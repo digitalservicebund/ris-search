@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<akn:akomaNtoso xmlns:akn="http://docs.oasis-open.org/legaldocml/ns/akn/3.0/WD17"
+                xmlns:ris="http://example.com/0.1/"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:schemaLocation="http://docs.oasis-open.org/legaldocml/ns/akn/3.0/WD17
+                     https://docs.oasis-open.org/legaldocml/akn-core/v1.0/csprd02/part2-specs/schemas/akomantoso30.xsd">
+   <akn:judgment name="Beispielurteil">
+      <akn:meta>
+         <akn:identification source="Beispielquelle">
+            <akn:FRBRWork>
+               <akn:FRBRthis value="STRE300770800"/>
+               <akn:FRBRuri value="STRE300770800"/>
+               <akn:FRBRalias name="uebergreifende-id" value="fake-uuid-0001"/>
+               <akn:FRBRdate date="2025-04-09" name="entscheidungsdatum"/>
+               <akn:FRBRauthor href="Beispielautor"/>
+               <akn:FRBRcountry value="de"/>
+            </akn:FRBRWork>
+            <akn:FRBRExpression>
+               <akn:FRBRthis value="STRE300770800/dokument"/>
+               <akn:FRBRuri value="STRE300770800/dokument"/>
+               <akn:FRBRdate date="2025-04-09" name="entscheidungsdatum"/>
+               <akn:FRBRauthor href="Beispielautor"/>
+               <akn:FRBRlanguage language="deu"/>
+            </akn:FRBRExpression>
+            <akn:FRBRManifestation>
+               <akn:FRBRthis value="STRE300770800/dokument.xml"/>
+               <akn:FRBRuri value="STRE300770800/dokument.xml"/>
+               <akn:FRBRdate date="2025-04-09" name="entscheidungsdatum"/>
+               <akn:FRBRauthor href="Beispielautor"/>
+            </akn:FRBRManifestation>
+         </akn:identification>
+         <akn:classification source="Beispielquelle">
+            <akn:keyword dictionary="Beispieldict" showAs="Beispiel" value="Arbeitsplatz"/>
+            <akn:keyword dictionary="Beispieldict" showAs="Beispiel" value="Vergütungssystem"/>
+            <akn:keyword dictionary="Beispieldict" showAs="Beispiel" value="Ertragsanalyse"/>
+            <akn:keyword dictionary="Beispieldict" showAs="Beispiel" value="Messwertig"/>
+         </akn:classification>
+         <akn:proprietary source="Beispielquelle">
+            <ris:meta>
+               <ris:ensuingDecisions>
+                  <ris:ensuingDecision date="2025-04-09">
+                     <ris:documentNumber>STRE300790000</ris:documentNumber>
+                     <ris:fileNumber>DE A 12/34</ris:fileNumber>
+                     <ris:courtType>BFH</ris:courtType>
+                  </ris:ensuingDecision>
+               </ris:ensuingDecisions>
+               <ris:fileNumbers>
+                  <ris:fileNumber>22 L 5678/90</ris:fileNumber>
+               </ris:fileNumbers>
+               <ris:documentType>Urteil</ris:documentType>
+               <ris:courtLocation>Berlin</ris:courtLocation>
+               <ris:courtType>FG</ris:courtType>
+               <ris:legalEffect>KEINE_ANGABE</ris:legalEffect>
+               <ris:fieldOfLaws>
+                  <ris:fieldOfLaw>Arbeitsgeld</ris:fieldOfLaw>
+                  <ris:fieldOfLaw>Fertiglohn, Zuschläge</ris:fieldOfLaw>
+                  <ris:fieldOfLaw>Erträge UVW (einschl. Ersatzwerten)</ris:fieldOfLaw>
+                  <ris:fieldOfLaw>Messwertig</ris:fieldOfLaw>
+               </ris:fieldOfLaws>
+               <ris:judicialBody>10. Senat</ris:judicialBody>
+               <ris:publicationStatus>PUBLISHED</ris:publicationStatus>
+               <ris:error>false</ris:error>
+               <ris:documentationOffice>BFH</ris:documentationOffice>
+               <ris:procedures>
+                  <ris:procedure>DE12345678</ris:procedure>
+               </ris:procedures>
+            </ris:meta>
+         </akn:proprietary>
+      </akn:meta>
+      <akn:header>
+         <akn:p>Dies ist ein Beispieltext für die Darstellung des Urteilskopfs.</akn:p>
+      </akn:header>
+      <akn:judgmentBody>
+         <akn:introduction>
+            <akn:block name="Orientierungssatz">
+               <akn:embeddedStructure>
+                  <akn:p>1. Dies ist ein fiktiver Urteilssatz, der für Testzwecke generiert wurde.</akn:p>
+                  <akn:p>2. Weitere Testinformationen werden hier mit Beispieltext dargestellt.</akn:p>
+                  <akn:p>3. Das Verfahren wird als vorläufig und unbefristet betrachtet.</akn:p>
+               </akn:embeddedStructure>
+            </akn:block>
+            <akn:block name="Tenor">
+               <akn:embeddedStructure>
+                  <akn:p>Der Beklagte wird verurteilt, einen beispielhaften Schaden zu tragen.</akn:p>
+                  <akn:p>Die Verfahrenskosten werden zu 100% dem Beklagten auferlegt.</akn:p>
+               </akn:embeddedStructure>
+            </akn:block>
+         </akn:introduction>
+         <akn:background>
+            <akn:hcontainer name="randnummer">
+               <akn:num>1</akn:num>
+               <akn:content>
+                  <akn:p>Die Streitfrage wird als exemplarisch für Testfälle verwendet.</akn:p>
+               </akn:content>
+            </akn:hcontainer>
+         </akn:background>
+      </akn:judgmentBody>
+   </akn:judgment>
+</akn:akomaNtoso>

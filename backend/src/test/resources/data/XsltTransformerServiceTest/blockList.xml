@@ -1,0 +1,14 @@
+<akn:akomaNtoso xmlns:akn="http://Inhaltsdaten.LegalDocML.de/1.7.2/">
+    <akn:act eId="a">
+        <akn:body eId="b">
+            <akn:article eId="c">
+                <akn:blockList eId="d">
+                <akn:item eId="e">
+                    <akn:num eId="f">1.</akn:num>
+                    <akn:p eId="g">Item</akn:p>
+                </akn:item>
+                </akn:blockList>
+            </akn:article>
+        </akn:body>
+    </akn:act>
+</akn:akomaNtoso>

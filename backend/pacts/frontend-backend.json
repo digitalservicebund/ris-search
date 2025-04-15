@@ -1,0 +1,273 @@
+{
+  "consumer": {
+    "name": "frontend"
+  },
+  "interactions": [
+    {
+      "description": "a request for retrieving the document with the same eli",
+      "pending": false,
+      "providerStates": [
+        {
+          "name": "I have a document in the database with eli/bund/bgbl-1/2000/s998/2000-10-06/2/deu/regelungstext-1"
+        }
+      ],
+      "request": {
+        "headers": {
+          "Accept": [
+            "application/json"
+          ]
+        },
+        "method": "GET",
+        "path": "/v1/legislation/eli/bund/bgbl-1/2000/s998/2000-10-06/2/deu/regelungstext-1"
+      },
+      "response": {
+        "body": {
+          "content": {
+            "@id": "/v1/legislation/eli/bund/bgbl-1/2000/s998/regelungstext-1",
+            "@type": "Legislation",
+            "abbreviation": "Fleischhygiene-Verordnung",
+            "alternateName": "Verordnung uber die Nichtanwendung fleisch- und geflugelfleischhygienerechtlicher Vorschriften",
+            "datePublished": "1977-05-22",
+            "isPartOf": {
+              "name": "Bundesgesetzblatt Teil I"
+            },
+            "legislationDate": "1977-05-21",
+            "legislationIdentifier": "eli/bund/bgbl-1/2000/s998/regelungstext-1",
+            "name": "Verordnung uber die Nichtanwendung fleisch- und geflugelfleischhygienerechtlicher Vorschriften Artikel 6 der Funften Verordnung zur Anderung von Vorschriften zum Schutz der Verbraucher vor der Bovinen Spongiformen Enzephalopathie",
+            "workExample": {
+              "@id": "/v1/legislation/eli/bund/bgbl-1/2000/s998/2000-10-06/2/deu/regelungstext-1",
+              "@type": "Legislation",
+              "encoding": [
+                {
+                  "@id": "/v1/legislation/eli/bund/bgbl-1/2000/s998/2000-10-06/2/deu/2000-10-06/regelungstext-1/html",
+                  "@type": "LegislationObject",
+                  "contentUrl": "/v1/legislation/eli/bund/bgbl-1/2000/s998/2000-10-06/2/deu/2000-10-06/regelungstext-1.html",
+                  "encodingFormat": "text/html",
+                  "inLanguage": "de"
+                },
+                {
+                  "@id": "/v1/legislation/eli/bund/bgbl-1/2000/s998/2000-10-06/2/deu/2000-10-06/regelungstext-1/xml",
+                  "@type": "LegislationObject",
+                  "contentUrl": "/v1/legislation/eli/bund/bgbl-1/2000/s998/2000-10-06/2/deu/2000-10-06/regelungstext-1.xml",
+                  "encodingFormat": "application/xml",
+                  "inLanguage": "de"
+                },
+                {
+                  "@id": "/v1/legislation/eli/bund/bgbl-1/2000/s998/2000-10-06/2/deu/2000-10-06/zip",
+                  "@type": "LegislationObject",
+                  "contentUrl": "/v1/legislation/eli/bund/bgbl-1/2000/s998/2000-10-06/2/deu/2000-10-06.zip",
+                  "encodingFormat": "application/zip",
+                  "inLanguage": "de"
+                }
+              ],
+              "hasPart": [
+                {
+                  "@id": "/v1/legislation/eli/bund/bgbl-1/2000/s998/2000-10-06/2/deu/regelungstext-1#hauptteil-1_art-1",
+                  "@type": "Legislation",
+                  "eId": "hauptteil-1_art-1",
+                  "encoding": null,
+                  "entryIntoForceDate": null,
+                  "expiryDate": null,
+                  "guid": null,
+                  "isActive": null,
+                  "name": "1 Fleischhygiene-Verordnung"
+                },
+                {
+                  "@id": "/v1/legislation/eli/bund/bgbl-1/2000/s998/2000-10-06/2/deu/regelungstext-1#hauptteil-1_art-2",
+                  "@type": "Legislation",
+                  "eId": "hauptteil-1_art-2",
+                  "encoding": null,
+                  "entryIntoForceDate": null,
+                  "expiryDate": null,
+                  "guid": null,
+                  "isActive": null,
+                  "name": "2 Geflugelfleischhygiene-Verordnung"
+                }
+              ],
+              "legislationIdentifier": "eli/bund/bgbl-1/2000/s998/2000-10-06/2/deu/regelungstext-1",
+              "legislationLegalForce": "InForce",
+              "tableOfContents": [
+                {
+                  "@type": "TocEntry",
+                  "children": [],
+                  "heading": "Art 1",
+                  "id": "hauptteil-1_para-1",
+                  "marker": "1"
+                },
+                {
+                  "@type": "TocEntry",
+                  "children": [],
+                  "heading": "Art 2",
+                  "id": "hauptteil-1_para-2",
+                  "marker": "2"
+                },
+                {
+                  "@type": "TocEntry",
+                  "children": [
+                    {
+                      "@type": "TocEntry",
+                      "children": [],
+                      "heading": "Art 3",
+                      "id": "hauptteil-1_teil-1-para-1",
+                      "marker": "3"
+                    },
+                    {
+                      "@type": "TocEntry",
+                      "children": [
+                        {
+                          "@type": "TocEntry",
+                          "children": [],
+                          "heading": "Art 4",
+                          "id": "hauptteil-1_teil-1_teil-1-para-1",
+                          "marker": "4"
+                        },
+                        {
+                          "@type": "TocEntry",
+                          "children": [
+                            {
+                              "@type": "TocEntry",
+                              "children": [],
+                              "heading": "Art 5",
+                              "id": "hauptteil-1_teil-1_teil-1_teil-1-para-1",
+                              "marker": "5"
+                            },
+                            {
+                              "@type": "TocEntry",
+                              "children": [],
+                              "heading": "Art 6",
+                              "id": "hauptteil-1_teil-1_teil-1_teil-1-para-2",
+                              "marker": "6"
+                            }
+                          ],
+                          "heading": "Heading 3",
+                          "id": "hauptteil-1_teil-1_teil-1_teil-1",
+                          "marker": "Teil 3"
+                        }
+                      ],
+                      "heading": "Heading 2",
+                      "id": "hauptteil-1_teil-1_teil-1",
+                      "marker": "Teil 2"
+                    }
+                  ],
+                  "heading": "Heading 1",
+                  "id": "hauptteil-1_teil-1",
+                  "marker": "Teil 1"
+                }
+              ],
+              "temporalCoverage": "2001-05-29/.."
+            }
+          },
+          "contentType": "application/json",
+          "encoded": false
+        },
+        "headers": {
+          "Content-Type": [
+            "application/json"
+          ]
+        },
+        "status": 200
+      },
+      "type": "Synchronous/HTTP"
+    },
+    {
+      "description": "a request for retrieving the document with the same number",
+      "pending": false,
+      "providerStates": [
+        {
+          "name": "I have a document in the database with number 12345"
+        }
+      ],
+      "request": {
+        "headers": {
+          "Accept": [
+            "application/json"
+          ]
+        },
+        "method": "GET",
+        "path": "/v1/case-law/12345"
+      },
+      "response": {
+        "body": {
+          "content": {
+            "@id": "/v1/case-law/12345",
+            "@type": "Decision",
+            "caseFacts": "Tatbestand",
+            "courtName": "Bundesgerichtshof",
+            "courtType": "FG",
+            "decisionDate": "2023-10-11",
+            "decisionGrounds": "Entscheidungsgrunde",
+            "decisionName": [
+              "Decision Name 1",
+              "Decision Name 2"
+            ],
+            "deviatingDocumentNumber": [
+              "DEV-123",
+              "DEV-124"
+            ],
+            "dissentingOpinion": "Abweichende Meinung",
+            "documentNumber": "12345",
+            "documentType": "Urteil",
+            "ecli": "ECLI:DE:FGRLP:1969:0905.IV85.68.0A",
+            "encoding": [
+              {
+                "@id": "/v1/case-law/12345/html",
+                "@type": "DecisionObject",
+                "contentUrl": "/v1/case-law/12345.html",
+                "encodingFormat": "text/html",
+                "inLanguage": "de"
+              },
+              {
+                "@id": "/v1/case-law/12345/xml",
+                "@type": "DecisionObject",
+                "contentUrl": "/v1/case-law/12345.xml",
+                "encodingFormat": "application/xml",
+                "inLanguage": "de"
+              }
+            ],
+            "fileNumbers": [
+              "BGH 123/23",
+              "BGH 124/23"
+            ],
+            "grounds": "Grunde",
+            "guidingPrinciple": "Leitsatz",
+            "headline": "Uberschrift",
+            "headnote": "Orientierungssatz",
+            "inLanguage": "de",
+            "judicialBody": "Gericht",
+            "keywords": [
+              "keyword1",
+              "keyword2",
+              "keyword3"
+            ],
+            "location": "Berlin",
+            "otherHeadnote": "Sonstiger Orientierungssatz",
+            "otherLongText": "Sonstiger Langtext",
+            "outline": "Leitsatz",
+            "tenor": "Tenor"
+          },
+          "contentType": "application/json",
+          "encoded": false
+        },
+        "headers": {
+          "Content-Type": [
+            "application/json"
+          ]
+        },
+        "status": 200
+      },
+      "type": "Synchronous/HTTP"
+    }
+  ],
+  "metadata": {
+    "pactRust": {
+      "ffi": "0.4.22",
+      "models": "1.2.3"
+    },
+    "pactSpecification": {
+      "version": "4.0"
+    }
+  },
+  "provider": {
+    "name": "backend"
+  }
+}

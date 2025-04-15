@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<akn:akomaNtoso xmlns:akn="http://docs.oasis-open.org/legaldocml/ns/akn/3.0/WD17"
+                xmlns:ris="http://example.com/0.1/"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:schemaLocation="http://docs.oasis-open.org/legaldocml/ns/akn/3.0/WD17
+                     https://docs.oasis-open.org/legaldocml/akn-core/v1.0/csprd02/part2-specs/schemas/akomantoso30.xsd">
+   <akn:judgment name="Beispielurteil5">
+      <akn:meta>
+         <akn:identification source="Testquelle5">
+            <akn:FRBRWork>
+               <akn:FRBRthis value="KORE600010000"/>
+               <akn:FRBRuri value="KORE600010000"/>
+               <akn:FRBRalias name="uebergreifende-id" value="fake-uuid-0005"/>
+               <akn:FRBRdate date="2025-04-09" name="entscheidungsdatum"/>
+               <akn:FRBRauthor href="Testautor5"/>
+               <akn:FRBRcountry value="de"/>
+            </akn:FRBRWork>
+            <akn:FRBRExpression>
+               <akn:FRBRthis value="KORE600010000/dokument"/>
+               <akn:FRBRuri value="KORE600010000/dokument"/>
+               <akn:FRBRdate date="2025-04-09" name="entscheidungsdatum"/>
+               <akn:FRBRauthor href="Testautor5"/>
+               <akn:FRBRlanguage language="deu"/>
+            </akn:FRBRExpression>
+            <akn:FRBRManifestation>
+               <akn:FRBRthis value="KORE600010000/dokument.xml"/>
+               <akn:FRBRuri value="KORE600010000/dokument.xml"/>
+               <akn:FRBRdate date="2025-04-09" name="entscheidungsdatum"/>
+               <akn:FRBRauthor href="Testautor5"/>
+            </akn:FRBRManifestation>
+         </akn:identification>
+         <akn:classification source="Testquelle5">
+            <akn:keyword dictionary="TestDict5" showAs="Beispiel" value="UnzumutbarkeitNeu"/>
+            <akn:keyword dictionary="TestDict5" showAs="Beispiel" value="PostItWerbung"/>
+            <akn:keyword dictionary="TestDict5" showAs="Beispiel" value="WerbesendungTest"/>
+            <akn:keyword dictionary="TestDict5" showAs="Beispiel" value="Testpostit"/>
+         </akn:classification>
+         <akn:proprietary source="Testquelle5">
+            <ris:meta>
+               <ris:fileNumbers>
+                  <ris:fileNumber>PS 12345678</ris:fileNumber>
+               </ris:fileNumbers>
+               <ris:documentType>Urteil</ris:documentType>
+               <ris:courtLocation>Testort5</ris:courtLocation>
+               <ris:courtType>LG</ris:courtType>
+               <ris:legalEffect>JA</ris:legalEffect>
+               <ris:fieldOfLaws>
+                  <ris:fieldOfLaw>Testwerbung</ris:fieldOfLaw>
+                  <ris:fieldOfLaw>Testdruck</ris:fieldOfLaw>
+                  <ris:fieldOfLaw>Musterpostit (inkl. Testdaten)</ris:fieldOfLaw>
+                  <ris:fieldOfLaw>Testbewertung</ris:fieldOfLaw>
+               </ris:fieldOfLaws>
+               <ris:judicialBody>12. Kammer</ris:judicialBody>
+               <ris:publicationStatus>PUBLISHED</ris:publicationStatus>
+               <ris:error>false</ris:error>
+               <ris:documentationOffice>LG Test</ris:documentationOffice>
+               <ris:procedures>
+                  <ris:procedure>PS98765432</ris:procedure>
+               </ris:procedures>
+            </ris:meta>
+         </akn:proprietary>
+      </akn:meta>
+      <akn:header>
+         <akn:p>Testheader für Urteil 5.</akn:p>
+      </akn:header>
+      <akn:judgmentBody>
+         <akn:introduction>
+            <akn:block name="Orientierungssatz">
+               <akn:embeddedStructure>
+                  <akn:p>1. Fiktiver Einleitungssatz zum Sachverhalt im Post-It Kontext.</akn:p>
+                  <akn:p>2. Weitere Testinformationen werden exemplarisch dargestellt.</akn:p>
+               </akn:embeddedStructure>
+            </akn:block>
+            <akn:block name="Tenor">
+               <akn:embeddedStructure>
+                  <akn:p>Der Beklagte trägt die Kosten in vollem Umfang.</akn:p>
+                  <akn:p>Der Entscheid wird als endgültig betrachtet.</akn:p>
+               </akn:embeddedStructure>
+            </akn:block>
+         </akn:introduction>
+         <akn:background>
+            <akn:hcontainer name="randnummer">
+               <akn:num>1</akn:num>
+               <akn:content>
+                  <akn:p>Eine fiktive Darstellung der Ereignisse wird hier exemplarisch dargestellt.</akn:p>
+               </akn:content>
+            </akn:hcontainer>
+         </akn:background>
+      </akn:judgmentBody>
+   </akn:judgment>
+</akn:akomaNtoso>

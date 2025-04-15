@@ -1,0 +1,119 @@
+<script setup lang="ts">
+import SimpleSearchInput from "@/components/Search/SimpleSearch/SimpleSearchInput.vue";
+import { useRedirectToSearch } from "@/composables/useRedirectToSearch";
+import HeroBanner from "~/components/HeroBanner.vue";
+import Message from "primevue/message";
+import IcBaselineLaunch from "~icons/ic/baseline-launch";
+import ButtonLink from "~/components/ButtonLink.vue";
+import bmjLogo from "~/assets/img/BMJ_Logo.svg";
+const redirectToSearch = useRedirectToSearch();
+</script>
+
+<template>
+  <HeroBanner class="flex gap-16 bg-blue-800 pt-64 pb-96 text-white">
+    <div class="container md:max-w-(--spacing-prose)">
+      <div
+        class="mb-8 inline-block rounded-[3px] border border-[#FFFFFF1A] bg-blue-700 px-8 py-4 text-sm font-bold uppercase"
+      >
+        Testphase
+      </div>
+      <h1 class="ris-heading1-regular break-words hyphens-auto">
+        Rechtsinformationen des Bundes
+      </h1>
+      <p class="ris-subhead-regular mt-24">
+        Schneller und direkter Zugang zu Gerichtsentscheidungen und künftig auch
+        Gesetzen, Verordnungen und Verwaltungsvorschriften des Bundes - an einem
+        zentralen Ort.
+      </p>
+    </div>
+  </HeroBanner>
+  <div class="my-56 flex flex-col gap-24 pb-48">
+    <FeatureCard>
+      <div>
+        <h2 class="ris-heading3-bold break-words hyphens-auto">
+          Testen Sie die Suche
+        </h2>
+        <p class="mt-8">
+          Finden Sie Gerichtsentscheidungen der Bundesgerichte.
+        </p>
+      </div>
+      <SimpleSearchInput
+        full-width
+        model-value=""
+        @update:model-value="(query?: string) => redirectToSearch({ query })"
+        @empty-search="() => redirectToSearch()"
+      />
+      <Message severity="warn" class="ris-body2-regular">
+        <p class="ris-body2-bold mt-2">
+          Dieser Service befindet sich in der Testphase:
+        </p>
+        <p>
+          Der Datenbestand ist noch nicht vollständig und der Service in
+          Entwicklung. Wir arbeiten an der Ergänzung und Darstellung aller
+          Inhalte. Für Recherchen nutzen Sie bitte weiterhin die bestehenden
+          Webseiten Gesetze-im-Internet und Rechtsprechung-im-Internet.
+        </p>
+      </Message>
+    </FeatureCard>
+    <FeatureCard>
+      <div>
+        <h2 class="ris-heading3-bold break-words hyphens-auto">
+          Testen Sie die Darstellung aktueller Gerichtsentscheidungen
+        </h2>
+        <p class="mt-8">
+          Prüfen Sie, wie Rechtsinformationen dargestellt werden und helfen Sie
+          uns, die Inhalte klarer und zugänglicher zu machen.
+        </p>
+      </div>
+      <div class="flex flex-wrap gap-16">
+        <Button
+          @click="() => redirectToSearch({ category: 'R', sort: '-date' })"
+          >Zu den Gerichtsentscheidungen</Button
+        >
+        <Button disabled> Zu den Gesetzen und Verordnungen</Button>
+      </div>
+    </FeatureCard>
+    <FeatureCard>
+      <div>
+        <h2 class="ris-heading3-bold break-words hyphens-auto">
+          Testen Sie die Programmierschnittstelle
+        </h2>
+        <p class="mt-8">
+          Rufen Sie Rechtsinformationen direkt ab und prüfen Sie, wie gut die
+          Programmierschnittstelle für Ihre Anwendung geeignet ist. Ihr Feedback
+          hilft uns bei der Optimierung. Die API-Dokumentation steht in
+          englischer Sprache zur Verfügung.
+        </p>
+      </div>
+
+      <div>
+        <ButtonLink
+          href="https://docs.rechtsinformationen.bund.de"
+          target="_blank"
+          >Zur API-Dokumentation <IcBaselineLaunch
+        /></ButtonLink>
+      </div>
+    </FeatureCard>
+    <FeatureCard inner-class="gap-x-64 gap-y-32 sm:flex-row">
+      <img
+        class="mt-20 ml-20 self-start sm:mt-4 md:ml-0"
+        :src="bmjLogo"
+        alt="Bundesministerium der Justiz"
+      />
+      <div class="space-y-8">
+        <p class="ris-body2-bold break-words hyphens-auto">
+          Ein Service im Auftrag des Bundesministeriums der Justiz
+        </p>
+        <p class="ris-body2-regular">
+          Dieser Service befindet sich in der Testphase. Sie haben die
+          Möglichkeit, erste Funktionen frühzeitig zu testen und Feedback zu
+          geben. Die Funktionen und der Umfang der Daten werden schrittweise
+          erweitert.
+        </p>
+        <NuxtLink class="ris-link2-regular" to="/ueber"
+          >Weitere Informationen zur Testphase</NuxtLink
+        >
+      </div>
+    </FeatureCard>
+  </div>
+</template>

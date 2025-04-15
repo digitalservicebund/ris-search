@@ -1,0 +1,99 @@
+[versions]
+# plugins
+jacoco = "0.8.11"
+spring-boot = "3.4.3"
+spring-dependency-management = "1.1.7"
+spotless = "6.25.0"
+sonarqube = "6.0.1.5171"
+license-report = "2.9"
+test-logger = "4.0.0"
+node-gradle = "7.1.0"
+# libraries
+spring-boot-starter = "3.4.3"
+test-containers = "1.20.6"
+spring-cloud-k8s = "3.2.1"
+spring-data-elasticsearch = "5.3.6"
+springdoc-openapi = "2.8.5"
+prometheus = "1.14.5"
+sentry = "8.3.0"
+commons-text = "1.13.0"
+junit5 = "1.3.0"
+mockito = "5.16.1"
+spring-security = "6.4.4"
+spring-security-test = "6.4.3"
+snakeyalm = "2.4"
+spring-data-opensearch-starter = "1.5.4"
+opensearch-test-containers = "2.1.3"
+jsoup = "1.18.3"
+lucene-core = "9.11.1"
+lucene-queryparser = "9.11.1"
+logbook = "3.11.0"
+org-json = "20250107"
+ds-xml-parser = "0.8"
+commons-csv = "1.13.0"
+oauth2-test-addon = "8.1.8"
+amazon-aws-sdk-s3 = "2.29.45"
+saxon-he = "12.5"
+streamex = "0.8.3"
+jackson-json-ld = "0.1.1"
+jackson-datatype-jsr310 = "2.18.2"
+jaxb-moxy = "4.0.5"
+pact = "4.6.17"
+posthog = "1.2.0"
+pebble = "3.2.3"
+rest-assured = "5.4.0"
+
+[libraries]
+spring-actuator = { module="org.springframework.boot:spring-boot-starter-actuator", version.ref="spring-boot-starter" }
+spring-validation = { module="org.springframework.boot:spring-boot-starter-validation", version.ref="spring-boot-starter" }
+spring-web = { module = "org.springframework.boot:spring-boot-starter-web", version.ref = "spring-boot-starter" }
+spring-security = { module = "org.springframework.boot:spring-boot-starter-security", version.ref = "spring-boot-starter" }
+spring-oauth2 = { module = "org.springframework.boot:spring-boot-starter-oauth2-resource-server", version.ref = "spring-boot-starter" }
+spring-data-jpa = { module = "org.springframework.boot:spring-boot-starter-data-jpa", version.ref = "spring-boot-starter" }
+spring-kubernetes-client = { module = "org.springframework.cloud:spring-cloud-starter-kubernetes-client-config", version.ref = "spring-cloud-k8s" }
+spring-data-opensearch = { module = "org.opensearch.client:spring-data-opensearch-starter", version.ref = "spring-data-opensearch-starter" }
+spring-security-oauth2-jose = { module = "org.springframework.security:spring-security-oauth2-jose", version.ref = "spring-security" }
+spring-data-elasticsearch = { module = "org.springframework.data:spring-data-elasticsearch", version.ref = "spring-data-elasticsearch" }
+springdoc-openapi-starter-webmvc-ui = { module = "org.springdoc:springdoc-openapi-starter-webmvc-ui", version.ref = "springdoc-openapi" }
+pact = { module = "au.com.dius.pact.provider:junit5spring", version.ref = "pact" }
+jsoup = { module = "org.jsoup:jsoup", version.ref = "jsoup" }
+amazon-aws-sdk-s3 = { module = "software.amazon.awssdk:s3", version.ref = "amazon-aws-sdk-s3" }
+snakeyaml = { module = "org.yaml:snakeyaml", version.ref = "snakeyalm" }
+micrometer-registry-prometheus = { module = "io.micrometer:micrometer-registry-prometheus", version.ref = "prometheus" }
+sentry-spring-boot-starter-jakarta = { module = "io.sentry:sentry-spring-boot-starter-jakarta", version.ref = "sentry" }
+sentry-logback = { module = "io.sentry:sentry-logback", version.ref = "sentry" }
+posthog = { module = "com.posthog.java:posthog", version.ref = "posthog" }
+commons-text = { module = "org.apache.commons:commons-text", version.ref = "commons-text" }
+lucene-queryparser = { module = "org.apache.lucene:lucene-queryparser", version.ref = "lucene-queryparser" }
+lucene-core = { module = "org.apache.lucene:lucene-core", version.ref = "lucene-core" }
+logbook-spring-boot-starter = { module = "org.zalando:logbook-spring-boot-starter", version.ref = "logbook" }
+json = { module = "org.json:json", version.ref = "org-json" }
+xml-parser = { module = "com.github.digitalservicebund:xml-parser", version.ref = "ds-xml-parser" }
+commons-csv = { module = "org.apache.commons:commons-csv", version.ref = "commons-csv" }
+jackson-jsonld = { module = "com.io-informatics.oss:jackson-jsonld", version.ref = "jackson-json-ld" }
+jackson-datatype-jsr310 = { module = "com.fasterxml.jackson.datatype:jackson-datatype-jsr310", version.ref = "jackson-datatype-jsr310"}
+saxon-he = { module = "net.sf.saxon:Saxon-HE", version.ref = "saxon-he" }
+lombok = { module = "org.projectlombok:lombok" }
+spring-boot-devtools = { module = "org.springframework.boot:spring-boot-devtools" }
+spring-boot-starter-test = { module = "org.springframework.boot:spring-boot-starter-test", version.ref = "spring-boot-starter" }
+spring-security-test = { module = "org.springframework.security:spring-security-test", version.ref = "spring-security-test" }
+archunit-junit5 = { module = "com.tngtech.archunit:archunit-junit5", version.ref = "junit5" }
+mockito-junit-jupiter = { module = "org.mockito:mockito-junit-jupiter", version.ref = "mockito" }
+spring-addons-oauth2-test = { module = "com.c4-soft.springaddons:spring-addons-oauth2-test", version.ref = "oauth2-test-addon" }
+testcontainers-junit-jupiter = { module = "org.testcontainers:junit-jupiter", version.ref = "test-containers" }
+opensearch-testcontainers = { module = "org.opensearch:opensearch-testcontainers", version.ref = "opensearch-test-containers" }
+testcontainers-postgresql = { module = "org.testcontainers:postgresql", version.ref = "test-containers" }
+jaxb-moxy = { module = "org.eclipse.persistence:org.eclipse.persistence.moxy", version.ref = "jaxb-moxy" }
+pebble = { module = "io.pebbletemplates:pebble-spring-boot-starter", version.ref = "pebble" }
+streamex = { module = 'one.util:streamex', version.ref = "streamex" }
+restassured = { module = 'io.rest-assured:rest-assured', version.ref = "rest-assured" }
+
+[plugins]
+spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
+spring-dependency-management = { id = "io.spring.dependency-management", version.ref = "spring-dependency-management" }
+spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
+sonarqube = { id = "org.sonarqube", version.ref = "sonarqube" }
+license-report = { id = "com.github.jk1.dependency-license-report", version.ref = "license-report" }
+test-logger = { id = "com.adarshr.test-logger", version.ref = "test-logger" }
+node-gradle = { id = "com.github.node-gradle.node", version.ref = "node-gradle" }
+

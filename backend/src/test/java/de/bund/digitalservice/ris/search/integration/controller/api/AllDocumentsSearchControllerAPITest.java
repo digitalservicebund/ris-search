@@ -1,0 +1,278 @@
+package de.bund.digitalservice.ris.search.integration.controller.api;
+
+import static org.hamcrest.Matchers.either;
+import static org.hamcrest.Matchers.everyItem;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import com.c4_soft.springaddons.security.oauth2.test.annotations.WithJwt;
+import de.bund.digitalservice.ris.search.config.ApiConfig;
+import de.bund.digitalservice.ris.search.integration.config.ContainersIntegrationBase;
+import de.bund.digitalservice.ris.search.integration.controller.api.testData.CaseLawTestData;
+import de.bund.digitalservice.ris.search.integration.controller.api.testData.NormsTestData;
+import de.bund.digitalservice.ris.search.integration.controller.api.testData.SharedTestConstants;
+import de.bund.digitalservice.ris.search.integration.controller.api.values.SortingTestArguments;
+import de.bund.digitalservice.ris.search.repository.opensearch.CaseLawRepository;
+import de.bund.digitalservice.ris.search.repository.opensearch.NormsRepository;
+import de.bund.digitalservice.ris.search.service.IndexAliasService;
+import java.io.IOException;
+import java.util.Map;
+import java.util.stream.Stream;
+import org.hamcrest.Matcher;
+import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultMatcher;
+import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
+
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@AutoConfigureMockMvc
+@Tag("integration")
+@WithJwt("jwtTokens/ValidAccessToken.json")
+class AllDocumentsSearchControllerAPITest extends ContainersIntegrationBase {
+
+  @Autowired private NormsRepository normsRepository;
+
+  @Autowired private CaseLawRepository caseLawRepository;
+
+  @Autowired private IndexAliasService indexAliasService;
+
+  @Autowired private MockMvc mockMvc;
+
+  @BeforeEach
+  void setUpSearchControllerApiTest() throws IOException {
+    assertTrue(openSearchContainer.isRunning());
+
+    super.recreateIndex();
+    super.updateMapping();
+
+    indexAliasService.setIndexAlias();
+
+    caseLawRepository.saveAll(CaseLawTestData.allDocuments);
+    normsRepository.saveAll(NormsTestData.allDocuments);
+  }
+
+  @Test
+  @DisplayName("Should return correct result for term search")
+  void shouldReturnCorrectResultForFilterSearch() throws Exception {
+    String query = "?searchTerm=Test";
+
+    mockMvc
+        .perform(get(ApiConfig.Paths.DOCUMENT + query).contentType(MediaType.APPLICATION_JSON))
+        .andExpect(jsonPath("$.member", hasSize(4)));
+  }
+
+  @Test
+  @DisplayName("Should return correct result for search with single date filter")
+  void shouldReturnCorrectResultForSearchWithDateFilter() throws Exception {
+    String query =
+        "?dateFrom=%s&dateTo=%s"
+            .formatted(SharedTestConstants.DATE_2_1, SharedTestConstants.DATE_2_1);
+
+    mockMvc
+        .perform(get(ApiConfig.Paths.DOCUMENT + query).contentType(MediaType.APPLICATION_JSON))
+        .andExpect(jsonPath("$.member", hasSize(2)))
+        .andExpect(
+            jsonPath(
+                "$.member[0]['item'].decisionDate",
+                Matchers.is(SharedTestConstants.DATE_2_1.toString())))
+        .andExpect(
+            jsonPath(
+                "$.member[1]['item'].legislationDate",
+                Matchers.is(SharedTestConstants.DATE_2_1.toString())));
+  }
+
+  @Test
+  @DisplayName("Should return correct result for search with date range filter")
+  void shouldReturnCorrectResultForSearchWithDateRangeFilter() throws Exception {
+    final String query =
+        "?dateFrom=%s&dateTo=%s"
+            .formatted(SharedTestConstants.DATE_2_1, SharedTestConstants.DATE_2_2);
+
+    Matcher<Iterable<? extends String>> onlyContainsGivenDates =
+        everyItem(
+            either(is(SharedTestConstants.DATE_2_1.toString()))
+                .or(is(SharedTestConstants.DATE_2_2.toString())));
+    mockMvc
+        .perform(get(ApiConfig.Paths.DOCUMENT + query).contentType(MediaType.APPLICATION_JSON))
+        .andExpect(jsonPath("$.member", hasSize(4)))
+        .andExpect(jsonPath("$.member[*].decisionDate", onlyContainsGivenDates))
+        .andExpect(jsonPath("$.member[*].legislationDate", onlyContainsGivenDates));
+  }
+
+  @Test
+  @DisplayName("Should return correct result for search with dateBefore filter")
+  void shouldReturnCorrectResultForSearchWithDateLtFilter() throws Exception {
+    final String url =
+        ApiConfig.Paths.DOCUMENT
+            + "?searchTerm=Test&dateTo=%s".formatted(SharedTestConstants.DATE_2_1.minusDays(1));
+    mockMvc
+        .perform(get(url).contentType(MediaType.APPLICATION_JSON))
+        .andExpect(jsonPath("$.member", hasSize(1)))
+        .andExpect(
+            jsonPath(
+                "$.member[0]['item'].legislationDate",
+                Matchers.is(SharedTestConstants.DATE_1_1.toString())))
+        .andExpect(
+            jsonPath(
+                "$.member[0].textMatches[?(@.name == 'name')].text",
+                Matchers.containsInAnyOrder(Matchers.is("<mark>Test</mark> Gesetz Nr. 2"))));
+  }
+
+  static Stream<Arguments> testArgsSameResultsAsOtherControllers() {
+    return Stream.of(
+        Arguments.of(
+            ApiConfig.Paths.DOCUMENT
+                + "?searchTerm="
+                + CaseLawTestData.matchAllTerm
+                + "&documentKind=R",
+            ApiConfig.Paths.CASELAW + "?searchTerm=" + CaseLawTestData.matchAllTerm),
+        Arguments.of(
+            ApiConfig.Paths.DOCUMENT + "?searchTerm=Gesetz&documentKind=N",
+            ApiConfig.Paths.LEGISLATION + "?searchTerm=Gesetz"));
+  }
+
+  @ParameterizedTest
+  @MethodSource("testArgsSameResultsAsOtherControllers")
+  @DisplayName("Returns the same contents as Norms and CaseLaw search controllers")
+  void testConsistencyWithOtherSearchControllers(String firstPath, String secondPath)
+      throws Exception {
+    var firstResponse =
+        mockMvc.perform(get(firstPath).contentType(MediaType.APPLICATION_JSON)).andReturn();
+
+    var secondResponse =
+        mockMvc.perform(get(secondPath).contentType(MediaType.APPLICATION_JSON)).andReturn();
+    var firstMap =
+        new ObjectMapper().readValue(firstResponse.getResponse().getContentAsString(), Map.class);
+    var secondMap =
+        new ObjectMapper().readValue(secondResponse.getResponse().getContentAsString(), Map.class);
+
+    Assertions.assertEquals(firstMap.get("member"), secondMap.get("member"));
+  }
+
+  static Stream<Arguments> provideOrderingTestArgs() {
+    return SortingTestArguments.provideSortingTestArguments();
+  }
+
+  @ParameterizedTest
+  @MethodSource("provideOrderingTestArgs")
+  @DisplayName("Should return correct ordering")
+  void shouldReturnCorrectOrdering(
+      String sortParam, int expectedCount, ResultMatcher matcher, ResultMatcher otherMatcher)
+      throws Exception {
+    String url = ApiConfig.Paths.DOCUMENT + String.format("?sort=%s", sortParam);
+
+    var perform =
+        mockMvc
+            .perform(get(url).contentType(MediaType.APPLICATION_JSON))
+            .andExpect(jsonPath("$.member", hasSize(expectedCount)));
+
+    if (matcher != null) {
+      perform.andExpect(matcher);
+    }
+    if (otherMatcher != null) {
+      perform.andExpect(otherMatcher);
+    }
+  }
+
+  @Test
+  @DisplayName("Should return an error when the search has invalid sort parameter")
+  void invalidSortParameter() throws Exception {
+    mockMvc
+        .perform(
+            get(ApiConfig.Paths.DOCUMENT + "?sort=invalidsortparameter")
+                .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isUnprocessableEntity())
+        .andExpect(
+            content()
+                .json(
+                    """
+                                                        {
+                                                          "errors": [
+                                                            {
+                                                              "code": "invalid_sort_parameter",
+                                                              "parameter": "sort",
+                                                              "message": "Sorting is not supported for invalidsortparameter"
+                                                            }
+                                                          ]
+                                                        }
+                                                    """));
+  }
+
+  private static Stream<Arguments> specialCharactersArguments() {
+    return Stream.of(
+        Arguments.of("§ 4 TBestG", "BFRE000107055"), Arguments.of("1.000 €", "BFRE000087655"));
+  }
+
+  @ParameterizedTest
+  @MethodSource("specialCharactersArguments")
+  @DisplayName("Should return correct result for special characters")
+  void testSpecialCharacters(String searchTerm, String expectedDocumentNumber) throws Exception {
+    String query = "?searchTerm=" + searchTerm;
+
+    mockMvc
+        .perform(get(ApiConfig.Paths.DOCUMENT + query).contentType(MediaType.APPLICATION_JSON))
+        .andExpect(
+            jsonPath("$.member[0].item.documentNumber", Matchers.is(expectedDocumentNumber)));
+  }
+
+  @Test
+  @DisplayName("should not break when stop words are included in search")
+  void testForStopWords() throws Exception {
+    mockMvc
+        .perform(
+            get(ApiConfig.Paths.DOCUMENT
+                    + "?searchTerm=Leitsatz mit ein paar Wörtern und Ergänzungen")
+                .contentType(MediaType.APPLICATION_JSON))
+        .andExpectAll(
+            status().isOk(),
+            jsonPath("$.member", hasSize(1)),
+            jsonPath("$.member[0].item.documentNumber", Matchers.is("BFRE000107055")));
+  }
+
+  @Test
+  @DisplayName("should throw an error when pagesize exceeds 100")
+  void testForExceededPageSize() throws Exception {
+    mockMvc
+        .perform(
+            get(ApiConfig.Paths.DOCUMENT
+                    + "?searchTerm=Leitsatz mit ein paar Wörtern und Ergänzungen&size=101&pageIndex=0")
+                .contentType(MediaType.APPLICATION_JSON))
+        .andExpectAll(
+            status().is(422),
+            jsonPath("$.errors[0].code", Matchers.is("invalid_parameter_value")),
+            jsonPath("$.errors[0].parameter", Matchers.is("size")),
+            jsonPath("$.errors[0].message", Matchers.is("Parameter value is invalid")));
+  }
+
+  @Test
+  @DisplayName("should throw an error when pagesize is 0")
+  void testForZeroPageSize() throws Exception {
+    mockMvc
+        .perform(
+            get(ApiConfig.Paths.DOCUMENT
+                    + "?searchTerm=Leitsatz mit ein paar Wörtern und Ergänzungen&size=0&pageIndex=0")
+                .contentType(MediaType.APPLICATION_JSON))
+        .andExpectAll(
+            status().is(422),
+            jsonPath("$.errors[0].code", Matchers.is("invalid_parameter_value")),
+            jsonPath("$.errors[0].parameter", Matchers.is("size")),
+            jsonPath("$.errors[0].message", Matchers.is("Parameter value is invalid")));
+  }
+}

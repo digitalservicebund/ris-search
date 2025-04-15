@@ -1,0 +1,31 @@
+<akn:akomaNtoso xmlns:akn="http://Inhaltsdaten.LegalDocML.de/1.7.2/">
+    <akn:act eId="act">
+        <akn:meta eId="meta">
+            <akn:notes>
+                <akn:note eId="meta-1_editfnote-1" marker="#"
+                          placementBase="#einleitung-1" refersTo="kommentierende-fussnote">
+                    <akn:p eId="meta-1_editfnote-1_text-1">*T (+++
+                        Textnachweis ab: 05.3.2025 +++)
+                    </akn:p>
+                </akn:note>
+                <akn:note eId="meta-1_editfnote-2" marker="#"
+                          placementBase="#body_art-1" refersTo="kommentierende-fussnote">
+                    <akn:p eId="meta-1_editfnote-2_text-1">Article note</akn:p>
+                </akn:note>
+            </akn:notes>
+        </akn:meta>
+        <akn:preface eId="einleitung-1">
+            <akn:longTitle eId="einleitung-1_doktitel-1">
+                <akn:p eId="einleitung-1_doktitel-1_text-1">
+                    <akn:docTitle eId="einleitung-1_doktitel-1_text-1_doctitel-1">Notes are output with the preface
+                    </akn:docTitle>
+                </akn:p>
+            </akn:longTitle>
+        </akn:preface>
+        <akn:body eId="body">
+            <akn:article eId="body_art-1">
+                <akn:p eId="body_art-1_text-1">Article text</akn:p>
+            </akn:article>
+        </akn:body>
+    </akn:act>
+</akn:akomaNtoso>

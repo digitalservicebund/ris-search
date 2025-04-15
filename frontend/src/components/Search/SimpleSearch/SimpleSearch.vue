@@ -1,0 +1,187 @@
+<script setup lang="ts">
+import { search as performSearch } from "@/services/searchService";
+import CategoryFilter from "@/components/Search/SimpleSearch/CategoryFilter/CategoryFilter.vue";
+import DateRangeFilter from "@/components/Search/SimpleSearch/DateRangeFilter.vue";
+import CourtFilter from "@/components/Search/SimpleSearch/CourtFilter.vue";
+import { useSimpleSearchParamsStore } from "@/stores/searchParams";
+import { storeToRefs } from "pinia";
+import SearchResult from "@/components/Search/Result/SearchResult.vue";
+import ItemsPerPageDropdown from "@/components/Search/SimpleSearch/ItemsPerPageDropdown.vue";
+import SimpleSearchInput from "@/components/Search/SimpleSearch/SimpleSearchInput.vue";
+import SortSelect from "@/components/Search/SortSelect.vue";
+import { DocumentKind } from "@/types";
+import { buildResultCountString } from "~/utils/paginationUtils";
+import { getCurrentDateInGermany } from "~/utils/dateFormatting";
+import Message from "primevue/message";
+
+const store = useSimpleSearchParamsStore();
+const values = storeToRefs(store);
+const {
+  data,
+  error: loadError, // must not be named error, refer to https://github.com/nuxt/test-utils/issues/684#issuecomment-1946138626
+  status,
+  execute,
+} = await useAsyncData(
+  `search:${store.$state}`,
+  () => {
+    return performSearch({
+      ...values.params.value,
+      temporalCoverage: getCurrentDateInGermany(),
+    });
+  },
+  {
+    server: false, // Should be investigated, sometimes wouldn't work on the server. Disabled for now.
+    watch: [values.params],
+  },
+);
+
+watch(
+  loadError,
+  () => {
+    if (loadError.value) {
+      showError(loadError.value);
+    }
+  },
+  { immediate: true },
+);
+
+const isLoading = computed(() => status.value === "pending");
+const currentPage = computed(() => data.value?.data);
+
+async function handleSearchSubmit(value?: string) {
+  store.setQuery(value ?? "");
+  store.setPageNumber(0);
+  await execute();
+}
+
+function scrollToResults() {
+  const element = document.getElementById("result-count");
+  const prefersReducedMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)",
+  ).matches;
+  const behavior: ScrollBehavior = prefersReducedMotion ? "instant" : "smooth";
+  element?.scrollIntoView({ behavior });
+}
+
+watch(data, scrollToResults);
+
+async function updatePage(page: number) {
+  store.setPageNumber(page);
+}
+
+const documentKind: ComputedRef<DocumentKind> = computed(() => {
+  if (values.category.value.length > 0) {
+    return values.category.value[0] as DocumentKind;
+  }
+  return DocumentKind.All;
+});
+
+const title = computed(() => {
+  if (store.query) {
+    return `${store.query} — Suche`;
+  } else {
+    switch (documentKind.value) {
+      case DocumentKind.Norm:
+        return "Gesetze & Verordnungen — Suche";
+      case DocumentKind.CaseLaw:
+        return "Rechtsprechung — Suche";
+      default:
+        return "Suche";
+    }
+  }
+});
+
+useHead({ title });
+</script>
+
+<template>
+  <div class="pb-24">
+    <div class="ris-heading2-regular inline-block font-semibold">Suche</div>
+  </div>
+  <SimpleSearchInput
+    :model-value="values.query.value"
+    @update:model-value="handleSearchSubmit"
+  />
+  <a href="#main" class="sr-only focus:not-sr-only"
+    >Zu den Hauptinhalten springen</a
+  >
+  <div class="mt-24 flex flex-col gap-48 pb-24 lg:flex-row">
+    <fieldset
+      class="top-8 flex w-full flex-col gap-24 pb-10 lg:sticky lg:max-h-screen lg:w-3/12 lg:overflow-y-auto"
+    >
+      <legend class="ris-label1-regular flex h-[3rem] items-center">
+        Filter
+      </legend>
+      <CategoryFilter />
+      <CourtFilter />
+      <DateRangeFilter />
+    </fieldset>
+    <main id="main" class="w-full flex-col justify-end gap-8 lg:w-9/12">
+      <h1 class="sr-only">Suchergebnisse</h1>
+
+      <Pagination
+        :is-loading="isLoading"
+        navigation-position="bottom"
+        :page="currentPage"
+        @update-page="updatePage"
+      >
+        <div
+          class="mb-12 flex w-full flex-wrap items-center justify-between gap-x-32 gap-y-16"
+        >
+          <output
+            id="result-count"
+            aria-live="polite"
+            aria-atomic="true"
+            class="ris-label2-regular"
+          >
+            {{ isLoading ? "Lade ..." : null }}
+            {{
+              currentPage && !isLoading
+                ? buildResultCountString(currentPage)
+                : ""
+            }}
+          </output>
+          <div class="flex flex-wrap gap-x-32 gap-y-16">
+            <ItemsPerPageDropdown />
+            <SortSelect v-model="store.sort" :document-kind="documentKind" />
+          </div>
+        </div>
+        <p
+          v-if="!!loadError"
+          class="my-8 text-red-700"
+          role="alert"
+          aria-relevant="all"
+        >
+          {{ loadError.message }}
+        </p>
+        <Message severity="warn" class="ris-body2-regular mt-16 max-w-prose">
+          <p class="ris-body2-bold mt-2">
+            Dieser Service befindet sich in der Testphase:
+          </p>
+          <p>
+            Der Datenbestand ist noch nicht vollständig und die
+            Suchpriorisierung noch nicht final. Der Service ist in Entwicklung.
+            Wir arbeiten an der Ergänzung und Darstellung aller Inhalte.
+          </p>
+        </Message>
+        <div
+          v-if="currentPage && currentPage?.member?.length > 0"
+          class="w-full"
+        >
+          <SearchResult
+            v-for="(element, index) in currentPage.member"
+            :key="index"
+            :search-result="element"
+            :order="index"
+          />
+        </div>
+        <div
+          v-if="isLoading"
+          class="flex h-full min-h-48 w-full items-center justify-center"
+        >
+          <DelayedLoadingMessage />
+        </div>
+      </Pagination>
+    </main>
+  </div>
+</template>

@@ -1,0 +1,148 @@
+# A pipeline definition to run just the E2E tests
+name: End-to-end tests
+
+on:
+  workflow_call:
+  workflow_dispatch:
+
+env:
+  RUN_ID: ${{ github.run_id }}
+  CONTAINER_REGISTRY: ghcr.io
+  CONTAINER_IMAGE_NAME: ${{ github.repository }}
+  CONTAINER_IMAGE_VERSION: ${{ github.sha }}
+  REPORTS_REPOSITORY: digitalservicebund/ris-search
+jobs:
+  e2e-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 40
+      - name: Log into container registry
+        uses: docker/login-action@3b8fed7e4b60203b2aa0ecc6c6d6d91d12c06760
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Adjust permissions to docker
+        run: sudo chmod 666 /var/run/docker.sock
+      - name: Set environment variables for backend and frontend
+        run: |
+          BRANCH_NAME=${{ github.head_ref || github.ref_name }}
+          BRANCH_NAME_TAG=$(echo $BRANCH_NAME | sed -e 's/[^[:alnum:]]/-/g')
+          if docker pull ghcr.io/digitalservicebund/ris-search:${BRANCH_NAME_TAG}; then
+            echo "BACKEND_IMAGE=ghcr.io/digitalservicebund/ris-search:${BRANCH_NAME_TAG}" >> $GITHUB_ENV
+          else
+            echo "BACKEND_IMAGE=ghcr.io/digitalservicebund/ris-search:main" >> $GITHUB_ENV
+          fi
+          if docker pull ghcr.io/digitalservicebund/ris-search/frontend:${BRANCH_NAME_TAG}; then
+            echo "FRONTEND_IMAGE=ghcr.io/digitalservicebund/ris-search/frontend:${BRANCH_NAME_TAG}" >> $GITHUB_ENV
+          else
+            echo "FRONTEND_IMAGE=ghcr.io/digitalservicebund/ris-search/frontend:main" >> $GITHUB_ENV
+          fi
+      - name: Run needed services
+        run: docker compose -f docker-compose-ci.yml up -d
+        env:
+          BACKEND_IMAGE: ${{ env.BACKEND_IMAGE }}
+          FRONTEND_IMAGE: ${{ env.FRONTEND_IMAGE }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+      - name: Get Playwright version
+        working-directory: ./frontend
+        run: echo "PLAYWRIGHT_VERSION=$(yarn list --pattern @playwright/test | awk -F "@" 'NR==2 {print $NF}')" >> $GITHUB_ENV
+      - name: Cache browser binaries
+        id: playwright-cache
+        uses: actions/cache@v4
+        with:
+          path: /home/runner/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ env.PLAYWRIGHT_VERSION }}-chromium
+      - name: Cache npm cache
+        uses: actions/cache@v4
+        id: cache-npm-cache
+        with:
+          path: /home/runner/.npm
+          key: npm-cache-${{ runner.os }}-playwright-${{ env.PLAYWRIGHT_VERSION }}
+      - name: Install Playwright
+        run: npm install @playwright/test@${{ env.PLAYWRIGHT_VERSION }}
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps chromium
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
+      - name: Wait for containers to be fully up
+        timeout-minutes: 5
+        run: |
+          until curl --silent --fail http://localhost:3000; do
+            echo "Waiting for containers to be fully up..."
+            sleep 15
+          done
+      - name: Run Playwright tests
+        run: npx playwright test --project chromium
+        working-directory: ./frontend
+        env:
+          RIS_BASE_URL: http://localhost:3000
+          TZ: Europe/Berlin
+      - name: Upload test reports
+        uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-report-public-chromium
+          path: frontend/playwright-report
+          retention-days: 5
+      - name: Output logs
+        run: docker compose -f docker-compose-ci.yml logs > docker-compose-logs.log
+        if: ${{ failure() }}
+        env:
+          BACKEND_IMAGE: ${{ env.BACKEND_IMAGE }}
+          FRONTEND_IMAGE: ${{ env.FRONTEND_IMAGE }}
+      - name: Upload docker logs
+        uses: actions/upload-artifact@v4
+        if: ${{ failure() }}
+        with:
+          name: docker-compose-logs
+          path: docker-compose-logs.log
+          retention-days: 5
+      - name: Send status to Slack
+        uses: digitalservicebund/notify-on-failure-gha@66c485757701f8d5dbee32f24df38d904ca693ba
+        if: ${{ failure() && github.ref == 'refs/heads/main' }}
+        with:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+  push-reports:
+    runs-on: ubuntu-latest
+    env:
+      reports-repo: digitalservicebund/ris-reports
+    needs:
+      - e2e-tests
+    if: ${{ github.ref == 'refs/heads/main' }}
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          repository: ${{ env.reports-repo }}
+          ssh-key: ${{ secrets.REPORTS_DEPLOY_KEY }}
+          ref: main
+      - name: Setup git config
+        run: |
+          git config user.name "${{ github.repository }}"
+          # This email identifies the commit as GitHub Actions - see https://github.com/orgs/community/discussions/26560
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+      - name: E2E test reports - Download
+        uses: actions/download-artifact@v4
+        with:
+          path: tmp/playwright-report/
+          pattern: playwright-report-*
+      - name: Add latest directory
+        run: mkdir -p test-reports/ris-search/latest
+      - name: E2E test reports - git add report
+        uses: digitalservicebund/add-ris-report@c6c8735d23295c36a271c75e7dedc9b6b9a9ef5e
+        with:
+          filePath: tmp/playwright-report/
+          destinationDir: test-reports/ris-search
+          reportIsDirectory: true
+      - name: Push reports
+        run: |
+          git diff-index --cached --quiet HEAD ||
+            git commit \
+              -m ${{ toJSON(github.event.head_commit.message) }} \
+              -m "From commit: ${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }}" &&
+            git push origin main &&
+            echo "Pushed reports to ${{ github.server_url }}/${{ env.reports-repo }}" >> $GITHUB_STEP_SUMMARY

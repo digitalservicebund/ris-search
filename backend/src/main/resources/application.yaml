@@ -1,0 +1,79 @@
+spring:
+  jpa:
+    properties:
+      hibernate:
+        ddl-auto: none
+  datasource:
+    hikari:
+      connection-test-query: SELECT 1 FROM DUAL
+      connection-timeout: 600000
+      maximum-pool-size: 500
+      max-lifetime: 1800000
+      minimum-idle: 20
+      validation-timeout: 3000
+      idle-timeout: 60000
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: http://localhost:8443/realms/ris/protocol/openid-connect/certs
+
+server:
+  port: 8090
+  front-end-url: "http://localhost:3000/"
+  api-keys: []
+
+swagger:
+  server:
+    url: http://localhost:8090
+    description: Local development server
+
+feature-flags:
+  advanced-search: true
+
+springdoc:
+  swagger-ui:
+    supportedSubmitMethods: ["get"]
+    defaultModelsExpandDepth: -1
+
+opensearch:
+  host: "${OPENSEARCH_HOST:localhost}"
+  port: 9200
+  username: ""
+  password: ""
+  norms-index-name: norms
+  caselaws-index-name: caselaws
+  documents-alias-name: documents
+
+# The user and password to access postgres was created in the neuris-infra following the variable convention in that repo
+search:
+  database:
+    host: "${POSTGRES_CASELAW_HOST:localhost}"
+    port: 5432
+    user: "test"
+    password: "test"
+    database: "neuris"
+
+s3:
+  file-storage:
+    norm:
+      endpoint: https://obs.eu-de.otc.t-systems.com
+      bucket-name: norm
+      access-key-id:
+      secret-access-key:
+    case-law:
+      endpoint: https://obs.eu-de.otc.t-systems.com
+      bucket-name: caselaw
+      access-key-id:
+      secret-access-key:
+    portal:
+      endpoint: https://obs.eu-de.otc.t-systems.com
+      bucket-name: portal
+      access-key-id:
+      secret-access-key:
+
+local:
+  file-storage: backend/.local-storage
+
+sentry:
+  release: "${SENTRY_RELEASE:default_release}"

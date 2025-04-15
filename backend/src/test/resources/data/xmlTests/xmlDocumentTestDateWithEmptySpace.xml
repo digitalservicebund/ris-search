@@ -1,0 +1,29 @@
+<akn:akomaNtoso xmlns:akn="http://Inhaltsdaten.LegalDocML.de/1.6/"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:schemaLocation="http://Metadaten.LegalDocML.de/1.6/ ../schema/legalDocML.de-metadaten.xsd http://Inhaltsdaten.LegalDocML.de/1.6/ ../schema/legalDocML.de-regelungstextverkuendungsfassung.xsd">
+    <akn:act name="regelungstext">
+        <akn:meta eId="meta-1" GUID="9fac524a-aced-4b13-a792-4f824daf1d01">
+            <akn:identification eId="meta-1_ident-1" GUID="44a279c1-22d5-4b68-b9e2-1693951e736e" source="attributsemantik-noch-undefiniert">
+                <akn:FRBRWork eId="meta-1_ident-1_frbrwork-1" GUID="bdfd5b94-8be0-4a73-a16a-1b4d3a189966">
+                    <akn:FRBRthis eId="meta-1_ident-1_frbrwork-1_frbrthis-1" GUID="3d8e1040-ca03-4cd9-83cc-f3e71d0bf716" value="eli/bund/bgbl-1/1962/s514/regelungstext-1"/>
+                    <akn:FRBRuri eId="meta-1_ident-1_frbrwork-1_frbruri-1" GUID="5ea31b41-621f-43af-b252-34f4e5322ce2" value="eli/bund/bgbl-1/1962/s514"/>
+                    <akn:FRBRdate eId="meta-1_ident-1_frbrwork-1_frbrdate-1" GUID="cb3b27cf-2bd4-4275-99bc-9cc1dd5f163a" date="  1962-07-20" name="verkuendungsfassung"/>
+                </akn:FRBRWork>
+                <akn:FRBRExpression>
+                    <akn:FRBRthis value="eli/bund/bgbl-1/1962/s514/2010-04-27/1/deu/regelungstext-1"/>
+                    <akn:FRBRuri value="eli/bund/bgbl-1/1962/s514/2010-04-27/1/deu"/>
+                </akn:FRBRExpression>
+                <akn:FRBRManifestation>
+                    <akn:FRBRthis value="eli/bund/bgbl-1/1962/s514/2010-04-27/1/deu/2010-04-27/regelungstext-1.xml"/>
+                    <akn:FRBRuri value="eli/bund/bgbl-1/1962/s514//2010-04-27/1/deu/2010-04-27/regelungstext-1.xml"/>
+                </akn:FRBRManifestation>
+            </akn:identification>
+        </akn:meta>
+        <akn:preface eId="einleitung-1" GUID="c0e7334b-6762-4115-9221-fe0a79666193">
+            <akn:block eId="einleitung-1_block-1" GUID="50b373c9-d7a9-4ea1-a6c9-bee1fa5617c6" name="attributsemantik-noch-undefiniert">
+                <akn:date eId="einleitung-1_block-1_datum-1" GUID="34a9b790-c90f-4177-8023-425062e13f07"
+                          refersTo="ausfertigung-datum" date="1962-07-15"/>
+            </akn:block>
+        </akn:preface>
+    </akn:act>
+</akn:akomaNtoso>

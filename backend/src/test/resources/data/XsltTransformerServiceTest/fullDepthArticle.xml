@@ -1,0 +1,32 @@
+<akn:akomaNtoso xmlns:akn="http://Inhaltsdaten.LegalDocML.de/1.7.2/">
+    <akn:act>
+        <akn:body>
+            <akn:part GUID="1" eId="a">
+                <akn:num GUID="2" eId="b"><akn:marker name="1"/>Part 1</akn:num>
+                <akn:heading GUID="3" eId="c">Part heading</akn:heading>
+                <akn:chapter GUID="4" eId="d">
+                    <akn:num GUID="5" eId="e"><akn:marker name="1"/>Chap 1</akn:num>
+                    <akn:heading GUID="6" eId="f">Chapter heading</akn:heading>
+                    <akn:section GUID="7" eId="g">
+                        <akn:num GUID="8" eId="h"><akn:marker name="1"/>Sec 1</akn:num>
+                        <akn:heading GUID="9" eId="i">Section heading</akn:heading>
+                        <akn:subsection GUID="10" eId="j">
+                            <akn:num GUID="11" eId="k"><akn:marker name="1"/>Subsec 1</akn:num>
+                            <akn:heading GUID="12" eId="l">Subsection heading</akn:heading>
+                            <akn:article GUID="13" eId="m">
+                                <akn:num GUID="14" eId="n"><akn:marker name="1"/>Art 1</akn:num>
+                                <akn:heading GUID="15" eId="o">Article heading</akn:heading>
+                                <akn:paragraph GUID="16" eId="p">
+                                    <akn:num GUID="17" eId="q"><akn:marker name="1"/>Par 1</akn:num>
+                                    <akn:content GUID="18" eId="r">
+                                        <akn:p GUID="19" eId="s">Paragraph content</akn:p>
+                                    </akn:content>
+                                </akn:paragraph>
+                            </akn:article>
+                        </akn:subsection>
+                    </akn:section>
+                </akn:chapter>
+            </akn:part>
+        </akn:body>
+    </akn:act>
+</akn:akomaNtoso>

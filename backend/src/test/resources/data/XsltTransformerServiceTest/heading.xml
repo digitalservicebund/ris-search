@@ -1,0 +1,9 @@
+<akn:akomaNtoso xmlns:akn="http://Inhaltsdaten.LegalDocML.de/1.7.2/">
+    <akn:article eId="a">
+        <akn:num eId="b">§ 1</akn:num>
+        <akn:heading eId="c">Heading
+            <akn:marker eId="marker-1"/>
+            with marker
+        </akn:heading>
+    </akn:article>
+</akn:akomaNtoso>

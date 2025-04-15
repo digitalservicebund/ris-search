@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="../../../Grammatiken/legalDocML.de.sch" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<akn:akomaNtoso xmlns:akn="http://Inhaltsdaten.LegalDocML.de/1.7.2/"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:schemaLocation="">
+    <akn:act name="regelungstext">
+        <akn:meta GUID="8f51c086-ffa1-4eb3-8e4b-8280a05b94c1" eId="meta-1">
+            <akn:identification eId="meta-1_ident-1" GUID="44a279c1-22d5-4b68-b9e2-1693951e736e" source="attributsemantik-noch-undefiniert">
+                <akn:FRBRWork eId="meta-1_ident-1_frbrwork-1" GUID="bdfd5b94-8be0-4a73-a16a-1b4d3a189966">
+                    <akn:FRBRthis eId="meta-1_ident-1_frbrwork-1_frbrthis-1" GUID="3d8e1040-ca03-4cd9-83cc-f3e71d0bf716" value="eli/bund/bgbl-1/1962/s514/regelungstext-1"/>
+                    <akn:FRBRuri eId="meta-1_ident-1_frbrwork-1_frbruri-1" GUID="5ea31b41-621f-43af-b252-34f4e5322ce2" value="eli/bund/bgbl-1/1962/s514"/>
+                    <akn:FRBRdate eId="meta-1_ident-1_frbrwork-1_frbrdate-1" GUID="cb3b27cf-2bd4-4275-99bc-9cc1dd5f163a" date="1962-07-20" name="verkuendungsfassung"/>
+                </akn:FRBRWork>
+                <akn:FRBRExpression>
+                    <akn:FRBRthis value="eli/bund/bgbl-1/1962/s514/2010-04-27/1/deu/regelungstext-1"/>
+                    <akn:FRBRuri value="eli/bund/bgbl-1/1962/s514/2010-04-27/1/deu"/>
+                </akn:FRBRExpression>
+                <akn:FRBRManifestation>
+                    <akn:FRBRthis value="eli/bund/bgbl-1/1962/s514/2010-04-27/1/deu/2010-04-27/regelungstext-1.xml"/>
+                    <akn:FRBRuri value="eli/bund/bgbl-1/1962/s514//2010-04-27/1/deu/2010-04-27/regelungstext-1.xml"/>
+                </akn:FRBRManifestation>
+            </akn:identification>
+            <akn:proprietary GUID="6cb4407c-4884-4ecf-83c0-6fde63bbf41a" source="attributsemantik-noch-undefiniert"
+                             eId="meta-1_proprietary-1">
+                <ris:legalDocML.de_metadaten xmlns:ris="http://MetadatenRIS.LegalDocML.de/1.7.2/"
+                                             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                                             xsi:schemaLocation="http://MetadatenRIS.LegalDocML.de/1.7.2/">
+                    <ris:inkraft date="%1$s"/>
+                    <ris:ausserkraft date="%2$s"/>
+                </ris:legalDocML.de_metadaten>
+            </akn:proprietary>
+        </akn:meta>
+    </akn:act>
+</akn:akomaNtoso>

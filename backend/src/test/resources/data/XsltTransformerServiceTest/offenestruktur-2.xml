@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?><?xml-model href="Grammatiken/legalDocML.de.sch" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<akn:akomaNtoso xmlns:akn="http://Inhaltsdaten.LegalDocML.de/1.7.2/"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:schemaLocation="http://Inhaltsdaten.LegalDocML.de/1.7.2/ Grammatiken/legalDocML.de-offenestruktur.xsd">
+    <akn:doc name="offene-struktur">
+        <akn:preface eId="einleitung-1">
+            <akn:block eId="einleitung-1_block-1"
+                       name="attributsemantik-noch-undefiniert">
+                <akn:docTitle eId="einleitung-1_block-1_doctitel-1">
+                    (Title part of offenestruktur-2.xml)
+                </akn:docTitle>
+            </akn:block>
+        </akn:preface>
+        <akn:mainBody eId="hauptteil-1">
+            <akn:p eId="hauptteil-1_text-1">
+                Contents of offenestruktur-2.xml
+            </akn:p>
+        </akn:mainBody>
+    </akn:doc>
+</akn:akomaNtoso>

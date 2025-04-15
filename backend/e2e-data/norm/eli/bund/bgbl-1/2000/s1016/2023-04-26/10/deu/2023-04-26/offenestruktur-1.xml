@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="UTF-8"?><?xml-model href="Grammatiken/legalDocML.de.sch" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<akn:akomaNtoso xmlns:akn="http://Inhaltsdaten.LegalDocML.de/1.7.2/"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:schemaLocation="http://Inhaltsdaten.LegalDocML.de/1.7.2/ Grammatiken/legalDocML.de-offenestruktur.xsd">
+    <akn:doc name="offene-struktur">
+        <akn:meta GUID="4cda11eb-c56d-495e-bd32-809501304d20" eId="meta-1">
+            <akn:identification GUID="c411c3fa-065c-4485-b7cd-8458f997b0b8" eId="meta-1_ident-1"
+                                source="attributsemantik-noch-undefiniert">
+                <akn:FRBRWork GUID="4d05c211-504e-431f-acb6-5a048ae85c08" eId="meta-1_ident-1_frbrwork-1">
+                    <akn:FRBRthis GUID="e50b1116-b94b-44d9-89c7-dfb65fd0e5ac" eId="meta-1_ident-1_frbrwork-1_frbrthis-1"
+                                  value="eli/bund/bgbl-1/2000/s1016/offenestruktur-1"/>
+                    <akn:FRBRuri GUID="e821153afc-29bd-45ba-a395-fac7abfddc0f" eId="meta-1_ident-1_frbrwork-1_frbruri-1"
+                                 value="eli/bund/bgbl-1/2000/s1016"/>
+                    <akn:FRBRalias GUID="9e411718-08ee-4f49-a9ce-9eb92731d850"
+                                   eId="meta-1_ident-1_frbrwork-1_frbralias-1" name="übergreifende-id"
+                                   value="38b112bd-ae28-4008-b1db-146fe794ed30"/>
+                    <akn:FRBRdate GUID="64551148-935c-4b64-819b-2458492d3a16" date="2000-05-27"
+                                  eId="meta-1_ident-1_frbrwork-1_frbrdate-1" name="verkuendungsfassung"/>
+                    <akn:FRBRauthor GUID="21a1139e-3c3c-4c84-a704-64231d3ccc5a"
+                                    eId="meta-1_ident-1_frbrwork-1_frbrauthor-1"
+                                    href="recht.bund.de/institution/bundesregierung"/>
+                    <akn:FRBRcountry GUID="fadf130b-a548-4119-a281-3a196b8e0470"
+                                     eId="meta-1_ident-1_frbrwork-1_frbrcountry-1" value="de"/>
+                    <akn:FRBRnumber GUID="d349f87c-fa03-4e11-9252-923ff67ef28b"
+                                    eId="meta-1_ident-1_frbrwork-1_frbrnumber-1" value="s1016"/>
+                    <akn:FRBRname GUID="1992ba44-58b6-445e-9211-ef4dec597073" eId="meta-1_ident-1_frbrwork-1_frbrname-1"
+                                  value="bgbl-1"/>
+                    <akn:FRBRsubtype GUID="203a80d9-90f3-4f4c-8e11-14c639f92c01"
+                                     eId="meta-1_ident-1_frbrwork-1_frbrsubtype-1" value="offenestruktur-1"/>
+                </akn:FRBRWork>
+                <akn:FRBRExpression GUID="16857812-3b53-4711-adb3-794b9b1b6113" eId="meta-1_ident-1_frbrexpression-1">
+                    <akn:FRBRthis GUID="a59ca0ff-1c34-117d-afaf-4fe42778550d"
+                                  eId="meta-1_ident-1_frbrexpression-1_frbrthis-1"
+                                  value="eli/bund/bgbl-1/2000/s1016/2023-04-26/10/deu/offenestruktur-1"/>
+                    <akn:FRBRuri GUID="6f859aa2-4153-4a11-b4be-313e425dd7b6"
+                                 eId="meta-1_ident-1_frbrexpression-1_frbruri-1"
+                                 value="eli/bund/bgbl-1/2000/s1016/2023-04-26/10/deu"/>
+                    <akn:FRBRalias GUID="bba8d3ad-83df-411e-aed4-1ab9df1382a6"
+                                   eId="meta-1_ident-1_frbrexpression-1_frbralias-1" name="vorherige-version-id"
+                                   value="e7317ecb-0ca1-4116-b5be-80e7cfdd2e09"/>
+                    <akn:FRBRalias GUID="00d9ce7a-5be3-11cd-9626-ba8ac66c680d"
+                                   eId="meta-1_ident-1_frbrexpression-1_frbralias-2" name="aktuelle-version-id"
+                                   value="5ec7ff64-6b38-4211-9927-92a1bcd0f63b"/>
+                    <akn:FRBRalias GUID="c1619709-7deb-114e-9a3f-e18560aa2f12"
+                                   eId="meta-1_ident-1_frbrexpression-1_frbralias-3" name="nachfolgende-version-id"
+                                   value="4871652f-4364-11c1-96db-93b638c457a4"/>
+                    <akn:FRBRauthor GUID="edf49ab8-6237-1195-840f-052206f49da6"
+                                    eId="meta-1_ident-1_frbrexpression-1_frbrauthor-1"
+                                    href="example.de/institution/test"/>
+                    <akn:FRBRdate GUID="25bca8bf-1148-4fe2-a1f0-811e4192cd99" date="2023-04-26"
+                                  eId="meta-1_ident-1_frbrexpression-1_frbrdate-1" name="verkuendung"/>
+                    <akn:FRBRlanguage GUID="b0711c29-1a02-4e91-9610-46a437388fbf"
+                                      eId="meta-1_ident-1_frbrexpression-1_frbrlanguage-1" language="deu"/>
+                    <akn:FRBRversionNumber GUID="98498e8e-11a3-4724-b469-e068a1c127f3"
+                                           eId="meta-1_ident-1_frbrexpression-1_frbrversionnumber-1" value="10"/>
+                </akn:FRBRExpression>
+                <akn:FRBRManifestation GUID="36cf571d-1120-4ba7-89e8-80381bd607bd"
+                                       eId="meta-1_ident-1_frbrmanifestation-1">
+                    <akn:FRBRthis GUID="051360a2-45ad-1129-825d-f2961dea6f7e"
+                                  eId="meta-1_ident-1_frbrmanifestation-1_frbrthis-1"
+                                  value="eli/bund/bgbl-1/2000/s1016/2023-04-26/10/deu/2023-04-26/offenestruktur-1.xml"/>
+                    <akn:FRBRuri GUID="1646c4f5-e4c5-4113-8b1a-8986a176df07"
+                                 eId="meta-1_ident-1_frbrmanifestation-1_frbruri-1"
+                                 value="eli/bund/bgbl-1/2000/s1016/2023-04-26/10/deu/2023-04-26/offenestruktur-1.xml"/>
+                    <akn:FRBRdate GUID="b8e3aa94-19f0-411f-81da-c2e4bce4bfe9" date="2023-04-26"
+                                  eId="meta-1_ident-1_frbrmanifestation-1_frbrdate-1" name="generierung"/>
+                    <akn:FRBRauthor GUID="937aab19-211f-4c72-a50f-3e77ad8cb80e"
+                                    eId="meta-1_ident-1_frbrmanifestation-1_frbrauthor-1" href="example.de"/>
+                    <akn:FRBRformat GUID="656cf2ab-11ee-4085-a378-ee5accf1ff9f"
+                                    eId="meta-1_ident-1_frbrmanifestation-1_frbrformat-1" value="xml"/>
+                </akn:FRBRManifestation>
+            </akn:identification>
+            <akn:notes source="attributsemantik-noch-undefiniert">
+                <akn:note GUID="0b3d7376-2ea9-4111-88aa-9aacb5421601" eId="meta-1_editfnote-1" marker="#"
+                          placement="bottom" refersTo="aenderungsfussnote">
+                    <akn:p GUID="cb0f4f8e-e204-48118e37-75bc5ced20fd" eId="meta-1_editfnote-1_text-1">Anlage 1: IdF d.
+                        Art. 1 Nr. 9 V v. 21.01.2014
+                    </akn:p>
+                </akn:note>
+                <akn:note GUID="50fb115a-c8f8-4789-b74e-4620afc8646e" eId="meta-1_editfnote-2" marker="#"
+                          placement="bottom" refersTo="aenderungsfussnote">
+                    <akn:p GUID="8ed11357-a016-4779-9504-df728e4d35a3" eId="meta-1_editfnote-2_text-1">Anlage 1
+                        Überschrift: Art. 1 Nr. 9 V v. 21.01.2014 Test1
+                    </akn:p>
+                </akn:note>
+                <akn:note GUID="1e9db110-93cd-446b-82fb-d93f23e00ae6" eId="meta-1_editfnote-3" marker="#"
+                          placement="bottom" refersTo="aenderungsfussnote">
+                    <akn:p GUID="192f362c-7167-4b97-8116-62480fc48151" eId="meta-1_editfnote-3_text-1">Anlage 1 Spalte 2
+                        Zeile 1: Art. 1 Nr. 9 V v. 21.01.2014 Test2
+                    </akn:p>
+                </akn:note>
+                <akn:note GUID="61117c97-e599-4f46-951a-a4d586ab7ac1" eId="meta-1_editfnote-4" marker="#"
+                          placement="bottom" refersTo="aenderungsfussnote">
+                    <akn:p GUID="7111b50e-f7f8-408e-b656-3d66ec7c557f" eId="meta-1_editfnote-4_text-1">Anlage 1 Tabelle Test
+                    </akn:p>
+                </akn:note>
+            </akn:notes>
+        </akn:meta>
+        <akn:preface GUID="ca78411a-6a11-4779-9958-f88fc48efbf7" eId="einleitung-1">
+            <akn:block GUID="5f317c6b-a602-4e33-115c-7c2fe1ec4060" eId="einleitung-1_block-1"
+                       name="attributsemantik-noch-undefiniert">
+                <akn:docTitle GUID="abcd1234-5678-90ef-ghij-klmnopqrstuv" eId="einleitung-1_block-1_doctitel-2">(zu § 4
+                    Absatz 2, § 5 Absatz 1 bis 3, § 6 Absatz 2 bis 4 und § 8)
+                </akn:docTitle>
+            </akn:block>
+        </akn:preface>
+        <akn:mainBody GUID="43960b63-b71f-4119-b6c8-cae9ab89741c" eId="hauptteil-1">
+            <akn:p GUID="46c37aae-55bb-4b26-a11d-6a73c41e30b6" eId="hauptteil-1_text-1">
+                <akn:inline GUID="fc2740ec-11da-4eb9-a04f-431a31870e6d" eId="hauptteil-1_text-1_inline-1" name="comment"
+                            refersTo="neuris"><akn:marker GUID="211afff6-180b-4013-af24-e2d8fed083f9"
+                                                          eId="hauptteil-1_text-1_inline-1_marker-1" name="Fundstelle"
+                                                          refersTo="neuris"/>(Fundstelle: BGBl. I 2020, 1234 - 1235;
+                </akn:inline>
+                <akn:br GUID="22a56616-6811-422d-8e10-f18b2789a33d" eId="hauptteil-1_text-1_br-1"/>
+                <akn:inline GUID="151bd344-2acd-4611-86cf-aa24c88369a5" eId="hauptteil-1_text-1_inline-2" name="comment"
+                            refersTo="neuris"><akn:marker GUID="0d2ab621-35f8-4e01-bbcc-3f48415b7be9"
+                                                          eId="hauptteil-1_text-1_inline-2_marker-1" name="Fundstelle"
+                                                          refersTo="neuris"/>insichtlich der spezifischen Änderungen siehe Fußnote.
+                </akn:inline>
+            </akn:p>
+            <akn:p GUID="5916e6af-fce0-4188-b091-111447f1b0fa" eId="hauptteil-1_text-2">
+                <akn:br GUID="feb188bb-60d7-49e9-9111-109b0c9f2b24" eId="hauptteil-1_text-2_br-1"/>
+                <akn:br GUID="c25b46b1-b6e7-410f-1111-2c5b656fbe96" eId="hauptteil-1_text-2_br-2"/>
+            </akn:p>
+            <akn:table GUID="9ffc2111-43c4-47d6-11a6-11252a98ea52" class="align-left charoff-50 frame-all"
+                       eId="hauptteil-1_tabelle-1">
+                <akn:caption GUID="69a12605-e64e-4511-9a0e-ea327d1d54bf" eId="hauptteil-1_tabelle-1_tblue-1">
+                    Namen der Produkte, Produktionsanforderungen
+                </akn:caption>
+                <akn:tr GUID="e48febc0-f088-4a84-b682-9b3d520d880a" eId="hauptteil-1_tabelle-1_tabellereihe-1">
+                    <akn:th GUID="98f70624-cc71-4f9e-83da-7557e878d0a2" class="rowsep valign-middle"
+                            eId="hauptteil-1_tabelle-1_tabellereihe-1_tabellekopf-1" style="width:3%;">
+                        <akn:p GUID="13720967-8cb4-4b9e-a682-a4d4f152c1dd"
+                               eId="hauptteil-1_tabelle-1_tabellereihe-1_tabellekopf-1_text-1">Nr.
+                        </akn:p>
+                    </akn:th>
+                    <akn:th GUID="e85da039-0fe0-4f9c-82f0-c012bdc0dffb" class="colsep rowsep valign-middle"
+                            eId="hauptteil-1_tabelle-1_tabellereihe-1_tabellekopf-2" style="width:3%;"/>
+                    <akn:th GUID="c89b1fae-3074-4438-a3de-34963bf216ea" class="colsep rowsep valign-middle"
+                            eId="hauptteil-1_tabelle-1_tabellereihe-1_tabellekopf-3" style="width:24%;">
+                        <akn:p GUID="37befe7d-ed2c-462f-b08d-680f2bb5d828"
+                               eId="hauptteil-1_tabelle-1_tabellereihe-1_tabellekopf-3_text-1">Namen der Produkte
+                        </akn:p>
+                    </akn:th>
+                    <akn:th GUID="31c88b5a-87d2-4768-987e-c23997f65003" class="colsep rowsep valign-middle"
+                            eId="hauptteil-1_tabelle-1_tabellereihe-1_tabellekopf-4" style="width:70%;">
+                        <akn:p GUID="57c591bb-c409-4519-a457-1b843f46bdcb"
+                               eId="hauptteil-1_tabelle-1_tabellereihe-1_tabellekopf-4_text-1">Produktionsanforderungen
+                        </akn:p>
+                    </akn:th>
+                </akn:tr>
+                <akn:tr GUID="6bb131a1-2ee9-4322-925a-0edcc32a2eae" eId="hauptteil-1_tabelle-1_tabellereihe-2">
+                    <akn:td GUID="ca76a888-9988-44be-aba6-55c4f4157831" class="valign-top"
+                            eId="hauptteil-1_tabelle-1_tabellereihe-2_tabelleinh-1" style="width:3%;">
+                        <akn:p GUID="4e83f31b-1022-4e08-b0e7-01253d1fb8bc"
+                               eId="hauptteil-1_tabelle-1_tabellereihe-2_tabelleinh-1_text-1">1.
+                        </akn:p>
+                    </akn:td>
+                    <akn:td GUID="47f82466-bacd-4e1e-bfed-cc07977e0bf3" class="colsep valign-top"
+                            eId="hauptteil-1_tabelle-1_tabellereihe-2_tabelleinh-2" style="width:3%;">
+                        <akn:p GUID="f4b8aea8-5580-4a8d-9c33-4f2e50ea7176"
+                               eId="hauptteil-1_tabelle-1_tabellereihe-2_tabelleinh-2_text-1">a)
+                        </akn:p>
+                    </akn:td>
+                    <akn:td GUID="5d522638-0ee9-4b67-af22-289711697082" class="colsep valign-top"
+                            eId="hauptteil-1_tabelle-1_tabellereihe-2_tabelleinh-3" style="width:24%;">
+                        <akn:p GUID="961c9a4b-3416-44f1-b360-1ad651461d22"
+                               eId="hauptteil-1_tabelle-1_tabellereihe-2_tabelleinh-3_text-1">Apfelsaft
+                        </akn:p>
+                    </akn:td>
+                    <akn:td GUID="80b40021-3700-4e4a-b225-7861d8967b57" class="colsep valign-top"
+                            eId="hauptteil-1_tabelle-1_tabellereihe-2_tabelleinh-4" style="width:70%;">
+                        <akn:blockList GUID="95e48773-4e53-49cb-814a-eb77dd839b26"
+                                       eId="hauptteil-1_tabelle-1_tabellereihe-2_tabelleinh-4_liste-1">
+                            <akn:item GUID="432cf931-8de3-4b60-a1ad-24906769452d"
+                                      eId="hauptteil-1_tabelle-1_tabellereihe-2_tabelleinh-4_liste-1_listenelem-1">
+                                <akn:num GUID="99a298be-10ce-40c1-aaf9-a28a1e61ed3a"
+                                         eId="hauptteil-1_tabelle-1_tabellereihe-2_tabelleinh-4_liste-1_listenelem-1_bezeichnung-1">
+                                    a)
+                                </akn:num>
+                                <akn:p GUID="e29e8e43-60e7-4edd-b477-c09e6e5a5fe8"
+                                       eId="hauptteil-1_tabelle-1_tabellereihe-2_tabelleinh-4_liste-1_listenelem-1_text-1">
+                                    Apfelsaft ist das gärfähige, jedoch nicht gegorene Produkt, das aus dem genießbaren Teil
+                                    gesunder und reifer Äpfel (frisch oder durch Kälte haltbar gemacht) gewonnen wird und die für den
+                                    Saft dieser Frucht charakteristische Farbe, das Aroma und den Geschmack aufweist.
+                                    <akn:marker GUID="2d4927ce-b503-4ee9-95b2-43c3467dc68d"
+                                                eId="hauptteil-1_tabelle-1_tabellereihe-2_tabelleinh-4_liste-1_listenelem-1_text-1_marker-1"
+                                                refersTo="satzende"/>
+                                    Aroma, Fruchtfleisch und Zellen, die mit geeigneten physikalischen Verfahren aus derselben
+                                    Fruchtart gewonnen wurden, dürfen im Saft wiederhergestellt werden.
+                                    <akn:marker GUID="fc00e5e6-a4b5-4b23-b770-0195633859b8"
+                                                eId="hauptteil-1_tabelle-1_tabellereihe-2_tabelleinh-4_liste-1_listenelem-1_text-1_marker-2"
+                                                refersTo="satzende"/>
+                                    Das Mischen von Apfelsaft mit Fruchtmark bei der Herstellung von Apfelsaft ist zulässig.
+                                    <akn:marker GUID="6380ed37-215a-48dd-9a22-6933c5b20275"
+                                                eId="hauptteil-1_tabelle-1_tabellereihe-2_tabelleinh-4_liste-1_listenelem-1_text-1_marker-3"
+                                                refersTo="satzende"/>
+                                    <akn:br GUID="d767d1a0-d8a1-44b9-8254-e609bbcba2a6"
+                                            eId="hauptteil-1_tabelle-1_tabellereihe-2_tabelleinh-4_liste-1_listenelem-1_text-1_br-1"/>
+                                    <akn:br GUID="da93ec95-aa27-4fdc-8e94-36330b28d76e"
+                                            eId="hauptteil-1_tabelle-1_tabellereihe-2_tabelleinh-4_liste-1_listenelem-1_text-1_br-2"/>
+                                    Der Brixwert des Apfelsaftes muss dem des aus der Frucht gewonnenen Saftes entsprechen und darf
+                                    nicht verändert werden, ausgenommen bei Verschnitten mit dem Saft derselben Fruchtart.
+                                    <akn:marker GUID="1968e27c-2d28-440b-9cce-6c3880378fd8"
+                                                eId="hauptteil-1_tabelle-1_tabellereihe-2_tabelleinh-4_liste-1_listenelem-1_text-1_marker-4"
+                                                refersTo="satzende"/>
+                                    <akn:br GUID="1fc4ff7e-c4dc-4356-bfad-d4a30f7cbb9d"
+                                            eId="hauptteil-1_tabelle-1_tabellereihe-2_tabelleinh-4_liste-1_listenelem-1_text-1_br-3"/>
+                                    <akn:br GUID="08efcc78-0dea-496a-b105-a293aa07c17e"
+                                            eId="hauptteil-1_tabelle-1_tabellereihe-2_tabelleinh-4_liste-1_listenelem-1_text-1_br-4"/>
+                                    Bei Zitrusfrüchten stammt der Saft vom Endokarp; Zitronensaft kann jedoch auch aus der ganzen
+                                    Frucht hergestellt werden.
+                                    <akn:marker GUID="7525f927-4804-4f07-8ff4-0269dbd943cd"
+                                                eId="hauptteil-1_tabelle-1_tabellereihe-2_tabelleinh-4_liste-1_listenelem-1_text-1_marker-5"
+                                                refersTo="satzende"/>
+                                    <akn:br GUID="28c2c199-67f4-47b4-8f6a-18ab7092a5c9"
+                                            eId="hauptteil-1_tabelle-1_tabellereihe-2_tabelleinh-4_liste-1_listenelem-1_text-1_br-5"/>
+                                    <akn:br GUID="34e4d674-dbce-4205-be6c-6cc5e4734e42"
+                                            eId="hauptteil-1_tabelle-1_tabellereihe-2_tabelleinh-4_liste-1_listenelem-1_text-1_br-6"/>
+                                    Werden Säfte aus Früchten mit Kernen, Samenkörnern und Schale hergestellt, dürfen Stücke oder
+                                    Bestandteile von Kernen, Samenkörnern und Schale nicht im Saft enthalten sein.
+                                    <akn:marker GUID="692b20fb-557b-4932-9c58-60933f58803d"
+                                                eId="hauptteil-1_tabelle-1_tabellereihe-2_tabelleinh-4_liste-1_listenelem-1_text-1_marker-6"
+                                                refersTo="satzende"/>
+                                    Dies gilt jedoch nicht, wenn Stücke oder Bestandteile von Kernen, Samenkörnern und Schale nicht
+                                    durch Verfahren der guten Herstellungspraxis entfernt werden können.
+                                    <akn:marker GUID="14419444-de64-4b29-a2e0-2c2220d815aa"
+                                                eId="hauptteil-1_tabelle-1_tabellereihe-2_tabelleinh-4_liste-1_listenelem-1_text-1_marker-7"
+                                                refersTo="satzende"/>
+                                </akn:p>
+                            </akn:item>
+                        </akn:blockList>
+                    </akn:td>
+                </akn:tr>
+                <akn:tr GUID="768ff8aa-08ef-487c-b92b-5ba9880310e3" eId="hauptteil-1_tabelle-1_tabellereihe-3">
+                    <akn:td GUID="efb8d6fc-61d7-4605-ae38-f9f349977fce" class="rowsep valign-top"
+                            eId="hauptteil-1_tabelle-1_tabellereihe-3_tabelleinh-1" style="width:3%;"/>
+                    <akn:td GUID="6233dd54-0e0e-41fe-a180-9eea1882f2fc" class="colsep rowsep valign-top"
+                            eId="hauptteil-1_tabelle-1_tabellereihe-3_tabelleinh-2" style="width:3%;">
+                        <akn:p GUID="59850ef0-579a-48f1-8e25-6149db3a4fcf"
+                               eId="hauptteil-1_tabelle-1_tabellereihe-3_tabelleinh-2_text-1">b)
+                        </akn:p>
+                    </akn:td>
+                    <akn:td GUID="5a696f79-cb22-4048-8433-199c2f725ba2" class="colsep rowsep valign-top"
+                            eId="hauptteil-1_tabelle-1_tabellereihe-3_tabelleinh-3" style="width:24%;">
+                        <akn:p GUID="60357f3c-0a11-451e-ad20-f83c07fa55d7"
+                               eId="hauptteil-1_tabelle-1_tabellereihe-3_tabelleinh-3_text-1">Test aus
+                            <akn:br GUID="5cf0f32a-cb2a-49f1-accb-712acb363ae5"
+                                    eId="hauptteil-1_tabelle-1_tabellereihe-3_tabelleinh-3_text-1_br-1"/>
+                            Testkonzentrat
+                        </akn:p>
+                    </akn:td>
+                    <akn:td GUID="b166f50b-c159-444d-9a4e-84ecf5d75812" class="colsep rowsep valign-top"
+                            eId="hauptteil-1_tabelle-1_tabellereihe-3_tabelleinh-4" style="width:70%;">
+                        <akn:blockList GUID="4f570014-7033-4cb1-aa86-e09fa5d8e536"
+                                       eId="hauptteil-1_tabelle-1_tabellereihe-3_tabelleinh-4_liste-1">
+                            <akn:item GUID="42734a64-c088-4894-931e-eaa4423d9cb2"
+                                      eId="hauptteil-1_tabelle-1_tabellereihe-3_tabelleinh-4_liste-1_listenelem-1">
+                                <akn:num GUID="11345468-5522-4697-8702-0e7d9153ff26"
+                                         eId="hauptteil-1_tabelle-1_tabellereihe-3_tabelleinh-4_liste-1_listenelem-1_bezeichnung-1">
+                                    b)
+                                </akn:num>
+                                <akn:p GUID="1d38f1a6-8e48-41da-8047-2f160ac3e2eb"
+                                       eId="hauptteil-1_tabelle-1_tabellereihe-3_tabelleinh-4_liste-1_listenelem-1_text-1">
+                                    Test aus Testkonzentrat ist das Produkt, das aus konzentriertem Test mit Trinkwasser
+                                    wiederhergestellt wird, das die Anforderungen der Trinkwasserverordnung erfüllt.
+                                    <akn:marker GUID="371115e6-2d5f-4897-9cd3-ff4cf52305fa"
+                                                eId="hauptteil-1_tabelle-1_tabellereihe-3_tabelleinh-4_liste-1_listenelem-1_text-1_marker-1"
+                                                refersTo="satzende"/>
+                                    <akn:br GUID="3e740612-61cb-45f1-98a1-f57cd16e9072"
+                                            eId="hauptteil-1_tabelle-1_tabellereihe-3_tabelleinh-4_liste-1_listenelem-1_text-1_br-1"/>
+                                    <akn:br GUID="ec0c0827-93a5-43f0-9641-f0441b78d3c5"
+                                            eId="hauptteil-1_tabelle-1_tabellereihe-3_tabelleinh-4_liste-1_listenelem-1_text-1_br-2"/>
+                                    Test aus Testkonzentrat wird nur mit geeigneten Verfahren hergestellt, die die wesentlichen
+                                    physikalischen, chemischen, organoleptischen und nährstoffbezogenen Merkmale eines durchschnittlichen
+                                    testes derselben Fruchtart erhalten.
+                                    <akn:marker GUID="e2805179-28e5-4453-9651-a376da159e74"
+                                                eId="hauptteil-1_tabelle-1_tabellereihe-3_tabelleinh-4_liste-1_listenelem-1_text-1_marker-2"
+                                                refersTo="satzende"/>
+                                    <akn:br GUID="4bfe67a1-bfdc-4710-b192-e10aec91243f"
+                                            eId="hauptteil-1_tabelle-1_tabellereihe-3_tabelleinh-4_liste-1_listenelem-1_text-1_br-3"/>
+                                    <akn:br GUID="4b6b96cb-b91c-4acc-a18b-8cad6dc3bb21"
+                                            eId="hauptteil-1_tabelle-1_tabellereihe-3_tabelleinh-4_liste-1_listenelem-1_text-1_br-4"/>
+                                    Aroma, Testfleisch und Zellen, die mit geeigneten physikalischen Verfahren aus derselben
+                                    Testart gewonnen werden, dürfen im Test aus Testkonzentrat wiederhergestellt werden.
+                                    <akn:marker GUID="0b1c34ce-eb4e-4910-8324-c77454b5abda"
+                                                eId="hauptteil-1_tabelle-1_tabellereihe-3_tabelleinh-4_liste-1_listenelem-1_text-1_marker-3"
+                                                refersTo="satzende"/>
+                                    <akn:br GUID="00642825-2028-4b74-8489-10c369f160e9"
+                                            eId="hauptteil-1_tabelle-1_tabellereihe-3_tabelleinh-4_liste-1_listenelem-1_text-1_br-5"/>
+                                    <akn:br GUID="ad7c3ceb-7c0d-4b3c-adae-341c047886bd"
+                                            eId="hauptteil-1_tabelle-1_tabellereihe-3_tabelleinh-4_liste-1_listenelem-1_text-1_br-6"/>
+                                    Das Mischen von Test oder konzentriertem Test mit Testmark oder konzentriertem Testmark bei
+                                    der Herstellung von Test aus Testkonzentrat ist zulässig.
+                                    <akn:marker GUID="953f72dc-d707-4f61-9591-9881e86aa57e"
+                                                eId="hauptteil-1_tabelle-1_tabellereihe-3_tabelleinh-4_liste-1_listenelem-1_text-1_marker-4"
+                                                refersTo="satzende"/>
+                                </akn:p>
+                            </akn:item>
+                        </akn:blockList>
+                    </akn:td>
+                </akn:tr>
+            </akn:table>
+        </akn:mainBody>
+    </akn:doc>
+</akn:akomaNtoso>

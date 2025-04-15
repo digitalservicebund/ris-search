@@ -1,0 +1,8 @@
+Contact: mailto:security@digitalservice.bund.de
+Expires: 2022-12-31T23:59:59.000Z
+Preferred-Languages: en, de
+Policy: https://raw.githubusercontent.com/digitalservicebund/ris-search/main/SECURITY.md
+# TODO: Update the canonical URI below and remove this comment
+Canonical: https://example.com/.well-known/security.txt
+Hiring: https://digitalservice.bund.de/en/career
+Encryption: https://raw.githubusercontent.com/digitalservicebund/public-keys/main/pgp-public-key-security-mail.pem

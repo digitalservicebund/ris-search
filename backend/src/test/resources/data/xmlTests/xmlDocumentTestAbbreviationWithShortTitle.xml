@@ -1,0 +1,36 @@
+<akn:akomaNtoso xmlns:akn="http://Inhaltsdaten.LegalDocML.de/1.6/"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:schemaLocation="http://Metadaten.LegalDocML.de/1.6/ ../schema/legalDocML.de-metadaten.xsd http://Inhaltsdaten.LegalDocML.de/1.6/ ../schema/legalDocML.de-regelungstextverkuendungsfassung.xsd">
+    <akn:act name="regelungstext">
+        <akn:meta eId="meta-1" GUID="9fac524a-aced-4b13-a792-4f824daf1d01">
+            <akn:identification eId="meta-1_ident-1" GUID="44a279c1-22d5-4b68-b9e2-1693951e736e" source="attributsemantik-noch-undefiniert">
+                <akn:FRBRWork eId="meta-1_ident-1_frbrwork-1" GUID="bdfd5b94-8be0-4a73-a16a-1b4d3a189966">
+                    <akn:FRBRthis eId="meta-1_ident-1_frbrwork-1_frbrthis-1" GUID="3d8e1040-ca03-4cd9-83cc-f3e71d0bf716" value="eli/bund/bgbl-1/1962/s514/regelungstext-1"/>
+                    <akn:FRBRuri eId="meta-1_ident-1_frbrwork-1_frbruri-1" GUID="5ea31b41-621f-43af-b252-34f4e5322ce2" value="eli/bund/bgbl-1/1962/s514"/>
+                </akn:FRBRWork>
+                <akn:FRBRExpression>
+                    <akn:FRBRthis value="eli/bund/bgbl-1/1962/s514/2010-04-27/1/deu/regelungstext-1"/>
+                    <akn:FRBRuri value="eli/bund/bgbl-1/1962/s514/2010-04-27/1/deu"/>
+                </akn:FRBRExpression>
+                <akn:FRBRManifestation>
+                    <akn:FRBRthis value="eli/bund/bgbl-1/1962/s514/2010-04-27/1/deu/2010-04-27/regelungstext-1.xml"/>
+                    <akn:FRBRuri value="eli/bund/bgbl-1/1962/s514//2010-04-27/1/deu/2010-04-27/regelungstext-1.xml"/>
+                </akn:FRBRManifestation>
+            </akn:identification>
+        </akn:meta>
+        <akn:preface>
+            <akn:longTitle GUID="1f417a79-9759-4f58-be61-59b98916c3d8" eId="doktitel-1">
+                <akn:p GUID="2fbea344-7798-4f11-a9cc-cc70c20cee9c" eId="doktitel-1_text-1">
+                    <akn:docTitle>
+                        Gesetz über Wirkungen der Annahme als Kind nach ausländischem Recht
+                        <akn:shortTitle GUID="8fc86feb-148e-4644-bb7f-2621513c2e3e" eId="kurztitel-1">
+                            (Adoptionswirkungsgesetz –
+                            <akn:inline refersTo="amtliche-abkuerzung" name="attributsemantik-noch-undefiniert">AdWirkG</akn:inline>
+                        </akn:shortTitle>
+                        )
+                    </akn:docTitle>
+                </akn:p>
+            </akn:longTitle>
+        </akn:preface>
+    </akn:act>
+</akn:akomaNtoso>

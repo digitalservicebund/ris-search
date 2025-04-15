@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<akn:akomaNtoso xmlns:akn="http://docs.oasis-open.org/legaldocml/ns/akn/3.0/WD17"
+                xmlns:ris="http://example.com/0.1/"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:schemaLocation="http://docs.oasis-open.org/legaldocml/ns/akn/3.0/WD17 https://docs.oasis-open.org/legaldocml/akn-core/v1.0/csprd02/part2-specs/schemas/akomantoso30.xsd">
+    <akn:judgment name="attributsemantik-noch-undefiniert">
+
+        {% if not hideMeta %}
+        <akn:meta>
+            {% include 'templates/case-law/includes/akn-meta.xml' %}
+        </akn:meta>
+        {% endif %}
+
+        {% if not hideTitle %}
+        <akn:header>
+            {% if title %}
+            {{ title | raw }}
+            {% else %}
+            <akn:p>Title</akn:p>
+            {% endif %}
+        </akn:header>
+        {% endif %}
+
+        <akn:judgmentBody>
+
+            {% if not hideMotivation %}
+            <akn:motivation>
+                <akn:p>{% if motivation %}{{ motivation }}{% else %}Example Leitsatz/GuidingPrinciple{% endif %}</akn:p>
+            </akn:motivation>
+            {% endif %}
+
+            {% if not hideIntroduction %}
+            <akn:introduction>
+                {% if not hideHeadnote %}
+                <akn:block name="Orientierungssatz">
+                    <akn:embeddedStructure>
+                        {% if headnote %}
+                        {{ headnote | raw }}
+                        {% else %}
+                        <akn:p>Example Orientierungssatz/Headnote</akn:p>
+                        {% endif %}
+                    </akn:embeddedStructure>
+                </akn:block>
+                {% endif %}
+                {% if not hideOtherHeadnote %}
+                <akn:block name="Sonstiger Orientierungssatz">
+                    <akn:embeddedStructure>
+                        {% if otherHeadnote %}
+                        {{ otherHeadnote | raw }}
+                        {% else %}
+                        <akn:p>Example SonstigerOrientierungssatz/OtherHeadnote</akn:p>
+                        {% endif %}
+                    </akn:embeddedStructure>
+                </akn:block>
+                {% endif %}
+                {% if not hideOutline %}
+                <akn:block name="Gliederung">
+                    <akn:embeddedStructure>
+                        {% if outline %}
+                        {{ outline | raw }}
+                        {% else %}
+                        <akn:p>Example Gliederung/Outline</akn:p>
+                        {% endif %}
+                    </akn:embeddedStructure>
+                </akn:block>
+                {% endif %}
+                {% if not hideTenor %}
+                <akn:block name="Tenor">
+                    <akn:embeddedStructure>
+                        {% if tenor %}
+                        {{ tenor | raw }}
+                        {% else %}
+                        <akn:p>Example Tenor/Tenor</akn:p>
+                        {% endif %}
+                    </akn:embeddedStructure>
+                </akn:block>
+                {% endif %}
+            </akn:introduction>
+            {% endif %}
+
+            {% if not hideBackground %}
+            <akn:background>
+                {% if background %}
+                {{ background | raw }}
+                {% else %}
+                <akn:hcontainer name="randnummer">
+                    <akn:num>1</akn:num>
+                    <akn:content>
+                        <akn:p>Example Tatbestand/CaseFacts. More background</akn:p>
+                    </akn:content>
+                </akn:hcontainer>
+                <akn:hcontainer name="randnummer">
+                    <akn:num>2</akn:num>
+                    <akn:content>
+                        <akn:p>even more background</akn:p>
+                    </akn:content>
+                </akn:hcontainer>
+                {% endif %}
+            </akn:background>
+            {% endif %}
+
+            {% if not hideDecision %}
+            <akn:decision>
+                {% if not hideDecisionGrounds %}
+                <akn:block name="Entscheidungsgründe">
+                    <akn:embeddedStructure>
+                        <akn:p>Example Entscheidungsgründe/DecisionGrounds</akn:p>
+                    </akn:embeddedStructure>
+                </akn:block>
+                {% endif %}
+                {% if not hideGrounds %}
+                <akn:block name="Gründe">
+                    <akn:embeddedStructure>
+                        {% if grounds %}
+                        {{ grounds | raw }}
+                        {% else %}
+                        <akn:foreign>
+                            <ris:table akn:unknownUseCaseDiscoveredForborder=""
+                                       ris:cellpadding="2"
+                                       ris:cellspacing="0">
+                                <ris:tbody>
+                                    <ris:tr>
+                                        <ris:td colspan="2" rowspan="1">
+                                            <akn:p style="text-align:center">
+                                                <akn:b>Spalte 1</akn:b>
+                                            </akn:p>
+                                        </ris:td>
+                                        <ris:td colspan="1" rowspan="1">
+                                            <akn:p style="text-align:center">
+                                                <akn:b>Spalte 2</akn:b>
+                                            </akn:p>
+                                        </ris:td>
+                                        <ris:td colspan="1" rowspan="1">
+                                            <akn:p style="text-align:center">
+                                                <akn:b>Spalte 3</akn:b>
+                                            </akn:p>
+                                        </ris:td>
+                                        <ris:td colspan="1" rowspan="1">
+                                            <akn:p style="text-align:center">
+                                                <akn:b>Spalte 4</akn:b>
+                                            </akn:p>
+                                        </ris:td>
+                                        <ris:td colspan="1" rowspan="1">
+                                            <akn:p style="text-align:center">
+                                                <akn:b>Spalte <akn:br/>5- <akn:br/>text</akn:b>
+                                            </akn:p>
+                                        </ris:td>
+                                    </ris:tr>
+                                </ris:tbody>
+                            </ris:table>
+                        </akn:foreign>
+                        {% endif %}
+                    </akn:embeddedStructure>
+                </akn:block>
+                {% endif %}
+                {% if not hideOtherLongText %}
+                <akn:block name="Sonstiger Langtext">
+                    <akn:embeddedStructure>
+                        <akn:p>{% if otherLongText %}{{ otherLongText }}{% else %}Example SonstigerLangtext/OtherLongText{% endif %}</akn:p>
+                    </akn:embeddedStructure>
+                </akn:block>
+                {% endif %}
+                {% if not hideOpinions %}
+                <akn:block name="Abweichende Meinung">
+                    <akn:opinion>
+                        <akn:embeddedStructure>
+                            <akn:p>Example AbweichendeMeinung/DissentingOpinion</akn:p>
+                        </akn:embeddedStructure>
+                    </akn:opinion>
+                </akn:block>
+                {% endif %}
+            </akn:decision>
+            {% endif %}
+
+
+        </akn:judgmentBody>
+    </akn:judgment>
+</akn:akomaNtoso>

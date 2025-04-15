@@ -1,0 +1,123 @@
+{
+  "id": "ris",
+  "realm": "ris",
+  "sslRequired": "none",
+  "ssoSessionIdleTimeout": 432000,
+  "ssoSessionMaxLifespan": 7776000,
+  "enabled": true,
+  "eventsEnabled": true,
+  "eventsExpiration": 900,
+  "adminEventsEnabled": true,
+  "adminEventsDetailsEnabled": true,
+  "attributes": {
+    "adminEventsExpiration": "900"
+  },
+  "clients": [
+    {
+      "clientId": "my-client",
+      "secret": "my-secret",
+      "enabled": true,
+      "protocol": "openid-connect",
+      "publicClient": false,
+      "serviceAccountsEnabled": true,
+      "standardFlowEnabled": false,
+      "directAccessGrantsEnabled": false,
+      "clientAuthenticatorType": "client-secret",
+      "authorizationServicesEnabled": false
+    },
+    {
+      "id": "ris-portal-internal-frontend",
+      "clientId": "ris-portal-internal-frontend",
+      "name": "ris-portal-internal-frontend",
+      "enabled": true,
+      "publicClient": true,
+      "rootUrl": "http://localhost:3000",
+      "baseUrl": "http://localhost:3000",
+      "redirectUris": ["http://localhost:3000/*"],
+      "webOrigins": ["http://localhost:3000"],
+      "clientAuthenticatorType": "client-secret",
+      "secret": "ris-portal-internal-frontend",
+      "protocolMappers": [
+        {
+          "id": "c4b86c90-3076-49df-9343-0928b135733a",
+          "name": "groups",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-group-membership-mapper",
+          "consentRequired": false,
+          "config": {
+            "full.path": "true",
+            "introspection.token.claim": "true",
+            "userinfo.token.claim": "true",
+            "multivalued": "true",
+            "id.token.claim": "true",
+            "lightweight.claim": "false",
+            "access.token.claim": "true",
+            "claim.name": "groups"
+          }
+        }
+      ]
+    },
+    {
+      "id": "ris-portal-public-frontend",
+      "clientId": "ris-portal-public-frontend",
+      "name": "ris-portal-public-frontend",
+      "enabled": true,
+      "publicClient": true,
+      "rootUrl": "http://localhost:3001",
+      "baseUrl": "http://localhost:3001",
+      "redirectUris": ["http://localhost:3001/*"],
+      "webOrigins": ["http://localhost:3001"],
+      "clientAuthenticatorType": "client-secret",
+      "secret": "ris-portal-public-frontend",
+      "protocolMappers": [
+        {
+          "id": "fcae98df-0040-4291-962c-2746ce8159ea",
+          "name": "groups",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-group-membership-mapper",
+          "consentRequired": false,
+          "config": {
+            "full.path": "true",
+            "introspection.token.claim": "true",
+            "userinfo.token.claim": "true",
+            "multivalued": "true",
+            "id.token.claim": "true",
+            "lightweight.claim": "false",
+            "access.token.claim": "true",
+            "claim.name": "groups"
+          }
+        }
+      ]
+    }
+  ],
+  "groups": [
+    {
+      "id": "4f928164-2bd4-455a-8fbd-174eeb8ea205",
+      "name": "DS",
+      "path": "/DS",
+      "subGroups": [],
+      "attributes": {},
+      "realmRoles": [],
+      "clientRoles": {}
+    }
+  ],
+  "users": [
+    {
+      "id": "jane.doe",
+      "email": "jane.doe@example.com",
+      "username": "jane.doe",
+      "firstName": "Jane",
+      "lastName": "Doe",
+      "enabled": true,
+      "emailVerified": true,
+      "credentials": [
+        {
+          "temporary": false,
+          "type": "password",
+          "value": "test"
+        }
+      ],
+      "groups": ["/DS"]
+    }
+  ]
+}

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<akn:akomaNtoso xmlns:akn="http://docs.oasis-open.org/legaldocml/ns/akn/3.0/WD17"
+                xmlns:ris="http://example.com/0.1/"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:schemaLocation="http://docs.oasis-open.org/legaldocml/ns/akn/3.0/WD17
+                     https://docs.oasis-open.org/legaldocml/akn-core/v1.0/csprd02/part2-specs/schemas/akomantoso30.xsd">
+   <akn:judgment name="Beispielurteil6">
+      <akn:meta>
+         <akn:identification source="Testquelle6">
+            <akn:FRBRWork>
+               <akn:FRBRthis value="KORE600500000"/>
+               <akn:FRBRuri value="KORE600500000"/>
+               <akn:FRBRalias name="uebergreifende-id" value="fake-uuid-0006"/>
+               <akn:FRBRdate date="2025-04-09" name="entscheidungsdatum"/>
+               <akn:FRBRauthor href="Testautor6"/>
+               <akn:FRBRcountry value="de"/>
+            </akn:FRBRWork>
+            <akn:FRBRExpression>
+               <akn:FRBRthis value="KORE600500000/dokument"/>
+               <akn:FRBRuri value="KORE600500000/dokument"/>
+               <akn:FRBRdate date="2025-04-09" name="entscheidungsdatum"/>
+               <akn:FRBRauthor href="Testautor6"/>
+               <akn:FRBRlanguage language="deu"/>
+            </akn:FRBRExpression>
+            <akn:FRBRManifestation>
+               <akn:FRBRthis value="KORE600500000/dokument.xml"/>
+               <akn:FRBRuri value="KORE600500000/dokument.xml"/>
+               <akn:FRBRdate date="2025-04-09" name="entscheidungsdatum"/>
+               <akn:FRBRauthor href="Testautor6"/>
+            </akn:FRBRManifestation>
+         </akn:identification>
+         <akn:classification source="Testquelle6">
+            <akn:keyword dictionary="TestDict6" showAs="Beispiel" value="AufteilungTest"/>
+            <akn:keyword dictionary="TestDict6" showAs="Beispiel" value="EndeTest"/>
+            <akn:keyword dictionary="TestDict6" showAs="Beispiel" value="Unterbrechung"/>
+            <akn:keyword dictionary="TestDict6" showAs="Beispiel" value="BerechnungX"/>
+         </akn:classification>
+         <akn:proprietary source="Testquelle6">
+            <ris:meta>
+               <ris:fileNumbers>
+                  <ris:fileNumber>TS 123456</ris:fileNumber>
+               </ris:fileNumbers>
+               <ris:documentType>Urteil</ris:documentType>
+               <ris:courtLocation>Testort6</ris:courtLocation>
+               <ris:courtType>LG</ris:courtType>
+               <ris:legalEffect>KEINE_ANGABE</ris:legalEffect>
+               <ris:fieldOfLaws>
+                  <ris:fieldOfLaw>Testaufteilung</ris:fieldOfLaw>
+                  <ris:fieldOfLaw>Testende</ris:fieldOfLaw>
+                  <ris:fieldOfLaw>Testunterbrechung</ris:fieldOfLaw>
+                  <ris:fieldOfLaw>BerechnungX</ris:fieldOfLaw>
+               </ris:fieldOfLaws>
+               <ris:judicialBody>8. Kammer</ris:judicialBody>
+               <ris:publicationStatus>PUBLISHED</ris:publicationStatus>
+               <ris:error>false</ris:error>
+               <ris:documentationOffice>LG Test6</ris:documentationOffice>
+               <ris:procedures>
+                  <ris:procedure>TS654321</ris:procedure>
+               </ris:procedures>
+            </ris:meta>
+         </akn:proprietary>
+      </akn:meta>
+      <akn:header>
+         <akn:p>Testheader für Urteil 6.</akn:p>
+      </akn:header>
+      <akn:judgmentBody>
+         <akn:introduction>
+            <akn:block name="Orientierungssatz">
+               <akn:embeddedStructure>
+                  <akn:p>1. Fiktiver Satz für den Fall der Aufteilung und Berechnung.</akn:p>
+                  <akn:p>2. Weitere Testangaben werden hier exemplarisch dargestellt.</akn:p>
+               </akn:embeddedStructure>
+            </akn:block>
+            <akn:block name="Tenor">
+               <akn:embeddedStructure>
+                  <akn:p>Der Beklagte wird zur Zahlung verurteilt.</akn:p>
+                  <akn:p>Die Kostenlast wird vollumfänglich übernommen.</akn:p>
+               </akn:embeddedStructure>
+            </akn:block>
+         </akn:introduction>
+         <akn:background>
+            <akn:hcontainer name="randnummer">
+               <akn:num>1</akn:num>
+               <akn:content>
+                  <akn:p>Testbeschreibung des fiktiven Sachverhalts.</akn:p>
+               </akn:content>
+            </akn:hcontainer>
+         </akn:background>
+      </akn:judgmentBody>
+   </akn:judgment>
+</akn:akomaNtoso>

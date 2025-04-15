@@ -1,0 +1,584 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-model href="../../schema/legalDocML.de.sch" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<akn:akomaNtoso xmlns:akn="http://Inhaltsdaten.LegalDocML.de/1.4/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://Metadaten.LegalDocML.de/1.4/ ../../../schema/legalDocML.de-metadaten.xsd http://Inhaltsdaten.LegalDocML.de/1.4/ ../../../schema/legalDocML.de-regelungstextverkuendungsfassung.xsd">
+  <akn:act name="regelungstext">
+    <akn:meta>
+      <akn:identification source="attributsemantik-noch-undefiniert">
+        <akn:FRBRWork>
+          <akn:FRBRthis value="eli/bgbl-1/1963/2/regelungstext" />
+          <akn:FRBRuri value="eli/bgbl-1/1963/2" />
+          <akn:FRBRalias name="übergreifende-id" value="c04ece1b-c56f-4c83-8605-4634cc0e7c7f" />
+          <akn:FRBRdate date="1963-01-08" name="neufassung" />
+          <akn:FRBRauthor href="recht.bund.de/institution/bundesregierung" />
+          <akn:FRBRcountry value="de" />
+          <akn:FRBRnumber value="2" />
+          <akn:FRBRname value="bgbl-1" />
+          <akn:FRBRsubtype value="regelungstext" />
+        </akn:FRBRWork>
+        <akn:FRBRExpression>
+          <akn:FRBRthis value="eli/bgbl-1/1963/2/1963-01-08/1/deu/regelungstext" />
+          <akn:FRBRuri value="eli/bgbl-1/1963/2/1963-01-08/1/deu" />
+          <akn:FRBRauthor href="recht.bund.de/institution/bundesregierung" />
+          <akn:FRBRdate date="1963-01-08" name="verkuendung" />
+          <akn:FRBRlanguage language="deu" />
+          <akn:FRBRversionNumber value="1" />
+        </akn:FRBRExpression>
+        <akn:FRBRManifestation>
+          <akn:FRBRthis value="eli/bgbl-1/1963/2/1963-01-08/1/deu/regelungstext.xml" />
+          <akn:FRBRuri value="eli/bgbl-1/1963/2/1963-01-08/1/deu/regelungstext.xml" />
+          <akn:FRBRdate date="1963-01-08" name="generierung" />
+          <akn:FRBRauthor href="recht.bund.de" />
+          <akn:FRBRformat value="xml" />
+        </akn:FRBRManifestation>
+      </akn:identification>
+      <akn:proprietary source="attributsemantik-noch-undefiniert">
+        <meta:legalDocML.de_metadaten xmlns:meta="http://Metadaten.LegalDocML.de/1.4/">
+          <meta:typ>gesetz</meta:typ>
+          <meta:form>stammform</meta:form>
+          <meta:fassung>neufassung</meta:fassung>
+          <meta:art>regelungstext</meta:art>
+          <meta:initiant>nicht-vorhanden</meta:initiant>
+          <meta:bearbeitendeInstitution>nicht-vorhanden</meta:bearbeitendeInstitution>
+        </meta:legalDocML.de_metadaten>
+      </akn:proprietary>
+    </akn:meta>
+    <akn:preface>
+      <akn:longTitle GUID="2ae46096-677a-487f-a559-ff8c16934a85" eId="doktitel-1">
+        <akn:p GUID="5f527881-959f-4e30-aea2-78e66ccadc13" eId="doktitel-1_text-1">
+          <akn:docTitle>Mindesturlaubsgesetz für Arbeitnehmer <akn:shortTitle GUID="b1794c05-77d0-4e5e-8749-8c7afe24c249" eId="kurztitel-1">(Bundesurlaubsgesetz – <akn:inline refersTo="amtliche-abkuerzung" name="attributsemantik-noch-undefiniert">BUrlG</akn:inline></akn:shortTitle>)</akn:docTitle>
+        </akn:p>
+      </akn:longTitle>
+    </akn:preface>
+    <akn:preamble>
+      <akn:formula GUID="3a0528ac-6d64-44e9-8cf7-b54ce387f7c5" eId="formel-1" refersTo="eingangsformel" name="attributsemantik-noch-undefiniert">
+        <akn:p GUID="3ffce10e-f071-43b3-82e6-03c812353b44" eId="formel-1_text-1">Der Bundestag hat mit Zustimmung des Bundesrates das folgende Gesetz beschlossen:</akn:p>
+      </akn:formula>
+      <akn:blockContainer refersTo="inhaltsuebersicht" GUID="90d34128-ae6f-4a56-afda-0a02e4f437f9" eId="verzeichnis-1">
+        <akn:heading GUID="09999411-2256-4a76-a524-9d76047713ba" eId="verzeichnis-1_überschrift-1">Inhaltsübersicht</akn:heading>
+        <akn:toc GUID="b5d5a9c0-26e3-4505-979f-c224f6dde35b" eId="verzeichnis-1_inhuebs-1">
+          <akn:tocItem href="#para-1_überschrift-1" level="1" GUID="d07f24ba-2cdd-4fc9-9be9-5c85473f5440" eId="verzeichnis-1_inhuebs-1_eintrag-1">
+            <akn:span>§ 1</akn:span>
+            <akn:span>Urlaubsanspruch</akn:span>
+          </akn:tocItem>
+          <akn:tocItem href="#para-2_überschrift-1" level="1" GUID="40d03e51-c1f4-4ab1-ba0c-9b15023c3684" eId="verzeichnis-1_inhuebs-1_eintrag-2">
+            <akn:span>§ 2</akn:span>
+            <akn:span>Geltungsbereich</akn:span>
+          </akn:tocItem>
+          <akn:tocItem href="#para-3_überschrift-1" level="1" GUID="d11bdd59-0514-4bd3-9083-de13be1e3869" eId="verzeichnis-1_inhuebs-1_eintrag-3">
+            <akn:span>§ 3</akn:span>
+            <akn:span>Dauer des Urlaubs</akn:span>
+          </akn:tocItem>
+          <akn:tocItem href="#para-4_überschrift-1" level="1" GUID="701c4299-e4f6-4c0d-8af8-c2fd5afe6efa" eId="verzeichnis-1_inhuebs-1_eintrag-4">
+            <akn:span>§ 4</akn:span>
+            <akn:span>Wartezeit</akn:span>
+          </akn:tocItem>
+          <akn:tocItem href="#para-5_überschrift-1" level="1" GUID="fb2d1ea2-fb48-4de5-b0c5-9c9c6a48293f" eId="verzeichnis-1_inhuebs-1_eintrag-5">
+            <akn:span>§ 5</akn:span>
+            <akn:span>Teilurlaub</akn:span>
+          </akn:tocItem>
+          <akn:tocItem href="#para-6_überschrift-1" level="1" GUID="df838e55-4e9c-4ca2-ab44-ef778af71a60" eId="verzeichnis-1_inhuebs-1_eintrag-6">
+            <akn:span>§ 6</akn:span>
+            <akn:span>Ausschluß von Doppelansprüchen</akn:span>
+          </akn:tocItem>
+          <akn:tocItem href="#para-7_überschrift-1" level="1" GUID="a572026c-6edc-4273-bd85-bf76d25015ec" eId="verzeichnis-1_inhuebs-1_eintrag-7">
+            <akn:span>§ 7</akn:span>
+            <akn:span>Zeitpunkt, Übertragbarkeit und Abgeltung des Urlaubs</akn:span>
+          </akn:tocItem>
+          <akn:tocItem href="#para-8_überschrift-1" level="1" GUID="af68c2e7-4742-4242-ae7c-f8ffec6d6ea8" eId="verzeichnis-1_inhuebs-1_eintrag-8">
+            <akn:span>§ 8</akn:span>
+            <akn:span>Erwerbstätigkeit während des Urlaubs</akn:span>
+          </akn:tocItem>
+          <akn:tocItem href="#para-9_überschrift-1" level="1" GUID="4b9ed6b1-f0d4-4bf3-b34e-ccfd34a7775b" eId="verzeichnis-1_inhuebs-1_eintrag-9">
+            <akn:span>§ 9</akn:span>
+            <akn:span>Erkrankung während des Urlaubs</akn:span>
+          </akn:tocItem>
+          <akn:tocItem href="#para-10_überschrift-1" level="1" GUID="796ab25b-c2a8-4345-acf1-647d8ebbee46" eId="verzeichnis-1_inhuebs-1_eintrag-10">
+            <akn:span>§ 10</akn:span>
+            <akn:span>Maßnahmen der medizinischen Vorsorge oder Rehabilitation</akn:span>
+          </akn:tocItem>
+          <akn:tocItem href="#para-11_überschrift-1" level="1" GUID="80a3118f-e472-40d7-a638-3bdc28c30065" eId="verzeichnis-1_inhuebs-1_eintrag-11">
+            <akn:span>§ 11</akn:span>
+            <akn:span>Urlaubsentgelt</akn:span>
+          </akn:tocItem>
+          <akn:tocItem href="#para-12_überschrift-1" level="1" GUID="9a0e74b8-c3c2-405b-b94e-2970096fa1c1" eId="verzeichnis-1_inhuebs-1_eintrag-12">
+            <akn:span>§ 12</akn:span>
+            <akn:span>Urlaub im Bereich der Heimarbeit</akn:span>
+          </akn:tocItem>
+          <akn:tocItem href="#para-13_überschrift-1" level="1" GUID="c9bb0775-fee8-46bf-a8b1-99718a54c79f" eId="verzeichnis-1_inhuebs-1_eintrag-13">
+            <akn:span>§ 13</akn:span>
+            <akn:span>Unabdingbarkeit</akn:span>
+          </akn:tocItem>
+          <akn:tocItem href="#para-14_überschrift-1" level="1" GUID="81ae8f67-f5b7-409f-bf37-fbfaa540c865" eId="verzeichnis-1_inhuebs-1_eintrag-14">
+            <akn:span>§ 14</akn:span>
+            <akn:span>Berlin-Klausel</akn:span>
+          </akn:tocItem>
+          <akn:tocItem href="#para-15_überschrift-1" level="1" GUID="cc36e396-7640-467b-a5f0-de4a8f4df332" eId="verzeichnis-1_inhuebs-1_eintrag-15">
+            <akn:span>§ 15</akn:span>
+            <akn:span>Änderung und Aufhebung von Gesetzen</akn:span>
+          </akn:tocItem>
+          <akn:tocItem href="#para-15a_überschrift-1" level="1" GUID="c3667418-ce5d-4e8a-adb6-21e848b1d8b2" eId="verzeichnis-1_inhuebs-1_eintrag-16">
+            <akn:span>§ 15a</akn:span>
+            <akn:span>Übergangsvorschrift</akn:span>
+          </akn:tocItem>
+          <akn:tocItem href="#para-16_überschrift-1" level="1" GUID="e5ce4c44-1846-40ab-95a3-7b1e49872e9c" eId="verzeichnis-1_inhuebs-1_eintrag-17">
+            <akn:span>§ 16</akn:span>
+            <akn:span>Inkrafttreten</akn:span>
+          </akn:tocItem>
+        </akn:toc>
+      </akn:blockContainer>
+    </akn:preamble>
+    <akn:body refersTo="hauptteil-stammform">
+      <akn:article GUID="57ff5eec-2ce6-4436-99b7-ef653c69c680" eId="para-1" refersTo="einzelvorschrift-stammform">
+        <akn:num GUID="c5861b2f-9d9e-4447-8af2-ee1171f13725" eId="para-1_bezeichnung-1">
+          <akn:marker name="1" />
+        </akn:num>
+        <akn:heading GUID="b023a916-7566-4793-b1e1-4fd59915bd1f" eId="para-1_überschrift-1">§ 1 Urlaubsanspruch</akn:heading>
+        <akn:paragraph GUID="722273fc-5bf2-4c91-bbd4-eb27dcaa7251" eId="para-1_abs-1">
+          <akn:num GUID="21fcfff6-dee7-4091-bed6-5d1066b49799" eId="para-1_abs-1_bezeichnung-1">
+            <akn:marker name="1" />
+          </akn:num>
+          <akn:content GUID="74cbe236-1ddd-45ea-8db4-7838e6d504c1" eId="para-1_abs-1_inhalt-1">
+            <akn:p GUID="0195cf61-273d-4a28-8a19-bc19a4e6acc6" eId="para-1_abs-1_inhalt-1_text-1">Jeder Arbeitnehmer hat in jedem Kalenderjahr Anspruch auf bezahlten Erholungsurlaub.</akn:p>
+          </akn:content>
+        </akn:paragraph>
+      </akn:article>
+      <akn:article GUID="4fe9f2a5-4ec7-4f6f-83c8-483b8c0f38ee" eId="para-2" refersTo="einzelvorschrift-stammform">
+        <akn:num GUID="a6f4811c-9524-4de9-a992-9612814f436b" eId="para-2_bezeichnung-1">
+          <akn:marker name="2" />
+        </akn:num>
+        <akn:heading GUID="a78a79b9-ed16-4bd4-9509-fdfb1b15e342" eId="para-2_überschrift-1">§ 2 Geltungsbereich</akn:heading>
+        <akn:paragraph GUID="fc864c26-d781-487f-8d59-1e54f36fffe5" eId="para-2_abs-1">
+          <akn:num GUID="928bf0f8-82c2-431f-938b-71f74f4fd035" eId="para-2_abs-1_bezeichnung-1">
+            <akn:marker name="1" />
+          </akn:num>
+          <akn:content GUID="9607921e-ebab-4ba5-9b78-57d5ecdfa8ed" eId="para-2_abs-1_inhalt-1">
+            <akn:p GUID="c948f899-0505-4698-990d-975cb1f6e63d" eId="para-2_abs-1_inhalt-1_text-1">Arbeitnehmer im Sinne des Gesetzes sind Arbeiter und Angestellte sowie die zu ihrer Berufsausbildung Beschäftigten. Als Arbeitnehmer gelten auch Personen, die wegen ihrer wirtschaftlichen Unselbständigkeit als arbeitnehmerähnliche Personen anzusehen sind; für den Bereich der Heimarbeit gilt § 12.</akn:p>
+          </akn:content>
+        </akn:paragraph>
+      </akn:article>
+      <akn:article GUID="c92fa4a0-5e86-4c5b-8032-ca695b165f2a" eId="para-3" refersTo="einzelvorschrift-stammform">
+        <akn:num GUID="7d65eee7-706e-410a-828c-5154e2b2a05d" eId="para-3_bezeichnung-1">
+          <akn:marker name="3" />
+        </akn:num>
+        <akn:heading GUID="c9bc1845-b606-4bb2-a7ef-686c87e7b0e5" eId="para-3_überschrift-1">§ 3 Dauer des Urlaubs</akn:heading>
+        <akn:paragraph GUID="ce10672a-84dd-4f99-8ed6-98fda36c8481" eId="para-3_abs-1">
+          <akn:num GUID="4e968225-d6ea-45a1-9afd-9479bfab3a8a" eId="para-3_abs-1_bezeichnung-1">
+            <akn:marker name="1" />
+            (1)
+          </akn:num>
+          <akn:content GUID="64539175-ec8b-4ea2-b83c-e2bd41f67620" eId="para-3_abs-1_inhalt-1">
+            <akn:p GUID="415eb11d-fba1-4ba2-81dc-635823e59ca0" eId="para-3_abs-1_inhalt-1_text-1">Der Urlaub beträgt jährlich mindestens 24 Werktage.</akn:p>
+          </akn:content>
+        </akn:paragraph>
+        <akn:paragraph GUID="30b7f100-28a9-406e-bd22-ff09c0149ec9" eId="para-3_abs-2">
+          <akn:num GUID="b2c18877-1b23-4dd2-8e61-307616a56721" eId="para-3_abs-2_bezeichnung-1">
+            <akn:marker name="2" />
+            (2)
+          </akn:num>
+          <akn:content GUID="306e68b1-1ff0-4ccc-b58e-e7ec623ac3ae" eId="para-3_abs-2_inhalt-1">
+            <akn:p GUID="e0e5f0c5-f6e8-4fcb-839b-35866b12d36c" eId="para-3_abs-2_inhalt-1_text-1">Als Werktage gelten alle Kalendertage, die nicht Sonn- oder gesetzliche Feiertage sind.</akn:p>
+          </akn:content>
+        </akn:paragraph>
+      </akn:article>
+      <akn:article GUID="eb66e89e-a332-4396-9d54-fef9e3b1f360" eId="para-4" refersTo="einzelvorschrift-stammform">
+        <akn:num GUID="91212e8f-9cdd-4acf-af75-46caabe956df" eId="para-4_bezeichnung-1">
+          <akn:marker name="4" />
+        </akn:num>
+        <akn:heading GUID="915de312-b302-4b53-ab3a-7975febfe6d8" eId="para-4_überschrift-1">§ 4 Wartezeit</akn:heading>
+        <akn:paragraph GUID="f306efcc-da13-40c6-ae0c-b3b3d7d6213d" eId="para-4_abs-1">
+          <akn:num GUID="d854e8c4-b410-48c5-8ecf-cdda4ce7a3a7" eId="para-4_abs-1_bezeichnung-1">
+            <akn:marker name="1" />
+          </akn:num>
+          <akn:content GUID="24d2c41d-4baa-49cc-b771-875c6e80dd76" eId="para-4_abs-1_inhalt-1">
+            <akn:p GUID="7b2d6890-6875-4533-82c5-d3d3639ea114" eId="para-4_abs-1_inhalt-1_text-1">Der volle Urlaubsanspruch wird erstmalig nach sechsmonatigem Bestehen des Arbeitsverhältnisses erworben.</akn:p>
+          </akn:content>
+        </akn:paragraph>
+      </akn:article>
+      <akn:article GUID="fc9163fb-2d9c-4576-a510-ab0c8f9565f9" eId="para-5" refersTo="einzelvorschrift-stammform">
+        <akn:num GUID="02cea12a-87b6-470f-b603-7dbd42d906e2" eId="para-5_bezeichnung-1">
+          <akn:marker name="5" />
+        </akn:num>
+        <akn:heading GUID="e1c8892b-6fa1-4cda-995e-687f30650b6b" eId="para-5_überschrift-1">§ 5 Teilurlaub</akn:heading>
+        <akn:paragraph GUID="e9d0cddf-ceca-4b47-8faa-5af81d251882" eId="para-5_abs-1">
+          <akn:num GUID="4ade5ef7-a7cb-4a68-a21c-65e51afda80a" eId="para-5_abs-1_bezeichnung-1">
+            <akn:marker name="1" />
+            (1)
+          </akn:num>
+          <akn:list GUID="668ab989-2435-43f2-9a5d-d1e3a9e8eb03" eId="para-5_abs-1_untergl-1">
+            <akn:intro GUID="b42b5923-3c1b-40eb-93d5-b939e7dc226b" eId="para-5_abs-1_untergl-1_intro-1">
+              <akn:p GUID="62957738-76c2-47db-9049-da3658849507" eId="para-5_abs-1_untergl-1_intro-1_text-1">Anspruch auf ein Zwölftel des Jahresurlaubs für jeden vollen Monat des Bestehens des Arbeitsverhältnisses hat der Arbeitnehmer</akn:p>
+            </akn:intro>
+            <akn:point GUID="7889fedc-f9c8-4046-bafa-228c4a6ba161" eId="para-5_abs-1_untergl-1_listenelem-a">
+              <akn:num GUID="e3de32a0-3292-485a-a2e7-3638c0beb138" eId="para-5_abs-1_untergl-1_listenelem-a_bezeichnung-1">
+                <akn:marker name="a" />
+                a)
+              </akn:num>
+              <akn:content GUID="8d87d326-9c9d-4554-b08e-56110747110b" eId="para-5_abs-1_untergl-1_listenelem-a_inhalt-1">
+                <akn:p GUID="e3d29120-dd40-4c2d-ac89-037a89a7af5a" eId="para-5_abs-1_untergl-1_listenelem-a_inhalt-1_text-1">für Zeiten eines Kalenderjahrs, für die er wegen Nichterfüllung der Wartezeit in diesem Kalenderjahr keinen vollen Urlaubsanspruch erwirbt;</akn:p>
+              </akn:content>
+            </akn:point>
+            <akn:point GUID="2455a8b0-94d1-487e-8852-ad409e2389a5" eId="para-5_abs-1_untergl-1_listenelem-b">
+              <akn:num GUID="594a44f5-7e91-4045-8ed5-7507e091e95e" eId="para-5_abs-1_untergl-1_listenelem-b_bezeichnung-1">
+                <akn:marker name="b" />
+                b)
+              </akn:num>
+              <akn:content GUID="0e3515c8-a601-4521-8a6b-0bc1bd1642b7" eId="para-5_abs-1_untergl-1_listenelem-b_inhalt-1">
+                <akn:p GUID="dfcad1e1-b730-4a1b-b6e4-34159be7306d" eId="para-5_abs-1_untergl-1_listenelem-b_inhalt-1_text-1">wenn er vor erfüllter Wartezeit aus dem Arbeitsverhältnis ausscheidet;</akn:p>
+              </akn:content>
+            </akn:point>
+            <akn:point GUID="b6b95b96-80bf-4c29-ac48-197c8d8daa3a" eId="para-5_abs-1_untergl-1_listenelem-c">
+              <akn:num GUID="d4cf8c95-3d07-4b68-8f0e-867f5810be1a" eId="para-5_abs-1_untergl-1_listenelem-c_bezeichnung-1">
+                <akn:marker name="c" />
+                c)
+              </akn:num>
+              <akn:content GUID="7e607bf0-743f-4dc7-a0f7-579c68170b8f" eId="para-5_abs-1_untergl-1_listenelem-c_inhalt-1">
+                <akn:p GUID="59ac570f-bbfb-400f-99a3-2babd881ad3c" eId="para-5_abs-1_untergl-1_listenelem-c_inhalt-1_text-1">wenn er nach erfüllter Wartezeit in der ersten Hälfte eines Kalenderjahrs aus dem Arbeitsverhältnis ausscheidet.</akn:p>
+              </akn:content>
+            </akn:point>
+          </akn:list>
+        </akn:paragraph>
+        <akn:paragraph GUID="11d85724-29cd-48c7-996e-201409d2f0c8" eId="para-5_abs-2">
+          <akn:num GUID="867048a1-7bd0-4522-b4a2-223ff7a1833e" eId="para-5_abs-2_bezeichnung-1">
+            <akn:marker name="2" />
+            (2)
+          </akn:num>
+          <akn:content GUID="71c859b7-7385-4cd2-9ca5-ce67ea4ee994" eId="para-5_abs-2_inhalt-1">
+            <akn:p GUID="7d70e6d8-3f5b-4cbc-a310-8afa0732d360" eId="para-5_abs-2_inhalt-1_text-1">Bruchteile von Urlaubstagen, die mindestens einen halben Tag ergeben, sind auf volle Urlaubstage aufzurunden.</akn:p>
+          </akn:content>
+        </akn:paragraph>
+        <akn:paragraph GUID="a1d31dd7-621c-4ccf-badb-15fa10e9fc56" eId="para-5_abs-3">
+          <akn:num GUID="6f6304f1-ff6a-4fa9-9b61-b7a01427054c" eId="para-5_abs-3_bezeichnung-1">
+            <akn:marker name="3" />
+            (3)
+          </akn:num>
+          <akn:content GUID="64ae58d6-607a-4fd7-8354-b06d1ce63bec" eId="para-5_abs-3_inhalt-1">
+            <akn:p GUID="8969c5b6-0206-405c-8538-2309f36b5be0" eId="para-5_abs-3_inhalt-1_text-1">Hat der Arbeitnehmer im Falle des Absatzes 1 Buchstabe c bereits Urlaub über den ihm zustehenden Umfang hinaus erhalten, so kann das dafür gezahlte Urlaubsentgelt nicht zurückgefordert werden.</akn:p>
+          </akn:content>
+        </akn:paragraph>
+      </akn:article>
+      <akn:article GUID="1e15fb90-edc4-4197-93e6-1a0a9de3905f" eId="para-6" refersTo="einzelvorschrift-stammform">
+        <akn:num GUID="0725d7d7-4271-4d3d-9a39-cd09d1739ef9" eId="para-6_bezeichnung-1">
+          <akn:marker name="6" />
+        </akn:num>
+        <akn:heading GUID="90f8b101-a027-4f66-8780-c4f06dd5e099" eId="para-6_überschrift-1">§ 6 Ausschluß von Doppelansprüchen</akn:heading>
+        <akn:paragraph GUID="14abe866-b833-46fd-a10d-54a7f10b2a33" eId="para-6_abs-1">
+          <akn:num GUID="98d5edf6-0ae3-4137-b311-c3c58b73e501" eId="para-6_abs-1_bezeichnung-1">
+            <akn:marker name="1" />
+            (1)
+          </akn:num>
+          <akn:content GUID="3b7f7f15-0068-40cc-8fef-3581dbf26a2f" eId="para-6_abs-1_inhalt-1">
+            <akn:p GUID="4302df34-0e41-450b-8e6a-948bddcfe106" eId="para-6_abs-1_inhalt-1_text-1">Der Anspruch auf Urlaub besteht nicht, soweit dem Arbeitnehmer für das laufende Kalenderjahr bereits von einem früheren Arbeitgeber Urlaub gewährt worden ist.</akn:p>
+          </akn:content>
+        </akn:paragraph>
+        <akn:paragraph GUID="a76d7274-7408-49d5-a611-297c85ecbe41" eId="para-6_abs-2">
+          <akn:num GUID="614fba28-040d-49e5-b3f8-df8d9f202849" eId="para-6_abs-2_bezeichnung-1">
+            <akn:marker name="2" />
+            (2)
+          </akn:num>
+          <akn:content GUID="0f1109c3-fc5e-402f-803b-746ad1351d6e" eId="para-6_abs-2_inhalt-1">
+            <akn:p GUID="23102cc1-e202-41fb-97f9-d54bc98bd765" eId="para-6_abs-2_inhalt-1_text-1">Der Arbeitgeber ist verpflichtet, bei Beendigung des Arbeitsverhältnisses dem Arbeitnehmer eine Bescheinigung über den im laufenden Kalenderjahr gewährten oder abgegoltenen Urlaub auszuhändigen.</akn:p>
+          </akn:content>
+        </akn:paragraph>
+      </akn:article>
+      <akn:article GUID="13eff8dd-a2dc-49ad-8a88-e5bcc3cb194a" eId="para-7" refersTo="einzelvorschrift-stammform">
+        <akn:num GUID="1fe95724-c272-46ad-a141-dbfc45adedd7" eId="para-7_bezeichnung-1">
+          <akn:marker name="7" />
+        </akn:num>
+        <akn:heading GUID="06aa1759-ff47-4c1e-b32c-e19999300916" eId="para-7_überschrift-1">§ 7 Zeitpunkt, Übertragbarkeit und Abgeltung des Urlaubs</akn:heading>
+        <akn:paragraph GUID="2c385fcf-df3b-4b30-9412-e24a2d59563e" eId="para-7_abs-1">
+          <akn:num GUID="ec5f8585-3e22-44b7-ac0a-9c7632c78174" eId="para-7_abs-1_bezeichnung-1">
+            <akn:marker name="1" />
+            (1)
+          </akn:num>
+          <akn:content GUID="aaf68c55-1607-4b0b-b0b3-df3a1bb3e352" eId="para-7_abs-1_inhalt-1">
+            <akn:p GUID="d67b7063-7403-42e5-82b1-2d4d4781fa11" eId="para-7_abs-1_inhalt-1_text-1">Bei der zeitlichen Festlegung des Urlaubs sind die Urlaubswünsche des Arbeitnehmers zu berücksichtigen, es sei denn, daß ihrer Berücksichtigung dringende betriebliche Belange oder Urlaubswünsche anderer Arbeitnehmer, die unter sozialen Gesichtspunkten den Vorrang verdienen, entgegenstehen. Der Urlaub ist zu gewähren, wenn der Arbeitnehmer dies im Anschluß an eine Maßnahme der medizinischen Vorsorge oder Rehabilitation verlangt.</akn:p>
+          </akn:content>
+        </akn:paragraph>
+        <akn:paragraph GUID="2dd0b618-6913-4177-83d0-70a1b6c87d5b" eId="para-7_abs-2">
+          <akn:num GUID="cbdc0075-9929-47c8-a434-1c5bc9e57d84" eId="para-7_abs-2_bezeichnung-1">
+            <akn:marker name="2" />
+            (2)
+          </akn:num>
+          <akn:content GUID="8286d7a7-9f71-4c46-85cb-e0fa69842774" eId="para-7_abs-2_inhalt-1">
+            <akn:p GUID="7f879350-71a8-449e-8968-7a35f3bc7e76" eId="para-7_abs-2_inhalt-1_text-1">Der Urlaub ist zusammenhängend zu gewähren, es sei denn, daß dringende betriebliche oder in der Person des Arbeitnehmers liegende Gründe eine Teilung des Urlaubs erforderlich machen. Kann der Urlaub aus diesen Gründen nicht zusammenhängend gewährt werden, und hat der Arbeitnehmer Anspruch auf Urlaub von mehr als zwölf Werktagen, so muß einer der Urlaubsteile mindestens zwölf aufeinanderfolgende Werktage umfassen.</akn:p>
+          </akn:content>
+        </akn:paragraph>
+        <akn:paragraph GUID="dc4d1a63-92a7-406c-9626-4d5689d4af7c" eId="para-7_abs-3">
+          <akn:num GUID="848e5ccd-93f7-4787-a894-63113c969891" eId="para-7_abs-3_bezeichnung-1">
+            <akn:marker name="3" />
+            (3)
+          </akn:num>
+          <akn:content GUID="842e19b8-c536-4627-9728-2a305bc9bddf" eId="para-7_abs-3_inhalt-1">
+            <akn:p GUID="a6a93cd7-8be6-4cac-b3f3-506221fc18f9" eId="para-7_abs-3_inhalt-1_text-1">Der Urlaub muß im laufenden Kalenderjahr gewährt und genommen werden. Eine Übertragung des Urlaubs auf das nächste Kalenderjahr ist nur statthaft, wenn dringende betriebliche oder in der Person des Arbeitnehmers liegende Gründe dies rechtfertigen. Im Fall der Übertragung muß der Urlaub in den ersten drei Monaten des folgenden Kalenderjahrs gewährt und genommen werden. Auf Verlangen des Arbeitnehmers ist ein nach § 5 Abs. 1 Buchstabe a entstehender Teilurlaub jedoch auf das nächste Kalenderjahr zu übertragen.</akn:p>
+          </akn:content>
+        </akn:paragraph>
+        <akn:paragraph GUID="1b6d074c-40ba-4228-bef8-bdfd905d6e78" eId="para-7_abs-4">
+          <akn:num GUID="cdbeffe9-0675-4081-af3f-a92238023790" eId="para-7_abs-4_bezeichnung-1">
+            <akn:marker name="4" />
+            (4)
+          </akn:num>
+          <akn:content GUID="65e8de39-16b6-4525-9977-e6fdd8014fea" eId="para-7_abs-4_inhalt-1">
+            <akn:p GUID="dccbe146-facf-46ad-a6af-cd16460fded4" eId="para-7_abs-4_inhalt-1_text-1">Kann der Urlaub wegen Beendigung des Arbeitsverhältnisses ganz oder teilweise nicht mehr gewährt werden, so ist er abzugelten.</akn:p>
+          </akn:content>
+        </akn:paragraph>
+      </akn:article>
+      <akn:article GUID="645636d7-efc4-4e04-b2ca-e55feeff60ba" eId="para-8" refersTo="einzelvorschrift-stammform">
+        <akn:num GUID="832ac631-ce31-425f-9836-432e75fa8b09" eId="para-8_bezeichnung-1">
+          <akn:marker name="8" />
+        </akn:num>
+        <akn:heading GUID="728d1775-7166-4da8-81e8-0b5920eefbdd" eId="para-8_überschrift-1">§ 8 Erwerbstätigkeit während des Urlaubs</akn:heading>
+        <akn:paragraph GUID="8e149010-75cf-45cd-b85c-b1522b40cc52" eId="para-8_abs-1">
+          <akn:num GUID="5c1766ef-d2ca-4555-89ef-bcbf3b4a0174" eId="para-8_abs-1_bezeichnung-1">
+            <akn:marker name="1" />
+          </akn:num>
+          <akn:content GUID="f5241cfe-52ee-4f5f-b5e7-6a6d6e29d40b" eId="para-8_abs-1_inhalt-1">
+            <akn:p GUID="c489eae5-c431-487b-91c9-0f751938b447" eId="para-8_abs-1_inhalt-1_text-1">Während des Urlaubs darf der Arbeitnehmer keine dem Urlaubszweck widersprechende Erwerbstätigkeit leisten.</akn:p>
+          </akn:content>
+        </akn:paragraph>
+      </akn:article>
+      <akn:article GUID="c429091f-61d3-4505-a03b-f5ca8326c8a5" eId="para-9" refersTo="einzelvorschrift-stammform">
+        <akn:num GUID="2eb23b28-8891-445f-935d-f1c460c485ca" eId="para-9_bezeichnung-1">
+          <akn:marker name="9" />
+        </akn:num>
+        <akn:heading GUID="79494365-9418-4508-8edb-d7ab608e693d" eId="para-9_überschrift-1">§ 9 Erkrankung während des Urlaubs</akn:heading>
+        <akn:paragraph GUID="01e72cf0-c0db-48fd-a414-ac1e3165388e" eId="para-9_abs-1">
+          <akn:num GUID="80f11619-fcb6-4aab-a7df-66342a8454db" eId="para-9_abs-1_bezeichnung-1">
+            <akn:marker name="1" />
+          </akn:num>
+          <akn:content GUID="b1c42f94-afad-4d02-bab7-3620a01fa0a7" eId="para-9_abs-1_inhalt-1">
+            <akn:p GUID="e3a33b8d-eb23-4f5c-9599-3e6a0429422f" eId="para-9_abs-1_inhalt-1_text-1">Erkrankt ein Arbeitnehmer während des Urlaubs, so werden die durch ärztliches Zeugnis nachgewiesenen Tage der Arbeitsunfähigkeit auf den Jahresurlaub nicht angerechnet.</akn:p>
+          </akn:content>
+        </akn:paragraph>
+      </akn:article>
+      <akn:article GUID="b07d47c0-437d-4ef5-85ad-f962b1fd8e7e" eId="para-10" refersTo="einzelvorschrift-stammform">
+        <akn:num GUID="9658d4c2-b5ab-4d23-877f-6681b9337115" eId="para-10_bezeichnung-1">
+          <akn:marker name="10" />
+        </akn:num>
+        <akn:heading GUID="8eaafb8c-9197-4523-9840-5aa6b8c515da" eId="para-10_überschrift-1">§ 10 Maßnahmen der medizinischen Vorsorge oder Rehabilitation</akn:heading>
+        <akn:paragraph GUID="7419dd26-9ff7-482f-bda4-9ef41ec3d391" eId="para-10_abs-1">
+          <akn:num GUID="5754f603-64ff-4201-a563-5d54770264e7" eId="para-10_abs-1_bezeichnung-1">
+            <akn:marker name="1" />
+          </akn:num>
+          <akn:content GUID="e6f5668f-c3fb-40c5-ab38-a36c7fbae165" eId="para-10_abs-1_inhalt-1">
+            <akn:p GUID="1088e33a-3699-4ef8-bde4-7627426bc94d" eId="para-10_abs-1_inhalt-1_text-1">Maßnahmen der medizinischen Vorsorge oder Rehabilitation dürfen nicht auf den Urlaub angerechnet werden, soweit ein Anspruch auf Fortzahlung des Arbeitsentgelts nach den gesetzlichen Vorschriften über die Entgeltfortzahlung im Krankheitsfall besteht.</akn:p>
+          </akn:content>
+        </akn:paragraph>
+      </akn:article>
+      <akn:article GUID="c586945c-7e23-4ca1-bb20-aabc0780ff4a" eId="para-11" refersTo="einzelvorschrift-stammform">
+        <akn:num GUID="4e34ca40-d285-4293-88a8-60c5d70ca16b" eId="para-11_bezeichnung-1">
+          <akn:marker name="11" />
+        </akn:num>
+        <akn:heading GUID="deccce58-bb34-408b-a488-b42fdfc42831" eId="para-11_überschrift-1">§ 11 Urlaubsentgelt</akn:heading>
+        <akn:paragraph GUID="84e0c991-cd3a-4195-be46-5fd119c0ec6d" eId="para-11_abs-1">
+          <akn:num GUID="49f83896-2e21-4021-a606-438025247ea1" eId="para-11_abs-1_bezeichnung-1">
+            <akn:marker name="1" />
+            (1)
+          </akn:num>
+          <akn:content GUID="fd7b0920-b427-4ba7-84b0-76d8c57898cb" eId="para-11_abs-1_inhalt-1">
+            <akn:p GUID="68e7886b-7dfa-4205-b960-c817441681ff" eId="para-11_abs-1_inhalt-1_text-1">Das Urlaubsentgelt bemißt sich nach dem durchschnittlichen Arbeitsverdienst, das der Arbeitnehmer in den letzten dreizehn Wochen vor dem Beginn des Urlaubs erhalten hat, mit Ausnahme des zusätzlich für Überstunden gezahlten Arbeitsverdienstes. Bei Verdiensterhöhungen nicht nur vorübergehender Natur, die während des Berechnungszeitraums oder des Urlaubs eintreten, ist von dem erhöhten Verdienst auszugehen. Verdienstkürzungen, die im Berechnungszeitraum infolge von Kurzarbeit, Arbeitsausfällen oder unverschuldeter Arbeitsversäumnis eintreten, bleiben für die Berechnung des Urlaubsentgelts außer Betracht. Zum Arbeitsentgelt gehörende Sachbezüge, die während des Urlaubs nicht weitergewährt werden, sind für die Dauer des Urlaubs angemessen in bar abzugelten.</akn:p>
+          </akn:content>
+        </akn:paragraph>
+        <akn:paragraph GUID="0dbabf0b-11fc-4b8f-aaf2-b94e345f0297" eId="para-11_abs-2">
+          <akn:num GUID="9976c2f5-bd3b-42a8-a581-217df72e5941" eId="para-11_abs-2_bezeichnung-1">
+            <akn:marker name="2" />
+            (2)
+          </akn:num>
+          <akn:content GUID="2be24d4b-58d6-4523-bcba-4e60f8c448d1" eId="para-11_abs-2_inhalt-1">
+            <akn:p GUID="52102ecb-a457-4a4d-9e4f-681a16e508b6" eId="para-11_abs-2_inhalt-1_text-1">Das Urlaubsentgelt ist vor Antritt des Urlaubs auszuzahlen.</akn:p>
+          </akn:content>
+        </akn:paragraph>
+      </akn:article>
+      <akn:article GUID="bf6e0bbb-1616-4444-b43a-94f583b687a4" eId="para-12" refersTo="einzelvorschrift-stammform">
+        <akn:num GUID="7e7f57cc-bba5-4cba-8fff-a33bf96a39ef" eId="para-12_bezeichnung-1">
+          <akn:marker name="12" />
+        </akn:num>
+        <akn:heading GUID="326471ed-bb34-4459-8aaa-4278ac5e0212" eId="para-12_überschrift-1">§ 12 Urlaub im Bereich der Heimarbeit</akn:heading>
+        <akn:paragraph GUID="5e62b796-e36e-4a23-9f4b-eb2cfcfdef18" eId="para-12_abs-1">
+          <akn:num GUID="3c4a9d51-a77f-4e28-ae24-8ac744bdd6f9" eId="para-12_abs-1_bezeichnung-1">
+            <akn:marker name="1" />
+          </akn:num>
+          <akn:list GUID="e921ddb6-1bba-4bc6-a86e-915b0be2587c" eId="para-12_abs-1_untergl-1">
+            <akn:intro GUID="569d2b22-88d0-4ac3-a9fe-d1128c149d4c" eId="para-12_abs-1_untergl-1_intro-1">
+              <akn:p GUID="6e814205-dbd3-4390-9b4c-3b3a3fa37a84" eId="para-12_abs-1_untergl-1_intro-1_text-1">Für die in Heimarbeit Beschäftigten und die ihnen nach § 1 Abs. 2 Buchstaben a bis c des Heimarbeitsgesetzes Gleichgestellten, für die die Urlaubsregelung nicht ausdrücklich von der Gleichstellung ausgenommen ist, gelten die vorstehenden Bestimmungen mit Ausnahme der §§ 4 bis 6, 7 Abs. 3 und 4 und § 11 nach Maßgabe der folgenden Bestimmungen:</akn:p>
+            </akn:intro>
+            <akn:point GUID="9461d506-bbb0-463f-928b-e67a49a01e4c" eId="para-12_abs-1_untergl-1_listenelem-1">
+              <akn:num GUID="48dfac21-581b-4f39-a89f-cdad2c417715" eId="para-12_abs-1_untergl-1_listenelem-1_bezeichnung-1">
+                <akn:marker name="1" />
+                1.
+              </akn:num>
+              <akn:content GUID="41169e45-5199-47e2-967a-9dba584551ce" eId="para-12_abs-1_untergl-1_listenelem-1_inhalt-1">
+                <akn:p GUID="71660d08-1c6c-4af9-96d6-3e2980d146de" eId="para-12_abs-1_untergl-1_listenelem-1_inhalt-1_text-1">Heimarbeiter (§ 1 Abs. 1 Buchstabe a des Heimarbeitsgesetzes) und nach § 1 Abs. 2 Buchstabe a des Heimarbeitsgesetzes Gleichgestellte erhalten von ihrem Auftraggeber oder, falls sie von einem Zwischenmeister beschäftigt werden, von diesem bei einem Anspruch auf 24 Werktage ein Urlaubsentgelt von 9,1 vom Hundert des in der Zeit vom 1. Mai bis zum 30. April des folgenden Jahres oder bis zur Beendigung des Beschäftigungsverhältnisses verdienten Arbeitsentgelts vor Abzug der Steuern und Sozialversicherungsbeiträge ohne Unkostenzuschlag und ohne die für den Lohnausfall an Feiertagen, den Arbeitsausfall infolge Krankheit und den Urlaub zu leistenden Zahlungen.</akn:p>
+              </akn:content>
+            </akn:point>
+            <akn:point GUID="9807c8a0-3745-49dc-9dc6-cf99be878586" eId="para-12_abs-1_untergl-1_listenelem-2">
+              <akn:num GUID="1f4ad952-7edf-4612-a060-dc6b6077254c" eId="para-12_abs-1_untergl-1_listenelem-2_bezeichnung-1">
+                <akn:marker name="2" />
+                2.
+              </akn:num>
+              <akn:content GUID="0de1c7dd-3780-47b7-b8be-c2f111836613" eId="para-12_abs-1_untergl-1_listenelem-2_inhalt-1">
+                <akn:p GUID="6a6e3638-885e-4c57-a7e8-2239255b0803" eId="para-12_abs-1_untergl-1_listenelem-2_inhalt-1_text-1">War der Anspruchsberechtigte im Berechnungszeitraum nicht ständig beschäftigt, so brauchen unbeschadet des Anspruches auf Urlaubsentgelt nach Nummer 1 nur so viele Urlaubstage gegeben zu werden, wie durchschnittliche Tagesverdienste, die er in der Regel erzielt hat, in dem Urlaubsentgelt nach Nummer 1 enthalten sind.</akn:p>
+              </akn:content>
+            </akn:point>
+            <akn:point GUID="37abc37f-5a03-486d-9290-2f4616852ffd" eId="para-12_abs-1_untergl-1_listenelem-3">
+              <akn:num GUID="67b461f2-2667-46f9-b6a3-ac63ad323c55" eId="para-12_abs-1_untergl-1_listenelem-3_bezeichnung-1">
+                <akn:marker name="3" />
+                3.
+              </akn:num>
+              <akn:content GUID="2e8ba5a7-dbef-48df-bc81-c96478ab89bf" eId="para-12_abs-1_untergl-1_listenelem-3_inhalt-1">
+                <akn:p GUID="6879520a-e4cf-4325-a46f-7e4fc5ce4a08" eId="para-12_abs-1_untergl-1_listenelem-3_inhalt-1_text-1">Das Urlaubsentgelt für die in Nummer 1 bezeichneten Personen soll erst bei der letzten Entgeltzahlung vor Antritt des Urlaubs ausgezahlt werden.</akn:p>
+              </akn:content>
+            </akn:point>
+            <akn:point GUID="754b28b4-52d9-4ba0-8c63-80aca1571211" eId="para-12_abs-1_untergl-1_listenelem-4">
+              <akn:num GUID="5a8e4d97-2b24-4579-ac75-a76ca8ee72da" eId="para-12_abs-1_untergl-1_listenelem-4_bezeichnung-1">
+                <akn:marker name="4" />
+                4.
+              </akn:num>
+              <akn:content GUID="8cd9ce7d-8c58-4a6b-8644-ed5ae11b5cc2" eId="para-12_abs-1_untergl-1_listenelem-4_inhalt-1">
+                <akn:p GUID="e48781f2-82ea-42de-85b9-0e931e609449" eId="para-12_abs-1_untergl-1_listenelem-4_inhalt-1_text-1">Hausgewerbetreibende (§ 1 Abs. 1 Buchstabe b des Heimarbeitsgesetzes) und nach § 1 Abs. 2 Buchstaben b und c des Heimarbeitsgesetzes Gleichgestellte erhalten von ihrem Auftraggeber oder, falls sie von einem Zwischenmeister beschäftigt werden, von diesem als eigenes Urlaubsentgelt und zur Sicherung der Urlaubsansprüche der von ihnen Beschäftigten einen Betrag von 9,1 vom Hundert des an sie ausgezahlten Arbeitsentgelts vor Abzug der Steuern und Sozialversicherungsbeiträge ohne Unkostenzuschlag und ohne die für den Lohnausfall an Feiertagen, den Arbeitsausfall infolge Krankheit und den Urlaub zu leistenden Zahlungen.</akn:p>
+              </akn:content>
+            </akn:point>
+            <akn:point GUID="1da628b5-0c8f-452a-a8c3-a9982cc757c3" eId="para-12_abs-1_untergl-1_listenelem-5">
+              <akn:num GUID="23c2b7f9-adaa-4ecd-85da-14125e09c395" eId="para-12_abs-1_untergl-1_listenelem-5_bezeichnung-1">
+                <akn:marker name="5" />
+                5.
+              </akn:num>
+              <akn:content GUID="6b14af2d-39e1-4519-9714-845cf3ce5a67" eId="para-12_abs-1_untergl-1_listenelem-5_inhalt-1">
+                <akn:p GUID="a3867d4d-8fee-4172-a525-d48531661ecc" eId="para-12_abs-1_untergl-1_listenelem-5_inhalt-1_text-1">Zwischenmeister, die den in Heimarbeit Beschäftigten nach § 1 Abs. 2 Buchstabe d des Heimarbeitsgesetzes gleichgestellt sind, haben gegen ihren Auftraggeber Anspruch auf die von ihnen nach den Nummern 1 und 4 nachweislich zu zahlenden Beträge.</akn:p>
+              </akn:content>
+            </akn:point>
+            <akn:point GUID="bb6bf8d9-8c7d-4a5e-870f-311557531e1c" eId="para-12_abs-1_untergl-1_listenelem-6">
+              <akn:num GUID="b66ac88d-66bf-4c0a-a333-6cf3ed1d33a1" eId="para-12_abs-1_untergl-1_listenelem-6_bezeichnung-1">
+                <akn:marker name="6" />
+                6.
+              </akn:num>
+              <akn:content GUID="5393d225-9d02-4733-a4a4-1b040eb5079e" eId="para-12_abs-1_untergl-1_listenelem-6_inhalt-1">
+                <akn:p GUID="65073fbb-da0c-4e86-9221-dc1e6207fd3a" eId="para-12_abs-1_untergl-1_listenelem-6_inhalt-1_text-1">Die Beträge nach den Nummern 1, 4 und 5 sind gesondert im Entgeltbeleg auszuweisen.</akn:p>
+              </akn:content>
+            </akn:point>
+            <akn:point GUID="e722ba12-6c10-4de5-9dc2-5eb3e3c815b7" eId="para-12_abs-1_untergl-1_listenelem-7">
+              <akn:num GUID="1ddff8c1-0f26-4949-9cf7-7d8333ae486c" eId="para-12_abs-1_untergl-1_listenelem-7_bezeichnung-1">
+                <akn:marker name="7" />
+                7.
+              </akn:num>
+              <akn:content GUID="e0fc7c78-900e-4153-9522-adfad55a2574" eId="para-12_abs-1_untergl-1_listenelem-7_inhalt-1">
+                <akn:p GUID="699bb19e-3502-4e57-bd19-9285582c748f" eId="para-12_abs-1_untergl-1_listenelem-7_inhalt-1_text-1">Durch Tarifvertrag kann bestimmt werden, daß Heimarbeiter (§ 1 Abs. 1 Buchstabe a des Heimarbeitsgesetzes), die nur für einen Auftraggeber tätig sind und tariflich allgemein wie Betriebsarbeiter behandelt werden, Urlaub nach den allgemeinen Urlaubsbestimmungen erhalten.</akn:p>
+              </akn:content>
+            </akn:point>
+            <akn:point GUID="a000980e-95e1-46c8-a61a-7210b11d16e3" eId="para-12_abs-1_untergl-1_listenelem-8">
+              <akn:num GUID="941c5512-61c6-4a4f-8162-c2213a598a58" eId="para-12_abs-1_untergl-1_listenelem-8_bezeichnung-1">
+                <akn:marker name="8" />
+                8.
+              </akn:num>
+              <akn:content GUID="1e510b32-315d-4e47-8520-2e4b1674a218" eId="para-12_abs-1_untergl-1_listenelem-8_inhalt-1">
+                <akn:p GUID="8dfdefe6-7b97-4dcb-87bf-6288cfa8c6a1" eId="para-12_abs-1_untergl-1_listenelem-8_inhalt-1_text-1">Auf die in den Nummern 1, 4 und 5 vorgesehenen Beträge finden die §§ 23 bis 25, 27 und 28 und auf die in den Nummern 1 und 4 vorgesehenen Beträge außerdem § 21 Abs. 2 des Heimarbeitsgesetzes entsprechende Anwendung. Für die Urlaubsansprüche der fremden Hilfskräfte der in Nummer 4 genannten Personen gilt § 26 des Heimarbeitsgesetzes entsprechend.</akn:p>
+              </akn:content>
+            </akn:point>
+          </akn:list>
+        </akn:paragraph>
+      </akn:article>
+      <akn:article GUID="c0bef701-53da-43bf-ac7d-0a49c8c0ac17" eId="para-13" refersTo="einzelvorschrift-stammform">
+        <akn:num GUID="30b05dae-9fc6-40f6-bb10-3e029f554c20" eId="para-13_bezeichnung-1">
+          <akn:marker name="13" />
+        </akn:num>
+        <akn:heading GUID="de06dee6-6be5-4a0f-b1cc-dab017580c5e" eId="para-13_überschrift-1">§ 13 Unabdingbarkeit</akn:heading>
+        <akn:paragraph GUID="7ddd8d12-25dc-479e-81a1-0ba48249749e" eId="para-13_abs-1">
+          <akn:num GUID="3331c53c-37b0-4ce9-8f73-90a4b34df99a" eId="para-13_abs-1_bezeichnung-1">
+            <akn:marker name="1" />
+            (1)
+          </akn:num>
+          <akn:content GUID="3e6ef453-deab-42c8-a1c5-0f4c2598074d" eId="para-13_abs-1_inhalt-1">
+            <akn:p GUID="bd3354d2-9f88-4a87-b3bb-d2c9d491c585" eId="para-13_abs-1_inhalt-1_text-1">Von den vorstehenden Vorschriften mit Ausnahme der §§ 1, 2 und 3 Abs. 1 kann in Tarifverträgen abgewichen werden. Die abweichenden Bestimmungen haben zwischen nichttarifgebundenen Arbeitgebern und Arbeitnehmern Geltung, wenn zwischen diesen die Anwendung der einschlägigen tariflichen Urlaubsregelung vereinbart ist. Im übrigen kann, abgesehen von § 7 Abs. 2 Satz 2, von den Bestimmungen dieses Gesetzes nicht zuungunsten des Arbeitnehmers abgewichen werden.</akn:p>
+          </akn:content>
+        </akn:paragraph>
+        <akn:paragraph GUID="1a771b98-0722-4f42-b44c-4d5e8cdaef4c" eId="para-13_abs-2">
+          <akn:num GUID="6b32de6a-f456-41b4-94c8-802d8d69d374" eId="para-13_abs-2_bezeichnung-1">
+            <akn:marker name="2" />
+            (2)
+          </akn:num>
+          <akn:content GUID="43790c4b-8d96-45bb-abab-17a1cc4321fb" eId="para-13_abs-2_inhalt-1">
+            <akn:p GUID="ec113db2-0a7b-4438-9f96-bee3e73a2f04" eId="para-13_abs-2_inhalt-1_text-1">Für das Baugewerbe oder sonstige Wirtschaftszweige, in denen als Folge häufigen Ortswechsels der von den Betrieben zu leistenden Arbeit Arbeitsverhältnisse von kürzerer Dauer als einem Jahr in erheblichem Umfange üblich sind, kann durch Tarifvertrag von den vorstehenden Vorschriften über die in Absatz 1 Satz 1 vorgesehene Grenze hinaus abgewichen werden, soweit dies zur Sicherung eines zusammenhängenden Jahresurlaubs für alle Arbeitnehmer erforderlich ist. Absatz 1 Satz 2 findet entsprechende Anwendung.</akn:p>
+          </akn:content>
+        </akn:paragraph>
+        <akn:paragraph GUID="2031b7ee-4713-40b6-9292-2209a7c71971" eId="para-13_abs-3">
+          <akn:num GUID="57b645dd-b86e-4024-ad88-d237c4120248" eId="para-13_abs-3_bezeichnung-1">
+            <akn:marker name="3" />
+            (3)
+          </akn:num>
+          <akn:content GUID="67f9ba0a-38c6-451a-9bcb-71ee32471a31" eId="para-13_abs-3_inhalt-1">
+            <akn:p GUID="beedab6f-dde1-42e6-8153-acebf911a304" eId="para-13_abs-3_inhalt-1_text-1">Für den Bereich der Deutsche Bahn Aktiengesellschaft sowie einer gemäß § 2 Abs. 1 und § 3 Abs. 3 des Deutsche Bahn Gründungsgesetzes vom 27. Dezember 1993 (BGBl. I S. 2378, 2386) ausgegliederten Gesellschaft und für den Bereich der Nachfolgeunternehmen der Deutschen Bundespost kann von der Vorschrift über das Kalenderjahr als Urlaubsjahr (§ 1) in Tarifverträgen abgewichen werden.</akn:p>
+          </akn:content>
+        </akn:paragraph>
+      </akn:article>
+      <akn:article GUID="5d35f7b1-a0b9-4d53-8af1-2c1eb9e1574d" eId="para-14" refersTo="einzelvorschrift-stammform">
+        <akn:num GUID="85ef2d5a-df11-474d-a59c-a3957021a882" eId="para-14_bezeichnung-1">
+          <akn:marker name="14" />
+        </akn:num>
+        <akn:heading GUID="e78b1120-db1e-460a-af17-b4ddd06c9423" eId="para-14_überschrift-1">§ 14 Berlin-Klausel</akn:heading>
+        <akn:paragraph GUID="dabba393-759c-4217-9875-06bad35a6fb4" eId="para-14_abs-1">
+          <akn:num GUID="fc077732-dadc-4f1e-a808-3012ba69ef72" eId="para-14_abs-1_bezeichnung-1">
+            <akn:marker name="1" />
+          </akn:num>
+          <akn:content GUID="73a2e0a4-bb29-4f49-82a6-ad3210f436df" eId="para-14_abs-1_inhalt-1">
+            <akn:p GUID="9c6db440-454c-476e-9522-3b0f0c69059a" eId="para-14_abs-1_inhalt-1_text-1">Dieses Gesetz gilt nach Maßgabe des § 13 Abs. 1 des Dritten Überleitungsgesetzes vom 4. Januar 1952 (Bundesgesetzbl. I S. 1) auch im Land Berlin.</akn:p>
+          </akn:content>
+        </akn:paragraph>
+      </akn:article>
+      <akn:article GUID="12a39147-2ba1-404f-ae21-0870f3a9cb73" eId="para-15" refersTo="einzelvorschrift-stammform">
+        <akn:num GUID="122eea81-f1ed-44c6-9482-3fed228a700f" eId="para-15_bezeichnung-1">
+          <akn:marker name="15" />
+        </akn:num>
+        <akn:heading GUID="8ad3539d-fb16-489a-9c6b-30cfeba8c808" eId="para-15_überschrift-1">§ 15 Änderung und Aufhebung von Gesetzen</akn:heading>
+        <akn:paragraph GUID="01b0797b-1c4c-4ff4-9989-2566c224e49d" eId="para-15_abs-1">
+          <akn:num GUID="598f619b-944c-418f-acf2-f362d9daf078" eId="para-15_abs-1_bezeichnung-1">
+            <akn:marker name="1" />
+            (1)
+          </akn:num>
+          <akn:content GUID="5cb2b9f8-7546-4bb2-bab2-d50f726e5572" eId="para-15_abs-1_inhalt-1">
+            <akn:p GUID="f0750481-af9d-4d49-99d7-3c173b15a945" eId="para-15_abs-1_inhalt-1_text-1">
+              Unberührt bleiben die urlaubsrechtlichen Bestimmungen des Arbeitsplatzschutzgesetzes vom 30. März 1957 (Bundesgesetzbl. I S. 293), geändert durch Gesetz vom 22. März 1962 (Bundesgesetzbl. I S. 169), des Neunten Buches Sozialgesetzbuch des Jugendarbeitsschutzgesetzes vom 9. August 1960 (Bundesgesetzbl. I S. 665), geändert durch Gesetz vom 20. Juli 1962 (Bundesgesetzbl. I S. 449), und des Seearbeitsgesetzes vom 20. April 2013 (BGBl. I S. 868), jedoch wird
+              <akn:br />
+              a) und b) (Änderungsvorschriften)
+            </akn:p>
+          </akn:content>
+        </akn:paragraph>
+        <akn:paragraph GUID="e01dfcc8-0888-4f02-8f71-38778d44aa3c" eId="para-15_abs-2">
+          <akn:num GUID="8806ee56-3f8f-4bab-a823-02e42f1d99d1" eId="para-15_abs-2_bezeichnung-1">
+            <akn:marker name="2" />
+            (2)
+          </akn:num>
+          <akn:content GUID="a002962e-3a4d-436b-b1b2-708d61d73ac1" eId="para-15_abs-2_inhalt-1">
+            <akn:p GUID="663bf148-3492-4727-b9dc-c1dd21bbdee6" eId="para-15_abs-2_inhalt-1_text-1">Mit dem Inkrafttreten dieses Gesetzes treten die landesrechtlichen Vorschriften über den Erholungsurlaub außer Kraft. In Kraft bleiben jedoch die landesrechtlichen Bestimmungen über den Urlaub für Opfer des Nationalsozialismus und für solche Arbeitnehmer, die geistig oder körperlich in ihrer Erwerbsfähigkeit behindert sind.</akn:p>
+          </akn:content>
+        </akn:paragraph>
+      </akn:article>
+      <akn:article GUID="b134563b-8366-4974-92c0-18211ecbbe8b" eId="para-15a" refersTo="einzelvorschrift-stammform">
+        <akn:num GUID="3a7d5754-f1c6-4bbf-8081-0cd5bab52a36" eId="para-15a_bezeichnung-1">
+          <akn:marker name="15a" />
+        </akn:num>
+        <akn:heading GUID="a9753c9f-f7c5-4095-932a-250208757f30" eId="para-15a_überschrift-1">§ 15a Übergangsvorschrift</akn:heading>
+        <akn:paragraph GUID="31553d65-b0b1-4ad0-bd90-906c61c94351" eId="para-15a_abs-1">
+          <akn:num GUID="8d6f7715-c0db-4724-a5db-641d39255e14" eId="para-15a_abs-1_bezeichnung-1">
+            <akn:marker name="1" />
+          </akn:num>
+          <akn:content GUID="0facac2c-67af-455c-b4c9-df517642421e" eId="para-15a_abs-1_inhalt-1">
+            <akn:p GUID="e311b176-f770-40df-a995-a8ca28e358cf" eId="para-15a_abs-1_inhalt-1_text-1">Befindet sich der Arbeitnehmer von einem Tag nach dem 9. Dezember 1998 bis zum 1. Januar 1999 oder darüber hinaus in einer Maßnahme der medizinischen Vorsorge oder Rehabilitation, sind für diesen Zeitraum die seit dem 1. Januar 1999 geltenden Vorschriften maßgebend, es sei denn, daß diese für den Arbeitnehmer ungünstiger sind.</akn:p>
+          </akn:content>
+        </akn:paragraph>
+      </akn:article>
+      <akn:article GUID="9b53cebc-5671-47c1-980a-df6de7025d91" eId="para-16" refersTo="einzelvorschrift-stammform">
+        <akn:num GUID="b2509050-1fd8-4a62-8b84-a146351438d8" eId="para-16_bezeichnung-1">
+          <akn:marker name="16" />
+        </akn:num>
+        <akn:heading GUID="7eca6b33-2d72-482c-bd39-eaa8a5b3e1eb" eId="para-16_überschrift-1">§ 16 Inkrafttreten</akn:heading>
+        <akn:paragraph GUID="6eda07eb-2cad-4868-8b40-885cda1a7b92" eId="para-16_abs-1">
+          <akn:num GUID="0bdb03e7-e0a8-45f4-9a5d-fc8180de470d" eId="para-16_abs-1_bezeichnung-1">
+            <akn:marker name="1" />
+          </akn:num>
+          <akn:content GUID="b957016f-9d4e-4bea-8717-3a9b1dd2294c" eId="para-16_abs-1_inhalt-1">
+            <akn:p GUID="0124b5e0-3de4-4073-bf9b-5290191fa22d" eId="para-16_abs-1_inhalt-1_text-1">Dieses Gesetz tritt mit Wirkung vom 1. Januar 1963 in Kraft.</akn:p>
+          </akn:content>
+        </akn:paragraph>
+      </akn:article>
+    </akn:body>
+  </akn:act>
+</akn:akomaNtoso>

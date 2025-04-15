@@ -1,0 +1,19 @@
+<akn:akomaNtoso xmlns:akn="http://Inhaltsdaten.LegalDocML.de/1.7.2/">
+    <akn:body>
+        <akn:article eId="a">
+            Main article
+        </akn:article>
+    </akn:body>
+    <akn:attachments eId="anlagen-1">
+    <akn:attachment eId="anlagen-1_anlage-1">
+        <akn:documentRef eId="anlagen-1_anlage-1_verweis-1"
+                         href="eli/bund/bgbl-1/0000/s1000/2000-01-01/1/deu/2000-01-01/offenestruktur-1.xml"
+                         showAs="offene-struktur"/>
+    </akn:attachment>
+    <akn:attachment eId="anlagen-1_anlage-2">
+        <akn:documentRef eId="anlagen-1_anlage-2_verweis-1"
+                         href="eli/bund/bgbl-1/0000/s1000/2000-01-01/1/deu/2000-01-01/offenestruktur-2.xml"
+                         showAs="offene-struktur"/>
+    </akn:attachment>
+    </akn:attachments>
+</akn:akomaNtoso>
