@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-model href="../../schema/legalDocML.de.sch" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<akn:akomaNtoso xmlns:akn="http://Inhaltsdaten.LegalDocML.de/1.4/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://Metadaten.LegalDocML.de/1.4/ ../../../schema/legalDocML.de-metadaten.xsd http://Inhaltsdaten.LegalDocML.de/1.4/ ../../../schema/legalDocML.de-regelungstextverkuendungsfassung.xsd">
+  <akn:act name="regelungstext">
+    <akn:meta>
+      <akn:identification source="attributsemantik-noch-undefiniert">
+        <akn:FRBRWork>
+          <akn:FRBRthis value="eli/bgbl-1/2005/2363/regelungstext" />
+          <akn:FRBRuri value="eli/bgbl-1/2005/2363" />
+          <akn:FRBRalias name="übergreifende-id" value="99c6673d-b64f-499e-8738-101b4104d2cd" />
+          <akn:FRBRdate date="2005-08-12" name="neufassung" />
+          <akn:FRBRauthor href="recht.bund.de/institution/bundesregierung" />
+          <akn:FRBRcountry value="de" />
+          <akn:FRBRnumber value="2363" />
+          <akn:FRBRname value="bgbl-1" />
+          <akn:FRBRsubtype value="regelungstext" />
+        </akn:FRBRWork>
+        <akn:FRBRExpression>
+          <akn:FRBRthis value="eli/bgbl-1/2005/2363/2005-08-12/1/deu/regelungstext" />
+          <akn:FRBRuri value="eli/bgbl-1/2005/2363/2005-08-12/1/deu" />
+          <akn:FRBRauthor href="recht.bund.de/institution/bundesregierung" />
+          <akn:FRBRdate date="2005-08-12" name="verkuendung" />
+          <akn:FRBRlanguage language="deu" />
+          <akn:FRBRversionNumber value="1" />
+        </akn:FRBRExpression>
+        <akn:FRBRManifestation>
+          <akn:FRBRthis value="eli/bgbl-1/2005/2363/2005-08-12/1/deu/regelungstext.xml" />
+          <akn:FRBRuri value="eli/bgbl-1/2005/2363/2005-08-12/1/deu/regelungstext.xml" />
+          <akn:FRBRdate date="2005-08-12" name="generierung" />
+          <akn:FRBRauthor href="recht.bund.de" />
+          <akn:FRBRformat value="xml" />
+        </akn:FRBRManifestation>
+      </akn:identification>
+      <akn:proprietary source="attributsemantik-noch-undefiniert">
+        <meta:legalDocML.de_metadaten xmlns:meta="http://Metadaten.LegalDocML.de/1.4/">
+          <meta:typ>gesetz</meta:typ>
+          <meta:form>stammform</meta:form>
+          <meta:fassung>neufassung</meta:fassung>
+          <meta:art>regelungstext</meta:art>
+          <meta:initiant>nicht-vorhanden</meta:initiant>
+          <meta:bearbeitendeInstitution>nicht-vorhanden</meta:bearbeitendeInstitution>
+        </meta:legalDocML.de_metadaten>
+      </akn:proprietary>
+    </akn:meta>
+    <akn:preface>
+      <akn:longTitle GUID="b46d55fc-12ae-4ef5-a7b1-a01a9178423d" eId="doktitel-1">
+        <akn:p GUID="795d7419-b0b4-4f20-acd7-2902dcaf7de1" eId="doktitel-1_text-1">
+          <akn:docTitle>Gesetz über das Zweckvermögen des Bundes bei der Landwirtschaftlichen Rentenbank (<akn:inline refersTo="amtliche-abkuerzung" name="attributsemantik-noch-undefiniert">ZweckVG</akn:inline>)</akn:docTitle>
+        </akn:p>
+      </akn:longTitle>
+    </akn:preface>
+    <akn:preamble>
+      <akn:blockContainer refersTo="inhaltsuebersicht" GUID="26173bc2-e1d6-4194-b250-56332f60d2ef" eId="verzeichnis-1">
+        <akn:heading GUID="7c604d99-af60-42f7-bd22-5f299fa8e3a7" eId="verzeichnis-1_überschrift-1">Inhaltsübersicht</akn:heading>
+        <akn:toc GUID="eee529bc-2efd-495b-bf5f-2c095c1b22e3" eId="verzeichnis-1_inhuebs-1">
+          <akn:tocItem href="#para-1_überschrift-1" level="1" GUID="e5a33181-26c6-4480-bdd9-6d79bb6273ec" eId="verzeichnis-1_inhuebs-1_eintrag-1">
+            <akn:span>§ 1</akn:span>
+            <akn:span>Zweckvermögen</akn:span>
+          </akn:tocItem>
+          <akn:tocItem href="#para-2_überschrift-1" level="1" GUID="78fddfe5-ad4a-4b9d-b12c-59908864c021" eId="verzeichnis-1_inhuebs-1_eintrag-2">
+            <akn:span>§ 2</akn:span>
+            <akn:span>Verwendung des Zweckvermögens</akn:span>
+          </akn:tocItem>
+          <akn:tocItem href="#para-3_überschrift-1" level="1" GUID="4a1bf54d-aa23-48fe-8bed-38bab814097e" eId="verzeichnis-1_inhuebs-1_eintrag-3">
+            <akn:span>§ 3</akn:span>
+            <akn:span>Wirtschaftsplan</akn:span>
+          </akn:tocItem>
+          <akn:tocItem href="#para-4_überschrift-1" level="1" GUID="86a87171-5f4d-4a2a-8173-f67d94a44021" eId="verzeichnis-1_inhuebs-1_eintrag-4">
+            <akn:span>§ 4</akn:span>
+            <akn:span>Verwaltungskosten</akn:span>
+          </akn:tocItem>
+        </akn:toc>
+      </akn:blockContainer>
+    </akn:preamble>
+    <akn:body refersTo="hauptteil-stammform">
+      <akn:article GUID="b50e22d0-2586-4ae9-9771-25363a23a537" eId="para-1" refersTo="einzelvorschrift-stammform">
+        <akn:num GUID="653c18cb-94ae-42a9-91de-64c3dd82073c" eId="para-1_bezeichnung-1">
+          <akn:marker name="1" />
+        </akn:num>
+        <akn:heading GUID="12bc3047-225f-4613-b141-53b39d9b2d75" eId="para-1_überschrift-1">§ 1 Zweckvermögen</akn:heading>
+        <akn:paragraph GUID="acf4de83-15cc-4e24-b1bc-0ca3f2bea08e" eId="para-1_abs-1">
+          <akn:num GUID="b9c69f28-7746-43c3-89f1-bbfc01bf13fc" eId="para-1_abs-1_bezeichnung-1">
+            <akn:marker name="1" />
+            (1)
+          </akn:num>
+          <akn:content GUID="34a81596-2e8f-460c-8782-27efa31047ba" eId="para-1_abs-1_inhalt-1">
+            <akn:p GUID="adc57ad5-0e9e-414b-9ddb-e6618e6f2a53" eId="para-1_abs-1_inhalt-1_text-1">Die Mittel, die nach einmaligem Abzug eines dem Bundeshaushalt 2005 zuzuführenden Betrages von 45 Millionen Euro aus dem Zweckvermögen, das nach § 10 Abs. 3 des Entschuldungsabwicklungsgesetzes in der im Bundesgesetzblatt Teil III, Gliederungsnummer 7812-2, veröffentlichten bereinigten Fassung, aufgehoben durch Artikel 8 Nr. 1 des Gesetzes vom 26. Oktober 2001 (BGBl. I S. 2710), gebildet worden ist, verbleiben, und die Mittel, die nach § 9 Abs. 3 des Gesetzes über die Landwirtschaftliche Rentenbank in der Fassung der Bekanntmachung vom 4. September 2002 (BGBl. I S. 3646), zuletzt geändert durch Artikel 8 des Gesetzes vom 22. Mai 2005 (BGBl. I S. 1373), diesem Zweckvermögen zuzuführen sind, bilden ein Zweckvermögen des Bundes. Die Landwirtschaftliche Rentenbank verwaltet dieses Zweckvermögen treuhänderisch für den Bund.</akn:p>
+          </akn:content>
+        </akn:paragraph>
+        <akn:paragraph GUID="f1715730-5134-46cf-bc58-47307f0972a9" eId="para-1_abs-2">
+          <akn:num GUID="c66a0dc1-37c4-435e-b1e2-d850dce6dcab" eId="para-1_abs-2_bezeichnung-1">
+            <akn:marker name="2" />
+            (2)
+          </akn:num>
+          <akn:content GUID="912f48ea-8d35-45d1-9263-49fb0f9edd85" eId="para-1_abs-2_inhalt-1">
+            <akn:p GUID="4cd8bb08-24e8-4036-a365-aa8acd4e691a" eId="para-1_abs-2_inhalt-1_text-1">Das Zweckvermögen kann nur durch Gesetz aufgelöst werden.</akn:p>
+          </akn:content>
+        </akn:paragraph>
+      </akn:article>
+      <akn:article GUID="86e99f99-bf53-4810-a803-48ad3eff5cbf" eId="para-2" refersTo="einzelvorschrift-stammform">
+        <akn:num GUID="17463b5f-c859-400f-b7d4-288482a20a83" eId="para-2_bezeichnung-1">
+          <akn:marker name="2" />
+        </akn:num>
+        <akn:heading GUID="3d35c401-efb9-4fb0-a2eb-3efc92b4d94c" eId="para-2_überschrift-1">§ 2 Verwendung des Zweckvermögens</akn:heading>
+        <akn:paragraph GUID="dd0cde9f-9e7f-409f-8937-0862f766d00f" eId="para-2_abs-1">
+          <akn:num GUID="e9b846e5-09ba-4480-a6f0-ee92dc21c1be" eId="para-2_abs-1_bezeichnung-1">
+            <akn:marker name="1" />
+            (1)
+          </akn:num>
+          <akn:content GUID="0d1068a8-31f3-4973-b87c-a8e324e7507f" eId="para-2_abs-1_inhalt-1">
+            <akn:p GUID="36ecdce6-dfda-4dd5-babf-a70541186686" eId="para-2_abs-1_inhalt-1_text-1">Das Zweckvermögen darf nur zur Förderung von Innovationen in der Landwirtschaft, der Forstwirtschaft, dem Gartenbau und der Fischerei verwendet werden, wobei die jeweiligen Zuständigkeiten des Bundes und der Länder zu beachten sind. Die Förderung umfasst die vorwettbewerbliche Entwicklung sowie die Markt- und Praxiseinführung von Innovationen. Die Verwaltungsvorschriften zur Durchführung dieser Vorschrift erlässt das Bundesministerium für Ernährung und Landwirtschaft im Einvernehmen mit dem Bundesministerium der Finanzen.</akn:p>
+          </akn:content>
+        </akn:paragraph>
+        <akn:paragraph GUID="1f56e6f4-32b2-48b1-92d3-c0d0d9876ba0" eId="para-2_abs-2">
+          <akn:num GUID="65594d85-8eac-48ef-904d-f2d25798b969" eId="para-2_abs-2_bezeichnung-1">
+            <akn:marker name="2" />
+            (2)
+          </akn:num>
+          <akn:content GUID="28c52e76-84be-425b-98f2-657749d37e1e" eId="para-2_abs-2_inhalt-1">
+            <akn:p GUID="5d407327-3426-404d-af0f-2f713100bc1b" eId="para-2_abs-2_inhalt-1_text-1">Die Verwendung des Zweckvermögens unterliegt der Prüfung durch den Bundesrechnungshof.</akn:p>
+          </akn:content>
+        </akn:paragraph>
+        <akn:paragraph GUID="2de8903f-6c51-4ec4-b9e5-d25a4474f023" eId="para-2_abs-3">
+          <akn:num GUID="0b05920f-1f6c-484f-a174-81e2c7ed04d8" eId="para-2_abs-3_bezeichnung-1">
+            <akn:marker name="3" />
+            (3)
+          </akn:num>
+          <akn:content GUID="c9da01a6-e51a-4e01-b3b9-6f81f271c632" eId="para-2_abs-3_inhalt-1">
+            <akn:p GUID="30df0fd7-1b03-4451-90bf-0e400b15214b" eId="para-2_abs-3_inhalt-1_text-1">Die Hälfte der dem Zweckvermögen zuwachsenden Zinseinkünfte ist an den Bundeshaushalt abzuführen.</akn:p>
+          </akn:content>
+        </akn:paragraph>
+      </akn:article>
+      <akn:article GUID="2419c96a-3f86-4c49-9703-3e0653f4fde5" eId="para-3" refersTo="einzelvorschrift-stammform">
+        <akn:num GUID="53b7846d-028d-4ced-a499-d1c021a0fce9" eId="para-3_bezeichnung-1">
+          <akn:marker name="3" />
+        </akn:num>
+        <akn:heading GUID="46ba64e1-62a1-4682-959a-aa379ac86090" eId="para-3_überschrift-1">§ 3 Wirtschaftsplan</akn:heading>
+        <akn:paragraph GUID="fac88856-eb69-45ed-aea1-828d9464a254" eId="para-3_abs-1">
+          <akn:num GUID="6b5a93b2-3ca9-4e27-a33f-cc8a88bc6ff9" eId="para-3_abs-1_bezeichnung-1">
+            <akn:marker name="1" />
+          </akn:num>
+          <akn:content GUID="a8c7694b-2775-4c4d-89b7-c1d69619fa47" eId="para-3_abs-1_inhalt-1">
+            <akn:p GUID="d1771059-c088-4661-ba00-53a5e383cac1" eId="para-3_abs-1_inhalt-1_text-1">Alle Einnahmen und Ausgaben sowie Verpflichtungsermächtigungen des Zweckvermögens werden in einem Wirtschaftsplan veranschlagt. Der Wirtschaftsplan ist in einer Anlage zum Einzelplan 10 des Bundeshaushalts darzustellen.</akn:p>
+          </akn:content>
+        </akn:paragraph>
+      </akn:article>
+      <akn:article GUID="2e00a7a4-70cc-4445-a339-a1966814cc65" eId="para-4" refersTo="einzelvorschrift-stammform">
+        <akn:num GUID="1dfe057a-bac9-4001-9db2-7846b9869cf8" eId="para-4_bezeichnung-1">
+          <akn:marker name="4" />
+        </akn:num>
+        <akn:heading GUID="fab06aa9-4f3e-4573-ad45-8757b0b08c29" eId="para-4_überschrift-1">§ 4 Verwaltungskosten</akn:heading>
+        <akn:paragraph GUID="622c6902-cde9-4cab-b693-74edc3616283" eId="para-4_abs-1">
+          <akn:num GUID="93b53d46-ed50-4bf4-a3c3-0c8b6cdf189c" eId="para-4_abs-1_bezeichnung-1">
+            <akn:marker name="1" />
+          </akn:num>
+          <akn:content GUID="39c873fd-10ad-41e1-9c45-6c1b49f3de68" eId="para-4_abs-1_inhalt-1">
+            <akn:p GUID="b5de3fed-f359-4630-90ca-102b1a318e1a" eId="para-4_abs-1_inhalt-1_text-1">Die Kosten für die treuhänderische Verwaltung des Zweckvermögens werden der Landwirtschaftlichen Rentenbank erstattet und aus dem Zweckvermögen getragen. Die Einzelheiten sind in Verwaltungsvorschriften nach § 2 Abs. 1 festzulegen.</akn:p>
+          </akn:content>
+        </akn:paragraph>
+      </akn:article>
+    </akn:body>
+  </akn:act>
+</akn:akomaNtoso>

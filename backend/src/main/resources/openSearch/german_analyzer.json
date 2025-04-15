@@ -1,0 +1,121 @@
+{
+  "analysis": {
+    "analyzer": {
+      "custom_german_analyzer": {
+        "type": "custom",
+        "tokenizer": "standard",
+        "filter": [
+          "lowercase",
+          "german_decompounder",
+          "german_normalization",
+          "german_stop",
+          "german_stemmer"
+        ],
+        "char_filter": [
+          "replace_article_character",
+          "replace_euro_character"
+        ]
+      },
+      "court_keyword_custom_german_analyzer": {
+        "type": "custom",
+        "tokenizer": "standard",
+        "filter": [
+          "lowercase",
+          "court_type_synonyms",
+          "german_decompounder",
+          "german_normalization",
+          "german_stop",
+          "german_stemmer"
+        ]
+      }
+    },
+    "filter": {
+      "german_normalization": {
+        "type": "asciifolding",
+        "name": "nfkc_cf"
+      },
+      "german_stop": {
+        "type": "stop",
+        "stopwords": "_german_"
+      },
+      "german_stemmer": {
+        "type": "stemmer",
+        "language": "light_german"
+      },
+      "german_decompounder": {
+        "type": "dictionary_decompounder",
+        "word_list": ["urteil", "beschluss", "entscheidung"],
+        "min_subword_size": 4
+      },
+      "court_type_synonyms": {
+        "type": "synonym",
+        "expand": true,
+        "synonyms": [
+          "AG, Amtsgericht",
+          "AnwG, Anwaltsgericht",
+          "ArbG, ARBG, Arbeitsgericht",
+          "BAG, Bundesarbeitsgericht",
+          "BFH, Bundesfinanzhof",
+          "BGH, Bundesgerichtshof",
+          "BPatG, Bundespatentgericht",
+          "BSG, Bundessozialgericht",
+          "BVerfG, Bundesverfassungsgericht",
+          "BVerwG, Bundesverwaltungsgericht",
+          "BayObLG, Bayerisches Oberstes Landesgericht",
+          "BayVGH, Bayerischer Verwaltungsgerichtshof",
+          "BfgGer, Berufungsgericht",
+          "FG, Finanzgericht",
+          "GmSOGB, GmS-OGB, Gemeinsamer Senat der obersten Gerichtshöfe des Bundes",
+          "Gr.S., GrS, Großer Senat",
+          "HESSVGH, Hessischer Verwaltungsgerichtshof",
+          "KG, Kammergericht",
+          "LG, Landgericht",
+          "LSG, Landessozialgericht",
+          "LVerfG, Landesverfassungsgericht",
+          "OLG, Oberlandesgericht",
+          "OVG, Oberverwaltungsgericht",
+          "PROVG, Preußisches Oberverwaltungsgericht",
+          "SG, Sozialgericht",
+          "SOLG, Saarländisches Oberlandesgericht",
+          "StGH, Staatsgerichtshof (Landesverfassungsgericht)",
+          "ThürOVG, OVG Thüringen, Oberverwaltungsgericht Thüringen",
+          "VERFG HA, Verfassungsgericht Hamburg",
+          "VERFG MV, VERFG Mecklenburg-Vorpommern, Verfassungsgericht Mecklenburg-Vorpommern",
+          "VG, Verwaltungsgericht",
+          "VGH, Verwaltungsgerichtshof, Verwaltungsgerichtshof (Oberverwaltungsgericht)",
+          "VerfG, Verfassungsgericht (Landesverfassungsgericht)",
+          "VerfGH, Verfassungsgerichtshof (Landesverfassungsgericht)"
+        ]
+      }
+    },
+    "char_filter": {
+      "replace_special_char_whitespace_filter": {
+        "type": "pattern_replace",
+        "pattern": "[/\\-. ]",
+        "replacement": ""
+      },
+      "replace_article_character": {
+        "type": "pattern_replace",
+        "pattern": "\\u00A7",
+        "replacement": "paragraph"
+      },
+      "replace_euro_character": {
+        "type": "pattern_replace",
+        "pattern": "\\u20AC",
+        "replacement": "eur"
+      }
+    },
+    "normalizer": {
+      "normalized_keyword": {
+        "type": "custom",
+        "char_filter": [],
+        "filter": ["asciifolding", "lowercase"]
+      },
+      "file_number_normalizer": {
+        "type": "custom",
+        "filter": ["lowercase"],
+        "char_filter": ["replace_special_char_whitespace_filter"]
+      }
+    }
+  }
+}

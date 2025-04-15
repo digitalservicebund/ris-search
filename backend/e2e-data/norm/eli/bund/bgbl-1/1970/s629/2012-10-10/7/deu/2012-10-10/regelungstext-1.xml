@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="../../../Grammatiken/legalDocML.de.sch" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<akn:akomaNtoso xmlns:akn="http://Inhaltsdaten.LegalDocML.de/1.7.2/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:schemaLocation="http://Metadaten.LegalDocML.de/1.7.2/ ../schema/legalDocML.de-metadaten.xsd
+                                    http://Inhaltsdaten.LegalDocML.de/1.7.2/ ../schema/legalDocML.de-regelungstextverkuendungsfassung.xsd
+                                    http://MetadatenBundesregierung.LegalDocML.de/1.7.2/ ../schema/legalDocML.de-metadaten-bundesregierung.xsd">
+    <akn:act name="regelungstext">
+        <akn:meta GUID="aaaaaaaa-aaaa-4aaa-aaaa-aaaaaaaaaaaa" eId="meta-1">
+            <akn:identification GUID="bbbbbbbb-bbbb-4bbb-bbbb-bbbbbbbbbbbb" eId="meta-1_ident-1" source="attributsemantik-noch-undefiniert">
+                <akn:FRBRWork GUID="cccccccc-cccc-4ccc-cccc-cccccccccccc" eId="meta-1_ident-1_frbrwork-1">
+                    <akn:FRBRthis GUID="dddddddd-dddd-4ddd-dddd-dddddddddddd" eId="meta-1_ident-1_frbrwork-1_frbrthis-1"
+                                  value="eli/bund/bgbl-1/1970/s629/regelungstext-1"/>
+                    <akn:FRBRuri GUID="eeeeeeee-eeee-4eee-eeee-eeeeeeeeeeee" eId="meta-1_ident-1_frbrwork-1_frbruri-1"
+                                 value="eli/bund/bgbl-1/1970/s629"/>
+                    <akn:FRBRalias GUID="ffffffff-ffff-4fff-ffff-ffffffffffff" eId="meta-1_ident-1_frbrwork-1_frbralias-1"
+                                   name="übergreifende-id" value="11223344-5566-7788-99aa-bbccddeeff00"/>
+                    <akn:FRBRdate GUID="11111111-2222-3333-4444-555555555555" date="1970-04-20" eId="meta-1_ident-1_frbrwork-1_frbrdate-1"
+                                  name="verkuendungsfassung"/>
+                    <akn:FRBRauthor GUID="66666666-7777-8888-9999-aaaaaaaaaaaa" eId="meta-1_ident-1_frbrwork-1_frbrauthor-1"
+                                    href="recht.bund.de/institution/bundesregierung"/>
+                    <akn:FRBRcountry GUID="77777777-8888-9999-aaaa-bbbbbbbbbbbb" eId="meta-1_ident-1_frbrwork-1_frbrcountry-1"
+                                     value="de"/>
+                    <akn:FRBRnumber GUID="88888888-9999-aaaa-bbbb-cccccccccccc" eId="meta-1_ident-1_frbrwork-1_frbrnumber-1"
+                                    value="s629"/>
+                    <akn:FRBRname GUID="99999999-aaaa-bbbb-cccc-dddddddddddd" eId="meta-1_ident-1_frbrwork-1_frbrname-1"
+                                  value="bgbl-1"/>
+                    <akn:FRBRsubtype GUID="aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee" eId="meta-1_ident-1_frbrwork-1_frbrsubtype-1"
+                                     value="regelungstext-1"/>
+                </akn:FRBRWork>
+                <akn:FRBRExpression GUID="bbbbbbbb-cccc-dddd-eeee-ffffffffffff" eId="meta-1_ident-1_frbrexpression-1">
+                    <akn:FRBRthis GUID="cccccccc-dddd-eeee-ffff-aaaaaaaaaaaa" eId="meta-1_ident-1_frbrexpression-1_frbrthis-1"
+                                  value="eli/bund/bgbl-1/1970/s629/2012-10-10/7/deu/regelungstext-1"/>
+                    <akn:FRBRuri GUID="dddddddd-eeee-ffff-0000-bbbbbbbbbbbb" eId="meta-1_ident-1_frbrexpression-1_frbruri-1"
+                                 value="eli/bund/bgbl-1/1970/s629/2012-10-10/7/deu"/>
+                    <akn:FRBRalias GUID="eeeeeeee-ffff-0000-1111-cccccccccccc" eId="meta-1_ident-1_frbrexpression-1_frbralias-1"
+                                   name="vorherige-version-id" value="a1b2c3d4-e5f6-4789-abcd-1234567890ab"/>
+                    <akn:FRBRalias GUID="ffffffff-0000-1111-2222-dddddddddddd" eId="meta-1_ident-1_frbrexpression-1_frbralias-2"
+                                   name="aktuelle-version-id" value="b1c2d3e4-f5a6-4789-abcd-2345678901bc"/>
+                    <akn:FRBRalias GUID="11111111-2222-3333-4444-666666666666" eId="meta-1_ident-1_frbrexpression-1_frbralias-3"
+                                   name="nachfolgende-version-id" value="c1d2e3f4-a5b6-4789-abcd-3456789012cd"/>
+                    <akn:FRBRauthor GUID="22222222-3333-4444-5555-777777777777" eId="meta-1_ident-1_frbrexpression-1_frbrauthor-1"
+                                    href="recht.bund.de/institution/bundesregierung"/>
+                    <akn:FRBRdate GUID="33333333-4444-5555-6666-888888888888" date="2012-10-10" eId="meta-1_ident-1_frbrexpression-1_frbrdate-1"
+                                  name="verkuendung"/>
+                    <akn:FRBRlanguage GUID="44444444-5555-6666-7777-999999999999" eId="meta-1_ident-1_frbrexpression-1_frbrlanguage-1"
+                                      language="deu"/>
+                    <akn:FRBRversionNumber GUID="55555555-6666-7777-8888-aaaaaaaaaaaa" eId="meta-1_ident-1_frbrexpression-1_frbrversionnumber-1"
+                                           value="7"/>
+                </akn:FRBRExpression>
+                <akn:FRBRManifestation GUID="66666666-7777-8888-9999-bbbbbbbbbbbb" eId="meta-1_ident-1_frbrmanifestation-1">
+                    <akn:FRBRthis GUID="77777777-8888-9999-aaaa-cccccccccccc" eId="meta-1_ident-1_frbrmanifestation-1_frbrthis-1"
+                                  value="eli/bund/bgbl-1/1970/s629/2012-10-10/7/deu/2012-10-10/regelungstext-1.xml"/>
+                    <akn:FRBRuri GUID="88888888-9999-aaaa-bbbb-dddddddddddd" eId="meta-1_ident-1_frbrmanifestation-1_frbruri-1"
+                                 value="eli/bund/bgbl-1/1970/s629/2012-10-10/7/deu/2012-10-10/regelungstext-1.xml"/>
+                    <akn:FRBRdate GUID="99999999-aaaa-bbbb-cccc-eeeeeeeeeeee" eId="meta-1_ident-1_frbrmanifestation-1_frbrdate-1"
+                                  date="2012-10-10" name="generierung"/>
+                    <akn:FRBRauthor GUID="aaaaaaaa-bbbb-cccc-dddd-ffffffffffff" eId="meta-1_ident-1_frbrmanifestation-1_frbrauthor-1"
+                                    href="recht.bund.de"/>
+                    <akn:FRBRformat GUID="bbbbbbbb-cccc-dddd-eeee-111111111111" eId="meta-1_ident-1_frbrmanifestation-1_frbrformat-1"
+                                    value="xml"/>
+                </akn:FRBRManifestation>
+            </akn:identification>
+            <akn:lifecycle GUID="cccccccc-dddd-eeee-ffff-222222222222" eId="meta-1_lebzykl-1"
+                           source="attributsemantik-noch-undefiniert">
+                <akn:eventRef GUID="dddddddd-eeee-ffff-0000-333333333333" eId="meta-1_lebzykl-1_ereignis-1"
+                              date="2023-10-18" refersTo="ausserkrafttreten" source="attributsemantik-noch-undefiniert"
+                              type="repeal"/>
+                <akn:eventRef GUID="eeeeeeee-ffff-0000-1111-444444444444" eId="meta-1_lebzykl-1_ereignis-2"
+                              date="1970-04-20" refersTo="ausfertigung" source="attributsemantik-noch-undefiniert"
+                              type="generation"/>
+                <akn:eventRef GUID="ffffffff-0000-1111-2222-555555555555" eId="meta-1_lebzykl-1_ereignis-3"
+                              date="1970-04-26" refersTo="inkrafttreten" source="attributsemantik-noch-undefiniert"
+                              type="generation"/>
+                <akn:eventRef GUID="11111111-2222-3333-4444-666666666667" eId="meta-1_lebzykl-1_ereignis-4"
+                              date="1992-11-21" refersTo="ausserkrafttreten" source="attributsemantik-noch-undefiniert"
+                              type="generation"/>
+                <akn:eventRef GUID="22222222-3333-4444-5555-777777777777" eId="meta-1_lebzykl-1_ereignis-5"
+                              date="2023-10-18" refersTo="ausserkrafttreten" source="attributsemantik-noch-undefiniert"
+                              type="generation"/>
+                <akn:eventRef GUID="33333333-4444-5555-6666-888888888888" eId="meta-1_lebzykl-1_ereignis-6"
+                              date="1979-11-22" refersTo="ausfertigung" source="attributsemantik-noch-undefiniert"
+                              type="amendment"/>
+                <akn:eventRef GUID="44444444-5555-6666-7777-999999999999" eId="meta-1_lebzykl-1_ereignis-7"
+                              date="1979-11-25" refersTo="inkrafttreten" source="attributsemantik-noch-undefiniert"
+                              type="amendment"/>
+                <akn:eventRef GUID="55555555-6666-7777-8888-aaaaaaaaaaaa" eId="meta-1_lebzykl-1_ereignis-8"
+                              date="1992-11-21" refersTo="ausserkrafttreten" source="attributsemantik-noch-undefiniert"
+                              type="amendment"/>
+                <akn:eventRef GUID="66666666-7777-8888-9999-bbbbbbbbbbbb" eId="meta-1_lebzykl-1_ereignis-9"
+                              date="1989-11-29" refersTo="inkrafttreten" source="attributsemantik-noch-undefiniert"
+                              type="amendment"/>
+                <akn:eventRef GUID="77777777-8888-9999-aaaa-cccccccccccc" eId="meta-1_lebzykl-1_ereignis-10"
+                              date="1999-04-20" refersTo="ausfertigung" source="attributsemantik-noch-undefiniert"
+                              type="amendment"/>
+                <akn:eventRef GUID="88888888-9999-aaaa-bbbb-dddddddddddd" eId="meta-1_lebzykl-1_ereignis-11"
+                              date="1999-04-24" refersTo="inkrafttreten-weggefallen" source="attributsemantik-noch-undefiniert"
+                              type="amendment"/>
+                <akn:eventRef GUID="99999999-aaaa-bbbb-cccc-eeeeeeeeeeee" eId="meta-1_lebzykl-1_ereignis-12"
+                              date="1999-04-24" refersTo="inkrafttreten" source="attributsemantik-noch-undefiniert"
+                              type="amendment"/>
+            </akn:lifecycle>
+            <akn:temporalData GUID="aaaaaaaa-bbbb-cccc-dddd-ffffffffffff" eId="meta-1_geltzeiten-1"
+                              source="attributsemantik-noch-undefiniert">
+                <akn:temporalGroup GUID="bbbbbbbb-cccc-dddd-eeee-111111111111" eId="meta-1_geltzeiten-1_geltungszeitgr-1">
+                    <akn:timeInterval GUID="cccccccc-dddd-eeee-ffff-222222222222" eId="meta-1_geltzeiten-1_geltungszeitgr-1_gelzeitintervall-1"
+                                      start="#meta-1_lebzykl-1_ereignis-2" end="#meta-1_lebzykl-1_ereignis-3" refersTo="geltungszeit"/>
+                </akn:temporalGroup>
+                <akn:temporalGroup GUID="dddddddd-eeee-ffff-0000-333333333333" eId="meta-1_geltzeiten-1_geltungszeitgr-2">
+                    <akn:timeInterval GUID="eeeeeeee-ffff-0000-1111-444444444444" eId="meta-1_geltzeiten-1_geltungszeitgr-2_gelzeitintervall-1"
+                                      start="#meta-1_lebzykl-1_ereignis-2" refersTo="geltungszeit"/>
+                </akn:temporalGroup>
+                <akn:temporalGroup GUID="ffffffff-0000-1111-2222-555555555555" eId="meta-1_geltzeiten-1_geltungszeitgr-3">
+                    <akn:timeInterval GUID="11111111-2222-3333-4444-666666666666" eId="meta-1_geltzeiten-1_geltungszeitgr-3_gelzeitintervall-1"
+                                      start="#meta-1_lebzykl-1_ereignis-6" end="#meta-1_lebzykl-1_ereignis-7" refersTo="geltungszeit"/>
+                </akn:temporalGroup>
+                <akn:temporalGroup GUID="22222222-3333-4444-5555-777777777777" eId="meta-1_geltzeiten-1_geltungszeitgr-4">
+                    <akn:timeInterval GUID="33333333-4444-5555-6666-888888888888" eId="meta-1_geltzeiten-1_geltungszeitgr-4_gelzeitintervall-1"
+                                      start="#meta-1_lebzykl-1_ereignis-7" end="#meta-1_lebzykl-1_ereignis-9" refersTo="geltungszeit"/>
+                </akn:temporalGroup>
+            </akn:temporalData>
+            <akn:proprietary GUID="44444444-5555-6666-7777-999999999999" eId="meta-1_proprietary-1"
+                             source="attributsemantik-noch-undefiniert">
+                <ris:legalDocML.de_metadaten xmlns:ris="http://MetadatenRIS.LegalDocML.de/1.7.2/" xsi:schemaLocation="http://MetadatenRIS.LegalDocML.de/1.7.2/ ../schema/legalDocML.de-metadaten-ris.xsd">
+                    <ris:inkraft date="2012-10-17"/>
+                    <ris:ausserkraft date="2023-10-18"/>
+                </ris:legalDocML.de_metadaten>
+            </akn:proprietary>
+        </akn:meta>
+        <akn:preface GUID="55555555-6666-7777-8888-aaaaaaaaaaaa" eId="einleitung-1">
+            <akn:longTitle GUID="66666666-7777-8888-9999-bbbbbbbbbbbb" eId="einleitung-1_doktitel-1">
+                <akn:p GUID="77777777-8888-9999-aaaa-cccccccccccc" eId="einleitung-1_doktitel-1_text-1">
+                    <akn:docStage GUID="88888888-9999-aaaa-bbbb-dddddddddddd" eId="einleitung-1_doktitel-1_text-1_docstadium-1"/>
+                    <akn:docTitle GUID="99999999-aaaa-bbbb-cccc-eeeeeeeeeeee" eId="einleitung-1_doktitel-1_text-1_doctitel-1">
+                        Musterverordnung zur Testregelung im Bereich der Wahlen mit Wahlgeräten
+                    </akn:docTitle>
+                    <akn:shortTitle GUID="aaaaaaaa-bbbb-cccc-dddd-ffffffffffff" eId="einleitung-1_doktitel-1_text-1_kurztitel-1">
+                        (Bundeswahlgeräteverordnung - <akn:inline GUID="bbbbbbbb-cccc-dddd-eeee-111111111111" eId="einleitung-1_doktitel-1_text-1_kurztitel-1_inline-1"
+                                                                  name="attributsemantik-noch-undefiniert" refersTo="amtliche-abkuerzung">BWahlGV</akn:inline>)
+                    </akn:shortTitle>
+                </akn:p>
+            </akn:longTitle>
+        </akn:preface>
+        <akn:preamble GUID="cccccccc-dddd-eeee-ffff-111111111111" eId="preambel-1">
+            <akn:formula GUID="dddddddd-eeee-ffff-0000-222222222222" eId="preambel-1_formel-1" name="attributsemantik-noch-undefiniert"
+                         refersTo="eingangsformel">
+                <akn:p GUID="eeeeeeee-ffff-0000-1111-333333333333" eId="preambel-1_formel-1_text-1">
+                    Im Rahmen der gesetzlichen Bestimmungen wird diese Testverordnung zur Erprobung des Einsatzes von Wahlgeräten bekannt gemacht.
+                </akn:p>
+            </akn:formula>
+        </akn:preamble>
+        <akn:body GUID="ffffffff-0000-1111-2222-444444444444" eId="hauptteil-1">
+            <akn:article GUID="11111111-2222-3333-4444-555555555555" eId="hauptteil-1_art-1" period="#meta-1_geltzeiten-1_geltungszeitgr-2" refersTo="stammform">
+                <akn:num GUID="22222222-3333-4444-5555-666666666666" eId="hauptteil-1_art-1_bezeichnung-1">§ 1</akn:num>
+                <akn:heading GUID="33333333-4444-5555-6666-777777777777" eId="hauptteil-1_art-1_überschrift-1">
+                    Zulassungspflicht für Wahlgeräte
+                </akn:heading>
+                <akn:paragraph GUID="44444444-5555-6666-7777-888888888888" eId="hauptteil-1_art-1_abs-1">
+                    <akn:num GUID="55555555-6666-7777-8888-999999999999" eId="hauptteil-1_art-1_abs-1_bezeichnung-1">(1)</akn:num>
+                    <akn:content GUID="66666666-7777-8888-9999-aaaaaaaaaaaa" eId="hauptteil-1_art-1_abs-1_inhalt-1">
+                        <akn:p GUID="77777777-8888-9999-aaaa-bbbbbbbbbbbb" eId="hauptteil-1_art-1_abs-1_inhalt-1_text-1">
+                            Zur Gewährleistung der ordnungsgemäßen Durchführung von Wahlen müssen alle Wahlgeräte vor ihrer Inbetriebnahme einer technischen Prüfung unterzogen werden.
+                        </akn:p>
+                        <akn:blockList GUID="88888888-9999-aaaa-bbbb-cccccccccccc" eId="hauptteil-1_art-1_abs-1_inhalt-1_liste-1">
+                            <akn:item GUID="99999999-aaaa-bbbb-cccc-dddddddddddd" eId="hauptteil-1_art-1_abs-1_inhalt-1_liste-1_listenelem-1">
+                                <akn:num GUID="aaaaaaaa-bbbb-cccc-dddd-111111111111" eId="hauptteil-1_art-1_abs-1_inhalt-1_liste-1_listenelem-1_bezeichnung-1">1.</akn:num>
+                                <akn:p GUID="bbbbbbbb-cccc-dddd-eeee-222222222222" eId="hauptteil-1_art-1_abs-1_inhalt-1_liste-1_listenelem-1_text-1">
+                                    Die Gerätebauart muss den aktuellen technischen Normen entsprechen,
+                                </akn:p>
+                            </akn:item>
+                            <akn:item GUID="cccccccc-dddd-eeee-ffff-333333333333" eId="hauptteil-1_art-1_abs-1_inhalt-1_liste-1_listenelem-2">
+                                <akn:num GUID="dddddddd-eeee-ffff-0000-444444444444" eId="hauptteil-1_art-1_abs-1_inhalt-1_liste-1_listenelem-2_bezeichnung-1">2.</akn:num>
+                                <akn:p GUID="eeeeeeee-ffff-0000-1111-555555555555" eId="hauptteil-1_art-1_abs-1_inhalt-1_liste-1_listenelem-2_text-1">
+                                    der Hersteller hat ein detailliertes Prüfzertifikat einzureichen.
+                                </akn:p>
+                            </akn:item>
+                        </akn:blockList>
+                    </akn:content>
+                </akn:paragraph>
+                <akn:paragraph GUID="ffffffff-0000-1111-2222-666666666666" eId="hauptteil-1_art-1_abs-2">
+                    <akn:num GUID="11111111-2222-3333-4444-777777777777" eId="hauptteil-1_art-1_abs-2_bezeichnung-1">(2)</akn:num>
+                    <akn:content GUID="22222222-3333-4444-5555-888888888888" eId="hauptteil-1_art-1_abs-2_inhalt-1">
+                        <akn:p GUID="33333333-4444-5555-6666-999999999999" eId="hauptteil-1_art-1_abs-2_inhalt-1_text-1">
+                            Die Zulassungsentscheidung wird vom Bundesministerium des Innern bekannt gegeben.
+                        </akn:p>
+                    </akn:content>
+                </akn:paragraph>
+            </akn:article>
+            <akn:article GUID="44444444-5555-6666-7777-aaaaaaaaaaaa" eId="hauptteil-1_art-2" period="#meta-1_geltzeiten-1_geltungszeitgr-4" refersTo="stammform">
+                <akn:num GUID="55555555-6666-7777-8888-bbbbbbbbbbbb" eId="hauptteil-1_art-2_bezeichnung-1">§ 2</akn:num>
+                <akn:heading GUID="66666666-7777-8888-9999-cccccccccccc" eId="hauptteil-1_art-2_überschrift-1">
+                    Geräteüberwachung
+                </akn:heading>
+                <akn:paragraph GUID="77777777-8888-9999-aaaa-dddddddddddd" eId="hauptteil-1_art-2_abs-1">
+                    <akn:num GUID="88888888-9999-aaaa-bbbb-eeeeeeeeeeee" eId="hauptteil-1_art-2_abs-1_bezeichnung-1">(1)</akn:num>
+                    <akn:content GUID="99999999-aaaa-bbbb-cccc-ffffffffffff" eId="hauptteil-1_art-2_abs-1_inhalt-1">
+                        <akn:p GUID="aaaaaaaa-bbbb-cccc-dddd-111111111111" eId="hauptteil-1_art-2_abs-1_inhalt-1_text-1">
+                            Die Funktionstüchtigkeit der Wahlgeräte wird in regelmäßigen Intervallen kontrolliert.
+                        </akn:p>
+                    </akn:content>
+                </akn:paragraph>
+            </akn:article>
+        </akn:body>
+        <akn:conclusions GUID="bbbbbbbb-cccc-dddd-eeee-222222222222" eId="schluss-1">
+            <akn:formula GUID="cccccccc-dddd-eeee-ffff-333333333333" eId="schluss-1_formel-1" name="attributsemantik-noch-undefiniert"
+                         refersTo="schlussformel">
+                <akn:p GUID="dddddddd-eeee-ffff-0000-444444444444" eId="schluss-1_formel-1_text-1">
+                    Die Testverordnung tritt am Tage nach ihrer Veröffentlichung in Kraft.
+                </akn:p>
+            </akn:formula>
+        </akn:conclusions>
+    </akn:act>
+</akn:akomaNtoso>

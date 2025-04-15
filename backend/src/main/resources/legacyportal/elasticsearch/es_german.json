@@ -1,0 +1,30 @@
+{
+  "analysis": {
+    "analyzer": {
+      "custom_german_analyzer": {
+        "type": "custom",
+        "tokenizer": "standard",
+        "filter": [
+          "lowercase",
+          "german_normalization",
+          "german_stop",
+          "german_stemmer"
+        ]
+      }
+    },
+    "filter": {
+      "german_normalization": {
+        "type": "asciifolding",
+        "name": "nfkc_cf"
+      },
+      "german_stop": {
+        "type": "stop",
+        "stopwords": "_german_"
+      },
+      "german_stemmer": {
+        "type": "stemmer",
+        "language": "light_german"
+      }
+    }
+  }
+}

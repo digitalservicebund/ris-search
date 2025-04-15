@@ -1,0 +1,25 @@
+<akn:akomaNtoso xmlns:akn="http://Inhaltsdaten.LegalDocML.de/1.7.2/">
+    <akn:act>
+        <akn:body>
+            <akn:article GUID="1" eId="a">
+                <akn:num GUID="2" eId="b">
+                    <akn:marker name="1"/>
+                </akn:num>
+                <akn:heading GUID="3" eId="c">Art 1</akn:heading>
+                <akn:paragraph GUID="4" eId="d">
+                    <akn:num GUID="5" eId="e">
+                        <akn:marker name="1"/>
+                    </akn:num>
+                    <akn:content GUID="6" eId="f">
+                        <akn:p GUID="7" eId="g">This is <akn:b>bold</akn:b> and this is <akn:i>italic</akn:i>. Also this
+                            is <akn:sub>subscript</akn:sub> and <akn:sup>superscript</akn:sup>.<akn:br/>This should
+                            appear after a line break.
+                        </akn:p>
+                        <akn:table class="frame-all"><akn:tr /></akn:table>
+                        <akn:p style="color: red;">Paragraph with inline style</akn:p>
+                    </akn:content>
+                </akn:paragraph>
+            </akn:article>
+        </akn:body>
+    </akn:act>
+</akn:akomaNtoso>

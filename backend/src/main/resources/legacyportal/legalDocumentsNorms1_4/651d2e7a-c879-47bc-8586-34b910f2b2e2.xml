@@ -1,0 +1,641 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<akn:akomaNtoso xmlns:akn="http://Inhaltsdaten.LegalDocML.de/1.4/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://Metadaten.LegalDocML.de/1.4/ ../schemas/legalDocML.de-metadaten.xsd
+                        http://Inhaltsdaten.LegalDocML.de/1.4/ ../schemas/legalDocML.de-regelungstextentwurfsfassung.xsd">
+    <akn:bill name="regelungstext">
+        <akn:meta>
+            <akn:identification source="attributsemantik-noch-undefiniert">
+                <akn:FRBRWork>
+                    <akn:FRBRthis value="eli/bgbl-1/2011/s1202/regelungstext-1" />
+                    <akn:FRBRuri value="eli/bgbl-1/2011/s1202" />
+                    <akn:FRBRalias name="übergreifende-id" value="651d2e7a-c879-47bc-8586-34b910f2b2e2" />
+                    <akn:FRBRdate date="2011-06-28" name="verkuendungsfassung" />
+                    <akn:FRBRauthor href="recht.bund.de/institution/bundesregierung" />
+                    <akn:FRBRcountry value="de" />
+                    <akn:FRBRnumber value="s1202" />
+                    <akn:FRBRname value="bgbl-1" />
+                    <akn:FRBRsubtype value="regelungstext-1" />
+                </akn:FRBRWork>
+                <akn:FRBRExpression>
+                    <akn:FRBRthis value="eli/bgbl-1/2011/s1202/2011-06-28/1/deu/regelungstext-1" />
+                    <akn:FRBRuri value="eli/bgbl-1/2011/s1202/2011-06-28/1/deu" />
+                    <akn:FRBRauthor href="recht.bund.de/institution/bundesregierung" />
+                    <akn:FRBRdate date="2011-06-28" name="verkuendung" />
+                    <akn:FRBRlanguage language="deu" />
+                    <akn:FRBRversionNumber value="1" />
+                </akn:FRBRExpression>
+                <akn:FRBRManifestation>
+                    <akn:FRBRthis value="eli/bgbl-1/2011/s1202/2011-06-28/1/deu/regelungstext-1.xml" />
+                    <akn:FRBRuri value="eli/bgbl-1/2011/s1202/2011-06-28/1/deu/regelungstext-1.xml" />
+                    <akn:FRBRdate date="2011-06-28" name="generierung" />
+                    <akn:FRBRauthor href="recht.bund.de" />
+                    <akn:FRBRformat value="xml" />
+                </akn:FRBRManifestation>
+            </akn:identification>
+            <akn:proprietary source="attributsemantik-noch-undefiniert">
+                <meta:legalDocML.de_metadaten xmlns:meta="http://Metadaten.LegalDocML.de/1.4/">
+                    <meta:typ>gesetz</meta:typ>
+                    <meta:form>stammform</meta:form>
+                    <meta:fassung>verkuendungsfassung</meta:fassung>
+                    <meta:art>rechtsetzungsdokument</meta:art>
+                    <meta:initiant>bundestag</meta:initiant>
+                    <meta:bearbeitendeInstitution>bundesrat</meta:bearbeitendeInstitution>
+                </meta:legalDocML.de_metadaten>
+            </akn:proprietary>
+        </akn:meta>
+        <akn:preface>
+            <akn:longTitle GUID="1f07d326-8c75-40f4-965b-702bdc91e08b" eId="doktitel-1">
+                <akn:p GUID="606d6bdc-a91d-421c-a02a-0092c0200cc1" eId="doktitel-1_text-1">
+                    <akn:docTitle>Gesetz zur Koordinierung der Systeme der sozialen Sicherheit in Europa</akn:docTitle>
+                    <akn:shortTitle GUID="5f642cf1-a98a-44c8-950a-865634895001" eId="doktitel-1_text-1_kurztitel-1">null</akn:shortTitle>
+                </akn:p>
+            </akn:longTitle>
+        </akn:preface>
+        <akn:body refersTo="hauptteil-stammform">
+            <akn:article refersTo="einzelvorschrift-stammform" GUID="2480aef2-ef1b-4d17-9eb2-8d9be7ed8c72" eId="para-1">
+                <akn:num GUID="d30b87e9-51a4-48d5-81f1-ca01e9dd9502" eId="para-1_bezeichnung-1">
+                    <akn:marker name="1" /> § 1 </akn:num>
+                <akn:heading GUID="fa729ffb-e414-4fea-87b5-e24f13269dba" eId="para-1_überschrift-1">
+                    Anwendungsbereich
+                </akn:heading>
+                <akn:paragraph GUID="0f106cac-17ca-4e5e-b788-c7d34ca6e532" eId="para-1_abs-0">
+                    <akn:num GUID="e1ea75a7-30da-43d6-a416-b5b5ecfc08ab" eId="para-1_abs-0_bezeichnung-1">
+                        <akn:marker name="0" />
+
+                    </akn:num>
+                    <akn:list GUID="7b6a604f-7618-4191-9093-9bfe198a17fd" eId="para-1_abs-0_untergl-1">
+                        <akn:intro GUID="75eed5bd-b86e-4397-9a24-7a6f703bab2b" eId="para-1_abs-0_untergl-1_intro-1">
+                            <akn:p GUID="50b76f11-4842-4a04-950e-7af0f2104bf5" eId="para-1_abs-0_untergl-1_intro-1_text-1">
+                                Dieses Gesetz regelt die Zuständigkeit der deutschen Sozialversicherungsträger und anderer für die soziale Sicherheit
+                                zuständiger Träger und Behörden bei der Anwendung und Durchführung folgender Verordnungen in ihrer jeweils geltenden
+                                Fassung:
+                            </akn:p>
+                        </akn:intro>
+                        <akn:point GUID="98f9a5c7-c5fc-46fc-9adb-8c294a07e148" eId="para-1_abs-0_untergl-1_listenelem-1">
+                            <akn:num GUID="a5e0f415-85f8-4e67-a944-5de26305f657" eId="para-1_abs-0_untergl-1_listenelem-1_bezeichnung-1">
+                                <akn:marker name="1" /> 1. </akn:num>
+                            <akn:content GUID="1d3aae99-aac7-48c0-8bcb-752445e6bce1" eId="para-1_abs-0_untergl-1_listenelem-1_inhalt-1">
+                                <akn:p GUID="b3b01f50-cb33-4d96-b8cd-15e66ce5b65d" eId="para-1_abs-0_untergl-1_listenelem-1_inhalt-1_text-1">
+                                    der Verordnung (EG) Nr. 883/2004 des Europäischen Parlaments und des Rates vom 29. April 2004 zur Koordinierung
+                                    der Systeme der sozialen Sicherheit (ABl. L 166 vom 30.4.2004, S. 1, L 200 vom 7.6.2004, S. 1), die zuletzt durch
+                                    die Verordnung (EG) Nr. 988/2009 (ABl. L 284 vom 30.10.2009, S. 43) geändert worden ist, und
+                                </akn:p>
+                            </akn:content>
+                        </akn:point>
+                        <akn:point GUID="f1fa0c27-041c-4d85-ad3e-3054e5cb3e08" eId="para-1_abs-0_untergl-1_listenelem-2">
+                            <akn:num GUID="a5e0f415-85f8-4e67-a944-5de26305f657" eId="para-1_abs-0_untergl-1_listenelem-2_bezeichnung-1">
+                                <akn:marker name="2" /> 2. </akn:num>
+                            <akn:content GUID="912a4254-9c28-4bea-a7b6-22d777c135d2" eId="para-1_abs-0_untergl-1_listenelem-2_inhalt-1">
+                                <akn:p GUID="034aa759-6fa8-4988-82e2-67ecf22c5a7d" eId="para-1_abs-0_untergl-1_listenelem-2_inhalt-1_text-1">
+                                    der Verordnung (EG) Nr. 987/2009 des Europäischen Parlaments und des Rates vom 16. September 2009 zur Festlegung
+                                    der Modalitäten für die Durchführung der Verordnung (EG) Nr. 883/2004 über die Koordinierung der Systeme der
+                                    sozialen Sicherheit (ABl. L 284 vom 30.10.2009, S. 1).
+                                </akn:p>
+                            </akn:content>
+                        </akn:point>
+                    </akn:list>
+
+
+                </akn:paragraph>
+            </akn:article>
+            <akn:article refersTo="einzelvorschrift-stammform" GUID="23a2a1bd-bd19-49eb-8204-0f5eafdc9d9d" eId="para-2">
+                <akn:num GUID="9f38f5ca-1199-437f-9ae9-242a726f164a" eId="para-2_bezeichnung-1">
+                    <akn:marker name="2" /> § 2 </akn:num>
+                <akn:heading GUID="edd82119-56f7-453f-b3bc-76a61c70fd8d" eId="para-2_überschrift-1">
+                    Zuständige Behörde
+                </akn:heading>
+                <akn:paragraph GUID="1dd33c5f-8de1-4560-b2e0-b3aa9f3d8596" eId="para-2_abs-0">
+                    <akn:num GUID="ef420af6-bbb2-4e5e-b049-413cf99acefb" eId="para-2_abs-0_bezeichnung-1">
+                        <akn:marker name="0" />
+
+                    </akn:num>
+                    <akn:content GUID="f1644600-a9c9-464a-b394-a88eafee54d9" eId="para-2_abs-0_inhalt-1">
+                        <akn:p GUID="467671b5-f576-40be-9a87-ba7e1763a0e4" eId="para-2_abs-0_inhalt-1_text-1">
+                            Das Bundesministerium für Arbeit und Soziales ist zuständige Behörde nach Artikel 1 Buchstabe m der Verordnung (EG) Nr.
+                            883/2004.
+                        </akn:p>
+                    </akn:content>
+
+
+                </akn:paragraph>
+            </akn:article>
+            <akn:article refersTo="einzelvorschrift-stammform" GUID="6fe983e0-252e-41e6-ac84-79bef07c84c0" eId="para-3">
+                <akn:num GUID="79ad3a0b-72e2-4a75-abe6-cc179950819c" eId="para-3_bezeichnung-1">
+                    <akn:marker name="3" /> § 3 </akn:num>
+                <akn:heading GUID="ac5ef482-70bd-4143-a15a-4c1f6da8a4a7" eId="para-3_überschrift-1">
+                    Verbindungsstelle für die berufsständischen Versorgungseinrichtungen
+                </akn:heading>
+                <akn:paragraph GUID="d2d6fb17-0f2f-4f12-86bf-d6abbb3cd123" eId="para-3_abs-1">
+                    <akn:num GUID="fa24a479-20e8-4651-b24f-26ddaf368353" eId="para-3_abs-1_bezeichnung-1">
+                        <akn:marker name="1" /> (1) </akn:num>
+                    <akn:list GUID="66fab042-4172-469e-82c2-01b1bacb6496" eId="para-3_abs-1_untergl-1">
+                        <akn:intro GUID="c660b71b-bbc8-4a50-b6b3-d18b5d22cebd" eId="para-3_abs-1_untergl-1_intro-1">
+                            <akn:p GUID="23790d84-8f7d-4d58-9240-688be556e724" eId="para-3_abs-1_untergl-1_intro-1_text-1">
+                                Die Arbeitsgemeinschaft Berufsständischer Versorgungseinrichtungen nimmt die Funktion einer Verbindungsstelle nach
+                                Artikel 1 Absatz 2 Buchstabe b der Verordnung (EG) Nr. 987/2009 für den Bereich der berufsständischen
+                                Versorgungseinrichtungen wahr. Zu ihren Aufgaben gehören insbesondere
+                            </akn:p>
+                        </akn:intro>
+                        <akn:point GUID="a1f02d93-d44c-486f-af1c-f634c2214a0b" eId="para-3_abs-1_untergl-1_listenelem-1">
+                            <akn:num GUID="a5e0f415-85f8-4e67-a944-5de26305f657" eId="para-3_abs-1_untergl-1_listenelem-1_bezeichnung-1">
+                                <akn:marker name="1" /> 1. </akn:num>
+                            <akn:content GUID="1f313c65-ced6-477d-9279-a19a7ccfb46e" eId="para-3_abs-1_untergl-1_listenelem-1_inhalt-1">
+                                <akn:p GUID="21a331d1-eece-4344-aeda-2d16e5c91fe5" eId="para-3_abs-1_untergl-1_listenelem-1_inhalt-1_text-1">
+                                    die Koordinierung der Verwaltungshilfe und des Datenaustauschs für den Bereich der berufsständischen
+                                    Versorgungseinrichtungen bei grenzüberschreitenden Sachverhalten,
+                                </akn:p>
+                            </akn:content>
+                        </akn:point>
+                        <akn:point GUID="beb930e6-4202-4216-9ec3-4e3e32a1c614" eId="para-3_abs-1_untergl-1_listenelem-2">
+                            <akn:num GUID="a5e0f415-85f8-4e67-a944-5de26305f657" eId="para-3_abs-1_untergl-1_listenelem-2_bezeichnung-1">
+                                <akn:marker name="2" /> 2. </akn:num>
+                            <akn:content GUID="7aba55d4-fd09-4799-8679-0d8ffd5fc983" eId="para-3_abs-1_untergl-1_listenelem-2_inhalt-1">
+                                <akn:p GUID="813960b5-057c-478f-893b-8bafc0a70e09" eId="para-3_abs-1_untergl-1_listenelem-2_inhalt-1_text-1">
+                                    Aufklärung, Beratung und Information.
+                                </akn:p>
+                            </akn:content>
+                        </akn:point>
+                    </akn:list>
+
+
+                </akn:paragraph>
+                <akn:paragraph GUID="a9d48c89-e676-43cb-9c51-89abef25274a" eId="para-3_abs-2">
+                    <akn:num GUID="1df713e8-78e1-4c53-b7e6-fd59b969d7e4" eId="para-3_abs-2_bezeichnung-1">
+                        <akn:marker name="2" /> (2) </akn:num>
+                    <akn:list GUID="fa677be9-b8ca-4a91-aec6-0656e5493160" eId="para-3_abs-2_untergl-1">
+                        <akn:intro GUID="c96bc158-4d89-4568-bb20-9e20e7ac5b24" eId="para-3_abs-2_untergl-1_intro-1">
+                            <akn:p GUID="ac775f09-b8db-4c4d-a3ef-e75779eb2f17" eId="para-3_abs-2_untergl-1_intro-1_text-1">
+                                Außerdem wird der Arbeitsgemeinschaft die Aufgabe übertragen, die weitere Anwendbarkeit der deutschen
+                                Rechtsvorschriften zu prüfen und für eine Person darüber zu entscheiden, die
+                            </akn:p>
+                        </akn:intro>
+                        <akn:point GUID="41643b68-4ab2-4435-8ce3-e30e1e813428" eId="para-3_abs-2_untergl-1_listenelem-1">
+                            <akn:num GUID="a5e0f415-85f8-4e67-a944-5de26305f657" eId="para-3_abs-2_untergl-1_listenelem-1_bezeichnung-1">
+                                <akn:marker name="1" /> 1. </akn:num>
+                            <akn:content GUID="c4d4c739-b34f-489c-945b-d2be2a4ca467" eId="para-3_abs-2_untergl-1_listenelem-1_inhalt-1">
+                                <akn:p GUID="64d07375-015d-413f-8a34-eb3cd783eed8" eId="para-3_abs-2_untergl-1_listenelem-1_inhalt-1_text-1">
+                                    vorübergehend in einen anderen Mitgliedstaat entsandt oder dort vorübergehend selbstständig tätig ist und
+                                </akn:p>
+                            </akn:content>
+                        </akn:point>
+                        <akn:point GUID="e15712d8-833e-4997-9baf-b62d1c242023" eId="para-3_abs-2_untergl-1_listenelem-2">
+                            <akn:num GUID="a5e0f415-85f8-4e67-a944-5de26305f657" eId="para-3_abs-2_untergl-1_listenelem-2_bezeichnung-1">
+                                <akn:marker name="2" /> 2. </akn:num>
+                            <akn:content GUID="f09d92a9-fb4c-423f-b7c4-40127e78ab0b" eId="para-3_abs-2_untergl-1_listenelem-2_inhalt-1">
+                                <akn:p GUID="ddc1552b-341f-4897-948f-7f48cd1a9230" eId="para-3_abs-2_untergl-1_listenelem-2_inhalt-1_text-1">
+                                    nicht Mitglied einer gesetzlichen Krankenkasse, jedoch Mitglied einer berufsständischen Versorgungseinrichtung
+                                    ist.
+                                </akn:p>
+                            </akn:content>
+                        </akn:point>
+                    </akn:list>
+
+
+                </akn:paragraph>
+                <akn:paragraph GUID="a4cf35b5-deaa-41c9-86a6-00d1dc821585" eId="para-3_abs-3">
+                    <akn:num GUID="5a231b4d-3b3e-49f7-a881-64b8f4395ac3" eId="para-3_abs-3_bezeichnung-1">
+                        <akn:marker name="3" /> (3) </akn:num>
+                    <akn:content GUID="c7edecdc-89c5-4bf9-a194-dfe0675c4c3f" eId="para-3_abs-3_inhalt-1">
+                        <akn:p GUID="f9380d8d-42fb-4d54-a17c-1798f01310eb" eId="para-3_abs-3_inhalt-1_text-1">
+                            Zur Erfüllung ihrer Aufgaben nach den Absätzen 1 und 2 darf die Arbeitsgemeinschaft den berufsständischen
+                            Versorgungseinrichtungen die erforderlichen Daten zur automatisierten Verarbeitung von Dokumenten oder strukturierten
+                            Dokumenten übermitteln oder nach Festlegung des Verfahrens mit den Versorgungseinrichtungen die Verarbeitung der Daten
+                            übernehmen.&#10; Diese Daten gelten als Sozialdaten, auf welche die Bestimmungen zum Sozialgeheimnis nach § 35 des Ersten
+                            Buches Sozialgesetzbuch und zum Schutz der Sozialdaten nach dem Zweiten Kapitel des Zehnten Buches Sozialgesetzbuch
+                            Anwendung finden.
+                        </akn:p>
+                    </akn:content>
+
+
+                </akn:paragraph>
+            </akn:article>
+            <akn:article refersTo="einzelvorschrift-stammform" GUID="b9f63244-272b-42cb-a9c5-5def9d265d1e" eId="para-4">
+                <akn:num GUID="32ee20fb-8576-4c33-bebd-c055f2300298" eId="para-4_bezeichnung-1">
+                    <akn:marker name="4" /> § 4 </akn:num>
+                <akn:heading GUID="2e1fa11a-8811-4d7c-a8cf-b59e58ea2ea1" eId="para-4_überschrift-1">
+                    Verbindungsstelle für Familienleistungen
+                </akn:heading>
+                <akn:paragraph GUID="71eab7f5-dfd1-49f5-b4cf-c9c499435d69" eId="para-4_abs-0">
+                    <akn:num GUID="f676cf9d-9691-49d2-900a-3276806208c7" eId="para-4_abs-0_bezeichnung-1">
+                        <akn:marker name="0" />
+
+                    </akn:num>
+                    <akn:list GUID="11b60165-9734-4672-a4ab-40fc27f8be8f" eId="para-4_abs-0_untergl-1">
+                        <akn:intro GUID="5833263f-f8aa-4748-b0cb-659847c7abeb" eId="para-4_abs-0_untergl-1_intro-1">
+                            <akn:p GUID="e19b2757-fedf-46cf-bfaa-3fa4793c5422" eId="para-4_abs-0_untergl-1_intro-1_text-1">
+                                Die Bundesagentur für Arbeit, Familienkasse Direktion, nimmt die Funktion der Verbindungsstelle nach Artikel 1 Absatz
+                                2 Buchstabe b der Verordnung (EG) Nr. 987/2009 für die Familienleistungen nach Artikel 3 Absatz 1 Buchstabe j der
+                                Verordnung (EG) Nr. 883/2004 (Kindergeld nach dem Abschnitt X des Einkommensteuergesetzes, Kindergeld und
+                                Kinderzuschlag nach dem Bundeskindergeldgesetz, Elterngeld nach dem Bundeselterngeld- und Elternzeitgesetz sowie
+                                Landeserziehungsgeld nach den Rechtsvorschriften der Länder betreffend Erziehungsgeld) wahr. Zu ihren Aufgaben gehören
+                                insbesondere
+                            </akn:p>
+                        </akn:intro>
+                        <akn:point GUID="cd237920-59e5-43f1-bca8-226fe367e895" eId="para-4_abs-0_untergl-1_listenelem-1">
+                            <akn:num GUID="a5e0f415-85f8-4e67-a944-5de26305f657" eId="para-4_abs-0_untergl-1_listenelem-1_bezeichnung-1">
+                                <akn:marker name="1" /> 1. </akn:num>
+                            <akn:content GUID="cad92fb9-5961-4841-9737-3c35c9be6545" eId="para-4_abs-0_untergl-1_listenelem-1_inhalt-1">
+                                <akn:p GUID="b2d2da3f-c30c-4b89-8f96-d0d320d54463" eId="para-4_abs-0_untergl-1_listenelem-1_inhalt-1_text-1">
+                                    die Koordinierung der Verwaltungshilfe und des Datenaustauschs für den Bereich der Familienleistungen bei
+                                    grenzüberschreitenden Sachverhalten,
+                                </akn:p>
+                            </akn:content>
+                        </akn:point>
+                        <akn:point GUID="c80ecf8b-79cd-4f37-a9a7-7766ec813dec" eId="para-4_abs-0_untergl-1_listenelem-2">
+                            <akn:num GUID="a5e0f415-85f8-4e67-a944-5de26305f657" eId="para-4_abs-0_untergl-1_listenelem-2_bezeichnung-1">
+                                <akn:marker name="2" /> 2. </akn:num>
+                            <akn:content GUID="31fef7a1-b551-487c-a8f7-dcff87c6931a" eId="para-4_abs-0_untergl-1_listenelem-2_inhalt-1">
+                                <akn:p GUID="c022e5f6-cffb-4e64-8673-c77e6920c61f" eId="para-4_abs-0_untergl-1_listenelem-2_inhalt-1_text-1">
+                                    Aufklärung, Beratung und Information.
+                                </akn:p>
+                            </akn:content>
+                        </akn:point>
+                    </akn:list>
+
+
+                </akn:paragraph>
+            </akn:article>
+            <akn:article refersTo="einzelvorschrift-stammform" GUID="cc829ceb-fbdf-4596-9d38-421ae9f12bc5" eId="para-5">
+                <akn:num GUID="1d81bfd1-5bff-478a-b337-22e7f3421b2e" eId="para-5_bezeichnung-1">
+                    <akn:marker name="5" /> § 5 </akn:num>
+                <akn:heading GUID="b531ac78-f2be-46a7-b356-a60030ca78a6" eId="para-5_überschrift-1">
+                    Koordinierungsstelle für die Systeme der Beamtenversorgung
+                </akn:heading>
+                <akn:paragraph GUID="c5be1138-83bb-46f8-b037-984eebb0668c" eId="para-5_abs-0">
+                    <akn:num GUID="bddc07de-7f71-493d-bd00-c0150916a0ba" eId="para-5_abs-0_bezeichnung-1">
+                        <akn:marker name="0" />
+
+                    </akn:num>
+                    <akn:content GUID="12dc1a79-8692-4052-84f4-71ff0f51f29c" eId="para-5_abs-0_inhalt-1">
+                        <akn:p GUID="a07c091d-b492-4079-b390-ebc730030e83" eId="para-5_abs-0_inhalt-1_text-1">
+                            Die Generalzolldirektion nimmt im Zusammenwirken mit der Deutschen Rentenversicherung Bund (§ 127a Absatz 2 des Sechsten
+                            Buches Sozialgesetzbuch) die Funktion einer Koordinierungsstelle für die deutschen Systeme der Beamtenversorgung
+                            wahr.&#10; Zu den Aufgaben der Generalzolldirektion in diesem Bereich gehören insbesondere die Koordinierung der
+                            Verwaltungshilfe und der Datenaustausch mit anderen Mitgliedstaaten bei grenzüberschreitenden Sachverhalten.&#10; Sie darf
+                            personenbezogene Daten erheben, verarbeiten und nutzen, soweit dies zur Erfüllung ihrer Aufgaben nach den Sätzen 1 und 2
+                            erforderlich ist.&#10; Diese Daten gelten als Sozialdaten, auf welche die Bestimmungen zum Sozialgeheimnis nach § 35 des
+                            Ersten Buches Sozialgesetzbuch und zum Schutz der Sozialdaten nach dem Zweiten Kapitel des Zehnten Buches Sozialgesetzbuch
+                            Anwendung finden.
+                        </akn:p>
+                    </akn:content>
+
+
+                </akn:paragraph>
+            </akn:article>
+            <akn:article refersTo="einzelvorschrift-stammform" GUID="eb6f4d08-8789-4f15-b16b-11a16a5a2079" eId="para-6">
+                <akn:num GUID="c2468f6c-57f9-4e38-a39e-cc7f270f5c13" eId="para-6_bezeichnung-1">
+                    <akn:marker name="6" /> § 6 </akn:num>
+                <akn:heading GUID="f4b1991b-b1d9-4a9b-a5c7-0e931b8e440e" eId="para-6_überschrift-1">
+                    Zugangsstellen
+                </akn:heading>
+                <akn:paragraph GUID="a1af9db7-31fe-43ce-a1fb-a5a8868f9a3c" eId="para-6_abs-1">
+                    <akn:num GUID="97e37811-cc78-4899-845d-bfc3aa3301b0" eId="para-6_abs-1_bezeichnung-1">
+                        <akn:marker name="1" /> (1) </akn:num>
+                    <akn:list GUID="6d125e30-c4e4-46e7-b3d8-bfa99af6f331" eId="para-6_abs-1_untergl-1">
+                        <akn:intro GUID="3f29dc1d-f6a4-4917-855a-41d6bc7896bf" eId="para-6_abs-1_untergl-1_intro-1">
+                            <akn:p GUID="df94612b-0631-4d11-b7f8-c29088b68ed0" eId="para-6_abs-1_untergl-1_intro-1_text-1">
+                                Zugangsstellen für den elektronischen Datenaustausch nach Artikel 1 Absatz 2 Buchstabe a der Verordnung (EG) Nr.
+                                987/2009 sind
+                            </akn:p>
+                        </akn:intro>
+                        <akn:point GUID="4857084a-d4a0-4494-a869-cf5f624f83c0" eId="para-6_abs-1_untergl-1_listenelem-1">
+                            <akn:num GUID="a5e0f415-85f8-4e67-a944-5de26305f657" eId="para-6_abs-1_untergl-1_listenelem-1_bezeichnung-1">
+                                <akn:marker name="1" /> 1. </akn:num>
+                            <akn:list GUID="f8685276-25df-43a8-81f2-90fe48c30639" eId="para-6_abs-1_untergl-1_listenelem-1_untergl-1">
+                                <akn:intro GUID="11d02361-82c4-4d37-a68c-b44f7d096165" eId="para-6_abs-1_untergl-1_listenelem-1_untergl-1_intro-1">
+                                    <akn:p GUID="fc3a5133-1381-4b55-9408-ba61dec8a32f"
+                                        eId="para-6_abs-1_untergl-1_listenelem-1_untergl-1_intro-1_text-1">
+                                        der Spitzenverband Bund der Krankenkassen, Deutsche Verbindungsstelle Krankenversicherung – Ausland,
+                                    </akn:p>
+                                </akn:intro>
+                                <akn:point GUID="152ca61b-8656-4e6f-b09b-9de25a51e9ce"
+                                    eId="para-6_abs-1_untergl-1_listenelem-1_untergl-1_listenelem-a">
+                                    <akn:num GUID="a5e0f415-85f8-4e67-a944-5de26305f657"
+                                        eId="para-6_abs-1_untergl-1_listenelem-1_untergl-1_listenelem-a_bezeichnung-1">
+                                        <akn:marker name="a" /> a) </akn:num>
+                                    <akn:content GUID="ed915009-cf27-4d69-93c2-2d938e066381"
+                                        eId="para-6_abs-1_untergl-1_listenelem-1_untergl-1_listenelem-a_inhalt-1">
+                                        <akn:p GUID="0e78701e-a35d-48c7-94ca-0b29854256c4"
+                                            eId="para-6_abs-1_untergl-1_listenelem-1_untergl-1_listenelem-a_inhalt-1_text-1">
+                                            für den Bereich der Leistungen bei Krankheit sowie der Leistungen bei Mutterschaft und gleichgestellter
+                                            Leistungen bei Vaterschaft (Artikel 3 Absatz 1 Buchstabe a und b der Verordnung (EG) Nr. 883/2004),
+                                        </akn:p>
+                                    </akn:content>
+                                </akn:point>
+                                <akn:point GUID="7ce31094-b53c-43ce-a4c9-b1ff0ad96df8"
+                                    eId="para-6_abs-1_untergl-1_listenelem-1_untergl-1_listenelem-b">
+                                    <akn:num GUID="a5e0f415-85f8-4e67-a944-5de26305f657"
+                                        eId="para-6_abs-1_untergl-1_listenelem-1_untergl-1_listenelem-b_bezeichnung-1">
+                                        <akn:marker name="b" /> b) </akn:num>
+                                    <akn:list GUID="7ce31094-b53c-43ce-a4c9-b1ff0ad96df8"
+                                        eId="para-6_abs-1_untergl-1_listenelem-1_untergl-1_listenelem-b_untergl-1">
+                                        <akn:intro GUID="ae8d0f68-4526-4b11-bbf5-a06aa2ec4d04"
+                                            eId="para-6_abs-1_untergl-1_listenelem-1_untergl-1_listenelem-b_untergl-1_intro-1">
+                                            <akn:p GUID="7918612b-cebb-4d89-bab7-9834c1023b27"
+                                                eId="para-6_abs-1_untergl-1_listenelem-1_untergl-1_listenelem-b_untergl-1_intro-1_text-1">
+                                                für den Bereich des anwendbaren Rechts in den Fällen
+                                            </akn:p>
+                                        </akn:intro>
+                                        <akn:point GUID="46395531-e2c0-4d52-83b4-03dccc7e529e"
+                                            eId="para-6_abs-1_untergl-1_listenelem-1_untergl-1_listenelem-b_untergl-1_listenelem-aa">
+                                            <akn:num GUID="a5e0f415-85f8-4e67-a944-5de26305f657"
+                                                eId="para-6_abs-1_untergl-1_listenelem-1_untergl-1_listenelem-b_untergl-1_listenelem-aa_bezeichnung-1">
+                                                <akn:marker name="aa" /> aa) </akn:num>
+                                            <akn:content GUID="cd452516-ce88-4b3c-8ff1-8d7b52c3a26c"
+                                                eId="para-6_abs-1_untergl-1_listenelem-1_untergl-1_listenelem-b_untergl-1_listenelem-aa_inhalt-1">
+                                                <akn:p GUID="d475e262-62af-4b63-ba49-582ec9234faa"
+                                                    eId="para-6_abs-1_untergl-1_listenelem-1_untergl-1_listenelem-b_untergl-1_listenelem-aa_inhalt-1_text-1">
+                                                    des Artikels 15 der Verordnung (EG) Nr. 987/2009,
+                                                </akn:p>
+                                            </akn:content>
+                                        </akn:point>
+                                        <akn:point GUID="1ec559f0-dbea-421d-9fd9-3e3672824f65"
+                                            eId="para-6_abs-1_untergl-1_listenelem-1_untergl-1_listenelem-b_untergl-1_listenelem-bb">
+                                            <akn:num GUID="a5e0f415-85f8-4e67-a944-5de26305f657"
+                                                eId="para-6_abs-1_untergl-1_listenelem-1_untergl-1_listenelem-b_untergl-1_listenelem-bb_bezeichnung-1">
+                                                <akn:marker name="bb" /> bb) </akn:num>
+                                            <akn:content GUID="b3b4ecd4-eb2e-44eb-b2de-91d3a2ed708e"
+                                                eId="para-6_abs-1_untergl-1_listenelem-1_untergl-1_listenelem-b_untergl-1_listenelem-bb_inhalt-1">
+                                                <akn:p GUID="e5ad474f-9d7e-48de-88c8-070987cd6bc9"
+                                                    eId="para-6_abs-1_untergl-1_listenelem-1_untergl-1_listenelem-b_untergl-1_listenelem-bb_inhalt-1_text-1">
+                                                    des Artikels 16 der Verordnung (EG) Nr. 987/2009, wenn der Wohnort der betreffenden Person in
+                                                    Deutschland liegt,
+                                                </akn:p>
+                                            </akn:content>
+                                        </akn:point>
+                                        <akn:point GUID="a61e332b-c32c-4c8d-9880-9ab6461fb4d2"
+                                            eId="para-6_abs-1_untergl-1_listenelem-1_untergl-1_listenelem-b_untergl-1_listenelem-cc">
+                                            <akn:num GUID="a5e0f415-85f8-4e67-a944-5de26305f657"
+                                                eId="para-6_abs-1_untergl-1_listenelem-1_untergl-1_listenelem-b_untergl-1_listenelem-cc_bezeichnung-1">
+                                                <akn:marker name="cc" /> cc) </akn:num>
+                                            <akn:content GUID="0f201add-a4c0-497d-a5c2-d997f91e647f"
+                                                eId="para-6_abs-1_untergl-1_listenelem-1_untergl-1_listenelem-b_untergl-1_listenelem-cc_inhalt-1">
+                                                <akn:p GUID="b616719b-97bd-41be-a3b0-f3669abdba61"
+                                                    eId="para-6_abs-1_untergl-1_listenelem-1_untergl-1_listenelem-b_untergl-1_listenelem-cc_inhalt-1_text-1">
+                                                    des Artikels 17 der Verordnung (EG) Nr. 987/2009,
+                                                </akn:p>
+                                            </akn:content>
+                                        </akn:point>
+                                        <akn:point GUID="26595e4a-9217-4e63-a466-9efa26888f1f"
+                                            eId="para-6_abs-1_untergl-1_listenelem-1_untergl-1_listenelem-b_untergl-1_listenelem-dd">
+                                            <akn:num GUID="a5e0f415-85f8-4e67-a944-5de26305f657"
+                                                eId="para-6_abs-1_untergl-1_listenelem-1_untergl-1_listenelem-b_untergl-1_listenelem-dd_bezeichnung-1">
+                                                <akn:marker name="dd" /> dd) </akn:num>
+                                            <akn:content GUID="86b8b283-b558-4926-8ee8-16f8614fdd94"
+                                                eId="para-6_abs-1_untergl-1_listenelem-1_untergl-1_listenelem-b_untergl-1_listenelem-dd_inhalt-1">
+                                                <akn:p GUID="8165ccde-b8d0-40cf-8d9b-4c4cdd364b9f"
+                                                    eId="para-6_abs-1_untergl-1_listenelem-1_untergl-1_listenelem-b_untergl-1_listenelem-dd_inhalt-1_text-1">
+                                                    des Artikels 18 der Verordnung (EG) Nr. 987/2009;
+                                                </akn:p>
+                                            </akn:content>
+                                        </akn:point>
+                                    </akn:list>
+                                </akn:point>
+                            </akn:list>
+                        </akn:point>
+                        <akn:point GUID="140b7a18-81a2-4a3c-9b1c-c3d995fe5b1b" eId="para-6_abs-1_untergl-1_listenelem-2">
+                            <akn:num GUID="a5e0f415-85f8-4e67-a944-5de26305f657" eId="para-6_abs-1_untergl-1_listenelem-2_bezeichnung-1">
+                                <akn:marker name="2" /> 2. </akn:num>
+                            <akn:content GUID="573f0f39-a7f7-45d9-a2db-d019722ea49f" eId="para-6_abs-1_untergl-1_listenelem-2_inhalt-1">
+                                <akn:p GUID="00705b70-84bb-4896-a7b6-bac2fdce2c3b" eId="para-6_abs-1_untergl-1_listenelem-2_inhalt-1_text-1">
+                                    die Deutsche Gesetzliche Unfallversicherung e. V., Deutsche Verbindungsstelle Unfallversicherung – Ausland, für
+                                    den Bereich der Leistungen bei Arbeitsunfällen und Berufskrankheiten sowie des Sterbegeldes (Artikel 3 Absatz 1
+                                    Buchstabe f und g der Verordnung (EG) Nr. 883/2004);
+                                </akn:p>
+                            </akn:content>
+                        </akn:point>
+                        <akn:point GUID="ee8b394b-974d-4474-a96f-6365b5e4c4fb" eId="para-6_abs-1_untergl-1_listenelem-3">
+                            <akn:num GUID="a5e0f415-85f8-4e67-a944-5de26305f657" eId="para-6_abs-1_untergl-1_listenelem-3_bezeichnung-1">
+                                <akn:marker name="3" /> 3. </akn:num>
+                            <akn:list GUID="f8685276-25df-43a8-81f2-90fe48c30639" eId="para-6_abs-1_untergl-1_listenelem-3_untergl-1">
+                                <akn:intro GUID="d968911f-8b25-459c-a3c1-d1168f8108bb" eId="para-6_abs-1_untergl-1_listenelem-3_untergl-1_intro-1">
+                                    <akn:p GUID="9444c165-07e2-412a-90e5-0ca734797777"
+                                        eId="para-6_abs-1_untergl-1_listenelem-3_untergl-1_intro-1_text-1">
+                                        die Datenstelle der Rentenversicherung
+                                    </akn:p>
+                                </akn:intro>
+                                <akn:point GUID="f9edbcef-a9a6-4056-82cc-3e0da3ee2e76"
+                                    eId="para-6_abs-1_untergl-1_listenelem-3_untergl-1_listenelem-a">
+                                    <akn:num GUID="a5e0f415-85f8-4e67-a944-5de26305f657"
+                                        eId="para-6_abs-1_untergl-1_listenelem-3_untergl-1_listenelem-a_bezeichnung-1">
+                                        <akn:marker name="a" /> a) </akn:num>
+                                    <akn:content GUID="9af0297c-2521-41cf-9c9b-f3dc2b79d0fd"
+                                        eId="para-6_abs-1_untergl-1_listenelem-3_untergl-1_listenelem-a_inhalt-1">
+                                        <akn:p GUID="c55ffbf1-2498-4ab0-aa0b-c4629bb6dc02"
+                                            eId="para-6_abs-1_untergl-1_listenelem-3_untergl-1_listenelem-a_inhalt-1_text-1">
+                                            für den Bereich der Leistungen bei Invalidität, bei Alter und an Hinterbliebene sowie der
+                                            Vorruhestandsleistungen (Artikel 3 Absatz 1 Buchstabe c bis e und i der Verordnung (EG) Nr. 883/2004),
+                                        </akn:p>
+                                    </akn:content>
+                                </akn:point>
+                                <akn:point GUID="d668e479-c5c1-4b60-b7fa-2a5c3ff09ad3"
+                                    eId="para-6_abs-1_untergl-1_listenelem-3_untergl-1_listenelem-b">
+                                    <akn:num GUID="a5e0f415-85f8-4e67-a944-5de26305f657"
+                                        eId="para-6_abs-1_untergl-1_listenelem-3_untergl-1_listenelem-b_bezeichnung-1">
+                                        <akn:marker name="b" /> b) </akn:num>
+                                    <akn:list GUID="d668e479-c5c1-4b60-b7fa-2a5c3ff09ad3"
+                                        eId="para-6_abs-1_untergl-1_listenelem-3_untergl-1_listenelem-b_untergl-1">
+                                        <akn:intro GUID="9036afac-cdff-4232-bf8c-063c27a037bb"
+                                            eId="para-6_abs-1_untergl-1_listenelem-3_untergl-1_listenelem-b_untergl-1_intro-1">
+                                            <akn:p GUID="ae93c207-34b6-46b6-a847-cb200bf26242"
+                                                eId="para-6_abs-1_untergl-1_listenelem-3_untergl-1_listenelem-b_untergl-1_intro-1_text-1">
+                                                für den Bereich des anwendbaren Rechts in den Fällen
+                                            </akn:p>
+                                        </akn:intro>
+                                        <akn:point GUID="f97a5b84-f0f1-4b18-a711-421d944cf4dd"
+                                            eId="para-6_abs-1_untergl-1_listenelem-3_untergl-1_listenelem-b_untergl-1_listenelem-aa">
+                                            <akn:num GUID="a5e0f415-85f8-4e67-a944-5de26305f657"
+                                                eId="para-6_abs-1_untergl-1_listenelem-3_untergl-1_listenelem-b_untergl-1_listenelem-aa_bezeichnung-1">
+                                                <akn:marker name="aa" /> aa) </akn:num>
+                                            <akn:content GUID="276ede76-e58e-4950-9377-5bbc201cc1b8"
+                                                eId="para-6_abs-1_untergl-1_listenelem-3_untergl-1_listenelem-b_untergl-1_listenelem-aa_inhalt-1">
+                                                <akn:p GUID="3137464d-dfbc-4d20-8b7e-680710872fd2"
+                                                    eId="para-6_abs-1_untergl-1_listenelem-3_untergl-1_listenelem-b_untergl-1_listenelem-aa_inhalt-1_text-1">
+                                                    des Artikels 15 der Verordnung (EG) Nr. 987/2009,
+                                                </akn:p>
+                                            </akn:content>
+                                        </akn:point>
+                                        <akn:point GUID="bf349393-acba-47e5-bc90-63edeebfd05d"
+                                            eId="para-6_abs-1_untergl-1_listenelem-3_untergl-1_listenelem-b_untergl-1_listenelem-bb">
+                                            <akn:num GUID="a5e0f415-85f8-4e67-a944-5de26305f657"
+                                                eId="para-6_abs-1_untergl-1_listenelem-3_untergl-1_listenelem-b_untergl-1_listenelem-bb_bezeichnung-1">
+                                                <akn:marker name="bb" /> bb) </akn:num>
+                                            <akn:content GUID="32038058-a913-4c4a-b219-3131918bb3a0"
+                                                eId="para-6_abs-1_untergl-1_listenelem-3_untergl-1_listenelem-b_untergl-1_listenelem-bb_inhalt-1">
+                                                <akn:p GUID="4b1a5d3c-bcb5-40ad-98f2-0e2f2bb10f1e"
+                                                    eId="para-6_abs-1_untergl-1_listenelem-3_untergl-1_listenelem-b_untergl-1_listenelem-bb_inhalt-1_text-1">
+                                                    des Artikels 16 der Verordnung (EG) Nr. 987/2009, wenn der Wohnort der betreffenden Person
+                                                    außerhalb Deutschlands liegt;
+                                                </akn:p>
+                                            </akn:content>
+                                        </akn:point>
+                                    </akn:list>
+                                </akn:point>
+                            </akn:list>
+                        </akn:point>
+                        <akn:point GUID="2bd1ea08-fa02-4485-a667-242b5d77aed2" eId="para-6_abs-1_untergl-1_listenelem-4">
+                            <akn:num GUID="a5e0f415-85f8-4e67-a944-5de26305f657" eId="para-6_abs-1_untergl-1_listenelem-4_bezeichnung-1">
+                                <akn:marker name="4" /> 4. </akn:num>
+                            <akn:content GUID="a0cbc4cd-a407-4856-8776-c90ff9f470f3" eId="para-6_abs-1_untergl-1_listenelem-4_inhalt-1">
+                                <akn:p GUID="37f8c42e-dcb2-4608-8eff-76f6e5362e80" eId="para-6_abs-1_untergl-1_listenelem-4_inhalt-1_text-1">
+                                    die Bundesagentur für Arbeit für den Bereich der Leistungen bei Arbeitslosigkeit (Artikel 3 Absatz 1 Buchstabe h
+                                    der Verordnung (EG) Nr. 883/2004);
+                                </akn:p>
+                            </akn:content>
+                        </akn:point>
+                        <akn:point GUID="8a95c8d6-42e0-4475-aef3-6511b8a25777" eId="para-6_abs-1_untergl-1_listenelem-5">
+                            <akn:num GUID="a5e0f415-85f8-4e67-a944-5de26305f657" eId="para-6_abs-1_untergl-1_listenelem-5_bezeichnung-1">
+                                <akn:marker name="5" /> 5. </akn:num>
+                            <akn:content GUID="115fadc6-474c-4662-8bf2-7b8d1b853db9" eId="para-6_abs-1_untergl-1_listenelem-5_inhalt-1">
+                                <akn:p GUID="ee568eed-747f-4496-b019-963ab00c85eb" eId="para-6_abs-1_untergl-1_listenelem-5_inhalt-1_text-1">
+                                    die Bundesagentur für Arbeit, Familienkasse Direktion, für den Bereich der Familienleistungen (Artikel 3 Absatz 1
+                                    Buchstabe j der Verordnung (EG) Nr. 883/2004).
+                                </akn:p>
+                            </akn:content>
+                        </akn:point>
+                    </akn:list>
+
+
+                </akn:paragraph>
+                <akn:paragraph GUID="33fe5a35-408e-4215-968e-04431def5762" eId="para-6_abs-2">
+                    <akn:num GUID="b023f685-695e-41de-93f3-f03f712c2a00" eId="para-6_abs-2_bezeichnung-1">
+                        <akn:marker name="2" /> (2) </akn:num>
+                    <akn:content GUID="bc0162de-4df8-4b87-ae02-30932ade03d8" eId="para-6_abs-2_inhalt-1">
+                        <akn:p GUID="fc6a77f2-910a-4bc9-b726-6051684ea94e" eId="para-6_abs-2_inhalt-1_text-1">
+                            Die Aufgaben der Zugangsstellen umfassen im Rahmen ihres jeweiligen Zuständigkeitsbereichs auch den elektronischen
+                            Datenaustausch zur Koordinierung der Verwaltungshilfe.&#10; Das schließt auch die Verarbeitung der von der
+                            Verwaltungskommission für die Koordinierung der Systeme der sozialen Sicherheit festgelegten Dokumente und strukturierten
+                            Dokumente in automatisierten Dateien im erforderlichen Umfang ein.&#10; Die Zugangsstellen können für die Durchführung der
+                            Verordnung (EG) Nr. 883/2004 den Verbindungsstellen und Trägern im Geltungsbereich dieses Gesetzes eine Datei zur
+                            automatisierten Verarbeitung der Dokumente oder strukturierten Dokumente zur Verfügung stellen oder die Verarbeitung im
+                            Rahmen einer Datenverarbeitung im Auftrag übernehmen.
+                        </akn:p>
+                    </akn:content>
+
+
+                </akn:paragraph>
+            </akn:article>
+            <akn:article refersTo="einzelvorschrift-stammform" GUID="70b21536-c101-4e9b-b24c-ec83f1262880" eId="para-7">
+                <akn:num GUID="bbccc41b-d5a3-4ee2-bb66-6df6c373dde3" eId="para-7_bezeichnung-1">
+                    <akn:marker name="7" /> § 7 </akn:num>
+                <akn:heading GUID="f6eebcb3-06d1-4978-8f83-49ed820dbf5b" eId="para-7_überschrift-1">
+                    Verordnungsermächtigungen
+                </akn:heading>
+                <akn:paragraph GUID="d4c4ca6c-071d-4b5a-9dbd-9ed58537eb89" eId="para-7_abs-1">
+                    <akn:num GUID="4b0be949-f1d6-44c4-99c9-5a125459113a" eId="para-7_abs-1_bezeichnung-1">
+                        <akn:marker name="1" /> (1) </akn:num>
+                    <akn:list GUID="60560ab4-3944-4d72-ba53-14aa6ebb12d5" eId="para-7_abs-1_untergl-1">
+                        <akn:intro GUID="d6084153-235c-4476-91e4-f0c9a8bde1d3" eId="para-7_abs-1_untergl-1_intro-1">
+                            <akn:p GUID="2fbddf10-95d0-4856-83c9-db536674187a" eId="para-7_abs-1_untergl-1_intro-1_text-1">
+                                Das Bundesministerium für Arbeit und Soziales wird ermächtigt, durch Rechtsverordnung mit Zustimmung des Bundesrates
+                                folgende Vereinbarungen mit anderen Mitgliedstaaten in Kraft zu setzen:
+                            </akn:p>
+                        </akn:intro>
+                        <akn:point GUID="b5deeecd-1cfc-414b-ae4d-03a9b71d44cd" eId="para-7_abs-1_untergl-1_listenelem-1">
+                            <akn:num GUID="a5e0f415-85f8-4e67-a944-5de26305f657" eId="para-7_abs-1_untergl-1_listenelem-1_bezeichnung-1">
+                                <akn:marker name="1" /> 1. </akn:num>
+                            <akn:content GUID="af676d26-b90d-49d6-a2e9-4f63b48f6290" eId="para-7_abs-1_untergl-1_listenelem-1_inhalt-1">
+                                <akn:p GUID="65d9cd45-dfdd-4fc0-9a54-a37d27c16f3a" eId="para-7_abs-1_untergl-1_listenelem-1_inhalt-1_text-1">
+                                    Vereinbarungen nach Artikel 84 Absatz 4 der Verordnung (EG) Nr. 883/2004 über die Einzelheiten der Durchführung
+                                    des Beitragseinzugsverfahrens und des Zwangsbeitreibungsverfahrens und
+                                </akn:p>
+                            </akn:content>
+                        </akn:point>
+                        <akn:point GUID="6c035424-dbda-4cea-a332-0efd16a8e386" eId="para-7_abs-1_untergl-1_listenelem-2">
+                            <akn:num GUID="a5e0f415-85f8-4e67-a944-5de26305f657" eId="para-7_abs-1_untergl-1_listenelem-2_bezeichnung-1">
+                                <akn:marker name="2" /> 2. </akn:num>
+                            <akn:content GUID="c4e7a720-84ee-4b9c-8579-d43452ef268a" eId="para-7_abs-1_untergl-1_listenelem-2_inhalt-1">
+                                <akn:p GUID="346037eb-f514-45ee-8896-439a44b1ace8" eId="para-7_abs-1_untergl-1_listenelem-2_inhalt-1_text-1">
+                                    Vereinbarungen nach Artikel 9 Absatz 1 der Verordnung (EG) Nr. 987/2009 zur Festlegung von abweichenden Verfahren
+                                    über die verwaltungsmäßige Durchführung der Verordnung (EG) Nr. 883/2004, soweit sie Familienleistungen der Länder
+                                    betreffen.
+                                </akn:p>
+                            </akn:content>
+                        </akn:point>
+                    </akn:list>
+
+
+                </akn:paragraph>
+                <akn:paragraph GUID="ec4e9a3b-e6e8-4ad7-8133-03054eafb4ec" eId="para-7_abs-2">
+                    <akn:num GUID="31c90d85-cbde-48d2-80d5-00b4dedc7c76" eId="para-7_abs-2_bezeichnung-1">
+                        <akn:marker name="2" /> (2) </akn:num>
+                    <akn:list GUID="9a116cc5-0804-4b8a-89e7-a93742ebb5cb" eId="para-7_abs-2_untergl-1">
+                        <akn:intro GUID="cccf51a0-b2a5-4669-aacc-42f8cd8a5dd4" eId="para-7_abs-2_untergl-1_intro-1">
+                            <akn:p GUID="d1596ea6-58fa-4d06-a916-b33b2bb8df64" eId="para-7_abs-2_untergl-1_intro-1_text-1">
+                                Das Bundesministerium für Arbeit und Soziales wird ermächtigt, durch Rechtsverordnung ohne Zustimmung des Bundesrates
+                                folgende Vereinbarungen mit anderen Mitgliedstaaten in Kraft zu setzen:
+                            </akn:p>
+                        </akn:intro>
+                        <akn:point GUID="d6b3a7ee-38f7-4b59-8107-a5b8fa5c0e56" eId="para-7_abs-2_untergl-1_listenelem-1">
+                            <akn:num GUID="a5e0f415-85f8-4e67-a944-5de26305f657" eId="para-7_abs-2_untergl-1_listenelem-1_bezeichnung-1">
+                                <akn:marker name="1" /> 1. </akn:num>
+                            <akn:content GUID="ca20b27f-889f-40e2-bc7e-d10132e4f2d2" eId="para-7_abs-2_untergl-1_listenelem-1_inhalt-1">
+                                <akn:p GUID="c66e5647-cd46-4dde-a93d-9ed83a01440a" eId="para-7_abs-2_untergl-1_listenelem-1_inhalt-1_text-1">
+                                    Vereinbarungen nach Artikel 35 Absatz 3 der Verordnung (EG) Nr. 883/2004 über das Erstattungsverfahren oder den
+                                    Erstattungsverzicht für Sachleistungen bei Krankheit, Mutterschaft sowie für gleichgestellte Leistungen bei
+                                    Vaterschaft,
+                                </akn:p>
+                            </akn:content>
+                        </akn:point>
+                        <akn:point GUID="41a22deb-4f84-4c85-9b94-f1607f43c335" eId="para-7_abs-2_untergl-1_listenelem-2">
+                            <akn:num GUID="a5e0f415-85f8-4e67-a944-5de26305f657" eId="para-7_abs-2_untergl-1_listenelem-2_bezeichnung-1">
+                                <akn:marker name="2" /> 2. </akn:num>
+                            <akn:content GUID="dafc61c1-0d8b-4d51-a174-c1e4cbb2e84a" eId="para-7_abs-2_untergl-1_listenelem-2_inhalt-1">
+                                <akn:p GUID="5494d305-b77a-4b80-8d50-6163762209b2" eId="para-7_abs-2_untergl-1_listenelem-2_inhalt-1_text-1">
+                                    Vereinbarungen nach Artikel 41 Absatz 2 der Verordnung (EG) Nr. 883/2004 über das Erstattungsverfahren oder den
+                                    Erstattungsverzicht für Sachleistungen bei Arbeitsunfällen und Berufskrankheiten,
+                                </akn:p>
+                            </akn:content>
+                        </akn:point>
+                        <akn:point GUID="88609fc6-6c90-401b-bf5b-dc532526358b" eId="para-7_abs-2_untergl-1_listenelem-3">
+                            <akn:num GUID="a5e0f415-85f8-4e67-a944-5de26305f657" eId="para-7_abs-2_untergl-1_listenelem-3_bezeichnung-1">
+                                <akn:marker name="3" /> 3. </akn:num>
+                            <akn:content GUID="544146de-855e-4f19-8a67-54da8f98c422" eId="para-7_abs-2_untergl-1_listenelem-3_inhalt-1">
+                                <akn:p GUID="5c9d2508-6db8-448c-82e2-6645db72794e" eId="para-7_abs-2_untergl-1_listenelem-3_inhalt-1_text-1">
+                                    Vereinbarungen nach Artikel 65 Absatz 8 der Verordnung (EG) Nr. 883/2004 über das Erstattungsverfahren oder den
+                                    Erstattungsverzicht für Leistungen bei Arbeitslosigkeit,
+                                </akn:p>
+                            </akn:content>
+                        </akn:point>
+                        <akn:point GUID="5f088274-43aa-4766-8dea-20da464b7746" eId="para-7_abs-2_untergl-1_listenelem-4">
+                            <akn:num GUID="a5e0f415-85f8-4e67-a944-5de26305f657" eId="para-7_abs-2_untergl-1_listenelem-4_bezeichnung-1">
+                                <akn:marker name="4" /> 4. </akn:num>
+                            <akn:content GUID="238f4e02-535c-4496-a44b-1a3ba93708bc" eId="para-7_abs-2_untergl-1_listenelem-4_inhalt-1">
+                                <akn:p GUID="e9dfab36-9f8b-4390-8eae-be9003651e30" eId="para-7_abs-2_untergl-1_listenelem-4_inhalt-1_text-1">
+                                    Vereinbarungen nach Artikel 86 der Verordnung (EG) Nr. 883/2004 mit Luxemburg über die Anwendung und Dauer des in
+                                    Artikel 65 Absatz 7 der Verordnung (EG) Nr. 883/2004 genannten Erstattungszeitraums für Leistungen bei
+                                    Arbeitslosigkeit,
+                                </akn:p>
+                            </akn:content>
+                        </akn:point>
+                        <akn:point GUID="f71d3c2c-8df1-4f56-90a9-c9f28c240068" eId="para-7_abs-2_untergl-1_listenelem-5">
+                            <akn:num GUID="a5e0f415-85f8-4e67-a944-5de26305f657" eId="para-7_abs-2_untergl-1_listenelem-5_bezeichnung-1">
+                                <akn:marker name="5" /> 5. </akn:num>
+                            <akn:content GUID="b25e6893-87ef-4cd7-881a-fd9e8cce76a6" eId="para-7_abs-2_untergl-1_listenelem-5_inhalt-1">
+                                <akn:p GUID="a3206426-a50d-4c6d-8af7-dff2a9b66f2f" eId="para-7_abs-2_untergl-1_listenelem-5_inhalt-1_text-1">
+                                    Vereinbarungen nach Artikel 9 Absatz 1 der Verordnung (EG) Nr. 987/2009 zur Festlegung von abweichenden Verfahren
+                                    über die verwaltungsmäßige Durchführung der Verordnung (EG) Nr. 883/2004, soweit sie nicht Familienleistungen der
+                                    Länder betreffen, sowie
+                                </akn:p>
+                            </akn:content>
+                        </akn:point>
+                        <akn:point GUID="063dc683-5f35-4188-88dd-ab7e461ffcc5" eId="para-7_abs-2_untergl-1_listenelem-6">
+                            <akn:num GUID="a5e0f415-85f8-4e67-a944-5de26305f657" eId="para-7_abs-2_untergl-1_listenelem-6_bezeichnung-1">
+                                <akn:marker name="6" /> 6. </akn:num>
+                            <akn:content GUID="984268f8-aec5-4ca0-88c2-55129386acd6" eId="para-7_abs-2_untergl-1_listenelem-6_inhalt-1">
+                                <akn:p GUID="b22b96f9-ed4f-4115-bc6e-d4561efbd894" eId="para-7_abs-2_untergl-1_listenelem-6_inhalt-1_text-1">
+                                    Vereinbarungen nach Artikel 87 Absatz 5 der Verordnung (EG) Nr. 987/2009 über spezifische Vorschriften und
+                                    Verfahren, durch die die Voraussetzungen verbessert werden, um eine teilweise oder vollständige Wiederaufnahme der
+                                    Arbeit durch Antragsteller und Leistungsempfänger und ihre Teilnahme an Systemen und Programmen, die im
+                                    Aufenthalts- oder Wohnmitglied*-staat zur Verfügung stehen, zu erreichen.
+                                </akn:p>
+                            </akn:content>
+                        </akn:point>
+                    </akn:list>
+
+
+                </akn:paragraph>
+            </akn:article>
+        </akn:body>
+    </akn:bill>
+</akn:akomaNtoso>

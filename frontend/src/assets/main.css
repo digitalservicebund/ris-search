@@ -1,0 +1,89 @@
+@import "tailwindcss";
+@import "../../node_modules/@digitalservicebund/ris-ui/dist/style.css";
+
+@source "../../node_modules/@digitalservicebund/ris-ui/dist/**/*.{js,vue,ts}";
+
+@theme {
+  --spacing-prose: 720px;
+  --max-width-title: 60ch;
+  --shadow-active-tab:
+    -1px -1px 0 0 var(--color-gray-600), 1px -1px 0 0 var(--color-gray-600);
+}
+@custom-variant aria-current-section (&[aria-current="section"]);
+.max-w-prose {
+  max-width: var(--spacing-prose);
+}
+.max-w-title {
+  max-width: var(--max-width-title);
+}
+
+@layer base {
+  body {
+    @apply text-[18px] font-normal text-black antialiased;
+  }
+
+  a {
+    @apply underline;
+  }
+
+  a:hover,
+  a:focus {
+    @apply text-blue-800;
+  }
+}
+
+@utility container {
+  margin-inline: auto;
+  padding-inline: 16px;
+}
+
+@utility link-hover {
+  @apply no-underline hover:underline;
+}
+
+.extra_letter_spacing {
+  letter-spacing: 0.2em; /* following styling in gesetze-im-internet.de */
+}
+
+mark {
+  @apply bg-yellow-200;
+}
+
+.portal-fullwidth-white {
+  background: white;
+  position: relative;
+  @apply z-10;
+
+  &:before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 100vw;
+    transform: translateX(-50%);
+    bottom: 0;
+    background: white;
+    z-index: -1;
+  }
+  &.separator:before {
+    box-shadow: 0 -1px 0 0 var(--color-gray-600);
+  }
+}
+
+@utility list-custom {
+  li {
+    @apply relative ml-56;
+  }
+  li:before {
+    content: counter(list-item);
+    @apply absolute -left-56 flex size-40 items-center justify-center rounded-full border-2 border-gray-400;
+  }
+}
+
+@utility list-bullet {
+  @apply ml-24 list-outside list-disc;
+}
+
+/* Workaround for https://github.com/tailwindlabs/tailwindcss/discussions/16429 */
+@import "./legislation.css";
+@import "./caselaw.css";

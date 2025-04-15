@@ -1,0 +1,11 @@
+<akn:akomaNtoso xmlns:akn="http://Inhaltsdaten.LegalDocML.de/1.7.2/">
+    <akn:act eId="a">
+        <akn:preface eId="einleitung-1">
+            <akn:container GUID="c3a0b76f-50ac-4639-8db6-0c8cddc500a8" eId="einleitung-1_dokcontainer-1" refersTo="einleitung">
+                <akn:p GUID="e95d1f0a-0408-4f3d-970b-99fd551a3a3c" eId="einleitung-1_dokcontainer-1_text-1">
+                    Diese Verordnung dient der Umsetzung der Richtlinie 01/01/EG
+                </akn:p>
+            </akn:container>
+        </akn:preface>
+    </akn:act>
+</akn:akomaNtoso>

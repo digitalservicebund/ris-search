@@ -1,0 +1,61 @@
+<akn:identification source="attributsemantik-noch-undefiniert">
+        <akn:FRBRWork>
+            <akn:FRBRthis value="{% if documentNumber %}{{documentNumber}}{% else %}testDocNumber{% endif %}"/>
+            <akn:FRBRuri value="{% if documentNumber %}{{documentNumber}}{% else %}testDocNumber{% endif %}"/>
+            <akn:FRBRalias name="uebergreifende-id" value="testUUID"/>
+            <akn:FRBRalias name="ecli" value="{% if ecli %}{{ ecli }}{% else %}testEcli{% endif %}"/>
+            <akn:FRBRdate date="{% if decisionDate %}{{ decisionDate }}{% else %}2020-01-01{% endif %}" name="entscheidungsdatum"/>
+            <akn:FRBRauthor href="attributsemantik-noch-undefiniert"/>
+            <akn:FRBRcountry value="de"/>
+        </akn:FRBRWork>
+        <akn:FRBRExpression>
+            <akn:FRBRthis value="{% if documentNumber %}{{documentNumber}}{% else %}testDocNumber{% endif %}"/>
+            <akn:FRBRuri value="{% if documentNumber %}{{documentNumber}}{% else %}testDocNumber{% endif %}"/>
+            <akn:FRBRdate date="2020-01-01" name="entscheidungsdatum"/>
+            <akn:FRBRauthor href="attributsemantik-noch-undefiniert"/>
+            <akn:FRBRlanguage language="deu"/>
+        </akn:FRBRExpression>
+        <akn:FRBRManifestation>
+            <akn:FRBRthis value="{% if documentNumber %}{{documentNumber}}{% else %}testDocNumber{% endif %}.xml"/>
+            <akn:FRBRuri value="{% if documentNumber %}{{documentNumber}}{% else %}testDocNumber{% endif %}.xml"/>
+            <akn:FRBRdate date="2020-01-01" name="entscheidungsdatum"/>
+            <akn:FRBRauthor href="attributsemantik-noch-undefiniert"/>
+        </akn:FRBRManifestation>
+    </akn:identification>
+    <akn:proprietary source="attributsemantik-noch-undefiniert">
+        <ris:meta>
+            <ris:decisionNames>
+                <ris:decisionName>Test decision name</ris:decisionName>
+            </ris:decisionNames>
+            <ris:fileNumbers>
+                <ris:fileNumber>Test file number 1</ris:fileNumber>
+                <ris:fileNumber>Test file number 2</ris:fileNumber>
+            </ris:fileNumbers>
+            <ris:documentType>{% if documentType %}{{ documentType }}{% else %}Test document type{% endif %}</ris:documentType>
+            <ris:courtLocation>{% if location %}{{ location }}{% else %}Test court location{% endif%}</ris:courtLocation>
+            <ris:courtType>{% if courtType %}{{ courtType }}{% else %}Test court type{% endif %}</ris:courtType>
+            <ris:legalForces>
+                <ris:legalForce>Test legal force</ris:legalForce>
+            </ris:legalForces>
+            <ris:legalEffect>JA</ris:legalEffect>
+            <ris:fieldOfLaws>
+                <ris:fieldOfLaw>Test field of law</ris:fieldOfLaw>
+            </ris:fieldOfLaws>
+            <ris:judicialBody>Test judicial body</ris:judicialBody>
+            <ris:deviatingDocumentNumbers>
+                <ris:deviatingDocumentNumber>Test deviatingDocumentNumber</ris:deviatingDocumentNumber>
+            </ris:deviatingDocumentNumbers>
+            <ris:publicationStatus>{% if publicationStatus %}{{ publicationStatus }}{% else %}PUBLISHED{% endif %}</ris:publicationStatus>
+            <ris:error>{% if error %}{{ error }}{% else %}false{% endif %}</ris:error>
+            <ris:documentationOffice>{% if documentationOffice %}{{ documentationOffice }}{% else %}documentationOffice{% endif %}</ris:documentationOffice>
+        </ris:meta>
+    </akn:proprietary>
+    <akn:classification source="attributsemantik-noch-undefiniert">
+        <akn:keyword dictionary="attributsemantik-noch-undefiniert"
+                     showAs="attributsemantik-noch-undefiniert"
+                     value ="keyword1"/>
+        <akn:keyword dictionary="attributsemantik-noch-undefiniert"
+                     showAs="attributsemantik-noch-undefiniert"
+                     value ="keyword2"/>
+    </akn:classification>
+

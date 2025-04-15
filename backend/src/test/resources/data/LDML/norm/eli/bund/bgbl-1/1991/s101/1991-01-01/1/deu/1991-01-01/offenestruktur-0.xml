@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?><?xml-model href="Grammatiken/legalDocML.de.sch" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<!-- This file should not be considered -->
+<akn:akomaNtoso xmlns:akn="http://Inhaltsdaten.LegalDocML.de/1.7.2/"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:schemaLocation="http://Inhaltsdaten.LegalDocML.de/1.7.2/ Grammatiken/legalDocML.de-offenestruktur.xsd">
+    <akn:doc name="offene-struktur">
+        <akn:meta GUID="4cda96eb-c56d-495e-bd32-809501304d20" eId="meta-1">
+            <akn:identification GUID="c4f7c3fa-065c-4485-b7cd-8458f997b0b8" eId="meta-1_ident-1"
+                                source="attributsemantik-noch-undefiniert">
+                <akn:FRBRWork GUID="4d05c247-504e-431f-acb6-5a048ae85c08" eId="meta-1_ident-1_frbrwork-1">
+                    <akn:FRBRthis GUID="e50b1266-b94b-44d9-89c7-dfb65fd0e5ac" eId="meta-1_ident-1_frbrwork-1_frbrthis-1"
+                                  value="eli/bund/bgbl-1/1991/s101/offenestruktur-1"/>
+                    <akn:FRBRuri GUID="e8253afc-29bd-45ba-a395-fac7abfddc0f" eId="meta-1_ident-1_frbrwork-1_frbruri-1"
+                                 value="eli/bund/bgbl-1/1991/s101"/>
+                    <akn:FRBRalias GUID="9e4bf718-08ee-4f49-a9ce-9eb92731d850"
+                                   eId="meta-1_ident-1_frbrwork-1_frbralias-1" name="übergreifende-id"
+                                   value="38b9f2bd-ae28-4008-b1db-146fe794ed30"/>
+                    <akn:FRBRdate GUID="64554948-935c-4b64-819b-2458492d3a16" date="2004-05-27"
+                                  eId="meta-1_ident-1_frbrwork-1_frbrdate-1" name="verkuendungsfassung"/>
+                    <akn:FRBRauthor GUID="21ae539e-3c3c-4c84-a704-64231d3ccc5a"
+                                    eId="meta-1_ident-1_frbrwork-1_frbrauthor-1"
+                                    href="recht.bund.de/institution/bundesregierung"/>
+                    <akn:FRBRcountry GUID="fadf130b-a548-4ee9-a281-3a196b8e0470"
+                                     eId="meta-1_ident-1_frbrwork-1_frbrcountry-1" value="de"/>
+                    <akn:FRBRnumber GUID="d349f87c-fa03-4e13-9252-923ff67ef28b"
+                                    eId="meta-1_ident-1_frbrwork-1_frbrnumber-1" value="s1016"/>
+                    <akn:FRBRname GUID="1992ba44-58b6-445e-9241-ef4dec597073" eId="meta-1_ident-1_frbrwork-1_frbrname-1"
+                                  value="bgbl-1"/>
+                    <akn:FRBRsubtype GUID="203a80d9-90f3-4f4c-8e43-14c639f92c01"
+                                     eId="meta-1_ident-1_frbrwork-1_frbrsubtype-1" value="offenestruktur-1"/>
+                </akn:FRBRWork>
+                <akn:FRBRExpression GUID="16857812-3b53-4778-adb3-794b9b1b6113" eId="meta-1_ident-1_frbrexpression-1">
+                    <akn:FRBRthis GUID="a59ca0ff-1c34-4b7d-afaf-4fe42778550d"
+                                  eId="meta-1_ident-1_frbrexpression-1_frbrthis-1"
+                                  value="eli/bund/bgbl-1/1991/s101/2023-04-26/10/deu/offenestruktur-1"/>
+                    <akn:FRBRuri GUID="6f859aa2-4153-4a16-b4be-313e425dd7b6"
+                                 eId="meta-1_ident-1_frbrexpression-1_frbruri-1"
+                                 value="eli/bund/bgbl-1/1991/s101/2023-04-26/10/deu"/>
+                    <akn:FRBRalias GUID="bba8d3ad-83df-495e-aed4-1ab9df1382a6"
+                                   eId="meta-1_ident-1_frbrexpression-1_frbralias-1" name="vorherige-version-id"
+                                   value="e7317ecb-0ca1-4506-b5be-80e7cfdd2e09"/>
+                    <akn:FRBRalias GUID="00d9ce7a-5be3-47cd-9626-ba8ac66c680d"
+                                   eId="meta-1_ident-1_frbrexpression-1_frbralias-2" name="aktuelle-version-id"
+                                   value="5ec7ff64-6b38-42c1-9927-92a1bcd0f63b"/>
+                    <akn:FRBRalias GUID="c1619709-7deb-464e-9a3f-e18560aa2f12"
+                                   eId="meta-1_ident-1_frbrexpression-1_frbralias-3" name="nachfolgende-version-id"
+                                   value="4871652f-4364-4ec1-96db-93b638c457a4"/>
+                    <akn:FRBRauthor GUID="edf49ab8-6237-4095-840f-052206f49da6"
+                                    eId="meta-1_ident-1_frbrexpression-1_frbrauthor-1"
+                                    href="recht.bund.de/institution/bundesregierung"/>
+                    <akn:FRBRdate GUID="25bca8bf-a048-4fe2-a1f0-811e4192cd99" date="2023-04-26"
+                                  eId="meta-1_ident-1_frbrexpression-1_frbrdate-1" name="verkuendung"/>
+                    <akn:FRBRlanguage GUID="b07b6c29-1a02-4e91-9610-46a437388fbf"
+                                      eId="meta-1_ident-1_frbrexpression-1_frbrlanguage-1" language="deu"/>
+                    <akn:FRBRversionNumber GUID="98498e8e-a9a3-4724-b469-e068a1c127f3"
+                                           eId="meta-1_ident-1_frbrexpression-1_frbrversionnumber-1" value="10"/>
+                </akn:FRBRExpression>
+                <akn:FRBRManifestation GUID="36cf571d-f920-4ba7-89e8-80381bd607bd"
+                                       eId="meta-1_ident-1_frbrmanifestation-1">
+                    <akn:FRBRthis GUID="051360a2-45ad-4a29-825d-f2961dea6f7e"
+                                  eId="meta-1_ident-1_frbrmanifestation-1_frbrthis-1"
+                                  value="eli/bund/bgbl-1/1991/s101/2023-04-26/10/deu/2023-04-26/offenestruktur-1.xml"/>
+                    <akn:FRBRuri GUID="1646c4f5-e4c5-4ac3-8b1a-8986a176df07"
+                                 eId="meta-1_ident-1_frbrmanifestation-1_frbruri-1"
+                                 value="eli/bund/bgbl-1/1991/s101/2023-04-26/10/deu/2023-04-26/offenestruktur-1.xml"/>
+                    <akn:FRBRdate GUID="b8e3aa94-19f0-4e4f-81da-c2e4bce4bfe9" date="2023-04-26"
+                                  eId="meta-1_ident-1_frbrmanifestation-1_frbrdate-1" name="generierung"/>
+                    <akn:FRBRauthor GUID="937aab19-2b8f-4c72-a50f-3e77ad8cb80e"
+                                    eId="meta-1_ident-1_frbrmanifestation-1_frbrauthor-1" href="recht.bund.de"/>
+                    <akn:FRBRformat GUID="656cf2ab-04ee-4085-a378-ee5accf1ff9f"
+                                    eId="meta-1_ident-1_frbrmanifestation-1_frbrformat-1" value="xml"/>
+                </akn:FRBRManifestation>
+            </akn:identification>
+        </akn:meta>
+        <akn:preface GUID="ca78411a-6a8a-4779-9958-f88fc48efbf7" eId="einleitung-1">
+            <akn:block GUID="5f317c6b-a602-4e33-a85c-7c2fe1ec4060" eId="einleitung-1_block-1"
+                       name="attributsemantik-noch-undefiniert">
+                <akn:docTitle GUID="d2495261-77bf-4e93-bfa0-f9eefee750a6" eId="einleitung-1_block-1_doctitel-1">
+                    (docTitle)
+                </akn:docTitle>
+            </akn:block>
+        </akn:preface>
+        <akn:mainBody GUID="43960b63-b71f-4f69-b6c8-cae9ab89741c" eId="hauptteil-1">
+            This file should not be considered
+        </akn:mainBody>
+    </akn:doc>
+</akn:akomaNtoso>

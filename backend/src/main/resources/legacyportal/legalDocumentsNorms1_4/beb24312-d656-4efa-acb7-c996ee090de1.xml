@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<akn:akomaNtoso xmlns:akn="http://Inhaltsdaten.LegalDocML.de/1.4/"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:schemaLocation="http://Metadaten.LegalDocML.de/1.4/ ../schemas/legalDocML.de-metadaten.xsd http://Inhaltsdaten.LegalDocML.de/1.4/ ../schemas/legalDocML.de-regelungstextentwurfsfassung.xsd">
+    <akn:bill name="regelungstext">
+        <akn:meta>
+            <akn:identification source="attributsemantik-noch-undefiniert">
+                <akn:FRBRWork>
+                    <akn:FRBRthis value="eli/bgbl-1/1997/s2942 (1998 I 946)/regelungstext-1"/>
+                    <akn:FRBRuri value="eli/bgbl-1/1997/s2942 (1998 I 946)"/>
+                    <akn:FRBRalias name="übergreifende-id" value="beb24312-d656-4efa-acb7-c996ee090de1"/>
+                    <akn:FRBRdate date="1997-12-16" name="verkuendungsfassung"/>
+                    <akn:FRBRauthor href="recht.bund.de/institution/bundesregierung"/>
+                    <akn:FRBRcountry value="de"/>
+                    <akn:FRBRnumber value="s2942 (1998 I 946)"/>
+                    <akn:FRBRname value="bgbl-1"/>
+                    <akn:FRBRsubtype value="regelungstext-1"/>
+                </akn:FRBRWork>
+                <akn:FRBRExpression>
+                    <akn:FRBRthis value="eli/bgbl-1/1997/s2942 (1998 I 946)/1997-12-16/1/deu/regelungstext-1"/>
+                    <akn:FRBRuri value="eli/bgbl-1/1997/s2942 (1998 I 946)/1997-12-16/1/deu"/>
+                    <akn:FRBRauthor href="recht.bund.de/institution/bundesregierung"/>
+                    <akn:FRBRdate date="1997-12-16" name="verkuendung"/>
+                    <akn:FRBRlanguage language="deu"/>
+                    <akn:FRBRversionNumber value="1"/>
+                </akn:FRBRExpression>
+                <akn:FRBRManifestation>
+                    <akn:FRBRthis value="eli/bgbl-1/1997/s2942 (1998 I 946)/1997-12-16/1/deu/regelungstext-1.xml"/>
+                    <akn:FRBRuri value="eli/bgbl-1/1997/s2942 (1998 I 946)/1997-12-16/1/deu/regelungstext-1.xml"/>
+                    <akn:FRBRdate date="1997-12-16" name="generierung"/>
+                    <akn:FRBRauthor href="recht.bund.de"/>
+                    <akn:FRBRformat value="xml"/>
+                </akn:FRBRManifestation>
+            </akn:identification>
+            <akn:proprietary source="attributsemantik-noch-undefiniert">
+                <meta:legalDocML.de_metadaten xmlns:meta="http://Metadaten.LegalDocML.de/1.4/">
+                    <meta:typ>gesetz</meta:typ>
+                    <meta:form>stammform</meta:form>
+                    <meta:fassung>verkuendungsfassung</meta:fassung>
+                    <meta:art>rechtsetzungsdokument</meta:art>
+                    <meta:initiant>bundestag</meta:initiant>
+                    <meta:bearbeitendeInstitution>bundesrat</meta:bearbeitendeInstitution>
+                </meta:legalDocML.de_metadaten>
+            </akn:proprietary>
+        </akn:meta>
+        <akn:preface>
+            <akn:longTitle GUID="82a45ace-b86f-4fa1-abb9-d4ea973a3ce2" eId="doktitel-1">
+                <akn:p GUID="0bb16e69-8afb-4bf4-a306-4c38ff4ba7ce" eId="doktitel-1_text-1">
+                    <akn:docTitle>Gesetz zur Reform des Kindschaftsrechts</akn:docTitle>
+                    <akn:shortTitle GUID="43022bfc-6799-40d5-84a0-806c4e344b61" eId="doktitel-1_text-1_kurztitel-1">Kindschaftsrechtsreformgesetz</akn:shortTitle>
+                </akn:p>
+            </akn:longTitle>
+        </akn:preface>
+        <akn:body refersTo="hauptteil-stammform">
+        </akn:body>
+    </akn:bill>
+</akn:akomaNtoso>

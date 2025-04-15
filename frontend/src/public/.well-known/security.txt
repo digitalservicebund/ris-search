@@ -1,0 +1,7 @@
+Contact: mailto:security@digitalservice.bund.de
+Expires: 2025-12-31T23:59:59.000Z
+Preferred-Languages: en, de
+Policy: https://testphase.rechtsinformationen.bund.de/.well-known/SECURITY.md
+Canonical: https://testphase.rechtsinformationen.bund.de/.well-known/security.txt
+Hiring: https://digitalservice.bund.de/en/careers
+Encryption: https://raw.githubusercontent.com/digitalservicebund/public-keys/main/pgp-public-key-security-mail.pem

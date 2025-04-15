@@ -1,0 +1,38 @@
+server:
+  port: 8080
+  technical-users: []
+
+spring:
+  config:
+    import: "kubernetes:"
+  cloud:
+    kubernetes:
+      config:
+        fail-fast: true
+        sources:
+          - name: ris-search-opensearch-config
+          - name: ris-search-postgres-config
+      secrets:
+        paths: /etc/secrets
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: https://neuris.login.bare.id/auth/realms/development/protocol/openid-connect/certs
+
+swagger:
+  server:
+    url: https://ris-search.dev.ds4g.net/
+    description: Public staging server
+
+sentry:
+  environment: staging-backend
+  traces-sample-rate: 0.1
+  logging:
+    minimum-event-level: error
+
+logging:
+  level:
+    org:
+      zalando:
+        logbook: TRACE

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<akn:akomaNtoso xmlns:akn="http://docs.oasis-open.org/legaldocml/ns/akn/3.0/WD17"
+                xmlns:ris="http://example.com/0.1/"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:schemaLocation="http://docs.oasis-open.org/legaldocml/ns/akn/3.0/WD17
+                     https://docs.oasis-open.org/legaldocml/akn-core/v1.0/csprd02/part2-specs/schemas/akomantoso30.xsd">
+   <akn:judgment name="Beispielurteil9">
+      <akn:meta>
+         <akn:identification source="Testquelle9">
+            <akn:FRBRWork>
+               <akn:FRBRthis value="BORE040077910"/>
+               <akn:FRBRuri value="BORE040077910"/>
+               <akn:FRBRalias name="uebergreifende-id" value="fake-uuid-0009"/>
+               <akn:FRBRdate date="2025-04-09" name="entscheidungsdatum"/>
+               <akn:FRBRauthor href="Testautor9"/>
+               <akn:FRBRcountry value="de"/>
+            </akn:FRBRWork>
+            <akn:FRBRExpression>
+               <akn:FRBRthis value="BORE040077910/dokument"/>
+               <akn:FRBRuri value="BORE040077910/dokument"/>
+               <akn:FRBRdate date="2025-04-09" name="entscheidungsdatum"/>
+               <akn:FRBRauthor href="Testautor9"/>
+               <akn:FRBRlanguage language="deu"/>
+            </akn:FRBRExpression>
+            <akn:FRBRManifestation>
+               <akn:FRBRthis value="BORE040077910/dokument.xml"/>
+               <akn:FRBRuri value="BORE040077910/dokument.xml"/>
+               <akn:FRBRdate date="2025-04-09" name="entscheidungsdatum"/>
+               <akn:FRBRauthor href="Testautor9"/>
+            </akn:FRBRManifestation>
+         </akn:identification>
+         <akn:classification source="Testquelle9">
+            <akn:keyword dictionary="TestDict9" showAs="Beispiel" value="RadarTest"/>
+            <akn:keyword dictionary="TestDict9" showAs="Beispiel" value="LangsamfahrenTest"/>
+            <akn:keyword dictionary="TestDict9" showAs="Beispiel" value="UnklarheitTest"/>
+            <akn:keyword dictionary="TestDict9" showAs="Beispiel" value="Testverkehr"/>
+         </akn:classification>
+         <akn:proprietary source="Testquelle9">
+            <ris:meta>
+               <ris:fileNumbers>
+                  <ris:fileNumber>RT 567890</ris:fileNumber>
+               </ris:fileNumbers>
+               <ris:documentType>Urteil</ris:documentType>
+               <ris:courtLocation>Hamburg</ris:courtLocation>
+               <ris:courtType>LG</ris:courtType>
+               <ris:legalEffect>KEINE_ANGABE</ris:legalEffect>
+               <ris:fieldOfLaws>
+                  <ris:fieldOfLaw>Testradar</ris:fieldOfLaw>
+                  <ris:fieldOfLaw>Testfahrverhalten</ris:fieldOfLaw>
+                  <ris:fieldOfLaw>Testnebelbedingungen</ris:fieldOfLaw>
+                  <ris:fieldOfLaw>Testverkehrslage</ris:fieldOfLaw>
+               </ris:fieldOfLaws>
+               <ris:judicialBody>12. Senat</ris:judicialBody>
+               <ris:publicationStatus>PUBLISHED</ris:publicationStatus>
+               <ris:error>false</ris:error>
+               <ris:documentationOffice>LG Hamburg</ris:documentationOffice>
+               <ris:procedures>
+                  <ris:procedure>RT123456</ris:procedure>
+               </ris:procedures>
+            </ris:meta>
+         </akn:proprietary>
+      </akn:meta>
+      <akn:header>
+         <akn:p>Testheader für Urteil 9.</akn:p>
+      </akn:header>
+      <akn:judgmentBody>
+         <akn:introduction>
+            <akn:block name="Orientierungssatz">
+               <akn:embeddedStructure>
+                  <akn:p>1. Fiktiver Satz für die Testdarstellung im Bereich Radar und Verkehr.</akn:p>
+                  <akn:p>2. Weitere Testangaben werden hier exemplarisch aufgeführt.</akn:p>
+               </akn:embeddedStructure>
+            </akn:block>
+            <akn:block name="Tenor">
+               <akn:embeddedStructure>
+                  <akn:p>Der Beklagte wird zur Testzahlung verpflichtet.</akn:p>
+                  <akn:p>Die Kosten des Verfahrens werden vollständig übernommen.</akn:p>
+               </akn:embeddedStructure>
+            </akn:block>
+         </akn:introduction>
+         <akn:background>
+            <akn:hcontainer name="randnummer">
+               <akn:num>1</akn:num>
+               <akn:content>
+                  <akn:p>Fiktiver Hintergrundtext für den Testfall im Verkehrsbereich.</akn:p>
+               </akn:content>
+            </akn:hcontainer>
+         </akn:background>
+      </akn:judgmentBody>
+   </akn:judgment>
+</akn:akomaNtoso>

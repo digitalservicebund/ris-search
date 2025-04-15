@@ -1,0 +1,33 @@
+<akn:akomaNtoso xmlns:akn="http://Inhaltsdaten.LegalDocML.de/1.7.2/">
+    <akn:act eId="a">
+        <akn:body eId="b">
+            <akn:article eId="c">
+                <akn:num GUID="2" eId="c_num-1">§ 1</akn:num>
+                <akn:heading GUID="3" eId="c_heading-1">Article title
+                    <akn:authorialNote eId="c_heading-1_amtlfnote-1" marker="1">
+                        <akn:p eId="c_heading-1_amtlfnote-1_text-1">Authorial note in the title.</akn:p>
+                    </akn:authorialNote>
+                </akn:heading>
+                <akn:paragraph eId="d">
+                    <akn:content eId="e">
+                        <akn:p eId="text-1">A paragraph with an authorialNote
+                            <akn:authorialNote marker="*"
+                                               eId="text-1_amtlfnote-1">
+                                <akn:p eId="text-1_amtlfnote-1_text-1">
+                                    Authorial note contents
+                                </akn:p>
+                            </akn:authorialNote>
+                        </akn:p>
+                        <akn:p eId="text-2">Another paragraph that also refers to the note
+                            <akn:ref eId="text-2_ref-1"
+                                     href="#text-1_amtlfnote-1">
+                                <akn:sup eId="text-2_ref-1_sup-1">**</akn:sup>
+                            </akn:ref>
+                        </akn:p>
+                        <akn:p eId="text-3">A third paragraph</akn:p>
+                    </akn:content>
+                </akn:paragraph>
+            </akn:article>
+        </akn:body>
+    </akn:act>
+</akn:akomaNtoso>

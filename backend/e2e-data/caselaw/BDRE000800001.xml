@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<akn:akomaNtoso xmlns:akn="http://docs.oasis-open.org/legaldocml/ns/akn/3.0/WD17"
+                xmlns:ris="http://example.com/0.1/"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:schemaLocation="http://docs.oasis-open.org/legaldocml/ns/akn/3.0/WD17
+                     https://docs.oasis-open.org/legaldocml/akn-core/v1.0/csprd02/part2-specs/schemas/akomantoso30.xsd">
+   <akn:judgment name="Beispielurteil10">
+      <akn:meta>
+         <akn:identification source="Testquelle10">
+            <akn:FRBRWork>
+               <akn:FRBRthis value="BDRE000800001"/>
+               <akn:FRBRuri value="BDRE000800001"/>
+               <akn:FRBRalias name="uebergreifende-id" value="fake-uuid-0010"/>
+               <akn:FRBRdate date="2025-04-09" name="entscheidungsdatum"/>
+               <akn:FRBRauthor href="Testautor10"/>
+               <akn:FRBRcountry value="de"/>
+            </akn:FRBRWork>
+            <akn:FRBRExpression>
+               <akn:FRBRthis value="BDRE000800001/dokument"/>
+               <akn:FRBRuri value="BDRE000800001/dokument"/>
+               <akn:FRBRdate date="2025-04-09" name="entscheidungsdatum"/>
+               <akn:FRBRauthor href="Testautor10"/>
+               <akn:FRBRlanguage language="deu"/>
+            </akn:FRBRExpression>
+            <akn:FRBRManifestation>
+               <akn:FRBRthis value="BDRE000800001/dokument.xml"/>
+               <akn:FRBRuri value="BDRE000800001/dokument.xml"/>
+               <akn:FRBRdate date="2025-04-09" name="entscheidungsdatum"/>
+               <akn:FRBRauthor href="Testautor10"/>
+            </akn:FRBRManifestation>
+         </akn:identification>
+         <akn:classification source="Testquelle10">
+            <akn:keyword dictionary="TestDict10" showAs="Beispiel" value="Dienstverhalten"/>
+            <akn:keyword dictionary="TestDict10" showAs="Beispiel" value="Urlaubsregelung"/>
+            <akn:keyword dictionary="TestDict10" showAs="Beispiel" value="Beamtenpflichten"/>
+            <akn:keyword dictionary="TestDict10" showAs="Beispiel" value="Disziplinarwert"/>
+         </akn:classification>
+         <akn:proprietary source="Testquelle10">
+            <ris:meta>
+               <ris:fileNumbers>
+                  <ris:fileNumber>XVI VL 34/99</ris:fileNumber>
+               </ris:fileNumbers>
+               <ris:documentType>Urteil</ris:documentType>
+               <ris:courtLocation>Frankfurt</ris:courtLocation>
+               <ris:courtType>BDiG</ris:courtType>
+               <ris:legalEffect>JA</ris:legalEffect>
+               <ris:fieldOfLaws>
+                  <ris:fieldOfLaw>Testbeamtenpflicht</ris:fieldOfLaw>
+                  <ris:fieldOfLaw>Testverwaltungsrecht</ris:fieldOfLaw>
+                  <ris:fieldOfLaw>Testdisziplinarrecht</ris:fieldOfLaw>
+                  <ris:fieldOfLaw>Testbeendigung</ris:fieldOfLaw>
+               </ris:fieldOfLaws>
+               <ris:judicialBody>16. Kammer</ris:judicialBody>
+               <ris:publicationStatus>PUBLISHED</ris:publicationStatus>
+               <ris:error>false</ris:error>
+               <ris:documentationOffice>OVGNW</ris:documentationOffice>
+               <ris:procedures>
+                  <ris:procedure>RE.BDIG5-00</ris:procedure>
+               </ris:procedures>
+            </ris:meta>
+         </akn:proprietary>
+      </akn:meta>
+      <akn:header>
+         <akn:p>Testheader für Urteil 10.</akn:p>
+      </akn:header>
+      <akn:judgmentBody>
+         <akn:introduction>
+            <akn:block name="Orientierungssatz">
+               <akn:embeddedStructure>
+                  <akn:p>1. Fiktiver Einleitungssatz für den Fall der Dienstvergehen.</akn:p>
+                  <akn:p>2. Weitere Testinformationen zur Urlaubs- und Dienstregelung werden aufgeführt.</akn:p>
+               </akn:embeddedStructure>
+            </akn:block>
+            <akn:block name="Tenor">
+               <akn:embeddedStructure>
+                  <akn:p>Der Beklagte wird zur Zahlung von Schadensersatz verurteilt.</akn:p>
+                  <akn:p>Die Verfahrenskosten werden zu 100% dem Beklagten auferlegt.</akn:p>
+               </akn:embeddedStructure>
+            </akn:block>
+         </akn:introduction>
+         <akn:background>
+            <akn:hcontainer name="randnummer">
+               <akn:num>1</akn:num>
+               <akn:content>
+                  <akn:p>Ein fiktiver Hintergrundtext rund um Beamtenpflichten wird als Testfall dargestellt.</akn:p>
+               </akn:content>
+            </akn:hcontainer>
+         </akn:background>
+      </akn:judgmentBody>
+   </akn:judgment>
+</akn:akomaNtoso>

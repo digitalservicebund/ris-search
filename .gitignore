@@ -1,0 +1,30 @@
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### VS Code ###
+.vscode/
+
+### Lefthook ###
+.lefthook-local
+lefthook-local.yml
+
+### macOS ###
+.DS_Store
+
+### postegres-data-set ###
+/postgres-dataset/*/*.csv
+postgres-dataset/
+
+playwright/.auth/user.json
+
+### yarn (not using Zero-Installs)
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions

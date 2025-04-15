@@ -1,0 +1,38 @@
+# Maps common abbreviations for court names to their expanded version
+# data enriched with mappings from https://openjur.de/s/abkuerzungen.html
+# see https://www.elastic.co/guide/en/elasticsearch/reference/7.10/analysis-synonym-tokenfilter.html for reference
+
+AG, Amtsgericht
+AnwG, Anwaltsgericht
+ArbG, ARBG, Arbeitsgericht
+BAG, Bundesarbeitsgericht
+BFH, Bundesfinanzhof
+BGH, Bundesgerichtshof
+BPatG, Bundespatentgericht
+BSG, Bundessozialgericht
+BVerfG, Bundesverfassungsgericht
+BVerwG, Bundesverwaltungsgericht
+BayObLG, Bayerisches Oberstes Landesgericht
+BayVGH, Bayerischer Verwaltungsgerichtshof
+BfgGer, Berufungsgericht
+FG, Finanzgericht
+GmSOGB, GmS-OGB, Gemeinsamer Senat der obersten Gerichtshöfe des Bundes
+Gr.S., GrS, Großer Senat
+HESSVGH, Hessischer Verwaltungsgerichtshof
+KG, Kammergericht
+LG, Landgericht
+LSG, Landessozialgericht
+LVerfG, Landesverfassungsgericht
+OLG, Oberlandesgericht
+OVG, Oberverwaltungsgericht
+PROVG, Preußisches Oberverwaltungsgericht
+SG, Sozialgericht
+SOLG, Saarländisches Oberlandesgericht
+StGH, Staatsgerichtshof (Landesverfassungsgericht)
+ThürOVG, OVG Thüringen, Oberverwaltungsgericht Thüringen
+VERFG HA, Verfassungsgericht Hamburg
+VERFG MV, VERFG Mecklenburg-Vorpommern, Verfassungsgericht Mecklenburg-Vorpommern
+VG, Verwaltungsgericht
+VGH, Verwaltungsgerichtshof, Verwaltungsgerichtshof (Oberverwaltungsgericht)
+VerfG, Verfassungsgericht (Landesverfassungsgericht)
+VerfGH, Verfassungsgerichtshof (Landesverfassungsgericht)

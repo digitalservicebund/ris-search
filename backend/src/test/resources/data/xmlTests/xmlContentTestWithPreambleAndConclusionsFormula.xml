@@ -1,0 +1,86 @@
+<akn:akomaNtoso xmlns:akn="http://Inhaltsdaten.LegalDocML.de/1.7.2/"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:schemaLocation="http://Metadaten.LegalDocML.de/1.7.2/ ../schema/legalDocML.de-metadaten.xsd http://Inhaltsdaten.LegalDocML.de/1.7.2/ ../schema/legalDocML.de-regelungstextverkuendungsfassung.xsd">
+    <akn:act name="regelungstext">
+        <akn:meta eId="meta-1" GUID="9fac524a-aced-4b13-a792-4f824daf1d01">
+            <akn:identification eId="meta-1_ident-1" GUID="44a279c1-22d5-4b68-b9e2-1693951e736e" source="attributsemantik-noch-undefiniert">
+                <akn:FRBRWork eId="meta-1_ident-1_frbrwork-1" GUID="bdfd5b94-8be0-4a73-a16a-1b4d3a189966">
+                    <akn:FRBRthis eId="meta-1_ident-1_frbrwork-1_frbrthis-1" GUID="3d8e1040-ca03-4cd9-83cc-f3e71d0bf716" value="eli/bund/bgbl-1/1962/s514/regelungstext-1"/>
+                    <akn:FRBRuri eId="meta-1_ident-1_frbrwork-1_frbruri-1" GUID="5ea31b41-621f-43af-b252-34f4e5322ce2" value="eli/bund/bgbl-1/1962/s514"/>
+                    <akn:FRBRalias eId="meta-1_ident-1_frbrwork-1_frbralias-1" GUID="faaf7d15-ef3c-4158-94bd-1ff19a0d462b" name="übergreifende-id" value="0de0aa21-4feb-4aba-8c55-f94675dc2b0c"/>
+                    <akn:FRBRdate eId="meta-1_ident-1_frbrwork-1_frbrdate-1" GUID="cb3b27cf-2bd4-4275-99bc-9cc1dd5f163a" date="1962-07-20" name="verkuendungsfassung"/>
+                    <akn:FRBRauthor eId="meta-1_ident-1_frbrwork-1_frbrauthor-1" GUID="f7097852-1c73-4836-bf86-23cfb8996be4" href="recht.bund.de/institution/bundesregierung"/>
+                    <akn:FRBRcountry eId="meta-1_ident-1_frbrwork-1_frbrcountry-1" GUID="575303cd-3ab8-4bd0-b067-2b37523877f4" value="de"/>
+                    <akn:FRBRnumber eId="meta-1_ident-1_frbrwork-1_frbrnumber-1" GUID="9ebec9ad-2009-40b9-9fa6-f76c50ff562a" value="s514"/>
+                    <akn:FRBRname eId="meta-1_ident-1_frbrwork-1_frbrname-1" GUID="9f03a40e-483a-402b-9417-dc0e879bb61f" value="bgbl-1"/>
+                    <akn:FRBRsubtype eId="meta-1_ident-1_frbrwork-1_frbrsubtype-1" GUID="d91d52da-a1c5-4f4b-a9e8-92affe5faab1" value="regelungstext-1"/>
+                </akn:FRBRWork>
+                <akn:FRBRExpression>
+                    <akn:FRBRthis value="eli/bund/bgbl-1/1962/s514/2010-04-27/1/deu/regelungstext-1"/>
+                    <akn:FRBRuri value="eli/bund/bgbl-1/1962/s514/2010-04-27/1/deu"/>
+                </akn:FRBRExpression>
+                <akn:FRBRManifestation>
+                    <akn:FRBRthis value="eli/bund/bgbl-1/1962/s514/2010-04-27/1/deu/2010-04-27/regelungstext-1.xml"/>
+                    <akn:FRBRuri value="eli/bund/bgbl-1/1962/s514/2010-04-27/1/deu/2010-04-27/regelungstext-1.xml"/>
+                </akn:FRBRManifestation>
+            </akn:identification>
+            <akn:proprietary eId="meta-1_proprietary-1" GUID="cc6ed2b0-745d-4b44-83e2-9e6f7e500c28" source="attributsemantik-noch-undefiniert">
+            </akn:proprietary>
+        </akn:meta>
+        <akn:preface eId="einleitung-1" GUID="c0e7334b-6762-4115-9221-fe0a79666193">
+            <akn:longTitle eId="einleitung-1_doktitel-1" GUID="438239dc-85ce-49bb-98dd-0ddbf02f4f59">
+                <akn:p eId="einleitung-1_doktitel-1_text-1" GUID="3092f091-25ba-4ac1-8e31-3e8d52a5e31d">
+                    <akn:docTitle eId="einleitung-1_doktitel-1_text-1_doctitel-1" GUID="4dbb009e-588a-43c6-b1c9-11f073014e60">Verordnung zur Durchführung des § 88 Abs. 2 Nr. 8 des
+                        Bundessozialhilfegesetzes</akn:docTitle>
+                    <akn:shortTitle eId="einleitung-1_doktitel-1_text-1_kurztitel-1"
+                                    GUID="42cf62a3-a61a-4d42-a94e-872d314a26bf">(Kurztitel - <akn:inline
+                            GUID="0d417b78-640d-4b57-8ef7-aff5dc169f8e"
+                            eId="einleitung-1_doktitel-1_text-1_kurztitel-1_inline-1"
+                            name="attributsemantik-noch-undefiniert" refersTo="amtliche-abkuerzung">ABK</akn:inline>)
+                    </akn:shortTitle>
+                </akn:p>
+            </akn:longTitle>
+            <akn:block eId="einleitung-1_block-1" GUID="50b373c9-d7a9-4ea1-a6c9-bee1fa5617c6" name="attributsemantik-noch-undefiniert">
+                <akn:date eId="einleitung-1_block-1_datum-1" GUID="34a9b790-c90f-4177-8023-425062e13f07"
+                          refersTo="ausfertigung-datum" date="1962-07-15"/>
+            </akn:block>
+        </akn:preface>
+        <akn:preamble eId="preambel-1">
+            <akn:formula GUID="656f4952-3adc-4512-86ef-3b9d7391ff68" eId="preambel-1_formel-1"
+                         name="attributsemantik-noch-undefiniert" refersTo="eingangsformel">
+                <akn:p eId="preambel-1_formel-1_text-1"> Eingangsformel Text</akn:p>
+            </akn:formula>
+        </akn:preamble>
+        <akn:body eId="hauptteil-1">
+            <akn:article eId="hauptteil-1_art-1"
+                         period="#meta-1_geltzeiten-1_geltungszeitgr-4" refersTo="stammform">
+            <akn:num eId="hauptteil-1_art-1_bezeichnung-1">§ 1</akn:num>
+            <akn:heading eId="hauptteil-1_art-1_überschrift-1"/>
+            <akn:paragraph eId="hauptteil-1_art-1_abs-1">
+            <akn:num eId="hauptteil-1_art-1_abs-1_bezeichnung-1"/>
+            <akn:content eId="hauptteil-1_art-1_abs-1_inhalt-1">
+            <akn:p eId="hauptteil-1_art-1_abs-1_inhalt-1_text-1">Article 1 Paragraph 1
+                <akn:br GUID="666b10d9-8625-4418-99ed-980ee42402f5"
+                        eId="hauptteil-1_art-1_abs-1_inhalt-1_text-1_br-1"/>
+            </akn:p>
+            </akn:content>
+            </akn:paragraph>
+            </akn:article>
+        </akn:body>
+        <akn:conclusions eId="schluss-1">
+            <akn:formula eId="schluss-1_formel-1"
+                         name="attributsemantik-noch-undefiniert" refersTo="schlussformel">
+                <akn:p eId="schluss-1_formel-1_text-1">
+                    <akn:span class="extra_letter_spacing" eId="schluss-1_formel-1_text-1_span-1">Der Bundeskanzler</akn:span>
+                </akn:p>
+            </akn:formula>
+        </akn:conclusions>
+        <akn:attachments GUID="00cf8a5b-4c59-4385-a701-55da314ae537" eId="anlagen-1">
+            <akn:attachment GUID="c9aab53d-99cf-4d10-bd0b-a531d9a79168" eId="anlagen-1_anlage-1">
+                <akn:documentRef GUID="b8dcaa4b-d69e-4eb7-b2a6-ba6a357672c0" eId="anlagen-1_anlage-1_verweis-1"
+                                 href="eli/bund/bgbl-1/1962/s514/2010-04-27/1/deu/2010-04-27/offenestruktur-1.xml"
+                                 showAs="offene-struktur"/>
+            </akn:attachment>
+        </akn:attachments>
+    </akn:act>
+</akn:akomaNtoso>

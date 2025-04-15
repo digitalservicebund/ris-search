@@ -1,0 +1,22 @@
+<akn:akomaNtoso xmlns:akn="http://Inhaltsdaten.LegalDocML.de/1.7.2/">
+    <akn:act>
+        <akn:body>
+            <akn:article GUID="to-be-removed" eId="a">
+                <akn:num eId="b">§ 1</akn:num>
+                <akn:heading eId="c">Art 1</akn:heading>
+                <akn:paragraph eId="d">
+                    <akn:num eId="e">(1)</akn:num>
+                    <akn:content eId="f">
+                        <akn:p eId="g">This is inside the first p block</akn:p>
+                    </akn:content>
+                </akn:paragraph>
+                <akn:paragraph eId="h">
+                    <akn:num eId="i">(2)</akn:num>
+                    <akn:content eId="j">
+                        <akn:p eId="k">This is inside the second p block</akn:p>
+                    </akn:content>
+                </akn:paragraph>
+            </akn:article>
+        </akn:body>
+    </akn:act>
+</akn:akomaNtoso>

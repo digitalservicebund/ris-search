@@ -1,0 +1,24 @@
+<akn:akomaNtoso xmlns:akn="http://Inhaltsdaten.LegalDocML.de/1.7.2/">
+    <akn:list GUID="6" eId="f">
+        <akn:intro GUID="7" eId="g">
+            <akn:p GUID="8" eId="h">This is the list intro:</akn:p>
+        </akn:intro>
+        <akn:point GUID="9" eId="i">
+            <akn:num GUID="10" eId="j"><akn:marker name="1"/>1.
+            </akn:num>
+            <akn:content GUID="11" eId="k">
+                <akn:p GUID="12" eId="l">Content of the first point</akn:p>
+            </akn:content>
+        </akn:point>
+        <akn:point GUID="13" eId="m">
+            <akn:num GUID="14" eId="n"><akn:marker name="2"/>2.
+            </akn:num>
+            <akn:content GUID="15" eId="o">
+                <akn:p GUID="16" eId="p">Content of the second point</akn:p>
+            </akn:content>
+        </akn:point>
+        <akn:wrapUp GUID="17" eId="q">
+            <akn:p GUID="18" eId="r">This is the wrap-up part.</akn:p>
+        </akn:wrapUp>
+    </akn:list>
+</akn:akomaNtoso>

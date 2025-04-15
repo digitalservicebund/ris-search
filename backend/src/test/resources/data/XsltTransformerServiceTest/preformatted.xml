@@ -1,0 +1,5 @@
+<akn:akomaNtoso xmlns:akn="http://Inhaltsdaten.LegalDocML.de/1.7.2/">
+    <akn:article eId="a">
+        <akn:p class="pre" eId="b"><akn:br eId="br-1"/><akn:b eId="fettschrift-1"> A      | B      </akn:b><akn:br eId="br-2"/><akn:b eId="fettschrift-2"> ...... | ...... </akn:b></akn:p>
+    </akn:article>
+</akn:akomaNtoso>

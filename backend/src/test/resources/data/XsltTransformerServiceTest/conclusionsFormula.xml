@@ -1,0 +1,15 @@
+<akn:akomaNtoso xmlns:akn="http://Inhaltsdaten.LegalDocML.de/1.7.2/">
+    <akn:act name="regelungstext">
+    <akn:conclusions eId="schluss-1">
+        <akn:formula eId="schluss-1_formel-1" refersTo="schlussformel">
+            <akn:p eId="schluss-1_formel-1_text-1">
+                <akn:span class="extra_letter_spacing"
+                          eId="schluss-1_formel-1_text-1_span-1">Der Bundeskanzler</akn:span>
+                <akn:br eId="schluss-1_formel-1_text-1_br-1"/>
+                <akn:span class="extra_letter_spacing"
+                          eId="schluss-1_formel-1_text-1_span-2">Der Bundesminister der Finanzen</akn:span>
+            </akn:p>
+        </akn:formula>
+    </akn:conclusions>
+    </akn:act>
+</akn:akomaNtoso>

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<akn:akomaNtoso xmlns:akn="http://docs.oasis-open.org/legaldocml/ns/akn/3.0/WD17"
+                xmlns:ris="http://example.com/0.1/"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:schemaLocation="http://docs.oasis-open.org/legaldocml/ns/akn/3.0/WD17
+                     https://docs.oasis-open.org/legaldocml/akn-core/v1.0/csprd02/part2-specs/schemas/akomantoso30.xsd">
+    <akn:judgment name="Beispielurteil7">
+        <akn:meta>
+            <akn:identification source="Testquelle7">
+                <akn:FRBRWork>
+                    <akn:FRBRthis value="JURE200030030"/>
+                    <akn:FRBRuri value="JURE200030030"/>
+                    <akn:FRBRalias name="uebergreifende-id" value="fake-uuid-0007"/>
+                    <akn:FRBRdate date="2025-04-09" name="entscheidungsdatum"/>
+                    <akn:FRBRauthor href="Testautor7"/>
+                    <akn:FRBRcountry value="de"/>
+                </akn:FRBRWork>
+                <akn:FRBRExpression>
+                    <akn:FRBRthis value="JURE200030030/dokument"/>
+                    <akn:FRBRuri value="JURE200030030/dokument"/>
+                    <akn:FRBRdate date="2025-04-09" name="entscheidungsdatum"/>
+                    <akn:FRBRauthor href="Testautor7"/>
+                    <akn:FRBRlanguage language="deu"/>
+                </akn:FRBRExpression>
+                <akn:FRBRManifestation>
+                    <akn:FRBRthis value="JURE200030030/dokument.xml"/>
+                    <akn:FRBRuri value="JURE200030030/dokument.xml"/>
+                    <akn:FRBRdate date="2025-04-09" name="entscheidungsdatum"/>
+                    <akn:FRBRauthor href="Testautor7"/>
+                </akn:FRBRManifestation>
+            </akn:identification>
+            <akn:classification source="Testquelle7">
+                <akn:keyword dictionary="TestDict7" showAs="Beispiel" value="Prozessförderung"/>
+                <akn:keyword dictionary="TestDict7" showAs="Beispiel" value="AnzahlTest"/>
+                <akn:keyword dictionary="TestDict7" showAs="Beispiel" value="UrlaubstageTest"/>
+                <akn:keyword dictionary="TestDict7" showAs="Beispiel" value="Testbeschleunigung"/>
+            </akn:classification>
+            <akn:proprietary source="Testquelle7">
+                <ris:meta>
+                    <ris:ensuingDecisions>
+                        <ris:ensuingDecision>
+                            <ris:fileNumber>XY Z 12/34</ris:fileNumber>
+                            <ris:courtType>LArbG</ris:courtType>
+                        </ris:ensuingDecision>
+                    </ris:ensuingDecisions>
+                    <ris:fileNumbers>
+                        <ris:fileNumber>AB 5678/90</ris:fileNumber>
+                    </ris:fileNumbers>
+                    <ris:documentType>Urteil</ris:documentType>
+                    <ris:courtLocation>Köln</ris:courtLocation>
+                    <ris:courtType>ArbG</ris:courtType>
+                    <ris:legalEffect>KEINE_ANGABE</ris:legalEffect>
+                    <ris:fieldOfLaws>
+                        <ris:fieldOfLaw>Testarbeitsrecht</ris:fieldOfLaw>
+                        <ris:fieldOfLaw>Testberufung</ris:fieldOfLaw>
+                        <ris:fieldOfLaw>Testprozess (Testfall)</ris:fieldOfLaw>
+                        <ris:fieldOfLaw>Testurlaub</ris:fieldOfLaw>
+                    </ris:fieldOfLaws>
+                    <ris:judicialBody>5. Kammer</ris:judicialBody>
+                    <ris:publicationStatus>PUBLISHED</ris:publicationStatus>
+                    <ris:error>false</ris:error>
+                    <ris:documentationOffice>BAG</ris:documentationOffice>
+                    <ris:procedures>
+                        <ris:procedure>TESTPROC7</ris:procedure>
+                    </ris:procedures>
+                </ris:meta>
+            </akn:proprietary>
+        </akn:meta>
+        <akn:header>
+            <akn:p>Testheader für Urteil 7.</akn:p>
+        </akn:header>
+        <akn:judgmentBody>
+            <akn:introduction>
+                <akn:block name="Orientierungssatz">
+                    <akn:embeddedStructure>
+                        <akn:p>1. Fiktive Darstellung des Sachverhalts im Bereich Urlaubsanspruch.</akn:p>
+                        <akn:p>2. Weitere Testangaben zur Prozessförderung werden exemplarisch aufgeführt.</akn:p>
+                        <akn:p>3. Berufung und weitere Schritte sind eingeleitet.</akn:p>
+                    </akn:embeddedStructure>
+                </akn:block>
+                <akn:block name="Tenor">
+                    <akn:embeddedStructure>
+                        <akn:p>Der Beklagte wird zur Zahlung von Ersatzurlaub verurteilt.</akn:p>
+                        <akn:p>Die Verfahrenskosten werden dem Beklagten angelastet.</akn:p>
+                        <akn:p>Ein weiterer Verfahrensteil wird zugelassen.</akn:p>
+                    </akn:embeddedStructure>
+                </akn:block>
+            </akn:introduction>
+            <akn:background>
+                <akn:hcontainer name="randnummer">
+                    <akn:num>1</akn:num>
+                    <akn:content>
+                        <akn:p>Fiktiver Hintergrundtext zur Darstellung des Testfalls im Prozess.</akn:p>
+                    </akn:content>
+                </akn:hcontainer>
+            </akn:background>
+        </akn:judgmentBody>
+    </akn:judgment>
+</akn:akomaNtoso>

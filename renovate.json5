@@ -1,0 +1,37 @@
+{
+  enabled: false,
+  $schema: "https://docs.renovatebot.com/renovate-schema.json",
+  extends: ["config:recommended", ":disableDependencyDashboard"],
+  rangeStrategy: "bump",
+  labels: ["renovate"],
+  timezone: "Europe/Berlin",
+  automergeSchedule: ["before 5:30am every weekday", "after 7pm every weekday"],
+  // branches are created, but not merged outside this schedule. Not during working hours to prevent too many rebases.
+  packageRules: [
+    {
+      groupName: "Manual frontend dependencies merge",
+      matchPaths: ["frontend/**"],
+      labels: ["frontend-updates"],
+      matchUpdateTypes: ["minor", "patch", "pin", "pinDigest", "digest"],
+      automerge: false,
+      platformAutomerge: false,
+      // this would require more repository setup; also it interferes with automergeSchedule
+      automergeType: "pr",
+      // default is "pr", creates branch and PR. With "branch" it only creates PR if fails
+      rebaseWhen: "conflicted"
+      // manual rebasing only while auto merge is disabled, to prevent a large number of CI runs
+    },
+    {
+      groupName: "all non-major backend dependencies",
+      matchPaths: ["backend/**"],
+      labels: ["backend-updates"],
+      matchUpdateTypes: ["minor", "patch", "pin", "pinDigest", "digest"],
+      automerge: true,
+      platformAutomerge: false, // this would require more repository setup; also it interferes with automergeSchedule
+      automergeType: "branch",
+      // default is "pr", creates branch and PR. With "branch" it only creates PR if fails
+      rebaseWhen: "conflicted"
+    }
+  ],
+  prConcurrentLimit: 5
+}

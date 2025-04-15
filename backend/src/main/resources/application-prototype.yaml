@@ -1,0 +1,48 @@
+server:
+  port: 8080
+
+spring:
+  config:
+    import: "kubernetes:"
+  cloud:
+    kubernetes:
+      config:
+        fail-fast: true
+        sources:
+          - name: ris-search-opensearch-prototype-config
+      secrets:
+        paths: /etc/secrets
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: https://neuris.login.bare.id/auth/realms/NeuRISProd/protocol/openid-connect/certs
+
+swagger:
+  server:
+    url: https://testphase.rechtsinformationen.bund.de/
+    description: Public API (preview)
+
+feature-flags:
+  advanced-search: false
+
+springdoc:
+  swagger-ui:
+    supportedSubmitMethods: []
+    defaultModelsExpandDepth: -1
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus
+
+sentry:
+  environment: prototype
+  traces-sample-rate: 0.01
+
+logging:
+  level:
+    org:
+      zalando:
+        logbook: TRACE

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<akn:akomaNtoso xmlns:akn="http://docs.oasis-open.org/legaldocml/ns/akn/3.0/WD17"
+                xmlns:ris="http://example.com/0.1/"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:schemaLocation="http://docs.oasis-open.org/legaldocml/ns/akn/3.0/WD17
+                     https://docs.oasis-open.org/legaldocml/akn-core/v1.0/csprd02/part2-specs/schemas/akomantoso30.xsd">
+   <akn:judgment name="Beispielurteil4">
+      <akn:meta>
+         <akn:identification source="Testquelle4">
+            <akn:FRBRWork>
+               <akn:FRBRthis value="KORE800400600"/>
+               <akn:FRBRuri value="KORE800400600"/>
+               <akn:FRBRalias name="uebergreifende-id" value="fake-uuid-0004"/>
+               <akn:FRBRdate date="2025-04-09" name="entscheidungsdatum"/>
+               <akn:FRBRauthor href="Testautor4"/>
+               <akn:FRBRcountry value="de"/>
+            </akn:FRBRWork>
+            <akn:FRBRExpression>
+               <akn:FRBRthis value="KORE800400600/dokument"/>
+               <akn:FRBRuri value="KORE800400600/dokument"/>
+               <akn:FRBRdate date="2025-04-09" name="entscheidungsdatum"/>
+               <akn:FRBRauthor href="Testautor4"/>
+               <akn:FRBRlanguage language="deu"/>
+            </akn:FRBRExpression>
+            <akn:FRBRManifestation>
+               <akn:FRBRthis value="KORE800400600/dokument.xml"/>
+               <akn:FRBRuri value="KORE800400600/dokument.xml"/>
+               <akn:FRBRdate date="2025-04-09" name="entscheidungsdatum"/>
+               <akn:FRBRauthor href="Testautor4"/>
+            </akn:FRBRManifestation>
+         </akn:identification>
+         <akn:classification source="Testquelle4">
+            <akn:keyword dictionary="TestDict4" showAs="Beispiel" value="ReiseniveauNeu"/>
+            <akn:keyword dictionary="TestDict4" showAs="Beispiel" value="Klassenstatus"/>
+            <akn:keyword dictionary="TestDict4" showAs="Beispiel" value="Fehlerfrei"/>
+            <akn:keyword dictionary="TestDict4" showAs="Beispiel" value="Testprozessrecht4"/>
+         </akn:classification>
+         <akn:proprietary source="Testquelle4">
+            <ris:meta>
+               <ris:fileNumbers>
+                  <ris:fileNumber>KL 1234/56</ris:fileNumber>
+               </ris:fileNumbers>
+               <ris:documentType>Urteil</ris:documentType>
+               <ris:courtLocation>Hamburg</ris:courtLocation>
+               <ris:courtType>LG</ris:courtType>
+               <ris:legalEffect>KEINE_ANGABE</ris:legalEffect>
+               <ris:fieldOfLaws>
+                  <ris:fieldOfLaw>Testreiserecht</ris:fieldOfLaw>
+                  <ris:fieldOfLaw>Testkostenrecht</ris:fieldOfLaw>
+                  <ris:fieldOfLaw>Testbuchungsrecht</ris:fieldOfLaw>
+                  <ris:fieldOfLaw>Messwertig</ris:fieldOfLaw>
+               </ris:fieldOfLaws>
+               <ris:judicialBody>10. Senat</ris:judicialBody>
+               <ris:publicationStatus>PUBLISHED</ris:publicationStatus>
+               <ris:error>false</ris:error>
+               <ris:documentationOffice>LG Hamburg</ris:documentationOffice>
+               <ris:procedures>
+                  <ris:procedure>KR8004006</ris:procedure>
+               </ris:procedures>
+            </ris:meta>
+         </akn:proprietary>
+      </akn:meta>
+      <akn:header>
+         <akn:p>Testheader für Urteil 4.</akn:p>
+      </akn:header>
+      <akn:judgmentBody>
+         <akn:introduction>
+            <akn:block name="Orientierungssatz">
+               <akn:embeddedStructure>
+                  <akn:p>1. Fiktiver Einleitungssatz für das Urteil im Reisebereich.</akn:p>
+                  <akn:p>2. Weitere exemplarische Angaben zur Testfallbeschreibung.</akn:p>
+               </akn:embeddedStructure>
+            </akn:block>
+            <akn:block name="Tenor">
+               <akn:embeddedStructure>
+                  <akn:p>Das Urteil enthält Testentscheidungen und Musterwerte.</akn:p>
+                  <akn:p>Die Kosten werden vom Beklagten getragen.</akn:p>
+               </akn:embeddedStructure>
+            </akn:block>
+         </akn:introduction>
+         <akn:background>
+            <akn:hcontainer name="randnummer">
+               <akn:num>1</akn:num>
+               <akn:content>
+                  <akn:p>Fiktiver Sachverhalt für den Reisekontext wird hier dargestellt.</akn:p>
+               </akn:content>
+            </akn:hcontainer>
+         </akn:background>
+      </akn:judgmentBody>
+   </akn:judgment>
+</akn:akomaNtoso>

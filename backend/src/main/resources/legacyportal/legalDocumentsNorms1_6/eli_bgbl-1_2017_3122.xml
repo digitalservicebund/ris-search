@@ -1,0 +1,486 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-model href="../../schema/legalDocML.de.sch" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<akn:akomaNtoso xmlns:akn="http://Inhaltsdaten.LegalDocML.de/1.4/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://Metadaten.LegalDocML.de/1.4/ ../../../schema/legalDocML.de-metadaten.xsd http://Inhaltsdaten.LegalDocML.de/1.4/ ../../../schema/legalDocML.de-regelungstextverkuendungsfassung.xsd">
+  <akn:act name="regelungstext">
+    <akn:meta>
+      <akn:identification source="attributsemantik-noch-undefiniert">
+        <akn:FRBRWork>
+          <akn:FRBRthis value="eli/bgbl-1/2017/3122/regelungstext" />
+          <akn:FRBRuri value="eli/bgbl-1/2017/3122" />
+          <akn:FRBRalias name="übergreifende-id" value="a842ad33-f49a-46bb-868d-b30b41ebbd69" />
+          <akn:FRBRdate date="2017-08-14" name="neufassung" />
+          <akn:FRBRauthor href="recht.bund.de/institution/bundesregierung" />
+          <akn:FRBRcountry value="de" />
+          <akn:FRBRnumber value="3122" />
+          <akn:FRBRname value="bgbl-1" />
+          <akn:FRBRsubtype value="regelungstext" />
+        </akn:FRBRWork>
+        <akn:FRBRExpression>
+          <akn:FRBRthis value="eli/bgbl-1/2017/3122/2017-08-14/1/deu/regelungstext" />
+          <akn:FRBRuri value="eli/bgbl-1/2017/3122/2017-08-14/1/deu" />
+          <akn:FRBRauthor href="recht.bund.de/institution/bundesregierung" />
+          <akn:FRBRdate date="2017-08-14" name="verkuendung" />
+          <akn:FRBRlanguage language="deu" />
+          <akn:FRBRversionNumber value="1" />
+        </akn:FRBRExpression>
+        <akn:FRBRManifestation>
+          <akn:FRBRthis value="eli/bgbl-1/2017/3122/2017-08-14/1/deu/regelungstext.xml" />
+          <akn:FRBRuri value="eli/bgbl-1/2017/3122/2017-08-14/1/deu/regelungstext.xml" />
+          <akn:FRBRdate date="2017-08-14" name="generierung" />
+          <akn:FRBRauthor href="recht.bund.de" />
+          <akn:FRBRformat value="xml" />
+        </akn:FRBRManifestation>
+      </akn:identification>
+      <akn:proprietary source="attributsemantik-noch-undefiniert">
+        <meta:legalDocML.de_metadaten xmlns:meta="http://Metadaten.LegalDocML.de/1.4/">
+          <meta:typ>gesetz</meta:typ>
+          <meta:form>stammform</meta:form>
+          <meta:fassung>neufassung</meta:fassung>
+          <meta:art>regelungstext</meta:art>
+          <meta:initiant>nicht-vorhanden</meta:initiant>
+          <meta:bearbeitendeInstitution>nicht-vorhanden</meta:bearbeitendeInstitution>
+        </meta:legalDocML.de_metadaten>
+      </akn:proprietary>
+    </akn:meta>
+    <akn:preface>
+      <akn:longTitle GUID="ea964868-35c1-4637-97fd-d09c848c62bb" eId="doktitel-1">
+        <akn:p GUID="35013977-d86d-4804-9810-99b63ad96587" eId="doktitel-1_text-1">
+          <akn:docTitle>Gesetz zur Errichtung eines Fernstraßen-Bundesamtes <akn:shortTitle GUID="f758c4ed-192e-4268-b44a-4f8f913540fa" eId="kurztitel-1">(Fernstraßen-Bundesamt-Errichtungsgesetz – <akn:inline refersTo="amtliche-abkuerzung" name="attributsemantik-noch-undefiniert">FStrBAG</akn:inline></akn:shortTitle>)</akn:docTitle>
+        </akn:p>
+      </akn:longTitle>
+    </akn:preface>
+    <akn:preamble>
+      <akn:blockContainer refersTo="inhaltsuebersicht" GUID="ee569a46-c027-4cdd-a5f4-7735442277bd" eId="verzeichnis-1">
+        <akn:heading GUID="5d8a0cae-2689-4a61-b0f0-a9fc1c1a696c" eId="verzeichnis-1_überschrift-1">Inhaltsübersicht</akn:heading>
+        <akn:toc GUID="dde7029f-7c07-42f1-a234-eb3d9ca0247f" eId="verzeichnis-1_inhuebs-1">
+          <akn:tocItem href="#para-1_überschrift-1" level="1" GUID="d1a8c8bd-b5e5-4d33-9081-d898f5d26e93" eId="verzeichnis-1_inhuebs-1_eintrag-1">
+            <akn:span>§ 1</akn:span>
+            <akn:span>Errichtung</akn:span>
+          </akn:tocItem>
+          <akn:tocItem href="#para-2_überschrift-1" level="1" GUID="fedc67f4-6343-4e96-968c-c46e97d74c9b" eId="verzeichnis-1_inhuebs-1_eintrag-2">
+            <akn:span>§ 2</akn:span>
+            <akn:span>Aufgaben des Fernstraßen-Bundesamtes</akn:span>
+          </akn:tocItem>
+          <akn:tocItem href="#para-3_überschrift-1" level="1" GUID="15110b5c-dc5f-417c-a01a-af6531af4759" eId="verzeichnis-1_inhuebs-1_eintrag-3">
+            <akn:span>§ 3</akn:span>
+            <akn:span>Übergangsregelung, Antragsrecht der Länder</akn:span>
+          </akn:tocItem>
+          <akn:tocItem href="#para-4_überschrift-1" level="1" GUID="e953af0c-2488-424b-bd1a-9c9e7b8217e0" eId="verzeichnis-1_inhuebs-1_eintrag-4">
+            <akn:span>§ 4</akn:span>
+            <akn:span>Straßenverkehrsrechtliche Aufgaben des Fernstraßen-Bundesamtes</akn:span>
+          </akn:tocItem>
+        </akn:toc>
+      </akn:blockContainer>
+    </akn:preamble>
+    <akn:body refersTo="hauptteil-stammform">
+      <akn:article GUID="506c811d-bbf7-486d-ae7f-b45705b9d330" eId="para-1" refersTo="einzelvorschrift-stammform">
+        <akn:num GUID="23a41893-580c-4171-a886-5a43c8f0f685" eId="para-1_bezeichnung-1">
+          <akn:marker name="1" />
+        </akn:num>
+        <akn:heading GUID="8405f26d-5fdd-43ba-a3c7-b33ce05f7bce" eId="para-1_überschrift-1">§ 1 Errichtung</akn:heading>
+        <akn:paragraph GUID="c092cd4f-f15d-4ff6-b63b-e668f5a2095c" eId="para-1_abs-1">
+          <akn:num GUID="b81749ba-6af2-45e1-8546-8e3995db38b5" eId="para-1_abs-1_bezeichnung-1">
+            <akn:marker name="1" />
+            (1)
+          </akn:num>
+          <akn:content GUID="5291990b-6b27-40ac-a081-224e840dc111" eId="para-1_abs-1_inhalt-1">
+            <akn:p GUID="1bb44d26-a7d8-49e0-b21a-a4c4558f7494" eId="para-1_abs-1_inhalt-1_text-1">Zum 1. Januar 2021 wird das Fernstraßen-Bundesamt als Bundesoberbehörde im Geschäftsbereich des Bundesministeriums für Verkehr und digitale Infrastruktur seine Tätigkeit aufnehmen.</akn:p>
+          </akn:content>
+        </akn:paragraph>
+        <akn:paragraph GUID="e9d64ef7-f21a-4327-9738-5bd80a2b7d22" eId="para-1_abs-2">
+          <akn:num GUID="369659ff-8794-4806-91c8-5702c9cc3422" eId="para-1_abs-2_bezeichnung-1">
+            <akn:marker name="2" />
+            (2)
+          </akn:num>
+          <akn:content GUID="e51ac869-f16e-492e-b522-0074387ce175" eId="para-1_abs-2_inhalt-1">
+            <akn:p GUID="edf7eb13-dfdc-42f3-8d0e-7266a1e83ac1" eId="para-1_abs-2_inhalt-1_text-1">Auf Vorschlag des Bundesministeriums für Verkehr und digitale Infrastruktur bestimmt die Bundesregierung den Sitz des Fernstraßen-Bundesamtes.</akn:p>
+          </akn:content>
+        </akn:paragraph>
+        <akn:paragraph GUID="c0e1e390-8168-4cc2-abc4-fc17a99b6f17" eId="para-1_abs-3">
+          <akn:num GUID="45a06516-5f81-457b-a483-f6cb9eb0bf93" eId="para-1_abs-3_bezeichnung-1">
+            <akn:marker name="3" />
+            (3)
+          </akn:num>
+          <akn:content GUID="1daddb67-76a2-4910-a132-e25e49f4ef45" eId="para-1_abs-3_inhalt-1">
+            <akn:p GUID="8086b8f9-e580-4ff3-9c90-cd04051e41b3" eId="para-1_abs-3_inhalt-1_text-1">Das Fernstraßen-Bundesamt wird von einem Präsidenten oder einer Präsidentin geleitet.</akn:p>
+          </akn:content>
+        </akn:paragraph>
+      </akn:article>
+      <akn:article GUID="0ce7d6a9-259d-4497-8b6f-e60f56286b58" eId="para-2" refersTo="einzelvorschrift-stammform">
+        <akn:num GUID="6e53877b-b1e1-4ad8-9826-26f355c174d8" eId="para-2_bezeichnung-1">
+          <akn:marker name="2" />
+        </akn:num>
+        <akn:heading GUID="5ca45d6e-47cd-43ca-b8a3-f3f7f9571c5e" eId="para-2_überschrift-1">§ 2 Aufgaben des Fernstraßen-Bundesamtes</akn:heading>
+        <akn:paragraph GUID="bd2fe920-2473-495f-a4de-3a26a98f1ee2" eId="para-2_abs-1">
+          <akn:num GUID="e30d8a39-6945-4d2f-aa6c-f0ecb975b130" eId="para-2_abs-1_bezeichnung-1">
+            <akn:marker name="1" />
+            (1)
+          </akn:num>
+          <akn:list GUID="be612754-c928-474c-a0d7-91d2b70f9655" eId="para-2_abs-1_untergl-1">
+            <akn:intro GUID="4713ff1c-a047-4208-913d-1bcb55f49561" eId="para-2_abs-1_untergl-1_intro-1">
+              <akn:p GUID="32afda49-5d6d-4c0b-b34c-c239767c58ba" eId="para-2_abs-1_untergl-1_intro-1_text-1">Dem Fernstraßen-Bundesamt obliegen folgende Aufgaben:</akn:p>
+            </akn:intro>
+            <akn:point GUID="0a8dd0e8-3236-484a-a05a-71553c1ff8fa" eId="para-2_abs-1_untergl-1_listenelem-1">
+              <akn:num GUID="0f45eeab-4a1b-45e7-aaa0-96236814d531" eId="para-2_abs-1_untergl-1_listenelem-1_bezeichnung-1">
+                <akn:marker name="1" />
+                1.
+              </akn:num>
+              <akn:content GUID="3bfa86e7-726a-49b3-8df6-f69ca42c6775" eId="para-2_abs-1_untergl-1_listenelem-1_inhalt-1">
+                <akn:p GUID="22040f91-6935-4ab0-931d-89697a4aa75f" eId="para-2_abs-1_untergl-1_listenelem-1_inhalt-1_text-1">die Widmung, Umstufung und Einziehung nach Maßgabe von § 2 des Bundesfernstraßengesetzes bei Bundesfernstraßen, soweit dem Bund die Verwaltung zusteht,</akn:p>
+              </akn:content>
+            </akn:point>
+            <akn:point GUID="82fdac48-cee1-46cb-8bec-8ef8ccffc6af" eId="para-2_abs-1_untergl-1_listenelem-2">
+              <akn:num GUID="e65b8d78-6fa0-4913-b87f-ebedecc27722" eId="para-2_abs-1_untergl-1_listenelem-2_bezeichnung-1">
+                <akn:marker name="2" />
+                2.
+              </akn:num>
+              <akn:content GUID="fc810239-a366-42da-9afe-31d0f3ee3287" eId="para-2_abs-1_untergl-1_listenelem-2_inhalt-1">
+                <akn:p GUID="b7eebbd3-77fd-4e36-a2ed-146a2fbcbca2" eId="para-2_abs-1_untergl-1_listenelem-2_inhalt-1_text-1">die Erteilung des Einverständnisses zur Widmungs- und Aufstufungsentscheidung der obersten Landesstraßenbaubehörde zu Bundesautobahnen und Bundesstraßen nach § 2 Absatz 6 Satz 5 des Bundesfernstraßengesetzes,</akn:p>
+              </akn:content>
+            </akn:point>
+            <akn:point GUID="7eb6e283-afdd-4f4d-b00c-b47dd0aafe30" eId="para-2_abs-1_untergl-1_listenelem-3">
+              <akn:num GUID="85d96410-931e-4863-8955-140efa70bc2a" eId="para-2_abs-1_untergl-1_listenelem-3_bezeichnung-1">
+                <akn:marker name="3" />
+                3.
+              </akn:num>
+              <akn:content GUID="a44c9dcc-541f-4c5d-9ea7-56f05e02473b" eId="para-2_abs-1_untergl-1_listenelem-3_inhalt-1">
+                <akn:p GUID="7c572ce4-f475-4dd3-b599-81ca3b0babe6" eId="para-2_abs-1_untergl-1_listenelem-3_inhalt-1_text-1">die Bestimmung der Planung und Linienführung für Bundesfernstraßen nach § 16 des Bundesfernstraßengesetzes,</akn:p>
+              </akn:content>
+            </akn:point>
+            <akn:point GUID="224e932a-906a-404c-82c9-eb748d406ca2" eId="para-2_abs-1_untergl-1_listenelem-4">
+              <akn:num GUID="be83ae6d-e4c0-4b1d-9a86-6cfda8c6d5b5" eId="para-2_abs-1_untergl-1_listenelem-4_bezeichnung-1">
+                <akn:marker name="4" />
+                4.
+              </akn:num>
+              <akn:content GUID="579039a0-d7b9-47f2-93a6-c8d5ca257f26" eId="para-2_abs-1_untergl-1_listenelem-4_inhalt-1">
+                <akn:p GUID="b7a552f4-404a-43dc-ac0c-a6f78e199de4" eId="para-2_abs-1_untergl-1_listenelem-4_inhalt-1_text-1">nach Maßgabe des Absatzes 2 und 3 und des § 3 Absatz 2 und 3 die Planfeststellung und Plangenehmigung für den Bau oder die Änderung von Bundesautobahnen nach § 17 des Bundesfernstraßengesetzes, einschließlich der vorgeschriebenen Anhörungen, und</akn:p>
+              </akn:content>
+            </akn:point>
+            <akn:point GUID="0a2c6ae4-304d-4459-8424-a8ed611a7fe7" eId="para-2_abs-1_untergl-1_listenelem-5">
+              <akn:num GUID="878f78df-5eaa-4cc9-a35f-89bf3f9b5969" eId="para-2_abs-1_untergl-1_listenelem-5_bezeichnung-1">
+                <akn:marker name="5" />
+                5.
+              </akn:num>
+              <akn:content GUID="630a21aa-2007-4548-8510-47cfa7d9c827" eId="para-2_abs-1_untergl-1_listenelem-5_inhalt-1">
+                <akn:p GUID="7019cafd-4383-46a6-9cf1-d33cb466e7be" eId="para-2_abs-1_untergl-1_listenelem-5_inhalt-1_text-1">die Wahrnehmung der Rechts- und Fachaufsicht über die Gesellschaft privaten Rechts im Sinne des Infrastrukturgesellschaftserrichtungsgesetzes, soweit diese auf Grund des § 6 des Infrastrukturgesellschaftserrichtungsgesetzes mit der Wahrnehmung von hoheitlichen Aufgaben beliehen ist.</akn:p>
+              </akn:content>
+            </akn:point>
+            <akn:wrapUp GUID="9e489f59-438a-4543-aea4-cbdfe277ad41" eId="para-2_abs-1_untergl-1_schlusstext-1">
+              <akn:p GUID="071f08bb-8990-4297-80ca-1f9ac2875d4f" eId="para-2_abs-1_untergl-1_schlusstext-1_text-1">Im Übrigen ist das Fernstraßen-Bundesamt zuständig, sofern und soweit ihm durch ein Gesetz oder auf Grund eines Gesetzes Aufgaben zugewiesen werden. Das Fernstraßen-Bundesamt unterstützt das Bundesministerium für Verkehr und digitale Infrastruktur fachlich bei der Wahrnehmung der Bundesaufsicht über die Landesbehörden, soweit dem Bund die Verwaltung der Bundesstraßen nicht zusteht, bei der Erarbeitung von Rechts- und Verwaltungsvorschriften sowie bei der zwischenstaatlichen Zusammenarbeit.</akn:p>
+            </akn:wrapUp>
+          </akn:list>
+        </akn:paragraph>
+        <akn:paragraph GUID="f133e320-b2c0-46c5-a406-8eff4e32f43b" eId="para-2_abs-2">
+          <akn:num GUID="0acf16af-fcff-43ad-9598-3c4153f98989" eId="para-2_abs-2_bezeichnung-1">
+            <akn:marker name="2" />
+            (2)
+          </akn:num>
+          <akn:content GUID="a0bde676-cc49-457d-8195-3af86aa72629" eId="para-2_abs-2_inhalt-1">
+            <akn:p GUID="57abd735-d1ac-4361-ac33-84e1b43df96c" eId="para-2_abs-2_inhalt-1_text-1">Das Fernstraßen-Bundesamt ist Anhörungs- und Planfeststellungsbehörde in Planfeststellungsverfahren oder Plangenehmigungsbehörde in Plangenehmigungsverfahren, die auf der Grundlage des § 17 des Bundesfernstraßengesetzes für den Bau oder die Änderung von Bundesautobahnen durchgeführt werden. Es trifft in den in Satz 1 genannten Fällen auch die Entscheidung nach § 74 Absatz 7 des Verwaltungsverfahrensgesetzes.</akn:p>
+          </akn:content>
+        </akn:paragraph>
+        <akn:paragraph GUID="23af8088-e20d-4ed7-b1b2-84dbdca662fc" eId="para-2_abs-3">
+          <akn:num GUID="b2decbac-8445-412c-9dd3-ff97049fcb35" eId="para-2_abs-3_bezeichnung-1">
+            <akn:marker name="3" />
+            (3)
+          </akn:num>
+          <akn:content GUID="b8713257-a2bb-4231-9528-b71c78a8326e" eId="para-2_abs-3_inhalt-1">
+            <akn:p GUID="cf38ed9c-2aa0-4bba-9898-ecf66948e7c8" eId="para-2_abs-3_inhalt-1_text-1">Soweit nach Artikel 90 Absatz 4 oder Artikel 143e Absatz 2 des Grundgesetzes auf Antrag eines Landes Bundesstraßen, soweit sie im Gebiet dieses Landes liegen, vom Bund in Bundesverwaltung übernommen werden, ist das Fernstraßen-Bundesamt Anhörungs- und Planfeststellungsbehörde in Planfeststellungsverfahren oder Plangenehmigungsbehörde in Plangenehmigungsverfahren für den Bau oder die Änderung von Bundesfernstraßen.</akn:p>
+          </akn:content>
+        </akn:paragraph>
+      </akn:article>
+      <akn:article GUID="b9c07e9b-e456-49e6-ba23-863171788570" eId="para-3" refersTo="einzelvorschrift-stammform">
+        <akn:num GUID="1be91f6e-ca7a-49d7-87d9-02446e06775a" eId="para-3_bezeichnung-1">
+          <akn:marker name="3" />
+        </akn:num>
+        <akn:heading GUID="1c0c3b8e-0606-43ff-9a77-d6bc6c076d1f" eId="para-3_überschrift-1">§ 3 Übergangsregelung, Antragsrecht der Länder</akn:heading>
+        <akn:paragraph GUID="83c3922c-21d7-442f-8de7-ac4e7368703d" eId="para-3_abs-1">
+          <akn:num GUID="6138b474-641a-44e6-a8f5-d9ddb7373e1b" eId="para-3_abs-1_bezeichnung-1">
+            <akn:marker name="1" />
+            (1)
+          </akn:num>
+          <akn:content GUID="b5bc1cc5-63f6-40f2-8d8e-5fd620e99697" eId="para-3_abs-1_inhalt-1">
+            <akn:p GUID="f772abfe-72f2-44b7-8bb4-837dbbafd870" eId="para-3_abs-1_inhalt-1_text-1">Das Fernstraßen-Bundesamt tritt im Rahmen seiner Zuständigkeiten nach § 2 in vor dem 1. Januar 2021 eingeleitete Verwaltungsverfahren ein, soweit in den Absätzen 2 und 3 nichts Abweichendes bestimmt ist.</akn:p>
+          </akn:content>
+        </akn:paragraph>
+        <akn:paragraph GUID="f0f3f364-c6eb-425b-8bd3-04b174d8f836" eId="para-3_abs-2">
+          <akn:num GUID="9e67a2cd-e245-498e-863c-f3c9908cf9a0" eId="para-3_abs-2_bezeichnung-1">
+            <akn:marker name="2" />
+            (2)
+          </akn:num>
+          <akn:list GUID="bbc45f5f-b6d8-482a-b179-18aa504804de" eId="para-3_abs-2_untergl-1">
+            <akn:intro GUID="e20d3b1d-692a-4025-b494-9321653d47d8" eId="para-3_abs-2_untergl-1_intro-1">
+              <akn:p GUID="c5b020fe-a196-4289-b517-d6b7eea31af2" eId="para-3_abs-2_untergl-1_intro-1_text-1">§ 2 Absatz 2 findet keine Anwendung auf Planfeststellungs- oder Plangenehmigungsverfahren, die vor dem 1. Januar 2021 bereits von den Ländern eingeleitet worden sind. Satz 1 umfasst dabei auch von den Ländern</akn:p>
+            </akn:intro>
+            <akn:point GUID="24281edc-7ebb-44fa-ac32-e6da52b00501" eId="para-3_abs-2_untergl-1_listenelem-1">
+              <akn:num GUID="003a1e2e-71bf-461d-a91b-e8fe04b90b7a" eId="para-3_abs-2_untergl-1_listenelem-1_bezeichnung-1">
+                <akn:marker name="1" />
+                1.
+              </akn:num>
+              <akn:content GUID="bec0d99d-93b7-48e7-afc6-3ba6b22c5979" eId="para-3_abs-2_untergl-1_listenelem-1_inhalt-1">
+                <akn:p GUID="be430070-1900-4a3e-960a-9e4b0bc9b358" eId="para-3_abs-2_untergl-1_listenelem-1_inhalt-1_text-1">vor dem 1. Januar 2021 bereits eingeleitete Planergänzungen und ergänzende Verfahren sowie Planänderungen vor Fertigstellung des Vorhabens nach § 17d Satz 1 des Bundesfernstraßengesetzes,</akn:p>
+              </akn:content>
+            </akn:point>
+            <akn:point GUID="a52f7589-b388-4cf1-b3f2-1a1b372b1d0b" eId="para-3_abs-2_untergl-1_listenelem-2">
+              <akn:num GUID="f8faa18a-d954-4308-b0b8-5a8ce566e942" eId="para-3_abs-2_untergl-1_listenelem-2_bezeichnung-1">
+                <akn:marker name="2" />
+                2.
+              </akn:num>
+              <akn:content GUID="cac0f111-2bcf-45a0-9e74-6c712cb0a8ae" eId="para-3_abs-2_untergl-1_listenelem-2_inhalt-1">
+                <akn:p GUID="01fa049c-8744-4ea7-9ced-e075e60036a9" eId="para-3_abs-2_untergl-1_listenelem-2_inhalt-1_text-1">vor dem 1. Januar 2021 bereits eingeleitete Verfahren zur Umsetzung eines Entscheidungsvorbehalts nach § 17b Absatz 1 des Bundesfernstraßengesetzes in Verbindung mit § 74 Absatz 3 des Verwaltungsverfahrensgesetzes,</akn:p>
+              </akn:content>
+            </akn:point>
+            <akn:point GUID="2ee0d43e-dbef-4bbd-a752-47c51c49bbdc" eId="para-3_abs-2_untergl-1_listenelem-3">
+              <akn:num GUID="ec8349f3-3aa4-42a0-876b-5788bc371094" eId="para-3_abs-2_untergl-1_listenelem-3_bezeichnung-1">
+                <akn:marker name="3" />
+                3.
+              </akn:num>
+              <akn:content GUID="64a7a651-36f7-4080-9292-13bd49ab8a5f" eId="para-3_abs-2_untergl-1_listenelem-3_inhalt-1">
+                <akn:p GUID="27143871-b67f-4d18-a7d2-1974b69e0216" eId="para-3_abs-2_untergl-1_listenelem-3_inhalt-1_text-1">vor dem 1. Januar 2021 bereits eingeleitete Verfahren zur Verlängerung eines Planfeststellungsbeschlusses nach § 17c Nummer 1 bis 3 des Bundesfernstraßengesetzes sowie</akn:p>
+              </akn:content>
+            </akn:point>
+            <akn:point GUID="9cecf731-6430-4593-a11f-6e7419dbb4cc" eId="para-3_abs-2_untergl-1_listenelem-4">
+              <akn:num GUID="75644b32-d42e-4136-8bab-2701fbb93de7" eId="para-3_abs-2_untergl-1_listenelem-4_bezeichnung-1">
+                <akn:marker name="4" />
+                4.
+              </akn:num>
+              <akn:content GUID="498a889b-23fe-40c9-9032-75f60628b0e8" eId="para-3_abs-2_untergl-1_listenelem-4_inhalt-1">
+                <akn:p GUID="2cae8e25-1013-4151-a65e-19f3c6c8b94e" eId="para-3_abs-2_untergl-1_listenelem-4_inhalt-1_text-1">vor dem 1. Januar 2021 bereits eingeleitete Verfahren wegen nicht voraussehbarer Wirkungen nach § 17c des Bundesfernstraßengesetzes in Verbindung mit § 75 Absatz 2 Satz 2 bis 4 des Verwaltungsverfahrensgesetzes.</akn:p>
+              </akn:content>
+            </akn:point>
+            <akn:wrapUp GUID="252931e9-dfc4-40f0-a3a6-92afd0bc2221" eId="para-3_abs-2_untergl-1_schlusstext-1">
+              <akn:p GUID="d330dea0-1c12-4db4-be50-1488a45671e6" eId="para-3_abs-2_untergl-1_schlusstext-1_text-1">§ 2 Absatz 2 findet auch keine Anwendung auf</akn:p>
+            </akn:wrapUp>
+          </akn:list>
+          <akn:list GUID="21ff8cce-444c-4c08-b2b0-bcf480b42b78" eId="para-3_abs-2_untergl-2">
+            <akn:intro GUID="31ee088e-ea43-4ac8-b95b-f817d8eceabe" eId="para-3_abs-2_untergl-2_intro-1">
+              <akn:p GUID="51933e00-8f05-492b-acd0-d74f720c49e3" eId="para-3_abs-2_untergl-2_intro-1_text-1">
+                <!-- TODO: Unklare Struktur der Listen -->
+              </akn:p>
+            </akn:intro>
+            <akn:point GUID="5537588f-fc59-4585-9940-028d498cc7a3" eId="para-3_abs-2_untergl-2_listenelem-1">
+              <akn:num GUID="879219a1-15ef-40e9-8d25-bb48380dd7f0" eId="para-3_abs-2_untergl-2_listenelem-1_bezeichnung-1">
+                <akn:marker name="1" />
+                1.
+              </akn:num>
+              <akn:content GUID="26516767-bd68-4a78-96ba-53d71cae7b87" eId="para-3_abs-2_untergl-2_listenelem-1_inhalt-1">
+                <akn:p GUID="173ea86c-b4e2-431c-8cae-ac82be6a08f5" eId="para-3_abs-2_untergl-2_listenelem-1_inhalt-1_text-1">nach dem 31. Dezember 2020 eingeleitete Planergänzungen und ergänzende Verfahren nach § 17d Satz 1 des Bundesfernstraßengesetzes, soweit diese ein vor dem 1. Januar 2021 eingeleitetes Planfeststellungs- oder Plangenehmigungsverfahren betreffen, über das noch nicht bestandskräftig entschieden wurde, sowie</akn:p>
+              </akn:content>
+            </akn:point>
+            <akn:point GUID="43702539-6f19-409f-b55c-3d1334caa03b" eId="para-3_abs-2_untergl-2_listenelem-2">
+              <akn:num GUID="97116bc4-2985-489e-a37b-375696259c0b" eId="para-3_abs-2_untergl-2_listenelem-2_bezeichnung-1">
+                <akn:marker name="2" />
+                2.
+              </akn:num>
+              <akn:content GUID="e374c407-7561-4dfe-8f00-d6a52aa53771" eId="para-3_abs-2_untergl-2_listenelem-2_inhalt-1">
+                <akn:p GUID="03ac60c3-fcb9-40ae-a3db-742a5b219026" eId="para-3_abs-2_untergl-2_listenelem-2_inhalt-1_text-1">eingeleitete Verfahren nach den §§ 48, 49 des Verwaltungsverfahrensgesetzes oder den entsprechenden landesrechtlichen Regelungen, soweit das jeweilige Verfahren den Zweck hat, einen Planfeststellungsbeschluss oder eine Plangenehmigung außer Vollzug zu setzen, um Verfahren nach § 17d Satz 1 des Bundesfernstraßengesetzes und § 75 Absatz 1a Satz 2 des Verwaltungsverfahrensgesetzes nach Maßgabe der Nummer 1 zu ermöglichen.</akn:p>
+              </akn:content>
+            </akn:point>
+          </akn:list>
+          <akn:list GUID="21ff8cce-444c-4c08-b2b0-bcf480b42b78" eId="para-3_abs-2_untergl-3">
+            <akn:intro GUID="31ee088e-ea43-4ac8-b95b-f817d8eceabe" eId="para-3_abs-2_untergl-3_intro-1">
+              <akn:p GUID="d330dea0-1c12-4db4-be50-1488a45671e6" eId="para-3_abs-2_untergl-3_intro-1_text-1">Für Verfahren nach den Sätzen 1 bis 3 bleiben die Länder zuständig und führen etwaige Verfahren fort. Eine Klage ist in diesen Verfahren nach § 78 Absatz 1 der Verwaltungsgerichtsordnung gegen das Land, dessen Behörde den angefochtenen Verwaltungsakt erlassen oder den beantragten Verwaltungsakt unterlassen hat, oder, sofern das Landesrecht dies bestimmt, gegen die Behörde selbst, die den angefochtenen Verwaltungsakt erlassen oder den beantragten Verwaltungsakt unterlassen hat, zu richten. Ein Verfahren gilt als eingeleitet</akn:p>
+            </akn:intro>
+            <akn:point GUID="5537588f-fc59-4585-9940-028d498cc7a3" eId="para-3_abs-2_untergl-3_listenelem-1">
+              <akn:num GUID="879219a1-15ef-40e9-8d25-bb48380dd7f0" eId="para-3_abs-2_untergl-3_listenelem-1_bezeichnung-1">
+                <akn:marker name="1" />
+                1.
+              </akn:num>
+              <akn:content GUID="26516767-bd68-4a78-96ba-53d71cae7b87" eId="para-3_abs-2_untergl-3_listenelem-1_inhalt-1">
+                <akn:p GUID="173ea86c-b4e2-431c-8cae-ac82be6a08f5" eId="para-3_abs-2_untergl-3_listenelem-1_inhalt-1_text-1">bei Planfeststellungsverfahren mit der Einreichung des Plans bei der Anhörungsbehörde nach § 17a des Bundesfernstraßengesetzes in Verbindung mit § 73 Absatz 1 des Verwaltungsverfahrensgesetzes und</akn:p>
+              </akn:content>
+            </akn:point>
+            <akn:point GUID="43702539-6f19-409f-b55c-3d1334caa03b" eId="para-3_abs-2_untergl-3_listenelem-2">
+              <akn:num GUID="97116bc4-2985-489e-a37b-375696259c0b" eId="para-3_abs-2_untergl-3_listenelem-2_bezeichnung-1">
+                <akn:marker name="2" />
+                2.
+              </akn:num>
+              <akn:content GUID="e374c407-7561-4dfe-8f00-d6a52aa53771" eId="para-3_abs-2_untergl-3_listenelem-2_inhalt-1">
+                <akn:p GUID="03ac60c3-fcb9-40ae-a3db-742a5b219026" eId="para-3_abs-2_untergl-3_listenelem-2_inhalt-1_text-1">bei der Plangenehmigung mit dem Antrag auf Einreichung des Plans bei der Anhörungs- oder Planfeststellungsbehörde nach § 17b Absatz 1 Nummer 2 Satz 2 und § 17a des Bundesfernstraßengesetzes in Verbindung mit § 73 Absatz 1 des Verwaltungsverfahrensgesetzes.</akn:p>
+              </akn:content>
+            </akn:point>
+            <akn:wrapUp GUID="54118ebe-226a-4afd-9969-a317da46710a" eId="para-3_abs-2_untergl-3_schlusstext-1">
+              <akn:p GUID="d330dea0-1c12-4db4-be50-1488a45671e6" eId="para-3_abs-2_untergl-3_schlusstext-1_text-1">Bei Planergänzungen oder ergänzenden Verfahren kann an die Stelle des Antrags auch eine von Amts wegen getroffene Entscheidung der Planfeststellungsbehörde des Landes treten.</akn:p>
+            </akn:wrapUp>
+          </akn:list>
+        </akn:paragraph>
+        <akn:paragraph GUID="638c4ef8-610c-4d35-99bb-38569ade4138" eId="para-3_abs-3">
+          <akn:num GUID="40b36403-d3d4-478e-ae53-9a96f5cd9d6e" eId="para-3_abs-3_bezeichnung-1">
+            <akn:marker name="3" />
+            (3)
+          </akn:num>
+          <akn:content GUID="a5fe07f1-8afa-4a7c-9483-59e7eaa46497" eId="para-3_abs-3_inhalt-1">
+            <akn:p GUID="ff040cba-f11c-4fad-a3ec-7038a8ee843c" eId="para-3_abs-3_inhalt-1_text-1">Wenn ein Land dies beim Fernstraßen-Bundesamt beantragt, ist abweichend von § 2 Absatz 2 und 3 eine nach Landesrecht zuständige Behörde die Anhörungs- und Planfeststellungsbehörde in Planfeststellungsverfahren oder die Plangenehmigungsbehörde in Plangenehmigungsverfahren, die auf der Grundlage des § 17 des Bundesfernstraßengesetzes für den Bau oder die Änderung von Bundesautobahnen oder Bundesstraßen in Bundesverwaltung durchgeführt werden, sowie für die Entscheidung nach § 74 Absatz 7 des Verwaltungsverfahrensgesetzes zuständig. Sofern das Fernstraßen-Bundesamt und das Land nicht etwas anderes vereinbaren, wird die beantragte Übernahme wirksam mit Beginn des zweiten auf die Antragstellung folgenden Kalenderjahres; das jeweilige Land trägt ab diesem Zeitpunkt seine Kosten. Die Übernahme ist in einem vom Land zu bestimmenden Amtsblatt zu veröffentlichen. Die Antragstellung eines Landes erfolgt stets für alle Bundesautobahnen, die in dem jeweiligen Land liegen, und zugleich für alle Bundesstraßen in Bundesverwaltung, die in dem jeweiligen Land liegen, und ist nur ein einziges Mal möglich. Erfolgt die Antragstellung mit Wirkung zum 1. Januar 2021, tritt die Zuständigkeit des Fernstraßen-Bundesamtes nach § 2 Absatz 2 nicht ein. Umfasste der Antrag auf Übernahme zum 1. Januar 2021 nur die Bundesautobahnen, die in dem jeweiligen Land liegen, kann das Land den Antrag einmalig auf die Übernahme der Bundesstraßen in Bundesverwaltung, die in dem jeweiligen Land liegen, erweitern. Erfolgt eine Antragstellung mit Wirkung zu einem späteren Zeitpunkt, gilt Absatz 2 entsprechend, so dass die nach dem 1. Januar 2021 bis zum Zeitpunkt der wirksamen Übernahme eingeleiteten Verfahren vom Fernstraßen-Bundesamt fortgeführt werden und das jeweilige Land die Kosten ab dem Zeitpunkt der wirksamen Übernahme erstattet.</akn:p>
+          </akn:content>
+        </akn:paragraph>
+        <akn:paragraph GUID="b355bc8c-1034-4b95-936a-d9e74aa8ab36" eId="para-3_abs-4">
+          <akn:num GUID="fcbed4b9-22e0-4a93-a873-110a5db2d733" eId="para-3_abs-4_bezeichnung-1">
+            <akn:marker name="4" />
+            (4)
+          </akn:num>
+          <akn:content GUID="45d2e64f-bb80-4d85-ac0e-49f9771f41d7" eId="para-3_abs-4_inhalt-1">
+            <akn:p GUID="109e8042-5523-4bea-9892-695538ec643e" eId="para-3_abs-4_inhalt-1_text-1">Bei Zuständigkeit einer nach Landesrecht zuständigen Behörde ist das Bundesministerium für Verkehr und digitale Infrastruktur berechtigt, die Zuständigkeit für die Befugnisse nach § 2 Absatz 2 und 3 dem Fernstraßen-Bundesamt zu übertragen, sofern es tatsächliche Anhaltspunkte gibt, dass ein Land seiner Aufgabe zur Schaffung von Baurecht nach den §§ 17 bis 17e des Bundesfernstraßengesetzes nicht ordnungsgemäß nachkommt. Die Übertragung der Befugnisse auf das Fernstraßen-Bundesamt wird mit Beginn des zweiten auf die Entscheidung des Bundesministeriums für Verkehr und digitale Infrastruktur folgenden Kalenderjahres wirksam und der Bund trägt ab diesem Zeitpunkt die Kosten. Absatz 2 gilt entsprechend, so dass die bis zum Zeitpunkt der wirksamen Übertragung auf das Fernstraßen-Bundesamt eingeleiteten Verfahren von dem jeweiligen Land fortgeführt werden und das Fernstraßen-Bundesamt dem jeweiligen Land die Kosten ab dem Zeitpunkt der wirksamen Übertragung erstattet. Das Bundesministerium für Verkehr und digitale Infrastruktur wird den Zeitpunkt der wirksamen Übertragung im Bundesanzeiger veröffentlichen.</akn:p>
+          </akn:content>
+        </akn:paragraph>
+      </akn:article>
+      <akn:article GUID="934e9e8b-50cb-4bcb-8d82-ecb6963f1abb" eId="para-4" refersTo="einzelvorschrift-stammform">
+        <akn:num GUID="e49a7705-6b25-47fa-9779-0a11999d9f62" eId="para-4_bezeichnung-1">
+          <akn:marker name="4" />
+        </akn:num>
+        <akn:heading GUID="33bcc083-2d14-4802-9948-ecffd1affb2a" eId="para-4_überschrift-1">§ 4 Straßenverkehrsrechtliche Aufgaben des Fernstraßen-Bundesamtes</akn:heading>
+        <akn:paragraph GUID="76c0239e-909e-40f7-88f8-2a9b29a7da48" eId="para-4_abs-1">
+          <akn:num GUID="f9889d5a-e6b9-4740-a3b0-7bc607033a8e" eId="para-4_abs-1_bezeichnung-1">
+            <akn:marker name="1" />
+            (1)
+          </akn:num>
+          <akn:list GUID="d1e4ee94-0ea3-4a26-8632-4d3e13d1d170" eId="para-4_abs-1_untergl-1">
+            <akn:intro GUID="3f4aefae-b492-436a-9751-633c17f69cf5" eId="para-4_abs-1_untergl-1_intro-1">
+              <akn:p GUID="093b1db4-5806-48de-809a-438ed7bc0cfa" eId="para-4_abs-1_untergl-1_intro-1_text-1">Das Bundesministerium für Verkehr und digitale Infrastruktur wird ermächtigt, durch Rechtsverordnung mit Zustimmung des Bundesrates dem Fernstraßen-Bundesamt Aufgaben zur Durchführung des Straßenverkehrsgesetzes und der auf Grund des Straßenverkehrsgesetzes erlassenen Rechtsverordnungen zu übertragen und dabei den Übergang laufender Verfahren auf das Fernstraßen-Bundesamt zu regeln. Übertragbar sind straßenverkehrsrechtliche Aufgaben auf Bundesautobahnen in der Baulast des Bundes und auf Bundesstraßen in Bundesverwaltung, die</akn:p>
+            </akn:intro>
+            <akn:point GUID="f6f89945-acc1-4110-812b-46ddc8927e6c" eId="para-4_abs-1_untergl-1_listenelem-1">
+              <akn:num GUID="03aa4df9-e41b-42dc-b395-996bf46984a7" eId="para-4_abs-1_untergl-1_listenelem-1_bezeichnung-1">
+                <akn:marker name="1" />
+                1.
+              </akn:num>
+              <akn:content GUID="40210c57-40bb-430a-bcb7-c4b082bab22c" eId="para-4_abs-1_untergl-1_listenelem-1_inhalt-1">
+                <akn:p GUID="a53a9582-5065-4ba8-b37b-2f57b38ca6cb" eId="para-4_abs-1_untergl-1_listenelem-1_inhalt-1_text-1">im Zusammenhang mit dem Bau, Betrieb oder der Erhaltung der vorgenannten Straßen stehen,</akn:p>
+              </akn:content>
+            </akn:point>
+            <akn:point GUID="495f92bb-17b6-4875-ad80-c107ad3db400" eId="para-4_abs-1_untergl-1_listenelem-2">
+              <akn:num GUID="1a9da526-3617-400d-9654-20d00b43a57c" eId="para-4_abs-1_untergl-1_listenelem-2_bezeichnung-1">
+                <akn:marker name="2" />
+                2.
+              </akn:num>
+              <akn:list GUID="a9b5303a-af73-4736-97ac-9c3f78e86d02" eId="para-4_abs-1_untergl-1_listenelem-2_untergl-1">
+                <akn:intro GUID="882f80e6-2faa-472e-af95-040b7a21debf" eId="para-4_abs-1_untergl-1_listenelem-2_untergl-1_intro-1">
+                  <akn:p GUID="a829ac21-2c27-486d-997e-b654227eb187" eId="para-4_abs-1_untergl-1_listenelem-2_untergl-1_intro-1_text-1">Maßnahmen über den Straßenverkehr betreffen, die erforderlich sind</akn:p>
+                </akn:intro>
+                <akn:point GUID="2ace37bc-a1bf-48ea-bd35-be9d73c11556" eId="para-4_abs-1_untergl-1_listenelem-2_untergl-1_listenelem-a">
+                  <akn:num GUID="545ad57a-d295-4c2a-ab42-6aaa9ba4b840" eId="para-4_abs-1_untergl-1_listenelem-2_untergl-1_listenelem-a_bezeichnung-1">
+                    <akn:marker name="a" />
+                    a)
+                  </akn:num>
+                  <akn:content GUID="5687c22f-0064-4cc7-9703-01b8218fdfd9" eId="para-4_abs-1_untergl-1_listenelem-2_untergl-1_listenelem-a_inhalt-1">
+                    <akn:p GUID="88d780e4-abec-4c58-954c-ec7ec1a8866f" eId="para-4_abs-1_untergl-1_listenelem-2_untergl-1_listenelem-a_inhalt-1_text-1">zur Erhaltung der Sicherheit und Ordnung auf den vorgenannten Straßen,</akn:p>
+                  </akn:content>
+                </akn:point>
+                <akn:point GUID="cd0df269-34ae-4ce6-b67e-6fa2ee394afa" eId="para-4_abs-1_untergl-1_listenelem-2_untergl-1_listenelem-b">
+                  <akn:num GUID="4b8515c8-1f3c-4022-81f8-7f7fada43fd5" eId="para-4_abs-1_untergl-1_listenelem-2_untergl-1_listenelem-b_bezeichnung-1">
+                    <akn:marker name="b" />
+                    b)
+                  </akn:num>
+                  <akn:content GUID="df726c60-4b3c-413e-9254-5b89a613b77e" eId="para-4_abs-1_untergl-1_listenelem-2_untergl-1_listenelem-b_inhalt-1">
+                    <akn:p GUID="f450ba4f-bec7-4722-bcea-4ec1b61ff801" eId="para-4_abs-1_untergl-1_listenelem-2_untergl-1_listenelem-b_inhalt-1_text-1">für Zwecke der Verteidigung,</akn:p>
+                  </akn:content>
+                </akn:point>
+                <akn:point GUID="6a549c38-beea-4038-bed0-553a0602db55" eId="para-4_abs-1_untergl-1_listenelem-2_untergl-1_listenelem-c">
+                  <akn:num GUID="5795aab5-7caa-45aa-99f2-262494fe6d83" eId="para-4_abs-1_untergl-1_listenelem-2_untergl-1_listenelem-c_bezeichnung-1">
+                    <akn:marker name="c" />
+                    c)
+                  </akn:num>
+                  <akn:content GUID="0607d756-2b11-493e-9f66-63f6b1de59b3" eId="para-4_abs-1_untergl-1_listenelem-2_untergl-1_listenelem-c_inhalt-1">
+                    <akn:p GUID="92b8ebdf-8c6c-4ae6-be70-66371de12e43" eId="para-4_abs-1_untergl-1_listenelem-2_untergl-1_listenelem-c_inhalt-1_text-1">zur Verhütung einer über das verkehrsübliche Maß hinausgehenden Abnutzung der vorgenannten Straßen,</akn:p>
+                  </akn:content>
+                </akn:point>
+                <akn:point GUID="b43c962f-dc9c-482d-a71e-d617bd57ed67" eId="para-4_abs-1_untergl-1_listenelem-2_untergl-1_listenelem-d">
+                  <akn:num GUID="fd55c5cd-bedc-47f9-8fc4-9e84c16513c0" eId="para-4_abs-1_untergl-1_listenelem-2_untergl-1_listenelem-d_bezeichnung-1">
+                    <akn:marker name="d" />
+                    d)
+                  </akn:num>
+                  <akn:content GUID="c63521a8-3a81-4f77-a19d-4c4eca4af836" eId="para-4_abs-1_untergl-1_listenelem-2_untergl-1_listenelem-d_inhalt-1">
+                    <akn:p GUID="1e524151-fb15-4580-9873-816b585a08db" eId="para-4_abs-1_untergl-1_listenelem-2_untergl-1_listenelem-d_inhalt-1_text-1">zur Verhütung von Belästigungen oder</akn:p>
+                  </akn:content>
+                </akn:point>
+                <akn:point GUID="ac127899-85f9-4848-bd12-3dbefe47705a" eId="para-4_abs-1_untergl-1_listenelem-2_untergl-1_listenelem-e">
+                  <akn:num GUID="01eb5477-dadf-4ee0-8450-f5f4422d9b18" eId="para-4_abs-1_untergl-1_listenelem-2_untergl-1_listenelem-e_bezeichnung-1">
+                    <akn:marker name="e" />
+                    e)
+                  </akn:num>
+                  <akn:content GUID="e1969351-276c-4852-8496-f987c89a0791" eId="para-4_abs-1_untergl-1_listenelem-2_untergl-1_listenelem-e_inhalt-1">
+                    <akn:p GUID="56134c2c-ba0f-4f60-95db-c3913b509abd" eId="para-4_abs-1_untergl-1_listenelem-2_untergl-1_listenelem-e_inhalt-1_text-1">zur Erhaltung der öffentlichen Sicherheit,</akn:p>
+                  </akn:content>
+                </akn:point>
+              </akn:list>
+            </akn:point>
+            <akn:point GUID="f8d44a8f-36ae-4041-bdab-36bd07b96a8f" eId="para-4_abs-1_untergl-1_listenelem-3">
+              <akn:num GUID="6bd8a744-2587-4c9e-9a63-ca01633e9369" eId="para-4_abs-1_untergl-1_listenelem-3_bezeichnung-1">
+                <akn:marker name="3" />
+                3.
+              </akn:num>
+              <akn:content GUID="f05c7dd6-3fee-4c94-96e8-1a68eb6cde08" eId="para-4_abs-1_untergl-1_listenelem-3_inhalt-1">
+                <akn:p GUID="234abc22-1c9d-47de-8a44-5bd91d2dc55b" eId="para-4_abs-1_untergl-1_listenelem-3_inhalt-1_text-1">Maßnahmen über das Verhalten im Straßenverkehr zum Schutz vor den von Fahrzeugen ausgehenden schädlichen Umwelteinwirkungen im Sinne des Bundes-Immissionsschutzgesetzes betreffen oder</akn:p>
+              </akn:content>
+            </akn:point>
+            <akn:point GUID="2ea19223-c8bb-43d6-aa14-027990ef06a5" eId="para-4_abs-1_untergl-1_listenelem-4">
+              <akn:num GUID="20b19114-83fa-46e9-bf83-d9a0246be7f7" eId="para-4_abs-1_untergl-1_listenelem-4_bezeichnung-1">
+                <akn:marker name="4" />
+                4.
+              </akn:num>
+              <akn:content GUID="11592680-daf2-453c-b45b-661a506e50ae" eId="para-4_abs-1_untergl-1_listenelem-4_inhalt-1">
+                <akn:p GUID="b7c8c371-f876-4f41-815e-ee85676c8aa0" eId="para-4_abs-1_untergl-1_listenelem-4_inhalt-1_text-1">Maßnahmen betreffen zur Beschränkung des Straßenverkehrs zum Zweck der Erforschung des Unfallgeschehens, des Verkehrsverhaltens, der Verkehrsabläufe oder die der Erprobung geplanter verkehrssichernder oder verkehrsregelnder Regelungen dienen.</akn:p>
+              </akn:content>
+            </akn:point>
+            <akn:wrapUp GUID="f7ac29af-e56f-4a38-87b8-793e4025284d" eId="para-4_abs-1_untergl-1_schlusstext-1">
+              <akn:p GUID="778d866e-6d33-4259-a405-9cccc03776f6" eId="para-4_abs-1_untergl-1_schlusstext-1_text-1">Auf Bundesstraßen in Bundesverwaltung zählen zu den übertragbaren Aufgaben außerdem solche, die</akn:p>
+            </akn:wrapUp>
+          </akn:list>
+          <akn:list GUID="d1e4ee94-0ea3-4a26-8632-4d3e13d1d170" eId="para-4_abs-1_untergl-2">
+            <akn:intro GUID="3f4aefae-b492-436a-9751-633c17f69cf5" eId="para-4_abs-1_untergl-2_intro-1">
+              <akn:p GUID="fe489d8a-a578-4863-b062-5f25c87fb286" eId="para-4_abs-1_untergl-2_intro-1_text-1">
+                <!-- TODO: Unklare Struktur der Listen -->
+              </akn:p>
+            </akn:intro>
+            <akn:point GUID="f6f89945-acc1-4110-812b-46ddc8927e6c" eId="para-4_abs-1_untergl-2_listenelem-1">
+              <akn:num GUID="03aa4df9-e41b-42dc-b395-996bf46984a7" eId="para-4_abs-1_untergl-2_listenelem-1_bezeichnung-1">
+                <akn:marker name="1" />
+                1.
+              </akn:num>
+              <akn:content GUID="40210c57-40bb-430a-bcb7-c4b082bab22c" eId="para-4_abs-1_untergl-2_listenelem-1_inhalt-1">
+                <akn:p GUID="a53a9582-5065-4ba8-b37b-2f57b38ca6cb" eId="para-4_abs-1_untergl-2_listenelem-1_inhalt-1_text-1">die Einrichtung gebührenpflichtiger Parkplätze bei Großveranstaltungen im Interesse der Ordnung und Sicherheit des Verkehrs betreffen,</akn:p>
+              </akn:content>
+            </akn:point>
+            <akn:point GUID="dc108514-cb11-4452-89f0-a0d1d268df4d" eId="para-4_abs-1_untergl-2_listenelem-2">
+              <akn:num GUID="88e02352-9213-4e58-a60e-e4964ad96f30" eId="para-4_abs-1_untergl-2_listenelem-2_bezeichnung-1">
+                <akn:marker name="2" />
+                2.
+              </akn:num>
+              <akn:content GUID="f16dd555-61a3-431c-9a67-ffcc917bb303" eId="para-4_abs-1_untergl-2_listenelem-2_inhalt-1">
+                <akn:p GUID="0c1d785e-aa0a-4cfc-b02c-1d5b9786f54b" eId="para-4_abs-1_untergl-2_listenelem-2_inhalt-1_text-1">die Beschränkung des Haltens und Parkens zugunsten der Bewohner städtischer Quartiere mit erheblichem Parkraummangel betreffen,</akn:p>
+              </akn:content>
+            </akn:point>
+            <akn:point GUID="f8d44a8f-36ae-4041-bdab-36bd07b96a8f" eId="para-4_abs-1_untergl-2_listenelem-3">
+              <akn:num GUID="6bd8a744-2587-4c9e-9a63-ca01633e9369" eId="para-4_abs-1_untergl-2_listenelem-3_bezeichnung-1">
+                <akn:marker name="3" />
+                3.
+              </akn:num>
+              <akn:content GUID="f05c7dd6-3fee-4c94-96e8-1a68eb6cde08" eId="para-4_abs-1_untergl-2_listenelem-3_inhalt-1">
+                <akn:p GUID="234abc22-1c9d-47de-8a44-5bd91d2dc55b" eId="para-4_abs-1_untergl-2_listenelem-3_inhalt-1_text-1">die Schaffung von Parkmöglichkeiten für schwerbehinderte Menschen mit außergewöhnlicher Gehbehinderung, mit beidseitiger Amelie oder Phokomelie oder mit vergleichbaren Funktionseinschränkungen sowie für blinde Menschen, insbesondere in unmittelbarer Nähe ihrer Wohnung oder Arbeitsstätte, betreffen oder</akn:p>
+              </akn:content>
+            </akn:point>
+            <akn:point GUID="2ea19223-c8bb-43d6-aa14-027990ef06a5" eId="para-4_abs-1_untergl-2_listenelem-4">
+              <akn:num GUID="20b19114-83fa-46e9-bf83-d9a0246be7f7" eId="para-4_abs-1_untergl-2_listenelem-4_bezeichnung-1">
+                <akn:marker name="4" />
+                4.
+              </akn:num>
+              <akn:content GUID="11592680-daf2-453c-b45b-661a506e50ae" eId="para-4_abs-1_untergl-2_listenelem-4_inhalt-1">
+                <akn:p GUID="b7c8c371-f876-4f41-815e-ee85676c8aa0" eId="para-4_abs-1_untergl-2_listenelem-4_inhalt-1_text-1">die Einrichtung von Sonderfahrspuren für Linienomnibusse und Taxen betreffen.</akn:p>
+              </akn:content>
+            </akn:point>
+            <akn:wrapUp GUID="f7ac29af-e56f-4a38-87b8-793e4025284d" eId="para-4_abs-1_untergl-2_schlusstext-1">
+              <akn:p GUID="778d866e-6d33-4259-a405-9cccc03776f6" eId="para-4_abs-1_untergl-2_schlusstext-1_text-1">Von Satz 2 ausgenommen sind Aufgaben der Polizei.</akn:p>
+            </akn:wrapUp>
+          </akn:list>
+        </akn:paragraph>
+        <akn:paragraph GUID="39a91ecb-367f-4057-8df0-6f9bcfea28c0" eId="para-4_abs-2">
+          <akn:num GUID="48eeca9c-46c8-4e35-981f-3e85a3dd6d61" eId="para-4_abs-2_bezeichnung-1">
+            <akn:marker name="2" />
+            (2)
+          </akn:num>
+          <akn:content GUID="f60d09b7-cedd-482a-b3a6-23d585c362a0" eId="para-4_abs-2_inhalt-1">
+            <akn:p GUID="a848a0d2-caae-4c05-a37a-08359d493ab6" eId="para-4_abs-2_inhalt-1_text-1">In der Rechtsverordnung nach Absatz 1 kann vorgesehen werden, dass Aufgaben des Fernstraßen-Bundesamtes der auf Grund des Infrastrukturgesellschaftserrichtungsgesetzes beliehenen Gesellschaft privaten Rechts weiter übertragen werden.</akn:p>
+          </akn:content>
+        </akn:paragraph>
+      </akn:article>
+    </akn:body>
+  </akn:act>
+</akn:akomaNtoso>

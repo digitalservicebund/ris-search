@@ -1,0 +1,388 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-model href="../../schema/legalDocML.de.sch" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<akn:akomaNtoso xmlns:akn="http://Inhaltsdaten.LegalDocML.de/1.4/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://Metadaten.LegalDocML.de/1.4/ ../../../schema/legalDocML.de-metadaten.xsd http://Inhaltsdaten.LegalDocML.de/1.4/ ../../../schema/legalDocML.de-regelungstextverkuendungsfassung.xsd">
+  <akn:act name="regelungstext">
+    <akn:meta>
+      <akn:identification source="attributsemantik-noch-undefiniert">
+        <akn:FRBRWork>
+          <akn:FRBRthis value="eli/bgbl-1/2020/575/regelungstext" />
+          <akn:FRBRuri value="eli/bgbl-1/2020/575" />
+          <akn:FRBRalias name="übergreifende-id" value="71c1c6c7-0cdd-418b-8680-d5aa736731c8" />
+          <akn:FRBRdate date="2020-03-27" name="neufassung" />
+          <akn:FRBRauthor href="recht.bund.de/institution/bundesregierung" />
+          <akn:FRBRcountry value="de" />
+          <akn:FRBRnumber value="575" />
+          <akn:FRBRname value="bgbl-1" />
+          <akn:FRBRsubtype value="regelungstext" />
+        </akn:FRBRWork>
+        <akn:FRBRExpression>
+          <akn:FRBRthis value="eli/bgbl-1/2020/575/2020-03-27/1/deu/regelungstext" />
+          <akn:FRBRuri value="eli/bgbl-1/2020/575/2020-03-27/1/deu" />
+          <akn:FRBRauthor href="recht.bund.de/institution/bundesregierung" />
+          <akn:FRBRdate date="2020-03-27" name="verkuendung" />
+          <akn:FRBRlanguage language="deu" />
+          <akn:FRBRversionNumber value="1" />
+        </akn:FRBRExpression>
+        <akn:FRBRManifestation>
+          <akn:FRBRthis value="eli/bgbl-1/2020/575/2020-03-27/1/deu/regelungstext.xml" />
+          <akn:FRBRuri value="eli/bgbl-1/2020/575/2020-03-27/1/deu/regelungstext.xml" />
+          <akn:FRBRdate date="2020-03-27" name="generierung" />
+          <akn:FRBRauthor href="recht.bund.de" />
+          <akn:FRBRformat value="xml" />
+        </akn:FRBRManifestation>
+      </akn:identification>
+      <akn:proprietary source="attributsemantik-noch-undefiniert">
+        <meta:legalDocML.de_metadaten xmlns:meta="http://Metadaten.LegalDocML.de/1.4/">
+          <meta:typ>gesetz</meta:typ>
+          <meta:form>stammform</meta:form>
+          <meta:fassung>neufassung</meta:fassung>
+          <meta:art>regelungstext</meta:art>
+          <meta:initiant>nicht-vorhanden</meta:initiant>
+          <meta:bearbeitendeInstitution>nicht-vorhanden</meta:bearbeitendeInstitution>
+        </meta:legalDocML.de_metadaten>
+      </akn:proprietary>
+    </akn:meta>
+    <akn:preface>
+      <akn:longTitle GUID="191e2322-3075-41d6-800c-c51baab33d90" eId="doktitel-1">
+        <akn:p GUID="7a4d23cc-93d9-4ce5-9e96-654dc6c3a94d" eId="doktitel-1_text-1">
+          <akn:docTitle>Gesetz über den Einsatz der Einrichtungen und sozialen Dienste zur Bekämpfung der Coronavirus SARS-CoV-2 Krise in Verbindung mit einem Sicherstellungsauftrag <akn:shortTitle GUID="23bb7226-4acc-47e6-9bb5-3607cd4bc915" eId="kurztitel-1">(Sozialdienstleister-Einsatzgesetz – <akn:inline refersTo="amtliche-abkuerzung" name="attributsemantik-noch-undefiniert">SodEG</akn:inline></akn:shortTitle>)</akn:docTitle>
+        </akn:p>
+      </akn:longTitle>
+    </akn:preface>
+    <akn:preamble>
+      <akn:blockContainer refersTo="inhaltsuebersicht" GUID="e743d01b-1103-4ff3-af7c-fc89932458c4" eId="verzeichnis-1">
+        <akn:heading GUID="0bf5763c-84f0-465b-8d4e-9d81645e94b6" eId="verzeichnis-1_überschrift-1">Inhaltsübersicht</akn:heading>
+        <akn:toc GUID="c7b6d031-82a4-4e4a-8c1c-b5c5b33b7616" eId="verzeichnis-1_inhuebs-1">
+          <akn:tocItem href="#para-1_überschrift-1" level="1" GUID="e0139e9c-076e-4033-9223-cde2912889f6" eId="verzeichnis-1_inhuebs-1_eintrag-1">
+            <akn:span>§ 1</akn:span>
+            <akn:span>Einsatz sozialer Dienstleister zur Krisenbewältigung</akn:span>
+          </akn:tocItem>
+          <akn:tocItem href="#para-2_überschrift-1" level="1" GUID="f79d36e8-ccec-40ee-9e2f-46091e79bb3a" eId="verzeichnis-1_inhuebs-1_eintrag-2">
+            <akn:span>§ 2</akn:span>
+            <akn:span>Sicherstellungsauftrag der Leistungsträger</akn:span>
+          </akn:tocItem>
+          <akn:tocItem href="#para-3_überschrift-1" level="1" GUID="c5a7ebef-a3b5-4f6a-92e8-80cfb9df5783" eId="verzeichnis-1_inhuebs-1_eintrag-3">
+            <akn:span>§ 3</akn:span>
+            <akn:span>Umsetzung des Sicherstellungsauftrages</akn:span>
+          </akn:tocItem>
+          <akn:tocItem href="#para-4_überschrift-1" level="1" GUID="925cc736-965a-4e49-ac57-f89a9824c1c7" eId="verzeichnis-1_inhuebs-1_eintrag-4">
+            <akn:span>§ 4</akn:span>
+            <akn:span>Erstattungsanspruch</akn:span>
+          </akn:tocItem>
+          <akn:tocItem href="#para-5_überschrift-1" level="1" GUID="63e798eb-5d15-4a29-ab48-1b31a43f8ae1" eId="verzeichnis-1_inhuebs-1_eintrag-5">
+            <akn:span>§ 5</akn:span>
+            <akn:span>Zuständigkeit und Geltungsdauer; Verordnungsermächtigung</akn:span>
+          </akn:tocItem>
+          <akn:tocItem href="#para-6_überschrift-1" level="1" GUID="e43493a3-35e0-4ac7-a8d9-b47601e15577" eId="verzeichnis-1_inhuebs-1_eintrag-6">
+            <akn:span>§ 6</akn:span>
+            <akn:span>Datenschutz</akn:span>
+          </akn:tocItem>
+          <akn:tocItem href="#para-7_überschrift-1" level="1" GUID="4e517a90-f59c-426d-9df9-3bd223cc3fda" eId="verzeichnis-1_inhuebs-1_eintrag-7">
+            <akn:span>§ 7</akn:span>
+            <akn:span>Verwaltungsverfahren und Rechtsweg</akn:span>
+          </akn:tocItem>
+          <akn:tocItem href="#para-8_überschrift-1" level="1" GUID="f2db4032-9c5a-48e0-812c-27c1a9700714" eId="verzeichnis-1_inhuebs-1_eintrag-8">
+            <akn:span>§ 8</akn:span>
+            <akn:span>Evaluation</akn:span>
+          </akn:tocItem>
+          <akn:tocItem href="#para-9_überschrift-1" level="1" GUID="1c900bb5-e614-423e-8686-453e5c097adf" eId="verzeichnis-1_inhuebs-1_eintrag-9">
+            <akn:span>§ 9</akn:span>
+            <akn:span>Ergänzende Bestimmungen für soziale Dienstleister im Bereich der interdisziplinären Früherkennung und Frühförderung</akn:span>
+          </akn:tocItem>
+        </akn:toc>
+      </akn:blockContainer>
+    </akn:preamble>
+    <akn:body refersTo="hauptteil-stammform">
+      <akn:article GUID="92bd4dee-e756-4321-af21-c6ee1d38c331" eId="para-1" refersTo="einzelvorschrift-stammform">
+        <akn:num GUID="1755fc13-cd33-49b2-8d50-e6b79eba4719" eId="para-1_bezeichnung-1">
+          <akn:marker name="1" />
+        </akn:num>
+        <akn:heading GUID="55f18e34-f449-4c21-aec9-165826fee9c8" eId="para-1_überschrift-1">§ 1 Einsatz sozialer Dienstleister zur Krisenbewältigung</akn:heading>
+        <akn:paragraph GUID="c1661ba9-3299-4f63-862c-74e15e4b0ecd" eId="para-1_abs-1">
+          <akn:num GUID="f86428bc-dfd0-4555-8eb1-17b2a5dd78a4" eId="para-1_abs-1_bezeichnung-1">
+            <akn:marker name="1" />
+          </akn:num>
+          <akn:content GUID="29d4ecc3-0578-4fd3-9a42-8de19c7ef462" eId="para-1_abs-1_inhalt-1">
+            <akn:p GUID="afffb9ac-42a4-4de4-b25e-9b3968ce04ad" eId="para-1_abs-1_inhalt-1_text-1">Die Gewährung von Zuschüssen nach diesem Gesetz ist davon abhängig, dass der soziale Dienstleister mit der Antragstellung erklärt, alle ihm nach den Umständen zumutbaren und rechtlich zulässigen Möglichkeiten auszuschöpfen, um Arbeitskräfte, Räumlichkeiten und Sachmittel in Bereichen zur Verfügung zu stellen, die für die Bewältigung von Auswirkungen der Coronavirus SARS-CoV-2 Krise geeignet sind. In der Erklärung nach Satz 1 hat der soziale Dienstleister Art und Umfang dieser zumutbaren und rechtlich zulässigen Unterstützungsmöglichkeiten anzuzeigen und seine tatsächliche Einsatzfähigkeit glaubhaft zu machen.</akn:p>
+          </akn:content>
+        </akn:paragraph>
+      </akn:article>
+      <akn:article GUID="8b0407ea-6050-4083-be66-e79a4519859f" eId="para-2" refersTo="einzelvorschrift-stammform">
+        <akn:num GUID="1b4573f5-1089-4e53-8424-7a7f0d9f71f5" eId="para-2_bezeichnung-1">
+          <akn:marker name="2" />
+        </akn:num>
+        <akn:heading GUID="f3deb16c-c2b1-448e-a371-504c01bc6f14" eId="para-2_überschrift-1">§ 2 Sicherstellungsauftrag der Leistungsträger</akn:heading>
+        <akn:paragraph GUID="15996e88-5cdc-4261-864e-410a2a580cff" eId="para-2_abs-1">
+          <akn:num GUID="9ad5ebe7-904c-42b3-859e-c2758675dde4" eId="para-2_abs-1_bezeichnung-1">
+            <akn:marker name="1" />
+          </akn:num>
+          <akn:content GUID="77d9ed3a-a500-413b-8e94-79bef88d7508" eId="para-2_abs-1_inhalt-1">
+            <akn:p GUID="81a485f0-5278-4f0f-96c2-1bdf42f02c54" eId="para-2_abs-1_inhalt-1_text-1">Die Leistungsträger nach § 12 des Ersten Buches Sozialgesetzbuch, mit Ausnahme der Leistungsträger nach dem Fünften und Elften Buch Sozialgesetzbuch, und das Bundesamt für Migration und Flüchtlinge (Leistungsträger) gewährleisten den Bestand der Einrichtungen, sozialen Dienste, Leistungserbringer und Maßnahmenträger, die als soziale Dienstleister im Aufgabenbereich des Sozialgesetzbuchs oder des Aufenthaltsgesetzes soziale Leistungen erbringen. Soziale Dienstleister in diesem Sinne sind alle natürlichen und juristischen Personen und Personengesellschaften, die durch Maßnahmen zur Bekämpfung übertragbarer Krankheiten nach dem Fünften Abschnitt des Infektionsschutzgesetzes beeinträchtigt sind und in einem Rechtsverhältnis zu einem Leistungsträger nach Satz 1 zur Erfüllung von Aufgaben nach dem Sozialgesetzbuch oder dem Aufenthaltsgesetz stehen. Maßnahmen nach Satz 2 sind hoheitliche Entscheidungen, die im örtlichen Tätigkeitsbereich von sozialen Dienstleistern unmittelbar oder mittelbar den Betrieb, die Ausübung, die Nutzung oder die Erreichbarkeit von Angeboten der sozialen Dienstleister beeinträchtigen. Abweichend von den Sätzen 1 und 2 gewährleisten auch Leistungsträger nach dem Fünften Buch Sozialgesetzbuch den Bestand sozialer Dienstleister, soweit diese Leistungen der interdisziplinären Früherkennung und Frühförderung nach § 42 Absatz 2 Nummer 2 und § 46 des Neunten Buches Sozialgesetzbuch in Verbindung mit der Frühförderungsverordnung erbringen.</akn:p>
+          </akn:content>
+        </akn:paragraph>
+      </akn:article>
+      <akn:article GUID="f3d1b65e-8f74-49f0-bfdc-6e665ddb411e" eId="para-3" refersTo="einzelvorschrift-stammform">
+        <akn:num GUID="2b727185-c7e1-4aba-a728-796f62dbfcd0" eId="para-3_bezeichnung-1">
+          <akn:marker name="3" />
+        </akn:num>
+        <akn:heading GUID="4f2b11d7-1566-4e5e-bc3a-3f266651b946" eId="para-3_überschrift-1">§ 3 Umsetzung des Sicherstellungsauftrages</akn:heading>
+        <akn:paragraph GUID="c615c080-3424-4d5d-a839-be83914b93a0" eId="para-3_abs-1">
+          <akn:num GUID="dc4d5f8a-9070-410f-9c1a-fc978e0db6c2" eId="para-3_abs-1_bezeichnung-1">
+            <akn:marker name="1" />
+          </akn:num>
+          <akn:content GUID="38c26242-0c23-4609-98da-a9dcaf68bb3d" eId="para-3_abs-1_inhalt-1">
+            <akn:p GUID="8ce8d073-7a3d-4806-9a16-ac0270370c7f" eId="para-3_abs-1_inhalt-1_text-1">Die Leistungsträger erfüllen den besonderen Sicherstellungsauftrag nach § 2 durch Auszahlung von monatlichen Zuschüssen an die einzelnen sozialen Dienstleister für den Zeitraum, in dem die sozialen Dienstleister durch Maßnahmen nach § 2 Satz 2 beeinträchtigt sind. Für die Berechnung der Zuschusshöhe wird ein Monatsdurchschnitt der im Zeitraum März 2019 bis Februar 2020 geleisteten Zahlungen in den in § 2 genannten Rechtsverhältnissen ermittelt; wurde das Rechtsverhältnis erst nach dem Monat Februar 2020 begründet, werden die letzten zwölf Monate vor dem ersten Monat, für den der Zuschuss beantragt wird, berücksichtigt. Sind berechnungserhebliche Zeiträume kürzer als zwölf Monate, sind entsprechende Anteile zu bilden. Wurde im Jahr 2020 bereits ein Zuschuss geleistet, kann für Folgeanträge der gleiche Monatsdurchschnitt zugrunde gelegt werden. Der monatliche Zuschuss beträgt höchstens 75 Prozent des Monatsdurchschnitts. Die Zuschüsse werden auf Antrag durch Verwaltungsakt oder auf Grundlage eines öffentlich-rechtlichen Vertrages gewährt. Die sozialen Dienstleister haben gegenüber dem zuschussgewährenden Leistungsträger den Zufluss vorrangiger Mittel nach § 4 Satz 1 und 2 anzuzeigen. Die sozialen Dienstleister sind verpflichtet, den Leistungsträgern den Zeitpunkt der Beendigung der Beeinträchtigung nach § 2 Satz 3 unverzüglich mitzuteilen.</akn:p>
+          </akn:content>
+        </akn:paragraph>
+      </akn:article>
+      <akn:article GUID="c0d3c1d6-5262-4776-bf85-7354a6bb490b" eId="para-4" refersTo="einzelvorschrift-stammform">
+        <akn:num GUID="50bcda19-f92e-4502-b27d-32bdf4b66df3" eId="para-4_bezeichnung-1">
+          <akn:marker name="4" />
+        </akn:num>
+        <akn:heading GUID="5cb25c19-ab8f-4d73-87bc-dbd017dfc104" eId="para-4_überschrift-1">§ 4 Erstattungsanspruch</akn:heading>
+        <akn:paragraph GUID="f09a4f03-1bec-4fee-855a-224e4b3a4242" eId="para-4_abs-1">
+          <akn:num GUID="21a642b1-2005-4c7b-9f76-f33b02844237" eId="para-4_abs-1_bezeichnung-1">
+            <akn:marker name="1" />
+          </akn:num>
+          <akn:list GUID="aeffcc72-6a8a-4675-91b2-fcf9cf0f7262" eId="para-4_abs-1_untergl-1">
+            <akn:intro GUID="4c9029df-5355-47fe-8259-6689a7292f57" eId="para-4_abs-1_untergl-1_intro-1">
+              <akn:p GUID="b5de3e9a-ef67-4bee-a991-f9a7ebf476f6" eId="para-4_abs-1_untergl-1_intro-1_text-1">Die Leistungsträger haben einen nachträglichen Erstattungsanspruch gegenüber sozialen Dienstleistern, soweit den sozialen Dienstleistern im Zeitraum der Zuschussgewährung vorrangige Mittel aus</akn:p>
+            </akn:intro>
+            <akn:point GUID="53fa6c84-1315-49c2-9529-5418ac46503a" eId="para-4_abs-1_untergl-1_listenelem-1">
+              <akn:num GUID="c557325d-d0e3-4005-8db3-93c67a9b8b0d" eId="para-4_abs-1_untergl-1_listenelem-1_bezeichnung-1">
+                <akn:marker name="1" />
+                1.
+              </akn:num>
+              <akn:content GUID="a219a5e8-963d-4765-84a4-e4f447529c58" eId="para-4_abs-1_untergl-1_listenelem-1_inhalt-1">
+                <akn:p GUID="6e44defc-e81d-4fce-8dbe-f20db7d9c4f4" eId="para-4_abs-1_untergl-1_listenelem-1_inhalt-1_text-1">Rechtsverhältnissen nach § 2 Satz 2, die vorbehaltlich der hoheitlichen Entscheidungen im Sinne von § 2 Satz 3 weiterhin möglich sind,</akn:p>
+              </akn:content>
+            </akn:point>
+            <akn:point GUID="28f4632a-13d8-4af8-aeb6-cc79cc7c1e04" eId="para-4_abs-1_untergl-1_listenelem-2">
+              <akn:num GUID="89996fae-f83d-49ce-91cb-360bfe8ed3b5" eId="para-4_abs-1_untergl-1_listenelem-2_bezeichnung-1">
+                <akn:marker name="2" />
+                2.
+              </akn:num>
+              <akn:content GUID="cdbc2325-dc11-40cb-a023-e55903a09269" eId="para-4_abs-1_untergl-1_listenelem-2_inhalt-1">
+                <akn:p GUID="935ae2c7-65e7-454f-8563-6cc608820f8d" eId="para-4_abs-1_untergl-1_listenelem-2_inhalt-1_text-1">Entschädigungen nach dem Infektionsschutzgesetz,</akn:p>
+              </akn:content>
+            </akn:point>
+            <akn:point GUID="8d3cd8be-7206-4f72-b3c3-41ee752c33c9" eId="para-4_abs-1_untergl-1_listenelem-3">
+              <akn:num GUID="5bd10b66-f8f8-4306-9d01-7e66574143cc" eId="para-4_abs-1_untergl-1_listenelem-3_bezeichnung-1">
+                <akn:marker name="3" />
+                3.
+              </akn:num>
+              <akn:content GUID="e4ecb185-eb4d-4746-86f9-ee74a110ce07" eId="para-4_abs-1_untergl-1_listenelem-3_inhalt-1">
+                <akn:p GUID="2301e05c-79ec-47ca-98a7-44d0cfba8802" eId="para-4_abs-1_untergl-1_listenelem-3_inhalt-1_text-1">Leistungen für den Verbleib in Beschäftigung nach dem Sechsten Abschnitt des Dritten Kapitels des Dritten Buches Sozialgesetzbuch,</akn:p>
+              </akn:content>
+            </akn:point>
+            <akn:point GUID="3807448d-39a6-418f-9ce0-513b6da4a419" eId="para-4_abs-1_untergl-1_listenelem-4">
+              <akn:num GUID="03bab662-bb58-4681-96d0-efc452fb2d8b" eId="para-4_abs-1_untergl-1_listenelem-4_bezeichnung-1">
+                <akn:marker name="4" />
+                4.
+              </akn:num>
+              <akn:content GUID="c90eee9f-8cfa-4086-903c-d0955b6d5e5d" eId="para-4_abs-1_untergl-1_listenelem-4_inhalt-1">
+                <akn:p GUID="978cd19a-1b88-47f2-8db2-fea416acd948" eId="para-4_abs-1_untergl-1_listenelem-4_inhalt-1_text-1">Zuschüssen des Bundes und der Länder an soziale Dienstleister auf Grundlage gesetzlicher Regelungen und</akn:p>
+              </akn:content>
+            </akn:point>
+            <akn:point GUID="ec653e7e-fec1-4fb3-96ab-78a44a25b22d" eId="para-4_abs-1_untergl-1_listenelem-5">
+              <akn:num GUID="08902d7d-2d63-4081-833e-2395c48322d6" eId="para-4_abs-1_untergl-1_listenelem-5_bezeichnung-1">
+                <akn:marker name="5" />
+                5.
+              </akn:num>
+              <akn:content GUID="0e3b4d7d-9fc2-4534-83fc-7807dafbfcd0" eId="para-4_abs-1_untergl-1_listenelem-5_inhalt-1">
+                <akn:p GUID="fac11091-fe77-4d62-8906-6c405252548f" eId="para-4_abs-1_untergl-1_listenelem-5_inhalt-1_text-1">Versicherungsleistungen, die aufgrund von Maßnahmen zur Bekämpfung übertragbarer Krankheiten nach dem Fünften Abschnitt des Infektionsschutzgesetzes an soziale Dienstleister für den Zeitraum der Zuschussgewährung gezahlt werden (Betriebsschließungs- oder Allgefahrenversicherungen), abzüglich der in den zwölf Monaten vor Beginn des Versicherungsfalls für diese Versicherungen geleisteten Beiträge</akn:p>
+              </akn:content>
+            </akn:point>
+            <akn:wrapUp GUID="c4747b70-6cc3-48e9-a20c-d9527cace15d" eId="para-4_abs-1_untergl-1_schlusstext-1">
+              <akn:p GUID="3d3ac30d-de24-4d6f-aaa6-42642d8d3c63" eId="para-4_abs-1_untergl-1_schlusstext-1_text-1">tatsächlich zugeflossen sind (bereite Mittel). Satz 1 gilt entsprechend, wenn die sozialen Dienstleister als Vorsorge- oder Rehabilitationseinrichtungen folgende Vergütungen erhalten haben:</akn:p>
+            </akn:wrapUp>
+          </akn:list>
+          <akn:list GUID="ae704a76-a73c-4604-943d-af137cce3962" eId="para-4_abs-1_untergl-2">
+            <akn:intro GUID="ba9b903d-5780-461a-b549-a4d026a9b4ee" eId="para-4_abs-1_untergl-2_intro-1">
+              <akn:p GUID="053e4bd9-6b51-4a78-8a27-83d7a98f72a1" eId="para-4_abs-1_untergl-2_intro-1_text-1">
+                <!-- TODO: Unklare Struktur der Listen -->
+              </akn:p>
+            </akn:intro>
+            <akn:point GUID="9f6b3df4-b7e9-4c2b-8f44-e71524b53711" eId="para-4_abs-1_untergl-2_listenelem-1">
+              <akn:num GUID="5852eebe-c912-4338-929e-77b9dfb7522e" eId="para-4_abs-1_untergl-2_listenelem-1_bezeichnung-1">
+                <akn:marker name="1" />
+                1.
+              </akn:num>
+              <akn:content GUID="1d65caef-a727-4104-a580-a153e97ecb63" eId="para-4_abs-1_untergl-2_listenelem-1_inhalt-1">
+                <akn:p GUID="ccdea5d1-c0a8-40e6-aa52-53eda40b5c90" eId="para-4_abs-1_untergl-2_listenelem-1_inhalt-1_text-1">Vergütungen nach § 22 des Krankenhausfinanzierungsgesetzes für die vollstationäre Behandlung von Patientinnen und Patienten, die einer nicht aufschiebbaren akutstationären Krankenhausversorgung nach § 39 des Fünften Buches Sozialgesetzbuch bedurften,</akn:p>
+              </akn:content>
+            </akn:point>
+            <akn:point GUID="04d9648f-207f-4ba9-a397-bd0cef105a88" eId="para-4_abs-1_untergl-2_listenelem-2">
+              <akn:num GUID="e9c007cd-395a-4ce0-8f2f-eb59e3415426" eId="para-4_abs-1_untergl-2_listenelem-2_bezeichnung-1">
+                <akn:marker name="2" />
+                2.
+              </akn:num>
+              <akn:content GUID="d07b456a-8bd9-46e7-9feb-b77442581137" eId="para-4_abs-1_untergl-2_listenelem-2_inhalt-1">
+                <akn:p GUID="f47dd739-84c3-4b70-9461-a3a3a4f26d20" eId="para-4_abs-1_untergl-2_listenelem-2_inhalt-1_text-1">Vergütungen nach § 149 Absatz 1 des Elften Buches Sozialgesetzbuch für die Kurzzeitpflege von Pflegebedürftigen, ohne dass gleichzeitig eine Maßnahme der medizinischen Vorsorge oder Rehabilitation für eine Pflegeperson erbracht wurde, oder</akn:p>
+              </akn:content>
+            </akn:point>
+            <akn:point GUID="9186d3fe-3d8d-4390-b47f-502b89a806fb" eId="para-4_abs-1_untergl-2_listenelem-3">
+              <akn:num GUID="13b0ff17-b957-4bc3-b59e-716aee8ea73d" eId="para-4_abs-1_untergl-2_listenelem-3_bezeichnung-1">
+                <akn:marker name="3" />
+                3.
+              </akn:num>
+              <akn:content GUID="3e4c906b-9130-461c-b861-e6a6da26a28b" eId="para-4_abs-1_untergl-2_listenelem-3_inhalt-1">
+                <akn:p GUID="1e6b6a00-fa9f-4766-877c-30bb81f7bace" eId="para-4_abs-1_untergl-2_listenelem-3_inhalt-1_text-1">Vergütungen nach § 149 Absatz 3 des Elften Buches Sozialgesetzbuch für die pflegerische Versorgung von bereits vollstationär versorgten Pflegebedürftigen.</akn:p>
+              </akn:content>
+            </akn:point>
+            <akn:wrapUp GUID="d7dd1993-d90d-400d-9a30-af7ad75ac96b" eId="para-4_abs-1_untergl-2_schlusstext-1">
+              <akn:p GUID="3d3ac30d-de24-4d6f-aaa6-42642d8d3c63" eId="para-4_abs-1_untergl-2_schlusstext-1_text-1">Ansprüche und Forderungen, die nicht zu tatsächlichen monatlichen Geldzuflüssen führen, sind keine bereiten Mittel. Der Erstattungsanspruch entsteht erst dann, wenn die Leistungsträger vollständige Kenntnis von den Tatsachen nach Satz 1 oder Satz 2 erlangen und frühestens drei Monate nach der letzten Zuschusszahlung des maßgeblichen Zeitraumes der Zuschussgewährung; er überschreitet nicht die Höhe der insgesamt geleisteten Zuschüsse. Mit jedem Kalenderjahr beginnt ein neuer Zeitraum der Zuschussgewährung. Die sozialen Dienstleister haben gegenüber dem zuschussgewährenden Leistungsträger den Zufluss vorrangiger Mittel nach Satz 1 und nach Satz 2 anzuzeigen. Die Stellen, die vorrangige Mittel nach Satz 1 oder nach Satz 2 erbringen, haben auf Ersuchen eines Leistungsträgers diesem die für die Feststellung seines nachträglichen Erstattungsanspruchs erforderlichen Informationen, einschließlich personenbezogener Daten, über die geleisteten vorrangigen Mittel mitzuteilen.</akn:p>
+            </akn:wrapUp>
+          </akn:list>
+        </akn:paragraph>
+      </akn:article>
+      <akn:article GUID="6c5474ce-cacc-4cce-ba9a-262930011b5f" eId="para-5" refersTo="einzelvorschrift-stammform">
+        <akn:num GUID="4a49081c-e4ac-42e0-9897-9650223a1b36" eId="para-5_bezeichnung-1">
+          <akn:marker name="5" />
+        </akn:num>
+        <akn:heading GUID="2c9474cc-ef0e-4f06-893c-4a378569a02c" eId="para-5_überschrift-1">§ 5 Zuständigkeit und Geltungsdauer; Verordnungsermächtigung</akn:heading>
+        <akn:paragraph GUID="63bd6e1d-6370-4f54-91ec-ad6b8837648a" eId="para-5_abs-1">
+          <akn:num GUID="594bb2db-a09b-4456-9ad0-4a3224d451d3" eId="para-5_abs-1_bezeichnung-1">
+            <akn:marker name="1" />
+          </akn:num>
+          <akn:content GUID="831426b8-2d63-4da1-bda3-b6c5839bb8e1" eId="para-5_abs-1_inhalt-1">
+            <akn:p GUID="c643e0f9-0a55-4bb3-b2db-2760285fc412" eId="para-5_abs-1_inhalt-1_text-1">Die Länder bestimmen die zuständigen Behörden für die Aufgabenwahrnehmung nach diesem Gesetz, soweit sich auch die Zuständigkeit der Leistungsträger für die Aufgabenausführung im Sozialgesetzbuch nach Landesrecht richtet; dabei können die Länder auch eine gegenüber § 3 Satz 5 nach oben abweichende Höchstgrenze für die Zuschusshöhe bestimmen. Die übrigen Leistungsträger können im Einvernehmen mit dem Bundesministerium für Arbeit und Soziales, im Bereich des Aufenthaltsgesetzes zusätzlich im Einvernehmen mit dem Bundesministerium des Innern, für Bau und Heimat, eine von § 3 Satz 5 nach oben abweichende Höchstgrenze für die Zuschusshöhe bestimmen. Der besondere Sicherstellungsauftrag endet mit Ablauf des 30. Juni 2022. Die Bundesregierung wird ermächtigt, durch Rechtsverordnung ohne Zustimmung des Bundesrates den besonderen Sicherstellungsauftrag bis zum 23. September 2022 zu verlängern</akn:p>
+          </akn:content>
+        </akn:paragraph>
+      </akn:article>
+      <akn:article GUID="8c96d2e7-14d3-4531-a04d-804934414774" eId="para-6" refersTo="einzelvorschrift-stammform">
+        <akn:num GUID="6a019169-5626-45f2-8118-20b5c1d194ff" eId="para-6_bezeichnung-1">
+          <akn:marker name="6" />
+        </akn:num>
+        <akn:heading GUID="ad6c6014-e32b-47da-ad7d-4a0d68a1ae32" eId="para-6_überschrift-1">§ 6 Datenschutz</akn:heading>
+        <akn:paragraph GUID="d28c10f8-a3c0-4f05-bf0c-ddf603a3b601" eId="para-6_abs-1">
+          <akn:num GUID="cdb004e3-b260-4647-999a-9e0f64f2baf6" eId="para-6_abs-1_bezeichnung-1">
+            <akn:marker name="1" />
+            (1)
+          </akn:num>
+          <akn:content GUID="3495f983-a69d-4526-8998-6ac669c850f4" eId="para-6_abs-1_inhalt-1">
+            <akn:p GUID="e6d54168-7d19-4318-ab9f-7ee21b055822" eId="para-6_abs-1_inhalt-1_text-1">Die Leistungsträger sind befugt, personenbezogene Daten, die die sozialen Dienstleister ihnen zusammen mit den Informationen zu den Unterstützungsleistungen nach § 1 übermitteln, zu erheben, zu erfassen und zu speichern.</akn:p>
+          </akn:content>
+        </akn:paragraph>
+        <akn:paragraph GUID="89853cfa-ea7c-4246-ba66-fab587d793d1" eId="para-6_abs-2">
+          <akn:num GUID="9b613ef3-8012-48b4-97a5-3b4fb08df9e3" eId="para-6_abs-2_bezeichnung-1">
+            <akn:marker name="2" />
+            (2)
+          </akn:num>
+          <akn:content GUID="314de7c3-c510-414f-b224-ca0dba88166d" eId="para-6_abs-2_inhalt-1">
+            <akn:p GUID="cbd2e7e8-d86b-4cc8-8fe3-851ba5e0c5bd" eId="para-6_abs-2_inhalt-1_text-1">Die Leistungsträger sind befugt, soziale Dienstleister, an die sie monatliche Zuschüsse nach § 3 leisten, dazu zu verpflichten, Informationen zu den Unterstützungsmöglichkeiten nach § 1 an öffentliche Stellen im Rahmen der gesetzlichen Aufgaben dieser Stellen zu übermitteln.</akn:p>
+          </akn:content>
+        </akn:paragraph>
+        <akn:paragraph GUID="ea24978a-8938-429d-834c-c09cfc171fe0" eId="para-6_abs-3">
+          <akn:num GUID="87733a1f-51a5-4021-bc6e-a0d1972805af" eId="para-6_abs-3_bezeichnung-1">
+            <akn:marker name="3" />
+            (3)
+          </akn:num>
+          <akn:list GUID="fb5cee44-6666-41f7-a37b-57e873e93c03" eId="para-6_abs-3_untergl-1">
+            <akn:intro GUID="15443cbf-e863-4b11-9670-dabbd23380c5" eId="para-6_abs-3_untergl-1_intro-1">
+              <akn:p GUID="8ce37273-5ba8-4e28-b702-ac9b71335586" eId="para-6_abs-3_untergl-1_intro-1_text-1">Die Leistungsträger sind darüber hinaus befugt, personenbezogene Daten zum Zweck der Kontaktaufnahme von anderen öffentlichen oder nichtöffentlichen Stellen mit den sozialen Dienstleistern im Rahmen der Unterstützungsmöglichkeiten nach § 1</akn:p>
+            </akn:intro>
+            <akn:point GUID="87592b07-dc27-4774-9e7e-353db3c1ed1a" eId="para-6_abs-3_untergl-1_listenelem-1">
+              <akn:num GUID="83f7cafc-e732-4bd8-9c70-29f806c09286" eId="para-6_abs-3_untergl-1_listenelem-1_bezeichnung-1">
+                <akn:marker name="1" />
+                1.
+              </akn:num>
+              <akn:content GUID="c00a4a66-5f78-499e-9858-5feae0d3fb2e" eId="para-6_abs-3_untergl-1_listenelem-1_inhalt-1">
+                <akn:p GUID="fbf50a6d-20ad-44d3-9858-45619c521855" eId="para-6_abs-3_untergl-1_listenelem-1_inhalt-1_text-1">an andere öffentliche Stellen zu übermitteln, soweit die Daten zur Erfüllung der den empfangenden Stellen gesetzlich zugewiesenen Aufgaben erforderlich sind und</akn:p>
+              </akn:content>
+            </akn:point>
+            <akn:point GUID="4fba0743-f93d-4932-b133-830774fe90d1" eId="para-6_abs-3_untergl-1_listenelem-2">
+              <akn:num GUID="aa7b8536-80ad-48c3-8693-558905facdb7" eId="para-6_abs-3_untergl-1_listenelem-2_bezeichnung-1">
+                <akn:marker name="2" />
+                2.
+              </akn:num>
+              <akn:content GUID="6e14b04c-4dfb-4b11-9079-7806710fa8ed" eId="para-6_abs-3_untergl-1_listenelem-2_inhalt-1">
+                <akn:p GUID="8db73e46-44ec-4262-bfc9-929b21f0dbd6" eId="para-6_abs-3_untergl-1_listenelem-2_inhalt-1_text-1">an nichtöffentliche Stellen nach Maßgabe des § 25 Absatz 2 des Bundesdatenschutzgesetzes zu übermitteln.</akn:p>
+              </akn:content>
+            </akn:point>
+          </akn:list>
+        </akn:paragraph>
+        <akn:paragraph GUID="a75ea4c8-d49e-4968-a2e9-636d1e285fb8" eId="para-6_abs-4">
+          <akn:num GUID="ee0ef1e4-d96e-40eb-9182-41b219fbbe9b" eId="para-6_abs-4_bezeichnung-1">
+            <akn:marker name="4" />
+            (4)
+          </akn:num>
+          <akn:content GUID="be00d3eb-36d9-46e9-b98b-cce50c4c0dd5" eId="para-6_abs-4_inhalt-1">
+            <akn:p GUID="53bdbe45-cca5-442f-b53f-00d32462ef31" eId="para-6_abs-4_inhalt-1_text-1">Für die Berechnung des Zuschusses nach § 3 und zur Feststellung des nachträglichen Erstattungsanspruchs nach § 4 können die Leistungsträger personenbezogene Daten verarbeiten, insbesondere können sie sich die insoweit erforderlichen Daten gegenseitig übermitteln.</akn:p>
+          </akn:content>
+        </akn:paragraph>
+      </akn:article>
+      <akn:article GUID="94480661-91c4-47f3-a3b3-596a47f68ca9" eId="para-7" refersTo="einzelvorschrift-stammform">
+        <akn:num GUID="350b60ae-da9b-4c17-96c2-0f3fd48352ea" eId="para-7_bezeichnung-1">
+          <akn:marker name="7" />
+        </akn:num>
+        <akn:heading GUID="7f034e33-edf3-409a-a5a7-6ec5a8336fc5" eId="para-7_überschrift-1">§ 7 Verwaltungsverfahren und Rechtsweg</akn:heading>
+        <akn:paragraph GUID="cd576300-44c9-42d8-ab20-b91945a00beb" eId="para-7_abs-1">
+          <akn:num GUID="b861c78a-c3a2-4fa9-8eb5-1fc0e7863592" eId="para-7_abs-1_bezeichnung-1">
+            <akn:marker name="1" />
+            (1)
+          </akn:num>
+          <akn:content GUID="418556f8-a5ea-43e7-90d0-ba4f9e5990ea" eId="para-7_abs-1_inhalt-1">
+            <akn:p GUID="60ee623c-8dd7-4785-a766-2729514b7903" eId="para-7_abs-1_inhalt-1_text-1">Für das Verwaltungsverfahren nach diesem Gesetz ist das Zehnte Buch Sozialgesetzbuch anzuwenden, soweit das zwischen dem sozialen Dienstleister und dem Leistungsträger zugrundeliegende Rechtsverhältnis nach § 2 Satz 2 den Bestimmungen des Sozialgesetzbuches folgt.</akn:p>
+          </akn:content>
+        </akn:paragraph>
+        <akn:paragraph GUID="8a238ae0-8527-45a7-9b02-fa1b745eca30" eId="para-7_abs-2">
+          <akn:num GUID="9ad97fde-471e-4d98-8361-df22301ba2eb" eId="para-7_abs-2_bezeichnung-1">
+            <akn:marker name="2" />
+            (2)
+          </akn:num>
+          <akn:content GUID="c5daf776-2672-4455-8697-fd3ed07ce234" eId="para-7_abs-2_inhalt-1">
+            <akn:p GUID="a2434105-4fbf-4ec7-9268-0f17024a8da8" eId="para-7_abs-2_inhalt-1_text-1">Für Streitigkeiten nach diesem Gesetz sind die Gerichte der Sozialgerichtsbarkeit zuständig, soweit dies auch bei Streitigkeiten zwischen dem sozialen Dienstleister und dem Leistungsträger über das zugrunde liegende Rechtsverhältnis nach § 2 Satz 2 der Fall wäre.</akn:p>
+          </akn:content>
+        </akn:paragraph>
+        <akn:paragraph GUID="84bb94bf-3f27-4c06-b82b-771daa560a9a" eId="para-7_abs-3">
+          <akn:num GUID="007003aa-cdd9-40c3-bded-361afe8a211e" eId="para-7_abs-3_bezeichnung-1">
+            <akn:marker name="3" />
+            (3)
+          </akn:num>
+          <akn:content GUID="7a26fbbb-d06b-4ef1-aef6-e3054163635d" eId="para-7_abs-3_inhalt-1">
+            <akn:p GUID="6b143ef4-9372-42fe-9275-04a7c698e5e0" eId="para-7_abs-3_inhalt-1_text-1">Verfahren in Streitigkeiten, für die nach Absatz 2 die Gerichte der Sozialgerichtsbarkeit zuständig sind und die am 28. Mai 2020 bei den Gerichten der Verwaltungsgerichtsbarkeit anhängig sind, gehen in dem Stadium, in dem sie sich befinden, auf die Gerichte der Sozialgerichtsbarkeit über. Verfahren in Streitigkeiten, für die nach § 40 Absatz 1 Satz 1 der Verwaltungsgerichtsordnung der Verwaltungsrechtsweg gegeben ist und die am 28. Mai 2020 bei den Gerichten der Sozialgerichtsbarkeit anhängig sind, gehen in dem Stadium, in dem sie sich befinden, auf die Gerichte der Verwaltungsgerichtsbarkeit über. Die Sätze 1 und 2 gelten nicht für Verfahren, die sich in der Hauptsache erledigt haben.</akn:p>
+          </akn:content>
+        </akn:paragraph>
+      </akn:article>
+      <akn:article GUID="6f3e6bb9-b0c2-411b-b3c2-098c9a5fb1ae" eId="para-8" refersTo="einzelvorschrift-stammform">
+        <akn:num GUID="67dd591f-4e27-4e32-843d-adc98dd6488f" eId="para-8_bezeichnung-1">
+          <akn:marker name="8" />
+        </akn:num>
+        <akn:heading GUID="2e8c0e46-7cf5-4650-b28a-2322b9f4c563" eId="para-8_überschrift-1">§ 8 Evaluation</akn:heading>
+        <akn:paragraph GUID="9b4e19f6-3cc9-4840-b39d-71e3df85ac71" eId="para-8_abs-1">
+          <akn:num GUID="3049bbf9-7410-4526-b849-2fc57568f5c7" eId="para-8_abs-1_bezeichnung-1">
+            <akn:marker name="1" />
+          </akn:num>
+          <akn:content GUID="ad119c5c-8063-4af1-a69a-cf4ea51c2ca1" eId="para-8_abs-1_inhalt-1">
+            <akn:p GUID="f66073bd-21b7-4d65-b830-82fecf744712" eId="para-8_abs-1_inhalt-1_text-1">Das Bundesministerium für Arbeit und Soziales kann die Ausführung dieses Gesetzes untersuchen. Für den Fall, dass eine Untersuchung durchgeführt wird, sollen deren Ergebnisse bis zum 31. Dezember 2021 veröffentlicht werden. Die Einbeziehung Dritter in die Durchführung der Untersuchung erfolgt im Benehmen mit den zuständigen obersten Landesbehörden, soweit die Länder dieses Gesetz ausführen.</akn:p>
+          </akn:content>
+        </akn:paragraph>
+      </akn:article>
+      <akn:article GUID="4b9f872e-71cf-49e0-be56-7ae5c154f1c8" eId="para-9" refersTo="einzelvorschrift-stammform">
+        <akn:num GUID="44f66609-5a24-43b5-ac45-173cf2ecf5a5" eId="para-9_bezeichnung-1">
+          <akn:marker name="9" />
+        </akn:num>
+        <akn:heading GUID="2bbee265-5002-47ea-9a9f-307250813720" eId="para-9_überschrift-1">§ 9 Ergänzende Bestimmungen für soziale Dienstleister im Bereich der interdisziplinären Früherkennung und Frühförderung</akn:heading>
+        <akn:paragraph GUID="03030c70-f2b1-415d-8474-31815597370e" eId="para-9_abs-1">
+          <akn:num GUID="c2eaac3e-1140-423f-a31b-5aa2980217a2" eId="para-9_abs-1_bezeichnung-1">
+            <akn:marker name="1" />
+            (1)
+          </akn:num>
+          <akn:content GUID="2063d732-0f7e-449b-a092-4759e56cd75e" eId="para-9_abs-1_inhalt-1">
+            <akn:p GUID="a974d72d-07fc-4537-9db4-bb14c929431d" eId="para-9_abs-1_inhalt-1_text-1">Die Umsetzung des Sicherstellungsauftrags nach § 3 durch Leistungsträger nach § 2 Satz 4 erfolgt durch von den Landesverbänden der Krankenkassen und den Ersatzkassen gemeinsam benannte Krankenkassen. Die sozialen Dienstleister melden die für die Berechnung der Zuschüsse von den Leistungsträgern nach dem Fünften Buch Sozialgesetzbuch erforderlichen Angaben an die benannte Krankenkasse. Die benannten Krankenkassen summieren die auf der Grundlage der Meldungen nach Satz 2 ermittelten Zuschussbeträge und übermitteln sie an das Bundesamt für Soziale Sicherung. Das Bundesamt für Soziale Sicherung zahlt auf Grundlage der angemeldeten Mittelbedarfe die Beträge an die benannten Krankenkassen zur Weiterleitung an die sozialen Dienstleister aus der Liquiditätsreserve des Gesundheitsfonds. Der Spitzenverband Bund der Krankenkassen bestimmt das Nähere zur Ermittlung der von den Leistungsträgern nach dem Fünften Buch Sozialgesetzbuch zu leistenden Zuschüsse. Das Bundesamt für Soziale Sicherung bestimmt das Nähere zum Verfahren der Übermittlung der aufsummierten Beträge sowie der Zahlung aus der Liquiditätsreserve des Gesundheitsfonds.</akn:p>
+          </akn:content>
+        </akn:paragraph>
+        <akn:paragraph GUID="3c483893-04e5-459a-b1dd-9fad5b22d8fe" eId="para-9_abs-2">
+          <akn:num GUID="8b29d46a-b9ad-497b-b828-2dca493c529b" eId="para-9_abs-2_bezeichnung-1">
+            <akn:marker name="2" />
+            (2)
+          </akn:num>
+          <akn:content GUID="df0b1c0c-0130-48cd-86d6-bd971afd6352" eId="para-9_abs-2_inhalt-1">
+            <akn:p GUID="bcc5dade-1f66-4a23-9e36-72f7bfdf9648" eId="para-9_abs-2_inhalt-1_text-1">Die nach Absatz 1 benannte Krankenkasse ist im Rahmen der nachträglichen Erstattung anspruchsberechtigter Leistungsträger im Sinne von § 4. Als vorrangige Mittel gelten auch Vergütungen der Krankenkassen für Leistungen nach § 2 Satz 4. Die benannte Krankenkasse leitet Erstattungen nach § 4 an die Liquiditätsreserve des Gesundheitsfonds weiter. Nach Abschluss der Zahlungen nach Absatz 1 Satz 4 durch das Bundesamt für Soziale Sicherung übermitteln die benannten Krankenkassen dem Bundesministerium für Gesundheit bis zum Ende des darauffolgenden Kalendermonats eine einrichtungsbezogene Aufstellung der ausgezahlten und zurückerstatteten Finanzmittel.</akn:p>
+          </akn:content>
+        </akn:paragraph>
+      </akn:article>
+    </akn:body>
+  </akn:act>
+</akn:akomaNtoso>

@@ -1,0 +1,65 @@
+.case-law {
+  --border-number-min-width: 46px;
+
+  @apply max-w-prose;
+
+  table[border="1"] :is(th, td) {
+    @apply border-1 border-solid border-black px-4;
+  }
+
+  table {
+    @apply inline-block max-w-full overflow-x-auto;
+  }
+
+  h2 {
+    @apply ris-heading3-bold my-24 inline-block;
+  }
+
+  .border-number {
+    display: flex;
+    align-items: flex-start;
+  }
+
+  .border-number .number {
+    margin-right: 10px;
+    min-width: calc(var(--border-number-min-width) - 10px);
+    @apply text-gray-900;
+  }
+
+  .border-number .content {
+    flex: 1;
+    min-width: 0;
+  }
+
+  /* Give paragraphs that are direct children of sections (no border number) the same left margin that they would have
+   with a border number, visually. */
+  section > p {
+    margin-left: var(--border-number-min-width);
+  }
+
+  #gliederung blockquote {
+    @apply ml-32;
+  }
+
+  #gruende blockquote {
+    @apply ml-[var(--border-number-min-width)] border-l-2 border-gray-700 pl-16 sm:ml-[calc(var(--border-number-min-width)+2rem)];
+
+    & + * {
+      @apply mt-16;
+    }
+
+    & + blockquote {
+      /* Do not add margin between consecutive quotes */
+      @apply mt-0;
+    }
+  }
+
+  #title {
+    display: none;
+  }
+
+  p {
+    @apply mb-16;
+    unicode-bidi: isolate;
+  }
+}

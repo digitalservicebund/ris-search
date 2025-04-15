@@ -1,0 +1,84 @@
+name: Playwright E2E tests frontend
+on:
+  workflow_call:
+    inputs:
+      browser:
+        required: false
+        type: string
+        default: chromium
+      baseUrl:
+        required: true
+        type: string
+        description: The URL to run the test against
+      profile:
+        required: true
+        type: string
+        default: internal
+        description: The profile to use for the test
+jobs:
+  e2e-test:
+    environment: staging
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+      - name: Get Playwright version
+        working-directory: ./frontend
+        run: echo "PLAYWRIGHT_VERSION=$(yarn list --pattern @playwright/test | awk -F "@" 'NR==2 {print $NF}')" >> $GITHUB_ENV
+      - name: Cache browser binaries
+        id: playwright-cache
+        uses: actions/cache@v4
+        with:
+          path: /home/runner/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ env.PLAYWRIGHT_VERSION }}-${{ inputs.browser }}
+      - name: Cache browser binaries chromium (for authentication)
+        id: playwright-cache-chromium
+        uses: actions/cache@v4
+        with:
+          path: /home/runner/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ env.PLAYWRIGHT_VERSION }}-chromium
+        if: inputs.browser != 'chromium'
+      - name: Cache npm cache
+        uses: actions/cache@v4
+        id: cache-npm-cache
+        with:
+          path: /home/runner/.npm
+          key: npm-cache-${{ runner.os }}-playwright-${{ env.PLAYWRIGHT_VERSION }}
+      - name: Install Playwright
+        run: npm install @playwright/test@${{ env.PLAYWRIGHT_VERSION }}
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps ${{ inputs.browser }}
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
+      - name: Install system dependencies for WebKit
+        # Some WebKit dependencies seem to lay outside the cache and will need to be installed separately
+        if: ${{ inputs.browser == 'webkit' && steps.playwright-cache.outputs.cache-hit == 'true' }}
+        run: npx playwright install-deps webkit
+      - name: Install chromium (for authentication)
+        run: npx playwright install --with-deps chromium
+        if: steps.playwright-cache-chromium.outputs.cache-hit != 'true' && inputs.browser != 'chromium'
+      - name: Run Playwright tests
+        run: npx playwright test --project ${{ inputs.browser }}
+        working-directory: ./frontend
+        env:
+          RIS_BASE_URL: ${{ inputs.baseUrl }}
+          NUXT_PUBLIC_PROFILE: ${{ inputs.profile }}
+          E2E_KEYCLOAK_USERNAME: ${{ secrets.E2E_KEYCLOAK_USERNAME }}
+          E2E_KEYCLOAK_PASSWORD: ${{ secrets.E2E_KEYCLOAK_PASSWORD }}
+          E2E_KEYCLOAK_USER_DISPLAY_NAME: ${{ secrets.E2E_KEYCLOAK_USER_DISPLAY_NAME }}
+          E2E_RIS_BASIC_AUTH: ${{ secrets.E2E_RIS_BASIC_AUTH }}
+          TZ: Europe/Berlin
+      - name: Upload test reports
+        uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-report-${{ inputs.profile }}-${{ inputs.browser }}
+          path: frontend/${{ inputs.profile }}/playwright-report
+          retention-days: 5
+      - name: Send status to Slack
+        uses: digitalservicebund/notify-on-failure-gha@66c485757701f8d5dbee32f24df38d904ca693ba
+        if: ${{ failure() && github.ref == 'refs/heads/main' }}
+        with:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}

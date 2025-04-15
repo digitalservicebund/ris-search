@@ -1,0 +1,101 @@
+services:
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.0
+    command: ["start-dev", "--import-realm"]
+    container_name: keycloak
+    restart: unless-stopped
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: test
+      KC_HEALTH_ENABLED: true
+      KC_METRICS_ENABLED: true
+    ports:
+      - "8443:8080"
+      - "8080:8080"
+    expose:
+      - 8080
+    volumes:
+      - ./local/keycloak/realm.json:/opt/keycloak/data/import/realm.json:ro
+    networks:
+      ris-portal:
+        ipv4_address: 172.18.0.3
+
+  opensearch:
+    image: opensearchproject/opensearch:1.3.19
+    container_name: opensearch
+    restart: unless-stopped
+    ports:
+      - "9200:9200"
+      - "9600:9600"
+    expose:
+      - 9200
+      - 9600
+    healthcheck:
+      test: ["CMD-SHELL", "curl --silent --fail http://localhost:9200/_cluster/health | grep docker-cluster || exit 1"]
+      interval: 5s
+      retries: 100
+      start_period: 10s
+    environment:
+      - node.name=opensearch-node1
+      - discovery.type=single-node
+      - "DISABLE_SECURITY_PLUGIN=true"
+      - "OPENSEARCH_JAVA_OPTS=-Xms4096m -Xmx4096m"
+    networks:
+      - ris-portal
+    volumes:
+      - ./backend/src/main/resources/openSearch/mounted/:/usr/share/opensearch/config/mounted/
+
+  backend:
+    image: ${BACKEND_IMAGE:-ghcr.io/digitalservicebund/ris-search:RISDEV-4628-end-to-end}
+    container_name: backend
+    restart: unless-stopped
+    environment:
+      - POSTGRES_CASELAW_HOST=postgres14-caselaw
+      - POSTGRES_NORMS_HOST=postgres14-norms
+      - POSTGRES_NORMS_PORT=5432
+      - OPENSEARCH_HOST=opensearch
+      - SPRING_PROFILES_ACTIVE=e2e,default
+      - THC_PATH=/actuator/health
+      - THC_PORT=8090
+      - LOCAL_FILE_STORAGE=/app/backend/e2e-data
+    depends_on:
+      opensearch:
+        condition: service_healthy
+    volumes:
+      - ./backend:/app/backend
+    healthcheck:
+      test: [ "CMD", "/workspace/health-check" ]
+      interval: 5s
+      retries: 400
+      start_period: 20s
+    ports:
+      - "8090:8090"
+    networks:
+      - ris-portal
+
+  frontend:
+    image: ${FRONTEND_IMAGE:-ghcr.io/digitalservicebund/ris-search/public-frontend:RISDEV-4628-end-to-end}
+    container_name: frontend
+    depends_on:
+      backend:
+        condition: service_healthy
+    env_file:
+      # these values are important to ensure start.sh runs correctly, without trying to read secrets from mounts
+      - ./frontend/.env.local
+    ports:
+      - "3000:3000"
+    networks:
+      - ris-portal
+    extra_hosts:
+      # the browser accessing keycloak doesn't know about the keycloak name, so we use localhost
+      # and redefine localhost to point to keycloak instead
+      - "localhost:172.18.0.3"
+
+networks:
+  ris-portal:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.18.0.0/24
+
