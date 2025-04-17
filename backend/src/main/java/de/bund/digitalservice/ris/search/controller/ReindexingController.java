@@ -1,7 +1,7 @@
 package de.bund.digitalservice.ris.search.controller;
 
-import de.bund.digitalservice.ris.search.caselawhandover.shared.CaseLawBucket;
 import de.bund.digitalservice.ris.search.config.ApiConfig;
+import de.bund.digitalservice.ris.search.repository.objectstorage.CaseLawBucket;
 import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
 import de.bund.digitalservice.ris.search.service.ImportService;
 import de.bund.digitalservice.ris.search.service.IndexCaselawService;
