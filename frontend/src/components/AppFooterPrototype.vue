@@ -8,7 +8,7 @@ const hideFeedbackForm = computed(() => route.path === "/feedback");
 </script>
 
 <template>
-  <footer class="container flex flex-col gap-32 px-16 py-32">
+  <footer class="container flex flex-col gap-32 px-16 py-32 print:hidden">
     <client-only>
       <FeedbackForm v-if="!hideFeedbackForm" class="mb-80" />
     </client-only>

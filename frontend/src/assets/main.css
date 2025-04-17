@@ -87,3 +87,15 @@ mark {
 /* Workaround for https://github.com/tailwindlabs/tailwindcss/discussions/16429 */
 @import "./legislation.css";
 @import "./caselaw.css";
+
+@media print {
+  .ris-heading2-bold {
+    font-size: 24px;
+  }
+  body {
+    font-size: 14px;
+  }
+  .max-w-prose {
+    max-width: initial;
+  }
+}
