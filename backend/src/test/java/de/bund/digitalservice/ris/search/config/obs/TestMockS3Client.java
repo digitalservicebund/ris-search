@@ -1,6 +1,5 @@
 package de.bund.digitalservice.ris.search.config.obs;
 
-import jakarta.annotation.PostConstruct;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
@@ -36,15 +35,21 @@ public class TestMockS3Client extends MockS3Client implements S3Client {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(TestMockS3Client.class);
 
-  @Value("${local.file-storage}")
-  private String relativeLocalStorageDirectory;
-
   private Path localStorageDirectory;
 
   private Map<String, byte[]> fileMap;
 
-  public TestMockS3Client(String bucketname) {
+  public TestMockS3Client(
+      String bucketname, @Value("${local.file-storage}") String relativeLocalStorageDirectory) {
     super(bucketname);
+
+    try {
+      localStorageDirectory = findProjectRoot().resolve(relativeLocalStorageDirectory);
+      Files.createDirectories(localStorageDirectory.resolve(bucketname));
+      loadFilesToMap();
+    } catch (IOException e) {
+      LOGGER.error("Couldn't load files to map: " + e.getMessage(), e);
+    }
   }
 
   @Override
@@ -56,17 +61,6 @@ public class TestMockS3Client extends MockS3Client implements S3Client {
   public void close() {
     fileMap.clear();
     fileMap = null;
-  }
-
-  @PostConstruct
-  public void init() {
-    try {
-      localStorageDirectory = findProjectRoot().resolve(relativeLocalStorageDirectory);
-      Files.createDirectories(localStorageDirectory.resolve(bucketname));
-      loadFilesToMap();
-    } catch (IOException e) {
-      LOGGER.error("Couldn't load files to map: " + e.getMessage(), e);
-    }
   }
 
   private void loadFilesToMap() throws IOException {

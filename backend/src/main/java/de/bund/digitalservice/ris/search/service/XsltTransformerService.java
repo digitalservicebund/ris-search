@@ -5,6 +5,7 @@ import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
 import de.bund.digitalservice.ris.search.service.exception.XMLElementNotFoundException;
 import de.bund.digitalservice.ris.search.utils.eli.ManifestationEli;
 import java.io.ByteArrayInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
@@ -80,7 +81,7 @@ public class XsltTransformerService {
     try {
       var response = this.normsBucket.getStream(eli.toString());
       return new StreamSource(response);
-    } catch (NullPointerException e) {
+    } catch (FileNotFoundException | NullPointerException e) {
       throw new TransformerException("Failed to resolve: " + eli, e);
     }
   }

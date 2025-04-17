@@ -3,9 +3,9 @@ package de.bund.digitalservice.ris.search.unit.service;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-import de.bund.digitalservice.ris.search.caselawhandover.shared.S3Bucket;
 import de.bund.digitalservice.ris.search.exception.RetryableObjectStoreException;
 import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
+import de.bund.digitalservice.ris.search.repository.objectstorage.ObjectStorage;
 import de.bund.digitalservice.ris.search.service.ChangelogService;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -21,7 +21,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 class ChangelogServiceTest {
 
-  @Mock S3Bucket bucket;
+  @Mock ObjectStorage bucket;
 
   ChangelogService changelogService;
 
