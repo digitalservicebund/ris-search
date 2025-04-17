@@ -17,7 +17,7 @@ test("can enter a query on the start page and go back", async ({ page }) => {
   );
 
   await test.step("go back to home page by clicking the logo", async () => {
-    await page.getByLabel("Home").click();
+    await page.getByLabel("Zur Startseite").click();
     await expect(
       page.getByPlaceholder("Suchbegriff eingeben"),
       "should be reset",
