@@ -56,7 +56,7 @@ public class ChangelogService {
       String timeString = filename.substring(filename.indexOf("/") + 1, filename.indexOf("Z") + 1);
       Instant instant = Instant.parse(timeString);
       return Optional.of(instant);
-    } catch (NullPointerException | DateTimeParseException e) {
+    } catch (StringIndexOutOfBoundsException | NullPointerException | DateTimeParseException e) {
       logger.error("unable to parse invalid changelog timestamp {}", filename);
       return Optional.empty();
     }
