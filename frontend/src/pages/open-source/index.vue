@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import IcBaselineLaunch from "~icons/ic/baseline-launch";
-import Button from "primevue/button";
 import StaticPageWrapper from "~/components/CustomLayouts/StaticPageWrapper.vue";
 useHead({ title: "Open Source" });
 definePageMeta({ alias: ["/opensource"] });
