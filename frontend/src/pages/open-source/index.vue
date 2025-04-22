@@ -22,7 +22,11 @@ definePageMeta({ alias: ["/opensource"] });
           Wir planen, das Github-Repository in den nächsten Wochen zu
           veröffentlichen und werden dann den Link auf dieser Seite teilen.
         </p>
-        <Button disabled>GitHub-Repository<IcBaselineLaunch /></Button>
+        <ButtonLink
+          href="https://github.com/digitalservicebund/ris-search"
+          target="_blank"
+          >GitHub-Repository<IcBaselineLaunch
+        /></ButtonLink>
       </main></div
   ></StaticPageWrapper>
 </template>
