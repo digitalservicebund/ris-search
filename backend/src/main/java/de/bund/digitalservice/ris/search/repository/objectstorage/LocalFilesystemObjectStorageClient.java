@@ -14,6 +14,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Stream;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
@@ -41,7 +42,7 @@ public class LocalFilesystemObjectStorageClient implements ObjectStorageClient {
     }
   }
 
-  protected Path findProjectRoot() {
+  private Path findProjectRoot() {
     File currentDir = new File(System.getProperty("user.dir"));
     while (!possibleProjectRoots.contains(currentDir.getName())) {
       currentDir = currentDir.getParentFile();
@@ -89,12 +90,24 @@ public class LocalFilesystemObjectStorageClient implements ObjectStorageClient {
   @Override
   public void close() {}
 
+  /**
+   * @param fileName String
+   *     <p>delete a specific file and all parts of the prefix when it contains directories
+   */
   @Override
   public void delete(String fileName) {
-    Path file = localStorageDirectory.resolve(bucket + "/" + fileName).toFile().toPath();
+    int numPaths = fileName.split("/").length;
+
     try {
-      Files.delete(file);
-    } catch (IOException e) {
+      Path absolutePath = localStorageDirectory.resolve(bucket + "/" + fileName).toFile().toPath();
+      for (int i = 0; i < numPaths; i++) {
+        File f = new File(absolutePath.toString());
+        if (f.isFile() || (f.isDirectory() && Objects.requireNonNull(f.list()).length == 0)) {
+          Files.delete(absolutePath);
+        }
+        absolutePath = absolutePath.getParent();
+      }
+    } catch (NullPointerException | IOException e) {
       LOGGER.error("Couldn't delete object from local storage: {}", e.getMessage(), e);
     }
   }
