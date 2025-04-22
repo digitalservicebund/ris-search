@@ -112,7 +112,7 @@ public class ImportService {
         int numberOfIndexedDocuments = indexService.getNumberOfIndexedDocuments();
         if (numberOfFilesInBucket != numberOfIndexedDocuments) {
           String indexServiceName = indexService.getClass().getSimpleName();
-          logger.error(
+          logger.info(
               "{} has {} files in bucket but {} indexed documents",
               indexServiceName,
               numberOfFilesInBucket,
