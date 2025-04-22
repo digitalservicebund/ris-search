@@ -50,6 +50,8 @@ sonar {
     }
 }
 
+val jaxws by configurations.creating
+
 dependencies {
     implementation(libs.spring.actuator)
     implementation(libs.spring.validation)
@@ -92,6 +94,11 @@ dependencies {
     implementation(libs.jaxb.moxy)
     implementation(libs.pebble)
     implementation(libs.streamex)
+    jaxws(libs.jaxws.tools)
+    jaxws(libs.jakarta.activation)
+    jaxws(libs.sun.xml.ws.jaxws)
+    implementation(libs.jakarta.xml.ws)
+    implementation(libs.jakarta.xml.bind)
 
     compileOnly(libs.lombok)
     annotationProcessor(libs.lombok)
@@ -112,9 +119,10 @@ dependencies {
 }
 
 val pactPath = "pacts/**/*.json"
-
+val generatedPath = "build/generated/**"
 spotless {
     java {
+        targetExclude(generatedPath)
         removeUnusedImports()
         googleJavaFormat()
         custom("Refuse wildcard imports") {
@@ -125,20 +133,20 @@ spotless {
             }
             it
         }
-        targetExclude(pactPath)
+        targetExclude(pactPath, generatedPath)
     }
     kotlin {
         ktfmt()
-        targetExclude(pactPath)
+        targetExclude(pactPath, generatedPath)
     }
     kotlinGradle {
         ktlint()
-        targetExclude(pactPath)
+        targetExclude(pactPath, generatedPath)
     }
 
     format("misc") {
         target("**/*.json", "**/*.md", "**/*.properties", "**/*.sh", "**/*.yml")
-        targetExclude("frontend/**", "pacts/**/*.json")
+        targetExclude("frontend/**", "pacts/**/*.json", generatedPath)
     }
 }
 
@@ -154,8 +162,32 @@ project.tasks.sonar {
 }
 
 tasks {
+    register("wsimport") {
+        enabled = true
+        val destDir by extra("$buildDir/generated/java/main")
+        doLast {
+            ant.withGroovyBuilder {
+                mkdir(destDir)
+                "taskdef"(
+                    "name" to "wsimport",
+                    "classname" to "com.sun.tools.ws.ant.WsImport",
+                    "classpath" to configurations["jaxws"].asPath,
+                )
+                "wsimport"(
+                    "keep" to true,
+                    "sourcedestdir" to destDir,
+                    "wsdl" to "$projectDir/src/main/resources/path_to_wsdl",
+                    "verbose" to true,
+                ) {
+                    "xjcarg"("value" to "-XautoNameResolution")
+                }
+            }
+        }
+    }
     compileJava {
         options.compilerArgs.addAll(arrayOf())
+        dependsOn("wsimport")
+        source("build/generated/java/main")
     }
 
     jar {
@@ -239,4 +271,8 @@ tasks {
         }
         include("**/*.java")
     }
+}
+
+java.sourceSets["main"].java {
+    srcDirs("build/generated/java/main")
 }

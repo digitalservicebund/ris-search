@@ -87,6 +87,11 @@ jaxb-moxy = { module = "org.eclipse.persistence:org.eclipse.persistence.moxy", v
 pebble = { module = "io.pebbletemplates:pebble-spring-boot-starter", version.ref = "pebble" }
 streamex = { module = 'one.util:streamex', version.ref = "streamex" }
 restassured = { module = 'io.rest-assured:rest-assured', version.ref = "rest-assured" }
+jaxws-tools = "com.sun.xml.ws:jaxws-tools:3.0.0"
+jakarta-xml-ws = "jakarta.xml.ws:jakarta.xml.ws-api:3.0.0"
+jakarta-xml-bind = "jakarta.xml.bind:jakarta.xml.bind-api:4.0.0"
+jakarta-activation = "jakarta.activation:jakarta.activation-api:2.0.0"
+sun-xml-ws-jaxws = "com.sun.xml.ws:jaxws-rt:3.0.0"
 
 [plugins]
 spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
