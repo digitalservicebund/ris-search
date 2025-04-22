@@ -198,6 +198,21 @@ brew install adr-tools
 
 See https://github.com/npryce/adr-tools regarding usage.
 
+## About the Repository
+
+**Program Name:** NeuRIS (Neues Rechtsinformationsportal)  
+**Description:** An intuitive legal information system aimed at simplifying access to laws, regulations, and court decisions in Germany.
+
+**Copyright (C) 2025 DigitalService GmbH des Bundes**
+
+**Author's Contact Information**
+
+DigitalService GmbH des Bundes  
+Prinzessinnenstraße 8-14,  
+10969 Berlin, Germany  
+Email: hallo@digitalservice.bund.de  
+Website: [https://digitalservice.bund.de](https://digitalservice.bund.de)
+
 ## Contributing
 
 🇬🇧
