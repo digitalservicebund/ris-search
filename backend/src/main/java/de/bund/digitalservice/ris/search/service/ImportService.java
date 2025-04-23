@@ -50,6 +50,8 @@ public class ImportService {
         if (lastSuccess == null) {
           indexService.reindexAll(startTime.toString());
           indexStatusService.updateLastSuccess(lastSuccessFilename, startTime);
+          alertOnNumberMismatch(
+              indexStatusService, indexService, lastSuccessFilename, changelogBucket);
         } else {
           importChangelogs(indexService, changelogBucket, lastSuccess, lastSuccessFilename);
         }
@@ -59,7 +61,6 @@ public class ImportService {
         indexStatusService.unlockIndex(lockfile);
       }
     }
-    alertOnNumberMismatch(indexStatusService, indexService, lastSuccessFilename, changelogBucket);
   }
 
   public void importChangelogs(
@@ -81,6 +82,11 @@ public class ImportService {
                 updatedLastSuccess ->
                     indexStatusService.updateLastSuccess(lastSuccessFilename, updatedLastSuccess));
       }
+    }
+
+    if (!unprocessedChangelogs.isEmpty()) {
+      // do not check number mismatch if nothing was processed
+      alertOnNumberMismatch(indexStatusService, indexService, lastSuccessFilename, changelogBucket);
     }
   }
 
@@ -112,7 +118,7 @@ public class ImportService {
         int numberOfIndexedDocuments = indexService.getNumberOfIndexedDocuments();
         if (numberOfFilesInBucket != numberOfIndexedDocuments) {
           String indexServiceName = indexService.getClass().getSimpleName();
-          logger.info(
+          logger.error(
               "{} has {} files in bucket but {} indexed documents",
               indexServiceName,
               numberOfFilesInBucket,
