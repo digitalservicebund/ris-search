@@ -2,11 +2,11 @@ package de.bund.digitalservice.ris.search.unit.mapper;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import de.bund.digitalservice.ris.search.api.schema.CaseLawSchema;
 import de.bund.digitalservice.ris.search.integration.controller.api.testData.SharedTestConstants;
 import de.bund.digitalservice.ris.search.mapper.CaseLawSchemaMapper;
 import de.bund.digitalservice.ris.search.models.PublicationStatus;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
-import de.bund.digitalservice.ris.search.schema.CaseLawSchema;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.List;

@@ -1,8 +1,8 @@
 package de.bund.digitalservice.ris.search.service.helper;
 
+import de.bund.digitalservice.ris.search.api.parameters.PaginationParams;
 import de.bund.digitalservice.ris.search.exception.CustomValidationException;
 import de.bund.digitalservice.ris.search.mapper.MappingDefinitions;
-import de.bund.digitalservice.ris.search.models.api.parameters.PaginationParams;
 import de.bund.digitalservice.ris.search.models.errors.CustomError;
 import de.bund.digitalservice.ris.search.utils.SortingUtils;
 import lombok.NonNull;

@@ -2,8 +2,8 @@ package de.bund.digitalservice.ris.search.unit.mapper;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import de.bund.digitalservice.ris.search.api.schema.PartialCollectionViewSchema;
 import de.bund.digitalservice.ris.search.mapper.PartialCollectionViewMapper;
-import de.bund.digitalservice.ris.search.schema.PartialCollectionViewSchema;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

@@ -2,8 +2,8 @@ package de.bund.digitalservice.ris.search.service;
 
 import static org.opensearch.index.query.QueryBuilders.queryStringQuery;
 
-import de.bund.digitalservice.ris.search.models.api.parameters.NormsSearchParams;
-import de.bund.digitalservice.ris.search.models.api.parameters.UniversalSearchParams;
+import de.bund.digitalservice.ris.search.api.parameters.NormsSearchParams;
+import de.bund.digitalservice.ris.search.api.parameters.UniversalSearchParams;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
 import de.bund.digitalservice.ris.search.repository.opensearch.NormsRepository;

@@ -3,13 +3,13 @@ package de.bund.digitalservice.ris.search.unit.mapper;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import de.bund.digitalservice.ris.search.api.schema.CaseLawSearchSchema;
+import de.bund.digitalservice.ris.search.api.schema.CollectionSchema;
+import de.bund.digitalservice.ris.search.api.schema.SearchMemberSchema;
 import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.mapper.CaseLawSearchSchemaMapper;
 import de.bund.digitalservice.ris.search.models.opensearch.AbstractSearchEntity;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
-import de.bund.digitalservice.ris.search.schema.CaseLawSearchSchema;
-import de.bund.digitalservice.ris.search.schema.CollectionSchema;
-import de.bund.digitalservice.ris.search.schema.SearchMemberSchema;
 import java.util.List;
 import java.util.function.IntFunction;
 import java.util.stream.IntStream;
