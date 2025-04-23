@@ -23,6 +23,7 @@ import org.opensearch.index.query.MatchAllQueryBuilder;
 import org.opensearch.index.query.MultiMatchQueryBuilder;
 import org.opensearch.index.query.MultiMatchQueryBuilder.Type;
 import org.opensearch.index.query.NestedQueryBuilder;
+import org.opensearch.index.query.Operator;
 import org.opensearch.index.query.QueryBuilders;
 import org.opensearch.index.query.TermQueryBuilder;
 import org.opensearch.index.search.MatchQuery;
@@ -75,6 +76,14 @@ public class UniversalDocumentQueryBuilder {
       nestedArticleQuery.innerHit(innerHitBuilder);
 
       query.should(nestedArticleQuery);
+
+      // add a BEST_FIELDS query with the whole term
+      // in order to boost cases where the whole
+      // searchTerm appears in one field
+      query.should(
+          new MultiMatchQueryBuilder(params.getSearchTerm())
+              .type(Type.BEST_FIELDS)
+              .operator(Operator.AND));
     }
     DateUtils.buildQuery("DATUM", params.getDateFrom(), params.getDateTo())
         .ifPresent(query::filter);
