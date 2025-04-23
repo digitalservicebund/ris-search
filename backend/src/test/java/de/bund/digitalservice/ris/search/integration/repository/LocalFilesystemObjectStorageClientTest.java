@@ -1,5 +1,6 @@
 package de.bund.digitalservice.ris.search.integration.repository;
 
+import de.bund.digitalservice.ris.search.exception.FileTransformationException;
 import de.bund.digitalservice.ris.search.repository.objectstorage.LocalFilesystemObjectStorageClient;
 import java.io.FilterInputStream;
 import java.io.IOException;
@@ -8,7 +9,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class LocalFilesystemObjectStorageClientTest {
+class LocalFilesystemObjectStorageClientTest {
 
   String path = "backend/src/test/resources/data/";
   String bucket = "tmp";
@@ -35,12 +36,22 @@ public class LocalFilesystemObjectStorageClientTest {
     Assertions.assertEquals(2, filenames.size());
 
     FilterInputStream inputStream = client.getStream("path/to/file1");
-    String expected = new String(inputStream.readAllBytes());
-    Assertions.assertEquals(expected, "content1");
+    String actual = new String(inputStream.readAllBytes());
+    Assertions.assertEquals("content1", actual);
 
     client.delete("path/to/file1");
     client.delete("path/to/file2");
 
     Assertions.assertEquals(0, client.getAllFilenamesByPath("/").size());
+  }
+
+  @Test
+  void ItThrowsAnExceptionOnInvalidPaths() {
+
+    Assertions.assertThrows(
+        FileTransformationException.class,
+        () -> {
+          client.getAllFilenamesByPath("path/to");
+        });
   }
 }
