@@ -97,6 +97,16 @@ export default defineNuxtConfig({
       },
     },
   },
+  security: {
+    strict: true,
+    headers: {
+      contentSecurityPolicy: {
+        "style-src": ["'self'", "https:", "'unsafe-inline'"],
+        "img-src": ["'self'", "data:"],
+        "script-src": ["'strict-dynamic'", "'nonce-{{nonce}}'"],
+      },
+    },
+  },
   sentry: {
     sourceMapsUploadOptions: {
       org: "digitalservice",
