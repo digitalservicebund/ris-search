@@ -8,6 +8,7 @@ import de.bund.digitalservice.ris.search.models.api.parameters.CaseLawSearchPara
 import de.bund.digitalservice.ris.search.models.api.parameters.NormsSearchParams;
 import de.bund.digitalservice.ris.search.models.api.parameters.UniversalSearchParams;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
+import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.utils.DateUtils;
 import de.bund.digitalservice.ris.search.utils.QuotedStringParser;
 import de.bund.digitalservice.ris.search.utils.RisHighlightBuilder;
@@ -83,7 +84,10 @@ public class UniversalDocumentQueryBuilder {
       query.should(
           new MultiMatchQueryBuilder(params.getSearchTerm())
               .type(Type.BEST_FIELDS)
-              .operator(Operator.AND));
+              .operator(Operator.AND)
+              .field(CaseLawDocumentationUnit.Fields.FILE_NUMBERS)
+              .field(CaseLawDocumentationUnit.Fields.ECLI)
+              .field(Norm.Fields.OFFICIAL_ABBREVIATION));
     }
     DateUtils.buildQuery("DATUM", params.getDateFrom(), params.getDateTo())
         .ifPresent(query::filter);
