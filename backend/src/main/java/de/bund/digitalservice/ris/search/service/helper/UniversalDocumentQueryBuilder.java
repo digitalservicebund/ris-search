@@ -3,10 +3,10 @@ package de.bund.digitalservice.ris.search.service.helper;
 import static org.opensearch.index.query.QueryBuilders.matchPhraseQuery;
 import static org.opensearch.index.query.QueryBuilders.matchQuery;
 
-import de.bund.digitalservice.ris.search.models.api.parameters.CaseLawDocumentTypeGroup;
-import de.bund.digitalservice.ris.search.models.api.parameters.CaseLawSearchParams;
-import de.bund.digitalservice.ris.search.models.api.parameters.NormsSearchParams;
-import de.bund.digitalservice.ris.search.models.api.parameters.UniversalSearchParams;
+import de.bund.digitalservice.ris.search.api.parameters.CaseLawDocumentTypeGroup;
+import de.bund.digitalservice.ris.search.api.parameters.CaseLawSearchParams;
+import de.bund.digitalservice.ris.search.api.parameters.NormsSearchParams;
+import de.bund.digitalservice.ris.search.api.parameters.UniversalSearchParams;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import de.bund.digitalservice.ris.search.utils.DateUtils;
 import de.bund.digitalservice.ris.search.utils.QuotedStringParser;

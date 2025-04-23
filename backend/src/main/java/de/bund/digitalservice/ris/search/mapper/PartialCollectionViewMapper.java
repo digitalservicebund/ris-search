@@ -1,6 +1,6 @@
 package de.bund.digitalservice.ris.search.mapper;
 
-import de.bund.digitalservice.ris.search.schema.PartialCollectionViewSchema;
+import de.bund.digitalservice.ris.search.api.schema.PartialCollectionViewSchema;
 import org.springframework.data.domain.Page;
 
 public class PartialCollectionViewMapper {

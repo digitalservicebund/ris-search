@@ -4,9 +4,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
+import de.bund.digitalservice.ris.search.api.schema.TextMatchSchema;
 import de.bund.digitalservice.ris.search.mapper.NormSearchResponseMapper;
 import de.bund.digitalservice.ris.search.models.opensearch.Article;
-import de.bund.digitalservice.ris.search.schema.TextMatchSchema;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
