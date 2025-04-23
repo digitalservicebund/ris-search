@@ -49,6 +49,7 @@ export default defineNuxtConfig({
     "@nuxt/test-utils/module",
     "@sentry/nuxt/module",
     "nuxt-auth-utils",
+    "nuxt-security",
   ],
   devtools: {
     enabled: true,
