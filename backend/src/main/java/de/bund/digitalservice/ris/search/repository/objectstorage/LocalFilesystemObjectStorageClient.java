@@ -8,10 +8,8 @@ import java.io.FileNotFoundException;
 import java.io.FilterInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -58,8 +56,6 @@ public class LocalFilesystemObjectStorageClient implements ObjectStorageClient {
           .filter(Files::isRegularFile)
           .map(p -> p.toString().substring(p.toString().indexOf(prefix)))
           .toList();
-    } catch (NoSuchFileException e) {
-      return new ArrayList<>();
     } catch (IOException e) {
       throw new FileTransformationException(String.format("Could not list files in %s", path));
     }
@@ -88,7 +84,9 @@ public class LocalFilesystemObjectStorageClient implements ObjectStorageClient {
   }
 
   @Override
-  public void close() {}
+  public void close() {
+    // Nothing to close in the Filesystem implementation
+  }
 
   /**
    * @param fileName String
@@ -99,7 +97,8 @@ public class LocalFilesystemObjectStorageClient implements ObjectStorageClient {
     int numPaths = fileName.split("/").length;
 
     try {
-      Path absolutePath = localStorageDirectory.resolve(bucket + "/" + fileName).toFile().toPath();
+      Path absolutePath =
+          localStorageDirectory.resolve(Path.of(bucket, fileName)).toFile().toPath();
       for (int i = 0; i < numPaths; i++) {
         File f = new File(absolutePath.toString());
         if (f.isFile() || (f.isDirectory() && Objects.requireNonNull(f.list()).length == 0)) {
