@@ -44,7 +44,7 @@ class ImportServiceTest {
   }
 
   @Test
-  void lockIsAquiredAndReleasedOnSuccesfullProcess() throws RetryableObjectStoreException {
+  void lockIsAcquiredAndReleasedOnSuccesfulProcess() throws RetryableObjectStoreException {
     when(indexStatusService.lockIndex(eq("norm_lock.txt"), any())).thenReturn(true);
 
     Changelog changelog = new Changelog();
@@ -69,7 +69,7 @@ class ImportServiceTest {
   }
 
   @Test
-  void lockIsAquiredAndReleasedOnRetryableException() throws RetryableObjectStoreException {
+  void lockIsAcquiredAndReleasedOnRetryableException() throws RetryableObjectStoreException {
 
     Instant lastSuccess = Instant.now().minus(1, ChronoUnit.HOURS);
 
