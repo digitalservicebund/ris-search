@@ -115,8 +115,7 @@ public class IndexNormsService implements IndexService {
       if (manifestationEli.isPresent()) {
         result.add(manifestationEli.get());
       } else {
-        throw new IllegalArgumentException(
-            "Error processing " + changelogKey + ". File listed was not a valid manifestationEli.");
+        logger.warn("Error processing manifestation {} in {}", eli, changelogKey);
       }
     }
     return result;
