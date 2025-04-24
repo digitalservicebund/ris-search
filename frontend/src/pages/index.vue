@@ -58,7 +58,7 @@ const redirectToSearch = useRedirectToSearch();
     </FeatureCard>
     <FeatureCard>
       <div>
-        <h2 class="ris-heading3-bold hyphens-auto break-words">
+        <h2 class="ris-heading3-bold break-words hyphens-auto">
           Testen Sie die Darstellung aktueller Gesetze, Verordnungen und
           Gerichtsentscheidungen
         </h2>
