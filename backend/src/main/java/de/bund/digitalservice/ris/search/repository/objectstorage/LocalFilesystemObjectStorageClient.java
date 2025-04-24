@@ -63,15 +63,14 @@ public class LocalFilesystemObjectStorageClient implements ObjectStorageClient {
 
   @Override
   public FilterInputStream getStream(String objectKey) throws FileNotFoundException {
-    File file = localStorageDirectory.resolve(bucket + "/" + objectKey).toFile();
+    File file = localStorageDirectory.resolve(bucket).resolve(objectKey).toFile();
     return new DataInputStream(new FileInputStream(file));
   }
 
   @Override
   public void save(String fileName, String fileContent) {
 
-    File bucketDirectory = new File(localStorageDirectory.toAbsolutePath().toString(), bucket);
-    File file = new File(bucketDirectory, fileName);
+    File file = localStorageDirectory.resolve(bucket).resolve(fileName).toFile();
 
     try {
       FileUtils.writeByteArrayToFile(file, fileContent.getBytes());
@@ -94,8 +93,7 @@ public class LocalFilesystemObjectStorageClient implements ObjectStorageClient {
     int numPaths = fileName.split("/").length;
 
     try {
-      Path absolutePath =
-          localStorageDirectory.resolve(Path.of(bucket, fileName)).toFile().toPath();
+      Path absolutePath = localStorageDirectory.resolve(bucket).resolve(fileName);
       for (int i = 0; i < numPaths; i++) {
         File f = new File(absolutePath.toString());
         if (f.isFile() || (f.isDirectory() && Objects.requireNonNull(f.list()).length == 0)) {
