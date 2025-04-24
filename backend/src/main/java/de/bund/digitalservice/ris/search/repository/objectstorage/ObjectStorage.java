@@ -33,7 +33,7 @@ public class ObjectStorage {
     try {
       return checkedGet(objectKey);
     } catch (RetryableObjectStoreException e) {
-      logger.error("AWS S3 encountered an issue.", e);
+      logger.error("object storage encountered an issue.", e);
     }
     return Optional.empty();
   }
@@ -52,7 +52,8 @@ public class ObjectStorage {
       return Optional.empty();
     } catch (IOException | AwsServiceException | SdkClientException e) {
       throw new RetryableObjectStoreException(
-          String.format("S3 has encountered a problem while trying to get object %s.", objectKey),
+          String.format(
+              "object storage has encountered a problem while trying to get object %s.", objectKey),
           e);
     }
   }
