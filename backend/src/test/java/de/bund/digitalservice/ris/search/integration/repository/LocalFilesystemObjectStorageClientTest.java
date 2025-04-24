@@ -1,5 +1,7 @@
 package de.bund.digitalservice.ris.search.integration.repository;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import de.bund.digitalservice.ris.search.exception.FileTransformationException;
 import de.bund.digitalservice.ris.search.repository.objectstorage.LocalFilesystemObjectStorageClient;
 import java.io.FilterInputStream;
@@ -19,6 +21,9 @@ class LocalFilesystemObjectStorageClientTest {
   @BeforeEach
   void beforeEach() {
     this.client = new LocalFilesystemObjectStorageClient(bucket, path);
+    for (String key : this.client.getAllFilenamesByPath("")) {
+      this.client.delete(key);
+    }
   }
 
   @Test
@@ -31,18 +36,21 @@ class LocalFilesystemObjectStorageClientTest {
 
     List<String> filenames = client.getAllFilenamesByPath("path/to");
 
-    Assertions.assertTrue(filenames.contains("path/to/file1"));
-    Assertions.assertTrue(filenames.contains("path/to/file2"));
-    Assertions.assertEquals(2, filenames.size());
+    assertThat(filenames).containsExactlyInAnyOrder(path1, path2);
 
     FilterInputStream inputStream = client.getStream("path/to/file1");
-    String actual = new String(inputStream.readAllBytes());
-    Assertions.assertEquals("content1", actual);
+    assertThat(inputStream).hasContent("content1");
 
     client.delete("path/to/file1");
     client.delete("path/to/file2");
 
-    Assertions.assertEquals(0, client.getAllFilenamesByPath("/").size());
+    assertThat(client.getAllFilenamesByPath("")).isEmpty();
+  }
+
+  @Test
+  void itSupportEmptyPrefixes() {
+    client.save("path/to/file", "content");
+    assertThat(client.getAllFilenamesByPath("")).containsExactly("path/to/file");
   }
 
   @Test

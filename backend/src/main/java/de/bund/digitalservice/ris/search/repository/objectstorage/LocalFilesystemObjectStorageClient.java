@@ -9,7 +9,6 @@ import java.io.FilterInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -36,7 +35,7 @@ public class LocalFilesystemObjectStorageClient implements ObjectStorageClient {
       this.localStorageDirectory = findProjectRoot().resolve(relativeLocalStorageDirectory);
       Files.createDirectories(localStorageDirectory.resolve(bucket));
     } catch (IOException e) {
-      LOGGER.error("Couldn't setup local objectstorage: {}", e.getMessage(), e);
+      LOGGER.error("Couldn't setup local object storage: {}", e.getMessage(), e);
     }
   }
 
@@ -50,23 +49,21 @@ public class LocalFilesystemObjectStorageClient implements ObjectStorageClient {
 
   @Override
   public List<String> getAllFilenamesByPath(String prefix) {
-    Path path = Paths.get(localStorageDirectory.toString(), bucket, prefix);
-    try (Stream<Path> stream = Files.walk(path)) {
+    Path bucketPath = localStorageDirectory.resolve(bucket);
+    Path basePath = bucketPath.resolve(prefix);
+    try (Stream<Path> stream = Files.walk(basePath)) {
       return stream
           .filter(Files::isRegularFile)
-          .map(p -> p.toString().substring(p.toString().indexOf(prefix)))
+          .map(p -> p.toString().substring(bucketPath.toString().length() + 1))
           .toList();
     } catch (IOException e) {
-      throw new FileTransformationException(String.format("Could not list files in %s", path));
+      throw new FileTransformationException("Could not list files in " + basePath, e);
     }
   }
 
   @Override
   public FilterInputStream getStream(String objectKey) throws FileNotFoundException {
-    File file =
-        localStorageDirectory
-            .resolve(this.localStorageDirectory + "/" + bucket + "/" + objectKey)
-            .toFile();
+    File file = localStorageDirectory.resolve(bucket + "/" + objectKey).toFile();
     return new DataInputStream(new FileInputStream(file));
   }
 
