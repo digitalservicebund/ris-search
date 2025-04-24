@@ -21,9 +21,9 @@ const redirectToSearch = useRedirectToSearch();
         Rechtsinformationen des Bundes
       </h1>
       <p class="ris-subhead-regular mt-24">
-        Schneller und direkter Zugang zu Gerichtsentscheidungen und künftig auch
-        Gesetzen, Verordnungen und Verwaltungsvorschriften des Bundes - an einem
-        zentralen Ort.
+        Schneller und direkter Zugang zu Gesetzen, Verordnungen,
+        Gerichtsentscheidungen und künftig auch Verwaltungsvorschriften des
+        Bundes – an einem zentralen Ort.
       </p>
     </div>
   </HeroBanner>
@@ -34,7 +34,8 @@ const redirectToSearch = useRedirectToSearch();
           Testen Sie die Suche
         </h2>
         <p class="mt-8">
-          Finden Sie Gerichtsentscheidungen der Bundesgerichte.
+          Finden Sie Gesetze, Verordnungen und Gerichtsentscheidungen der
+          Bundesgerichte.
         </p>
       </div>
       <SimpleSearchInput
@@ -57,8 +58,9 @@ const redirectToSearch = useRedirectToSearch();
     </FeatureCard>
     <FeatureCard>
       <div>
-        <h2 class="ris-heading3-bold break-words hyphens-auto">
-          Testen Sie die Darstellung aktueller Gerichtsentscheidungen
+        <h2 class="ris-heading3-bold hyphens-auto break-words">
+          Testen Sie die Darstellung aktueller Gesetze, Verordnungen und
+          Gerichtsentscheidungen
         </h2>
         <p class="mt-8">
           Prüfen Sie, wie Rechtsinformationen dargestellt werden und helfen Sie
@@ -70,7 +72,11 @@ const redirectToSearch = useRedirectToSearch();
           @click="() => redirectToSearch({ category: 'R', sort: '-date' })"
           >Zu den Gerichtsentscheidungen</Button
         >
-        <Button disabled> Zu den Gesetzen und Verordnungen</Button>
+        <Button
+          @click="() => redirectToSearch({ category: 'N', sort: '-date' })"
+        >
+          Zu den Gesetzen und Verordnungen</Button
+        >
       </div>
     </FeatureCard>
     <FeatureCard>

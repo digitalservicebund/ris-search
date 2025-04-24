@@ -12,19 +12,15 @@ definePageMeta({ alias: ["/opensource"] });
     <div class="flex flex-col gap-32">
       <main class="max-w-prose space-y-24">
         <p>
-          Open Source bedeutet für uns Transparenz, Vertrauen, Sicherheit,
-          Qualität und Flexibilität. Aus diesem Grund wird unsere Arbeit bald in
-          unserem Github-Repository frei zugänglich und offen für Mitarbeit
-          sein.
-        </p>
-        <p>
-          Wir planen, das Github-Repository in den nächsten Wochen zu
-          veröffentlichen und werden dann den Link auf dieser Seite teilen.
+          Bei der Entwicklung setzen wir vollständig auf Open Source. Open
+          Source bedeutet für uns Transparenz, Vertrauen, Sicherheit, Qualität
+          und Flexibilität. Aus diesem Grund ist unsere Arbeit in unserem
+          Github-Repository frei zugänglich und offen für Mitarbeit.
         </p>
         <ButtonLink
           href="https://github.com/digitalservicebund/ris-search"
           target="_blank"
-          >GitHub-Repository<IcBaselineLaunch
+          >Zum Github Repository<IcBaselineLaunch
         /></ButtonLink>
       </main></div
   ></StaticPageWrapper>
