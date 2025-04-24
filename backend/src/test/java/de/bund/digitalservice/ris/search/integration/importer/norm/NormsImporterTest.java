@@ -5,8 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import de.bund.digitalservice.ris.search.exception.RetryableObjectStoreException;
 import de.bund.digitalservice.ris.search.integration.config.ContainersIntegrationBase;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
-import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
-import de.bund.digitalservice.ris.search.repository.objectstorage.PortalBucket;
+import de.bund.digitalservice.ris.search.repository.objectstorage.ObjectStorage;
 import de.bund.digitalservice.ris.search.repository.opensearch.NormsSynthesizedRepository;
 import de.bund.digitalservice.ris.search.service.ImportService;
 import de.bund.digitalservice.ris.search.service.IndexNormsService;
@@ -20,6 +19,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SuppressWarnings("OptionalGetWithoutIsPresent")
@@ -31,8 +31,14 @@ class NormsImporterTest extends ContainersIntegrationBase {
   @Autowired ImportService normsImporter;
   @Autowired IndexNormsService indexNormsService;
   @Autowired NormsSynthesizedRepository normIndex;
-  @Autowired private NormsBucket normsBucket;
-  @Autowired private PortalBucket portalBucket;
+
+  @Autowired
+  @Qualifier("normObjectStorage")
+  private ObjectStorage normsBucket;
+
+  @Autowired
+  @Qualifier("portalObjectStorage")
+  private ObjectStorage portalBucket;
 
   @BeforeEach
   void beforeEach() {

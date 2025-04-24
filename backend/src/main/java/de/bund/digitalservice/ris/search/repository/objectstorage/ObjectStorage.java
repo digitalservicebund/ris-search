@@ -11,44 +11,35 @@ import org.apache.logging.log4j.Logger;
 import software.amazon.awssdk.awscore.exception.AwsServiceException;
 import software.amazon.awssdk.core.exception.SdkClientException;
 
-public class ObjectStorage {
+public interface ObjectStorage {
 
-  private final Logger logger;
-  private final ObjectStorageClient client;
+  public List<String> getAllFilenames();
 
-  public ObjectStorage(ObjectStorageClient client, Logger logger) {
-    this.client = client;
-    this.logger = logger;
-  }
+  public List<String> getAllFilenamesByPath(String path);
 
-  public List<String> getAllFilenames() {
-    return getAllFilenamesByPath("");
-  }
+  public Logger getLogger();
 
-  public List<String> getAllFilenamesByPath(String path) {
-    return client.getAllFilenamesByPath(path);
-  }
-
-  public Optional<byte[]> get(String objectKey) {
+  default Optional<byte[]> get(String objectKey) {
     try {
       return checkedGet(objectKey);
     } catch (RetryableObjectStoreException e) {
-      logger.error("AWS S3 encountered an issue.", e);
+      this.getLogger().error("AWS S3 encountered an issue.", e);
     }
     return Optional.empty();
   }
 
-  public Optional<String> getFileAsString(String filename) throws RetryableObjectStoreException {
+  default Optional<String> getFileAsString(String filename) throws RetryableObjectStoreException {
     Optional<byte[]> s3Response = checkedGet(filename);
     return s3Response.map(bytes -> new String(bytes, StandardCharsets.UTF_8));
   }
+  ;
 
-  public Optional<byte[]> checkedGet(String objectKey) throws RetryableObjectStoreException {
+  default Optional<byte[]> checkedGet(String objectKey) throws RetryableObjectStoreException {
     try {
       final var response = getStream(objectKey);
       return Optional.of(response.readAllBytes());
     } catch (FileNotFoundException e) {
-      logger.warn(String.format("Object key %s does not exist", objectKey));
+      this.getLogger().warn(String.format("Object key %s does not exist", objectKey));
       return Optional.empty();
     } catch (IOException | AwsServiceException | SdkClientException e) {
       throw new RetryableObjectStoreException(
@@ -56,20 +47,13 @@ public class ObjectStorage {
           e);
     }
   }
+  ;
 
-  public FilterInputStream getStream(String objectKey) throws FileNotFoundException {
-    return client.getStream(objectKey);
-  }
+  public FilterInputStream getStream(String objectKey) throws FileNotFoundException;
 
-  public void delete(String fileName) {
-    client.delete(fileName);
-  }
+  public void delete(String fileName);
 
-  public void save(String fileName, String fileContent) {
-    client.save(fileName, fileContent);
-  }
+  public void save(String fileName, String fileContent);
 
-  public void close() {
-    client.close();
-  }
+  public void close();
 }

@@ -1,12 +1,12 @@
 package de.bund.digitalservice.ris.search.controller;
 
 import de.bund.digitalservice.ris.search.config.ApiConfig;
-import de.bund.digitalservice.ris.search.repository.objectstorage.CaseLawBucket;
-import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
+import de.bund.digitalservice.ris.search.repository.objectstorage.ObjectStorage;
 import de.bund.digitalservice.ris.search.service.ImportService;
 import de.bund.digitalservice.ris.search.service.IndexCaselawService;
 import de.bund.digitalservice.ris.search.service.IndexNormsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,16 +19,16 @@ public class ReindexingController {
   private final ImportService importService;
   private final IndexNormsService indexNormsService;
   private final IndexCaselawService indexCaselawService;
-  private final NormsBucket normsBucket;
-  private final CaseLawBucket caselawBucket;
+  private final ObjectStorage normsBucket;
+  private final ObjectStorage caselawBucket;
 
   @Autowired
   public ReindexingController(
       ImportService importService,
       IndexNormsService indexNormsService,
-      NormsBucket normsBucket,
+      @Qualifier("normObjectStorage") ObjectStorage normsBucket,
       IndexCaselawService indexCaselawService,
-      CaseLawBucket caselawBucket) {
+      @Qualifier("caseLawObjectStorage") ObjectStorage caselawBucket) {
     this.importService = importService;
     this.indexNormsService = indexNormsService;
     this.normsBucket = normsBucket;

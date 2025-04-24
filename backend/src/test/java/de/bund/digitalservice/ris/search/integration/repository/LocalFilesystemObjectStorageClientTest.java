@@ -1,7 +1,7 @@
 package de.bund.digitalservice.ris.search.integration.repository;
 
 import de.bund.digitalservice.ris.search.exception.FileTransformationException;
-import de.bund.digitalservice.ris.search.repository.objectstorage.LocalFilesystemObjectStorageClient;
+import de.bund.digitalservice.ris.search.repository.objectstorage.FileSystemObjectStorage;
 import java.io.FilterInputStream;
 import java.io.IOException;
 import java.util.List;
@@ -14,11 +14,11 @@ class LocalFilesystemObjectStorageClientTest {
   String path = "backend/src/test/resources/data/";
   String bucket = "tmp";
 
-  LocalFilesystemObjectStorageClient client;
+  FileSystemObjectStorage client;
 
   @BeforeEach
   void beforeEach() {
-    this.client = new LocalFilesystemObjectStorageClient(bucket, path);
+    this.client = new FileSystemObjectStorage(bucket, path);
   }
 
   @Test

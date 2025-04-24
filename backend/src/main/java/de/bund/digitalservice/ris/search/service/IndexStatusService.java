@@ -1,13 +1,14 @@
 package de.bund.digitalservice.ris.search.service;
 
 import de.bund.digitalservice.ris.search.exception.RetryableObjectStoreException;
-import de.bund.digitalservice.ris.search.repository.objectstorage.PortalBucket;
+import de.bund.digitalservice.ris.search.repository.objectstorage.ObjectStorage;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.format.DateTimeParseException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -15,10 +16,10 @@ public class IndexStatusService {
 
   private static final Logger logger = LogManager.getLogger(IndexStatusService.class);
 
-  private final PortalBucket portalBucket;
+  private final ObjectStorage portalBucket;
 
   @Autowired
-  public IndexStatusService(PortalBucket portalBucket) {
+  public IndexStatusService(@Qualifier("portalObjectStorage") ObjectStorage portalBucket) {
     this.portalBucket = portalBucket;
   }
 

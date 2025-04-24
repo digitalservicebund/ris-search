@@ -10,7 +10,7 @@ import static org.mockito.Mockito.when;
 import de.bund.digitalservice.ris.search.exception.RetryableObjectStoreException;
 import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
-import de.bund.digitalservice.ris.search.repository.objectstorage.CaseLawBucket;
+import de.bund.digitalservice.ris.search.repository.objectstorage.ObjectStorage;
 import de.bund.digitalservice.ris.search.repository.opensearch.CaseLawSynthesizedRepository;
 import de.bund.digitalservice.ris.search.service.IndexCaselawService;
 import de.bund.digitalservice.ris.search.utils.CaseLawLdmlTemplateUtils;
@@ -29,14 +29,14 @@ import org.mockito.junit.jupiter.MockitoExtension;
 class CaseLawImporterTest {
   private String testCaseLawLdml;
   private CaseLawSynthesizedRepository caseLawSynthesizedRepositoryMock;
-  private CaseLawBucket caseLawBucket;
+  private ObjectStorage caseLawBucket;
   private final CaseLawLdmlTemplateUtils caseLawLdmlTemplateUtils = new CaseLawLdmlTemplateUtils();
 
   @BeforeEach
   void beforeEach() throws IOException {
     testCaseLawLdml = caseLawLdmlTemplateUtils.getXmlFromTemplate(null);
     caseLawSynthesizedRepositoryMock = Mockito.mock(CaseLawSynthesizedRepository.class);
-    caseLawBucket = Mockito.mock(CaseLawBucket.class);
+    caseLawBucket = Mockito.mock(ObjectStorage.class);
   }
 
   @Test

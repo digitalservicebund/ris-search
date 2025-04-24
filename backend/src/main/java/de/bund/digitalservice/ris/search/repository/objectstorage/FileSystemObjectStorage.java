@@ -15,21 +15,20 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
 import org.apache.commons.io.FileUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-public class LocalFilesystemObjectStorageClient implements ObjectStorageClient {
+public class FileSystemObjectStorage implements ObjectStorage {
 
   private static final List<String> possibleProjectRoots = Arrays.asList("ris-search", "workspace");
-
-  private static final Logger LOGGER =
-      LoggerFactory.getLogger(LocalFilesystemObjectStorageClient.class);
 
   private Path localStorageDirectory;
 
   private final String bucket;
 
-  public LocalFilesystemObjectStorageClient(String bucket, String relativeLocalStorageDirectory) {
+  private static final Logger LOGGER = LogManager.getLogger(FileSystemObjectStorage.class);
+
+  public FileSystemObjectStorage(String bucket, String relativeLocalStorageDirectory) {
     this.bucket = bucket;
 
     try {
@@ -49,6 +48,11 @@ public class LocalFilesystemObjectStorageClient implements ObjectStorageClient {
   }
 
   @Override
+  public List<String> getAllFilenames() {
+    return getAllFilenamesByPath("");
+  }
+
+  @Override
   public List<String> getAllFilenamesByPath(String prefix) {
     Path path = Paths.get(localStorageDirectory.toString(), bucket, prefix);
     try (Stream<Path> stream = Files.walk(path)) {
@@ -62,12 +66,36 @@ public class LocalFilesystemObjectStorageClient implements ObjectStorageClient {
   }
 
   @Override
+  public Logger getLogger() {
+    return FileSystemObjectStorage.LOGGER;
+  }
+
+  @Override
   public FilterInputStream getStream(String objectKey) throws FileNotFoundException {
     File file =
         localStorageDirectory
             .resolve(this.localStorageDirectory + "/" + bucket + "/" + objectKey)
             .toFile();
     return new DataInputStream(new FileInputStream(file));
+  }
+
+  @Override
+  public void delete(String fileName) {
+    int numPaths = fileName.split("/").length;
+
+    try {
+      Path absolutePath =
+          localStorageDirectory.resolve(Path.of(bucket, fileName)).toFile().toPath();
+      for (int i = 0; i < numPaths; i++) {
+        File f = new File(absolutePath.toString());
+        if (f.isFile() || (f.isDirectory() && Objects.requireNonNull(f.list()).length == 0)) {
+          Files.delete(absolutePath);
+        }
+        absolutePath = absolutePath.getParent();
+      }
+    } catch (NullPointerException | IOException e) {
+      LOGGER.error("Couldn't delete object from local storage: {}", e.getMessage(), e);
+    }
   }
 
   @Override
@@ -86,28 +114,5 @@ public class LocalFilesystemObjectStorageClient implements ObjectStorageClient {
   @Override
   public void close() {
     // Nothing to close in the Filesystem implementation
-  }
-
-  /**
-   * @param fileName String
-   *     <p>delete a specific file and all parts of the prefix when it contains directories
-   */
-  @Override
-  public void delete(String fileName) {
-    int numPaths = fileName.split("/").length;
-
-    try {
-      Path absolutePath =
-          localStorageDirectory.resolve(Path.of(bucket, fileName)).toFile().toPath();
-      for (int i = 0; i < numPaths; i++) {
-        File f = new File(absolutePath.toString());
-        if (f.isFile() || (f.isDirectory() && Objects.requireNonNull(f.list()).length == 0)) {
-          Files.delete(absolutePath);
-        }
-        absolutePath = absolutePath.getParent();
-      }
-    } catch (NullPointerException | IOException e) {
-      LOGGER.error("Couldn't delete object from local storage: {}", e.getMessage(), e);
-    }
   }
 }

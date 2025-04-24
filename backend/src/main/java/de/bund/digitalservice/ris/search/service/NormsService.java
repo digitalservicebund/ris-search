@@ -5,7 +5,7 @@ import static org.opensearch.index.query.QueryBuilders.queryStringQuery;
 import de.bund.digitalservice.ris.search.models.api.parameters.NormsSearchParams;
 import de.bund.digitalservice.ris.search.models.api.parameters.UniversalSearchParams;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
-import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
+import de.bund.digitalservice.ris.search.repository.objectstorage.ObjectStorage;
 import de.bund.digitalservice.ris.search.repository.opensearch.NormsRepository;
 import de.bund.digitalservice.ris.search.service.helper.FetchSourceFilterDefinitions;
 import de.bund.digitalservice.ris.search.service.helper.UniversalDocumentQueryBuilder;
@@ -26,6 +26,7 @@ import org.opensearch.data.client.orhlc.NativeSearchQuery;
 import org.opensearch.data.client.orhlc.NativeSearchQueryBuilder;
 import org.opensearch.index.query.BoolQueryBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.SearchHits;
@@ -42,12 +43,12 @@ public class NormsService {
 
   private final NormsRepository normsRepository;
   private final ElasticsearchOperations operations;
-  private final NormsBucket normsBucket;
+  private final ObjectStorage normsBucket;
 
   @Autowired
   public NormsService(
       NormsRepository normsRepository,
-      NormsBucket normsBucket,
+      @Qualifier("normObjectStorage") ObjectStorage normsBucket,
       ElasticsearchOperations operations) {
     this.normsRepository = normsRepository;
     this.normsBucket = normsBucket;

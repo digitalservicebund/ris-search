@@ -5,7 +5,7 @@ import de.bund.digitalservice.ris.search.exception.RetryableObjectStoreException
 import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
 import de.bund.digitalservice.ris.search.mapper.CaseLawLdmlToOpenSearchMapper;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
-import de.bund.digitalservice.ris.search.repository.objectstorage.CaseLawBucket;
+import de.bund.digitalservice.ris.search.repository.objectstorage.ObjectStorage;
 import de.bund.digitalservice.ris.search.repository.opensearch.CaseLawSynthesizedRepository;
 import java.time.Instant;
 import java.util.List;
@@ -16,6 +16,7 @@ import org.apache.commons.collections4.ListUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -26,10 +27,12 @@ public class IndexCaselawService implements IndexService {
   private static final Integer IMPORT_BATCH_SIZE = 1000;
 
   private final CaseLawSynthesizedRepository repository;
-  private final CaseLawBucket bucket;
+  private final ObjectStorage bucket;
 
   @Autowired
-  public IndexCaselawService(CaseLawBucket bucket, CaseLawSynthesizedRepository repository) {
+  public IndexCaselawService(
+      @Qualifier("caseLawObjectStorage") ObjectStorage bucket,
+      CaseLawSynthesizedRepository repository) {
     this.bucket = bucket;
     this.repository = repository;
   }

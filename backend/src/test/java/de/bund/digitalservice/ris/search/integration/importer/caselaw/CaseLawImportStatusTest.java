@@ -2,8 +2,7 @@ package de.bund.digitalservice.ris.search.integration.importer.caselaw;
 
 import de.bund.digitalservice.ris.search.exception.RetryableObjectStoreException;
 import de.bund.digitalservice.ris.search.integration.config.ContainersIntegrationBase;
-import de.bund.digitalservice.ris.search.repository.objectstorage.CaseLawBucket;
-import de.bund.digitalservice.ris.search.repository.objectstorage.PortalBucket;
+import de.bund.digitalservice.ris.search.repository.objectstorage.ObjectStorage;
 import de.bund.digitalservice.ris.search.repository.opensearch.CaseLawSynthesizedRepository;
 import de.bund.digitalservice.ris.search.service.ImportService;
 import de.bund.digitalservice.ris.search.service.IndexCaselawService;
@@ -20,6 +19,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
@@ -27,8 +27,14 @@ import org.springframework.boot.test.context.SpringBootTest;
 class CaseLawImportStatusTest extends ContainersIntegrationBase {
   @Autowired CaseLawSynthesizedRepository caseLawSynthesizedRepository;
 
-  @Autowired CaseLawBucket caseLawBucket;
-  @Autowired PortalBucket portalBucket;
+  @Autowired
+  @Qualifier("caseLawObjectStorage")
+  ObjectStorage caseLawBucket;
+
+  @Autowired
+  @Qualifier("portalObjectStorage")
+  ObjectStorage portalBucket;
+
   @Autowired IndexCaselawService indexCaselawService;
   @Autowired ImportService importService;
   @Autowired IndexStatusService indexStatusService;

@@ -4,7 +4,7 @@ import de.bund.digitalservice.ris.search.exception.RetryableObjectStoreException
 import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
 import de.bund.digitalservice.ris.search.mapper.NormLdmlToOpenSearchMapper;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
-import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
+import de.bund.digitalservice.ris.search.repository.objectstorage.ObjectStorage;
 import de.bund.digitalservice.ris.search.repository.opensearch.NormsSynthesizedRepository;
 import de.bund.digitalservice.ris.search.utils.DateUtils;
 import de.bund.digitalservice.ris.search.utils.eli.ExpressionEli;
@@ -22,6 +22,7 @@ import org.apache.commons.collections4.ListUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -30,11 +31,12 @@ public class IndexNormsService implements IndexService {
   private static final Logger logger = LogManager.getLogger(IndexNormsService.class);
 
   private final NormsSynthesizedRepository normsSynthesizedRepository;
-  private final NormsBucket normsBucket;
+  private final ObjectStorage normsBucket;
 
   @Autowired
   public IndexNormsService(
-      NormsBucket normsBucket, NormsSynthesizedRepository normsSynthesizedRepository) {
+      @Qualifier("normObjectStorage") ObjectStorage normsBucket,
+      NormsSynthesizedRepository normsSynthesizedRepository) {
     this.normsBucket = normsBucket;
     this.normsSynthesizedRepository = normsSynthesizedRepository;
   }
