@@ -1,7 +1,7 @@
 package de.bund.digitalservice.ris.search.service;
 
 import de.bund.digitalservice.ris.search.exception.FileTransformationException;
-import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
+import de.bund.digitalservice.ris.search.repository.objectstorage.ObjectStorage;
 import de.bund.digitalservice.ris.search.service.exception.XMLElementNotFoundException;
 import de.bund.digitalservice.ris.search.utils.eli.ManifestationEli;
 import java.io.ByteArrayInputStream;
@@ -27,6 +27,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
@@ -40,9 +41,9 @@ public class XsltTransformerService {
   private final String normXslt = getXslt(XSLT_PATH + "/ris-portal.xsl");
   private final String caseLawXslt = getXslt("XSLT/html/case-law.xslt");
 
-  private final NormsBucket normsBucket;
+  private final ObjectStorage normsBucket;
 
-  public XsltTransformerService(NormsBucket normsBucket) {
+  public XsltTransformerService(@Qualifier("normObjectStorage") ObjectStorage normsBucket) {
     this.normsBucket = normsBucket;
     URIResolver defaultResolver = transformerFactory.getURIResolver();
 

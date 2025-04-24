@@ -1,26 +1,35 @@
 package de.bund.digitalservice.ris.search.repository.objectstorage;
 
 import java.io.FileNotFoundException;
+import java.io.FilterInputStream;
 import java.util.ArrayList;
 import java.util.List;
-import software.amazon.awssdk.core.ResponseInputStream;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.GetObjectRequest;
-import software.amazon.awssdk.services.s3.model.GetObjectResponse;
 import software.amazon.awssdk.services.s3.model.ListObjectsV2Request;
 import software.amazon.awssdk.services.s3.model.ListObjectsV2Response;
 import software.amazon.awssdk.services.s3.model.NoSuchKeyException;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import software.amazon.awssdk.services.s3.model.S3Object;
 
-public class S3ObjectStorageClient implements ObjectStorageClient {
+public class S3ObjectStorage implements ObjectStorage {
+
   private final S3Client s3Client;
   private final String bucketName;
 
-  public S3ObjectStorageClient(S3Client s3Client, String bucketName) {
+  private final Logger logger = LogManager.getLogger();
+
+  public S3ObjectStorage(S3Client s3Client, String bucketName) {
     this.s3Client = s3Client;
     this.bucketName = bucketName;
+  }
+
+  @Override
+  public List<String> getAllFilenames() {
+    return getAllFilenamesByPath("");
   }
 
   @Override
@@ -45,14 +54,23 @@ public class S3ObjectStorageClient implements ObjectStorageClient {
   }
 
   @Override
-  public ResponseInputStream<GetObjectResponse> getStream(String objectKey)
-      throws FileNotFoundException {
+  public Logger getLogger() {
+    return logger;
+  }
+
+  @Override
+  public FilterInputStream getStream(String objectKey) throws FileNotFoundException {
     GetObjectRequest request = GetObjectRequest.builder().bucket(bucketName).key(objectKey).build();
     try {
       return s3Client.getObject(request);
     } catch (NoSuchKeyException e) {
       throw new FileNotFoundException(e.getMessage());
     }
+  }
+
+  @Override
+  public void delete(String fileName) {
+    s3Client.deleteObject(builder -> builder.bucket(bucketName).key(fileName));
   }
 
   @Override
@@ -64,11 +82,6 @@ public class S3ObjectStorageClient implements ObjectStorageClient {
 
   @Override
   public void close() {
-    s3Client.close();
-  }
-
-  @Override
-  public void delete(String fileName) {
-    s3Client.deleteObject(builder -> builder.bucket(bucketName).key(fileName));
+    this.s3Client.close();
   }
 }

@@ -9,7 +9,7 @@ import static org.mockito.Mockito.when;
 
 import de.bund.digitalservice.ris.search.exception.RetryableObjectStoreException;
 import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
-import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
+import de.bund.digitalservice.ris.search.repository.objectstorage.ObjectStorage;
 import de.bund.digitalservice.ris.search.service.ChangelogService;
 import de.bund.digitalservice.ris.search.service.ImportService;
 import de.bund.digitalservice.ris.search.service.IndexNormsService;
@@ -32,7 +32,7 @@ import org.springframework.boot.test.system.OutputCaptureExtension;
 class ImportServiceTest {
 
   @Mock IndexStatusService indexStatusService;
-  @Mock NormsBucket normsBucket;
+  @Mock ObjectStorage normsBucket;
   @Mock ChangelogService changelogService;
 
   @Mock IndexNormsService indexNormsService;

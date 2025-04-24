@@ -3,7 +3,7 @@ package de.bund.digitalservice.ris.search.controller.api;
 import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.mapper.CaseLawSchemaMapper;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
-import de.bund.digitalservice.ris.search.repository.objectstorage.CaseLawBucket;
+import de.bund.digitalservice.ris.search.repository.objectstorage.ObjectStorage;
 import de.bund.digitalservice.ris.search.schema.CaseLawSchema;
 import de.bund.digitalservice.ris.search.service.CaseLawService;
 import de.bund.digitalservice.ris.search.service.XsltTransformerService;
@@ -16,6 +16,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -30,13 +31,13 @@ public class CaseLawController {
 
   private final CaseLawService caseLawService;
   private final XsltTransformerService xsltTransformerService;
-  private final CaseLawBucket caseLawBucket;
+  private final ObjectStorage caseLawBucket;
 
   @Autowired
   public CaseLawController(
       CaseLawService caseLawService,
       XsltTransformerService xsltTransformerService,
-      CaseLawBucket caseLawBucket) {
+      @Qualifier("caseLawObjectStorage") ObjectStorage caseLawBucket) {
     this.caseLawService = caseLawService;
     this.xsltTransformerService = xsltTransformerService;
     this.caseLawBucket = caseLawBucket;

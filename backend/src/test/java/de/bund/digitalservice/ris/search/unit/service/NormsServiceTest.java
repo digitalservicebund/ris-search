@@ -5,7 +5,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
-import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
+import de.bund.digitalservice.ris.search.repository.objectstorage.ObjectStorage;
 import de.bund.digitalservice.ris.search.repository.opensearch.NormsRepository;
 import de.bund.digitalservice.ris.search.repository.opensearch.NormsSynthesizedRepository;
 import de.bund.digitalservice.ris.search.service.NormsService;
@@ -39,7 +39,7 @@ class NormsServiceTest {
     NormsRepository normsRepositoryMock =
         new NormsRepository(Mockito.mock(NormsSynthesizedRepository.class));
     operationsMock = Mockito.mock(ElasticsearchOperations.class);
-    NormsBucket normsBucketMock = Mockito.mock(NormsBucket.class);
+    ObjectStorage normsBucketMock = Mockito.mock(ObjectStorage.class);
     this.normsService = new NormsService(normsRepositoryMock, normsBucketMock, operationsMock);
   }
 

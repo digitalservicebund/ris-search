@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.testcontainers.shaded.org.apache.commons.lang3.StringUtils.deleteWhitespace;
 
 import de.bund.digitalservice.ris.search.exception.FileTransformationException;
-import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
+import de.bund.digitalservice.ris.search.repository.objectstorage.ObjectStorage;
 import de.bund.digitalservice.ris.search.service.XsltTransformerService;
 import de.bund.digitalservice.ris.search.utils.CaseLawLdmlTemplateUtils;
 import java.io.ByteArrayInputStream;
@@ -30,7 +30,7 @@ import software.amazon.awssdk.services.s3.model.GetObjectResponse;
 
 class XsltTransformerServiceTest {
 
-  private final NormsBucket normsBucketMock = Mockito.mock(NormsBucket.class);
+  private final ObjectStorage normsBucketMock = Mockito.mock(ObjectStorage.class);
   private final XsltTransformerService service = new XsltTransformerService(normsBucketMock);
 
   private final CaseLawLdmlTemplateUtils caseLawLdmlTemplateUtils = new CaseLawLdmlTemplateUtils();

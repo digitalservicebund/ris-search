@@ -9,7 +9,7 @@ import static org.mockito.Mockito.when;
 import de.bund.digitalservice.ris.search.exception.RetryableObjectStoreException;
 import de.bund.digitalservice.ris.search.mapper.NormLdmlToOpenSearchMapper;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
-import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
+import de.bund.digitalservice.ris.search.repository.objectstorage.ObjectStorage;
 import de.bund.digitalservice.ris.search.repository.opensearch.NormsSynthesizedRepository;
 import de.bund.digitalservice.ris.search.service.IndexNormsService;
 import java.time.ZoneOffset;
@@ -29,7 +29,7 @@ class IndexNormsServiceTest {
 
   IndexNormsService service;
 
-  @Mock NormsBucket bucket;
+  @Mock ObjectStorage bucket;
   @Mock NormsSynthesizedRepository repo;
 
   @BeforeEach()

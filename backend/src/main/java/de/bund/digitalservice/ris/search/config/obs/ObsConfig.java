@@ -1,8 +1,8 @@
 package de.bund.digitalservice.ris.search.config.obs;
 
-import de.bund.digitalservice.ris.search.repository.objectstorage.LocalFilesystemObjectStorageClient;
-import de.bund.digitalservice.ris.search.repository.objectstorage.ObjectStorageClient;
-import de.bund.digitalservice.ris.search.repository.objectstorage.S3ObjectStorageClient;
+import de.bund.digitalservice.ris.search.repository.objectstorage.FileSystemObjectStorage;
+import de.bund.digitalservice.ris.search.repository.objectstorage.ObjectStorage;
+import de.bund.digitalservice.ris.search.repository.objectstorage.S3ObjectStorage;
 import java.net.URI;
 import java.net.URISyntaxException;
 import org.springframework.beans.factory.annotation.Value;
@@ -45,11 +45,11 @@ public class ObsConfig {
   @Value("${s3.file-storage.portal.secret-access-key}")
   private String portalSecretAccessKey;
 
-  @Bean(name = "normS3Client")
+  @Bean(name = "normObjectStorage")
   @Profile({"production", "staging", "prototype"})
-  public ObjectStorageClient normS3Client(
-      @Value("${s3.file-storage.norm.bucket-name}") String bucket) throws URISyntaxException {
-    return new S3ObjectStorageClient(
+  public ObjectStorage normS3Client(@Value("${s3.file-storage.norm.bucket-name}") String bucket)
+      throws URISyntaxException {
+    return new S3ObjectStorage(
         S3Client.builder()
             .credentialsProvider(
                 StaticCredentialsProvider.create(
@@ -60,11 +60,11 @@ public class ObsConfig {
         bucket);
   }
 
-  @Bean(name = "caseLawS3Client")
+  @Bean(name = "caseLawObjectStorage")
   @Profile({"staging", "prototype"})
-  public ObjectStorageClient caseLawS3Client(
+  public ObjectStorage caseLawS3Client(
       @Value("${s3.file-storage.case-law.bucket-name}") String bucket) throws URISyntaxException {
-    return new S3ObjectStorageClient(
+    return new S3ObjectStorage(
         S3Client.builder()
             .credentialsProvider(
                 StaticCredentialsProvider.create(
@@ -72,14 +72,14 @@ public class ObsConfig {
             .endpointOverride(new URI(portalEndpoint))
             .region(Region.of(REGION))
             .build(),
-        bucket);
+        bucket) {};
   }
 
-  @Bean(name = "portalS3Client")
+  @Bean(name = "portalObjectStorage")
   @Profile({"production", "staging", "prototype"})
-  public ObjectStorageClient portalS3Client(
-      @Value("${s3.file-storage.portal.bucket-name}") String bucket) throws URISyntaxException {
-    return new S3ObjectStorageClient(
+  public ObjectStorage portalS3Client(@Value("${s3.file-storage.portal.bucket-name}") String bucket)
+      throws URISyntaxException {
+    return new S3ObjectStorage(
         S3Client.builder()
             .credentialsProvider(
                 StaticCredentialsProvider.create(
@@ -90,24 +90,24 @@ public class ObsConfig {
         bucket);
   }
 
-  @Bean(name = "normS3Client")
+  @Bean(name = "normObjectStorage")
   @Profile({"default"})
-  public ObjectStorageClient mockNormS3Client(
+  public ObjectStorage mockNormS3Client(
       @Value("${local.file-storage}") String relativeLocalStorageDirectory) {
-    return new LocalFilesystemObjectStorageClient("norm", relativeLocalStorageDirectory);
+    return new FileSystemObjectStorage("norm", relativeLocalStorageDirectory);
   }
 
-  @Bean(name = "caseLawS3Client")
+  @Bean(name = "caseLawObjectStorage")
   @Profile({"default"})
-  public ObjectStorageClient mockCaseLawS3Client(
+  public ObjectStorage mockCaseLawS3Client(
       @Value("${local.file-storage}") String relativeLocalStorageDirectory) {
-    return new LocalFilesystemObjectStorageClient("caselaw", relativeLocalStorageDirectory);
+    return new FileSystemObjectStorage("caselaw", relativeLocalStorageDirectory);
   }
 
-  @Bean(name = "portalS3Client")
+  @Bean(name = "portalObjectStorage")
   @Profile({"default"})
-  public ObjectStorageClient mockPortalS3Client(
+  public ObjectStorage mockPortalS3Client(
       @Value("${local.file-storage}") String relativeLocalStorageDirectory) {
-    return new LocalFilesystemObjectStorageClient("portal", relativeLocalStorageDirectory);
+    return new FileSystemObjectStorage("portal", relativeLocalStorageDirectory);
   }
 }
