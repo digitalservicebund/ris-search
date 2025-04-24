@@ -84,11 +84,6 @@ definePageMeta({ alias: ["/ueber"] });
           class="grid max-w-5xl auto-rows-fr grid-cols-1 gap-24 md:grid-cols-3"
         >
           <StatusCard
-            header="Gesetze und Verordnungen"
-            content="in der jeweils aktuell gültigen Fassung inklusive Tabellen und Anhängen sowie den wichtigsten Metadaten"
-            :status="StatusCardType.IN_PROGRESS"
-          />
-          <StatusCard
             header="Verwaltungsvorschriften"
             content="um den Zugang zu allen relevanten Rechtsinformationen zu vervollständigen"
             :status="StatusCardType.IN_PROGRESS"

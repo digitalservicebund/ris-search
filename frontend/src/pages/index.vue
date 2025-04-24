@@ -69,13 +69,13 @@ const redirectToSearch = useRedirectToSearch();
       </div>
       <div class="flex flex-wrap gap-16">
         <Button
-          @click="() => redirectToSearch({ category: 'R', sort: '-date' })"
-          >Zu den Gerichtsentscheidungen</Button
-        >
-        <Button
           @click="() => redirectToSearch({ category: 'N', sort: '-date' })"
         >
           Zu den Gesetzen und Verordnungen</Button
+        >
+        <Button
+          @click="() => redirectToSearch({ category: 'R', sort: '-date' })"
+          >Zu den Gerichtsentscheidungen</Button
         >
       </div>
     </FeatureCard>
