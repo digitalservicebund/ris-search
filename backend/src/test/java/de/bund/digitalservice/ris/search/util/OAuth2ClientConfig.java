@@ -1,4 +1,4 @@
-package de.bund.digitalservice.ris.search.data;
+package de.bund.digitalservice.ris.search.util;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
