@@ -1,16 +1,16 @@
 package de.bund.digitalservice.ris.search.mapper;
 
+import de.bund.digitalservice.ris.search.api.schema.LegalForceStatus;
+import de.bund.digitalservice.ris.search.api.schema.LegislationExpressionPartSchema;
+import de.bund.digitalservice.ris.search.api.schema.LegislationExpressionSchema;
+import de.bund.digitalservice.ris.search.api.schema.LegislationObjectSchema;
+import de.bund.digitalservice.ris.search.api.schema.LegislationWorkSchema;
+import de.bund.digitalservice.ris.search.api.schema.PublicationIssueSchema;
+import de.bund.digitalservice.ris.search.api.schema.TableOfContentsSchema;
 import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.models.opensearch.Article;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.models.opensearch.TableOfContentsItem;
-import de.bund.digitalservice.ris.search.schema.LegalForceStatus;
-import de.bund.digitalservice.ris.search.schema.LegislationExpressionPartSchema;
-import de.bund.digitalservice.ris.search.schema.LegislationExpressionSchema;
-import de.bund.digitalservice.ris.search.schema.LegislationObjectSchema;
-import de.bund.digitalservice.ris.search.schema.LegislationWorkSchema;
-import de.bund.digitalservice.ris.search.schema.PublicationIssueSchema;
-import de.bund.digitalservice.ris.search.schema.TableOfContentsSchema;
 import de.bund.digitalservice.ris.search.utils.DateUtils;
 import java.util.Collections;
 import java.util.List;

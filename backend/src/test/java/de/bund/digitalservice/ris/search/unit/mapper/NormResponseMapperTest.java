@@ -1,15 +1,15 @@
 package de.bund.digitalservice.ris.search.unit.mapper;
 
+import de.bund.digitalservice.ris.search.api.schema.LegalForceStatus;
+import de.bund.digitalservice.ris.search.api.schema.LegislationExpressionPartSchema;
+import de.bund.digitalservice.ris.search.api.schema.LegislationExpressionSchema;
+import de.bund.digitalservice.ris.search.api.schema.LegislationObjectSchema;
+import de.bund.digitalservice.ris.search.api.schema.LegislationWorkSchema;
+import de.bund.digitalservice.ris.search.api.schema.TableOfContentsSchema;
 import de.bund.digitalservice.ris.search.mapper.NormResponseMapper;
 import de.bund.digitalservice.ris.search.models.opensearch.Article;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.models.opensearch.TableOfContentsItem;
-import de.bund.digitalservice.ris.search.schema.LegalForceStatus;
-import de.bund.digitalservice.ris.search.schema.LegislationExpressionPartSchema;
-import de.bund.digitalservice.ris.search.schema.LegislationExpressionSchema;
-import de.bund.digitalservice.ris.search.schema.LegislationObjectSchema;
-import de.bund.digitalservice.ris.search.schema.LegislationWorkSchema;
-import de.bund.digitalservice.ris.search.schema.TableOfContentsSchema;
 import java.util.List;
 import java.util.Objects;
 import org.junit.jupiter.api.Assertions;
