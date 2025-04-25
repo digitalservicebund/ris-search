@@ -50,8 +50,7 @@
     },
     "official_abbreviation": {
       "type": "keyword",
-      "boost": 3,
-      "normalizer": "lowercase"
+      "boost": 3
     },
     "work_eli": {
       "type": "keyword",
