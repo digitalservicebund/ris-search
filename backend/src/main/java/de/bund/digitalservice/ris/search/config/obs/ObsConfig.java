@@ -53,8 +53,8 @@ public class ObsConfig {
         S3Client.builder()
             .credentialsProvider(
                 StaticCredentialsProvider.create(
-                    AwsBasicCredentials.create(portalAccessKeyId, portalSecretAccessKey)))
-            .endpointOverride(new URI(portalEndpoint))
+                    AwsBasicCredentials.create(normAccessKeyId, normSecretAccessKey)))
+            .endpointOverride(new URI(normEndpoint))
             .region(Region.of(REGION))
             .build(),
         bucket);
@@ -68,8 +68,8 @@ public class ObsConfig {
         S3Client.builder()
             .credentialsProvider(
                 StaticCredentialsProvider.create(
-                    AwsBasicCredentials.create(portalAccessKeyId, portalSecretAccessKey)))
-            .endpointOverride(new URI(portalEndpoint))
+                    AwsBasicCredentials.create(caseLawAccessKeyId, caseLawSecretAccessKey)))
+            .endpointOverride(new URI(caseLawEndpoint))
             .region(Region.of(REGION))
             .build(),
         bucket);
