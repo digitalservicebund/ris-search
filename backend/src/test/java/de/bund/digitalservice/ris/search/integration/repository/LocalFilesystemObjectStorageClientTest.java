@@ -2,12 +2,10 @@ package de.bund.digitalservice.ris.search.integration.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import de.bund.digitalservice.ris.search.exception.FileTransformationException;
 import de.bund.digitalservice.ris.search.repository.objectstorage.LocalFilesystemObjectStorageClient;
 import java.io.FilterInputStream;
 import java.io.IOException;
 import java.util.List;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -54,12 +52,7 @@ class LocalFilesystemObjectStorageClientTest {
   }
 
   @Test
-  void ItThrowsAnExceptionOnInvalidPaths() {
-
-    Assertions.assertThrows(
-        FileTransformationException.class,
-        () -> {
-          client.getAllFilenamesByPath("path/to");
-        });
+  void ItReturnsAnEmptyListOnInvalidPaths() {
+    assertThat(client.getAllFilenamesByPath("path/to")).isEmpty();
   }
 }

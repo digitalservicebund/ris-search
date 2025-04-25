@@ -1,6 +1,5 @@
 package de.bund.digitalservice.ris.search.repository.objectstorage;
 
-import de.bund.digitalservice.ris.search.exception.FileTransformationException;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -57,7 +56,8 @@ public class LocalFilesystemObjectStorageClient implements ObjectStorageClient {
           .map(p -> p.toString().substring(bucketPath.toString().length() + 1))
           .toList();
     } catch (IOException e) {
-      throw new FileTransformationException("Could not list files in " + basePath, e);
+      LOGGER.info("Could not list files in {}", basePath);
+      return List.of();
     }
   }
 
