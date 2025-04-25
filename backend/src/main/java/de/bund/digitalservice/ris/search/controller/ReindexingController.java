@@ -3,6 +3,8 @@ package de.bund.digitalservice.ris.search.controller;
 import de.bund.digitalservice.ris.search.caselawhandover.shared.CaseLawBucket;
 import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
+import de.bund.digitalservice.ris.search.repository.objectstorage.PortalBucket;
+import de.bund.digitalservice.ris.search.service.BulkExportService;
 import de.bund.digitalservice.ris.search.service.ImportService;
 import de.bund.digitalservice.ris.search.service.IndexCaselawService;
 import de.bund.digitalservice.ris.search.service.IndexNormsService;
@@ -21,6 +23,8 @@ public class ReindexingController {
   private final IndexCaselawService indexCaselawService;
   private final NormsBucket normsBucket;
   private final CaseLawBucket caselawBucket;
+  private final BulkExportService bulkExportService;
+  private final PortalBucket portalBucket;
 
   @Autowired
   public ReindexingController(
@@ -28,12 +32,16 @@ public class ReindexingController {
       IndexNormsService indexNormsService,
       NormsBucket normsBucket,
       IndexCaselawService indexCaselawService,
-      CaseLawBucket caselawBucket) {
+      CaseLawBucket caselawBucket,
+      BulkExportService bulkExportService,
+      PortalBucket portalBucket) {
     this.importService = importService;
     this.indexNormsService = indexNormsService;
     this.normsBucket = normsBucket;
     this.indexCaselawService = indexCaselawService;
     this.caselawBucket = caselawBucket;
+    this.bulkExportService = bulkExportService;
+    this.portalBucket = portalBucket;
   }
 
   @PostMapping(value = ApiConfig.Paths.REINDEX_CASELAW)
@@ -54,5 +62,11 @@ public class ReindexingController {
         ImportService.NORM_LAST_SUCCESS_FILENAME,
         normsBucket);
     return ResponseEntity.ok().build();
+  }
+
+  @PostMapping(value = ApiConfig.Paths.GENERATE_ARCHIVE)
+  public ResponseEntity<Void> generateArchive() {
+    bulkExportService.updateExportAsync(normsBucket, portalBucket, "norms", "");
+    return ResponseEntity.noContent().build();
   }
 }
