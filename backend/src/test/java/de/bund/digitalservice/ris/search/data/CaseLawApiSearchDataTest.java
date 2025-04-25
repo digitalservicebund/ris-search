@@ -21,9 +21,11 @@ import org.springframework.security.oauth2.client.OAuth2AuthorizedClientManager;
 @Tag("data")
 class CaseLawApiSearchDataTest extends BaseApiSearchDataTest {
 
-  public int maxEntries = 500;
+  private int maxEntries = 500;
 
-  public double threshold = 95.0;
+  private double threshold = 95.0;
+
+  private String apiUrl = "/v1/case-law";
 
   @Autowired
   public CaseLawApiSearchDataTest(OAuth2AuthorizedClientManager authorizedClientManager) {
@@ -32,7 +34,7 @@ class CaseLawApiSearchDataTest extends BaseApiSearchDataTest {
 
   @BeforeAll
   static void setup() {
-    RestAssured.baseURI = "https://ris-search.dev.ds4g.net/";
+    RestAssured.baseURI = BASE_URL;
     RestAssured.defaultParser = Parser.JSON;
   }
 
@@ -41,6 +43,7 @@ class CaseLawApiSearchDataTest extends BaseApiSearchDataTest {
     List<String> searchStrings =
         fetchSearchStrings(
             maxEntries,
+            apiUrl,
             response -> {
               List<Map<String, Object>> members = response.path("member");
               return members.stream()
@@ -62,6 +65,7 @@ class CaseLawApiSearchDataTest extends BaseApiSearchDataTest {
     List<String> searchStrings =
         fetchSearchStrings(
             maxEntries,
+            apiUrl,
             response -> {
               List<Map<String, Object>> members = response.path("member");
               return members.stream()
