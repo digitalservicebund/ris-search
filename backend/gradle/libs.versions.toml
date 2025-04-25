@@ -87,6 +87,8 @@ jaxb-moxy = { module = "org.eclipse.persistence:org.eclipse.persistence.moxy", v
 pebble = { module = "io.pebbletemplates:pebble-spring-boot-starter", version.ref = "pebble" }
 streamex = { module = 'one.util:streamex', version.ref = "streamex" }
 restassured = { module = 'io.rest-assured:rest-assured', version.ref = "rest-assured" }
+jaxb-xjc = { module =  "org.glassfish.jaxb:jaxb-xjc", version.ref = "jaxb-moxy" }
+jaxb-runtime = { module =  "org.glassfish.jaxb:jaxb-runtime", version.ref = "jaxb-moxy" }
 
 [plugins]
 spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
