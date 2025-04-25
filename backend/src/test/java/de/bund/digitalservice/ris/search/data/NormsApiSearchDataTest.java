@@ -59,7 +59,8 @@ class NormsApiSearchDataTest extends BaseApiSearchDataTest {
     List<String> uniqueSearchStrings = new ArrayList<>(set);
     List<String> successfulAbbreviations =
         searchForSearchTerm(this::searchForSingleAbbreviation, uniqueSearchStrings);
-    double successRate = calculatePercentage(successfulAbbreviations.size(), searchStrings.size());
+    double successRate =
+        calculatePercentage(successfulAbbreviations.size(), uniqueSearchStrings.size());
     assertThat(successRate, Matchers.greaterThan(threshold));
   }
 
