@@ -2,9 +2,9 @@ package de.bund.digitalservice.ris.search.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import de.bund.digitalservice.ris.search.caselawhandover.shared.S3Bucket;
 import de.bund.digitalservice.ris.search.exception.RetryableObjectStoreException;
 import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
+import de.bund.digitalservice.ris.search.repository.objectstorage.ObjectStorage;
 import java.time.Instant;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
@@ -21,7 +21,8 @@ public class ChangelogService {
   public static final String CHANGELOG = "changelogs/";
   private static final Logger logger = LoggerFactory.getLogger(ChangelogService.class);
 
-  public List<String> getNewChangelogsSinceInstant(S3Bucket changelogBucket, Instant threshold) {
+  public List<String> getNewChangelogsSinceInstant(
+      ObjectStorage changelogBucket, Instant threshold) {
     List<String> allChangelogFiles = changelogBucket.getAllFilenamesByPath(CHANGELOG);
 
     List<String> result = new ArrayList<>();
@@ -35,7 +36,7 @@ public class ChangelogService {
     return result;
   }
 
-  public Changelog parseOneChangelog(S3Bucket changelogBucket, String filename)
+  public Changelog parseOneChangelog(ObjectStorage changelogBucket, String filename)
       throws RetryableObjectStoreException {
     Optional<String> changelogContent = changelogBucket.getFileAsString(filename);
     if (changelogContent.isEmpty()) {
