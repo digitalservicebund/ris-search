@@ -98,7 +98,13 @@ mark {
   .max-w-prose {
     max-width: initial;
   }
-  @theme {
+  :root {
     --spacing-prose: 100%;
+  }
+}
+
+@page {
+  @bottom-center {
+    content: "Seite " counter(page) " von " counter(pages);
   }
 }
