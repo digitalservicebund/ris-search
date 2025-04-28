@@ -8,6 +8,7 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import software.amazon.awssdk.core.ResponseInputStream;
+import software.amazon.awssdk.core.exception.SdkException;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.AbortMultipartUploadRequest;
@@ -144,7 +145,7 @@ public class S3ObjectStorageClient implements ObjectStorageClient {
 
       return totalBytesRead;
 
-    } catch (IOException e) {
+    } catch (IOException | SdkException e) {
       logger.warn("Error uploading to S3, aborting multipart upload");
       s3Client.abortMultipartUpload(
           AbortMultipartUploadRequest.builder()
@@ -152,7 +153,7 @@ public class S3ObjectStorageClient implements ObjectStorageClient {
               .key(objectKey)
               .uploadId(uploadId)
               .build());
-      throw new IOException("Failed to upload to S3: " + e.getMessage(), e);
+      throw e;
     }
   }
 
@@ -164,8 +165,7 @@ public class S3ObjectStorageClient implements ObjectStorageClient {
    * @param maxByteCount The number of bytes to read.
    * @return The number of bytes read.
    */
-  private int readChunk(InputStream inputStream, byte[] buffer, int maxByteCount)
-      throws IOException {
+  int readChunk(InputStream inputStream, byte[] buffer, int maxByteCount) throws IOException {
     int offset = 0;
     int bytesRead;
     while (offset < maxByteCount) {
