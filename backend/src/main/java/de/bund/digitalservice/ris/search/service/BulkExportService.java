@@ -5,16 +5,18 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.time.Instant;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
+import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -22,37 +24,42 @@ public class BulkExportService {
 
   private final Logger logger = LogManager.getLogger(BulkExportService.class);
 
+  @Async
   public void updateExportAsync(
       S3Bucket bucket, S3Bucket destinationBucket, String outputName, String prefix) {
     try {
       this.updateExport(bucket, destinationBucket, outputName, prefix);
-    } catch (IOException e) {
+    } catch (IOException | ExecutionException e) {
       logger.error("in async operation", e);
+    } catch (InterruptedException e) {
+      logger.error("in async operation", e);
+      Thread.currentThread().interrupt();
     }
   }
 
   public void updateExport(
       S3Bucket bucket, S3Bucket destinationBucket, String outputName, String prefix)
-      throws IOException {
-    String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yy-MM-dd_HH-mm-ss"));
+      throws IOException, ExecutionException, InterruptedException {
+    String timestamp = Instant.now().toString();
     List<String> keysToZip = bucket.getAllFilenamesByPath(prefix);
 
-    String resultObjectKey = "archive/" + outputName + "_" + timestamp + ".zip";
+    String affectedPrefix = "archive/" + outputName;
+    String resultObjectKey = affectedPrefix + "_" + timestamp + ".zip";
+    List<String> obsoleteObjectKeys = destinationBucket.getAllFilenamesByPath(affectedPrefix);
 
-    // Create a PipedInputStream and PipedOutputStream for streaming data
-    PipedInputStream pipedInputStream = new PipedInputStream();
-    PipedOutputStream pipedOutputStream = new PipedOutputStream(pipedInputStream);
-
-    // Create an ExecutorService for parallel execution
-    try (ExecutorService executorService = Executors.newFixedThreadPool(2)) {
-      Future<?> uploadFuture = null; // future for the upload
+    // Create a PipedInputStream and PipedOutputStream for streaming data, and an ExecutorService
+    // for parallel execution
+    try (PipedInputStream pipedInputStream = new PipedInputStream();
+        PipedOutputStream pipedOutputStream = new PipedOutputStream(pipedInputStream);
+        ExecutorService executorService = Executors.newFixedThreadPool(1)) {
       // Start the multipart upload in a separate thread
-      uploadFuture =
+      Future<?> uploadFuture =
           executorService.submit(
               () -> {
                 try {
                   return destinationBucket.putStream(resultObjectKey, pipedInputStream);
-                } catch (RuntimeException e) {
+                } catch (RuntimeException | IOException e) {
+                  logger.error("error in putStream, closing pipe", e);
                   pipedOutputStream
                       .close(); // prevent the writing thread from waiting to write more data
                   throw e;
@@ -61,45 +68,43 @@ public class BulkExportService {
 
       // Create the zip archive in the main thread, writing to the PipedOutputStream
       try (ZipOutputStream zos = new ZipOutputStream(pipedOutputStream)) {
+        logger.info("adding {} files to ZIP", keysToZip.size());
         for (String key : keysToZip) {
-          logger.info("Zipping key {}", key);
+          logger.debug("adding {}", key);
 
-          InputStream inputStream = bucket.getStream(key);
-          ZipEntry zipEntry = new ZipEntry(key);
-          zos.putNextEntry(zipEntry);
+          try (InputStream inputStream = bucket.getStream(key)) {
+            ZipEntry zipEntry = new ZipEntry(key);
+            zos.putNextEntry(zipEntry);
 
-          byte[] buffer = new byte[1024];
-          int bytesRead;
-          while ((bytesRead = inputStream.read(buffer)) != -1) {
-            zos.write(buffer, 0, bytesRead);
+            byte[] buffer = new byte[1024];
+            int bytesRead;
+            while ((bytesRead = inputStream.read(buffer)) != -1) {
+              zos.write(buffer, 0, bytesRead);
+            }
+            zos.closeEntry();
           }
-          inputStream.close();
-          zos.closeEntry();
         }
         zos.finish();
         zos.flush();
-      } catch (Exception e) {
-        // need to close the pipedOutputStream here, otherwise the upload thread might hang
-        pipedOutputStream.close();
-        throw e;
       }
 
-      // Wait for the upload to complete and get the result
-      try {
-        String resultEtag = (String) uploadFuture.get(); // blocking call, waits for the upload
-        logger.info("Upload completed: {}, {}", resultObjectKey, resultEtag);
-      } catch (InterruptedException | java.util.concurrent.ExecutionException e) {
-        throw new IOException("Error during upload: " + e.getMessage(), e); // unwrap
+      long byteCount = (long) uploadFuture.get(); // blocking call, waits for the upload
+      if (logger.isInfoEnabled()) {
+        logger.info(
+            "Added {} items to {}, compressed size: {}",
+            keysToZip.size(),
+            resultObjectKey,
+            FileUtils.byteCountToDisplaySize(byteCount));
       }
 
-    } catch (Exception e) {
+    } catch (InterruptedException | ExecutionException | RuntimeException e) {
       logger.error("Error processing key '{}'", keysToZip, e);
+      throw e;
     }
-    // shut down the executor
-    // Close the PipedOutputStream in a finally block
-    // Log the error, but don't throw an exception here.  We want to ensure
-    // the upload thread is also cleaned up.
 
-    // TODO on success, delete old archive
+    logger.info("deleting obsolete archive objects {}", obsoleteObjectKeys);
+    for (String obsoleteObjectKey : obsoleteObjectKeys) {
+      destinationBucket.delete(obsoleteObjectKey);
+    }
   }
 }

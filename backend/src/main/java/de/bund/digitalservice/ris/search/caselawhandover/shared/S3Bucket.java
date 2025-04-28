@@ -15,8 +15,6 @@ import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.AbortMultipartUploadRequest;
 import software.amazon.awssdk.services.s3.model.CompleteMultipartUploadRequest;
-import software.amazon.awssdk.services.s3.model.CompleteMultipartUploadResponse;
-import software.amazon.awssdk.services.s3.model.CompletedMultipartUpload;
 import software.amazon.awssdk.services.s3.model.CompletedPart;
 import software.amazon.awssdk.services.s3.model.CreateMultipartUploadRequest;
 import software.amazon.awssdk.services.s3.model.GetObjectRequest;
@@ -116,28 +114,28 @@ public class S3Bucket {
    * Uploads an InputStream to S3 using multipart upload.
    *
    * @param inputStream The InputStream to upload.
-   * @return The ETag of the uploaded file.
+   * @return The total size of the uploaded object in bytes.
    * @throws IOException If an error occurs during the upload.
    */
-  public String putStream(String objectKey, InputStream inputStream) throws IOException {
+  public long putStream(String objectKey, InputStream inputStream) throws IOException {
     CreateMultipartUploadRequest createRequest =
         CreateMultipartUploadRequest.builder().bucket(bucketName).key(objectKey).build();
 
-    var initResponse = s3Client.createMultipartUpload(createRequest);
-    String uploadId = initResponse.uploadId();
+    String uploadId = s3Client.createMultipartUpload(createRequest).uploadId();
+    logger.info("Started multipart upload with ID: {}", uploadId);
 
     List<String> partETags = new java.util.ArrayList<>();
     List<CompletedPart> completedParts = new ArrayList<>();
-    int partSize = 0x500000; // 5MiB is the minimum part size, except for the last part.
-    int partNumber = 0;
+    int partSize =
+        0x500000; // 5MiB is the minimum part size, except for the last part, which may be smaller.
+    int partNumber = 1;
+    long totalBytesRead = 0;
 
     try (inputStream) { // try-with-resources closes the input stream when exiting the block
       // Read the input stream in chunks and upload each part
       byte[] buffer = new byte[partSize];
       int bytesRead;
-      while ((bytesRead = readAtLeast(inputStream, buffer, partSize)) > 0) {
-        logger.debug("uploading part %d: %s", partNumber++, partETags);
-
+      while ((bytesRead = readChunk(inputStream, buffer, partSize)) > 0) {
         UploadPartRequest uploadRequest =
             UploadPartRequest.builder()
                 .bucket(bucketName)
@@ -156,24 +154,24 @@ public class S3Bucket {
             CompletedPart.builder().partNumber(partNumber).eTag(uploadResult.eTag()).build());
 
         partNumber++;
+        totalBytesRead += bytesRead;
       }
 
       // Complete the multipart upload.
-      CompletedMultipartUpload multipartUpload =
-          CompletedMultipartUpload.builder().parts(completedParts).build();
       CompleteMultipartUploadRequest completeRequest =
           CompleteMultipartUploadRequest.builder()
               .bucket(bucketName)
               .key(objectKey)
               .uploadId(uploadId)
-              .multipartUpload(multipartUpload)
+              .multipartUpload(upload -> upload.parts(completedParts))
               .build();
-      CompleteMultipartUploadResponse result = s3Client.completeMultipartUpload(completeRequest);
+      s3Client.completeMultipartUpload(completeRequest);
+      logger.info("Completed multipart upload ({} parts) with ID: {}", partETags.size(), uploadId);
 
-      return result.eTag();
+      return totalBytesRead;
 
     } catch (IOException e) {
-      System.err.println("Error uploading to S3: " + e.getMessage());
+      logger.warn("Error uploading to S3, aborting multipart upload");
       s3Client.abortMultipartUpload(
           AbortMultipartUploadRequest.builder()
               .bucket(bucketName)
@@ -184,13 +182,28 @@ public class S3Bucket {
     }
   }
 
-  private int readAtLeast(InputStream inputStream, byte[] buffer, int minBytes) throws IOException {
+  /**
+   * Keeps reading from a stream until a number of bytes has been read, or the stream is closed.
+   *
+   * @param inputStream The stream to read from.
+   * @param buffer The buffer to read into.
+   * @param maxByteCount The number of bytes to read.
+   * @return The number of bytes read.
+   */
+  private int readChunk(InputStream inputStream, byte[] buffer, int maxByteCount)
+      throws IOException {
     int offset = 0;
     int bytesRead;
-    while (offset < minBytes
-        && (bytesRead = inputStream.read(buffer, offset, minBytes - offset)) != -1) {
-      offset += bytesRead;
+    while (offset < maxByteCount) {
+      final int byteCountRemaining = maxByteCount - offset;
+      bytesRead = inputStream.read(buffer, offset, byteCountRemaining);
+      if (bytesRead != -1) {
+        offset += bytesRead;
+      } else {
+        break;
+      }
     }
+    assert offset <= maxByteCount;
     return offset;
   }
 }
