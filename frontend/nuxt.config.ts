@@ -49,6 +49,7 @@ export default defineNuxtConfig({
     "@nuxt/test-utils/module",
     "@sentry/nuxt/module",
     "nuxt-auth-utils",
+    "nuxt-security",
   ],
   devtools: {
     enabled: true,
@@ -93,6 +94,16 @@ export default defineNuxtConfig({
         posthogKey: "", // needs override in env
         posthogHost: "", // needs override in env
         feedbackSurveyId: "", // needs override in env
+      },
+    },
+  },
+  security: {
+    strict: true,
+    headers: {
+      contentSecurityPolicy: {
+        "style-src": ["'self'", "https:", "'unsafe-inline'"],
+        "img-src": ["'self'", "data:"],
+        "script-src": ["'strict-dynamic'", "'nonce-{{nonce}}'"],
       },
     },
   },

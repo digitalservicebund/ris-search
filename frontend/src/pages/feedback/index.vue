@@ -20,9 +20,9 @@ useHead({ title: "Feedback geben" });
       <ul class="list-bullet mt-16">
         <li>Beschreiben Sie Ihr Anliegen so genau wie möglich.</li>
         <li>
-          Beziehen Sie sich auf die Darstellung einer bestimmten Entscheidung?
-          Teilen Sie uns den Titel oder Link mit oder benutzen Sie das
-          Feedback-Feld am Ende der betreffenden Seite.
+          Beziehen Sie sich auf die Darstellung eines bestimmten Gesetzes oder
+          einer bestimmten Entscheidung? Teilen Sie uns den Titel oder Link mit
+          oder benutzen Sie das Feedback-Feld am Ende der betreffenden Seite.
         </li>
         <li>Bitte geben Sie keine persönlichen Daten an.</li>
       </ul>
