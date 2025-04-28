@@ -6,6 +6,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FilterInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
@@ -48,6 +49,9 @@ public class LocalFilesystemObjectStorageClient implements ObjectStorageClient {
 
   @Override
   public List<String> getAllFilenamesByPath(String prefix) {
+    if (!prefix.isEmpty() && !prefix.endsWith("/")) {
+      throw new UnsupportedOperationException("Filtering by non-directory prefix is not supported");
+    }
     Path bucketPath = localStorageDirectory.resolve(bucket);
     Path basePath = bucketPath.resolve(prefix);
     try (Stream<Path> stream = Files.walk(basePath)) {
@@ -104,5 +108,17 @@ public class LocalFilesystemObjectStorageClient implements ObjectStorageClient {
     } catch (NullPointerException | IOException e) {
       LOGGER.error("Couldn't delete object from local storage: {}", e.getMessage(), e);
     }
+  }
+
+  @Override
+  public long putStream(String objectKey, InputStream inputStream) {
+    File file = localStorageDirectory.resolve(bucket).resolve(objectKey).toFile();
+
+    try {
+      FileUtils.copyInputStreamToFile(inputStream, file);
+    } catch (IOException e) {
+      LOGGER.error(e.toString());
+    }
+    return file.length();
   }
 }

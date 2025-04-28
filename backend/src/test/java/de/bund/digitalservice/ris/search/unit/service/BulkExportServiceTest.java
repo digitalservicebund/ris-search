@@ -13,7 +13,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import de.bund.digitalservice.ris.ZipTestUtils;
-import de.bund.digitalservice.ris.search.caselawhandover.shared.S3Bucket;
+import de.bund.digitalservice.ris.search.repository.objectstorage.ObjectStorage;
 import de.bund.digitalservice.ris.search.service.BulkExportService;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -44,8 +44,8 @@ class BulkExportServiceTest {
 
   @Test
   void updateExport_successfulZipAndUpload() throws IOException {
-    S3Bucket sourceBucket = mock(S3Bucket.class);
-    S3Bucket destinationBucket = mock(S3Bucket.class);
+    ObjectStorage sourceBucket = mock(ObjectStorage.class);
+    ObjectStorage destinationBucket = mock(ObjectStorage.class);
     String outputName = "test-export";
     String prefix = "some/path/";
 
@@ -86,8 +86,8 @@ class BulkExportServiceTest {
 
   @Test
   void updateExport_withObsoleteFiles_shouldDeleteThem() throws IOException {
-    S3Bucket sourceBucket = mock(S3Bucket.class);
-    S3Bucket destinationBucket = mock(S3Bucket.class);
+    ObjectStorage sourceBucket = mock(ObjectStorage.class);
+    ObjectStorage destinationBucket = mock(ObjectStorage.class);
     String outputName = "test-export";
     String prefix = "some/path/";
     String file1Content = "Some content";
@@ -117,8 +117,8 @@ class BulkExportServiceTest {
 
   @Test
   void updateExport_sourceBucketThrowsIOException_shouldPropagateException() throws IOException {
-    S3Bucket sourceBucket = mock(S3Bucket.class);
-    S3Bucket destinationBucket = mock(S3Bucket.class);
+    ObjectStorage sourceBucket = mock(ObjectStorage.class);
+    ObjectStorage destinationBucket = mock(ObjectStorage.class);
     String outputName = "test-export";
     String prefix = "some/path/";
 
@@ -137,8 +137,8 @@ class BulkExportServiceTest {
   @Test
   void updateExport_destinationBucketPutStreamThrowsIOException_shouldPropagateException()
       throws IOException {
-    S3Bucket sourceBucket = mock(S3Bucket.class);
-    S3Bucket destinationBucket = mock(S3Bucket.class);
+    ObjectStorage sourceBucket = mock(ObjectStorage.class);
+    ObjectStorage destinationBucket = mock(ObjectStorage.class);
 
     when(sourceBucket.getAllFilenamesByPath("some/prefix/")).thenReturn(List.of("file.txt"));
     when(sourceBucket.getStream("file.txt"))

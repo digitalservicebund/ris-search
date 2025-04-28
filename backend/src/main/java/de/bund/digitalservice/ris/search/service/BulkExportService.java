@@ -1,6 +1,6 @@
 package de.bund.digitalservice.ris.search.service;
 
-import de.bund.digitalservice.ris.search.caselawhandover.shared.S3Bucket;
+import de.bund.digitalservice.ris.search.repository.objectstorage.ObjectStorage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PipedInputStream;
@@ -26,9 +26,12 @@ public class BulkExportService {
 
   @Async
   public void updateExportAsync(
-      S3Bucket bucket, S3Bucket destinationBucket, String outputName, String prefix) {
+      ObjectStorage sourceBucket,
+      ObjectStorage destinationBucket,
+      String outputName,
+      String prefix) {
     try {
-      this.updateExport(bucket, destinationBucket, outputName, prefix);
+      this.updateExport(sourceBucket, destinationBucket, outputName, prefix);
     } catch (IOException | ExecutionException e) {
       logger.error("in async operation", e);
     } catch (InterruptedException e) {
@@ -38,10 +41,10 @@ public class BulkExportService {
   }
 
   public void updateExport(
-      S3Bucket bucket, S3Bucket destinationBucket, String outputName, String prefix)
+      ObjectStorage sourceBucket, ObjectStorage destinationBucket, String outputName, String prefix)
       throws IOException, ExecutionException, InterruptedException {
     String timestamp = Instant.now().toString();
-    List<String> keysToZip = bucket.getAllFilenamesByPath(prefix);
+    List<String> keysToZip = sourceBucket.getAllFilenamesByPath(prefix);
 
     String affectedPrefix = "archive/" + outputName;
     String resultObjectKey = affectedPrefix + "_" + timestamp + ".zip";
@@ -72,7 +75,7 @@ public class BulkExportService {
         for (String key : keysToZip) {
           logger.debug("adding {}", key);
 
-          try (InputStream inputStream = bucket.getStream(key)) {
+          try (InputStream inputStream = sourceBucket.getStream(key)) {
             ZipEntry zipEntry = new ZipEntry(key);
             zos.putNextEntry(zipEntry);
 

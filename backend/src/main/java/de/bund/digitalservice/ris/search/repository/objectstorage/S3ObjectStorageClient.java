@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import software.amazon.awssdk.core.ResponseInputStream;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
@@ -25,6 +27,7 @@ import software.amazon.awssdk.services.s3.model.UploadPartResponse;
 public class S3ObjectStorageClient implements ObjectStorageClient {
   private final S3Client s3Client;
   private final String bucketName;
+  private final Logger logger = LogManager.getLogger(S3ObjectStorageClient.class);
 
   public S3ObjectStorageClient(S3Client s3Client, String bucketName) {
     this.s3Client = s3Client;
@@ -87,6 +90,7 @@ public class S3ObjectStorageClient implements ObjectStorageClient {
    * @return The total size of the uploaded object in bytes.
    * @throws IOException If an error occurs during the upload.
    */
+  @Override
   public long putStream(String objectKey, InputStream inputStream) throws IOException {
     CreateMultipartUploadRequest createRequest =
         CreateMultipartUploadRequest.builder().bucket(bucketName).key(objectKey).build();
