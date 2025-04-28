@@ -4,6 +4,8 @@ import de.bund.digitalservice.ris.search.exception.CustomValidationException;
 import de.bund.digitalservice.ris.search.mapper.MappingDefinitions;
 import de.bund.digitalservice.ris.search.models.api.parameters.PaginationParams;
 import de.bund.digitalservice.ris.search.models.errors.CustomError;
+import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
+import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.utils.SortingUtils;
 import lombok.NonNull;
 import org.apache.logging.log4j.util.Strings;
@@ -20,14 +22,14 @@ public class PaginationParamsConverter {
     return PageRequest.of(
         paginationParams.getPageIndex(),
         paginationParams.getSize(),
-        parseSort(paginationParams.getSort(), resolutionMode));
+        buildSort(paginationParams.getSort(), resolutionMode));
   }
 
-  public static @NonNull Sort parseSort(
+  public static @NonNull Sort buildSort(
       String sort, MappingDefinitions.ResolutionMode resolutionMode)
       throws CustomValidationException {
     if (Strings.isEmpty(sort) || sort.equalsIgnoreCase("default")) {
-      return Sort.unsorted();
+      return getDefaultSort(resolutionMode);
     }
 
     Sort.Direction direction;
@@ -61,6 +63,14 @@ public class PaginationParamsConverter {
       case ALL -> SortingUtils.documentSortFields.contains(sort);
       case NORMS -> SortingUtils.normsSortFields.contains(sort);
       case CASE_LAW -> SortingUtils.caseLawSortFields.contains(sort);
+    };
+  }
+
+  private static Sort getDefaultSort(MappingDefinitions.ResolutionMode resolutionMode) {
+    return switch (resolutionMode) {
+      case ALL -> Sort.by(Sort.Direction.DESC, "DATUM");
+      case NORMS -> Sort.by(Sort.Direction.DESC, Norm.Fields.NORMS_DATE);
+      case CASE_LAW -> Sort.by(Sort.Direction.DESC, CaseLawDocumentationUnit.Fields.DECISION_DATE);
     };
   }
 }
