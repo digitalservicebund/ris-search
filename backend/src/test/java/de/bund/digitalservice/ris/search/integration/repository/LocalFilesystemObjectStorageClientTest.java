@@ -3,9 +3,12 @@ package de.bund.digitalservice.ris.search.integration.repository;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import de.bund.digitalservice.ris.search.repository.objectstorage.LocalFilesystemObjectStorageClient;
+import java.io.ByteArrayInputStream;
+import java.io.FileNotFoundException;
 import java.io.FilterInputStream;
 import java.io.IOException;
 import java.util.List;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,6 +23,10 @@ class LocalFilesystemObjectStorageClientTest {
   @BeforeEach
   void beforeEach() {
     this.client = new LocalFilesystemObjectStorageClient(bucket, path);
+  }
+
+  @AfterEach
+  void afterEach() {
     for (String key : this.client.getAllFilenamesByPath("")) {
       this.client.delete(key);
     }
@@ -61,5 +68,13 @@ class LocalFilesystemObjectStorageClientTest {
   void itDoesntSupportListingNonDirectoryPrefixes() {
     Assertions.assertThrows(
         UnsupportedOperationException.class, () -> client.getAllFilenamesByPath("prefix"));
+  }
+
+  @Test
+  void itWritesStreamToFile() throws FileNotFoundException {
+    ByteArrayInputStream inputStream = new ByteArrayInputStream("content".getBytes());
+    client.putStream("stream", inputStream);
+
+    assertThat(client.getStream("stream")).hasContent("content");
   }
 }
