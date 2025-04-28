@@ -36,7 +36,7 @@ public class IndexCaselawService implements IndexService {
 
   @Override
   public void reindexAll(String startingTimestamp) throws RetryableObjectStoreException {
-    List<String> ldmlFiles = bucket.getAllFilenames();
+    List<String> ldmlFiles = getAllCaseLawFilenames();
     indexFileList(ldmlFiles);
     repository.deleteByIndexedAtBefore(startingTimestamp);
   }
@@ -93,8 +93,12 @@ public class IndexCaselawService implements IndexService {
   }
 
   public int getNumberOfFilesInBucket() {
-    int numberOfChangelogFiles = bucket.getAllFilenamesByPath("changelogs").size();
-    int numberOfAllFiles = bucket.getAllFilenames().size();
-    return numberOfAllFiles - numberOfChangelogFiles;
+    return getAllCaseLawFilenames().size();
+  }
+
+  private List<String> getAllCaseLawFilenames() {
+    return bucket.getAllFilenames().stream()
+        .filter(s -> !s.contains(ChangelogService.CHANGELOG))
+        .toList();
   }
 }
