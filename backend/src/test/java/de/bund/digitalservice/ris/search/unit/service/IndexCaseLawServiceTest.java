@@ -6,9 +6,9 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import de.bund.digitalservice.ris.search.caselawhandover.shared.CaseLawBucket;
 import de.bund.digitalservice.ris.search.exception.RetryableObjectStoreException;
 import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
+import de.bund.digitalservice.ris.search.repository.objectstorage.CaseLawBucket;
 import de.bund.digitalservice.ris.search.repository.opensearch.CaseLawSynthesizedRepository;
 import de.bund.digitalservice.ris.search.service.IndexCaselawService;
 import java.time.ZoneOffset;
@@ -237,8 +237,6 @@ class IndexCaseLawServiceTest {
                 "TEST080020093",
                 "TEST080020094",
                 "changelogs/2025-03-26T14:13:34.096304815Z-caselaw.json"));
-    when(this.bucket.getAllFilenamesByPath("changelogs"))
-        .thenReturn(List.of("2025-03-26T14:13:34.096304815Z-caselaw.json"));
     assertThat(service.getNumberOfFilesInBucket()).isEqualTo(2);
   }
 }

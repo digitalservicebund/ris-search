@@ -1,8 +1,8 @@
 package de.bund.digitalservice.ris.search.service;
 
-import de.bund.digitalservice.ris.search.caselawhandover.shared.S3Bucket;
 import de.bund.digitalservice.ris.search.exception.RetryableObjectStoreException;
 import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
+import de.bund.digitalservice.ris.search.repository.objectstorage.ObjectStorage;
 import java.time.Instant;
 import java.util.Collections;
 import java.util.List;
@@ -33,7 +33,10 @@ public class ImportService {
 
   @Async
   public void lockAndProcessChangelogsAsync(
-      IndexService importService, String lockfile, String statusFile, S3Bucket changelogBucket) {
+      IndexService importService,
+      String lockfile,
+      String statusFile,
+      ObjectStorage changelogBucket) {
     lockAndImportChangelogs(importService, lockfile, statusFile, changelogBucket);
   }
 
@@ -41,7 +44,7 @@ public class ImportService {
       IndexService indexService,
       String lockfile,
       String lastSuccessFilename,
-      S3Bucket changelogBucket) {
+      ObjectStorage changelogBucket) {
     Instant startTime = Instant.now();
     boolean locked = indexStatusService.lockIndex(lockfile, startTime);
     if (locked) {
@@ -50,6 +53,8 @@ public class ImportService {
         if (lastSuccess == null) {
           indexService.reindexAll(startTime.toString());
           indexStatusService.updateLastSuccess(lastSuccessFilename, startTime);
+          alertOnNumberMismatch(
+              indexStatusService, indexService, lastSuccessFilename, changelogBucket);
         } else {
           importChangelogs(indexService, changelogBucket, lastSuccess, lastSuccessFilename);
         }
@@ -59,12 +64,11 @@ public class ImportService {
         indexStatusService.unlockIndex(lockfile);
       }
     }
-    alertOnNumberMismatch(indexStatusService, indexService, lastSuccessFilename, changelogBucket);
   }
 
   public void importChangelogs(
       IndexService indexService,
-      S3Bucket changelogBucket,
+      ObjectStorage changelogBucket,
       Instant lastSuccess,
       String lastSuccessFilename)
       throws RetryableObjectStoreException {
@@ -81,6 +85,11 @@ public class ImportService {
                 updatedLastSuccess ->
                     indexStatusService.updateLastSuccess(lastSuccessFilename, updatedLastSuccess));
       }
+    }
+
+    if (!unprocessedChangelogs.isEmpty()) {
+      // do not check number mismatch if nothing was processed
+      alertOnNumberMismatch(indexStatusService, indexService, lastSuccessFilename, changelogBucket);
     }
   }
 
@@ -102,7 +111,7 @@ public class ImportService {
       IndexStatusService indexStatusService,
       IndexService indexService,
       String lastSuccessFilename,
-      S3Bucket changelogBucket) {
+      ObjectStorage changelogBucket) {
     try {
       Instant lastSuccess = indexStatusService.getLastSuccess(lastSuccessFilename);
       List<String> unprocessedChangelogs =
