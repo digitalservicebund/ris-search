@@ -237,8 +237,6 @@ class IndexCaseLawServiceTest {
                 "TEST080020093",
                 "TEST080020094",
                 "changelogs/2025-03-26T14:13:34.096304815Z-caselaw.json"));
-    when(this.bucket.getAllFilenamesByPath("changelogs"))
-        .thenReturn(List.of("2025-03-26T14:13:34.096304815Z-caselaw.json"));
     assertThat(service.getNumberOfFilesInBucket()).isEqualTo(2);
   }
 }
