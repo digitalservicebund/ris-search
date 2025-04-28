@@ -98,4 +98,7 @@ mark {
   .max-w-prose {
     max-width: initial;
   }
+  @theme {
+    --spacing-prose: 100%;
+  }
 }
