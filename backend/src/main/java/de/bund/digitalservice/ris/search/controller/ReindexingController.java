@@ -66,7 +66,7 @@ public class ReindexingController {
 
   @PostMapping(value = ApiConfig.Paths.GENERATE_ARCHIVE)
   public ResponseEntity<Void> generateArchive() {
-    bulkExportService.updateExportAsync(normsBucket, portalBucket, "norms", "");
+    bulkExportService.updateExportAsync(normsBucket, portalBucket, "norms", "eli/");
     return ResponseEntity.noContent().build();
   }
 }
