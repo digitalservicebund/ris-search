@@ -24,7 +24,8 @@ class PaginationParamsConverterTest {
     paginationParams.setSort("date");
     // Act
     PageRequest result =
-        PaginationParamsConverter.convert(paginationParams, MappingDefinitions.ResolutionMode.ALL);
+        PaginationParamsConverter.convert(
+            paginationParams, MappingDefinitions.ResolutionMode.ALL, true);
 
     // Assert
     Assertions.assertEquals(0, result.getPageNumber());
@@ -40,17 +41,25 @@ class PaginationParamsConverterTest {
       value = null;
     }
     // Act
-    Sort result = PaginationParamsConverter.buildSort(value, MappingDefinitions.ResolutionMode.ALL);
+    Sort result =
+        PaginationParamsConverter.buildSort(value, MappingDefinitions.ResolutionMode.ALL, false);
 
     // Assert
     Assertions.assertEquals(Sort.by(Sort.Direction.DESC, "DATUM"), result);
+
+    // Act
+    Sort resultWithDefault =
+        PaginationParamsConverter.buildSort(value, MappingDefinitions.ResolutionMode.ALL, true);
+
+    // Assert
+    Assertions.assertEquals(Sort.unsorted(), resultWithDefault);
   }
 
   @Test
   void testBuildSort_withValidAscField_shouldReturnAscSort() throws CustomValidationException {
     // Act
     Sort result =
-        PaginationParamsConverter.buildSort("date", MappingDefinitions.ResolutionMode.ALL);
+        PaginationParamsConverter.buildSort("date", MappingDefinitions.ResolutionMode.ALL, true);
 
     // Assert
     Assertions.assertEquals(Sort.by(Sort.Direction.ASC, "DATUM"), result);
@@ -60,7 +69,7 @@ class PaginationParamsConverterTest {
   void testBuildSort_withValidDescField_shouldReturnDescSort() throws CustomValidationException {
     // Act
     Sort result =
-        PaginationParamsConverter.buildSort("-date", MappingDefinitions.ResolutionMode.ALL);
+        PaginationParamsConverter.buildSort("-date", MappingDefinitions.ResolutionMode.ALL, true);
 
     // Assert
     Assertions.assertEquals(Sort.by(Sort.Direction.DESC, "DATUM"), result);
@@ -75,7 +84,8 @@ class PaginationParamsConverterTest {
         Assertions.assertThrows(
             CustomValidationException.class,
             () -> {
-              PaginationParamsConverter.buildSort(value, MappingDefinitions.ResolutionMode.ALL);
+              PaginationParamsConverter.buildSort(
+                  value, MappingDefinitions.ResolutionMode.ALL, true);
             });
 
     Assertions.assertEquals(

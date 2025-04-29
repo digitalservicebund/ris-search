@@ -7,6 +7,7 @@ import de.bund.digitalservice.ris.search.models.errors.CustomError;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.utils.SortingUtils;
+import jakarta.validation.constraints.NotNull;
 import lombok.NonNull;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.data.domain.PageRequest;
@@ -17,19 +18,21 @@ public class PaginationParamsConverter {
   private PaginationParamsConverter() {}
 
   public static PageRequest convert(
-      PaginationParams paginationParams, MappingDefinitions.ResolutionMode resolutionMode)
+      PaginationParams paginationParams,
+      MappingDefinitions.ResolutionMode resolutionMode,
+      @NotNull boolean sortByRelevance)
       throws CustomValidationException {
     return PageRequest.of(
         paginationParams.getPageIndex(),
         paginationParams.getSize(),
-        buildSort(paginationParams.getSort(), resolutionMode));
+        buildSort(paginationParams.getSort(), resolutionMode, sortByRelevance));
   }
 
   public static @NonNull Sort buildSort(
-      String sort, MappingDefinitions.ResolutionMode resolutionMode)
+      String sort, MappingDefinitions.ResolutionMode resolutionMode, boolean sortByRelevance)
       throws CustomValidationException {
     if (Strings.isEmpty(sort) || sort.equalsIgnoreCase("default")) {
-      return getDefaultSort(resolutionMode);
+      return sortByRelevance ? Sort.unsorted() : getDefaultSort(resolutionMode);
     }
 
     Sort.Direction direction;

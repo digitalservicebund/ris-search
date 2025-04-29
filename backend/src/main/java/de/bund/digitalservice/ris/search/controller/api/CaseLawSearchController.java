@@ -15,6 +15,7 @@ import de.bund.digitalservice.ris.search.schema.SearchMemberSchema;
 import de.bund.digitalservice.ris.search.service.CaseLawService;
 import de.bund.digitalservice.ris.search.service.helper.PaginationParamsConverter;
 import de.bund.digitalservice.ris.search.utils.LuceneQueryTools;
+import io.micrometer.common.util.StringUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -72,9 +73,10 @@ public class CaseLawSearchController {
       @ParameterObject() @Valid PaginationParams paginationParams)
       throws CustomValidationException {
 
+    boolean defaultToUnsorted = StringUtils.isNotBlank(universalSearchParams.getSearchTerm());
     Pageable pageable =
         PaginationParamsConverter.convert(
-            paginationParams, MappingDefinitions.ResolutionMode.CASE_LAW);
+            paginationParams, MappingDefinitions.ResolutionMode.CASE_LAW, defaultToUnsorted);
 
     try {
       SearchPage<CaseLawDocumentationUnit> page =
