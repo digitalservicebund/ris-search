@@ -59,7 +59,6 @@ dependencies {
     implementation(libs.spring.security)
     implementation(libs.spring.oauth2)
     implementation(libs.spring.data.jpa)
-    implementation("org.apache.cxf:cxf-spring-boot-starter-jaxws:4.1.1")
     implementation("org.springframework.boot:spring-boot-starter-web-services:3.1.4")
 
     implementation(libs.spring.kubernetes.client)
