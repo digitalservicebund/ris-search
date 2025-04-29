@@ -52,6 +52,10 @@ sonar {
 
 val wsdl2java by configurations.creating
 
+configurations.all {
+    exclude(group = "org.apache.commons", module = "commons-logging")
+}
+
 dependencies {
     implementation(libs.spring.actuator)
     implementation(libs.spring.validation)
