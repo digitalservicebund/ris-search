@@ -20,10 +20,10 @@ public class NlexEndpoint {
 
   @PayloadRoot(namespace = NAMESPACE_URI, localPart = "VERSION")
   @ResponsePayload
-  public String version() {
+  public VERSIONResponse version() {
     VERSIONResponse response = new VERSIONResponse();
     response.setVERSIONResult("1.0");
-    return "1.0";
+    return response;
   }
 
   @PayloadRoot(namespace = NAMESPACE_URI, localPart = "test_query")
