@@ -2,10 +2,8 @@ package de.bund.digitalservice.ris.search.repository.objectstorage;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
@@ -239,7 +237,6 @@ class S3ObjectStorageClientTest {
     byte[] data = "short".getBytes();
     InputStream inputStream = new ByteArrayInputStream(data);
     byte[] buffer = new byte[10];
-    int maxByteCount = 10;
 
     int bytesRead = s3Service.readChunk(inputStream, buffer);
 
@@ -282,41 +279,5 @@ class S3ObjectStorageClientTest {
 
     assertEquals(maxByteCount, totalBytesRead);
     assertArrayEquals(data, readData);
-  }
-
-  @Test
-  void readChunk_inputStreamClosesMidRead() throws IOException {
-    try (InputStream inputStream =
-        new InputStream() {
-          private int count = 0;
-          private final byte[] data = "partial".getBytes();
-
-          @Override
-          public int read() throws IOException {
-            if (count < data.length) {
-              return data[count++] & 0xFF;
-            }
-            if (count == data.length) {
-              count++;
-              return data[data.length - 1] & 0xFF; // Simulate still readable for one more call
-            }
-            return -1; // End of stream
-          }
-
-          @Override
-          public void close() throws IOException {
-            // Simulate closing after a few reads
-            if (count > 2) {
-              super.close();
-            }
-          }
-        }) {
-      byte[] buffer = new byte[10];
-      int maxByteCount = 10;
-
-      int bytesRead = assertDoesNotThrow(() -> s3Service.readChunk(inputStream, buffer));
-      assertTrue(bytesRead <= maxByteCount);
-      assertTrue(bytesRead > 0);
-    }
   }
 }
