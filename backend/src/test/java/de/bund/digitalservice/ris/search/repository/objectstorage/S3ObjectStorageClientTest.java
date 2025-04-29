@@ -236,15 +236,15 @@ class S3ObjectStorageClientTest {
 
   @Test
   void readChunk_readsLessThanMaxBytes() throws IOException {
-    byte[] data = "short string".getBytes();
+    byte[] data = "short".getBytes();
     InputStream inputStream = new ByteArrayInputStream(data);
     byte[] buffer = new byte[10];
     int maxByteCount = 10;
 
     int bytesRead = s3Service.readChunk(inputStream, buffer);
 
-    assertThat(bytesRead).isEqualTo(maxByteCount);
-    assertThat(data).startsWith(buffer);
+    assertThat(bytesRead).isEqualTo(data.length);
+    assertThat(buffer).isEqualTo("short\0\0\0\0\0".getBytes());
   }
 
   @Test
