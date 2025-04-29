@@ -50,11 +50,7 @@ sonar {
     }
 }
 
-val wsdl2java by configurations.creating
-
-configurations.all {
-    exclude(group = "org.apache.commons", module = "commons-logging")
-}
+val jaxws by configurations.creating
 
 dependencies {
     implementation(libs.spring.actuator)
@@ -71,13 +67,7 @@ dependencies {
     implementation(libs.spring.data.opensearch) {
         exclude(group = "org.opensearch.client", module = "opensearch-rest-client-sniffer")
     }
-    wsdl2java("com.sun.xml.bind:jaxb-ri:4.0.2")
-    wsdl2java("com.sun.xml.bind:jaxb-xjc:4.0.2")
-    wsdl2java("com.sun.xml.bind:jaxb-core:4.0.2")
-    wsdl2java("com.sun.xml.bind:jaxb-impl:4.0.2")
-    wsdl2java("org.apache.cxf:cxf-tools-wsdlto-core:4.0.0")
-    wsdl2java("org.apache.cxf:cxf-tools-wsdlto-frontend-jaxws:4.0.0")
-    wsdl2java("org.apache.cxf:cxf-tools-wsdlto-databinding-jaxb:4.0.0")
+
     implementation(libs.spring.security.oauth2.jose)
 
     implementation(libs.spring.data.elasticsearch)
@@ -106,6 +96,11 @@ dependencies {
     implementation(libs.jaxb.moxy)
     implementation(libs.pebble)
     implementation(libs.streamex)
+    jaxws(libs.jaxws.tools)
+    jaxws(libs.jakarta.activation)
+    jaxws(libs.sun.xml.ws.jaxws)
+    implementation(libs.jakarta.xml.ws)
+    implementation(libs.jakarta.xml.bind)
 
     compileOnly(libs.lombok)
     annotationProcessor(libs.lombok)
@@ -169,24 +164,32 @@ project.tasks.sonar {
 }
 
 tasks {
-    register("wsdl2java", JavaExec::class) {
-        doFirst {
-            mkdir("$buildDir/generated/java/main")
+    register("wsimport") {
+        enabled = true
+        val destDir by extra("$buildDir/generated/java/main")
+        doLast {
+            ant.withGroovyBuilder {
+                mkdir(destDir)
+                "taskdef"(
+                    "name" to "wsimport",
+                    "classname" to "com.sun.tools.ws.ant.WsImport",
+                    "classpath" to configurations["jaxws"].asPath,
+                )
+                "wsimport"(
+                    "keep" to true,
+                    "sourcedestdir" to destDir,
+                    "wsdl" to "$projectDir/src/main/resources/nlex",
+                    "verbose" to true,
+                ) {
+                    "xjcarg"("value" to "-XautoNameResolution")
+                }
+            }
         }
-        classpath(configurations["wsdl2java"])
-        mainClass = "org.apache.cxf.tools.wsdlto.WSDLToJava"
-        // args = listOf("src/main/resources/xjustiz", "-d", "$buildDir/generated/java/main")
-        args =
-            listOf(
-                "-server", "-impl", "-exsh", "true", "-noAddressBinding", "-autoNameResolution",
-                "-wsdlLocation", "classpath:nlex/name.wsdl", "-p", "testnamespace", "-encoding", "UTF-8", "-d",
-                "$buildDir/generated/java/main", "src/main/resources/nlex/simple_template.wsdl",
-            )
     }
-
     compileJava {
-        dependsOn("wsdl2java")
         options.compilerArgs.addAll(arrayOf())
+        dependsOn("wsimport")
+        source("build/generated/java/main")
     }
 
     jar {
@@ -271,6 +274,7 @@ tasks {
         include("**/*.java")
     }
 }
+
 java.sourceSets["main"].java {
     srcDirs("build/generated/java/main")
 }
