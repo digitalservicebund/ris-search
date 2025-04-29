@@ -1,6 +1,7 @@
 package de.bund.digitalservice.ris.search.config.opensearch;
 
 import io.sentry.Sentry;
+import io.sentry.SentryLevel;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
@@ -71,7 +72,9 @@ public class RestClientConfigStaging extends AbstractOpenSearchConfiguration {
         try {
           return super.execute(callback);
         } catch (DataAccessResourceFailureException e) {
-          Sentry.captureException(e);
+          Sentry.captureMessage(
+              "retry elasticsearch operation after DataAccessResourceFailureException",
+              SentryLevel.ERROR);
           return super.execute(callback);
         }
       }
