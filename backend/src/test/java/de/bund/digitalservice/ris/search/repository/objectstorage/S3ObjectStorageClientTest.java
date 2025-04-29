@@ -241,7 +241,7 @@ class S3ObjectStorageClientTest {
     byte[] buffer = new byte[10];
     int maxByteCount = 10;
 
-    int bytesRead = s3Service.readChunk(inputStream, buffer, maxByteCount);
+    int bytesRead = s3Service.readChunk(inputStream, buffer);
 
     assertThat(bytesRead).isEqualTo(maxByteCount);
     assertThat(data).startsWith(buffer);
@@ -254,7 +254,7 @@ class S3ObjectStorageClientTest {
     byte[] buffer = new byte[data.length];
     int maxByteCount = data.length;
 
-    int bytesRead = s3Service.readChunk(inputStream, buffer, maxByteCount);
+    int bytesRead = s3Service.readChunk(inputStream, buffer);
 
     assertEquals(maxByteCount, bytesRead);
     assertArrayEquals(data, buffer);
@@ -271,9 +271,7 @@ class S3ObjectStorageClientTest {
     int bytesRead;
 
     while (totalBytesRead < maxByteCount) {
-      bytesRead =
-          s3Service.readChunk(
-              inputStream, buffer, Math.min(buffer.length, maxByteCount - totalBytesRead));
+      bytesRead = s3Service.readChunk(inputStream, buffer);
       if (bytesRead > 0) {
         System.arraycopy(buffer, 0, readData, totalBytesRead, bytesRead);
         totalBytesRead += bytesRead;
@@ -316,8 +314,7 @@ class S3ObjectStorageClientTest {
       byte[] buffer = new byte[10];
       int maxByteCount = 10;
 
-      int bytesRead =
-          assertDoesNotThrow(() -> s3Service.readChunk(inputStream, buffer, maxByteCount));
+      int bytesRead = assertDoesNotThrow(() -> s3Service.readChunk(inputStream, buffer));
       assertTrue(bytesRead <= maxByteCount);
       assertTrue(bytesRead > 0);
     }

@@ -110,7 +110,7 @@ public class S3ObjectStorageClient implements ObjectStorageClient {
       // Read the input stream in chunks and upload each part
       byte[] buffer = new byte[partSize];
       int bytesRead;
-      while ((bytesRead = readChunk(inputStream, buffer, partSize)) > 0) {
+      while ((bytesRead = readChunk(inputStream, buffer)) > 0) {
         UploadPartRequest uploadRequest =
             UploadPartRequest.builder()
                 .bucket(bucketName)
@@ -162,14 +162,13 @@ public class S3ObjectStorageClient implements ObjectStorageClient {
    *
    * @param inputStream The stream to read from.
    * @param buffer The buffer to read into.
-   * @param maxByteCount The number of bytes to read.
    * @return The number of bytes read.
    */
-  int readChunk(InputStream inputStream, byte[] buffer, int maxByteCount) throws IOException {
+  int readChunk(InputStream inputStream, byte[] buffer) throws IOException {
     int offset = 0;
     int bytesRead;
-    while (offset < maxByteCount) {
-      final int byteCountRemaining = maxByteCount - offset;
+    while (offset < buffer.length) {
+      final int byteCountRemaining = buffer.length - offset;
       bytesRead = inputStream.read(buffer, offset, byteCountRemaining);
       if (bytesRead != -1) {
         offset += bytesRead;
@@ -177,7 +176,7 @@ public class S3ObjectStorageClient implements ObjectStorageClient {
         break;
       }
     }
-    assert offset <= maxByteCount;
+    assert offset <= buffer.length;
     return offset;
   }
 }
