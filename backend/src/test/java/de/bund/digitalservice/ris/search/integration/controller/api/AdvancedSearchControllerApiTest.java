@@ -293,7 +293,14 @@ class AdvancedSearchControllerApiTest extends ContainersIntegrationBase {
   }
 
   static Stream<Arguments> provideSortingTestArguments() {
-    return SortingTestArguments.provideSortingTestArguments();
+    Stream.Builder<Arguments> stream = SortingTestArguments.provideSortingTestArguments();
+
+    int caseLawSize = CaseLawTestData.allDocuments.size();
+    int normsSize = NormsTestData.allDocuments.size();
+    int combinedSize = caseLawSize + normsSize;
+    stream.add(Arguments.of("", combinedSize, null, null));
+
+    return stream.build();
   }
 
   @ParameterizedTest

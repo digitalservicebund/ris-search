@@ -1,5 +1,6 @@
 package de.bund.digitalservice.ris.search.integration.controller.api;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.either;
 import static org.hamcrest.Matchers.everyItem;
 import static org.hamcrest.Matchers.hasSize;
@@ -21,10 +22,13 @@ import de.bund.digitalservice.ris.search.repository.opensearch.CaseLawRepository
 import de.bund.digitalservice.ris.search.repository.opensearch.NormsRepository;
 import de.bund.digitalservice.ris.search.service.IndexAliasService;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Map;
 import java.util.stream.Stream;
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
+import org.json.JSONObject;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -167,7 +171,28 @@ class AllDocumentsSearchControllerAPITest extends ContainersIntegrationBase {
   }
 
   static Stream<Arguments> provideOrderingTestArgs() {
-    return SortingTestArguments.provideSortingTestArguments();
+    int caseLawSize = CaseLawTestData.allDocuments.size();
+    int normsSize = NormsTestData.allDocuments.size();
+    int combinedSize = caseLawSize + normsSize;
+
+    var stream = SortingTestArguments.provideSortingTestArguments();
+    final ResultMatcher dateDescendingResultMatcher =
+        result -> {
+          JSONObject jsonObject = new JSONObject(result.getResponse().getContentAsString());
+          ArrayList<String> dates = new ArrayList<>();
+          for (Object member : jsonObject.getJSONArray("member")) {
+            var item = ((JSONObject) member).getJSONObject("item");
+            if (item.has("decisionDate")) {
+              dates.add(item.getString("decisionDate"));
+            } else if (item.has("legislationDate")) {
+              dates.add(item.getString("legislationDate"));
+            }
+          }
+          assertThat(dates).isSortedAccordingTo(Comparator.reverseOrder());
+        };
+    stream.add(Arguments.of("", combinedSize, dateDescendingResultMatcher, null));
+
+    return stream.build();
   }
 
   @ParameterizedTest

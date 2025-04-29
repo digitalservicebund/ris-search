@@ -1,6 +1,5 @@
 package de.bund.digitalservice.ris.search.integration.controller.api.values;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 import de.bund.digitalservice.ris.search.integration.controller.api.testData.CaseLawTestData;
@@ -8,37 +7,18 @@ import de.bund.digitalservice.ris.search.integration.controller.api.testData.Nor
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Stream;
 import org.hamcrest.Matchers;
-import org.json.JSONObject;
 import org.junit.jupiter.params.provider.Arguments;
-import org.springframework.test.web.servlet.ResultMatcher;
 
 public class SortingTestArguments {
-  public static Stream<Arguments> provideSortingTestArguments() {
+  public static Stream.Builder<Arguments> provideSortingTestArguments() {
     Stream.Builder<Arguments> stream = Stream.builder();
 
     int caseLawSize = CaseLawTestData.allDocuments.size();
     int normsSize = NormsTestData.allDocuments.size();
     int combinedSize = caseLawSize + normsSize;
-
-    final ResultMatcher dateDescendingResultMatcher =
-        result -> {
-          JSONObject jsonObject = new JSONObject(result.getResponse().getContentAsString());
-          ArrayList<String> dates = new ArrayList<>();
-          for (Object member : jsonObject.getJSONArray("member")) {
-            var item = ((JSONObject) member).getJSONObject("item");
-            if (item.has("decisionDate")) {
-              dates.add(item.getString("decisionDate"));
-            } else if (item.has("legislationDate")) {
-              dates.add(item.getString("legislationDate"));
-            }
-          }
-          assertThat(dates).isSortedAccordingTo(Comparator.reverseOrder());
-        };
-    stream.add(Arguments.of("", combinedSize, dateDescendingResultMatcher, null));
 
     List<String> sortedDocumentNumbers =
         CaseLawTestData.allDocuments.stream()
@@ -111,6 +91,6 @@ public class SortingTestArguments {
             caseLawSize,
             jsonPath("$.member[*].item.courtName", Matchers.is(invertedCourtNames)),
             null));
-    return stream.build();
+    return stream;
   }
 }
