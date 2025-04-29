@@ -50,6 +50,8 @@ sonar {
     }
 }
 
+val wsdl2java by configurations.creating
+
 dependencies {
     implementation(libs.spring.actuator)
     implementation(libs.spring.validation)
@@ -57,13 +59,21 @@ dependencies {
     implementation(libs.spring.security)
     implementation(libs.spring.oauth2)
     implementation(libs.spring.data.jpa)
+    implementation("org.apache.cxf:cxf-spring-boot-starter-jaxws:4.1.1")
+    implementation("org.springframework.boot:spring-boot-starter-web-services:3.1.4")
 
     implementation(libs.spring.kubernetes.client)
 
     implementation(libs.spring.data.opensearch) {
         exclude(group = "org.opensearch.client", module = "opensearch-rest-client-sniffer")
     }
-
+    wsdl2java("com.sun.xml.bind:jaxb-ri:4.0.2")
+    wsdl2java("com.sun.xml.bind:jaxb-xjc:4.0.2")
+    wsdl2java("com.sun.xml.bind:jaxb-core:4.0.2")
+    wsdl2java("com.sun.xml.bind:jaxb-impl:4.0.2")
+    wsdl2java("org.apache.cxf:cxf-tools-wsdlto-core:4.0.0")
+    wsdl2java("org.apache.cxf:cxf-tools-wsdlto-frontend-jaxws:4.0.0")
+    wsdl2java("org.apache.cxf:cxf-tools-wsdlto-databinding-jaxb:4.0.0")
     implementation(libs.spring.security.oauth2.jose)
 
     implementation(libs.spring.data.elasticsearch)
@@ -112,9 +122,10 @@ dependencies {
 }
 
 val pactPath = "pacts/**/*.json"
-
+val generatedPath = "build/generated/**"
 spotless {
     java {
+        targetExclude(generatedPath)
         removeUnusedImports()
         googleJavaFormat()
         custom("Refuse wildcard imports") {
@@ -125,20 +136,20 @@ spotless {
             }
             it
         }
-        targetExclude(pactPath)
+        targetExclude(pactPath, generatedPath)
     }
     kotlin {
         ktfmt()
-        targetExclude(pactPath)
+        targetExclude(pactPath, generatedPath)
     }
     kotlinGradle {
         ktlint()
-        targetExclude(pactPath)
+        targetExclude(pactPath, generatedPath)
     }
 
     format("misc") {
         target("**/*.json", "**/*.md", "**/*.properties", "**/*.sh", "**/*.yml")
-        targetExclude("frontend/**", "pacts/**/*.json")
+        targetExclude("frontend/**", "pacts/**/*.json", generatedPath)
     }
 }
 
@@ -154,7 +165,23 @@ project.tasks.sonar {
 }
 
 tasks {
+    register("wsdl2java", JavaExec::class) {
+        doFirst {
+            mkdir("$buildDir/generated/java/main")
+        }
+        classpath(configurations["wsdl2java"])
+        mainClass = "org.apache.cxf.tools.wsdlto.WSDLToJava"
+        // args = listOf("src/main/resources/xjustiz", "-d", "$buildDir/generated/java/main")
+        args =
+            listOf(
+                "-server", "-impl", "-exsh", "true", "-noAddressBinding", "-autoNameResolution",
+                "-wsdlLocation", "classpath:nlex/name.wsdl", "-p", "testnamespace", "-encoding", "UTF-8", "-d",
+                "$buildDir/generated/java/main", "src/main/resources/nlex/simple_template.wsdl",
+            )
+    }
+
     compileJava {
+        dependsOn("wsdl2java")
         options.compilerArgs.addAll(arrayOf())
     }
 
@@ -239,4 +266,7 @@ tasks {
         }
         include("**/*.java")
     }
+}
+java.sourceSets["main"].java {
+    srcDirs("build/generated/java/main")
 }
