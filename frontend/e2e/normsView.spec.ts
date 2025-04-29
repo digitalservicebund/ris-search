@@ -53,6 +53,19 @@ test("can search, filter for norms, and view a single norm", async ({
       }),
     ).toBeVisible();
     await expect(page.locator(".akn-act")).toBeVisible();
+
+    await test.step("The content has the correct max-width", async () => {
+      for (const locator of [
+        "#preambel-1_formel-1_text-1",
+        "#preambel-1_formel-1_liste-1",
+        ".akn-section .akn-num",
+        ".akn-section .akn-heading",
+        ".akn-section .akn-paragraph",
+      ]) {
+        const boundingBox = await page.locator(locator).first().boundingBox();
+        expect(boundingBox?.width, locator).toBeLessThanOrEqual(720);
+      }
+    });
   });
 });
 
