@@ -1,5 +1,6 @@
 package de.bund.digitalservice.ris.search.integration.controller.api;
 
+import static de.bund.digitalservice.ris.ZipTestUtils.readZipStream;
 import static de.bund.digitalservice.ris.search.utils.JsonLdUtils.writeJsonLdString;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.contains;
@@ -33,13 +34,10 @@ import java.nio.file.Path;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Stream;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -188,16 +186,7 @@ class NormsControllerApiTest extends ContainersIntegrationBase {
 
     byte[] zipBytes = result.getResponse().getContentAsByteArray();
     ByteArrayInputStream byteInputStream = new ByteArrayInputStream(zipBytes);
-    ZipInputStream zipInputStream = new ZipInputStream(byteInputStream);
-
-    Map<String, byte[]> files = new HashMap<>();
-
-    ZipEntry entry;
-    while ((entry = zipInputStream.getNextEntry()) != null) {
-      files.put(entry.getName(), zipInputStream.readAllBytes());
-      zipInputStream.closeEntry();
-    }
-    zipInputStream.close();
+    final Map<String, byte[]> files = readZipStream(byteInputStream);
 
     String resourceDirectoryPath =
         getClass()

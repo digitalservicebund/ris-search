@@ -28,6 +28,7 @@ public class ApiConfig {
 
     public static final String REINDEX_NORMS = "internal/legislation/sync";
     public static final String REINDEX_CASELAW = "internal/case-law/sync";
+    public static final String GENERATE_ARCHIVE = "internal/legislation/archive";
   }
 
   public static final String VERSION = "1";
