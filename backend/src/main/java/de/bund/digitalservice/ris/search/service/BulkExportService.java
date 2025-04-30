@@ -14,6 +14,7 @@ import java.util.concurrent.Future;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 import org.apache.commons.io.FileUtils;
+import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.scheduling.annotation.Async;
@@ -48,7 +49,7 @@ public class BulkExportService {
 
     String affectedPrefix = "archive/" + outputName;
     String resultObjectKey = affectedPrefix + "_" + timestamp + ".zip";
-    List<String> obsoleteObjectKeys = destinationBucket.getAllFilenamesByPath(affectedPrefix);
+    List<String> obsoleteObjectKeys = List.of();
 
     // Create a PipedInputStream and PipedOutputStream for streaming data, and an ExecutorService
     // for parallel execution
@@ -92,13 +93,14 @@ public class BulkExportService {
       }
 
       long byteCount = (long) uploadFuture.get(); // blocking call, waits for the upload
-      if (logger.isInfoEnabled()) {
-        logger.info(
-            "Added {} items to {}, compressed size: {}",
-            keysToZip.size(),
-            resultObjectKey,
-            FileUtils.byteCountToDisplaySize(byteCount));
-      }
+      logger.log(
+          Level.INFO,
+          () ->
+              "Added %s items to %s, compressed size: %s"
+                  .formatted(
+                      keysToZip.size(),
+                      resultObjectKey,
+                      FileUtils.byteCountToDisplaySize(byteCount)));
 
     } catch (InterruptedException | ExecutionException | RuntimeException e) {
       logger.error("Error processing key '{}'", keysToZip, e);
