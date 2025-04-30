@@ -37,15 +37,15 @@ jobs:
         run: |
           BRANCH_NAME=${{ github.head_ref || github.ref_name }}
           BRANCH_NAME_TAG=$(echo $BRANCH_NAME | sed -e 's/[^[:alnum:]]/-/g')
-          if [[ -n ${{ inputs.backend_tag }} ]]; then
-            echo "BACKEND_IMAGE=ghcr.io/digitalservicebund/ris-search:${{ inputs.backend_tag }}" >> $GITHUB_ENV
+          if [[ -n "${INPUT_BACKEND_TAG}" ]]; then
+            echo "BACKEND_IMAGE=ghcr.io/digitalservicebund/ris-search:${INPUT_BACKEND_TAG}" >> $GITHUB_ENV
           elif docker pull ghcr.io/digitalservicebund/ris-search:${BRANCH_NAME_TAG}; then
             echo "BACKEND_IMAGE=ghcr.io/digitalservicebund/ris-search:${BRANCH_NAME_TAG}" >> $GITHUB_ENV
           else
             echo "BACKEND_IMAGE=ghcr.io/digitalservicebund/ris-search:main" >> $GITHUB_ENV
           fi
-          if [[ -n ${{ inputs.backend_tag }} ]]; then
-            echo "FRONTEND_IMAGE=ghcr.io/digitalservicebund/ris-search/frontend:${{ inputs.backend_tag }}" >> $GITHUB_ENV
+          if [[ -n "${INPUT_FRONTEND_TAG}" ]]; then
+            echo "FRONTEND_IMAGE=ghcr.io/digitalservicebund/ris-search/frontend:${INPUT_FRONTEND_TAG}" >> $GITHUB_ENV
           elif docker pull ghcr.io/digitalservicebund/ris-search/frontend:${BRANCH_NAME_TAG}; then
             echo "FRONTEND_IMAGE=ghcr.io/digitalservicebund/ris-search/frontend:${BRANCH_NAME_TAG}" >> $GITHUB_ENV
           else
