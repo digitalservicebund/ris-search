@@ -1,22 +1,22 @@
-package de.bund.digitalservice.ris.search.controller;
+package de.bund.digitalservice.ris.search.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ws.server.endpoint.annotation.Endpoint;
 import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
 import org.springframework.ws.server.endpoint.annotation.RequestPayload;
 import org.springframework.ws.server.endpoint.annotation.ResponsePayload;
-import testnamespace.Request;
-import testnamespace.RequestResponse;
-import testnamespace.TestQuery;
-import testnamespace.TestQueryResponse;
-import testnamespace.VERSIONResponse;
+import search.ris.digitalservice.bund.de.Request;
+import search.ris.digitalservice.bund.de.RequestResponse;
+import search.ris.digitalservice.bund.de.TestQuery;
+import search.ris.digitalservice.bund.de.TestQueryResponse;
+import search.ris.digitalservice.bund.de.VERSIONResponse;
 
 @Endpoint
-public class NlexEndpoint {
-  private static final String NAMESPACE_URI = "testnamespace";
+public class NlexWebService {
+  private static final String NAMESPACE_URI = "de.bund.digitalservice.ris.search";
 
   @Autowired
-  public NlexEndpoint() {}
+  public NlexWebService() {}
 
   @PayloadRoot(namespace = NAMESPACE_URI, localPart = "VERSION")
   @ResponsePayload
