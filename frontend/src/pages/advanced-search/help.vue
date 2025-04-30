@@ -1,5 +1,13 @@
 <script lang="ts" setup>
-import { availableFields, availableFeatures, type FieldType } from "./data";
+import {
+  type FieldType,
+  type Field,
+  availablePublicFields,
+  availableInternalFields,
+  availablePublicFeatures,
+  availableInternalFeatures,
+  type Feature,
+} from "./data";
 import { isInternalProfile, isPublicProfile } from "@/utils/config";
 import type { DropdownItem } from "@/components/types";
 
@@ -21,6 +29,13 @@ const fields = computed(() => {
 });
 const isInternal = isInternalProfile();
 const isPublic = isPublicProfile();
+
+const availableFields: Field[] = isPublic
+  ? availablePublicFields
+  : availableInternalFields;
+const availableFeatures: Feature[] = isPublic
+  ? availablePublicFeatures
+  : availableInternalFeatures;
 </script>
 
 <template>
