@@ -288,4 +288,4 @@ jobs:
     uses: ./.github/workflows/pipeline-e2e.yml
     secrets: inherit
     with:
-      frontend_tag: ${{ env.CONTAINER_IMAGE_VERSION }}
+      frontend_tag: ${{ github.sha }}
