@@ -10,6 +10,7 @@ import {
 } from "./data";
 import { isInternalProfile, isPublicProfile } from "@/utils/config";
 import type { DropdownItem } from "@/components/types";
+import Select from "primevue/select";
 
 definePageMeta({ alias: "/erweiterte-suche/hilfe" });
 
@@ -85,11 +86,12 @@ const availableFeatures: Feature[] = isPublic
       <div>
         <div class="flex flex-row justify-between">
           <h2 class="ris-heading3-regular mb-20">Verfügbare Rubriken</h2>
-          <DropdownInput
+          <Select
             v-model="filter"
-            aria-label="dropdown input"
             class="ds-select-small w-auto"
-            :items="filters"
+            :options="filters"
+            option-label="label"
+            option-value="value"
             placeholder="Bitte auswählen"
           />
         </div>
@@ -201,11 +203,12 @@ const availableFeatures: Feature[] = isPublic
       <div>
         <div class="flex flex-row justify-between">
           <h2 class="ris-heading3-regular mb-20">Verfügbare Rubriken</h2>
-          <DropdownInput
+          <Select
             v-model="filter"
-            aria-label="dropdown input"
             class="ds-select-small w-auto"
-            :items="filters"
+            :options="filters"
+            option-label="label"
+            option-value="value"
             placeholder="Bitte auswählen"
           />
         </div>

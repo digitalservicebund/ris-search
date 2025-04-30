@@ -15,29 +15,27 @@ test("can go to search via URL", async ({ page }) => {
 test("the document type selection dropdown exists", async ({ page }) => {
   await navigateToSearch(page);
 
-  await expect(page.getByLabel("Dokumentart")).toHaveSelectedOptionText(
-    "Alle Dokumentarten",
-  );
+  const combobox = page.getByRole("combobox", { name: "Dokumentart" });
+  await expect(combobox).toHaveText("Alle Dokumentarten");
 
-  await page
-    .getByLabel("Dokumentart")
-    .selectOption({ label: "Alle Dokumentarten" });
-  await expect(page.getByLabel("Dokumentart")).toHaveValue("A");
-
+  await combobox.click();
   const expectedOptionLabels = [
     "Alle Dokumentarten",
     "Rechtsprechung",
     "Normen",
   ];
-  await expect(page.getByLabel("Dokumentart")).toContainText(
-    expectedOptionLabels.join(""),
-  );
+  for (const option of expectedOptionLabels) {
+    await expect(page.getByRole("option", { name: option })).toBeVisible();
+  }
+  await page.getByRole("option", { name: "Normen" }).click();
+  await expect(combobox).toHaveText("Normen");
 });
 
 async function selectCaseLaw(page: Page) {
-  await expect(page.getByLabel("Dokumentart")).toBeEnabled();
-  const documentTypeSelect = page.getByLabel("Dokumentart");
-  await documentTypeSelect.selectOption({ label: "Rechtsprechung" });
+  const combobox = page.getByRole("combobox", { name: "Dokumentart" });
+  await expect(combobox).toBeEnabled();
+  await combobox.click();
+  await page.getByRole("option", { name: "Rechtsprechung" }).click();
 }
 
 enum BuilderOperator {
@@ -64,18 +62,21 @@ async function addBuilderParameters(
   await searchParameterAddButton.click();
 
   if (params.rowLogicOperator) {
-    await page
-      .getByTestId("row-logic-operator")
-      .selectOption({ label: params.rowLogicOperator });
+    await page.getByTestId("row-logic-operator").click();
+    await page.getByRole("option", { name: params.rowLogicOperator }).click();
   }
 
   const builderRow = page.getByTestId("builder-row").last();
   await expect(builderRow).toBeVisible();
-  const addedComboBox = builderRow.getByTestId("field");
-  await addedComboBox.selectOption({ label: params.leftHandSide });
+  const fieldComboBox = builderRow.getByTestId("field");
+  await fieldComboBox.click();
+  await page
+    .getByRole("option", { name: params.leftHandSide, exact: true })
+    .click();
 
   const typeComboBox = builderRow.getByTestId("operator");
-  await typeComboBox.selectOption({ label: params.operator });
+  await typeComboBox.click();
+  await page.getByRole("option", { name: params.operator }).click();
 
   await builderRow.getByRole("textbox").fill(params.rightHandSide);
 }
@@ -203,9 +204,8 @@ test("Switching back to Lucene query input yields the correct parameters", async
     rightHandSide: "31.12.1999",
   });
 
-  await page
-    .getByLabel("Sucheingabemodus")
-    .selectOption({ label: FormSearchMode.text });
+  await page.getByLabel("Sucheingabemodus").click();
+  await page.getByRole("option", { name: FormSearchMode.text }).click();
 
   await expect(page.getByLabel("Suchanfrage")).toHaveValue("DATUM:1999-12-31");
 });
@@ -220,7 +220,8 @@ for (const mode of formSearchModes) {
   test(`resetting the query works in mode "${mode}"`, async ({ page }) => {
     test.skip(mode === FormSearchMode.text, "not yet implemented");
     await navigateToSearch(page);
-    await page.getByLabel("Sucheingabemodus").selectOption({ label: mode });
+    await page.getByLabel("Sucheingabemodus").click();
+    await page.getByRole("option", { name: mode }).click();
 
     if (mode === FormSearchMode.builder) {
       await addBuilderParameters(page, {
@@ -233,12 +234,10 @@ for (const mode of formSearchModes) {
     }
     await page.getByLabel("Suchen").click();
     await page.getByLabel("Zurücksetzen").click();
-    await page
-      .getByLabel("Sucheingabemodus")
-      .selectOption({ label: FormSearchMode.text });
-    await page
-      .getByLabel("Sucheingabemodus")
-      .selectOption({ label: FormSearchMode.builder });
+    await page.getByLabel("Sucheingabemodus").click();
+    await page.getByRole("option", { name: FormSearchMode.text }).click();
+    await page.getByLabel("Sucheingabemodus").click();
+    await page.getByRole("option", { name: FormSearchMode.builder }).click();
     await addBuilderParameters(page, {
       leftHandSide: "Titel",
       operator: BuilderOperator.doesNotContainExactPhrase,
