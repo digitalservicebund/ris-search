@@ -21,6 +21,7 @@ import de.bund.digitalservice.ris.search.service.helper.PaginationParamsConverte
 import de.bund.digitalservice.ris.search.utils.LuceneQueryTools;
 import de.bund.digitalservice.ris.search.utils.eli.ExpressionEli;
 import de.bund.digitalservice.ris.search.utils.eli.ManifestationEli;
+import io.micrometer.common.util.StringUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -104,8 +105,10 @@ public class NormsController {
 
     normsSearchParams.validate();
 
+    boolean defaultToUnsorted = StringUtils.isNotBlank(universalSearchParams.getSearchTerm());
     Pageable pageable =
-        PaginationParamsConverter.convert(pagination, MappingDefinitions.ResolutionMode.NORMS);
+        PaginationParamsConverter.convert(
+            pagination, MappingDefinitions.ResolutionMode.NORMS, defaultToUnsorted);
 
     try {
       SearchPage<Norm> resultPage =
