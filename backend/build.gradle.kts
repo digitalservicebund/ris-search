@@ -177,7 +177,7 @@ tasks {
                 "wsimport"(
                     "keep" to true,
                     "sourcedestdir" to destDir,
-                    "wsdl" to "$projectDir/src/main/resources/nlex",
+                    "wsdl" to "$projectDir/src/main/resources/WEB_INF/nlex",
                     "verbose" to true,
                 ) {
                     "xjcarg"("value" to "-XautoNameResolution")
