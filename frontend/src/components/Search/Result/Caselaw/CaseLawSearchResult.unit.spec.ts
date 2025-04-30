@@ -24,7 +24,7 @@ const searchResult: SearchResult<CaseLaw> = {
     decisionGrounds: "Decision Grounds",
     courtName: "Test Court",
     decisionDate: "2023-01-01",
-    fileNumbers: ["123", "456"],
+    fileNumbers: ["123", "testing highlighted file number is here"],
     decisionName: ["Decision Name"],
     documentType: "Document Type",
   },
@@ -40,6 +40,54 @@ describe("CaselawSearchResult.vue", () => {
       },
     });
     expect(wrapper.get("a").text()).toBe("Decision Name — Test Headline");
+  });
+
+  it(`displays highlighted headline`, async () => {
+    const textMatch: TextMatch = {
+      "@type": "SearchResultMatch",
+      name: "headline",
+      text: `testing <mark>highlighted headline</mark> is here`,
+      location: null,
+    };
+    const caseLawSearchResult: SearchResult<CaseLaw> = {
+      item: searchResult.item,
+      textMatches: [textMatch],
+    };
+    const wrapper = await mountSuspended(CaselawRecord, {
+      props: { searchResult: caseLawSearchResult, order: 0 },
+      stubs: {
+        RouterLink: RouterLinkStub,
+      },
+    });
+    const highlightedElements = wrapper.findAll("mark");
+    expect(highlightedElements).length(1);
+    expect(highlightedElements[0].text()).toBe(`highlighted headline`);
+  });
+
+  it("displays highlighted file numbers", async () => {
+    const textMatch: TextMatch = {
+      "@type": "SearchResultMatch",
+      name: "fileNumbers",
+      text: `testing <mark>highlighted file number</mark> is here`,
+      location: null,
+    };
+    const caseLawSearchResult: SearchResult<CaseLaw> = {
+      item: searchResult.item,
+      textMatches: [textMatch],
+    };
+    const wrapper = await mountSuspended(CaselawRecord, {
+      props: { searchResult: caseLawSearchResult, order: 0 },
+      stubs: {
+        RouterLink: RouterLinkStub,
+      },
+    });
+    const highlightedElements = wrapper.findAll("mark");
+    expect(highlightedElements).length(1);
+    expect(highlightedElements[0].text()).toBe(`highlighted file number`);
+
+    expect(wrapper.get("[aria-label='Aktenzeichen']").html()).toBe(
+      `<span aria-label="Aktenzeichen">123, testing <mark>highlighted file number</mark> is here</span>`,
+    );
   });
 
   it("displays highlighted text with correct class", async () => {

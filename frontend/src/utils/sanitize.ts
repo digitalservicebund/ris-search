@@ -2,7 +2,10 @@ import DOMPurify from "dompurify";
 
 let purify: typeof DOMPurify;
 
-export function sanitizeSearchResult(html: string) {
+export function sanitizeSearchResult(
+  html: string,
+  allowedTags: string[] | undefined = ["b", "i", "mark"],
+) {
   if (!purify) {
     if (import.meta.server) {
       const { JSDOM } = require("jsdom");
@@ -13,5 +16,5 @@ export function sanitizeSearchResult(html: string) {
       purify = DOMPurify;
     }
   }
-  return purify.sanitize(html, { ALLOWED_TAGS: ["b", "i", "mark"] });
+  return purify.sanitize(html, { ALLOWED_TAGS: allowedTags });
 }
