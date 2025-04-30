@@ -59,7 +59,8 @@ class NormsServiceTest extends ContainersIntegrationBase {
     PaginationParams pagination = new PaginationParams();
     universalSearchParams.setSearchTerm("text");
     Pageable pageable =
-        PaginationParamsConverter.convert(pagination, MappingDefinitions.ResolutionMode.NORMS);
+        PaginationParamsConverter.convert(
+            pagination, MappingDefinitions.ResolutionMode.NORMS, true);
     SearchPage<Norm> result =
         normsService.searchAndFilterNorms(universalSearchParams, normsSearchParams, pageable);
     assertThat(result.getContent()).hasSize(1);

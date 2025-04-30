@@ -77,7 +77,7 @@ public class AdvancedSearchController {
     String decodedQuery = validateLuceneQuery(query);
 
     PageRequest pageable =
-        PaginationParamsConverter.convert(pagination, MappingDefinitions.ResolutionMode.ALL);
+        PaginationParamsConverter.convert(pagination, MappingDefinitions.ResolutionMode.ALL, true);
 
     try {
       SearchPage<AbstractSearchEntity> resultPage =
@@ -119,7 +119,8 @@ public class AdvancedSearchController {
 
     String decodedQuery = validateLuceneQuery(query);
     PageRequest pageable =
-        PaginationParamsConverter.convert(pagination, MappingDefinitions.ResolutionMode.NORMS);
+        PaginationParamsConverter.convert(
+            pagination, MappingDefinitions.ResolutionMode.NORMS, true);
 
     try {
       SearchPage<Norm> page = normsService.searchNorms(decodedQuery, pageable);
@@ -155,7 +156,8 @@ public class AdvancedSearchController {
     String decodedQuery = validateLuceneQuery(query);
 
     PageRequest pageable =
-        PaginationParamsConverter.convert(pagination, MappingDefinitions.ResolutionMode.CASE_LAW);
+        PaginationParamsConverter.convert(
+            pagination, MappingDefinitions.ResolutionMode.CASE_LAW, true);
 
     try {
       SearchPage<CaseLawDocumentationUnit> page =

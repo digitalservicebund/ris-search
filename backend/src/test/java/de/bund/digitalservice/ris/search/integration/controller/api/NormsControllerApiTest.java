@@ -2,6 +2,13 @@ package de.bund.digitalservice.ris.search.integration.controller.api;
 
 import static de.bund.digitalservice.ris.search.utils.JsonLdUtils.writeJsonLdString;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.startsWith;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -33,7 +40,6 @@ import java.util.Objects;
 import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
-import org.hamcrest.Matchers;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -97,27 +103,25 @@ class NormsControllerApiTest extends ContainersIntegrationBase {
                 .contentType(MediaType.APPLICATION_JSON))
         .andExpectAll(
             status().isOk(),
-            jsonPath("$.@type", Matchers.is("Legislation")),
-            jsonPath("$.name", Matchers.is("Test Gesetz")),
-            jsonPath(
-                "$.legislationIdentifier",
-                Matchers.is("eli/bund/bgbl-1/1000/test/regelungstext-1")),
-            jsonPath("$.alternateName", Matchers.is("TestG1")),
-            jsonPath("$.abbreviation", Matchers.is("TeG")),
-            jsonPath("$.legislationDate", Matchers.is("2024-01-02")),
-            jsonPath("$.datePublished", Matchers.is("2024-01-03")),
-            jsonPath("$.workExample.hasPart", Matchers.hasSize(2)),
-            jsonPath("$.workExample.hasPart[0].@type", Matchers.is("Legislation")),
-            jsonPath("$.workExample.hasPart[0].eId", Matchers.is("eid1")),
-            jsonPath("$.workExample.hasPart[0].guid", Matchers.is("guid1")),
+            jsonPath("$.@type", is("Legislation")),
+            jsonPath("$.name", is("Test Gesetz")),
+            jsonPath("$.legislationIdentifier", is("eli/bund/bgbl-1/1000/test/regelungstext-1")),
+            jsonPath("$.alternateName", is("TestG1")),
+            jsonPath("$.abbreviation", is("TeG")),
+            jsonPath("$.legislationDate", is("2024-01-02")),
+            jsonPath("$.datePublished", is("2024-01-03")),
+            jsonPath("$.workExample.hasPart", hasSize(2)),
+            jsonPath("$.workExample.hasPart[0].@type", is("Legislation")),
+            jsonPath("$.workExample.hasPart[0].eId", is("eid1")),
+            jsonPath("$.workExample.hasPart[0].guid", is("guid1")),
             jsonPath(
                 "$.workExample.hasPart[0].@id",
-                Matchers.is(
+                is(
                     "/v1/legislation/eli/bund/bgbl-1/1000/test/2000-10-06/2/deu/regelungstext-1#eid1")),
-            jsonPath("$.workExample.hasPart[0].name", Matchers.is("§ 1 Example article")),
-            jsonPath("$.workExample.hasPart[0].isActive", Matchers.is(true)),
-            jsonPath("$.workExample.hasPart[0].entryIntoForceDate", Matchers.is("2023-12-31")),
-            jsonPath("$.workExample.hasPart[0].expiryDate", Matchers.is("3000-01-02")));
+            jsonPath("$.workExample.hasPart[0].name", is("§ 1 Example article")),
+            jsonPath("$.workExample.hasPart[0].isActive", is(true)),
+            jsonPath("$.workExample.hasPart[0].entryIntoForceDate", is("2023-12-31")),
+            jsonPath("$.workExample.hasPart[0].expiryDate", is("3000-01-02")));
   }
 
   @Test
@@ -167,7 +171,7 @@ class NormsControllerApiTest extends ContainersIntegrationBase {
         .perform(get(MANIFESTATION_URL_XML).contentType(MediaType.APPLICATION_XML))
         .andExpectAll(
             status().isOk(),
-            content().string(Matchers.startsWith("<?xml version=\"1.0\" encoding=\"UTF-8\"?>")),
+            content().string(startsWith("<?xml version=\"1.0\" encoding=\"UTF-8\"?>")),
             content().contentType("application/xml"));
   }
 
@@ -259,8 +263,7 @@ class NormsControllerApiTest extends ContainersIntegrationBase {
                     + "/bund/bgbl-1/1000/s999/1000-01-01/1/epo/1000-01-02/reguliga teksto-1.html")
                 .contentType(MediaType.TEXT_HTML))
         .andDo(print())
-        .andExpect(
-            content().string(Matchers.containsString("<div>LegalDocML file not found</div>")))
+        .andExpect(content().string(containsString("<div>LegalDocML file not found</div>")))
         .andExpect(content().contentType("text/html;charset=UTF-8"))
         .andExpect(status().isNotFound());
   }
@@ -272,10 +275,10 @@ class NormsControllerApiTest extends ContainersIntegrationBase {
     mockMvc
         .perform(get(ApiConfig.Paths.LEGISLATION).contentType(MediaType.APPLICATION_JSON))
         .andDo(print())
-        .andExpect(jsonPath("$.member", Matchers.hasSize(expectedSize)))
-        .andExpect(jsonPath("$.member[0]['item'].abbreviation", Matchers.is("TeG")))
-        .andExpect(jsonPath("$.@type", Matchers.is("hydra:Collection")))
-        .andExpect(jsonPath("$.totalItems", Matchers.is(expectedSize)))
+        .andExpect(jsonPath("$.member", hasSize(expectedSize)))
+        .andExpect(jsonPath("$.member[0]['item'].abbreviation", is("TeG")))
+        .andExpect(jsonPath("$.@type", is("hydra:Collection")))
+        .andExpect(jsonPath("$.totalItems", is(expectedSize)))
         .andExpect(status().isOk());
   }
 
@@ -288,8 +291,8 @@ class NormsControllerApiTest extends ContainersIntegrationBase {
         .perform(get(uri).contentType(MediaType.APPLICATION_JSON))
         .andExpectAll(
             status().isOk(),
-            jsonPath("$.member", Matchers.hasSize(1)),
-            jsonPath("$.member[0]['item'].abbreviation", Matchers.is("TeG")));
+            jsonPath("$.member", hasSize(1)),
+            jsonPath("$.member[0]['item'].abbreviation", is("TeG")));
   }
 
   @Test
@@ -303,18 +306,23 @@ class NormsControllerApiTest extends ContainersIntegrationBase {
         .andExpect(status().isOk())
         .andExpectAll(
             jsonPath(
-                "$.member[0].item.workExample.temporalCoverage",
-                Matchers.is(DateUtils.toDateIntervalString(yesterday, null))),
-            jsonPath("$.member[0].item.workExample.legislationLegalForce", Matchers.is("InForce")),
+                "$.member[?(@.item.abbreviation == \"TeG\")].item.workExample.temporalCoverage",
+                contains(DateUtils.toDateIntervalString(yesterday, null))),
             jsonPath(
-                "$.member[1].item.workExample.temporalCoverage",
-                Matchers.is(DateUtils.toDateIntervalString(yesterday, tomorrow))),
-            jsonPath("$.member[1].item.workExample.legislationLegalForce", Matchers.is("InForce")),
+                "$.member[?(@.item.abbreviation == \"TeG\")].item.workExample.legislationLegalForce",
+                contains("InForce")),
             jsonPath(
-                "$.member[2].item.workExample.temporalCoverage",
-                Matchers.is(DateUtils.toDateIntervalString(null, yesterday))),
+                "$.member[?(@.item.abbreviation == \"TeG2\")].item.workExample.temporalCoverage",
+                contains(DateUtils.toDateIntervalString(yesterday, tomorrow))),
             jsonPath(
-                "$.member[2].item.workExample.legislationLegalForce", Matchers.is("NotInForce")));
+                "$.member[?(@.item.abbreviation == \"TeG2\")].item.workExample.legislationLegalForce",
+                contains("InForce")),
+            jsonPath(
+                "$.member[?(@.item.abbreviation == \"TeG3\")].item.workExample.temporalCoverage",
+                contains(DateUtils.toDateIntervalString(null, yesterday))),
+            jsonPath(
+                "$.member[?(@.item.abbreviation == \"TeG3\")].item.workExample.legislationLegalForce",
+                contains("NotInForce")));
   }
 
   @Test
@@ -325,11 +333,10 @@ class NormsControllerApiTest extends ContainersIntegrationBase {
             get(ApiConfig.Paths.LEGISLATION
                     + "?searchTerm=Gesetz&dateFrom=2023-01-02&dateTo=2023-01-02")
                 .contentType(MediaType.APPLICATION_JSON))
-        .andExpect(jsonPath("$.member", Matchers.hasSize(1)))
+        .andExpect(jsonPath("$.member", hasSize(1)))
         .andExpect(
             jsonPath(
-                "$.member[0]['item'].@id",
-                Matchers.is("/v1/legislation/eli/2024/teg/2/regelungstext-1")))
+                "$.member[0]['item'].@id", is("/v1/legislation/eli/2024/teg/2/regelungstext-1")))
         .andExpect(status().isOk());
   }
 
@@ -342,8 +349,8 @@ class NormsControllerApiTest extends ContainersIntegrationBase {
         .perform(get(uri).contentType(MediaType.APPLICATION_JSON))
         .andExpectAll(
             status().isOk(),
-            jsonPath("$.member", Matchers.hasSize(1)),
-            jsonPath("$.member[0]['item'].workExample.legislationIdentifier", Matchers.is(eli)));
+            jsonPath("$.member", hasSize(1)),
+            jsonPath("$.member[0]['item'].workExample.legislationIdentifier", is(eli)));
   }
 
   @Test
@@ -353,7 +360,7 @@ class NormsControllerApiTest extends ContainersIntegrationBase {
         .perform(
             get(ApiConfig.Paths.LEGISLATION + "?searchTerm=Gesetz&dateTo=2023-01-02")
                 .contentType(MediaType.APPLICATION_JSON))
-        .andExpect(jsonPath("$.member", Matchers.hasSize(1)))
+        .andExpect(jsonPath("$.member", hasSize(1)))
         .andExpect(status().isOk());
   }
 
@@ -365,7 +372,7 @@ class NormsControllerApiTest extends ContainersIntegrationBase {
         .perform(
             get(ApiConfig.Paths.LEGISLATION + "?searchTerm=Gesetz&normsDateFrom=2023-01-02")
                 .contentType(MediaType.APPLICATION_JSON))
-        .andExpect(jsonPath("$.member", Matchers.hasSize(3)))
+        .andExpect(jsonPath("$.member", hasSize(3)))
         .andExpect(status().isOk());
   }
 
@@ -388,24 +395,18 @@ class NormsControllerApiTest extends ContainersIntegrationBase {
             get(ApiConfig.Paths.LEGISLATION + "?searchTerm=test")
                 .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$.member[*].articles", Matchers.hasSize(0)))
-        .andExpect(jsonPath("$.member[*].textMatches").value(Matchers.hasSize(3)))
-        .andExpect(
-            jsonPath("$.member[0].textMatches[0].@type")
-                .value(Matchers.equalTo("SearchResultMatch")))
+        .andExpect(jsonPath("$.member[*].articles", hasSize(0)))
+        .andExpect(jsonPath("$.member[*].textMatches").value(hasSize(3)))
+        .andExpect(jsonPath("$.member[0].textMatches[0].@type").value(equalTo("SearchResultMatch")))
         .andExpect(
             jsonPath("$.member[0].textMatches[*].name")
-                .value(
-                    Matchers.containsInAnyOrder(
-                        "name", "§ 1 Example article", "§ 2 Example article")))
+                .value(containsInAnyOrder("name", "§ 1 Example article", "§ 2 Example article")))
         .andExpect(
             jsonPath("$.member[0].textMatches[*].location")
-                .value(Matchers.containsInAnyOrder(null, "eid1", "eid2")))
+                .value(containsInAnyOrder(null, "eid1", "eid2")))
         .andExpect(
             jsonPath("$.member[0].textMatches[*].text")
-                .value(
-                    Matchers.containsInAnyOrder(
-                        highlightedMatch, "example text 1", "example text 2")));
+                .value(containsInAnyOrder(highlightedMatch, "example text 1", "example text 2")));
   }
 
   @Test
@@ -417,20 +418,19 @@ class NormsControllerApiTest extends ContainersIntegrationBase {
                 .contentType(MediaType.APPLICATION_JSON))
         .andExpectAll(
             status().isOk(),
-            jsonPath("$.member[0].textMatches[*]", Matchers.hasSize(3)),
-            jsonPath("$.member[0].textMatches[0].@type", Matchers.equalTo("SearchResultMatch")),
+            jsonPath("$.member[0].textMatches[*]", hasSize(3)),
+            jsonPath("$.member[0].textMatches[0].@type", equalTo("SearchResultMatch")),
             jsonPath(
                 "$.member[0].textMatches[*].name",
-                Matchers.containsInAnyOrder(
+                containsInAnyOrder(
                     "name",
                     "§ 1 <mark>Example</mark> <mark>article</mark>",
                     "§ 2 <mark>Example</mark> <mark>article</mark>")),
             jsonPath(
-                "$.member[0].textMatches[*].location",
-                Matchers.containsInAnyOrder(null, "eid1", "eid2")),
+                "$.member[0].textMatches[*].location", containsInAnyOrder(null, "eid1", "eid2")),
             jsonPath(
                 "$.member[0].textMatches[*].text",
-                Matchers.containsInAnyOrder(
+                containsInAnyOrder(
                     "<mark>Test</mark> Gesetz",
                     "<mark>example</mark> text 1",
                     "<mark>example</mark> text 2")));
@@ -446,9 +446,7 @@ class NormsControllerApiTest extends ContainersIntegrationBase {
     stream.add(
         Arguments.of(
             "legislationIdentifier",
-            jsonPath(
-                "$.member[*].item.legislationIdentifier",
-                Matchers.is(sortedLegislationIdentifiers))));
+            jsonPath("$.member[*].item.legislationIdentifier", is(sortedLegislationIdentifiers))));
 
     List<String> inverseSortedLegislationIdentifiers =
         new ArrayList<>(sortedLegislationIdentifiers);
@@ -458,7 +456,7 @@ class NormsControllerApiTest extends ContainersIntegrationBase {
             "-legislationIdentifier",
             jsonPath(
                 "$.member[*].item.legislationIdentifier",
-                Matchers.is(inverseSortedLegislationIdentifiers))));
+                is(inverseSortedLegislationIdentifiers))));
 
     List<String> dates =
         new ArrayList<>(
@@ -467,15 +465,13 @@ class NormsControllerApiTest extends ContainersIntegrationBase {
                 .sorted()
                 .toList());
 
-    stream.add(
-        Arguments.of("date", jsonPath("$.member[*].item.legislationDate", Matchers.is(dates))));
+    stream.add(Arguments.of("date", jsonPath("$.member[*].item.legislationDate", is(dates))));
 
     List<String> invertedDates = new ArrayList<>(dates);
     Collections.reverse(invertedDates);
 
     stream.add(
-        Arguments.of(
-            "-date", jsonPath("$.member[*].item.legislationDate", Matchers.is(invertedDates))));
+        Arguments.of("-date", jsonPath("$.member[*].item.legislationDate", is(invertedDates))));
 
     return stream.build();
   }
@@ -491,7 +487,7 @@ class NormsControllerApiTest extends ContainersIntegrationBase {
                 get(ApiConfig.Paths.LEGISLATION
                         + String.format("?searchTerm=%s&sort=%s", "test", sortParam))
                     .contentType(MediaType.APPLICATION_JSON))
-            .andExpect(jsonPath("$.member", Matchers.hasSize(NormsTestData.allDocuments.size())));
+            .andExpect(jsonPath("$.member", hasSize(NormsTestData.allDocuments.size())));
 
     if (matcher != null) {
       perform.andExpect(matcher);
