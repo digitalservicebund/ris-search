@@ -49,7 +49,7 @@ public class BulkExportService {
 
     String affectedPrefix = "archive/" + outputName;
     String resultObjectKey = affectedPrefix + "_" + timestamp + ".zip";
-    List<String> obsoleteObjectKeys = List.of();
+    List<String> obsoleteObjectKeys = destinationBucket.getAllFilenamesByPath(affectedPrefix);
 
     // Create a PipedInputStream and PipedOutputStream for streaming data, and an ExecutorService
     // for parallel execution
