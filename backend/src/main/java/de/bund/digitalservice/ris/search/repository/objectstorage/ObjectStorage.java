@@ -4,6 +4,7 @@ import de.bund.digitalservice.ris.search.exception.RetryableObjectStoreException
 import java.io.FileNotFoundException;
 import java.io.FilterInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Optional;
@@ -72,5 +73,9 @@ public class ObjectStorage {
 
   public void close() {
     client.close();
+  }
+
+  public long putStream(String objectKey, InputStream inputStream) throws IOException {
+    return client.putStream(objectKey, inputStream);
   }
 }
