@@ -50,7 +50,7 @@ public class LocalFilesystemObjectStorageClient implements ObjectStorageClient {
   @Override
   public List<String> getAllFilenamesByPath(String prefix) {
     if (!prefix.isEmpty() && !prefix.endsWith("/")) {
-      throw new UnsupportedOperationException("Filtering by non-directory prefix is not supported");
+      LOGGER.warn("Filtering by non-directory prefix is not supported, {}", prefix);
     }
     Path bucketPath = localStorageDirectory.resolve(bucket);
     Path basePath = bucketPath.resolve(prefix);
