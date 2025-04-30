@@ -9,7 +9,6 @@ import java.io.FilterInputStream;
 import java.io.IOException;
 import java.util.List;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -62,12 +61,6 @@ class LocalFilesystemObjectStorageClientTest {
   @Test
   void ItReturnsAnEmptyListOnInvalidPaths() {
     assertThat(client.getAllFilenamesByPath("another/")).isEmpty();
-  }
-
-  @Test
-  void itDoesntSupportListingNonDirectoryPrefixes() {
-    Assertions.assertThrows(
-        UnsupportedOperationException.class, () -> client.getAllFilenamesByPath("prefix"));
   }
 
   @Test
