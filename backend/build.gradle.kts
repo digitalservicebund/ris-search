@@ -50,9 +50,12 @@ sonar {
     }
 }
 
-val jaxws by configurations.creating
+val jaxb by configurations.creating
 
 dependencies {
+    jaxb(libs.jaxb.xjc)
+    jaxb(libs.jaxb.runtime)
+
     implementation(libs.spring.actuator)
     implementation(libs.spring.validation)
     implementation(libs.spring.web)
@@ -95,11 +98,6 @@ dependencies {
     implementation(libs.jaxb.moxy)
     implementation(libs.pebble)
     implementation(libs.streamex)
-    jaxws(libs.jaxws.tools)
-    jaxws(libs.jakarta.activation)
-    jaxws(libs.sun.xml.ws.jaxws)
-    implementation(libs.jakarta.xml.ws)
-    implementation(libs.jakarta.xml.bind)
 
     compileOnly(libs.lombok)
     annotationProcessor(libs.lombok)
@@ -163,32 +161,19 @@ project.tasks.sonar {
 }
 
 tasks {
-    register("wsimport") {
-        enabled = true
-        val destDir by extra("$buildDir/generated/java/main")
-        doLast {
-            ant.withGroovyBuilder {
-                mkdir(destDir)
-                "taskdef"(
-                    "name" to "wsimport",
-                    "classname" to "com.sun.tools.ws.ant.WsImport",
-                    "classpath" to configurations["jaxws"].asPath,
-                )
-                "wsimport"(
-                    "keep" to true,
-                    "sourcedestdir" to destDir,
-                    "wsdl" to "$projectDir/src/main/resources/WEB_INF/nlex",
-                    "verbose" to true,
-                ) {
-                    "xjcarg"("value" to "-XautoNameResolution")
-                }
-            }
+    register("jaxb", JavaExec::class) {
+        doFirst {
+            mkdir("$buildDir/generated/java/main")
         }
+        enabled = true
+        classpath(configurations["jaxb"])
+        mainClass = "com.sun.tools.xjc.XJCFacade"
+        // args = listOf("src/main/resources/xjustiz", "-d", "$buildDir/generated/java/main")
+        args = listOf("src/main/resources/WEB_INF/nlex", "-wsdl", "-d", "$buildDir/generated/java/main")
     }
     compileJava {
+        dependsOn("jaxb")
         options.compilerArgs.addAll(arrayOf())
-        dependsOn("wsimport")
-        source("build/generated/java/main")
     }
 
     jar {
