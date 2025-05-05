@@ -1,6 +1,6 @@
 package de.bund.digitalservice.ris.search.service;
 
-import de.bund.digitalservice.ris.search.exception.RetryableObjectStoreException;
+import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
 import de.bund.digitalservice.ris.search.repository.objectstorage.ObjectStorage;
 import java.time.Instant;
@@ -59,7 +59,7 @@ public class ImportService {
           importChangelogs(indexService, changelogBucket, lastSuccess, lastSuccessFilename);
         }
         indexStatusService.unlockIndex(lockfile);
-      } catch (RetryableObjectStoreException e) {
+      } catch (ObjectStoreServiceException e) {
         logger.error("Import process failed due to a retryable error. Removing lock", e);
         indexStatusService.unlockIndex(lockfile);
       }
@@ -71,7 +71,7 @@ public class ImportService {
       ObjectStorage changelogBucket,
       Instant lastSuccess,
       String lastSuccessFilename)
-      throws RetryableObjectStoreException {
+      throws ObjectStoreServiceException {
     List<String> unprocessedChangelogs =
         changelogService.getNewChangelogsSinceInstant(changelogBucket, lastSuccess);
 
@@ -95,7 +95,7 @@ public class ImportService {
 
   public void importChangelogContent(
       String changelogKey, Changelog changelog, IndexService service, Instant startTime)
-      throws RetryableObjectStoreException {
+      throws ObjectStoreServiceException {
     if (changelog.isChangeAll()) {
       logger.info("Reindexing all");
       service.reindexAll(startTime.toString());
@@ -128,7 +128,7 @@ public class ImportService {
               numberOfIndexedDocuments);
         }
       }
-    } catch (RetryableObjectStoreException e) {
+    } catch (ObjectStoreServiceException e) {
       logger.error("Import process failed due to a retryable error.", e);
     }
   }

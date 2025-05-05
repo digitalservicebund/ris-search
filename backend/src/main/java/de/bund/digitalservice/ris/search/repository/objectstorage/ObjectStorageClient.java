@@ -1,15 +1,15 @@
 package de.bund.digitalservice.ris.search.repository.objectstorage;
 
-import java.io.FileNotFoundException;
+import de.bund.digitalservice.ris.search.exception.NoSuchKeyException;
 import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
 public interface ObjectStorageClient {
-  public List<String> getAllFilenamesByPath(String path);
+  public List<String> listKeysByPrefix(String path);
 
-  public FilterInputStream getStream(String objectKey) throws FileNotFoundException;
+  public FilterInputStream getStream(String objectKey) throws NoSuchKeyException;
 
   public void save(String fileName, String fileContent);
 
