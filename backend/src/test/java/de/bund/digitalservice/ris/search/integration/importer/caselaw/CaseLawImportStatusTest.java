@@ -1,6 +1,6 @@
 package de.bund.digitalservice.ris.search.integration.importer.caselaw;
 
-import de.bund.digitalservice.ris.search.exception.RetryableObjectStoreException;
+import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.integration.config.ContainersIntegrationBase;
 import de.bund.digitalservice.ris.search.repository.objectstorage.CaseLawBucket;
 import de.bund.digitalservice.ris.search.repository.objectstorage.PortalBucket;
@@ -48,7 +48,7 @@ class CaseLawImportStatusTest extends ContainersIntegrationBase {
   }
 
   @BeforeEach
-  public void setUp() {
+  void setUp() {
     for (int i = 0; i < 5; i++) {
       try {
         caseLawBucket.save(
@@ -62,22 +62,22 @@ class CaseLawImportStatusTest extends ContainersIntegrationBase {
   }
 
   @Test
-  void createsLastSuccessFileProperly() throws RetryableObjectStoreException {
-    Assertions.assertEquals(5, caseLawBucket.getAllFilenames().size());
+  void createsLastSuccessFileProperly() throws ObjectStoreServiceException {
+    Assertions.assertEquals(5, caseLawBucket.getAllKeys().size());
     importService.importChangelogs(
         indexCaselawService,
         caseLawBucket,
         Instant.now(),
         ImportService.CASELAW_LAST_SUCCESS_FILENAME);
-    Assertions.assertEquals(5, caseLawBucket.getAllFilenames().size());
+    Assertions.assertEquals(5, caseLawBucket.getAllKeys().size());
     Assertions.assertTrue(
-        portalBucket.getAllFilenames().contains(ImportService.CASELAW_LAST_SUCCESS_FILENAME));
+        portalBucket.getAllKeys().contains(ImportService.CASELAW_LAST_SUCCESS_FILENAME));
     String lastSuccess = readValueFromFile(ImportService.CASELAW_LAST_SUCCESS_FILENAME);
     Assertions.assertTrue(isUTCDate(lastSuccess));
   }
 
   @Test
-  void testLocking() throws RetryableObjectStoreException {
+  void testLocking() throws ObjectStoreServiceException {
     Instant currentTime = Instant.now();
     boolean locked = indexStatusService.lockIndex(ImportService.CASELAW_LOCK_FILENAME, currentTime);
     Assertions.assertTrue(locked);
@@ -96,7 +96,7 @@ class CaseLawImportStatusTest extends ContainersIntegrationBase {
     }
   }
 
-  private String readValueFromFile(String fileName) throws RetryableObjectStoreException {
+  private String readValueFromFile(String fileName) throws ObjectStoreServiceException {
     return portalBucket.getFileAsString(fileName).orElse(null);
   }
 }

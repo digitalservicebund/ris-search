@@ -2,11 +2,10 @@ package de.bund.digitalservice.ris.search.integration.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import de.bund.digitalservice.ris.search.exception.NoSuchKeyException;
 import de.bund.digitalservice.ris.search.repository.objectstorage.LocalFilesystemObjectStorageClient;
 import java.io.ByteArrayInputStream;
-import java.io.FileNotFoundException;
 import java.io.FilterInputStream;
-import java.io.IOException;
 import java.util.List;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -26,20 +25,20 @@ class LocalFilesystemObjectStorageClientTest {
 
   @AfterEach
   void afterEach() {
-    for (String key : this.client.getAllFilenamesByPath("")) {
+    for (String key : this.client.listKeysByPrefix("")) {
       this.client.delete(key);
     }
   }
 
   @Test
-  void itStoresListsAndDeletesGivenFilesByPath() throws IOException {
+  void itStoresListsAndDeletesGivenFilesByPath() throws NoSuchKeyException {
     String path1 = "path/to/file1";
     String path2 = "path/to/file2";
 
     client.save(path1, "content1");
     client.save(path2, "content2");
 
-    List<String> filenames = client.getAllFilenamesByPath("path/to/");
+    List<String> filenames = client.listKeysByPrefix("path/to/");
 
     assertThat(filenames).containsExactlyInAnyOrder(path1, path2);
 
@@ -49,22 +48,22 @@ class LocalFilesystemObjectStorageClientTest {
     client.delete("path/to/file1");
     client.delete("path/to/file2");
 
-    assertThat(client.getAllFilenamesByPath("")).isEmpty();
+    assertThat(client.listKeysByPrefix("")).isEmpty();
   }
 
   @Test
   void itSupportEmptyPrefixes() {
     client.save("path/to/file", "content");
-    assertThat(client.getAllFilenamesByPath("")).containsExactly("path/to/file");
+    assertThat(client.listKeysByPrefix("")).containsExactly("path/to/file");
   }
 
   @Test
   void ItReturnsAnEmptyListOnInvalidPaths() {
-    assertThat(client.getAllFilenamesByPath("another/")).isEmpty();
+    assertThat(client.listKeysByPrefix("another/")).isEmpty();
   }
 
   @Test
-  void itWritesStreamToFile() throws FileNotFoundException {
+  void itWritesStreamToFile() throws NoSuchKeyException {
     ByteArrayInputStream inputStream = new ByteArrayInputStream("content".getBytes());
     client.putStream("stream", inputStream);
 

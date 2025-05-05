@@ -1,6 +1,6 @@
 package de.bund.digitalservice.ris.search.repository.objectstorage;
 
-import java.io.FileNotFoundException;
+import de.bund.digitalservice.ris.search.exception.NoSuchKeyException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -19,7 +19,6 @@ import software.amazon.awssdk.services.s3.model.GetObjectRequest;
 import software.amazon.awssdk.services.s3.model.GetObjectResponse;
 import software.amazon.awssdk.services.s3.model.ListObjectsV2Request;
 import software.amazon.awssdk.services.s3.model.ListObjectsV2Response;
-import software.amazon.awssdk.services.s3.model.NoSuchKeyException;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import software.amazon.awssdk.services.s3.model.S3Object;
 import software.amazon.awssdk.services.s3.model.UploadPartRequest;
@@ -36,7 +35,7 @@ public class S3ObjectStorageClient implements ObjectStorageClient {
   }
 
   @Override
-  public List<String> getAllFilenamesByPath(String path) {
+  public List<String> listKeysByPrefix(String path) {
     List<String> keys = new ArrayList<>();
     ListObjectsV2Response response;
     ListObjectsV2Request request =
@@ -58,12 +57,12 @@ public class S3ObjectStorageClient implements ObjectStorageClient {
 
   @Override
   public ResponseInputStream<GetObjectResponse> getStream(String objectKey)
-      throws FileNotFoundException {
+      throws NoSuchKeyException {
     GetObjectRequest request = GetObjectRequest.builder().bucket(bucketName).key(objectKey).build();
     try {
       return s3Client.getObject(request);
-    } catch (NoSuchKeyException e) {
-      throw new FileNotFoundException(e.getMessage());
+    } catch (software.amazon.awssdk.services.s3.model.NoSuchKeyException e) {
+      throw new NoSuchKeyException(e.getMessage(), e);
     }
   }
 
