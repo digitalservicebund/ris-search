@@ -7,7 +7,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import de.bund.digitalservice.ris.search.exception.RetryableObjectStoreException;
+import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
 import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
 import de.bund.digitalservice.ris.search.service.ChangelogService;
@@ -44,7 +44,7 @@ class ImportServiceTest {
   }
 
   @Test
-  void lockIsAcquiredAndReleasedOnSuccesfulProcess() throws RetryableObjectStoreException {
+  void lockIsAcquiredAndReleasedOnSuccessfulProcess() throws ObjectStoreServiceException {
     when(indexStatusService.lockIndex(eq("norm_lock.txt"), any())).thenReturn(true);
 
     Changelog changelog = new Changelog();
@@ -69,7 +69,7 @@ class ImportServiceTest {
   }
 
   @Test
-  void lockIsAcquiredAndReleasedOnRetryableException() throws RetryableObjectStoreException {
+  void lockIsAcquiredAndReleasedOnRetryableException() throws ObjectStoreServiceException {
 
     Instant lastSuccess = Instant.now().minus(1, ChronoUnit.HOURS);
 
@@ -79,7 +79,7 @@ class ImportServiceTest {
     when(changelogService.getNewChangelogsSinceInstant(any(), any()))
         .thenReturn(List.of("changelogs/" + Instant.now() + "-changelog.json"));
     when(changelogService.parseOneChangelog(any(), any()))
-        .thenThrow(RetryableObjectStoreException.class);
+        .thenThrow(ObjectStoreServiceException.class);
 
     service.lockAndImportChangelogs(
         indexNormsService,
@@ -93,7 +93,7 @@ class ImportServiceTest {
   }
 
   @Test
-  void itTriggersReindexAll() throws RetryableObjectStoreException {
+  void itTriggersReindexAll() throws ObjectStoreServiceException {
     Changelog changelog = new Changelog();
     changelog.setChangeAll(true);
     Instant startTime = Instant.now();

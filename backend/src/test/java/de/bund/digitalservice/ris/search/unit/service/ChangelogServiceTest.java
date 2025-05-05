@@ -3,7 +3,7 @@ package de.bund.digitalservice.ris.search.unit.service;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-import de.bund.digitalservice.ris.search.exception.RetryableObjectStoreException;
+import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
 import de.bund.digitalservice.ris.search.repository.objectstorage.ObjectStorage;
 import de.bund.digitalservice.ris.search.service.ChangelogService;
@@ -31,7 +31,7 @@ class ChangelogServiceTest {
   }
 
   @Test
-  void itSkipsInvalidChangelogContent() throws RetryableObjectStoreException {
+  void itSkipsInvalidChangelogContent() throws ObjectStoreServiceException {
 
     when(bucket.getFileAsString(any())).thenReturn(Optional.of("you shall not parse"));
     Changelog changelog = changelogService.parseOneChangelog(bucket, "mockFileName");
@@ -39,7 +39,7 @@ class ChangelogServiceTest {
   }
 
   @Test
-  void itSkipsEmptyChangelogFiles() throws RetryableObjectStoreException {
+  void itSkipsEmptyChangelogFiles() throws ObjectStoreServiceException {
 
     when(bucket.getFileAsString(any())).thenReturn(Optional.empty());
 
@@ -55,7 +55,7 @@ class ChangelogServiceTest {
     String changelogFile2 =
         ChangelogService.CHANGELOG + lastSuccess.plus(2, ChronoUnit.HOURS) + "-changelog.json";
 
-    when(bucket.getAllFilenamesByPath(ChangelogService.CHANGELOG))
+    when(bucket.getAllKeysByPrefix(ChangelogService.CHANGELOG))
         .thenReturn(List.of(changelogFile2, changelogFile1));
 
     List<String> changelogs = changelogService.getNewChangelogsSinceInstant(bucket, lastSuccess);

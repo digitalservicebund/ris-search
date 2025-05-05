@@ -1,5 +1,6 @@
 package de.bund.digitalservice.ris.search.service;
 
+import de.bund.digitalservice.ris.search.exception.NoSuchKeyException;
 import de.bund.digitalservice.ris.search.repository.objectstorage.ObjectStorage;
 import java.io.IOException;
 import java.io.InputStream;
@@ -33,7 +34,7 @@ public class BulkExportService {
       String prefix) {
     try {
       this.updateExport(sourceBucket, destinationBucket, outputName, prefix);
-    } catch (IOException | ExecutionException e) {
+    } catch (IOException | ExecutionException | NoSuchKeyException e) {
       logger.error("in async operation", e);
     } catch (InterruptedException e) {
       logger.error("in async operation", e);
@@ -43,13 +44,13 @@ public class BulkExportService {
 
   public void updateExport(
       ObjectStorage sourceBucket, ObjectStorage destinationBucket, String outputName, String prefix)
-      throws IOException, ExecutionException, InterruptedException {
+      throws IOException, ExecutionException, InterruptedException, NoSuchKeyException {
     String timestamp = Instant.now().toString();
-    List<String> keysToZip = sourceBucket.getAllFilenamesByPath(prefix);
+    List<String> keysToZip = sourceBucket.getAllKeysByPrefix(prefix);
 
     String affectedPrefix = "archive/" + outputName;
     String resultObjectKey = affectedPrefix + "_" + timestamp + ".zip";
-    List<String> obsoleteObjectKeys = destinationBucket.getAllFilenamesByPath(affectedPrefix);
+    List<String> obsoleteObjectKeys = destinationBucket.getAllKeysByPrefix(affectedPrefix);
 
     // Create a PipedInputStream and PipedOutputStream for streaming data, and an ExecutorService
     // for parallel execution
@@ -102,7 +103,7 @@ public class BulkExportService {
                       resultObjectKey,
                       FileUtils.byteCountToDisplaySize(byteCount)));
 
-    } catch (InterruptedException | ExecutionException | RuntimeException e) {
+    } catch (InterruptedException | ExecutionException | RuntimeException | NoSuchKeyException e) {
       logger.error("Error processing key '{}'", keysToZip, e);
       throw e;
     }

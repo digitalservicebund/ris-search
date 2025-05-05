@@ -1,6 +1,6 @@
 package de.bund.digitalservice.ris.search.service;
 
-import de.bund.digitalservice.ris.search.exception.RetryableObjectStoreException;
+import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.repository.objectstorage.PortalBucket;
 import java.time.Duration;
 import java.time.Instant;
@@ -38,7 +38,7 @@ public class IndexStatusService {
       } else {
         return false;
       }
-    } catch (RetryableObjectStoreException e) {
+    } catch (ObjectStoreServiceException e) {
       logger.error("AWS S3 encountered an issue.", e);
       return false;
     }
@@ -68,7 +68,7 @@ public class IndexStatusService {
     portalBucket.delete(lockFileName);
   }
 
-  public Instant getLastSuccess(String fileName) throws RetryableObjectStoreException {
+  public Instant getLastSuccess(String fileName) throws ObjectStoreServiceException {
     String lastSuccess = portalBucket.getFileAsString(fileName).orElse(null);
     if (lastSuccess == null) {
       logger.error("Status file missing.");
