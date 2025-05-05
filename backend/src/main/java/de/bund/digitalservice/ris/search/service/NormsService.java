@@ -128,6 +128,10 @@ public class NormsService {
     return normsBucket.get(eli.toString());
   }
 
+  public Optional<byte[]> getNormFileByString(String identifier) {
+    return normsBucket.get(identifier);
+  }
+
   public void writeZipArchive(List<String> keys, OutputStream outputStream) throws IOException {
     try (ZipOutputStream zipOut = new ZipOutputStream(outputStream)) {
       for (String key : keys) {

@@ -428,4 +428,63 @@ public class NormsController {
         .map(bytes -> ResponseEntity.ok(xsltTransformerService.transformArticle(bytes, articleEid)))
         .orElseGet(() -> ResponseEntity.notFound().build());
   }
+
+  @GetMapping(
+      path =
+          ApiConfig.Paths.LEGISLATION
+              + "/image/"
+              + "eli/{jurisdiction}/{agent}/{year}/{naturalIdentifier}/{pointInTime}/{version}/{language}/{pointInTimeManifestation}/{name}.jpg",
+      produces = MediaType.IMAGE_JPEG_VALUE)
+  @Operation(
+      summary = "Get an Image particular manifestation of a piece of legislation",
+      description =
+          """
+                            Returns a specific Image of a particular manifestation of a piece of legislation.
+                            """)
+  @ApiResponse(responseCode = "200")
+  @ApiResponse(responseCode = "404", content = @Content())
+  public ResponseEntity<byte[]> getImage(
+      @Parameter(description = "Country or regional code for the jurisdiction", example = "bund")
+          @PathVariable
+          @Schema(allowableValues = {"bund"})
+          String jurisdiction,
+      @Parameter(
+              description =
+                  "Agent or authority issuing the legislation, e.g., 'bgbl-1' for Bundesgesetzblatt Teil I (Federal Law Gazette part I)",
+              example = "bgbl-1")
+          @PathVariable
+          String agent,
+      @PathVariable
+          @Parameter(
+              description = "Year the legislation was enacted or published",
+              example = "1979")
+          String year,
+      @Parameter(
+              description =
+                  "Unique natural identifier for the legislation, specific to the jurisdiction and agent",
+              example = "s1325")
+          @PathVariable
+          String naturalIdentifier,
+      @Parameter(example = "2020-06-19") @PathVariable LocalDate pointInTime,
+      @PathVariable @Schema(example = "2") Integer version,
+      @PathVariable @Schema(example = "deu") String language,
+      @PathVariable @Schema(example = "2020-06-19") LocalDate pointInTimeManifestation,
+      @Schema(example = "image") @PathVariable String name) {
+
+    Optional<byte[]> image =
+        normsService.getNormFileByString(
+            new ManifestationEli(
+                    jurisdiction,
+                    agent,
+                    year,
+                    naturalIdentifier,
+                    pointInTime,
+                    version,
+                    language,
+                    pointInTimeManifestation,
+                    name + ".jpg")
+                .toStringWithoutFileExtension());
+
+    return image.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+  }
 }
