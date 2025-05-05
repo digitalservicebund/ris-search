@@ -20,7 +20,7 @@ const backendBaseUrl = process.env.NUXT_RIS_BACKEND_URL;
 export default defineNuxtConfig({
   app: {
     head: {
-      title: "Rechtsinformationssystem des Bundes",
+      title: undefined, // set dynamically in app.vue useHead
       meta: [
         {
           name: "description",
