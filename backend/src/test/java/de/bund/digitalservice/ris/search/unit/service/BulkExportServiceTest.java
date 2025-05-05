@@ -13,6 +13,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import de.bund.digitalservice.ris.ZipTestUtils;
+import de.bund.digitalservice.ris.search.exception.NoSuchKeyException;
 import de.bund.digitalservice.ris.search.repository.objectstorage.ObjectStorage;
 import de.bund.digitalservice.ris.search.service.BulkExportService;
 import java.io.ByteArrayInputStream;
@@ -43,18 +44,18 @@ class BulkExportServiceTest {
       };
 
   @Test
-  void updateExport_successfulZipAndUpload() throws IOException {
+  void updateExport_successfulZipAndUpload() throws IOException, NoSuchKeyException {
     ObjectStorage sourceBucket = mock(ObjectStorage.class);
     ObjectStorage destinationBucket = mock(ObjectStorage.class);
     String outputName = "test-export";
     String prefix = "some/path/";
 
-    when(sourceBucket.getAllFilenamesByPath(prefix)).thenReturn(List.of("file1.txt", "file2.pdf"));
+    when(sourceBucket.getAllKeysByPrefix(prefix)).thenReturn(List.of("file1.txt", "file2.pdf"));
     final byte[] bytes1 = "This is the content of file 1.".getBytes();
     when(sourceBucket.getStream("file1.txt")).thenReturn(makeInputStream.apply(bytes1));
     final byte[] bytes2 = "%PDF-1.5...".getBytes();
     when(sourceBucket.getStream("file2.pdf")).thenReturn(makeInputStream.apply(bytes2));
-    when(destinationBucket.getAllFilenamesByPath(anyString())).thenReturn(Collections.emptyList());
+    when(destinationBucket.getAllKeysByPrefix(anyString())).thenReturn(Collections.emptyList());
 
     AtomicReference<Map<String, byte[]>> files = new AtomicReference<>();
     when(destinationBucket.putStream(anyString(), any(InputStream.class)))
@@ -70,10 +71,10 @@ class BulkExportServiceTest {
     assertDoesNotThrow(
         () -> bulkExportService.updateExport(sourceBucket, destinationBucket, outputName, prefix));
 
-    verify(sourceBucket, times(1)).getAllFilenamesByPath(prefix);
+    verify(sourceBucket, times(1)).getAllKeysByPrefix(prefix);
     verify(sourceBucket, times(1)).getStream("file1.txt");
     verify(sourceBucket, times(1)).getStream("file2.pdf");
-    verify(destinationBucket, times(1)).getAllFilenamesByPath(anyString());
+    verify(destinationBucket, times(1)).getAllKeysByPrefix(anyString());
     verify(destinationBucket, times(1))
         .putStream(
             matches("archive/test-export_\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d+Z\\.zip"),
@@ -85,17 +86,17 @@ class BulkExportServiceTest {
   }
 
   @Test
-  void updateExport_withObsoleteFiles_shouldDeleteThem() throws IOException {
+  void updateExport_withObsoleteFiles_shouldDeleteThem() throws IOException, NoSuchKeyException {
     ObjectStorage sourceBucket = mock(ObjectStorage.class);
     ObjectStorage destinationBucket = mock(ObjectStorage.class);
     String outputName = "test-export";
     String prefix = "some/path/";
     String file1Content = "Some content";
 
-    when(sourceBucket.getAllFilenamesByPath(prefix)).thenReturn(List.of("file1.txt"));
+    when(sourceBucket.getAllKeysByPrefix(prefix)).thenReturn(List.of("file1.txt"));
     when(sourceBucket.getStream("file1.txt"))
         .thenReturn(makeInputStream.apply(file1Content.getBytes()));
-    when(destinationBucket.getAllFilenamesByPath(anyString()))
+    when(destinationBucket.getAllKeysByPrefix(anyString()))
         .thenReturn(
             List.of(
                 "archive/test-export_old1.zip",
@@ -107,22 +108,23 @@ class BulkExportServiceTest {
     assertDoesNotThrow(
         () -> bulkExportService.updateExport(sourceBucket, destinationBucket, outputName, prefix));
 
-    verify(sourceBucket, times(1)).getAllFilenamesByPath(prefix);
+    verify(sourceBucket, times(1)).getAllKeysByPrefix(prefix);
     verify(sourceBucket, times(1)).getStream("file1.txt");
-    verify(destinationBucket, times(1)).getAllFilenamesByPath(anyString());
+    verify(destinationBucket, times(1)).getAllKeysByPrefix(anyString());
     verify(destinationBucket, times(1)).putStream(anyString(), any(InputStream.class));
     verify(destinationBucket, times(1)).delete("archive/test-export_old1.zip");
     verify(destinationBucket, times(1)).delete("archive/test-export_old2.zip");
   }
 
   @Test
-  void updateExport_sourceBucketThrowsIOException_shouldPropagateException() throws IOException {
+  void updateExport_sourceBucketThrowsIOException_shouldPropagateException()
+      throws IOException, NoSuchKeyException {
     ObjectStorage sourceBucket = mock(ObjectStorage.class);
     ObjectStorage destinationBucket = mock(ObjectStorage.class);
     String outputName = "test-export";
     String prefix = "some/path/";
 
-    when(sourceBucket.getAllFilenamesByPath(prefix))
+    when(sourceBucket.getAllKeysByPrefix(prefix))
         .thenThrow(new RuntimeException("The mock source bucket does not want to list files"));
 
     assertThrows(
@@ -136,14 +138,14 @@ class BulkExportServiceTest {
 
   @Test
   void updateExport_destinationBucketPutStreamThrowsIOException_shouldPropagateException()
-      throws IOException {
+      throws IOException, NoSuchKeyException {
     ObjectStorage sourceBucket = mock(ObjectStorage.class);
     ObjectStorage destinationBucket = mock(ObjectStorage.class);
 
-    when(sourceBucket.getAllFilenamesByPath("some/prefix/")).thenReturn(List.of("file.txt"));
+    when(sourceBucket.getAllKeysByPrefix("some/prefix/")).thenReturn(List.of("file.txt"));
     when(sourceBucket.getStream("file.txt"))
         .thenReturn(makeInputStream.apply("content".getBytes()));
-    when(destinationBucket.getAllFilenamesByPath(anyString())).thenReturn(Collections.emptyList());
+    when(destinationBucket.getAllKeysByPrefix(anyString())).thenReturn(Collections.emptyList());
     when(destinationBucket.putStream(anyString(), any(InputStream.class)))
         .thenThrow(new IOException("The mock source bucket threw an exception"));
 
@@ -153,9 +155,9 @@ class BulkExportServiceTest {
             bulkExportService.updateExport(
                 sourceBucket, destinationBucket, "test-export", "some/prefix/"));
 
-    verify(sourceBucket, times(1)).getAllFilenamesByPath("some/prefix/");
+    verify(sourceBucket, times(1)).getAllKeysByPrefix("some/prefix/");
     verify(sourceBucket, times(1)).getStream("file.txt");
-    verify(destinationBucket, times(1)).getAllFilenamesByPath(anyString());
+    verify(destinationBucket, times(1)).getAllKeysByPrefix(anyString());
     verify(destinationBucket, times(0)).delete(anyString());
   }
 }

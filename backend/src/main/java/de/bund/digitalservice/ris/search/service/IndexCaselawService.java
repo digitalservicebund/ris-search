@@ -1,7 +1,7 @@
 package de.bund.digitalservice.ris.search.service;
 
+import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.exception.OpenSearchMapperException;
-import de.bund.digitalservice.ris.search.exception.RetryableObjectStoreException;
 import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
 import de.bund.digitalservice.ris.search.mapper.CaseLawLdmlToOpenSearchMapper;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
@@ -35,14 +35,14 @@ public class IndexCaselawService implements IndexService {
   }
 
   @Override
-  public void reindexAll(String startingTimestamp) throws RetryableObjectStoreException {
+  public void reindexAll(String startingTimestamp) throws ObjectStoreServiceException {
     List<String> ldmlFiles = getAllCaseLawFilenames();
     indexFileList(ldmlFiles);
     repository.deleteByIndexedAtBefore(startingTimestamp);
   }
 
   @Override
-  public void indexChangelog(String key, Changelog changelog) throws RetryableObjectStoreException {
+  public void indexChangelog(String key, Changelog changelog) throws ObjectStoreServiceException {
     if (changelog.isChangeAll()) {
       reindexAll(Instant.now().toString());
     } else {
@@ -59,7 +59,7 @@ public class IndexCaselawService implements IndexService {
     return filename.substring(0, filename.lastIndexOf('.'));
   }
 
-  public void indexFileList(List<String> filenames) throws RetryableObjectStoreException {
+  public void indexFileList(List<String> filenames) throws ObjectStoreServiceException {
     List<List<String>> fileBatches = ListUtils.partition(filenames, IMPORT_BATCH_SIZE);
     logger.info("Import caselaw process will have {} batches", fileBatches.size());
     for (int i = 0; i < fileBatches.size(); i++) {
@@ -68,7 +68,7 @@ public class IndexCaselawService implements IndexService {
     }
   }
 
-  public void indexOneBatch(List<String> filenames) throws RetryableObjectStoreException {
+  public void indexOneBatch(List<String> filenames) throws ObjectStoreServiceException {
     for (String filename : filenames) {
       Optional<String> content = bucket.getFileAsString(filename);
       if (content.isPresent()) {
@@ -97,7 +97,7 @@ public class IndexCaselawService implements IndexService {
   }
 
   private List<String> getAllCaseLawFilenames() {
-    return bucket.getAllFilenames().stream()
+    return bucket.getAllKeys().stream()
         .filter(s -> !s.contains(ChangelogService.CHANGELOG))
         .toList();
   }

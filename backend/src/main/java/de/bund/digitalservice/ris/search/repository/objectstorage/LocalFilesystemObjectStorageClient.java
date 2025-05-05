@@ -1,5 +1,6 @@
 package de.bund.digitalservice.ris.search.repository.objectstorage;
 
+import de.bund.digitalservice.ris.search.exception.NoSuchKeyException;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -48,7 +49,7 @@ public class LocalFilesystemObjectStorageClient implements ObjectStorageClient {
   }
 
   @Override
-  public List<String> getAllFilenamesByPath(String prefix) {
+  public List<String> listKeysByPrefix(String prefix) {
     if (!prefix.isEmpty() && !prefix.endsWith("/")) {
       LOGGER.warn("Filtering by non-directory prefix is not supported, {}", prefix);
     }
@@ -66,9 +67,13 @@ public class LocalFilesystemObjectStorageClient implements ObjectStorageClient {
   }
 
   @Override
-  public FilterInputStream getStream(String objectKey) throws FileNotFoundException {
+  public FilterInputStream getStream(String objectKey) throws NoSuchKeyException {
     File file = localStorageDirectory.resolve(bucket).resolve(objectKey).toFile();
-    return new DataInputStream(new FileInputStream(file));
+    try {
+      return new DataInputStream(new FileInputStream(file));
+    } catch (FileNotFoundException e) {
+      throw new NoSuchKeyException(objectKey + " not found", e);
+    }
   }
 
   @Override

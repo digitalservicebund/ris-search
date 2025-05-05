@@ -2,7 +2,7 @@ package de.bund.digitalservice.ris.search.controller.api;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import de.bund.digitalservice.ris.search.exception.RetryableObjectStoreException;
+import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
 import de.bund.digitalservice.ris.search.service.ImportService;
 import de.bund.digitalservice.ris.search.service.IndexNormsService;
@@ -36,7 +36,7 @@ public class ImporterController {
       Changelog cl = new ObjectMapper().readValue(changelog, Changelog.class);
       normsImporter.importChangelogContent("apiRequest", cl, normsIndexer, Instant.now());
       return ResponseEntity.noContent().build();
-    } catch (JsonProcessingException | RetryableObjectStoreException e) {
+    } catch (JsonProcessingException | ObjectStoreServiceException e) {
       return ResponseEntity.badRequest().body(e.getMessage());
     }
   }
