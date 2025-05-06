@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Delete old images
     steps:
-      - uses: snok/container-retention-policy@v3.0.0
+      - uses: snok/container-retention-policy@4f22ef80902ad409ed55a99dc5133cc1250a0d03
         with:
           account: digitalservicebund
           token: ${{ secrets.GITHUB_TOKEN }}
