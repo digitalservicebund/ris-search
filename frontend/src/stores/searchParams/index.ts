@@ -141,10 +141,12 @@ export const useSimpleSearchParamsStore = defineStore(
       () => route.query,
       async (newQuery) => {
         // check whether the store already has the values, in order to prevent loops
-        const updatedQueryWasSetByStore = _.isEqualWith(
-          toRaw(routerQuerySetByStore.value),
+        const updatedQueryWasSetByStore = _.isEqual(
+          _.mapValues(
+            toRaw(routerQuerySetByStore.value),
+            (value) => value?.toString(), // numbers in query are represented as strings
+          ),
           newQuery,
-          (a, b) => a.toString() == b, // numbers in query are represented as strings
         );
 
         if (!updatedQueryWasSetByStore) {
