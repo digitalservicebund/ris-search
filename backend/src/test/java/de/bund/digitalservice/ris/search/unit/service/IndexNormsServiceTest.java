@@ -6,7 +6,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import de.bund.digitalservice.ris.search.exception.RetryableObjectStoreException;
+import de.bund.digitalservice.ris.search.exception.ObjectStoreException;
 import de.bund.digitalservice.ris.search.mapper.NormLdmlToOpenSearchMapper;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
@@ -127,7 +127,7 @@ class IndexNormsServiceTest {
           """;
 
   @Test
-  void reindexAllIgnoreseInvalidFiles() throws RetryableObjectStoreException {
+  void reindexAllIgnoreseInvalidFiles() throws ObjectStoreException {
 
     when(this.bucket.getAllFilenamesByPath("eli/"))
         .thenReturn(

@@ -2,7 +2,7 @@ package de.bund.digitalservice.ris.search.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import de.bund.digitalservice.ris.search.exception.RetryableObjectStoreException;
+import de.bund.digitalservice.ris.search.exception.ObjectStoreException;
 import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
 import de.bund.digitalservice.ris.search.repository.objectstorage.ObjectStorage;
 import java.time.Instant;
@@ -37,7 +37,7 @@ public class ChangelogService {
   }
 
   public Changelog parseOneChangelog(ObjectStorage changelogBucket, String filename)
-      throws RetryableObjectStoreException {
+      throws ObjectStoreException {
     Optional<String> changelogContent = changelogBucket.getFileAsString(filename);
     if (changelogContent.isEmpty()) {
       logger.error("Changelog file {} could not be fetched during import.", filename);

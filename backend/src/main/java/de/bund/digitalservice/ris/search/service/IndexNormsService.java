@@ -1,6 +1,6 @@
 package de.bund.digitalservice.ris.search.service;
 
-import de.bund.digitalservice.ris.search.exception.RetryableObjectStoreException;
+import de.bund.digitalservice.ris.search.exception.ObjectStoreException;
 import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
 import de.bund.digitalservice.ris.search.mapper.NormLdmlToOpenSearchMapper;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
@@ -39,7 +39,7 @@ public class IndexNormsService implements IndexService {
     this.normsSynthesizedRepository = normsSynthesizedRepository;
   }
 
-  public void reindexAll(String startingTimestamp) throws RetryableObjectStoreException {
+  public void reindexAll(String startingTimestamp) throws ObjectStoreException {
     List<ManifestationEli> manifestations =
         normsBucket.getAllFilenamesByPath("eli/").stream()
             .map(ManifestationEli::fromString)
@@ -60,8 +60,7 @@ public class IndexNormsService implements IndexService {
   }
 
   @Override
-  public void indexChangelog(String changelogKey, Changelog changelog)
-      throws RetryableObjectStoreException {
+  public void indexChangelog(String changelogKey, Changelog changelog) throws ObjectStoreException {
     try {
       List<ManifestationEli> changedFiles =
           getValidManifestations(changelogKey, changelog.getChanged().stream().toList());
@@ -94,8 +93,7 @@ public class IndexNormsService implements IndexService {
     }
   }
 
-  private void indexOneNormBatch(List<ExpressionEli> expressionElis)
-      throws RetryableObjectStoreException {
+  private void indexOneNormBatch(List<ExpressionEli> expressionElis) throws ObjectStoreException {
     List<Norm> norms = new ArrayList<>();
     for (ExpressionEli eli : expressionElis) {
       if (eli.subtype().startsWith("regelungstext-")) {
@@ -121,7 +119,7 @@ public class IndexNormsService implements IndexService {
     return result;
   }
 
-  private Norm getNormFromS3(ExpressionEli expressionEli) throws RetryableObjectStoreException {
+  private Norm getNormFromS3(ExpressionEli expressionEli) throws ObjectStoreException {
     String today = DateUtils.toDateString(LocalDate.now());
     // get the currently active manifestation or if none are active the most recently active
     final List<String> keysMatchingExpressionEli =

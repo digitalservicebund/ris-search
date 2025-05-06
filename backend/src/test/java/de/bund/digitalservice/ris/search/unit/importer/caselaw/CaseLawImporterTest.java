@@ -7,7 +7,7 @@ import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import de.bund.digitalservice.ris.search.exception.RetryableObjectStoreException;
+import de.bund.digitalservice.ris.search.exception.ObjectStoreException;
 import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import de.bund.digitalservice.ris.search.repository.objectstorage.CaseLawBucket;
@@ -41,7 +41,7 @@ class CaseLawImporterTest {
 
   @Test
   @DisplayName("Import one caselaw ldml")
-  void canImportLdml() throws RetryableObjectStoreException {
+  void canImportLdml() throws ObjectStoreException {
     IndexCaselawService indexCaselawService =
         new IndexCaselawService(caseLawBucket, caseLawSynthesizedRepositoryMock);
     Changelog mockChangelog = new Changelog();

@@ -2,6 +2,7 @@ package de.bund.digitalservice.ris.search.service;
 
 import static org.opensearch.index.query.QueryBuilders.queryStringQuery;
 
+import de.bund.digitalservice.ris.search.exception.ObjectStoreException;
 import de.bund.digitalservice.ris.search.models.api.parameters.NormsSearchParams;
 import de.bund.digitalservice.ris.search.models.api.parameters.UniversalSearchParams;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
@@ -124,7 +125,7 @@ public class NormsService {
     return Optional.ofNullable(result);
   }
 
-  public Optional<byte[]> getNormFileByEli(ManifestationEli eli) {
+  public Optional<byte[]> getNormFileByEli(ManifestationEli eli) throws ObjectStoreException {
     return normsBucket.get(eli.toString());
   }
 

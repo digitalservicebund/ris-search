@@ -1,6 +1,6 @@
 package de.bund.digitalservice.ris.search.repository.objectstorage;
 
-import de.bund.digitalservice.ris.search.exception.RetryableObjectStoreException;
+import de.bund.digitalservice.ris.search.exception.ObjectStoreException;
 import java.io.FileNotFoundException;
 import java.io.FilterInputStream;
 import java.io.IOException;
@@ -30,33 +30,29 @@ public class ObjectStorage {
     return client.getAllFilenamesByPath(path);
   }
 
-  public Optional<byte[]> get(String objectKey) {
-    try {
-      return checkedGet(objectKey);
-    } catch (RetryableObjectStoreException e) {
-      logger.error("object storage encountered an issue.", e);
-    }
-    return Optional.empty();
-  }
-
-  public Optional<String> getFileAsString(String filename) throws RetryableObjectStoreException {
-    Optional<byte[]> s3Response = checkedGet(filename);
+  public Optional<String> getFileAsString(String filename) throws ObjectStoreException {
+    Optional<byte[]> s3Response = get(filename);
     return s3Response.map(bytes -> new String(bytes, StandardCharsets.UTF_8));
   }
 
-  public Optional<byte[]> checkedGet(String objectKey) throws RetryableObjectStoreException {
-    try {
-      final var response = getStream(objectKey);
-      return Optional.of(response.readAllBytes());
-    } catch (FileNotFoundException e) {
-      logger.warn(String.format("Object key %s does not exist", objectKey));
-      return Optional.empty();
-    } catch (IOException | AwsServiceException | SdkClientException e) {
-      throw new RetryableObjectStoreException(
-          String.format(
-              "object storage has encountered a problem while trying to get object %s.", objectKey),
-          e);
+  public Optional<byte[]> get(String objectKey) throws ObjectStoreException {
+    for (int i = 0; i < 3; i++) {
+      try {
+        final var response = getStream(objectKey);
+        return Optional.of(response.readAllBytes());
+      } catch (FileNotFoundException e) {
+        logger.warn(String.format("Object key %s does not exist", objectKey));
+        return Optional.empty();
+      } catch (IOException | AwsServiceException | SdkClientException e) {
+        logger.warn(
+            "Object storage encountered an issue while trying to get object {}."
+                + " Attempt {} will try again.",
+            objectKey,
+            i,
+            e);
+      }
     }
+    throw new ObjectStoreException("Object storage encountered an issue. All retries failed.");
   }
 
   public FilterInputStream getStream(String objectKey) throws FileNotFoundException {

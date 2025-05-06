@@ -1,7 +1,9 @@
 package de.bund.digitalservice.ris.search.controller;
 
 import de.bund.digitalservice.ris.search.config.ApiConfig;
+import de.bund.digitalservice.ris.search.exception.ObjectStoreException;
 import de.bund.digitalservice.ris.search.repository.objectstorage.CaseLawBucket;
+import de.bund.digitalservice.ris.search.repository.objectstorage.IndexingState;
 import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
 import de.bund.digitalservice.ris.search.service.ImportService;
 import de.bund.digitalservice.ris.search.service.IndexCaselawService;
@@ -36,23 +38,20 @@ public class ReindexingController {
     this.caselawBucket = caselawBucket;
   }
 
-  @PostMapping(value = ApiConfig.Paths.REINDEX_CASELAW)
-  public ResponseEntity<Void> reindexCaselaw() {
-    importService.lockAndProcessChangelogsAsync(
-        indexCaselawService,
-        ImportService.CASELAW_LOCK_FILENAME,
-        ImportService.CASELAW_LAST_SUCCESS_FILENAME,
-        caselawBucket);
+  @PostMapping(value = ApiConfig.Paths.SYNC_CASELAW)
+  public ResponseEntity<Void> syncCaselawIndex() throws ObjectStoreException {
+    IndexingState state =
+        new IndexingState(
+            caselawBucket, ImportService.CASELAW_STATUS_FILENAME, indexCaselawService);
+    importService.lockAndProcessChangelogsAsync(state);
     return ResponseEntity.ok().build();
   }
 
-  @PostMapping(value = ApiConfig.Paths.REINDEX_NORMS)
-  public ResponseEntity<Void> reindexNorms() {
-    importService.lockAndProcessChangelogsAsync(
-        indexNormsService,
-        ImportService.NORM_LOCK_FILENAME,
-        ImportService.NORM_LAST_SUCCESS_FILENAME,
-        normsBucket);
+  @PostMapping(value = ApiConfig.Paths.SYNC_NORMS)
+  public ResponseEntity<Void> syncNormIndex() throws ObjectStoreException {
+    IndexingState state =
+        new IndexingState(normsBucket, ImportService.NORM_STATUS_FILENAME, indexNormsService);
+    importService.lockAndProcessChangelogsAsync(state);
     return ResponseEntity.ok().build();
   }
 }

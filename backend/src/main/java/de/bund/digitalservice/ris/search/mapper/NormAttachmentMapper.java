@@ -45,27 +45,31 @@ public class NormAttachmentMapper {
               try {
                 var href = attachmentRef.getAttributes().getNamedItem("href").getNodeValue();
                 var attachmentFileString = attachmentFiles.get(href);
-                XmlDocument attachmentDocument =
-                    new XmlDocument(attachmentFileString.getBytes(StandardCharsets.UTF_8));
-                var docTitleNode =
-                    attachmentDocument.getFirstMatchedNodeByXpath(
-                        "/akn:akomaNtoso/akn:doc/akn:preface/akn:block/akn:docTitle");
-                String docTitle =
-                    docTitleNode.map(node -> cleanText(extractDirectChildText(node))).orElse("");
+                if (attachmentFileString != null) {
+                  XmlDocument attachmentDocument =
+                      new XmlDocument(attachmentFileString.getBytes(StandardCharsets.UTF_8));
+                  var docTitleNode =
+                      attachmentDocument.getFirstMatchedNodeByXpath(
+                          "/akn:akomaNtoso/akn:doc/akn:preface/akn:block/akn:docTitle");
+                  String docTitle =
+                      docTitleNode.map(node -> cleanText(extractDirectChildText(node))).orElse("");
 
-                String text =
-                    attachmentDocument.extractCleanedText(
-                        "/akn:akomaNtoso/akn:doc/akn:mainBody//text()");
+                  String text =
+                      attachmentDocument.extractCleanedText(
+                          "/akn:akomaNtoso/akn:doc/akn:mainBody//text()");
 
-                var attachment =
-                    Attachment.builder()
-                        .marker("Anlage")
-                        .docTitle(docTitle)
-                        .eId(eId)
-                        .textContent(text)
-                        .manifestationEli(href)
-                        .build();
-                return Optional.of(attachment);
+                  var attachment =
+                      Attachment.builder()
+                          .marker("Anlage")
+                          .docTitle(docTitle)
+                          .eId(eId)
+                          .textContent(text)
+                          .manifestationEli(href)
+                          .build();
+                  return Optional.of(attachment);
+                } else {
+                  return Optional.<Attachment>empty();
+                }
               } catch (ParserConfigurationException
                   | SAXException
                   | IOException

@@ -6,7 +6,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import de.bund.digitalservice.ris.search.exception.RetryableObjectStoreException;
+import de.bund.digitalservice.ris.search.exception.ObjectStoreException;
 import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
 import de.bund.digitalservice.ris.search.repository.objectstorage.CaseLawBucket;
 import de.bund.digitalservice.ris.search.repository.opensearch.CaseLawSynthesizedRepository;
@@ -180,7 +180,7 @@ class IndexCaseLawServiceTest {
   }
 
   @Test
-  void reindexAllIgnoreseInvalidFiles() throws RetryableObjectStoreException {
+  void reindexAllIgnoreseInvalidFiles() throws ObjectStoreException {
     String testContent = caseLawContent;
 
     when(this.bucket.getAllFilenames()).thenReturn(List.of("file1", "file2"));
@@ -202,7 +202,7 @@ class IndexCaseLawServiceTest {
   }
 
   @Test
-  void itCanReindexFromeOneSpecificChangelog() throws RetryableObjectStoreException {
+  void itCanReindexFromeOneSpecificChangelog() throws ObjectStoreException {
     String testContent = caseLawContent;
 
     when(this.bucket.getFileAsString("TEST080020093.xml")).thenReturn(Optional.of(testContent));
@@ -221,7 +221,7 @@ class IndexCaseLawServiceTest {
   }
 
   @Test
-  void itCanDeleteFromOneSpecificChangelog() throws RetryableObjectStoreException {
+  void itCanDeleteFromOneSpecificChangelog() throws ObjectStoreException {
     Changelog changelog = new Changelog();
     changelog.setDeleted(Sets.newHashSet(Set.of("TEST080020093.xml")));
     service.indexChangelog("changelog1", changelog);
