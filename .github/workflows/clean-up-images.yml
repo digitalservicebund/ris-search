@@ -2,8 +2,6 @@ name: Clean up old images
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: "0 4 * * 5"
 
 jobs:
   clean:
@@ -16,4 +14,4 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           image-names: "ris-search ris-search/frontend ris-search/public-frontend ris-search/internal-frontend"
           cut-off: 4w
-          dry-run: true
+          dry-run: false
