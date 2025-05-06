@@ -74,4 +74,21 @@ class IndexStatusServiceTest extends ContainersIntegrationBase {
     assertThat(lockTime).isEqualTo(startTime.toString());
     portalBucket.delete(ImportService.CASELAW_STATUS_FILENAME);
   }
+
+  @Test
+  void alreadyLockedWorksAsExpected() {
+    Instant startTime = Instant.now();
+    IndexingState state =
+        new IndexingState(
+            caseLawBucket, ImportService.CASELAW_STATUS_FILENAME, indexCaselawService);
+    PersistedIndexingState persistedState = new PersistedIndexingState(null, null, null, null);
+    state.setPersistedIndexingState(persistedState);
+    state.setStartTime(startTime);
+    boolean locked = indexStatusService.lockIndex(state);
+    assertThat(locked).isTrue();
+
+    locked = indexStatusService.lockIndex(state);
+    assertThat(locked).isFalse();
+    portalBucket.delete(ImportService.CASELAW_STATUS_FILENAME);
+  }
 }
