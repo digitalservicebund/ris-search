@@ -1,6 +1,6 @@
-package de.bund.digitalservice.ris.search.repository.objectstorage;
+package de.bund.digitalservice.ris.search.service;
 
-import de.bund.digitalservice.ris.search.service.IndexService;
+import de.bund.digitalservice.ris.search.repository.objectstorage.ObjectStorage;
 import java.time.Instant;
 import lombok.Data;
 

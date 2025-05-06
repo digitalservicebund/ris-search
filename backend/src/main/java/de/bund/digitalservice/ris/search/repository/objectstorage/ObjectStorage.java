@@ -52,7 +52,8 @@ public class ObjectStorage {
             e);
       }
     }
-    throw new ObjectStoreServiceException("Object storage encountered an issue. All retries failed.");
+    throw new ObjectStoreServiceException(
+        "Object storage encountered an issue. All retries failed.");
   }
 
   public FilterInputStream getStream(String objectKey) throws NoSuchKeyException {

@@ -1,4 +1,4 @@
-package de.bund.digitalservice.ris.search.repository.objectstorage;
+package de.bund.digitalservice.ris.search.service;
 
 import java.time.Instant;
 import java.time.format.DateTimeParseException;
