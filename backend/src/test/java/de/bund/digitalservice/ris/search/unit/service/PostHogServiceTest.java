@@ -31,7 +31,7 @@ class PostHogServiceTest {
       expectedData.put("$survey_id", surveyId);
       expectedData.put("$survey_response", text);
       expectedData.put("$current_url", url);
-      verify(postHogInstance).capture(userId, "survey_sent", expectedData);
+      verify(postHogInstance).capture(userId, "survey sent", expectedData);
       verify(postHogInstance).shutdown();
     }
   }
