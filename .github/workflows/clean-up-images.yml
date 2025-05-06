@@ -1,0 +1,17 @@
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 4 * * 5"
+
+jobs:
+  clean:
+    runs-on: ubuntu-latest
+    name: Delete old images
+    steps:
+      - uses: snok/container-retention-policy@v3.0.0
+        with:
+          account: digitalservicebund
+          token: ${{ secrets.GITHUB_TOKEN }}
+          image-names: "ris-search ris-search/*"
+          cut-off: 4w
+          dry-run: true
