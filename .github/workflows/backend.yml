@@ -403,3 +403,5 @@ jobs:
       - backend-tests-and-code-quality
     uses: ./.github/workflows/pipeline-e2e.yml
     secrets: inherit
+    with:
+      backend_tag: ${{ github.sha }}
