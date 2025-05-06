@@ -2,7 +2,7 @@ package de.bund.digitalservice.ris.search.controller.api;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import de.bund.digitalservice.ris.search.exception.ObjectStoreException;
+import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
 import de.bund.digitalservice.ris.search.repository.objectstorage.IndexingState;
 import de.bund.digitalservice.ris.search.repository.objectstorage.PersistedIndexingState;
@@ -31,8 +31,7 @@ public class ImporterController {
   }
 
   @PostMapping(path = "/norms/changelog")
-  public ResponseEntity<String> importNorms(@RequestBody String changelog)
-      throws ObjectStoreException {
+  public ResponseEntity<String> importNorms(@RequestBody String changelog) {
     try {
       Changelog changelogContent = new ObjectMapper().readValue(changelog, Changelog.class);
       IndexingState state =
@@ -40,7 +39,7 @@ public class ImporterController {
       state.setPersistedIndexingState(new PersistedIndexingState(null, null, "apiRequest", null));
       normsImporter.importChangelogContent(changelogContent, state);
       return ResponseEntity.noContent().build();
-    } catch (JsonProcessingException e) {
+    } catch (JsonProcessingException | ObjectStoreServiceException e) {
       return ResponseEntity.badRequest().body(e.getMessage());
     }
   }

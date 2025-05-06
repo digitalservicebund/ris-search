@@ -1,8 +1,8 @@
 package de.bund.digitalservice.ris.search.service;
 
+import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import de.bund.digitalservice.ris.search.exception.ObjectStoreException;
 import de.bund.digitalservice.ris.search.repository.objectstorage.IndexingState;
 import de.bund.digitalservice.ris.search.repository.objectstorage.PersistedIndexingState;
 import de.bund.digitalservice.ris.search.repository.objectstorage.PortalBucket;
@@ -63,7 +63,7 @@ public class IndexStatusService {
     saveStatus(statusFileName, loadStatus(statusFileName).withLastSuccess(lastSuccess.toString()));
   }
 
-  public PersistedIndexingState loadStatus(String statusFileName) throws ObjectStoreException {
+  public PersistedIndexingState loadStatus(String statusFileName) throws ObjectStoreServiceException {
     ObjectMapper mapper = new ObjectMapper();
     try {
       String content = portalBucket.getFileAsString(statusFileName).orElse(null);

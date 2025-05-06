@@ -2,7 +2,7 @@ package de.bund.digitalservice.ris.search.integration.importer.norm;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import de.bund.digitalservice.ris.search.exception.ObjectStoreException;
+import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.integration.config.ContainersIntegrationBase;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.repository.objectstorage.IndexingState;
@@ -42,14 +42,14 @@ class NormsImporterTest extends ContainersIntegrationBase {
   void beforeEach() {
     final Predicate<String> isChangelogOrStatus =
         s -> s.contains("changelog") || s.equals(ImportService.NORM_STATUS_FILENAME);
-    portalBucket.getAllFilenames().stream()
+    portalBucket.getAllKeys().stream()
         .filter(isChangelogOrStatus)
         .forEach(filename -> portalBucket.delete(filename));
 
     indexStatusService.saveStatus(
         ImportService.NORM_STATUS_FILENAME, getMockState().getPersistedIndexingState());
 
-    normsBucket.getAllFilenames().stream()
+    normsBucket.getAllKeys().stream()
         .filter(isChangelogOrStatus)
         .forEach(filename -> normsBucket.delete(filename));
     normIndex.deleteAll();
@@ -57,7 +57,7 @@ class NormsImporterTest extends ContainersIntegrationBase {
 
   @Test
   @DisplayName("Only unprocessed changelogs are considered")
-  void testProcessedChangelogIsIgnored() throws ObjectStoreException {
+  void testProcessedChangelogIsIgnored() throws ObjectStoreServiceException {
     final String ignoredManifestationEli =
         "eli/bund/bgbl-1/1991/s101/1991-01-01/1/deu/1991-01-01/regelungstext-1.xml";
     final String nonIgnoredManifestationEli =
@@ -91,7 +91,7 @@ class NormsImporterTest extends ContainersIntegrationBase {
 
   @Test
   @DisplayName("Updating the manifestation for an expression ELI only keeps the new manifestation")
-  void testDeleteAndUpdate() throws ObjectStoreException {
+  void testDeleteAndUpdate() throws ObjectStoreServiceException {
     final String expressionEli = "eli/bund/bgbl-1/1992/s101/1992-01-01/1/deu/regelungstext-1";
 
     final String expressionEliUriPart = "eli/bund/bgbl-1/1992/s101/1992-01-01/1/deu";
@@ -124,7 +124,7 @@ class NormsImporterTest extends ContainersIntegrationBase {
 
   @Test
   @DisplayName("Delete removes the norm")
-  void testDelete() throws ObjectStoreException {
+  void testDelete() throws ObjectStoreServiceException {
     final String expressionEliToDelete =
         "eli/bund/bgbl-1/1993/s101/1993-01-01/1/deu/regelungstext-1";
     final String expressionEliToKeep = "eli/bund/bgbl-1/1994/s101/1994-01-01/1/deu/regelungstext-1";

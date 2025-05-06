@@ -4,7 +4,7 @@ import static org.springframework.http.HttpHeaders.CONTENT_DISPOSITION;
 
 import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.exception.CustomValidationException;
-import de.bund.digitalservice.ris.search.exception.ObjectStoreException;
+import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.mapper.MappingDefinitions;
 import de.bund.digitalservice.ris.search.mapper.NormResponseMapper;
 import de.bund.digitalservice.ris.search.mapper.NormSearchResponseMapper;
@@ -211,7 +211,7 @@ public class NormsController {
       @PathVariable @Schema(example = "deu") String language,
       @PathVariable @Schema(example = "2020-06-19") LocalDate pointInTimeManifestation,
       @Schema(example = "regelungstext-1") @PathVariable String subtype)
-      throws ObjectStoreException {
+      throws ObjectStoreServiceException {
     var eli =
         new ManifestationEli(
             jurisdiction,
@@ -280,7 +280,7 @@ public class NormsController {
       @PathVariable @Schema(example = "deu") String language,
       @PathVariable @Schema(example = "2020-06-19") LocalDate pointInTimeManifestation,
       @Schema(example = "regelungstext-1") @PathVariable String subtype)
-      throws ObjectStoreException {
+      throws ObjectStoreServiceException {
     var eli =
         new ManifestationEli(
             jurisdiction,
@@ -412,7 +412,7 @@ public class NormsController {
           @PathVariable
           String articleEid,
       @PathVariable @Schema(allowableValues = "html") String format)
-      throws ObjectStoreException {
+      throws ObjectStoreServiceException {
     if (!Objects.equals(format, "html")) {
       return ResponseEntity.badRequest().body("only html is supported for format");
     }

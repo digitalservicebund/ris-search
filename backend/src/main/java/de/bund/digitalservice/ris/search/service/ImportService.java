@@ -1,6 +1,6 @@
 package de.bund.digitalservice.ris.search.service;
 
-import de.bund.digitalservice.ris.search.exception.ObjectStoreException;
+import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
 import de.bund.digitalservice.ris.search.repository.objectstorage.IndexingState;
 import de.bund.digitalservice.ris.search.repository.objectstorage.PersistedIndexingState;
@@ -35,7 +35,7 @@ public class ImportService {
     lockAndImportChangelogs(state);
   }
 
-  public void lockAndImportChangelogs(IndexingState state) throws ObjectStoreException {
+  public void lockAndImportChangelogs(IndexingState state) throws ObjectStoreServiceException {
     // load current state and lock if possible
     PersistedIndexingState persistedState =
         indexStatusService.loadStatus(state.getStatusFileName());
@@ -58,7 +58,7 @@ public class ImportService {
     indexStatusService.unlockIndex(state.getStatusFileName());
   }
 
-  public void importChangelogs(IndexingState state) throws ObjectStoreException {
+  public void importChangelogs(IndexingState state) throws ObjectStoreServiceException {
     PersistedIndexingState persistedState = state.getPersistedIndexingState();
     List<String> unprocessedChangelogs =
         changelogService.getNewChangelogsSinceInstant(
@@ -79,7 +79,7 @@ public class ImportService {
   }
 
   public void importChangelogContent(Changelog changelog, IndexingState state)
-      throws ObjectStoreException {
+      throws ObjectStoreServiceException {
     if (changelog.isChangeAll()) {
       logger.info("Reindexing all");
       state.getIndexService().reindexAll(state.getStartTime().toString());

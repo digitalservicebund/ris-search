@@ -2,7 +2,8 @@ package de.bund.digitalservice.ris.search.service;
 
 import static org.opensearch.index.query.QueryBuilders.queryStringQuery;
 
-import de.bund.digitalservice.ris.search.exception.ObjectStoreException;
+import de.bund.digitalservice.ris.search.exception.NoSuchKeyException;
+import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.models.api.parameters.NormsSearchParams;
 import de.bund.digitalservice.ris.search.models.api.parameters.UniversalSearchParams;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
@@ -125,7 +126,8 @@ public class NormsService {
     return Optional.ofNullable(result);
   }
 
-  public Optional<byte[]> getNormFileByEli(ManifestationEli eli) throws ObjectStoreException {
+  public Optional<byte[]> getNormFileByEli(ManifestationEli eli)
+      throws ObjectStoreServiceException {
     return normsBucket.get(eli.toString());
   }
 
@@ -150,12 +152,12 @@ public class NormsService {
       while ((length = objectInputStream.read(bytes)) >= 0) {
         zipOut.write(bytes, 0, length);
       }
-    } catch (IOException e) {
+    } catch (IOException | NoSuchKeyException e) {
       throw new IOException("error adding item with key %s".formatted(key), e);
     }
   }
 
   public List<String> getAllFilenamesByPath(String prefix) {
-    return normsBucket.getAllFilenamesByPath(prefix);
+    return normsBucket.getAllKeysByPrefix(prefix);
   }
 }

@@ -6,7 +6,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import de.bund.digitalservice.ris.search.exception.ObjectStoreException;
+import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
 import de.bund.digitalservice.ris.search.repository.objectstorage.IndexingState;
 import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
@@ -44,7 +44,7 @@ class ImportServiceTest {
   }
 
   @Test
-  void lockIsAcquiredAndReleasedOnSuccesfulProcess() throws ObjectStoreException {
+  void lockIsAcquiredAndReleasedOnSuccesfulProcess() throws ObjectStoreServiceException {
 
     Changelog changelog = new Changelog();
     changelog.setChangeAll(true);
@@ -68,7 +68,7 @@ class ImportServiceTest {
   }
 
   @Test
-  void itTriggersReindexAll() throws ObjectStoreException {
+  void itTriggersReindexAll() throws ObjectStoreServiceException {
     Changelog changelog = new Changelog();
     changelog.setChangeAll(true);
     IndexingState state = getMockState();

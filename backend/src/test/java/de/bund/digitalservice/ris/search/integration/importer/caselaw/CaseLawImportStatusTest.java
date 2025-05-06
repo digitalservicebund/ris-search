@@ -1,6 +1,6 @@
 package de.bund.digitalservice.ris.search.integration.importer.caselaw;
 
-import de.bund.digitalservice.ris.search.exception.ObjectStoreException;
+import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.integration.config.ContainersIntegrationBase;
 import de.bund.digitalservice.ris.search.repository.objectstorage.CaseLawBucket;
 import de.bund.digitalservice.ris.search.repository.objectstorage.IndexingState;
@@ -47,7 +47,7 @@ class CaseLawImportStatusTest extends ContainersIntegrationBase {
   }
 
   @BeforeEach
-  public void setUp() {
+  void setUp() {
     for (int i = 0; i < 5; i++) {
       try {
         caseLawBucket.save(
@@ -62,20 +62,20 @@ class CaseLawImportStatusTest extends ContainersIntegrationBase {
   }
 
   @Test
-  void createsLastSuccessFileProperly() throws ObjectStoreException {
-    Assertions.assertEquals(5, caseLawBucket.getAllFilenames().size());
+  void createsLastSuccessFileProperly() throws ObjectStoreServiceException {
+    Assertions.assertEquals(5, caseLawBucket.getAllKeys().size());
     IndexingState state =
         new IndexingState(
             caseLawBucket, ImportService.CASELAW_STATUS_FILENAME, indexCaselawService);
     importService.lockAndImportChangelogs(state);
-    Assertions.assertEquals(5, caseLawBucket.getAllFilenames().size());
+    Assertions.assertEquals(5, caseLawBucket.getAllKeys().size());
     PersistedIndexingState result =
         indexStatusService.loadStatus(ImportService.CASELAW_STATUS_FILENAME);
     Assertions.assertNotNull(result.lastSuccessInstant());
   }
 
   @Test
-  void testLocking() throws ObjectStoreException {
+  void testLocking() throws ObjectStoreServiceException {
     IndexingState state =
         new IndexingState(
             caseLawBucket, ImportService.CASELAW_STATUS_FILENAME, indexCaselawService);

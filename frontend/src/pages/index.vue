@@ -68,13 +68,10 @@ const redirectToSearch = useRedirectToSearch();
         </p>
       </div>
       <div class="flex flex-wrap gap-16">
-        <Button
-          @click="() => redirectToSearch({ category: 'N', sort: '-date' })"
-        >
+        <Button @click="() => redirectToSearch({ category: 'N' })">
           Zu den Gesetzen und Verordnungen</Button
         >
-        <Button
-          @click="() => redirectToSearch({ category: 'R', sort: '-date' })"
+        <Button @click="() => redirectToSearch({ category: 'R' })"
           >Zu den Gerichtsentscheidungen</Button
         >
       </div>

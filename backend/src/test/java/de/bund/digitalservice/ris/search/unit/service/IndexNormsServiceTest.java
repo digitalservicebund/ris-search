@@ -6,7 +6,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import de.bund.digitalservice.ris.search.exception.ObjectStoreException;
+import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.mapper.NormLdmlToOpenSearchMapper;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
@@ -127,14 +127,14 @@ class IndexNormsServiceTest {
           """;
 
   @Test
-  void reindexAllIgnoreseInvalidFiles() throws ObjectStoreException {
+  void reindexAllIgnoresInvalidFiles() throws ObjectStoreServiceException {
 
-    when(this.bucket.getAllFilenamesByPath("eli/"))
+    when(this.bucket.getAllKeysByPrefix("eli/"))
         .thenReturn(
             List.of(
                 "eli/bund/bgbl-1/1992/s101/1992-01-01/1/deu/1992-01-02/regelungstext-1.xml",
                 "not an eli"));
-    when(this.bucket.getAllFilenamesByPath("eli/bund/bgbl-1/1992/s101/1992-01-01/1/deu"))
+    when(this.bucket.getAllKeysByPrefix("eli/bund/bgbl-1/1992/s101/1992-01-01/1/deu"))
         .thenReturn(
             List.of("eli/bund/bgbl-1/1992/s101/1992-01-01/1/deu/1992-01-02/regelungstext-1.xml"));
     when(this.bucket.getFileAsString(
@@ -160,7 +160,7 @@ class IndexNormsServiceTest {
 
   @Test
   void itReturnsRightNumberOfFiles() {
-    when(this.bucket.getAllFilenamesByPath("eli/"))
+    when(this.bucket.getAllKeysByPrefix("eli/"))
         .thenReturn(
             List.of(
                 "eli/bund/bgbl-1/2013/s323/2018-07-02/2/deu/2025-03-08/regelungstext-1.xml",
