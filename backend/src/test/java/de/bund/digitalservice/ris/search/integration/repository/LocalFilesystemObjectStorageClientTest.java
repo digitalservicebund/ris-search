@@ -58,6 +58,21 @@ class LocalFilesystemObjectStorageClientTest {
   }
 
   @Test
+  void itSupportIncompletePrefixes() {
+    client.save("path/to/file", "content");
+    client.save("path/to/file2", "content");
+    assertThat(client.listKeysByPrefix("path"))
+        .containsExactlyInAnyOrder("path/to/file", "path/to/file2");
+  }
+
+  @Test
+  void itRetrievesASpecificKeyByPrefix() {
+    client.save("path/to/file", "content");
+    client.save("path/to/file2", "content");
+    assertThat(client.listKeysByPrefix("path/to/file2")).containsExactlyInAnyOrder("path/to/file2");
+  }
+
+  @Test
   void ItReturnsAnEmptyListOnInvalidPaths() {
     assertThat(client.listKeysByPrefix("another/")).isEmpty();
   }

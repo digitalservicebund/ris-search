@@ -50,14 +50,15 @@ public class LocalFilesystemObjectStorageClient implements ObjectStorageClient {
 
   @Override
   public List<String> listKeysByPrefix(String prefix) {
-    if (!prefix.isEmpty() && !prefix.endsWith("/")) {
-      LOGGER.warn("Filtering by non-directory prefix is not supported, {}", prefix);
-    }
     Path bucketPath = localStorageDirectory.resolve(bucket);
-    Path basePath = bucketPath.resolve(prefix);
+
+    int parentDirPosition = Math.max(0, prefix.lastIndexOf("/"));
+    Path basePath = bucketPath.resolve(prefix.substring(0, parentDirPosition));
+
     try (Stream<Path> stream = Files.walk(basePath)) {
       return stream
           .filter(Files::isRegularFile)
+          .filter(f -> f.toString().contains(prefix))
           .map(p -> p.toString().substring(bucketPath.toString().length() + 1))
           .toList();
     } catch (IOException e) {
