@@ -102,13 +102,14 @@ export const useSimpleSearchParamsStore = defineStore(
     function reinitializeFromQuery(routerQuery: LocationQuery) {
       const initialState = getInitialState(routerQuery);
 
+      console.log("initial state", initialState);
       query.value = initialState.query;
       pageNumber.value = initialState.pageNumber;
       category.value = initialState.category;
       itemsPerPage.value = initialState.itemsPerPage;
       sort.value = initialState.sort;
       court.value = initialState.court;
-      dateParams.$reset();
+      dateParams.reset(initialState);
     }
 
     /*
@@ -151,6 +152,7 @@ export const useSimpleSearchParamsStore = defineStore(
 
         if (!updatedQueryWasSetByStore) {
           reinitializeFromQuery(newQuery);
+          console.log(newQuery);
         }
       },
     );
