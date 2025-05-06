@@ -3,6 +3,7 @@ package de.bund.digitalservice.ris.search.integration.service;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
+import de.bund.digitalservice.ris.search.integration.config.ContainersIntegrationBase;
 import de.bund.digitalservice.ris.search.repository.objectstorage.PortalBucket;
 import de.bund.digitalservice.ris.search.service.IndexStatusService;
 import de.bund.digitalservice.ris.search.service.PersistedIndexingState;
@@ -15,7 +16,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 @Tag("integration")
-public class IndexStatusServiceTest {
+public class IndexStatusServiceTest extends ContainersIntegrationBase {
   @Autowired private PortalBucket portalBucket;
   @Autowired private IndexStatusService indexStatusService;
 
