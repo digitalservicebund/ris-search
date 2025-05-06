@@ -47,7 +47,7 @@ class IndexStatusServiceTest extends ContainersIntegrationBase {
   @Test
   void loadMissingStatusFile() throws ObjectStoreServiceException {
     PersistedIndexingState result = indexStatusService.loadStatus("testFile2.json");
-    assertThat(result).isNull();
+    assertThat(result).isEqualTo(new PersistedIndexingState());
   }
 
   @Test
