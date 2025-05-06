@@ -5,10 +5,13 @@ import { useDateParams } from "@/stores/searchParams/dateParams";
 import {
   defaultParams,
   getInitialState,
-  setRouterQuery,
+  omitDefaults,
 } from "./getInitialState";
 import { ref, watch, computed } from "vue";
 import { sortMode } from "@/components/types";
+import type { LocationQuery } from "#vue-router";
+import _ from "lodash";
+import type { LocationQueryRaw, Router } from "vue-router";
 
 export { DateSearchMode } from "@/stores/searchParams/dateParams";
 
@@ -31,7 +34,8 @@ export const useSimpleSearchParamsStore = defineStore(
   "simpleSearchParams",
   () => {
     const router = useRouter();
-    const initialState = getInitialState(router);
+    const route = useRoute();
+    const initialState = getInitialState(route.query);
 
     /*
         #############
@@ -92,7 +96,11 @@ export const useSimpleSearchParamsStore = defineStore(
     const setSort = (value: string) => (sort.value = value);
 
     function $reset() {
-      const initialState = getInitialState(router);
+      reinitializeFromQuery(route.query);
+    }
+
+    function reinitializeFromQuery(routerQuery: LocationQuery) {
+      const initialState = getInitialState(routerQuery);
 
       query.value = initialState.query;
       pageNumber.value = initialState.pageNumber;
@@ -107,8 +115,43 @@ export const useSimpleSearchParamsStore = defineStore(
     ##############
     #  watchers  #
     ##############
-*/
-    watch(params, () => setRouterQuery(router, params.value));
+    */
+
+    /*
+     track what query has been set by the store, in order to prevent infinite
+     update loops
+    */
+    const routerQuerySetByStore = ref(omitDefaults(params.value));
+
+    const postHogStore = usePostHogStore();
+    const updateRouterQuery = (router: Router, params: LocationQueryRaw) => {
+      const query = omitDefaults(params);
+      const oldQuery = routerQuerySetByStore.value;
+      postHogStore.searchPerformed("simple", query, oldQuery);
+      routerQuerySetByStore.value = query;
+      return router.push({
+        ...route,
+        query,
+      });
+    };
+
+    watch(params, () => updateRouterQuery(router, params.value));
+
+    watch(
+      () => route.query,
+      async (newQuery) => {
+        // check whether the store already has the values, in order to prevent loops
+        const updatedQueryWasSetByStore = _.isEqualWith(
+          toRaw(routerQuerySetByStore.value),
+          newQuery,
+          (a, b) => a.toString() == b, // numbers in query are represented as strings
+        );
+
+        if (!updatedQueryWasSetByStore) {
+          reinitializeFromQuery(newQuery);
+        }
+      },
+    );
 
     return {
       query,
