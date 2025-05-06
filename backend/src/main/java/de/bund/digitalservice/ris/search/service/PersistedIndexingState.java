@@ -10,6 +10,10 @@ public record PersistedIndexingState(
 
   private static final Logger logger = LogManager.getLogger(PersistedIndexingState.class);
 
+  public PersistedIndexingState() {
+    this(null, null, null, null);
+  }
+
   public PersistedIndexingState withLockTime(String lockTime) {
     return new PersistedIndexingState(lastSuccess, lockTime, currentChangelogFile, successIndex);
   }

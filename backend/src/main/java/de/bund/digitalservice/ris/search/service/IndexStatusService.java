@@ -67,7 +67,7 @@ public class IndexStatusService {
     try {
       String content = portalBucket.getFileAsString(statusFileName).orElse(null);
       if (content == null) {
-        return null;
+        return new PersistedIndexingState();
       }
       return mapper.readValue(content, PersistedIndexingState.class);
     } catch (JsonProcessingException e) {
@@ -81,7 +81,7 @@ public class IndexStatusService {
       String statusJson = mapper.writeValueAsString(status);
       portalBucket.save(statusFileName, statusJson);
     } catch (JsonProcessingException e) {
-      throw new RuntimeException(e);
+      logger.error("Error while saving status file", e);
     }
   }
 }
