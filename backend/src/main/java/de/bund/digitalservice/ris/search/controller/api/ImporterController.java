@@ -5,10 +5,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
 import de.bund.digitalservice.ris.search.service.ImportService;
-import de.bund.digitalservice.ris.search.service.IndexNormsService;
 import de.bund.digitalservice.ris.search.service.IndexingState;
-import de.bund.digitalservice.ris.search.service.PersistedIndexingState;
+import java.time.Instant;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,23 +21,20 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(path = "/internal/import")
 public class ImporterController {
 
-  private final ImportService normsImporter;
-  private final IndexNormsService normsIndexer;
+  private final ImportService normImportService;
 
   @Autowired
-  public ImporterController(ImportService importer, IndexNormsService normsIndexer) {
-    this.normsImporter = importer;
-    this.normsIndexer = normsIndexer;
+  public ImporterController(@Qualifier("normImportService") ImportService normImportService) {
+    this.normImportService = normImportService;
   }
 
   @PostMapping(path = "/norms/changelog")
   public ResponseEntity<String> importNorms(@RequestBody String changelog) {
     try {
       Changelog changelogContent = new ObjectMapper().readValue(changelog, Changelog.class);
-      IndexingState state =
-          new IndexingState(null, ImportService.NORM_STATUS_FILENAME, normsIndexer);
-      state.setPersistedIndexingState(new PersistedIndexingState(null, null, "apiRequest", null));
-      normsImporter.importChangelogContent(changelogContent, state);
+      normImportService.importChangelogContent(
+          changelogContent,
+          new IndexingState(null, Instant.now().toString(), null, "apiRequest", null));
       return ResponseEntity.noContent().build();
     } catch (JsonProcessingException | ObjectStoreServiceException e) {
       return ResponseEntity.badRequest().body(e.getMessage());

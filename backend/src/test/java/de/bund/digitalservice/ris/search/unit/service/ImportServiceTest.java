@@ -6,6 +6,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import de.bund.digitalservice.ris.search.config.ImportServiceConfig;
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
 import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
@@ -14,7 +15,6 @@ import de.bund.digitalservice.ris.search.service.ImportService;
 import de.bund.digitalservice.ris.search.service.IndexNormsService;
 import de.bund.digitalservice.ris.search.service.IndexStatusService;
 import de.bund.digitalservice.ris.search.service.IndexingState;
-import de.bund.digitalservice.ris.search.service.PersistedIndexingState;
 import java.time.Instant;
 import java.util.List;
 import org.assertj.core.util.Sets;
@@ -40,7 +40,13 @@ class ImportServiceTest {
 
   @BeforeEach
   void setup() {
-    service = new ImportService(indexStatusService, changelogService);
+    service =
+        new ImportService(
+            indexStatusService,
+            changelogService,
+            normsBucket,
+            indexNormsService,
+            ImportServiceConfig.NORM_STATUS_FILENAME);
   }
 
   @Test
@@ -51,20 +57,20 @@ class ImportServiceTest {
     Instant time = Instant.now();
     List<String> changelogs = List.of(ChangelogService.CHANGELOG + time + "-changelog.json");
 
-    when(indexStatusService.lockIndex(any())).thenReturn(true);
+    when(indexStatusService.lockIndex(any(), any())).thenReturn(true);
     when(indexStatusService.loadStatus(any()))
-        .thenReturn(new PersistedIndexingState(time.toString(), time.toString(), null, null));
+        .thenReturn(
+            new IndexingState(time.toString(), time.toString(), time.toString(), null, null));
     when(changelogService.getNewChangelogsSinceInstant(any(), any())).thenReturn(changelogs);
     when(changelogService.parseOneChangelog(any(), any())).thenReturn(changelog);
     when(changelogService.getInstantFromChangelog(any())).thenCallRealMethod();
 
-    IndexingState state = getMockState();
-    service.lockAndImportChangelogs(state);
+    service.lockAndImportChangelogs();
 
-    verify(indexStatusService, times(1)).lockIndex(any());
+    verify(indexStatusService, times(1)).lockIndex(any(), any());
     verify(indexStatusService, times(1)).unlockIndex(any());
     verify(indexStatusService, times(1))
-        .updateLastSuccess(ImportService.NORM_STATUS_FILENAME, time);
+        .updateLastSuccess(ImportServiceConfig.NORM_STATUS_FILENAME, time.toString());
   }
 
   @Test
@@ -104,10 +110,6 @@ class ImportServiceTest {
 
   private IndexingState getMockState() {
     Instant time = Instant.now();
-    IndexingState indexingState =
-        new IndexingState(normsBucket, ImportService.NORM_STATUS_FILENAME, indexNormsService);
-    indexingState.setPersistedIndexingState(
-        new PersistedIndexingState(time.toString(), time.toString(), null, null));
-    return indexingState;
+    return new IndexingState(time.toString(), time.toString(), time.toString(), null, null);
   }
 }
