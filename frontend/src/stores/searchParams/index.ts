@@ -8,7 +8,7 @@ import {
   getInitialState,
   omitDefaults,
 } from "./getInitialState";
-import { ref, watch, computed } from "vue";
+import { computed, ref, watch } from "vue";
 import { sortMode } from "@/components/types";
 import type { LocationQuery } from "#vue-router";
 import _ from "lodash";
@@ -29,6 +29,21 @@ export interface QueryParams {
   dateBefore?: string; // inclusive (greater-than-equal)
   dateSearchMode: DateSearchMode;
   court?: string;
+}
+
+/**
+ * Converts query values in query to strings, as they are represented in URLs.
+ */
+function normalizeQuery(
+  query: LocationQueryRaw,
+): Record<string, string | undefined> {
+  const result: Record<string, string> = {};
+  Object.entries(query).forEach(([key, value]) => {
+    if (value) {
+      result[key] = value.toString();
+    }
+  });
+  return result;
 }
 
 export const useSimpleSearchParamsStore = defineStore(
@@ -122,21 +137,22 @@ export const useSimpleSearchParamsStore = defineStore(
      track what query has been set by the store, in order to prevent infinite
      update loops
     */
-    const routerQuerySetByStore = ref(omitDefaults(params.value));
+    const storeQuery = ref(normalizeQuery(omitDefaults(params.value)));
 
     const postHogStore = usePostHogStore();
     const updateRouterQuery = (router: Router, params: LocationQueryRaw) => {
       const query = omitDefaults(params);
-      const previousQuery = routerQuerySetByStore.value;
+      const previousQuery = storeQuery.value;
       postHogStore.searchPerformed(
         "simple",
         addDefaults(query),
         addDefaults(previousQuery),
       );
-      routerQuerySetByStore.value = query;
+      const normalized = normalizeQuery(query);
+      storeQuery.value = normalized;
       return router.push({
         ...route,
-        query,
+        query: normalized,
       });
     };
 
@@ -145,18 +161,10 @@ export const useSimpleSearchParamsStore = defineStore(
     watch(
       () => route.query,
       async (newQuery) => {
-        // check whether the store already has the values, in order to prevent loops
-        const updatedQueryWasSetByStore = _.isEqual(
-          _.mapValues(
-            toRaw(routerQuerySetByStore.value),
-            (value) => value?.toString(), // numbers in query are represented as strings
-          ),
-          newQuery,
-        );
-
-        if (!updatedQueryWasSetByStore) {
+        // prevent infinite loops
+        const needsUpdate = !_.isEqual(toRaw(storeQuery.value), newQuery);
+        if (needsUpdate) {
           reinitializeFromQuery(newQuery);
-          console.log(newQuery);
         }
       },
     );

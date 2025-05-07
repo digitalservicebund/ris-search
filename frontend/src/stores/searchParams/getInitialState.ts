@@ -17,7 +17,7 @@ export const defaultParams: QueryParams = {
   dateSearchMode: DateSearchMode.None,
 };
 
-export const omitDefaults = (newValue: LocationQueryRaw) => {
+export const omitDefaults = (newValue: LocationQueryRaw): LocationQueryRaw => {
   return _.pickBy(newValue, (value, key) => {
     return (defaultParams as unknown as Record<string, string>)[key] !== value;
   });

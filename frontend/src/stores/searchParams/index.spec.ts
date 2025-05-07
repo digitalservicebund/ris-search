@@ -149,7 +149,7 @@ describe("useSimpleSearchParamsStore", () => {
     await nextTick();
     expect(mockPush).toHaveBeenLastCalledWith({
       path: "/search",
-      query: { category: DocumentKind.CaseLaw, pageNumber: 1 },
+      query: { category: DocumentKind.CaseLaw, pageNumber: "1" },
     });
 
     store.category = DocumentKind.All;
