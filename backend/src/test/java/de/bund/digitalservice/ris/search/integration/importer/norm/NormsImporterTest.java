@@ -10,6 +10,9 @@ import de.bund.digitalservice.ris.search.repository.objectstorage.PortalBucket;
 import de.bund.digitalservice.ris.search.repository.opensearch.NormsSynthesizedRepository;
 import de.bund.digitalservice.ris.search.service.ImportService;
 import de.bund.digitalservice.ris.search.service.IndexNormsService;
+import de.bund.digitalservice.ris.search.service.IndexStatusService;
+import de.bund.digitalservice.ris.search.service.IndexingState;
+import de.bund.digitalservice.ris.search.service.PersistedIndexingState;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -30,6 +33,7 @@ class NormsImporterTest extends ContainersIntegrationBase {
 
   @Autowired ImportService normsImporter;
   @Autowired IndexNormsService indexNormsService;
+  @Autowired IndexStatusService indexStatusService;
   @Autowired NormsSynthesizedRepository normIndex;
   @Autowired private NormsBucket normsBucket;
   @Autowired private PortalBucket portalBucket;
@@ -37,13 +41,14 @@ class NormsImporterTest extends ContainersIntegrationBase {
   @BeforeEach
   void beforeEach() {
     final Predicate<String> isChangelogOrStatus =
-        s ->
-            s.contains("changelog")
-                || s.equals(ImportService.NORM_LOCK_FILENAME)
-                || s.equals(ImportService.NORM_LAST_SUCCESS_FILENAME);
+        s -> s.contains("changelog") || s.equals(ImportService.NORM_STATUS_FILENAME);
     portalBucket.getAllKeys().stream()
         .filter(isChangelogOrStatus)
         .forEach(filename -> portalBucket.delete(filename));
+
+    indexStatusService.saveStatus(
+        ImportService.NORM_STATUS_FILENAME, getMockState().getPersistedIndexingState());
+
     normsBucket.getAllKeys().stream()
         .filter(isChangelogOrStatus)
         .forEach(filename -> normsBucket.delete(filename));
@@ -74,8 +79,10 @@ class NormsImporterTest extends ContainersIntegrationBase {
 
     assertThat(normIndex.count()).isZero();
 
-    normsImporter.importChangelogs(
-        indexNormsService, normsBucket, firstChangelogTime, "statusfile");
+    IndexingState mockState = getMockState();
+    mockState.setPersistedIndexingState(
+        mockState.getPersistedIndexingState().withLastSuccess(firstChangelogTime.toString()));
+    normsImporter.importChangelogs(mockState);
 
     assertThat(normIndex.findAll())
         .map(Norm::getManifestationEliExample)
@@ -104,7 +111,11 @@ class NormsImporterTest extends ContainersIntegrationBase {
             {"changed": ["%s"], "deleted": ["%s"]}"""
             .formatted(newManifestationEli, oldManifestationEli));
 
-    normsImporter.importChangelogs(indexNormsService, normsBucket, lastSuccess, "statusfile");
+    IndexingState mockState = getMockState();
+    mockState.setPersistedIndexingState(
+        mockState.getPersistedIndexingState().withLastSuccess(lastSuccess.toString()));
+
+    normsImporter.importChangelogs(mockState);
 
     assertThat(normIndex.count()).isEqualTo(1);
     assertThat(normIndex.findById(expressionEli).get().getManifestationEliExample())
@@ -129,18 +140,32 @@ class NormsImporterTest extends ContainersIntegrationBase {
     assertThat(normIndex.count()).isEqualTo(2);
 
     Instant now = Instant.now();
-    Instant lastSuccess = now.minus(1, ChronoUnit.HOURS);
 
     normsBucket.save(
         "changelogs/%s-changelog.json".formatted(now),
         """
                     { "deleted": [ "%s" ] }""".formatted(manifestationEliToDelete));
 
-    normsImporter.importChangelogs(indexNormsService, normsBucket, lastSuccess, "statusfile");
+    Instant lastSuccess = now.minus(1, ChronoUnit.HOURS);
+    IndexingState mockState = getMockState();
+    mockState.setPersistedIndexingState(
+        mockState.getPersistedIndexingState().withLastSuccess(lastSuccess.toString()));
 
-    String statusfileContent = portalBucket.getFileAsString("statusfile").orElseThrow();
-    assertThat(statusfileContent).isEqualTo(now.toString());
+    normsImporter.importChangelogs(mockState);
+
+    PersistedIndexingState persistedIndexingState =
+        indexStatusService.loadStatus(ImportService.NORM_STATUS_FILENAME);
+    assertThat(persistedIndexingState.lastSuccess()).isEqualTo(now.toString());
     assertThat(normIndex.count()).isEqualTo(1);
     assertThat(normIndex.findById(expressionEliToKeep)).isPresent();
+  }
+
+  private IndexingState getMockState() {
+    Instant time = Instant.now();
+    IndexingState indexingState =
+        new IndexingState(normsBucket, ImportService.NORM_STATUS_FILENAME, indexNormsService);
+    indexingState.setPersistedIndexingState(
+        new PersistedIndexingState(time.toString(), time.toString(), null, null));
+    return indexingState;
   }
 }

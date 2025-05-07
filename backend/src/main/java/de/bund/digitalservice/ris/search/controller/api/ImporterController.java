@@ -6,7 +6,8 @@ import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
 import de.bund.digitalservice.ris.search.service.ImportService;
 import de.bund.digitalservice.ris.search.service.IndexNormsService;
-import java.time.Instant;
+import de.bund.digitalservice.ris.search.service.IndexingState;
+import de.bund.digitalservice.ris.search.service.PersistedIndexingState;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.ResponseEntity;
@@ -32,9 +33,11 @@ public class ImporterController {
   @PostMapping(path = "/norms/changelog")
   public ResponseEntity<String> importNorms(@RequestBody String changelog) {
     try {
-
-      Changelog cl = new ObjectMapper().readValue(changelog, Changelog.class);
-      normsImporter.importChangelogContent("apiRequest", cl, normsIndexer, Instant.now());
+      Changelog changelogContent = new ObjectMapper().readValue(changelog, Changelog.class);
+      IndexingState state =
+          new IndexingState(null, ImportService.NORM_STATUS_FILENAME, normsIndexer);
+      state.setPersistedIndexingState(new PersistedIndexingState(null, null, "apiRequest", null));
+      normsImporter.importChangelogContent(changelogContent, state);
       return ResponseEntity.noContent().build();
     } catch (JsonProcessingException | ObjectStoreServiceException e) {
       return ResponseEntity.badRequest().body(e.getMessage());
