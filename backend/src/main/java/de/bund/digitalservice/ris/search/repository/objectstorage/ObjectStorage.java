@@ -14,6 +14,7 @@ import software.amazon.awssdk.core.exception.SdkClientException;
 
 public class ObjectStorage {
 
+  public static final int MAXIMUM_CALL_ATTEMPTS = 3;
   private final Logger logger;
   private final ObjectStorageClient client;
 
@@ -36,7 +37,7 @@ public class ObjectStorage {
   }
 
   public Optional<byte[]> get(String objectKey) throws ObjectStoreServiceException {
-    for (int i = 0; i < 3; i++) {
+    for (int i = 0; i < MAXIMUM_CALL_ATTEMPTS; i++) {
       try {
         final var response = getStream(objectKey);
         return Optional.of(response.readAllBytes());
