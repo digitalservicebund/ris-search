@@ -176,10 +176,20 @@ describe("useSimpleSearchParamsStore", () => {
     expect(mockPostHog.searchPerformed).toHaveBeenCalledExactlyOnceWith(
       "simple",
       {
+        category: "A",
+        dateSearchMode: "",
+        itemsPerPage: 10,
+        pageNumber: 0,
         query: "second",
+        sort: "default",
       },
       {
+        category: "A",
+        dateSearchMode: "",
+        itemsPerPage: 10,
+        pageNumber: 0,
         query: "first",
+        sort: "default",
       },
     );
   });

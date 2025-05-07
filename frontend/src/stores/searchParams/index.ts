@@ -3,6 +3,7 @@ import { DocumentKind } from "@/types";
 import type { DateSearchMode } from "@/stores/searchParams/dateParams";
 import { useDateParams } from "@/stores/searchParams/dateParams";
 import {
+  addDefaults,
   defaultParams,
   getInitialState,
   omitDefaults,
@@ -102,7 +103,6 @@ export const useSimpleSearchParamsStore = defineStore(
     function reinitializeFromQuery(routerQuery: LocationQuery) {
       const initialState = getInitialState(routerQuery);
 
-      console.log("initial state", initialState);
       query.value = initialState.query;
       pageNumber.value = initialState.pageNumber;
       category.value = initialState.category;
@@ -127,8 +127,12 @@ export const useSimpleSearchParamsStore = defineStore(
     const postHogStore = usePostHogStore();
     const updateRouterQuery = (router: Router, params: LocationQueryRaw) => {
       const query = omitDefaults(params);
-      const oldQuery = routerQuerySetByStore.value;
-      postHogStore.searchPerformed("simple", query, oldQuery);
+      const previousQuery = routerQuerySetByStore.value;
+      postHogStore.searchPerformed(
+        "simple",
+        addDefaults(query),
+        addDefaults(previousQuery),
+      );
       routerQuerySetByStore.value = query;
       return router.push({
         ...route,
