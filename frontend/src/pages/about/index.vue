@@ -31,9 +31,9 @@ definePageMeta({ alias: ["/ueber"] });
           erweitert.
         </p>
         <p>
-          Der Service wird gemeinsam vom Bundesministerium der Justiz, dem
-          Bundesamt für Justiz und der DigitalService GmbH des Bundes
-          entwickelt.
+          Der Service wird gemeinsam vom Bundesministerium der Justiz und für
+          Verbraucherschutz, dem Bundesamt für Justiz und der DigitalService
+          GmbH des Bundes entwickelt.
         </p>
       </section>
       <section class="space-y-24">

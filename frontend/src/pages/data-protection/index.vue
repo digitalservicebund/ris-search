@@ -13,10 +13,10 @@ definePageMeta({ alias: ["/datenschutz"] });
       <section class="space-y-16">
         <p>Zuletzt aktualisiert: [23. April 2025]</p>
         <p>
-          Für das Bundesministerium der Justiz (BMJ) hat der Schutz
-          personenbezogener Daten einen hohen Stellenwert. Auf dieser Seite
-          informieren wir Sie über die Verarbeitung Ihrer personenbezogenen
-          Daten, wenn Sie
+          Für das Bundesministerium der Justiz und für Verbraucherschutz (BMJV)
+          hat der Schutz personenbezogener Daten einen hohen Stellenwert. Auf
+          dieser Seite informieren wir Sie über die Verarbeitung Ihrer
+          personenbezogenen Daten, wenn Sie
         </p>
         <ul class="list-bullet">
           <li>
@@ -47,10 +47,11 @@ definePageMeta({ alias: ["/datenschutz"] });
           diesbezüglich wenden können (siehe Abschnitt D).
         </p>
         <p>
-          Das Bundesministerium der Justiz (BMJ) verarbeitet Ihre
-          personenbezogenen Daten gemäß den datenschutzrechtlichen Vorschriften
-          der Verordnung (EU) 2016/679 (Datenschutz-Grundverordnung – „DS-GVO“),
-          des Bundesdatenschutzgesetzes („BDSG“) in der ab dem 25. Mai 2018
+          Das Bundesministerium der Justiz und für Verbraucherschutz (BMJV)
+          verarbeitet Ihre personenbezogenen Daten gemäß den
+          datenschutzrechtlichen Vorschriften der Verordnung (EU) 2016/679
+          (Datenschutz-Grundverordnung – „DS-GVO“), des
+          Bundesdatenschutzgesetzes („BDSG“) in der ab dem 25. Mai 2018
           geltenden Fassung, sowie des
           Telekommunikation-Digitale-Dienste-Datenschutz-Gesetzes („TDDDG“).
         </p>
@@ -69,17 +70,17 @@ definePageMeta({ alias: ["/datenschutz"] });
         <dl class="[&_dt]:mt-32">
           <dt class="ris-body1-bold">1. Verantwortliche Organisation:</dt>
           <dd>
-            Bundesministerium der Justiz<br />Mohrenstraße 37, 10117 Berlin<br />Telefon:
-            +49 (0)30 18 580 – 0<br /><br />E-Mail:
+            Bundesministerium der Justiz und für Verbraucherschutz<br />Mohrenstraße
+            37, 10117 Berlin<br />Telefon: +49 (0)30 18 580 – 0<br /><br />E-Mail:
             <a href="mailto:poststelle@bmj.bund.de" class="ris-link1-regular"
               >poststelle@bmj.bund.de</a
             >
           </dd>
           <dt class="ris-body1-bold">
-            2. Die behördliche Datenschutzbeauftragte des BMJ:
+            2. Die behördliche Datenschutzbeauftragte des BMJV:
           </dt>
           <dd>
-            Bundesministerium der Justiz<br />Behördliche
+            Bundesministerium der Justiz und für Verbraucherschutz<br />Behördliche
             Datenschutzbeauftragte<br />Mohrenstraße 37, 10117 Berlin<br />Telefon:
             +49 (0)30 18 580 – 0<br /><br />E-Mail:
             <a href="mailto:datenschutz@bmj.bund.de" class="ris-link1-regular"
@@ -128,7 +129,7 @@ definePageMeta({ alias: ["/datenschutz"] });
           Die Datenverarbeitung erfolgt auf Grundlage des Artikel 6 Abs. 1 UAbs.
           1 lit. e) und Abs. 3 lit. b) DS-GVO in Verbindung mit § 3
           E-Government-Gesetz (EGovG) im Rahmen der Öffentlichkeitsarbeit zur
-          bedarfsorientierten Bereitstellung von Informationen zu den dem BMJ
+          bedarfsorientierten Bereitstellung von Informationen zu den dem BMJV
           übertragenen Aufgaben.
         </p>
       </section>
@@ -220,8 +221,8 @@ definePageMeta({ alias: ["/datenschutz"] });
         <p>
           Jede Person, deren personenbezogene Daten verarbeitet werden, kann als
           Betroffene oder Betroffener gegenüber der verantwortlichen
-          Organisation (gemäß Ziffer 1 (s.o.) das BMJ) die nachfolgend benannten
-          Rechte geltend machen.
+          Organisation (gemäß Ziffer 1 (s.o.) das BMJV) die nachfolgend
+          benannten Rechte geltend machen.
         </p>
         <h4>VI.1. Recht auf Auskunft (Art. 15 DS-GVO)</h4>
         <p>
@@ -265,7 +266,7 @@ definePageMeta({ alias: ["/datenschutz"] });
           andere der verantwortliche Organisation weiterleiten zu lassen. Gemäß
           Artikel 20 Abs. 3 Satz 2 DS-GVO steht dieses Recht aber dann nicht zur
           Verfügung, wenn die Datenverarbeitung der Wahrnehmung öffentlicher
-          Aufgaben dient. Dies ist beim BMJ nur dann nicht der Fall, wenn die
+          Aufgaben dient. Dies ist beim BMJV nur dann nicht der Fall, wenn die
           Verarbeitung personenbezogener Daten zu fiskalischen Zwecken erfolgt.
         </p>
         <h4>VI.6. Recht auf Widerspruch (Art. 21 DS-GVO)</h4>
@@ -281,7 +282,7 @@ definePageMeta({ alias: ["/datenschutz"] });
         <h4>VI.7. Recht auf Beschwerde (Art. 77 DS-GVO)</h4>
         <p>
           Der oder die Betroffene hat die Möglichkeit, sich mit einer Beschwerde
-          gegen die Datenverarbeitung des BMJ an die Bundesbeauftragte für den
+          gegen die Datenverarbeitung des BMJV an die Bundesbeauftragte für den
           Datenschutz und die Informationsfreiheit zu wenden, die die
           datenschutzrechtliche Aufsicht über die Bundesbehörden hat. Sie ist
           wie folgt erreichbar:
