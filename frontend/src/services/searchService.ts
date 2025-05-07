@@ -2,10 +2,11 @@ import type { Page } from "@/components/Pagination/Pagination";
 import { axiosInstance } from "@/services/httpClient";
 import { DocumentKind } from "@/types";
 import type { AxiosResponse } from "axios";
+import type { QueryParams } from "~/stores/searchParams";
 
 const timeout = 10000;
 
-function getUrl(category?: string) {
+export function getUrl(category?: string) {
   if (category?.startsWith(DocumentKind.CaseLaw)) {
     return `/v1/case-law`;
   } else if (category?.startsWith(DocumentKind.Norm)) {
@@ -23,6 +24,40 @@ function getAdvancedSearchUrl(documentKind: DocumentKind) {
   } else {
     return `/v1/document/lucene-search`;
   }
+}
+
+export function convertParams(
+  params: Omit<QueryParams, "dateSearchMode"> & { temporalCoverage?: string },
+) {
+  const result: Record<string, string | string[]> = {
+    searchTerm: params.query,
+    size: params.itemsPerPage.toString(),
+    pageIndex: params.pageNumber.toString(),
+    sort: params.sort,
+  };
+  if (params.court) {
+    result.court = params.court;
+  }
+  if (params.date) {
+    result["dateFrom"] = params.date;
+    result["dateTo"] = params.date;
+  }
+  if (params.dateAfter) {
+    result["dateFrom"] = params.dateAfter;
+  }
+  if (params.dateBefore) {
+    result["dateTo"] = params.dateBefore;
+  }
+  if (params.category && params.category.length > 2) {
+    const stripped = params.category.substring(2); // remove "R." prefix
+    result["typeGroup"] = stripped;
+  }
+  if (params.temporalCoverage) {
+    // temporalCoverage is expected as a range
+    result["temporalCoverageFrom"] = params.temporalCoverage;
+    result["temporalCoverageTo"] = params.temporalCoverage;
+  }
+  return result;
 }
 
 export async function search(params: {

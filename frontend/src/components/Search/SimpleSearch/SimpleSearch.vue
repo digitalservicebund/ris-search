@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { search as performSearch } from "@/services/searchService";
+import { convertParams, getUrl } from "@/services/searchService";
 import CategoryFilter from "@/components/Search/SimpleSearch/CategoryFilter/CategoryFilter.vue";
 import DateRangeFilter from "@/components/Search/SimpleSearch/DateRangeFilter.vue";
 import CourtFilter from "@/components/Search/SimpleSearch/CourtFilter.vue";
@@ -13,27 +13,36 @@ import { DocumentKind } from "@/types";
 import { buildResultCountString } from "~/utils/paginationUtils";
 import { getCurrentDateInGermany } from "~/utils/dateFormatting";
 import Message from "primevue/message";
+import type { Page } from "~/components/Pagination/Pagination";
 
 const store = useSimpleSearchParamsStore();
 const values = storeToRefs(store);
+
+const config = useRuntimeConfig();
+const baseUrl = config.public.backendURL;
+
+const params = computed(() =>
+  convertParams({
+    ...values.params.value,
+    temporalCoverage: getCurrentDateInGermany(),
+  }),
+);
+
+const url = computed(() => getUrl(values.category.value));
+
 const {
   data,
   error: loadError, // must not be named error, refer to https://github.com/nuxt/test-utils/issues/684#issuecomment-1946138626
   status,
   execute,
-} = await useAsyncData(
-  `search:${store.$state}`,
-  () => {
-    return performSearch({
-      ...values.params.value,
-      temporalCoverage: getCurrentDateInGermany(),
-    });
-  },
-  {
-    server: false, // Should be investigated, sometimes wouldn't work on the server. Disabled for now.
-    watch: [values.params],
-  },
-);
+} = await useFetch<Page>(() => `${baseUrl}${url.value}`, {
+  query: params,
+  watch: [params],
+});
+
+watch([params, url], () => console.log(params.value, url.value), {
+  immediate: true,
+});
 
 watch(
   loadError,
@@ -46,7 +55,7 @@ watch(
 );
 
 const isLoading = computed(() => status.value === "pending");
-const currentPage = computed(() => data.value?.data);
+const currentPage = computed(() => data.value);
 
 async function handleSearchSubmit(value?: string) {
   store.setQuery(value ?? "");

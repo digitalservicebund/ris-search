@@ -10,7 +10,7 @@ import type { Page } from "~/components/Pagination/Pagination";
 
 const props = withDefaults(
   defineProps<{
-    page?: Page;
+    page?: Page | null;
     navigationPosition?: "top" | "bottom";
     isLoading?: boolean;
   }>(),
