@@ -4,7 +4,7 @@ Date: 2025-03-07
 
 ## Status
 
-Decided
+Superseded by ADR 0013
 
 ## Context
 
