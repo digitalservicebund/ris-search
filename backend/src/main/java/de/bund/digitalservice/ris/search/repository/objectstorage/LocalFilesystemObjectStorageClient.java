@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,8 +53,7 @@ public class LocalFilesystemObjectStorageClient implements ObjectStorageClient {
   public List<String> listKeysByPrefix(String prefix) {
     Path bucketPath = localStorageDirectory.resolve(bucket);
 
-    int parentDirPosition = Math.max(0, prefix.lastIndexOf("/"));
-    Path basePath = bucketPath.resolve(prefix.substring(0, parentDirPosition));
+    Path basePath = bucketPath.resolve(StringUtils.substringBeforeLast(prefix, "/"));
 
     try (Stream<Path> stream = Files.walk(basePath)) {
       return stream
