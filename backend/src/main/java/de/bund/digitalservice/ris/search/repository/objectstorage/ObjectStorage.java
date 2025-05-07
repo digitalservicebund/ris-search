@@ -14,6 +14,7 @@ import software.amazon.awssdk.core.exception.SdkClientException;
 
 public class ObjectStorage {
 
+  public static final int MAXIMUM_CALL_ATTEMPTS = 3;
   private final Logger logger;
   private final ObjectStorageClient client;
 
@@ -36,18 +37,24 @@ public class ObjectStorage {
   }
 
   public Optional<byte[]> get(String objectKey) throws ObjectStoreServiceException {
-    try {
-      final var response = getStream(objectKey);
-      return Optional.of(response.readAllBytes());
-    } catch (NoSuchKeyException e) {
-      logger.warn("Object key {} does not exist", objectKey);
-      return Optional.empty();
-    } catch (IOException | AwsServiceException | SdkClientException e) {
-      throw new ObjectStoreServiceException(
-          String.format(
-              "object storage has encountered a problem while trying to get object %s.", objectKey),
-          e);
+    for (int i = 0; i < MAXIMUM_CALL_ATTEMPTS; i++) {
+      try {
+        final var response = getStream(objectKey);
+        return Optional.of(response.readAllBytes());
+      } catch (NoSuchKeyException e) {
+        logger.warn(String.format("Object key %s does not exist", objectKey));
+        return Optional.empty();
+      } catch (IOException | AwsServiceException | SdkClientException e) {
+        logger.warn(
+            "Object storage encountered an issue while trying to get object {}."
+                + " Attempt {} will try again.",
+            objectKey,
+            i,
+            e);
+      }
     }
+    throw new ObjectStoreServiceException(
+        "Object storage encountered an issue. All retries failed.");
   }
 
   public FilterInputStream getStream(String objectKey) throws NoSuchKeyException {

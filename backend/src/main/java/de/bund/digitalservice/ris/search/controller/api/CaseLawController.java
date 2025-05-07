@@ -98,7 +98,6 @@ public class CaseLawController {
       throws ObjectStoreServiceException {
 
     Optional<byte[]> bytes = caseLawBucket.get(String.format("%s.xml", documentNumber));
-
     return bytes.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
   }
 }

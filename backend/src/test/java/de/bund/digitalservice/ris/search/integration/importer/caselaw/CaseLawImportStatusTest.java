@@ -8,11 +8,10 @@ import de.bund.digitalservice.ris.search.repository.opensearch.CaseLawSynthesize
 import de.bund.digitalservice.ris.search.service.ImportService;
 import de.bund.digitalservice.ris.search.service.IndexCaselawService;
 import de.bund.digitalservice.ris.search.service.IndexStatusService;
+import de.bund.digitalservice.ris.search.service.IndexingState;
+import de.bund.digitalservice.ris.search.service.PersistedIndexingState;
 import de.bund.digitalservice.ris.search.utils.CaseLawLdmlTemplateUtils;
 import java.io.IOException;
-import java.time.Instant;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeParseException;
 import org.junit.AfterClass;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
@@ -38,7 +37,7 @@ class CaseLawImportStatusTest extends ContainersIntegrationBase {
 
   @AfterEach
   void cleanUp() {
-    portalBucket.delete(ImportService.CASELAW_LOCK_FILENAME);
+    portalBucket.delete(ImportService.CASELAW_STATUS_FILENAME);
   }
 
   @AfterClass
@@ -57,46 +56,34 @@ class CaseLawImportStatusTest extends ContainersIntegrationBase {
         throw new RuntimeException(e);
       }
     }
-    portalBucket.save(ImportService.CASELAW_LOCK_FILENAME, oldTimestamp);
-    portalBucket.save(ImportService.CASELAW_LAST_SUCCESS_FILENAME, oldTimestamp);
+    PersistedIndexingState persistedIndexingState =
+        new PersistedIndexingState(null, oldTimestamp, null, null);
+    indexStatusService.saveStatus(ImportService.CASELAW_STATUS_FILENAME, persistedIndexingState);
   }
 
   @Test
   void createsLastSuccessFileProperly() throws ObjectStoreServiceException {
     Assertions.assertEquals(5, caseLawBucket.getAllKeys().size());
-    importService.importChangelogs(
-        indexCaselawService,
-        caseLawBucket,
-        Instant.now(),
-        ImportService.CASELAW_LAST_SUCCESS_FILENAME);
+    IndexingState state =
+        new IndexingState(
+            caseLawBucket, ImportService.CASELAW_STATUS_FILENAME, indexCaselawService);
+    importService.lockAndImportChangelogs(state);
     Assertions.assertEquals(5, caseLawBucket.getAllKeys().size());
-    Assertions.assertTrue(
-        portalBucket.getAllKeys().contains(ImportService.CASELAW_LAST_SUCCESS_FILENAME));
-    String lastSuccess = readValueFromFile(ImportService.CASELAW_LAST_SUCCESS_FILENAME);
-    Assertions.assertTrue(isUTCDate(lastSuccess));
+    PersistedIndexingState result =
+        indexStatusService.loadStatus(ImportService.CASELAW_STATUS_FILENAME);
+    Assertions.assertNotNull(result.lastSuccessInstant());
   }
 
   @Test
   void testLocking() throws ObjectStoreServiceException {
-    Instant currentTime = Instant.now();
-    boolean locked = indexStatusService.lockIndex(ImportService.CASELAW_LOCK_FILENAME, currentTime);
+    IndexingState state =
+        new IndexingState(
+            caseLawBucket, ImportService.CASELAW_STATUS_FILENAME, indexCaselawService);
+    state.setPersistedIndexingState(indexStatusService.loadStatus(state.getStatusFileName()));
+    boolean locked = indexStatusService.lockIndex(state);
     Assertions.assertTrue(locked);
-    String lockedAt = readValueFromFile(ImportService.CASELAW_LOCK_FILENAME);
-    Assertions.assertEquals(currentTime.toString(), lockedAt);
-    String lastSuccess = readValueFromFile(ImportService.CASELAW_LAST_SUCCESS_FILENAME);
-    Assertions.assertEquals(oldTimestamp, lastSuccess);
-  }
-
-  private Boolean isUTCDate(String date) {
-    try {
-      String zone = ZonedDateTime.parse(date).getZone().toString();
-      return "Z".equals(zone);
-    } catch (DateTimeParseException e) {
-      return false;
-    }
-  }
-
-  private String readValueFromFile(String fileName) throws ObjectStoreServiceException {
-    return portalBucket.getFileAsString(fileName).orElse(null);
+    PersistedIndexingState result =
+        indexStatusService.loadStatus(ImportService.CASELAW_STATUS_FILENAME);
+    Assertions.assertEquals(state.getStartTime().toString(), result.lockTime());
   }
 }
