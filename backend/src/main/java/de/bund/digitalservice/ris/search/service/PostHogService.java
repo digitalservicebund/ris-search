@@ -25,7 +25,7 @@ public class PostHogService {
     surveyFeedback.put("$survey_id", phSurveyId);
     surveyFeedback.put("$survey_response", text);
     surveyFeedback.put("$current_url", url);
-    postHog.capture(userId, "survey_sent", surveyFeedback);
+    postHog.capture(userId, "survey sent", surveyFeedback);
     postHog.shutdown();
   }
 }

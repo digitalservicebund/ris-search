@@ -287,3 +287,5 @@ jobs:
       - frontend-image-build-scan-and-push
     uses: ./.github/workflows/pipeline-e2e.yml
     secrets: inherit
+    with:
+      frontend_tag: ${{ github.sha }}

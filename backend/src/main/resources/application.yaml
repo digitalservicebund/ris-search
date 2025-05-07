@@ -21,6 +21,7 @@ spring:
 server:
   port: 8090
   front-end-url: "http://localhost:3000/"
+  docs-url: "https://localhost::5173/"
   api-keys: []
 
 swagger:
