@@ -1,5 +1,5 @@
 // @vitest-environment node
-import type { LocationQueryRaw, Router } from "vue-router";
+import type { LocationQueryRaw } from "vue-router";
 import { DateSearchMode } from "@/stores/searchParams/index";
 import { dateSearchFromQuery } from "@/stores/searchParams/dateParams";
 import {
@@ -12,11 +12,6 @@ import { describe, expect } from "vitest";
 vi.mock("./dateParams.ts");
 
 describe("getInitialState", () => {
-  const buildMockRouter = (query: LocationQueryRaw) =>
-    ({
-      currentRoute: { value: { query } },
-    }) as Router;
-
   beforeAll(() => {
     vi.mocked(dateSearchFromQuery).mockImplementation(() => ({
       dateSearchMode: DateSearchMode.None,
@@ -24,44 +19,44 @@ describe("getInitialState", () => {
   });
 
   it("returns the correct query", () => {
-    expect(
-      getInitialState(buildMockRouter({ query: "this query" })),
-    ).toMatchObject({ query: "this query" });
+    expect(getInitialState({ query: "this query" })).toMatchObject({
+      query: "this query",
+    });
   });
 
   it("returns the default values", () => {
-    expect(getInitialState(buildMockRouter({}))).toEqual(defaultParams);
+    expect(getInitialState({})).toEqual(defaultParams);
   });
 
   it("parses the category", () => {
-    expect(
-      getInitialState(buildMockRouter({ category: "R.urteil" })),
-    ).toMatchObject({ category: "R.urteil" });
+    expect(getInitialState({ category: "R.urteil" })).toMatchObject({
+      category: "R.urteil",
+    });
   });
 
   it("parses int page params", () => {
     expect(
-      getInitialState(buildMockRouter({ itemsPerPage: "55", pageNumber: "7" })),
+      getInitialState({ itemsPerPage: "55", pageNumber: "7" }),
     ).toMatchObject({ itemsPerPage: 55, pageNumber: 7 });
   });
 
   it("parses sort", () => {
-    expect(getInitialState(buildMockRouter({ sort: "-date" }))).toMatchObject({
+    expect(getInitialState({ sort: "-date" })).toMatchObject({
       sort: "-date",
     });
   });
 
   it("parses court", () => {
-    expect(
-      getInitialState(buildMockRouter({ court: "OLVerfG Kiel" })),
-    ).toMatchObject({ court: "OLVerfG Kiel" });
-    expect(
-      getInitialState(buildMockRouter({ court: ["in array"] })),
-    ).toMatchObject({ court: "in array" });
+    expect(getInitialState({ court: "OLVerfG Kiel" })).toMatchObject({
+      court: "OLVerfG Kiel",
+    });
+    expect(getInitialState({ court: ["in array"] })).toMatchObject({
+      court: "in array",
+    });
   });
 
   it("delegates date parsing to ./dateParams", () => {
-    getInitialState(buildMockRouter({ date: "some date" }));
+    getInitialState({ date: "some date" });
     expect(dateSearchFromQuery).toHaveBeenCalledWith({ date: "some date" });
   });
 
