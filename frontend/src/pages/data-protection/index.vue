@@ -11,7 +11,7 @@ definePageMeta({ alias: ["/datenschutz"] });
     <PageHeader title="Datenschutzerklärung" />
     <main class="max-w-prose space-y-64">
       <section class="space-y-16">
-        <p>Zuletzt aktualisiert: [31. März 2025]</p>
+        <p>Zuletzt aktualisiert: [23. April 2025]</p>
         <p>
           Für das Bundesministerium der Justiz (BMJ) hat der Schutz
           personenbezogener Daten einen hohen Stellenwert. Auf dieser Seite
@@ -177,27 +177,9 @@ definePageMeta({ alias: ["/datenschutz"] });
           kontinuierlich zu verbessern. Sie werden ausdrücklich gebeten, keine
           personenbezogenen Daten in die Feedback Box einzutragen.
         </p>
-        <p class="mt-16">
-          Bei Benutzung der Feedback-Box bedient sich unsere
-          Auftragsverarbeiterin der Unterstützung eines externen Dienstleisters,
-          dem Webanalysedienst Posthog (<a
-            href="https://posthog.com/"
-            class="ris-link1-regular"
-            >https://posthog.com/</a
-          >), 2261 Market Street, San Francisco, CA 94114, USA. Posthog erhält
-          keinen Zugriff auf Ihre personenbezogenen Daten; es werden insofern
-          keine personenbezogenen Daten gespeichert. Es wird zwar Ihre
-          IP-Adresse erhoben, aber sogleich in ein anonymisiertes Format
-          umgewandelt. Ab diesem Zeitpunkt können die Daten Ihnen nicht mehr
-          zugeordnet werden. Weitere Informationen zum Datenschutz des
-          Dienstleisters finden Sie unter
-          <a href="https://posthog.com/privacy" class="ris-link1-regular"
-            >https://posthog.com/privacy</a
-          >.
-        </p>
         <h4>III.2. Kategorien personenbezogener Daten</h4>
         <ul class="list-bullet">
-          <li>IP-Adresse</li>
+          <li>Ihre Internet-Protokoll-Adresse (IP-Adresse)</li>
         </ul>
         <h4>
           III.3. Rechtsgrundlage für die Verarbeitung Ihrer personenbezogenen
@@ -218,26 +200,6 @@ definePageMeta({ alias: ["/datenschutz"] });
           Ihre personenbezogenen Daten werden ausschließlich auf Servern
           innerhalb der Europäischen Union/des Europäischen Wirtschaftsraums
           verarbeitet und nicht an unberechtigte Dritte weitergeleitet.
-        </p>
-        <p>
-          Bei Benutzung der Feedback Box (siehe Abschnitt C) bedient sich unsere
-          Auftragsverarbeiterin der Unterstützung eines externen Dienstleisters,
-          dem Webanalysedienst Posthog (<a
-            href="https://posthog.com/"
-            class="ris-link1-regular"
-            >https://posthog.com/</a
-          >), 2261 Market Street, San Francisco, CA 94114, USA. Posthog erhält
-          keinen Zugriff auf Ihre personenbezogenen Daten; es werden insofern
-          keine personenbezogenen Daten gespeichert. Die von Posthog im Zuge der
-          Benutzung der Feedback Box erhobene IP-Adresse wird insofern innerhalb
-          der Europäischen Union/dem Europäischen Wirtschaftsraum gekürzt und
-          folglich unmittelbar in ein anonymisiertes Format umgewandelt. Ab
-          diesem Zeitpunkt können die Analysedaten Ihnen nicht mehr zugeordnet
-          werden. Weitere Informationen zum Datenschutz des Dienstleisters
-          finden Sie unter
-          <a href="https://posthog.com/privacy" class="ris-link1-regular"
-            >https://posthog.com/privacy</a
-          >.
         </p>
         <h3 class="ris-heading3-regular">V. Dauer der Speicherung</h3>
         <p>
