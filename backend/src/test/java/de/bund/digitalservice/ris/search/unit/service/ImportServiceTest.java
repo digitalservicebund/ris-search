@@ -6,15 +6,14 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import de.bund.digitalservice.ris.search.config.ImportServiceConfig;
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
 import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
 import de.bund.digitalservice.ris.search.service.ChangelogService;
-import de.bund.digitalservice.ris.search.service.ImportService;
 import de.bund.digitalservice.ris.search.service.IndexNormsService;
 import de.bund.digitalservice.ris.search.service.IndexStatusService;
 import de.bund.digitalservice.ris.search.service.IndexingState;
+import de.bund.digitalservice.ris.search.service.NormImportService;
 import java.time.Instant;
 import java.util.List;
 import org.assertj.core.util.Sets;
@@ -34,19 +33,14 @@ class ImportServiceTest {
   @Mock IndexStatusService indexStatusService;
   @Mock NormsBucket normsBucket;
   @Mock ChangelogService changelogService;
-
   @Mock IndexNormsService indexNormsService;
-  ImportService service;
+
+  NormImportService service;
 
   @BeforeEach
   void setup() {
     service =
-        new ImportService(
-            indexStatusService,
-            changelogService,
-            normsBucket,
-            indexNormsService,
-            ImportServiceConfig.NORM_STATUS_FILENAME);
+        new NormImportService(indexStatusService, changelogService, normsBucket, indexNormsService);
   }
 
   @Test
@@ -70,7 +64,7 @@ class ImportServiceTest {
     verify(indexStatusService, times(1)).lockIndex(any(), any());
     verify(indexStatusService, times(1)).unlockIndex(any());
     verify(indexStatusService, times(1))
-        .updateLastSuccess(ImportServiceConfig.NORM_STATUS_FILENAME, time.toString());
+        .updateLastSuccess(NormImportService.NORM_STATUS_FILENAME, time.toString());
   }
 
   @Test

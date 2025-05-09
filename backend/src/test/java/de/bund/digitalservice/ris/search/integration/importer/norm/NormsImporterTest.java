@@ -2,17 +2,15 @@ package de.bund.digitalservice.ris.search.integration.importer.norm;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import de.bund.digitalservice.ris.search.config.ImportServiceConfig;
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.integration.config.ContainersIntegrationBase;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
 import de.bund.digitalservice.ris.search.repository.objectstorage.PortalBucket;
 import de.bund.digitalservice.ris.search.repository.opensearch.NormsSynthesizedRepository;
-import de.bund.digitalservice.ris.search.service.ImportService;
-import de.bund.digitalservice.ris.search.service.IndexNormsService;
 import de.bund.digitalservice.ris.search.service.IndexStatusService;
 import de.bund.digitalservice.ris.search.service.IndexingState;
+import de.bund.digitalservice.ris.search.service.NormImportService;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -23,7 +21,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SuppressWarnings("OptionalGetWithoutIsPresent")
@@ -32,25 +29,21 @@ import org.springframework.boot.test.context.SpringBootTest;
 class NormsImporterTest extends ContainersIntegrationBase {
   // for these test cases, refer to the file structure at resources/data/LDML/norm
 
-  @Autowired
-  @Qualifier("normImportService")
-  ImportService normsImporter;
-
-  @Autowired IndexNormsService indexNormsService;
-  @Autowired IndexStatusService indexStatusService;
-  @Autowired NormsSynthesizedRepository normIndex;
+  @Autowired private NormImportService normsImporter;
+  @Autowired private IndexStatusService indexStatusService;
+  @Autowired private NormsSynthesizedRepository normIndex;
   @Autowired private NormsBucket normsBucket;
   @Autowired private PortalBucket portalBucket;
 
   @BeforeEach
   void beforeEach() {
     final Predicate<String> isChangelogOrStatus =
-        s -> s.contains("changelog") || s.equals(ImportServiceConfig.NORM_STATUS_FILENAME);
+        s -> s.contains("changelog") || s.equals(NormImportService.NORM_STATUS_FILENAME);
     portalBucket.getAllKeys().stream()
         .filter(isChangelogOrStatus)
         .forEach(filename -> portalBucket.delete(filename));
 
-    indexStatusService.saveStatus(ImportServiceConfig.NORM_STATUS_FILENAME, getMockState());
+    indexStatusService.saveStatus(NormImportService.NORM_STATUS_FILENAME, getMockState());
 
     normsBucket.getAllKeys().stream()
         .filter(isChangelogOrStatus)
@@ -151,7 +144,7 @@ class NormsImporterTest extends ContainersIntegrationBase {
     normsImporter.importChangelogs(mockState);
 
     IndexingState indexingState =
-        indexStatusService.loadStatus(ImportServiceConfig.NORM_STATUS_FILENAME);
+        indexStatusService.loadStatus(NormImportService.NORM_STATUS_FILENAME);
     assertThat(indexingState.lastSuccess()).isEqualTo(now.toString());
     assertThat(normIndex.count()).isEqualTo(1);
     assertThat(normIndex.findById(expressionEliToKeep)).isPresent();

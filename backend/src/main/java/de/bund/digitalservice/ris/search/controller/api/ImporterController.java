@@ -4,11 +4,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
-import de.bund.digitalservice.ris.search.service.ImportService;
 import de.bund.digitalservice.ris.search.service.IndexingState;
+import de.bund.digitalservice.ris.search.service.NormImportService;
 import java.time.Instant;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,10 +20,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(path = "/internal/import")
 public class ImporterController {
 
-  private final ImportService normImportService;
+  private final NormImportService normImportService;
 
   @Autowired
-  public ImporterController(@Qualifier("normImportService") ImportService normImportService) {
+  public ImporterController(NormImportService normImportService) {
     this.normImportService = normImportService;
   }
 
