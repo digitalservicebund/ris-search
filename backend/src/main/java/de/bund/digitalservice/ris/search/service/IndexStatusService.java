@@ -33,7 +33,7 @@ public class IndexStatusService {
     }
   }
 
-  public boolean canLock(String StatusFileName, IndexingState state) {
+  public boolean canLock(String statusFileName, IndexingState state) {
     if (state.lockTime() == null) {
       return true;
     } else if (Instant.parse(state.lockTime())
@@ -43,7 +43,7 @@ public class IndexStatusService {
     } else {
       logger.warn(
           "Import already in progress for {}. Current import started at {}",
-          StatusFileName,
+          statusFileName,
           state.lockTime());
       return false;
     }

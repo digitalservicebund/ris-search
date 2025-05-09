@@ -7,7 +7,6 @@ import de.bund.digitalservice.ris.search.service.ImportService;
 import de.bund.digitalservice.ris.search.service.IndexCaselawService;
 import de.bund.digitalservice.ris.search.service.IndexNormsService;
 import de.bund.digitalservice.ris.search.service.IndexStatusService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -17,15 +16,18 @@ public class ImportServiceConfig {
   public static final String CASELAW_STATUS_FILENAME = "caselaw_status.json";
   public static final String NORM_STATUS_FILENAME = "norm_status.json";
 
-  @Autowired IndexStatusService indexStatusService;
-  @Autowired ChangelogService changelogService;
-  @Autowired NormsBucket normsBucket;
-  @Autowired IndexNormsService indexNormsService;
-  @Autowired CaseLawBucket caseLawBucket;
-  @Autowired IndexCaselawService indexCaselawService;
+  final IndexStatusService indexStatusService;
+  final ChangelogService changelogService;
+
+  public ImportServiceConfig(
+      IndexStatusService indexStatusService, ChangelogService changelogService) {
+    this.indexStatusService = indexStatusService;
+    this.changelogService = changelogService;
+  }
 
   @Bean
-  public ImportService caselawImportService() {
+  public ImportService caselawImportService(
+      CaseLawBucket caseLawBucket, IndexCaselawService indexCaselawService) {
     return new ImportService(
         indexStatusService,
         changelogService,
@@ -35,7 +37,8 @@ public class ImportServiceConfig {
   }
 
   @Bean
-  public ImportService normImportService() {
+  public ImportService normImportService(
+      NormsBucket normsBucket, IndexNormsService indexNormsService) {
     return new ImportService(
         indexStatusService,
         changelogService,
