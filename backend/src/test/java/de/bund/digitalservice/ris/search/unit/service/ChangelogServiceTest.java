@@ -6,10 +6,10 @@ import static org.mockito.Mockito.when;
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
 import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
-import de.bund.digitalservice.ris.search.service.ImportService;
 import de.bund.digitalservice.ris.search.service.IndexNormsService;
 import de.bund.digitalservice.ris.search.service.IndexStatusService;
-import de.bund.digitalservice.ris.search.service.NormImportService;
+import de.bund.digitalservice.ris.search.service.IndexSyncJob;
+import de.bund.digitalservice.ris.search.service.NormIndexSyncJob;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
@@ -28,18 +28,18 @@ class ChangelogServiceTest {
   @Mock NormsBucket normsBucket;
   @Mock IndexNormsService indexNormsService;
 
-  NormImportService normImportService;
+  NormIndexSyncJob normIndexSyncJob;
 
   @BeforeEach
   void setup() {
-    normImportService = new NormImportService(indexStatusService, normsBucket, indexNormsService);
+    normIndexSyncJob = new NormIndexSyncJob(indexStatusService, normsBucket, indexNormsService);
   }
 
   @Test
   void itSkipsInvalidChangelogContent() throws ObjectStoreServiceException {
 
     when(normsBucket.getFileAsString(any())).thenReturn(Optional.of("you shall not parse"));
-    Changelog changelog = normImportService.parseOneChangelog(normsBucket, "mockFileName");
+    Changelog changelog = normIndexSyncJob.parseOneChangelog(normsBucket, "mockFileName");
     Assertions.assertNull(changelog);
   }
 
@@ -48,7 +48,7 @@ class ChangelogServiceTest {
 
     when(normsBucket.getFileAsString(any())).thenReturn(Optional.empty());
 
-    Changelog changelog = normImportService.parseOneChangelog(normsBucket, "mockFileName");
+    Changelog changelog = normIndexSyncJob.parseOneChangelog(normsBucket, "mockFileName");
     Assertions.assertNull(changelog);
   }
 
@@ -56,15 +56,15 @@ class ChangelogServiceTest {
   void itReturnsChangelogsSortedByTimestamp() {
     Instant lastSuccess = Instant.now().minus(2, ChronoUnit.HOURS);
     String changelogFile1 =
-        ImportService.CHANGELOG + lastSuccess.plus(1, ChronoUnit.HOURS) + "-changelog.json";
+        IndexSyncJob.CHANGELOG + lastSuccess.plus(1, ChronoUnit.HOURS) + "-changelog.json";
     String changelogFile2 =
-        ImportService.CHANGELOG + lastSuccess.plus(2, ChronoUnit.HOURS) + "-changelog.json";
+        IndexSyncJob.CHANGELOG + lastSuccess.plus(2, ChronoUnit.HOURS) + "-changelog.json";
 
-    when(normsBucket.getAllKeysByPrefix(ImportService.CHANGELOG))
+    when(normsBucket.getAllKeysByPrefix(IndexSyncJob.CHANGELOG))
         .thenReturn(List.of(changelogFile2, changelogFile1));
 
     List<String> changelogs =
-        normImportService.getNewChangelogsSinceInstant(normsBucket, lastSuccess);
+        normIndexSyncJob.getNewChangelogsSinceInstant(normsBucket, lastSuccess);
     Assertions.assertEquals(changelogs.toArray()[0], changelogFile1);
     Assertions.assertEquals(changelogs.toArray()[1], changelogFile2);
   }
@@ -72,7 +72,7 @@ class ChangelogServiceTest {
   @Test
   void itRetrievesAnInstantFromAChangelogPath() {
     Instant instant =
-        normImportService
+        normIndexSyncJob
             .getInstantFromChangelog("changelogs/2025-03-21T15:10:03.382450489Z-changelog.json")
             .orElseThrow();
     Assertions.assertEquals("2025-03-21T15:10:03.382450489Z", instant.toString());
@@ -80,7 +80,7 @@ class ChangelogServiceTest {
 
   @Test
   void itRetrievesEmptyOnParsingError() {
-    Optional<Instant> instant = normImportService.getInstantFromChangelog("not parseable");
+    Optional<Instant> instant = normIndexSyncJob.getInstantFromChangelog("not parseable");
     Assertions.assertEquals(Optional.empty(), instant);
   }
 }

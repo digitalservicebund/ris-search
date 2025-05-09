@@ -97,6 +97,6 @@ public class IndexCaselawService implements IndexService {
   }
 
   private List<String> getAllCaseLawFilenames() {
-    return bucket.getAllKeys().stream().filter(s -> !s.contains(ImportService.CHANGELOG)).toList();
+    return bucket.getAllKeys().stream().filter(s -> !s.contains(IndexSyncJob.CHANGELOG)).toList();
   }
 }

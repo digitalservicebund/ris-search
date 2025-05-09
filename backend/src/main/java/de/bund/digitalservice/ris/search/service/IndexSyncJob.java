@@ -14,9 +14,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.scheduling.annotation.Async;
 
-public class ImportService {
+public class IndexSyncJob {
 
-  private static final Logger logger = LogManager.getLogger(ImportService.class);
+  private static final Logger logger = LogManager.getLogger(IndexSyncJob.class);
 
   public static final String CHANGELOG = "changelogs/";
 
@@ -25,7 +25,7 @@ public class ImportService {
   private final IndexService indexService;
   private final String statusFileName;
 
-  public ImportService(
+  public IndexSyncJob(
       IndexStatusService indexStatusService,
       ObjectStorage changelogBucket,
       IndexService indexService,
@@ -37,11 +37,11 @@ public class ImportService {
   }
 
   @Async
-  public void lockAndProcessChangelogsAsync() throws ObjectStoreServiceException {
-    lockAndImportChangelogs();
+  public void runJobAsync() throws ObjectStoreServiceException {
+    runJob();
   }
 
-  public void lockAndImportChangelogs() throws ObjectStoreServiceException {
+  public void runJob() throws ObjectStoreServiceException {
     // load current state and lock if possible
     IndexingState state =
         indexStatusService.loadStatus(statusFileName).withStartTime(Instant.now().toString());
@@ -50,15 +50,7 @@ public class ImportService {
       return;
     }
 
-    if (state.lastSuccess() == null) {
-      // if status file or last success missing do a full reset
-      indexService.reindexAll(state.startTime());
-      indexStatusService.updateLastSuccess(statusFileName, state.startTime());
-    } else {
-      // otherwise process files as normal
-      importChangelogs(state);
-    }
-
+    fetchAndProcessChanges(state);
     alertOnNumberMismatch(state);
     indexStatusService.unlockIndex(statusFileName);
   }
@@ -88,10 +80,20 @@ public class ImportService {
     }
   }
 
-  public void importChangelogs(IndexingState state) throws ObjectStoreServiceException {
-    List<String> unprocessedChangelogs =
-        getNewChangelogsSinceInstant(changelogBucket, state.lastSuccessInstant());
+  public void fetchAndProcessChanges(IndexingState state) throws ObjectStoreServiceException {
+    if (state.lastSuccess() == null) {
+      // if status file or last success missing do a full reset
+      indexService.reindexAll(state.startTime());
+      indexStatusService.updateLastSuccess(statusFileName, state.startTime());
+    } else {
+      List<String> unprocessedChangelogs =
+          getNewChangelogsSinceInstant(changelogBucket, state.lastSuccessInstant());
+      processChangelogs(state, unprocessedChangelogs);
+    }
+  }
 
+  private void processChangelogs(IndexingState state, List<String> unprocessedChangelogs)
+      throws ObjectStoreServiceException {
     for (String fileName : unprocessedChangelogs) {
       state = state.withCurrentChangelogFile(fileName);
       Changelog changelogContent = parseOneChangelog(changelogBucket, fileName);

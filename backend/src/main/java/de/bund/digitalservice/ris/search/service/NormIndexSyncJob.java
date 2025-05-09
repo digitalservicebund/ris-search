@@ -4,11 +4,11 @@ import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
 import org.springframework.stereotype.Component;
 
 @Component
-public class NormImportService extends ImportService {
+public class NormIndexSyncJob extends IndexSyncJob {
 
   public static final String NORM_STATUS_FILENAME = "norm_status.json";
 
-  public NormImportService(
+  public NormIndexSyncJob(
       IndexStatusService indexStatusService,
       NormsBucket normsBucket,
       IndexNormsService indexNormsService) {

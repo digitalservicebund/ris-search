@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
 import de.bund.digitalservice.ris.search.service.IndexingState;
-import de.bund.digitalservice.ris.search.service.NormImportService;
+import de.bund.digitalservice.ris.search.service.NormIndexSyncJob;
 import java.time.Instant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
@@ -20,18 +20,18 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(path = "/internal/import")
 public class ImporterController {
 
-  private final NormImportService normImportService;
+  private final NormIndexSyncJob normIndexSyncJob;
 
   @Autowired
-  public ImporterController(NormImportService normImportService) {
-    this.normImportService = normImportService;
+  public ImporterController(NormIndexSyncJob normIndexSyncJob) {
+    this.normIndexSyncJob = normIndexSyncJob;
   }
 
   @PostMapping(path = "/norms/changelog")
   public ResponseEntity<String> importNorms(@RequestBody String changelog) {
     try {
       Changelog changelogContent = new ObjectMapper().readValue(changelog, Changelog.class);
-      normImportService.importChangelogContent(
+      normIndexSyncJob.importChangelogContent(
           changelogContent,
           new IndexingState(null, Instant.now().toString(), null, "apiRequest", null));
       return ResponseEntity.noContent().build();

@@ -5,7 +5,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.integration.config.ContainersIntegrationBase;
 import de.bund.digitalservice.ris.search.repository.objectstorage.PortalBucket;
-import de.bund.digitalservice.ris.search.service.CaseLawImportService;
+import de.bund.digitalservice.ris.search.service.CaseLawIndexSyncJob;
 import de.bund.digitalservice.ris.search.service.IndexStatusService;
 import de.bund.digitalservice.ris.search.service.IndexingState;
 import java.time.Instant;
@@ -58,12 +58,12 @@ class IndexStatusServiceTest extends ContainersIntegrationBase {
   void normalLockingWorks() throws ObjectStoreServiceException {
     Instant startTime = Instant.now();
     IndexingState state = new IndexingState().withStartTime(startTime.toString());
-    indexStatusService.lockIndex(CaseLawImportService.CASELAW_STATUS_FILENAME, state);
+    indexStatusService.lockIndex(CaseLawIndexSyncJob.CASELAW_STATUS_FILENAME, state);
     IndexingState result =
-        indexStatusService.loadStatus(CaseLawImportService.CASELAW_STATUS_FILENAME);
+        indexStatusService.loadStatus(CaseLawIndexSyncJob.CASELAW_STATUS_FILENAME);
     String lockTime = result.lockTime();
     assertThat(lockTime).isEqualTo(startTime.toString());
-    portalBucket.delete(CaseLawImportService.CASELAW_STATUS_FILENAME);
+    portalBucket.delete(CaseLawIndexSyncJob.CASELAW_STATUS_FILENAME);
   }
 
   @Test
@@ -71,14 +71,14 @@ class IndexStatusServiceTest extends ContainersIntegrationBase {
     Instant startTime = Instant.now();
     IndexingState state = new IndexingState().withStartTime(startTime.toString());
     boolean locked =
-        indexStatusService.lockIndex(CaseLawImportService.CASELAW_STATUS_FILENAME, state);
+        indexStatusService.lockIndex(CaseLawIndexSyncJob.CASELAW_STATUS_FILENAME, state);
     assertThat(locked).isTrue();
 
     IndexingState newState =
-        indexStatusService.loadStatus(CaseLawImportService.CASELAW_STATUS_FILENAME);
+        indexStatusService.loadStatus(CaseLawIndexSyncJob.CASELAW_STATUS_FILENAME);
 
-    locked = indexStatusService.lockIndex(CaseLawImportService.CASELAW_STATUS_FILENAME, newState);
+    locked = indexStatusService.lockIndex(CaseLawIndexSyncJob.CASELAW_STATUS_FILENAME, newState);
     assertThat(locked).isFalse();
-    portalBucket.delete(CaseLawImportService.CASELAW_STATUS_FILENAME);
+    portalBucket.delete(CaseLawIndexSyncJob.CASELAW_STATUS_FILENAME);
   }
 }

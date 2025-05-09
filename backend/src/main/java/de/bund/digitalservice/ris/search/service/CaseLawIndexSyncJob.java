@@ -4,11 +4,11 @@ import de.bund.digitalservice.ris.search.repository.objectstorage.CaseLawBucket;
 import org.springframework.stereotype.Component;
 
 @Component
-public class CaseLawImportService extends ImportService {
+public class CaseLawIndexSyncJob extends IndexSyncJob {
 
   public static final String CASELAW_STATUS_FILENAME = "caselaw_status.json";
 
-  public CaseLawImportService(
+  public CaseLawIndexSyncJob(
       IndexStatusService indexStatusService,
       CaseLawBucket caseLawBucket,
       IndexCaselawService indexCaselawService) {
