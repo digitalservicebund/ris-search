@@ -9,14 +9,14 @@ import static org.mockito.Mockito.when;
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
 import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
-import de.bund.digitalservice.ris.search.service.ChangelogService;
-import de.bund.digitalservice.ris.search.service.ImportService;
 import de.bund.digitalservice.ris.search.service.IndexNormsService;
 import de.bund.digitalservice.ris.search.service.IndexStatusService;
+import de.bund.digitalservice.ris.search.service.IndexSyncJob;
 import de.bund.digitalservice.ris.search.service.IndexingState;
-import de.bund.digitalservice.ris.search.service.PersistedIndexingState;
+import de.bund.digitalservice.ris.search.service.NormIndexSyncJob;
 import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
 import org.assertj.core.util.Sets;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -29,42 +29,41 @@ import org.springframework.boot.test.system.OutputCaptureExtension;
 
 @ExtendWith(MockitoExtension.class)
 @ExtendWith(OutputCaptureExtension.class)
-class ImportServiceTest {
+class IndexSyncJobTest {
 
   @Mock IndexStatusService indexStatusService;
   @Mock NormsBucket normsBucket;
-  @Mock ChangelogService changelogService;
-
   @Mock IndexNormsService indexNormsService;
-  ImportService service;
+
+  NormIndexSyncJob normIndexSyncJob;
 
   @BeforeEach
   void setup() {
-    service = new ImportService(indexStatusService, changelogService);
+    normIndexSyncJob = new NormIndexSyncJob(indexStatusService, normsBucket, indexNormsService);
   }
 
   @Test
   void lockIsAcquiredAndReleasedOnSuccesfulProcess() throws ObjectStoreServiceException {
 
-    Changelog changelog = new Changelog();
-    changelog.setChangeAll(true);
     Instant time = Instant.now();
-    List<String> changelogs = List.of(ChangelogService.CHANGELOG + time + "-changelog.json");
+    String changelogFileName = IndexSyncJob.CHANGELOG + time + "-changelog.json";
+    List<String> changelogs = List.of(changelogFileName);
 
-    when(indexStatusService.lockIndex(any())).thenReturn(true);
+    when(indexStatusService.lockIndex(any(), any())).thenReturn(true);
     when(indexStatusService.loadStatus(any()))
-        .thenReturn(new PersistedIndexingState(time.toString(), time.toString(), null, null));
-    when(changelogService.getNewChangelogsSinceInstant(any(), any())).thenReturn(changelogs);
-    when(changelogService.parseOneChangelog(any(), any())).thenReturn(changelog);
-    when(changelogService.getInstantFromChangelog(any())).thenCallRealMethod();
+        .thenReturn(
+            new IndexingState(
+                time.minusSeconds(10).toString(), time.toString(), time.toString(), null, null));
+    when(normsBucket.getAllKeysByPrefix(IndexSyncJob.CHANGELOG)).thenReturn(changelogs);
+    String changeAll = "{\"change_all\" : true}";
+    when(normsBucket.getFileAsString(changelogFileName)).thenReturn(Optional.of(changeAll));
 
-    IndexingState state = getMockState();
-    service.lockAndImportChangelogs(state);
+    normIndexSyncJob.runJob();
 
-    verify(indexStatusService, times(1)).lockIndex(any());
+    verify(indexStatusService, times(1)).lockIndex(any(), any());
     verify(indexStatusService, times(1)).unlockIndex(any());
     verify(indexStatusService, times(1))
-        .updateLastSuccess(ImportService.NORM_STATUS_FILENAME, time);
+        .updateLastSuccess(NormIndexSyncJob.NORM_STATUS_FILENAME, time.toString());
   }
 
   @Test
@@ -73,7 +72,7 @@ class ImportServiceTest {
     changelog.setChangeAll(true);
     IndexingState state = getMockState();
 
-    service.importChangelogContent(changelog, state);
+    normIndexSyncJob.importChangelogContent(changelog, state);
 
     verify(indexNormsService, times(1)).reindexAll(any());
   }
@@ -86,7 +85,8 @@ class ImportServiceTest {
     IndexingState state = getMockState();
 
     Assertions.assertThrows(
-        IllegalArgumentException.class, () -> service.importChangelogContent(changelog, state));
+        IllegalArgumentException.class,
+        () -> normIndexSyncJob.importChangelogContent(changelog, state));
   }
 
   @Test
@@ -95,7 +95,7 @@ class ImportServiceTest {
     when(indexNormsService.getNumberOfFilesInBucket()).thenReturn(99);
 
     IndexingState indexingState = getMockState();
-    service.alertOnNumberMismatch(indexingState);
+    normIndexSyncJob.alertOnNumberMismatch(indexingState);
 
     String expectedOutput = "IndexNormsService has 99 files in bucket but 100 indexed documents";
 
@@ -104,10 +104,6 @@ class ImportServiceTest {
 
   private IndexingState getMockState() {
     Instant time = Instant.now();
-    IndexingState indexingState =
-        new IndexingState(normsBucket, ImportService.NORM_STATUS_FILENAME, indexNormsService);
-    indexingState.setPersistedIndexingState(
-        new PersistedIndexingState(time.toString(), time.toString(), null, null));
-    return indexingState;
+    return new IndexingState(time.toString(), time.toString(), time.toString(), null, null);
   }
 }
