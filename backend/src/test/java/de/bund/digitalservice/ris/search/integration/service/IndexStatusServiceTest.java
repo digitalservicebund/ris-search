@@ -4,13 +4,10 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.integration.config.ContainersIntegrationBase;
-import de.bund.digitalservice.ris.search.repository.objectstorage.CaseLawBucket;
 import de.bund.digitalservice.ris.search.repository.objectstorage.PortalBucket;
-import de.bund.digitalservice.ris.search.service.ImportService;
-import de.bund.digitalservice.ris.search.service.IndexCaselawService;
+import de.bund.digitalservice.ris.search.service.CaseLawIndexSyncJob;
 import de.bund.digitalservice.ris.search.service.IndexStatusService;
 import de.bund.digitalservice.ris.search.service.IndexingState;
-import de.bund.digitalservice.ris.search.service.PersistedIndexingState;
 import java.time.Instant;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -23,72 +20,65 @@ import org.springframework.boot.test.context.SpringBootTest;
 @Tag("integration")
 class IndexStatusServiceTest extends ContainersIntegrationBase {
   @Autowired private PortalBucket portalBucket;
-  @Autowired private CaseLawBucket caseLawBucket;
   @Autowired private IndexStatusService indexStatusService;
-  @Autowired private IndexCaselawService indexCaselawService;
 
   @Test
   void saveAndloadStatusTest1() throws ObjectStoreServiceException {
-    PersistedIndexingState testData =
-        new PersistedIndexingState("lastSuccess", "lockTime", "currentChangelogFile", 10);
+    Instant time = Instant.now();
+    IndexingState testData =
+        new IndexingState("lastSuccess", time.toString(), "lockTime", "currentChangelogFile", 10);
     indexStatusService.saveStatus("testFile.json", testData);
-    PersistedIndexingState result = indexStatusService.loadStatus("testFile.json");
+    IndexingState result = indexStatusService.loadStatus("testFile.json");
     assertThat(result).isEqualTo(testData);
   }
 
   @Test
   void saveAndloadStatusTest2() throws ObjectStoreServiceException {
-    PersistedIndexingState testData = new PersistedIndexingState(null, null, null, null);
+    IndexingState testData = new IndexingState();
     indexStatusService.saveStatus("testFile.json", testData);
-    PersistedIndexingState result = indexStatusService.loadStatus("testFile.json");
+    IndexingState result = indexStatusService.loadStatus("testFile.json");
     assertThat(result).isEqualTo(testData);
   }
 
   @Test
   void loadMissingStatusFile() throws ObjectStoreServiceException {
-    PersistedIndexingState result = indexStatusService.loadStatus("testFile2.json");
-    assertThat(result).isEqualTo(new PersistedIndexingState());
+    IndexingState result = indexStatusService.loadStatus("testFile2.json");
+    assertThat(result).isEqualTo(new IndexingState());
   }
 
   @Test
   void loadStatusFileMissingFields() throws ObjectStoreServiceException {
     portalBucket.save("testFile.json", "{\"lastSuccess\" : \"lastSuccess\"}");
-    PersistedIndexingState result = indexStatusService.loadStatus("testFile.json");
-    PersistedIndexingState expected = new PersistedIndexingState("lastSuccess", null, null, null);
+    IndexingState result = indexStatusService.loadStatus("testFile.json");
+    IndexingState expected = new IndexingState().withLastSuccess("lastSuccess");
     assertThat(result).isEqualTo(expected);
   }
 
   @Test
   void normalLockingWorks() throws ObjectStoreServiceException {
     Instant startTime = Instant.now();
-    IndexingState state =
-        new IndexingState(
-            caseLawBucket, ImportService.CASELAW_STATUS_FILENAME, indexCaselawService);
-    PersistedIndexingState persistedState = new PersistedIndexingState(null, null, null, null);
-    state.setPersistedIndexingState(persistedState);
-    state.setStartTime(startTime);
-    indexStatusService.lockIndex(state);
-    PersistedIndexingState result =
-        indexStatusService.loadStatus(ImportService.CASELAW_STATUS_FILENAME);
+    IndexingState state = new IndexingState().withStartTime(startTime.toString());
+    indexStatusService.lockIndex(CaseLawIndexSyncJob.CASELAW_STATUS_FILENAME, state);
+    IndexingState result =
+        indexStatusService.loadStatus(CaseLawIndexSyncJob.CASELAW_STATUS_FILENAME);
     String lockTime = result.lockTime();
     assertThat(lockTime).isEqualTo(startTime.toString());
-    portalBucket.delete(ImportService.CASELAW_STATUS_FILENAME);
+    portalBucket.delete(CaseLawIndexSyncJob.CASELAW_STATUS_FILENAME);
   }
 
   @Test
-  void alreadyLockedWorksAsExpected() {
+  void alreadyLockedWorksAsExpected() throws ObjectStoreServiceException {
     Instant startTime = Instant.now();
-    IndexingState state =
-        new IndexingState(
-            caseLawBucket, ImportService.CASELAW_STATUS_FILENAME, indexCaselawService);
-    PersistedIndexingState persistedState = new PersistedIndexingState(null, null, null, null);
-    state.setPersistedIndexingState(persistedState);
-    state.setStartTime(startTime);
-    boolean locked = indexStatusService.lockIndex(state);
+    IndexingState state = new IndexingState().withStartTime(startTime.toString());
+    boolean locked =
+        indexStatusService.lockIndex(CaseLawIndexSyncJob.CASELAW_STATUS_FILENAME, state);
     assertThat(locked).isTrue();
 
-    locked = indexStatusService.lockIndex(state);
+    IndexingState newState =
+        indexStatusService.loadStatus(CaseLawIndexSyncJob.CASELAW_STATUS_FILENAME);
+
+    locked = indexStatusService.lockIndex(CaseLawIndexSyncJob.CASELAW_STATUS_FILENAME, newState);
     assertThat(locked).isFalse();
-    portalBucket.delete(ImportService.CASELAW_STATUS_FILENAME);
+    portalBucket.delete(CaseLawIndexSyncJob.CASELAW_STATUS_FILENAME);
   }
 }

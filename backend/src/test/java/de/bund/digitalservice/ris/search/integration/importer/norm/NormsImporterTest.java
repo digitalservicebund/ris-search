@@ -8,11 +8,9 @@ import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
 import de.bund.digitalservice.ris.search.repository.objectstorage.PortalBucket;
 import de.bund.digitalservice.ris.search.repository.opensearch.NormsSynthesizedRepository;
-import de.bund.digitalservice.ris.search.service.ImportService;
-import de.bund.digitalservice.ris.search.service.IndexNormsService;
 import de.bund.digitalservice.ris.search.service.IndexStatusService;
 import de.bund.digitalservice.ris.search.service.IndexingState;
-import de.bund.digitalservice.ris.search.service.PersistedIndexingState;
+import de.bund.digitalservice.ris.search.service.NormIndexSyncJob;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -31,23 +29,21 @@ import org.springframework.boot.test.context.SpringBootTest;
 class NormsImporterTest extends ContainersIntegrationBase {
   // for these test cases, refer to the file structure at resources/data/LDML/norm
 
-  @Autowired ImportService normsImporter;
-  @Autowired IndexNormsService indexNormsService;
-  @Autowired IndexStatusService indexStatusService;
-  @Autowired NormsSynthesizedRepository normIndex;
+  @Autowired private NormIndexSyncJob normsImporter;
+  @Autowired private IndexStatusService indexStatusService;
+  @Autowired private NormsSynthesizedRepository normIndex;
   @Autowired private NormsBucket normsBucket;
   @Autowired private PortalBucket portalBucket;
 
   @BeforeEach
   void beforeEach() {
     final Predicate<String> isChangelogOrStatus =
-        s -> s.contains("changelog") || s.equals(ImportService.NORM_STATUS_FILENAME);
+        s -> s.contains("changelog") || s.equals(NormIndexSyncJob.NORM_STATUS_FILENAME);
     portalBucket.getAllKeys().stream()
         .filter(isChangelogOrStatus)
         .forEach(filename -> portalBucket.delete(filename));
 
-    indexStatusService.saveStatus(
-        ImportService.NORM_STATUS_FILENAME, getMockState().getPersistedIndexingState());
+    indexStatusService.saveStatus(NormIndexSyncJob.NORM_STATUS_FILENAME, getMockState());
 
     normsBucket.getAllKeys().stream()
         .filter(isChangelogOrStatus)
@@ -79,10 +75,8 @@ class NormsImporterTest extends ContainersIntegrationBase {
 
     assertThat(normIndex.count()).isZero();
 
-    IndexingState mockState = getMockState();
-    mockState.setPersistedIndexingState(
-        mockState.getPersistedIndexingState().withLastSuccess(firstChangelogTime.toString()));
-    normsImporter.importChangelogs(mockState);
+    IndexingState mockState = getMockState().withLastSuccess(firstChangelogTime.toString());
+    normsImporter.fetchAndProcessChanges(mockState);
 
     assertThat(normIndex.findAll())
         .map(Norm::getManifestationEliExample)
@@ -111,11 +105,9 @@ class NormsImporterTest extends ContainersIntegrationBase {
             {"changed": ["%s"], "deleted": ["%s"]}"""
             .formatted(newManifestationEli, oldManifestationEli));
 
-    IndexingState mockState = getMockState();
-    mockState.setPersistedIndexingState(
-        mockState.getPersistedIndexingState().withLastSuccess(lastSuccess.toString()));
+    IndexingState mockState = getMockState().withLastSuccess(lastSuccess.toString());
 
-    normsImporter.importChangelogs(mockState);
+    normsImporter.fetchAndProcessChanges(mockState);
 
     assertThat(normIndex.count()).isEqualTo(1);
     assertThat(normIndex.findById(expressionEli).get().getManifestationEliExample())
@@ -147,25 +139,19 @@ class NormsImporterTest extends ContainersIntegrationBase {
                     { "deleted": [ "%s" ] }""".formatted(manifestationEliToDelete));
 
     Instant lastSuccess = now.minus(1, ChronoUnit.HOURS);
-    IndexingState mockState = getMockState();
-    mockState.setPersistedIndexingState(
-        mockState.getPersistedIndexingState().withLastSuccess(lastSuccess.toString()));
+    IndexingState mockState = getMockState().withLastSuccess(lastSuccess.toString());
 
-    normsImporter.importChangelogs(mockState);
+    normsImporter.fetchAndProcessChanges(mockState);
 
-    PersistedIndexingState persistedIndexingState =
-        indexStatusService.loadStatus(ImportService.NORM_STATUS_FILENAME);
-    assertThat(persistedIndexingState.lastSuccess()).isEqualTo(now.toString());
+    IndexingState indexingState =
+        indexStatusService.loadStatus(NormIndexSyncJob.NORM_STATUS_FILENAME);
+    assertThat(indexingState.lastSuccess()).isEqualTo(now.toString());
     assertThat(normIndex.count()).isEqualTo(1);
     assertThat(normIndex.findById(expressionEliToKeep)).isPresent();
   }
 
   private IndexingState getMockState() {
     Instant time = Instant.now();
-    IndexingState indexingState =
-        new IndexingState(normsBucket, ImportService.NORM_STATUS_FILENAME, indexNormsService);
-    indexingState.setPersistedIndexingState(
-        new PersistedIndexingState(time.toString(), time.toString(), null, null));
-    return indexingState;
+    return new IndexingState(time.toString(), time.toString(), time.toString(), null, null);
   }
 }

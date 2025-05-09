@@ -5,14 +5,13 @@ import de.bund.digitalservice.ris.search.integration.config.ContainersIntegratio
 import de.bund.digitalservice.ris.search.repository.objectstorage.CaseLawBucket;
 import de.bund.digitalservice.ris.search.repository.objectstorage.PortalBucket;
 import de.bund.digitalservice.ris.search.repository.opensearch.CaseLawSynthesizedRepository;
-import de.bund.digitalservice.ris.search.service.ImportService;
+import de.bund.digitalservice.ris.search.service.CaseLawIndexSyncJob;
 import de.bund.digitalservice.ris.search.service.IndexCaselawService;
 import de.bund.digitalservice.ris.search.service.IndexStatusService;
 import de.bund.digitalservice.ris.search.service.IndexingState;
-import de.bund.digitalservice.ris.search.service.PersistedIndexingState;
 import de.bund.digitalservice.ris.search.utils.CaseLawLdmlTemplateUtils;
 import java.io.IOException;
-import org.junit.AfterClass;
+import java.time.Instant;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -29,21 +28,14 @@ class CaseLawImportStatusTest extends ContainersIntegrationBase {
   @Autowired CaseLawBucket caseLawBucket;
   @Autowired PortalBucket portalBucket;
   @Autowired IndexCaselawService indexCaselawService;
-  @Autowired ImportService importService;
+  @Autowired CaseLawIndexSyncJob caseLawIndexSyncJob;
+
   @Autowired IndexStatusService indexStatusService;
   private final CaseLawLdmlTemplateUtils caseLawLdmlTemplateUtils = new CaseLawLdmlTemplateUtils();
 
-  private final String oldTimestamp = "2000-01-01T00:00:00Z";
-
   @AfterEach
   void cleanUp() {
-    portalBucket.delete(ImportService.CASELAW_STATUS_FILENAME);
-  }
-
-  @AfterClass
-  public void cleanUpClass() {
-    caseLawBucket.close();
-    portalBucket.close();
+    portalBucket.delete(CaseLawIndexSyncJob.CASELAW_STATUS_FILENAME);
   }
 
   @BeforeEach
@@ -56,34 +48,32 @@ class CaseLawImportStatusTest extends ContainersIntegrationBase {
         throw new RuntimeException(e);
       }
     }
-    PersistedIndexingState persistedIndexingState =
-        new PersistedIndexingState(null, oldTimestamp, null, null);
-    indexStatusService.saveStatus(ImportService.CASELAW_STATUS_FILENAME, persistedIndexingState);
+    String oldTimestamp = "2000-01-01T00:00:00Z";
+    IndexingState indexingState = new IndexingState(null, null, oldTimestamp, null, null);
+    indexStatusService.saveStatus(CaseLawIndexSyncJob.CASELAW_STATUS_FILENAME, indexingState);
   }
 
   @Test
   void createsLastSuccessFileProperly() throws ObjectStoreServiceException {
     Assertions.assertEquals(5, caseLawBucket.getAllKeys().size());
-    IndexingState state =
-        new IndexingState(
-            caseLawBucket, ImportService.CASELAW_STATUS_FILENAME, indexCaselawService);
-    importService.lockAndImportChangelogs(state);
+    caseLawIndexSyncJob.runJob();
     Assertions.assertEquals(5, caseLawBucket.getAllKeys().size());
-    PersistedIndexingState result =
-        indexStatusService.loadStatus(ImportService.CASELAW_STATUS_FILENAME);
+    IndexingState result =
+        indexStatusService.loadStatus(CaseLawIndexSyncJob.CASELAW_STATUS_FILENAME);
     Assertions.assertNotNull(result.lastSuccessInstant());
   }
 
   @Test
   void testLocking() throws ObjectStoreServiceException {
     IndexingState state =
-        new IndexingState(
-            caseLawBucket, ImportService.CASELAW_STATUS_FILENAME, indexCaselawService);
-    state.setPersistedIndexingState(indexStatusService.loadStatus(state.getStatusFileName()));
-    boolean locked = indexStatusService.lockIndex(state);
+        indexStatusService
+            .loadStatus(CaseLawIndexSyncJob.CASELAW_STATUS_FILENAME)
+            .withStartTime(Instant.now().toString());
+    boolean locked =
+        indexStatusService.lockIndex(CaseLawIndexSyncJob.CASELAW_STATUS_FILENAME, state);
     Assertions.assertTrue(locked);
-    PersistedIndexingState result =
-        indexStatusService.loadStatus(ImportService.CASELAW_STATUS_FILENAME);
-    Assertions.assertEquals(state.getStartTime().toString(), result.lockTime());
+    IndexingState result =
+        indexStatusService.loadStatus(CaseLawIndexSyncJob.CASELAW_STATUS_FILENAME);
+    Assertions.assertEquals(state.startTime(), result.lockTime());
   }
 }
