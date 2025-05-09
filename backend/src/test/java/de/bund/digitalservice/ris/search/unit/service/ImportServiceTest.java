@@ -31,7 +31,7 @@ import org.springframework.boot.test.system.OutputCaptureExtension;
 @ExtendWith(OutputCaptureExtension.class)
 class ImportServiceTest {
 
-    @Mock IndexStatusService indexStatusService;
+  @Mock IndexStatusService indexStatusService;
   @Mock NormsBucket normsBucket;
   @Mock IndexNormsService indexNormsService;
 
@@ -55,8 +55,8 @@ class ImportServiceTest {
             new IndexingState(
                 time.minusSeconds(10).toString(), time.toString(), time.toString(), null, null));
     when(normsBucket.getAllKeysByPrefix(ImportService.CHANGELOG)).thenReturn(changelogs);
-      String changeAll = "{\"change_all\" : true}";
-      when(normsBucket.getFileAsString(changelogFileName)).thenReturn(Optional.of(changeAll));
+    String changeAll = "{\"change_all\" : true}";
+    when(normsBucket.getFileAsString(changelogFileName)).thenReturn(Optional.of(changeAll));
 
     normImportService.lockAndImportChangelogs();
 
