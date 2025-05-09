@@ -1,9 +1,12 @@
 package de.bund.digitalservice.ris.search.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
 import de.bund.digitalservice.ris.search.repository.objectstorage.ObjectStorage;
 import java.time.Instant;
+import java.time.format.DateTimeParseException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -15,20 +18,19 @@ public class ImportService {
 
   private static final Logger logger = LogManager.getLogger(ImportService.class);
 
+  public static final String CHANGELOG = "changelogs/";
+
   private final IndexStatusService indexStatusService;
-  private final ChangelogService changelogService;
   private final ObjectStorage changelogBucket;
   private final IndexService indexService;
   private final String statusFileName;
 
   public ImportService(
       IndexStatusService indexStatusService,
-      ChangelogService changelogService,
       ObjectStorage changelogBucket,
       IndexService indexService,
       String statusFileName) {
     this.indexStatusService = indexStatusService;
-    this.changelogService = changelogService;
     this.changelogBucket = changelogBucket;
     this.indexService = indexService;
     this.statusFileName = statusFileName;
@@ -61,19 +63,60 @@ public class ImportService {
     indexStatusService.unlockIndex(statusFileName);
   }
 
+  public List<String> getNewChangelogsSinceInstant(
+      ObjectStorage changelogBucket, Instant threshold) {
+
+    return changelogBucket.getAllKeysByPrefix(CHANGELOG).stream()
+        .filter(e -> !CHANGELOG.equals(e))
+        .filter(e -> changelogIsNewerThanThreshold(e, threshold))
+        .sorted()
+        .toList();
+  }
+
+  private boolean changelogIsNewerThanThreshold(String filename, Instant threshold) {
+    return getInstantFromChangelog(filename).map(time -> time.isAfter(threshold)).orElse(false);
+  }
+
+  public Optional<Instant> getInstantFromChangelog(String filename) {
+    try {
+      String timeString = filename.substring(filename.indexOf("/") + 1, filename.indexOf("Z") + 1);
+      Instant instant = Instant.parse(timeString);
+      return Optional.of(instant);
+    } catch (StringIndexOutOfBoundsException | NullPointerException | DateTimeParseException e) {
+      logger.error("unable to parse invalid changelog timestamp {}", filename);
+      return Optional.empty();
+    }
+  }
+
   public void importChangelogs(IndexingState state) throws ObjectStoreServiceException {
     List<String> unprocessedChangelogs =
-        changelogService.getNewChangelogsSinceInstant(changelogBucket, state.lastSuccessInstant());
+        getNewChangelogsSinceInstant(changelogBucket, state.lastSuccessInstant());
 
     for (String fileName : unprocessedChangelogs) {
       state = state.withCurrentChangelogFile(fileName);
-      Changelog changelogContent = changelogService.parseOneChangelog(changelogBucket, fileName);
+      Changelog changelogContent = parseOneChangelog(changelogBucket, fileName);
       if (changelogContent != null) {
         importChangelogContent(changelogContent, state);
-        Optional<Instant> changelogTimestamp = changelogService.getInstantFromChangelog(fileName);
+        Optional<Instant> changelogTimestamp = getInstantFromChangelog(fileName);
         if (changelogTimestamp.isPresent()) {
           indexStatusService.updateLastSuccess(statusFileName, changelogTimestamp.get().toString());
         }
+      }
+    }
+  }
+
+  public Changelog parseOneChangelog(ObjectStorage changelogBucket, String filename)
+      throws ObjectStoreServiceException {
+    Optional<String> changelogContent = changelogBucket.getFileAsString(filename);
+    if (changelogContent.isEmpty()) {
+      logger.error("Changelog file {} could not be fetched during import.", filename);
+      return null;
+    } else {
+      try {
+        return new ObjectMapper().readValue(changelogContent.get(), Changelog.class);
+      } catch (JsonProcessingException e) {
+        logger.error("Error while parsing changelog file {}", filename, e);
+        return null;
       }
     }
   }
@@ -93,7 +136,7 @@ public class ImportService {
 
   public void alertOnNumberMismatch(IndexingState state) {
     List<String> unprocessedChangelogs =
-        changelogService.getNewChangelogsSinceInstant(changelogBucket, state.lastSuccessInstant());
+        getNewChangelogsSinceInstant(changelogBucket, state.lastSuccessInstant());
     if (unprocessedChangelogs.isEmpty()) {
       int numberOfFilesInBucket = indexService.getNumberOfFilesInBucket();
       int numberOfIndexedDocuments = indexService.getNumberOfIndexedDocuments();

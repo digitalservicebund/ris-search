@@ -10,14 +10,8 @@ public class CaseLawImportService extends ImportService {
 
   public CaseLawImportService(
       IndexStatusService indexStatusService,
-      ChangelogService changelogService,
       CaseLawBucket caseLawBucket,
       IndexCaselawService indexCaselawService) {
-    super(
-        indexStatusService,
-        changelogService,
-        caseLawBucket,
-        indexCaselawService,
-        CASELAW_STATUS_FILENAME);
+    super(indexStatusService, caseLawBucket, indexCaselawService, CASELAW_STATUS_FILENAME);
   }
 }

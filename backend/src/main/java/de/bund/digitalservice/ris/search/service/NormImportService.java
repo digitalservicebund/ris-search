@@ -10,10 +10,8 @@ public class NormImportService extends ImportService {
 
   public NormImportService(
       IndexStatusService indexStatusService,
-      ChangelogService changelogService,
       NormsBucket normsBucket,
       IndexNormsService indexNormsService) {
-    super(
-        indexStatusService, changelogService, normsBucket, indexNormsService, NORM_STATUS_FILENAME);
+    super(indexStatusService, normsBucket, indexNormsService, NORM_STATUS_FILENAME);
   }
 }

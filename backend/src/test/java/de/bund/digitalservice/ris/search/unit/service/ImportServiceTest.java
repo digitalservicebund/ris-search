@@ -9,13 +9,14 @@ import static org.mockito.Mockito.when;
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
 import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
-import de.bund.digitalservice.ris.search.service.ChangelogService;
+import de.bund.digitalservice.ris.search.service.ImportService;
 import de.bund.digitalservice.ris.search.service.IndexNormsService;
 import de.bund.digitalservice.ris.search.service.IndexStatusService;
 import de.bund.digitalservice.ris.search.service.IndexingState;
 import de.bund.digitalservice.ris.search.service.NormImportService;
 import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
 import org.assertj.core.util.Sets;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -30,36 +31,34 @@ import org.springframework.boot.test.system.OutputCaptureExtension;
 @ExtendWith(OutputCaptureExtension.class)
 class ImportServiceTest {
 
-  @Mock IndexStatusService indexStatusService;
+    @Mock IndexStatusService indexStatusService;
   @Mock NormsBucket normsBucket;
-  @Mock ChangelogService changelogService;
   @Mock IndexNormsService indexNormsService;
 
-  NormImportService service;
+  NormImportService normImportService;
 
   @BeforeEach
   void setup() {
-    service =
-        new NormImportService(indexStatusService, changelogService, normsBucket, indexNormsService);
+    normImportService = new NormImportService(indexStatusService, normsBucket, indexNormsService);
   }
 
   @Test
   void lockIsAcquiredAndReleasedOnSuccesfulProcess() throws ObjectStoreServiceException {
 
-    Changelog changelog = new Changelog();
-    changelog.setChangeAll(true);
     Instant time = Instant.now();
-    List<String> changelogs = List.of(ChangelogService.CHANGELOG + time + "-changelog.json");
+    String changelogFileName = ImportService.CHANGELOG + time + "-changelog.json";
+    List<String> changelogs = List.of(changelogFileName);
 
     when(indexStatusService.lockIndex(any(), any())).thenReturn(true);
     when(indexStatusService.loadStatus(any()))
         .thenReturn(
-            new IndexingState(time.toString(), time.toString(), time.toString(), null, null));
-    when(changelogService.getNewChangelogsSinceInstant(any(), any())).thenReturn(changelogs);
-    when(changelogService.parseOneChangelog(any(), any())).thenReturn(changelog);
-    when(changelogService.getInstantFromChangelog(any())).thenCallRealMethod();
+            new IndexingState(
+                time.minusSeconds(10).toString(), time.toString(), time.toString(), null, null));
+    when(normsBucket.getAllKeysByPrefix(ImportService.CHANGELOG)).thenReturn(changelogs);
+      String changeAll = "{\"change_all\" : true}";
+      when(normsBucket.getFileAsString(changelogFileName)).thenReturn(Optional.of(changeAll));
 
-    service.lockAndImportChangelogs();
+    normImportService.lockAndImportChangelogs();
 
     verify(indexStatusService, times(1)).lockIndex(any(), any());
     verify(indexStatusService, times(1)).unlockIndex(any());
@@ -73,7 +72,7 @@ class ImportServiceTest {
     changelog.setChangeAll(true);
     IndexingState state = getMockState();
 
-    service.importChangelogContent(changelog, state);
+    normImportService.importChangelogContent(changelog, state);
 
     verify(indexNormsService, times(1)).reindexAll(any());
   }
@@ -86,7 +85,8 @@ class ImportServiceTest {
     IndexingState state = getMockState();
 
     Assertions.assertThrows(
-        IllegalArgumentException.class, () -> service.importChangelogContent(changelog, state));
+        IllegalArgumentException.class,
+        () -> normImportService.importChangelogContent(changelog, state));
   }
 
   @Test
@@ -95,7 +95,7 @@ class ImportServiceTest {
     when(indexNormsService.getNumberOfFilesInBucket()).thenReturn(99);
 
     IndexingState indexingState = getMockState();
-    service.alertOnNumberMismatch(indexingState);
+    normImportService.alertOnNumberMismatch(indexingState);
 
     String expectedOutput = "IndexNormsService has 99 files in bucket but 100 indexed documents";
 
