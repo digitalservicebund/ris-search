@@ -20,10 +20,10 @@ public record ManifestationEli(
 
   @Override
   public String toString() {
-    return toStringWithoutFileExtension() + ".xml";
+    return withoutSuffix() + ".xml";
   }
 
-  public String toStringWithoutFileExtension() {
+  public String withoutSuffix() {
     return "eli/%s/%s/%s/%s/%s/%d/%s/%s/%s"
         .formatted(
             jurisdiction(),

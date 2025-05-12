@@ -131,7 +131,9 @@ public class NormsService {
     return normsBucket.get(eli.toString());
   }
 
-  public Optional<byte[]> get(String identifier) throws ObjectStoreServiceException {
+  public Optional<byte[]> getAttachment(ManifestationEli eli, String extension)
+      throws ObjectStoreServiceException {
+    String identifier = eli.withoutSuffix() + "." + extension;
     return normsBucket.get(identifier);
   }
 

@@ -499,8 +499,7 @@ public class NormsController {
             language,
             pointInTimeManifestation,
             name);
-    final String attachmentEli = baseEli.toStringWithoutFileExtension() + "." + extension;
-    Optional<byte[]> image = normsService.get(attachmentEli);
+    Optional<byte[]> image = normsService.getAttachment(baseEli, extension);
 
     final String mimeType = URLConnection.guessContentTypeFromName(name + "." + extension);
 
