@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { convertParams, getUrl } from "@/services/searchService";
 import CategoryFilter from "@/components/Search/SimpleSearch/CategoryFilter/CategoryFilter.vue";
 import DateRangeFilter from "@/components/Search/SimpleSearch/DateRangeFilter.vue";
 import CourtFilter from "@/components/Search/SimpleSearch/CourtFilter.vue";
@@ -14,6 +13,7 @@ import { buildResultCountString } from "~/utils/paginationUtils";
 import { getCurrentDateInGermany } from "~/utils/dateFormatting";
 import Message from "primevue/message";
 import type { Page } from "~/components/Pagination/Pagination";
+import { convertParams, getUrl } from "./SimpleSearch.logic";
 
 const store = useSimpleSearchParamsStore();
 const values = storeToRefs(store);
@@ -38,10 +38,6 @@ const {
 } = await useFetch<Page>(() => `${baseUrl}${url.value}`, {
   query: params,
   watch: [params],
-});
-
-watch([params, url], () => console.log(params.value, url.value), {
-  immediate: true,
 });
 
 watch(
