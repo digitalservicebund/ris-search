@@ -131,7 +131,7 @@ public class NormsService {
     return normsBucket.get(eli.toString());
   }
 
-  public Optional<byte[]> getNormFileByString(String identifier) {
+  public Optional<byte[]> get(String identifier) throws ObjectStoreServiceException {
     return normsBucket.get(identifier);
   }
 

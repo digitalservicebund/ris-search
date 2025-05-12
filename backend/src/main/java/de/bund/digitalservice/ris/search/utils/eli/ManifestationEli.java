@@ -18,11 +18,13 @@ public record ManifestationEli(
     LocalDate pointInTimeManifestation,
     String subtype) {
 
-  private static final String eliPattern = "eli/%s/%s/%s/%s/%s/%d/%s/%s/%s";
-
   @Override
   public String toString() {
-    return (eliPattern + ".xml")
+    return toStringWithoutFileExtension() + ".xml";
+  }
+
+  public String toStringWithoutFileExtension() {
+    return "eli/%s/%s/%s/%s/%s/%d/%s/%s/%s"
         .formatted(
             jurisdiction(),
             agent(),
@@ -33,19 +35,6 @@ public record ManifestationEli(
             language(),
             pointInTimeManifestation().format(DateTimeFormatter.ISO_LOCAL_DATE),
             subtype());
-  }
-
-  public String toStringWithoutFileExtension() {
-    return eliPattern.formatted(
-        jurisdiction(),
-        agent(),
-        year(),
-        naturalIdentifier(),
-        pointInTime().format(DateTimeFormatter.ISO_LOCAL_DATE),
-        version(),
-        language(),
-        pointInTimeManifestation().format(DateTimeFormatter.ISO_LOCAL_DATE),
-        subtype());
   }
 
   public WorkEli getWorkEli() {

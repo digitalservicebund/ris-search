@@ -34,6 +34,7 @@
     <xsl:variable name="marker" as="xs:string" select="'marker'"/>
     <xsl:variable name="rueckverweis" as="xs:string" select="'rueckverweis'"/>
     <xsl:param name="erlaube-links-in-heading" as="xs:boolean" select="false()"/>
+    <xsl:param name="ressourcenpfad" as="xs:string" select="''"/>
 
     <!-- ******************************************************************************************************* -->
 
@@ -590,6 +591,16 @@
             <xsl:apply-templates select="@*" />
             <xsl:value-of select="."/>
         </dd>
+    </xsl:template>
+
+    <!--
+        Bilder
+        ######
+    -->
+    <xsl:template match="akn:img">
+        <img src="{concat($ressourcenpfad, @src)}">
+              <xsl:apply-templates select="@*[local-name() != 'src']" />
+        </img>
     </xsl:template>
 
     <!--

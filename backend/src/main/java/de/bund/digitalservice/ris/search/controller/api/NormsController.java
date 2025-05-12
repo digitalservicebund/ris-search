@@ -3,6 +3,7 @@ package de.bund.digitalservice.ris.search.controller.api;
 import static org.springframework.http.HttpHeaders.CONTENT_DISPOSITION;
 
 import de.bund.digitalservice.ris.search.config.ApiConfig;
+import de.bund.digitalservice.ris.search.controller.api.utils.ResourceResolutionMode;
 import de.bund.digitalservice.ris.search.exception.CustomValidationException;
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.mapper.MappingDefinitions;
@@ -22,7 +23,6 @@ import de.bund.digitalservice.ris.search.service.helper.PaginationParamsConverte
 import de.bund.digitalservice.ris.search.utils.LuceneQueryTools;
 import de.bund.digitalservice.ris.search.utils.eli.ExpressionEli;
 import de.bund.digitalservice.ris.search.utils.eli.ManifestationEli;
-import io.micrometer.common.util.StringUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -30,12 +30,14 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import java.net.URLConnection;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import org.apache.commons.lang3.StringUtils;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -46,6 +48,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
@@ -210,8 +213,11 @@ public class NormsController {
       @PathVariable @Schema(example = "2") Integer version,
       @PathVariable @Schema(example = "deu") String language,
       @PathVariable @Schema(example = "2020-06-19") LocalDate pointInTimeManifestation,
-      @Schema(example = "regelungstext-1") @PathVariable String subtype)
+      @Schema(example = "regelungstext-1") @PathVariable String subtype,
+      @RequestHeader(name = "x-resource-base", required = false, defaultValue = "BASE")
+          ResourceResolutionMode resolutionMode)
       throws ObjectStoreServiceException {
+    final String resourcesBasePath = resolutionMode.getResourcesBasePath();
     var eli =
         new ManifestationEli(
             jurisdiction,
@@ -225,7 +231,8 @@ public class NormsController {
             subtype);
     final Optional<byte[]> normFileByEli = normsService.getNormFileByEli(eli);
     if (normFileByEli.isPresent()) {
-      final String body = xsltTransformerService.transformNorm(normFileByEli.get(), subtype);
+      final String body =
+          xsltTransformerService.transformNorm(normFileByEli.get(), subtype, resourcesBasePath);
       return ResponseEntity.ok(body);
     } else {
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body(HTML_FILE_NOT_FOUND);
@@ -411,8 +418,11 @@ public class NormsController {
               example = "hauptteil-1_art-1")
           @PathVariable
           String articleEid,
-      @PathVariable @Schema(allowableValues = "html") String format)
+      @PathVariable @Schema(allowableValues = "html") String format,
+      @RequestHeader(name = "x-resource-base", required = false)
+          ResourceResolutionMode resourceResolutionMode)
       throws ObjectStoreServiceException {
+    String resourceBasePath = resourceResolutionMode.getResourcesBasePath();
     if (!Objects.equals(format, "html")) {
       return ResponseEntity.badRequest().body("only html is supported for format");
     }
@@ -429,16 +439,17 @@ public class NormsController {
             subtype);
     final Optional<byte[]> normFileByEli = normsService.getNormFileByEli(eli);
     return normFileByEli
-        .map(bytes -> ResponseEntity.ok(xsltTransformerService.transformArticle(bytes, articleEid)))
+        .map(
+            bytes ->
+                ResponseEntity.ok(
+                    xsltTransformerService.transformArticle(bytes, articleEid, resourceBasePath)))
         .orElseGet(() -> ResponseEntity.notFound().build());
   }
 
   @GetMapping(
       path =
-          ApiConfig.Paths.LEGISLATION
-              + "/image/"
-              + "eli/{jurisdiction}/{agent}/{year}/{naturalIdentifier}/{pointInTime}/{version}/{language}/{pointInTimeManifestation}/{name}.jpg",
-      produces = MediaType.IMAGE_JPEG_VALUE)
+          ApiConfig.Paths.LEGISLATION_SINGLE
+              + "/{jurisdiction}/{agent}/{year}/{naturalIdentifier}/{pointInTime}/{version}/{language}/{pointInTimeManifestation}/{name}.{extension}")
   @Operation(
       summary = "Get an Image particular manifestation of a piece of legislation",
       description =
@@ -473,22 +484,30 @@ public class NormsController {
       @PathVariable @Schema(example = "2") Integer version,
       @PathVariable @Schema(example = "deu") String language,
       @PathVariable @Schema(example = "2020-06-19") LocalDate pointInTimeManifestation,
-      @Schema(example = "image") @PathVariable String name) {
+      @Schema(example = "image") @PathVariable String name,
+      @Schema(example = "jpg") @PathVariable String extension)
+      throws ObjectStoreServiceException {
 
-    Optional<byte[]> image =
-        normsService.getNormFileByString(
-            new ManifestationEli(
-                    jurisdiction,
-                    agent,
-                    year,
-                    naturalIdentifier,
-                    pointInTime,
-                    version,
-                    language,
-                    pointInTimeManifestation,
-                    name + ".jpg")
-                .toStringWithoutFileExtension());
+    final ManifestationEli baseEli =
+        new ManifestationEli(
+            jurisdiction,
+            agent,
+            year,
+            naturalIdentifier,
+            pointInTime,
+            version,
+            language,
+            pointInTimeManifestation,
+            name);
+    final String attachmentEli = baseEli.toStringWithoutFileExtension() + "." + extension;
+    Optional<byte[]> image = normsService.get(attachmentEli);
 
-    return image.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    final String mimeType = URLConnection.guessContentTypeFromName(name + "." + extension);
+
+    return image
+        .map(
+            body ->
+                ResponseEntity.status(HttpStatus.OK).header("Content-Type", mimeType).body(body))
+        .orElseGet(() -> ResponseEntity.notFound().build());
   }
 }
