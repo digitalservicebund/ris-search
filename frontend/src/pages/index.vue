@@ -5,7 +5,7 @@ import HeroBanner from "~/components/HeroBanner.vue";
 import Message from "primevue/message";
 import IcBaselineLaunch from "~icons/ic/baseline-launch";
 import ButtonLink from "~/components/ButtonLink.vue";
-import bmjLogo from "~/assets/img/BMJ_Logo.svg";
+import bmjvLogo from "~/assets/img/BMJV_de_v1__Web_farbig.svg";
 const redirectToSearch = useRedirectToSearch();
 </script>
 
@@ -68,13 +68,10 @@ const redirectToSearch = useRedirectToSearch();
         </p>
       </div>
       <div class="flex flex-wrap gap-16">
-        <Button
-          @click="() => redirectToSearch({ category: 'N', sort: '-date' })"
-        >
+        <Button @click="() => redirectToSearch({ category: 'N' })">
           Zu den Gesetzen und Verordnungen</Button
         >
-        <Button
-          @click="() => redirectToSearch({ category: 'R', sort: '-date' })"
+        <Button @click="() => redirectToSearch({ category: 'R' })"
           >Zu den Gerichtsentscheidungen</Button
         >
       </div>
@@ -103,12 +100,13 @@ const redirectToSearch = useRedirectToSearch();
     <FeatureCard inner-class="gap-x-64 gap-y-32 sm:flex-row">
       <img
         class="mt-20 ml-20 self-start sm:mt-4 md:ml-0"
-        :src="bmjLogo"
-        alt="Bundesministerium der Justiz"
+        :src="bmjvLogo"
+        alt="Bundesministerium der Justiz und für Verbraucherschutz"
       />
       <div class="space-y-8">
         <p class="ris-body2-bold break-words hyphens-auto">
-          Ein Service im Auftrag des Bundesministeriums der Justiz
+          Ein Service im Auftrag des Bundesministeriums der Justiz und für
+          Verbraucherschutz
         </p>
         <p class="ris-body2-regular">
           Dieser Service befindet sich in der Testphase. Sie haben die

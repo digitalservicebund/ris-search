@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.testcontainers.shaded.org.apache.commons.lang3.StringUtils.deleteWhitespace;
 
 import de.bund.digitalservice.ris.search.exception.FileTransformationException;
+import de.bund.digitalservice.ris.search.exception.NoSuchKeyException;
 import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
 import de.bund.digitalservice.ris.search.service.XsltTransformerService;
 import de.bund.digitalservice.ris.search.utils.CaseLawLdmlTemplateUtils;
@@ -71,7 +72,7 @@ class XsltTransformerServiceTest {
   }
 
   @Test
-  void testTransformNormWithAttachments() throws IOException {
+  void testTransformNormWithAttachments() throws IOException, NoSuchKeyException {
     byte[] bytes = Files.readAllBytes(Path.of(resourcesPath, "attachments.xml"));
 
     final Function<String, ResponseInputStream<GetObjectResponse>> makeInputStream =
