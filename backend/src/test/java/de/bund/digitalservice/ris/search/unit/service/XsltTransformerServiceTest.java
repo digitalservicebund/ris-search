@@ -31,6 +31,7 @@ import software.amazon.awssdk.services.s3.model.GetObjectResponse;
 
 class XsltTransformerServiceTest {
 
+  public static final String RESOURCES_BASE_PATH = "res://";
   private final NormsBucket normsBucketMock = Mockito.mock(NormsBucket.class);
   private final XsltTransformerService service = new XsltTransformerService(normsBucketMock);
 
@@ -51,6 +52,7 @@ class XsltTransformerServiceTest {
     "authorialNoteInDocTitle.xml, authorialNoteInDocTitle.html, Should transform authorialNotes in title",
     "authorialNoteInDoc.xml, authorialNoteInDoc.html, Should transform authorialNotes in attachment body",
     "notes.xml, notes.html, Should transform notes",
+    "image.xml, image.html, Should transform img tag",
     "container.xml, container.html, Should transform container elements in the preface",
     "preambleFormula.xml, preambleFormula.html, Should transform a preamble formula",
     "conclusionsFormula.xml, conclusionsFormula.html, Should transform a conclusions formula",
@@ -63,7 +65,7 @@ class XsltTransformerServiceTest {
       String inputFileName, String expectedFileName, String testName) throws IOException {
     byte[] bytes = Files.readAllBytes(Path.of(resourcesPath, inputFileName));
 
-    var actualHtml = service.transformNorm(bytes, "subtype");
+    var actualHtml = service.transformNorm(bytes, "subtype", RESOURCES_BASE_PATH);
 
     var expectedHtml = Files.readString(Path.of(resourcesPath, expectedFileName));
     var expectedDocument = Jsoup.parse(expectedHtml);
@@ -95,7 +97,7 @@ class XsltTransformerServiceTest {
                 "eli/bund/bgbl-1/0000/s1000/2000-01-01/1/deu/2000-01-01/offenestruktur-2.xml"))
         .thenReturn(makeInputStream.apply("offenestruktur-2.xml"));
 
-    var actualHtml = service.transformNorm(bytes, "subtype");
+    var actualHtml = service.transformNorm(bytes, "subtype", RESOURCES_BASE_PATH);
 
     var expectedHtml = Files.readString(Path.of(resourcesPath, "attachments.html"));
     var expectedDocument = Jsoup.parse(expectedHtml);
@@ -110,7 +112,8 @@ class XsltTransformerServiceTest {
 
     FileTransformationException exception =
         Assertions.assertThrows(
-            FileTransformationException.class, () -> service.transformNorm(bytes, "subtype"));
+            FileTransformationException.class,
+            () -> service.transformNorm(bytes, "subtype", RESOURCES_BASE_PATH));
     assertThat(exception.getMessage()).endsWith("offenestruktur-1.xml");
   }
 
@@ -118,7 +121,7 @@ class XsltTransformerServiceTest {
   @DisplayName("Includes a link to authorialNotes in the heading when in article mode")
   void testArticleHeadingWithAuthorialNote() throws IOException {
     byte[] bytes = Files.readAllBytes(Path.of(resourcesPath, "authorialNote.xml"));
-    var actualHtml = service.transformArticle(bytes, "c");
+    var actualHtml = service.transformArticle(bytes, "c", RESOURCES_BASE_PATH);
     var actualDocument = Jsoup.parse(actualHtml);
     var heading = actualDocument.select("h2").html();
     assertThat(heading)
@@ -133,7 +136,7 @@ class XsltTransformerServiceTest {
         Files.readAllBytes(
             Path.of(
                 "src/test/resources/data/LDML/norm/eli/bund/bgbl-1/1991/s101/1991-01-01/1/deu/1991-01-01/regelungstext-1.xml"));
-    var html = service.transformNorm(xml, "subtype");
+    var html = service.transformNorm(xml, "subtype", RESOURCES_BASE_PATH);
     var expectedToc =
         """
         <div class="level-1">
@@ -175,7 +178,7 @@ class XsltTransformerServiceTest {
         Files.readAllBytes(
             Path.of(
                 "src/test/resources/data/LDML/norm/eli/bund/bgbl-1/1991/s101/1991-01-01/1/deu/1991-01-01/regelungstext-1.xml"));
-    var html = service.transformArticle(xml, "hauptteil-1_para-1");
+    var html = service.transformArticle(xml, "hauptteil-1_para-1", RESOURCES_BASE_PATH);
     var expectedArticle =
         """
          <article id="hauptteil-1_para-1" data-period="#geltungszeitgr-1">

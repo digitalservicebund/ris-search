@@ -48,8 +48,10 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.opensearch.core.common.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -57,6 +59,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultMatcher;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
@@ -160,6 +163,35 @@ class NormsControllerApiTest extends ContainersIntegrationBase {
     assertThat(h1Element.outerHtml())
         .isEqualTo(
             "<h1 class=\"titel\" id=\"einleitung-1_doktitel-1_text-1_doctitel-1\">Formatting Test Document</h1>");
+  }
+
+  @ParameterizedTest
+  @CsvSource({",/v1/legislation/", "PROXY,/api/v1/legislation/"})
+  @DisplayName("Html endpoint should adapt img src paths")
+  void shouldReturnHtmlWithAdaptedImgSrcAttributes(String header, String expectedPrefix)
+      throws Exception {
+    final MockHttpServletRequestBuilder requestBuilder =
+        get(MANIFESTATION_URL_HTML).contentType(MediaType.TEXT_HTML);
+
+    if (!Strings.isEmpty(header)) {
+      requestBuilder.header("get-resources-via", header);
+    }
+
+    var response =
+        mockMvc
+            .perform(requestBuilder)
+            .andExpectAll(status().isOk(), content().contentType("text/html;charset=UTF-8"))
+            .andReturn();
+
+    var document = Jsoup.parse(response.getResponse().getContentAsString());
+
+    Element image =
+        Objects.requireNonNull(
+            document.body().getElementById("hauptteil-1_para-5_abs-1_inhalt-1_bild-1"));
+
+    final String srcInLDML = "eli/bund/bgbl-1/1991/s101/1991-01-01/1/deu/1991-01-01/bild_1.jpg";
+    String expectedSrc = expectedPrefix + srcInLDML;
+    assertThat(image.attr("src")).isEqualTo(expectedSrc);
   }
 
   @Test

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-model href="../../../Grammatiken/legalDocML.de.sch" schematypens="http://purl.oclc.org/dsdl/schematron"?>
-<akn:akomaNtoso xmlns:akn="http://Inhaltsdaten.LegalDocML.de/1.7.2/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<akn:akomaNtoso xmlns:akn="http://Inhaltsdaten.LegalDocML.de/1.7.2/"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://Metadaten.LegalDocML.de/1.7.2/ ../../../Grammatiken/legalDocML.de-metadaten.xsd
                       http://Inhaltsdaten.LegalDocML.de/1.7.2/ ../../../Grammatiken/legalDocML.de-regelungstextverkuendungsfassung.xsd">
   <akn:act name="regelungstext">
@@ -280,6 +281,21 @@
             <akn:p eId="hauptteil-1_para-4_abs-4_inhalt-1_text-1" GUID="d9e5c9f7-3db0-4f6f-adb2-1008105aa0bf"> This paragraph contains a "aenderungsbefehl-streichen" mod that indicates that <akn:mod eId="hauptteil-1_para-4_abs-4_inhalt-1_text-1_ändbefehl-1" refersTo="aenderungsbefehl-streichen"
                 GUID="c18ccb16-ac0e-4c47-adfa-6de2971f6bbc">the articles <akn:ref eId="hauptteil-1_para-4_abs-4_inhalt-1_text-1_ändbefehl-1_ref-1" href="#" GUID="e542fd1f-fae3-4da9-b624-b579897bace7">1 to 5</akn:ref> will be repealed.</akn:mod>
             </akn:p>
+          </akn:content>
+        </akn:paragraph>
+      </akn:article>
+      <akn:article eId="hauptteil-1_para-5" GUID="a59598fa-b139-41cc-ae08-12fc4aebf11b" period="#geltungszeitgr-1">
+        <akn:num eId="hauptteil-1_para-5_bezeichnung-1" GUID="5af34ff6-0a79-4665-a227-e765c04028f0">
+          § 5
+        </akn:num>
+        <akn:heading eId="hauptteil-1_para-4_überschrift-1" GUID="d065ecca-2eab-4e12-92e4-64e7050e7912">Images
+        </akn:heading>
+
+        <akn:paragraph eId="hauptteil-1_para-5_abs-1" GUID="4de4dacd-eb20-4a38-927a-ab71fd9ee85f">
+          <akn:content eId="hauptteil-1_para-5_abs-1_inhalt-1" GUID="0db68311-33d5-43d0-92ba-ed5dcf167eb5">
+            <akn:img GUID="7f4172f8-2184-4b13-98b3-d387b6b25a72" class="type-tif units-72"
+                     eId="hauptteil-1_para-5_abs-1_inhalt-1_bild-1" height="54"
+                     src="eli/bund/bgbl-1/1991/s101/1991-01-01/1/deu/1991-01-01/bild_1.jpg" width="60"/>
           </akn:content>
         </akn:paragraph>
       </akn:article>
