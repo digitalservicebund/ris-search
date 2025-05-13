@@ -195,6 +195,17 @@ class NormsControllerApiTest extends ContainersIntegrationBase {
   }
 
   @Test
+  @DisplayName("Serves images via the API with correct contentType")
+  void shouldReturnReferencedImageWithContentType() throws Exception {
+    String url =
+        ApiConfig.Paths.LEGISLATION_SINGLE
+            + "/bund/bgbl-1/1991/s101/1991-01-01/1/deu/1991-01-01/bild_1.jpg";
+    mockMvc
+        .perform(get(url))
+        .andExpectAll(status().isOk(), content().contentType(MediaType.IMAGE_JPEG));
+  }
+
+  @Test
   @DisplayName("XML Endpoint Should return XML when requesting a single norm")
   void textLegislationXMLEndpoint() throws Exception {
     mockMvc
