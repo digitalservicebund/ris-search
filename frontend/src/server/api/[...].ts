@@ -36,7 +36,7 @@ export default defineEventHandler(async (event): Promise<unknown> => {
     const headers: Record<string, string> = {
       Accept: event.headers.get("Accept") ?? "application/json",
       Authorization: `Bearer ${token}`,
-      "x-resource-base": "PROXY",
+      "get-resources-via": "PROXY",
     };
     return await $fetch.raw(newUrl, {
       headers,
