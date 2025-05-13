@@ -218,6 +218,9 @@ public class NormsController {
               name = ApiConfig.Headers.GET_RESOURCES_VIA,
               required = false,
               defaultValue = ResourceReferenceMode.DEFAULT_VALUE)
+          @Parameter(
+              description =
+                  "Used to select a different prefix for referenced resources, like images. Selecting 'PROXY' will prepend `/api`. Otherwise, the API base URL will be used.")
           ResourceReferenceMode resourceReferenceMode)
       throws ObjectStoreServiceException {
     final String resourceBasePath = getResourceBasePath(resourceReferenceMode);
@@ -426,6 +429,9 @@ public class NormsController {
               name = ApiConfig.Headers.GET_RESOURCES_VIA,
               required = false,
               defaultValue = ResourceReferenceMode.DEFAULT_VALUE)
+          @Parameter(
+              description =
+                  "Used to select a different prefix for referenced resources, like images. Selecting 'PROXY' will prepend `/api`. Otherwise, the API base URL will be used.")
           ResourceReferenceMode resourceReferenceMode)
       throws ObjectStoreServiceException {
     final String resourceBasePath = getResourceBasePath(resourceReferenceMode);
