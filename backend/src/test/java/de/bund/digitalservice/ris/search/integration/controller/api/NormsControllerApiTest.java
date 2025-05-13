@@ -217,8 +217,8 @@ class NormsControllerApiTest extends ContainersIntegrationBase {
   }
 
   @Test
-  @DisplayName("ZIP endpoint should return a ZIP with two specific XML files")
-  void zipEndpointWithTwoXmlFiles() throws Exception {
+  @DisplayName("ZIP endpoint should return a ZIP all relevant files")
+  void zipEndpointWithRelevantFiles() throws Exception {
     MvcResult result =
         mockMvc
             .perform(get(MANIFESTATION_PREFIX_URL_ZIP))
@@ -242,7 +242,9 @@ class NormsControllerApiTest extends ContainersIntegrationBase {
                 Files.readAllBytes(Path.of(resourceDirectoryPath, "regelungstext-1.xml"))),
             Map.entry(
                 "offenestruktur-0.xml",
-                Files.readAllBytes(Path.of(resourceDirectoryPath, "offenestruktur-0.xml"))));
+                Files.readAllBytes(Path.of(resourceDirectoryPath, "offenestruktur-0.xml"))),
+            Map.entry(
+                "bild_1.jpg", Files.readAllBytes(Path.of(resourceDirectoryPath, "bild_1.jpg"))));
   }
 
   @Test
