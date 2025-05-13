@@ -157,8 +157,8 @@
         </xsl:attribute>
     </xsl:template>
 
-    <!-- @style und @class unverändert übernehmen -->
-    <xsl:template match="@class | @style" priority="2">
+    <!-- @style, @class und @alt unverändert übernehmen -->
+    <xsl:template match="@class | @style | @alt" priority="2">
         <xsl:attribute name="{local-name()}" select="."/>
     </xsl:template>
 
