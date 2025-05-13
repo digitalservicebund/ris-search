@@ -464,10 +464,10 @@ public class NormsController {
           ApiConfig.Paths.LEGISLATION_SINGLE
               + "/{jurisdiction}/{agent}/{year}/{naturalIdentifier}/{pointInTime}/{version}/{language}/{pointInTimeManifestation}/{name}.{extension}")
   @Operation(
-      summary = "Get an Image particular manifestation of a piece of legislation",
+      summary = "Get a resource of a particular manifestation of a piece of legislation",
       description =
           """
-                            Returns a specific Image of a particular manifestation of a piece of legislation.
+                            Returns a specific resource of a particular manifestation of a piece of legislation.
                             """)
   @ApiResponse(responseCode = "200")
   @ApiResponse(responseCode = "404", content = @Content())
