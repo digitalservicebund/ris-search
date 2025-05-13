@@ -92,7 +92,7 @@ test("can select courts for case law", async ({ page }) => {
   const courtName = "LG Hamburg";
 
   await page.goto("/search?query=Fiktiv&category=R", {
-    waitUntil: "load",
+    waitUntil: "networkidle",
   });
 
   await page.getByLabel("Gericht", { exact: true }).pressSequentially("LG ");
