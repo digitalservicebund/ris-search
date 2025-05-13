@@ -3,7 +3,6 @@ package de.bund.digitalservice.ris.search.controller.api;
 import static org.springframework.http.HttpHeaders.CONTENT_DISPOSITION;
 
 import de.bund.digitalservice.ris.search.config.ApiConfig;
-import de.bund.digitalservice.ris.search.controller.api.utils.ResourceResolutionMode;
 import de.bund.digitalservice.ris.search.exception.CustomValidationException;
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.mapper.MappingDefinitions;
@@ -11,6 +10,7 @@ import de.bund.digitalservice.ris.search.mapper.NormResponseMapper;
 import de.bund.digitalservice.ris.search.mapper.NormSearchResponseMapper;
 import de.bund.digitalservice.ris.search.models.api.parameters.NormsSearchParams;
 import de.bund.digitalservice.ris.search.models.api.parameters.PaginationParams;
+import de.bund.digitalservice.ris.search.models.api.parameters.ResourceReferenceMode;
 import de.bund.digitalservice.ris.search.models.api.parameters.UniversalSearchParams;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.schema.CollectionSchema;
@@ -214,10 +214,13 @@ public class NormsController {
       @PathVariable @Schema(example = "deu") String language,
       @PathVariable @Schema(example = "2020-06-19") LocalDate pointInTimeManifestation,
       @Schema(example = "regelungstext-1") @PathVariable String subtype,
-      @RequestHeader(name = "x-resource-base", required = false, defaultValue = "BASE")
-          ResourceResolutionMode resolutionMode)
+      @RequestHeader(
+              name = ApiConfig.Headers.GET_RESOURCES_VIA,
+              required = false,
+              defaultValue = ResourceReferenceMode.DEFAULT_VALUE)
+          ResourceReferenceMode resourceReferenceMode)
       throws ObjectStoreServiceException {
-    final String resourcesBasePath = resolutionMode.getResourcesBasePath();
+    final String resourceBasePath = getResourceBasePath(resourceReferenceMode);
     var eli =
         new ManifestationEli(
             jurisdiction,
@@ -232,7 +235,7 @@ public class NormsController {
     final Optional<byte[]> normFileByEli = normsService.getNormFileByEli(eli);
     if (normFileByEli.isPresent()) {
       final String body =
-          xsltTransformerService.transformNorm(normFileByEli.get(), subtype, resourcesBasePath);
+          xsltTransformerService.transformNorm(normFileByEli.get(), subtype, resourceBasePath);
       return ResponseEntity.ok(body);
     } else {
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body(HTML_FILE_NOT_FOUND);
@@ -419,10 +422,14 @@ public class NormsController {
           @PathVariable
           String articleEid,
       @PathVariable @Schema(allowableValues = "html") String format,
-      @RequestHeader(name = "x-resource-base", required = false)
-          ResourceResolutionMode resourceResolutionMode)
+      @RequestHeader(
+              name = ApiConfig.Headers.GET_RESOURCES_VIA,
+              required = false,
+              defaultValue = ResourceReferenceMode.DEFAULT_VALUE)
+          ResourceReferenceMode resourceReferenceMode)
       throws ObjectStoreServiceException {
-    String resourceBasePath = resourceResolutionMode.getResourcesBasePath();
+    final String resourceBasePath = getResourceBasePath(resourceReferenceMode);
+
     if (!Objects.equals(format, "html")) {
       return ResponseEntity.badRequest().body("only html is supported for format");
     }
@@ -508,5 +515,19 @@ public class NormsController {
             body ->
                 ResponseEntity.status(HttpStatus.OK).header("Content-Type", mimeType).body(body))
         .orElseGet(() -> ResponseEntity.notFound().build());
+  }
+
+  /**
+   * Controls how resources like images will be referenced. For example, they might be accessed
+   * through an API endpoint in local development, but served via a CDN in production.
+   *
+   * @param mode Controls which static prefix will be returned.
+   * @return The prefix to use when returning references to resources.
+   */
+  private String getResourceBasePath(ResourceReferenceMode mode) {
+    return switch (mode) {
+      case API -> ApiConfig.Paths.LEGISLATION + "/";
+      case PROXY -> "/api" + ApiConfig.Paths.LEGISLATION + "/";
+    };
   }
 }
