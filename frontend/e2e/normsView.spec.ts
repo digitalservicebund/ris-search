@@ -151,3 +151,19 @@ test("can navigate to and view an attachment", async ({ page }) => {
     await page.waitForURL(mainExpressionEliUrl);
   });
 });
+
+test("can view images", async ({ page }) => {
+  await page.goto(
+    "/norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu/regelungstext-1",
+  );
+
+  await page.getByRole("img", { name: "Beispielbild" }).isVisible();
+
+  await test.step("in a single article", async () => {
+    await page
+      .getByRole("link", { name: "§ 1 Beispielhafte Illustration" })
+      .click();
+    await page.waitForURL(/\/hauptteil-1_art-1$/g);
+    await page.getByRole("img", { name: "Beispielbild" }).isVisible();
+  });
+});
