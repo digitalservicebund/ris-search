@@ -13,7 +13,11 @@ import { buildResultCountString } from "~/utils/paginationUtils";
 import { getCurrentDateInGermany } from "~/utils/dateFormatting";
 import Message from "primevue/message";
 import type { Page } from "~/components/Pagination/Pagination";
-import { convertParams, getUrl } from "./SimpleSearch.logic";
+import {
+  convertParams,
+  getUrl,
+  type SearchEndpointParams,
+} from "./SimpleSearch.logic";
 
 const store = useSimpleSearchParamsStore();
 const values = storeToRefs(store);
@@ -21,7 +25,7 @@ const values = storeToRefs(store);
 const config = useRuntimeConfig();
 const baseUrl = config.public.backendURL;
 
-const params = computed(() =>
+const params: ComputedRef<SearchEndpointParams> = computed(() =>
   convertParams({
     ...values.params.value,
     temporalCoverage: getCurrentDateInGermany(),

@@ -1,8 +1,9 @@
 import type { QueryParams } from "~/stores/searchParams";
 import { DocumentKind } from "~/types";
 
-export function getUrl(category?: string) {
+export function getUrl(category?: string): string {
   if (category?.startsWith(DocumentKind.CaseLaw)) {
+    // covers cases such as R and R.urteil
     return `/v1/case-law`;
   } else if (category?.startsWith(DocumentKind.Norm)) {
     return `/v1/legislation`;
@@ -11,14 +12,23 @@ export function getUrl(category?: string) {
   }
 }
 
-/**
- * Converts the params used in the pinia store to URL params as expected by
- * the API.
- */
+export interface SearchEndpointParams {
+  searchTerm: string;
+  size: string;
+  pageIndex: string;
+  sort: string;
+  court?: string;
+  dateFrom?: string;
+  dateTo?: string;
+  typeGroup?: string;
+  temporalCoverageFrom?: string;
+  temporalCoverageTo?: string;
+}
+
 export function convertParams(
   params: Omit<QueryParams, "dateSearchMode"> & { temporalCoverage?: string },
-) {
-  const result: Record<string, string | string[]> = {
+): SearchEndpointParams {
+  const result: SearchEndpointParams = {
     searchTerm: params.query,
     size: params.itemsPerPage.toString(),
     pageIndex: params.pageNumber.toString(),
