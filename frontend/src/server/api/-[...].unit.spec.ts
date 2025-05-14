@@ -83,6 +83,7 @@ describe("Access Token Middleware", () => {
         headers: {
           Accept: "application/json",
           Authorization: "Bearer valid-token",
+          "get-resources-via": "PROXY",
         },
         responseType: "stream",
       },

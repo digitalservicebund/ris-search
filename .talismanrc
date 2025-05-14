@@ -17,5 +17,7 @@ fileignoreconfig:
     ignore_detectors: [filecontent]
   - filename: frontend/.env.local
     checksum: c06405b024edb7b811398e2e1f424ee9d7bb7869019bf97f1d6d695dbf777aa2
+  - filename: backend/src/test/resources/data/LDML/norm/eli/bund/bgbl-1/1991/s101/1991-01-01/1/deu/1991-01-01/bild_1.jpg
+    checksum: b071ef31805cb949d0577403930bbe66ee49330fa6de2b07630bd5e063a1f32e
 scopeconfig:
 - scope: node
