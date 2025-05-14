@@ -32,6 +32,8 @@ public class ApiConfig {
   }
 
   public static class Headers {
+    private Headers() {}
+
     public static final String GET_RESOURCES_VIA = "get-resources-via";
   }
 
