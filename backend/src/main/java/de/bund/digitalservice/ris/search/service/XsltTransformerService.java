@@ -86,13 +86,15 @@ public class XsltTransformerService {
     }
   }
 
-  public String transformNorm(byte[] source, String basePath) {
-    Map<String, String> parameters = Map.of("dokumentpfad", basePath, "debugging", "false");
+  public String transformNorm(byte[] source, String basePath, String resourcesBasePath) {
+    Map<String, String> parameters =
+        Map.of("dokumentpfad", basePath, "debugging", "false", "ressourcenpfad", resourcesBasePath);
     return transformLegalDocMlFromBytes(source, parameters, normXslt);
   }
 
-  public String transformArticle(byte[] source, String eId) {
-    Map<String, String> parameters = Map.of("article-eid", eId, "debugging", "false");
+  public String transformArticle(byte[] source, String eId, String resourcesBasePath) {
+    Map<String, String> parameters =
+        Map.of("article-eid", eId, "debugging", "false", "ressourcenpfad", resourcesBasePath);
     return transformLegalDocMlFromBytes(source, parameters, normXslt);
   }
 

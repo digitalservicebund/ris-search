@@ -61,7 +61,7 @@
         <akn:body GUID="e1f2a3b4-c5d6-4789-abcd-34567890abcd" eId="hauptteil-1">
             <akn:article GUID="f1a2b3c4-d5e6-4789-abcd-4567890abcde" eId="hauptteil-1_art-1" period="#meta-1_geltzeiten-1_geltungszeitgr-1" refersTo="stammform">
                 <akn:num GUID="a2b3c4d5-e6f7-4789-abcd-567890abcdef" eId="hauptteil-1_art-1_bezeichnung-1">§ 1</akn:num>
-                <akn:heading GUID="b3c4d5e6-f7a8-4789-abcd-67890abcdef1" eId="hauptteil-1_art-1_überschrift-1">Fiktive Grundlagen politischer Einrichtungen</akn:heading>
+                <akn:heading GUID="b3c4d5e6-f7a8-4789-abcd-67890abcdef1" eId="hauptteil-1_art-1_überschrift-1">Beispielhafte Illustration</akn:heading>
                 <akn:paragraph GUID="c4d5e6f7-a8b9-4789-abcd-7890abcdef12" eId="hauptteil-1_art-1_abs-1">
                     <akn:num GUID="d5e6f7a8-b9ca-4789-abcd-890abcdef123" eId="hauptteil-1_art-1_abs-1_bezeichnung-1">(1)</akn:num>
                     <akn:content GUID="e6f7a8b9-cad0-4789-abcd-901abcdef234" eId="hauptteil-1_art-1_abs-1_inhalt-1">
@@ -71,7 +71,11 @@
                 <akn:paragraph GUID="a8b9cad0-e1f2-4789-abcd-1234abcdef45" eId="hauptteil-1_art-1_abs-2">
                     <akn:num GUID="b9cad0e1-f2a3-4789-abcd-2345abcdef56" eId="hauptteil-1_art-1_abs-2_bezeichnung-1">(2)</akn:num>
                     <akn:content GUID="cad0e1f2-a3b4-4789-abcd-3456abcdef67" eId="hauptteil-1_art-1_abs-2_inhalt-1">
-                        <akn:p GUID="dae1f2a3-b4c5-4789-abcd-4567abcdef78" eId="hauptteil-1_art-1_abs-2_inhalt-1_text-1">Die Anerkennung erfolgt ausschließlich durch die fiktiven politischen Parteien.</akn:p>
+                        <akn:p GUID="dae1f2a3-b4c5-4789-abcd-4567abcdef78" eId="hauptteil-1_art-1_abs-2_inhalt-1_text-1">
+                            Beispielhafte Illustration
+                            <akn:img GUID="7f4172f8-2184-4b13-98b3-d387b6b25a72"
+                                     eId="hauptteil-1_art-1_abs-2_inhalt-1_bild-1"
+                                     src="eli/bund/bgbl-1/2024/383/2024-12-19/1/deu/2024-12-19/illustration.png" alt="Beispielbild"/></akn:p>
                     </akn:content>
                 </akn:paragraph>
             </akn:article>
