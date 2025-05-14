@@ -23,31 +23,28 @@ public class IndexStatusService {
     this.portalBucket = portalBucket;
   }
 
-  public boolean lockIndex(IndexingState state) {
-    if (canLock(state)) {
-      PersistedIndexingState persistedState =
-          state.getPersistedIndexingState().withLockTime(state.getStartTime().toString());
-      state.setPersistedIndexingState(persistedState);
-      saveStatus(state.getStatusFileName(), persistedState);
+  public boolean lockIndex(String statusFileName, IndexingState state) {
+    if (canLock(statusFileName, state)) {
+      state = state.withLockTime(state.startTime());
+      saveStatus(statusFileName, state);
       return true;
     } else {
       return false;
     }
   }
 
-  public boolean canLock(IndexingState state) {
-    PersistedIndexingState persistedState = state.getPersistedIndexingState();
-    if (persistedState.lockTime() == null) {
+  public boolean canLock(String statusFileName, IndexingState state) {
+    if (state.lockTime() == null) {
       return true;
-    } else if (Instant.parse(persistedState.lockTime())
-        .isBefore(state.getStartTime().minus(Duration.ofDays(1)))) {
+    } else if (Instant.parse(state.lockTime())
+        .isBefore(state.startTimeInstant().minus(Duration.ofDays(1)))) {
       logger.error("Import has been locked for more than 24 hours. Attempting a graceful reset.");
       return true;
     } else {
       logger.warn(
           "Import already in progress for {}. Current import started at {}",
-          state.getStatusFileName(),
-          persistedState.lockTime());
+          statusFileName,
+          state.lockTime());
       return false;
     }
   }
@@ -56,26 +53,25 @@ public class IndexStatusService {
     saveStatus(statusFileName, loadStatus(statusFileName).withLockTime(null));
   }
 
-  public void updateLastSuccess(String statusFileName, Instant lastSuccess)
+  public void updateLastSuccess(String statusFileName, String lastSuccess)
       throws ObjectStoreServiceException {
-    saveStatus(statusFileName, loadStatus(statusFileName).withLastSuccess(lastSuccess.toString()));
+    saveStatus(statusFileName, loadStatus(statusFileName).withLastSuccess(lastSuccess));
   }
 
-  public PersistedIndexingState loadStatus(String statusFileName)
-      throws ObjectStoreServiceException {
+  public IndexingState loadStatus(String statusFileName) throws ObjectStoreServiceException {
     ObjectMapper mapper = new ObjectMapper();
     try {
       String content = portalBucket.getFileAsString(statusFileName).orElse(null);
       if (content == null) {
-        return new PersistedIndexingState();
+        return new IndexingState();
       }
-      return mapper.readValue(content, PersistedIndexingState.class);
+      return mapper.readValue(content, IndexingState.class);
     } catch (JsonProcessingException e) {
       return null;
     }
   }
 
-  public void saveStatus(String statusFileName, PersistedIndexingState status) {
+  public void saveStatus(String statusFileName, IndexingState status) {
     ObjectMapper mapper = new ObjectMapper();
     try {
       String statusJson = mapper.writeValueAsString(status);

@@ -1,6 +1,6 @@
 import { type Page, test } from "@playwright/test";
 import { expect } from "./fixtures";
-import { getResultCount } from "./utils";
+import { getDisplayedResultCount } from "./utils";
 
 async function navigateToSearch(page: Page) {
   await page.goto("/advanced-search");
@@ -121,7 +121,7 @@ test.describe("additional search criteria", async () => {
     });
 
     await page.getByLabel("Suchen").click();
-    baselineNumberOfResults = await getResultCount(page);
+    baselineNumberOfResults = await getDisplayedResultCount(page);
   });
 
   test("Adding a specific search parameter with AND reduces the result set", async ({
@@ -136,7 +136,7 @@ test.describe("additional search criteria", async () => {
 
     await page.getByLabel("Suchen").click();
     await expect
-      .poll(() => getResultCount(page), {
+      .poll(() => getDisplayedResultCount(page), {
         message: "ensure that the correct results appear eventually",
       })
       .toBeLessThan(baselineNumberOfResults);
@@ -153,7 +153,7 @@ test.describe("additional search criteria", async () => {
     });
     await page.getByLabel("Suchen").click();
     await expect
-      .poll(() => getResultCount(page), {
+      .poll(() => getDisplayedResultCount(page), {
         message: "ensure that the correct results appear eventually",
       })
       .toBeGreaterThan(baselineNumberOfResults);

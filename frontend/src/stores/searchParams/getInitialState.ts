@@ -1,6 +1,10 @@
 import _ from "lodash";
 import { DocumentKind } from "@/types";
-import type { LocationQueryRaw, LocationQueryValue, Router } from "#vue-router";
+import type {
+  LocationQuery,
+  LocationQueryRaw,
+  LocationQueryValue,
+} from "#vue-router";
 import { dateSearchFromQuery, DateSearchMode } from "./dateParams";
 import type { QueryParams } from "@/stores/searchParams/index";
 
@@ -13,7 +17,7 @@ export const defaultParams: QueryParams = {
   dateSearchMode: DateSearchMode.None,
 };
 
-const omitDefaults = (newValue: LocationQueryRaw) => {
+export const omitDefaults = (newValue: LocationQueryRaw): LocationQueryRaw => {
   return _.pickBy(newValue, (value, key) => {
     return (defaultParams as unknown as Record<string, string>)[key] !== value;
   });
@@ -41,8 +45,7 @@ function getFirstValue(
 ): string | undefined {
   return (Array.isArray(value) ? value[0] : value) ?? undefined;
 }
-export const getInitialState = (router: Router): QueryParams => {
-  const routerQuery = router.currentRoute.value.query;
+export const getInitialState = (routerQuery: LocationQuery): QueryParams => {
   return {
     query: getFirstValue(routerQuery.query) ?? defaultParams.query,
     category: getFirstValue(routerQuery.category) ?? defaultParams.category,
@@ -53,14 +56,4 @@ export const getInitialState = (router: Router): QueryParams => {
     ...dateSearchFromQuery(routerQuery),
     court: getFirstValue(routerQuery.court),
   };
-};
-export const setRouterQuery = (router: Router, params: LocationQueryRaw) => {
-  const postHogStore = usePostHogStore();
-  const newParams = params as unknown as QueryParams;
-  const previousParams = addDefaults(router.currentRoute.value.query);
-  postHogStore.searchPerformed("simple", newParams, previousParams);
-  return router.replace({
-    ...router.currentRoute.value,
-    query: omitDefaults(params),
-  });
 };
