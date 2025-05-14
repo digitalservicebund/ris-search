@@ -192,6 +192,7 @@ test("can view images", async ({ page }) => {
 
   await test.step("in a single article", async () => {
     await page
+      .getByRole("main")
       .getByRole("link", { name: "§ 1 Beispielhafte Illustration" })
       .click();
     await page.waitForURL(/\/hauptteil-1_art-1$/g);
