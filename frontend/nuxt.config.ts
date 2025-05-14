@@ -106,6 +106,9 @@ export default defineNuxtConfig({
         "script-src": ["'strict-dynamic'", "'nonce-{{nonce}}'"],
       },
     },
+    rateLimiter: {
+      whiteList: config.devMode ? ["127.0.0.1", "192.168.0.1"] : [],
+    },
   },
   sentry: {
     sourceMapsUploadOptions: {
