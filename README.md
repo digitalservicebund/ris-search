@@ -112,10 +112,8 @@ The API application will be available at [localhost:8090](http://localhost:8090)
 The project has distinct unit and integration test sets.
 You can add the following AWS credentials to your environment:
 
-```bash
-export AWS_ACCESS_KEY_ID=ASIAY34FZABOKMYTVV9A
-export AWS_SECRET_ACCESS_KEY=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
-```
+AWS_ACCESS_KEY_ID=AKIAEXAMPLE
+AWS_SECRET_ACCESS_KEY=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
 
 **To run just the unit tests:**
 
