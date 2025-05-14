@@ -42,6 +42,11 @@ const isOnlyPage = computed(
 );
 
 const itemsOnPage = computed(() => buildItemsOnPageString(props.page));
+
+const userInputDisabled = ref(true);
+onNuxtReady(() => {
+  userInputDisabled.value = false;
+});
 </script>
 
 <template>
@@ -58,7 +63,7 @@ const itemsOnPage = computed(() => buildItemsOnPageString(props.page));
           v-if="!isOnlyPage"
           aria-label="vorherige Ergebnisse"
           severity="secondary"
-          :disabled="!page?.view.previous"
+          :disabled="!page?.view.previous || userInputDisabled"
           icon-position="left"
           label="Zurück"
           @click="previousPage"
@@ -75,7 +80,7 @@ const itemsOnPage = computed(() => buildItemsOnPageString(props.page));
           v-if="!isOnlyPage"
           aria-label="nächste Ergebnisse"
           severity="secondary"
-          :disabled="!page?.view.next"
+          :disabled="!page?.view.next || userInputDisabled"
           icon-pos="right"
           label="Weiter"
           @click="nextPage"
