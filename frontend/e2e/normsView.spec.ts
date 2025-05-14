@@ -1,6 +1,6 @@
 import { test } from "@playwright/test";
 import { expect } from "./fixtures";
-import { getResultCount } from "./utils";
+import { getDisplayedResultCount } from "./utils";
 
 const expectedNorms = [
   "Fiktive Fruchtsaft- und Erfrischungsgetränkeverordnung zu Testzwecken",
@@ -16,7 +16,7 @@ test("can search, filter for norms, and view a single norm", async ({
 
     // three current matching norms, plus matching decisions
     const expectedCaseLawCount = 4;
-    expect(await getResultCount(page)).toBe(
+    expect(await getDisplayedResultCount(page)).toBe(
       expectedNorms.length + expectedCaseLawCount,
     );
   });
@@ -24,7 +24,7 @@ test("can search, filter for norms, and view a single norm", async ({
   await test.step("Filter for norms", async () => {
     await page.getByRole("button", { name: "Gesetze & Verordnungen" }).click();
     await expect
-      .poll(() => getResultCount(page), {
+      .poll(() => getDisplayedResultCount(page), {
         message: "the count should decrease",
       })
       .toBe(expectedNorms.length);
@@ -81,7 +81,9 @@ test("can navigate to a single norm article and between articles", async ({
     await page.waitForURL(
       mainExpressionEliUrl + "/hauptteil-1_abschnitt-1_art-1",
     );
-    await expect(page.locator("section")).toHaveCount(2);
+    await expect(
+      page.getByRole("heading", { name: "§ 1 Anwendungsbereich" }),
+    ).toBeVisible();
   });
 
   await test.step("Navigate between single articles", async () => {
@@ -89,12 +91,41 @@ test("can navigate to a single norm article and between articles", async ({
     await page.waitForURL(
       mainExpressionEliUrl + "/hauptteil-1_abschnitt-2_art-1",
     );
-    await expect(page.locator("section")).toHaveCount(2);
+    await expect(
+      page.getByRole("heading", {
+        name: "§ 2 Zutaten, Herstellungsanforderungen",
+      }),
+    ).toBeVisible();
     await page.getByRole("link", { name: "Nächster Paragraf" }).click();
+    await page.waitForURL(
+      mainExpressionEliUrl + "/hauptteil-1_abschnitt-2_art-2",
+    );
+    await expect(
+      page.getByRole("heading", {
+        name: "§ 3 Kennzeichnung",
+      }),
+    ).toBeVisible();
+  });
+
+  await test.step("Navigate back between single articles", async () => {
+    const mainExpressionEliUrl =
+      "/norms/eli/bund/bgbl-1/2000/s1016/2023-04-26/10/deu/regelungstext-1";
+    await page.goto(mainExpressionEliUrl + "/hauptteil-1_abschnitt-2_art-2");
+    await expect(
+      page.getByRole("heading", {
+        name: "§ 3 Kennzeichnung",
+      }),
+    ).toBeVisible();
+
+    await page.getByRole("link", { name: "Vorheriger Paragraf" }).click();
     await page.waitForURL(
       mainExpressionEliUrl + "/hauptteil-1_abschnitt-2_art-1",
     );
-    await expect(page.locator("section")).toHaveCount(8);
+    await expect(
+      page.getByRole("heading", {
+        name: "§ 2 Zutaten, Herstellungsanforderungen",
+      }),
+    ).toBeVisible();
   });
 
   await test.step("Navigate back to main norm view", async () => {
