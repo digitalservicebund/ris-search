@@ -16,15 +16,12 @@ public record ManifestationEli(
     Integer version,
     String language,
     LocalDate pointInTimeManifestation,
-    String subtype) {
+    String subtype,
+    String format) {
 
   @Override
   public String toString() {
-    return withoutSuffix() + ".xml";
-  }
-
-  public String withoutSuffix() {
-    return "eli/%s/%s/%s/%s/%s/%d/%s/%s/%s"
+    return "eli/%s/%s/%s/%s/%s/%d/%s/%s/%s.%s"
         .formatted(
             jurisdiction(),
             agent(),
@@ -34,7 +31,8 @@ public record ManifestationEli(
             version(),
             language(),
             pointInTimeManifestation().format(DateTimeFormatter.ISO_LOCAL_DATE),
-            subtype());
+            subtype(),
+            format());
   }
 
   public WorkEli getWorkEli() {
@@ -55,7 +53,7 @@ public record ManifestationEli(
 
   static final Pattern pattern =
       Pattern.compile(
-          "eli/(?<jurisdiction>[^/]+)/(?<agent>[^/]+)/(?<year>[^/]+)/(?<naturalIdentifier>[^/]+)/(?<pointInTime>[^/]+)/(?<version>[^/]+)/(?<language>[^/]+)/(?<pointInTimeManifestation>[^/]+)/(?<subtype>[^/]+)\\.xml");
+          "eli/(?<jurisdiction>[^/]+)/(?<agent>[^/]+)/(?<year>[^/]+)/(?<naturalIdentifier>[^/]+)/(?<pointInTime>[^/]+)/(?<version>[^/]+)/(?<language>[^/]+)/(?<pointInTimeManifestation>[^/]+)/(?<subtype>[^/]+)\\.(?<format>[^/]+)");
 
   public static Optional<ManifestationEli> fromString(String manifestationEli) {
     Matcher matcher = pattern.matcher(manifestationEli);
@@ -76,7 +74,8 @@ public record ManifestationEli(
               matcher.group("language"),
               LocalDate.parse(
                   matcher.group("pointInTimeManifestation"), DateTimeFormatter.ISO_LOCAL_DATE),
-              matcher.group("subtype")));
+              matcher.group("subtype"),
+              matcher.group("format")));
     } catch (IllegalStateException | IllegalArgumentException | DateTimeParseException e) {
       return Optional.empty();
     }

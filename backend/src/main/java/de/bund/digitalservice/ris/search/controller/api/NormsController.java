@@ -234,7 +234,8 @@ public class NormsController {
             version,
             language,
             pointInTimeManifestation,
-            subtype);
+            subtype,
+            "xml");
     final Optional<byte[]> normFileByEli = normsService.getNormFileByEli(eli);
     if (normFileByEli.isPresent()) {
       final String body =
@@ -304,7 +305,8 @@ public class NormsController {
             version,
             language,
             pointInTimeManifestation,
-            subtype);
+            subtype,
+            "xml");
 
     return normsService
         .getNormFileByEli(eli)
@@ -449,7 +451,8 @@ public class NormsController {
             version,
             language,
             pointInTimeManifestation,
-            subtype);
+            subtype,
+            "xml");
     final Optional<byte[]> normFileByEli = normsService.getNormFileByEli(eli);
     return normFileByEli
         .map(
@@ -501,7 +504,7 @@ public class NormsController {
       @Schema(example = "jpg") @PathVariable String extension)
       throws ObjectStoreServiceException {
 
-    final ManifestationEli baseEli =
+    final ManifestationEli eli =
         new ManifestationEli(
             jurisdiction,
             agent,
@@ -511,8 +514,9 @@ public class NormsController {
             version,
             language,
             pointInTimeManifestation,
-            name);
-    Optional<byte[]> image = normsService.getAttachment(baseEli, extension);
+            name,
+            extension);
+    Optional<byte[]> image = normsService.getNormFileByEli(eli);
 
     final String mimeType = URLConnection.guessContentTypeFromName(name + "." + extension);
 
