@@ -1,10 +1,8 @@
 package de.bund.digitalservice.ris.search.importer;
 
-import de.bund.digitalservice.ris.search.repository.objectstorage.CaseLawBucket;
-import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
-import de.bund.digitalservice.ris.search.service.ImportService;
-import de.bund.digitalservice.ris.search.service.IndexCaselawService;
-import de.bund.digitalservice.ris.search.service.IndexNormsService;
+import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
+import de.bund.digitalservice.ris.search.service.CaseLawIndexSyncJob;
+import de.bund.digitalservice.ris.search.service.NormIndexSyncJob;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -18,28 +16,21 @@ import org.springframework.stereotype.Component;
 @Component
 public class ImportTaskProcessor {
 
-  private final ImportService importService;
-  private final IndexNormsService indexNormsService;
-  private final IndexCaselawService indexCaselawService;
+  public static final int OK_RETURN_CODE = 0;
+  public static final int ERROR_RETURN_CODE = 1;
+
+  private final NormIndexSyncJob normIndexSyncJob;
+  private final CaseLawIndexSyncJob caseLawIndexSyncJob;
 
   private static final Logger logger = LogManager.getLogger(ImportTaskProcessor.class);
 
-  private static final String TASK_ARGUMENT = "--import";
-  private final NormsBucket normsBucket;
-  private final CaseLawBucket caseLawBucket;
+  private static final String TASK_ARGUMENT = "--task";
 
   @Autowired
   public ImportTaskProcessor(
-      ImportService importService,
-      IndexNormsService indexNormsService,
-      IndexCaselawService indexCaselawService,
-      NormsBucket normsBucket,
-      CaseLawBucket caseLawBucket) {
-    this.importService = importService;
-    this.indexNormsService = indexNormsService;
-    this.indexCaselawService = indexCaselawService;
-    this.normsBucket = normsBucket;
-    this.caseLawBucket = caseLawBucket;
+      NormIndexSyncJob normIndexSyncJob, CaseLawIndexSyncJob caseLawIndexSyncJob) {
+    this.normIndexSyncJob = normIndexSyncJob;
+    this.caseLawIndexSyncJob = caseLawIndexSyncJob;
   }
 
   public boolean shouldRun(String[] args) {
@@ -49,24 +40,27 @@ public class ImportTaskProcessor {
   public int run(String[] args) {
     try {
       for (String target : parseTargets(args)) {
-        runTask(target);
+        int returnValue = runTask(target);
+        if (returnValue != OK_RETURN_CODE) {
+          return returnValue;
+        }
       }
-      return 0;
+      return OK_RETURN_CODE;
     } catch (IllegalArgumentException ex) {
       logger.error(ex.getMessage(), ex);
-      return 1;
+      return ERROR_RETURN_CODE;
     }
   }
 
   @NotNull
   public static List<String> parseTargets(String[] args) {
     List<String> targets = new ArrayList<>();
-    IntStream.range(0, args.length)
+    IntStream.range(OK_RETURN_CODE, args.length)
         .filter(i -> args[i].equals(TASK_ARGUMENT))
         .forEachOrdered(
             i -> {
               try {
-                String target = args[i + 1];
+                String target = args[i + ERROR_RETURN_CODE];
                 targets.add(target);
               } catch (IndexOutOfBoundsException e) {
                 throw new IllegalArgumentException(
@@ -76,24 +70,27 @@ public class ImportTaskProcessor {
     return targets;
   }
 
-  public void runTask(String target) {
-    switch (target) {
-      case "norms":
-        importService.lockAndImportChangelogs(
-            indexNormsService,
-            ImportService.NORM_LOCK_FILENAME,
-            ImportService.NORM_LAST_SUCCESS_FILENAME,
-            normsBucket);
-        break;
-      case "caselaw":
-        importService.lockAndImportChangelogs(
-            indexCaselawService,
-            ImportService.CASELAW_LOCK_FILENAME,
-            ImportService.CASELAW_LAST_SUCCESS_FILENAME,
-            caseLawBucket);
-        break;
-      default:
-        throw new IllegalArgumentException("Unexpected target '%s'".formatted(target));
-    }
+  public int runTask(String target) {
+    return switch (target) {
+      case "import_norms" -> {
+        try {
+          normIndexSyncJob.runJob();
+        } catch (ObjectStoreServiceException e) {
+          logger.error(e.getMessage(), e);
+          yield ERROR_RETURN_CODE;
+        }
+        yield OK_RETURN_CODE;
+      }
+      case "import_caselaw" -> {
+        try {
+          caseLawIndexSyncJob.runJob();
+        } catch (ObjectStoreServiceException e) {
+          logger.error(e.getMessage(), e);
+          yield ERROR_RETURN_CODE;
+        }
+        yield OK_RETURN_CODE;
+      }
+      default -> throw new IllegalArgumentException("Unexpected target '%s'".formatted(target));
+    };
   }
 }
