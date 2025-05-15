@@ -9401,6 +9401,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"isomorphic-dompurify@npm:^2.24.0":
+  version: 2.24.0
+  resolution: "isomorphic-dompurify@npm:2.24.0"
+  dependencies:
+    dompurify: "npm:^3.2.5"
+    jsdom: "npm:^26.1.0"
+  checksum: 10c0/0db27a48c848f05ce71bde779eead660defdf844993073fd4eaf66ae81039a0e69989f3ff4ce1d357c82f427d7018c6fc406ed6a42bab0fc93bbaab9aaccaa7e
+  languageName: node
+  linkType: hard
+
 "istanbul-lib-coverage@npm:^3.0.0, istanbul-lib-coverage@npm:^3.2.2":
   version: 3.2.2
   resolution: "istanbul-lib-coverage@npm:3.2.2"
@@ -13335,6 +13345,7 @@ __metadata:
     eslint-config-prettier: "npm:^9.1.0"
     eslint-plugin-prettier: "npm:^5.2.6"
     eslint-plugin-unused-imports: "npm:^4.1.4"
+    isomorphic-dompurify: "npm:^2.24.0"
     js-cookie: "npm:^3.0.5"
     jsdom: "npm:^26.1.0"
     json-schema-to-typescript-lite: "npm:^14.1.0"
