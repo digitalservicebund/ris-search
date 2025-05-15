@@ -1,7 +1,7 @@
 import type { Page } from "@playwright/test";
 import { test } from "@playwright/test";
 import { expect } from "./fixtures";
-import { getResultCount } from "./utils";
+import { getDisplayedResultCount } from "./utils";
 
 function getSidebar(page: Page) {
   const sidebarLabel = page.getByText("Seiteninhalte");
@@ -17,7 +17,7 @@ test("can search, filter for case law, and view a single case law documentation 
     await page.getByPlaceholder("Suchbegriff eingeben").fill("Fiktiv");
     await page.getByLabel("Suchen").click();
 
-    expect(await getResultCount(page)).toBe(15);
+    expect(await getDisplayedResultCount(page)).toBe(15);
   });
 
   let resultsListUrl: string;
@@ -25,7 +25,7 @@ test("can search, filter for case law, and view a single case law documentation 
   await test.step("Filter for Gerichtsentscheidungen", async () => {
     await page.getByRole("button", { name: "Gerichtsentscheidungen" }).click();
     await expect
-      .poll(() => getResultCount(page), {
+      .poll(() => getDisplayedResultCount(page), {
         message: "the count should decrease",
       })
       .toBe(10);

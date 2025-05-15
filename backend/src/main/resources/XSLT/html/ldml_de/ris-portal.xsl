@@ -24,6 +24,8 @@
     <xsl:param name="durchreichen" as="xs:boolean" select="true()"/>
     <!-- base path to use when generating links -->
     <xsl:param name="dokumentpfad" as="xs:string" select="'/regelungstext-1'"/>
+    <!-- base path to use when linking to resources, such as images -->
+    <xsl:param name="ressourcenpfad" as="xs:string" select="''" />
     <!-- article eId can be specified to only output a single article -->
     <xsl:param name="article-eid" as="xs:string" select="''"/>
     <xsl:variable name="is-single-article" as="xs:boolean" select="$article-eid != ''"/>
@@ -304,12 +306,5 @@
         ### Images ###
         ###################
     -->
-
-    <!-- Replace src of images with placeholder image until images are migrated -->
-    <xsl:template match="akn:img">
-        <img src="/placeholder.png" alt="Platzhalterbild. Das Bild wird bald hinzugefügt.">
-            <xsl:apply-templates select="@*[name() != 'src' and name() != 'alt' and name() != 'title']"/>
-        </img>
-    </xsl:template>
 
 </xsl:stylesheet>

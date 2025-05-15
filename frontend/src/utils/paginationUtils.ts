@@ -30,7 +30,7 @@ export function buildResultCountString(currentPage: Page) {
   return `${currentPage.totalItems.toLocaleString("de-DE")} Suchergebnisse`;
 }
 
-export function buildItemsOnPageString(page?: Page) {
+export function buildItemsOnPageString(page?: Page | null) {
   if (!page?.member.length || !page?.totalItems) {
     return "";
   }

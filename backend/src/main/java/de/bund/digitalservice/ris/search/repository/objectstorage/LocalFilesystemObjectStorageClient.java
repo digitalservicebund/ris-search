@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,14 +51,14 @@ public class LocalFilesystemObjectStorageClient implements ObjectStorageClient {
 
   @Override
   public List<String> listKeysByPrefix(String prefix) {
-    if (!prefix.isEmpty() && !prefix.endsWith("/")) {
-      LOGGER.warn("Filtering by non-directory prefix is not supported, {}", prefix);
-    }
     Path bucketPath = localStorageDirectory.resolve(bucket);
-    Path basePath = bucketPath.resolve(prefix);
+
+    Path basePath = bucketPath.resolve(StringUtils.substringBeforeLast(prefix, "/"));
+
     try (Stream<Path> stream = Files.walk(basePath)) {
       return stream
           .filter(Files::isRegularFile)
+          .filter(f -> f.toString().contains(prefix))
           .map(p -> p.toString().substring(bucketPath.toString().length() + 1))
           .toList();
     } catch (IOException e) {

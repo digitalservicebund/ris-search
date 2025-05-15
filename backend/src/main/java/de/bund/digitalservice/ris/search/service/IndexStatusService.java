@@ -1,10 +1,11 @@
 package de.bund.digitalservice.ris.search.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.repository.objectstorage.PortalBucket;
 import java.time.Duration;
 import java.time.Instant;
-import java.time.format.DateTimeParseException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,74 +23,61 @@ public class IndexStatusService {
     this.portalBucket = portalBucket;
   }
 
-  /**
-   * Stores a lockfile to ensure only one index job is running at once.
-   *
-   * @param lockFileName String name of the lockfile
-   * @param currentTime Instant startTime that is supposed to be persisted with the lockfile
-   * @return returns if a new lock file was written
-   */
-  public boolean lockIndex(String lockFileName, Instant currentTime) {
-    try {
-      String lockedAt = portalBucket.getFileAsString(lockFileName).orElse(null);
-      if (canLock(lockedAt, lockFileName, currentTime)) {
-        portalBucket.save(lockFileName, currentTime.toString());
-        return true;
-      } else {
-        return false;
-      }
-    } catch (ObjectStoreServiceException e) {
-      logger.error("AWS S3 encountered an issue.", e);
+  public boolean lockIndex(String statusFileName, IndexingState state) {
+    if (canLock(statusFileName, state)) {
+      state = state.withLockTime(state.startTime());
+      saveStatus(statusFileName, state);
+      return true;
+    } else {
       return false;
     }
   }
 
-  private boolean canLock(String lockedAt, String statusFileName, Instant currentTime) {
-    if (lockedAt == null) {
+  public boolean canLock(String statusFileName, IndexingState state) {
+    if (state.lockTime() == null) {
       return true;
-    } else if (Instant.parse(lockedAt).isBefore(currentTime.minus(Duration.ofDays(1)))) {
+    } else if (Instant.parse(state.lockTime())
+        .isBefore(state.startTimeInstant().minus(Duration.ofDays(1)))) {
       logger.error("Import has been locked for more than 24 hours. Attempting a graceful reset.");
       return true;
     } else {
       logger.warn(
           "Import already in progress for {}. Current import started at {}",
           statusFileName,
-          lockedAt);
+          state.lockTime());
       return false;
     }
   }
 
-  /**
-   * release the lock of a specific file
-   *
-   * @param lockFileName String reference of the lockfile
-   */
-  public void unlockIndex(String lockFileName) {
-    portalBucket.delete(lockFileName);
+  public void unlockIndex(String statusFileName) throws ObjectStoreServiceException {
+    saveStatus(statusFileName, loadStatus(statusFileName).withLockTime(null));
   }
 
-  public Instant getLastSuccess(String fileName) throws ObjectStoreServiceException {
-    String lastSuccess = portalBucket.getFileAsString(fileName).orElse(null);
-    if (lastSuccess == null) {
-      logger.error("Status file missing.");
-      return null;
-    } else {
-      try {
-        return Instant.parse(lastSuccess);
-      } catch (DateTimeParseException e) {
-        logger.error("Status file has an invalid format.");
-        return null;
+  public void updateLastSuccess(String statusFileName, String lastSuccess)
+      throws ObjectStoreServiceException {
+    saveStatus(statusFileName, loadStatus(statusFileName).withLastSuccess(lastSuccess));
+  }
+
+  public IndexingState loadStatus(String statusFileName) throws ObjectStoreServiceException {
+    ObjectMapper mapper = new ObjectMapper();
+    try {
+      String content = portalBucket.getFileAsString(statusFileName).orElse(null);
+      if (content == null) {
+        return new IndexingState();
       }
+      return mapper.readValue(content, IndexingState.class);
+    } catch (JsonProcessingException e) {
+      return null;
     }
   }
 
-  /**
-   * stores the time of the last successful run
-   *
-   * @param lastSuccessFilename String
-   * @param lastSuccess Instant
-   */
-  public void updateLastSuccess(String lastSuccessFilename, Instant lastSuccess) {
-    portalBucket.save(lastSuccessFilename, lastSuccess.toString());
+  public void saveStatus(String statusFileName, IndexingState status) {
+    ObjectMapper mapper = new ObjectMapper();
+    try {
+      String statusJson = mapper.writeValueAsString(status);
+      portalBucket.save(statusFileName, statusJson);
+    } catch (JsonProcessingException e) {
+      logger.error("Error while saving status file", e);
+    }
   }
 }
