@@ -140,9 +140,18 @@ test("can navigate to a single norm article and between articles", async ({
     const footnotes = page.locator(".dokumentenkopf-fussnoten");
     await expect(footnotes).not.toContainText("❃");
 
-    await page.getByRole("button", { name: "Fußnote anzeigen" }).click();
+    const expandButton = page.getByRole("button", { name: "Fußnote anzeigen" });
 
-    await expect(footnotes).toContainText("❃");
+    await expect
+      .poll(
+        async () => {
+          await expandButton.click();
+          return footnotes.textContent();
+        },
+        { message: "wait for the expand button to become interactive" },
+      )
+      .toContain("❃");
+
     await expect(footnotes).toContainText(
       "(Diese Fußnote im Titel wurde im End-to-end-Datenbestand ergänzt",
     );
