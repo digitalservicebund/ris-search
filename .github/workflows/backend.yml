@@ -275,6 +275,7 @@ jobs:
           app: ris-search-staging
           argocd_pipeline_password: ${{ secrets.ARGOCD_PIPELINE_PASSWORD }}
           argocd_server: ${{ secrets.ARGOCD_SERVER }}
+          argocd_sync_timeout: 420
 
   deploy-staging-public-portal:
     runs-on: ubuntu-latest
