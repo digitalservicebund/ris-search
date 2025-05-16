@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
-import de.bund.digitalservice.ris.search.service.IndexingState;
 import de.bund.digitalservice.ris.search.service.NormIndexSyncJob;
 import java.time.Instant;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,8 +31,7 @@ public class ImporterController {
     try {
       Changelog changelogContent = new ObjectMapper().readValue(changelog, Changelog.class);
       normIndexSyncJob.importChangelogContent(
-          changelogContent,
-          new IndexingState(null, Instant.now().toString(), null, "apiRequest", null));
+          changelogContent, Instant.now().toString(), "apiRequest");
       return ResponseEntity.noContent().build();
     } catch (JsonProcessingException | ObjectStoreServiceException e) {
       return ResponseEntity.badRequest().body(e.getMessage());

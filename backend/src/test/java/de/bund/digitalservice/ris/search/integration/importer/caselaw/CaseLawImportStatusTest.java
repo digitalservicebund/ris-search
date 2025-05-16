@@ -49,7 +49,7 @@ class CaseLawImportStatusTest extends ContainersIntegrationBase {
       }
     }
     String oldTimestamp = "2000-01-01T00:00:00Z";
-    IndexingState indexingState = new IndexingState(null, null, oldTimestamp, null, null);
+    IndexingState indexingState = new IndexingState(null, null, oldTimestamp);
     indexStatusService.saveStatus(CaseLawIndexSyncJob.CASELAW_STATUS_FILENAME, indexingState);
   }
 
@@ -60,7 +60,7 @@ class CaseLawImportStatusTest extends ContainersIntegrationBase {
     Assertions.assertEquals(5, caseLawBucket.getAllKeys().size());
     IndexingState result =
         indexStatusService.loadStatus(CaseLawIndexSyncJob.CASELAW_STATUS_FILENAME);
-    Assertions.assertNotNull(result.lastSuccessInstant());
+    Assertions.assertNotNull(result.lastProcessedChangelogFile());
   }
 
   @Test
