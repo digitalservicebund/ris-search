@@ -6,7 +6,6 @@ import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
 import de.bund.digitalservice.ris.search.repository.objectstorage.ObjectStorage;
 import java.time.Instant;
-import java.time.format.DateTimeParseException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -55,39 +54,26 @@ public class IndexSyncJob {
     indexStatusService.unlockIndex(statusFileName);
   }
 
-  public List<String> getNewChangelogsSinceInstant(
-      ObjectStorage changelogBucket, Instant threshold) {
+  public List<String> getNewChangelogs(
+      ObjectStorage changelogBucket, String lastProcessedChangelog) {
 
     return changelogBucket.getAllKeysByPrefix(CHANGELOG).stream()
         .filter(e -> !CHANGELOG.equals(e))
-        .filter(e -> changelogIsNewerThanThreshold(e, threshold))
+        .filter(e -> e.compareTo(lastProcessedChangelog) > 0)
         .sorted()
         .toList();
   }
 
-  private boolean changelogIsNewerThanThreshold(String filename, Instant threshold) {
-    return getInstantFromChangelog(filename).map(time -> time.isAfter(threshold)).orElse(false);
-  }
-
-  public Optional<Instant> getInstantFromChangelog(String filename) {
-    try {
-      String timeString = filename.substring(filename.indexOf("/") + 1, filename.indexOf("Z") + 1);
-      Instant instant = Instant.parse(timeString);
-      return Optional.of(instant);
-    } catch (StringIndexOutOfBoundsException | NullPointerException | DateTimeParseException e) {
-      logger.error("unable to parse invalid changelog timestamp {}", filename);
-      return Optional.empty();
-    }
-  }
-
   public void fetchAndProcessChanges(IndexingState state) throws ObjectStoreServiceException {
-    if (state.lastSuccess() == null) {
+    if (state.lastProcessedChangelogFile() == null) {
       // if status file or last success missing do a full reset
       indexService.reindexAll(state.startTime());
-      indexStatusService.updateLastSuccess(statusFileName, state.startTime());
+      indexStatusService.updateLastProcessedChangelog(statusFileName, state.startTime());
     } else {
       List<String> unprocessedChangelogs =
-          getNewChangelogsSinceInstant(changelogBucket, state.lastSuccessInstant());
+          getNewChangelogs(changelogBucket, state.lastProcessedChangelogFile()).stream()
+              .sorted()
+              .toList();
       processChangelogs(state, unprocessedChangelogs);
     }
   }
@@ -95,14 +81,10 @@ public class IndexSyncJob {
   private void processChangelogs(IndexingState state, List<String> unprocessedChangelogs)
       throws ObjectStoreServiceException {
     for (String fileName : unprocessedChangelogs) {
-      state = state.withCurrentChangelogFile(fileName);
       Changelog changelogContent = parseOneChangelog(changelogBucket, fileName);
       if (changelogContent != null) {
-        importChangelogContent(changelogContent, state);
-        Optional<Instant> changelogTimestamp = getInstantFromChangelog(fileName);
-        if (changelogTimestamp.isPresent()) {
-          indexStatusService.updateLastSuccess(statusFileName, changelogTimestamp.get().toString());
-        }
+        importChangelogContent(changelogContent, state.startTime(), fileName);
+        indexStatusService.updateLastProcessedChangelog(statusFileName, fileName);
       }
     }
   }
@@ -123,22 +105,23 @@ public class IndexSyncJob {
     }
   }
 
-  public void importChangelogContent(Changelog changelog, IndexingState state)
+  public void importChangelogContent(
+      Changelog changelog, String startTime, String changelogFileName)
       throws ObjectStoreServiceException {
     if (changelog.isChangeAll()) {
       logger.info("Reindexing all");
-      indexService.reindexAll(state.startTime());
+      indexService.reindexAll(startTime);
     } else {
       if (!Collections.disjoint(changelog.getChanged(), changelog.getDeleted())) {
         throw new IllegalArgumentException("duplicate identifier in changed and deleted list");
       }
-      indexService.indexChangelog(state.currentChangelogFile(), changelog);
+      indexService.indexChangelog(changelogFileName, changelog);
     }
   }
 
   public void alertOnNumberMismatch(IndexingState state) {
     List<String> unprocessedChangelogs =
-        getNewChangelogsSinceInstant(changelogBucket, state.lastSuccessInstant());
+        getNewChangelogs(changelogBucket, state.lastProcessedChangelogFile());
     if (unprocessedChangelogs.isEmpty()) {
       int numberOfFilesInBucket = indexService.getNumberOfFilesInBucket();
       int numberOfIndexedDocuments = indexService.getNumberOfIndexedDocuments();

@@ -26,7 +26,7 @@ class IndexStatusServiceTest extends ContainersIntegrationBase {
   void saveAndloadStatusTest1() throws ObjectStoreServiceException {
     Instant time = Instant.now();
     IndexingState testData =
-        new IndexingState("lastSuccess", time.toString(), "lockTime", "currentChangelogFile", 10);
+        new IndexingState("lastProcessedChangelogFile", time.toString(), "lockTime");
     indexStatusService.saveStatus("testFile.json", testData);
     IndexingState result = indexStatusService.loadStatus("testFile.json");
     assertThat(result).isEqualTo(testData);
@@ -48,9 +48,11 @@ class IndexStatusServiceTest extends ContainersIntegrationBase {
 
   @Test
   void loadStatusFileMissingFields() throws ObjectStoreServiceException {
-    portalBucket.save("testFile.json", "{\"lastSuccess\" : \"lastSuccess\"}");
+    portalBucket.save(
+        "testFile.json", "{\"lastProcessedChangelogFile\" : \"lastProcessedChangelogFile\"}");
     IndexingState result = indexStatusService.loadStatus("testFile.json");
-    IndexingState expected = new IndexingState().withLastSuccess("lastSuccess");
+    IndexingState expected =
+        new IndexingState().withLastProcessedChangelogFile("lastProcessedChangelogFile");
     assertThat(result).isEqualTo(expected);
   }
 

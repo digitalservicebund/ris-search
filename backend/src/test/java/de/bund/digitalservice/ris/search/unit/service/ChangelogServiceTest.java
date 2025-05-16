@@ -54,33 +54,18 @@ class ChangelogServiceTest {
 
   @Test
   void itReturnsChangelogsSortedByTimestamp() {
-    Instant lastSuccess = Instant.now().minus(2, ChronoUnit.HOURS);
+    Instant now = Instant.now();
+    String lastSuccess = now.minus(2, ChronoUnit.HOURS).toString();
     String changelogFile1 =
-        IndexSyncJob.CHANGELOG + lastSuccess.plus(1, ChronoUnit.HOURS) + "-changelog.json";
+        IndexSyncJob.CHANGELOG + now.plus(1, ChronoUnit.HOURS) + "-changelog.json";
     String changelogFile2 =
-        IndexSyncJob.CHANGELOG + lastSuccess.plus(2, ChronoUnit.HOURS) + "-changelog.json";
+        IndexSyncJob.CHANGELOG + now.plus(2, ChronoUnit.HOURS) + "-changelog.json";
 
     when(normsBucket.getAllKeysByPrefix(IndexSyncJob.CHANGELOG))
         .thenReturn(List.of(changelogFile2, changelogFile1));
 
-    List<String> changelogs =
-        normIndexSyncJob.getNewChangelogsSinceInstant(normsBucket, lastSuccess);
+    List<String> changelogs = normIndexSyncJob.getNewChangelogs(normsBucket, lastSuccess);
     Assertions.assertEquals(changelogs.toArray()[0], changelogFile1);
     Assertions.assertEquals(changelogs.toArray()[1], changelogFile2);
-  }
-
-  @Test
-  void itRetrievesAnInstantFromAChangelogPath() {
-    Instant instant =
-        normIndexSyncJob
-            .getInstantFromChangelog("changelogs/2025-03-21T15:10:03.382450489Z-changelog.json")
-            .orElseThrow();
-    Assertions.assertEquals("2025-03-21T15:10:03.382450489Z", instant.toString());
-  }
-
-  @Test
-  void itRetrievesEmptyOnParsingError() {
-    Optional<Instant> instant = normIndexSyncJob.getInstantFromChangelog("not parseable");
-    Assertions.assertEquals(Optional.empty(), instant);
   }
 }

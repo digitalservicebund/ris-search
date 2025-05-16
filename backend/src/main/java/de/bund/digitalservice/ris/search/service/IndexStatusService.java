@@ -53,9 +53,11 @@ public class IndexStatusService {
     saveStatus(statusFileName, loadStatus(statusFileName).withLockTime(null));
   }
 
-  public void updateLastSuccess(String statusFileName, String lastSuccess)
+  public void updateLastProcessedChangelog(String statusFileName, String lastProcessedChangelogFile)
       throws ObjectStoreServiceException {
-    saveStatus(statusFileName, loadStatus(statusFileName).withLastSuccess(lastSuccess));
+    saveStatus(
+        statusFileName,
+        loadStatus(statusFileName).withLastProcessedChangelogFile(lastProcessedChangelogFile));
   }
 
   public IndexingState loadStatus(String statusFileName) throws ObjectStoreServiceException {
