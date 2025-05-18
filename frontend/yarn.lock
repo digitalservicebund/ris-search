@@ -10666,9 +10666,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"msw@npm:^2.7.4":
-  version: 2.7.4
-  resolution: "msw@npm:2.7.4"
+"msw@npm:^2.8.3":
+  version: 2.8.3
+  resolution: "msw@npm:2.8.3"
   dependencies:
     "@bundled-es-modules/cookie": "npm:^2.0.1"
     "@bundled-es-modules/statuses": "npm:^1.0.1"
@@ -10695,7 +10695,7 @@ __metadata:
       optional: true
   bin:
     msw: cli/index.js
-  checksum: 10c0/cbae966ebd7eb460b179dc2792ae710bd88647a17cb983af9c00cf1705146e885a86c7ff5ba12bb5320d1f335f09367b0097c53166c0e43c8554035649b96c41
+  checksum: 10c0/d947ac193e2b102e5231a449903f8334410a7162e1a0a65c03878109d1d735512adf07053a9d623a914e3af8303d5537bb8b9ca05bb4b5de90b9c7e18f9b16de
   languageName: node
   linkType: hard
 
@@ -13353,7 +13353,7 @@ __metadata:
     license-checker: "npm:^25.0.1"
     lodash: "npm:^4.17.21"
     maska: "npm:^3.1.1"
-    msw: "npm:^2.7.4"
+    msw: "npm:^2.8.3"
     nuxt: "npm:3.16.0"
     nuxt-auth-utils: "npm:^0.5.19"
     nuxt-security: "npm:2.2.0"
