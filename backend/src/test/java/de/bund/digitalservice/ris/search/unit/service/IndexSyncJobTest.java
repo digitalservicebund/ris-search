@@ -81,11 +81,11 @@ class IndexSyncJobTest {
     changelog.setChanged(Sets.newHashSet(List.of("identifier1")));
     changelog.setDeleted(Sets.newHashSet(List.of("identifier1")));
 
+    String now = Instant.now().toString();
+
     Assertions.assertThrows(
         IllegalArgumentException.class,
-        () ->
-            normIndexSyncJob.importChangelogContent(
-                changelog, Instant.now().toString(), "testFileName"));
+        () -> normIndexSyncJob.importChangelogContent(changelog, now, "testFileName"));
   }
 
   @Test
