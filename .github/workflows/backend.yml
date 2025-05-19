@@ -239,6 +239,9 @@ jobs:
       - name: Install sentry-cli using official script
         run: |
           curl -sL https://sentry.io/get-cli/ | bash
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+        if: ${{ env.SENTRY_AUTH_TOKEN != '' }}
       - name: Create and finalize Sentry release for Backend
         run: |
           sentry-cli releases new $CONTAINER_IMAGE_VERSION
@@ -246,6 +249,7 @@ jobs:
           sentry-cli releases finalize $CONTAINER_IMAGE_VERSION
         env:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+        if: ${{ env.SENTRY_AUTH_TOKEN != '' }}
 
   deploy-staging-internal-portal:
     runs-on: ubuntu-latest
