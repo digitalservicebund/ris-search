@@ -1,6 +1,6 @@
 import { RouterLinkStub } from "@vue/test-utils";
 import CaselawRecord from "@/components/Search/Result/Caselaw/CaselawSearchResult.vue";
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 import type { CaseLaw, SearchResult, TextMatch } from "@/types";
 import { mountSuspended } from "@nuxt/test-utils/runtime";
 
@@ -24,22 +24,63 @@ const searchResult: SearchResult<CaseLaw> = {
     decisionGrounds: "Decision Grounds",
     courtName: "Test Court",
     decisionDate: "2023-01-01",
-    fileNumbers: ["123", "456"],
+    fileNumbers: ["123", "testing highlighted file number is here"],
     decisionName: ["Decision Name"],
     documentType: "Document Type",
   },
   textMatches: [],
 };
 
+async function mountComponent({
+  item = searchResult.item,
+  textMatches = [],
+}: Partial<SearchResult<CaseLaw>>) {
+  const searchResult: SearchResult<CaseLaw> = {
+    item,
+    textMatches,
+  };
+  return await mountSuspended(CaselawRecord, {
+    props: { searchResult, order: 0 },
+    stubs: {
+      RouterLink: RouterLinkStub,
+    },
+  });
+}
+
 describe("CaselawSearchResult.vue", () => {
   it("renders the expected title", async () => {
-    const wrapper = await mountSuspended(CaselawRecord, {
-      props: { searchResult: searchResult, order: 0 },
-      stubs: {
-        RouterLink: RouterLinkStub,
-      },
-    });
+    const wrapper = await mountComponent({});
     expect(wrapper.get("a").text()).toBe("Decision Name — Test Headline");
+  });
+
+  it("displays highlighted headline", async () => {
+    const textMatch: TextMatch = {
+      "@type": "SearchResultMatch",
+      name: "headline",
+      text: `testing <mark>highlighted headline</mark> is here`,
+      location: null,
+    };
+    const wrapper = await mountComponent({ textMatches: [textMatch] });
+    const highlightedElements = wrapper.findAll("mark");
+    expect(highlightedElements).length(1);
+    expect(highlightedElements[0].text()).toBe(`highlighted headline`);
+  });
+
+  it("displays highlighted file numbers", async () => {
+    const textMatch: TextMatch = {
+      "@type": "SearchResultMatch",
+      name: "fileNumbers",
+      text: `testing <mark>highlighted file number</mark> is here`,
+      location: null,
+    };
+    const wrapper = await mountComponent({ textMatches: [textMatch] });
+    const highlightedElements = wrapper.findAll("mark");
+    expect(highlightedElements).length(1);
+    expect(highlightedElements[0].text()).toBe(`highlighted file number`);
+
+    expect(wrapper.get("[aria-label='Aktenzeichen']").html()).toBe(
+      `<span aria-label="Aktenzeichen">123, testing <mark>highlighted file number</mark> is here</span>`,
+    );
   });
 
   it("displays highlighted text with correct class", async () => {
@@ -49,16 +90,8 @@ describe("CaselawSearchResult.vue", () => {
       text: "testing <mark>highlighted Text</mark> is here",
       location: null,
     };
-    const caseLawSearchResult: SearchResult<CaseLaw> = {
-      item: searchResult.item,
-      textMatches: [textMatch],
-    };
-    const wrapper = await mountSuspended(CaselawRecord, {
-      props: { searchResult: caseLawSearchResult, order: 0 },
-      stubs: {
-        RouterLink: RouterLinkStub,
-      },
-    });
+    const wrapper = await mountComponent({ textMatches: [textMatch] });
+
     const highlightedElements = wrapper.findAll("mark");
     expect(highlightedElements).length(1);
     expect(highlightedElements[0].text()).toBe("highlighted Text");
@@ -69,29 +102,22 @@ describe("CaselawSearchResult.vue", () => {
       '<mark>mark</mark> <i>i</i> <b>b</b> <img src="" alt="do not show"> <div>div</div> plain_text.';
     const expectedSanitized =
       "<mark>mark</mark> <i>i</i> <b>b</b>  div plain_text.";
-    const caseLawSearchResult: SearchResult<CaseLaw> = {
-      item: searchResult.item,
-      textMatches: [
-        {
-          "@type": "SearchResultMatch",
-          name: "guidingPrinciple",
-          text,
-          location: null,
-        },
-        {
-          "@type": "SearchResultMatch",
-          name: "headline",
-          text,
-          location: null,
-        },
-      ],
-    };
-    const wrapper = await mountSuspended(CaselawRecord, {
-      props: { searchResult: caseLawSearchResult, order: 0 },
-      stubs: {
-        RouterLink: RouterLinkStub,
+
+    const textMatches: TextMatch[] = [
+      {
+        "@type": "SearchResultMatch",
+        name: "guidingPrinciple",
+        text,
+        location: null,
       },
-    });
+      {
+        "@type": "SearchResultMatch",
+        name: "headline",
+        text,
+        location: null,
+      },
+    ];
+    const wrapper = await mountComponent({ textMatches });
     const headlineContent = wrapper.find("h2 > span:has(mark)");
     expect(headlineContent.element.innerHTML).toBe(expectedSanitized);
     const contentItems = wrapper.findAll('[data-testid="highlighted-field"]');
@@ -104,12 +130,7 @@ describe("CaselawSearchResult.vue", () => {
       item: { ...searchResult.item, headline: "" },
       textMatches: [],
     };
-    const wrapper = await mountSuspended(CaselawRecord, {
-      props: { searchResult: searchResultWithoutTitle, order: 0 },
-      stubs: {
-        RouterLink: RouterLinkStub,
-      },
-    });
+    const wrapper = await mountComponent(searchResultWithoutTitle);
     expect(wrapper.html()).toContain("Titelzeile nicht vorhanden");
   });
   const fields = [
@@ -124,23 +145,15 @@ describe("CaselawSearchResult.vue", () => {
 
   fields.forEach(({ field, value }) => {
     it(`displays '${value}' when it is the only textMatch returned`, async () => {
-      const searchResultWithoutTitle = {
-        item: searchResult.item,
-        textMatches: [
-          {
-            name: field,
-            text: value,
-            "@type": "SearchResultMatch",
-            location: null,
-          },
-        ] as TextMatch[],
-      };
-      const wrapper = await mountSuspended(CaselawRecord, {
-        props: { searchResult: searchResultWithoutTitle, order: 0 },
-        stubs: {
-          RouterLink: RouterLinkStub,
+      const textMatches: TextMatch[] = [
+        {
+          name: field,
+          text: value,
+          "@type": "SearchResultMatch",
+          location: null,
         },
-      });
+      ];
+      const wrapper = await mountComponent({ textMatches });
       const contentItems = wrapper.findAll('[data-testid="highlighted-field"]');
       expect(contentItems.length).toBe(1);
       expect(contentItems[0].text()).toBe(value);
@@ -148,24 +161,21 @@ describe("CaselawSearchResult.vue", () => {
   });
 
   it("displays the first field in order only when there are no highlights if there are multiple fields", async () => {
-    const wrapper = await mountSuspended(CaselawRecord, {
-      props: {
-        searchResult: {
-          item: searchResult.item,
-          textMatches: [
-            {
-              name: "guidingPrinciple",
-              text: "Leitsatz.",
-            },
-            { name: "caseFacts", text: "Tatbestand." },
-          ] as TextMatch[],
-        },
-        order: 0,
+    const textMatches: TextMatch[] = [
+      {
+        "@type": "SearchResultMatch",
+        name: "guidingPrinciple",
+        text: "Leitsatz.",
+        location: null,
       },
-      stubs: {
-        RouterLink: RouterLinkStub,
+      {
+        "@type": "SearchResultMatch",
+        name: "caseFacts",
+        text: "Tatbestand.",
+        location: null,
       },
-    });
+    ];
+    const wrapper = await mountComponent({ textMatches });
     const contentItems = wrapper.findAll('[data-testid="highlighted-field"]');
     expect(contentItems).toHaveLength(1);
     expect(contentItems[0].text()).toBe("Leitsatz.");
@@ -205,16 +215,8 @@ describe("CaselawSearchResult.vue", () => {
         location: null,
       },
     ];
-    const caseLawSearchResult: SearchResult<CaseLaw> = {
-      item: searchResult.item,
-      textMatches: textMatches,
-    };
-    const wrapper = await mountSuspended(CaselawRecord, {
-      props: { searchResult: caseLawSearchResult, order: 0 },
-      stubs: {
-        RouterLink: RouterLinkStub,
-      },
-    });
+
+    const wrapper = await mountComponent({ textMatches });
     const contentItems = wrapper.findAll('[data-testid="highlighted-field"]');
     expect(contentItems.length).toBe(4);
     expect(contentItems[0].element.innerHTML).toBe(guidingPrinciple.text);
@@ -237,12 +239,7 @@ describe("CaselawSearchResult.vue", () => {
       },
       textMatches: [],
     };
-    const wrapper = await mountSuspended(CaselawRecord, {
-      props: { searchResult: searchResultWithoutFields, order: 0 },
-      stubs: {
-        RouterLink: RouterLinkStub,
-      },
-    });
+    const wrapper = await mountComponent(searchResultWithoutFields);
     const contentItems = wrapper.findAll('[data-testid="highlighted-field"]');
     expect(contentItems.length).toBe(0);
   });
@@ -265,12 +262,7 @@ describe("CaselawSearchResult.vue", () => {
         },
       ] as TextMatch[],
     };
-    const wrapper = await mountSuspended(CaselawRecord, {
-      props: { searchResult: searchResultWithoutHighlights, order: 0 },
-      stubs: {
-        RouterLink: RouterLinkStub,
-      },
-    });
+    const wrapper = await mountComponent(searchResultWithoutHighlights);
     const contentItems = wrapper.findAll('[data-testid="highlighted-field"]');
     expect(contentItems.length).toBe(1);
     expect(contentItems[0].text()).toBe("Guiding Principle.");
@@ -303,16 +295,8 @@ describe("CaselawSearchResult.vue", () => {
         location: null,
       },
     ];
-    const caseLawSearchResult: SearchResult<CaseLaw> = {
-      item: searchResult.item,
-      textMatches: textMatches,
-    };
-    const wrapper = await mountSuspended(CaselawRecord, {
-      props: { searchResult: caseLawSearchResult, order: 0 },
-      stubs: {
-        RouterLink: RouterLinkStub,
-      },
-    });
+
+    const wrapper = await mountComponent({ textMatches });
     const contentItems = wrapper.findAll('[data-testid="highlighted-field"]');
     expect(contentItems).toHaveLength(4);
     expect(contentItems[0].element.innerHTML).toBe("Guiding Principle.");

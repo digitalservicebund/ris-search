@@ -45,6 +45,9 @@ public class NormAttachmentMapper {
               try {
                 var href = attachmentRef.getAttributes().getNamedItem("href").getNodeValue();
                 var attachmentFileString = attachmentFiles.get(href);
+                if (attachmentFileString == null) {
+                  return Optional.<Attachment>empty();
+                }
                 XmlDocument attachmentDocument =
                     new XmlDocument(attachmentFileString.getBytes(StandardCharsets.UTF_8));
                 var docTitleNode =

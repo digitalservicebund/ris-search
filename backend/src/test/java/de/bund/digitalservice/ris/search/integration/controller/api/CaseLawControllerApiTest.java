@@ -11,10 +11,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.c4_soft.springaddons.security.oauth2.test.annotations.WithJwt;
-import de.bund.digitalservice.ris.search.caselawhandover.shared.CaseLawBucket;
 import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.integration.config.ContainersIntegrationBase;
 import de.bund.digitalservice.ris.search.models.PublicationStatus;
+import de.bund.digitalservice.ris.search.repository.objectstorage.CaseLawBucket;
 import de.bund.digitalservice.ris.search.repository.opensearch.CaseLawSynthesizedRepository;
 import de.bund.digitalservice.ris.search.service.IndexCaselawService;
 import de.bund.digitalservice.ris.search.utils.CaseLawLdmlTemplateUtils;

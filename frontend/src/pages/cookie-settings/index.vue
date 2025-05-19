@@ -65,7 +65,7 @@ function handleSetTracking(value: boolean) {
           Webseite testphase.rechtsinformationen.bund.de eingesetzt werden.
           Cookies sind kleine Textdateien, die auf dem Datenträger des Nutzenden
           gespeichert werden und über den Browser bestimmte Einstellungen und
-          Daten mit dem System des BMJ austauschen.
+          Daten mit dem System des BMJV austauschen.
         </p>
         <div class="space-y-24">
           <h2 class="ris-heading2-regular">Notwendige (essenzielle) Cookies</h2>
@@ -116,7 +116,7 @@ function handleSetTracking(value: boolean) {
               Gesetzes über den Datenschutz und den Schutz der Privatsphäre in
               der Telekommunikation bei digitalen Diensten (TDDDG)) im Rahmen
               der Öffentlichkeitsarbeit zur bedarfsorientierten Bereitstellung
-              von Informationen zu den dem BMJ übertragenen Aufgaben.
+              von Informationen zu den dem BMJV übertragenen Aufgaben.
             </p>
           </div>
           <div>

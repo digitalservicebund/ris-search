@@ -1,7 +1,5 @@
 package de.bund.digitalservice.ris.search.mapper;
 
-import static java.util.Map.entry;
-
 import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.models.opensearch.Article;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
@@ -14,6 +12,7 @@ import de.bund.digitalservice.ris.search.schema.PublicationIssueSchema;
 import de.bund.digitalservice.ris.search.schema.SearchMemberSchema;
 import de.bund.digitalservice.ris.search.schema.TextMatchSchema;
 import de.bund.digitalservice.ris.search.utils.DateUtils;
+import de.bund.digitalservice.ris.search.utils.PageUtils;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -96,10 +95,9 @@ public class NormSearchResponseMapper {
   }
 
   private static String getTextMatchName(String key) {
-    Map<String, String> normHighlightFieldNameTranslations =
-        Map.ofEntries(entry("officialTitle", "name"));
-
-    return Optional.ofNullable(normHighlightFieldNameTranslations.get(key)).orElse(key);
+    String converted = PageUtils.snakeCaseToCamelCase(key);
+    if (converted.equals("officialTitle")) return "name";
+    return converted;
   }
 
   private static LegislationWorkSearchSchema fromDomain(Norm norm) {

@@ -1,7 +1,6 @@
 import com.adarshr.gradle.testlogger.theme.ThemeType
 import com.github.jk1.license.filter.DependencyFilter
 import com.github.jk1.license.filter.LicenseBundleNormalizer
-import org.gradle.internal.impldep.org.junit.platform.launcher.TagFilter.includeTags
 
 buildscript { repositories { mavenCentral() } }
 
@@ -46,7 +45,7 @@ sonar {
         property("sonar.projectKey", "digitalservicebund_ris-search-backend")
         property("sonar.organization", "digitalservicebund")
         property("sonar.host.url", "https://sonarcloud.io")
-        property("sonar.coverage.exclusions", "**/config/**, **/legacyportal**,**/e2e/**, **/CustomErrorController.java")
+        property("sonar.coverage.exclusions", "**/config/**, ,**/e2e/**, **/CustomErrorController.java")
     }
 }
 

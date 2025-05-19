@@ -5,10 +5,5 @@
       "type": "java.lang.Boolean",
       "description": "Whether to enable advanced search endpoints. Accessed by @ConditionalOnProperty."
     }
-    {
-      "name": "feature-flags.legacy-endpoints",
-      "type": "java.lang.Boolean",
-      "description": "Whether to enable legacy endpoints. Accessed by @ConditionalOnProperty."
-    }
   ]
 }

@@ -7,10 +7,10 @@ import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import de.bund.digitalservice.ris.search.caselawhandover.shared.CaseLawBucket;
-import de.bund.digitalservice.ris.search.exception.RetryableObjectStoreException;
+import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
+import de.bund.digitalservice.ris.search.repository.objectstorage.CaseLawBucket;
 import de.bund.digitalservice.ris.search.repository.opensearch.CaseLawSynthesizedRepository;
 import de.bund.digitalservice.ris.search.service.IndexCaselawService;
 import de.bund.digitalservice.ris.search.utils.CaseLawLdmlTemplateUtils;
@@ -41,12 +41,12 @@ class CaseLawImporterTest {
 
   @Test
   @DisplayName("Import one caselaw ldml")
-  void canImportLdml() throws RetryableObjectStoreException {
+  void canImportLdml() throws ObjectStoreServiceException {
     IndexCaselawService indexCaselawService =
         new IndexCaselawService(caseLawBucket, caseLawSynthesizedRepositoryMock);
     Changelog mockChangelog = new Changelog();
     mockChangelog.setChangeAll(true);
-    when(caseLawBucket.getAllFilenames()).thenReturn(List.of("mockFile.xml"));
+    when(caseLawBucket.getAllKeys()).thenReturn(List.of("mockFile.xml"));
     when(caseLawBucket.getFileAsString("mockFile.xml")).thenReturn(Optional.of(testCaseLawLdml));
     indexCaselawService.indexChangelog("mockChangelogFileName", mockChangelog);
     verify(caseLawSynthesizedRepositoryMock, atLeastOnce()).save(any());

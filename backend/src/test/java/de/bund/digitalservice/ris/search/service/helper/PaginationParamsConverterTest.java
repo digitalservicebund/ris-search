@@ -24,7 +24,8 @@ class PaginationParamsConverterTest {
     paginationParams.setSort("date");
     // Act
     PageRequest result =
-        PaginationParamsConverter.convert(paginationParams, MappingDefinitions.ResolutionMode.ALL);
+        PaginationParamsConverter.convert(
+            paginationParams, MappingDefinitions.ResolutionMode.ALL, true);
 
     // Assert
     Assertions.assertEquals(0, result.getPageNumber());
@@ -34,33 +35,41 @@ class PaginationParamsConverterTest {
 
   @ParameterizedTest
   @ValueSource(strings = {"default", "", "null"})
-  void testParseSort_withUnsorted_shouldReturnUnsorted(String value)
+  void testBuildSort_withUnsorted_shouldReturnDefaultSort(String value)
       throws CustomValidationException {
     if (value.equals("null")) {
       value = null;
     }
     // Act
-    Sort result = PaginationParamsConverter.parseSort(value, MappingDefinitions.ResolutionMode.ALL);
+    Sort result =
+        PaginationParamsConverter.buildSort(value, MappingDefinitions.ResolutionMode.ALL, false);
 
     // Assert
-    Assertions.assertEquals(Sort.unsorted(), result);
+    Assertions.assertEquals(Sort.by(Sort.Direction.DESC, "DATUM"), result);
+
+    // Act
+    Sort resultWithDefault =
+        PaginationParamsConverter.buildSort(value, MappingDefinitions.ResolutionMode.ALL, true);
+
+    // Assert
+    Assertions.assertEquals(Sort.unsorted(), resultWithDefault);
   }
 
   @Test
-  void testParseSort_withValidAscField_shouldReturnAscSort() throws CustomValidationException {
+  void testBuildSort_withValidAscField_shouldReturnAscSort() throws CustomValidationException {
     // Act
     Sort result =
-        PaginationParamsConverter.parseSort("date", MappingDefinitions.ResolutionMode.ALL);
+        PaginationParamsConverter.buildSort("date", MappingDefinitions.ResolutionMode.ALL, true);
 
     // Assert
     Assertions.assertEquals(Sort.by(Sort.Direction.ASC, "DATUM"), result);
   }
 
   @Test
-  void testParseSort_withValidDescField_shouldReturnDescSort() throws CustomValidationException {
+  void testBuildSort_withValidDescField_shouldReturnDescSort() throws CustomValidationException {
     // Act
     Sort result =
-        PaginationParamsConverter.parseSort("-date", MappingDefinitions.ResolutionMode.ALL);
+        PaginationParamsConverter.buildSort("-date", MappingDefinitions.ResolutionMode.ALL, true);
 
     // Assert
     Assertions.assertEquals(Sort.by(Sort.Direction.DESC, "DATUM"), result);
@@ -68,14 +77,15 @@ class PaginationParamsConverterTest {
 
   @ParameterizedTest
   @ValueSource(strings = {"unsupportedField", "-unsupportedField"})
-  void testParseSort_withUnsupportedField_shouldThrowCustomValidationException(String value) {
+  void testBuildSort_withUnsupportedField_shouldThrowCustomValidationException(String value) {
 
     // Act & Assert
     CustomValidationException exception =
         Assertions.assertThrows(
             CustomValidationException.class,
             () -> {
-              PaginationParamsConverter.parseSort(value, MappingDefinitions.ResolutionMode.ALL);
+              PaginationParamsConverter.buildSort(
+                  value, MappingDefinitions.ResolutionMode.ALL, true);
             });
 
     Assertions.assertEquals(

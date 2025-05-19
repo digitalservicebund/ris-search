@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import FeedbackForm from "~/components/Analytics/FeedbackForm.vue";
-import bmjLogo from "assets/img/BMJ_Logo.svg";
+import bmjvLogo from "assets/img/BMJV_de_v1__Web_farbig.svg";
 import BackToTopLink from "~/components/BackToTopLink.vue";
 
 const route = useRoute();
@@ -13,17 +13,18 @@ const hideFeedbackForm = computed(() => route.path === "/feedback");
       <FeedbackForm v-if="!hideFeedbackForm" class="mb-80" />
     </client-only>
     <div class="grid grid-cols-1 gap-48 md:grid-cols-2">
-      <div class="space-y-48">
+      <div class="space-y-16">
         <img
           class="mt-4 self-start"
-          :src="bmjLogo"
-          alt="Bundesministerium der Justiz"
+          :src="bmjvLogo"
+          alt="Bundesministerium der Justiz und für Verbraucherschutz"
         />
         <div>
           <p class="ris-body2-regular">
             Ein Service im Auftrag des
             <ExternalLink class="ris-link2-regular" url="https://www.bmj.de"
-              >Bundesministeriums der Justiz</ExternalLink
+              >Bundesministeriums der Justiz und für
+              Verbraucherschutz</ExternalLink
             >
           </p>
           <p class="ris-body2-regular">

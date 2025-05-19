@@ -4,6 +4,7 @@ import { type DropdownItem, sortMode } from "@/components/types";
 import * as searchService from "@/services/searchService";
 import Button from "primevue/button";
 import InputText from "primevue/inputtext";
+import Select from "primevue/select";
 
 import { computed } from "vue";
 
@@ -137,20 +138,24 @@ function updateQuery(query?: string) {
 <template>
   <div class="flex flex-col gap-8">
     <div class="relative flex flex-wrap space-x-4">
-      <DropdownInput
+      <Select
         id="documentKind"
         v-model="currentDocumentKind"
         aria-label="Dokumentart"
         class="ds-select-small w-auto"
-        :items="DocumentKinds"
+        :options="DocumentKinds"
+        option-label="label"
+        option-value="value"
         :disabled="userInputDisabled"
       />
-      <DropdownInput
+      <Select
         id="searchMode"
         v-model="currentSearchMode"
         aria-label="Sucheingabemodus"
         class="ds-select-small w-auto"
-        :items="searchModeItems"
+        :options="searchModeItems"
+        option-label="label"
+        option-value="value"
         :disabled="textEntered || userInputDisabled"
       />
     </div>

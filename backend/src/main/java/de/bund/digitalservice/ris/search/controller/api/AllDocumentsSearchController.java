@@ -15,6 +15,7 @@ import de.bund.digitalservice.ris.search.schema.SearchMemberSchema;
 import de.bund.digitalservice.ris.search.service.AllDocumentsService;
 import de.bund.digitalservice.ris.search.service.helper.PaginationParamsConverter;
 import de.bund.digitalservice.ris.search.utils.LuceneQueryTools;
+import io.micrometer.common.util.StringUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -74,8 +75,10 @@ public class AllDocumentsSearchController {
       throws CustomValidationException {
     normsSearchParams.validate();
 
+    boolean defaultToUnsorted = StringUtils.isNotBlank(request.getSearchTerm());
     Pageable pageable =
-        PaginationParamsConverter.convert(pagination, MappingDefinitions.ResolutionMode.ALL);
+        PaginationParamsConverter.convert(
+            pagination, MappingDefinitions.ResolutionMode.ALL, defaultToUnsorted);
     try {
       SearchPage<AbstractSearchEntity> entitiesPage =
           allDocumentsService.searchAndFilterAllDocuments(

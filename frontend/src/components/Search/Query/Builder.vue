@@ -3,7 +3,6 @@ import { computed, reactive, ref } from "vue";
 import { toString } from "@hyperdx/lucene";
 import Button from "primevue/button";
 import {
-  FIELD_TYPE,
   fields,
   fieldTypeToLogicOptions,
   INPUT_ELEMENT,
@@ -11,6 +10,8 @@ import {
   rowLogicOperators,
 } from "./data";
 import { type AstNode, buildTerm } from "~/components/Search/Query/logic";
+import Select from "primevue/select";
+import InputText from "primevue/inputtext";
 
 const userInputDisabled = ref(true);
 onNuxtReady(() => {
@@ -92,7 +93,7 @@ function updateLuceneQuery() {
 </script>
 
 <template>
-  <div class="container">
+  <div>
     <div
       v-for="(row, index) in rows"
       :key="index"
@@ -101,91 +102,61 @@ function updateLuceneQuery() {
       data-testid="builder-row"
     >
       <!-- row logic operator, only AND for now -->
-      <select
+      <Select
         v-if="index > 0"
         v-model="row.rowLogicOp"
         style="margin-right: 10px"
-        class="ds-select ds-select-small basis-1/5"
+        class="basis-1/5"
         data-testid="row-logic-operator"
+        :options="rowLogicOperators"
+        option-label="label"
         @change="() => updateLuceneQuery()"
-      >
-        <option
-          v-for="rowLogicOp in rowLogicOperators"
-          :key="rowLogicOp.value"
-          :value="rowLogicOp"
-        >
-          {{ rowLogicOp.label }}
-        </option>
-      </select>
-      <!-- field -->
+      />
 
-      <select
+      <Select
         v-model="row.selectedField"
         style="margin-right: 10px"
-        class="ds-select ds-select-small basis-1/4"
+        class="basis-1/4"
         data-testid="field"
+        placeholder="Rubrik auswählen"
+        :options="filteredFields"
+        option-label="label"
         @change="() => updateLuceneQuery()"
-      >
-        <option disabled value="">Rubrik auswählen</option>
-        <option
-          v-for="field in filteredFields"
-          :key="field.value"
-          :value="field"
-          :disabled="
-            !(field.type === FIELD_TYPE.TEXT || field.type === FIELD_TYPE.DATE)
-          "
-        >
-          {{ field.label }}
-        </option>
-      </select>
+      />
       <!-- logic operator -->
-      <select
+      <Select
         v-if="row.selectedField"
         v-model="row.selectedLogic"
         style="margin-right: 10px"
-        class="ds-select ds-select-small basis-1/4"
+        class="basis-1/4"
         data-testid="operator"
+        placeholder="Operator auswählen"
+        :options="fieldTypeToLogicOptions(row.selectedField.type)"
+        option-label="label"
         @change="() => updateLuceneQuery()"
-      >
-        <option disabled value="">Operator auswählen</option>
-        <option
-          v-for="option in fieldTypeToLogicOptions(row.selectedField.type)"
-          :key="option.value"
-          :value="option"
-          :disabled="
-            !(
-              option.value.includes('ExactPhrase') ||
-              option.inputElement === INPUT_ELEMENT.DATE
-            )
-          "
-        >
-          {{ option.label }}
-        </option>
-      </select>
+      />
       <!-- search value -->
       <div v-if="row.selectedField && row.selectedLogic" class="grow">
-        <input
+        <InputText
           v-if="row.selectedLogic.inputElement === INPUT_ELEMENT.CHIPS"
           v-model="row.searchValue"
           type="text"
           placeholder="Chips input (TODO)"
           @input="() => updateLuceneQuery()"
         />
-        <input
+        <InputText
           v-if="row.selectedLogic.inputElement === INPUT_ELEMENT.TEXT"
           v-model="row.searchValue"
           type="text"
           placeholder="Text input"
-          class="ds-input ds-input-small"
           @input="() => updateLuceneQuery()"
         />
 
-        <input
+        <InputText
           v-if="row.selectedLogic.inputElement === INPUT_ELEMENT.DATE"
           v-model="row.searchValue"
           type="text"
           placeholder="TT.MM.YYYY"
-          class="ds-input ds-input-small"
           @input="() => updateLuceneQuery()"
         />
       </div>

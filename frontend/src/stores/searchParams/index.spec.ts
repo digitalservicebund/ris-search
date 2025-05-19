@@ -1,28 +1,56 @@
 import { createPinia, setActivePinia } from "pinia";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { nextTick } from "vue";
-import { useSimpleSearchParamsStore } from "@/stores/searchParams/index";
+import {
+  type QueryParams,
+  useSimpleSearchParamsStore,
+} from "@/stores/searchParams/index";
 import { DocumentKind } from "@/types";
 import { mockNuxtImport } from "@nuxt/test-utils/runtime";
 import { defaultParams } from "@/stores/searchParams/getInitialState";
 import { sortMode } from "@/components/types";
+import type { RouteLocationNormalized } from "#vue-router";
 
-const routerEmptyState = { currentRoute: { value: { query: {} } } };
+type MockRoute = Pick<RouteLocationNormalized, "path" | "query">;
+const mockRouteInitialState = {
+  path: "/search",
+  query: {},
+};
+const mockRoute = ref<MockRoute>(mockRouteInitialState);
+const routerEmptyState = {
+  push: (newValue: MockRoute) => {
+    mockRoute.value = newValue;
+  },
+};
+
+const mockPostHog = {
+  searchPerformed: vi.fn(),
+};
 
 // refer to https://nuxt.com/docs/getting-started/testing#unit-testing
-const { useRouterMock } = vi.hoisted(() => {
+const { useRouteMock, useRouterMock, usePostHogStoreMock } = vi.hoisted(() => {
   return {
+    useRouteMock: vi.fn().mockImplementation(() => mockRoute.value),
     useRouterMock: vi.fn().mockImplementation(() => routerEmptyState),
+    usePostHogStoreMock: () => mockPostHog,
   };
 });
 
+mockNuxtImport("useRoute", () => {
+  return useRouteMock;
+});
 mockNuxtImport("useRouter", () => {
   return useRouterMock;
+});
+mockNuxtImport("usePostHogStore", () => {
+  return usePostHogStoreMock;
 });
 
 describe("useSimpleSearchParamsStore", () => {
   beforeEach(async () => {
     setActivePinia(createPinia());
+    mockRoute.value = mockRouteInitialState;
+    mockPostHog.searchPerformed.mockRestore();
   });
 
   it("returns default parameters if the URL is empty", async () => {
@@ -40,9 +68,7 @@ describe("useSimpleSearchParamsStore", () => {
   });
 
   it("returns the correct category if one is set", async () => {
-    useRouterMock.mockReturnValueOnce({
-      currentRoute: { value: { query: { category: "R" } } },
-    });
+    useRouteMock.mockReturnValueOnce({ query: { category: "R" } });
 
     const store = useSimpleSearchParamsStore();
 
@@ -51,8 +77,8 @@ describe("useSimpleSearchParamsStore", () => {
 
   for (const category of ["A", "R", "N", "R.urteil"])
     it(`returns the correct category for ${category}`, async () => {
-      useRouterMock.mockReturnValueOnce({
-        currentRoute: { value: { query: { category } } },
+      useRouteMock.mockReturnValueOnce({
+        query: { category },
       });
 
       const store = useSimpleSearchParamsStore();
@@ -61,18 +87,17 @@ describe("useSimpleSearchParamsStore", () => {
     });
 
   it("discards caseLaw-specific options if the DocumentKind is updated", async () => {
-    const mockReplace = vi.fn();
-    useRouterMock.mockReturnValue({
-      currentRoute: {
-        value: {
-          query: {
-            category: DocumentKind.CaseLaw,
-            sort: sortMode.courtName,
-            court: "Example court",
-          },
-        },
+    const mockPush = vi.fn();
+
+    useRouteMock.mockReturnValueOnce({
+      query: {
+        category: DocumentKind.CaseLaw,
+        sort: sortMode.courtName,
+        court: "Example court",
       },
-      replace: mockReplace,
+    });
+    useRouterMock.mockReturnValue({
+      push: mockPush,
     });
 
     const store = useSimpleSearchParamsStore();
@@ -88,17 +113,15 @@ describe("useSimpleSearchParamsStore", () => {
   });
 
   it("resets the page index if the category is updated", async () => {
-    const mockReplace = vi.fn();
-    useRouterMock.mockReturnValue({
-      currentRoute: {
-        value: {
-          query: {
-            category: DocumentKind.CaseLaw,
-            pageNumber: 1,
-          },
-        },
+    const mockPush = vi.fn();
+    useRouterMock.mockReturnValueOnce({
+      push: mockPush,
+    });
+    useRouteMock.mockReturnValueOnce({
+      query: {
+        category: DocumentKind.CaseLaw,
+        pageNumber: 1,
       },
-      replace: mockReplace,
     });
 
     const store = useSimpleSearchParamsStore();
@@ -111,24 +134,84 @@ describe("useSimpleSearchParamsStore", () => {
   });
 
   it("updates the URL", async () => {
-    const mockReplace = vi.fn();
+    const mockPush = vi
+      .fn()
+      .mockImplementation((newValue) => Object.assign(mockRoute, newValue));
+
     useRouterMock.mockReturnValue({
-      ...routerEmptyState,
-      replace: mockReplace,
+      push: mockPush,
     });
 
     const store = useSimpleSearchParamsStore();
 
     store.category = DocumentKind.CaseLaw;
+    store.pageNumber = 1;
     await nextTick();
-    expect(mockReplace).toHaveBeenLastCalledWith({
-      query: { category: DocumentKind.CaseLaw },
+    expect(mockPush).toHaveBeenLastCalledWith({
+      path: "/search",
+      query: { category: DocumentKind.CaseLaw, pageNumber: "1" },
     });
 
     store.category = DocumentKind.All;
     await nextTick();
-    expect(mockReplace).toHaveBeenLastCalledWith({
-      query: {},
+    expect(mockPush).toHaveBeenLastCalledWith({
+      path: "/search",
+      query: {}, // pageNumber is reset through category change
     });
+  });
+
+  it("updates if the URL changes, and reports an event", async () => {
+    const mockRoute = reactive({
+      query: { query: "first" },
+    });
+    useRouteMock.mockReturnValue(mockRoute);
+    const store = useSimpleSearchParamsStore();
+    expect(store.query).toBe("first");
+
+    mockRoute.query = { query: "second" };
+    await nextTick();
+
+    expect(store.query).toBe("second");
+
+    expect(mockPostHog.searchPerformed).toHaveBeenCalledExactlyOnceWith(
+      "simple",
+      {
+        category: "A",
+        dateSearchMode: "",
+        itemsPerPage: 10,
+        pageNumber: 0,
+        query: "second",
+        sort: "default",
+      },
+      {
+        category: "A",
+        dateSearchMode: "",
+        itemsPerPage: 10,
+        pageNumber: 0,
+        query: "first",
+        sort: "default",
+      },
+    );
+  });
+
+  it("does not create a reactive cycle", async () => {
+    const mockRoute = reactive<{ query: Partial<QueryParams> }>({
+      query: { query: "testQuery" },
+    });
+    useRouteMock.mockReturnValue(mockRoute);
+    const mockPush = vi
+      .fn()
+      .mockImplementation((newValue) => Object.assign(mockRoute, newValue));
+    useRouterMock.mockReturnValue({
+      push: mockPush,
+    });
+
+    const store = useSimpleSearchParamsStore();
+    store.sort = "newSort";
+    await nextTick();
+    expect(mockPush).toHaveBeenCalledExactlyOnceWith({
+      query: { query: "testQuery", sort: "newSort" },
+    });
+    expect(mockRoute.query.sort).toBe("newSort");
   });
 });

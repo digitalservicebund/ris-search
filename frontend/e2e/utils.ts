@@ -1,6 +1,6 @@
 import type { Page } from "@playwright/test";
 
-export async function getResultCount(page: Page) {
+export async function getDisplayedResultCount(page: Page) {
   const resultCountElement = page.locator("output", {
     hasText: "Suchergebnis",
   });

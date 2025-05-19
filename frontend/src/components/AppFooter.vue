@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import bmjBfjLogo from "~/assets/img/BMJ_BfJ_Logo.svg";
 import FeedbackForm from "~/components/Analytics/FeedbackForm.vue";
 </script>
 
@@ -89,15 +88,13 @@ import FeedbackForm from "~/components/Analytics/FeedbackForm.vue";
         </ul>
       </div>
     </div>
-    <div class="mt-48 mb-24 flex h-48 flex-col items-start">
-      <img :src="bmjBfjLogo" alt="BMJ und BfJ Logo" />
-    </div>
     <div class="mt-24 flex justify-between">
       <div>
         <p class="ris-body2-regular">
           Ein Projekt des
           <ExternalLink url="https://www.bmj.de"
-            >Bundesministeriums der Justiz</ExternalLink
+            >Bundesministeriums der Justiz und für
+            Verbraucherschutz</ExternalLink
           >
           und des
           <ExternalLink url="https://www.bundesjustizamt.de"

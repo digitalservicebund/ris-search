@@ -1,7 +1,16 @@
 <script lang="ts" setup>
-import { availableFields, availableFeatures, type FieldType } from "./data";
+import {
+  type FieldType,
+  type Field,
+  availablePublicFields,
+  availableInternalFields,
+  availablePublicFeatures,
+  availableInternalFeatures,
+  type Feature,
+} from "./data";
 import { isInternalProfile, isPublicProfile } from "@/utils/config";
 import type { DropdownItem } from "@/components/types";
+import Select from "primevue/select";
 
 definePageMeta({ alias: "/erweiterte-suche/hilfe" });
 
@@ -21,6 +30,13 @@ const fields = computed(() => {
 });
 const isInternal = isInternalProfile();
 const isPublic = isPublicProfile();
+
+const availableFields: Field[] = isPublic
+  ? availablePublicFields
+  : availableInternalFields;
+const availableFeatures: Feature[] = isPublic
+  ? availablePublicFeatures
+  : availableInternalFeatures;
 </script>
 
 <template>
@@ -70,11 +86,12 @@ const isPublic = isPublicProfile();
       <div>
         <div class="flex flex-row justify-between">
           <h2 class="ris-heading3-regular mb-20">Verfügbare Rubriken</h2>
-          <DropdownInput
+          <Select
             v-model="filter"
-            aria-label="dropdown input"
             class="ds-select-small w-auto"
-            :items="filters"
+            :options="filters"
+            option-label="label"
+            option-value="value"
             placeholder="Bitte auswählen"
           />
         </div>
@@ -186,11 +203,12 @@ const isPublic = isPublicProfile();
       <div>
         <div class="flex flex-row justify-between">
           <h2 class="ris-heading3-regular mb-20">Verfügbare Rubriken</h2>
-          <DropdownInput
+          <Select
             v-model="filter"
-            aria-label="dropdown input"
             class="ds-select-small w-auto"
-            :items="filters"
+            :options="filters"
+            option-label="label"
+            option-value="value"
             placeholder="Bitte auswählen"
           />
         </div>
