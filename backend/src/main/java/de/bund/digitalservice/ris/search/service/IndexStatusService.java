@@ -69,7 +69,7 @@ public class IndexStatusService {
       }
       return mapper.readValue(content, IndexingState.class);
     } catch (JsonProcessingException e) {
-      return null;
+      return new IndexingState();
     }
   }
 
