@@ -60,22 +60,22 @@ class NormsImporterTest extends ContainersIntegrationBase {
         "eli/bund/bgbl-1/1992/s101/1992-01-01/1/deu/1992-01-02/regelungstext-1.xml";
 
     Instant now = Instant.now();
-    Instant firstChangelogTime = now.minus(2, ChronoUnit.HOURS);
-    Instant secondChangelogTime = now.minus(1, ChronoUnit.HOURS);
+    String firstChangelogFileName =
+        "changelogs/%s-changelog.json".formatted(now.minus(2, ChronoUnit.HOURS).toString());
+    String secondChangelogFileName =
+        "changelogs/%s-changelog.json".formatted(now.minus(1, ChronoUnit.HOURS).toString());
 
     // changelog1.json contains Norm 1...
     normsBucket.save(
-        "changelogs/%s-changelog.json".formatted(firstChangelogTime.toString()),
-        "{\"changed\": [\"%s\"]}".formatted(ignoredManifestationEli));
+        firstChangelogFileName, "{\"changed\": [\"%s\"]}".formatted(ignoredManifestationEli));
 
     // opposite case: verify that the file can actually be imported
     normsBucket.save(
-        "changelogs/%s-changelog.json".formatted(secondChangelogTime.toString()),
-        "{\"changed\": [\"%s\"]}".formatted(nonIgnoredManifestationEli));
+        secondChangelogFileName, "{\"changed\": [\"%s\"]}".formatted(nonIgnoredManifestationEli));
 
     assertThat(normIndex.count()).isZero();
 
-    IndexingState mockState = getMockState().withLastSuccess(firstChangelogTime.toString());
+    IndexingState mockState = getMockState().withLastProcessedChangelogFile(firstChangelogFileName);
     normsImporter.fetchAndProcessChanges(mockState);
 
     assertThat(normIndex.findAll())
@@ -101,11 +101,10 @@ class NormsImporterTest extends ContainersIntegrationBase {
 
     normsBucket.save(
         "changelogs/%s-changelog.json".formatted(now),
-        """
-            {"changed": ["%s"], "deleted": ["%s"]}"""
+        "{\"changed\": [\"%s\"], \"deleted\": [\"%s\"]}"
             .formatted(newManifestationEli, oldManifestationEli));
 
-    IndexingState mockState = getMockState().withLastSuccess(lastSuccess.toString());
+    IndexingState mockState = getMockState().withLastProcessedChangelogFile(lastSuccess.toString());
 
     normsImporter.fetchAndProcessChanges(mockState);
 
@@ -132,26 +131,25 @@ class NormsImporterTest extends ContainersIntegrationBase {
     assertThat(normIndex.count()).isEqualTo(2);
 
     Instant now = Instant.now();
+    String changelogFileName = "changelogs/%s-changelog.json".formatted(now);
 
     normsBucket.save(
-        "changelogs/%s-changelog.json".formatted(now),
-        """
-                    { "deleted": [ "%s" ] }""".formatted(manifestationEliToDelete));
+        changelogFileName, "{ \"deleted\": [ \"%s\" ] }".formatted(manifestationEliToDelete));
 
     Instant lastSuccess = now.minus(1, ChronoUnit.HOURS);
-    IndexingState mockState = getMockState().withLastSuccess(lastSuccess.toString());
+    IndexingState mockState = getMockState().withLastProcessedChangelogFile(lastSuccess.toString());
 
     normsImporter.fetchAndProcessChanges(mockState);
 
     IndexingState indexingState =
         indexStatusService.loadStatus(NormIndexSyncJob.NORM_STATUS_FILENAME);
-    assertThat(indexingState.lastSuccess()).isEqualTo(now.toString());
+    assertThat(indexingState.lastProcessedChangelogFile()).isEqualTo(changelogFileName);
     assertThat(normIndex.count()).isEqualTo(1);
     assertThat(normIndex.findById(expressionEliToKeep)).isPresent();
   }
 
   private IndexingState getMockState() {
     Instant time = Instant.now();
-    return new IndexingState(time.toString(), time.toString(), time.toString(), null, null);
+    return new IndexingState(time.toString(), time.toString(), time.toString());
   }
 }

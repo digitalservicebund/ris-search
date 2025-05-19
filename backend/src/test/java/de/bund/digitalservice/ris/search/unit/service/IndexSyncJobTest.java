@@ -52,8 +52,7 @@ class IndexSyncJobTest {
     when(indexStatusService.lockIndex(any(), any())).thenReturn(true);
     when(indexStatusService.loadStatus(any()))
         .thenReturn(
-            new IndexingState(
-                time.minusSeconds(10).toString(), time.toString(), time.toString(), null, null));
+            new IndexingState(time.minusSeconds(10).toString(), time.toString(), time.toString()));
     when(normsBucket.getAllKeysByPrefix(IndexSyncJob.CHANGELOG)).thenReturn(changelogs);
     String changeAll = "{\"change_all\" : true}";
     when(normsBucket.getFileAsString(changelogFileName)).thenReturn(Optional.of(changeAll));
@@ -63,16 +62,15 @@ class IndexSyncJobTest {
     verify(indexStatusService, times(1)).lockIndex(any(), any());
     verify(indexStatusService, times(1)).unlockIndex(any());
     verify(indexStatusService, times(1))
-        .updateLastSuccess(NormIndexSyncJob.NORM_STATUS_FILENAME, time.toString());
+        .updateLastProcessedChangelog(NormIndexSyncJob.NORM_STATUS_FILENAME, changelogFileName);
   }
 
   @Test
   void itTriggersReindexAll() throws ObjectStoreServiceException {
     Changelog changelog = new Changelog();
     changelog.setChangeAll(true);
-    IndexingState state = getMockState();
 
-    normIndexSyncJob.importChangelogContent(changelog, state);
+    normIndexSyncJob.importChangelogContent(changelog, Instant.now().toString(), "testFileName");
 
     verify(indexNormsService, times(1)).reindexAll(any());
   }
@@ -82,11 +80,12 @@ class IndexSyncJobTest {
     Changelog changelog = new Changelog();
     changelog.setChanged(Sets.newHashSet(List.of("identifier1")));
     changelog.setDeleted(Sets.newHashSet(List.of("identifier1")));
-    IndexingState state = getMockState();
+
+    String now = Instant.now().toString();
 
     Assertions.assertThrows(
         IllegalArgumentException.class,
-        () -> normIndexSyncJob.importChangelogContent(changelog, state));
+        () -> normIndexSyncJob.importChangelogContent(changelog, now, "testFileName"));
   }
 
   @Test
@@ -94,16 +93,12 @@ class IndexSyncJobTest {
     when(indexNormsService.getNumberOfIndexedDocuments()).thenReturn(100);
     when(indexNormsService.getNumberOfFilesInBucket()).thenReturn(99);
 
-    IndexingState indexingState = getMockState();
-    normIndexSyncJob.alertOnNumberMismatch(indexingState);
+    Instant time = Instant.now();
+    normIndexSyncJob.alertOnNumberMismatch(
+        new IndexingState(time.toString(), time.toString(), time.toString()));
 
     String expectedOutput = "IndexNormsService has 99 files in bucket but 100 indexed documents";
 
     assertThat(output).contains(expectedOutput);
-  }
-
-  private IndexingState getMockState() {
-    Instant time = Instant.now();
-    return new IndexingState(time.toString(), time.toString(), time.toString(), null, null);
   }
 }
