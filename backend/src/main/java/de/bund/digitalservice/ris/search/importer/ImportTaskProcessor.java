@@ -6,7 +6,6 @@ import de.bund.digitalservice.ris.search.service.NormIndexSyncJob;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.IntStream;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
@@ -55,18 +54,17 @@ public class ImportTaskProcessor {
   @NotNull
   public static List<String> parseTargets(String[] args) {
     List<String> targets = new ArrayList<>();
-    IntStream.range(OK_RETURN_CODE, args.length)
-        .filter(i -> args[i].equals(TASK_ARGUMENT))
-        .forEachOrdered(
-            i -> {
-              try {
-                String target = args[i + ERROR_RETURN_CODE];
-                targets.add(target);
-              } catch (IndexOutOfBoundsException e) {
-                throw new IllegalArgumentException(
-                    "Expected a target argument following %s".formatted(TASK_ARGUMENT));
-              }
-            });
+    for (int i = 0; i < args.length; i++) {
+      if (args[i].equals(TASK_ARGUMENT)) {
+        try {
+          String target = args[i + 1];
+          targets.add(target);
+        } catch (IndexOutOfBoundsException e) {
+          throw new IllegalArgumentException(
+              "Expected a target argument following %s".formatted(TASK_ARGUMENT));
+        }
+      }
+    }
     return targets;
   }
 
@@ -75,20 +73,20 @@ public class ImportTaskProcessor {
       case "import_norms" -> {
         try {
           normIndexSyncJob.runJob();
+          yield OK_RETURN_CODE;
         } catch (ObjectStoreServiceException e) {
           logger.error(e.getMessage(), e);
           yield ERROR_RETURN_CODE;
         }
-        yield OK_RETURN_CODE;
       }
       case "import_caselaw" -> {
         try {
           caseLawIndexSyncJob.runJob();
+          yield OK_RETURN_CODE;
         } catch (ObjectStoreServiceException e) {
           logger.error(e.getMessage(), e);
           yield ERROR_RETURN_CODE;
         }
-        yield OK_RETURN_CODE;
       }
       default -> throw new IllegalArgumentException("Unexpected target '%s'".formatted(target));
     };
