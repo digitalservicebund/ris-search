@@ -34,9 +34,9 @@ const title =
             wen Sie sich diesbezüglich wenden können.
           </p>
           <p>
-            Das Bundesministerium der Justiz (BMJ) verarbeitet Ihre
-            personenbezogenen Daten gemäß den datenschutzrechtlichen
-            Vorschriften der Verordnung (EU) 2016/679
+            Das Bundesministerium der Justiz und für Verbraucherschutz (BMJV)
+            verarbeitet Ihre personenbezogenen Daten gemäß den
+            datenschutzrechtlichen Vorschriften der Verordnung (EU) 2016/679
             (Datenschutz-Grundverordnung – „DS-GVO“), des
             Bundesdatenschutzgesetzes („BDSG“) in der ab dem 25. Mai 2018
             geltenden Fassung, sowie des
@@ -64,8 +64,8 @@ const title =
             das
           </p>
           <p>
-            Bundesministerium der Justiz<br />Mohrenstraße 37<br />10117
-            Berlin<br /><br />Telefon: +49 (0)30 18 580 – 0<br />E-Mail:
+            Bundesministerium der Justiz und für Verbraucherschutz<br />Mohrenstraße
+            37<br />10117 Berlin<br /><br />Telefon: +49 (0)30 18 580 – 0<br />E-Mail:
             <a href="mailto:poststelle@bmj.bund.de" class="ris-link1-regular"
               >poststelle@bmj.bund.de</a
             >
@@ -73,17 +73,17 @@ const title =
         </section>
         <section class="space-y-24">
           <h2 class="ris-heading2-regular">
-            2. Die behördliche Datenschutzbeauftragte des BMJ
+            2. Die behördliche Datenschutzbeauftragte des BMJV
           </h2>
           <p>
             Fragen in datenschutzrechtlichen Angelegenheiten können Sie an die
-            Datenschutzbeauftragte des BMJ richten. Diese erreichen Sie unter
+            Datenschutzbeauftragte des BMJV richten. Diese erreichen Sie unter
             folgender Adresse:
           </p>
           <p>
             Behördliche Datenschutzbeauftragte<br />
-            Bundesministerium der Justiz<br />Mohrenstraße 37<br />10117
-            Berlin<br /><br />Telefon: +49 (0)30 18 580 – 0<br />E-Mail:
+            Bundesministerium der Justiz und für Verbraucherschutz<br />Mohrenstraße
+            37<br />10117 Berlin<br /><br />Telefon: +49 (0)30 18 580 – 0<br />E-Mail:
             <a href="mailto:datenschutz@bmj.bund.de" class="ris-link1-regular"
               >datenschutz@bmj.bund.de</a
             >
@@ -232,7 +232,7 @@ const title =
           <p>
             Jede Person, deren personenbezogene Daten verarbeitet werden, kann
             als Betroffene oder Betroffener gegenüber der verantwortlichen
-            Organisation (gemäß Ziffer 1 (s.o.) das BMJ) die nachfolgend
+            Organisation (gemäß Ziffer 1 (s.o.) das BMJV) die nachfolgend
             benannten Rechte geltend machen.
           </p>
           <h3 class="ris-heading3-regular">
@@ -287,7 +287,7 @@ const title =
             eine andere der verantwortliche Organisation weiterleiten zu lassen.
             Gemäß Artikel 20 Abs. 3 Satz 2 DS-GVO steht dieses Recht aber dann
             nicht zur Verfügung, wenn die Datenverarbeitung der Wahrnehmung
-            öffentlicher Aufgaben dient. Dies ist beim BMJ nur dann nicht der
+            öffentlicher Aufgaben dient. Dies ist beim BMJV nur dann nicht der
             Fall, wenn die Verarbeitung personenbezogener Daten zu fiskalischen
             Zwecken erfolgt.
           </p>
@@ -313,7 +313,7 @@ const title =
           </h3>
           <p>
             Der oder die Betroffene hat die Möglichkeit, sich mit einer
-            Beschwerde gegen die Datenverarbeitung des BMJ an die
+            Beschwerde gegen die Datenverarbeitung des BMJV an die
             Bundesbeauftragte für den Datenschutz und die Informationsfreiheit
             zu wenden, die die datenschutzrechtliche Aufsicht über die
             Bundesbehörden hat. Sie ist wie folgt erreichbar:

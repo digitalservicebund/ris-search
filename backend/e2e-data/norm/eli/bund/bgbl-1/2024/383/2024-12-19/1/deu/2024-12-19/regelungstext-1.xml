@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="../../../Grammatiken/legalDocML.de.sch" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<akn:akomaNtoso xmlns:akn="http://Inhaltsdaten.LegalDocML.de/1.7.2/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://Metadaten.LegalDocML.de/1.7.2/ ../schema/legalDocML.de-metadaten.xsd http://Inhaltsdaten.LegalDocML.de/1.7.2/ ../schema/legalDocML.de-regelungstextverkuendungsfassung.xsd http://MetadatenBundesregierung.LegalDocML.de/1.7.2/ ../schema/legalDocML.de-metadaten-bundesregierung.xsd">
+    <akn:act name="regelungstext">
+        <akn:meta GUID="a3e9cfae-8d79-4f05-b8a0-1a2f3c8b9d71" eId="meta-1">
+            <akn:identification GUID="b1d6f2ae-3123-4d8f-8c42-7a9b0f2a3d4e" eId="meta-1_ident-1" source="attributsemantik-noch-undefiniert">
+                <akn:FRBRWork GUID="c2f3e4ad-4a65-4818-9cc8-1f2e3d4c5b6a" eId="meta-1_ident-1_frbrwork-1">
+                    <akn:FRBRthis GUID="d3e4f5ac-5b76-4cab-9e51-2f3e4d5c6b7a" eId="meta-1_ident-1_frbrwork-1_frbrthis-1" value="eli/bund/bgbl-1/2024/383/regelungstext-1"/>
+                    <akn:FRBRuri GUID="e4f5a6bc-6c87-4dab-8e62-3f4e5d6c7b8a" eId="meta-1_ident-1_frbrwork-1_frbruri-1" value="eli/bund/bgbl-1/2024/383"/>
+                    <akn:FRBRalias GUID="f5a6b7cd-7d98-4eab-9f73-4f5a6b7c8d9e" eId="meta-1_ident-1_frbrwork-1_frbralias-1" name="übergreifende-id" value="a56b4956-68a7-421d-bf44-109d87f5126e"/>
+                    <akn:FRBRdate GUID="a6b7c8de-8e09-4fab-8e84-5f6a7b8c9dae" date="2024-12-22" eId="meta-1_ident-1_frbrwork-1_frbrdate-1" name="verkuendungsfassung"/>
+                    <akn:FRBRauthor GUID="b7c8d9ef-9f10-4abc-8f95-6f7a8b9cadfe" eId="meta-1_ident-1_frbrwork-1_frbrauthor-1" href="recht.bund.de/institution/bundesregierung"/>
+                    <akn:FRBRcountry GUID="c8d9eafb-0a21-4bcd-8fa6-7f8a9b0cda1e" eId="meta-1_ident-1_frbrwork-1_frbrcountry-1" value="de"/>
+                    <akn:FRBRnumber GUID="d9ea0bcf-1b32-4cde-8fb7-8f9ab0cd1e2f" eId="meta-1_ident-1_frbrwork-1_frbrnumber-1" value="383"/>
+                    <akn:FRBRname GUID="e0fabcd1-2c43-4def-8fc8-9f0abcdef123" eId="meta-1_ident-1_frbrwork-1_frbrname-1" value="bgbl-1"/>
+                    <akn:FRBRsubtype GUID="f0abcde2-3d54-4efa-8fd9-0a1b2c3d4e5f" eId="meta-1_ident-1_frbrwork-1_frbrsubtype-1" value="regelungstext-1"/>
+                </akn:FRBRWork>
+                <akn:FRBRExpression GUID="11223344-5566-7788-99aa-bbccddeeff00" eId="meta-1_ident-1_frbrexpression-1">
+                    <akn:FRBRthis GUID="22334455-6677-8899-aabb-ccddeeff0011" eId="meta-1_ident-1_frbrexpression-1_frbrthis-1" value="eli/bund/bgbl-1/2024/383/2024-12-19/1/deu/regelungstext-1"/>
+                    <akn:FRBRuri GUID="33445566-7788-99aa-bbcc-ddeeff001122" eId="meta-1_ident-1_frbrexpression-1_frbruri-1" value="eli/bund/bgbl-1/2024/383/2024-12-19/1/deu"/>
+                    <akn:FRBRalias GUID="44556677-8899-aabb-ccdd-eeff00112233" eId="meta-1_ident-1_frbrexpression-1_frbralias-1" name="aktuelle-version-id" value="73a5c78b-cf4d-4518-9004-813e3af3e284"/>
+                    <akn:FRBRalias GUID="55667788-99aa-bbcc-ddee-ff0011223344" eId="meta-1_ident-1_frbrexpression-1_frbralias-2" name="nachfolgende-version-id" value="99ba24e2-ae36-484e-9978-4efb93a0b506"/>
+                    <akn:FRBRauthor GUID="66778899-aabb-ccdd-eeff-001122334455" eId="meta-1_ident-1_frbrexpression-1_frbrauthor-1" href="recht.bund.de/institution/bundesregierung"/>
+                    <akn:FRBRdate GUID="778899aa-bbcc-ddee-ff00-112233445566" date="2024-12-19" eId="meta-1_ident-1_frbrexpression-1_frbrdate-1" name="verkuendung"/>
+                    <akn:FRBRlanguage GUID="8899aabb-ccdd-eeff-0011-223344556677" eId="meta-1_ident-1_frbrexpression-1_frbrlanguage-1" language="deu"/>
+                    <akn:FRBRversionNumber GUID="99aabbcc-ddee-0011-2233-445566778899" eId="meta-1_ident-1_frbrexpression-1_frbrversionnumber-1" value="1"/>
+                </akn:FRBRExpression>
+                <akn:FRBRManifestation GUID="aa112233-4455-6677-8899-aabbccddeeff" eId="meta-1_ident-1_frbrmanifestation-1">
+                    <akn:FRBRthis GUID="bb223344-5566-7788-99aa-bbccddeeff001" eId="meta-1_ident-1_frbrmanifestation-1_frbrthis-1" value="eli/bund/bgbl-1/2024/383/2024-12-19/1/deu/2024-12-19/regelungstext-1.xml"/>
+                    <akn:FRBRuri GUID="cc334455-6677-8899-aabb-ccddee001122" eId="meta-1_ident-1_frbrmanifestation-1_frbruri-1" value="eli/bund/bgbl-1/2024/383/2024-12-19/1/deu/2024-12-19/regelungstext-1.xml"/>
+                    <akn:FRBRdate GUID="dd445566-7788-99aa-bbcc-ddee11223344" date="2024-12-19" eId="meta-1_ident-1_frbrmanifestation-1_frbrdate-1" name="generierung"/>
+                    <akn:FRBRauthor GUID="ee556677-8899-aabb-ccdd-eeff11223344" eId="meta-1_ident-1_frbrmanifestation-1_frbrauthor-1" href="recht.bund.de"/>
+                    <akn:FRBRformat GUID="ff667788-99aa-bbcc-ddee-ff0011223344" eId="meta-1_ident-1_frbrmanifestation-1_frbrformat-1" value="xml"/>
+                </akn:FRBRManifestation>
+            </akn:identification>
+            <akn:lifecycle GUID="00112233-4455-6677-8899-aabbccddeeff" eId="meta-1_lebzykl-1" source="attributsemantik-noch-undefiniert">
+                <akn:eventRef GUID="11223344-5566-7788-99aa-bbccddeeff00" date="2024-12-19" eId="meta-1_lebzykl-1_ereignis-1" refersTo="ausfertigung" source="attributsemantik-noch-undefiniert" type="generation"/>
+                <akn:eventRef GUID="22334455-6677-8899-aabb-ccddeeff0011" date="2024-12-23" eId="meta-1_lebzykl-1_ereignis-2" refersTo="inkrafttreten" source="attributsemantik-noch-undefiniert" type="generation"/>
+            </akn:lifecycle>
+            <akn:temporalData GUID="33445566-7788-99aa-bbcc-ddeeff001122" eId="meta-1_geltzeiten-1" source="attributsemantik-noch-undefiniert">
+                <akn:temporalGroup GUID="44556677-8899-aabb-ccdd-eeff00112233" eId="meta-1_geltzeiten-1_geltungszeitgr-1">
+                    <akn:timeInterval GUID="55667788-99aa-bbcc-ddee-ff0011223344" eId="meta-1_geltzeiten-1_geltungszeitgr-1_gelzeitintervall-1" refersTo="geltungszeit" start="#meta-1_lebzykl-1_ereignis-2"/>
+                </akn:temporalGroup>
+            </akn:temporalData>
+            <akn:proprietary GUID="66778899-aabb-ccdd-eeff-001122334455" eId="meta-1_proprietary-1" source="attributsemantik-noch-undefiniert">
+                <ris:legalDocML.de_metadaten xmlns:ris="http://MetadatenRIS.LegalDocML.de/1.7.2/" xsi:schemaLocation="http://MetadatenRIS.LegalDocML.de/1.7.2/ ../schema/legalDocML.de-metadaten-ris.xsd">
+                    <ris:inkraft date="2024-12-23"/>
+                </ris:legalDocML.de_metadaten>
+            </akn:proprietary>
+        </akn:meta>
+        <akn:preface GUID="778899aa-bbcc-ddee-ff00-112233445566" eId="einleitung-1">
+            <akn:longTitle GUID="8899aabb-ccdd-eeff-0011-223344556677" eId="einleitung-1_doktitel-1">
+                <akn:p GUID="99aabbcc-ddee-0011-2233-445566778899" eId="einleitung-1_doktitel-1_text-1">
+                    <akn:docStage GUID="aabbccdd-eeff-0011-2233-445566778899" eId="einleitung-1_doktitel-1_text-1_docstadium-1"/>
+                    <akn:docTitle GUID="a1b2c3d4-e5f6-4789-abcd-0123456789ab" eId="einleitung-1_doktitel-1_text-1_doctitel-1">Fiktives Gesetz zur Musterfinanzierung politischer Einrichtungen</akn:docTitle>
+                    <akn:shortTitle GUID="b1c2d3e4-f5a6-4789-abcd-1234567890ab" eId="einleitung-1_doktitel-1_text-1_kurztitel-1">(MusterfinanzG - <akn:inline GUID="c1d2e3f4-a5b6-4789-abcd-0123456789ab" eId="einleitung-1_doktitel-1_text-1_kurztitel-1_inline-1" name="attributsemantik-noch-undefiniert" refersTo="amtliche-abkuerzung">MFG</akn:inline>)</akn:shortTitle>
+                </akn:p>
+            </akn:longTitle>
+        </akn:preface>
+        <akn:preamble GUID="d1e2f3a4-b5c6-4789-abcd-234567890abc" eId="preambel-1">Fiktiver Prologstext zur Einführung in das Gesetz.</akn:preamble>
+        <akn:body GUID="e1f2a3b4-c5d6-4789-abcd-34567890abcd" eId="hauptteil-1">
+            <akn:article GUID="f1a2b3c4-d5e6-4789-abcd-4567890abcde" eId="hauptteil-1_art-1" period="#meta-1_geltzeiten-1_geltungszeitgr-1" refersTo="stammform">
+                <akn:num GUID="a2b3c4d5-e6f7-4789-abcd-567890abcdef" eId="hauptteil-1_art-1_bezeichnung-1">§ 1</akn:num>
+                <akn:heading GUID="b3c4d5e6-f7a8-4789-abcd-67890abcdef1" eId="hauptteil-1_art-1_überschrift-1">Beispielhafte Illustration</akn:heading>
+                <akn:paragraph GUID="c4d5e6f7-a8b9-4789-abcd-7890abcdef12" eId="hauptteil-1_art-1_abs-1">
+                    <akn:num GUID="d5e6f7a8-b9ca-4789-abcd-890abcdef123" eId="hauptteil-1_art-1_abs-1_bezeichnung-1">(1)</akn:num>
+                    <akn:content GUID="e6f7a8b9-cad0-4789-abcd-901abcdef234" eId="hauptteil-1_art-1_abs-1_inhalt-1">
+                        <akn:p GUID="f7a8b9ca-d0e1-4789-abcd-0123abcdef34" eId="hauptteil-1_art-1_abs-1_inhalt-1_text-1">Fiktive Einrichtungen im öffentlichen Interesse werden von den zuständigen fiktiven Trägern anerkannt.</akn:p>
+                    </akn:content>
+                </akn:paragraph>
+                <akn:paragraph GUID="a8b9cad0-e1f2-4789-abcd-1234abcdef45" eId="hauptteil-1_art-1_abs-2">
+                    <akn:num GUID="b9cad0e1-f2a3-4789-abcd-2345abcdef56" eId="hauptteil-1_art-1_abs-2_bezeichnung-1">(2)</akn:num>
+                    <akn:content GUID="cad0e1f2-a3b4-4789-abcd-3456abcdef67" eId="hauptteil-1_art-1_abs-2_inhalt-1">
+                        <akn:p GUID="dae1f2a3-b4c5-4789-abcd-4567abcdef78" eId="hauptteil-1_art-1_abs-2_inhalt-1_text-1">
+                            Beispielhafte Illustration
+                            <akn:img GUID="7f4172f8-2184-4b13-98b3-d387b6b25a72"
+                                     eId="hauptteil-1_art-1_abs-2_inhalt-1_bild-1"
+                                     src="eli/bund/bgbl-1/2024/383/2024-12-19/1/deu/2024-12-19/illustration.png" alt="Beispielbild"/></akn:p>
+                    </akn:content>
+                </akn:paragraph>
+            </akn:article>
+            <akn:article GUID="e2f3a4b5-c6d7-4789-abcd-5678abcdef89" eId="hauptteil-1_art-2" period="#meta-1_geltzeiten-1_geltungszeitgr-1" refersTo="stammform">
+                <akn:num GUID="f3a4b5c6-d7e8-4789-abcd-6789abcdef90" eId="hauptteil-1_art-2_bezeichnung-1">§ 2</akn:num>
+                <akn:heading GUID="a4b5c6d7-e8f9-4789-abcd-789abcdef012" eId="hauptteil-1_art-2_überschrift-1"/>
+                <akn:paragraph GUID="b5c6d7e8-f9a0-4789-abcd-89abcdef0123" eId="hauptteil-1_art-2_abs-1">
+                    <akn:num GUID="c6d7e8f9-a0b1-4789-abcd-90abcdef1234" eId="hauptteil-1_art-2_abs-1_bezeichnung-1">(1)</akn:num>
+                    <akn:content GUID="d7e8f9a0-b1c2-4789-abcd-01abcdef2345" eId="hauptteil-1_art-2_abs-1_inhalt-1">
+                        <akn:p GUID="e8f9a0b1-c2d3-4789-abcd-12abcdef3456" eId="hauptteil-1_art-2_abs-1_inhalt-1_text-1">Dieses Gesetz tritt am Tag nach der Verkündung in Kraft.</akn:p>
+                    </akn:content>
+                </akn:paragraph>
+                <akn:paragraph GUID="f9a0b1c2-d3e4-4789-abcd-23abcdef4567" eId="hauptteil-1_art-2_abs-2">
+                    <akn:num GUID="a0b1c2d3-e4f5-4789-abcd-34abcdef5678" eId="hauptteil-1_art-2_abs-2_bezeichnung-1">(2)</akn:num>
+                    <akn:content GUID="b1c2d3e4-f5a6-4789-abcd-45abcdef6789" eId="hauptteil-1_art-2_abs-2_inhalt-1">
+                        <akn:p GUID="c2d3e4f5-a6b7-4789-abcd-56abcdef7890" eId="hauptteil-1_art-2_abs-2_inhalt-1_text-1">Das zuständige Ministerium kündigt den Umsetzungstermin an.</akn:p>
+                    </akn:content>
+                </akn:paragraph>
+            </akn:article>
+        </akn:body>
+    </akn:act>
+</akn:akomaNtoso>

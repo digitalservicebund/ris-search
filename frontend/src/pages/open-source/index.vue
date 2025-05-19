@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import IcBaselineLaunch from "~icons/ic/baseline-launch";
-import Button from "primevue/button";
 import StaticPageWrapper from "~/components/CustomLayouts/StaticPageWrapper.vue";
 useHead({ title: "Open Source" });
 definePageMeta({ alias: ["/opensource"] });
@@ -13,16 +12,16 @@ definePageMeta({ alias: ["/opensource"] });
     <div class="flex flex-col gap-32">
       <main class="max-w-prose space-y-24">
         <p>
-          Open Source bedeutet für uns Transparenz, Vertrauen, Sicherheit,
-          Qualität und Flexibilität. Aus diesem Grund wird unsere Arbeit bald in
-          unserem Github-Repository frei zugänglich und offen für Mitarbeit
-          sein.
+          Bei der Entwicklung setzen wir vollständig auf Open Source. Open
+          Source bedeutet für uns Transparenz, Vertrauen, Sicherheit, Qualität
+          und Flexibilität. Aus diesem Grund ist unsere Arbeit in unserem
+          Github-Repository frei zugänglich und offen für Mitarbeit.
         </p>
-        <p>
-          Wir planen, das Github-Repository in den nächsten Wochen zu
-          veröffentlichen und werden dann den Link auf dieser Seite teilen.
-        </p>
-        <Button disabled>GitHub-Repository<IcBaselineLaunch /></Button>
+        <ButtonLink
+          href="https://github.com/digitalservicebund/ris-search"
+          target="_blank"
+          >Zum Github Repository<IcBaselineLaunch
+        /></ButtonLink>
       </main></div
   ></StaticPageWrapper>
 </template>

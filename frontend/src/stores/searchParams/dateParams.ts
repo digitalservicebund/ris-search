@@ -72,11 +72,11 @@ export function useDateParams(initialState: QueryParams) {
     },
   });
 
-  function $reset() {
-    date.value = initialState.date;
-    dateAfter.value = initialState.dateAfter;
-    dateBefore.value = initialState.dateBefore;
-    dateSearchMode.value = initialState.dateSearchMode;
+  function reset(state: QueryParams) {
+    date.value = state.date;
+    dateAfter.value = state.dateAfter;
+    dateBefore.value = state.dateBefore;
+    dateSearchMode.value = state.dateSearchMode;
   }
-  return { date, dateAfter, dateBefore, dateSearchMode, $reset };
+  return { date, dateAfter, dateBefore, dateSearchMode, reset };
 }

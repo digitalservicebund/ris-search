@@ -7,7 +7,10 @@ import de.bund.digitalservice.ris.search.schema.CollectionSchema;
 import de.bund.digitalservice.ris.search.schema.PartialCollectionViewSchema;
 import de.bund.digitalservice.ris.search.schema.SearchMemberSchema;
 import de.bund.digitalservice.ris.search.schema.TextMatchSchema;
+import de.bund.digitalservice.ris.search.utils.PageUtils;
 import java.util.List;
+import java.util.Map;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.elasticsearch.core.SearchHit;
 import org.springframework.data.elasticsearch.core.SearchPage;
 
@@ -18,18 +21,35 @@ public class CaseLawSearchSchemaMapper {
     CaseLawDocumentationUnit document = (CaseLawDocumentationUnit) searchHit.getContent();
     List<TextMatchSchema> textMatches =
         searchHit.getHighlightFields().entrySet().stream()
-            .map(
+            .flatMap(
                 textMatch ->
-                    TextMatchSchema.builder()
-                        .name(textMatch.getKey())
-                        .text(textMatch.getValue().getFirst())
-                        .build())
+                    textMatch.getValue().stream()
+                        .map(
+                            valueMatch ->
+                                TextMatchSchema.builder()
+                                    .name(getTextMatchKey(textMatch))
+                                    .text(valueMatch)
+                                    .build()))
             .toList();
 
     return SearchMemberSchema.<CaseLawSearchSchema>builder()
         .item(fromDomain(document))
         .textMatches(textMatches)
         .build();
+  }
+
+  /**
+   * Case-convert text match keys (field names) to match the result schema.
+   *
+   * @param textMatch The text match to take the name from.
+   * @return A normalized key
+   */
+  private static String getTextMatchKey(Map.Entry<String, List<String>> textMatch) {
+    final String key = textMatch.getKey();
+    if (key.endsWith(".text")) {
+      return PageUtils.snakeCaseToCamelCase(StringUtils.removeEnd(key, ".text"));
+    }
+    return PageUtils.snakeCaseToCamelCase(key);
   }
 
   public static CaseLawSearchSchema fromDomain(CaseLawDocumentationUnit doc) {

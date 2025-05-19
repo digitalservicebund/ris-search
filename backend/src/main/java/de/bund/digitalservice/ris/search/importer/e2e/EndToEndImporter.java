@@ -1,6 +1,6 @@
 package de.bund.digitalservice.ris.search.importer.e2e;
 
-import de.bund.digitalservice.ris.search.exception.RetryableObjectStoreException;
+import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.service.IndexCaselawService;
 import de.bund.digitalservice.ris.search.service.IndexNormsService;
 import java.time.Instant;
@@ -34,7 +34,7 @@ public class EndToEndImporter {
 
   @Async
   @EventListener(value = ApplicationReadyEvent.class)
-  public void endToEndTrigger() throws RetryableObjectStoreException {
+  public void endToEndTrigger() throws ObjectStoreServiceException {
     logger.info("Import E2E caselaw data: started");
     indexCaselawService.reindexAll(Instant.now().toString());
     logger.info("Import E2E caselaw data: done");

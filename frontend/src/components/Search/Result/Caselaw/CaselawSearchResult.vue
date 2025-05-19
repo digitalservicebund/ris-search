@@ -27,6 +27,12 @@ function getMatch(match: string, matches: TextMatch[]) {
   return matches.find((highlight) => highlight.name === match)?.text;
 }
 
+function getMatches(match: string, matches: TextMatch[]) {
+  return matches
+    .filter((highlight) => highlight.name === match)
+    .map((highlight) => highlight.text);
+}
+
 type Key =
   | "guidingPrinciple"
   | "headnote"
@@ -63,6 +69,22 @@ const fields: Map<Key, FieldDisplayProperties> = new Map([
   ],
 ]);
 
+function getFileNumbers(item: CaseLaw) {
+  const matches = getMatches("fileNumbers", props.searchResult.textMatches);
+  if (matches.length) {
+    const replaced = [...item.fileNumbers];
+    matches.forEach((match) => {
+      const stripped = sanitizeSearchResult(match, []);
+      const index = item.fileNumbers.indexOf(stripped);
+      if (index !== -1) {
+        replaced[index] = match;
+      }
+    });
+    return replaced.join(", ");
+  }
+  return item.fileNumbers?.join(", ");
+}
+
 const metadata = computed(() => {
   const item = props.searchResult.item;
   return {
@@ -73,7 +95,7 @@ const metadata = computed(() => {
     url: `/case-law/${props.searchResult.item.documentNumber}`,
     courtName: item.courtName,
     decisionDate: formattedDate(item.decisionDate),
-    fileNumbers: item.fileNumbers?.join(", "),
+    fileNumbers: getFileNumbers(item),
     decisionName: item.decisionName?.at(0),
     documentType: item.documentType || "Entscheidung",
   } as CaseLawMetadata;
@@ -132,7 +154,7 @@ function openResult(url: string) {
         ><span class="sr-only">Entscheidungsdatum </span
         >{{ metadata.decisionDate }}</span
       >
-      <span aria-label="Aktenzeichen">{{ metadata.fileNumbers }}</span>
+      <span aria-label="Aktenzeichen" v-html="metadata.fileNumbers" />
     </div>
     <NuxtLink
       :to="metadata.url"

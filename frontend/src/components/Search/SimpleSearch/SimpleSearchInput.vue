@@ -14,7 +14,14 @@ const props = defineProps<{ fullWidth?: boolean }>();
 const postHogStore = usePostHogStore();
 const router = useRouter();
 
+// currentText is decoupled from the model, we want to update
+// the model only when the user performs a search
 const currentText = ref<string | undefined>(model.value);
+
+// propagate model updates back to the input
+watch(model, (newValue) => {
+  currentText.value = newValue;
+});
 const emit = defineEmits(["emptySearch"]);
 const performSearch = () => {
   // If the user is coming from another page, we want to track the search

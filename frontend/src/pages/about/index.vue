@@ -31,22 +31,27 @@ definePageMeta({ alias: ["/ueber"] });
           erweitert.
         </p>
         <p>
-          Der Service wird gemeinsam vom Bundesministerium der Justiz, dem
-          Bundesamt für Justiz und der DigitalService GmbH des Bundes
-          entwickelt.
+          Der Service wird gemeinsam vom Bundesministerium der Justiz und für
+          Verbraucherschutz, dem Bundesamt für Justiz und der DigitalService
+          GmbH des Bundes entwickelt.
         </p>
       </section>
       <section class="space-y-24">
         <h2 class="ris-heading2-regular">Was gibt es bereits?</h2>
         <p class="max-w-prose">
-          Der Service enthält bereits eine erste Auswahl an
-          Gerichtsentscheidungen. Während der Testphase kann es noch zu
-          fehlenden Inhalten oder Darstellungsfehlern kommen. Ihr Feedback hilft
-          uns, den Service weiter zu verbessern.
+          Der Service enthält bereits eine erste Auswahl an Gesetzen,
+          Verordnungen und Gerichtsentscheidungen. Während der Testphase kann es
+          noch zu fehlenden Inhalten oder Darstellungsfehlern kommen. Ihr
+          Feedback hilft uns, den Service weiter zu verbessern.
         </p>
         <div
           class="grid max-w-5xl auto-rows-fr grid-cols-1 gap-24 md:grid-cols-3"
         >
+          <StatusCard
+            header="Gesetze und Verordnungen"
+            content="in der jeweils aktuell gültigen Fassung inklusive Tabellen und Anhängen sowie den wichtigsten Metadaten"
+            :status="StatusCardType.IMPLEMENTED"
+          />
           <StatusCard
             header="Gerichtsentscheidungen"
             content="mit den wichtigsten Metadaten und verlinkten Randnummern"
@@ -59,7 +64,7 @@ definePageMeta({ alias: ["/ueber"] });
           />
           <StatusCard
             header="XML-Ansichten"
-            content="für Rechtsinformationen"
+            content="für Gesetze, Verordnungen und Gerichtsentscheidungen"
             :status="StatusCardType.IMPLEMENTED"
           />
           <StatusCard
@@ -78,11 +83,6 @@ definePageMeta({ alias: ["/ueber"] });
         <div
           class="grid max-w-5xl auto-rows-fr grid-cols-1 gap-24 md:grid-cols-3"
         >
-          <StatusCard
-            header="Gesetze und Verordnungen"
-            content="in der jeweils aktuell gültigen Fassung inklusive Tabellen und Anhängen sowie den wichtigsten Metadaten"
-            :status="StatusCardType.IN_PROGRESS"
-          />
           <StatusCard
             header="Verwaltungsvorschriften"
             content="um den Zugang zu allen relevanten Rechtsinformationen zu vervollständigen"
