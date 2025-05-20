@@ -114,7 +114,7 @@ const normBreadcrumbTitle = computed(() =>
   <ContentWrapper border>
     <div v-if="status == 'pending'">Lade ...</div>
     <div v-if="!!metadata">
-      <div class="flex items-center gap-8">
+      <div class="flex items-center gap-8 print:hidden">
         <RisBreadcrumb
           type="norm"
           :title="normBreadcrumbTitle"
