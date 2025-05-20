@@ -1,9 +1,13 @@
 package de.bund.digitalservice.ris.search.integration.controller.api;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.either;
 import static org.hamcrest.Matchers.everyItem;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.matchesRegex;
+import static org.hamcrest.Matchers.oneOf;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -21,10 +25,13 @@ import de.bund.digitalservice.ris.search.repository.opensearch.CaseLawRepository
 import de.bund.digitalservice.ris.search.repository.opensearch.NormsRepository;
 import de.bund.digitalservice.ris.search.service.IndexAliasService;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Map;
 import java.util.stream.Stream;
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
+import org.json.JSONObject;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -69,13 +76,47 @@ class AllDocumentsSearchControllerAPITest extends ContainersIntegrationBase {
   }
 
   @Test
-  @DisplayName("Should return correct result for term search")
+  @DisplayName("Should return correct result for term search, with textMatches")
   void shouldReturnCorrectResultForFilterSearch() throws Exception {
     String query = "?searchTerm=Test";
 
     mockMvc
         .perform(get(ApiConfig.Paths.DOCUMENT + query).contentType(MediaType.APPLICATION_JSON))
-        .andExpect(jsonPath("$.member", hasSize(4)));
+        .andExpectAll(
+            status().isOk(),
+            jsonPath("$.member", hasSize(4)),
+            jsonPath(
+                "$.member[*].textMatches[*].name",
+                everyItem(
+                    either(
+                            oneOf(
+                                "name",
+                                "headnote",
+                                "otherHeadnote",
+                                "caseFacts",
+                                "headline",
+                                "outline",
+                                "longText",
+                                "otherLongText",
+                                "dissentingOpinion",
+                                "decisionGrounds",
+                                "fileNumbers"))
+                        .or(matchesRegex("§ \\d .+")))));
+  }
+
+  @Test
+  @DisplayName("Should correctly highlight case law file numbers")
+  void shouldReturnTextMatchForFileNumber() throws Exception {
+    String fileNumber = CaseLawTestData.allDocuments.getFirst().fileNumbers().getFirst();
+    String query = "?searchTerm=" + fileNumber;
+
+    mockMvc
+        .perform(get(ApiConfig.Paths.DOCUMENT + query).contentType(MediaType.APPLICATION_JSON))
+        .andExpectAll(
+            status().isOk(),
+            jsonPath(
+                "$.member[0].textMatches[?(@.name == 'fileNumbers')].text",
+                contains("<mark>IX</mark> <mark>ZR</mark> <mark>100</mark>/<mark>10</mark>")));
   }
 
   @Test
@@ -167,7 +208,28 @@ class AllDocumentsSearchControllerAPITest extends ContainersIntegrationBase {
   }
 
   static Stream<Arguments> provideOrderingTestArgs() {
-    return SortingTestArguments.provideSortingTestArguments();
+    int caseLawSize = CaseLawTestData.allDocuments.size();
+    int normsSize = NormsTestData.allDocuments.size();
+    int combinedSize = caseLawSize + normsSize;
+
+    var stream = SortingTestArguments.provideSortingTestArguments();
+    final ResultMatcher dateDescendingResultMatcher =
+        result -> {
+          JSONObject jsonObject = new JSONObject(result.getResponse().getContentAsString());
+          ArrayList<String> dates = new ArrayList<>();
+          for (Object member : jsonObject.getJSONArray("member")) {
+            var item = ((JSONObject) member).getJSONObject("item");
+            if (item.has("decisionDate")) {
+              dates.add(item.getString("decisionDate"));
+            } else if (item.has("legislationDate")) {
+              dates.add(item.getString("legislationDate"));
+            }
+          }
+          assertThat(dates).isSortedAccordingTo(Comparator.reverseOrder());
+        };
+    stream.add(Arguments.of("", combinedSize, dateDescendingResultMatcher, null));
+
+    return stream.build();
   }
 
   @ParameterizedTest

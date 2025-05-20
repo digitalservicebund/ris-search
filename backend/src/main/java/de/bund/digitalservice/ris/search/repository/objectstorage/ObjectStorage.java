@@ -1,9 +1,10 @@
 package de.bund.digitalservice.ris.search.repository.objectstorage;
 
-import de.bund.digitalservice.ris.search.exception.RetryableObjectStoreException;
-import java.io.FileNotFoundException;
+import de.bund.digitalservice.ris.search.exception.NoSuchKeyException;
+import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import java.io.FilterInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Optional;
@@ -13,6 +14,7 @@ import software.amazon.awssdk.core.exception.SdkClientException;
 
 public class ObjectStorage {
 
+  public static final int MAXIMUM_CALL_ATTEMPTS = 3;
   private final Logger logger;
   private final ObjectStorageClient client;
 
@@ -21,44 +23,41 @@ public class ObjectStorage {
     this.logger = logger;
   }
 
-  public List<String> getAllFilenames() {
-    return getAllFilenamesByPath("");
+  public List<String> getAllKeys() {
+    return getAllKeysByPrefix("");
   }
 
-  public List<String> getAllFilenamesByPath(String path) {
-    return client.getAllFilenamesByPath(path);
+  public List<String> getAllKeysByPrefix(String path) {
+    return client.listKeysByPrefix(path);
   }
 
-  public Optional<byte[]> get(String objectKey) {
-    try {
-      return checkedGet(objectKey);
-    } catch (RetryableObjectStoreException e) {
-      logger.error("object storage encountered an issue.", e);
-    }
-    return Optional.empty();
-  }
-
-  public Optional<String> getFileAsString(String filename) throws RetryableObjectStoreException {
-    Optional<byte[]> s3Response = checkedGet(filename);
+  public Optional<String> getFileAsString(String filename) throws ObjectStoreServiceException {
+    Optional<byte[]> s3Response = get(filename);
     return s3Response.map(bytes -> new String(bytes, StandardCharsets.UTF_8));
   }
 
-  public Optional<byte[]> checkedGet(String objectKey) throws RetryableObjectStoreException {
-    try {
-      final var response = getStream(objectKey);
-      return Optional.of(response.readAllBytes());
-    } catch (FileNotFoundException e) {
-      logger.warn(String.format("Object key %s does not exist", objectKey));
-      return Optional.empty();
-    } catch (IOException | AwsServiceException | SdkClientException e) {
-      throw new RetryableObjectStoreException(
-          String.format(
-              "object storage has encountered a problem while trying to get object %s.", objectKey),
-          e);
+  public Optional<byte[]> get(String objectKey) throws ObjectStoreServiceException {
+    for (int i = 0; i < MAXIMUM_CALL_ATTEMPTS; i++) {
+      try {
+        final var response = getStream(objectKey);
+        return Optional.of(response.readAllBytes());
+      } catch (NoSuchKeyException e) {
+        logger.warn(String.format("Object key %s does not exist", objectKey));
+        return Optional.empty();
+      } catch (IOException | AwsServiceException | SdkClientException e) {
+        logger.warn(
+            "Object storage encountered an issue while trying to get object {}."
+                + " Attempt {} will try again.",
+            objectKey,
+            i,
+            e);
+      }
     }
+    throw new ObjectStoreServiceException(
+        "Object storage encountered an issue. All retries failed.");
   }
 
-  public FilterInputStream getStream(String objectKey) throws FileNotFoundException {
+  public FilterInputStream getStream(String objectKey) throws NoSuchKeyException {
     return client.getStream(objectKey);
   }
 
@@ -72,5 +71,9 @@ public class ObjectStorage {
 
   public void close() {
     client.close();
+  }
+
+  public long putStream(String objectKey, InputStream inputStream) throws IOException {
+    return client.putStream(objectKey, inputStream);
   }
 }

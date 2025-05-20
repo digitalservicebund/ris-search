@@ -6,7 +6,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import de.bund.digitalservice.ris.search.exception.RetryableObjectStoreException;
+import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
 import de.bund.digitalservice.ris.search.repository.objectstorage.CaseLawBucket;
 import de.bund.digitalservice.ris.search.repository.opensearch.CaseLawSynthesizedRepository;
@@ -180,10 +180,10 @@ class IndexCaseLawServiceTest {
   }
 
   @Test
-  void reindexAllIgnoreseInvalidFiles() throws RetryableObjectStoreException {
+  void reindexAllIgnoresInvalidFiles() throws ObjectStoreServiceException {
     String testContent = caseLawContent;
 
-    when(this.bucket.getAllFilenames()).thenReturn(List.of("file1", "file2"));
+    when(this.bucket.getAllKeys()).thenReturn(List.of("file1", "file2"));
     when(this.bucket.getFileAsString("file1")).thenReturn(Optional.of(testContent));
     when(this.bucket.getFileAsString("file2")).thenReturn(Optional.of("this will not parse"));
 
@@ -202,7 +202,7 @@ class IndexCaseLawServiceTest {
   }
 
   @Test
-  void itCanReindexFromeOneSpecificChangelog() throws RetryableObjectStoreException {
+  void itCanReindexFromOneSpecificChangelog() throws ObjectStoreServiceException {
     String testContent = caseLawContent;
 
     when(this.bucket.getFileAsString("TEST080020093.xml")).thenReturn(Optional.of(testContent));
@@ -221,7 +221,7 @@ class IndexCaseLawServiceTest {
   }
 
   @Test
-  void itCanDeleteFromOneSpecificChangelog() throws RetryableObjectStoreException {
+  void itCanDeleteFromOneSpecificChangelog() throws ObjectStoreServiceException {
     Changelog changelog = new Changelog();
     changelog.setDeleted(Sets.newHashSet(Set.of("TEST080020093.xml")));
     service.indexChangelog("changelog1", changelog);
@@ -231,7 +231,7 @@ class IndexCaseLawServiceTest {
 
   @Test
   void itReturnsRightNumberOfFiles() {
-    when(this.bucket.getAllFilenames())
+    when(this.bucket.getAllKeys())
         .thenReturn(
             List.of(
                 "TEST080020093",

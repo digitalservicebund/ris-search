@@ -79,6 +79,7 @@ public record CaseLawDocumentationUnit(
     public static final String TENOR = "tenor";
     public static final String DECISION_DATE = "decision_date";
     public static final String FILE_NUMBERS = "file_numbers";
+    public static final String FILE_NUMBERS_TEXT = "file_numbers.text";
 
     /** Field holding the type of court, e.g., FG, BVerwG */
     public static final String COURT_TYPE = "court_type";

@@ -1,6 +1,7 @@
 package de.bund.digitalservice.ris.search.controller.api;
 
 import de.bund.digitalservice.ris.search.config.ApiConfig;
+import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.mapper.CaseLawSchemaMapper;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import de.bund.digitalservice.ris.search.repository.objectstorage.CaseLawBucket;
@@ -71,7 +72,8 @@ public class CaseLawController {
   @ApiResponse(responseCode = "200")
   @ApiResponse(responseCode = "404", content = @Content)
   public ResponseEntity<String> getCaseLawDocumentationUnitAsHtml(
-      @Parameter(example = "STRE201770751") @PathVariable String documentNumber) {
+      @Parameter(example = "STRE201770751") @PathVariable String documentNumber)
+      throws ObjectStoreServiceException {
     Optional<byte[]> bytes = caseLawBucket.get(String.format("%s.xml", documentNumber));
 
     if (bytes.isPresent()) {
@@ -92,10 +94,10 @@ public class CaseLawController {
   @ApiResponse(responseCode = "200")
   @ApiResponse(responseCode = "404", content = @Content(schema = @Schema()))
   public ResponseEntity<byte[]> getCaseLawDocumentationUnitAsXml(
-      @Parameter(example = "STRE201770751") @PathVariable String documentNumber) {
+      @Parameter(example = "STRE201770751") @PathVariable String documentNumber)
+      throws ObjectStoreServiceException {
 
     Optional<byte[]> bytes = caseLawBucket.get(String.format("%s.xml", documentNumber));
-
     return bytes.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
   }
 }

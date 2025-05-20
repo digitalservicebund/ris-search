@@ -5,9 +5,7 @@ import de.bund.digitalservice.ris.search.models.opensearch.AbstractSearchEntity;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import java.util.List;
-import java.util.Map;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.core.SearchHit;
@@ -79,7 +77,7 @@ public class PageUtils {
         // For mixed search hits, the keys of the highlightFields Map must be converted manually.
         // If a single index is queried, the names are converted automatically by {@link
         // ElasticsearchOperations}.
-        convertSnakeCaseKeysToCamelCase(searchHit.getHighlightFields()),
+        searchHit.getHighlightFields(),
         searchHit.getInnerHits(),
         searchHit.getNestedMetaData(),
         searchHit.getExplanation(),
@@ -89,14 +87,8 @@ public class PageUtils {
 
   public static final Pattern SNAKE_CASE_PATTERN = Pattern.compile("_([a-z])");
 
-  private static String snakeCaseToCamelCase(String str) {
+  public static String snakeCaseToCamelCase(String str) {
+    if (!str.contains("_")) return str;
     return SNAKE_CASE_PATTERN.matcher(str).replaceAll(m -> m.group(1).toUpperCase());
-  }
-
-  public static <T> Map<String, T> convertSnakeCaseKeysToCamelCase(Map<String, T> map) {
-    // Convert the key from snake_case to camelCase
-    // Add a new entry with the converted key and original value to the newMap
-    return map.entrySet().stream()
-        .collect(Collectors.toMap(e -> snakeCaseToCamelCase(e.getKey()), Map.Entry::getValue));
   }
 }

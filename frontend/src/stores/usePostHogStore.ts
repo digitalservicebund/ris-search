@@ -97,8 +97,8 @@ export const usePostHogStore = defineStore("postHog", () => {
   }
   function searchPerformed(
     type: "simple" | "advanced",
-    newParams?: QueryParams,
-    previousParams?: QueryParams,
+    newParams?: Partial<QueryParams>,
+    previousParams?: Partial<QueryParams>,
   ) {
     if (postHog.value && userConsent.value === true) {
       postHog.value.capture("search_performed", {

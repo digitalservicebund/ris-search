@@ -1,11 +1,13 @@
 package de.bund.digitalservice.ris.search.repository.objectstorage;
 
+import de.bund.digitalservice.ris.search.exception.NoSuchKeyException;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FilterInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
@@ -13,6 +15,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,12 +50,15 @@ public class LocalFilesystemObjectStorageClient implements ObjectStorageClient {
   }
 
   @Override
-  public List<String> getAllFilenamesByPath(String prefix) {
+  public List<String> listKeysByPrefix(String prefix) {
     Path bucketPath = localStorageDirectory.resolve(bucket);
-    Path basePath = bucketPath.resolve(prefix);
+
+    Path basePath = bucketPath.resolve(StringUtils.substringBeforeLast(prefix, "/"));
+
     try (Stream<Path> stream = Files.walk(basePath)) {
       return stream
           .filter(Files::isRegularFile)
+          .filter(f -> f.toString().contains(prefix))
           .map(p -> p.toString().substring(bucketPath.toString().length() + 1))
           .toList();
     } catch (IOException e) {
@@ -62,9 +68,13 @@ public class LocalFilesystemObjectStorageClient implements ObjectStorageClient {
   }
 
   @Override
-  public FilterInputStream getStream(String objectKey) throws FileNotFoundException {
+  public FilterInputStream getStream(String objectKey) throws NoSuchKeyException {
     File file = localStorageDirectory.resolve(bucket).resolve(objectKey).toFile();
-    return new DataInputStream(new FileInputStream(file));
+    try {
+      return new DataInputStream(new FileInputStream(file));
+    } catch (FileNotFoundException e) {
+      throw new NoSuchKeyException(objectKey + " not found", e);
+    }
   }
 
   @Override
@@ -104,5 +114,17 @@ public class LocalFilesystemObjectStorageClient implements ObjectStorageClient {
     } catch (NullPointerException | IOException e) {
       LOGGER.error("Couldn't delete object from local storage: {}", e.getMessage(), e);
     }
+  }
+
+  @Override
+  public long putStream(String objectKey, InputStream inputStream) {
+    File file = localStorageDirectory.resolve(bucket).resolve(objectKey).toFile();
+
+    try {
+      FileUtils.copyInputStreamToFile(inputStream, file);
+    } catch (IOException e) {
+      LOGGER.error(e.toString());
+    }
+    return file.length();
   }
 }
