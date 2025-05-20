@@ -97,7 +97,7 @@ const onPrint = () => {
       <MdiDotsVertical />
     </template>
   </Button>
-  <Menu ref="menu" :popup="true" :model="model">
+  <Menu ref="menu" :popup="true" :model="model" class="print:hidden">
     <template #item="{ item }">
       <div
         class="flex h-full items-center py-4"
