@@ -1,0 +1,37 @@
+.akn-section,
+.akn-subsection {
+  @apply break-inside-avoid;
+
+  .akn-num,
+  .akn-heading {
+    @apply break-after-avoid-page;
+  }
+}
+
+article {
+  @apply break-inside-avoid-page;
+  h2 {
+    @apply break-after-avoid-page;
+  }
+}
+
+@media print {
+  .ris-heading2-bold {
+    @apply text-2xl;
+  }
+  body {
+    @apply text-sm;
+  }
+  .max-w-prose {
+    @apply max-w-[initial];
+  }
+  :root {
+    --spacing-prose: 100%;
+  }
+}
+
+@page {
+  @bottom-center {
+    content: "Seite " counter(page) " von " counter(pages);
+  }
+}

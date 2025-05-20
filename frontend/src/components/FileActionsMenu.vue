@@ -5,7 +5,7 @@ import Button from "primevue/button";
 import MdiDotsVertical from "~icons/mdi/dots-vertical";
 import MaterialSymbolsLink from "~icons/material-symbols/link";
 import MaterialSymbolsCode from "~icons/material-symbols/code";
-import MaterialSymbolsPictureAsPdfOutline from "~icons/material-symbols/picture-as-pdf-outline";
+import MdiPrinter from "~icons/mdi/printer";
 import XMLFolderIcon from "~/components/icons/XMLFolderIcon.vue";
 const { xmlUrl, zipUrl } = defineProps<{ xmlUrl?: string; zipUrl?: string }>();
 
@@ -19,7 +19,7 @@ const model: ComputedRef<MenuItem[]> = computed(() => {
     {
       label: "PDF anzeigen",
       icon: "pdf",
-      disabled: true,
+      command: onPrint,
     },
   ];
   if (xmlUrl) {
@@ -46,7 +46,7 @@ const getIcon = (name: string) => {
     case "link":
       return MaterialSymbolsLink;
     case "pdf":
-      return MaterialSymbolsPictureAsPdfOutline;
+      return MdiPrinter;
     case "xml":
       return MaterialSymbolsCode;
     case "xml-zip":
@@ -61,6 +61,10 @@ const toggle = (event: Event) => {
 };
 
 defineExpose({ toggle });
+
+const onPrint = () => {
+  if (window) window.print();
+};
 </script>
 
 <template>
@@ -68,8 +72,8 @@ defineExpose({ toggle });
     <Button text disabled aria-label="Link kopieren">
       <template #icon><MaterialSymbolsLink /></template>
     </Button>
-    <Button text disabled aria-label="PDF anzeigen">
-      <template #icon><MaterialSymbolsPictureAsPdfOutline /></template>
+    <Button text aria-label="Drucken" @click="onPrint">
+      <template #icon><MdiPrinter /></template>
     </Button>
     <Button
       v-if="!!xmlUrl"
@@ -93,7 +97,7 @@ defineExpose({ toggle });
       <MdiDotsVertical />
     </template>
   </Button>
-  <Menu ref="menu" :popup="true" :model="model">
+  <Menu ref="menu" :popup="true" :model="model" class="print:hidden">
     <template #item="{ item }">
       <div
         class="flex h-full items-center py-4"
