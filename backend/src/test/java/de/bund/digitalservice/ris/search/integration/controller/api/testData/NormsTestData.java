@@ -74,7 +74,8 @@ public class NormsTestData {
                         true,
                         "eid1",
                         "guid1",
-                        null),
+                        null,
+                        "§ 1 TeG"),
                     new Article(
                         "§ 2 Example article",
                         "example text 2",
@@ -83,7 +84,8 @@ public class NormsTestData {
                         false,
                         "eid2",
                         "guid2",
-                        null)))
+                        null,
+                        "§ 2 TeG")))
             .tableOfContents(nestedToC)
             .build();
 

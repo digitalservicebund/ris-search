@@ -21,14 +21,14 @@ public abstract class BaseApiSearchDataTest {
     this.tokenProvider = new OAuthTokenProvider(authorizedClientManager);
   }
 
-  public List<String> fetchSearchStrings(
-      int maxEntries, String apiUrl, Function<Response, List<String>> extractor) {
-    List<String> results = new ArrayList<>();
+  public <T> List<T> fetchSearchStrings(
+      int maxEntries, String apiUrl, Function<Response, List<T>> extractor) {
+    List<T> results = new ArrayList<>();
     String url = buildInitialUrl(apiUrl);
 
     while (results.size() < maxEntries) {
       Response response = fetchPageResponse(url);
-      List<String> extracted = extractor.apply(response);
+      List<T> extracted = extractor.apply(response);
       results.addAll(extracted);
 
       url = getNextUrl(response);
@@ -48,8 +48,8 @@ public abstract class BaseApiSearchDataTest {
         .response();
   }
 
-  public List<String> searchForSearchTerm(
-      Function<String, Optional<String>> searchFunction, List<String> searchStrings) {
+  public <T> List<T> searchForSearchTerm(
+      Function<T, Optional<T>> searchFunction, List<T> searchStrings) {
     return searchStrings.parallelStream()
         .map(searchFunction)
         .filter(Optional::isPresent)
@@ -75,7 +75,7 @@ public abstract class BaseApiSearchDataTest {
     return (String) view.get("next");
   }
 
-  private Response fetchPageResponse(String url) {
+  Response fetchPageResponse(String url) {
     return given()
         .header("Authorization", "Bearer " + this.tokenProvider.getTokenValue())
         .when()

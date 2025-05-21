@@ -90,7 +90,10 @@ public class NormLdmlToOpenSearchMapper {
       List<Attachment> attachments =
           NormAttachmentMapper.parseAttachments(xmlDocument, attachmentFileContents);
 
-      List<Article> articles = getArticlesByXmlDocument(xmlDocument, attachments);
+      final String officialAbbreviation = getOfficialAbbreviationByXmlDocument(xmlDocument);
+
+      List<Article> articles =
+          getArticlesByXmlDocument(xmlDocument, attachments, officialAbbreviation);
       List<String> articleNames = articles.stream().map(Article::name).toList();
       List<String> articleTexts = articles.stream().map(Article::text).toList();
       LocalDate expiryDate = getDateByXpath(xmlDocument, X_PATH_EXPIRY_DATE);
@@ -114,7 +117,7 @@ public class NormLdmlToOpenSearchMapper {
               .manifestationEliExample(manifestationEli)
               .officialTitle(getOfficialTitleByXmlDocument(xmlDocument))
               .officialShortTitle(getOfficialShortTitleByXmlDocument(xmlDocument))
-              .officialAbbreviation(getOfficialAbbreviationByXmlDocument(xmlDocument))
+              .officialAbbreviation(officialAbbreviation)
               .normsDate(legislationDate)
               .datePublished(datePublished)
               .publishedIn(getPublishedInByXmlDocument(xmlDocument, datePublished))
@@ -285,7 +288,7 @@ public class NormLdmlToOpenSearchMapper {
   }
 
   private static List<Article> getArticlesByXmlDocument(
-      XmlDocument xmlDocument, List<Attachment> attachments) {
+      XmlDocument xmlDocument, List<Attachment> attachments, String officialAbbreviation) {
 
     NodeList nodes = null;
     try {
@@ -325,15 +328,21 @@ public class NormLdmlToOpenSearchMapper {
         }
         LocalDate entryIntoForceDate = getArticleDate(eventRefDates, articleStartDates, period);
         LocalDate expiryDate = getArticleDate(eventRefDates, articleEndDates, period);
+
+        final String articleHeader = buildArticleHeader(marker, heading);
+
+        final @Nullable String searchKeyword = getSearchKeyword(marker, officialAbbreviation);
+
         articles.add(
             Article.builder()
                 .guid(guid)
                 .eId(eId)
                 .isActive(DateUtils.isActive(entryIntoForceDate, expiryDate))
-                .name(buildArticleHeader(marker, heading))
+                .name(articleHeader)
                 .text(cleanText(text))
                 .entryIntoForceDate(entryIntoForceDate)
                 .expiryDate(expiryDate)
+                .searchKeyword(searchKeyword)
                 .build());
       } catch (Exception e) {
         logger.warn("Error parsing xml", e);
@@ -362,6 +371,22 @@ public class NormLdmlToOpenSearchMapper {
     articles.addAll(attachmentsAsArticles);
 
     return articles;
+  }
+
+  /**
+   * Builds a value for targeted article search using the article marker and abbreviation. For
+   * instance, users might type "97 BGB", which should reveal that article first.
+   *
+   * @param marker The first part, e.g. "§ 97".
+   * @param officialAbbreviation E.g. "BGB".
+   * @return null if either part is missing, or the concatenation of both.
+   */
+  @Nullable
+  private static String getSearchKeyword(String marker, String officialAbbreviation) {
+    if (StringUtils.isBlank(officialAbbreviation) || StringUtils.isBlank(marker)) {
+      return null;
+    }
+    return "%s %s".formatted(marker, officialAbbreviation);
   }
 
   private static Optional<Article> getNodeAsArticle(

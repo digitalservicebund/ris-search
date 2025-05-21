@@ -21,6 +21,7 @@ import org.jetbrains.annotations.NotNull;
 import org.opensearch.index.query.BoolQueryBuilder;
 import org.opensearch.index.query.InnerHitBuilder;
 import org.opensearch.index.query.MatchAllQueryBuilder;
+import org.opensearch.index.query.MatchPhraseQueryBuilder;
 import org.opensearch.index.query.MultiMatchQueryBuilder;
 import org.opensearch.index.query.MultiMatchQueryBuilder.Type;
 import org.opensearch.index.query.NestedQueryBuilder;
@@ -65,11 +66,27 @@ public class UniversalDocumentQueryBuilder {
       }
 
       nestedQuery.minimumShouldMatch(1);
-      // get other articles for a preview, but with a score of 0
+      nestedQuery.should(
+          new MatchPhraseQueryBuilder("articles.search_keyword", params.getSearchTerm())
+              .slop(3)
+              .boost(3));
+
+      // Other articles that don't match should appear in a preview, but not influence the ranking.
+      // Therefore, match all (=all else) with boost 0 (no influence on ranking).
       nestedQuery.should(new MatchAllQueryBuilder().boost(0));
 
+      /*
+       * Configures a nested query for 'articles'.
+       *
+       * ScoreMode.Max is chosen to ensure that documents are ranked based on the highest-scoring matching article.
+       * This prevents documents with many lower-scoring articles from disproportionately ranking higher than
+       * documents with fewer, but highly relevant, articles.
+       */
       NestedQueryBuilder nestedArticleQuery =
-          QueryBuilders.nestedQuery("articles", nestedQuery, ScoreMode.None);
+          QueryBuilders.nestedQuery("articles", nestedQuery, ScoreMode.Max);
+
+      // Configure the nested query "inner hits" to retrieve specific fields from articles and apply
+      // highlighting.
       InnerHitBuilder innerHitBuilder = new InnerHitBuilder().setSize(ARTICLE_INNER_HITS_SIZE);
       innerHitBuilder.setHighlightBuilder(RisHighlightBuilder.getArticleFieldsHighlighter());
       innerHitBuilder.setFetchSourceContext(
@@ -78,9 +95,10 @@ public class UniversalDocumentQueryBuilder {
 
       query.should(nestedArticleQuery);
 
-      // add a BEST_FIELDS query with the whole term
-      // in order to boost cases where the whole
-      // searchTerm appears in one field
+      /*
+       Add a "BEST_FIELDS" query with the whole term in order to boost cases where the whole searchTerm appears in one
+       field.
+      */
       query.should(
           new MultiMatchQueryBuilder(params.getSearchTerm())
               .type(Type.BEST_FIELDS)
