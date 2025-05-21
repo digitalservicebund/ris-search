@@ -181,6 +181,7 @@ tasks {
         buildpacks.set(
             listOf(
                 "urn:cnb:builder:paketo-buildpacks/java",
+                "docker.io/paketobuildpacks/health-checker:latest",
             ),
         )
     }
