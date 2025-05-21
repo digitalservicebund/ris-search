@@ -56,6 +56,7 @@ dependencies {
     implementation(libs.spring.security)
     implementation(libs.spring.oauth2)
     implementation(libs.spring.data.jpa)
+    implementation(libs.jts.core)
 
     implementation(libs.spring.kubernetes.client)
 
