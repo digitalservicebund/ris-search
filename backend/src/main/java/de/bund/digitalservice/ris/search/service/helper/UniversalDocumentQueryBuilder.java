@@ -66,6 +66,11 @@ public class UniversalDocumentQueryBuilder {
       }
 
       nestedQuery.minimumShouldMatch(1);
+
+      /*
+       * Allow searching articles by "search keyword", consisting of an article number and the norm abbreviation.
+       * The slop parameter is added to allow for re-ordering of article number and abbreviation.
+       */
       nestedQuery.should(
           new MatchPhraseQueryBuilder("articles.search_keyword", params.getSearchTerm())
               .slop(3)
