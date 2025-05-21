@@ -91,6 +91,8 @@ class NormsApiSearchDataTest extends BaseApiSearchDataTest {
     return Optional.empty();
   }
 
+  record ArticleNumberAndAbbreviation(String abbreviation, String articleNumber) {}
+
   @Test
   void searchForArticleNumberAndAbbreviation() {
     List<ArticleNumberAndAbbreviation> searchCases =
@@ -104,7 +106,7 @@ class NormsApiSearchDataTest extends BaseApiSearchDataTest {
     double successRate = calculatePercentage(successfulAbbreviations.size(), set.size());
 
     successfulAbbreviations.forEach(set::remove);
-    logger.info("successful rate: {}", successRate);
+    logger.info("success rate: {}", successRate);
     logger.info("failed cases sample: {}", set.stream().limit(20).toList());
     assertThat(successRate, Matchers.greaterThan(threshold));
   }
@@ -156,29 +158,46 @@ class NormsApiSearchDataTest extends BaseApiSearchDataTest {
     try {
       Response response = searchWithTerm(searchTerm);
       List<Map<String, Object>> members = response.path("member");
-      if (members == null || members.isEmpty()) return Optional.empty();
-      Map<String, Object> firstMatch = members.getFirst();
-      String abbreviationFromMatch =
-          (String) ((Map<String, Object>) firstMatch.get("item")).get("abbreviation");
-
-      if (Objects.equals(abbreviationFromMatch, testCase.abbreviation)) {
-        final var textMatches = (List<Map<String, String>>) firstMatch.get("textMatches");
-        if (!textMatches.isEmpty()) {
-          String name = textMatches.getFirst().get("name");
-          if (name.startsWith(testCase.articleNumber)) {
-            return Optional.of(testCase);
-          } else {
-            logger.info("did not match article number: {}, was: {}", testCase.articleNumber, name);
-          }
-        }
-      } else {
-        logger.info("did not match searchTerm: {}, {}", searchTerm, abbreviationFromMatch);
+      if (members == null || members.isEmpty()) {
+        logger.error("No members found for search term {}", searchTerm);
+        return Optional.empty();
       }
+      Map<String, Object> firstMatch = members.getFirst();
+
+      if (matchHasAbbreviation(firstMatch, testCase.abbreviation)
+          && matchHasArticleAsFirstTextMatch(firstMatch, testCase.articleNumber)) {
+        return Optional.of(testCase);
+      }
+
     } catch (Exception e) {
       logger.error("Error occurred while searching for searchTerm: {}", searchTerm, e);
     }
     return Optional.empty();
   }
 
-  record ArticleNumberAndAbbreviation(String abbreviation, String articleNumber) {}
+  private boolean matchHasAbbreviation(Map<String, Object> match, String expectedAbbreviation) {
+    String actualAbbreviation =
+        (String) ((Map<String, Object>) match.get("item")).get("abbreviation");
+    final boolean equals = Objects.equals(expectedAbbreviation, actualAbbreviation);
+    if (!equals) {
+      logger.warn(
+          "Received abbreviation {} does not match {}", actualAbbreviation, expectedAbbreviation);
+    }
+    return equals;
+  }
+
+  private boolean matchHasArticleAsFirstTextMatch(Map<String, Object> match, String articleNumber) {
+    final var textMatches = (List<Map<String, String>>) match.get("textMatches");
+    if (textMatches.isEmpty()) {
+      logger.warn(
+          "No text matches in result {}, looking for article number {}", match, articleNumber);
+      return false;
+    }
+    String name = textMatches.getFirst().get("name");
+    final boolean nameHasExpectedPrefix = name.startsWith(articleNumber);
+    if (!nameHasExpectedPrefix) {
+      logger.warn("Unexpected article name {}, expected {}", name, articleNumber);
+    }
+    return nameHasExpectedPrefix;
+  }
 }
