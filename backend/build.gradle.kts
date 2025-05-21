@@ -181,7 +181,6 @@ tasks {
         buildpacks.set(
             listOf(
                 "urn:cnb:builder:paketo-buildpacks/java",
-                "ghcr.io/paketo-buildpacks/health-checker:latest",
             ),
         )
     }
