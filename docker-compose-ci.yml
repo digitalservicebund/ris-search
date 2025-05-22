@@ -64,7 +64,7 @@ services:
     volumes:
       - ./backend:/app/backend
     healthcheck:
-      test: [ "CMD-SHELL", "curl --silent --fail http://localhost:8090/actuator/health" ]
+      test: [ "CMD-SHELL", "curl --silent --fail http://localhost:8090/actuator/health/readiness" ]
       interval: 5s
       retries: 48
       start_period: 20s
