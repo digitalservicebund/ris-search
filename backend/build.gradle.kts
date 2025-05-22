@@ -177,11 +177,9 @@ tasks {
                 url.set("https://$containerRegistry")
             }
         }
-        environment.set(mapOf("BP_HEALTH_CHECKER_ENABLED" to "true"))
         buildpacks.set(
             listOf(
                 "urn:cnb:builder:paketo-buildpacks/java",
-                "docker.io/paketobuildpacks/health-checker:latest",
             ),
         )
     }
