@@ -25,17 +25,13 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
 import software.amazon.awssdk.core.ResponseInputStream;
 import software.amazon.awssdk.services.s3.model.GetObjectResponse;
 
-@ExtendWith(MockitoExtension.class)
 class BulkExportServiceTest {
 
-  @InjectMocks private BulkExportService bulkExportService;
+  private final BulkExportService bulkExportService = new BulkExportService();
 
   final Function<byte[], ResponseInputStream<GetObjectResponse>> makeInputStream =
       bytes -> {
