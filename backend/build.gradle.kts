@@ -56,6 +56,7 @@ dependencies {
     implementation(libs.spring.security)
     implementation(libs.spring.oauth2)
     implementation(libs.spring.data.jpa)
+    implementation(libs.jts.core)
 
     implementation(libs.spring.kubernetes.client)
 
@@ -180,7 +181,7 @@ tasks {
         buildpacks.set(
             listOf(
                 "urn:cnb:builder:paketo-buildpacks/java",
-                "gcr.io/paketo-buildpacks/health-checker:latest",
+                "docker.io/paketobuildpacks/health-checker:latest",
             ),
         )
     }

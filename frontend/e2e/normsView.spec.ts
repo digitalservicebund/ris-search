@@ -138,7 +138,8 @@ test("can navigate to a single norm article and between articles", async ({
     expect(marker).toBe("❃");
 
     const footnotes = page.locator(".dokumentenkopf-fussnoten");
-    await expect(footnotes).not.toContainText("❃");
+    const footnotesContent = footnotes.locator("ol");
+    await expect(footnotesContent).not.toBeVisible();
 
     const expandButton = page.getByRole("button", { name: "Fußnote anzeigen" });
 
@@ -146,18 +147,18 @@ test("can navigate to a single norm article and between articles", async ({
       .poll(
         async () => {
           await expandButton.click();
-          return footnotes.textContent();
+          return footnotesContent.isVisible();
         },
         { message: "wait for the expand button to become interactive" },
       )
-      .toContain("❃");
+      .toBeTruthy();
 
     await expect(footnotes).toContainText(
       "(Diese Fußnote im Titel wurde im End-to-end-Datenbestand ergänzt",
     );
 
     await page.getByRole("button", { name: "Fußnote ausblenden" }).click();
-    await expect(footnotes).not.toContainText("❃");
+    await expect(footnotesContent).not.toBeVisible();
   });
 });
 

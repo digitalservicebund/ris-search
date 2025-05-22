@@ -9,7 +9,7 @@ const toggleMenu = () => {
 </script>
 <template>
   <AppBanner />
-  <header id="top" class="bg-white">
+  <header id="top" class="bg-white print:hidden">
     <div class="container mx-auto">
       <div class="flex flex-col gap-24 py-24">
         <div class="flex flex-row items-center justify-between gap-16">

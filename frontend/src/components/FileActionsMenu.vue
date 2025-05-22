@@ -4,8 +4,8 @@ import Menu, { type MenuMethods } from "primevue/menu";
 import Button from "primevue/button";
 import MdiDotsVertical from "~icons/mdi/dots-vertical";
 import MaterialSymbolsLink from "~icons/material-symbols/link";
-import MaterialSymbolsCode from "~icons/material-symbols/code";
-import MaterialSymbolsPictureAsPdfOutline from "~icons/material-symbols/picture-as-pdf-outline";
+import XMLIcon from "~/components/icons/XMLIcon.vue";
+import PDFIcon from "~/components/icons/PDFIcon.vue";
 import XMLFolderIcon from "~/components/icons/XMLFolderIcon.vue";
 const { xmlUrl, zipUrl } = defineProps<{ xmlUrl?: string; zipUrl?: string }>();
 
@@ -17,9 +17,9 @@ const model: ComputedRef<MenuItem[]> = computed(() => {
       disabled: true,
     },
     {
-      label: "PDF anzeigen",
+      label: "Drucken oder als PDF speichern",
       icon: "pdf",
-      disabled: true,
+      command: onPrint,
     },
   ];
   if (xmlUrl) {
@@ -46,9 +46,9 @@ const getIcon = (name: string) => {
     case "link":
       return MaterialSymbolsLink;
     case "pdf":
-      return MaterialSymbolsPictureAsPdfOutline;
+      return PDFIcon;
     case "xml":
-      return MaterialSymbolsCode;
+      return XMLIcon;
     case "xml-zip":
       return XMLFolderIcon;
   }
@@ -61,6 +61,10 @@ const toggle = (event: Event) => {
 };
 
 defineExpose({ toggle });
+
+const onPrint = () => {
+  if (window) window.print();
+};
 </script>
 
 <template>
@@ -68,8 +72,8 @@ defineExpose({ toggle });
     <Button text disabled aria-label="Link kopieren">
       <template #icon><MaterialSymbolsLink /></template>
     </Button>
-    <Button text disabled aria-label="PDF anzeigen">
-      <template #icon><MaterialSymbolsPictureAsPdfOutline /></template>
+    <Button text aria-label="Drucken oder als PDF speichern" @click="onPrint">
+      <template #icon><PDFIcon /></template>
     </Button>
     <Button
       v-if="!!xmlUrl"
@@ -77,7 +81,7 @@ defineExpose({ toggle });
       aria-label="XML anzeigen"
       @click="navigateTo(xmlUrl, { external: true })"
     >
-      <template #icon><MaterialSymbolsCode /></template>
+      <template #icon><XMLIcon /></template>
     </Button>
     <Button
       v-if="!!zipUrl"
@@ -93,7 +97,7 @@ defineExpose({ toggle });
       <MdiDotsVertical />
     </template>
   </Button>
-  <Menu ref="menu" :popup="true" :model="model">
+  <Menu ref="menu" :popup="true" :model="model" class="print:hidden">
     <template #item="{ item }">
       <div
         class="flex h-full items-center py-4"
