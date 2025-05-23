@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Optional;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.scheduling.annotation.Async;
 
 public class IndexSyncJob {
@@ -55,7 +56,7 @@ public class IndexSyncJob {
   }
 
   public List<String> getNewChangelogs(
-      ObjectStorage changelogBucket, String lastProcessedChangelog) {
+      ObjectStorage changelogBucket, @NotNull String lastProcessedChangelog) {
 
     return changelogBucket.getAllKeysByPrefix(CHANGELOG).stream()
         .filter(e -> !CHANGELOG.equals(e))
@@ -120,6 +121,9 @@ public class IndexSyncJob {
   }
 
   public void alertOnNumberMismatch(IndexingState state) {
+    if (state.lastProcessedChangelogFile() == null) {
+      return;
+    }
     List<String> unprocessedChangelogs =
         getNewChangelogs(changelogBucket, state.lastProcessedChangelogFile());
     if (unprocessedChangelogs.isEmpty()) {

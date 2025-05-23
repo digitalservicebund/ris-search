@@ -56,7 +56,9 @@ describe("FileActionsMenu.vue", () => {
       expect(actionButtons[0].attributes("aria-label")).toBe("Link kopieren");
 
       expect(actionButtons[1].attributes("data-p-disabled")).toBe("false");
-      expect(actionButtons[1].attributes("aria-label")).toBe("Drucken");
+      expect(actionButtons[1].attributes("aria-label")).toBe(
+        "Drucken oder als PDF speichern",
+      );
 
       expect(actionButtons[2].attributes("data-p-disabled")).toBe("false");
       expect(actionButtons[2].attributes("aria-label")).toBe(
