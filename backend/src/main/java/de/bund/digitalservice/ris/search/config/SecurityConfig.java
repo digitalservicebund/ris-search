@@ -36,6 +36,9 @@ public class SecurityConfig {
   @Value("${server.front-end-url}")
   String frontEndUrl;
 
+  @Value("${server.docs-url}")
+  String docsUrl;
+
   final AuthProperties authProperties;
 
   final String[] internalPaths = new String[] {"/actuator/**", "/internal/**"};
@@ -174,7 +177,7 @@ public class SecurityConfig {
             .addMapping("/**")
             .allowedMethods(CorsConfiguration.ALL)
             .allowedHeaders(CorsConfiguration.ALL)
-            .allowedOrigins(frontEndUrl);
+            .allowedOrigins(frontEndUrl, docsUrl);
       }
     };
   }

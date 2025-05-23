@@ -14,9 +14,10 @@ definePageMeta({ alias: ["/impressum"] });
         <section>
           <h2 class="ris-heading3-regular mb-8">Anbieter</h2>
           <p>
-            Bundesministerium der Justiz (BMJ)<br class="mb-8" />Mohrenstraße
-            37, 10117 Berlin<br />Telefon: 030/ 18 580 - 0<br />Fax: 030/ 18 580
-            - 95 25<br />E-Mail:
+            Bundesministerium der Justiz und für Verbraucherschutz (BMJV)<br
+              class="mb-8"
+            />Mohrenstraße 37, 10117 Berlin<br />Telefon: 030/ 18 580 - 0<br />Fax:
+            030/ 18 580 - 95 25<br />E-Mail:
             <a href="mailto:poststelle@bmj.bund.de" class="ris-link1-regular"
               >poststelle@bmj.bund.de</a
             ><br />Internet:
@@ -28,15 +29,16 @@ definePageMeta({ alias: ["/impressum"] });
         <section>
           <h2 class="ris-heading3-regular mb-8">Gesetzlicher Vertreter</h2>
           <p>
-            Der Bundesminister der Justiz<br />Mohrenstraße 37, 10117 Berlin
+            Die Bundesministerin der Justiz und für Verbraucherschutz<br />Mohrenstraße
+            37, 10117 Berlin
           </p>
         </section>
         <section>
           <h2 class="ris-heading3-regular mb-8">Verantwortlich</h2>
           <p class="mb-8">Dr. Stephanie Krüger, Referat ZC4</p>
           <p>
-            Bundesministerium der Justiz (BMJ)<br />Mohrenstraße 37, 10117
-            Berlin
+            Bundesministerium der Justiz und für Verbraucherschutz (BMJV)<br />Mohrenstraße
+            37, 10117 Berlin
           </p>
         </section>
         <section>

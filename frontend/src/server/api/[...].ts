@@ -33,11 +33,13 @@ export default defineEventHandler(async (event): Promise<unknown> => {
       requestedUrl.pathname.replace("/api/v1", "/v1") +
       requestedUrl.search;
 
+    const headers: Record<string, string> = {
+      Accept: event.headers.get("Accept") ?? "application/json",
+      Authorization: `Bearer ${token}`,
+      "get-resources-via": "PROXY",
+    };
     return await $fetch.raw(newUrl, {
-      headers: {
-        Accept: event.headers.get("Accept") ?? "application/json",
-        Authorization: `Bearer ${token}`,
-      },
+      headers,
       responseType: "stream",
     });
   } catch (error) {

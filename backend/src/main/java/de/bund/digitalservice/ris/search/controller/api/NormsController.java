@@ -4,11 +4,13 @@ import static org.springframework.http.HttpHeaders.CONTENT_DISPOSITION;
 
 import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.exception.CustomValidationException;
+import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.mapper.MappingDefinitions;
 import de.bund.digitalservice.ris.search.mapper.NormResponseMapper;
 import de.bund.digitalservice.ris.search.mapper.NormSearchResponseMapper;
 import de.bund.digitalservice.ris.search.models.api.parameters.NormsSearchParams;
 import de.bund.digitalservice.ris.search.models.api.parameters.PaginationParams;
+import de.bund.digitalservice.ris.search.models.api.parameters.ResourceReferenceMode;
 import de.bund.digitalservice.ris.search.models.api.parameters.UniversalSearchParams;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.schema.CollectionSchema;
@@ -28,12 +30,14 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import java.net.URLConnection;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import org.apache.commons.lang3.StringUtils;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -44,6 +48,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
@@ -104,8 +109,10 @@ public class NormsController {
 
     normsSearchParams.validate();
 
+    boolean defaultToUnsorted = StringUtils.isNotBlank(universalSearchParams.getSearchTerm());
     Pageable pageable =
-        PaginationParamsConverter.convert(pagination, MappingDefinitions.ResolutionMode.NORMS);
+        PaginationParamsConverter.convert(
+            pagination, MappingDefinitions.ResolutionMode.NORMS, defaultToUnsorted);
 
     try {
       SearchPage<Norm> resultPage =
@@ -206,7 +213,17 @@ public class NormsController {
       @PathVariable @Schema(example = "2") Integer version,
       @PathVariable @Schema(example = "deu") String language,
       @PathVariable @Schema(example = "2020-06-19") LocalDate pointInTimeManifestation,
-      @Schema(example = "regelungstext-1") @PathVariable String subtype) {
+      @Schema(example = "regelungstext-1") @PathVariable String subtype,
+      @RequestHeader(
+              name = ApiConfig.Headers.GET_RESOURCES_VIA,
+              required = false,
+              defaultValue = ResourceReferenceMode.DEFAULT_VALUE)
+          @Parameter(
+              description =
+                  "Used to select a different prefix for referenced resources, like images. Selecting 'PROXY' will prepend `/api`. Otherwise, the API base URL will be used.")
+          ResourceReferenceMode resourceReferenceMode)
+      throws ObjectStoreServiceException {
+    final String resourceBasePath = getResourceBasePath(resourceReferenceMode);
     var eli =
         new ManifestationEli(
             jurisdiction,
@@ -217,10 +234,12 @@ public class NormsController {
             version,
             language,
             pointInTimeManifestation,
-            subtype);
+            subtype,
+            "xml");
     final Optional<byte[]> normFileByEli = normsService.getNormFileByEli(eli);
     if (normFileByEli.isPresent()) {
-      final String body = xsltTransformerService.transformNorm(normFileByEli.get(), subtype);
+      final String body =
+          xsltTransformerService.transformNorm(normFileByEli.get(), subtype, resourceBasePath);
       return ResponseEntity.ok(body);
     } else {
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body(HTML_FILE_NOT_FOUND);
@@ -274,7 +293,8 @@ public class NormsController {
       @PathVariable @Schema(example = "2") Integer version,
       @PathVariable @Schema(example = "deu") String language,
       @PathVariable @Schema(example = "2020-06-19") LocalDate pointInTimeManifestation,
-      @Schema(example = "regelungstext-1") @PathVariable String subtype) {
+      @Schema(example = "regelungstext-1") @PathVariable String subtype)
+      throws ObjectStoreServiceException {
     var eli =
         new ManifestationEli(
             jurisdiction,
@@ -285,7 +305,8 @@ public class NormsController {
             version,
             language,
             pointInTimeManifestation,
-            subtype);
+            subtype,
+            "xml");
 
     return normsService
         .getNormFileByEli(eli)
@@ -405,7 +426,18 @@ public class NormsController {
               example = "hauptteil-1_art-1")
           @PathVariable
           String articleEid,
-      @PathVariable @Schema(allowableValues = "html") String format) {
+      @PathVariable @Schema(allowableValues = "html") String format,
+      @RequestHeader(
+              name = ApiConfig.Headers.GET_RESOURCES_VIA,
+              required = false,
+              defaultValue = ResourceReferenceMode.DEFAULT_VALUE)
+          @Parameter(
+              description =
+                  "Used to select a different prefix for referenced resources, like images. Selecting 'PROXY' will prepend `/api`. Otherwise, the API base URL will be used.")
+          ResourceReferenceMode resourceReferenceMode)
+      throws ObjectStoreServiceException {
+    final String resourceBasePath = getResourceBasePath(resourceReferenceMode);
+
     if (!Objects.equals(format, "html")) {
       return ResponseEntity.badRequest().body("only html is supported for format");
     }
@@ -419,10 +451,93 @@ public class NormsController {
             version,
             language,
             pointInTimeManifestation,
-            subtype);
+            subtype,
+            "xml");
     final Optional<byte[]> normFileByEli = normsService.getNormFileByEli(eli);
     return normFileByEli
-        .map(bytes -> ResponseEntity.ok(xsltTransformerService.transformArticle(bytes, articleEid)))
+        .map(
+            bytes ->
+                ResponseEntity.ok(
+                    xsltTransformerService.transformArticle(bytes, articleEid, resourceBasePath)))
         .orElseGet(() -> ResponseEntity.notFound().build());
+  }
+
+  @GetMapping(
+      path =
+          ApiConfig.Paths.LEGISLATION_SINGLE
+              + "/{jurisdiction}/{agent}/{year}/{naturalIdentifier}/{pointInTime}/{version}/{language}/{pointInTimeManifestation}/{name}.{extension}")
+  @Operation(
+      summary = "Get a resource of a particular manifestation of a piece of legislation",
+      description =
+          """
+                            Returns a specific resource of a particular manifestation of a piece of legislation.
+                            """)
+  @ApiResponse(responseCode = "200")
+  @ApiResponse(responseCode = "404", content = @Content())
+  public ResponseEntity<byte[]> getImage(
+      @Parameter(description = "Country or regional code for the jurisdiction", example = "bund")
+          @PathVariable
+          @Schema(allowableValues = {"bund"})
+          String jurisdiction,
+      @Parameter(
+              description =
+                  "Agent or authority issuing the legislation, e.g., 'bgbl-1' for Bundesgesetzblatt Teil I (Federal Law Gazette part I)",
+              example = "bgbl-1")
+          @PathVariable
+          String agent,
+      @PathVariable
+          @Parameter(
+              description = "Year the legislation was enacted or published",
+              example = "1979")
+          String year,
+      @Parameter(
+              description =
+                  "Unique natural identifier for the legislation, specific to the jurisdiction and agent",
+              example = "s1325")
+          @PathVariable
+          String naturalIdentifier,
+      @Parameter(example = "2020-06-19") @PathVariable LocalDate pointInTime,
+      @PathVariable @Schema(example = "2") Integer version,
+      @PathVariable @Schema(example = "deu") String language,
+      @PathVariable @Schema(example = "2020-06-19") LocalDate pointInTimeManifestation,
+      @Schema(example = "image") @PathVariable String name,
+      @Schema(example = "jpg") @PathVariable String extension)
+      throws ObjectStoreServiceException {
+
+    final ManifestationEli eli =
+        new ManifestationEli(
+            jurisdiction,
+            agent,
+            year,
+            naturalIdentifier,
+            pointInTime,
+            version,
+            language,
+            pointInTimeManifestation,
+            name,
+            extension);
+    Optional<byte[]> image = normsService.getNormFileByEli(eli);
+
+    final String mimeType = URLConnection.guessContentTypeFromName(name + "." + extension);
+
+    return image
+        .map(
+            body ->
+                ResponseEntity.status(HttpStatus.OK).header("Content-Type", mimeType).body(body))
+        .orElseGet(() -> ResponseEntity.notFound().build());
+  }
+
+  /**
+   * Controls how resources like images will be referenced. For example, they might be accessed
+   * through an API endpoint in local development, but served via a CDN in production.
+   *
+   * @param mode Controls which static prefix will be returned.
+   * @return The prefix to use when returning references to resources.
+   */
+  private String getResourceBasePath(ResourceReferenceMode mode) {
+    return switch (mode) {
+      case API -> ApiConfig.Paths.LEGISLATION + "/";
+      case PROXY -> "/api" + ApiConfig.Paths.LEGISLATION + "/";
+    };
   }
 }

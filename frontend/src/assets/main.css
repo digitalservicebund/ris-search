@@ -87,3 +87,13 @@ mark {
 /* Workaround for https://github.com/tailwindlabs/tailwindcss/discussions/16429 */
 @import "./legislation.css";
 @import "./caselaw.css";
+
+@import "./print.css";
+
+input[type="search"]::-webkit-search-cancel-button {
+  @apply -mr-12 h-36 w-36 cursor-pointer appearance-none;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='-16 -16 52 52'><path fill='currentColor' d='M19 6.41L17.59 5L12 10.59L6.41 5L5 6.41L10.59 12L5 17.59L6.41 19L12 13.41L17.59 19L19 17.59L13.41 12z'></path></svg>");
+}
+input[type="search"]::-webkit-search-cancel-button:hover {
+  @apply bg-blue-100;
+}

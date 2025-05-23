@@ -70,7 +70,7 @@ if (contentError?.value) {
   <ContentWrapper border>
     <div v-if="status == 'pending'">Lade ...</div>
     <div v-if="!!caseLaw" class="text-left">
-      <div class="flex items-center gap-8">
+      <div class="flex items-center gap-8 print:hidden">
         <RisBreadcrumb
           class="grow"
           type="caselaw"

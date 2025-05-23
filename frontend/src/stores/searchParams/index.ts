@@ -3,12 +3,16 @@ import { DocumentKind } from "@/types";
 import type { DateSearchMode } from "@/stores/searchParams/dateParams";
 import { useDateParams } from "@/stores/searchParams/dateParams";
 import {
+  addDefaults,
   defaultParams,
   getInitialState,
-  setRouterQuery,
+  omitDefaults,
 } from "./getInitialState";
-import { ref, watch, computed } from "vue";
+import { computed, ref, watch } from "vue";
 import { sortMode } from "@/components/types";
+import type { LocationQuery } from "#vue-router";
+import _ from "lodash";
+import type { LocationQueryRaw, Router } from "vue-router";
 
 export { DateSearchMode } from "@/stores/searchParams/dateParams";
 
@@ -27,11 +31,27 @@ export interface QueryParams {
   court?: string;
 }
 
+/**
+ * Converts query values in query to strings, as they are represented in URLs.
+ */
+function normalizeQuery(
+  query: LocationQueryRaw,
+): Record<string, string | undefined> {
+  const result: Record<string, string> = {};
+  Object.entries(query).forEach(([key, value]) => {
+    if (value) {
+      result[key] = value.toString();
+    }
+  });
+  return result;
+}
+
 export const useSimpleSearchParamsStore = defineStore(
   "simpleSearchParams",
   () => {
     const router = useRouter();
-    const initialState = getInitialState(router);
+    const route = useRoute();
+    const initialState = getInitialState(route.query);
 
     /*
         #############
@@ -92,7 +112,11 @@ export const useSimpleSearchParamsStore = defineStore(
     const setSort = (value: string) => (sort.value = value);
 
     function $reset() {
-      const initialState = getInitialState(router);
+      reinitializeFromQuery(route.query);
+    }
+
+    function reinitializeFromQuery(routerQuery: LocationQuery) {
+      const initialState = getInitialState(routerQuery);
 
       query.value = initialState.query;
       pageNumber.value = initialState.pageNumber;
@@ -100,15 +124,50 @@ export const useSimpleSearchParamsStore = defineStore(
       itemsPerPage.value = initialState.itemsPerPage;
       sort.value = initialState.sort;
       court.value = initialState.court;
-      dateParams.$reset();
+      dateParams.reset(initialState);
     }
 
     /*
     ##############
     #  watchers  #
     ##############
-*/
-    watch(params, () => setRouterQuery(router, params.value));
+    */
+
+    /*
+     track what query has been set by the store, in order to prevent infinite
+     update loops
+    */
+    const storeQuery = ref(normalizeQuery(omitDefaults(params.value)));
+
+    const postHogStore = usePostHogStore();
+    const updateRouterQuery = (router: Router, params: LocationQueryRaw) => {
+      const query = omitDefaults(params);
+      const previousQuery = storeQuery.value;
+      postHogStore.searchPerformed(
+        "simple",
+        addDefaults(query),
+        addDefaults(previousQuery),
+      );
+      const normalized = normalizeQuery(query);
+      storeQuery.value = normalized;
+      return router.push({
+        ...route,
+        query: normalized,
+      });
+    };
+
+    watch(params, () => updateRouterQuery(router, params.value));
+
+    watch(
+      () => route.query,
+      async (newQuery) => {
+        // prevent infinite loops
+        const needsUpdate = !_.isEqual(toRaw(storeQuery.value), newQuery);
+        if (needsUpdate) {
+          reinitializeFromQuery(newQuery);
+        }
+      },
+    );
 
     return {
       query,
