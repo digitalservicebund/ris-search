@@ -4,8 +4,8 @@ import Menu, { type MenuMethods } from "primevue/menu";
 import Button from "primevue/button";
 import MdiDotsVertical from "~icons/mdi/dots-vertical";
 import MaterialSymbolsLink from "~icons/material-symbols/link";
-import MaterialSymbolsCode from "~icons/material-symbols/code";
-import MdiPrinter from "~icons/mdi/printer";
+import XMLIcon from "~/components/icons/XMLIcon.vue";
+import PDFIcon from "~/components/icons/PDFIcon.vue";
 import XMLFolderIcon from "~/components/icons/XMLFolderIcon.vue";
 const { xmlUrl, zipUrl } = defineProps<{ xmlUrl?: string; zipUrl?: string }>();
 
@@ -17,7 +17,7 @@ const model: ComputedRef<MenuItem[]> = computed(() => {
       disabled: true,
     },
     {
-      label: "PDF anzeigen",
+      label: "Drucken oder als PDF speichern",
       icon: "pdf",
       command: onPrint,
     },
@@ -46,9 +46,9 @@ const getIcon = (name: string) => {
     case "link":
       return MaterialSymbolsLink;
     case "pdf":
-      return MdiPrinter;
+      return PDFIcon;
     case "xml":
-      return MaterialSymbolsCode;
+      return XMLIcon;
     case "xml-zip":
       return XMLFolderIcon;
   }
@@ -72,8 +72,8 @@ const onPrint = () => {
     <Button text disabled aria-label="Link kopieren">
       <template #icon><MaterialSymbolsLink /></template>
     </Button>
-    <Button text aria-label="Drucken" @click="onPrint">
-      <template #icon><MdiPrinter /></template>
+    <Button text aria-label="Drucken oder als PDF speichern" @click="onPrint">
+      <template #icon><PDFIcon /></template>
     </Button>
     <Button
       v-if="!!xmlUrl"
@@ -81,7 +81,7 @@ const onPrint = () => {
       aria-label="XML anzeigen"
       @click="navigateTo(xmlUrl, { external: true })"
     >
-      <template #icon><MaterialSymbolsCode /></template>
+      <template #icon><XMLIcon /></template>
     </Button>
     <Button
       v-if="!!zipUrl"
