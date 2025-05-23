@@ -281,6 +281,7 @@ class NormLdmlToOpenSearchMapperTest {
             "hauptteil-1_para-2",
             "hauptteil-1_para-3",
             "hauptteil-1_para-4",
+            "hauptteil-1_para-5",
             "schluss-1_formel-1");
     assertThat(norm.getArticles().stream().map(Article::eId).toList()).isEqualTo(eIds);
     Article firstArticle = norm.getArticles().stream().findFirst().orElseThrow();

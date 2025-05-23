@@ -1,5 +1,8 @@
 package de.bund.digitalservice.ris.search.config.obs;
 
+import de.bund.digitalservice.ris.search.repository.objectstorage.LocalFilesystemObjectStorageClient;
+import de.bund.digitalservice.ris.search.repository.objectstorage.ObjectStorageClient;
+import de.bund.digitalservice.ris.search.repository.objectstorage.S3ObjectStorageClient;
 import java.net.URI;
 import java.net.URISyntaxException;
 import org.springframework.beans.factory.annotation.Value;
@@ -44,73 +47,67 @@ public class ObsConfig {
 
   @Bean(name = "normS3Client")
   @Profile({"production", "staging", "prototype"})
-  public S3Client normS3Client() throws URISyntaxException {
-    return S3Client.builder()
-        .credentialsProvider(
-            StaticCredentialsProvider.create(
-                AwsBasicCredentials.create(normAccessKeyId, normSecretAccessKey)))
-        .endpointOverride(new URI(normEndpoint))
-        .region(Region.of(REGION))
-        .build();
+  public ObjectStorageClient normS3Client(
+      @Value("${s3.file-storage.norm.bucket-name}") String bucket) throws URISyntaxException {
+    return new S3ObjectStorageClient(
+        S3Client.builder()
+            .credentialsProvider(
+                StaticCredentialsProvider.create(
+                    AwsBasicCredentials.create(normAccessKeyId, normSecretAccessKey)))
+            .endpointOverride(new URI(normEndpoint))
+            .region(Region.of(REGION))
+            .build(),
+        bucket);
   }
 
   @Bean(name = "caseLawS3Client")
   @Profile({"staging", "prototype"})
-  public S3Client caseLawS3Client() throws URISyntaxException {
-    return S3Client.builder()
-        .credentialsProvider(
-            StaticCredentialsProvider.create(
-                AwsBasicCredentials.create(caseLawAccessKeyId, caseLawSecretAccessKey)))
-        .endpointOverride(new URI(caseLawEndpoint))
-        .region(Region.of(REGION))
-        .build();
+  public ObjectStorageClient caseLawS3Client(
+      @Value("${s3.file-storage.case-law.bucket-name}") String bucket) throws URISyntaxException {
+    return new S3ObjectStorageClient(
+        S3Client.builder()
+            .credentialsProvider(
+                StaticCredentialsProvider.create(
+                    AwsBasicCredentials.create(caseLawAccessKeyId, caseLawSecretAccessKey)))
+            .endpointOverride(new URI(caseLawEndpoint))
+            .region(Region.of(REGION))
+            .build(),
+        bucket);
   }
 
   @Bean(name = "portalS3Client")
   @Profile({"production", "staging", "prototype"})
-  public S3Client portalS3Client() throws URISyntaxException {
-    return S3Client.builder()
-        .credentialsProvider(
-            StaticCredentialsProvider.create(
-                AwsBasicCredentials.create(portalAccessKeyId, portalSecretAccessKey)))
-        .endpointOverride(new URI(portalEndpoint))
-        .region(Region.of(REGION))
-        .build();
+  public ObjectStorageClient portalS3Client(
+      @Value("${s3.file-storage.portal.bucket-name}") String bucket) throws URISyntaxException {
+    return new S3ObjectStorageClient(
+        S3Client.builder()
+            .credentialsProvider(
+                StaticCredentialsProvider.create(
+                    AwsBasicCredentials.create(portalAccessKeyId, portalSecretAccessKey)))
+            .endpointOverride(new URI(portalEndpoint))
+            .region(Region.of(REGION))
+            .build(),
+        bucket);
   }
 
   @Bean(name = "normS3Client")
   @Profile({"default"})
-  public S3Client mockNormS3Client() {
-    return new LocalMockS3Client("norm");
-  }
-
-  @Bean(name = "normS3Client")
-  @Profile({"test"})
-  public S3Client mockNormTestS3Client() {
-    return new TestMockS3Client("norm");
+  public ObjectStorageClient mockNormS3Client(
+      @Value("${local.file-storage}") String relativeLocalStorageDirectory) {
+    return new LocalFilesystemObjectStorageClient("norm", relativeLocalStorageDirectory);
   }
 
   @Bean(name = "caseLawS3Client")
   @Profile({"default"})
-  public S3Client mockCaseLawS3Client() {
-    return new LocalMockS3Client("caselaw");
-  }
-
-  @Bean(name = "caseLawS3Client")
-  @Profile({"test"})
-  public S3Client mockCaseLawTestS3Client() {
-    return new TestMockS3Client("caselaw");
+  public ObjectStorageClient mockCaseLawS3Client(
+      @Value("${local.file-storage}") String relativeLocalStorageDirectory) {
+    return new LocalFilesystemObjectStorageClient("caselaw", relativeLocalStorageDirectory);
   }
 
   @Bean(name = "portalS3Client")
   @Profile({"default"})
-  public S3Client mockPortalS3Client() {
-    return new LocalMockS3Client("portal");
-  }
-
-  @Bean(name = "portalS3Client")
-  @Profile({"test"})
-  public S3Client mockPortalTestS3Client() {
-    return new TestMockS3Client("portal");
+  public ObjectStorageClient mockPortalS3Client(
+      @Value("${local.file-storage}") String relativeLocalStorageDirectory) {
+    return new LocalFilesystemObjectStorageClient("portal", relativeLocalStorageDirectory);
   }
 }

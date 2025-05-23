@@ -27,18 +27,18 @@ describe("NormHeadingFootnotes.vue", () => {
       },
     });
     expect(wrapper.get("button").text()).toBe("Fußnote anzeigen");
-    expect(wrapper.text()).not.toContain("longer content");
+    expect(wrapper.get("div.hidden").attributes("data-show")).toBe("false");
 
     await wrapper.get("button").trigger("click");
     await nextTick();
 
-    expect(wrapper.text()).toContain("longer content");
     expect(wrapper.get("button").text()).toBe("Fußnote ausblenden");
+    expect(wrapper.get("div.hidden").attributes("data-show")).toBe("true");
 
     await wrapper.get("button").trigger("click");
     await nextTick();
 
     expect(wrapper.get("button").text()).toBe("Fußnote anzeigen");
-    expect(wrapper.text()).not.toContain("longer content");
+    expect(wrapper.get("div.hidden").attributes("data-show")).toBe("false");
   });
 });

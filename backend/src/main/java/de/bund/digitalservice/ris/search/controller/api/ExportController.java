@@ -91,7 +91,8 @@ public class ExportController {
     String filename = "caselaw_export_" + timestamp + ".csv";
 
     Pageable pageable =
-        PaginationParamsConverter.convert(pagination, MappingDefinitions.ResolutionMode.CASE_LAW);
+        PaginationParamsConverter.convert(
+            pagination, MappingDefinitions.ResolutionMode.CASE_LAW, true);
 
     List<CaseLawDocumentationUnit> results =
         caseLawService.searchCaseLaws(decodedQuery, pageable).getContent().stream()

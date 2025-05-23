@@ -49,6 +49,12 @@ describe("SearchComponent", () => {
     expect(wrapper.vm.model).toBeFalsy();
   });
 
+  it("updates input on model change", async () => {
+    await wrapper.setProps({ modelValue: "updated model" });
+    const input = wrapper.findComponent("input") as VueWrapper;
+    expect(input.attributes("modelvalue")).toBe("updated model");
+  });
+
   it("submits search on Enter key press", async () => {
     const input = wrapper.findComponent("input") as VueWrapper;
     input.vm.$emit("update:modelValue", "test query");

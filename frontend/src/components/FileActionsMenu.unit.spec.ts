@@ -37,8 +37,9 @@ describe("FileActionsMenu.vue", () => {
       await nextTick();
 
       const links = wrapper.findAll("a");
-      expect(links).toHaveLength(1);
-      expect(links[0].element.href).toBe(testCase.expectedUrl);
+      expect(links).toHaveLength(2);
+      expect(links[0].element.href).toBe("");
+      expect(links[1].element.href).toBe(testCase.expectedUrl);
     });
 
     it(`[${label}] renders the larger-viewport buttons`, async () => {
@@ -54,8 +55,10 @@ describe("FileActionsMenu.vue", () => {
       expect(actionButtons[0].attributes("data-p-disabled")).toBe("true");
       expect(actionButtons[0].attributes("aria-label")).toBe("Link kopieren");
 
-      expect(actionButtons[1].attributes("data-p-disabled")).toBe("true");
-      expect(actionButtons[1].attributes("aria-label")).toBe("PDF anzeigen");
+      expect(actionButtons[1].attributes("data-p-disabled")).toBe("false");
+      expect(actionButtons[1].attributes("aria-label")).toBe(
+        "Drucken oder als PDF speichern",
+      );
 
       expect(actionButtons[2].attributes("data-p-disabled")).toBe("false");
       expect(actionButtons[2].attributes("aria-label")).toBe(

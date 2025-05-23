@@ -130,7 +130,7 @@ describe("useDateParams", () => {
     result.dateSearchMode.effect(DateSearchMode.Equal);
     result.date.value = "2024-01-01";
 
-    result.$reset();
+    result.reset(initialState);
 
     expect(result.date.value).toBe("2023-01-01");
     expect(result.dateAfter.value).toBe("2023-02-01");

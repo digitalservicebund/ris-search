@@ -5,12 +5,13 @@ import static de.bund.digitalservice.ris.search.integration.controller.api.testD
 import static de.bund.digitalservice.ris.search.integration.controller.api.testData.CaseLawTestData.URTEIL_COUNT;
 import static de.bund.digitalservice.ris.search.integration.controller.api.testData.CaseLawTestData.matchAllTerm;
 import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.everyItem;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertTrue;
+import static org.hamcrest.Matchers.startsWith;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -27,6 +28,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
@@ -55,7 +57,7 @@ class CaseLawSearchControllerApiTest extends ContainersIntegrationBase {
 
   @BeforeEach
   void setUpSearchControllerApiTest() throws IOException {
-    assertTrue(openSearchContainer.isRunning());
+    Assertions.assertTrue(openSearchContainer.isRunning());
     super.recreateIndex();
     super.updateMapping();
 
@@ -136,7 +138,6 @@ class CaseLawSearchControllerApiTest extends ContainersIntegrationBase {
       strings = {
         "IX ZR 100/10", // with original spelling
         "ix ZR 100 10", // with spaces instead of slashes
-        "iXZR10010", // with whitespace and slashes removed
         "\"iX ZR 100 / 10\"", // with extra spaces if quoted
       })
   @DisplayName("Should return correct item first when looking for a file number as search term")
@@ -147,7 +148,25 @@ class CaseLawSearchControllerApiTest extends ContainersIntegrationBase {
         .andExpectAll(
             status().isOk(),
             jsonPath("$.member", hasSize(greaterThan(0))),
-            jsonPath("$.member[0].item.fileNumbers[0]", equalTo("IX ZR 100/10")));
+            jsonPath("$.member[0].item.fileNumbers[0]", equalTo("IX ZR 100/10")),
+            jsonPath("$.member[0].textMatches[?(@.name == 'fileNumbers')]", hasSize(1)),
+            jsonPath(
+                "$.member[0].textMatches[?(@.name == 'fileNumbers')].text",
+                everyItem(is("<mark>IX</mark> <mark>ZR</mark> <mark>100</mark>/<mark>10</mark>"))));
+  }
+
+  @Test
+  @DisplayName(
+      "Should return correct item first when looking for a file number with special characters removed")
+  void testFileNumberSearchTermSpacesRemoved() throws Exception {
+    String query = "?searchTerm=iXZR10010";
+    mockMvc
+        .perform(get(ApiConfig.Paths.CASELAW + query).contentType(MediaType.APPLICATION_JSON))
+        .andExpectAll(
+            status().isOk(),
+            jsonPath("$.member", hasSize(greaterThan(0))),
+            jsonPath("$.member[0].item.fileNumbers[0]", equalTo("IX ZR 100/10")),
+            jsonPath("$.member[0].textMatches[?(@.name == 'fileNumbers')]", empty()));
   }
 
   @ParameterizedTest
@@ -166,7 +185,11 @@ class CaseLawSearchControllerApiTest extends ContainersIntegrationBase {
             jsonPath("$.member", hasSize(3)),
             jsonPath(
                 "$.member[*].item.fileNumbers[*]",
-                containsInAnyOrder("IX ZR 100/10", "IX ZR 100/20", "IX ZR 100/30")));
+                containsInAnyOrder("IX ZR 100/10", "IX ZR 100/20", "IX ZR 100/30")),
+            jsonPath("$.member[*].textMatches[?(@.name == 'fileNumbers')]", hasSize(3)),
+            jsonPath(
+                "$.member[*].textMatches[?(@.name == 'fileNumbers')].text",
+                everyItem(startsWith("<mark>IX</mark> <mark>ZR</mark> <mark>100</mark>"))));
   }
 
   private static Stream<Arguments> documentTypeParameters() {

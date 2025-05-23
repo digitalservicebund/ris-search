@@ -8,6 +8,7 @@ import de.bund.digitalservice.ris.search.models.api.parameters.CaseLawSearchPara
 import de.bund.digitalservice.ris.search.models.api.parameters.NormsSearchParams;
 import de.bund.digitalservice.ris.search.models.api.parameters.UniversalSearchParams;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
+import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.utils.DateUtils;
 import de.bund.digitalservice.ris.search.utils.QuotedStringParser;
 import de.bund.digitalservice.ris.search.utils.RisHighlightBuilder;
@@ -23,6 +24,7 @@ import org.opensearch.index.query.MatchAllQueryBuilder;
 import org.opensearch.index.query.MultiMatchQueryBuilder;
 import org.opensearch.index.query.MultiMatchQueryBuilder.Type;
 import org.opensearch.index.query.NestedQueryBuilder;
+import org.opensearch.index.query.Operator;
 import org.opensearch.index.query.QueryBuilders;
 import org.opensearch.index.query.TermQueryBuilder;
 import org.opensearch.index.search.MatchQuery;
@@ -75,6 +77,17 @@ public class UniversalDocumentQueryBuilder {
       nestedArticleQuery.innerHit(innerHitBuilder);
 
       query.should(nestedArticleQuery);
+
+      // add a BEST_FIELDS query with the whole term
+      // in order to boost cases where the whole
+      // searchTerm appears in one field
+      query.should(
+          new MultiMatchQueryBuilder(params.getSearchTerm())
+              .type(Type.BEST_FIELDS)
+              .operator(Operator.AND)
+              .field(CaseLawDocumentationUnit.Fields.FILE_NUMBERS)
+              .field(CaseLawDocumentationUnit.Fields.ECLI)
+              .field(Norm.Fields.OFFICIAL_ABBREVIATION));
     }
     DateUtils.buildQuery("DATUM", params.getDateFrom(), params.getDateTo())
         .ifPresent(query::filter);

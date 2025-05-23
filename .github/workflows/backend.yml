@@ -239,6 +239,9 @@ jobs:
       - name: Install sentry-cli using official script
         run: |
           curl -sL https://sentry.io/get-cli/ | bash
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+        if: ${{ env.SENTRY_AUTH_TOKEN != '' }}
       - name: Create and finalize Sentry release for Backend
         run: |
           sentry-cli releases new $CONTAINER_IMAGE_VERSION
@@ -246,6 +249,7 @@ jobs:
           sentry-cli releases finalize $CONTAINER_IMAGE_VERSION
         env:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+        if: ${{ env.SENTRY_AUTH_TOKEN != '' }}
 
   deploy-staging-internal-portal:
     runs-on: ubuntu-latest
@@ -275,6 +279,7 @@ jobs:
           app: ris-search-staging
           argocd_pipeline_password: ${{ secrets.ARGOCD_PIPELINE_PASSWORD }}
           argocd_server: ${{ secrets.ARGOCD_SERVER }}
+          argocd_sync_timeout: 420
 
   deploy-staging-public-portal:
     runs-on: ubuntu-latest
@@ -305,6 +310,7 @@ jobs:
           app: ris-portal-staging
           argocd_pipeline_password: ${{ secrets.ARGOCD_PIPELINE_PASSWORD }}
           argocd_server: ${{ secrets.ARGOCD_SERVER }}
+          argocd_sync_timeout: 420
 
   generate-backend-code-documentation:
     runs-on: ubuntu-latest
@@ -401,5 +407,8 @@ jobs:
   run-e2e-tests:
     needs:
       - backend-tests-and-code-quality
+      - build-and-push-image
     uses: ./.github/workflows/pipeline-e2e.yml
     secrets: inherit
+    with:
+      backend_tag: ${{ github.sha }}

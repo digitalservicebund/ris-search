@@ -1,6 +1,6 @@
 package de.bund.digitalservice.ris.search.unit.utils;
 
-import static de.bund.digitalservice.ris.search.utils.PageUtils.convertSnakeCaseKeysToCamelCase;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -17,10 +17,12 @@ class PageUtilsTest {
 
   @Test
   void testConvertSnakeCaseKeysToCamelCase() {
-    var input = Map.of("UPPERCASE", "uc", "camelCase", "cc", "snake_case", "sc");
-    var expectedOutput = Map.of("UPPERCASE", "uc", "camelCase", "cc", "snakeCase", "sc");
+    var expectations =
+        Map.of("UPPERCASE", "UPPERCASE", "camelCase", "camelCase", "snake_case", "snakeCase");
 
-    assertEquals(expectedOutput, convertSnakeCaseKeysToCamelCase(input));
+    for (var entry : expectations.entrySet()) {
+      assertThat(PageUtils.snakeCaseToCamelCase(entry.getKey())).isEqualTo(entry.getValue());
+    }
   }
 
   @Test

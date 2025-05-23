@@ -66,7 +66,7 @@ public class LuceneQueryTools {
       queryParser.parse(queryStr);
       return true;
     } catch (ParseException e) {
-      logger.warn("Error parsing the follow query %s", queryStr);
+      logger.warn("Error parsing the follow query: {}", queryStr);
       return false;
     }
   }

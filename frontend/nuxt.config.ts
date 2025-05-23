@@ -20,7 +20,7 @@ const backendBaseUrl = process.env.NUXT_RIS_BACKEND_URL;
 export default defineNuxtConfig({
   app: {
     head: {
-      title: "Rechtsinformationssystem des Bundes",
+      title: undefined, // set dynamically in app.vue useHead
       meta: [
         {
           name: "description",
@@ -49,6 +49,7 @@ export default defineNuxtConfig({
     "@nuxt/test-utils/module",
     "@sentry/nuxt/module",
     "nuxt-auth-utils",
+    "nuxt-security",
   ],
   devtools: {
     enabled: true,
@@ -94,6 +95,21 @@ export default defineNuxtConfig({
         posthogHost: "", // needs override in env
         feedbackSurveyId: "", // needs override in env
       },
+    },
+  },
+  security: {
+    strict: true,
+    headers: {
+      contentSecurityPolicy: {
+        "style-src": ["'self'", "https:", "'unsafe-inline'"],
+        "img-src": ["'self'", "data:"],
+        "script-src": ["'strict-dynamic'", "'nonce-{{nonce}}'"],
+      },
+    },
+    rateLimiter: {
+      whiteList: config.devMode ? ["127.0.0.1", "192.168.0.1"] : [],
+      tokensPerInterval: 600,
+      interval: 60000,
     },
   },
   sentry: {

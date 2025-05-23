@@ -110,6 +110,9 @@ Attributes from the Juris CALS format without a corresponding HTML attribute mig
 }
 .akn-act .align-center {
   @apply text-center;
+  img {
+    @apply inline-block;
+  }
 }
 
 /* Hide headings for single article view */
@@ -188,6 +191,7 @@ h2.einzelvorschrift {
   .akn-subtitle,
   .akn-num,
   .akn-heading,
+  .akn-paragraph,
   ol,
   h2,
   p,

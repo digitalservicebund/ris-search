@@ -1,6 +1,7 @@
 package de.bund.digitalservice.ris.search.service;
 
 import de.bund.digitalservice.ris.search.exception.FileTransformationException;
+import de.bund.digitalservice.ris.search.exception.NoSuchKeyException;
 import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
 import de.bund.digitalservice.ris.search.service.exception.XMLElementNotFoundException;
 import de.bund.digitalservice.ris.search.utils.eli.ManifestationEli;
@@ -80,18 +81,20 @@ public class XsltTransformerService {
     try {
       var response = this.normsBucket.getStream(eli.toString());
       return new StreamSource(response);
-    } catch (NullPointerException e) {
+    } catch (NoSuchKeyException | NullPointerException e) {
       throw new TransformerException("Failed to resolve: " + eli, e);
     }
   }
 
-  public String transformNorm(byte[] source, String basePath) {
-    Map<String, String> parameters = Map.of("dokumentpfad", basePath, "debugging", "false");
+  public String transformNorm(byte[] source, String basePath, String resourcesBasePath) {
+    Map<String, String> parameters =
+        Map.of("dokumentpfad", basePath, "debugging", "false", "ressourcenpfad", resourcesBasePath);
     return transformLegalDocMlFromBytes(source, parameters, normXslt);
   }
 
-  public String transformArticle(byte[] source, String eId) {
-    Map<String, String> parameters = Map.of("article-eid", eId, "debugging", "false");
+  public String transformArticle(byte[] source, String eId, String resourcesBasePath) {
+    Map<String, String> parameters =
+        Map.of("article-eid", eId, "debugging", "false", "ressourcenpfad", resourcesBasePath);
     return transformLegalDocMlFromBytes(source, parameters, normXslt);
   }
 

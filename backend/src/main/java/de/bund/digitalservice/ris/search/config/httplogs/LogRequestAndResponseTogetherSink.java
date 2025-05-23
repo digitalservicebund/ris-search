@@ -1,5 +1,6 @@
 package de.bund.digitalservice.ris.search.config.httplogs;
 
+import de.bund.digitalservice.ris.search.utils.HttpLogSanitizer;
 import java.io.IOException;
 import lombok.AllArgsConstructor;
 import org.json.JSONObject;
@@ -52,6 +53,7 @@ public class LogRequestAndResponseTogetherSink implements Sink {
       throws IOException {
     String requestMessage = formatter.format(correlation, request);
     var reqJson = new JSONObject(requestMessage);
+    reqJson = HttpLogSanitizer.sanitizeLogJson(reqJson);
 
     // do not log actuator path
     if (shouldSkipLogging(reqJson.optString("path"))) {
@@ -60,6 +62,7 @@ public class LogRequestAndResponseTogetherSink implements Sink {
 
     String responseMessage = formatter.format(correlation, response);
     var respJson = new JSONObject(responseMessage);
+    respJson = HttpLogSanitizer.sanitizeLogJson(respJson);
 
     var combinedReqResp = new JSONObject();
     combinedReqResp.put("requestMessage", reqJson);

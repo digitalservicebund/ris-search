@@ -5,7 +5,6 @@ import type { KeycloakTokenResponse } from "./routes/auth/keycloak/keycloakUtils
 import { buildSessionAttributes } from "./routes/auth/keycloak/keycloakUtils";
 import type { NitroRuntimeConfig } from "nitropack/types";
 import { useRuntimeConfig } from "#imports";
-import type { UserSession } from "#auth-utils";
 
 async function getRefreshedTokens(
   config: Pick<
@@ -58,7 +57,7 @@ export async function performRefresh(event: H3Event<EventHandlerRequest>) {
 export const requireAccessTokenWithRefresh = async (
   event: H3Event<EventHandlerRequest>,
 ) => {
-  const session = (await getUserSession(event)) as UserSession;
+  const session = await getUserSession(event);
   if (!session.secure?.tokens.accessToken) {
     throw createError({
       statusCode: HttpStatusCode.Unauthorized,
@@ -79,8 +78,8 @@ export const requireAccessTokenWithRefresh = async (
 export const requireAccessToken = async (
   event: H3Event<EventHandlerRequest>,
 ) => {
-  const session = (await getUserSession(event)) as UserSession;
-  if (!session.secure || !session.secure.tokens.accessToken) {
+  const session = await getUserSession(event);
+  if (!session.secure?.tokens.accessToken) {
     throw createError({
       statusCode: HttpStatusCode.Unauthorized,
       statusMessage: "Unauthorized",

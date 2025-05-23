@@ -11,12 +11,12 @@ definePageMeta({ alias: ["/datenschutz"] });
     <PageHeader title="Datenschutzerklärung" />
     <main class="max-w-prose space-y-64">
       <section class="space-y-16">
-        <p>Zuletzt aktualisiert: [31. März 2025]</p>
+        <p>Zuletzt aktualisiert: [23. April 2025]</p>
         <p>
-          Für das Bundesministerium der Justiz (BMJ) hat der Schutz
-          personenbezogener Daten einen hohen Stellenwert. Auf dieser Seite
-          informieren wir Sie über die Verarbeitung Ihrer personenbezogenen
-          Daten, wenn Sie
+          Für das Bundesministerium der Justiz und für Verbraucherschutz (BMJV)
+          hat der Schutz personenbezogener Daten einen hohen Stellenwert. Auf
+          dieser Seite informieren wir Sie über die Verarbeitung Ihrer
+          personenbezogenen Daten, wenn Sie
         </p>
         <ul class="list-bullet">
           <li>
@@ -47,10 +47,11 @@ definePageMeta({ alias: ["/datenschutz"] });
           diesbezüglich wenden können (siehe Abschnitt D).
         </p>
         <p>
-          Das Bundesministerium der Justiz (BMJ) verarbeitet Ihre
-          personenbezogenen Daten gemäß den datenschutzrechtlichen Vorschriften
-          der Verordnung (EU) 2016/679 (Datenschutz-Grundverordnung – „DS-GVO“),
-          des Bundesdatenschutzgesetzes („BDSG“) in der ab dem 25. Mai 2018
+          Das Bundesministerium der Justiz und für Verbraucherschutz (BMJV)
+          verarbeitet Ihre personenbezogenen Daten gemäß den
+          datenschutzrechtlichen Vorschriften der Verordnung (EU) 2016/679
+          (Datenschutz-Grundverordnung – „DS-GVO“), des
+          Bundesdatenschutzgesetzes („BDSG“) in der ab dem 25. Mai 2018
           geltenden Fassung, sowie des
           Telekommunikation-Digitale-Dienste-Datenschutz-Gesetzes („TDDDG“).
         </p>
@@ -69,17 +70,17 @@ definePageMeta({ alias: ["/datenschutz"] });
         <dl class="[&_dt]:mt-32">
           <dt class="ris-body1-bold">1. Verantwortliche Organisation:</dt>
           <dd>
-            Bundesministerium der Justiz<br />Mohrenstraße 37, 10117 Berlin<br />Telefon:
-            +49 (0)30 18 580 – 0<br /><br />E-Mail:
+            Bundesministerium der Justiz und für Verbraucherschutz<br />Mohrenstraße
+            37, 10117 Berlin<br />Telefon: +49 (0)30 18 580 – 0<br /><br />E-Mail:
             <a href="mailto:poststelle@bmj.bund.de" class="ris-link1-regular"
               >poststelle@bmj.bund.de</a
             >
           </dd>
           <dt class="ris-body1-bold">
-            2. Die behördliche Datenschutzbeauftragte des BMJ:
+            2. Die behördliche Datenschutzbeauftragte des BMJV:
           </dt>
           <dd>
-            Bundesministerium der Justiz<br />Behördliche
+            Bundesministerium der Justiz und für Verbraucherschutz<br />Behördliche
             Datenschutzbeauftragte<br />Mohrenstraße 37, 10117 Berlin<br />Telefon:
             +49 (0)30 18 580 – 0<br /><br />E-Mail:
             <a href="mailto:datenschutz@bmj.bund.de" class="ris-link1-regular"
@@ -128,7 +129,7 @@ definePageMeta({ alias: ["/datenschutz"] });
           Die Datenverarbeitung erfolgt auf Grundlage des Artikel 6 Abs. 1 UAbs.
           1 lit. e) und Abs. 3 lit. b) DS-GVO in Verbindung mit § 3
           E-Government-Gesetz (EGovG) im Rahmen der Öffentlichkeitsarbeit zur
-          bedarfsorientierten Bereitstellung von Informationen zu den dem BMJ
+          bedarfsorientierten Bereitstellung von Informationen zu den dem BMJV
           übertragenen Aufgaben.
         </p>
       </section>
@@ -177,27 +178,9 @@ definePageMeta({ alias: ["/datenschutz"] });
           kontinuierlich zu verbessern. Sie werden ausdrücklich gebeten, keine
           personenbezogenen Daten in die Feedback Box einzutragen.
         </p>
-        <p class="mt-16">
-          Bei Benutzung der Feedback-Box bedient sich unsere
-          Auftragsverarbeiterin der Unterstützung eines externen Dienstleisters,
-          dem Webanalysedienst Posthog (<a
-            href="https://posthog.com/"
-            class="ris-link1-regular"
-            >https://posthog.com/</a
-          >), 2261 Market Street, San Francisco, CA 94114, USA. Posthog erhält
-          keinen Zugriff auf Ihre personenbezogenen Daten; es werden insofern
-          keine personenbezogenen Daten gespeichert. Es wird zwar Ihre
-          IP-Adresse erhoben, aber sogleich in ein anonymisiertes Format
-          umgewandelt. Ab diesem Zeitpunkt können die Daten Ihnen nicht mehr
-          zugeordnet werden. Weitere Informationen zum Datenschutz des
-          Dienstleisters finden Sie unter
-          <a href="https://posthog.com/privacy" class="ris-link1-regular"
-            >https://posthog.com/privacy</a
-          >.
-        </p>
         <h4>III.2. Kategorien personenbezogener Daten</h4>
         <ul class="list-bullet">
-          <li>IP-Adresse</li>
+          <li>Ihre Internet-Protokoll-Adresse (IP-Adresse)</li>
         </ul>
         <h4>
           III.3. Rechtsgrundlage für die Verarbeitung Ihrer personenbezogenen
@@ -219,26 +202,6 @@ definePageMeta({ alias: ["/datenschutz"] });
           innerhalb der Europäischen Union/des Europäischen Wirtschaftsraums
           verarbeitet und nicht an unberechtigte Dritte weitergeleitet.
         </p>
-        <p>
-          Bei Benutzung der Feedback Box (siehe Abschnitt C) bedient sich unsere
-          Auftragsverarbeiterin der Unterstützung eines externen Dienstleisters,
-          dem Webanalysedienst Posthog (<a
-            href="https://posthog.com/"
-            class="ris-link1-regular"
-            >https://posthog.com/</a
-          >), 2261 Market Street, San Francisco, CA 94114, USA. Posthog erhält
-          keinen Zugriff auf Ihre personenbezogenen Daten; es werden insofern
-          keine personenbezogenen Daten gespeichert. Die von Posthog im Zuge der
-          Benutzung der Feedback Box erhobene IP-Adresse wird insofern innerhalb
-          der Europäischen Union/dem Europäischen Wirtschaftsraum gekürzt und
-          folglich unmittelbar in ein anonymisiertes Format umgewandelt. Ab
-          diesem Zeitpunkt können die Analysedaten Ihnen nicht mehr zugeordnet
-          werden. Weitere Informationen zum Datenschutz des Dienstleisters
-          finden Sie unter
-          <a href="https://posthog.com/privacy" class="ris-link1-regular"
-            >https://posthog.com/privacy</a
-          >.
-        </p>
         <h3 class="ris-heading3-regular">V. Dauer der Speicherung</h3>
         <p>
           Personenbezogene Daten von Besuchern der Webseiten werden gelöscht,
@@ -258,8 +221,8 @@ definePageMeta({ alias: ["/datenschutz"] });
         <p>
           Jede Person, deren personenbezogene Daten verarbeitet werden, kann als
           Betroffene oder Betroffener gegenüber der verantwortlichen
-          Organisation (gemäß Ziffer 1 (s.o.) das BMJ) die nachfolgend benannten
-          Rechte geltend machen.
+          Organisation (gemäß Ziffer 1 (s.o.) das BMJV) die nachfolgend
+          benannten Rechte geltend machen.
         </p>
         <h4>VI.1. Recht auf Auskunft (Art. 15 DS-GVO)</h4>
         <p>
@@ -303,7 +266,7 @@ definePageMeta({ alias: ["/datenschutz"] });
           andere der verantwortliche Organisation weiterleiten zu lassen. Gemäß
           Artikel 20 Abs. 3 Satz 2 DS-GVO steht dieses Recht aber dann nicht zur
           Verfügung, wenn die Datenverarbeitung der Wahrnehmung öffentlicher
-          Aufgaben dient. Dies ist beim BMJ nur dann nicht der Fall, wenn die
+          Aufgaben dient. Dies ist beim BMJV nur dann nicht der Fall, wenn die
           Verarbeitung personenbezogener Daten zu fiskalischen Zwecken erfolgt.
         </p>
         <h4>VI.6. Recht auf Widerspruch (Art. 21 DS-GVO)</h4>
@@ -319,7 +282,7 @@ definePageMeta({ alias: ["/datenschutz"] });
         <h4>VI.7. Recht auf Beschwerde (Art. 77 DS-GVO)</h4>
         <p>
           Der oder die Betroffene hat die Möglichkeit, sich mit einer Beschwerde
-          gegen die Datenverarbeitung des BMJ an die Bundesbeauftragte für den
+          gegen die Datenverarbeitung des BMJV an die Bundesbeauftragte für den
           Datenschutz und die Informationsfreiheit zu wenden, die die
           datenschutzrechtliche Aufsicht über die Bundesbehörden hat. Sie ist
           wie folgt erreichbar:

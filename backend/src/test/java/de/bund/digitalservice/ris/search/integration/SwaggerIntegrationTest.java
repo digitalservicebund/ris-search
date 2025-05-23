@@ -25,7 +25,6 @@ import org.springframework.test.web.servlet.MockMvc;
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
     properties = {
       "feature-flags.advanced-search=false",
-      "feature-flags.legacy-endpoints=false",
       "swagger.server.url=https://testphase.rechtsinformationen.bund.de",
       "swagger.server.description=Public API (preview)"
     })

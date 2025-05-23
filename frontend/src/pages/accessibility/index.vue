@@ -20,7 +20,8 @@ definePageMeta({ alias: ["/barrierefreiheit"] });
           >
             testphase.rechtsinformationen.bund.de</a
           >
-          veröffentlichte Website des Bundesministeriums der Justiz.
+          veröffentlichte Website des Bundesministeriums der Justiz und für
+          Verbraucherschutz.
         </p>
         <p>
           Als öffentliche Stelle im Sinne der Richtlinie (EU) 2016/2102 sind wir

@@ -2,9 +2,10 @@ package de.bund.digitalservice.ris.search.service.helper;
 
 import de.bund.digitalservice.ris.search.exception.CustomValidationException;
 import de.bund.digitalservice.ris.search.mapper.MappingDefinitions;
+import de.bund.digitalservice.ris.search.mapper.SortingDefinitions;
 import de.bund.digitalservice.ris.search.models.api.parameters.PaginationParams;
 import de.bund.digitalservice.ris.search.models.errors.CustomError;
-import de.bund.digitalservice.ris.search.utils.SortingUtils;
+import jakarta.validation.constraints.NotNull;
 import lombok.NonNull;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.data.domain.PageRequest;
@@ -15,19 +16,21 @@ public class PaginationParamsConverter {
   private PaginationParamsConverter() {}
 
   public static PageRequest convert(
-      PaginationParams paginationParams, MappingDefinitions.ResolutionMode resolutionMode)
+      PaginationParams paginationParams,
+      MappingDefinitions.ResolutionMode resolutionMode,
+      @NotNull boolean sortByRelevance)
       throws CustomValidationException {
     return PageRequest.of(
         paginationParams.getPageIndex(),
         paginationParams.getSize(),
-        parseSort(paginationParams.getSort(), resolutionMode));
+        buildSort(paginationParams.getSort(), resolutionMode, sortByRelevance));
   }
 
-  public static @NonNull Sort parseSort(
-      String sort, MappingDefinitions.ResolutionMode resolutionMode)
+  public static @NonNull Sort buildSort(
+      String sort, MappingDefinitions.ResolutionMode resolutionMode, boolean sortByRelevance)
       throws CustomValidationException {
     if (Strings.isEmpty(sort) || sort.equalsIgnoreCase("default")) {
-      return Sort.unsorted();
+      return sortByRelevance ? Sort.unsorted() : SortingDefinitions.getDefaultSort(resolutionMode);
     }
 
     Sort.Direction direction;
@@ -40,7 +43,7 @@ public class PaginationParamsConverter {
       direction = Sort.Direction.ASC;
     }
 
-    if (!isSupportedField(fieldName, resolutionMode)) {
+    if (!SortingDefinitions.canSortByField(fieldName, resolutionMode)) {
       throw new CustomValidationException(
           new CustomError(
               "invalid_sort_parameter",
@@ -53,14 +56,5 @@ public class PaginationParamsConverter {
       mappedFieldName = fieldName;
     }
     return Sort.by(direction, mappedFieldName);
-  }
-
-  private static boolean isSupportedField(
-      String sort, MappingDefinitions.ResolutionMode resolutionMode) {
-    return switch (resolutionMode) {
-      case ALL -> SortingUtils.documentSortFields.contains(sort);
-      case NORMS -> SortingUtils.normsSortFields.contains(sort);
-      case CASE_LAW -> SortingUtils.caseLawSortFields.contains(sort);
-    };
   }
 }

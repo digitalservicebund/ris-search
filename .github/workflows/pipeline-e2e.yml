@@ -3,6 +3,13 @@ name: End-to-end tests
 
 on:
   workflow_call:
+    inputs:
+      backend_tag:
+        type: string
+        required: false
+      frontend_tag:
+        type: string
+        required: false
   workflow_dispatch:
 
 env:
@@ -27,15 +34,22 @@ jobs:
       - name: Adjust permissions to docker
         run: sudo chmod 666 /var/run/docker.sock
       - name: Set environment variables for backend and frontend
+        env:
+          INPUT_BACKEND_TAG: ${{ inputs.backend_tag }}
+          INPUT_FRONTEND_TAG: ${{ inputs.frontend_tag }}
         run: |
           BRANCH_NAME=${{ github.head_ref || github.ref_name }}
           BRANCH_NAME_TAG=$(echo $BRANCH_NAME | sed -e 's/[^[:alnum:]]/-/g')
-          if docker pull ghcr.io/digitalservicebund/ris-search:${BRANCH_NAME_TAG}; then
+          if [[ -n "${INPUT_BACKEND_TAG}" ]]; then
+            echo "BACKEND_IMAGE=ghcr.io/digitalservicebund/ris-search:${INPUT_BACKEND_TAG}" >> $GITHUB_ENV
+          elif docker pull ghcr.io/digitalservicebund/ris-search:${BRANCH_NAME_TAG}; then
             echo "BACKEND_IMAGE=ghcr.io/digitalservicebund/ris-search:${BRANCH_NAME_TAG}" >> $GITHUB_ENV
           else
             echo "BACKEND_IMAGE=ghcr.io/digitalservicebund/ris-search:main" >> $GITHUB_ENV
           fi
-          if docker pull ghcr.io/digitalservicebund/ris-search/frontend:${BRANCH_NAME_TAG}; then
+          if [[ -n "${INPUT_FRONTEND_TAG}" ]]; then
+            echo "FRONTEND_IMAGE=ghcr.io/digitalservicebund/ris-search/frontend:${INPUT_FRONTEND_TAG}" >> $GITHUB_ENV
+          elif docker pull ghcr.io/digitalservicebund/ris-search/frontend:${BRANCH_NAME_TAG}; then
             echo "FRONTEND_IMAGE=ghcr.io/digitalservicebund/ris-search/frontend:${BRANCH_NAME_TAG}" >> $GITHUB_ENV
           else
             echo "FRONTEND_IMAGE=ghcr.io/digitalservicebund/ris-search/frontend:main" >> $GITHUB_ENV

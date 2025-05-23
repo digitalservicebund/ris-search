@@ -13,14 +13,12 @@ import org.hamcrest.Matchers;
 import org.junit.jupiter.params.provider.Arguments;
 
 public class SortingTestArguments {
-  public static Stream<Arguments> provideSortingTestArguments() {
+  public static Stream.Builder<Arguments> provideSortingTestArguments() {
     Stream.Builder<Arguments> stream = Stream.builder();
 
     int caseLawSize = CaseLawTestData.allDocuments.size();
     int normsSize = NormsTestData.allDocuments.size();
     int combinedSize = caseLawSize + normsSize;
-
-    stream.add(Arguments.of("", combinedSize, null, null));
 
     List<String> sortedDocumentNumbers =
         CaseLawTestData.allDocuments.stream()
@@ -93,6 +91,6 @@ public class SortingTestArguments {
             caseLawSize,
             jsonPath("$.member[*].item.courtName", Matchers.is(invertedCourtNames)),
             null));
-    return stream.build();
+    return stream;
   }
 }

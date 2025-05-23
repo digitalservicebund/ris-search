@@ -34,6 +34,7 @@
     <xsl:variable name="marker" as="xs:string" select="'marker'"/>
     <xsl:variable name="rueckverweis" as="xs:string" select="'rueckverweis'"/>
     <xsl:param name="erlaube-links-in-heading" as="xs:boolean" select="false()"/>
+    <xsl:param name="ressourcenpfad" as="xs:string" select="''"/>
 
     <!-- ******************************************************************************************************* -->
 
@@ -156,8 +157,8 @@
         </xsl:attribute>
     </xsl:template>
 
-    <!-- @style und @class unverändert übernehmen -->
-    <xsl:template match="@class | @style" priority="2">
+    <!-- @style, @class und @alt unverändert übernehmen -->
+    <xsl:template match="@class | @style | @alt" priority="2">
         <xsl:attribute name="{local-name()}" select="."/>
     </xsl:template>
 
@@ -590,6 +591,16 @@
             <xsl:apply-templates select="@*" />
             <xsl:value-of select="."/>
         </dd>
+    </xsl:template>
+
+    <!--
+        Bilder
+        ######
+    -->
+    <xsl:template match="akn:img">
+        <img src="{concat($ressourcenpfad, @src)}">
+              <xsl:apply-templates select="@*[local-name() != 'src']" />
+        </img>
     </xsl:template>
 
     <!--

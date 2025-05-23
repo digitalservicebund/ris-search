@@ -1,5 +1,3 @@
-import { isPublicProfile } from "@/utils/config";
-
 export type FieldType =
   | "all"
   | "case_law"
@@ -15,7 +13,7 @@ export type Field = {
   types: FieldType[];
 };
 
-type Feature = {
+export type Feature = {
   id: string;
   label: string;
   description: string;
@@ -280,10 +278,3 @@ export const availableInternalFeatures: Feature[] = [
     ],
   },
 ];
-
-export const availableFields: Field[] = isPublicProfile()
-  ? availablePublicFields
-  : availableInternalFields;
-export const availableFeatures: Feature[] = isPublicProfile()
-  ? availablePublicFeatures
-  : availableInternalFeatures;

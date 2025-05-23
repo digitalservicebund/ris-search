@@ -6,6 +6,7 @@ import * as searchService from "@/services/searchService";
 import { mountSuspended } from "@nuxt/test-utils/runtime";
 import type { AxiosResponse } from "axios";
 import { DocumentKind } from "~/types";
+import PrimeVue from "primevue/config";
 
 type SearchResultPage = {
   member: [{ id: string; title: string }];
@@ -83,7 +84,9 @@ const stubs = {
   },
 };
 
-const wrapper = mount(AdvancedSearch, { global: { stubs } });
+const wrapper = mount(AdvancedSearch, {
+  global: { stubs, plugins: [PrimeVue] },
+});
 
 describe("AdvancedSearch.vue", () => {
   beforeEach(() => {
@@ -92,7 +95,7 @@ describe("AdvancedSearch.vue", () => {
 
   it("should disable user input initially if component is not ready", async () => {
     const notReadyComponent = await mountSuspended(AdvancedSearch, {
-      global: { stubs },
+      global: { stubs, plugins: [PrimeVue] },
     });
     expect(notReadyComponent.html()).toContain("Lade Suche...");
   });
