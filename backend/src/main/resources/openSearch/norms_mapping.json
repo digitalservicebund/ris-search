@@ -98,11 +98,13 @@
         "manifestation_eli": {
           "type": "text",
           "index": false
+        },
+        "search_keyword": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer",
+          "boost": 10
         }
       }
-    },
-    "table_of_contents": {
-      "type": "nested"
     },
     "article_names": {
       "type": "text",
