@@ -193,7 +193,8 @@ class NormLdmlToOpenSearchMapperTest {
                 null,
                 "anlagen-1_anlage-1",
                 null,
-                "eli/bund/bgbl-1/1962/s514/2010-04-27/1/deu/2010-04-27/offenestruktur-1.xml"));
+                "eli/bund/bgbl-1/1962/s514/2010-04-27/1/deu/2010-04-27/offenestruktur-1.xml",
+                null));
   }
 
   @Test

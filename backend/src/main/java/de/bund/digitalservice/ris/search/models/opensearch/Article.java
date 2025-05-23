@@ -28,4 +28,9 @@ public record Article(
     @Nullable @Field(name = "is_active") Boolean isActive,
     @Nullable @Field(name = "eid") String eId,
     @Nullable @Field(name = "guid") String guid,
-    @Nullable @Field(name = "manifestation_eli") String manifestationEli) {}
+    @Nullable @Field(name = "manifestation_eli") String manifestationEli,
+    /*
+     * A helper field that allows higher-ranked retrieval of articles through a combination of article number and norm
+     * abbreviation.
+     */
+    @Nullable @Field(name = "search_keyword") String searchKeyword) {}
