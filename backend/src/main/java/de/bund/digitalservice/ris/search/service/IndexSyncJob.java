@@ -51,7 +51,6 @@ public class IndexSyncJob {
     }
 
     fetchAndProcessChanges(state);
-    alertOnNumberMismatch(state);
     indexStatusService.unlockIndex(statusFileName);
   }
 
@@ -70,12 +69,17 @@ public class IndexSyncJob {
       // if status file or last success missing do a full reset
       indexService.reindexAll(state.startTime());
       indexStatusService.updateLastProcessedChangelog(statusFileName, state.startTime());
+      alertOnNumberMismatch(state);
     } else {
       List<String> unprocessedChangelogs =
           getNewChangelogs(changelogBucket, state.lastProcessedChangelogFile()).stream()
               .sorted()
               .toList();
       processChangelogs(state, unprocessedChangelogs);
+      boolean didRun = !unprocessedChangelogs.isEmpty();
+      if (didRun) {
+        alertOnNumberMismatch(state);
+      }
     }
   }
 
