@@ -1,7 +1,5 @@
 package de.bund.digitalservice.ris.search.config.opensearch;
 
-import io.sentry.Sentry;
-import io.sentry.SentryLevel;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
@@ -10,6 +8,8 @@ import org.apache.http.conn.ssl.NoopHostnameVerifier;
 import org.apache.http.conn.ssl.TrustAllStrategy;
 import org.apache.http.impl.nio.reactor.IOReactorConfig;
 import org.apache.http.ssl.SSLContextBuilder;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.opensearch.client.RestHighLevelClient;
 import org.opensearch.data.client.orhlc.AbstractOpenSearchConfiguration;
 import org.opensearch.data.client.orhlc.ClientConfiguration;
@@ -29,6 +29,8 @@ import org.springframework.data.elasticsearch.repository.config.EnableElasticsea
 @EnableElasticsearchRepositories(
     basePackages = "de.bund.digitalservice.ris.search.repository.opensearch")
 public class RestClientConfigStaging extends AbstractOpenSearchConfiguration {
+
+  private static final Logger logger = LogManager.getLogger(RestClientConfigStaging.class);
 
   private static final long OPENSEARCH_TIMEOUT = 30000;
 
@@ -72,9 +74,8 @@ public class RestClientConfigStaging extends AbstractOpenSearchConfiguration {
         try {
           return super.execute(callback);
         } catch (DataAccessResourceFailureException e) {
-          Sentry.captureMessage(
-              "retry elasticsearch operation after DataAccessResourceFailureException",
-              SentryLevel.ERROR);
+          logger.warn(
+              "retrying elasticsearch operation after DataAccessResourceFailureException", e);
           return super.execute(callback);
         }
       }
