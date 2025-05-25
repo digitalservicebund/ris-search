@@ -2174,24 +2174,27 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nuxtjs/tailwindcss@npm:^6.13.2":
-  version: 6.13.2
-  resolution: "@nuxtjs/tailwindcss@npm:6.13.2"
+"@nuxtjs/tailwindcss@npm:^6.14.0":
+  version: 6.14.0
+  resolution: "@nuxtjs/tailwindcss@npm:6.14.0"
   dependencies:
+    "@nuxt/kit": "npm:^3.16.0"
     autoprefixer: "npm:^10.4.20"
     c12: "npm:^3.0.2"
     consola: "npm:^3.4.0"
     defu: "npm:^6.1.4"
     h3: "npm:^1.15.1"
     klona: "npm:^2.0.6"
+    ohash: "npm:^2.0.11"
     pathe: "npm:^2.0.3"
+    pkg-types: "npm:^2.1.0"
     postcss: "npm:^8.5.3"
     postcss-nesting: "npm:^13.0.1"
     tailwind-config-viewer: "npm:^2.0.4"
     tailwindcss: "npm:~3.4.17"
     ufo: "npm:^1.5.4"
     unctx: "npm:^2.4.1"
-  checksum: 10c0/da585ff938a205506fa06080316c6c2adf3cd22137f0ea594cb8aed653ed073fe15ded6bc7e2ba2d6e8f6c7620e7b0cf5295ed3a60a1d52fcb7573aa9706b839
+  checksum: 10c0/7acf1234daba0770b843ac7cc83a5cf266a083592aed065f14526a258375c21e81587f3790f132957abdb0c0ea92174efd386d2ea7a6dac821df5b91eeb4c2d4
   languageName: node
   linkType: hard
 
@@ -13339,7 +13342,7 @@ __metadata:
     "@nuxt/kit": "npm:^3.17.1"
     "@nuxt/schema": "npm:^3.16.0"
     "@nuxt/test-utils": "npm:^3.17.2"
-    "@nuxtjs/tailwindcss": "npm:^6.13.2"
+    "@nuxtjs/tailwindcss": "npm:^6.14.0"
     "@pact-foundation/pact": "npm:^15.0.1"
     "@pinia/nuxt": "npm:^0.11.0"
     "@pinia/testing": "npm:^1.0.1"
