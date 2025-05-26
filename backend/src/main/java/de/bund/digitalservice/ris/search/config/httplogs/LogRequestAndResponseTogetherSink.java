@@ -53,7 +53,7 @@ public class LogRequestAndResponseTogetherSink implements Sink {
       throws IOException {
     String requestMessage = formatter.format(correlation, request);
     var reqJson = new JSONObject(requestMessage);
-    reqJson = HttpLogSanitizer.sanitizeLogJson(reqJson);
+    reqJson = HttpLogSanitizer.sanitizeLogJson(reqJson, request);
 
     // do not log actuator path
     if (shouldSkipLogging(reqJson.optString("path"))) {
@@ -62,7 +62,7 @@ public class LogRequestAndResponseTogetherSink implements Sink {
 
     String responseMessage = formatter.format(correlation, response);
     var respJson = new JSONObject(responseMessage);
-    respJson = HttpLogSanitizer.sanitizeLogJson(respJson);
+    respJson = HttpLogSanitizer.sanitizeLogJson(respJson, request);
 
     var combinedReqResp = new JSONObject();
     combinedReqResp.put("requestMessage", reqJson);
