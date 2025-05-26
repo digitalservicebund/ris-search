@@ -104,6 +104,7 @@ export default defineNuxtConfig({
         "style-src": ["'self'", "https:", "'unsafe-inline'"],
         "img-src": ["'self'", "data:"],
         "script-src": ["'strict-dynamic'", "'nonce-{{nonce}}'"],
+        "connect-src": config.devMode ? ["'self'", "http:"] : ["'self'"],
       },
     },
     rateLimiter: {
