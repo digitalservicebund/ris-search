@@ -44,7 +44,24 @@ const legislationWork: LegislationWork = {
     "@type": "Legislation",
     hasPart: [],
     legislationIdentifier: "eli/work-LEG12345/expression-LEG12345",
-    encoding: [],
+    encoding: [
+      {
+        "@type": "LegislationObject",
+        "@id": "id-xml",
+        encodingFormat: "application/xml",
+        contentUrl:
+          "/eli/work-LEG12345/expression-LEG12345/manifestation-LEG12345/regelungstext-1.xml",
+        inLanguage: "test",
+      },
+      {
+        "@type": "LegislationObject",
+        "@id": "id-zip",
+        encodingFormat: "application/zip",
+        contentUrl:
+          "/eli/work-LEG12345/expression-LEG12345/manifestation-LEG12345.zip",
+        inLanguage: "test",
+      },
+    ],
     tableOfContents: [],
     temporalCoverage: "2024-01-01/2024-12-31",
     legislationLegalForce: "InForce",
@@ -64,7 +81,6 @@ const mockData: NormContent = {
     standangabenHinweis: ["Änderung durch Y textlich nachgewiesen"],
     prefaceContainer: "Mit dieser Verordnung wird…",
   },
-  hasAttachments: false,
 };
 
 function mockMetadata(value: typeof mockData = mockData) {
@@ -88,15 +104,20 @@ function mountComponent() {
         RisExpandableText: {
           template: '<div class="mock-expandable-text"><slot /></div>',
         },
+        FileActionsMenu: true,
       },
     },
   });
 }
 
+type StubbedComponent = {
+  props: (value: string) => string;
+};
+
 function getBreadcrumbStub(wrapper: VueWrapper) {
-  return wrapper.findComponent("ris-breadcrumb-stub") as unknown as {
-    props: (value: string) => string;
-  };
+  return wrapper.findComponent(
+    "ris-breadcrumb-stub",
+  ) as unknown as StubbedComponent;
 }
 
 function getDDElement(wrapper: VueWrapper, label: string): HTMLElement | null {
@@ -159,6 +180,17 @@ describe("index.vue", () => {
     expect(getBreadcrumbStub(wrapper).props("title")).toBe("abbreviation");
   });
 
+  it("shows the FileActionsMenu with correct XML link", async () => {
+    mockMetadata();
+    const wrapper = await mountComponent();
+    const stub = wrapper.getComponent(
+      "file-actions-menu-stub",
+    ) as unknown as StubbedComponent;
+    expect(stub.props("xmlUrl")).toBe(
+      "/api/eli/work-LEG12345/expression-LEG12345/manifestation-LEG12345/regelungstext-1.xml",
+    );
+  });
+
   it("shows metadata", async () => {
     mockMetadata();
     const wrapper = await mountComponent();
@@ -187,6 +219,11 @@ describe("index.vue", () => {
 
     const notes = getDDElement(wrapper, "Fußnoten:");
     expect(notes?.textContent).toBe("Notes");
+
+    const zipDownload = getDDElement(wrapper, "Download:");
+    expect(zipDownload?.querySelector("a")?.href).toBe(
+      "http://localhost:3000/api/eli/work-LEG12345/expression-LEG12345/manifestation-LEG12345.zip",
+    );
   });
 
   it("uses the abbreviation as meta title", async () => {

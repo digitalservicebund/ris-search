@@ -25,6 +25,7 @@ import TabPanel from "primevue/tabpanel";
 import IcBaselineSubject from "~icons/ic/baseline-subject";
 import IcOutlineInfo from "~icons/ic/outline-info";
 import IcOutlineRestore from "~icons/ic/outline-settings-backup-restore";
+import MaterialSymbolsDownload from "~icons/material-symbols/download";
 import PropertiesItem from "~/components/PropertiesItem.vue";
 import Properties from "~/components/Properties.vue";
 import {
@@ -69,16 +70,8 @@ function getManifestationUrl(format: string) {
   return encoding?.contentUrl ? backendURL + encoding.contentUrl : undefined;
 }
 
-const xmlUrl = computed(() =>
-  data.value.hasAttachments
-    ? undefined
-    : getManifestationUrl("application/xml"),
-);
-const zipUrl = computed(() =>
-  data.value.hasAttachments
-    ? getManifestationUrl("application/zip")
-    : undefined,
-);
+const xmlUrl = computed(() => getManifestationUrl("application/xml"));
+const zipUrl = computed(() => getManifestationUrl("application/zip"));
 
 if (error.value) {
   showError(error.value);
@@ -121,7 +114,7 @@ const normBreadcrumbTitle = computed(() =>
           :base-path="route.fullPath"
           class="grow"
         />
-        <FileActionsMenu :xml-url="xmlUrl" :zip-url="zipUrl" />
+        <FileActionsMenu :xml-url="xmlUrl" />
       </div>
       <NormHeadingGroup :metadata="metadata" :html-parts="htmlParts" />
       <div class="mt-8 mb-48 flex flex-wrap items-end gap-24">
@@ -233,10 +226,18 @@ const normBreadcrumbTitle = computed(() =>
                     <div v-html="htmlParts.headingNotes" />
                   </template>
                 </PropertiesItem>
+                <PropertiesItem label="Download:"
+                  ><NuxtLink class="ris-link1-regular" external :href="zipUrl"
+                    ><MaterialSymbolsDownload class="mr-2 inline" />
+                    {{ metadata.abbreviation ?? "Inhalte" }} als ZIP
+                    herunterladen</NuxtLink
+                  >
+                </PropertiesItem>
               </Properties>
             </section>
           </TabPanel>
         </TabPanels>
-      </Tabs></div
-  ></ContentWrapper>
+      </Tabs>
+    </div></ContentWrapper
+  >
 </template>
