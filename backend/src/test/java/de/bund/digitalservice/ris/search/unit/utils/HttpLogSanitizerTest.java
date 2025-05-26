@@ -46,6 +46,14 @@ class HttpLogSanitizerTest {
   }
 
   @Test
+  void testGetQueryParamsAsTextHandlesNullRequest() {
+    JSONObject input = new JSONObject();
+    JSONObject sanitized = HttpLogSanitizer.sanitizeLogJson(input, null);
+
+    assertEquals("{}", sanitized.get("queryParams").toString());
+  }
+
+  @Test
   void testPrivateConstructorThrowsException() throws Exception {
     Constructor<HttpLogSanitizer> constructor = HttpLogSanitizer.class.getDeclaredConstructor();
     constructor.setAccessible(true);
