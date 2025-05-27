@@ -227,7 +227,11 @@ const normBreadcrumbTitle = computed(() =>
                   </template>
                 </PropertiesItem>
                 <PropertiesItem label="Download:"
-                  ><NuxtLink class="ris-link1-regular" external :href="zipUrl"
+                  ><NuxtLink
+                    data-attr="xml-zip-view"
+                    class="ris-link1-regular"
+                    external
+                    :href="zipUrl"
                     ><MaterialSymbolsDownload class="mr-2 inline" />
                     {{ metadata.abbreviation ?? "Inhalte" }} als ZIP
                     herunterladen</NuxtLink

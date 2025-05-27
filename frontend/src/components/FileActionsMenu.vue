@@ -77,6 +77,7 @@ const onPrint = () => {
       v-if="!!xmlUrl"
       text
       aria-label="XML anzeigen"
+      data-attr="xml-view"
       @click="navigateTo(xmlUrl, { external: true })"
     >
       <template #icon><XMLIcon /></template>
