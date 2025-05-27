@@ -98,7 +98,7 @@ export default defineNuxtConfig({
     },
   },
   security: {
-    strict: true,
+    strict: config.production,
     headers: {
       contentSecurityPolicy: {
         "style-src": ["'self'", "https:", "'unsafe-inline'"],
