@@ -50,6 +50,7 @@ export default defineNuxtConfig({
     "@sentry/nuxt/module",
     "nuxt-auth-utils",
     "nuxt-security",
+    "@nuxt/scripts",
   ],
   devtools: {
     enabled: true,
@@ -98,12 +99,13 @@ export default defineNuxtConfig({
     },
   },
   security: {
-    strict: true,
+    strict: config.production,
     headers: {
       contentSecurityPolicy: {
         "style-src": ["'self'", "https:", "'unsafe-inline'"],
-        "img-src": ["'self'", "data:"],
+        "img-src": ["'self'", "data:", "'unsafe-inline'"],
         "script-src": ["'strict-dynamic'", "'nonce-{{nonce}}'"],
+        "connect-src": config.devMode ? ["'self'", "http:"] : ["'self'"],
       },
     },
     rateLimiter: {

@@ -12,6 +12,7 @@ import java.util.Optional;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.springframework.scheduling.annotation.Async;
 
 public class IndexSyncJob {
@@ -51,7 +52,6 @@ public class IndexSyncJob {
     }
 
     fetchAndProcessChanges(state);
-    alertOnNumberMismatch(state);
     indexStatusService.unlockIndex(statusFileName);
   }
 
@@ -68,14 +68,21 @@ public class IndexSyncJob {
   public void fetchAndProcessChanges(IndexingState state) throws ObjectStoreServiceException {
     if (state.lastProcessedChangelogFile() == null) {
       // if status file or last success missing do a full reset
+      logger.info("Reindexing all due to missing previous lastProcessedChangelogFile");
       indexService.reindexAll(state.startTime());
       indexStatusService.updateLastProcessedChangelog(statusFileName, state.startTime());
+      alertOnNumberMismatch(state);
     } else {
       List<String> unprocessedChangelogs =
           getNewChangelogs(changelogBucket, state.lastProcessedChangelogFile()).stream()
               .sorted()
               .toList();
       processChangelogs(state, unprocessedChangelogs);
+      if (unprocessedChangelogs.isEmpty()) {
+        logger.info("No new changelogs found since {}", state.lastProcessedChangelogFile());
+      } else {
+        alertOnNumberMismatch(state);
+      }
     }
   }
 
@@ -84,13 +91,15 @@ public class IndexSyncJob {
     for (String fileName : unprocessedChangelogs) {
       Changelog changelogContent = parseOneChangelog(changelogBucket, fileName);
       if (changelogContent != null) {
+        logger.info("Processing changelog {}", fileName);
         importChangelogContent(changelogContent, state.startTime(), fileName);
         indexStatusService.updateLastProcessedChangelog(statusFileName, fileName);
+        logger.info("Processed changelog {}", fileName);
       }
     }
   }
 
-  public Changelog parseOneChangelog(ObjectStorage changelogBucket, String filename)
+  public @Nullable Changelog parseOneChangelog(ObjectStorage changelogBucket, String filename)
       throws ObjectStoreServiceException {
     Optional<String> changelogContent = changelogBucket.getFileAsString(filename);
     if (changelogContent.isEmpty()) {

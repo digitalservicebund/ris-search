@@ -6,8 +6,10 @@ import MdiDotsVertical from "~icons/mdi/dots-vertical";
 import MaterialSymbolsLink from "~icons/material-symbols/link";
 import XMLIcon from "~/components/icons/XMLIcon.vue";
 import PDFIcon from "~/components/icons/PDFIcon.vue";
+import { isPrototypeProfile } from "@/utils/config";
 const { xmlUrl } = defineProps<{ xmlUrl?: string }>();
 
+const enablePdfButton = !isPrototypeProfile();
 const model: ComputedRef<MenuItem[]> = computed(() => {
   const items: MenuItem[] = [
     {
@@ -19,8 +21,10 @@ const model: ComputedRef<MenuItem[]> = computed(() => {
       label: "Drucken oder als PDF speichern",
       icon: "pdf",
       command: onPrint,
+      disabled: !enablePdfButton,
     },
   ];
+
   if (xmlUrl) {
     items.push({
       label: "XML anzeigen",
@@ -61,7 +65,12 @@ const onPrint = () => {
     <Button text disabled aria-label="Link kopieren">
       <template #icon><MaterialSymbolsLink /></template>
     </Button>
-    <Button text aria-label="Drucken oder als PDF speichern" @click="onPrint">
+    <Button
+      text
+      aria-label="Drucken oder als PDF speichern"
+      :disabled="!enablePdfButton"
+      @click="onPrint"
+    >
       <template #icon><PDFIcon /></template>
     </Button>
     <Button
@@ -87,7 +96,7 @@ const onPrint = () => {
       >
         <a
           v-if="!item.disabled"
-          class="flex cursor-pointer items-center gap-8"
+          class="flex cursor-pointer items-center gap-8 no-underline"
           :href="item.url"
           data-pc-section="itemlink"
           :data-attr="item.dataAttribute"
