@@ -7,7 +7,7 @@ COPY .yarn/releases/yarn-4.7.0.cjs .yarn/releases/yarn-4.7.0.cjs
 COPY package.json yarn.lock .yarnrc.yml ./
 RUN yarn install --immutable
 COPY playwright.config.ts nuxt.config.ts nuxt.config.d.ts libraries.d.ts tsconfig.json \
-    eslint.config.mjs sentry.client.config.ts sentry.server.config.ts ./
+    eslint.config.mjs sentry.server.config.ts ./
 COPY src ./src
 RUN yarn run prepare && yarn build
 
