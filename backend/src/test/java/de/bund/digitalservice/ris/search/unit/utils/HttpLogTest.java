@@ -31,7 +31,8 @@ class HttpLogTest {
     when(request.getRequestUri())
         .thenReturn("http://localhost:8090/v1/legislation?searchTerm=urlaub&size=100&pageIndex=0");
 
-    JSONObject sanitized = HttpLogSanitizer.sanitizeLogJson(input, request);
+    JSONObject sanitized = HttpLog.sanitizeLogJson(input);
+    sanitized.put("queryParams", HttpLog.getQueryParamsAsMap(request));
 
     assertFalse(sanitized.has("headers"));
     assertFalse(sanitized.has("remote"));
