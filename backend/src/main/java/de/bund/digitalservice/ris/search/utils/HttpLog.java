@@ -9,13 +9,13 @@ import java.util.Map;
 import org.json.JSONObject;
 import org.zalando.logbook.HttpRequest;
 
-public class HttpLogSanitizer {
+public class HttpLog {
 
-  private HttpLogSanitizer() {
+  private HttpLog() {
     throw new IllegalStateException("Utility class");
   }
 
-  public static JSONObject sanitizeLogJson(JSONObject json, HttpRequest request) {
+  public static JSONObject sanitizeLogJson(JSONObject json) {
 
     json.remove("headers");
     json.remove("remote");
@@ -23,12 +23,10 @@ public class HttpLogSanitizer {
     json.remove("host");
     json.remove("type");
 
-    json.put("queryParams", getQueryParamsAsText(request));
-
     return json;
   }
 
-  private static Map<String, String> getQueryParamsAsText(HttpRequest request) {
+  public static Map<String, String> getQueryParamsAsMap(HttpRequest request) {
     if (request == null || request.getRequestUri() == null) {
       return new HashMap<>();
     }

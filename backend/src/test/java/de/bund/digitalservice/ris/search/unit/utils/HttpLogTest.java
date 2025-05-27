@@ -9,17 +9,17 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import de.bund.digitalservice.ris.search.utils.HttpLogSanitizer;
+import de.bund.digitalservice.ris.search.utils.HttpLog;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
 import org.zalando.logbook.HttpRequest;
 
-class HttpLogSanitizerTest {
+class HttpLogTest {
 
   @Test
-  void testSanitizeLogJson_removesSensitiveFieldsAndRedactsEmail() {
+  void testSanitizeLogJsonRemovesSensitiveFieldsAndAddsRequestParams() {
     JSONObject input = new JSONObject();
     input.put("headers", new JSONObject().put("Cookie", "secret_token=abc123"));
     input.put("remote", "127.0.0.1");
@@ -46,16 +46,8 @@ class HttpLogSanitizerTest {
   }
 
   @Test
-  void testGetQueryParamsAsTextHandlesNullRequest() {
-    JSONObject input = new JSONObject();
-    JSONObject sanitized = HttpLogSanitizer.sanitizeLogJson(input, null);
-
-    assertEquals("{}", sanitized.get("queryParams").toString());
-  }
-
-  @Test
   void testPrivateConstructorThrowsException() throws Exception {
-    Constructor<HttpLogSanitizer> constructor = HttpLogSanitizer.class.getDeclaredConstructor();
+    Constructor<HttpLog> constructor = HttpLog.class.getDeclaredConstructor();
     constructor.setAccessible(true);
 
     InvocationTargetException thrown =
