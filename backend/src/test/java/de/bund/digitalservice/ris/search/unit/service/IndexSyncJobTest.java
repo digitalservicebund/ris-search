@@ -43,7 +43,7 @@ class IndexSyncJobTest {
   }
 
   @Test
-  void lockIsAcquiredAndReleasedOnSuccesfulProcess() throws ObjectStoreServiceException {
+  void lockIsAcquiredAndReleasedOnSuccessfulProcess() throws ObjectStoreServiceException {
 
     Instant time = Instant.now();
     String changelogFileName = IndexSyncJob.CHANGELOG + time + "-changelog.json";
@@ -89,7 +89,7 @@ class IndexSyncJobTest {
   }
 
   @Test
-  void itLogsAnErrorWhenTheNumberInBucketAnIndexDiffer(CapturedOutput output) {
+  void itLogsAWarningWhenTheNumberInBucketAnIndexDiffer(CapturedOutput output) {
     when(indexNormsService.getNumberOfIndexedDocuments()).thenReturn(100);
     when(indexNormsService.getNumberOfFilesInBucket()).thenReturn(99);
 
