@@ -51,12 +51,12 @@ brew install --cask docker
 
 Make sure to open docker once to complete the installation and start the docker daemon.
 
-### Node Talisman
+### Node
 
 For the provided Git hooks you will need:
 
 ```bash
-brew install lefthook node talisman
+brew install lefthook node
 ```
 
 ## Getting started
@@ -110,6 +110,10 @@ The API application will be available at [localhost:8090](http://localhost:8090)
 ### Test
 
 The project has distinct unit and integration test sets.
+You can add the following AWS credentials to your environment:
+
+AWS_ACCESS_KEY_ID=TESTACCESSKEY1234567890
+AWS_SECRET_ACCESS_KEY=TESTSECRETKEY1234567890EXAMPLE
 
 **To run just the unit tests:**
 
