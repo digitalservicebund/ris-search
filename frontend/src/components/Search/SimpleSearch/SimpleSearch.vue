@@ -22,9 +22,6 @@ import {
 const store = useSimpleSearchParamsStore();
 const values = storeToRefs(store);
 
-const config = useRuntimeConfig();
-const baseUrl = config.public.backendURL;
-
 const params: ComputedRef<SearchEndpointParams> = computed(() =>
   convertParams({
     ...values.params.value,
@@ -32,14 +29,12 @@ const params: ComputedRef<SearchEndpointParams> = computed(() =>
   }),
 );
 
-const url = computed(() => getUrl(values.category.value));
-
 const {
   data,
   error: loadError, // must not be named error, refer to https://github.com/nuxt/test-utils/issues/684#issuecomment-1946138626
   status,
   execute,
-} = await useFetch<Page>(() => `${baseUrl}${url.value}`, {
+} = await useFetch<Page>(() => getUrl(values.category.value), {
   query: params,
   watch: [params],
 });
