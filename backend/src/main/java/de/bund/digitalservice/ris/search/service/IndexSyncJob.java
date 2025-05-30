@@ -70,7 +70,8 @@ public class IndexSyncJob {
       // if status file or last success missing do a full reset
       logger.info("Reindexing all due to missing previous lastProcessedChangelogFile");
       indexService.reindexAll(state.startTime());
-      indexStatusService.updateLastProcessedChangelog(statusFileName, state.startTime());
+      indexStatusService.updateLastProcessedChangelog(
+          statusFileName, CHANGELOG + state.startTime());
       alertOnNumberMismatch(state);
     } else {
       List<String> unprocessedChangelogs =
