@@ -4,7 +4,7 @@ import { getAccessibilityRelatedMetrics } from "~/utils/postHog";
 describe("getAccessibilityRelatedMetrics", () => {
   beforeEach(() => {
     Object.defineProperty(window, "devicePixelRatio", {
-      value: 2,
+      value: 1.25,
       configurable: true,
     });
     vi.spyOn(window, "getComputedStyle").mockImplementation(() => {
@@ -30,7 +30,7 @@ describe("getAccessibilityRelatedMetrics", () => {
 
     const info = getAccessibilityRelatedMetrics();
 
-    expect(info.zoomLevel).toBe(2);
+    expect(info.zoomLevel).toBe(125);
     expect(info.defaultTextSize).toBe("16px");
     expect(info.themePreference).toBe("dark");
   });
