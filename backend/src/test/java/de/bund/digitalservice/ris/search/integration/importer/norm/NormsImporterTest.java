@@ -104,7 +104,9 @@ class NormsImporterTest extends ContainersIntegrationBase {
         "{\"changed\": [\"%s\"], \"deleted\": [\"%s\"]}"
             .formatted(newManifestationEli, oldManifestationEli));
 
-    IndexingState mockState = getMockState().withLastProcessedChangelogFile(lastSuccess.toString());
+    IndexingState mockState =
+        getMockState()
+            .withLastProcessedChangelogFile(NormIndexSyncJob.CHANGELOG + lastSuccess.toString());
 
     normsImporter.fetchAndProcessChanges(mockState);
 
@@ -137,7 +139,9 @@ class NormsImporterTest extends ContainersIntegrationBase {
         changelogFileName, "{ \"deleted\": [ \"%s\" ] }".formatted(manifestationEliToDelete));
 
     Instant lastSuccess = now.minus(1, ChronoUnit.HOURS);
-    IndexingState mockState = getMockState().withLastProcessedChangelogFile(lastSuccess.toString());
+    IndexingState mockState =
+        getMockState()
+            .withLastProcessedChangelogFile(NormIndexSyncJob.CHANGELOG + lastSuccess.toString());
 
     normsImporter.fetchAndProcessChanges(mockState);
 
