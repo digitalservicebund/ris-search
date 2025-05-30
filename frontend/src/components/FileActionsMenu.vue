@@ -11,6 +11,8 @@ import { isPrototypeProfile } from "@/utils/config";
 const { xmlUrl, zipUrl } = defineProps<{ xmlUrl?: string; zipUrl?: string }>();
 
 const enablePdfButton = !isPrototypeProfile();
+const xmlViewDataAttribute = "xml-view";
+const zipViewDataAttribute = "xml-zip-view";
 const model: ComputedRef<MenuItem[]> = computed(() => {
   const items: MenuItem[] = [
     {
@@ -30,7 +32,7 @@ const model: ComputedRef<MenuItem[]> = computed(() => {
     items.push({
       label: "XML anzeigen",
       icon: "xml",
-      dataAttribute: "xml-view",
+      dataAttribute: xmlViewDataAttribute,
       url: xmlUrl,
     });
   }
@@ -38,7 +40,7 @@ const model: ComputedRef<MenuItem[]> = computed(() => {
     items.push({
       label: "XML-Archiv herunterladen",
       icon: "xml-zip",
-      dataAttribute: "xml-zip-view",
+      dataAttribute: zipViewDataAttribute,
       url: zipUrl,
     });
   }
@@ -88,6 +90,7 @@ const onPrint = () => {
       v-if="!!xmlUrl"
       text
       aria-label="XML anzeigen"
+      :data-attr="xmlViewDataAttribute"
       @click="navigateTo(xmlUrl, { external: true })"
     >
       <template #icon><XMLIcon /></template>
@@ -96,6 +99,7 @@ const onPrint = () => {
       v-if="!!zipUrl"
       text
       aria-label="XML-Archiv herunterladen"
+      :data-attr="zipViewDataAttribute"
       @click="navigateTo(zipUrl, { external: true })"
     >
       <template #icon><XMLFolderIcon /></template>

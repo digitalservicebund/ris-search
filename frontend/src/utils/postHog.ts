@@ -23,10 +23,9 @@ export function getAccessibilityRelatedMetrics(): AccessibilityRelatedMetrics {
   document.body.appendChild(tempElement);
   const defaultTextSize = window.getComputedStyle(tempElement).fontSize;
   document.body.removeChild(tempElement);
-  const zoomLevel = window.devicePixelRatio;
+  const zoomLevel = Math.round(window.devicePixelRatio * 100);
   const isDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
   const themePreference = isDark ? "dark" : "light";
-
   return {
     zoomLevel: zoomLevel,
     defaultTextSize: defaultTextSize,
