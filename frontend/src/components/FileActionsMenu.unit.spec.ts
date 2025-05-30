@@ -1,5 +1,6 @@
 import { mount } from "@vue/test-utils";
 import FileActionsMenu from "./FileActionsMenu.vue";
+
 describe("FileActionsMenu.vue", () => {
   const cases = {
     XML: {
