@@ -6,9 +6,8 @@ import MdiDotsVertical from "~icons/mdi/dots-vertical";
 import MaterialSymbolsLink from "~icons/material-symbols/link";
 import XMLIcon from "~/components/icons/XMLIcon.vue";
 import PDFIcon from "~/components/icons/PDFIcon.vue";
-import XMLFolderIcon from "~/components/icons/XMLFolderIcon.vue";
 import { isPrototypeProfile } from "@/utils/config";
-const { xmlUrl, zipUrl } = defineProps<{ xmlUrl?: string; zipUrl?: string }>();
+const { xmlUrl } = defineProps<{ xmlUrl?: string }>();
 
 const enablePdfButton = !isPrototypeProfile();
 const model: ComputedRef<MenuItem[]> = computed(() => {
@@ -34,14 +33,6 @@ const model: ComputedRef<MenuItem[]> = computed(() => {
       url: xmlUrl,
     });
   }
-  if (zipUrl) {
-    items.push({
-      label: "XML-Archiv herunterladen",
-      icon: "xml-zip",
-      dataAttribute: "xml-zip-view",
-      url: zipUrl,
-    });
-  }
   return items;
 });
 
@@ -53,8 +44,6 @@ const getIcon = (name: string) => {
       return PDFIcon;
     case "xml":
       return XMLIcon;
-    case "xml-zip":
-      return XMLFolderIcon;
   }
 };
 
@@ -88,17 +77,10 @@ const onPrint = () => {
       v-if="!!xmlUrl"
       text
       aria-label="XML anzeigen"
+      data-attr="xml-view"
       @click="navigateTo(xmlUrl, { external: true })"
     >
       <template #icon><XMLIcon /></template>
-    </Button>
-    <Button
-      v-if="!!zipUrl"
-      text
-      aria-label="XML-Archiv herunterladen"
-      @click="navigateTo(zipUrl, { external: true })"
-    >
-      <template #icon><XMLFolderIcon /></template>
     </Button>
   </div>
   <Button class="sm:hidden" text @click="toggle">

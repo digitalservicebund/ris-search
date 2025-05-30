@@ -17,7 +17,6 @@ export interface NormContent {
     standangaben?: string[];
     standangabenHinweis?: string[];
   };
-  hasAttachments: boolean;
 }
 
 /**
@@ -54,7 +53,6 @@ export function useFetchNormContent(
       legislationWork: metadata,
       html,
       htmlParts,
-      hasAttachments: checkForAttachments(metadata),
     };
   });
 }
@@ -169,11 +167,4 @@ function getContentUrl(metadata: LegislationWork) {
     console.info("using manifestation", encoding?.["@id"]);
   }
   return contentUrl;
-}
-
-function checkForAttachments(metadata: LegislationWork): boolean {
-  return (
-    metadata.workExample.hasPart.find((part) => part.encoding?.length) !==
-    undefined
-  );
 }
