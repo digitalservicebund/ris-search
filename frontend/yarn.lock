@@ -13622,7 +13622,7 @@ __metadata:
     tailwindcss: "npm:^4.1.3"
     typescript: "npm:~5.8.3"
     unplugin-icons: "npm:^22.1.0"
-    unplugin-vue-components: "npm:^28.5.0"
+    unplugin-vue-components: "npm:^28.7.0"
     valibot: "npm:^1.0.0"
     vitest: "npm:^3.1.1"
     vue-tsc: "npm:^2.2.10"
@@ -15138,6 +15138,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"tinyglobby@npm:^0.2.14":
+  version: 0.2.14
+  resolution: "tinyglobby@npm:0.2.14"
+  dependencies:
+    fdir: "npm:^6.4.4"
+    picomatch: "npm:^4.0.2"
+  checksum: 10c0/f789ed6c924287a9b7d3612056ed0cda67306cd2c80c249fd280cf1504742b12583a2089b61f4abbd24605f390809017240e250241f09938054c9b363e51c0a6
+  languageName: node
+  linkType: hard
+
 "tinypool@npm:^1.0.2":
   version: 1.0.2
   resolution: "tinypool@npm:1.0.2"
@@ -15650,17 +15660,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"unplugin-vue-components@npm:^28.5.0":
-  version: 28.5.0
-  resolution: "unplugin-vue-components@npm:28.5.0"
+"unplugin-vue-components@npm:^28.7.0":
+  version: 28.7.0
+  resolution: "unplugin-vue-components@npm:28.7.0"
   dependencies:
     chokidar: "npm:^3.6.0"
-    debug: "npm:^4.4.0"
+    debug: "npm:^4.4.1"
     local-pkg: "npm:^1.1.1"
     magic-string: "npm:^0.30.17"
     mlly: "npm:^1.7.4"
-    tinyglobby: "npm:^0.2.12"
-    unplugin: "npm:^2.3.2"
+    tinyglobby: "npm:^0.2.14"
+    unplugin: "npm:^2.3.4"
     unplugin-utils: "npm:^0.2.4"
   peerDependencies:
     "@babel/parser": ^7.15.8
@@ -15671,7 +15681,7 @@ __metadata:
       optional: true
     "@nuxt/kit":
       optional: true
-  checksum: 10c0/4a2419cee6a8d19e0dd121fa56afef29c981434ee4f632e972e46aec52f161608c85b0806737308c597ca6d19b07d62f654f4070bd4302c1691a1c865acb9248
+  checksum: 10c0/400d0fa3a7cb8d4ce874fb81eae1a9c5b1e678144f634b32e7da3393e498994b872b943a78caf70c6e9d0f030047cd119c0f528543b6c4133f84ec345b88fe52
   languageName: node
   linkType: hard
 
@@ -15752,17 +15762,6 @@ __metadata:
     acorn: "npm:^8.14.0"
     webpack-virtual-modules: "npm:^0.6.2"
   checksum: 10c0/265896fb541ffaad9da7e8f73e24aaa5d0d1f8161cb66445caf0962d2c357de0f17d208020b59b0fb1c68843e6307966f91706fba34ccaba30480881f37887ae
-  languageName: node
-  linkType: hard
-
-"unplugin@npm:^2.3.2":
-  version: 2.3.2
-  resolution: "unplugin@npm:2.3.2"
-  dependencies:
-    acorn: "npm:^8.14.1"
-    picomatch: "npm:^4.0.2"
-    webpack-virtual-modules: "npm:^0.6.2"
-  checksum: 10c0/157a50072601b9bfbf3ab27a76a04685fb0af0c1a579d958787ffcb28a4d64e09acf42f0176e8767ccd940f27ee52d97a7f6aa6ce2e1e0dbe666ec26519750ef
   languageName: node
   linkType: hard
 
