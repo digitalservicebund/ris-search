@@ -106,7 +106,8 @@ class NormsImporterTest extends ContainersIntegrationBase {
 
     IndexingState mockState =
         getMockState()
-            .withLastProcessedChangelogFile(NormIndexSyncJob.CHANGELOG + lastSuccess.toString());
+            .withLastProcessedChangelogFile(
+                NormIndexSyncJob.CHANGELOGS_PREFIX + lastSuccess.toString());
 
     normsImporter.fetchAndProcessChanges(mockState);
 
@@ -141,7 +142,8 @@ class NormsImporterTest extends ContainersIntegrationBase {
     Instant lastSuccess = now.minus(1, ChronoUnit.HOURS);
     IndexingState mockState =
         getMockState()
-            .withLastProcessedChangelogFile(NormIndexSyncJob.CHANGELOG + lastSuccess.toString());
+            .withLastProcessedChangelogFile(
+                NormIndexSyncJob.CHANGELOGS_PREFIX + lastSuccess.toString());
 
     normsImporter.fetchAndProcessChanges(mockState);
 

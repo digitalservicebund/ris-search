@@ -57,11 +57,11 @@ class ChangelogServiceTest {
     Instant now = Instant.now();
     String lastSuccess = now.minus(2, ChronoUnit.HOURS).toString();
     String changelogFile1 =
-        IndexSyncJob.CHANGELOG + now.plus(1, ChronoUnit.HOURS) + "-changelog.json";
+        IndexSyncJob.CHANGELOGS_PREFIX + now.plus(1, ChronoUnit.HOURS) + "-changelog.json";
     String changelogFile2 =
-        IndexSyncJob.CHANGELOG + now.plus(2, ChronoUnit.HOURS) + "-changelog.json";
+        IndexSyncJob.CHANGELOGS_PREFIX + now.plus(2, ChronoUnit.HOURS) + "-changelog.json";
 
-    when(normsBucket.getAllKeysByPrefix(IndexSyncJob.CHANGELOG))
+    when(normsBucket.getAllKeysByPrefix(IndexSyncJob.CHANGELOGS_PREFIX))
         .thenReturn(List.of(changelogFile2, changelogFile1));
 
     List<String> changelogs = normIndexSyncJob.getNewChangelogs(normsBucket, lastSuccess);
