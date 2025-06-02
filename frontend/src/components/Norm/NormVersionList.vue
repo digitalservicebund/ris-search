@@ -5,8 +5,6 @@ import type { JSONLDList, LegislationWork, SearchResult } from "~/types";
 import NormVersionListRow from "./NormVersionListRow.vue";
 import _ from "lodash";
 
-console.info("Loading fassungen");
-
 const props = defineProps<{
   workEli: string;
 }>();

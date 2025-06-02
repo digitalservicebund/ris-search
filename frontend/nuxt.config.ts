@@ -178,6 +178,9 @@ export default defineNuxtConfig({
   build: {
     transpile: ["hyperdx/lucene"],
   },
-  ignore: ["**/**/*.{spec,test}.{js,cts,mts,ts,jsx,tsx}"],
+  ignore: [
+    "**/**/*.{spec,test}.{js,cts,mts,ts,jsx,tsx}",
+    "**/**/*.{spec,test}.data.ts",
+  ],
   compatibilityDate: "2024-11-01",
 });

@@ -3,8 +3,10 @@ export interface JSONLDList<T> {
   totalItems: number;
   member: T[];
   view: {
-    previous: boolean;
-    next: boolean;
+    previous: string | null;
+    next: string | null;
+    first: string;
+    last: string;
   };
 }
 

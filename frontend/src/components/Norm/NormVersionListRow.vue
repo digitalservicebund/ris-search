@@ -32,7 +32,7 @@ const temporalCoverage = computed(() =>
         />
       </div>
       <MetadataField
-        id="force"
+        id="status"
         label="Status"
         :value="translateLegalForce(item.workExample.legislationLegalForce)"
       />
