@@ -10,6 +10,7 @@ import { isPrototypeProfile } from "@/utils/config";
 const { xmlUrl } = defineProps<{ xmlUrl?: string }>();
 
 const enablePdfButton = !isPrototypeProfile();
+const xmlViewDataAttribute = "xml-view";
 const model: ComputedRef<MenuItem[]> = computed(() => {
   const items: MenuItem[] = [
     {
@@ -29,7 +30,7 @@ const model: ComputedRef<MenuItem[]> = computed(() => {
     items.push({
       label: "XML anzeigen",
       icon: "xml",
-      dataAttribute: "xml-view",
+      dataAttribute: xmlViewDataAttribute,
       url: xmlUrl,
     });
   }
@@ -77,7 +78,7 @@ const onPrint = () => {
       v-if="!!xmlUrl"
       text
       aria-label="XML anzeigen"
-      data-attr="xml-view"
+      :data-attr="xmlViewDataAttribute"
       @click="navigateTo(xmlUrl, { external: true })"
     >
       <template #icon><XMLIcon /></template>
