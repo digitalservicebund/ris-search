@@ -19,7 +19,7 @@ public class IndexSyncJob {
 
   private static final Logger logger = LogManager.getLogger(IndexSyncJob.class);
 
-  public static final String CHANGELOG = "changelogs/";
+  public static final String CHANGELOGS_PREFIX = "changelogs/";
 
   private final IndexStatusService indexStatusService;
   private final ObjectStorage changelogBucket;
@@ -58,8 +58,8 @@ public class IndexSyncJob {
   public List<String> getNewChangelogs(
       ObjectStorage changelogBucket, @NotNull String lastProcessedChangelog) {
 
-    return changelogBucket.getAllKeysByPrefix(CHANGELOG).stream()
-        .filter(e -> !CHANGELOG.equals(e))
+    return changelogBucket.getAllKeysByPrefix(CHANGELOGS_PREFIX).stream()
+        .filter(e -> !CHANGELOGS_PREFIX.equals(e))
         .filter(e -> e.compareTo(lastProcessedChangelog) > 0)
         .sorted()
         .toList();
@@ -70,7 +70,8 @@ public class IndexSyncJob {
       // if status file or last success missing do a full reset
       logger.info("Reindexing all due to missing previous lastProcessedChangelogFile");
       indexService.reindexAll(state.startTime());
-      indexStatusService.updateLastProcessedChangelog(statusFileName, state.startTime());
+      indexStatusService.updateLastProcessedChangelog(
+          statusFileName, CHANGELOGS_PREFIX + state.startTime());
       alertOnNumberMismatch(state);
     } else {
       List<String> unprocessedChangelogs =
