@@ -35,7 +35,7 @@ const items = computed(() => {
         : "Gerichtsentscheidungen";
     const documentKind =
       props.type === "norm" ? DocumentKind.Norm : DocumentKind.CaseLaw;
-    const route = `/search?category=${documentKind}&sort=-date`;
+    const route = `/search?category=${documentKind}`;
     items.push({
       label,
       route,
