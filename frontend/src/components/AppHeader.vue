@@ -16,10 +16,12 @@ const toggleMenu = () => {
           <a
             href="/"
             aria-label="Zur Startseite"
-            class="text-20 link-hover leading-none"
+            class="text-20 group leading-none no-underline"
           >
             <span class="block font-bold">Rechtsinformationen</span>
-            <span class="text-gray-900 hover:text-inherit">des Bundes</span>
+            <span class="text-gray-900 group-hover:text-inherit"
+              >des Bundes</span
+            >
           </a>
           <div class="float-end lg:hidden">
             <button

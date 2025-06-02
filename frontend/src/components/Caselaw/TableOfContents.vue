@@ -105,13 +105,13 @@ onMounted(() => {
           :aria-current="selectedEntry === entry.id ? 'section' : null"
           replace
           :to="`#${entry.id}`"
-          class="flex flex-row items-center space-x-12 py-8 text-blue-800 underline hover:font-bold hover:text-black hover:underline aria-current-section:bg-blue-300 aria-current-section:text-black aria-current-section:hover:bg-blue-300 lg:px-24 lg:py-20 lg:no-underline lg:hover:bg-blue-200 lg:aria-current-section:border-l-4 lg:aria-current-section:border-blue-900 lg:aria-current-section:bg-blue-200 lg:aria-current-section:pl-20"
+          class="flex flex-row items-center space-x-12 py-8 text-blue-800 underline hover:text-black hover:underline aria-current-section:bg-blue-300 aria-current-section:text-black aria-current-section:hover:bg-blue-300 lg:px-24 lg:py-20 lg:no-underline lg:hover:bg-blue-200 lg:aria-current-section:border-l-4 lg:aria-current-section:border-blue-900 lg:aria-current-section:bg-blue-200 lg:aria-current-section:pl-20"
           @click="selectEntry(entry.id)"
         >
           <component :is="getIcon(entry.title)"></component>
           <p
             :data-selected="selectedEntry === entry.id"
-            class="ris-subhead-regular data-[selected=false]:hover:font-bold lg:data-[selected=true]:font-bold"
+            class="ris-subhead-regular lg:data-[selected=true]:font-bold"
           >
             {{ entry.title }}
           </p>
