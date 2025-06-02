@@ -46,14 +46,14 @@ class IndexSyncJobTest {
   void lockIsAcquiredAndReleasedOnSuccessfulProcess() throws ObjectStoreServiceException {
 
     Instant time = Instant.now();
-    String changelogFileName = IndexSyncJob.CHANGELOG + time + "-changelog.json";
+    String changelogFileName = IndexSyncJob.CHANGELOGS_PREFIX + time + "-changelog.json";
     List<String> changelogs = List.of(changelogFileName);
 
     when(indexStatusService.lockIndex(any(), any())).thenReturn(true);
     when(indexStatusService.loadStatus(any()))
         .thenReturn(
             new IndexingState(time.minusSeconds(10).toString(), time.toString(), time.toString()));
-    when(normsBucket.getAllKeysByPrefix(IndexSyncJob.CHANGELOG)).thenReturn(changelogs);
+    when(normsBucket.getAllKeysByPrefix(IndexSyncJob.CHANGELOGS_PREFIX)).thenReturn(changelogs);
     String changeAll = "{\"change_all\" : true}";
     when(normsBucket.getFileAsString(changelogFileName)).thenReturn(Optional.of(changeAll));
 
