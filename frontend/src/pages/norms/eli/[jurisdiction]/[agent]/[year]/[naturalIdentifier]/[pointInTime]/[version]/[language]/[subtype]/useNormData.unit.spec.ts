@@ -2,7 +2,6 @@
 import { describe, expect, it, type MockedFunction, vi } from "vitest";
 import { useFetchNormArticleContent, useFetchNormContent } from "./useNormData";
 import type {
-  Article,
   LegislationExpression,
   LegislationManifestation,
   LegislationWork,
@@ -89,7 +88,6 @@ describe("useNormData", () => {
         standangabenHinweis: ["Stand-Hinweis 1;", "Stand-Hinweis 2"],
         vollzitat: "Vollzitat",
       },
-      hasAttachments: false,
     });
 
     expect(mockFetch).toHaveBeenCalledTimes(2);
@@ -100,37 +98,6 @@ describe("useNormData", () => {
         Accept: "text/html",
       },
     });
-  });
-
-  it("should correctly indicate if there are attachments", async () => {
-    const mockFetch = vi.fn();
-    (
-      useRequestFetch as MockedFunction<MockedFunction<any>>
-    ).mockReturnValueOnce(mockFetch);
-    const modifiedMockMetadata: Partial<LegislationWork> = {
-      ...mockMetadata,
-      workExample: {
-        ...mockMetadata.workExample,
-        hasPart: [
-          {
-            encoding: [
-              {
-                "@type": "LegislationObject",
-                contentUrl: "/case-law/",
-                encodingFormat: "text/html",
-                inLanguage: "de",
-                "@id": "/case-law/",
-              },
-            ],
-          } as Article,
-        ],
-      } as LegislationExpression,
-    };
-    mockFetch.mockReturnValueOnce(modifiedMockMetadata);
-    mockFetch.mockReturnValueOnce(mockHtml);
-
-    const { data } = await useFetchNormContent(expressionEli);
-    expect(data.value.hasAttachments).toBe(true);
   });
 
   it("should fetch JSON and HTML data for articles", async () => {
