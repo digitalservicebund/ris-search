@@ -26,18 +26,21 @@ const toggleMenu = () => {
           <div class="float-end lg:hidden">
             <button
               v-if="!open"
+              id="mobile-menu"
               class="flex cursor-pointer items-center gap-4 hover:underline active:underline"
               @click="toggleMenu"
             >
-              <IcBaselineMenu id="mobile-menu" size="1.25em" />Menu
+              <IcBaselineMenu size="1.25em" />Menu
             </button>
-            <IcBaselineClose
+            <button
               v-else
               id="mobile-menu-close"
+              class="flex cursor-pointer items-center gap-4 hover:underline active:underline"
               :onclick="toggleMenu"
-              size="1.25em"
-              class="my-4"
-            />
+            >
+              <IcBaselineClose size="1.25em" />
+              Menu
+            </button>
           </div>
           <AppHeaderNav class="hidden lg:inline-block" list-class="items-end" />
         </div>
@@ -45,6 +48,7 @@ const toggleMenu = () => {
           v-if="open"
           class="inline-block items-center lg:hidden"
           list-class="items-center gap-y-8"
+          @select-item="toggleMenu"
         />
       </div>
     </div>
