@@ -6,10 +6,8 @@ import de.bund.digitalservice.ris.search.mapper.NormLdmlToOpenSearchMapper;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
 import de.bund.digitalservice.ris.search.repository.opensearch.NormsSynthesizedRepository;
-import de.bund.digitalservice.ris.search.utils.DateUtils;
 import de.bund.digitalservice.ris.search.utils.eli.ExpressionEli;
 import de.bund.digitalservice.ris.search.utils.eli.ManifestationEli;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -122,8 +120,7 @@ public class IndexNormsService implements IndexService {
   }
 
   private Norm getNormFromS3(ExpressionEli expressionEli) throws ObjectStoreServiceException {
-    String today = DateUtils.toDateString(LocalDate.now());
-    // get the currently active manifestation or if none are active the most recently active
+    // Get the newest manifestation for the current expression.
     final List<String> keysMatchingExpressionEli =
         normsBucket.getAllKeysByPrefix(expressionEli.getUriPrefix());
 
@@ -138,8 +135,6 @@ public class IndexNormsService implements IndexService {
             documents within the same "Mantelgesetz" structure, post-filter by subtype equality.
              */
             .filter(e -> e.subtype().equals(expressionEli.subtype()))
-            // filter only the manifestations that in force date is in the past
-            .filter(e -> today.compareTo(e.pointInTime().toString()) >= 0)
             // take the manifestation with the latest in force date
             .map(ManifestationEli::toString)
             .max(java.util.Comparator.naturalOrder());
