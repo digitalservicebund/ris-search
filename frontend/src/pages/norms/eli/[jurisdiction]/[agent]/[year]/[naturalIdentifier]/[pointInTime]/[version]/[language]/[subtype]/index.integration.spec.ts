@@ -4,6 +4,7 @@ import Index from "./index.vue";
 import type { LegislationWork } from "~/types";
 import type { VueWrapper } from "@vue/test-utils";
 import type { NormContent } from "~/pages/norms/eli/[jurisdiction]/[agent]/[year]/[naturalIdentifier]/[pointInTime]/[version]/[language]/[subtype]/useNormData";
+import type { BreadcrumbItem } from "~/components/Ris/RisBreadcrumb.vue";
 
 const mocks = vi.hoisted(() => {
   return {
@@ -147,7 +148,13 @@ describe("index.vue", () => {
     const wrapper = await mountComponent();
     expect(wrapper.get(".ris-heading3-regular").text()).toBe("alternateName");
     expect(wrapper.find(".titel").text()).toBe("Sample Norm");
-    expect(getBreadcrumbStub(wrapper).props("title")).toBe("abbreviation");
+    expect(
+      (
+        getBreadcrumbStub(wrapper).props(
+          "items",
+        )[0] as unknown as BreadcrumbItem
+      )?.label,
+    ).toBe("abbreviation");
   });
 
   it("uses the alternateName as title if the name is not present", async () => {
@@ -165,7 +172,13 @@ describe("index.vue", () => {
     const wrapper = await mountComponent();
     expect(wrapper.find(".ris-heading2-regular").exists()).toBe(false);
     expect(wrapper.find(".titel").text()).toBe("alternateName");
-    expect(getBreadcrumbStub(wrapper).props("title")).toBe("abbreviation");
+    expect(
+      (
+        getBreadcrumbStub(wrapper).props(
+          "items",
+        )[0] as unknown as BreadcrumbItem
+      )?.label,
+    ).toBe("abbreviation");
   });
 
   it("uses the abbreviation as title if the name and alternateName are not present", async () => {
@@ -180,7 +193,13 @@ describe("index.vue", () => {
     const wrapper = await mountComponent();
     expect(wrapper.find(".ris-heading2-regular").exists()).toBe(false);
     expect(wrapper.find(".titel").text()).toBe("abbreviation");
-    expect(getBreadcrumbStub(wrapper).props("title")).toBe("abbreviation");
+    expect(
+      (
+        getBreadcrumbStub(wrapper).props(
+          "items",
+        )[0] as unknown as BreadcrumbItem
+      )?.label,
+    ).toBe("abbreviation");
   });
 
   it("shows the FileActionsMenu with correct XML link", async () => {
