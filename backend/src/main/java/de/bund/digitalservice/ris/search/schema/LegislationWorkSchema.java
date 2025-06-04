@@ -26,7 +26,7 @@ public record LegislationWorkSchema(
             description = "Amtliche Langüberschrift")
         String name,
     @Schema(
-            example = "eli/bund/bgbl-1/1975/s1760",
+            example = "eli/bund/bgbl-1/1975/s1760/regelungstext-1",
             description = "European Legislation Identifier (ELI)")
         String legislationIdentifier,
     @Schema(example = "Kakaoverordnung", description = "Amtliche Kurzüberschrift")
@@ -48,4 +48,8 @@ public record LegislationWorkSchema(
                 """)
         LocalDate datePublished,
     @Nullable PublicationIssueSchema isPartOf,
-    @Nullable LegislationExpressionSchema workExample) {}
+    @Schema(
+            description =
+                "Expression-level details (<i>an \"exemplary\" expression of this work</i>)")
+        @Nullable
+        LegislationExpressionSchema workExample) {}

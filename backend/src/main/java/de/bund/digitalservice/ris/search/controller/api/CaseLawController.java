@@ -47,7 +47,7 @@ public class CaseLawController {
       path = ApiConfig.Paths.CASELAW + "/{documentNumber}",
       produces = MediaType.APPLICATION_JSON_VALUE)
   @Operation(
-      summary = "Get a single decision by document number",
+      summary = "Decision metadata",
       description = "The endpoint returns a single decision from our database.")
   @ApiResponse(responseCode = "200")
   @ApiResponse(responseCode = "404", content = @Content)
@@ -67,7 +67,7 @@ public class CaseLawController {
       path = ApiConfig.Paths.CASELAW + "/{documentNumber}.html",
       produces = MediaType.TEXT_HTML_VALUE)
   @Operation(
-      summary = "Get a case law decision as HTML",
+      summary = "Decision HTML",
       description = "Renders and returns a case law decision as HTML.")
   @ApiResponse(responseCode = "200")
   @ApiResponse(responseCode = "404", content = @Content)
@@ -88,7 +88,7 @@ public class CaseLawController {
       path = ApiConfig.Paths.CASELAW + "/{documentNumber}.xml",
       produces = MediaType.APPLICATION_XML_VALUE)
   @Operation(
-      summary = "Get a case law decision as XML",
+      summary = "Decision XML",
       description =
           "Returns a case law decision as XML. This content is used as a source for the HTML endpoint.")
   @ApiResponse(responseCode = "200")
