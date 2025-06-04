@@ -16,25 +16,25 @@
                     <akn:FRBRsubtype GUID="c4b5a6d7-6789-8cde-fa12-3d4e5f607182" eId="meta-1_ident-1_frbrwork-1_frbrsubtype-1" value="regelungstext-1"/>
                 </akn:FRBRWork>
                 <akn:FRBRExpression GUID="e2d3c4b5-a6b7-4890-8cde-f1234567890b" eId="meta-1_ident-1_frbrexpression-1">
-                    <akn:FRBRthis GUID="f1a2b3c4-e5f6-4789-abcd-0123456789ab" eId="meta-1_ident-1_frbrexpression-1_frbrthis-1" value="eli/bund/bgbl-1/2020/s1126/2020-08-04/1/deu/regelungstext-1"/>
-                    <akn:FRBRuri GUID="a1b2c3d4-e5f6-4789-abcd-0123456789ab" eId="meta-1_ident-1_frbrexpression-1_frbruri-1" value="eli/bund/bgbl-1/2020/s1126/2020-08-04/1/deu"/>
+                    <akn:FRBRthis GUID="f1a2b3c4-e5f6-4789-abcd-0123456789ab" eId="meta-1_ident-1_frbrexpression-1_frbrthis-1" value="eli/bund/bgbl-1/2020/s1126/2920-08-04/1/deu/regelungstext-1"/>
+                    <akn:FRBRuri GUID="a1b2c3d4-e5f6-4789-abcd-0123456789ab" eId="meta-1_ident-1_frbrexpression-1_frbruri-1" value="eli/bund/bgbl-1/2020/s1126/2920-08-04/1/deu"/>
                     <akn:FRBRalias GUID="b2c3d4e5-f6a7-4890-abcd-1234567890ab" eId="meta-1_ident-1_frbrexpression-1_frbralias-1" name="aktuelle-version-id" value="769e6daa-3424-480b-acb5-419c749ea01e"/>
                     <akn:FRBRalias GUID="c3d4e5f6-a7b8-4890-abcd-234567890abc" eId="meta-1_ident-1_frbrexpression-1_frbralias-2" name="nachfolgende-version-id" value="84a9f2a2-102b-45b3-8441-708762022835"/>
                     <akn:FRBRauthor GUID="d4e5f6a7-b8c9-4890-abcd-34567890abcd" eId="meta-1_ident-1_frbrexpression-1_frbrauthor-1" href="recht.bund.de/institution/bundesregierung"/>
-                    <akn:FRBRdate GUID="e5f6a7b8-c9d0-4890-abcd-4567890abcde" date="2020-08-04" eId="meta-1_ident-1_frbrexpression-1_frbrdate-1" name="verkuendung"/>
+                    <akn:FRBRdate GUID="e5f6a7b8-c9d0-4890-abcd-4567890abcde" date="2920-08-04" eId="meta-1_ident-1_frbrexpression-1_frbrdate-1" name="verkuendung"/>
                     <akn:FRBRlanguage GUID="f6a7b8c9-d0e1-4890-abcd-567890abcde1" eId="meta-1_ident-1_frbrexpression-1_frbrlanguage-1" language="deu"/>
                     <akn:FRBRversionNumber GUID="a7b8c9d0-e1f2-4890-abcd-67890abcde12" eId="meta-1_ident-1_frbrexpression-1_frbrversionnumber-1" value="1"/>
                 </akn:FRBRExpression>
                 <akn:FRBRManifestation GUID="b8c9d0e1-f2a3-4890-abcd-7890abcde123" eId="meta-1_ident-1_frbrmanifestation-1">
-                    <akn:FRBRthis GUID="c9d0e1f2-a3b4-4890-abcd-890abcde1234" eId="meta-1_ident-1_frbrmanifestation-1_frbrthis-1" value="eli/bund/bgbl-1/2020/s1126/2020-08-04/1/deu/2020-08-04/regelungstext-1.xml"/>
-                    <akn:FRBRuri GUID="d0e1f2a3-b4c5-4890-abcd-901abcde1234" eId="meta-1_ident-1_frbrmanifestation-1_frbruri-1" value="eli/bund/bgbl-1/2020/s1126/2020-08-04/1/deu/2020-08-04/regelungstext-1.xml"/>
-                    <akn:FRBRdate GUID="e1f2a3b4-c5d6-4890-abcd-0123abcde123" date="2020-08-04" eId="meta-1_ident-1_frbrmanifestation-1_frbrdate-1" name="generierung"/>
+                    <akn:FRBRthis GUID="c9d0e1f2-a3b4-4890-abcd-890abcde1234" eId="meta-1_ident-1_frbrmanifestation-1_frbrthis-1" value="eli/bund/bgbl-1/2020/s1126/2920-08-04/1/deu/2920-08-04/regelungstext-1.xml"/>
+                    <akn:FRBRuri GUID="d0e1f2a3-b4c5-4890-abcd-901abcde1234" eId="meta-1_ident-1_frbrmanifestation-1_frbruri-1" value="eli/bund/bgbl-1/2020/s1126/2920-08-04/1/deu/2920-08-04/regelungstext-1.xml"/>
+                    <akn:FRBRdate GUID="e1f2a3b4-c5d6-4890-abcd-0123abcde123" date="2920-08-04" eId="meta-1_ident-1_frbrmanifestation-1_frbrdate-1" name="generierung"/>
                     <akn:FRBRauthor GUID="f2a3b4c5-d6e7-4890-abcd-1234abcde123" eId="meta-1_ident-1_frbrmanifestation-1_frbrauthor-1" href="recht.bund.de"/>
                     <akn:FRBRformat GUID="a3b4c5d6-e7f8-4890-abcd-2345abcde123" eId="meta-1_ident-1_frbrmanifestation-1_frbrformat-1" value="xml"/>
                 </akn:FRBRManifestation>
             </akn:identification>
             <akn:lifecycle GUID="b4c5d6e7-f8a9-4890-abcd-3456abcde123" eId="meta-1_lebzykl-1" source="attributsemantik-noch-undefiniert">
-                <akn:eventRef GUID="c5d6e7f8-a9b0-4890-abcd-4567abcde123" date="2020-08-04" eId="meta-1_lebzykl-1_ereignis-1" refersTo="ausfertigung" source="attributsemantik-noch-undefiniert" type="generation"/>
+                <akn:eventRef GUID="c5d6e7f8-a9b0-4890-abcd-4567abcde123" date="2920-08-04" eId="meta-1_lebzykl-1_ereignis-1" refersTo="ausfertigung" source="attributsemantik-noch-undefiniert" type="generation"/>
                 <akn:eventRef GUID="d6e7f8a9-b0c1-4890-abcd-5678abcde123" date="2020-08-09" eId="meta-1_lebzykl-1_ereignis-2" refersTo="inkrafttreten" source="attributsemantik-noch-undefiniert" type="generation"/>
             </akn:lifecycle>
             <akn:temporalData GUID="e7f8a9b0-c1d2-4890-abcd-6789abcde123" eId="meta-1_geltzeiten-1" source="attributsemantik-noch-undefiniert">
@@ -44,7 +44,7 @@
             </akn:temporalData>
             <akn:proprietary GUID="b0c1d2e3-f4a5-4890-abcd-901abcde1234" eId="meta-1_proprietary-1" source="attributsemantik-noch-undefiniert">
                 <ris:legalDocML.de_metadaten xmlns:ris="http://MetadatenRIS.LegalDocML.de/1.7.2/" xsi:schemaLocation="http://MetadatenRIS.LegalDocML.de/1.7.2/ ../schema/legalDocML.de-metadaten-ris.xsd">
-                    <ris:inkraft date="2020-08-09"/>
+                    <ris:inkraft date="2919-08-04"/>
                 </ris:legalDocML.de_metadaten>
             </akn:proprietary>
         </akn:meta>
