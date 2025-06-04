@@ -5,6 +5,8 @@ import LoginActions from "~/components/LoginActions.vue";
 const config = useRuntimeConfig();
 
 defineProps<{ listClass: string }>();
+
+defineEmits(["selectItem"]);
 </script>
 
 <template>
@@ -13,20 +15,24 @@ defineProps<{ listClass: string }>();
       class="flex flex-col justify-end gap-x-28 md:flex-row md:items-center"
       :class="listClass"
     >
-      <li>
+      <li @click="$emit('selectItem')">
         <NuxtLink
-          class="ris-link1-regular link-hover flex items-center gap-4"
+          class="ris-link1-regular link-hover flex items-center gap-4 decoration-3 aria-[current=page]:underline"
           to="/search"
           ><IconSearch />Suche</NuxtLink
         >
       </li>
-      <li>
-        <NuxtLink class="ris-link1-regular link-hover" to="/feedback"
+      <li @click="$emit('selectItem')">
+        <NuxtLink
+          class="ris-link1-regular link-hover decoration-3 aria-[current=page]:underline"
+          to="/feedback"
           >Feedback geben</NuxtLink
         >
       </li>
-      <li>
-        <NuxtLink class="ris-link1-regular link-hover" to="/ueber"
+      <li @click="$emit('selectItem')">
+        <NuxtLink
+          class="ris-link1-regular link-hover decoration-3 aria-[current=page]:underline"
+          to="/ueber"
           >Über den Service</NuxtLink
         >
       </li>
