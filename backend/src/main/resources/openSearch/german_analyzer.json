@@ -8,7 +8,6 @@
           "lowercase",
           "german_decompounder",
           "german_normalization",
-          "german_stop",
           "german_stemmer"
         ],
         "char_filter": [
