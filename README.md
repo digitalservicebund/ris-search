@@ -51,12 +51,12 @@ brew install --cask docker
 
 Make sure to open docker once to complete the installation and start the docker daemon.
 
-### Node Talisman
+### Node
 
 For the provided Git hooks you will need:
 
 ```bash
-brew install lefthook node talisman
+brew install lefthook node
 ```
 
 ## Getting started

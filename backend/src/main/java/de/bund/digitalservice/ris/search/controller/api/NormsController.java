@@ -33,7 +33,6 @@ import jakarta.validation.Valid;
 import java.net.URLConnection;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -56,7 +55,13 @@ import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBo
 @RestController
 @Tag(
     name = "Legislation",
-    description = "Retrieve current and historical versions of laws and decrees.")
+    description =
+        """
+        Retrieve current and historical versions of laws and decrees.
+        The endpoints operate on the levels of "work", "expression", and "manifestation". See
+        <a href="https://en.wikipedia.org/wiki/Functional_Requirements_for_Bibliographic_Records">Functional
+        Requirements for Bibliographic Records (FRBR)</a> for more information.
+        """)
 public class NormsController {
   private static final String HTML_FILE_NOT_FOUND = "<div>LegalDocML file not found</div>";
   private final NormsService normsService;
@@ -94,9 +99,9 @@ public class NormsController {
 
                       ## Example 3
 
-                      Get all legislation that belong to the work eli `eli/bund/bgbl-1/1979/s1325`
+                      Get all legislation that belong to the work eli `eli/bund/bgbl-1/1979/s1325/regelungstext-1`
                       ```http request
-                      GET /v1/legislation?eli=eli/bund/bgbl-1/1979/s1325
+                      GET /v1/legislation?eli=eli/bund/bgbl-1/1979/s1325/regelungstext-1
                       ```
                       """)
   @ApiResponse(responseCode = "200")
@@ -130,7 +135,9 @@ public class NormsController {
               + "/{jurisdiction}/{agent}/{year}/{naturalIdentifier}/{pointInTime}/{version}/{language}/{subtype}",
       produces = MediaType.APPLICATION_JSON_VALUE)
   @Operation(
-      summary = "Get the metadata for a legislation expression, by its expression-level ELI.")
+      summary = "Work and expression-level metadata",
+      description =
+          "Returns the work and expression-level (\"workExample\") metadata of a legislation item.")
   @ApiResponse(responseCode = "200")
   @ApiResponse(responseCode = "404", content = @Content)
   public ResponseEntity<LegislationWorkSchema> getLegislation(
@@ -175,7 +182,7 @@ public class NormsController {
               + "/{jurisdiction}/{agent}/{year}/{naturalIdentifier}/{pointInTime}/{version}/{language}/{pointInTimeManifestation}/{subtype}.html",
       produces = MediaType.TEXT_HTML_VALUE)
   @Operation(
-      summary = "Get a particular manifestation of a piece of legislation as HTML",
+      summary = "Manifestation HTML",
       description =
           """
               Returns a particular manifestation of a piece of legislation, converted to HTML.
@@ -252,7 +259,7 @@ public class NormsController {
               + "/{jurisdiction}/{agent}/{year}/{naturalIdentifier}/{pointInTime}/{version}/{language}/{pointInTimeManifestation}/{subtype}.xml",
       produces = MediaType.APPLICATION_XML_VALUE)
   @Operation(
-      summary = "Get a particular manifestation of a piece of legislation as XML",
+      summary = "Manifestation XML",
       description =
           """
               Returns a particular manifestation of a piece of legislation in XML format.
@@ -320,10 +327,12 @@ public class NormsController {
               + "/{jurisdiction}/{agent}/{year}/{naturalIdentifier}/{pointInTime}/{version}/{language}/{pointInTimeManifestation}.zip",
       produces = "application/zip")
   @Operation(
-      summary =
-          "Get a particular manifestation of a piece of legislation, including attachments, as ZIP",
+      summary = "Manifestation ZIP (XML and attachments)",
       description =
-          "Returns a particular manifestation of a piece of legislation, including attachments, as a ZIP archive.")
+          """
+            Returns a particular manifestation of a piece of legislation, including attachments, as a ZIP archive.
+            Note the omission of the subtype path parameter.
+            """)
   @ApiResponse(responseCode = "200")
   @ApiResponse(responseCode = "404", content = @Content(schema = @Schema()))
   public ResponseEntity<StreamingResponseBody> getLegislationSubtypeAsZip(
@@ -381,11 +390,10 @@ public class NormsController {
   @GetMapping(
       path =
           ApiConfig.Paths.LEGISLATION_SINGLE
-              + "/{jurisdiction}/{agent}/{year}/{naturalIdentifier}/{pointInTime}/{version}/{language}/{pointInTimeManifestation}/{subtype}/{articleEid}.{format}",
+              + "/{jurisdiction}/{agent}/{year}/{naturalIdentifier}/{pointInTime}/{version}/{language}/{pointInTimeManifestation}/{subtype}/{articleEid}.html",
       produces = MediaType.TEXT_HTML_VALUE)
   @Operation(
-      summary =
-          "Get an article (§) of a particular manifestation of a piece of legislation as HTML",
+      summary = "Manifestation article (§) HTML",
       description =
           """
               Returns a specific article (§) of particular manifestation of a piece of legislation, converted to HTML.
@@ -426,7 +434,6 @@ public class NormsController {
               example = "hauptteil-1_art-1")
           @PathVariable
           String articleEid,
-      @PathVariable @Schema(allowableValues = "html") String format,
       @RequestHeader(
               name = ApiConfig.Headers.GET_RESOURCES_VIA,
               required = false,
@@ -438,9 +445,6 @@ public class NormsController {
       throws ObjectStoreServiceException {
     final String resourceBasePath = getResourceBasePath(resourceReferenceMode);
 
-    if (!Objects.equals(format, "html")) {
-      return ResponseEntity.badRequest().body("only html is supported for format");
-    }
     var eli =
         new ManifestationEli(
             jurisdiction,
@@ -467,7 +471,7 @@ public class NormsController {
           ApiConfig.Paths.LEGISLATION_SINGLE
               + "/{jurisdiction}/{agent}/{year}/{naturalIdentifier}/{pointInTime}/{version}/{language}/{pointInTimeManifestation}/{name}.{extension}")
   @Operation(
-      summary = "Get a resource of a particular manifestation of a piece of legislation",
+      summary = "Manifestation resource",
       description =
           """
                             Returns a specific resource of a particular manifestation of a piece of legislation.

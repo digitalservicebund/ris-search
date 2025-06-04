@@ -95,9 +95,9 @@ public class CaseLawSearchController {
       path = ApiConfig.Paths.CASELAW + "/courts",
       produces = MediaType.APPLICATION_JSON_VALUE)
   @Operation(
-      summary = "List courts whose decisions are published in this database",
+      summary = "List courts",
       description =
-          "Lists courts with long and short name and number of associated decisions. The prefix parameter may be used to filter this list.")
+          "Lists courts with long and short name and number of associated decisions. The prefix parameter may be used to filter this list. Only includes courts whose decisions have been published in this database.")
   public ResponseEntity<List<CourtSearchResult>> getCourts(@Nullable String prefix) {
     var result = caseLawService.getCourts(prefix);
     return ResponseEntity.ok(result);

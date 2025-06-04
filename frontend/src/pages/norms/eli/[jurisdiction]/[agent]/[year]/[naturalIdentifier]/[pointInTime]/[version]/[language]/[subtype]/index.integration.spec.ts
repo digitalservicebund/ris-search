@@ -124,6 +124,9 @@ function getDDElement(wrapper: VueWrapper, label: string): HTMLElement | null {
   const labelElement = wrapper
     .findAll("dt")
     .filter((element) => element.text() === label)[0];
+  if (!labelElement) {
+    return null;
+  }
   let next = labelElement.element.nextSibling as HTMLElement | null;
   if (next?.localName !== "dd") {
     next = next?.nextSibling as HTMLElement | null; // skip in-between text node
@@ -194,6 +197,9 @@ describe("index.vue", () => {
   it("shows metadata", async () => {
     mockMetadata();
     const wrapper = await mountComponent();
+
+    const tabButton = wrapper.get("button[aria-label*='Details']");
+    await tabButton.trigger("click");
 
     const ausfertigungsDatum = getDDElement(wrapper, "Ausfertigungsdatum:");
     expect(ausfertigungsDatum?.textContent).toBe("05.10.2024");

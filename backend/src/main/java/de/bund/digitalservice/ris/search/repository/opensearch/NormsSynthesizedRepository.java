@@ -31,4 +31,6 @@ public interface NormsSynthesizedRepository extends ElasticsearchRepository<Norm
   Page<Norm> findAll(@NotNull Pageable pageable);
 
   void deleteByIndexedAtBefore(String indexedAt);
+
+  void deleteByIndexedAtIsNull();
 }
