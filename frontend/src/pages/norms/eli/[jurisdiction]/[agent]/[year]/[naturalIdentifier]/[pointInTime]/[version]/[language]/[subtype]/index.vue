@@ -35,6 +35,7 @@ import {
 } from "~/components/Tabs.styles";
 import { isPrototypeProfile } from "~/utils/config";
 import ContentWrapper from "~/components/CustomLayouts/ContentWrapper.vue";
+import NormVersionList from "~/components/Norm/NormVersionList.vue";
 
 definePageMeta({
   // note: this is an expression ELI that additionally specifies the subtype component of a manifestation ELI
@@ -143,7 +144,7 @@ const normBreadcrumbTitle = computed(() =>
         />
       </div>
 
-      <Tabs value="0">
+      <Tabs value="0" lazy>
         <TabList :pt="tabListStyles">
           <Tab
             class="flex items-center gap-8"
@@ -161,7 +162,7 @@ const normBreadcrumbTitle = computed(() =>
             ><IcOutlineInfo />Details</Tab
           >
           <Tab
-            v-if="false"
+            v-if="!isPrototypeProfile()"
             data-attr="norm-versions-tab"
             class="flex items-center gap-8"
             :pt="tabStyles"
@@ -240,8 +241,15 @@ const normBreadcrumbTitle = computed(() =>
               </Properties>
             </section>
           </TabPanel>
+          <TabPanel
+            v-if="!isPrototypeProfile()"
+            value="2"
+            :pt="tabPanelStyles"
+            class="pt-24 pb-80"
+          >
+            <NormVersionList :work-eli="metadata.legislationIdentifier" />
+          </TabPanel>
         </TabPanels>
-      </Tabs>
-    </div></ContentWrapper
-  >
+      </Tabs></div
+  ></ContentWrapper>
 </template>
