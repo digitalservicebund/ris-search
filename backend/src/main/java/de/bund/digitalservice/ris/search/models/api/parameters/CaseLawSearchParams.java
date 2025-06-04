@@ -22,11 +22,7 @@ public class CaseLawSearchParams {
   @Schema(
       name = "legalEffect",
       description =
-          "Corresponds to “Rechtskraft”, meaning that the decision referred to is legally binding.",
-      allowableValues = {
-        "true", "false"
-      } /* accepted by {@link LegalEffect::extendedValueOf} in addition to the enum
-        values */)
+          "Corresponds to “Rechtskraft”, meaning that the decision referred to is legally binding.")
   LegalEffect legalEffect;
 
   public void setLegalEffect(@NotNull String force) {
