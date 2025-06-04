@@ -167,7 +167,7 @@ jobs:
         uses: sonarsource/sonarqube-quality-gate-action@dc2f7b0dd95544cd550de3028f89193576e958b9
         with:
           scanMetadataReportFile: backend/build/sonar/report-task.txt
-        timeout-minutes: 5 # Force to fail step after specific time
+        timeout-minutes: 3 # Force to fail step after specific time
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         if: ${{ github.actor != 'dependabot[bot]' }}
