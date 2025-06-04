@@ -39,6 +39,7 @@ public class IndexCaselawService implements IndexService {
     List<String> ldmlFiles = getAllCaseLawFilenames();
     indexFileList(ldmlFiles);
     repository.deleteByIndexedAtBefore(startingTimestamp);
+    repository.deleteByIndexedAtIsNull();
   }
 
   @Override

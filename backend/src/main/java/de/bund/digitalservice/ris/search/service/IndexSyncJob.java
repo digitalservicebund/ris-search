@@ -43,6 +43,7 @@ public class IndexSyncJob {
   }
 
   public void runJob() throws ObjectStoreServiceException {
+    logger.info("Starting index sync job for {}", statusFileName);
     // load current state and lock if possible
     IndexingState state =
         indexStatusService.loadStatus(statusFileName).withStartTime(Instant.now().toString());
@@ -53,6 +54,7 @@ public class IndexSyncJob {
 
     fetchAndProcessChanges(state);
     indexStatusService.unlockIndex(statusFileName);
+    logger.info("Finished index sync job for {}", statusFileName);
   }
 
   public List<String> getNewChangelogs(
