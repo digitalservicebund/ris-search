@@ -178,6 +178,7 @@ public class IndexNormsService implements IndexService {
 
   private void clearOldNorms(String timestamp) {
     normsSynthesizedRepository.deleteByIndexedAtBefore(timestamp);
+    normsSynthesizedRepository.deleteByIndexedAtIsNull();
   }
 
   public int getNumberOfIndexedDocuments() {
