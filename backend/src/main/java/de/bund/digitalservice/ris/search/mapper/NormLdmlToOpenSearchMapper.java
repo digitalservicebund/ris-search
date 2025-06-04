@@ -10,6 +10,7 @@ import de.bund.digitalservice.ris.search.models.opensearch.TableOfContentsItem;
 import de.bund.digitalservice.ris.search.utils.DateUtils;
 import de.bund.digitalservice.ris.search.utils.XmlDocument;
 import java.nio.charset.StandardCharsets;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
@@ -126,6 +127,7 @@ public class NormLdmlToOpenSearchMapper {
               .articles(articles)
               .articleNames(articleNames)
               .articleTexts(articleTexts)
+              .indexedAt(Instant.now().toString())
               .build());
     } catch (Exception e) {
       logger.warn("Error to create Norms from XML content.", e);

@@ -23,9 +23,7 @@ import jakarta.xml.bind.DataBindingException;
 import jakarta.xml.bind.JAXB;
 import jakarta.xml.bind.ValidationException;
 import java.io.StringReader;
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
+import java.time.Instant;
 import javax.xml.transform.stream.StreamSource;
 import org.eclipse.persistence.exceptions.DescriptorException;
 
@@ -131,7 +129,7 @@ public class CaseLawLdmlToOpenSearchMapper {
         .dissentingOpinion(jaxbToSanitizedHtml(dissentingOpinion))
 
         // Internal (portal team) fields
-        .indexedAt(ZonedDateTime.now(ZoneOffset.UTC).format(DateTimeFormatter.ISO_INSTANT))
+        .indexedAt(Instant.now().toString())
         .articles(null)
         .build();
   }

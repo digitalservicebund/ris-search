@@ -15,5 +15,7 @@ public interface CaseLawSynthesizedRepository
 
   void deleteByIndexedAtBefore(String indexedAt);
 
+  void deleteByIndexedAtIsNull();
+
   void deleteAllById(Iterable<? extends String> ids);
 }
