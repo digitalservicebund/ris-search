@@ -31,7 +31,7 @@ public record CaseLawSchema(
     @Schema(description = "Sonstiger Langtext") String otherLongText,
     @Schema(description = "Tenor") String tenor,
     @Schema(description = "Entscheidungsdatum") LocalDate decisionDate,
-    @Schema(example = "[\"BGH 123/23\"]", description = "Aktenzeichen") List<String> fileNumbers,
+    @Schema(example = "BGH 123/23", description = "Aktenzeichen") List<String> fileNumbers,
     @Schema(example = "FG", description = "Gerichtstyp") String courtType,
     @Schema(example = "Berlin", description = "Gerichtssitz") String location,
     @Schema(example = "Urteil") String documentType,
