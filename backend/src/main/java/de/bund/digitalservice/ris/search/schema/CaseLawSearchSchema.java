@@ -19,7 +19,7 @@ public record CaseLawSearchSchema(
     @Schema(example = "Überschrift") String headline,
     @Schema(example = "Sonstiger Langtext") String otherLongText,
     LocalDate decisionDate,
-    @Schema(example = "[\"BGH 123/23\"]") List<String> fileNumbers,
+    @Schema(example = "BGH 123/23") List<String> fileNumbers,
     @Schema(example = "FG") String courtType,
     @Schema(example = "Berlin") String location,
     @Schema(example = "Urteil") String documentType,
