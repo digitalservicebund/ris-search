@@ -9677,13 +9677,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"isomorphic-dompurify@npm:^2.24.0":
-  version: 2.24.0
-  resolution: "isomorphic-dompurify@npm:2.24.0"
+"isomorphic-dompurify@npm:^2.25.0":
+  version: 2.25.0
+  resolution: "isomorphic-dompurify@npm:2.25.0"
   dependencies:
-    dompurify: "npm:^3.2.5"
+    dompurify: "npm:^3.2.6"
     jsdom: "npm:^26.1.0"
-  checksum: 10c0/0db27a48c848f05ce71bde779eead660defdf844993073fd4eaf66ae81039a0e69989f3ff4ce1d357c82f427d7018c6fc406ed6a42bab0fc93bbaab9aaccaa7e
+  checksum: 10c0/ce245fb68e9d53ae2f2523623a62f5c0a5252c23a95c7bd67d926ceaa7fa5cb5cdeb8a8a87f448dad43402d692cf4d78ddcfc937860aed822e480bd8a2dcaedd
   languageName: node
   linkType: hard
 
@@ -13599,7 +13599,7 @@ __metadata:
     eslint-config-prettier: "npm:^10.1.5"
     eslint-plugin-prettier: "npm:^5.4.0"
     eslint-plugin-unused-imports: "npm:^4.1.4"
-    isomorphic-dompurify: "npm:^2.24.0"
+    isomorphic-dompurify: "npm:^2.25.0"
     js-cookie: "npm:^3.0.5"
     jsdom: "npm:^26.1.0"
     json-schema-to-typescript-lite: "npm:^14.1.0"
