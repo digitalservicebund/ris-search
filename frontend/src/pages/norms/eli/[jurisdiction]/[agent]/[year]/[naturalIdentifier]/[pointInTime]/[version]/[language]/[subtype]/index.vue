@@ -2,7 +2,7 @@
 import NormTableOfContents from "@/components/Ris/NormTableOfContents.vue";
 import type { TreeNode } from "primevue/treenode";
 import { tocItemsToTreeNodes } from "@/utils/tableOfContents";
-import type { LegislationWork } from "@/types";
+import type { LegislationWork, SearchResult } from "@/types";
 import { useFetchNormContent } from "./useNormData";
 import { useRoute } from "#app";
 import { useIntersectionObserver } from "@/composables/useIntersectionObserver";
@@ -36,6 +36,7 @@ import {
 import { isPrototypeProfile } from "~/utils/config";
 import ContentWrapper from "~/components/CustomLayouts/ContentWrapper.vue";
 import NormVersionList from "~/components/Norm/NormVersionList.vue";
+import VersionInfoBox from "~/components/Norm/VersionInfoBox.vue";
 
 definePageMeta({
   // note: this is an expression ELI that additionally specifies the subtype component of a manifestation ELI
@@ -102,6 +103,14 @@ const { selectedEntry, vObserveElements } = useIntersectionObserver();
 const normBreadcrumbTitle = computed(() =>
   metadata.value ? getNormBreadcrumbTitle(metadata.value) : "",
 );
+
+const { status: normVersionsStatus, sortedVersions: normVersions } = metadata
+  .value?.legislationIdentifier
+  ? useNormVersions(metadata.value?.legislationIdentifier)
+  : {
+      status: "error",
+      sortedVersions: [] as SearchResult<LegislationWork>[],
+    };
 </script>
 
 <template>
@@ -118,6 +127,10 @@ const normBreadcrumbTitle = computed(() =>
         <FileActionsMenu :xml-url="xmlUrl" />
       </div>
       <NormHeadingGroup :metadata="metadata" :html-parts="htmlParts" />
+      <VersionInfoBox
+        :versions="normVersions"
+        :current-expression="metadata.workExample.legislationIdentifier"
+      />
       <div class="mt-8 mb-48 flex flex-wrap items-end gap-24">
         <MetadataField
           v-if="metadata.abbreviation"
@@ -151,24 +164,30 @@ const normBreadcrumbTitle = computed(() =>
             :pt="tabStyles"
             value="0"
             aria-label="Gesetzestext"
-            ><IcBaselineSubject />Text</Tab
           >
+            <IcBaselineSubject />
+            Text
+          </Tab>
           <Tab
             data-attr="norm-metadata-tab"
             class="flex items-center gap-8"
             :pt="tabStyles"
             value="1"
             aria-label="Details zum Gesetz"
-            ><IcOutlineInfo />Details</Tab
           >
+            <IcOutlineInfo />
+            Details
+          </Tab>
           <Tab
             v-if="!isPrototypeProfile()"
             data-attr="norm-versions-tab"
             class="flex items-center gap-8"
             :pt="tabStyles"
             value="2"
-            ><IcOutlineRestore />Fassungen</Tab
           >
+            <IcOutlineRestore />
+            Fassungen
+          </Tab>
         </TabList>
         <TabPanels>
           <TabPanel value="0" :pt="tabPanelStyles">
@@ -220,23 +239,25 @@ const normBreadcrumbTitle = computed(() =>
                 <PropertiesItem
                   v-if="htmlParts.prefaceContainer"
                   label="Besonderer Hinweis:"
-                  ><div v-html="htmlParts.prefaceContainer"
-                /></PropertiesItem>
-                <PropertiesItem label="Fußnoten:"
-                  ><template v-if="htmlParts.headingNotes" #default>
+                >
+                  <div v-html="htmlParts.prefaceContainer" />
+                </PropertiesItem>
+                <PropertiesItem label="Fußnoten:">
+                  <template v-if="htmlParts.headingNotes" #default>
                     <div v-html="htmlParts.headingNotes" />
                   </template>
                 </PropertiesItem>
-                <PropertiesItem label="Download:"
-                  ><NuxtLink
+                <PropertiesItem label="Download:">
+                  <NuxtLink
                     data-attr="xml-zip-view"
                     class="ris-link1-regular"
                     external
                     :href="zipUrl"
-                    ><MaterialSymbolsDownload class="mr-2 inline" />
-                    {{ metadata.abbreviation ?? "Inhalte" }} als ZIP
-                    herunterladen</NuxtLink
                   >
+                    <MaterialSymbolsDownload class="mr-2 inline" />
+                    {{ metadata.abbreviation ?? "Inhalte" }} als ZIP
+                    herunterladen
+                  </NuxtLink>
                 </PropertiesItem>
               </Properties>
             </section>
@@ -247,9 +268,13 @@ const normBreadcrumbTitle = computed(() =>
             :pt="tabPanelStyles"
             class="pt-24 pb-80"
           >
-            <NormVersionList :work-eli="metadata.legislationIdentifier" />
+            <NormVersionList
+              :status="normVersionsStatus"
+              :versions="normVersions"
+            />
           </TabPanel>
         </TabPanels>
-      </Tabs></div
-  ></ContentWrapper>
+      </Tabs>
+    </div>
+  </ContentWrapper>
 </template>

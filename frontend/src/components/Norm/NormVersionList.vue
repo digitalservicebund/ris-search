@@ -1,38 +1,12 @@
 <script setup lang="ts">
 import IncompleteDataMessage from "~/components/IncompleteDataMessage.vue";
-import { useFetch } from "#app";
-import type { JSONLDList, LegislationWork, SearchResult } from "~/types";
+import type { LegislationWork, SearchResult } from "~/types";
 import NormVersionListRow from "./NormVersionListRow.vue";
-import _ from "lodash";
 
-const props = defineProps<{
-  workEli: string;
+defineProps<{
+  status: string;
+  versions: SearchResult<LegislationWork>[];
 }>();
-
-const backendURL = useBackendURL();
-const {
-  status,
-  data,
-  error: loadError,
-} = await useFetch<JSONLDList<SearchResult<LegislationWork>>>(
-  `${backendURL}/v1/legislation`,
-  {
-    params: {
-      eli: props.workEli,
-    },
-  },
-);
-
-if (loadError?.value) {
-  showError(loadError.value);
-}
-
-const sortedMembers = computed(() =>
-  _.sortBy(
-    data.value?.member,
-    (member) => member.item.workExample.temporalCoverage,
-  ),
-);
 </script>
 
 <template>
@@ -57,7 +31,7 @@ const sortedMembers = computed(() =>
       </thead>
       <tbody>
         <NormVersionListRow
-          v-for="member in sortedMembers"
+          v-for="member in versions"
           :key="member.item.workExample['@id']"
           :item="member.item"
         />
