@@ -135,7 +135,7 @@ const previewSections: ComputedRef<ExtendedTextMatch[]> = computed(() => {
   return slice;
 });
 
-function openResult(url: string) {
+function trackResultClick(url: string) {
   postHogStore.searchResultClicked(url, props.order);
 }
 </script>
@@ -159,7 +159,7 @@ function openResult(url: string) {
     <NuxtLink
       :to="metadata.url"
       class="ris-heading3-bold max-w-title link-hover mt-8 block text-balance text-blue-800"
-      @click="openResult(metadata.url)"
+      @click="trackResultClick(metadata.url)"
     >
       <h2>
         <span v-if="!!metadata.decisionName"
@@ -177,7 +177,8 @@ function openResult(url: string) {
         <NuxtLink
           :to="`${metadata.url}#${section.id}`"
           class="ris-label1-bold link-hover text-blue-800"
-          @click="openResult(`${metadata.url}#${section.id}`)"
+          external
+          @click="trackResultClick(`${metadata.url}#${section.id}`)"
         >
           {{ section.title }}:</NuxtLink
         >{{ " " }}
