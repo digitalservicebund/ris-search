@@ -1,5 +1,11 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { describe, expect, it, type MockedFunction, vi } from "vitest";
+ 
+import {
+  afterEach,
+  describe,
+  expect,
+  it,
+  vi,
+} from "vitest";
 import { useFetchNormArticleContent, useFetchNormContent } from "./useNormData";
 import type {
   LegislationExpression,
@@ -9,13 +15,15 @@ import type {
 
 import { mockNuxtImport } from "@nuxt/test-utils/runtime";
 
-const { useRequestFetchMock } = vi.hoisted(() => {
+const { mockFetch } = vi.hoisted(() => {
   return {
-    useRequestFetchMock: vi.fn(() => vi.fn()),
+    mockFetch: vi.fn(),
   };
 });
 
-mockNuxtImport("useRequestFetch", () => useRequestFetchMock);
+mockNuxtImport("useRequestFetch", () => {
+  return () => mockFetch;
+});
 
 describe("useNormData", () => {
   const consoleInfoMock = vi
@@ -28,6 +36,9 @@ describe("useNormData", () => {
   afterAll(() => {
     consoleInfoMock.mockReset();
     consoleErrorMock.mockReset();
+  });
+  afterEach(() => {
+    mockFetch.mockReset();
   });
 
   const expressionEli = "test-eli";
@@ -66,10 +77,6 @@ describe("useNormData", () => {
    <div>Test HTML content</div>`;
 
   it("should fetch JSON and HTML data", async () => {
-    const mockFetch = vi.fn();
-    (
-      useRequestFetch as MockedFunction<MockedFunction<any>>
-    ).mockReturnValueOnce(mockFetch);
     mockFetch.mockReturnValueOnce(mockMetadata);
     mockFetch.mockReturnValueOnce(mockHtml);
 
@@ -104,10 +111,6 @@ describe("useNormData", () => {
     const articleEId = "eid-1";
     const mockHtml = `<h2 class="einzelvorschrift">§ 1 Some article</h2><div>Test HTML content</div>`;
 
-    const mockFetch = vi.fn();
-    (
-      useRequestFetch as MockedFunction<MockedFunction<any>>
-    ).mockReturnValueOnce(mockFetch);
     mockFetch.mockReturnValueOnce(mockMetadata);
     mockFetch.mockReturnValueOnce(mockHtml);
 
@@ -147,10 +150,6 @@ describe("useNormData", () => {
       },
     };
 
-    const mockFetch = vi.fn();
-    (
-      useRequestFetch as MockedFunction<MockedFunction<any>>
-    ).mockReturnValueOnce(mockFetch);
     mockFetch.mockReturnValueOnce(mockMetadata);
 
     const { error } = await useFetchNormContent(expressionEli);
