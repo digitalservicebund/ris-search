@@ -33,17 +33,12 @@ const currentVersion: ComputedRef<SearchResult<LegislationWork>> = computed(
     );
     if (!current)
       throw new Error(
-        `Current version not found for prop expression: ${props.currentExpression}`,
+        `The provided current expression (${props.currentExpression}) does not exist in the provided versions`,
       );
     return current;
   },
 );
-console.error(
-  "Current version:",
-  currentVersion.value,
-  "Status:",
-  getVersionStatus(currentVersion.value),
-);
+
 const currentVersionStatus = computed<VersionStatus>(() =>
   getVersionStatus(currentVersion.value),
 );
