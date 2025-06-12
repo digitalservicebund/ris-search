@@ -9,6 +9,11 @@ export function formattedDate(date: string | null | undefined) {
   return date ? dayjs(date).format("DD.MM.YYYY") : undefined;
 }
 
+export function formattedDateToDateTime(date: string): Date {
+  const [day, month, year] = date.split(".").map(Number);
+  return new Date(year, month - 1, day);
+}
+
 export function splitTemporalCoverage(value: string | null | undefined) {
   if (!value) return [undefined, undefined];
   const [from, to] = value.replaceAll("..", "").split("/");
