@@ -148,7 +148,12 @@ describe("index.vue", () => {
     const wrapper = await mountComponent();
     expect(wrapper.get(".ris-heading3-regular").text()).toBe("alternateName");
     expect(wrapper.find(".titel").text()).toBe("Sample Norm");
-    expect(getBreadcrumbStub(wrapper).props("title")).toBe("abbreviation");
+    expect(getBreadcrumbStub(wrapper).props("items")).toStrictEqual(
+      Array.of({
+        route: "/norms/eli/work-LEG12345",
+        label: "abbreviation",
+      }),
+    );
   });
 
   it("uses the alternateName as title if the name is not present", async () => {
@@ -166,7 +171,12 @@ describe("index.vue", () => {
     const wrapper = await mountComponent();
     expect(wrapper.find(".ris-heading2-regular").exists()).toBe(false);
     expect(wrapper.find(".titel").text()).toBe("alternateName");
-    expect(getBreadcrumbStub(wrapper).props("title")).toBe("abbreviation");
+    expect(getBreadcrumbStub(wrapper).props("items")).toStrictEqual(
+      Array.of({
+        route: "/norms/eli/work-LEG12345",
+        label: "abbreviation",
+      }),
+    );
   });
 
   it("uses the abbreviation as title if the name and alternateName are not present", async () => {
@@ -181,7 +191,12 @@ describe("index.vue", () => {
     const wrapper = await mountComponent();
     expect(wrapper.find(".ris-heading2-regular").exists()).toBe(false);
     expect(wrapper.find(".titel").text()).toBe("abbreviation");
-    expect(getBreadcrumbStub(wrapper).props("title")).toBe("abbreviation");
+    expect(getBreadcrumbStub(wrapper).props("items")).toStrictEqual(
+      Array.of({
+        route: "/norms/eli/work-LEG12345",
+        label: "abbreviation",
+      }),
+    );
   });
 
   it("shows the FileActionsMenu with correct XML link", async () => {
