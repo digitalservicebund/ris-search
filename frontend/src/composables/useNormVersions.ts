@@ -35,7 +35,7 @@ export function useNormVersions(workEli: string): UseNormVersions {
 export const getVersionDates = (
   version: SearchResult<LegislationWork> | undefined,
 ) => {
-  const temporalCoverage = version?.item.workExample.temporalCoverage || "";
+  const temporalCoverage = version?.item.workExample.temporalCoverage ?? "";
   return splitTemporalCoverage(temporalCoverage);
 };
 
