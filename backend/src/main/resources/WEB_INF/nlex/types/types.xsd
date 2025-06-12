@@ -1,0 +1,35 @@
+<!--This schema describes some basic types used elsewere in the schemas.-->
+<xsd:schema xmlns:xsd = "http://www.w3.org/2001/XMLSchema"
+>
+
+  <xsd:complexType name = "single_date" mixed="true">
+    <xsd:attribute name = "year" type = "single_year" use = "required" />
+    <xsd:attribute name = "month" type = "xsd:integer" use = "optional" />
+    <xsd:attribute name = "day" type = "xsd:integer" use = "optional" />
+  </xsd:complexType>
+
+  <xsd:simpleType name = "single_year">
+    <xsd:restriction base="xsd:gYear" />
+  </xsd:simpleType>
+
+  <xsd:simpleType name="locale_lang">
+    <xsd:restriction base="xsd:language" />
+  </xsd:simpleType>
+
+  <xsd:complexType name="navigation">
+    <xsd:sequence>
+      <xsd:element name="request-id" type="request-id" minOccurs="0"/>
+      <xsd:element name="page" minOccurs="0">
+        <xsd:complexType>
+          <xsd:attribute name="number" type="xsd:int" />
+          <xsd:attribute name="size" type="xsd:int" />
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:simpleType name="request-id">
+    <xsd:restriction base="xsd:string" />
+  </xsd:simpleType>
+
+</xsd:schema>

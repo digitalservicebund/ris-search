@@ -160,7 +160,7 @@ project.tasks.sonar {
 }
 
 tasks {
-    register("jaxb", JavaExec::class) {
+    register("generate-wsdl", JavaExec::class) {
         doFirst {
             mkdir("$buildDir/generated/java/main")
         }
@@ -168,10 +168,27 @@ tasks {
         classpath(configurations["jaxb"])
         mainClass = "com.sun.tools.xjc.XJCFacade"
         // args = listOf("src/main/resources/xjustiz", "-d", "$buildDir/generated/java/main")
-        args = listOf("src/main/resources/WEB_INF/nlex", "-wsdl", "-d", "$buildDir/generated/java/main")
+        args = listOf("src/main/resources/WEB_INF/nlex/simple_template.wsdl", "-wsdl", "-d", "$buildDir/generated/java/main")
+    }
+    register("generate-types", JavaExec::class) {
+        doFirst {
+            mkdir("$buildDir/generated/java/main")
+        }
+        enabled = true
+        classpath(configurations["jaxb"])
+        mainClass = "com.sun.tools.xjc.XJCFacade"
+        // args = listOf("src/main/resources/xjustiz", "-d", "$buildDir/generated/java/main")
+        args =
+            listOf(
+                "src/main/resources/WEB_INF/nlex/types/",
+                "-d",
+                "$buildDir/generated/java/main",
+                "-b",
+                "src/main/resources/WEB_INF/nlex/types/bindings.xjb",
+            )
     }
     compileJava {
-        dependsOn("jaxb")
+        dependsOn("generate-wsdl", "generate-types")
         options.compilerArgs.addAll(arrayOf())
     }
 

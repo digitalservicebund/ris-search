@@ -1,0 +1,185 @@
+<!--This schema describes the common part between result lists (what method ’request’ should answer) and document view.-->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+      elementFormDefault="qualified">
+
+  <xsd:include schemaLocation="../types.xsd"/>
+
+  <xsd:element name="result" type="result"/>
+
+  <xsd:complexType name="result">
+    <xsd:choice>
+      <xsd:element ref="error" minOccurs="0" maxOccurs="unbounded"/>
+      <xsd:element ref="errors" minOccurs="0"/>
+    </xsd:choice>
+
+    <xsd:attribute name="status" type="xsd:string"/>
+    <!--<xsd:attribute name="site" type="xsd:string"/>
+    <xsd:attribute name="connector" type="xsd:string"/>-->
+  </xsd:complexType>
+
+  <xsd:element name="errors">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="error" maxOccurs="unbounded"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="error">
+    <xsd:complexType mixed="true">
+      <xsd:attribute name="cause" type="xsd:positiveInteger"/>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="document" type="documentSpecification"/>
+
+  <xsd:complexType name="documentSpecification">
+    <xsd:all>
+      <xsd:element name="references" type="references" minOccurs="0"/>
+      <xsd:element name="metadata" type="metadata"/>
+      <xsd:element name="content" type="content"/>
+    </xsd:all>
+  </xsd:complexType>
+
+  <xsd:complexType name="metadata" abstract="true"/>
+
+  <xsd:complexType name="references">
+    <xsd:sequence>
+      <xsd:element name="nlex-url" type="nlex-url" minOccurs="0" maxOccurs="unbounded"/>
+      <xsd:element name="extern-url" type="extern-url" minOccurs="0" maxOccurs="unbounded"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="nlex-url">
+    <xsd:sequence>
+      <xsd:element name="param" minOccurs="0" maxOccurs="unbounded">
+        <xsd:complexType>
+          <xsd:attribute name="name" type="xsd:string" use="optional"/>
+          <xsd:attribute name="value" type="xsd:string" use="required"/>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:sequence>
+    <xsd:attribute name="display" type="xsd:string" use="optional"/>
+    <!-- id is the identifier relative to the current document -->
+    <!--<xsd:attribute name="id" type="xsd:string" use="optional"/>-->
+    <xsd:attribute name="method" type="xsd:string"/>
+    <!--<xsd:attribute name="hidden" type="xsd:boolean" use="optional" default="false"/>-->
+    <xsd:attribute name="format" type="xsd:string" use="optional"/>
+    <xsd:attribute name="param-method" type="xsd:string" use="optional"/>
+  </xsd:complexType>
+
+  <xsd:complexType name="extern-url">
+    <xsd:attribute name="display" type="xsd:string" use="optional"/>
+    <!--<xsd:attribute name="hidden" type="xsd:boolean" use="optional" default="false"/>-->
+    <!-- id is the identifier relative to the current document -->
+    <xsd:attribute name="id" type="xsd:string" use="optional"/>
+    <xsd:attribute name="href" type="xsd:string"/>
+    <xsd:attribute name="format" type="xsd:string"/>
+  </xsd:complexType>
+
+  <xsd:complexType name="content">
+    <xsd:complexContent>
+      <xsd:extension base="longText">
+        <xsd:attribute name="lang" type="locale_lang"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+
+  <xsd:complexType name="longText" abstract="true" mixed="true">
+    <xsd:sequence>
+      <!--
+        because of ambiguity, introduction, title are not used explicitly
+        element ref="introduction" minOccurs="0" maxOccurs="1"
+        element ref="title" minOccurs="0" maxOccurs="1"
+      -->
+
+      <xsd:any minOccurs="0" maxOccurs="unbounded"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="paragraph">
+    <xsd:complexContent>
+      <xsd:extension base="expression">
+        <xsd:attribute name="roles" type="paragraphRoles"/>
+        <xsd:attribute name="class" type="paragraphClass"/>
+        <xsd:attribute name="head" type="xsd:string"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+
+  <xsd:element name="title">
+    <xsd:complexType>
+      <xsd:complexContent>
+        <xsd:extension base="expression">
+          <xsd:attribute name="roles" type="paragraphRoles" fixed="title"/>
+        </xsd:extension>
+      </xsd:complexContent>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="introduction">
+    <xsd:complexType>
+      <xsd:complexContent>
+        <xsd:extension base="expression">
+          <xsd:attribute name="roles" type="paragraphRoles" fixed="intro"/>
+        </xsd:extension>
+      </xsd:complexContent>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:simpleType name="paragraphRole">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="title"/>
+      <xsd:enumeration value="text"/>
+      <xsd:enumeration value="text zoom"/>
+      <xsd:enumeration value="summary"/>
+      <xsd:enumeration value="zoom"/>
+      <xsd:enumeration value="para"/>
+      <xsd:enumeration value="intro"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+
+  <xsd:simpleType name="paragraphRoles">
+    <xsd:list itemType="paragraphRole"/>
+  </xsd:simpleType>
+
+  <xsd:simpleType name="paragraphClass">
+    <xsd:list>
+      <xsd:simpleType>
+        <xsd:restriction base="xsd:string">
+          <xsd:enumeration value="standard"/>
+          <xsd:enumeration value="bullet"/>
+          <xsd:enumeration value="arabic"/>
+          <xsd:enumeration value="roman"/>
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:list>
+  </xsd:simpleType>
+
+  <xsd:complexType name="expression" mixed="true">
+    <xsd:sequence minOccurs="0" maxOccurs="unbounded">
+      <xsd:group ref="expression"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:group name="expression">
+    <xsd:choice>
+      <xsd:element name="emphasis" type="emphasis"/>
+    </xsd:choice>
+  </xsd:group>
+
+  <xsd:complexType name="emphasis">
+    <xsd:complexContent>
+      <xsd:extension base="expression">
+        <xsd:attribute name="role" type="xsd:string"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+
+  <xsd:complexType name="nlex_date">
+    <xsd:complexContent mixed="true">
+      <xsd:extension base="single_date"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+
+</xsd:schema>
