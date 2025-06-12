@@ -37,6 +37,7 @@ import { isPrototypeProfile } from "~/utils/config";
 import ContentWrapper from "~/components/CustomLayouts/ContentWrapper.vue";
 import NormVersionList from "~/components/Norm/NormVersionList.vue";
 import VersionInfoBox from "~/components/Norm/VersionInfoBox.vue";
+import type { BreadcrumbItem } from "~/components/Ris/RisBreadcrumb.vue";
 
 definePageMeta({
   // note: this is an expression ELI that additionally specifies the subtype component of a manifestation ELI
@@ -111,6 +112,24 @@ const { status: normVersionsStatus, sortedVersions: normVersions } = metadata
       status: "error",
       sortedVersions: [] as SearchResult<LegislationWork>[],
     };
+
+const breadcrumbItems: ComputedRef<BreadcrumbItem[]> = computed(() => {
+  const list = [
+    {
+      route: `/norms/${metadata.value?.legislationIdentifier}`,
+      label: normBreadcrumbTitle.value,
+    },
+  ];
+
+  const isInForce =
+    metadata.value?.workExample.legislationLegalForce === "InForce";
+  if (!isInForce) {
+    const temporalCoverageLabel = temporalCoverage.value?.join("–");
+    list.push({ route: route.fullPath, label: temporalCoverageLabel });
+  }
+
+  return list;
+});
 </script>
 
 <template>
@@ -118,12 +137,7 @@ const { status: normVersionsStatus, sortedVersions: normVersions } = metadata
     <div v-if="status == 'pending'">Lade ...</div>
     <div v-if="!!metadata">
       <div class="flex items-center gap-8 print:hidden">
-        <RisBreadcrumb
-          type="norm"
-          :title="normBreadcrumbTitle"
-          :base-path="route.fullPath"
-          class="grow"
-        />
+        <RisBreadcrumb type="norm" :items="breadcrumbItems" class="grow" />
         <FileActionsMenu :xml-url="xmlUrl" />
       </div>
       <NormHeadingGroup :metadata="metadata" :html-parts="htmlParts" />
