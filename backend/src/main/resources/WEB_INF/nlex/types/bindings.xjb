@@ -27,4 +27,10 @@
                 <jxb:property name="titleAttribute"/>
            </jxb:bindings>
         </jxb:bindings>
+
+    <jxb:bindings schemaLocation="types.xsd" node="//xsd:schema">
+                <jxb:schemaBindings>
+                    <jxb:package name="de.bund.digitalservice.ris.search.types"/>
+                </jxb:schemaBindings>
+            </jxb:bindings>
 </jxb:bindings>
