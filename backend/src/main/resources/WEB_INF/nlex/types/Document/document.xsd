@@ -8,7 +8,7 @@
   <xsd:import namespace="http://www.w3.org/1999/xlink"
         schemaLocation="../xlink.xsd"/>
 
-  <xsd:redefine schemaLocation="legislation.xsd">
+  <xsd:redefine schemaLocation="../legislation.xsd">
     <xsd:complexType name="result">
       <xsd:complexContent>
         <xsd:extension base="result">

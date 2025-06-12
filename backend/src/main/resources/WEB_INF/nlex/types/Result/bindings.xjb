@@ -28,7 +28,7 @@
            </jxb:bindings>
         </jxb:bindings>
 
-    <jxb:bindings schemaLocation="result.xsd" node="//xsd:schema">
+    <jxb:bindings schemaLocation="result-list.xsd" node="//xsd:schema">
                 <jxb:schemaBindings>
                     <jxb:package name="de.bund.digitalservice.ris.search.result"/>
                 </jxb:schemaBindings>

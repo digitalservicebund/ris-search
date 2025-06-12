@@ -2,7 +2,7 @@
 <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
       elementFormDefault="qualified">
 
-  <xsd:include schemaLocation="../types.xsd"/>
+  <xsd:include schemaLocation="types.xsd"/>
 
   <xsd:element name="result" type="result"/>
 
