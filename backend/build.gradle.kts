@@ -170,7 +170,7 @@ tasks {
         // args = listOf("src/main/resources/xjustiz", "-d", "$buildDir/generated/java/main")
         args = listOf("src/main/resources/WEB_INF/nlex/simple_template.wsdl", "-wsdl", "-d", "$buildDir/generated/java/main")
     }
-    register("generate-types", JavaExec::class) {
+    register("generate-document", JavaExec::class) {
         doFirst {
             mkdir("$buildDir/generated/java/main")
         }
@@ -180,15 +180,32 @@ tasks {
         // args = listOf("src/main/resources/xjustiz", "-d", "$buildDir/generated/java/main")
         args =
             listOf(
-                "src/main/resources/WEB_INF/nlex/types/",
+                "src/main/resources/WEB_INF/nlex/types/Document",
                 "-d",
                 "$buildDir/generated/java/main",
                 "-b",
-                "src/main/resources/WEB_INF/nlex/types/bindings.xjb",
+                "src/main/resources/WEB_INF/nlex/types/Document/bindings.xjb",
+            )
+    }
+    register("generate-result-list", JavaExec::class) {
+        doFirst {
+            mkdir("$buildDir/generated/java/main")
+        }
+        enabled = true
+        classpath(configurations["jaxb"])
+        mainClass = "com.sun.tools.xjc.XJCFacade"
+        // args = listOf("src/main/resources/xjustiz", "-d", "$buildDir/generated/java/main")
+        args =
+            listOf(
+                "src/main/resources/WEB_INF/nlex/types/Result",
+                "-d",
+                "$buildDir/generated/java/main",
+                "-b",
+                "src/main/resources/WEB_INF/nlex/types/Result/bindings.xjb",
             )
     }
     compileJava {
-        dependsOn("generate-wsdl", "generate-types")
+        dependsOn("generate-wsdl", "generate-document", "generate-result-list")
         options.compilerArgs.addAll(arrayOf())
     }
 

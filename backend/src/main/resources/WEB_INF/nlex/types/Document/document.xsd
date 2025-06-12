@@ -1,0 +1,70 @@
+<!--This schema describes a single document view-->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml"
+        xmlns:xlink="http://www.w3.org/1999/xlink">
+
+  <xsd:import namespace="http://www.w3.org/1999/xhtml"
+        schemaLocation="http://www.w3.org/2002/08/xhtml/xhtml1-strict.xsd"/>
+  <xsd:import namespace="http://www.w3.org/1999/xlink"
+        schemaLocation="../xlink.xsd"/>
+
+  <xsd:redefine schemaLocation="legislation.xsd">
+    <xsd:complexType name="result">
+      <xsd:complexContent>
+        <xsd:extension base="result">
+          <xsd:sequence>
+            <xsd:element name="navigation" minOccurs="0">
+              <xsd:complexType>
+                <xsd:complexContent>
+                  <xsd:extension base="navigation">
+                    <xsd:sequence>
+                      <xsd:element name="hits" type="xsd:positiveInteger"/>
+                      <!--<xsd:element name="position" type="xsd:positiveInteger"/>
+                      <xsd:element name="nlex-url-prev" type="nlex-url" minOccurs="0"/>
+                      <xsd:element name="nlex-url-next" type="nlex-url" minOccurs="0"/>-->
+                    </xsd:sequence>
+                  </xsd:extension>
+                </xsd:complexContent>
+              </xsd:complexType>
+            </xsd:element>
+            <xsd:element ref="document" minOccurs="0" maxOccurs="1"/>
+          </xsd:sequence>
+        </xsd:extension>
+      </xsd:complexContent>
+    </xsd:complexType>
+
+    <xsd:complexType name="longText">
+      <xsd:complexContent mixed="true">
+        <xsd:restriction base="longText">
+          <xsd:sequence>
+            <xsd:element ref="title" minOccurs="0" maxOccurs="1"/>
+            <xsd:choice minOccurs="0" maxOccurs="unbounded">
+              <xsd:element ref="para"/>
+              <xsd:element ref="use"/>
+              <xsd:element ref="br"/>
+              <xsd:any namespace="http://www.w3.org/1999/xhtml"/>
+            </xsd:choice>
+          </xsd:sequence>
+        </xsd:restriction>
+      </xsd:complexContent>
+    </xsd:complexType>
+
+    <xsd:group name="expression">
+      <xsd:choice>
+        <xsd:group ref="expression"/>
+        <xsd:element ref="use"/>
+      </xsd:choice>
+    </xsd:group>
+
+  </xsd:redefine>
+
+  <xsd:element name="br"/>
+
+  <xsd:element name="para" type="paragraph"/>
+
+  <xsd:element name="use">
+    <xsd:complexType mixed="true">
+      <xsd:attribute ref="xlink:href"/>
+    </xsd:complexType>
+  </xsd:element>
+</xsd:schema>

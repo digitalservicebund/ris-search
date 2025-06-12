@@ -1,0 +1,119 @@
+<!--This schema describes the ’metadata’ part of a legislative document.-->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+      elementFormDefault="qualified">
+
+  <xsd:redefine schemaLocation="result.xsd">
+    <xsd:complexType name="metadata" final="extension">
+      <xsd:annotation>
+        <xsd:documentation> Search on corpus related to Legislation </xsd:documentation>
+      </xsd:annotation>
+
+      <xsd:complexContent>
+        <xsd:extension base="metadata">
+          <xsd:sequence>
+            <xsd:element name="section_article" type="section" minOccurs="0"/>
+            <xsd:element name="doc_type" type="doc_type"
+                  minOccurs="0" maxOccurs="unbounded"/>
+            <xsd:element name="doc_number" type="doc_number"
+                  minOccurs="0" maxOccurs="unbounded"/>
+            <xsd:element name="date_of_doc" minOccurs="0">
+              <xsd:complexType>
+                <xsd:complexContent>
+                  <xsd:extension base="nlex_date">
+                    <xsd:attribute name="role" use="optional" type="xsd:string"/>
+                  </xsd:extension>
+                </xsd:complexContent>
+              </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="pub_source" minOccurs="0" maxOccurs="unbounded">
+              <xsd:complexType>
+                <xsd:all>
+                  <xsd:element name="OJ_Name" type="OJ_name" minOccurs="0"/>
+                  <xsd:element name="OJ_Number" type="OJ_number" minOccurs="0"/>
+                  <!--<xsd:element name="OJ_Page" minOccurs="0">
+                    <xsd:complexType mixed="true">
+                      <xsd:attribute name="from" type="xsd:positiveInteger"/>
+                      <xsd:attribute name="to" type="xsd:positiveInteger"/>
+                    </xsd:complexType>
+                  </xsd:element>-->
+                  <xsd:element name="date_of_pub" type="nlex_date" minOccurs="0"/>
+                </xsd:all>
+              </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="validity_date" type="period_date" minOccurs="0" maxOccurs="1"/>
+
+            <!--<xsd:element name="extra-fields" minOccurs="0">
+              <xsd:complexType>
+                <xsd:sequence>
+                  <xsd:choice minOccurs="0" maxOccurs="unbounded">
+                    <xsd:element ref="field"/>
+                    <xsd:any namespace="##other"/>
+                  </xsd:choice>
+                </xsd:sequence>
+              </xsd:complexType>
+            </xsd:element>-->
+          </xsd:sequence>
+
+          <xsd:attribute name="type" type="xsd:string" fixed="Legislation"/>
+        </xsd:extension>
+      </xsd:complexContent>
+    </xsd:complexType>
+  </xsd:redefine>
+
+  <xsd:complexType name="doc_type">
+    <xsd:simpleContent>
+      <xsd:extension base="xsd:string">
+        <xsd:attribute name="level" type="xsd:positiveInteger" use="optional" default="1"/>
+        <xsd:attribute name="code" type="doc_type-code"/>
+      </xsd:extension>
+    </xsd:simpleContent>
+  </xsd:complexType>
+
+  <xsd:simpleType name="doc_type-code">
+    <xsd:restriction base="xsd:string"/>
+  </xsd:simpleType>
+
+  <xsd:complexType name="OJ_name">
+    <xsd:simpleContent>
+      <xsd:extension base="xsd:string">
+        <xsd:attribute name="code" type="OJ_name-code"/>
+      </xsd:extension>
+    </xsd:simpleContent>
+  </xsd:complexType>
+
+  <xsd:simpleType name="OJ_name-code">
+    <xsd:restriction base="xsd:string"/>
+  </xsd:simpleType>
+
+  <xsd:complexType name="doc_number" mixed="true">
+    <xsd:attribute name="role" type="xsd:string" use="optional"/>
+  </xsd:complexType>
+
+  <xsd:complexType name="OJ_number" mixed="true">
+    <xsd:attribute name="role" type="xsd:string" use="optional"/>
+  </xsd:complexType>
+
+  <xsd:simpleType name="section">
+    <xsd:restriction base="xsd:string"/>
+  </xsd:simpleType>
+
+  <xsd:element name="field">
+    <xsd:complexType mixed="true">
+      <xsd:attribute name="name" type="xsd:string"/>
+      <xsd:attribute name="type" type="xsd:string" use="optional"/>
+      <xsd:attribute name="code" type="field-code"/>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:simpleType name="field-code">
+    <xsd:restriction base="xsd:string"/>
+  </xsd:simpleType>
+
+  <xsd:complexType name="period_date" mixed="true">
+    <xsd:sequence>
+      <xsd:element name="begin " type="single_year" minOccurs="0"/>
+      <xsd:element name="end " type="single_year" minOccurs="0"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+</xsd:schema>

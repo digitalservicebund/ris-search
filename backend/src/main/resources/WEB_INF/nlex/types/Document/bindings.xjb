@@ -1,0 +1,36 @@
+<!-- cti-domain/src/main/xjb/cwe-bindings.xjb -->
+<jxb:bindings version="3.0"
+              xmlns:jxb="https://jakarta.ee/xml/ns/jaxb"
+              xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <jxb:bindings schemaLocation="http://www.w3.org/2002/08/xhtml/xhtml1-strict.xsd" node="//xsd:schema">
+        <jxb:schemaBindings>
+            <jxb:package name="xhtml1"/>
+        </jxb:schemaBindings>
+
+        <!-- rename the 'lang' attribute on line 302 to 'langAttribute' -->
+        <jxb:bindings node="//xsd:attributeGroup[@name='i18n']/xsd:attribute[@name='lang']">
+            <jxb:property name="langAttribute"/>
+       </jxb:bindings>
+
+        <!-- rename the 'lang' attribute on line 1166 to 'langAttribute' -->
+       <jxb:bindings node="//xsd:element[@name='bdo']/xsd:complexType/xsd:complexContent/xsd:extension/xsd:attribute[@name='lang']">
+            <jxb:property name="langAttribute"/>
+       </jxb:bindings>
+    </jxb:bindings>
+
+    <jxb:bindings schemaLocation="../xlink.xsd" node="//xsd:schema">
+            <jxb:schemaBindings>
+                <jxb:package name="xlink"/>
+            </jxb:schemaBindings>
+
+            <jxb:bindings node="//xsd:attribute[@name='title']">
+                <jxb:property name="titleAttribute"/>
+           </jxb:bindings>
+        </jxb:bindings>
+
+    <jxb:bindings schemaLocation="document.xsd" node="//xsd:schema">
+                <jxb:schemaBindings>
+                    <jxb:package name="de.bund.digitalservice.ris.search.document"/>
+                </jxb:schemaBindings>
+            </jxb:bindings>
+</jxb:bindings>

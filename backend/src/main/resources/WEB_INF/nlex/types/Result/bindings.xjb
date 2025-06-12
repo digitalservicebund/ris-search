@@ -18,7 +18,7 @@
        </jxb:bindings>
     </jxb:bindings>
 
-    <jxb:bindings schemaLocation="xlink.xsd" node="//xsd:schema">
+    <jxb:bindings schemaLocation="../xlink.xsd" node="//xsd:schema">
             <jxb:schemaBindings>
                 <jxb:package name="xlink"/>
             </jxb:schemaBindings>
@@ -28,9 +28,9 @@
            </jxb:bindings>
         </jxb:bindings>
 
-    <jxb:bindings schemaLocation="types.xsd" node="//xsd:schema">
+    <jxb:bindings schemaLocation="result.xsd" node="//xsd:schema">
                 <jxb:schemaBindings>
-                    <jxb:package name="de.bund.digitalservice.ris.search.types"/>
+                    <jxb:package name="de.bund.digitalservice.ris.search.result"/>
                 </jxb:schemaBindings>
             </jxb:bindings>
 </jxb:bindings>
