@@ -11,13 +11,15 @@ describe("NormVersionList", () => {
   it("lists versions, sorted by date", async () => {
     const wrapper = await mountSuspended(NormVersionList, {
       props: {
-        workEli: data.member[0].item.legislationIdentifier,
+        status: "success",
+        versions: data.member,
       },
       global: {
         stubs: {
           NormVersionListRow: {
             template: `<tr><td>{{$attrs.item.workExample.legislationIdentifier}}</td></tr>`,
           },
+          IncompleteDataMessage: true,
         },
       },
     });
@@ -25,8 +27,8 @@ describe("NormVersionList", () => {
     const stubbedCells = wrapper.findAll("td");
     expect(stubbedCells).toHaveLength(2);
     expect(stubbedCells.map((cell) => cell.text())).toEqual([
-      data.member[1].item.workExample.legislationIdentifier,
       data.member[0].item.workExample.legislationIdentifier,
-    ]); // note the changed order
+      data.member[1].item.workExample.legislationIdentifier,
+    ]);
   });
 });

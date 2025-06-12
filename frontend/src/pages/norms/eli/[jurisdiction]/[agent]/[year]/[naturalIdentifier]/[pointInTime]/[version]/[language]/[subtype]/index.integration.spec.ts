@@ -105,6 +105,7 @@ function mountComponent() {
           template: '<div class="mock-expandable-text"><slot /></div>',
         },
         FileActionsMenu: true,
+        VersionInfoBox: true,
       },
     },
   });
