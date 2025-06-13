@@ -36,7 +36,7 @@ import {
 import { isPrototypeProfile } from "~/utils/config";
 import ContentWrapper from "~/components/CustomLayouts/ContentWrapper.vue";
 import NormVersionList from "~/components/Norm/NormVersionList.vue";
-import VersionInfoBox from "~/components/Norm/VersionInfoBox.vue";
+import VersionWarningMessage from "~/components/Norm/VersionWarningMessage.vue";
 import type { BreadcrumbItem } from "~/components/Ris/RisBreadcrumb.vue";
 
 definePageMeta({
@@ -141,7 +141,7 @@ const breadcrumbItems: ComputedRef<BreadcrumbItem[]> = computed(() => {
         <FileActionsMenu :xml-url="xmlUrl" />
       </div>
       <NormHeadingGroup :metadata="metadata" :html-parts="htmlParts" />
-      <VersionInfoBox
+      <VersionWarningMessage
         :versions="normVersions"
         :current-expression="metadata.workExample.legislationIdentifier"
       />
