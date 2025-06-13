@@ -26,6 +26,7 @@
   },
   "packageManager": "yarn@4.7.0",
   "dependencies": {
+    "@axe-core/playwright": "^4.10.2",
     "@digitalservicebund/ris-ui": "^3.9.0",
     "@eslint/plugin-kit": "0.3.1",
     "@hyperdx/lucene": "^3.1.1",
@@ -35,6 +36,7 @@
     "@pinia/nuxt": "^0.11.1",
     "@sentry/nuxt": "^9.28.1",
     "@tailwindcss/vite": "^4.1.8",
+    "axe-html-reporter": "^2.2.11",
     "axios": "^1.9.0",
     "dayjs": "^1.11.13",
     "js-cookie": "^3.0.5",

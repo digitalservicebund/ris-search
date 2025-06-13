@@ -91,6 +91,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@axe-core/playwright@npm:^4.10.2":
+  version: 4.10.2
+  resolution: "@axe-core/playwright@npm:4.10.2"
+  dependencies:
+    axe-core: "npm:~4.10.3"
+  peerDependencies:
+    playwright-core: ">= 1.0.0"
+  checksum: 10c0/3dc02d177eb1b4865bbef05df993a5ad94268cb862e7095a273d7c7191174855f9f5a444cd8ad3ccea4991fab884083d6fdc661d471515af0d6c571958162043
+  languageName: node
+  linkType: hard
+
 "@babel/code-frame@npm:^7.10.4, @babel/code-frame@npm:^7.25.9, @babel/code-frame@npm:^7.26.0, @babel/code-frame@npm:^7.26.2":
   version: 7.26.2
   resolution: "@babel/code-frame@npm:7.26.2"
@@ -5973,6 +5984,24 @@ __metadata:
   languageName: node
   linkType: hard
 
+"axe-core@npm:~4.10.3":
+  version: 4.10.3
+  resolution: "axe-core@npm:4.10.3"
+  checksum: 10c0/1b1c24f435b2ffe89d76eca0001cbfff42dbf012ad9bd37398b70b11f0d614281a38a28bc3069e8972e3c90ec929a8937994bd24b0ebcbaab87b8d1e241ab0c7
+  languageName: node
+  linkType: hard
+
+"axe-html-reporter@npm:^2.2.11":
+  version: 2.2.11
+  resolution: "axe-html-reporter@npm:2.2.11"
+  dependencies:
+    mustache: "npm:^4.0.1"
+  peerDependencies:
+    axe-core: ">=3"
+  checksum: 10c0/7f56c06e28aea591762c10f151bd48efbf7cff6a4a783a8074e779d283366a745085be64de72e6f9208006bab8dedc83681c8a9a691c9904886244d579375acd
+  languageName: node
+  linkType: hard
+
 "axios@npm:^1.8.2":
   version: 1.8.3
   resolution: "axios@npm:1.8.3"
@@ -11779,6 +11808,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"mustache@npm:^4.0.1":
+  version: 4.2.0
+  resolution: "mustache@npm:4.2.0"
+  bin:
+    mustache: bin/mustache
+  checksum: 10c0/1f8197e8a19e63645a786581d58c41df7853da26702dbc005193e2437c98ca49b255345c173d50c08fe4b4dbb363e53cb655ecc570791f8deb09887248dd34a2
+  languageName: node
+  linkType: hard
+
 "mute-stream@npm:^2.0.0":
   version: 2.0.0
   resolution: "mute-stream@npm:2.0.0"
@@ -14513,6 +14551,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "ris-portal-frontend@workspace:."
   dependencies:
+    "@axe-core/playwright": "npm:^4.10.2"
     "@digitalservicebund/ris-ui": "npm:^3.9.0"
     "@eslint/plugin-kit": "npm:0.3.1"
     "@hyperdx/lucene": "npm:^3.1.1"
@@ -14544,6 +14583,7 @@ __metadata:
     "@vitejs/plugin-vue": "npm:^5.2.4"
     "@vitest/coverage-v8": "npm:^3.2.3"
     "@vue/test-utils": "npm:^2.4.6"
+    axe-html-reporter: "npm:^2.2.11"
     axios: "npm:^1.9.0"
     dayjs: "npm:^1.11.13"
     dompurify: "npm:^3.2.6"
