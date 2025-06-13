@@ -49,14 +49,22 @@ const latestFutureVersion = computed(() => {
   return getVersionStatus(last) === "future" ? last : undefined;
 });
 
-const infoBoxType = computed(() =>
+const warningMessageType = computed(() =>
   currentVersionStatus.value === "inForce" ? "info" : "warn",
 );
+
+const showWarningMessage = computed(() => {
+  return (
+    (currentVersionStatus.value === "inForce" && latestFutureVersion.value) ||
+    currentVersionStatus.value === "historical" ||
+    currentVersionStatus.value === "future"
+  );
+});
 </script>
 
 <template>
-  <div v-if="currentVersionStatus" class="mb-40 w-fit">
-    <Message :severity="infoBoxType" class="ris-body2-regular">
+  <div v-if="showWarningMessage" class="mb-40 w-fit">
+    <Message :severity="warningMessageType" class="ris-body2-regular">
       <template #icon>
         <IcBaselineHistory
           v-if="currentVersionStatus === 'inForce'"
