@@ -49,7 +49,12 @@ sonar {
     }
 }
 
+val jaxb by configurations.creating
+
 dependencies {
+    jaxb(libs.jaxb.xjc)
+    jaxb(libs.jaxb.runtime)
+    implementation(libs.jaxb.runtime)
     implementation(libs.spring.actuator)
     implementation(libs.spring.validation)
     implementation(libs.spring.web)
@@ -112,9 +117,10 @@ dependencies {
 }
 
 val pactPath = "pacts/**/*.json"
-
+val generatedPath = "build/generated/**"
 spotless {
     java {
+        targetExclude(generatedPath)
         removeUnusedImports()
         googleJavaFormat()
         custom("Refuse wildcard imports") {
@@ -125,20 +131,20 @@ spotless {
             }
             it
         }
-        targetExclude(pactPath)
+        targetExclude(pactPath, generatedPath)
     }
     kotlin {
         ktfmt()
-        targetExclude(pactPath)
+        targetExclude(pactPath, generatedPath)
     }
     kotlinGradle {
         ktlint()
-        targetExclude(pactPath)
+        targetExclude(pactPath, generatedPath)
     }
 
     format("misc") {
         target("**/*.json", "**/*.md", "**/*.properties", "**/*.sh", "**/*.yml")
-        targetExclude("frontend/**", "pacts/**/*.json")
+        targetExclude("frontend/**", "pacts/**/*.json", generatedPath)
     }
 }
 
@@ -154,7 +160,18 @@ project.tasks.sonar {
 }
 
 tasks {
+    register("jaxb", JavaExec::class) {
+        doFirst {
+            mkdir("$buildDir/generated/java/main")
+        }
+        enabled = true
+        classpath(configurations["jaxb"])
+        mainClass = "com.sun.tools.xjc.XJCFacade"
+        // args = listOf("src/main/resources/xjustiz", "-d", "$buildDir/generated/java/main")
+        args = listOf("src/main/resources/WEB_INF/nlex", "-wsdl", "-d", "$buildDir/generated/java/main")
+    }
     compileJava {
+        dependsOn("jaxb")
         options.compilerArgs.addAll(arrayOf())
     }
 
@@ -239,4 +256,8 @@ tasks {
         }
         include("**/*.java")
     }
+}
+
+java.sourceSets["main"].java {
+    srcDirs("build/generated/java/main")
 }
