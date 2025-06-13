@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions
+        xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+        xmlns:tns="search.ris.digitalservice.bund.de"
+        xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+        xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+        targetNamespace="search.ris.digitalservice.bund.de"
+        xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+>
+    <!--
+    This wsdl template of N-Lex SOAP connector has the following paramaters
+    |SOAP_ADDRESS_URL| : the URL of the target connector
+    testnamespace: the namespace of the connector
+    |SOAP_NAMESPACE_FORM| : the form of the namespace definition: 'qualified' or
+    'unqualified'
+    |INCLUDE_SCHEMA_FILE_NAME| : the include schema file name
+    -->
+    <wsdl:types>
+        <xsd:schema elementFormDefault="qualified"
+                    targetNamespace="search.ris.digitalservice.bund.de">
+            <!--
+            elementFormDefault attribut should be changed to 'qualified'
+            if the elements of the SOAP parameters (input or output) define explicitly their namespace.
+            -->
+            <xsd:include schemaLocation="nlex_soap_template.xsd"/>
+        </xsd:schema>
+    </wsdl:types>
+    <wsdl:message name="VERSIONSoapIn">
+        <wsdl:part name="parameters" element="tns:VERSION"/>
+    </wsdl:message>
+    <wsdl:message name="VERSIONSoapOut">
+        <wsdl:part name="parameters" element="tns:VERSIONResponse"/>
+    </wsdl:message>
+    <wsdl:message name="test_querySoapIn">
+        <wsdl:part name="parameters" element="tns:test_query"/>
+    </wsdl:message>
+    <wsdl:message name="test_querySoapOut">
+        <wsdl:part name="parameters" element="tns:test_queryResponse"/>
+    </wsdl:message>
+    <wsdl:message name="requestSoapIn">
+        <wsdl:part name="parameters" element="tns:request"/>
+    </wsdl:message>
+    <wsdl:message name="requestSoapOut">
+        <wsdl:part name="parameters" element="tns:requestResponse"/>
+    </wsdl:message>
+    <wsdl:message name="about_connectorSoapIn">
+        <wsdl:part name="parameters" element="tns:about_connector"/>
+    </wsdl:message>
+    <wsdl:message name="about_connectorSoapOut">
+        <wsdl:part name="parameters" element="tns:about_connectorResponse"/>
+    </wsdl:message>
+    <wsdl:portType name="ConnectorSoap">
+        <wsdl:operation name="VERSION">
+            <wsdl:input message="tns:VERSIONSoapIn"/>
+            <wsdl:output message="tns:VERSIONSoapOut"/>
+        </wsdl:operation>
+        <wsdl:operation name="test_query">
+            <wsdl:input message="tns:test_querySoapIn"/>
+            <wsdl:output message="tns:test_querySoapOut"/>
+        </wsdl:operation>
+        <wsdl:operation name="request">
+            <wsdl:input message="tns:requestSoapIn"/>
+            <wsdl:output message="tns:requestSoapOut"/>
+        </wsdl:operation>
+        <wsdl:operation name="about_connector">
+            <wsdl:input message="tns:about_connectorSoapIn"/>
+            <wsdl:output message="tns:about_connectorSoapOut"/>
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="ConnectorSoap" type="tns:ConnectorSoap">
+        <soap:binding transport="http://schemas.xmlsoap.org/soap/http"/>
+        <wsdl:operation name="VERSION">
+            <soap:operation soapAction="search.ris.digitalservice.bund.de:VERSION" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="test_query">
+            <soap:operation soapAction="search.ris.digitalservice.bund.de:test_query" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="request">
+            <soap:operation soapAction="search.ris.digitalservice.bund.de:request" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="about_connector">
+            <soap:operation soapAction="search.ris.digitalservice.bund.de:about_connector"
+                            style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:binding name="ConnectorSoap12" type="tns:ConnectorSoap">
+        <soap12:binding transport="http://schemas.xmlsoap.org/soap/http"/>
+        <wsdl:operation name="VERSION">
+            <soap12:operation soapAction="search.ris.digitalservice.bund.de:VERSION" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="test_query">
+            <soap12:operation soapAction="search.ris.digitalservice.bund.de:test_query" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="request">
+            <soap12:operation soapAction="search.ris.digitalservice.bund.de:request" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="about_connector">
+            <soap12:operation soapAction="search.ris.digitalservice.bund.de:about_connector"
+                              style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:service name="Connector">
+        <wsdl:port name="ConnectorSoap" binding="tns:ConnectorSoap">
+            <soap:address location="http://localhost:8090/internal/soap"/>
+        </wsdl:port>
+        <wsdl:port name="ConnectorSoap12" binding="tns:ConnectorSoap12">
+            <soap12:address location="http://localhost:8090/internal/soap"/>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>
