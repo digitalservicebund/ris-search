@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <wsdl:definitions
         xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
-        xmlns:tns="search.ris.digitalservice.bund.de"
+        xmlns:tns="nlex.search.ris.digitalservice.bund.de"
         xmlns:xsd="http://www.w3.org/2001/XMLSchema"
         xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
-        targetNamespace="search.ris.digitalservice.bund.de"
+        targetNamespace="nlex.search.ris.digitalservice.bund.de"
         xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
 >
     <!--
@@ -17,7 +17,7 @@
     -->
     <wsdl:types>
         <xsd:schema elementFormDefault="qualified"
-                    targetNamespace="search.ris.digitalservice.bund.de">
+                    targetNamespace="nlex.search.ris.digitalservice.bund.de">
             <!--
             elementFormDefault attribut should be changed to 'qualified'
             if the elements of the SOAP parameters (input or output) define explicitly their namespace.
@@ -70,7 +70,7 @@
     <wsdl:binding name="ConnectorSoap" type="tns:ConnectorSoap">
         <soap:binding transport="http://schemas.xmlsoap.org/soap/http"/>
         <wsdl:operation name="VERSION">
-            <soap:operation soapAction="search.ris.digitalservice.bund.de:VERSION" style="document"/>
+            <soap:operation soapAction="nlex.search.ris.digitalservice.bund.de:VERSION" style="document"/>
             <wsdl:input>
                 <soap:body use="literal"/>
             </wsdl:input>
@@ -79,7 +79,7 @@
             </wsdl:output>
         </wsdl:operation>
         <wsdl:operation name="test_query">
-            <soap:operation soapAction="search.ris.digitalservice.bund.de:test_query" style="document"/>
+            <soap:operation soapAction="nlex.search.ris.digitalservice.bund.de:test_query" style="document"/>
             <wsdl:input>
                 <soap:body use="literal"/>
             </wsdl:input>
@@ -88,7 +88,7 @@
             </wsdl:output>
         </wsdl:operation>
         <wsdl:operation name="request">
-            <soap:operation soapAction="search.ris.digitalservice.bund.de:request" style="document"/>
+            <soap:operation soapAction="nlex.search.ris.digitalservice.bund.de:request" style="document"/>
             <wsdl:input>
                 <soap:body use="literal"/>
             </wsdl:input>
@@ -97,7 +97,7 @@
             </wsdl:output>
         </wsdl:operation>
         <wsdl:operation name="about_connector">
-            <soap:operation soapAction="search.ris.digitalservice.bund.de:about_connector"
+            <soap:operation soapAction="nlex.search.ris.digitalservice.bund.de:about_connector"
                             style="document"/>
             <wsdl:input>
                 <soap:body use="literal"/>
@@ -110,7 +110,7 @@
     <wsdl:binding name="ConnectorSoap12" type="tns:ConnectorSoap">
         <soap12:binding transport="http://schemas.xmlsoap.org/soap/http"/>
         <wsdl:operation name="VERSION">
-            <soap12:operation soapAction="search.ris.digitalservice.bund.de:VERSION" style="document"/>
+            <soap12:operation soapAction="nlex.search.ris.digitalservice.bund.de:VERSION" style="document"/>
             <wsdl:input>
                 <soap12:body use="literal"/>
             </wsdl:input>
@@ -119,7 +119,7 @@
             </wsdl:output>
         </wsdl:operation>
         <wsdl:operation name="test_query">
-            <soap12:operation soapAction="search.ris.digitalservice.bund.de:test_query" style="document"/>
+            <soap12:operation soapAction="nlex.search.ris.digitalservice.bund.de:test_query" style="document"/>
             <wsdl:input>
                 <soap12:body use="literal"/>
             </wsdl:input>
@@ -128,7 +128,7 @@
             </wsdl:output>
         </wsdl:operation>
         <wsdl:operation name="request">
-            <soap12:operation soapAction="search.ris.digitalservice.bund.de:request" style="document"/>
+            <soap12:operation soapAction="nlex.search.ris.digitalservice.bund.de:request" style="document"/>
             <wsdl:input>
                 <soap12:body use="literal"/>
             </wsdl:input>
@@ -137,7 +137,7 @@
             </wsdl:output>
         </wsdl:operation>
         <wsdl:operation name="about_connector">
-            <soap12:operation soapAction="search.ris.digitalservice.bund.de:about_connector"
+            <soap12:operation soapAction="nlex.search.ris.digitalservice.bund.de:about_connector"
                               style="document"/>
             <wsdl:input>
                 <soap12:body use="literal"/>

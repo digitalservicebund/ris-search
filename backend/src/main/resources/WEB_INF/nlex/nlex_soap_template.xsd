@@ -2,7 +2,7 @@
 <xsd:schema
         xmlns:xsd="http://www.w3.org/2001/XMLSchema"
         elementFormDefault="unqualified"
-        targetNamespace="search.ris.digitalservice.bund.de">
+        targetNamespace="nlex.search.ris.digitalservice.bund.de">
     <!--
     webservice request and response types
     -->

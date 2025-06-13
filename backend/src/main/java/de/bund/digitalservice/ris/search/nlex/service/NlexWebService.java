@@ -1,10 +1,10 @@
 package de.bund.digitalservice.ris.search.nlex.service;
 
-import de.bund.digitalservice.ris.search.Request;
-import de.bund.digitalservice.ris.search.RequestResponse;
-import de.bund.digitalservice.ris.search.TestQuery;
-import de.bund.digitalservice.ris.search.TestQueryResponse;
-import de.bund.digitalservice.ris.search.VERSIONResponse;
+import de.bund.digitalservice.ris.search.nlex.Request;
+import de.bund.digitalservice.ris.search.nlex.RequestResponse;
+import de.bund.digitalservice.ris.search.nlex.TestQuery;
+import de.bund.digitalservice.ris.search.nlex.TestQueryResponse;
+import de.bund.digitalservice.ris.search.nlex.VERSIONResponse;
 import de.bund.digitalservice.ris.search.nlex.service.schema.Result;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
