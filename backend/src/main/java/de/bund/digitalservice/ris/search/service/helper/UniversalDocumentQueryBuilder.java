@@ -57,95 +57,76 @@ public class UniversalDocumentQueryBuilder {
       return this;
     }
     if (StringUtils.isNotEmpty(params.getSearchTerm())) {
-      // separate quoted terms (contained in "") from unquoted terms
-      var parsed = new QuotedStringParser(params.getSearchTerm()).parse();
-      final List<String> unquotedTerms = parsed.unquotedTerms();
-      final List<String> quotedTerms = parsed.quotedTerms();
+      // Parse the search term to differentiate between quoted (phrase) and unquoted (individual)
+      // terms
+      var termsResult = new QuotedStringParser(params.getSearchTerm()).parse();
+      final List<String> unquotedSearchTerms = termsResult.unquotedTerms();
+      final List<String> quotedSearchPhrases = termsResult.quotedTerms();
 
-      /*
-       * Norm articles are stored as nested fields, and need to be searched separately using a nested query.
-       * Since this is a separate query, the quoted and unquoted terms need to be applied to it separately.
-       * This separate query is applied to the main query using QueryBuilders.nestedQuery.
-       *
-       * Unlike for the main query, minimumShouldMatch is set to 1: For example, if a user searches for the norm
-       * abbreviation and a keyword in an article, only that keyword needs to match in order for the article
-       * to be relevant.
-       *
-       * A simpler implementation would search a flat list of articles for the query terms. In order to show
-       * the article name and link (eId), however, the context needs to be retrieved using a nested query.
-       */
-      BoolQueryBuilder articleQuery = QueryBuilders.boolQuery();
-      articleQuery.minimumShouldMatch(1);
+      // --- Article Search within Nested Documents ---
+      // Norm articles are stored as nested documents and require a dedicated nested query.
+      // This query aims to find relevant articles, even if only a single term within the article
+      // matches.
+      BoolQueryBuilder articleNestedQuery = QueryBuilders.boolQuery();
+      articleNestedQuery.minimumShouldMatch(1); // At least one clause must match within an article
 
-      for (var unquotedTerm : unquotedTerms) {
-        /*
-         * Each unquoted term is searched for using a
-         * <a href="https://docs.opensearch.org/docs/latest/query-dsl/full-text/multi-match/">Multi-Match query</a>,
-         * which searches multiple fields at once.
-         * ZeroTermsQuery.ALL ensures that if the analyzer removes all terms (e.g. stop words), the now-empty
-         * term matches all documents instead of causing an empty result set.
-         * */
-        MultiMatchQueryBuilder queryBuilder =
-            new MultiMatchQueryBuilder(unquotedTerm)
+      for (String term : unquotedSearchTerms) {
+        // Use a Multi-Match query to search across multiple fields.
+        // ZeroTermsQuery.ALL ensures that if the analyzer removes all terms (e.g., stop words),
+        // the query still matches all documents instead of returning an empty result set.
+        MultiMatchQueryBuilder unquotedQuery =
+            new MultiMatchQueryBuilder(term)
                 .zeroTermsQuery(MatchQuery.ZeroTermsQuery.ALL)
                 .operator(Operator.AND)
                 .type(Type.CROSS_FIELDS);
-        query.must(queryBuilder);
-        articleQuery.should(queryBuilder);
-      }
-      for (var quotedTerm : quotedTerms) {
-        /*
-         * Each quoted term is searched for using a Multi-Match query, like for unquoted terms, but with type
-         * set to PHRASE.
-         * */
-        MultiMatchQueryBuilder queryBuilder =
-            new MultiMatchQueryBuilder(quotedTerm).type(Type.PHRASE);
-        query.must(queryBuilder);
-        articleQuery.should(queryBuilder);
+        query.must(unquotedQuery);
+        articleNestedQuery.should(unquotedQuery);
       }
 
-      /*
-       * Allow searching articles by "search keyword", consisting of an article number and the norm abbreviation.
-       * The slop parameter is added to allow for re-ordering of article number and abbreviation.
-       */
-      articleQuery.should(
+      for (String phrase : quotedSearchPhrases) {
+        // Quoted terms are treated as phrases using a Multi-Match query with type PHRASE.
+        MultiMatchQueryBuilder quotedQuery = new MultiMatchQueryBuilder(phrase).type(Type.PHRASE);
+        query.must(quotedQuery);
+        articleNestedQuery.should(quotedQuery);
+      }
+
+      // Allow searching articles by a combined "search keyword" (e.g., article number and norm
+      // abbreviation).
+      // Slop is added to account for re-ordering of the components, and a boost prioritizes these
+      // matches.
+      articleNestedQuery.should(
           new MatchPhraseQueryBuilder("articles.search_keyword", params.getSearchTerm())
               .slop(3)
               .boost(3));
 
-      /*
-       * The search tries to show ARTICLE_INNER_HITS_SIZE number of relevant articles.
-       * If fewer articles are found to be relevant, other articles should be shown in the textMatches instead.
-       * However, they should not influence the ranking.
-       * Therefore, match all (=all else) with boost 0 (no influence on ranking).
-       */
-      articleQuery.should(new MatchAllQueryBuilder().boost(0));
+      // Include a MatchAllQuery with boost 0 to ensure all articles are considered for display,
+      // even if they don't explicitly match the query, but without influencing their ranking.
+      // This is useful for filling in results if few highly relevant articles are found.
+      articleNestedQuery.should(new MatchAllQueryBuilder().boost(0));
 
-      /*
-       * ScoreMode.Max is chosen to ensure that documents are ranked based on the highest-scoring matching article.
-       * This prevents documents with many lower-scoring articles from disproportionately ranking higher than
-       * documents with fewer, but highly relevant, articles.
-       */
-      NestedQueryBuilder nestedArticleQuery =
-          QueryBuilders.nestedQuery("articles", articleQuery, ScoreMode.Max);
+      // Construct the nested query for articles.
+      // ScoreMode.Max ensures that documents are ranked by their highest-scoring matching article,
+      // preventing documents with many low-scoring articles from outranking those with fewer,
+      // highly relevant ones.
+      NestedQueryBuilder articleQueryBuilder =
+          QueryBuilders.nestedQuery("articles", articleNestedQuery, ScoreMode.Max);
 
-      /*
-       * The "inner hits" property on the nested query is used to configure highlighting, and that the
-       * necessary context (article name and eId) are returned together with any text highlights so that
-       * the UI may link directly to those articles.
-       * */
-      InnerHitBuilder innerHitBuilder = new InnerHitBuilder().setSize(ARTICLE_INNER_HITS_SIZE);
-      innerHitBuilder.setHighlightBuilder(RisHighlightBuilder.getArticleFieldsHighlighter());
-      innerHitBuilder.setFetchSourceContext(
-          new FetchSourceContext(true, new String[] {"articles.name", "articles.eid"}, null));
-      nestedArticleQuery.innerHit(innerHitBuilder);
+      // Configure inner hits for the nested article query.
+      // Inner hits enable highlighting and extraction of specific article context (name, eId)
+      // to facilitate direct linking in the UI.
+      InnerHitBuilder articleInnerHitBuilder =
+          new InnerHitBuilder()
+              .setSize(ARTICLE_INNER_HITS_SIZE)
+              .setHighlightBuilder(RisHighlightBuilder.getArticleFieldsHighlighter())
+              .setFetchSourceContext(
+                  new FetchSourceContext(
+                      true, new String[] {"articles.name", "articles.eid"}, null));
+      articleQueryBuilder.innerHit(articleInnerHitBuilder);
 
-      query.should(nestedArticleQuery);
+      query.should(articleQueryBuilder);
 
-      /*
-       Add a "BEST_FIELDS" query with the whole term in order to boost cases where the whole searchTerm appears in one
-       field.
-      */
+      // Add a "BEST_FIELDS" query with the entire search term to boost documents
+      // where the complete term appears in high-priority fields.
       query.should(
           new MultiMatchQueryBuilder(params.getSearchTerm())
               .type(Type.BEST_FIELDS)
