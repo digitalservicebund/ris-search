@@ -2,7 +2,7 @@
 import NormTableOfContents from "@/components/Ris/NormTableOfContents.vue";
 import type { TreeNode } from "primevue/treenode";
 import { tocItemsToTreeNodes } from "@/utils/tableOfContents";
-import type { LegislationWork, SearchResult } from "@/types";
+import type { LegislationWork } from "@/types";
 import { useFetchNormContent } from "./useNormData";
 import { useRoute } from "#app";
 import { useIntersectionObserver } from "@/composables/useIntersectionObserver";
@@ -105,13 +105,8 @@ const normBreadcrumbTitle = computed(() =>
   metadata.value ? getNormBreadcrumbTitle(metadata.value) : "",
 );
 
-const { status: normVersionsStatus, sortedVersions: normVersions } = metadata
-  .value?.legislationIdentifier
-  ? useNormVersions(metadata.value?.legislationIdentifier)
-  : {
-      status: "error",
-      sortedVersions: [] as SearchResult<LegislationWork>[],
-    };
+const { status: normVersionsStatus, sortedVersions: normVersions } =
+  useNormVersions(metadata.value?.legislationIdentifier);
 
 const breadcrumbItems: ComputedRef<BreadcrumbItem[]> = computed(() => {
   const list = [
@@ -141,7 +136,9 @@ const breadcrumbItems: ComputedRef<BreadcrumbItem[]> = computed(() => {
         <FileActionsMenu :xml-url="xmlUrl" />
       </div>
       <NormHeadingGroup :metadata="metadata" :html-parts="htmlParts" />
+
       <VersionWarningMessage
+        v-if="normVersionsStatus === 'success'"
         :versions="normVersions"
         :current-expression="metadata.workExample.legislationIdentifier"
       />

@@ -12,11 +12,15 @@ interface UseNormVersions {
 
 export type VersionStatus = "inForce" | "future" | "historical" | undefined;
 
-export function useNormVersions(workEli: string): UseNormVersions {
+export function useNormVersions(workEli?: string): UseNormVersions {
   const backendURL = useBackendURL();
+  const immediate = workEli !== undefined;
   const { status, data, error } = useFetch<
     JSONLDList<SearchResult<LegislationWork>>
-  >(`${backendURL}/v1/legislation`, { params: { eli: workEli } });
+  >(`${backendURL}/v1/legislation`, {
+    params: { eli: workEli },
+    immediate: immediate,
+  });
 
   if (error?.value) {
     showError(error.value);
