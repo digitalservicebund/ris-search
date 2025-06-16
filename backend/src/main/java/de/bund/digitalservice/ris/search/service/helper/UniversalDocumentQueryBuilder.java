@@ -13,6 +13,7 @@ import de.bund.digitalservice.ris.search.utils.DateUtils;
 import de.bund.digitalservice.ris.search.utils.QuotedStringParser;
 import de.bund.digitalservice.ris.search.utils.RisHighlightBuilder;
 import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Stream;
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
@@ -44,57 +45,95 @@ public class UniversalDocumentQueryBuilder {
     query = QueryBuilders.boolQuery();
   }
 
+  /**
+   * Adds those parameters to the query object that may apply to both norms and case law.
+   * Nevertheless, it contains some norms-specific logic, to allow generic parameters to match
+   * norm-specific fields.
+   *
+   * @return The mutated UniversalDocumentQueryBuilder instance.
+   */
   public UniversalDocumentQueryBuilder withUniversalSearchParams(UniversalSearchParams params) {
     if (params == null) {
       return this;
     }
     if (StringUtils.isNotEmpty(params.getSearchTerm())) {
+      // separate quoted terms (contained in "") from unquoted terms
       var parsed = new QuotedStringParser(params.getSearchTerm()).parse();
-      BoolQueryBuilder nestedQuery = QueryBuilders.boolQuery();
+      final List<String> unquotedTerms = parsed.unquotedTerms();
+      final List<String> quotedTerms = parsed.quotedTerms();
 
-      for (var unquotedTerm : parsed.unquotedTerms()) {
+      /*
+       * Norm articles are stored as nested fields, and need to be searched separately using a nested query.
+       * Since this is a separate query, the quoted and unquoted terms need to be applied to it separately.
+       * This separate query is applied to the main query using QueryBuilders.nestedQuery.
+       *
+       * Unlike for the main query, minimumShouldMatch is set to 1: For example, if a user searches for the norm
+       * abbreviation and a keyword in an article, only that keyword needs to match in order for the article
+       * to be relevant.
+       *
+       * A simpler implementation would search a flat list of articles for the query terms. In order to show
+       * the article name and link (eId), however, the context needs to be retrieved using a nested query.
+       */
+      BoolQueryBuilder articleQuery = QueryBuilders.boolQuery();
+      articleQuery.minimumShouldMatch(1);
+
+      for (var unquotedTerm : unquotedTerms) {
+        /*
+         * Each unquoted term is searched for using a
+         * <a href="https://docs.opensearch.org/docs/latest/query-dsl/full-text/multi-match/">Multi-Match query</a>,
+         * which searches multiple fields at once.
+         * ZeroTermsQuery.ALL ensures that if the analyzer removes all terms (e.g. stop words), the now-empty
+         * term matches all documents instead of causing an empty result set.
+         * */
         MultiMatchQueryBuilder queryBuilder =
             new MultiMatchQueryBuilder(unquotedTerm)
                 .zeroTermsQuery(MatchQuery.ZeroTermsQuery.ALL)
                 .operator(Operator.AND)
                 .type(Type.CROSS_FIELDS);
         query.must(queryBuilder);
-        nestedQuery.should(queryBuilder);
+        articleQuery.should(queryBuilder);
       }
-      for (var quotedTerm : parsed.quotedTerms()) {
+      for (var quotedTerm : quotedTerms) {
+        /*
+         * Each quoted term is searched for using a Multi-Match query, like for unquoted terms, but with type
+         * set to PHRASE.
+         * */
         MultiMatchQueryBuilder queryBuilder =
             new MultiMatchQueryBuilder(quotedTerm).type(Type.PHRASE);
         query.must(queryBuilder);
-        nestedQuery.should(queryBuilder);
+        articleQuery.should(queryBuilder);
       }
-
-      nestedQuery.minimumShouldMatch(1);
 
       /*
        * Allow searching articles by "search keyword", consisting of an article number and the norm abbreviation.
        * The slop parameter is added to allow for re-ordering of article number and abbreviation.
        */
-      nestedQuery.should(
+      articleQuery.should(
           new MatchPhraseQueryBuilder("articles.search_keyword", params.getSearchTerm())
               .slop(3)
               .boost(3));
 
-      // Other articles that don't match should appear in a preview, but not influence the ranking.
-      // Therefore, match all (=all else) with boost 0 (no influence on ranking).
-      nestedQuery.should(new MatchAllQueryBuilder().boost(0));
+      /*
+       * The search tries to show ARTICLE_INNER_HITS_SIZE number of relevant articles.
+       * If fewer articles are found to be relevant, other articles should be shown in the textMatches instead.
+       * However, they should not influence the ranking.
+       * Therefore, match all (=all else) with boost 0 (no influence on ranking).
+       */
+      articleQuery.should(new MatchAllQueryBuilder().boost(0));
 
       /*
-       * Configures a nested query for 'articles'.
-       *
        * ScoreMode.Max is chosen to ensure that documents are ranked based on the highest-scoring matching article.
        * This prevents documents with many lower-scoring articles from disproportionately ranking higher than
        * documents with fewer, but highly relevant, articles.
        */
       NestedQueryBuilder nestedArticleQuery =
-          QueryBuilders.nestedQuery("articles", nestedQuery, ScoreMode.Max);
+          QueryBuilders.nestedQuery("articles", articleQuery, ScoreMode.Max);
 
-      // Configure the nested query "inner hits" to retrieve specific fields from articles and apply
-      // highlighting.
+      /*
+       * The "inner hits" property on the nested query is used to configure highlighting, and that the
+       * necessary context (article name and eId) are returned together with any text highlights so that
+       * the UI may link directly to those articles.
+       * */
       InnerHitBuilder innerHitBuilder = new InnerHitBuilder().setSize(ARTICLE_INNER_HITS_SIZE);
       innerHitBuilder.setHighlightBuilder(RisHighlightBuilder.getArticleFieldsHighlighter());
       innerHitBuilder.setFetchSourceContext(
