@@ -39,7 +39,7 @@ class CaseLawApiSearchDataTest extends BaseApiSearchDataTest {
   }
 
   @Test
-  void testCaseLawFilenameSearchResults() {
+  void testCaseLawFileNumberSearchResults() {
     List<String> searchStrings =
         fetchSearchStrings(
             maxEntries,

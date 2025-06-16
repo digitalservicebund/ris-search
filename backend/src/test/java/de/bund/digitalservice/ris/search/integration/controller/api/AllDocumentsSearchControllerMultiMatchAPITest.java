@@ -67,17 +67,17 @@ class AllDocumentsSearchControllerMultiMatchAPITest extends ContainersIntegratio
     var caseLawData =
         List.of(
             CaseLawDocumentationUnit.builder()
-                .documentNumber("C1 {m,t,r} in different fields")
+                .documentNumber("case_acrossFields {m,t,r} in different fields")
                 .tenor("Mord")
                 .headline("Totschlag")
                 .guidingPrinciple("Raub")
                 .build(),
             CaseLawDocumentationUnit.builder()
-                .documentNumber("C2 {m,t,r} in one field")
+                .documentNumber("case_sameField {m,t,r} in one field")
                 .tenor("Mord, Totschlag, Raub")
                 .build(),
             CaseLawDocumentationUnit.builder()
-                .documentNumber("C3 {m,t,r} in one field but different order")
+                .documentNumber("case_sameFieldReordered {m,t,r} in one field but different order")
                 .tenor("Raub, Mord, Totschlag")
                 .build());
     var normsData =
@@ -136,7 +136,8 @@ class AllDocumentsSearchControllerMultiMatchAPITest extends ContainersIntegratio
     mockMvc
         .perform(get(ApiConfig.Paths.DOCUMENT + query).contentType(MediaType.APPLICATION_JSON))
         .andExpect(everyIdContainsEither("{m,t}", "{m,t,r}"))
-        .andExpect(idsContainAll("C1", "C2", "C3", "N1"));
+        .andExpect(
+            idsContainAll("case_acrossFields", "case_sameField", "case_sameFieldReordered", "N1"));
   }
 
   @Test
@@ -147,7 +148,8 @@ class AllDocumentsSearchControllerMultiMatchAPITest extends ContainersIntegratio
     mockMvc
         .perform(get(ApiConfig.Paths.DOCUMENT + query).contentType(MediaType.APPLICATION_JSON))
         .andExpect(everyIdContainsEither("{m,t}", "{m,t,r}"))
-        .andExpect(idsContainAll("C1", "C2", "C3", "N1"));
+        .andExpect(
+            idsContainAll("case_acrossFields", "case_sameField", "case_sameFieldReordered", "N1"));
   }
 
   @Test
@@ -158,7 +160,9 @@ class AllDocumentsSearchControllerMultiMatchAPITest extends ContainersIntegratio
     mockMvc
         .perform(get(ApiConfig.Paths.DOCUMENT + query).contentType(MediaType.APPLICATION_JSON))
         .andExpect(everyIdContainsEither("{r}", "{m,t,r}"))
-        .andExpect(idsContainAll("C1", "C2", "C3", "N2", "N3"));
+        .andExpect(
+            idsContainAll(
+                "case_acrossFields", "case_sameField", "case_sameFieldReordered", "N2", "N3"));
   }
 
   @ParameterizedTest
@@ -170,16 +174,19 @@ class AllDocumentsSearchControllerMultiMatchAPITest extends ContainersIntegratio
     mockMvc
         .perform(get(ApiConfig.Paths.DOCUMENT + query).contentType(MediaType.APPLICATION_JSON))
         .andExpect(everyIdContainsEither("{m,t,r}"))
-        .andExpect(idsContainAll("C1", "C2", "C3"));
+        .andExpect(idsContainAll("case_acrossFields", "case_sameField", "case_sameFieldReordered"));
   }
 
   static Stream<Arguments> shouldMatchPhraseIfQuotedArguments() {
     return Stream.of(
-        Arguments.of("\"Mord, Totschlag, Raub\"", 1, idsContainAll("C2")),
-        Arguments.of("\"Raub, Mord, Totschlag\"", 1, idsContainAll("C3")),
-        Arguments.of("\"raub mord TOTSCHLAG\"", 1, idsContainAll("C3")),
-        Arguments.of("\"mord Totschlag\" Raub", 2, idsContainAll("C2", "C3")),
-        Arguments.of("\"mord Totschlag\" \"Totschlag Raub\"", 1, idsContainAll("C2")),
+        Arguments.of("\"Mord, Totschlag, Raub\"", 1, idsContainAll("case_sameField")),
+        Arguments.of("\"Raub, Mord, Totschlag\"", 1, idsContainAll("case_sameFieldReordered")),
+        Arguments.of("\"raub mord TOTSCHLAG\"", 1, idsContainAll("case_sameFieldReordered")),
+        Arguments.of(
+            "\"mord Totschlag\" Raub",
+            2,
+            idsContainAll("case_sameField", "case_sameFieldReordered")),
+        Arguments.of("\"mord Totschlag\" \"Totschlag Raub\"", 1, idsContainAll("case_sameField")),
         Arguments.of("\"Mord Raub\"", 0, null));
   }
 
