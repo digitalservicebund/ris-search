@@ -24,20 +24,19 @@ const inForceVersionLink = computed(
     `/norms/${inForceVersion.value?.item.workExample.legislationIdentifier}`,
 );
 
-const currentVersion: ComputedRef<SearchResult<LegislationWork>> = computed(
-  () => {
+const currentVersion: ComputedRef<SearchResult<LegislationWork> | undefined> =
+  computed(() => {
     const current = props.versions.find(
       (version) =>
         version.item.workExample.legislationIdentifier ===
         props.currentExpression,
     );
     if (!current)
-      throw new Error(
-        `The provided current expression (${props.currentExpression}) does not exist in the provided versions`,
-      );
+      showError({
+        statusMessage: `The provided current expression (${props.currentExpression}) does not exist in the provided versions`,
+      });
     return current;
-  },
-);
+  });
 
 const currentVersionStatus = computed<VersionStatus>(() =>
   getVersionStatus(currentVersion.value),
