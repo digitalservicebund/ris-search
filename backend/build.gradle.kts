@@ -204,8 +204,25 @@ tasks {
                 "src/main/resources/WEB_INF/nlex/types/Result/bindings.xjb",
             )
     }
+    register("generate-query", JavaExec::class) {
+        doFirst {
+            mkdir("$buildDir/generated/java/main")
+        }
+        enabled = true
+        classpath(configurations["jaxb"])
+        mainClass = "com.sun.tools.xjc.XJCFacade"
+        // args = listOf("src/main/resources/xjustiz", "-d", "$buildDir/generated/java/main")
+        args =
+            listOf(
+                "src/main/resources/WEB_INF/nlex/types/Query",
+                "-d",
+                "$buildDir/generated/java/main",
+                "-b",
+                "src/main/resources/WEB_INF/nlex/types/Query/bindings.xjb",
+            )
+    }
     compileJava {
-        dependsOn("generate-wsdl", "generate-document", "generate-result-list")
+        dependsOn("generate-wsdl", "generate-document", "generate-result-list", "generate-query")
         options.compilerArgs.addAll(arrayOf())
     }
 

@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xsd:schema xmlns:xsd = "http://www.w3.org/2001/XMLSchema">
+
+  <xsd:include schemaLocation="../types.xsd" />
+
+  <!-- 1. Header : request, navigation -->
+
+  <xsd:element name = "request">
+    <xsd:complexType>
+      <xsd:all>
+        <xsd:element name="navigation" type="navigation"
+           minOccurs="0" maxOccurs="1" />
+        <xsd:element name="criteria" minOccurs="0" maxOccurs="1">
+          <xsd:complexType>
+            <xsd:complexContent>
+              <xsd:extension base="boolean">
+                <xsd:attribute name="encoding" type="criteria-encoding" />
+              </xsd:extension>
+            </xsd:complexContent>
+          </xsd:complexType>
+        </xsd:element>
+      </xsd:all>
+
+      <xsd:attribute name = "output_format" use="required" type="outputFormat"/>
+      <xsd:attribute name = "output_lang" use="required" type="locale_lang"/>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:simpleType name="outputFormat">
+    <xsd:restriction base="xsd:string" />
+  </xsd:simpleType>
+
+
+  <xsd:simpleType name="criteria-encoding">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="utf8" />
+      <xsd:enumeration value="xml-entities-decimal" />
+      <xsd:enumeration value="xml-entities-hexadecimal" />
+    </xsd:restriction>
+  </xsd:simpleType>
+
+  <!-- 2. Part "criteria" -->
+
+  <xsd:complexType name="boolean">
+    <xsd:choice>
+      <xsd:group ref="field" />
+      <xsd:group ref="boolean" />
+    </xsd:choice>
+  </xsd:complexType>
+
+  <xsd:group name="boolean">
+    <xsd:choice>
+      <xsd:element name="not" type="boolean" />
+      <xsd:element name="or" type="binary_op" />
+      <xsd:element name="and" type="binary_op" />
+    </xsd:choice>
+  </xsd:group>
+
+  <xsd:complexType name="binary_op">
+    <xsd:sequence>
+      <xsd:choice minOccurs="0" maxOccurs="unbounded">
+        <xsd:group ref="field" />
+        <xsd:group ref="boolean" />
+      </xsd:choice>
+    </xsd:sequence>
+  </xsd:complexType>
+
+
+  <xsd:simpleType name="comparator">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="eq" />
+      <xsd:enumeration value="ne" />
+      <xsd:enumeration value="lt" />
+      <xsd:enumeration value="le" />
+      <xsd:enumeration value="gt" />
+      <xsd:enumeration value="ge" />
+    </xsd:restriction>
+  </xsd:simpleType>
+
+  <xsd:simpleType name="string-comparator">
+    <xsd:union memberTypes="comparator">
+      <xsd:simpleType>
+        <xsd:restriction base="xsd:string">
+          <xsd:enumeration value="match" />
+          <xsd:enumeration value="like" />
+          <xsd:enumeration value="truncated" />
+          <xsd:enumeration value="contains" />
+          <xsd:enumeration value="sound" />
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:union>
+  </xsd:simpleType>
+
+  <xsd:group name="field">
+    <xsd:choice>
+      <!-- Complex types -->
+      <xsd:element name="words" type="wordsType" />
+      <xsd:element name="date"  type="dateType" />
+      <!-- Simple types -->
+      <xsd:element ref="string.value" />
+      <xsd:element ref="int.value" />
+    </xsd:choice>
+  </xsd:group>
+
+  <!-- 2.1. Indexes of "words" type (look for documents according to their plain text) -->
+
+  <xsd:simpleType name="wordsIndexName">
+    <xsd:restriction base="xsd:QName" />
+  </xsd:simpleType>
+
+  <xsd:complexType name="wordsType">
+    <xsd:complexContent>
+      <xsd:extension base="boolean-words">
+        <xsd:attribute name="idx-name" type="wordsIndexName" />
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+
+  <xsd:complexType name="boolean-words">
+    <xsd:group ref="boolean-words" />
+  </xsd:complexType>
+
+  <xsd:group name="boolean-words">
+    <xsd:choice>
+      <xsd:element name="contains" type="containsType"/>
+      <xsd:element name="not" type="boolean-words" />
+      <xsd:element name="or" type="binary_op-words" />
+      <xsd:element name="and" type="binary_op-words" />
+      <xsd:element name="proximity">
+        <xsd:complexType>
+          <xsd:complexContent>
+            <xsd:extension base="binary_op-words">
+              <xsd:attribute name="range" type="wordsProximity"
+                       use="optional" default="any" />
+            </xsd:extension>
+          </xsd:complexContent>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:choice>
+  </xsd:group>
+
+  <xsd:complexType name="binary_op-words">
+    <xsd:group ref="boolean-words" minOccurs="1" maxOccurs="unbounded" />
+  </xsd:complexType>
+
+  <xsd:simpleType name="wordsProximity">
+    <xsd:union memberTypes="wordsProximityInt wordsProximityText" />
+  </xsd:simpleType>
+
+  <xsd:simpleType name="wordsProximityInt">
+    <xsd:restriction base="xsd:nonNegativeInteger" />
+  </xsd:simpleType>
+
+  <xsd:simpleType name="wordsProximityText">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="any" />
+      <xsd:enumeration value="phrase" />
+      <xsd:enumeration value="paragraph" />
+      <xsd:enumeration value="section" />
+    </xsd:restriction>
+  </xsd:simpleType>
+
+  <xsd:simpleType name="words-group-type">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="nominal" />
+      <xsd:enumeration value="verbal" />
+    </xsd:restriction>
+  </xsd:simpleType>
+
+  <xsd:simpleType name="words-inflexion">
+    <xsd:restriction base="xsd:string">
+      <!-- Global inflexions -->
+      <xsd:enumeration value="all" />
+      <xsd:enumeration value="none" />
+      <!-- all-type inflexions -->
+      <xsd:enumeration value="singular-only" />
+      <xsd:enumeration value="plural-only" />
+      <!-- noun inflexions -->
+      <xsd:enumeration value="all-cases" />
+      <xsd:enumeration value="definite-only" />
+      <xsd:enumeration value="indefinite-only" />
+      <!-- Verb inflexions -->
+      <xsd:enumeration value="all-tenses" />
+      <xsd:enumeration value="all-aspects" />
+    </xsd:restriction>
+  </xsd:simpleType>
+
+  <xsd:simpleType name="word-encoding">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="none" />
+      <xsd:enumeration value="translit" />
+      <xsd:enumeration value="rich" />
+      <xsd:enumeration value="poor" />
+    </xsd:restriction>
+  </xsd:simpleType>
+
+  <!-- 2.2. Index of "string" type -->
+
+  <xsd:element name="string.value">
+    <xsd:complexType>
+      <xsd:simpleContent>
+        <xsd:extension base="xsd:string">
+          <xsd:attribute name="idx-name" type="stringIndexName" />
+          <xsd:attribute name="compare" type="string-comparator" />
+        </xsd:extension>
+      </xsd:simpleContent>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:simpleType name="stringIndexName">
+    <xsd:restriction base="xsd:QName" />
+  </xsd:simpleType>
+
+
+  <!-- 2.3. Index of "integer" type -->
+
+  <xsd:element name="int.value">
+    <xsd:complexType>
+      <xsd:simpleContent>
+        <xsd:extension base="xsd:int">
+          <xsd:attribute name="idx-name" type="intIndexName" />
+          <xsd:attribute name="compare" type="comparator" />
+        </xsd:extension>
+      </xsd:simpleContent>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:simpleType name="intIndexName">
+    <xsd:restriction base="xsd:QName" />
+  </xsd:simpleType>
+
+  <!-- 2.4. Index of "date" type -->
+
+  <xsd:simpleType name="dateIndexName">
+    <xsd:restriction base="xsd:QName" />
+  </xsd:simpleType>
+
+  <xsd:complexType name="dateType">
+    <xsd:complexContent>
+      <xsd:extension base="single_date">
+        <xsd:attribute name="compare" type="comparator" />
+        <xsd:attribute name="idx-name" type="dateIndexName" />
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+
+    <xsd:complexType name="containsType">
+      <xsd:simpleContent>
+        <xsd:extension base="xsd:string">
+          <xsd:attribute name="compare" type="string-comparator" />
+          <xsd:attribute name="words-group-type" type="words-group-type" />
+          <xsd:attribute name="words-inflexion" type="words-inflexion" />
+          <xsd:attribute name="encoding" type="word-encoding" use="optional" />
+        </xsd:extension>
+      </xsd:simpleContent>
+    </xsd:complexType>
+
+</xsd:schema>

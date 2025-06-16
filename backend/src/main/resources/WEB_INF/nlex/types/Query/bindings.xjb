@@ -1,0 +1,11 @@
+<!-- cti-domain/src/main/xjb/cwe-bindings.xjb -->
+<jxb:bindings version="3.0"
+              xmlns:jxb="https://jakarta.ee/xml/ns/jaxb"
+              xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+    <jxb:bindings schemaLocation="nlex-query.xsd" node="//xsd:schema">
+                <jxb:schemaBindings>
+                    <jxb:package name="de.bund.digitalservice.ris.search.query"/>
+                </jxb:schemaBindings>
+            </jxb:bindings>
+</jxb:bindings>

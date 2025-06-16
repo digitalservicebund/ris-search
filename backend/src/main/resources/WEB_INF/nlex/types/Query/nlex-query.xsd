@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE xsd:schema [
+        <!ELEMENT xsd:schema (xsd:redefine|xsd:element|xsd:simpleType)*>
+        <!ATTLIST xsd:schema
+                xmlns:xsd CDATA #REQUIRED
+                xmlns:nlex CDATA #REQUIRED>
+        <!ELEMENT xsd:redefine (xsd:simpleType|xsd:complexType|xsd:group)*>
+        <!ATTLIST xsd:redefine
+                schemaLocation CDATA #REQUIRED>
+        <!ELEMENT xsd:simpleType (xsd:restriction)*>
+        <!ATTLIST xsd:simpleType
+                name CDATA #REQUIRED>
+        <!ELEMENT xsd:restriction (xsd:enumeration|xsd:pattern)*>
+        <!ATTLIST xsd:restriction
+                base CDATA #REQUIRED>
+        <!ELEMENT xsd:enumeration (#PCDATA)>
+        <!ATTLIST xsd:enumeration
+                value CDATA #REQUIRED>
+        <!ELEMENT xsd:complexType (xsd:complexContent|xsd:simpleContent)*>
+        <!ATTLIST xsd:complexType
+                name CDATA #IMPLIED>
+        <!ELEMENT xsd:complexContent (xsd:extension)*>
+        <!ELEMENT xsd:extension (xsd:attribute)*>
+        <!ATTLIST xsd:extension
+                base CDATA #REQUIRED>
+        <!ELEMENT xsd:attribute (#PCDATA)>
+        <!ATTLIST xsd:attribute
+                name CDATA #REQUIRED
+                type CDATA #REQUIRED>
+        <!ELEMENT xsd:pattern (#PCDATA)>
+        <!ATTLIST xsd:pattern
+                value CDATA #REQUIRED>
+        <!ELEMENT xsd:group (xsd:choice)*>
+        <!ATTLIST xsd:group
+                name CDATA #IMPLIED
+                ref CDATA #IMPLIED>
+        <!ELEMENT xsd:choice (xsd:group|xsd:element)*>
+        <!ELEMENT xsd:element (xsd:complexType)*>
+        <!ATTLIST xsd:element
+                name CDATA #IMPLIED
+                ref CDATA #IMPLIED>
+        <!ELEMENT xsd:simpleContent (xsd:extension)*>
+        ]>
+<xsd:schema xmlns:xsd = "http://www.w3.org/2001/XMLSchema"
+        xmlns:nlex="http://n-lex.europa.eu/xml/schemas/query/legislation/">
+
+  <xsd:redefine schemaLocation="query.xsd">
+
+    <xsd:simpleType name="outputFormat">
+      <xsd:restriction base="outputFormat">
+        <!-- number of documents -->
+        <xsd:enumeration value="xsd:int" />
+        <!-- only for local connectors : original output -->
+        <xsd:enumeration value="original" />
+        <!-- only for local connectors : original output, filtered -->
+        <xsd:enumeration value="original-filtered" />
+        <!-- complete html -->
+        <xsd:enumeration value="http://www.w3.org/TR/REC-html40 html" />
+        <!-- only part -->
+        <xsd:enumeration value="http://www.w3.org/TR/REC-html40 body" />
+        <!-- xml, n-lex -->
+        <xsd:enumeration value="../result/document.xsd" />
+        <!-- xml, n-lex -->
+        <xsd:enumeration value="../result/result-list.xsd" />
+      </xsd:restriction>
+    </xsd:simpleType>
+
+    <!-- 2.1. Indexes of "words" type (look for documents according to their plain text) -->
+
+    <xsd:complexType name="wordsType">
+      <xsd:complexContent>
+        <xsd:extension base="wordsType">
+          <xsd:attribute name="lang" type="locale_lang" />
+        </xsd:extension>
+      </xsd:complexContent>
+    </xsd:complexType>
+
+    <xsd:simpleType name="wordsIndexName">
+      <xsd:restriction base="wordsIndexName">
+        <!-- N-Lex available indexes -->
+        <xsd:pattern value="nlex:title" />
+        <xsd:pattern value="nlex:text" />
+        <xsd:pattern value="nlex:abstract" />
+        <xsd:pattern value="nlex:fulltext" />
+      </xsd:restriction>
+    </xsd:simpleType>
+
+    <!-- 2.2. Index of "string" type -->
+
+    <xsd:simpleType name="stringIndexName">
+      <xsd:restriction base="stringIndexName">
+        <!-- N-Lex available indexes -->
+        <xsd:pattern value="nlex:doc_type" />
+        <xsd:pattern value="nlex:doc_number" />
+        <xsd:pattern value="nlex:OJ_Name" />
+        <xsd:pattern value="nlex:OJ_Number" />
+      </xsd:restriction>
+    </xsd:simpleType>
+
+    <!-- 2.3. Index of "integer" type -->
+
+    <xsd:simpleType name="intIndexName">
+      <xsd:restriction base="intIndexName">
+        <!-- N-Lex available indexes -->
+        <xsd:pattern value="nlex:doc_number" />
+        <xsd:pattern value="nlex:OJ_Number" />
+      </xsd:restriction>
+    </xsd:simpleType>
+
+    <!-- 2.4. Index of "date" type -->
+
+    <xsd:simpleType name="dateIndexName">
+      <xsd:restriction base="dateIndexName">
+        <!-- N-Lex available indexes -->
+        <xsd:pattern value="nlex:date-of-doc" />
+        <xsd:pattern value="nlex:date-of-pub" />
+        <xsd:pattern value="nlex:validity-date" />
+      </xsd:restriction>
+    </xsd:simpleType>
+
+    <!-- 3. Add Specific N-Lex types -->
+
+    <xsd:group name="field">
+      <xsd:choice>
+        <!-- Use definitions of query.xsd (words, date, string.value,int.value) -->
+          <xsd:group ref="field"/>
+        <!-- extension -->
+        <xsd:element ref="docType.value" />
+        <xsd:element ref="docNumber.value" />
+        <xsd:element ref="section.value" />
+        <xsd:element ref="OJName.value" />
+        <xsd:element ref="OJNumber.value" />
+      </xsd:choice>
+    </xsd:group>
+
+
+  </xsd:redefine>
+
+  <xsd:element name="docType.value">
+    <xsd:complexType>
+      <xsd:simpleContent>
+        <xsd:extension base="doc_type">
+          <xsd:attribute name="idx-name" type="docTypeIndexName" />
+          <xsd:attribute name="compare" type="comparator" />
+        </xsd:extension>
+      </xsd:simpleContent>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:simpleType name="docTypeIndexName">
+    <xsd:restriction base="xsd:QName">
+      <!-- N-Lex available index -->
+      <xsd:pattern value="nlex:doc_type" />
+    </xsd:restriction>
+  </xsd:simpleType>
+
+  <!-- The created doc_type type should be redefined -->
+  <xsd:simpleType name="doc_type">
+    <xsd:restriction base="xsd:string" />
+  </xsd:simpleType>
+
+  <xsd:element name="docNumber.value">
+    <xsd:complexType>
+      <xsd:simpleContent>
+        <xsd:extension base="doc_number">
+          <xsd:attribute name="idx-name" type="docNumberIndexName" />
+          <xsd:attribute name="compare" type="comparator" />
+        </xsd:extension>
+      </xsd:simpleContent>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:simpleType name="docNumberIndexName">
+    <xsd:restriction base="xsd:QName">
+      <!-- N-Lex available index -->
+      <xsd:pattern value="nlex:doc_number" />
+    </xsd:restriction>
+  </xsd:simpleType>
+
+  <!-- The created doc_number type should be redefined -->
+  <xsd:simpleType name="doc_number">
+    <xsd:restriction base="xsd:string" />
+  </xsd:simpleType>
+
+  <xsd:element name="section.value">
+    <xsd:complexType>
+      <xsd:simpleContent>
+        <xsd:extension base="section">
+          <xsd:attribute name="idx-name" type="sectionIndexName" />
+          <xsd:attribute name="compare" type="comparator" />
+        </xsd:extension>
+      </xsd:simpleContent>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:simpleType name="sectionIndexName">
+    <xsd:restriction base="xsd:QName">
+      <!-- N-Lex available index -->
+      <xsd:pattern value="nlex:section-article" />
+    </xsd:restriction>
+  </xsd:simpleType>
+
+  <!-- The created section type should be redefined -->
+  <xsd:simpleType name="section">
+    <xsd:restriction base="xsd:string" />
+  </xsd:simpleType>
+
+  <xsd:element name="OJName.value">
+    <xsd:complexType>
+      <xsd:simpleContent>
+        <xsd:extension base="OJ_Name">
+          <xsd:attribute name="idx-name" type="OJNameIndexName" />
+          <xsd:attribute name="compare" type="comparator" />
+        </xsd:extension>
+      </xsd:simpleContent>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:simpleType name="OJNameIndexName">
+    <xsd:restriction base="xsd:QName">
+      <!-- N-Lex available index -->
+      <xsd:pattern value="nlex:OJ_Name" />
+    </xsd:restriction>
+  </xsd:simpleType>
+
+  <xsd:simpleType name="OJ_Name">
+    <xsd:restriction base="xsd:string" />
+  </xsd:simpleType>
+
+
+  <xsd:element name="OJNumber.value">
+    <xsd:complexType>
+      <xsd:simpleContent>
+        <xsd:extension base="OJ_Number">
+          <xsd:attribute name="idx-name" type="OJNumberIndexName" />
+          <xsd:attribute name="compare" type="comparator" />
+        </xsd:extension>
+      </xsd:simpleContent>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:simpleType name="OJNumberIndexName">
+    <xsd:restriction base="xsd:QName">
+      <!-- N-Lex available index -->
+      <xsd:pattern value="nlex:OJ_Number" />
+    </xsd:restriction>
+  </xsd:simpleType>
+
+  <xsd:simpleType name="OJ_Number">
+    <xsd:restriction base="xsd:string" />
+  </xsd:simpleType>
+
+</xsd:schema>
