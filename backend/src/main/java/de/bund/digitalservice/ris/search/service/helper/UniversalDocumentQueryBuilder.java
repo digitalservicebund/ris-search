@@ -54,7 +54,9 @@ public class UniversalDocumentQueryBuilder {
 
       for (var unquotedTerm : parsed.unquotedTerms()) {
         MultiMatchQueryBuilder queryBuilder =
-            new MultiMatchQueryBuilder(unquotedTerm).zeroTermsQuery(MatchQuery.ZeroTermsQuery.ALL);
+            new MultiMatchQueryBuilder(unquotedTerm)
+                .zeroTermsQuery(MatchQuery.ZeroTermsQuery.ALL)
+                .operator(Operator.AND);
         query.must(queryBuilder);
         nestedQuery.should(queryBuilder);
       }
