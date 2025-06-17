@@ -59,7 +59,7 @@
   }
 
   p {
-    @apply mb-16;
+    @apply mb-16 overflow-x-auto;
     unicode-bidi: isolate;
   }
 }
