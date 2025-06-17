@@ -54,7 +54,7 @@ val jaxb by configurations.creating
 dependencies {
     jaxb(libs.jaxb.xjc)
     jaxb(libs.jaxb.runtime)
-    implementation(libs.jaxb.runtime)
+
     implementation(libs.spring.actuator)
     implementation(libs.spring.validation)
     implementation(libs.spring.web)

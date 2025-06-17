@@ -20,7 +20,9 @@ import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationU
 import de.bund.digitalservice.ris.search.utils.DateUtils;
 import de.bund.digitalservice.ris.search.utils.MappingUtils;
 import jakarta.xml.bind.DataBindingException;
-import jakarta.xml.bind.JAXB;
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.JAXBException;
+import jakarta.xml.bind.Unmarshaller;
 import jakarta.xml.bind.ValidationException;
 import java.io.StringReader;
 import java.time.Instant;
@@ -144,9 +146,12 @@ public class CaseLawLdmlToOpenSearchMapper {
   public static CaseLawDocumentationUnit fromString(String ldmlFile) {
     try {
       StreamSource ldmlStreamSource = new StreamSource(new StringReader(ldmlFile));
-      CaseLawLdml ldml = JAXB.unmarshal(ldmlStreamSource, CaseLawLdml.class);
+      JAXBContext jaxbContext = JAXBContext.newInstance(CaseLawLdml.class);
+      Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
+
+      CaseLawLdml ldml = (CaseLawLdml) unmarshaller.unmarshal(ldmlStreamSource);
       return CaseLawLdmlToOpenSearchMapper.mapToEntity(ldml);
-    } catch (DescriptorException | DataBindingException | ValidationException e) {
+    } catch (DescriptorException | DataBindingException | JAXBException e) {
       throw new OpenSearchMapperException("unable to parse file to DocumentationUnit", e);
     }
   }
