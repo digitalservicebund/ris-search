@@ -1,10 +1,16 @@
-package de.bund.digitalservice.ris.search.service;
+package de.bund.digitalservice.ris.search.nlex.service;
 
-import de.bund.digitalservice.ris.search.Request;
-import de.bund.digitalservice.ris.search.RequestResponse;
-import de.bund.digitalservice.ris.search.TestQuery;
-import de.bund.digitalservice.ris.search.TestQueryResponse;
-import de.bund.digitalservice.ris.search.VERSIONResponse;
+import de.bund.digitalservice.ris.search.nlex.RequestResponse;
+import de.bund.digitalservice.ris.search.nlex.TestQuery;
+import de.bund.digitalservice.ris.search.nlex.TestQueryResponse;
+import de.bund.digitalservice.ris.search.nlex.VERSIONResponse;
+import de.bund.digitalservice.ris.search.nlex.query.Request;
+import de.bund.digitalservice.ris.search.nlex.result.DocumentSpecification;
+import de.bund.digitalservice.ris.search.nlex.result.ResultList;
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.JAXBException;
+import jakarta.xml.bind.Marshaller;
+import java.io.StringWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ws.server.endpoint.annotation.Endpoint;
 import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
@@ -13,10 +19,35 @@ import org.springframework.ws.server.endpoint.annotation.ResponsePayload;
 
 @Endpoint
 public class NlexWebService {
-  private static final String NAMESPACE_URI = "de.bund.digitalservice.ris.search";
+  private static final String NAMESPACE_URI = "nlex.search.ris.digitalservice.bund.de";
 
   @Autowired
   public NlexWebService() {}
+
+  @PayloadRoot(namespace = NAMESPACE_URI, localPart = "request")
+  @ResponsePayload
+  public RequestResponse request(@RequestPayload Request query) throws JAXBException {
+
+    RequestResponse resp = new RequestResponse();
+    ResultList resultList = new ResultList();
+
+    Class[] classes = new Class[1];
+    classes[0] = ResultList.class;
+    JAXBContext jc = JAXBContext.newInstance(classes);
+
+    Marshaller m = jc.createMarshaller();
+    m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+    m.setProperty(Marshaller.JAXB_ENCODING, "ISO-8859-1");
+
+    ResultList.Documents docs = new ResultList.Documents();
+    docs.getDocument().add(new DocumentSpecification());
+    resultList.setDocuments(docs);
+
+    StringWriter sw = new StringWriter();
+    m.marshal(resultList, sw);
+    resp.setRequestResult(sw.toString());
+    return resp;
+  }
 
   @PayloadRoot(namespace = NAMESPACE_URI, localPart = "VERSION")
   @ResponsePayload
@@ -33,14 +64,6 @@ public class NlexWebService {
     response.setQuery(request.getType());
 
     return response;
-  }
-
-  @PayloadRoot(namespace = NAMESPACE_URI, localPart = "request")
-  @ResponsePayload
-  public RequestResponse request(@RequestPayload Request query) {
-    RequestResponse resp = new RequestResponse();
-    resp.setRequestResult("TEST");
-    return resp;
   }
 
   public String aboutConnector(String type) {

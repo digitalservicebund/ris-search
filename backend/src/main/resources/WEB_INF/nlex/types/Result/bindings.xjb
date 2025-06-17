@@ -10,27 +10,18 @@
         <!-- rename the 'lang' attribute on line 302 to 'langAttribute' -->
         <jxb:bindings node="//xsd:attributeGroup[@name='i18n']/xsd:attribute[@name='lang']">
             <jxb:property name="langAttribute"/>
-       </jxb:bindings>
-
-        <!-- rename the 'lang' attribute on line 1166 to 'langAttribute' -->
-       <jxb:bindings node="//xsd:element[@name='bdo']/xsd:complexType/xsd:complexContent/xsd:extension/xsd:attribute[@name='lang']">
-            <jxb:property name="langAttribute"/>
-       </jxb:bindings>
-    </jxb:bindings>
-
-    <jxb:bindings schemaLocation="../xlink.xsd" node="//xsd:schema">
-            <jxb:schemaBindings>
-                <jxb:package name="xlink"/>
-            </jxb:schemaBindings>
-
-            <jxb:bindings node="//xsd:attribute[@name='title']">
-                <jxb:property name="titleAttribute"/>
-           </jxb:bindings>
         </jxb:bindings>
 
+        <!-- rename the 'lang' attribute on line 1166 to 'langAttribute' -->
+        <jxb:bindings
+                node="//xsd:element[@name='bdo']/xsd:complexType/xsd:complexContent/xsd:extension/xsd:attribute[@name='lang']">
+            <jxb:property name="langAttribute"/>
+        </jxb:bindings>
+    </jxb:bindings>
+
     <jxb:bindings schemaLocation="result-list.xsd" node="//xsd:schema">
-                <jxb:schemaBindings>
-                    <jxb:package name="de.bund.digitalservice.ris.search.result"/>
-                </jxb:schemaBindings>
-            </jxb:bindings>
+        <jxb:schemaBindings>
+            <jxb:package name="de.bund.digitalservice.ris.search.nlex.result"/>
+        </jxb:schemaBindings>
+    </jxb:bindings>
 </jxb:bindings>
