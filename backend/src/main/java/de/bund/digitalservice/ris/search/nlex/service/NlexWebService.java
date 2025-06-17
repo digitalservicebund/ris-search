@@ -1,11 +1,13 @@
 package de.bund.digitalservice.ris.search.nlex.service;
 
+import de.bund.digitalservice.ris.search.nlex.Request;
 import de.bund.digitalservice.ris.search.nlex.RequestResponse;
 import de.bund.digitalservice.ris.search.nlex.TestQuery;
 import de.bund.digitalservice.ris.search.nlex.TestQueryResponse;
 import de.bund.digitalservice.ris.search.nlex.VERSIONResponse;
-import de.bund.digitalservice.ris.search.nlex.query.Request;
 import de.bund.digitalservice.ris.search.nlex.result.DocumentSpecification;
+import de.bund.digitalservice.ris.search.nlex.result.ObjectFactory;
+import de.bund.digitalservice.ris.search.nlex.result.Result;
 import de.bund.digitalservice.ris.search.nlex.result.ResultList;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
@@ -30,21 +32,23 @@ public class NlexWebService {
 
     RequestResponse resp = new RequestResponse();
     ResultList resultList = new ResultList();
-
+    Result result = new Result();
     Class[] classes = new Class[1];
-    classes[0] = ResultList.class;
+    classes[0] = Result.class;
     JAXBContext jc = JAXBContext.newInstance(classes);
 
     Marshaller m = jc.createMarshaller();
     m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-    m.setProperty(Marshaller.JAXB_ENCODING, "ISO-8859-1");
+    m.setProperty(Marshaller.JAXB_FRAGMENT, true);
 
     ResultList.Documents docs = new ResultList.Documents();
     docs.getDocument().add(new DocumentSpecification());
     resultList.setDocuments(docs);
 
+    result.setStatus("OK");
+    result.setResultList(resultList);
     StringWriter sw = new StringWriter();
-    m.marshal(resultList, sw);
+    m.marshal(new ObjectFactory().createResult(result), sw);
     resp.setRequestResult(sw.toString());
     return resp;
   }

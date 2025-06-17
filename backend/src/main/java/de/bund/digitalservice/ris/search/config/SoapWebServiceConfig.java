@@ -10,7 +10,7 @@ import org.springframework.ws.transport.http.MessageDispatcherServlet;
 
 @EnableWs
 @Configuration
-public class WebServiceConfig extends WsConfigurerAdapter {
+public class SoapWebServiceConfig extends WsConfigurerAdapter {
 
   @Bean
   public ServletRegistrationBean<MessageDispatcherServlet> messageDispatcherServlet(
