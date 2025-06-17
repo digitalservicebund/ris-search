@@ -1,5 +1,7 @@
 package de.bund.digitalservice.ris.search.nlex.service;
 
+import de.bund.digitalservice.ris.search.nlex.AboutConnector;
+import de.bund.digitalservice.ris.search.nlex.AboutConnectorResponse;
 import de.bund.digitalservice.ris.search.nlex.Request;
 import de.bund.digitalservice.ris.search.nlex.RequestResponse;
 import de.bund.digitalservice.ris.search.nlex.TestQuery;
@@ -57,7 +59,7 @@ public class NlexWebService {
   @ResponsePayload
   public VERSIONResponse version() {
     VERSIONResponse response = new VERSIONResponse();
-    response.setVERSIONResult("1.0");
+    response.setVERSIONResult("0.1");
     return response;
   }
 
@@ -70,7 +72,11 @@ public class NlexWebService {
     return response;
   }
 
-  public String aboutConnector(String type) {
-    return "";
+  @PayloadRoot(namespace = NAMESPACE_URI, localPart = "about_connector")
+  @ResponsePayload
+  public AboutConnectorResponse aboutConnector(@RequestPayload AboutConnector connector) {
+    AboutConnectorResponse resp = new AboutConnectorResponse();
+    resp.setAboutConnectorResult("<result>");
+    return resp;
   }
 }
