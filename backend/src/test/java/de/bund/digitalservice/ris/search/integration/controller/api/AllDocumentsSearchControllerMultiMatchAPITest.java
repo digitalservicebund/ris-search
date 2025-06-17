@@ -67,33 +67,41 @@ class AllDocumentsSearchControllerMultiMatchAPITest extends ContainersIntegratio
     var caseLawData =
         List.of(
             CaseLawDocumentationUnit.builder()
-                .documentNumber("case_acrossFields {m,t,r} in different fields")
+                .documentNumber("caselaw_acrossFields {m,t,r} in different fields")
                 .tenor("Mord")
                 .headline("Totschlag")
                 .guidingPrinciple("Raub")
                 .build(),
             CaseLawDocumentationUnit.builder()
-                .documentNumber("case_sameField {m,t,r} in one field")
+                .documentNumber(
+                    "caselaw_acrossFields_2 {m,t,r} in different fields of different types")
+                .tenor("Mord")
+                .ecli("Totschlag")
+                .guidingPrinciple("Raub")
+                .build(),
+            CaseLawDocumentationUnit.builder()
+                .documentNumber("caselaw_sameField {m,t,r} in one field")
                 .tenor("Mord, Totschlag, Raub")
                 .build(),
             CaseLawDocumentationUnit.builder()
-                .documentNumber("case_sameFieldReordered {m,t,r} in one field but different order")
+                .documentNumber(
+                    "caselaw_sameFieldReordered {m,t,r} in one field but different order")
                 .tenor("Raub, Mord, Totschlag")
                 .build());
     var normsData =
         List.of(
             Norm.builder()
-                .workEli("N1 {m,t} in one field")
+                .workEli("norm_1 {m,t} in one field")
                 .officialTitle("Mord Totschlag")
                 .tableOfContents(Collections.emptyList())
                 .build(),
             Norm.builder()
-                .workEli("N2 {r} in one field")
+                .workEli("norm_2 {r} in one field")
                 .officialTitle("Raub")
                 .tableOfContents(Collections.emptyList())
                 .build(),
             Norm.builder()
-                .workEli("N3 {r} in one field")
+                .workEli("norm_3 {r} in one field")
                 .officialTitle("Raub")
                 .tableOfContents(Collections.emptyList())
                 .build());
@@ -137,7 +145,12 @@ class AllDocumentsSearchControllerMultiMatchAPITest extends ContainersIntegratio
         .perform(get(ApiConfig.Paths.DOCUMENT + query).contentType(MediaType.APPLICATION_JSON))
         .andExpect(everyIdContainsEither("{m,t}", "{m,t,r}"))
         .andExpect(
-            idsContainAll("case_acrossFields", "case_sameField", "case_sameFieldReordered", "N1"));
+            idsContainAll(
+                "caselaw_acrossFields",
+                "caselaw_acrossFields_2",
+                "caselaw_sameField",
+                "caselaw_sameFieldReordered",
+                "norm_1"));
   }
 
   @Test
@@ -149,7 +162,11 @@ class AllDocumentsSearchControllerMultiMatchAPITest extends ContainersIntegratio
         .perform(get(ApiConfig.Paths.DOCUMENT + query).contentType(MediaType.APPLICATION_JSON))
         .andExpect(everyIdContainsEither("{m,t}", "{m,t,r}"))
         .andExpect(
-            idsContainAll("case_acrossFields", "case_sameField", "case_sameFieldReordered", "N1"));
+            idsContainAll(
+                "caselaw_acrossFields",
+                "caselaw_sameField",
+                "caselaw_sameFieldReordered",
+                "norm_1"));
   }
 
   @Test
@@ -162,7 +179,12 @@ class AllDocumentsSearchControllerMultiMatchAPITest extends ContainersIntegratio
         .andExpect(everyIdContainsEither("{r}", "{m,t,r}"))
         .andExpect(
             idsContainAll(
-                "case_acrossFields", "case_sameField", "case_sameFieldReordered", "N2", "N3"));
+                "caselaw_acrossFields",
+                "caselaw_acrossFields_2",
+                "caselaw_sameField",
+                "caselaw_sameFieldReordered",
+                "norm_2",
+                "norm_3"));
   }
 
   @ParameterizedTest
@@ -174,19 +196,25 @@ class AllDocumentsSearchControllerMultiMatchAPITest extends ContainersIntegratio
     mockMvc
         .perform(get(ApiConfig.Paths.DOCUMENT + query).contentType(MediaType.APPLICATION_JSON))
         .andExpect(everyIdContainsEither("{m,t,r}"))
-        .andExpect(idsContainAll("case_acrossFields", "case_sameField", "case_sameFieldReordered"));
+        .andExpect(
+            idsContainAll(
+                "caselaw_acrossFields",
+                "caselaw_acrossFields_2",
+                "caselaw_sameField",
+                "caselaw_sameFieldReordered"));
   }
 
   static Stream<Arguments> shouldMatchPhraseIfQuotedArguments() {
     return Stream.of(
-        Arguments.of("\"Mord, Totschlag, Raub\"", 1, idsContainAll("case_sameField")),
-        Arguments.of("\"Raub, Mord, Totschlag\"", 1, idsContainAll("case_sameFieldReordered")),
-        Arguments.of("\"raub mord TOTSCHLAG\"", 1, idsContainAll("case_sameFieldReordered")),
+        Arguments.of("\"Mord, Totschlag, Raub\"", 1, idsContainAll("caselaw_sameField")),
+        Arguments.of("\"Raub, Mord, Totschlag\"", 1, idsContainAll("caselaw_sameFieldReordered")),
+        Arguments.of("\"raub mord TOTSCHLAG\"", 1, idsContainAll("caselaw_sameFieldReordered")),
         Arguments.of(
             "\"mord Totschlag\" Raub",
             2,
-            idsContainAll("case_sameField", "case_sameFieldReordered")),
-        Arguments.of("\"mord Totschlag\" \"Totschlag Raub\"", 1, idsContainAll("case_sameField")),
+            idsContainAll("caselaw_sameField", "caselaw_sameFieldReordered")),
+        Arguments.of(
+            "\"mord Totschlag\" \"Totschlag Raub\"", 1, idsContainAll("caselaw_sameField")),
         Arguments.of("\"Mord Raub\"", 0, null));
   }
 
