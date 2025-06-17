@@ -76,7 +76,7 @@ public class NlexWebService {
   @ResponsePayload
   public AboutConnectorResponse aboutConnector(@RequestPayload AboutConnector connector) {
     AboutConnectorResponse resp = new AboutConnectorResponse();
-    resp.setAboutConnectorResult("<result>");
+    resp.setAboutConnectorResult("query.xsd");
     return resp;
   }
 }
