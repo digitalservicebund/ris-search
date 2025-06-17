@@ -62,6 +62,7 @@ dependencies {
     implementation(libs.spring.oauth2)
     implementation(libs.spring.data.jpa)
     implementation(libs.jts.core)
+    implementation(libs.spring.boot.starter.webservices)
 
     implementation(libs.spring.kubernetes.client)
 
