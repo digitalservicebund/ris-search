@@ -432,8 +432,7 @@ public class NormLdmlToOpenSearchMapper {
 
   private static String getEventReferenceEidByAttribute(
       Map<String, String> dateMap, String period) {
-    return dateMap.get(
-        "meta-1_geltzeiten-1_" + period.replace("#", "").trim() + "_gelzeitintervall-1");
+    return dateMap.get(period.replace("#", "").trim() + "_gelzeitintervall-1");
   }
 
   private static String buildArticleHeader(String articleMarker, String articleHeading) {
