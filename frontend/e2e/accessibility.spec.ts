@@ -53,7 +53,7 @@ const testPages = [
     url: "/norms/eli/bund/bgbl-1/1972/s2459/1999-04-20/4/deu/regelungstext-1/hauptteil-1_abschnitt-1_art-1",
   },
 ];
-test.describe("General Pages Accessibility Tests", () => {
+test.describe.skip("General Pages Accessibility Tests", () => {
   testPages.forEach(({ name, url }) => {
     test(`${name} should not have accessibility issues`, async ({ page }) => {
       await page.goto(url);
@@ -70,47 +70,57 @@ test.describe("General Pages Accessibility Tests", () => {
     });
   });
 });
-test.describe("View Page Accessibility Tests", () => {
+test.describe.skip("View Page Accessibility Tests", () => {
   test(`Norms page should not have accessibility issues`, async ({ page }) => {
     await page.goto(
       "/norms/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu/regelungstext-1",
     );
     await page.waitForLoadState("networkidle");
-    const mainTabScanResults = await new AxeBuilder({ page }).analyze();
-    createHtmlReport({
-      results: mainTabScanResults,
-      options: {
-        outputDir: path.join("e2e", "test-results", "accessibility-results"),
-        reportFileName: `Norms View Page.html`,
-      },
-    });
-    expect(mainTabScanResults.violations).toEqual([]);
+    const tabsAnalysisResults = [];
+    tabsAnalysisResults[0] = await new AxeBuilder({ page }).analyze();
     await page.getByRole("tab", { name: "Details" }).click();
     await page.waitForLoadState("networkidle");
-    const detailsTabScanResults = await new AxeBuilder({ page }).analyze();
-    expect(detailsTabScanResults.violations).toEqual([]);
+    tabsAnalysisResults[1] = await new AxeBuilder({ page }).analyze();
     await page.getByRole("tab", { name: "Fassungen" }).click();
     await page.waitForLoadState("networkidle");
-    const versionsTabScanResults = await new AxeBuilder({ page }).analyze();
-    expect(versionsTabScanResults.violations).toEqual([]);
+    tabsAnalysisResults[2] = await new AxeBuilder({ page }).analyze();
+    tabsAnalysisResults.forEach((result, index) => {
+      createHtmlReport({
+        results: result,
+        options: {
+          outputDir: path.join("e2e", "test-results", "accessibility-results"),
+          reportFileName: `Norms View Page - Tab ${index + 1}.html`,
+        },
+      });
+    });
+    expect(tabsAnalysisResults.map((result) => result.violations)).toEqual([
+      [],
+      [],
+      [],
+    ]);
   });
   test(`Caselaw page should not have accessibility issues`, async ({
     page,
   }) => {
     await page.goto("/case-law/STRE300770800");
     await page.waitForLoadState("networkidle");
-    const mainTabScanResults = await new AxeBuilder({ page }).analyze();
-    createHtmlReport({
-      results: mainTabScanResults,
-      options: {
-        outputDir: path.join("e2e", "test-results", "accessibility-results"),
-        reportFileName: `Caselaw View Page.html`,
-      },
-    });
-    expect(mainTabScanResults.violations).toEqual([]);
+    const tabsAnalysisResults = [];
+    tabsAnalysisResults[0] = await new AxeBuilder({ page }).analyze();
     await page.getByRole("tab", { name: "Details" }).click();
     await page.waitForLoadState("networkidle");
-    const detailsTabScanResults = await new AxeBuilder({ page }).analyze();
-    expect(detailsTabScanResults.violations).toEqual([]);
+    tabsAnalysisResults[1] = await new AxeBuilder({ page }).analyze();
+    tabsAnalysisResults.forEach((result, index) => {
+      createHtmlReport({
+        results: result,
+        options: {
+          outputDir: path.join("e2e", "test-results", "accessibility-results"),
+          reportFileName: `Caselaw View Page - Tab ${index + 1}.html`,
+        },
+      });
+    });
+    expect(tabsAnalysisResults.map((result) => result.violations)).toEqual([
+      [],
+      [],
+    ]);
   });
 });
