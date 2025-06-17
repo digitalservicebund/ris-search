@@ -22,6 +22,7 @@ definePageMeta({
   // plus the article eId
   alias:
     "/eli/:jurisdiction/:agent/:year/:naturalIdentifier/:pointInTime/:version/:language/:subtype/:eId",
+  layout: "base", // use "base" layout to allow for full-width text background
 });
 
 const route = useRoute();
@@ -111,30 +112,33 @@ useHead({ title: article.value?.name });
 
 <template>
   <ContentWrapper border>
-    <div v-if="status == 'pending'">Lade ...</div>
+    <div v-if="status == 'pending'" class="container">Lade ...</div>
     <template v-if="!!norm">
-      <RisBreadcrumb
-        type="norm"
-        :items="items"
-        :title="normBreadcrumbTitle"
-        :base-path="normPath"
-      />
-      <div class="max-w-prose">
-        <NuxtLink
-          class="ris-heading3-bold link-hover mt-24 line-clamp-2 items-center text-blue-800"
-          :to="normPath"
-          ><MdiArrowTopLeft class="inline-block" />
-          {{ norm.name || norm.alternateName }}</NuxtLink
-        >
-        <h2
-          class="ris-heading2-bold my-24 mb-24 inline-block"
-          v-html="htmlTitle"
+      <div class="container">
+        <RisBreadcrumb
+          type="norm"
+          :items="items"
+          :title="normBreadcrumbTitle"
+          :base-path="normPath"
         />
+        <div class="max-w-prose">
+          <NuxtLink
+            class="ris-heading3-bold link-hover mt-24 line-clamp-2 items-center text-blue-800"
+            :to="normPath"
+            ><MdiArrowTopLeft class="inline-block" />
+            {{ norm.name || norm.alternateName }}</NuxtLink
+          >
+          <h2
+            class="ris-heading2-bold my-24 mb-24 inline-block"
+            v-html="htmlTitle"
+          />
+        </div>
       </div>
+
       <!-- Metadata -->
       <div
         v-if="!!article && showNormArticleStatus"
-        class="mb-24 flex flex-col space-y-16 space-x-0 md:space-y-0 lg:flex-row lg:space-x-24"
+        class="container mb-24 flex flex-col space-y-16 space-x-0 md:space-y-0 lg:flex-row lg:space-x-24"
         data-testid="metadata"
       >
         <MetadataField
@@ -160,55 +164,57 @@ useHead({ title: article.value?.name });
           :value="formattedDate(article.expiryDate)"
         />
       </div>
-      <TableOfContentsLayout class="portal-fullwidth-white separator py-24">
-        <template v-if="!!articleHtml" #content>
-          <IncompleteDataMessage />
-          <main class="single-article akn-act" v-html="articleHtml" />
-          <div class="flex flex-row justify-between">
-            <div class="flex flex-col">
-              <router-link
-                v-if="previousArticleUrl"
-                :to="previousArticleUrl"
-                class="text-blue-800 hover:underline"
-              >
-                <div class="flex items-center space-x-8">
-                  <IcBaselineArrowBack class="mt-1 shrink-0" />
-                  <span>Vorheriger Paragraf</span>
-                </div>
-              </router-link>
+      <div class="border-t border-gray-600 bg-white">
+        <TableOfContentsLayout class="container py-24">
+          <template v-if="!!articleHtml" #content>
+            <IncompleteDataMessage />
+            <main class="single-article akn-act" v-html="articleHtml" />
+            <div class="flex flex-row justify-between">
+              <div class="flex flex-col">
+                <router-link
+                  v-if="previousArticleUrl"
+                  :to="previousArticleUrl"
+                  class="text-blue-800 hover:underline"
+                >
+                  <div class="flex items-center space-x-8">
+                    <IcBaselineArrowBack class="mt-1 shrink-0" />
+                    <span>Vorheriger Paragraf</span>
+                  </div>
+                </router-link>
+              </div>
+              <div class="flex flex-col">
+                <router-link
+                  v-if="nextArticleUrl"
+                  :to="nextArticleUrl"
+                  class="text-blue-800 hover:underline"
+                >
+                  <div class="flex items-center space-x-8">
+                    <span>Nächster Paragraf</span>
+                    <IcBaselineArrowForward class="mt-1 shrink-0" />
+                  </div>
+                </router-link>
+              </div>
             </div>
-            <div class="flex flex-col">
-              <router-link
-                v-if="nextArticleUrl"
-                :to="nextArticleUrl"
-                class="text-blue-800 hover:underline"
-              >
-                <div class="flex items-center space-x-8">
-                  <span>Nächster Paragraf</span>
-                  <IcBaselineArrowForward class="mt-1 shrink-0" />
-                </div>
-              </router-link>
-            </div>
-          </div>
-        </template>
-        <template #sidebar>
-          <NormTableOfContents
-            v-if="norm.workExample.tableOfContents.length > 0"
-            :table-of-contents="tableOfContents"
-            :selected-key="eId"
-          >
-            <template #header>
-              <router-link
-                v-if="normTitle"
-                :to="normPath"
-                class="link-hover font-bold text-blue-800"
-              >
-                {{ normTitle }}
-              </router-link>
-            </template>
-          </NormTableOfContents>
-        </template>
-      </TableOfContentsLayout>
+          </template>
+          <template #sidebar>
+            <NormTableOfContents
+              v-if="norm.workExample.tableOfContents.length > 0"
+              :table-of-contents="tableOfContents"
+              :selected-key="eId"
+            >
+              <template #header>
+                <router-link
+                  v-if="normTitle"
+                  :to="normPath"
+                  class="link-hover font-bold text-blue-800"
+                >
+                  {{ normTitle }}
+                </router-link>
+              </template>
+            </NormTableOfContents>
+          </template>
+        </TableOfContentsLayout>
+      </div>
     </template></ContentWrapper
   >
 </template>

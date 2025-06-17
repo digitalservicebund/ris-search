@@ -45,6 +45,8 @@ const { data: html, error: contentError } = await useFetch<string>(
 
 useHead({ title: caseLaw.value?.fileNumbers?.[0] });
 
+definePageMeta({ layout: "base" }); // use "base" layout to allow for full-width tab backgrounds
+
 const tocEntries: ComputedRef<TableOfContentsEntry[] | null> = computed(() => {
   return html.value ? getAllSectionsFromHtml(html.value, "section") : null;
 });
@@ -68,8 +70,8 @@ if (contentError?.value) {
 
 <template>
   <ContentWrapper border>
-    <div v-if="status == 'pending'">Lade ...</div>
-    <div v-if="!!caseLaw" class="text-left">
+    <div v-if="status == 'pending'" class="container">Lade ...</div>
+    <div v-if="!!caseLaw" class="container text-left">
       <div class="flex items-center gap-8 print:hidden">
         <RisBreadcrumb
           class="grow"
@@ -115,65 +117,62 @@ if (contentError?.value) {
           :value="caseLaw.fileNumbers?.join(', ')"
         />
       </div>
+    </div>
+    <Tabs v-if="!!caseLaw" value="0">
+      <TabList :pt="tabListStyles">
+        <Tab
+          class="flex items-center gap-8"
+          :pt="tabStyles"
+          value="0"
+          aria-label="Text der Gerichtsentscheidung"
+          ><IcBaselineSubject />Text</Tab
+        >
+        <Tab
+          data-attr="caselaw-metadata-tab"
+          class="flex items-center gap-8"
+          :pt="tabStyles"
+          value="1"
+          aria-label="Details zur Gerichtsentscheidung"
+          ><IcOutlineInfo />Details</Tab
+        >
+      </TabList>
+      <TabPanels>
+        <TabPanel value="0" :pt="tabPanelStyles">
+          <!-- Content -->
+          <SidebarLayout class="container">
+            <template #content>
+              <IncompleteDataMessage class="mb-16" />
+              <main class="case-law" v-html="html"></main>
+            </template>
+            <template #sidebar>
+              <client-only>
+                <TableOfContents :table-of-content-entries="tocEntries || []" />
+              </client-only>
+            </template>
+          </SidebarLayout>
+        </TabPanel>
+        <TabPanel value="1" :pt="tabPanelStyles" class="pt-24 pb-80">
+          <section aria-labelledby="detailsTabPanelTitle" class="container">
+            <h2 id="detailsTabPanelTitle" class="ris-heading3-bold my-24">
+              Details
+            </h2>
+            <IncompleteDataMessage class="my-24" />
 
-      <Tabs value="0">
-        <TabList :pt="tabListStyles">
-          <Tab
-            class="flex items-center gap-8"
-            :pt="tabStyles"
-            value="0"
-            aria-label="Text der Gerichtsentscheidung"
-            ><IcBaselineSubject />Text</Tab
-          >
-          <Tab
-            data-attr="caselaw-metadata-tab"
-            class="flex items-center gap-8"
-            :pt="tabStyles"
-            value="1"
-            aria-label="Details zur Gerichtsentscheidung"
-            ><IcOutlineInfo />Details</Tab
-          >
-        </TabList>
-        <TabPanels>
-          <TabPanel value="0" :pt="tabPanelStyles">
-            <!-- Content -->
-            <SidebarLayout>
-              <template #content>
-                <IncompleteDataMessage class="mb-16" />
-                <main class="case-law" v-html="html"></main>
-              </template>
-              <template #sidebar>
-                <client-only>
-                  <TableOfContents
-                    :table-of-content-entries="tocEntries || []"
-                  />
-                </client-only>
-              </template>
-            </SidebarLayout>
-          </TabPanel>
-          <TabPanel value="1" :pt="tabPanelStyles" class="pt-24 pb-80">
-            <section aria-labelledby="detailsTabPanelTitle">
-              <h2 id="detailsTabPanelTitle" class="ris-heading3-bold my-24">
-                Details
-              </h2>
-              <IncompleteDataMessage class="my-24" />
-
-              <Properties>
-                <PropertiesItem
-                  label="Spruchkörper:"
-                  :value="caseLaw.judicialBody"
-                />
-                <PropertiesItem label="ECLI:" :value="caseLaw.ecli" />
-                <PropertiesItem label="Normen:" value="" />
-                <PropertiesItem
-                  label="Entscheidungsname:"
-                  :value="caseLaw.decisionName?.join(', ')"
-                />
-                <PropertiesItem label="Vorinstanz:" value="" />
-              </Properties>
-            </section>
-          </TabPanel>
-        </TabPanels>
-      </Tabs></div
+            <Properties>
+              <PropertiesItem
+                label="Spruchkörper:"
+                :value="caseLaw.judicialBody"
+              />
+              <PropertiesItem label="ECLI:" :value="caseLaw.ecli" />
+              <PropertiesItem label="Normen:" value="" />
+              <PropertiesItem
+                label="Entscheidungsname:"
+                :value="caseLaw.decisionName?.join(', ')"
+              />
+              <PropertiesItem label="Vorinstanz:" value="" />
+            </Properties>
+          </section>
+        </TabPanel>
+      </TabPanels> </Tabs
   ></ContentWrapper>
 </template>

@@ -1,30 +1,16 @@
 <script setup lang="ts">
-import AppFooter from "@/components/AppFooter.vue";
-import ConsentBanner from "~/components/Analytics/ConsentBanner.vue";
-import AppHeader from "@/components/AppHeader.vue";
-import NavbarTop from "@/components/NavbarTop.vue";
-import { isPublicProfile, isPrototypeProfile } from "@/utils/config";
-import AppFooterPrototype from "~/components/AppFooterPrototype.vue";
-/* v8 ignore start */
-const isPublic = isPublicProfile();
-const isPrototype = isPrototypeProfile();
-const showPublicProfileHeader = isPublic || isPrototype;
-/* v8 ignore stop */
+/*
+The default layout provides a container, but uses the base layout, which
+provides header and footer elements.
+Pages that need to use full-width ("hero style") elements should use the base
+layout directly.
+*/
+import BaseLayout from "./base.vue";
 </script>
-
 <template>
-  <client-only>
-    <ConsentBanner />
-  </client-only>
-  <div class="flex flex-col gap-48">
-    <div class="min-h-[50vh] bg-gray-100">
-      <AppHeader v-if="showPublicProfileHeader" />
-      <NavbarTop v-else />
-      <div class="container md:mx-auto">
-        <slot />
-      </div>
+  <BaseLayout>
+    <div class="container md:mx-auto">
+      <slot />
     </div>
-    <AppFooterPrototype v-if="true" />
-    <AppFooter v-else />
-  </div>
+  </BaseLayout>
 </template>
