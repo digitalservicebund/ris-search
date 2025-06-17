@@ -49,27 +49,6 @@ mark {
   @apply bg-yellow-200;
 }
 
-.portal-fullwidth-white {
-  background: white;
-  position: relative;
-  @apply z-10;
-
-  &:before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 50%;
-    width: 100vw;
-    transform: translateX(-50%);
-    bottom: 0;
-    background: white;
-    z-index: -1;
-  }
-  &.separator:before {
-    box-shadow: 0 -1px 0 0 var(--color-gray-600);
-  }
-}
-
 @utility list-custom {
   li {
     @apply relative ml-56;
