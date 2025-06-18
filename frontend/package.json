@@ -35,7 +35,7 @@
     "@nuxt/schema": "^3.17.5",
     "@pinia/nuxt": "^0.11.1",
     "@sentry/nuxt": "^9.29.0",
-    "@tailwindcss/vite": "^4.1.8",
+    "@tailwindcss/vite": "^4.1.10",
     "axe-html-reporter": "^2.2.11",
     "axios": "^1.9.0",
     "dayjs": "^1.11.13",
