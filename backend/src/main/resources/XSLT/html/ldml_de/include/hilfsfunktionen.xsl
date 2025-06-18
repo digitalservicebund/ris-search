@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:akn="http://Inhaltsdaten.LegalDocML.de/1.7.2/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:math="http://www.w3.org/2005/xpath-functions/math" exclude-result-prefixes="xs math akn" version="3.0">
+<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:akn="http://Inhaltsdaten.LegalDocML.de/1.8.1/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:math="http://www.w3.org/2005/xpath-functions/math" exclude-result-prefixes="xs math akn" version="3.0">
 
     <!--
         ****************************************************************************************************************************
@@ -7,7 +7,7 @@
         Die dort deklarierte globale Variable $dokument beinhaltet die LegalDocML.de-Instanz als Baum mit der Wurzel akn:akomaNtoso.
 
         Pflegeorganisation LegalDocML.de / Philipp Koch / 2024-11-20 - 1.7.1
-                                  NeuRIS / Carl Gödecken / 2025-01-15 - 1.7.2
+                                  NeuRIS / Carl Gödecken / 2025-01-15 - 1.8.1
         ****************************************************************************************************************************
     -->
 

@@ -1,4 +1,4 @@
-<akn:akomaNtoso xmlns:akn="http://Inhaltsdaten.LegalDocML.de/1.7.2/">
+<akn:akomaNtoso xmlns:akn="http://Inhaltsdaten.LegalDocML.de/1.8.1/">
     <akn:act name="regelungstext">
     <akn:conclusions eId="schluss-1">
         <akn:formula eId="schluss-1_formel-1" refersTo="schlussformel">

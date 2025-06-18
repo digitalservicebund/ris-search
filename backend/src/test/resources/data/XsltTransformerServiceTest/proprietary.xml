@@ -1,11 +1,11 @@
-<akn:akomaNtoso xmlns:akn="http://Inhaltsdaten.LegalDocML.de/1.7.2/"
+<akn:akomaNtoso xmlns:akn="http://Inhaltsdaten.LegalDocML.de/1.8.1/"
                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                xsi:schemaLocation="http://Inhaltsdaten.LegalDocML.de/1.7.2/ Grammatiken/legalDocML.de-regelungstextverkuendungsfassung.xsd">
+                xsi:schemaLocation="http://Inhaltsdaten.LegalDocML.de/1.8.1/ Grammatiken/legalDocML.de-regelungstextverkuendungsfassung.xsd">
     <akn:act>
         <akn:meta>
             <akn:proprietary eId="meta-1_proprietary-1">
-                <ris:legalDocML.de_metadaten xmlns:ris="http://MetadatenRIS.LegalDocML.de/1.7.2/"
-                                             xsi:schemaLocation="http://MetadatenRIS.LegalDocML.de/1.7.2/ Grammatiken/legalDocML.de-metadaten-ris.xsd">
+                <ris:legalDocML.de_metadaten xmlns:ris="http://MetadatenRIS.LegalDocML.de/1.8.1/"
+                                             xsi:schemaLocation="http://MetadatenRIS.LegalDocML.de/1.8.1/ Grammatiken/legalDocML.de-metadaten-ris.xsd">
                     <ris:vollzitat>
                         Verordnung über A in der Fassung der Bekanntmachung vom 01. Januar 2000 (BGBl. I S. 123), die
                         zuletzt durch Artikel 1337 des Gesetzes vom 07. März 2025 (BGBl. 2025 I Nr. 1) geändert worden
