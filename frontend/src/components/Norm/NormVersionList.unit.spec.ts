@@ -12,6 +12,7 @@ describe("NormVersionList", () => {
     const wrapper = await mountSuspended(NormVersionList, {
       props: {
         status: "success",
+        currentLegislationIdentifier: "foo",
         versions: data.member,
       },
       global: {

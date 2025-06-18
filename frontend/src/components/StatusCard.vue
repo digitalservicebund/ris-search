@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { StatusCardType } from "~/components/types";
+import { BadgeColor, StatusCardType } from "~/components/types";
+import Badge from "@/components/Badge.vue";
 
 interface Props {
   header: string;
@@ -9,22 +10,22 @@ interface Props {
 
 const props = defineProps<Props>();
 
-const label = computed(() => {
+const badge = computed(() => {
   switch (props.status) {
     case StatusCardType.IMPLEMENTED:
       return {
-        title: "Erste Version verfügbar",
-        classes: "bg-green-100 text-green-800 border-1 border-green-200",
+        label: "Erste Version verfügbar",
+        color: BadgeColor.GREEN,
       };
     case StatusCardType.IN_PROGRESS:
       return {
-        title: "In Arbeit",
-        classes: "bg-yellow-100 text-orange-900 border-1 border-yellow-300",
+        label: "In Arbeit",
+        color: BadgeColor.YELLOW,
       };
     case StatusCardType.PLANNED:
       return {
-        title: "Geplant",
-        classes: "bg-blue-200 text-blue-800 border-1 border-blue-200",
+        label: "Geplant",
+        color: BadgeColor.BLUE,
       };
     default:
       return undefined;
@@ -40,10 +41,8 @@ const label = computed(() => {
     <div class="ris-body2-regular pt-8 pb-16">
       {{ props.content }}
     </div>
-    <div v-if="label" class="mt-auto self-start py-4" :class="label.classes">
-      <div class="ris-label3-bold px-8">
-        {{ label.title }}
-      </div>
+    <div v-if="badge" class="mt-auto self-start">
+      <Badge :label="badge.label" :color="badge.color" />
     </div>
   </div>
 </template>
