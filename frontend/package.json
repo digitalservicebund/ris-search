@@ -105,7 +105,8 @@
     "dompurify": "^3.2.5",
     "esbuild": "^0.25.0",
     "@vercel/nft": "^0.27.4",
-    "tar-fs": "^3.0.8"
+    "tar-fs": "^3.0.10",
+    "brace-expansion": "^2.0.2"
   },
   "overrides": {
     "cross-spawn": "7.0.5"
