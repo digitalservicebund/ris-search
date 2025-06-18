@@ -38,6 +38,7 @@ import ContentWrapper from "~/components/CustomLayouts/ContentWrapper.vue";
 import NormVersionList from "~/components/Norm/NormVersionList.vue";
 import VersionWarningMessage from "~/components/Norm/VersionWarningMessage.vue";
 import type { BreadcrumbItem } from "~/components/Ris/RisBreadcrumb.vue";
+import { useNormVersions } from "~/composables/useNormVersions";
 
 definePageMeta({
   // note: this is an expression ELI that additionally specifies the subtype component of a manifestation ELI
@@ -279,6 +280,9 @@ const breadcrumbItems: ComputedRef<BreadcrumbItem[]> = computed(() => {
               v-if="!isPrototypeProfile()"
               class="container"
               :status="normVersionsStatus"
+              :current-legislation-identifier="
+                metadata.workExample.legislationIdentifier
+              "
               :versions="normVersions"
             />
             <div v-else class="max-w-prose">
