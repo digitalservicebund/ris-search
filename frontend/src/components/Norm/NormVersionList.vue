@@ -2,6 +2,7 @@
 import IncompleteDataMessage from "~/components/IncompleteDataMessage.vue";
 import type { LegislationWork, SearchResult } from "~/types";
 import Column from "primevue/column";
+import DataTable from "primevue/datatable";
 import { BadgeColor } from "~/components/types";
 import Badge from "@/components/Badge.vue";
 import type { VersionStatus } from "~/composables/useNormVersions";
@@ -24,36 +25,47 @@ interface TableRowData {
 
 const selectedVersion = defineModel<TableRowData>();
 
-const tableRowData = computed<TableRowData[]>(
-  () =>
-    props.versions
-      .map((version, index) => {
-        const fromAndToDate = splitTemporalCoverage(
-          version.item.workExample.temporalCoverage,
-        );
+const tableRowData = computed<TableRowData[]>(() => {
+  const versionsSorted = [...props.versions].sort((versionA, versionB) => {
+    if (
+      versionA.item.workExample.temporalCoverage <
+      versionB.item.workExample.temporalCoverage
+    )
+      return 1;
+    if (
+      versionA.item.workExample.temporalCoverage >
+      versionB.item.workExample.temporalCoverage
+    )
+      return -1;
+    return 0;
+  });
 
-        const id = index;
-        const fromDate = fromAndToDate[0] ?? "-";
-        const toDate = fromAndToDate[1] ?? "-";
-        const status = translateStatus(getVersionStatus(version));
-        const link = `/norms/${version.item.workExample.legislationIdentifier}`;
-        const selectable =
-          version.item.workExample.legislationIdentifier !==
-          props.currentLegislationIdentifier;
+  return versionsSorted.map((version, index) => {
+    const fromAndToDate = splitTemporalCoverage(
+      version.item.workExample.temporalCoverage,
+    );
 
-        const rowData: TableRowData = {
-          id: id,
-          fromDate: fromDate,
-          toDate: toDate,
-          status: status,
-          link: link,
-          selectable: selectable,
-        };
+    const id = index;
+    const fromDate = fromAndToDate[0] ?? "-";
+    const toDate = fromAndToDate[1] ?? "-";
+    const status = translateStatus(getVersionStatus(version));
+    const link = `/norms/${version.item.workExample.legislationIdentifier}`;
+    const selectable =
+      version.item.workExample.legislationIdentifier !==
+      props.currentLegislationIdentifier;
 
-        return rowData;
-      })
-      .reverse(), // We want to display them descending, but they are sorted ascending
-);
+    const rowData: TableRowData = {
+      id: id,
+      fromDate: fromDate,
+      toDate: toDate,
+      status: status,
+      link: link,
+      selectable: selectable,
+    };
+
+    return rowData;
+  });
+});
 
 function translateStatus(status: VersionStatus): string | undefined {
   switch (status) {
