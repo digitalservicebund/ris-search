@@ -1,16 +1,17 @@
 <script setup lang="ts">
 import SimpleSearchInput from "@/components/Search/SimpleSearch/SimpleSearchInput.vue";
 import { useRedirectToSearch } from "@/composables/useRedirectToSearch";
-import HeroBanner from "~/components/HeroBanner.vue";
 import Message from "primevue/message";
 import IcBaselineLaunch from "~icons/ic/baseline-launch";
 import ButtonLink from "~/components/ButtonLink.vue";
 import bmjvLogo from "~/assets/img/BMJV_de_v1__Web_farbig.svg";
 const redirectToSearch = useRedirectToSearch();
+
+definePageMeta({ layout: "base" });
 </script>
 
 <template>
-  <HeroBanner class="flex gap-16 bg-blue-800 pt-64 pb-96 text-white">
+  <div class="flex gap-16 bg-blue-800 pt-64 pb-96 text-white">
     <div class="container md:max-w-(--spacing-prose)">
       <div
         class="mb-8 inline-block rounded-[3px] border border-[#FFFFFF1A] bg-blue-700 px-8 py-4 text-sm font-bold uppercase"
@@ -26,7 +27,7 @@ const redirectToSearch = useRedirectToSearch();
         Bundes – an einem zentralen Ort.
       </p>
     </div>
-  </HeroBanner>
+  </div>
   <div class="my-56 flex flex-col gap-24 pb-48">
     <FeatureCard>
       <div>

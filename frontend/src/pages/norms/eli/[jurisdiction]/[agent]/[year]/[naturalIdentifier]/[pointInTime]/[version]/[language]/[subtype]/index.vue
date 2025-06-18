@@ -43,6 +43,7 @@ definePageMeta({
   // note: this is an expression ELI that additionally specifies the subtype component of a manifestation ELI
   alias:
     "/eli/:jurisdiction/:agent/:year/:naturalIdentifier/:pointInTime/:version/:language/:subtype",
+  layout: "base", // use "base" layout to allow for full-width tab backgrounds
 });
 
 const route = useRoute();
@@ -131,43 +132,44 @@ const breadcrumbItems: ComputedRef<BreadcrumbItem[]> = computed(() => {
   <ContentWrapper border>
     <div v-if="status == 'pending'">Lade ...</div>
     <div v-if="!!metadata">
-      <div class="flex items-center gap-8 print:hidden">
-        <RisBreadcrumb type="norm" :items="breadcrumbItems" class="grow" />
-        <FileActionsMenu :xml-url="xmlUrl" />
-      </div>
-      <NormHeadingGroup :metadata="metadata" :html-parts="htmlParts" />
+      <div class="container">
+        <div class="flex items-center gap-8 print:hidden">
+          <RisBreadcrumb type="norm" :items="breadcrumbItems" class="grow" />
+          <FileActionsMenu :xml-url="xmlUrl" />
+        </div>
+        <NormHeadingGroup :metadata="metadata" :html-parts="htmlParts" />
 
-      <VersionWarningMessage
-        v-if="normVersionsStatus === 'success'"
-        :versions="normVersions"
-        :current-expression="metadata.workExample.legislationIdentifier"
-      />
-      <div class="mt-8 mb-48 flex flex-wrap items-end gap-24">
-        <MetadataField
-          v-if="metadata.abbreviation"
-          id="abbreviation"
-          label="Abkürzung"
-          :value="metadata.abbreviation"
+        <VersionWarningMessage
+          v-if="normVersionsStatus === 'success'"
+          :versions="normVersions"
+          :current-expression="metadata.workExample.legislationIdentifier"
         />
-        <MetadataField
-          id="status"
-          label="Status"
-          :value="translatedLegalForce"
-        />
-        <MetadataField
-          v-if="temporalCoverage[0]"
-          id="validFrom"
-          label="Fassung gültig seit"
-          :value="temporalCoverage[0]"
-        />
-        <MetadataField
-          v-if="temporalCoverage[1]"
-          id="validTo"
-          label="Fassung gültig bis"
-          :value="temporalCoverage[1]"
-        />
+        <div class="mt-8 mb-48 flex flex-wrap items-end gap-24">
+          <MetadataField
+            v-if="metadata.abbreviation"
+            id="abbreviation"
+            label="Abkürzung"
+            :value="metadata.abbreviation"
+          />
+          <MetadataField
+            id="status"
+            label="Status"
+            :value="translatedLegalForce"
+          />
+          <MetadataField
+            v-if="temporalCoverage[0]"
+            id="validFrom"
+            label="Fassung gültig seit"
+            :value="temporalCoverage[0]"
+          />
+          <MetadataField
+            v-if="temporalCoverage[1]"
+            id="validTo"
+            label="Fassung gültig bis"
+            :value="temporalCoverage[1]"
+          />
+        </div>
       </div>
-
       <Tabs value="0" lazy>
         <TabList :pt="tabListStyles">
           <Tab
@@ -202,7 +204,7 @@ const breadcrumbItems: ComputedRef<BreadcrumbItem[]> = computed(() => {
         </TabList>
         <TabPanels>
           <TabPanel value="0" :pt="tabPanelStyles">
-            <TableOfContentsLayout>
+            <TableOfContentsLayout class="container">
               <template #content>
                 <IncompleteDataMessage />
                 <Accordion
@@ -224,7 +226,7 @@ const breadcrumbItems: ComputedRef<BreadcrumbItem[]> = computed(() => {
             </TableOfContentsLayout>
           </TabPanel>
           <TabPanel value="1" :pt="tabPanelStyles" class="pt-24 pb-80">
-            <section aria-labelledby="detailsTabPanelTitle">
+            <section aria-labelledby="detailsTabPanelTitle" class="container">
               <h2 id="detailsTabPanelTitle" class="ris-heading3-bold my-24">
                 Details
               </h2>
@@ -280,6 +282,7 @@ const breadcrumbItems: ComputedRef<BreadcrumbItem[]> = computed(() => {
             class="pt-24 pb-80"
           >
             <NormVersionList
+              class="container"
               :status="normVersionsStatus"
               :versions="normVersions"
             />
