@@ -47,8 +47,8 @@ jobs:
         with:
           path: /home/runner/.npm
           key: npm-cache-${{ runner.os }}-playwright-${{ env.PLAYWRIGHT_VERSION }}
-      - name: Install Playwright
-        run: npm install @playwright/test@${{ env.PLAYWRIGHT_VERSION }}
+      - name: Install Playwright and accessibility test libraries
+        run: npm install @playwright/test@${{ env.PLAYWRIGHT_VERSION }} @axe-core/playwright axe-html-reporter
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps ${{ inputs.browser }}
         if: steps.playwright-cache.outputs.cache-hit != 'true'
