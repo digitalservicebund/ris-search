@@ -8,10 +8,8 @@ import de.bund.digitalservice.ris.search.nlex.TestQuery;
 import de.bund.digitalservice.ris.search.nlex.TestQueryResponse;
 import de.bund.digitalservice.ris.search.nlex.VERSIONResponse;
 import de.bund.digitalservice.ris.search.nlex.marshaller.MarshallerFactory;
-import de.bund.digitalservice.ris.search.nlex.result.DocumentSpecification;
 import de.bund.digitalservice.ris.search.nlex.result.ObjectFactory;
 import de.bund.digitalservice.ris.search.nlex.result.Result;
-import de.bund.digitalservice.ris.search.nlex.result.ResultList;
 import jakarta.xml.bind.JAXBException;
 import java.io.StringWriter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,15 +33,8 @@ public class NlexWebService {
   public RequestResponse request(@RequestPayload Request query) throws JAXBException {
 
     RequestResponse resp = new RequestResponse();
-    ResultList resultList = new ResultList();
     Result result = new Result();
-
-    ResultList.Documents docs = new ResultList.Documents();
-    docs.getDocument().add(new DocumentSpecification());
-    resultList.setDocuments(docs);
-
     result.setStatus("OK");
-    result.setResultList(resultList);
     StringWriter sw = new StringWriter();
     this.marshallerFactory
         .getResultMarshaller()
@@ -65,7 +56,7 @@ public class NlexWebService {
   @ResponsePayload
   public TestQueryResponse testQuery(@RequestPayload TestQuery request) {
     TestQueryResponse response = new TestQueryResponse();
-    response.setQuery(request.getType());
+    response.setQuery("test_query_placeholder");
 
     return response;
   }
