@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-model href="../../../Grammatiken/legalDocML.de.sch" schematypens="http://purl.oclc.org/dsdl/schematron"?>
-<akn:akomaNtoso xmlns:akn="http://Inhaltsdaten.LegalDocML.de/1.7.2/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://Metadaten.LegalDocML.de/1.7.2/ ../schema/legalDocML.de-metadaten.xsd http://Inhaltsdaten.LegalDocML.de/1.7.2/ ../schema/legalDocML.de-regelungstextverkuendungsfassung.xsd http://MetadatenBundesregierung.LegalDocML.de/1.7.2/ ../schema/legalDocML.de-metadaten-bundesregierung.xsd">
+<akn:akomaNtoso xmlns:akn="http://Inhaltsdaten.LegalDocML.de/1.8.1/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://Metadaten.LegalDocML.de/1.8.1/ ../schema/legalDocML.de-metadaten.xsd http://Inhaltsdaten.LegalDocML.de/1.8.1/ ../schema/legalDocML.de-regelungstextverkuendungsfassung.xsd http://MetadatenBundesregierung.LegalDocML.de/1.8.1/ ../schema/legalDocML.de-metadaten-bundesregierung.xsd">
     <akn:act name="regelungstext">
         <akn:meta GUID="a1b2c3d4-1111-4111-8111-aaaaaaaaaaaa" eId="meta-1">
             <akn:identification GUID="a1b2c3d4-2222-4111-8111-bbbbbbbbbbbb" eId="meta-1_ident-1" source="attributsemantik-noch-undefiniert">
@@ -49,7 +49,7 @@
                 </akn:temporalGroup>
             </akn:temporalData>
             <akn:proprietary GUID="c1b2c3d4-9999-4111-8111-333333333333" eId="meta-1_proprietary-1" source="attributsemantik-noch-undefiniert">
-                <ris:legalDocML.de_metadaten xmlns:ris="http://MetadatenRIS.LegalDocML.de/1.7.2/" xsi:schemaLocation="http://MetadatenRIS.LegalDocML.de/1.7.2/ ../schema/legalDocML.de-metadaten-ris.xsd">
+                <ris:legalDocML.de_metadaten xmlns:ris="http://MetadatenRIS.LegalDocML.de/1.8.1/" xsi:schemaLocation="http://MetadatenRIS.LegalDocML.de/1.8.1/ ../schema/legalDocML.de-metadaten-ris.xsd">
                     <ris:inkraft date="1990-10-03"/>
                 </ris:legalDocML.de_metadaten>
             </akn:proprietary>
