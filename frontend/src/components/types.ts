@@ -33,12 +33,6 @@ export enum StatusCardType {
   PLANNED,
 }
 
-export enum BadgeColor {
-  BLUE,
-  GREEN,
-  YELLOW,
-}
-
 //BASE
 export interface BaseInputAttributes {
   ariaLabel: string;

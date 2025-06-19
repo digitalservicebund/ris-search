@@ -3,8 +3,7 @@ import IncompleteDataMessage from "~/components/IncompleteDataMessage.vue";
 import type { LegislationWork, SearchResult } from "~/types";
 import Column from "primevue/column";
 import DataTable from "primevue/datatable";
-import { BadgeColor } from "~/components/types";
-import Badge from "@/components/Badge.vue";
+import Badge, { BadgeColor } from "@/components/Badge.vue";
 import type { VersionStatus } from "~/composables/useNormVersions";
 import { getVersionStatus } from "~/composables/useNormVersions";
 
