@@ -81,9 +81,9 @@ function translateStatus(status: VersionStatus): string | undefined {
 }
 
 const rowClass = (row: TableRowData) => {
-  return !row.selectable
-    ? "pointer-event-none hover:bg-transparent"
-    : "cursor-pointer";
+  return row.selectable
+    ? "cursor-pointer"
+    : "pointer-event-none hover:bg-transparent";
 };
 
 async function onRowSelect() {
@@ -117,16 +117,8 @@ async function handleSelectionUpdate(newSelection: TableRowData) {
       @row-select="onRowSelect"
       @update:selection="handleSelectionUpdate"
     >
-      <Column
-        field="fromDate"
-        header="Gültig von"
-        header-class="w-[1px]"
-      ></Column>
-      <Column
-        field="toDate"
-        header="Gültig bis"
-        header-class="w-[1px]"
-      ></Column>
+      <Column field="fromDate" header="Gültig von" header-class="w-px"></Column>
+      <Column field="toDate" header="Gültig bis" header-class="w-px"></Column>
       <Column header="Status">
         <template #body="slotProps">
           <Badge
