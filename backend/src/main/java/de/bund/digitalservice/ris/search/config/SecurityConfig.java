@@ -41,7 +41,7 @@ public class SecurityConfig {
 
   final AuthProperties authProperties;
 
-  final String[] internalPaths = new String[] {"/actuator/**", "/internal/**"};
+  final String[] internalPaths = new String[] {"/actuator/**", "/internal/**", "/nlex"};
 
   public SecurityConfig(AuthProperties authProperties) {
     this.authProperties = authProperties;
