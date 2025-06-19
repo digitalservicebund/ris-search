@@ -49,7 +49,11 @@ sonar {
     }
 }
 
+val xjc by configurations.creating
+
 dependencies {
+    xjc(libs.jaxb.moxy.xjc)
+
     implementation(libs.spring.actuator)
     implementation(libs.spring.validation)
     implementation(libs.spring.web)
@@ -57,6 +61,7 @@ dependencies {
     implementation(libs.spring.oauth2)
     implementation(libs.spring.data.jpa)
     implementation(libs.jts.core)
+    implementation(libs.spring.boot.starter.webservices)
 
     implementation(libs.spring.kubernetes.client)
 
@@ -112,9 +117,10 @@ dependencies {
 }
 
 val pactPath = "pacts/**/*.json"
-
+val generatedPath = "build/generated/**"
 spotless {
     java {
+        targetExclude(generatedPath)
         removeUnusedImports()
         googleJavaFormat()
         custom("Refuse wildcard imports") {
@@ -125,21 +131,25 @@ spotless {
             }
             it
         }
-        targetExclude(pactPath)
+        targetExclude(pactPath, generatedPath)
     }
     kotlin {
         ktfmt()
-        targetExclude(pactPath)
+        targetExclude(pactPath, generatedPath)
     }
     kotlinGradle {
         ktlint()
-        targetExclude(pactPath)
+        targetExclude(pactPath, generatedPath)
     }
 
     format("misc") {
         target("**/*.json", "**/*.md", "**/*.properties", "**/*.sh", "**/*.yml")
-        targetExclude("frontend/**", "pacts/**/*.json")
+        targetExclude("frontend/**", "pacts/**/*.json", generatedPath)
     }
+}
+
+tasks.named<Checkstyle>("checkstyleMain") {
+    source("src")
 }
 
 licenseReport {
@@ -154,7 +164,18 @@ project.tasks.sonar {
 }
 
 tasks {
+    register("generate-nlex-wsdl", JavaExec::class) {
+        doFirst {
+            mkdir("$buildDir/generated/nlex")
+        }
+        enabled = true
+        classpath(configurations["xjc"])
+        mainClass = "org.eclipse.persistence.jaxb.xjc.MOXyXJC"
+        args = listOf("src/main/resources/WEB_INF/nlex", "-wsdl", "-d", "$buildDir/generated/nlex", "-p", "nlex")
+    }
+
     compileJava {
+        dependsOn("generate-nlex-wsdl")
         options.compilerArgs.addAll(arrayOf())
     }
 
@@ -239,4 +260,8 @@ tasks {
         }
         include("**/*.java")
     }
+}
+
+java.sourceSets["main"].java {
+    srcDirs("build/generated/nlex")
 }
