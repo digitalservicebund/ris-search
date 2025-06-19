@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { BadgeColor } from "~/components/types";
-
 interface Props {
   label: string;
   color: BadgeColor;
@@ -20,6 +18,14 @@ const badgeStyle = computed(() => {
       return undefined;
   }
 });
+</script>
+
+<script lang="ts">
+export enum BadgeColor {
+  BLUE,
+  GREEN,
+  YELLOW,
+}
 </script>
 
 <template>
