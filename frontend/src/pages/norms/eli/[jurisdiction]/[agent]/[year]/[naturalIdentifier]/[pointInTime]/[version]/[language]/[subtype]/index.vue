@@ -192,7 +192,6 @@ const breadcrumbItems: ComputedRef<BreadcrumbItem[]> = computed(() => {
             Details
           </Tab>
           <Tab
-            v-if="!isPrototypeProfile()"
             data-attr="norm-versions-tab"
             class="flex items-center gap-8"
             :pt="tabStyles"
@@ -275,17 +274,35 @@ const breadcrumbItems: ComputedRef<BreadcrumbItem[]> = computed(() => {
               </Properties>
             </section>
           </TabPanel>
-          <TabPanel
-            v-if="!isPrototypeProfile()"
-            value="2"
-            :pt="tabPanelStyles"
-            class="pt-24 pb-80"
-          >
+          <TabPanel value="2" :pt="tabPanelStyles" class="pt-24 pb-80">
             <NormVersionList
+              v-if="!isPrototypeProfile()"
               class="container"
               :status="normVersionsStatus"
               :versions="normVersions"
             />
+            <div v-else class="max-w-prose">
+              <h3 class="ris-heading3-bold my-24">
+                Fassungen sind noch nicht verfügbar
+              </h3>
+              <p class="ris-body1-regular">
+                Mit dem Livegang des neuen Rechtsinformationsportals werden auch
+                außer Kraft getretene und zukünftig in Kraft tretende Fassungen
+                der Gesetze und Verordnungen zur Verfügung gestellt.
+              </p>
+              <h3 class="ris-heading3-bold mt-48 mb-24">
+                Unterstützen Sie uns bei der Entwicklung dieser Funktion
+              </h3>
+              <p class="ris-body1-regular">
+                Unser Ziel ist es, Rechtsinformationen für Bürgerinnen und
+                Bürger leichter zugänglich zu machen. Deshalb suchen wir
+                Menschen, die ihre Erfahrungen mit uns teilen und unseren
+                Service testen.
+              </p>
+              <ButtonLink class="mt-16" variant="primary" href="/nutzungstests">
+                Mehr über Nutzungstest erfahren
+              </ButtonLink>
+            </div>
           </TabPanel>
         </TabPanels>
       </Tabs>
