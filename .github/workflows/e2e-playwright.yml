@@ -27,7 +27,7 @@ jobs:
           node-version: lts/*
       - name: Get Playwright version
         working-directory: ./frontend
-        run: echo "PLAYWRIGHT_VERSION=$(yarn list --pattern @playwright/test | awk -F "@" 'NR==2 {print $NF}')" >> $GITHUB_ENV
+        run: echo "PLAYWRIGHT_VERSION=$(yarn info @playwright/test | awk -F "@npm:" 'NR==1 {print $NF}')" >> $GITHUB_ENV
       - name: Cache browser binaries
         id: playwright-cache
         uses: actions/cache@v4
