@@ -1,5 +1,8 @@
 package de.bund.digitalservice.ris.search.nlex.service;
 
+import jakarta.xml.bind.JAXBException;
+import java.io.IOException;
+import java.util.Objects;
 import nlex.AboutConnector;
 import nlex.AboutConnectorResponse;
 import nlex.Request;
@@ -7,7 +10,7 @@ import nlex.RequestResponse;
 import nlex.TestQuery;
 import nlex.TestQueryResponse;
 import nlex.VERSIONResponse;
-import org.eclipse.persistence.exceptions.JAXBException;
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ws.server.endpoint.annotation.Endpoint;
 import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
@@ -19,12 +22,11 @@ public class NlexWebService {
   private static final String NAMESPACE_URI = "nlex.search.ris.digitalservice.bund.de";
 
   @Autowired
-  public NlexWebService() throws JAXBException {}
+  public NlexWebService() {}
 
   @PayloadRoot(namespace = NAMESPACE_URI, localPart = "request")
   @ResponsePayload
-  public RequestResponse request(@RequestPayload Request query) throws JAXBException {
-
+  public RequestResponse request(@RequestPayload Request request) throws JAXBException {
     RequestResponse resp = new RequestResponse();
     resp.setRequestResult("placeholder");
     return resp;
@@ -49,9 +51,15 @@ public class NlexWebService {
 
   @PayloadRoot(namespace = NAMESPACE_URI, localPart = "about_connector")
   @ResponsePayload
-  public AboutConnectorResponse aboutConnector(@RequestPayload AboutConnector connector) {
+  public AboutConnectorResponse aboutConnector(@RequestPayload AboutConnector connector)
+      throws IOException {
     AboutConnectorResponse resp = new AboutConnectorResponse();
-    resp.setAboutConnectorResult("placeholder");
+    String configContent =
+        IOUtils.toString(
+            Objects.requireNonNull(
+                this.getClass().getResourceAsStream("/WEB_INF/nlex/schema/ris-query.xsd")),
+            "UTF-8");
+    resp.setAboutConnectorResult(configContent);
     return resp;
   }
 }
