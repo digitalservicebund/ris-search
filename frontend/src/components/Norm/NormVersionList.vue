@@ -1,12 +1,105 @@
 <script setup lang="ts">
 import IncompleteDataMessage from "~/components/IncompleteDataMessage.vue";
 import type { LegislationWork, SearchResult } from "~/types";
-import NormVersionListRow from "./NormVersionListRow.vue";
+import Column from "primevue/column";
+import DataTable from "primevue/datatable";
+import Badge, { BadgeColor } from "@/components/Badge.vue";
+import type { VersionStatus } from "~/composables/useNormVersions";
+import { getVersionStatus } from "~/composables/useNormVersions";
+import IcBaselineLaunch from "~icons/ic/baseline-launch";
 
-defineProps<{
+const props = defineProps<{
   status: string;
+  currentLegislationIdentifier: string;
   versions: SearchResult<LegislationWork>[];
 }>();
+
+interface TableRowData {
+  id: number;
+  fromDate: string;
+  toDate: string;
+  status?: string;
+  link: string;
+  selectable: boolean;
+}
+
+const selectedVersion = defineModel<TableRowData>();
+
+const tableRowData = computed<TableRowData[]>(() => {
+  const versionsSorted = [...props.versions].sort((versionA, versionB) => {
+    if (
+      versionA.item.workExample.temporalCoverage <
+      versionB.item.workExample.temporalCoverage
+    )
+      return 1;
+    if (
+      versionA.item.workExample.temporalCoverage >
+      versionB.item.workExample.temporalCoverage
+    )
+      return -1;
+    return 0;
+  });
+
+  return versionsSorted.map((version, index) => {
+    const fromAndToDate = splitTemporalCoverage(
+      version.item.workExample.temporalCoverage,
+    );
+
+    const id = index;
+    const fromDate = fromAndToDate[0] ?? "-";
+    const toDate = fromAndToDate[1] ?? "-";
+    const status = translateStatus(getVersionStatus(version));
+    const link = `/norms/${version.item.workExample.legislationIdentifier}`;
+    const selectable =
+      version.item.workExample.legislationIdentifier !==
+      props.currentLegislationIdentifier;
+
+    const rowData: TableRowData = {
+      id: id,
+      fromDate: fromDate,
+      toDate: toDate,
+      status: status,
+      link: link,
+      selectable: selectable,
+    };
+
+    return rowData;
+  });
+});
+
+function translateStatus(status: VersionStatus): string | undefined {
+  switch (status) {
+    case "inForce":
+      return "Aktuell gültig";
+    case "future":
+      return "Zukünftig in Kraft";
+    case "historical":
+      return "Außer Kraft";
+    default:
+      return undefined;
+  }
+}
+
+const rowClass = (row: TableRowData) => {
+  return row.selectable
+    ? "group cursor-pointer"
+    : "cursor-not-allowed pointer-event-none bg-blue-100 text-gray-900";
+};
+
+async function onRowSelect() {
+  if (selectedVersion.value) {
+    await navigateTo(selectedVersion.value.link);
+  }
+}
+
+async function handleSelectionUpdate(newSelection: TableRowData) {
+  // Necessary so the unselectable row is never highlighted as selected
+  if (newSelection.selectable) {
+    selectedVersion.value = newSelection;
+  } else {
+    selectedVersion.value = undefined;
+  }
+}
 </script>
 
 <template>
@@ -15,27 +108,32 @@ defineProps<{
       Fassungen
     </h2>
     <IncompleteDataMessage class="my-24" />
-
-    <div v-if="status === 'pending'">
-      <DelayedLoadingMessage class="my-24 w-24">Lade...</DelayedLoadingMessage>
-    </div>
-    <table class="border-separate border-spacing-x-24 border-spacing-y-16">
-      <caption class="sr-only">
-        Fassungshistorie
-      </caption>
-      <thead class="sr-only">
-        <tr>
-          <th scope="col">Gültig von</th>
-          <th scope="col">Metadaten der Fassung</th>
-        </tr>
-      </thead>
-      <tbody>
-        <NormVersionListRow
-          v-for="member in versions"
-          :key="member.item.workExample['@id']"
-          :item="member.item"
-        />
-      </tbody>
-    </table>
+    <DataTable
+      v-model:selection="selectedVersion"
+      selection-mode="single"
+      data-key="id"
+      :value="tableRowData"
+      :loading="status === 'pending'"
+      :row-class="rowClass"
+      @row-select="onRowSelect"
+      @update:selection="handleSelectionUpdate"
+    >
+      <Column field="fromDate" header="Gültig von" header-class="w-px"></Column>
+      <Column field="toDate" header="Gültig bis" header-class="w-px"></Column>
+      <Column header="Status">
+        <template #body="slotProps">
+          <div class="flex justify-between">
+            <Badge
+              v-if="slotProps.data.status"
+              :label="slotProps.data.status"
+              :color="BadgeColor.BLUE"
+            ></Badge>
+            <IcBaselineLaunch
+              class="invisible text-gray-900 group-hover:visible"
+            />
+          </div>
+        </template>
+      </Column>
+    </DataTable>
   </section>
 </template>
