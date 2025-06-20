@@ -70,7 +70,7 @@
             </akn:formula>
         </akn:preamble>
         <akn:body GUID="2521d678-5a5e-4746-837b-594cb1b2c1b9" eId="hauptteil-1">
-            <akn:article GUID="c4e78387-33af-46ce-b6be-75bbc164b055" eId="hauptteil-1_abschnitt-1_art-1" period="#geltungszeitgr-1" refersTo="stammform">
+            <akn:article GUID="c4e78387-33af-46ce-b6be-75bbc164b055" eId="hauptteil-1_abschnitt-1_art-1" period="#meta-1_geltzeiten-1_geltungszeitgr-1" refersTo="stammform">
                 <akn:num GUID="3a03d37f-3607-439f-8c16-4cb54abc3800" eId="hauptteil-1_abschnitt-1_art-1_bezeichnung-1">§ 1</akn:num>
                 <akn:heading GUID="db338584-a78e-4333-87d7-b1a59d33ee94"
                              eId="hauptteil-1_abschnitt-1_art-1_überschrift-1">Heading
@@ -88,7 +88,7 @@
                     </akn:content>
                 </akn:paragraph>
             </akn:article>
-            <akn:article GUID="f3d05406-8679-4e3e-9678-ba0cf42d71ba" eId="hauptteil-1_abschnitt-1_art-2" period="#geltungszeitgr-2" refersTo="stammform">
+            <akn:article GUID="f3d05406-8679-4e3e-9678-ba0cf42d71ba" eId="hauptteil-1_abschnitt-1_art-2" period="#meta-1_geltzeiten-1_geltungszeitgr-2" refersTo="stammform">
                 <akn:num GUID="1f72458f-e8a7-47d7-9bf9-61a952ba9abc" eId="hauptteil-1_abschnitt-1_art-2_bezeichnung-1">§ 2</akn:num>
                 <akn:heading GUID="7970777d-8ac5-4737-9545-126e46765180" eId="hauptteil-1_abschnitt-1_art-2_überschrift-1">Heading<akn:br /> 2</akn:heading>
                 <akn:paragraph GUID="40f53f0f-f083-46ba-8654-f91f977b1a39" eId="hauptteil-1_abschnitt-1_art-2_abs-1">
@@ -140,7 +140,7 @@
                     </akn:content>
                 </akn:paragraph>
             </akn:article>
-            <akn:article GUID="969efcb1-2e82-493d-bed9-b013eb485d7a" eId="hauptteil-1_para-2" period="#geltungszeitgr-3" refersTo="stammform">
+            <akn:article GUID="969efcb1-2e82-493d-bed9-b013eb485d7a" eId="hauptteil-1_para-2" period="#meta-1_geltzeiten-1_geltungszeitgr-3" refersTo="stammform">
                 <akn:paragraph GUID="0db3d3fa-805d-4520-9052-10542502643a" eId="hauptteil-1_para-2_abs-0">
                     <akn:num GUID="48f61c0c-43bd-48ba-956c-cb383e2c1e06" eId="hauptteil-1_para-2_abs-0_bezeichnung-1">
                         <akn:marker GUID="60666204-25b1-4ea7-ba9b-c2e5802f1b15" eId="hauptteil-1_para-2_abs-0_bezeichnung-1_zaehlbez-1" name="0"/>
