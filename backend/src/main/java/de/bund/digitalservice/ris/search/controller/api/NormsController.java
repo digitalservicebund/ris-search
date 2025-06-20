@@ -80,15 +80,14 @@ public class NormsController {
 
   private final NormsService normsService;
   private final XsltTransformerService xsltTransformerService;
-
-  private final byte[] MOCK_PDF_BYTES;
+  private final byte[] mockPdfBytes;
 
   @Autowired
   public NormsController(NormsService normsService, XsltTransformerService xsltTransformerService)
       throws IOException {
     this.normsService = normsService;
     this.xsltTransformerService = xsltTransformerService;
-    MOCK_PDF_BYTES = new ClassPathResource("placeholder.pdf").getInputStream().readAllBytes();
+    mockPdfBytes = new ClassPathResource("placeholder.pdf").getInputStream().readAllBytes();
   }
 
   @GetMapping(value = ApiConfig.Paths.LEGISLATION, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -279,7 +278,7 @@ public class NormsController {
       @PathVariable @Schema(example = "deu") String language,
       @PathVariable @Schema(example = "2020-06-19") LocalDate pointInTimeManifestation,
       @Schema(example = "regelungstext-1") @PathVariable String subtype) {
-    return ResponseEntity.ok().contentType(MediaType.APPLICATION_PDF).body(MOCK_PDF_BYTES);
+    return ResponseEntity.ok().contentType(MediaType.APPLICATION_PDF).body(mockPdfBytes);
   }
 
   @GetMapping(

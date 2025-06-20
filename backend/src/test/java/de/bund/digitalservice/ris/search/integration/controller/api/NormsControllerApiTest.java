@@ -72,6 +72,7 @@ class NormsControllerApiTest extends ContainersIntegrationBase {
       ApiConfig.Paths.LEGISLATION_SINGLE
           + "/bund/bgbl-1/1991/s101/1991-01-01/1/deu/1991-01-01/regelungstext-1";
   static final String MANIFESTATION_URL_HTML = MANIFESTATION_URL_PREFIX + ".html";
+  static final String MANIFESTATION_URL_PDF = MANIFESTATION_URL_PREFIX + ".pdf";
   static final String MANIFESTATION_URL_XML = MANIFESTATION_URL_PREFIX + ".xml";
   static final String MANIFESTATION_PREFIX_URL_ZIP =
       ApiConfig.Paths.LEGISLATION_SINGLE + "/bund/bgbl-1/1991/s101/1991-01-01/1/deu/1991-01-01.zip";
@@ -163,6 +164,15 @@ class NormsControllerApiTest extends ContainersIntegrationBase {
     assertThat(h1Element.outerHtml())
         .isEqualTo(
             "<h1 class=\"titel\" id=\"einleitung-1_doktitel-1_text-1_doctitel-1\">Formatting Test Document</h1>");
+  }
+
+  @Test
+  @DisplayName("Pdf endpoint should return pdf when requesting a single norm")
+  void shouldReturnPdfWhenRequestingNormAsPdf() throws Exception {
+    mockMvc
+        .perform(get(MANIFESTATION_URL_PDF))
+        .andExpect(status().isOk())
+        .andExpect(content().contentType("application/pdf"));
   }
 
   @ParameterizedTest
