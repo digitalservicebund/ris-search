@@ -6,6 +6,7 @@ import DataTable from "primevue/datatable";
 import Badge, { BadgeColor } from "@/components/Badge.vue";
 import type { VersionStatus } from "~/composables/useNormVersions";
 import { getVersionStatus } from "~/composables/useNormVersions";
+import IcBaselineLaunch from "~icons/ic/baseline-launch";
 
 const props = defineProps<{
   status: string;
@@ -81,8 +82,8 @@ function translateStatus(status: VersionStatus): string | undefined {
 
 const rowClass = (row: TableRowData) => {
   return row.selectable
-    ? "cursor-pointer"
-    : "pointer-event-none hover:bg-transparent";
+    ? "group cursor-pointer"
+    : "cursor-not-allowed pointer-event-none bg-blue-100 text-gray-900";
 };
 
 async function onRowSelect() {
@@ -92,6 +93,7 @@ async function onRowSelect() {
 }
 
 async function handleSelectionUpdate(newSelection: TableRowData) {
+  // Necessary so the unselectable row is never highlighted as selected
   if (newSelection.selectable) {
     selectedVersion.value = newSelection;
   } else {
@@ -120,11 +122,16 @@ async function handleSelectionUpdate(newSelection: TableRowData) {
       <Column field="toDate" header="Gültig bis" header-class="w-px"></Column>
       <Column header="Status">
         <template #body="slotProps">
-          <Badge
-            v-if="slotProps.data.status"
-            :label="slotProps.data.status"
-            :color="BadgeColor.BLUE"
-          ></Badge>
+          <div class="flex justify-between">
+            <Badge
+              v-if="slotProps.data.status"
+              :label="slotProps.data.status"
+              :color="BadgeColor.BLUE"
+            ></Badge>
+            <IcBaselineLaunch
+              class="invisible text-gray-900 group-hover:visible"
+            />
+          </div>
         </template>
       </Column>
     </DataTable>
