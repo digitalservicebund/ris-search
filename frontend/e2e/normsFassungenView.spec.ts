@@ -39,3 +39,34 @@ test("can browse different Fassungen of a norm", async ({ page }) => {
     await expect(cellLocator.nth(2)).toContainText(expectedRowData.status);
   }
 });
+
+test("can navigate to a Fassung by clicking the table row", async ({
+  page,
+}) => {
+  await page.goto(
+    "/norms/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu/regelungstext-1",
+    { waitUntil: "networkidle" },
+  );
+
+  await expect(
+    page.getByRole("heading", {
+      name: "Zum Testen von Fassungen - Aktuelle Fassung",
+    }),
+  ).toBeVisible();
+
+  await page.getByRole("tab", { name: "Fassungen" }).click();
+
+  await test.step("Navigate to future fassung", async () => {
+    const tableBodyLocator = page
+      .getByRole("table")
+      .getByRole("rowgroup")
+      .nth(1);
+    await tableBodyLocator.getByRole("row").nth(0).click();
+
+    await expect(
+      page.getByRole("heading", {
+        name: "Zum Testen von Fassungen - Zukünftige Fassung",
+      }),
+    ).toBeVisible();
+  });
+});

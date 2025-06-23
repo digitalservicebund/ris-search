@@ -52,7 +52,7 @@
             <akn:longTitle GUID="d2e3f4a5-b6c7-4890-abcd-1234abcde123" eId="einleitung-1_doktitel-1">
                 <akn:p GUID="e3f4a5b6-c7d8-4890-abcd-2345abcde123" eId="einleitung-1_doktitel-1_text-1">
                     <akn:docStage GUID="f4a5b6c7-d8e9-4890-abcd-3456abcde123" eId="einleitung-1_doktitel-1_text-1_docstadium-1"/>
-                    <akn:docTitle GUID="a5b6c7d8-e9f0-4890-abcd-4567abcde123" eId="einleitung-1_doktitel-1_text-1_doctitel-1">Fiktives Gesetz zum IT-Änderungsvertrag</akn:docTitle>
+                    <akn:docTitle GUID="a5b6c7d8-e9f0-4890-abcd-4567abcde123" eId="einleitung-1_doktitel-1_text-1_doctitel-1">Zum Testen von Fassungen - Zukünftige Fassung</akn:docTitle>
                 </akn:p>
             </akn:longTitle>
         </akn:preface>
