@@ -14,6 +14,8 @@ const badgeStyle = computed(() => {
       return "bg-yellow-100 text-orange-900 border-1 border-yellow-300";
     case BadgeColor.BLUE:
       return "bg-blue-200 text-blue-800 border-1 border-blue-500";
+    case BadgeColor.RED:
+      return "bg-red-200 text-red-900 border-1 border-red-400";
     default:
       return undefined;
   }
@@ -25,6 +27,7 @@ export enum BadgeColor {
   BLUE,
   GREEN,
   YELLOW,
+  RED,
 }
 </script>
 

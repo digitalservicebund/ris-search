@@ -63,7 +63,7 @@ describe("NormVersionList", () => {
     expect(currentVersionRowCells.map((cell) => cell.text())).toEqual([
       "01.01.2020",
       "-",
-      "Aktuell gültig",
+      "In Kraft",
     ]);
 
     const pastVersionRowCells = tableBodyRows[2].findAll("td");

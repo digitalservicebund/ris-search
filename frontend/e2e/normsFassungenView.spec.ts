@@ -10,7 +10,7 @@ const expectedVersionData = [
   {
     dateFrom: "04.08.2022",
     dateTo: "-",
-    status: "Aktuell gültig",
+    status: "In Kraft",
   },
   {
     dateFrom: "04.08.2020",

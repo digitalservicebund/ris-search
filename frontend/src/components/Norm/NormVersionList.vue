@@ -18,9 +18,14 @@ interface TableRowData {
   id: number;
   fromDate: string;
   toDate: string;
-  status?: string;
+  status?: Status;
   link: string;
   selectable: boolean;
+}
+
+interface Status {
+  label: string;
+  color: BadgeColor;
 }
 
 const selectedVersion = defineModel<TableRowData>();
@@ -67,14 +72,14 @@ const tableRowData = computed<TableRowData[]>(() => {
   });
 });
 
-function translateStatus(status: VersionStatus): string | undefined {
+function translateStatus(status: VersionStatus): Status | undefined {
   switch (status) {
     case "inForce":
-      return "Aktuell gültig";
+      return { label: "In Kraft", color: BadgeColor.GREEN };
     case "future":
-      return "Zukünftig in Kraft";
+      return { label: "Zukünftig in Kraft", color: BadgeColor.YELLOW };
     case "historical":
-      return "Außer Kraft";
+      return { label: "Außer Kraft", color: BadgeColor.RED };
     default:
       return undefined;
   }
@@ -125,8 +130,8 @@ async function handleSelectionUpdate(newSelection: TableRowData) {
           <div class="flex justify-between">
             <Badge
               v-if="slotProps.data.status"
-              :label="slotProps.data.status"
-              :color="BadgeColor.BLUE"
+              :label="slotProps.data.status.label"
+              :color="slotProps.data.status.color"
             ></Badge>
             <IcBaselineLaunch
               class="invisible text-gray-900 group-hover:visible"
