@@ -22,13 +22,21 @@ import org.w3c.dom.Node;
  *
  * <p>The XML follows a hierarchical structure based on the Akoma Ntoso standard:
  *
- * <p>Structure Overview: - <akn:akomaNtoso> └── <akn:act> ├── <akn:meta> │ ├── <akn:lifecycle> │ │
- * └── <akn:eventRef>: Defines key legal events with associated dates. │ └── <akn:temporalData> │
- * └── <akn:temporalGroup>: Groups time intervals for legal validity. │ └── <akn:timeInterval>:
- * References <akn:eventRef> elements via @start/@end attributes. └── <akn:body> └── <akn:article>:
- * References a <akn:temporalGroup> using the @period attribute to define its validity.
+ * <pre>
+ * Structure Overview:
+ * - <akn:akomaNtoso>
+ *   └── <akn:act>
+ *       ├── <akn:meta>
+ *       │   ├── <akn:lifecycle>
+ *       │   │   └── <akn:eventRef>: Defines key legal events with associated dates.
+ *       │   └── <akn:temporalData>
+ *       │       └── <akn:temporalGroup>: Groups time intervals for legal validity.
+ *       │           └── <akn:timeInterval>: References <akn:eventRef> elements via @start/@end attributes.
+ *       └── <akn:body>
+ *           └── <akn:article>: References a <akn:temporalGroup> using the @period attribute to define its validity.
+ * </pre>
  *
- * <p>Functionality: This class provides methods to map temporal group identifiers to their
+ * Functionality: This class provides methods to map temporal group identifiers to their
  * corresponding dates as defined in the <akn:lifecycle> section.
  */
 public class LdmlTemporalData {
