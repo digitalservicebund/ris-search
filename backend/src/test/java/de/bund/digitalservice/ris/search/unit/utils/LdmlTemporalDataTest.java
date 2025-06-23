@@ -1,5 +1,6 @@
 package de.bund.digitalservice.ris.search.unit.utils;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.hibernate.validator.internal.util.Contracts.assertNotNull;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
@@ -58,13 +59,13 @@ class LdmlTemporalDataTest {
     XmlDocument xmlDocument = new XmlDocument(testContent.getBytes());
     Map<String, TimeInterval> result =
         LdmlTemporalData.getTemporalDataWithDatesMapping(xmlDocument);
-    assert result.size() == 3;
-    assert result.get("#meta-1_geltzeiten-1_geltungszeitgr-1").getStart().equals("2003-11-03");
-    assertNull(result.get("#meta-1_geltzeiten-1_geltungszeitgr-1").getEnd());
-    assert result.get("#meta-1_geltzeiten-1_geltungszeitgr-2").getStart().equals("2003-11-03");
-    assert result.get("#meta-1_geltzeiten-1_geltungszeitgr-2").getEnd().equals("2003-11-06");
-    assertNull(result.get("#meta-1_geltzeiten-1_geltungszeitgr-3").getStart());
-    assert result.get("#meta-1_geltzeiten-1_geltungszeitgr-3").getEnd().equals("2003-11-01");
+    assertThat(result.size() == 3);
+    assertThat(result.get("#meta-1_geltzeiten-1_geltungszeitgr-1").start().equals("2003-11-03"));
+    assertNull(result.get("#meta-1_geltzeiten-1_geltungszeitgr-1").end());
+    assertThat(result.get("#meta-1_geltzeiten-1_geltungszeitgr-2").start().equals("2003-11-03"));
+    assertThat(result.get("#meta-1_geltzeiten-1_geltungszeitgr-2").end().equals("2003-11-06"));
+    assertNull(result.get("#meta-1_geltzeiten-1_geltungszeitgr-3").start());
+    assertThat(result.get("#meta-1_geltzeiten-1_geltungszeitgr-3").end().equals("2003-11-01"));
   }
 
   @Test

@@ -3,6 +3,7 @@ package de.bund.digitalservice.ris.search.utils;
 import de.bund.digitalservice.ris.search.caselawhandover.shared.XmlUtils;
 import de.bund.digitalservice.ris.search.models.ldml.TimeInterval;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -19,38 +20,43 @@ public class LdmlTemporalData {
 
   private static final Logger logger = LogManager.getLogger(LdmlTemporalData.class);
 
-  private static final String X_PATH_ALL_EVENT_REF = "//*[local-name()='eventRef']";
+  private static final String X_PATH_ALL_EVENT_REF =
+      "/akn:akomaNtoso/akn:act/akn:meta/akn:lifecycle/akn:eventRef";
 
-  private static final String X_PATH_ALL_TEMPORAL_GROUP = "//*[local-name()='temporalGroup']";
+  private static final String X_PATH_ALL_TEMPORAL_GROUP =
+      "/akn:akomaNtoso/akn:act/akn:meta/akn:temporalData/akn:temporalGroup";
 
   private LdmlTemporalData() {
     throw new IllegalStateException("Utility class");
   }
 
   public static Map<String, TimeInterval> getTemporalDataWithDatesMapping(XmlDocument xmlDocument) {
-    Map<String, TimeInterval> temporalDataWithDates = new HashMap<>();
+    Map<String, TimeInterval> temporalGroupToIntervalMap = new HashMap<>();
     Map<String, String> eventRefMap = getEventRefMap(xmlDocument);
+    List<Node> temporalGroups;
+
     try {
-      XmlUtils.toList(xmlDocument.getNodesByXpath(X_PATH_ALL_TEMPORAL_GROUP))
-          .forEach(
-              temporalGroup -> {
-                String temporalGroupId =
-                    String.format("#%s", getAttributeValue(temporalGroup, "eId"));
-                Node timeIntervalNode = getTimeIntervalNode((Element) temporalGroup);
-
-                if (timeIntervalNode != null
-                    && timeIntervalNode.getNodeType() == Node.ELEMENT_NODE) {
-                  Element timeInterval = (Element) timeIntervalNode;
-                  TimeInterval timeIntervalData =
-                      fetchDatesForTimeInterval(timeInterval, eventRefMap);
-
-                  temporalDataWithDates.put(temporalGroupId, timeIntervalData);
-                }
-              });
+      temporalGroups = XmlUtils.toList(xmlDocument.getNodesByXpath(X_PATH_ALL_TEMPORAL_GROUP));
     } catch (XPathExpressionException e) {
-      logger.warn("Error parsing temporal data", e);
+      logger.warn("Failed to evaluate XPath expression for temporal groups", e);
+      return temporalGroupToIntervalMap;
     }
-    return temporalDataWithDates;
+
+    for (Node temporalGroup : temporalGroups) {
+      if (!(temporalGroup instanceof Element)) {
+        continue;
+      }
+
+      String temporalGroupId = String.format("#%s", getAttributeValue(temporalGroup, "eId"));
+      Node timeIntervalNode = getTimeIntervalNode((Element) temporalGroup);
+
+      if (timeIntervalNode != null && timeIntervalNode.getNodeType() == Node.ELEMENT_NODE) {
+        Element timeInterval = (Element) timeIntervalNode;
+        TimeInterval timeIntervalData = fetchDatesForTimeInterval(timeInterval, eventRefMap);
+        temporalGroupToIntervalMap.put(temporalGroupId, timeIntervalData);
+      }
+    }
+    return temporalGroupToIntervalMap;
   }
 
   private static TimeInterval fetchDatesForTimeInterval(

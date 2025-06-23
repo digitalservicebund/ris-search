@@ -331,8 +331,8 @@ public class NormLdmlToOpenSearchMapper {
 
         TimeInterval timeInterval = temporalGroupsWithDates.get(period);
         if (timeInterval != null) {
-          entryIntoForceDate = toLocalDate(timeInterval.getStart());
-          expiryDate = toLocalDate(timeInterval.getEnd());
+          entryIntoForceDate = toLocalDate(timeInterval.start());
+          expiryDate = toLocalDate(timeInterval.end());
         }
 
         final String articleHeader = buildArticleHeader(marker, heading);
