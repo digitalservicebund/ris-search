@@ -1,9 +1,13 @@
 package de.bund.digitalservice.ris.search.unit.utils;
 
+import static org.hibernate.validator.internal.util.Contracts.assertNotNull;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.spy;
 
 import de.bund.digitalservice.ris.search.models.ldml.TimeInterval;
 import de.bund.digitalservice.ris.search.utils.LdmlTemporalData;
@@ -13,6 +17,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.xpath.XPathExpressionException;
 import org.junit.jupiter.api.Test;
 import org.xml.sax.SAXException;
 
@@ -72,5 +77,20 @@ class LdmlTemporalDataTest {
 
     assertTrue(thrown.getCause() instanceof IllegalStateException);
     assertEquals("Utility class", thrown.getCause().getMessage());
+  }
+
+  @Test
+  void testReturnsEmptyMapWhenXPathExpressionExceptionOccurs() throws Exception {
+    byte[] xmlBytes = "<root/>".getBytes();
+    XmlDocument realXml = new XmlDocument(xmlBytes);
+
+    XmlDocument spyXml = spy(realXml);
+
+    doThrow(new XPathExpressionException("Fake error")).when(spyXml).getNodesByXpath(anyString());
+
+    Map<String, TimeInterval> result = LdmlTemporalData.getTemporalDataWithDatesMapping(spyXml);
+
+    assertNotNull(result);
+    assertTrue(result.isEmpty());
   }
 }
