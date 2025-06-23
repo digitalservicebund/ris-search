@@ -326,9 +326,14 @@ public class NormLdmlToOpenSearchMapper {
           text = text.concat(paragraphText).concat(" ");
         }
 
+        LocalDate entryIntoForceDate = null;
+        LocalDate expiryDate = null;
+
         TimeInterval timeInterval = temporalGroupsWithDates.get(period);
-        LocalDate entryIntoForceDate = toLocalDate(timeInterval.getStart());
-        LocalDate expiryDate = toLocalDate(timeInterval.getEnd());
+        if (timeInterval != null) {
+          entryIntoForceDate = toLocalDate(timeInterval.getStart());
+          expiryDate = toLocalDate(timeInterval.getEnd());
+        }
 
         final String articleHeader = buildArticleHeader(marker, heading);
 
