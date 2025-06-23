@@ -46,7 +46,7 @@ export const data: JSONLDList<SearchResult<LegislationWork>> = {
     {
       item: {
         ...createWorkExample(
-          "eli/bund/bgbl-1/2000/s001/2020-01-01/2/deu/regelungstext-1",
+          "eli/bund/bgbl-1/2000/s001/2020-01-01/1/deu/regelungstext-1",
           "2020-01-01/..",
           "InForce",
         ),
@@ -56,7 +56,7 @@ export const data: JSONLDList<SearchResult<LegislationWork>> = {
     {
       item: {
         ...createWorkExample(
-          "eli/bund/bgbl-1/2000/s001/2030-01-01/2/deu/regelungstext-1",
+          "eli/bund/bgbl-1/2000/s001/2030-01-01/1/deu/regelungstext-1",
           "2031-01-01/..",
           "NotInForce",
         ),
