@@ -29,7 +29,7 @@ interface Status {
   color: BadgeColor;
 }
 
-const selectedVersion = defineModel<TableRowData>();
+const selectedVersion = ref<TableRowData>();
 
 const tableRowData = computed<TableRowData[]>(() => {
   const versionsSorted = _.orderBy(

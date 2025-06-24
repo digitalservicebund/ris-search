@@ -34,33 +34,27 @@ export const data: JSONLDList<SearchResult<LegislationWork>> = {
   totalItems: 3,
   member: [
     {
-      item: {
-        ...createWorkExample(
-          "eli/bund/bgbl-1/2000/s001/2000-01-01/1/deu/regelungstext-1",
-          "2000-01-05/2019-12-31",
-          "NotInForce",
-        ),
-      },
+      item: createWorkExample(
+        "eli/bund/bgbl-1/2000/s001/2000-01-01/1/deu/regelungstext-1",
+        "2000-01-05/2019-12-31",
+        "NotInForce",
+      ),
       textMatches: [],
     },
     {
-      item: {
-        ...createWorkExample(
-          "eli/bund/bgbl-1/2000/s001/2020-01-01/1/deu/regelungstext-1",
-          "2020-01-01/..",
-          "InForce",
-        ),
-      },
+      item: createWorkExample(
+        "eli/bund/bgbl-1/2000/s001/2020-01-01/1/deu/regelungstext-1",
+        "2020-01-01/..",
+        "InForce",
+      ),
       textMatches: [],
     },
     {
-      item: {
-        ...createWorkExample(
-          "eli/bund/bgbl-1/2000/s001/2030-01-01/1/deu/regelungstext-1",
-          "2031-01-01/..",
-          "NotInForce",
-        ),
-      },
+      item: createWorkExample(
+        "eli/bund/bgbl-1/2000/s001/2030-01-01/1/deu/regelungstext-1",
+        "2031-01-01/..",
+        "NotInForce",
+      ),
       textMatches: [],
     },
   ],
