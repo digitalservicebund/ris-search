@@ -2,19 +2,19 @@ package de.bund.digitalservice.ris.search.mapper;
 
 import static de.bund.digitalservice.ris.search.utils.MappingUtils.cleanText;
 
-import de.bund.digitalservice.ris.search.caselawhandover.shared.XmlUtils;
 import de.bund.digitalservice.ris.search.models.Attachment;
+import de.bund.digitalservice.ris.search.models.ldml.TimeInterval;
 import de.bund.digitalservice.ris.search.models.opensearch.Article;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.models.opensearch.TableOfContentsItem;
 import de.bund.digitalservice.ris.search.utils.DateUtils;
+import de.bund.digitalservice.ris.search.utils.LdmlTemporalData;
 import de.bund.digitalservice.ris.search.utils.XmlDocument;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -63,8 +63,7 @@ public class NormLdmlToOpenSearchMapper {
       "/akn:akomaNtoso/akn:act/akn:meta/akn:proprietary/ris:legalDocML.de_metadaten/ris:inkraft/@date";
   private static final String X_PATH_EXPIRY_DATE =
       "/akn:akomaNtoso/akn:act/akn:meta/akn:proprietary/ris:legalDocML.de_metadaten/ris:ausserkraft/@date";
-  private static final String X_PATH_ALL_TIME_INTERVAL = "//*[local-name()='timeInterval']";
-  private static final String X_PATH_ALL_EVENT_REF = "//*[local-name()='eventRef']";
+
   private static final String X_PATH_BODY = "//*[local-name()='body']";
   private static final String X_PATH_CONCLUSIONS_FORMULA =
       "//*[local-name()='conclusions']/*[local-name()='formula']";
@@ -303,11 +302,9 @@ public class NormLdmlToOpenSearchMapper {
     if (nodes == null) {
       return articles;
     }
-    Map<String, String> eventRefDates = getEidToDateMap(xmlDocument, X_PATH_ALL_EVENT_REF, "date");
-    Map<String, String> articleStartDates =
-        getEidToDateMap(xmlDocument, X_PATH_ALL_TIME_INTERVAL, "start");
-    Map<String, String> articleEndDates =
-        getEidToDateMap(xmlDocument, X_PATH_ALL_TIME_INTERVAL, "end");
+
+    Map<String, TimeInterval> temporalGroupsWithDates =
+        LdmlTemporalData.getTemporalDataWithDatesMapping(xmlDocument);
 
     getNodeAsArticle(xmlDocument, X_PATH_PREAMBLE_FORMULA, EINGANGSFORMEL).ifPresent(articles::add);
     for (int i = 0; i < nodes.getLength(); i++) {
@@ -328,8 +325,15 @@ public class NormLdmlToOpenSearchMapper {
           String paragraphText = NormParagraphToTextMapper.extractTextFromParagraph(paragraphNode);
           text = text.concat(paragraphText).concat(" ");
         }
-        LocalDate entryIntoForceDate = getArticleDate(eventRefDates, articleStartDates, period);
-        LocalDate expiryDate = getArticleDate(eventRefDates, articleEndDates, period);
+
+        LocalDate entryIntoForceDate = null;
+        LocalDate expiryDate = null;
+
+        TimeInterval timeInterval = temporalGroupsWithDates.get(period);
+        if (timeInterval != null) {
+          entryIntoForceDate = toLocalDate(timeInterval.start());
+          expiryDate = toLocalDate(timeInterval.end());
+        }
 
         final String articleHeader = buildArticleHeader(marker, heading);
 
@@ -405,35 +409,6 @@ public class NormLdmlToOpenSearchMapper {
                     .text(cleanText(node.getTextContent()))
                     .name(cleanText(name))
                     .build());
-  }
-
-  private static Map<String, String> getEidToDateMap(
-      XmlDocument xmlDocument, String xpath, String dateField) {
-    try {
-      return XmlUtils.toList(xmlDocument.getNodesByXpath(xpath)).stream()
-          .map(e -> (Element) e)
-          .collect(Collectors.toMap(e -> e.getAttribute("eId"), e -> e.getAttribute(dateField)));
-    } catch (XPathExpressionException e) {
-      logger.warn("Error parsing norm dates", e);
-      return new HashMap<>();
-    }
-  }
-
-  private static LocalDate getArticleDate(
-      Map<String, String> eventRefDates, Map<String, String> timeIntervalMap, String period) {
-    if (period != null && !period.isBlank()) {
-      String dateEid = getEventReferenceEidByAttribute(timeIntervalMap, period);
-      if (dateEid != null) {
-        return toLocalDate(eventRefDates.get(dateEid.replace("#", "").trim()));
-      }
-    }
-    return null;
-  }
-
-  private static String getEventReferenceEidByAttribute(
-      Map<String, String> dateMap, String period) {
-    return dateMap.get(
-        "meta-1_geltzeiten-1_" + period.replace("#", "").trim() + "_gelzeitintervall-1");
   }
 
   private static String buildArticleHeader(String articleMarker, String articleHeading) {
