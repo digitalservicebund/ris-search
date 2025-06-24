@@ -75,7 +75,7 @@ const tableRowData = computed<TableRowData[]>(() => {
 function translateStatus(status: VersionStatus): Status | undefined {
   switch (status) {
     case "inForce":
-      return { label: "In Kraft", color: BadgeColor.GREEN };
+      return { label: "Aktuell gültig", color: BadgeColor.GREEN };
     case "future":
       return { label: "Zukünftig in Kraft", color: BadgeColor.YELLOW };
     case "historical":
