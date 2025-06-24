@@ -43,6 +43,7 @@ import VersionWarningMessage from "~/components/Norm/VersionWarningMessage.vue";
 import type { BreadcrumbItem } from "~/components/Ris/RisBreadcrumb.vue";
 import { useNormVersions } from "~/composables/useNormVersions";
 import type { ActionMenuItem } from "~/components/ActionsMenu.vue";
+import UpdatingLinkIcon from "~/components/icons/UpdatingLinkIcon.vue";
 
 definePageMeta({
   // note: this is an expression ELI that additionally specifies the subtype component of a manifestation ELI
@@ -138,12 +139,15 @@ const onPrint = () => {
 };
 const xmlViewDataAttribute = "xml-view";
 
+const workUrl = computed(() => {
+  if (!import.meta.client || !metadata.value) return undefined;
+  const href = window.location.href;
+  const workEli = metadata.value?.legislationIdentifier;
+  return href.replace(/eli.+$/, workEli);
+});
 const copyWorkUrl = async () => {
-  if (metadata.value) {
-    const href = window.location.href;
-    const workEli = metadata.value?.legislationIdentifier;
-    const target = href.replace(/eli.+$/, workEli);
-    await navigator.clipboard.writeText(target);
+  if (workUrl.value) {
+    await navigator.clipboard.writeText(workUrl.value);
   }
 };
 
@@ -152,8 +156,9 @@ const actions: ComputedRef<ActionMenuItem[]> = computed(() => {
     {
       key: "link",
       label: "Link zur jeweils gültigen Fassung",
-      iconComponent: MaterialSymbolsLink,
+      iconComponent: UpdatingLinkIcon,
       command: copyWorkUrl,
+      url: workUrl.value,
     },
     {
       key: "permalink",

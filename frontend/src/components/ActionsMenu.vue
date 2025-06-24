@@ -28,7 +28,9 @@ defineExpose({ toggle });
       text
       :disabled="item.disabled"
       :aria-label="item.label"
-      @click="item.command && item.command()"
+      :href="item.url"
+      :as="item.url ? 'a' : undefined"
+      @click.prevent="item.command && item.command()"
     >
       <template #icon
         ><component :is="(item as ActionMenuItem).iconComponent"
