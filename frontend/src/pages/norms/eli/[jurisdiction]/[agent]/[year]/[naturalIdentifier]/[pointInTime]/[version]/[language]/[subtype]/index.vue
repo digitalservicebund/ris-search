@@ -199,7 +199,7 @@ const actions: ComputedRef<ActionMenuItem[]> = computed(() => {
       <div class="container">
         <div class="flex items-center gap-8 print:hidden">
           <RisBreadcrumb type="norm" :items="breadcrumbItems" class="grow" />
-          <ActionsMenu :items="actions" />
+          <client-only> <ActionsMenu :items="actions" /></client-only>
         </div>
         <NormHeadingGroup :metadata="metadata" :html-parts="htmlParts" />
 
