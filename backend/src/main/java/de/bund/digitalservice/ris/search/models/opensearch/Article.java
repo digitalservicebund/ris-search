@@ -25,7 +25,6 @@ public record Article(
         LocalDate entryIntoForceDate,
     @Nullable @Field(name = "expiry_date", type = FieldType.Date, format = DateFormat.date)
         LocalDate expiryDate,
-    @Nullable @Field(name = "is_active") Boolean isActive,
     @Nullable @Field(name = "eid") String eId,
     @Nullable @Field(name = "guid") String guid,
     @Nullable @Field(name = "manifestation_eli") String manifestationEli,

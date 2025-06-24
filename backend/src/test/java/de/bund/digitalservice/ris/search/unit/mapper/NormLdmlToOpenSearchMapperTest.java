@@ -190,7 +190,6 @@ class NormLdmlToOpenSearchMapperTest {
                 "This text appears in the attachment. This text also appears, inside a paragraph.",
                 null,
                 null,
-                null,
                 "anlagen-1_anlage-1",
                 null,
                 "eli/bund/bgbl-1/1962/s514/2010-04-27/1/deu/2010-04-27/offenestruktur-1.xml",
@@ -289,6 +288,5 @@ class NormLdmlToOpenSearchMapperTest {
     assertThat(firstArticle.entryIntoForceDate()).isEqualTo(LocalDate.of(1991, 1, 1));
     assertThat(firstArticle.guid()).isEqualTo("87cd6b3a-d198-49c3-a02f-6adfd12940cb");
     assertThat(firstArticle.expiryDate()).isNull();
-    assertThat(firstArticle.isActive()).isTrue();
   }
 }

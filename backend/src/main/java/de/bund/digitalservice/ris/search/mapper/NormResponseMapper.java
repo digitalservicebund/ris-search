@@ -135,7 +135,7 @@ public class NormResponseMapper {
         .guid(article.guid())
         .entryIntoForceDate(article.entryIntoForceDate())
         .expiryDate(article.expiryDate())
-        .isActive(article.isActive())
+        .isActive(DateUtils.isActive(article.entryIntoForceDate(), article.expiryDate()))
         .encoding(encoding)
         .build();
   }
