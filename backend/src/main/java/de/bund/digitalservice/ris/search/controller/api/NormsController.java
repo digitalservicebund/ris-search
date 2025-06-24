@@ -30,6 +30,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import java.io.IOException;
 import java.net.URLConnection;
 import java.time.LocalDate;
 import java.util.List;
@@ -39,6 +40,7 @@ import java.util.stream.Stream;
 import org.apache.commons.lang3.StringUtils;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.UncategorizedElasticsearchException;
 import org.springframework.data.elasticsearch.core.SearchPage;
@@ -64,13 +66,28 @@ import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBo
         """)
 public class NormsController {
   private static final String HTML_FILE_NOT_FOUND = "<div>LegalDocML file not found</div>";
+
+  public static final String BUND_DESCRIPTION = "Country or regional code for the jurisdiction";
+  public static final String BUND_EXAMPLE = "bund";
+  public static final String AGENT_DESCRIPTION =
+      "Agent or authority issuing the legislation, e.g., 'bgbl-1' for Bundesgesetzblatt Teil I (Federal Law Gazette part I)";
+  public static final String AGENT_EXAMPLE = "bgbl-1";
+  public static final String YEAR_DESCRIPTION = "Year the legislation was enacted or published";
+  public static final String YEAR_EXAMPLE = "1979";
+  public static final String NATURAL_IDENTIFIER_DESCRIPTION =
+      "Unique natural identifier for the legislation, specific to the jurisdiction and agent";
+  public static final String NATURAL_IDENTIFIER_EXAMPLE = "s1325";
+
   private final NormsService normsService;
   private final XsltTransformerService xsltTransformerService;
+  private final byte[] mockPdfBytes;
 
   @Autowired
-  public NormsController(NormsService normsService, XsltTransformerService xsltTransformerService) {
+  public NormsController(NormsService normsService, XsltTransformerService xsltTransformerService)
+      throws IOException {
     this.normsService = normsService;
     this.xsltTransformerService = xsltTransformerService;
+    mockPdfBytes = new ClassPathResource("placeholder.pdf").getInputStream().readAllBytes();
   }
 
   @GetMapping(value = ApiConfig.Paths.LEGISLATION, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -141,24 +158,16 @@ public class NormsController {
   @ApiResponse(responseCode = "200")
   @ApiResponse(responseCode = "404", content = @Content)
   public ResponseEntity<LegislationWorkSchema> getLegislation(
-      @Parameter(description = "Country or regional code for the jurisdiction", example = "bund")
+      @Parameter(description = BUND_DESCRIPTION, example = BUND_EXAMPLE)
           @PathVariable
-          @Schema(allowableValues = {"bund"})
+          @Schema(allowableValues = {BUND_EXAMPLE})
           String jurisdiction,
-      @Parameter(
-              description =
-                  "Agent or authority issuing the legislation, e.g., 'bgbl-1' for Bundesgesetzblatt Teil I (Federal Law Gazette part I)",
-              example = "bgbl-1")
+      @Parameter(description = AGENT_DESCRIPTION, example = AGENT_EXAMPLE)
           @PathVariable
-          @Schema(example = "bgbl-1")
+          @Schema(example = AGENT_EXAMPLE)
           String agent,
-      @Parameter(description = "Year the legislation was enacted or published", example = "1979")
-          @PathVariable
-          String year,
-      @Parameter(
-              description =
-                  "Unique natural identifier for the legislation, specific to the jurisdiction and agent",
-              example = "s1325")
+      @Parameter(description = YEAR_DESCRIPTION, example = YEAR_EXAMPLE) @PathVariable String year,
+      @Parameter(description = NATURAL_IDENTIFIER_DESCRIPTION, example = NATURAL_IDENTIFIER_EXAMPLE)
           @PathVariable
           String naturalIdentifier,
       @Parameter(example = "2020-06-19") @PathVariable LocalDate pointInTime,
@@ -195,25 +204,14 @@ public class NormsController {
               mediaType = MediaType.TEXT_HTML_VALUE,
               schema = @Schema(example = HTML_FILE_NOT_FOUND)))
   public ResponseEntity<String> getLegislationSubtypeAsHtml(
-      @Parameter(description = "Country or regional code for the jurisdiction", example = "bund")
+      @Parameter(description = BUND_DESCRIPTION, example = BUND_EXAMPLE)
           @PathVariable
-          @Schema(allowableValues = {"bund"})
+          @Schema(allowableValues = {BUND_EXAMPLE})
           String jurisdiction,
-      @Parameter(
-              description =
-                  "Agent or authority issuing the legislation, e.g., 'bgbl-1' for Bundesgesetzblatt Teil I (Federal Law Gazette part I)",
-              example = "bgbl-1")
-          @PathVariable
+      @Parameter(description = AGENT_DESCRIPTION, example = AGENT_EXAMPLE) @PathVariable
           String agent,
-      @PathVariable
-          @Parameter(
-              description = "Year the legislation was enacted or published",
-              example = "1979")
-          String year,
-      @Parameter(
-              description =
-                  "Unique natural identifier for the legislation, specific to the jurisdiction and agent",
-              example = "s1325")
+      @PathVariable @Parameter(description = YEAR_DESCRIPTION, example = YEAR_EXAMPLE) String year,
+      @Parameter(description = NATURAL_IDENTIFIER_DESCRIPTION, example = NATURAL_IDENTIFIER_EXAMPLE)
           @PathVariable
           String naturalIdentifier,
       @Parameter(example = "2020-06-19") @PathVariable LocalDate pointInTime,
@@ -256,6 +254,36 @@ public class NormsController {
   @GetMapping(
       path =
           ApiConfig.Paths.LEGISLATION_SINGLE
+              + "/{jurisdiction}/{agent}/{year}/{naturalIdentifier}/{pointInTime}/{version}/{language}/{pointInTimeManifestation}/{subtype}.pdf",
+      produces = MediaType.APPLICATION_PDF_VALUE)
+  @Operation(
+      summary = "Manifestation PDF",
+      description =
+          "Returns a particular manifestation of a piece of legislation, converted to PDF.")
+  @ApiResponse(responseCode = "200")
+  @ApiResponse(responseCode = "404")
+  public ResponseEntity<byte[]> getLegislationSubtypeAsPdf(
+      @Parameter(description = BUND_DESCRIPTION, example = BUND_EXAMPLE)
+          @PathVariable
+          @Schema(allowableValues = {BUND_EXAMPLE})
+          String jurisdiction,
+      @Parameter(description = AGENT_DESCRIPTION, example = AGENT_EXAMPLE) @PathVariable
+          String agent,
+      @PathVariable @Parameter(description = YEAR_DESCRIPTION, example = YEAR_EXAMPLE) String year,
+      @Parameter(description = NATURAL_IDENTIFIER_DESCRIPTION, example = NATURAL_IDENTIFIER_EXAMPLE)
+          @PathVariable
+          String naturalIdentifier,
+      @Parameter(example = "2020-06-19") @PathVariable LocalDate pointInTime,
+      @PathVariable @Schema(example = "2") Integer version,
+      @PathVariable @Schema(example = "deu") String language,
+      @PathVariable @Schema(example = "2020-06-19") LocalDate pointInTimeManifestation,
+      @Schema(example = "regelungstext-1") @PathVariable String subtype) {
+    return ResponseEntity.ok().contentType(MediaType.APPLICATION_PDF).body(mockPdfBytes);
+  }
+
+  @GetMapping(
+      path =
+          ApiConfig.Paths.LEGISLATION_SINGLE
               + "/{jurisdiction}/{agent}/{year}/{naturalIdentifier}/{pointInTime}/{version}/{language}/{pointInTimeManifestation}/{subtype}.xml",
       produces = MediaType.APPLICATION_XML_VALUE)
   @Operation(
@@ -275,25 +303,14 @@ public class NormsController {
   @ApiResponse(responseCode = "200")
   @ApiResponse(responseCode = "404", content = @Content(schema = @Schema()))
   public ResponseEntity<byte[]> getLegislationSubtypeAsXml(
-      @Parameter(description = "Country or regional code for the jurisdiction", example = "bund")
+      @Parameter(description = BUND_DESCRIPTION, example = BUND_EXAMPLE)
           @PathVariable
-          @Schema(allowableValues = {"bund"})
+          @Schema(allowableValues = {BUND_EXAMPLE})
           String jurisdiction,
-      @Parameter(
-              description =
-                  "Agent or authority issuing the legislation, e.g., 'bgbl-1' for Bundesgesetzblatt Teil I (Federal Law Gazette part I)",
-              example = "bgbl-1")
-          @PathVariable
+      @Parameter(description = AGENT_DESCRIPTION, example = AGENT_EXAMPLE) @PathVariable
           String agent,
-      @PathVariable
-          @Parameter(
-              description = "Year the legislation was enacted or published",
-              example = "1979")
-          String year,
-      @Parameter(
-              description =
-                  "Unique natural identifier for the legislation, specific to the jurisdiction and agent",
-              example = "s1325")
+      @PathVariable @Parameter(description = YEAR_DESCRIPTION, example = YEAR_EXAMPLE) String year,
+      @Parameter(description = NATURAL_IDENTIFIER_DESCRIPTION, example = NATURAL_IDENTIFIER_EXAMPLE)
           @PathVariable
           String naturalIdentifier,
       @Parameter(example = "2020-06-19") @PathVariable LocalDate pointInTime,
@@ -336,25 +353,14 @@ public class NormsController {
   @ApiResponse(responseCode = "200")
   @ApiResponse(responseCode = "404", content = @Content(schema = @Schema()))
   public ResponseEntity<StreamingResponseBody> getLegislationSubtypeAsZip(
-      @Parameter(description = "Country or regional code for the jurisdiction", example = "bund")
+      @Parameter(description = BUND_DESCRIPTION, example = BUND_EXAMPLE)
           @PathVariable
-          @Schema(allowableValues = {"bund"})
+          @Schema(allowableValues = {BUND_EXAMPLE})
           String jurisdiction,
-      @Parameter(
-              description =
-                  "Agent or authority issuing the legislation, e.g., 'bgbl-1' for Bundesgesetzblatt Teil I (Federal Law Gazette part I)",
-              example = "bgbl-1")
-          @PathVariable
+      @Parameter(description = AGENT_DESCRIPTION, example = AGENT_EXAMPLE) @PathVariable
           String agent,
-      @PathVariable
-          @Parameter(
-              description = "Year the legislation was enacted or published",
-              example = "1979")
-          String year,
-      @Parameter(
-              description =
-                  "Unique natural identifier for the legislation, specific to the jurisdiction and agent",
-              example = "s1325")
+      @PathVariable @Parameter(description = YEAR_DESCRIPTION, example = YEAR_EXAMPLE) String year,
+      @Parameter(description = NATURAL_IDENTIFIER_DESCRIPTION, example = NATURAL_IDENTIFIER_EXAMPLE)
           @PathVariable
           String naturalIdentifier,
       @Parameter(example = "2020-06-19") @PathVariable LocalDate pointInTime,
@@ -402,26 +408,13 @@ public class NormsController {
   @ApiResponse(responseCode = "404", content = @Content())
   public ResponseEntity<String> getLegislationArticleAsHtml(
       @PathVariable
-          @Parameter(
-              description = "Country or regional code for the jurisdiction",
-              example = "bund")
-          @Schema(allowableValues = {"bund"})
+          @Parameter(description = BUND_DESCRIPTION, example = BUND_EXAMPLE)
+          @Schema(allowableValues = {BUND_EXAMPLE})
           String jurisdiction,
-      @Parameter(
-              description =
-                  "Agent or authority issuing the legislation, e.g., 'bgbl-1' for Bundesgesetzblatt Teil I (Federal Law Gazette part I)",
-              example = "bgbl-1")
-          @PathVariable
+      @Parameter(description = AGENT_DESCRIPTION, example = AGENT_EXAMPLE) @PathVariable
           String agent,
-      @PathVariable
-          @Parameter(
-              description = "Year the legislation was enacted or published",
-              example = "1979")
-          String year,
-      @Parameter(
-              description =
-                  "Unique natural identifier for the legislation, specific to the jurisdiction and agent",
-              example = "s1325")
+      @PathVariable @Parameter(description = YEAR_DESCRIPTION, example = YEAR_EXAMPLE) String year,
+      @Parameter(description = NATURAL_IDENTIFIER_DESCRIPTION, example = NATURAL_IDENTIFIER_EXAMPLE)
           @PathVariable
           String naturalIdentifier,
       @Parameter(example = "2020-06-19") @PathVariable LocalDate pointInTime,
@@ -479,25 +472,14 @@ public class NormsController {
   @ApiResponse(responseCode = "200")
   @ApiResponse(responseCode = "404", content = @Content())
   public ResponseEntity<byte[]> getImage(
-      @Parameter(description = "Country or regional code for the jurisdiction", example = "bund")
+      @Parameter(description = BUND_DESCRIPTION, example = BUND_EXAMPLE)
           @PathVariable
-          @Schema(allowableValues = {"bund"})
+          @Schema(allowableValues = {BUND_EXAMPLE})
           String jurisdiction,
-      @Parameter(
-              description =
-                  "Agent or authority issuing the legislation, e.g., 'bgbl-1' for Bundesgesetzblatt Teil I (Federal Law Gazette part I)",
-              example = "bgbl-1")
-          @PathVariable
+      @Parameter(description = AGENT_DESCRIPTION, example = AGENT_EXAMPLE) @PathVariable
           String agent,
-      @PathVariable
-          @Parameter(
-              description = "Year the legislation was enacted or published",
-              example = "1979")
-          String year,
-      @Parameter(
-              description =
-                  "Unique natural identifier for the legislation, specific to the jurisdiction and agent",
-              example = "s1325")
+      @PathVariable @Parameter(description = YEAR_DESCRIPTION, example = YEAR_EXAMPLE) String year,
+      @Parameter(description = NATURAL_IDENTIFIER_DESCRIPTION, example = NATURAL_IDENTIFIER_EXAMPLE)
           @PathVariable
           String naturalIdentifier,
       @Parameter(example = "2020-06-19") @PathVariable LocalDate pointInTime,
