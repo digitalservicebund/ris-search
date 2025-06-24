@@ -73,7 +73,7 @@ public class LdmlTemporalData {
       String temporalGroupId = String.format("#%s", getAttributeValue(temporalGroup, "eId"));
       Node timeIntervalNode = getTimeIntervalNode((Element) temporalGroup);
 
-      if (timeIntervalNode != null && timeIntervalNode.getNodeType() == Node.ELEMENT_NODE) {
+      if (timeIntervalNode != null && timeIntervalNode instanceof Element) {
         Element timeInterval = (Element) timeIntervalNode;
         TimeInterval timeIntervalData = fetchDatesForTimeInterval(timeInterval, eventRefMap);
         temporalGroupToIntervalMap.put(temporalGroupId, timeIntervalData);
