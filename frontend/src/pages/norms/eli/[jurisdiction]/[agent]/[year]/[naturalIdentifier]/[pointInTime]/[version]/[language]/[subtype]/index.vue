@@ -6,7 +6,6 @@ import type { LegislationWork } from "@/types";
 import { useFetchNormContent } from "./useNormData";
 import { useRoute } from "#app";
 import { useIntersectionObserver } from "@/composables/useIntersectionObserver";
-import MetadataField from "@/components/MetadataField.vue";
 import {
   splitTemporalCoverage,
   translateLegalForce,
@@ -42,6 +41,7 @@ import { useNormVersions } from "~/composables/useNormVersions";
 import Toast from "primevue/toast";
 import { useNormActions } from "./useNormActions";
 import { getManifestationUrl } from "~/utils/normsUtils";
+import NormMetadataHeader from "~/pages/norms/eli/[jurisdiction]/[agent]/[year]/[naturalIdentifier]/[pointInTime]/[version]/[language]/[subtype]/NormMetadataHeader.vue";
 
 definePageMeta({
   // note: this is an expression ELI that additionally specifies the subtype component of a manifestation ELI
@@ -144,31 +144,12 @@ const { actions } = useNormActions(metadata);
           :versions="normVersions"
           :current-expression="metadata.workExample.legislationIdentifier"
         />
-        <div class="mt-8 mb-48 flex flex-wrap items-end gap-24">
-          <MetadataField
-            v-if="metadata.abbreviation"
-            id="abbreviation"
-            label="Abkürzung"
-            :value="metadata.abbreviation"
-          />
-          <MetadataField
-            id="status"
-            label="Status"
-            :value="translatedLegalForce"
-          />
-          <MetadataField
-            v-if="temporalCoverage[0]"
-            id="validFrom"
-            label="Fassung gültig seit"
-            :value="temporalCoverage[0]"
-          />
-          <MetadataField
-            v-if="temporalCoverage[1]"
-            id="validTo"
-            label="Fassung gültig bis"
-            :value="temporalCoverage[1]"
-          />
-        </div>
+        <NormMetadataHeader
+          :abbreviation="metadata.abbreviation"
+          :status="translatedLegalForce"
+          :valid-from="temporalCoverage[0]"
+          :valid-to="temporalCoverage[1]"
+        />
       </div>
       <Tabs value="0" lazy>
         <TabList :pt="tabListStyles">
