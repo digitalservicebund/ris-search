@@ -7,6 +7,7 @@ import Badge, { BadgeColor } from "@/components/Badge.vue";
 import type { VersionStatus } from "~/composables/useNormVersions";
 import { getVersionStatus } from "~/composables/useNormVersions";
 import IcBaselineLaunch from "~icons/ic/baseline-launch";
+import _ from "lodash";
 
 const props = defineProps<{
   status: string;
@@ -31,19 +32,11 @@ interface Status {
 const selectedVersion = defineModel<TableRowData>();
 
 const tableRowData = computed<TableRowData[]>(() => {
-  const versionsSorted = [...props.versions].sort((versionA, versionB) => {
-    if (
-      versionA.item.workExample.temporalCoverage <
-      versionB.item.workExample.temporalCoverage
-    )
-      return 1;
-    if (
-      versionA.item.workExample.temporalCoverage >
-      versionB.item.workExample.temporalCoverage
-    )
-      return -1;
-    return 0;
-  });
+  const versionsSorted = _.orderBy(
+    props.versions,
+    [(version) => version.item.workExample.temporalCoverage],
+    ["desc"],
+  );
 
   return versionsSorted.map((version, index) => {
     const fromAndToDate = splitTemporalCoverage(
