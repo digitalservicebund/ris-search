@@ -4,7 +4,8 @@ import Menu, { type MenuMethods } from "primevue/menu";
 import Button from "primevue/button";
 import MdiDotsVertical from "~icons/mdi/dots-vertical";
 
-const { items } = defineProps<{ items: ActionMenuItem[] }>();
+export type ActionsMenuProps = { items: ActionMenuItem[] };
+const { items } = defineProps<ActionsMenuProps>();
 
 export type ActionMenuItem = Omit<MenuItem, "icon"> & {
   disabled?: boolean;
@@ -37,7 +38,7 @@ defineExpose({ toggle });
       /></template>
     </Button>
   </div>
-  <Button class="sm:hidden" text @click="toggle">
+  <Button class="sm:hidden" text aria-label="Aktionen anzeigen" @click="toggle">
     <template #icon>
       <MdiDotsVertical />
     </template>
