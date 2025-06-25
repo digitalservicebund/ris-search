@@ -30,7 +30,7 @@ export const legislationWork: LegislationWork = {
         guid: "",
         name: "§ 1 Test Article",
         isActive: true,
-        entryIntoForceDate: null,
+        entryIntoForceDate: "2023-05-05",
         expiryDate: null,
         encoding: null,
       },
@@ -120,7 +120,7 @@ describe("[eId].vue", () => {
     const wrapper = await mountComponent();
     await nextTick();
     const metadata = wrapper.get("div[data-testid='metadata']");
-    expect(metadata.text()).toBe("Status" + "Nicht in Kraft");
+    expect(metadata.text()).toBe("Gültig von" + "05.05.2023");
   });
   it("hides date metadata if disabled by flag", async () => {
     mocks.featureFlags.showNormArticleStatus.mockReturnValueOnce(false);
