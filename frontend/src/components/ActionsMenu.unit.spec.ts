@@ -37,6 +37,9 @@ describe("ActionsMenu.vue", () => {
         stubs: {
           teleport: true,
         },
+        directives: {
+          tooltip: () => {},
+        },
       },
     });
 
@@ -52,7 +55,7 @@ describe("ActionsMenu.vue", () => {
     const actions = wrapper.get('[data-pc-section="list"]').findAll("li");
     expect(actions).toHaveLength(2);
     expect(actions[0].text()).toBe("Link");
-    expect(actions[0].get("a").attributes("href")).toBe("https://example.com");
+    expect(actions[0].get("a").attributes("href")).toBe("https://example.com/");
 
     expect(actions[1].text()).toBe("Action");
     actions[1].get("a").element.click();
@@ -63,6 +66,11 @@ describe("ActionsMenu.vue", () => {
   it("renders the larger-viewport elements", async () => {
     const wrapper = mount(ActionsMenu, {
       props,
+      global: {
+        directives: {
+          tooltip: () => {},
+        },
+      },
     });
     const toggleButton = wrapper.get(toggleButtonSelector);
     expect(toggleButton.classes()).toContain("sm:hidden");
