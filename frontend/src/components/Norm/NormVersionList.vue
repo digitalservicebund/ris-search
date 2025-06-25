@@ -116,8 +116,16 @@ async function handleSelectionUpdate(newSelection: TableRowData) {
       @row-select="onRowSelect"
       @update:selection="handleSelectionUpdate"
     >
-      <Column field="fromDate" header="Gültig von" header-class="w-px"></Column>
-      <Column field="toDate" header="Gültig bis" header-class="w-px"></Column>
+      <Column
+        field="fromDate"
+        header="Gültig von"
+        header-class="whitespace-nowrap w-1"
+      ></Column>
+      <Column
+        field="toDate"
+        header="Gültig bis"
+        header-class="whitespace-nowrap w-1"
+      ></Column>
       <Column header="Status">
         <template #body="slotProps">
           <div class="flex justify-between">
