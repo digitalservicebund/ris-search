@@ -66,10 +66,10 @@
                   "@type": "Legislation",
                   "eId": "hauptteil-1_art-1",
                   "encoding": null,
-                  "entryIntoForceDate": "2001-06-01",
-                  "expiryDate": "2001-06-30",
+                  "entryIntoForceDate": null,
+                  "expiryDate": null,
                   "guid": null,
-                  "isActive": false,
+                  "isActive": null,
                   "name": "1 Fleischhygiene-Verordnung"
                 },
                 {
@@ -80,7 +80,7 @@
                   "entryIntoForceDate": null,
                   "expiryDate": null,
                   "guid": null,
-                  "isActive": true,
+                  "isActive": null,
                   "name": "2 Geflugelfleischhygiene-Verordnung"
                 }
               ],

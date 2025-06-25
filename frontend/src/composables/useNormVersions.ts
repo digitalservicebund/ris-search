@@ -1,5 +1,10 @@
 import { type AsyncDataRequestStatus, useFetch } from "#app";
-import type { JSONLDList, LegislationWork, SearchResult } from "~/types";
+import type {
+  JSONLDList,
+  LegalForceStatus,
+  LegislationWork,
+  SearchResult,
+} from "~/types";
 import _ from "lodash";
 
 import { computed } from "vue";
@@ -45,15 +50,29 @@ export const getVersionStatus = (
       version?.item.workExample.temporalCoverage,
     ) || {};
   const status = version?.item.workExample.legislationLegalForce;
+  return getStatusLabel(startDate, endDate, status);
+};
+
+export function getStatusLabel(
+  startDate: string | undefined,
+  endDate: string | undefined,
+  status?: LegalForceStatus | undefined,
+): VersionStatus {
   if (status === "InForce") {
     return "inForce";
-  } else {
-    if (startDate && formattedDateToDateTime(startDate) > new Date()) {
-      return "future";
-    }
-    if (endDate && formattedDateToDateTime(endDate) < new Date()) {
-      return "historical";
-    }
+  }
+  const dateFrom = startDate ? formattedDateToDateTime(startDate) : undefined;
+  const dateTo = endDate ? formattedDateToDateTime(endDate) : undefined;
+  const now = new Date();
+  console.log(startDate, endDate, dateFrom, dateTo, now);
+  if (dateFrom && dateFrom > now) {
+    return "future";
+  }
+  if (dateTo && dateTo < now) {
+    return "historical";
+  }
+  if (dateFrom && dateFrom <= now && (!dateTo || dateTo >= now)) {
+    return "inForce";
   }
   return undefined;
-};
+}
