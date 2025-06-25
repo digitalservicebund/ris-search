@@ -1,7 +1,8 @@
-import { mount } from "@vue/test-utils";
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 import NormMetadataFields from "~/components/Norm/NormMetadataFields.vue";
 import MetadataField from "~/components/MetadataField.vue";
+import { mount } from "@vue/test-utils";
+import * as Config from "~/utils/config";
 
 describe("NormMetadataFields.vue", () => {
   it("shows abbreviation", () => {
@@ -9,11 +10,6 @@ describe("NormMetadataFields.vue", () => {
     const wrapper = mount(NormMetadataFields, {
       props: {
         abbreviation: expectedAbbreviation,
-      },
-      global: {
-        components: {
-          MetadataField,
-        },
       },
     });
 
@@ -28,20 +24,8 @@ describe("NormMetadataFields.vue", () => {
   });
 
   it("does not show abbreviation if abbreviation is undefined", () => {
-    const wrapper = mount(NormMetadataFields, {
-      global: {
-        components: {
-          MetadataField,
-        },
-      },
-    });
-
-    const metadataFields = wrapper.findAllComponents(MetadataField);
-
-    const abbreviationFields = metadataFields.filter(
-      (fieldWrapper) => fieldWrapper.props().label === "Abkürzung",
-    );
-    expect(abbreviationFields).toHaveLength(0);
+    const wrapper = mount(NormMetadataFields);
+    expect(wrapper.find("#abbreviation").exists()).toBeFalsy();
   });
 
   it("shows status", () => {
@@ -49,11 +33,6 @@ describe("NormMetadataFields.vue", () => {
     const wrapper = mount(NormMetadataFields, {
       props: {
         status: expectedStatus,
-      },
-      global: {
-        components: {
-          MetadataField,
-        },
       },
     });
 
@@ -68,15 +47,10 @@ describe("NormMetadataFields.vue", () => {
   });
 
   it("shows valid from date", () => {
-    const expectedValidFrom = "2025-01-01";
+    const expectedValidFrom = "01.01.2025";
     const wrapper = mount(NormMetadataFields, {
       props: {
         validFrom: expectedValidFrom,
-      },
-      global: {
-        components: {
-          MetadataField,
-        },
       },
     });
 
@@ -91,13 +65,7 @@ describe("NormMetadataFields.vue", () => {
   });
 
   it("shows placeholder if valid from date is undefined", () => {
-    const wrapper = mount(NormMetadataFields, {
-      global: {
-        components: {
-          MetadataField,
-        },
-      },
-    });
+    const wrapper = mount(NormMetadataFields);
 
     const metadataFields = wrapper.findAllComponents(MetadataField);
 
@@ -110,15 +78,10 @@ describe("NormMetadataFields.vue", () => {
   });
 
   it("shows valid to date", () => {
-    const expectedValidTo = "2025-12-01";
+    const expectedValidTo = "01.12.2025";
     const wrapper = mount(NormMetadataFields, {
       props: {
         validTo: expectedValidTo,
-      },
-      global: {
-        components: {
-          MetadataField,
-        },
       },
     });
 
@@ -133,13 +96,7 @@ describe("NormMetadataFields.vue", () => {
   });
 
   it("shows placeholder if valid to date is undefined", () => {
-    const wrapper = mount(NormMetadataFields, {
-      global: {
-        components: {
-          MetadataField,
-        },
-      },
-    });
+    const wrapper = mount(NormMetadataFields);
 
     const metadataFields = wrapper.findAllComponents(MetadataField);
 
@@ -149,5 +106,15 @@ describe("NormMetadataFields.vue", () => {
 
     expect(abbreviationFields).toHaveLength(1);
     expect(abbreviationFields[0].props().value).toBe("-");
+  });
+
+  it("hides valid from and to dates on prototype", () => {
+    const mockedIsPrototypeProfile = vi.spyOn(Config, "isPrototypeProfile");
+    mockedIsPrototypeProfile.mockReturnValue(true);
+
+    const wrapper = mount(NormMetadataFields, {});
+
+    expect(wrapper.find("#validFrom").exists()).toBeFalsy();
+    expect(wrapper.find("#validTo").exists()).toBeFalsy();
   });
 });

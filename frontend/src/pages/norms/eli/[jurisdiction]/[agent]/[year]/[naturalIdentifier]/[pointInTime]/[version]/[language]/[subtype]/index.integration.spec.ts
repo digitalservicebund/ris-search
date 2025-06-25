@@ -4,6 +4,7 @@ import Index from "./index.vue";
 import type { LegislationWork } from "~/types";
 import type { VueWrapper } from "@vue/test-utils";
 import type { NormContent } from "~/pages/norms/eli/[jurisdiction]/[agent]/[year]/[naturalIdentifier]/[pointInTime]/[version]/[language]/[subtype]/useNormData";
+import NormMetadataFields from "~/components/Norm/NormMetadataFields.vue";
 
 const mocks = vi.hoisted(() => {
   return {
@@ -259,13 +260,9 @@ describe("index.vue", () => {
     });
   });
 
-  it("hides validFrom and validTo metadata only on prototype", async () => {
-    vi.mock("~/utils/config", () => ({
-      isPrototypeProfile: () => true,
-    }));
+  it("renders metadata fields", async () => {
     mockMetadata();
     const wrapper = await mountComponent();
-    expect(wrapper.find("#validFrom").exists()).toBeFalsy();
-    expect(wrapper.find("#validTo").exists()).toBeFalsy();
+    expect(wrapper.findComponent(NormMetadataFields).exists()).toBeTruthy();
   });
 });

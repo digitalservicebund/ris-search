@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import MetadataField from "~/components/MetadataField.vue";
+import { isPrototypeProfile } from "~/utils/config";
 
-const datePlaceholder = "-";
 withDefaults(
   defineProps<{
     abbreviation?: string;
@@ -10,8 +10,8 @@ withDefaults(
     validTo?: string;
   }>(),
   {
-    validFrom: datePlaceholder,
-    validTo: datePlaceholder,
+    validFrom: "-",
+    validTo: "-",
   },
 );
 </script>
@@ -25,7 +25,17 @@ withDefaults(
       :value="abbreviation"
     />
     <MetadataField id="status" label="Status" :value="status" />
-    <MetadataField id="validFrom" label="Gültig ab" :value="validFrom" />
-    <MetadataField id="validTo" label="Gültig bis" :value="validTo" />
+    <MetadataField
+      v-if="!isPrototypeProfile()"
+      id="validFrom"
+      label="Gültig ab"
+      :value="validFrom"
+    />
+    <MetadataField
+      v-if="!isPrototypeProfile()"
+      id="validTo"
+      label="Gültig bis"
+      :value="validTo"
+    />
   </div>
 </template>
