@@ -55,3 +55,9 @@ export function translateLegalForce(
 export function getCurrentDateInGermany() {
   return dayjs().tz("Europe/Berlin").format("YYYY-MM-DD");
 }
+
+export function parseDate(input: string | null): Date | null {
+  if (!input || input.trim() === "") return null;
+  const parsed = new Date(input);
+  return isNaN(parsed.getTime()) ? null : parsed;
+}

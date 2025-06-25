@@ -10,12 +10,13 @@ import NormTableOfContents from "@/components/Ris/NormTableOfContents.vue";
 import { useFetchNormArticleContent } from "./useNormData";
 import type { BreadcrumbItem } from "@/components/Ris/RisBreadcrumb.vue";
 import RisBreadcrumb from "@/components/Ris/RisBreadcrumb.vue";
-import { getTranslatedLegalForceByDates } from "@/utils/dateFormatting";
 import { getNormBreadcrumbTitle, getNormTitle } from "./titles";
 import TableOfContentsLayout from "~/components/CustomLayouts/SidebarLayout.vue";
 import IncompleteDataMessage from "@/components/IncompleteDataMessage.vue";
 import { featureFlags } from "@/utils/config";
 import ContentWrapper from "~/components/CustomLayouts/ContentWrapper.vue";
+import IcBaselineHistory from "~icons/ic/baseline-history";
+import { parseDate } from "@/utils/dateFormatting";
 
 definePageMeta({
   // note: this is an expression ELI that additionally specifies the subtype component of a manifestation ELI,
@@ -35,6 +36,29 @@ const eId = computed(() => {
   if (!eIdParam) return undefined;
   return eIdParam.endsWith(".html") ? eIdParam.slice(0, -5) : eIdParam;
 });
+
+const normStatus = computed(() => {
+  const temporialCoverage: string =
+    data.value?.legislationWork.workExample.temporalCoverage;
+  const dateList: string[] = temporialCoverage.split("/");
+  const start: Date | null = parseDate(dateList[0].trim());
+  const end: Date | null = parseDate(dateList[1].trim());
+  return getDateStatus(start, end);
+});
+
+const getDateStatus = (start: Date | null, end: Date | null): string => {
+  const now = new Date();
+  if (start && end) {
+    if (now < start) return "future";
+    if (now >= start && now <= end) return "inForce";
+    return "historical";
+  } else if (start) {
+    return now >= start ? "inForce" : "future";
+  } else if (end) {
+    return now <= end ? "inForce" : "historical";
+  }
+  return "unknown";
+};
 
 const { data, error, status } = await useFetchNormArticleContent(
   expressionEli,
@@ -132,6 +156,25 @@ useHead({ title: article.value?.name });
             class="ris-heading2-bold my-24 mb-24 inline-block"
             v-html="htmlTitle"
           />
+          <Message
+            v-if="normStatus !== 'inForce'"
+            severity="warn"
+            class="ris-body2-regular mb-16"
+          >
+            <template #icon>
+              <IcBaselineHistory />
+            </template>
+            <p class="mt-2">
+              <span class="ris-body2-bold">
+                <template v-if="normStatus === 'future'">
+                  Diese Norm ist noch nicht in Kraft.
+                </template>
+                <template v-else-if="normStatus === 'historical'">
+                  Paragraph einer historischen Fassung.
+                </template>
+              </span>
+            </p>
+          </Message>
         </div>
       </div>
 
@@ -142,29 +185,19 @@ useHead({ title: article.value?.name });
         data-testid="metadata"
       >
         <MetadataField
-          id="article_is_active"
-          label="Status"
-          :value="
-            getTranslatedLegalForceByDates(
-              article.entryIntoForceDate,
-              article.expiryDate,
-            )
-          "
-        />
-        <MetadataField
           v-if="article.entryIntoForceDate"
           id="article_entry_into_force_date"
-          label="Fassung in Kraft seit"
+          label="Gültig von"
           :value="formattedDate(article.entryIntoForceDate)"
         />
         <MetadataField
           v-if="article.expiryDate"
           id="article_expiry_date"
-          label="Fassung außer Kraft seit"
+          label="Gültig bis"
           :value="formattedDate(article.expiryDate)"
         />
       </div>
-      <div class="border-t border-gray-600 bg-white">
+      <div class="bg-white">
         <TableOfContentsLayout class="container py-24">
           <template v-if="!!articleHtml" #content>
             <IncompleteDataMessage />
