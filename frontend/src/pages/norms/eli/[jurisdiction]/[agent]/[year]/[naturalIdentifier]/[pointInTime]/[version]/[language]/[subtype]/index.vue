@@ -41,7 +41,7 @@ import { useNormVersions } from "~/composables/useNormVersions";
 import Toast from "primevue/toast";
 import { useNormActions } from "./useNormActions";
 import { getManifestationUrl } from "~/utils/normsUtils";
-import NormMetadataHeader from "~/pages/norms/eli/[jurisdiction]/[agent]/[year]/[naturalIdentifier]/[pointInTime]/[version]/[language]/[subtype]/NormMetadataHeader.vue";
+import NormMetadataFields from "~/components/Norm/NormMetadataFields.vue";
 
 definePageMeta({
   // note: this is an expression ELI that additionally specifies the subtype component of a manifestation ELI
@@ -144,7 +144,7 @@ const { actions } = useNormActions(metadata);
           :versions="normVersions"
           :current-expression="metadata.workExample.legislationIdentifier"
         />
-        <NormMetadataHeader
+        <NormMetadataFields
           :abbreviation="metadata.abbreviation"
           :status="translatedLegalForce"
           :valid-from="temporalCoverage[0]"
