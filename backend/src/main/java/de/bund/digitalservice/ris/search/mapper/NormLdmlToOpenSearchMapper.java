@@ -7,7 +7,6 @@ import de.bund.digitalservice.ris.search.models.ldml.TimeInterval;
 import de.bund.digitalservice.ris.search.models.opensearch.Article;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.models.opensearch.TableOfContentsItem;
-import de.bund.digitalservice.ris.search.utils.DateUtils;
 import de.bund.digitalservice.ris.search.utils.LdmlTemporalData;
 import de.bund.digitalservice.ris.search.utils.XmlDocument;
 import java.nio.charset.StandardCharsets;
@@ -343,7 +342,6 @@ public class NormLdmlToOpenSearchMapper {
             Article.builder()
                 .guid(guid)
                 .eId(eId)
-                .isActive(DateUtils.isActive(entryIntoForceDate, expiryDate))
                 .name(articleHeader)
                 .text(cleanText(text))
                 .entryIntoForceDate(entryIntoForceDate)
