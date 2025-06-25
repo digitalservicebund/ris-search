@@ -12,10 +12,9 @@ public class RequestResult {
   @XmlAttribute(name = "status")
   private String status;
 
-  @XmlAttribute private final String site = "https://testphase.rechtsinformationen.bund.de/";
+  @XmlAttribute private String site;
 
-  @XmlAttribute
-  private final String connector = "https://testphase.rechtsinformationen.bund.de/nlex";
+  @XmlAttribute private String connector;
 
   @XmlElement(name = "result-list")
   private ResultList resultList;

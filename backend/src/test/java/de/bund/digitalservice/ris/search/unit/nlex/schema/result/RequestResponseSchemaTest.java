@@ -5,6 +5,8 @@ import de.bund.digitalservice.ris.search.nlex.schema.result.Document;
 import de.bund.digitalservice.ris.search.nlex.schema.result.ExternUrl;
 import de.bund.digitalservice.ris.search.nlex.schema.result.Navigation;
 import de.bund.digitalservice.ris.search.nlex.schema.result.Page;
+import de.bund.digitalservice.ris.search.nlex.schema.result.Para;
+import de.bund.digitalservice.ris.search.nlex.schema.result.ParagraphRoles;
 import de.bund.digitalservice.ris.search.nlex.schema.result.References;
 import de.bund.digitalservice.ris.search.nlex.schema.result.RequestResult;
 import de.bund.digitalservice.ris.search.nlex.schema.result.ResultList;
@@ -19,7 +21,7 @@ import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class RequesteResponseSchemaTest {
+class RequestResponseSchemaTest {
 
   @Test
   void theSchemaCreatesTheDesiredXml() throws JAXBException, IOException {
@@ -38,7 +40,11 @@ public class RequesteResponseSchemaTest {
                                 <references>
                                     <extern-url format="text/html" display="HTML extern" href="link/to/legislation.html"/>
                                 </references>
-                                <content lang="de-DE"/>
+                                <content lang="de-DE">
+                                  <title>docTitle</title>
+                                  <para roles="zoom">textMatch1</para>
+                                  <para roles="zoom">textMatch2</para>
+                                </content>
                             </document>
                         </documents>
                     </result-list>
@@ -50,16 +56,27 @@ public class RequesteResponseSchemaTest {
 
     RequestResult result = new RequestResult();
     result.setStatus("OK");
-
+    result.setConnector("https://testphase.rechtsinformationen.bund.de/nlex");
+    result.setSite("https://testphase.rechtsinformationen.bund.de/");
     ResultList resultList = new ResultList();
     References ref = new References();
     ExternUrl externUrl = new ExternUrl();
     externUrl.setHref("link/to/legislation.html");
+    externUrl.setFormat("text/html");
+    externUrl.setDisplay("HTML extern");
     ref.setExternUrl(externUrl);
     Document doc = new Document();
     doc.setReferences(ref);
     Content content = new Content();
-    content.setLang(Content.LANG.DE_DE);
+    content.setLang(Content.LANG_DE_DE);
+    content.setTitle("docTitle");
+    Para para1 = new Para();
+    para1.setValue("textMatch1");
+    para1.setRoles(ParagraphRoles.ZOOM);
+    Para para2 = new Para();
+    para2.setValue("textMatch2");
+    para2.setRoles(ParagraphRoles.ZOOM);
+    content.setParaList(List.of(para1, para2));
     doc.setContent(content);
     Navigation navigation = new Navigation();
     navigation.setHits(1);

@@ -13,7 +13,7 @@ public class ExternUrl {
 
   @XmlAttribute private String href;
 
-  @XmlAttribute private final String format = "text/html";
+  @XmlAttribute private String format;
 
-  @XmlAttribute private final String display = "HTML extern";
+  @XmlAttribute private String display;
 }

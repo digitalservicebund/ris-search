@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test;
  * different depending on how exactly the input fields in the n-lex UI are parsed. Based on our
  * ris-query.xsd we can expect the request to have a schema similar to the testcases provided below
  */
-public class RequestSchemaTest {
+class RequestSchemaTest {
 
   @Test
   void theQueryStringsWithSingleContainsGetsProperlyUnmarshalled() throws JAXBException {
