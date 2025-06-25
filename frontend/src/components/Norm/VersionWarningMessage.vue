@@ -32,9 +32,10 @@ const currentVersion: ComputedRef<SearchResult<LegislationWork> | undefined> =
         props.currentExpression,
     );
     if (!current)
-      showError({
-        statusMessage: `The provided current expression (${props.currentExpression}) does not exist in the provided versions`,
-      });
+      console.warn(
+        `The provided current expression (${props.currentExpression}) does not exist in the provided list`,
+        props.versions,
+      );
     return current;
   });
 
