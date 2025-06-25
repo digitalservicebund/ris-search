@@ -892,14 +892,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@digitalservicebund/ris-ui@npm:^3.9.0":
-  version: 3.9.0
-  resolution: "@digitalservicebund/ris-ui@npm:3.9.0"
+"@digitalservicebund/ris-ui@npm:^3.11.0":
+  version: 3.11.0
+  resolution: "@digitalservicebund/ris-ui@npm:3.11.0"
   peerDependencies:
     primevue: ^4.0.0
     tailwindcss: ^4.0.0
     vue: ^3.0.0
-  checksum: 10c0/6a1938cf10857ac7a02a63c14d246ea3dbb76a5915b1352c73c6628fc1955202cc6bcfbe97c084f28eb86a031d3006ee075d2d0ef08a3a06424624557d2611d5
+  checksum: 10c0/2e63282325490a623c6da2a6d8ef590fbffeb7aef004b0d5ea906d9d725dab0e5eb137f5d74edf4ab76cdcba86426fa0275b60f204c302017197ae888d9dd65e
   languageName: node
   linkType: hard
 
@@ -14535,7 +14535,7 @@ __metadata:
   resolution: "ris-portal-frontend@workspace:."
   dependencies:
     "@axe-core/playwright": "npm:^4.10.2"
-    "@digitalservicebund/ris-ui": "npm:^3.9.0"
+    "@digitalservicebund/ris-ui": "npm:^3.11.0"
     "@eslint/plugin-kit": "npm:0.3.1"
     "@hyperdx/lucene": "npm:^3.1.1"
     "@iconify-json/ic": "npm:^1.2.2"

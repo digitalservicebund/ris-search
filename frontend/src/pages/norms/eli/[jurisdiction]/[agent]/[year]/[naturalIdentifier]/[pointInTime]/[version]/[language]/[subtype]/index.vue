@@ -44,6 +44,8 @@ import type { BreadcrumbItem } from "~/components/Ris/RisBreadcrumb.vue";
 import { useNormVersions } from "~/composables/useNormVersions";
 import type { ActionMenuItem } from "~/components/ActionsMenu.vue";
 import UpdatingLinkIcon from "~/components/icons/UpdatingLinkIcon.vue";
+import Toast from "primevue/toast";
+import { useToast } from "primevue/usetoast";
 
 definePageMeta({
   // note: this is an expression ELI that additionally specifies the subtype component of a manifestation ELI
@@ -145,10 +147,27 @@ const workUrl = computed(() => {
   const workEli = metadata.value?.legislationIdentifier;
   return href.replace(/eli.+$/, workEli);
 });
+
+const toast = useToast();
+
+function showSuccessMessage() {
+  toast.add({
+    severity: "success",
+    summary: "Kopiert!",
+    life: 3000,
+    closable: false,
+  });
+}
+
 const copyWorkUrl = async () => {
   if (workUrl.value) {
     await navigator.clipboard.writeText(workUrl.value);
   }
+  showSuccessMessage();
+};
+const copyCurrentUrl = async () => {
+  await navigator.clipboard.writeText(window.location.href);
+  showSuccessMessage();
 };
 
 const actions: ComputedRef<ActionMenuItem[]> = computed(() => {
@@ -164,10 +183,8 @@ const actions: ComputedRef<ActionMenuItem[]> = computed(() => {
       key: "permalink",
       label: "Permalink zu dieser Fassung",
       iconComponent: MaterialSymbolsLink,
-      command: () => {
-        alert("nicht implementiert");
-      },
-      disabled: true,
+      command: copyCurrentUrl,
+      url: window?.location.href,
     },
     {
       key: "pdf",
@@ -375,4 +392,5 @@ const actions: ComputedRef<ActionMenuItem[]> = computed(() => {
       </Tabs>
     </div>
   </ContentWrapper>
+  <Toast />
 </template>
