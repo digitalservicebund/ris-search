@@ -1,4 +1,4 @@
-import type { DOMWrapper} from "@vue/test-utils";
+import type { DOMWrapper } from "@vue/test-utils";
 import { mount } from "@vue/test-utils";
 import ActionsMenu, { type ActionsMenuProps } from "./ActionsMenu.vue";
 import MdiDotsVertical from "~icons/mdi/dots-vertical";
@@ -72,6 +72,7 @@ describe("ActionsMenu.vue", () => {
 
     const links = actionButtonSection.findAll("a");
     expect(links).toHaveLength(1);
+    expect(links[0].attributes("aria-label")).toBe("Link");
     expect(links[0].element.href).toBe("https://example.com/");
 
     const actionButtons = actionButtonSection.findAll("button");
