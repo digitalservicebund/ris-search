@@ -26,6 +26,7 @@ defineExpose({ toggle });
     <Button
       v-for="item in items"
       :key="item.key"
+      v-tooltip.bottom="item.label"
       text
       :disabled="item.disabled"
       :aria-label="item.label"
