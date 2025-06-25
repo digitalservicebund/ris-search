@@ -1,0 +1,99 @@
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:nlex="http://n-lex.europa.eu/">
+    <xsd:redefine schemaLocation = "http://n-lex.europa.eu/xml/schema/query/nlex-query.xsd">
+    <!-- 1.1. deactivate OR booleans -->
+        <xsd:group name="boolean">
+            <xsd:choice>
+                <xsd:element name="and" type="binary_op" />
+            </xsd:choice>
+        </xsd:group>
+        <xsd:complexType name="binary_op">
+            <xsd:complexContent>
+                <xsd:restriction base="binary_op">
+                    <xsd:sequence>
+                        <xsd:group ref="field" minOccurs="0" maxOccurs="unbounded" />
+                    </xsd:sequence>
+                </xsd:restriction>
+            </xsd:complexContent>
+        </xsd:complexType>
+
+        <!-- 1.2. Indicates that this connector answers in full HTML -->
+        <xsd:simpleType name="outputFormat">
+            <xsd:restriction base="outputFormat">
+                <xsd:enumeration value="xsd:int" /> <!-- number of documents -->
+                <xsd:enumeration value="original" /> <!-- only for local connectors: original output -->
+                <xsd:enumeration value="original-filtered" /> <!-- only for local connectors: original output, filtered -->
+                <xsd:enumeration value="http://www.w3.org/TR/REC-html40 html" /> <!-- complete html -->
+            </xsd:restriction>
+        </xsd:simpleType>
+
+        <!-- 2.1. Word indexes -->
+        <!-- declare the language of the database -->
+        <xsd:simpleType name="locale_lang">
+            <xsd:restriction base="locale_lang">
+                <xsd:enumeration value="de-DE" />
+            </xsd:restriction>
+        </xsd:simpleType>
+
+        <!-- no boolean words: only containsType -->
+        <xsd:group name="boolean-words">
+            <xsd:choice>
+                <xsd:element name="contains" type="containsType" />
+            </xsd:choice>
+        </xsd:group>
+        <xsd:simpleType name="wordsIndexName">
+            <xsd:restriction base="wordsIndexName">
+                <!-- only fulltext search -->
+                <xsd:pattern value="nlex:fulltext" />
+            </xsd:restriction>
+        </xsd:simpleType>
+
+        <!-- deactivate searching for any date -->
+        <xsd:simpleType name="dateIndexName">
+            <xsd:restriction base="dateIndexName">
+            </xsd:restriction>
+        </xsd:simpleType>
+
+        <!-- deactivate searching for any docType -->
+        <xsd:simpleType name="docTypeIndexName">
+            <xsd:restriction base="docTypeIndexName">
+            </xsd:restriction>
+        </xsd:simpleType>
+
+        <!-- deactivate searching for any doc numbers -->
+        <xsd:simpleType name="docNumberIndexName">
+            <xsd:restriction base="docNumberIndexName">
+            </xsd:restriction>
+        </xsd:simpleType>
+
+        <!-- deactivate searching for sections -->
+        <xsd:simpleType name="sectionIndexName">
+            <xsd:restriction base="sectionIndexName">
+            </xsd:restriction>
+        </xsd:simpleType>
+
+        <!-- deactivate searching for official journal name -->
+        <xsd:simpleType name="OJNameIndexName">
+            <xsd:restriction base="OJNameIndexName">
+            </xsd:restriction>
+        </xsd:simpleType>
+
+        <!-- deactivate searching for official journal doc number -->
+        <xsd:simpleType name="OJNumberIndexName">
+            <xsd:restriction base="OJNumberIndexName">
+            </xsd:restriction>
+        </xsd:simpleType>
+
+        <!-- deactivate string types that are not text -->
+        <xsd:simpleType name="stringIndexName">
+            <xsd:restriction base="stringIndexName">
+                <!-- N-Lex available indexes -->
+            </xsd:restriction>
+        </xsd:simpleType>
+
+        <!-- deactivate int doc numbers -->
+        <xsd:simpleType name="intIndexName">
+            <xsd:restriction base="intIndexName">
+            </xsd:restriction>
+        </xsd:simpleType>
+    </xsd:redefine>
+</xsd:schema>

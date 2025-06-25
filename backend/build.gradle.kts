@@ -171,7 +171,7 @@ tasks {
         enabled = true
         classpath(configurations["xjc"])
         mainClass = "org.eclipse.persistence.jaxb.xjc.MOXyXJC"
-        args = listOf("src/main/resources/WEB_INF/nlex", "-wsdl", "-d", "$buildDir/generated/nlex", "-p", "nlex")
+        args = listOf("src/main/resources/WEB_INF/nlex/simple_template.wsdl", "-wsdl", "-d", "$buildDir/generated/nlex", "-p", "nlex")
     }
 
     compileJava {

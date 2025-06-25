@@ -1,13 +1,16 @@
 package de.bund.digitalservice.ris.search.unit.nlex.service;
 
 import de.bund.digitalservice.ris.search.nlex.service.NlexWebService;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.Objects;
 import nlex.AboutConnector;
-import nlex.AboutConnectorResponse;
 import nlex.Request;
 import nlex.RequestResponse;
 import nlex.TestQuery;
 import nlex.TestQueryResponse;
 import nlex.VERSIONResponse;
+import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -33,9 +36,15 @@ class NlexWebserviceTest {
   }
 
   @Test
-  void onAboutConnectorItReturnsThePlaceholder() {
-    AboutConnectorResponse response = this.service.aboutConnector(new AboutConnector());
-    Assertions.assertEquals("about_connector_placeholder", response.getAboutConnectorResult());
+  void onAboutConnectorItReturnsTheRisQuerySchemaDefinition() throws IOException {
+    String configContent =
+        this.service.aboutConnector(new AboutConnector()).getAboutConnectorResult();
+    String expectedContent =
+        IOUtils.toString(
+            Objects.requireNonNull(
+                NlexWebService.class.getResourceAsStream("/WEB_INF/nlex/schema/ris-query.xsd")),
+            StandardCharsets.UTF_8);
+    Assertions.assertEquals(expectedContent, configContent);
   }
 
   @Test
