@@ -25,9 +25,6 @@ import TabPanel from "primevue/tabpanel";
 import IcBaselineSubject from "~icons/ic/baseline-subject";
 import IcOutlineInfo from "~icons/ic/outline-info";
 import IcOutlineRestore from "~icons/ic/outline-settings-backup-restore";
-import MaterialSymbolsLink from "~icons/material-symbols/link";
-import XMLIcon from "~/components/icons/XMLIcon.vue";
-import PDFIcon from "~/components/icons/PDFIcon.vue";
 import MaterialSymbolsDownload from "~icons/material-symbols/download";
 import PropertiesItem from "~/components/PropertiesItem.vue";
 import Properties from "~/components/Properties.vue";
@@ -42,10 +39,9 @@ import NormVersionList from "~/components/Norm/NormVersionList.vue";
 import VersionWarningMessage from "~/components/Norm/VersionWarningMessage.vue";
 import type { BreadcrumbItem } from "~/components/Ris/RisBreadcrumb.vue";
 import { useNormVersions } from "~/composables/useNormVersions";
-import type { ActionMenuItem } from "~/components/ActionsMenu.vue";
-import UpdatingLinkIcon from "~/components/icons/UpdatingLinkIcon.vue";
 import Toast from "primevue/toast";
-import { useToast } from "primevue/usetoast";
+import { useNormActions } from "./useNormActions";
+import { getManifestationUrl } from "~/utils/normsUtils";
 
 definePageMeta({
   // note: this is an expression ELI that additionally specifies the subtype component of a manifestation ELI
@@ -75,15 +71,9 @@ const htmlParts = computed(() => data.value.htmlParts);
 
 const backendURL = useBackendURL();
 
-function getManifestationUrl(format: string) {
-  const encoding = metadata.value?.workExample?.encoding.find(
-    (e) => e.encodingFormat === format,
-  );
-  return encoding?.contentUrl ? backendURL + encoding.contentUrl : undefined;
-}
-
-const xmlUrl = computed(() => getManifestationUrl("application/xml"));
-const zipUrl = computed(() => getManifestationUrl("application/zip"));
+const zipUrl = computed(() =>
+  getManifestationUrl(metadata.value, backendURL, "application/zip"),
+);
 
 if (error.value) {
   showError(error.value);
@@ -135,78 +125,7 @@ const breadcrumbItems: ComputedRef<BreadcrumbItem[]> = computed(() => {
   return list;
 });
 
-const enablePdfButton = !isPrototypeProfile();
-const onPrint = () => {
-  if (window) window.print();
-};
-const xmlViewDataAttribute = "xml-view";
-
-const workUrl = computed(() => {
-  if (!import.meta.client || !metadata.value) return undefined;
-  const href = window.location.href;
-  const workEli = metadata.value?.legislationIdentifier;
-  return href.replace(/eli.+$/, workEli);
-});
-
-const toast = useToast();
-
-function showSuccessMessage() {
-  toast.add({
-    severity: "success",
-    summary: "Kopiert!",
-    life: 3000,
-    closable: false,
-  });
-}
-
-const copyWorkUrl = async () => {
-  if (workUrl.value) {
-    await navigator.clipboard.writeText(workUrl.value);
-  }
-  showSuccessMessage();
-};
-const copyCurrentUrl = async () => {
-  await navigator.clipboard.writeText(window.location.href);
-  showSuccessMessage();
-};
-
-const actions: ComputedRef<ActionMenuItem[]> = computed(() => {
-  const items: ActionMenuItem[] = [
-    {
-      key: "link",
-      label: "Link zur jeweils gültigen Fassung",
-      iconComponent: UpdatingLinkIcon,
-      command: copyWorkUrl,
-      url: workUrl.value,
-    },
-    {
-      key: "permalink",
-      label: "Permalink zu dieser Fassung",
-      iconComponent: MaterialSymbolsLink,
-      command: copyCurrentUrl,
-      url: window?.location.href,
-    },
-    {
-      key: "pdf",
-      label: "Drucken oder als PDF speichern",
-      iconComponent: PDFIcon,
-      command: onPrint,
-      disabled: !enablePdfButton,
-    },
-  ];
-
-  if (xmlUrl.value) {
-    items.push({
-      key: "xml",
-      label: "XML anzeigen",
-      iconComponent: XMLIcon,
-      dataAttribute: xmlViewDataAttribute,
-      command: async () => await navigateTo(xmlUrl.value, { external: true }),
-      url: xmlUrl.value,
-    });
-  }
-  return items;
-});
+const { actions } = useNormActions(metadata);
 </script>
 
 <template>
