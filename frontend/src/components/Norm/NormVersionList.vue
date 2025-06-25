@@ -8,6 +8,7 @@ import type { VersionStatus } from "~/composables/useNormVersions";
 import { getVersionStatus } from "~/composables/useNormVersions";
 import IcBaselineLaunch from "~icons/ic/baseline-launch";
 import _ from "lodash";
+import { temporalCoverageToValidityInterval } from "~/utils/normUtils";
 
 const props = defineProps<{
   status: string;
@@ -39,13 +40,13 @@ const tableRowData = computed<TableRowData[]>(() => {
   );
 
   return versionsSorted.map((version, index) => {
-    const fromAndToDate = splitTemporalCoverage(
+    const validityInterval = temporalCoverageToValidityInterval(
       version.item.workExample.temporalCoverage,
     );
 
     const id = index;
-    const fromDate = fromAndToDate[0] ?? "-";
-    const toDate = fromAndToDate[1] ?? "-";
+    const fromDate = validityInterval?.from ?? "-";
+    const toDate = validityInterval?.to ?? "-";
     const status = translateStatus(getVersionStatus(version));
     const link = `/norms/${version.item.workExample.legislationIdentifier}`;
     const selectable =

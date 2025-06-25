@@ -5,19 +5,15 @@ import timezone from "dayjs/plugin/timezone";
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
-export function formattedDate(date: string | null | undefined) {
+export function formattedDate(
+  date: string | null | undefined,
+): string | undefined {
   return date ? dayjs(date).format("DD.MM.YYYY") : undefined;
 }
 
 export function formattedDateToDateTime(date: string): Date {
   const [day, month, year] = date.split(".").map(Number);
   return new Date(year, month - 1, day);
-}
-
-export function splitTemporalCoverage(value: string | null | undefined) {
-  if (!value) return [undefined, undefined];
-  const [from, to] = value.replaceAll("..", "").split("/");
-  return [formattedDate(from), formattedDate(to)];
 }
 
 export function isActive(start: string | null, end: string | null): boolean {

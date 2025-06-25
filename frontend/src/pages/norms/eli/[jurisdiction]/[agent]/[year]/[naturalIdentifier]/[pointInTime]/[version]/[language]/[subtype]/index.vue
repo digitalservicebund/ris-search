@@ -6,10 +6,7 @@ import type { LegislationWork } from "@/types";
 import { useFetchNormContent } from "./useNormData";
 import { useRoute } from "#app";
 import { useIntersectionObserver } from "@/composables/useIntersectionObserver";
-import {
-  splitTemporalCoverage,
-  translateLegalForce,
-} from "@/utils/dateFormatting";
+import { translateLegalForce } from "@/utils/dateFormatting";
 import RisBreadcrumb from "@/components/Ris/RisBreadcrumb.vue";
 import Accordion from "@/components/Accordion.vue";
 import { getNormBreadcrumbTitle } from "./titles";
@@ -42,6 +39,7 @@ import Toast from "primevue/toast";
 import { useNormActions } from "./useNormActions";
 import { getManifestationUrl } from "~/utils/normsUtils";
 import NormMetadataFields from "~/components/Norm/NormMetadataFields.vue";
+import { temporalCoverageToValidityInterval } from "~/utils/normUtils";
 
 definePageMeta({
   // note: this is an expression ELI that additionally specifies the subtype component of a manifestation ELI
@@ -92,10 +90,12 @@ const tableOfContents: Ref<TreeNode[]> = computed(() => {
 const translatedLegalForce = computed(() =>
   translateLegalForce(metadata.value?.workExample.legislationLegalForce),
 );
-const temporalCoverage = computed(() =>
+const validityInterval = computed(() =>
   isPrototypeProfile()
-    ? []
-    : splitTemporalCoverage(metadata.value?.workExample.temporalCoverage),
+    ? undefined
+    : temporalCoverageToValidityInterval(
+        metadata.value?.workExample.temporalCoverage,
+      ),
 );
 
 const { selectedEntry, vObserveElements } = useIntersectionObserver();
@@ -118,8 +118,8 @@ const breadcrumbItems: ComputedRef<BreadcrumbItem[]> = computed(() => {
   const isInForce =
     metadata.value?.workExample.legislationLegalForce === "InForce";
   if (!isInForce) {
-    const temporalCoverageLabel = temporalCoverage.value?.join("–");
-    list.push({ route: route.fullPath, label: temporalCoverageLabel });
+    const validityIntervalLabel = `${validityInterval.value?.from ?? ""}-${validityInterval.value?.to ?? ""}`;
+    list.push({ route: route.fullPath, label: validityIntervalLabel });
   }
 
   return list;
@@ -147,8 +147,8 @@ const { actions } = useNormActions(metadata);
         <NormMetadataFields
           :abbreviation="metadata.abbreviation"
           :status="translatedLegalForce"
-          :valid-from="temporalCoverage[0]"
-          :valid-to="temporalCoverage[1]"
+          :valid-from="validityInterval?.from"
+          :valid-to="validityInterval?.to"
         />
       </div>
       <Tabs value="0" lazy>
