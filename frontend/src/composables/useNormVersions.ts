@@ -8,7 +8,10 @@ import type {
 import _ from "lodash";
 
 import { computed } from "vue";
-import { formattedDateToDateTime } from "~/utils/dateFormatting";
+import {
+  formattedDateToDateTime,
+  getCurrentDateInGermany,
+} from "~/utils/dateFormatting";
 
 interface UseNormVersions {
   status: Ref<AsyncDataRequestStatus>;
@@ -18,12 +21,27 @@ interface UseNormVersions {
 export type VersionStatus = "inForce" | "future" | "historical" | undefined;
 
 export function useNormVersions(workEli?: string): UseNormVersions {
+  const { data, status } = getNorms({ eli: workEli });
+  const sortedVersions = computed(() =>
+    _.sortBy(
+      data.value?.member ?? [],
+      (member) => member.item.workExample.temporalCoverage,
+    ),
+  );
+  return { status, sortedVersions };
+}
+
+function getNorms(params: {
+  eli?: string;
+  temporalCoverageFrom?: string;
+  temporalCoverageTo?: string;
+}) {
   const backendURL = useBackendURL();
-  const immediate = workEli !== undefined;
+  const immediate = params.eli !== undefined;
   const { status, data, error } = useFetch<
     JSONLDList<SearchResult<LegislationWork>>
   >(`${backendURL}/v1/legislation`, {
-    params: { eli: workEli },
+    params: params,
     immediate: immediate,
   });
 
@@ -31,14 +49,16 @@ export function useNormVersions(workEli?: string): UseNormVersions {
     showError(error.value);
   }
 
-  const sortedVersions = computed(() =>
-    _.sortBy(
-      data.value?.member ?? [],
-      (member) => member.item.workExample.temporalCoverage,
-    ),
-  );
+  return { status, data };
+}
 
-  return { status, sortedVersions };
+export function useValidNormVersions(workEli?: string) {
+  const today = getCurrentDateInGermany();
+  return getNorms({
+    eli: workEli,
+    temporalCoverageFrom: today,
+    temporalCoverageTo: today,
+  });
 }
 
 export const getVersionDates = (version: LegislationWork | undefined) => {

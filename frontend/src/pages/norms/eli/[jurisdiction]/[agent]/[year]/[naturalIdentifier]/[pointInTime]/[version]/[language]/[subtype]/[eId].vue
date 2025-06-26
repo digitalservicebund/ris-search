@@ -15,7 +15,7 @@ import TableOfContentsLayout from "~/components/CustomLayouts/SidebarLayout.vue"
 import IncompleteDataMessage from "@/components/IncompleteDataMessage.vue";
 import { featureFlags } from "@/utils/config";
 import ContentWrapper from "~/components/CustomLayouts/ContentWrapper.vue";
-import { useNormVersions } from "~/composables/useNormVersions";
+import { useValidNormVersions } from "~/composables/useNormVersions";
 import ArticleVersionWarning from "~/components/Norm/ArticleVersionWarning.vue";
 
 definePageMeta({
@@ -89,9 +89,6 @@ function getRouteForSiblingArticle(
   );
 }
 
-const { status: normVersionsStatus, sortedVersions: normVersions } =
-  useNormVersions(norm.value?.legislationIdentifier);
-
 const currentNodePath = findNodePath(tableOfContents.value, eId.value ?? "");
 const normTitle = computed(() => getNormTitle(norm.value));
 const normBreadcrumbTitle = computed(() => getNormBreadcrumbTitle(norm.value));
@@ -130,15 +127,24 @@ const topNormLinkText = computed(() => {
   return baseText;
 });
 
-const inForceNormLink = computed(
-  () =>
-    `/norms/${
-      normVersions.value.find(
-        (version) =>
-          version.item.workExample.legislationLegalForce === "InForce",
-      )?.item.workExample.legislationIdentifier
-    }`,
-);
+const validVersions =
+  norm.value.workExample.legislationLegalForce !== "InForce"
+    ? useValidNormVersions(norm.value?.legislationIdentifier)
+    : undefined;
+
+const inForceNormLink = computed(() => {
+  if (
+    !validVersions ||
+    validVersions.status.value !== "success" ||
+    !validVersions.data.value?.member ||
+    validVersions.data.value.member.length === 0
+  ) {
+    return undefined;
+  }
+
+  const validVersion = validVersions.data.value.member[0];
+  return `/norms/${validVersion.item.workExample.legislationIdentifier}`;
+});
 
 const showNormArticleStatus = computed(() =>
   featureFlags.showNormArticleStatus(),
@@ -171,7 +177,7 @@ useHead({ title: article.value?.name });
           />
         </div>
         <ArticleVersionWarning
-          v-if="normVersionsStatus === 'success' && article"
+          v-if="inForceNormLink && article"
           :in-force-version-link="inForceNormLink"
           :current-article="article"
         />
