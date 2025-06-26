@@ -1,8 +1,19 @@
 package de.bund.digitalservice.ris.search.nlex.service;
 
+import de.bund.digitalservice.ris.search.models.api.parameters.UniversalSearchParams;
+import de.bund.digitalservice.ris.search.models.opensearch.Norm;
+import de.bund.digitalservice.ris.search.nlex.mapper.NlexToRisMapper;
+import de.bund.digitalservice.ris.search.nlex.mapper.RisToNlexMapper;
+import de.bund.digitalservice.ris.search.nlex.schema.query.Query;
+import de.bund.digitalservice.ris.search.nlex.schema.result.RequestResult;
 import de.bund.digitalservice.ris.search.repository.opensearch.NormsRepository;
 import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.JAXBException;
+import jakarta.xml.bind.Marshaller;
+import jakarta.xml.bind.Unmarshaller;
 import java.io.IOException;
+import java.io.StringReader;
+import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 import nlex.AboutConnector;
@@ -13,6 +24,8 @@ import nlex.TestQuery;
 import nlex.TestQueryResponse;
 import nlex.VERSIONResponse;
 import org.apache.commons.io.IOUtils;
+import org.springframework.data.elasticsearch.core.SearchHit;
+import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.ws.server.endpoint.annotation.Endpoint;
 import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
 import org.springframework.ws.server.endpoint.annotation.RequestPayload;
@@ -24,18 +37,30 @@ public class NlexWebService {
 
   NormsRepository repository;
   JAXBContext queryCtx;
+  JAXBContext resultCtx;
 
   public NlexWebService(NormsRepository repository) throws jakarta.xml.bind.JAXBException {
     this.repository = repository;
-    this.queryCtx = JAXBContext.newInstance(Request.class);
+    this.queryCtx = JAXBContext.newInstance(Query.class);
+    this.resultCtx = JAXBContext.newInstance(RequestResult.class);
   }
 
   @PayloadRoot(namespace = NAMESPACE_URI, localPart = "request")
   @ResponsePayload
-  public RequestResponse request(@RequestPayload Request request) {
+  public RequestResponse request(@RequestPayload Request request) throws JAXBException {
+    Unmarshaller um = this.queryCtx.createUnmarshaller();
 
+    Query query = (Query) um.unmarshal(new StringReader(request.getQuery()));
+    UniversalSearchParams searchParams = NlexToRisMapper.mapRequestToSearchParams(query);
+    SearchHits<Norm> hits = this.repository.searchAndFilterNorms(searchParams, null, null);
+
+    RequestResult result =
+        RisToNlexMapper.normsToNlexRequestResult(hits.stream().map(SearchHit::getContent).toList());
+    Marshaller m = resultCtx.createMarshaller();
+    StringWriter sw = new StringWriter();
+    m.marshal(result, sw);
     RequestResponse resp = new RequestResponse();
-    resp.setRequestResult("request_placeholder");
+    resp.setRequestResult(sw.toString());
     return resp;
   }
 

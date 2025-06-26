@@ -1,6 +1,6 @@
 package de.bund.digitalservice.ris.search.unit.nlex.schema.query;
 
-import de.bund.digitalservice.ris.search.nlex.schema.query.Request;
+import de.bund.digitalservice.ris.search.nlex.schema.query.Query;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Unmarshaller;
@@ -18,7 +18,7 @@ class RequestSchemaTest {
   @Test
   void theQueryStringsWithSingleContainsGetsProperlyUnmarshalled() throws JAXBException {
 
-    jakarta.xml.bind.JAXBContext ctx = JAXBContext.newInstance(Request.class);
+    jakarta.xml.bind.JAXBContext ctx = JAXBContext.newInstance(Query.class);
 
     String exampleRequest =
         """
@@ -36,14 +36,14 @@ class RequestSchemaTest {
 
     Unmarshaller um = ctx.createUnmarshaller();
 
-    Request request = (Request) um.unmarshal(new StringReader(exampleRequest));
+    Query request = (Query) um.unmarshal(new StringReader(exampleRequest));
     Assertions.assertEquals("Sample expression", request.getCriteria().getWords().getContains());
   }
 
   @Test
   void theQueryStringsWithSingleCriteriaInAndBlockGetsProperlyUnmarshalled() throws JAXBException {
 
-    jakarta.xml.bind.JAXBContext ctx = JAXBContext.newInstance(Request.class);
+    jakarta.xml.bind.JAXBContext ctx = JAXBContext.newInstance(Query.class);
 
     String exampleRequest =
         """
@@ -62,7 +62,7 @@ class RequestSchemaTest {
                 """;
 
     Unmarshaller um = ctx.createUnmarshaller();
-    Request request = (Request) um.unmarshal(new StringReader(exampleRequest));
+    Query request = (Query) um.unmarshal(new StringReader(exampleRequest));
     Assertions.assertEquals(
         "Sample expression", request.getCriteria().getAnd().getWords().getContains());
   }

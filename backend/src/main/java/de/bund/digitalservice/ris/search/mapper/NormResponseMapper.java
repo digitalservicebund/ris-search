@@ -28,7 +28,7 @@ public class NormResponseMapper {
     List<LegislationObjectSchema> encoding;
     if (manifestationEliXml != null) {
       String xmlContentUrl = contentBaseUrl + manifestationEliXml;
-      String htmlContentUrl = xmlContentUrl.replace(".xml", ".html");
+      String htmlContentUrl = norm.getHtmlContentUrl();
       String zipContentUrl = xmlContentUrl.substring(0, xmlContentUrl.lastIndexOf('/')) + ".zip";
 
       String htmlId = contentBaseUrl + manifestationEliXml.replace(".xml", "/html");

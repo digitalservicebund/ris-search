@@ -4,9 +4,9 @@ import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import lombok.Data;
 
-@XmlRootElement()
+@XmlRootElement(name = "request")
 @Data
-public class Request {
+public class Query {
   private Navigation navigation;
 
   private Criteria criteria;

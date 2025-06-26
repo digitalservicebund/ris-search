@@ -1,6 +1,5 @@
 package de.bund.digitalservice.ris.search.unit.nlex.service;
 
-import de.bund.digitalservice.ris.search.nlex.schema.result.VERSIONResponse;
 import de.bund.digitalservice.ris.search.nlex.service.NlexWebService;
 import de.bund.digitalservice.ris.search.repository.opensearch.NormsRepository;
 import jakarta.xml.bind.JAXBException;
@@ -12,6 +11,7 @@ import nlex.Request;
 import nlex.RequestResponse;
 import nlex.TestQuery;
 import nlex.TestQueryResponse;
+import nlex.VERSIONResponse;
 import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -54,7 +54,7 @@ class NlexWebserviceTest {
   }
 
   @Test
-  void onRequestItReturnsAPlaceholderResult() {
+  void onRequestItReturnsAPlaceholderResult() throws JAXBException {
     RequestResponse response = this.service.request(new Request());
     Assertions.assertEquals("request_placeholder", response.getRequestResult());
   }
