@@ -39,6 +39,9 @@ import NormVersionList from "~/components/Norm/NormVersionList.vue";
 import VersionWarningMessage from "~/components/Norm/VersionWarningMessage.vue";
 import type { BreadcrumbItem } from "~/components/Ris/RisBreadcrumb.vue";
 import { useNormVersions } from "~/composables/useNormVersions";
+import Toast from "primevue/toast";
+import { useNormActions } from "./useNormActions";
+import { getManifestationUrl } from "~/utils/normsUtils";
 
 definePageMeta({
   // note: this is an expression ELI that additionally specifies the subtype component of a manifestation ELI
@@ -68,15 +71,9 @@ const htmlParts = computed(() => data.value.htmlParts);
 
 const backendURL = useBackendURL();
 
-function getManifestationUrl(format: string) {
-  const encoding = metadata.value?.workExample?.encoding.find(
-    (e) => e.encodingFormat === format,
-  );
-  return encoding?.contentUrl ? backendURL + encoding.contentUrl : undefined;
-}
-
-const xmlUrl = computed(() => getManifestationUrl("application/xml"));
-const zipUrl = computed(() => getManifestationUrl("application/zip"));
+const zipUrl = computed(() =>
+  getManifestationUrl(metadata.value, backendURL, "application/zip"),
+);
 
 if (error.value) {
   showError(error.value);
@@ -127,6 +124,8 @@ const breadcrumbItems: ComputedRef<BreadcrumbItem[]> = computed(() => {
 
   return list;
 });
+
+const { actions } = useNormActions(metadata);
 </script>
 
 <template>
@@ -136,7 +135,7 @@ const breadcrumbItems: ComputedRef<BreadcrumbItem[]> = computed(() => {
       <div class="container">
         <div class="flex items-center gap-8 print:hidden">
           <RisBreadcrumb type="norm" :items="breadcrumbItems" class="grow" />
-          <FileActionsMenu :xml-url="xmlUrl" />
+          <client-only> <ActionsMenu :items="actions" /></client-only>
         </div>
         <NormHeadingGroup :metadata="metadata" :html-parts="htmlParts" />
 
@@ -318,4 +317,5 @@ const breadcrumbItems: ComputedRef<BreadcrumbItem[]> = computed(() => {
       </Tabs>
     </div>
   </ContentWrapper>
+  <Toast />
 </template>

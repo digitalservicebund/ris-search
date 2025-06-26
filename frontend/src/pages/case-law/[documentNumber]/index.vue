@@ -26,6 +26,7 @@ import IcOutlineInfo from "~icons/ic/outline-info";
 import PropertiesItem from "~/components/PropertiesItem.vue";
 import Properties from "~/components/Properties.vue";
 import ContentWrapper from "@/components/CustomLayouts/ContentWrapper.vue";
+import { useCaseLawActions } from "~/pages/case-law/[documentNumber]/useCaseLawActions";
 
 const route = useRoute();
 const documentNumber = route.params.documentNumber as string;
@@ -51,15 +52,7 @@ const tocEntries: ComputedRef<TableOfContentsEntry[] | null> = computed(() => {
   return html.value ? getAllSectionsFromHtml(html.value, "section") : null;
 });
 
-function getManifestationUrl(format: string) {
-  const encoding = caseLaw.value?.encoding.find(
-    (e) => e.encodingFormat === format,
-  );
-  return encoding?.contentUrl ? backendURL + encoding.contentUrl : undefined;
-}
-
-const xmlUrl = computed(() => getManifestationUrl("application/xml"));
-
+const { actions } = useCaseLawActions(caseLaw);
 if (metadataError?.value) {
   showError(metadataError.value);
 }
@@ -80,7 +73,7 @@ if (contentError?.value) {
             removeOuterParentheses(caseLaw.headline) || emptyTitlePlaceholder
           "
         />
-        <FileActionsMenu :xml-url="xmlUrl" />
+        <ActionsMenu :items="actions" />
       </div>
       <h1
         v-if="caseLaw.headline"
