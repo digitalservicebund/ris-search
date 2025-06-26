@@ -5,7 +5,7 @@ import { isPrototypeProfile } from "~/utils/config";
 withDefaults(
   defineProps<{
     abbreviation?: string;
-    status?: string;
+    status?: ExpresssionStatus;
     validFrom?: string;
     validTo?: string;
   }>(),

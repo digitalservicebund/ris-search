@@ -1,3 +1,4 @@
+import type { Dayjs } from "dayjs";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
@@ -48,6 +49,10 @@ export function translateLegalForce(
   }
 }
 
-export function getCurrentDateInGermany() {
-  return dayjs().tz("Europe/Berlin").format("YYYY-MM-DD");
+export function getCurrentDateInGermany(): Dayjs {
+  return dayjs().tz("Europe/Berlin");
+}
+
+export function getCurrentDateInGermanyFormatted(): string {
+  return getCurrentDateInGermany().format("YYYY-MM-DD");
 }

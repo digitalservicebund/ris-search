@@ -4,9 +4,7 @@ import _ from "lodash";
 
 import { computed } from "vue";
 import { formattedDateToDateTime } from "~/utils/dateFormatting";
-import {
-  temporalCoverageToValidityInterval,
-} from "~/utils/normUtils";
+import { temporalCoverageToValidityInterval } from "~/utils/normUtils";
 
 interface UseNormVersions {
   status: Ref<AsyncDataRequestStatus>;

@@ -28,11 +28,47 @@ describe("NormMetadataFields.vue", () => {
     expect(wrapper.find("#abbreviation").exists()).toBeFalsy();
   });
 
-  it("shows status", () => {
-    const expectedStatus = "FooStatus";
+  it("shows status inForce", () => {
+    const expectedStatus = "Aktuell gültig";
     const wrapper = mount(NormMetadataFields, {
       props: {
-        status: expectedStatus,
+        status: ExpresssionStatus.InForce,
+      },
+    });
+
+    const metadataFields = wrapper.findAllComponents(MetadataField);
+
+    const abbreviationFields = metadataFields.filter(
+      (fieldWrapper) => fieldWrapper.props().label === "Status",
+    );
+
+    expect(abbreviationFields).toHaveLength(1);
+    expect(abbreviationFields[0].props().value).toBe(expectedStatus);
+  });
+
+  it("shows status historical", () => {
+    const expectedStatus = "Außer Kraft";
+    const wrapper = mount(NormMetadataFields, {
+      props: {
+        status: ExpresssionStatus.Historcial,
+      },
+    });
+
+    const metadataFields = wrapper.findAllComponents(MetadataField);
+
+    const abbreviationFields = metadataFields.filter(
+      (fieldWrapper) => fieldWrapper.props().label === "Status",
+    );
+
+    expect(abbreviationFields).toHaveLength(1);
+    expect(abbreviationFields[0].props().value).toBe(expectedStatus);
+  });
+
+  it("shows status future", () => {
+    const expectedStatus = "Zukünftig in Kraft";
+    const wrapper = mount(NormMetadataFields, {
+      props: {
+        status: ExpresssionStatus.Future,
       },
     });
 

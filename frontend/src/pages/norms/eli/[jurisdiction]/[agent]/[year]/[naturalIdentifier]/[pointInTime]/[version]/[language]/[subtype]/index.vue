@@ -6,7 +6,6 @@ import type { LegislationWork } from "@/types";
 import { useFetchNormContent } from "./useNormData";
 import { useRoute } from "#app";
 import { useIntersectionObserver } from "@/composables/useIntersectionObserver";
-import { translateLegalForce } from "@/utils/dateFormatting";
 import RisBreadcrumb from "@/components/Ris/RisBreadcrumb.vue";
 import Accordion from "@/components/Accordion.vue";
 import { getNormBreadcrumbTitle } from "./titles";
@@ -39,7 +38,10 @@ import Toast from "primevue/toast";
 import { useNormActions } from "./useNormActions";
 import { getManifestationUrl } from "~/utils/normsUtils";
 import NormMetadataFields from "~/components/Norm/NormMetadataFields.vue";
-import { temporalCoverageToValidityInterval } from "~/utils/normUtils";
+import {
+  getExpressionStatus,
+  temporalCoverageToValidityInterval,
+} from "~/utils/normUtils";
 
 definePageMeta({
   // note: this is an expression ELI that additionally specifies the subtype component of a manifestation ELI
@@ -87,9 +89,12 @@ const tableOfContents: Ref<TreeNode[]> = computed(() => {
   );
 });
 
-const translatedLegalForce = computed(() =>
-  translateLegalForce(metadata.value?.workExample.legislationLegalForce),
-);
+const expressionStatus = computed(() => {
+  if (metadata.value?.workExample)
+    return getExpressionStatus(metadata.value?.workExample);
+  return undefined;
+});
+
 const validityInterval = computed(() =>
   isPrototypeProfile()
     ? undefined
@@ -146,7 +151,7 @@ const { actions } = useNormActions(metadata);
         />
         <NormMetadataFields
           :abbreviation="metadata.abbreviation"
-          :status="translatedLegalForce"
+          :status="expressionStatus"
           :valid-from="validityInterval?.from"
           :valid-to="validityInterval?.to"
         />
