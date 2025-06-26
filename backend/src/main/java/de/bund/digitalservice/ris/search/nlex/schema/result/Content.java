@@ -6,9 +6,11 @@ import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlElement;
 import java.util.List;
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @Data
+@Accessors(chain = true)
 public class Content {
 
   public static final String LANG_DE_DE = "de-DE";

@@ -3,10 +3,12 @@ package de.bund.digitalservice.ris.search.nlex.schema.query;
 import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import lombok.Data;
+import lombok.experimental.Accessors;
 
-@XmlRootElement()
+@XmlRootElement(name = "request")
 @Data
-public class Request {
+@Accessors(chain = true)
+public class Query {
   private Navigation navigation;
 
   private Criteria criteria;

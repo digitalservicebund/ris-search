@@ -5,9 +5,11 @@ import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlType;
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @Data
+@Accessors(chain = true)
 @XmlType(propOrder = {"format", "display", "href"})
 public class ExternUrl {
 
