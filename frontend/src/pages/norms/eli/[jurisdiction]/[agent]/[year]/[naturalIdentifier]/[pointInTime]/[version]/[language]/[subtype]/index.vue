@@ -147,7 +147,7 @@ const { actions } = useNormActions(metadata);
         <VersionWarning
           v-if="normVersionsStatus === 'success'"
           :versions="normVersions"
-          :current-expression="metadata.workExample.legislationIdentifier"
+          :current-version="metadata"
         />
         <NormMetadataFields
           :abbreviation="metadata.abbreviation"

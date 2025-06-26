@@ -4,12 +4,10 @@ import type { LegislationWork, SearchResult } from "~/types";
 import Column from "primevue/column";
 import DataTable from "primevue/datatable";
 import Badge, { BadgeColor } from "@/components/Badge.vue";
+import type { VersionStatus } from "~/composables/useNormVersions";
+import { getVersionStatus } from "~/composables/useNormVersions";
 import IcBaselineLaunch from "~icons/ic/baseline-launch";
 import _ from "lodash";
-import {
-  getExpressionStatus,
-  temporalCoverageToValidityInterval,
-} from "~/utils/normUtils";
 
 const props = defineProps<{
   status: string;
@@ -41,18 +39,14 @@ const tableRowData = computed<TableRowData[]>(() => {
   );
 
   return versionsSorted.map((version, index) => {
-    const validityInterval = temporalCoverageToValidityInterval(
+    const fromAndToDate = splitTemporalCoverage(
       version.item.workExample.temporalCoverage,
     );
 
     const id = index;
-    const fromDate = validityInterval?.from ?? "-";
-    const toDate = validityInterval?.to ?? "-";
-    const expressionStatus = getExpressionStatus(version.item.workExample);
-    const status: Status = {
-      label: expressionStatus ?? "Unbekannt",
-      color: getStatusColor(expressionStatus),
-    };
+    const fromDate = fromAndToDate[0] ?? "-";
+    const toDate = fromAndToDate[1] ?? "-";
+    const status = translateStatus(getVersionStatus(version.item));
     const link = `/norms/${version.item.workExample.legislationIdentifier}`;
     const selectable =
       version.item.workExample.legislationIdentifier !==
@@ -71,16 +65,16 @@ const tableRowData = computed<TableRowData[]>(() => {
   });
 });
 
-function getStatusColor(expressionStatus?: ExpresssionStatus): BadgeColor {
-  switch (expressionStatus) {
-    case ExpresssionStatus.InForce:
-      return BadgeColor.GREEN;
-    case ExpresssionStatus.Future:
-      return BadgeColor.YELLOW;
-    case ExpresssionStatus.Historcial:
-      return BadgeColor.RED;
+function translateStatus(status: VersionStatus): Status | undefined {
+  switch (status) {
+    case "inForce":
+      return { label: "Aktuell gültig", color: BadgeColor.GREEN };
+    case "future":
+      return { label: "Zukünftig in Kraft", color: BadgeColor.YELLOW };
+    case "historical":
+      return { label: "Außer Kraft", color: BadgeColor.RED };
     default:
-      return BadgeColor.BLUE;
+      return undefined;
   }
 }
 

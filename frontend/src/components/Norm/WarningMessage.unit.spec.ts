@@ -36,7 +36,7 @@ describe("WarningMessage.vue", () => {
     const wrapper = getWrapper({
       ...baseProps,
       currentVersionStatus: "inForce",
-      futureVersion: futureVersion,
+      futureVersion: futureVersion.item,
     });
     expect(wrapper.find("[data-testid='norm-warning-message']").exists()).toBe(
       true,

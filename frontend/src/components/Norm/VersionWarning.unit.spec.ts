@@ -43,8 +43,7 @@ describe("VersionWarningMessage", () => {
     const wrapper = mount(VersionWarning, {
       props: {
         versions: testVersions,
-        currentExpression:
-          testVersions[1].item.workExample.legislationIdentifier,
+        currentVersion: testVersions[1].item,
       },
       global: { stubs: ["RouterLink"] },
     });
@@ -58,7 +57,7 @@ describe("VersionWarningMessage", () => {
     const wrapper = mount(VersionWarning, {
       props: {
         versions: testVersions,
-        currentExpression: `${testVersions[0].item.workExample.legislationIdentifier}`,
+        currentVersion: testVersions[0].item,
       },
       global: { stubs: ["RouterLink"] },
     });
@@ -72,7 +71,7 @@ describe("VersionWarningMessage", () => {
     const wrapper = mount(VersionWarning, {
       props: {
         versions: testVersions,
-        currentExpression: `${testVersions[2].item.workExample.legislationIdentifier}`,
+        currentVersion: testVersions[2].item,
       },
       global: { stubs: ["RouterLink"] },
     });
@@ -86,7 +85,7 @@ describe("VersionWarningMessage", () => {
     const wrapper = mount(VersionWarning, {
       props: {
         versions: [testVersions[0], testVersions[1]],
-        currentExpression: `${testVersions[1].item.workExample.legislationIdentifier}`,
+        currentVersion: testVersions[1].item,
       },
       global: { stubs: ["RouterLink"] },
     });

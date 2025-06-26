@@ -78,7 +78,7 @@ describe("useNormVersions", () => {
   Object.keys(statusTestData).forEach((status) => {
     it(`returns correct status for version with ${status} status`, () => {
       const version = statusTestData[status as keyof typeof statusTestData];
-      expect(getVersionStatus(version)).toBe(status);
+      expect(getVersionStatus(version.item)).toBe(status);
     });
   });
 });

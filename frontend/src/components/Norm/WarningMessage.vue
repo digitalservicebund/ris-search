@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { LegislationWork, SearchResult } from "~/types";
+import type { LegislationWork } from "~/types";
 import Message from "primevue/message";
 import IcBaselineHistory from "~icons/ic/baseline-history";
 import {
@@ -10,7 +10,7 @@ import {
 export interface WarningMessageProps {
   currentVersionStatus: VersionStatus;
   inForceVersionLink: string;
-  futureVersion?: SearchResult<LegislationWork>;
+  futureVersion?: LegislationWork;
   historicalWarningMessage: string;
   futureWarningMessage: string;
 }
@@ -18,7 +18,7 @@ export interface WarningMessageProps {
 const props = defineProps<{
   currentVersionStatus: VersionStatus;
   inForceVersionLink: string;
-  futureVersion?: SearchResult<LegislationWork>;
+  futureVersion?: LegislationWork;
   historicalWarningMessage: string;
   futureWarningMessage: string;
 }>();
@@ -60,7 +60,7 @@ const showWarningMessage = computed(() => {
             Neue Fassung ab {{ getVersionDates(props.futureVersion)[0] }}.
           </span>
           <NuxtLink
-            :to="`/norms/${props.futureVersion.item.workExample.legislationIdentifier}`"
+            :to="`/norms/${props.futureVersion.workExample.legislationIdentifier}`"
           >
             Zur zukünftigen Fassung
           </NuxtLink>

@@ -8,7 +8,7 @@ import WarningMessage from "~/components/Norm/WarningMessage.vue";
 
 const props = defineProps<{
   versions: SearchResult<LegislationWork>[];
-  currentExpression: string;
+  currentVersion: LegislationWork;
 }>();
 
 const inForceVersion = computed(() =>
@@ -22,28 +22,14 @@ const inForceVersionLink = computed(
     `/norms/${inForceVersion.value?.item.workExample.legislationIdentifier}`,
 );
 
-const currentVersion: ComputedRef<SearchResult<LegislationWork> | undefined> =
-  computed(() => {
-    const current = props.versions.find(
-      (version) =>
-        version.item.workExample.legislationIdentifier ===
-        props.currentExpression,
-    );
-    if (!current)
-      showError({
-        statusMessage: `The provided current expression (${props.currentExpression}) does not exist in the provided versions`,
-      });
-    return current;
-  });
-
 const currentVersionStatus = computed<VersionStatus>(() =>
-  getVersionStatus(currentVersion.value),
+  getVersionStatus(props.currentVersion),
 );
 
 const latestFutureVersion = computed(() => {
   if (currentVersionStatus.value !== "inForce") return undefined;
   const last = props.versions[props.versions.length - 1];
-  return getVersionStatus(last) === "future" ? last : undefined;
+  return getVersionStatus(last.item) === "future" ? last.item : undefined;
 });
 </script>
 

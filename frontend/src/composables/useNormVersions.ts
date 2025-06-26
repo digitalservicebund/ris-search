@@ -9,7 +9,6 @@ import _ from "lodash";
 
 import { computed } from "vue";
 import { formattedDateToDateTime } from "~/utils/dateFormatting";
-import { temporalCoverageToValidityInterval } from "~/utils/normUtils";
 
 interface UseNormVersions {
   status: Ref<AsyncDataRequestStatus>;
@@ -42,14 +41,16 @@ export function useNormVersions(workEli?: string): UseNormVersions {
   return { status, sortedVersions };
 }
 
+export const getVersionDates = (version: LegislationWork | undefined) => {
+  const temporalCoverage = version?.workExample.temporalCoverage ?? "";
+  return splitTemporalCoverage(temporalCoverage);
+};
+
 export const getVersionStatus = (
-  version: SearchResult<LegislationWork> | undefined,
+  version: LegislationWork | undefined,
 ): VersionStatus => {
-  const { from: startDate, to: endDate } =
-    temporalCoverageToValidityInterval(
-      version?.item.workExample.temporalCoverage,
-    ) || {};
-  const status = version?.item.workExample.legislationLegalForce;
+  const [startDate, endDate] = getVersionDates(version);
+  const status = version?.workExample.legislationLegalForce;
   return getStatusLabel(startDate, endDate, status);
 };
 
