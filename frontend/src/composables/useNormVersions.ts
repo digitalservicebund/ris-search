@@ -65,7 +65,6 @@ export function getStatusLabel(
   const dateFrom = startDate ? formattedDateToDateTime(startDate) : undefined;
   const dateTo = endDate ? formattedDateToDateTime(endDate) : undefined;
   const now = new Date();
-  console.log(startDate, endDate, dateFrom, dateTo, now);
   if (dateFrom && dateFrom > now) {
     return "future";
   }
