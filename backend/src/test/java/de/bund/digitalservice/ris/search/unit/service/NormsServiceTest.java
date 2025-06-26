@@ -37,7 +37,9 @@ class NormsServiceTest {
   @BeforeEach
   public void setUp() {
     NormsRepository normsRepositoryMock =
-        new NormsRepository(Mockito.mock(NormsSynthesizedRepository.class));
+        new NormsRepository(
+            Mockito.mock(NormsSynthesizedRepository.class),
+            Mockito.mock(ElasticsearchOperations.class));
     operationsMock = Mockito.mock(ElasticsearchOperations.class);
     NormsBucket normsBucketMock = Mockito.mock(NormsBucket.class);
     this.normsService = new NormsService(normsRepositoryMock, normsBucketMock, operationsMock);

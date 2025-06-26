@@ -8,14 +8,19 @@ import de.bund.digitalservice.ris.search.repository.opensearch.NormsSynthesizedR
 import java.util.Collections;
 import java.util.List;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 
 class NormsRepositoryTest {
   @Test
   void saveAll() {
     List<Norm> normList = Collections.emptyList();
     NormsSynthesizedRepository normsSynthesizedRepository =
-        org.mockito.Mockito.mock(NormsSynthesizedRepository.class);
-    var normsRepository = new NormsRepository(normsSynthesizedRepository);
+        Mockito.mock(NormsSynthesizedRepository.class);
+    ElasticsearchOperations elasticsearchOperationsMock =
+        Mockito.mock(ElasticsearchOperations.class);
+    var normsRepository =
+        new NormsRepository(normsSynthesizedRepository, elasticsearchOperationsMock);
 
     normsRepository.saveAll(normList);
 

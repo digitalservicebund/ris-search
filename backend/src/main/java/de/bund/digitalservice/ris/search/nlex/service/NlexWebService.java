@@ -1,5 +1,7 @@
 package de.bund.digitalservice.ris.search.nlex.service;
 
+import de.bund.digitalservice.ris.search.repository.opensearch.NormsRepository;
+import jakarta.xml.bind.JAXBContext;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Objects;
@@ -20,9 +22,18 @@ import org.springframework.ws.server.endpoint.annotation.ResponsePayload;
 public class NlexWebService {
   private static final String NAMESPACE_URI = "nlex.search.ris.digitalservice.bund.de";
 
+  NormsRepository repository;
+  JAXBContext queryCtx;
+
+  public NlexWebService(NormsRepository repository) throws jakarta.xml.bind.JAXBException {
+    this.repository = repository;
+    this.queryCtx = JAXBContext.newInstance(Request.class);
+  }
+
   @PayloadRoot(namespace = NAMESPACE_URI, localPart = "request")
   @ResponsePayload
   public RequestResponse request(@RequestPayload Request request) {
+
     RequestResponse resp = new RequestResponse();
     resp.setRequestResult("request_placeholder");
     return resp;
