@@ -2,18 +2,19 @@
 import MetadataField from "~/components/MetadataField.vue";
 import { isPrototypeProfile } from "~/utils/config";
 
-withDefaults(
-  defineProps<{
-    abbreviation?: string;
-    status?: ExpresssionStatus;
-    validFrom?: string;
-    validTo?: string;
-  }>(),
-  {
-    validFrom: "-",
-    validTo: "-",
-  },
-);
+interface Props {
+  abbreviation?: string;
+  status?: ExpresssionStatus;
+  validFrom?: string;
+  validTo?: string;
+}
+
+const {
+  abbreviation,
+  status,
+  validFrom = "-",
+  validTo = "-",
+} = defineProps<Props>();
 </script>
 
 <template>

@@ -12,7 +12,7 @@ dayjs.extend(utc);
 dayjs.extend(timezone);
 
 describe("temporalCoverageToValidityInterval", () => {
-  it("returns undefined if temporal coverage is undifined", () => {
+  it("returns undefined if temporal coverage is undefined", () => {
     const result = temporalCoverageToValidityInterval(undefined);
     expect(result).toBeUndefined();
   });
