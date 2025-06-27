@@ -10,12 +10,13 @@ import NormTableOfContents from "@/components/Ris/NormTableOfContents.vue";
 import { useFetchNormArticleContent } from "./useNormData";
 import type { BreadcrumbItem } from "@/components/Ris/RisBreadcrumb.vue";
 import RisBreadcrumb from "@/components/Ris/RisBreadcrumb.vue";
-import { getTranslatedLegalForceByDates } from "@/utils/dateFormatting";
 import { getNormBreadcrumbTitle, getNormTitle } from "./titles";
 import TableOfContentsLayout from "~/components/CustomLayouts/SidebarLayout.vue";
 import IncompleteDataMessage from "@/components/IncompleteDataMessage.vue";
 import { featureFlags } from "@/utils/config";
 import ContentWrapper from "~/components/CustomLayouts/ContentWrapper.vue";
+import { useValidNormVersions } from "~/composables/useNormVersions";
+import ArticleVersionWarning from "~/components/Norm/ArticleVersionWarning.vue";
 
 definePageMeta({
   // note: this is an expression ELI that additionally specifies the subtype component of a manifestation ELI,
@@ -91,18 +92,55 @@ function getRouteForSiblingArticle(
 const currentNodePath = findNodePath(tableOfContents.value, eId.value ?? "");
 const normTitle = computed(() => getNormTitle(norm.value));
 const normBreadcrumbTitle = computed(() => getNormBreadcrumbTitle(norm.value));
-const items: Ref<BreadcrumbItem[]> = computed(
-  () =>
-    currentNodePath?.map(
-      (node) =>
-        ({
-          label: node.label,
-          route: node.route,
-        }) as BreadcrumbItem,
-    ) ?? [],
-);
-
+const items: Ref<BreadcrumbItem[]> = computed(() => {
+  const list: BreadcrumbItem[] = [];
+  if (article.value && !article.value?.isActive) {
+    list.push({
+      label: [article.value.entryIntoForceDate, article.value.expiryDate].join(
+        "–",
+      ),
+      route: route.fullPath,
+    } as BreadcrumbItem);
+  }
+  currentNodePath?.forEach((node) =>
+    list.push({
+      label: node.label,
+      route: node.route,
+    } as BreadcrumbItem),
+  );
+  return list;
+});
 const htmlTitle = computed(() => data.value.articleHeading);
+const topNormLinkText = computed(() => {
+  if (!norm.value) return "";
+  const baseText = norm.value.name || norm.value.alternateName;
+  const validityInterval = temporalCoverageToValidityInterval(
+    norm.value.workExample.temporalCoverage,
+  );
+  if (!article.value?.isActive && validityInterval?.from) {
+    return `${baseText} vom ${validityInterval.from}`;
+  }
+  return baseText;
+});
+
+const validVersions =
+  norm.value.workExample.legislationLegalForce !== "InForce"
+    ? useValidNormVersions(norm.value?.legislationIdentifier)
+    : undefined;
+
+const inForceNormLink = computed(() => {
+  if (
+    !validVersions ||
+    validVersions.status.value !== "success" ||
+    !validVersions.data.value?.member ||
+    validVersions.data.value.member.length === 0
+  ) {
+    return undefined;
+  }
+
+  const validVersion = validVersions.data.value.member[0];
+  return `/norms/${validVersion.item.workExample.legislationIdentifier}`;
+});
 
 const showNormArticleStatus = computed(() =>
   featureFlags.showNormArticleStatus(),
@@ -125,14 +163,20 @@ useHead({ title: article.value?.name });
           <NuxtLink
             class="ris-heading3-bold link-hover mt-24 line-clamp-2 items-center text-blue-800"
             :to="normPath"
-            ><MdiArrowTopLeft class="inline-block" />
-            {{ norm.name || norm.alternateName }}</NuxtLink
           >
+            <MdiArrowTopLeft class="inline-block" />
+            {{ topNormLinkText }}
+          </NuxtLink>
           <h2
             class="ris-heading2-bold my-24 mb-24 inline-block"
             v-html="htmlTitle"
           />
         </div>
+        <ArticleVersionWarning
+          v-if="inForceNormLink && article"
+          :in-force-version-link="inForceNormLink"
+          :current-article="article"
+        />
       </div>
 
       <!-- Metadata -->
@@ -142,29 +186,19 @@ useHead({ title: article.value?.name });
         data-testid="metadata"
       >
         <MetadataField
-          id="article_is_active"
-          label="Status"
-          :value="
-            getTranslatedLegalForceByDates(
-              article.entryIntoForceDate,
-              article.expiryDate,
-            )
-          "
-        />
-        <MetadataField
           v-if="article.entryIntoForceDate"
           id="article_entry_into_force_date"
-          label="Fassung in Kraft seit"
+          label="Gültig von"
           :value="formattedDate(article.entryIntoForceDate)"
         />
         <MetadataField
           v-if="article.expiryDate"
           id="article_expiry_date"
-          label="Fassung außer Kraft seit"
+          label="Gültig bis"
           :value="formattedDate(article.expiryDate)"
         />
       </div>
-      <div class="border-t border-gray-600 bg-white">
+      <div class="bg-white">
         <TableOfContentsLayout class="container py-24">
           <template v-if="!!articleHtml" #content>
             <IncompleteDataMessage />
@@ -215,8 +249,8 @@ useHead({ title: article.value?.name });
           </template>
         </TableOfContentsLayout>
       </div>
-    </template></ContentWrapper
-  >
+    </template>
+  </ContentWrapper>
 </template>
 
 <style>

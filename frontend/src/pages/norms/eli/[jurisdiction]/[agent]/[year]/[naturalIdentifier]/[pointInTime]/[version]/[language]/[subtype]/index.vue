@@ -31,9 +31,10 @@ import {
 import { isPrototypeProfile } from "~/utils/config";
 import ContentWrapper from "~/components/CustomLayouts/ContentWrapper.vue";
 import NormVersionList from "~/components/Norm/NormVersionList.vue";
-import VersionWarningMessage from "~/components/Norm/VersionWarningMessage.vue";
+import NormVersionWarning from "~/components/Norm/NormVersionWarning.vue";
 import type { BreadcrumbItem } from "~/components/Ris/RisBreadcrumb.vue";
 import { useNormVersions } from "~/composables/useNormVersions";
+import VersionsTeaser from "~/components/Norm/VersionsTeaser.vue";
 import Toast from "primevue/toast";
 import { useNormActions } from "./useNormActions";
 import NormMetadataFields from "~/components/Norm/NormMetadataFields.vue";
@@ -143,11 +144,10 @@ const { actions } = useNormActions(metadata);
           <client-only> <ActionsMenu :items="actions" /></client-only>
         </div>
         <NormHeadingGroup :metadata="metadata" :html-parts="htmlParts" />
-
-        <VersionWarningMessage
+        <NormVersionWarning
           v-if="normVersionsStatus === 'success'"
           :versions="normVersions"
-          :current-expression="metadata.workExample.legislationIdentifier"
+          :current-version="metadata"
         />
         <NormMetadataFields
           :abbreviation="metadata.abbreviation"
@@ -270,34 +270,7 @@ const { actions } = useNormActions(metadata);
               "
               :versions="normVersions"
             />
-            <div v-else class="container">
-              <div class="max-w-prose">
-                <h3 class="ris-heading3-bold my-24">
-                  Fassungen sind noch nicht verfügbar
-                </h3>
-                <p class="ris-body1-regular">
-                  Mit dem Livegang des neuen Rechtsinformationsportals werden
-                  auch außer Kraft getretene und zukünftig in Kraft tretende
-                  Fassungen der Gesetze und Verordnungen zur Verfügung gestellt.
-                </p>
-                <h3 class="ris-heading3-bold mt-48 mb-24">
-                  Unterstützen Sie uns bei der Entwicklung dieser Funktion
-                </h3>
-                <p class="ris-body1-regular">
-                  Unser Ziel ist es, Rechtsinformationen für Bürgerinnen und
-                  Bürger leichter zugänglich zu machen. Deshalb suchen wir
-                  Menschen, die ihre Erfahrungen mit uns teilen und unseren
-                  Service testen.
-                </p>
-                <ButtonLink
-                  class="mt-16"
-                  variant="primary"
-                  href="/nutzungstests"
-                >
-                  Mehr über Nutzungstest erfahren
-                </ButtonLink>
-              </div>
-            </div>
+            <VersionsTeaser v-else />
           </TabPanel>
         </TabPanels>
       </Tabs>
