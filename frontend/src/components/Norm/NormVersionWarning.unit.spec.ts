@@ -1,8 +1,8 @@
 import { mount } from "@vue/test-utils";
-import VersionWarning from "./VersionWarning.vue";
+import NormVersionWarning from "./NormVersionWarning.vue";
 import type { LegislationWork, SearchResult } from "~/types";
 
-describe("VersionWarningMessage", () => {
+describe("NormVersionWarning", () => {
   const testVersions = [
     {
       item: {
@@ -40,7 +40,7 @@ describe("VersionWarningMessage", () => {
   ] as SearchResult<LegislationWork>[];
 
   it("renders message when a future version exists for the current in force version", () => {
-    const wrapper = mount(VersionWarning, {
+    const wrapper = mount(NormVersionWarning, {
       props: {
         versions: testVersions,
         currentVersion: testVersions[1].item,
@@ -54,7 +54,7 @@ describe("VersionWarningMessage", () => {
   });
 
   it("renders message when the current version is a future version", () => {
-    const wrapper = mount(VersionWarning, {
+    const wrapper = mount(NormVersionWarning, {
       props: {
         versions: testVersions,
         currentVersion: testVersions[0].item,
@@ -68,7 +68,7 @@ describe("VersionWarningMessage", () => {
   });
 
   it("renders message when the current version is a historical version", () => {
-    const wrapper = mount(VersionWarning, {
+    const wrapper = mount(NormVersionWarning, {
       props: {
         versions: testVersions,
         currentVersion: testVersions[2].item,
@@ -82,7 +82,7 @@ describe("VersionWarningMessage", () => {
   });
 
   it("does not render a message if there are no future versions existing for the current in force version", () => {
-    const wrapper = mount(VersionWarning, {
+    const wrapper = mount(NormVersionWarning, {
       props: {
         versions: [testVersions[0], testVersions[1]],
         currentVersion: testVersions[1].item,

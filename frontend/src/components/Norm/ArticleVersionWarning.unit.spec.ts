@@ -39,11 +39,11 @@ describe("ArticleVersionWarning.vue", () => {
     it(`shows warning for article with entry date ${currentArticle.entryIntoForceDate} and expiry date ${currentArticle.expiryDate}`, () => {
       const wrapper = mount(ArticleVersionWarning, {
         props: { inForceVersionLink, currentArticle },
-        global: { stubs: ["WarningMessage"] },
+        global: { stubs: ["VersionWarningMessage"] },
       });
-      expect(wrapper.findComponent({ name: "WarningMessage" }).exists()).toBe(
-        true,
-      );
+      expect(
+        wrapper.findComponent({ name: "VersionWarningMessage" }).exists(),
+      ).toBe(true);
     });
   }
 });

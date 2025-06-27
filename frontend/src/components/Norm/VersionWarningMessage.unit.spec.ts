@@ -1,12 +1,12 @@
 import { mount } from "@vue/test-utils";
-import WarningMessage from "./WarningMessage.vue";
+import VersionWarningMessage from "./VersionWarningMessage.vue";
 import type { LegislationWork, SearchResult } from "~/types";
-import type { WarningMessageProps } from "~/components/Norm/WarningMessage.vue";
+import type { VersionWarningMessageProps } from "~/components/Norm/VersionWarningMessage.vue";
 
 const baseProps = {
   inForceVersionLink: "/norms/eli/bund/bgbl-1/2000/s100/2000-01-01/1/deu",
   historicalWarningMessage: "Paragraf einer historischen Fassung.",
-  futureWarningMessage: "Paragraph einer zukünftigen Fassung.",
+  futureWarningMessage: "Paragraf einer zukünftigen Fassung.",
 };
 
 const futureVersion = {
@@ -19,8 +19,8 @@ const futureVersion = {
   versionDates: ["2100-01-01"],
 } as unknown as SearchResult<LegislationWork>;
 
-function getWrapper(customProps: WarningMessageProps) {
-  return mount(WarningMessage, {
+function getWrapper(customProps: VersionWarningMessageProps) {
+  return mount(VersionWarningMessage, {
     props: customProps,
     global: {
       stubs: {
@@ -31,7 +31,7 @@ function getWrapper(customProps: WarningMessageProps) {
   });
 }
 
-describe("WarningMessage.vue", () => {
+describe("VersionWarningMessage.vue", () => {
   it("shows info message for inForce with futureVersion", () => {
     const wrapper = getWrapper({
       ...baseProps,
@@ -75,7 +75,7 @@ describe("WarningMessage.vue", () => {
     expect(wrapper.find("[data-testid='norm-warning-message']").exists()).toBe(
       true,
     );
-    expect(wrapper.text()).toContain("Paragraph einer zukünftigen Fassung.");
+    expect(wrapper.text()).toContain("Paragraf einer zukünftigen Fassung.");
     expect(wrapper.text()).toContain("Zur aktuell gültigen Fassung");
   });
 });

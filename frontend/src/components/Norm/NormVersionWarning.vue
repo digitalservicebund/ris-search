@@ -4,7 +4,7 @@ import {
   getVersionStatus,
   type VersionStatus,
 } from "~/composables/useNormVersions";
-import WarningMessage from "~/components/Norm/WarningMessage.vue";
+import VersionWarningMessage from "~/components/Norm/VersionWarningMessage.vue";
 
 const props = defineProps<{
   versions: SearchResult<LegislationWork>[];
@@ -34,7 +34,7 @@ const latestFutureVersion = computed(() => {
 </script>
 
 <template>
-  <WarningMessage
+  <VersionWarningMessage
     :current-version-status="currentVersionStatus"
     :in-force-version-link="inForceVersionLink"
     :future-version="latestFutureVersion"

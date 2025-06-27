@@ -31,7 +31,7 @@ import {
 import { isPrototypeProfile } from "~/utils/config";
 import ContentWrapper from "~/components/CustomLayouts/ContentWrapper.vue";
 import NormVersionList from "~/components/Norm/NormVersionList.vue";
-import VersionWarning from "~/components/Norm/VersionWarning.vue";
+import NormVersionWarning from "~/components/Norm/NormVersionWarning.vue";
 import type { BreadcrumbItem } from "~/components/Ris/RisBreadcrumb.vue";
 import { useNormVersions } from "~/composables/useNormVersions";
 import VersionsTeaser from "~/components/Norm/VersionsTeaser.vue";
@@ -144,7 +144,7 @@ const { actions } = useNormActions(metadata);
           <client-only> <ActionsMenu :items="actions" /></client-only>
         </div>
         <NormHeadingGroup :metadata="metadata" :html-parts="htmlParts" />
-        <VersionWarning
+        <NormVersionWarning
           v-if="normVersionsStatus === 'success'"
           :versions="normVersions"
           :current-version="metadata"
