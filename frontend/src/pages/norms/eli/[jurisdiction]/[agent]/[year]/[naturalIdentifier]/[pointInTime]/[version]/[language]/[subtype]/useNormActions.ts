@@ -6,7 +6,7 @@ import MaterialSymbolsLink from "~icons/material-symbols/link";
 import PDFIcon from "~/components/icons/PDFIcon.vue";
 import XMLIcon from "~/components/icons/XMLIcon.vue";
 import type { ActionMenuItem } from "~/components/ActionsMenu.vue";
-import { getManifestationUrl } from "~/utils/normsUtils";
+import { getManifestationUrl } from "~/utils/normUtils";
 
 export function useNormActions(metadata: Ref<LegislationWork | undefined>) {
   const enablePdfButton = !isPrototypeProfile();

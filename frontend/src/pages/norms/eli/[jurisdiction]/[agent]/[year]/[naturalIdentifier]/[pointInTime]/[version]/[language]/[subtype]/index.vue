@@ -36,10 +36,10 @@ import type { BreadcrumbItem } from "~/components/Ris/RisBreadcrumb.vue";
 import { useNormVersions } from "~/composables/useNormVersions";
 import Toast from "primevue/toast";
 import { useNormActions } from "./useNormActions";
-import { getManifestationUrl } from "~/utils/normsUtils";
 import NormMetadataFields from "~/components/Norm/NormMetadataFields.vue";
 import {
   getExpressionStatus,
+  getManifestationUrl,
   temporalCoverageToValidityInterval,
 } from "~/utils/normUtils";
 

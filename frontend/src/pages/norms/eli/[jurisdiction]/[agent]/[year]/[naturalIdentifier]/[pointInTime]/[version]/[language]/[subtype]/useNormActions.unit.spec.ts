@@ -21,7 +21,7 @@ vi.mock("~/utils/config", () => ({
   isPrototypeProfile: vi.fn(),
 }));
 
-vi.mock("~/utils/normsUtils", () => ({
+vi.mock("~/utils/normUtils", () => ({
   getManifestationUrl: vi.fn(),
 }));
 

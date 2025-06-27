@@ -1,5 +1,5 @@
 import { formattedDate, formattedDateToDateTime } from "~/utils/dateFormatting";
-import type { LegislationExpression } from "~/types";
+import type { LegislationExpression, LegislationWork } from "~/types";
 
 export interface ValidityInterval {
   from?: string;
@@ -43,4 +43,15 @@ export function getExpressionStatus(
     }
   }
   return undefined;
+}
+
+export function getManifestationUrl(
+  metadata: LegislationWork | undefined,
+  backendURL: string,
+  format: string,
+) {
+  const encoding = metadata?.workExample?.encoding.find(
+    (e) => e.encodingFormat === format,
+  );
+  return encoding?.contentUrl ? backendURL + encoding.contentUrl : undefined;
 }
