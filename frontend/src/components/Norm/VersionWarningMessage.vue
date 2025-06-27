@@ -3,10 +3,10 @@ import type { LegislationWork, SearchResult } from "~/types";
 import Message from "primevue/message";
 import IcBaselineHistory from "~icons/ic/baseline-history";
 import {
-  getVersionDates,
   getVersionStatus,
   type VersionStatus,
 } from "~/composables/useNormVersions";
+import { temporalCoverageToValidityInterval } from "~/utils/normUtils";
 
 const props = defineProps<{
   versions: SearchResult<LegislationWork>[];
@@ -78,7 +78,12 @@ const showWarningMessage = computed(() => {
       <p class="mt-2">
         <span v-if="currentVersionStatus === 'inForce' && latestFutureVersion">
           <span class="ris-body2-bold">
-            Neue Fassung ab {{ getVersionDates(latestFutureVersion)[0] }}.
+            Neue Fassung ab
+            {{
+              temporalCoverageToValidityInterval(
+                latestFutureVersion?.item.workExample.temporalCoverage,
+              )?.from
+            }}.
           </span>
           <NuxtLink
             :to="`/norms/${latestFutureVersion.item.workExample.legislationIdentifier}`"

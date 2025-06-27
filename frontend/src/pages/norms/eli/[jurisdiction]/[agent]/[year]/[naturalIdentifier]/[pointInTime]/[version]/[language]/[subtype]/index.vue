@@ -6,11 +6,6 @@ import type { LegislationWork } from "@/types";
 import { useFetchNormContent } from "./useNormData";
 import { useRoute } from "#app";
 import { useIntersectionObserver } from "@/composables/useIntersectionObserver";
-import MetadataField from "@/components/MetadataField.vue";
-import {
-  splitTemporalCoverage,
-  translateLegalForce,
-} from "@/utils/dateFormatting";
 import RisBreadcrumb from "@/components/Ris/RisBreadcrumb.vue";
 import Accordion from "@/components/Accordion.vue";
 import { getNormBreadcrumbTitle } from "./titles";
@@ -41,7 +36,12 @@ import type { BreadcrumbItem } from "~/components/Ris/RisBreadcrumb.vue";
 import { useNormVersions } from "~/composables/useNormVersions";
 import Toast from "primevue/toast";
 import { useNormActions } from "./useNormActions";
-import { getManifestationUrl } from "~/utils/normsUtils";
+import NormMetadataFields from "~/components/Norm/NormMetadataFields.vue";
+import {
+  getExpressionStatus,
+  getManifestationUrl,
+  temporalCoverageToValidityInterval,
+} from "~/utils/normUtils";
 
 definePageMeta({
   // note: this is an expression ELI that additionally specifies the subtype component of a manifestation ELI
@@ -89,13 +89,18 @@ const tableOfContents: Ref<TreeNode[]> = computed(() => {
   );
 });
 
-const translatedLegalForce = computed(() =>
-  translateLegalForce(metadata.value?.workExample.legislationLegalForce),
-);
-const temporalCoverage = computed(() =>
+const expressionStatus = computed(() => {
+  if (metadata.value?.workExample)
+    return getExpressionStatus(metadata.value?.workExample);
+  return undefined;
+});
+
+const validityInterval = computed(() =>
   isPrototypeProfile()
-    ? []
-    : splitTemporalCoverage(metadata.value?.workExample.temporalCoverage),
+    ? undefined
+    : temporalCoverageToValidityInterval(
+        metadata.value?.workExample.temporalCoverage,
+      ),
 );
 
 const { selectedEntry, vObserveElements } = useIntersectionObserver();
@@ -118,8 +123,8 @@ const breadcrumbItems: ComputedRef<BreadcrumbItem[]> = computed(() => {
   const isInForce =
     metadata.value?.workExample.legislationLegalForce === "InForce";
   if (!isInForce) {
-    const temporalCoverageLabel = temporalCoverage.value?.join("–");
-    list.push({ route: route.fullPath, label: temporalCoverageLabel });
+    const validityIntervalLabel = `${validityInterval.value?.from ?? ""}-${validityInterval.value?.to ?? ""}`;
+    list.push({ route: route.fullPath, label: validityIntervalLabel });
   }
 
   return list;
@@ -144,31 +149,12 @@ const { actions } = useNormActions(metadata);
           :versions="normVersions"
           :current-expression="metadata.workExample.legislationIdentifier"
         />
-        <div class="mt-8 mb-48 flex flex-wrap items-end gap-24">
-          <MetadataField
-            v-if="metadata.abbreviation"
-            id="abbreviation"
-            label="Abkürzung"
-            :value="metadata.abbreviation"
-          />
-          <MetadataField
-            id="status"
-            label="Status"
-            :value="translatedLegalForce"
-          />
-          <MetadataField
-            v-if="temporalCoverage[0]"
-            id="validFrom"
-            label="Fassung gültig seit"
-            :value="temporalCoverage[0]"
-          />
-          <MetadataField
-            v-if="temporalCoverage[1]"
-            id="validTo"
-            label="Fassung gültig bis"
-            :value="temporalCoverage[1]"
-          />
-        </div>
+        <NormMetadataFields
+          :abbreviation="metadata.abbreviation"
+          :status="expressionStatus"
+          :valid-from="validityInterval?.from"
+          :valid-to="validityInterval?.to"
+        />
       </div>
       <Tabs value="0" lazy>
         <TabList :pt="tabListStyles">
