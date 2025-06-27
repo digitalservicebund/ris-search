@@ -14594,7 +14594,7 @@ __metadata:
     primeicons: "npm:^7.0.0"
     primevue: "npm:^4.3.5"
     sass-embedded: "npm:^1.89.2"
-    tailwindcss: "npm:^4.1.8"
+    tailwindcss: "npm:^4.1.11"
     typescript: "npm:~5.8.3"
     unplugin-icons: "npm:^22.1.0"
     unplugin-vue-components: "npm:^28.7.0"
@@ -15881,10 +15881,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tailwindcss@npm:4.1.8, tailwindcss@npm:^4.1.6, tailwindcss@npm:^4.1.8":
+"tailwindcss@npm:4.1.8, tailwindcss@npm:^4.1.6":
   version: 4.1.8
   resolution: "tailwindcss@npm:4.1.8"
   checksum: 10c0/a566d049ee313f9c1638fd2a5fe95ae7e40bb35b58e92ed8d7c51880e71dff2a423dd430ff97444e2496c9c77b3f44ad4df48110b11484133019c1a8520d7bce
+  languageName: node
+  linkType: hard
+
+"tailwindcss@npm:^4.1.11":
+  version: 4.1.11
+  resolution: "tailwindcss@npm:4.1.11"
+  checksum: 10c0/e23eed0a0d6557b3aff8ba320b82758988ca67c351ee9b33dfc646e83a64f6eaeca6183dfc97e931f7b2fab46e925090066edd697d2ede3f396c9fdeb4af24c1
   languageName: node
   linkType: hard
 
