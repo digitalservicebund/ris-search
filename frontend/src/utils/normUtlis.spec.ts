@@ -79,7 +79,7 @@ describe("expressionStatus", () => {
   it("returns InForce if legalForce is in force", () => {
     const expression = createLegislationExpression("InForce", "");
     const result = getExpressionStatus(expression);
-    expect(result).toBe(ExpresssionStatus.InForce);
+    expect(result).toBe(ExpressionStatus.InForce);
   });
 
   it("returns future if legalForce is NotInForce and start date is in future", () => {
@@ -89,7 +89,7 @@ describe("expressionStatus", () => {
       "2025-01-01/..",
     );
     const result = getExpressionStatus(expression);
-    expect(result).toBe(ExpresssionStatus.Future);
+    expect(result).toBe(ExpressionStatus.Future);
   });
 
   it("returns historical if legalForce is NotInForce and end date is in past", () => {
@@ -99,7 +99,7 @@ describe("expressionStatus", () => {
       "2024-09-01/2024-12-31",
     );
     const result = getExpressionStatus(expression);
-    expect(result).toBe(ExpresssionStatus.Historcial);
+    expect(result).toBe(ExpressionStatus.Historical);
   });
 
   it("returns undefined if legalForce is NotInForce but current date is in temporalCoverage", () => {

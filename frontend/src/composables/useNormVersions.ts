@@ -12,6 +12,7 @@ import {
   formattedDateToDateTime,
   getCurrentDateInGermany,
 } from "~/utils/dateFormatting";
+import { temporalCoverageToValidityInterval } from "~/utils/normUtils";
 
 interface UseNormVersions {
   status: Ref<AsyncDataRequestStatus>;
@@ -53,7 +54,7 @@ function getNorms(params: {
 }
 
 export function useValidNormVersions(workEli?: string) {
-  const today = getCurrentDateInGermany();
+  const today = getCurrentDateInGermanyFormatted();
   return getNorms({
     eli: workEli,
     temporalCoverageFrom: today,
@@ -63,15 +64,15 @@ export function useValidNormVersions(workEli?: string) {
 
 export const getVersionDates = (version: LegislationWork | undefined) => {
   const temporalCoverage = version?.workExample.temporalCoverage ?? "";
-  return splitTemporalCoverage(temporalCoverage);
+  return temporalCoverageToValidityInterval(temporalCoverage);
 };
 
 export const getVersionStatus = (
   version: LegislationWork | undefined,
 ): VersionStatus => {
-  const [startDate, endDate] = getVersionDates(version);
+  const validityInterval = getVersionDates(version);
   const status = version?.workExample.legislationLegalForce;
-  return getStatusLabel(startDate, endDate, status);
+  return getStatusLabel(validityInterval?.from, validityInterval?.to, status);
 };
 
 export function getStatusLabel(

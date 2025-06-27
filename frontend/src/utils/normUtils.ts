@@ -14,32 +14,32 @@ export function temporalCoverageToValidityInterval(
   return { from: formattedDate(from), to: formattedDate(to) };
 }
 
-export enum ExpresssionStatus {
+export enum ExpressionStatus {
   InForce = "Aktuell gültig",
   Future = "Zukünftig in Kraft",
-  Historcial = "Außer Kraft",
+  Historical = "Außer Kraft",
 }
 
 export function getExpressionStatus(
   expression: LegislationExpression,
-): ExpresssionStatus | undefined {
+): ExpressionStatus | undefined {
   const { from: startDate, to: endDate } =
     temporalCoverageToValidityInterval(expression.temporalCoverage) || {};
   const legalForceStatus = expression.legislationLegalForce;
   if (legalForceStatus === "InForce") {
-    return ExpresssionStatus.InForce;
+    return ExpressionStatus.InForce;
   } else {
     if (
       startDate &&
       formattedDateToDateTime(startDate) > getCurrentDateInGermany().toDate()
     ) {
-      return ExpresssionStatus.Future;
+      return ExpressionStatus.Future;
     }
     if (
       endDate &&
       formattedDateToDateTime(endDate) < getCurrentDateInGermany().toDate()
     ) {
-      return ExpresssionStatus.Historcial;
+      return ExpressionStatus.Historical;
     }
   }
   return undefined;

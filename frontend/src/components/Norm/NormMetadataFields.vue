@@ -4,7 +4,7 @@ import { isPrototypeProfile } from "~/utils/config";
 
 interface Props {
   abbreviation?: string;
-  status?: ExpresssionStatus;
+  status?: ExpressionStatus;
   validFrom?: string;
   validTo?: string;
 }

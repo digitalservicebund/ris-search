@@ -114,15 +114,11 @@ const htmlTitle = computed(() => data.value.articleHeading);
 const topNormLinkText = computed(() => {
   if (!norm.value) return "";
   const baseText = norm.value.name || norm.value.alternateName;
-  const normEntryIntoForceDate = splitTemporalCoverage(
+  const validityInterval = temporalCoverageToValidityInterval(
     norm.value.workExample.temporalCoverage,
   );
-  if (
-    !article.value?.isActive &&
-    normEntryIntoForceDate.length > 0 &&
-    normEntryIntoForceDate[0]
-  ) {
-    return `${baseText} vom ${normEntryIntoForceDate[0]}`;
+  if (!article.value?.isActive && validityInterval?.from) {
+    return `${baseText} vom ${validityInterval.from}`;
   }
   return baseText;
 });

@@ -51,7 +51,7 @@ const showWarningMessage = computed(() => {
       <p class="mt-2">
         <span v-if="currentVersionStatus === 'inForce' && props.futureVersion">
           <span class="ris-body2-bold">
-            Neue Fassung ab {{ getVersionDates(props.futureVersion)[0] }}.
+            Neue Fassung ab {{ getVersionDates(props.futureVersion)?.from }}.
           </span>
           <NuxtLink
             :to="`/norms/${props.futureVersion.workExample.legislationIdentifier}`"
