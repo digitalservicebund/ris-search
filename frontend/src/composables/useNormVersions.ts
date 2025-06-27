@@ -8,10 +8,7 @@ import type {
 import _ from "lodash";
 
 import { computed } from "vue";
-import {
-  formattedDateToDateTime,
-  getCurrentDateInGermany,
-} from "~/utils/dateFormatting";
+import { formattedDateToDateTime } from "~/utils/dateFormatting";
 import { temporalCoverageToValidityInterval } from "~/utils/normUtils";
 
 interface UseNormVersions {
