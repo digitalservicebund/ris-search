@@ -73,8 +73,8 @@ public class NormSearchResponseMapper {
     List<TextMatchSchema> articleHits =
         matchingArticles
             .map(
-                articles ->
-                    articles.stream()
+                hits ->
+                    hits.stream()
                         .map(NormSearchResponseMapper::convertArticleHitToTextMatchSchema)
                         .filter(Objects::nonNull)
                         .toList())

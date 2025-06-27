@@ -15,6 +15,6 @@ public class Words {
   @XmlAttribute(name = "idx-name")
   private String idxName;
 
-  /** base on the configuration only containsType is allowed */
+  /** based on the configuration only containsType is allowed */
   @XmlElement private String contains;
 }
