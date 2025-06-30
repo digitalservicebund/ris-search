@@ -8,7 +8,10 @@ import type {
 import _ from "lodash";
 
 import { computed } from "vue";
-import { formattedDateToDateTime } from "~/utils/dateFormatting";
+import {
+  dateFormattedDDMMYYYY,
+  formattedDateToDateTime,
+} from "~/utils/dateFormatting";
 import { temporalCoverageToValidityInterval } from "~/utils/normUtils";
 
 interface UseNormVersions {
@@ -69,7 +72,11 @@ export const getVersionStatus = (
 ): VersionStatus => {
   const validityInterval = getVersionDates(version);
   const status = version?.workExample.legislationLegalForce;
-  return getStatusLabel(validityInterval?.from, validityInterval?.to, status);
+  return getStatusLabel(
+    dateFormattedDDMMYYYY(validityInterval?.from),
+    dateFormattedDDMMYYYY(validityInterval?.to),
+    status,
+  );
 };
 
 export function getStatusLabel(

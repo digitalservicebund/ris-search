@@ -86,7 +86,7 @@ describe("NormMetadataFields.vue", () => {
     const expectedValidFrom = "01.01.2025";
     const wrapper = mount(NormMetadataFields, {
       props: {
-        validFrom: expectedValidFrom,
+        validFrom: parseDateGermanLocalTime("2025-01-01"),
       },
     });
 
@@ -117,7 +117,7 @@ describe("NormMetadataFields.vue", () => {
     const expectedValidTo = "01.12.2025";
     const wrapper = mount(NormMetadataFields, {
       props: {
-        validTo: expectedValidTo,
+        validTo: parseDateGermanLocalTime("2025-12-01"),
       },
     });
 

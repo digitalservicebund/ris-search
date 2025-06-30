@@ -6,10 +6,16 @@ import timezone from "dayjs/plugin/timezone";
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
+const TIMEZONE_GERMANY = "Europe/Berlin";
+
 export function formattedDate(
   date: string | null | undefined,
 ): string | undefined {
   return date ? dayjs(date).format("DD.MM.YYYY") : undefined;
+}
+
+export function dateFormattedDDMMYYYY(date?: Dayjs): string | undefined {
+  return date ? date.format("DD.MM.YYYY") : undefined;
 }
 
 export function formattedDateToDateTime(date: string): Date {
@@ -17,9 +23,16 @@ export function formattedDateToDateTime(date: string): Date {
   return new Date(year, month - 1, day);
 }
 
+export function parseDateGermanLocalTime(
+  dateString: string,
+): Dayjs | undefined {
+  if (dateString === "") return undefined;
+  return dayjs.tz(dateString, TIMEZONE_GERMANY);
+}
+
 export function isActive(start: string | null, end: string | null): boolean {
   const validDates = start !== null || end !== null;
-  const currentDateInGermany = dayjs().tz("Europe/Berlin").startOf("day");
+  const currentDateInGermany = dayjs().tz(TIMEZONE_GERMANY).startOf("day");
   const hasStarted =
     start === null || !dayjs(start).isAfter(currentDateInGermany);
   const hasNotEnded =
@@ -50,7 +63,7 @@ export function translateLegalForce(
 }
 
 export function getCurrentDateInGermany(): Dayjs {
-  return dayjs().tz("Europe/Berlin");
+  return dayjs().tz(TIMEZONE_GERMANY);
 }
 
 export function getCurrentDateInGermanyFormatted(): string {

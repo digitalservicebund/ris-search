@@ -11,6 +11,7 @@ import {
   temporalCoverageToValidityInterval,
   ExpressionStatus,
 } from "~/utils/normUtils";
+import { dateFormattedDDMMYYYY } from "~/utils/dateFormatting";
 
 const props = defineProps<{
   status: string;
@@ -59,8 +60,8 @@ const tableRowData = computed<TableRowData[]>(() => {
 
     const rowData: TableRowData = {
       id: id,
-      fromDate: validityInterval?.from ?? "-",
-      toDate: validityInterval?.to ?? "-",
+      fromDate: dateFormattedDDMMYYYY(validityInterval?.from) ?? "-",
+      toDate: dateFormattedDDMMYYYY(validityInterval?.to) ?? "-",
       status: status,
       link: link,
       selectable: selectable,

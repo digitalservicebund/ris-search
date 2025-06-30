@@ -124,7 +124,7 @@ const breadcrumbItems: ComputedRef<BreadcrumbItem[]> = computed(() => {
   const isInForce =
     metadata.value?.workExample.legislationLegalForce === "InForce";
   if (!isInForce) {
-    const validityIntervalLabel = `${validityInterval.value?.from ?? ""}-${validityInterval.value?.to ?? ""}`;
+    const validityIntervalLabel = `${dateFormattedDDMMYYYY(validityInterval.value?.from) ?? ""}-${dateFormattedDDMMYYYY(validityInterval.value?.to) ?? ""}`;
     list.push({ route: route.fullPath, label: validityIntervalLabel });
   }
 

@@ -1,20 +1,16 @@
 <script setup lang="ts">
 import MetadataField from "~/components/MetadataField.vue";
 import { isPrototypeProfile } from "~/utils/config";
+import type { Dayjs } from "dayjs";
 
 interface Props {
   abbreviation?: string;
   status?: ExpressionStatus;
-  validFrom?: string;
-  validTo?: string;
+  validFrom?: Dayjs;
+  validTo?: Dayjs;
 }
 
-const {
-  abbreviation,
-  status,
-  validFrom = "-",
-  validTo = "-",
-} = defineProps<Props>();
+defineProps<Props>();
 </script>
 
 <template>
@@ -30,13 +26,13 @@ const {
       v-if="!isPrototypeProfile()"
       id="validFrom"
       label="Gültig ab"
-      :value="validFrom"
+      :value="dateFormattedDDMMYYYY(validFrom) ?? '-'"
     />
     <MetadataField
       v-if="!isPrototypeProfile()"
       id="validTo"
       label="Gültig bis"
-      :value="validTo"
+      :value="dateFormattedDDMMYYYY(validTo) ?? '-'"
     />
   </div>
 </template>
