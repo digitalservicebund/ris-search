@@ -4,11 +4,13 @@ import type { LegislationWork, SearchResult } from "~/types";
 import Column from "primevue/column";
 import DataTable from "primevue/datatable";
 import Badge, { BadgeColor } from "@/components/Badge.vue";
-import type { VersionStatus } from "~/composables/useNormVersions";
-import { getVersionStatus } from "~/composables/useNormVersions";
 import IcBaselineLaunch from "~icons/ic/baseline-launch";
 import _ from "lodash";
-import { temporalCoverageToValidityInterval } from "~/utils/normUtils";
+import {
+  getExpressionStatus,
+  temporalCoverageToValidityInterval,
+  ExpressionStatus,
+} from "~/utils/normUtils";
 
 const props = defineProps<{
   status: string;
@@ -45,7 +47,11 @@ const tableRowData = computed<TableRowData[]>(() => {
     );
 
     const id = index;
-    const status = translateStatus(getVersionStatus(version.item));
+    const expressionStatus = getExpressionStatus(version.item.workExample);
+    const status: Status = {
+      label: expressionStatus ?? "Unbekannt",
+      color: getStatusColor(expressionStatus),
+    };
     const link = `/norms/${version.item.workExample.legislationIdentifier}`;
     const selectable =
       version.item.workExample.legislationIdentifier !==
@@ -64,16 +70,16 @@ const tableRowData = computed<TableRowData[]>(() => {
   });
 });
 
-function translateStatus(status: VersionStatus): Status | undefined {
-  switch (status) {
-    case "inForce":
-      return { label: "Aktuell gültig", color: BadgeColor.GREEN };
-    case "future":
-      return { label: "Zukünftig in Kraft", color: BadgeColor.YELLOW };
-    case "historical":
-      return { label: "Außer Kraft", color: BadgeColor.RED };
+function getStatusColor(expressionStatus?: ExpressionStatus): BadgeColor {
+  switch (expressionStatus) {
+    case ExpressionStatus.InForce:
+      return BadgeColor.GREEN;
+    case ExpressionStatus.Future:
+      return BadgeColor.YELLOW;
+    case ExpressionStatus.Historical:
+      return BadgeColor.RED;
     default:
-      return undefined;
+      return BadgeColor.BLUE;
   }
 }
 
