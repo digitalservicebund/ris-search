@@ -4,16 +4,12 @@
             Main article
         </akn:article>
     </akn:body>
-    <akn:attachments eId="anlagen-1">
-    <akn:attachment eId="anlagen-1_anlage-1">
-        <akn:documentRef eId="anlagen-1_anlage-1_verweis-1"
-                         href="eli/bund/bgbl-1/0000/s1000/2000-01-01/1/deu/2000-01-01/offenestruktur-1.xml"
-                         showAs="offene-struktur"/>
-    </akn:attachment>
-    <akn:attachment eId="anlagen-1_anlage-2">
-        <akn:documentRef eId="anlagen-1_anlage-2_verweis-1"
-                         href="eli/bund/bgbl-1/0000/s1000/2000-01-01/1/deu/2000-01-01/offenestruktur-2.xml"
-                         showAs="offene-struktur"/>
-    </akn:attachment>
+    <akn:attachments eId="anlagen-n1">
+        <akn:attachment eId="anlagen-n1_anlage-n1">
+            <akn:documentRef eId="anlagen-n1_anlage-n1_verweis-n1" href="eli/bund/bgbl-1/0000/s1000/2000-01-01/1/deu/2000-01-01/anlage-regelungstext-1.xml" showAs="/akn/ontology/de/concept/documenttype/bund/anlage-regelungstext"/>
+        </akn:attachment>
+        <akn:attachment eId="anlagen-n1_anlage-n2">
+            <akn:documentRef eId="anlagen-n1_anlage-n2_verweis-n1" href="eli/bund/bgbl-1/0000/s1000/2000-01-01/1/deu/2000-01-01/anlage-regelungstext-2.xml" showAs="/akn/ontology/de/concept/documenttype/bund/anlage-regelungstext"/>
+        </akn:attachment>
     </akn:attachments>
 </akn:akomaNtoso>
