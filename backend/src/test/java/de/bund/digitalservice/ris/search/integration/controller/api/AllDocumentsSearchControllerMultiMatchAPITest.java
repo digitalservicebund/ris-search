@@ -164,6 +164,7 @@ class AllDocumentsSearchControllerMultiMatchAPITest extends ContainersIntegratio
         .andExpect(
             idsContainAll(
                 "caselaw_acrossFields",
+                "caselaw_acrossFields_2",
                 "caselaw_sameField",
                 "caselaw_sameFieldReordered",
                 "norm_1"));
@@ -188,7 +189,7 @@ class AllDocumentsSearchControllerMultiMatchAPITest extends ContainersIntegratio
   }
 
   @ParameterizedTest
-  @ValueSource(strings = {"Mord Totschlag Raub", "Raub Mord Totschlag", "totschlag MORD, raub"})
+  @ValueSource(strings = {"Mord Totschlag Raub", "Raub Mord Totschlag", "Totschlag MORD, raub"})
   @DisplayName("Should return correct results for 3 terms")
   void shouldReturnCorrectResultForThreeTerms(String searchTerm) throws Exception {
     String query = "?searchTerm=%s".formatted(searchTerm);
