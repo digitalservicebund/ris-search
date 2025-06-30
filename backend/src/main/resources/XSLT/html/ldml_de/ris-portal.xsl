@@ -239,15 +239,15 @@
     -->
 
     <!-- Handle individual attachment -->
-    <xsl:template match="akn:attachment[@showAs='offene-struktur']" name="attachment">
-        <div class="attachment">
+    <xsl:template match="akn:attachment" name="attachment">
+        <div class="akn-attachment" id="{@eId}">
             <xsl:apply-templates/>
         </div>
     </xsl:template>
 
     <!-- Handle document references -->
     <xsl:template match="akn:documentRef">
-        <div class="included-document">
+        <div class="included-document" data-source="{@href}">
             <xsl:try>
                 <!-- Include referenced document -->
                 <xsl:apply-templates select="document(@href)/akn:akomaNtoso/*">
@@ -267,16 +267,23 @@
             <xsl:when test="not($is-single-article)">
                 <a href="{concat($dokumentpfad, '/', akn:encode-for-uri($attachment-eId))}">
                     <h2 class="{$einzelvorschrift}">
-                        Anlage <xsl:apply-templates/>
+                        <xsl:apply-templates/>
                     </h2>
                 </a>
             </xsl:when>
             <xsl:otherwise>
                 <h2 class="{$einzelvorschrift}">
-                    Anlage <xsl:apply-templates/>
+                    <xsl:apply-templates/>
                 </h2>
             </xsl:otherwise>
         </xsl:choose>
+    </xsl:template>
+
+    <!-- Insert space between attachment number and "Bezug" -->
+    <xsl:template
+            match="akn:inline[@refersTo='anlageregelungstext-num' and following-sibling::akn:inline[@refersTo='anlageregelungstext-bezug']]">
+        <span id="{@eId}" class="anlageregelungstext-num"><xsl:value-of select="text()"/></span>
+        <xsl:text> </xsl:text>
     </xsl:template>
 
     <!-- Handle attachments without preface (and therefore lacking a title) -->
