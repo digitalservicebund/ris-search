@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { NuxtLoadingIndicator } from "#components";
 import AppFooter from "@/components/AppFooter.vue";
 import ConsentBanner from "~/components/Analytics/ConsentBanner.vue";
 import AppHeader from "@/components/AppHeader.vue";
@@ -13,6 +14,10 @@ const showPublicProfileHeader = isPublic || isPrototype;
 </script>
 
 <template>
+  <NuxtLoadingIndicator
+    :color="false"
+    class="bg-linear-to-r from-blue-900 to-blue-500"
+  />
   <client-only>
     <ConsentBanner />
   </client-only>
