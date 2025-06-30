@@ -48,7 +48,10 @@ const tableRowData = computed<TableRowData[]>(() => {
     );
 
     const id = index;
-    const expressionStatus = getExpressionStatus(version.item.workExample);
+    const expressionStatus = getExpressionStatus(
+      validityInterval?.from,
+      validityInterval?.to,
+    );
     const status: Status = {
       label: expressionStatus ?? "Unbekannt",
       color: getStatusColor(expressionStatus),

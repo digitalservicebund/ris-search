@@ -1,6 +1,6 @@
 import { parseDateGermanLocalTime } from "~/utils/dateFormatting";
-import type { LegislationExpression, LegislationWork } from "~/types";
-import type { Dayjs } from "dayjs";
+import type { LegislationWork } from "~/types";
+import dayjs, { type Dayjs } from "dayjs";
 
 export interface ValidityInterval {
   from?: Dayjs;
@@ -25,28 +25,30 @@ export enum ExpressionStatus {
 }
 
 export function getExpressionStatus(
-  expression: LegislationExpression,
+  startDate?: Dayjs,
+  endDate?: Dayjs,
 ): ExpressionStatus | undefined {
-  const { from: startDate, to: endDate } =
-    temporalCoverageToValidityInterval(expression.temporalCoverage) || {};
-  const legalForceStatus = expression.legislationLegalForce;
+  if (!startDate && !endDate) return undefined;
+
   const currentDate = getCurrentDateInGermany();
+  const start = startDate ?? dayjs(new Date(-8640000000000000)); // Smallest possible date
+  const end = endDate ?? dayjs(new Date(8640000000000000)); // largest possible date
 
   if (
-    legalForceStatus === "InForce" ||
-    (startDate &&
-      startDate <= currentDate &&
-      (!endDate || endDate >= currentDate))
+    (start.isBefore(end, "day") || start.isSame(end, "day")) &&
+    end.isBefore(currentDate, "day")
+  ) {
+    return ExpressionStatus.Historical;
+  } else if (
+    (start.isBefore(currentDate, "day") || start.isSame(currentDate, "day")) &&
+    (end.isSame(currentDate, "day") || end.isAfter(currentDate, "day"))
   ) {
     return ExpressionStatus.InForce;
-  }
-
-  if (startDate && startDate.isAfter(currentDate, "day")) {
+  } else if (
+    start.isAfter(currentDate, "day") &&
+    (end.isAfter(start, "day") || end.isSame(startDate, "day"))
+  ) {
     return ExpressionStatus.Future;
-  }
-
-  if (endDate && endDate.isBefore(currentDate, "day")) {
-    return ExpressionStatus.Historical;
   }
 
   return undefined;

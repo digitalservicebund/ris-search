@@ -3,7 +3,6 @@ import {
   getExpressionStatus,
   temporalCoverageToValidityInterval,
 } from "~/utils/normUtils";
-import type { LegalForceStatus, LegislationExpression } from "~/types";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
@@ -46,22 +45,6 @@ describe("temporalCoverageToValidityInterval", () => {
   });
 });
 
-function createLegislationExpression(
-  legislationLegalForce: LegalForceStatus,
-  temporalCoverage: string,
-): LegislationExpression {
-  return {
-    "@type": "Legislation",
-    "@id": "foo",
-    legislationIdentifier: "foo",
-    temporalCoverage: temporalCoverage,
-    legislationLegalForce: legislationLegalForce,
-    encoding: [],
-    tableOfContents: [],
-    hasPart: [],
-  };
-}
-
 function setCurrentDate(dateTimeString: string) {
   const currentDate = dayjs
     .tz(dateTimeString, "YYYY-MM-DD HH:mm", "Europe/Berlin")
@@ -78,45 +61,58 @@ describe("expressionStatus", () => {
     vi.useRealTimers();
   });
 
-  it("returns InForce if legalForce is in force", () => {
-    const expression = createLegislationExpression("InForce", "");
-    const result = getExpressionStatus(expression);
+  it("returns InForce if current date is in validity interval", () => {
+    setCurrentDate("2025-01-03 00:00");
+    const result = getExpressionStatus(
+      parseDateGermanLocalTime("2025-01-01"),
+      parseDateGermanLocalTime("2025-01-05"),
+    );
     expect(result).toBe(ExpressionStatus.InForce);
   });
 
-  it("returns InForce if legalForce is NotInForce but current date is in temporalCoverage", () => {
+  it("returns InForce if current date on lower boundary of validity interval", () => {
     setCurrentDate("2025-01-01 00:00");
-    const expression = createLegislationExpression(
-      "NotInForce",
-      "2025-01-01/2025-01-01",
+    const result = getExpressionStatus(
+      parseDateGermanLocalTime("2025-01-01"),
+      parseDateGermanLocalTime("2025-01-05"),
     );
-    const result = getExpressionStatus(expression);
     expect(result).toBe(ExpressionStatus.InForce);
   });
 
-  it("returns future if legalForce is NotInForce and start date is in future", () => {
-    setCurrentDate("2024-12-31 23:59");
-    const expression = createLegislationExpression(
-      "NotInForce",
-      "2025-01-01/..",
+  it("returns InForce if current date on upper boundary of validity interval", () => {
+    setCurrentDate("2025-01-05 00:00");
+    const result = getExpressionStatus(
+      parseDateGermanLocalTime("2025-01-01"),
+      parseDateGermanLocalTime("2025-01-05"),
     );
-    const result = getExpressionStatus(expression);
+    expect(result).toBe(ExpressionStatus.InForce);
+  });
+
+  it("returns future if start date is after current date", () => {
+    setCurrentDate("2024-12-31 23:59");
+    const result = getExpressionStatus(parseDateGermanLocalTime("2025-01-01"));
     expect(result).toBe(ExpressionStatus.Future);
   });
 
-  it("returns historical if legalForce is NotInForce and end date is in past", () => {
+  it("returns historical if end date is before current date", () => {
     setCurrentDate("2025-01-01 00:00");
-    const expression = createLegislationExpression(
-      "NotInForce",
-      "2024-09-01/2024-12-31",
+    const result = getExpressionStatus(
+      undefined,
+      parseDateGermanLocalTime("2024-12-31"),
     );
-    const result = getExpressionStatus(expression);
     expect(result).toBe(ExpressionStatus.Historical);
   });
 
-  it("returns undefined if legalForce is partiallyInForce", () => {
-    const expression = createLegislationExpression("PartiallyInForce", "");
-    const result = getExpressionStatus(expression);
+  it("returns undefined if start and end date are undefined", () => {
+    const result = getExpressionStatus();
+    expect(result).toBeUndefined();
+  });
+
+  it("returns undefined if start date is after end date", () => {
+    const result = getExpressionStatus(
+      parseDateGermanLocalTime("2025-01-01"),
+      parseDateGermanLocalTime("2024-12-31"),
+    );
     expect(result).toBeUndefined();
   });
 });

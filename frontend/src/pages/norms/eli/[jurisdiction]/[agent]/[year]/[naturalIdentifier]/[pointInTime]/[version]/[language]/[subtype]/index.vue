@@ -90,12 +90,6 @@ const tableOfContents: Ref<TreeNode[]> = computed(() => {
   );
 });
 
-const expressionStatus = computed(() => {
-  if (metadata.value?.workExample)
-    return getExpressionStatus(metadata.value?.workExample);
-  return undefined;
-});
-
 const validityInterval = computed(() =>
   isPrototypeProfile()
     ? undefined
@@ -103,6 +97,15 @@ const validityInterval = computed(() =>
         metadata.value?.workExample.temporalCoverage,
       ),
 );
+
+const expressionStatus = computed(() => {
+  if (metadata.value?.workExample && validityInterval)
+    return getExpressionStatus(
+      validityInterval.value?.from,
+      validityInterval.value?.to,
+    );
+  return undefined;
+});
 
 const { selectedEntry, vObserveElements } = useIntersectionObserver();
 
