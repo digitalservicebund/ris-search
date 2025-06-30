@@ -82,7 +82,7 @@
     </akn:preamble>
     <akn:body eId="hauptteil-1" GUID="2bd1d0a2-ff72-42af-b9ab-2f30cc8d7539">
       <!-- Basic HTML elements -->
-      <akn:article eId="hauptteil-1_para-1" GUID="87cd6b3a-d198-49c3-a02f-6adfd12940cb" period="#geltungszeitgr-1">
+      <akn:article eId="hauptteil-1_para-1" GUID="87cd6b3a-d198-49c3-a02f-6adfd12940cb" period="#meta-1_geltzeiten-1_geltungszeitgr-1">
         <akn:num eId="hauptteil-1_para-1_bezeichnung-1" GUID="0a0885f1-5bf1-476e-b12b-ce8243a47ddb">
           <akn:marker eId="hauptteil-1_para-1_bezeichnung-1_zaehlbez-1" GUID="1e35f3b3-ad84-4c5a-9804-092454853b84" name="1"></akn:marker> § 1 </akn:num>
         <akn:heading eId="hauptteil-1_para-1_überschrift-1" GUID="519116f1-968a-4eaa-a89e-71258285844f"> Basic HTML Elements </akn:heading>
@@ -102,7 +102,7 @@
         </akn:paragraph>
       </akn:article>
 
-      <akn:article eId="hauptteil-1_para-2" GUID="ee1dc8ec-3811-4f7e-9836-144e98dd9e99" period="#geltungszeitgr-1">
+      <akn:article eId="hauptteil-1_para-2" GUID="ee1dc8ec-3811-4f7e-9836-144e98dd9e99" period="#meta-1_geltzeiten-1_geltungszeitgr-1">
         <akn:num eId="hauptteil-1_para-2_bezeichnung-1" GUID="9828d548-409e-40f2-be0b-8a1add5286e4">
           <akn:marker eId="hauptteil-1_para-2_bezeichnung-1_zaehlbez-1" GUID="814565ce-117e-4d5e-9cf0-e8dca7b3a1a6" name="1"></akn:marker> § 2 </akn:num>
         <akn:heading eId="hauptteil-1_para-2_überschrift-1" GUID="22237c8d-544f-48ba-9013-6c7e81a5893c"> Lists </akn:heading>
@@ -174,7 +174,7 @@
         </akn:paragraph>
       </akn:article>
 
-      <akn:article eId="hauptteil-1_para-3" GUID="a783fdb3-0751-4389-a42b-8ad622389c6b" period="#geltungszeitgr-1">
+      <akn:article eId="hauptteil-1_para-3" GUID="a783fdb3-0751-4389-a42b-8ad622389c6b" period="#meta-1_geltzeiten-1_geltungszeitgr-1">
         <akn:num eId="hauptteil-1_para-3_bezeichnung-1" GUID="cc26cb33-5156-45c0-bc1c-3df83a438915">
           <akn:marker eId="hauptteil-1_para-3_bezeichnung-1_zaehlbez-1" GUID="86b371b7-c590-4680-b5b3-59e5ecc15840" name="1"></akn:marker> § 3 </akn:num>
         <akn:heading eId="hauptteil-1_para-3_überschrift-1" GUID="eb2d8e15-0394-4ea4-b867-a41d14693f08"> Tables </akn:heading>
@@ -229,7 +229,7 @@
         </akn:paragraph>
       </akn:article>
 
-      <akn:article eId="hauptteil-1_para-4" GUID="a59598fa-b139-41cc-ae08-12fc4aebf11a" period="#geltungszeitgr-1">
+      <akn:article eId="hauptteil-1_para-4" GUID="a59598fa-b139-41cc-ae08-12fc4aebf11a" period="#meta-1_geltzeiten-1_geltungszeitgr-1">
         <akn:num eId="hauptteil-1_para-4_bezeichnung-1" GUID="5af34ff6-0a79-4665-a227-e765c04028e9">
           <akn:marker eId="hauptteil-1_para-4_bezeichnung-1_zaehlbez-1" GUID="c1431277-d2db-4afe-95d1-1abe536341b2" name="1"></akn:marker> § 4 </akn:num>
         <akn:heading eId="hauptteil-1_para-4_überschrift-1" GUID="d065ecca-2eab-4e12-92e4-64e7050e7912"> Modifications </akn:heading>
@@ -284,7 +284,7 @@
           </akn:content>
         </akn:paragraph>
       </akn:article>
-      <akn:article eId="hauptteil-1_para-5" GUID="a59598fa-b139-41cc-ae08-12fc4aebf11b" period="#geltungszeitgr-1">
+      <akn:article eId="hauptteil-1_para-5" GUID="a59598fa-b139-41cc-ae08-12fc4aebf11b" period="#meta-1_geltzeiten-1_geltungszeitgr-1">
         <akn:num eId="hauptteil-1_para-5_bezeichnung-1" GUID="5af34ff6-0a79-4665-a227-e765c04028f0">
           § 5
         </akn:num>

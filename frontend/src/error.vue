@@ -40,7 +40,7 @@ useHead({ title: pageTitle.value });
 
 <template>
   <NuxtLayout>
-    <div class="pt-48 pb-24">
+    <div class="container pt-48 pb-24">
       <template v-if="isNotFoundError">
         <p class="ris-heading2-regular inline-block font-semibold">
           Diese Seite existiert nicht

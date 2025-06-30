@@ -892,14 +892,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@digitalservicebund/ris-ui@npm:^3.9.0":
-  version: 3.9.0
-  resolution: "@digitalservicebund/ris-ui@npm:3.9.0"
+"@digitalservicebund/ris-ui@npm:^3.11.0":
+  version: 3.11.0
+  resolution: "@digitalservicebund/ris-ui@npm:3.11.0"
   peerDependencies:
     primevue: ^4.0.0
     tailwindcss: ^4.0.0
     vue: ^3.0.0
-  checksum: 10c0/6a1938cf10857ac7a02a63c14d246ea3dbb76a5915b1352c73c6628fc1955202cc6bcfbe97c084f28eb86a031d3006ee075d2d0ef08a3a06424624557d2611d5
+  checksum: 10c0/2e63282325490a623c6da2a6d8ef590fbffeb7aef004b0d5ea906d9d725dab0e5eb137f5d74edf4ab76cdcba86426fa0275b60f204c302017197ae888d9dd65e
   languageName: node
   linkType: hard
 
@@ -4474,10 +4474,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/lodash@npm:^4.17.17":
-  version: 4.17.17
-  resolution: "@types/lodash@npm:4.17.17"
-  checksum: 10c0/8e75df02a15f04d4322c5a503e4efd0e7a92470570ce80f17e9f11ce2b1f1a7c994009c9bcff39f07e0f9ffd8ccaff09b3598997c404b801abd5a7eee5a639dc
+"@types/lodash@npm:^4.17.18":
+  version: 4.17.18
+  resolution: "@types/lodash@npm:4.17.18"
+  checksum: 10c0/d25f86941990403d59dcaae42b42fc9fef55a0a7f398790517e7189300183e425a94127594cbeaf9b5fcdc4f6c2b285e34f4301fb56c92f81ccd8505a41ab5f5
   languageName: node
   linkType: hard
 
@@ -13799,9 +13799,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prettier-plugin-tailwindcss@npm:^0.6.12":
-  version: 0.6.12
-  resolution: "prettier-plugin-tailwindcss@npm:0.6.12"
+"prettier-plugin-tailwindcss@npm:^0.6.13":
+  version: 0.6.13
+  resolution: "prettier-plugin-tailwindcss@npm:0.6.13"
   peerDependencies:
     "@ianvs/prettier-plugin-sort-imports": "*"
     "@prettier/plugin-pug": "*"
@@ -13853,7 +13853,7 @@ __metadata:
       optional: true
     prettier-plugin-svelte:
       optional: true
-  checksum: 10c0/fc3428fa4395483c9ddfc356929d9a3e43ae1b34a9696a0ba47219295111105c93b5021ceb40fea6ee893b79a2cce23cf685868dce52701ca11269900431c535
+  checksum: 10c0/88e8ceef24a88850c751268e25ab628df91094ab5501fd39b473b8c3d6c025b871a792f9ce00a069b0ebb19bfb9b7ce85d02672e158899c541d888aee0df2c6f
   languageName: node
   linkType: hard
 
@@ -14535,7 +14535,7 @@ __metadata:
   resolution: "ris-portal-frontend@workspace:."
   dependencies:
     "@axe-core/playwright": "npm:^4.10.2"
-    "@digitalservicebund/ris-ui": "npm:^3.9.0"
+    "@digitalservicebund/ris-ui": "npm:^3.11.0"
     "@eslint/plugin-kit": "npm:0.3.1"
     "@hyperdx/lucene": "npm:^3.1.1"
     "@iconify-json/ic": "npm:^1.2.2"
@@ -14560,7 +14560,7 @@ __metadata:
     "@types/dompurify": "npm:^3.2.0"
     "@types/js-cookie": "npm:^3.0.6"
     "@types/jsdom": "npm:^21.1.7"
-    "@types/lodash": "npm:^4.17.17"
+    "@types/lodash": "npm:^4.17.18"
     "@types/node": "npm:^22.15.31"
     "@unhead/vue": "npm:^2.0.10"
     "@vitejs/plugin-vue": "npm:^5.2.4"
@@ -14590,11 +14590,11 @@ __metadata:
     postcss-import: "npm:^16.1.0"
     posthog-js: "npm:^1.250.2"
     prettier: "npm:^3.5.3"
-    prettier-plugin-tailwindcss: "npm:^0.6.12"
+    prettier-plugin-tailwindcss: "npm:^0.6.13"
     primeicons: "npm:^7.0.0"
     primevue: "npm:^4.3.5"
     sass-embedded: "npm:^1.89.2"
-    tailwindcss: "npm:^4.1.8"
+    tailwindcss: "npm:^4.1.11"
     typescript: "npm:~5.8.3"
     unplugin-icons: "npm:^22.1.0"
     unplugin-vue-components: "npm:^28.7.0"
@@ -15881,10 +15881,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tailwindcss@npm:4.1.8, tailwindcss@npm:^4.1.6, tailwindcss@npm:^4.1.8":
+"tailwindcss@npm:4.1.8, tailwindcss@npm:^4.1.6":
   version: 4.1.8
   resolution: "tailwindcss@npm:4.1.8"
   checksum: 10c0/a566d049ee313f9c1638fd2a5fe95ae7e40bb35b58e92ed8d7c51880e71dff2a423dd430ff97444e2496c9c77b3f44ad4df48110b11484133019c1a8520d7bce
+  languageName: node
+  linkType: hard
+
+"tailwindcss@npm:^4.1.11":
+  version: 4.1.11
+  resolution: "tailwindcss@npm:4.1.11"
+  checksum: 10c0/e23eed0a0d6557b3aff8ba320b82758988ca67c351ee9b33dfc646e83a64f6eaeca6183dfc97e931f7b2fab46e925090066edd697d2ede3f396c9fdeb4af24c1
   languageName: node
   linkType: hard
 

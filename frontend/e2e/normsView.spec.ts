@@ -209,3 +209,46 @@ test("can view images", async ({ page }) => {
     await page.getByRole("img", { name: "Beispielbild" }).isVisible();
   });
 });
+
+test.use({
+  permissions: ["clipboard-write", "clipboard-read"],
+});
+
+test("can copy and use link to work (changing content)", async ({ page }) => {
+  await page.goto(
+    "/norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu/regelungstext-1",
+    { waitUntil: "networkidle" },
+  );
+  const button = page.getByRole("link", {
+    name: "Link zur jeweils gültigen Fassung",
+  });
+  await button.hover();
+
+  await expect(
+    page.getByRole("tooltip", { name: "Link zur jeweils gültigen Fassung" }),
+  ).toBeVisible();
+
+  let clipboardContents: string;
+
+  await test.step("can copy the link", async () => {
+    await button.click();
+
+    await expect(page.getByText("Kopiert!")).toBeVisible();
+    clipboardContents = await page.evaluate(() => {
+      return navigator.clipboard.readText();
+    });
+    expect(
+      clipboardContents.endsWith(
+        "/norms/eli/bund/bgbl-1/2024/383/regelungstext-1",
+        // note the omission of 2024-12-19/1/deu/
+      ),
+    ).toBe(true);
+  });
+
+  await test.step("can use the copied link to get back to the original URL", async () => {
+    await page.goto(clipboardContents);
+    await page.waitForURL(
+      "/norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu/regelungstext-1",
+    );
+  });
+});

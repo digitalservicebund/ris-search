@@ -181,7 +181,7 @@ class XsltTransformerServiceTest {
     var html = service.transformArticle(xml, "hauptteil-1_para-1", RESOURCES_BASE_PATH);
     var expectedArticle =
         """
-         <article id="hauptteil-1_para-1" data-period="#geltungszeitgr-1">
+         <article id="hauptteil-1_para-1" data-period="#meta-1_geltzeiten-1_geltungszeitgr-1">
             <h2 class="einzelvorschrift">
               <span class="akn-num" id="hauptteil-1_para-1_bezeichnung-1" data-marker="1">
                 § 1

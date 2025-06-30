@@ -1,6 +1,6 @@
 import type { LegislationWork, SearchResult } from "~/types";
 import _ from "lodash";
-import { getCurrentDateInGermany } from "~/utils/dateFormatting";
+import { getCurrentDateInGermanyFormatted } from "~/utils/dateFormatting";
 
 export function getMostRelevantExpression(
   list: SearchResult<LegislationWork>[],
@@ -21,7 +21,7 @@ export function getMostRelevantExpression(
     }
     return activeExpressions[0].legislationIdentifier;
   }
-  const referenceDate = getCurrentDateInGermany();
+  const referenceDate = getCurrentDateInGermanyFormatted();
   const [future, past] = _.partition(
     expressions,
     (item) => item.temporalCoverage >= referenceDate,

@@ -10,7 +10,7 @@ import SimpleSearchInput from "@/components/Search/SimpleSearch/SimpleSearchInpu
 import SortSelect from "@/components/Search/SortSelect.vue";
 import { DocumentKind } from "@/types";
 import { buildResultCountString } from "~/utils/paginationUtils";
-import { getCurrentDateInGermany } from "~/utils/dateFormatting";
+import { getCurrentDateInGermanyFormatted } from "~/utils/dateFormatting";
 import Message from "primevue/message";
 import type { Page } from "~/components/Pagination/Pagination";
 import {
@@ -25,7 +25,7 @@ const values = storeToRefs(store);
 const params: ComputedRef<SearchEndpointParams> = computed(() =>
   convertParams({
     ...values.params.value,
-    temporalCoverage: getCurrentDateInGermany(),
+    temporalCoverage: getCurrentDateInGermanyFormatted(),
   }),
 );
 

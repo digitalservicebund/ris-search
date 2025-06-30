@@ -6,11 +6,6 @@ import type { LegislationWork } from "@/types";
 import { useFetchNormContent } from "./useNormData";
 import { useRoute } from "#app";
 import { useIntersectionObserver } from "@/composables/useIntersectionObserver";
-import MetadataField from "@/components/MetadataField.vue";
-import {
-  splitTemporalCoverage,
-  translateLegalForce,
-} from "@/utils/dateFormatting";
 import RisBreadcrumb from "@/components/Ris/RisBreadcrumb.vue";
 import Accordion from "@/components/Accordion.vue";
 import { getNormBreadcrumbTitle } from "./titles";
@@ -36,13 +31,24 @@ import {
 import { isPrototypeProfile } from "~/utils/config";
 import ContentWrapper from "~/components/CustomLayouts/ContentWrapper.vue";
 import NormVersionList from "~/components/Norm/NormVersionList.vue";
-import VersionWarningMessage from "~/components/Norm/VersionWarningMessage.vue";
+import NormVersionWarning from "~/components/Norm/NormVersionWarning.vue";
 import type { BreadcrumbItem } from "~/components/Ris/RisBreadcrumb.vue";
+import { useNormVersions } from "~/composables/useNormVersions";
+import VersionsTeaser from "~/components/Norm/VersionsTeaser.vue";
+import Toast from "primevue/toast";
+import { useNormActions } from "./useNormActions";
+import NormMetadataFields from "~/components/Norm/NormMetadataFields.vue";
+import {
+  getExpressionStatus,
+  getManifestationUrl,
+  temporalCoverageToValidityInterval,
+} from "~/utils/normUtils";
 
 definePageMeta({
   // note: this is an expression ELI that additionally specifies the subtype component of a manifestation ELI
   alias:
     "/eli/:jurisdiction/:agent/:year/:naturalIdentifier/:pointInTime/:version/:language/:subtype",
+  layout: "base", // use "base" layout to allow for full-width tab backgrounds
 });
 
 const route = useRoute();
@@ -66,15 +72,9 @@ const htmlParts = computed(() => data.value.htmlParts);
 
 const backendURL = useBackendURL();
 
-function getManifestationUrl(format: string) {
-  const encoding = metadata.value?.workExample?.encoding.find(
-    (e) => e.encodingFormat === format,
-  );
-  return encoding?.contentUrl ? backendURL + encoding.contentUrl : undefined;
-}
-
-const xmlUrl = computed(() => getManifestationUrl("application/xml"));
-const zipUrl = computed(() => getManifestationUrl("application/zip"));
+const zipUrl = computed(() =>
+  getManifestationUrl(metadata.value, backendURL, "application/zip"),
+);
 
 if (error.value) {
   showError(error.value);
@@ -90,13 +90,18 @@ const tableOfContents: Ref<TreeNode[]> = computed(() => {
   );
 });
 
-const translatedLegalForce = computed(() =>
-  translateLegalForce(metadata.value?.workExample.legislationLegalForce),
-);
-const temporalCoverage = computed(() =>
+const expressionStatus = computed(() => {
+  if (metadata.value?.workExample)
+    return getExpressionStatus(metadata.value?.workExample);
+  return undefined;
+});
+
+const validityInterval = computed(() =>
   isPrototypeProfile()
-    ? []
-    : splitTemporalCoverage(metadata.value?.workExample.temporalCoverage),
+    ? undefined
+    : temporalCoverageToValidityInterval(
+        metadata.value?.workExample.temporalCoverage,
+      ),
 );
 
 const { selectedEntry, vObserveElements } = useIntersectionObserver();
@@ -119,55 +124,38 @@ const breadcrumbItems: ComputedRef<BreadcrumbItem[]> = computed(() => {
   const isInForce =
     metadata.value?.workExample.legislationLegalForce === "InForce";
   if (!isInForce) {
-    const temporalCoverageLabel = temporalCoverage.value?.join("–");
-    list.push({ route: route.fullPath, label: temporalCoverageLabel });
+    const validityIntervalLabel = `${validityInterval.value?.from ?? ""}-${validityInterval.value?.to ?? ""}`;
+    list.push({ route: route.fullPath, label: validityIntervalLabel });
   }
 
   return list;
 });
+
+const { actions } = useNormActions(metadata);
 </script>
 
 <template>
   <ContentWrapper border>
     <div v-if="status == 'pending'">Lade ...</div>
     <div v-if="!!metadata">
-      <div class="flex items-center gap-8 print:hidden">
-        <RisBreadcrumb type="norm" :items="breadcrumbItems" class="grow" />
-        <FileActionsMenu :xml-url="xmlUrl" />
-      </div>
-      <NormHeadingGroup :metadata="metadata" :html-parts="htmlParts" />
-
-      <VersionWarningMessage
-        v-if="normVersionsStatus === 'success'"
-        :versions="normVersions"
-        :current-expression="metadata.workExample.legislationIdentifier"
-      />
-      <div class="mt-8 mb-48 flex flex-wrap items-end gap-24">
-        <MetadataField
-          v-if="metadata.abbreviation"
-          id="abbreviation"
-          label="Abkürzung"
-          :value="metadata.abbreviation"
+      <div class="container">
+        <div class="flex items-center gap-8 print:hidden">
+          <RisBreadcrumb type="norm" :items="breadcrumbItems" class="grow" />
+          <client-only> <ActionsMenu :items="actions" /></client-only>
+        </div>
+        <NormHeadingGroup :metadata="metadata" :html-parts="htmlParts" />
+        <NormVersionWarning
+          v-if="normVersionsStatus === 'success'"
+          :versions="normVersions"
+          :current-version="metadata"
         />
-        <MetadataField
-          id="status"
-          label="Status"
-          :value="translatedLegalForce"
-        />
-        <MetadataField
-          v-if="temporalCoverage[0]"
-          id="validFrom"
-          label="Fassung gültig seit"
-          :value="temporalCoverage[0]"
-        />
-        <MetadataField
-          v-if="temporalCoverage[1]"
-          id="validTo"
-          label="Fassung gültig bis"
-          :value="temporalCoverage[1]"
+        <NormMetadataFields
+          :abbreviation="metadata.abbreviation"
+          :status="expressionStatus"
+          :valid-from="validityInterval?.from"
+          :valid-to="validityInterval?.to"
         />
       </div>
-
       <Tabs value="0" lazy>
         <TabList :pt="tabListStyles">
           <Tab
@@ -190,7 +178,6 @@ const breadcrumbItems: ComputedRef<BreadcrumbItem[]> = computed(() => {
             Details
           </Tab>
           <Tab
-            v-if="!isPrototypeProfile()"
             data-attr="norm-versions-tab"
             class="flex items-center gap-8"
             :pt="tabStyles"
@@ -202,7 +189,7 @@ const breadcrumbItems: ComputedRef<BreadcrumbItem[]> = computed(() => {
         </TabList>
         <TabPanels>
           <TabPanel value="0" :pt="tabPanelStyles">
-            <TableOfContentsLayout>
+            <TableOfContentsLayout class="container">
               <template #content>
                 <IncompleteDataMessage />
                 <Accordion
@@ -224,7 +211,7 @@ const breadcrumbItems: ComputedRef<BreadcrumbItem[]> = computed(() => {
             </TableOfContentsLayout>
           </TabPanel>
           <TabPanel value="1" :pt="tabPanelStyles" class="pt-24 pb-80">
-            <section aria-labelledby="detailsTabPanelTitle">
+            <section aria-labelledby="detailsTabPanelTitle" class="container">
               <h2 id="detailsTabPanelTitle" class="ris-heading3-bold my-24">
                 Details
               </h2>
@@ -273,19 +260,21 @@ const breadcrumbItems: ComputedRef<BreadcrumbItem[]> = computed(() => {
               </Properties>
             </section>
           </TabPanel>
-          <TabPanel
-            v-if="!isPrototypeProfile()"
-            value="2"
-            :pt="tabPanelStyles"
-            class="pt-24 pb-80"
-          >
+          <TabPanel value="2" :pt="tabPanelStyles" class="pt-24 pb-80">
             <NormVersionList
+              v-if="!isPrototypeProfile()"
+              class="container"
               :status="normVersionsStatus"
+              :current-legislation-identifier="
+                metadata.workExample.legislationIdentifier
+              "
               :versions="normVersions"
             />
+            <VersionsTeaser v-else />
           </TabPanel>
         </TabPanels>
       </Tabs>
     </div>
   </ContentWrapper>
+  <Toast />
 </template>

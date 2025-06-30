@@ -4,6 +4,7 @@ import Index from "./index.vue";
 import type { LegislationWork } from "~/types";
 import type { VueWrapper } from "@vue/test-utils";
 import type { NormContent } from "~/pages/norms/eli/[jurisdiction]/[agent]/[year]/[naturalIdentifier]/[pointInTime]/[version]/[language]/[subtype]/useNormData";
+import NormMetadataFields from "~/components/Norm/NormMetadataFields.vue";
 
 const mocks = vi.hoisted(() => {
   return {
@@ -18,6 +19,10 @@ vi.mock("./useNormData", () => {
     useFetchNormArticleContent: mocks.useFetchNormArticleContent,
   };
 });
+
+vi.mock("./useNormActions", () => ({
+  useNormActions: () => ({ actions: ref([{ key: "mockAction" }]) }),
+}));
 
 const { useHeadMock } = vi.hoisted(() => {
   return {
@@ -104,7 +109,7 @@ function mountComponent() {
         RisExpandableText: {
           template: '<div class="mock-expandable-text"><slot /></div>',
         },
-        FileActionsMenu: true,
+        ActionsMenu: true,
         VersionWarningMessage: true,
       },
     },
@@ -199,15 +204,13 @@ describe("index.vue", () => {
     );
   });
 
-  it("shows the FileActionsMenu with correct XML link", async () => {
+  it("passes actions to the ActionsMenu", async () => {
     mockMetadata();
     const wrapper = await mountComponent();
     const stub = wrapper.getComponent(
-      "file-actions-menu-stub",
+      "actions-menu-stub",
     ) as unknown as StubbedComponent;
-    expect(stub.props("xmlUrl")).toBe(
-      "/api/eli/work-LEG12345/expression-LEG12345/manifestation-LEG12345/regelungstext-1.xml",
-    );
+    expect(stub.props("items")).toEqual([{ key: "mockAction" }]);
   });
 
   it("shows metadata", async () => {
@@ -257,13 +260,9 @@ describe("index.vue", () => {
     });
   });
 
-  it("hides validFrom and validTo metadata only on prototype", async () => {
-    vi.mock("~/utils/config", () => ({
-      isPrototypeProfile: () => true,
-    }));
+  it("renders metadata fields", async () => {
     mockMetadata();
     const wrapper = await mountComponent();
-    expect(wrapper.find("#validFrom").exists()).toBeFalsy();
-    expect(wrapper.find("#validTo").exists()).toBeFalsy();
+    expect(wrapper.findComponent(NormMetadataFields).exists()).toBeTruthy();
   });
 });

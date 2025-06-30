@@ -16,11 +16,14 @@ export const tabStyles: TabPassThroughOptions = {
   },
 };
 export const tabPanelStyles: TabPanelPassThroughOptions = {
-  root: { class: "py-24 min-h-96 portal-fullwidth-white print:py-0" },
+  root: { class: "py-24 min-h-96 bg-white print:py-0" },
 };
 export const tabListStyles: TabListPassThroughOptions = {
-  tabList: {
+  content: {
     class:
-      "flex relative before:absolute before:left-[50%] before:-translate-x-1/2 before:w-screen before:h-px before:bottom-0 before:bg-gray-600 print:hidden",
+      "relative before:absolute before:left-[50%] before:-translate-x-1/2 before:w-full before:h-px before:bottom-0 before:bg-gray-600 print:hidden",
+  },
+  tabList: {
+    class: "flex container",
   },
 };

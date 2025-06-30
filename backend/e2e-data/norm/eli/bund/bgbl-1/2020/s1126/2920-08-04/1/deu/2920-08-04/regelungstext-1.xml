@@ -36,10 +36,15 @@
             <akn:lifecycle GUID="b4c5d6e7-f8a9-4890-abcd-3456abcde123" eId="meta-1_lebzykl-1" source="attributsemantik-noch-undefiniert">
                 <akn:eventRef GUID="c5d6e7f8-a9b0-4890-abcd-4567abcde123" date="2920-08-04" eId="meta-1_lebzykl-1_ereignis-1" refersTo="ausfertigung" source="attributsemantik-noch-undefiniert" type="generation"/>
                 <akn:eventRef GUID="d6e7f8a9-b0c1-4890-abcd-5678abcde123" date="2020-08-09" eId="meta-1_lebzykl-1_ereignis-2" refersTo="inkrafttreten" source="attributsemantik-noch-undefiniert" type="generation"/>
+                <akn:eventRef GUID="c5d6e7f8-a9b0-4890-abcd-4567abcde223" date="9999-99-99" eId="meta-1_lebzykl-1_ereignis-3" refersTo="ausfertigung" source="attributsemantik-noch-undefiniert" type="generation"/>
+                <akn:eventRef GUID="d6e7f8a9-b0c2-4890-abcd-5678abcde123" date="2920-08-04" eId="meta-1_lebzykl-1_ereignis-4" refersTo="inkrafttreten" source="attributsemantik-noch-undefiniert" type="generation"/>
             </akn:lifecycle>
             <akn:temporalData GUID="e7f8a9b0-c1d2-4890-abcd-6789abcde123" eId="meta-1_geltzeiten-1" source="attributsemantik-noch-undefiniert">
                 <akn:temporalGroup GUID="f8a9b0c1-d2e3-4890-abcd-7890abcde123" eId="meta-1_geltzeiten-1_geltungszeitgr-1">
                     <akn:timeInterval GUID="a9b0c1d2-e3f4-4890-abcd-8901abcde123" eId="meta-1_geltzeiten-1_geltungszeitgr-1_gelzeitintervall-1" refersTo="geltungszeit" start="#meta-1_lebzykl-1_ereignis-2"/>
+                </akn:temporalGroup>
+                <akn:temporalGroup GUID="f8a9b0c2-d2e3-4890-abcd-7890abcde123" eId="meta-1_geltzeiten-1_geltungszeitgr-2">
+                    <akn:timeInterval GUID="a9b0c2d2-e3f4-4890-abcd-8901abcde123" eId="meta-1_geltzeiten-1_geltungszeitgr-2_gelzeitintervall-1" refersTo="geltungszeit" start="#meta-1_lebzykl-1_ereignis-4"/>
                 </akn:temporalGroup>
             </akn:temporalData>
             <akn:proprietary GUID="b0c1d2e3-f4a5-4890-abcd-901abcde1234" eId="meta-1_proprietary-1" source="attributsemantik-noch-undefiniert">
@@ -52,7 +57,7 @@
             <akn:longTitle GUID="d2e3f4a5-b6c7-4890-abcd-1234abcde123" eId="einleitung-1_doktitel-1">
                 <akn:p GUID="e3f4a5b6-c7d8-4890-abcd-2345abcde123" eId="einleitung-1_doktitel-1_text-1">
                     <akn:docStage GUID="f4a5b6c7-d8e9-4890-abcd-3456abcde123" eId="einleitung-1_doktitel-1_text-1_docstadium-1"/>
-                    <akn:docTitle GUID="a5b6c7d8-e9f0-4890-abcd-4567abcde123" eId="einleitung-1_doktitel-1_text-1_doctitel-1">Fiktives Gesetz zum IT-Änderungsvertrag</akn:docTitle>
+                    <akn:docTitle GUID="a5b6c7d8-e9f0-4890-abcd-4567abcde123" eId="einleitung-1_doktitel-1_text-1_doctitel-1">Zum Testen von Fassungen - Zukünftige Fassung</akn:docTitle>
                 </akn:p>
             </akn:longTitle>
         </akn:preface>
@@ -87,6 +92,22 @@
                     <akn:num GUID="e7f8a9b0-c1d2-4890-abcd-6789ef123456" eId="hauptteil-1_art-2_abs-2_bezeichnung-1">(2)</akn:num>
                     <akn:content GUID="f8a9b0c1-d2e3-4890-abcd-7890ef123456" eId="hauptteil-1_art-2_abs-2_inhalt-1">
                         <akn:p GUID="a9b0c1d2-e3f4-4890-abcd-8901ef123456" eId="hauptteil-1_art-2_abs-2_inhalt-1_text-1">Das Bundesministerium des Innern, für Bau und Heimat kündigt den Zeitpunkt der Umsetzung an.</akn:p>
+                    </akn:content>
+                </akn:paragraph>
+            </akn:article>
+            <akn:article GUID="c9d0e2f2-a3b4-4890-abcd-890cdef12345" eId="hauptteil-1_art-3" period="#meta-1_geltzeiten-1_geltungszeitgr-2" refersTo="stammform">
+                <akn:num GUID="d0e2f2a3-b4c5-4890-abcd-901cdef12345" eId="hauptteil-1_art-3_bezeichnung-1">Art 3</akn:num>
+                <akn:heading GUID="e2f2a3b4-c5d6-4890-abcd-0123def12345" eId="hauptteil-1_art-3_überschrift-1"> Zukünftiger Artikel </akn:heading>
+                <akn:paragraph GUID="f2a3b4c5-d6e7-4890-abcd-2234ef123456" eId="hauptteil-1_art-3_abs-1">
+                    <akn:num GUID="a3b4c5d6-e7f8-4890-abcd-2345ef223456" eId="hauptteil-1_art-3_abs-1_bezeichnung-1">(1)</akn:num>
+                    <akn:content GUID="b4c5d6e7-f8a9-4890-abcd-3456ef223456" eId="hauptteil-1_art-3_abs-1_inhalt-1">
+                        <akn:p GUID="c5d6e7f8-a9b0-4890-abcd-4567ef223456" eId="hauptteil-1_art-3_abs-1_inhalt-1_text-1">Test.</akn:p>
+                    </akn:content>
+                </akn:paragraph>
+                <akn:paragraph GUID="d6e7f8a9-b0c2-4890-abcd-5678ef123456" eId="hauptteil-1_art-3_abs-2">
+                    <akn:num GUID="e7f8a9b0-c2d2-4890-abcd-6789ef123456" eId="hauptteil-1_art-3_abs-2_bezeichnung-1">(2)</akn:num>
+                    <akn:content GUID="f8a9b0c2-d2e3-4890-abcd-7890ef123456" eId="hauptteil-1_art-3_abs-2_inhalt-1">
+                        <akn:p GUID="a9b0c2d2-e3f4-4890-abcd-8901ef123456" eId="hauptteil-1_art-3_abs-2_inhalt-1_text-1">Das Bundesministerium des Innern, für Bau und Heimat kündigt den Zeitpunkt der Umsetzung an.</akn:p>
                     </akn:content>
                 </akn:paragraph>
             </akn:article>
