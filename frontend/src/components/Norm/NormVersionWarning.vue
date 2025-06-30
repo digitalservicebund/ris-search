@@ -1,9 +1,5 @@
 <script setup lang="ts">
 import type { LegislationWork, SearchResult } from "~/types";
-import {
-  getVersionStatus,
-  type VersionStatus,
-} from "~/composables/useNormVersions";
 import VersionWarningMessage from "~/components/Norm/VersionWarningMessage.vue";
 
 const props = defineProps<{
@@ -22,20 +18,32 @@ const inForceVersionLink = computed(
     `/norms/${inForceVersion.value?.item.workExample.legislationIdentifier}`,
 );
 
-const currentVersionStatus = computed<VersionStatus>(() =>
-  getVersionStatus(props.currentVersion),
-);
+const currentVersionValidityStatus = computed(() => {
+  const validityInterval = temporalCoverageToValidityInterval(
+    props.currentVersion.workExample.temporalCoverage,
+  );
+  return getValidityStatus(validityInterval?.from, validityInterval?.to);
+});
 
 const latestFutureVersion = computed(() => {
-  if (currentVersionStatus.value !== "inForce") return undefined;
+  if (currentVersionValidityStatus.value !== ValidityStatus.InForce)
+    return undefined;
   const last = props.versions[props.versions.length - 1];
-  return getVersionStatus(last.item) === "future" ? last.item : undefined;
+  const latestValidityInterval = temporalCoverageToValidityInterval(
+    last.item.workExample.temporalCoverage,
+  );
+  return getValidityStatus(
+    latestValidityInterval?.from,
+    latestValidityInterval?.to,
+  ) === ValidityStatus.Future
+    ? last.item
+    : undefined;
 });
 </script>
 
 <template>
   <VersionWarningMessage
-    :current-version-status="currentVersionStatus"
+    :current-version-validity-status="currentVersionValidityStatus"
     :in-force-version-link="inForceVersionLink"
     :future-version="latestFutureVersion"
     historical-warning-message="Historische Fassung."

@@ -2,13 +2,19 @@ import { mount } from "@vue/test-utils";
 import ArticleVersionWarning from "./ArticleVersionWarning.vue";
 import type { Article } from "~/types";
 
-vi.mock("~/composables/useNormVersions", () => ({
-  getStatusLabel: vi.fn((entry, expiry) => {
-    if (entry === "past" && expiry === "past") return "historical";
-    if (entry === "future") return "future";
-    return "inForce";
-  }),
-}));
+vi.mock("~/utils/normUtils", async (importOriginal) => {
+  const mod = (await importOriginal()) as Record<string, unknown>;
+  return {
+    ...mod,
+    getValidityStatus: vi.fn((entry, expiry) => {
+      if (entry === "past" && expiry === "past")
+        return ValidityStatus.Historical;
+      if (entry === "future") return ValidityStatus.Future;
+      return ValidityStatus.InForce;
+    }),
+  };
+});
+
 const formattedDate = (d: string | null) => {
   if (!d) return null;
   if (d === "1990-01-01" || d === "2000-01-01") return "past";

@@ -11,33 +11,6 @@ const dummyData = {
   ],
 } as unknown as SearchResult<LegislationWork>[];
 
-const statusTestData = {
-  historical: {
-    item: {
-      workExample: {
-        temporalCoverage: "2020-01-01/2022-12-31",
-        legislationLegalForce: "NotInForce",
-      },
-    },
-  } as unknown as SearchResult<LegislationWork>,
-  inForce: {
-    item: {
-      workExample: {
-        temporalCoverage: "2023-01-01/2923-12-31",
-        legislationLegalForce: "InForce",
-      },
-    },
-  } as unknown as SearchResult<LegislationWork>,
-  future: {
-    item: {
-      workExample: {
-        temporalCoverage: "2924-01-01/..",
-        legislationLegalForce: "NotInForce",
-      },
-    },
-  } as unknown as SearchResult<LegislationWork>,
-};
-
 vi.mock("#app", () => {
   return {
     useFetch: vi.fn(),
@@ -73,12 +46,5 @@ describe("useNormVersions", () => {
     } as unknown as ReturnType<typeof useFetch>);
     const { sortedVersions } = useNormVersions("dummy-eli");
     expect(sortedVersions.value).toEqual([]);
-  });
-
-  Object.keys(statusTestData).forEach((status) => {
-    it(`returns correct status for version with ${status} status`, () => {
-      const version = statusTestData[status as keyof typeof statusTestData];
-      expect(getVersionStatus(version.item)).toBe(status);
-    });
   });
 });

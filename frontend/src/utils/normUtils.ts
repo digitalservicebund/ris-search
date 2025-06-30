@@ -18,16 +18,16 @@ export function temporalCoverageToValidityInterval(
   };
 }
 
-export enum ExpressionStatus {
+export enum ValidityStatus {
   InForce = "Aktuell gültig",
   Future = "Zukünftig in Kraft",
   Historical = "Außer Kraft",
 }
 
-export function getExpressionStatus(
+export function getValidityStatus(
   startDate?: Dayjs,
   endDate?: Dayjs,
-): ExpressionStatus | undefined {
+): ValidityStatus | undefined {
   if (!startDate && !endDate) return undefined;
 
   const currentDate = getCurrentDateInGermany();
@@ -38,17 +38,17 @@ export function getExpressionStatus(
     (start.isBefore(end, "day") || start.isSame(end, "day")) &&
     end.isBefore(currentDate, "day")
   ) {
-    return ExpressionStatus.Historical;
+    return ValidityStatus.Historical;
   } else if (
     (start.isBefore(currentDate, "day") || start.isSame(currentDate, "day")) &&
     (end.isSame(currentDate, "day") || end.isAfter(currentDate, "day"))
   ) {
-    return ExpressionStatus.InForce;
+    return ValidityStatus.InForce;
   } else if (
     start.isAfter(currentDate, "day") &&
     (end.isAfter(start, "day") || end.isSame(startDate, "day"))
   ) {
-    return ExpressionStatus.Future;
+    return ValidityStatus.Future;
   }
 
   return undefined;

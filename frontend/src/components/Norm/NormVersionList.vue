@@ -7,9 +7,9 @@ import Badge, { BadgeColor } from "@/components/Badge.vue";
 import IcBaselineLaunch from "~icons/ic/baseline-launch";
 import _ from "lodash";
 import {
-  getExpressionStatus,
+  getValidityStatus,
   temporalCoverageToValidityInterval,
-  ExpressionStatus,
+  ValidityStatus,
 } from "~/utils/normUtils";
 import { dateFormattedDDMMYYYY } from "~/utils/dateFormatting";
 
@@ -48,7 +48,7 @@ const tableRowData = computed<TableRowData[]>(() => {
     );
 
     const id = index;
-    const expressionStatus = getExpressionStatus(
+    const expressionStatus = getValidityStatus(
       validityInterval?.from,
       validityInterval?.to,
     );
@@ -74,13 +74,13 @@ const tableRowData = computed<TableRowData[]>(() => {
   });
 });
 
-function getStatusColor(expressionStatus?: ExpressionStatus): BadgeColor {
+function getStatusColor(expressionStatus?: ValidityStatus): BadgeColor {
   switch (expressionStatus) {
-    case ExpressionStatus.InForce:
+    case ValidityStatus.InForce:
       return BadgeColor.GREEN;
-    case ExpressionStatus.Future:
+    case ValidityStatus.Future:
       return BadgeColor.YELLOW;
-    case ExpressionStatus.Historical:
+    case ValidityStatus.Historical:
       return BadgeColor.RED;
     default:
       return BadgeColor.BLUE;

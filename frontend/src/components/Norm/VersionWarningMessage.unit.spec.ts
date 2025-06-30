@@ -35,7 +35,7 @@ describe("VersionWarningMessage.vue", () => {
   it("shows info message for inForce with futureVersion", () => {
     const wrapper = getWrapper({
       ...baseProps,
-      currentVersionStatus: "inForce",
+      currentVersionValidityStatus: ValidityStatus.InForce,
       futureVersion: futureVersion.item,
     });
     expect(wrapper.find("[data-testid='norm-warning-message']").exists()).toBe(
@@ -48,7 +48,7 @@ describe("VersionWarningMessage.vue", () => {
   it("shows no message for inForce without futureVersion", () => {
     const wrapper = getWrapper({
       ...baseProps,
-      currentVersionStatus: "inForce",
+      currentVersionValidityStatus: ValidityStatus.InForce,
     });
     expect(wrapper.find("[data-testid='norm-warning-message']").exists()).toBe(
       false,
@@ -58,7 +58,7 @@ describe("VersionWarningMessage.vue", () => {
   it("shows warning for historical version", () => {
     const wrapper = getWrapper({
       ...baseProps,
-      currentVersionStatus: "historical",
+      currentVersionValidityStatus: ValidityStatus.Historical,
     });
     expect(wrapper.find("[data-testid='norm-warning-message']").exists()).toBe(
       true,
@@ -70,7 +70,7 @@ describe("VersionWarningMessage.vue", () => {
   it("shows warning for future version", () => {
     const wrapper = getWrapper({
       ...baseProps,
-      currentVersionStatus: "future",
+      currentVersionValidityStatus: ValidityStatus.Future,
     });
     expect(wrapper.find("[data-testid='norm-warning-message']").exists()).toBe(
       true,

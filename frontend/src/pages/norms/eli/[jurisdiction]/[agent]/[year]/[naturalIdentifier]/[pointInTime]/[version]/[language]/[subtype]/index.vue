@@ -39,7 +39,7 @@ import Toast from "primevue/toast";
 import { useNormActions } from "./useNormActions";
 import NormMetadataFields from "~/components/Norm/NormMetadataFields.vue";
 import {
-  getExpressionStatus,
+  getValidityStatus,
   getManifestationUrl,
   temporalCoverageToValidityInterval,
 } from "~/utils/normUtils";
@@ -100,7 +100,7 @@ const validityInterval = computed(() =>
 
 const expressionStatus = computed(() => {
   if (metadata.value?.workExample && validityInterval)
-    return getExpressionStatus(
+    return getValidityStatus(
       validityInterval.value?.from,
       validityInterval.value?.to,
     );

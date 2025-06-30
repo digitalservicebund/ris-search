@@ -1,6 +1,6 @@
 import { describe, expect, vi } from "vitest";
 import {
-  getExpressionStatus,
+  getValidityStatus,
   temporalCoverageToValidityInterval,
 } from "~/utils/normUtils";
 import dayjs from "dayjs";
@@ -63,53 +63,53 @@ describe("expressionStatus", () => {
 
   it("returns InForce if current date is in validity interval", () => {
     setCurrentDate("2025-01-03 00:00");
-    const result = getExpressionStatus(
+    const result = getValidityStatus(
       parseDateGermanLocalTime("2025-01-01"),
       parseDateGermanLocalTime("2025-01-05"),
     );
-    expect(result).toBe(ExpressionStatus.InForce);
+    expect(result).toBe(ValidityStatus.InForce);
   });
 
   it("returns InForce if current date on lower boundary of validity interval", () => {
     setCurrentDate("2025-01-01 00:00");
-    const result = getExpressionStatus(
+    const result = getValidityStatus(
       parseDateGermanLocalTime("2025-01-01"),
       parseDateGermanLocalTime("2025-01-05"),
     );
-    expect(result).toBe(ExpressionStatus.InForce);
+    expect(result).toBe(ValidityStatus.InForce);
   });
 
   it("returns InForce if current date on upper boundary of validity interval", () => {
     setCurrentDate("2025-01-05 00:00");
-    const result = getExpressionStatus(
+    const result = getValidityStatus(
       parseDateGermanLocalTime("2025-01-01"),
       parseDateGermanLocalTime("2025-01-05"),
     );
-    expect(result).toBe(ExpressionStatus.InForce);
+    expect(result).toBe(ValidityStatus.InForce);
   });
 
   it("returns future if start date is after current date", () => {
     setCurrentDate("2024-12-31 23:59");
-    const result = getExpressionStatus(parseDateGermanLocalTime("2025-01-01"));
-    expect(result).toBe(ExpressionStatus.Future);
+    const result = getValidityStatus(parseDateGermanLocalTime("2025-01-01"));
+    expect(result).toBe(ValidityStatus.Future);
   });
 
   it("returns historical if end date is before current date", () => {
     setCurrentDate("2025-01-01 00:00");
-    const result = getExpressionStatus(
+    const result = getValidityStatus(
       undefined,
       parseDateGermanLocalTime("2024-12-31"),
     );
-    expect(result).toBe(ExpressionStatus.Historical);
+    expect(result).toBe(ValidityStatus.Historical);
   });
 
   it("returns undefined if start and end date are undefined", () => {
-    const result = getExpressionStatus();
+    const result = getValidityStatus();
     expect(result).toBeUndefined();
   });
 
   it("returns undefined if start date is after end date", () => {
-    const result = getExpressionStatus(
+    const result = getValidityStatus(
       parseDateGermanLocalTime("2025-01-01"),
       parseDateGermanLocalTime("2024-12-31"),
     );

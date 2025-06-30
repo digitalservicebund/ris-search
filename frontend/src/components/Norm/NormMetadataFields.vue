@@ -5,7 +5,7 @@ import type { Dayjs } from "dayjs";
 
 interface Props {
   abbreviation?: string;
-  status?: ExpressionStatus;
+  status?: ValidityStatus;
   validFrom?: Dayjs;
   validTo?: Dayjs;
 }
