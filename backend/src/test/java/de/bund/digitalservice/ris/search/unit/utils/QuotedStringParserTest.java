@@ -23,7 +23,7 @@ class QuotedStringParserTest {
     QuotedStringParser parser = new QuotedStringParser("hello world");
     QuotedStringParser.Result result = parser.parse();
 
-    assertEquals(List.of("hello world"), result.unquotedTerms());
+    assertEquals(List.of("hello", "world"), result.unquotedTerms());
     assertTrue(result.quotedTerms().isEmpty());
   }
 
@@ -80,7 +80,7 @@ class QuotedStringParserTest {
     QuotedStringParser.Result result = parser.parse();
 
     assertEquals(List.of("balanced quote"), result.quotedTerms());
-    assertEquals(List.of("unbalanced", "quote text"), result.unquotedTerms());
+    assertEquals(List.of("unbalanced", "quote", "text"), result.unquotedTerms());
   }
 
   @Test
@@ -89,7 +89,7 @@ class QuotedStringParserTest {
         new QuotedStringParser("  leading space \"  quoted with space  \" trailing space  ");
     QuotedStringParser.Result result = parser.parse();
 
-    assertEquals(List.of("leading space", "trailing space"), result.unquotedTerms());
+    assertEquals(List.of("leading", "space", "trailing", "space"), result.unquotedTerms());
     assertEquals(List.of("quoted with space"), result.quotedTerms());
   }
 
@@ -100,7 +100,7 @@ class QuotedStringParserTest {
         new QuotedStringParser("\t leading space\"quoted with space  \" trailing\nspace ");
     QuotedStringParser.Result result = parser.parse();
 
-    assertEquals(List.of("leading space", "trailing\nspace"), result.unquotedTerms());
+    assertEquals(List.of("leading", "space", "trailing", "space"), result.unquotedTerms());
     assertEquals(List.of("quoted with space"), result.quotedTerms());
   }
 

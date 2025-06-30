@@ -56,8 +56,7 @@ public class UniversalDocumentQueryBuilder {
         MultiMatchQueryBuilder queryBuilder =
             new MultiMatchQueryBuilder(unquotedTerm)
                 .zeroTermsQuery(MatchQuery.ZeroTermsQuery.ALL)
-                .operator(Operator.AND)
-                .type(Type.CROSS_FIELDS);
+                .type(Type.BEST_FIELDS);
         query.must(queryBuilder);
         nestedQuery.should(queryBuilder);
       }

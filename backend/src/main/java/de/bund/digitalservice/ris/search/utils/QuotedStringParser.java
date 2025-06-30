@@ -38,9 +38,11 @@ public class QuotedStringParser {
   }
 
   private void handleUnquotedTerm(String item) {
-    item = item.strip();
-    if (!item.isEmpty()) {
-      this.result.unquotedTerms.add(item);
+    var terms = item.split("\\s+");
+    for (var term : terms) {
+      if (!term.isEmpty()) {
+        this.result.unquotedTerms.add(term);
+      }
     }
   }
 
