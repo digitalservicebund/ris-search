@@ -35,3 +35,9 @@
 ```bash
 ./gradlew checkLicense
 ```
+
+- Re-import local data (norms)
+
+```bash
+curl http://localhost:8090/internal/import/norms/changelog --json '{"change_all": true}
+```
