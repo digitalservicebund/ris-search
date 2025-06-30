@@ -10,6 +10,8 @@ import org.springframework.stereotype.Component;
  * A RequestMatcher that determines whether a request has a valid API key in the X-Api-Key header.
  * The API key may have a prefix to differentiate different keys. It is compared to a hash stored in
  * {@link AuthProperties}.
+ *
+ * <p>See also: `doc/readme/api-keys.md`.
  */
 @Component
 public class ApiKeyRequestMatcher implements RequestMatcher {
