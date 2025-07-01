@@ -68,19 +68,19 @@ describe("getValidityStatus", () => {
     vi.useRealTimers();
   });
 
-  it("returns InForce if current date is in validity interval", () => {
-    for (const currentDate of [
-      "2025-01-01 00:00",
-      "2025-01-03 00:00",
-      "2025-01-05 00:00",
-    ]) {
+  for (const currentDate of [
+    "2025-01-01 00:00",
+    "2025-01-03 00:00",
+    "2025-01-05 00:00",
+  ]) {
+    it(`returns InForce for current date ${currentDate} and interval 2025-01-01-2025-01-05`, () => {
       setCurrentDate(currentDate);
       const result = getValidityStatus(
         createInterval("2025-01-01", "2025-01-05"),
       );
       expect(result).toBe(ValidityStatus.InForce);
-    }
-  });
+    });
+  }
 
   it("returns future if start date is after current date", () => {
     setCurrentDate("2024-12-31 23:59");
