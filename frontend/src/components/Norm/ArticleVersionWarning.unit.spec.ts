@@ -3,7 +3,7 @@ import ArticleVersionWarning from "./ArticleVersionWarning.vue";
 import type { Article } from "~/types";
 
 vi.mock("~/utils/normUtils", async (importOriginal) => {
-  const mod = (await importOriginal()) as Record<string, unknown>;
+  const mod = await importOriginal<Record<string, unknown>>();
   return {
     ...mod,
     getValidityStatus: vi.fn((interval?: ValidityInterval) => {
