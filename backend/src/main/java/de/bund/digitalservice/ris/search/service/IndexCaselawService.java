@@ -99,7 +99,7 @@ public class IndexCaselawService implements IndexService {
 
   private List<String> getAllCaseLawFilenames() {
     return bucket.getAllKeys().stream()
-        .filter(s -> !s.contains(IndexSyncJob.CHANGELOGS_PREFIX))
+        .filter(s -> s.endsWith(".xml") && !s.contains(IndexSyncJob.CHANGELOGS_PREFIX))
         .toList();
   }
 }
