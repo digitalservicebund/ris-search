@@ -14,10 +14,7 @@ const showPublicProfileHeader = isPublic || isPrototype;
 </script>
 
 <template>
-  <NuxtLoadingIndicator
-    :color="false"
-    class="bg-linear-to-r from-blue-900 to-blue-500"
-  />
+  <NuxtLoadingIndicator :color="false" class="bg-blue-800" />
   <client-only>
     <ConsentBanner />
   </client-only>
