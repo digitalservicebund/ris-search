@@ -1,9 +1,9 @@
-FROM node:20.17.0-alpine3.19 AS build
+FROM node:22.17.0-alpine3.22 AS build
 
 RUN apk update && apk upgrade
 
 WORKDIR /app
-COPY .yarn/releases/yarn-4.7.0.cjs .yarn/releases/yarn-4.7.0.cjs
+COPY .yarn/releases/yarn-4.9.2.cjs .yarn/releases/yarn-4.9.2.cjs
 COPY package.json yarn.lock .yarnrc.yml ./
 RUN yarn install --immutable
 COPY playwright.config.ts nuxt.config.ts nuxt.config.d.ts libraries.d.ts tsconfig.json \
@@ -12,7 +12,7 @@ COPY src ./src
 RUN yarn run prepare && yarn build
 
 
-FROM node:20.17.0-alpine3.19
+FROM node:22.17.0-alpine3.22
 RUN apk update && apk upgrade && apk add dumb-init && apk cache clean && \
     rm -r /usr/local/lib/node_modules/npm/node_modules/cross-spawn
 USER node

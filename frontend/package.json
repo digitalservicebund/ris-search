@@ -24,7 +24,7 @@
     "node": "20.17.0",
     "npm": "10.8.3"
   },
-  "packageManager": "yarn@4.7.0",
+  "packageManager": "yarn@4.9.2",
   "dependencies": {
     "@axe-core/playwright": "^4.10.2",
     "@digitalservicebund/ris-ui": "^3.11.0",
