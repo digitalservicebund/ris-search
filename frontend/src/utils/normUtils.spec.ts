@@ -69,27 +69,17 @@ describe("getValidityStatus", () => {
   });
 
   it("returns InForce if current date is in validity interval", () => {
-    setCurrentDate("2025-01-03 00:00");
-    const result = getValidityStatus(
-      createInterval("2025-01-01", "2025-01-05"),
-    );
-    expect(result).toBe(ValidityStatus.InForce);
-  });
-
-  it("returns InForce if current date on lower boundary of validity interval", () => {
-    setCurrentDate("2025-01-01 00:00");
-    const result = getValidityStatus(
-      createInterval("2025-01-01", "2025-01-05"),
-    );
-    expect(result).toBe(ValidityStatus.InForce);
-  });
-
-  it("returns InForce if current date on upper boundary of validity interval", () => {
-    setCurrentDate("2025-01-05 00:00");
-    const result = getValidityStatus(
-      createInterval("2025-01-01", "2025-01-05"),
-    );
-    expect(result).toBe(ValidityStatus.InForce);
+    for (const currentDate of [
+      "2025-01-01 00:00",
+      "2025-01-03 00:00",
+      "2025-01-05 00:00",
+    ]) {
+      setCurrentDate(currentDate);
+      const result = getValidityStatus(
+        createInterval("2025-01-01", "2025-01-05"),
+      );
+      expect(result).toBe(ValidityStatus.InForce);
+    }
   });
 
   it("returns future if start date is after current date", () => {
