@@ -100,10 +100,7 @@ const validityInterval = computed(() =>
 
 const expressionStatus = computed(() => {
   if (metadata.value?.workExample && validityInterval)
-    return getValidityStatus(
-      validityInterval.value?.from,
-      validityInterval.value?.to,
-    );
+    return getValidityStatus(validityInterval.value);
   return undefined;
 });
 

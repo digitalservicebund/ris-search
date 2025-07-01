@@ -25,14 +25,13 @@ export enum ValidityStatus {
 }
 
 export function getValidityStatus(
-  startDate?: Dayjs,
-  endDate?: Dayjs,
+  validityInterval?: ValidityInterval,
 ): ValidityStatus | undefined {
-  if (!startDate && !endDate) return undefined;
+  if (!validityInterval?.from && !validityInterval?.to) return undefined;
 
   const currentDate = getCurrentDateInGermany();
-  const start = startDate ?? dayjs(new Date(-8640000000000000)); // Smallest possible date
-  const end = endDate ?? dayjs(new Date(8640000000000000)); // largest possible date
+  const start = validityInterval?.from ?? dayjs(new Date(-8640000000000000)); // mallest possible date
+  const end = validityInterval?.to ?? dayjs(new Date(8640000000000000)); // largest possible date
 
   if (
     (start.isBefore(end, "day") || start.isSame(end, "day")) &&
@@ -46,7 +45,7 @@ export function getValidityStatus(
     return ValidityStatus.InForce;
   } else if (
     start.isAfter(currentDate, "day") &&
-    (end.isAfter(start, "day") || end.isSame(startDate, "day"))
+    (end.isAfter(start, "day") || end.isSame(start, "day"))
   ) {
     return ValidityStatus.Future;
   }

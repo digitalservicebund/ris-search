@@ -22,7 +22,7 @@ const currentVersionValidityStatus = computed(() => {
   const validityInterval = temporalCoverageToValidityInterval(
     props.currentVersion.workExample.temporalCoverage,
   );
-  return getValidityStatus(validityInterval?.from, validityInterval?.to);
+  return getValidityStatus(validityInterval);
 });
 
 const latestFutureVersion = computed(() => {
@@ -32,10 +32,7 @@ const latestFutureVersion = computed(() => {
   const latestValidityInterval = temporalCoverageToValidityInterval(
     last.item.workExample.temporalCoverage,
   );
-  return getValidityStatus(
-    latestValidityInterval?.from,
-    latestValidityInterval?.to,
-  ) === ValidityStatus.Future
+  return getValidityStatus(latestValidityInterval) === ValidityStatus.Future
     ? last.item
     : undefined;
 });

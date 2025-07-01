@@ -52,7 +52,7 @@ function setCurrentDate(dateTimeString: string) {
   vi.setSystemTime(currentDate);
 }
 
-describe("expressionStatus", () => {
+describe("getValidityStatus", () => {
   beforeEach(() => {
     vi.useFakeTimers();
   });
@@ -63,43 +63,44 @@ describe("expressionStatus", () => {
 
   it("returns InForce if current date is in validity interval", () => {
     setCurrentDate("2025-01-03 00:00");
-    const result = getValidityStatus(
-      parseDateGermanLocalTime("2025-01-01"),
-      parseDateGermanLocalTime("2025-01-05"),
-    );
+    const result = getValidityStatus({
+      from: parseDateGermanLocalTime("2025-01-01"),
+      to: parseDateGermanLocalTime("2025-01-05"),
+    });
     expect(result).toBe(ValidityStatus.InForce);
   });
 
   it("returns InForce if current date on lower boundary of validity interval", () => {
     setCurrentDate("2025-01-01 00:00");
-    const result = getValidityStatus(
-      parseDateGermanLocalTime("2025-01-01"),
-      parseDateGermanLocalTime("2025-01-05"),
-    );
+    const result = getValidityStatus({
+      from: parseDateGermanLocalTime("2025-01-01"),
+      to: parseDateGermanLocalTime("2025-01-05"),
+    });
     expect(result).toBe(ValidityStatus.InForce);
   });
 
   it("returns InForce if current date on upper boundary of validity interval", () => {
     setCurrentDate("2025-01-05 00:00");
-    const result = getValidityStatus(
-      parseDateGermanLocalTime("2025-01-01"),
-      parseDateGermanLocalTime("2025-01-05"),
-    );
+    const result = getValidityStatus({
+      from: parseDateGermanLocalTime("2025-01-01"),
+      to: parseDateGermanLocalTime("2025-01-05"),
+    });
     expect(result).toBe(ValidityStatus.InForce);
   });
 
   it("returns future if start date is after current date", () => {
     setCurrentDate("2024-12-31 23:59");
-    const result = getValidityStatus(parseDateGermanLocalTime("2025-01-01"));
+    const result = getValidityStatus({
+      from: parseDateGermanLocalTime("2025-01-01"),
+    });
     expect(result).toBe(ValidityStatus.Future);
   });
 
   it("returns historical if end date is before current date", () => {
     setCurrentDate("2025-01-01 00:00");
-    const result = getValidityStatus(
-      undefined,
-      parseDateGermanLocalTime("2024-12-31"),
-    );
+    const result = getValidityStatus({
+      to: parseDateGermanLocalTime("2024-12-31"),
+    });
     expect(result).toBe(ValidityStatus.Historical);
   });
 
@@ -109,10 +110,10 @@ describe("expressionStatus", () => {
   });
 
   it("returns undefined if start date is after end date", () => {
-    const result = getValidityStatus(
-      parseDateGermanLocalTime("2025-01-01"),
-      parseDateGermanLocalTime("2024-12-31"),
-    );
+    const result = getValidityStatus({
+      from: parseDateGermanLocalTime("2025-01-01"),
+      to: parseDateGermanLocalTime("2024-12-31"),
+    });
     expect(result).toBeUndefined();
   });
 });

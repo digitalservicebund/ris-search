@@ -9,10 +9,10 @@ const props = defineProps<{
 }>();
 
 const currentArticleStatus = computed(() =>
-  getValidityStatus(
-    parseDateGermanLocalTime(props.currentArticle.entryIntoForceDate),
-    parseDateGermanLocalTime(props.currentArticle.expiryDate),
-  ),
+  getValidityStatus({
+    from: parseDateGermanLocalTime(props.currentArticle.entryIntoForceDate),
+    to: parseDateGermanLocalTime(props.currentArticle.expiryDate),
+  }),
 );
 </script>
 
