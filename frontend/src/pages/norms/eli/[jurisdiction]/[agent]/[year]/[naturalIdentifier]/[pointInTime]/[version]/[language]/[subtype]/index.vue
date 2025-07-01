@@ -98,7 +98,7 @@ const validityInterval = computed(() =>
       ),
 );
 
-const expressionStatus = computed(() => {
+const validityStatus = computed(() => {
   if (metadata.value?.workExample && validityInterval)
     return getValidityStatus(validityInterval.value);
   return undefined;
@@ -151,7 +151,7 @@ const { actions } = useNormActions(metadata);
         />
         <NormMetadataFields
           :abbreviation="metadata.abbreviation"
-          :status="expressionStatus"
+          :status="validityStatus"
           :valid-from="validityInterval?.from"
           :valid-to="validityInterval?.to"
         />

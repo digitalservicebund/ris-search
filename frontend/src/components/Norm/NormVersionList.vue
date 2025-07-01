@@ -48,10 +48,10 @@ const tableRowData = computed<TableRowData[]>(() => {
     );
 
     const id = index;
-    const expressionStatus = getValidityStatus(validityInterval);
+    const validityStatus = getValidityStatus(validityInterval);
     const status: Status = {
-      label: expressionStatus ?? "Unbekannt",
-      color: getStatusColor(expressionStatus),
+      label: validityStatus ?? "Unbekannt",
+      color: getStatusColor(validityStatus),
     };
     const link = `/norms/${version.item.workExample.legislationIdentifier}`;
     const selectable =
@@ -71,8 +71,8 @@ const tableRowData = computed<TableRowData[]>(() => {
   });
 });
 
-function getStatusColor(expressionStatus?: ValidityStatus): BadgeColor {
-  switch (expressionStatus) {
+function getStatusColor(validityStatus?: ValidityStatus): BadgeColor {
+  switch (validityStatus) {
     case ValidityStatus.InForce:
       return BadgeColor.GREEN;
     case ValidityStatus.Future:
