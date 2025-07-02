@@ -66,15 +66,15 @@ public class NormSearchResponseMapper {
     return null;
   }
 
-  private static <T> List<TextMatchSchema> getTextMatches(SearchHit<T> searchHit) {
+  public static <T> List<TextMatchSchema> getTextMatches(SearchHit<T> searchHit) {
     Optional<SearchHits<?>> matchingArticles =
         Optional.ofNullable(searchHit.getInnerHits().getOrDefault("articles", null));
 
     List<TextMatchSchema> articleHits =
         matchingArticles
             .map(
-                articles ->
-                    articles.getSearchHits().stream()
+                hits ->
+                    hits.stream()
                         .map(NormSearchResponseMapper::convertArticleHitToTextMatchSchema)
                         .filter(Objects::nonNull)
                         .toList())
