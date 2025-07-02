@@ -47,3 +47,9 @@ logging:
     org:
       zalando:
         logbook: TRACE
+      springframework:
+        ws:
+          server:
+            MessageTracing:
+              sent: DEBUG
+              received: TRACE
