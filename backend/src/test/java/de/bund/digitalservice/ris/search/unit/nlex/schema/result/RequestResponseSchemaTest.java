@@ -2,6 +2,7 @@ package de.bund.digitalservice.ris.search.unit.nlex.schema.result;
 
 import de.bund.digitalservice.ris.search.nlex.schema.result.Content;
 import de.bund.digitalservice.ris.search.nlex.schema.result.Document;
+import de.bund.digitalservice.ris.search.nlex.schema.result.Error;
 import de.bund.digitalservice.ris.search.nlex.schema.result.ExternUrl;
 import de.bund.digitalservice.ris.search.nlex.schema.result.Navigation;
 import de.bund.digitalservice.ris.search.nlex.schema.result.Page;
@@ -10,6 +11,8 @@ import de.bund.digitalservice.ris.search.nlex.schema.result.ParagraphRoles;
 import de.bund.digitalservice.ris.search.nlex.schema.result.References;
 import de.bund.digitalservice.ris.search.nlex.schema.result.RequestResult;
 import de.bund.digitalservice.ris.search.nlex.schema.result.ResultList;
+import de.bund.digitalservice.ris.search.nlex.schema.result.ResultStatus;
+import jakarta.xml.bind.JAXB;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Marshaller;
@@ -22,6 +25,29 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 class RequestResponseSchemaTest {
+
+  @Test
+  void theSchemaIsCorrectInErrorCases() throws IOException {
+    String expected =
+        """
+             <?xml version="1.0" encoding="UTF-8"?>
+                <result status="error" site="site" connector="connector">
+                  <errors>
+                    <error cause="1"/>
+                  </errors>
+                </result>
+            """;
+
+    RequestResult result =
+        new RequestResult()
+            .setStatus(ResultStatus.ERROR)
+            .setSite("site")
+            .setConnector("connector")
+            .setErrors(List.of(new Error().setCause("1")));
+    StringWriter sw = new StringWriter();
+    JAXB.marshal(result, sw);
+    Assertions.assertEquals(trimXml(expected), trimXml(sw.toString()));
+  }
 
   @Test
   void theSchemaCreatesTheDesiredXml() throws JAXBException, IOException {

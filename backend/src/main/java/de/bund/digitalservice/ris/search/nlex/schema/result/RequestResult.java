@@ -23,7 +23,7 @@ public class RequestResult {
   @XmlElement(name = "result-list")
   private ResultList resultList;
 
-  @XmlElementWrapper(name = "errors")
+  @XmlElementWrapper
   @XmlElement(name = "error")
   private List<Error> errors;
 }

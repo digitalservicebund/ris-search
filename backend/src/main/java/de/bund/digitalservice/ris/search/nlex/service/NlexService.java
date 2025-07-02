@@ -24,17 +24,15 @@ public class NlexService {
   }
 
   public RequestResult runRequestQuery(Query query) {
-    String searchTerm = this.getSearchTerm(query);
+    String searchTerm = getSearchTerm(query);
 
-    return this.runQuery(
-        searchTerm, PageRequest.of(query.getNavigation().getPage().getNumber(), 20));
+    return runQuery(searchTerm, PageRequest.of(query.getNavigation().getPage().getNumber(), 20));
   }
 
   private RequestResult runQuery(String searchTerm, Pageable pageable) {
     UniversalSearchParams searchParams = new UniversalSearchParams();
     searchParams.setSearchTerm(searchTerm);
-    SearchPage<Norm> normPage =
-        this.normsService.searchAndFilterNorms(searchParams, null, pageable);
+    SearchPage<Norm> normPage = normsService.searchAndFilterNorms(searchParams, null, pageable);
 
     String requestId = Base64.encode(searchTerm.getBytes());
     return RisToNlexMapper.normsToNlexRequestResult(requestId, normPage);

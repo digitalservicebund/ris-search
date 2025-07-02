@@ -42,13 +42,13 @@ public class NlexWebServiceEndpoint {
   @ResponsePayload
   public RequestResponse request(@RequestPayload Request request) throws JAXBException {
 
-    Query query = this.unmarshallQuery(request.getQuery());
-    RequestResult result = this.nlexService.runRequestQuery(query);
+    Query query = unmarshallQuery(request.getQuery());
+    RequestResult result = nlexService.runRequestQuery(query);
     return this.marshallRequestResponse(result);
   }
 
   private Query unmarshallQuery(String query) throws JAXBException {
-    Unmarshaller um = this.queryCtx.createUnmarshaller();
+    Unmarshaller um = queryCtx.createUnmarshaller();
     return (Query) um.unmarshal(new StringReader(query));
   }
 
