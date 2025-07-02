@@ -8,6 +8,7 @@ import de.bund.digitalservice.ris.search.nlex.schema.query.Query;
 import de.bund.digitalservice.ris.search.nlex.schema.result.RequestResult;
 import de.bund.digitalservice.ris.search.service.NormsService;
 import java.util.Objects;
+import java.util.Optional;
 import org.jose4j.base64url.Base64;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -41,7 +42,9 @@ public class NlexService {
   private String getSearchTerm(Query query) {
     Navigation navigation = query.getNavigation();
     if (Objects.isNull(navigation.getRequestId()) || navigation.getRequestId().isEmpty()) {
-      return query.getCriteria().getWords().getContains();
+      // if it turns out the words tag isn't wrapped in an and tag we can remove it
+      var searchTerm = Optional.ofNullable(query.getCriteria().getWords().getContains());
+      return searchTerm.orElseGet(() -> query.getCriteria().getAnd().getWords().getContains());
     } else {
       return new String(Base64.decode(navigation.getRequestId()));
     }
