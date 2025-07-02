@@ -18,6 +18,8 @@ import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
+import org.springframework.core.env.Environment;
+import org.springframework.core.env.Profiles;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,15 +34,18 @@ public class CaseLawController {
   private final CaseLawService caseLawService;
   private final XsltTransformerService xsltTransformerService;
   private final CaseLawBucket caseLawBucket;
+  private final Environment environment;
 
   @Autowired
   public CaseLawController(
       CaseLawService caseLawService,
       XsltTransformerService xsltTransformerService,
-      CaseLawBucket caseLawBucket) {
+      CaseLawBucket caseLawBucket,
+      Environment environment) {
     this.caseLawService = caseLawService;
     this.xsltTransformerService = xsltTransformerService;
     this.caseLawBucket = caseLawBucket;
+    this.environment = environment;
   }
 
   @GetMapping(
@@ -74,8 +79,12 @@ public class CaseLawController {
   public ResponseEntity<String> getCaseLawDocumentationUnitAsHtml(
       @Parameter(example = "STRE201770751") @PathVariable String documentNumber)
       throws ObjectStoreServiceException {
-    Optional<byte[]> bytes =
-        caseLawBucket.get(String.format("%s/%s.xml", documentNumber, documentNumber));
+    Optional<byte[]> bytes;
+    if (environment.acceptsProfiles(Profiles.of("default", "test", "staging"))) {
+      bytes = caseLawBucket.get(String.format("%s/%s.xml", documentNumber, documentNumber));
+    } else {
+      bytes = caseLawBucket.get(String.format("%s.xml", documentNumber));
+    }
 
     if (bytes.isPresent()) {
       String html = xsltTransformerService.transformCaseLaw(bytes.get());
@@ -97,9 +106,12 @@ public class CaseLawController {
   public ResponseEntity<byte[]> getCaseLawDocumentationUnitAsXml(
       @Parameter(example = "STRE201770751") @PathVariable String documentNumber)
       throws ObjectStoreServiceException {
-
-    Optional<byte[]> bytes =
-        caseLawBucket.get(String.format("%s/%s.xml", documentNumber, documentNumber));
+    Optional<byte[]> bytes;
+    if (environment.acceptsProfiles(Profiles.of("default", "test", "staging"))) {
+      bytes = caseLawBucket.get(String.format("%s/%s.xml", documentNumber, documentNumber));
+    } else {
+      bytes = caseLawBucket.get(String.format("%s.xml", documentNumber));
+    }
     return bytes.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
   }
 }
