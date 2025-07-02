@@ -2,6 +2,7 @@
 import MetadataField from "~/components/MetadataField.vue";
 import { isPrototypeProfile } from "~/utils/config";
 import type { Dayjs } from "dayjs";
+import { getValidityStatusLabel } from "~/utils/normUtils";
 
 interface Props {
   abbreviation?: string;
@@ -21,7 +22,11 @@ defineProps<Props>();
       label="Abkürzung"
       :value="abbreviation"
     />
-    <MetadataField id="status" label="Status" :value="status" />
+    <MetadataField
+      id="status"
+      label="Status"
+      :value="getValidityStatusLabel(status)"
+    />
     <MetadataField
       v-if="!isPrototypeProfile()"
       id="validFrom"

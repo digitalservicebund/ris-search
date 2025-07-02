@@ -32,7 +32,7 @@ describe("NormMetadataFields.vue", () => {
     const expectedStatus = "Aktuell gültig";
     const wrapper = mount(NormMetadataFields, {
       props: {
-        status: ValidityStatus.InForce,
+        status: "InForce",
       },
     });
 
@@ -50,7 +50,7 @@ describe("NormMetadataFields.vue", () => {
     const expectedStatus = "Außer Kraft";
     const wrapper = mount(NormMetadataFields, {
       props: {
-        status: ValidityStatus.Historical,
+        status: "Expired",
       },
     });
 
@@ -68,7 +68,7 @@ describe("NormMetadataFields.vue", () => {
     const expectedStatus = "Zukünftig in Kraft";
     const wrapper = mount(NormMetadataFields, {
       props: {
-        status: ValidityStatus.Future,
+        status: "FutureInForce",
       },
     });
 

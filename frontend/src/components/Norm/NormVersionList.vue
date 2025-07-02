@@ -8,8 +8,9 @@ import IcBaselineLaunch from "~icons/ic/baseline-launch";
 import _ from "lodash";
 import {
   getValidityStatus,
+  getValidityStatusLabel,
   temporalCoverageToValidityInterval,
-  ValidityStatus,
+  type ValidityStatus,
 } from "~/utils/normUtils";
 import { dateFormattedDDMMYYYY } from "~/utils/dateFormatting";
 
@@ -50,7 +51,7 @@ const tableRowData = computed<TableRowData[]>(() => {
     const id = index;
     const validityStatus = getValidityStatus(validityInterval);
     const status: Status = {
-      label: validityStatus ?? "Unbekannt",
+      label: getValidityStatusLabel(validityStatus) ?? "Unbekannt",
       color: getStatusColor(validityStatus),
     };
     const link = `/norms/${version.item.workExample.legislationIdentifier}`;
@@ -73,11 +74,11 @@ const tableRowData = computed<TableRowData[]>(() => {
 
 function getStatusColor(validityStatus?: ValidityStatus): BadgeColor {
   switch (validityStatus) {
-    case ValidityStatus.InForce:
+    case "InForce":
       return BadgeColor.GREEN;
-    case ValidityStatus.Future:
+    case "FutureInForce":
       return BadgeColor.YELLOW;
-    case ValidityStatus.Historical:
+    case "Expired":
       return BadgeColor.RED;
     default:
       return BadgeColor.BLUE;

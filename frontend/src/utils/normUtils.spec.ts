@@ -78,20 +78,20 @@ describe("getValidityStatus", () => {
       const result = getValidityStatus(
         createInterval("2025-01-01", "2025-01-05"),
       );
-      expect(result).toBe(ValidityStatus.InForce);
+      expect(result).toBe("InForce");
     });
   }
 
   it("returns future if start date is after current date", () => {
     setCurrentDate("2024-12-31 23:59");
     const result = getValidityStatus(createInterval("2025-01-01"));
-    expect(result).toBe(ValidityStatus.Future);
+    expect(result).toBe("FutureInForce");
   });
 
   it("returns historical if end date is before current date", () => {
     setCurrentDate("2025-01-01 00:00");
     const result = getValidityStatus(createInterval(undefined, "2024-12-31"));
-    expect(result).toBe(ValidityStatus.Historical);
+    expect(result).toBe("Expired");
   });
 
   it("returns undefined if start and end date are undefined", () => {

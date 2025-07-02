@@ -11,11 +11,11 @@ vi.mock("~/utils/normUtils", async (importOriginal) => {
         interval?.from === parseDateGermanLocalTime("1990-01-01") &&
         interval?.to === parseDateGermanLocalTime("2000-01-01")
       ) {
-        return ValidityStatus.Historical;
+        return "Expired";
       }
       if (interval?.from === parseDateGermanLocalTime("2100-01-01"))
-        return ValidityStatus.Future;
-      return ValidityStatus.InForce;
+        return "FutureInForce";
+      return "InForce";
     }),
   };
 });

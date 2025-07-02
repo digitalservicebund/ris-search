@@ -26,13 +26,12 @@ const currentVersionValidityStatus = computed(() => {
 });
 
 const latestFutureVersion = computed(() => {
-  if (currentVersionValidityStatus.value !== ValidityStatus.InForce)
-    return undefined;
+  if (currentVersionValidityStatus.value !== "InForce") return undefined;
   const last = props.versions[props.versions.length - 1];
   const latestValidityInterval = temporalCoverageToValidityInterval(
     last.item.workExample.temporalCoverage,
   );
-  return getValidityStatus(latestValidityInterval) === ValidityStatus.Future
+  return getValidityStatus(latestValidityInterval) === "FutureInForce"
     ? last.item
     : undefined;
 });

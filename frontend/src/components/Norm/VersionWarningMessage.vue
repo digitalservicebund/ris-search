@@ -14,17 +14,14 @@ export interface VersionWarningMessageProps {
 const props = defineProps<VersionWarningMessageProps>();
 
 const warningMessageType = computed(() =>
-  props.currentVersionValidityStatus === ValidityStatus.InForce
-    ? "info"
-    : "warn",
+  props.currentVersionValidityStatus === "InForce" ? "info" : "warn",
 );
 
 const showWarningMessage = computed(() => {
   return (
-    (props.currentVersionValidityStatus === ValidityStatus.InForce &&
-      props.futureVersion) ||
-    props.currentVersionValidityStatus === ValidityStatus.Historical ||
-    props.currentVersionValidityStatus === ValidityStatus.Future
+    (props.currentVersionValidityStatus === "InForce" && props.futureVersion) ||
+    props.currentVersionValidityStatus === "Expired" ||
+    props.currentVersionValidityStatus === "FutureInForce"
   );
 });
 </script>
@@ -38,11 +35,11 @@ const showWarningMessage = computed(() => {
     <Message :severity="warningMessageType" class="ris-body2-regular">
       <template #icon>
         <IcBaselineHistory
-          v-if="currentVersionValidityStatus === ValidityStatus.InForce"
+          v-if="currentVersionValidityStatus === 'InForce'"
           class="text-blue-800"
         />
         <IcBaselineHistory
-          v-else-if="currentVersionValidityStatus === ValidityStatus.Historical"
+          v-else-if="currentVersionValidityStatus === 'Expired'"
           class="scale-x-[-1]"
         />
         <IcBaselineHistory v-else />
@@ -50,8 +47,7 @@ const showWarningMessage = computed(() => {
       <p class="mt-2">
         <span
           v-if="
-            currentVersionValidityStatus === ValidityStatus.InForce &&
-            props.futureVersion
+            currentVersionValidityStatus === 'InForce' && props.futureVersion
           "
         >
           <span class="ris-body2-bold">
@@ -70,9 +66,7 @@ const showWarningMessage = computed(() => {
             Zur zukünftigen Fassung
           </NuxtLink>
         </span>
-        <span
-          v-else-if="currentVersionValidityStatus === ValidityStatus.Historical"
-        >
+        <span v-else-if="currentVersionValidityStatus === 'Expired'">
           <span class="ris-body2-bold">
             {{ historicalWarningMessage }}
           </span>
@@ -80,9 +74,7 @@ const showWarningMessage = computed(() => {
             Zur aktuell gültigen Fassung
           </NuxtLink>
         </span>
-        <span
-          v-else-if="currentVersionValidityStatus === ValidityStatus.Future"
-        >
+        <span v-else-if="currentVersionValidityStatus === 'FutureInForce'">
           <span class="ris-body2-bold">{{ futureWarningMessage }} </span>
           <NuxtLink v-if="props.inForceVersionLink" :to="inForceVersionLink">
             Zur aktuell gültigen Fassung

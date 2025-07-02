@@ -18,10 +18,21 @@ export function temporalCoverageToValidityInterval(
   };
 }
 
-export enum ValidityStatus {
-  InForce = "Aktuell gültig",
-  Future = "Zukünftig in Kraft",
-  Historical = "Außer Kraft",
+export type ValidityStatus = "InForce" | "FutureInForce" | "Expired";
+
+export function getValidityStatusLabel(
+  status?: ValidityStatus,
+): string | undefined {
+  switch (status) {
+    case "Expired":
+      return "Außer Kraft";
+    case "InForce":
+      return "Aktuell gültig";
+    case "FutureInForce":
+      return "Zukünftig in Kraft";
+    default:
+      return undefined;
+  }
 }
 
 export function getValidityStatus(
@@ -34,18 +45,18 @@ export function getValidityStatus(
   const end = validityInterval?.to ?? dayjs(new Date("9999-12-31"));
 
   if (end.isBefore(currentDate, "day")) {
-    return ValidityStatus.Historical;
+    return "Expired";
   }
 
   if (
     (start.isBefore(currentDate, "day") || start.isSame(currentDate, "day")) &&
     (end.isSame(currentDate, "day") || end.isAfter(currentDate, "day"))
   ) {
-    return ValidityStatus.InForce;
+    return "InForce";
   }
 
   if (start.isAfter(currentDate, "day")) {
-    return ValidityStatus.Future;
+    return "FutureInForce";
   }
 
   return undefined;
