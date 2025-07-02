@@ -69,7 +69,7 @@ class CaseLawControllerApiTest extends ContainersIntegrationBase {
     context.put("error", false);
 
     String testCaseLawLdml = caseLawLdmlTemplateUtils.getXmlFromTemplate(context);
-    caseLawBucket.save("BFRE000107055.xml", testCaseLawLdml);
+    caseLawBucket.save("BFRE000107055/BFRE000107055.xml", testCaseLawLdml);
   }
 
   @Test

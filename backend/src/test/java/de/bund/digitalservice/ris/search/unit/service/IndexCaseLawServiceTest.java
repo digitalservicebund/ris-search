@@ -183,9 +183,9 @@ class IndexCaseLawServiceTest {
   void reindexAllIgnoresInvalidFiles() throws ObjectStoreServiceException {
     String testContent = caseLawContent;
 
-    when(this.bucket.getAllKeys()).thenReturn(List.of("file1", "file2"));
-    when(this.bucket.getFileAsString("file1")).thenReturn(Optional.of(testContent));
-    when(this.bucket.getFileAsString("file2")).thenReturn(Optional.of("this will not parse"));
+    when(this.bucket.getAllKeys()).thenReturn(List.of("file1.xml", "file2.xml"));
+    when(this.bucket.getFileAsString("file1.xml")).thenReturn(Optional.of(testContent));
+    when(this.bucket.getFileAsString("file2.xml")).thenReturn(Optional.of("this will not parse"));
 
     String startingTimestamp =
         ZonedDateTime.now(ZoneOffset.UTC).format(DateTimeFormatter.ISO_INSTANT);
@@ -234,8 +234,8 @@ class IndexCaseLawServiceTest {
     when(this.bucket.getAllKeys())
         .thenReturn(
             List.of(
-                "TEST080020093",
-                "TEST080020094",
+                "TEST080020093/TEST080020093.xml",
+                "TEST080020093/TEST080020094.xml",
                 "changelogs/2025-03-26T14:13:34.096304815Z-caselaw.json"));
     assertThat(service.getNumberOfFilesInBucket()).isEqualTo(2);
   }

@@ -74,7 +74,8 @@ public class CaseLawController {
   public ResponseEntity<String> getCaseLawDocumentationUnitAsHtml(
       @Parameter(example = "STRE201770751") @PathVariable String documentNumber)
       throws ObjectStoreServiceException {
-    Optional<byte[]> bytes = caseLawBucket.get(String.format("%s.xml", documentNumber));
+    Optional<byte[]> bytes =
+        caseLawBucket.get(String.format("%s/%s.xml", documentNumber, documentNumber));
 
     if (bytes.isPresent()) {
       String html = xsltTransformerService.transformCaseLaw(bytes.get());
@@ -97,7 +98,8 @@ public class CaseLawController {
       @Parameter(example = "STRE201770751") @PathVariable String documentNumber)
       throws ObjectStoreServiceException {
 
-    Optional<byte[]> bytes = caseLawBucket.get(String.format("%s.xml", documentNumber));
+    Optional<byte[]> bytes =
+        caseLawBucket.get(String.format("%s/%s.xml", documentNumber, documentNumber));
     return bytes.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
   }
 }
