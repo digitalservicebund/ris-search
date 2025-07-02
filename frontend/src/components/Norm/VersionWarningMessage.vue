@@ -2,6 +2,7 @@
 import type { LegislationWork } from "~/types";
 import Message from "primevue/message";
 import IcBaselineHistory from "~icons/ic/baseline-history";
+import IcBaselineUpdate from "~icons/ic/baseline-update";
 
 export interface VersionWarningMessageProps {
   currentVersionValidityStatus?: ValidityStatus;
@@ -24,6 +25,8 @@ const showWarningMessage = computed(() => {
     props.currentVersionValidityStatus === "FutureInForce"
   );
 });
+
+const toCurrentVersionText = "Zur aktuell gültigen Fassung";
 </script>
 
 <template>
@@ -40,11 +43,10 @@ const showWarningMessage = computed(() => {
         />
         <IcBaselineHistory
           v-else-if="currentVersionValidityStatus === 'Expired'"
-          class="scale-x-[-1]"
         />
-        <IcBaselineHistory v-else />
+        <IcBaselineUpdate v-else />
       </template>
-      <p class="mt-2">
+      <p>
         <span
           v-if="
             currentVersionValidityStatus === 'InForce' && props.futureVersion
@@ -66,18 +68,16 @@ const showWarningMessage = computed(() => {
             Zur zukünftigen Fassung
           </NuxtLink>
         </span>
-        <span v-else-if="currentVersionValidityStatus === 'Expired'">
+        <span v-else>
           <span class="ris-body2-bold">
-            {{ historicalWarningMessage }}
+            {{
+              currentVersionValidityStatus === "Expired"
+                ? historicalWarningMessage
+                : futureWarningMessage
+            }}&nbsp;
           </span>
           <NuxtLink v-if="props.inForceVersionLink" :to="inForceVersionLink">
-            Zur aktuell gültigen Fassung
-          </NuxtLink>
-        </span>
-        <span v-else-if="currentVersionValidityStatus === 'FutureInForce'">
-          <span class="ris-body2-bold">{{ futureWarningMessage }} </span>
-          <NuxtLink v-if="props.inForceVersionLink" :to="inForceVersionLink">
-            Zur aktuell gültigen Fassung
+            {{ toCurrentVersionText }}
           </NuxtLink>
         </span>
       </p>
