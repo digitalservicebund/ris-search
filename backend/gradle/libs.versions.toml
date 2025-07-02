@@ -42,7 +42,7 @@ jaxb-moxy = "4.0.5"
 pact = "4.6.17"
 posthog = "1.2.0"
 pebble = "3.2.3"
-rest-assured = "5.4.0"
+rest-assured = "5.5.5"
 
 [libraries]
 spring-actuator = { module="org.springframework.boot:spring-boot-starter-actuator", version.ref="spring-boot-starter" }
