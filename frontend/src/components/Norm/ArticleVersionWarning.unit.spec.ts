@@ -2,20 +2,23 @@ import { mount } from "@vue/test-utils";
 import ArticleVersionWarning from "./ArticleVersionWarning.vue";
 import type { Article } from "~/types";
 
-vi.mock("~/composables/useNormVersions", () => ({
-  getStatusLabel: vi.fn((entry, expiry) => {
-    if (entry === "past" && expiry === "past") return "historical";
-    if (entry === "future") return "future";
-    return "inForce";
-  }),
-}));
-const formattedDate = (d: string | null) => {
-  if (!d) return null;
-  if (d === "1990-01-01" || d === "2000-01-01") return "past";
-  if (d === "2100-01-01") return "future";
-  return "now";
-};
-vi.stubGlobal("formattedDate", formattedDate);
+vi.mock("~/utils/normUtils", async (importOriginal) => {
+  const mod = await importOriginal<Record<string, unknown>>();
+  return {
+    ...mod,
+    getValidityStatus: vi.fn((interval?: ValidityInterval) => {
+      if (
+        interval?.from === parseDateGermanLocalTime("1990-01-01") &&
+        interval?.to === parseDateGermanLocalTime("2000-01-01")
+      ) {
+        return "Expired";
+      }
+      if (interval?.from === parseDateGermanLocalTime("2100-01-01"))
+        return "FutureInForce";
+      return "InForce";
+    }),
+  };
+});
 
 const articleTestData = [
   {

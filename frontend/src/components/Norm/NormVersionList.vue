@@ -7,10 +7,12 @@ import Badge, { BadgeColor } from "@/components/Badge.vue";
 import IcBaselineLaunch from "~icons/ic/baseline-launch";
 import _ from "lodash";
 import {
-  getExpressionStatus,
+  getValidityStatus,
+  getValidityStatusLabel,
   temporalCoverageToValidityInterval,
-  ExpressionStatus,
+  type ValidityStatus,
 } from "~/utils/normUtils";
+import { dateFormattedDDMMYYYY } from "~/utils/dateFormatting";
 
 const props = defineProps<{
   status: string;
@@ -47,10 +49,10 @@ const tableRowData = computed<TableRowData[]>(() => {
     );
 
     const id = index;
-    const expressionStatus = getExpressionStatus(version.item.workExample);
+    const validityStatus = getValidityStatus(validityInterval);
     const status: Status = {
-      label: expressionStatus ?? "Unbekannt",
-      color: getStatusColor(expressionStatus),
+      label: getValidityStatusLabel(validityStatus) ?? "Unbekannt",
+      color: getStatusColor(validityStatus),
     };
     const link = `/norms/${version.item.workExample.legislationIdentifier}`;
     const selectable =
@@ -59,8 +61,8 @@ const tableRowData = computed<TableRowData[]>(() => {
 
     const rowData: TableRowData = {
       id: id,
-      fromDate: validityInterval?.from ?? "-",
-      toDate: validityInterval?.to ?? "-",
+      fromDate: dateFormattedDDMMYYYY(validityInterval?.from) ?? "-",
+      toDate: dateFormattedDDMMYYYY(validityInterval?.to) ?? "-",
       status: status,
       link: link,
       selectable: selectable,
@@ -70,13 +72,13 @@ const tableRowData = computed<TableRowData[]>(() => {
   });
 });
 
-function getStatusColor(expressionStatus?: ExpressionStatus): BadgeColor {
-  switch (expressionStatus) {
-    case ExpressionStatus.InForce:
+function getStatusColor(validityStatus?: ValidityStatus): BadgeColor {
+  switch (validityStatus) {
+    case "InForce":
       return BadgeColor.GREEN;
-    case ExpressionStatus.Future:
+    case "FutureInForce":
       return BadgeColor.YELLOW;
-    case ExpressionStatus.Historical:
+    case "Expired":
       return BadgeColor.RED;
     default:
       return BadgeColor.BLUE;

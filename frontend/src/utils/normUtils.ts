@@ -1,9 +1,10 @@
-import { formattedDate, formattedDateToDateTime } from "~/utils/dateFormatting";
-import type { LegislationExpression, LegislationWork } from "~/types";
+import { parseDateGermanLocalTime } from "~/utils/dateFormatting";
+import type { LegislationWork } from "~/types";
+import dayjs, { type Dayjs } from "dayjs";
 
 export interface ValidityInterval {
-  from?: string;
-  to?: string;
+  from?: Dayjs;
+  to?: Dayjs;
 }
 
 export function temporalCoverageToValidityInterval(
@@ -11,37 +12,53 @@ export function temporalCoverageToValidityInterval(
 ): ValidityInterval | undefined {
   if (!temporalCoverage) return undefined;
   const [from, to] = temporalCoverage.replaceAll("..", "").split("/");
-  return { from: formattedDate(from), to: formattedDate(to) };
+  return {
+    from: parseDateGermanLocalTime(from),
+    to: parseDateGermanLocalTime(to),
+  };
 }
 
-export enum ExpressionStatus {
-  InForce = "Aktuell gültig",
-  Future = "Zukünftig in Kraft",
-  Historical = "Außer Kraft",
-}
+export type ValidityStatus = "InForce" | "FutureInForce" | "Expired";
 
-export function getExpressionStatus(
-  expression: LegislationExpression,
-): ExpressionStatus | undefined {
-  const { from: startDate, to: endDate } =
-    temporalCoverageToValidityInterval(expression.temporalCoverage) || {};
-  const legalForceStatus = expression.legislationLegalForce;
-  if (legalForceStatus === "InForce") {
-    return ExpressionStatus.InForce;
-  } else {
-    if (
-      startDate &&
-      formattedDateToDateTime(startDate) > getCurrentDateInGermany().toDate()
-    ) {
-      return ExpressionStatus.Future;
-    }
-    if (
-      endDate &&
-      formattedDateToDateTime(endDate) < getCurrentDateInGermany().toDate()
-    ) {
-      return ExpressionStatus.Historical;
-    }
+export function getValidityStatusLabel(
+  status?: ValidityStatus,
+): string | undefined {
+  switch (status) {
+    case "Expired":
+      return "Außer Kraft";
+    case "InForce":
+      return "Aktuell gültig";
+    case "FutureInForce":
+      return "Zukünftig in Kraft";
+    default:
+      return undefined;
   }
+}
+
+export function getValidityStatus(
+  validityInterval?: ValidityInterval,
+): ValidityStatus | undefined {
+  if (!validityInterval?.from && !validityInterval?.to) return undefined;
+
+  const currentDate = getCurrentDateInGermany();
+  const start = validityInterval?.from ?? dayjs(new Date("0000-01-01"));
+  const end = validityInterval?.to ?? dayjs(new Date("9999-12-31"));
+
+  if (end.isBefore(currentDate, "day")) {
+    return "Expired";
+  }
+
+  if (
+    (start.isBefore(currentDate, "day") || start.isSame(currentDate, "day")) &&
+    (end.isSame(currentDate, "day") || end.isAfter(currentDate, "day"))
+  ) {
+    return "InForce";
+  }
+
+  if (start.isAfter(currentDate, "day")) {
+    return "FutureInForce";
+  }
+
   return undefined;
 }
 

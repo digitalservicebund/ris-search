@@ -39,7 +39,7 @@ import Toast from "primevue/toast";
 import { useNormActions } from "./useNormActions";
 import NormMetadataFields from "~/components/Norm/NormMetadataFields.vue";
 import {
-  getExpressionStatus,
+  getValidityStatus,
   getManifestationUrl,
   temporalCoverageToValidityInterval,
 } from "~/utils/normUtils";
@@ -90,12 +90,6 @@ const tableOfContents: Ref<TreeNode[]> = computed(() => {
   );
 });
 
-const expressionStatus = computed(() => {
-  if (metadata.value?.workExample)
-    return getExpressionStatus(metadata.value?.workExample);
-  return undefined;
-});
-
 const validityInterval = computed(() =>
   isPrototypeProfile()
     ? undefined
@@ -103,6 +97,12 @@ const validityInterval = computed(() =>
         metadata.value?.workExample.temporalCoverage,
       ),
 );
+
+const validityStatus = computed(() => {
+  if (metadata.value?.workExample && validityInterval)
+    return getValidityStatus(validityInterval.value);
+  return undefined;
+});
 
 const { selectedEntry, vObserveElements } = useIntersectionObserver();
 
@@ -124,7 +124,7 @@ const breadcrumbItems: ComputedRef<BreadcrumbItem[]> = computed(() => {
   const isInForce =
     metadata.value?.workExample.legislationLegalForce === "InForce";
   if (!isInForce) {
-    const validityIntervalLabel = `${validityInterval.value?.from ?? ""}-${validityInterval.value?.to ?? ""}`;
+    const validityIntervalLabel = `${dateFormattedDDMMYYYY(validityInterval.value?.from) ?? ""}-${dateFormattedDDMMYYYY(validityInterval.value?.to) ?? ""}`;
     list.push({ route: route.fullPath, label: validityIntervalLabel });
   }
 
@@ -151,7 +151,7 @@ const { actions } = useNormActions(metadata);
         />
         <NormMetadataFields
           :abbreviation="metadata.abbreviation"
-          :status="expressionStatus"
+          :status="validityStatus"
           :valid-from="validityInterval?.from"
           :valid-to="validityInterval?.to"
         />

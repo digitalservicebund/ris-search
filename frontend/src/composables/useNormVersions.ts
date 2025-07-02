@@ -1,22 +1,13 @@
 import { type AsyncDataRequestStatus, useFetch } from "#app";
-import type {
-  JSONLDList,
-  LegalForceStatus,
-  LegislationWork,
-  SearchResult,
-} from "~/types";
+import type { JSONLDList, LegislationWork, SearchResult } from "~/types";
 import _ from "lodash";
 
 import { computed } from "vue";
-import { formattedDateToDateTime } from "~/utils/dateFormatting";
-import { temporalCoverageToValidityInterval } from "~/utils/normUtils";
 
 interface UseNormVersions {
   status: Ref<AsyncDataRequestStatus>;
   sortedVersions: ComputedRef<SearchResult<LegislationWork>[]>;
 }
-
-export type VersionStatus = "inForce" | "future" | "historical" | undefined;
 
 export function useNormVersions(workEli?: string): UseNormVersions {
   const { data, status } = getNorms({ eli: workEli });
@@ -57,40 +48,4 @@ export function useValidNormVersions(workEli?: string) {
     temporalCoverageFrom: today,
     temporalCoverageTo: today,
   });
-}
-
-export const getVersionDates = (version: LegislationWork | undefined) => {
-  const temporalCoverage = version?.workExample.temporalCoverage ?? "";
-  return temporalCoverageToValidityInterval(temporalCoverage);
-};
-
-export const getVersionStatus = (
-  version: LegislationWork | undefined,
-): VersionStatus => {
-  const validityInterval = getVersionDates(version);
-  const status = version?.workExample.legislationLegalForce;
-  return getStatusLabel(validityInterval?.from, validityInterval?.to, status);
-};
-
-export function getStatusLabel(
-  startDate: string | undefined,
-  endDate: string | undefined,
-  status?: LegalForceStatus | undefined,
-): VersionStatus {
-  if (status === "InForce") {
-    return "inForce";
-  }
-  const dateFrom = startDate ? formattedDateToDateTime(startDate) : undefined;
-  const dateTo = endDate ? formattedDateToDateTime(endDate) : undefined;
-  const now = new Date();
-  if (dateFrom && dateFrom > now) {
-    return "future";
-  }
-  if (dateTo && dateTo < now) {
-    return "historical";
-  }
-  if (dateFrom && dateFrom <= now && (!dateTo || dateTo >= now)) {
-    return "inForce";
-  }
-  return undefined;
 }
