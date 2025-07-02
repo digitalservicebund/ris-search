@@ -80,7 +80,7 @@ public class CaseLawController {
       @Parameter(example = "STRE201770751") @PathVariable String documentNumber)
       throws ObjectStoreServiceException {
     Optional<byte[]> bytes;
-    if (environment.acceptsProfiles(Profiles.of("default", "staging"))) {
+    if (environment.acceptsProfiles(Profiles.of("default", "test", "staging"))) {
       bytes = caseLawBucket.get(String.format("%s/%s.xml", documentNumber, documentNumber));
     } else {
       bytes = caseLawBucket.get(String.format("%s.xml", documentNumber));
@@ -107,7 +107,7 @@ public class CaseLawController {
       @Parameter(example = "STRE201770751") @PathVariable String documentNumber)
       throws ObjectStoreServiceException {
     Optional<byte[]> bytes;
-    if (environment.acceptsProfiles(Profiles.of("default", "staging"))) {
+    if (environment.acceptsProfiles(Profiles.of("default", "test", "staging"))) {
       bytes = caseLawBucket.get(String.format("%s/%s.xml", documentNumber, documentNumber));
     } else {
       bytes = caseLawBucket.get(String.format("%s.xml", documentNumber));
