@@ -77,8 +77,7 @@ public class UniversalDocumentQueryBuilder {
         MultiMatchQueryBuilder unquotedQuery =
             new MultiMatchQueryBuilder(term)
                 .zeroTermsQuery(MatchQuery.ZeroTermsQuery.ALL)
-                .operator(Operator.AND)
-                .type(Type.CROSS_FIELDS);
+                .type(Type.BEST_FIELDS);
         query.must(unquotedQuery);
         articleNestedQuery.should(unquotedQuery);
       }
