@@ -30,23 +30,21 @@ export function getValidityStatus(
   if (!validityInterval?.from && !validityInterval?.to) return undefined;
 
   const currentDate = getCurrentDateInGermany();
-  const start = validityInterval?.from ?? dayjs(new Date(-8640000000000000)); // mallest possible date
-  const end = validityInterval?.to ?? dayjs(new Date(8640000000000000)); // largest possible date
+  const start = validityInterval?.from ?? dayjs(new Date("0000-01-01"));
+  const end = validityInterval?.to ?? dayjs(new Date("9999-12-31"));
+
+  if (end.isBefore(currentDate, "day")) {
+    return ValidityStatus.Historical;
+  }
 
   if (
-    (start.isBefore(end, "day") || start.isSame(end, "day")) &&
-    end.isBefore(currentDate, "day")
-  ) {
-    return ValidityStatus.Historical;
-  } else if (
     (start.isBefore(currentDate, "day") || start.isSame(currentDate, "day")) &&
     (end.isSame(currentDate, "day") || end.isAfter(currentDate, "day"))
   ) {
     return ValidityStatus.InForce;
-  } else if (
-    start.isAfter(currentDate, "day") &&
-    (end.isAfter(start, "day") || end.isSame(start, "day"))
-  ) {
+  }
+
+  if (start.isAfter(currentDate, "day")) {
     return ValidityStatus.Future;
   }
 

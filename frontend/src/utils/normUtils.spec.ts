@@ -98,11 +98,4 @@ describe("getValidityStatus", () => {
     const result = getValidityStatus();
     expect(result).toBeUndefined();
   });
-
-  it("returns undefined if start date is after end date", () => {
-    const result = getValidityStatus(
-      createInterval("2025-01-01", "2024-12-31"),
-    );
-    expect(result).toBeUndefined();
-  });
 });
