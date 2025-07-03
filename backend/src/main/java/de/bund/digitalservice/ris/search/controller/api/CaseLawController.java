@@ -1,10 +1,11 @@
 package de.bund.digitalservice.ris.search.controller.api;
 
+import static org.springframework.http.HttpHeaders.CONTENT_DISPOSITION;
+
 import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.mapper.CaseLawSchemaMapper;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
-import de.bund.digitalservice.ris.search.repository.objectstorage.CaseLawBucket;
 import de.bund.digitalservice.ris.search.schema.CaseLawSchema;
 import de.bund.digitalservice.ris.search.service.CaseLawService;
 import de.bund.digitalservice.ris.search.service.XsltTransformerService;
@@ -25,6 +26,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
 @Tag(name = "Case Law")
 @RestController
@@ -33,19 +35,12 @@ public class CaseLawController {
 
   private final CaseLawService caseLawService;
   private final XsltTransformerService xsltTransformerService;
-  private final CaseLawBucket caseLawBucket;
-  private final Environment environment;
 
   @Autowired
   public CaseLawController(
-      CaseLawService caseLawService,
-      XsltTransformerService xsltTransformerService,
-      CaseLawBucket caseLawBucket,
-      Environment environment) {
+      CaseLawService caseLawService, XsltTransformerService xsltTransformerService) {
     this.caseLawService = caseLawService;
     this.xsltTransformerService = xsltTransformerService;
-    this.caseLawBucket = caseLawBucket;
-    this.environment = environment;
   }
 
   @GetMapping(
@@ -79,12 +74,7 @@ public class CaseLawController {
   public ResponseEntity<String> getCaseLawDocumentationUnitAsHtml(
       @Parameter(example = "STRE201770751") @PathVariable String documentNumber)
       throws ObjectStoreServiceException {
-    Optional<byte[]> bytes;
-    if (environment.acceptsProfiles(Profiles.of("default", "test", "staging"))) {
-      bytes = caseLawBucket.get(String.format("%s/%s.xml", documentNumber, documentNumber));
-    } else {
-      bytes = caseLawBucket.get(String.format("%s.xml", documentNumber));
-    }
+    Optional<byte[]> bytes = caseLawService.getFileByDocumentNumber(documentNumber);
 
     if (bytes.isPresent()) {
       String html = xsltTransformerService.transformCaseLaw(bytes.get());
@@ -106,13 +96,31 @@ public class CaseLawController {
   public ResponseEntity<byte[]> getCaseLawDocumentationUnitAsXml(
       @Parameter(example = "STRE201770751") @PathVariable String documentNumber)
       throws ObjectStoreServiceException {
-    Optional<byte[]> bytes;
-    if (environment.acceptsProfiles(Profiles.of("default", "test", "staging"))) {
-      bytes = caseLawBucket.get(String.format("%s/%s.xml", documentNumber, documentNumber));
-    } else {
-      bytes = caseLawBucket.get(String.format("%s.xml", documentNumber));
-    }
 
+    Optional<byte[]> bytes = caseLawService.getFileByDocumentNumber(documentNumber);
     return bytes.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+  }
+
+  @GetMapping(
+      path = ApiConfig.Paths.CASELAW + "/{documentNumber}.zip",
+      produces = "application/zip")
+  @Operation(
+      summary = "Decision ZIP (XML and attachments)",
+      description = "Returns a case law decision, including attachments, as a ZIP archive.")
+  @ApiResponse(responseCode = "200")
+  @ApiResponse(responseCode = "404", content = @Content(schema = @Schema()))
+  public ResponseEntity<StreamingResponseBody> getCaseLawDocumentationUnitAsZip(
+      @Parameter(example = "STRE201770751") @PathVariable String documentNumber) {
+
+    String filename = documentNumber + ".zip";
+    List<String> keys = caseLawService.getAllFilenamesByKey(documentNumber);
+
+    if (keys.isEmpty()) {
+      return ResponseEntity.notFound().build();
+    }
+    return ResponseEntity.ok()
+        .header(CONTENT_DISPOSITION, "attachment;filename=\"%s\"".formatted(filename))
+        .contentType(MediaType.valueOf("application/zip"))
+        .body(outputStream -> caseLawService.writeZipArchive(keys, outputStream));
   }
 }

@@ -27,6 +27,14 @@ public class CaseLawEncodingSchemaMapper {
             .inLanguage("de")
             .build();
 
-    return List.of(htmlObjectSchema, xmlObjectSchema);
+    var zipObjectSchema =
+        CaseLawEncodingSchema.builder()
+            .id(base + "/zip")
+            .contentUrl(base + ".zip")
+            .encodingFormat("application/zip")
+            .inLanguage("de")
+            .build();
+
+    return List.of(htmlObjectSchema, xmlObjectSchema, zipObjectSchema);
   }
 }

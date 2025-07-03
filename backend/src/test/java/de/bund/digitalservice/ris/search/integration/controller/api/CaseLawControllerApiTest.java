@@ -1,5 +1,6 @@
 package de.bund.digitalservice.ris.search.integration.controller.api;
 
+import static de.bund.digitalservice.ris.ZipTestUtils.readZipStream;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.containsString;
@@ -8,6 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.request;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.c4_soft.springaddons.security.oauth2.test.annotations.WithJwt;
@@ -18,11 +20,13 @@ import de.bund.digitalservice.ris.search.repository.objectstorage.CaseLawBucket;
 import de.bund.digitalservice.ris.search.repository.opensearch.CaseLawSynthesizedRepository;
 import de.bund.digitalservice.ris.search.service.IndexCaselawService;
 import de.bund.digitalservice.ris.search.utils.CaseLawLdmlTemplateUtils;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
+import org.assertj.core.api.Assertions;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -33,6 +37,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
@@ -45,13 +50,7 @@ class CaseLawControllerApiTest extends ContainersIntegrationBase {
   @Autowired private CaseLawBucket caseLawBucket;
   private final CaseLawLdmlTemplateUtils caseLawLdmlTemplateUtils = new CaseLawLdmlTemplateUtils();
 
-  @BeforeEach
-  void setUpSearchControllerApiTest() throws IOException {
-    assertTrue(openSearchContainer.isRunning());
-
-    super.recreateIndex();
-    super.updateMapping();
-
+  private String createTestCaseLawLdml() throws IOException {
     LocalDate decisionDate = LocalDate.of(2023, 1, 2);
 
     Map<String, Object> context = new HashMap<>();
@@ -68,8 +67,19 @@ class CaseLawControllerApiTest extends ContainersIntegrationBase {
     context.put("documentationOffice", "DS");
     context.put("error", false);
 
-    String testCaseLawLdml = caseLawLdmlTemplateUtils.getXmlFromTemplate(context);
+    return caseLawLdmlTemplateUtils.getXmlFromTemplate(context);
+  }
+
+  @BeforeEach
+  void setUpSearchControllerApiTest() throws IOException {
+    assertTrue(openSearchContainer.isRunning());
+
+    super.recreateIndex();
+    super.updateMapping();
+
+    String testCaseLawLdml = createTestCaseLawLdml();
     caseLawBucket.save("BFRE000107055/BFRE000107055.xml", testCaseLawLdml);
+    caseLawBucket.save("BFRE000107055/Attachment.png", "picture");
   }
 
   @Test
@@ -100,11 +110,15 @@ class CaseLawControllerApiTest extends ContainersIntegrationBase {
             jsonPath(
                 "$.encoding[*]['@id']",
                 containsInAnyOrder(
-                    "/v1/case-law/BFRE000107055/html", "/v1/case-law/BFRE000107055/xml")),
+                    "/v1/case-law/BFRE000107055/html",
+                    "/v1/case-law/BFRE000107055/xml",
+                    "/v1/case-law/BFRE000107055/zip")),
             jsonPath(
                 "$.encoding[*].contentUrl",
                 containsInAnyOrder(
-                    "/v1/case-law/BFRE000107055.html", "/v1/case-law/BFRE000107055.xml")));
+                    "/v1/case-law/BFRE000107055.html",
+                    "/v1/case-law/BFRE000107055.xml",
+                    "/v1/case-law/BFRE000107055.zip")));
   }
 
   @Test
@@ -146,6 +160,30 @@ class CaseLawControllerApiTest extends ContainersIntegrationBase {
     assertThat(responseContent, containsString("Das ist der Leitsatz"));
     assertThat(responseContent, containsString("Sonstiger Orientierungssatz"));
     assertThat(responseContent, containsString("Tatbestand"));
+  }
+
+  @Test
+  @DisplayName("Should return case law and attachment in zip when using api endpoint for zip")
+  void shouldReturnCaselawZip() throws Exception {
+
+    MvcResult result =
+        mockMvc
+            .perform(
+                get(ApiConfig.Paths.CASELAW + "/BFRE000107055.zip")
+                    .contentType(MediaType.valueOf("application/zip")))
+            .andExpect(request().asyncStarted())
+            .andDo(MvcResult::getAsyncResult)
+            .andExpectAll(status().isOk(), content().contentType("application/zip"))
+            .andReturn();
+
+    byte[] zipBytes = result.getResponse().getContentAsByteArray();
+    ByteArrayInputStream byteInputStream = new ByteArrayInputStream(zipBytes);
+    final Map<String, byte[]> files = readZipStream(byteInputStream);
+
+    Assertions.assertThat(files)
+        .containsOnly(
+            Map.entry("BFRE000107055.xml", createTestCaseLawLdml().getBytes()),
+            Map.entry("Attachment.png", "picture".getBytes()));
   }
 
   @Test

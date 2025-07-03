@@ -27,6 +27,7 @@ import PropertiesItem from "~/components/PropertiesItem.vue";
 import Properties from "~/components/Properties.vue";
 import ContentWrapper from "@/components/CustomLayouts/ContentWrapper.vue";
 import { useCaseLawActions } from "~/pages/case-law/[documentNumber]/useCaseLawActions";
+import MaterialSymbolsDownload from "~icons/material-symbols/download";
 
 const route = useRoute();
 const documentNumber = route.params.documentNumber as string;
@@ -53,6 +54,13 @@ const tocEntries: ComputedRef<TableOfContentsEntry[] | null> = computed(() => {
 });
 
 const { actions } = useCaseLawActions(caseLaw);
+
+const zipUrl = computed(() =>
+  getEncodingURL(caseLaw.value, backendURL, "application/zip"),
+);
+
+console.log(`Zip url: ${zipUrl.value}` + caseLaw.value?.encoding.values);
+
 if (metadataError?.value) {
   showError(metadataError.value);
 }
@@ -163,9 +171,21 @@ if (contentError?.value) {
                 :value="caseLaw.decisionName?.join(', ')"
               />
               <PropertiesItem label="Vorinstanz:" value="" />
+              <PropertiesItem label="Download:">
+                <NuxtLink
+                  data-attr="xml-zip-view"
+                  class="ris-link1-regular"
+                  external
+                  :href="zipUrl"
+                >
+                  <MaterialSymbolsDownload class="mr-2 inline" />
+                  Als ZIP herunterladen
+                </NuxtLink>
+              </PropertiesItem>
             </Properties>
           </section>
         </TabPanel>
-      </TabPanels> </Tabs
-  ></ContentWrapper>
+      </TabPanels>
+    </Tabs></ContentWrapper
+  >
 </template>
