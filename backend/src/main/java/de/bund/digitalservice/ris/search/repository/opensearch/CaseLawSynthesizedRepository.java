@@ -13,6 +13,8 @@ public interface CaseLawSynthesizedRepository
     extends ElasticsearchRepository<CaseLawDocumentationUnit, String> {
   List<CaseLawDocumentationUnit> findByDocumentNumber(String documentNumber);
 
+  List<CaseLawDocumentationUnit> findAllByDocumentNumberIn(List<String> documentNumbers);
+
   void deleteByIndexedAtBefore(String indexedAt);
 
   void deleteByIndexedAtIsNull();

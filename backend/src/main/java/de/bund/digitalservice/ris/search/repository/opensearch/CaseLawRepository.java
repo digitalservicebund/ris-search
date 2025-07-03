@@ -33,4 +33,8 @@ public class CaseLawRepository {
   public List<CaseLawDocumentationUnit> getByDocumentNumber(String documentNumber) {
     return caseLawSynthesizedRepository.findByDocumentNumber(documentNumber);
   }
+
+  public List<CaseLawDocumentationUnit> getByDocumentNumbers(List<String> numbers) {
+    return caseLawSynthesizedRepository.findAllByDocumentNumberIn(numbers);
+  }
 }

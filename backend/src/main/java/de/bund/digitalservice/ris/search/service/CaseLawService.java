@@ -174,4 +174,8 @@ public class CaseLawService {
   public List<CaseLawDocumentationUnit> getByDocumentNumber(String documentNumber) {
     return caseLawRepository.getByDocumentNumber(documentNumber);
   }
+
+  public List<CaseLawDocumentationUnit> getByDocumentNumbers(List<String> documentNumber) {
+    return caseLawRepository.getByDocumentNumbers(documentNumber);
+  }
 }
