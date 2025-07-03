@@ -8,6 +8,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import de.bund.digitalservice.ris.search.eclicrawler.service.EcliSitemapJob;
 import de.bund.digitalservice.ris.search.importer.ImportTaskProcessor;
 import de.bund.digitalservice.ris.search.service.CaseLawIndexSyncJob;
 import de.bund.digitalservice.ris.search.service.Job;
@@ -28,6 +29,7 @@ class ImportTaskProcessorTest {
   @Mock private CaseLawIndexSyncJob caseLawIndexSyncJob;
   @Mock private LiteratureIndexSyncJob literatureIndexSyncJob;
   @Mock private SitemapsUpdateJob sitemapsUpdateJob;
+  @Mock private EcliSitemapJob ecliSitemapJob;
 
   private ImportTaskProcessor processor;
 
@@ -35,7 +37,11 @@ class ImportTaskProcessorTest {
   void setUp() {
     processor =
         new ImportTaskProcessor(
-            normIndexSyncJob, caseLawIndexSyncJob, literatureIndexSyncJob, sitemapsUpdateJob);
+            normIndexSyncJob,
+            caseLawIndexSyncJob,
+            sitemapsUpdateJob,
+            literatureIndexSyncJob,
+            ecliSitemapJob);
   }
 
   @Test
@@ -194,6 +200,19 @@ class ImportTaskProcessorTest {
 
     // Then
     verify(sitemapsUpdateJob).runJob();
+  }
+
+  @Test
+  void runTask_withEcliSitemapsTarget_callsEcliSitemapsUpdateJob() {
+    // Given
+    String target = "generate_ecli_sitemaps";
+
+    // When
+    when(ecliSitemapJob.runJob()).thenReturn(Job.ReturnCode.SUCCESS);
+    processor.runTask(target);
+
+    // Then
+    verify(ecliSitemapJob).runJob();
   }
 
   @Test

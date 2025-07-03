@@ -1,5 +1,6 @@
 package de.bund.digitalservice.ris.search.importer;
 
+import de.bund.digitalservice.ris.search.eclicrawler.service.EcliSitemapJob;
 import de.bund.digitalservice.ris.search.service.CaseLawIndexSyncJob;
 import de.bund.digitalservice.ris.search.service.Job;
 import de.bund.digitalservice.ris.search.service.LiteratureIndexSyncJob;
@@ -24,6 +25,7 @@ public class ImportTaskProcessor {
   private final CaseLawIndexSyncJob caseLawIndexSyncJob;
   private final LiteratureIndexSyncJob literatureIndexSyncJob;
   private final SitemapsUpdateJob sitemapsUpdateJob;
+  private final EcliSitemapJob ecliSitemapJob;
 
   private static final Logger logger = LogManager.getLogger(ImportTaskProcessor.class);
 
@@ -33,12 +35,14 @@ public class ImportTaskProcessor {
   public ImportTaskProcessor(
       NormIndexSyncJob normIndexSyncJob,
       CaseLawIndexSyncJob caseLawIndexSyncJob,
+      SitemapsUpdateJob sitemapsUpdateJob,
       LiteratureIndexSyncJob literatureIndexSyncJob,
-      SitemapsUpdateJob sitemapsUpdateJob) {
+      EcliSitemapJob ecliSitemapJob) {
     this.normIndexSyncJob = normIndexSyncJob;
     this.caseLawIndexSyncJob = caseLawIndexSyncJob;
     this.literatureIndexSyncJob = literatureIndexSyncJob;
     this.sitemapsUpdateJob = sitemapsUpdateJob;
+    this.ecliSitemapJob = ecliSitemapJob;
   }
 
   public boolean shouldRun(String[] args) {
@@ -87,6 +91,7 @@ public class ImportTaskProcessor {
       case "import_caselaw" -> runTask(caseLawIndexSyncJob);
       case "import_literature" -> runTask(literatureIndexSyncJob);
       case "update_sitemaps" -> runTask(sitemapsUpdateJob);
+      case "generate_ecli_sitemaps" -> runTask(ecliSitemapJob);
       default -> throw new IllegalArgumentException("Unexpected target '%s'".formatted(target));
     };
   }

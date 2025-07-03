@@ -10,6 +10,8 @@ import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationU
 import de.bund.digitalservice.ris.search.repository.objectstorage.CaseLawBucket;
 import de.bund.digitalservice.ris.search.repository.opensearch.CaseLawRepository;
 import de.bund.digitalservice.ris.search.service.CaseLawService;
+import de.bund.digitalservice.ris.search.utils.CaseLawLdmlTemplateUtils;
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
@@ -36,6 +38,10 @@ class CaseLawServiceTest {
   private CaseLawService caseLawService;
   private ElasticsearchOperations operationsMock;
   private CaseLawBucket caseLawBucketMock;
+
+  // instead of using this we should make the mapper functions non static to be able to mock
+  // marhshalling an xml file
+  private final CaseLawLdmlTemplateUtils templateUtils = new CaseLawLdmlTemplateUtils();
 
   @BeforeEach
   void setUp() {
@@ -98,5 +104,32 @@ class CaseLawServiceTest {
 
     var actual = caseLawService.getAllFilenamesByDocumentNumber("FOO");
     Assertions.assertEquals(expectedResult, actual);
+  }
+
+  @Test
+  void itReturnsEmptyForInvalidLdmlFromFile() throws ObjectStoreServiceException {
+    String filename = "docNr/docNr.xml";
+
+    when(caseLawBucketMock.getFileAsString(filename)).thenReturn(Optional.of("content"));
+    Assertions.assertTrue(caseLawService.getFromBucket(filename).isEmpty());
+  }
+
+  @Test
+  void itReturnsEmptyForMissingContentFromFile() throws ObjectStoreServiceException {
+    String filename = "docNr/docNr.xml";
+
+    when(caseLawBucketMock.getFileAsString(filename)).thenReturn(Optional.empty());
+    Assertions.assertTrue(caseLawService.getFromBucket(filename).isEmpty());
+  }
+
+  @Test
+  void itReturnsACaseLawDocumentationUnit() throws IOException, ObjectStoreServiceException {
+    String filename = "docNr/docNr.xml";
+    String content = templateUtils.getXmlFromTemplate(null);
+    when(caseLawBucketMock.getFileAsString(filename)).thenReturn(Optional.of(content));
+
+    var result = caseLawService.getFromBucket(filename);
+
+    Assertions.assertTrue(result.isPresent());
   }
 }
