@@ -27,23 +27,23 @@ class CaseLawEncodingSchemaMapperTest {
 
     // HTML Schema
     CaseLawEncodingSchema htmlSchema = schemas.getFirst();
-    assertEquals(htmlSchema.id(), base + "/html");
-    assertEquals(htmlSchema.contentUrl(), base + ".html");
-    assertEquals(htmlSchema.encodingFormat(), "text/html");
-    assertEquals(htmlSchema.inLanguage(), "de");
+    assertEquals(base + "/html", htmlSchema.id());
+    assertEquals(base + ".html", htmlSchema.contentUrl());
+    assertEquals("text/html", htmlSchema.encodingFormat());
+    assertEquals("de", htmlSchema.inLanguage());
 
     // XML Schema
     CaseLawEncodingSchema xmlSchema = schemas.get(1);
-    assertEquals(xmlSchema.id(), base + "/xml");
-    assertEquals(xmlSchema.contentUrl(), base + ".xml");
-    assertEquals(xmlSchema.encodingFormat(), "application/xml");
-    assertEquals(xmlSchema.inLanguage(), "de");
+    assertEquals(base + "/xml", xmlSchema.id());
+    assertEquals(base + ".xml", xmlSchema.contentUrl());
+    assertEquals("application/xml", xmlSchema.encodingFormat());
+    assertEquals("de", xmlSchema.inLanguage());
 
     // ZIP Schema
     CaseLawEncodingSchema zipSchema = schemas.get(2);
-    assertEquals(zipSchema.id(), base + "/zip");
-    assertEquals(zipSchema.contentUrl(), base + ".zip");
-    assertEquals(zipSchema.encodingFormat(), "application/zip");
-    assertEquals(zipSchema.inLanguage(), "de");
+    assertEquals(base + "/zip", zipSchema.id());
+    assertEquals(base + ".zip", zipSchema.contentUrl());
+    assertEquals("application/zip", zipSchema.encodingFormat());
+    assertEquals("de", zipSchema.inLanguage());
   }
 }
