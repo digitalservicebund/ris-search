@@ -20,6 +20,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.core.env.Environment;
+import org.springframework.core.env.Profiles;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
@@ -37,6 +39,7 @@ class CaseLawServiceTest {
   private CaseLawService caseLawService;
   private ElasticsearchOperations operationsMock;
   private CaseLawBucket caseLawBucketMock;
+  private Environment environmentMock;
 
   @BeforeEach
   public void setUp() {
@@ -46,10 +49,15 @@ class CaseLawServiceTest {
         new CaseLawRepository(caseLawSynthesizedRepositoryMock);
     caseLawBucketMock = Mockito.mock(CaseLawBucket.class);
     operationsMock = Mockito.mock(ElasticsearchOperations.class);
+    environmentMock = Mockito.mock(Environment.class);
     Configurations configurations = Mockito.mock(Configurations.class);
     this.caseLawService =
         new CaseLawService(
-            caseLawRepositoryMock, caseLawBucketMock, operationsMock, configurations);
+            caseLawRepositoryMock,
+            caseLawBucketMock,
+            operationsMock,
+            configurations,
+            environmentMock);
   }
 
   @Test
@@ -73,19 +81,24 @@ class CaseLawServiceTest {
   }
 
   @Test
-  @DisplayName("Should return existing file as bytes")
-  void shouldReturnFileAsBytes() throws ObjectStoreServiceException {
+  @DisplayName("Should return existing file as bytes from folder if not in prototype envrionment")
+  void shouldReturnFileAsBytesFromFolderWhenNotInPrototypeEnvironment()
+      throws ObjectStoreServiceException {
     Optional<byte[]> expectedResult = Optional.of("file-content".getBytes());
     when(caseLawBucketMock.get("STRE201770751/STRE201770751.xml")).thenReturn(expectedResult);
+    when(environmentMock.acceptsProfiles(Profiles.of("default", "test", "staging")))
+        .thenReturn(true);
 
     var actual = caseLawService.getFileByDocumentNumber("STRE201770751");
     Assertions.assertEquals(expectedResult, actual);
   }
 
   @Test
-  @DisplayName("Should throw if file does not exist")
-  void shouldThrowIfFileDoesNotExist() throws ObjectStoreServiceException {
+  @DisplayName("Should throw if file does not")
+  void shouldThrowIfFileNotFoundInFolder() throws ObjectStoreServiceException {
     when(caseLawBucketMock.get(any())).thenThrow(ObjectStoreServiceException.class);
+    when(environmentMock.acceptsProfiles(Profiles.of("default", "test", "staging")))
+        .thenReturn(false);
 
     Assertions.assertThrows(
         ObjectStoreServiceException.class,
@@ -94,12 +107,38 @@ class CaseLawServiceTest {
   }
 
   @Test
-  @DisplayName("Should return all filenames for document number")
-  void shouldReturnAllFilenamesForADocumentNumber() {
+  @DisplayName("Should return existing file as bytes in prototype environment")
+  void shouldReturnFileAsBytesFromRootWhenInPrototypeEnvironment()
+      throws ObjectStoreServiceException {
+    Optional<byte[]> expectedResult = Optional.of("file-content".getBytes());
+    when(caseLawBucketMock.get("STRE201770751.xml")).thenReturn(expectedResult);
+    when(environmentMock.acceptsProfiles(Profiles.of("default", "test", "staging")))
+        .thenReturn(false);
+
+    var actual = caseLawService.getFileByDocumentNumber("STRE201770751");
+    Assertions.assertEquals(expectedResult, actual);
+  }
+
+  @Test
+  @DisplayName("Should return all filenames for document number if not in prototype environment")
+  void shouldReturnAllFilenamesForADocumentNumberIfNotInPrototypeEnvironment() {
     List<String> expectedResult = List.of("FOO.xml", "FOO-image.png");
     when(caseLawBucketMock.getAllKeysByPrefix("FOO")).thenReturn(expectedResult);
+    when(environmentMock.acceptsProfiles(Profiles.of("default", "test", "staging")))
+        .thenReturn(true);
 
-    var actual = caseLawService.getAllFilenamesByKey("FOO");
+    var actual = caseLawService.getAllFilenamesByDocumentNumber("FOO");
+    Assertions.assertEquals(expectedResult, actual);
+  }
+
+  @Test
+  @DisplayName("Should return single file for document number if in prototype environment")
+  void shouldReturnOnlyXmlFileForADocumentNumberIfInPrototypeEnvironment() {
+    List<String> expectedResult = List.of("FOO.xml");
+    when(environmentMock.acceptsProfiles(Profiles.of("default", "test", "staging")))
+        .thenReturn(false);
+
+    var actual = caseLawService.getAllFilenamesByDocumentNumber("FOO");
     Assertions.assertEquals(expectedResult, actual);
   }
 }

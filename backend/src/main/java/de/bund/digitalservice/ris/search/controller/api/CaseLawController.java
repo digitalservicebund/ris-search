@@ -19,8 +19,6 @@ import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
-import org.springframework.core.env.Environment;
-import org.springframework.core.env.Profiles;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -113,7 +111,7 @@ public class CaseLawController {
       @Parameter(example = "STRE201770751") @PathVariable String documentNumber) {
 
     String filename = documentNumber + ".zip";
-    List<String> keys = caseLawService.getAllFilenamesByKey(documentNumber);
+    List<String> keys = caseLawService.getAllFilenamesByDocumentNumber(documentNumber);
 
     if (keys.isEmpty()) {
       return ResponseEntity.notFound().build();
