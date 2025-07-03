@@ -1,6 +1,11 @@
 import CaseLawPage from "@/pages/case-law/[documentNumber]/index.vue";
 import { mockNuxtImport, mountSuspended } from "@nuxt/test-utils/runtime";
-import { type DOMWrapper, mount, type VueWrapper } from "@vue/test-utils";
+import {
+  type DOMWrapper,
+  mount,
+  type VueWrapper,
+  RouterLinkStub,
+} from "@vue/test-utils";
 import dayjs from "dayjs";
 import type { CaseLaw } from "@/types";
 
@@ -32,7 +37,15 @@ const caseLawTestData: CaseLaw = {
   "@id": "123",
   "@type": "Decision",
   deviatingDocumentNumber: [],
-  encoding: [],
+  encoding: [
+    {
+      "@type": "DecisionObject",
+      "@id": "/v1/case-law/12345/zip",
+      contentUrl: "/v1/case-law/12345.zip",
+      encodingFormat: "application/zip",
+      inLanguage: "de",
+    },
+  ],
   inLanguage: "",
   keywords: [],
   documentNumber: "12345",
@@ -223,5 +236,37 @@ describe("case law single view page", async () => {
     mount(CaseLawPage);
     await nextTick();
     expect(useHeadMock).toHaveBeenCalledWith({ title: "123" });
+  });
+
+  it("displays zip link on the details tab", async () => {
+    useFetchMock.mockImplementation(async (url: string) => {
+      if (url.includes("html")) {
+        return {
+          data: ref(htmlData),
+          status: ref("success"),
+        };
+      } else {
+        return {
+          data: ref(caseLawTestData),
+          status: ref("success"),
+        };
+      }
+    });
+
+    const wrapper = await mountSuspended(CaseLawPage, {
+      global: {
+        stubs: {
+          NuxtLink: RouterLinkStub,
+        },
+      },
+    });
+
+    const tabButton = wrapper.get("button[aria-label*='Details']");
+    await tabButton.trigger("click");
+
+    const zipLink = wrapper.get("[data-attr='xml-zip-view']");
+    expect(zipLink).toBeTruthy();
+    expect(zipLink.text()).toBe("12345 als ZIP herunterladen");
+    expect(zipLink.attributes("href")).toBe("/api/v1/case-law/12345.zip");
   });
 });
