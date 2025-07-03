@@ -97,7 +97,7 @@ public class IndexCaselawService implements IndexService {
     return getAllCaseLawFilenames().size();
   }
 
-  private List<String> getAllCaseLawFilenames() {
+  public List<String> getAllCaseLawFilenames() {
     return bucket.getAllKeys().stream()
         .filter(s -> s.endsWith(".xml") && !s.contains(IndexSyncJob.CHANGELOGS_PREFIX))
         .toList();

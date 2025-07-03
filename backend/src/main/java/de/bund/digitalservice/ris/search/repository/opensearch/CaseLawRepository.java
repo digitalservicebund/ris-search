@@ -18,4 +18,10 @@ public interface CaseLawRepository
   void deleteByIndexedAtIsNull();
 
   void deleteAllById(Iterable<? extends String> ids);
+
+  List<CaseLawDocumentationUnit> findAllByDocumentNumberInAndEcliNotNull(
+          List<String> documentNumbers);
+
+  List<CaseLawDocumentationUnit> findAllByEcliNotNull();
+
 }
