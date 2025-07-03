@@ -143,4 +143,15 @@ class NlexServiceTest {
                 any()))
         .thenReturn(page);
   }
+
+  @Test
+  void itReturnsTheProperErrorCodeOnEmptySearch() {
+    Query query =
+        new Query()
+            .setNavigation(new Navigation())
+            .setCriteria(new Criteria().setWords(new Words().setContains("")));
+
+    RequestResult result = this.nlexService.runRequestQuery(query);
+    Assertions.assertEquals("1", result.getErrors().getFirst().getCause());
+  }
 }

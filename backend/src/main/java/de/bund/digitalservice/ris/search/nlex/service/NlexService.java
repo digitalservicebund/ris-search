@@ -5,8 +5,10 @@ import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.nlex.mapper.RisToNlexMapper;
 import de.bund.digitalservice.ris.search.nlex.schema.query.Navigation;
 import de.bund.digitalservice.ris.search.nlex.schema.query.Query;
+import de.bund.digitalservice.ris.search.nlex.schema.result.Error;
 import de.bund.digitalservice.ris.search.nlex.schema.result.RequestResult;
 import de.bund.digitalservice.ris.search.service.NormsService;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import org.jose4j.base64url.Base64;
@@ -26,6 +28,10 @@ public class NlexService {
 
   public RequestResult runRequestQuery(Query query) {
     String searchTerm = getSearchTerm(query);
+    if (Objects.isNull(searchTerm) || searchTerm.isEmpty()) {
+      return new RequestResult()
+          .setErrors(List.of(new Error().setCause(Error.STANDARD_ERROR_NO_SEARCHTERM)));
+    }
 
     return runQuery(searchTerm, PageRequest.of(query.getNavigation().getPage().getNumber(), 20));
   }

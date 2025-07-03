@@ -9,7 +9,7 @@ import lombok.experimental.Accessors;
 @XmlRootElement(name = "request")
 @Data
 @Accessors(chain = true)
-@XmlType(propOrder = {"navigation", "criteria"})
+@XmlType(propOrder = {})
 public class Query {
   private Navigation navigation;
 
