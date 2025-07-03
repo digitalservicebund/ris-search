@@ -2,11 +2,13 @@ package de.bund.digitalservice.ris.search.unit.nlex.service;
 
 import static org.mockito.ArgumentMatchers.argThat;
 
+import de.bund.digitalservice.ris.TestXmlUtils;
 import de.bund.digitalservice.ris.search.nlex.schema.query.Query;
 import de.bund.digitalservice.ris.search.nlex.schema.result.RequestResult;
 import de.bund.digitalservice.ris.search.nlex.service.NlexService;
 import de.bund.digitalservice.ris.search.nlex.service.NlexWebServiceEndpoint;
 import jakarta.xml.bind.JAXB;
+import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import java.io.IOException;
 import java.io.StringReader;
@@ -44,9 +46,11 @@ class NlexWebserviceEndpointTest {
   }
 
   @Test
-  void onTestQueryItReturnsThePlaceholder() {
+  void onTestQueryItReturnsAValidTestQuery() throws JAXBException, IOException {
     TestQueryResponse response = this.nlexServiceEndpoint.testQuery(new TestQuery());
-    Assertions.assertEquals("test_query_placeholder", response.getQuery());
+
+    JAXBContext ctx = JAXBContext.newInstance(Query.class);
+    TestXmlUtils.validate(response.getQuery(), ctx);
   }
 
   @Test

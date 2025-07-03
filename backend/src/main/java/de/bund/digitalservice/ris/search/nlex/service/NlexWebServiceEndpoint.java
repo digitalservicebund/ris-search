@@ -71,9 +71,14 @@ public class NlexWebServiceEndpoint {
 
   @PayloadRoot(namespace = NAMESPACE_URI, localPart = "test_query")
   @ResponsePayload
-  public TestQueryResponse testQuery(@RequestPayload TestQuery request) {
+  public TestQueryResponse testQuery(@RequestPayload TestQuery request) throws IOException {
     TestQueryResponse response = new TestQueryResponse();
-    response.setQuery("test_query_placeholder");
+    String query =
+        IOUtils.toString(
+            Objects.requireNonNull(
+                this.getClass().getResourceAsStream("/WEB_INF/nlex/test-query.xml")),
+            StandardCharsets.UTF_8);
+    response.setQuery(query);
 
     return response;
   }
