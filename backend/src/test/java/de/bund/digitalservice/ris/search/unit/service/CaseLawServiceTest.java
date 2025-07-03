@@ -42,7 +42,7 @@ class CaseLawServiceTest {
   private Environment environmentMock;
 
   @BeforeEach
-  public void setUp() {
+  void setUp() {
     CaseLawSynthesizedRepository caseLawSynthesizedRepositoryMock =
         Mockito.mock(CaseLawSynthesizedRepository.class);
     CaseLawRepository caseLawRepositoryMock =

@@ -28,7 +28,7 @@ class ZipManagerTest {
   private ObjectStorage bucketMock;
 
   @BeforeEach
-  public void setUp() {
+  void setUp() {
     bucketMock = Mockito.mock(ObjectStorage.class);
   }
 
