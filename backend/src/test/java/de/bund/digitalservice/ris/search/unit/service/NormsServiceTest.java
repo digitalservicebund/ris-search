@@ -35,7 +35,7 @@ class NormsServiceTest {
   private ElasticsearchOperations operationsMock;
 
   @BeforeEach
-  public void setUp() {
+  void setUp() {
     NormsRepository normsRepositoryMock =
         new NormsRepository(Mockito.mock(NormsSynthesizedRepository.class));
     operationsMock = Mockito.mock(ElasticsearchOperations.class);
