@@ -179,7 +179,7 @@ if (contentError?.value) {
                   :href="zipUrl"
                 >
                   <MaterialSymbolsDownload class="mr-2 inline" />
-                  Als ZIP herunterladen
+                  {{ caseLaw.documentNumber }} als ZIP herunterladen
                 </NuxtLink>
               </PropertiesItem>
             </Properties>
