@@ -111,7 +111,7 @@ public class CaseLawController {
       @Parameter(example = "STRE201770751") @PathVariable String documentNumber) {
 
     String filename = documentNumber + ".zip";
-    List<String> keys = caseLawService.getAllFilenamesByKey(documentNumber);
+    List<String> keys = caseLawService.getAllFilenamesByDocumentNumber(documentNumber);
 
     if (keys.isEmpty()) {
       return ResponseEntity.notFound().build();

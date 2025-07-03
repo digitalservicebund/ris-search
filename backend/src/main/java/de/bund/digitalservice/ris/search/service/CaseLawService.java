@@ -202,7 +202,11 @@ public class CaseLawService {
     ZipManager.writeZipArchive(caseLawBucket, keys, outputStream);
   }
 
-  public List<String> getAllFilenamesByKey(String prefix) {
-    return caseLawBucket.getAllKeysByPrefix(prefix);
+  public List<String> getAllFilenamesByDocumentNumber(String documentNumber) {
+    if (environment.acceptsProfiles(Profiles.of("default", "test", "staging"))) {
+      return caseLawBucket.getAllKeysByPrefix(documentNumber);
+    } else {
+      return List.of(String.format("%s.xml", documentNumber));
+    }
   }
 }
