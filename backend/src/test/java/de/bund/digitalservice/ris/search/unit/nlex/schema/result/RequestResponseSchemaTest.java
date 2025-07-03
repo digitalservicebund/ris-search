@@ -1,5 +1,6 @@
 package de.bund.digitalservice.ris.search.unit.nlex.schema.result;
 
+import de.bund.digitalservice.ris.TestXmlUtils;
 import de.bund.digitalservice.ris.search.nlex.schema.result.Content;
 import de.bund.digitalservice.ris.search.nlex.schema.result.Document;
 import de.bund.digitalservice.ris.search.nlex.schema.result.Error;
@@ -16,9 +17,7 @@ import jakarta.xml.bind.JAXB;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Marshaller;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.List;
 import org.junit.jupiter.api.Assertions;
@@ -46,7 +45,7 @@ class RequestResponseSchemaTest {
             .setErrors(List.of(new Error().setCause("1")));
     StringWriter sw = new StringWriter();
     JAXB.marshal(result, sw);
-    Assertions.assertEquals(trimXml(expected), trimXml(sw.toString()));
+    Assertions.assertEquals(TestXmlUtils.trim(expected), TestXmlUtils.trim(sw.toString()));
   }
 
   @Test
@@ -77,7 +76,7 @@ class RequestResponseSchemaTest {
                 </result>
                 """;
 
-    String expectedXml = trimXml(exampleXml);
+    String expectedXml = TestXmlUtils.trim(exampleXml);
     JAXBContext ctx = JAXBContext.newInstance(RequestResult.class);
 
     RequestResult result = new RequestResult();
@@ -125,20 +124,5 @@ class RequestResponseSchemaTest {
     String actualtXml = sw.toString();
 
     Assertions.assertEquals(expectedXml.trim(), actualtXml.trim());
-  }
-
-  /**
-   * @param original pretty print xml
-   * @return String single line xml
-   * @throws IOException If an I/O error occurs
-   */
-  private String trimXml(String original) throws IOException {
-    BufferedReader br = new BufferedReader(new StringReader(original));
-    String line;
-    StringBuilder sb = new StringBuilder();
-    while ((line = br.readLine()) != null) {
-      sb.append(line.trim());
-    }
-    return sb.toString();
   }
 }

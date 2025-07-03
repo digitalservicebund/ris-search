@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<request output_lang="de-DE">
+    <navigation>
+        <page number="1"/>
+    </navigation>
+    <criteria encoding="utf8">
+        <words idx-name="nlex:fulltext">
+            <contains>Verfassungsorgan Bundesregierung</contains>
+        </words>
+    </criteria>
+</request>
