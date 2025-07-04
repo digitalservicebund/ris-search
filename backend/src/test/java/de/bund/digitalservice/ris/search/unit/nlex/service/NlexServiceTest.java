@@ -7,6 +7,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import de.bund.digitalservice.ris.search.models.api.parameters.UniversalSearchParams;
 import de.bund.digitalservice.ris.search.models.opensearch.Article;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
+import de.bund.digitalservice.ris.search.nlex.schema.query.BooleanAnd;
 import de.bund.digitalservice.ris.search.nlex.schema.query.Criteria;
 import de.bund.digitalservice.ris.search.nlex.schema.query.Navigation;
 import de.bund.digitalservice.ris.search.nlex.schema.query.Page;
@@ -146,12 +147,22 @@ class NlexServiceTest {
 
   @Test
   void itReturnsTheProperErrorCodeOnEmptySearch() {
-    Query query =
+    Query emptyString =
         new Query()
             .setNavigation(new Navigation())
             .setCriteria(new Criteria().setWords(new Words().setContains("")));
 
-    RequestResult result = this.nlexService.runRequestQuery(query);
+    RequestResult result = this.nlexService.runRequestQuery(emptyString);
     Assertions.assertEquals("1", result.getErrors().getFirst().getCause());
+  }
+
+  @Test
+  void itReturnsTheProperErrorCodeOnNullSearch() {
+    Query nullSearchTerm =
+        new Query()
+            .setNavigation(new Navigation())
+            .setCriteria(new Criteria().setAnd(new BooleanAnd().setWords(new Words())));
+    RequestResult nullSearchTermResult = this.nlexService.runRequestQuery(nullSearchTerm);
+    Assertions.assertEquals("1", nullSearchTermResult.getErrors().getFirst().getCause());
   }
 }
