@@ -3,10 +3,15 @@ package de.bund.digitalservice.ris.search.nlex.service;
 import de.bund.digitalservice.ris.search.models.api.parameters.UniversalSearchParams;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.nlex.mapper.RisToNlexMapper;
+import de.bund.digitalservice.ris.search.nlex.schema.query.BooleanAnd;
+import de.bund.digitalservice.ris.search.nlex.schema.query.Criteria;
 import de.bund.digitalservice.ris.search.nlex.schema.query.Navigation;
 import de.bund.digitalservice.ris.search.nlex.schema.query.Query;
+import de.bund.digitalservice.ris.search.nlex.schema.query.Words;
+import de.bund.digitalservice.ris.search.nlex.schema.result.Error;
 import de.bund.digitalservice.ris.search.nlex.schema.result.RequestResult;
 import de.bund.digitalservice.ris.search.service.NormsService;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import org.jose4j.base64url.Base64;
@@ -25,9 +30,14 @@ public class NlexService {
   }
 
   public RequestResult runRequestQuery(Query query) {
-    String searchTerm = getSearchTerm(query);
-
-    return runQuery(searchTerm, PageRequest.of(query.getNavigation().getPage().getNumber(), 20));
+    return getSearchTerm(query)
+        .map(
+            searchTerm ->
+                runQuery(
+                    searchTerm, PageRequest.of(query.getNavigation().getPage().getNumber(), 20)))
+        .orElse(
+            new RequestResult()
+                .setErrors(List.of(new Error().setCause(Error.STANDARD_ERROR_NO_SEARCHTERM))));
   }
 
   private RequestResult runQuery(String searchTerm, Pageable pageable) {
@@ -39,14 +49,37 @@ public class NlexService {
     return RisToNlexMapper.normsToNlexRequestResult(requestId, normPage);
   }
 
-  private String getSearchTerm(Query query) {
+  /**
+   * it parses the searchterm either from the base64 encoded id or the given contains tag
+   *
+   * @param query
+   * @return a given searchTerm if not empty
+   */
+  private Optional<String> getSearchTerm(Query query) {
     Navigation navigation = query.getNavigation();
+
     if (Objects.isNull(navigation.getRequestId()) || navigation.getRequestId().isEmpty()) {
-      // if it turns out the words tag isn't wrapped in an and tag we can remove it
-      var searchTerm = Optional.ofNullable(query.getCriteria().getWords().getContains());
-      return searchTerm.orElseGet(() -> query.getCriteria().getAnd().getWords().getContains());
+      // not sure how empty searches are represented in the schema. Safeguarding against
+      // null tags and empty strings
+      var contains =
+          Optional.ofNullable(query.getCriteria())
+              .map(Criteria::getWords)
+              .map(Words::getContains)
+              .orElseGet(
+                  () ->
+                      Optional.ofNullable(query.getCriteria())
+                          .map(Criteria::getAnd)
+                          .map(BooleanAnd::getWords)
+                          .map(Words::getContains)
+                          .orElse(""));
+
+      if (contains.isEmpty()) {
+        return Optional.empty();
+      }
+      return Optional.of(contains);
+
     } else {
-      return new String(Base64.decode(navigation.getRequestId()));
+      return Optional.of(new String(Base64.decode(navigation.getRequestId())));
     }
   }
 }

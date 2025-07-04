@@ -10,5 +10,7 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 public class Error {
+  public static final String STANDARD_ERROR_NO_SEARCHTERM = "1";
+
   @XmlAttribute String cause;
 }
