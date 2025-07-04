@@ -53,7 +53,9 @@
         </akn:preamble>
         <akn:body eId="hauptteil-1">
             <akn:article eId="hauptteil-1_art-1"
-                         period="#meta-1_geltzeiten-1_geltungszeitgr-4" refersTo="stammform">
+                         period="#meta-1_geltzeiten-1_geltungszeitgr-4"
+                         GUID="666b10d9-8625-4418-99ed-980ee42402f4"
+                         refersTo="stammform">
             <akn:num eId="hauptteil-1_art-1_bezeichnung-1">§ 1</akn:num>
             <akn:heading eId="hauptteil-1_art-1_überschrift-1"/>
             <akn:paragraph eId="hauptteil-1_art-1_abs-1">

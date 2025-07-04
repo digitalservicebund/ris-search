@@ -59,7 +59,7 @@ class XsltTransformerServiceTest {
     "blockList.xml, blockList.html, Should transform a blockList",
     "preformatted.xml, preformatted.html, Should transform preformatted paragraphs",
     "proprietary.xml, proprietary.html, Should transform proprietary metadata",
-    "offenestruktur-without-title.xml, offenestruktur-without-title.html, Should transform an attachment without title",
+    "anlage-regelungstext-without-title.xml, anlage-regelungstext-without-title.html, Should transform an attachment without title",
   })
   void testTransformNormLegalDocMlFull(
       String inputFileName, String expectedFileName, String testName) throws IOException {
@@ -90,12 +90,12 @@ class XsltTransformerServiceTest {
 
     Mockito.when(
             normsBucketMock.getStream(
-                "eli/bund/bgbl-1/0000/s1000/2000-01-01/1/deu/2000-01-01/offenestruktur-1.xml"))
-        .thenReturn(makeInputStream.apply("offenestruktur-1.xml"));
+                "eli/bund/bgbl-1/0000/s1000/2000-01-01/1/deu/2000-01-01/anlage-regelungstext-1.xml"))
+        .thenReturn(makeInputStream.apply("anlage-regelungstext-1.xml"));
     Mockito.when(
             normsBucketMock.getStream(
-                "eli/bund/bgbl-1/0000/s1000/2000-01-01/1/deu/2000-01-01/offenestruktur-2.xml"))
-        .thenReturn(makeInputStream.apply("offenestruktur-2.xml"));
+                "eli/bund/bgbl-1/0000/s1000/2000-01-01/1/deu/2000-01-01/anlage-regelungstext-2.xml"))
+        .thenReturn(makeInputStream.apply("anlage-regelungstext-2.xml"));
 
     var actualHtml = service.transformNorm(bytes, "subtype", RESOURCES_BASE_PATH);
 
@@ -108,13 +108,15 @@ class XsltTransformerServiceTest {
   @Test
   void testHandlesMissingAttachment() throws IOException {
     Mockito.reset(normsBucketMock);
+    // same file as in testTransformNormWithAttachments, but normsBucketMock isn't set up to serve
+    // included files
     byte[] bytes = Files.readAllBytes(Path.of(resourcesPath, "attachments.xml"));
 
     FileTransformationException exception =
         Assertions.assertThrows(
             FileTransformationException.class,
             () -> service.transformNorm(bytes, "subtype", RESOURCES_BASE_PATH));
-    assertThat(exception.getMessage()).endsWith("offenestruktur-1.xml");
+    assertThat(exception.getMessage()).endsWith("anlage-regelungstext-1.xml");
   }
 
   @Test

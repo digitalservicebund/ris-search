@@ -186,7 +186,7 @@ class NormLdmlToOpenSearchMapperTest {
     assertThat(attachment)
         .isEqualTo(
             new Article(
-                "Anlage (zu § 1) Testanlage",
+                "Anlage T1 (zu § 1)",
                 "This text appears in the attachment. This text also appears, inside a paragraph.",
                 null,
                 null,
@@ -215,8 +215,7 @@ class NormLdmlToOpenSearchMapperTest {
                 new TableOfContentsItem("preambel-1_formel-1", "", "Eingangsformel", List.of()),
                 new TableOfContentsItem("hauptteil-1_art-1", "§ 1", "", List.of()),
                 new TableOfContentsItem("schluss-1_formel-1", "", "Schlussformel", List.of()),
-                new TableOfContentsItem(
-                    "anlagen-1_anlage-1", "Anlage", "(zu § 1) Testanlage", List.of())));
+                new TableOfContentsItem("anlagen-1_anlage-1", "Anlage T1", "(zu § 1)", List.of())));
   }
 
   List<TableOfContentsItem> expectedToC =

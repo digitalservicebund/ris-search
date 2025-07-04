@@ -41,6 +41,16 @@ class XmlDocumentTest {
   }
 
   @Test
+  void testFirstMatchedNodeNested() throws ParserConfigurationException, IOException, SAXException {
+    String xml = "<xml><test><text>Test</text></test></xml>";
+    XmlDocument xmlDocument = new XmlDocument(xml.getBytes());
+    Optional<Node> parent = xmlDocument.getFirstMatchedNodeByXpath("/xml/test");
+    Optional<Node> nested =
+        xmlDocument.getFirstMatchedNodeByXpath(".//*[local-name()='text']", parent.orElseThrow());
+    Assertions.assertEquals("Test", nested.orElseThrow().getTextContent());
+  }
+
+  @Test
   void testFirstMatchedNodeNullpointerReturnsEmptyOption()
       throws ParserConfigurationException, IOException, SAXException {
     String xml = "<xml><test><text>Test</text></test></xml>";

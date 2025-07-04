@@ -1,8 +1,5 @@
 package de.bund.digitalservice.ris.search.mapper;
 
-import static de.bund.digitalservice.ris.search.utils.MappingUtils.cleanText;
-import static de.bund.digitalservice.ris.search.utils.XmlDocument.extractDirectChildText;
-
 import de.bund.digitalservice.ris.search.models.Attachment;
 import de.bund.digitalservice.ris.search.utils.XmlDocument;
 import java.io.IOException;
@@ -50,11 +47,16 @@ public class NormAttachmentMapper {
                 }
                 XmlDocument attachmentDocument =
                     new XmlDocument(attachmentFileString.getBytes(StandardCharsets.UTF_8));
-                var docTitleNode =
+                Optional<Node> docTitleNode =
                     attachmentDocument.getFirstMatchedNodeByXpath(
                         "/akn:akomaNtoso/akn:doc/akn:preface/akn:block/akn:docTitle");
-                String docTitle =
-                    docTitleNode.map(node -> cleanText(extractDirectChildText(node))).orElse("");
+
+                Optional<Node> numNode =
+                    attachmentDocument.getFirstMatchedNodeByXpath(
+                        "./akn:inline[@refersTo='anlageregelungstext-num']", docTitleNode.get());
+                Optional<Node> referenceNode =
+                    attachmentDocument.getFirstMatchedNodeByXpath(
+                        "./akn:inline[@refersTo='anlageregelungstext-bezug']", docTitleNode.get());
 
                 String text =
                     attachmentDocument.extractCleanedText(
@@ -62,8 +64,8 @@ public class NormAttachmentMapper {
 
                 var attachment =
                     Attachment.builder()
-                        .marker("Anlage")
-                        .docTitle(docTitle)
+                        .marker(numNode.map(Node::getTextContent).orElse(null))
+                        .docTitle(referenceNode.map(Node::getTextContent).orElse(null))
                         .eId(eId)
                         .textContent(text)
                         .manifestationEli(href)
