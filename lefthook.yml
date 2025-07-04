@@ -25,7 +25,7 @@ pre-commit:
       root: frontend
       glob: "*.pact.*.{js,ts}"
       run: >-
-        npm run test pact &&
+        yarn run test pact &&
         git add ../backend/pacts &&
         if ! git diff-index --quiet HEAD -- ../backend/pacts; then
           echo -e "\e[31mPact files have changed, please make sure to run the backend tests again before you push.\e[0m"
