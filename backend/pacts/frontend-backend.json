@@ -222,6 +222,13 @@
                 "contentUrl": "/v1/case-law/12345.xml",
                 "encodingFormat": "application/xml",
                 "inLanguage": "de"
+              },
+              {
+                "@id": "/v1/case-law/12345/zip",
+                "@type": "DecisionObject",
+                "contentUrl": "/v1/case-law/12345.zip",
+                "encodingFormat": "application/zip",
+                "inLanguage": "de"
               }
             ],
             "fileNumbers": [
