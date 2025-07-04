@@ -259,6 +259,13 @@ describe("GET /case-law/document", () => {
         encodingFormat: "application/xml",
         inLanguage: "de",
       },
+      {
+        "@type": "DecisionObject",
+        "@id": "/v1/case-law/12345/zip",
+        contentUrl: "/v1/case-law/12345.zip",
+        encodingFormat: "application/zip",
+        inLanguage: "de",
+      },
     ],
   };
 
