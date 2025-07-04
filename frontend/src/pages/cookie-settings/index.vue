@@ -156,13 +156,13 @@ function handleSetTracking(value: boolean) {
               Welche Kategorien von personenbezogenen Daten werden verarbeitet?
             </p>
             <p>Daten zum Nutzungsverhalten</p>
-            <ul class="list-bullet">
+            <ul class="list-bullet mt-16">
               <li>Besuchte Seiten</li>
               <li>Dauer des Besuchs</li>
               <li>Bewegungs-, Klick- und Scrollverhalten</li>
             </ul>
             <p class="mt-16">Technische Daten</p>
-            <ul class="list-bullet">
+            <ul class="list-bullet mt-16">
               <li>IP-Adresse</li>
               <li>Betriebssystem</li>
               <li>Browser und Browserversion</li>
@@ -170,11 +170,11 @@ function handleSetTracking(value: boolean) {
               <li>Bildschirmauflösung</li>
             </ul>
             <p class="mt-16">Metadaten</p>
-            <ul class="list-bullet">
+            <ul class="list-bullet mt-16">
               <li>Zeitpunkt des Besuchs</li>
             </ul>
             <p class="mt-16">Verlaufsdaten</p>
-            <ul class="list-bullet">
+            <ul class="list-bullet mt-16">
               <li>
                 Verweisende Seite (von welcher Seite sind Sie auf diese Seite
                 gekommen)
