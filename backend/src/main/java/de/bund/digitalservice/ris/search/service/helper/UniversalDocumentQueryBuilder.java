@@ -133,6 +133,7 @@ public class UniversalDocumentQueryBuilder {
               .operator(Operator.AND)
               .field(CaseLawDocumentationUnit.Fields.FILE_NUMBERS)
               .field(CaseLawDocumentationUnit.Fields.ECLI)
+              .field(Norm.Fields.OFFICIAL_SHORT_TITLE)
               .field(Norm.Fields.OFFICIAL_ABBREVIATION));
     }
     DateUtils.buildQuery("DATUM", params.getDateFrom(), params.getDateTo())
