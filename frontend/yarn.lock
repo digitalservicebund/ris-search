@@ -1361,12 +1361,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@iconify-json/material-symbols@npm:^1.2.26":
-  version: 1.2.26
-  resolution: "@iconify-json/material-symbols@npm:1.2.26"
+"@iconify-json/material-symbols@npm:^1.2.29":
+  version: 1.2.29
+  resolution: "@iconify-json/material-symbols@npm:1.2.29"
   dependencies:
     "@iconify/types": "npm:*"
-  checksum: 10c0/982088b035340fd0f8c19704cf2b558d32b1f74f65f3c6c6a97d814beee2f1a7b912cad2578ab433d259361a74014af6c5821ffd0c8c8845a3669fc88e1338fc
+  checksum: 10c0/308055815d2a2e5db414e564a59b3258c465d157a0f51d659cbf4c293ae856e5e206bdd801129cc87b3e52c2d3d1b0b7c1cb5961cccf823ce7cd95a7f43b7245
   languageName: node
   linkType: hard
 
@@ -14539,7 +14539,7 @@ __metadata:
     "@eslint/plugin-kit": "npm:0.3.1"
     "@hyperdx/lucene": "npm:^3.1.1"
     "@iconify-json/ic": "npm:^1.2.2"
-    "@iconify-json/material-symbols": "npm:^1.2.26"
+    "@iconify-json/material-symbols": "npm:^1.2.29"
     "@iconify/json": "npm:^2.2.347"
     "@nuxt/eslint": "npm:^1.4.1"
     "@nuxt/image": "npm:^1.10.0"
