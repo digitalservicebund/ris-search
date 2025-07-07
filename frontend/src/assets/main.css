@@ -60,10 +60,7 @@ mark {
 }
 
 @utility list-bullet {
-  @apply ml-24 list-outside list-disc;
-  li + li {
-    @apply mt-16;
-  }
+  @apply ml-24 list-outside list-disc space-y-16;
 }
 
 /* Workaround for https://github.com/tailwindlabs/tailwindcss/discussions/16429 */
