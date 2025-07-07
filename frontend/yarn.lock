@@ -3397,14 +3397,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@playwright/test@npm:^1.53.0":
-  version: 1.53.0
-  resolution: "@playwright/test@npm:1.53.0"
+"@playwright/test@npm:^1.53.2":
+  version: 1.53.2
+  resolution: "@playwright/test@npm:1.53.2"
   dependencies:
-    playwright: "npm:1.53.0"
+    playwright: "npm:1.53.2"
   bin:
     playwright: cli.js
-  checksum: 10c0/8335d56545a172b3b0d98c67094ce659899577746d95e991d7c47d94b533f715b2278d13795646cd3c5c2ed4559ce89b520aafd6f4ec4586fb51d047215173db
+  checksum: 10c0/cdc718a94df00aaaff5489421a89286e006e9c7781c5e8294fd10aaffcf6558cfe3d0db2d76a447574b334329902659cd539756dfd12fafde03627e2013698ae
   languageName: node
   linkType: hard
 
@@ -13201,27 +13201,27 @@ __metadata:
   languageName: node
   linkType: hard
 
-"playwright-core@npm:1.53.0":
-  version: 1.53.0
-  resolution: "playwright-core@npm:1.53.0"
+"playwright-core@npm:1.53.2":
+  version: 1.53.2
+  resolution: "playwright-core@npm:1.53.2"
   bin:
     playwright-core: cli.js
-  checksum: 10c0/fda0cf76115b15b1ca5cbc69e14185904e5c85e9e7cddb0a48121e69d681c638ac497e8a103985976cae260aa02e9c03ea27d6cd0b5f3d3ca914d4c7fd96f930
+  checksum: 10c0/cd9434736687600943e749313e3d6166ef5d8614e64e74f440099f3a1b0fe56a9a462921c0ca9264aebc7bfc4ffeaec3fddf1c30731c0d60de3211d796f1be44
   languageName: node
   linkType: hard
 
-"playwright@npm:1.53.0":
-  version: 1.53.0
-  resolution: "playwright@npm:1.53.0"
+"playwright@npm:1.53.2":
+  version: 1.53.2
+  resolution: "playwright@npm:1.53.2"
   dependencies:
     fsevents: "npm:2.3.2"
-    playwright-core: "npm:1.53.0"
+    playwright-core: "npm:1.53.2"
   dependenciesMeta:
     fsevents:
       optional: true
   bin:
     playwright: cli.js
-  checksum: 10c0/8d995114808b92f2005bd12ff5e494cdc3fa2d484f4d85a3e54be1fb99e88ae3e34b24792d83bb987462c73e553a0fa37a2a70264afbf67894b51c1498cf5a11
+  checksum: 10c0/4620bdb2bd341916cae50721336f628abc9d0b1a097fd74a93127feed8dede52be4fb789ac0d17aefac74e5d43a5832b1b79a0d3c2af5abc5a82491b72ebcf92
   languageName: node
   linkType: hard
 
@@ -14551,7 +14551,7 @@ __metadata:
     "@pact-foundation/pact": "npm:^15.0.1"
     "@pinia/nuxt": "npm:^0.11.1"
     "@pinia/testing": "npm:^1.0.2"
-    "@playwright/test": "npm:^1.53.0"
+    "@playwright/test": "npm:^1.53.2"
     "@primevue/nuxt-module": "npm:^4.3.5"
     "@rollup/rollup-linux-x64-gnu": "npm:^4.43.0"
     "@sentry/nuxt": "npm:^9.29.0"
