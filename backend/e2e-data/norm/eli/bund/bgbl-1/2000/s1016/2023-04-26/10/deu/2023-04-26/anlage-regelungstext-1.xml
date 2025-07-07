@@ -2,13 +2,13 @@
 <akn:akomaNtoso xmlns:akn="http://Inhaltsdaten.LegalDocML.de/1.8.1/"
                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                 xsi:schemaLocation="http://Inhaltsdaten.LegalDocML.de/1.8.1/ Grammatiken/legalDocML.de-offenestruktur.xsd">
-    <akn:doc name="offene-struktur">
+    <akn:doc name="/akn/ontology/de/concept/documenttype/bund/anlage-regelungstext">
         <akn:meta GUID="4cda11eb-c56d-495e-bd32-809501304d20" eId="meta-1">
             <akn:identification GUID="c411c3fa-065c-4485-b7cd-8458f997b0b8" eId="meta-1_ident-1"
                                 source="attributsemantik-noch-undefiniert">
                 <akn:FRBRWork GUID="4d05c211-504e-431f-acb6-5a048ae85c08" eId="meta-1_ident-1_frbrwork-1">
                     <akn:FRBRthis GUID="e50b1116-b94b-44d9-89c7-dfb65fd0e5ac" eId="meta-1_ident-1_frbrwork-1_frbrthis-1"
-                                  value="eli/bund/bgbl-1/2000/s1016/offenestruktur-1"/>
+                                  value="eli/bund/bgbl-1/2000/s1016/anlage-regelungstext-1"/>
                     <akn:FRBRuri GUID="e821153afc-29bd-45ba-a395-fac7abfddc0f" eId="meta-1_ident-1_frbrwork-1_frbruri-1"
                                  value="eli/bund/bgbl-1/2000/s1016"/>
                     <akn:FRBRalias GUID="9e411718-08ee-4f49-a9ce-9eb92731d850"
@@ -26,12 +26,12 @@
                     <akn:FRBRname GUID="1992ba44-58b6-445e-9211-ef4dec597073" eId="meta-1_ident-1_frbrwork-1_frbrname-1"
                                   value="bgbl-1"/>
                     <akn:FRBRsubtype GUID="203a80d9-90f3-4f4c-8e11-14c639f92c01"
-                                     eId="meta-1_ident-1_frbrwork-1_frbrsubtype-1" value="offenestruktur-1"/>
+                                     eId="meta-1_ident-1_frbrwork-1_frbrsubtype-1" value="anlage-regelungstext-1"/>
                 </akn:FRBRWork>
                 <akn:FRBRExpression GUID="16857812-3b53-4711-adb3-794b9b1b6113" eId="meta-1_ident-1_frbrexpression-1">
                     <akn:FRBRthis GUID="a59ca0ff-1c34-117d-afaf-4fe42778550d"
                                   eId="meta-1_ident-1_frbrexpression-1_frbrthis-1"
-                                  value="eli/bund/bgbl-1/2000/s1016/2023-04-26/10/deu/offenestruktur-1"/>
+                                  value="eli/bund/bgbl-1/2000/s1016/2023-04-26/10/deu/anlage-regelungstext-1"/>
                     <akn:FRBRuri GUID="6f859aa2-4153-4a11-b4be-313e425dd7b6"
                                  eId="meta-1_ident-1_frbrexpression-1_frbruri-1"
                                  value="eli/bund/bgbl-1/2000/s1016/2023-04-26/10/deu"/>
@@ -58,10 +58,10 @@
                                        eId="meta-1_ident-1_frbrmanifestation-1">
                     <akn:FRBRthis GUID="051360a2-45ad-1129-825d-f2961dea6f7e"
                                   eId="meta-1_ident-1_frbrmanifestation-1_frbrthis-1"
-                                  value="eli/bund/bgbl-1/2000/s1016/2023-04-26/10/deu/2023-04-26/offenestruktur-1.xml"/>
+                                  value="eli/bund/bgbl-1/2000/s1016/2023-04-26/10/deu/2023-04-26/anlage-regelungstext-1.xml"/>
                     <akn:FRBRuri GUID="1646c4f5-e4c5-4113-8b1a-8986a176df07"
                                  eId="meta-1_ident-1_frbrmanifestation-1_frbruri-1"
-                                 value="eli/bund/bgbl-1/2000/s1016/2023-04-26/10/deu/2023-04-26/offenestruktur-1.xml"/>
+                                 value="eli/bund/bgbl-1/2000/s1016/2023-04-26/10/deu/2023-04-26/anlage-regelungstext-1.xml"/>
                     <akn:FRBRdate GUID="b8e3aa94-19f0-411f-81da-c2e4bce4bfe9" date="2023-04-26"
                                   eId="meta-1_ident-1_frbrmanifestation-1_frbrdate-1" name="generierung"/>
                     <akn:FRBRauthor GUID="937aab19-211f-4c72-a50f-3e77ad8cb80e"
@@ -99,8 +99,16 @@
         <akn:preface GUID="ca78411a-6a11-4779-9958-f88fc48efbf7" eId="einleitung-1">
             <akn:block GUID="5f317c6b-a602-4e33-115c-7c2fe1ec4060" eId="einleitung-1_block-1"
                        name="attributsemantik-noch-undefiniert">
-                <akn:docTitle GUID="abcd1234-5678-90ef-ghij-klmnopqrstuv" eId="einleitung-1_block-1_doctitel-2">(zu § 4
-                    Absatz 2, § 5 Absatz 1 bis 3, § 6 Absatz 2 bis 4 und § 8)
+                <akn:docTitle GUID="abcd1234-5678-90ef-ghij-klmnopqrstuv" eId="einleitung-1_block-1_doctitel-1">
+                    <akn:inline GUID="dff9e31d-d9a6-442f-a28a-9899fb5d9b01"
+                                eId="einleitung-1_block-1_doctitel-1_inline-1"
+                                name="attributsemantik-noch-undefiniert" refersTo="anlageregelungstext-num">Anlage T1
+                    </akn:inline>
+                    <akn:inline GUID="f8610d9b-35f4-432b-a63e-5c759fbd3617"
+                                eId="einleitung-1_block-1_doctitel-1_inline-2"
+                                name="attributsemantik-noch-undefiniert" refersTo="anlageregelungstext-bezug">(zu § 4
+                        Absatz 2, § 5 Absatz 1 bis 3, § 6 Absatz 2 bis 4 und § 8)
+                    </akn:inline>
                 </akn:docTitle>
             </akn:block>
         </akn:preface>
