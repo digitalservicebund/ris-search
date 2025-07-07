@@ -3,6 +3,8 @@ package de.bund.digitalservice.ris.search.importer;
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.service.CaseLawIndexSyncJob;
 import de.bund.digitalservice.ris.search.service.NormIndexSyncJob;
+import de.bund.digitalservice.ris.search.sitemap.caselaw.service.SitemapJob;
+import jakarta.xml.bind.JAXBException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -20,6 +22,7 @@ public class ImportTaskProcessor {
 
   private final NormIndexSyncJob normIndexSyncJob;
   private final CaseLawIndexSyncJob caseLawIndexSyncJob;
+  private final SitemapJob sitemapJob;
 
   private static final Logger logger = LogManager.getLogger(ImportTaskProcessor.class);
 
@@ -27,9 +30,12 @@ public class ImportTaskProcessor {
 
   @Autowired
   public ImportTaskProcessor(
-      NormIndexSyncJob normIndexSyncJob, CaseLawIndexSyncJob caseLawIndexSyncJob) {
+      NormIndexSyncJob normIndexSyncJob,
+      CaseLawIndexSyncJob caseLawIndexSyncJob,
+      SitemapJob sitemapJob) {
     this.normIndexSyncJob = normIndexSyncJob;
     this.caseLawIndexSyncJob = caseLawIndexSyncJob;
+    this.sitemapJob = sitemapJob;
   }
 
   public boolean shouldRun(String[] args) {
@@ -85,6 +91,15 @@ public class ImportTaskProcessor {
           yield OK_RETURN_CODE;
         } catch (ObjectStoreServiceException e) {
           logger.error(e.getMessage(), e);
+          yield ERROR_RETURN_CODE;
+        }
+      }
+      case "generate_sitemaps" -> {
+        try {
+          this.sitemapJob.run();
+          yield OK_RETURN_CODE;
+        } catch (JAXBException ex) {
+          logger.error(ex.getMessage(), ex);
           yield ERROR_RETURN_CODE;
         }
       }
