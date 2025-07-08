@@ -20,7 +20,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.core.env.Environment;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
@@ -38,7 +37,6 @@ class CaseLawServiceTest {
   private CaseLawService caseLawService;
   private ElasticsearchOperations operationsMock;
   private CaseLawBucket caseLawBucketMock;
-  private Environment environmentMock;
 
   @BeforeEach
   void setUp() {
@@ -48,15 +46,10 @@ class CaseLawServiceTest {
         new CaseLawRepository(caseLawSynthesizedRepositoryMock);
     caseLawBucketMock = Mockito.mock(CaseLawBucket.class);
     operationsMock = Mockito.mock(ElasticsearchOperations.class);
-    environmentMock = Mockito.mock(Environment.class);
     Configurations configurations = Mockito.mock(Configurations.class);
     this.caseLawService =
         new CaseLawService(
-            caseLawRepositoryMock,
-            caseLawBucketMock,
-            operationsMock,
-            configurations,
-            environmentMock);
+            caseLawRepositoryMock, caseLawBucketMock, operationsMock, configurations);
   }
 
   @Test

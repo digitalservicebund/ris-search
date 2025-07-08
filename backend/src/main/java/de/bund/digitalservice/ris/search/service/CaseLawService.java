@@ -33,7 +33,6 @@ import org.opensearch.search.aggregations.bucket.terms.ParsedStringTerms;
 import org.opensearch.search.aggregations.bucket.terms.Terms;
 import org.opensearch.search.aggregations.bucket.terms.TermsAggregationBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.SearchHits;
@@ -53,7 +52,6 @@ public class CaseLawService {
   private final ElasticsearchOperations operations;
   private final CourtNameAbbreviationExpander courtNameAbbreviationExpander;
   private final Configurations configurations;
-  private final Environment environment;
 
   @SneakyThrows
   @Autowired
@@ -61,14 +59,12 @@ public class CaseLawService {
       CaseLawRepository caseLawRepository,
       CaseLawBucket caseLawBucket,
       ElasticsearchOperations operations,
-      Configurations configurations,
-      Environment environment) {
+      Configurations configurations) {
     this.caseLawRepository = caseLawRepository;
     this.caseLawBucket = caseLawBucket;
     this.operations = operations;
     this.configurations = configurations;
     this.courtNameAbbreviationExpander = new CourtNameAbbreviationExpander();
-    this.environment = environment;
   }
 
   /**
