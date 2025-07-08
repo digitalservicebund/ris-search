@@ -61,7 +61,13 @@ public abstract class RisToNlexMapper {
     ResultList rl = new ResultList();
     rl.setDocuments(documents);
     rl.setNavigation(
-        new Navigation().setRequestId(id).setPage(new Page().setNumber(searchPage.getNumber())));
+        new Navigation()
+            .setRequestId(id)
+            .setHits(searchPage.getTotalElements())
+            .setPage(
+                new Page()
+                    .setSize(searchPage.getNumberOfElements())
+                    .setNumber(searchPage.getNumber())));
 
     result.setResultList(rl);
 
