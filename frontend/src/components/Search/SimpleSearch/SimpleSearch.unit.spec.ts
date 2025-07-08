@@ -29,4 +29,21 @@ describe("SimpleSearch", () => {
       "frühstück brötchen — Suche",
     );
   });
+
+  for (const testCase of [
+    { documentKind: DocumentKind.All, isFilterVisible: false },
+    { documentKind: DocumentKind.Norm, isFilterVisible: false },
+    { documentKind: DocumentKind.CaseLaw, isFilterVisible: true },
+  ]) {
+    it(`sets the visibility of the duration filter to ${testCase.isFilterVisible} when the document kind is ${testCase.documentKind}`, async () => {
+      const wrapper = await mountSuspended(SimpleSearch);
+      const store = useSimpleSearchParamsStore();
+      store.category = testCase.documentKind;
+      await nextTick();
+
+      expect(wrapper.findComponent({ name: "DateRangeFilter" }).exists()).toBe(
+        testCase.isFilterVisible,
+      );
+    });
+  }
 });
