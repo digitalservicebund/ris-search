@@ -34,7 +34,6 @@ import org.opensearch.search.aggregations.bucket.terms.Terms;
 import org.opensearch.search.aggregations.bucket.terms.TermsAggregationBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
-import org.springframework.core.env.Profiles;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.SearchHits;
@@ -191,11 +190,7 @@ public class CaseLawService {
 
   public Optional<byte[]> getFileByDocumentNumber(String documentNumber)
       throws ObjectStoreServiceException {
-    if (environment.acceptsProfiles(Profiles.of("default", "test", "staging"))) {
-      return caseLawBucket.get(String.format("%s/%s.xml", documentNumber, documentNumber));
-    } else {
-      return caseLawBucket.get(String.format("%s.xml", documentNumber));
-    }
+    return caseLawBucket.get(String.format("%s/%s.xml", documentNumber, documentNumber));
   }
 
   public void writeZipArchive(List<String> keys, OutputStream outputStream) throws IOException {
@@ -203,10 +198,6 @@ public class CaseLawService {
   }
 
   public List<String> getAllFilenamesByDocumentNumber(String documentNumber) {
-    if (environment.acceptsProfiles(Profiles.of("default", "test", "staging"))) {
-      return caseLawBucket.getAllKeysByPrefix(documentNumber);
-    } else {
-      return List.of(String.format("%s.xml", documentNumber));
-    }
+    return caseLawBucket.getAllKeysByPrefix(documentNumber);
   }
 }
