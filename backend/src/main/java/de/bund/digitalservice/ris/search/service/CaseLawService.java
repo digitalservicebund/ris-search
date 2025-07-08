@@ -3,17 +3,23 @@ package de.bund.digitalservice.ris.search.service;
 import static org.opensearch.index.query.QueryBuilders.queryStringQuery;
 
 import de.bund.digitalservice.ris.search.config.opensearch.Configurations;
+import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.models.CourtSearchResult;
 import de.bund.digitalservice.ris.search.models.api.parameters.CaseLawSearchParams;
 import de.bund.digitalservice.ris.search.models.api.parameters.UniversalSearchParams;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
+import de.bund.digitalservice.ris.search.repository.objectstorage.CaseLawBucket;
 import de.bund.digitalservice.ris.search.repository.opensearch.CaseLawRepository;
 import de.bund.digitalservice.ris.search.service.helper.CourtNameAbbreviationExpander;
 import de.bund.digitalservice.ris.search.service.helper.FetchSourceFilterDefinitions;
 import de.bund.digitalservice.ris.search.service.helper.UniversalDocumentQueryBuilder;
+import de.bund.digitalservice.ris.search.service.helper.ZipManager;
 import de.bund.digitalservice.ris.search.utils.PageUtils;
 import de.bund.digitalservice.ris.search.utils.RisHighlightBuilder;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.List;
+import java.util.Optional;
 import lombok.SneakyThrows;
 import org.jetbrains.annotations.Nullable;
 import org.opensearch.action.search.SearchType;
@@ -42,6 +48,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class CaseLawService {
   private final CaseLawRepository caseLawRepository;
+  private final CaseLawBucket caseLawBucket;
   private final ElasticsearchOperations operations;
   private final CourtNameAbbreviationExpander courtNameAbbreviationExpander;
   private final Configurations configurations;
@@ -50,9 +57,11 @@ public class CaseLawService {
   @Autowired
   public CaseLawService(
       CaseLawRepository caseLawRepository,
+      CaseLawBucket caseLawBucket,
       ElasticsearchOperations operations,
       Configurations configurations) {
     this.caseLawRepository = caseLawRepository;
+    this.caseLawBucket = caseLawBucket;
     this.operations = operations;
     this.configurations = configurations;
     this.courtNameAbbreviationExpander = new CourtNameAbbreviationExpander();
@@ -173,5 +182,18 @@ public class CaseLawService {
 
   public List<CaseLawDocumentationUnit> getByDocumentNumber(String documentNumber) {
     return caseLawRepository.getByDocumentNumber(documentNumber);
+  }
+
+  public Optional<byte[]> getFileByDocumentNumber(String documentNumber)
+      throws ObjectStoreServiceException {
+    return caseLawBucket.get(String.format("%s/%s.xml", documentNumber, documentNumber));
+  }
+
+  public void writeZipArchive(List<String> keys, OutputStream outputStream) throws IOException {
+    ZipManager.writeZipArchive(caseLawBucket, keys, outputStream);
+  }
+
+  public List<String> getAllFilenamesByDocumentNumber(String documentNumber) {
+    return caseLawBucket.getAllKeysByPrefix(documentNumber);
   }
 }
