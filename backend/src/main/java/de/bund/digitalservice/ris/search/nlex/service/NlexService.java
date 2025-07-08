@@ -6,6 +6,7 @@ import de.bund.digitalservice.ris.search.nlex.mapper.RisToNlexMapper;
 import de.bund.digitalservice.ris.search.nlex.schema.query.BooleanAnd;
 import de.bund.digitalservice.ris.search.nlex.schema.query.Criteria;
 import de.bund.digitalservice.ris.search.nlex.schema.query.Navigation;
+import de.bund.digitalservice.ris.search.nlex.schema.query.Page;
 import de.bund.digitalservice.ris.search.nlex.schema.query.Query;
 import de.bund.digitalservice.ris.search.nlex.schema.query.Words;
 import de.bund.digitalservice.ris.search.nlex.schema.result.Error;
@@ -32,9 +33,14 @@ public class NlexService {
   public RequestResult runRequestQuery(Query query) {
     return getSearchTerm(query)
         .map(
-            searchTerm ->
-                runQuery(
-                    searchTerm, PageRequest.of(query.getNavigation().getPage().getNumber(), 20)))
+            searchTerm -> {
+              var pageNumber =
+                  Optional.ofNullable(query.getNavigation().getPage())
+                      .map(Page::getNumber)
+                      .orElse(0);
+
+              return runQuery(searchTerm, PageRequest.of(pageNumber, 20));
+            })
         .orElse(
             new RequestResult()
                 .setErrors(List.of(new Error().setCause(Error.STANDARD_ERROR_NO_SEARCHTERM))));
