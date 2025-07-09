@@ -1,12 +1,12 @@
 // @vitest-environment node
 // @ts-nocheck
+import { describe } from "vitest";
 import {
   DateSearchMode,
   dateSearchFromQuery,
   dateSearchToQuery,
   useDateParams,
 } from "./dateParams";
-import { describe } from "vitest";
 
 vi.mock("vue", () => ({
   ref: vi.fn((val) => ({ value: val })),

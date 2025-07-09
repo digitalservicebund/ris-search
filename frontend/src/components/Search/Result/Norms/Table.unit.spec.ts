@@ -1,9 +1,9 @@
 // @ts-nocheck
-import { describe, expect, it } from "vitest";
-import { RouterLinkStub } from "@vue/test-utils";
-import Table from "./Table.vue";
-import type { LegislationWork, SearchResult } from "@/types";
 import { mountSuspended } from "@nuxt/test-utils/runtime";
+import { RouterLinkStub } from "@vue/test-utils";
+import { describe, expect, it } from "vitest";
+import Table from "./Table.vue";
+import type { LegislationWork, SearchResult } from "~/types";
 
 const searchResult: SearchResult<LegislationWork> = {
   item: {

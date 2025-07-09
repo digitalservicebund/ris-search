@@ -1,7 +1,7 @@
-import type { LegislationWork } from "@/types";
 import type { AsyncData, NuxtError } from "#app";
-import { getTextFromElements } from "~/utils/htmlParser";
 import { useBackendURL } from "~/composables/useBackendURL";
+import type { LegislationWork } from "~/types";
+import { getTextFromElements } from "~/utils/htmlParser";
 
 export interface NormContent {
   legislationWork: LegislationWork;

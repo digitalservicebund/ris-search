@@ -1,7 +1,7 @@
+import { mockNuxtImport } from "@nuxt/test-utils/runtime";
 import { mount, RouterLinkStub } from "@vue/test-utils";
 import { describe, it, expect, vi } from "vitest";
 import AppHeaderNav from "./AppHeaderNav.vue";
-import { mockNuxtImport } from "@nuxt/test-utils/runtime";
 
 const { mockRuntimeConfig } = vi.hoisted(() => ({
   mockRuntimeConfig: vi.fn().mockReturnValue({

@@ -1,48 +1,48 @@
 <script setup lang="ts">
-import NormTableOfContents from "@/components/Ris/NormTableOfContents.vue";
+import Tab from "primevue/tab";
+import TabList from "primevue/tablist";
+import TabPanel from "primevue/tabpanel";
+import TabPanels from "primevue/tabpanels";
+import Tabs from "primevue/tabs";
+import Toast from "primevue/toast";
 import type { TreeNode } from "primevue/treenode";
-import { tocItemsToTreeNodes } from "@/utils/tableOfContents";
-import type { LegislationWork } from "@/types";
+import NormHeadingGroup from "./NormHeadingGroup.vue";
+import { getNormBreadcrumbTitle } from "./titles";
+import { useNormActions } from "./useNormActions";
 import { useFetchNormContent } from "./useNormData";
 import { useRoute } from "#app";
-import { useIntersectionObserver } from "@/composables/useIntersectionObserver";
-import RisBreadcrumb from "@/components/Ris/RisBreadcrumb.vue";
-import Accordion from "@/components/Accordion.vue";
-import { getNormBreadcrumbTitle } from "./titles";
-import NormHeadingGroup from "./NormHeadingGroup.vue";
+import Accordion from "~/components/Accordion.vue";
+import ContentWrapper from "~/components/CustomLayouts/ContentWrapper.vue";
 import TableOfContentsLayout from "~/components/CustomLayouts/SidebarLayout.vue";
-import IncompleteDataMessage from "@/components/IncompleteDataMessage.vue";
-import Tabs from "primevue/tabs";
-import TabList from "primevue/tablist";
-import Tab from "primevue/tab";
-import TabPanels from "primevue/tabpanels";
-import TabPanel from "primevue/tabpanel";
-import IcBaselineSubject from "~icons/ic/baseline-subject";
-import IcOutlineInfo from "~icons/ic/outline-info";
-import IcOutlineRestore from "~icons/ic/outline-settings-backup-restore";
-import MaterialSymbolsDownload from "~icons/material-symbols/download";
-import PropertiesItem from "~/components/PropertiesItem.vue";
+import IncompleteDataMessage from "~/components/IncompleteDataMessage.vue";
+import NormMetadataFields from "~/components/Norm/NormMetadataFields.vue";
+import NormVersionList from "~/components/Norm/NormVersionList.vue";
+import NormVersionWarning from "~/components/Norm/NormVersionWarning.vue";
+import VersionsTeaser from "~/components/Norm/VersionsTeaser.vue";
 import Properties from "~/components/Properties.vue";
+import PropertiesItem from "~/components/PropertiesItem.vue";
+import NormTableOfContents from "~/components/Ris/NormTableOfContents.vue";
+import RisBreadcrumb from "~/components/Ris/RisBreadcrumb.vue";
+import type { BreadcrumbItem } from "~/components/Ris/RisBreadcrumb.vue";
 import {
   tabListStyles,
   tabPanelStyles,
   tabStyles,
 } from "~/components/Tabs.styles";
-import { isPrototypeProfile } from "~/utils/config";
-import ContentWrapper from "~/components/CustomLayouts/ContentWrapper.vue";
-import NormVersionList from "~/components/Norm/NormVersionList.vue";
-import NormVersionWarning from "~/components/Norm/NormVersionWarning.vue";
-import type { BreadcrumbItem } from "~/components/Ris/RisBreadcrumb.vue";
+import { useIntersectionObserver } from "~/composables/useIntersectionObserver";
 import { useNormVersions } from "~/composables/useNormVersions";
-import VersionsTeaser from "~/components/Norm/VersionsTeaser.vue";
-import Toast from "primevue/toast";
-import { useNormActions } from "./useNormActions";
-import NormMetadataFields from "~/components/Norm/NormMetadataFields.vue";
+import type { LegislationWork } from "~/types";
+import { isPrototypeProfile } from "~/utils/config";
 import {
   getValidityStatus,
   getManifestationUrl,
   temporalCoverageToValidityInterval,
 } from "~/utils/normUtils";
+import { tocItemsToTreeNodes } from "~/utils/tableOfContents";
+import IcBaselineSubject from "~icons/ic/baseline-subject";
+import IcOutlineInfo from "~icons/ic/outline-info";
+import IcOutlineRestore from "~icons/ic/outline-settings-backup-restore";
+import MaterialSymbolsDownload from "~icons/material-symbols/download";
 
 definePageMeta({
   // note: this is an expression ELI that additionally specifies the subtype component of a manifestation ELI

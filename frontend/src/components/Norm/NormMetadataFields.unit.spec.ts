@@ -1,7 +1,7 @@
-import { describe, it, expect, vi } from "vitest";
-import NormMetadataFields from "~/components/Norm/NormMetadataFields.vue";
-import MetadataField from "~/components/MetadataField.vue";
 import { mount } from "@vue/test-utils";
+import { describe, it, expect, vi } from "vitest";
+import MetadataField from "~/components/MetadataField.vue";
+import NormMetadataFields from "~/components/Norm/NormMetadataFields.vue";
 import * as Config from "~/utils/config";
 
 describe("NormMetadataFields.vue", () => {

@@ -1,9 +1,9 @@
-import { defineStore } from "pinia";
-import type { PostHog } from "posthog-js";
-import { getStringOrUndefined, stringToBoolean } from "~/utils/textFormatting";
-import posthog from "posthog-js";
 import Cookies from "js-cookie";
+import { defineStore } from "pinia";
+import posthog from "posthog-js";
+import type { PostHog } from "posthog-js";
 import type { QueryParams } from "~/stores/searchParams";
+import { getStringOrUndefined, stringToBoolean } from "~/utils/textFormatting";
 
 const CONSENT_COOKIE_NAME = "consent_given";
 

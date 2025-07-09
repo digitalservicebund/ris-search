@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import GravityUiCircleChevronUpFill from "~icons/gravity-ui/circle-chevron-up-fill";
-import GravityUiCircleChevronUp from "~icons/gravity-ui/circle-chevron-up";
-import GravityUiCircleChevronDownFill from "~icons/gravity-ui/circle-chevron-down-fill";
-import GravityUiCircleChevronDown from "~icons/gravity-ui/circle-chevron-down";
 import PrimevueAccordion from "primevue/accordion";
-import AccordionPanel from "primevue/accordionpanel";
-import AccordionHeader from "primevue/accordionheader";
 import AccordionContent from "primevue/accordioncontent";
+import AccordionHeader from "primevue/accordionheader";
+import AccordionPanel from "primevue/accordionpanel";
+import GravityUiCircleChevronDown from "~icons/gravity-ui/circle-chevron-down";
+import GravityUiCircleChevronDownFill from "~icons/gravity-ui/circle-chevron-down-fill";
+import GravityUiCircleChevronUp from "~icons/gravity-ui/circle-chevron-up";
+import GravityUiCircleChevronUpFill from "~icons/gravity-ui/circle-chevron-up-fill";
 
 const isHovered = ref(false);
 

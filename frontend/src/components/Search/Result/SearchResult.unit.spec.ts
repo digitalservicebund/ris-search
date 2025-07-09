@@ -6,7 +6,7 @@ import type {
   CaseLaw,
   LegislationWork,
   SearchResult,
-} from "@/types";
+} from "~/types";
 
 describe("SearchResult.vue", () => {
   it("shows the correct result for Decisions", () => {

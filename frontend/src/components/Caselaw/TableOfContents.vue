@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { useRoute } from "#app";
 import type { RouteQueryAndHash } from "#vue-router";
-import IcBaselineNotes from "~icons/ic/baseline-notes";
-import IcBaselineSubject from "~icons/ic/baseline-subject";
-import IcBaselineShortText from "~icons/ic/baseline-short-text";
-import IcBaselineGavel from "~icons/ic/baseline-gavel";
-import IcOutlineFactCheck from "~icons/ic/outline-fact-check";
 import IcBaselineFormatListBulleted from "~icons/ic/baseline-format-list-bulleted";
+import IcBaselineGavel from "~icons/ic/baseline-gavel";
+import IcBaselineNotes from "~icons/ic/baseline-notes";
+import IcBaselineShortText from "~icons/ic/baseline-short-text";
+import IcBaselineSubject from "~icons/ic/baseline-subject";
+import IcOutlineFactCheck from "~icons/ic/outline-fact-check";
 
 export type TableOfContentsEntry = {
   id: string;

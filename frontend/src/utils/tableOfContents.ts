@@ -1,5 +1,5 @@
-import type { TableOfContentsItem } from "@/types";
 import type { TreeNode } from "primevue/treenode";
+import type { TableOfContentsItem } from "~/types";
 
 export function tocItemsToTreeNodes(
   items: TableOfContentsItem[],

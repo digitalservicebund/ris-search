@@ -1,11 +1,10 @@
-import type { VueWrapper } from "@vue/test-utils";
-import { mount, RouterLinkStub } from "@vue/test-utils";
-
-import { beforeEach, describe, expect, it } from "vitest";
 import { createTestingPinia } from "@pinia/testing";
-import { useSimpleSearchParamsStore } from "@/stores/searchParams";
-import ItemsPerPageDropdown from "./ItemsPerPageDropdown.vue";
+import { mount, RouterLinkStub } from "@vue/test-utils";
+import type { VueWrapper } from "@vue/test-utils";
 import PrimeVue from "primevue/config";
+import { beforeEach, describe, expect, it } from "vitest";
+import ItemsPerPageDropdown from "./ItemsPerPageDropdown.vue";
+import { useSimpleSearchParamsStore } from "~/stores/searchParams";
 
 describe("items per page dropdown", () => {
   let wrapper: VueWrapper;

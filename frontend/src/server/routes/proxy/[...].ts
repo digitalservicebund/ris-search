@@ -1,5 +1,4 @@
 import { HttpStatusCode } from "axios";
-import { requireAccessToken } from "@/server/auth";
 import {
   createError,
   defineEventHandler,
@@ -7,8 +6,8 @@ import {
   getRequestURL,
   type H3Event,
 } from "h3";
-
 import { useRuntimeConfig } from "#imports";
+import { requireAccessToken } from "~/server/auth";
 
 const runtimeConfig = useRuntimeConfig();
 

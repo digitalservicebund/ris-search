@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { LegislationWork, SearchResult } from "@/types";
 import dayjs from "dayjs";
+import type { LegislationWork, SearchResult } from "~/types";
 
 defineProps<{
   searchResults: SearchResult<LegislationWork>[];

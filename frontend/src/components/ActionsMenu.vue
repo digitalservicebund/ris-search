@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import type { MenuItem } from "primevue/menuitem";
-import Menu, { type MenuMethods } from "primevue/menu";
 import Button from "primevue/button";
+import Menu, { type MenuMethods } from "primevue/menu";
+import type { MenuItem } from "primevue/menuitem";
 import MdiDotsVertical from "~icons/mdi/dots-vertical";
 
 export type ActionsMenuProps = { items: ActionMenuItem[] };

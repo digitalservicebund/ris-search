@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { useSimpleSearchParamsStore } from "@/stores/searchParams";
 import PrimevueSelect from "primevue/select";
+import { useSimpleSearchParamsStore } from "~/stores/searchParams";
 
 const store = useSimpleSearchParamsStore();
 

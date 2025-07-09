@@ -1,8 +1,7 @@
+import _ from "lodash";
+import { computed } from "vue";
 import { type AsyncDataRequestStatus, useFetch } from "#app";
 import type { JSONLDList, LegislationWork, SearchResult } from "~/types";
-import _ from "lodash";
-
-import { computed } from "vue";
 
 interface UseNormVersions {
   status: Ref<AsyncDataRequestStatus>;

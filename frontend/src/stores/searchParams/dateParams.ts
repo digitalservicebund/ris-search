@@ -1,7 +1,7 @@
 import _ from "lodash";
-import type { QueryParams } from "@/stores/searchParams/index";
-import type { LocationQuery } from "#vue-router";
 import { ref, computed } from "vue";
+import type { LocationQuery } from "#vue-router";
+import type { QueryParams } from "~/stores/searchParams/index";
 
 export enum DateSearchMode {
   None = "",

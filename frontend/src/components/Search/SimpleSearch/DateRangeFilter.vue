@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import type { DropdownItem } from "@/components/types";
+import PrimevueSelect from "primevue/select";
+import type { DropdownItem } from "~/components/types";
 import {
   useSimpleSearchParamsStore,
   DateSearchMode,
-} from "@/stores/searchParams";
-import PrimevueSelect from "primevue/select";
+} from "~/stores/searchParams";
 
 const store = useSimpleSearchParamsStore();
 

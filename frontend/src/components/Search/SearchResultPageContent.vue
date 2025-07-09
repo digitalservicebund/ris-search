@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { Page } from "@/components/Pagination/Pagination";
-import SearchResult from "@/components/Search/Result/SearchResult.vue";
+import type { Page } from "~/components/Pagination/Pagination";
+import SearchResult from "~/components/Search/Result/SearchResult.vue";
 import { buildResultCountString } from "~/utils/paginationUtils";
 
 const props = defineProps<{

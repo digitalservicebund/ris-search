@@ -1,10 +1,10 @@
-import { vi } from "vitest";
 import { mountSuspended } from "@nuxt/test-utils/runtime";
+import { vi } from "vitest";
 import SimpleSearch from "./SimpleSearch.vue";
 import { useSimpleSearchParamsStore } from "~/stores/searchParams";
 import { DocumentKind } from "~/types";
 
-vi.mock("@/services/searchService", () => {
+vi.mock("~/services/searchService", () => {
   return { search: () => ({}) };
 });
 

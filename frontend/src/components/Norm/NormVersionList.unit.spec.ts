@@ -3,10 +3,10 @@ import {
   registerEndpoint,
   mockNuxtImport,
 } from "@nuxt/test-utils/runtime";
-import { useBackendURL } from "~/composables/useBackendURL";
+import { vi } from "vitest";
 import NormVersionList from "./NormVersionList.vue";
 import { data } from "~/components/Norm/NormVersions.spec.data";
-import { vi } from "vitest";
+import { useBackendURL } from "~/composables/useBackendURL";
 
 registerEndpoint(`${useBackendURL()}/v1/legislation`, () => {
   return data;

@@ -1,7 +1,7 @@
 import { mount } from "@vue/test-utils";
 import VersionWarningMessage from "./VersionWarningMessage.vue";
-import type { LegislationWork, SearchResult } from "~/types";
 import type { VersionWarningMessageProps } from "~/components/Norm/VersionWarningMessage.vue";
+import type { LegislationWork, SearchResult } from "~/types";
 
 const baseProps = {
   inForceVersionLink: "/norms/eli/bund/bgbl-1/2000/s100/2000-01-01/1/deu",

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { LegislationWork } from "@/types";
+import type { LegislationWork } from "~/types";
 
 const props = defineProps<{ item: LegislationWork }>();
 const item = props.item;

@@ -1,22 +1,22 @@
 <script setup lang="ts">
 import type { TreeNode } from "primevue/treenode";
-import { tocItemsToTreeNodes } from "@/utils/tableOfContents";
-import MetadataField from "@/components/MetadataField.vue";
-import type { Article, LegislationWork } from "@/types";
+import { getNormBreadcrumbTitle, getNormTitle } from "./titles";
+import { useFetchNormArticleContent } from "./useNormData";
+import ContentWrapper from "~/components/CustomLayouts/ContentWrapper.vue";
+import TableOfContentsLayout from "~/components/CustomLayouts/SidebarLayout.vue";
+import IncompleteDataMessage from "~/components/IncompleteDataMessage.vue";
+import MetadataField from "~/components/MetadataField.vue";
+import ArticleVersionWarning from "~/components/Norm/ArticleVersionWarning.vue";
+import NormTableOfContents from "~/components/Ris/NormTableOfContents.vue";
+import type { BreadcrumbItem } from "~/components/Ris/RisBreadcrumb.vue";
+import RisBreadcrumb from "~/components/Ris/RisBreadcrumb.vue";
+import { useValidNormVersions } from "~/composables/useNormVersions";
+import type { Article, LegislationWork } from "~/types";
+import { featureFlags } from "~/utils/config";
+import { tocItemsToTreeNodes } from "~/utils/tableOfContents";
 import IcBaselineArrowBack from "~icons/ic/baseline-arrow-back";
 import IcBaselineArrowForward from "~icons/ic/baseline-arrow-Forward";
 import MdiArrowTopLeft from "~icons/mdi/arrow-top-left?width=24&height=24";
-import NormTableOfContents from "@/components/Ris/NormTableOfContents.vue";
-import { useFetchNormArticleContent } from "./useNormData";
-import type { BreadcrumbItem } from "@/components/Ris/RisBreadcrumb.vue";
-import RisBreadcrumb from "@/components/Ris/RisBreadcrumb.vue";
-import { getNormBreadcrumbTitle, getNormTitle } from "./titles";
-import TableOfContentsLayout from "~/components/CustomLayouts/SidebarLayout.vue";
-import IncompleteDataMessage from "@/components/IncompleteDataMessage.vue";
-import { featureFlags } from "@/utils/config";
-import ContentWrapper from "~/components/CustomLayouts/ContentWrapper.vue";
-import { useValidNormVersions } from "~/composables/useNormVersions";
-import ArticleVersionWarning from "~/components/Norm/ArticleVersionWarning.vue";
 
 definePageMeta({
   // note: this is an expression ELI that additionally specifies the subtype component of a manifestation ELI,

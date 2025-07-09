@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { NuxtError } from "#app";
 import { HttpStatusCode } from "axios";
+import type { NuxtError } from "#app";
 import SimpleSearchInput from "~/components/Search/SimpleSearch/SimpleSearchInput.vue";
 import { useRedirectToSearch } from "~/composables/useRedirectToSearch";
 const onSearchInputChange = useRedirectToSearch();

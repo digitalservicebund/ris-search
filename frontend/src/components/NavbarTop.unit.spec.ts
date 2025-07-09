@@ -1,8 +1,8 @@
-import NavbarTop from "./NavbarTop.vue";
-import { vi, describe, it, expect } from "vitest";
 import { mockNuxtImport } from "@nuxt/test-utils/runtime";
 import { mount } from "@vue/test-utils";
-import { redirectToLogin } from "@/utils/redirectToLogin";
+import { vi, describe, it, expect } from "vitest";
+import NavbarTop from "./NavbarTop.vue";
+import { redirectToLogin } from "~/utils/redirectToLogin";
 
 mockNuxtImport("useUserSession", () => {
   return () => ({
@@ -26,7 +26,7 @@ describe("NavbarTop", async () => {
       "fetch",
       vi.fn().mockImplementation(() => Promise.resolve()),
     );
-    vi.mock("@/utils/redirectToLogin");
+    vi.mock("~/utils/redirectToLogin");
 
     const wrapper = mount(NavbarTop, { shallow: true });
 

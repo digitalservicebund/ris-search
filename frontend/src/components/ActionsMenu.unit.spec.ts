@@ -1,8 +1,8 @@
-import type { DOMWrapper } from "@vue/test-utils";
 import { mount } from "@vue/test-utils";
+import type { DOMWrapper } from "@vue/test-utils";
+import { afterEach } from "vitest";
 import ActionsMenu, { type ActionsMenuProps } from "./ActionsMenu.vue";
 import MdiDotsVertical from "~icons/mdi/dots-vertical";
-import { afterEach } from "vitest";
 
 describe("ActionsMenu.vue", () => {
   const command = vi.fn();

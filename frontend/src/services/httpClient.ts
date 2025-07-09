@@ -1,5 +1,5 @@
-import type { AxiosError } from "axios";
 import axios, { HttpStatusCode } from "axios";
+import type { AxiosError } from "axios";
 
 export const axiosInstance = axios.create();
 

@@ -1,7 +1,7 @@
 <script setup lang="ts">
+import type { Dayjs } from "dayjs";
 import MetadataField from "~/components/MetadataField.vue";
 import { isPrototypeProfile } from "~/utils/config";
-import type { Dayjs } from "dayjs";
 import { getValidityStatusLabel } from "~/utils/normUtils";
 
 interface Props {

@@ -1,9 +1,9 @@
-import { describe, it, expect } from "vitest";
 import { mount } from "@vue/test-utils";
+import PrimeVue from "primevue/config";
+import { describe, it, expect } from "vitest";
 import { nextTick } from "vue";
 import SortOptionsComponent from "./SortSelect.vue";
-import { DocumentKind } from "@/types";
-import PrimeVue from "primevue/config";
+import { DocumentKind } from "~/types";
 
 describe("SortSelect", () => {
   it("computes correct validSortOptions for DocumentKind.All", async () => {

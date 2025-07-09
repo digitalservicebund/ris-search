@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import type { LegislationWork, SearchResult, TextMatch } from "@/types";
 import LegalIcon from "virtual:icons/mdi/legal";
-import { formattedDate } from "@/utils/dateFormatting";
+import type { LegislationWork, SearchResult, TextMatch } from "~/types";
+import { formattedDate } from "~/utils/dateFormatting";
 
 const props = defineProps<{
   searchResult: SearchResult<LegislationWork>;

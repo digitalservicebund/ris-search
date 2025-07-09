@@ -1,5 +1,5 @@
 import { defineNuxtRouteMiddleware } from "nuxt/app";
-import { redirectToLogin } from "@/utils/redirectToLogin";
+import { redirectToLogin } from "~/utils/redirectToLogin";
 
 export default defineNuxtRouteMiddleware((to) => {
   const config = useRuntimeConfig();

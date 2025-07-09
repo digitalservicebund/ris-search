@@ -1,6 +1,6 @@
 import { vi } from "vitest";
 
-vi.mock("@/middleware/check-login.global.ts", () => ({ default: vi.fn() }));
+vi.mock("~/middleware/check-login.global.ts", () => ({ default: vi.fn() }));
 
 // see https://jestjs.io/docs/manual-mocks#mocking-methods-which-are-not-implemented-in-jsdom
 if (global.window) {

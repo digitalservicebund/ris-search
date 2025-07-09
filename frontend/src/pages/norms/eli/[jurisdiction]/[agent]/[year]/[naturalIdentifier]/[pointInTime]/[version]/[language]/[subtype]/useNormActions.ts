@@ -1,12 +1,12 @@
+import { useToast } from "primevue/usetoast";
+import type { ActionMenuItem } from "~/components/ActionsMenu.vue";
+import PDFIcon from "~/components/icons/PDFIcon.vue";
+import UpdatingLinkIcon from "~/components/icons/UpdatingLinkIcon.vue";
+import XMLIcon from "~/components/icons/XMLIcon.vue";
 import type { LegislationWork } from "~/types";
 import { isPrototypeProfile } from "~/utils/config";
-import { useToast } from "primevue/usetoast";
-import UpdatingLinkIcon from "~/components/icons/UpdatingLinkIcon.vue";
-import MaterialSymbolsLink from "~icons/material-symbols/link";
-import PDFIcon from "~/components/icons/PDFIcon.vue";
-import XMLIcon from "~/components/icons/XMLIcon.vue";
-import type { ActionMenuItem } from "~/components/ActionsMenu.vue";
 import { getManifestationUrl } from "~/utils/normUtils";
+import MaterialSymbolsLink from "~icons/material-symbols/link";
 
 export function useNormActions(metadata: Ref<LegislationWork | undefined>) {
   const enablePdfButton = !isPrototypeProfile();

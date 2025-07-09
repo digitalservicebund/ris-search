@@ -1,32 +1,32 @@
 <script setup lang="ts">
+import Tab from "primevue/tab";
+import TabList from "primevue/tablist";
+import TabPanel from "primevue/tabpanel";
+import TabPanels from "primevue/tabpanels";
+import Tabs from "primevue/tabs";
+import type { ComputedRef } from "vue";
 import { useFetch } from "#app";
-import type { CaseLaw } from "@/types";
-import MetadataField from "@/components/MetadataField.vue";
 import TableOfContents, {
   type TableOfContentsEntry,
-} from "@/components/Caselaw/TableOfContents.vue";
-import { getAllSectionsFromHtml } from "@/utils/htmlParser";
-import { removeOuterParentheses } from "@/utils/textFormatting";
-import type { ComputedRef } from "vue";
-import RisBreadcrumb from "@/components/Ris/RisBreadcrumb.vue";
+} from "~/components/Caselaw/TableOfContents.vue";
+import ContentWrapper from "~/components/CustomLayouts/ContentWrapper.vue";
 import SidebarLayout from "~/components/CustomLayouts/SidebarLayout.vue";
-import IncompleteDataMessage from "@/components/IncompleteDataMessage.vue";
+import IncompleteDataMessage from "~/components/IncompleteDataMessage.vue";
+import MetadataField from "~/components/MetadataField.vue";
+import Properties from "~/components/Properties.vue";
+import PropertiesItem from "~/components/PropertiesItem.vue";
+import RisBreadcrumb from "~/components/Ris/RisBreadcrumb.vue";
 import {
   tabListStyles,
   tabPanelStyles,
   tabStyles,
-} from "@/components/Tabs.styles";
-import Tabs from "primevue/tabs";
-import TabList from "primevue/tablist";
-import Tab from "primevue/tab";
-import TabPanels from "primevue/tabpanels";
-import TabPanel from "primevue/tabpanel";
+} from "~/components/Tabs.styles";
+import { useCaseLawActions } from "~/pages/case-law/[documentNumber]/useCaseLawActions";
+import type { CaseLaw } from "~/types";
+import { getAllSectionsFromHtml } from "~/utils/htmlParser";
+import { removeOuterParentheses } from "~/utils/textFormatting";
 import IcBaselineSubject from "~icons/ic/baseline-subject";
 import IcOutlineInfo from "~icons/ic/outline-info";
-import PropertiesItem from "~/components/PropertiesItem.vue";
-import Properties from "~/components/Properties.vue";
-import ContentWrapper from "@/components/CustomLayouts/ContentWrapper.vue";
-import { useCaseLawActions } from "~/pages/case-law/[documentNumber]/useCaseLawActions";
 import MaterialSymbolsDownload from "~icons/material-symbols/download";
 
 const route = useRoute();

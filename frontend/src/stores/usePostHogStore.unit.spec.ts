@@ -1,12 +1,12 @@
-import { describe, it, expect, beforeEach, vi } from "vitest";
-import { usePostHogStore } from "~/stores/usePostHogStore";
-import type { PostHog } from "posthog-js";
-import posthog from "posthog-js";
 import { mockNuxtImport } from "@nuxt/test-utils/runtime";
 import { createPinia, setActivePinia } from "pinia";
-import { getPostHogConfig } from "~/utils/testing/postHogUtils";
-import { addDefaults } from "~/stores/searchParams/getInitialState";
+import posthog from "posthog-js";
+import type { PostHog } from "posthog-js";
+import { describe, it, expect, beforeEach, vi } from "vitest";
 import type { QueryParams } from "~/stores/searchParams";
+import { addDefaults } from "~/stores/searchParams/getInitialState";
+import { usePostHogStore } from "~/stores/usePostHogStore";
+import { getPostHogConfig } from "~/utils/testing/postHogUtils";
 
 const { useRuntimeConfigMock } = vi.hoisted(() => {
   return {

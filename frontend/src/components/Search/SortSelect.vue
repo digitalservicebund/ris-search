@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { DocumentKind } from "@/types";
-import { type DropdownItem, sortMode } from "@/components/types";
-import { computed } from "vue";
 import PrimevueSelect from "primevue/select";
+import { computed } from "vue";
+import { type DropdownItem, sortMode } from "~/components/types";
+import { DocumentKind } from "~/types";
 
 const props = defineProps<{ documentKind: DocumentKind }>();
 const model = defineModel<DropdownItem["value"]>();
