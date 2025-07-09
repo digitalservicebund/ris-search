@@ -1,7 +1,6 @@
 package de.bund.digitalservice.ris.search.sitemap.caselaw.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
 import de.bund.digitalservice.ris.search.repository.objectstorage.CaseLawBucket;
@@ -34,7 +33,7 @@ public class SitemapJob {
 
   IndexStatusService indexStatusService;
 
-  public static final String STATUS_FILE = "sitemaps_status.json";
+  public static final String LAST_SUCCESS_FILE = "caselaw_sitemaps_last_success";
 
   public SitemapJob(
       SitemapService service,
@@ -53,17 +52,31 @@ public class SitemapJob {
 
     final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
+    Boolean runWasSuccessfullToday =
+        portalBucket
+            .getFileAsString(LAST_SUCCESS_FILE)
+            .map(
+                content -> {
+                  LocalDate lastSuccess = LocalDate.parse(content, formatter);
+                  return lastSuccess.equals(LocalDate.now());
+                })
+            .orElse(false);
+
+    if (runWasSuccessfullToday) {
+      return;
+    }
+
     IndexingState state =
         indexStatusService.loadStatus(CaseLawIndexSyncJob.CASELAW_STATUS_FILENAME);
-    var lastProcessedChangelogFile = state.lastProcessedChangelogFile();
+    String lastProcessedChangelogFile = state.lastProcessedChangelogFile();
     if (Objects.isNull(lastProcessedChangelogFile)) {
       return;
     }
 
-    var files = indexJob.getNewChangelogs(caselawbucket, lastProcessedChangelogFile);
+    List<String> filePaths = indexJob.getNewChangelogs(caselawbucket, lastProcessedChangelogFile);
 
     var changelogsUpToYesterday =
-        files.stream()
+        filePaths.stream()
             .filter(
                 (e) -> {
                   int datetimeStringOffset = IndexSyncJob.CHANGELOGS_PREFIX.length();
@@ -100,9 +113,7 @@ public class SitemapJob {
       Sitemapindex index = sitemapService.createSitemapIndex(urlSetLocations);
       sitemapService.writeSitemapIndex(index, now);
     }
-    String content =
-        new ObjectMapper()
-            .writeValueAsString(new SitemapJobState().withLastSuccess(now.format(formatter)));
-    portalBucket.save(STATUS_FILE, content);
+
+    portalBucket.save(LAST_SUCCESS_FILE, now.format(formatter));
   }
 }
