@@ -1,10 +1,10 @@
-import Icons from "unplugin-icons/vite";
-import Components from "unplugin-vue-components/vite";
-import IconsResolver from "unplugin-icons/resolver";
-import { defineNuxtConfig } from "nuxt/config";
-import { PrimeVueResolver } from "unplugin-vue-components/resolvers";
-import { isStringEmpty, getStringOrDefault } from "./src/utils/textFormatting";
 import tailwindcss from "@tailwindcss/vite";
+import { defineNuxtConfig } from "nuxt/config";
+import IconsResolver from "unplugin-icons/resolver";
+import Icons from "unplugin-icons/vite";
+import { PrimeVueResolver } from "unplugin-vue-components/resolvers";
+import Components from "unplugin-vue-components/vite";
+import { isStringEmpty, getStringOrDefault } from "./src/utils/textFormatting";
 
 const config = {
   devMode: process.env.NODE_ENV == "development",
@@ -36,7 +36,7 @@ export default defineNuxtConfig({
     },
   },
   srcDir: "src/",
-  css: ["@/assets/main.css"],
+  css: ["~/assets/main.css"],
   devServer: {
     port: parseInt(getStringOrDefault(process.env.PORT, "3000")),
   },
@@ -169,12 +169,6 @@ export default defineNuxtConfig({
       },
     },
   },
-  components: [
-    {
-      path: "@/components",
-    },
-    // PrimeVue components are registered implicitly
-  ],
   build: {
     transpile: ["hyperdx/lucene"],
   },

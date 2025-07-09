@@ -1,7 +1,7 @@
+import { fileURLToPath } from "url";
+import { includeIgnoreFile } from "@eslint/compat";
 import { createConfigForNuxt } from "@nuxt/eslint-config/flat";
 import unusedImports from "eslint-plugin-unused-imports";
-import { includeIgnoreFile } from "@eslint/compat";
-import { fileURLToPath } from "url";
 
 export default createConfigForNuxt(undefined, [
   {
@@ -29,6 +29,30 @@ export default createConfigForNuxt(undefined, [
           allowTernary: true,
           allowTaggedTemplates: true,
           enforceForJSX: true,
+        },
+      ],
+      // Enforce a consistent order for imports
+      "import/order": [
+        "error",
+        {
+          "newlines-between": "never",
+          alphabetize: {
+            order: "asc",
+            caseInsensitive: true,
+          },
+        },
+      ],
+      // To increase consistency use ~/... instead of @/...
+      "no-restricted-imports": [
+        "error",
+        {
+          patterns: [
+            {
+              group: ["@/**"],
+              message:
+                'Please use "~/..." alias instead of "@/..." for project-specific imports.',
+            },
+          ],
         },
       ],
     },
