@@ -173,7 +173,7 @@ test("can navigate to and view an attachment", async ({ page }) => {
 
   await test.step("Navigate from main norm view to a single article", async () => {
     const attachmentTitle =
-      "Anlage (zu § 4 Absatz 2, § 5 Absatz 1 bis 3, § 6 Absatz 2 bis 4 und § 8)";
+      "Anlage T1 (zu § 4 Absatz 2, § 5 Absatz 1 bis 3, § 6 Absatz 2 bis 4 und § 8)";
 
     await page
       .getByRole("main")

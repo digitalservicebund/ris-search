@@ -75,9 +75,7 @@
         <akn:preface GUID="ca78411a-6a8a-4779-9958-f88fc48efbf7" eId="einleitung-1">
             <akn:block GUID="5f317c6b-a602-4e33-a85c-7c2fe1ec4060" eId="einleitung-1_block-1"
                        name="attributsemantik-noch-undefiniert">
-                <akn:docTitle GUID="d2495261-77bf-4e93-bfa0-f9eefee750a6" eId="einleitung-1_block-1_doctitel-1">
-                    (zu § 1)<akn:br eId="einleitung-1_block-1_doctitel-1_br-1"/>Testanlage
-                </akn:docTitle>
+                <akn:docTitle GUID="d2495261-77bf-4e93-bfa0-f9eefee750a6" eId="einleitung-1_block-1_doctitel-1"><akn:inline GUID="dff9e31d-d9a6-442f-a28a-9899fb5d9b01" eId="einleitung-n1_block-n1_doctitel-n1_inline-n1" name="attributsemantik-noch-undefiniert" refersTo="anlageregelungstext-num">Anlage T1</akn:inline><akn:inline GUID="f8610d9b-35f4-432b-a63e-5c759fbd3617" eId="einleitung-n1_block-n1_doctitel-n1_inline-n2" name="attributsemantik-noch-undefiniert" refersTo="anlageregelungstext-bezug">(zu § 1)</akn:inline></akn:docTitle>
             </akn:block>
         </akn:preface>
         <akn:mainBody GUID="43960b63-b71f-4f69-b6c8-cae9ab89741c" eId="hauptteil-1">
