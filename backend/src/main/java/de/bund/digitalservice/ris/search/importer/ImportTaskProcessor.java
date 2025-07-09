@@ -1,5 +1,6 @@
 package de.bund.digitalservice.ris.search.importer;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.service.CaseLawIndexSyncJob;
 import de.bund.digitalservice.ris.search.service.NormIndexSyncJob;
@@ -98,7 +99,7 @@ public class ImportTaskProcessor {
         try {
           this.sitemapJob.run();
           yield OK_RETURN_CODE;
-        } catch (JAXBException ex) {
+        } catch (JAXBException | ObjectStoreServiceException | JsonProcessingException ex) {
           logger.error(ex.getMessage(), ex);
           yield ERROR_RETURN_CODE;
         }

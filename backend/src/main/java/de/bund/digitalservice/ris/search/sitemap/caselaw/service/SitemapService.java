@@ -1,6 +1,5 @@
 package de.bund.digitalservice.ris.search.sitemap.caselaw.service;
 
-import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
 import de.bund.digitalservice.ris.search.repository.objectstorage.PortalBucket;
 import de.bund.digitalservice.ris.search.service.CaseLawService;
 import de.bund.digitalservice.ris.search.sitemap.caselaw.schema.Sitemap;
@@ -36,8 +35,8 @@ public class SitemapService {
     this.jaxbCtx = JAXBContext.newInstance(Sitemapindex.class, UrlSet.class);
   }
 
-  public List<UrlSet> createUrlSets(Changelog changelog) throws JAXBException {
-    HashSet<String> changed = changelog.getChanged();
+  public List<UrlSet> createUrlSets(HashSet<String> changed, HashSet<String> deleted)
+      throws JAXBException {
 
     List<ChangedDocument> changedDocuments =
         new ArrayList<>(
@@ -46,7 +45,7 @@ public class SitemapService {
                 .toList());
 
     changedDocuments.addAll(
-        this.caseLawService.getByDocumentNumbers(changed.stream().toList()).stream()
+        this.caseLawService.getByDocumentNumbers(deleted.stream().toList()).stream()
             .map(d -> new ChangedDocument(ChangedDocument.DELETED, d))
             .toList());
 
