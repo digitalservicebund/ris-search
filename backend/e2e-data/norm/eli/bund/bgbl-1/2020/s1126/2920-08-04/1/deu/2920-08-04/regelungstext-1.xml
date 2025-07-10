@@ -35,10 +35,12 @@
                 </akn:FRBRManifestation>
             </akn:identification>
             <akn:lifecycle GUID="b4c5d6e7-f8a9-4890-abcd-3456abcde123" eId="meta-n1_lebzykl-n1" source="attributsemantik-noch-undefiniert">
-                <akn:eventRef GUID="c5d6e7f8-a9b0-4890-abcd-4567abcde123" date="2920-08-04" eId="meta-n1_lebzykl-n1_ereignis-n1" refersTo="ausfertigung" source="attributsemantik-noch-undefiniert" type="generation"/>
+                <akn:eventRef GUID="c5d6e7f8-a9b0-4890-abcd-4567abcde123" date="2020-08-04" eId="meta-n1_lebzykl-n1_ereignis-n1" refersTo="ausfertigung" source="attributsemantik-noch-undefiniert" type="generation"/>
                 <akn:eventRef GUID="d6e7f8a9-b0c1-4890-abcd-5678abcde123" date="2020-08-09" eId="meta-n1_lebzykl-n1_ereignis-n2" refersTo="inkrafttreten" source="attributsemantik-noch-undefiniert" type="generation"/>
-                <akn:eventRef GUID="c5d6e7f8-a9b0-4890-abcd-4567abcde223" date="9999-99-99" eId="meta-n1_lebzykl-n1_ereignis-n3" refersTo="ausfertigung" source="attributsemantik-noch-undefiniert" type="generation"/>
-                <akn:eventRef GUID="d6e7f8a9-b0c2-4890-abcd-5678abcde123" date="2920-08-04" eId="meta-n1_lebzykl-n1_ereignis-n4" refersTo="inkrafttreten" source="attributsemantik-noch-undefiniert" type="generation"/>
+                <akn:eventRef GUID="d6e7f8a9-b0c1-4890-abcd-5678abcde123" date="2022-08-04" eId="meta-n1_lebzykl-n1_ereignis-n3" refersTo="ausserkrafttreten" source="attributsemantik-noch-undefiniert" type="amendment"/>
+                <akn:eventRef GUID="d6e7f8a9-b0c1-4890-abcd-5678abcde123" date="2022-08-09" eId="meta-n1_lebzykl-n1_ereignis-n4" refersTo="inkrafttreten" source="attributsemantik-noch-undefiniert" type="amendment"/>
+                <akn:eventRef GUID="d6e7f8a9-b0c1-4890-abcd-5678abcde123" date="2920-08-04" eId="meta-n1_lebzykl-n1_ereignis-n5" refersTo="ausserkrafttreten" source="attributsemantik-noch-undefiniert" type="amendment"/>
+                <akn:eventRef GUID="d6e7f8a9-b0c1-4890-abcd-5678abcde123" date="2920-08-09" eId="meta-n1_lebzykl-n1_ereignis-n6" refersTo="inkrafttreten" source="attributsemantik-noch-undefiniert" type="amendment"/>
             </akn:lifecycle>
             <akn:temporalData GUID="e7f8a9b0-c1d2-4890-abcd-6789abcde123" eId="meta-n1_geltzeiten-n1" source="attributsemantik-noch-undefiniert">
                 <akn:temporalGroup GUID="f8a9b0c1-d2e3-4890-abcd-7890abcde123" eId="meta-n1_geltzeiten-n1_geltungszeitgr-n1">
@@ -46,6 +48,9 @@
                 </akn:temporalGroup>
                 <akn:temporalGroup GUID="f8a9b0c2-d2e3-4890-abcd-7890abcde123" eId="meta-n1_geltzeiten-n1_geltungszeitgr-n2">
                     <akn:timeInterval GUID="a9b0c2d2-e3f4-4890-abcd-8901abcde123" eId="meta-n1_geltzeiten-n1_geltungszeitgr-n2_gelzeitintervall-n1" refersTo="geltungszeit" start="#meta-n1_lebzykl-n1_ereignis-n4"/>
+                </akn:temporalGroup>
+                <akn:temporalGroup GUID="f8a9b0c2-d2e3-4890-abcd-7890abcde123" eId="meta-n1_geltzeiten-n1_geltungszeitgr-n3">
+                    <akn:timeInterval GUID="a9b0c2d2-e3f4-4890-abcd-8901abcde123" eId="meta-n1_geltzeiten-n1_geltungszeitgr-n3_gelzeitintervall-n1" refersTo="geltungszeit" start="#meta-n1_lebzykl-n1_ereignis-n6"/>
                 </akn:temporalGroup>
             </akn:temporalData>
             <akn:proprietary GUID="b0c1d2e3-f4a5-4890-abcd-901abcde1234" eId="meta-n1_proprietary-n1" source="attributsemantik-noch-undefiniert">
@@ -62,7 +67,7 @@
                 </akn:p>
             </akn:longTitle>
         </akn:preface>
-        <akn:preamble GUID="b6c7d8e9-f0a1-4890-abcd-5678abcde1234" eId="präambel-n1">
+        <akn:preamble GUID="b6c7d8e9-f0a1-4890-abcd-5678abcde123" eId="präambel-n1">
             <akn:formula GUID="dddddddd-eeee-ffff-0000-222222222222" eId="präambel-n1_formel-n1" name="attributsemantik-noch-undefiniert"
                          refersTo="eingangsformel">
                 <akn:p GUID="eeeeeeee-ffff-0000-1111-333333333333" eId="präambel-n1_formel-n1_text-n1">
