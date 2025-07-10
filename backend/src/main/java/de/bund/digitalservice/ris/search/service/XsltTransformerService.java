@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
@@ -98,8 +97,9 @@ public class XsltTransformerService {
     return transformLegalDocMlFromBytes(source, parameters, normXslt);
   }
 
-  public String transformCaseLaw(byte[] source) {
-    return transformLegalDocMlFromBytes(source, new HashMap<>(), caseLawXslt);
+  public String transformCaseLaw(byte[] source, String resourcesBasePath) {
+    Map<String, String> parameters = Map.of("ressourcenpfad", resourcesBasePath);
+    return transformLegalDocMlFromBytes(source, parameters, caseLawXslt);
   }
 
   private String transformLegalDocMlFromBytes(

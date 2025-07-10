@@ -5,6 +5,7 @@ import static org.springframework.http.HttpHeaders.CONTENT_DISPOSITION;
 import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.mapper.CaseLawSchemaMapper;
+import de.bund.digitalservice.ris.search.models.api.parameters.ResourceReferenceMode;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import de.bund.digitalservice.ris.search.schema.CaseLawSchema;
 import de.bund.digitalservice.ris.search.service.CaseLawService;
@@ -15,14 +16,17 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.net.URLConnection;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
@@ -70,12 +74,21 @@ public class CaseLawController {
   @ApiResponse(responseCode = "200")
   @ApiResponse(responseCode = "404", content = @Content)
   public ResponseEntity<String> getCaseLawDocumentationUnitAsHtml(
-      @Parameter(example = "STRE201770751") @PathVariable String documentNumber)
+      @Parameter(example = "STRE201770751") @PathVariable String documentNumber,
+      @RequestHeader(
+              name = ApiConfig.Headers.GET_RESOURCES_VIA,
+              required = false,
+              defaultValue = ResourceReferenceMode.DEFAULT_VALUE)
+          @Parameter(
+              description =
+                  "Used to select a different prefix for referenced resources, like images. Selecting 'PROXY' will prepend `/api`. Otherwise, the API base URL will be used.")
+          ResourceReferenceMode resourceReferenceMode)
       throws ObjectStoreServiceException {
+    final String resourcePath = getResourceBasePath(resourceReferenceMode) + documentNumber + "/";
     Optional<byte[]> bytes = caseLawService.getFileByDocumentNumber(documentNumber);
 
     if (bytes.isPresent()) {
-      String html = xsltTransformerService.transformCaseLaw(bytes.get());
+      String html = xsltTransformerService.transformCaseLaw(bytes.get(), resourcePath);
       return ResponseEntity.ok(html);
     } else {
       return ResponseEntity.notFound().build();
@@ -120,5 +133,42 @@ public class CaseLawController {
         .header(CONTENT_DISPOSITION, "attachment;filename=\"%s\"".formatted(filename))
         .contentType(MediaType.valueOf("application/zip"))
         .body(outputStream -> caseLawService.writeZipArchive(keys, outputStream));
+  }
+
+  @GetMapping(path = ApiConfig.Paths.CASELAW + "/{documentNumber}/{name}.{extension}")
+  @Operation(
+      summary = "Caselaw resource",
+      description = "Returns a specific resource of a particular caselaw.")
+  @ApiResponse(responseCode = "200")
+  @ApiResponse(responseCode = "404", content = @Content())
+  public ResponseEntity<byte[]> getResource(
+      @PathVariable @Schema(example = "BDRE000800001") String documentNumber,
+      @Schema(example = "image") @PathVariable String name,
+      @Schema(example = "jpg") @PathVariable String extension)
+      throws ObjectStoreServiceException {
+    Optional<byte[]> resource =
+        caseLawService.getFileByPath(documentNumber + "/" + name + "." + extension);
+
+    final String mimeType = URLConnection.guessContentTypeFromName(name + "." + extension);
+
+    return resource
+        .map(
+            body ->
+                ResponseEntity.status(HttpStatus.OK).header("Content-Type", mimeType).body(body))
+        .orElseGet(() -> ResponseEntity.notFound().build());
+  }
+
+  /**
+   * Controls how resources like images will be referenced. For example, they might be accessed
+   * through an API endpoint in local development, but served via a CDN in production.
+   *
+   * @param mode Controls which static prefix will be returned.
+   * @return The prefix to use when returning references to resources.
+   */
+  private String getResourceBasePath(ResourceReferenceMode mode) {
+    return switch (mode) {
+      case API -> ApiConfig.Paths.CASELAW + "/";
+      case PROXY -> "/api" + ApiConfig.Paths.CASELAW + "/";
+    };
   }
 }
