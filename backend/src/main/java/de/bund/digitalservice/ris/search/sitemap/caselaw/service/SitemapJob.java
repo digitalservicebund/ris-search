@@ -16,7 +16,6 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import org.springframework.stereotype.Component;
 
@@ -33,7 +32,7 @@ public class SitemapJob {
 
   IndexStatusService indexStatusService;
 
-  public static final String LAST_SUCCESS_FILE = "caselaw_sitemaps_last_success";
+  public static final String STATUS_FILE = "caselaw_sitemaps_status.json";
 
   public SitemapJob(
       SitemapService service,
@@ -52,28 +51,17 @@ public class SitemapJob {
 
     final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
-    Boolean runWasSuccessfullToday =
-        portalBucket
-            .getFileAsString(LAST_SUCCESS_FILE)
-            .map(
-                content -> {
-                  LocalDate lastSuccess = LocalDate.parse(content, formatter);
-                  return lastSuccess.equals(LocalDate.now());
-                })
-            .orElse(false);
-
-    if (runWasSuccessfullToday) {
-      return;
-    }
-
-    IndexingState state =
-        indexStatusService.loadStatus(CaseLawIndexSyncJob.CASELAW_STATUS_FILENAME);
+    IndexingState state = indexStatusService.loadStatus(STATUS_FILE);
     String lastProcessedChangelogFile = state.lastProcessedChangelogFile();
-    if (Objects.isNull(lastProcessedChangelogFile)) {
+
+    List<String> filePaths =
+        Optional.ofNullable(lastProcessedChangelogFile)
+            .map(lastProcessed -> indexJob.getNewChangelogs(caselawbucket, lastProcessed))
+            .orElseGet(() -> indexJob.getAllChangelogs(caselawbucket));
+
+    if (filePaths.isEmpty()) {
       return;
     }
-
-    List<String> filePaths = indexJob.getNewChangelogs(caselawbucket, lastProcessedChangelogFile);
 
     var changelogsUpToYesterday =
         filePaths.stream()
@@ -114,6 +102,7 @@ public class SitemapJob {
       sitemapService.writeSitemapIndex(index, now);
     }
 
-    portalBucket.save(LAST_SUCCESS_FILE, now.format(formatter));
+    indexStatusService.saveStatus(
+        STATUS_FILE, new IndexingState().withLastProcessedChangelogFile(filePaths.getLast()));
   }
 }
