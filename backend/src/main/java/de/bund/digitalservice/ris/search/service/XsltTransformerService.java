@@ -35,6 +35,7 @@ public class XsltTransformerService {
   private static final Logger logger = LogManager.getLogger(XsltTransformerService.class);
 
   private static final String XSLT_PATH = "XSLT/html/ldml_de/";
+  private static final String RESOURCE_PATH_KEY = "ressourcenpfad";
   private final TransformerFactory transformerFactory = TransformerFactory.newInstance();
   private final String normXslt = getXslt(XSLT_PATH + "/ris-portal.xsl");
   private final String caseLawXslt = getXslt("XSLT/html/case-law.xslt");
@@ -87,18 +88,19 @@ public class XsltTransformerService {
 
   public String transformNorm(byte[] source, String basePath, String resourcesBasePath) {
     Map<String, String> parameters =
-        Map.of("dokumentpfad", basePath, "debugging", "false", "ressourcenpfad", resourcesBasePath);
+        Map.of(
+            "dokumentpfad", basePath, "debugging", "false", RESOURCE_PATH_KEY, resourcesBasePath);
     return transformLegalDocMlFromBytes(source, parameters, normXslt);
   }
 
   public String transformArticle(byte[] source, String eId, String resourcesBasePath) {
     Map<String, String> parameters =
-        Map.of("article-eid", eId, "debugging", "false", "ressourcenpfad", resourcesBasePath);
+        Map.of("article-eid", eId, "debugging", "false", RESOURCE_PATH_KEY, resourcesBasePath);
     return transformLegalDocMlFromBytes(source, parameters, normXslt);
   }
 
   public String transformCaseLaw(byte[] source, String resourcesBasePath) {
-    Map<String, String> parameters = Map.of("ressourcenpfad", resourcesBasePath);
+    Map<String, String> parameters = Map.of(RESOURCE_PATH_KEY, resourcesBasePath);
     return transformLegalDocMlFromBytes(source, parameters, caseLawXslt);
   }
 

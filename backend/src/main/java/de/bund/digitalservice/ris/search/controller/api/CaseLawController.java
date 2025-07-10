@@ -84,7 +84,7 @@ public class CaseLawController {
                   "Used to select a different prefix for referenced resources, like images. Selecting 'PROXY' will prepend `/api`. Otherwise, the API base URL will be used.")
           ResourceReferenceMode resourceReferenceMode)
       throws ObjectStoreServiceException {
-    final String resourcePath = getResourceBasePath(resourceReferenceMode) + documentNumber + "/";
+    final String resourcePath = getResourceBasePath(resourceReferenceMode, documentNumber);
     Optional<byte[]> bytes = caseLawService.getFileByDocumentNumber(documentNumber);
 
     if (bytes.isPresent()) {
@@ -165,10 +165,11 @@ public class CaseLawController {
    * @param mode Controls which static prefix will be returned.
    * @return The prefix to use when returning references to resources.
    */
-  private String getResourceBasePath(ResourceReferenceMode mode) {
+  private String getResourceBasePath(ResourceReferenceMode mode, String documentNumber) {
+    String basePath = ApiConfig.Paths.CASELAW + "/" + documentNumber + "/";
     return switch (mode) {
-      case API -> ApiConfig.Paths.CASELAW + "/";
-      case PROXY -> "/api" + ApiConfig.Paths.CASELAW + "/";
+      case API -> basePath;
+      case PROXY -> "/api" + basePath;
     };
   }
 }
