@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns="http://Inhaltsdaten.LegalDocML.de/1.8.1/"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="http://Inhaltsdaten.LegalDocML.de/1.8.1/"
+           elementFormDefault="qualified"
+           version="LegalDocML.de 1.8.1 (10.06.2025)">
+<!-- ********************************* Hinweis zur Lizensierung ********************************* -->
+   <xs:annotation>
+      <xs:appinfo>
+         <copyright-hinweis>2025 Copyright © 2021–2025 Bundesministerium des Innern und für Heimat, 
+Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Verwaltungsarbeit</copyright-hinweis>
+         <lizenz url="https://creativecommons.org/licenses/by/3.0/legalcode.de"
+                 kurzbezeichnung="CC-BY-3.0"
+                 langbezeichnung="Creative Commons Namensnennung 3.0"/>
+         <autor organisation="Bundesministerium des Innern und für Heimat"
+                referat="DG II 6"
+                organisatorischer-rahmen="Maßnahmen Enterprise Resource Management und Elektronische Verwaltungsarbeit"/>
+      </xs:appinfo>
+   </xs:annotation>
+   <!-- ******************************************************************************************** -->
+   <xs:import namespace="http://www.w3.org/XML/1998/namespace"
+              schemaLocation="xml.xsd"/>
+   <!-- #### Inkludierte Module mit modulübergreifend genutzen Komponenten #### -->
+   <xs:include schemaLocation="legalDocML.de-baukasten.xsd"/>
+   <!-- #### Globales Root-Element, spezifisch für dieses Paket #### -->
+   <xs:element name="akomaNtoso">
+      <xs:complexType>
+         <xs:sequence>
+            <xs:element name="doc" type="antrag"/>
+         </xs:sequence>
+      </xs:complexType>
+   </xs:element>
+   <!-- #### Typen des Moduls "Antrag" #### -->
+   <xs:complexType name="antrag" mixed="false">
+      <xs:annotation>
+         <xs:documentation>Die Klasse "antrag" bildet ein eigenständiges Teildokument eines Rechtsetzungsdokuments in der Entwurfsfassung in Form eines separaten XML-Dokuments, das durch die Klasse "rechtsetzungsdokument" referenziert und in dieser eingebunden wird.</xs:documentation>
+      </xs:annotation>
+      <xs:sequence>
+         <xs:element name="meta" type="metadatenOptionalErweitert"/>
+         <xs:element name="preface" type="dokumentenkopf"/>
+         <xs:element name="preamble" type="antragEingangsformel"/>
+         <xs:element name="mainBody" type="antragHauptteil"/>
+         <xs:element name="conclusions" type="antragSchluss"/>
+         <xs:element name="components" type="teildokumente" minOccurs="0"/>
+      </xs:sequence>
+      <xs:attribute name="name" use="required" type="nameLiterals.antrag"/>
+   </xs:complexType>
+   <xs:complexType name="antragEingangsformel" mixed="false">
+      <xs:annotation>
+         <xs:documentation>Die Klasse antragEingangsformel stellt die Eingangsformel eines Antrags dar.</xs:documentation>
+      </xs:annotation>
+      <xs:sequence>
+         <xs:element name="formula" type="eingangsformel"/>
+      </xs:sequence>
+      <xs:attribute name="eId" use="required" type="eIdLiterals.antragEingangsformel"/>
+      <xs:attribute name="GUID" use="required" type="GUIDLiterals"/>
+      <xs:attribute ref="xml:id" use="optional"/>
+   </xs:complexType>
+   <xs:complexType name="antragHauptteil" mixed="false">
+      <xs:annotation>
+         <xs:documentation>Die Klasse "antragHauptteil" wird benutzt, um innerhalb des Antrags einen Hauptteil einzufügen</xs:documentation>
+      </xs:annotation>
+      <xs:sequence>
+         <xs:element name="blockList" type="liste"/>
+      </xs:sequence>
+      <xs:attribute name="eId" use="required" type="eIdLiterals.antragHauptteil"/>
+      <xs:attribute name="GUID" use="required" type="GUIDLiterals"/>
+      <xs:attribute ref="xml:id" use="optional"/>
+   </xs:complexType>
+   <xs:complexType name="antragSchluss" mixed="false">
+      <xs:annotation>
+         <xs:documentation>Die Klasse "antragSchluss" wird benutzt, um innerhalb des Antrags einen Schlussteil einzufügen.</xs:documentation>
+      </xs:annotation>
+      <xs:sequence>
+         <xs:element name="blockContainer" type="signaturblock"/>
+      </xs:sequence>
+      <xs:attribute name="eId" use="required" type="eIdLiterals.antragSchluss"/>
+      <xs:attribute name="GUID" use="required" type="GUIDLiterals"/>
+      <xs:attribute ref="xml:id" use="optional"/>
+   </xs:complexType>
+</xs:schema>

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns="http://MetadatenNormenkontrollrat.LegalDocML.de/1.8.1/"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           elementFormDefault="qualified"
+           targetNamespace="http://MetadatenNormenkontrollrat.LegalDocML.de/1.8.1/"
+           version="LegalDocML.de 1.8.1 (10.06.2025)">
+<!-- ********************************* Hinweis zur Lizensierung ********************************* -->
+   <xs:annotation>
+      <xs:appinfo>
+         <copyright-hinweis>2025 Copyright © 2021–2025 Bundesministerium des Innern und für Heimat, 
+Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Verwaltungsarbeit</copyright-hinweis>
+         <lizenz url="https://creativecommons.org/licenses/by/3.0/legalcode.de"
+                 kurzbezeichnung="CC-BY-3.0"
+                 langbezeichnung="Creative Commons Namensnennung 3.0"/>
+         <autor organisation="Bundesministerium des Innern und für Heimat"
+                referat="DG II 6"
+                organisatorischer-rahmen="Maßnahmen Enterprise Resource Management und Elektronische Verwaltungsarbeit"/>
+      </xs:appinfo>
+   </xs:annotation>
+   <!-- ******************************************************************************************** -->
+   <xs:element name="legalDocML.de_metadaten">
+      <xs:complexType>
+         <xs:sequence>
+            <xs:element name="normenkontrollrat">
+               <xs:annotation>
+                  <xs:documentation>Umfasst die relevanten Metadaten für Dokumente aus dem Normenkontrollrat.</xs:documentation>
+               </xs:annotation>
+               <xs:complexType>
+                  <xs:sequence>
+                     <xs:element name="nkr-nummer">
+                        <xs:annotation>
+                           <xs:documentation>Die vierstellige NKR-Nr.</xs:documentation>
+                        </xs:annotation>
+                        <xs:complexType>
+                           <xs:simpleContent>
+                              <xs:extension base="mindestens-ein-zeichen"/>
+                           </xs:simpleContent>
+                        </xs:complexType>
+                     </xs:element>
+                     <xs:element name="nkr-eingangsdatum">
+                        <xs:annotation>
+                           <xs:documentation>Das Eingangsdatum des Dokuments im NKR</xs:documentation>
+                        </xs:annotation>
+                        <xs:complexType>
+                           <xs:simpleContent>
+                              <xs:extension base="xs:date"/>
+                           </xs:simpleContent>
+                        </xs:complexType>
+                     </xs:element>
+                  </xs:sequence>
+               </xs:complexType>
+            </xs:element>
+         </xs:sequence>
+      </xs:complexType>
+   </xs:element>
+   <xs:simpleType name="mindestens-ein-zeichen">
+      <xs:restriction base="xs:token">
+         <xs:minLength value="1"/>
+      </xs:restriction>
+   </xs:simpleType>
+</xs:schema>

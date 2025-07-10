@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns="http://Inhaltsdaten.LegalDocML.de/1.8.1/"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="http://Inhaltsdaten.LegalDocML.de/1.8.1/"
+           elementFormDefault="qualified"
+           version="LegalDocML.de 1.8.1 (10.06.2025)">
+<!-- ********************************* Hinweis zur Lizensierung ********************************* -->
+   <xs:annotation>
+      <xs:appinfo>
+         <copyright-hinweis>2025 Copyright © 2021–2025 Bundesministerium des Innern und für Heimat, 
+Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Verwaltungsarbeit</copyright-hinweis>
+         <lizenz url="https://creativecommons.org/licenses/by/3.0/legalcode.de"
+                 kurzbezeichnung="CC-BY-3.0"
+                 langbezeichnung="Creative Commons Namensnennung 3.0"/>
+         <autor organisation="Bundesministerium des Innern und für Heimat"
+                referat="DG II 6"
+                organisatorischer-rahmen="Maßnahmen Enterprise Resource Management und Elektronische Verwaltungsarbeit"/>
+      </xs:appinfo>
+   </xs:annotation>
+   <!-- ******************************************************************************************** -->
+   <xs:import namespace="http://www.w3.org/XML/1998/namespace"
+              schemaLocation="xml.xsd"/>
+   <!-- #### Inkludierte Module mit modulübergreifend genutzen Komponenten #### -->
+   <xs:include schemaLocation="legalDocML.de-baukasten.xsd"/>
+   <!-- #### Globales Root-Element, spezifisch für dieses Paket #### -->
+   <xs:element name="akomaNtoso">
+      <xs:complexType>
+         <xs:sequence>
+            <xs:element name="doc" type="bekanntmachung"/>
+         </xs:sequence>
+      </xs:complexType>
+   </xs:element>
+   <!-- #### Typen des Moduls "Bekanntmachung" #### -->
+   <xs:complexType name="bekanntmachung" mixed="false">
+      <xs:annotation>
+         <xs:documentation>Die Klasse "bekanntmachung" bildet ein eigenständiges Teildokument eines Rechtsetzungsdokuments in Form eines separaten XML-Dokuments, das durch die Klasse 'rechtsetzungsdokument' referenziert und in dieser eingebunden wird.</xs:documentation>
+      </xs:annotation>
+      <xs:sequence>
+         <xs:element name="meta" type="metadatenVollstaendig"/>
+         <xs:element name="preface" type="bekanntmachungDokumentenkopf" minOccurs="0"/>
+         <xs:element name="mainBody" type="bekanntmachungHauptteil"/>
+         <xs:element name="conclusions" type="bekanntmachungSchluss" minOccurs="0"/>
+         <xs:element name="attachments" type="anlagencontainer" minOccurs="0"/>
+      </xs:sequence>
+      <xs:attribute name="name" use="required" type="nameLiterals.bekanntmachung"/>
+   </xs:complexType>
+   <xs:complexType name="bekanntmachungDokumentenkopf" mixed="false">
+      <xs:annotation>
+         <xs:documentation>Die Klasse "bekanntmachungDokumentenkopf" wird benutzt, um der Bekanntmachung einen Dokumentenkopf hinzuzufügen.</xs:documentation>
+      </xs:annotation>
+      <xs:sequence>
+         <xs:element name="block" type="bekanntmachungDokumentenkopfContainer"/>
+      </xs:sequence>
+      <xs:attribute name="eId"
+                    use="required"
+                    type="eIdLiterals.bekanntmachungDokumentenkopf"/>
+      <xs:attribute name="GUID" use="required" type="GUIDLiterals"/>
+      <xs:attribute ref="xml:id" use="optional"/>
+   </xs:complexType>
+   <xs:complexType name="bekanntmachungDokumentenkopfContainer" mixed="true">
+      <xs:annotation>
+         <xs:documentation>Die Klasse "bekanntmachungDokumentenkopfContainer" wird genutzt, um einen Dokumententitel und ein Datum hinzuzufügen.</xs:documentation>
+      </xs:annotation>
+      <xs:sequence>
+         <xs:element name="docTitle" type="dokumententitel"/>
+         <xs:element name="date" type="datum" minOccurs="0"/>
+      </xs:sequence>
+      <xs:attribute name="eId"
+                    use="required"
+                    type="eIdLiterals.bekanntmachungDokumentenkopfContainer"/>
+      <xs:attribute name="GUID" use="required" type="GUIDLiterals"/>
+      <xs:attribute name="name"
+                    use="required"
+                    type="nameLiterals.bekanntmachungDokumentenkopfContainer"/>
+      <xs:attribute ref="xml:id" use="optional"/>
+   </xs:complexType>
+   <xs:complexType name="bekanntmachungHauptteil" mixed="false">
+      <xs:annotation>
+         <xs:documentation>Die Klasse "bekanntmachungHauptteil" wird benutzt, um innerhalb der Bekanntmachung einen Hauptteil einzufügen.</xs:documentation>
+      </xs:annotation>
+      <xs:sequence>
+         <xs:group ref="inhaltselement" maxOccurs="unbounded"/>
+      </xs:sequence>
+      <xs:attribute name="eId"
+                    use="required"
+                    type="eIdLiterals.bekanntmachungHauptteil"/>
+      <xs:attribute name="GUID" use="required" type="GUIDLiterals"/>
+      <xs:attribute ref="xml:id" use="optional"/>
+   </xs:complexType>
+   <xs:complexType name="bekanntmachungSchluss" mixed="false">
+      <xs:annotation>
+         <xs:documentation>Die Klasse "bekanntmachungSchluss" wird benutzt, um einer Bekanntmachung einen Schlussteil hinzuzufügen.</xs:documentation>
+      </xs:annotation>
+      <xs:sequence>
+         <xs:element name="blockContainer" type="signaturblock"/>
+         <xs:element name="tblock" type="EUVerweise" minOccurs="0"/>
+      </xs:sequence>
+      <xs:attribute name="eId" use="required" type="eIdLiterals.bekanntmachungSchluss"/>
+      <xs:attribute name="GUID" use="required" type="GUIDLiterals"/>
+      <xs:attribute ref="xml:id" use="optional"/>
+   </xs:complexType>
+</xs:schema>

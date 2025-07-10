@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns="http://Inhaltsdaten.LegalDocML.de/1.8.1/"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="http://Inhaltsdaten.LegalDocML.de/1.8.1/"
+           elementFormDefault="qualified"
+           version="LegalDocML.de 1.8.1 (10.06.2025)">
+<!-- ********************************* Hinweis zur Lizensierung ********************************* -->
+   <xs:annotation>
+      <xs:appinfo>
+         <copyright-hinweis>2025 Copyright © 2021–2025 Bundesministerium des Innern und für Heimat, 
+Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Verwaltungsarbeit</copyright-hinweis>
+         <lizenz url="https://creativecommons.org/licenses/by/3.0/legalcode.de"
+                 kurzbezeichnung="CC-BY-3.0"
+                 langbezeichnung="Creative Commons Namensnennung 3.0"/>
+         <autor organisation="Bundesministerium des Innern und für Heimat"
+                referat="DG II 6"
+                organisatorischer-rahmen="Maßnahmen Enterprise Resource Management und Elektronische Verwaltungsarbeit"/>
+      </xs:appinfo>
+   </xs:annotation>
+   <!-- ******************************************************************************************** -->
+   <xs:import namespace="http://www.w3.org/XML/1998/namespace"
+              schemaLocation="xml.xsd"/>
+   <!-- #### Inkludierte Module mit modulübergreifend genutzen Komponenten #### -->
+   <xs:include schemaLocation="legalDocML.de-baukasten.xsd"/>
+   <!-- #### Globales Root-Element, spezifisch für dieses Paket #### -->
+   <xs:element name="akomaNtoso">
+      <xs:complexType>
+         <xs:sequence>
+            <xs:element name="doc" type="unterrichtung"/>
+         </xs:sequence>
+      </xs:complexType>
+   </xs:element>
+   <!-- #### Typen des Moduls "Unterrichtung" #### -->
+   <xs:complexType name="unterrichtungsbestandteilVerweis" mixed="false">
+      <xs:annotation>
+         <xs:documentation>Die Klasse "unterrichtungsbestandteilVerweis" verweist auf einen Bericht innerhalb einer Unterrichtung.</xs:documentation>
+      </xs:annotation>
+      <xs:sequence/>
+      <xs:attribute name="eId"
+                    use="required"
+                    type="eIdLiterals.unterrichtungsbestandteilVerweis"/>
+      <xs:attribute name="GUID" use="required" type="GUIDLiterals"/>
+      <xs:attribute name="src" use="required" type="srcLiterals"/>
+      <xs:attribute name="showAs" use="required" type="showAsLiterals"/>
+   </xs:complexType>
+   <xs:complexType name="unterrichtung" mixed="false">
+      <xs:annotation>
+         <xs:documentation>Die Klasse "unterrichtung" bildet ein eigenständiges Teildokument eines Rechtsetzungsdokuments in der Entwurfsfassung in Form eines separaten XML-Dokuments, das durch die Klasse "rechtsetzungsdokument" referenziert und in dieser eingebunden wird.</xs:documentation>
+      </xs:annotation>
+      <xs:sequence>
+         <xs:element name="meta" type="metadatenOptionalErweitert"/>
+         <xs:element name="preface" type="unterrichtungDokumentenkopf"/>
+         <xs:element name="mainBody" type="unterrichtungHauptteil"/>
+         <xs:element name="conclusions" type="unterrichtungSchluss" minOccurs="0"/>
+         <xs:element name="components" type="teildokumente" minOccurs="0"/>
+      </xs:sequence>
+      <xs:attribute name="name" use="required" type="nameLiterals.unterrichtung"/>
+   </xs:complexType>
+   <xs:complexType name="unterrichtungDokumentenkopf" mixed="false">
+      <xs:annotation>
+         <xs:documentation>Die Klasse "unterrichtungDokumentenkopf" wird benutzt, um der Unterrichtung einen Dokumentenkopf hinzuzufügen.</xs:documentation>
+      </xs:annotation>
+      <xs:sequence>
+         <xs:element name="longTitle" type="unterrichtungDokumentenkopfTitel"/>
+      </xs:sequence>
+      <xs:attribute name="eId"
+                    use="required"
+                    type="eIdLiterals.unterrichtungDokumentenkopf"/>
+      <xs:attribute name="GUID" use="required" type="GUIDLiterals"/>
+      <xs:attribute ref="xml:id" use="optional"/>
+   </xs:complexType>
+   <xs:complexType name="unterrichtungDokumentenkopfTitel" mixed="false">
+      <xs:annotation>
+         <xs:documentation>Die Klasse "unterrichtungDokumentenkopfTitel" wird benutzt, um Titelinformationen in den Dokumentenkopf einer Unterrichtung hinzuzufügen.</xs:documentation>
+      </xs:annotation>
+      <xs:sequence>
+         <xs:element name="p" type="p" maxOccurs="unbounded"/>
+      </xs:sequence>
+      <xs:attribute name="eId"
+                    use="required"
+                    type="eIdLiterals.unterrichtungDokumentenkopfTitel"/>
+      <xs:attribute name="GUID" use="required" type="GUIDLiterals"/>
+      <xs:attribute ref="xml:id" use="optional"/>
+   </xs:complexType>
+   <xs:complexType name="unterrichtungHauptteil" mixed="false">
+      <xs:annotation>
+         <xs:documentation>Die Klasse "unterrichtungHauptteil" wird benutzt, um innerhalb der Unterrichtung einen Hauptteil einzufügen.</xs:documentation>
+      </xs:annotation>
+      <xs:choice>
+         <xs:group ref="inhaltselement" maxOccurs="unbounded"/>
+         <xs:element name="componentRef"
+                     type="unterrichtungsbestandteilVerweis"
+                     maxOccurs="unbounded"/>
+      </xs:choice>
+      <xs:attribute name="eId" use="required" type="eIdLiterals.unterrichtungHauptteil"/>
+      <xs:attribute name="GUID" use="required" type="GUIDLiterals"/>
+      <xs:attribute ref="xml:id" use="optional"/>
+   </xs:complexType>
+   <xs:complexType name="unterrichtungSchluss" mixed="false">
+      <xs:annotation>
+         <xs:documentation>Die Klasse "unterrichtungSchluss" wird benutzt, um einer Unterrichtung einen Schlussteil hinzuzufügen</xs:documentation>
+      </xs:annotation>
+      <xs:sequence>
+         <xs:element name="blockContainer" type="signaturblock"/>
+      </xs:sequence>
+      <xs:attribute name="eId" use="required" type="eIdLiterals.unterrichtungSchluss"/>
+      <xs:attribute name="GUID" use="required" type="GUIDLiterals"/>
+      <xs:attribute ref="xml:id" use="optional"/>
+   </xs:complexType>
+</xs:schema>

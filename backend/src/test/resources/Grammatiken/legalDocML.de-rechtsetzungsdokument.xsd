@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns="http://Inhaltsdaten.LegalDocML.de/1.8.1/"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="http://Inhaltsdaten.LegalDocML.de/1.8.1/"
+           elementFormDefault="qualified"
+           version="LegalDocML.de 1.8.1 (10.06.2025)">
+<!-- ********************************* Hinweis zur Lizensierung ********************************* -->
+   <xs:annotation>
+      <xs:appinfo>
+         <copyright-hinweis>2025 Copyright © 2021–2025 Bundesministerium des Innern und für Heimat, 
+Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Verwaltungsarbeit</copyright-hinweis>
+         <lizenz url="https://creativecommons.org/licenses/by/3.0/legalcode.de"
+                 kurzbezeichnung="CC-BY-3.0"
+                 langbezeichnung="Creative Commons Namensnennung 3.0"/>
+         <autor organisation="Bundesministerium des Innern und für Heimat"
+                referat="DG II 6"
+                organisatorischer-rahmen="Maßnahmen Enterprise Resource Management und Elektronische Verwaltungsarbeit"/>
+      </xs:appinfo>
+   </xs:annotation>
+   <!-- ******************************************************************************************** -->
+   <xs:import namespace="http://www.w3.org/XML/1998/namespace"
+              schemaLocation="xml.xsd"/>
+   <!-- #### Inkludierte Module mit modulübergreifend genutzen Komponenten #### -->
+   <xs:include schemaLocation="legalDocML.de-baukasten.xsd"/>
+   <!-- #### Globales Root-Element, spezifisch für dieses Paket #### -->
+   <xs:element name="akomaNtoso">
+      <xs:complexType>
+         <xs:sequence>
+            <xs:element name="documentCollection" type="rechtsetzungsdokument"/>
+         </xs:sequence>
+      </xs:complexType>
+   </xs:element>
+   <!-- #### Typen des Moduls "Rechtsetzungsdokument" #### -->
+   <xs:complexType name="rechtsetzungsdokument" mixed="false">
+      <xs:annotation>
+         <xs:documentation>Die Klasse "rechtsetzungsdokument" wird benutzt, um den Inhalt eines Rechtsetzungsdokuments in XML abzubilden. Auf Basis der Klasse "rechtsetzungsdokument" wird ein XML-Dokument erzeugt, worin durch Referenzierung die verschiedenen Bestandteile eines Rechtsetzungsdokuments eingebunden sind, die wiederum als separate XML-Dokumente angelegt werden. Auf Ebene des Schemas werden keine spezifischen Arten von Rechtsetzungsdokumenten unterschieden, da diese strukturell identisch aufgebaut sind. Die Darstellung spezifischer Rechtsetzungsdokumente erfolgt ausschließlich durch die Zuordnung von @name-Attributen.</xs:documentation>
+      </xs:annotation>
+      <xs:sequence>
+         <xs:element name="meta" type="metadatenMinimal"/>
+         <xs:element name="collectionBody" type="rechtsetzungsdokumentHauptteil"/>
+      </xs:sequence>
+      <xs:attribute name="name"
+                    use="required"
+                    type="nameLiterals.rechtsetzungsdokument"/>
+   </xs:complexType>
+   <xs:complexType name="rechtsetzungsdokumentHauptteil" mixed="false">
+      <xs:annotation>
+         <xs:documentation>Die Klasse "rechtsetzungsdokumentHauptteil" wird benutzt, um die einzelnen Bestandteile eines Rechtsetzungsdokuments (die einzelnen XML-Dateien) zu referenzieren.</xs:documentation>
+      </xs:annotation>
+      <xs:sequence>
+         <xs:element name="component" type="teildokument" maxOccurs="unbounded"/>
+      </xs:sequence>
+      <xs:attribute name="eId"
+                    use="required"
+                    type="eIdLiterals.rechtsetzungsdokumentHauptteil"/>
+      <xs:attribute name="GUID" use="required" type="GUIDLiterals"/>
+      <xs:attribute ref="xml:id" use="optional"/>
+   </xs:complexType>
+</xs:schema>

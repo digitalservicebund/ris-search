@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns="http://Inhaltsdaten.LegalDocML.de/1.8.1/"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="http://Inhaltsdaten.LegalDocML.de/1.8.1/"
+           elementFormDefault="qualified"
+           version="LegalDocML.de 1.8.1 (10.06.2025)">
+<!-- ********************************* Hinweis zur Lizensierung ********************************* -->
+   <xs:annotation>
+      <xs:appinfo>
+         <copyright-hinweis>2025 Copyright © 2021–2025 Bundesministerium des Innern und für Heimat, 
+Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Verwaltungsarbeit</copyright-hinweis>
+         <lizenz url="https://creativecommons.org/licenses/by/3.0/legalcode.de"
+                 kurzbezeichnung="CC-BY-3.0"
+                 langbezeichnung="Creative Commons Namensnennung 3.0"/>
+         <autor organisation="Bundesministerium des Innern und für Heimat"
+                referat="DG II 6"
+                organisatorischer-rahmen="Maßnahmen Enterprise Resource Management und Elektronische Verwaltungsarbeit"/>
+      </xs:appinfo>
+   </xs:annotation>
+   <!-- ******************************************************************************************** -->
+   <xs:import namespace="http://www.w3.org/XML/1998/namespace"
+              schemaLocation="xml.xsd"/>
+   <!-- #### Inkludierte Module mit modulübergreifend genutzen Komponenten #### -->
+   <xs:include schemaLocation="legalDocML.de-baukasten.xsd"/>
+   <!-- #### Globales Root-Element, spezifisch für dieses Paket #### -->
+   <xs:element name="akomaNtoso">
+      <xs:complexType>
+         <xs:sequence>
+            <xs:element name="doc" type="vorblattBeschlussempfehlung"/>
+         </xs:sequence>
+      </xs:complexType>
+   </xs:element>
+   <!-- #### Typen des Moduls "Vorblattbeschlussempfehlung" #### -->
+   <xs:complexType name="vorblattBeschlussempfehlung" mixed="false">
+      <xs:annotation>
+         <xs:documentation>Die Klasse "vorblattBeschlussempfehlung" bildet ein eigenständiges Teildokument eines Rechtsetzungsdokuments in der Entwurfsfassung in Form eines separaten XML-Dokuments, das durch dieKlasse "rechtsetzungsdokument" referenziert und in dieser eingebunden wird.</xs:documentation>
+      </xs:annotation>
+      <xs:sequence>
+         <xs:element name="meta" type="metadatenMinimal"/>
+         <xs:element name="preface" type="vorblattBeschlussempfehlungDokumentenkopf"/>
+         <xs:element name="mainBody" type="vorblattBeschlussempfehlungHauptteil"/>
+      </xs:sequence>
+      <xs:attribute name="name"
+                    use="required"
+                    type="nameLiterals.vorblattBeschlussempfehlung"/>
+   </xs:complexType>
+   <xs:complexType name="vorblattBeschlussempfehlungAbschnitt" mixed="false">
+      <xs:annotation>
+         <xs:documentation>Die Klasse "vorblattBeschlussempfehlungAbschnitt" wird genutzt, um innerhalb des Vorblatts einen Abschnitt einzufügen. Auf Ebene des Schemas werden keine spezifischen Arten von Vorblattabschnitten unterschieden, da diese strukturell identisch aufgebaut sind. Die Darstellung spezifischer Vorblattabschnitte erfolgt ausschließlich durch die Zuordnung von @refersTo-Attributen.</xs:documentation>
+      </xs:annotation>
+      <xs:sequence>
+         <xs:element name="num" type="artUndZaehlbezeichnung"/>
+         <xs:element name="heading" type="ueberschrift"/>
+         <xs:element name="content" type="inhalt"/>
+      </xs:sequence>
+      <xs:attribute name="eId"
+                    use="required"
+                    type="eIdLiterals.vorblattBeschlussempfehlungAbschnitt"/>
+      <xs:attribute name="GUID" use="required" type="GUIDLiterals"/>
+      <xs:attribute name="name" use="required" type="nameLiterals.vorblattAbschnitt"/>
+      <xs:attribute name="refersTo"
+                    use="required"
+                    type="refersToLiterals.vorblattBeschlussempfehlungAbschnitt"/>
+      <xs:attribute ref="xml:id" use="optional"/>
+   </xs:complexType>
+   <xs:complexType name="vorblattBeschlussempfehlungDokumentenkopf" mixed="false">
+      <xs:annotation>
+         <xs:documentation>Die Klasse "vorblattBeschlussempfehlungDokumentenkopf" wird benutzt, um dem Vorblatt einen Dokumentenkopf hinzuzufügen.</xs:documentation>
+      </xs:annotation>
+      <xs:sequence>
+         <xs:element name="longTitle" type="vorblattBeschlussempfehlungDokumentenkopfTitel"/>
+      </xs:sequence>
+      <xs:attribute name="eId"
+                    use="required"
+                    type="eIdLiterals.vorblattBeschlussempfehlungDokumentenkopf"/>
+      <xs:attribute name="GUID" use="required" type="GUIDLiterals"/>
+      <xs:attribute ref="xml:id" use="optional"/>
+   </xs:complexType>
+   <xs:complexType name="vorblattBeschlussempfehlungDokumentenkopfTitel" mixed="false">
+      <xs:annotation>
+         <xs:documentation>Die Klasse "vorblattBeschlussempfehlungDokumentenkopfTitel" wird benutzt, um Titelinformationen in den Dokumentenkopf eines Teildokuments eines Rechtsetzungsdokuments einzufügen.</xs:documentation>
+      </xs:annotation>
+      <xs:sequence>
+         <xs:element name="p" type="p" maxOccurs="unbounded"/>
+         <xs:element name="ol" type="ol" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+      <xs:attribute name="eId"
+                    use="required"
+                    type="eIdLiterals.vorblattBeschlussempfehlungDokumentenkopfTitel"/>
+      <xs:attribute name="GUID" use="required" type="GUIDLiterals"/>
+      <xs:attribute ref="xml:id" use="optional"/>
+   </xs:complexType>
+   <xs:complexType name="vorblattBeschlussempfehlungHauptteil" mixed="false">
+      <xs:annotation>
+         <xs:documentation>Die Klasse "vorblattBeschlussempfehlungHauptteil" wird benutzt, um innerhalb des Vorblatts einen Hauptteil einzufügen.</xs:documentation>
+      </xs:annotation>
+      <xs:sequence>
+         <xs:element name="hcontainer"
+                     type="vorblattBeschlussempfehlungAbschnitt"
+                     maxOccurs="unbounded"/>
+      </xs:sequence>
+      <xs:attribute name="eId"
+                    use="required"
+                    type="eIdLiterals.vorblattBeschlussempfehlungHauptteil"/>
+      <xs:attribute name="GUID" use="required" type="GUIDLiterals"/>
+      <xs:attribute ref="xml:id" use="optional"/>
+   </xs:complexType>
+</xs:schema>
