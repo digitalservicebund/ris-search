@@ -31,7 +31,6 @@ export default createConfigForNuxt(undefined, [
           enforceForJSX: true,
         },
       ],
-      // Enforce a consistent order for imports
       "import/order": [
         "error",
         {
@@ -42,7 +41,6 @@ export default createConfigForNuxt(undefined, [
           },
         },
       ],
-      // To increase consistency use ~/... instead of @/...
       "no-restricted-imports": [
         "error",
         {
