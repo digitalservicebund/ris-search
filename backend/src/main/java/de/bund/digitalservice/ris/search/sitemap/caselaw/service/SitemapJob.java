@@ -6,16 +6,19 @@ import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
 import de.bund.digitalservice.ris.search.repository.objectstorage.CaseLawBucket;
 import de.bund.digitalservice.ris.search.repository.objectstorage.PortalBucket;
 import de.bund.digitalservice.ris.search.service.CaseLawIndexSyncJob;
+import de.bund.digitalservice.ris.search.service.IndexCaselawService;
 import de.bund.digitalservice.ris.search.service.IndexStatusService;
 import de.bund.digitalservice.ris.search.service.IndexSyncJob;
 import de.bund.digitalservice.ris.search.service.IndexingState;
 import de.bund.digitalservice.ris.search.sitemap.caselaw.schema.Sitemapindex;
 import de.bund.digitalservice.ris.search.sitemap.caselaw.schema.UrlSet;
 import jakarta.xml.bind.JAXBException;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import org.springframework.stereotype.Component;
 
@@ -32,6 +35,10 @@ public class SitemapJob {
 
   IndexStatusService indexStatusService;
 
+  IndexCaselawService indexCaselawService;
+
+  final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
   public static final String STATUS_FILE = "caselaw_sitemaps_status.json";
 
   public SitemapJob(
@@ -39,29 +46,55 @@ public class SitemapJob {
       CaseLawIndexSyncJob indexJob,
       PortalBucket portalBucket,
       CaseLawBucket caselawbucket,
-      IndexStatusService indexStatusService) {
+      IndexStatusService indexStatusService,
+      IndexCaselawService indexCaselawService) {
     this.sitemapService = service;
     this.indexJob = indexJob;
     this.portalBucket = portalBucket;
     this.caselawbucket = caselawbucket;
     this.indexStatusService = indexStatusService;
+    this.indexCaselawService = indexCaselawService;
   }
 
   public void run() throws JAXBException, JsonProcessingException, ObjectStoreServiceException {
 
-    final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-
     IndexingState state = indexStatusService.loadStatus(STATUS_FILE);
     String lastProcessedChangelogFile = state.lastProcessedChangelogFile();
 
-    List<String> filePaths =
-        Optional.ofNullable(lastProcessedChangelogFile)
-            .map(lastProcessed -> indexJob.getNewChangelogs(caselawbucket, lastProcessed))
-            .orElseGet(() -> indexJob.getAllChangelogs(caselawbucket));
-
-    if (filePaths.isEmpty()) {
-      return;
+    if (Objects.isNull(lastProcessedChangelogFile)) {
+      createAll();
+    } else {
+      createFromChangelogs(indexJob.getNewChangelogs(caselawbucket, lastProcessedChangelogFile));
     }
+  }
+
+  private void createSitemaps(HashSet<String> changed, HashSet<String> deleted)
+      throws JAXBException {
+    LocalDate now = LocalDate.now();
+    List<UrlSet> urlSets = sitemapService.createUrlSets(changed, deleted);
+    List<String> urlSetLocations = sitemapService.writeUrlSets(urlSets, now);
+
+    if (!urlSetLocations.isEmpty()) {
+      Sitemapindex index = sitemapService.createSitemapIndex(urlSetLocations);
+      sitemapService.writeSitemapIndex(index, now);
+    }
+  }
+
+  private void createAll() throws JAXBException {
+    HashSet<String> filenames =
+        new HashSet<>(
+            indexCaselawService.getAllCaseLawFilenames().stream()
+                .map(name -> name.replace(".xml", ""))
+                .toList());
+    createSitemaps(filenames, new HashSet<>());
+    indexStatusService.saveStatus(
+        STATUS_FILE,
+        new IndexingState()
+            .withLastProcessedChangelogFile(
+                IndexSyncJob.CHANGELOGS_PREFIX + Instant.now().toString()));
+  }
+
+  private void createFromChangelogs(List<String> filePaths) throws JAXBException {
 
     var changelogsUpToYesterday =
         filePaths.stream()
@@ -93,16 +126,11 @@ public class SitemapJob {
           }
         });
 
-    LocalDate now = LocalDate.now();
-    List<UrlSet> urlSets = sitemapService.createUrlSets(changed, deleted);
-    List<String> urlSetLocations = sitemapService.writeUrlSets(urlSets, now);
+    if (!changelogsUpToYesterday.isEmpty()) {
+      createSitemaps(changed, deleted);
 
-    if (!urlSetLocations.isEmpty()) {
-      Sitemapindex index = sitemapService.createSitemapIndex(urlSetLocations);
-      sitemapService.writeSitemapIndex(index, now);
+      indexStatusService.saveStatus(
+          STATUS_FILE, new IndexingState().withLastProcessedChangelogFile(filePaths.getLast()));
     }
-
-    indexStatusService.saveStatus(
-        STATUS_FILE, new IndexingState().withLastProcessedChangelogFile(filePaths.getLast()));
   }
 }

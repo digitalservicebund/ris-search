@@ -67,14 +67,6 @@ public class IndexSyncJob {
         .toList();
   }
 
-  public List<String> getAllChangelogs(ObjectStorage changelogBucket) {
-
-    return changelogBucket.getAllKeysByPrefix(CHANGELOGS_PREFIX).stream()
-        .filter(e -> !CHANGELOGS_PREFIX.equals(e))
-        .sorted()
-        .toList();
-  }
-
   public void fetchAndProcessChanges(IndexingState state) throws ObjectStoreServiceException {
     if (state.lastProcessedChangelogFile() == null) {
       // if status file or last success missing do a full reset
