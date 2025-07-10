@@ -1,12 +1,12 @@
-import { mount, flushPromises } from "@vue/test-utils";
-import { nextTick } from "vue";
-import { vi } from "vitest";
-import AdvancedSearch from "./AdvancedSearch.vue";
-import * as searchService from "@/services/searchService";
 import { mountSuspended } from "@nuxt/test-utils/runtime";
+import { mount, flushPromises } from "@vue/test-utils";
 import type { AxiosResponse } from "axios";
-import { DocumentKind } from "~/types";
 import PrimeVue from "primevue/config";
+import { vi } from "vitest";
+import { nextTick } from "vue";
+import AdvancedSearch from "./AdvancedSearch.vue";
+import * as searchService from "~/services/searchService";
+import { DocumentKind } from "~/types";
 
 type SearchResultPage = {
   member: [{ id: string; title: string }];

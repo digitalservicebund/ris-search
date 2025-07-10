@@ -3,9 +3,9 @@ import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import type { MaskaDetail } from "maska";
 import { vMaska } from "maska/vue";
-import { computed, ref, watch } from "vue";
-import type { ValidationError } from "@/components/types";
 import InputText from "primevue/inputtext";
+import { computed, ref, watch } from "vue";
+import type { ValidationError } from "~/components/types";
 
 interface Props {
   id: string;

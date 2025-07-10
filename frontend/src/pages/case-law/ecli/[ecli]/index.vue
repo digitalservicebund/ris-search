@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import Properties from "@/components/Properties.vue";
-import PropertiesItem from "@/components/PropertiesItem.vue";
+import Properties from "~/components/Properties.vue";
+import PropertiesItem from "~/components/PropertiesItem.vue";
 
 definePageMeta({ alias: "/ecli/:ecli" });
 const route = useRoute();

@@ -1,12 +1,12 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { useSimpleSearchParamsStore } from "~/stores/searchParams";
-import CourtFilter from "~/components/Search/SimpleSearch/CourtFilter.vue";
-import { DocumentKind } from "@/types";
 import { mountSuspended } from "@nuxt/test-utils/runtime";
-import { setStoreValues } from "~/utils/testing/piniaUtils";
-import type { VueWrapper } from "@vue/test-utils";
 import { flushPromises } from "@vue/test-utils";
+import type { VueWrapper } from "@vue/test-utils";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { defaultSuggestions } from "./CourtFilter.data";
+import CourtFilter from "~/components/Search/SimpleSearch/CourtFilter.vue";
+import { useSimpleSearchParamsStore } from "~/stores/searchParams";
+import { DocumentKind } from "~/types";
+import { setStoreValues } from "~/utils/testing/piniaUtils";
 
 const mockData = [{ id: "TG Berlin", label: "Tagesgericht Berlin", count: 1 }];
 const mockFetch = vi.fn().mockResolvedValue(mockData);

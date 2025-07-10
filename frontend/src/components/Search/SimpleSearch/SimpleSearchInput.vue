@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import IconSearch from "~icons/ic/search";
 import Button from "primevue/button";
 import InputText from "primevue/inputtext";
 import { addDefaults } from "~/stores/searchParams/getInitialState";
+import IconSearch from "~icons/ic/search";
 
 const userInputDisabled = ref(true);
 onNuxtReady(() => {

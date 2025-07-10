@@ -1,9 +1,9 @@
+import { RisExpandableText } from "@digitalservicebund/ris-ui/components";
 import { mount, shallowMount } from "@vue/test-utils";
 import { describe, it, expect, vi } from "vitest";
+import { nextTick } from "vue";
 import NormHeadingGroup from "./NormHeadingGroup.vue";
 import type { LegislationWork } from "~/types";
-import { RisExpandableText } from "@digitalservicebund/ris-ui/components";
-import { nextTick } from "vue";
 
 const createDefaultProps = () => ({
   htmlParts: {

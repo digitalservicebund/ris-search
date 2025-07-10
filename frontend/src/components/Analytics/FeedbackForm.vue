@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import ErrorOutline from "~icons/material-symbols/error-outline";
 import PrimevueTextarea from "primevue/textarea";
 import { usePostHogStore } from "~/stores/usePostHogStore";
+import ErrorOutline from "~icons/material-symbols/error-outline";
 
 const store = usePostHogStore();
 const feedback = ref("");

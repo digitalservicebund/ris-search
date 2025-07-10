@@ -1,18 +1,18 @@
 <script setup lang="ts">
-import IncompleteDataMessage from "~/components/IncompleteDataMessage.vue";
-import type { LegislationWork, SearchResult } from "~/types";
+import _ from "lodash";
 import Column from "primevue/column";
 import DataTable from "primevue/datatable";
-import Badge, { BadgeColor } from "@/components/Badge.vue";
-import IcBaselineLaunch from "~icons/ic/baseline-launch";
-import _ from "lodash";
+import Badge, { BadgeColor } from "~/components/Badge.vue";
+import IncompleteDataMessage from "~/components/IncompleteDataMessage.vue";
+import type { LegislationWork, SearchResult } from "~/types";
+import { dateFormattedDDMMYYYY } from "~/utils/dateFormatting";
 import {
   getValidityStatus,
   getValidityStatusLabel,
   temporalCoverageToValidityInterval,
   type ValidityStatus,
 } from "~/utils/normUtils";
-import { dateFormattedDDMMYYYY } from "~/utils/dateFormatting";
+import IcBaselineLaunch from "~icons/ic/baseline-launch";
 
 const props = defineProps<{
   status: string;

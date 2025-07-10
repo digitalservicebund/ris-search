@@ -1,4 +1,3 @@
-import CaseLawPage from "@/pages/case-law/[documentNumber]/index.vue";
 import { mockNuxtImport, mountSuspended } from "@nuxt/test-utils/runtime";
 import {
   type DOMWrapper,
@@ -7,7 +6,8 @@ import {
   RouterLinkStub,
 } from "@vue/test-utils";
 import dayjs from "dayjs";
-import type { CaseLaw } from "@/types";
+import CaseLawPage from "~/pages/case-law/[documentNumber]/index.vue";
+import type { CaseLaw } from "~/types";
 
 const { useFetchMock, useHeadMock } = vi.hoisted(() => ({
   useFetchMock: vi.fn().mockImplementation(async (url: string) => {

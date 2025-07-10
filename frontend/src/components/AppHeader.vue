@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import IcBaselineMenu from "~icons/ic/baseline-menu";
 import IcBaselineClose from "~icons/ic/baseline-close";
+import IcBaselineMenu from "~icons/ic/baseline-menu";
 
 const open = ref(false);
 const toggleMenu = () => {

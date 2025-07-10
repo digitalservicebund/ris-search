@@ -1,10 +1,10 @@
+import _ from "lodash";
+import { getMostRelevantExpression } from "~/pages/norms/eli/[jurisdiction]/[agent]/[year]/[naturalIdentifier]/[subtype]/index.logic";
 import type {
   LegislationExpression,
   LegislationWork,
   SearchResult,
 } from "~/types";
-import _ from "lodash";
-import { getMostRelevantExpression } from "~/pages/norms/eli/[jurisdiction]/[agent]/[year]/[naturalIdentifier]/[subtype]/index.logic";
 
 vi.mock("~/utils/dateFormatting", () => ({
   getCurrentDateInGermanyFormatted: vi.fn().mockReturnValue("2000-01-01"),

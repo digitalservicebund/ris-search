@@ -1,10 +1,10 @@
 // @ts-nocheck
 import { mount, RouterLinkStub } from "@vue/test-utils";
+import type { TreeNode } from "primevue/treenode";
 import { describe, it, expect, beforeEach } from "vitest";
 import NormTableOfContents from "./NormTableOfContents.vue";
-import { tocItemsToTreeNodes } from "@/utils/tableOfContents";
-import type { TreeNode } from "primevue/treenode";
-import type { TableOfContentsItem } from "@/types";
+import type { TableOfContentsItem } from "~/types";
+import { tocItemsToTreeNodes } from "~/utils/tableOfContents";
 
 describe("TableOfContents Component", () => {
   let wrapper: ReturnType;

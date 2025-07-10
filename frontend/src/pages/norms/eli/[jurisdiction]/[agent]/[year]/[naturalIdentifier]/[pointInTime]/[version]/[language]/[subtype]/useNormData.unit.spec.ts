@@ -1,12 +1,11 @@
+import { mockNuxtImport } from "@nuxt/test-utils/runtime";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { useFetchNormArticleContent, useFetchNormContent } from "./useNormData";
 import type {
   LegislationExpression,
   LegislationManifestation,
   LegislationWork,
-} from "@/types";
-
-import { mockNuxtImport } from "@nuxt/test-utils/runtime";
+} from "~/types";
 
 const { mockFetch } = vi.hoisted(() => {
   return {

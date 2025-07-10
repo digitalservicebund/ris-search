@@ -1,10 +1,10 @@
-import type { CaseLaw } from "~/types";
-import { isPrototypeProfile } from "~/utils/config";
-import MaterialSymbolsLink from "~icons/material-symbols/link";
+import type { ActionMenuItem } from "~/components/ActionsMenu.vue";
 import PDFIcon from "~/components/icons/PDFIcon.vue";
 import XMLIcon from "~/components/icons/XMLIcon.vue";
-import type { ActionMenuItem } from "~/components/ActionsMenu.vue";
+import type { CaseLaw } from "~/types";
 import { getEncodingURL } from "~/utils/caseLawUtils";
+import { isPrototypeProfile } from "~/utils/config";
+import MaterialSymbolsLink from "~icons/material-symbols/link";
 
 export function useCaseLawActions(caseLaw: Ref<CaseLaw | null>) {
   const enablePdfButton = !isPrototypeProfile();

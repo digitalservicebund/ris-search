@@ -1,9 +1,8 @@
 import { HttpStatusCode } from "axios";
 import { createError, type EventHandlerRequest, type H3Event } from "h3";
-
-import type { KeycloakTokenResponse } from "./routes/auth/keycloak/keycloakUtils";
-import { buildSessionAttributes } from "./routes/auth/keycloak/keycloakUtils";
 import type { NitroRuntimeConfig } from "nitropack/types";
+import { buildSessionAttributes } from "./routes/auth/keycloak/keycloakUtils";
+import type { KeycloakTokenResponse } from "./routes/auth/keycloak/keycloakUtils";
 import { useRuntimeConfig } from "#imports";
 
 async function getRefreshedTokens(

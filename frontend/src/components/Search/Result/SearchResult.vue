@@ -1,12 +1,12 @@
 <script setup lang="ts">
+import CaselawSearchResult from "~/components/Search/Result/Caselaw/CaselawSearchResult.vue";
+import NormSearchResult from "~/components/Search/Result/Norms/NormSearchResult.vue";
 import type {
   CaseLaw,
   LegislationWork,
   AnyDocument,
   SearchResult,
-} from "@/types";
-import CaselawSearchResult from "@/components/Search/Result/Caselaw/CaselawSearchResult.vue";
-import NormSearchResult from "@/components/Search/Result/Norms/NormSearchResult.vue";
+} from "~/types";
 
 const props = defineProps<{
   searchResult: SearchResult<AnyDocument>;

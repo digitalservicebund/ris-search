@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import AdvancedSearch from "@/components/Search/AdvancedSearch.vue";
-import { isPublicProfile, isInternalProfile } from "@/utils/config";
+import AdvancedSearch from "~/components/Search/AdvancedSearch.vue";
+import { isPublicProfile, isInternalProfile } from "~/utils/config";
 const isInternal = isInternalProfile();
 const isPublic = isPublicProfile();
 const isPrototype = isPrototypeProfile();

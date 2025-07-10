@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-import IconSearch from "~icons/ic/search?width=20&height=20";
 import LoginActions from "~/components/LoginActions.vue";
+import IconSearch from "~icons/ic/search?width=20&height=20";
 
 const config = useRuntimeConfig();
 

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useFetch } from "#app";
-import type { JSONLDList, LegislationWork, SearchResult } from "~/types";
 import { getMostRelevantExpression } from "~/pages/norms/eli/[jurisdiction]/[agent]/[year]/[naturalIdentifier]/[subtype]/index.logic";
+import type { JSONLDList, LegislationWork, SearchResult } from "~/types";
 
 const route = useRoute();
 const workEli = [

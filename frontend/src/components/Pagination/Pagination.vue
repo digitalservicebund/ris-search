@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import IconArrowBack from "~icons/ic/baseline-arrow-back";
-import IconArrowForward from "~icons/ic/baseline-arrow-forward";
 import Button from "primevue/button";
+import type { Page } from "~/components/Pagination/Pagination";
 import {
   buildItemsOnPageString,
   parsePageNumber,
 } from "~/utils/paginationUtils";
-import type { Page } from "~/components/Pagination/Pagination";
+import IconArrowBack from "~icons/ic/baseline-arrow-back";
+import IconArrowForward from "~icons/ic/baseline-arrow-forward";
 
 const props = withDefaults(
   defineProps<{

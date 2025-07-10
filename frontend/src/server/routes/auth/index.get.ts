@@ -1,5 +1,5 @@
 import { sendRedirect } from "h3";
-import { authRedirectCookieName } from "@/server/auth";
+import { authRedirectCookieName } from "~/server/auth";
 
 export default defineEventHandler((event) => {
   const query = getQuery(event);

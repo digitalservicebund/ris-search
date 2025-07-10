@@ -1,6 +1,6 @@
 <script setup lang="ts">
+import Badge, { BadgeColor } from "~/components/Badge.vue";
 import { StatusCardType } from "~/components/types";
-import Badge, { BadgeColor } from "@/components/Badge.vue";
 
 interface Props {
   header: string;

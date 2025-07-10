@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { LegislationWork, SearchResult } from "~/types";
 import VersionWarningMessage from "~/components/Norm/VersionWarningMessage.vue";
+import type { LegislationWork, SearchResult } from "~/types";
 
 const props = defineProps<{
   versions: SearchResult<LegislationWork>[];

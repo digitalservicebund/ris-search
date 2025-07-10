@@ -1,4 +1,4 @@
-import { useSimpleSearchParamsStore } from "@/stores/searchParams";
+import { useSimpleSearchParamsStore } from "~/stores/searchParams";
 
 export async function setStoreValues(
   values: Partial<ReturnType<typeof useSimpleSearchParamsStore>>,

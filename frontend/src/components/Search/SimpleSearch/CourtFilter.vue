@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { useSimpleSearchParamsStore } from "@/stores/searchParams";
-import { DocumentKind } from "@/types";
-import type { AutoCompleteDropdownClickEvent } from "primevue/autocomplete";
-import _ from "lodash";
 import { RisAutoComplete } from "@digitalservicebund/ris-ui/components";
+import _ from "lodash";
+import type { AutoCompleteDropdownClickEvent } from "primevue/autocomplete";
 import { defaultSuggestions } from "~/components/Search/SimpleSearch/CourtFilter.data";
+import { useSimpleSearchParamsStore } from "~/stores/searchParams";
+import { DocumentKind } from "~/types";
 
 const store = useSimpleSearchParamsStore();
 

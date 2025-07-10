@@ -1,4 +1,4 @@
-import type { UserSession } from "@/auth";
+import type { UserSession } from "~/auth";
 
 export interface KeycloakTokenResponse {
   access_token: string;

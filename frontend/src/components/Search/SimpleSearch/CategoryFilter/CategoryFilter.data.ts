@@ -1,5 +1,5 @@
 import type { MenuItem } from "primevue/menuitem";
-import { DocumentKind } from "@/types";
+import { DocumentKind } from "~/types";
 
 export const items: MenuItem[] = [
   {

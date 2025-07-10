@@ -1,5 +1,5 @@
-import type { NitroRuntimeConfig } from "nitropack";
 import { HttpStatusCode } from "axios";
+import type { NitroRuntimeConfig } from "nitropack";
 
 async function doFinalSignout(
   config: Pick<

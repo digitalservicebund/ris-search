@@ -1,8 +1,8 @@
 <script setup lang="ts">
+import type { MenuItem, MenuItemCommandEvent } from "primevue/menuitem";
 import PanelMenu from "primevue/panelmenu";
 import { computeExpandedKeys, items } from "./CategoryFilter.data";
-import type { MenuItem, MenuItemCommandEvent } from "primevue/menuitem";
-import { useSimpleSearchParamsStore } from "@/stores/searchParams";
+import { useSimpleSearchParamsStore } from "~/stores/searchParams";
 
 const store = useSimpleSearchParamsStore();
 

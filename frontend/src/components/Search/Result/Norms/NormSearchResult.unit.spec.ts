@@ -1,8 +1,8 @@
-import { describe, it, expect } from "vitest";
-import { mount, RouterLinkStub } from "@vue/test-utils";
-import NormSearchResult from "./NormSearchResult.vue";
-import type { LegislationWork, SearchResult, TextMatch } from "@/types";
 import { mountSuspended } from "@nuxt/test-utils/runtime";
+import { mount, RouterLinkStub } from "@vue/test-utils";
+import { describe, it, expect } from "vitest";
+import NormSearchResult from "./NormSearchResult.vue";
+import type { LegislationWork, SearchResult, TextMatch } from "~/types";
 
 const NuxtLinkStub = {
   name: "NuxtLink",

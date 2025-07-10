@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import { computed, ref, watch } from "vue";
 import type { ValidationError } from "./types";
-import errors from "@/i18n/errors.json";
-import { isErrorCode } from "@/i18n/utils";
+import errors from "~/i18n/errors.json";
+import { isErrorCode } from "~/i18n/utils";
 
 interface WithHtml {
   html: string;

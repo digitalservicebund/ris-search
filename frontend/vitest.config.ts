@@ -1,10 +1,10 @@
 /// <reference types="vitest" />
 /// <reference types="vite" />
 
+import { defineVitestConfig } from "@nuxt/test-utils/config";
+import IconsResolver from "unplugin-icons/resolver";
 import Icons from "unplugin-icons/vite";
 import Components from "unplugin-vue-components/vite";
-import IconsResolver from "unplugin-icons/resolver";
-import { defineVitestConfig } from "@nuxt/test-utils/config";
 import { configDefaults } from "vitest/config";
 
 export default defineVitestConfig({

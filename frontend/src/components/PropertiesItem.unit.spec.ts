@@ -1,5 +1,5 @@
 import { mount } from "@vue/test-utils";
-import PropertiesItem from "@/components/PropertiesItem.vue";
+import PropertiesItem from "~/components/PropertiesItem.vue";
 
 describe("PropertiesItem.vue", () => {
   it('displays "nicht vorhanden" in text-gray-900 color when data prop is not supplied', () => {

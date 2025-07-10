@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import ContactDetails from "~/pages/contact/ContactDetails.vue";
 import StaticPageWrapper from "~/components/CustomLayouts/StaticPageWrapper.vue";
+import ContactDetails from "~/pages/contact/ContactDetails.vue";
 
 useHead({ title: "Erklärung zur Barrierefreiheit" });
 definePageMeta({ alias: ["/barrierefreiheit"] });
