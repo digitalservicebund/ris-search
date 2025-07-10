@@ -166,10 +166,9 @@ public class CaseLawController {
    * @return The prefix to use when returning references to resources.
    */
   private String getResourceBasePath(ResourceReferenceMode mode, String documentNumber) {
-    String basePath = ApiConfig.Paths.CASELAW + "/" + documentNumber + "/";
     return switch (mode) {
-      case API -> basePath;
-      case PROXY -> "/api" + basePath;
+      case API -> ApiConfig.Paths.CASELAW + "/" + documentNumber + "/";
+      case PROXY -> "/api" + ApiConfig.Paths.CASELAW + "/" + documentNumber + "/";
     };
   }
 }
