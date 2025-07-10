@@ -1,124 +1,123 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?xml-model href="../../../Grammatiken/legalDocML.de.sch" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<?xml-model href="Grammatiken/legalDocML.de.sch" schematypens="http://purl.oclc.org/dsdl/schematron"?>
 <akn:akomaNtoso xmlns:akn="http://Inhaltsdaten.LegalDocML.de/1.8.1/"
-                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                xsi:schemaLocation="http://Inhaltsdaten.LegalDocML.de/1.8.1/ ../schema/legalDocML.de-regelungstextverkuendungsfassung.xsd http://MetadatenBundesregierung.LegalDocML.de/1.8.1/ ../schema/legalDocML.de-metadaten-bundesregierung.xsd">
-    <akn:act name="regelungstext">
-        <akn:meta GUID="a1111111-1111-1111-1111-111111111111" eId="meta-1">
-            <akn:identification GUID="a2222222-2222-2222-2222-222222222222" eId="meta-1_ident-1" source="attributsemantik-noch-undefiniert">
-                <akn:FRBRWork GUID="a3333333-3333-3333-3333-333333333333" eId="meta-1_ident-1_frbrwork-1">
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://MetadatenRIS.LegalDocML.de/1.8.1/ Grammatiken/legalDocML.de-metadaten-ris.xsd http://MetadatenRegelungstext.LegalDocML.de/1.8.1/ Grammatiken/legalDocML.de-metadaten-regelungstext.xsd http://MetadatenRechtsetzungsdokument.LegalDocML.de/1.8.1/ Grammatiken/legalDocML.de-metadaten-rechtsetzungsdokument.xsd http://Inhaltsdaten.LegalDocML.de/1.8.1/ Grammatiken/legalDocML.de-regelungstextverkuendungsfassung.xsd">
+    <akn:act name="/akn/ontology/de/concept/documenttype/bund/regelungstext-verkuendung">
+        <akn:meta GUID="a1111111-1111-1111-1111-111111111111" eId="meta-n1">
+            <akn:identification GUID="a2222222-2222-2222-2222-222222222222" eId="meta-n1_ident-n1" source="attributsemantik-noch-undefiniert">
+                <akn:FRBRWork GUID="a3333333-3333-3333-3333-333333333333" eId="meta-n1_ident-n1_frbrwork-n1">
                     <!-- Die Jahreszahl wurde aus dem Dateinamen übernommen: '2000' statt '2004'. -->
-                    <akn:FRBRthis GUID="a4444444-4444-4444-4444-444444444444" eId="meta-1_ident-1_frbrwork-1_frbrthis-1" value="eli/bund/bgbl-1/2000/s1016/regelungstext-1"/>
-                    <akn:FRBRuri GUID="a5555555-5555-5555-5555-555555555555" eId="meta-1_ident-1_frbrwork-1_frbruri-1" value="eli/bund/bgbl-1/2000/s1016"/>
-                    <akn:FRBRalias GUID="a6666666-6666-6666-6666-666666666666" eId="meta-1_ident-1_frbrwork-1_frbralias-1" name="übergreifende-id" value="145a78a3-7240-49dd-ab0f-3195e1832905"/>
+                    <akn:FRBRthis GUID="a4444444-4444-4444-4444-444444444444" eId="meta-n1_ident-n1_frbrwork-n1_frbrthis-n1" value="eli/bund/bgbl-1/2000/s1016/regelungstext-1"/>
+                    <akn:FRBRuri GUID="a5555555-5555-5555-5555-555555555555" eId="meta-n1_ident-n1_frbrwork-n1_frbruri-n1" value="eli/bund/bgbl-1/2000/s1016"/>
+                    <akn:FRBRalias GUID="a6666666-6666-6666-6666-666666666666" eId="meta-n1_ident-n1_frbrwork-n1_frbralias-n1" name="übergreifende-id" value="145a78a3-7240-49dd-ab0f-3195e1832905"/>
                     <!-- Datum in FRBRdate wurde so angepasst, dass auch hier die Jahreszahl 2000 übernommen wird -->
-                    <akn:FRBRdate GUID="a7777777-7777-7777-7777-777777777777" date="2000-05-27" eId="meta-1_ident-1_frbrwork-1_frbrdate-1" name="verkuendungsfassung"/>
-                    <akn:FRBRauthor GUID="a8888888-8888-8888-8888-888888888888" eId="meta-1_ident-1_frbrwork-1_frbrauthor-1" href="recht.bund.de/institution/bundesregierung"/>
-                    <akn:FRBRcountry GUID="a9999999-9999-9999-9999-999999999999" eId="meta-1_ident-1_frbrwork-1_frbrcountry-1" value="de"/>
-                    <akn:FRBRnumber GUID="aa111111-1111-1111-1111-111111111111" eId="meta-1_ident-1_frbrwork-1_frbrnumber-1" value="s1016"/>
-                    <akn:FRBRname GUID="aa222222-2222-2222-2222-222222222222" eId="meta-1_ident-1_frbrwork-1_frbrname-1" value="bgbl-1"/>
-                    <akn:FRBRsubtype GUID="aa333333-3333-3333-3333-333333333333" eId="meta-1_ident-1_frbrwork-1_frbrsubtype-1" value="regelungstext-1"/>
+                    <akn:FRBRdate GUID="a7777777-7777-7777-7777-777777777777" date="2000-05-27" eId="meta-n1_ident-n1_frbrwork-n1_frbrdate-n1" name="verkuendungsfassung-verkuendungsdatum"/>
+                    <akn:FRBRauthor GUID="a8888888-8888-8888-8888-888888888888" eId="meta-n1_ident-n1_frbrwork-n1_frbrauthor-n1" href="recht.bund.de/institution/bundesregierung"/>
+                    <akn:FRBRcountry GUID="a9999999-9999-9999-9999-999999999999" eId="meta-n1_ident-n1_frbrwork-n1_frbrcountry-n1" value="de"/>
+                    <akn:FRBRnumber GUID="aa111111-1111-1111-1111-111111111111" eId="meta-n1_ident-n1_frbrwork-n1_frbrnumber-n1" value="s1016"/>
+                    <akn:FRBRname GUID="aa222222-2222-2222-2222-222222222222" eId="meta-n1_ident-n1_frbrwork-n1_frbrname-n1" value="bgbl-1"/>
+                    <akn:FRBRsubtype GUID="aa333333-3333-3333-3333-333333333333" eId="meta-n1_ident-n1_frbrwork-n1_frbrsubtype-n1" value="regelungstext-1"/>
                 </akn:FRBRWork>
-                <akn:FRBRExpression GUID="aa444444-4444-4444-4444-444444444444" eId="meta-1_ident-1_frbrexpression-1">
-                    <akn:FRBRthis GUID="aa555555-5555-5555-5555-555555555555" eId="meta-1_ident-1_frbrexpression-1_frbrthis-1"
+                <akn:FRBRExpression GUID="aa444444-4444-4444-4444-444444444444" eId="meta-n1_ident-n1_frbrexpression-n1">
+                    <akn:FRBRthis GUID="aa555555-5555-5555-5555-555555555555" eId="meta-n1_ident-n1_frbrexpression-n1_frbrthis-n1"
                                   value="eli/bund/bgbl-1/2000/s1016/2023-04-26/10/deu/regelungstext-1"/>
-                    <akn:FRBRuri GUID="aa666666-6666-6666-6666-666666666666" eId="meta-1_ident-1_frbrexpression-1_frbruri-1"
+                    <akn:FRBRuri GUID="aa666666-6666-6666-6666-666666666666" eId="meta-n1_ident-n1_frbrexpression-n1_frbruri-n1"
                                  value="eli/bund/bgbl-1/2000/s1016/2023-04-26/10/deu"/>
-                    <akn:FRBRalias GUID="aa777777-7777-7777-7777-777777777777" eId="meta-1_ident-1_frbrexpression-1_frbralias-1" name="vorherige-version-id" value="0f970c4b-1666-4bcc-a6e6-a7b74973379e"/>
-                    <akn:FRBRalias GUID="aa888888-8888-8888-8888-888888888888" eId="meta-1_ident-1_frbrexpression-1_frbralias-2" name="aktuelle-version-id" value="06a19488-600e-4ef8-85e6-9a87d569f238"/>
-                    <akn:FRBRalias GUID="aa999999-9999-9999-9999-999999999999" eId="meta-1_ident-1_frbrexpression-1_frbralias-3" name="nachfolgende-version-id" value="533a1918-bd5a-4eef-82f1-5943e1f413a5"/>
-                    <akn:FRBRauthor GUID="ab111111-1111-1111-1111-111111111111" eId="meta-1_ident-1_frbrexpression-1_frbrauthor-1" href="recht.bund.de/institution/bundesregierung"/>
-                    <akn:FRBRdate GUID="ab222222-2222-2222-2222-222222222222" date="2023-04-26" eId="meta-1_ident-1_frbrexpression-1_frbrdate-1" name="verkuendung"/>
-                    <akn:FRBRlanguage GUID="ab333333-3333-3333-3333-333333333333" eId="meta-1_ident-1_frbrexpression-1_frbrlanguage-1" language="deu"/>
-                    <akn:FRBRversionNumber GUID="ab444444-4444-4444-4444-444444444444" eId="meta-1_ident-1_frbrexpression-1_frbrversionnumber-1" value="10"/>
+                    <akn:FRBRalias GUID="aa777777-7777-7777-7777-777777777777" eId="meta-n1_ident-n1_frbrexpression-n1_frbralias-n1" name="vorherige-version-id" value="0f970c4b-1666-4bcc-a6e6-a7b74973379e"/>
+                    <akn:FRBRalias GUID="aa888888-8888-8888-8888-888888888888" eId="meta-n1_ident-n1_frbrexpression-n1_frbralias-n2" name="aktuelle-version-id" value="06a19488-600e-4ef8-85e6-9a87d569f238"/>
+                    <akn:FRBRalias GUID="aa999999-9999-9999-9999-999999999999" eId="meta-n1_ident-n1_frbrexpression-n1_frbralias-n3" name="nachfolgende-version-id" value="533a1918-bd5a-4eef-82f1-5943e1f413a5"/>
+                    <akn:FRBRauthor GUID="ab111111-1111-1111-1111-111111111111" eId="meta-n1_ident-n1_frbrexpression-n1_frbrauthor-n1" href="recht.bund.de/institution/bundesregierung"/>
+                    <akn:FRBRdate GUID="ab222222-2222-2222-2222-222222222222" date="2023-04-26" eId="meta-n1_ident-n1_frbrexpression-n1_frbrdate-n1" name="verkuendung"/>
+                    <akn:FRBRlanguage GUID="ab333333-3333-3333-3333-333333333333" eId="meta-n1_ident-n1_frbrexpression-n1_frbrlanguage-n1" language="deu"/>
+                    <akn:FRBRversionNumber GUID="ab444444-4444-4444-4444-444444444444" eId="meta-n1_ident-n1_frbrexpression-n1_frbrversionnumber-n1" value="10"/>
                 </akn:FRBRExpression>
-                <akn:FRBRManifestation GUID="ab555555-5555-5555-5555-555555555555" eId="meta-1_ident-1_frbrmanifestation-1">
-                    <akn:FRBRthis GUID="ab666666-6666-6666-6666-666666666666" eId="meta-1_ident-1_frbrmanifestation-1_frbrthis-1"
+                <akn:FRBRManifestation GUID="ab555555-5555-5555-5555-555555555555" eId="meta-n1_ident-n1_frbrmanifestation-n1">
+                    <akn:FRBRthis GUID="ab666666-6666-6666-6666-666666666666" eId="meta-n1_ident-n1_frbrmanifestation-n1_frbrthis-n1"
                                   value="eli/bund/bgbl-1/2000/s1016/2023-04-26/10/deu/2023-04-26/regelungstext-1.xml"/>
-                    <akn:FRBRuri GUID="ab777777-7777-7777-7777-777777777777" eId="meta-1_ident-1_frbrmanifestation-1_frbruri-1"
+                    <akn:FRBRuri GUID="ab777777-7777-7777-7777-777777777777" eId="meta-n1_ident-n1_frbrmanifestation-n1_frbruri-n1"
                                  value="eli/bund/bgbl-1/2000/s1016/2023-04-26/10/deu/2023-04-26/regelungstext-1.xml"/>
-                    <akn:FRBRdate GUID="ab888888-8888-8888-8888-888888888888" date="2023-04-26" eId="meta-1_ident-1_frbrmanifestation-1_frbrdate-1" name="generierung"/>
-                    <akn:FRBRauthor GUID="ab999999-9999-9999-9999-999999999999" eId="meta-1_ident-1_frbrmanifestation-1_frbrauthor-1" href="recht.bund.de"/>
-                    <akn:FRBRformat GUID="ac111111-1111-1111-1111-111111111111" eId="meta-1_ident-1_frbrmanifestation-1_frbrformat-1" value="xml"/>
+                    <akn:FRBRdate GUID="ab888888-8888-8888-8888-888888888888" date="2023-04-26" eId="meta-n1_ident-n1_frbrmanifestation-n1_frbrdate-n1" name="generierung"/>
+                    <akn:FRBRauthor GUID="ab999999-9999-9999-9999-999999999999" eId="meta-n1_ident-n1_frbrmanifestation-n1_frbrauthor-n1" href="recht.bund.de"/>
+                    <akn:FRBRformat GUID="ac111111-1111-1111-1111-111111111111" eId="meta-n1_ident-n1_frbrmanifestation-n1_frbrformat-n1" value="xml"/>
                 </akn:FRBRManifestation>
             </akn:identification>
-            <akn:lifecycle GUID="ac222222-2222-2222-2222-222222222222" eId="meta-1_lebzykl-1" source="attributsemantik-noch-undefiniert">
-                <akn:eventRef GUID="ac333333-3333-3333-3333-333333333333" date="2000-05-24" eId="meta-1_lebzykl-1_ereignis-1" refersTo="ausfertigung" source="attributsemantik-noch-undefiniert" type="generation"/>
-                <akn:eventRef GUID="ac444444-4444-4444-4444-444444444444" date="2000-05-28" eId="meta-1_lebzykl-1_ereignis-2" refersTo="inkrafttreten" source="attributsemantik-noch-undefiniert" type="generation"/>
-                <akn:eventRef GUID="ac555555-5555-5555-5555-555555555555" date="2002-03-06" eId="meta-1_lebzykl-1_ereignis-3" refersTo="ausserkrafttreten" source="attributsemantik-noch-undefiniert" type="generation"/>
-                <akn:eventRef GUID="ac666666-6666-6666-6666-666666666666" date="2002-10-20" eId="meta-1_lebzykl-1_ereignis-4" refersTo="ausserkrafttreten" source="attributsemantik-noch-undefiniert" type="generation"/>
-                <akn:eventRef GUID="ac777777-7777-7777-7777-777777777777" date="2006-06-02" eId="meta-1_lebzykl-1_ereignis-5" refersTo="ausserkrafttreten" source="attributsemantik-noch-undefiniert" type="generation"/>
-                <akn:eventRef GUID="ac888888-8888-8888-8888-888888888888" date="2008-05-31" eId="meta-1_lebzykl-1_ereignis-6" refersTo="ausserkrafttreten" source="attributsemantik-noch-undefiniert" type="generation"/>
-                <akn:eventRef GUID="ac999999-9999-9999-9999-999999999999" date="2009-10-30" eId="meta-1_lebzykl-1_ereignis-7" refersTo="ausserkrafttreten" source="attributsemantik-noch-undefiniert" type="generation"/>
-                <akn:eventRef GUID="ad111111-1111-1111-1111-111111111111" date="2020-05-28" eId="meta-1_lebzykl-1_ereignis-8" refersTo="ausserkrafttreten" source="attributsemantik-noch-undefiniert" type="generation"/>
-                <akn:eventRef GUID="ad222222-2222-2222-2222-222222222222" date="2006-02-22" eId="meta-1_lebzykl-1_ereignis-9" refersTo="ausfertigung" source="attributsemantik-noch-undefiniert" type="amendment"/>
-                <akn:eventRef GUID="ad333333-3333-3333-3333-333333333333" date="2006-03-07" eId="meta-1_lebzykl-1_ereignis-10" refersTo="inkrafttreten" source="attributsemantik-noch-undefiniert" type="amendment"/>
-                <akn:eventRef GUID="ad444444-4444-4444-4444-444444444444" date="2006-10-09" eId="meta-1_lebzykl-1_ereignis-11" refersTo="ausfertigung" source="attributsemantik-noch-undefiniert" type="amendment"/>
-                <akn:eventRef GUID="ad555555-5555-5555-5555-555555555555" date="2006-10-21" eId="meta-1_lebzykl-1_ereignis-12" refersTo="inkrafttreten" source="attributsemantik-noch-undefiniert" type="amendment"/>
-                <akn:eventRef GUID="ad666666-6666-6666-6666-666666666666" date="2010-06-02" eId="meta-1_lebzykl-1_ereignis-13" refersTo="ausserkrafttreten" source="attributsemantik-noch-undefiniert" type="amendment"/>
-                <akn:eventRef GUID="ad777777-7777-7777-7777-777777777777" date="2006-10-21" eId="meta-1_lebzykl-1_ereignis-14" refersTo="inkrafttreten" source="attributsemantik-noch-undefiniert" type="amendment"/>
-                <akn:eventRef GUID="ad888888-8888-8888-8888-888888888888" date="2017-07-12" eId="meta-1_lebzykl-1_ereignis-15" refersTo="ausserkrafttreten" source="attributsemantik-noch-undefiniert" type="amendment"/>
-                <akn:eventRef GUID="ad999999-9999-9999-9999-999999999999" date="2023-04-28" eId="meta-1_lebzykl-1_ereignis-16" refersTo="ausserkrafttreten" source="attributsemantik-noch-undefiniert" type="amendment"/>
-                <akn:eventRef GUID="ae111111-1111-1111-1111-111111111111" date="2015-06-30" eId="meta-1_lebzykl-1_ereignis-17" refersTo="ausfertigung" source="attributsemantik-noch-undefiniert" type="amendment"/>
-                <akn:eventRef GUID="ae222222-2222-2222-2222-222222222222" date="2015-07-09" eId="meta-1_lebzykl-1_ereignis-18" refersTo="inkrafttreten" source="attributsemantik-noch-undefiniert" type="amendment"/>
-                <akn:eventRef GUID="ae333333-3333-3333-3333-333333333333" date="2017-07-05" eId="meta-1_lebzykl-1_ereignis-19" refersTo="ausfertigung" source="attributsemantik-noch-undefiniert" type="amendment"/>
-                <akn:eventRef GUID="ae444444-4444-4444-4444-444444444444" date="2017-07-13" eId="meta-1_lebzykl-1_ereignis-20" refersTo="inkrafttreten" source="attributsemantik-noch-undefiniert" type="amendment"/>
-                <akn:eventRef GUID="ae555555-5555-5555-5555-555555555555" date="2020-05-18" eId="meta-1_lebzykl-1_ereignis-21" refersTo="ausfertigung" source="attributsemantik-noch-undefiniert" type="amendment"/>
-                <akn:eventRef GUID="ae666666-6666-6666-6666-666666666666" date="2020-05-29" eId="meta-1_lebzykl-1_ereignis-22" refersTo="inkrafttreten" source="attributsemantik-noch-undefiniert" type="amendment"/>
-                <akn:eventRef GUID="ae777777-7777-7777-7777-777777777777" date="2023-04-26" eId="meta-1_lebzykl-1_ereignis-23" refersTo="ausfertigung" source="attributsemantik-noch-undefiniert" type="amendment"/>
-                <akn:eventRef GUID="ae888888-8888-8888-8888-888888888888" date="2023-04-29" eId="meta-1_lebzykl-1_ereignis-24" refersTo="inkrafttreten" source="attributsemantik-noch-undefiniert" type="amendment"/>
+            <akn:lifecycle GUID="ac222222-2222-2222-2222-222222222222" eId="meta-n1_lebzykl-n1" source="attributsemantik-noch-undefiniert">
+                <akn:eventRef GUID="ac333333-3333-3333-3333-333333333333" date="2000-05-24" eId="meta-n1_lebzykl-n1_ereignis-n1" refersTo="ausfertigung" source="attributsemantik-noch-undefiniert" type="generation"/>
+                <akn:eventRef GUID="ac444444-4444-4444-4444-444444444444" date="2000-05-28" eId="meta-n1_lebzykl-n1_ereignis-n2" refersTo="inkrafttreten" source="attributsemantik-noch-undefiniert" type="generation"/>
+                <akn:eventRef GUID="ac555555-5555-5555-5555-555555555555" date="2002-03-06" eId="meta-n1_lebzykl-n1_ereignis-n3" refersTo="ausserkrafttreten" source="attributsemantik-noch-undefiniert" type="generation"/>
+                <akn:eventRef GUID="ac666666-6666-6666-6666-666666666666" date="2002-10-20" eId="meta-n1_lebzykl-n1_ereignis-n4" refersTo="ausserkrafttreten" source="attributsemantik-noch-undefiniert" type="generation"/>
+                <akn:eventRef GUID="ac777777-7777-7777-7777-777777777777" date="2006-06-02" eId="meta-n1_lebzykl-n1_ereignis-n5" refersTo="ausserkrafttreten" source="attributsemantik-noch-undefiniert" type="generation"/>
+                <akn:eventRef GUID="ac888888-8888-8888-8888-888888888888" date="2008-05-31" eId="meta-n1_lebzykl-n1_ereignis-n6" refersTo="ausserkrafttreten" source="attributsemantik-noch-undefiniert" type="generation"/>
+                <akn:eventRef GUID="ac999999-9999-9999-9999-999999999999" date="2009-10-30" eId="meta-n1_lebzykl-n1_ereignis-n7" refersTo="ausserkrafttreten" source="attributsemantik-noch-undefiniert" type="generation"/>
+                <akn:eventRef GUID="ad111111-1111-1111-1111-111111111111" date="2020-05-28" eId="meta-n1_lebzykl-n1_ereignis-n8" refersTo="ausserkrafttreten" source="attributsemantik-noch-undefiniert" type="generation"/>
+                <akn:eventRef GUID="ad222222-2222-2222-2222-222222222222" date="2006-02-22" eId="meta-n1_lebzykl-n1_ereignis-n9" refersTo="ausfertigung" source="attributsemantik-noch-undefiniert" type="amendment"/>
+                <akn:eventRef GUID="ad333333-3333-3333-3333-333333333333" date="2006-03-07" eId="meta-n1_lebzykl-n1_ereignis-n10" refersTo="inkrafttreten" source="attributsemantik-noch-undefiniert" type="amendment"/>
+                <akn:eventRef GUID="ad444444-4444-4444-4444-444444444444" date="2006-10-09" eId="meta-n1_lebzykl-n1_ereignis-n11" refersTo="ausfertigung" source="attributsemantik-noch-undefiniert" type="amendment"/>
+                <akn:eventRef GUID="ad555555-5555-5555-5555-555555555555" date="2006-10-21" eId="meta-n1_lebzykl-n1_ereignis-n12" refersTo="inkrafttreten" source="attributsemantik-noch-undefiniert" type="amendment"/>
+                <akn:eventRef GUID="ad666666-6666-6666-6666-666666666666" date="2010-06-02" eId="meta-n1_lebzykl-n1_ereignis-n13" refersTo="ausserkrafttreten" source="attributsemantik-noch-undefiniert" type="amendment"/>
+                <akn:eventRef GUID="ad777777-7777-7777-7777-777777777777" date="2006-10-21" eId="meta-n1_lebzykl-n1_ereignis-n14" refersTo="inkrafttreten" source="attributsemantik-noch-undefiniert" type="amendment"/>
+                <akn:eventRef GUID="ad888888-8888-8888-8888-888888888888" date="2017-07-12" eId="meta-n1_lebzykl-n1_ereignis-n15" refersTo="ausserkrafttreten" source="attributsemantik-noch-undefiniert" type="amendment"/>
+                <akn:eventRef GUID="ad999999-9999-9999-9999-999999999999" date="2023-04-28" eId="meta-n1_lebzykl-n1_ereignis-n16" refersTo="ausserkrafttreten" source="attributsemantik-noch-undefiniert" type="amendment"/>
+                <akn:eventRef GUID="ae111111-1111-1111-1111-111111111111" date="2015-06-30" eId="meta-n1_lebzykl-n1_ereignis-n17" refersTo="ausfertigung" source="attributsemantik-noch-undefiniert" type="amendment"/>
+                <akn:eventRef GUID="ae222222-2222-2222-2222-222222222222" date="2015-07-09" eId="meta-n1_lebzykl-n1_ereignis-n18" refersTo="inkrafttreten" source="attributsemantik-noch-undefiniert" type="amendment"/>
+                <akn:eventRef GUID="ae333333-3333-3333-3333-333333333333" date="2017-07-05" eId="meta-n1_lebzykl-n1_ereignis-n19" refersTo="ausfertigung" source="attributsemantik-noch-undefiniert" type="amendment"/>
+                <akn:eventRef GUID="ae444444-4444-4444-4444-444444444444" date="2017-07-13" eId="meta-n1_lebzykl-n1_ereignis-n20" refersTo="inkrafttreten" source="attributsemantik-noch-undefiniert" type="amendment"/>
+                <akn:eventRef GUID="ae555555-5555-5555-5555-555555555555" date="2020-05-18" eId="meta-n1_lebzykl-n1_ereignis-n21" refersTo="ausfertigung" source="attributsemantik-noch-undefiniert" type="amendment"/>
+                <akn:eventRef GUID="ae666666-6666-6666-6666-666666666666" date="2020-05-29" eId="meta-n1_lebzykl-n1_ereignis-n22" refersTo="inkrafttreten" source="attributsemantik-noch-undefiniert" type="amendment"/>
+                <akn:eventRef GUID="ae777777-7777-7777-7777-777777777777" date="2023-04-26" eId="meta-n1_lebzykl-n1_ereignis-n23" refersTo="ausfertigung" source="attributsemantik-noch-undefiniert" type="amendment"/>
+                <akn:eventRef GUID="ae888888-8888-8888-8888-888888888888" date="2023-04-29" eId="meta-n1_lebzykl-n1_ereignis-n24" refersTo="inkrafttreten" source="attributsemantik-noch-undefiniert" type="amendment"/>
             </akn:lifecycle>
-            <akn:temporalData GUID="af111111-1111-1111-1111-111111111111" eId="meta-1_geltzeiten-1" source="attributsemantik-noch-undefiniert">
-                <akn:temporalGroup GUID="af222222-2222-2222-2222-222222222222" eId="meta-1_geltzeiten-1_geltungszeitgr-1">
-                    <akn:timeInterval GUID="af333333-3333-3333-3333-333333333333" eId="meta-1_geltzeiten-1_geltungszeitgr-1_gelzeitintervall-1" end="#meta-1_lebzykl-1_ereignis-3" refersTo="geltungszeit" start="#meta-1_lebzykl-1_ereignis-2"/>
+            <akn:temporalData GUID="af111111-1111-1111-1111-111111111111" eId="meta-n1_geltzeiten-n1" source="attributsemantik-noch-undefiniert">
+                <akn:temporalGroup GUID="af222222-2222-2222-2222-222222222222" eId="meta-n1_geltzeiten-n1_geltungszeitgr-n1">
+                    <akn:timeInterval GUID="af333333-3333-3333-3333-333333333333" eId="meta-n1_geltzeiten-n1_geltungszeitgr-n1_gelzeitintervall-n1" end="#meta-n1_lebzykl-n1_ereignis-n3" refersTo="geltungszeit" start="#meta-n1_lebzykl-n1_ereignis-n2"/>
                 </akn:temporalGroup>
-                <akn:temporalGroup GUID="af444444-4444-4444-4444-444444444444" eId="meta-1_geltzeiten-1_geltungszeitgr-2">
-                    <akn:timeInterval GUID="af555555-5555-5555-5555-555555555555" eId="meta-1_geltzeiten-1_geltungszeitgr-2_gelzeitintervall-1" end="#meta-1_lebzykl-1_ereignis-4" refersTo="geltungszeit" start="#meta-1_lebzykl-1_ereignis-2"/>
+                <akn:temporalGroup GUID="af444444-4444-4444-4444-444444444444" eId="meta-n1_geltzeiten-n1_geltungszeitgr-n2">
+                    <akn:timeInterval GUID="af555555-5555-5555-5555-555555555555" eId="meta-n1_geltzeiten-n1_geltungszeitgr-n2_gelzeitintervall-n1" end="#meta-n1_lebzykl-n1_ereignis-n4" refersTo="geltungszeit" start="#meta-n1_lebzykl-n1_ereignis-n2"/>
                 </akn:temporalGroup>
-                <akn:temporalGroup GUID="af666666-6666-6666-6666-666666666666" eId="meta-1_geltzeiten-1_geltungszeitgr-3">
-                    <akn:timeInterval GUID="af777777-7777-7777-7777-777777777777" eId="meta-1_geltzeiten-1_geltungszeitgr-3_gelzeitintervall-1" end="#meta-1_lebzykl-1_ereignis-5" refersTo="geltungszeit" start="#meta-1_lebzykl-1_ereignis-2"/>
+                <akn:temporalGroup GUID="af666666-6666-6666-6666-666666666666" eId="meta-n1_geltzeiten-n1_geltungszeitgr-n3">
+                    <akn:timeInterval GUID="af777777-7777-7777-7777-777777777777" eId="meta-n1_geltzeiten-n1_geltungszeitgr-n3_gelzeitintervall-n1" end="#meta-n1_lebzykl-n1_ereignis-n5" refersTo="geltungszeit" start="#meta-n1_lebzykl-n1_ereignis-n2"/>
                 </akn:temporalGroup>
-                <akn:temporalGroup GUID="af888888-8888-8888-8888-888888888888" eId="meta-1_geltzeiten-1_geltungszeitgr-4">
-                    <akn:timeInterval GUID="af999999-9999-9999-9999-999999999999" eId="meta-1_geltzeiten-1_geltungszeitgr-4_gelzeitintervall-1" end="#meta-1_lebzykl-1_ereignis-6" refersTo="geltungszeit" start="#meta-1_lebzykl-1_ereignis-2"/>
+                <akn:temporalGroup GUID="af888888-8888-8888-8888-888888888888" eId="meta-n1_geltzeiten-n1_geltungszeitgr-n4">
+                    <akn:timeInterval GUID="af999999-9999-9999-9999-999999999999" eId="meta-n1_geltzeiten-n1_geltungszeitgr-n4_gelzeitintervall-n1" end="#meta-n1_lebzykl-n1_ereignis-n6" refersTo="geltungszeit" start="#meta-n1_lebzykl-n1_ereignis-n2"/>
                 </akn:temporalGroup>
-                <akn:temporalGroup GUID="b0111111-1111-1111-1111-111111111111" eId="meta-1_geltzeiten-1_geltungszeitgr-5">
-                    <akn:timeInterval GUID="b0222222-2222-2222-2222-222222222222" eId="meta-1_geltzeiten-1_geltungszeitgr-5_gelzeitintervall-1" end="#meta-1_lebzykl-1_ereignis-7" refersTo="geltungszeit" start="#meta-1_lebzykl-1_ereignis-2"/>
+                <akn:temporalGroup GUID="b0111111-1111-1111-1111-111111111111" eId="meta-n1_geltzeiten-n1_geltungszeitgr-n5">
+                    <akn:timeInterval GUID="b0222222-2222-2222-2222-222222222222" eId="meta-n1_geltzeiten-n1_geltungszeitgr-n5_gelzeitintervall-n1" end="#meta-n1_lebzykl-n1_ereignis-n7" refersTo="geltungszeit" start="#meta-n1_lebzykl-n1_ereignis-n2"/>
                 </akn:temporalGroup>
-                <akn:temporalGroup GUID="b0333333-3333-3333-3333-333333333333" eId="meta-1_geltzeiten-1_geltungszeitgr-6">
-                    <akn:timeInterval GUID="b0444444-4444-4444-4444-444444444444" eId="meta-1_geltzeiten-1_geltungszeitgr-6_gelzeitintervall-1" end="#meta-1_lebzykl-1_ereignis-8" refersTo="geltungszeit" start="#meta-1_lebzykl-1_ereignis-2"/>
+                <akn:temporalGroup GUID="b0333333-3333-3333-3333-333333333333" eId="meta-n1_geltzeiten-n1_geltungszeitgr-n6">
+                    <akn:timeInterval GUID="b0444444-4444-4444-4444-444444444444" eId="meta-n1_geltzeiten-n1_geltungszeitgr-n6_gelzeitintervall-n1" end="#meta-n1_lebzykl-n1_ereignis-n8" refersTo="geltungszeit" start="#meta-n1_lebzykl-n1_ereignis-n2"/>
                 </akn:temporalGroup>
-                <akn:temporalGroup GUID="b0555555-5555-5555-5555-555555555555" eId="meta-1_geltzeiten-1_geltungszeitgr-7">
-                    <akn:timeInterval GUID="b0666666-6666-6666-6666-666666666666" eId="meta-1_geltzeiten-1_geltungszeitgr-7_gelzeitintervall-1" refersTo="geltungszeit" start="#meta-1_lebzykl-1_ereignis-2"/>
+                <akn:temporalGroup GUID="b0555555-5555-5555-5555-555555555555" eId="meta-n1_geltzeiten-n1_geltungszeitgr-n7">
+                    <akn:timeInterval GUID="b0666666-6666-6666-6666-666666666666" eId="meta-n1_geltzeiten-n1_geltungszeitgr-n7_gelzeitintervall-n1" refersTo="geltungszeit" start="#meta-n1_lebzykl-n1_ereignis-n2"/>
                 </akn:temporalGroup>
-                <akn:temporalGroup GUID="b0777777-7777-7777-7777-777777777777" eId="meta-1_geltzeiten-1_geltungszeitgr-8">
-                    <akn:timeInterval GUID="b0888888-8888-8888-8888-888888888888" eId="meta-1_geltzeiten-1_geltungszeitgr-8_gelzeitintervall-1" end="#meta-1_lebzykl-1_ereignis-11" refersTo="geltungszeit" start="#meta-1_lebzykl-1_ereignis-10"/>
+                <akn:temporalGroup GUID="b0777777-7777-7777-7777-777777777777" eId="meta-n1_geltzeiten-n1_geltungszeitgr-n8">
+                    <akn:timeInterval GUID="b0888888-8888-8888-8888-888888888888" eId="meta-n1_geltzeiten-n1_geltungszeitgr-n8_gelzeitintervall-n1" end="#meta-n1_lebzykl-n1_ereignis-n11" refersTo="geltungszeit" start="#meta-n1_lebzykl-n1_ereignis-n10"/>
                 </akn:temporalGroup>
-                <akn:temporalGroup GUID="b0999999-9999-9999-9999-999999999999" eId="meta-1_geltzeiten-1_geltungszeitgr-9">
-                    <akn:timeInterval GUID="ba111111-1111-1111-1111-111111111111" eId="meta-1_geltzeiten-1_geltungszeitgr-9_gelzeitintervall-1" end="#meta-1_lebzykl-1_ereignis-12" refersTo="geltungszeit" start="#meta-1_lebzykl-1_ereignis-10"/>
+                <akn:temporalGroup GUID="b0999999-9999-9999-9999-999999999999" eId="meta-n1_geltzeiten-n1_geltungszeitgr-n9">
+                    <akn:timeInterval GUID="ba111111-1111-1111-1111-111111111111" eId="meta-n1_geltzeiten-n1_geltungszeitgr-n9_gelzeitintervall-n1" end="#meta-n1_lebzykl-n1_ereignis-n12" refersTo="geltungszeit" start="#meta-n1_lebzykl-n1_ereignis-n10"/>
                 </akn:temporalGroup>
-                <akn:temporalGroup GUID="ba222222-2222-2222-2222-222222222222" eId="meta-1_geltzeiten-1_geltungszeitgr-10">
-                    <akn:timeInterval GUID="ba333333-3333-3333-3333-333333333333" eId="meta-1_geltzeiten-1_geltungszeitgr-10_gelzeitintervall-1" end="#meta-1_lebzykl-1_ereignis-15" refersTo="geltungszeit" start="#meta-1_lebzykl-1_ereignis-14"/>
+                <akn:temporalGroup GUID="ba222222-2222-2222-2222-222222222222" eId="meta-n1_geltzeiten-n1_geltungszeitgr-n10">
+                    <akn:timeInterval GUID="ba333333-3333-3333-3333-333333333333" eId="meta-n1_geltzeiten-n1_geltungszeitgr-n10_gelzeitintervall-n1" end="#meta-n1_lebzykl-n1_ereignis-n15" refersTo="geltungszeit" start="#meta-n1_lebzykl-n1_ereignis-n14"/>
                 </akn:temporalGroup>
-                <akn:temporalGroup GUID="ba444444-4444-4444-4444-444444444444" eId="meta-1_geltzeiten-1_geltungszeitgr-11">
-                    <akn:timeInterval GUID="ba555555-5555-5555-5555-555555555555" eId="meta-1_geltzeiten-1_geltungszeitgr-11_gelzeitintervall-1" end="#meta-1_lebzykl-1_ereignis-15" refersTo="geltungszeit" start="#meta-1_lebzykl-1_ereignis-14"/>
+                <akn:temporalGroup GUID="ba444444-4444-4444-4444-444444444444" eId="meta-n1_geltzeiten-n1_geltungszeitgr-n11">
+                    <akn:timeInterval GUID="ba555555-5555-5555-5555-555555555555" eId="meta-n1_geltzeiten-n1_geltungszeitgr-n11_gelzeitintervall-n1" end="#meta-n1_lebzykl-n1_ereignis-n15" refersTo="geltungszeit" start="#meta-n1_lebzykl-n1_ereignis-n14"/>
                 </akn:temporalGroup>
-                <akn:temporalGroup GUID="ba666666-6666-6666-6666-666666666666" eId="meta-1_geltzeiten-1_geltungszeitgr-12">
-                    <akn:timeInterval GUID="ba777777-7777-7777-7777-777777777777" eId="meta-1_geltzeiten-1_geltungszeitgr-12_gelzeitintervall-1" end="#meta-1_lebzykl-1_ereignis-15" refersTo="geltungszeit" start="#meta-1_lebzykl-1_ereignis-17"/>
+                <akn:temporalGroup GUID="ba666666-6666-6666-6666-666666666666" eId="meta-n1_geltzeiten-n1_geltungszeitgr-n12">
+                    <akn:timeInterval GUID="ba777777-7777-7777-7777-777777777777" eId="meta-n1_geltzeiten-n1_geltungszeitgr-n12_gelzeitintervall-n1" end="#meta-n1_lebzykl-n1_ereignis-n15" refersTo="geltungszeit" start="#meta-n1_lebzykl-n1_ereignis-n17"/>
                 </akn:temporalGroup>
-                <akn:temporalGroup GUID="ba888888-8888-8888-8888-888888888888" eId="meta-1_geltzeiten-1_geltungszeitgr-13">
-                    <akn:timeInterval GUID="ba999999-9999-9999-9999-999999999999" eId="meta-1_geltzeiten-1_geltungszeitgr-13_gelzeitintervall-1" end="#meta-1_lebzykl-1_ereignis-15" refersTo="geltungszeit" start="#meta-1_lebzykl-1_ereignis-19"/>
+                <akn:temporalGroup GUID="ba888888-8888-8888-8888-888888888888" eId="meta-n1_geltzeiten-n1_geltungszeitgr-n13">
+                    <akn:timeInterval GUID="ba999999-9999-9999-9999-999999999999" eId="meta-n1_geltzeiten-n1_geltungszeitgr-n13_gelzeitintervall-n1" end="#meta-n1_lebzykl-n1_ereignis-n15" refersTo="geltungszeit" start="#meta-n1_lebzykl-n1_ereignis-n19"/>
                 </akn:temporalGroup>
-                <akn:temporalGroup GUID="bb111111-1111-1111-1111-111111111111" eId="meta-1_geltzeiten-1_geltungszeitgr-14">
-                    <akn:timeInterval GUID="bb222222-2222-2222-2222-222222222222" eId="meta-1_geltzeiten-1_geltungszeitgr-14_gelzeitintervall-1" end="#meta-1_lebzykl-1_ereignis-20" refersTo="geltungszeit" start="#meta-1_lebzykl-1_ereignis-19"/>
+                <akn:temporalGroup GUID="bb111111-1111-1111-1111-111111111111" eId="meta-n1_geltzeiten-n1_geltungszeitgr-n14">
+                    <akn:timeInterval GUID="bb222222-2222-2222-2222-222222222222" eId="meta-n1_geltzeiten-n1_geltungszeitgr-n14_gelzeitintervall-n1" end="#meta-n1_lebzykl-n1_ereignis-n20" refersTo="geltungszeit" start="#meta-n1_lebzykl-n1_ereignis-n19"/>
                 </akn:temporalGroup>
-                <akn:temporalGroup GUID="bb333333-3333-3333-3333-333333333333" eId="meta-1_geltzeiten-1_geltungszeitgr-15">
-                    <akn:timeInterval GUID="bb444444-4444-4444-4444-444444444444" eId="meta-1_geltzeiten-1_geltungszeitgr-15_gelzeitintervall-1" end="#meta-1_lebzykl-1_ereignis-21" refersTo="geltungszeit" start="#meta-1_lebzykl-1_ereignis-19"/>
+                <akn:temporalGroup GUID="bb333333-3333-3333-3333-333333333333" eId="meta-n1_geltzeiten-n1_geltungszeitgr-n15">
+                    <akn:timeInterval GUID="bb444444-4444-4444-4444-444444444444" eId="meta-n1_geltzeiten-n1_geltungszeitgr-n15_gelzeitintervall-n1" end="#meta-n1_lebzykl-n1_ereignis-n21" refersTo="geltungszeit" start="#meta-n1_lebzykl-n1_ereignis-n19"/>
                 </akn:temporalGroup>
-                <akn:temporalGroup GUID="bb555555-5555-5555-5555-555555555555" eId="meta-1_geltzeiten-1_geltungszeitgr-16">
-                    <akn:timeInterval GUID="bb666666-6666-6666-6666-666666666666" eId="meta-1_geltzeiten-1_geltungszeitgr-16_gelzeitintervall-1" refersTo="geltungszeit" start="#meta-1_lebzykl-1_ereignis-19"/>
+                <akn:temporalGroup GUID="bb555555-5555-5555-5555-555555555555" eId="meta-n1_geltzeiten-n1_geltungszeitgr-n16">
+                    <akn:timeInterval GUID="bb666666-6666-6666-6666-666666666666" eId="meta-n1_geltzeiten-n1_geltungszeitgr-n16_gelzeitintervall-n1" refersTo="geltungszeit" start="#meta-n1_lebzykl-n1_ereignis-n19"/>
                 </akn:temporalGroup>
             </akn:temporalData>
-            <akn:proprietary GUID="bb777777-7777-7777-7777-777777777777" eId="meta-1_proprietary-1" source="attributsemantik-noch-undefiniert">
+            <akn:proprietary GUID="bb777777-7777-7777-7777-777777777777" eId="meta-n1_proprietary-n1" source="attributsemantik-noch-undefiniert">
                 <ris:legalDocML.de_metadaten xmlns:ris="http://MetadatenRIS.LegalDocML.de/1.8.1/" xsi:schemaLocation="http://MetadatenRIS.LegalDocML.de/1.8.1/ Grammatiken/legalDocML.de-metadaten-ris.xsd">
                     <ris:inkraft date="2023-04-29"/>
                     <ris:vollzitat>Fiktive Fruchtsaft- und Erfrischungsgetränkeverordnung vom 27. Mai 2000 (BGBl. I S. 1016), zuletzt modifiziert im Testverfahren</ris:vollzitat>
@@ -127,222 +126,222 @@
                 </ris:legalDocML.de_metadaten>
             </akn:proprietary>
         </akn:meta>
-        <akn:preface GUID="d1111111-1111-1111-1111-111111111111" eId="einleitung-1">
-            <akn:longTitle GUID="d2222222-2222-2222-2222-222222222222" eId="einleitung-1_doktitel-1">
-                <akn:p GUID="d3333333-3333-3333-3333-333333333333" eId="einleitung-1_doktitel-1_text-1">
-                    <akn:docStage GUID="d4444444-4444-4444-4444-444444444444" eId="einleitung-1_doktitel-1_text-1_docstadium-1"/>
-                    <akn:docTitle GUID="d5555555-5555-5555-5555-555555555555" eId="einleitung-1_doktitel-1_text-1_doctitel-1">
+        <akn:preface GUID="d1111111-1111-1111-1111-111111111111" eId="einleitung-n1">
+            <akn:longTitle GUID="d2222222-2222-2222-2222-222222222222" eId="einleitung-n1_doktitel-n1">
+                <akn:p GUID="d3333333-3333-3333-3333-333333333333" eId="einleitung-n1_doktitel-n1_text-n1">
+                    <akn:docStage GUID="d4444444-4444-4444-4444-444444444444" eId="einleitung-n1_doktitel-n1_text-n1_docstadium-n1"/>
+                    <akn:docTitle GUID="d5555555-5555-5555-5555-555555555555" eId="einleitung-n1_doktitel-n1_text-n1_doctitel-n1">
                         Fiktive Fruchtsaft- und Erfrischungsgetränkeverordnung zu Testzwecken
-                        <akn:authorialNote GUID="" eId="einleitung-1_doktitel-1_text-1_doctitel-1_amtlfnote-1"
+                        <akn:authorialNote GUID="d5555555-5555-5555-5555-5555555555ef" eId="einleitung-n1_doktitel-n1_text-n1_doctitel-n1_amtlfnote-n1"
                                            marker="❃">
-                            <akn:p GUID="" eId="einleitung-1_doktitel-1_text-1_doctitel-1_amtlfnote-1_text-1">
+                            <akn:p GUID="d5555555-5555-5555-5555-555555555523" eId="einleitung-n1_doktitel-n1_text-n1_doctitel-n1_amtlfnote-n1_text-n1">
                                 (Diese Fußnote im Titel wurde im End-to-end-Datenbestand ergänzt und ist keine echte
                                 amtliche Fußnote.)
-                                <akn:marker GUID=""
-                                            eId="einleitung-1_doktitel-1_text-1_doctitel-1_amtlfnote-1_text-1_marker-1"
+                                <akn:marker GUID="d5555555-5555-5555-5555-555555555589"
+                                            eId="einleitung-n1_doktitel-n1_text-n1_doctitel-n1_amtlfnote-n1_text-n1_marker-n1"
                                             refersTo="satzende"/>
                             </akn:p>
                         </akn:authorialNote>
                     </akn:docTitle>
-                    <akn:shortTitle GUID="d6666666-6666-6666-6666-666666666666" eId="einleitung-1_doktitel-1_text-1_kurztitel-1">
-                        (Fruchtsaft- und Erfrischungsgetränkeverordnung – <akn:inline GUID="d7777777-7777-7777-7777-777777777777" eId="einleitung-1_doktitel-1_text-1_kurztitel-1_inline-1" name="attributsemantik-noch-undefiniert" refersTo="amtliche-abkuerzung">FrSaftErfrischV</akn:inline>)
+                    <akn:shortTitle GUID="d6666666-6666-6666-6666-666666666666" eId="einleitung-n1_doktitel-n1_text-n1_kurztitel-n1">
+                        (Fruchtsaft- und Erfrischungsgetränkeverordnung – <akn:inline GUID="d7777777-7777-7777-7777-777777777777" eId="einleitung-n1_doktitel-n1_text-n1_kurztitel-n1_inline-n1" name="attributsemantik-noch-undefiniert" refersTo="amtliche-abkuerzung">FrSaftErfrischV</akn:inline>)
                     </akn:shortTitle>
                 </akn:p>
             </akn:longTitle>
         </akn:preface>
-        <akn:preamble GUID="d8888888-8888-8888-8888-888888888888" eId="preambel-1">
-            <akn:formula GUID="d9999999-9999-9999-9999-999999999999" eId="preambel-1_formel-1" name="attributsemantik-noch-undefiniert" refersTo="eingangsformel">
-                <akn:p GUID="da111111-1111-1111-1111-111111111111" eId="preambel-1_formel-1_text-1">
+        <akn:preamble GUID="d8888888-8888-8888-8888-888888888888" eId="präambel-n1">
+            <akn:formula GUID="d9999999-9999-9999-9999-999999999999" eId="präambel-n1_formel-n1" name="attributsemantik-noch-undefiniert" refersTo="eingangsformel">
+                <akn:p GUID="da111111-1111-1111-1111-111111111111" eId="präambel-n1_formel-n1_text-n1">
                     Auf Grundlage des fiktiven Lebensmittel- und Bedarfsgegenständegesetzes in der Fassung vom 27. Mai 2000 und unter Einbeziehung aktueller Testdaten wird diese Verordnung erlassen:
                 </akn:p>
-                <akn:blockList GUID="da222222-2222-2222-2222-222222222222" eId="preambel-1_formel-1_liste-1">
-                    <akn:item GUID="da333333-3333-3333-3333-333333333333" eId="preambel-1_formel-1_liste-1_listenelem-1">
-                        <akn:num GUID="da444444-4444-4444-4444-444444444444" eId="preambel-1_formel-1_liste-1_listenelem-1_bezeichnung-1">-</akn:num>
-                        <akn:p GUID="da555555-5555-5555-5555-555555555555" eId="preambel-1_formel-1_liste-1_listenelem-1_text-1">
+                <akn:blockList GUID="da222222-2222-2222-2222-222222222222" eId="präambel-n1_formel-n1_liste-n1">
+                    <akn:item GUID="da333333-3333-3333-3333-333333333333" eId="präambel-n1_formel-n1_liste-n1_listenelem-n1">
+                        <akn:num GUID="da444444-4444-4444-4444-444444444444" eId="präambel-n1_formel-n1_liste-n1_listenelem-n1_bezeichnung-n1">-</akn:num>
+                        <akn:p GUID="da555555-5555-5555-5555-555555555555" eId="präambel-n1_formel-n1_liste-n1_listenelem-n1_text-n1">
                             auf Grund des § 12 Abs. 1 Nr. 1 und Abs. 2 Nr. 2a und 3 in Verbindung mit Abs. 3 des fiktiven Lebensmittelgesetzes
                         </akn:p>
                     </akn:item>
-                    <akn:item GUID="da666666-6666-6666-6666-666666666666" eId="preambel-1_formel-1_liste-1_listenelem-2">
-                        <akn:num GUID="da777777-7777-7777-7777-777777777777" eId="preambel-1_formel-1_liste-1_listenelem-2_bezeichnung-1">-</akn:num>
-                        <akn:p GUID="da888888-8888-8888-8888-888888888888" eId="preambel-1_formel-1_liste-1_listenelem-2_text-1">
+                    <akn:item GUID="da666666-6666-6666-6666-666666666666" eId="präambel-n1_formel-n1_liste-n1_listenelem-n2">
+                        <akn:num GUID="da777777-7777-7777-7777-777777777777" eId="präambel-n1_formel-n1_liste-n1_listenelem-n2_bezeichnung-n1">-</akn:num>
+                        <akn:p GUID="da888888-8888-8888-8888-888888888888" eId="präambel-n1_formel-n1_liste-n1_listenelem-n2_text-n1">
                             unter Einvernehmen mit den zuständigen Ministerien
                         </akn:p>
                     </akn:item>
                 </akn:blockList>
-                <akn:p GUID="da999999-9999-9999-9999-999999999999" eId="preambel-1_formel-1_text-2">
+                <akn:p GUID="da999999-9999-9999-9999-999999999999" eId="präambel-n1_formel-n1_text-n2">
                     (Letzte Änderung durch fiktive Testanpassungen)
                 </akn:p>
             </akn:formula>
         </akn:preamble>
-        <akn:body GUID="db111111-1111-1111-1111-111111111111" eId="hauptteil-1">
-            <akn:section GUID="db222222-2222-2222-2222-222222222222" eId="hauptteil-1_abschnitt-1">
-                <akn:num GUID="db333333-3333-3333-3333-333333333333" eId="hauptteil-1_abschnitt-1_bezeichnung-1">
+        <akn:body GUID="db111111-1111-1111-1111-111111111111" eId="hauptteil-n1">
+            <akn:section GUID="db222222-2222-2222-2222-222222222222" eId="hauptteil-n1_abschnitt-n1">
+                <akn:num GUID="db333333-3333-3333-3333-333333333333" eId="hauptteil-n1_abschnitt-n1_bezeichnung-n1">
                     Abschnitt 1
                 </akn:num>
-                <akn:heading GUID="db444444-4444-4444-4444-444444444444" eId="hauptteil-1_abschnitt-1_überschrift-1">
+                <akn:heading GUID="db444444-4444-4444-4444-444444444444" eId="hauptteil-n1_abschnitt-n1_überschrift-n1">
                     Anwendungsbereich
                 </akn:heading>
-                <akn:article GUID="db555555-5555-5555-5555-555555555555" eId="hauptteil-1_abschnitt-1_art-1" period="#meta-1_geltzeiten-1_geltungszeitgr-26" refersTo="stammform">
-                    <akn:num GUID="db666666-6666-6666-6666-666666666666" eId="hauptteil-1_abschnitt-1_art-1_bezeichnung-1">
+                <akn:article GUID="db555555-5555-5555-5555-555555555555" eId="hauptteil-n1_abschnitt-n1_art-n1" period="#meta-n1_geltzeiten-n1_geltungszeitgr-n26" refersTo="stammform">
+                    <akn:num GUID="db666666-6666-6666-6666-666666666666" eId="hauptteil-n1_abschnitt-n1_art-n1_bezeichnung-n1">
                         § 1
                     </akn:num>
-                    <akn:heading GUID="db777777-7777-7777-7777-777777777777" eId="hauptteil-1_abschnitt-1_art-1_überschrift-1">
+                    <akn:heading GUID="db777777-7777-7777-7777-777777777777" eId="hauptteil-n1_abschnitt-n1_art-n1_überschrift-n1">
                         Anwendungsbereich
                     </akn:heading>
-                    <akn:paragraph GUID="db888888-8888-8888-8888-888888888888" eId="hauptteil-1_abschnitt-1_art-1_abs-1">
-                        <akn:num GUID="db999999-9999-9999-9999-999999999999" eId="hauptteil-1_abschnitt-1_art-1_abs-1_bezeichnung-1">(1)</akn:num>
-                        <akn:content GUID="dc111111-1111-1111-1111-111111111111" eId="hauptteil-1_abschnitt-1_art-1_abs-1_inhalt-1">
-                            <akn:p GUID="dc222222-2222-2222-2222-222222222222" eId="hauptteil-1_abschnitt-1_art-1_abs-1_inhalt-1_text-1">
+                    <akn:paragraph GUID="db888888-8888-8888-8888-888888888888" eId="hauptteil-n1_abschnitt-n1_art-n1_abs-n1">
+                        <akn:num GUID="db999999-9999-9999-9999-999999999999" eId="hauptteil-n1_abschnitt-n1_art-n1_abs-n1_bezeichnung-n1">(1)</akn:num>
+                        <akn:content GUID="dc111111-1111-1111-1111-111111111111" eId="hauptteil-n1_abschnitt-n1_art-n1_abs-n1_inhalt-n1">
+                            <akn:p GUID="dc222222-2222-2222-2222-222222222222" eId="hauptteil-n1_abschnitt-n1_art-n1_abs-n1_inhalt-n1_text-n1">
                                 Die in Anlage 1 aufgeführten Erzeugnisse unterliegen dieser Verordnung, soweit sie zum gewerbsmäßigen Vertrieb bestimmt sind.
-                                <akn:marker GUID="dc333333-3333-3333-3333-333333333333" eId="hauptteil-1_abschnitt-1_art-1_abs-1_inhalt-1_text-1_marker-1" refersTo="satzende"/>
+                                <akn:marker GUID="dc333333-3333-3333-3333-333333333333" eId="hauptteil-n1_abschnitt-n1_art-n1_abs-n1_inhalt-n1_text-n1_marker-n1" refersTo="satzende"/>
                             </akn:p>
                         </akn:content>
                     </akn:paragraph>
-                    <akn:paragraph GUID="dc444444-4444-4444-4444-444444444444" eId="hauptteil-1_abschnitt-1_art-1_abs-2">
-                        <akn:num GUID="dc555555-5555-5555-5555-555555555555" eId="hauptteil-1_abschnitt-1_art-1_abs-2_bezeichnung-1">(2)</akn:num>
-                        <akn:content GUID="dc666666-6666-6666-6666-666666666666" eId="hauptteil-1_abschnitt-1_art-1_abs-2_inhalt-1">
-                            <akn:p GUID="dc777777-7777-7777-7777-777777777777" eId="hauptteil-1_abschnitt-1_art-1_abs-2_inhalt-1_text-1">
+                    <akn:paragraph GUID="dc444444-4444-4444-4444-444444444444" eId="hauptteil-n1_abschnitt-n1_art-n1_abs-n2">
+                        <akn:num GUID="dc555555-5555-5555-5555-555555555555" eId="hauptteil-n1_abschnitt-n1_art-n1_abs-n2_bezeichnung-n1">(2)</akn:num>
+                        <akn:content GUID="dc666666-6666-6666-6666-666666666666" eId="hauptteil-n1_abschnitt-n1_art-n1_abs-n2_inhalt-n1">
+                            <akn:p GUID="dc777777-7777-7777-7777-777777777777" eId="hauptteil-n1_abschnitt-n1_art-n1_abs-n2_inhalt-n1_text-n1">
                                 Diese Verordnung gilt ergänzend auch für Produkte, die in den Anwendungsbereich des Abschnitts 3 fallen.
-                                <akn:marker GUID="dc888888-8888-8888-8888-888888888888" eId="hauptteil-1_abschnitt-1_art-1_abs-2_inhalt-1_text-1_marker-1" refersTo="satzende"/>
+                                <akn:marker GUID="dc888888-8888-8888-8888-888888888888" eId="hauptteil-n1_abschnitt-n1_art-n1_abs-n2_inhalt-n1_text-n1_marker-n1" refersTo="satzende"/>
                             </akn:p>
                         </akn:content>
                     </akn:paragraph>
                 </akn:article>
             </akn:section>
-            <akn:section GUID="dd111111-1111-1111-1111-111111111111" eId="hauptteil-1_abschnitt-2">
-                <akn:num GUID="dd222222-2222-2222-2222-222222222222" eId="hauptteil-1_abschnitt-2_bezeichnung-1">
+            <akn:section GUID="dd111111-1111-1111-1111-111111111111" eId="hauptteil-n1_abschnitt-n2">
+                <akn:num GUID="dd222222-2222-2222-2222-222222222222" eId="hauptteil-n1_abschnitt-n2_bezeichnung-n1">
                     Abschnitt 2
                 </akn:num>
-                <akn:heading GUID="dd333333-3333-3333-3333-333333333333" eId="hauptteil-1_abschnitt-2_überschrift-1">
+                <akn:heading GUID="dd333333-3333-3333-3333-333333333333" eId="hauptteil-n1_abschnitt-n2_überschrift-n1">
                     Fruchtsaft, einige ähnliche Erzeugnisse und Fruchtnektar
                 </akn:heading>
-                <akn:article GUID="dd444444-4444-4444-4444-444444444444" eId="hauptteil-1_abschnitt-2_art-1" period="#meta-1_geltzeiten-1_geltungszeitgr-26" refersTo="stammform">
-                    <akn:num GUID="dd555555-5555-5555-5555-555555555555" eId="hauptteil-1_abschnitt-2_art-1_bezeichnung-1">
+                <akn:article GUID="dd444444-4444-4444-4444-444444444444" eId="hauptteil-n1_abschnitt-n2_art-n1" period="#meta-n1_geltzeiten-n1_geltungszeitgr-n26" refersTo="stammform">
+                    <akn:num GUID="dd555555-5555-5555-5555-555555555555" eId="hauptteil-n1_abschnitt-n2_art-n1_bezeichnung-n1">
                         § 2
                     </akn:num>
-                    <akn:heading GUID="dd666666-6666-6666-6666-666666666666" eId="hauptteil-1_abschnitt-2_art-1_überschrift-1">
+                    <akn:heading GUID="dd666666-6666-6666-6666-666666666666" eId="hauptteil-n1_abschnitt-n2_art-n1_überschrift-n1">
                         Zutaten, Herstellungsanforderungen
                     </akn:heading>
-                    <akn:paragraph GUID="dd777777-7777-7777-7777-777777777777" eId="hauptteil-1_abschnitt-2_art-1_abs-1">
-                        <akn:num GUID="dd888888-8888-8888-8888-888888888888" eId="hauptteil-1_abschnitt-2_art-1_abs-1_bezeichnung-1">(1)</akn:num>
-                        <akn:content GUID="dd999999-9999-9999-9999-999999999999" eId="hauptteil-1_abschnitt-2_art-1_abs-1_inhalt-1">
-                            <akn:p GUID="de111111-1111-1111-1111-111111111111" eId="hauptteil-1_abschnitt-2_art-1_abs-1_inhalt-1_text-1">
+                    <akn:paragraph GUID="dd777777-7777-7777-7777-777777777777" eId="hauptteil-n1_abschnitt-n2_art-n1_abs-n1">
+                        <akn:num GUID="dd888888-8888-8888-8888-888888888888" eId="hauptteil-n1_abschnitt-n2_art-n1_abs-n1_bezeichnung-n1">(1)</akn:num>
+                        <akn:content GUID="dd999999-9999-9999-9999-999999999999" eId="hauptteil-n1_abschnitt-n2_art-n1_abs-n1_inhalt-n1">
+                            <akn:p GUID="de111111-1111-1111-1111-111111111111" eId="hauptteil-n1_abschnitt-n2_art-n1_abs-n1_inhalt-n1_text-n1">
                                 Die Ausgangserzeugnisse für Erzeugnisse gemäß Anlage 1 müssen den in Anlage 2 festgelegten Qualitätsstandards entsprechen.
-                                <akn:marker GUID="de222222-2222-2222-2222-222222222222" eId="hauptteil-1_abschnitt-2_art-1_abs-1_inhalt-1_text-1_marker-1" refersTo="satzende"/>
+                                <akn:marker GUID="de222222-2222-2222-2222-222222222222" eId="hauptteil-n1_abschnitt-n2_art-n1_abs-n1_inhalt-n1_text-n1_marker-n1" refersTo="satzende"/>
                             </akn:p>
                         </akn:content>
                     </akn:paragraph>
-                    <akn:paragraph GUID="de333333-3333-3333-3333-333333333333" eId="hauptteil-1_abschnitt-2_art-1_abs-2">
-                        <akn:num GUID="de444444-4444-4444-4444-444444444444" eId="hauptteil-1_abschnitt-2_art-1_abs-2_bezeichnung-1">(2)</akn:num>
-                        <akn:content GUID="de555555-5555-5555-5555-555555555555" eId="hauptteil-1_abschnitt-2_art-1_abs-2_inhalt-1">
-                            <akn:p GUID="de666666-6666-6666-6666-666666666666" eId="hauptteil-1_abschnitt-2_art-1_abs-2_inhalt-1_text-1">
+                    <akn:paragraph GUID="de333333-3333-3333-3333-333333333333" eId="hauptteil-n1_abschnitt-n2_art-n1_abs-n2">
+                        <akn:num GUID="de444444-4444-4444-4444-444444444444" eId="hauptteil-n1_abschnitt-n2_art-n1_abs-n2_bezeichnung-n1">(2)</akn:num>
+                        <akn:content GUID="de555555-5555-5555-5555-555555555555" eId="hauptteil-n1_abschnitt-n2_art-n1_abs-n2_inhalt-n1">
+                            <akn:p GUID="de666666-6666-6666-6666-666666666666" eId="hauptteil-n1_abschnitt-n2_art-n1_abs-n2_inhalt-n1_text-n1">
                                 Für die Herstellung von Produkten gemäß Anlage 1 dürfen ausschließlich die in Anlage 3 genannten Zutaten verwendet werden.
-                                <akn:marker GUID="de777777-7777-7777-7777-777777777777" eId="hauptteil-1_abschnitt-2_art-1_abs-2_inhalt-1_text-1_marker-1" refersTo="satzende"/>
+                                <akn:marker GUID="de777777-7777-7777-7777-777777777777" eId="hauptteil-n1_abschnitt-n2_art-n1_abs-n2_inhalt-n1_text-n1_marker-n1" refersTo="satzende"/>
                             </akn:p>
                         </akn:content>
                     </akn:paragraph>
-                    <akn:paragraph GUID="de888888-8888-8888-8888-888888888888" eId="hauptteil-1_abschnitt-2_art-1_abs-3">
-                        <akn:num GUID="de999999-9999-9999-9999-999999999999" eId="hauptteil-1_abschnitt-2_art-1_abs-3_bezeichnung-1">(3)</akn:num>
-                        <akn:content GUID="df111111-1111-1111-1111-111111111111" eId="hauptteil-1_abschnitt-2_art-1_abs-3_inhalt-1">
-                            <akn:p GUID="df222222-2222-2222-2222-222222222222" eId="hauptteil-1_abschnitt-2_art-1_abs-3_inhalt-1_text-1">
+                    <akn:paragraph GUID="de888888-8888-8888-8888-888888888888" eId="hauptteil-n1_abschnitt-n2_art-n1_abs-n3">
+                        <akn:num GUID="de999999-9999-9999-9999-999999999999" eId="hauptteil-n1_abschnitt-n2_art-n1_abs-n3_bezeichnung-n1">(3)</akn:num>
+                        <akn:content GUID="df111111-1111-1111-1111-111111111111" eId="hauptteil-n1_abschnitt-n2_art-n1_abs-n3_inhalt-n1">
+                            <akn:p GUID="df222222-2222-2222-2222-222222222222" eId="hauptteil-n1_abschnitt-n2_art-n1_abs-n3_inhalt-n1_text-n1">
                                 Bei der Anwendung der in Anlage 4 Abschnitt A genannten Verfahren sind die dort festgelegten technischen Vorgaben strikt einzuhalten.
-                                <akn:marker GUID="df333333-3333-3333-3333-333333333333" eId="hauptteil-1_abschnitt-2_art-1_abs-3_inhalt-1_text-1_marker-1" refersTo="satzende"/>
+                                <akn:marker GUID="df333333-3333-3333-3333-333333333333" eId="hauptteil-n1_abschnitt-n2_art-n1_abs-n3_inhalt-n1_text-n1_marker-n1" refersTo="satzende"/>
                             </akn:p>
                         </akn:content>
                     </akn:paragraph>
-                    <akn:paragraph GUID="df444444-4444-4444-4444-444444444444" eId="hauptteil-1_abschnitt-2_art-1_abs-4">
-                        <akn:num GUID="df555555-5555-5555-5555-555555555555" eId="hauptteil-1_abschnitt-2_art-1_abs-4_bezeichnung-1">(4)</akn:num>
-                        <akn:content GUID="df666666-6666-6666-6666-666666666666" eId="hauptteil-1_abschnitt-2_art-1_abs-4_inhalt-1">
-                            <akn:p GUID="df777777-7777-7777-7777-777777777777" eId="hauptteil-1_abschnitt-2_art-1_abs-4_inhalt-1_text-1">
+                    <akn:paragraph GUID="df444444-4444-4444-4444-444444444444" eId="hauptteil-n1_abschnitt-n2_art-n1_abs-n4">
+                        <akn:num GUID="df555555-5555-5555-5555-555555555555" eId="hauptteil-n1_abschnitt-n2_art-n1_abs-n4_bezeichnung-n1">(4)</akn:num>
+                        <akn:content GUID="df666666-6666-6666-6666-666666666666" eId="hauptteil-n1_abschnitt-n2_art-n1_abs-n4_inhalt-n1">
+                            <akn:p GUID="df777777-7777-7777-7777-777777777777" eId="hauptteil-n1_abschnitt-n2_art-n1_abs-n4_inhalt-n1_text-n1">
                                 Beim gewerbsmäßigen Herstellen von Erzeugnissen nach Anlage 1 dürfen – vorbehaltlich Absatz 5 Satz 2 sowie Absatz 7 – keine anderen als die in den Absätzen 1 und 2 bezeichneten Zutaten verwendet werden.
-                                <akn:marker GUID="df888888-8888-8888-8888-888888888888" eId="hauptteil-1_abschnitt-2_art-1_abs-4_inhalt-1_text-1_marker-1" refersTo="satzende"/>
+                                <akn:marker GUID="df888888-8888-8888-8888-888888888888" eId="hauptteil-n1_abschnitt-n2_art-n1_abs-n4_inhalt-n1_text-n1_marker-n1" refersTo="satzende"/>
                             </akn:p>
-                            <akn:blockList GUID="df999999-9999-9999-9999-999999999999" eId="hauptteil-1_abschnitt-2_art-1_abs-4_inhalt-1_liste-1">
-                                <akn:item GUID="e0111111-1111-1111-1111-111111111111" eId="hauptteil-1_abschnitt-2_art-1_abs-4_inhalt-1_liste-1_listenelem-1">
-                                    <akn:num GUID="e0222222-2222-2222-2222-222222222222" eId="hauptteil-1_abschnitt-2_art-1_abs-4_inhalt-1_liste-1_listenelem-1_bezeichnung-1">
+                            <akn:blockList GUID="df999999-9999-9999-9999-999999999999" eId="hauptteil-n1_abschnitt-n2_art-n1_abs-n4_inhalt-n1_liste-n1">
+                                <akn:item GUID="e0111111-1111-1111-1111-111111111111" eId="hauptteil-n1_abschnitt-n2_art-n1_abs-n4_inhalt-n1_liste-n1_listenelem-n1">
+                                    <akn:num GUID="e0222222-2222-2222-2222-222222222222" eId="hauptteil-n1_abschnitt-n2_art-n1_abs-n4_inhalt-n1_liste-n1_listenelem-n1_bezeichnung-n1">
                                         1.
                                     </akn:num>
-                                    <akn:p GUID="e0333333-3333-3333-3333-333333333333" eId="hauptteil-1_abschnitt-2_art-1_abs-4_inhalt-1_liste-1_listenelem-1_text-1">
+                                    <akn:p GUID="e0333333-3333-3333-3333-333333333333" eId="hauptteil-n1_abschnitt-n2_art-n1_abs-n4_inhalt-n1_liste-n1_listenelem-n1_text-n1">
                                         Zutaten, die ausdrücklich ausgeschlossen sind.
                                     </akn:p>
                                 </akn:item>
-                                <akn:item GUID="e0444444-4444-4444-4444-444444444444" eId="hauptteil-1_abschnitt-2_art-1_abs-4_inhalt-1_liste-1_listenelem-2">
-                                    <akn:num GUID="e0555555-5555-5555-5555-555555555555" eId="hauptteil-1_abschnitt-2_art-1_abs-4_inhalt-1_liste-1_listenelem-2_bezeichnung-1">
+                                <akn:item GUID="e0444444-4444-4444-4444-444444444444" eId="hauptteil-n1_abschnitt-n2_art-n1_abs-n4_inhalt-n1_liste-n1_listenelem-n2">
+                                    <akn:num GUID="e0555555-5555-5555-5555-555555555555" eId="hauptteil-n1_abschnitt-n2_art-n1_abs-n4_inhalt-n1_liste-n1_listenelem-n2_bezeichnung-n1">
                                         2.
                                     </akn:num>
-                                    <akn:p GUID="e0666666-6666-6666-6666-666666666666" eId="hauptteil-1_abschnitt-2_art-1_abs-4_inhalt-1_liste-1_listenelem-2_text-1">
+                                    <akn:p GUID="e0666666-6666-6666-6666-666666666666" eId="hauptteil-n1_abschnitt-n2_art-n1_abs-n4_inhalt-n1_liste-n1_listenelem-n2_text-n1">
                                         Verfahren, die nicht angewendet werden dürfen.
                                     </akn:p>
                                 </akn:item>
                             </akn:blockList>
-                            <akn:p GUID="e0777777-7777-7777-7777-777777777777" eId="hauptteil-1_abschnitt-2_art-1_abs-4_inhalt-1_text-2">
+                            <akn:p GUID="e0777777-7777-7777-7777-777777777777" eId="hauptteil-n1_abschnitt-n2_art-n1_abs-n4_inhalt-n1_text-n2">
                                 werden.
-                                <akn:marker GUID="e0888888-8888-8888-8888-888888888888" eId="hauptteil-1_abschnitt-2_art-1_abs-4_inhalt-1_text-2_marker-1" refersTo="satzende"/>
+                                <akn:marker GUID="e0888888-8888-8888-8888-888888888888" eId="hauptteil-n1_abschnitt-n2_art-n1_abs-n4_inhalt-n1_text-n2_marker-n1" refersTo="satzende"/>
                             </akn:p>
                         </akn:content>
                     </akn:paragraph>
-                    <akn:paragraph GUID="e0999999-9999-9999-9999-999999999999" eId="hauptteil-1_abschnitt-2_art-1_abs-5">
-                        <akn:num GUID="ea111111-1111-1111-1111-111111111111" eId="hauptteil-1_abschnitt-2_art-1_abs-5_bezeichnung-1">(5)</akn:num>
-                        <akn:content GUID="ea222222-2222-2222-2222-222222222222" eId="hauptteil-1_abschnitt-2_art-1_abs-5_inhalt-1">
-                            <akn:p GUID="ea333333-3333-3333-3333-333333333333" eId="hauptteil-1_abschnitt-2_art-1_abs-5_inhalt-1_text-1">
+                    <akn:paragraph GUID="e0999999-9999-9999-9999-999999999999" eId="hauptteil-n1_abschnitt-n2_art-n1_abs-n5">
+                        <akn:num GUID="ea111111-1111-1111-1111-111111111111" eId="hauptteil-n1_abschnitt-n2_art-n1_abs-n5_bezeichnung-n1">(5)</akn:num>
+                        <akn:content GUID="ea222222-2222-2222-2222-222222222222" eId="hauptteil-n1_abschnitt-n2_art-n1_abs-n5_inhalt-n1">
+                            <akn:p GUID="ea333333-3333-3333-3333-333333333333" eId="hauptteil-n1_abschnitt-n2_art-n1_abs-n5_inhalt-n1_text-n1">
                                 Als Lebensmittelzusatzstoffe für die Verarbeitung von Erzeugnissen nach Anlage 1 sind ausschließlich die in Anlage 4 Abschnitt B aufgeführten Stoffe nach den dort definierten Maßgaben zugelassen.
-                                <akn:marker GUID="ea444444-4444-4444-4444-444444444444" eId="hauptteil-1_abschnitt-2_art-1_abs-5_inhalt-1_text-1_marker-1" refersTo="satzende"/>
+                                <akn:marker GUID="ea444444-4444-4444-4444-444444444444" eId="hauptteil-n1_abschnitt-n2_art-n1_abs-n5_inhalt-n1_text-n1_marker-n1" refersTo="satzende"/>
                             </akn:p>
                         </akn:content>
                     </akn:paragraph>
-                    <akn:paragraph GUID="ea555555-5555-5555-5555-555555555555" eId="hauptteil-1_abschnitt-2_art-1_abs-6">
-                        <akn:num GUID="ea666666-6666-6666-6666-666666666666" eId="hauptteil-1_abschnitt-2_art-1_abs-6_bezeichnung-1">(6)</akn:num>
-                        <akn:content GUID="ea777777-7777-7777-7777-777777777777" eId="hauptteil-1_abschnitt-2_art-1_abs-6_inhalt-1">
-                            <akn:p GUID="ea888888-8888-8888-8888-888888888888" eId="hauptteil-1_abschnitt-2_art-1_abs-6_inhalt-1_text-1">
+                    <akn:paragraph GUID="ea555555-5555-5555-5555-555555555555" eId="hauptteil-n1_abschnitt-n2_art-n1_abs-n6">
+                        <akn:num GUID="ea666666-6666-6666-6666-666666666666" eId="hauptteil-n1_abschnitt-n2_art-n1_abs-n6_bezeichnung-n1">(6)</akn:num>
+                        <akn:content GUID="ea777777-7777-7777-7777-777777777777" eId="hauptteil-n1_abschnitt-n2_art-n1_abs-n6_inhalt-n1">
+                            <akn:p GUID="ea888888-8888-8888-8888-888888888888" eId="hauptteil-n1_abschnitt-n2_art-n1_abs-n6_inhalt-n1_text-n1">
                                 Fruchtnektare müssen die in Anlage 5 vorgeschriebenen Mindestgehalte an Fruchtsaft oder Fruchtmark aufweisen.
-                                <akn:marker GUID="ea999999-9999-9999-9999-999999999999" eId="hauptteil-1_abschnitt-2_art-1_abs-6_inhalt-1_text-1_marker-1" refersTo="satzende"/>
+                                <akn:marker GUID="ea999999-9999-9999-9999-999999999999" eId="hauptteil-n1_abschnitt-n2_art-n1_abs-n6_inhalt-n1_text-n1_marker-n1" refersTo="satzende"/>
                             </akn:p>
                         </akn:content>
                     </akn:paragraph>
-                    <akn:paragraph GUID="eb111111-1111-1111-1111-111111111111" eId="hauptteil-1_abschnitt-2_art-1_abs-7">
-                        <akn:num GUID="eb222222-2222-2222-2222-222222222222" eId="hauptteil-1_abschnitt-2_art-1_abs-7_bezeichnung-1">(7)</akn:num>
-                        <akn:content GUID="eb333333-3333-3333-3333-333333333333" eId="hauptteil-1_abschnitt-2_art-1_abs-7_inhalt-1">
-                            <akn:p GUID="eb444444-4444-4444-4444-444444444444" eId="hauptteil-1_abschnitt-2_art-1_abs-7_inhalt-1_text-1">
+                    <akn:paragraph GUID="eb111111-1111-1111-1111-111111111111" eId="hauptteil-n1_abschnitt-n2_art-n1_abs-n7">
+                        <akn:num GUID="eb222222-2222-2222-2222-222222222222" eId="hauptteil-n1_abschnitt-n2_art-n1_abs-n7_bezeichnung-n1">(7)</akn:num>
+                        <akn:content GUID="eb333333-3333-3333-3333-333333333333" eId="hauptteil-n1_abschnitt-n2_art-n1_abs-n7_inhalt-n1">
+                            <akn:p GUID="eb444444-4444-4444-4444-444444444444" eId="hauptteil-n1_abschnitt-n2_art-n1_abs-n7_inhalt-n1_text-n1">
                                 Bei Fruchtsäften aus Fruchtsaftkonzentrat muss der Mindestbrixwert des wiederhergestellten Saftes dem Ursprungswert des verwendeten Konzentrats entsprechen.
-                                <akn:marker GUID="eb555555-5555-5555-5555-555555555555" eId="hauptteil-1_abschnitt-2_art-1_abs-7_inhalt-1_text-1_marker-1" refersTo="satzende"/>
+                                <akn:marker GUID="eb555555-5555-5555-5555-555555555555" eId="hauptteil-n1_abschnitt-n2_art-n1_abs-n7_inhalt-n1_text-n1_marker-n1" refersTo="satzende"/>
                             </akn:p>
                         </akn:content>
                     </akn:paragraph>
-                    <akn:paragraph GUID="eb666666-6666-6666-6666-666666666666" eId="hauptteil-1_abschnitt-2_art-1_abs-8">
-                        <akn:num GUID="eb777777-7777-7777-7777-777777777777" eId="hauptteil-1_abschnitt-2_art-1_abs-8_bezeichnung-1">(8)</akn:num>
-                        <akn:content GUID="eb888888-8888-8888-8888-888888888888" eId="hauptteil-1_abschnitt-2_art-1_abs-8_inhalt-1">
-                            <akn:p GUID="eb999999-9999-9999-9999-999999999999" eId="hauptteil-1_abschnitt-2_art-1_abs-8_inhalt-1_text-1">
+                    <akn:paragraph GUID="eb666666-6666-6666-6666-666666666666" eId="hauptteil-n1_abschnitt-n2_art-n1_abs-n8">
+                        <akn:num GUID="eb777777-7777-7777-7777-777777777777" eId="hauptteil-n1_abschnitt-n2_art-n1_abs-n8_bezeichnung-n1">(8)</akn:num>
+                        <akn:content GUID="eb888888-8888-8888-8888-888888888888" eId="hauptteil-n1_abschnitt-n2_art-n1_abs-n8_inhalt-n1">
+                            <akn:p GUID="eb999999-9999-9999-9999-999999999999" eId="hauptteil-n1_abschnitt-n2_art-n1_abs-n8_inhalt-n1_text-n1">
                                 Unberührt bleiben die Vorschriften über den Zusatz von Vitaminen und Mineralstoffen zu Lebensmitteln.
-                                <akn:marker GUID="ec111111-1111-1111-1111-111111111111" eId="hauptteil-1_abschnitt-2_art-1_abs-8_inhalt-1_text-1_marker-1" refersTo="satzende"/>
+                                <akn:marker GUID="ec111111-1111-1111-1111-111111111111" eId="hauptteil-n1_abschnitt-n2_art-n1_abs-n8_inhalt-n1_text-n1_marker-n1" refersTo="satzende"/>
                             </akn:p>
                         </akn:content>
                     </akn:paragraph>
                 </akn:article>
-                <akn:article GUID="ec222222-2222-2222-2222-222222222222" eId="hauptteil-1_abschnitt-2_art-2" period="#meta-1_geltzeiten-1_geltungszeitgr-24" refersTo="stammform">
-                    <akn:num GUID="ec333333-3333-3333-3333-333333333333" eId="hauptteil-1_abschnitt-2_art-2_bezeichnung-1">
+                <akn:article GUID="ec222222-2222-2222-2222-222222222222" eId="hauptteil-n1_abschnitt-n2_art-n2" period="#meta-n1_geltzeiten-n1_geltungszeitgr-n24" refersTo="stammform">
+                    <akn:num GUID="ec333333-3333-3333-3333-333333333333" eId="hauptteil-n1_abschnitt-n2_art-n2_bezeichnung-n1">
                         § 3
                     </akn:num>
-                    <akn:heading GUID="ec444444-4444-4444-4444-444444444444" eId="hauptteil-1_abschnitt-2_art-2_überschrift-1">
+                    <akn:heading GUID="ec444444-4444-4444-4444-444444444444" eId="hauptteil-n1_abschnitt-n2_art-n2_überschrift-n1">
                         Kennzeichnung
                     </akn:heading>
-                    <akn:paragraph GUID="dccccccc-cccc-cccc-cccc-cccccccccccc" eId="hauptteil-1_abschnitt-2_art-2_abs-1">
-                        <akn:num GUID="ddcccccc-cccc-cccc-cccc-cccccccccccc" eId="hauptteil-1_abschnitt-2_art-2_abs-1_bezeichnung-1">(1)</akn:num>
-                        <akn:content GUID="decccccc-cccc-cccc-cccc-cccccccccccc" eId="hauptteil-1_abschnitt-2_art-2_abs-1_inhalt-1">
-                            <akn:p GUID="dfcccccc-cccc-cccc-cccc-cccccccccccc" eId="hauptteil-1_abschnitt-2_art-2_abs-1_inhalt-1_text-1">
+                    <akn:paragraph GUID="dccccccc-cccc-cccc-cccc-cccccccccccc" eId="hauptteil-n1_abschnitt-n2_art-n2_abs-n1">
+                        <akn:num GUID="ddcccccc-cccc-cccc-cccc-cccccccccccc" eId="hauptteil-n1_abschnitt-n2_art-n2_abs-n1_bezeichnung-n1">(1)</akn:num>
+                        <akn:content GUID="decccccc-cccc-cccc-cccc-cccccccccccc" eId="hauptteil-n1_abschnitt-n2_art-n2_abs-n1_inhalt-n1">
+                            <akn:p GUID="dfcccccc-cccc-cccc-cccc-cccccccccccc" eId="hauptteil-n1_abschnitt-n2_art-n2_abs-n1_inhalt-n1_text-n1">
                                 Die Kennzeichnung der Erzeugnisse erfolgt nach den aktuellen gesetzlichen Vorgaben. Alle wesentlichen Informationen wie Inhaltsstoffe, Mindesthaltbarkeitsdatum und Herkunft sind klar und deutlich auszuweisen.
-                                <akn:marker GUID="d0cccccc-cccc-cccc-cccc-cccccccccccc" eId="hauptteil-1_abschnitt-2_art-2_abs-1_inhalt-1_text-1_marker-1" refersTo="satzende"/>
+                                <akn:marker GUID="d0cccccc-cccc-cccc-cccc-cccccccccccc" eId="hauptteil-n1_abschnitt-n2_art-n2_abs-n1_inhalt-n1_text-n1_marker-n1" refersTo="satzende"/>
                             </akn:p>
                         </akn:content>
                     </akn:paragraph>
                 </akn:article>
             </akn:section>
         </akn:body>
-        <akn:conclusions GUID="71b6351e-5975-448a-8e10-46a27e34a73a" eId="schluss-1">
-            <akn:formula GUID="39305ff5-94de-489b-9410-bc707ebb5482" eId="schluss-1_formel-1"
+        <akn:conclusions GUID="71b6351e-5975-448a-8e10-46a27e34a73a" eId="schluss-n1">
+            <akn:formula GUID="39305ff5-94de-489b-9410-bc707ebb5482" eId="schluss-n1_formel-n1"
                          name="attributsemantik-noch-undefiniert" refersTo="schlussformel">
-                <akn:p GUID="94422474-9a54-4110-a2da-c3a4fd3fe569" eId="schluss-1_formel-1_text-1">Der Bundesrat hat
+                <akn:p GUID="94422474-9a54-4110-a2da-c3a4fd3fe569" eId="schluss-n1_formel-n1_text-n1">Der Bundesrat hat
                     zugestimmt.
-                    <akn:marker GUID="5330dc25-9110-4253-9110-8ba875f435a8" eId="schluss-1_formel-1_text-1_marker-1"
+                    <akn:marker GUID="5330dc25-9110-4253-9110-8ba875f435a8" eId="schluss-n1_formel-n1_text-n1_marker-n1"
                                 refersTo="satzende"/>
                 </akn:p>
             </akn:formula>

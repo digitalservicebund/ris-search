@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns="http://MetadatenBundesregierung.LegalDocML.de/1.8.1/"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           elementFormDefault="qualified"
+           targetNamespace="http://MetadatenBundesregierung.LegalDocML.de/1.8.1/"
+           version="LegalDocML.de 1.8.1 (10.06.2025)">
+<!-- ********************************* Hinweis zur Lizensierung ********************************* -->
+   <xs:annotation>
+      <xs:appinfo>
+         <copyright-hinweis>2025 Copyright © 2021–2025 Bundesministerium des Innern und für Heimat, 
+Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Verwaltungsarbeit</copyright-hinweis>
+         <lizenz url="https://creativecommons.org/licenses/by/3.0/legalcode.de"
+                 kurzbezeichnung="CC-BY-3.0"
+                 langbezeichnung="Creative Commons Namensnennung 3.0"/>
+         <autor organisation="Bundesministerium des Innern und für Heimat"
+                referat="DG II 6"
+                organisatorischer-rahmen="Maßnahmen Enterprise Resource Management und Elektronische Verwaltungsarbeit"/>
+      </xs:appinfo>
+   </xs:annotation>
+   <!-- ******************************************************************************************** -->
+   <xs:element name="legalDocML.de_metadaten">
+      <xs:complexType>
+         <xs:sequence>
+            <xs:element name="federfuehrung">
+               <xs:annotation>
+                  <xs:documentation>Umfasst die Historie und das aktuell federführende Ressort. Es können mehrere federführende Ressorts abgebildet
+                            werden.</xs:documentation>
+               </xs:annotation>
+               <xs:complexType>
+                  <xs:sequence maxOccurs="unbounded">
+                     <xs:element name="federfuehrend">
+                        <xs:annotation>
+                           <xs:documentation>Das federführende Ressort</xs:documentation>
+                        </xs:annotation>
+                        <xs:complexType>
+                           <xs:simpleContent>
+                              <xs:extension base="mindestens-ein-zeichen">
+                                 <xs:attribute name="ab" type="xs:date" use="required">
+                                    <xs:annotation>
+                                       <xs:documentation>Datum, zu welchem die Federführung des angegebenen Ressorts beginnt</xs:documentation>
+                                    </xs:annotation>
+                                 </xs:attribute>
+                                 <xs:attribute name="bis" use="required">
+                                    <xs:annotation>
+                                       <xs:documentation>Datum, zu welchem die Federführung des angegebenen Ressorts endet. Neben einem Datum ist
+                                                        hier auch das Literal 'unbestimmt' zulässig, mittels welchem ausdrückt wird, dass das angegebene Ressort
+                                                        die Federführung noch innehat.</xs:documentation>
+                                    </xs:annotation>
+                                    <xs:simpleType>
+                                       <xs:union memberTypes="xs:date">
+                                          <xs:simpleType>
+                                             <xs:restriction base="xs:string">
+                                                <xs:enumeration value="unbestimmt"/>
+                                             </xs:restriction>
+                                          </xs:simpleType>
+                                       </xs:union>
+                                    </xs:simpleType>
+                                 </xs:attribute>
+                              </xs:extension>
+                           </xs:simpleContent>
+                        </xs:complexType>
+                     </xs:element>
+                  </xs:sequence>
+               </xs:complexType>
+            </xs:element>
+         </xs:sequence>
+      </xs:complexType>
+   </xs:element>
+   <xs:simpleType name="mindestens-ein-zeichen">
+      <xs:restriction base="xs:token">
+         <xs:minLength value="1"/>
+      </xs:restriction>
+   </xs:simpleType>
+</xs:schema>

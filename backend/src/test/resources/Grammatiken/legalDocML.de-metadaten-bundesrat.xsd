@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns="http://MetadatenBundesrat.LegalDocML.de/1.8.1/"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           elementFormDefault="qualified"
+           targetNamespace="http://MetadatenBundesrat.LegalDocML.de/1.8.1/"
+           version="LegalDocML.de 1.8.1 (10.06.2025)">
+<!-- ********************************* Hinweis zur Lizensierung ********************************* -->
+   <xs:annotation>
+      <xs:appinfo>
+         <copyright-hinweis>2025 Copyright © 2021–2025 Bundesministerium des Innern und für Heimat, 
+Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Verwaltungsarbeit</copyright-hinweis>
+         <lizenz url="https://creativecommons.org/licenses/by/3.0/legalcode.de"
+                 kurzbezeichnung="CC-BY-3.0"
+                 langbezeichnung="Creative Commons Namensnennung 3.0"/>
+         <autor organisation="Bundesministerium des Innern und für Heimat"
+                referat="DG II 6"
+                organisatorischer-rahmen="Maßnahmen Enterprise Resource Management und Elektronische Verwaltungsarbeit"/>
+      </xs:appinfo>
+   </xs:annotation>
+   <!-- ******************************************************************************************** -->
+   <!--E-Gesetzgebung: Metadaten Bundesrat-->
+   <xs:element name="legalDocML.de_metadaten">
+      <xs:complexType>
+         <xs:sequence>
+            <xs:element name="herausgeber" type="institution">
+               <xs:annotation>
+                  <xs:documentation>Der Name des Herausgebers der Drucksache</xs:documentation>
+               </xs:annotation>
+            </xs:element>
+            <xs:element name="urheber" minOccurs="0" maxOccurs="unbounded">
+               <xs:annotation>
+                  <xs:documentation>Der Urhebers der Drucksache</xs:documentation>
+               </xs:annotation>
+               <xs:complexType>
+                  <xs:simpleContent>
+                     <xs:extension base="mindestens-ein-zeichen"/>
+                  </xs:simpleContent>
+               </xs:complexType>
+            </xs:element>
+            <xs:element name="drucksachennummer" minOccurs="0">
+               <xs:annotation>
+                  <xs:documentation>Angabe der eindeutigen Drucksachennummer</xs:documentation>
+               </xs:annotation>
+               <xs:complexType>
+                  <xs:simpleContent>
+                     <xs:extension base="mindestens-ein-zeichen"/>
+                  </xs:simpleContent>
+               </xs:complexType>
+            </xs:element>
+            <xs:element name="bezieht-sich-auf-br-drucksachennummer" minOccurs="0">
+               <xs:annotation>
+                  <xs:documentation>Angabe des Bezugs zu einer weiteren BR-Drucksachennummer</xs:documentation>
+               </xs:annotation>
+               <xs:complexType>
+                  <xs:simpleContent>
+                     <xs:extension base="mindestens-ein-zeichen"/>
+                  </xs:simpleContent>
+               </xs:complexType>
+            </xs:element>
+            <xs:element name="drucksachentyp" minOccurs="0">
+               <xs:annotation>
+                  <xs:documentation>Angabe des Drucksachentyps</xs:documentation>
+               </xs:annotation>
+               <xs:complexType>
+                  <xs:simpleContent>
+                     <xs:extension base="mindestens-ein-zeichen"/>
+                  </xs:simpleContent>
+               </xs:complexType>
+            </xs:element>
+            <xs:element name="zuleitungsdatum" type="xs:date" minOccurs="0">
+               <xs:annotation>
+                  <xs:documentation>Zuleitungsdatum der Drucksache im Bundesrat</xs:documentation>
+               </xs:annotation>
+            </xs:element>
+            <xs:element name="beteiligte-ausschuesse" minOccurs="0">
+               <xs:annotation>
+                  <xs:documentation>Angabe der beteiligten Ausschüsse</xs:documentation>
+               </xs:annotation>
+               <xs:complexType>
+                  <xs:simpleContent>
+                     <xs:extension base="mindestens-ein-zeichen"/>
+                  </xs:simpleContent>
+               </xs:complexType>
+            </xs:element>
+            <xs:element name="federfuehrender-ausschuss" minOccurs="0">
+               <xs:annotation>
+                  <xs:documentation>Angabe des federführenden Ausschusses</xs:documentation>
+               </xs:annotation>
+               <xs:complexType>
+                  <xs:simpleContent>
+                     <xs:extension base="mindestens-ein-zeichen"/>
+                  </xs:simpleContent>
+               </xs:complexType>
+            </xs:element>
+            <xs:element name="art-der-stellungnahme" minOccurs="0" type="art">
+               <xs:annotation>
+                  <xs:documentation>Die Angabe der Art der Stellungnahme im Bundesrat. Für Dokumenttypen, die keine Stellungnahme im Bundesrat sind, ist diese Angabe nicht sinnvoll.</xs:documentation>
+               </xs:annotation>
+            </xs:element>
+         </xs:sequence>
+      </xs:complexType>
+   </xs:element>
+   <xs:simpleType name="mindestens-ein-zeichen">
+      <xs:restriction base="xs:token">
+         <xs:minLength value="1"/>
+      </xs:restriction>
+   </xs:simpleType>
+   <xs:simpleType name="institution" final="restriction">
+      <xs:restriction base="xs:string">
+         <xs:enumeration value="deutscher-bundesrat"/>
+      </xs:restriction>
+   </xs:simpleType>
+   <xs:simpleType name="art" final="restriction">
+      <xs:restriction base="xs:string">
+         <xs:enumeration value="stellungnahme"/>
+         <xs:enumeration value="nicht-beschlossen"/>
+         <xs:enumeration value="keine-einwendungen"/>
+      </xs:restriction>
+   </xs:simpleType>
+</xs:schema>

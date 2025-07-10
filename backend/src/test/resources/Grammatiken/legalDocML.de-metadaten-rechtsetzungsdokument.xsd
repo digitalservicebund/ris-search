@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns="http://MetadatenRechtsetzungsdokument.LegalDocML.de/1.8.1/"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           elementFormDefault="qualified"
+           targetNamespace="http://MetadatenRechtsetzungsdokument.LegalDocML.de/1.8.1/"
+           version="LegalDocML.de 1.8.1 (10.06.2025)">
+<!-- ********************************* Hinweis zur Lizensierung ********************************* -->
+   <xs:annotation>
+      <xs:appinfo>
+         <copyright-hinweis>2025 Copyright © 2021–2025 Bundesministerium des Innern und für Heimat, 
+Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Verwaltungsarbeit</copyright-hinweis>
+         <lizenz url="https://creativecommons.org/licenses/by/3.0/legalcode.de"
+                 kurzbezeichnung="CC-BY-3.0"
+                 langbezeichnung="Creative Commons Namensnennung 3.0"/>
+         <autor organisation="Bundesministerium des Innern und für Heimat"
+                referat="DG II 6"
+                organisatorischer-rahmen="Maßnahmen Enterprise Resource Management und Elektronische Verwaltungsarbeit"/>
+      </xs:appinfo>
+   </xs:annotation>
+   <!-- ******************************************************************************************** -->
+   <xs:element name="legalDocML.de_metadaten">
+      <xs:complexType>
+         <xs:sequence>
+            <xs:element name="initiant" type="institution">
+               <xs:annotation>
+                  <xs:documentation>Institution, welche die erste Fassung des Rechtsetzungsdokuments und seiner Teildokumente erstellt hat (z. B. Bundesregierung, Bundestag usw.). Dieses Metadatum ist nur in der Entwurfsfassung relevant; in der Verkündungsfassung ist das Literal "nicht-vorhanden" zu nutzen.</xs:documentation>
+               </xs:annotation>
+            </xs:element>
+            <xs:element name="bearbeitendeInstitution" type="institution">
+               <xs:annotation>
+                  <xs:documentation>Institution, welche die vorliegende Fassung des Rechtsetzungsdokuments und seiner Teildokumente bearbeitet (z. B. Bundesregierung, Bundestag usw.). Dieses Metadatum ist nur in der Entwurfsfassung relevant; in der Verkündungsfassung ist das Literal "nicht-vorhanden" zu nutzen.</xs:documentation>
+               </xs:annotation>
+            </xs:element>
+            <xs:element name="fna" type="xs:token" default="nicht-vorhanden">
+               <xs:annotation>
+                  <xs:documentation>Der Fundstellennachweis A (FNA) weist die Fundstellen der im Bundesgesetzblatt oder Bundesanzeiger veröffentlichten geltenden Gesetze und Rechtsverordnungen der Bundesrepublik Deutschland nach. In der Entwurfsfassung ist das Literal "nicht-vorhanden" zu verwenden.</xs:documentation>
+               </xs:annotation>
+            </xs:element>
+            <xs:element name="gesta" type="xs:token" default="nicht-vorhanden">
+               <xs:annotation>
+                  <xs:documentation>Die GESTA-Ordnungsnummer ist eine von der Parlamentsdokumentation des Bundestages vergebene Kennzeichnung eines Gesetzgebungsverfahrens. Falls sie unbekannt ist, ist das Literal 'nicht-vorhanden' anzugeben.</xs:documentation>
+               </xs:annotation>
+            </xs:element>
+            <xs:element name="gegenstandlos" minOccurs="0">
+               <xs:complexType>
+                  <xs:attribute name="seit" type="xs:date" use="optional">
+                     <xs:annotation>
+                        <xs:documentation>Kennzeichnung, wann das vorliegende Rechtsetzungsdokument als gegenstandslos deklariert wurde.</xs:documentation>
+                     </xs:annotation>
+                  </xs:attribute>
+               </xs:complexType>
+            </xs:element>
+            <xs:element name="migrationsstatusNeuRIS" minOccurs="0">
+               <xs:annotation>
+                  <xs:documentation>Dieses Element wird übergangsweise von NeuRIS gesetzt, um den Status der Normenmigration für dieses Dokument anzugeben.</xs:documentation>
+               </xs:annotation>
+               <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                     <xs:enumeration value="text-vollstaendig-formatierung-vollstaendig">
+                        <xs:annotation>
+                           <xs:documentation>Das Dokument wurde textlich vollständig migriert, die Formatierung konnte ohne Nutzung von class und akn:inline mit refersTo='neuris' migriert werden.</xs:documentation>
+                        </xs:annotation>
+                     </xs:enumeration>
+                     <xs:enumeration value="text-vollstaendig-formatierung-unvollstaendig">
+                        <xs:annotation>
+                           <xs:documentation>Das Dokument wurde textlich vollständig migriert, für einen Teil der Formatierungen wurde allerdings 'class' und/oder akn:inline mit refersTo='neuris' verwendet.</xs:documentation>
+                        </xs:annotation>
+                     </xs:enumeration>
+                     <xs:enumeration value="text-unvollstaendig">
+                        <xs:annotation>
+                           <xs:documentation>Das Dokument wurde textlich noch nicht vollständig bzw. nicht in ein standardkonformes LegalDocML.de-Dokument migriert.</xs:documentation>
+                        </xs:annotation>
+                     </xs:enumeration>
+                  </xs:restriction>
+               </xs:simpleType>
+            </xs:element>
+         </xs:sequence>
+      </xs:complexType>
+   </xs:element>
+   <xs:simpleType name="institution" final="restriction">
+      <xs:restriction base="xs:string">
+         <xs:enumeration value="bundesregierung"/>
+         <xs:enumeration value="bundestag"/>
+         <xs:enumeration value="bundesrat"/>
+         <xs:enumeration value="bundespräsident"/>
+         <xs:enumeration value="bundeskanzler"/>
+         <xs:enumeration value="nicht-vorhanden"/>
+      </xs:restriction>
+   </xs:simpleType>
+   <xs:simpleType name="mindestens-ein-zeichen">
+      <xs:restriction base="xs:token">
+         <xs:minLength value="1"/>
+      </xs:restriction>
+   </xs:simpleType>
+</xs:schema>
