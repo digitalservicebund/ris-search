@@ -69,7 +69,7 @@ public class SitemapJob {
   }
 
   private void createSitemaps(HashSet<String> changed, HashSet<String> deleted)
-      throws JAXBException {
+      throws JAXBException, ObjectStoreServiceException {
     LocalDate now = LocalDate.now();
     List<UrlSet> urlSets = sitemapService.createUrlSets(changed, deleted);
     List<String> urlSetLocations = sitemapService.writeUrlSets(urlSets, now);
@@ -80,12 +80,9 @@ public class SitemapJob {
     }
   }
 
-  private void createAll() throws JAXBException {
+  private void createAll() throws JAXBException, ObjectStoreServiceException {
     HashSet<String> filenames =
-        new HashSet<>(
-            indexCaselawService.getAllCaseLawFilenames().stream()
-                .map(name -> name.replace(".xml", ""))
-                .toList());
+        new HashSet<>(indexCaselawService.getAllCaseLawFilenames().stream().toList());
     createSitemaps(filenames, new HashSet<>());
     indexStatusService.saveStatus(
         STATUS_FILE,
@@ -94,7 +91,8 @@ public class SitemapJob {
                 IndexSyncJob.CHANGELOGS_PREFIX + Instant.now().toString()));
   }
 
-  private void createFromChangelogs(List<String> filePaths) throws JAXBException {
+  private void createFromChangelogs(List<String> filePaths)
+      throws JAXBException, ObjectStoreServiceException {
 
     var changelogsUpToYesterday =
         filePaths.stream()
