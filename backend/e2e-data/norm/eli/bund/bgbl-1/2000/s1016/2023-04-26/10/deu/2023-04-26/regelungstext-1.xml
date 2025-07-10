@@ -346,9 +346,9 @@
                 </akn:p>
             </akn:formula>
         </akn:conclusions>
-        <akn:attachments GUID="32b152d5-aee4-101f-10b1-4b6f6e485fde" eId="anlagen-1">
-            <akn:attachment GUID="ff624c3c-b438-101b-b67e-7bf875f3fbab" eId="anlagen-1_anlage-1">
-                <akn:documentRef GUID="3c39bb1b-7aa1-4b10-af10-f0cb61014bf8" eId="anlagen-1_anlage-1_verweis-1"
+        <akn:attachments GUID="32b152d5-aee4-101f-10b1-4b6f6e485fde" eId="anlagen-n1">
+            <akn:attachment GUID="ff624c3c-b438-101b-b67e-7bf875f3fbab" eId="anlagen-n1_anlage-n1">
+                <akn:documentRef GUID="3c39bb1b-7aa1-4b10-af10-f0cb61014bf8" eId="anlagen-n1_anlage-n1_verweis-n1"
                                  href="eli/bund/bgbl-1/2000/s1016/2023-04-26/10/deu/2023-04-26/anlage-regelungstext-1.xml"
                                  showAs="/akn/ontology/de/concept/documenttype/bund/anlage-regelungstext"/>
             </akn:attachment>
