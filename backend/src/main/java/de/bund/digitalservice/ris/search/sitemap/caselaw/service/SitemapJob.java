@@ -60,16 +60,22 @@ public class SitemapJob {
 
     IndexingState state = indexStatusService.loadStatus(STATUS_FILE);
     String lastProcessedChangelogFile = state.lastProcessedChangelogFile();
+    String lastSuccesfulIndexingJob =
+        indexStatusService
+            .loadStatus(CaseLawIndexSyncJob.CASELAW_STATUS_FILENAME)
+            .lastProcessedChangelogFile();
 
     if (Objects.isNull(lastProcessedChangelogFile)) {
       createAll();
     } else {
-      createFromChangelogs(indexJob.getNewChangelogs(caselawbucket, lastProcessedChangelogFile));
+      if (!Objects.isNull(lastSuccesfulIndexingJob)
+          && lastSuccesfulIndexingJob.compareTo(lastProcessedChangelogFile) >= 0)
+        createFromChangelogs(indexJob.getNewChangelogs(caselawbucket, lastProcessedChangelogFile));
     }
   }
 
   private void createSitemaps(HashSet<String> changed, HashSet<String> deleted)
-      throws JAXBException, ObjectStoreServiceException {
+      throws JAXBException {
     LocalDate now = LocalDate.now();
     List<UrlSet> urlSets = sitemapService.createUrlSets(changed, deleted);
     List<String> urlSetLocations = sitemapService.writeUrlSets(urlSets, now);
@@ -91,8 +97,7 @@ public class SitemapJob {
                 IndexSyncJob.CHANGELOGS_PREFIX + Instant.now().toString()));
   }
 
-  private void createFromChangelogs(List<String> filePaths)
-      throws JAXBException, ObjectStoreServiceException {
+  private void createFromChangelogs(List<String> filePaths) throws JAXBException {
 
     var changelogsUpToYesterday =
         filePaths.stream()

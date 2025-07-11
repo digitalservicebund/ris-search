@@ -1,9 +1,7 @@
 package de.bund.digitalservice.ris.search.sitemap.caselaw.service;
 
-import de.bund.digitalservice.ris.search.caselawhandover.shared.caselawldml.CaseLawLdml;
-import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
-import de.bund.digitalservice.ris.search.repository.objectstorage.CaseLawBucket;
 import de.bund.digitalservice.ris.search.repository.objectstorage.PortalBucket;
+import de.bund.digitalservice.ris.search.service.CaseLawService;
 import de.bund.digitalservice.ris.search.sitemap.caselaw.schema.Sitemap;
 import de.bund.digitalservice.ris.search.sitemap.caselaw.schema.Sitemapindex;
 import de.bund.digitalservice.ris.search.sitemap.caselaw.schema.Url;
@@ -14,44 +12,46 @@ import de.bund.digitalservice.ris.search.sitemap.caselaw.schema.ecli.Metadata;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Marshaller;
-import jakarta.xml.bind.Unmarshaller;
-import java.io.StringReader;
 import java.io.StringWriter;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import org.apache.commons.collections4.ListUtils;
 import org.springframework.stereotype.Service;
 
 @Service
 public class SitemapService {
 
-  CaseLawBucket caseLawBucket;
+  CaseLawService caseLawService;
 
   PortalBucket portalBucket;
 
   JAXBContext jaxbCtx;
 
-  public SitemapService(CaseLawBucket bucket, PortalBucket portalBucket) throws JAXBException {
-    this.caseLawBucket = bucket;
+  public SitemapService(CaseLawService service, PortalBucket portalBucket) throws JAXBException {
+    this.caseLawService = service;
     this.portalBucket = portalBucket;
-    this.jaxbCtx = JAXBContext.newInstance(Sitemapindex.class, UrlSet.class, CaseLawLdml.class);
+    this.jaxbCtx = JAXBContext.newInstance(Sitemapindex.class, UrlSet.class);
   }
 
   public List<UrlSet> createUrlSets(HashSet<String> changed, HashSet<String> deleted)
-      throws JAXBException, ObjectStoreServiceException {
+      throws JAXBException {
 
-    Unmarshaller um = jaxbCtx.createUnmarshaller();
-    List<ChangedDocument> changedDocuments = new ArrayList<>();
-    for (String filename : changed) {
-      Optional<String> content = caseLawBucket.getFileAsString(filename);
-      if (content.isPresent()) {
-        CaseLawLdml ldml = (CaseLawLdml) um.unmarshal(new StringReader(content.get()));
-        changedDocuments.add(new ChangedDocument(ChangedDocument.CHANGED, ldml));
-      }
-    }
+    List<ChangedDocument> changedDocuments =
+        new ArrayList<>(
+            this.caseLawService
+                .getByDocumentNumbers(changed.stream().map(f -> f.replace(".xml", "")).toList())
+                .stream()
+                .map(d -> new ChangedDocument(ChangedDocument.CHANGED, d))
+                .toList());
+
+    changedDocuments.addAll(
+        this.caseLawService
+            .getByDocumentNumbers(deleted.stream().map(f -> f.replace(".xml", "")).toList())
+            .stream()
+            .map(d -> new ChangedDocument(ChangedDocument.DELETED, d))
+            .toList());
 
     if (changedDocuments.isEmpty()) {
       return List.of();
@@ -67,13 +67,12 @@ public class SitemapService {
         changed.stream()
             .map(
                 doc -> {
-                  Url url = new Url().setLoc("location/to/" + doc.document().getUniqueId());
+                  Url url = new Url().setLoc("location/to/" + doc.document().id());
                   url.setDocument(
                       new Document()
                           .setMetadata(
                               new Metadata()
-                                  .setIdentifier(
-                                      new Identifier().setValue(doc.document().getUniqueId()))));
+                                  .setIdentifier(new Identifier().setValue(doc.document().id()))));
                   if (doc.status().equals(ChangedDocument.DELETED)) {
                     url.getDocument().setStatus(Document.STATUS_DELETED);
                   }
