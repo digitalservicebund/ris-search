@@ -291,7 +291,7 @@ class XsltTransformerServiceTest {
   }
 
   @Test
-  void testReturnsPlaceholderSourceInImageTag() throws IOException {
+  void testReturnsSourceInImageTagWhenPresent() throws IOException {
     String image =
         """
             <akn:img src="bild1.jpg" alt="Abbildung" title="bild1.jpg"/>
