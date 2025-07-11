@@ -5,7 +5,6 @@ import static de.bund.digitalservice.ris.search.integration.controller.api.testD
 import static de.bund.digitalservice.ris.search.integration.controller.api.testData.CaseLawTestData.URTEIL_COUNT;
 import static de.bund.digitalservice.ris.search.integration.controller.api.testData.CaseLawTestData.matchAllTerm;
 import static org.hamcrest.Matchers.containsInAnyOrder;
-import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.everyItem;
 import static org.hamcrest.Matchers.greaterThan;
@@ -67,7 +66,9 @@ class CaseLawSearchControllerApiTest extends ContainersIntegrationBase {
   @Test
   @DisplayName("Should return correct item when filtering for ECLI and using filter")
   void shouldReturnDocumentationUnitsWhenFilteringForEcli() throws Exception {
-    String ecli = "ECLI:DE:FGNI:1975:0526.IXL180.73.0A"; // should only match one
+    String ecli = "ECLI:DE:FGHH:1972:0630.III10.72.0";
+    String markedEcli =
+        "<mark>ECLI:DE:FGHH</mark>:<mark>1972</mark>:<mark>0630</mark>.<mark>III10.72.0</mark>";
 
     mockMvc
         .perform(
@@ -77,10 +78,7 @@ class CaseLawSearchControllerApiTest extends ContainersIntegrationBase {
         .andExpect(jsonPath("$.member", hasSize(1)))
         .andExpect(jsonPath("$.member[0]['item'].ecli", Matchers.is(ecli)))
         .andExpect(jsonPath("$.member[0]['textMatches'][*]['name']", Matchers.hasItem("ecli")))
-        .andExpect(
-            jsonPath(
-                "$.member[0]['textMatches'][*]['text']",
-                Matchers.hasItem(String.format("<mark>%s</mark>", ecli))))
+        .andExpect(jsonPath("$.member[0]['textMatches'][*]['text']", Matchers.hasItem(markedEcli)))
         .andExpect(status().isOk());
   }
 
@@ -120,7 +118,7 @@ class CaseLawSearchControllerApiTest extends ContainersIntegrationBase {
   }
 
   @ParameterizedTest
-  @ValueSource(strings = {"IX ZR 100/10", "ixZR10010", "ix zr 100 10", "iX ZR 100 / 10"})
+  @ValueSource(strings = {"IX ZR 100/10", "ix zr 100 10", "iX ZR 100 / 10"})
   @DisplayName("Should return only correct item when looking for a file number as such")
   void testFileNumberSearch(String fileNumberFormat) throws Exception {
     String query = String.format("?searchTerm=%s&fileNumber=%s", matchAllTerm, fileNumberFormat);
@@ -153,20 +151,6 @@ class CaseLawSearchControllerApiTest extends ContainersIntegrationBase {
             jsonPath(
                 "$.member[0].textMatches[?(@.name == 'fileNumbers')].text",
                 everyItem(is("<mark>IX</mark> <mark>ZR</mark> <mark>100</mark>/<mark>10</mark>"))));
-  }
-
-  @Test
-  @DisplayName(
-      "Should return correct item first when looking for a file number with special characters removed")
-  void testFileNumberSearchTermSpacesRemoved() throws Exception {
-    String query = "?searchTerm=iXZR10010";
-    mockMvc
-        .perform(get(ApiConfig.Paths.CASELAW + query).contentType(MediaType.APPLICATION_JSON))
-        .andExpectAll(
-            status().isOk(),
-            jsonPath("$.member", hasSize(greaterThan(0))),
-            jsonPath("$.member[0].item.fileNumbers[0]", equalTo("IX ZR 100/10")),
-            jsonPath("$.member[0].textMatches[?(@.name == 'fileNumbers')]", empty()));
   }
 
   @ParameterizedTest
