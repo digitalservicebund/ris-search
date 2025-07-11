@@ -1,5 +1,5 @@
 import { mount } from "@vue/test-utils";
-import MetadataField from "@/components/MetadataField.vue";
+import MetadataField from "~/components/MetadataField.vue";
 
 describe("MetadataField.vue", () => {
   it("renders correctly with and without class prop", () => {

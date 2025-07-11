@@ -1,14 +1,14 @@
 <script setup lang="ts">
-import Tree from "primevue/tree";
 import Button from "primevue/button";
+import Tree from "primevue/tree";
 import type { TreeNode } from "primevue/treenode";
-import ChevronDownIcon from "~icons/mdi/chevron-down";
-import ChevronUpIcon from "~icons/mdi/chevron-up";
-import IcBaselineUnfoldMore from "~icons/ic/baseline-unfold-more";
-import IcBaselineUnfoldLess from "~icons/ic/baseline-unfold-less";
+import { findNodePath } from "~/utils/tableOfContents";
 import IcBaselineClose from "~icons/ic/baseline-close";
 import IcBaselineFormatListBulleted from "~icons/ic/baseline-format-list-bulleted";
-import { findNodePath } from "@/utils/tableOfContents";
+import IcBaselineUnfoldLess from "~icons/ic/baseline-unfold-less";
+import IcBaselineUnfoldMore from "~icons/ic/baseline-unfold-more";
+import ChevronDownIcon from "~icons/mdi/chevron-down";
+import ChevronUpIcon from "~icons/mdi/chevron-up";
 
 interface Props {
   tableOfContents: TreeNode[];

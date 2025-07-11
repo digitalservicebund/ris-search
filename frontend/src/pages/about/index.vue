@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { StatusCardType } from "~/components/types";
 import StaticPageWrapper from "~/components/CustomLayouts/StaticPageWrapper.vue";
+import { StatusCardType } from "~/components/types";
 
 useHead({ title: "Über den Service" });
 definePageMeta({ alias: ["/ueber"] });

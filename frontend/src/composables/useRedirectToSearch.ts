@@ -1,5 +1,5 @@
-import { useSimpleSearchParamsStore } from "@/stores/searchParams";
 import type { LocationQueryRaw } from "vue-router";
+import { useSimpleSearchParamsStore } from "~/stores/searchParams";
 
 export const useRedirectToSearch = () => {
   const router = useRouter();

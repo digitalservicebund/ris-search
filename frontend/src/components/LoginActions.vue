@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { useRoute } from "nuxt/app";
-import { redirectToLogin } from "@/utils/redirectToLogin";
 import IconPermIdentity from "virtual:icons/ic/baseline-perm-identity";
+import { redirectToLogin } from "~/utils/redirectToLogin";
 
 const { loggedIn, user, clear } = useUserSession();
 const route = useRoute();

@@ -1,6 +1,6 @@
 import type { TabPassThroughOptions } from "primevue/tab";
-import type { TabPanelPassThroughOptions } from "primevue/tabpanel";
 import type { TabListPassThroughOptions } from "primevue/tablist";
+import type { TabPanelPassThroughOptions } from "primevue/tabpanel";
 
 export const tabStyles: TabPassThroughOptions = {
   root: ({ context }) => {

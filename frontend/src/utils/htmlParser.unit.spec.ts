@@ -1,5 +1,5 @@
-import { getTextFromElements } from "./htmlParser";
 import { afterEach } from "vitest";
+import { getTextFromElements } from "./htmlParser";
 
 describe("getTextFromElements", () => {
   afterEach(() => {

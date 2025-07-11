@@ -1,15 +1,15 @@
+import { mockNuxtImport } from "@nuxt/test-utils/runtime";
 import { createPinia, setActivePinia } from "pinia";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { nextTick } from "vue";
+import type { RouteLocationNormalized } from "#vue-router";
+import { sortMode } from "~/components/types";
+import { defaultParams } from "~/stores/searchParams/getInitialState";
 import {
   type QueryParams,
   useSimpleSearchParamsStore,
-} from "@/stores/searchParams/index";
-import { DocumentKind } from "@/types";
-import { mockNuxtImport } from "@nuxt/test-utils/runtime";
-import { defaultParams } from "@/stores/searchParams/getInitialState";
-import { sortMode } from "@/components/types";
-import type { RouteLocationNormalized } from "#vue-router";
+} from "~/stores/searchParams/index";
+import { DocumentKind } from "~/types";
 
 type MockRoute = Pick<RouteLocationNormalized, "path" | "query">;
 const mockRouteInitialState = {

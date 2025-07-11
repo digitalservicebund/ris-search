@@ -1,11 +1,11 @@
 // @vitest-environment node
-import type { MatchersV3 } from "@pact-foundation/pact";
-import { PactV4, SpecificationVersion } from "@pact-foundation/pact";
-import * as path from "node:path";
 import fs from "fs";
+import * as path from "node:path";
+import { PactV4, SpecificationVersion } from "@pact-foundation/pact";
+import type { MatchersV3 } from "@pact-foundation/pact";
 import axios, { type AxiosResponse } from "axios";
-import type { CaseLaw, LegislationWork } from "@/types";
 import { describe, expect, it } from "vitest";
+import type { CaseLaw, LegislationWork } from "~/types";
 
 describe("GET /case-law/document", () => {
   // Create a 'pact' between the two applications in the integration we are testing
@@ -257,6 +257,13 @@ describe("GET /case-law/document", () => {
         "@id": "/v1/case-law/12345/xml",
         contentUrl: "/v1/case-law/12345.xml",
         encodingFormat: "application/xml",
+        inLanguage: "de",
+      },
+      {
+        "@type": "DecisionObject",
+        "@id": "/v1/case-law/12345/zip",
+        contentUrl: "/v1/case-law/12345.zip",
+        encodingFormat: "application/zip",
         inLanguage: "de",
       },
     ],

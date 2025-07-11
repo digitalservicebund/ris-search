@@ -58,9 +58,12 @@ public class XmlDocument {
   }
 
   public Optional<Node> getFirstMatchedNodeByXpath(String xpath) {
+    return getFirstMatchedNodeByXpath(xpath, document);
+  }
+
+  public Optional<Node> getFirstMatchedNodeByXpath(String xpath, Node item) {
     try {
-      return Optional.ofNullable(
-          (Node) xpathInstance.evaluate(xpath, document, XPathConstants.NODE));
+      return Optional.ofNullable((Node) xpathInstance.evaluate(xpath, item, XPathConstants.NODE));
     } catch (XPathExpressionException e) {
       return Optional.empty();
     }

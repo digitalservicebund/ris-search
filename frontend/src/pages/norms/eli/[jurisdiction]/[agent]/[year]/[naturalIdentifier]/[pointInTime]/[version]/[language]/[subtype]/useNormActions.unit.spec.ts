@@ -1,8 +1,8 @@
+import { mockNuxtImport } from "@nuxt/test-utils/runtime";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { ref } from "vue";
 import { useNormActions } from "./useNormActions";
 import type { LegislationWork } from "~/types";
-import { mockNuxtImport } from "@nuxt/test-utils/runtime";
 
 const { mockToastAdd, mockNavigateTo } = vi.hoisted(() => ({
   mockToastAdd: vi.fn(),

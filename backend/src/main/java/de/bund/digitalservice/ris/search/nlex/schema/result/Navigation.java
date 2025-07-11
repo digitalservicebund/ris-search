@@ -16,5 +16,5 @@ public class Navigation {
 
   private Page page;
 
-  @XmlElement private int hits;
+  @XmlElement private Long hits;
 }

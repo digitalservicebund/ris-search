@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { mockNuxtImport } from "@nuxt/test-utils/runtime";
+import { mount } from "@vue/test-utils";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { useIntersectionObserver } from "./useIntersectionObserver";
-import { mount } from "@vue/test-utils";
-import { mockNuxtImport } from "@nuxt/test-utils/runtime";
 
 mockNuxtImport("useRoute", () => {
   return () => ({

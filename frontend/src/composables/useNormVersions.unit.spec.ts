@@ -1,5 +1,5 @@
-import { ref } from "vue";
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import { ref } from "vue";
 import { useNormVersions } from "./useNormVersions";
 import { useFetch } from "#app";
 import type { LegislationWork, SearchResult } from "~/types";

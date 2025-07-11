@@ -59,7 +59,7 @@ class XsltTransformerServiceTest {
     "blockList.xml, blockList.html, Should transform a blockList",
     "preformatted.xml, preformatted.html, Should transform preformatted paragraphs",
     "proprietary.xml, proprietary.html, Should transform proprietary metadata",
-    "offenestruktur-without-title.xml, offenestruktur-without-title.html, Should transform an attachment without title",
+    "anlage-regelungstext-without-title.xml, anlage-regelungstext-without-title.html, Should transform an attachment without title",
   })
   void testTransformNormLegalDocMlFull(
       String inputFileName, String expectedFileName, String testName) throws IOException {
@@ -90,12 +90,12 @@ class XsltTransformerServiceTest {
 
     Mockito.when(
             normsBucketMock.getStream(
-                "eli/bund/bgbl-1/0000/s1000/2000-01-01/1/deu/2000-01-01/offenestruktur-1.xml"))
-        .thenReturn(makeInputStream.apply("offenestruktur-1.xml"));
+                "eli/bund/bgbl-1/0000/s1000/2000-01-01/1/deu/2000-01-01/anlage-regelungstext-1.xml"))
+        .thenReturn(makeInputStream.apply("anlage-regelungstext-1.xml"));
     Mockito.when(
             normsBucketMock.getStream(
-                "eli/bund/bgbl-1/0000/s1000/2000-01-01/1/deu/2000-01-01/offenestruktur-2.xml"))
-        .thenReturn(makeInputStream.apply("offenestruktur-2.xml"));
+                "eli/bund/bgbl-1/0000/s1000/2000-01-01/1/deu/2000-01-01/anlage-regelungstext-2.xml"))
+        .thenReturn(makeInputStream.apply("anlage-regelungstext-2.xml"));
 
     var actualHtml = service.transformNorm(bytes, "subtype", RESOURCES_BASE_PATH);
 
@@ -108,13 +108,15 @@ class XsltTransformerServiceTest {
   @Test
   void testHandlesMissingAttachment() throws IOException {
     Mockito.reset(normsBucketMock);
+    // same file as in testTransformNormWithAttachments, but normsBucketMock isn't set up to serve
+    // included files
     byte[] bytes = Files.readAllBytes(Path.of(resourcesPath, "attachments.xml"));
 
     FileTransformationException exception =
         Assertions.assertThrows(
             FileTransformationException.class,
             () -> service.transformNorm(bytes, "subtype", RESOURCES_BASE_PATH));
-    assertThat(exception.getMessage()).endsWith("offenestruktur-1.xml");
+    assertThat(exception.getMessage()).endsWith("anlage-regelungstext-1.xml");
   }
 
   @Test
@@ -162,7 +164,8 @@ class XsltTransformerServiceTest {
   @Test
   void testTransformsCaselawHeaderCorrectly() throws IOException {
     var actualXml = caseLawLdmlTemplateUtils.getXmlFromTemplate(null);
-    var actualHtml = service.transformCaseLaw(actualXml.getBytes(StandardCharsets.UTF_8));
+    var actualHtml =
+        service.transformCaseLaw(actualXml.getBytes(StandardCharsets.UTF_8), "api/v1/");
     var expectedHeader =
         """
         <h1 id="title">
@@ -207,7 +210,8 @@ class XsltTransformerServiceTest {
   @Test
   void testTransformsCaselawBorderNumberCorrectly() throws IOException {
     var actualXml = caseLawLdmlTemplateUtils.getXmlFromTemplate(null);
-    var actualHtml = service.transformCaseLaw(actualXml.getBytes(StandardCharsets.UTF_8));
+    var actualHtml =
+        service.transformCaseLaw(actualXml.getBytes(StandardCharsets.UTF_8), "api/v1/");
     var expectedBorderNumber =
         """
             <dl class="border-number">
@@ -233,7 +237,8 @@ class XsltTransformerServiceTest {
   @Test
   void testTransformsCaselawTableCorrectlyWithStyles() throws IOException {
     var actualXml = caseLawLdmlTemplateUtils.getXmlFromTemplate(null);
-    var actualHtml = service.transformCaseLaw(actualXml.getBytes(StandardCharsets.UTF_8));
+    var actualHtml =
+        service.transformCaseLaw(actualXml.getBytes(StandardCharsets.UTF_8), "api/v1/");
     var expectedTable =
         """
             <table cellpadding="2" cellspacing="0">
@@ -279,25 +284,27 @@ class XsltTransformerServiceTest {
     Map<String, Object> context = new HashMap<>();
     context.put("outline", text);
     var actualXml = caseLawLdmlTemplateUtils.getXmlFromTemplate(context);
-    var actualHtml = service.transformCaseLaw(actualXml.getBytes(StandardCharsets.UTF_8));
+    var actualHtml =
+        service.transformCaseLaw(actualXml.getBytes(StandardCharsets.UTF_8), "api/v1/");
     String expectedSubstring = "<%s>Das ist der Leitsatz</%s>".formatted(expected, expected);
     assertThat(actualHtml).contains(expectedSubstring);
   }
 
   @Test
-  void testReturnsPlaceholderSourceInImageTag() throws IOException {
+  void testReturnsSourceInImageTagWhenPresent() throws IOException {
     String image =
         """
-            <akn:img src="original/path/to/image" alt="Abbildung" title="bild1.jpg"/>
+            <akn:img src="bild1.jpg" alt="Abbildung" title="bild1.jpg"/>
             """;
     Map<String, Object> context = new HashMap<>();
     context.put("outline", image);
 
     var actualXml = caseLawLdmlTemplateUtils.getXmlFromTemplate(context);
-    var actualHtml = service.transformCaseLaw(actualXml.getBytes(StandardCharsets.UTF_8));
+    var actualHtml =
+        service.transformCaseLaw(actualXml.getBytes(StandardCharsets.UTF_8), "api/v1/");
     var expectedImage =
         """
-            <img src="/placeholder.png" alt="Platzhalterbild. Das Bild wird bald hinzugefügt.">
+            <img src="api/v1/bild1.jpg" alt="Abbildung" title="bild1.jpg">
             """;
     assertTrue(StringUtils.deleteWhitespace(actualHtml).contains(deleteWhitespace(expectedImage)));
   }

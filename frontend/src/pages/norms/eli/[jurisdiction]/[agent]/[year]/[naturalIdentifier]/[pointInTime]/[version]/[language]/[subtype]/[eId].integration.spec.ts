@@ -1,8 +1,8 @@
 import { mockNuxtImport, mountSuspended } from "@nuxt/test-utils/runtime";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import ArticlePage from "./[eId].vue";
-import type { LegislationWork } from "~/types";
 import type { NormArticleContent } from "./useNormData";
+import type { LegislationWork } from "~/types";
 
 const headingInnerHtml = `<span class="akn-num">§ 1</span> <span class="akn-heading">Erster Paragraf<sup>1</sup></span>`;
 const headingHtml = `<h2 class="einzelvorschrift">${headingInnerHtml}</h2>`;

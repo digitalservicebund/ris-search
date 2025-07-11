@@ -1,7 +1,7 @@
 import { mountSuspended } from "@nuxt/test-utils/runtime";
+import type { VueWrapper } from "@vue/test-utils";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import TableOfContents from "./TableOfContents.vue";
-import type { VueWrapper } from "@vue/test-utils";
 
 describe("TableOfContents.vue", async () => {
   let wrapper: VueWrapper;

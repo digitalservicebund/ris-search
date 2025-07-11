@@ -1,20 +1,20 @@
+import _ from "lodash";
 import { defineStore } from "pinia";
-import { DocumentKind } from "@/types";
-import type { DateSearchMode } from "@/stores/searchParams/dateParams";
-import { useDateParams } from "@/stores/searchParams/dateParams";
+import { computed, ref, watch } from "vue";
+import type { LocationQueryRaw, Router } from "vue-router";
 import {
   addDefaults,
   defaultParams,
   getInitialState,
   omitDefaults,
 } from "./getInitialState";
-import { computed, ref, watch } from "vue";
-import { sortMode } from "@/components/types";
 import type { LocationQuery } from "#vue-router";
-import _ from "lodash";
-import type { LocationQueryRaw, Router } from "vue-router";
+import { sortMode } from "~/components/types";
+import type { DateSearchMode } from "~/stores/searchParams/dateParams";
+import { useDateParams } from "~/stores/searchParams/dateParams";
+import { DocumentKind } from "~/types";
 
-export { DateSearchMode } from "@/stores/searchParams/dateParams";
+export { DateSearchMode } from "~/stores/searchParams/dateParams";
 
 export type DocumentKindSelectable = Omit<DocumentKind, DocumentKind.All>;
 

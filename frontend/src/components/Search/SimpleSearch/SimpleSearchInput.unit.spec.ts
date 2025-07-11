@@ -1,5 +1,5 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
 import { mount, type VueWrapper } from "@vue/test-utils";
+import { describe, it, expect, vi, beforeEach } from "vitest";
 import { ref } from "vue";
 import SimpleSearchInput from "./SimpleSearchInput.vue";
 

@@ -1,9 +1,9 @@
-import ConsentBanner from "./ConsentBanner.vue";
-import { mount, RouterLinkStub } from "@vue/test-utils";
-import { createTestingPinia } from "@pinia/testing";
-import { vi } from "vitest";
-import { getPostHogConfig } from "~/utils/testing/postHogUtils";
 import { mockNuxtImport } from "@nuxt/test-utils/runtime";
+import { createTestingPinia } from "@pinia/testing";
+import { mount, RouterLinkStub } from "@vue/test-utils";
+import { vi } from "vitest";
+import ConsentBanner from "./ConsentBanner.vue";
+import { getPostHogConfig } from "~/utils/testing/postHogUtils";
 
 const { useRuntimeConfigMock } = vi.hoisted(() => {
   return {

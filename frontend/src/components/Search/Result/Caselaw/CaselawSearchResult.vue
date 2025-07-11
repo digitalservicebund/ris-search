@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import type { CaseLaw, SearchResult, TextMatch } from "@/types";
-import { addEllipsis, removeOuterParentheses } from "@/utils/textFormatting";
-import GavelIcon from "virtual:icons/material-symbols/gavel";
-import { formattedDate } from "@/utils/dateFormatting";
 import _ from "lodash";
+import GavelIcon from "virtual:icons/material-symbols/gavel";
+import type { CaseLaw, SearchResult, TextMatch } from "~/types";
+import { formattedDate } from "~/utils/dateFormatting";
 import { sanitizeSearchResult } from "~/utils/sanitize";
+import { addEllipsis, removeOuterParentheses } from "~/utils/textFormatting";
 
 const postHogStore = usePostHogStore();
 

@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import Select from "primevue/select";
 import {
   type FieldType,
   type Field,
@@ -8,9 +9,8 @@ import {
   availableInternalFeatures,
   type Feature,
 } from "./data";
-import { isInternalProfile, isPublicProfile } from "@/utils/config";
-import type { DropdownItem } from "@/components/types";
-import Select from "primevue/select";
+import type { DropdownItem } from "~/components/types";
+import { isInternalProfile, isPublicProfile } from "~/utils/config";
 
 definePageMeta({ alias: "/erweiterte-suche/hilfe" });
 

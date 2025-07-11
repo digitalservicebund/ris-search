@@ -1,6 +1,6 @@
+import { mockNuxtImport } from "@nuxt/test-utils/runtime";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { ref } from "vue";
-import { mockNuxtImport } from "@nuxt/test-utils/runtime";
 import { useCaseLawActions } from "./useCaseLawActions";
 import type { CaseLaw } from "~/types";
 

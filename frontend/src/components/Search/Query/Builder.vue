@@ -1,7 +1,9 @@
 <script setup lang="ts">
-import { computed, reactive, ref } from "vue";
 import { toString } from "@hyperdx/lucene";
 import Button from "primevue/button";
+import InputText from "primevue/inputtext";
+import Select from "primevue/select";
+import { computed, reactive, ref } from "vue";
 import {
   fields,
   fieldTypeToLogicOptions,
@@ -10,8 +12,6 @@ import {
   rowLogicOperators,
 } from "./data";
 import { type AstNode, buildTerm } from "~/components/Search/Query/logic";
-import Select from "primevue/select";
-import InputText from "primevue/inputtext";
 
 const userInputDisabled = ref(true);
 onNuxtReady(() => {

@@ -1,9 +1,9 @@
 import { mount } from "@vue/test-utils";
-import Accordion from "@/components/Accordion.vue";
-import GravityUiCircleChevronDownFill from "~icons/gravity-ui/circle-chevron-down-fill";
+import Accordion from "~/components/Accordion.vue";
 import GravityUiCircleChevronDown from "~icons/gravity-ui/circle-chevron-down";
-import GravityUiCircleChevronUpFill from "~icons/gravity-ui/circle-chevron-up-fill";
+import GravityUiCircleChevronDownFill from "~icons/gravity-ui/circle-chevron-down-fill";
 import GravityUiCircleChevronUp from "~icons/gravity-ui/circle-chevron-up";
+import GravityUiCircleChevronUpFill from "~icons/gravity-ui/circle-chevron-up-fill";
 
 describe("Accordion.vue", () => {
   it("changes icon from normal to filled on hover", async () => {

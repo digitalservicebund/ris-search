@@ -1,7 +1,7 @@
-import { expect, test } from "@playwright/test";
-import AxeBuilder from "@axe-core/playwright";
-import { createHtmlReport } from "axe-html-reporter";
 import path from "node:path";
+import AxeBuilder from "@axe-core/playwright";
+import { expect, test } from "@playwright/test";
+import { createHtmlReport } from "axe-html-reporter";
 
 const testPages = [
   {

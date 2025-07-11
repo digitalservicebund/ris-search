@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useSentry } from "@/composables/useSentry";
+import { useSentry } from "~/composables/useSentry";
 useHead({
   titleTemplate: (pageTitle) =>
     pageTitle

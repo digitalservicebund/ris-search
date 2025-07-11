@@ -1,5 +1,5 @@
-import type { LegislationWork, SearchResult } from "~/types";
 import _ from "lodash";
+import type { LegislationWork, SearchResult } from "~/types";
 import { getCurrentDateInGermanyFormatted } from "~/utils/dateFormatting";
 
 export function getMostRelevantExpression(

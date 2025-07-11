@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import { storeToRefs } from "pinia";
-import { usePostHogStore } from "~/stores/usePostHogStore";
-
 import PrimeVueButton from "primevue/button";
+import { usePostHogStore } from "~/stores/usePostHogStore";
 import IconCheck from "~icons/ic/check";
 import IconClose from "~icons/ic/close";
 

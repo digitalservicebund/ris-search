@@ -1,5 +1,7 @@
 package de.bund.digitalservice.ris.search.unit.nlex.schema.result;
 
+import static org.testcontainers.shaded.org.bouncycastle.util.Longs.valueOf;
+
 import de.bund.digitalservice.ris.TestXmlUtils;
 import de.bund.digitalservice.ris.search.nlex.schema.result.Content;
 import de.bund.digitalservice.ris.search.nlex.schema.result.Document;
@@ -104,7 +106,7 @@ class RequestResponseSchemaTest {
     content.setParaList(List.of(para1, para2));
     doc.setContent(content);
     Navigation navigation = new Navigation();
-    navigation.setHits(1);
+    navigation.setHits(valueOf(1));
     navigation.setRequestId("uuid-1111-1111");
 
     Page page = new Page();

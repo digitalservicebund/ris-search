@@ -1,7 +1,7 @@
+import { mockNuxtImport } from "@nuxt/test-utils/runtime";
 import { describe, it, expect, vi, type Mock } from "vitest";
 import { axiosInstance } from "./httpClient";
 import { advancedSearch } from "./searchService";
-import { mockNuxtImport } from "@nuxt/test-utils/runtime";
 import { DocumentKind } from "~/types";
 
 vi.mock("./httpClient");

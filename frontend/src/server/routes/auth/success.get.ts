@@ -1,5 +1,5 @@
 import { type H3Event, sendRedirect } from "h3";
-import { authRedirectCookieName } from "@/server/auth";
+import { authRedirectCookieName } from "~/server/auth";
 
 export default defineEventHandler((event: H3Event) => {
   const redirectUrl = getCookie(event, authRedirectCookieName);

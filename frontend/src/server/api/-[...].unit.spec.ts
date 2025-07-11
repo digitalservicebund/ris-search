@@ -1,9 +1,9 @@
 // @ts-nocheck
+import { mockNuxtImport } from "@nuxt/test-utils/runtime";
+import { HttpStatusCode } from "axios";
+import type { EventHandlerRequest, H3Event } from "h3";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import middleware from "./[...]";
-import { HttpStatusCode } from "axios";
-import { mockNuxtImport } from "@nuxt/test-utils/runtime";
-import type { EventHandlerRequest, H3Event } from "h3";
 
 const { getRequestURL, mockUseRuntimeConfig } = vi.hoisted(() => {
   return { getRequestURL: vi.fn(), mockUseRuntimeConfig: vi.fn() };

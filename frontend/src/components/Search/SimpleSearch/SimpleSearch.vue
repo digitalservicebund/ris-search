@@ -1,23 +1,23 @@
 <script setup lang="ts">
-import CategoryFilter from "@/components/Search/SimpleSearch/CategoryFilter/CategoryFilter.vue";
-import DateRangeFilter from "@/components/Search/SimpleSearch/DateRangeFilter.vue";
-import CourtFilter from "@/components/Search/SimpleSearch/CourtFilter.vue";
-import { useSimpleSearchParamsStore } from "@/stores/searchParams";
 import { storeToRefs } from "pinia";
-import SearchResult from "@/components/Search/Result/SearchResult.vue";
-import ItemsPerPageDropdown from "@/components/Search/SimpleSearch/ItemsPerPageDropdown.vue";
-import SimpleSearchInput from "@/components/Search/SimpleSearch/SimpleSearchInput.vue";
-import SortSelect from "@/components/Search/SortSelect.vue";
-import { DocumentKind } from "@/types";
-import { buildResultCountString } from "~/utils/paginationUtils";
-import { getCurrentDateInGermanyFormatted } from "~/utils/dateFormatting";
 import Message from "primevue/message";
-import type { Page } from "~/components/Pagination/Pagination";
 import {
   convertParams,
   getUrl,
   type SearchEndpointParams,
 } from "./SimpleSearch.logic";
+import type { Page } from "~/components/Pagination/Pagination";
+import SearchResult from "~/components/Search/Result/SearchResult.vue";
+import CategoryFilter from "~/components/Search/SimpleSearch/CategoryFilter/CategoryFilter.vue";
+import CourtFilter from "~/components/Search/SimpleSearch/CourtFilter.vue";
+import DateRangeFilter from "~/components/Search/SimpleSearch/DateRangeFilter.vue";
+import ItemsPerPageDropdown from "~/components/Search/SimpleSearch/ItemsPerPageDropdown.vue";
+import SimpleSearchInput from "~/components/Search/SimpleSearch/SimpleSearchInput.vue";
+import SortSelect from "~/components/Search/SortSelect.vue";
+import { useSimpleSearchParamsStore } from "~/stores/searchParams";
+import { DocumentKind } from "~/types";
+import { getCurrentDateInGermanyFormatted } from "~/utils/dateFormatting";
+import { buildResultCountString } from "~/utils/paginationUtils";
 
 const store = useSimpleSearchParamsStore();
 const values = storeToRefs(store);
@@ -118,7 +118,7 @@ useHead({ title });
       </legend>
       <CategoryFilter />
       <CourtFilter />
-      <DateRangeFilter />
+      <DateRangeFilter v-if="documentKind === DocumentKind.CaseLaw" />
     </fieldset>
     <main id="main" class="w-full flex-col justify-end gap-8 lg:w-9/12">
       <h1 class="sr-only">Suchergebnisse</h1>

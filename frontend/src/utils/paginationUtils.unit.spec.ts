@@ -1,8 +1,8 @@
 // @vitest-environment node
 import { describe, it, expect } from "vitest";
-import { buildItemsOnPageString } from "~/utils/paginationUtils";
-import type { AnyDocument, SearchResult } from "~/types";
 import type { Page } from "~/components/Pagination/Pagination";
+import type { AnyDocument, SearchResult } from "~/types";
+import { buildItemsOnPageString } from "~/utils/paginationUtils";
 
 function getPage(params: {
   page: number;

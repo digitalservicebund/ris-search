@@ -1,7 +1,7 @@
 import { config, mount } from "@vue/test-utils";
+import { HttpStatusCode } from "axios";
 import { describe } from "vitest";
 import ErrorPage from "./error.vue";
-import { HttpStatusCode } from "axios";
 
 const mountComponent = (statusCode: number) =>
   mount(ErrorPage, {

@@ -1,7 +1,7 @@
+import { HttpStatusCode } from "axios";
+import type { H3Event } from "h3";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { requireAccessTokenWithRefresh } from "./auth";
-import type { H3Event } from "h3";
-import { HttpStatusCode } from "axios";
 
 interface CustomNodeJsGlobal extends NodeJS.Global {
   getUserSession: () => Promise<unknown>;

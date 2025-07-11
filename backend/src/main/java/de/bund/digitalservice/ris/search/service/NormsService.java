@@ -2,7 +2,6 @@ package de.bund.digitalservice.ris.search.service;
 
 import static org.opensearch.index.query.QueryBuilders.queryStringQuery;
 
-import de.bund.digitalservice.ris.search.exception.NoSuchKeyException;
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.models.api.parameters.NormsSearchParams;
 import de.bund.digitalservice.ris.search.models.api.parameters.UniversalSearchParams;
@@ -11,17 +10,15 @@ import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
 import de.bund.digitalservice.ris.search.repository.opensearch.NormsRepository;
 import de.bund.digitalservice.ris.search.service.helper.FetchSourceFilterDefinitions;
 import de.bund.digitalservice.ris.search.service.helper.UniversalDocumentQueryBuilder;
+import de.bund.digitalservice.ris.search.service.helper.ZipManager;
 import de.bund.digitalservice.ris.search.utils.PageUtils;
 import de.bund.digitalservice.ris.search.utils.RisHighlightBuilder;
 import de.bund.digitalservice.ris.search.utils.eli.ExpressionEli;
 import de.bund.digitalservice.ris.search.utils.eli.ManifestationEli;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
 import java.util.Optional;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
 import org.jetbrains.annotations.Nullable;
 import org.opensearch.action.search.SearchType;
 import org.opensearch.data.client.orhlc.NativeSearchQuery;
@@ -132,29 +129,7 @@ public class NormsService {
   }
 
   public void writeZipArchive(List<String> keys, OutputStream outputStream) throws IOException {
-    try (ZipOutputStream zipOut = new ZipOutputStream(outputStream)) {
-      for (String key : keys) {
-        appendZipEntryFromS3(key, zipOut);
-      }
-    } catch (IOException e) {
-      throw new IOException("error building ZipOutputStream with keys %s".formatted(keys), e);
-    }
-  }
-
-  private void appendZipEntryFromS3(String key, ZipOutputStream zipOut) throws IOException {
-    String suffix = key.substring(key.lastIndexOf('/') + 1);
-    ZipEntry zipEntry = new ZipEntry(suffix);
-    zipOut.putNextEntry(zipEntry);
-
-    try (InputStream objectInputStream = normsBucket.getStream(key)) {
-      byte[] bytes = new byte[4096];
-      int length;
-      while ((length = objectInputStream.read(bytes)) >= 0) {
-        zipOut.write(bytes, 0, length);
-      }
-    } catch (IOException | NoSuchKeyException e) {
-      throw new IOException("error adding item with key %s".formatted(key), e);
-    }
+    ZipManager.writeZipArchive(normsBucket, keys, outputStream);
   }
 
   public List<String> getAllFilenamesByPath(String prefix) {

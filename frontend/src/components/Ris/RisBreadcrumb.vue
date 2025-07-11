@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import HomeOutlineIcon from "~icons/material-symbols/home-outline";
-import HomeFilledIcon from "~icons/material-symbols/home";
-import ChevronRightIcon from "~icons/material-symbols/chevron-right";
 import { DocumentKind } from "~/types";
+import ChevronRightIcon from "~icons/material-symbols/chevron-right";
+import HomeFilledIcon from "~icons/material-symbols/home";
+import HomeOutlineIcon from "~icons/material-symbols/home-outline";
 
 export interface BreadcrumbItem {
   label: string;

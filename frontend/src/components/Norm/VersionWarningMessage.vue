@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { LegislationWork } from "~/types";
 import Message from "primevue/message";
+import type { LegislationWork } from "~/types";
 import IcBaselineHistory from "~icons/ic/baseline-history";
 import IcBaselineUpdate from "~icons/ic/baseline-update";
 

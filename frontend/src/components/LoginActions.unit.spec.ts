@@ -1,8 +1,8 @@
-import LoginActions from "./LoginActions.vue";
 import { mockNuxtImport } from "@nuxt/test-utils/runtime";
-import { describe, it, vi, expect } from "vitest";
 import { mount } from "@vue/test-utils";
-import { redirectToLogin } from "@/utils/redirectToLogin";
+import { describe, it, vi, expect } from "vitest";
+import LoginActions from "./LoginActions.vue";
+import { redirectToLogin } from "~/utils/redirectToLogin";
 
 const { useAuthMock, mockUseAuth } = vi.hoisted(() => {
   const mockUseAuth = {
@@ -31,7 +31,7 @@ describe("LoginActions", async () => {
       "fetch",
       vi.fn().mockImplementation(() => Promise.resolve()),
     );
-    vi.mock("@/utils/redirectToLogin");
+    vi.mock("~/utils/redirectToLogin");
 
     const wrapper = mount(LoginActions, {
       shallow: true,

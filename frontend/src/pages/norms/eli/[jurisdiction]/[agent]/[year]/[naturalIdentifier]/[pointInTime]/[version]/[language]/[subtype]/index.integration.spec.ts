@@ -1,10 +1,10 @@
 import { mockNuxtImport, mountSuspended } from "@nuxt/test-utils/runtime";
+import type { VueWrapper } from "@vue/test-utils";
 import { describe, it, expect, vi } from "vitest";
 import Index from "./index.vue";
-import type { LegislationWork } from "~/types";
-import type { VueWrapper } from "@vue/test-utils";
-import type { NormContent } from "~/pages/norms/eli/[jurisdiction]/[agent]/[year]/[naturalIdentifier]/[pointInTime]/[version]/[language]/[subtype]/useNormData";
 import NormMetadataFields from "~/components/Norm/NormMetadataFields.vue";
+import type { NormContent } from "~/pages/norms/eli/[jurisdiction]/[agent]/[year]/[naturalIdentifier]/[pointInTime]/[version]/[language]/[subtype]/useNormData";
+import type { LegislationWork } from "~/types";
 
 const mocks = vi.hoisted(() => {
   return {

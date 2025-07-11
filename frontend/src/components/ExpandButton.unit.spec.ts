@@ -1,7 +1,7 @@
 import { mount } from "@vue/test-utils";
-import ExpandButton from "@/components/ExpandButton.vue";
-import GravityUiCircleChevronDownFill from "~icons/gravity-ui/circle-chevron-down-fill";
+import ExpandButton from "~/components/ExpandButton.vue";
 import GravityUiCircleChevronDown from "~icons/gravity-ui/circle-chevron-down";
+import GravityUiCircleChevronDownFill from "~icons/gravity-ui/circle-chevron-down-fill";
 
 describe("ExpandButton.vue", () => {
   it("changes icon from normal to filled on hover", async () => {

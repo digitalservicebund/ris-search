@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import GravityUiCircleChevronDownFill from "~icons/gravity-ui/circle-chevron-down-fill";
 import GravityUiCircleChevronDown from "~icons/gravity-ui/circle-chevron-down";
+import GravityUiCircleChevronDownFill from "~icons/gravity-ui/circle-chevron-down-fill";
 
 const value = defineModel<boolean>();
 const isHovered = ref(false);

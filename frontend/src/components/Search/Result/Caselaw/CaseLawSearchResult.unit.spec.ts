@@ -1,8 +1,8 @@
-import { RouterLinkStub } from "@vue/test-utils";
-import CaselawRecord from "@/components/Search/Result/Caselaw/CaselawSearchResult.vue";
-import { describe, expect, it } from "vitest";
-import type { CaseLaw, SearchResult, TextMatch } from "@/types";
 import { mountSuspended } from "@nuxt/test-utils/runtime";
+import { RouterLinkStub } from "@vue/test-utils";
+import { describe, expect, it } from "vitest";
+import CaselawRecord from "~/components/Search/Result/Caselaw/CaselawSearchResult.vue";
+import type { CaseLaw, SearchResult, TextMatch } from "~/types";
 
 const searchResult: SearchResult<CaseLaw> = {
   item: {

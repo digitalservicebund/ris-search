@@ -1,9 +1,9 @@
-import { describe, it, expect, vi } from "vitest";
-import type { VueWrapper } from "@vue/test-utils";
-import { mount, RouterLinkStub } from "@vue/test-utils";
-import CookieSettings from "~/pages/cookie-settings/index.vue";
-import { createTestingPinia } from "@pinia/testing";
 import { mockNuxtImport } from "@nuxt/test-utils/runtime";
+import { createTestingPinia } from "@pinia/testing";
+import { mount, RouterLinkStub } from "@vue/test-utils";
+import type { VueWrapper } from "@vue/test-utils";
+import { describe, it, expect, vi } from "vitest";
+import CookieSettings from "~/pages/cookie-settings/index.vue";
 import { getPostHogConfig } from "~/utils/testing/postHogUtils";
 
 const { useRuntimeConfigMock } = vi.hoisted(() => {

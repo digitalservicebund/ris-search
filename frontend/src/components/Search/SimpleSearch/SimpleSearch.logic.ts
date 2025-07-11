@@ -1,6 +1,6 @@
+import { useBackendURL } from "~/composables/useBackendURL";
 import type { QueryParams } from "~/stores/searchParams";
 import { DocumentKind } from "~/types";
-import { useBackendURL } from "~/composables/useBackendURL";
 
 export function getUrl(category?: string): string {
   const backendURL = useBackendURL();

@@ -1,12 +1,12 @@
 import _ from "lodash";
-import { DocumentKind } from "@/types";
+import { dateSearchFromQuery, DateSearchMode } from "./dateParams";
 import type {
   LocationQuery,
   LocationQueryRaw,
   LocationQueryValue,
 } from "#vue-router";
-import { dateSearchFromQuery, DateSearchMode } from "./dateParams";
-import type { QueryParams } from "@/stores/searchParams/index";
+import type { QueryParams } from "~/stores/searchParams/index";
+import { DocumentKind } from "~/types";
 
 export const defaultParams: QueryParams = {
   query: "",
