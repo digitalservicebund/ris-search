@@ -20,7 +20,6 @@ public class LuceneQueryTools {
   private static final Logger logger = LogManager.getLogger(LuceneQueryTools.class);
 
   private static final StandardAnalyzer analyzer = new StandardAnalyzer();
-  private static final QueryParser queryParser = new QueryParser("", analyzer);
 
   private LuceneQueryTools() {}
 
@@ -63,6 +62,7 @@ public class LuceneQueryTools {
   public static boolean isValidLuceneQuery(String queryStr) {
     if (queryStr == null) return false;
     try {
+      QueryParser queryParser = new QueryParser("", analyzer);
       queryParser.parse(queryStr);
       return true;
     } catch (ParseException e) {
