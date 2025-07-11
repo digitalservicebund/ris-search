@@ -37,7 +37,7 @@ const toCurrentVersionText = "Zur aktuell gültigen Fassung";
   >
     <Message :severity="warningMessageType" class="ris-body2-regular">
       <template #icon>
-        <IcBaselineHistory
+        <IcBaselineUpdate
           v-if="currentVersionValidityStatus === 'InForce'"
           class="text-blue-800"
         />
