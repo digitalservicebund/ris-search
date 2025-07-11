@@ -85,6 +85,9 @@
                   <akn:p>Ein fiktiver Hintergrundtext rund um Beamtenpflichten wird als Testfall dargestellt.</akn:p>
                </akn:content>
             </akn:hcontainer>
+            <akn:p style="text-align:center">
+               <akn:img src="bild1.jpg" alt="Abbildung"/>
+            </akn:p>
          </akn:background>
       </akn:judgmentBody>
    </akn:judgment>

@@ -164,7 +164,8 @@ class XsltTransformerServiceTest {
   @Test
   void testTransformsCaselawHeaderCorrectly() throws IOException {
     var actualXml = caseLawLdmlTemplateUtils.getXmlFromTemplate(null);
-    var actualHtml = service.transformCaseLaw(actualXml.getBytes(StandardCharsets.UTF_8));
+    var actualHtml =
+        service.transformCaseLaw(actualXml.getBytes(StandardCharsets.UTF_8), "api/v1/");
     var expectedHeader =
         """
         <h1 id="title">
@@ -209,7 +210,8 @@ class XsltTransformerServiceTest {
   @Test
   void testTransformsCaselawBorderNumberCorrectly() throws IOException {
     var actualXml = caseLawLdmlTemplateUtils.getXmlFromTemplate(null);
-    var actualHtml = service.transformCaseLaw(actualXml.getBytes(StandardCharsets.UTF_8));
+    var actualHtml =
+        service.transformCaseLaw(actualXml.getBytes(StandardCharsets.UTF_8), "api/v1/");
     var expectedBorderNumber =
         """
             <dl class="border-number">
@@ -235,7 +237,8 @@ class XsltTransformerServiceTest {
   @Test
   void testTransformsCaselawTableCorrectlyWithStyles() throws IOException {
     var actualXml = caseLawLdmlTemplateUtils.getXmlFromTemplate(null);
-    var actualHtml = service.transformCaseLaw(actualXml.getBytes(StandardCharsets.UTF_8));
+    var actualHtml =
+        service.transformCaseLaw(actualXml.getBytes(StandardCharsets.UTF_8), "api/v1/");
     var expectedTable =
         """
             <table cellpadding="2" cellspacing="0">
@@ -281,25 +284,27 @@ class XsltTransformerServiceTest {
     Map<String, Object> context = new HashMap<>();
     context.put("outline", text);
     var actualXml = caseLawLdmlTemplateUtils.getXmlFromTemplate(context);
-    var actualHtml = service.transformCaseLaw(actualXml.getBytes(StandardCharsets.UTF_8));
+    var actualHtml =
+        service.transformCaseLaw(actualXml.getBytes(StandardCharsets.UTF_8), "api/v1/");
     String expectedSubstring = "<%s>Das ist der Leitsatz</%s>".formatted(expected, expected);
     assertThat(actualHtml).contains(expectedSubstring);
   }
 
   @Test
-  void testReturnsPlaceholderSourceInImageTag() throws IOException {
+  void testReturnsSourceInImageTagWhenPresent() throws IOException {
     String image =
         """
-            <akn:img src="original/path/to/image" alt="Abbildung" title="bild1.jpg"/>
+            <akn:img src="bild1.jpg" alt="Abbildung" title="bild1.jpg"/>
             """;
     Map<String, Object> context = new HashMap<>();
     context.put("outline", image);
 
     var actualXml = caseLawLdmlTemplateUtils.getXmlFromTemplate(context);
-    var actualHtml = service.transformCaseLaw(actualXml.getBytes(StandardCharsets.UTF_8));
+    var actualHtml =
+        service.transformCaseLaw(actualXml.getBytes(StandardCharsets.UTF_8), "api/v1/");
     var expectedImage =
         """
-            <img src="/placeholder.png" alt="Platzhalterbild. Das Bild wird bald hinzugefügt.">
+            <img src="api/v1/bild1.jpg" alt="Abbildung" title="bild1.jpg">
             """;
     assertTrue(StringUtils.deleteWhitespace(actualHtml).contains(deleteWhitespace(expectedImage)));
   }

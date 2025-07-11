@@ -189,6 +189,10 @@ public class CaseLawService {
     return caseLawBucket.get(String.format("%s/%s.xml", documentNumber, documentNumber));
   }
 
+  public Optional<byte[]> getFileByPath(String path) throws ObjectStoreServiceException {
+    return caseLawBucket.get(path);
+  }
+
   public void writeZipArchive(List<String> keys, OutputStream outputStream) throws IOException {
     ZipManager.writeZipArchive(caseLawBucket, keys, outputStream);
   }

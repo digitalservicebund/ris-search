@@ -16,6 +16,8 @@
 		<xsl:value-of select="$uri" />
 	</xsl:function>
 
+	<xsl:param name="ressourcenpfad" as="xs:string" select="''"/>
+
 	<!-- akn wrapper elements (can be removed but content is kept) -->
 	<xsl:template match="akn:judgmentBody|akn:subFlow|akn:docTitle|akn:akomaNtoso
 	|akn:embeddedStructure|akn:decision|akn:foreign|akn:opinion|akn:introduction">
@@ -132,11 +134,14 @@
 		</xsl:element>
 	</xsl:template>
 
+	<!--
+        Bilder
+        ######
+    -->
 	<xsl:template match="akn:img">
-		<img src="/placeholder.png" alt="Platzhalterbild. Das Bild wird bald hinzugefügt.">
-			<xsl:apply-templates select="@*[name() != 'src' and name() != 'alt' and name() != 'title']"/>
+		<img src="{concat($ressourcenpfad, @src)}">
+			<xsl:apply-templates select="@*[local-name() != 'src']" />
 		</img>
-
 	</xsl:template>
 
 
