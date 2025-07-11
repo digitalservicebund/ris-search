@@ -281,7 +281,7 @@ class NormsControllerApiTest extends ContainersIntegrationBase {
 
     final Elements articles = parsed.body().selectXpath("//article");
     assertThat(articles).hasSize(1);
-    final String articleId = Objects.requireNonNull(articles.get(0).attribute("id")).getValue();
+    final String articleId = Objects.requireNonNull(articles.getFirst().attribute("id")).getValue();
     assertThat(articleId).isEqualTo("hauptteil-1_para-1");
   }
 
@@ -335,7 +335,7 @@ class NormsControllerApiTest extends ContainersIntegrationBase {
         .perform(get(uri).contentType(MediaType.APPLICATION_JSON))
         .andExpectAll(
             status().isOk(),
-            jsonPath("$.member", hasSize(1)),
+            jsonPath("$.member", hasSize(3)),
             jsonPath("$.member[0]['item'].abbreviation", is("TeG")));
   }
 
@@ -387,7 +387,7 @@ class NormsControllerApiTest extends ContainersIntegrationBase {
   @Test
   @DisplayName("Should find a norm when searching for its expression ELI explicitly")
   void shouldFindNormByExpressionEli() throws Exception {
-    final String eli = NormsTestData.allDocuments.get(0).getExpressionEli();
+    final String eli = NormsTestData.allDocuments.getFirst().getExpressionEli();
     final String uri = ApiConfig.Paths.LEGISLATION + "?searchTerm=\"%s\"".formatted(eli);
     mockMvc
         .perform(get(uri).contentType(MediaType.APPLICATION_JSON))

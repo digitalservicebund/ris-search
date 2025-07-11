@@ -67,6 +67,7 @@ public record CaseLawDocumentationUnit(
     public static final String ID = "id";
     public static final String DOCUMENT_NUMBER = "document_number";
     public static final String ECLI = "ecli";
+    public static final String ECLI_KEYWORD = "ecli.keyword";
     public static final String CASE_FACTS = "case_facts";
     public static final String DECISION_GROUNDS = "decision_grounds";
     public static final String DISSENTING_OPINION = "dissenting_opinion";
@@ -79,7 +80,7 @@ public record CaseLawDocumentationUnit(
     public static final String TENOR = "tenor";
     public static final String DECISION_DATE = "decision_date";
     public static final String FILE_NUMBERS = "file_numbers";
-    public static final String FILE_NUMBERS_TEXT = "file_numbers.text";
+    public static final String FILE_NUMBERS_KEYWORD = "file_numbers.keyword";
 
     /** Field holding the type of court, e.g., FG, BVerwG */
     public static final String COURT_TYPE = "court_type";

@@ -20,7 +20,7 @@ public class MappingDefinitions {
   static {
     normsOpenSearchToSchemaMap =
         Map.ofEntries(
-            Map.entry(Norm.Fields.WORK_ELI, "legislationIdentifier"),
+            Map.entry(Norm.Fields.WORK_ELI_KEYWORD, "legislationIdentifier"),
             Map.entry(Norm.Fields.OFFICIAL_TITLE, "name"),
             Map.entry(Norm.Fields.OFFICIAL_SHORT_TITLE, "alternateName"),
             Map.entry(Norm.Fields.OFFICIAL_ABBREVIATION, "abbreviation"),

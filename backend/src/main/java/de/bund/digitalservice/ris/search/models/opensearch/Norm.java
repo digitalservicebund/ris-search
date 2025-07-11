@@ -117,11 +117,16 @@ public final class Norm implements AbstractSearchEntity {
     public static final String NORMS_DATE = "norms_date";
     public static final String DATE_PUBLISHED = "date_published";
     public static final String OFFICIAL_ABBREVIATION = "official_abbreviation";
+    public static final String OFFICIAL_ABBREVIATION_KEYWORD = "official_abbreviation.keyword";
     public static final String OFFICIAL_SHORT_TITLE = "official_short_title";
+    public static final String OFFICIAL_SHORT_TITLE_KEYWORD = "official_short_title.keyword";
     public static final String OFFICIAL_TITLE = "official_title";
+    public static final String OFFICIAL_TITLE_KEYWORD = "official_title.keyword";
     public static final String PUBLISHED_IN = "published_in";
     public static final String WORK_ELI = "work_eli";
+    public static final String WORK_ELI_KEYWORD = "work_eli.keyword";
     public static final String EXPRESSION_ELI = "expression_eli";
+    public static final String EXPRESSION_ELI_KEYWORD = "expression_eli.keyword";
     public static final String LATEST_MANIFESTATION_ELI = "latest_manifestation_eli";
     public static final String TABLE_OF_CONTENTS = "table_of_contents";
     public static final String CONCLUSIONS_FORMULA = "conclusions_formula";

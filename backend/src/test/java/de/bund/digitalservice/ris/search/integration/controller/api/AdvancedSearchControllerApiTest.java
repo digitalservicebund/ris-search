@@ -4,7 +4,6 @@ import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.hasSize;
-import static org.junit.Assert.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -61,7 +60,7 @@ class AdvancedSearchControllerApiTest extends ContainersIntegrationBase {
     if (initialized) return; // replacement for @BeforeAll setup, which causes errors
     initialized = true;
 
-    assertTrue(openSearchContainer.isRunning());
+    Assertions.assertTrue(openSearchContainer.isRunning());
     super.recreateIndex();
     super.updateMapping();
 
@@ -273,7 +272,7 @@ class AdvancedSearchControllerApiTest extends ContainersIntegrationBase {
   @DisplayName("Should return 200 when looking for a specific document number and aliases")
   void shouldReturnOkDocumentNumberQuery(String queryParam) throws Exception {
 
-    var document = CaseLawTestData.allDocuments.get(0);
+    var document = CaseLawTestData.allDocuments.getFirst();
     mockMvc
         .perform(
             get(ApiConfig.Paths.CASELAW_ADVANCED_SEARCH
@@ -366,7 +365,7 @@ class AdvancedSearchControllerApiTest extends ContainersIntegrationBase {
     mockMvc
         .perform(
             get(ApiConfig.Paths.LEGISLATION_ADVANCED_SEARCH
-                    + "?query=work_eli:eli\\/2024\\/teg\\/*")
+                    + "?query=work_eli.keyword:eli\\/2024\\/teg\\/*")
                 .contentType(MediaType.APPLICATION_JSON))
         .andDo(print())
         .andExpect(jsonPath("$.member", hasSize(2)))

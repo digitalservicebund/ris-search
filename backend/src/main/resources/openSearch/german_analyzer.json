@@ -108,11 +108,6 @@
         "type": "custom",
         "char_filter": [],
         "filter": ["asciifolding", "lowercase"]
-      },
-      "file_number_normalizer": {
-        "type": "custom",
-        "filter": ["lowercase"],
-        "char_filter": ["replace_special_char_whitespace_filter"]
       }
     }
   }
