@@ -31,7 +31,7 @@
     "@eslint/plugin-kit": "0.3.3",
     "@hyperdx/lucene": "^3.1.1",
     "@nuxt/image": "^1.10.0",
-    "@nuxt/kit": "^3.17.5",
+    "@nuxt/kit": "^3.17.6",
     "@nuxt/schema": "^3.17.5",
     "@pinia/nuxt": "^0.11.1",
     "@sentry/nuxt": "^9.29.0",
