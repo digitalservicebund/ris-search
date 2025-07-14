@@ -41,9 +41,9 @@ class LdmlTestDataSchemaConformanceTest {
     return schemaFiles;
   }
 
-  private static Stream<Arguments> argumentsForE2EDataSchemaConformance() throws IOException {
-    Path e2eDataDirectory = Paths.get(System.getProperty("user.dir")).resolve("e2e-data/norm");
-    return Files.walk(e2eDataDirectory)
+  private static Stream<Arguments> testDataPathForDirectory(String directory) throws IOException {
+    Path directoryPath = Paths.get(System.getProperty("user.dir")).resolve(directory);
+    return Files.walk(directoryPath)
         .map(
             path -> {
               if (!path.toFile().isDirectory() && path.toString().endsWith(".xml")) {
@@ -53,12 +53,6 @@ class LdmlTestDataSchemaConformanceTest {
               return null;
             })
         .filter(Objects::nonNull);
-  }
-
-  @ParameterizedTest
-  @MethodSource("argumentsForE2EDataSchemaConformance")
-  void ldmlE2ETestDataShouldBeSchemaConform(Path ldmlFilePath) {
-    assertSchemaValid(ldmlFilePath);
   }
 
   private void assertSchemaValid(Path ldmlFilePath) {
@@ -87,5 +81,26 @@ class LdmlTestDataSchemaConformanceTest {
     } catch (Exception e) {
       Assertions.fail("File: " + ldmlFilePath + " is not schema conform: \n" + e.getMessage());
     }
+  }
+
+  private static Stream<Arguments> argumentsForE2EDataSchemaConformance() throws IOException {
+    return testDataPathForDirectory("e2e-data/norm");
+  }
+
+  @ParameterizedTest
+  @MethodSource("argumentsForE2EDataSchemaConformance")
+  void ldmlE2ETestDataShouldBeSchemaConform(Path ldmlFilePath) {
+    assertSchemaValid(ldmlFilePath);
+  }
+
+  private static Stream<Arguments> argumentsForIntegrationTestDataSchemaConformance()
+      throws IOException {
+    return testDataPathForDirectory("src/test/resources/data/LDML/norm");
+  }
+
+  @ParameterizedTest
+  @MethodSource("argumentsForIntegrationTestDataSchemaConformance")
+  void ldmlIntegrationTestDataShouldBeSchemaConform(Path ldmlFilePath) {
+    assertSchemaValid(ldmlFilePath);
   }
 }

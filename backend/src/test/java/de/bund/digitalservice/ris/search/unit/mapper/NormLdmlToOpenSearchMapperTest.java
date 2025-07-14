@@ -276,12 +276,12 @@ class NormLdmlToOpenSearchMapperTest {
     var norm = NormLdmlToOpenSearchMapper.parseNorm(sourceFile, Map.of()).orElseThrow();
     var eIds =
         List.of(
-            "hauptteil-1_para-1",
-            "hauptteil-1_para-2",
-            "hauptteil-1_para-3",
-            "hauptteil-1_para-4",
-            "hauptteil-1_para-5",
-            "schluss-1_formel-1");
+            "hauptteil-n1_art-n1",
+            "hauptteil-n1_art-n2",
+            "hauptteil-n1_art-n3",
+            "hauptteil-n1_art-n4",
+            "hauptteil-n1_art-n5",
+            "schluss-n1_formel-n1");
     assertThat(norm.getArticles().stream().map(Article::eId).toList()).isEqualTo(eIds);
     Article firstArticle = norm.getArticles().stream().findFirst().orElseThrow();
     assertThat(firstArticle.entryIntoForceDate()).isEqualTo(LocalDate.of(1991, 1, 1));
