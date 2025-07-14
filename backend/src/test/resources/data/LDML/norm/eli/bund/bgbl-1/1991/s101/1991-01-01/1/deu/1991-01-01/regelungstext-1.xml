@@ -85,7 +85,7 @@
     <akn:body eId="hauptteil-n1" GUID="2bd1d0a2-ff72-42af-b9ab-2f30cc8d7539">
       <!-- Basic HTML elements -->
       <akn:article eId="hauptteil-n1_art-n1" GUID="87cd6b3a-d198-49c3-a02f-6adfd12940cb" period="#meta-n1_geltzeiten-n1_geltungszeitgr-n1">
-        <akn:num eId="hauptteil-n1_art-n1_bezeichnung-n1" GUID="0a0885f1-5bf1-476e-b12b-ce8243a47ddb">§ 1 </akn:num>
+        <akn:num eId="hauptteil-n1_art-n1_bezeichnung-n1" GUID="0a0885f1-5bf1-476e-b12b-ce8243a47ddb">§ 1</akn:num>
         <akn:heading eId="hauptteil-n1_art-n1_überschrift-n1" GUID="519116f1-968a-4eaa-a89e-71258285844f"> Basic HTML Elements </akn:heading>
 
         <akn:paragraph eId="hauptteil-n1_art-n1_abs-n1" GUID="5eb21b69-8e10-4b24-8d69-14e6688a7886">

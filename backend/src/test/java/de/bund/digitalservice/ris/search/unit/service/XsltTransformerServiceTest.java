@@ -129,7 +129,7 @@ class XsltTransformerServiceTest {
     assertThat(heading)
         .isEqualTo(
             """
-            <span class="akn-num" id="c_num-n1">§ 1</span> <span class="akn-heading" id="c_heading-n1">Article title <a href="#c_heading-n1_amtlfnote-n1"><sup>1</sup></a></span>""");
+            <span class="akn-num" id="c_num-1">§ 1</span> <span class="akn-heading" id="c_heading-1">Article title <a href="#c_heading-1_amtlfnote-1"><sup>1</sup></a></span>""");
   }
 
   @Test
@@ -186,15 +186,13 @@ class XsltTransformerServiceTest {
         """
          <article id="hauptteil-n1_art-n1" data-period="#meta-n1_geltzeiten-n1_geltungszeitgr-n1">
             <h2 class="einzelvorschrift">
-              <span class="akn-num" id="hauptteil-n1_art-n1_bezeichnung-n1" data-marker="1">
-                § 1
-              </span>
+              <span class="akn-num" id="hauptteil-n1_art-n1_bezeichnung-n1">§ 1</span>
               <span class="akn-heading" id="hauptteil-n1_art-n1_ueberschrift-n1">
                 Basic HTML Elements
               </span>
             </h2>
             <section class="akn-paragraph" id="hauptteil-n1_art-n1_abs-n1">
-               <span class="akn-num" id="hauptteil-n1_art-n1_abs-n1_bezeichnung-n1" data-marker="1"></span>
+               <span class="akn-num" id="hauptteil-n1_art-n1_abs-n1_bezeichnung-n1">(1)</span>
                <div class="akn-content" id="hauptteil-n1_art-n1_abs-n1_inhalt-n1">
                   <p class="akn-p" id="hauptteil-n1_art-n1_abs-n1_inhalt-n1_text-n1">
                      <b id="hauptteil-n1_art-n1_abs-n1_inhalt-n1_text-n1_fettschrift-n1">Bold</b> text. <i id="hauptteil-n1_art-n1_abs-n1_inhalt-n1_text-n1_kursiv-n1">Italic</i> text. <u id="hauptteil-n1_art-n1_abs-n1_inhalt-n1_text-n1_u-n1">Underlined</u> text. This contains <sub id="hauptteil-n1_art-n1_abs-n1_inhalt-n1_text-n1_sub-n1">subscript</sub> text. This contains <sup id="hauptteil-n1_art-n1_abs-n1_inhalt-n1_text-n1_sup-n1">superscript</sup> text. This text contains a <a href="#" id="hauptteil-n1_art-n1_abs-n1_inhalt-n1_text-n1_a-n1">link</a>. <span class="akn-span" id="hauptteil-n1_art-n1_abs-n1_inhalt-n1_text-n1_span-n1">Inline container</span>. <br id="hauptteil-n1_art-n1_abs-n1_inhalt-n1_text-n1_br-n1"><br id="hauptteil-n1_art-n1_abs-n1_inhalt-n1_text-n1_br-n2">This text has two preceding line breaks.</p>
@@ -215,7 +213,7 @@ class XsltTransformerServiceTest {
     var expectedBorderNumber =
         """
             <dl class="border-number">
-              <dt class="number" id="border-number-link-n1">1</dt>
+              <dt class="number" id="border-number-link-1">1</dt>
               <dd class="content"><p>Example Tatbestand/CaseFacts. More background</p></dd>
             </dl>
             """;
@@ -225,7 +223,7 @@ class XsltTransformerServiceTest {
     var otherBorderNumber =
         """
             <dl class="border-number">
-               <dt class="number" id="border-number-link-n2">2</dt>
+               <dt class="number" id="border-number-link-2">2</dt>
                <dd class="content">
                   <p>even more background</p>
                </dd>
