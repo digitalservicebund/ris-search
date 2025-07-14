@@ -101,9 +101,9 @@ describe("GET /case-law/document", () => {
       temporalCoverage: "2001-05-29/..",
       hasPart: [
         {
-          "@id": buildPath(expressionEli) + "#hauptteil-1_art-1",
+          "@id": buildPath(expressionEli) + "#art-z1",
           "@type": "Legislation",
-          eId: "hauptteil-1_art-1",
+          eId: "art-z1",
           entryIntoForceDate: "2001-06-01",
           expiryDate: "2001-06-30",
           guid: null,
@@ -112,9 +112,9 @@ describe("GET /case-law/document", () => {
           encoding: null,
         },
         {
-          "@id": buildPath(expressionEli) + "#hauptteil-1_art-2",
+          "@id": buildPath(expressionEli) + "#art-z2",
           "@type": "Legislation",
-          eId: "hauptteil-1_art-2",
+          eId: "art-z2",
           entryIntoForceDate: null,
           expiryDate: null,
           guid: null,
@@ -126,60 +126,60 @@ describe("GET /case-law/document", () => {
       tableOfContents: [
         {
           "@type": "TocEntry",
-          id: "hauptteil-1_para-1",
+          id: "art-z1",
           marker: "1",
           heading: "Art 1",
           children: [],
         },
         {
           "@type": "TocEntry",
-          id: "hauptteil-1_para-2",
+          id: "art-z2",
           marker: "2",
           heading: "Art 2",
           children: [],
         },
         {
           "@type": "TocEntry",
-          id: "hauptteil-1_teil-1",
+          id: "hauptteil-n1_teil-n1",
           marker: "Teil 1",
           heading: "Heading 1",
           children: [
             {
               "@type": "TocEntry",
-              id: "hauptteil-1_teil-1-para-1",
+              id: "art-z3",
               marker: "3",
               heading: "Art 3",
               children: [],
             },
             {
               "@type": "TocEntry",
-              id: "hauptteil-1_teil-1_teil-1",
+              id: "hauptteil-n1_teil-n1_teil-n1",
               marker: "Teil 2",
               heading: "Heading 2",
               children: [
                 {
                   "@type": "TocEntry",
-                  id: "hauptteil-1_teil-1_teil-1-para-1",
+                  id: "art-z4",
                   marker: "4",
                   heading: "Art 4",
                   children: [],
                 },
                 {
                   "@type": "TocEntry",
-                  id: "hauptteil-1_teil-1_teil-1_teil-1",
+                  id: "hauptteil-n1_teil-n1_teil-n1_teil-n1",
                   marker: "Teil 3",
                   heading: "Heading 3",
                   children: [
                     {
                       "@type": "TocEntry",
-                      id: "hauptteil-1_teil-1_teil-1_teil-1-para-1",
+                      id: "art-z5",
                       marker: "5",
                       heading: "Art 5",
                       children: [],
                     },
                     {
                       "@type": "TocEntry",
-                      id: "hauptteil-1_teil-1_teil-1_teil-1-para-2",
+                      id: "art-z6",
                       marker: "6",
                       heading: "Art 6",
                       children: [],

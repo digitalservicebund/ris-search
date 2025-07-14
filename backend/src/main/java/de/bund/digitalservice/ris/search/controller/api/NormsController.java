@@ -424,7 +424,7 @@ public class NormsController {
       @Parameter(example = "regelungstext-1") @PathVariable String subtype,
       @Parameter(
               description = "The expression identifier, denoting elements inside an expression",
-              example = "hauptteil-1_art-1")
+              example = "art-z1")
           @PathVariable
           String articleEid,
       @RequestHeader(
