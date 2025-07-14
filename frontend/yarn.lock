@@ -2072,7 +2072,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nuxt/kit@npm:3.17.5, @nuxt/kit@npm:^3.17.1, @nuxt/kit@npm:^3.17.4, @nuxt/kit@npm:^3.17.5":
+"@nuxt/kit@npm:3.17.5, @nuxt/kit@npm:^3.17.1, @nuxt/kit@npm:^3.17.4":
   version: 3.17.5
   resolution: "@nuxt/kit@npm:3.17.5"
   dependencies:
@@ -14637,7 +14637,7 @@ __metadata:
     "@iconify/json": "npm:^2.2.347"
     "@nuxt/eslint": "npm:^1.4.1"
     "@nuxt/image": "npm:^1.10.0"
-    "@nuxt/kit": "npm:^3.17.5"
+    "@nuxt/kit": "npm:^3.17.6"
     "@nuxt/schema": "npm:^3.17.5"
     "@nuxt/scripts": "npm:0.11.9"
     "@nuxt/test-utils": "npm:^3.19.1"
