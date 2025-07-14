@@ -94,7 +94,7 @@
     "unplugin-icons": "^22.1.0",
     "unplugin-vue-components": "^28.7.0",
     "vitest": "^3.2.3",
-    "vue-tsc": "^2.2.10"
+    "vue-tsc": "^3.0.1"
   },
   "resolutions": {
     "@auth/core": "^0.17.0",
