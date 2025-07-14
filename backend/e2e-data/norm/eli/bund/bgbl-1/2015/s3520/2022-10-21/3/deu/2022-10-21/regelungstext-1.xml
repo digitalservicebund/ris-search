@@ -84,45 +84,45 @@
             </akn:formula>
         </akn:preamble>
         <akn:body GUID="f1e2d3c4-003d-0001-0001-00000000003d" eId="hauptteil-n1">
-            <akn:article GUID="f1e2d3c4-003e-0001-0001-00000000003e" eId="hauptteil-n1_art-n1" period="#meta-n1_geltzeiten-n1_geltungszeitgr-n5" refersTo="stammform">
-                <akn:num GUID="f1e2d3c4-003f-0001-0001-00000000003f" eId="hauptteil-n1_art-n1_bezeichnung-n1">§ 1</akn:num>
-                <akn:heading GUID="f1e2d3c4-0040-0001-0001-000000000040" eId="hauptteil-n1_art-n1_überschrift-n1">Fiktive Aufgaben und Befugnisse</akn:heading>
-                <akn:paragraph GUID="f1e2d3c4-0041-0001-0001-000000000041" eId="hauptteil-n1_art-n1_abs-n1">
-                    <akn:num GUID="f1e2d3c4-0042-0001-0001-000000000042" eId="hauptteil-n1_art-n1_abs-n1_bezeichnung-n1"/>
-                    <akn:content GUID="f1e2d3c4-0043-0001-0001-000000000043" eId="hauptteil-n1_art-n1_abs-n1_inhalt-n1">
-                        <akn:p GUID="f1e2d3c4-0044-0001-0001-000000000044" eId="hauptteil-n1_art-n1_abs-n1_inhalt-n1_text-n1">Das fiktive Bundesamt für Verbraucherschutz und Lebensmittelsicherheit übernimmt zentrale Kontrollaufgaben für neuartige Lebensmittel und steuert konsolidierte Informationsverfahren auf europäischer Ebene.<akn:marker GUID="f1e2d3c4-0045-0001-0001-000000000045" eId="hauptteil-n1_art-n1_abs-n1_inhalt-n1_text-n1_marker-n1" refersTo="satzende"/></akn:p>
+            <akn:article GUID="f1e2d3c4-003e-0001-0001-00000000003e" eId="art-z1" period="#meta-n1_geltzeiten-n1_geltungszeitgr-n5" refersTo="stammform">
+                <akn:num GUID="f1e2d3c4-003f-0001-0001-00000000003f" eId="art-z1_bezeichnung-n1">§ 1</akn:num>
+                <akn:heading GUID="f1e2d3c4-0040-0001-0001-000000000040" eId="art-z1_überschrift-n1">Fiktive Aufgaben und Befugnisse</akn:heading>
+                <akn:paragraph GUID="f1e2d3c4-0041-0001-0001-000000000041" eId="art-z1_abs-z1">
+                    <akn:num GUID="f1e2d3c4-0042-0001-0001-000000000042" eId="art-z1_abs-z1_bezeichnung-n1"/>
+                    <akn:content GUID="f1e2d3c4-0043-0001-0001-000000000043" eId="art-z1_abs-z1_inhalt-n1">
+                        <akn:p GUID="f1e2d3c4-0044-0001-0001-000000000044" eId="art-z1_abs-z1_inhalt-n1_text-n1">Das fiktive Bundesamt für Verbraucherschutz und Lebensmittelsicherheit übernimmt zentrale Kontrollaufgaben für neuartige Lebensmittel und steuert konsolidierte Informationsverfahren auf europäischer Ebene.<akn:marker GUID="f1e2d3c4-0045-0001-0001-000000000045" eId="art-z1_abs-z1_inhalt-n1_text-n1_marker-n1" refersTo="satzende"/></akn:p>
                     </akn:content>
                 </akn:paragraph>
             </akn:article>
-            <akn:article GUID="f1e2d3c4-0046-0001-0001-000000000046" eId="hauptteil-n1_art-n2" period="#meta-n1_geltzeiten-n1_geltungszeitgr-n5" refersTo="stammform">
-                <akn:num GUID="f1e2d3c4-0047-0001-0001-000000000047" eId="hauptteil-n1_art-n2_bezeichnung-n1">§ 2</akn:num>
-                <akn:heading GUID="f1e2d3c4-0048-0001-0001-000000000048" eId="hauptteil-n1_art-n2_überschrift-n1">Fiktives Verkehrsverbot</akn:heading>
-                <akn:paragraph GUID="f1e2d3c4-0049-0001-0001-000000000049" eId="hauptteil-n1_art-n2_abs-n1">
-                    <akn:num GUID="f1e2d3c4-004a-0001-0001-00000000004a" eId="hauptteil-n1_art-n2_abs-n1_bezeichnung-n1">(1)</akn:num>
-                    <akn:content GUID="f1e2d3c4-004b-0001-0001-00000000004b" eId="hauptteil-n1_art-n2_abs-n1_inhalt-n1">
-                        <akn:p GUID="f1e2d3c4-004c-0001-0001-00000000004c" eId="hauptteil-n1_art-n2_abs-n1_inhalt-n1_text-n1">Das Inverkehrbringen von neuartigen Lebensmitteln, welche die festgelegten unionsrechtlichen Grenzwerte nicht einhalten, ist strikt untersagt.<akn:marker GUID="f1e2d3c4-004d-0001-0001-00000000004d" eId="hauptteil-n1_art-n2_abs-n1_inhalt-n1_text-n1_marker-n1" refersTo="satzende"/></akn:p>
+            <akn:article GUID="f1e2d3c4-0046-0001-0001-000000000046" eId="art-z2" period="#meta-n1_geltzeiten-n1_geltungszeitgr-n5" refersTo="stammform">
+                <akn:num GUID="f1e2d3c4-0047-0001-0001-000000000047" eId="art-z2_bezeichnung-n1">§ 2</akn:num>
+                <akn:heading GUID="f1e2d3c4-0048-0001-0001-000000000048" eId="art-z2_überschrift-n1">Fiktives Verkehrsverbot</akn:heading>
+                <akn:paragraph GUID="f1e2d3c4-0049-0001-0001-000000000049" eId="art-z2_abs-z1">
+                    <akn:num GUID="f1e2d3c4-004a-0001-0001-00000000004a" eId="art-z2_abs-z1_bezeichnung-n1">(1)</akn:num>
+                    <akn:content GUID="f1e2d3c4-004b-0001-0001-00000000004b" eId="art-z2_abs-z1_inhalt-n1">
+                        <akn:p GUID="f1e2d3c4-004c-0001-0001-00000000004c" eId="art-z2_abs-z1_inhalt-n1_text-n1">Das Inverkehrbringen von neuartigen Lebensmitteln, welche die festgelegten unionsrechtlichen Grenzwerte nicht einhalten, ist strikt untersagt.<akn:marker GUID="f1e2d3c4-004d-0001-0001-00000000004d" eId="art-z2_abs-z1_inhalt-n1_text-n1_marker-n1" refersTo="satzende"/></akn:p>
                     </akn:content>
                 </akn:paragraph>
-                <akn:paragraph GUID="f1e2d3c4-004e-0001-0001-00000000004e" eId="hauptteil-n1_art-n2_abs-n2">
-                    <akn:num GUID="f1e2d3c4-004f-0001-0001-00000000004f" eId="hauptteil-n1_art-n2_abs-n2_bezeichnung-n1">(2)</akn:num>
-                    <akn:content GUID="f1e2d3c4-0050-0001-0001-000000000050" eId="hauptteil-n1_art-n2_abs-n2_inhalt-n1">
-                        <akn:p GUID="f1e2d3c4-0051-0001-0001-000000000051" eId="hauptteil-n1_art-n2_abs-n2_inhalt-n1_text-n1">Lebensmittel, die die in den entsprechenden Spezifikationen festgelegten Werte verfehlen, dürfen weder verkauft noch verwendet werden.<akn:marker GUID="f1e2d3c4-0052-0001-0001-000000000052" eId="hauptteil-n1_art-n2_abs-n2_inhalt-n1_text-n1_marker-n1" refersTo="satzende"/></akn:p>
+                <akn:paragraph GUID="f1e2d3c4-004e-0001-0001-00000000004e" eId="art-z2_abs-z2">
+                    <akn:num GUID="f1e2d3c4-004f-0001-0001-00000000004f" eId="art-z2_abs-z2_bezeichnung-n1">(2)</akn:num>
+                    <akn:content GUID="f1e2d3c4-0050-0001-0001-000000000050" eId="art-z2_abs-z2_inhalt-n1">
+                        <akn:p GUID="f1e2d3c4-0051-0001-0001-000000000051" eId="art-z2_abs-z2_inhalt-n1_text-n1">Lebensmittel, die die in den entsprechenden Spezifikationen festgelegten Werte verfehlen, dürfen weder verkauft noch verwendet werden.<akn:marker GUID="f1e2d3c4-0052-0001-0001-000000000052" eId="art-z2_abs-z2_inhalt-n1_text-n1_marker-n1" refersTo="satzende"/></akn:p>
                     </akn:content>
                 </akn:paragraph>
             </akn:article>
-            <akn:article GUID="f1e2d3c4-0053-0001-0001-000000000053" eId="hauptteil-n1_art-n3" period="#meta-n1_geltzeiten-n1_geltungszeitgr-n5" refersTo="stammform">
-                <akn:num GUID="f1e2d3c4-0054-0001-0001-000000000054" eId="hauptteil-n1_art-n3_bezeichnung-n1">§ 3</akn:num>
-                <akn:heading GUID="f1e2d3c4-0055-0001-0001-000000000055" eId="hauptteil-n1_art-n3_überschrift-n1">Fiktive Straftaten und Ordnungswidrigkeiten</akn:heading>
-                <akn:paragraph GUID="f1e2d3c4-0056-0001-0001-000000000056" eId="hauptteil-n1_art-n3_abs-n1">
-                    <akn:num GUID="f1e2d3c4-0057-0001-0001-000000000057" eId="hauptteil-n1_art-n3_abs-n1_bezeichnung-n1">(1)</akn:num>
-                    <akn:content GUID="f1e2d3c4-0058-0001-0001-000000000058" eId="hauptteil-n1_art-n3_abs-n1_inhalt-n1">
-                        <akn:p GUID="f1e2d3c4-0059-0001-0001-000000000059" eId="hauptteil-n1_art-n3_abs-n1_inhalt-n1_text-n1">Verstöße gegen die Bestimmungen dieser fiktiven Verordnung werden unter Anwendung der einschlägigen straf- und ordnungsrechtlichen Vorschriften bestraft.<akn:marker GUID="f1e2d3c4-005a-0001-0001-00000000005a" eId="hauptteil-n1_art-n3_abs-n1_inhalt-n1_text-n1_marker-n1" refersTo="satzende"/></akn:p>
+            <akn:article GUID="f1e2d3c4-0053-0001-0001-000000000053" eId="art-z3" period="#meta-n1_geltzeiten-n1_geltungszeitgr-n5" refersTo="stammform">
+                <akn:num GUID="f1e2d3c4-0054-0001-0001-000000000054" eId="art-z3_bezeichnung-n1">§ 3</akn:num>
+                <akn:heading GUID="f1e2d3c4-0055-0001-0001-000000000055" eId="art-z3_überschrift-n1">Fiktive Straftaten und Ordnungswidrigkeiten</akn:heading>
+                <akn:paragraph GUID="f1e2d3c4-0056-0001-0001-000000000056" eId="art-z3_abs-z1">
+                    <akn:num GUID="f1e2d3c4-0057-0001-0001-000000000057" eId="art-z3_abs-z1_bezeichnung-n1">(1)</akn:num>
+                    <akn:content GUID="f1e2d3c4-0058-0001-0001-000000000058" eId="art-z3_abs-z1_inhalt-n1">
+                        <akn:p GUID="f1e2d3c4-0059-0001-0001-000000000059" eId="art-z3_abs-z1_inhalt-n1_text-n1">Verstöße gegen die Bestimmungen dieser fiktiven Verordnung werden unter Anwendung der einschlägigen straf- und ordnungsrechtlichen Vorschriften bestraft.<akn:marker GUID="f1e2d3c4-005a-0001-0001-00000000005a" eId="art-z3_abs-z1_inhalt-n1_text-n1_marker-n1" refersTo="satzende"/></akn:p>
                     </akn:content>
                 </akn:paragraph>
-                <akn:paragraph GUID="f1e2d3c4-005b-0001-0001-00000000005b" eId="hauptteil-n1_art-n3_abs-n2">
-                    <akn:num GUID="f1e2d3c4-005c-0001-0001-00000000005c" eId="hauptteil-n1_art-n3_abs-n2_bezeichnung-n1">(2)</akn:num>
-                    <akn:content GUID="f1e2d3c4-005d-0001-0001-00000000005d" eId="hauptteil-n1_art-n3_abs-n2_inhalt-n1">
-                        <akn:p GUID="f1e2d3c4-005e-0001-0001-00000000005e" eId="hauptteil-n1_art-n3_abs-n2_inhalt-n1_text-n1">Bei Verstößen gegen unionsrechtliche Vorgaben im Lebensmittelbereich werden strenge Maßnahmen ergriffen – dies schließt auch entsprechende Ordnungswidrigkeiten ein.<akn:marker GUID="f1e2d3c4-005f-0001-0001-00000000005f" eId="hauptteil-n1_art-n3_abs-n2_inhalt-n1_text-n1_marker-n1" refersTo="satzende"/></akn:p>
+                <akn:paragraph GUID="f1e2d3c4-005b-0001-0001-00000000005b" eId="art-z3_abs-z2">
+                    <akn:num GUID="f1e2d3c4-005c-0001-0001-00000000005c" eId="art-z3_abs-z2_bezeichnung-n1">(2)</akn:num>
+                    <akn:content GUID="f1e2d3c4-005d-0001-0001-00000000005d" eId="art-z3_abs-z2_inhalt-n1">
+                        <akn:p GUID="f1e2d3c4-005e-0001-0001-00000000005e" eId="art-z3_abs-z2_inhalt-n1_text-n1">Bei Verstößen gegen unionsrechtliche Vorgaben im Lebensmittelbereich werden strenge Maßnahmen ergriffen – dies schließt auch entsprechende Ordnungswidrigkeiten ein.<akn:marker GUID="f1e2d3c4-005f-0001-0001-00000000005f" eId="art-z3_abs-z2_inhalt-n1_text-n1_marker-n1" refersTo="satzende"/></akn:p>
                     </akn:content>
                 </akn:paragraph>
             </akn:article>

@@ -65,53 +65,53 @@
         </akn:preface>
         <akn:preamble GUID="22222222-0000-4333-4444-555555555555" eId="präambel-n1"/>
         <akn:body GUID="33333333-0000-4444-5555-666666666666" eId="hauptteil-n1">
-            <akn:article GUID="44444444-0000-4555-6666-777777777777" eId="hauptteil-n1_art-n1" period="#meta-n1_geltzeiten-n1_geltungszeitgr-n29" refersTo="stammform">
-                <akn:num GUID="55555555-0000-4666-7777-888888888888" eId="hauptteil-n1_art-n1_bezeichnung-n1">§ 1</akn:num>
-                <akn:heading GUID="66666666-0000-4777-8888-999999999999" eId="hauptteil-n1_art-n1_überschrift-n1">Erlaubnis zur Nutzung öffentlicher Einrichtungen für Testzwecke</akn:heading>
-                <akn:paragraph GUID="77777777-0000-4888-9999-aaaaaaaaaaaa" eId="hauptteil-n1_art-n1_abs-n1">
-                    <akn:num GUID="88888888-0000-4999-aaaa-bbbbbbbbbbbb" eId="hauptteil-n1_art-n1_abs-n1_bezeichnung-n1">(1)</akn:num>
-                    <akn:content GUID="99999999-0000-4aaa-bbbb-cccccccccccc" eId="hauptteil-n1_art-n1_abs-n1_inhalt-n1">
-                        <akn:p GUID="aaaaaaaa-0000-4bbb-cccc-dddddddddddd" eId="hauptteil-n1_art-n1_abs-n1_inhalt-n1_text-n1">Für die Testphase ist eine simulierte Freistellung mit fortlaufender Bezahlung zu gewähren.</akn:p>
-                        <akn:blockList GUID="bbbbbbbb-0000-4ccc-dddd-eeeeeeeeeeee" eId="hauptteil-n1_art-n1_abs-n1_inhalt-n1_liste-n1">
-                            <akn:item GUID="cccccccc-0000-4ddd-eeee-ffffffffffff" eId="hauptteil-n1_art-n1_abs-n1_inhalt-n1_liste-n1_listenelem-n1">
-                                <akn:num GUID="dddddddd-0000-4eee-ffff-111111111112" eId="hauptteil-n1_art-n1_abs-n1_inhalt-n1_liste-n1_listenelem-n1_bezeichnung-n1">1.</akn:num>
-                                <akn:p GUID="eeeeeeee-0000-4fff-1111-222222222222" eId="hauptteil-n1_art-n1_abs-n1_inhalt-n1_liste-n1_listenelem-n1_text-n1">für die Durchführung von Testwahlen in der simulierten Umgebung,</akn:p>
+            <akn:article GUID="44444444-0000-4555-6666-777777777777" eId="art-z1" period="#meta-n1_geltzeiten-n1_geltungszeitgr-n29" refersTo="stammform">
+                <akn:num GUID="55555555-0000-4666-7777-888888888888" eId="art-z1_bezeichnung-n1">§ 1</akn:num>
+                <akn:heading GUID="66666666-0000-4777-8888-999999999999" eId="art-z1_überschrift-n1">Erlaubnis zur Nutzung öffentlicher Einrichtungen für Testzwecke</akn:heading>
+                <akn:paragraph GUID="77777777-0000-4888-9999-aaaaaaaaaaaa" eId="art-z1_abs-z1">
+                    <akn:num GUID="88888888-0000-4999-aaaa-bbbbbbbbbbbb" eId="art-z1_abs-z1_bezeichnung-n1">(1)</akn:num>
+                    <akn:content GUID="99999999-0000-4aaa-bbbb-cccccccccccc" eId="art-z1_abs-z1_inhalt-n1">
+                        <akn:p GUID="aaaaaaaa-0000-4bbb-cccc-dddddddddddd" eId="art-z1_abs-z1_inhalt-n1_text-n1">Für die Testphase ist eine simulierte Freistellung mit fortlaufender Bezahlung zu gewähren.</akn:p>
+                        <akn:blockList GUID="bbbbbbbb-0000-4ccc-dddd-eeeeeeeeeeee" eId="art-z1_abs-z1_inhalt-n1_liste-n1">
+                            <akn:item GUID="cccccccc-0000-4ddd-eeee-ffffffffffff" eId="art-z1_abs-z1_inhalt-n1_liste-n1_listenelem-n1">
+                                <akn:num GUID="dddddddd-0000-4eee-ffff-111111111112" eId="art-z1_abs-z1_inhalt-n1_liste-n1_listenelem-n1_bezeichnung-n1">1.</akn:num>
+                                <akn:p GUID="eeeeeeee-0000-4fff-1111-222222222222" eId="art-z1_abs-z1_inhalt-n1_liste-n1_listenelem-n1_text-n1">für die Durchführung von Testwahlen in der simulierten Umgebung,</akn:p>
                             </akn:item>
-                            <akn:item GUID="11111112-0000-4222-3333-444444444445" eId="hauptteil-n1_art-n1_abs-n1_inhalt-n1_liste-n1_listenelem-n2">
-                                <akn:num GUID="22222223-0000-4333-4444-555555555556" eId="hauptteil-n1_art-n1_abs-n1_inhalt-n1_liste-n1_listenelem-n2_bezeichnung-n1">2.</akn:num>
-                                <akn:p GUID="33333334-0000-4444-5555-666666666667" eId="hauptteil-n1_art-n1_abs-n1_inhalt-n1_liste-n1_listenelem-n2_text-n1">zur Wahrnehmung von Testterminen in Musterbehörden,</akn:p>
+                            <akn:item GUID="11111112-0000-4222-3333-444444444445" eId="art-z1_abs-z1_inhalt-n1_liste-n1_listenelem-n2">
+                                <akn:num GUID="22222223-0000-4333-4444-555555555556" eId="art-z1_abs-z1_inhalt-n1_liste-n1_listenelem-n2_bezeichnung-n1">2.</akn:num>
+                                <akn:p GUID="33333334-0000-4444-5555-666666666667" eId="art-z1_abs-z1_inhalt-n1_liste-n1_listenelem-n2_text-n1">zur Wahrnehmung von Testterminen in Musterbehörden,</akn:p>
                             </akn:item>
-                            <akn:item GUID="44444445-0000-4555-6666-777777777778" eId="hauptteil-n1_art-n1_abs-n1_inhalt-n1_liste-n1_listenelem-n3">
-                                <akn:num GUID="55555556-0000-4666-7777-888888888889" eId="hauptteil-n1_art-n1_abs-n1_inhalt-n1_liste-n1_listenelem-n3_bezeichnung-n1">3.</akn:num>
-                                <akn:p GUID="66666667-0000-4777-8888-999999999990" eId="hauptteil-n1_art-n1_abs-n1_inhalt-n1_liste-n1_listenelem-n3_text-n1">zur Teilnahme an freiwilligen Testprojekten, sofern zur Übernahme keine Verpflichtung besteht.<akn:marker GUID="77777778-0000-4888-9999-aaaaaaaaaaab" eId="hauptteil-n1_art-n1_abs-n1_inhalt-n1_liste-n1_listenelem-n3_text-n1_marker-n1" refersTo="satzende"/></akn:p>
+                            <akn:item GUID="44444445-0000-4555-6666-777777777778" eId="art-z1_abs-z1_inhalt-n1_liste-n1_listenelem-n3">
+                                <akn:num GUID="55555556-0000-4666-7777-888888888889" eId="art-z1_abs-z1_inhalt-n1_liste-n1_listenelem-n3_bezeichnung-n1">3.</akn:num>
+                                <akn:p GUID="66666667-0000-4777-8888-999999999990" eId="art-z1_abs-z1_inhalt-n1_liste-n1_listenelem-n3_text-n1">zur Teilnahme an freiwilligen Testprojekten, sofern zur Übernahme keine Verpflichtung besteht.<akn:marker GUID="77777778-0000-4888-9999-aaaaaaaaaaab" eId="art-z1_abs-z1_inhalt-n1_liste-n1_listenelem-n3_text-n1_marker-n1" refersTo="satzende"/></akn:p>
                             </akn:item>
                         </akn:blockList>
                     </akn:content>
                 </akn:paragraph>
-                <akn:paragraph GUID="77777778-0000-4888-9999-aaaaaaaaaaab" eId="hauptteil-n1_art-n1_abs-n2">
-                    <akn:num GUID="88888889-0000-4999-aaaa-bbbbbbbbbbbc" eId="hauptteil-n1_art-n1_abs-n2_bezeichnung-n1">(2)</akn:num>
-                    <akn:content GUID="99999990-0000-4aaa-bbbb-cccccccccccd" eId="hauptteil-n1_art-n1_abs-n2_inhalt-n1">
-                        <akn:p GUID="aaaaaaaa-0000-4bbb-cccc-ddddddddddee" eId="hauptteil-n1_art-n1_abs-n2_inhalt-n1_text-n1">Beruht eine freiwillige Tätigkeit in der Testumgebung auf gesetzlichen Vorgaben, kann der notwendige Testurlaub unter Fortzahlung der Bezüge gewährt werden, sofern dienstliche Belange dies zulassen.<akn:marker GUID="bbbbbbbb-0000-4ccc-dddd-eeeeeeeeeeef" eId="hauptteil-n1_art-n1_abs-n2_inhalt-n1_text-n1_marker-n1" refersTo="satzende"/></akn:p>
+                <akn:paragraph GUID="77777778-0000-4888-9999-aaaaaaaaaaab" eId="art-z1_abs-z2">
+                    <akn:num GUID="88888889-0000-4999-aaaa-bbbbbbbbbbbc" eId="art-z1_abs-z2_bezeichnung-n1">(2)</akn:num>
+                    <akn:content GUID="99999990-0000-4aaa-bbbb-cccccccccccd" eId="art-z1_abs-z2_inhalt-n1">
+                        <akn:p GUID="aaaaaaaa-0000-4bbb-cccc-ddddddddddee" eId="art-z1_abs-z2_inhalt-n1_text-n1">Beruht eine freiwillige Tätigkeit in der Testumgebung auf gesetzlichen Vorgaben, kann der notwendige Testurlaub unter Fortzahlung der Bezüge gewährt werden, sofern dienstliche Belange dies zulassen.<akn:marker GUID="bbbbbbbb-0000-4ccc-dddd-eeeeeeeeeeef" eId="art-z1_abs-z2_inhalt-n1_text-n1_marker-n1" refersTo="satzende"/></akn:p>
                     </akn:content>
                 </akn:paragraph>
             </akn:article>
-            <akn:article GUID="cccccccc-0000-4ddd-eeee-fffffffffff0" eId="hauptteil-n1_art-n2" period="#meta-n1_geltzeiten-n1_geltungszeitgr-n29" refersTo="stammform">
-                <akn:num GUID="dddddddd-0000-4eee-ffff-111111111113" eId="hauptteil-n1_art-n2_bezeichnung-n1">§ 2</akn:num>
-                <akn:heading GUID="eeeeeeee-0000-4fff-1111-222222222223" eId="hauptteil-n1_art-n2_überschrift-n1">Regelung entfällt in der Testversion</akn:heading>
-                <akn:paragraph GUID="ffffffff-0000-4111-2222-333333333335" eId="hauptteil-n1_art-n2_abs-n1">
-                    <akn:num GUID="11111113-0000-4222-3333-444444444446" eId="hauptteil-n1_art-n2_abs-n1_bezeichnung-n1"/>
-                    <akn:content GUID="22222224-0000-4333-4444-555555555557" eId="hauptteil-n1_art-n2_abs-n1_inhalt-n1">
-                        <akn:p GUID="33333335-0000-4444-5555-666666666668" eId="hauptteil-n1_art-n2_abs-n1_inhalt-n1_text-n1">--</akn:p>
+            <akn:article GUID="cccccccc-0000-4ddd-eeee-fffffffffff0" eId="art-z2" period="#meta-n1_geltzeiten-n1_geltungszeitgr-n29" refersTo="stammform">
+                <akn:num GUID="dddddddd-0000-4eee-ffff-111111111113" eId="art-z2_bezeichnung-n1">§ 2</akn:num>
+                <akn:heading GUID="eeeeeeee-0000-4fff-1111-222222222223" eId="art-z2_überschrift-n1">Regelung entfällt in der Testversion</akn:heading>
+                <akn:paragraph GUID="ffffffff-0000-4111-2222-333333333335" eId="art-z2_abs-z1">
+                    <akn:num GUID="11111113-0000-4222-3333-444444444446" eId="art-z2_abs-z1_bezeichnung-n1"/>
+                    <akn:content GUID="22222224-0000-4333-4444-555555555557" eId="art-z2_abs-z1_inhalt-n1">
+                        <akn:p GUID="33333335-0000-4444-5555-666666666668" eId="art-z2_abs-z1_inhalt-n1_text-n1">--</akn:p>
                     </akn:content>
                 </akn:paragraph>
             </akn:article>
-            <akn:article GUID="44444446-0000-4555-6666-777777777779" eId="hauptteil-n1_art-n3" period="#meta-n1_geltzeiten-n1_geltungszeitgr-n33" refersTo="stammform">
-                <akn:num GUID="55555557-0000-4666-7777-888888888890" eId="hauptteil-n1_art-n3_bezeichnung-n1">§ 3</akn:num>
-                <akn:heading GUID="66666668-0000-4777-8888-999999999991" eId="hauptteil-n1_art-n3_überschrift-n1">Testregelung für freiwillige Dienste im öffentlichen Sektor</akn:heading>
-                <akn:paragraph GUID="77777779-0000-4888-9999-aaaaaaaaaaac" eId="hauptteil-n1_art-n3_abs-n1">
-                    <akn:num GUID="88888880-0000-4999-aaaa-bbbbbbbbbbbd" eId="hauptteil-n1_art-n3_abs-n1_bezeichnung-n1"/>
-                    <akn:content GUID="99999991-0000-4aaa-bbbb-ccccccccccce" eId="hauptteil-n1_art-n3_abs-n1_inhalt-n1">
-                        <akn:p GUID="aaaaaaaa-0000-4bbb-cccc-dddddddddddd" eId="hauptteil-n1_art-n3_abs-n1_inhalt-n1_text-n1">Zur Ableistung eines freiwilligen Testjahres oder eines ökologischen Testprogramms im Rahmen der simulierten Testgesetzgebung können Testkraftkräfte vom Dienst freigestellt werden.</akn:p>
+            <akn:article GUID="44444446-0000-4555-6666-777777777779" eId="art-z3" period="#meta-n1_geltzeiten-n1_geltungszeitgr-n33" refersTo="stammform">
+                <akn:num GUID="55555557-0000-4666-7777-888888888890" eId="art-z3_bezeichnung-n1">§ 3</akn:num>
+                <akn:heading GUID="66666668-0000-4777-8888-999999999991" eId="art-z3_überschrift-n1">Testregelung für freiwillige Dienste im öffentlichen Sektor</akn:heading>
+                <akn:paragraph GUID="77777779-0000-4888-9999-aaaaaaaaaaac" eId="art-z3_abs-z1">
+                    <akn:num GUID="88888880-0000-4999-aaaa-bbbbbbbbbbbd" eId="art-z3_abs-z1_bezeichnung-n1"/>
+                    <akn:content GUID="99999991-0000-4aaa-bbbb-ccccccccccce" eId="art-z3_abs-z1_inhalt-n1">
+                        <akn:p GUID="aaaaaaaa-0000-4bbb-cccc-dddddddddddd" eId="art-z3_abs-z1_inhalt-n1_text-n1">Zur Ableistung eines freiwilligen Testjahres oder eines ökologischen Testprogramms im Rahmen der simulierten Testgesetzgebung können Testkraftkräfte vom Dienst freigestellt werden.</akn:p>
                     </akn:content>
                 </akn:paragraph>
             </akn:article>

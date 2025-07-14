@@ -151,37 +151,37 @@
                 <akn:heading GUID="ffffffff-0000-1111-2222-dddddddddddd" eId="hauptteil-n1_abschnitt-n1_überschrift-n1">
                     Zulassung und Regelung des Einsatzes von Wahlgeräten
                 </akn:heading>
-                <akn:article GUID="11111111-2222-3333-4444-777777777777" eId="hauptteil-n1_abschnitt-n1_art-n1" period="#meta-n1_geltzeiten-n1_geltungszeitgr-n3" refersTo="stammform">
-                    <akn:num GUID="22222222-3333-4444-5555-888888888888" eId="hauptteil-n1_abschnitt-n1_art-n1_bezeichnung-n1">§ 1</akn:num>
-                    <akn:heading GUID="33333333-4444-5555-6666-999999999999" eId="hauptteil-n1_abschnitt-n1_art-n1_überschrift-n1">
+                <akn:article GUID="11111111-2222-3333-4444-777777777777" eId="art-z1" period="#meta-n1_geltzeiten-n1_geltungszeitgr-n3" refersTo="stammform">
+                    <akn:num GUID="22222222-3333-4444-5555-888888888888" eId="art-z1_bezeichnung-n1">§ 1</akn:num>
+                    <akn:heading GUID="33333333-4444-5555-6666-999999999999" eId="art-z1_überschrift-n1">
                         Zulassungspflicht und Bauartzulassung
                     </akn:heading>
-                    <akn:paragraph GUID="44444444-5555-6666-7777-aaaaaaaaaaaa" eId="hauptteil-n1_abschnitt-n1_art-n1_abs-n1">
-                        <akn:num GUID="55555555-6666-7777-8888-bbbbbbbbbbbb" eId="hauptteil-n1_abschnitt-n1_art-n1_abs-n1_bezeichnung-n1">(1)</akn:num>
-                        <akn:content GUID="66666666-7777-8888-9999-cccccccccccc" eId="hauptteil-n1_abschnitt-n1_art-n1_abs-n1_inhalt-n1">
-                            <akn:p GUID="77777777-8888-9999-aaaa-dddddddddddd" eId="hauptteil-n1_abschnitt-n1_art-n1_abs-n1_inhalt-n1_text-n1">
+                    <akn:paragraph GUID="44444444-5555-6666-7777-aaaaaaaaaaaa" eId="art-z1_abs-z1">
+                        <akn:num GUID="55555555-6666-7777-8888-bbbbbbbbbbbb" eId="art-z1_abs-z1_bezeichnung-n1">(1)</akn:num>
+                        <akn:content GUID="66666666-7777-8888-9999-cccccccccccc" eId="art-z1_abs-z1_inhalt-n1">
+                            <akn:p GUID="77777777-8888-9999-aaaa-dddddddddddd" eId="art-z1_abs-z1_inhalt-n1_text-n1">
                                 Wahlgeräte müssen vor ihrer Verwendung gemäß den geltenden technischen Normen zugelassen sein.
                             </akn:p>
-                            <akn:blockList GUID="88888888-9999-aaaa-bbbb-eeeeeeeeeeee" eId="hauptteil-n1_abschnitt-n1_art-n1_abs-n1_inhalt-n1_liste-n1">
-                                <akn:item GUID="99999999-aaaa-bbbb-cccc-ffffffffffff" eId="hauptteil-n1_abschnitt-n1_art-n1_abs-n1_inhalt-n1_liste-n1_listenelem-n1">
-                                    <akn:num GUID="aaaaaaaa-bbbb-cccc-dddd-111111111111" eId="hauptteil-n1_abschnitt-n1_art-n1_abs-n1_inhalt-n1_liste-n1_listenelem-n1_bezeichnung-n1">1.</akn:num>
-                                    <akn:p GUID="bbbbbbbb-cccc-dddd-eeee-222222222222" eId="hauptteil-n1_abschnitt-n1_art-n1_abs-n1_inhalt-n1_liste-n1_listenelem-n1_text-n1">
+                            <akn:blockList GUID="88888888-9999-aaaa-bbbb-eeeeeeeeeeee" eId="art-z1_abs-z1_inhalt-n1_liste-n1">
+                                <akn:item GUID="99999999-aaaa-bbbb-cccc-ffffffffffff" eId="art-z1_abs-z1_inhalt-n1_liste-n1_listenelem-n1">
+                                    <akn:num GUID="aaaaaaaa-bbbb-cccc-dddd-111111111111" eId="art-z1_abs-z1_inhalt-n1_liste-n1_listenelem-n1_bezeichnung-n1">1.</akn:num>
+                                    <akn:p GUID="bbbbbbbb-cccc-dddd-eeee-222222222222" eId="art-z1_abs-z1_inhalt-n1_liste-n1_listenelem-n1_text-n1">
                                         Die Zulassung umfasst eine Prüfung der technischen Ausstattung,
                                     </akn:p>
                                 </akn:item>
-                                <akn:item GUID="cccccccc-dddd-eeee-ffff-333333333333" eId="hauptteil-n1_abschnitt-n1_art-n1_abs-n1_inhalt-n1_liste-n1_listenelem-n2">
-                                    <akn:num GUID="dddddddd-eeee-ffff-0000-444444444444" eId="hauptteil-n1_abschnitt-n1_art-n1_abs-n1_inhalt-n1_liste-n1_listenelem-n2_bezeichnung-n1">2.</akn:num>
-                                    <akn:p GUID="eeeeeeee-ffff-0000-1111-555555555555" eId="hauptteil-n1_abschnitt-n1_art-n1_abs-n1_inhalt-n1_liste-n1_listenelem-n2_text-n1">
+                                <akn:item GUID="cccccccc-dddd-eeee-ffff-333333333333" eId="art-z1_abs-z1_inhalt-n1_liste-n1_listenelem-n2">
+                                    <akn:num GUID="dddddddd-eeee-ffff-0000-444444444444" eId="art-z1_abs-z1_inhalt-n1_liste-n1_listenelem-n2_bezeichnung-n1">2.</akn:num>
+                                    <akn:p GUID="eeeeeeee-ffff-0000-1111-555555555555" eId="art-z1_abs-z1_inhalt-n1_liste-n1_listenelem-n2_text-n1">
                                         eine technische Überprüfung der elektronischen Komponenten.
                                     </akn:p>
                                 </akn:item>
                             </akn:blockList>
                         </akn:content>
                     </akn:paragraph>
-                    <akn:paragraph GUID="ffffffff-0000-1111-2222-666666666666" eId="hauptteil-n1_abschnitt-n1_art-n1_abs-n2">
-                        <akn:num GUID="11111111-2222-3333-4444-777777777778" eId="hauptteil-n1_abschnitt-n1_art-n1_abs-n2_bezeichnung-n1">(2)</akn:num>
-                        <akn:content GUID="22222222-3333-4444-5555-888888888889" eId="hauptteil-n1_abschnitt-n1_art-n1_abs-n2_inhalt-n1">
-                            <akn:p GUID="33333333-4444-5555-6666-999999999998" eId="hauptteil-n1_abschnitt-n1_art-n1_abs-n2_inhalt-n1_text-n1">
+                    <akn:paragraph GUID="ffffffff-0000-1111-2222-666666666666" eId="art-z1_abs-z2">
+                        <akn:num GUID="11111111-2222-3333-4444-777777777778" eId="art-z1_abs-z2_bezeichnung-n1">(2)</akn:num>
+                        <akn:content GUID="22222222-3333-4444-5555-888888888889" eId="art-z1_abs-z2_inhalt-n1">
+                            <akn:p GUID="33333333-4444-5555-6666-999999999998" eId="art-z1_abs-z2_inhalt-n1_text-n1">
                                 Die Zulassung wird durch das Bundesministerium des Innern kommuniziert.
                             </akn:p>
                         </akn:content>
@@ -195,15 +195,15 @@
                 <akn:heading GUID="66666666-7777-8888-9999-cccccccccccd" eId="hauptteil-n1_abschnitt-n2_überschrift-n1">
                     Durchführung der Wahl und Geräteüberwachung
                 </akn:heading>
-                <akn:article GUID="77777777-8888-9999-aaaa-dddddddddddd" eId="hauptteil-n1_abschnitt-n2_art-n1" period="#meta-n1_geltzeiten-n1_geltungszeitgr-n3" refersTo="stammform">
-                    <akn:num GUID="88888888-9999-aaaa-bbbb-eeeeeeeeeeef" eId="hauptteil-n1_abschnitt-n2_art-n1_bezeichnung-n1">§ 5</akn:num>
-                    <akn:heading GUID="99999999-aaaa-bbbb-cccc-ffffffffffff" eId="hauptteil-n1_abschnitt-n2_art-n1_überschrift-n1">
+                <akn:article GUID="77777777-8888-9999-aaaa-dddddddddddd" eId="art-z1" period="#meta-n1_geltzeiten-n1_geltungszeitgr-n3" refersTo="stammform">
+                    <akn:num GUID="88888888-9999-aaaa-bbbb-eeeeeeeeeeef" eId="art-z1_bezeichnung-n1">§ 5</akn:num>
+                    <akn:heading GUID="99999999-aaaa-bbbb-cccc-ffffffffffff" eId="art-z1_überschrift-n1">
                         Geräteüberwachung und Einsatzkontrolle
                     </akn:heading>
-                    <akn:paragraph GUID="aaaaaaaa-bbbb-cccc-dddd-111111111112" eId="hauptteil-n1_abschnitt-n2_art-n1_abs-n1">
-                        <akn:num GUID="bbbbbbbb-cccc-dddd-eeee-222222222223" eId="hauptteil-n1_abschnitt-n2_art-n1_abs-n1_bezeichnung-n1">(1)</akn:num>
-                        <akn:content GUID="cccccccc-dddd-eeee-ffff-333333333334" eId="hauptteil-n1_abschnitt-n2_art-n1_abs-n1_inhalt-n1">
-                            <akn:p GUID="dddddddd-eeee-ffff-0000-444444444445" eId="hauptteil-n1_abschnitt-n2_art-n1_abs-n1_inhalt-n1_text-n1">
+                    <akn:paragraph GUID="aaaaaaaa-bbbb-cccc-dddd-111111111112" eId="art-z1_abs-z1">
+                        <akn:num GUID="bbbbbbbb-cccc-dddd-eeee-222222222223" eId="art-z1_abs-z1_bezeichnung-n1">(1)</akn:num>
+                        <akn:content GUID="cccccccc-dddd-eeee-ffff-333333333334" eId="art-z1_abs-z1_inhalt-n1">
+                            <akn:p GUID="dddddddd-eeee-ffff-0000-444444444445" eId="art-z1_abs-z1_inhalt-n1_text-n1">
                                 Die ordnungsgemäße Funktion der Wahlgeräte wird durch regelmäßige Prüfungen sichergestellt.
                             </akn:p>
                         </akn:content>

@@ -274,14 +274,7 @@ class NormLdmlToOpenSearchMapperTest {
             Path.of(
                 "src/test/resources/data/LDML/norm/eli/bund/bgbl-1/1991/s101/1991-01-01/1/deu/1991-01-01/regelungstext-1.xml"));
     var norm = NormLdmlToOpenSearchMapper.parseNorm(sourceFile, Map.of()).orElseThrow();
-    var eIds =
-        List.of(
-            "hauptteil-n1_art-n1",
-            "hauptteil-n1_art-n2",
-            "hauptteil-n1_art-n3",
-            "hauptteil-n1_art-n4",
-            "hauptteil-n1_art-n5",
-            "schluss-n1_formel-n1");
+    var eIds = List.of("art-z1", "art-z2", "art-z3", "art-z4", "art-z5", "schluss-n1_formel-n1");
     assertThat(norm.getArticles().stream().map(Article::eId).toList()).isEqualTo(eIds);
     Article firstArticle = norm.getArticles().stream().findFirst().orElseThrow();
     assertThat(firstArticle.entryIntoForceDate()).isEqualTo(LocalDate.of(1991, 1, 1));

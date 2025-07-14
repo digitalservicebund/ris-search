@@ -197,7 +197,7 @@ class NormsControllerApiTest extends ContainersIntegrationBase {
 
     Element image =
         Objects.requireNonNull(
-            document.body().getElementById("hauptteil-n1_art-n5_abs-n1_inhalt-n1_text-n1_bild-n1"));
+            document.body().getElementById("art-z5_abs-z1_inhalt-n1_text-n1_bild-n1"));
 
     final String srcInLDML = "eli/bund/bgbl-1/1991/s101/1991-01-01/1/deu/1991-01-01/bild_1.jpg";
     String expectedSrc = expectedPrefix + srcInLDML;
@@ -272,7 +272,7 @@ class NormsControllerApiTest extends ContainersIntegrationBase {
     var response =
         mockMvc
             .perform(
-                get(MANIFESTATION_URL_HTML.replace(".html", "/hauptteil-n1_art-n1.html"))
+                get(MANIFESTATION_URL_HTML.replace(".html", "/art-z1.html"))
                     .contentType(MediaType.TEXT_HTML))
             .andExpectAll(status().isOk(), content().contentType("text/html;charset=UTF-8"))
             .andReturn();
@@ -283,7 +283,7 @@ class NormsControllerApiTest extends ContainersIntegrationBase {
     assertThat(articles).hasSize(1);
 
     final String articleId = Objects.requireNonNull(articles.getFirst().attribute("id")).getValue();
-    assertThat(articleId).isEqualTo("hauptteil-n1_art-n1");
+    assertThat(articleId).isEqualTo("art-z1");
   }
 
   @Test
@@ -293,7 +293,7 @@ class NormsControllerApiTest extends ContainersIntegrationBase {
 
     mockMvc
         .perform(
-            get(MANIFESTATION_URL_HTML.replace(".html", "/hauptteil-n1_art-n10.html"))
+            get(MANIFESTATION_URL_HTML.replace(".html", "/art-z10.html"))
                 .contentType(MediaType.TEXT_HTML))
         .andExpect(status().isNotFound());
   }
