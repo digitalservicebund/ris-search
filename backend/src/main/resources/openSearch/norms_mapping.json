@@ -62,6 +62,7 @@
     },
     "official_abbreviation": {
       "type": "text",
+      "analyzer": "custom_german_analyzer",
       "boost": 3,
       "fields": {
         "keyword": {
@@ -73,6 +74,7 @@
     },
     "work_eli": {
       "type": "text",
+      "analyzer": "custom_german_analyzer",
       "fields": {
         "keyword": {
           "type": "keyword",
@@ -83,6 +85,7 @@
     },
     "expression_eli": {
       "type": "text",
+      "analyzer": "custom_german_analyzer",
       "fields": {
         "keyword": {
           "type": "keyword",
@@ -144,7 +147,8 @@
       "type": "date"
     },
     "published_in": {
-      "type": "text"
+      "type": "text",
+      "analyzer": "custom_german_analyzer"
     },
     "expiry_date": {
       "type": "date"
