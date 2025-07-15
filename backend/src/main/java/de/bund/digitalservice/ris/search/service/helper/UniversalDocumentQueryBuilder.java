@@ -80,7 +80,12 @@ public class UniversalDocumentQueryBuilder {
                 .operator(Operator.AND)
                 .type(Type.CROSS_FIELDS);
         query.must(unquotedQuery);
-        articleNestedQuery.should(unquotedQuery);
+        MultiMatchQueryBuilder nestedMatchQuery =
+            new MultiMatchQueryBuilder(term)
+                .zeroTermsQuery(MatchQuery.ZeroTermsQuery.ALL)
+                .operator(Operator.OR)
+                .type(Type.BEST_FIELDS);
+        articleNestedQuery.should(nestedMatchQuery);
       }
 
       for (String phrase : quotedSearchPhrases) {
