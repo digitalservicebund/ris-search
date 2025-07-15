@@ -45,8 +45,10 @@ public class IndexNormsService implements IndexService {
             .toList();
     Set<ExpressionEli> expressions = getExpressions(manifestations);
     List<List<ExpressionEli>> batches = ListUtils.partition(expressions.stream().toList(), 100);
-    for (List<ExpressionEli> batch : batches) {
-      indexOneNormBatch(batch);
+    logger.info("Import norms process will have {} batches", batches.size());
+    for (int i = 0; i < batches.size(); i++) {
+      indexOneNormBatch(batches.get(i));
+      logger.info("Import norms batch {} of {} complete.", (i + 1), batches.size());
     }
     clearOldNorms(startingTimestamp);
   }
