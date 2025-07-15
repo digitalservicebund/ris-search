@@ -125,16 +125,18 @@ public class UniversalDocumentQueryBuilder {
 
       query.should(articleQueryBuilder);
 
-      // Add a "BEST_FIELDS" query with the entire search term to boost documents
-      // where the complete term appears in high-priority fields.
+      // Targeted search. If the entire search term is an exact match for a unique identifier it
+      // should get a very large boost.
       query.should(
           new MultiMatchQueryBuilder(params.getSearchTerm())
-              .type(Type.BEST_FIELDS)
-              .operator(Operator.AND)
-              .field(CaseLawDocumentationUnit.Fields.FILE_NUMBERS)
-              .field(CaseLawDocumentationUnit.Fields.ECLI)
-              .field(Norm.Fields.OFFICIAL_SHORT_TITLE)
-              .field(Norm.Fields.OFFICIAL_ABBREVIATION));
+              .field(CaseLawDocumentationUnit.Fields.ECLI_KEYWORD)
+              .field(CaseLawDocumentationUnit.Fields.FILE_NUMBERS_KEYWORD)
+              .field(Norm.Fields.WORK_ELI_KEYWORD)
+              .field(Norm.Fields.EXPRESSION_ELI_KEYWORD)
+              .field(Norm.Fields.OFFICIAL_TITLE_KEYWORD)
+              .field(Norm.Fields.OFFICIAL_SHORT_TITLE_KEYWORD)
+              .field(Norm.Fields.OFFICIAL_ABBREVIATION_KEYWORD)
+              .boost(10.0f));
     }
     DateUtils.buildQuery("DATUM", params.getDateFrom(), params.getDateTo())
         .ifPresent(query::filter);
@@ -144,7 +146,7 @@ public class UniversalDocumentQueryBuilder {
   public UniversalDocumentQueryBuilder withNormsParams(NormsSearchParams params) {
     if (params == null) return this;
     if (params.getEli() != null) {
-      query.must(matchQuery("work_eli", params.getEli()));
+      query.must(matchQuery("work_eli", params.getEli()).operator(Operator.AND));
     }
     DateUtils.buildQueryForTemporalCoverage(
             params.getTemporalCoverageFrom(), params.getTemporalCoverageTo())
@@ -156,10 +158,10 @@ public class UniversalDocumentQueryBuilder {
   public UniversalDocumentQueryBuilder withCaseLawSearchParams(CaseLawSearchParams params) {
     if (params == null) return this;
     if (params.getEcli() != null) {
-      query.must(matchQuery("ecli", params.getEcli()));
+      query.must(matchQuery("ecli", params.getEcli()).operator(Operator.AND));
     }
     if (params.getFileNumber() != null) {
-      query.filter(matchQuery("file_numbers", params.getFileNumber()));
+      query.filter(matchQuery("file_numbers", params.getFileNumber()).operator(Operator.AND));
     }
     if (params.getCourt() != null) {
       var either =
@@ -173,7 +175,8 @@ public class UniversalDocumentQueryBuilder {
       query.filter(either);
     }
     if (params.getLegalEffect() != null) {
-      query.filter(matchQuery("legal_effect", params.getLegalEffect().toString()));
+      query.filter(
+          matchQuery("legal_effect", params.getLegalEffect().toString()).operator(Operator.AND));
     }
     if (params.getType() != null) {
       queryDocumentType(params.getType());

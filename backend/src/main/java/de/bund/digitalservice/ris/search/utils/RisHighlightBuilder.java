@@ -66,12 +66,7 @@ public final class RisHighlightBuilder {
   private static HighlightBuilder addCaseLawFields(HighlightBuilder builder) {
     CASE_LAW_HIGHLIGHT_CONTENT_FIELDS.forEach(builder::field);
     builder.field(getFieldBasic(CaseLawDocumentationUnit.Fields.ECLI));
-    /*
-     * Note that this uses the .text variant of file_numbers
-     * */
-    builder.field(
-        getFieldBasic(CaseLawDocumentationUnit.Fields.FILE_NUMBERS_TEXT)
-            .numOfFragments(5) /* Support highlighting multiple (partial) file numbers */);
+    builder.field(getFieldBasic(CaseLawDocumentationUnit.Fields.FILE_NUMBERS));
     return builder;
   }
 

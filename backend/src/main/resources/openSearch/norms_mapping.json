@@ -35,6 +35,12 @@
     "official_title": {
       "type": "text",
       "analyzer": "custom_german_analyzer",
+      "fields": {
+        "keyword": {
+          "type": "keyword",
+          "normalizer": "normalized_keyword"
+        }
+      },
       "boost": 2
     },
     "norms_date": {
@@ -46,25 +52,43 @@
     "official_short_title": {
       "type": "text",
       "analyzer": "custom_german_analyzer",
+      "fields": {
+        "keyword": {
+          "type": "keyword",
+          "normalizer": "normalized_keyword"
+        }
+      },
       "boost": 2
     },
     "official_abbreviation": {
-      "type": "keyword",
-      "normalizer": "lowercase",
+      "type": "text",
       "boost": 3,
       "fields": {
-        "text": {
-          "type": "text",
+        "keyword": {
+          "type": "keyword",
+          "normalizer": "normalized_keyword",
           "boost": 3
         }
       }
     },
     "work_eli": {
-      "type": "keyword",
+      "type": "text",
+      "fields": {
+        "keyword": {
+          "type": "keyword",
+          "normalizer": "normalized_keyword"
+        }
+      },
       "boost": 2
     },
     "expression_eli": {
-      "type": "keyword",
+      "type": "text",
+      "fields": {
+        "keyword": {
+          "type": "keyword",
+          "normalizer": "normalized_keyword"
+        }
+      },
       "boost": 2
     },
     "manifestation_eli": {
