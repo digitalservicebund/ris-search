@@ -6,6 +6,7 @@
         "tokenizer": "standard",
         "filter": [
           "lowercase",
+          "court_type_synonyms",
           "german_decompounder",
           "german_normalization",
           "german_stemmer"
@@ -14,27 +15,12 @@
           "replace_article_character",
           "replace_euro_character"
         ]
-      },
-      "court_keyword_custom_german_analyzer": {
-        "type": "custom",
-        "tokenizer": "standard",
-        "filter": [
-          "lowercase",
-          "court_type_synonyms",
-          "german_decompounder",
-          "german_normalization",
-          "german_stemmer"
-        ]
       }
     },
     "filter": {
       "german_normalization": {
         "type": "asciifolding",
         "name": "nfkc_cf"
-      },
-      "german_stop": {
-        "type": "stop",
-        "stopwords": "_german_"
       },
       "german_stemmer": {
         "type": "stemmer",

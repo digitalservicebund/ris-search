@@ -187,12 +187,12 @@
     },
     "court_type": {
       "type": "text",
+      "analyzer": "custom_german_analyzer",
       "fields": {
         "keyword": {
           "type": "keyword"
         }
-      },
-      "analyzer": "court_keyword_custom_german_analyzer"
+      }
     },
     "decision_date": {
       "type": "date"
@@ -223,6 +223,7 @@
     },
     "ecli": {
       "type": "text",
+      "analyzer": "custom_german_analyzer",
       "fields": {
         "keyword": {
           "type": "keyword",
@@ -254,7 +255,8 @@
       "type": "keyword"
     },
     "location": {
-      "type": "text"
+      "type": "text",
+      "analyzer": "custom_german_analyzer"
     },
     "other_headnote": {
       "type": "text",
@@ -268,6 +270,7 @@
     },
     "file_numbers": {
       "type": "text",
+      "analyzer": "custom_german_analyzer",
       "boost": 2.5,
       "fields": {
         "keyword": {
@@ -292,11 +295,12 @@
       "analyzer": "custom_german_analyzer"
     },
     "keywords": {
-      "type": "text"
+      "type": "text",
+      "analyzer": "custom_german_analyzer"
     },
     "court_keyword": {
       "type": "text",
-      "analyzer": "court_keyword_custom_german_analyzer",
+      "analyzer": "custom_german_analyzer",
       "fields": {
         "keyword": {
           "type": "keyword"
@@ -342,7 +346,8 @@
       "path": "procedures"
     },
     "legal_effect": {
-      "type": "text"
+      "type": "text",
+      "analyzer": "custom_german_analyzer"
     },
     "RECHTSKRAFT": {
       "type": "alias",
