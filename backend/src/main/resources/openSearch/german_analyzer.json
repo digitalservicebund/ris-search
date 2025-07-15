@@ -95,7 +95,7 @@
       "replace_article_character": {
         "type": "pattern_replace",
         "pattern": "\\u00A7",
-        "replacement": "paragraph"
+        "replacement": "paragraph "
       },
       "replace_euro_character": {
         "type": "pattern_replace",
