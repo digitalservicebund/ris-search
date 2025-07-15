@@ -12,23 +12,18 @@ The `analysis` section specifies custom analyzer definitions for text data in th
 
 #### `custom_german_analyzer`
 
-This analyzer is used for most text content in the project, such as headlines, document body, or metadata such as
-location.
-
-#### `court_keyword_custom_german_analyzer`
-
-This analyzer is similar to the `custom_german_analyzer`, but has support for domain-specific synonyms, such as "AG"
-for "Amtsgericht".
+This analyzer is used for all text content in the project, such as headlines, document body, or metadata such as
+location. The fields need to use the same analyzer in order to support our needed `CROSS_FIELDS` logic
 
 ## Normalizer Settings
 
-The normalizer section is mainly used for keyword fields, doing character-level replacements:
+The normalizer section is used for keyword fields.
 
-### `file_number_normalizer`
-
-This normalizer processes file numbers (Aktenzeichen) by filtering out special characters and spaces, and converting the
-token to lowercase.
-This way, both "IX ZR 100/10" and "ixzr10010" match the original input "IX ZR 100/10".
+### `normalized_keyword`
+All keyword fields are currently indexed twice. Once as text (for the filtering logic using `CROSS_FIELDS`) and once
+as keyword (with an exact match on keyword providing a large boost). Exact match means after normalization. The keyword
+fields use `normalized_keyword` to apply `lowercase` and `asciifolding` so that "exact" match works as expected. In
+particular "Abcü/123" will match "abcue/123", but will NOT match "Abcü 123".
 
 ## Document index definition
 
@@ -39,20 +34,6 @@ See [IndexAliasService.java](../../java/de/bund/digitalservice/ris/search/servic
 
 The [caselaw_mappings.json](./caselaw_mappings.json) document defines a list of aliases, so that both e.g. AZ,
 AKTENZEICHEN, and file_numbers may be used in Lucene queries to refer to document_numbers.
-
-### `_type` keywords fields
-
-For court_type and document_type, a `keyword` field is defined so that exact matching based on court type may be
-performed more efficiently.
-
-### `file_numbers`
-
-The file_numbers field is given a boost, so that users searching for a file number will see documents with that file
-number first, before other documents that quote that number or have parts of that file number across different fields.
-
-### `court_keyword`
-
-See `court_keyword_custom_german_analyzer`.
 
 ### `articles`
 
