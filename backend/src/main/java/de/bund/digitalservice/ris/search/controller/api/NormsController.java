@@ -30,7 +30,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import java.io.IOException;
 import java.net.URLConnection;
 import java.time.LocalDate;
 import java.util.List;
@@ -81,8 +80,7 @@ public class NormsController {
   private final XsltTransformerService xsltTransformerService;
 
   @Autowired
-  public NormsController(NormsService normsService, XsltTransformerService xsltTransformerService)
-      throws IOException {
+  public NormsController(NormsService normsService, XsltTransformerService xsltTransformerService) {
     this.normsService = normsService;
     this.xsltTransformerService = xsltTransformerService;
   }
