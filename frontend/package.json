@@ -37,7 +37,7 @@
     "@sentry/nuxt": "^9.29.0",
     "@tailwindcss/vite": "^4.1.8",
     "axe-html-reporter": "^2.2.11",
-    "axios": "^1.9.0",
+    "axios": "^1.10.0",
     "dayjs": "^1.11.13",
     "js-cookie": "^3.0.5",
     "jwt-decode": "^4.0.0",
