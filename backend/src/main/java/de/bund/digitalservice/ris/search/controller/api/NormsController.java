@@ -80,14 +80,12 @@ public class NormsController {
 
   private final NormsService normsService;
   private final XsltTransformerService xsltTransformerService;
-  private final byte[] mockPdfBytes;
 
   @Autowired
   public NormsController(NormsService normsService, XsltTransformerService xsltTransformerService)
       throws IOException {
     this.normsService = normsService;
     this.xsltTransformerService = xsltTransformerService;
-    mockPdfBytes = new ClassPathResource("placeholder.pdf").getInputStream().readAllBytes();
   }
 
   @GetMapping(value = ApiConfig.Paths.LEGISLATION, produces = MediaType.APPLICATION_JSON_VALUE)
