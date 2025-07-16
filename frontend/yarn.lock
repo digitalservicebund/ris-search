@@ -14686,7 +14686,7 @@ __metadata:
     "@vitest/coverage-v8": "npm:^3.2.3"
     "@vue/test-utils": "npm:^2.4.6"
     axe-html-reporter: "npm:^2.2.11"
-    axios: "npm:^1.9.0"
+    axios: "npm:^1.10.0"
     dayjs: "npm:^1.11.13"
     dompurify: "npm:^3.2.6"
     eslint: "npm:^9.30.1"
