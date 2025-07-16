@@ -40,7 +40,6 @@ import java.util.stream.Stream;
 import org.apache.commons.lang3.StringUtils;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.UncategorizedElasticsearchException;
 import org.springframework.data.elasticsearch.core.SearchPage;
