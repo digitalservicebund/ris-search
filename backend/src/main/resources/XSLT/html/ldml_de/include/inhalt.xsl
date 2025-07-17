@@ -604,6 +604,17 @@
     </xsl:template>
 
     <!--
+        PDF
+        ######
+    -->
+    <xsl:template match="akn:a[ends-with(@href, '.pdf')]">
+        <a class="norm-pdf-link" href="{concat($ressourcenpfad, @href)}" target="_blank" rel="noopener noreferrer">
+            <xsl:apply-templates select="@*[local-name() != 'href']" />
+            PDF öffnen
+        </a>
+    </xsl:template>
+
+    <!--
         An diversen Stellen wiederverwendete Angaben
         ############################################
     -->

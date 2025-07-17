@@ -359,3 +359,15 @@ hr.trennlinie {
     @apply ml-16;
   }
 }
+
+.norm-pdf-link {
+  @apply inline-flex items-center;
+}
+
+.norm-pdf-link::before {
+  content: "";
+  @apply mr-8 inline-block h-24 w-24;
+  mask: url("img/file.svg") no-repeat center;
+  mask-size: contain;
+  background-color: currentColor;
+}

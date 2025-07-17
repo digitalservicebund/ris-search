@@ -83,6 +83,9 @@
                             <akn:img GUID="7f4172f8-2184-4b13-98b3-d387b6b25a72"
                                      eId="art-z1_abs-z2_inhalt-n1_bild-n1"
                                      src="eli/bund/bgbl-1/2024/383/2024-12-19/1/deu/2024-12-19/illustration.png" alt="Beispielbild"/></akn:p>
+                        <akn:p GUID="bb1a2595-b3e5-42a2-8b88-d85027c65e91" class="bold" eId="art-z1_abs-z2_inhalt-n1_text-n1">
+                            <akn:a GUID="065d5bee-4243-4d58-9abc-890824b1ca9c" eId="art-z1_abs-z2_inhalt-n1_text-n1_a-n1" href="eli/bund/bgbl-1/2024/383/2024-12-19/1/deu/2024-12-19/dokument.pdf"/>
+                        </akn:p>
                     </akn:content>
                 </akn:paragraph>
             </akn:article>

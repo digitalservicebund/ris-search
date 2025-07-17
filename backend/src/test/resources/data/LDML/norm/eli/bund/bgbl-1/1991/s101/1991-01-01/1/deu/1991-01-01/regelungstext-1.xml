@@ -274,6 +274,9 @@
                            eId="art-z5_abs-z1_inhalt-n1_text-n1_bild-n1" height="54"
                            src="eli/bund/bgbl-1/1991/s101/1991-01-01/1/deu/1991-01-01/bild_1.jpg" width="60"/>
               </akn:p>
+              <akn:p eId="art-z5_abs-z1_inhalt-n1_text-n2" GUID="b0c5d6f7-8e9a-4c0f-bb2d-8e3d5f6c7a1b">
+                  <akn:a eId="art-z5_abs-z1_inhalt-n1_text-n2_a-n1" href="eli/bund/bgbl-1/1991/s101/1991-01-01/1/deu/1991-01-01/dokument.pdf" GUID="c5b6f8d9-0a2b-4c3d-bf4e-5f6a7b8c9d0e" />
+              </akn:p>
           </akn:content>
         </akn:paragraph>
       </akn:article>

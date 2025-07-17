@@ -1,0 +1,5 @@
+<akn:akomaNtoso xmlns:akn="http://Inhaltsdaten.LegalDocML.de/1.8.1/">
+    <akn:a GUID="7f4172f8-2184-4b13-98b3-d387b6b25a72"
+             eId="a-1"
+             href="some/link"/>
+</akn:akomaNtoso>

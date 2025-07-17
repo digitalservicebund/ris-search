@@ -30,7 +30,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import java.io.IOException;
 import java.net.URLConnection;
 import java.time.LocalDate;
 import java.util.List;
@@ -40,7 +39,6 @@ import java.util.stream.Stream;
 import org.apache.commons.lang3.StringUtils;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.UncategorizedElasticsearchException;
 import org.springframework.data.elasticsearch.core.SearchPage;
@@ -80,14 +78,11 @@ public class NormsController {
 
   private final NormsService normsService;
   private final XsltTransformerService xsltTransformerService;
-  private final byte[] mockPdfBytes;
 
   @Autowired
-  public NormsController(NormsService normsService, XsltTransformerService xsltTransformerService)
-      throws IOException {
+  public NormsController(NormsService normsService, XsltTransformerService xsltTransformerService) {
     this.normsService = normsService;
     this.xsltTransformerService = xsltTransformerService;
-    mockPdfBytes = new ClassPathResource("placeholder.pdf").getInputStream().readAllBytes();
   }
 
   @GetMapping(value = ApiConfig.Paths.LEGISLATION, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -249,36 +244,6 @@ public class NormsController {
     } else {
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body(HTML_FILE_NOT_FOUND);
     }
-  }
-
-  @GetMapping(
-      path =
-          ApiConfig.Paths.LEGISLATION_SINGLE
-              + "/{jurisdiction}/{agent}/{year}/{naturalIdentifier}/{pointInTime}/{version}/{language}/{pointInTimeManifestation}/{subtype}.pdf",
-      produces = MediaType.APPLICATION_PDF_VALUE)
-  @Operation(
-      summary = "Manifestation PDF",
-      description =
-          "Returns a particular manifestation of a piece of legislation, converted to PDF.")
-  @ApiResponse(responseCode = "200")
-  @ApiResponse(responseCode = "404")
-  public ResponseEntity<byte[]> getLegislationSubtypeAsPdf(
-      @Parameter(description = BUND_DESCRIPTION, example = BUND_EXAMPLE)
-          @PathVariable
-          @Schema(allowableValues = {BUND_EXAMPLE})
-          String jurisdiction,
-      @Parameter(description = AGENT_DESCRIPTION, example = AGENT_EXAMPLE) @PathVariable
-          String agent,
-      @PathVariable @Parameter(description = YEAR_DESCRIPTION, example = YEAR_EXAMPLE) String year,
-      @Parameter(description = NATURAL_IDENTIFIER_DESCRIPTION, example = NATURAL_IDENTIFIER_EXAMPLE)
-          @PathVariable
-          String naturalIdentifier,
-      @Parameter(example = "2020-06-19") @PathVariable LocalDate pointInTime,
-      @PathVariable @Schema(example = "2") Integer version,
-      @PathVariable @Schema(example = "deu") String language,
-      @PathVariable @Schema(example = "2020-06-19") LocalDate pointInTimeManifestation,
-      @Schema(example = "regelungstext-1") @PathVariable String subtype) {
-    return ResponseEntity.ok().contentType(MediaType.APPLICATION_PDF).body(mockPdfBytes);
   }
 
   @GetMapping(
@@ -471,7 +436,7 @@ public class NormsController {
                             """)
   @ApiResponse(responseCode = "200")
   @ApiResponse(responseCode = "404", content = @Content())
-  public ResponseEntity<byte[]> getImage(
+  public ResponseEntity<byte[]> getFile(
       @Parameter(description = BUND_DESCRIPTION, example = BUND_EXAMPLE)
           @PathVariable
           @Schema(allowableValues = {BUND_EXAMPLE})
@@ -487,8 +452,17 @@ public class NormsController {
       @PathVariable @Schema(example = "deu") String language,
       @PathVariable @Schema(example = "2020-06-19") LocalDate pointInTimeManifestation,
       @Schema(example = "image") @PathVariable String name,
-      @Schema(example = "jpg") @PathVariable String extension)
+      @Schema(
+              example = "jpg",
+              allowableValues = {"pdf", "xml", "jpg", "gif"})
+          @PathVariable
+          String extension)
       throws ObjectStoreServiceException {
+
+    final List<String> allowedExtensions = List.of("pdf", "xml", "jpg", "gif");
+    if (!allowedExtensions.contains(extension.toLowerCase())) {
+      return ResponseEntity.notFound().build();
+    }
 
     final ManifestationEli eli =
         new ManifestationEli(
@@ -502,12 +476,11 @@ public class NormsController {
             pointInTimeManifestation,
             name,
             extension);
-    Optional<byte[]> image = normsService.getNormFileByEli(eli);
+    Optional<byte[]> file = normsService.getNormFileByEli(eli);
 
     final String mimeType = URLConnection.guessContentTypeFromName(name + "." + extension);
 
-    return image
-        .map(
+    return file.map(
             body ->
                 ResponseEntity.status(HttpStatus.OK).header("Content-Type", mimeType).body(body))
         .orElseGet(() -> ResponseEntity.notFound().build());

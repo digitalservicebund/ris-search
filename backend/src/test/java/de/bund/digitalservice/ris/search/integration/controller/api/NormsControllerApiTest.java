@@ -166,13 +166,25 @@ class NormsControllerApiTest extends ContainersIntegrationBase {
             "<h1 class=\"titel\" id=\"einleitung-n1_doktitel-n1_text-n1_doctitel-n1\">Formatting Test Document</h1>");
   }
 
-  @Test
-  @DisplayName("Pdf endpoint should return pdf when requesting a single norm")
-  void shouldReturnPdfWhenRequestingNormAsPdf() throws Exception {
-    mockMvc
-        .perform(get(MANIFESTATION_URL_PDF))
-        .andExpect(status().isOk())
-        .andExpect(content().contentType("application/pdf"));
+  public static Stream<Arguments> fileTestArguments() {
+    String baseUrl = MANIFESTATION_URL_PREFIX.replace("regelungstext-1", "");
+    return Stream.of(
+        Arguments.of(
+            "return file when it exists and extension supported", 200, baseUrl + "dokument.pdf"),
+        Arguments.of("not return file when extension not supported", 404, baseUrl + "bild_1.png"),
+        Arguments.of("not return file when does not exist", 404, baseUrl + "nonexistent.jpg"),
+        Arguments.of(
+            "not return files if relative paths are used",
+            400,
+            baseUrl + "../1991-02-01/bild_1.jpg"));
+  }
+
+  @ParameterizedTest
+  @MethodSource("fileTestArguments")
+  @DisplayName("File endpoint should {0}")
+  void shouldReturnFilesWhenRequestedAndIfExtensionIsSupported(
+      String testDescription, int status, String path) throws Exception {
+    mockMvc.perform(get(path)).andExpect(status().is(status));
   }
 
   @ParameterizedTest
@@ -254,7 +266,12 @@ class NormsControllerApiTest extends ContainersIntegrationBase {
                 "anlage-regelungstext-1.xml",
                 Files.readAllBytes(Path.of(resourceDirectoryPath, "anlage-regelungstext-1.xml"))),
             Map.entry(
-                "bild_1.jpg", Files.readAllBytes(Path.of(resourceDirectoryPath, "bild_1.jpg"))));
+                "bild_1.jpg", Files.readAllBytes(Path.of(resourceDirectoryPath, "bild_1.jpg"))),
+            Map.entry(
+                "bild_1.png", Files.readAllBytes(Path.of(resourceDirectoryPath, "bild_1.png"))),
+            Map.entry(
+                "dokument.pdf",
+                Files.readAllBytes(Path.of(resourceDirectoryPath, "dokument.pdf"))));
   }
 
   @Test
