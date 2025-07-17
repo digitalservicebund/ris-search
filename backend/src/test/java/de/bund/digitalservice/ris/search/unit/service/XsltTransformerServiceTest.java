@@ -54,7 +54,7 @@ class XsltTransformerServiceTest {
     "notes.xml, notes.html, Should transform notes",
     "image.xml, image.html, Should transform img tag",
     "pdf.xml, pdf.html, Should transform links with pdf file",
-    "noPdfLinks.xml, noPdfLinks.html, Should not transform links with pdf file",
+    "noPdfLinks.xml, noPdfLinks.html, Should not apply any special transformation to non-pdf links",
     "container.xml, container.html, Should transform container elements in the preface",
     "preambleFormula.xml, preambleFormula.html, Should transform a preamble formula",
     "conclusionsFormula.xml, conclusionsFormula.html, Should transform a conclusions formula",
