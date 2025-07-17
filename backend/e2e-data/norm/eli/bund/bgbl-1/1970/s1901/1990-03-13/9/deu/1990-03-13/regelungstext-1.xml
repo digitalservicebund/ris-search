@@ -1,168 +1,167 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?xml-model href="../../../Grammatiken/legalDocML.de.sch" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<?xml-model href="Grammatiken/legalDocML.de.sch" schematypens="http://purl.oclc.org/dsdl/schematron"?>
 <akn:akomaNtoso xmlns:akn="http://Inhaltsdaten.LegalDocML.de/1.8.1/"
-                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                xsi:schemaLocation="http://Metadaten.LegalDocML.de/1.8.1/ ../schema/legalDocML.de-metadaten.xsd http://Inhaltsdaten.LegalDocML.de/1.8.1/ ../schema/legalDocML.de-regelungstextverkuendungsfassung.xsd http://MetadatenBundesregierung.LegalDocML.de/1.8.1/ ../schema/legalDocML.de-metadaten-bundesregierung.xsd">
-    <akn:act name="regelungstext">
-        <akn:meta GUID="11111111-1111-4111-8111-111111111111" eId="meta-1">
-            <akn:identification GUID="22222222-2222-4222-8222-222222222222" eId="meta-1_ident-1" source="attributsemantik-noch-undefiniert">
-                <akn:FRBRWork GUID="33333333-3333-4333-8333-333333333333" eId="meta-1_ident-1_frbrwork-1">
-                    <akn:FRBRthis GUID="44444444-4444-4444-8444-444444444444" eId="meta-1_ident-1_frbrwork-1_frbrthis-1" value="eli/bund/bgbl-1/1970/s1901/regelungstext-1"/>
-                    <akn:FRBRuri GUID="55555555-5555-4555-8555-555555555555" eId="meta-1_ident-1_frbrwork-1_frbruri-1" value="eli/bund/bgbl-1/1970/s1901"/>
-                    <akn:FRBRalias GUID="66666666-6666-4666-8666-666666666666" eId="meta-1_ident-1_frbrwork-1_frbralias-1" name="übergreifende-id" value="f568594c-4924-4fb5-8d3e-eca0409009de"/>
-                    <akn:FRBRdate GUID="77777777-7777-4777-8777-777777777777" date="1970-10-10" eId="meta-1_ident-1_frbrwork-1_frbrdate-1" name="verkuendungsfassung"/>
-                    <akn:FRBRauthor GUID="88888888-8888-4888-8888-888888888888" eId="meta-1_ident-1_frbrwork-1_frbrauthor-1" href="recht.bund.de/institution/bundesregierung"/>
-                    <akn:FRBRcountry GUID="99999999-9999-4999-9999-999999999999" eId="meta-1_ident-1_frbrwork-1_frbrcountry-1" value="de"/>
-                    <akn:FRBRnumber GUID="aaaaaaaa-aaaa-4aaa-aaaa-aaaaaaaaaaaa" eId="meta-1_ident-1_frbrwork-1_frbrnumber-1" value="s1901"/>
-                    <akn:FRBRname GUID="bbbbbbbb-bbbb-4bbb-bbbb-bbbbbbbbbbbb" eId="meta-1_ident-1_frbrwork-1_frbrname-1" value="bgbl-1"/>
-                    <akn:FRBRsubtype GUID="cccccccc-cccc-4ccc-cccc-cccccccccccc" eId="meta-1_ident-1_frbrwork-1_frbrsubtype-1" value="regelungstext-1"/>
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://MetadatenRIS.LegalDocML.de/1.8.1/ Grammatiken/legalDocML.de-metadaten-ris.xsd http://MetadatenRegelungstext.LegalDocML.de/1.8.1/ Grammatiken/legalDocML.de-metadaten-regelungstext.xsd http://MetadatenRechtsetzungsdokument.LegalDocML.de/1.8.1/ Grammatiken/legalDocML.de-metadaten-rechtsetzungsdokument.xsd http://Inhaltsdaten.LegalDocML.de/1.8.1/ Grammatiken/legalDocML.de-regelungstextverkuendungsfassung.xsd">
+    <akn:act name="/akn/ontology/de/concept/documenttype/bund/regelungstext-verkuendung">
+        <akn:meta GUID="11111111-1111-4111-8111-111111111111" eId="meta-n1">
+            <akn:identification GUID="22222222-2222-4222-8222-222222222222" eId="meta-n1_ident-n1" source="attributsemantik-noch-undefiniert">
+                <akn:FRBRWork GUID="33333333-3333-4333-8333-333333333333" eId="meta-n1_ident-n1_frbrwork-n1">
+                    <akn:FRBRthis GUID="44444444-4444-4444-8444-444444444444" eId="meta-n1_ident-n1_frbrwork-n1_frbrthis-n1" value="eli/bund/bgbl-1/1970/s1901/regelungstext-1"/>
+                    <akn:FRBRuri GUID="55555555-5555-4555-8555-555555555555" eId="meta-n1_ident-n1_frbrwork-n1_frbruri-n1" value="eli/bund/bgbl-1/1970/s1901"/>
+                    <akn:FRBRalias GUID="66666666-6666-4666-8666-666666666666" eId="meta-n1_ident-n1_frbrwork-n1_frbralias-n1" name="übergreifende-id" value="f568594c-4924-4fb5-8d3e-eca0409009de"/>
+                    <akn:FRBRdate GUID="77777777-7777-4777-8777-777777777777" date="1970-10-10" eId="meta-n1_ident-n1_frbrwork-n1_frbrdate-n1" name="verkuendungsfassung-verkuendungsdatum"/>
+                    <akn:FRBRauthor GUID="88888888-8888-4888-8888-888888888888" eId="meta-n1_ident-n1_frbrwork-n1_frbrauthor-n1" href="recht.bund.de/institution/bundesregierung"/>
+                    <akn:FRBRcountry GUID="99999999-9999-4999-9999-999999999999" eId="meta-n1_ident-n1_frbrwork-n1_frbrcountry-n1" value="de"/>
+                    <akn:FRBRnumber GUID="aaaaaaaa-aaaa-4aaa-aaaa-aaaaaaaaaaaa" eId="meta-n1_ident-n1_frbrwork-n1_frbrnumber-n1" value="s1901"/>
+                    <akn:FRBRname GUID="bbbbbbbb-bbbb-4bbb-bbbb-bbbbbbbbbbbb" eId="meta-n1_ident-n1_frbrwork-n1_frbrname-n1" value="bgbl-1"/>
+                    <akn:FRBRsubtype GUID="cccccccc-cccc-4ccc-cccc-cccccccccccc" eId="meta-n1_ident-n1_frbrwork-n1_frbrsubtype-n1" value="regelungstext-1"/>
                 </akn:FRBRWork>
-                <akn:FRBRExpression GUID="dddddddd-dddd-4ddd-dddd-dddddddddddd" eId="meta-1_ident-1_frbrexpression-1">
-                    <akn:FRBRthis GUID="eeeeeeee-eeee-4eee-eeee-eeeeeeeeeeee" eId="meta-1_ident-1_frbrexpression-1_frbrthis-1" value="eli/bund/bgbl-1/1970/s1901/1990-03-13/9/deu/regelungstext-1"/>
-                    <akn:FRBRuri GUID="ffffffff-ffff-4fff-ffff-ffffffffffff" eId="meta-1_ident-1_frbrexpression-1_frbruri-1" value="eli/bund/bgbl-1/1970/s1901/1990-03-13/9/deu"/>
-                    <akn:FRBRalias GUID="11111110-1111-4111-8111-111111111112" eId="meta-1_ident-1_frbrexpression-1_frbralias-1" name="vorherige-version-id" value="88c430c0-ec32-4636-81bb-300bb307fa70"/>
-                    <akn:FRBRalias GUID="22222220-2222-4222-8222-222222222223" eId="meta-1_ident-1_frbrexpression-1_frbralias-2" name="aktuelle-version-id" value="474ae3b4-20c8-4709-91f6-2cbc4e28891e"/>
-                    <akn:FRBRalias GUID="33333330-3333-4333-8333-333333333334" eId="meta-1_ident-1_frbrexpression-1_frbralias-3" name="nachfolgende-version-id" value="c0d5456f-49eb-4a96-b3ea-d8b8dbb88628"/>
-                    <akn:FRBRauthor GUID="44444440-4444-4444-8444-444444444445" eId="meta-1_ident-1_frbrexpression-1_frbrauthor-1" href="recht.bund.de/institution/bundesregierung"/>
-                    <akn:FRBRdate GUID="55555550-5555-4555-8555-555555555556" date="1990-03-13" eId="meta-1_ident-1_frbrexpression-1_frbrdate-1" name="verkuendung"/>
-                    <akn:FRBRlanguage GUID="66666660-6666-4666-8666-666666666667" eId="meta-1_ident-1_frbrexpression-1_frbrlanguage-1" language="deu"/>
-                    <akn:FRBRversionNumber GUID="77777770-7777-4777-8777-777777777778" eId="meta-1_ident-1_frbrexpression-1_frbrversionnumber-1" value="9"/>
+                <akn:FRBRExpression GUID="dddddddd-dddd-4ddd-dddd-dddddddddddd" eId="meta-n1_ident-n1_frbrexpression-n1">
+                    <akn:FRBRthis GUID="eeeeeeee-eeee-4eee-eeee-eeeeeeeeeeee" eId="meta-n1_ident-n1_frbrexpression-n1_frbrthis-n1" value="eli/bund/bgbl-1/1970/s1901/1990-03-13/9/deu/regelungstext-1"/>
+                    <akn:FRBRuri GUID="ffffffff-ffff-4fff-ffff-ffffffffffff" eId="meta-n1_ident-n1_frbrexpression-n1_frbruri-n1" value="eli/bund/bgbl-1/1970/s1901/1990-03-13/9/deu"/>
+                    <akn:FRBRalias GUID="11111110-1111-4111-8111-111111111112" eId="meta-n1_ident-n1_frbrexpression-n1_frbralias-n1" name="vorherige-version-id" value="88c430c0-ec32-4636-81bb-300bb307fa70"/>
+                    <akn:FRBRalias GUID="22222220-2222-4222-8222-222222222223" eId="meta-n1_ident-n1_frbrexpression-n1_frbralias-n2" name="aktuelle-version-id" value="474ae3b4-20c8-4709-91f6-2cbc4e28891e"/>
+                    <akn:FRBRalias GUID="33333330-3333-4333-8333-333333333334" eId="meta-n1_ident-n1_frbrexpression-n1_frbralias-n3" name="nachfolgende-version-id" value="c0d5456f-49eb-4a96-b3ea-d8b8dbb88628"/>
+                    <akn:FRBRauthor GUID="44444440-4444-4444-8444-444444444445" eId="meta-n1_ident-n1_frbrexpression-n1_frbrauthor-n1" href="recht.bund.de/institution/bundesregierung"/>
+                    <akn:FRBRdate GUID="55555550-5555-4555-8555-555555555556" date="1990-03-13" eId="meta-n1_ident-n1_frbrexpression-n1_frbrdate-n1" name="verkuendung"/>
+                    <akn:FRBRlanguage GUID="66666660-6666-4666-8666-666666666667" eId="meta-n1_ident-n1_frbrexpression-n1_frbrlanguage-n1" language="deu"/>
+                    <akn:FRBRversionNumber GUID="77777770-7777-4777-8777-777777777778" eId="meta-n1_ident-n1_frbrexpression-n1_frbrversionnumber-n1" value="9"/>
                 </akn:FRBRExpression>
-                <akn:FRBRManifestation GUID="88888880-8888-4888-8888-888888888889" eId="meta-1_ident-1_frbrmanifestation-1">
-                    <akn:FRBRthis GUID="99999990-9999-4999-9999-999999999990" eId="meta-1_ident-1_frbrmanifestation-1_frbrthis-1" value="eli/bund/bgbl-1/1970/s1901/1990-03-13/9/deu/1990-03-13/regelungstext-1.xml"/>
-                    <akn:FRBRuri GUID="aaaaaaaa-aaaa-4aaa-aaaa-aaaaaaaaaaab" eId="meta-1_ident-1_frbrmanifestation-1_frbruri-1" value="eli/bund/bgbl-1/1970/s1901/1990-03-13/9/deu/1990-03-13/regelungstext-1.xml"/>
-                    <akn:FRBRdate GUID="bbbbbbbb-bbbb-4bbb-bbbb-bbbbbbbbbbbc" date="1990-03-13" eId="meta-1_ident-1_frbrmanifestation-1_frbrdate-1" name="generierung"/>
-                    <akn:FRBRauthor GUID="cccccccc-cccc-4ccc-cccc-cccccccccccd" eId="meta-1_ident-1_frbrmanifestation-1_frbrauthor-1" href="recht.bund.de"/>
-                    <akn:FRBRformat GUID="dddddddd-dddd-4ddd-dddd-ddddddddddde" eId="meta-1_ident-1_frbrmanifestation-1_frbrformat-1" value="xml"/>
+                <akn:FRBRManifestation GUID="88888880-8888-4888-8888-888888888889" eId="meta-n1_ident-n1_frbrmanifestation-n1">
+                    <akn:FRBRthis GUID="99999990-9999-4999-9999-999999999990" eId="meta-n1_ident-n1_frbrmanifestation-n1_frbrthis-n1" value="eli/bund/bgbl-1/1970/s1901/1990-03-13/9/deu/1990-03-13/regelungstext-1.xml"/>
+                    <akn:FRBRuri GUID="aaaaaaaa-aaaa-4aaa-aaaa-aaaaaaaaaaab" eId="meta-n1_ident-n1_frbrmanifestation-n1_frbruri-n1" value="eli/bund/bgbl-1/1970/s1901/1990-03-13/9/deu/1990-03-13/regelungstext-1.xml"/>
+                    <akn:FRBRdate GUID="bbbbbbbb-bbbb-4bbb-bbbb-bbbbbbbbbbbc" date="1990-03-13" eId="meta-n1_ident-n1_frbrmanifestation-n1_frbrdate-n1" name="generierung"/>
+                    <akn:FRBRauthor GUID="cccccccc-cccc-4ccc-cccc-cccccccccccd" eId="meta-n1_ident-n1_frbrmanifestation-n1_frbrauthor-n1" href="recht.bund.de"/>
+                    <akn:FRBRformat GUID="dddddddd-dddd-4ddd-dddd-ddddddddddde" eId="meta-n1_ident-n1_frbrmanifestation-n1_frbrformat-n1" value="xml"/>
                 </akn:FRBRManifestation>
             </akn:identification>
-            <akn:lifecycle GUID="eeeeeeee-eeee-4eee-eeee-eeeeeeeeeeef" eId="meta-1_lebzykl-1" source="attributsemantik-noch-undefiniert">
-                <akn:eventRef GUID="ffffffff-ffff-4fff-ffff-fffffffffff0" date="1990-12-31" eId="meta-1_lebzykl-1_ereignis-1" refersTo="ausserkrafttreten" source="attributsemantik-noch-undefiniert" type="repeal"/>
-                <akn:eventRef GUID="11111111-2222-4333-8444-555555555555" date="1972-10-10" eId="meta-1_lebzykl-1_ereignis-2" refersTo="ausfertigung" source="attributsemantik-noch-undefiniert" type="generation"/>
-                <akn:eventRef GUID="22222222-3333-4444-9555-666666666666" date="1972-10-15" eId="meta-1_lebzykl-1_ereignis-3" refersTo="inkrafttreten" source="attributsemantik-noch-undefiniert" type="generation"/>
-                <akn:eventRef GUID="33333333-4444-5555-9666-777777777777" date="1990-12-31" eId="meta-1_lebzykl-1_ereignis-4" refersTo="ausserkrafttreten" source="attributsemantik-noch-undefiniert" type="generation"/>
-                <akn:eventRef GUID="44444444-5555-6666-9777-888888888888" date="1977-02-24" eId="meta-1_lebzykl-1_ereignis-5" refersTo="ausfertigung" source="attributsemantik-noch-undefiniert" type="amendment"/>
-                <akn:eventRef GUID="55555555-6666-7777-9888-999999999999" date="1977-04-01" eId="meta-1_lebzykl-1_ereignis-6" refersTo="inkrafttreten" source="attributsemantik-noch-undefiniert" type="amendment"/>
-                <akn:eventRef GUID="66666666-7777-8888-9999-aaaaaaaaaaaa" date="1983-11-30" eId="meta-1_lebzykl-1_ereignis-7" refersTo="ausserkrafttreten" source="attributsemantik-noch-undefiniert" type="amendment"/>
-                <akn:eventRef GUID="77777777-8888-9999-aaaa-bbbbbbbbbbbb" date="1980-11-17" eId="meta-1_lebzykl-1_ereignis-8" refersTo="ausfertigung" source="attributsemantik-noch-undefiniert" type="amendment"/>
-                <akn:eventRef GUID="88888888-9999-aaaa-bbbb-cccccccccccc" date="1980-12-01" eId="meta-1_lebzykl-1_ereignis-9" refersTo="inkrafttreten" source="attributsemantik-noch-undefiniert" type="amendment"/>
-                <akn:eventRef GUID="99999999-aaaa-bbbb-cccc-dddddddddddd" date="1982-03-31" eId="meta-1_lebzykl-1_ereignis-10" refersTo="ausserkrafttreten" source="attributsemantik-noch-undefiniert" type="amendment"/>
-                <akn:eventRef GUID="aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee" date="1990-12-31" eId="meta-1_lebzykl-1_ereignis-11" refersTo="ausserkrafttreten" source="attributsemantik-noch-undefiniert" type="amendment"/>
-                <akn:eventRef GUID="bbbbbbbb-cccc-dddd-eeee-ffffffffffff" date="1981-11-30" eId="meta-1_lebzykl-1_ereignis-12" refersTo="ausfertigung" source="attributsemantik-noch-undefiniert" type="amendment"/>
-                <akn:eventRef GUID="cccccccc-dddd-eeee-ffff-aaaaaaaaaaaa" date="1982-01-01" eId="meta-1_lebzykl-1_ereignis-13" refersTo="inkrafttreten" source="attributsemantik-noch-undefiniert" type="amendment"/>
-                <akn:eventRef GUID="dddddddd-eeee-ffff-gggg-bbbbbbbbbbbb" date="1982-04-07" eId="meta-1_lebzykl-1_ereignis-14" refersTo="ausfertigung" source="attributsemantik-noch-undefiniert" type="amendment"/>
-                <akn:eventRef GUID="eeeeeeee-ffff-gggg-hhhh-cccccccccccc" date="1982-09-28" eId="meta-1_lebzykl-1_ereignis-15" refersTo="ausfertigung" source="attributsemantik-noch-undefiniert" type="amendment"/>
-                <akn:eventRef GUID="ffffffff-0000-1111-2222-333333333333" date="1983-11-22" eId="meta-1_lebzykl-1_ereignis-16" refersTo="ausfertigung" source="attributsemantik-noch-undefiniert" type="amendment"/>
-                <akn:eventRef GUID="11111111-2222-3333-4444-555555555556" date="1983-12-01" eId="meta-1_lebzykl-1_ereignis-17" refersTo="inkrafttreten" source="attributsemantik-noch-undefiniert" type="amendment"/>
-                <akn:eventRef GUID="22222222-3333-4444-5555-666666666667" date="1984-08-31" eId="meta-1_lebzykl-1_ereignis-18" refersTo="ausserkrafttreten" source="attributsemantik-noch-undefiniert" type="amendment"/>
-                <akn:eventRef GUID="33333333-4444-5555-6666-777777777778" date="1984-08-16" eId="meta-1_lebzykl-1_ereignis-19" refersTo="ausfertigung" source="attributsemantik-noch-undefiniert" type="amendment"/>
-                <akn:eventRef GUID="44444444-5555-6666-7777-888888888889" date="1984-09-01" eId="meta-1_lebzykl-1_ereignis-20" refersTo="inkrafttreten" source="attributsemantik-noch-undefiniert" type="amendment"/>
-                <akn:eventRef GUID="55555555-6666-7777-8888-999999999990" date="1985-03-31" eId="meta-1_lebzykl-1_ereignis-21" refersTo="ausserkrafttreten" source="attributsemantik-noch-undefiniert" type="amendment"/>
-                <akn:eventRef GUID="66666666-7777-8888-9999-aaaaaaaaaaab" date="1985-03-11" eId="meta-1_lebzykl-1_ereignis-22" refersTo="ausfertigung" source="attributsemantik-noch-undefiniert" type="amendment"/>
-                <akn:eventRef GUID="77777777-8888-9999-aaaa-bbbbbbbbbbbc" date="1985-04-01" eId="meta-1_lebzykl-1_ereignis-23" refersTo="inkrafttreten" source="attributsemantik-noch-undefiniert" type="amendment"/>
-                <akn:eventRef GUID="88888888-9999-aaaa-bbbb-cccccccccccd" date="1987-05-31" eId="meta-1_lebzykl-1_ereignis-24" refersTo="ausserkrafttreten" source="attributsemantik-noch-undefiniert" type="amendment"/>
-                <akn:eventRef GUID="99999999-aaaa-bbbb-cccc-dddddddddde" date="1987-05-25" eId="meta-1_lebzykl-1_ereignis-25" refersTo="ausfertigung" source="attributsemantik-noch-undefiniert" type="amendment"/>
-                <akn:eventRef GUID="aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeef" date="1987-06-01" eId="meta-1_lebzykl-1_ereignis-26" refersTo="inkrafttreten" source="attributsemantik-noch-undefiniert" type="amendment"/>
-                <akn:eventRef GUID="bbbbbbbb-cccc-dddd-eeee-ffffffffffff" date="1990-03-31" eId="meta-1_lebzykl-1_ereignis-27" refersTo="ausserkrafttreten" source="attributsemantik-noch-undefiniert" type="amendment"/>
-                <akn:eventRef GUID="cccccccc-dddd-eeee-ffff-aaaaaaaaaaab" date="1990-03-13" eId="meta-1_lebzykl-1_ereignis-28" refersTo="ausfertigung" source="attributsemantik-noch-undefiniert" type="amendment"/>
-                <akn:eventRef GUID="dddddddd-eeee-ffff-gggg-cccccccccccc" date="1990-04-01" eId="meta-1_lebzykl-1_ereignis-29" refersTo="inkrafttreten" source="attributsemantik-noch-undefiniert" type="amendment"/>
+            <akn:lifecycle GUID="eeeeeeee-eeee-4eee-eeee-eeeeeeeeeeef" eId="meta-n1_lebzykl-n1" source="attributsemantik-noch-undefiniert">
+                <akn:eventRef GUID="ffffffff-ffff-4fff-ffff-fffffffffff0" date="1990-12-31" eId="meta-n1_lebzykl-n1_ereignis-n1" refersTo="ausserkrafttreten" source="attributsemantik-noch-undefiniert" type="repeal"/>
+                <akn:eventRef GUID="11111111-2222-4333-8444-555555555555" date="1972-10-10" eId="meta-n1_lebzykl-n1_ereignis-n2" refersTo="ausfertigung" source="attributsemantik-noch-undefiniert" type="generation"/>
+                <akn:eventRef GUID="22222222-3333-4444-9555-666666666666" date="1972-10-15" eId="meta-n1_lebzykl-n1_ereignis-n3" refersTo="inkrafttreten" source="attributsemantik-noch-undefiniert" type="generation"/>
+                <akn:eventRef GUID="33333333-4444-5555-9666-777777777777" date="1990-12-31" eId="meta-n1_lebzykl-n1_ereignis-n4" refersTo="ausserkrafttreten" source="attributsemantik-noch-undefiniert" type="generation"/>
+                <akn:eventRef GUID="44444444-5555-6666-9777-888888888888" date="1977-02-24" eId="meta-n1_lebzykl-n1_ereignis-n5" refersTo="ausfertigung" source="attributsemantik-noch-undefiniert" type="amendment"/>
+                <akn:eventRef GUID="55555555-6666-7777-9888-999999999999" date="1977-04-01" eId="meta-n1_lebzykl-n1_ereignis-n6" refersTo="inkrafttreten" source="attributsemantik-noch-undefiniert" type="amendment"/>
+                <akn:eventRef GUID="66666666-7777-8888-9999-aaaaaaaaaaaa" date="1983-11-30" eId="meta-n1_lebzykl-n1_ereignis-n7" refersTo="ausserkrafttreten" source="attributsemantik-noch-undefiniert" type="amendment"/>
+                <akn:eventRef GUID="77777777-8888-9999-aaaa-bbbbbbbbbbbb" date="1980-11-17" eId="meta-n1_lebzykl-n1_ereignis-n8" refersTo="ausfertigung" source="attributsemantik-noch-undefiniert" type="amendment"/>
+                <akn:eventRef GUID="88888888-9999-aaaa-bbbb-cccccccccccc" date="1980-12-01" eId="meta-n1_lebzykl-n1_ereignis-n9" refersTo="inkrafttreten" source="attributsemantik-noch-undefiniert" type="amendment"/>
+                <akn:eventRef GUID="99999999-aaaa-bbbb-cccc-dddddddddddd" date="1982-03-31" eId="meta-n1_lebzykl-n1_ereignis-n10" refersTo="ausserkrafttreten" source="attributsemantik-noch-undefiniert" type="amendment"/>
+                <akn:eventRef GUID="aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee" date="1990-12-31" eId="meta-n1_lebzykl-n1_ereignis-n11" refersTo="ausserkrafttreten" source="attributsemantik-noch-undefiniert" type="amendment"/>
+                <akn:eventRef GUID="bbbbbbbb-cccc-dddd-eeee-ffffffffffff" date="1981-11-30" eId="meta-n1_lebzykl-n1_ereignis-n12" refersTo="ausfertigung" source="attributsemantik-noch-undefiniert" type="amendment"/>
+                <akn:eventRef GUID="cccccccc-dddd-eeee-ffff-aaaaaaaaaaaa" date="1982-01-01" eId="meta-n1_lebzykl-n1_ereignis-n13" refersTo="inkrafttreten" source="attributsemantik-noch-undefiniert" type="amendment"/>
+                <akn:eventRef GUID="dddddddd-eeee-ffff-1234-bbbbbbbbbbbb" date="1982-04-07" eId="meta-n1_lebzykl-n1_ereignis-n14" refersTo="ausfertigung" source="attributsemantik-noch-undefiniert" type="amendment"/>
+                <akn:eventRef GUID="eeeeeeee-ffff-1234-1234-cccccccccccc" date="1982-09-28" eId="meta-n1_lebzykl-n1_ereignis-n15" refersTo="ausfertigung" source="attributsemantik-noch-undefiniert" type="amendment"/>
+                <akn:eventRef GUID="ffffffff-0000-1111-2222-333333333333" date="1983-11-22" eId="meta-n1_lebzykl-n1_ereignis-n16" refersTo="ausfertigung" source="attributsemantik-noch-undefiniert" type="amendment"/>
+                <akn:eventRef GUID="11111111-2222-3333-4444-555555555556" date="1983-12-01" eId="meta-n1_lebzykl-n1_ereignis-n17" refersTo="inkrafttreten" source="attributsemantik-noch-undefiniert" type="amendment"/>
+                <akn:eventRef GUID="22222222-3333-4444-5555-666666666667" date="1984-08-31" eId="meta-n1_lebzykl-n1_ereignis-n18" refersTo="ausserkrafttreten" source="attributsemantik-noch-undefiniert" type="amendment"/>
+                <akn:eventRef GUID="33333333-4444-5555-6666-777777777778" date="1984-08-16" eId="meta-n1_lebzykl-n1_ereignis-n19" refersTo="ausfertigung" source="attributsemantik-noch-undefiniert" type="amendment"/>
+                <akn:eventRef GUID="44444444-5555-6666-7777-888888888889" date="1984-09-01" eId="meta-n1_lebzykl-n1_ereignis-n20" refersTo="inkrafttreten" source="attributsemantik-noch-undefiniert" type="amendment"/>
+                <akn:eventRef GUID="55555555-6666-7777-8888-999999999990" date="1985-03-31" eId="meta-n1_lebzykl-n1_ereignis-n21" refersTo="ausserkrafttreten" source="attributsemantik-noch-undefiniert" type="amendment"/>
+                <akn:eventRef GUID="66666666-7777-8888-9999-aaaaaaaaaaab" date="1985-03-11" eId="meta-n1_lebzykl-n1_ereignis-n22" refersTo="ausfertigung" source="attributsemantik-noch-undefiniert" type="amendment"/>
+                <akn:eventRef GUID="77777777-8888-9999-aaaa-bbbbbbbbbbbc" date="1985-04-01" eId="meta-n1_lebzykl-n1_ereignis-n23" refersTo="inkrafttreten" source="attributsemantik-noch-undefiniert" type="amendment"/>
+                <akn:eventRef GUID="88888888-9999-aaaa-bbbb-cccccccccccd" date="1987-05-31" eId="meta-n1_lebzykl-n1_ereignis-n24" refersTo="ausserkrafttreten" source="attributsemantik-noch-undefiniert" type="amendment"/>
+                <akn:eventRef GUID="99999999-aaaa-bbbb-cccc-ddddddddddef" date="1987-05-25" eId="meta-n1_lebzykl-n1_ereignis-n25" refersTo="ausfertigung" source="attributsemantik-noch-undefiniert" type="amendment"/>
+                <akn:eventRef GUID="aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeef" date="1987-06-01" eId="meta-n1_lebzykl-n1_ereignis-n26" refersTo="inkrafttreten" source="attributsemantik-noch-undefiniert" type="amendment"/>
+                <akn:eventRef GUID="bbbbbbbb-cccc-dddd-eeee-ffffffffffff" date="1990-03-31" eId="meta-n1_lebzykl-n1_ereignis-n27" refersTo="ausserkrafttreten" source="attributsemantik-noch-undefiniert" type="amendment"/>
+                <akn:eventRef GUID="cccccccc-dddd-eeee-ffff-aaaaaaaaaaab" date="1990-03-13" eId="meta-n1_lebzykl-n1_ereignis-n28" refersTo="ausfertigung" source="attributsemantik-noch-undefiniert" type="amendment"/>
+                <akn:eventRef GUID="dddddddd-eeee-ffff-1234-cccccccccccc" date="1990-04-01" eId="meta-n1_lebzykl-n1_ereignis-n29" refersTo="inkrafttreten" source="attributsemantik-noch-undefiniert" type="amendment"/>
             </akn:lifecycle>
-            <akn:temporalData GUID="eeeeeeee-ffff-gggg-hhhh-iiiiiiiiiiii" eId="meta-1_geltzeiten-1" source="attributsemantik-noch-undefiniert">
-                <akn:temporalGroup GUID="ffffffff-0000-1111-2222-333333333334" eId="meta-1_geltzeiten-1_geltungszeitgr-1">
-                    <akn:timeInterval GUID="11111111-2222-3333-4444-555555555557" eId="meta-1_geltzeiten-1_geltungszeitgr-1_gelzeitintervall-1" end="#meta-1_lebzykl-1_ereignis-4" refersTo="geltungszeit" start="#meta-1_lebzykl-1_ereignis-3"/>
+            <akn:temporalData GUID="eeeeeeee-ffff-1234-3456-ffff22225555" eId="meta-n1_geltzeiten-n1" source="attributsemantik-noch-undefiniert">
+                <akn:temporalGroup GUID="ffffffff-0000-1111-2222-333333333334" eId="meta-n1_geltzeiten-n1_geltungszeitgr-n1">
+                    <akn:timeInterval GUID="11111111-2222-3333-4444-555555555557" eId="meta-n1_geltzeiten-n1_geltungszeitgr-n1_gelzeitintervall-n1" end="#meta-n1_lebzykl-n1_ereignis-n4" refersTo="geltungszeit" start="#meta-n1_lebzykl-n1_ereignis-n3"/>
                 </akn:temporalGroup>
-                <akn:temporalGroup GUID="22222222-3333-4444-5555-666666666668" eId="meta-1_geltzeiten-1_geltungszeitgr-2">
-                    <akn:timeInterval GUID="33333333-4444-5555-6666-777777777779" eId="meta-1_geltzeiten-1_geltungszeitgr-2_gelzeitintervall-1" end="#meta-1_lebzykl-1_ereignis-7" refersTo="geltungszeit" start="#meta-1_lebzykl-1_ereignis-6"/>
+                <akn:temporalGroup GUID="22222222-3333-4444-5555-666666666668" eId="meta-n1_geltzeiten-n1_geltungszeitgr-n2">
+                    <akn:timeInterval GUID="33333333-4444-5555-6666-777777777779" eId="meta-n1_geltzeiten-n1_geltungszeitgr-n2_gelzeitintervall-n1" end="#meta-n1_lebzykl-n1_ereignis-n7" refersTo="geltungszeit" start="#meta-n1_lebzykl-n1_ereignis-n6"/>
                 </akn:temporalGroup>
-                <akn:temporalGroup GUID="44444444-5555-6666-7777-888888888889" eId="meta-1_geltzeiten-1_geltungszeitgr-3">
-                    <akn:timeInterval GUID="55555555-6666-7777-8888-999999999990" eId="meta-1_geltzeiten-1_geltungszeitgr-3_gelzeitintervall-1" end="#meta-1_lebzykl-1_ereignis-10" refersTo="geltungszeit" start="#meta-1_lebzykl-1_ereignis-9"/>
+                <akn:temporalGroup GUID="44444444-5555-6666-7777-888888888889" eId="meta-n1_geltzeiten-n1_geltungszeitgr-n3">
+                    <akn:timeInterval GUID="55555555-6666-7777-8888-999999999990" eId="meta-n1_geltzeiten-n1_geltungszeitgr-n3_gelzeitintervall-n1" end="#meta-n1_lebzykl-n1_ereignis-n10" refersTo="geltungszeit" start="#meta-n1_lebzykl-n1_ereignis-n9"/>
                 </akn:temporalGroup>
-                <akn:temporalGroup GUID="66666666-7777-8888-9999-aaaaaaaaaaac" eId="meta-1_geltzeiten-1_geltungszeitgr-4">
-                    <akn:timeInterval GUID="77777777-8888-9999-aaaa-bbbbbbbbbbbb" eId="meta-1_geltzeiten-1_geltungszeitgr-4_gelzeitintervall-1" end="#meta-1_lebzykl-1_ereignis-11" refersTo="geltungszeit" start="#meta-1_lebzykl-1_ereignis-9"/>
+                <akn:temporalGroup GUID="66666666-7777-8888-9999-aaaaaaaaaaac" eId="meta-n1_geltzeiten-n1_geltungszeitgr-n4">
+                    <akn:timeInterval GUID="77777777-8888-9999-aaaa-bbbbbbbbbbbb" eId="meta-n1_geltzeiten-n1_geltungszeitgr-n4_gelzeitintervall-n1" end="#meta-n1_lebzykl-n1_ereignis-n11" refersTo="geltungszeit" start="#meta-n1_lebzykl-n1_ereignis-n9"/>
                 </akn:temporalGroup>
             </akn:temporalData>
-            <akn:proprietary GUID="77777777-8888-9999-aaaa-bbbbbbbbbbbc" eId="meta-1_proprietary-1" source="attributsemantik-noch-undefiniert">
+            <akn:proprietary GUID="77777777-8888-9999-aaaa-bbbbbbbbbbbc" eId="meta-n1_proprietary-n1" source="attributsemantik-noch-undefiniert">
                 <ris:legalDocML.de_metadaten xmlns:ris="http://MetadatenRIS.LegalDocML.de/1.8.1/" xsi:schemaLocation="http://MetadatenRIS.LegalDocML.de/1.8.1/ ../schema/legalDocML.de-metadaten-ris.xsd">
                     <ris:inkraft date="1990-04-01"/>
                     <ris:ausserkraft date="1990-12-31"/>
                 </ris:legalDocML.de_metadaten>
             </akn:proprietary>
         </akn:meta>
-        <akn:preface GUID="88888888-9999-aaaa-bbbb-cccccccccccc" eId="einleitung-1">
-            <akn:longTitle GUID="aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee" eId="einleitung-1_doktitel-1">
-                <akn:p GUID="bbbbbbbb-cccc-dddd-eeee-ffffffffffff" eId="einleitung-1_doktitel-1_text-1">
-                    <akn:docStage GUID="cccccccc-dddd-eeee-ffff-000000000000" eId="einleitung-1_doktitel-1_text-1_docstadium-1"/>
-                    <akn:docTitle GUID="dddddddd-eeee-ffff-0000-111111111111" eId="einleitung-1_doktitel-1_text-1_doctitel-1">Testverordnung zur Musterregelung des Heimaturlaubs im internationalen Dienst</akn:docTitle>
-                    <akn:shortTitle GUID="eeeeeeee-ffff-0000-1111-222222222222" eId="einleitung-1_doktitel-1_text-1_kurztitel-1">(Heimaturlaubsverordnung - HUrlV)</akn:shortTitle>
+        <akn:preface GUID="88888888-9999-aaaa-bbbb-cccccccccccc" eId="einleitung-n1">
+            <akn:longTitle GUID="aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee" eId="einleitung-n1_doktitel-n1">
+                <akn:p GUID="bbbbbbbb-cccc-dddd-eeee-ffffffffffff" eId="einleitung-n1_doktitel-n1_text-n1">
+                    <akn:docStage GUID="cccccccc-dddd-eeee-ffff-000000000000" eId="einleitung-n1_doktitel-n1_text-n1_docstadium-n1"/>
+                    <akn:docTitle GUID="dddddddd-eeee-ffff-0000-111111111111" eId="einleitung-n1_doktitel-n1_text-n1_doctitel-n1">Testverordnung zur Musterregelung des Heimaturlaubs im internationalen Dienst</akn:docTitle>
+                    <akn:shortTitle GUID="eeeeeeee-ffff-0000-1111-222222222222" eId="einleitung-n1_doktitel-n1_text-n1_kurztitel-n1">(Heimaturlaubsverordnung - HUrlV)</akn:shortTitle>
                 </akn:p>
             </akn:longTitle>
         </akn:preface>
-        <akn:preamble GUID="ffffffff-0000-1111-2222-333333333333" eId="preambel-1"/>
-        <akn:body GUID="11111111-2222-3333-4444-555555555555" eId="hauptteil-1">
-            <akn:section GUID="22222222-3333-4444-5555-666666666666" eId="hauptteil-1_abschnitt-1">
-                <akn:num GUID="33333333-4444-5555-6666-777777777777" eId="hauptteil-1_abschnitt-1_bezeichnung-1">I. Abschnitt</akn:num>
-                <akn:heading GUID="44444444-5555-6666-7777-888888888888" eId="hauptteil-1_abschnitt-1_überschrift-1">Erholungsurlaub</akn:heading>
-                <akn:article GUID="55555555-6666-7777-8888-999999999999" eId="hauptteil-1_abschnitt-1_art-1" period="#meta-1_geltzeiten-1_geltungszeitgr-3" refersTo="stammform">
-                    <akn:num GUID="66666666-7777-8888-9999-aaaaaaaaaaaa" eId="hauptteil-1_abschnitt-1_art-1_bezeichnung-1">§ 1</akn:num>
-                    <akn:heading GUID="77777777-8888-9999-aaaa-bbbbbbbbbbbb" eId="hauptteil-1_abschnitt-1_art-1_überschrift-1">Anwendung der Inlandsregelungen im Erholungsurlaub</akn:heading>
-                    <akn:paragraph GUID="88888888-9999-aaaa-bbbb-cccccccccccc" eId="hauptteil-1_abschnitt-1_art-1_abs-1">
-                        <akn:num GUID="99999999-aaaa-bbbb-cccc-dddddddddddd" eId="hauptteil-1_abschnitt-1_art-1_abs-1_bezeichnung-1">(1)</akn:num>
-                        <akn:content GUID="aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee" eId="hauptteil-1_abschnitt-1_art-1_abs-1_inhalt-1">
-                            <akn:p GUID="bbbbbbbb-cccc-dddd-eeee-ffffffffffff" eId="hauptteil-1_abschnitt-1_art-1_abs-1_inhalt-1_text-1">Für den Erholungsurlaub im internationalen Dienst ist eine flexible Freistellung mit fortlaufender Bezahlung zu gewähren.</akn:p>
-                            <akn:blockList GUID="cccccccc-dddd-eeee-ffff-000000000000" eId="hauptteil-1_abschnitt-1_art-1_abs-1_inhalt-1_liste-1">
-                                <akn:item GUID="dddddddd-eeee-ffff-0000-111111111112" eId="hauptteil-1_abschnitt-1_art-1_abs-1_inhalt-1_liste-1_listenelem-1">
-                                    <akn:num GUID="eeeeeeee-ffff-0000-1111-222222222223" eId="hauptteil-1_abschnitt-1_art-1_abs-1_inhalt-1_liste-1_listenelem-1_bezeichnung-1">1.</akn:num>
-                                    <akn:p GUID="ffffffff-0000-1111-2222-333333333334" eId="hauptteil-1_abschnitt-1_art-1_abs-1_inhalt-1_liste-1_listenelem-1_text-1">zur Teilnahme an regionalen Gesundheitsprojekten,</akn:p>
+        <akn:preamble GUID="ffffffff-0000-1111-2222-333333333333" eId="präambel-n1"/>
+        <akn:body GUID="11111111-2222-3333-4444-555555555555" eId="hauptteil-n1">
+            <akn:section GUID="22222222-3333-4444-5555-666666666666" eId="hauptteil-n1_abschnitt-n1">
+                <akn:num GUID="33333333-4444-5555-6666-777777777777" eId="hauptteil-n1_abschnitt-n1_bezeichnung-n1">I. Abschnitt</akn:num>
+                <akn:heading GUID="44444444-5555-6666-7777-888888888888" eId="hauptteil-n1_abschnitt-n1_überschrift-n1">Erholungsurlaub</akn:heading>
+                <akn:article GUID="55555555-6666-7777-8888-999999999999" eId="art-z1" period="#meta-n1_geltzeiten-n1_geltungszeitgr-n3" refersTo="stammform">
+                    <akn:num GUID="66666666-7777-8888-9999-aaaaaaaaaaaa" eId="art-z1_bezeichnung-n1">§ 1</akn:num>
+                    <akn:heading GUID="77777777-8888-9999-aaaa-bbbbbbbbbbbb" eId="art-z1_überschrift-n1">Anwendung der Inlandsregelungen im Erholungsurlaub</akn:heading>
+                    <akn:paragraph GUID="88888888-9999-aaaa-bbbb-cccccccccccc" eId="art-z1_abs-z1">
+                        <akn:num GUID="99999999-aaaa-bbbb-cccc-dddddddddddd" eId="art-z1_abs-z1_bezeichnung-n1">(1)</akn:num>
+                        <akn:content GUID="aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee" eId="art-z1_abs-z1_inhalt-n1">
+                            <akn:p GUID="bbbbbbbb-cccc-dddd-eeee-ffffffffffff" eId="art-z1_abs-z1_inhalt-n1_text-n1">Für den Erholungsurlaub im internationalen Dienst ist eine flexible Freistellung mit fortlaufender Bezahlung zu gewähren.</akn:p>
+                            <akn:blockList GUID="cccccccc-dddd-eeee-ffff-000000000000" eId="art-z1_abs-z1_inhalt-n1_liste-n1">
+                                <akn:item GUID="dddddddd-eeee-ffff-0000-111111111112" eId="art-z1_abs-z1_inhalt-n1_liste-n1_listenelem-n1">
+                                    <akn:num GUID="eeeeeeee-ffff-0000-1111-222222222223" eId="art-z1_abs-z1_inhalt-n1_liste-n1_listenelem-n1_bezeichnung-n1">1.</akn:num>
+                                    <akn:p GUID="ffffffff-0000-1111-2222-333333333334" eId="art-z1_abs-z1_inhalt-n1_liste-n1_listenelem-n1_text-n1">zur Teilnahme an regionalen Gesundheitsprojekten,</akn:p>
                                 </akn:item>
-                                <akn:item GUID="11111111-0000-2222-3333-444444444444" eId="hauptteil-1_abschnitt-1_art-1_abs-1_inhalt-1_liste-1_listenelem-2">
-                                    <akn:num GUID="22222222-0000-3333-4444-555555555555" eId="hauptteil-1_abschnitt-1_art-1_abs-1_inhalt-1_liste-1_listenelem-2_bezeichnung-1">2.</akn:num>
-                                    <akn:p GUID="33333333-0000-4444-5555-666666666666" eId="hauptteil-1_abschnitt-1_art-1_abs-1_inhalt-1_liste-1_listenelem-2_text-1">zur Erprobung von neuen Dienstmodellen,</akn:p>
+                                <akn:item GUID="11111111-0000-2222-3333-444444444444" eId="art-z1_abs-z1_inhalt-n1_liste-n1_listenelem-n2">
+                                    <akn:num GUID="22222222-0000-3333-4444-555555555555" eId="art-z1_abs-z1_inhalt-n1_liste-n1_listenelem-n2_bezeichnung-n1">2.</akn:num>
+                                    <akn:p GUID="33333333-0000-4444-5555-666666666666" eId="art-z1_abs-z1_inhalt-n1_liste-n1_listenelem-n2_text-n1">zur Erprobung von neuen Dienstmodellen,</akn:p>
                                 </akn:item>
-                                <akn:item GUID="44444444-0000-5555-6666-777777777777" eId="hauptteil-1_abschnitt-1_art-1_abs-1_inhalt-1_liste-1_listenelem-3">
-                                    <akn:num GUID="55555555-0000-6666-7777-888888888888" eId="hauptteil-1_abschnitt-1_art-1_abs-1_inhalt-1_liste-1_listenelem-3_bezeichnung-1">3.</akn:num>
-                                    <akn:p GUID="66666666-0000-7777-8888-999999999999" eId="hauptteil-1_abschnitt-1_art-1_abs-1_inhalt-1_liste-1_listenelem-3_text-1">zur Durchführung innovativer Testverfahren.</akn:p>
+                                <akn:item GUID="44444444-0000-5555-6666-777777777777" eId="art-z1_abs-z1_inhalt-n1_liste-n1_listenelem-n3">
+                                    <akn:num GUID="55555555-0000-6666-7777-888888888888" eId="art-z1_abs-z1_inhalt-n1_liste-n1_listenelem-n3_bezeichnung-n1">3.</akn:num>
+                                    <akn:p GUID="66666666-0000-7777-8888-999999999999" eId="art-z1_abs-z1_inhalt-n1_liste-n1_listenelem-n3_text-n1">zur Durchführung innovativer Testverfahren.</akn:p>
                                 </akn:item>
                             </akn:blockList>
                         </akn:content>
                     </akn:paragraph>
-                    <akn:paragraph GUID="77777777-8888-9999-aaaa-bbbbbbbbbbbc" eId="hauptteil-1_abschnitt-1_art-1_abs-2">
-                        <akn:num GUID="88888888-9999-aaaa-bbbb-cccccccccccd" eId="hauptteil-1_abschnitt-1_art-1_abs-2_bezeichnung-1">(2)</akn:num>
-                        <akn:content GUID="99999999-aaaa-bbbb-cccc-ddddddddddd" eId="hauptteil-1_abschnitt-1_art-1_abs-2_inhalt-1">
-                            <akn:p GUID="aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeef" eId="hauptteil-1_abschnitt-1_art-1_abs-2_inhalt-1_text-1">Bei sich ändernden internationalen Rahmenbedingungen erfolgt eine regelmäßige Überprüfung der Freistellungsmodalitäten.</akn:p>
+                    <akn:paragraph GUID="77777777-8888-9999-aaaa-bbbbbbbbbbbc" eId="art-z1_abs-z2">
+                        <akn:num GUID="88888888-9999-aaaa-bbbb-cccccccccccd" eId="art-z1_abs-z2_bezeichnung-n1">(2)</akn:num>
+                        <akn:content GUID="99999999-aaaa-bbbb-cccc-ddddddddddde" eId="art-z1_abs-z2_inhalt-n1">
+                            <akn:p GUID="aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeef" eId="art-z1_abs-z2_inhalt-n1_text-n1">Bei sich ändernden internationalen Rahmenbedingungen erfolgt eine regelmäßige Überprüfung der Freistellungsmodalitäten.</akn:p>
                         </akn:content>
                     </akn:paragraph>
                 </akn:article>
             </akn:section>
-            <akn:section GUID="aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeef" eId="hauptteil-1_abschnitt-2">
-                <akn:num GUID="bbbbbbbb-cccc-dddd-eeee-ffffffffffff" eId="hauptteil-1_abschnitt-2_bezeichnung-1">II. Abschnitt</akn:num>
-                <akn:heading GUID="cccccccc-dddd-eeee-ffff-000000000001" eId="hauptteil-1_abschnitt-2_überschrift-1">Heimaturlaub</akn:heading>
-                <akn:article GUID="dddddddd-eeee-ffff-0000-111111111113" eId="hauptteil-1_abschnitt-2_art-1" period="#meta-1_geltzeiten-1_geltungszeitgr-4" refersTo="stammform">
-                    <akn:num GUID="eeeeeeee-ffff-0000-1111-222222222224" eId="hauptteil-1_abschnitt-2_art-1_bezeichnung-1">§ 4</akn:num>
-                    <akn:heading GUID="ffffffff-0000-1111-2222-333333333335" eId="hauptteil-1_abschnitt-2_art-1_überschrift-1">Heimaturlaubsberechtigung</akn:heading>
-                    <akn:paragraph GUID="11111111-2222-3333-4444-555555555556" eId="hauptteil-1_abschnitt-2_art-1_abs-1">
-                        <akn:num GUID="22222222-3333-4444-5555-666666666667" eId="hauptteil-1_abschnitt-2_art-1_abs-1_bezeichnung-1">(1)</akn:num>
-                        <akn:content GUID="33333333-4444-5555-6666-777777777778" eId="hauptteil-1_abschnitt-2_art-1_abs-1_inhalt-1">
-                            <akn:p GUID="44444444-5555-6666-7777-888888888889" eId="hauptteil-1_abschnitt-2_art-1_abs-1_inhalt-1_text-1">Für im Ausland eingesetzte Beamte wird Heimaturlaub auf Antrag gewährt – unter Berücksichtigung besonderer internationaler Regelungen.</akn:p>
-                            <akn:blockList GUID="55555555-6666-7777-8888-999999999990" eId="hauptteil-1_abschnitt-2_art-1_abs-1_inhalt-1_liste-1">
-                                <akn:item GUID="66666666-7777-8888-9999-aaaaaaaaaaab" eId="hauptteil-1_abschnitt-2_art-1_abs-1_inhalt-1_liste-1_listenelem-1">
-                                    <akn:num GUID="77777777-8888-9999-aaaa-bbbbbbbbbbbb" eId="hauptteil-1_abschnitt-2_art-1_abs-1_inhalt-1_liste-1_listenelem-1_bezeichnung-1">1.</akn:num>
-                                    <akn:p GUID="88888888-9999-aaaa-bbbb-cccccccccccc" eId="hauptteil-1_abschnitt-2_art-1_abs-1_inhalt-1_liste-1_listenelem-1_text-1">für den internationalen Personalaustausch,</akn:p>
+            <akn:section GUID="aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeef" eId="hauptteil-n1_abschnitt-n2">
+                <akn:num GUID="bbbbbbbb-cccc-dddd-eeee-ffffffffffff" eId="hauptteil-n1_abschnitt-n2_bezeichnung-n1">II. Abschnitt</akn:num>
+                <akn:heading GUID="cccccccc-dddd-eeee-ffff-000000000001" eId="hauptteil-n1_abschnitt-n2_überschrift-n1">Heimaturlaub</akn:heading>
+                <akn:article GUID="dddddddd-eeee-ffff-0000-111111111113" eId="art-z1" period="#meta-n1_geltzeiten-n1_geltungszeitgr-n4" refersTo="stammform">
+                    <akn:num GUID="eeeeeeee-ffff-0000-1111-222222222224" eId="art-z1_bezeichnung-n1">§ 4</akn:num>
+                    <akn:heading GUID="ffffffff-0000-1111-2222-333333333335" eId="art-z1_überschrift-n1">Heimaturlaubsberechtigung</akn:heading>
+                    <akn:paragraph GUID="11111111-2222-3333-4444-555555555556" eId="art-z1_abs-z1">
+                        <akn:num GUID="22222222-3333-4444-5555-666666666667" eId="art-z1_abs-z1_bezeichnung-n1">(1)</akn:num>
+                        <akn:content GUID="33333333-4444-5555-6666-777777777778" eId="art-z1_abs-z1_inhalt-n1">
+                            <akn:p GUID="44444444-5555-6666-7777-888888888889" eId="art-z1_abs-z1_inhalt-n1_text-n1">Für im Ausland eingesetzte Beamte wird Heimaturlaub auf Antrag gewährt – unter Berücksichtigung besonderer internationaler Regelungen.</akn:p>
+                            <akn:blockList GUID="55555555-6666-7777-8888-999999999990" eId="art-z1_abs-z1_inhalt-n1_liste-n1">
+                                <akn:item GUID="66666666-7777-8888-9999-aaaaaaaaaaab" eId="art-z1_abs-z1_inhalt-n1_liste-n1_listenelem-n1">
+                                    <akn:num GUID="77777777-8888-9999-aaaa-bbbbbbbbbbbb" eId="art-z1_abs-z1_inhalt-n1_liste-n1_listenelem-n1_bezeichnung-n1">1.</akn:num>
+                                    <akn:p GUID="88888888-9999-aaaa-bbbb-cccccccccccc" eId="art-z1_abs-z1_inhalt-n1_liste-n1_listenelem-n1_text-n1">für den internationalen Personalaustausch,</akn:p>
                                 </akn:item>
-                                <akn:item GUID="99999999-aaaa-bbbb-cccc-dddddddddddd" eId="hauptteil-1_abschnitt-2_art-1_abs-1_inhalt-1_liste-1_listenelem-2">
-                                    <akn:num GUID="aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee" eId="hauptteil-1_abschnitt-2_art-1_abs-1_inhalt-1_liste-1_listenelem-2_bezeichnung-1">2.</akn:num>
-                                    <akn:p GUID="bbbbbbbb-cccc-dddd-eeee-ffffffffffff" eId="hauptteil-1_abschnitt-2_art-1_abs-1_inhalt-1_liste-1_listenelem-2_text-1">zur Durchführung internationaler Fortbildungen,</akn:p>
+                                <akn:item GUID="99999999-aaaa-bbbb-cccc-dddddddddddd" eId="art-z1_abs-z1_inhalt-n1_liste-n1_listenelem-n2">
+                                    <akn:num GUID="aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee" eId="art-z1_abs-z1_inhalt-n1_liste-n1_listenelem-n2_bezeichnung-n1">2.</akn:num>
+                                    <akn:p GUID="bbbbbbbb-cccc-dddd-eeee-ffffffffffff" eId="art-z1_abs-z1_inhalt-n1_liste-n1_listenelem-n2_text-n1">zur Durchführung internationaler Fortbildungen,</akn:p>
                                 </akn:item>
-                                <akn:item GUID="cccccccc-dddd-eeee-ffff-000000000000" eId="hauptteil-1_abschnitt-2_art-1_abs-1_inhalt-1_liste-1_listenelem-3">
-                                    <akn:num GUID="dddddddd-eeee-ffff-0000-111111111111" eId="hauptteil-1_abschnitt-2_art-1_abs-1_inhalt-1_liste-1_listenelem-3_bezeichnung-1">3.</akn:num>
-                                    <akn:p GUID="eeeeeeee-ffff-0000-1111-222222222222" eId="hauptteil-1_abschnitt-2_art-1_abs-1_inhalt-1_liste-1_listenelem-3_text-1">zur Förderung des interkulturellen Austauschs.</akn:p>
+                                <akn:item GUID="cccccccc-dddd-eeee-ffff-000000000000" eId="art-z1_abs-z1_inhalt-n1_liste-n1_listenelem-n3">
+                                    <akn:num GUID="dddddddd-eeee-ffff-0000-111111111111" eId="art-z1_abs-z1_inhalt-n1_liste-n1_listenelem-n3_bezeichnung-n1">3.</akn:num>
+                                    <akn:p GUID="eeeeeeee-ffff-0000-1111-222222222222" eId="art-z1_abs-z1_inhalt-n1_liste-n1_listenelem-n3_text-n1">zur Förderung des interkulturellen Austauschs.</akn:p>
                                 </akn:item>
                             </akn:blockList>
                         </akn:content>
                     </akn:paragraph>
-                    <akn:paragraph GUID="ffffffff-0000-1111-2222-333333333336" eId="hauptteil-1_abschnitt-2_art-1_abs-2">
-                        <akn:num GUID="11111111-2222-3333-4444-555555555557" eId="hauptteil-1_abschnitt-2_art-1_abs-2_bezeichnung-1">(2)</akn:num>
-                        <akn:content GUID="22222222-3333-4444-5555-666666666668" eId="hauptteil-1_abschnitt-2_art-1_abs-2_inhalt-1">
-                            <akn:p GUID="33333333-4444-5555-6666-777777777779" eId="hauptteil-1_abschnitt-2_art-1_abs-2_inhalt-1_text-1">Spezielle dienstliche Erfordernisse können zu einer individuellen Anpassung des Heimaturlaubs führen.</akn:p>
+                    <akn:paragraph GUID="ffffffff-0000-1111-2222-333333333336" eId="art-z1_abs-z2">
+                        <akn:num GUID="11111111-2222-3333-4444-555555555557" eId="art-z1_abs-z2_bezeichnung-n1">(2)</akn:num>
+                        <akn:content GUID="22222222-3333-4444-5555-666666666668" eId="art-z1_abs-z2_inhalt-n1">
+                            <akn:p GUID="33333333-4444-5555-6666-777777777779" eId="art-z1_abs-z2_inhalt-n1_text-n1">Spezielle dienstliche Erfordernisse können zu einer individuellen Anpassung des Heimaturlaubs führen.</akn:p>
                         </akn:content>
                     </akn:paragraph>
                 </akn:article>

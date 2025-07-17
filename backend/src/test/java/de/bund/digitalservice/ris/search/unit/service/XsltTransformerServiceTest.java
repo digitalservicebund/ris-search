@@ -142,16 +142,16 @@ class XsltTransformerServiceTest {
     var expectedToc =
         """
         <div class="level-1">
-         <span class="akn-span" id="preambel-1_blockcontainer-1_inhuebs-1_eintrag-1_span-1">Abschnitt 1</span>
+         <span class="akn-span" id="praeambel-n1_blockcontainer-n1_inhuebs-n1_eintrag-n1_span-n1">Abschnitt 1</span>
         </div>
         <div class="level-2">
-         <span class="akn-span" id="preambel-1_blockcontainer-1_inhuebs-1_eintrag-2_span-1">Allgemeine Bestimmungen</span>
+         <span class="akn-span" id="praeambel-n1_blockcontainer-n1_inhuebs-n1_eintrag-n2_span-n1">Allgemeine Bestimmungen</span>
         </div>
         <div class="level-5">
-         <span class="akn-span" id="preambel-1_blockcontainer-1_inhuebs-1_eintrag-3_span-1">Art 1</span> <span class="akn-span" id="preambel-1_blockcontainer-1_inhuebs-1_eintrag-3_span-2">Test Title</span>
+         <span class="akn-span" id="praeambel-n1_blockcontainer-n1_inhuebs-n1_eintrag-n3_span-n1">Art 1</span> <span class="akn-span" id="praeambel-n1_blockcontainer-n1_inhuebs-n1_eintrag-n3_span-n2">Test Title</span>
         </div>
         <div class="level-1">
-         <span class="akn-span" id="preambel-1_blockcontainer-1_inhuebs-1_eintrag-4_span-1">Art 2</span> <span class="akn-span" id="preambel-1_blockcontainer-1_inhuebs-1_eintrag-4_span-2">Another Test Title</span>
+         <span class="akn-span" id="praeambel-n1_blockcontainer-n1_inhuebs-n1_eintrag-n4_span-n1">Art 2</span> <span class="akn-span" id="praeambel-n1_blockcontainer-n1_inhuebs-n1_eintrag-n4_span-n2">Another Test Title</span>
         </div>""";
     final Document parsed = Jsoup.parse(html);
 
@@ -181,23 +181,21 @@ class XsltTransformerServiceTest {
         Files.readAllBytes(
             Path.of(
                 "src/test/resources/data/LDML/norm/eli/bund/bgbl-1/1991/s101/1991-01-01/1/deu/1991-01-01/regelungstext-1.xml"));
-    var html = service.transformArticle(xml, "hauptteil-1_para-1", RESOURCES_BASE_PATH);
+    var html = service.transformArticle(xml, "art-z1", RESOURCES_BASE_PATH);
     var expectedArticle =
         """
-         <article id="hauptteil-1_para-1" data-period="#meta-1_geltzeiten-1_geltungszeitgr-1">
+         <article id="art-z1" data-period="#meta-n1_geltzeiten-n1_geltungszeitgr-n1">
             <h2 class="einzelvorschrift">
-              <span class="akn-num" id="hauptteil-1_para-1_bezeichnung-1" data-marker="1">
-                § 1
-              </span>
-              <span class="akn-heading" id="hauptteil-1_para-1_ueberschrift-1">
+              <span class="akn-num" id="art-z1_bezeichnung-n1">§ 1</span>
+              <span class="akn-heading" id="art-z1_ueberschrift-n1">
                 Basic HTML Elements
               </span>
             </h2>
-            <section class="akn-paragraph" id="hauptteil-1_para-1_abs-1">
-               <span class="akn-num" id="hauptteil-1_para-1_abs-1_bezeichnung-1" data-marker="1"></span>
-               <div class="akn-content" id="hauptteil-1_para-1_abs-1_inhalt-1">
-                  <p class="akn-p" id="hauptteil-1_para-1_abs-1_inhalt-1_text-1">
-                     <b id="hauptteil-1_para-1_abs-1_inhalt-1_text-1_fettschrift-1">Bold</b> text. <i id="hauptteil-1_para-1_abs-1_inhalt-1_text-1_kursiv-1">Italic</i> text. <u id="hauptteil-1_para-1_abs-1_inhalt-1_text-1_u-1">Underlined</u> text. This contains <sub id="hauptteil-1_para-1_abs-1_inhalt-1_text-1_sub-1">subscript</sub> text. This contains <sup id="hauptteil-1_para-1_abs-1_inhalt-1_text-1_sup-1">superscript</sup> text. This text contains a <a href="#" id="hauptteil-1_para-1_abs-1_inhalt-1_text-1_a-1">link</a>. <span class="akn-span" id="hauptteil-1_para-1_abs-1_inhalt-1_text-1_span-1">Inline container</span>. <br id="hauptteil-1_para-1_abs-1_inhalt-1_text-1_br-1"><br id="hauptteil-1_para-1_abs-1_inhalt-1_text-1_br-2">This text has two preceding line breaks.</p>
+            <section class="akn-paragraph" id="art-z1_abs-z1">
+               <span class="akn-num" id="art-z1_abs-z1_bezeichnung-n1">(1)</span>
+               <div class="akn-content" id="art-z1_abs-z1_inhalt-n1">
+                  <p class="akn-p" id="art-z1_abs-z1_inhalt-n1_text-n1">
+                     <b id="art-z1_abs-z1_inhalt-n1_text-n1_fettschrift-n1">Bold</b> text. <i id="art-z1_abs-z1_inhalt-n1_text-n1_kursiv-n1">Italic</i> text. <u id="art-z1_abs-z1_inhalt-n1_text-n1_u-n1">Underlined</u> text. This contains <sub id="art-z1_abs-z1_inhalt-n1_text-n1_sub-n1">subscript</sub> text. This contains <sup id="art-z1_abs-z1_inhalt-n1_text-n1_sup-n1">superscript</sup> text. This text contains a <a href="#" id="art-z1_abs-z1_inhalt-n1_text-n1_a-n1">link</a>. <span class="akn-span" id="art-z1_abs-z1_inhalt-n1_text-n1_span-n1">Inline container</span>. <br id="art-z1_abs-z1_inhalt-n1_text-n1_br-n1"><br id="art-z1_abs-z1_inhalt-n1_text-n1_br-n2">This text has two preceding line breaks.</p>
                   </div>
                </section>
             </article>

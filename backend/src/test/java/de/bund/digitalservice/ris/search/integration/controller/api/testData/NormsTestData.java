@@ -17,37 +17,29 @@ public class NormsTestData {
 
   public static List<TableOfContentsItem> nestedToC =
       List.of(
-          new TableOfContentsItem("hauptteil-1_para-1", "1", "Art 1", new ArrayList<>()),
-          new TableOfContentsItem("hauptteil-1_para-2", "2", "Art 2", new ArrayList<>()),
+          new TableOfContentsItem("art-z1", "1", "Art 1", new ArrayList<>()),
+          new TableOfContentsItem("art-z2", "2", "Art 2", new ArrayList<>()),
           new TableOfContentsItem(
-              "hauptteil-1_teil-1",
+              "hauptteil-n1_teil-n1",
               "Teil 1",
               "Heading 1",
               List.of(
+                  new TableOfContentsItem("art-z3", "3", "Art 3", new ArrayList<>()),
                   new TableOfContentsItem(
-                      "hauptteil-1_teil-1-para-1", "3", "Art 3", new ArrayList<>()),
-                  new TableOfContentsItem(
-                      "hauptteil-1_teil-1_teil-1",
+                      "hauptteil-n1_teil-n1_teil-n1",
                       "Teil 2",
                       "Heading 2",
                       List.of(
+                          new TableOfContentsItem("art-z4", "4", "Art 4", new ArrayList<>()),
                           new TableOfContentsItem(
-                              "hauptteil-1_teil-1_teil-1-para-1", "4", "Art 4", new ArrayList<>()),
-                          new TableOfContentsItem(
-                              "hauptteil-1_teil-1_teil-1_teil-1",
+                              "hauptteil-n1_teil-n1_teil-n1_teil-n1",
                               "Teil 3",
                               "Heading 3",
                               List.of(
                                   new TableOfContentsItem(
-                                      "hauptteil-1_teil-1_teil-1_teil-1-para-1",
-                                      "5",
-                                      "Art 5",
-                                      new ArrayList<>()),
+                                      "art-z5", "5", "Art 5", new ArrayList<>()),
                                   new TableOfContentsItem(
-                                      "hauptteil-1_teil-1_teil-1_teil-1-para-2",
-                                      "6",
-                                      "Art 6",
-                                      new ArrayList<>()))))))));
+                                      "art-z6", "6", "Art 6", new ArrayList<>()))))))));
 
   static {
     var normTestOne =

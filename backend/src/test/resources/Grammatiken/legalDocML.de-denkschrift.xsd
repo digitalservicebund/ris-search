@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns="http://Inhaltsdaten.LegalDocML.de/1.8.1/"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="http://Inhaltsdaten.LegalDocML.de/1.8.1/"
+           elementFormDefault="qualified"
+           version="LegalDocML.de 1.8.1 (10.06.2025)">
+<!-- ********************************* Hinweis zur Lizensierung ********************************* -->
+   <xs:annotation>
+      <xs:appinfo>
+         <copyright-hinweis>2025 Copyright © 2021–2025 Bundesministerium des Innern und für Heimat, 
+Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Verwaltungsarbeit</copyright-hinweis>
+         <lizenz url="https://creativecommons.org/licenses/by/3.0/legalcode.de"
+                 kurzbezeichnung="CC-BY-3.0"
+                 langbezeichnung="Creative Commons Namensnennung 3.0"/>
+         <autor organisation="Bundesministerium des Innern und für Heimat"
+                referat="DG II 6"
+                organisatorischer-rahmen="Maßnahmen Enterprise Resource Management und Elektronische Verwaltungsarbeit"/>
+      </xs:appinfo>
+   </xs:annotation>
+   <!-- ******************************************************************************************** -->
+   <xs:import namespace="http://www.w3.org/XML/1998/namespace"
+              schemaLocation="xml.xsd"/>
+   <!-- #### Inkludierte Module mit modulübergreifend genutzen Komponenten #### -->
+   <xs:include schemaLocation="legalDocML.de-baukasten.xsd"/>
+   <!-- #### Globales Root-Element, spezifisch für dieses Paket #### -->
+   <xs:element name="akomaNtoso">
+      <xs:complexType>
+         <xs:sequence>
+            <xs:element name="doc" type="denkschriftVertRA"/>
+         </xs:sequence>
+      </xs:complexType>
+   </xs:element>
+   <!-- #### Typen des Moduls "Denkschrift" #### -->
+   <xs:complexType name="denkschriftAbschnitt" mixed="false">
+      <xs:annotation>
+         <xs:documentation>Die Klasse "denkschriftAbschnitt" wird genutzt, um innerhalb eines Denkschriftteils einen Abschnitt einzufügen. Auf Ebene des Schemas werden keine spezifischen Arten von Denkschrift-Abschnitten unterschieden, da diese strukturell identisch aufgebaut sind. Die Darstellung spezifischer Denkschrift-Abschnitte erfolgt ausschließlich durch die Zuordnung von @refersTo-Attributen.</xs:documentation>
+      </xs:annotation>
+      <xs:sequence>
+         <xs:element name="num" type="artUndZaehlbezeichnung"/>
+         <xs:element name="heading" type="ueberschrift"/>
+         <xs:element name="content" type="inhalt"/>
+      </xs:sequence>
+      <xs:attribute name="eId" use="required" type="eIdLiterals.denkschriftAbschnitt"/>
+      <xs:attribute name="GUID" use="required" type="GUIDLiterals"/>
+      <xs:attribute name="name" use="required" type="nameLiterals.denkschriftAbschnitt"/>
+      <xs:attribute name="refersTo"
+                    use="required"
+                    type="refersToLiterals.denkschriftAbschnitt"/>
+      <xs:attribute ref="xml:id" use="optional"/>
+   </xs:complexType>
+   <xs:complexType name="denkschriftHauptteil" mixed="false">
+      <xs:annotation>
+         <xs:documentation>Die Klasse "denkschriftHauptteil" wird benutzt, um den Hauptteil einer Denkschrift einzufügen. Der Hauptteil einer Denkschrift wird weiter in Teile untergliedert.</xs:documentation>
+      </xs:annotation>
+      <xs:sequence>
+         <xs:element name="hcontainer" type="denkschriftTeil" maxOccurs="unbounded"/>
+      </xs:sequence>
+      <xs:attribute name="eId" use="required" type="eIdLiterals.denkschriftHauptteil"/>
+      <xs:attribute name="GUID" use="required" type="GUIDLiterals"/>
+      <xs:attribute ref="xml:id" use="optional"/>
+   </xs:complexType>
+   <xs:complexType name="denkschriftTeil" mixed="false">
+      <xs:annotation>
+         <xs:documentation>Die Klasse "denkschriftTeil" wird genutzt, um innerhalb eines Teils einer Denkschrift Abschnitte einzufügen.</xs:documentation>
+      </xs:annotation>
+      <xs:sequence>
+         <xs:element name="num" type="artUndZaehlbezeichnung" minOccurs="0"/>
+         <xs:element name="heading" type="ueberschrift"/>
+         <xs:element name="hcontainer"
+                     type="denkschriftAbschnitt"
+                     minOccurs="2"
+                     maxOccurs="2"/>
+      </xs:sequence>
+      <xs:attribute name="eId" use="required" type="eIdLiterals.denkschriftTeil"/>
+      <xs:attribute name="GUID" use="required" type="GUIDLiterals"/>
+      <xs:attribute name="name" use="required" type="nameLiterals.denkschriftTeil"/>
+      <xs:attribute name="refersTo"
+                    use="required"
+                    type="refersToLiterals.denkschriftTeil"/>
+      <xs:attribute ref="xml:id" use="optional"/>
+   </xs:complexType>
+   <xs:complexType name="denkschriftVertRA" mixed="false">
+      <xs:annotation>
+         <xs:documentation>Die Klasse "denkschriftVertRA" bildet ein eigenständiges Teildokument eines Rechtsetzungsdokuments in der Entwurfsfassung in Form eines separaten XML-Dokuments, das durch die Klasse "rechtsetzungsdokument" referenziert und in dieser eingebunden wird.</xs:documentation>
+      </xs:annotation>
+      <xs:sequence>
+         <xs:element name="meta" type="metadatenOptionalErweitert"/>
+         <xs:element name="mainBody" type="denkschriftHauptteil"/>
+      </xs:sequence>
+      <xs:attribute name="name" use="required" type="nameLiterals.denkschriftVertRA"/>
+   </xs:complexType>
+</xs:schema>

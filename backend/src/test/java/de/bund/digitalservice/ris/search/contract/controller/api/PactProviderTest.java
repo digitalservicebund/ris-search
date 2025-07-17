@@ -129,13 +129,13 @@ class PactProviderTest extends ContainersIntegrationBase {
                 List.of(
                     Article.builder()
                         .name("1 Fleischhygiene-Verordnung")
-                        .eId("hauptteil-1_art-1")
+                        .eId("art-z1")
                         .entryIntoForceDate(LocalDate.of(2001, 6, 1))
                         .expiryDate(LocalDate.of(2001, 6, 30))
                         .build(),
                     Article.builder()
                         .name("2 Geflugelfleischhygiene-Verordnung")
-                        .eId("hauptteil-1_art-2")
+                        .eId("art-z2")
                         .build()))
             .officialAbbreviation("Fleischhygiene-Verordnung")
             .publishedIn("Bundesgesetzblatt Teil I")

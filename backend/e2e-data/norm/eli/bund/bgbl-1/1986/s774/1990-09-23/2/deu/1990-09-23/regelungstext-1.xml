@@ -1,323 +1,324 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?xml-model href="../../../Grammatiken/legalDocML.de.sch" schematypens="http://purl.oclc.org/dsdl/schematron"?>
-<akn:akomaNtoso xmlns:akn="http://Inhaltsdaten.LegalDocML.de/1.8.1/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://Metadaten.LegalDocML.de/1.8.1/ ../schema/legalDocML.de-metadaten.xsd http://Inhaltsdaten.LegalDocML.de/1.8.1/ ../schema/legalDocML.de-regelungstextverkuendungsfassung.xsd http://MetadatenBundesregierung.LegalDocML.de/1.8.1/ ../schema/legalDocML.de-metadaten-bundesregierung.xsd">
-    <akn:act name="regelungstext">
-        <akn:meta GUID="a1b2c3d4-1111-4111-8111-aaaaaaaaaaaa" eId="meta-1">
-            <akn:identification GUID="a1b2c3d4-2222-4111-8111-bbbbbbbbbbbb" eId="meta-1_ident-1" source="attributsemantik-noch-undefiniert">
-                <akn:FRBRWork GUID="a1b2c3d4-3333-4111-8111-cccccccccccc" eId="meta-1_ident-1_frbrwork-1">
-                    <akn:FRBRthis GUID="a1b2c3d4-4444-4111-8111-dddddddddddd" eId="meta-1_ident-1_frbrwork-1_frbrthis-1" value="eli/bund/bgbl-1/1986/s774/regelungstext-1"/>
-                    <akn:FRBRuri GUID="a1b2c3d4-5555-4111-8111-eeeeeeeeeeee" eId="meta-1_ident-1_frbrwork-1_frbruri-1" value="eli/bund/bgbl-1/1986/s774"/>
-                    <akn:FRBRalias GUID="a1b2c3d4-6666-4111-8111-ffffffffffff" eId="meta-1_ident-1_frbrwork-1_frbralias-1" name="übergreifende-id" value="71c3558b-2a3a-47c1-b1eb-4ef21f6f1d8e"/>
-                    <akn:FRBRdate GUID="a1b2c3d4-7777-4111-8111-010101010101" date="1986-06-25" eId="meta-1_ident-1_frbrwork-1_frbrdate-1" name="verkuendungsfassung"/>
-                    <akn:FRBRauthor GUID="a1b2c3d4-8888-4111-8111-020202020202" eId="meta-1_ident-1_frbrwork-1_frbrauthor-1" href="recht.bund.de/institution/bundesregierung"/>
-                    <akn:FRBRcountry GUID="a1b2c3d4-9999-4111-8111-030303030303" eId="meta-1_ident-1_frbrwork-1_frbrcountry-1" value="de"/>
-                    <akn:FRBRnumber GUID="a1b2c3d4-aaaa-4111-8111-040404040404" eId="meta-1_ident-1_frbrwork-1_frbrnumber-1" value="s774"/>
-                    <akn:FRBRname GUID="a1b2c3d4-bbbb-4111-8111-050505050505" eId="meta-1_ident-1_frbrwork-1_frbrname-1" value="bgbl-1"/>
-                    <akn:FRBRsubtype GUID="a1b2c3d4-cccc-4111-8111-060606060606" eId="meta-1_ident-1_frbrwork-1_frbrsubtype-1" value="regelungstext-1"/>
+<?xml-model href="Grammatiken/legalDocML.de.sch" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<akn:akomaNtoso xmlns:akn="http://Inhaltsdaten.LegalDocML.de/1.8.1/"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://MetadatenRIS.LegalDocML.de/1.8.1/ Grammatiken/legalDocML.de-metadaten-ris.xsd http://MetadatenRegelungstext.LegalDocML.de/1.8.1/ Grammatiken/legalDocML.de-metadaten-regelungstext.xsd http://MetadatenRechtsetzungsdokument.LegalDocML.de/1.8.1/ Grammatiken/legalDocML.de-metadaten-rechtsetzungsdokument.xsd http://Inhaltsdaten.LegalDocML.de/1.8.1/ Grammatiken/legalDocML.de-regelungstextverkuendungsfassung.xsd">
+    <akn:act name="/akn/ontology/de/concept/documenttype/bund/regelungstext-verkuendung">
+        <akn:meta GUID="a1b2c3d4-1111-4111-8111-aaaaaaaaaaaa" eId="meta-n1">
+            <akn:identification GUID="a1b2c3d4-2222-4111-8111-bbbbbbbbbbbb" eId="meta-n1_ident-n1" source="attributsemantik-noch-undefiniert">
+                <akn:FRBRWork GUID="a1b2c3d4-3333-4111-8111-cccccccccccc" eId="meta-n1_ident-n1_frbrwork-n1">
+                    <akn:FRBRthis GUID="a1b2c3d4-4444-4111-8111-dddddddddddd" eId="meta-n1_ident-n1_frbrwork-n1_frbrthis-n1" value="eli/bund/bgbl-1/1986/s774/regelungstext-1"/>
+                    <akn:FRBRuri GUID="a1b2c3d4-5555-4111-8111-eeeeeeeeeeee" eId="meta-n1_ident-n1_frbrwork-n1_frbruri-n1" value="eli/bund/bgbl-1/1986/s774"/>
+                    <akn:FRBRalias GUID="a1b2c3d4-6666-4111-8111-ffffffffffff" eId="meta-n1_ident-n1_frbrwork-n1_frbralias-n1" name="übergreifende-id" value="71c3558b-2a3a-47c1-b1eb-4ef21f6f1d8e"/>
+                    <akn:FRBRdate GUID="a1b2c3d4-7777-4111-8111-010101010101" date="1986-06-25" eId="meta-n1_ident-n1_frbrwork-n1_frbrdate-n1" name="verkuendungsfassung-verkuendungsdatum"/>
+                    <akn:FRBRauthor GUID="a1b2c3d4-8888-4111-8111-020202020202" eId="meta-n1_ident-n1_frbrwork-n1_frbrauthor-n1" href="recht.bund.de/institution/bundesregierung"/>
+                    <akn:FRBRcountry GUID="a1b2c3d4-9999-4111-8111-030303030303" eId="meta-n1_ident-n1_frbrwork-n1_frbrcountry-n1" value="de"/>
+                    <akn:FRBRnumber GUID="a1b2c3d4-aaaa-4111-8111-040404040404" eId="meta-n1_ident-n1_frbrwork-n1_frbrnumber-n1" value="s774"/>
+                    <akn:FRBRname GUID="a1b2c3d4-bbbb-4111-8111-050505050505" eId="meta-n1_ident-n1_frbrwork-n1_frbrname-n1" value="bgbl-1"/>
+                    <akn:FRBRsubtype GUID="a1b2c3d4-cccc-4111-8111-060606060606" eId="meta-n1_ident-n1_frbrwork-n1_frbrsubtype-n1" value="regelungstext-1"/>
                 </akn:FRBRWork>
-                <akn:FRBRExpression GUID="a1b2c3d4-dddd-4111-8111-070707070707" eId="meta-1_ident-1_frbrexpression-1">
-                    <akn:FRBRthis GUID="a1b2c3d4-eeee-4111-8111-080808080808" eId="meta-1_ident-1_frbrexpression-1_frbrthis-1" value="eli/bund/bgbl-1/1986/s774/1990-09-23/2/deu/regelungstext-1"/>
-                    <akn:FRBRuri GUID="a1b2c3d4-ffff-4111-8111-090909090909" eId="meta-1_ident-1_frbrexpression-1_frbruri-1" value="eli/bund/bgbl-1/1986/s774/1990-09-23/2/deu"/>
-                    <akn:FRBRalias GUID="b1b2c3d4-1111-4111-8111-101010101010" eId="meta-1_ident-1_frbrexpression-1_frbralias-1" name="vorherige-version-id" value="6ffebb64-cc58-4d75-a7c3-4f9f78227980"/>
-                    <akn:FRBRalias GUID="b1b2c3d4-2222-4111-8111-111111111111" eId="meta-1_ident-1_frbrexpression-1_frbralias-2" name="aktuelle-version-id" value="46593fe9-be67-4d90-94d9-16687aaff689"/>
-                    <akn:FRBRalias GUID="b1b2c3d4-3333-4111-8111-121212121212" eId="meta-1_ident-1_frbrexpression-1_frbralias-3" name="nachfolgende-version-id" value="57d84ae9-ac7d-4a8a-ac9d-f06f57caea0a"/>
-                    <akn:FRBRauthor GUID="b1b2c3d4-4444-4111-8111-131313131313" eId="meta-1_ident-1_frbrexpression-1_frbrauthor-1" href="recht.bund.de/institution/bundesregierung"/>
-                    <akn:FRBRdate GUID="b1b2c3d4-5555-4111-8111-141414141414" date="1990-09-23" eId="meta-1_ident-1_frbrexpression-1_frbrdate-1" name="verkuendung"/>
-                    <akn:FRBRlanguage GUID="b1b2c3d4-6666-4111-8111-151515151515" eId="meta-1_ident-1_frbrexpression-1_frbrlanguage-1" language="deu"/>
-                    <akn:FRBRversionNumber GUID="b1b2c3d4-7777-4111-8111-161616161616" eId="meta-1_ident-1_frbrexpression-1_frbrversionnumber-1" value="2"/>
+                <akn:FRBRExpression GUID="a1b2c3d4-dddd-4111-8111-070707070707" eId="meta-n1_ident-n1_frbrexpression-n1">
+                    <akn:FRBRthis GUID="a1b2c3d4-eeee-4111-8111-080808080808" eId="meta-n1_ident-n1_frbrexpression-n1_frbrthis-n1" value="eli/bund/bgbl-1/1986/s774/1990-09-23/2/deu/regelungstext-1"/>
+                    <akn:FRBRuri GUID="a1b2c3d4-ffff-4111-8111-090909090909" eId="meta-n1_ident-n1_frbrexpression-n1_frbruri-n1" value="eli/bund/bgbl-1/1986/s774/1990-09-23/2/deu"/>
+                    <akn:FRBRalias GUID="b1b2c3d4-1111-4111-8111-101010101010" eId="meta-n1_ident-n1_frbrexpression-n1_frbralias-n1" name="vorherige-version-id" value="6ffebb64-cc58-4d75-a7c3-4f9f78227980"/>
+                    <akn:FRBRalias GUID="b1b2c3d4-2222-4111-8111-111111111111" eId="meta-n1_ident-n1_frbrexpression-n1_frbralias-n2" name="aktuelle-version-id" value="46593fe9-be67-4d90-94d9-16687aaff689"/>
+                    <akn:FRBRalias GUID="b1b2c3d4-3333-4111-8111-121212121212" eId="meta-n1_ident-n1_frbrexpression-n1_frbralias-n3" name="nachfolgende-version-id" value="57d84ae9-ac7d-4a8a-ac9d-f06f57caea0a"/>
+                    <akn:FRBRauthor GUID="b1b2c3d4-4444-4111-8111-131313131313" eId="meta-n1_ident-n1_frbrexpression-n1_frbrauthor-n1" href="recht.bund.de/institution/bundesregierung"/>
+                    <akn:FRBRdate GUID="b1b2c3d4-5555-4111-8111-141414141414" date="1990-09-23" eId="meta-n1_ident-n1_frbrexpression-n1_frbrdate-n1" name="verkuendung"/>
+                    <akn:FRBRlanguage GUID="b1b2c3d4-6666-4111-8111-151515151515" eId="meta-n1_ident-n1_frbrexpression-n1_frbrlanguage-n1" language="deu"/>
+                    <akn:FRBRversionNumber GUID="b1b2c3d4-7777-4111-8111-161616161616" eId="meta-n1_ident-n1_frbrexpression-n1_frbrversionnumber-n1" value="2"/>
                 </akn:FRBRExpression>
-                <akn:FRBRManifestation GUID="b1b2c3d4-8888-4111-8111-171717171717" eId="meta-1_ident-1_frbrmanifestation-1">
-                    <akn:FRBRthis GUID="b1b2c3d4-9999-4111-8111-181818181818" eId="meta-1_ident-1_frbrmanifestation-1_frbrthis-1" value="eli/bund/bgbl-1/1986/s774/1990-09-23/2/deu/1990-09-23/regelungstext-1.xml"/>
-                    <akn:FRBRuri GUID="b1b2c3d4-aaaa-4111-8111-191919191919" eId="meta-1_ident-1_frbrmanifestation-1_frbruri-1" value="eli/bund/bgbl-1/1986/s774/1990-09-23/2/deu/1990-09-23/regelungstext-1.xml"/>
-                    <akn:FRBRdate GUID="b1b2c3d4-bbbb-4111-8111-202020202020" date="1990-09-23" eId="meta-1_ident-1_frbrmanifestation-1_frbrdate-1" name="generierung"/>
-                    <akn:FRBRauthor GUID="b1b2c3d4-cccc-4111-8111-212121212121" eId="meta-1_ident-1_frbrmanifestation-1_frbrauthor-1" href="recht.bund.de"/>
-                    <akn:FRBRformat GUID="b1b2c3d4-dddd-4111-8111-222222222222" eId="meta-1_ident-1_frbrmanifestation-1_frbrformat-1" value="xml"/>
+                <akn:FRBRManifestation GUID="b1b2c3d4-8888-4111-8111-171717171717" eId="meta-n1_ident-n1_frbrmanifestation-n1">
+                    <akn:FRBRthis GUID="b1b2c3d4-9999-4111-8111-181818181818" eId="meta-n1_ident-n1_frbrmanifestation-n1_frbrthis-n1" value="eli/bund/bgbl-1/1986/s774/1990-09-23/2/deu/1990-09-23/regelungstext-1.xml"/>
+                    <akn:FRBRuri GUID="b1b2c3d4-aaaa-4111-8111-191919191919" eId="meta-n1_ident-n1_frbrmanifestation-n1_frbruri-n1" value="eli/bund/bgbl-1/1986/s774/1990-09-23/2/deu/1990-09-23/regelungstext-1.xml"/>
+                    <akn:FRBRdate GUID="b1b2c3d4-bbbb-4111-8111-202020202020" date="1990-09-23" eId="meta-n1_ident-n1_frbrmanifestation-n1_frbrdate-n1" name="generierung"/>
+                    <akn:FRBRauthor GUID="b1b2c3d4-cccc-4111-8111-212121212121" eId="meta-n1_ident-n1_frbrmanifestation-n1_frbrauthor-n1" href="recht.bund.de"/>
+                    <akn:FRBRformat GUID="b1b2c3d4-dddd-4111-8111-222222222222" eId="meta-n1_ident-n1_frbrmanifestation-n1_frbrformat-n1" value="xml"/>
                 </akn:FRBRManifestation>
             </akn:identification>
-            <akn:lifecycle GUID="b1b2c3d4-eeee-4111-8111-232323232323" eId="meta-1_lebzykl-1" source="attributsemantik-noch-undefiniert">
-                <akn:eventRef GUID="b1b2c3d4-ffff-4111-8111-242424242424" date="1986-06-25" eId="meta-1_lebzykl-1_ereignis-1" refersTo="ausfertigung" source="attributsemantik-noch-undefiniert" type="generation"/>
-                <akn:eventRef GUID="c1b2c3d4-1111-4111-8111-252525252525" date="1987-08-01" eId="meta-1_lebzykl-1_ereignis-2" refersTo="inkrafttreten" source="attributsemantik-noch-undefiniert" type="generation"/>
-                <akn:eventRef GUID="c1b2c3d4-2222-4111-8111-262626262626" date="1990-09-23" eId="meta-1_lebzykl-1_ereignis-3" refersTo="ausfertigung" source="attributsemantik-noch-undefiniert" type="amendment"/>
-                <akn:eventRef GUID="c1b2c3d4-3333-4111-8111-272727272727" date="1990-10-03" eId="meta-1_lebzykl-1_ereignis-4" refersTo="inkrafttreten" source="attributsemantik-noch-undefiniert" type="amendment"/>
+            <akn:lifecycle GUID="b1b2c3d4-eeee-4111-8111-232323232323" eId="meta-n1_lebzykl-n1" source="attributsemantik-noch-undefiniert">
+                <akn:eventRef GUID="b1b2c3d4-ffff-4111-8111-242424242424" date="1986-06-25" eId="meta-n1_lebzykl-n1_ereignis-n1" refersTo="ausfertigung" source="attributsemantik-noch-undefiniert" type="generation"/>
+                <akn:eventRef GUID="c1b2c3d4-1111-4111-8111-252525252525" date="1987-08-01" eId="meta-n1_lebzykl-n1_ereignis-n2" refersTo="inkrafttreten" source="attributsemantik-noch-undefiniert" type="generation"/>
+                <akn:eventRef GUID="c1b2c3d4-2222-4111-8111-262626262626" date="1990-09-23" eId="meta-n1_lebzykl-n1_ereignis-n3" refersTo="ausfertigung" source="attributsemantik-noch-undefiniert" type="amendment"/>
+                <akn:eventRef GUID="c1b2c3d4-3333-4111-8111-272727272727" date="1990-10-03" eId="meta-n1_lebzykl-n1_ereignis-n4" refersTo="inkrafttreten" source="attributsemantik-noch-undefiniert" type="amendment"/>
             </akn:lifecycle>
-            <akn:temporalData GUID="c1b2c3d4-4444-4111-8111-282828282828" eId="meta-1_geltzeiten-1" source="attributsemantik-noch-undefiniert">
-                <akn:temporalGroup GUID="c1b2c3d4-5555-4111-8111-292929292929" eId="meta-1_geltzeiten-1_geltungszeitgr-1">
-                    <akn:timeInterval GUID="c1b2c3d4-6666-4111-8111-303030303030" eId="meta-1_geltzeiten-1_geltungszeitgr-1_gelzeitintervall-1" refersTo="geltungszeit" start="#meta-1_lebzykl-1_ereignis-2"/>
+            <akn:temporalData GUID="c1b2c3d4-4444-4111-8111-282828282828" eId="meta-n1_geltzeiten-n1" source="attributsemantik-noch-undefiniert">
+                <akn:temporalGroup GUID="c1b2c3d4-5555-4111-8111-292929292929" eId="meta-n1_geltzeiten-n1_geltungszeitgr-n1">
+                    <akn:timeInterval GUID="c1b2c3d4-6666-4111-8111-303030303030" eId="meta-n1_geltzeiten-n1_geltungszeitgr-n1_gelzeitintervall-n1" refersTo="geltungszeit" start="#meta-n1_lebzykl-n1_ereignis-n2"/>
                 </akn:temporalGroup>
-                <akn:temporalGroup GUID="c1b2c3d4-7777-4111-8111-313131313131" eId="meta-1_geltzeiten-1_geltungszeitgr-2">
-                    <akn:timeInterval GUID="c1b2c3d4-8888-4111-8111-323232323232" eId="meta-1_geltzeiten-1_geltungszeitgr-2_gelzeitintervall-1" refersTo="geltungszeit" start="#meta-1_lebzykl-1_ereignis-4"/>
+                <akn:temporalGroup GUID="c1b2c3d4-7777-4111-8111-313131313131" eId="meta-n1_geltzeiten-n1_geltungszeitgr-n2">
+                    <akn:timeInterval GUID="c1b2c3d4-8888-4111-8111-323232323232" eId="meta-n1_geltzeiten-n1_geltungszeitgr-n2_gelzeitintervall-n1" refersTo="geltungszeit" start="#meta-n1_lebzykl-n1_ereignis-n4"/>
                 </akn:temporalGroup>
             </akn:temporalData>
-            <akn:proprietary GUID="c1b2c3d4-9999-4111-8111-333333333333" eId="meta-1_proprietary-1" source="attributsemantik-noch-undefiniert">
+            <akn:proprietary GUID="c1b2c3d4-9999-4111-8111-333333333333" eId="meta-n1_proprietary-n1" source="attributsemantik-noch-undefiniert">
                 <ris:legalDocML.de_metadaten xmlns:ris="http://MetadatenRIS.LegalDocML.de/1.8.1/" xsi:schemaLocation="http://MetadatenRIS.LegalDocML.de/1.8.1/ ../schema/legalDocML.de-metadaten-ris.xsd">
                     <ris:inkraft date="1990-10-03"/>
                 </ris:legalDocML.de_metadaten>
             </akn:proprietary>
         </akn:meta>
-        <akn:preface GUID="c1b2c3d4-aaaa-4111-8111-343434343434" eId="einleitung-1">
-            <akn:longTitle GUID="c1b2c3d4-bbbb-4111-8111-353535353535" eId="einleitung-1_doktitel-1">
-                <akn:p GUID="c1b2c3d4-cccc-4111-8111-363636363636" eId="einleitung-1_doktitel-1_text-1">
-                    <akn:docStage GUID="c1b2c3d4-dddd-4111-8111-373737373737" eId="einleitung-1_doktitel-1_text-1_docstadium-1"/>
-                    <akn:docTitle GUID="c1b2c3d4-eeee-4111-8111-383838383838" eId="einleitung-1_doktitel-1_text-1_doctitel-1">Fiktive Verordnung zur Ausbildung in der Fruchtverarbeitung</akn:docTitle>
+        <akn:preface GUID="c1b2c3d4-aaaa-4111-8111-343434343434" eId="einleitung-n1">
+            <akn:longTitle GUID="c1b2c3d4-bbbb-4111-8111-353535353535" eId="einleitung-n1_doktitel-n1">
+                <akn:p GUID="c1b2c3d4-cccc-4111-8111-363636363636" eId="einleitung-n1_doktitel-n1_text-n1">
+                    <akn:docStage GUID="c1b2c3d4-dddd-4111-8111-373737373737" eId="einleitung-n1_doktitel-n1_text-n1_docstadium-n1"/>
+                    <akn:docTitle GUID="c1b2c3d4-eeee-4111-8111-383838383838" eId="einleitung-n1_doktitel-n1_text-n1_doctitel-n1">Fiktive Verordnung zur Ausbildung in der Fruchtverarbeitung</akn:docTitle>
                 </akn:p>
             </akn:longTitle>
         </akn:preface>
-        <akn:preamble GUID="c1b2c3d4-ffff-4111-8111-393939393939" eId="preambel-1">
-            <akn:formula GUID="d2b3c4d5-1111-4111-8111-404040404040" eId="preambel-1_formel-1" name="attributsemantik-noch-undefiniert" refersTo="eingangsformel">
-                <akn:p GUID="d2b3c4d5-2222-4111-8111-414141414141" eId="preambel-1_formel-1_text-1">Auf Grundlage des fiktiven Berufsbildungsgesetzes vom 1. Januar 1986, in mehrfacher Berücksichtigung aktueller Erkenntnisse, wird diese Verordnung erlassen:</akn:p>
+        <akn:preamble GUID="c1b2c3d4-ffff-4111-8111-393939393939" eId="präambel-n1">
+            <akn:formula GUID="d2b3c4d5-1111-4111-8111-404040404040" eId="präambel-n1_formel-n1" name="attributsemantik-noch-undefiniert" refersTo="eingangsformel">
+                <akn:p GUID="d2b3c4d5-2222-4111-8111-414141414141" eId="präambel-n1_formel-n1_text-n1">Auf Grundlage des fiktiven Berufsbildungsgesetzes vom 1. Januar 1986, in mehrfacher Berücksichtigung aktueller Erkenntnisse, wird diese Verordnung erlassen:</akn:p>
             </akn:formula>
         </akn:preamble>
-        <akn:body GUID="d2b3c4d5-3333-4111-8111-424242424242" eId="hauptteil-1">
-            <akn:article GUID="d2b3c4d5-4444-4111-8111-434343434343" eId="hauptteil-1_art-1" period="#meta-1_geltzeiten-1_geltungszeitgr-1" refersTo="stammform">
-                <akn:num GUID="d2b3c4d5-5555-4111-8111-444444444444" eId="hauptteil-1_art-1_bezeichnung-1">§ 1</akn:num>
-                <akn:heading GUID="d2b3c4d5-6666-4111-8111-454545454545" eId="hauptteil-1_art-1_überschrift-1">Anerkennung des fiktiven Ausbildungsberufs</akn:heading>
-                <akn:paragraph GUID="d2b3c4d5-7777-4111-8111-464646464646" eId="hauptteil-1_art-1_abs-1">
-                    <akn:num GUID="d2b3c4d5-8888-4111-8111-474747474747" eId="hauptteil-1_art-1_abs-1_bezeichnung-1"/>
-                    <akn:content GUID="d2b3c4d5-9999-4111-8111-484848484848" eId="hauptteil-1_art-1_abs-1_inhalt-1">
-                        <akn:p GUID="d2b3c4d5-aaaa-4111-8111-494949494949" eId="hauptteil-1_art-1_abs-1_inhalt-1_text-1">Der Ausbildungsberuf in der Fruchtverarbeitung wird auf fiktiver Basis anerkannt und soll innovative Ansätze fördern.<akn:marker GUID="d2b3c4d5-bbbb-4111-8111-4a4a4a4a4a4a" eId="hauptteil-1_art-1_abs-1_inhalt-1_text-1_marker-1" refersTo="satzende"/></akn:p>
+        <akn:body GUID="d2b3c4d5-3333-4111-8111-424242424242" eId="hauptteil-n1">
+            <akn:article GUID="d2b3c4d5-4444-4111-8111-434343434343" eId="art-z1" period="#meta-n1_geltzeiten-n1_geltungszeitgr-n1" refersTo="stammform">
+                <akn:num GUID="d2b3c4d5-5555-4111-8111-444444444444" eId="art-z1_bezeichnung-n1">§ 1</akn:num>
+                <akn:heading GUID="d2b3c4d5-6666-4111-8111-454545454545" eId="art-z1_überschrift-n1">Anerkennung des fiktiven Ausbildungsberufs</akn:heading>
+                <akn:paragraph GUID="d2b3c4d5-7777-4111-8111-464646464646" eId="art-z1_abs-z1">
+                    <akn:num GUID="d2b3c4d5-8888-4111-8111-474747474747" eId="art-z1_abs-z1_bezeichnung-n1"/>
+                    <akn:content GUID="d2b3c4d5-9999-4111-8111-484848484848" eId="art-z1_abs-z1_inhalt-n1">
+                        <akn:p GUID="d2b3c4d5-aaaa-4111-8111-494949494949" eId="art-z1_abs-z1_inhalt-n1_text-n1">Der Ausbildungsberuf in der Fruchtverarbeitung wird auf fiktiver Basis anerkannt und soll innovative Ansätze fördern.<akn:marker GUID="d2b3c4d5-bbbb-4111-8111-4a4a4a4a4a4a" eId="art-z1_abs-z1_inhalt-n1_text-n1_marker-n1" refersTo="satzende"/></akn:p>
                     </akn:content>
                 </akn:paragraph>
             </akn:article>
-            <akn:article GUID="d2b3c4d5-cccc-4111-8111-4b4b4b4b4b4b" eId="hauptteil-1_art-2" period="#meta-1_geltzeiten-1_geltungszeitgr-1" refersTo="stammform">
-                <akn:num GUID="d2b3c4d5-dddd-4111-8111-4c4c4c4c4c4c" eId="hauptteil-1_art-2_bezeichnung-1">§ 2</akn:num>
-                <akn:heading GUID="d2b3c4d5-eeee-4111-8111-4d4d4d4d4d4d" eId="hauptteil-1_art-2_überschrift-1">Fiktive Ausbildungsdauer</akn:heading>
-                <akn:paragraph GUID="d2b3c4d5-ffff-4111-8111-4e4e4e4e4e4e" eId="hauptteil-1_art-2_abs-1">
-                    <akn:num GUID="e3b4c5d6-1111-4111-8111-4f4f4f4f4f4f" eId="hauptteil-1_art-2_abs-1_bezeichnung-1"/>
-                    <akn:content GUID="e3b4c5d6-2222-4111-8111-505050505050" eId="hauptteil-1_art-2_abs-1_inhalt-1">
-                        <akn:p GUID="e3b4c5d6-3333-4111-8111-515151515151" eId="hauptteil-1_art-2_abs-1_inhalt-1_text-1">Die Ausbildung dauert 3 Jahre und fördert praxisnahe Lerninhalte.<akn:marker GUID="e3b4c5d6-4444-4111-8111-525252525252" eId="hauptteil-1_art-2_abs-1_inhalt-1_text-1_marker-1" refersTo="satzende"/></akn:p>
+            <akn:article GUID="d2b3c4d5-cccc-4111-8111-4b4b4b4b4b4b" eId="art-z2" period="#meta-n1_geltzeiten-n1_geltungszeitgr-n1" refersTo="stammform">
+                <akn:num GUID="d2b3c4d5-dddd-4111-8111-4c4c4c4c4c4c" eId="art-z2_bezeichnung-n1">§ 2</akn:num>
+                <akn:heading GUID="d2b3c4d5-eeee-4111-8111-4d4d4d4d4d4d" eId="art-z2_überschrift-n1">Fiktive Ausbildungsdauer</akn:heading>
+                <akn:paragraph GUID="d2b3c4d5-ffff-4111-8111-4e4e4e4e4e4e" eId="art-z2_abs-z1">
+                    <akn:num GUID="e3b4c5d6-1111-4111-8111-4f4f4f4f4f4f" eId="art-z2_abs-z1_bezeichnung-n1"/>
+                    <akn:content GUID="e3b4c5d6-2222-4111-8111-505050505050" eId="art-z2_abs-z1_inhalt-n1">
+                        <akn:p GUID="e3b4c5d6-3333-4111-8111-515151515151" eId="art-z2_abs-z1_inhalt-n1_text-n1">Die Ausbildung dauert 3 Jahre und fördert praxisnahe Lerninhalte.<akn:marker GUID="e3b4c5d6-4444-4111-8111-525252525252" eId="art-z2_abs-z1_inhalt-n1_text-n1_marker-n1" refersTo="satzende"/></akn:p>
                     </akn:content>
                 </akn:paragraph>
             </akn:article>
-            <akn:article GUID="e3b4c5d6-5555-4111-8111-535353535353" eId="hauptteil-1_art-3" period="#meta-1_geltzeiten-1_geltungszeitgr-1" refersTo="stammform">
-                <akn:num GUID="e3b4c5d6-6666-4111-8111-545454545454" eId="hauptteil-1_art-3_bezeichnung-1">§ 3</akn:num>
-                <akn:heading GUID="e3b4c5d6-7777-4111-8111-555555555555" eId="hauptteil-1_art-3_überschrift-1">Fiktives Ausbildungsberufsbild</akn:heading>
-                <akn:paragraph GUID="e3b4c5d6-8888-4111-8111-565656565656" eId="hauptteil-1_art-3_abs-1">
-                    <akn:num GUID="e3b4c5d6-9999-4111-8111-575757575757" eId="hauptteil-1_art-3_abs-1_bezeichnung-1"/>
-                    <akn:content GUID="e3b4c5d6-aaaa-4111-8111-585858585858" eId="hauptteil-1_art-3_abs-1_inhalt-1">
-                        <akn:p GUID="e3b4c5d6-bbbb-4111-8111-595959595959" eId="hauptteil-1_art-3_abs-1_inhalt-1_text-1">Gegenstand der Ausbildung sind folgende fiktive Fertigkeiten und Kenntnisse:</akn:p>
-                        <akn:blockList GUID="e3b4c5d6-cccc-4111-8111-5a5a5a5a5a5a" eId="hauptteil-1_art-3_abs-1_inhalt-1_liste-1">
-                            <akn:item GUID="e3b4c5d6-dddd-4111-8111-5b5b5b5b5b5b" eId="hauptteil-1_art-3_abs-1_inhalt-1_liste-1_listenelem-1">
-                                <akn:num GUID="e3b4c5d6-eeee-4111-8111-5c5c5c5c5c5c" eId="hauptteil-1_art-3_abs-1_inhalt-1_liste-1_listenelem-1_bezeichnung-1">1.</akn:num>
-                                <akn:p GUID="e3b4c5d6-ffff-4111-8111-5d5d5d5d5d5d" eId="hauptteil-1_art-3_abs-1_inhalt-1_liste-1_listenelem-1_text-1">Innovative Sicherheits- und Umweltkonzepte,</akn:p>
+            <akn:article GUID="e3b4c5d6-5555-4111-8111-535353535353" eId="art-z3" period="#meta-n1_geltzeiten-n1_geltungszeitgr-n1" refersTo="stammform">
+                <akn:num GUID="e3b4c5d6-6666-4111-8111-545454545454" eId="art-z3_bezeichnung-n1">§ 3</akn:num>
+                <akn:heading GUID="e3b4c5d6-7777-4111-8111-555555555555" eId="art-z3_überschrift-n1">Fiktives Ausbildungsberufsbild</akn:heading>
+                <akn:paragraph GUID="e3b4c5d6-8888-4111-8111-565656565656" eId="art-z3_abs-z1">
+                    <akn:num GUID="e3b4c5d6-9999-4111-8111-575757575757" eId="art-z3_abs-z1_bezeichnung-n1"/>
+                    <akn:content GUID="e3b4c5d6-aaaa-4111-8111-585858585858" eId="art-z3_abs-z1_inhalt-n1">
+                        <akn:p GUID="e3b4c5d6-bbbb-4111-8111-595959595959" eId="art-z3_abs-z1_inhalt-n1_text-n1">Gegenstand der Ausbildung sind folgende fiktive Fertigkeiten und Kenntnisse:</akn:p>
+                        <akn:blockList GUID="e3b4c5d6-cccc-4111-8111-5a5a5a5a5a5a" eId="art-z3_abs-z1_inhalt-n1_liste-n1">
+                            <akn:item GUID="e3b4c5d6-dddd-4111-8111-5b5b5b5b5b5b" eId="art-z3_abs-z1_inhalt-n1_liste-n1_listenelem-n1">
+                                <akn:num GUID="e3b4c5d6-eeee-4111-8111-5c5c5c5c5c5c" eId="art-z3_abs-z1_inhalt-n1_liste-n1_listenelem-n1_bezeichnung-n1">1.</akn:num>
+                                <akn:p GUID="e3b4c5d6-ffff-4111-8111-5d5d5d5d5d5d" eId="art-z3_abs-z1_inhalt-n1_liste-n1_listenelem-n1_text-n1">Innovative Sicherheits- und Umweltkonzepte,</akn:p>
                             </akn:item>
-                            <akn:item GUID="f3b4c5d6-1111-4111-8111-5e5e5e5e5e5e" eId="hauptteil-1_art-3_abs-1_inhalt-1_liste-1_listenelem-2">
-                                <akn:num GUID="f3b4c5d6-2222-4111-8111-5f5f5f5f5f5f" eId="hauptteil-1_art-3_abs-1_inhalt-1_liste-1_listenelem-2_bezeichnung-1">2.</akn:num>
-                                <akn:p GUID="f3b4c5d6-3333-4111-8111-606060606060" eId="hauptteil-1_art-3_abs-1_inhalt-1_liste-1_listenelem-2_text-1">Grundkenntnisse in fiktiven Rechtsvorschriften,</akn:p>
+                            <akn:item GUID="f3b4c5d6-1111-4111-8111-5e5e5e5e5e5e" eId="art-z3_abs-z1_inhalt-n1_liste-n1_listenelem-n2">
+                                <akn:num GUID="f3b4c5d6-2222-4111-8111-5f5f5f5f5f5f" eId="art-z3_abs-z1_inhalt-n1_liste-n1_listenelem-n2_bezeichnung-n1">2.</akn:num>
+                                <akn:p GUID="f3b4c5d6-3333-4111-8111-606060606060" eId="art-z3_abs-z1_inhalt-n1_liste-n1_listenelem-n2_text-n1">Grundkenntnisse in fiktiven Rechtsvorschriften,</akn:p>
                             </akn:item>
-                            <akn:item GUID="f3b4c5d6-4444-4111-8111-616161616161" eId="hauptteil-1_art-3_abs-1_inhalt-1_liste-1_listenelem-3">
-                                <akn:num GUID="f3b4c5d6-5555-4111-8111-626262626262" eId="hauptteil-1_art-3_abs-1_inhalt-1_liste-1_listenelem-3_bezeichnung-1">3.</akn:num>
-                                <akn:p GUID="f3b4c5d6-6666-4111-8111-636363636363" eId="hauptteil-1_art-3_abs-1_inhalt-1_liste-1_listenelem-3_text-1">Grundlegende Hygienepraktiken,</akn:p>
+                            <akn:item GUID="f3b4c5d6-4444-4111-8111-616161616161" eId="art-z3_abs-z1_inhalt-n1_liste-n1_listenelem-n3">
+                                <akn:num GUID="f3b4c5d6-5555-4111-8111-626262626262" eId="art-z3_abs-z1_inhalt-n1_liste-n1_listenelem-n3_bezeichnung-n1">3.</akn:num>
+                                <akn:p GUID="f3b4c5d6-6666-4111-8111-636363636363" eId="art-z3_abs-z1_inhalt-n1_liste-n1_listenelem-n3_text-n1">Grundlegende Hygienepraktiken,</akn:p>
                             </akn:item>
-                            <akn:item GUID="f3b4c5d6-7777-4111-8111-646464646464" eId="hauptteil-1_art-3_abs-1_inhalt-1_liste-1_listenelem-4">
-                                <akn:num GUID="f3b4c5d6-8888-4111-8111-656565656565" eId="hauptteil-1_art-3_abs-1_inhalt-1_liste-1_listenelem-4_bezeichnung-1">4.</akn:num>
-                                <akn:p GUID="f3b4c5d6-9999-4111-8111-666666666666" eId="hauptteil-1_art-3_abs-1_inhalt-1_liste-1_listenelem-4_text-1">Einblicke in betriebliche Abläufe,</akn:p>
+                            <akn:item GUID="f3b4c5d6-7777-4111-8111-646464646464" eId="art-z3_abs-z1_inhalt-n1_liste-n1_listenelem-n4">
+                                <akn:num GUID="f3b4c5d6-8888-4111-8111-656565656565" eId="art-z3_abs-z1_inhalt-n1_liste-n1_listenelem-n4_bezeichnung-n1">4.</akn:num>
+                                <akn:p GUID="f3b4c5d6-9999-4111-8111-666666666666" eId="art-z3_abs-z1_inhalt-n1_liste-n1_listenelem-n4_text-n1">Einblicke in betriebliche Abläufe,</akn:p>
                             </akn:item>
-                            <akn:item GUID="f3b4c5d6-aaaa-4111-8111-676767676767" eId="hauptteil-1_art-3_abs-1_inhalt-1_liste-1_listenelem-5">
-                                <akn:num GUID="f3b4c5d6-bbbb-4111-8111-686868686868" eId="hauptteil-1_art-3_abs-1_inhalt-1_liste-1_listenelem-5_bezeichnung-1">5.</akn:num>
-                                <akn:p GUID="f3b4c5d6-cccc-4111-8111-696969696969" eId="hauptteil-1_art-3_abs-1_inhalt-1_liste-1_listenelem-5_text-1">Grundlagen der Fruchtverarbeitung,</akn:p>
+                            <akn:item GUID="f3b4c5d6-aaaa-4111-8111-676767676767" eId="art-z3_abs-z1_inhalt-n1_liste-n1_listenelem-n5">
+                                <akn:num GUID="f3b4c5d6-bbbb-4111-8111-686868686868" eId="art-z3_abs-z1_inhalt-n1_liste-n1_listenelem-n5_bezeichnung-n1">5.</akn:num>
+                                <akn:p GUID="f3b4c5d6-cccc-4111-8111-696969696969" eId="art-z3_abs-z1_inhalt-n1_liste-n1_listenelem-n5_text-n1">Grundlagen der Fruchtverarbeitung,</akn:p>
                             </akn:item>
-                            <akn:item GUID="f3b4c5d6-dddd-4111-8111-707070707070" eId="hauptteil-1_art-3_abs-1_inhalt-1_liste-1_listenelem-6">
-                                <akn:num GUID="f3b4c5d6-eeee-4111-8111-717171717171" eId="hauptteil-1_art-3_abs-1_inhalt-1_liste-1_listenelem-6_bezeichnung-1">6.</akn:num>
-                                <akn:p GUID="f3b4c5d6-ffff-4111-8111-727272727272" eId="hauptteil-1_art-3_abs-1_inhalt-1_liste-1_listenelem-6_text-1">Praktische Übungen zur Qualitätssicherung,</akn:p>
+                            <akn:item GUID="f3b4c5d6-dddd-4111-8111-707070707070" eId="art-z3_abs-z1_inhalt-n1_liste-n1_listenelem-n6">
+                                <akn:num GUID="f3b4c5d6-eeee-4111-8111-717171717171" eId="art-z3_abs-z1_inhalt-n1_liste-n1_listenelem-n6_bezeichnung-n1">6.</akn:num>
+                                <akn:p GUID="f3b4c5d6-ffff-4111-8111-727272727272" eId="art-z3_abs-z1_inhalt-n1_liste-n1_listenelem-n6_text-n1">Praktische Übungen zur Qualitätssicherung,</akn:p>
                             </akn:item>
-                            <akn:item GUID="f4b4c5d6-1111-4111-8111-737373737373" eId="hauptteil-1_art-3_abs-1_inhalt-1_liste-1_listenelem-7">
-                                <akn:num GUID="f4b4c5d6-2222-4111-8111-747474747474" eId="hauptteil-1_art-3_abs-1_inhalt-1_liste-1_listenelem-7_bezeichnung-1">7.</akn:num>
-                                <akn:p GUID="f4b4c5d6-3333-4111-8111-757575757575" eId="hauptteil-1_art-3_abs-1_inhalt-1_liste-1_listenelem-7_text-1">Anwendung von Prüfverfahren,</akn:p>
+                            <akn:item GUID="f4b4c5d6-1111-4111-8111-737373737373" eId="art-z3_abs-z1_inhalt-n1_liste-n1_listenelem-n7">
+                                <akn:num GUID="f4b4c5d6-2222-4111-8111-747474747474" eId="art-z3_abs-z1_inhalt-n1_liste-n1_listenelem-n7_bezeichnung-n1">7.</akn:num>
+                                <akn:p GUID="f4b4c5d6-3333-4111-8111-757575757575" eId="art-z3_abs-z1_inhalt-n1_liste-n1_listenelem-n7_text-n1">Anwendung von Prüfverfahren,</akn:p>
                             </akn:item>
-                            <akn:item GUID="f4b4c5d6-4444-4111-8111-767676767676" eId="hauptteil-1_art-3_abs-1_inhalt-1_liste-1_listenelem-8">
-                                <akn:num GUID="f4b4c5d6-5555-4111-8111-777777777777" eId="hauptteil-1_art-3_abs-1_inhalt-1_liste-1_listenelem-8_bezeichnung-1">8.</akn:num>
-                                <akn:p GUID="f4b4c5d6-6666-4111-8111-787878787878" eId="hauptteil-1_art-3_abs-1_inhalt-1_liste-1_listenelem-8_text-1">Grundlagen der Mischungsberechnung.<akn:marker GUID="f4b4c5d6-7777-4111-8111-797979797979" eId="hauptteil-1_art-3_abs-1_inhalt-1_liste-1_listenelem-8_text-1_marker-1" refersTo="satzende"/>
+                            <akn:item GUID="f4b4c5d6-4444-4111-8111-767676767676" eId="art-z3_abs-z1_inhalt-n1_liste-n1_listenelem-n8">
+                                <akn:num GUID="f4b4c5d6-5555-4111-8111-777777777777" eId="art-z3_abs-z1_inhalt-n1_liste-n1_listenelem-n8_bezeichnung-n1">8.</akn:num>
+                                <akn:p GUID="f4b4c5d6-6666-4111-8111-787878787878" eId="art-z3_abs-z1_inhalt-n1_liste-n1_listenelem-n8_text-n1">Grundlagen der Mischungsberechnung.<akn:marker GUID="f4b4c5d6-7777-4111-8111-797979797979" eId="art-z3_abs-z1_inhalt-n1_liste-n1_listenelem-n8_text-n1_marker-n1" refersTo="satzende"/>
                                 </akn:p>
                             </akn:item>
                         </akn:blockList>
                     </akn:content>
                 </akn:paragraph>
             </akn:article>
-            <akn:article GUID="f4b4c5d6-8888-4111-8111-808080808080" eId="hauptteil-1_art-4" period="#meta-1_geltzeiten-1_geltungszeitgr-1" refersTo="stammform">
-                <akn:num GUID="f4b4c5d6-9999-4111-8111-818181818181" eId="hauptteil-1_art-4_bezeichnung-1">§ 4</akn:num>
-                <akn:heading GUID="f4b4c5d6-aaaa-4111-8111-828282828282" eId="hauptteil-1_art-4_überschrift-1">Fiktiver Ausbildungsrahmenplan</akn:heading>
-                <akn:paragraph GUID="f4b4c5d6-bbbb-4111-8111-838383838383" eId="hauptteil-1_art-4_abs-1">
-                    <akn:num GUID="f4b4c5d6-cccc-4111-8111-848484848484" eId="hauptteil-1_art-4_abs-1_bezeichnung-1"/>
-                    <akn:content GUID="f4b4c5d6-dddd-4111-8111-858585858585" eId="hauptteil-1_art-4_abs-1_inhalt-1">
-                        <akn:p GUID="f4b4c5d6-eeee-4111-8111-868686868686" eId="hauptteil-1_art-4_abs-1_inhalt-1_text-1">Die im Rahmenplan dargelegten Fertigkeiten und Kenntnisse werden in einem modifizierten Konzept vermittelt.<akn:marker GUID="f4b4c5d6-ffff-4111-8111-878787878787" eId="hauptteil-1_art-4_abs-1_inhalt-1_text-1_marker-1" refersTo="satzende"/> Eine alternative Gliederung ist zulässig, wenn betriebliche Besonderheiten dies erfordern.<akn:marker GUID="f5b4c5d6-1111-4111-8111-888888888888" eId="hauptteil-1_art-4_abs-1_inhalt-1_text-1_marker-2" refersTo="satzende"/>
+            <akn:article GUID="f4b4c5d6-8888-4111-8111-808080808080" eId="art-z4" period="#meta-n1_geltzeiten-n1_geltungszeitgr-n1" refersTo="stammform">
+                <akn:num GUID="f4b4c5d6-9999-4111-8111-818181818181" eId="art-z4_bezeichnung-n1">§ 4</akn:num>
+                <akn:heading GUID="f4b4c5d6-aaaa-4111-8111-828282828282" eId="art-z4_überschrift-n1">Fiktiver Ausbildungsrahmenplan</akn:heading>
+                <akn:paragraph GUID="f4b4c5d6-bbbb-4111-8111-838383838383" eId="art-z4_abs-z1">
+                    <akn:num GUID="f4b4c5d6-cccc-4111-8111-848484848484" eId="art-z4_abs-z1_bezeichnung-n1"/>
+                    <akn:content GUID="f4b4c5d6-dddd-4111-8111-858585858585" eId="art-z4_abs-z1_inhalt-n1">
+                        <akn:p GUID="f4b4c5d6-eeee-4111-8111-868686868686" eId="art-z4_abs-z1_inhalt-n1_text-n1">Die im Rahmenplan dargelegten Fertigkeiten und Kenntnisse werden in einem modifizierten Konzept vermittelt.<akn:marker GUID="f4b4c5d6-ffff-4111-8111-878787878787" eId="art-z4_abs-z1_inhalt-n1_text-n1_marker-n1" refersTo="satzende"/> Eine alternative Gliederung ist zulässig, wenn betriebliche Besonderheiten dies erfordern.<akn:marker GUID="f5b4c5d6-1111-4111-8111-888888888888" eId="art-z4_abs-z1_inhalt-n1_text-n1_marker-n2" refersTo="satzende"/>
                         </akn:p>
                     </akn:content>
                 </akn:paragraph>
             </akn:article>
-            <akn:article GUID="f5b4c5d6-2222-4111-8111-898989898989" eId="hauptteil-1_art-5" period="#meta-1_geltzeiten-1_geltungszeitgr-1" refersTo="stammform">
-                <akn:num GUID="f5b4c5d6-3333-4111-8111-909090909090" eId="hauptteil-1_art-5_bezeichnung-1">§ 5</akn:num>
-                <akn:heading GUID="f5b4c5d6-4444-4111-8111-919191919191" eId="hauptteil-1_art-5_überschrift-1">Fiktiver Ausbildungsplan</akn:heading>
-                <akn:paragraph GUID="f5b4c5d6-5555-4111-8111-929292929292" eId="hauptteil-1_art-5_abs-1">
-                    <akn:num GUID="f5b4c5d6-6666-4111-8111-939393939393" eId="hauptteil-1_art-5_abs-1_bezeichnung-1"/>
-                    <akn:content GUID="f5b4c5d6-7777-4111-8111-949494949494" eId="hauptteil-1_art-5_abs-1_inhalt-1">
-                        <akn:p GUID="f5b4c5d6-8888-4111-8111-959595959595" eId="hauptteil-1_art-5_abs-1_inhalt-1_text-1">Der Ausbildende erstellt einen fiktiven Ausbildungsplan, der innovative Lehrinhalte integriert.<akn:marker GUID="f5b4c5d6-9999-4111-8111-969696969696" eId="hauptteil-1_art-5_abs-1_inhalt-1_text-1_marker-1" refersTo="satzende"/></akn:p>
+            <akn:article GUID="f5b4c5d6-2222-4111-8111-898989898989" eId="art-z5" period="#meta-n1_geltzeiten-n1_geltungszeitgr-n1" refersTo="stammform">
+                <akn:num GUID="f5b4c5d6-3333-4111-8111-909090909090" eId="art-z5_bezeichnung-n1">§ 5</akn:num>
+                <akn:heading GUID="f5b4c5d6-4444-4111-8111-919191919191" eId="art-z5_überschrift-n1">Fiktiver Ausbildungsplan</akn:heading>
+                <akn:paragraph GUID="f5b4c5d6-5555-4111-8111-929292929292" eId="art-z5_abs-z1">
+                    <akn:num GUID="f5b4c5d6-6666-4111-8111-939393939393" eId="art-z5_abs-z1_bezeichnung-n1"/>
+                    <akn:content GUID="f5b4c5d6-7777-4111-8111-949494949494" eId="art-z5_abs-z1_inhalt-n1">
+                        <akn:p GUID="f5b4c5d6-8888-4111-8111-959595959595" eId="art-z5_abs-z1_inhalt-n1_text-n1">Der Ausbildende erstellt einen fiktiven Ausbildungsplan, der innovative Lehrinhalte integriert.<akn:marker GUID="f5b4c5d6-9999-4111-8111-969696969696" eId="art-z5_abs-z1_inhalt-n1_text-n1_marker-n1" refersTo="satzende"/></akn:p>
                     </akn:content>
                 </akn:paragraph>
             </akn:article>
-            <akn:article GUID="f5b4c5d6-aaaa-4111-8111-979797979797" eId="hauptteil-1_art-6" period="#meta-1_geltzeiten-1_geltungszeitgr-1" refersTo="stammform">
-                <akn:num GUID="f5b4c5d6-bbbb-4111-8111-989898989898" eId="hauptteil-1_art-6_bezeichnung-1">§ 6</akn:num>
-                <akn:heading GUID="f5b4c5d6-cccc-4111-8111-999999999999" eId="hauptteil-1_art-6_überschrift-1">Fiktives Berichtsheft</akn:heading>
-                <akn:paragraph GUID="f5b4c5d6-dddd-4111-8111-a0a0a0a0a0a0" eId="hauptteil-1_art-6_abs-1">
-                    <akn:num GUID="f5b4c5d6-eeee-4111-8111-a1a1a1a1a1a1" eId="hauptteil-1_art-6_abs-1_bezeichnung-1"/>
-                    <akn:content GUID="f5b4c5d6-ffff-4111-8111-a2a2a2a2a2a2" eId="hauptteil-1_art-6_abs-1_inhalt-1">
-                        <akn:p GUID="f6b4c5d6-1111-4111-8111-a3a3a3a3a3a3" eId="hauptteil-1_art-6_abs-1_inhalt-1_text-1">Der Auszubildende führt ein Berichtsheft, das kontinuierlich aktualisiert wird.<akn:marker GUID="f6b4c5d6-2222-4111-8111-a4a4a4a4a4a4" eId="hauptteil-1_art-6_abs-1_inhalt-1_text-1_marker-1" refersTo="satzende"/> Gelegenheit zur Führung des Berichtshefts wird bereitgestellt.<akn:marker GUID="f6b4c5d6-3333-4111-8111-a5a5a5a5a5a5" eId="hauptteil-1_art-6_abs-1_inhalt-1_text-1_marker-2" refersTo="satzende"/> Das Berichtsheft wird regelmäßig überprüft.<akn:marker GUID="f6b4c5d6-4444-4111-8111-a6a6a6a6a6a6" eId="hauptteil-1_art-6_abs-1_inhalt-1_text-1_marker-3" refersTo="satzende"/>
+            <akn:article GUID="f5b4c5d6-aaaa-4111-8111-979797979797" eId="art-z6" period="#meta-n1_geltzeiten-n1_geltungszeitgr-n1" refersTo="stammform">
+                <akn:num GUID="f5b4c5d6-bbbb-4111-8111-989898989898" eId="art-z6_bezeichnung-n1">§ 6</akn:num>
+                <akn:heading GUID="f5b4c5d6-cccc-4111-8111-999999999999" eId="art-z6_überschrift-n1">Fiktives Berichtsheft</akn:heading>
+                <akn:paragraph GUID="f5b4c5d6-dddd-4111-8111-a0a0a0a0a0a0" eId="art-z6_abs-z1">
+                    <akn:num GUID="f5b4c5d6-eeee-4111-8111-a1a1a1a1a1a1" eId="art-z6_abs-z1_bezeichnung-n1"/>
+                    <akn:content GUID="f5b4c5d6-ffff-4111-8111-a2a2a2a2a2a2" eId="art-z6_abs-z1_inhalt-n1">
+                        <akn:p GUID="f6b4c5d6-1111-4111-8111-a3a3a3a3a3a3" eId="art-z6_abs-z1_inhalt-n1_text-n1">Der Auszubildende führt ein Berichtsheft, das kontinuierlich aktualisiert wird.<akn:marker GUID="f6b4c5d6-2222-4111-8111-a4a4a4a4a4a4" eId="art-z6_abs-z1_inhalt-n1_text-n1_marker-n1" refersTo="satzende"/> Gelegenheit zur Führung des Berichtshefts wird bereitgestellt.<akn:marker GUID="f6b4c5d6-3333-4111-8111-a5a5a5a5a5a5" eId="art-z6_abs-z1_inhalt-n1_text-n1_marker-n2" refersTo="satzende"/> Das Berichtsheft wird regelmäßig überprüft.<akn:marker GUID="f6b4c5d6-4444-4111-8111-a6a6a6a6a6a6" eId="art-z6_abs-z1_inhalt-n1_text-n1_marker-n3" refersTo="satzende"/>
                         </akn:p>
                     </akn:content>
                 </akn:paragraph>
             </akn:article>
-            <akn:article GUID="f6b4c5d6-5555-4111-8111-a7a7a7a7a7a7" eId="hauptteil-1_art-7" period="#meta-1_geltzeiten-1_geltungszeitgr-1" refersTo="stammform">
-                <akn:num GUID="f6b4c5d6-6666-4111-8111-a8a8a8a8a8a8" eId="hauptteil-1_art-7_bezeichnung-1">§ 7</akn:num>
-                <akn:heading GUID="f6b4c5d6-7777-4111-8111-a9a9a9a9a9a9" eId="hauptteil-1_art-7_überschrift-1">Fiktive Zwischenprüfung</akn:heading>
-                <akn:paragraph GUID="f6b4c5d6-8888-4111-8111-aaaabaaaabaa" eId="hauptteil-1_art-7_abs-1">
-                    <akn:num GUID="f6b4c5d6-9999-4111-8111-abababababab" eId="hauptteil-1_art-7_abs-1_bezeichnung-1">(1)</akn:num>
-                    <akn:content GUID="f6b4c5d6-aaa1-4111-8111-acacacacacac" eId="hauptteil-1_art-7_abs-1_inhalt-1">
-                        <akn:p GUID="f6b4c5d6-bbb2-4111-8111-adadadadadad" eId="hauptteil-1_art-7_abs-1_inhalt-1_text-1">Zur Überprüfung des Ausbildungsstandes wird eine Zwischenprüfung durchgeführt.<akn:marker GUID="f6b4c5d6-ccc3-4111-8111-aeaeaeaeaeae" eId="hauptteil-1_art-7_abs-1_inhalt-1_text-1_marker-1" refersTo="satzende"/> Die Prüfung erfolgt vor Abschluss des zweiten Ausbildungsjahres.<akn:marker GUID="f6b4c5d6-ddd4-4111-8111-afafafafafaf" eId="hauptteil-1_art-7_abs-1_inhalt-1_text-1_marker-2" refersTo="satzende"/>
+            <akn:article GUID="f6b4c5d6-5555-4111-8111-a7a7a7a7a7a7" eId="art-z7" period="#meta-n1_geltzeiten-n1_geltungszeitgr-n1" refersTo="stammform">
+                <akn:num GUID="f6b4c5d6-6666-4111-8111-a8a8a8a8a8a8" eId="art-z7_bezeichnung-n1">§ 7</akn:num>
+                <akn:heading GUID="f6b4c5d6-7777-4111-8111-a9a9a9a9a9a9" eId="art-z7_überschrift-n1">Fiktive Zwischenprüfung</akn:heading>
+                <akn:paragraph GUID="f6b4c5d6-8888-4111-8111-aaaabaaaabaa" eId="art-z7_abs-z1">
+                    <akn:num GUID="f6b4c5d6-9999-4111-8111-abababababab" eId="art-z7_abs-z1_bezeichnung-n1">(1)</akn:num>
+                    <akn:content GUID="f6b4c5d6-aaa1-4111-8111-acacacacacac" eId="art-z7_abs-z1_inhalt-n1">
+                        <akn:p GUID="f6b4c5d6-bbb2-4111-8111-adadadadadad" eId="art-z7_abs-z1_inhalt-n1_text-n1">Zur Überprüfung des Ausbildungsstandes wird eine Zwischenprüfung durchgeführt.<akn:marker GUID="f6b4c5d6-ccc3-4111-8111-aeaeaeaeaeae" eId="art-z7_abs-z1_inhalt-n1_text-n1_marker-n1" refersTo="satzende"/> Die Prüfung erfolgt vor Abschluss des zweiten Ausbildungsjahres.<akn:marker GUID="f6b4c5d6-ddd4-4111-8111-afafafafafaf" eId="art-z7_abs-z1_inhalt-n1_text-n1_marker-n2" refersTo="satzende"/>
                         </akn:p>
                     </akn:content>
                 </akn:paragraph>
-                <akn:paragraph GUID="f6b4c5d6-eee5-4111-8111-b0b0b0b0b0b0" eId="hauptteil-1_art-7_abs-2">
-                    <akn:num GUID="f6b4c5d6-fff6-4111-8111-b1b1b1b1b1b1" eId="hauptteil-1_art-7_abs-2_bezeichnung-1">(2)</akn:num>
-                    <akn:content GUID="f7b4c5d6-1117-4111-8111-b2b2b2b2b2b2" eId="hauptteil-1_art-7_abs-2_inhalt-1">
-                        <akn:p GUID="f7b4c5d6-2228-4111-8111-b3b3b3b3b3b3" eId="hauptteil-1_art-7_abs-2_inhalt-1_text-1">Die Zwischenprüfung umfasst zentrale fiktive Fertigkeiten und Lehrinhalte.<akn:marker GUID="f7b4c5d6-3339-4111-8111-b4b4b4b4b4b4" eId="hauptteil-1_art-7_abs-2_inhalt-1_text-1_marker-1" refersTo="satzende"/>
+                <akn:paragraph GUID="f6b4c5d6-eee5-4111-8111-b0b0b0b0b0b0" eId="art-z7_abs-z2">
+                    <akn:num GUID="f6b4c5d6-fff6-4111-8111-b1b1b1b1b1b1" eId="art-z7_abs-z2_bezeichnung-n1">(2)</akn:num>
+                    <akn:content GUID="f7b4c5d6-1117-4111-8111-b2b2b2b2b2b2" eId="art-z7_abs-z2_inhalt-n1">
+                        <akn:p GUID="f7b4c5d6-2228-4111-8111-b3b3b3b3b3b3" eId="art-z7_abs-z2_inhalt-n1_text-n1">Die Zwischenprüfung umfasst zentrale fiktive Fertigkeiten und Lehrinhalte.<akn:marker GUID="f7b4c5d6-3339-4111-8111-b4b4b4b4b4b4" eId="art-z7_abs-z2_inhalt-n1_text-n1_marker-n1" refersTo="satzende"/>
                         </akn:p>
                     </akn:content>
                 </akn:paragraph>
-                <akn:paragraph GUID="f7b4c5d6-444a-4111-8111-b5b5b5b5b5b5" eId="hauptteil-1_art-7_abs-3">
-                    <akn:num GUID="f7b4c5d6-555b-4111-8111-b6b6b6b6b6b6" eId="hauptteil-1_art-7_abs-3_bezeichnung-1">(3)</akn:num>
-                    <akn:content GUID="f7b4c5d6-666c-4111-8111-b7b7b7b7b7b7" eId="hauptteil-1_art-7_abs-3_inhalt-1">
-                        <akn:p GUID="f7b4c5d6-777d-4111-8111-b8b8b8b8b8b8" eId="hauptteil-1_art-7_abs-3_inhalt-1_text-1">Für den praktischen Nachweis der Fertigkeiten werden 3 Stunden Prüfungszeit angesetzt.<akn:marker GUID="f7b4c5d6-888e-4111-8111-b9b9b9b9b9b9" eId="hauptteil-1_art-7_abs-3_inhalt-1_text-1_marker-1" refersTo="satzende"/> Praktische Aufgaben aus verschiedenen Bereichen werden geprüft:</akn:p>
-                        <akn:blockList GUID="f7b4c5d6-999f-4111-8111-babababababa" eId="hauptteil-1_art-7_abs-3_inhalt-1_liste-1">
-                            <akn:item GUID="f7b4c5d6-ab00-4111-8111-bcbcbcbcbcbc" eId="hauptteil-1_art-7_abs-3_inhalt-1_liste-1_listenelem-1">
-                                <akn:num GUID="f7b4c5d6-ab11-4111-8111-bdbdbdbdbdbd" eId="hauptteil-1_art-7_abs-3_inhalt-1_liste-1_listenelem-1_bezeichnung-1">1.</akn:num>
-                                <akn:p GUID="f7b4c5d6-ab22-4111-8111-bebebebebebe" eId="hauptteil-1_art-7_abs-3_inhalt-1_liste-1_listenelem-1_text-1">Überprüfung der Rohmaterialien auf Qualität,</akn:p>
+                <akn:paragraph GUID="f7b4c5d6-444a-4111-8111-b5b5b5b5b5b5" eId="art-z7_abs-z3">
+                    <akn:num GUID="f7b4c5d6-555b-4111-8111-b6b6b6b6b6b6" eId="art-z7_abs-z3_bezeichnung-n1">(3)</akn:num>
+                    <akn:content GUID="f7b4c5d6-666c-4111-8111-b7b7b7b7b7b7" eId="art-z7_abs-z3_inhalt-n1">
+                        <akn:p GUID="f7b4c5d6-777d-4111-8111-b8b8b8b8b8b8" eId="art-z7_abs-z3_inhalt-n1_text-n1">Für den praktischen Nachweis der Fertigkeiten werden 3 Stunden Prüfungszeit angesetzt.<akn:marker GUID="f7b4c5d6-888e-4111-8111-b9b9b9b9b9b9" eId="art-z7_abs-z3_inhalt-n1_text-n1_marker-n1" refersTo="satzende"/> Praktische Aufgaben aus verschiedenen Bereichen werden geprüft:</akn:p>
+                        <akn:blockList GUID="f7b4c5d6-999f-4111-8111-babababababa" eId="art-z7_abs-z3_inhalt-n1_liste-n1">
+                            <akn:item GUID="f7b4c5d6-ab00-4111-8111-bcbcbcbcbcbc" eId="art-z7_abs-z3_inhalt-n1_liste-n1_listenelem-n1">
+                                <akn:num GUID="f7b4c5d6-ab11-4111-8111-bdbdbdbdbdbd" eId="art-z7_abs-z3_inhalt-n1_liste-n1_listenelem-n1_bezeichnung-n1">1.</akn:num>
+                                <akn:p GUID="f7b4c5d6-ab22-4111-8111-bebebebebebe" eId="art-z7_abs-z3_inhalt-n1_liste-n1_listenelem-n1_text-n1">Überprüfung der Rohmaterialien auf Qualität,</akn:p>
                             </akn:item>
-                            <akn:item GUID="f7b4c5d6-ab33-4111-8111-bfbfbfbfbfbf" eId="hauptteil-1_art-7_abs-3_inhalt-1_liste-1_listenelem-2">
-                                <akn:num GUID="f7b4c5d6-ab44-4111-8111-c0c0c0c0c0c0" eId="hauptteil-1_art-7_abs-3_inhalt-1_liste-1_listenelem-2_bezeichnung-1">2.</akn:num>
-                                <akn:p GUID="f7b4c5d6-ab55-4111-8111-c1c1c1c1c1c1" eId="hauptteil-1_art-7_abs-3_inhalt-1_liste-1_listenelem-2_text-1">Bedienung technischer Geräte zur Entsaftung,</akn:p>
+                            <akn:item GUID="f7b4c5d6-ab33-4111-8111-bfbfbfbfbfbf" eId="art-z7_abs-z3_inhalt-n1_liste-n1_listenelem-n2">
+                                <akn:num GUID="f7b4c5d6-ab44-4111-8111-c0c0c0c0c0c0" eId="art-z7_abs-z3_inhalt-n1_liste-n1_listenelem-n2_bezeichnung-n1">2.</akn:num>
+                                <akn:p GUID="f7b4c5d6-ab55-4111-8111-c1c1c1c1c1c1" eId="art-z7_abs-z3_inhalt-n1_liste-n1_listenelem-n2_text-n1">Bedienung technischer Geräte zur Entsaftung,</akn:p>
                             </akn:item>
-                            <akn:item GUID="f7b4c5d6-ab66-4111-8111-c2c2c2c2c2c2" eId="hauptteil-1_art-7_abs-3_inhalt-1_liste-1_listenelem-3">
-                                <akn:num GUID="f7b4c5d6-ab77-4111-8111-c3c3c3c3c3c3" eId="hauptteil-1_art-7_abs-3_inhalt-1_liste-1_listenelem-3_bezeichnung-1">3.</akn:num>
-                                <akn:p GUID="f7b4c5d6-ab88-4111-8111-c4c4c4c4c4c4" eId="hauptteil-1_art-7_abs-3_inhalt-1_liste-1_listenelem-3_text-1">Durchführung einfacher Prüfverfahren,</akn:p>
+                            <akn:item GUID="f7b4c5d6-ab66-4111-8111-c2c2c2c2c2c2" eId="art-z7_abs-z3_inhalt-n1_liste-n1_listenelem-n3">
+                                <akn:num GUID="f7b4c5d6-ab77-4111-8111-c3c3c3c3c3c3" eId="art-z7_abs-z3_inhalt-n1_liste-n1_listenelem-n3_bezeichnung-n1">3.</akn:num>
+                                <akn:p GUID="f7b4c5d6-ab88-4111-8111-c4c4c4c4c4c4" eId="art-z7_abs-z3_inhalt-n1_liste-n1_listenelem-n3_text-n1">Durchführung einfacher Prüfverfahren,</akn:p>
                             </akn:item>
-                            <akn:item GUID="f7b4c5d6-ab99-4111-8111-c5c5c5c5c5c5" eId="hauptteil-1_art-7_abs-3_inhalt-1_liste-1_listenelem-4">
-                                <akn:num GUID="f7b4c5d6-abaa-4111-8111-c6c6c6c6c6c6" eId="hauptteil-1_art-7_abs-3_inhalt-1_liste-1_listenelem-4_bezeichnung-1">4.</akn:num>
-                                <akn:p GUID="f7b4c5d6-abbb-4111-8111-c7c7c7c7c7c7" eId="hauptteil-1_art-7_abs-3_inhalt-1_liste-1_listenelem-4_text-1">Einsatz von Filtrationstechniken,</akn:p>
+                            <akn:item GUID="f7b4c5d6-ab99-4111-8111-c5c5c5c5c5c5" eId="art-z7_abs-z3_inhalt-n1_liste-n1_listenelem-n4">
+                                <akn:num GUID="f7b4c5d6-abaa-4111-8111-c6c6c6c6c6c6" eId="art-z7_abs-z3_inhalt-n1_liste-n1_listenelem-n4_bezeichnung-n1">4.</akn:num>
+                                <akn:p GUID="f7b4c5d6-abbb-4111-8111-c7c7c7c7c7c7" eId="art-z7_abs-z3_inhalt-n1_liste-n1_listenelem-n4_text-n1">Einsatz von Filtrationstechniken,</akn:p>
                             </akn:item>
-                            <akn:item GUID="f7b4c5d6-abcc-4111-8111-c8c8c8c8c8c8" eId="hauptteil-1_art-7_abs-3_inhalt-1_liste-1_listenelem-5">
-                                <akn:num GUID="f7b4c5d6-abdd-4111-8111-c9c9c9c9c9c9" eId="hauptteil-1_art-7_abs-3_inhalt-1_liste-1_listenelem-5_bezeichnung-1">5.</akn:num>
-                                <akn:p GUID="f7b4c5d6-abee-4111-8111-cacacacacaca" eId="hauptteil-1_art-7_abs-3_inhalt-1_liste-1_listenelem-5_text-1">Einfache Qualitätskontrollen,</akn:p>
+                            <akn:item GUID="f7b4c5d6-abcc-4111-8111-c8c8c8c8c8c8" eId="art-z7_abs-z3_inhalt-n1_liste-n1_listenelem-n5">
+                                <akn:num GUID="f7b4c5d6-abdd-4111-8111-c9c9c9c9c9c9" eId="art-z7_abs-z3_inhalt-n1_liste-n1_listenelem-n5_bezeichnung-n1">5.</akn:num>
+                                <akn:p GUID="f7b4c5d6-abee-4111-8111-cacacacacaca" eId="art-z7_abs-z3_inhalt-n1_liste-n1_listenelem-n5_text-n1">Einfache Qualitätskontrollen,</akn:p>
                             </akn:item>
-                            <akn:item GUID="f7b4c5d6-abff-4111-8111-cbcbcbcbcbcb" eId="hauptteil-1_art-7_abs-3_inhalt-1_liste-1_listenelem-6">
-                                <akn:num GUID="f7b4c5d6-b000-4111-8111-cccccccccccc" eId="hauptteil-1_art-7_abs-3_inhalt-1_liste-1_listenelem-6_bezeichnung-1">6.</akn:num>
-                                <akn:p GUID="f7b4c5d6-b111-4111-8111-cdcdcdcdcdcd" eId="hauptteil-1_art-7_abs-3_inhalt-1_liste-1_listenelem-6_text-1">Bewertung der Wasserqualität,</akn:p>
+                            <akn:item GUID="f7b4c5d6-abff-4111-8111-cbcbcbcbcbcb" eId="art-z7_abs-z3_inhalt-n1_liste-n1_listenelem-n6">
+                                <akn:num GUID="f7b4c5d6-b000-4111-8111-cccccccccccc" eId="art-z7_abs-z3_inhalt-n1_liste-n1_listenelem-n6_bezeichnung-n1">6.</akn:num>
+                                <akn:p GUID="f7b4c5d6-b111-4111-8111-cdcdcdcdcdcd" eId="art-z7_abs-z3_inhalt-n1_liste-n1_listenelem-n6_text-n1">Bewertung der Wasserqualität,</akn:p>
                             </akn:item>
-                            <akn:item GUID="f7b4c5d6-b222-4111-8111-cececececece" eId="hauptteil-1_art-7_abs-3_inhalt-1_liste-1_listenelem-7">
-                                <akn:num GUID="f7b4c5d6-b333-4111-8111-cfcfcfcfcfcf" eId="hauptteil-1_art-7_abs-3_inhalt-1_liste-1_listenelem-7_bezeichnung-1">7.</akn:num>
-                                <akn:p GUID="f7b4c5d6-b444-4111-8111-d0d0d0d0d0d0" eId="hauptteil-1_art-7_abs-3_inhalt-1_liste-1_listenelem-7_text-1">Anwendung von Desinfektionsmitteln.<akn:marker GUID="f7b4c5d6-b555-4111-8111-d1d1d1d1d1d1" eId="hauptteil-1_art-7_abs-3_inhalt-1_liste-1_listenelem-7_text-1_marker-1" refersTo="satzende"/>
+                            <akn:item GUID="f7b4c5d6-b222-4111-8111-cececececece" eId="art-z7_abs-z3_inhalt-n1_liste-n1_listenelem-n7">
+                                <akn:num GUID="f7b4c5d6-b333-4111-8111-cfcfcfcfcfcf" eId="art-z7_abs-z3_inhalt-n1_liste-n1_listenelem-n7_bezeichnung-n1">7.</akn:num>
+                                <akn:p GUID="f7b4c5d6-b444-4111-8111-d0d0d0d0d0d0" eId="art-z7_abs-z3_inhalt-n1_liste-n1_listenelem-n7_text-n1">Anwendung von Desinfektionsmitteln.<akn:marker GUID="f7b4c5d6-b555-4111-8111-d1d1d1d1d1d1" eId="art-z7_abs-z3_inhalt-n1_liste-n1_listenelem-n7_text-n1_marker-n1" refersTo="satzende"/>
                                 </akn:p>
                             </akn:item>
                         </akn:blockList>
                     </akn:content>
                 </akn:paragraph>
-                <akn:paragraph GUID="f7b4c5d6-b666-4111-8111-d2d2d2d2d2d2" eId="hauptteil-1_art-7_abs-4">
-                    <akn:num GUID="f7b4c5d6-b777-4111-8111-d3d3d3d3d3d3" eId="hauptteil-1_art-7_abs-4_bezeichnung-1">(4)</akn:num>
-                    <akn:content GUID="f7b4c5d6-b888-4111-8111-d4d4d4d4d4d4" eId="hauptteil-1_art-7_abs-4_inhalt-1">
-                        <akn:p GUID="f7b4c5d6-b999-4111-8111-d5d5d5d5d5d5" eId="hauptteil-1_art-7_abs-4_inhalt-1_text-1">Zur Überprüfung der Kenntnisse sind 180 Minuten schriftliche Aufgaben vorgesehen:</akn:p>
-                        <akn:blockList GUID="f7b4c5d6-baaa-4111-8111-d6d6d6d6d6d6" eId="hauptteil-1_art-7_abs-4_inhalt-1_liste-1">
-                            <akn:item GUID="f7b4c5d6-bbbb-4111-8111-d7d7d7d7d7d7" eId="hauptteil-1_art-7_abs-4_inhalt-1_liste-1_listenelem-1">
-                                <akn:num GUID="f7b4c5d6-bccc-4111-8111-d8d8d8d8d8d8" eId="hauptteil-1_art-7_abs-4_inhalt-1_liste-1_listenelem-1_bezeichnung-1">1.</akn:num>
-                                <akn:p GUID="f7b4c5d6-bddd-4111-8111-d9d9d9d9d9d9" eId="hauptteil-1_art-7_abs-4_inhalt-1_liste-1_listenelem-1_text-1">Bewertung von Rohmaterialien,</akn:p>
+                <akn:paragraph GUID="f7b4c5d6-b666-4111-8111-d2d2d2d2d2d2" eId="art-z7_abs-z4">
+                    <akn:num GUID="f7b4c5d6-b777-4111-8111-d3d3d3d3d3d3" eId="art-z7_abs-z4_bezeichnung-n1">(4)</akn:num>
+                    <akn:content GUID="f7b4c5d6-b888-4111-8111-d4d4d4d4d4d4" eId="art-z7_abs-z4_inhalt-n1">
+                        <akn:p GUID="f7b4c5d6-b999-4111-8111-d5d5d5d5d5d5" eId="art-z7_abs-z4_inhalt-n1_text-n1">Zur Überprüfung der Kenntnisse sind 180 Minuten schriftliche Aufgaben vorgesehen:</akn:p>
+                        <akn:blockList GUID="f7b4c5d6-baaa-4111-8111-d6d6d6d6d6d6" eId="art-z7_abs-z4_inhalt-n1_liste-n1">
+                            <akn:item GUID="f7b4c5d6-bbbb-4111-8111-d7d7d7d7d7d7" eId="art-z7_abs-z4_inhalt-n1_liste-n1_listenelem-n1">
+                                <akn:num GUID="f7b4c5d6-bccc-4111-8111-d8d8d8d8d8d8" eId="art-z7_abs-z4_inhalt-n1_liste-n1_listenelem-n1_bezeichnung-n1">1.</akn:num>
+                                <akn:p GUID="f7b4c5d6-bddd-4111-8111-d9d9d9d9d9d9" eId="art-z7_abs-z4_inhalt-n1_liste-n1_listenelem-n1_text-n1">Bewertung von Rohmaterialien,</akn:p>
                             </akn:item>
-                            <akn:item GUID="f7b4c5d6-beee-4111-8111-dadadadadada" eId="hauptteil-1_art-7_abs-4_inhalt-1_liste-1_listenelem-2">
-                                <akn:num GUID="f7b4c5d6-bfff-4111-8111-dbebebebebeb" eId="hauptteil-1_art-7_abs-4_inhalt-1_liste-1_listenelem-2_bezeichnung-1">2.</akn:num>
-                                <akn:p GUID="f7b4c5d6-c000-4111-8111-dededededede" eId="hauptteil-1_art-7_abs-4_inhalt-1_liste-1_listenelem-2_text-1">Analyse typischer Anbaugebiete,</akn:p>
+                            <akn:item GUID="f7b4c5d6-beee-4111-8111-dadadadadada" eId="art-z7_abs-z4_inhalt-n1_liste-n1_listenelem-n2">
+                                <akn:num GUID="f7b4c5d6-bfff-4111-8111-dbebebebebeb" eId="art-z7_abs-z4_inhalt-n1_liste-n1_listenelem-n2_bezeichnung-n1">2.</akn:num>
+                                <akn:p GUID="f7b4c5d6-c000-4111-8111-dededededede" eId="art-z7_abs-z4_inhalt-n1_liste-n1_listenelem-n2_text-n1">Analyse typischer Anbaugebiete,</akn:p>
                             </akn:item>
-                            <akn:item GUID="f7b4c5d6-c111-4111-8111-dfdfdfdfdfdf" eId="hauptteil-1_art-7_abs-4_inhalt-1_liste-1_listenelem-3">
-                                <akn:num GUID="f7b4c5d6-c222-4111-8111-e0e0e0e0e0e0" eId="hauptteil-1_art-7_abs-4_inhalt-1_liste-1_listenelem-3_bezeichnung-1">3.</akn:num>
-                                <akn:p GUID="f7b4c5d6-c333-4111-8111-e1e1e1e1e1e1" eId="hauptteil-1_art-7_abs-4_inhalt-1_liste-1_listenelem-3_text-1">Technische Anlagen zur Entsaftung,</akn:p>
+                            <akn:item GUID="f7b4c5d6-c111-4111-8111-dfdfdfdfdfdf" eId="art-z7_abs-z4_inhalt-n1_liste-n1_listenelem-n3">
+                                <akn:num GUID="f7b4c5d6-c222-4111-8111-e0e0e0e0e0e0" eId="art-z7_abs-z4_inhalt-n1_liste-n1_listenelem-n3_bezeichnung-n1">3.</akn:num>
+                                <akn:p GUID="f7b4c5d6-c333-4111-8111-e1e1e1e1e1e1" eId="art-z7_abs-z4_inhalt-n1_liste-n1_listenelem-n3_text-n1">Technische Anlagen zur Entsaftung,</akn:p>
                             </akn:item>
-                            <akn:item GUID="f7b4c5d6-c444-4111-8111-e2e2e2e2e2e2" eId="hauptteil-1_art-7_abs-4_inhalt-1_liste-1_listenelem-4">
-                                <akn:num GUID="f7b4c5d6-c555-4111-8111-e3e3e3e3e3e3" eId="hauptteil-1_art-7_abs-4_inhalt-1_liste-1_listenelem-4_bezeichnung-1">4.</akn:num>
-                                <akn:p GUID="f7b4c5d6-c666-4111-8111-e4e4e4e4e4e4" eId="hauptteil-1_art-7_abs-4_inhalt-1_liste-1_listenelem-4_text-1">Verfahren der Schönung und Filtration,</akn:p>
+                            <akn:item GUID="f7b4c5d6-c444-4111-8111-e2e2e2e2e2e2" eId="art-z7_abs-z4_inhalt-n1_liste-n1_listenelem-n4">
+                                <akn:num GUID="f7b4c5d6-c555-4111-8111-e3e3e3e3e3e3" eId="art-z7_abs-z4_inhalt-n1_liste-n1_listenelem-n4_bezeichnung-n1">4.</akn:num>
+                                <akn:p GUID="f7b4c5d6-c666-4111-8111-e4e4e4e4e4e4" eId="art-z7_abs-z4_inhalt-n1_liste-n1_listenelem-n4_text-n1">Verfahren der Schönung und Filtration,</akn:p>
                             </akn:item>
-                            <akn:item GUID="f7b4c5d6-c777-4111-8111-e5e5e5e5e5e5" eId="hauptteil-1_art-7_abs-4_inhalt-1_liste-1_listenelem-5">
-                                <akn:num GUID="f7b4c5d6-c888-4111-8111-e6e6e6e6e6e6" eId="hauptteil-1_art-7_abs-4_inhalt-1_liste-1_listenelem-5_bezeichnung-1">5.</akn:num>
-                                <akn:p GUID="f7b4c5d6-c999-4111-8111-e7e7e7e7e7e7" eId="hauptteil-1_art-7_abs-4_inhalt-1_liste-1_listenelem-5_text-1">Herstellung von Fruchtmark,</akn:p>
+                            <akn:item GUID="f7b4c5d6-c777-4111-8111-e5e5e5e5e5e5" eId="art-z7_abs-z4_inhalt-n1_liste-n1_listenelem-n5">
+                                <akn:num GUID="f7b4c5d6-c888-4111-8111-e6e6e6e6e6e6" eId="art-z7_abs-z4_inhalt-n1_liste-n1_listenelem-n5_bezeichnung-n1">5.</akn:num>
+                                <akn:p GUID="f7b4c5d6-c999-4111-8111-e7e7e7e7e7e7" eId="art-z7_abs-z4_inhalt-n1_liste-n1_listenelem-n5_text-n1">Herstellung von Fruchtmark,</akn:p>
                             </akn:item>
-                            <akn:item GUID="f7b4c5d6-caaa-4111-8111-e8e8e8e8e8e8" eId="hauptteil-1_art-7_abs-4_inhalt-1_liste-1_listenelem-6">
-                                <akn:num GUID="f7b4c5d6-cbbb-4111-8111-e9e9e9e9e9e9" eId="hauptteil-1_art-7_abs-4_inhalt-1_liste-1_listenelem-6_bezeichnung-1">6.</akn:num>
-                                <akn:p GUID="f7b4c5d6-cccc-4111-8111-eaeaeaeaeaea" eId="hauptteil-1_art-7_abs-4_inhalt-1_liste-1_listenelem-6_text-1">Berücksichtigung produktbezogener Vorschriften,</akn:p>
+                            <akn:item GUID="f7b4c5d6-caaa-4111-8111-e8e8e8e8e8e8" eId="art-z7_abs-z4_inhalt-n1_liste-n1_listenelem-n6">
+                                <akn:num GUID="f7b4c5d6-cbbb-4111-8111-e9e9e9e9e9e9" eId="art-z7_abs-z4_inhalt-n1_liste-n1_listenelem-n6_bezeichnung-n1">6.</akn:num>
+                                <akn:p GUID="f7b4c5d6-cccc-4111-8111-eaeaeaeaeaea" eId="art-z7_abs-z4_inhalt-n1_liste-n1_listenelem-n6_text-n1">Berücksichtigung produktbezogener Vorschriften,</akn:p>
                             </akn:item>
-                            <akn:item GUID="f7b4c5d6-cddd-4111-8111-ebebebebebeb" eId="hauptteil-1_art-7_abs-4_inhalt-1_liste-1_listenelem-7">
-                                <akn:num GUID="f7b4c5d6-ceee-4111-8111-ecececececec" eId="hauptteil-1_art-7_abs-4_inhalt-1_liste-1_listenelem-7_bezeichnung-1">7.</akn:num>
-                                <akn:p GUID="f7b4c5d6-cfff-4111-8111-edededededed" eId="hauptteil-1_art-7_abs-4_inhalt-1_liste-1_listenelem-7_text-1">Flächenberechnungen,</akn:p>
+                            <akn:item GUID="f7b4c5d6-cddd-4111-8111-ebebebebebeb" eId="art-z7_abs-z4_inhalt-n1_liste-n1_listenelem-n7">
+                                <akn:num GUID="f7b4c5d6-ceee-4111-8111-ecececececec" eId="art-z7_abs-z4_inhalt-n1_liste-n1_listenelem-n7_bezeichnung-n1">7.</akn:num>
+                                <akn:p GUID="f7b4c5d6-cfff-4111-8111-edededededed" eId="art-z7_abs-z4_inhalt-n1_liste-n1_listenelem-n7_text-n1">Flächenberechnungen,</akn:p>
                             </akn:item>
-                            <akn:item GUID="f7b4c5d6-d000-4111-8111-e0e0e0e0e0e0" eId="hauptteil-1_art-7_abs-4_inhalt-1_liste-1_listenelem-8">
-                                <akn:num GUID="f7b4c5d6-d111-4111-8111-e1e1e1e1e1e1" eId="hauptteil-1_art-7_abs-4_inhalt-1_liste-1_listenelem-8_bezeichnung-1">8.</akn:num>
-                                <akn:p GUID="f7b4c5d6-d222-4111-8111-e2e2e2e2e2e2" eId="hauptteil-1_art-7_abs-4_inhalt-1_liste-1_listenelem-8_text-1">Berechnung von Mischungsverhältnissen.<akn:marker GUID="f7b4c5d6-d333-4111-8111-e3e3e3e3e3e3" eId="hauptteil-1_art-7_abs-4_inhalt-1_liste-1_listenelem-8_text-1_marker-1" refersTo="satzende"/>
+                            <akn:item GUID="f7b4c5d6-d000-4111-8111-e0e0e0e0e0e0" eId="art-z7_abs-z4_inhalt-n1_liste-n1_listenelem-n8">
+                                <akn:num GUID="f7b4c5d6-d111-4111-8111-e1e1e1e1e1e1" eId="art-z7_abs-z4_inhalt-n1_liste-n1_listenelem-n8_bezeichnung-n1">8.</akn:num>
+                                <akn:p GUID="f7b4c5d6-d222-4111-8111-e2e2e2e2e2e2" eId="art-z7_abs-z4_inhalt-n1_liste-n1_listenelem-n8_text-n1">Berechnung von Mischungsverhältnissen.<akn:marker GUID="f7b4c5d6-d333-4111-8111-e3e3e3e3e3e3" eId="art-z7_abs-z4_inhalt-n1_liste-n1_listenelem-n8_text-n1_marker-n1" refersTo="satzende"/>
                                 </akn:p>
                             </akn:item>
                         </akn:blockList>
-                        <akn:p GUID="f7b4c5d6-d444-4111-8111-e4e4e4e4e4e4" eId="hauptteil-1_art-7_abs-4_inhalt-1_text-2">Die Aufgaben berücksichtigen praxisbezogene Fallbeispiele.<akn:marker GUID="f7b4c5d6-d555-4111-8111-e5e5e5e5e5e5" eId="hauptteil-1_art-7_abs-4_inhalt-1_text-2_marker-1" refersTo="satzende"/></akn:p>
+                        <akn:p GUID="f7b4c5d6-d444-4111-8111-e4e4e4e4e4e4" eId="art-z7_abs-z4_inhalt-n1_text-n2">Die Aufgaben berücksichtigen praxisbezogene Fallbeispiele.<akn:marker GUID="f7b4c5d6-d555-4111-8111-e5e5e5e5e5e5" eId="art-z7_abs-z4_inhalt-n1_text-n2_marker-n1" refersTo="satzende"/></akn:p>
                     </akn:content>
                 </akn:paragraph>
-                <akn:paragraph GUID="f7b4c5d6-d666-4111-8111-e6e6e6e6e6e6" eId="hauptteil-1_art-7_abs-5">
-                    <akn:num GUID="f7b4c5d6-d777-4111-8111-e7e7e7e7e7e7" eId="hauptteil-1_art-7_abs-5_bezeichnung-1">(5)</akn:num>
-                    <akn:content GUID="f7b4c5d6-d888-4111-8111-e8e8e8e8e8e8" eId="hauptteil-1_art-7_abs-5_inhalt-1">
-                        <akn:p GUID="f7b4c5d6-d999-4111-8111-e9e9e9e9e9e9" eId="hauptteil-1_art-7_abs-5_inhalt-1_text-1">Sollte die Prüfungsdauer angepasst werden, kann diese im programmgestützten Prüfungsmodus reduziert werden.<akn:marker GUID="f7b4c5d6-da00-4111-8111-eaeaeaeaeaea" eId="hauptteil-1_art-7_abs-5_inhalt-1_text-1_marker-1" refersTo="satzende"/></akn:p>
+                <akn:paragraph GUID="f7b4c5d6-d666-4111-8111-e6e6e6e6e6e6" eId="art-z7_abs-z5">
+                    <akn:num GUID="f7b4c5d6-d777-4111-8111-e7e7e7e7e7e7" eId="art-z7_abs-z5_bezeichnung-n1">(5)</akn:num>
+                    <akn:content GUID="f7b4c5d6-d888-4111-8111-e8e8e8e8e8e8" eId="art-z7_abs-z5_inhalt-n1">
+                        <akn:p GUID="f7b4c5d6-d999-4111-8111-e9e9e9e9e9e9" eId="art-z7_abs-z5_inhalt-n1_text-n1">Sollte die Prüfungsdauer angepasst werden, kann diese im programmgestützten Prüfungsmodus reduziert werden.<akn:marker GUID="f7b4c5d6-da00-4111-8111-eaeaeaeaeaea" eId="art-z7_abs-z5_inhalt-n1_text-n1_marker-n1" refersTo="satzende"/></akn:p>
                     </akn:content>
                 </akn:paragraph>
             </akn:article>
-            <akn:article GUID="f7b4c5d6-db11-4111-8111-ebebebebebeb" eId="hauptteil-1_art-8" period="#meta-1_geltzeiten-1_geltungszeitgr-1" refersTo="stammform">
-                <akn:num GUID="f7b4c5d6-dc22-4111-8111-ecececececec" eId="hauptteil-1_art-8_bezeichnung-1">§ 8</akn:num>
-                <akn:heading GUID="f7b4c5d6-dd33-4111-8111-edededededed" eId="hauptteil-1_art-8_überschrift-1">Fiktive Abschlußprüfung</akn:heading>
-                <akn:paragraph GUID="f7b4c5d6-de44-4111-8111-e0e0e0e0e0e0" eId="hauptteil-1_art-8_abs-1">
-                    <akn:num GUID="f7b4c5d6-df55-4111-8111-e1e1e1e1e1e1" eId="hauptteil-1_art-8_abs-1_bezeichnung-1">(1)</akn:num>
-                    <akn:content GUID="f7b4c5d6-e066-4111-8111-e2e2e2e2e2e2" eId="hauptteil-1_art-8_abs-1_inhalt-1">
-                        <akn:p GUID="f7b4c5d6-e177-4111-8111-e3e3e3e3e3e3" eId="hauptteil-1_art-8_abs-1_inhalt-1_text-1">Die Abschlußprüfung umfasst fiktive Prüfungsinhalte, die auf praxisnahen Lehrinhalten basieren.<akn:marker GUID="f7b4c5d6-e288-4111-8111-e4e4e4e4e4e4" eId="hauptteil-1_art-8_abs-1_inhalt-1_text-1_marker-1" refersTo="satzende"/></akn:p>
+            <akn:article GUID="f7b4c5d6-db11-4111-8111-ebebebebebeb" eId="art-z8" period="#meta-n1_geltzeiten-n1_geltungszeitgr-n1" refersTo="stammform">
+                <akn:num GUID="f7b4c5d6-dc22-4111-8111-ecececececec" eId="art-z8_bezeichnung-n1">§ 8</akn:num>
+                <akn:heading GUID="f7b4c5d6-dd33-4111-8111-edededededed" eId="art-z8_überschrift-n1">Fiktive Abschlußprüfung</akn:heading>
+                <akn:paragraph GUID="f7b4c5d6-de44-4111-8111-e0e0e0e0e0e0" eId="art-z8_abs-z1">
+                    <akn:num GUID="f7b4c5d6-df55-4111-8111-e1e1e1e1e1e1" eId="art-z8_abs-z1_bezeichnung-n1">(1)</akn:num>
+                    <akn:content GUID="f7b4c5d6-e066-4111-8111-e2e2e2e2e2e2" eId="art-z8_abs-z1_inhalt-n1">
+                        <akn:p GUID="f7b4c5d6-e177-4111-8111-e3e3e3e3e3e3" eId="art-z8_abs-z1_inhalt-n1_text-n1">Die Abschlußprüfung umfasst fiktive Prüfungsinhalte, die auf praxisnahen Lehrinhalten basieren.<akn:marker GUID="f7b4c5d6-e288-4111-8111-e4e4e4e4e4e4" eId="art-z8_abs-z1_inhalt-n1_text-n1_marker-n1" refersTo="satzende"/></akn:p>
                     </akn:content>
                 </akn:paragraph>
-                <akn:paragraph GUID="f7b4c5d6-e399-4111-8111-e5e5e5e5e5e5" eId="hauptteil-1_art-8_abs-2">
-                    <akn:num GUID="f7b4c5d6-e4aa-4111-8111-e6e6e6e6e6e6" eId="hauptteil-1_art-8_abs-2_bezeichnung-1">(2)</akn:num>
-                    <akn:content GUID="f7b4c5d6-e5bb-4111-8111-e7e7e7e7e7e7" eId="hauptteil-1_art-8_abs-2_inhalt-1">
-                        <akn:p GUID="f7b4c5d6-e6cc-4111-8111-e8e8e8e8e8e8" eId="hauptteil-1_art-8_abs-2_inhalt-1_text-1">Die praktischen Prüfungen dauern 6 Stunden und beinhalten 4 fiktive Arbeitsproben.<akn:marker GUID="f7b4c5d6-e7dd-4111-8111-e9e9e9e9e9e9" eId="hauptteil-1_art-8_abs-2_inhalt-1_text-1_marker-1" refersTo="satzende"/> Hierbei werden insbesondere folgende Prüfungen durchgeführt:</akn:p>
-                        <akn:blockList GUID="f7b4c5d6-e8ee-4111-8111-eaeaeaeaeaea" eId="hauptteil-1_art-8_abs-2_inhalt-1_liste-1">
-                            <akn:item GUID="f7b4c5d6-e9ff-4111-8111-ebebebebebeb" eId="hauptteil-1_art-8_abs-2_inhalt-1_liste-1_listenelem-1">
-                                <akn:num GUID="f7b4c5d6-f000-4111-8111-ecececececec" eId="hauptteil-1_art-8_abs-2_inhalt-1_liste-1_listenelem-1_bezeichnung-1">1.</akn:num>
-                                <akn:p GUID="f7b4c5d6-f111-4111-8111-edededededed" eId="hauptteil-1_art-8_abs-2_inhalt-1_liste-1_listenelem-1_text-1">Sensorische und chemische Prüfungen,</akn:p>
+                <akn:paragraph GUID="f7b4c5d6-e399-4111-8111-e5e5e5e5e5e5" eId="art-z8_abs-z2">
+                    <akn:num GUID="f7b4c5d6-e4aa-4111-8111-e6e6e6e6e6e6" eId="art-z8_abs-z2_bezeichnung-n1">(2)</akn:num>
+                    <akn:content GUID="f7b4c5d6-e5bb-4111-8111-e7e7e7e7e7e7" eId="art-z8_abs-z2_inhalt-n1">
+                        <akn:p GUID="f7b4c5d6-e6cc-4111-8111-e8e8e8e8e8e8" eId="art-z8_abs-z2_inhalt-n1_text-n1">Die praktischen Prüfungen dauern 6 Stunden und beinhalten 4 fiktive Arbeitsproben.<akn:marker GUID="f7b4c5d6-e7dd-4111-8111-e9e9e9e9e9e9" eId="art-z8_abs-z2_inhalt-n1_text-n1_marker-n1" refersTo="satzende"/> Hierbei werden insbesondere folgende Prüfungen durchgeführt:</akn:p>
+                        <akn:blockList GUID="f7b4c5d6-e8ee-4111-8111-eaeaeaeaeaea" eId="art-z8_abs-z2_inhalt-n1_liste-n1">
+                            <akn:item GUID="f7b4c5d6-e9ff-4111-8111-ebebebebebeb" eId="art-z8_abs-z2_inhalt-n1_liste-n1_listenelem-n1">
+                                <akn:num GUID="f7b4c5d6-f000-4111-8111-ecececececec" eId="art-z8_abs-z2_inhalt-n1_liste-n1_listenelem-n1_bezeichnung-n1">1.</akn:num>
+                                <akn:p GUID="f7b4c5d6-f111-4111-8111-edededededed" eId="art-z8_abs-z2_inhalt-n1_liste-n1_listenelem-n1_text-n1">Sensorische und chemische Prüfungen,</akn:p>
                             </akn:item>
-                            <akn:item GUID="f7b4c5d6-f222-4111-8111-e0e0e0e0e0e0" eId="hauptteil-1_art-8_abs-2_inhalt-1_liste-1_listenelem-2">
-                                <akn:num GUID="f7b4c5d6-f333-4111-8111-e1e1e1e1e1e1" eId="hauptteil-1_art-8_abs-2_inhalt-1_liste-1_listenelem-2_bezeichnung-1">2.</akn:num>
-                                <akn:p GUID="f7b4c5d6-f444-4111-8111-e2e2e2e2e2e2" eId="hauptteil-1_art-8_abs-2_inhalt-1_liste-1_listenelem-2_text-1">Auswertung von Vorversuchen,</akn:p>
+                            <akn:item GUID="f7b4c5d6-f222-4111-8111-e0e0e0e0e0e0" eId="art-z8_abs-z2_inhalt-n1_liste-n1_listenelem-n2">
+                                <akn:num GUID="f7b4c5d6-f333-4111-8111-e1e1e1e1e1e1" eId="art-z8_abs-z2_inhalt-n1_liste-n1_listenelem-n2_bezeichnung-n1">2.</akn:num>
+                                <akn:p GUID="f7b4c5d6-f444-4111-8111-e2e2e2e2e2e2" eId="art-z8_abs-z2_inhalt-n1_liste-n1_listenelem-n2_text-n1">Auswertung von Vorversuchen,</akn:p>
                             </akn:item>
-                            <akn:item GUID="f7b4c5d6-f555-4111-8111-e3e3e3e3e3e3" eId="hauptteil-1_art-8_abs-2_inhalt-1_liste-1_listenelem-3">
-                                <akn:num GUID="f7b4c5d6-f666-4111-8111-e4e4e4e4e4e4" eId="hauptteil-1_art-8_abs-2_inhalt-1_liste-1_listenelem-3_bezeichnung-1">3.</akn:num>
-                                <akn:p GUID="f7b4c5d6-f777-4111-8111-e5e5e5e5e5e5" eId="hauptteil-1_art-8_abs-2_inhalt-1_liste-1_listenelem-3_text-1">Vorbereitung der Haltbarmachung,</akn:p>
+                            <akn:item GUID="f7b4c5d6-f555-4111-8111-e3e3e3e3e3e3" eId="art-z8_abs-z2_inhalt-n1_liste-n1_listenelem-n3">
+                                <akn:num GUID="f7b4c5d6-f666-4111-8111-e4e4e4e4e4e4" eId="art-z8_abs-z2_inhalt-n1_liste-n1_listenelem-n3_bezeichnung-n1">3.</akn:num>
+                                <akn:p GUID="f7b4c5d6-f777-4111-8111-e5e5e5e5e5e5" eId="art-z8_abs-z2_inhalt-n1_liste-n1_listenelem-n3_text-n1">Vorbereitung der Haltbarmachung,</akn:p>
                             </akn:item>
-                            <akn:item GUID="f7b4c5d6-f888-4111-8111-e6e6e6e6e6e6" eId="hauptteil-1_art-8_abs-2_inhalt-1_liste-1_listenelem-4">
-                                <akn:num GUID="f7b4c5d6-f999-4111-8111-e7e7e7e7e7e7" eId="hauptteil-1_art-8_abs-2_inhalt-1_liste-1_listenelem-4_bezeichnung-1">4.</akn:num>
-                                <akn:p GUID="f7b4c5d6-fa00-4111-8111-e8e8e8e8e8e8" eId="hauptteil-1_art-8_abs-2_inhalt-1_liste-1_listenelem-4_text-1">Rezepturerstellung für Fruchtwein,</akn:p>
+                            <akn:item GUID="f7b4c5d6-f888-4111-8111-e6e6e6e6e6e6" eId="art-z8_abs-z2_inhalt-n1_liste-n1_listenelem-n4">
+                                <akn:num GUID="f7b4c5d6-f999-4111-8111-e7e7e7e7e7e7" eId="art-z8_abs-z2_inhalt-n1_liste-n1_listenelem-n4_bezeichnung-n1">4.</akn:num>
+                                <akn:p GUID="f7b4c5d6-fa00-4111-8111-e8e8e8e8e8e8" eId="art-z8_abs-z2_inhalt-n1_liste-n1_listenelem-n4_text-n1">Rezepturerstellung für Fruchtwein,</akn:p>
                             </akn:item>
-                            <akn:item GUID="f7b4c5d6-fb11-4111-8111-e9e9e9e9e9e9" eId="hauptteil-1_art-8_abs-2_inhalt-1_liste-1_listenelem-5">
-                                <akn:num GUID="f7b4c5d6-fc22-4111-8111-eaeaeaeaeaea" eId="hauptteil-1_art-8_abs-2_inhalt-1_liste-1_listenelem-5_bezeichnung-1">5.</akn:num>
-                                <akn:p GUID="f7b4c5d6-fd33-4111-8111-ebebebebebeb" eId="hauptteil-1_art-8_abs-2_inhalt-1_liste-1_listenelem-5_text-1">Prüfung der Erzeugnisse nach gesetzlichen Vorgaben,</akn:p>
+                            <akn:item GUID="f7b4c5d6-fb11-4111-8111-e9e9e9e9e9e9" eId="art-z8_abs-z2_inhalt-n1_liste-n1_listenelem-n5">
+                                <akn:num GUID="f7b4c5d6-fc22-4111-8111-eaeaeaeaeaea" eId="art-z8_abs-z2_inhalt-n1_liste-n1_listenelem-n5_bezeichnung-n1">5.</akn:num>
+                                <akn:p GUID="f7b4c5d6-fd33-4111-8111-ebebebebebeb" eId="art-z8_abs-z2_inhalt-n1_liste-n1_listenelem-n5_text-n1">Prüfung der Erzeugnisse nach gesetzlichen Vorgaben,</akn:p>
                             </akn:item>
-                            <akn:item GUID="f7b4c5d6-fe44-4111-8111-ecececececec" eId="hauptteil-1_art-8_abs-2_inhalt-1_liste-1_listenelem-6">
-                                <akn:num GUID="f7b4c5d6-ff55-4111-8111-edeeddeeddee" eId="hauptteil-1_art-8_abs-2_inhalt-1_liste-1_listenelem-6_bezeichnung-1">6.</akn:num>
-                                <akn:p GUID="g0b4c5d6-0000-4111-8111-efefefefefef" eId="hauptteil-1_art-8_abs-2_inhalt-1_liste-1_listenelem-6_text-1">Erstellung eines fiktiven Herstellungsrezepts,</akn:p>
+                            <akn:item GUID="f7b4c5d6-fe44-4111-8111-ecececececec" eId="art-z8_abs-z2_inhalt-n1_liste-n1_listenelem-n6">
+                                <akn:num GUID="f7b4c5d6-ff55-4111-8111-edeeddeeddee" eId="art-z8_abs-z2_inhalt-n1_liste-n1_listenelem-n6_bezeichnung-n1">6.</akn:num>
+                                <akn:p GUID="f0b4c5d6-0000-4111-8111-efefefefefef" eId="art-z8_abs-z2_inhalt-n1_liste-n1_listenelem-n6_text-n1">Erstellung eines fiktiven Herstellungsrezepts,</akn:p>
                             </akn:item>
-                            <akn:item GUID="g0b4c5d6-1111-4111-8111-f0f0f0f0f0f0" eId="hauptteil-1_art-8_abs-2_inhalt-1_liste-1_listenelem-7">
-                                <akn:num GUID="g0b4c5d6-2222-4111-8111-f1f1f1f1f1f1" eId="hauptteil-1_art-8_abs-2_inhalt-1_liste-1_listenelem-7_bezeichnung-1">7.</akn:num>
-                                <akn:p GUID="g0b4c5d6-3333-4111-8111-f2f2f2f2f2f2" eId="hauptteil-1_art-8_abs-2_inhalt-1_liste-1_listenelem-7_text-1">Vorbereitung der Abfüllung und Kontrolle der Fertigware.<akn:marker GUID="g0b4c5d6-4444-4111-8111-f3f3f3f3f3f3" eId="hauptteil-1_art-8_abs-2_inhalt-1_liste-1_listenelem-7_text-1_marker-1" refersTo="satzende"/>
+                            <akn:item GUID="f0b4c5d6-1111-4111-8111-f0f0f0f0f0f0" eId="art-z8_abs-z2_inhalt-n1_liste-n1_listenelem-n7">
+                                <akn:num GUID="f0b4c5d6-2222-4111-8111-f1f1f1f1f1f1" eId="art-z8_abs-z2_inhalt-n1_liste-n1_listenelem-n7_bezeichnung-n1">7.</akn:num>
+                                <akn:p GUID="f0b4c5d6-3333-4111-8111-f2f2f2f2f2f2" eId="art-z8_abs-z2_inhalt-n1_liste-n1_listenelem-n7_text-n1">Vorbereitung der Abfüllung und Kontrolle der Fertigware.<akn:marker GUID="a0b4c5d6-4444-4111-8111-f3f3f3f3f3f3" eId="art-z8_abs-z2_inhalt-n1_liste-n1_listenelem-n7_text-n1_marker-n1" refersTo="satzende"/>
                                 </akn:p>
                             </akn:item>
                         </akn:blockList>
                     </akn:content>
                 </akn:paragraph>
-                <akn:paragraph GUID="g0b4c5d6-5555-4111-8111-f4f4f4f4f4f4" eId="hauptteil-1_art-8_abs-3">
-                    <akn:num GUID="g0b4c5d6-6666-4111-8111-f5f5f5f5f5f5" eId="hauptteil-1_art-8_abs-3_bezeichnung-1">(3)</akn:num>
-                    <akn:content GUID="g0b4c5d6-7777-4111-8111-f6f6f6f6f6f6" eId="hauptteil-1_art-8_abs-3_inhalt-1">
-                        <akn:p GUID="g0b4c5d6-8888-4111-8111-f7f7f7f7f7f7" eId="hauptteil-1_art-8_abs-3_inhalt-1_text-1">Im Fachbereich Technologie, Technische Mathematik sowie Wirtschafts- und Sozialkunde erfolgt eine schriftliche Prüfung.<akn:marker GUID="g0b4c5d6-9999-4111-8111-f8f8f8f8f8f8" eId="hauptteil-1_art-8_abs-3_inhalt-1_text-1_marker-1" refersTo="satzende"/> Es werden praxisnahe Prüfungsfragen gestellt, die den fiktiven Ausbildungsinhalt widerspiegeln.
+                <akn:paragraph GUID="f0b4c5d6-5555-4111-8111-f4f4f4f4f4f4" eId="art-z8_abs-z3">
+                    <akn:num GUID="f0b4c5d6-6666-4111-8111-f5f5f5f5f5f5" eId="art-z8_abs-z3_bezeichnung-n1">(3)</akn:num>
+                    <akn:content GUID="f0b4c5d6-7777-4111-8111-f6f6f6f6f6f6" eId="art-z8_abs-z3_inhalt-n1">
+                        <akn:p GUID="f0b4c5d6-8888-4111-8111-f7f7f7f7f7f7" eId="art-z8_abs-z3_inhalt-n1_text-n1">Im Fachbereich Technologie, Technische Mathematik sowie Wirtschafts- und Sozialkunde erfolgt eine schriftliche Prüfung.<akn:marker GUID="a0b4c5d6-9999-4111-8111-f8f8f8f8f8f8" eId="art-z8_abs-z3_inhalt-n1_text-n1_marker-n1" refersTo="satzende"/> Es werden praxisnahe Prüfungsfragen gestellt, die den fiktiven Ausbildungsinhalt widerspiegeln.
                         </akn:p>
                     </akn:content>
                 </akn:paragraph>

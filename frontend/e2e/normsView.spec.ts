@@ -56,8 +56,8 @@ test("can search, filter for norms, and view a single norm", async ({
 
     await test.step("The content has the correct max-width", async () => {
       for (const locator of [
-        "#preambel-1_formel-1_text-1",
-        "#preambel-1_formel-1_liste-1",
+        "#praeambel-n1_formel-n1_text-n1",
+        "#praeambel-n1_formel-n1_liste-n1",
         ".akn-section .akn-num",
         ".akn-section .akn-heading",
         ".akn-section .akn-paragraph",
@@ -78,9 +78,7 @@ test("can navigate to a single norm article and between articles", async ({
 
   await test.step("Navigate from main norm view to a single article", async () => {
     await page.getByRole("link", { name: "§ 1 Anwendungsbereich" }).click();
-    await page.waitForURL(
-      mainExpressionEliUrl + "/hauptteil-1_abschnitt-1_art-1",
-    );
+    await page.waitForURL(mainExpressionEliUrl + "/art-z1");
     await expect(
       page.getByRole("heading", { name: "§ 1 Anwendungsbereich" }),
     ).toBeVisible();
@@ -88,18 +86,14 @@ test("can navigate to a single norm article and between articles", async ({
 
   await test.step("Navigate between single articles", async () => {
     await page.getByRole("link", { name: "Nächster Paragraf" }).click();
-    await page.waitForURL(
-      mainExpressionEliUrl + "/hauptteil-1_abschnitt-2_art-1",
-    );
+    await page.waitForURL(mainExpressionEliUrl + "/art-z2");
     await expect(
       page.getByRole("heading", {
         name: "§ 2 Zutaten, Herstellungsanforderungen",
       }),
     ).toBeVisible();
     await page.getByRole("link", { name: "Nächster Paragraf" }).click();
-    await page.waitForURL(
-      mainExpressionEliUrl + "/hauptteil-1_abschnitt-2_art-2",
-    );
+    await page.waitForURL(mainExpressionEliUrl + "/art-z3");
     await expect(
       page.getByRole("heading", {
         name: "§ 3 Kennzeichnung",
@@ -110,7 +104,7 @@ test("can navigate to a single norm article and between articles", async ({
   await test.step("Navigate back between single articles", async () => {
     const mainExpressionEliUrl =
       "/norms/eli/bund/bgbl-1/2000/s1016/2023-04-26/10/deu/regelungstext-1";
-    await page.goto(mainExpressionEliUrl + "/hauptteil-1_abschnitt-2_art-2");
+    await page.goto(mainExpressionEliUrl + "/art-z3");
     await expect(
       page.getByRole("heading", {
         name: "§ 3 Kennzeichnung",
@@ -118,9 +112,7 @@ test("can navigate to a single norm article and between articles", async ({
     ).toBeVisible();
 
     await page.getByRole("link", { name: "Vorheriger Paragraf" }).click();
-    await page.waitForURL(
-      mainExpressionEliUrl + "/hauptteil-1_abschnitt-2_art-1",
-    );
+    await page.waitForURL(mainExpressionEliUrl + "/art-z2");
     await expect(
       page.getByRole("heading", {
         name: "§ 2 Zutaten, Herstellungsanforderungen",
@@ -183,7 +175,7 @@ test("can navigate to and view an attachment", async ({ page }) => {
     await expect(
       page.getByRole("heading", { name: attachmentTitle }),
     ).toBeVisible();
-    await page.waitForURL(mainExpressionEliUrl + "/anlagen-1_anlage-1");
+    await page.waitForURL(mainExpressionEliUrl + "/anlagen-n1_anlage-n1");
     await expect(cell).toBeVisible();
   });
 
@@ -205,7 +197,7 @@ test("can view images", async ({ page }) => {
       .getByRole("main")
       .getByRole("link", { name: "§ 1 Beispielhafte Illustration" })
       .click();
-    await page.waitForURL(/\/hauptteil-1_art-1$/g);
+    await page.waitForURL(/\/art-z1$/g);
     await page.getByRole("img", { name: "Beispielbild" }).isVisible();
   });
 });

@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns="http://Inhaltsdaten.LegalDocML.de/1.8.1/"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="http://Inhaltsdaten.LegalDocML.de/1.8.1/"
+           elementFormDefault="qualified"
+           version="LegalDocML.de 1.8.1 (10.06.2025)">
+<!-- ********************************* Hinweis zur Lizensierung ********************************* -->
+   <xs:annotation>
+      <xs:appinfo>
+         <copyright-hinweis>2025 Copyright © 2021–2025 Bundesministerium des Innern und für Heimat, 
+Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Verwaltungsarbeit</copyright-hinweis>
+         <lizenz url="https://creativecommons.org/licenses/by/3.0/legalcode.de"
+                 kurzbezeichnung="CC-BY-3.0"
+                 langbezeichnung="Creative Commons Namensnennung 3.0"/>
+         <autor organisation="Bundesministerium des Innern und für Heimat"
+                referat="DG II 6"
+                organisatorischer-rahmen="Maßnahmen Enterprise Resource Management und Elektronische Verwaltungsarbeit"/>
+      </xs:appinfo>
+   </xs:annotation>
+   <!-- ******************************************************************************************** -->
+   <xs:import namespace="http://www.w3.org/XML/1998/namespace"
+              schemaLocation="xml.xsd"/>
+   <!-- #### Inkludierte Module mit modulübergreifend genutzen Komponenten #### -->
+   <xs:include schemaLocation="legalDocML.de-baukasten.xsd"/>
+   <!-- #### Globales Root-Element, spezifisch für dieses Paket #### -->
+   <xs:element name="akomaNtoso">
+      <xs:complexType>
+         <xs:sequence>
+            <xs:element name="doc" type="begruendung"/>
+         </xs:sequence>
+      </xs:complexType>
+   </xs:element>
+   <!-- #### Typen des Moduls "Begruendung" #### -->
+   <xs:complexType name="begruendungHauptteil" mixed="false">
+      <xs:annotation>
+         <xs:documentation>Die Klasse "begruendungHauptteil" wird benutzt, um innerhalb der Begründung einen Hauptteil einzufügen.</xs:documentation>
+      </xs:annotation>
+      <xs:sequence>
+         <xs:element name="hcontainer" type="begruendungsteil" maxOccurs="2"/>
+      </xs:sequence>
+      <xs:attribute name="eId" use="required" type="eIdLiterals.begruendungHauptteil"/>
+      <xs:attribute name="GUID" use="required" type="GUIDLiterals"/>
+      <xs:attribute ref="xml:id" use="optional"/>
+   </xs:complexType>
+   <xs:complexType name="begruendungsteil" mixed="false">
+      <xs:annotation>
+         <xs:documentation>Die Klasse "begruendungsteil" wird genutzt, um innerhalb der Begründung einen Teil einzufügen. Auf Ebene des Schemas werden keine spezifischen Arten von Begründungsteilen unterschieden, da diese strukturell identisch aufgebaut sind. Die Darstellung spezifischer Begründungsteile erfolgt ausschließlich durch die Zuordnung von @refersTo-Attributen.</xs:documentation>
+      </xs:annotation>
+      <xs:sequence>
+         <xs:element name="num" type="artUndZaehlbezeichnung"/>
+         <xs:element name="heading" type="ueberschrift"/>
+         <xs:element name="hcontainer"
+                     type="begruendungsteilAbschnitt"
+                     maxOccurs="unbounded"/>
+      </xs:sequence>
+      <xs:attribute name="eId" use="required" type="eIdLiterals.begruendungsteil"/>
+      <xs:attribute name="GUID" use="required" type="GUIDLiterals"/>
+      <xs:attribute name="name" use="required" type="nameLiterals.begruendungsteil"/>
+      <xs:attribute name="refersTo"
+                    use="required"
+                    type="refersToLiterals.begruendungsteil"/>
+      <xs:attribute ref="xml:id" use="optional"/>
+   </xs:complexType>
+   <xs:complexType name="begruendungsteilAbschnitt" mixed="false">
+      <xs:annotation>
+         <xs:documentation>Die Klasse "begruendungsteilAbschnitt" wird genutzt, um innerhalb eines Teils der Begründung einen Abschnitt einzufügen. Ein solcher Abschnitt kann sowohl im allgemeinen als auch besonderen Teil der Begründung genutzt werden. Auf Ebene des Schemas werden keine spezifischen Arten von Begründungsabschnitten unterschieden, da diese strukturell identisch aufgebaut sind. Die Darstellung spezifischer Begründungsabschnitte für den allgemeinen Teil einer Begründung erfolgt ausschließlich durch die Zuordnung von @refersTo-Attributen.</xs:documentation>
+      </xs:annotation>
+      <xs:sequence>
+         <xs:element name="num" type="artUndZaehlbezeichnung" minOccurs="0"/>
+         <xs:element name="heading" type="ueberschrift" minOccurs="0"/>
+         <xs:element name="content" type="inhalt"/>
+      </xs:sequence>
+      <xs:attribute name="eId"
+                    use="required"
+                    type="eIdLiterals.begruendungsteilAbschnitt"/>
+      <xs:attribute name="GUID" use="required" type="GUIDLiterals"/>
+      <xs:attribute name="name"
+                    use="required"
+                    type="nameLiterals.begruendungsteilAbschnitt"/>
+      <xs:attribute name="refersTo"
+                    use="required"
+                    type="refersToLiterals.begruendungsteilAbschnitt"/>
+      <xs:attribute ref="xml:id" use="optional"/>
+   </xs:complexType>
+   <xs:complexType name="begruendungVertRASchlussbemerkung" mixed="false">
+      <xs:annotation>
+         <xs:documentation>Die Klasse "begruendungVertRASchlussbemerkung" wird genutzt, um innerhalb der Begründung zu einem Vertragsrechtsakt eine Schlussbemerkung einzufügen. Diese Schlussbemerkung wird ausschließlich in der Begründung zu einem Vertragsrechtsakt genutzt.</xs:documentation>
+      </xs:annotation>
+      <xs:sequence>
+         <xs:element name="heading" type="ueberschrift"/>
+         <xs:group ref="inhaltselement" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+      <xs:attribute name="eId"
+                    use="required"
+                    type="eIdLiterals.begruendungVertRASchlussbemerkung"/>
+      <xs:attribute name="GUID" use="required" type="GUIDLiterals"/>
+      <xs:attribute ref="xml:id" use="optional"/>
+   </xs:complexType>
+   <xs:complexType name="begruendung" mixed="false">
+      <xs:annotation>
+         <xs:documentation>Die Klasse "begruendung" bildet ein eigenständiges Teildokument eines Rechtsetzungsdokuments in der Entwurfsfassung in Form eines separaten XML-Dokuments, das durch die Klasse "rechtsetzungsdokument" referenziert und in dieser eingebunden wird.</xs:documentation>
+      </xs:annotation>
+      <xs:sequence>
+         <xs:element name="meta" type="metadatenMinimal"/>
+         <xs:element name="preface" type="dokumentenkopf"/>
+         <xs:element name="mainBody" type="begruendungHauptteil"/>
+         <xs:element name="conclusions"
+                     type="begruendungVertRASchlussbemerkung"
+                     minOccurs="0"/>
+      </xs:sequence>
+      <xs:attribute name="name" use="required" type="nameLiterals.begruendung"/>
+   </xs:complexType>
+</xs:schema>

@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns="http://Inhaltsdaten.LegalDocML.de/1.8.1/"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="http://Inhaltsdaten.LegalDocML.de/1.8.1/"
+           elementFormDefault="qualified"
+           version="LegalDocML.de 1.8.1 (10.06.2025)">
+<!-- ********************************* Hinweis zur Lizensierung ********************************* -->
+   <xs:annotation>
+      <xs:appinfo>
+         <copyright-hinweis>2025 Copyright © 2021–2025 Bundesministerium des Innern und für Heimat, 
+Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Verwaltungsarbeit</copyright-hinweis>
+         <lizenz url="https://creativecommons.org/licenses/by/3.0/legalcode.de"
+                 kurzbezeichnung="CC-BY-3.0"
+                 langbezeichnung="Creative Commons Namensnennung 3.0"/>
+         <autor organisation="Bundesministerium des Innern und für Heimat"
+                referat="DG II 6"
+                organisatorischer-rahmen="Maßnahmen Enterprise Resource Management und Elektronische Verwaltungsarbeit"/>
+      </xs:appinfo>
+   </xs:annotation>
+   <!-- ******************************************************************************************** -->
+   <xs:import namespace="http://www.w3.org/XML/1998/namespace"
+              schemaLocation="xml.xsd"/>
+   <!-- #### Inkludierte Module mit modulübergreifend genutzen Komponenten #### -->
+   <xs:include schemaLocation="legalDocML.de-baukasten.xsd"/>
+   <!-- #### Globales Root-Element, spezifisch für dieses Paket #### -->
+   <xs:element name="akomaNtoso">
+      <xs:complexType>
+         <xs:sequence>
+            <xs:element name="doc" type="aenderungsantrag"/>
+         </xs:sequence>
+      </xs:complexType>
+   </xs:element>
+   <!-- #### Typen des Moduls "Aenderungsantrag" #### -->
+   <xs:complexType name="aenderungsantrag" mixed="false">
+      <xs:annotation>
+         <xs:documentation>Die Klasse aenderungsantrag bildet ein eigenständiges Teildokument eines Rechtsetzungsdokuments in der Entwurfsfassung in Form eines separaten XML-Dokuments, das durch die Klasse "rechtsetzungsdokument" referenziert und in dieser eingebunden wird.</xs:documentation>
+      </xs:annotation>
+      <xs:sequence>
+         <xs:element name="meta" type="metadatenOptionalErweitert"/>
+         <xs:element name="preface" type="aenderungsantragDokumentenkopf"/>
+         <xs:element name="preamble" type="aenderungsantragEingangsformel"/>
+         <xs:element name="mainBody" type="aenderungsantragHauptteil"/>
+         <xs:element name="conclusions" type="aenderungsantragSchluss" minOccurs="0"/>
+         <xs:element name="components" type="teildokumente" minOccurs="0"/>
+      </xs:sequence>
+      <xs:attribute name="name" use="required" type="nameLiterals.aenderungsantrag"/>
+   </xs:complexType>
+   <xs:complexType name="aenderungsantragDokumentenkopf" mixed="false">
+      <xs:annotation>
+         <xs:documentation>Die Klasse "aenderungsantragDokumentenkopf" wird benutzt, um dem Änderungsantrag einen Dokumentenkopf hinzuzufügen.</xs:documentation>
+      </xs:annotation>
+      <xs:sequence>
+         <xs:element name="longTitle" type="aenderungsantragDokumentenkopfTitel"/>
+      </xs:sequence>
+      <xs:attribute name="eId"
+                    use="required"
+                    type="eIdLiterals.aenderungsantragDokumentenkopf"/>
+      <xs:attribute name="GUID" use="required" type="GUIDLiterals"/>
+      <xs:attribute ref="xml:id" use="optional"/>
+   </xs:complexType>
+   <xs:complexType name="aenderungsantragDokumentenkopfTitel" mixed="false">
+      <xs:annotation>
+         <xs:documentation>Die Klasse "aenderungsantragDokumentenkopfTitel" wird benutzt, um Titelinformationen in den Dokumentenkopf eines Änderungsantrags einzufügen.</xs:documentation>
+      </xs:annotation>
+      <xs:sequence>
+         <xs:element name="p" type="p" maxOccurs="unbounded"/>
+      </xs:sequence>
+      <xs:attribute name="eId"
+                    use="required"
+                    type="eIdLiterals.aenderungsantragDokumentenkopfTitel"/>
+      <xs:attribute name="GUID" use="required" type="GUIDLiterals"/>
+      <xs:attribute ref="xml:id" use="optional"/>
+   </xs:complexType>
+   <xs:complexType name="aenderungsantragEingangsformel" mixed="false">
+      <xs:annotation>
+         <xs:documentation>Die Klasse "aenderungsantragEingangsformel" stellt die Eingangsformel zu einem Änderungsantrag dar.</xs:documentation>
+      </xs:annotation>
+      <xs:sequence>
+         <xs:element name="formula" type="eingangsformel"/>
+      </xs:sequence>
+      <xs:attribute name="eId"
+                    use="required"
+                    type="eIdLiterals.aenderungsantragEingangsformel"/>
+      <xs:attribute name="GUID" use="required" type="GUIDLiterals"/>
+      <xs:attribute ref="xml:id" use="optional"/>
+   </xs:complexType>
+   <xs:complexType name="aenderungsantragHauptteil" mixed="false">
+      <xs:annotation>
+         <xs:documentation>Die Klasse "name-der-klasse" wird benutzt, um innerhalb des Änderungsantrags einen Hauptteil einzufügen.</xs:documentation>
+      </xs:annotation>
+      <xs:sequence>
+         <xs:group ref="aenderungsantragHauptteilInhalt" maxOccurs="unbounded"/>
+      </xs:sequence>
+      <xs:attribute name="eId"
+                    use="required"
+                    type="eIdLiterals.aenderungsantragHauptteil"/>
+      <xs:attribute name="GUID" use="required" type="GUIDLiterals"/>
+      <xs:attribute ref="xml:id" use="optional"/>
+   </xs:complexType>
+   <xs:group name="aenderungsantragHauptteilInhalt">
+      <xs:choice>
+         <xs:element name="p" type="p" minOccurs="0"/>
+         <xs:element name="blockList" type="liste" minOccurs="0"/>
+      </xs:choice>
+   </xs:group>
+   <xs:complexType name="aenderungsantragSchluss" mixed="false">
+      <xs:annotation>
+         <xs:documentation>Die Klasse "aenderungsantragSchluss" wird benutzt, um einem Änderungsantrag einen Schlussteil hinzuzufügen</xs:documentation>
+      </xs:annotation>
+      <xs:sequence>
+         <xs:element name="blockContainer" type="signaturblock"/>
+      </xs:sequence>
+      <xs:attribute name="eId"
+                    use="required"
+                    type="eIdLiterals.aenderungsantragSchluss"/>
+      <xs:attribute name="GUID" use="required" type="GUIDLiterals"/>
+      <xs:attribute ref="xml:id" use="optional"/>
+   </xs:complexType>
+</xs:schema>

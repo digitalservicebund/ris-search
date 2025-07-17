@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns="http://Inhaltsdaten.LegalDocML.de/1.8.1/"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="http://Inhaltsdaten.LegalDocML.de/1.8.1/"
+           elementFormDefault="qualified"
+           version="LegalDocML.de 1.8.1 (10.06.2025)">
+<!-- ********************************* Hinweis zur Lizensierung ********************************* -->
+   <xs:annotation>
+      <xs:appinfo>
+         <copyright-hinweis>2025 Copyright © 2021–2025 Bundesministerium des Innern und für Heimat, 
+Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Verwaltungsarbeit</copyright-hinweis>
+         <lizenz url="https://creativecommons.org/licenses/by/3.0/legalcode.de"
+                 kurzbezeichnung="CC-BY-3.0"
+                 langbezeichnung="Creative Commons Namensnennung 3.0"/>
+         <autor organisation="Bundesministerium des Innern und für Heimat"
+                referat="DG II 6"
+                organisatorischer-rahmen="Maßnahmen Enterprise Resource Management und Elektronische Verwaltungsarbeit"/>
+      </xs:appinfo>
+   </xs:annotation>
+   <!-- ******************************************************************************************** -->
+   <xs:import namespace="http://www.w3.org/XML/1998/namespace"
+              schemaLocation="xml.xsd"/>
+   <!-- #### Inkludierte Module mit modulübergreifend genutzen Komponenten #### -->
+   <xs:include schemaLocation="legalDocML.de-baukasten.xsd"/>
+   <!-- #### Globales Root-Element, spezifisch für dieses Paket #### -->
+   <xs:element name="akomaNtoso">
+      <xs:complexType>
+         <xs:sequence>
+            <xs:element name="doc" type="offeneStruktur"/>
+         </xs:sequence>
+      </xs:complexType>
+   </xs:element>
+   <!-- #### Typen des Moduls "Offenestruktur" #### -->
+   <xs:complexType name="offeneStruktur" mixed="false">
+      <xs:annotation>
+         <xs:documentation>Die Klasse "offeneStruktur" bildet ein eigenständiges Teildokument eines Rechtsetzungsdokuments in Form eines separaten XML-Dokuments, das durch die Klasse 'rechtsetzungsdokument' referenziert und in dieser eingebunden wird.</xs:documentation>
+      </xs:annotation>
+      <xs:sequence>
+         <xs:element name="meta" type="metadatenOptionalErweitert"/>
+         <xs:element name="preface" type="offeneStrukturDokumentenkopf" minOccurs="0"/>
+         <xs:element name="preamble" type="offeneStrukturPräambel" minOccurs="0"/>
+         <xs:element name="mainBody" type="offeneStrukturHauptteil"/>
+         <xs:element name="conclusions" type="offeneStrukturSchluss" minOccurs="0"/>
+      </xs:sequence>
+      <xs:attribute name="name" use="required" type="nameLiterals.offeneStruktur"/>
+   </xs:complexType>
+   <xs:complexType name="offeneStrukturDokumentenkopf" mixed="false">
+      <xs:annotation>
+         <xs:documentation>Die Klasse "offeneStrukturDokumentenkopf" wird benutzt, um innerhalb einer offenen Struktur einen Dokumentenkopf hinzuzufügen.</xs:documentation>
+      </xs:annotation>
+      <xs:sequence>
+         <xs:group ref="inhaltselement" maxOccurs="unbounded"/>
+      </xs:sequence>
+      <xs:attribute name="eId"
+                    use="required"
+                    type="eIdLiterals.offeneStrukturDokumentenkopf"/>
+      <xs:attribute name="GUID" use="required" type="GUIDLiterals"/>
+      <xs:attribute ref="xml:id" use="optional"/>
+   </xs:complexType>
+   <xs:complexType name="offeneStrukturHauptteil" mixed="false">
+      <xs:annotation>
+         <xs:documentation>Die Klasse "offeneStrukturHauptteil" wird benutzt, um innerhalb einer offenen Struktur einen Hauptteil hinzuzufügen.</xs:documentation>
+      </xs:annotation>
+      <xs:sequence>
+         <xs:group ref="offeneStrukturHauptteilInhalt" maxOccurs="unbounded"/>
+      </xs:sequence>
+      <xs:attribute name="eId"
+                    use="required"
+                    type="eIdLiterals.offeneStrukturHauptteil"/>
+      <xs:attribute name="GUID" use="required" type="GUIDLiterals"/>
+      <xs:attribute ref="xml:id" use="optional"/>
+   </xs:complexType>
+   <xs:group name="offeneStrukturHauptteilInhalt">
+      <xs:choice>
+         <xs:group ref="inhaltselement"/>
+         <xs:element name="componentRef" type="offeneStrukturBestandteilVerweis"/>
+      </xs:choice>
+   </xs:group>
+   <xs:complexType name="offeneStrukturPräambel" mixed="false">
+      <xs:annotation>
+         <xs:documentation>Die Klasse "offeneStrukturPräambel" wird benutzt, um innerhalb einer offenen Struktur eine Präambel hinzuzufügen.</xs:documentation>
+      </xs:annotation>
+      <xs:sequence>
+         <xs:group ref="inhaltselement"/>
+      </xs:sequence>
+      <xs:attribute name="eId" use="required" type="eIdLiterals.offeneStrukturPräambel"/>
+      <xs:attribute name="GUID" use="required" type="GUIDLiterals"/>
+      <xs:attribute ref="xml:id" use="optional"/>
+   </xs:complexType>
+   <xs:complexType name="offeneStrukturSchluss" mixed="false">
+      <xs:annotation>
+         <xs:documentation>Die Klasse "offeneStrukturSchluss" wird benutzt, um innerhalb einer offenen Struktur einen Schluss hinzuzufügen.</xs:documentation>
+      </xs:annotation>
+      <xs:sequence>
+         <xs:group ref="inhaltselement" maxOccurs="unbounded"/>
+      </xs:sequence>
+      <xs:attribute name="eId" use="required" type="eIdLiterals.offeneStrukturSchluss"/>
+      <xs:attribute name="GUID" use="required" type="GUIDLiterals"/>
+      <xs:attribute ref="xml:id" use="optional"/>
+   </xs:complexType>
+   <xs:complexType name="offeneStrukturBestandteilVerweis" mixed="false">
+      <xs:annotation>
+         <xs:documentation>Die Klasse "offeneStrukturBestandteilVerweis" verweist auf einen separaten Bestandteil (beispielsweise ein PDF-Dokument) innerhalb der offenen Struktur.</xs:documentation>
+      </xs:annotation>
+      <xs:sequence/>
+      <xs:attribute name="eId"
+                    use="required"
+                    type="eIdLiterals.offeneStrukturBestandteilVerweis"/>
+      <xs:attribute name="GUID" use="required" type="GUIDLiterals"/>
+      <xs:attribute name="src" use="required" type="srcLiterals"/>
+      <xs:attribute name="showAs" use="required" type="showAsLiterals"/>
+   </xs:complexType>
+</xs:schema>
