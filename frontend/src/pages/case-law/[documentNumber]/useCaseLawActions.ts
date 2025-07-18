@@ -3,11 +3,10 @@ import PDFIcon from "~/components/icons/PDFIcon.vue";
 import XMLIcon from "~/components/icons/XMLIcon.vue";
 import type { CaseLaw } from "~/types";
 import { getEncodingURL } from "~/utils/caseLawUtils";
-import { isPrototypeProfile } from "~/utils/config";
 import MaterialSymbolsLink from "~icons/material-symbols/link";
+import MaterialSymbolsPrint from "~icons/material-symbols/print";
 
 export function useCaseLawActions(caseLaw: Ref<CaseLaw | null>) {
-  const enablePdfButton = !isPrototypeProfile();
   const onPrint = () => {
     if (window) window.print();
   };
@@ -25,11 +24,17 @@ export function useCaseLawActions(caseLaw: Ref<CaseLaw | null>) {
         disabled: true,
       },
       {
-        key: "pdf",
-        label: "Drucken oder als PDF speichern",
-        iconComponent: PDFIcon,
+        key: "print",
+        label: "Drucken",
+        iconComponent: MaterialSymbolsPrint,
         command: onPrint,
-        disabled: !enablePdfButton,
+      },
+      {
+        key: "pdf",
+        label: "Als PDF speichern",
+        iconComponent: PDFIcon,
+        command: {},
+        disabled: true,
       },
     ];
 

@@ -48,8 +48,7 @@ describe("useNormActions", () => {
     });
   });
 
-  it("should include PDF and link actions by default", () => {
-    vi.mocked(isPrototypeProfile).mockReturnValue(false);
+  it("should include link, permalink, print and PDF actions by default", () => {
     vi.mocked(getManifestationUrl).mockReturnValue(undefined);
 
     const metadata = ref(mockLegislationWork);
@@ -57,10 +56,10 @@ describe("useNormActions", () => {
 
     const keys = actions.value.map((value) => value.key);
 
-    expect(keys).toEqual(["link", "permalink", "pdf"]);
+    expect(keys).toEqual(["link", "permalink", "print", "pdf"]);
   });
 
-  it("should disable PDF button if isPrototypeProfile returns true", () => {
+  it("should disable PDF button", () => {
     vi.mocked(isPrototypeProfile).mockReturnValue(true); // Disable PDF button
 
     const metadata = ref(mockLegislationWork);
@@ -88,13 +87,13 @@ describe("useNormActions", () => {
     });
   });
 
-  it("should call window.print when PDF action command is executed", () => {
+  it("should call window.print when print action command is executed", () => {
     vi.mocked(isPrototypeProfile).mockReturnValue(false); // Enable PDF button
     const metadata = ref(mockLegislationWork);
     const { actions } = useNormActions(metadata);
 
-    const pdfAction = actions.value.find((a) => a.key === "pdf");
-    pdfAction?.command?.();
+    const printAction = actions.value.find((a) => a.key === "print");
+    printAction?.command?.();
 
     expect(window.print).toHaveBeenCalledOnce();
   });

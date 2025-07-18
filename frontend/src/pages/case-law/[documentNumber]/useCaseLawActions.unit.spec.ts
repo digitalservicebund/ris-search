@@ -26,8 +26,7 @@ describe("useCaseLawActions", () => {
     });
   });
 
-  it("should include link and PDF actions by default", () => {
-    vi.mocked(isPrototypeProfile).mockReturnValue(false);
+  it("should include link, print and PDF actions by default", () => {
     vi.mocked(getEncodingURL).mockReturnValue(undefined);
 
     const caseLaw = ref({} as CaseLaw);
@@ -35,10 +34,10 @@ describe("useCaseLawActions", () => {
 
     const keys = actions.value.map((value) => value.key);
 
-    expect(keys).toEqual(["link", "pdf"]);
+    expect(keys).toEqual(["link", "print", "pdf"]);
   });
 
-  it("should disable PDF button if isPrototypeProfile returns true", () => {
+  it("should disable PDF button", () => {
     vi.mocked(isPrototypeProfile).mockReturnValue(true); // Disables PDF button
 
     const caseLaw = ref({} as CaseLaw);
@@ -65,13 +64,13 @@ describe("useCaseLawActions", () => {
     });
   });
 
-  it("should call window.print when PDF action command is executed", () => {
+  it("should call window.print when print action command is executed", () => {
     vi.mocked(isPrototypeProfile).mockReturnValue(false); // Enable PDF button
     const caseLaw = ref({} as CaseLaw);
     const { actions } = useCaseLawActions(caseLaw);
 
-    const pdfAction = actions.value.find((a) => a.key === "pdf");
-    pdfAction?.command?.();
+    const printAction = actions.value.find((a) => a.key === "print");
+    printAction?.command?.();
 
     expect(window.print).toHaveBeenCalledOnce();
   });
