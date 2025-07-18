@@ -2,22 +2,19 @@ package de.bund.digitalservice.ris.search.sitemap.eclicrawler.service;
 
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.repository.objectstorage.PortalBucket;
-import de.bund.digitalservice.ris.search.sitemap.eclicrawler.mapper.RisToEcliMapper;
-import de.bund.digitalservice.ris.search.sitemap.eclicrawler.schema.Sitemap;
-import de.bund.digitalservice.ris.search.sitemap.eclicrawler.schema.SitemapIndexEntry;
-import de.bund.digitalservice.ris.search.sitemap.eclicrawler.schema.Sitemapindex;
+import de.bund.digitalservice.ris.search.sitemap.eclicrawler.mapper.EcliCrawlerDocumentMapper;
+import de.bund.digitalservice.ris.search.sitemap.eclicrawler.model.EcliCrawlerDocument;
+import de.bund.digitalservice.ris.search.sitemap.eclicrawler.schema.sitemap.Sitemap;
+import de.bund.digitalservice.ris.search.sitemap.eclicrawler.schema.sitemapindex.SitemapIndexEntry;
+import de.bund.digitalservice.ris.search.sitemap.eclicrawler.schema.sitemapindex.Sitemapindex;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
-import jakarta.xml.bind.Marshaller;
 import java.io.FileNotFoundException;
-import java.io.StringWriter;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
-import java.util.function.Predicate;
-import java.util.stream.Stream;
 import org.apache.commons.collections4.ListUtils;
 import org.springframework.stereotype.Service;
 
@@ -28,8 +25,8 @@ public class SitemapService {
 
   JAXBContext jaxbCtx;
 
-  private static final String PATH_PREFIX = "eclicrawler/";
-  private static final String ROBOTS_TXT_PATH = PATH_PREFIX + "robots.txt";
+  public static final String PATH_PREFIX = "eclicrawler/";
+  public static final String ROBOTS_TXT_PATH = PATH_PREFIX + "robots.txt";
 
   public SitemapService(PortalBucket portalBucket) throws JAXBException {
     this.portalBucket = portalBucket;
@@ -37,50 +34,37 @@ public class SitemapService {
   }
 
   public List<Sitemap> createSitemaps(
-      List<ChangedDocument> changedDocuments, int maxSitemapEntries) {
+      List<EcliCrawlerDocument> ecliDocuments, int maxSitemapEntries) {
 
-    List<ChangedDocument> partsOfSitemap =
-        changedDocuments.stream().filter(filterIncomplete()).toList();
-
-    if (partsOfSitemap.isEmpty()) {
-      return List.of();
-    }
-    List<List<ChangedDocument>> partitioned =
-        ListUtils.partition(partsOfSitemap, maxSitemapEntries);
+    List<List<EcliCrawlerDocument>> partitioned =
+        ListUtils.partition(ecliDocuments, maxSitemapEntries);
 
     return partitioned.stream().map(this::createSitemap).toList();
   }
 
-  public List<Sitemap> createSitemaps(List<ChangedDocument> changedDocuments) {
-    return createSitemaps(changedDocuments, 10000);
+  public List<Sitemap> createSitemaps(List<EcliCrawlerDocument> ecliDocuments) {
+    return createSitemaps(ecliDocuments, 10000);
   }
 
-  public Optional<String> writeSitemapFiles(List<Sitemap> urlSets, LocalDate day)
+  public List<String> writeSitemapFiles(List<Sitemap> sitemaps, LocalDate day)
       throws JAXBException {
-    List<String> urlSetLocations = writeUrlSets(urlSets, day);
+    List<String> urlSetLocations = writeSitemaps(sitemaps, day);
 
-    if (!urlSetLocations.isEmpty()) {
+    List<List<Sitemap>> partitionedSitemaps = ListUtils.partition(sitemaps, 10000);
+
+    List<String> sitemapFilePaths = new ArrayList<>();
+    for (int i = 0; i < partitionedSitemaps.size(); i++) {
+      int indexEnumertaor = i + 1;
       Sitemapindex index = createSitemapIndex(urlSetLocations);
-      String indexFilename = writeSitemapIndex(index, day);
-      return Optional.of(indexFilename);
-    } else {
-      return Optional.empty();
+      sitemapFilePaths.add(writeSitemapIndex(index, day, indexEnumertaor));
     }
+
+    return sitemapFilePaths;
   }
 
-  private Sitemap createSitemap(List<ChangedDocument> changedDocuments) {
+  private Sitemap createSitemap(List<EcliCrawlerDocument> ecliDocuments) {
     Sitemap set = new Sitemap();
-    set.setUrl(
-        changedDocuments.stream()
-            .map(
-                changed ->
-                    switch (changed) {
-                      case CreatedDocument created ->
-                          RisToEcliMapper.caselawDocumentationUnitToEcliUrl(created.docUnit());
-                      case DeletedDocument deleted ->
-                          RisToEcliMapper.deletedDocumentToEcliUrl(deleted.identifier());
-                    })
-            .toList());
+    set.setUrl(ecliDocuments.stream().map(EcliCrawlerDocumentMapper::toSitemapUrl).toList());
 
     return set;
   }
@@ -93,87 +77,66 @@ public class SitemapService {
     return index;
   }
 
-  private String writeSitemapIndex(Sitemapindex index, LocalDate date) throws JAXBException {
-    StringWriter sw = new StringWriter();
-    Marshaller m = jaxbCtx.createMarshaller();
-    m.setProperty(
-        Marshaller.JAXB_SCHEMA_LOCATION,
-        "http://www.sitemaps.org/schemas/sitemap/0.9 "
-            + "http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd ");
-    m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-    m.marshal(index, sw);
+  private String writeSitemapIndex(Sitemapindex index, LocalDate date, int enumerator)
+      throws JAXBException {
+    String content = EcliMarshaller.marshallSitemapIndex(index);
 
-    String filename = String.format(PATH_PREFIX + "%s/sitemap_index_1.xml", getDatePartition(date));
-    portalBucket.save(filename, sw.toString());
+    String filename =
+        String.format(PATH_PREFIX + "%s/sitemap_index_%s.xml", getDatePartition(date), enumerator);
+    portalBucket.save(filename, content);
 
     return filename;
   }
 
   private String getDatePartition(LocalDate date) {
-    return String.format("%s/%s/%s", date.getYear(), date.getMonthValue(), date.getDayOfMonth());
+    return date.format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
   }
 
   public List<String> getSitemapFilesPathsForDay(LocalDate date) {
     return portalBucket.getAllKeysByPrefix(PATH_PREFIX + getDatePartition(date));
   }
 
-  private List<String> writeUrlSets(List<Sitemap> sets, LocalDate date) throws JAXBException {
-    Marshaller m = jaxbCtx.createMarshaller();
-    m.setProperty(
-        Marshaller.JAXB_SCHEMA_LOCATION,
-        "http://www.sitemaps.org/schemas/sitemap/0.9 "
-            + "http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd "
-            + "https://e-justice.europa.eu/eclisearch "
-            + "https://e-justice.europa.eu/eclisearch/ecli.xsd");
-    m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+  private List<String> writeSitemaps(List<Sitemap> sets, LocalDate date) throws JAXBException {
 
     List<String> locations = new ArrayList<>();
     for (int i = 0; i < sets.size(); i++) {
-      StringWriter sw = new StringWriter();
       int sitemapNr = i + 1;
       String filename =
           String.format(PATH_PREFIX + "%s/sitemap_%s.xml", getDatePartition(date), sitemapNr);
-      m.marshal(sets.get(i), sw);
-      portalBucket.save(filename, sw.toString());
+      String content = EcliMarshaller.marshallSitemap(sets.get(i));
+      portalBucket.save(filename, content);
       locations.add(filename);
     }
 
     return locations;
   }
 
-  public void writeRobotsTxt(String sitemapIndexPath) {
+  public void writeRobotsTxt(List<String> sitemapIndexPaths) {
+
     String header =
         """
             User-agent: DG_JUSTICE_CRAWLER
             Allow: /
             """;
 
-    String content = header + "Sitemap:" + sitemapIndexPath;
-
-    portalBucket.save(ROBOTS_TXT_PATH, content);
+    portalBucket.save(ROBOTS_TXT_PATH, appendSitemapPaths(header, sitemapIndexPaths));
   }
 
-  public void updateRobotsTxt(String sitemapIndexPath)
+  public void updateRobotsTxt(List<String> sitemapIndexPaths)
       throws ObjectStoreServiceException, FileNotFoundException {
     Optional<String> contentOption = portalBucket.getFileAsString(ROBOTS_TXT_PATH);
     if (contentOption.isEmpty()) {
       throw new FileNotFoundException("no robots.txt found");
     }
-    portalBucket.save(ROBOTS_TXT_PATH, contentOption.get() + "\nSitemap:" + sitemapIndexPath);
+    portalBucket.save(ROBOTS_TXT_PATH, appendSitemapPaths(contentOption.get(), sitemapIndexPaths));
   }
 
-  private Predicate<ChangedDocument> filterIncomplete() {
-    return document ->
-        switch (document) {
-          case DeletedDocument ignored -> true;
-          case CreatedDocument created ->
-              Stream.of(
-                      created.docUnit().ecli(),
-                      created.docUnit().id(),
-                      created.docUnit().decisionDate(),
-                      created.docUnit().courtType(),
-                      created.docUnit().documentType())
-                  .noneMatch(Objects::isNull);
-        };
+  private String appendSitemapPaths(String content, List<String> sitemapIndexPaths) {
+    StringBuilder sb = new StringBuilder(content);
+
+    for (String indexPath : sitemapIndexPaths) {
+      sb.append("\nSitemap:").append(indexPath);
+    }
+    return sb.toString();
   }
 }

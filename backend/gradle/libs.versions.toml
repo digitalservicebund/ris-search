@@ -43,6 +43,8 @@ pact = "4.6.17"
 posthog = "1.2.0"
 pebble = "3.2.3"
 rest-assured = "5.5.5"
+flyway = "11.11.2"
+postgresql = "42.7.7"
 
 [libraries]
 spring-actuator = { module="org.springframework.boot:spring-boot-starter-actuator", version.ref="spring-boot-starter" }
@@ -91,6 +93,9 @@ jaxb-moxy-xjc = {module = "org.eclipse.persistence:org.eclipse.persistence.moxy.
 pebble = { module = "io.pebbletemplates:pebble-spring-boot-starter", version.ref = "pebble" }
 streamex = { module = 'one.util:streamex', version.ref = "streamex" }
 restassured = { module = 'io.rest-assured:rest-assured', version.ref = "rest-assured" }
+flyway-core = { module = "org.flywaydb:flyway-core", version.ref = "flyway"}
+flyway-postgres = { module = "org.flywaydb:flyway-database-postgresql", version.ref = "flyway"}
+postgresql = { module = "org.postgresql:postgresql", version.ref = "postgresql"}
 
 [plugins]
 spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }

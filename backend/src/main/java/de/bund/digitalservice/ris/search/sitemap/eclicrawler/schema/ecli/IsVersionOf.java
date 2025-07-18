@@ -11,6 +11,8 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 public class IsVersionOf {
+  public static final String COUNTRY_DE = "DE";
+
   @XmlAttribute String value;
 
   @XmlElement String country;

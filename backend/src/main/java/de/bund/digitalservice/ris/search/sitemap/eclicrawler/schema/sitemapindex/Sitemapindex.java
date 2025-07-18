@@ -1,4 +1,4 @@
-package de.bund.digitalservice.ris.search.sitemap.eclicrawler.schema;
+package de.bund.digitalservice.ris.search.sitemap.eclicrawler.schema.sitemapindex;
 
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlRootElement;
