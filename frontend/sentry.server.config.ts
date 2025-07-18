@@ -15,7 +15,7 @@ Sentry.init({
   // It has to be in the environment of the server when building the app
   // See: https://nuxt.com/docs/guide/directory-structure/env#production
   dsn,
-  tracesSampleRate: 1.0,
+  tracesSampleRate: 0.1,
   debug: false,
   release, // this will be set from the CI/CD as the commit SHA
   environment,
