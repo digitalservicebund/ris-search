@@ -1,7 +1,9 @@
 package de.bund.digitalservice.ris.search.unit.sitemap.caselaw;
 
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import de.bund.digitalservice.ris.search.repository.objectstorage.PortalBucket;
 import de.bund.digitalservice.ris.search.sitemap.eclicrawler.schema.Sitemap;
@@ -10,9 +12,11 @@ import de.bund.digitalservice.ris.search.sitemap.eclicrawler.service.CreatedDocu
 import de.bund.digitalservice.ris.search.sitemap.eclicrawler.service.DeletedDocument;
 import de.bund.digitalservice.ris.search.sitemap.eclicrawler.service.SitemapService;
 import jakarta.xml.bind.JAXBException;
+import java.io.FileNotFoundException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -89,5 +93,46 @@ class SitemapServiceTest {
 
     Assertions.assertEquals(
         "eclicrawler/2025/1/1/sitemap_1.xml", service.getSitemapFilesPathsForDay(date).getFirst());
+  }
+
+  @Test
+  void itWritesARobotsTxt() {
+    String expectedContent =
+        """
+                User-agent: DG_JUSTICE_CRAWLER
+                Allow: /
+                Sitemap:sitemapPath""";
+    service.writeRobotsTxt("sitemapPath");
+
+    verify(bucket).save(SitemapService.ROBOTS_TXT_PATH, expectedContent);
+  }
+
+  @Test
+  void itUpdatesAnExistingRobotsTxt() throws FileNotFoundException, ObjectStoreServiceException {
+    String existingContent =
+        """
+                User-agent: DG_JUSTICE_CRAWLER
+                Allow: /
+                Sitemap:sitemapPath1""";
+    String expectedContent =
+        """
+                User-agent: DG_JUSTICE_CRAWLER
+                Allow: /
+                Sitemap:sitemapPath1
+                Sitemap:sitemapPath2""";
+    when(bucket.getFileAsString("eclicrawler/robots.txt")).thenReturn(Optional.of(existingContent));
+    service.updateRobotsTxt("sitemapPath2");
+
+    verify(bucket).save(SitemapService.ROBOTS_TXT_PATH, expectedContent);
+  }
+
+  @Test
+  void itThrowsAnErrorOnUpdatingNonExistingRobotsTxt() throws ObjectStoreServiceException {
+    when(bucket.getFileAsString(SitemapService.ROBOTS_TXT_PATH)).thenReturn(Optional.empty());
+    Assertions.assertThrows(
+        FileNotFoundException.class,
+        () -> {
+          service.updateRobotsTxt("indexpath");
+        });
   }
 }

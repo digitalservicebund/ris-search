@@ -28,8 +28,8 @@ public class SitemapService {
 
   JAXBContext jaxbCtx;
 
-  private static final String PATH_PREFIX = "eclicrawler/";
-  private static final String ROBOTS_TXT_PATH = PATH_PREFIX + "robots.txt";
+  public static final String PATH_PREFIX = "eclicrawler/";
+  public static final String ROBOTS_TXT_PATH = PATH_PREFIX + "robots.txt";
 
   public SitemapService(PortalBucket portalBucket) throws JAXBException {
     this.portalBucket = portalBucket;
