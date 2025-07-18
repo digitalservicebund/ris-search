@@ -152,7 +152,7 @@ public class CaseLawController {
               allowableValues = {"png", "jpg", "jpeg", "gif", "wmf", "emf", "bitmap"})
           @PathVariable
           String extension)
-      throws ObjectStoreServiceException, RuntimeException {
+      throws ObjectStoreServiceException, FileNotFoundException {
     if (!List.of("png", "jpg", "jpeg", "gif", "wmf", "emf", "bitmap")
         .contains(extension.toLowerCase())) {
       return ResponseEntity.notFound().build();
