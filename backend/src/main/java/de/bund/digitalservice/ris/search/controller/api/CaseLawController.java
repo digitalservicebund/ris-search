@@ -3,6 +3,7 @@ package de.bund.digitalservice.ris.search.controller.api;
 import static org.springframework.http.HttpHeaders.CONTENT_DISPOSITION;
 
 import de.bund.digitalservice.ris.search.config.ApiConfig;
+import de.bund.digitalservice.ris.search.exception.FileNotFoundException;
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.mapper.CaseLawSchemaMapper;
 import de.bund.digitalservice.ris.search.models.api.parameters.ResourceReferenceMode;
@@ -143,7 +144,7 @@ public class CaseLawController {
       description = "Returns a specific resource of a particular caselaw.")
   @ApiResponse(responseCode = "200")
   @ApiResponse(responseCode = "404", content = @Content())
-  public ResponseEntity<byte[]> getResource(
+  public ResponseEntity<byte[]> getImage(
       @PathVariable @Schema(example = "BDRE000800001") String documentNumber,
       @Schema(example = "image") @PathVariable String name,
       @Schema(
@@ -164,7 +165,7 @@ public class CaseLawController {
                   try {
                     return new ClassPathResource("placeholder.png").getInputStream().readAllBytes();
                   } catch (IOException exception) {
-                    throw new RuntimeException(exception);
+                    throw new FileNotFoundException(exception.getMessage());
                   }
                 });
 
