@@ -6,6 +6,7 @@ import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.startsWithIgnoringCase;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -37,6 +38,8 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.mockito.MockedConstruction;
+import org.mockito.Mockito;
 import org.opensearch.core.common.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -278,5 +281,19 @@ class CaseLawControllerApiTest extends ContainersIntegrationBase {
         .andReturn()
         .getResponse()
         .getContentAsByteArray();
+  }
+
+  @Test
+  @DisplayName("Returns 500 if placeholder.png is missing")
+  void shouldReturn500IfPlaceholderMissing() throws Exception {
+    try (MockedConstruction<ClassPathResource> mocked =
+        Mockito.mockConstruction(
+            ClassPathResource.class,
+            (mock, context) ->
+                when(mock.getInputStream()).thenThrow(new IOException("not found")))) {
+      mockMvc
+          .perform(get(getResourcePath(this.documentNumber + "/NonExistent", "png")))
+          .andExpect(status().isInternalServerError());
+    }
   }
 }
