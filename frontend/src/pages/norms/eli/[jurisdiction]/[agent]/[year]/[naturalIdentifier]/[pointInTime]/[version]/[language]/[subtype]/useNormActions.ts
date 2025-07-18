@@ -4,12 +4,11 @@ import PDFIcon from "~/components/icons/PDFIcon.vue";
 import UpdatingLinkIcon from "~/components/icons/UpdatingLinkIcon.vue";
 import XMLIcon from "~/components/icons/XMLIcon.vue";
 import type { LegislationWork } from "~/types";
-import { isPrototypeProfile } from "~/utils/config";
 import { getManifestationUrl } from "~/utils/normUtils";
 import MaterialSymbolsLink from "~icons/material-symbols/link";
+import MaterialSymbolsPrint from "~icons/material-symbols/print";
 
 export function useNormActions(metadata: Ref<LegislationWork | undefined>) {
-  const enablePdfButton = !isPrototypeProfile();
   const onPrint = () => {
     if (window) window.print();
   };
@@ -64,11 +63,17 @@ export function useNormActions(metadata: Ref<LegislationWork | undefined>) {
         url: window?.location.href,
       },
       {
-        key: "pdf",
-        label: "Drucken oder als PDF speichern",
-        iconComponent: PDFIcon,
+        key: "print",
+        label: "Drucken",
+        iconComponent: MaterialSymbolsPrint,
         command: onPrint,
-        disabled: !enablePdfButton,
+      },
+      {
+        key: "pdf",
+        label: "Als PDF speichern",
+        iconComponent: PDFIcon,
+        command: {},
+        disabled: true,
       },
     ];
 

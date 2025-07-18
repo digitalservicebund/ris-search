@@ -202,45 +202,144 @@ test("can view images", async ({ page }) => {
   });
 });
 
-test.use({
-  permissions: ["clipboard-write", "clipboard-read"],
-});
-
-test("can copy and use link to work (changing content)", async ({ page }) => {
-  await page.goto(
-    "/norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu/regelungstext-1",
-    { waitUntil: "networkidle" },
-  );
-  const button = page.getByRole("link", {
-    name: "Link zur jeweils gültigen Fassung",
+test.describe("actions menu", () => {
+  test.use({
+    permissions: ["clipboard-write", "clipboard-read"],
   });
-  await button.hover();
 
-  await expect(
-    page.getByRole("tooltip", { name: "Link zur jeweils gültigen Fassung" }),
-  ).toBeVisible();
+  test("can use link action button to copy link to currently valid expression", async ({
+    page,
+  }) => {
+    await page.goto(
+      "/norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu/regelungstext-1",
+      { waitUntil: "networkidle" },
+    );
+    const button = page.getByRole("link", {
+      name: "Link zur jeweils gültigen Fassung",
+    });
+    await button.hover();
 
-  let clipboardContents: string;
+    await expect(
+      page.getByRole("tooltip", { name: "Link zur jeweils gültigen Fassung" }),
+    ).toBeVisible();
 
-  await test.step("can copy the link", async () => {
+    let clipboardContents: string;
+
+    await test.step("can copy the link", async () => {
+      await button.click();
+
+      await expect(page.getByText("Kopiert!")).toBeVisible();
+      clipboardContents = await page.evaluate(() => {
+        return navigator.clipboard.readText();
+      });
+      expect(
+        clipboardContents.endsWith(
+          "/norms/eli/bund/bgbl-1/2024/383/regelungstext-1",
+          // note the omission of 2024-12-19/1/deu/
+        ),
+      ).toBe(true);
+    });
+
+    await test.step("can use the copied link to get back to the original URL", async () => {
+      await page.goto(clipboardContents);
+      await page.waitForURL(
+        "/norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu/regelungstext-1",
+      );
+    });
+  });
+
+  test("can use permalink action button to copy permalink to viewed expression", async ({
+    page,
+  }) => {
+    await page.goto(
+      "/norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu/regelungstext-1",
+      { waitUntil: "networkidle" },
+    );
+    const button = page.getByRole("link", {
+      name: "Permalink zu dieser Fassung",
+    });
+    await button.hover();
+
+    await expect(
+      page.getByRole("tooltip", { name: "Permalink zu dieser Fassung" }),
+    ).toBeVisible();
+
+    let clipboardContents: string;
+
+    await test.step("can copy the link", async () => {
+      await button.click();
+
+      await expect(page.getByText("Kopiert!")).toBeVisible();
+      clipboardContents = await page.evaluate(() => {
+        return navigator.clipboard.readText();
+      });
+      expect(
+        clipboardContents.endsWith(
+          "/norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu/regelungstext-1",
+        ),
+      ).toBe(true);
+    });
+  });
+
+  test("can use print action button to open print menu", async ({ page }) => {
+    await page.goto(
+      "/norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu/regelungstext-1",
+      { waitUntil: "networkidle" },
+    );
+    const button = page.getByRole("button", {
+      name: "Drucken",
+    });
+    await button.hover();
+
+    await expect(page.getByRole("tooltip", { name: "Drucken" })).toBeVisible();
+
+    await test.step("can open print menu", async () => {
+      await page.evaluate(
+        "(() => {window.waitForPrintDialog = new Promise(f => window.print = f);})()",
+      );
+      await button.click();
+
+      await page.waitForFunction("window.waitForPrintDialog");
+    });
+  });
+
+  test("can't use PDF action as it is disabled", async ({ page }) => {
+    await page.goto(
+      "/norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu/regelungstext-1",
+      { waitUntil: "networkidle" },
+    );
+    const button = page.getByRole("button", {
+      name: "Als PDF speichern",
+    });
+
+    await button.hover();
+
+    await expect(
+      page.getByRole("tooltip", { name: "Als PDF speichern" }),
+    ).toBeVisible();
+
+    await expect(button).toBeDisabled();
+  });
+
+  test("can use XML action to view norms xml file", async ({ page }) => {
+    await page.goto(
+      "/norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu/regelungstext-1",
+      { waitUntil: "networkidle" },
+    );
+    const button = page.getByRole("link", {
+      name: "XML anzeigen",
+    });
+
+    await button.hover();
+
+    await expect(
+      page.getByRole("tooltip", { name: "XML anzeigen" }),
+    ).toBeVisible();
+
     await button.click();
 
-    await expect(page.getByText("Kopiert!")).toBeVisible();
-    clipboardContents = await page.evaluate(() => {
-      return navigator.clipboard.readText();
-    });
-    expect(
-      clipboardContents.endsWith(
-        "/norms/eli/bund/bgbl-1/2024/383/regelungstext-1",
-        // note the omission of 2024-12-19/1/deu/
-      ),
-    ).toBe(true);
-  });
-
-  await test.step("can use the copied link to get back to the original URL", async () => {
-    await page.goto(clipboardContents);
     await page.waitForURL(
-      "/norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu/regelungstext-1",
+      "/api/v1/legislation/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu/2024-12-19/regelungstext-1.xml",
     );
   });
 });
