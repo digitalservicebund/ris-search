@@ -80,3 +80,74 @@ test("can search, filter for case law, and view a single case law documentation 
     });
   }
 });
+
+test.describe("actions menu", () => {
+  test.use({
+    permissions: ["clipboard-write", "clipboard-read"],
+  });
+
+  test("can't use link action button as its disabled", async ({ page }) => {
+    await page.goto("/case-law/JURE200030030", { waitUntil: "networkidle" });
+    const button = page.getByRole("button", {
+      name: "Link kopieren",
+    });
+    await button.hover();
+
+    await expect(
+      page.getByRole("tooltip", { name: "Link kopieren" }),
+    ).toBeVisible();
+
+    await expect(button).toBeDisabled();
+  });
+
+  test("can use print action button to open print menu", async ({ page }) => {
+    await page.goto("/case-law/JURE200030030", { waitUntil: "networkidle" });
+    const button = page.getByRole("button", {
+      name: "Drucken",
+    });
+    await button.hover();
+
+    await expect(page.getByRole("tooltip", { name: "Drucken" })).toBeVisible();
+
+    await test.step("can open print menu", async () => {
+      await page.evaluate(
+        "(() => {window.waitForPrintDialog = new Promise(f => window.print = f);})()",
+      );
+      await button.click();
+
+      await page.waitForFunction("window.waitForPrintDialog");
+    });
+  });
+
+  test("can't use PDF action as it is disabled", async ({ page }) => {
+    await page.goto("/case-law/JURE200030030", { waitUntil: "networkidle" });
+    const button = page.getByRole("button", {
+      name: "Als PDF speichern",
+    });
+
+    await button.hover();
+
+    await expect(
+      page.getByRole("tooltip", { name: "Als PDF speichern" }),
+    ).toBeVisible();
+
+    await expect(button).toBeDisabled();
+  });
+
+  test("can use XML action to view norms xml file", async ({ page }) => {
+    await page.goto("/case-law/JURE200030030", { waitUntil: "networkidle" });
+    const button = page.getByRole("link", {
+      name: "XML anzeigen",
+    });
+
+    await button.hover();
+
+    await expect(
+      page.getByRole("tooltip", { name: "XML anzeigen" }),
+    ).toBeVisible();
+
+    await button.click();
+
+    await page.waitForURL("api/v1/case-law/JURE200030030.xml");
+  });
+});
