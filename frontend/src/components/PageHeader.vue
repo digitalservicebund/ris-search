@@ -3,7 +3,7 @@ defineProps<{ title?: string }>();
 </script>
 
 <template>
-  <div class="py-20 sm:py-48">
+  <div class="py-20 sm:pt-24 sm:pb-48">
     <h1
       class="ris-heading1-regular inline-block hyphens-auto max-sm:leading-48"
     >
