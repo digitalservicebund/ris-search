@@ -6,6 +6,7 @@ import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.startsWithIgnoringCase;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -37,10 +38,13 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.mockito.MockedConstruction;
+import org.mockito.Mockito;
 import org.opensearch.core.common.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -88,6 +92,14 @@ class CaseLawControllerApiTest extends ContainersIntegrationBase {
     """);
 
     return caseLawLdmlTemplateUtils.getXmlFromTemplate(context);
+  }
+
+  private String getResourcePath(String fileName, String extension) {
+    return ApiConfig.Paths.CASELAW + "/" + fileName + "." + extension;
+  }
+
+  private String getResourcePath(String extension) {
+    return getResourcePath(this.documentNumber, extension);
   }
 
   @BeforeEach
@@ -155,9 +167,7 @@ class CaseLawControllerApiTest extends ContainersIntegrationBase {
   @DisplayName("Should return XML version of a decision")
   void textLegislationXMLEndpoint() throws Exception {
     mockMvc
-        .perform(
-            get(ApiConfig.Paths.CASELAW + "/" + this.documentNumber + ".xml")
-                .contentType(MediaType.APPLICATION_XML))
+        .perform(get(getResourcePath("xml")).contentType(MediaType.APPLICATION_XML))
         .andExpectAll(
             status().isOk(),
             content().string(startsWithIgnoringCase("<?xml version=\"1.0\" encoding=\"UTF-8\"?>")),
@@ -170,9 +180,7 @@ class CaseLawControllerApiTest extends ContainersIntegrationBase {
 
     String responseContent =
         mockMvc
-            .perform(
-                get(ApiConfig.Paths.CASELAW + "/" + this.documentNumber + ".html")
-                    .contentType(MediaType.TEXT_HTML))
+            .perform(get(getResourcePath("html")).contentType(MediaType.TEXT_HTML))
             .andExpect(status().isOk())
             .andReturn()
             .getResponse()
@@ -189,9 +197,7 @@ class CaseLawControllerApiTest extends ContainersIntegrationBase {
 
     MvcResult result =
         mockMvc
-            .perform(
-                get(ApiConfig.Paths.CASELAW + "/" + this.documentNumber + ".zip")
-                    .contentType(MediaType.valueOf("application/zip")))
+            .perform(get(getResourcePath("zip")).contentType(MediaType.valueOf("application/zip")))
             .andExpect(request().asyncStarted())
             .andDo(MvcResult::getAsyncResult)
             .andExpectAll(status().isOk(), content().contentType("application/zip"))
@@ -212,7 +218,7 @@ class CaseLawControllerApiTest extends ContainersIntegrationBase {
   void shouldReturn404() throws Exception {
 
     mockMvc
-        .perform(get(ApiConfig.Paths.CASELAW + "/test.html").contentType(MediaType.TEXT_HTML))
+        .perform(get(getResourcePath("test", "html")).contentType(MediaType.TEXT_HTML))
         .andExpect(status().isNotFound());
   }
 
@@ -222,8 +228,7 @@ class CaseLawControllerApiTest extends ContainersIntegrationBase {
   void shouldReturnHtmlWithAdaptedImgSrcAttributes(String header, String expectedPrefix)
       throws Exception {
     final MockHttpServletRequestBuilder requestBuilder =
-        get(ApiConfig.Paths.CASELAW + "/" + this.documentNumber + ".html")
-            .contentType(MediaType.TEXT_HTML);
+        get(getResourcePath("html")).contentType(MediaType.TEXT_HTML);
 
     if (!Strings.isEmpty(header)) {
       requestBuilder.header("get-resources-via", header);
@@ -247,9 +252,48 @@ class CaseLawControllerApiTest extends ContainersIntegrationBase {
   @Test
   @DisplayName("Serves images via the API with correct contentType")
   void shouldReturnReferencedImageWithContentType() throws Exception {
-    String url = ApiConfig.Paths.CASELAW + "/" + this.documentNumber + "/Attachment.png";
     mockMvc
-        .perform(get(url))
+        .perform(get(getResourcePath(this.documentNumber + "/Attachment", "png")))
         .andExpectAll(status().isOk(), content().contentType(MediaType.IMAGE_PNG));
+  }
+
+  @Test
+  @DisplayName("Returns 404 for disallowed image extensions")
+  void shouldReturn404ForDisallowedImageExtensions() throws Exception {
+    String[] disallowed = {"exe", "svg", "txt", "pdf"};
+    for (String ext : disallowed) {
+      mockMvc
+          .perform(get(getResourcePath(this.documentNumber + "/Attachment", ext)))
+          .andExpect(status().isNotFound());
+    }
+  }
+
+  @Test
+  @DisplayName("Returns placeholder.png if requested image does not exist")
+  void shouldReturnPlaceholderIfImageMissing() throws Exception {
+    byte[] expected = new ClassPathResource("placeholder.png").getInputStream().readAllBytes();
+
+    mockMvc
+        .perform(get(getResourcePath(this.documentNumber + "/NonExistent", "png")))
+        .andExpect(status().isOk())
+        .andExpect(content().contentType(MediaType.IMAGE_PNG))
+        .andExpect(content().bytes(expected))
+        .andReturn()
+        .getResponse()
+        .getContentAsByteArray();
+  }
+
+  @Test
+  @DisplayName("Returns 500 if placeholder.png is missing")
+  void shouldReturn500IfPlaceholderMissing() throws Exception {
+    try (MockedConstruction<ClassPathResource> mocked =
+        Mockito.mockConstruction(
+            ClassPathResource.class,
+            (mock, context) ->
+                when(mock.getInputStream()).thenThrow(new IOException("not found")))) {
+      mockMvc
+          .perform(get(getResourcePath(this.documentNumber + "/NonExistent", "png")))
+          .andExpect(status().isInternalServerError());
+    }
   }
 }
