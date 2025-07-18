@@ -5,7 +5,7 @@ import NormHeadingFootnotes from "./NormHeadingFootnotes.vue";
 describe("NormHeadingFootnotes.vue", () => {
   it("shows nothing if no footnote is passed", () => {
     const wrapper = mount(NormHeadingFootnotes);
-    expect(wrapper.html()).toBe("<!--v-if-->");
+    expect(wrapper.html()).toBe("<!--v-if-->\n<!--v-if-->");
   });
 
   it("shows short footnotes in full", () => {
