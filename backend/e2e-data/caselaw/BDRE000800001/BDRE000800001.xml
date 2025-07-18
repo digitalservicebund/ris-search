@@ -88,6 +88,9 @@
             <akn:p style="text-align:center">
                <akn:img src="bild1.jpg" alt="Abbildung"/>
             </akn:p>
+            <akn:p style="text-align:center">
+               <akn:img src="bild2.bitmap" alt="Abbildung"/>
+            </akn:p>
          </akn:background>
       </akn:judgmentBody>
    </akn:judgment>

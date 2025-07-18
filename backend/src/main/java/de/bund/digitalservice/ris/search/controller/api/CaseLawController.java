@@ -16,11 +16,13 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.io.IOException;
 import java.net.URLConnection;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -144,18 +146,31 @@ public class CaseLawController {
   public ResponseEntity<byte[]> getResource(
       @PathVariable @Schema(example = "BDRE000800001") String documentNumber,
       @Schema(example = "image") @PathVariable String name,
-      @Schema(example = "jpg") @PathVariable String extension)
-      throws ObjectStoreServiceException {
-    Optional<byte[]> resource =
-        caseLawService.getFileByPath(documentNumber + "/" + name + "." + extension);
+      @Schema(
+              example = "jpg",
+              allowableValues = {"png", "jpg", "jpeg", "gif", "wmf", "emf", "bitmap"})
+          @PathVariable
+          String extension)
+      throws ObjectStoreServiceException, RuntimeException {
+    if (!List.of("png", "jpg", "jpeg", "gif", "wmf", "emf", "bitmap")
+        .contains(extension.toLowerCase())) {
+      return ResponseEntity.notFound().build();
+    }
+    byte[] resource =
+        caseLawService
+            .getFileByPath(documentNumber + "/" + name + "." + extension)
+            .orElseGet(
+                () -> {
+                  try {
+                    return new ClassPathResource("placeholder.png").getInputStream().readAllBytes();
+                  } catch (IOException exception) {
+                    throw new RuntimeException(exception);
+                  }
+                });
 
     final String mimeType = URLConnection.guessContentTypeFromName(name + "." + extension);
 
-    return resource
-        .map(
-            body ->
-                ResponseEntity.status(HttpStatus.OK).header("Content-Type", mimeType).body(body))
-        .orElseGet(() -> ResponseEntity.notFound().build());
+    return ResponseEntity.status(HttpStatus.OK).header("Content-Type", mimeType).body(resource);
   }
 
   /**
