@@ -2345,7 +2345,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nuxt/schema@npm:3.17.5, @nuxt/schema@npm:^3.17.4, @nuxt/schema@npm:^3.17.5":
+"@nuxt/schema@npm:3.17.5, @nuxt/schema@npm:^3.17.4":
   version: 3.17.5
   resolution: "@nuxt/schema@npm:3.17.5"
   dependencies:
@@ -2368,6 +2368,19 @@ __metadata:
     pathe: "npm:^2.0.3"
     std-env: "npm:^3.9.0"
   checksum: 10c0/85c3e58dbb85a658df8faa3b3665def7f71dd4032405bab7c82c99dfbb73a2e24ffcb9753c612af9f8db99888ba7c1376e5eb1114c0fa85da2d10e892ad9aecd
+  languageName: node
+  linkType: hard
+
+"@nuxt/schema@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "@nuxt/schema@npm:4.0.0"
+  dependencies:
+    "@vue/shared": "npm:^3.5.17"
+    consola: "npm:^3.4.2"
+    defu: "npm:^6.1.4"
+    pathe: "npm:^2.0.3"
+    std-env: "npm:^3.9.0"
+  checksum: 10c0/8bb2791591c14ea6f97df1c68c1067351870f6f54002351d1132d1b11280893efabb93906362c82457c33f3382142467a53aedf660aeac64fcde1a3a265fa71d
   languageName: node
   linkType: hard
 
@@ -5575,6 +5588,13 @@ __metadata:
   version: 3.5.14
   resolution: "@vue/shared@npm:3.5.14"
   checksum: 10c0/cf1fc42fd318e876dcdafb6ca2584498e55012f48487b4f8e3a7d209c35415a779600bd1288c171095518fbf6fc90efea75a06937fdc4d3f316a12bc7c7dd94b
+  languageName: node
+  linkType: hard
+
+"@vue/shared@npm:^3.5.17":
+  version: 3.5.17
+  resolution: "@vue/shared@npm:3.5.17"
+  checksum: 10c0/915d8f80d863826531cf6ddefeb52455cbffcbca4d14717472b7765b3142d2ad9900dfce351e90a22e1fe9e2f8fca588421de6e751e1c816ab9e1fdefa3e8a0d
   languageName: node
   linkType: hard
 
@@ -14663,7 +14683,7 @@ __metadata:
     "@nuxt/eslint": "npm:^1.4.1"
     "@nuxt/image": "npm:^1.10.0"
     "@nuxt/kit": "npm:^3.17.6"
-    "@nuxt/schema": "npm:^3.17.5"
+    "@nuxt/schema": "npm:^4.0.0"
     "@nuxt/scripts": "npm:0.11.9"
     "@nuxt/test-utils": "npm:^3.19.1"
     "@nuxtjs/tailwindcss": "npm:^7.0.0-beta.0"
