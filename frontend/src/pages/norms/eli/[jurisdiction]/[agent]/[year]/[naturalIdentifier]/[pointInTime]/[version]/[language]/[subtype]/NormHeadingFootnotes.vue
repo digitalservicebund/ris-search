@@ -9,12 +9,12 @@ const showFootnote = ref(!isLongFootnote.value);
 </script>
 
 <template>
-  <div v-if="isLongFootnote" class="mt-8 print:hidden">
-    <ExpandButton v-model="showFootnote">{{
-      showFootnote ? "Fußnote ausblenden" : "Fußnote anzeigen"
-    }}</ExpandButton>
-  </div>
   <div v-if="props.html" class="dokumentenkopf-fussnoten space-y-12">
+    <div v-if="isLongFootnote" class="mt-8 print:hidden">
+      <ExpandButton v-model="showFootnote">{{
+        showFootnote ? "Fußnote ausblenden" : "Fußnote anzeigen"
+      }}</ExpandButton>
+    </div>
     <div
       :data-show="showFootnote"
       class="hidden data-[show=true]:block print:block"
