@@ -157,6 +157,7 @@ public class CaseLawController {
         .contains(extension.toLowerCase())) {
       return ResponseEntity.notFound().build();
     }
+
     byte[] resource =
         caseLawService
             .getFileByPath(documentNumber + "/" + name + "." + extension)
