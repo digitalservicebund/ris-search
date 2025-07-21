@@ -3,14 +3,12 @@ package de.bund.digitalservice.ris.search.sitemap.eclicrawler.service;
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.repository.objectstorage.PortalBucket;
 import de.bund.digitalservice.ris.search.sitemap.eclicrawler.mapper.RisToEcliMapper;
-import de.bund.digitalservice.ris.search.sitemap.eclicrawler.schema.Sitemap;
-import de.bund.digitalservice.ris.search.sitemap.eclicrawler.schema.SitemapIndexEntry;
-import de.bund.digitalservice.ris.search.sitemap.eclicrawler.schema.Sitemapindex;
+import de.bund.digitalservice.ris.search.sitemap.eclicrawler.schema.sitemap.Sitemap;
+import de.bund.digitalservice.ris.search.sitemap.eclicrawler.schema.sitemapindex.SitemapIndexEntry;
+import de.bund.digitalservice.ris.search.sitemap.eclicrawler.schema.sitemapindex.Sitemapindex;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
-import jakarta.xml.bind.Marshaller;
 import java.io.FileNotFoundException;
-import java.io.StringWriter;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -57,7 +55,7 @@ public class SitemapService {
 
   public Optional<String> writeSitemapFiles(List<Sitemap> urlSets, LocalDate day)
       throws JAXBException {
-    List<String> urlSetLocations = writeUrlSets(urlSets, day);
+    List<String> urlSetLocations = writeSitemaps(urlSets, day);
 
     if (!urlSetLocations.isEmpty()) {
       Sitemapindex index = createSitemapIndex(urlSetLocations);
@@ -94,17 +92,10 @@ public class SitemapService {
   }
 
   private String writeSitemapIndex(Sitemapindex index, LocalDate date) throws JAXBException {
-    StringWriter sw = new StringWriter();
-    Marshaller m = jaxbCtx.createMarshaller();
-    m.setProperty(
-        Marshaller.JAXB_SCHEMA_LOCATION,
-        "http://www.sitemaps.org/schemas/sitemap/0.9 "
-            + "http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd ");
-    m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-    m.marshal(index, sw);
+    String content = EcliMarshaller.marshallSitemapIndex(index);
 
     String filename = String.format(PATH_PREFIX + "%s/sitemap_index_1.xml", getDatePartition(date));
-    portalBucket.save(filename, sw.toString());
+    portalBucket.save(filename, content);
 
     return filename;
   }
@@ -117,24 +108,15 @@ public class SitemapService {
     return portalBucket.getAllKeysByPrefix(PATH_PREFIX + getDatePartition(date));
   }
 
-  private List<String> writeUrlSets(List<Sitemap> sets, LocalDate date) throws JAXBException {
-    Marshaller m = jaxbCtx.createMarshaller();
-    m.setProperty(
-        Marshaller.JAXB_SCHEMA_LOCATION,
-        "http://www.sitemaps.org/schemas/sitemap/0.9 "
-            + "http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd "
-            + "https://e-justice.europa.eu/eclisearch "
-            + "https://e-justice.europa.eu/eclisearch/ecli.xsd");
-    m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+  private List<String> writeSitemaps(List<Sitemap> sets, LocalDate date) throws JAXBException {
 
     List<String> locations = new ArrayList<>();
     for (int i = 0; i < sets.size(); i++) {
-      StringWriter sw = new StringWriter();
       int sitemapNr = i + 1;
       String filename =
           String.format(PATH_PREFIX + "%s/sitemap_%s.xml", getDatePartition(date), sitemapNr);
-      m.marshal(sets.get(i), sw);
-      portalBucket.save(filename, sw.toString());
+      String content = EcliMarshaller.marshallSitemap(sets.get(i));
+      portalBucket.save(filename, content);
       locations.add(filename);
     }
 

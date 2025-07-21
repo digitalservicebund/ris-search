@@ -14,7 +14,7 @@ import de.bund.digitalservice.ris.search.service.CaseLawIndexSyncJob;
 import de.bund.digitalservice.ris.search.service.CaseLawService;
 import de.bund.digitalservice.ris.search.service.IndexStatusService;
 import de.bund.digitalservice.ris.search.service.IndexingState;
-import de.bund.digitalservice.ris.search.sitemap.eclicrawler.schema.Sitemap;
+import de.bund.digitalservice.ris.search.sitemap.eclicrawler.schema.sitemap.Sitemap;
 import de.bund.digitalservice.ris.search.sitemap.eclicrawler.service.CreatedDocument;
 import de.bund.digitalservice.ris.search.sitemap.eclicrawler.service.DailySitemapJob;
 import de.bund.digitalservice.ris.search.sitemap.eclicrawler.service.DeletedDocument;

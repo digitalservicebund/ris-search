@@ -1,4 +1,4 @@
-package de.bund.digitalservice.ris.search.sitemap.eclicrawler.schema;
+package de.bund.digitalservice.ris.search.sitemap.eclicrawler.schema.sitemap;
 
 import de.bund.digitalservice.ris.search.sitemap.eclicrawler.schema.ecli.Document;
 import jakarta.xml.bind.annotation.XmlAccessType;

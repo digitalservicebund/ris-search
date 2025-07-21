@@ -9,7 +9,7 @@ import de.bund.digitalservice.ris.search.service.CaseLawService;
 import de.bund.digitalservice.ris.search.service.IndexStatusService;
 import de.bund.digitalservice.ris.search.service.IndexSyncJob;
 import de.bund.digitalservice.ris.search.service.IndexingState;
-import de.bund.digitalservice.ris.search.sitemap.eclicrawler.schema.Sitemap;
+import de.bund.digitalservice.ris.search.sitemap.eclicrawler.schema.sitemap.Sitemap;
 import jakarta.xml.bind.JAXBException;
 import java.io.FileNotFoundException;
 import java.time.Instant;

@@ -1,10 +1,10 @@
 package de.bund.digitalservice.ris.search.unit.ecli.schema;
 
-import de.bund.digitalservice.ris.search.sitemap.eclicrawler.schema.Sitemap;
-import de.bund.digitalservice.ris.search.sitemap.eclicrawler.schema.Url;
 import de.bund.digitalservice.ris.search.sitemap.eclicrawler.schema.ecli.Document;
 import de.bund.digitalservice.ris.search.sitemap.eclicrawler.schema.ecli.Identifier;
 import de.bund.digitalservice.ris.search.sitemap.eclicrawler.schema.ecli.Metadata;
+import de.bund.digitalservice.ris.search.sitemap.eclicrawler.schema.sitemap.Sitemap;
+import de.bund.digitalservice.ris.search.sitemap.eclicrawler.schema.sitemap.Url;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Marshaller;

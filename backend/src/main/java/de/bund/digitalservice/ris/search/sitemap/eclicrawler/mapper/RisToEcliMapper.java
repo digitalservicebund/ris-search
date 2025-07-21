@@ -1,7 +1,6 @@
 package de.bund.digitalservice.ris.search.sitemap.eclicrawler.mapper;
 
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
-import de.bund.digitalservice.ris.search.sitemap.eclicrawler.schema.Url;
 import de.bund.digitalservice.ris.search.sitemap.eclicrawler.schema.ecli.AccessRights;
 import de.bund.digitalservice.ris.search.sitemap.eclicrawler.schema.ecli.Coverage;
 import de.bund.digitalservice.ris.search.sitemap.eclicrawler.schema.ecli.Creator;
@@ -13,12 +12,13 @@ import de.bund.digitalservice.ris.search.sitemap.eclicrawler.schema.ecli.Metadat
 import de.bund.digitalservice.ris.search.sitemap.eclicrawler.schema.ecli.Publisher;
 import de.bund.digitalservice.ris.search.sitemap.eclicrawler.schema.ecli.SupportedLanguages;
 import de.bund.digitalservice.ris.search.sitemap.eclicrawler.schema.ecli.Type;
+import de.bund.digitalservice.ris.search.sitemap.eclicrawler.schema.sitemap.Url;
 import java.time.format.DateTimeFormatter;
 
 public class RisToEcliMapper {
 
   private static final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-  private static final String URL_PREFIX = "placeholder_url/to/";
+  private static final String URL_PREFIX = "http://placeholder_url/to/";
 
   private RisToEcliMapper() {}
 
@@ -60,16 +60,16 @@ public class RisToEcliMapper {
   private static IsVersionOf getIsVersionOf(CaseLawDocumentationUnit doc) {
     return new IsVersionOf()
         .setValue(doc.ecli())
-        .setCountry(SupportedLanguages.DE)
+        .setCountry(IsVersionOf.COUNTRY_DE)
         .setCourt(doc.courtType());
   }
 
   private static Creator getCreator(CaseLawDocumentationUnit doc) {
-    return new Creator().setLang(SupportedLanguages.DE).setValue("placeholder_court_langform");
+    return new Creator().setLang(SupportedLanguages.DE).setValue("placeholder_court_long");
   }
 
   private static Coverage getCoverage() {
-    return new Coverage().setLang(SupportedLanguages.DE).setValue("placeholder_deutschland");
+    return new Coverage().setLang(SupportedLanguages.DE).setValue("placeholder_germany");
   }
 
   private static Language getLanguage() {

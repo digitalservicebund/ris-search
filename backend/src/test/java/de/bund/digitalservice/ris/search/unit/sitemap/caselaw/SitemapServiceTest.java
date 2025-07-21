@@ -6,7 +6,7 @@ import static org.mockito.Mockito.when;
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import de.bund.digitalservice.ris.search.repository.objectstorage.PortalBucket;
-import de.bund.digitalservice.ris.search.sitemap.eclicrawler.schema.Sitemap;
+import de.bund.digitalservice.ris.search.sitemap.eclicrawler.schema.sitemap.Sitemap;
 import de.bund.digitalservice.ris.search.sitemap.eclicrawler.service.ChangedDocument;
 import de.bund.digitalservice.ris.search.sitemap.eclicrawler.service.CreatedDocument;
 import de.bund.digitalservice.ris.search.sitemap.eclicrawler.service.DeletedDocument;
