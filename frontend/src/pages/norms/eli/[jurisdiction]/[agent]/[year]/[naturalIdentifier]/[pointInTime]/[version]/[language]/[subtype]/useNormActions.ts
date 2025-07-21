@@ -1,17 +1,16 @@
 import { useToast } from "primevue/usetoast";
+import {
+  pdfActionMenuItem,
+  printActionMenuItem,
+} from "~/components/ActionMenuItems";
 import type { ActionMenuItem } from "~/components/ActionsMenu.vue";
-import PDFIcon from "~/components/icons/PDFIcon.vue";
 import UpdatingLinkIcon from "~/components/icons/UpdatingLinkIcon.vue";
 import XMLIcon from "~/components/icons/XMLIcon.vue";
 import type { LegislationWork } from "~/types";
 import { getManifestationUrl } from "~/utils/normUtils";
 import MaterialSymbolsLink from "~icons/material-symbols/link";
-import MaterialSymbolsPrint from "~icons/material-symbols/print";
 
 export function useNormActions(metadata: Ref<LegislationWork | undefined>) {
-  const onPrint = () => {
-    if (window) window.print();
-  };
   const backendURL = useBackendURL();
   const xmlUrl = computed(() =>
     getManifestationUrl(metadata.value, backendURL, "application/xml"),
@@ -62,19 +61,8 @@ export function useNormActions(metadata: Ref<LegislationWork | undefined>) {
         command: copyCurrentUrl,
         url: window?.location.href,
       },
-      {
-        key: "print",
-        label: "Drucken",
-        iconComponent: MaterialSymbolsPrint,
-        command: onPrint,
-      },
-      {
-        key: "pdf",
-        label: "Als PDF speichern",
-        iconComponent: PDFIcon,
-        command: {},
-        disabled: true,
-      },
+      printActionMenuItem,
+      pdfActionMenuItem,
     ];
 
     if (xmlUrl.value) {

@@ -1,15 +1,14 @@
+import {
+  pdfActionMenuItem,
+  printActionMenuItem,
+} from "~/components/ActionMenuItems";
 import type { ActionMenuItem } from "~/components/ActionsMenu.vue";
-import PDFIcon from "~/components/icons/PDFIcon.vue";
 import XMLIcon from "~/components/icons/XMLIcon.vue";
 import type { CaseLaw } from "~/types";
 import { getEncodingURL } from "~/utils/caseLawUtils";
 import MaterialSymbolsLink from "~icons/material-symbols/link";
-import MaterialSymbolsPrint from "~icons/material-symbols/print";
 
 export function useCaseLawActions(caseLaw: Ref<CaseLaw | null>) {
-  const onPrint = () => {
-    if (window) window.print();
-  };
   const backendURL = useBackendURL();
   const xmlUrl = computed(() =>
     getEncodingURL(caseLaw.value, backendURL, "application/xml"),
@@ -23,19 +22,8 @@ export function useCaseLawActions(caseLaw: Ref<CaseLaw | null>) {
         iconComponent: MaterialSymbolsLink,
         disabled: true,
       },
-      {
-        key: "print",
-        label: "Drucken",
-        iconComponent: MaterialSymbolsPrint,
-        command: onPrint,
-      },
-      {
-        key: "pdf",
-        label: "Als PDF speichern",
-        iconComponent: PDFIcon,
-        command: {},
-        disabled: true,
-      },
+      printActionMenuItem,
+      pdfActionMenuItem,
     ];
 
     if (xmlUrl.value) {
