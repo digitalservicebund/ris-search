@@ -4,7 +4,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.ArgumentMatchers.eq;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
@@ -23,7 +22,6 @@ import de.bund.digitalservice.ris.search.sitemap.eclicrawler.service.SitemapServ
 import jakarta.xml.bind.JAXBException;
 import java.io.FileNotFoundException;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
@@ -47,8 +45,6 @@ class DailySitemapJobTest {
   @Mock IndexStatusService indexStatusService;
   @Mock CaseLawService caseLawService;
 
-  DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-
   @BeforeEach
   void setup() {
     sitemapJob =
@@ -66,7 +62,6 @@ class DailySitemapJobTest {
       throws JAXBException,
           FileNotFoundException,
           ObjectStoreServiceException,
-          JsonProcessingException,
           FatalDailySitemapJobException {
     String lastProcessedChangelog = "changelogs/2025-02-01T12:40:58.683244Z";
     String lastSuccesfulIndexJob = "changelogs/2025-02-03T12:40:58.683244Z";
@@ -175,7 +170,7 @@ class DailySitemapJobTest {
     Mockito.when(
             sitemapService.createSitemaps(
                 argThat(
-                    (arg) -> {
+                    arg -> {
                       CreatedDocument doc = (CreatedDocument) arg.getFirst();
                       return Objects.equals(doc.docUnit().id(), "id");
                     })))
@@ -186,7 +181,7 @@ class DailySitemapJobTest {
 
     sitemapJob.run(date);
 
-    Mockito.verify(sitemapService).writeRobotsTxt(eq(expectedSitemapIndexPath));
+    Mockito.verify(sitemapService).writeRobotsTxt(expectedSitemapIndexPath);
     Mockito.verify(indexStatusService, Mockito.atMostOnce())
         .saveStatus(
             DailySitemapJob.STATUS_FILE, new IndexingState().withLastProcessedChangelogFile(""));
@@ -225,7 +220,7 @@ class DailySitemapJobTest {
     Mockito.when(
             sitemapService.createSitemaps(
                 argThat(
-                    (arg) ->
+                    arg ->
                         arg.getFirst().getClass().equals(CreatedDocument.class)
                             && arg.getLast().getClass().equals(DeletedDocument.class))))
         .thenReturn(urlSets);
@@ -235,7 +230,7 @@ class DailySitemapJobTest {
 
     sitemapJob.run(date);
 
-    Mockito.verify(sitemapService).updateRobotsTxt(eq(expectedSitemapIndexPath));
+    Mockito.verify(sitemapService).updateRobotsTxt(expectedSitemapIndexPath);
     Mockito.verify(indexStatusService, Mockito.atMostOnce())
         .saveStatus(
             DailySitemapJob.STATUS_FILE,

@@ -1,6 +1,7 @@
 package de.bund.digitalservice.ris.search.sitemap.eclicrawler.service;
 
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
+import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import de.bund.digitalservice.ris.search.repository.objectstorage.PortalBucket;
 import de.bund.digitalservice.ris.search.sitemap.eclicrawler.mapper.RisToEcliMapper;
 import de.bund.digitalservice.ris.search.sitemap.eclicrawler.schema.sitemap.Sitemap;
@@ -73,10 +74,10 @@ public class SitemapService {
             .map(
                 changed ->
                     switch (changed) {
-                      case CreatedDocument created ->
-                          RisToEcliMapper.caselawDocumentationUnitToEcliUrl(created.docUnit());
-                      case DeletedDocument deleted ->
-                          RisToEcliMapper.deletedDocumentToEcliUrl(deleted.identifier());
+                      case CreatedDocument(CaseLawDocumentationUnit docUnit) ->
+                          RisToEcliMapper.caselawDocumentationUnitToEcliUrl(docUnit);
+                      case DeletedDocument(String identifier) ->
+                          RisToEcliMapper.deletedDocumentToEcliUrl(identifier);
                     })
             .toList());
 
@@ -148,13 +149,13 @@ public class SitemapService {
     return document ->
         switch (document) {
           case DeletedDocument ignored -> true;
-          case CreatedDocument created ->
+          case CreatedDocument(CaseLawDocumentationUnit docUnit) ->
               Stream.of(
-                      created.docUnit().ecli(),
-                      created.docUnit().id(),
-                      created.docUnit().decisionDate(),
-                      created.docUnit().courtType(),
-                      created.docUnit().documentType())
+                      docUnit.ecli(),
+                      docUnit.id(),
+                      docUnit.decisionDate(),
+                      docUnit.courtType(),
+                      docUnit.documentType())
                   .noneMatch(Objects::isNull);
         };
   }

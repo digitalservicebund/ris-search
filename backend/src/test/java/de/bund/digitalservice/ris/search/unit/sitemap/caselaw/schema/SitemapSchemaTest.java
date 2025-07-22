@@ -2,17 +2,8 @@ package de.bund.digitalservice.ris.search.unit.sitemap.caselaw.schema;
 
 import static org.testcontainers.shaded.org.apache.commons.io.FileUtils.getFile;
 
-import de.bund.digitalservice.ris.search.sitemap.eclicrawler.schema.ecli.AccessRights;
-import de.bund.digitalservice.ris.search.sitemap.eclicrawler.schema.ecli.Coverage;
-import de.bund.digitalservice.ris.search.sitemap.eclicrawler.schema.ecli.Creator;
-import de.bund.digitalservice.ris.search.sitemap.eclicrawler.schema.ecli.Document;
-import de.bund.digitalservice.ris.search.sitemap.eclicrawler.schema.ecli.Identifier;
-import de.bund.digitalservice.ris.search.sitemap.eclicrawler.schema.ecli.IsVersionOf;
-import de.bund.digitalservice.ris.search.sitemap.eclicrawler.schema.ecli.Language;
-import de.bund.digitalservice.ris.search.sitemap.eclicrawler.schema.ecli.Metadata;
-import de.bund.digitalservice.ris.search.sitemap.eclicrawler.schema.ecli.Publisher;
-import de.bund.digitalservice.ris.search.sitemap.eclicrawler.schema.ecli.SupportedLanguages;
-import de.bund.digitalservice.ris.search.sitemap.eclicrawler.schema.ecli.Type;
+import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
+import de.bund.digitalservice.ris.search.sitemap.eclicrawler.mapper.RisToEcliMapper;
 import de.bund.digitalservice.ris.search.sitemap.eclicrawler.schema.sitemap.Sitemap;
 import de.bund.digitalservice.ris.search.sitemap.eclicrawler.schema.sitemap.Url;
 import de.bund.digitalservice.ris.search.sitemap.eclicrawler.schema.sitemapindex.SitemapIndexEntry;
@@ -21,6 +12,7 @@ import de.bund.digitalservice.ris.search.sitemap.eclicrawler.service.EcliMarshal
 import jakarta.xml.bind.JAXBException;
 import java.io.IOException;
 import java.io.StringReader;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 import javax.xml.XMLConstants;
@@ -51,60 +43,41 @@ class SitemapSchemaTest {
         new StreamSource(new StringReader(EcliMarshaller.marshallSitemapIndex(index))));
   }
 
-  @Test
-  void itGeneratesAValidSitemap() throws SAXException, JAXBException, IOException {
-    SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-    String path =
-        Objects.requireNonNull(
-                this.getClass().getClassLoader().getResource("schema/sitemap/sitemap.xsd"))
-            .getPath();
-    Source schemaFile = new StreamSource(getFile(path));
-    Schema schema = factory.newSchema(schemaFile);
-    Validator validator = schema.newValidator();
-
-    Sitemap sitemap = new Sitemap();
-    List<Url> urls = List.of(new Url().setLoc("path/to/document"));
-    sitemap.setUrl(urls);
-
-    validator.validate(new StreamSource(new StringReader(EcliMarshaller.marshallSitemap(sitemap))));
+  private CaseLawDocumentationUnit getTestDocUnit() {
+    return CaseLawDocumentationUnit.builder()
+        .id("identifier")
+        .ecli("ECLI:DE:XX:2025:1111111")
+        .courtType("BGH")
+        .documentType("decision")
+        .decisionDate(LocalDate.of(2025, 1, 1))
+        .build();
   }
 
   @Test
-  void itGeneratesAValidDocument() throws SAXException, JAXBException, IOException {
+  void itGeneratesAValidSitemap() throws SAXException, JAXBException, IOException {
     SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-    String path =
+    String sitemaPpath =
+        Objects.requireNonNull(
+                this.getClass().getClassLoader().getResource("schema/sitemap/sitemap.xsd"))
+            .getPath();
+    String ecliPath =
         Objects.requireNonNull(
                 this.getClass().getClassLoader().getResource("schema/sitemap/ecli.xsd"))
             .getPath();
-    Source schemaFile = new StreamSource(getFile(path));
-    Schema schema = factory.newSchema(schemaFile);
+
+    Schema schema =
+        factory.newSchema(
+            new Source[] {
+              new StreamSource(getFile(ecliPath)), new StreamSource(getFile(sitemaPpath))
+            });
     Validator validator = schema.newValidator();
 
-    Document doc = new Document();
-    Metadata metadata = new Metadata();
-    metadata.setAccessRights(AccessRights.PUBLIC);
-    metadata.setIdentifier(
-        new Identifier()
-            .setValue("http://identifier")
-            .setLang(SupportedLanguages.DE)
-            .setFormat(Identifier.FORMAT_HTML));
-    metadata.setIsVersionOf(
-        new IsVersionOf()
-            .setValue("ECLI:DE:XX:2025:1111111")
-            .setCountry(IsVersionOf.COUNTRY_DE)
-            .setCourt("BGH"));
-    metadata.setCreator(new Creator().setLang(SupportedLanguages.DE).setValue("creator"));
-    metadata.setCoverage(new Coverage().setLang(SupportedLanguages.DE).setValue("coverage"));
-    metadata.setDate("2025-01-01");
-    metadata.setLanguage(
-        new Language()
-            .setLanguageType(SupportedLanguages.TYPE_AUTHORITATIVE)
-            .setValue(SupportedLanguages.DE));
-    metadata.setPublisher(new Publisher().setLang(SupportedLanguages.DE).setValue("publisher"));
-    metadata.setType(new Type().setLang(SupportedLanguages.DE).setValue("type"));
-    doc.setMetadata(metadata);
+    Sitemap sitemap = new Sitemap();
+    Url url = RisToEcliMapper.caselawDocumentationUnitToEcliUrl(getTestDocUnit());
+    List<Url> urls = List.of(url);
+    sitemap.setUrl(urls);
 
-    StringReader xmlStringReader = new StringReader(EcliMarshaller.marshallDocument(doc));
-    validator.validate(new StreamSource(xmlStringReader));
+    String content = EcliMarshaller.marshallSitemap(sitemap);
+    validator.validate(new StreamSource(new StringReader(content)));
   }
 }

@@ -101,10 +101,7 @@ public class DailySitemapJob {
 
     try {
       Optional<String> sitemapOption = createSitemaps(documents, yesterday);
-      sitemapOption.ifPresent(
-          sitemap -> {
-            sitemapService.writeRobotsTxt(sitemap);
-          });
+      sitemapOption.ifPresent(sitemap -> sitemapService.writeRobotsTxt(sitemap));
       indexStatusService.saveStatus(
           STATUS_FILE,
           new IndexingState()
@@ -121,7 +118,7 @@ public class DailySitemapJob {
     var changelogsUpToCutoff =
         filePaths.stream()
             .filter(
-                (e) -> {
+                e -> {
                   int datetimeStringOffset = IndexSyncJob.CHANGELOGS_PREFIX.length();
                   String datetimeString =
                       e.substring(datetimeStringOffset, datetimeStringOffset + 10);

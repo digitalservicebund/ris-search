@@ -11,8 +11,8 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 public class Url {
+  private String loc;
+
   @XmlElement(namespace = "https://e-justice.europa.eu/ecli")
   private Document document;
-
-  private String loc;
 }
