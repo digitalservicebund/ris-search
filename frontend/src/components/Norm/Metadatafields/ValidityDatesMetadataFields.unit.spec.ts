@@ -1,18 +1,7 @@
-import { mount, type VueWrapper } from "@vue/test-utils";
+import { mount } from "@vue/test-utils";
 import { describe, it, expect } from "vitest";
-import MetadataField from "~/components/MetadataField.vue";
 import ValidityDatesMetadataFields from "~/components/Norm/Metadatafields/ValidityDatesMetadataFields.vue";
-
-function findMetadataField(wrapper: VueWrapper, label: string) {
-  const metadataFields = wrapper.findAllComponents(MetadataField);
-
-  const result = metadataFields.filter(
-    (fieldWrapper) => fieldWrapper.props().label === label,
-  );
-
-  expect(result).toHaveLength(1);
-  return result[0];
-}
+import { findMetadataField } from "~/utils/testing/testUtils";
 
 describe("ValidityDatesMetadataFields.vue", () => {
   it("displays formatted valid from date if present", () => {

@@ -1,9 +1,9 @@
 import { mount } from "@vue/test-utils";
 import { describe, it, expect, vi, afterEach } from "vitest";
-import MetadataField from "~/components/MetadataField.vue";
 import NormMetadataFields from "~/components/Norm/Metadatafields/NormMetadataFields.vue";
 import ValidityDatesMetadataFields from "~/components/Norm/Metadatafields/ValidityDatesMetadataFields.vue";
 import * as Config from "~/utils/config";
+import { findMetadataField } from "~/utils/testing/testUtils";
 
 describe("NormMetadataFields.vue", () => {
   afterEach(() => {
@@ -18,14 +18,8 @@ describe("NormMetadataFields.vue", () => {
       },
     });
 
-    const metadataFields = wrapper.findAllComponents(MetadataField);
-
-    const abbreviationFields = metadataFields.filter(
-      (fieldWrapper) => fieldWrapper.props().label === "Abkürzung",
-    );
-
-    expect(abbreviationFields).toHaveLength(1);
-    expect(abbreviationFields[0].props().value).toBe(expectedAbbreviation);
+    const abbreviationField = findMetadataField(wrapper, "Abkürzung");
+    expect(abbreviationField.props().value).toBe(expectedAbbreviation);
   });
 
   it("does not show abbreviation if abbreviation is undefined", () => {
@@ -33,58 +27,19 @@ describe("NormMetadataFields.vue", () => {
     expect(wrapper.find("#abbreviation").exists()).toBeFalsy();
   });
 
-  it("shows status inForce", () => {
-    const expectedStatus = "Aktuell gültig";
+  it.each([
+    ["InForce", "Aktuell gültig"],
+    ["Expired", "Außer Kraft"],
+    ["FutureInForce", "Zukünftig in Kraft"],
+  ])("status %s is displayed as %s", (status, expected) => {
     const wrapper = mount(NormMetadataFields, {
       props: {
-        status: "InForce",
+        status: status as ValidityStatus,
       },
     });
 
-    const metadataFields = wrapper.findAllComponents(MetadataField);
-
-    const statusFields = metadataFields.filter(
-      (fieldWrapper) => fieldWrapper.props().label === "Status",
-    );
-
-    expect(statusFields).toHaveLength(1);
-    expect(statusFields[0].props().value).toBe(expectedStatus);
-  });
-
-  it("shows status historical", () => {
-    const expectedStatus = "Außer Kraft";
-    const wrapper = mount(NormMetadataFields, {
-      props: {
-        status: "Expired",
-      },
-    });
-
-    const metadataFields = wrapper.findAllComponents(MetadataField);
-
-    const statusFields = metadataFields.filter(
-      (fieldWrapper) => fieldWrapper.props().label === "Status",
-    );
-
-    expect(statusFields).toHaveLength(1);
-    expect(statusFields[0].props().value).toBe(expectedStatus);
-  });
-
-  it("shows status future", () => {
-    const expectedStatus = "Zukünftig in Kraft";
-    const wrapper = mount(NormMetadataFields, {
-      props: {
-        status: "FutureInForce",
-      },
-    });
-
-    const metadataFields = wrapper.findAllComponents(MetadataField);
-
-    const statusFields = metadataFields.filter(
-      (fieldWrapper) => fieldWrapper.props().label === "Status",
-    );
-
-    expect(statusFields).toHaveLength(1);
-    expect(statusFields[0].props().value).toBe(expectedStatus);
+    const statusField = findMetadataField(wrapper, "Status");
+    expect(statusField.props().value).toBe(expected);
   });
 
   it("shows validity dates metadata fields", () => {
