@@ -125,7 +125,7 @@ async function handleSelectionUpdate(newSelection: TableRowData) {
     >
       <Column
         field="fromDate"
-        header="Gültig von"
+        header="Gültig ab"
         header-class="whitespace-nowrap w-1"
       ></Column>
       <Column
