@@ -2,8 +2,7 @@ import { mount } from "@vue/test-utils";
 import { describe, it, expect, vi, afterEach } from "vitest";
 import MetadataField from "~/components/MetadataField.vue";
 import NormMetadataFields from "~/components/Norm/Metadatafields/NormMetadataFields.vue";
-import ValidFromField from "~/components/Norm/Metadatafields/ValidFromField.vue";
-import ValidToField from "~/components/Norm/Metadatafields/ValidToField.vue";
+import ValidityDatesMetadataFields from "~/components/Norm/Metadatafields/ValidityDatesMetadataFields.vue";
 import * as Config from "~/utils/config";
 
 describe("NormMetadataFields.vue", () => {
@@ -88,28 +87,26 @@ describe("NormMetadataFields.vue", () => {
     expect(statusFields[0].props().value).toBe(expectedStatus);
   });
 
-  it("shows valid-from metadata field", () => {
-    const inputDate = parseDateGermanLocalTime("2025-01-01");
+  it("shows validity dates metadata fields", () => {
+    const validFrom = parseDateGermanLocalTime("2025-01-01");
+    const validTo = parseDateGermanLocalTime("2025-06-01");
+
     const wrapper = mount(NormMetadataFields, {
       props: {
-        validFrom: inputDate,
+        validFrom: validFrom,
+        validTo: validTo,
       },
     });
 
-    const validFromField = wrapper.findComponent(ValidFromField);
-    expect(validFromField.props().value).toStrictEqual(inputDate);
-  });
+    const validityDatesMetadataFields = wrapper.findComponent(
+      ValidityDatesMetadataFields,
+    );
 
-  it("shows valid-to metadata field", () => {
-    const inputDate = parseDateGermanLocalTime("2025-06-01");
-    const wrapper = mount(NormMetadataFields, {
-      props: {
-        validTo: inputDate,
-      },
-    });
-
-    const validToField = wrapper.findComponent(ValidToField);
-    expect(validToField.props().value).toStrictEqual(inputDate);
+    expect(validityDatesMetadataFields.exists()).toBeTruthy();
+    expect(validityDatesMetadataFields.props().validFrom).toStrictEqual(
+      validFrom,
+    );
+    expect(validityDatesMetadataFields.props().validTo).toStrictEqual(validTo);
   });
 
   it("hides valid from and to fields on prototype", () => {
@@ -118,7 +115,8 @@ describe("NormMetadataFields.vue", () => {
 
     const wrapper = mount(NormMetadataFields, {});
 
-    expect(wrapper.findComponent(ValidFromField).exists()).toBeFalsy();
-    expect(wrapper.findComponent(ValidToField).exists()).toBeFalsy();
+    expect(
+      wrapper.findComponent(ValidityDatesMetadataFields).exists(),
+    ).toBeFalsy();
   });
 });

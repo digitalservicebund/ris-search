@@ -120,7 +120,7 @@ describe("[eId].vue", () => {
   afterEach(() => {
     vi.clearAllMocks();
   });
-  it("shows the article data properly", async () => {
+  it("shows the article data properly on prototype", async () => {
     mocks.isPrototypeProfile.mockReturnValueOnce(true);
     const wrapper = await mountComponent();
     expect(wrapper.find(".ris-heading2-bold").html()).toBe(
