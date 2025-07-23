@@ -11,6 +11,7 @@ import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import java.io.FileNotFoundException;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -102,7 +103,7 @@ public class SitemapService {
   }
 
   private String getDatePartition(LocalDate date) {
-    return String.format("%s/%s/%s", date.getYear(), date.getMonthValue(), date.getDayOfMonth());
+    return date.format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
   }
 
   public List<String> getSitemapFilesPathsForDay(LocalDate date) {

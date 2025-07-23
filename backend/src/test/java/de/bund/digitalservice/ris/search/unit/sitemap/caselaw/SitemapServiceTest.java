@@ -1,5 +1,6 @@
 package de.bund.digitalservice.ris.search.unit.sitemap.caselaw;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -7,6 +8,7 @@ import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import de.bund.digitalservice.ris.search.repository.objectstorage.PortalBucket;
 import de.bund.digitalservice.ris.search.sitemap.eclicrawler.schema.sitemap.Sitemap;
+import de.bund.digitalservice.ris.search.sitemap.eclicrawler.schema.sitemap.Url;
 import de.bund.digitalservice.ris.search.sitemap.eclicrawler.service.ChangedDocument;
 import de.bund.digitalservice.ris.search.sitemap.eclicrawler.service.CreatedDocument;
 import de.bund.digitalservice.ris.search.sitemap.eclicrawler.service.DeletedDocument;
@@ -21,7 +23,9 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
@@ -105,6 +109,32 @@ class SitemapServiceTest {
     service.writeRobotsTxt("sitemapPath");
 
     verify(bucket).save(SitemapService.ROBOTS_TXT_PATH, expectedContent);
+  }
+
+  @Test
+  void itWritesMultipleSitemapFilesWithTheCorrectSuffix() throws JAXBException {
+
+    List<Sitemap> sitemaps =
+        List.of(new Sitemap().setUrl(List.of(new Url())), new Sitemap().setUrl(List.of(new Url())));
+    LocalDate date = LocalDate.of(2025, 1, 1);
+
+    ArgumentCaptor<String> pathArgumentCaptor = ArgumentCaptor.forClass(String.class);
+
+    Optional<String> indexpath = service.writeSitemapFiles(sitemaps, date);
+
+    verify(bucket, Mockito.times(3)).save(pathArgumentCaptor.capture(), any(String.class));
+
+    Assertions.assertTrue(
+        pathArgumentCaptor
+            .getAllValues()
+            .containsAll(
+                List.of(
+                    SitemapService.PATH_PREFIX + "2025/01/01/sitemap_1.xml",
+                    SitemapService.PATH_PREFIX + "2025/01/01/sitemap_2.xml",
+                    SitemapService.PATH_PREFIX + "2025/01/01/sitemap_index_1.xml")));
+
+    Assertions.assertEquals(
+        SitemapService.PATH_PREFIX + "2025/01/01/sitemap_index_1.xml", indexpath.orElseThrow());
   }
 
   @Test
