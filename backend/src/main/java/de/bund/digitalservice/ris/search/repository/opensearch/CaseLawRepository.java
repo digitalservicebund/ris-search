@@ -2,6 +2,7 @@ package de.bund.digitalservice.ris.search.repository.opensearch;
 
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import java.util.List;
+import org.apache.commons.collections4.IterableUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -32,5 +33,13 @@ public class CaseLawRepository {
 
   public List<CaseLawDocumentationUnit> getByDocumentNumber(String documentNumber) {
     return caseLawSynthesizedRepository.findByDocumentNumber(documentNumber);
+  }
+
+  public List<CaseLawDocumentationUnit> getEcliDocumentsByDocumentNumbers(List<String> numbers) {
+    return caseLawSynthesizedRepository.findAllByDocumentNumberInAndEcliNotNull(numbers);
+  }
+
+  public List<CaseLawDocumentationUnit> getAllEcliDocuments() {
+    return IterableUtils.toList(caseLawSynthesizedRepository.findAllByEcliNotNull());
   }
 }
