@@ -44,7 +44,7 @@ describe("NormVersionList", () => {
 
     const headerRowCells = wrapper.find("thead").findAll("th");
     expect(headerRowCells.map((cell) => cell.text())).toEqual([
-      "Gültig von",
+      "Gültig ab",
       "Gültig bis",
       "Status",
     ]);
