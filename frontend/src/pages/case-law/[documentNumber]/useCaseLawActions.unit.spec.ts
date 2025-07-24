@@ -4,8 +4,15 @@ import { ref } from "vue";
 import { useCaseLawActions } from "./useCaseLawActions";
 import type { CaseLaw } from "~/types";
 
-const { mockNavigateTo } = vi.hoisted(() => ({
+const { mockToastAdd, mockNavigateTo } = vi.hoisted(() => ({
+  mockToastAdd: vi.fn(),
   mockNavigateTo: vi.fn(),
+}));
+
+vi.mock("primevue/usetoast", () => ({
+  useToast: () => ({
+    add: mockToastAdd,
+  }),
 }));
 
 mockNuxtImport("navigateTo", () => mockNavigateTo);
@@ -34,7 +41,7 @@ describe("useCaseLawActions", () => {
 
     const keys = actions.value.map((value) => value.key);
 
-    expect(keys).toEqual(["link", "print", "pdf"]);
+    expect(keys).toEqual(["permalink", "print", "pdf"]);
   });
 
   it("should disable PDF button", () => {
