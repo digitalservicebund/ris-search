@@ -11,6 +11,7 @@ describe("ActionsMenu.vue", () => {
     items: [
       {
         key: "link",
+        command: () => {},
         iconComponent: MdiDotsVertical,
         label: "Link",
         url: "https://example.com/",

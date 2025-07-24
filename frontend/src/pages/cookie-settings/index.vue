@@ -33,11 +33,7 @@ function handleSetTracking(value: boolean) {
               label="Anonyme Nutzungsdaten nicht speichern"
               data-testid="settings-decline-cookie"
               @click="handleSetTracking(false)"
-            >
-              <template #icon>
-                <IconClose />
-              </template>
-            </PrimeVueButton>
+            />
           </div>
         </div>
         <div v-else class="consent-status-wrapper">
@@ -51,11 +47,7 @@ function handleSetTracking(value: boolean) {
               label="Anonyme Nutzungsdaten speichern"
               data-testid="settings-accept-cookie"
               @click="handleSetTracking(true)"
-            >
-              <template #icon>
-                <IconCheck />
-              </template>
-            </PrimeVueButton>
+            />
           </div>
         </div>
       </client-only>

@@ -1,16 +1,11 @@
 <script setup lang="ts">
 import Button from "primevue/button";
 import Menu, { type MenuMethods } from "primevue/menu";
-import type { MenuItem } from "primevue/menuitem";
+import type { ActionMenuItem } from "~/utils/actionMenuItem";
 import MdiDotsVertical from "~icons/mdi/dots-vertical";
 
 export type ActionsMenuProps = { items: ActionMenuItem[] };
 const { items } = defineProps<ActionsMenuProps>();
-
-export type ActionMenuItem = Omit<MenuItem, "icon"> & {
-  disabled?: boolean;
-  iconComponent: Component;
-};
 
 const menuRef = useTemplateRef<MenuMethods>("menu");
 

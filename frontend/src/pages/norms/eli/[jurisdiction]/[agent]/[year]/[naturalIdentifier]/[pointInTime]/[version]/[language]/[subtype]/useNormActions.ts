@@ -1,18 +1,15 @@
 import { useToast } from "primevue/usetoast";
-import type { ActionMenuItem } from "~/components/ActionsMenu.vue";
-import PDFIcon from "~/components/icons/PDFIcon.vue";
-import UpdatingLinkIcon from "~/components/icons/UpdatingLinkIcon.vue";
-import XMLIcon from "~/components/icons/XMLIcon.vue";
 import type { LegislationWork } from "~/types";
-import { isPrototypeProfile } from "~/utils/config";
+import {
+  type ActionMenuItem,
+  PdfActionMenuItem,
+  XmlActionMenuItem,
+  LinkActionMenuItem,
+  PrintActionMenuItem,
+} from "~/utils/actionMenuItem";
 import { getManifestationUrl } from "~/utils/normUtils";
-import MaterialSymbolsLink from "~icons/material-symbols/link";
 
 export function useNormActions(metadata: Ref<LegislationWork | undefined>) {
-  const enablePdfButton = !isPrototypeProfile();
-  const onPrint = () => {
-    if (window) window.print();
-  };
   const backendURL = useBackendURL();
   const xmlUrl = computed(() =>
     getManifestationUrl(metadata.value, backendURL, "application/xml"),
@@ -25,62 +22,28 @@ export function useNormActions(metadata: Ref<LegislationWork | undefined>) {
     return href.replace(/eli.+$/, workEli);
   });
 
-  const toast = useToast();
-
-  function showSuccessMessage() {
-    toast.add({
-      severity: "success",
-      summary: "Kopiert!",
-      life: 3000,
-      closable: false,
-    });
-  }
-
-  const copyWorkUrl = async () => {
-    if (workUrl.value) {
-      await navigator.clipboard.writeText(workUrl.value);
-    }
-    showSuccessMessage();
-  };
-  const copyCurrentUrl = async () => {
-    await navigator.clipboard.writeText(window.location.href);
-    showSuccessMessage();
-  };
+  const toastService = useToast();
 
   const actions: ComputedRef<ActionMenuItem[]> = computed(() => {
     const items: ActionMenuItem[] = [
-      {
-        key: "link",
-        label: "Link zur jeweils gültigen Fassung",
-        iconComponent: UpdatingLinkIcon,
-        command: copyWorkUrl,
-        url: workUrl.value,
-      },
-      {
-        key: "permalink",
-        label: "Permalink zu dieser Fassung",
-        iconComponent: MaterialSymbolsLink,
-        command: copyCurrentUrl,
-        url: window?.location.href,
-      },
-      {
-        key: "pdf",
-        label: "Drucken oder als PDF speichern",
-        iconComponent: PDFIcon,
-        command: onPrint,
-        disabled: !enablePdfButton,
-      },
+      new LinkActionMenuItem(
+        toastService,
+        "link",
+        "Link zur jeweils gültigen Fassung",
+        workUrl.value,
+      ),
+      new LinkActionMenuItem(
+        toastService,
+        "permalink",
+        "Permalink zu dieser Fassung",
+        window?.location.href,
+      ),
+      new PrintActionMenuItem(),
+      new PdfActionMenuItem(),
     ];
 
     if (xmlUrl.value) {
-      items.push({
-        key: "xml",
-        label: "XML anzeigen",
-        iconComponent: XMLIcon,
-        dataAttribute: "xml-view",
-        command: async () => await navigateTo(xmlUrl.value, { external: true }),
-        url: xmlUrl.value,
-      });
+      items.push(new XmlActionMenuItem(xmlUrl.value));
     }
     return items;
   });
