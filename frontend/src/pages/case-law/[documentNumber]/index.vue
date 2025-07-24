@@ -6,6 +6,7 @@ import TabPanels from "primevue/tabpanels";
 import Tabs from "primevue/tabs";
 import type { ComputedRef } from "vue";
 import { useFetch } from "#app";
+import CaseLawActionsMenu from "~/components/ActionMenu/CaseLawActionsMenu.vue";
 import TableOfContents, {
   type TableOfContentsEntry,
 } from "~/components/Caselaw/TableOfContents.vue";
@@ -21,7 +22,6 @@ import {
   tabPanelStyles,
   tabStyles,
 } from "~/components/Tabs.styles";
-import { useCaseLawActions } from "~/pages/case-law/[documentNumber]/useCaseLawActions";
 import type { CaseLaw } from "~/types";
 import { getAllSectionsFromHtml } from "~/utils/htmlParser";
 import { removeOuterParentheses } from "~/utils/textFormatting";
@@ -53,8 +53,6 @@ const tocEntries: ComputedRef<TableOfContentsEntry[] | null> = computed(() => {
   return html.value ? getAllSectionsFromHtml(html.value, "section") : null;
 });
 
-const { actions } = useCaseLawActions(caseLaw);
-
 const zipUrl = computed(() =>
   getEncodingURL(caseLaw.value, backendURL, "application/zip"),
 );
@@ -81,7 +79,7 @@ if (contentError?.value) {
             removeOuterParentheses(caseLaw.headline) || emptyTitlePlaceholder
           "
         />
-        <ActionsMenu :items="actions" />
+        <CaseLawActionsMenu :case-law="caseLaw" />
       </div>
       <h1
         v-if="caseLaw.headline"

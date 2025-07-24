@@ -1,17 +1,10 @@
 <script setup lang="ts">
 import Button from "primevue/button";
 import Menu, { type MenuMethods } from "primevue/menu";
-import type { MenuItem } from "primevue/menuitem";
+import type { ActionMenuItem } from "~/components/ActionMenu/ActionsMenu.vue";
 import MdiDotsVertical from "~icons/mdi/dots-vertical";
 
-export type ActionsMenuProps = { items: ActionMenuItem[] };
-const { items } = defineProps<ActionsMenuProps>();
-
-export type ActionMenuItem = Omit<MenuItem, "icon"> & {
-  disabled?: boolean;
-  iconComponent: Component;
-};
-
+const { actions } = defineProps<{ actions: ActionMenuItem[] }>();
 const menuRef = useTemplateRef<MenuMethods>("menu");
 
 const toggle = (event: Event) => {
@@ -22,29 +15,12 @@ defineExpose({ toggle });
 </script>
 
 <template>
-  <div class="hidden items-center *:-mx-4 sm:flex">
-    <Button
-      v-for="item in items"
-      :key="item.key"
-      v-tooltip.bottom="item.label"
-      text
-      :disabled="item.disabled"
-      :aria-label="item.label"
-      :href="item.url"
-      :as="item.url ? 'a' : undefined"
-      @click.prevent="item.command && item.command()"
-    >
-      <template #icon
-        ><component :is="(item as ActionMenuItem).iconComponent"
-      /></template>
-    </Button>
-  </div>
-  <Button class="sm:hidden" text aria-label="Aktionen anzeigen" @click="toggle">
+  <Button text aria-label="Aktionen anzeigen" @click="toggle">
     <template #icon>
       <MdiDotsVertical />
     </template>
   </Button>
-  <Menu ref="menu" :popup="true" :model="items" class="print:hidden">
+  <Menu ref="menu" :popup="true" :model="actions" class="print:hidden">
     <template #item="{ item }">
       <div
         class="flex h-full items-center py-4"
