@@ -1,5 +1,5 @@
 import * as Sentry from "@sentry/nuxt";
-import { isStringEmpty, getStringOrDefault } from "~/utils/textFormatting";
+import { getStringOrDefault, isStringEmpty } from "~/utils/textFormatting";
 
 const dsn = process.env.NUXT_PUBLIC_SENTRY_DSN;
 const release = getStringOrDefault(
@@ -15,8 +15,10 @@ Sentry.init({
   // It has to be in the environment of the server when building the app
   // See: https://nuxt.com/docs/guide/directory-structure/env#production
   dsn,
-  tracesSampleRate: 1.0,
+  tracesSampleRate: 0.1,
   debug: false,
   release, // this will be set from the CI/CD as the commit SHA
+  beforeSend: (event) =>
+    event.level === "error" || event.level === "fatal" ? event : null,
   environment,
 });
