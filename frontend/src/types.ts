@@ -64,7 +64,8 @@ export interface TableOfContentsItem {
   id: string;
   marker: string;
   heading: string;
-  articleRange: string;
+  articleRangeStart: string;
+  articleRangeEnd: string;
   children: TableOfContentsItem[];
 }
 
