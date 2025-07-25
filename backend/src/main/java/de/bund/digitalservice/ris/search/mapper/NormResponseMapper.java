@@ -14,6 +14,7 @@ import de.bund.digitalservice.ris.search.schema.TableOfContentsSchema;
 import de.bund.digitalservice.ris.search.utils.DateUtils;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import javax.annotation.Nullable;
 import org.springframework.http.MediaType;
 
@@ -107,8 +108,39 @@ public class NormResponseMapper {
                     item.id(),
                     item.marker(),
                     item.heading(),
+                    getArticleRange(item),
                     buildTableOfContents(item.children())))
         .toList();
+  }
+
+  private static String getArticleRange(TableOfContentsItem item) {
+    if (item.children().isEmpty()) {
+      return "";
+    }
+    String start = extractFirstArticleInSection(item);
+    String end = extractLastArticleInSection(item);
+
+    if (Objects.equals(start, end)) {
+      return start;
+    } else {
+      return start + " - " + end;
+    }
+  }
+
+  private static String extractFirstArticleInSection(TableOfContentsItem item) {
+    if (item.children().isEmpty()) {
+      return item.marker();
+    } else {
+      return extractFirstArticleInSection(item.children().getFirst());
+    }
+  }
+
+  private static String extractLastArticleInSection(TableOfContentsItem item) {
+    if (item.children().isEmpty()) {
+      return item.marker();
+    } else {
+      return extractLastArticleInSection(item.children().getLast());
+    }
   }
 
   private static List<LegislationExpressionPartSchema> buildPartList(Norm norm, String idPrefix) {

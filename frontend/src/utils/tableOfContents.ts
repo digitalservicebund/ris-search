@@ -17,7 +17,7 @@ export function tocItemsToTreeNodes(
       : {
           ...childTreeNode,
           label: child.marker,
-          secondaryLabel: child.heading,
+          secondaryLabel: [child.heading, child.articleRange].join(" "),
           route: headingBasePath + child.id,
           children: tocItemsToTreeNodes(
             child.children,
