@@ -5,14 +5,14 @@ import { useFetchNormArticleContent } from "./useNormData";
 import ContentWrapper from "~/components/CustomLayouts/ContentWrapper.vue";
 import TableOfContentsLayout from "~/components/CustomLayouts/SidebarLayout.vue";
 import IncompleteDataMessage from "~/components/IncompleteDataMessage.vue";
-import MetadataField from "~/components/MetadataField.vue";
 import ArticleVersionWarning from "~/components/Norm/ArticleVersionWarning.vue";
+import ValidityDatesMetadataFields from "~/components/Norm/Metadatafields/ValidityDatesMetadataFields.vue";
 import NormTableOfContents from "~/components/Ris/NormTableOfContents.vue";
 import type { BreadcrumbItem } from "~/components/Ris/RisBreadcrumb.vue";
 import RisBreadcrumb from "~/components/Ris/RisBreadcrumb.vue";
 import { useValidNormVersions } from "~/composables/useNormVersions";
 import type { Article, LegislationWork } from "~/types";
-import { featureFlags } from "~/utils/config";
+import { isPrototypeProfile } from "~/utils/config";
 import { tocItemsToTreeNodes } from "~/utils/tableOfContents";
 import IcBaselineArrowBack from "~icons/ic/baseline-arrow-back";
 import IcBaselineArrowForward from "~icons/ic/baseline-arrow-Forward";
@@ -142,9 +142,6 @@ const inForceNormLink = computed(() => {
   return `/norms/${validVersion.item.workExample.legislationIdentifier}`;
 });
 
-const showNormArticleStatus = computed(() =>
-  featureFlags.showNormArticleStatus(),
-);
 useHead({ title: article.value?.name });
 </script>
 
@@ -179,23 +176,14 @@ useHead({ title: article.value?.name });
         />
       </div>
 
-      <!-- Metadata -->
       <div
-        v-if="!!article && showNormArticleStatus"
+        v-if="!isPrototypeProfile()"
         class="container mb-24 flex flex-col space-y-16 space-x-0 md:space-y-0 lg:flex-row lg:space-x-24"
         data-testid="metadata"
       >
-        <MetadataField
-          v-if="article.entryIntoForceDate"
-          id="article_entry_into_force_date"
-          label="Gültig von"
-          :value="formattedDate(article.entryIntoForceDate)"
-        />
-        <MetadataField
-          v-if="article.expiryDate"
-          id="article_expiry_date"
-          label="Gültig bis"
-          :value="formattedDate(article.expiryDate)"
+        <ValidityDatesMetadataFields
+          :valid-from="parseDateGermanLocalTime(article?.entryIntoForceDate)"
+          :valid-to="parseDateGermanLocalTime(article?.expiryDate)"
         />
       </div>
       <div class="bg-white">

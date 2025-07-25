@@ -12,10 +12,6 @@ export function isPrototypeProfile(): boolean {
   return checkProfile("prototype");
 }
 
-export const featureFlags = {
-  showNormArticleStatus: () => !isPrototypeProfile(),
-};
-
 function checkProfile(profile: string): boolean {
   const config = useRuntimeConfig();
   return config.public.profile === profile;
