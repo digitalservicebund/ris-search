@@ -3428,14 +3428,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@pinia/nuxt@npm:^0.11.1":
-  version: 0.11.1
-  resolution: "@pinia/nuxt@npm:0.11.1"
+"@pinia/nuxt@npm:^0.11.2":
+  version: 0.11.2
+  resolution: "@pinia/nuxt@npm:0.11.2"
   dependencies:
     "@nuxt/kit": "npm:^3.9.0"
   peerDependencies:
     pinia: ^3.0.3
-  checksum: 10c0/92e91274d22e60618fc6b7d8eddddb95056d0b7eb238297d436f787ca744b583c3b0f06bb7fce0a852a1e08268350a40a18c786a0448e68a6788a26561c07a56
+  checksum: 10c0/baf0c496ce81043f2881d5d00124517b14983638d1ee28061786d3a26d23a2f3b899a841b348ab8ebaaca65613640ddbaa560cefecda4f4f9ca0cf7a5815c750
   languageName: node
   linkType: hard
 
@@ -14682,7 +14682,7 @@ __metadata:
     "@nuxt/test-utils": "npm:^3.19.1"
     "@nuxtjs/tailwindcss": "npm:^7.0.0-beta.0"
     "@pact-foundation/pact": "npm:^15.0.1"
-    "@pinia/nuxt": "npm:^0.11.1"
+    "@pinia/nuxt": "npm:^0.11.2"
     "@pinia/testing": "npm:^1.0.2"
     "@playwright/test": "npm:^1.53.2"
     "@primevue/nuxt-module": "npm:^4.3.5"
