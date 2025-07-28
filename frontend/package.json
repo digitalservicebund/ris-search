@@ -33,7 +33,7 @@
     "@nuxt/image": "^1.10.0",
     "@nuxt/kit": "^3.17.6",
     "@nuxt/schema": "^3.17.5",
-    "@pinia/nuxt": "^0.11.1",
+    "@pinia/nuxt": "^0.11.2",
     "@sentry/nuxt": "^9.29.0",
     "@tailwindcss/vite": "^4.1.8",
     "axe-html-reporter": "^2.2.11",
