@@ -14730,7 +14730,7 @@ __metadata:
     tailwindcss: "npm:^4.1.11"
     typescript: "npm:~5.8.3"
     unplugin-icons: "npm:^22.1.0"
-    unplugin-vue-components: "npm:^28.7.0"
+    unplugin-vue-components: "npm:^28.8.0"
     valibot: "npm:^1.1.0"
     vitest: "npm:^3.2.3"
     vue-tsc: "npm:^3.0.1"
@@ -16725,9 +16725,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"unplugin-vue-components@npm:^28.7.0":
-  version: 28.7.0
-  resolution: "unplugin-vue-components@npm:28.7.0"
+"unplugin-vue-components@npm:^28.8.0":
+  version: 28.8.0
+  resolution: "unplugin-vue-components@npm:28.8.0"
   dependencies:
     chokidar: "npm:^3.6.0"
     debug: "npm:^4.4.1"
@@ -16735,18 +16735,18 @@ __metadata:
     magic-string: "npm:^0.30.17"
     mlly: "npm:^1.7.4"
     tinyglobby: "npm:^0.2.14"
-    unplugin: "npm:^2.3.4"
+    unplugin: "npm:^2.3.5"
     unplugin-utils: "npm:^0.2.4"
   peerDependencies:
     "@babel/parser": ^7.15.8
-    "@nuxt/kit": ^3.2.2
+    "@nuxt/kit": ^3.2.2 || ^4.0.0
     vue: 2 || 3
   peerDependenciesMeta:
     "@babel/parser":
       optional: true
     "@nuxt/kit":
       optional: true
-  checksum: 10c0/400d0fa3a7cb8d4ce874fb81eae1a9c5b1e678144f634b32e7da3393e498994b872b943a78caf70c6e9d0f030047cd119c0f528543b6c4133f84ec345b88fe52
+  checksum: 10c0/3c01c81eaeafce498588ab78241af592ab10235a8d32c8a58faa045ec562303689d16a0158b25ae0a50779877a50561d31d1f2bef866b65fa630cf3f0a8eda9b
   languageName: node
   linkType: hard
 
