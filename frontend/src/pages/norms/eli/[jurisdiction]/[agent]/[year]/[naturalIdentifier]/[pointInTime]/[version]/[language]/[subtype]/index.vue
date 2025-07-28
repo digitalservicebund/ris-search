@@ -15,7 +15,7 @@ import Accordion from "~/components/Accordion.vue";
 import ContentWrapper from "~/components/CustomLayouts/ContentWrapper.vue";
 import TableOfContentsLayout from "~/components/CustomLayouts/SidebarLayout.vue";
 import IncompleteDataMessage from "~/components/IncompleteDataMessage.vue";
-import NormMetadataFields from "~/components/Norm/NormMetadataFields.vue";
+import NormMetadataFields from "~/components/Norm/Metadatafields/NormMetadataFields.vue";
 import NormVersionList from "~/components/Norm/NormVersionList.vue";
 import NormVersionWarning from "~/components/Norm/NormVersionWarning.vue";
 import VersionsTeaser from "~/components/Norm/VersionsTeaser.vue";

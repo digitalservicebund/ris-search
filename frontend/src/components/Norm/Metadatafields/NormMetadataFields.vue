@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { Dayjs } from "dayjs";
 import MetadataField from "~/components/MetadataField.vue";
-import { isPrototypeProfile } from "~/utils/config";
+import ValidityDatesMetadataFields from "~/components/Norm/Metadatafields/ValidityDatesMetadataFields.vue";
 import { getValidityStatusLabel } from "~/utils/normUtils";
 
 interface Props {
@@ -27,17 +27,10 @@ defineProps<Props>();
       label="Status"
       :value="getValidityStatusLabel(status)"
     />
-    <MetadataField
+    <ValidityDatesMetadataFields
       v-if="!isPrototypeProfile()"
-      id="validFrom"
-      label="Gültig ab"
-      :value="dateFormattedDDMMYYYY(validFrom) ?? '-'"
-    />
-    <MetadataField
-      v-if="!isPrototypeProfile()"
-      id="validTo"
-      label="Gültig bis"
-      :value="dateFormattedDDMMYYYY(validTo) ?? '-'"
+      :valid-from="validFrom"
+      :valid-to="validTo"
     />
   </div>
 </template>

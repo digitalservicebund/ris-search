@@ -2,7 +2,7 @@ import { mockNuxtImport, mountSuspended } from "@nuxt/test-utils/runtime";
 import type { VueWrapper } from "@vue/test-utils";
 import { describe, it, expect, vi } from "vitest";
 import Index from "./index.vue";
-import NormMetadataFields from "~/components/Norm/NormMetadataFields.vue";
+import NormMetadataFields from "~/components/Norm/Metadatafields/NormMetadataFields.vue";
 import type { NormContent } from "~/pages/norms/eli/[jurisdiction]/[agent]/[year]/[naturalIdentifier]/[pointInTime]/[version]/[language]/[subtype]/useNormData";
 import type { LegislationWork } from "~/types";
 

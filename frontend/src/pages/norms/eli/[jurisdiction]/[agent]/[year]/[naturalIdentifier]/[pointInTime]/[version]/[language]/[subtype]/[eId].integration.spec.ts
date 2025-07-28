@@ -68,9 +68,7 @@ const mocks = vi.hoisted(() => {
         status: { value: "success" },
       }),
     ),
-    featureFlags: {
-      showNormArticleStatus: vi.fn().mockReturnValue(true),
-    },
+    isPrototypeProfile: vi.fn().mockReturnValue(false),
   };
 });
 
@@ -79,7 +77,7 @@ vi.mock("./useNormData", () => {
 });
 
 vi.mock("~/utils/config", () => {
-  return { featureFlags: mocks.featureFlags };
+  return { isPrototypeProfile: mocks.isPrototypeProfile };
 });
 
 const { useHeadMock } = vi.hoisted(() => {
@@ -122,8 +120,8 @@ describe("[eId].vue", () => {
   afterEach(() => {
     vi.clearAllMocks();
   });
-  it("shows the article data properly", async () => {
-    mocks.featureFlags.showNormArticleStatus.mockReturnValueOnce(false);
+  it("shows the article data properly on prototype", async () => {
+    mocks.isPrototypeProfile.mockReturnValueOnce(true);
     const wrapper = await mountComponent();
     expect(wrapper.find(".ris-heading2-bold").html()).toBe(
       `<h2 class="ris-heading2-bold my-24 mb-24 inline-block">${headingInnerHtml}</h2>`,
@@ -132,8 +130,8 @@ describe("[eId].vue", () => {
     const metadata = wrapper.find("div[data-testid='metadata']");
     expect(metadata.exists()).toBe(false);
   });
-  it("shows entry into force and expiry dates if enabled by flag", async () => {
-    mocks.featureFlags.showNormArticleStatus.mockReturnValue(true);
+  it("shows entry into force and expiry dates if not prototype", async () => {
+    mocks.isPrototypeProfile.mockReturnValue(false);
     const wrapper = await mountComponent();
     await nextTick();
     const metadataText = wrapper
@@ -141,7 +139,7 @@ describe("[eId].vue", () => {
       .text()
       .replaceAll(" ", "");
     expect(metadataText).toContain(
-      "Gültig von 01.01.2000 Gültig bis 01.01.2300".replaceAll(" ", ""),
+      "Gültig ab 01.01.2000 Gültig bis 01.01.2300".replaceAll(" ", ""),
     );
   });
 });
