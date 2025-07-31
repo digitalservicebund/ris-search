@@ -13,6 +13,7 @@ import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.importer.ImportTaskProcessor;
 import de.bund.digitalservice.ris.search.service.CaseLawIndexSyncJob;
 import de.bund.digitalservice.ris.search.service.NormIndexSyncJob;
+import de.bund.digitalservice.ris.search.sitemap.eclicrawler.service.DailySitemapJob;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,12 +26,12 @@ class ImportTaskProcessorTest {
 
   @Mock private NormIndexSyncJob normIndexSyncJob;
   @Mock private CaseLawIndexSyncJob caseLawIndexSyncJob;
-
+  @Mock private DailySitemapJob sitemapJob;
   private ImportTaskProcessor processor;
 
   @BeforeEach
   void setUp() {
-    processor = new ImportTaskProcessor(normIndexSyncJob, caseLawIndexSyncJob);
+    processor = new ImportTaskProcessor(normIndexSyncJob, caseLawIndexSyncJob, sitemapJob);
   }
 
   @Test
