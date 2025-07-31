@@ -1,10 +1,11 @@
 import tailwindcss from "@tailwindcss/vite";
+import { parseInt } from "lodash";
 import { defineNuxtConfig } from "nuxt/config";
 import IconsResolver from "unplugin-icons/resolver";
 import Icons from "unplugin-icons/vite";
 import { PrimeVueResolver } from "unplugin-vue-components/resolvers";
 import Components from "unplugin-vue-components/vite";
-import { isStringEmpty, getStringOrDefault } from "./src/utils/textFormatting";
+import { getStringOrDefault, isStringEmpty } from "./src/utils/textFormatting";
 
 const config = {
   devMode: process.env.NODE_ENV == "development",
@@ -51,6 +52,7 @@ export default defineNuxtConfig({
     "nuxt-auth-utils",
     "nuxt-security",
     "@nuxt/scripts",
+    "@nuxtjs/seo",
   ],
   devtools: {
     enabled: true,
@@ -124,6 +126,15 @@ export default defineNuxtConfig({
       },
     },
     enabled: config.production,
+  },
+  sitemap: {
+    sitemapsPathPrefix: "/sitemaps/",
+    sitemaps: {
+      static: {
+        includeAppSources: true,
+        exclude: ["/case‑law/**", "/norms/eli/**"],
+      },
+    },
   },
   nitro: {
     rollupConfig: {
