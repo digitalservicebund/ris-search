@@ -8,10 +8,10 @@ import Toast from "primevue/toast";
 import type { TreeNode } from "primevue/treenode";
 import NormHeadingGroup from "./NormHeadingGroup.vue";
 import { getNormBreadcrumbTitle } from "./titles";
-import { useNormActions } from "./useNormActions";
 import { useFetchNormContent } from "./useNormData";
 import { useRoute } from "#app";
 import Accordion from "~/components/Accordion.vue";
+import NormActionsMenu from "~/components/ActionMenu/NormActionsMenu.vue";
 import ContentWrapper from "~/components/CustomLayouts/ContentWrapper.vue";
 import TableOfContentsLayout from "~/components/CustomLayouts/SidebarLayout.vue";
 import IncompleteDataMessage from "~/components/IncompleteDataMessage.vue";
@@ -130,8 +130,6 @@ const breadcrumbItems: ComputedRef<BreadcrumbItem[]> = computed(() => {
 
   return list;
 });
-
-const { actions } = useNormActions(metadata);
 </script>
 
 <template>
@@ -141,7 +139,7 @@ const { actions } = useNormActions(metadata);
       <div class="container">
         <div class="flex items-center gap-8 print:hidden">
           <RisBreadcrumb type="norm" :items="breadcrumbItems" class="grow" />
-          <client-only> <ActionsMenu :items="actions" /></client-only>
+          <client-only> <NormActionsMenu :metadata="metadata" /></client-only>
         </div>
         <NormHeadingGroup :metadata="metadata" :html-parts="htmlParts" />
         <NormVersionWarning

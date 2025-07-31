@@ -2,6 +2,7 @@ import { mockNuxtImport, mountSuspended } from "@nuxt/test-utils/runtime";
 import type { VueWrapper } from "@vue/test-utils";
 import { describe, it, expect, vi } from "vitest";
 import Index from "./index.vue";
+import NormActionsMenu from "~/components/ActionMenu/NormActionsMenu.vue";
 import NormMetadataFields from "~/components/Norm/Metadatafields/NormMetadataFields.vue";
 import type { NormContent } from "~/pages/norms/eli/[jurisdiction]/[agent]/[year]/[naturalIdentifier]/[pointInTime]/[version]/[language]/[subtype]/useNormData";
 import type { LegislationWork } from "~/types";
@@ -109,7 +110,7 @@ function mountComponent() {
         RisExpandableText: {
           template: '<div class="mock-expandable-text"><slot /></div>',
         },
-        ActionsMenu: true,
+        NormActionMenu: true,
         VersionWarningMessage: true,
       },
     },
@@ -204,13 +205,11 @@ describe("index.vue", () => {
     );
   });
 
-  it("passes actions to the ActionsMenu", async () => {
+  it("passes metadata to the NormActionsMenu", async () => {
     mockMetadata();
     const wrapper = await mountComponent();
-    const stub = wrapper.getComponent(
-      "actions-menu-stub",
-    ) as unknown as StubbedComponent;
-    expect(stub.props("items")).toEqual([{ key: "mockAction" }]);
+    const normActionsMenu = wrapper.getComponent(NormActionsMenu);
+    expect(normActionsMenu.props("metadata")).toEqual(legislationWork);
   });
 
   it("shows metadata", async () => {

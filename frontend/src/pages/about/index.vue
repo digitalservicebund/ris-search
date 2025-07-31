@@ -111,12 +111,12 @@ definePageMeta({ alias: ["/ueber"] });
           <StatusCard
             header="Optimierung der API-Dokumentation"
             content="um die API und den Datenstandard genauer zu erklären"
-            :status="StatusCardType.PLANNED"
+            :status="StatusCardType.IN_PROGRESS"
           />
           <StatusCard
             header="Englische Übersetzungen"
             content="einiger ausgewählter Gesetze"
-            :status="StatusCardType.PLANNED"
+            :status="StatusCardType.IN_PROGRESS"
           />
         </div>
         <div class="max-w-prose">

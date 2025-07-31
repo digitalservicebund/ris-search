@@ -6,6 +6,8 @@ import {
   RouterLinkStub,
 } from "@vue/test-utils";
 import dayjs from "dayjs";
+import { expect, it } from "vitest";
+import CaseLawActionsMenu from "~/components/ActionMenu/CaseLawActionsMenu.vue";
 import CaseLawPage from "~/pages/case-law/[documentNumber]/index.vue";
 import type { CaseLaw } from "~/types";
 
@@ -268,5 +270,11 @@ describe("case law single view page", async () => {
     expect(zipLink).toBeTruthy();
     expect(zipLink.text()).toBe("12345 als ZIP herunterladen");
     expect(zipLink.attributes("href")).toBe("/api/v1/case-law/12345.zip");
+  });
+
+  it("passes caseLaw to the CaseLawActionsMenu", async () => {
+    const wrapper = await mountSuspended(CaseLawPage);
+    const caseLawActionsMenu = wrapper.getComponent(CaseLawActionsMenu);
+    expect(caseLawActionsMenu.props("caseLaw")).toEqual(caseLawTestData);
   });
 });
