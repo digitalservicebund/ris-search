@@ -47,7 +47,7 @@ public class IndexCaselawService implements IndexService {
     if (changelog.isChangeAll()) {
       reindexAll(Instant.now().toString());
     } else {
-      indexFileList(changelog.getChanged().stream().toList());
+      indexFileList(changelog.getChanged().stream().filter(s -> s.endsWith(".xml")).toList());
       Set<String> deletedIds =
           changelog.getDeleted().stream()
               .map(this::extractIdFromFilename)
