@@ -1,5 +1,4 @@
 import tailwindcss from "@tailwindcss/vite";
-import { parseInt } from "lodash";
 import { defineNuxtConfig } from "nuxt/config";
 import IconsResolver from "unplugin-icons/resolver";
 import Icons from "unplugin-icons/vite";
@@ -52,7 +51,7 @@ export default defineNuxtConfig({
     "nuxt-auth-utils",
     "nuxt-security",
     "@nuxt/scripts",
-    "@nuxtjs/seo",
+    "@nuxtjs/sitemap",
   ],
   devtools: {
     enabled: true,
