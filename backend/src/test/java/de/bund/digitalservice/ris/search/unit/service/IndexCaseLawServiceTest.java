@@ -221,6 +221,27 @@ class IndexCaseLawServiceTest {
   }
 
   @Test
+  void doesNotIndexNoneXmlFilesListedInChangelog() throws ObjectStoreServiceException {
+    String testContent = caseLawContent;
+
+    when(this.bucket.getFileAsString("TEST080020093/TEST080020093.xml"))
+        .thenReturn(Optional.of(testContent));
+
+    Changelog changelog = new Changelog();
+    changelog.setChanged(
+        Sets.newHashSet(List.of("TEST080020093/TEST080020093.xml", "TEST080020093/picture.png")));
+    service.indexChangelog("changelog1", changelog);
+
+    verify(repo, times(1))
+        .save(
+            argThat(
+                arg -> {
+                  assertThat(arg.id()).isEqualTo("TEST80020093");
+                  return true;
+                }));
+  }
+
+  @Test
   void itCanDeleteFromOneSpecificChangelog() throws ObjectStoreServiceException {
     Changelog changelog = new Changelog();
     changelog.setDeleted(Sets.newHashSet(Set.of("TEST080020093.xml")));
