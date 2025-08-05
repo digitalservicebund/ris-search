@@ -1,8 +1,9 @@
 import { mountSuspended } from "@nuxt/test-utils/runtime";
 import { mount, RouterLinkStub } from "@vue/test-utils";
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi, afterEach } from "vitest";
 import NormSearchResult from "./NormSearchResult.vue";
 import type { LegislationWork, SearchResult, TextMatch } from "~/types";
+import * as Config from "~/utils/config";
 
 const NuxtLinkStub = {
   name: "NuxtLink",
@@ -19,7 +20,7 @@ describe("NormSearchResult.vue", () => {
       "@type": "Legislation",
       "@id": "eli/bund/bgbl-0/1999/ab/regelungstext-1",
       alternateName: "NoRM",
-      legislationDate: "1999-12-21",
+      legislationDate: "1999-12-14",
       datePublished: "1999-12-21",
       isPartOf: {
         name: "The Official Gazette",
@@ -33,7 +34,7 @@ describe("NormSearchResult.vue", () => {
         encoding: [],
         tableOfContents: [],
         legislationLegalForce: "InForce",
-        temporalCoverage: "../..",
+        temporalCoverage: "2000-01-01/..",
       },
     },
     textMatches: [
@@ -84,6 +85,10 @@ describe("NormSearchResult.vue", () => {
     });
   };
 
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   it("renders correctly with all props", () => {
     const wrapper = customMount({
       searchResult: mockSearchResult,
@@ -92,6 +97,8 @@ describe("NormSearchResult.vue", () => {
 
     expect(wrapper.text()).toContain("TN");
     expect(wrapper.text()).toContain("Norm");
+    expect(wrapper.text()).toContain("01.01.2000");
+    expect(wrapper.text()).not.toContain("14.12.1999");
     expect(wrapper.get("a").element.innerHTML).toBe(
       "<div>Highlighted <mark>Test Title</mark></div>",
     );
@@ -102,6 +109,19 @@ describe("NormSearchResult.vue", () => {
       "Example Text 1",
     );
     expect(wrapper.findAll('[data-testid="highlights"] > div')).toHaveLength(4); // 4 relevant highlights
+  });
+
+  it("renders ausfertigungs datum when in prototype environment", () => {
+    const mockedIsPrototypeProfile = vi.spyOn(Config, "isPrototypeProfile");
+    mockedIsPrototypeProfile.mockReturnValue(true);
+
+    const wrapper = customMount({
+      searchResult: mockSearchResult,
+      order: 0,
+    });
+
+    expect(wrapper.text()).toContain("14.12.1999");
+    expect(wrapper.text()).not.toContain("01.01.2000");
   });
 
   it("uses item name when official title is not available", () => {
