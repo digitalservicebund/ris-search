@@ -1,3 +1,4 @@
+import dayjs from "dayjs";
 import { describe, vi } from "vitest";
 import { getCurrentDateInGermanyFormatted } from "./dateFormatting";
 
@@ -14,5 +15,23 @@ describe("getCurrentDateInGermany", () => {
     expect(getCurrentDateInGermanyFormatted()).toBe("1970-01-02");
 
     vi.useRealTimers();
+  });
+});
+
+describe("dateFormattedDDMMYYYY", () => {
+  it("returns undefined if input is undefined", () => {
+    expect(dateFormattedDDMMYYYY()).toBe(undefined);
+  });
+
+  it("returns undefined if input not a valid date", () => {
+    expect(dateFormattedDDMMYYYY("foo")).toBe(undefined);
+  });
+
+  it("returns formatted date if input is valid date string", () => {
+    expect(dateFormattedDDMMYYYY("2042-04-02")).toBe("02.04.2042");
+  });
+
+  it("returns formatted date if input is dayjs object", () => {
+    expect(dateFormattedDDMMYYYY(dayjs("2042-04-02"))).toBe("02.04.2042");
   });
 });

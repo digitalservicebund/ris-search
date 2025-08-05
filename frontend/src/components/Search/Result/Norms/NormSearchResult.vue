@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import LegalIcon from "virtual:icons/mdi/legal";
 import type { LegislationWork, SearchResult, TextMatch } from "~/types";
-import { formattedDate } from "~/utils/dateFormatting";
+import { dateFormattedDDMMYYYY } from "~/utils/dateFormatting";
 
 const props = defineProps<{
   searchResult: SearchResult<LegislationWork>;
@@ -28,6 +28,16 @@ const link = computed(() => {
   return prefix + expressionEli;
 });
 
+const formattedDate = computed(() => {
+  const date = isPrototypeProfile()
+    ? item.value?.legislationDate
+    : temporalCoverageToValidityInterval(
+        item.value?.workExample?.temporalCoverage,
+      )?.from;
+
+  return dateFormattedDDMMYYYY(date);
+});
+
 const relevantHighlights = computed(() => {
   return highlights.value
     .filter((highlight) => highlight.name != "name")
@@ -46,7 +56,7 @@ function openResult(url: string) {
         <span>Norm</span>
       </div>
       <span v-if="item.abbreviation">{{ item.abbreviation }}</span>
-      <span>{{ formattedDate(item.legislationDate) }}</span>
+      <span v-if="formattedDate">{{ formattedDate }}</span>
     </div>
     <NuxtLink
       v-if="!!link"

@@ -108,7 +108,7 @@ if (contentError?.value) {
         <MetadataField
           id="decision_date"
           label="Entscheidungsdatum"
-          :value="formattedDate(caseLaw.decisionDate)"
+          :value="dateFormattedDDMMYYYY(caseLaw.decisionDate)"
         />
         <MetadataField
           id="file_numbers"

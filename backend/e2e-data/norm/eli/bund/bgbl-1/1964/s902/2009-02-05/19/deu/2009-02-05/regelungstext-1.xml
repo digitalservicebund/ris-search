@@ -62,6 +62,9 @@
                     <akn:shortTitle GUID="11111111-0000-4222-3333-444444444444" eId="einleitung-n1_doktitel-n1_text-n1_kurztitel-n1">(Musterverordnung - TestV)</akn:shortTitle>
                 </akn:p>
             </akn:longTitle>
+            <akn:block eId="einleitung-n1_block-n1" GUID="11111111-0000-4222-3333-444444444456" name="attributsemantik-noch-undefiniert">
+                <akn:date date="1964-08-01" eId="einleitung-n1_block-n1_datum-n1" GUID="11111111-0000-4222-3333-444444444820" refersTo="ausfertigung-datum"/>
+            </akn:block>
         </akn:preface>
         <akn:preamble GUID="22222222-0000-4333-4444-555555555555" eId="präambel-n1"/>
         <akn:body GUID="33333333-0000-4444-5555-666666666666" eId="hauptteil-n1">

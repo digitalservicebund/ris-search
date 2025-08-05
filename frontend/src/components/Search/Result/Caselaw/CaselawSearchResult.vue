@@ -2,7 +2,6 @@
 import _ from "lodash";
 import GavelIcon from "virtual:icons/material-symbols/gavel";
 import type { CaseLaw, SearchResult, TextMatch } from "~/types";
-import { formattedDate } from "~/utils/dateFormatting";
 import { sanitizeSearchResult } from "~/utils/sanitize";
 import { addEllipsis, removeOuterParentheses } from "~/utils/textFormatting";
 
@@ -94,7 +93,7 @@ const metadata = computed(() => {
       "Titelzeile nicht vorhanden",
     url: `/case-law/${props.searchResult.item.documentNumber}`,
     courtName: item.courtName,
-    decisionDate: formattedDate(item.decisionDate),
+    decisionDate: dateFormattedDDMMYYYY(item.decisionDate),
     fileNumbers: getFileNumbers(item),
     decisionName: item.decisionName?.at(0),
     documentType: item.documentType || "Entscheidung",

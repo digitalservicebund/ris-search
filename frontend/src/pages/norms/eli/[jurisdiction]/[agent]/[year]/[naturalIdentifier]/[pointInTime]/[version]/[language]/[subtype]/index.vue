@@ -217,7 +217,7 @@ const breadcrumbItems: ComputedRef<BreadcrumbItem[]> = computed(() => {
               <Properties>
                 <PropertiesItem
                   label="Ausfertigungsdatum:"
-                  :value="formattedDate(metadata.legislationDate)"
+                  :value="dateFormattedDDMMYYYY(metadata.legislationDate)"
                 />
                 <PropertiesItem
                   label="Vollzitat:"

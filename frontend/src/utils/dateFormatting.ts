@@ -8,14 +8,16 @@ dayjs.extend(timezone);
 
 const TIMEZONE_GERMANY = "Europe/Berlin";
 
-export function formattedDate(
-  date: string | null | undefined,
+export function dateFormattedDDMMYYYY(
+  date?: Dayjs | string,
 ): string | undefined {
-  return date ? dateFormattedDDMMYYYY(dayjs(date)) : undefined;
-}
+  const dayjsDate = typeof date === "string" ? dayjs(date) : date;
 
-export function dateFormattedDDMMYYYY(date?: Dayjs): string | undefined {
-  return date ? date.format("DD.MM.YYYY") : undefined;
+  if (!dayjsDate?.isValid()) {
+    return undefined;
+  }
+
+  return dayjsDate.format("DD.MM.YYYY");
 }
 
 export function parseDateGermanLocalTime(
