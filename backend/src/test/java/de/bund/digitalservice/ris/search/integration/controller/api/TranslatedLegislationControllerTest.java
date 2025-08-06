@@ -147,7 +147,7 @@ class TranslatedLegislationControllerTest extends ContainersIntegrationBase {
   }
 
   @Test
-  @DisplayName("Should return 404 when file does not exists")
+  @DisplayName("Should return 404 when file does not exist")
   void shouldReturnNotFoundWhenFileDoesNotExist() throws Exception {
     mockMvc
         .perform(
