@@ -123,7 +123,7 @@ class TranslatedLegislationControllerTest extends ContainersIntegrationBase {
   }
 
   @Test
-  @DisplayName("Should return empty list of translation with one item on match")
+  @DisplayName("Should return empty list of translation on no match")
   void shouldReturnEmptyListOnNoIdMatch() throws Exception {
     mockMvc
         .perform(
