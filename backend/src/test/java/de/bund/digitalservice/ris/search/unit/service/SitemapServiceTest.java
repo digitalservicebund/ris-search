@@ -1,98 +1,77 @@
 package de.bund.digitalservice.ris.search.unit.service;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.anyString;
+import static org.mockito.Mockito.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
-import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.service.SitemapService;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
-import java.util.Collections;
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
-
+@ExtendWith(MockitoExtension.class)
 class SitemapServiceTest {
-    private SitemapService sitemapService;
-    private NormsBucket normsBucket;
+  private SitemapService sitemapService;
+  @Mock private NormsBucket normsBucket;
 
-    @BeforeEach
-    void setUp() {
-        sitemapService = new SitemapService();
-        normsBucket = mock(NormsBucket.class);
-        ReflectionTestUtils.setField(sitemapService, "baseUrl", "https://test.local/");
-    }
+  @BeforeEach
+  void setUp() {
+    sitemapService = new SitemapService();
+    ReflectionTestUtils.setField(sitemapService, "baseUrl", "https://test.local/");
+  }
 
-    @Test
-    void testGetNormsBatchSitemapPath() {
-        assertEquals("sitemaps/norms/1.xml", sitemapService.getNormsBatchSitemapPath(1));
-    }
+  @Test
+  void testGetNormsBatchSitemapPath() {
+    assertEquals("sitemaps/norms/1.xml", sitemapService.getNormsBatchSitemapPath(1));
+  }
 
-    @Test
-    void testGetNormsIndexSitemapPath() {
-        assertEquals("sitemaps/norms/index.xml", sitemapService.getNormsIndexSitemapPath());
-    }
+  @Test
+  void testGetNormsIndexSitemapPath() {
+    assertEquals("sitemaps/norms/index.xml", sitemapService.getNormsIndexSitemapPath());
+  }
 
-    @Test
-    void testGenerateNormsSitemap() throws IOException {
-        Norm norm = mock(Norm.class);
-        when(norm.getExpressionEli()).thenReturn("eli/test/1");
-        when(norm.getDatePublished()).thenReturn(LocalDate.parse("2025-08-06"));
-        InputStream normSitemap = sitemapService.generateNormsSitemap(List.of(norm));
-        String xml = new String(normSitemap.readAllBytes(), StandardCharsets.UTF_8);
-        assertTrue(xml.contains("<loc>https://test.local/norms/eli/test/1</loc>"));
-        assertTrue(xml.contains("<lastmod>2025-08-06</lastmod>"));
-    }
+  @Test
+  void testGenerateNormsSitemap() throws IOException {
+    Norm norm = mock(Norm.class);
+    when(norm.getExpressionEli()).thenReturn("eli/test/1");
+    when(norm.getDatePublished()).thenReturn(LocalDate.parse("2025-08-06"));
+    String normSitemap = sitemapService.generateNormsSitemap(List.of(norm));
+    assertTrue(normSitemap.contains("<loc>https://test.local/norms/eli/test/1</loc>"));
+    assertTrue(normSitemap.contains("<lastmod>2025-08-06</lastmod>"));
+  }
 
-    @Test
-    void testGenerateIndexXml() throws IOException {
-        InputStream indexXml = sitemapService.generateIndexXml(2);
-        String xml = new String(indexXml.readAllBytes(), StandardCharsets.UTF_8);
-        assertTrue(xml.contains("<loc>https://test.local/api/v1/sitemaps/norms/1.xml</loc>"));
-        assertTrue(xml.contains("<loc>https://test.local/api/v1/sitemaps/norms/2.xml</loc>"));
-        assertTrue(xml.contains("<sitemapindex"));
-    }
+  @Test
+  void testGenerateIndexXml() throws IOException {
+    String indexXml = sitemapService.generateIndexXml(2);
+    assertTrue(indexXml.contains("<loc>https://test.local/sitemaps/norms/1.xml</loc>"));
+    assertTrue(indexXml.contains("<loc>https://test.local/sitemaps/norms/2.xml</loc>"));
+    assertTrue(indexXml.contains("<sitemapindex"));
+  }
 
-    @Test
-    void testCreateNormsBatchSitemap() throws Exception {
-        Norm norm = mock(Norm.class);
-        when(norm.getExpressionEli()).thenReturn("eli/test/1");
-        when(norm.getDatePublished()).thenReturn(LocalDate.parse("2025-08-06"));
-        doNothing().when(normsBucket).putStream(anyString(), any(InputStream.class));
-        sitemapService.createNormsBatchSitemap(1, List.of(norm), normsBucket);
-        verify(normsBucket).putStream(eq("sitemaps/norms/1.xml"), any(InputStream.class));
-    }
+  @Test
+  void testCreateNormsBatchSitemap() throws Exception {
+    Norm norm = mock(Norm.class);
+    when(norm.getExpressionEli()).thenReturn("eli/test/1");
+    when(norm.getDatePublished()).thenReturn(LocalDate.parse("2025-08-06"));
+    sitemapService.createNormsBatchSitemap(1, List.of(norm), normsBucket);
+    verify(normsBucket).save(eq("sitemaps/norms/1.xml"), anyString());
+  }
 
-    @Test
-    void testCreateNormsIndexSitemap() throws Exception {
-        doNothing().when(normsBucket).putStream(anyString(), any(InputStream.class));
-        sitemapService.createNormsIndexSitemap(2, normsBucket);
-        verify(normsBucket).putStream(eq("sitemaps/norms/index.xml"), any(InputStream.class));
-    }
-
-    @Test
-    void testCreateNormsBatchSitemapThrowsException() throws Exception {
-        Norm norm = mock(Norm.class);
-        when(norm.getExpressionEli()).thenReturn("eli/test/1");
-        when(norm.getDatePublished()).thenReturn(LocalDate.parse("2025-08-06"));
-        doThrow(new RuntimeException("fail")).when(normsBucket).putStream(anyString(), any(InputStream.class));
-        Exception ex = assertThrows(ObjectStoreServiceException.class, () ->
-            sitemapService.createNormsBatchSitemap(1, List.of(norm), normsBucket));
-        assertTrue(ex.getMessage().contains("Failed to create norms sitemap"));
-    }
-
-    @Test
-    void testCreateNormsIndexSitemapThrowsException() throws Exception {
-        doThrow(new RuntimeException("fail")).when(normsBucket).putStream(anyString(), any(InputStream.class));
-        Exception ex = assertThrows(ObjectStoreServiceException.class, () ->
-            sitemapService.createNormsIndexSitemap(2, normsBucket));
-        assertTrue(ex.getMessage().contains("Failed to create norms index sitemap"));
-    }
+  @Test
+  void testCreateNormsIndexSitemap() throws Exception {
+    sitemapService.createNormsIndexSitemap(2, normsBucket);
+    verify(normsBucket).save(eq("sitemaps/norms/index.xml"), anyString());
+  }
 }
-

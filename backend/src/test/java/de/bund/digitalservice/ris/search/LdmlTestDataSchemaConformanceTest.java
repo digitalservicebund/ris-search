@@ -84,7 +84,7 @@ class LdmlTestDataSchemaConformanceTest {
   }
 
   private static Stream<Arguments> argumentsForE2EDataSchemaConformance() throws IOException {
-    return testDataPathForDirectory("e2e-data/norm");
+    return testDataPathForDirectory("e2e-data/norm/eli/");
   }
 
   @ParameterizedTest
@@ -95,7 +95,7 @@ class LdmlTestDataSchemaConformanceTest {
 
   private static Stream<Arguments> argumentsForIntegrationTestDataSchemaConformance()
       throws IOException {
-    return testDataPathForDirectory("src/test/resources/data/LDML/norm");
+    return testDataPathForDirectory("src/test/resources/data/LDML/norm/eli");
   }
 
   @ParameterizedTest

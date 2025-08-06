@@ -4,6 +4,7 @@ import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
 import de.bund.digitalservice.ris.search.service.SitemapService;
+import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 /** Controller class for handling REST API requests for sitemaps. */
 @RestController
+@Hidden
 @Tag(
     name = "Sitemap",
     description =
@@ -67,7 +69,7 @@ public class SitemapController {
   @ApiResponse(responseCode = "200")
   @ApiResponse(responseCode = "404")
   public ResponseEntity<byte[]> getNormSitemapXml(
-          @Parameter(description = "Sitemap Filename", example = "index") @PathVariable String filename)
+      @Parameter(description = "Sitemap Filename", example = "index") @PathVariable String filename)
       throws ObjectStoreServiceException {
 
     Optional<byte[]> file;
@@ -85,7 +87,9 @@ public class SitemapController {
 
     return file.map(
             body ->
-                ResponseEntity.status(HttpStatus.OK).header("Content-Type", MediaType.APPLICATION_XML_VALUE).body(body))
+                ResponseEntity.status(HttpStatus.OK)
+                    .header("Content-Type", MediaType.APPLICATION_XML_VALUE)
+                    .body(body))
         .orElseGet(() -> ResponseEntity.notFound().build());
   }
 }

@@ -53,7 +53,7 @@ public class IndexNormsService implements IndexService {
     for (int i = 0; i < batches.size(); i++) {
       logger.info("Import norms batch {} of {} complete.", (i + 1), batches.size());
       List<Norm> norms = indexOneNormBatch(batches.get(i));
-      sitemapService.createNormsBatchSitemap(i+1, norms, normsBucket);
+      sitemapService.createNormsBatchSitemap(i + 1, norms, normsBucket);
     }
     sitemapService.createNormsIndexSitemap(batches.size(), normsBucket);
     clearOldNorms(startingTimestamp);

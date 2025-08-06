@@ -3,10 +3,8 @@ package de.bund.digitalservice.ris.search.service;
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 import java.time.Instant;
-import java.util.*;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -28,24 +26,15 @@ public class SitemapService {
   public void createNormsBatchSitemap(int batchNumber, List<Norm> norms, NormsBucket normsBucket)
       throws ObjectStoreServiceException {
     String path = this.getNormsBatchSitemapPath(batchNumber);
-    try {
-      normsBucket.putStream(path, this.generateNormsSitemap(norms));
-    } catch (Exception e) {
-      throw new ObjectStoreServiceException("Failed to create norms sitemap: " + path, e);
-    }
+    normsBucket.save(path, this.generateNormsSitemap(norms));
   }
 
-  public void createNormsIndexSitemap(int size, NormsBucket normsBucket)
-      throws ObjectStoreServiceException {
+  public void createNormsIndexSitemap(int size, NormsBucket normsBucket) {
     String path = this.getNormsIndexSitemapPath();
-    try {
-      normsBucket.putStream(path, this.generateIndexXml(size));
-    } catch (Exception e) {
-      throw new ObjectStoreServiceException("Failed to create norms index sitemap: " + path, e);
-    }
+    normsBucket.save(path, this.generateIndexXml(size));
   }
 
-  public InputStream generateNormsSitemap(List<Norm> norms) {
+  public String generateNormsSitemap(List<Norm> norms) {
     StringBuilder builder = new StringBuilder();
     builder.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
     builder.append("<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n");
@@ -55,17 +44,17 @@ public class SitemapService {
           .append("    <loc>")
           .append(baseUrl + "norms/")
           .append(norm.getExpressionEli())
-              .append("</loc>\n");
+          .append("</loc>\n");
       if (norm.getDatePublished() != null) {
         builder.append("    <lastmod>").append(norm.getDatePublished()).append("</lastmod>\n");
       }
       builder.append("  </url>\n");
     }
     builder.append("</urlset>");
-    return new ByteArrayInputStream(builder.toString().getBytes());
+    return builder.toString();
   }
 
-  public InputStream generateIndexXml(int size) {
+  public String generateIndexXml(int size) {
     StringBuilder builder = new StringBuilder();
     builder.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
     builder.append("<sitemapindex xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n");
@@ -73,7 +62,7 @@ public class SitemapService {
       builder
           .append("  <sitemap>\n")
           .append("    <loc>")
-          .append(baseUrl + "api/v1/")
+          .append(baseUrl)
           .append(this.getNormsBatchSitemapPath(i))
           .append("</loc>\n")
           .append("    <lastmod>")
@@ -82,6 +71,6 @@ public class SitemapService {
           .append("  </sitemap>\n");
     }
     builder.append("</sitemapindex>");
-    return new ByteArrayInputStream(builder.toString().getBytes());
+    return builder.toString();
   }
 }

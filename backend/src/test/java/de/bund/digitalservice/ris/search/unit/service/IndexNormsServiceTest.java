@@ -2,12 +2,10 @@ package de.bund.digitalservice.ris.search.unit.service;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.ArgumentMatchers.anyMap;
-import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -182,24 +180,18 @@ class IndexNormsServiceTest {
   void reindexAllCallsSitemapServiceForBatchesAndIndex() throws Exception {
     List<String> keys = new java.util.ArrayList<>();
     for (int i = 0; i < 101; i++) {
-      keys.add("eli/bund/bgbl-1/1992/s101/1992-01-01/1/deu/regelungstext-" + i + ".xml");
+      keys.add("eli/bund/bgbl-1/1992/s101/1992-01-01/1/deu/1992-01-02/regelungstext-" + i + ".xml");
     }
-    when(bucket.getAllKeysByPrefix("eli/")).thenReturn(keys);
-    when(bucket.getAllKeysByPrefix(anyString())).thenReturn(keys);
-    when(bucket.getFileAsString(anyString())).thenReturn(Optional.of(testContent));
-    Norm norm = mock(Norm.class);
-    NormLdmlToOpenSearchMapper normLdmlToOpenSearchMapper = mock(NormLdmlToOpenSearchMapper.class);
-    when(normLdmlToOpenSearchMapper.parseNorm(anyString(), anyMap())).thenReturn(Optional.of(norm));
-    when(repo.saveAll(anyList())).thenReturn(Collections.singletonList(norm));
-    when(norm.getExpressionEli()).thenReturn("eli/bund/bgbl-1/1992/s101/1992-01-01/1/deu/regelungstext-1");
-    when(normLdmlToOpenSearchMapper.parseNorm(anyString(), anyMap())).thenReturn(Optional.of(norm));
+    when(this.bucket.getAllKeysByPrefix(anyString())).thenReturn(keys);
+    when(this.bucket.getFileAsString(anyString())).thenReturn(Optional.of(testContent));
+    Norm norm =
+        NormLdmlToOpenSearchMapper.parseNorm(testContent, Collections.emptyMap()).orElseThrow();
+    when(this.repo.saveAll(anyList())).thenReturn(Collections.singletonList(norm));
 
-    String startingTimestamp = ZonedDateTime.now(ZoneOffset.UTC).format(DateTimeFormatter.ISO_INSTANT);
-    service.reindexAll(startingTimestamp);
-
-    // Should call createNormsBatchSitemap twice (2 batches)
-    verify(sitemapService, times(2)).createNormsBatchSitemap(anyInt(), anyList(), eq(bucket));
-    // Should call createNormsIndexSitemap once
-    verify(sitemapService, times(1)).createNormsIndexSitemap(eq(2), eq(bucket));
+    String startingTimestamp =
+        ZonedDateTime.now(ZoneOffset.UTC).format(DateTimeFormatter.ISO_INSTANT);
+    this.service.reindexAll(startingTimestamp);
+    verify(this.sitemapService, times(2)).createNormsBatchSitemap(anyInt(), anyList(), eq(bucket));
+    verify(this.sitemapService, times(1)).createNormsIndexSitemap(eq(2), eq(bucket));
   }
 }
