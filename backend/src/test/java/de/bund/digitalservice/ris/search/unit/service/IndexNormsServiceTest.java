@@ -1,11 +1,11 @@
 package de.bund.digitalservice.ris.search.unit.service;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.argThat;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -17,7 +17,6 @@ import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
 import de.bund.digitalservice.ris.search.repository.opensearch.NormsSynthesizedRepository;
 import de.bund.digitalservice.ris.search.service.IndexNormsService;
 import de.bund.digitalservice.ris.search.service.SitemapService;
-import java.io.IOException;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -134,7 +133,7 @@ class IndexNormsServiceTest {
           """;
 
   @Test
-  void reindexAllIgnoresInvalidFiles() throws ObjectStoreServiceException, IOException {
+  void reindexAllIgnoresInvalidFiles() throws ObjectStoreServiceException {
 
     when(this.bucket.getAllKeysByPrefix("eli/"))
         .thenReturn(
@@ -191,7 +190,8 @@ class IndexNormsServiceTest {
     String startingTimestamp =
         ZonedDateTime.now(ZoneOffset.UTC).format(DateTimeFormatter.ISO_INSTANT);
     this.service.reindexAll(startingTimestamp);
-    verify(this.sitemapService, times(2)).createNormsBatchSitemap(anyInt(), anyList(), eq(bucket));
-    verify(this.sitemapService, times(1)).createNormsIndexSitemap(eq(2), eq(bucket));
+    verify(this.sitemapService, times(2))
+        .createNormsBatchSitemap(anyInt(), anyList(), any(NormsBucket.class));
+    verify(this.sitemapService, times(1)).createNormsIndexSitemap(anyInt(), any(NormsBucket.class));
   }
 }

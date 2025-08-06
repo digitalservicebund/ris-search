@@ -14,7 +14,6 @@ import de.bund.digitalservice.ris.search.service.IndexStatusService;
 import de.bund.digitalservice.ris.search.service.IndexSyncJob;
 import de.bund.digitalservice.ris.search.service.IndexingState;
 import de.bund.digitalservice.ris.search.service.NormIndexSyncJob;
-import java.io.IOException;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
@@ -67,7 +66,7 @@ class IndexSyncJobTest {
   }
 
   @Test
-  void itTriggersReindexAll() throws ObjectStoreServiceException, IOException {
+  void itTriggersReindexAll() throws ObjectStoreServiceException {
     Changelog changelog = new Changelog();
     changelog.setChangeAll(true);
 

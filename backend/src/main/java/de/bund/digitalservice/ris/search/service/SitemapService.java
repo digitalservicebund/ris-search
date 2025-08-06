@@ -1,6 +1,5 @@
 package de.bund.digitalservice.ris.search.service;
 
-import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
 import java.time.Instant;
@@ -13,18 +12,17 @@ public class SitemapService {
   @Value("${server.front-end-url}")
   private String baseUrl;
 
-  private final String NORMS_SITEMAPS_PREFIX = "sitemaps/norms/";
+  private static final String normsSitemapPrefix = "sitemaps/norms/";
 
   public String getNormsBatchSitemapPath(int batchNumber) {
-    return NORMS_SITEMAPS_PREFIX + String.format("%d.xml", batchNumber);
+    return normsSitemapPrefix + String.format("%d.xml", batchNumber);
   }
 
   public String getNormsIndexSitemapPath() {
-    return NORMS_SITEMAPS_PREFIX + "index.xml";
+    return normsSitemapPrefix + "index.xml";
   }
 
-  public void createNormsBatchSitemap(int batchNumber, List<Norm> norms, NormsBucket normsBucket)
-      throws ObjectStoreServiceException {
+  public void createNormsBatchSitemap(int batchNumber, List<Norm> norms, NormsBucket normsBucket) {
     String path = this.getNormsBatchSitemapPath(batchNumber);
     normsBucket.save(path, this.generateNormsSitemap(norms));
   }
@@ -42,7 +40,8 @@ public class SitemapService {
       builder.append("  <url>\n");
       builder
           .append("    <loc>")
-          .append(baseUrl + "norms/")
+          .append(baseUrl)
+          .append("norms/")
           .append(norm.getExpressionEli())
           .append("</loc>\n");
       if (norm.getDatePublished() != null) {

@@ -11,7 +11,6 @@ import static org.mockito.Mockito.when;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
 import de.bund.digitalservice.ris.search.service.SitemapService;
-import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -43,7 +42,7 @@ class SitemapServiceTest {
   }
 
   @Test
-  void testGenerateNormsSitemap() throws IOException {
+  void testGenerateNormsSitemap() {
     Norm norm = mock(Norm.class);
     when(norm.getExpressionEli()).thenReturn("eli/test/1");
     when(norm.getDatePublished()).thenReturn(LocalDate.parse("2025-08-06"));
@@ -53,7 +52,7 @@ class SitemapServiceTest {
   }
 
   @Test
-  void testGenerateIndexXml() throws IOException {
+  void testGenerateIndexXml() {
     String indexXml = sitemapService.generateIndexXml(2);
     assertTrue(indexXml.contains("<loc>https://test.local/sitemaps/norms/1.xml</loc>"));
     assertTrue(indexXml.contains("<loc>https://test.local/sitemaps/norms/2.xml</loc>"));
@@ -61,7 +60,7 @@ class SitemapServiceTest {
   }
 
   @Test
-  void testCreateNormsBatchSitemap() throws Exception {
+  void testCreateNormsBatchSitemap() {
     Norm norm = mock(Norm.class);
     when(norm.getExpressionEli()).thenReturn("eli/test/1");
     when(norm.getDatePublished()).thenReturn(LocalDate.parse("2025-08-06"));
@@ -70,7 +69,7 @@ class SitemapServiceTest {
   }
 
   @Test
-  void testCreateNormsIndexSitemap() throws Exception {
+  void testCreateNormsIndexSitemap() {
     sitemapService.createNormsIndexSitemap(2, normsBucket);
     verify(normsBucket).save(eq("sitemaps/norms/index.xml"), anyString());
   }
