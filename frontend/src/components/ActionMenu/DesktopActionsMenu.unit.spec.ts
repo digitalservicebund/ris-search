@@ -1,10 +1,12 @@
 import { mount, type VueWrapper } from "@vue/test-utils";
 import { afterEach } from "vitest";
-import type { ActionMenuItem } from "~/components/ActionMenu/ActionsMenu.vue";
+import ActionsMenu, {
+  type ActionMenuItem,
+} from "~/components/ActionMenu/ActionsMenu.vue";
 import LargeActionsMenu from "~/components/ActionMenu/LargeActionsMenu.vue";
 import MdiDotsVertical from "~icons/mdi/dots-vertical";
 
-describe("LargeActionsMenu.vue", () => {
+describe("DesktopActionsMenu.vue", () => {
   const command = vi.fn();
 
   afterEach(() => {
@@ -12,7 +14,7 @@ describe("LargeActionsMenu.vue", () => {
   });
 
   function mountWithActions(actions: ActionMenuItem[]): VueWrapper {
-    return mount(LargeActionsMenu, {
+    return mount(ActionsMenu, {
       props: {
         actions: actions,
       },
