@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -61,7 +62,8 @@ public class TranslatedLegislationController {
       }
       return ResponseEntity.notFound().build();
     } catch (ObjectStoreServiceException exception) {
-      return ResponseEntity.notFound().build();
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+          .body("Error accessing the object store.");
     }
   }
 
