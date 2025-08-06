@@ -1,7 +1,13 @@
 package de.bund.digitalservice.ris.search.unit.service;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyMap;
 import static org.mockito.ArgumentMatchers.argThat;
+import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -12,6 +18,8 @@ import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
 import de.bund.digitalservice.ris.search.repository.opensearch.NormsSynthesizedRepository;
 import de.bund.digitalservice.ris.search.service.IndexNormsService;
+import de.bund.digitalservice.ris.search.service.SitemapService;
+import java.io.IOException;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -31,10 +39,11 @@ class IndexNormsServiceTest {
 
   @Mock NormsBucket bucket;
   @Mock NormsSynthesizedRepository repo;
+  @Mock SitemapService sitemapService;
 
   @BeforeEach()
   void setup() {
-    this.service = new IndexNormsService(bucket, repo);
+    this.service = new IndexNormsService(bucket, repo, sitemapService);
   }
 
   private String testContent =
@@ -127,7 +136,7 @@ class IndexNormsServiceTest {
           """;
 
   @Test
-  void reindexAllIgnoresInvalidFiles() throws ObjectStoreServiceException {
+  void reindexAllIgnoresInvalidFiles() throws ObjectStoreServiceException, IOException {
 
     when(this.bucket.getAllKeysByPrefix("eli/"))
         .thenReturn(
@@ -167,5 +176,30 @@ class IndexNormsServiceTest {
                 "eli/bund/bgbl-1/2013/s4098/2022-03-15/2/deu/2025-03-08/regelungstext-1.xml",
                 "eli/bund/bgbl-1/2013/s1925/2015-10-12/2/deu/2025-03-08/offenestruktur-1.xml"));
     assertThat(service.getNumberOfFilesInBucket()).isEqualTo(2);
+  }
+
+  @Test
+  void reindexAllCallsSitemapServiceForBatchesAndIndex() throws Exception {
+    List<String> keys = new java.util.ArrayList<>();
+    for (int i = 0; i < 101; i++) {
+      keys.add("eli/bund/bgbl-1/1992/s101/1992-01-01/1/deu/regelungstext-" + i + ".xml");
+    }
+    when(bucket.getAllKeysByPrefix("eli/")).thenReturn(keys);
+    when(bucket.getAllKeysByPrefix(anyString())).thenReturn(keys);
+    when(bucket.getFileAsString(anyString())).thenReturn(Optional.of(testContent));
+    Norm norm = mock(Norm.class);
+    NormLdmlToOpenSearchMapper normLdmlToOpenSearchMapper = mock(NormLdmlToOpenSearchMapper.class);
+    when(normLdmlToOpenSearchMapper.parseNorm(anyString(), anyMap())).thenReturn(Optional.of(norm));
+    when(repo.saveAll(anyList())).thenReturn(Collections.singletonList(norm));
+    when(norm.getExpressionEli()).thenReturn("eli/bund/bgbl-1/1992/s101/1992-01-01/1/deu/regelungstext-1");
+    when(normLdmlToOpenSearchMapper.parseNorm(anyString(), anyMap())).thenReturn(Optional.of(norm));
+
+    String startingTimestamp = ZonedDateTime.now(ZoneOffset.UTC).format(DateTimeFormatter.ISO_INSTANT);
+    service.reindexAll(startingTimestamp);
+
+    // Should call createNormsBatchSitemap twice (2 batches)
+    verify(sitemapService, times(2)).createNormsBatchSitemap(anyInt(), anyList(), eq(bucket));
+    // Should call createNormsIndexSitemap once
+    verify(sitemapService, times(1)).createNormsIndexSitemap(eq(2), eq(bucket));
   }
 }

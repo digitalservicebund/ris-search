@@ -132,6 +132,15 @@ export default defineNuxtConfig({
       static: {
         includeAppSources: true,
         exclude: ["/case‑law/**", "/norms/eli/**"],
+        defaults: { priority: 0.7 },
+      },
+      norms: {
+        sources: [
+          [
+            backendBaseUrl + "/v1/sitemaps/norms/index.xml",
+            { headers: { Accept: "application/xml" } },
+          ]
+        ],
       },
     },
   },
