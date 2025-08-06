@@ -12,14 +12,14 @@ public class SitemapService {
   @Value("${server.front-end-url}")
   private String baseUrl;
 
-  private static final String normsSitemapPrefix = "sitemaps/norms/";
+  private static final String NORMS_SITEMAP_PREFIX = "sitemaps/norms/";
 
   public String getNormsBatchSitemapPath(int batchNumber) {
-    return normsSitemapPrefix + String.format("%d.xml", batchNumber);
+    return NORMS_SITEMAP_PREFIX + String.format("%d.xml", batchNumber);
   }
 
   public String getNormsIndexSitemapPath() {
-    return normsSitemapPrefix + "index.xml";
+    return NORMS_SITEMAP_PREFIX + "index.xml";
   }
 
   public void createNormsBatchSitemap(int batchNumber, List<Norm> norms, NormsBucket normsBucket) {
