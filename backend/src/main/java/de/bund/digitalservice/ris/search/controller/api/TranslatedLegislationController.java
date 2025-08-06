@@ -60,7 +60,8 @@ public class TranslatedLegislationController {
       if (translationHtmlString.isPresent()) {
         return ResponseEntity.ok(translationHtmlString.get());
       }
-      return ResponseEntity.notFound().build();
+      return ResponseEntity.status(HttpStatus.NOT_FOUND)
+          .body("Translation not found for filename: " + filename);
     } catch (ObjectStoreServiceException exception) {
       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
           .body("Error accessing the object store.");
