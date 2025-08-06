@@ -22,7 +22,7 @@ export function createActionMenuItems(
       key: "link",
       label: link.label ?? "Link kopieren",
       iconComponent: UpdatingLinkIcon,
-      command: () => copyUrlCommand(link.url),
+      command: async () => await copyUrlCommand(link.url),
       url: link.url,
     });
   }
@@ -33,7 +33,7 @@ export function createActionMenuItems(
         key: "permalink",
         label: records.permalink.label,
         iconComponent: MaterialSymbolsLink,
-        command: copyUrlCommand(records.permalink.url),
+        command: async () => await copyUrlCommand(records.permalink.url),
         url: records.permalink.url,
         disabled: records.permalink.disabled,
       },
