@@ -3,13 +3,16 @@ package de.bund.digitalservice.ris.search.integration.controller.api;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.c4_soft.springaddons.security.oauth2.test.annotations.WithJwt;
 import de.bund.digitalservice.ris.search.config.ApiConfig;
+import de.bund.digitalservice.ris.search.integration.config.ContainersIntegrationBase;
 import de.bund.digitalservice.ris.search.repository.objectstorage.PortalBucket;
+import java.io.IOException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
@@ -25,12 +28,17 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 @AutoConfigureMockMvc
 @Tag("integration")
 @WithJwt("jwtTokens/ValidAccessToken.json")
-class TranslatedLegislationControllerTest {
+class TranslatedLegislationControllerTest extends ContainersIntegrationBase {
   @Autowired private MockMvc mockMvc;
   @Autowired private PortalBucket portalBucket;
 
   @BeforeEach
-  void setUpTranslatedLegislationControllerTest() {
+  void setUpTranslatedLegislationControllerTest() throws IOException {
+    assertTrue(openSearchContainer.isRunning());
+
+    super.recreateIndex();
+    super.updateMapping();
+
     String translationsJson =
         """
                     [{
