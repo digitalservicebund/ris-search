@@ -23,6 +23,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class TranslatedLegislationController {
 
+  private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+
   private final PortalBucket portalBucket;
 
   public TranslatedLegislationController(PortalBucket portalBucket) {
@@ -70,11 +72,10 @@ public class TranslatedLegislationController {
 
   private List<TranslatedLegislationsJson> readDataFromJson(String abbreviation)
       throws IOException, ObjectStoreServiceException {
-    ObjectMapper mapper = new ObjectMapper();
     Optional<String> dataJson = portalBucket.getFileAsString("translations/data.json");
     if (dataJson.isPresent()) {
       List<TranslatedLegislationsJson> resultList =
-          mapper.readValue(
+          OBJECT_MAPPER.readValue(
               dataJson.get(), new TypeReference<List<TranslatedLegislationsJson>>() {});
       if (abbreviation == null || abbreviation.isEmpty()) {
         return resultList;
