@@ -32,7 +32,7 @@
     "@hyperdx/lucene": "^3.1.1",
     "@nuxt/image": "^1.10.0",
     "@nuxt/kit": "^3.17.6",
-    "@nuxt/schema": "^3.17.5",
+    "@nuxt/schema": "^4.0.3",
     "@nuxtjs/sitemap": "^7.4.3",
     "@pinia/nuxt": "^0.11.2",
     "@sentry/nuxt": "^10.0.0",
