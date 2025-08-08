@@ -132,8 +132,10 @@ export default defineNuxtConfig({
       static: {
         includeAppSources: true,
         exclude: ["/case‑law/**", "/norms/eli/**"],
+        defaults: { priority: 0.7 },
       },
     },
+    appendSitemaps: ["/sitemaps/norms/index.xml"],
   },
   nitro: {
     rollupConfig: {
@@ -148,6 +150,9 @@ export default defineNuxtConfig({
     },
     "v3/api-docs/**": {
       proxy: `${backendBaseUrl}/**`,
+    },
+    "/sitemaps/norms/**": {
+      proxy: `${backendBaseUrl}/v1/sitemaps/norms/**`,
     },
   },
   vite: {
