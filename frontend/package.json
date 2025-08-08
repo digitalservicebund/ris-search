@@ -35,7 +35,7 @@
     "@nuxt/schema": "^3.17.5",
     "@nuxtjs/sitemap": "^7.4.3",
     "@pinia/nuxt": "^0.11.2",
-    "@sentry/nuxt": "^9.29.0",
+    "@sentry/nuxt": "^10.0.0",
     "@tailwindcss/vite": "^4.1.8",
     "axe-html-reporter": "^2.2.11",
     "axios": "^1.10.0",
