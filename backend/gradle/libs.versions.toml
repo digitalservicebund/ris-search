@@ -1,7 +1,7 @@
 [versions]
 # plugins
 jacoco = "0.8.11"
-spring-boot = "3.4.3"
+spring-boot = "3.5.4"
 spring-dependency-management = "1.1.7"
 spotless = "6.25.0"
 sonarqube = "6.0.1.5171"
