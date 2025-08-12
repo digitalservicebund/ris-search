@@ -16,7 +16,7 @@ import org.springframework.data.elasticsearch.repository.config.EnableElasticsea
 
 /** Class to configure the REST client which connects to opensearch in production without ssl. */
 @Configuration
-@Profile({"production", "prototype"})
+@Profile({"production", "prototype", "uat"})
 @EnableElasticsearchRepositories(
     basePackages = "de.bund.digitalservice.ris.search.repository.opensearch")
 public class RestClientConfigProd extends AbstractOpenSearchConfiguration {
