@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 @Component
-@Profile({"default", "staging", "test", "prototype"})
+@Profile({"default", "staging", "uat", "test", "prototype"})
 public class CaseLawBucket extends ObjectStorage {
 
   public CaseLawBucket(@Qualifier("caseLawS3Client") ObjectStorageClient s3Client) {

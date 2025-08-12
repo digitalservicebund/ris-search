@@ -64,7 +64,7 @@ public class SecurityConfig {
    * @throws Exception If an error occurs
    */
   @Bean
-  @Profile({"staging"})
+  @Profile({"staging", "uat"})
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     http.authorizeHttpRequests(
             requests ->
