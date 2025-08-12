@@ -8,7 +8,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.c4_soft.springaddons.security.oauth2.test.annotations.WithJwt;
 import de.bund.digitalservice.ris.search.config.ApiConfig.Paths;
 import de.bund.digitalservice.ris.search.integration.config.ContainersIntegrationBase;
-import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
+import de.bund.digitalservice.ris.search.repository.objectstorage.PortalBucket;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,12 +22,12 @@ import org.springframework.test.web.servlet.MockMvc;
 @WithJwt("jwtTokens/ValidAccessToken.json")
 class SitemapControllerTest extends ContainersIntegrationBase {
   @Autowired private MockMvc mockMvc;
-  @Autowired private NormsBucket normsBucket;
+  @Autowired private PortalBucket portalBucket;
 
   @Test
   void testGetNormsIndexSitemapXml() throws Exception {
     byte[] indexSitemap = "<sitemapindex></sitemapindex>".getBytes();
-    normsBucket.save("sitemaps/norms/index.xml", new String(indexSitemap));
+    portalBucket.save("sitemaps/norms/index.xml", new String(indexSitemap));
     mockMvc
         .perform(get(Paths.SITEMAP_NORMS + "/index.xml"))
         .andExpect(status().isOk())
@@ -38,7 +38,7 @@ class SitemapControllerTest extends ContainersIntegrationBase {
   @Test
   void testGetNormsBatchSitemapXml() throws Exception {
     byte[] xml = "<urlset></urlset>".getBytes();
-    normsBucket.save("sitemaps/norms/1.xml", new String(xml));
+    portalBucket.save("sitemaps/norms/1.xml", new String(xml));
     mockMvc
         .perform(get(Paths.SITEMAP_NORMS + "/1.xml"))
         .andExpect(status().isOk())

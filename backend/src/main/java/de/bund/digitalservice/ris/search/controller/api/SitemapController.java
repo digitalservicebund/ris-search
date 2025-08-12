@@ -2,7 +2,7 @@ package de.bund.digitalservice.ris.search.controller.api;
 
 import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
-import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
+import de.bund.digitalservice.ris.search.repository.objectstorage.PortalBucket;
 import de.bund.digitalservice.ris.search.service.SitemapService;
 import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
@@ -30,12 +30,12 @@ import org.springframework.web.bind.annotation.RestController;
         during the indexing time of norms and caselaw.
         """)
 public class SitemapController {
-  public final NormsBucket normsBucket;
+  public final PortalBucket portalBucket;
   public final SitemapService sitemapService;
 
   @Autowired
-  public SitemapController(SitemapService sitemapService, NormsBucket normsBucket) {
-    this.normsBucket = normsBucket;
+  public SitemapController(SitemapService sitemapService, PortalBucket portalBucket) {
+    this.portalBucket = portalBucket;
     this.sitemapService = sitemapService;
   }
 
@@ -75,11 +75,11 @@ public class SitemapController {
     Optional<byte[]> file;
 
     if (filename.equals("index")) {
-      file = normsBucket.get(sitemapService.getNormsIndexSitemapPath());
+      file = portalBucket.get(sitemapService.getNormsIndexSitemapPath());
     } else {
       try {
         int batchNumber = Integer.parseInt(filename);
-        file = normsBucket.get(sitemapService.getNormsBatchSitemapPath(batchNumber));
+        file = portalBucket.get(sitemapService.getNormsBatchSitemapPath(batchNumber));
       } catch (NumberFormatException e) {
         return ResponseEntity.notFound().build();
       }

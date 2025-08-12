@@ -9,7 +9,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
-import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
+import de.bund.digitalservice.ris.search.repository.objectstorage.PortalBucket;
 import de.bund.digitalservice.ris.search.service.SitemapService;
 import java.time.LocalDate;
 import java.util.List;
@@ -23,11 +23,11 @@ import org.springframework.test.util.ReflectionTestUtils;
 @ExtendWith(MockitoExtension.class)
 class SitemapServiceTest {
   private SitemapService sitemapService;
-  @Mock private NormsBucket normsBucket;
+  @Mock private PortalBucket portalBucket;
 
   @BeforeEach
   void setUp() {
-    sitemapService = new SitemapService();
+    sitemapService = new SitemapService(portalBucket);
     ReflectionTestUtils.setField(sitemapService, "baseUrl", "https://test.local/");
   }
 
@@ -45,7 +45,7 @@ class SitemapServiceTest {
   void testGenerateNormsSitemap() {
     Norm norm = mock(Norm.class);
     when(norm.getExpressionEli()).thenReturn("eli/test/1");
-    when(norm.getDatePublished()).thenReturn(LocalDate.parse("2025-08-06"));
+    when(norm.getEntryIntoForceDate()).thenReturn(LocalDate.parse("2025-08-06"));
     String normSitemap = sitemapService.generateNormsSitemap(List.of(norm));
     assertTrue(normSitemap.contains("<loc>https://test.local/norms/eli/test/1</loc>"));
     assertTrue(normSitemap.contains("<lastmod>2025-08-06</lastmod>"));
@@ -63,14 +63,14 @@ class SitemapServiceTest {
   void testCreateNormsBatchSitemap() {
     Norm norm = mock(Norm.class);
     when(norm.getExpressionEli()).thenReturn("eli/test/1");
-    when(norm.getDatePublished()).thenReturn(LocalDate.parse("2025-08-06"));
-    sitemapService.createNormsBatchSitemap(1, List.of(norm), normsBucket);
-    verify(normsBucket).save(eq("sitemaps/norms/1.xml"), anyString());
+    when(norm.getEntryIntoForceDate()).thenReturn(LocalDate.parse("2025-08-06"));
+    sitemapService.createNormsBatchSitemap(1, List.of(norm));
+    verify(portalBucket).save(eq("sitemaps/norms/1.xml"), anyString());
   }
 
   @Test
   void testCreateNormsIndexSitemap() {
-    sitemapService.createNormsIndexSitemap(2, normsBucket);
-    verify(normsBucket).save(eq("sitemaps/norms/index.xml"), anyString());
+    sitemapService.createNormsIndexSitemap(2);
+    verify(portalBucket).save(eq("sitemaps/norms/index.xml"), anyString());
   }
 }

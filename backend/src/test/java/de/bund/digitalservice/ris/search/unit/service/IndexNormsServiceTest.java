@@ -1,7 +1,6 @@
 package de.bund.digitalservice.ris.search.unit.service;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -190,8 +189,7 @@ class IndexNormsServiceTest {
     String startingTimestamp =
         ZonedDateTime.now(ZoneOffset.UTC).format(DateTimeFormatter.ISO_INSTANT);
     this.service.reindexAll(startingTimestamp);
-    verify(this.sitemapService, times(2))
-        .createNormsBatchSitemap(anyInt(), anyList(), any(NormsBucket.class));
-    verify(this.sitemapService, times(1)).createNormsIndexSitemap(anyInt(), any(NormsBucket.class));
+    verify(this.sitemapService, times(2)).createNormsBatchSitemap(anyInt(), anyList());
+    verify(this.sitemapService, times(1)).createNormsIndexSitemap(anyInt());
   }
 }
