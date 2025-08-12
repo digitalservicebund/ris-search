@@ -46,7 +46,7 @@ public class ObsConfig {
   private String portalSecretAccessKey;
 
   @Bean(name = "normS3Client")
-  @Profile({"production", "staging", "prototype"})
+  @Profile({"production", "staging", "uat", "prototype"})
   public ObjectStorageClient normS3Client(
       @Value("${s3.file-storage.norm.bucket-name}") String bucket) throws URISyntaxException {
     return new S3ObjectStorageClient(
@@ -61,7 +61,7 @@ public class ObsConfig {
   }
 
   @Bean(name = "caseLawS3Client")
-  @Profile({"staging", "prototype"})
+  @Profile({"staging", "uat", "prototype"})
   public ObjectStorageClient caseLawS3Client(
       @Value("${s3.file-storage.case-law.bucket-name}") String bucket) throws URISyntaxException {
     return new S3ObjectStorageClient(
@@ -76,7 +76,7 @@ public class ObsConfig {
   }
 
   @Bean(name = "portalS3Client")
-  @Profile({"production", "staging", "prototype"})
+  @Profile({"production", "staging", "uat", "prototype"})
   public ObjectStorageClient portalS3Client(
       @Value("${s3.file-storage.portal.bucket-name}") String bucket) throws URISyntaxException {
     return new S3ObjectStorageClient(
