@@ -7,9 +7,9 @@ import static org.mockito.Mockito.when;
 
 import de.bund.digitalservice.ris.search.exception.CustomValidationException;
 import java.io.IOException;
-import org.apache.http.ProtocolVersion;
-import org.apache.http.message.BasicRequestLine;
-import org.apache.http.message.BasicStatusLine;
+import org.apache.hc.core5.http.ProtocolVersion;
+import org.apache.hc.core5.http.message.RequestLine;
+import org.apache.hc.core5.http.message.StatusLine;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.opensearch.client.Response;
@@ -29,10 +29,11 @@ class LuceneQueryToolsTest {
   void testCheckForInvalidQueryException() throws IOException {
     Response mockResponse = mock(Response.class);
     when(mockResponse.getRequestLine())
-        .thenReturn(new BasicRequestLine("GET", "uri", new ProtocolVersion("HTTP", 1, 1)));
+        .thenReturn(new RequestLine("GET", "uri", new ProtocolVersion("HTTP", 1, 1)));
+
     when(mockResponse.getStatusLine())
         .thenReturn(
-            new BasicStatusLine(
+            new StatusLine(
                 new ProtocolVersion("HTTP", 1, 1),
                 422,
                 "No mapping found for [param_field] in order to sort on"));

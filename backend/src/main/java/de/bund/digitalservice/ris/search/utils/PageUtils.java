@@ -45,6 +45,7 @@ public class PageUtils {
             searchHits.getTotalHits(),
             searchHits.getTotalHitsRelation(),
             searchHits.getMaxScore(),
+            searchHits.getExecutionDuration(),
             "",
             searchHits.getPointInTimeId(),
             convertedSearchHits,

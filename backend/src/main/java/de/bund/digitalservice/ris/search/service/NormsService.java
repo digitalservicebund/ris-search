@@ -92,7 +92,9 @@ public class NormsService {
     // Exclude fields with long text from search results
     nativeQuery.addSourceFilter(
         new FetchSourceFilter(
-            null, FetchSourceFilterDefinitions.NORMS_FETCH_EXCLUDED_FIELDS.toArray(String[]::new)));
+            true,
+            null,
+            FetchSourceFilterDefinitions.NORMS_FETCH_EXCLUDED_FIELDS.toArray(String[]::new)));
 
     SearchHits<Norm> searchHits = operations.search(nativeQuery, Norm.class);
 

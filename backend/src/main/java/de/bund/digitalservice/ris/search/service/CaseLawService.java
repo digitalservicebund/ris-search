@@ -110,6 +110,7 @@ public class CaseLawService {
     // Exclude fields with long text from search results
     nativeQuery.addSourceFilter(
         new FetchSourceFilter(
+            true,
             null,
             FetchSourceFilterDefinitions.CASE_LAW_FETCH_EXCLUDED_FIELDS.toArray(String[]::new)));
 

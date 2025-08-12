@@ -23,11 +23,10 @@ mockito = "5.16.1"
 spring-security = "6.5.2"
 spring-security-test = "6.4.3"
 snakeyalm = "2.4"
-spring-data-opensearch-starter = "1.5.4"
+spring-data-opensearch-starter = "2.0.0"
+opensearch-test-autoconfigure = "2.0.0"
 opensearch-test-containers = "2.1.3"
 jsoup = "1.18.3"
-lucene-core = "9.11.1"
-lucene-queryparser = "9.11.1"
 logbook = "3.11.0"
 org-json = "20250107"
 ds-xml-parser = "0.8"
@@ -54,7 +53,6 @@ spring-data-jpa = { module = "org.springframework.boot:spring-boot-starter-data-
 spring-kubernetes-client = { module = "org.springframework.cloud:spring-cloud-starter-kubernetes-client-config", version.ref = "spring-cloud-k8s" }
 spring-data-opensearch = { module = "org.opensearch.client:spring-data-opensearch-starter", version.ref = "spring-data-opensearch-starter" }
 spring-security-oauth2-jose = { module = "org.springframework.security:spring-security-oauth2-jose", version.ref = "spring-security" }
-spring-data-elasticsearch = { module = "org.springframework.data:spring-data-elasticsearch", version.ref = "spring-data-elasticsearch" }
 springdoc-openapi-starter-webmvc-ui = { module = "org.springdoc:springdoc-openapi-starter-webmvc-ui", version.ref = "springdoc-openapi" }
 pact = { module = "au.com.dius.pact.provider:junit5spring", version.ref = "pact" }
 jsoup = { module = "org.jsoup:jsoup", version.ref = "jsoup" }
@@ -66,8 +64,6 @@ sentry-spring-boot-starter-jakarta = { module = "io.sentry:sentry-spring-boot-st
 sentry-logback = { module = "io.sentry:sentry-logback", version.ref = "sentry" }
 posthog = { module = "com.posthog.java:posthog", version.ref = "posthog" }
 commons-text = { module = "org.apache.commons:commons-text", version.ref = "commons-text" }
-lucene-queryparser = { module = "org.apache.lucene:lucene-queryparser", version.ref = "lucene-queryparser" }
-lucene-core = { module = "org.apache.lucene:lucene-core", version.ref = "lucene-core" }
 logbook-spring-boot-starter = { module = "org.zalando:logbook-spring-boot-starter", version.ref = "logbook" }
 json = { module = "org.json:json", version.ref = "org-json" }
 xml-parser = { module = "com.github.digitalservicebund:xml-parser", version.ref = "ds-xml-parser" }
