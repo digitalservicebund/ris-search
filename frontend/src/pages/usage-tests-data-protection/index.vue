@@ -64,7 +64,7 @@ const title =
             das
           </p>
           <p>
-            Bundesministerium der Justiz und für Verbraucherschutz<br />Mohrenstraße
+            Bundesministerium der Justiz und für Verbraucherschutz<br />Anton-Wilhelm-Amo-Straße
             37<br />10117 Berlin<br /><br />Telefon: +49 (0)30 18 580 – 0<br />E-Mail:
             <a href="mailto:poststelle@bmj.bund.de" class="ris-link1-regular"
               >poststelle@bmj.bund.de</a
@@ -82,7 +82,7 @@ const title =
           </p>
           <p>
             Behördliche Datenschutzbeauftragte<br />
-            Bundesministerium der Justiz und für Verbraucherschutz<br />Mohrenstraße
+            Bundesministerium der Justiz und für Verbraucherschutz<br />Anton-Wilhelm-Amo-Straße
             37<br />10117 Berlin<br /><br />Telefon: +49 (0)30 18 580 – 0<br />E-Mail:
             <a href="mailto:datenschutz@bmj.bund.de" class="ris-link1-regular"
               >datenschutz@bmj.bund.de</a

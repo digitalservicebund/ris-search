@@ -70,7 +70,7 @@ definePageMeta({ alias: ["/datenschutz"] });
         <dl class="[&_dt]:mt-32">
           <dt class="ris-body1-bold">1. Verantwortliche Organisation:</dt>
           <dd>
-            Bundesministerium der Justiz und für Verbraucherschutz<br />Mohrenstraße
+            Bundesministerium der Justiz und für Verbraucherschutz<br />Anton-Wilhelm-Amo-Straße
             37, 10117 Berlin<br />Telefon: +49 (0)30 18 580 – 0<br /><br />E-Mail:
             <a href="mailto:poststelle@bmj.bund.de" class="ris-link1-regular"
               >poststelle@bmj.bund.de</a
@@ -81,8 +81,8 @@ definePageMeta({ alias: ["/datenschutz"] });
           </dt>
           <dd>
             Bundesministerium der Justiz und für Verbraucherschutz<br />Behördliche
-            Datenschutzbeauftragte<br />Mohrenstraße 37, 10117 Berlin<br />Telefon:
-            +49 (0)30 18 580 – 0<br /><br />E-Mail:
+            Datenschutzbeauftragte<br />Anton-Wilhelm-Amo-Straße 37, 10117
+            Berlin<br />Telefon: +49 (0)30 18 580 – 0<br /><br />E-Mail:
             <a href="mailto:datenschutz@bmj.bund.de" class="ris-link1-regular"
               >datenschutz@bmj.bund.de</a
             >
