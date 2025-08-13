@@ -294,7 +294,6 @@ jobs:
       - backend-tests-and-code-quality
       - build-and-push-image
       - run-e2e-tests
-
     permissions:
       id-token: write
     steps:
@@ -308,6 +307,29 @@ jobs:
           infra_repo: neuris-portal-infra
           deploy_key: ${{ secrets.PORTAL_INFRA_DEPLOY_KEY }}
           app: ris-portal-staging
+          argocd_pipeline_password: ${{ secrets.ARGOCD_PIPELINE_PASSWORD }}
+          argocd_server: ${{ secrets.ARGOCD_SERVER }}
+          argocd_sync_timeout: 420
+
+  deploy-uat-public-portal:
+    runs-on: ubuntu-latest
+    if: ${{ github.ref == 'refs/heads/main' }}
+    environment: staging
+    needs:
+      - deploy-staging-public-portal
+    permissions:
+      id-token: write
+    steps:
+      - uses: chainguard-dev/actions/setup-gitsign@29fb6e979a0b3efc79748a17e8cec08d0594cbfd
+      - name: Deploy new images
+        uses: digitalservicebund/argocd-deploy@4fac1bb67c92ed168f6d9b22f8779ce241a9e412 # v1.0.0
+        with:
+          environment: uat
+          version: ${{ env.CONTAINER_IMAGE_VERSION }}
+          deploying_repo: ris-search
+          infra_repo: neuris-portal-infra
+          deploy_key: ${{ secrets.PORTAL_INFRA_DEPLOY_KEY }}
+          app: ris-portal-uat
           argocd_pipeline_password: ${{ secrets.ARGOCD_PIPELINE_PASSWORD }}
           argocd_server: ${{ secrets.ARGOCD_SERVER }}
           argocd_sync_timeout: 420
