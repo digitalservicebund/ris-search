@@ -75,7 +75,7 @@ public class IndexCaselawService implements IndexService {
       sitemapService.createCaselawBatchSitemap(i + 1, caseLawDocumentationUnits);
       logger.info("Import caselaw batch {} of {} complete.", (i + 1), fileBatches.size());
     }
-    sitemapService.createIndexSitemap(fileBatches.size(), SitemapType.caselaw);
+    sitemapService.createIndexSitemap(fileBatches.size(), SitemapType.CASELAW);
   }
 
   public List<CaseLawDocumentationUnit> indexOneBatch(List<String> filenames)

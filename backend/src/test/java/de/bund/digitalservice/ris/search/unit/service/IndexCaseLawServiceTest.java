@@ -282,6 +282,6 @@ class IndexCaseLawServiceTest {
         ZonedDateTime.now(ZoneOffset.UTC).format(DateTimeFormatter.ISO_INSTANT);
     this.service.reindexAll(startingTimestamp);
     verify(this.sitemapService, times(2)).createCaselawBatchSitemap(anyInt(), anyList());
-    verify(this.sitemapService, times(1)).createIndexSitemap(anyInt(), eq(SitemapType.caselaw));
+    verify(this.sitemapService, times(1)).createIndexSitemap(anyInt(), eq(SitemapType.CASELAW));
   }
 }
