@@ -193,6 +193,6 @@ class IndexNormsServiceTest {
         ZonedDateTime.now(ZoneOffset.UTC).format(DateTimeFormatter.ISO_INSTANT);
     this.service.reindexAll(startingTimestamp);
     verify(this.sitemapService, times(2)).createNormsBatchSitemap(anyInt(), anyList());
-    verify(this.sitemapService, times(1)).createIndexSitemap(anyInt(), eq(SitemapType.norms));
+    verify(this.sitemapService, times(1)).createIndexSitemap(anyInt(), eq(SitemapType.NORMS));
   }
 }

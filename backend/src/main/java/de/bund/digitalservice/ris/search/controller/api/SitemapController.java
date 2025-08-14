@@ -84,7 +84,7 @@ public class SitemapController {
     Optional<byte[]> file;
 
     try {
-      SitemapType sitemapType = SitemapType.valueOf(type);
+      SitemapType sitemapType = SitemapType.valueOf(type.toUpperCase());
       sitemapService.setSitemapType(sitemapType);
       if (filename.equals("index")) {
         file = portalBucket.get(sitemapService.getIndexSitemapPath());

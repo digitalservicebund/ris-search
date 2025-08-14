@@ -26,17 +26,18 @@ public class SitemapService {
   @Value("${server.front-end-url}")
   private String baseUrl;
 
-  @Setter private SitemapType sitemapType = SitemapType.norms;
+  @Setter private SitemapType sitemapType = SitemapType.NORMS;
 
   private static final String SITEMAP_PREFIX = "sitemaps/";
   public final PortalBucket portalBucket;
 
   public String getBatchSitemapPath(int batchNumber) {
-    return SITEMAP_PREFIX + String.format("%s/%d.xml", this.sitemapType.name(), batchNumber);
+    return SITEMAP_PREFIX
+        + String.format("%s/%d.xml", this.sitemapType.name().toLowerCase(), batchNumber);
   }
 
   public String getIndexSitemapPath() {
-    return SITEMAP_PREFIX + String.format("%s/index.xml", this.sitemapType.name());
+    return SITEMAP_PREFIX + String.format("%s/index.xml", this.sitemapType.name().toLowerCase());
   }
 
   public void createIndexSitemap(int size, SitemapType type) {
@@ -46,14 +47,14 @@ public class SitemapService {
   }
 
   public void createNormsBatchSitemap(int batchNumber, List<Norm> norms) {
-    this.setSitemapType(SitemapType.norms);
+    this.setSitemapType(SitemapType.NORMS);
     String path = this.getBatchSitemapPath(batchNumber);
     this.portalBucket.save(path, this.generateNormsSitemap(norms));
   }
 
   public void createCaselawBatchSitemap(
       int batchNumber, List<CaseLawDocumentationUnit> caseLawDocumentationUnits) {
-    this.setSitemapType(SitemapType.caselaw);
+    this.setSitemapType(SitemapType.CASELAW);
     String path = this.getBatchSitemapPath(batchNumber);
     this.portalBucket.save(path, this.generateCaselawSitemap(caseLawDocumentationUnits));
   }

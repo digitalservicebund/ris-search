@@ -70,7 +70,7 @@ class SitemapServiceTest {
     assertTrue(indexXml.contains("<loc>https://test.local/sitemaps/norms/1.xml</loc>"));
     assertTrue(indexXml.contains("<loc>https://test.local/sitemaps/norms/2.xml</loc>"));
     assertTrue(indexXml.contains("<sitemapindex"));
-    sitemapService.setSitemapType(SitemapType.caselaw);
+    sitemapService.setSitemapType(SitemapType.CASELAW);
     indexXml = sitemapService.generateIndexXml(1);
     assertTrue(indexXml.contains("<loc>https://test.local/sitemaps/caselaw/1.xml</loc>"));
   }
@@ -86,7 +86,7 @@ class SitemapServiceTest {
 
   @Test
   void testCreateNormsIndexSitemap() {
-    sitemapService.createIndexSitemap(2, SitemapType.norms);
+    sitemapService.createIndexSitemap(2, SitemapType.NORMS);
     verify(portalBucket).save(eq("sitemaps/norms/index.xml"), anyString());
   }
 
@@ -101,7 +101,7 @@ class SitemapServiceTest {
 
   @Test
   void testCreateCaselawIndexSitemap() {
-    sitemapService.createIndexSitemap(2, SitemapType.caselaw);
+    sitemapService.createIndexSitemap(2, SitemapType.CASELAW);
     verify(portalBucket).save(eq("sitemaps/caselaw/index.xml"), anyString());
   }
 }
