@@ -18,7 +18,7 @@ public class SortingDefinitions {
   public static final Set<String> caseLawSortFields =
       Set.of("date", DATE_ALIAS_FIELD, "courtName", "documentNumber");
   public static final Set<String> normsSortFields =
-      Set.of("date", DATE_ALIAS_FIELD, "legislationIdentifier");
+      Set.of("date", DATE_ALIAS_FIELD, "legislationIdentifier", "temporalCoverageFrom");
 
   public static boolean canSortByField(
       String openSearchFieldName, MappingDefinitions.ResolutionMode resolutionMode) {
