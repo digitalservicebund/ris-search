@@ -25,6 +25,7 @@ public class MappingDefinitions {
             Map.entry(Norm.Fields.OFFICIAL_SHORT_TITLE, "alternateName"),
             Map.entry(Norm.Fields.OFFICIAL_ABBREVIATION, "abbreviation"),
             Map.entry(Norm.Fields.NORMS_DATE, "legislationDate"),
+            Map.entry(Norm.Fields.ENTRY_INTO_FORCE_DATE, "temporalCoverageFrom"),
             Map.entry("DATUM", "date") // alias shared with caseLaw
             );
     caseLawOpenSearchToSchemaMap =
