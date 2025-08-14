@@ -22,11 +22,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @Hidden
 @Tag(
-    name = "Sitemap",
+    name = "SitemapFile",
     description =
         """
-        Retrieve sitemap files for norms and caselaw.
-        The endpoints operates as a proxy for retrieving the sitemap files from the bucket, which were saved
+        Retrieve sitemapFile files for norms and caselaw.
+        The endpoints operates as a proxy for retrieving the sitemapFile files from the bucket, which were saved
         during the indexing time of norms and caselaw.
         """)
 public class SitemapController {
@@ -43,23 +43,23 @@ public class SitemapController {
       path = ApiConfig.Paths.SITEMAP_NORMS + "/{filename}.xml",
       produces = MediaType.APPLICATION_XML_VALUE)
   @Operation(
-      summary = "Get Norms Sitemap files",
+      summary = "Get Norms SitemapFile files",
       description =
           """
-                              Return specific sitemap file for norms.
+                              Return specific sitemapFile file for norms.
 
                               ## Example 1
 
-                              Get the index sitemap for norms.
+                              Get the index sitemapFile for norms.
                               ```http request
                               GET /v1/sitemaps/norms/index.xml
                               ```
-                              The API will return the index sitemap file for norms, which contains links to all
-                              individual sitemap files for norms batched in 100 norms per file.
+                              The API will return the index sitemapFile file for norms, which contains links to all
+                              individual sitemapFile files for norms batched in 100 norms per file.
 
                               ## Example 2
 
-                              Get a particular norms' batch sitemap file.
+                              Get a particular norms' batch sitemapFile file.
                               ```http request
                               GET /v1/sitemaps/norms/1.xml
                               ```
@@ -69,7 +69,8 @@ public class SitemapController {
   @ApiResponse(responseCode = "200")
   @ApiResponse(responseCode = "404")
   public ResponseEntity<byte[]> getNormSitemapXml(
-      @Parameter(description = "Sitemap Filename", example = "index") @PathVariable String filename)
+      @Parameter(description = "SitemapFile Filename", example = "index") @PathVariable
+          String filename)
       throws ObjectStoreServiceException {
 
     Optional<byte[]> file;

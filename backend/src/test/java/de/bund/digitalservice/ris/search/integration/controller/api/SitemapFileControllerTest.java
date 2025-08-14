@@ -20,7 +20,7 @@ import org.springframework.test.web.servlet.MockMvc;
 @AutoConfigureMockMvc
 @Tag("integration")
 @WithJwt("jwtTokens/ValidAccessToken.json")
-class SitemapControllerTest extends ContainersIntegrationBase {
+class SitemapFileControllerTest extends ContainersIntegrationBase {
   @Autowired private MockMvc mockMvc;
   @Autowired private PortalBucket portalBucket;
 

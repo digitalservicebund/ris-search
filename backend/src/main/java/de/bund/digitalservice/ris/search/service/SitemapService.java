@@ -1,9 +1,16 @@
 package de.bund.digitalservice.ris.search.service;
 
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
+import de.bund.digitalservice.ris.search.models.sitemap.SitemapFile;
+import de.bund.digitalservice.ris.search.models.sitemap.SitemapIndex;
+import de.bund.digitalservice.ris.search.models.sitemap.Url;
 import de.bund.digitalservice.ris.search.repository.objectstorage.PortalBucket;
-import java.time.Instant;
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.JAXBException;
+import jakarta.xml.bind.Marshaller;
+import java.io.StringWriter;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -37,44 +44,44 @@ public class SitemapService {
   }
 
   public String generateNormsSitemap(List<Norm> norms) {
-    StringBuilder builder = new StringBuilder();
-    builder.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
-    builder.append("<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n");
+    List<Url> urls = new ArrayList<>();
     for (Norm norm : norms) {
-      builder.append("<url>\n");
-      builder
-          .append("<loc>")
-          .append(baseUrl)
-          .append("norms/")
-          .append(norm.getExpressionEli())
-          .append("</loc>\n");
+      Url url = new Url();
       if (norm.getEntryIntoForceDate() != null
           && norm.getEntryIntoForceDate().isBefore(LocalDate.now())) {
-        builder.append("<lastmod>").append(norm.getEntryIntoForceDate()).append("</lastmod>\n");
+        url.setLastmod(norm.getEntryIntoForceDate());
       }
-      builder.append("</url>\n");
+      url.setLoc(String.format("%snorms/%s", baseUrl, norm.getExpressionEli()));
+      urls.add(url);
     }
-    builder.append("</urlset>");
-    return builder.toString();
+    SitemapFile sitemapFile = new SitemapFile();
+    sitemapFile.setUrls(urls);
+    return marshal(sitemapFile);
   }
 
   public String generateIndexXml(int size) {
-    StringBuilder builder = new StringBuilder();
-    builder.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
-    builder.append("<sitemapindex xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n");
+    List<Url> urls = new ArrayList<>();
     for (int i = 1; i <= size; i++) {
-      builder
-          .append("<sitemap>\n")
-          .append("<loc>")
-          .append(baseUrl)
-          .append(this.getNormsBatchSitemapPath(i))
-          .append("</loc>\n")
-          .append("<lastmod>")
-          .append(Instant.now().toString())
-          .append("</lastmod>\n")
-          .append("</sitemap>\n");
+      Url url = new Url();
+      url.setLastmod(LocalDate.now());
+      url.setLoc(String.format("%s%s", baseUrl, this.getNormsBatchSitemapPath(i)));
+      urls.add(url);
     }
-    builder.append("</sitemapindex>");
-    return builder.toString();
+    SitemapIndex sitemapIndexFile = new SitemapIndex();
+    sitemapIndexFile.setUrls(urls);
+    return marshal(sitemapIndexFile);
+  }
+
+  private String marshal(Object sitemapFile) {
+    try {
+      JAXBContext context = JAXBContext.newInstance(sitemapFile.getClass());
+      Marshaller mar = context.createMarshaller();
+      mar.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+      StringWriter sitemapFileContent = new StringWriter();
+      mar.marshal(sitemapFile, sitemapFileContent);
+      return sitemapFileContent.toString();
+    } catch (JAXBException exception) {
+      return "";
+    }
   }
 }
