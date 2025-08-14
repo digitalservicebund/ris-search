@@ -13,6 +13,7 @@ import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationU
 import de.bund.digitalservice.ris.search.repository.objectstorage.CaseLawBucket;
 import de.bund.digitalservice.ris.search.repository.opensearch.CaseLawSynthesizedRepository;
 import de.bund.digitalservice.ris.search.service.IndexCaselawService;
+import de.bund.digitalservice.ris.search.service.SitemapService;
 import de.bund.digitalservice.ris.search.utils.CaseLawLdmlTemplateUtils;
 import java.io.IOException;
 import java.time.LocalDate;
@@ -30,6 +31,7 @@ class CaseLawImporterTest {
   private String testCaseLawLdml;
   private CaseLawSynthesizedRepository caseLawSynthesizedRepositoryMock;
   private CaseLawBucket caseLawBucket;
+  private SitemapService sitemapService;
   private final CaseLawLdmlTemplateUtils caseLawLdmlTemplateUtils = new CaseLawLdmlTemplateUtils();
 
   @BeforeEach
@@ -37,13 +39,14 @@ class CaseLawImporterTest {
     testCaseLawLdml = caseLawLdmlTemplateUtils.getXmlFromTemplate(null);
     caseLawSynthesizedRepositoryMock = Mockito.mock(CaseLawSynthesizedRepository.class);
     caseLawBucket = Mockito.mock(CaseLawBucket.class);
+    sitemapService = Mockito.mock(SitemapService.class);
   }
 
   @Test
   @DisplayName("Import one caselaw ldml")
   void canImportLdml() throws ObjectStoreServiceException {
     IndexCaselawService indexCaselawService =
-        new IndexCaselawService(caseLawBucket, caseLawSynthesizedRepositoryMock);
+        new IndexCaselawService(caseLawBucket, caseLawSynthesizedRepositoryMock, sitemapService);
     Changelog mockChangelog = new Changelog();
     mockChangelog.setChangeAll(true);
     when(caseLawBucket.getAllKeys()).thenReturn(List.of("mockFile.xml"));
@@ -56,7 +59,7 @@ class CaseLawImporterTest {
   // Also tests striping xml tags
   void importerShouldMapToCaseLawDocumentationUnitCorrectly() {
     IndexCaselawService indexCaselawService =
-        new IndexCaselawService(caseLawBucket, caseLawSynthesizedRepositoryMock);
+        new IndexCaselawService(caseLawBucket, caseLawSynthesizedRepositoryMock, sitemapService);
     Optional<CaseLawDocumentationUnit> parseResult =
         indexCaselawService.parseOneDocument("mockFileName", testCaseLawLdml);
     assertTrue(parseResult.isPresent());

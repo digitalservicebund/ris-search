@@ -8,7 +8,9 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
+import de.bund.digitalservice.ris.search.models.sitemap.SitemapType;
 import de.bund.digitalservice.ris.search.repository.objectstorage.PortalBucket;
 import de.bund.digitalservice.ris.search.service.SitemapService;
 import java.time.LocalDate;
@@ -33,12 +35,12 @@ class SitemapServiceTest {
 
   @Test
   void testGetNormsBatchSitemapPath() {
-    assertEquals("sitemaps/norms/1.xml", sitemapService.getNormsBatchSitemapPath(1));
+    assertEquals("sitemaps/norms/1.xml", sitemapService.getBatchSitemapPath(1));
   }
 
   @Test
   void testGetNormsIndexSitemapPath() {
-    assertEquals("sitemaps/norms/index.xml", sitemapService.getNormsIndexSitemapPath());
+    assertEquals("sitemaps/norms/index.xml", sitemapService.getIndexSitemapPath());
   }
 
   @Test
@@ -52,11 +54,25 @@ class SitemapServiceTest {
   }
 
   @Test
+  void testGenerateCaselawSitemap() {
+    CaseLawDocumentationUnit caseLawDocumentationUnit = mock(CaseLawDocumentationUnit.class);
+    when(caseLawDocumentationUnit.documentNumber()).thenReturn("KORE1");
+    when(caseLawDocumentationUnit.decisionDate()).thenReturn(LocalDate.parse("2025-08-06"));
+    String caselawSitemap =
+        sitemapService.generateCaselawSitemap(List.of(caseLawDocumentationUnit));
+    assertTrue(caselawSitemap.contains("<loc>https://test.local/case-law/KORE1</loc>"));
+    assertTrue(caselawSitemap.contains("<lastmod>2025-08-06</lastmod>"));
+  }
+
+  @Test
   void testGenerateIndexXml() {
     String indexXml = sitemapService.generateIndexXml(2);
     assertTrue(indexXml.contains("<loc>https://test.local/sitemaps/norms/1.xml</loc>"));
     assertTrue(indexXml.contains("<loc>https://test.local/sitemaps/norms/2.xml</loc>"));
     assertTrue(indexXml.contains("<sitemapindex"));
+    sitemapService.setSitemapType(SitemapType.caselaw);
+    indexXml = sitemapService.generateIndexXml(1);
+    assertTrue(indexXml.contains("<loc>https://test.local/sitemaps/caselaw/1.xml</loc>"));
   }
 
   @Test
@@ -70,7 +86,22 @@ class SitemapServiceTest {
 
   @Test
   void testCreateNormsIndexSitemap() {
-    sitemapService.createNormsIndexSitemap(2);
+    sitemapService.createIndexSitemap(2, SitemapType.norms);
     verify(portalBucket).save(eq("sitemaps/norms/index.xml"), anyString());
+  }
+
+  @Test
+  void testCreateCaselawBatchSitemap() {
+    CaseLawDocumentationUnit caseLawDocumentationUnit = mock(CaseLawDocumentationUnit.class);
+    when(caseLawDocumentationUnit.documentNumber()).thenReturn("KORE1");
+    when(caseLawDocumentationUnit.decisionDate()).thenReturn(LocalDate.parse("2025-08-06"));
+    sitemapService.createCaselawBatchSitemap(1, List.of(caseLawDocumentationUnit));
+    verify(portalBucket).save(eq("sitemaps/caselaw/1.xml"), anyString());
+  }
+
+  @Test
+  void testCreateCaselawIndexSitemap() {
+    sitemapService.createIndexSitemap(2, SitemapType.caselaw);
+    verify(portalBucket).save(eq("sitemaps/caselaw/index.xml"), anyString());
   }
 }
