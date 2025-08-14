@@ -1,19 +1,26 @@
 package de.bund.digitalservice.ris.search.unit.service;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.argThat;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
+import de.bund.digitalservice.ris.search.models.sitemap.SitemapType;
 import de.bund.digitalservice.ris.search.repository.objectstorage.CaseLawBucket;
 import de.bund.digitalservice.ris.search.repository.opensearch.CaseLawSynthesizedRepository;
 import de.bund.digitalservice.ris.search.service.IndexCaselawService;
+import de.bund.digitalservice.ris.search.service.SitemapService;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -31,6 +38,7 @@ class IndexCaseLawServiceTest {
 
   @Mock CaseLawBucket bucket;
   @Mock CaseLawSynthesizedRepository repo;
+  @Mock SitemapService sitemapService;
 
   String caseLawContent =
       """
@@ -176,7 +184,7 @@ class IndexCaseLawServiceTest {
 
   @BeforeEach()
   void setup() {
-    this.service = new IndexCaselawService(bucket, repo);
+    this.service = new IndexCaselawService(bucket, repo, sitemapService);
   }
 
   @Test
@@ -259,5 +267,21 @@ class IndexCaseLawServiceTest {
                 "TEST080020093/TEST080020094.xml",
                 "changelogs/2025-03-26T14:13:34.096304815Z-caselaw.json"));
     assertThat(service.getNumberOfFilesInBucket()).isEqualTo(2);
+  }
+
+  @Test
+  void reindexAllCallsSitemapServiceForCaselawBatchesAndIndex() throws Exception {
+    List<String> keys = new ArrayList<>();
+    for (int i = 0; i <= 1001; i++) {
+      keys.add("KORE" + i + ".xml");
+    }
+    when(this.bucket.getAllKeys()).thenReturn(keys);
+    when(this.bucket.getFileAsString(anyString())).thenReturn(Optional.of(caseLawContent));
+
+    String startingTimestamp =
+        ZonedDateTime.now(ZoneOffset.UTC).format(DateTimeFormatter.ISO_INSTANT);
+    this.service.reindexAll(startingTimestamp);
+    verify(this.sitemapService, times(2)).createCaselawBatchSitemap(anyInt(), anyList());
+    verify(this.sitemapService, times(1)).createIndexSitemap(anyInt(), eq(SitemapType.caselaw));
   }
 }

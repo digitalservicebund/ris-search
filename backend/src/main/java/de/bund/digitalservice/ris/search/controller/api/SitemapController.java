@@ -2,11 +2,13 @@ package de.bund.digitalservice.ris.search.controller.api;
 
 import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
+import de.bund.digitalservice.ris.search.models.sitemap.SitemapType;
 import de.bund.digitalservice.ris.search.repository.objectstorage.PortalBucket;
 import de.bund.digitalservice.ris.search.service.SitemapService;
 import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.Optional;
@@ -40,10 +42,10 @@ public class SitemapController {
   }
 
   @GetMapping(
-      path = ApiConfig.Paths.SITEMAP_NORMS + "/{filename}.xml",
+      path = ApiConfig.Paths.SITEMAP + "/{type}/{filename}.xml",
       produces = MediaType.APPLICATION_XML_VALUE)
   @Operation(
-      summary = "Get Norms SitemapFile files",
+      summary = "Get Norms and Caselaw Sitemap files",
       description =
           """
                               Return specific sitemapFile file for norms.
@@ -59,31 +61,39 @@ public class SitemapController {
 
                               ## Example 2
 
-                              Get a particular norms' batch sitemapFile file.
+                              Get a particular caselaw's batch sitemapFile file.
                               ```http request
-                              GET /v1/sitemaps/norms/1.xml
+                              GET /v1/sitemaps/caselaw/1.xml
                               ```
-                              This call will return the first batch of norms, which contains the first 100 norms
+                              This call will return the first batch of caselaw, which contains the first 100 caselaw results
                               ```
                               """)
   @ApiResponse(responseCode = "200")
   @ApiResponse(responseCode = "404")
   public ResponseEntity<byte[]> getNormSitemapXml(
+      @Parameter(
+              description = "Type of sitemap files",
+              example = "norms",
+              schema = @Schema(allowableValues = {"norms", "caselaw"}))
+          @PathVariable
+          String type,
       @Parameter(description = "SitemapFile Filename", example = "index") @PathVariable
           String filename)
       throws ObjectStoreServiceException {
 
     Optional<byte[]> file;
 
-    if (filename.equals("index")) {
-      file = portalBucket.get(sitemapService.getNormsIndexSitemapPath());
-    } else {
-      try {
+    try {
+      SitemapType sitemapType = SitemapType.valueOf(type);
+      sitemapService.setSitemapType(sitemapType);
+      if (filename.equals("index")) {
+        file = portalBucket.get(sitemapService.getIndexSitemapPath());
+      } else {
         int batchNumber = Integer.parseInt(filename);
-        file = portalBucket.get(sitemapService.getNormsBatchSitemapPath(batchNumber));
-      } catch (NumberFormatException e) {
-        return ResponseEntity.notFound().build();
+        file = portalBucket.get(sitemapService.getBatchSitemapPath(batchNumber));
       }
+    } catch (IllegalArgumentException exception) {
+      return ResponseEntity.notFound().build();
     }
 
     return file.map(
