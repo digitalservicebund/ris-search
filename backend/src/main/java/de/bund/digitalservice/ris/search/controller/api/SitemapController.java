@@ -24,11 +24,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @Hidden
 @Tag(
-    name = "SitemapFile",
+    name = "Sitemap",
     description =
         """
-        Retrieve sitemapFile files for norms and caselaw.
-        The endpoints operates as a proxy for retrieving the sitemapFile files from the bucket, which were saved
+        Retrieve sitemap files for norms and caselaw.
+        The endpoints operates as a proxy for retrieving the sitemap files from the bucket, which were saved
         during the indexing time of norms and caselaw.
         """)
 public class SitemapController {
@@ -48,20 +48,20 @@ public class SitemapController {
       summary = "Get Norms and Caselaw Sitemap files",
       description =
           """
-                              Return specific sitemapFile file for norms.
+                              Return specific sitemap file for norms.
 
                               ## Example 1
 
-                              Get the index sitemapFile for norms.
+                              Get the index sitemap for norms.
                               ```http request
                               GET /v1/sitemaps/norms/index.xml
                               ```
-                              The API will return the index sitemapFile file for norms, which contains links to all
-                              individual sitemapFile files for norms batched in 100 norms per file.
+                              The API will return the index sitemap file for norms, which contains links to all
+                              individual sitemap files for norms batched in 100 norms per file.
 
                               ## Example 2
 
-                              Get a particular caselaw's batch sitemapFile file.
+                              Get a particular caselaw's batch sitemap file.
                               ```http request
                               GET /v1/sitemaps/caselaw/1.xml
                               ```
