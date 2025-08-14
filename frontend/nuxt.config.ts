@@ -135,7 +135,10 @@ export default defineNuxtConfig({
         defaults: { priority: 0.7 },
       },
     },
-    appendSitemaps: ["/sitemaps/norms/index.xml"],
+    appendSitemaps: [
+      "/sitemaps/norms/index.xml",
+      "/sitemaps/caselaw/index.xml",
+    ],
   },
   nitro: {
     rollupConfig: {
@@ -153,6 +156,9 @@ export default defineNuxtConfig({
     },
     "/sitemaps/norms/**": {
       proxy: `${backendBaseUrl}/v1/sitemaps/norms/**`,
+    },
+    "/sitemaps/caselaw/**": {
+      proxy: `${backendBaseUrl}/v1/sitemaps/caselaw/**`,
     },
   },
   vite: {
