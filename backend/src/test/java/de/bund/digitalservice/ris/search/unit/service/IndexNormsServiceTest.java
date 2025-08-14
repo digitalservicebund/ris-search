@@ -13,7 +13,6 @@ import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.mapper.NormLdmlToOpenSearchMapper;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
-import de.bund.digitalservice.ris.search.repository.objectstorage.PortalBucket;
 import de.bund.digitalservice.ris.search.repository.opensearch.NormsSynthesizedRepository;
 import de.bund.digitalservice.ris.search.service.IndexNormsService;
 import de.bund.digitalservice.ris.search.service.SitemapService;
@@ -37,11 +36,10 @@ class IndexNormsServiceTest {
   @Mock NormsBucket bucket;
   @Mock NormsSynthesizedRepository repo;
   @Mock SitemapService sitemapService;
-  @Mock PortalBucket portalBucket;
 
   @BeforeEach()
   void setup() {
-    this.service = new IndexNormsService(bucket, portalBucket, repo, sitemapService);
+    this.service = new IndexNormsService(bucket, repo, sitemapService);
   }
 
   private String testContent =

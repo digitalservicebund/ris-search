@@ -5,7 +5,6 @@ import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
 import de.bund.digitalservice.ris.search.mapper.NormLdmlToOpenSearchMapper;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
-import de.bund.digitalservice.ris.search.repository.objectstorage.PortalBucket;
 import de.bund.digitalservice.ris.search.repository.opensearch.NormsSynthesizedRepository;
 import de.bund.digitalservice.ris.search.utils.eli.ExpressionEli;
 import de.bund.digitalservice.ris.search.utils.eli.ManifestationEli;
@@ -31,18 +30,15 @@ public class IndexNormsService implements IndexService {
   private final NormsSynthesizedRepository normsSynthesizedRepository;
   private final NormsBucket normsBucket;
   private final SitemapService sitemapService;
-  private final PortalBucket portalBucket;
 
   @Autowired
   public IndexNormsService(
       NormsBucket normsBucket,
-      PortalBucket portalBucket,
       NormsSynthesizedRepository normsSynthesizedRepository,
       SitemapService sitemapService) {
     this.normsBucket = normsBucket;
     this.normsSynthesizedRepository = normsSynthesizedRepository;
     this.sitemapService = sitemapService;
-    this.portalBucket = portalBucket;
   }
 
   public void reindexAll(String startingTimestamp) throws ObjectStoreServiceException {
