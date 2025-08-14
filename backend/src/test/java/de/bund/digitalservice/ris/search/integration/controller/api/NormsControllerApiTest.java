@@ -556,6 +556,41 @@ class NormsControllerApiTest extends ContainersIntegrationBase {
     }
   }
 
+  @Test
+  void itSortsByTemporalCoverageFrom() throws Exception {
+
+    super.recreateIndex();
+    super.updateMapping();
+
+    var normTestOne =
+        Norm.builder()
+            .id("n1")
+            .officialTitle("title1")
+            .entryIntoForceDate(LocalDate.of(2026, 1, 1))
+            .build();
+
+    var normTestTwo =
+        Norm.builder()
+            .id("id2")
+            .officialTitle("title2")
+            .entryIntoForceDate(LocalDate.of(2025, 1, 1))
+            .build();
+
+    normsRepository.saveAll(List.of(normTestOne, normTestTwo));
+
+    mockMvc
+        .perform(
+            get(ApiConfig.Paths.LEGISLATION + String.format("?sort=%s", "temporalCoverageFrom"))
+                .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(jsonPath("$.member[*].item.name", is(List.of("title2", "title1"))));
+
+    mockMvc
+        .perform(
+            get(ApiConfig.Paths.LEGISLATION + String.format("?sort=%s", "-temporalCoverageFrom"))
+                .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(jsonPath("$.member[*].item.name", is(List.of("title1", "title2"))));
+  }
+
   private TableOfContentsSchema mapToTableOfContentsSchema(TableOfContentsItem item) {
     return new TableOfContentsSchema(
         item.id(),
