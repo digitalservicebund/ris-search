@@ -9,6 +9,8 @@ import de.bund.digitalservice.ris.search.mapper.DocumentResponseMapper;
 import de.bund.digitalservice.ris.search.mapper.MappingDefinitions;
 import de.bund.digitalservice.ris.search.mapper.NormSearchResponseMapper;
 import de.bund.digitalservice.ris.search.mapper.SortParamsConverter;
+import de.bund.digitalservice.ris.search.models.api.parameters.CaseLawSortParam;
+import de.bund.digitalservice.ris.search.models.api.parameters.NormsSortParam;
 import de.bund.digitalservice.ris.search.models.api.parameters.PaginationParams;
 import de.bund.digitalservice.ris.search.models.api.parameters.UniversalSortParam;
 import de.bund.digitalservice.ris.search.models.opensearch.AbstractSearchEntity;
@@ -120,7 +122,7 @@ public class AdvancedSearchController {
               @RequestParam
               String query,
           @ParameterObject @Valid PaginationParams pagination,
-          @ParameterObject @Valid UniversalSortParam sortParams)
+          @ParameterObject @Valid NormsSortParam sortParams)
           throws CustomValidationException {
 
     String decodedQuery = validateLuceneQuery(query);
@@ -129,7 +131,7 @@ public class AdvancedSearchController {
     PageRequest sortedPageable =
         pageable.withSort(
             SortParamsConverter.buildSort(
-                sortParams.getSort(), MappingDefinitions.ResolutionMode.ALL, true));
+                sortParams.getSort(), MappingDefinitions.ResolutionMode.NORMS, true));
 
     try {
       SearchPage<Norm> page = normsService.searchNorms(decodedQuery, sortedPageable);
@@ -160,7 +162,7 @@ public class AdvancedSearchController {
           @RequestParam
           String query,
       @ParameterObject @Valid PaginationParams pagination,
-      @ParameterObject @Valid UniversalSortParam sortParams)
+      @ParameterObject @Valid CaseLawSortParam sortParams)
       throws CustomValidationException {
 
     String decodedQuery = validateLuceneQuery(query);
@@ -169,7 +171,7 @@ public class AdvancedSearchController {
     PageRequest sortedPageable =
         pageable.withSort(
             SortParamsConverter.buildSort(
-                sortParams.getSort(), MappingDefinitions.ResolutionMode.ALL, true));
+                sortParams.getSort(), MappingDefinitions.ResolutionMode.CASE_LAW, true));
 
     try {
       SearchPage<CaseLawDocumentationUnit> page =
