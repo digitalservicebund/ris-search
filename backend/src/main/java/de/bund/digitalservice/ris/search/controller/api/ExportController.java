@@ -5,13 +5,14 @@ import static de.bund.digitalservice.ris.search.utils.LuceneQueryTools.validateL
 import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.exception.CustomValidationException;
 import de.bund.digitalservice.ris.search.mapper.MappingDefinitions;
+import de.bund.digitalservice.ris.search.mapper.SortParamsConverter;
+import de.bund.digitalservice.ris.search.models.api.parameters.CaseLawSortParam;
 import de.bund.digitalservice.ris.search.models.api.parameters.PaginationParams;
 import de.bund.digitalservice.ris.search.models.errors.CustomError;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import de.bund.digitalservice.ris.search.schema.CaseLawSchema;
 import de.bund.digitalservice.ris.search.service.CaseLawService;
 import de.bund.digitalservice.ris.search.service.ExportService;
-import de.bund.digitalservice.ris.search.service.helper.PaginationParamsConverter;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -27,7 +28,7 @@ import java.util.List;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.elasticsearch.core.SearchHit;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -79,6 +80,7 @@ public class ExportController {
           @RequestParam(value = "query")
           String query,
       @ParameterObject @Valid PaginationParams pagination,
+      @ParameterObject @Valid CaseLawSortParam sortParams,
       @Parameter(name = "fields", description = "The fields to be included in the export")
           @RequestParam(value = "field", defaultValue = "")
           List<String> includedFields,
@@ -90,12 +92,14 @@ public class ExportController {
     String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yy-MM-dd_HH-mm-ss"));
     String filename = "caselaw_export_" + timestamp + ".csv";
 
-    Pageable pageable =
-        PaginationParamsConverter.convert(
-            pagination, MappingDefinitions.ResolutionMode.CASE_LAW, true);
+    PageRequest pageable = PageRequest.of(pagination.getPageIndex(), pagination.getSize());
+    PageRequest sortedPageable =
+        pageable.withSort(
+            SortParamsConverter.buildSort(
+                sortParams.getSort(), MappingDefinitions.ResolutionMode.CASE_LAW, true));
 
     List<CaseLawDocumentationUnit> results =
-        caseLawService.searchCaseLaws(decodedQuery, pageable).getContent().stream()
+        caseLawService.searchCaseLaws(decodedQuery, sortedPageable).getContent().stream()
             .map(SearchHit::getContent)
             .toList();
     exportService.writeListAsCsvToResponse(filename, includedFields, results, response);

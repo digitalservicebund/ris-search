@@ -8,7 +8,9 @@ import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.mapper.MappingDefinitions;
 import de.bund.digitalservice.ris.search.mapper.NormResponseMapper;
 import de.bund.digitalservice.ris.search.mapper.NormSearchResponseMapper;
+import de.bund.digitalservice.ris.search.mapper.SortParamsConverter;
 import de.bund.digitalservice.ris.search.models.api.parameters.NormsSearchParams;
+import de.bund.digitalservice.ris.search.models.api.parameters.NormsSortParam;
 import de.bund.digitalservice.ris.search.models.api.parameters.PaginationParams;
 import de.bund.digitalservice.ris.search.models.api.parameters.ResourceReferenceMode;
 import de.bund.digitalservice.ris.search.models.api.parameters.UniversalSearchParams;
@@ -19,7 +21,6 @@ import de.bund.digitalservice.ris.search.schema.LegislationWorkSearchSchema;
 import de.bund.digitalservice.ris.search.schema.SearchMemberSchema;
 import de.bund.digitalservice.ris.search.service.NormsService;
 import de.bund.digitalservice.ris.search.service.XsltTransformerService;
-import de.bund.digitalservice.ris.search.service.helper.PaginationParamsConverter;
 import de.bund.digitalservice.ris.search.utils.LuceneQueryTools;
 import de.bund.digitalservice.ris.search.utils.eli.ExpressionEli;
 import de.bund.digitalservice.ris.search.utils.eli.ManifestationEli;
@@ -39,7 +40,7 @@ import java.util.stream.Stream;
 import org.apache.commons.lang3.StringUtils;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.elasticsearch.UncategorizedElasticsearchException;
 import org.springframework.data.elasticsearch.core.SearchPage;
 import org.springframework.http.HttpStatus;
@@ -121,19 +122,23 @@ public class NormsController {
   public CollectionSchema<SearchMemberSchema<LegislationWorkSearchSchema>> searchAndFilter(
       @ParameterObject NormsSearchParams normsSearchParams,
       @ParameterObject UniversalSearchParams universalSearchParams,
-      @ParameterObject @Valid PaginationParams pagination)
+      @ParameterObject @Valid PaginationParams pagination,
+      @ParameterObject @Valid NormsSortParam sortParams)
       throws CustomValidationException {
 
     normsSearchParams.validate();
 
     boolean defaultToUnsorted = StringUtils.isNotBlank(universalSearchParams.getSearchTerm());
-    Pageable pageable =
-        PaginationParamsConverter.convert(
-            pagination, MappingDefinitions.ResolutionMode.NORMS, defaultToUnsorted);
+    var pageRequest = PageRequest.of(pagination.getPageIndex(), pagination.getSize());
+    var sortedPageRequest =
+        pageRequest.withSort(
+            SortParamsConverter.buildSort(
+                sortParams.getSort(), MappingDefinitions.ResolutionMode.NORMS, defaultToUnsorted));
 
     try {
       SearchPage<Norm> resultPage =
-          normsService.searchAndFilterNorms(universalSearchParams, normsSearchParams, pageable);
+          normsService.searchAndFilterNorms(
+              universalSearchParams, normsSearchParams, sortedPageRequest);
       return NormSearchResponseMapper.fromDomain(resultPage, ApiConfig.Paths.LEGISLATION);
     } catch (UncategorizedElasticsearchException e) {
       LuceneQueryTools.checkForInvalidQuery(e);

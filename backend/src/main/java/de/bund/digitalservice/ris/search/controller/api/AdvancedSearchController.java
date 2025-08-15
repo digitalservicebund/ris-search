@@ -8,7 +8,9 @@ import de.bund.digitalservice.ris.search.mapper.CaseLawSearchSchemaMapper;
 import de.bund.digitalservice.ris.search.mapper.DocumentResponseMapper;
 import de.bund.digitalservice.ris.search.mapper.MappingDefinitions;
 import de.bund.digitalservice.ris.search.mapper.NormSearchResponseMapper;
+import de.bund.digitalservice.ris.search.mapper.SortParamsConverter;
 import de.bund.digitalservice.ris.search.models.api.parameters.PaginationParams;
+import de.bund.digitalservice.ris.search.models.api.parameters.UniversalSortParam;
 import de.bund.digitalservice.ris.search.models.opensearch.AbstractSearchEntity;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
@@ -19,7 +21,6 @@ import de.bund.digitalservice.ris.search.schema.SearchMemberSchema;
 import de.bund.digitalservice.ris.search.service.AllDocumentsService;
 import de.bund.digitalservice.ris.search.service.CaseLawService;
 import de.bund.digitalservice.ris.search.service.NormsService;
-import de.bund.digitalservice.ris.search.service.helper.PaginationParamsConverter;
 import de.bund.digitalservice.ris.search.utils.LuceneQueryTools;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -71,17 +72,21 @@ public class AdvancedSearchController {
       @Parameter(name = "query", description = "The query filter based on Lucene query")
           @RequestParam
           String query,
-      @ParameterObject @Valid PaginationParams pagination)
+      @ParameterObject @Valid PaginationParams pagination,
+      @ParameterObject @Valid UniversalSortParam sortParams)
       throws CustomValidationException {
 
     String decodedQuery = validateLuceneQuery(query);
 
-    PageRequest pageable =
-        PaginationParamsConverter.convert(pagination, MappingDefinitions.ResolutionMode.ALL, true);
+    PageRequest pageable = PageRequest.of(pagination.getPageIndex(), pagination.getSize());
+    PageRequest sortedPageable =
+        pageable.withSort(
+            SortParamsConverter.buildSort(
+                sortParams.getSort(), MappingDefinitions.ResolutionMode.ALL, true));
 
     try {
       SearchPage<AbstractSearchEntity> resultPage =
-          allDocumentsService.searchAllDocuments(decodedQuery, pageable);
+          allDocumentsService.searchAllDocuments(decodedQuery, sortedPageable);
 
       return ResponseEntity.ok()
           .contentType(MediaType.APPLICATION_JSON)
@@ -114,16 +119,20 @@ public class AdvancedSearchController {
           @Parameter(name = "query", description = "The query filter based on Lucene query")
               @RequestParam
               String query,
-          @ParameterObject @Valid PaginationParams pagination)
+          @ParameterObject @Valid PaginationParams pagination,
+          @ParameterObject @Valid UniversalSortParam sortParams)
           throws CustomValidationException {
 
     String decodedQuery = validateLuceneQuery(query);
-    PageRequest pageable =
-        PaginationParamsConverter.convert(
-            pagination, MappingDefinitions.ResolutionMode.NORMS, true);
+
+    PageRequest pageable = PageRequest.of(pagination.getPageIndex(), pagination.getSize());
+    PageRequest sortedPageable =
+        pageable.withSort(
+            SortParamsConverter.buildSort(
+                sortParams.getSort(), MappingDefinitions.ResolutionMode.ALL, true));
 
     try {
-      SearchPage<Norm> page = normsService.searchNorms(decodedQuery, pageable);
+      SearchPage<Norm> page = normsService.searchNorms(decodedQuery, sortedPageable);
       return ResponseEntity.ok(
           NormSearchResponseMapper.fromDomain(page, ApiConfig.Paths.LEGISLATION_ADVANCED_SEARCH));
     } catch (UncategorizedElasticsearchException e) {
@@ -150,18 +159,21 @@ public class AdvancedSearchController {
       @Parameter(name = "query", description = "The query filter based on Lucene query syntax")
           @RequestParam
           String query,
-      @ParameterObject @Valid PaginationParams pagination)
+      @ParameterObject @Valid PaginationParams pagination,
+      @ParameterObject @Valid UniversalSortParam sortParams)
       throws CustomValidationException {
 
     String decodedQuery = validateLuceneQuery(query);
 
-    PageRequest pageable =
-        PaginationParamsConverter.convert(
-            pagination, MappingDefinitions.ResolutionMode.CASE_LAW, true);
+    PageRequest pageable = PageRequest.of(pagination.getPageIndex(), pagination.getSize());
+    PageRequest sortedPageable =
+        pageable.withSort(
+            SortParamsConverter.buildSort(
+                sortParams.getSort(), MappingDefinitions.ResolutionMode.ALL, true));
 
     try {
       SearchPage<CaseLawDocumentationUnit> page =
-          caseLawService.searchCaseLaws(decodedQuery, pageable);
+          caseLawService.searchCaseLaws(decodedQuery, sortedPageable);
 
       return ResponseEntity.ok(CaseLawSearchSchemaMapper.fromSearchPage(page));
     } catch (UncategorizedElasticsearchException e) {

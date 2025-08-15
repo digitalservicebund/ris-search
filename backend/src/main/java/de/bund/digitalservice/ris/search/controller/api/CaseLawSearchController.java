@@ -4,8 +4,10 @@ import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.exception.CustomValidationException;
 import de.bund.digitalservice.ris.search.mapper.CaseLawSearchSchemaMapper;
 import de.bund.digitalservice.ris.search.mapper.MappingDefinitions;
+import de.bund.digitalservice.ris.search.mapper.SortParamsConverter;
 import de.bund.digitalservice.ris.search.models.CourtSearchResult;
 import de.bund.digitalservice.ris.search.models.api.parameters.CaseLawSearchParams;
+import de.bund.digitalservice.ris.search.models.api.parameters.CaseLawSortParam;
 import de.bund.digitalservice.ris.search.models.api.parameters.PaginationParams;
 import de.bund.digitalservice.ris.search.models.api.parameters.UniversalSearchParams;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
@@ -13,18 +15,17 @@ import de.bund.digitalservice.ris.search.schema.CaseLawSearchSchema;
 import de.bund.digitalservice.ris.search.schema.CollectionSchema;
 import de.bund.digitalservice.ris.search.schema.SearchMemberSchema;
 import de.bund.digitalservice.ris.search.service.CaseLawService;
-import de.bund.digitalservice.ris.search.service.helper.PaginationParamsConverter;
 import de.bund.digitalservice.ris.search.utils.LuceneQueryTools;
-import io.micrometer.common.util.StringUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.List;
+import org.apache.commons.lang3.StringUtils;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.elasticsearch.UncategorizedElasticsearchException;
 import org.springframework.data.elasticsearch.core.SearchPage;
 import org.springframework.http.MediaType;
@@ -70,18 +71,24 @@ public class CaseLawSearchController {
   public ResponseEntity<CollectionSchema<SearchMemberSchema<CaseLawSearchSchema>>> searchAndFilter(
       @ParameterObject() CaseLawSearchParams caseLawSearchParams,
       @ParameterObject UniversalSearchParams universalSearchParams,
-      @ParameterObject() @Valid PaginationParams paginationParams)
+      @ParameterObject() @Valid PaginationParams paginationParams,
+      @ParameterObject @Valid CaseLawSortParam sortParams)
       throws CustomValidationException {
 
     boolean defaultToUnsorted = StringUtils.isNotBlank(universalSearchParams.getSearchTerm());
-    Pageable pageable =
-        PaginationParamsConverter.convert(
-            paginationParams, MappingDefinitions.ResolutionMode.CASE_LAW, defaultToUnsorted);
+    var pageRequest = PageRequest.of(paginationParams.getPageIndex(), paginationParams.getSize());
+
+    var sortedPageRequest =
+        pageRequest.withSort(
+            SortParamsConverter.buildSort(
+                sortParams.getSort(),
+                MappingDefinitions.ResolutionMode.CASE_LAW,
+                defaultToUnsorted));
 
     try {
       SearchPage<CaseLawDocumentationUnit> page =
           caseLawService.searchAndFilterCaseLaw(
-              universalSearchParams, caseLawSearchParams, pageable);
+              universalSearchParams, caseLawSearchParams, sortedPageRequest);
       return ResponseEntity.ok()
           .contentType(MediaType.APPLICATION_JSON)
           .body(CaseLawSearchSchemaMapper.fromSearchPage(page));

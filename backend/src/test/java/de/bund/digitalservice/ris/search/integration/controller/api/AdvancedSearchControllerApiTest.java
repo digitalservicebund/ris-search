@@ -495,9 +495,9 @@ class AdvancedSearchControllerApiTest extends ContainersIntegrationBase {
                                 {
                                   "errors": [
                                     {
-                                      "code": "invalid_sort_parameter",
+                                      "code": "invalid_parameter_value",
                                       "parameter": "sort",
-                                      "message": "Sorting is not supported for invalidsortparameter"
+                                      "message": "Parameter value is invalid"
                                     }
                                   ]
                                 }
