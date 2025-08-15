@@ -11,7 +11,7 @@ public class CaseLawSortParam {
       description =
           "The field to sort the results by. Default is the relevance score calculated by OpenSearch. Valid usage of the sort field are : date, courtName, documentNumber and not setting the sort field (sort by relevance descending)."
               + "Add a leading - to set the order to descending (-date)")
-  @Pattern(regexp = "^-?(|date|DATUM|courtName|documentNumber)$")
+  @Pattern(regexp = "^-?(|default|date|DATUM|courtName|documentNumber)$")
   @Nullable
   String sort = null;
 }

@@ -13,7 +13,7 @@ public class UniversalSortParam {
               + "Add a leading - to set the order to descending (-date)")
   @Pattern(
       regexp =
-          "^-?(|date|DATUM|courtName|documentNumber|temporalCoverageFrom|legislationIdentifier)$")
+          "^-?(|default|date|DATUM|courtName|documentNumber|temporalCoverageFrom|legislationIdentifier)$")
   @Nullable
   String sort = null;
 }
