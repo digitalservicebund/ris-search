@@ -2,6 +2,7 @@ package de.bund.digitalservice.ris.search.sitemap.eclicrawler.service;
 
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
+import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import de.bund.digitalservice.ris.search.repository.objectstorage.CaseLawBucket;
 import de.bund.digitalservice.ris.search.repository.objectstorage.PortalBucket;
 import de.bund.digitalservice.ris.search.service.CaseLawIndexSyncJob;
@@ -16,9 +17,12 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -95,21 +99,51 @@ public class DailySitemapJob {
   private void createAll() throws FatalDailySitemapJobException {
     LocalDate yesterday = LocalDate.now().minusDays(1);
 
-    List<ChangedDocument> documents =
-        new ArrayList<>(
-            caseLawService.getAllEcliDocuments().stream().map(CreatedDocument::new).toList());
+    Stream<List<ChangedDocument>> docUnits = batchStream(caseLawService.getAllEcliDocuments());
 
-    try {
-      Optional<String> sitemapOption = createSitemaps(documents, yesterday);
-      sitemapOption.ifPresent(sitemap -> sitemapService.writeRobotsTxt(sitemap));
-      indexStatusService.saveStatus(
-          STATUS_FILE,
-          new IndexingState()
-              .withLastProcessedChangelogFile(
-                  IndexSyncJob.CHANGELOGS_PREFIX + Instant.now().toString()));
-    } catch (JAXBException ex) {
-      throw new FatalDailySitemapJobException(ex.getMessage());
-    }
+    docUnits.forEach(
+        documents -> {
+          try {
+            Optional<String> sitemapOption = createSitemaps(documents, yesterday);
+            sitemapOption.ifPresent(sitemap -> sitemapService.writeRobotsTxt(sitemap));
+            indexStatusService.saveStatus(
+                STATUS_FILE,
+                new IndexingState()
+                    .withLastProcessedChangelogFile(
+                        IndexSyncJob.CHANGELOGS_PREFIX + Instant.now().toString()));
+          } catch (JAXBException ex) {
+            throw new FatalDailySitemapJobException(ex.getMessage());
+          }
+        });
+  }
+
+  /**
+   * process the caselawDocumentationUnit stream in batches of 10000 to avoid outOfMemoryErrors in
+   * case we receive too items
+   *
+   * @param stream Original Stream of CaseLawDocumentationUnits
+   * @return Returns a stream of CaseLawDocumentationUnit batches
+   */
+  private Stream<List<ChangedDocument>> batchStream(Stream<CaseLawDocumentationUnit> stream) {
+    Iterator<CaseLawDocumentationUnit> iterator = stream.iterator();
+    Iterator<List<ChangedDocument>> listIterator =
+        new Iterator<>() {
+
+          public boolean hasNext() {
+            return iterator.hasNext();
+          }
+
+          public List<ChangedDocument> next() {
+            List<ChangedDocument> result = new ArrayList<>(10000);
+            for (int i = 0; i < 10000 && iterator.hasNext(); i++) {
+              result.add(new CreatedDocument(iterator.next()));
+            }
+            return result;
+          }
+        };
+
+    return StreamSupport.stream(
+        ((Iterable<List<ChangedDocument>>) () -> listIterator).spliterator(), false);
   }
 
   private void createFromChangelogs(List<String> filePaths, LocalDate cutoffDate)

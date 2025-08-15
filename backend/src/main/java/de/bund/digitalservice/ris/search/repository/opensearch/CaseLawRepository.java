@@ -2,7 +2,7 @@ package de.bund.digitalservice.ris.search.repository.opensearch;
 
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import java.util.List;
-import org.apache.commons.collections4.IterableUtils;
+import java.util.stream.Stream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -39,7 +39,7 @@ public class CaseLawRepository {
     return caseLawSynthesizedRepository.findAllByDocumentNumberInAndEcliNotNull(numbers);
   }
 
-  public List<CaseLawDocumentationUnit> getAllEcliDocuments() {
-    return IterableUtils.toList(caseLawSynthesizedRepository.findAllByEcliNotNull());
+  public Stream<CaseLawDocumentationUnit> getAllEcliDocuments() {
+    return caseLawSynthesizedRepository.findAllByEcliNotNull();
   }
 }
