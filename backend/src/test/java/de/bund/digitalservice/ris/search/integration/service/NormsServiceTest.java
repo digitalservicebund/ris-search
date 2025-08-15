@@ -50,7 +50,7 @@ class NormsServiceTest extends ContainersIntegrationBase {
 
   @Test
   @DisplayName("Should return highlights matching the norm article using search query")
-  void shouldReturnHighlightsMatchingANormArticleUsingSearchQuery() throws Exception {
+  void shouldReturnHighlightsMatchingANormArticleUsingSearchQuery() {
     String articleName = "§ 1 Example article";
     NormsSearchParams normsSearchParams = new NormsSearchParams();
     UniversalSearchParams universalSearchParams = new UniversalSearchParams();

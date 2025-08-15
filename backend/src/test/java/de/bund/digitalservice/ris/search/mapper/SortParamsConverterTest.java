@@ -1,8 +1,5 @@
-package de.bund.digitalservice.ris.search.service.helper;
+package de.bund.digitalservice.ris.search.mapper;
 
-import de.bund.digitalservice.ris.search.exception.CustomValidationException;
-import de.bund.digitalservice.ris.search.mapper.MappingDefinitions;
-import de.bund.digitalservice.ris.search.mapper.SortParamsConverter;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,8 +13,7 @@ class SortParamsConverterTest {
 
   @ParameterizedTest
   @ValueSource(strings = {"default", "", "null"})
-  void testBuildSort_withUnsorted_shouldReturnDefaultSort(String value)
-      throws CustomValidationException {
+  void testBuildSort_withUnsorted_shouldReturnDefaultSort(String value) {
     if (value.equals("null")) {
       value = null;
     }
