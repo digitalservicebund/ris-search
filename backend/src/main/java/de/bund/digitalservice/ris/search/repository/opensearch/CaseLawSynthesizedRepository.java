@@ -2,6 +2,7 @@ package de.bund.digitalservice.ris.search.repository.opensearch;
 
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import java.util.List;
+import java.util.stream.Stream;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 
 /**
@@ -12,6 +13,11 @@ import org.springframework.data.elasticsearch.repository.ElasticsearchRepository
 public interface CaseLawSynthesizedRepository
     extends ElasticsearchRepository<CaseLawDocumentationUnit, String> {
   List<CaseLawDocumentationUnit> findByDocumentNumber(String documentNumber);
+
+  List<CaseLawDocumentationUnit> findAllByDocumentNumberInAndEcliNotNull(
+      List<String> documentNumbers);
+
+  Stream<CaseLawDocumentationUnit> findAllByEcliNotNull();
 
   void deleteByIndexedAtBefore(String indexedAt);
 

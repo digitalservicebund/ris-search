@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 import lombok.SneakyThrows;
 import org.jetbrains.annotations.Nullable;
 import org.opensearch.action.search.SearchType;
@@ -199,5 +200,14 @@ public class CaseLawService {
 
   public List<String> getAllFilenamesByDocumentNumber(String documentNumber) {
     return caseLawBucket.getAllKeysByPrefix(documentNumber);
+  }
+
+  public Stream<CaseLawDocumentationUnit> getAllEcliDocuments() {
+    return caseLawRepository.getAllEcliDocuments();
+  }
+
+  public List<CaseLawDocumentationUnit> getEcliDocumentsByDocumentNumbers(
+      List<String> documentNumber) {
+    return caseLawRepository.getEcliDocumentsByDocumentNumbers(documentNumber);
   }
 }
