@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?><?xml-model href="Grammatiken/legalDocML.de.sch" schematypens="http://purl.oclc.org/dsdl/schematron"?>
 <!-- This file should not be considered -->
-<akn:akomaNtoso xmlns:akn="http://Inhaltsdaten.LegalDocML.de/1.8.1/"
+<akn:akomaNtoso xmlns:akn="http://Inhaltsdaten.LegalDocML.de/1.8.2/"
                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                xsi:schemaLocation="http://Inhaltsdaten.LegalDocML.de/1.8.1/ Grammatiken/legalDocML.de-offenestruktur.xsd">
+                xsi:schemaLocation="http://Inhaltsdaten.LegalDocML.de/1.8.2/ Grammatiken/legalDocML.de-offenestruktur.xsd">
     <akn:doc name="offene-struktur">
         <akn:meta GUID="4cda96eb-c56d-495e-bd32-809501304d20" eId="meta-1">
             <akn:identification GUID="c4f7c3fa-065c-4485-b7cd-8458f997b0b8" eId="meta-1_ident-1"

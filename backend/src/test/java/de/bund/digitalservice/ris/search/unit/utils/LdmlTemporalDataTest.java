@@ -29,7 +29,7 @@ class LdmlTemporalDataTest {
          <?xml-model href="../../../Grammatiken/legalDocML.de.sch" schematypens="http://purl.oclc.org/dsdl/schematron"?>
          <?xml-model href="../../../Grammatiken/legalDocML.de.sch" schematypens="http://purl.oclc.org/dsdl/schematron"?>
          <?xml-model href="../../../Grammatiken/legalDocML.de.sch" schematypens="http://purl.oclc.org/dsdl/schematron"?>
-         <akn:akomaNtoso xmlns:akn="http://Inhaltsdaten.LegalDocML.de/1.8.1/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://Inhaltsdaten.LegalDocML.de/1.8.1/ ../schema/legalDocML.de-regelungstextverkuendungsfassung.xsd">
+         <akn:akomaNtoso xmlns:akn="http://Inhaltsdaten.LegalDocML.de/1.8.2/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://Inhaltsdaten.LegalDocML.de/1.8.2/ ../schema/legalDocML.de-regelungstextverkuendungsfassung.xsd">
            <akn:act name="regelungstext">
              <akn:meta GUID="87b3446a-faa1-4d81-bb34-48ce7929de86" eId="meta-1">
                <akn:lifecycle GUID="21800a74-04c9-424e-8017-c63fe835a017" eId="meta-1_lebzykl-1" source="attributsemantik-noch-undefiniert">

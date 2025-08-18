@@ -2,7 +2,7 @@
 <sch:schema xmlns:fkt="lokale-funktionen"
             xmlns:sch="http://purl.oclc.org/dsdl/schematron"
             queryBinding="xslt2"
-            schemaVersion="LegalDocML.de 1.8.1 (10.06.2025)">
+            schemaVersion="LegalDocML.de 1.8.2 (07.08.2025)">
 <!--
 
 ********************************* Hinweis zur Lizensierung ***********************************
@@ -14,18 +14,18 @@
 **********************************************************************************************
 
 -->
-   <sch:ns uri="http://Inhaltsdaten.LegalDocML.de/1.8.1/" prefix="akn"/>
-   <sch:ns uri="http://MetadatenRegelungstext.LegalDocML.de/1.8.1/"
+   <sch:ns uri="http://Inhaltsdaten.LegalDocML.de/1.8.2/" prefix="akn"/>
+   <sch:ns uri="http://MetadatenRegelungstext.LegalDocML.de/1.8.2/"
            prefix="regtxt"/>
-   <sch:ns uri="http://MetadatenRechtsetzungsdokument.LegalDocML.de/1.8.1/"
+   <sch:ns uri="http://MetadatenRechtsetzungsdokument.LegalDocML.de/1.8.2/"
            prefix="redok"/>
-   <sch:ns uri="http://MetadatenBundestag.LegalDocML.de/1.8.1/" prefix="btag"/>
-   <sch:ns uri="http://MetadatenBundesrat.LegalDocML.de/1.8.1/" prefix="brat"/>
-   <sch:ns uri="http://MetadatenBundesregierung.LegalDocML.de/1.8.1/"
+   <sch:ns uri="http://MetadatenBundestag.LegalDocML.de/1.8.2/" prefix="btag"/>
+   <sch:ns uri="http://MetadatenBundesrat.LegalDocML.de/1.8.2/" prefix="brat"/>
+   <sch:ns uri="http://MetadatenBundesregierung.LegalDocML.de/1.8.2/"
            prefix="breg"/>
-   <sch:ns uri="http://MetadatenFormulierungshilfe.LegalDocML.de/1.8.1/"
+   <sch:ns uri="http://MetadatenFormulierungshilfe.LegalDocML.de/1.8.2/"
            prefix="fhilf"/>
-   <sch:ns uri="http://MetadatenNormenkontrollrat.LegalDocML.de/1.8.1/"
+   <sch:ns uri="http://MetadatenNormenkontrollrat.LegalDocML.de/1.8.2/"
            prefix="nkr"/>
    <sch:ns uri="lokale-funktionen" prefix="fkt"/>
    <!-- Dokumenteigenschaften: Form -->
@@ -323,7 +323,8 @@
    <sch:pattern xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
       <sch:rule id="SCH-00071"
                 context="/akn:akomaNtoso/akn:act[@name = $art-regelungstext-uri and $fassung = $fassung-verkündungsfassung and not($form = $form-eingebundene-stammform)]">
-         <sch:assert id="SCH-00071-005" role="error" test="./akn:preface/akn:block">Für einen Regelungstext in der Verkündungsfassung muss ein Datums-Container innerhalb des Dokumentenkopfes verwendet werden. </sch:assert>
+         <!-- HINWEIS: Regel SCH-00071-005 wurde gemäß https://projekte.kosit.org/ldml_de/tickets/-/issues/277 in 1.8.2 vollständig deaktiviert. -->
+         <!--<sch:assert id="SCH-00071-005" role="error" test="./akn:preface/akn:block">Für einen Regelungstext in der Verkündungsfassung muss ein Datums-Container innerhalb des Dokumentenkopfes verwendet werden. </sch:assert>-->
          <!--<sch:assert id="SCH-00071-010" role="error" test="./akn:conclusions/akn:blockContainer">Für einen Regelungstext in der Verkündungsfassung muss ein Signaturblock verwendet werden.</sch:assert>-->
       </sch:rule>
    </sch:pattern>
@@ -343,8 +344,10 @@
                 context="/akn:akomaNtoso/*[@name = $art-regelungstext-uri and $typ = ($typ-gesetz, $typ-vertragsgesetz)]/akn:preamble">
          <sch:assert id="SCH-00100-005" role="error" test="not(./akn:citations)">Ein Gesetz darf keine Ermächtigungsnorm enthalten.</sch:assert>
       </sch:rule>
+      <!-- HINWEIS: Regel SCH-00110-005 wurde gemäß https://projekte.kosit.org/ldml_de/tickets/-/issues/277 in 1.8.2 beschränkt auf Stammformen und Mantelformen 
+              und zudem deaktiviert für Verkündungsfassungen. -->
       <sch:rule id="SCH-00110"
-                context="/akn:akomaNtoso/*[@name = $art-regelungstext-uri and $typ = ($typ-verordnung, $typ-vertragsverordnung) and not($fassung = $fassung-neufassung)]/akn:preamble">
+                context="/akn:akomaNtoso/* [ @name = $art-regelungstext-uri and $typ = ($typ-verordnung, $typ-vertragsverordnung) and $form = ($form-stammform, $form-mantelform) and not($fassung = ($fassung-neufassung, $fassung-verkündungsfassung)) ]/akn:preamble">
          <sch:assert id="SCH-00110-005" role="error" test="./akn:citations">Eine Verordnung muss Ermächtigungsnormen bereitstellen.</sch:assert>
       </sch:rule>
    </sch:pattern>
@@ -356,15 +359,19 @@
       </sch:rule>
    </sch:pattern>
    <sch:pattern xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+      <!-- HINWEIS: Die Gültigkeit von SCH-00121-000 wurde im Zuge von https://projekte.kosit.org/ldml_de/tickets/-/issues/270 
+           in 1.8.2 auf Entwurfsfassungen eingeschränkt. -->
       <sch:rule id="SCH-00121"
-                context="akn:article[not(ancestor::akn:quotedStructure)]/@refersTo [ $form = $form-mantelform and $typ = ($typ-gesetz, $typ-verordnung, $typ-satzung, $typ-verwaltungsvorschrift, $typ-vertragsgesetz, $typ-vertragsverordnung) and $fassung = ($fassung-entwurfsfassung, $fassung-verkündungsfassung) ]">
+                context="akn:article[not(ancestor::akn:quotedStructure)]/@refersTo [ $form = $form-mantelform and $typ = ($typ-gesetz, $typ-verordnung, $typ-satzung, $typ-verwaltungsvorschrift, $typ-vertragsgesetz, $typ-vertragsverordnung) and $fassung = ($fassung-entwurfsfassung) ]">
          <sch:assert id="SCH-00121-000"
                      test=". = ($refersto-literal-hauptaenderung, $refersto-literal-folgeaenderung, $refersto-literal-eingebundene-stammform, $refersto-literal-geltungszeitregel, $refersto-literal-geltungszeitregel-inkrafttreten, $refersto-literal-geltungszeitregel-ausserkrafttreten)">Liegt ein Regelungstext in Mantelform vor und seine Einzelvorschriften sind mittels @refersTo näher bestimmt, so dürfen lediglich folgende Literale verwendet werden: "hauptaenderung", "folgeaenderung", "eingebundene-stammform", "geltungszeitregel", "geltungszeitregel-inkrafttreten", "geltungszeitregel-ausserkrafttreten".</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+      <!-- HINWEIS: Die Gültigkeit von SCH-00122-000 wurde im Zuge von https://projekte.kosit.org/ldml_de/tickets/-/issues/270 
+           in 1.8.2 auf Entwurfsfassungen eingeschränkt. -->
       <sch:rule id="SCH-00122"
-                context="akn:article/@refersTo [ $form = $form-stammform and $typ = ($typ-gesetz, $typ-verordnung, $typ-satzung, $typ-verwaltungsvorschrift, $typ-vertragsgesetz, $typ-vertragsverordnung) and $fassung = ($fassung-entwurfsfassung, $fassung-verkündungsfassung, $fassung-neufassung) ]">
+                context="akn:article/@refersTo [ $form = $form-stammform and $typ = ($typ-gesetz, $typ-verordnung, $typ-satzung, $typ-verwaltungsvorschrift, $typ-vertragsgesetz, $typ-vertragsverordnung) and $fassung = ($fassung-entwurfsfassung) ]">
          <sch:assert id="SCH-00122-000"
                      test="(. = $refersto-literal-geltungszeitregel and count(//akn:article/@refersTo) = 1) or (. = $refersto-literal-geltungszeitregel-inkrafttreten and (every $r in //akn:article/@refersTo satisfies $r = $refersto-literal-geltungszeitregel-inkrafttreten or $r = $refersto-literal-geltungszeitregel-ausserkrafttreten))">In einem Regelungstext in Stammform darf entweder genau eine mit refersTo="geltungszeitregel" ausgezeichnete Einzelvorschrift und keine weiteren mit refersTo ausgezeichneten Einzelvorschriften haben oder genau eine mit refersTo="geltungszeitregel-inkrafttreten" ausgezeichnete Einzelvorschrift haben und optional eine mit refersTo="geltungszeitregel-ausserkrafttreten" ausgezeichnete Einzelvorschrift.</sch:assert>
       </sch:rule>
@@ -397,8 +404,9 @@
    </sch:pattern>
    <sch:title xmlns:xsl="http://www.w3.org/1999/XSL/Transform">Klasse: Hauptteil</sch:title>
    <sch:pattern xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+      <!-- HINWEIS: Regel SCH-00150-005 wurde gemäß https://projekte.kosit.org/ldml_de/tickets/-/issues/277 in 1.8.2 auf Entwurfsfassungen beschränkt. -->
       <sch:rule id="SCH-00150"
-                context="/akn:akomaNtoso/*/akn:body[$form = $form-mantelform]">
+                context="/akn:akomaNtoso/*/akn:body[$form = $form-mantelform and $fassung = $fassung-entwurfsfassung]">
          <sch:report id="SCH-00150-005"
                      role="error"
                      test="./akn:book or ./akn:part or ./akn:chapter or ./akn:subchapter or ./akn:section or ./akn:subsection or ./akn:title or ./akn:subtitle">Der Hauptteil einer Mantelform wird nicht in weitere Gliederungsabschnitte untergliedert.</sch:report>
@@ -425,13 +433,7 @@
                      role="warn">Gemäß HdR 4 sollen Inkrafttreten und Außerkrafttreten in getrennten Einzelvorschriften gefasst werden, die entsprechend mit den refersTo-Literalen geltungszeitregel-inkrafttreten und geltungszeitregel-ausserkrafttreten auszuzeichnen sind. Das refersTo-Literal "geltungszeitregel" soll in Entwurfsfassungen nicht mehr verwendet werden.</sch:report>
       </sch:rule>
    </sch:pattern>
-   <sch:pattern xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-      <sch:rule id="SCH-00185"
-                context="akn:article[empty(ancestor::akn:quotedStructure) and @refersTo = $refersto-literal-geltungszeitregel-ausserkrafttreten]">
-         <sch:report id="SCH-00185-000"
-                     test="$form = ($form-eingebundene-stammform, $form-mantelform)">Eine Einzelvorschrift zum Außerkrafttreten darf es nur in einer Stammform bzw. eingebundenen Stammform geben.</sch:report>
-      </sch:rule>
-   </sch:pattern>
+   <!-- HINWEIS: SCH-00185-000 wurde im Zuge von https://projekte.kosit.org/ldml_de/tickets/-/issues/278 in 1.8.2 entfernt. -->
    <sch:title xmlns:xsl="http://www.w3.org/1999/XSL/Transform">Aufzählungen</sch:title>
    <sch:pattern xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
       <sch:rule id="SCH-00200"
@@ -684,7 +686,7 @@
                 context="/akn:akomaNtoso/akn:doc[@name = ($art-anschreiben-uri, $art-vorblatt-uri)]/akn:preface/akn:longTitle/akn:p">
          <sch:report id="SCH-00390-005"
                      role="error"
-                     test="./akn:inline [@refersTo = $refersto-literal-ausschussueberweisung] and $bearbeitende-institution-frbrauthor = ( 'recht.bund.de/institution/bundesregierung', 'recht.bund.de/institution/bundestag', 'recht.bund.de/institution/bundeskanzler', 'recht.bund.de/institution/bundespraesident' )"> Eine Ausschussüberweisung steht nur dem Bundesrat optional zur Verfügung.</sch:report>
+                     test="./akn:inline[@refersTo = $refersto-literal-ausschussueberweisung] and $bearbeitende-institution-frbrauthor = ( 'recht.bund.de/institution/bundesregierung', 'recht.bund.de/institution/bundestag', 'recht.bund.de/institution/bundeskanzler', 'recht.bund.de/institution/bundespraesident' )"> Eine Ausschussüberweisung steht nur dem Bundesrat optional zur Verfügung.</sch:report>
          <sch:report id="SCH-00390-020"
                      role="error"
                      test="./akn:docNumber and $bearbeitende-institution-frbrauthor = ( 'recht.bund.de/institution/bundesregierung', 'recht.bund.de/institution/bundeskanzler', 'recht.bund.de/institution/bundespraesident' )"> Die Drucksachennummer steht nur dem Bundestag/Bundesrat optional zur Verfügung.</sch:report>
@@ -794,20 +796,29 @@
                 context="@eId[starts-with(tokenize(., '-')[last()], $präfix-eid-zitierbar) and parent::*/akn:num != '']">
          <sch:let name="positionsangabe-ist" value="tokenize(., '-')[last()]"/>
          <sch:let name="eingabe-textknoten" value="parent::*/akn:num/text()"/>
+         <sch:let name="doppelparagraph" value="'§§ '"/>
+         <sch:let name="platzhalter" value="'µµ '"/>
          <!-- Schritt 1: Weißraumnormalisierung und Umwandlung in Kleinbuchstaben -->
          <sch:let name="weißraumnormalisiert"
                   value="normalize-space(lower-case($eingabe-textknoten))"/>
-         <!-- Schritt 2: ggf. Weglassen von '§ ', 'Art. ', 'Art ' und 'Artikel ' (in den Suchausdrücken kleingeschrieben, da bereits lower-case aus vorherigemn Schritt) -->
+         <!-- Schritt 2: Temporär etwaige Vorkommnisse von '§§ ' durch 'µµ ' ersetzen -->
+         <sch:let name="mit-platzhaltern"
+                  value="replace($weißraumnormalisiert, $doppelparagraph, $platzhalter)"/>
+         <!-- Schritt 3: Ggf. Weglassen von '§ ', 'Art. ', 'Art ' und 'Artikel ' (in den Suchausdrücken kleingeschrieben, da bereits lower-case aus vorherigem Schritt) -->
          <sch:let name="ohne-sonderzeichen"
-                  value="replace($weißraumnormalisiert, '(§ )|(art\. )|(art )|(artikel )', '')"/>
-         <!-- Schritt 3: Weglassen der Klammern bei Ausdrücken wie '(1)' oder '(1337bb)' -->
+                  value="replace($mit-platzhaltern, '(§ )|(art\. )|(art )|(artikel )', '')"/>
+         <!-- Schritt 4: Weglassen der Klammern bei Ausdrücken wie '(1)' oder '(1337bb)' -->
          <sch:let name="ohne-klammern"
                   value="replace($ohne-sonderzeichen, '(\()(\d+[a-z]*)(\))', '$2')"/>
-         <!-- Schritt 4: Maskierung von -, _ und . als ~ -->
+         <!-- Schritt 5: Maskierung von -, _ und . als ~ -->
          <sch:let name="maskiert" value="translate($ohne-klammern, '-_.', '~~~')"/>
-         <!-- Schritt 5: uri-Encoding -->
+         <!-- Schritt 6: Etwaige temporäre Platzhalter wieder zurückverwandeln -->
+         <sch:let name="ggf-mit-doppelten-paragraphenzeichen"
+                  value="replace($maskiert, $platzhalter, $doppelparagraph)"/>
+         <!-- Schritt 7: uri-Encoding -->
          <sch:let name="normalisierte-positionsangabe-eid"
-                  value="encode-for-uri($maskiert)"/>
+                  value="encode-for-uri($ggf-mit-doppelten-paragraphenzeichen)"/>
+         <!-- Schritt 8: Konstruktion der erwarteteten Positionsangabe -->
          <sch:let name="positionsangabe-soll"
                   value="lower-case(concat($präfix-eid-zitierbar, $normalisierte-positionsangabe-eid))"/>
          <sch:assert id="SCH-00431-005"
@@ -824,23 +835,22 @@
                 context="akn:num[@refersTo = $literal-deklaration-ausnahme-eid-zählweise]"
                 subject="parent::*">
          <sch:assert id="SCH-00433-000"
-                     test="local-name(parent::*) = $zitierbare-elementtypen">Die Deklaration der ausnahmsweisen ordinalen Zählung eines Elementes, obwohl für es eine Art- und Zählbezeichnung vorhanden ist, darf nur für Einzelvorschriften (akn:article), juristische Absätze (akn:paragraph) oder Listenuntergliederungselemente (akn:point) vorgenommen werden.</sch:assert>
+                     test="local-name(parent::*) = $zitierbare-elementtypen">Die Deklaration der ausnahmsweisen ordinalen Zählung eines Elementes, obwohl für es eine Art- und Zählbezeichnung vorhanden ist, darf nur für Einzelvorschriften (akn:article), juristische Absätze (akn:paragraph) oder Listenuntergliederungselemente (aksn:point) vorgenommen werden.</sch:assert>
          <sch:assert id="SCH-00433-005"
                      test="starts-with(tokenize(parent::*/@eId, '-')[last()], $präfix-eid-nummerierbar)">Die @eId eines Elementes, für welches an seinem Kindelement akn:num mittels refersTo='<sch:value-of select="$literal-deklaration-ausnahme-eid-zählweise"/>' deklariert wurde, dass nicht die Art- und Zählbezeichnung zu verwenden sei, sondern eine ordinale Zählung vorzunehmen ist, muss im lokalen Teil seiner eId (hier: "<sch:value-of select="tokenize(parent::*/@eId, '_')[last()]"/>") das Präfix "<sch:value-of select="$präfix-eid-nummerierbar"/>" besitzen, nicht "<sch:value-of select="$präfix-eid-zitierbar"/>".</sch:assert>
       </sch:rule>
    </sch:pattern>
-   <!-- Wenn n-Typ, dann ordinale Zählung (außer bei Einzelvorschriften außerhalb von quotedStructures: Diese global zählen): Positionsangabe muss zum Rang passen -->
+   <!-- Wenn n-Typ, dann ordinale Zählung: Die Positionsangabe muss zum Rang passen! (Einzelvorschriften müssen gesondert behandelt werden, dies wird in SCH-00437 deklariert.) -->
    <sch:pattern xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
       <sch:rule id="SCH-00434"
-                context="*[@eId[starts-with(tokenize(., '-')[last()], $präfix-eid-nummerierbar)]]">
+                context="*[@eId[starts-with(tokenize(., '-')[last()], $präfix-eid-nummerierbar)] and not(local-name() = 'article')]">
          <sch:let name="elementtyp-bezeichner" value="local-name(.)"/>
-         <sch:let name="einzelvorschrift" value="'article'"/>
          <sch:let name="elementrang-soll"
-                  value="if ($elementtyp-bezeichner = $einzelvorschrift and not(ancestor::akn:quotedStructure)) then (1 + count(preceding::*[local-name() eq $einzelvorschrift])) else (1 + count(preceding-sibling::*[local-name() eq $elementtyp-bezeichner]))"/>
+                  value="1 + count(preceding-sibling::*[local-name() eq $elementtyp-bezeichner])"/>
          <sch:let name="lokaler-eId-teil" value="tokenize(@eId, '_')[last()]"/>
          <sch:let name="elementrang-ist"
                   value="xs:integer(tokenize($lokaler-eId-teil, concat('-', $präfix-eid-nummerierbar))[last()])"/>
-         <sch:assert id="SCH-00434-000" test="$elementrang-ist = $elementrang-soll">Elemente, deren @eId im lokalen Teil (hier: "<sch:value-of select="$lokaler-eId-teil"/>) das Präfix "<sch:value-of select="$präfix-eid-nummerierbar"/>" enthalten, müssen ihre Positionsangabe mittels ordinaler Zählung bilden. Konkret würde hier als Postion [<sch:value-of select="$elementrang-soll"/>] erwartet, nicht [<sch:value-of select="$elementrang-ist"/>].</sch:assert>
+         <sch:assert id="SCH-00434-000" test="$elementrang-ist = $elementrang-soll">Elemente, deren @eId im lokalen Teil (hier: "<sch:value-of select="$lokaler-eId-teil"/>) das Präfix "<sch:value-of select="$präfix-eid-nummerierbar"/>" enthalten, müssen ihre Positionsangabe mittels ordinaler Zählung bilden. Konkret würde hier als Position [<sch:value-of select="$elementrang-soll"/>] erwartet, nicht [<sch:value-of select="$elementrang-ist"/>].</sch:assert>
       </sch:rule>
    </sch:pattern>
    <!-- Wenn akn:num vorhanden und keine Ausnahme qua @refersTo, dann kein n-Typ, sondern z-Typ! -->
@@ -861,6 +871,22 @@
                   value="replace($lokaler-verweis, '(/\d+-\d+)$', '')"/>
          <sch:assert id="SCH-00436-010"
                      test="count(/akn:akomaNtoso//*[@eId eq $lokaler-verweis-ohne-zeichenbereich]) = 1">Verweise auf ein jeweiliges ELement sind innerhalb von passiveModifications grundsätzlich lokal. Zur hier angegebenen Referenz existiert jedoch im vorliegenden Dokument kein Element mit korrespondierender @eId ("<sch:value-of select="$lokaler-verweis-ohne-zeichenbereich"/>")!</sch:assert>
+      </sch:rule>
+   </sch:pattern>
+   <!-- Wenn es sich um eine Einzelvorschrift mit ordinaler Zählung handelt, dann muss ihre Positionsangabe zum Rang passen. Innerhalb von Änderungsbefehlen ist dabei lokal zu zählen, 
+        außerhalb hingegen global, aber ohne Berücksichtigung etwaiger Einzelvorschriften innerhalb enthaltener Änderungsbefehle. -->
+   <sch:pattern xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+      <sch:rule id="SCH-00437"
+                context="akn:article[@eId[starts-with(tokenize(., '-')[last()], $präfix-eid-nummerierbar)]]">
+         <sch:let name="elementtyp-bezeichner" value="local-name(.)"/>
+         <sch:let name="id-des-übergeordneten-änderungsbefehls"
+                  value="ancestor::akn:mod/generate-id()"/>
+         <sch:let name="elementrang-soll"
+                  value="if (ancestor::akn:mod) then (1 + count(preceding::akn:article[ancestor::akn:mod/generate-id() eq $id-des-übergeordneten-änderungsbefehls])) else (1 + count(preceding::akn:article[not(ancestor::akn:mod)]))"/>
+         <sch:let name="lokaler-eId-teil" value="tokenize(@eId, '_')[last()]"/>
+         <sch:let name="elementrang-ist"
+                  value="xs:integer(tokenize($lokaler-eId-teil, concat('-', $präfix-eid-nummerierbar))[last()])"/>
+         <sch:assert id="SCH-00437-000" test="$elementrang-ist = $elementrang-soll">Bei Einzelvorschriften, für die eine ordinale Zählung deklariert wurde, muss die Positionsangabe zu ihrem Rang passen; dabei ist innerhalb von Änderungsbefehlen lokal zu zählen (d. h. nur auf der Menge der Geschwisterknoten), während außerhalb im Gegensatz dazu global zu zählen ist, wobei jedoch Einzelvorschriften innerhalb etwaiger Änderungsbefehle nicht mitgezählt werden. Konkret würde für die vorliegende Einzelvorschrift als Position [<sch:value-of select="$elementrang-soll"/>] erwartet, nicht [<sch:value-of select="$elementrang-ist"/>].</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
@@ -1051,7 +1077,7 @@
          <sch:assert id="SCH-00500-010"
                      role="error"
                      test="if ($ist-verkündungsfassung) then (@value = $FRBRthis-verkündungsfassung-work-inhalt) else true()">
-            <sch:value-of select="$FRBRthis-verkündungsfassung-work-beschreibung"/> muss sich aus den Inhalten der jeweiligen Metadaten zusammensetzen in der Form "<sch:value-of select="$FRBRthis-verkündungsfassung-work-aufbau"/>". Erwartet würde hier konkret: "<sch:value-of select="$FRBRthis-verkündungsfassung-work-inhalt"/>".</sch:assert>
+            <sch:value-of select="$FRBRthis-verkündungsfassung-work-beschreibung"/> muss sich aus den Inhalten der jeweiligen Metadaten zusammensetzen in der Form "<sch:value-of select="$FRBRthis-verkündungsfassung-work-aufbau"/>". Erwartest würde hier konkret: "<sch:value-of select="$FRBRthis-verkündungsfassung-work-inhalt"/>".</sch:assert>
       </sch:rule>
       <!-- FRBRthis: Expression-Ebene -->
       <sch:rule id="SCH-00510"
@@ -1307,15 +1333,14 @@
                   value="akn:eventRef[@type = $type-literal-ereignisreferenz-repeal and @refersTo = $refersto-literal-ereignisreferenz-verkündungsfassung-ausserkrafttreten]/@date"/>
          <sch:assert id="SCH-00660-015"
                      test="if (akn:eventRef[@type = $type-literal-ereignisreferenz-repeal and @refersTo = $refersto-literal-ereignisreferenz-verkündungsfassung-ausserkrafttreten]) then (xs:date($datum-ausserkafttreten) gt xs:date($datum-ausfertigung)) else true()">Das Datum des Außerkrafttretens muss nach der Ausfertigung liegen; angegeben wurden jedoch für das Außerkrafttreten '<sch:value-of select="$datum-ausserkafttreten"/>' und für die Ausfertigung '<sch:value-of select="$datum-ausfertigung"/>'.</sch:assert>
-         <sch:let name="frühestes-datum-amendment-als-reine-ziffern"
-                  value="min(for $n in akn:eventRef[@type = $type-literal-ereignisreferenz-amendment (: inkl. aller möglichen @refersTo :)]/@date return format-date($n, '[Y,4][M,2][D,2]'))"/>
-         <sch:let name="frühestes-datum-amendment"
-                  value="if (not(empty($frühestes-datum-amendment-als-reine-ziffern))) then (xs:date(concat( substring($frühestes-datum-amendment-als-reine-ziffern, 1, 4), '-', substring($frühestes-datum-amendment-als-reine-ziffern, 5, 2), '-', substring($frühestes-datum-amendment-als-reine-ziffern, 7, 2)))) else '0001-01-01'"/>
-         <sch:let name="ausfertigungsdatum"
+         <sch:let name="frühestes-datum-amendment-ausfertigung-als-reine-ziffern"
+                  value="min(for $n in akn:eventRef[@type = $type-literal-ereignisreferenz-amendment and @refersTo = $refersto-literal-ereignisreferenz-verkündungsfassung-ausfertigung]/@date return format-date($n, '[Y,4][M,2][D,2]'))"/>
+         <sch:let name="frühestes-datum-amendment-ausfertigung"
+                  value="if (not(empty($frühestes-datum-amendment-ausfertigung-als-reine-ziffern))) then (xs:date(concat( substring($frühestes-datum-amendment-ausfertigung-als-reine-ziffern, 1, 4), '-', substring($frühestes-datum-amendment-ausfertigung-als-reine-ziffern, 5, 2), '-', substring($frühestes-datum-amendment-ausfertigung-als-reine-ziffern, 7, 2)))) else '0001-01-01'"/>
+         <sch:let name="ausfertigungsdatum-stammform"
                   value="(akn:eventRef[@type = $type-literal-ereignisreferenz-generation and @refersTo = $refersto-literal-ereignisreferenz-verkündungsfassung-ausfertigung]/@date)[1]"/>
          <sch:assert id="SCH-00660-020"
-                     test="if (not(xs:date($frühestes-datum-amendment) = xs:date('0001-01-01'))) then (xs:date($frühestes-datum-amendment) gt xs:date($ausfertigungsdatum)) else true()">
-            <sch:value-of select="$dokumentarten-mit-lebenszyklus-angaben-formulierung-satzanfang-nominativ"/> können erst geändert werden, nachdem er/sie initial ausgefertigt wurde (d. h. die früheste Änderung - akn:eventRef[@type = '<sch:value-of select="$type-literal-ereignisreferenz-amendment"/>']/@date - muss nach der initialen Ausfertigung - &lt;eventRef&gt; mit @type = '<sch:value-of select="$type-literal-ereignisreferenz-generation"/>' und @refersTo = '<sch:value-of select="$refersto-literal-ereignisreferenz-verkündungsfassung-ausfertigung"/>' - erfolgen).</sch:assert>
+                     test="if (not(xs:date($frühestes-datum-amendment-ausfertigung) = xs:date('0001-01-01'))) then (xs:date($frühestes-datum-amendment-ausfertigung) ge xs:date($ausfertigungsdatum-stammform)) else true()">Das initiale Ausfertigungsdatum der Stammform kann nicht hinter dem Ausfertigungsdatum des Änderungsgesetzes liegen.</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
@@ -1337,7 +1362,7 @@
          <sch:let name="ausfertigung"
                   value="akn:eventRef[@type = $type-literal-ereignisreferenz-generation and @refersTo = $refersto-literal-ereignisreferenz-verkündungsfassung-ausfertigung]/@date"/>
          <sch:assert id="SCH-00670-005"
-                     test="xs:date($früheste-neufassung) gt xs:date($ausfertigung)">Das Datum der frühesten Neufassung (&lt;eventRef&gt; mit @type='<sch:value-of select="$type-literal-ereignisreferenz-generation"/>' und @rfersTo='<sch:value-of select="$refersto-literal-ereignisreferenz-neufassung"/>') muss nach dem initialen Ausfertigungsdatum (&lt;eventRef&gt; mit @type='<sch:value-of select="$type-literal-ereignisreferenz-generation"/>' und @refersTo='<sch:value-of select="$refersto-literal-ereignisreferenz-verkündungsfassung-ausfertigung"/>') liegen; angegeben wurden jedoch als Ausfertigungsdatum '<sch:value-of select="$ausfertigung"/>' und als Datum der Neufassung '<sch:value-of select="$früheste-neufassung"/>'.</sch:assert>
+                     test="xs:date($früheste-neufassung) gt xs:date($ausfertigung)">Das Datum der frühesten Neufassung (&lt;eventRef&gt; mit @type='<sch:value-of select="$type-literal-ereignisreferenz-generation"/>' und @refersTo='<sch:value-of select="$refersto-literal-ereignisreferenz-neufassung"/>') muss nach dem initialen Ausfertigungsdatum (&lt;eventRef&gt; mit @type='<sch:value-of select="$type-literal-ereignisreferenz-generation"/>' und @refersTo='<sch:value-of select="$refersto-literal-ereignisreferenz-verkündungsfassung-ausfertigung"/>') liegen; angegeben wurden jedoch als Ausfertigungsdatum '<sch:value-of select="$ausfertigung"/>' und als Datum der Neufassung '<sch:value-of select="$früheste-neufassung"/>'.</sch:assert>
       </sch:rule>
    </sch:pattern>
    <!-- Regeln zu Kardinalitäten von Inline-Elementen -->

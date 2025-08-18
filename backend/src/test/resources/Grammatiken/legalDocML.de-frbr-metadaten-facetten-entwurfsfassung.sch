@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-Diese Datei ist Bestandteil der Schematronregeln des Standards LegalDocML.de 1.8.1 (10.06.2025).
+Diese Datei ist Bestandteil der Schematronregeln des Standards LegalDocML.de 1.8.2 (07.08.2025).
 Sie wird inkludiert von der Schematron-Hauptdatei.
 
                 

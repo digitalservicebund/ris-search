@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns="http://Inhaltsdaten.LegalDocML.de/1.8.1/"
+<xs:schema xmlns="http://Inhaltsdaten.LegalDocML.de/1.8.2/"
            xmlns:xs="http://www.w3.org/2001/XMLSchema"
-           targetNamespace="http://Inhaltsdaten.LegalDocML.de/1.8.1/"
+           targetNamespace="http://Inhaltsdaten.LegalDocML.de/1.8.2/"
            elementFormDefault="qualified"
-           version="LegalDocML.de 1.8.1 (10.06.2025)">
+           version="LegalDocML.de 1.8.2 (07.08.2025)">
 <!-- ********************************* Hinweis zur Lizensierung ********************************* -->
    <xs:annotation>
       <xs:appinfo>

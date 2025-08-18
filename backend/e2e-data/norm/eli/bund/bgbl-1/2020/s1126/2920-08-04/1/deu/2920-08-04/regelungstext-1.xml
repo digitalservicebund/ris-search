@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-model href="Grammatiken/legalDocML.de.sch" schematypens="http://purl.oclc.org/dsdl/schematron"?>
-<akn:akomaNtoso xmlns:akn="http://Inhaltsdaten.LegalDocML.de/1.8.1/"
-                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://MetadatenRIS.LegalDocML.de/1.8.1/ Grammatiken/legalDocML.de-metadaten-ris.xsd http://MetadatenRegelungstext.LegalDocML.de/1.8.1/ Grammatiken/legalDocML.de-metadaten-regelungstext.xsd http://MetadatenRechtsetzungsdokument.LegalDocML.de/1.8.1/ Grammatiken/legalDocML.de-metadaten-rechtsetzungsdokument.xsd http://Inhaltsdaten.LegalDocML.de/1.8.1/ Grammatiken/legalDocML.de-regelungstextverkuendungsfassung.xsd">
+<akn:akomaNtoso xmlns:akn="http://Inhaltsdaten.LegalDocML.de/1.8.2/"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://MetadatenRIS.LegalDocML.de/1.8.2/ Grammatiken/legalDocML.de-metadaten-ris.xsd http://MetadatenRegelungstext.LegalDocML.de/1.8.2/ Grammatiken/legalDocML.de-metadaten-regelungstext.xsd http://MetadatenRechtsetzungsdokument.LegalDocML.de/1.8.2/ Grammatiken/legalDocML.de-metadaten-rechtsetzungsdokument.xsd http://Inhaltsdaten.LegalDocML.de/1.8.2/ Grammatiken/legalDocML.de-regelungstextverkuendungsfassung.xsd">
     <akn:act name="/akn/ontology/de/concept/documenttype/bund/regelungstext-verkuendung">
         <akn:meta GUID="f1e2d3c4-b5a6-4789-8cde-f01234567890" eId="meta-n1">
             <akn:identification GUID="e2d3c4b5-a6b7-4890-8cde-f1234567890a" eId="meta-n1_ident-n1" source="attributsemantik-noch-undefiniert">
@@ -54,7 +54,7 @@
                 </akn:temporalGroup>
             </akn:temporalData>
             <akn:proprietary GUID="b0c1d2e3-f4a5-4890-abcd-901abcde1234" eId="meta-n1_proprietary-n1" source="attributsemantik-noch-undefiniert">
-                <ris:legalDocML.de_metadaten xmlns:ris="http://MetadatenRIS.LegalDocML.de/1.8.1/" xsi:schemaLocation="http://MetadatenRIS.LegalDocML.de/1.8.1/ ../schema/legalDocML.de-metadaten-ris.xsd">
+                <ris:legalDocML.de_metadaten xmlns:ris="http://MetadatenRIS.LegalDocML.de/1.8.2/" xsi:schemaLocation="http://MetadatenRIS.LegalDocML.de/1.8.2/ ../schema/legalDocML.de-metadaten-ris.xsd">
                     <ris:inkraft date="2919-08-04"/>
                 </ris:legalDocML.de_metadaten>
             </akn:proprietary>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-Diese Datei ist Bestandteil der Schematronregeln des Standards LegalDocML.de 1.8.1 (10.06.2025).
+Diese Datei ist Bestandteil der Schematronregeln des Standards LegalDocML.de 1.8.2 (07.08.2025).
 Sie wird inkludiert von der Schematron-Hauptdatei.
 
                 
@@ -36,26 +36,26 @@ Sie wird inkludiert von der Schematron-Hauptdatei.
    <sch:rule role="error"
              context="akn:identification/akn:FRBRExpression/akn:FRBRthis/@value">
       <sch:assert id="SCH-VERK-valueLiterals.expression.FRBRthis"
-                  test="if ($ist-verkündungsfassung) then (matches(., '^eli/bund/[-a-z0-9]+/\d{4}/(s[0-9]+[a-zäöüß]*|[0-9]+(-\d+)?)/\d{4}-\d{2}-\d{2}/\d+/[a-z]{3}/[a-zöäüß\-]+-\d+$')) else true()">In der Verkündungsfassung ist das Literal "<sch:value-of select="."/>" an dieser Stelle nicht
-                                    zulässig. Erlaubt sind ausschließlich Werte, die dem Muster "eli/bund/[-a-z0-9]+/\d{4}/(s[0-9]+[a-zäöüß]*|[0-9]+(-\d+)?)/\d{4}-\d{2}-\d{2}/\d+/[a-z]{3}/[a-zöäüß\-]+-\d+" entsprechen.</sch:assert>
+                  test="if ($ist-verkündungsfassung) then (matches(., '^eli/bund/[-a-z0-9]+/\d{4}/((s[0-9]+[a-zäöüß]*)|([0-9]+[a-zäöüß]*(-\d+)?))/\d{4}-\d{2}-\d{2}/\d+/[a-z]{3}/[a-zöäüß\-]+-\d+$')) else true()">In der Verkündungsfassung ist das Literal "<sch:value-of select="."/>" an dieser Stelle nicht
+                                    zulässig. Erlaubt sind ausschließlich Werte, die dem Muster "eli/bund/[-a-z0-9]+/\d{4}/((s[0-9]+[a-zäöüß]*)|([0-9]+[a-zäöüß]*(-\d+)?))/\d{4}-\d{2}-\d{2}/\d+/[a-z]{3}/[a-zöäüß\-]+-\d+" entsprechen.</sch:assert>
    </sch:rule>
    <sch:rule role="error"
              context="akn:identification/akn:FRBRExpression/akn:FRBRuri/@value">
       <sch:assert id="SCH-VERK-valueLiterals.expression.FRBRuri"
-                  test="if ($ist-verkündungsfassung) then (matches(., '^eli/bund/[-a-z0-9]+/\d{4}/(s[0-9]+[a-zäöüß]*|[0-9]+(-\d+)?)/\d{4}-\d{2}-\d{2}/\d+/[a-z]{3}$')) else true()">In der Verkündungsfassung ist das Literal "<sch:value-of select="."/>" an dieser Stelle nicht
-                                    zulässig. Erlaubt sind ausschließlich Werte, die dem Muster "eli/bund/[-a-z0-9]+/\d{4}/(s[0-9]+[a-zäöüß]*|[0-9]+(-\d+)?)/\d{4}-\d{2}-\d{2}/\d+/[a-z]{3}" entsprechen.</sch:assert>
+                  test="if ($ist-verkündungsfassung) then (matches(., '^eli/bund/[-a-z0-9]+/\d{4}/((s[0-9]+[a-zäöüß]*)|([0-9]+[a-zäöüß]*(-\d+)?))/\d{4}-\d{2}-\d{2}/\d+/[a-z]{3}$')) else true()">In der Verkündungsfassung ist das Literal "<sch:value-of select="."/>" an dieser Stelle nicht
+                                    zulässig. Erlaubt sind ausschließlich Werte, die dem Muster "eli/bund/[-a-z0-9]+/\d{4}/((s[0-9]+[a-zäöüß]*)|([0-9]+[a-zäöüß]*(-\d+)?))/\d{4}-\d{2}-\d{2}/\d+/[a-z]{3}" entsprechen.</sch:assert>
    </sch:rule>
    <sch:rule role="error"
              context="akn:identification/akn:FRBRManifestation/akn:FRBRthis/@value">
       <sch:assert id="SCH-VERK-valueLiterals.manifestation.FRBRthis"
-                  test="if ($ist-verkündungsfassung) then (matches(., '^eli/bund/[-a-z0-9]+/\d{4}/(s[0-9]+[a-zäöüß]*|[0-9]+(-\d+)?)/\d{4}-\d{2}-\d{2}/\d+/[a-z]{3}/\d{4}-\d{2}-\d{2}/[a-zöäüß\-]+-\d+\.[a-zöäüß]+$')) else true()">In der Verkündungsfassung ist das Literal "<sch:value-of select="."/>" an dieser Stelle nicht
-                                    zulässig. Erlaubt sind ausschließlich Werte, die dem Muster "eli/bund/[-a-z0-9]+/\d{4}/(s[0-9]+[a-zäöüß]*|[0-9]+(-\d+)?)/\d{4}-\d{2}-\d{2}/\d+/[a-z]{3}/\d{4}-\d{2}-\d{2}/[a-zöäüß\-]+-\d+\.[a-zöäüß]+" entsprechen.</sch:assert>
+                  test="if ($ist-verkündungsfassung) then (matches(., '^eli/bund/[-a-z0-9]+/\d{4}/((s[0-9]+[a-zäöüß]*)|([0-9]+[a-zäöüß]*(-\d+)?))/\d{4}-\d{2}-\d{2}/\d+/[a-z]{3}/\d{4}-\d{2}-\d{2}/[a-zöäüß\-]+-\d+\.[a-zöäüß]+$')) else true()">In der Verkündungsfassung ist das Literal "<sch:value-of select="."/>" an dieser Stelle nicht
+                                    zulässig. Erlaubt sind ausschließlich Werte, die dem Muster "eli/bund/[-a-z0-9]+/\d{4}/((s[0-9]+[a-zäöüß]*)|([0-9]+[a-zäöüß]*(-\d+)?))/\d{4}-\d{2}-\d{2}/\d+/[a-z]{3}/\d{4}-\d{2}-\d{2}/[a-zöäüß\-]+-\d+\.[a-zöäüß]+" entsprechen.</sch:assert>
    </sch:rule>
    <sch:rule role="error"
              context="akn:identification/akn:FRBRManifestation/akn:FRBRuri/@value">
       <sch:assert id="SCH-VERK-valueLiterals.manifestation.FRBRuri"
-                  test="if ($ist-verkündungsfassung) then (matches(., '^eli/bund/[-a-z0-9]+/\d{4}/(s[0-9]+[a-zäöüß]*|[0-9]+(-\d+)?)/\d{4}-\d{2}-\d{2}/\d+/[a-z]{3}/\d{4}-\d{2}-\d{2}/[a-zöäüß\-]+-\d+\.[a-zöäüß]+$')) else true()">In der Verkündungsfassung ist das Literal "<sch:value-of select="."/>" an dieser Stelle nicht
-                                    zulässig. Erlaubt sind ausschließlich Werte, die dem Muster "eli/bund/[-a-z0-9]+/\d{4}/(s[0-9]+[a-zäöüß]*|[0-9]+(-\d+)?)/\d{4}-\d{2}-\d{2}/\d+/[a-z]{3}/\d{4}-\d{2}-\d{2}/[a-zöäüß\-]+-\d+\.[a-zöäüß]+" entsprechen.</sch:assert>
+                  test="if ($ist-verkündungsfassung) then (matches(., '^eli/bund/[-a-z0-9]+/\d{4}/((s[0-9]+[a-zäöüß]*)|([0-9]+[a-zäöüß]*(-\d+)?))/\d{4}-\d{2}-\d{2}/\d+/[a-z]{3}/\d{4}-\d{2}-\d{2}/[a-zöäüß\-]+-\d+\.[a-zöäüß]+$')) else true()">In der Verkündungsfassung ist das Literal "<sch:value-of select="."/>" an dieser Stelle nicht
+                                    zulässig. Erlaubt sind ausschließlich Werte, die dem Muster "eli/bund/[-a-z0-9]+/\d{4}/((s[0-9]+[a-zäöüß]*)|([0-9]+[a-zäöüß]*(-\d+)?))/\d{4}-\d{2}-\d{2}/\d+/[a-z]{3}/\d{4}-\d{2}-\d{2}/[a-zöäüß\-]+-\d+\.[a-zöäüß]+" entsprechen.</sch:assert>
    </sch:rule>
    <sch:rule role="error"
              context="akn:identification/akn:FRBRWork/akn:FRBRname/@value">
@@ -66,8 +66,8 @@ Sie wird inkludiert von der Schematron-Hauptdatei.
    <sch:rule role="error"
              context="akn:identification/akn:FRBRWork/akn:FRBRnumber/@value">
       <sch:assert id="SCH-VERK-valueLiterals.work.FRBRnumber"
-                  test="if ($ist-verkündungsfassung) then (matches(., '^((s[0-9]+[a-zäöüß]*)|([0-9]+(-\d+)?))$')) else true()">In der Verkündungsfassung ist das Literal "<sch:value-of select="."/>" an dieser Stelle nicht
-                                    zulässig. Erlaubt sind ausschließlich Werte, die dem Muster "((s[0-9]+[a-zäöüß]*)|([0-9]+(-\d+)?))" entsprechen.</sch:assert>
+                  test="if ($ist-verkündungsfassung) then (matches(., '^((s[0-9]+[a-zäöüß]*)|([0-9]+[a-zäöüß]*(-\d+)?))$')) else true()">In der Verkündungsfassung ist das Literal "<sch:value-of select="."/>" an dieser Stelle nicht
+                                    zulässig. Erlaubt sind ausschließlich Werte, die dem Muster "((s[0-9]+[a-zäöüß]*)|([0-9]+[a-zäöüß]*(-\d+)?))" entsprechen.</sch:assert>
    </sch:rule>
    <sch:rule role="error"
              context="akn:identification/akn:FRBRWork/akn:FRBRsubtype/@value">
@@ -78,13 +78,13 @@ Sie wird inkludiert von der Schematron-Hauptdatei.
    <sch:rule role="error"
              context="akn:identification/akn:FRBRWork/akn:FRBRthis/@value">
       <sch:assert id="SCH-VERK-valueLiterals.work.FRBRthis"
-                  test="if ($ist-verkündungsfassung) then (matches(., '^eli/bund/[-a-z0-9]+/\d{4}/(s[0-9]+[a-zäöüß]*|[0-9]+(\-\d+)?)/[a-zöäüß\-]+-\d+$')) else true()">In der Verkündungsfassung ist das Literal "<sch:value-of select="."/>" an dieser Stelle nicht
-                                    zulässig. Erlaubt sind ausschließlich Werte, die dem Muster "eli/bund/[-a-z0-9]+/\d{4}/(s[0-9]+[a-zäöüß]*|[0-9]+(\-\d+)?)/[a-zöäüß\-]+-\d+" entsprechen.</sch:assert>
+                  test="if ($ist-verkündungsfassung) then (matches(., '^eli/bund/[-a-z0-9]+/\d{4}/((s[0-9]+[a-zäöüß]*)|([0-9]+[a-zäöüß]*(-\d+)?))/[a-zöäüß\-]+-\d+$')) else true()">In der Verkündungsfassung ist das Literal "<sch:value-of select="."/>" an dieser Stelle nicht
+                                    zulässig. Erlaubt sind ausschließlich Werte, die dem Muster "eli/bund/[-a-z0-9]+/\d{4}/((s[0-9]+[a-zäöüß]*)|([0-9]+[a-zäöüß]*(-\d+)?))/[a-zöäüß\-]+-\d+" entsprechen.</sch:assert>
    </sch:rule>
    <sch:rule role="error"
              context="akn:identification/akn:FRBRWork/akn:FRBRuri/@value">
       <sch:assert id="SCH-VERK-valueLiterals.work.FRBRuri"
-                  test="if ($ist-verkündungsfassung) then (matches(., '^eli/bund/[-a-z0-9]+/\d{4}/(s[0-9]+[a-zäöüß]*|[0-9]+(\-\d+)?)$')) else true()">In der Verkündungsfassung ist das Literal "<sch:value-of select="."/>" an dieser Stelle nicht
-                                    zulässig. Erlaubt sind ausschließlich Werte, die dem Muster "eli/bund/[-a-z0-9]+/\d{4}/(s[0-9]+[a-zäöüß]*|[0-9]+(\-\d+)?)" entsprechen.</sch:assert>
+                  test="if ($ist-verkündungsfassung) then (matches(., '^eli/bund/[-a-z0-9]+/\d{4}/((s[0-9]+[a-zäöüß]*)|([0-9]+[a-zäöüß]*(-\d+)?))$')) else true()">In der Verkündungsfassung ist das Literal "<sch:value-of select="."/>" an dieser Stelle nicht
+                                    zulässig. Erlaubt sind ausschließlich Werte, die dem Muster "eli/bund/[-a-z0-9]+/\d{4}/((s[0-9]+[a-zäöüß]*)|([0-9]+[a-zäöüß]*(-\d+)?))" entsprechen.</sch:assert>
    </sch:rule>
 </sch:pattern>

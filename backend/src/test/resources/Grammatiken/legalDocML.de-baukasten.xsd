@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns="http://Inhaltsdaten.LegalDocML.de/1.8.1/"
+<xs:schema xmlns="http://Inhaltsdaten.LegalDocML.de/1.8.2/"
            xmlns:xs="http://www.w3.org/2001/XMLSchema"
-           targetNamespace="http://Inhaltsdaten.LegalDocML.de/1.8.1/"
+           targetNamespace="http://Inhaltsdaten.LegalDocML.de/1.8.2/"
            elementFormDefault="qualified"
-           version="LegalDocML.de 1.8.1 (10.06.2025)">
+           version="LegalDocML.de 1.8.2 (07.08.2025)">
 <!-- ********************************* Hinweis zur Lizensierung ********************************* -->
    <xs:annotation>
       <xs:appinfo>
@@ -4686,11 +4686,11 @@ Referat DG II 6, Maßnahmen Enterprise Resource Management und Elektronische Ver
             <xs:any processContents="strict"
                     minOccurs="0"
                     maxOccurs="unbounded"
-                    namespace="http://MetadatenRechtsetzungsdokument.LegalDocML.de/1.8.1/ http://MetadatenRegelungstext.LegalDocML.de/1.8.1/ http://MetadatenFormulierungshilfe.LegalDocML.de/1.8.1/ http://MetadatenBundestag.LegalDocML.de/1.8.1/ http://MetadatenBundesrat.LegalDocML.de/1.8.1/ http://MetadatenBundesregierung.LegalDocML.de/1.8.1/ http://MetadatenNormenkontrollrat.LegalDocML.de/1.8.1/"/>
+                    namespace="http://MetadatenRechtsetzungsdokument.LegalDocML.de/1.8.2/ http://MetadatenRegelungstext.LegalDocML.de/1.8.2/ http://MetadatenFormulierungshilfe.LegalDocML.de/1.8.2/ http://MetadatenBundestag.LegalDocML.de/1.8.2/ http://MetadatenBundesrat.LegalDocML.de/1.8.2/ http://MetadatenBundesregierung.LegalDocML.de/1.8.2/ http://MetadatenNormenkontrollrat.LegalDocML.de/1.8.2/"/>
             <xs:any processContents="lax"
                     minOccurs="0"
                     maxOccurs="unbounded"
-                    namespace="http://MetadatenRIS.LegalDocML.de/1.8.1/"/>
+                    namespace="http://MetadatenRIS.LegalDocML.de/1.8.2/"/>
          </xs:choice>
       </xs:sequence>
       <xs:attribute name="eId" use="required" type="eIdLiterals.weitereMetadaten"/>

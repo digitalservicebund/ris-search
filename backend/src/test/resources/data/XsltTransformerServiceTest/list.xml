@@ -1,4 +1,4 @@
-<akn:akomaNtoso xmlns:akn="http://Inhaltsdaten.LegalDocML.de/1.8.1/">
+<akn:akomaNtoso xmlns:akn="http://Inhaltsdaten.LegalDocML.de/1.8.2/">
     <akn:list GUID="6" eId="f">
         <akn:intro GUID="7" eId="g">
             <akn:p GUID="8" eId="h">This is the list intro:</akn:p>
