@@ -10,9 +10,10 @@ import de.bund.digitalservice.ris.search.models.api.parameters.UniversalSearchPa
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import de.bund.digitalservice.ris.search.repository.objectstorage.CaseLawBucket;
 import de.bund.digitalservice.ris.search.repository.opensearch.CaseLawRepository;
+import de.bund.digitalservice.ris.search.service.helper.CaseLawQueryBuilder;
 import de.bund.digitalservice.ris.search.service.helper.CourtNameAbbreviationExpander;
 import de.bund.digitalservice.ris.search.service.helper.FetchSourceFilterDefinitions;
-import de.bund.digitalservice.ris.search.service.helper.UniversalDocumentQueryBuilder;
+import de.bund.digitalservice.ris.search.service.helper.PortalQueryBuilder;
 import de.bund.digitalservice.ris.search.service.helper.ZipManager;
 import de.bund.digitalservice.ris.search.utils.PageUtils;
 import de.bund.digitalservice.ris.search.utils.RisHighlightBuilder;
@@ -26,7 +27,6 @@ import org.opensearch.action.search.SearchType;
 import org.opensearch.data.client.orhlc.NativeSearchQuery;
 import org.opensearch.data.client.orhlc.NativeSearchQueryBuilder;
 import org.opensearch.data.client.orhlc.OpenSearchAggregations;
-import org.opensearch.index.query.BoolQueryBuilder;
 import org.opensearch.index.query.MatchPhrasePrefixQueryBuilder;
 import org.opensearch.search.aggregations.Aggregations;
 import org.opensearch.search.aggregations.bucket.terms.ParsedStringTerms;
@@ -83,18 +83,15 @@ public class CaseLawService {
       Pageable pageable) {
 
     // transform the request parameters into a BoolQuery
-    BoolQueryBuilder query =
-        new UniversalDocumentQueryBuilder()
-            .withUniversalSearchParams(params)
-            .withCaseLawSearchParams(caseLawParams)
-            .getQuery();
+    PortalQueryBuilder builder = new PortalQueryBuilder(params);
+    CaseLawQueryBuilder.addCaseLawFilters(caseLawParams, builder.getQuery());
 
     // add pagination and other parameters
     NativeSearchQuery nativeQuery =
         new NativeSearchQueryBuilder()
             .withSearchType(SearchType.DFS_QUERY_THEN_FETCH)
             .withPageable(pageable)
-            .withQuery(query)
+            .withQuery(builder.getQuery())
             .withHighlightBuilder(RisHighlightBuilder.getCaseLawHighlighter())
             .build();
 
