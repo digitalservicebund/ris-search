@@ -14931,7 +14931,7 @@ __metadata:
     tailwindcss: "npm:^4.1.11"
     typescript: "npm:~5.8.3"
     unplugin-icons: "npm:^22.1.0"
-    unplugin-vue-components: "npm:^28.8.0"
+    unplugin-vue-components: "npm:^29.0.0"
     valibot: "npm:^1.1.0"
     vitest: "npm:^3.2.3"
     vue-tsc: "npm:^3.0.1"
@@ -16944,9 +16944,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"unplugin-vue-components@npm:^28.8.0":
-  version: 28.8.0
-  resolution: "unplugin-vue-components@npm:28.8.0"
+"unplugin-vue-components@npm:^29.0.0":
+  version: 29.0.0
+  resolution: "unplugin-vue-components@npm:29.0.0"
   dependencies:
     chokidar: "npm:^3.6.0"
     debug: "npm:^4.4.1"
@@ -16965,7 +16965,7 @@ __metadata:
       optional: true
     "@nuxt/kit":
       optional: true
-  checksum: 10c0/3c01c81eaeafce498588ab78241af592ab10235a8d32c8a58faa045ec562303689d16a0158b25ae0a50779877a50561d31d1f2bef866b65fa630cf3f0a8eda9b
+  checksum: 10c0/33e42709f54c580898812e04d75bb3debd409b72366ff38c65c4cecad9ea04662519aca83ce08db1f09cc36d56afa7b882cb4d2405c270d0e6fcb95afaf14cab
   languageName: node
   linkType: hard
 
