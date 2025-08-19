@@ -43,8 +43,8 @@ class SwaggerIntegrationTest extends ContainersIntegrationBase {
             item -> {
               byte[] content = item.getResponse().getContentAsByteArray();
 
-              Path outDir = Paths.get("./out");
-              Files.createDirectories(outDir);
+              Path outDir = Paths.get("./../frontend/src/public");
+                Files.createDirectories(outDir);
               File outputFile = new File(outDir.toFile(), "openapi.json");
               try (FileOutputStream outputStream = new FileOutputStream(outputFile)) {
                 outputStream.write(content);
