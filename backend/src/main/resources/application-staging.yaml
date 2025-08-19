@@ -27,7 +27,7 @@ swagger:
 
 sentry:
   environment: staging-backend
-  traces-sample-rate: 0.1
+  traces-sample-rate: 0.01
   logging:
     minimum-event-level: error
 
