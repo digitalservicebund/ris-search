@@ -17,10 +17,8 @@ const route = useRoute();
 const router = useRouter();
 const isMenuDisabled = true;
 
-// Use the reactive route hash instead of window.*
 const currentHash = computed(() => (route.hash ?? "").replace("#", ""));
 
-// collect hash URLs of self and children
 const matchingHashes = computed(() => {
   const hashes = new Set<string>();
   const thisHash = props.item.link?.split("#")?.[1];
@@ -41,11 +39,7 @@ const isActive = computed(() => {
 
 function onAnchorClick(e: MouseEvent) {
   if (props.item.items?.length) {
-    // Parent with children: expand instead of navigating away.
     e.preventDefault();
-
-    // Ensure we set a hash that belongs to this group so it expands.
-    // Prefer the item’s own hash; otherwise first child’s hash.
     const ownHash = props.item.link.split("#")[1];
     const firstChildHash = props.item.items
       ?.find((c) => c.link.includes("#"))
@@ -53,13 +47,10 @@ function onAnchorClick(e: MouseEvent) {
     const targetHash = ownHash || firstChildHash;
 
     if (targetHash) {
-      // This updates the URL hash without a full navigation.
       router.replace({ hash: `#${targetHash}` });
     }
-    // You can also emit for analytics or other side-effects.
     emit("click");
   } else {
-    // Leaf: allow normal navigation and emit the event you already use.
     emit("click");
   }
 }
