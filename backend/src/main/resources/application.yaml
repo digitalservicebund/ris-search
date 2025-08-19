@@ -44,6 +44,7 @@ opensearch:
   password: ""
   norms-index-name: norms
   caselaws-index-name: caselaws
+  literatures-index-name: literatures
   documents-alias-name: documents
 
 # The user and password to access postgres was created in the neuris-infra following the variable convention in that repo
