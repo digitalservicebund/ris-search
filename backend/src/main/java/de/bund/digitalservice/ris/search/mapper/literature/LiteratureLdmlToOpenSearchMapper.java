@@ -24,6 +24,8 @@ public class LiteratureLdmlToOpenSearchMapper {
               .documentNumber(extractDocumentNumber(xmlDocument))
               .yearsOfPublication(extractYearsOfPublication(xmlDocument))
               .documentTypes(extractDocumentTypes(xmlDocument))
+              .mainTitle(extractMainTitle(xmlDocument))
+              .documentaryTitle(extractDocumentaryTitle(xmlDocument))
               .build());
     } catch (Exception e) {
       logger.warn("Error creating literature opensearch entity.", e);
@@ -53,6 +55,16 @@ public class LiteratureLdmlToOpenSearchMapper {
     return extractNodeListTextContents(
         xmlDocument,
         "//*[local-name()='classification' and @source='doktyp']/*[local-name()='keyword']/@value");
+  }
+
+  private static String extractMainTitle(XmlDocument xmlDocument) {
+    return xmlDocument.getElementByXpath(
+        "//*[local-name()='preface']/*[local-name()='longTitle']/*[local-name()='block' and @name='longTitle']");
+  }
+
+  private static String extractDocumentaryTitle(XmlDocument xmlDocument) {
+    return xmlDocument.getElementByXpath(
+        "//*[local-name()='FRBRWork']/*[local-name()='FRBRalias' and @name='dokumentarischerTitel']/@value");
   }
 
   private static List<String> extractNodeListTextContents(XmlDocument xmlDocument, String xPath) {
