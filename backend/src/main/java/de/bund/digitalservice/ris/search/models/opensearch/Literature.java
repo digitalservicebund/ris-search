@@ -1,8 +1,10 @@
 package de.bund.digitalservice.ris.search.models.opensearch;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.ElementCollection;
 import java.util.List;
 import lombok.Builder;
+import org.opensearch.common.Nullable;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
@@ -15,16 +17,16 @@ import org.springframework.data.elasticsearch.annotations.Setting;
 public record Literature(
     @JsonIgnore @Id @Field(name = Fields.ID) String id,
     @Field(name = Fields.DOCUMENT_NUMBER) String documentNumber,
-    @Field(name = Fields.YEARS_OF_PUBLICATION) List<String> yearsOfPublication,
-    @Field(name = Fields.DOCUMENT_TYPES) List<String> documentTypes,
-    @Field(name = Fields.REFERENCE) String reference,
-    @Field(name = Fields.MAIN_TITLE) String mainTitle,
-    @Field(name = Fields.DOCUMENTARY_TITLE) String documentaryTitle,
-    @Field(name = Fields.AUTHORS) List<String> authors,
-    @Field(name = Fields.EDITORS) List<String> editors,
-    @Field(name = Fields.CO_EDITORS) List<String> coEditors,
-    @Field(name = Fields.OUTLINE) List<String> outline,
-    @Field(name = Fields.SHORT_REPORT) List<String> shortReport)
+    @ElementCollection @Field(name = Fields.YEARS_OF_PUBLICATION) List<String> yearsOfPublication,
+    @ElementCollection @Field(name = Fields.DOCUMENT_TYPES) List<String> documentTypes,
+    @Nullable @Field(name = Fields.REFERENCE) String reference,
+    @Nullable @Field(name = Fields.MAIN_TITLE) String mainTitle,
+    @Nullable @Field(name = Fields.DOCUMENTARY_TITLE) String documentaryTitle,
+    @ElementCollection @Field(name = Fields.AUTHORS) List<Author> authors,
+    @ElementCollection @Field(name = Fields.EDITORS) List<String> editors,
+    @ElementCollection @Field(name = Fields.CO_EDITORS) List<String> coEditors,
+    @ElementCollection @Field(name = Fields.OUTLINE) List<String> outline,
+    @ElementCollection @Field(name = Fields.SHORT_REPORT) List<String> shortReport)
     implements AbstractSearchEntity {
   public static class Fields {
     private Fields() {}
