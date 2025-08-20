@@ -1,6 +1,7 @@
 package de.bund.digitalservice.ris.search.unit.mapper;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import de.bund.digitalservice.ris.search.mapper.literature.LiteratureLdmlToOpenSearchMapper;
 import de.bund.digitalservice.ris.search.models.opensearch.Literature;
@@ -87,15 +88,6 @@ class LiteratureLdmlToOpenSearchMapperTest {
   }
 
   @Test
-  @DisplayName("Sets empty list for years of publication if not present")
-  void setsEmptyListForYearsOfPublicationIfNotPresent() {
-    Literature literature =
-        LiteratureLdmlToOpenSearchMapper.parseLiteratureLdml(minimalValidLdml).get();
-
-    assertEquals(Collections.emptyList(), literature.yearsOfPublication());
-  }
-
-  @Test
   @DisplayName("Extracts and sets document types")
   void extractsAndSetsDocumentTypes() {
     String literatureLdml =
@@ -110,7 +102,7 @@ class LiteratureLdmlToOpenSearchMapperTest {
                      </akn:FRBRExpression>
                    </akn:identification>
                    <akn:classification source="doktyp">
-                      <akn:keyword dictionary="attributsemantik-noch-undefiniert" showAs="Auf" value="Auf"/>
+                      <akn:keyword dictionary="attributsemantik-noch-undefiniert" showAs="foo" value="Auf"/>
                    </akn:classification>
                </akn:meta>
              </akn:doc>
@@ -124,11 +116,75 @@ class LiteratureLdmlToOpenSearchMapperTest {
   }
 
   @Test
-  @DisplayName("Sets empty list for document types if not present")
-  void setsEmptyListForDocumentTypesIfNotPresent() {
+  @DisplayName("Extracts and sets main title")
+  void extractsAndSetsMainTitle() {
+    String literatureLdml =
+        """
+              <akn:akomaNtoso xmlns:akn="http://docs.oasis-open.org/legaldocml/ns/akn/3.0"
+               xmlns:ris="http://ldml.neuris.de/literature/metadata/">
+               <akn:doc name="offene-struktur">
+                 <akn:meta>
+                     <akn:identification>
+                       <akn:FRBRExpression>
+                         <akn:FRBRalias name="documentNumber" value="BJLU002758328" />
+                       </akn:FRBRExpression>
+                     </akn:identification>
+                 </akn:meta>
+                 <akn:preface>
+                    <akn:longTitle>
+                     <akn:block name="longTitle">This is a long title</akn:block>
+                     <akn:block name="foo">This should not be considered</akn:block>
+                    </akn:longTitle>
+                  </akn:preface>
+               </akn:doc>
+             </akn:akomaNtoso>
+             """
+            .stripIndent();
+
+    Literature literature =
+        LiteratureLdmlToOpenSearchMapper.parseLiteratureLdml(literatureLdml).get();
+
+    assertEquals("This is a long title", literature.mainTitle());
+  }
+
+  @Test
+  @DisplayName("Extracts and sets documentary title")
+  void extractsAndSetsDocumentaryTitle() {
+    String literatureLdml =
+        """
+              <akn:akomaNtoso xmlns:akn="http://docs.oasis-open.org/legaldocml/ns/akn/3.0"
+               xmlns:ris="http://ldml.neuris.de/literature/metadata/">
+               <akn:doc name="offene-struktur">
+                 <akn:meta>
+                     <akn:identification>
+                      <akn:FRBRWork>
+                        <akn:FRBRalias name="dokumentarischerTitel" value="Dokumentarischer Titel"/>
+                      </akn:FRBRWork>
+                      <akn:FRBRExpression>
+                        <akn:FRBRalias name="documentNumber" value="BJLU002758328" />
+                       </akn:FRBRExpression>
+                     </akn:identification>
+                 </akn:meta>
+               </akn:doc>
+             </akn:akomaNtoso>
+             """
+            .stripIndent();
+
+    Literature literature =
+        LiteratureLdmlToOpenSearchMapper.parseLiteratureLdml(literatureLdml).get();
+
+    assertEquals("Dokumentarischer Titel", literature.documentaryTitle());
+  }
+
+  @Test
+  @DisplayName("Does not set values for missing optional datapoints")
+  void doesNotSetValuesForMissingOptionalDatapoints() {
     Literature literature =
         LiteratureLdmlToOpenSearchMapper.parseLiteratureLdml(minimalValidLdml).get();
 
+    assertEquals(Collections.emptyList(), literature.yearsOfPublication());
     assertEquals(Collections.emptyList(), literature.documentTypes());
+    assertNull(literature.mainTitle());
+    assertNull(literature.documentaryTitle());
   }
 }
