@@ -15,8 +15,8 @@ import org.springframework.data.elasticsearch.annotations.Setting;
 public record Literature(
     @JsonIgnore @Id @Field(name = Fields.ID) String id,
     @Field(name = Fields.DOCUMENT_NUMBER) String documentNumber,
-    @Field(name = Fields.YEAR) String year,
-    @Field(name = Fields.DOCUMENT_TYPE) String documentType,
+    @Field(name = Fields.YEARS_OF_PUBLICATION) List<String> yearsOfPublication,
+    @Field(name = Fields.DOCUMENT_TYPES) List<String> documentTypes,
     @Field(name = Fields.REFERENCE) String reference,
     @Field(name = Fields.MAIN_TITLE) String mainTitle,
     @Field(name = Fields.DOCUMENTARY_TITLE) String documentaryTitle,
@@ -31,8 +31,8 @@ public record Literature(
 
     public static final String ID = "id";
     public static final String DOCUMENT_NUMBER = "document_number";
-    public static final String YEAR = "year";
-    public static final String DOCUMENT_TYPE = "document_type";
+    public static final String YEARS_OF_PUBLICATION = "years_of_publication";
+    public static final String DOCUMENT_TYPES = "document_types";
 
     /** Fundstelle * */
     public static final String REFERENCE = "reference";
