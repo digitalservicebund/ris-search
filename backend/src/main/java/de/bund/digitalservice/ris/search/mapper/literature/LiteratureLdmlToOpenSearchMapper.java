@@ -1,5 +1,6 @@
 package de.bund.digitalservice.ris.search.mapper.literature;
 
+import de.bund.digitalservice.ris.search.models.opensearch.Author;
 import de.bund.digitalservice.ris.search.models.opensearch.Literature;
 import de.bund.digitalservice.ris.search.utils.XmlDocument;
 import java.nio.charset.StandardCharsets;
@@ -26,6 +27,7 @@ public class LiteratureLdmlToOpenSearchMapper {
               .documentTypes(extractDocumentTypes(xmlDocument))
               .mainTitle(extractMainTitle(xmlDocument))
               .documentaryTitle(extractDocumentaryTitle(xmlDocument))
+              .authors(extractAuthors(xmlDocument))
               .build());
     } catch (Exception e) {
       logger.warn("Error creating literature opensearch entity.", e);
@@ -65,6 +67,32 @@ public class LiteratureLdmlToOpenSearchMapper {
   private static String extractDocumentaryTitle(XmlDocument xmlDocument) {
     return xmlDocument.getElementByXpath(
         "//*[local-name()='FRBRWork']/*[local-name()='FRBRalias' and @name='dokumentarischerTitel']/@value");
+  }
+
+  private static List<Author> extractAuthors(XmlDocument xmlDocument) {
+    var authorEids =
+        extractNodeListTextContents(
+                xmlDocument,
+                "//*[local-name()='FRBRWork']/*[local-name()='FRBRauthor' and @as='#verfasser']/@href")
+            .stream()
+            .map(href -> href.replaceFirst("#", ""))
+            .toList();
+
+    return authorEids.stream()
+        .map(
+            authorEid -> {
+              var authorXPath =
+                  String.format(
+                      "//*[local-name()='references']/*[local-name()='TLCPerson' and @eId='%s']",
+                      authorEid);
+              var authorNameXpath = authorXPath + "/@ris:name";
+              var authorTitleXpath = authorXPath + "/@ris:titel";
+              return Author.builder()
+                  .name(xmlDocument.getElementByXpath(authorNameXpath))
+                  .title(xmlDocument.getElementByXpath(authorTitleXpath))
+                  .build();
+            })
+        .toList();
   }
 
   private static List<String> extractNodeListTextContents(XmlDocument xmlDocument, String xPath) {

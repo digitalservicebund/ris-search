@@ -1,12 +1,9 @@
 package de.bund.digitalservice.ris.search.unit.mapper;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import de.bund.digitalservice.ris.search.mapper.literature.LiteratureLdmlToOpenSearchMapper;
 import de.bund.digitalservice.ris.search.models.opensearch.Literature;
-import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -35,7 +32,7 @@ class LiteratureLdmlToOpenSearchMapperTest {
     Literature literature =
         LiteratureLdmlToOpenSearchMapper.parseLiteratureLdml(minimalValidLdml).get();
 
-    assertEquals("BJLU002758328", literature.documentNumber());
+    assertThat(literature.documentNumber()).isEqualTo("BJLU002758328");
   }
 
   @Test
@@ -52,7 +49,7 @@ class LiteratureLdmlToOpenSearchMapperTest {
     Optional<Literature> literature =
         LiteratureLdmlToOpenSearchMapper.parseLiteratureLdml(literatureLdml);
 
-    assertEquals(Optional.empty(), literature);
+    assertThat(literature).isEmpty();
   }
 
   @Test
@@ -84,7 +81,7 @@ class LiteratureLdmlToOpenSearchMapperTest {
     Literature literature =
         LiteratureLdmlToOpenSearchMapper.parseLiteratureLdml(literatureLdml).get();
 
-    assertEquals(List.of("2009"), literature.yearsOfPublication());
+    assertThat(literature.yearsOfPublication()).containsExactly("2009");
   }
 
   @Test
@@ -112,7 +109,7 @@ class LiteratureLdmlToOpenSearchMapperTest {
     Literature literature =
         LiteratureLdmlToOpenSearchMapper.parseLiteratureLdml(literatureLdml).get();
 
-    assertEquals(List.of("Auf"), literature.documentTypes());
+    assertThat(literature.documentTypes()).containsExactly("Auf");
   }
 
   @Test
@@ -144,7 +141,7 @@ class LiteratureLdmlToOpenSearchMapperTest {
     Literature literature =
         LiteratureLdmlToOpenSearchMapper.parseLiteratureLdml(literatureLdml).get();
 
-    assertEquals("This is a long title", literature.mainTitle());
+    assertThat(literature.mainTitle()).isEqualTo("This is a long title");
   }
 
   @Test
@@ -173,7 +170,48 @@ class LiteratureLdmlToOpenSearchMapperTest {
     Literature literature =
         LiteratureLdmlToOpenSearchMapper.parseLiteratureLdml(literatureLdml).get();
 
-    assertEquals("Dokumentarischer Titel", literature.documentaryTitle());
+    assertThat(literature.documentaryTitle()).isEqualTo("Dokumentarischer Titel");
+  }
+
+  @Test
+  @DisplayName("Extracts and sets authors")
+  void extractsAndSetsAuthors() {
+    String literatureLdml =
+        """
+                  <akn:akomaNtoso xmlns:akn="http://docs.oasis-open.org/legaldocml/ns/akn/3.0"
+                   xmlns:ris="http://ldml.neuris.de/literature/metadata/">
+                   <akn:doc name="offene-struktur">
+                     <akn:meta>
+                         <akn:identification>
+                          <akn:FRBRWork>
+                            <akn:FRBRauthor as="#verfasser" href="#mustermann-max-verfasser-1"/>
+                            <akn:FRBRauthor as="#verfasser" href="#muserfrau-susanne-verfasser-2"/>
+                          </akn:FRBRWork>
+                          <akn:FRBRExpression>
+                            <akn:FRBRalias name="documentNumber" value="BJLU002758328" />
+                           </akn:FRBRExpression>
+                         </akn:identification>
+                         <akn:references source="attributsemantik-noch-undefiniert">
+                              <akn:TLCPerson eId="mustermann-max-verfasser-1" href="" ris:name="Mustermann, Max"/>
+                              <akn:TLCPerson eId="muserfrau-susanne-verfasser-2" href="" ris:titel="Prof Dr" ris:name="Musterfrau, Susanne"/>
+                              <akn:TLCRole eId="verfasser" href="akn/ontology/roles/de/verfasser" showAs="Verfasser"/>
+                            </akn:references>
+                     </akn:meta>
+                   </akn:doc>
+                 </akn:akomaNtoso>
+                 """
+            .stripIndent();
+
+    Literature literature =
+        LiteratureLdmlToOpenSearchMapper.parseLiteratureLdml(literatureLdml).get();
+
+    var authors = literature.authors();
+    assertThat(authors).hasSize(2);
+    assertThat(authors.getFirst().name()).isEqualTo("Mustermann, Max");
+    assertThat(authors.getFirst().title()).isNull();
+
+    assertThat(authors.get(1).name()).isEqualTo("Musterfrau, Susanne");
+    assertThat(authors.get(1).title()).isEqualTo("Prof Dr");
   }
 
   @Test
@@ -182,9 +220,11 @@ class LiteratureLdmlToOpenSearchMapperTest {
     Literature literature =
         LiteratureLdmlToOpenSearchMapper.parseLiteratureLdml(minimalValidLdml).get();
 
-    assertEquals(Collections.emptyList(), literature.yearsOfPublication());
-    assertEquals(Collections.emptyList(), literature.documentTypes());
-    assertNull(literature.mainTitle());
-    assertNull(literature.documentaryTitle());
+    assertThat(literature.yearsOfPublication()).isEmpty();
+    assertThat(literature.documentTypes()).isEmpty();
+    assertThat(literature.yearsOfPublication()).isEmpty();
+    assertThat(literature.mainTitle()).isNull();
+    assertThat(literature.documentaryTitle()).isNull();
+    assertThat(literature.authors()).isEmpty();
   }
 }
