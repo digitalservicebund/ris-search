@@ -6,6 +6,7 @@ import java.util.AbstractList;
 import java.util.List;
 import java.util.Optional;
 import javax.xml.XMLConstants;
+import javax.xml.namespace.NamespaceContext;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -21,31 +22,55 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 public class XmlDocument {
-  private Document document;
+  private final Document document;
   private final XPath xpathInstance = XPathFactory.newInstance().newXPath();
   private final Logger logger = LogManager.getLogger(XmlDocument.class);
 
-  public XmlDocument(byte[] content)
+  public static XmlDocument fromNormBytes(byte[] content)
       throws ParserConfigurationException, IOException, SAXException {
-    xpathInstance.setNamespaceContext(new LegalDocMLDeContext());
-    DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-    factory.setNamespaceAware(true);
-    factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
-    factory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+    return new XmlDocument(content, new LegalDocMLDeContext());
+  }
+
+  public static XmlDocument fromLiteratureBytes(byte[] content)
+      throws ParserConfigurationException, IOException, SAXException {
+    return new XmlDocument(content, new LiteratureLegalDocMLContext());
+  }
+
+  public static XmlDocument fromNormNode(Node node)
+      throws ParserConfigurationException, IOException, SAXException {
+    return new XmlDocument(node, new LegalDocMLDeContext());
+  }
+
+  public static XmlDocument fromLiteratureNode(Node node)
+      throws ParserConfigurationException, IOException, SAXException {
+    return new XmlDocument(node, new LiteratureLegalDocMLContext());
+  }
+
+  private XmlDocument(byte[] content, NamespaceContext namespaceContext)
+      throws ParserConfigurationException, IOException, SAXException {
+    var factory = createDocumentBuilderFactory();
+    xpathInstance.setNamespaceContext(namespaceContext);
     document = factory.newDocumentBuilder().parse(new ByteArrayInputStream(content));
   }
 
-  public XmlDocument(Node node) throws ParserConfigurationException {
-    DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-    factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
-    factory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
-    factory.setNamespaceAware(true);
-    xpathInstance.setNamespaceContext(new LegalDocMLDeContext());
+  private XmlDocument(Node node, NamespaceContext namespaceContext)
+      throws ParserConfigurationException {
+    var factory = createDocumentBuilderFactory();
+    xpathInstance.setNamespaceContext(namespaceContext);
     DocumentBuilder builder = factory.newDocumentBuilder();
     Document newDocument = builder.newDocument();
     Node importedNode = newDocument.importNode(node, true);
     newDocument.appendChild(importedNode);
     document = newDocument;
+  }
+
+  private static DocumentBuilderFactory createDocumentBuilderFactory()
+      throws ParserConfigurationException {
+    DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+    factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+    factory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+    factory.setNamespaceAware(true);
+    return factory;
   }
 
   public String getSimpleElementByXpath(String xpath) throws XPathExpressionException {
