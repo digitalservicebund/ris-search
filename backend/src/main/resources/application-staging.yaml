@@ -36,3 +36,9 @@ logging:
     org:
       zalando:
         logbook: TRACE
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus
