@@ -46,7 +46,8 @@ public class NormAttachmentMapper {
                   return Optional.<Attachment>empty();
                 }
                 XmlDocument attachmentDocument =
-                    new XmlDocument(attachmentFileString.getBytes(StandardCharsets.UTF_8));
+                    XmlDocument.fromNormBytes(
+                        attachmentFileString.getBytes(StandardCharsets.UTF_8));
                 Optional<Node> docTitleNode =
                     attachmentDocument.getFirstMatchedNodeByXpath(
                         "/akn:akomaNtoso/akn:doc/akn:preface/akn:block/akn:docTitle");

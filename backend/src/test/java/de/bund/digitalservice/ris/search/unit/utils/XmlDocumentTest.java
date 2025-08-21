@@ -1,20 +1,39 @@
 package de.bund.digitalservice.ris.search.unit.utils;
 
 import de.bund.digitalservice.ris.search.utils.XmlDocument;
-import java.io.IOException;
 import java.util.Optional;
-import javax.xml.parsers.ParserConfigurationException;
+import java.util.function.Function;
+import java.util.stream.Stream;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.w3c.dom.Node;
-import org.xml.sax.SAXException;
 
 class XmlDocumentTest {
 
-  @Test
-  void testRemoveNodesByXpath() throws ParserConfigurationException, IOException, SAXException {
+  private static Stream<Function<byte[], XmlDocument>> xmlDocumentFromBytesSupplier() {
+    return Stream.of(
+        inputBytes -> {
+          try {
+            return XmlDocument.fromNormBytes(inputBytes);
+          } catch (Exception e) {
+            return null;
+          }
+        },
+        inputBytes -> {
+          try {
+            return XmlDocument.fromLiteratureBytes(inputBytes);
+          } catch (Exception e) {
+            return null;
+          }
+        });
+  }
+
+  @ParameterizedTest
+  @MethodSource("xmlDocumentFromBytesSupplier")
+  void testRemoveNodesByXpath(Function<byte[], XmlDocument> constructor) {
     String xml = "<xml><test><text>Test</text></test></xml>";
-    XmlDocument xmlDocument = new XmlDocument(xml.getBytes());
+    XmlDocument xmlDocument = constructor.apply(xml.getBytes());
 
     Optional<Node> node1 = xmlDocument.getFirstMatchedNodeByXpath("/xml/test/text");
     Assertions.assertTrue(node1.isPresent());
@@ -31,50 +50,54 @@ class XmlDocumentTest {
     Assertions.assertEquals("", text2);
   }
 
-  @Test
-  void testFirstMatchedNode() throws ParserConfigurationException, IOException, SAXException {
+  @ParameterizedTest
+  @MethodSource("xmlDocumentFromBytesSupplier")
+  void testFirstMatchedNode(Function<byte[], XmlDocument> constructor) {
     String xml = "<xml><test><text>Test</text></test></xml>";
-    XmlDocument xmlDocument = new XmlDocument(xml.getBytes());
+    XmlDocument xmlDocument = constructor.apply(xml.getBytes());
     Optional<Node> actual = xmlDocument.getFirstMatchedNodeByXpath(".//*[local-name()='text']");
 
     Assertions.assertEquals("Test", actual.orElseThrow().getTextContent());
   }
 
-  @Test
-  void testFirstMatchedNodeNested() throws ParserConfigurationException, IOException, SAXException {
+  @ParameterizedTest
+  @MethodSource("xmlDocumentFromBytesSupplier")
+  void testFirstMatchedNodeNested(Function<byte[], XmlDocument> constructor) {
     String xml = "<xml><test><text>Test</text></test></xml>";
-    XmlDocument xmlDocument = new XmlDocument(xml.getBytes());
+    XmlDocument xmlDocument = constructor.apply(xml.getBytes());
     Optional<Node> parent = xmlDocument.getFirstMatchedNodeByXpath("/xml/test");
     Optional<Node> nested =
         xmlDocument.getFirstMatchedNodeByXpath(".//*[local-name()='text']", parent.orElseThrow());
     Assertions.assertEquals("Test", nested.orElseThrow().getTextContent());
   }
 
-  @Test
-  void testFirstMatchedNodeNullpointerReturnsEmptyOption()
-      throws ParserConfigurationException, IOException, SAXException {
+  @ParameterizedTest
+  @MethodSource("xmlDocumentFromBytesSupplier")
+  void testFirstMatchedNodeNullpointerReturnsEmptyOption(
+      Function<byte[], XmlDocument> constructor) {
     String xml = "<xml><test><text>Test</text></test></xml>";
-    XmlDocument xmlDocument = new XmlDocument(xml.getBytes());
+    XmlDocument xmlDocument = constructor.apply(xml.getBytes());
     Optional<Node> actual = xmlDocument.getFirstMatchedNodeByXpath(".//*[local-name()='notFound']");
 
     Assertions.assertEquals(Optional.empty(), actual);
   }
 
-  @Test
-  void testFirstMatchedNodeXPathExpressionExceptionReturnsEmptyOption()
-      throws ParserConfigurationException, IOException, SAXException {
+  @ParameterizedTest
+  @MethodSource("xmlDocumentFromBytesSupplier")
+  void testFirstMatchedNodeXPathExpressionExceptionReturnsEmptyOption(
+      Function<byte[], XmlDocument> constructor) {
     String xml = "<xml><test><text>Test</text></test></xml>";
-    XmlDocument xmlDocument = new XmlDocument(xml.getBytes());
+    XmlDocument xmlDocument = constructor.apply(xml.getBytes());
     Optional<Node> actual = xmlDocument.getFirstMatchedNodeByXpath("<>");
 
     Assertions.assertEquals(Optional.empty(), actual);
   }
 
-  @Test
-  void testReplaceNodesByXpathWithString()
-      throws ParserConfigurationException, IOException, SAXException {
+  @ParameterizedTest
+  @MethodSource("xmlDocumentFromBytesSupplier")
+  void testReplaceNodesByXpathWithString(Function<byte[], XmlDocument> constructor) {
     String xml = "<xml><test><text>Test</text></test></xml>";
-    XmlDocument xmlDocument = new XmlDocument(xml.getBytes());
+    XmlDocument xmlDocument = constructor.apply(xml.getBytes());
 
     String text1 =
         xmlDocument.getFirstMatchedNodeByXpath("/xml/test").orElseThrow().getTextContent();
