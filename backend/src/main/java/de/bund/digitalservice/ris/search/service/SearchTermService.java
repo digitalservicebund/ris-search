@@ -1,5 +1,6 @@
 package de.bund.digitalservice.ris.search.service;
 
+import de.bund.digitalservice.ris.search.exception.OpenSearchMapperException;
 import de.bund.digitalservice.ris.search.models.ParsedSearchTerm;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -75,7 +76,8 @@ public class SearchTermService {
     } catch (IOException e) {
       // This should never happen, but if it does, there will be a stack trace in the logs and a 500
       // returned in the api response
-      throw new RuntimeException(e);
+      throw new OpenSearchMapperException(
+          "Unknown IOException while calling opensearch analyzer.", e);
     }
   }
 }
