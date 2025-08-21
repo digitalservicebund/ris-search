@@ -7,6 +7,8 @@ import de.bund.digitalservice.ris.search.models.opensearch.Literature;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 class LiteratureLdmlToOpenSearchMapperTest {
 
@@ -110,6 +112,80 @@ class LiteratureLdmlToOpenSearchMapperTest {
         LiteratureLdmlToOpenSearchMapper.parseLiteratureLdml(literatureLdml).get();
 
     assertThat(literature.documentTypes()).containsExactly("Auf");
+  }
+
+  @Test
+  @DisplayName("Extracts and sets dependent reference")
+  void extractsDependentReference() {
+    String literatureLdml =
+        """
+                      <akn:akomaNtoso xmlns:akn="http://docs.oasis-open.org/legaldocml/ns/akn/3.0"
+                       xmlns:ris="http://ldml.neuris.de/literature/metadata/">
+                       <akn:doc name="offene-struktur">
+                         <akn:meta>
+                             <akn:identification>
+                               <akn:FRBRExpression>
+                                 <akn:FRBRalias name="documentNumber" value="BJLU002758328" />
+                               </akn:FRBRExpression>
+                             </akn:identification>
+                         </akn:meta>
+                          <akn:analysis source="attributsemantik-noch-undefiniert">
+                            <akn:otherReferences source="attributsemantik-noch-undefiniert">
+                              <akn:implicitReference showAs="">
+                                <ris:fundstelleUnselbstaendig periodikum="RdA" zitatstelle="1982, 122"/>
+                              </akn:implicitReference>
+                            </akn:otherReferences>
+                          </akn:analysis>
+                       </akn:doc>
+                     </akn:akomaNtoso>
+                     """
+            .stripIndent();
+
+    Literature literature =
+        LiteratureLdmlToOpenSearchMapper.parseLiteratureLdml(literatureLdml).get();
+
+    var dependentReferences = literature.dependentReferences();
+    assertThat(dependentReferences).hasSize(1);
+    var dependentReference = dependentReferences.getFirst();
+    assertThat(dependentReference.periodical()).isEqualTo("RdA");
+    assertThat(dependentReference.citation()).isEqualTo("1982, 122");
+  }
+
+  @ParameterizedTest
+  @ValueSource(
+      strings = {
+        "<ris:fundstelleUnselbstaendig zitatstelle=\"1982, 122\"/>",
+        "<ris:fundstelleUnselbstaendig periodikum=\"RdA\"/>"
+      })
+  @DisplayName("Does not create literature object if dependent reference has missing attributes")
+  void doesNotCreateLiteratureObjectIfDependentReferenceHasMissingAttributes(String fundstelle) {
+    String literatureLdml =
+        String.format(
+                """
+                      <akn:akomaNtoso xmlns:akn="http://docs.oasis-open.org/legaldocml/ns/akn/3.0"
+                       xmlns:ris="http://ldml.neuris.de/literature/metadata/">
+                       <akn:doc name="offene-struktur">
+                         <akn:meta>
+                             <akn:identification>
+                               <akn:FRBRExpression>
+                                 <akn:FRBRalias name="documentNumber" value="BJLU002758328" />
+                               </akn:FRBRExpression>
+                             </akn:identification>
+                         </akn:meta>
+                          <akn:analysis source="attributsemantik-noch-undefiniert">
+                            <akn:otherReferences source="attributsemantik-noch-undefiniert">
+                              <akn:implicitReference showAs="">
+                                %s
+                              </akn:implicitReference>
+                            </akn:otherReferences>
+                          </akn:analysis>
+                       </akn:doc>
+                     </akn:akomaNtoso>
+                     """,
+                fundstelle)
+            .stripIndent();
+
+    assertThat(LiteratureLdmlToOpenSearchMapper.parseLiteratureLdml(literatureLdml)).isEmpty();
   }
 
   @Test
@@ -298,8 +374,8 @@ class LiteratureLdmlToOpenSearchMapperTest {
   }
 
   @Test
-  @DisplayName("Sets empty string if short report is missing")
-  void setsEmptyStringIfShortReportIsMissing() {
+  @DisplayName("Sets null if short report is empty hcontainer")
+  void setsNullIfShortReportIsMissing() {
     String literatureLdml =
         """
                   <akn:akomaNtoso xmlns:akn="http://docs.oasis-open.org/legaldocml/ns/akn/3.0"
@@ -323,7 +399,7 @@ class LiteratureLdmlToOpenSearchMapperTest {
     Literature literature =
         LiteratureLdmlToOpenSearchMapper.parseLiteratureLdml(literatureLdml).get();
 
-    assertThat(literature.shortReport()).isEmpty();
+    assertThat(literature.shortReport()).isNull();
   }
 
   @Test
@@ -334,10 +410,12 @@ class LiteratureLdmlToOpenSearchMapperTest {
 
     assertThat(literature.yearsOfPublication()).isEmpty();
     assertThat(literature.documentTypes()).isEmpty();
+    assertThat(literature.dependentReferences()).isEmpty();
     assertThat(literature.yearsOfPublication()).isEmpty();
     assertThat(literature.mainTitle()).isNull();
     assertThat(literature.documentaryTitle()).isNull();
     assertThat(literature.authors()).isEmpty();
     assertThat(literature.collaborators()).isEmpty();
+    assertThat(literature.shortReport()).isNull();
   }
 }
