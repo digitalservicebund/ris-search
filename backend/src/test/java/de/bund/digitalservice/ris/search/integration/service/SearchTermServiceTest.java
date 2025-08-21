@@ -3,6 +3,7 @@ package de.bund.digitalservice.ris.search.integration.service;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import de.bund.digitalservice.ris.search.integration.config.ContainersIntegrationBase;
 import de.bund.digitalservice.ris.search.models.ParsedSearchTerm;
 import de.bund.digitalservice.ris.search.service.SearchTermService;
 import java.util.List;
@@ -13,7 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 @Tag("integration")
-class SearchTermServiceTest {
+class SearchTermServiceTest extends ContainersIntegrationBase {
 
   @Autowired SearchTermService searchTermService;
 
