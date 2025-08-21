@@ -185,7 +185,7 @@ class LiteratureLdmlToOpenSearchMapperTest {
                          <akn:identification>
                           <akn:FRBRWork>
                             <akn:FRBRauthor as="#verfasser" href="#mustermann-max-verfasser-1"/>
-                            <akn:FRBRauthor as="#verfasser" href="#muserfrau-susanne-verfasser-2"/>
+                            <akn:FRBRauthor as="#verfasser" href="#musterfrau-susanne-verfasser-2"/>
                           </akn:FRBRWork>
                           <akn:FRBRExpression>
                             <akn:FRBRalias name="documentNumber" value="BJLU002758328" />
@@ -193,7 +193,7 @@ class LiteratureLdmlToOpenSearchMapperTest {
                          </akn:identification>
                          <akn:references source="attributsemantik-noch-undefiniert">
                               <akn:TLCPerson eId="mustermann-max-verfasser-1" href="" ris:name="Mustermann, Max"/>
-                              <akn:TLCPerson eId="muserfrau-susanne-verfasser-2" href="" ris:titel="Prof Dr" ris:name="Musterfrau, Susanne"/>
+                              <akn:TLCPerson eId="musterfrau-susanne-verfasser-2" href="" ris:titel="Prof Dr" ris:name="Musterfrau, Susanne"/>
                               <akn:TLCRole eId="verfasser" href="akn/ontology/roles/de/verfasser" showAs="Verfasser"/>
                             </akn:references>
                      </akn:meta>
@@ -215,6 +215,47 @@ class LiteratureLdmlToOpenSearchMapperTest {
   }
 
   @Test
+  @DisplayName("Extracts and sets collaborators")
+  void extractsAndSetsCollaborators() {
+    String literatureLdml =
+        """
+                      <akn:akomaNtoso xmlns:akn="http://docs.oasis-open.org/legaldocml/ns/akn/3.0"
+                       xmlns:ris="http://ldml.neuris.de/literature/metadata/">
+                       <akn:doc name="offene-struktur">
+                         <akn:meta>
+                             <akn:identification>
+                              <akn:FRBRWork>
+                                <akn:FRBRauthor as="#mitarbeiter" href="#foo-peter-mitarbeiter-1"/>
+                                <akn:FRBRauthor as="#mitarbeiter" href="#bar-janine-mitarbeiter-2"/>
+                              </akn:FRBRWork>
+                              <akn:FRBRExpression>
+                                <akn:FRBRalias name="documentNumber" value="BJLU002758328" />
+                               </akn:FRBRExpression>
+                             </akn:identification>
+                             <akn:references source="attributsemantik-noch-undefiniert">
+                                  <akn:TLCPerson eId="foo-peter-mitarbeiter-1" href="" ris:name="Foo, Peter"/>
+                                  <akn:TLCPerson eId="bar-janine-mitarbeiter-2" href="" ris:titel="Prof Dr" ris:name="Bar, Janine"/>
+                                  <akn:TLCRole eId="mitarbeiter" href="akn/ontology/roles/de/mitarbeiter" showAs="Mitarbeiter"/>
+                                </akn:references>
+                         </akn:meta>
+                       </akn:doc>
+                     </akn:akomaNtoso>
+                     """
+            .stripIndent();
+
+    Literature literature =
+        LiteratureLdmlToOpenSearchMapper.parseLiteratureLdml(literatureLdml).get();
+
+    var collaborators = literature.collaborators();
+    assertThat(collaborators).hasSize(2);
+    assertThat(collaborators.getFirst().name()).isEqualTo("Foo, Peter");
+    assertThat(collaborators.getFirst().title()).isNull();
+
+    assertThat(collaborators.get(1).name()).isEqualTo("Bar, Janine");
+    assertThat(collaborators.get(1).title()).isEqualTo("Prof Dr");
+  }
+
+  @Test
   @DisplayName("Does not set values for missing optional datapoints")
   void doesNotSetValuesForMissingOptionalDatapoints() {
     Literature literature =
@@ -226,5 +267,6 @@ class LiteratureLdmlToOpenSearchMapperTest {
     assertThat(literature.mainTitle()).isNull();
     assertThat(literature.documentaryTitle()).isNull();
     assertThat(literature.authors()).isEmpty();
+    assertThat(literature.collaborators()).isEmpty();
   }
 }

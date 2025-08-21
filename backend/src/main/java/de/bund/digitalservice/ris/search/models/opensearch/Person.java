@@ -4,7 +4,7 @@ import javax.annotation.Nullable;
 import lombok.Builder;
 import org.springframework.data.elasticsearch.annotations.Field;
 
-/** Represents on author (Verfasser) of a Literature work. */
+/** Represents a Person in a literature document, e.g. a author or collaborator. */
 @Builder
-public record Author(
+public record Person(
     @Field(name = "name") String name, @Nullable @Field(name = "title") String title) {}
