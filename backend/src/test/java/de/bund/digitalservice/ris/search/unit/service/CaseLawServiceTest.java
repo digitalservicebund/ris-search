@@ -49,7 +49,7 @@ class CaseLawServiceTest {
     Configurations configurations = Mockito.mock(Configurations.class);
     this.caseLawService =
         new CaseLawService(
-            caseLawRepositoryMock, caseLawBucketMock, operationsMock, configurations);
+            caseLawRepositoryMock, caseLawBucketMock, operationsMock, configurations, null);
   }
 
   @Test
