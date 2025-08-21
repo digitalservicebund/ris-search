@@ -15305,7 +15305,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prettier@npm:^3.5.3":
+"prettier@npm:^3.6.2":
   version: 3.6.2
   resolution: "prettier@npm:3.6.2"
   bin:
@@ -16166,7 +16166,7 @@ __metadata:
     playwright-lighthouse: "npm:^4.0.0"
     postcss-import: "npm:^16.1.0"
     posthog-js: "npm:^1.250.2"
-    prettier: "npm:^3.5.3"
+    prettier: "npm:^3.6.2"
     prettier-plugin-tailwindcss: "npm:^0.6.13"
     primeicons: "npm:^7.0.0"
     primevue: "npm:^4.3.5"
