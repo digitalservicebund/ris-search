@@ -256,6 +256,77 @@ class LiteratureLdmlToOpenSearchMapperTest {
   }
 
   @Test
+  @DisplayName("Extracts, cleans and sets short report")
+  void extractsAndSetsShortReport() {
+    String literatureLdml =
+        """
+                  <akn:akomaNtoso xmlns:akn="http://docs.oasis-open.org/legaldocml/ns/akn/3.0"
+                   xmlns:ris="http://ldml.neuris.de/literature/metadata/">
+                   <akn:doc name="offene-struktur">
+                     <akn:meta>
+                         <akn:identification>
+                           <akn:FRBRExpression>
+                             <akn:FRBRalias name="documentNumber" value="BJLU002758328" />
+                           </akn:FRBRExpression>
+                         </akn:identification>
+                     </akn:meta>
+                      <akn:mainBody>
+                        <akn:div>
+                          <akn:p>
+                            A <akn:a href="http://www.foo.de" shape="rect">foo</akn:a> is <akn:span>bar</akn:span>.
+                            <akn:br/>
+                            Bar <akn:sub>baz</akn:sub> or <akn:sup>bas</akn:sup>.
+                          </akn:p>
+                          <akn:p>
+                            <akn:inline name="em">EM</akn:inline>
+                            <akn:inline name="hlj">hlj</akn:inline>
+                            <akn:inline name="noindex">noindex</akn:inline>
+                            <akn:inline name="strong">strong</akn:inline>
+                          </akn:p>
+                        </akn:div>
+                      </akn:mainBody>
+                   </akn:doc>
+                 </akn:akomaNtoso>
+                 """
+            .stripIndent();
+
+    Literature literature =
+        LiteratureLdmlToOpenSearchMapper.parseLiteratureLdml(literatureLdml).get();
+
+    assertThat(literature.shortReport())
+        .isEqualTo("A foo is bar. Bar baz or bas. EM hlj noindex strong");
+  }
+
+  @Test
+  @DisplayName("Sets empty string if short report is missing")
+  void setsEmptyStringIfShortReportIsMissing() {
+    String literatureLdml =
+        """
+                  <akn:akomaNtoso xmlns:akn="http://docs.oasis-open.org/legaldocml/ns/akn/3.0"
+                   xmlns:ris="http://ldml.neuris.de/literature/metadata/">
+                   <akn:doc name="offene-struktur">
+                     <akn:meta>
+                         <akn:identification>
+                           <akn:FRBRExpression>
+                             <akn:FRBRalias name="documentNumber" value="BJLU002758328" />
+                           </akn:FRBRExpression>
+                         </akn:identification>
+                     </akn:meta>
+                      <akn:mainBody>
+                        <akn:hcontainer name="crossheading"/>
+                      </akn:mainBody>
+                   </akn:doc>
+                 </akn:akomaNtoso>
+                 """
+            .stripIndent();
+
+    Literature literature =
+        LiteratureLdmlToOpenSearchMapper.parseLiteratureLdml(literatureLdml).get();
+
+    assertThat(literature.shortReport()).isEmpty();
+  }
+
+  @Test
   @DisplayName("Does not set values for missing optional datapoints")
   void doesNotSetValuesForMissingOptionalDatapoints() {
     Literature literature =

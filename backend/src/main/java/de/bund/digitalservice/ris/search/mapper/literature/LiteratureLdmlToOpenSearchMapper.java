@@ -29,6 +29,7 @@ public class LiteratureLdmlToOpenSearchMapper {
               .documentaryTitle(extractDocumentaryTitle(xmlDocument))
               .authors(extractAuthors(xmlDocument))
               .collaborators(extractCollaborators(xmlDocument))
+              .shortReport(extractShortReport(xmlDocument))
               .build());
     } catch (Exception e) {
       logger.warn("Error creating literature opensearch entity.", e);
@@ -76,6 +77,14 @@ public class LiteratureLdmlToOpenSearchMapper {
 
   private static List<Person> extractCollaborators(XmlDocument xmlDocument) {
     return extractPerson(xmlDocument, "mitarbeiter");
+  }
+
+  private static String extractShortReport(XmlDocument xmlDocument) {
+    return xmlDocument
+        .getElementByXpath("//*[local-name()='mainBody']")
+        .strip()
+        .replace("\n", "")
+        .replaceAll("\\s+", " ");
   }
 
   private static List<Person> extractPerson(XmlDocument xmlDocument, String type) {
