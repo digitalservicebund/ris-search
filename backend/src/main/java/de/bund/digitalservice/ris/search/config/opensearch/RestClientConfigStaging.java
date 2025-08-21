@@ -4,10 +4,10 @@ import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import javax.net.ssl.SSLContext;
-import org.apache.http.conn.ssl.NoopHostnameVerifier;
-import org.apache.http.conn.ssl.TrustAllStrategy;
-import org.apache.http.impl.nio.reactor.IOReactorConfig;
-import org.apache.http.ssl.SSLContextBuilder;
+import org.apache.hc.client5.http.ssl.NoopHostnameVerifier;
+import org.apache.hc.client5.http.ssl.TrustAllStrategy;
+import org.apache.hc.core5.reactor.IOReactorConfig;
+import org.apache.hc.core5.ssl.SSLContextBuilder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.opensearch.client.RestHighLevelClient;
@@ -46,7 +46,7 @@ public class RestClientConfigStaging extends AbstractOpenSearchConfiguration {
     final var keepAliveCallback =
         RestClients.RestClientConfigurationCallback.from(
             clientConfigurer ->
-                clientConfigurer.setDefaultIOReactorConfig(
+                clientConfigurer.setIOReactorConfig(
                     IOReactorConfig.custom().setSoKeepAlive(true).build()));
 
     SSLContext sslContext = buildSSLContext();
@@ -85,7 +85,7 @@ public class RestClientConfigStaging extends AbstractOpenSearchConfiguration {
   private SSLContext buildSSLContext() {
     try {
       SSLContextBuilder contextBuilder =
-          new SSLContextBuilder().loadTrustMaterial(null, new TrustAllStrategy());
+          new SSLContextBuilder().loadTrustMaterial(new TrustAllStrategy());
       return contextBuilder.build();
     } catch (KeyManagementException | NoSuchAlgorithmException | KeyStoreException ex) {
       throw new IllegalArgumentException("Failed to initialize SSL Context instance", ex);
