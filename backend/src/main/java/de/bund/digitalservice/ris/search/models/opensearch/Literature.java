@@ -10,7 +10,7 @@ import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.Setting;
 
-/** Model class representing a literature to opensearch index. */
+/** Model class representing a literature opensearch index. */
 @Builder
 @Document(indexName = "#{@configurations.getLiteratureIndexName()}")
 @Setting(settingPath = "/openSearch/german_analyzer.json")
@@ -19,7 +19,8 @@ public record Literature(
     @Field(name = Fields.DOCUMENT_NUMBER) String documentNumber,
     @ElementCollection @Field(name = Fields.YEARS_OF_PUBLICATION) List<String> yearsOfPublication,
     @ElementCollection @Field(name = Fields.DOCUMENT_TYPES) List<String> documentTypes,
-    @Nullable @Field(name = Fields.REFERENCE) String reference,
+    @ElementCollection @Field(name = Fields.DEPENDENT_REFERENCES)
+        List<DependentReference> dependentReferences,
     @Nullable @Field(name = Fields.MAIN_TITLE) String mainTitle,
     @Nullable @Field(name = Fields.DOCUMENTARY_TITLE) String documentaryTitle,
     @ElementCollection @Field(name = Fields.AUTHORS) List<Person> authors,
@@ -34,8 +35,8 @@ public record Literature(
     public static final String YEARS_OF_PUBLICATION = "years_of_publication";
     public static final String DOCUMENT_TYPES = "document_types";
 
-    /** Fundstelle * */
-    public static final String REFERENCE = "reference";
+    /** unselbstständige Fundstellen * */
+    public static final String DEPENDENT_REFERENCES = "dependent_references";
 
     /** Haupttitel* */
     public static final String MAIN_TITLE = "main_title";

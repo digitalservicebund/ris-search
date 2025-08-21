@@ -1,5 +1,6 @@
 package de.bund.digitalservice.ris.search.mapper.literature;
 
+import de.bund.digitalservice.ris.search.models.opensearch.DependentReference;
 import de.bund.digitalservice.ris.search.models.opensearch.Literature;
 import de.bund.digitalservice.ris.search.models.opensearch.Person;
 import de.bund.digitalservice.ris.search.utils.XmlDocument;
@@ -25,6 +26,7 @@ public class LiteratureLdmlToOpenSearchMapper {
               .documentNumber(extractDocumentNumber(xmlDocument))
               .yearsOfPublication(extractYearsOfPublication(xmlDocument))
               .documentTypes(extractDocumentTypes(xmlDocument))
+              .dependentReferences(extractDependentRefernces(xmlDocument))
               .mainTitle(extractMainTitle(xmlDocument))
               .documentaryTitle(extractDocumentaryTitle(xmlDocument))
               .authors(extractAuthors(xmlDocument))
@@ -61,6 +63,20 @@ public class LiteratureLdmlToOpenSearchMapper {
         "//*[local-name()='classification' and @source='doktyp']/*[local-name()='keyword']/@value");
   }
 
+  private static List<DependentReference> extractDependentRefernces(XmlDocument xmlDocument)
+      throws XPathExpressionException {
+    var independentReferencesXPath =
+        "//*[local-name()='otherReferences']/*[local-name()='implicitReference']/*[local-name()='fundstelleUnselbstaendig']";
+    return XmlDocument.asList(xmlDocument.getNodesByXpath(independentReferencesXPath)).stream()
+        .map(
+            node ->
+                DependentReference.builder()
+                    .periodical(node.getAttributes().getNamedItem("periodikum").getTextContent())
+                    .citation(node.getAttributes().getNamedItem("zitatstelle").getTextContent())
+                    .build())
+        .toList();
+  }
+
   private static String extractMainTitle(XmlDocument xmlDocument) {
     return xmlDocument.getElementByXpath(
         "//*[local-name()='preface']/*[local-name()='longTitle']/*[local-name()='block' and @name='longTitle']");
@@ -80,11 +96,10 @@ public class LiteratureLdmlToOpenSearchMapper {
   }
 
   private static String extractShortReport(XmlDocument xmlDocument) {
-    return xmlDocument
-        .getElementByXpath("//*[local-name()='mainBody']")
-        .strip()
-        .replace("\n", "")
-        .replaceAll("\\s+", " ");
+    return Optional.ofNullable(xmlDocument.getElementByXpath("//*[local-name()='mainBody']"))
+        .map(report -> report.strip().replace("\n", "").replaceAll("\\s+", " "))
+        .filter(report -> !report.isBlank())
+        .orElse(null);
   }
 
   private static List<Person> extractPerson(XmlDocument xmlDocument, String type) {
