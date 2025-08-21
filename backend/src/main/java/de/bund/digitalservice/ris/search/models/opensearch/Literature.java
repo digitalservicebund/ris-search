@@ -22,9 +22,8 @@ public record Literature(
     @Nullable @Field(name = Fields.REFERENCE) String reference,
     @Nullable @Field(name = Fields.MAIN_TITLE) String mainTitle,
     @Nullable @Field(name = Fields.DOCUMENTARY_TITLE) String documentaryTitle,
-    @ElementCollection @Field(name = Fields.AUTHORS) List<Author> authors,
-    @ElementCollection @Field(name = Fields.EDITORS) List<String> editors,
-    @ElementCollection @Field(name = Fields.CO_EDITORS) List<String> coEditors,
+    @ElementCollection @Field(name = Fields.AUTHORS) List<Person> authors,
+    @ElementCollection @Field(name = Fields.COLLABORATORS) List<Person> collaborators,
     @ElementCollection @Field(name = Fields.OUTLINE) List<String> outline,
     @ElementCollection @Field(name = Fields.SHORT_REPORT) List<String> shortReport)
     implements AbstractSearchEntity {
@@ -48,11 +47,8 @@ public record Literature(
     /** Verfasser * */
     public static final String AUTHORS = "authors";
 
-    /** Bearbeiter * */
-    public static final String EDITORS = "editors";
-
     /** Mitarbeiter * */
-    public static final String CO_EDITORS = "co_editors";
+    public static final String COLLABORATORS = "collaborators";
 
     /** Kurzrefarat * */
     public static final String SHORT_REPORT = "short_report";

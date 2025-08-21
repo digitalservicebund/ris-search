@@ -1,7 +1,7 @@
 package de.bund.digitalservice.ris.search.mapper.literature;
 
-import de.bund.digitalservice.ris.search.models.opensearch.Author;
 import de.bund.digitalservice.ris.search.models.opensearch.Literature;
+import de.bund.digitalservice.ris.search.models.opensearch.Person;
 import de.bund.digitalservice.ris.search.utils.XmlDocument;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
@@ -28,6 +28,7 @@ public class LiteratureLdmlToOpenSearchMapper {
               .mainTitle(extractMainTitle(xmlDocument))
               .documentaryTitle(extractDocumentaryTitle(xmlDocument))
               .authors(extractAuthors(xmlDocument))
+              .collaborators(extractCollaborators(xmlDocument))
               .build());
     } catch (Exception e) {
       logger.warn("Error creating literature opensearch entity.", e);
@@ -69,27 +70,37 @@ public class LiteratureLdmlToOpenSearchMapper {
         "//*[local-name()='FRBRWork']/*[local-name()='FRBRalias' and @name='dokumentarischerTitel']/@value");
   }
 
-  private static List<Author> extractAuthors(XmlDocument xmlDocument) {
-    var authorEids =
+  private static List<Person> extractAuthors(XmlDocument xmlDocument) {
+    return extractPerson(xmlDocument, "verfasser");
+  }
+
+  private static List<Person> extractCollaborators(XmlDocument xmlDocument) {
+    return extractPerson(xmlDocument, "mitarbeiter");
+  }
+
+  private static List<Person> extractPerson(XmlDocument xmlDocument, String type) {
+    var personEids =
         extractNodeListTextContents(
                 xmlDocument,
-                "//*[local-name()='FRBRWork']/*[local-name()='FRBRauthor' and @as='#verfasser']/@href")
+                String.format(
+                    "//*[local-name()='FRBRWork']/*[local-name()='FRBRauthor' and @as='#%s']/@href",
+                    type))
             .stream()
             .map(href -> href.replaceFirst("#", ""))
             .toList();
 
-    return authorEids.stream()
+    return personEids.stream()
         .map(
-            authorEid -> {
-              var authorXPath =
+            personEid -> {
+              var personXPath =
                   String.format(
                       "//*[local-name()='references']/*[local-name()='TLCPerson' and @eId='%s']",
-                      authorEid);
-              var authorNameXpath = authorXPath + "/@ris:name";
-              var authorTitleXpath = authorXPath + "/@ris:titel";
-              return Author.builder()
-                  .name(xmlDocument.getElementByXpath(authorNameXpath))
-                  .title(xmlDocument.getElementByXpath(authorTitleXpath))
+                      personEid);
+              var personNameXpath = personXPath + "/@ris:name";
+              var personTitleXpath = personXPath + "/@ris:titel";
+              return Person.builder()
+                  .name(xmlDocument.getElementByXpath(personNameXpath))
+                  .title(xmlDocument.getElementByXpath(personTitleXpath))
                   .build();
             })
         .toList();
