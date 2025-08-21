@@ -1,11 +1,7 @@
 package de.bund.digitalservice.ris.search.unit.service;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.ArgumentMatchers.anyList;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.argThat;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -13,7 +9,6 @@ import static org.mockito.Mockito.when;
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.mapper.NormLdmlToOpenSearchMapper;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
-import de.bund.digitalservice.ris.search.models.sitemap.SitemapType;
 import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
 import de.bund.digitalservice.ris.search.repository.opensearch.NormsSynthesizedRepository;
 import de.bund.digitalservice.ris.search.service.IndexNormsService;
@@ -21,7 +16,6 @@ import de.bund.digitalservice.ris.search.service.SitemapService;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -175,24 +169,5 @@ class IndexNormsServiceTest {
                 "eli/bund/bgbl-1/2013/s4098/2022-03-15/2/deu/2025-03-08/regelungstext-1.xml",
                 "eli/bund/bgbl-1/2013/s1925/2015-10-12/2/deu/2025-03-08/offenestruktur-1.xml"));
     assertThat(service.getNumberOfFilesInBucket()).isEqualTo(2);
-  }
-
-  @Test
-  void reindexAllCallsSitemapServiceForBatchesAndIndex() throws Exception {
-    List<String> keys = new ArrayList<>();
-    for (int i = 0; i < 101; i++) {
-      keys.add("eli/bund/bgbl-1/1992/s101/1992-01-01/1/deu/1992-01-02/regelungstext-" + i + ".xml");
-    }
-    when(this.bucket.getAllKeysByPrefix(anyString())).thenReturn(keys);
-    when(this.bucket.getFileAsString(anyString())).thenReturn(Optional.of(testContent));
-    Norm norm =
-        NormLdmlToOpenSearchMapper.parseNorm(testContent, Collections.emptyMap()).orElseThrow();
-    when(this.repo.saveAll(anyList())).thenReturn(Collections.singletonList(norm));
-
-    String startingTimestamp =
-        ZonedDateTime.now(ZoneOffset.UTC).format(DateTimeFormatter.ISO_INSTANT);
-    this.service.reindexAll(startingTimestamp);
-    verify(this.sitemapService, times(2)).createNormsBatchSitemap(anyInt(), anyList());
-    verify(this.sitemapService, times(1)).createIndexSitemap(anyInt(), eq(SitemapType.NORMS));
   }
 }

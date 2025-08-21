@@ -1,12 +1,11 @@
 package de.bund.digitalservice.ris.search.service;
 
-import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
-import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.models.sitemap.SitemapFile;
 import de.bund.digitalservice.ris.search.models.sitemap.SitemapIndex;
 import de.bund.digitalservice.ris.search.models.sitemap.SitemapType;
 import de.bund.digitalservice.ris.search.models.sitemap.Url;
 import de.bund.digitalservice.ris.search.repository.objectstorage.PortalBucket;
+import de.bund.digitalservice.ris.search.utils.eli.ExpressionEli;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Marshaller;
@@ -46,17 +45,16 @@ public class SitemapService {
     this.portalBucket.save(path, this.generateIndexXml(size));
   }
 
-  public void createNormsBatchSitemap(int batchNumber, List<Norm> norms) {
+  public void createNormsBatchSitemap(int batchNumber, List<ExpressionEli> norms) {
     this.setSitemapType(SitemapType.NORMS);
     String path = this.getBatchSitemapPath(batchNumber);
     this.portalBucket.save(path, this.generateNormsSitemap(norms));
   }
 
-  public void createCaselawBatchSitemap(
-      int batchNumber, List<CaseLawDocumentationUnit> caseLawDocumentationUnits) {
+  public void createCaselawBatchSitemap(int batchNumber, List<String> paths) {
     this.setSitemapType(SitemapType.CASELAW);
     String path = this.getBatchSitemapPath(batchNumber);
-    this.portalBucket.save(path, this.generateCaselawSitemap(caseLawDocumentationUnits));
+    this.portalBucket.save(path, this.generateCaselawSitemap(paths));
   }
 
   private String generateSitemap(List<?> items, Function<Object, Url> urlMapper) {
@@ -69,31 +67,28 @@ public class SitemapService {
     return marshal(sitemapFile);
   }
 
-  public String generateNormsSitemap(List<Norm> norms) {
+  public String generateNormsSitemap(List<ExpressionEli> norms) {
     return generateSitemap(
         norms,
         item -> {
-          Norm norm = (Norm) item;
+          ExpressionEli norm = (ExpressionEli) item;
           Url url = new Url();
-          if (norm.getEntryIntoForceDate() != null
-              && norm.getEntryIntoForceDate().isBefore(LocalDate.now())) {
-            url.setLastmod(norm.getEntryIntoForceDate());
-          }
-          url.setLoc(String.format("%snorms/%s", baseUrl, norm.getExpressionEli()));
+          url.setLoc(String.format("%snorms/%s", baseUrl, norm));
           return url;
         });
   }
 
-  public String generateCaselawSitemap(List<CaseLawDocumentationUnit> caseLawDocumentationUnits) {
+  public String generateCaselawSitemap(List<String> paths) {
+    List<String> documentNumbers =
+        paths.stream()
+            .map(path -> path.substring(path.lastIndexOf("/") + 1, path.length() - 4))
+            .toList();
     return generateSitemap(
-        caseLawDocumentationUnits,
+        documentNumbers,
         item -> {
-          CaseLawDocumentationUnit unit = (CaseLawDocumentationUnit) item;
+          String documentNumber = (String) item;
           Url url = new Url();
-          if (unit.decisionDate() != null) {
-            url.setLastmod(unit.decisionDate());
-          }
-          url.setLoc(String.format("%scase-law/%s", baseUrl, unit.documentNumber()));
+          url.setLoc(String.format("%scase-law/%s", baseUrl, documentNumber));
           return url;
         });
   }

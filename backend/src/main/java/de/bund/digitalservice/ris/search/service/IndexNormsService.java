@@ -4,7 +4,6 @@ import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
 import de.bund.digitalservice.ris.search.mapper.NormLdmlToOpenSearchMapper;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
-import de.bund.digitalservice.ris.search.models.sitemap.SitemapType;
 import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
 import de.bund.digitalservice.ris.search.repository.opensearch.NormsSynthesizedRepository;
 import de.bund.digitalservice.ris.search.utils.eli.ExpressionEli;
@@ -53,10 +52,8 @@ public class IndexNormsService implements IndexService {
     logger.info("Import norms process will have {} batches", batches.size());
     for (int i = 0; i < batches.size(); i++) {
       logger.info("Import norms batch {} of {} complete.", (i + 1), batches.size());
-      List<Norm> norms = indexOneNormBatch(batches.get(i));
-      sitemapService.createNormsBatchSitemap(i + 1, norms);
+      indexOneNormBatch(batches.get(i));
     }
-    sitemapService.createIndexSitemap(batches.size(), SitemapType.NORMS);
     clearOldNorms(startingTimestamp);
   }
 
@@ -101,7 +98,7 @@ public class IndexNormsService implements IndexService {
     }
   }
 
-  private List<Norm> indexOneNormBatch(List<ExpressionEli> expressionElis)
+  private void indexOneNormBatch(List<ExpressionEli> expressionElis)
       throws ObjectStoreServiceException {
     List<Norm> norms = new ArrayList<>();
     for (ExpressionEli eli : expressionElis) {
@@ -113,7 +110,6 @@ public class IndexNormsService implements IndexService {
       }
     }
     normsSynthesizedRepository.saveAll(norms);
-    return norms;
   }
 
   private List<ManifestationEli> getValidManifestations(String changelogKey, List<String> elis) {
