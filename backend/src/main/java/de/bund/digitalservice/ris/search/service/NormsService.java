@@ -9,7 +9,8 @@ import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
 import de.bund.digitalservice.ris.search.repository.opensearch.NormsRepository;
 import de.bund.digitalservice.ris.search.service.helper.FetchSourceFilterDefinitions;
-import de.bund.digitalservice.ris.search.service.helper.UniversalDocumentQueryBuilder;
+import de.bund.digitalservice.ris.search.service.helper.NormQueryBuilder;
+import de.bund.digitalservice.ris.search.service.helper.PortalQueryBuilder;
 import de.bund.digitalservice.ris.search.service.helper.ZipManager;
 import de.bund.digitalservice.ris.search.utils.PageUtils;
 import de.bund.digitalservice.ris.search.utils.RisHighlightBuilder;
@@ -23,7 +24,6 @@ import org.jetbrains.annotations.Nullable;
 import org.opensearch.action.search.SearchType;
 import org.opensearch.data.client.orhlc.NativeSearchQuery;
 import org.opensearch.data.client.orhlc.NativeSearchQueryBuilder;
-import org.opensearch.index.query.BoolQueryBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
@@ -69,18 +69,22 @@ public class NormsService {
       Pageable pageable) {
 
     // Transform the request parameters into a BoolQuery
-    BoolQueryBuilder query =
-        new UniversalDocumentQueryBuilder()
-            .withUniversalSearchParams(params)
-            .withNormsParams(normsSearchParams)
-            .getQuery();
+    PortalQueryBuilder builder = new PortalQueryBuilder(params);
+    if (builder.getSearchTerm() != null) {
+      NormQueryBuilder.addSearchTerm(
+          builder.getSearchTerm().original(),
+          builder.getSearchTerm().unquotedSearchTerms(),
+          builder.getSearchTerm().quotedSearchPhrases(),
+          builder.getQuery());
+    }
+    NormQueryBuilder.addNormFilters(normsSearchParams, builder.getQuery());
 
     // Add pagination and other parameters
     NativeSearchQuery nativeQuery =
         new NativeSearchQueryBuilder()
             .withSearchType(SearchType.DFS_QUERY_THEN_FETCH)
             .withPageable(pageable)
-            .withQuery(query)
+            .withQuery(builder.getQuery())
             .withHighlightBuilder(RisHighlightBuilder.getNormsHighlighter())
             .build();
     // articles are highlighted using the HighlightBuilder added in the inner query

@@ -3,7 +3,7 @@ package de.bund.digitalservice.ris.search.unit.utils;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import de.bund.digitalservice.ris.search.utils.QuotedStringParser;
+import de.bund.digitalservice.ris.search.service.helper.QuotableSearchTerm;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 
@@ -11,105 +11,93 @@ class QuotedStringParserTest {
 
   @Test
   void testEmptyString() {
-    QuotedStringParser parser = new QuotedStringParser("");
-    QuotedStringParser.Result result = parser.parse();
+    QuotableSearchTerm result = QuotableSearchTerm.parse("");
 
-    assertTrue(result.unquotedTerms().isEmpty());
-    assertTrue(result.quotedTerms().isEmpty());
+    assertTrue(result.unquotedSearchTerms().isEmpty());
+    assertTrue(result.quotedSearchPhrases().isEmpty());
   }
 
   @Test
   void testOnlyUnquotedTerms() {
-    QuotedStringParser parser = new QuotedStringParser("hello world");
-    QuotedStringParser.Result result = parser.parse();
+    QuotableSearchTerm result = QuotableSearchTerm.parse("hello world");
 
-    assertEquals(List.of("hello world"), result.unquotedTerms());
-    assertTrue(result.quotedTerms().isEmpty());
+    assertEquals(List.of("hello world"), result.unquotedSearchTerms());
+    assertTrue(result.quotedSearchPhrases().isEmpty());
   }
 
   @Test
   void testOnlyQuotedTerms() {
-    QuotedStringParser parser = new QuotedStringParser("\"hello world\"");
-    QuotedStringParser.Result result = parser.parse();
-
-    assertTrue(result.unquotedTerms().isEmpty());
-    assertEquals(List.of("hello world"), result.quotedTerms());
+    QuotableSearchTerm result = QuotableSearchTerm.parse("\"hello world\"");
+    assertTrue(result.unquotedSearchTerms().isEmpty());
+    assertEquals(List.of("hello world"), result.quotedSearchPhrases());
   }
 
   @Test
   void testMixedQuotedAndUnquotedTerms() {
-    QuotedStringParser parser =
-        new QuotedStringParser("hello \"quoted world\" unquoted \"another quote\"");
-    QuotedStringParser.Result result = parser.parse();
+    QuotableSearchTerm result =
+        QuotableSearchTerm.parse("hello \"quoted world\" unquoted \"another quote\"");
 
-    assertEquals(List.of("hello", "unquoted"), result.unquotedTerms());
-    assertEquals(List.of("quoted world", "another quote"), result.quotedTerms());
+    assertEquals(List.of("hello", "unquoted"), result.unquotedSearchTerms());
+    assertEquals(List.of("quoted world", "another quote"), result.quotedSearchPhrases());
   }
 
   @Test
   void testConsecutiveQuotes() {
-    QuotedStringParser parser = new QuotedStringParser("\"first quote\"\"second quote\"");
-    QuotedStringParser.Result result = parser.parse();
+    QuotableSearchTerm result = QuotableSearchTerm.parse("\"first quote\"\"second quote\"");
 
-    assertTrue(result.unquotedTerms().isEmpty());
-    assertEquals(List.of("first quote", "second quote"), result.quotedTerms());
+    assertTrue(result.unquotedSearchTerms().isEmpty());
+    assertEquals(List.of("first quote", "second quote"), result.quotedSearchPhrases());
   }
 
   @Test
   void testConsecutiveQuotesWithWhitespace() {
-    QuotedStringParser parser = new QuotedStringParser(" \"first quote\" \"second quote\"");
-    QuotedStringParser.Result result = parser.parse();
+    QuotableSearchTerm result = QuotableSearchTerm.parse(" \"first quote\" \"second quote\"");
 
-    assertTrue(result.unquotedTerms().isEmpty());
-    assertEquals(List.of("first quote", "second quote"), result.quotedTerms());
+    assertTrue(result.unquotedSearchTerms().isEmpty());
+    assertEquals(List.of("first quote", "second quote"), result.quotedSearchPhrases());
   }
 
   @Test
   void testUnbalancedQuotes() {
-    QuotedStringParser parser = new QuotedStringParser("unbalanced \"quote");
-    QuotedStringParser.Result result = parser.parse();
+    QuotableSearchTerm result = QuotableSearchTerm.parse("unbalanced \"quote");
 
-    assertEquals(List.of("unbalanced", "quote"), result.unquotedTerms());
-    assertEquals(List.of(), result.quotedTerms());
+    assertEquals(List.of("unbalanced  quote"), result.unquotedSearchTerms());
+    assertEquals(List.of(), result.quotedSearchPhrases());
   }
 
   @Test
   void testUnbalancedQuotesWithBalancedQuotes() {
-    QuotedStringParser parser =
-        new QuotedStringParser("\"balanced quote\" unbalanced \"quote text");
-    QuotedStringParser.Result result = parser.parse();
+    QuotableSearchTerm result =
+        QuotableSearchTerm.parse("\"balanced quote\" unbalanced \"quote text");
 
-    assertEquals(List.of("balanced quote"), result.quotedTerms());
-    assertEquals(List.of("unbalanced", "quote text"), result.unquotedTerms());
+    assertEquals(List.of("balanced quote"), result.quotedSearchPhrases());
+    assertEquals(List.of("unbalanced  quote text"), result.unquotedSearchTerms());
   }
 
   @Test
   void testWhitespaceHandling() {
-    QuotedStringParser parser =
-        new QuotedStringParser("  leading space \"  quoted with space  \" trailing space  ");
-    QuotedStringParser.Result result = parser.parse();
+    QuotableSearchTerm result =
+        QuotableSearchTerm.parse("  leading space \"  quoted with space  \" trailing space  ");
 
-    assertEquals(List.of("leading space", "trailing space"), result.unquotedTerms());
-    assertEquals(List.of("quoted with space"), result.quotedTerms());
+    assertEquals(List.of("leading space", "trailing space"), result.unquotedSearchTerms());
+    assertEquals(List.of("quoted with space"), result.quotedSearchPhrases());
   }
 
   @Test
   void testSpecialWhitespaceHandling() {
     // doesn't handle \x0B or zero-width space
-    QuotedStringParser parser =
-        new QuotedStringParser("\t leading space\"quoted with space  \" trailing\nspace ");
-    QuotedStringParser.Result result = parser.parse();
+    QuotableSearchTerm result =
+        QuotableSearchTerm.parse("\t leading space\"quoted with space  \" trailing\nspace ");
 
-    assertEquals(List.of("leading space", "trailing\nspace"), result.unquotedTerms());
-    assertEquals(List.of("quoted with space"), result.quotedTerms());
+    assertEquals(List.of("leading space", "trailing\nspace"), result.unquotedSearchTerms());
+    assertEquals(List.of("quoted with space"), result.quotedSearchPhrases());
   }
 
   @Test
   void testEmptyQuotes() {
-    QuotedStringParser parser = new QuotedStringParser("before \"\" after");
-    QuotedStringParser.Result result = parser.parse();
+    QuotableSearchTerm result = QuotableSearchTerm.parse("before \"\" after");
 
-    assertEquals(List.of("before", "after"), result.unquotedTerms());
-    assertEquals(List.of(), result.quotedTerms());
+    assertEquals(List.of("before", "after"), result.unquotedSearchTerms());
+    assertEquals(List.of(), result.quotedSearchPhrases());
   }
 }
