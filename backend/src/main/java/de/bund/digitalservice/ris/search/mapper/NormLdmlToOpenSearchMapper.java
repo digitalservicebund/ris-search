@@ -76,7 +76,7 @@ public class NormLdmlToOpenSearchMapper {
   public static Optional<Norm> parseNorm(
       String xmlFile, Map<String, String> attachmentFileContents) {
     try {
-      var xmlDocument = XmlDocument.fromNormBytes(xmlFile.getBytes(StandardCharsets.UTF_8));
+      var xmlDocument = new XmlDocument(xmlFile.getBytes(StandardCharsets.UTF_8));
       @Nullable String workEli = xmlDocument.getElementByXpath(X_PATH_WORK_THIS);
       @Nullable String expressionEli = xmlDocument.getElementByXpath(X_PATH_EXPRESSION_THIS);
       @Nullable String manifestationEli = xmlDocument.getElementByXpath(X_PATH_MANIFESTATION_THIS);
@@ -309,7 +309,7 @@ public class NormLdmlToOpenSearchMapper {
     for (int i = 0; i < nodes.getLength(); i++) {
       Node articleNode = nodes.item(i);
       try {
-        var articleXml = XmlDocument.fromNormNode(articleNode);
+        var articleXml = new XmlDocument(articleNode);
         String marker = cleanText(articleXml.getSimpleElementByXpath(X_PATH_ARTICLE_NUM));
         final var headingNode = articleXml.getFirstMatchedNodeByXpath(X_PATH_ARTICLE_HEADING);
         String heading =
