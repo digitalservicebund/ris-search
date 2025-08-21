@@ -3,10 +3,8 @@ package de.bund.digitalservice.ris.search.mapper;
 import static de.bund.digitalservice.ris.search.utils.MappingUtils.cleanText;
 
 import de.bund.digitalservice.ris.search.utils.XmlDocument;
-import java.io.IOException;
 import javax.xml.parsers.ParserConfigurationException;
 import org.w3c.dom.Node;
-import org.xml.sax.SAXException;
 
 public class NormParagraphToTextMapper {
   private static final String X_PATH_ARTICLE_PARAGRAPHS = ".//*[local-name()='paragraph']";
@@ -33,9 +31,9 @@ public class NormParagraphToTextMapper {
   }
 
   public static String extractTextFromParagraph(Node normParagraph)
-      throws ParserConfigurationException, IOException, SAXException {
+      throws ParserConfigurationException {
 
-    XmlDocument paragraphXml = XmlDocument.fromNormNode(normParagraph);
+    XmlDocument paragraphXml = new XmlDocument(normParagraph);
 
     String paragraphNumber = extractParagraphNumber(paragraphXml);
     String paragraphTextContent = extractParagraphTextContent(paragraphXml);
