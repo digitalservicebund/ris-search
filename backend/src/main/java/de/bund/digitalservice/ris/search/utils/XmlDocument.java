@@ -41,11 +41,6 @@ public class XmlDocument {
     return new XmlDocument(node, new LegalDocMLDeContext());
   }
 
-  public static XmlDocument fromLiteratureNode(Node node)
-      throws ParserConfigurationException, IOException, SAXException {
-    return new XmlDocument(node, new LiteratureLegalDocMLContext());
-  }
-
   private XmlDocument(byte[] content, NamespaceContext namespaceContext)
       throws ParserConfigurationException, IOException, SAXException {
     var factory = createDocumentBuilderFactory();
