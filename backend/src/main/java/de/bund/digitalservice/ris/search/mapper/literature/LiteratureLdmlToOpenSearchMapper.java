@@ -22,9 +22,11 @@ public class LiteratureLdmlToOpenSearchMapper {
   public static Optional<Literature> parseLiteratureLdml(String xmlFile) {
     try {
       var xmlDocument = XmlDocument.fromLiteratureBytes(xmlFile.getBytes(StandardCharsets.UTF_8));
+      var documentNumber = extractDocumentNumber(xmlDocument);
       return Optional.of(
           Literature.builder()
-              .documentNumber(extractDocumentNumber(xmlDocument))
+              .id(documentNumber)
+              .documentNumber(documentNumber)
               .yearsOfPublication(extractYearsOfPublication(xmlDocument))
               .documentTypes(extractDocumentTypes(xmlDocument))
               .dependentReferences(extractDependentReferences(xmlDocument))

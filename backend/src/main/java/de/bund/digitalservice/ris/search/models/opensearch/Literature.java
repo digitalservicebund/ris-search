@@ -1,6 +1,5 @@
 package de.bund.digitalservice.ris.search.models.opensearch;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.ElementCollection;
 import java.util.List;
 import lombok.Builder;
@@ -15,7 +14,7 @@ import org.springframework.data.elasticsearch.annotations.Setting;
 @Document(indexName = "#{@configurations.getLiteratureIndexName()}")
 @Setting(settingPath = "/openSearch/german_analyzer.json")
 public record Literature(
-    @JsonIgnore @Id @Field(name = Fields.ID) String id,
+    @Id @Field(name = Fields.ID) String id,
     @Field(name = Fields.DOCUMENT_NUMBER) String documentNumber,
     @ElementCollection @Field(name = Fields.YEARS_OF_PUBLICATION) List<String> yearsOfPublication,
     @ElementCollection @Field(name = Fields.DOCUMENT_TYPES) List<String> documentTypes,

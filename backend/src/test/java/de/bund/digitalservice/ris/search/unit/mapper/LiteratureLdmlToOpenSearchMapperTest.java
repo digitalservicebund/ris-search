@@ -29,6 +29,15 @@ class LiteratureLdmlToOpenSearchMapperTest {
           .stripIndent();
 
   @Test
+  @DisplayName("Sets document number as Id")
+  void setsDocumentNumberAsId() {
+    Literature literature =
+        LiteratureLdmlToOpenSearchMapper.parseLiteratureLdml(minimalValidLdml).get();
+
+    assertThat(literature.id()).isEqualTo("BJLU002758328");
+  }
+
+  @Test
   @DisplayName("Extracts and sets document number")
   void extractsAndSetsDocumentNumber() {
     Literature literature =
