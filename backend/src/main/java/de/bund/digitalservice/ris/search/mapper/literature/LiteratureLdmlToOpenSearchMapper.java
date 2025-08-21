@@ -1,6 +1,7 @@
 package de.bund.digitalservice.ris.search.mapper.literature;
 
 import de.bund.digitalservice.ris.search.models.opensearch.DependentReference;
+import de.bund.digitalservice.ris.search.models.opensearch.IndependentReference;
 import de.bund.digitalservice.ris.search.models.opensearch.Literature;
 import de.bund.digitalservice.ris.search.models.opensearch.Person;
 import de.bund.digitalservice.ris.search.utils.XmlDocument;
@@ -26,7 +27,8 @@ public class LiteratureLdmlToOpenSearchMapper {
               .documentNumber(extractDocumentNumber(xmlDocument))
               .yearsOfPublication(extractYearsOfPublication(xmlDocument))
               .documentTypes(extractDocumentTypes(xmlDocument))
-              .dependentReferences(extractDependentRefernces(xmlDocument))
+              .dependentReferences(extractDependentReferences(xmlDocument))
+              .independentReferences(extractIndependentReferences(xmlDocument))
               .mainTitle(extractMainTitle(xmlDocument))
               .documentaryTitle(extractDocumentaryTitle(xmlDocument))
               .authors(extractAuthors(xmlDocument))
@@ -63,7 +65,7 @@ public class LiteratureLdmlToOpenSearchMapper {
         "//*[local-name()='classification' and @source='doktyp']/*[local-name()='keyword']/@value");
   }
 
-  private static List<DependentReference> extractDependentRefernces(XmlDocument xmlDocument)
+  private static List<DependentReference> extractDependentReferences(XmlDocument xmlDocument)
       throws XPathExpressionException {
     var independentReferencesXPath =
         "//*[local-name()='otherReferences']/*[local-name()='implicitReference']/*[local-name()='fundstelleUnselbstaendig']";
@@ -72,6 +74,20 @@ public class LiteratureLdmlToOpenSearchMapper {
             node ->
                 DependentReference.builder()
                     .periodical(node.getAttributes().getNamedItem("periodikum").getTextContent())
+                    .citation(node.getAttributes().getNamedItem("zitatstelle").getTextContent())
+                    .build())
+        .toList();
+  }
+
+  private static List<IndependentReference> extractIndependentReferences(XmlDocument xmlDocument)
+      throws XPathExpressionException {
+    var independentReferencesXPath =
+        "//*[local-name()='otherReferences']/*[local-name()='implicitReference']/*[local-name()='fundstelleSelbstaendig']";
+    return XmlDocument.asList(xmlDocument.getNodesByXpath(independentReferencesXPath)).stream()
+        .map(
+            node ->
+                IndependentReference.builder()
+                    .title(node.getAttributes().getNamedItem("titel").getTextContent())
                     .citation(node.getAttributes().getNamedItem("zitatstelle").getTextContent())
                     .build())
         .toList();

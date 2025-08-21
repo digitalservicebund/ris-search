@@ -189,6 +189,80 @@ class LiteratureLdmlToOpenSearchMapperTest {
   }
 
   @Test
+  @DisplayName("Extracts and sets independent reference")
+  void extractsIndependentReference() {
+    String literatureLdml =
+        """
+                          <akn:akomaNtoso xmlns:akn="http://docs.oasis-open.org/legaldocml/ns/akn/3.0"
+                           xmlns:ris="http://ldml.neuris.de/literature/metadata/">
+                           <akn:doc name="offene-struktur">
+                             <akn:meta>
+                                 <akn:identification>
+                                   <akn:FRBRExpression>
+                                     <akn:FRBRalias name="documentNumber" value="BJLU002758328" />
+                                   </akn:FRBRExpression>
+                                 </akn:identification>
+                             </akn:meta>
+                              <akn:analysis source="attributsemantik-noch-undefiniert">
+                                <akn:otherReferences source="attributsemantik-noch-undefiniert">
+                                  <akn:implicitReference showAs="">
+                                    <ris:fundstelleSelbstaendig titel="Foo" zitatstelle="1982, 122"/>
+                                  </akn:implicitReference>
+                                </akn:otherReferences>
+                              </akn:analysis>
+                           </akn:doc>
+                         </akn:akomaNtoso>
+                         """
+            .stripIndent();
+
+    Literature literature =
+        LiteratureLdmlToOpenSearchMapper.parseLiteratureLdml(literatureLdml).get();
+
+    var independentReferences = literature.independentReferences();
+    assertThat(independentReferences).hasSize(1);
+    var independentReference = independentReferences.getFirst();
+    assertThat(independentReference.title()).isEqualTo("Foo");
+    assertThat(independentReference.citation()).isEqualTo("1982, 122");
+  }
+
+  @ParameterizedTest
+  @ValueSource(
+      strings = {
+        "<ris:fundstelleSelbstaendig zitatstelle=\"1982, 122\"/>",
+        "<ris:fundstelleSelbstaendig titel=\"Foo\"/>"
+      })
+  @DisplayName("Does not create literature object if independent reference has missing attributes")
+  void doesNotCreateLiteratureObjectIfIndependentReferenceHasMissingAttributes(String fundstelle) {
+    String literatureLdml =
+        String.format(
+                """
+                                  <akn:akomaNtoso xmlns:akn="http://docs.oasis-open.org/legaldocml/ns/akn/3.0"
+                                   xmlns:ris="http://ldml.neuris.de/literature/metadata/">
+                                   <akn:doc name="offene-struktur">
+                                     <akn:meta>
+                                         <akn:identification>
+                                           <akn:FRBRExpression>
+                                             <akn:FRBRalias name="documentNumber" value="BJLU002758328" />
+                                           </akn:FRBRExpression>
+                                         </akn:identification>
+                                     </akn:meta>
+                                      <akn:analysis source="attributsemantik-noch-undefiniert">
+                                        <akn:otherReferences source="attributsemantik-noch-undefiniert">
+                                          <akn:implicitReference showAs="">
+                                            %s
+                                          </akn:implicitReference>
+                                        </akn:otherReferences>
+                                      </akn:analysis>
+                                   </akn:doc>
+                                 </akn:akomaNtoso>
+                                 """,
+                fundstelle)
+            .stripIndent();
+
+    assertThat(LiteratureLdmlToOpenSearchMapper.parseLiteratureLdml(literatureLdml)).isEmpty();
+  }
+
+  @Test
   @DisplayName("Extracts and sets main title")
   void extractsAndSetsMainTitle() {
     String literatureLdml =
@@ -411,6 +485,7 @@ class LiteratureLdmlToOpenSearchMapperTest {
     assertThat(literature.yearsOfPublication()).isEmpty();
     assertThat(literature.documentTypes()).isEmpty();
     assertThat(literature.dependentReferences()).isEmpty();
+    assertThat(literature.independentReferences()).isEmpty();
     assertThat(literature.yearsOfPublication()).isEmpty();
     assertThat(literature.mainTitle()).isNull();
     assertThat(literature.documentaryTitle()).isNull();

@@ -21,6 +21,8 @@ public record Literature(
     @ElementCollection @Field(name = Fields.DOCUMENT_TYPES) List<String> documentTypes,
     @ElementCollection @Field(name = Fields.DEPENDENT_REFERENCES)
         List<DependentReference> dependentReferences,
+    @ElementCollection @Field(name = Fields.INDEPENDENT_REFERENCES)
+        List<IndependentReference> independentReferences,
     @Nullable @Field(name = Fields.MAIN_TITLE) String mainTitle,
     @Nullable @Field(name = Fields.DOCUMENTARY_TITLE) String documentaryTitle,
     @ElementCollection @Field(name = Fields.AUTHORS) List<Person> authors,
@@ -37,6 +39,9 @@ public record Literature(
 
     /** unselbstständige Fundstellen * */
     public static final String DEPENDENT_REFERENCES = "dependent_references";
+
+    /** selbständige Fundstellen * */
+    public static final String INDEPENDENT_REFERENCES = "independent_references";
 
     /** Haupttitel* */
     public static final String MAIN_TITLE = "main_title";
