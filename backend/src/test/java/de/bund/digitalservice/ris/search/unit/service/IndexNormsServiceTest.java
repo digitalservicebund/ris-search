@@ -12,7 +12,6 @@ import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
 import de.bund.digitalservice.ris.search.repository.opensearch.NormsSynthesizedRepository;
 import de.bund.digitalservice.ris.search.service.IndexNormsService;
-import de.bund.digitalservice.ris.search.service.SitemapService;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -32,11 +31,10 @@ class IndexNormsServiceTest {
 
   @Mock NormsBucket bucket;
   @Mock NormsSynthesizedRepository repo;
-  @Mock SitemapService sitemapService;
 
   @BeforeEach()
   void setup() {
-    this.service = new IndexNormsService(bucket, repo, sitemapService);
+    this.service = new IndexNormsService(bucket, repo);
   }
 
   private String testContent =

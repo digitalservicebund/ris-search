@@ -27,16 +27,11 @@ public class IndexCaselawService implements IndexService {
 
   private final CaseLawSynthesizedRepository repository;
   private final CaseLawBucket bucket;
-  private final SitemapService sitemapService;
 
   @Autowired
-  public IndexCaselawService(
-      CaseLawBucket bucket,
-      CaseLawSynthesizedRepository repository,
-      SitemapService sitemapService) {
+  public IndexCaselawService(CaseLawBucket bucket, CaseLawSynthesizedRepository repository) {
     this.bucket = bucket;
     this.repository = repository;
-    this.sitemapService = sitemapService;
   }
 
   @Override

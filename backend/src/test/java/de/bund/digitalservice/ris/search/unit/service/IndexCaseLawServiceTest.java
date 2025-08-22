@@ -11,7 +11,6 @@ import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
 import de.bund.digitalservice.ris.search.repository.objectstorage.CaseLawBucket;
 import de.bund.digitalservice.ris.search.repository.opensearch.CaseLawSynthesizedRepository;
 import de.bund.digitalservice.ris.search.service.IndexCaselawService;
-import de.bund.digitalservice.ris.search.service.SitemapService;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -32,7 +31,6 @@ class IndexCaseLawServiceTest {
 
   @Mock CaseLawBucket bucket;
   @Mock CaseLawSynthesizedRepository repo;
-  @Mock SitemapService sitemapService;
 
   String caseLawContent =
       """
@@ -178,7 +176,7 @@ class IndexCaseLawServiceTest {
 
   @BeforeEach()
   void setup() {
-    this.service = new IndexCaselawService(bucket, repo, sitemapService);
+    this.service = new IndexCaselawService(bucket, repo);
   }
 
   @Test

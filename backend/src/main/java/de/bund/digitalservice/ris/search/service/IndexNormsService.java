@@ -29,16 +29,12 @@ public class IndexNormsService implements IndexService {
 
   private final NormsSynthesizedRepository normsSynthesizedRepository;
   private final NormsBucket normsBucket;
-  private final SitemapService sitemapService;
 
   @Autowired
   public IndexNormsService(
-      NormsBucket normsBucket,
-      NormsSynthesizedRepository normsSynthesizedRepository,
-      SitemapService sitemapService) {
+      NormsBucket normsBucket, NormsSynthesizedRepository normsSynthesizedRepository) {
     this.normsBucket = normsBucket;
     this.normsSynthesizedRepository = normsSynthesizedRepository;
-    this.sitemapService = sitemapService;
   }
 
   public void reindexAll(String startingTimestamp) throws ObjectStoreServiceException {
