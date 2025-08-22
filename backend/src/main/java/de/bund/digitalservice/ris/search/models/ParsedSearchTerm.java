@@ -1,13 +1,13 @@
-package de.bund.digitalservice.ris.search.service.helper;
+package de.bund.digitalservice.ris.search.models;
 
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 
-public record QuotableSearchTerm(
+public record ParsedSearchTerm(
     String original, List<String> unquotedSearchTerms, List<String> quotedSearchPhrases) {
 
-  public static QuotableSearchTerm parse(String searchTerm) {
+  public static ParsedSearchTerm parse(String searchTerm) {
     List<String> unquotedSearchTerms = new ArrayList<>();
     List<String> quotedSearchPhrases = new ArrayList<>();
 
@@ -31,6 +31,6 @@ public record QuotableSearchTerm(
         }
       }
     }
-    return new QuotableSearchTerm(searchTerm, unquotedSearchTerms, quotedSearchPhrases);
+    return new ParsedSearchTerm(searchTerm, unquotedSearchTerms, quotedSearchPhrases);
   }
 }

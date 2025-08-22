@@ -1,5 +1,6 @@
 package de.bund.digitalservice.ris.search.service.helper;
 
+import de.bund.digitalservice.ris.search.models.ParsedSearchTerm;
 import de.bund.digitalservice.ris.search.models.api.parameters.UniversalSearchParams;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
@@ -17,7 +18,7 @@ import org.opensearch.index.search.MatchQuery;
 public class PortalQueryBuilder {
 
   private final BoolQueryBuilder query;
-  private QuotableSearchTerm searchTerm;
+  private ParsedSearchTerm searchTerm;
 
   public PortalQueryBuilder(UniversalSearchParams params) {
     query = QueryBuilders.boolQuery();
@@ -26,7 +27,7 @@ public class PortalQueryBuilder {
     }
 
     if (StringUtils.isNotEmpty(params.getSearchTerm())) {
-      searchTerm = QuotableSearchTerm.parse(params.getSearchTerm());
+      searchTerm = ParsedSearchTerm.parse(params.getSearchTerm());
       applyMustLogic(searchTerm.unquotedSearchTerms(), searchTerm.quotedSearchPhrases());
       applyShouldLogic(params.getSearchTerm());
     }
