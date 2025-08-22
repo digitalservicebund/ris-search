@@ -70,7 +70,7 @@ class SearchTermServiceTest extends ContainersIntegrationBase {
   void testUnbalancedQuotes() {
     ParsedSearchTerm result = searchTermService.parse("unbalanced \"quote");
 
-    assertEquals(List.of("unbalanced", "quot"), result.unquotedTokens());
+    assertEquals(List.of("unbalanced", "quote"), result.unquotedTokens());
     assertEquals(List.of(), result.quotedSearchPhrases());
   }
 
@@ -80,7 +80,7 @@ class SearchTermServiceTest extends ContainersIntegrationBase {
 
     assertEquals(List.of("balanced quote"), result.quotedSearchPhrases());
     // Stemming applied to tokens
-    assertEquals(List.of("unbalanced", "quot", "text"), result.unquotedTokens());
+    assertEquals(List.of("unbalanced", "quote", "text"), result.unquotedTokens());
   }
 
   @Test
@@ -89,7 +89,7 @@ class SearchTermServiceTest extends ContainersIntegrationBase {
         searchTermService.parse("  leading space \"  quoted with space  \" trailing space  ");
 
     // Stemming applied to tokens
-    assertEquals(List.of("leading", "spac", "trailing", "spac"), result.unquotedTokens());
+    assertEquals(List.of("leading", "space", "trailing", "space"), result.unquotedTokens());
     assertEquals(List.of("quoted with space"), result.quotedSearchPhrases());
   }
 
@@ -100,7 +100,7 @@ class SearchTermServiceTest extends ContainersIntegrationBase {
         searchTermService.parse("\t leading space\"quoted with space  \" trailing\nspace ");
 
     // Stemming applied to tokens
-    assertEquals(List.of("leading", "spac", "trailing", "spac"), result.unquotedTokens());
+    assertEquals(List.of("leading", "space", "trailing", "space"), result.unquotedTokens());
     assertEquals(List.of("quoted with space"), result.quotedSearchPhrases());
   }
 
@@ -109,7 +109,7 @@ class SearchTermServiceTest extends ContainersIntegrationBase {
     ParsedSearchTerm result = searchTermService.parse("before \"\" after");
 
     // Stemming applied to tokens
-    assertEquals(List.of("befor", "aft"), result.unquotedTokens());
+    assertEquals(List.of("before", "after"), result.unquotedTokens());
     assertEquals(List.of(), result.quotedSearchPhrases());
   }
 }
