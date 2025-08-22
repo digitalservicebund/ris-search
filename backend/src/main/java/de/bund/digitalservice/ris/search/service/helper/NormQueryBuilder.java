@@ -2,10 +2,13 @@ package de.bund.digitalservice.ris.search.service.helper;
 
 import static org.opensearch.index.query.QueryBuilders.matchQuery;
 
+import de.bund.digitalservice.ris.search.models.ParsedSearchTerm;
 import de.bund.digitalservice.ris.search.models.api.parameters.NormsSearchParams;
+import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.utils.DateUtils;
 import de.bund.digitalservice.ris.search.utils.RisHighlightBuilder;
 import java.util.List;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.lucene.search.join.ScoreMode;
 import org.opensearch.index.query.BoolQueryBuilder;
 import org.opensearch.index.query.InnerHitBuilder;
@@ -72,7 +75,7 @@ public class NormQueryBuilder {
     // preventing documents with many low-scoring articles from outranking those with fewer,
     // highly relevant ones.
     NestedQueryBuilder articleQueryBuilder =
-        QueryBuilders.nestedQuery("articles", articleNestedQuery, ScoreMode.Max);
+        QueryBuilders.nestedQuery(Norm.Fields.ARTICLES, articleNestedQuery, ScoreMode.Max);
 
     // Configure inner hits for the nested article query.
     // Inner hits enable highlighting and extraction of specific article context (name, eId)
@@ -82,18 +85,30 @@ public class NormQueryBuilder {
             .setSize(ARTICLE_INNER_HITS_SIZE)
             .setHighlightBuilder(RisHighlightBuilder.getArticleFieldsHighlighter())
             .setFetchSourceContext(
-                new FetchSourceContext(true, new String[] {"articles.name", "articles.eid"}, null));
+                new FetchSourceContext(
+                    true,
+                    new String[] {Norm.Fields.ARTICLES + ".name", Norm.Fields.ARTICLES + ".eid"},
+                    null));
     articleQueryBuilder.innerHit(articleInnerHitBuilder);
 
     query.should(articleQueryBuilder);
   }
 
-  public static void addNormFilters(NormsSearchParams params, BoolQueryBuilder query) {
+  public static void addNormFilters(
+      ParsedSearchTerm searchTerm, NormsSearchParams params, BoolQueryBuilder query) {
+    if (StringUtils.isNotEmpty(searchTerm.original())) {
+      NormQueryBuilder.addSearchTerm(
+          searchTerm.original(),
+          searchTerm.unquotedTokens(),
+          searchTerm.quotedSearchPhrases(),
+          query);
+    }
+
     if (params == null) {
       return;
     }
     if (params.getEli() != null) {
-      query.must(matchQuery("work_eli", params.getEli()).operator(Operator.AND));
+      query.must(matchQuery(Norm.Fields.WORK_ELI, params.getEli()).operator(Operator.AND));
     }
     DateUtils.buildQueryForTemporalCoverage(
             params.getTemporalCoverageFrom(), params.getTemporalCoverageTo())

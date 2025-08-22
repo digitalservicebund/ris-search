@@ -4,6 +4,7 @@ import static org.opensearch.index.query.QueryBuilders.queryStringQuery;
 
 import de.bund.digitalservice.ris.search.config.opensearch.Configurations;
 import de.bund.digitalservice.ris.search.models.DocumentKind;
+import de.bund.digitalservice.ris.search.models.ParsedSearchTerm;
 import de.bund.digitalservice.ris.search.models.api.parameters.CaseLawSearchParams;
 import de.bund.digitalservice.ris.search.models.api.parameters.NormsSearchParams;
 import de.bund.digitalservice.ris.search.models.api.parameters.UniversalSearchParams;
@@ -35,14 +36,19 @@ import org.springframework.stereotype.Service;
 public class AllDocumentsService {
 
   private final ElasticsearchOperations operations;
+  private final SearchTermService searchTermService;
   private final IndexCoordinates allDocumentsIndex;
   private final PageUtils pageUtils;
 
   public AllDocumentsService(
-      ElasticsearchOperations operations, Configurations configurations, PageUtils pageUtils) {
+      ElasticsearchOperations operations,
+      Configurations configurations,
+      PageUtils pageUtils,
+      SearchTermService searchTermService) {
     this.operations = operations;
     allDocumentsIndex = IndexCoordinates.of(configurations.getDocumentsAliasName());
     this.pageUtils = pageUtils;
+    this.searchTermService = searchTermService;
   }
 
   /**
@@ -81,22 +87,17 @@ public class AllDocumentsService {
    * @return A new {@link SearchPage} of the containing {@link AbstractSearchEntity}.
    */
   public SearchPage<AbstractSearchEntity> searchAndFilterAllDocuments(
-      @Nullable UniversalSearchParams params,
+      @NotNull UniversalSearchParams params,
       @Nullable NormsSearchParams normsParams,
       @Nullable CaseLawSearchParams caseLawParams,
       @Nullable DocumentKind documentKind,
       Pageable pageable) {
 
     // transform the request parameters into a BoolQuery
-    PortalQueryBuilder builder = new PortalQueryBuilder(params);
-    if (builder.getSearchTerm() != null) {
-      NormQueryBuilder.addSearchTerm(
-          builder.getSearchTerm().original(),
-          builder.getSearchTerm().unquotedSearchTerms(),
-          builder.getSearchTerm().quotedSearchPhrases(),
-          builder.getQuery());
-    }
-    NormQueryBuilder.addNormFilters(normsParams, builder.getQuery());
+    ParsedSearchTerm searchTerm = searchTermService.parse(params.getSearchTerm());
+    PortalQueryBuilder builder =
+        new PortalQueryBuilder(searchTerm, params.getDateFrom(), params.getDateTo());
+    NormQueryBuilder.addNormFilters(searchTerm, normsParams, builder.getQuery());
     CaseLawQueryBuilder.addCaseLawFilters(caseLawParams, builder.getQuery());
 
     // add pagination and other parameters
