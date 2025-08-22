@@ -49,8 +49,8 @@ export default defineEventHandler(async (event): Promise<unknown> => {
       "ECONNREFUSED"
     )
       throw createError({
-        statusCode: HttpStatusCode.BadGateway,
-        statusMessage: "Bad Gateway",
+        statusCode: HttpStatusCode.InternalServerError,
+        statusMessage: "Internal Server Error",
       });
 
     throw error;
