@@ -115,8 +115,8 @@ describe("Access Token Middleware", () => {
 
     await expect(middleware(mockEvent)).rejects.toEqual(
       expect.objectContaining({
-        statusCode: HttpStatusCode.BadGateway,
-        statusMessage: "Bad Gateway",
+        statusCode: HttpStatusCode.InternalServerError,
+        statusMessage: "Internal Server Error",
       }),
     );
   });
