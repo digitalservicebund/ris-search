@@ -1,4 +1,4 @@
-package de.bund.digitalservice.ris.search.unit.utils;
+package de.bund.digitalservice.ris.search.integration.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -7,7 +7,7 @@ import de.bund.digitalservice.ris.search.models.ParsedSearchTerm;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 
-class QuotedStringParserTest {
+class SearchTermServiceTest {
 
   @Test
   void testEmptyString() {
