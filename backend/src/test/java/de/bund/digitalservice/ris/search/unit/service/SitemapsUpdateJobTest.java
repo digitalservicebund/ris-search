@@ -36,7 +36,7 @@ class SitemapsUpdateJobTest {
   @BeforeEach
   void setup() {
     sitemapsUpdateJob = new SitemapsUpdateJob(caseLawBucket, normsBucket, sitemapService);
-    ReflectionTestUtils.setField(sitemapsUpdateJob, "SITEMAP_URLS", 1);
+    ReflectionTestUtils.setField(sitemapsUpdateJob, "urlsPerPage", 1);
   }
 
   @Test
