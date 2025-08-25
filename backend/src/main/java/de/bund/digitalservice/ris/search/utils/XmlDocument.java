@@ -36,8 +36,7 @@ public class XmlDocument {
     return new XmlDocument(content, new LiteratureLegalDocMLContext());
   }
 
-  public static XmlDocument fromNormNode(Node node)
-      throws ParserConfigurationException, IOException, SAXException {
+  public static XmlDocument fromNormNode(Node node) throws ParserConfigurationException {
     return new XmlDocument(node, new LegalDocMLDeContext());
   }
 
