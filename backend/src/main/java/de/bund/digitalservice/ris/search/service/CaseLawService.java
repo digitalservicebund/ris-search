@@ -5,6 +5,7 @@ import static org.opensearch.index.query.QueryBuilders.queryStringQuery;
 import de.bund.digitalservice.ris.search.config.opensearch.Configurations;
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.models.CourtSearchResult;
+import de.bund.digitalservice.ris.search.models.ParsedSearchTerm;
 import de.bund.digitalservice.ris.search.models.api.parameters.CaseLawSearchParams;
 import de.bund.digitalservice.ris.search.models.api.parameters.UniversalSearchParams;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
@@ -22,6 +23,7 @@ import java.io.OutputStream;
 import java.util.List;
 import java.util.Optional;
 import lombok.SneakyThrows;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.opensearch.action.search.SearchType;
 import org.opensearch.data.client.orhlc.NativeSearchQuery;
@@ -52,6 +54,7 @@ public class CaseLawService {
   private final ElasticsearchOperations operations;
   private final CourtNameAbbreviationExpander courtNameAbbreviationExpander;
   private final Configurations configurations;
+  private final SearchTermService searchTermService;
 
   @SneakyThrows
   @Autowired
@@ -59,12 +62,14 @@ public class CaseLawService {
       CaseLawRepository caseLawRepository,
       CaseLawBucket caseLawBucket,
       ElasticsearchOperations operations,
-      Configurations configurations) {
+      Configurations configurations,
+      SearchTermService searchTermService) {
     this.caseLawRepository = caseLawRepository;
     this.caseLawBucket = caseLawBucket;
     this.operations = operations;
     this.configurations = configurations;
     this.courtNameAbbreviationExpander = new CourtNameAbbreviationExpander();
+    this.searchTermService = searchTermService;
   }
 
   /**
@@ -78,12 +83,14 @@ public class CaseLawService {
    * @return A new {@link SearchPage} of the containing {@link CaseLawDocumentationUnit}.
    */
   public SearchPage<CaseLawDocumentationUnit> searchAndFilterCaseLaw(
-      @Nullable UniversalSearchParams params,
+      @NotNull UniversalSearchParams params,
       @Nullable CaseLawSearchParams caseLawParams,
       Pageable pageable) {
 
-    // transform the request parameters into a BoolQuery
-    PortalQueryBuilder builder = new PortalQueryBuilder(params);
+    // Transform the request parameters into a BoolQuery
+    ParsedSearchTerm searchTerm = searchTermService.parse(params.getSearchTerm());
+    PortalQueryBuilder builder =
+        new PortalQueryBuilder(searchTerm, params.getDateFrom(), params.getDateTo());
     CaseLawQueryBuilder.addCaseLawFilters(caseLawParams, builder.getQuery());
 
     // add pagination and other parameters

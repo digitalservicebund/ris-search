@@ -40,7 +40,8 @@ class NormsServiceTest {
         new NormsRepository(Mockito.mock(NormsSynthesizedRepository.class));
     operationsMock = Mockito.mock(ElasticsearchOperations.class);
     NormsBucket normsBucketMock = Mockito.mock(NormsBucket.class);
-    this.normsService = new NormsService(normsRepositoryMock, normsBucketMock, operationsMock);
+    this.normsService =
+        new NormsService(normsRepositoryMock, normsBucketMock, operationsMock, null);
   }
 
   @Test
