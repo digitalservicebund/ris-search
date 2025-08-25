@@ -1,15 +1,13 @@
 package de.bund.digitalservice.ris.search.mapper.literature;
 
-import de.bund.digitalservice.ris.search.models.opensearch.DependentReference;
-import de.bund.digitalservice.ris.search.models.opensearch.IndependentReference;
 import de.bund.digitalservice.ris.search.models.opensearch.Literature;
-import de.bund.digitalservice.ris.search.models.opensearch.Person;
 import de.bund.digitalservice.ris.search.utils.XmlDocument;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import javax.xml.xpath.XPathExpressionException;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.w3c.dom.Node;
@@ -67,31 +65,29 @@ public class LiteratureLdmlToOpenSearchMapper {
         "//*[local-name()='classification' and @source='doktyp']/*[local-name()='keyword']/@value");
   }
 
-  private static List<DependentReference> extractDependentReferences(XmlDocument xmlDocument)
+  private static List<String> extractDependentReferences(XmlDocument xmlDocument)
       throws XPathExpressionException {
     var independentReferencesXPath =
         "//*[local-name()='otherReferences']/*[local-name()='implicitReference']/*[local-name()='fundstelleUnselbstaendig']";
     return XmlDocument.asList(xmlDocument.getNodesByXpath(independentReferencesXPath)).stream()
         .map(
             node ->
-                DependentReference.builder()
-                    .periodical(node.getAttributes().getNamedItem("periodikum").getTextContent())
-                    .citation(node.getAttributes().getNamedItem("zitatstelle").getTextContent())
-                    .build())
+                node.getAttributes().getNamedItem("periodikum").getTextContent()
+                    + StringUtils.SPACE
+                    + node.getAttributes().getNamedItem("zitatstelle").getTextContent())
         .toList();
   }
 
-  private static List<IndependentReference> extractIndependentReferences(XmlDocument xmlDocument)
+  private static List<String> extractIndependentReferences(XmlDocument xmlDocument)
       throws XPathExpressionException {
     var independentReferencesXPath =
         "//*[local-name()='otherReferences']/*[local-name()='implicitReference']/*[local-name()='fundstelleSelbstaendig']";
     return XmlDocument.asList(xmlDocument.getNodesByXpath(independentReferencesXPath)).stream()
         .map(
             node ->
-                IndependentReference.builder()
-                    .title(node.getAttributes().getNamedItem("titel").getTextContent())
-                    .citation(node.getAttributes().getNamedItem("zitatstelle").getTextContent())
-                    .build())
+                node.getAttributes().getNamedItem("titel").getTextContent()
+                    + StringUtils.SPACE
+                    + node.getAttributes().getNamedItem("zitatstelle").getTextContent())
         .toList();
   }
 
@@ -105,11 +101,11 @@ public class LiteratureLdmlToOpenSearchMapper {
         "//*[local-name()='FRBRWork']/*[local-name()='FRBRalias' and @name='dokumentarischerTitel']/@value");
   }
 
-  private static List<Person> extractAuthors(XmlDocument xmlDocument) {
+  private static List<String> extractAuthors(XmlDocument xmlDocument) {
     return extractPerson(xmlDocument, "verfasser");
   }
 
-  private static List<Person> extractCollaborators(XmlDocument xmlDocument) {
+  private static List<String> extractCollaborators(XmlDocument xmlDocument) {
     return extractPerson(xmlDocument, "mitarbeiter");
   }
 
@@ -120,7 +116,7 @@ public class LiteratureLdmlToOpenSearchMapper {
         .orElse(null);
   }
 
-  private static List<Person> extractPerson(XmlDocument xmlDocument, String type) {
+  private static List<String> extractPerson(XmlDocument xmlDocument, String type) {
     var personEids =
         extractNodeListTextContents(
                 xmlDocument,
@@ -134,16 +130,11 @@ public class LiteratureLdmlToOpenSearchMapper {
     return personEids.stream()
         .map(
             personEid -> {
-              var personXPath =
+              var nameXpath =
                   String.format(
-                      "//*[local-name()='references']/*[local-name()='TLCPerson' and @eId='%s']",
+                      "//*[local-name()='references']/*[local-name()='TLCPerson' and @eId='%s']/@ris:name",
                       personEid);
-              var personNameXpath = personXPath + "/@ris:name";
-              var personTitleXpath = personXPath + "/@ris:titel";
-              return Person.builder()
-                  .name(xmlDocument.getElementByXpath(personNameXpath))
-                  .title(xmlDocument.getElementByXpath(personTitleXpath))
-                  .build();
+              return xmlDocument.getElementByXpath(nameXpath);
             })
         .toList();
   }

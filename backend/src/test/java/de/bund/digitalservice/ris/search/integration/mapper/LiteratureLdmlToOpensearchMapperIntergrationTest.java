@@ -1,7 +1,6 @@
 package de.bund.digitalservice.ris.search.integration.mapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.tuple;
 
 import de.bund.digitalservice.ris.search.mapper.literature.LiteratureLdmlToOpenSearchMapper;
 import de.bund.digitalservice.ris.search.models.opensearch.Literature;
@@ -29,20 +28,14 @@ class LiteratureLdmlToOpensearchMapperIntergrationTest {
     assertThat(literatureUnwrapped.documentNumber()).isEqualTo("ABCD0000000001");
     assertThat(literatureUnwrapped.yearsOfPublication()).containsExactly("2025");
     assertThat(literatureUnwrapped.documentTypes()).containsExactly("Auf", "Foo");
-    assertThat(literatureUnwrapped.dependentReferences())
-        .extracting("periodical", "citation")
-        .containsExactly(tuple("BB", "1979, 1298-1300"));
+    assertThat(literatureUnwrapped.dependentReferences()).containsExactly("BB 1979, 1298-1300");
     assertThat(literatureUnwrapped.independentReferences())
-        .extracting("title", "citation")
-        .containsExactly(tuple("Titel einer Fundstelle", "1979, 1298-1300"));
+        .containsExactly("Titel einer Fundstelle 1979, 1298-1300");
     assertThat(literatureUnwrapped.mainTitle()).isEqualTo("Literatur Test Dokument");
     assertThat(literatureUnwrapped.documentaryTitle()).isEqualTo("Dokumentarischer Titel");
     assertThat(literatureUnwrapped.authors())
-        .extracting("name", "title")
-        .containsExactly(tuple("Mustermann, Max", null), tuple("Musterfrau, Susanne", "Prof Dr"));
-    assertThat(literatureUnwrapped.collaborators())
-        .extracting("name", "title")
-        .containsExactly(tuple("Foo, Peter", "Dr"));
+        .containsExactly("Mustermann, Max", "Musterfrau, Susanne");
+    assertThat(literatureUnwrapped.collaborators()).containsExactly("Foo, Peter");
     assertThat(literatureUnwrapped.shortReport())
         .isEqualTo(
             "1. Dies ist ein literature LDML Dokument für Tests. Es werden sub und sup Elemente unterstützt. Außerdem gib es noch EM, hlj, noindex und strong.");

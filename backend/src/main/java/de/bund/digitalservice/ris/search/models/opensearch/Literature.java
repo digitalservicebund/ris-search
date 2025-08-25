@@ -18,14 +18,13 @@ public record Literature(
     @Field(name = Fields.DOCUMENT_NUMBER) String documentNumber,
     @ElementCollection @Field(name = Fields.YEARS_OF_PUBLICATION) List<String> yearsOfPublication,
     @ElementCollection @Field(name = Fields.DOCUMENT_TYPES) List<String> documentTypes,
-    @ElementCollection @Field(name = Fields.DEPENDENT_REFERENCES)
-        List<DependentReference> dependentReferences,
+    @ElementCollection @Field(name = Fields.DEPENDENT_REFERENCES) List<String> dependentReferences,
     @ElementCollection @Field(name = Fields.INDEPENDENT_REFERENCES)
-        List<IndependentReference> independentReferences,
+        List<String> independentReferences,
     @Nullable @Field(name = Fields.MAIN_TITLE) String mainTitle,
     @Nullable @Field(name = Fields.DOCUMENTARY_TITLE) String documentaryTitle,
-    @ElementCollection @Field(name = Fields.AUTHORS) List<Person> authors,
-    @ElementCollection @Field(name = Fields.COLLABORATORS) List<Person> collaborators,
+    @ElementCollection @Field(name = Fields.AUTHORS) List<String> authors,
+    @ElementCollection @Field(name = Fields.COLLABORATORS) List<String> collaborators,
     @Nullable @Field(name = Fields.SHORT_REPORT) String shortReport)
     implements AbstractSearchEntity {
   public static class Fields {
