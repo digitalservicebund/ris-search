@@ -15,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.scheduling.annotation.Async;
 
-public class IndexSyncJob {
+public class IndexSyncJob implements Job {
 
   private static final Logger logger = LogManager.getLogger(IndexSyncJob.class);
 

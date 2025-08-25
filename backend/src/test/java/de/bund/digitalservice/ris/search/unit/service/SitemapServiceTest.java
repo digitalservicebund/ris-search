@@ -6,12 +6,11 @@ import static org.mockito.Mockito.anyString;
 import static org.mockito.Mockito.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
-import de.bund.digitalservice.ris.search.models.opensearch.Norm;
+import de.bund.digitalservice.ris.search.models.sitemap.SitemapType;
 import de.bund.digitalservice.ris.search.repository.objectstorage.PortalBucket;
 import de.bund.digitalservice.ris.search.service.SitemapService;
-import java.time.LocalDate;
+import de.bund.digitalservice.ris.search.utils.eli.ExpressionEli;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,6 +21,8 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 @ExtendWith(MockitoExtension.class)
 class SitemapServiceTest {
+  private static final String TEST_EXPRESSION_ELI =
+      "eli/bund/bgbl-1/1991/s101/1991-01-01/1/deu/regelungstext-1";
   private SitemapService sitemapService;
   @Mock private PortalBucket portalBucket;
 
@@ -33,22 +34,27 @@ class SitemapServiceTest {
 
   @Test
   void testGetNormsBatchSitemapPath() {
-    assertEquals("sitemaps/norms/1.xml", sitemapService.getNormsBatchSitemapPath(1));
+    assertEquals("sitemaps/norms/1.xml", sitemapService.getBatchSitemapPath(1));
   }
 
   @Test
   void testGetNormsIndexSitemapPath() {
-    assertEquals("sitemaps/norms/index.xml", sitemapService.getNormsIndexSitemapPath());
+    assertEquals("sitemaps/norms/index.xml", sitemapService.getIndexSitemapPath());
   }
 
   @Test
   void testGenerateNormsSitemap() {
-    Norm norm = mock(Norm.class);
-    when(norm.getExpressionEli()).thenReturn("eli/test/1");
-    when(norm.getEntryIntoForceDate()).thenReturn(LocalDate.parse("2025-08-06"));
+    ExpressionEli norm = ExpressionEli.fromString(TEST_EXPRESSION_ELI);
     String normSitemap = sitemapService.generateNormsSitemap(List.of(norm));
-    assertTrue(normSitemap.contains("<loc>https://test.local/norms/eli/test/1</loc>"));
-    assertTrue(normSitemap.contains("<lastmod>2025-08-06</lastmod>"));
+    assertTrue(
+        normSitemap.contains("<loc>https://test.local/norms/" + TEST_EXPRESSION_ELI + "</loc>"));
+  }
+
+  @Test
+  void testGenerateCaselawSitemap() {
+    String path = "some/path/to/file/caselaw/KORE1.xml";
+    String caselawSitemap = sitemapService.generateCaselawSitemap(List.of(path));
+    assertTrue(caselawSitemap.contains("<loc>https://test.local/case-law/KORE1</loc>"));
   }
 
   @Test
@@ -57,20 +63,33 @@ class SitemapServiceTest {
     assertTrue(indexXml.contains("<loc>https://test.local/sitemaps/norms/1.xml</loc>"));
     assertTrue(indexXml.contains("<loc>https://test.local/sitemaps/norms/2.xml</loc>"));
     assertTrue(indexXml.contains("<sitemapindex"));
+    sitemapService.setSitemapType(SitemapType.CASELAW);
+    indexXml = sitemapService.generateIndexXml(1);
+    assertTrue(indexXml.contains("<loc>https://test.local/sitemaps/caselaw/1.xml</loc>"));
   }
 
   @Test
   void testCreateNormsBatchSitemap() {
-    Norm norm = mock(Norm.class);
-    when(norm.getExpressionEli()).thenReturn("eli/test/1");
-    when(norm.getEntryIntoForceDate()).thenReturn(LocalDate.parse("2025-08-06"));
+    ExpressionEli norm = mock(ExpressionEli.class);
     sitemapService.createNormsBatchSitemap(1, List.of(norm));
     verify(portalBucket).save(eq("sitemaps/norms/1.xml"), anyString());
   }
 
   @Test
   void testCreateNormsIndexSitemap() {
-    sitemapService.createNormsIndexSitemap(2);
+    sitemapService.createIndexSitemap(2, SitemapType.NORMS);
     verify(portalBucket).save(eq("sitemaps/norms/index.xml"), anyString());
+  }
+
+  @Test
+  void testCreateCaselawBatchSitemap() {
+    sitemapService.createCaselawBatchSitemap(1, List.of("caselaw/KORE12315.xml"));
+    verify(portalBucket).save(eq("sitemaps/caselaw/1.xml"), anyString());
+  }
+
+  @Test
+  void testCreateCaselawIndexSitemap() {
+    sitemapService.createIndexSitemap(2, SitemapType.CASELAW);
+    verify(portalBucket).save(eq("sitemaps/caselaw/index.xml"), anyString());
   }
 }

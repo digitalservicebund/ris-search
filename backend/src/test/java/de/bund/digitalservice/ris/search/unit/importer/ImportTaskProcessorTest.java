@@ -13,6 +13,7 @@ import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.importer.ImportTaskProcessor;
 import de.bund.digitalservice.ris.search.service.CaseLawIndexSyncJob;
 import de.bund.digitalservice.ris.search.service.NormIndexSyncJob;
+import de.bund.digitalservice.ris.search.service.SitemapsUpdateJob;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,12 +26,13 @@ class ImportTaskProcessorTest {
 
   @Mock private NormIndexSyncJob normIndexSyncJob;
   @Mock private CaseLawIndexSyncJob caseLawIndexSyncJob;
+  @Mock private SitemapsUpdateJob sitemapsUpdateJob;
 
   private ImportTaskProcessor processor;
 
   @BeforeEach
   void setUp() {
-    processor = new ImportTaskProcessor(normIndexSyncJob, caseLawIndexSyncJob);
+    processor = new ImportTaskProcessor(normIndexSyncJob, caseLawIndexSyncJob, sitemapsUpdateJob);
   }
 
   @Test
@@ -60,15 +62,24 @@ class ImportTaskProcessorTest {
   @Test
   void parseTargets_withValidArgs_returnsTargets() {
     // Given
-    String[] args = {"--other-arg", "--task", "import_norms", "--task", "import_caselaw"};
+    String[] args = {
+      "--other-arg",
+      "--task",
+      "import_norms",
+      "--task",
+      "import_caselaw",
+      "--task",
+      "update_sitemaps"
+    };
 
     // When
     List<String> targets = ImportTaskProcessor.parseTargets(args);
 
     // Then
-    assertEquals(2, targets.size());
+    assertEquals(3, targets.size());
     assertEquals("import_norms", targets.get(0));
     assertEquals("import_caselaw", targets.get(1));
+    assertEquals("update_sitemaps", targets.get(2));
   }
 
   @Test
@@ -85,9 +96,12 @@ class ImportTaskProcessorTest {
   @Test
   void run_withValidTargets_returnsZero() throws ObjectStoreServiceException {
     // Given
-    String[] args = {"--task", "import_norms", "--task", "import_caselaw"};
+    String[] args = {
+      "--task", "import_norms", "--task", "import_caselaw", "--task", "update_sitemaps"
+    };
     doNothing().when(normIndexSyncJob).runJob();
     doNothing().when(caseLawIndexSyncJob).runJob();
+    doNothing().when(sitemapsUpdateJob).runJob();
 
     // When
     int exitCode = processor.run(args);
@@ -96,6 +110,7 @@ class ImportTaskProcessorTest {
     assertEquals(0, exitCode);
     verify(normIndexSyncJob).runJob();
     verify(caseLawIndexSyncJob).runJob();
+    verify(sitemapsUpdateJob).runJob();
   }
 
   @Test
@@ -110,6 +125,7 @@ class ImportTaskProcessorTest {
     assertEquals(1, exitCode);
     verify(normIndexSyncJob, never()).runJob();
     verify(caseLawIndexSyncJob, never()).runJob();
+    verify(sitemapsUpdateJob, never()).runJob();
   }
 
   @Test
@@ -139,6 +155,18 @@ class ImportTaskProcessorTest {
   }
 
   @Test
+  void runTask_withSitemapsTarget_callsSitemapsUpdateJob() throws ObjectStoreServiceException {
+    // Given
+    String target = "update_sitemaps";
+
+    // When
+    processor.runTask(target);
+
+    // Then
+    verify(sitemapsUpdateJob).runJob();
+  }
+
+  @Test
   void runTask_withInvalidTarget_throwsException() {
     // Given
     String target = "invalid-target";
@@ -152,7 +180,9 @@ class ImportTaskProcessorTest {
   @Test
   void runTask_withNonzeroExitCode_returnsExitCode() throws ObjectStoreServiceException {
     // Given
-    String[] args = {"--task", "import_norms", "--task", "import_caselaw"};
+    String[] args = {
+      "--task", "import_norms", "--task", "import_caselaw", "--task", "update_sitemaps"
+    };
     doThrow(new ObjectStoreServiceException("mock")).when(normIndexSyncJob).runJob();
 
     // When
@@ -162,5 +192,6 @@ class ImportTaskProcessorTest {
     assertEquals(1, exitCode);
     verify(normIndexSyncJob).runJob();
     verify(caseLawIndexSyncJob, never()).runJob();
+    verify(sitemapsUpdateJob, never()).runJob();
   }
 }
