@@ -4,18 +4,18 @@ import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.exception.CustomValidationException;
 import de.bund.digitalservice.ris.search.mapper.DocumentResponseMapper;
 import de.bund.digitalservice.ris.search.mapper.MappingDefinitions;
+import de.bund.digitalservice.ris.search.mapper.SortParamsConverter;
 import de.bund.digitalservice.ris.search.models.DocumentKind;
 import de.bund.digitalservice.ris.search.models.api.parameters.CaseLawSearchParams;
 import de.bund.digitalservice.ris.search.models.api.parameters.NormsSearchParams;
 import de.bund.digitalservice.ris.search.models.api.parameters.PaginationParams;
 import de.bund.digitalservice.ris.search.models.api.parameters.UniversalSearchParams;
+import de.bund.digitalservice.ris.search.models.api.parameters.UniversalSortParam;
 import de.bund.digitalservice.ris.search.models.opensearch.AbstractSearchEntity;
 import de.bund.digitalservice.ris.search.schema.CollectionSchema;
 import de.bund.digitalservice.ris.search.schema.SearchMemberSchema;
 import de.bund.digitalservice.ris.search.service.AllDocumentsService;
-import de.bund.digitalservice.ris.search.service.helper.PaginationParamsConverter;
 import de.bund.digitalservice.ris.search.utils.LuceneQueryTools;
-import io.micrometer.common.util.StringUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -23,8 +23,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.Optional;
+import org.apache.commons.lang3.StringUtils;
 import org.springdoc.core.annotations.ParameterObject;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.elasticsearch.UncategorizedElasticsearchException;
 import org.springframework.data.elasticsearch.core.SearchPage;
 import org.springframework.http.MediaType;
@@ -66,23 +67,32 @@ public class AllDocumentsSearchController {
       @ParameterObject UniversalSearchParams request,
       @ParameterObject NormsSearchParams normsSearchParams,
       @ParameterObject CaseLawSearchParams caseLawSearchParams,
+      @ParameterObject UniversalSortParam sortParams,
       @RequestParam("documentKind")
           @Schema(
               description =
                   "Filter by document kind. Specify R for case law (<u>R</u>echtsprechung), or N for legislation (<u>N</u>ormen).")
           Optional<DocumentKind> documentKind,
-      @ParameterObject @Valid PaginationParams pagination)
+      @ParameterObject @Valid PaginationParams paginationParams)
       throws CustomValidationException {
     normsSearchParams.validate();
 
     boolean defaultToUnsorted = StringUtils.isNotBlank(request.getSearchTerm());
-    Pageable pageable =
-        PaginationParamsConverter.convert(
-            pagination, MappingDefinitions.ResolutionMode.ALL, defaultToUnsorted);
+    var pageRequest = PageRequest.of(paginationParams.getPageIndex(), paginationParams.getSize());
+
+    var sortedPageRequest =
+        pageRequest.withSort(
+            SortParamsConverter.buildSort(
+                sortParams.getSort(), MappingDefinitions.ResolutionMode.ALL, defaultToUnsorted));
+
     try {
       SearchPage<AbstractSearchEntity> entitiesPage =
           allDocumentsService.searchAndFilterAllDocuments(
-              request, normsSearchParams, caseLawSearchParams, documentKind.orElse(null), pageable);
+              request,
+              normsSearchParams,
+              caseLawSearchParams,
+              documentKind.orElse(null),
+              sortedPageRequest);
 
       return ResponseEntity.ok()
           .contentType(MediaType.APPLICATION_JSON)
