@@ -3,6 +3,7 @@ package de.bund.digitalservice.ris.search.service;
 import static org.opensearch.index.query.QueryBuilders.queryStringQuery;
 
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
+import de.bund.digitalservice.ris.search.models.ParsedSearchTerm;
 import de.bund.digitalservice.ris.search.models.api.parameters.NormsSearchParams;
 import de.bund.digitalservice.ris.search.models.api.parameters.UniversalSearchParams;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
@@ -20,6 +21,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.opensearch.action.search.SearchType;
 import org.opensearch.data.client.orhlc.NativeSearchQuery;
@@ -41,16 +43,19 @@ public class NormsService {
 
   private final NormsRepository normsRepository;
   private final ElasticsearchOperations operations;
+  private final SearchTermService searchTermService;
   private final NormsBucket normsBucket;
 
   @Autowired
   public NormsService(
       NormsRepository normsRepository,
       NormsBucket normsBucket,
-      ElasticsearchOperations operations) {
+      ElasticsearchOperations operations,
+      SearchTermService searchTermService) {
     this.normsRepository = normsRepository;
     this.normsBucket = normsBucket;
     this.operations = operations;
+    this.searchTermService = searchTermService;
   }
 
   /**
@@ -64,20 +69,15 @@ public class NormsService {
    * @return A new {@link SearchPage} of the containing {@link Norm}.
    */
   public SearchPage<Norm> searchAndFilterNorms(
-      @Nullable UniversalSearchParams params,
+      @NotNull UniversalSearchParams params,
       @Nullable NormsSearchParams normsSearchParams,
       Pageable pageable) {
 
     // Transform the request parameters into a BoolQuery
-    PortalQueryBuilder builder = new PortalQueryBuilder(params);
-    if (builder.getSearchTerm() != null) {
-      NormQueryBuilder.addSearchTerm(
-          builder.getSearchTerm().original(),
-          builder.getSearchTerm().unquotedSearchTerms(),
-          builder.getSearchTerm().quotedSearchPhrases(),
-          builder.getQuery());
-    }
-    NormQueryBuilder.addNormFilters(normsSearchParams, builder.getQuery());
+    ParsedSearchTerm searchTerm = searchTermService.parse(params.getSearchTerm());
+    PortalQueryBuilder builder =
+        new PortalQueryBuilder(searchTerm, params.getDateFrom(), params.getDateTo());
+    NormQueryBuilder.addNormFilters(searchTerm, normsSearchParams, builder.getQuery());
 
     // Add pagination and other parameters
     NativeSearchQuery nativeQuery =

@@ -1,9 +1,10 @@
 package de.bund.digitalservice.ris.search.service.helper;
 
-import de.bund.digitalservice.ris.search.models.api.parameters.UniversalSearchParams;
+import de.bund.digitalservice.ris.search.models.ParsedSearchTerm;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.utils.DateUtils;
+import java.time.LocalDate;
 import java.util.List;
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
@@ -16,23 +17,15 @@ import org.opensearch.index.search.MatchQuery;
 @Getter
 public class PortalQueryBuilder {
 
-  private final BoolQueryBuilder query;
-  private QuotableSearchTerm searchTerm;
+  private final BoolQueryBuilder query = QueryBuilders.boolQuery();
 
-  public PortalQueryBuilder(UniversalSearchParams params) {
-    query = QueryBuilders.boolQuery();
-    if (params == null) {
-      return;
+  public PortalQueryBuilder(ParsedSearchTerm searchTerm, LocalDate from, LocalDate to) {
+    if (StringUtils.isNotEmpty(searchTerm.original())) {
+      applyMustLogic(searchTerm.unquotedTokens(), searchTerm.quotedSearchPhrases());
+      applyShouldLogic(searchTerm.original());
     }
 
-    if (StringUtils.isNotEmpty(params.getSearchTerm())) {
-      searchTerm = QuotableSearchTerm.parse(params.getSearchTerm());
-      applyMustLogic(searchTerm.unquotedSearchTerms(), searchTerm.quotedSearchPhrases());
-      applyShouldLogic(params.getSearchTerm());
-    }
-
-    DateUtils.buildQuery("DATUM", params.getDateFrom(), params.getDateTo())
-        .ifPresent(query::filter);
+    DateUtils.buildQuery("DATUM", from, to).ifPresent(query::filter);
   }
 
   private void applyMustLogic(List<String> unquotedSearchTerms, List<String> quotedSearchPhrases) {
@@ -44,7 +37,7 @@ public class PortalQueryBuilder {
           new MultiMatchQueryBuilder(term)
               .zeroTermsQuery(MatchQuery.ZeroTermsQuery.ALL)
               .operator(Operator.AND)
-              .type(MultiMatchQueryBuilder.Type.CROSS_FIELDS);
+              .type(MultiMatchQueryBuilder.Type.BEST_FIELDS);
       query.must(unquotedQuery);
     }
 

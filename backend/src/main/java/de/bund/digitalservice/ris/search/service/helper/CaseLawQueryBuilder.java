@@ -7,16 +7,12 @@ import de.bund.digitalservice.ris.search.models.api.parameters.CaseLawDocumentTy
 import de.bund.digitalservice.ris.search.models.api.parameters.CaseLawSearchParams;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import java.util.Arrays;
-import java.util.stream.Stream;
 import org.jetbrains.annotations.NotNull;
 import org.opensearch.index.query.BoolQueryBuilder;
 import org.opensearch.index.query.Operator;
 import org.opensearch.index.query.QueryBuilders;
-import org.opensearch.index.query.TermQueryBuilder;
 
 public class CaseLawQueryBuilder {
-
-  private static final String DOCUMENT_TYPE = "document_type";
 
   private CaseLawQueryBuilder() {}
 
@@ -25,10 +21,14 @@ public class CaseLawQueryBuilder {
       return;
     }
     if (params.getEcli() != null) {
-      query.must(matchQuery("ecli", params.getEcli()).operator(Operator.AND));
+      query.must(
+          matchQuery(CaseLawDocumentationUnit.Fields.ECLI, params.getEcli())
+              .operator(Operator.AND));
     }
     if (params.getFileNumber() != null) {
-      query.must(matchQuery("file_numbers", params.getFileNumber()).operator(Operator.AND));
+      query.must(
+          matchQuery(CaseLawDocumentationUnit.Fields.FILE_NUMBERS, params.getFileNumber())
+              .operator(Operator.AND));
     }
     if (params.getCourt() != null) {
       query.must(
@@ -40,7 +40,9 @@ public class CaseLawQueryBuilder {
     }
     if (params.getLegalEffect() != null) {
       query.must(
-          matchQuery("legal_effect", params.getLegalEffect().toString()).operator(Operator.AND));
+          matchQuery(
+                  CaseLawDocumentationUnit.Fields.LEGAL_EFFECT, params.getLegalEffect().toString())
+              .operator(Operator.AND));
     }
     if (params.getType() != null) {
       queryDocumentType(params.getType(), query);
@@ -59,11 +61,13 @@ public class CaseLawQueryBuilder {
         // "beschluss"
         boolQuery.should(
             QueryBuilders.boolQuery()
-                .mustNot(matchQuery(DOCUMENT_TYPE, "beschluss"))
-                .mustNot(matchQuery(DOCUMENT_TYPE, "urteil")));
+                .mustNot(matchQuery(CaseLawDocumentationUnit.Fields.DOCUMENT_TYPE, "beschluss"))
+                .mustNot(matchQuery(CaseLawDocumentationUnit.Fields.DOCUMENT_TYPE, "urteil")));
       } else {
         // use a match query to get subtypes, e.g., "Teilurteil" for query "Urteil"
-        boolQuery.should(matchQuery(DOCUMENT_TYPE, group.toString().toLowerCase()));
+        boolQuery.should(
+            matchQuery(
+                CaseLawDocumentationUnit.Fields.DOCUMENT_TYPE, group.toString().toLowerCase()));
       }
     }
     query.filter(boolQuery);
@@ -71,11 +75,13 @@ public class CaseLawQueryBuilder {
 
   private static void queryDocumentType(@NotNull String[] types, BoolQueryBuilder query) {
     // use the document_type.keyword field to match the query exactly
-    Stream<TermQueryBuilder> termQueries =
-        Arrays.stream(types)
-            .map(documentType -> QueryBuilders.termQuery(DOCUMENT_TYPE + ".keyword", documentType));
     var boolQuery = QueryBuilders.boolQuery().minimumShouldMatch(1);
-    termQueries.forEach(boolQuery::should);
+    Arrays.stream(types)
+        .map(
+            documentType ->
+                QueryBuilders.termQuery(
+                    CaseLawDocumentationUnit.Fields.DOCUMENT_TYPE + ".keyword", documentType))
+        .forEach(boolQuery::should);
     query.must(boolQuery);
   }
 }
