@@ -11,11 +11,15 @@ import org.opensearch.client.RestHighLevelClient;
 import org.opensearch.client.indices.AnalyzeRequest;
 import org.opensearch.client.indices.AnalyzeResponse;
 import org.opensearch.data.client.orhlc.AbstractOpenSearchConfiguration;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
 public class SearchTermService {
   private final RestHighLevelClient client;
+
+  @Value("${opensearch.norms-index-name}")
+  private String normsIndexName;
 
   public SearchTermService(AbstractOpenSearchConfiguration abstractOpenSearchConfiguration) {
     this.client = abstractOpenSearchConfiguration.opensearchClient();
@@ -69,7 +73,7 @@ public class SearchTermService {
     // our OTC setup doesn't allow a global analyzer definition, but we use multiple copies of the
     // exact same analyzer. Therefore,  it doesn't matter which index we call.
     AnalyzeRequest request =
-        AnalyzeRequest.withIndexAnalyzer("norms", "custom_german_analyzer", textToTokenize);
+        AnalyzeRequest.withIndexAnalyzer(normsIndexName, "custom_german_analyzer", textToTokenize);
 
     try {
       AnalyzeResponse response = client.indices().analyze(request, RequestOptions.DEFAULT);
