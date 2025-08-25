@@ -13,16 +13,7 @@ const toggleMenu = () => {
     <div class="container mx-auto">
       <div class="flex flex-col gap-24 py-24">
         <div class="flex flex-row items-center justify-between gap-16">
-          <a
-            href="/"
-            aria-label="Zur Startseite"
-            class="text-20 group leading-none no-underline"
-          >
-            <span class="block font-bold">Rechtsinformationen</span>
-            <span class="text-gray-900 group-hover:text-inherit"
-              >des Bundes</span
-            >
-          </a>
+          <Logo />
           <div class="float-end lg:hidden">
             <button
               v-if="!open"
