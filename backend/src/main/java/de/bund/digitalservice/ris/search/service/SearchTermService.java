@@ -1,22 +1,24 @@
 package de.bund.digitalservice.ris.search.service;
 
+import de.bund.digitalservice.ris.search.exception.OpenSearchMapperException;
 import de.bund.digitalservice.ris.search.models.ParsedSearchTerm;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.opensearch.client.RequestOptions;
+import org.opensearch.client.RestHighLevelClient;
 import org.opensearch.client.indices.AnalyzeRequest;
 import org.opensearch.client.indices.AnalyzeResponse;
-import org.opensearch.data.client.orhlc.OpenSearchRestTemplate;
-import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
+import org.opensearch.data.client.orhlc.AbstractOpenSearchConfiguration;
 import org.springframework.stereotype.Service;
 
 @Service
 public class SearchTermService {
-  private final ElasticsearchOperations elasticsearchOperations;
+  private final RestHighLevelClient client;
 
-  public SearchTermService(ElasticsearchOperations elasticsearchOperations) {
-    this.elasticsearchOperations = elasticsearchOperations;
+  public SearchTermService(AbstractOpenSearchConfiguration abstractOpenSearchConfiguration) {
+    this.client = abstractOpenSearchConfiguration.opensearchClient();
   }
 
   // This method turns searchTerm into two lists of strings. Sections inside double quotes
@@ -69,9 +71,14 @@ public class SearchTermService {
     AnalyzeRequest request =
         AnalyzeRequest.withIndexAnalyzer("norms", "custom_german_analyzer", textToTokenize);
 
-    OpenSearchRestTemplate osrt = (OpenSearchRestTemplate) elasticsearchOperations;
-    AnalyzeResponse response =
-        osrt.execute(client -> client.indices().analyze(request, RequestOptions.DEFAULT));
-    return response.getTokens().stream().map(AnalyzeResponse.AnalyzeToken::getTerm).toList();
+    try {
+      AnalyzeResponse response = client.indices().analyze(request, RequestOptions.DEFAULT);
+      return response.getTokens().stream().map(AnalyzeResponse.AnalyzeToken::getTerm).toList();
+    } catch (IOException e) {
+      // This should never happen, but if it does, there will be a stack trace in the logs and a 500
+      // returned in the api response
+      throw new OpenSearchMapperException(
+          "Unknown IOException while calling opensearch analyzer.", e);
+    }
   }
 }
