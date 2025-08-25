@@ -260,8 +260,27 @@ tasks {
         }
         include("**/*.java")
     }
+
+    register("generate-literature-ldml-entities", JavaExec::class) {
+        doFirst {
+            mkdir("$buildDir/generated/literature-ldml")
+        }
+        enabled = true
+        classpath(configurations["xjc"])
+        mainClass = "org.eclipse.persistence.jaxb.xjc.MOXyXJC"
+        args =
+            listOf(
+                "src/main/resources/literature/schemas/ldml-ris-literature-metadata.xsd",
+                "src/main/resources/literature/schemas/akomantoso30.xsd",
+                "src/main/resources/literature/schemas/xml.xsd",
+                "-b", "src/main/resources/literature/schemas/bindings.xjb",
+                "-d", "$buildDir/generated/literature-ldml",
+                "-p", "literature.ldml",
+            )
+    }
 }
 
 java.sourceSets["main"].java {
     srcDirs("build/generated/nlex")
+    srcDirs("build/generated/literature-ldml")
 }

@@ -1,0 +1,30 @@
+<jaxb:bindings
+    xmlns:jaxb="https://jakarta.ee/xml/ns/jaxb"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:xjc="https://jakarta.ee/xml/ns/jaxb/xjc"
+    jaxb:extensionBindingPrefixes="xjc"
+    version="3.0">
+
+
+
+    <jaxb:bindings schemaLocation="./akomantoso30.xsd">
+        <jaxb:package name="com.literature.ldml">
+            <jaxb:javadoc>
+                This package contains JAXB-generated classes for the XML schema.
+            </jaxb:javadoc>
+        </jaxb:package>
+
+        <jaxb:bindings node="/xsd:schema/xsd:attributeGroup[@name='HTMLattrs']/xsd:attribute[@name='title']">
+            <jaxb:property name="HTMLattrsTitle"/>
+        </jaxb:bindings>
+
+        <jaxb:bindings node="/xsd:schema/xsd:element[@name='title']">
+            <jaxb:property name="title"/>
+        </jaxb:bindings>
+
+        <jaxb:bindings node="/xsd:schema/xsd:element[@name='inline']">
+            <jaxb:class name="InlineElement"/>
+        </jaxb:bindings>
+    </jaxb:bindings>
+
+</jaxb:bindings>
