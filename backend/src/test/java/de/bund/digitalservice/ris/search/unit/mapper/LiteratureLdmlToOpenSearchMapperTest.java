@@ -154,10 +154,7 @@ class LiteratureLdmlToOpenSearchMapperTest {
         LiteratureLdmlToOpenSearchMapper.parseLiteratureLdml(literatureLdml).get();
 
     var dependentReferences = literature.dependentReferences();
-    assertThat(dependentReferences).hasSize(1);
-    var dependentReference = dependentReferences.getFirst();
-    assertThat(dependentReference.periodical()).isEqualTo("RdA");
-    assertThat(dependentReference.citation()).isEqualTo("1982, 122");
+    assertThat(dependentReferences).hasSize(1).containsExactly("RdA 1982, 122");
   }
 
   @ParameterizedTest
@@ -228,10 +225,7 @@ class LiteratureLdmlToOpenSearchMapperTest {
         LiteratureLdmlToOpenSearchMapper.parseLiteratureLdml(literatureLdml).get();
 
     var independentReferences = literature.independentReferences();
-    assertThat(independentReferences).hasSize(1);
-    var independentReference = independentReferences.getFirst();
-    assertThat(independentReference.title()).isEqualTo("Foo");
-    assertThat(independentReference.citation()).isEqualTo("1982, 122");
+    assertThat(independentReferences).hasSize(1).containsExactly("Foo 1982, 122");
   }
 
   @ParameterizedTest
@@ -365,12 +359,7 @@ class LiteratureLdmlToOpenSearchMapperTest {
         LiteratureLdmlToOpenSearchMapper.parseLiteratureLdml(literatureLdml).get();
 
     var authors = literature.authors();
-    assertThat(authors).hasSize(2);
-    assertThat(authors.getFirst().name()).isEqualTo("Mustermann, Max");
-    assertThat(authors.getFirst().title()).isNull();
-
-    assertThat(authors.get(1).name()).isEqualTo("Musterfrau, Susanne");
-    assertThat(authors.get(1).title()).isEqualTo("Prof Dr");
+    assertThat(authors).hasSize(2).containsExactly("Mustermann, Max", "Musterfrau, Susanne");
   }
 
   @Test
@@ -406,12 +395,7 @@ class LiteratureLdmlToOpenSearchMapperTest {
         LiteratureLdmlToOpenSearchMapper.parseLiteratureLdml(literatureLdml).get();
 
     var collaborators = literature.collaborators();
-    assertThat(collaborators).hasSize(2);
-    assertThat(collaborators.getFirst().name()).isEqualTo("Foo, Peter");
-    assertThat(collaborators.getFirst().title()).isNull();
-
-    assertThat(collaborators.get(1).name()).isEqualTo("Bar, Janine");
-    assertThat(collaborators.get(1).title()).isEqualTo("Prof Dr");
+    assertThat(collaborators).hasSize(2).containsExactly("Foo, Peter", "Bar, Janine");
   }
 
   @Test
