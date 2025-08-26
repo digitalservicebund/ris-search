@@ -1,3 +1,4 @@
+import { mockNuxtImport } from "@nuxt/test-utils/runtime";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { ref } from "vue";
 import { useNormVersions } from "./useNormVersions";
@@ -11,10 +12,20 @@ const dummyData = {
   ],
 } as unknown as SearchResult<LegislationWork>[];
 
-vi.mock("#app", () => {
+const { useFetchMock } = vi.hoisted(() => {
   return {
-    useFetch: vi.fn(),
+    useFetchMock: vi.fn(() => {
+      return {
+        status: ref("success"),
+        data: computed(() => dummyData),
+        error: ref(null),
+      };
+    }),
   };
+});
+
+mockNuxtImport("useFetch", () => {
+  return useFetchMock;
 });
 
 beforeEach(() => {
@@ -23,18 +34,24 @@ beforeEach(() => {
 
 describe("useNormVersions", () => {
   it("returns a sorted list when there is no error", () => {
-    vi.mocked(useFetch).mockReturnValue({
-      status: ref("success"),
-      data: computed(() => dummyData),
-      error: ref(null),
-    } as unknown as ReturnType<typeof useFetch>);
     const { sortedVersions } = useNormVersions("dummy-eli");
+    expect(useFetchMock).toBeCalledWith(
+      "/api/v1/legislation",
+      {
+        immediate: true,
+        params: {
+          eli: "dummy-eli",
+          sort: "-temporalCoverageFrom",
+        },
+      },
+      expect.anything(),
+    );
     expect(sortedVersions.value.length).toBe(2);
     expect(sortedVersions.value[0].item.workExample.temporalCoverage).toBe(
-      "2021-12-01/2023-11-30",
+      "2023-12-01/2300-10-01",
     );
     expect(sortedVersions.value[1].item.workExample.temporalCoverage).toBe(
-      "2023-12-01/2300-10-01",
+      "2021-12-01/2023-11-30",
     );
   });
 
