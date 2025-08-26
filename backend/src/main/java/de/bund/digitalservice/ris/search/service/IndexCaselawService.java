@@ -73,7 +73,7 @@ public class IndexCaselawService implements IndexService {
     for (String filename : filenames) {
       Optional<String> content = bucket.getFileAsString(filename);
       if (content.isPresent()) {
-        parseOneDocument(filename, content.get()).ifPresent(repository::save);
+        parseOneDocument(filename, content.get()).ifPresent((repository::save));
       } else {
         logger.warn("Tried to index caselaw file {}, but it doesn't exist.", filename);
       }

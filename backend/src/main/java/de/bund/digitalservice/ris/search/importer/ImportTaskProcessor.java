@@ -2,7 +2,9 @@ package de.bund.digitalservice.ris.search.importer;
 
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.service.CaseLawIndexSyncJob;
+import de.bund.digitalservice.ris.search.service.Job;
 import de.bund.digitalservice.ris.search.service.NormIndexSyncJob;
+import de.bund.digitalservice.ris.search.service.SitemapsUpdateJob;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -20,6 +22,7 @@ public class ImportTaskProcessor {
 
   private final NormIndexSyncJob normIndexSyncJob;
   private final CaseLawIndexSyncJob caseLawIndexSyncJob;
+  private final SitemapsUpdateJob sitemapsUpdateJob;
 
   private static final Logger logger = LogManager.getLogger(ImportTaskProcessor.class);
 
@@ -27,9 +30,12 @@ public class ImportTaskProcessor {
 
   @Autowired
   public ImportTaskProcessor(
-      NormIndexSyncJob normIndexSyncJob, CaseLawIndexSyncJob caseLawIndexSyncJob) {
+      NormIndexSyncJob normIndexSyncJob,
+      CaseLawIndexSyncJob caseLawIndexSyncJob,
+      SitemapsUpdateJob sitemapsUpdateJob) {
     this.normIndexSyncJob = normIndexSyncJob;
     this.caseLawIndexSyncJob = caseLawIndexSyncJob;
+    this.sitemapsUpdateJob = sitemapsUpdateJob;
   }
 
   public boolean shouldRun(String[] args) {
@@ -68,26 +74,21 @@ public class ImportTaskProcessor {
     return targets;
   }
 
+  private int runTask(Job job) {
+    try {
+      job.runJob();
+      return OK_RETURN_CODE;
+    } catch (ObjectStoreServiceException e) {
+      logger.error(e.getMessage(), e);
+      return ERROR_RETURN_CODE;
+    }
+  }
+
   public int runTask(String target) {
     return switch (target) {
-      case "import_norms" -> {
-        try {
-          normIndexSyncJob.runJob();
-          yield OK_RETURN_CODE;
-        } catch (ObjectStoreServiceException e) {
-          logger.error(e.getMessage(), e);
-          yield ERROR_RETURN_CODE;
-        }
-      }
-      case "import_caselaw" -> {
-        try {
-          caseLawIndexSyncJob.runJob();
-          yield OK_RETURN_CODE;
-        } catch (ObjectStoreServiceException e) {
-          logger.error(e.getMessage(), e);
-          yield ERROR_RETURN_CODE;
-        }
-      }
+      case "import_norms" -> runTask(normIndexSyncJob);
+      case "import_caselaw" -> runTask(caseLawIndexSyncJob);
+      case "update_sitemaps" -> runTask(sitemapsUpdateJob);
       default -> throw new IllegalArgumentException("Unexpected target '%s'".formatted(target));
     };
   }

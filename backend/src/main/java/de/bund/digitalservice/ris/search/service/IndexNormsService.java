@@ -29,16 +29,12 @@ public class IndexNormsService implements IndexService {
 
   private final NormsSynthesizedRepository normsSynthesizedRepository;
   private final NormsBucket normsBucket;
-  private final SitemapService sitemapService;
 
   @Autowired
   public IndexNormsService(
-      NormsBucket normsBucket,
-      NormsSynthesizedRepository normsSynthesizedRepository,
-      SitemapService sitemapService) {
+      NormsBucket normsBucket, NormsSynthesizedRepository normsSynthesizedRepository) {
     this.normsBucket = normsBucket;
     this.normsSynthesizedRepository = normsSynthesizedRepository;
-    this.sitemapService = sitemapService;
   }
 
   public void reindexAll(String startingTimestamp) throws ObjectStoreServiceException {
@@ -52,10 +48,8 @@ public class IndexNormsService implements IndexService {
     logger.info("Import norms process will have {} batches", batches.size());
     for (int i = 0; i < batches.size(); i++) {
       logger.info("Import norms batch {} of {} complete.", (i + 1), batches.size());
-      List<Norm> norms = indexOneNormBatch(batches.get(i));
-      sitemapService.createNormsBatchSitemap(i + 1, norms);
+      indexOneNormBatch(batches.get(i));
     }
-    sitemapService.createNormsIndexSitemap(batches.size());
     clearOldNorms(startingTimestamp);
   }
 
@@ -100,7 +94,7 @@ public class IndexNormsService implements IndexService {
     }
   }
 
-  private List<Norm> indexOneNormBatch(List<ExpressionEli> expressionElis)
+  private void indexOneNormBatch(List<ExpressionEli> expressionElis)
       throws ObjectStoreServiceException {
     List<Norm> norms = new ArrayList<>();
     for (ExpressionEli eli : expressionElis) {
@@ -112,7 +106,6 @@ public class IndexNormsService implements IndexService {
       }
     }
     normsSynthesizedRepository.saveAll(norms);
-    return norms;
   }
 
   private List<ManifestationEli> getValidManifestations(String changelogKey, List<String> elis) {
