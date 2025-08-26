@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import com.c4_soft.springaddons.security.oauth2.test.annotations.WithJwt;
 import de.bund.digitalservice.ris.search.integration.config.ContainersIntegrationBase;
 import de.bund.digitalservice.ris.search.integration.controller.api.testData.NormsTestData;
-import de.bund.digitalservice.ris.search.mapper.MappingDefinitions;
 import de.bund.digitalservice.ris.search.models.api.parameters.NormsSearchParams;
 import de.bund.digitalservice.ris.search.models.api.parameters.PaginationParams;
 import de.bund.digitalservice.ris.search.models.api.parameters.UniversalSearchParams;
@@ -14,7 +13,6 @@ import de.bund.digitalservice.ris.search.models.opensearch.Article;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.repository.opensearch.NormsRepository;
 import de.bund.digitalservice.ris.search.service.NormsService;
-import de.bund.digitalservice.ris.search.service.helper.PaginationParamsConverter;
 import java.io.IOException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -23,7 +21,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.elasticsearch.core.SearchPage;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -52,15 +50,13 @@ class NormsServiceTest extends ContainersIntegrationBase {
 
   @Test
   @DisplayName("Should return highlights matching the norm article using search query")
-  void shouldReturnHighlightsMatchingANormArticleUsingSearchQuery() throws Exception {
+  void shouldReturnHighlightsMatchingANormArticleUsingSearchQuery() {
     String articleName = "§ 1 Example article";
     NormsSearchParams normsSearchParams = new NormsSearchParams();
     UniversalSearchParams universalSearchParams = new UniversalSearchParams();
     PaginationParams pagination = new PaginationParams();
     universalSearchParams.setSearchTerm("text");
-    Pageable pageable =
-        PaginationParamsConverter.convert(
-            pagination, MappingDefinitions.ResolutionMode.NORMS, true);
+    PageRequest pageable = PageRequest.of(pagination.getPageIndex(), pagination.getSize());
     SearchPage<Norm> result =
         normsService.searchAndFilterNorms(universalSearchParams, normsSearchParams, pageable);
     assertThat(result.getContent()).hasSize(1);
