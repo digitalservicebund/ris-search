@@ -20,8 +20,7 @@ class LiteratureLdmlToOpensearchMapperIntergrationTest {
     File file = ResourceUtils.getFile("classpath:data/LDML/literature/literatureLdml-1.xml");
     String literatureContent = new String(Files.readAllBytes(file.toPath()));
 
-    Optional<Literature> literature =
-        LiteratureLdmlToOpenSearchMapper.parseLiteratureLdml(literatureContent);
+    Optional<Literature> literature = LiteratureLdmlToOpenSearchMapper.mapLdml(literatureContent);
     assertThat(literature).isPresent();
     var literatureUnwrapped = literature.get();
     assertThat(literatureUnwrapped.id()).isEqualTo("ABCD0000000001");

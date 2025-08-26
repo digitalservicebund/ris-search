@@ -31,8 +31,7 @@ class LiteratureLdmlToOpenSearchMapperTest {
   @Test
   @DisplayName("Sets document number as Id")
   void setsDocumentNumberAsId() {
-    Literature literature =
-        LiteratureLdmlToOpenSearchMapper.parseLiteratureLdml(minimalValidLdml).get();
+    Literature literature = LiteratureLdmlToOpenSearchMapper.mapLdml(minimalValidLdml).get();
 
     assertThat(literature.id()).isEqualTo("BJLU002758328");
   }
@@ -40,8 +39,7 @@ class LiteratureLdmlToOpenSearchMapperTest {
   @Test
   @DisplayName("Extracts and sets document number")
   void extractsAndSetsDocumentNumber() {
-    Literature literature =
-        LiteratureLdmlToOpenSearchMapper.parseLiteratureLdml(minimalValidLdml).get();
+    Literature literature = LiteratureLdmlToOpenSearchMapper.mapLdml(minimalValidLdml).get();
 
     assertThat(literature.documentNumber()).isEqualTo("BJLU002758328");
   }
@@ -57,8 +55,7 @@ class LiteratureLdmlToOpenSearchMapperTest {
             </akn:akomaNtoso>
             """
             .stripIndent();
-    Optional<Literature> literature =
-        LiteratureLdmlToOpenSearchMapper.parseLiteratureLdml(literatureLdml);
+    Optional<Literature> literature = LiteratureLdmlToOpenSearchMapper.mapLdml(literatureLdml);
 
     assertThat(literature).isEmpty();
   }
@@ -89,8 +86,7 @@ class LiteratureLdmlToOpenSearchMapperTest {
            </akn:akomaNtoso>
            """
             .stripIndent();
-    Literature literature =
-        LiteratureLdmlToOpenSearchMapper.parseLiteratureLdml(literatureLdml).get();
+    Literature literature = LiteratureLdmlToOpenSearchMapper.mapLdml(literatureLdml).get();
 
     assertThat(literature.yearsOfPublication()).containsExactly("2009");
   }
@@ -117,8 +113,7 @@ class LiteratureLdmlToOpenSearchMapperTest {
            </akn:akomaNtoso>
            """
             .stripIndent();
-    Literature literature =
-        LiteratureLdmlToOpenSearchMapper.parseLiteratureLdml(literatureLdml).get();
+    Literature literature = LiteratureLdmlToOpenSearchMapper.mapLdml(literatureLdml).get();
 
     assertThat(literature.documentTypes()).containsExactly("Auf");
   }
@@ -159,8 +154,7 @@ class LiteratureLdmlToOpenSearchMapperTest {
                 fundstelle)
             .stripIndent();
 
-    Literature literature =
-        LiteratureLdmlToOpenSearchMapper.parseLiteratureLdml(literatureLdml).get();
+    Literature literature = LiteratureLdmlToOpenSearchMapper.mapLdml(literatureLdml).get();
 
     var dependentReferences = literature.dependentReferences();
     assertThat(dependentReferences).hasSize(1).containsExactly(expected);
@@ -202,8 +196,7 @@ class LiteratureLdmlToOpenSearchMapperTest {
                 fundstelle)
             .stripIndent();
 
-    Literature literature =
-        LiteratureLdmlToOpenSearchMapper.parseLiteratureLdml(literatureLdml).get();
+    Literature literature = LiteratureLdmlToOpenSearchMapper.mapLdml(literatureLdml).get();
 
     var independentReferences = literature.independentReferences();
     assertThat(independentReferences).hasSize(1).containsExactly(expected);
@@ -232,8 +225,7 @@ class LiteratureLdmlToOpenSearchMapperTest {
              """
             .stripIndent();
 
-    Literature literature =
-        LiteratureLdmlToOpenSearchMapper.parseLiteratureLdml(literatureLdml).get();
+    Literature literature = LiteratureLdmlToOpenSearchMapper.mapLdml(literatureLdml).get();
 
     assertThat(literature.mainTitle()).isEqualTo("This is a long title");
   }
@@ -261,8 +253,7 @@ class LiteratureLdmlToOpenSearchMapperTest {
              """
             .stripIndent();
 
-    Literature literature =
-        LiteratureLdmlToOpenSearchMapper.parseLiteratureLdml(literatureLdml).get();
+    Literature literature = LiteratureLdmlToOpenSearchMapper.mapLdml(literatureLdml).get();
 
     assertThat(literature.documentaryTitle()).isEqualTo("Dokumentarischer Titel");
   }
@@ -296,8 +287,7 @@ class LiteratureLdmlToOpenSearchMapperTest {
                  """
             .stripIndent();
 
-    Literature literature =
-        LiteratureLdmlToOpenSearchMapper.parseLiteratureLdml(literatureLdml).get();
+    Literature literature = LiteratureLdmlToOpenSearchMapper.mapLdml(literatureLdml).get();
 
     var authors = literature.authors();
     assertThat(authors).hasSize(2).containsExactly("Mustermann, Max", "Musterfrau, Susanne");
@@ -332,8 +322,7 @@ class LiteratureLdmlToOpenSearchMapperTest {
                      """
             .stripIndent();
 
-    Literature literature =
-        LiteratureLdmlToOpenSearchMapper.parseLiteratureLdml(literatureLdml).get();
+    Literature literature = LiteratureLdmlToOpenSearchMapper.mapLdml(literatureLdml).get();
 
     var collaborators = literature.collaborators();
     assertThat(collaborators).hasSize(2).containsExactly("Foo, Peter", "Bar, Janine");
@@ -374,8 +363,7 @@ class LiteratureLdmlToOpenSearchMapperTest {
                 \s"""
             .stripIndent();
 
-    Literature literature =
-        LiteratureLdmlToOpenSearchMapper.parseLiteratureLdml(literatureLdml).get();
+    Literature literature = LiteratureLdmlToOpenSearchMapper.mapLdml(literatureLdml).get();
 
     assertThat(literature.shortReport())
         .isEqualTo("A foo is bar. Bar baz or bas. 1. EM 2. hlj 3. noindex 4. strong");
@@ -404,8 +392,7 @@ class LiteratureLdmlToOpenSearchMapperTest {
                  """
             .stripIndent();
 
-    Literature literature =
-        LiteratureLdmlToOpenSearchMapper.parseLiteratureLdml(literatureLdml).get();
+    Literature literature = LiteratureLdmlToOpenSearchMapper.mapLdml(literatureLdml).get();
 
     assertThat(literature.shortReport()).isNull();
   }
@@ -435,8 +422,7 @@ class LiteratureLdmlToOpenSearchMapperTest {
                     """
             .stripIndent();
 
-    Literature literature =
-        LiteratureLdmlToOpenSearchMapper.parseLiteratureLdml(literatureLdml).get();
+    Literature literature = LiteratureLdmlToOpenSearchMapper.mapLdml(literatureLdml).get();
 
     assertThat(literature.outline()).isEqualTo("I. Foo. II. Bar. III. Baz.");
   }
@@ -444,8 +430,7 @@ class LiteratureLdmlToOpenSearchMapperTest {
   @Test
   @DisplayName("Does not set values for missing optional datapoints")
   void doesNotSetValuesForMissingOptionalDatapoints() {
-    Literature literature =
-        LiteratureLdmlToOpenSearchMapper.parseLiteratureLdml(minimalValidLdml).get();
+    Literature literature = LiteratureLdmlToOpenSearchMapper.mapLdml(minimalValidLdml).get();
 
     assertThat(literature.yearsOfPublication()).isEmpty();
     assertThat(literature.documentTypes()).isEmpty();

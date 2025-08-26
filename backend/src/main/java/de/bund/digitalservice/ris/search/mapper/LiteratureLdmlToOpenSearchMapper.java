@@ -1,6 +1,5 @@
 package de.bund.digitalservice.ris.search.mapper;
 
-import de.bund.digitalservice.ris.search.exception.OpenSearchMapperException;
 import de.bund.digitalservice.ris.search.models.ldml.literature.Analysis;
 import de.bund.digitalservice.ris.search.models.ldml.literature.Classification;
 import de.bund.digitalservice.ris.search.models.ldml.literature.Doc;
@@ -19,47 +18,47 @@ import de.bund.digitalservice.ris.search.models.ldml.literature.Proprietary;
 import de.bund.digitalservice.ris.search.models.ldml.literature.References;
 import de.bund.digitalservice.ris.search.models.ldml.literature.TlcPerson;
 import de.bund.digitalservice.ris.search.models.opensearch.Literature;
-import jakarta.xml.bind.DataBindingException;
-import jakarta.xml.bind.JAXB;
-import java.io.StringReader;
+import de.bund.digitalservice.ris.search.utils.LdmlUnmarshaller;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import javax.xml.transform.stream.StreamSource;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.eclipse.persistence.exceptions.DescriptorException;
 
 public class LiteratureLdmlToOpenSearchMapper {
   private static final Logger logger = LogManager.getLogger(LiteratureLdmlToOpenSearchMapper.class);
 
   private LiteratureLdmlToOpenSearchMapper() {}
 
-  public static Optional<Literature> parseLiteratureLdml(String xmlFile) {
+  public static Optional<Literature> mapLdml(String ldmlString) {
     try {
-      var literatureLdml = fromString(xmlFile);
-      var documentNumber = extractDocumentNumber(literatureLdml);
-      return Optional.of(
-          Literature.builder()
-              .id(documentNumber)
-              .documentNumber(documentNumber)
-              .yearsOfPublication(extractYearsOfPublication(literatureLdml))
-              .documentTypes(extractDocumentTypes(literatureLdml))
-              .dependentReferences(extractDependentReferences(literatureLdml))
-              .independentReferences(extractIndependentReferences(literatureLdml))
-              .mainTitle(extractMainTitle(literatureLdml))
-              .documentaryTitle(extractDocumentaryTitle(literatureLdml))
-              .authors(extractAuthors(literatureLdml))
-              .collaborators(extractCollaborators(literatureLdml))
-              .shortReport(extractShortReport(literatureLdml))
-              .outline((extractOutline(literatureLdml)))
-              .build());
+      var literatureLdml = LdmlUnmarshaller.unmarshall(ldmlString, LiteratureLdml.class);
+      return mapToEntity(literatureLdml);
     } catch (Exception e) {
       logger.warn("Error creating literature opensearch entity.", e);
       return Optional.empty();
     }
+  }
+
+  private static Optional<Literature> mapToEntity(LiteratureLdml literatureLdml) {
+    var documentNumber = extractDocumentNumber(literatureLdml);
+    return Optional.of(
+        Literature.builder()
+            .id(documentNumber)
+            .documentNumber(documentNumber)
+            .yearsOfPublication(extractYearsOfPublication(literatureLdml))
+            .documentTypes(extractDocumentTypes(literatureLdml))
+            .dependentReferences(extractDependentReferences(literatureLdml))
+            .independentReferences(extractIndependentReferences(literatureLdml))
+            .mainTitle(extractMainTitle(literatureLdml))
+            .documentaryTitle(extractDocumentaryTitle(literatureLdml))
+            .authors(extractAuthors(literatureLdml))
+            .collaborators(extractCollaborators(literatureLdml))
+            .shortReport(extractShortReport(literatureLdml))
+            .outline((extractOutline(literatureLdml)))
+            .build());
   }
 
   private static String extractDocumentNumber(LiteratureLdml literatureLdml) {
@@ -244,15 +243,5 @@ public class LiteratureLdmlToOpenSearchMapper {
         .filter(person -> personEids.contains(person.getEId()))
         .map(TlcPerson::getName)
         .toList();
-  }
-
-  // TODO: Make this generic? So it can be used by caselaw and literature
-  public static LiteratureLdml fromString(String ldmlFile) {
-    try {
-      StreamSource ldmlStreamSource = new StreamSource(new StringReader(ldmlFile));
-      return JAXB.unmarshal(ldmlStreamSource, LiteratureLdml.class);
-    } catch (DescriptorException | DataBindingException e) {
-      throw new OpenSearchMapperException("unable to parse file to DocumentationUnit", e);
-    }
   }
 }
