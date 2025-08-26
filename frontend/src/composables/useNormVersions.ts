@@ -9,7 +9,10 @@ interface UseNormVersions {
 }
 
 export function useNormVersions(workEli?: string): UseNormVersions {
-  const { data, status } = getNorms({ eli: workEli });
+  const { data, status } = getNorms({
+    eli: workEli,
+    sort: "-temporalCoverageFrom",
+  });
   const sortedVersions = computed(() =>
     _.sortBy(
       data.value?.member ?? [],
@@ -23,6 +26,7 @@ function getNorms(params: {
   eli?: string;
   temporalCoverageFrom?: string;
   temporalCoverageTo?: string;
+  sort?: string;
 }) {
   const backendURL = useBackendURL();
   const immediate = params.eli !== undefined;
