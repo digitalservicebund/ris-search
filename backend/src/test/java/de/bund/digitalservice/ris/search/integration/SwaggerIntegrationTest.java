@@ -7,9 +7,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import de.bund.digitalservice.ris.search.integration.config.ContainersIntegrationBase;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -42,13 +44,21 @@ class SwaggerIntegrationTest extends ContainersIntegrationBase {
         .andDo(
             item -> {
               byte[] content = item.getResponse().getContentAsByteArray();
-
-              Path outDir = Paths.get("./out");
-              Files.createDirectories(outDir);
-              File outputFile = new File(outDir.toFile(), "openapi.json");
-              try (FileOutputStream outputStream = new FileOutputStream(outputFile)) {
-                outputStream.write(content);
-              }
+              // Maintaining both the frontend /docs url and portal-docs-repo
+              List.of("./../frontend/src/public", "./out")
+                  .forEach(
+                      path -> {
+                        Path outDir = Paths.get(path);
+                        try {
+                          Files.createDirectories(outDir);
+                          File outputFile = new File(outDir.toFile(), "openapi.json");
+                          try (FileOutputStream outputStream = new FileOutputStream(outputFile)) {
+                            outputStream.write(content);
+                          }
+                        } catch (IOException exception) {
+                          throw new RuntimeException(exception);
+                        }
+                      });
             })
         .andExpect(
             jsonPath(
