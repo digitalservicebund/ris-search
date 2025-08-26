@@ -1,0 +1,48 @@
+{
+  "properties": {
+    "DOKUMENTNUMMER": {
+      "type": "alias",
+      "path": "document_number"
+    },
+    "VEROEFFENTLICHUNGSJAHRE": {
+      "type": "alias",
+      "path": "years_of_publication"
+    },
+    "DOKUMENTTYPEN": {
+      "type": "alias",
+      "path": "document_types"
+    },
+    "UNSELBSSTAENDIGEFUNDSTELLEN": {
+      "type": "alias",
+      "path": "dependent_references"
+    },
+    "SELBSSTAENDIGEFUNDSTELLEN": {
+      "type": "alias",
+      "path": "independent_references"
+    },
+    "HAUPTTITEL": {
+      "type": "alias",
+      "path": "main_title"
+    },
+    "DOKUMENTARISCHERTITEL": {
+      "type": "alias",
+      "path": "documentary_title"
+    },
+    "VERFASSER": {
+      "type": "alias",
+      "path": "authors"
+    },
+    "MITARBEITER": {
+      "type": "alias",
+      "path": "collaborators"
+    },
+    "KURZREFARAT": {
+      "type": "alias",
+      "path": "short_report"
+    },
+    "GLIEDERUNG": {
+      "type": "alias",
+      "path": "outline"
+    }
+  }
+}

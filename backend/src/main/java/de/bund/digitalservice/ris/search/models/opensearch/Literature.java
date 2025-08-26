@@ -7,12 +7,14 @@ import org.opensearch.common.Nullable;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.Mapping;
 import org.springframework.data.elasticsearch.annotations.Setting;
 
 /** Model class representing a literature opensearch index. */
 @Builder
 @Document(indexName = "#{@configurations.getLiteratureIndexName()}")
 @Setting(settingPath = "/openSearch/german_analyzer.json")
+@Mapping(mappingPath = "/openSearch/literature_mappings.json")
 public record Literature(
     @Id @Field(name = Fields.ID) String id,
     @Field(name = Fields.DOCUMENT_NUMBER) String documentNumber,
