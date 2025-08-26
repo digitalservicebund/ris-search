@@ -1,8 +1,33 @@
 package de.bund.digitalservice.ris.search.utils;
 
-class LegalDocMLDeContext extends LegalDocMLNamespaceContext {
+import java.util.Iterator;
+import javax.xml.namespace.NamespaceContext;
 
-  protected LegalDocMLDeContext() {
-    super("http://Inhaltsdaten.LegalDocML.de/1.8.2/", "http://MetadatenRIS.LegalDocML.de/1.8.2/");
+class LegalDocMLDeContext implements NamespaceContext {
+  @Override
+  public String getNamespaceURI(String prefix) {
+    if ("akn".equals(prefix)) {
+      return "http://Inhaltsdaten.LegalDocML.de/1.8.2/";
+    }
+    if ("ris".equals(prefix)) {
+      return "http://MetadatenRIS.LegalDocML.de/1.8.2/";
+    }
+    return null;
+  }
+
+  @Override
+  public String getPrefix(String namespaceURI) {
+    if ("http://Inhaltsdaten.LegalDocML.de/1.8.2/".equals(namespaceURI)) {
+      return "akn";
+    }
+    if ("http://MetadatenRIS.LegalDocML.de/1.8.2/".equals(namespaceURI)) {
+      return "ris";
+    }
+    return null;
+  }
+
+  @Override
+  public Iterator<String> getPrefixes(String namespaceURI) {
+    return null;
   }
 }

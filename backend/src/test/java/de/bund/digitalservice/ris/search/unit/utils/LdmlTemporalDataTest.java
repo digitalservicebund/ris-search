@@ -56,7 +56,7 @@ class LdmlTemporalDataTest {
   @Test
   void testGetTemporalDataWithDatesMapping()
       throws ParserConfigurationException, IOException, SAXException {
-    XmlDocument xmlDocument = XmlDocument.fromNormBytes(testContent.getBytes());
+    XmlDocument xmlDocument = new XmlDocument(testContent.getBytes());
     Map<String, TimeInterval> result =
         LdmlTemporalData.getTemporalDataWithDatesMapping(xmlDocument);
     assertThat(result.size() == 3);
@@ -83,7 +83,7 @@ class LdmlTemporalDataTest {
   @Test
   void testReturnsEmptyMapWhenXPathExpressionExceptionOccurs() throws Exception {
     byte[] xmlBytes = "<root/>".getBytes();
-    XmlDocument realXml = XmlDocument.fromNormBytes(xmlBytes);
+    XmlDocument realXml = new XmlDocument(xmlBytes);
 
     XmlDocument spyXml = spy(realXml);
 
