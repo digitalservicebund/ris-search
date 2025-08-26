@@ -43,6 +43,8 @@ export default defineVitestConfig({
         "src/utils/config.ts",
         "src/tests/setup.ts",
         "src/**/*.spec.ts",
+        "src/pages/docs/index.vue",
+        "src/components/Docs/*.vue",
       ],
     },
   },

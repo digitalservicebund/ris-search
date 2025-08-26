@@ -12,7 +12,7 @@ export interface NavItem {
 }
 
 const props = defineProps<{ item: NavItem; root?: boolean }>();
-const emit = defineEmits<{ (e: "click"): void }>();
+const emit = defineEmits<(e: "click") => void>();
 const route = useRoute();
 const router = useRouter();
 const isMenuDisabled = true;
