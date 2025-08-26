@@ -25,7 +25,8 @@ public record Literature(
     @Nullable @Field(name = Fields.DOCUMENTARY_TITLE) String documentaryTitle,
     @ElementCollection @Field(name = Fields.AUTHORS) List<String> authors,
     @ElementCollection @Field(name = Fields.COLLABORATORS) List<String> collaborators,
-    @Nullable @Field(name = Fields.SHORT_REPORT) String shortReport)
+    @Nullable @Field(name = Fields.SHORT_REPORT) String shortReport,
+    @Nullable @Field(name = Fields.OUTLINE) String outline)
     implements AbstractSearchEntity {
   public static class Fields {
     private Fields() {}
@@ -55,5 +56,8 @@ public record Literature(
 
     /** Kurzrefarat * */
     public static final String SHORT_REPORT = "short_report";
+
+    /** Gliederung * */
+    public static final String OUTLINE = "outline";
   }
 }

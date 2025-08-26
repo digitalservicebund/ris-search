@@ -2,7 +2,7 @@ package de.bund.digitalservice.ris.search.integration.mapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import de.bund.digitalservice.ris.search.mapper.literature.LiteratureLdmlToOpenSearchMapper;
+import de.bund.digitalservice.ris.search.mapper.LiteratureLdmlToOpenSearchMapper;
 import de.bund.digitalservice.ris.search.models.opensearch.Literature;
 import java.io.File;
 import java.io.IOException;
