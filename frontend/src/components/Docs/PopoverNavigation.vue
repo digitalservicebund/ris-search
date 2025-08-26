@@ -2,8 +2,8 @@
 import { Popover, PopoverButton, PopoverPanel } from "@headlessui/vue";
 import { data as menuItems } from "./navigation.data";
 import SidebarMenu from "./SidebarMenu.vue";
-import IcBaselineMenu from "~icons/ic/baseline-menu";
 import IcBaselineClose from "~icons/ic/baseline-close";
+import IcBaselineMenu from "~icons/ic/baseline-menu";
 </script>
 
 <template>

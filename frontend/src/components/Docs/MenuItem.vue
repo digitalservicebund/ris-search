@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { useRoute, useRouter } from "#imports";
-import MdiChevronUp from "~icons/mdi/chevron-up";
 import MdiChevronRight from "~icons/mdi/chevron-right";
+import MdiChevronUp from "~icons/mdi/chevron-up";
 
 export interface NavItem {
   text: string;
