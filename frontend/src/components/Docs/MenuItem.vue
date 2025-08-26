@@ -11,7 +11,12 @@ export interface NavItem {
   items?: NavItem[];
 }
 
-const props = defineProps<{ item: NavItem; root?: boolean }>();
+export type MenuItemProps = {
+  item: NavItem;
+  root?: boolean;
+};
+
+const props = defineProps<MenuItemProps>();
 const emit = defineEmits<(e: "click") => void>();
 const route = useRoute();
 const router = useRouter();
@@ -37,7 +42,19 @@ const isActive = computed(() => {
   return matchingHashes.value.has(currentHash.value);
 });
 
-function onAnchorClick(e: MouseEvent) {
+const linkClass = computed(() => [
+  "flex cursor-pointer items-center px-4 pr-2 pl-8 no-underline focus:underline focus-visible:outline focus-visible:outline-offset-4 focus-visible:outline-blue-800 dark:text-blue-200",
+  props.root ? "py-4 text-base font-medium" : "ris-body2-bold py-2 font-bold",
+  isActive.value && "border-l-4 border-blue-800 pl-4 text-blue-800",
+]);
+
+const linkTo = computed(() => (isMenuDisabled ? "#" : props.item.link));
+
+function handleClick(e: MouseEvent) {
+  if (isMenuDisabled) {
+    e.preventDefault();
+    return;
+  }
   if (props.item.items?.length) {
     e.preventDefault();
     const ownHash = props.item.link.split("#")[1];
@@ -45,10 +62,7 @@ function onAnchorClick(e: MouseEvent) {
       ?.find((c) => c.link.includes("#"))
       ?.link.split("#")[1];
     const targetHash = ownHash || firstChildHash;
-
-    if (targetHash) {
-      router.replace({ hash: `#${targetHash}` });
-    }
+    if (targetHash) router.replace({ hash: `#${targetHash}` });
     emit("click");
   } else {
     emit("click");
@@ -58,18 +72,17 @@ function onAnchorClick(e: MouseEvent) {
 
 <template>
   <NuxtLink
-    class="flex cursor-pointer items-center px-4 pr-2 pl-8 no-underline focus:underline focus-visible:outline focus-visible:outline-offset-4 focus-visible:outline-blue-800 dark:text-blue-200"
-    :class="{
-      'py-4 text-base font-medium': root,
-      'ris-body2-bold py-2 font-bold': !root,
-      'border-l-4 border-blue-800 pl-4 text-blue-800': isActive,
-    }"
-    :to="isMenuDisabled ? '#' : item.link"
-    @click="isMenuDisabled ? () => {} : onAnchorClick"
+    :to="linkTo"
+    :class="linkClass"
+    :aria-current="isActive ? 'page' : undefined"
+    :aria-disabled="isMenuDisabled || undefined"
+    :prefetch="!isMenuDisabled"
+    @click="handleClick"
   >
-    <span :class="item.icon" />
+    <span :class="item.icon || ''" />
     <span class="ml-2">{{ item.text }}</span>
-    <span v-if="item.items && item.items.length > 0" class="ml-auto">
+
+    <span v-if="item.items?.length" class="ml-auto">
       <MdiChevronUp v-if="isActive" size="1.25em" class="ml-auto" />
       <MdiChevronRight v-else size="1.25em" class="ml-auto" />
     </span>
