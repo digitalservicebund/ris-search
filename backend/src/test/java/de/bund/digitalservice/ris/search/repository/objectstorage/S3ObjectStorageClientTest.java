@@ -308,9 +308,9 @@ class S3ObjectStorageClientTest {
 
     when(s3Client.listObjectsV2(any(ListObjectsV2Request.class))).thenReturn(page);
 
-    List<ObjectKeyInfo> infos = s3Service.listByPrefixWithLastModified(prefix);
-    assertThat(infos).hasSize(2);
-    assertThat(infos).containsAll(List.of(objectKeyInfo1, objectKeyInfo2));
+    assertThat(s3Service.listByPrefixWithLastModified(prefix))
+        .hasSize(2)
+        .containsAll(List.of(objectKeyInfo1, objectKeyInfo2));
 
     ArgumentCaptor<ListObjectsV2Request> captor =
         ArgumentCaptor.forClass(ListObjectsV2Request.class);

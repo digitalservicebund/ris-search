@@ -61,7 +61,7 @@ public class SitemapService {
   public void deleteSitemapFiles(Instant beforeDateTime) {
     this.portalBucket.getAllKeyInfosByPrefix(SITEMAP_PREFIX).stream()
         .filter(info -> info.lastModified().isBefore(beforeDateTime))
-        .forEach((info) -> portalBucket.delete(info.key()));
+        .forEach(info -> portalBucket.delete(info.key()));
   }
 
   private String generateSitemap(List<?> items, Function<Object, Url> urlMapper) {

@@ -1,6 +1,7 @@
 package de.bund.digitalservice.ris.search.integration.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.testcontainers.shaded.org.awaitility.Awaitility.await;
 
 import de.bund.digitalservice.ris.search.exception.NoSuchKeyException;
 import de.bund.digitalservice.ris.search.repository.objectstorage.LocalFilesystemObjectStorageClient;
@@ -8,6 +9,7 @@ import de.bund.digitalservice.ris.search.repository.objectstorage.ObjectKeyInfo;
 import java.io.ByteArrayInputStream;
 import java.io.FilterInputStream;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -94,9 +96,14 @@ class LocalFilesystemObjectStorageClientTest {
   }
 
   @Test
-  void itListsKeysWithLastModified() throws InterruptedException {
-    client.save("sitemaps/norms/1.xml", "old");
-    Thread.sleep(1);
+  void itListsKeysWithLastModified() {
+    await()
+        .atMost(101, TimeUnit.MILLISECONDS)
+        .until(
+            () -> {
+              client.save("sitemaps/norms/1.xml", "old");
+              return true;
+            });
     client.save("sitemaps/norms/2.xml", "new");
 
     List<ObjectKeyInfo> infos = client.listByPrefixWithLastModified("sitemaps/");
