@@ -41,7 +41,7 @@ public class ControllerExceptionHandler {
       return new CustomError(
           "invalid_parameter_value", "Parameter value is invalid", fieldError.getField());
     } else {
-      return new CustomError("unknown", "Unknown error", "");
+      return new CustomError("invalid_parameter_value", error.getDefaultMessage(), "");
     }
   }
 

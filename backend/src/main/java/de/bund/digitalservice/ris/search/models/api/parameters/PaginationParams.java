@@ -8,6 +8,7 @@ import jakarta.validation.constraints.Min;
 import lombok.Data;
 
 @Data
+@ValidatePaginationParams()
 public class PaginationParams {
   @Parameter(
       name = "size",
