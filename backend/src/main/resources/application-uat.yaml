@@ -1,5 +1,6 @@
 server:
   port: 8080
+  front-end-url: https://ris-search.uat.ds4g.net/
   technical-users: []
 
 spring:

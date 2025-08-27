@@ -5,12 +5,16 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.anyString;
 import static org.mockito.Mockito.eq;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import de.bund.digitalservice.ris.search.models.sitemap.SitemapType;
+import de.bund.digitalservice.ris.search.repository.objectstorage.ObjectKeyInfo;
 import de.bund.digitalservice.ris.search.repository.objectstorage.PortalBucket;
 import de.bund.digitalservice.ris.search.service.SitemapService;
 import de.bund.digitalservice.ris.search.utils.eli.ExpressionEli;
+import java.time.Instant;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -91,5 +95,23 @@ class SitemapServiceTest {
   void testCreateCaselawIndexSitemap() {
     sitemapService.createIndexSitemap(2, SitemapType.CASELAW);
     verify(portalBucket).save(eq("sitemaps/caselaw/index.xml"), anyString());
+  }
+
+  @Test
+  void testDeleteOldSitemapFiles() {
+    Instant now = Instant.now();
+    ObjectKeyInfo oldFile = new ObjectKeyInfo("sitemaps/norms/1.xml", now.minusSeconds(86400));
+    ObjectKeyInfo nowFile = new ObjectKeyInfo("sitemaps/caselaw/2.xml", now);
+    ObjectKeyInfo newFile = new ObjectKeyInfo("sitemaps/norms/3.xml", now.plusSeconds(60));
+
+    when(portalBucket.getAllKeyInfosByPrefix("sitemaps/"))
+        .thenReturn(List.of(oldFile, nowFile, newFile));
+
+    sitemapService.deleteSitemapFiles(now);
+
+    verify(portalBucket).getAllKeyInfosByPrefix("sitemaps/");
+    verify(portalBucket).delete(oldFile.key());
+    verify(portalBucket, never()).delete(newFile.key());
+    verify(portalBucket, never()).delete(nowFile.key());
   }
 }
