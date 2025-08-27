@@ -1,5 +1,6 @@
 package de.bund.digitalservice.ris.search.repository.objectstorage;
 
+import de.bund.digitalservice.ris.search.exception.FileTransformationException;
 import de.bund.digitalservice.ris.search.exception.NoSuchKeyException;
 import java.io.DataInputStream;
 import java.io.File;
@@ -68,7 +69,7 @@ public class LocalFilesystemObjectStorageClient implements ObjectStorageClient {
                 path.toString().substring(bucketPath.toString().length() + 1),
                 Files.getLastModifiedTime(path).toInstant());
           } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new FileTransformationException(e.getMessage());
           }
         });
   }
