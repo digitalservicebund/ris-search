@@ -1,48 +1,48 @@
 {
   "properties": {
-    "DOKUMENTNUMMER": {
-      "type": "alias",
-      "path": "document_number"
+    "document_number": {
+      "type": "text",
+      "analyzer": "custom_german_analyzer"
     },
-    "VEROEFFENTLICHUNGSJAHRE": {
-      "type": "alias",
-      "path": "years_of_publication"
+    "years_of_publication": {
+      "type": "text",
+      "analyzer": "custom_german_analyzer"
     },
-    "DOKUMENTTYPEN": {
-      "type": "alias",
-      "path": "document_types"
+    "document_types": {
+      "type": "text",
+      "analyzer": "custom_german_analyzer"
     },
-    "UNSELBSSTAENDIGEFUNDSTELLEN": {
-      "type": "alias",
-      "path": "dependent_references"
+    "dependent_references": {
+      "type": "text",
+      "analyzer": "custom_german_analyzer"
     },
-    "SELBSSTAENDIGEFUNDSTELLEN": {
-      "type": "alias",
-      "path": "independent_references"
+    "independent_references": {
+      "type": "text",
+      "analyzer": "custom_german_analyzer"
     },
-    "HAUPTTITEL": {
-      "type": "alias",
-      "path": "main_title"
+    "main_title": {
+      "type": "text",
+      "analyzer": "custom_german_analyzer"
     },
-    "DOKUMENTARISCHERTITEL": {
-      "type": "alias",
-      "path": "documentary_title"
+    "documentary_title": {
+      "type": "text",
+      "analyzer": "custom_german_analyzer"
     },
-    "VERFASSER": {
-      "type": "alias",
-      "path": "authors"
+    "authors": {
+      "type": "text",
+      "analyzer": "custom_german_analyzer"
     },
-    "MITARBEITER": {
-      "type": "alias",
-      "path": "collaborators"
+    "collaborators": {
+      "type": "text",
+      "analyzer": "custom_german_analyzer"
     },
-    "KURZREFARAT": {
-      "type": "alias",
-      "path": "short_report"
+    "short_report": {
+      "type": "text",
+      "analyzer": "custom_german_analyzer"
     },
-    "GLIEDERUNG": {
-      "type": "alias",
-      "path": "outline"
+    "outline": {
+      "type": "text",
+      "analyzer": "custom_german_analyzer"
     }
   }
 }
