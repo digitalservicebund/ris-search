@@ -13,6 +13,7 @@ import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Function;
 import java.util.stream.Stream;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -52,19 +53,24 @@ public class LocalFilesystemObjectStorageClient implements ObjectStorageClient {
   @Override
   public List<String> listKeysByPrefix(String prefix) {
     Path bucketPath = localStorageDirectory.resolve(bucket);
+    return listKeysByPrefix(
+        prefix, path -> path.toString().substring(bucketPath.toString().length() + 1));
+  }
 
-    Path basePath = bucketPath.resolve(StringUtils.substringBeforeLast(prefix, "/"));
-
-    try (Stream<Path> stream = Files.walk(basePath)) {
-      return stream
-          .filter(Files::isRegularFile)
-          .filter(f -> f.toString().contains(prefix))
-          .map(p -> p.toString().substring(bucketPath.toString().length() + 1))
-          .toList();
-    } catch (IOException e) {
-      LOGGER.info("Could not list files in {}", basePath);
-      return List.of();
-    }
+  @Override
+  public List<ObjectKeyInfo> listByPrefixWithLastModified(String prefix) {
+    Path bucketPath = localStorageDirectory.resolve(bucket);
+    return listKeysByPrefix(
+        prefix,
+        path -> {
+          try {
+            return new ObjectKeyInfo(
+                path.toString().substring(bucketPath.toString().length() + 1),
+                Files.getLastModifiedTime(path).toInstant());
+          } catch (IOException e) {
+            throw new RuntimeException(e);
+          }
+        });
   }
 
   @Override
@@ -126,5 +132,21 @@ public class LocalFilesystemObjectStorageClient implements ObjectStorageClient {
       LOGGER.error(e.toString());
     }
     return file.length();
+  }
+
+  private <T> List<T> listKeysByPrefix(String prefix, Function<Path, T> mappingFunction) {
+    Path basePath =
+        localStorageDirectory.resolve(bucket).resolve(StringUtils.substringBeforeLast(prefix, "/"));
+
+    try (Stream<Path> stream = Files.walk(basePath)) {
+      return stream
+          .filter(Files::isRegularFile)
+          .filter(f -> f.toString().contains(prefix))
+          .map(mappingFunction)
+          .toList();
+    } catch (IOException e) {
+      LOGGER.info("Could not list files in {}", basePath);
+      return List.of();
+    }
   }
 }
