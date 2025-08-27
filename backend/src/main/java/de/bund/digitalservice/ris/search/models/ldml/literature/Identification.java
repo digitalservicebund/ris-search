@@ -6,9 +6,9 @@ import lombok.Getter;
 @Getter
 public class Identification {
 
-  @XmlElement(name = "FRBRExpression", namespace = LiteratureLdml.AKN_NS)
+  @XmlElement(name = "FRBRExpression", namespace = LiteratureNamespaces.AKN_NS)
   private FrbrExpression frbrExpression;
 
-  @XmlElement(name = "FRBRWork", namespace = LiteratureLdml.AKN_NS)
+  @XmlElement(name = "FRBRWork", namespace = LiteratureNamespaces.AKN_NS)
   private FrbrWork frbrWork;
 }

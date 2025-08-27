@@ -7,6 +7,6 @@ import lombok.Getter;
 @Getter
 public class Gliederung {
 
-  @XmlElement(name = "gliederungEntry", namespace = LiteratureLdml.RIS_NS)
+  @XmlElement(name = "gliederungEntry", namespace = LiteratureNamespaces.RIS_NS)
   private List<String> gliederungEntry;
 }

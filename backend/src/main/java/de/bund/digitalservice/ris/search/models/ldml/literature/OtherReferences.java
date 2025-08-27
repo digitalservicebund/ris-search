@@ -7,6 +7,6 @@ import lombok.Getter;
 @Getter
 public class OtherReferences {
 
-  @XmlElement(name = "implicitReference", namespace = LiteratureLdml.AKN_NS)
+  @XmlElement(name = "implicitReference", namespace = LiteratureNamespaces.AKN_NS)
   private List<ImplicitReference> implicitReferences;
 }

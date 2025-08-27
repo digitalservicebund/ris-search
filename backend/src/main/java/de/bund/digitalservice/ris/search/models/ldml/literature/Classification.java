@@ -10,6 +10,6 @@ public class Classification {
 
   @XmlAttribute private String source;
 
-  @XmlElement(name = "keyword", namespace = LiteratureLdml.AKN_NS)
+  @XmlElement(name = "keyword", namespace = LiteratureNamespaces.AKN_NS)
   private List<Keyword> keywords;
 }

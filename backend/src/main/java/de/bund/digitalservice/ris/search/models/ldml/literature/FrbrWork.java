@@ -7,9 +7,9 @@ import lombok.Getter;
 @Getter
 public class FrbrWork {
 
-  @XmlElement(name = "FRBRalias", namespace = LiteratureLdml.AKN_NS)
+  @XmlElement(name = "FRBRalias", namespace = LiteratureNamespaces.AKN_NS)
   private List<FrbrNameValueElement> frbrAliasList;
 
-  @XmlElement(name = "FRBRauthor", namespace = LiteratureLdml.AKN_NS)
+  @XmlElement(name = "FRBRauthor", namespace = LiteratureNamespaces.AKN_NS)
   private List<FrbrAuthor> frbrAuthors;
 }

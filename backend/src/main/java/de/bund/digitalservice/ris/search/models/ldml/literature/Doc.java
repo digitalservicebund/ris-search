@@ -5,9 +5,9 @@ import lombok.Getter;
 
 @Getter
 public class Doc {
-  @XmlElement(name = "meta", namespace = LiteratureLdml.AKN_NS)
+  @XmlElement(name = "meta", namespace = LiteratureNamespaces.AKN_NS)
   private Meta meta;
 
-  @XmlElement(name = "mainBody", namespace = LiteratureLdml.AKN_NS)
+  @XmlElement(name = "mainBody", namespace = LiteratureNamespaces.AKN_NS)
   private MainBody mainBody;
 }

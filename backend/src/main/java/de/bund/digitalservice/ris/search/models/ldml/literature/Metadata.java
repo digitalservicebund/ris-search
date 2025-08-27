@@ -7,7 +7,7 @@ import lombok.Getter;
 
 @Getter
 public class Metadata {
-  @XmlElementWrapper(name = "veroeffentlichungsJahre", namespace = LiteratureLdml.RIS_NS)
-  @XmlElement(name = "veroeffentlichungsJahr", namespace = LiteratureLdml.RIS_NS)
+  @XmlElementWrapper(name = "veroeffentlichungsJahre", namespace = LiteratureNamespaces.RIS_NS)
+  @XmlElement(name = "veroeffentlichungsJahr", namespace = LiteratureNamespaces.RIS_NS)
   private List<String> yearsOfPublication;
 }

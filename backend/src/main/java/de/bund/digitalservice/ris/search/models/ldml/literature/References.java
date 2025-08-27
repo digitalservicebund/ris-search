@@ -7,6 +7,6 @@ import lombok.Getter;
 @Getter
 public class References {
 
-  @XmlElement(name = "TLCPerson", namespace = LiteratureLdml.AKN_NS)
+  @XmlElement(name = "TLCPerson", namespace = LiteratureNamespaces.AKN_NS)
   private List<TlcPerson> tlcPersons;
 }

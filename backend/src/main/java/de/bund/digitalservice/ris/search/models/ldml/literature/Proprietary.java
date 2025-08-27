@@ -6,6 +6,6 @@ import lombok.Getter;
 @Getter
 public class Proprietary {
 
-  @XmlElement(name = "metadata", namespace = LiteratureLdml.RIS_NS)
+  @XmlElement(name = "metadata", namespace = LiteratureNamespaces.RIS_NS)
   private Metadata metadata;
 }

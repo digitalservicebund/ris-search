@@ -9,6 +9,6 @@ public class TlcPerson {
   @XmlAttribute(name = "eId")
   private String eId;
 
-  @XmlAttribute(name = "name", namespace = LiteratureLdml.RIS_NS)
+  @XmlAttribute(name = "name", namespace = LiteratureNamespaces.RIS_NS)
   private String name;
 }

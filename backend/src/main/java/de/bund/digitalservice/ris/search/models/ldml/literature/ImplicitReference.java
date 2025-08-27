@@ -6,9 +6,9 @@ import lombok.Getter;
 @Getter
 public class ImplicitReference {
 
-  @XmlElement(name = "fundstelleUnselbstaendig", namespace = LiteratureLdml.RIS_NS)
+  @XmlElement(name = "fundstelleUnselbstaendig", namespace = LiteratureNamespaces.RIS_NS)
   private FundstelleUnselbstaendig fundstelleUnselbstaendig;
 
-  @XmlElement(name = "fundstelleSelbstaendig", namespace = LiteratureLdml.RIS_NS)
+  @XmlElement(name = "fundstelleSelbstaendig", namespace = LiteratureNamespaces.RIS_NS)
   private FundstelleSelbstaendig fundstelleSelbstaendig;
 }
