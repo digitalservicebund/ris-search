@@ -18,15 +18,19 @@ import de.bund.digitalservice.ris.search.models.ldml.literature.Proprietary;
 import de.bund.digitalservice.ris.search.models.ldml.literature.References;
 import de.bund.digitalservice.ris.search.models.ldml.literature.TlcPerson;
 import de.bund.digitalservice.ris.search.models.opensearch.Literature;
-import de.bund.digitalservice.ris.search.utils.LdmlUnmarshaller;
-import jakarta.xml.bind.UnmarshalException;
+import jakarta.xml.bind.DataBindingException;
+import jakarta.xml.bind.JAXB;
+import jakarta.xml.bind.ValidationException;
+import java.io.StringReader;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import javax.xml.transform.stream.StreamSource;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.eclipse.persistence.exceptions.DescriptorException;
 
 public class LiteratureLdmlToOpenSearchMapper {
   private static final Logger logger = LogManager.getLogger(LiteratureLdmlToOpenSearchMapper.class);
@@ -35,15 +39,17 @@ public class LiteratureLdmlToOpenSearchMapper {
 
   public static Optional<Literature> mapLdml(String ldmlString) {
     try {
-      var literatureLdml = LdmlUnmarshaller.unmarshall(ldmlString, LiteratureLdml.class);
+      StreamSource ldmlStreamSource = new StreamSource(new StringReader(ldmlString));
+      var literatureLdml = JAXB.unmarshal(ldmlStreamSource, LiteratureLdml.class);
       return mapToEntity(literatureLdml);
-    } catch (UnmarshalException e) {
+    } catch (DescriptorException | DataBindingException | ValidationException e) {
       logger.warn("Error creating literature opensearch entity.", e);
       return Optional.empty();
     }
   }
 
-  private static Optional<Literature> mapToEntity(LiteratureLdml literatureLdml) {
+  private static Optional<Literature> mapToEntity(LiteratureLdml literatureLdml)
+      throws ValidationException {
     var documentNumber = extractDocumentNumber(literatureLdml);
     return Optional.of(
         Literature.builder()
@@ -62,7 +68,8 @@ public class LiteratureLdmlToOpenSearchMapper {
             .build());
   }
 
-  private static String extractDocumentNumber(LiteratureLdml literatureLdml) {
+  private static String extractDocumentNumber(LiteratureLdml literatureLdml)
+      throws ValidationException {
     var documentNumber =
         Optional.ofNullable(literatureLdml)
             .map(LiteratureLdml::getDoc)
@@ -78,7 +85,7 @@ public class LiteratureLdmlToOpenSearchMapper {
             .orElse(null);
 
     if (documentNumber == null) {
-      throw new IllegalArgumentException("Literature ldml has no documentNumber");
+      throw new ValidationException("Literature ldml has no documentNumber");
     }
 
     return documentNumber;
