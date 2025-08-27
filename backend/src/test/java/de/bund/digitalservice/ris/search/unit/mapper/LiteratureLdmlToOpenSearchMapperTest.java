@@ -344,12 +344,14 @@ class LiteratureLdmlToOpenSearchMapperTest {
                          </akn:identification>
                      </akn:meta>
                       <akn:mainBody>
+                        Foo.
                         <akn:div>
                           <akn:p>
                             A <akn:a href="http://www.foo.de" shape="rect">foo</akn:a> is <akn:span>bar</akn:span>.
                             <akn:br/>
                             Bar <akn:sub>baz</akn:sub> or <akn:sup>bas</akn:sup>.
                           </akn:p>
+                          Bar.
                           <akn:p>
                              1. <akn:inline name="em">EM</akn:inline>
                              2. <akn:inline name="hlj">hlj</akn:inline>
@@ -357,6 +359,7 @@ class LiteratureLdmlToOpenSearchMapperTest {
                              4. <akn:inline name="strong">strong</akn:inline>
                           </akn:p>
                         </akn:div>
+                        Baz.
                       </akn:mainBody>
                    </akn:doc>
                  </akn:akomaNtoso>
@@ -366,7 +369,8 @@ class LiteratureLdmlToOpenSearchMapperTest {
     Literature literature = LiteratureLdmlToOpenSearchMapper.mapLdml(literatureLdml).get();
 
     assertThat(literature.shortReport())
-        .isEqualTo("A foo is bar. Bar baz or bas. 1. EM 2. hlj 3. noindex 4. strong");
+        .isEqualTo(
+            "Foo. A foo is bar. Bar baz or bas. Bar. 1. EM 2. hlj 3. noindex 4. strong Baz.");
   }
 
   @Test
