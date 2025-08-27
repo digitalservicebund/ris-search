@@ -14,6 +14,7 @@ import de.bund.digitalservice.ris.search.models.ldml.literature.LiteratureLdml;
 import de.bund.digitalservice.ris.search.models.ldml.literature.MainBody;
 import de.bund.digitalservice.ris.search.models.ldml.literature.Meta;
 import de.bund.digitalservice.ris.search.models.ldml.literature.Metadata;
+import de.bund.digitalservice.ris.search.models.ldml.literature.OtherReferences;
 import de.bund.digitalservice.ris.search.models.ldml.literature.Proprietary;
 import de.bund.digitalservice.ris.search.models.ldml.literature.References;
 import de.bund.digitalservice.ris.search.models.ldml.literature.TlcPerson;
@@ -26,6 +27,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.Function;
+import java.util.stream.Stream;
 import javax.xml.transform.stream.StreamSource;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
@@ -127,15 +130,10 @@ public class LiteratureLdmlToOpenSearchMapper {
         .stream()
         .flatMap(
             otherReferences ->
-                otherReferences.getImplicitReferences().stream()
-                    .map(ImplicitReference::getFundstelleUnselbstaendig)
-                    .filter(Objects::nonNull))
+                extractReferences(otherReferences, ImplicitReference::getFundstelleUnselbstaendig))
         .map(
             fundstelle ->
-                (Optional.ofNullable(fundstelle.getPeriodikum()).orElse(StringUtils.EMPTY)
-                        + StringUtils.SPACE
-                        + Optional.ofNullable(fundstelle.getZitstelle()).orElse(StringUtils.EMPTY))
-                    .strip())
+                buildFundstelleString(fundstelle.getPeriodikum(), fundstelle.getZitstelle()))
         .toList();
   }
 
@@ -149,16 +147,21 @@ public class LiteratureLdmlToOpenSearchMapper {
         .stream()
         .flatMap(
             otherReferences ->
-                otherReferences.getImplicitReferences().stream()
-                    .map(ImplicitReference::getFundstelleSelbstaendig)
-                    .filter(Objects::nonNull))
-        .map(
-            fundstelle ->
-                (Optional.ofNullable(fundstelle.getTitel()).orElse(StringUtils.EMPTY)
-                        + StringUtils.SPACE
-                        + Optional.ofNullable(fundstelle.getZitstelle()).orElse(StringUtils.EMPTY))
-                    .strip())
+                extractReferences(otherReferences, ImplicitReference::getFundstelleSelbstaendig))
+        .map(fundstelle -> buildFundstelleString(fundstelle.getTitel(), fundstelle.getZitstelle()))
         .toList();
+  }
+
+  private static <T> Stream<T> extractReferences(
+      OtherReferences otherReferences, Function<ImplicitReference, T> getter) {
+    return otherReferences.getImplicitReferences().stream().map(getter).filter(Objects::nonNull);
+  }
+
+  private static String buildFundstelleString(String firstPart, String secondPart) {
+    return (Optional.ofNullable(firstPart).orElse(StringUtils.EMPTY)
+            + StringUtils.SPACE
+            + Optional.ofNullable(secondPart).orElse(StringUtils.EMPTY))
+        .strip();
   }
 
   private static String extractMainTitle(LiteratureLdml literatureLdml) {
@@ -223,7 +226,7 @@ public class LiteratureLdmlToOpenSearchMapper {
   }
 
   private static List<String> extractPerson(LiteratureLdml literatureLdml, String type) {
-    var personEids =
+    var persons =
         Optional.ofNullable(literatureLdml)
             .map(LiteratureLdml::getDoc)
             .map(Doc::getMeta)
@@ -232,7 +235,10 @@ public class LiteratureLdmlToOpenSearchMapper {
             .map(FrbrWork::getFrbrAuthors)
             .orElse(Collections.emptyList())
             .stream()
-            .filter(author -> Objects.equals(author.getAs(), "#" + type))
+            .filter(author -> Objects.equals(author.getAs(), "#" + type));
+
+    var personEids =
+        persons
             .map(
                 author ->
                     Optional.ofNullable(author.getHref())
