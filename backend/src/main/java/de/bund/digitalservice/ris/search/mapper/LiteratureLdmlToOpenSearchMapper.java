@@ -19,6 +19,7 @@ import de.bund.digitalservice.ris.search.models.ldml.literature.References;
 import de.bund.digitalservice.ris.search.models.ldml.literature.TlcPerson;
 import de.bund.digitalservice.ris.search.models.opensearch.Literature;
 import de.bund.digitalservice.ris.search.utils.LdmlUnmarshaller;
+import jakarta.xml.bind.UnmarshalException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -36,7 +37,7 @@ public class LiteratureLdmlToOpenSearchMapper {
     try {
       var literatureLdml = LdmlUnmarshaller.unmarshall(ldmlString, LiteratureLdml.class);
       return mapToEntity(literatureLdml);
-    } catch (Exception e) {
+    } catch (UnmarshalException e) {
       logger.warn("Error creating literature opensearch entity.", e);
       return Optional.empty();
     }
