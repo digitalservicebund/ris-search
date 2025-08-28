@@ -474,15 +474,23 @@ class AdvancedSearchControllerApiTest extends ContainersIntegrationBase {
                                     """));
   }
 
+  private static Stream<Arguments> provideSortTestData() {
+    return Stream.of(
+        Arguments.of(
+            ApiConfig.Paths.DOCUMENT_ADVANCED_SEARCH,
+            "must match \\\"^-?(|default|date|DATUM|courtName|documentNumber|temporalCoverageFrom|legislationIdentifier)$\\\""),
+        Arguments.of(
+            ApiConfig.Paths.LEGISLATION_ADVANCED_SEARCH,
+            "must match \\\"^-?(|default|date|temporalCoverageFrom|legislationIdentifier|DATUM)$\\\""),
+        Arguments.of(
+            ApiConfig.Paths.CASELAW_ADVANCED_SEARCH,
+            "must match \\\"^-?(|default|date|DATUM|courtName|documentNumber)$\\\""));
+  }
+
   @ParameterizedTest
   @DisplayName("Should return an error when the search has invalid sort parameter")
-  @ValueSource(
-      strings = {
-        ApiConfig.Paths.DOCUMENT_ADVANCED_SEARCH,
-        ApiConfig.Paths.LEGISLATION_ADVANCED_SEARCH,
-        ApiConfig.Paths.CASELAW_ADVANCED_SEARCH
-      })
-  void invalidSortParameter(String baseUrl) throws Exception {
+  @MethodSource("provideSortTestData")
+  void invalidSortParameter(String baseUrl, String expectedError) throws Exception {
     mockMvc
         .perform(
             get(baseUrl + "?query=anything&sort=invalidsortparameter")
@@ -496,11 +504,12 @@ class AdvancedSearchControllerApiTest extends ContainersIntegrationBase {
                                   "errors": [
                                     {
                                       "code": "invalid_parameter_value",
-                                      "parameter": "sort",
-                                      "message": "Parameter value is invalid"
+                                      "message": "%s",
+                                      "parameter": "sort"
                                     }
                                   ]
                                 }
-                                """));
+                                """
+                        .formatted(expectedError)));
   }
 }

@@ -67,7 +67,7 @@ public class AllDocumentsSearchController {
       @ParameterObject UniversalSearchParams request,
       @ParameterObject NormsSearchParams normsSearchParams,
       @ParameterObject CaseLawSearchParams caseLawSearchParams,
-      @ParameterObject UniversalSortParam sortParams,
+      @ParameterObject @Valid UniversalSortParam sortParams,
       @RequestParam("documentKind")
           @Schema(
               description =
