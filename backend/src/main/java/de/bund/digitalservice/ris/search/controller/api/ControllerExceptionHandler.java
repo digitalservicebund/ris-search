@@ -39,9 +39,9 @@ public class ControllerExceptionHandler {
   private CustomError sanitizeError(ObjectError error) {
     if (error instanceof FieldError fieldError) {
       return new CustomError(
-          "invalid_parameter_value", "Parameter value is invalid", fieldError.getField());
+          "invalid_parameter_value", fieldError.getDefaultMessage(), fieldError.getField());
     } else {
-      return new CustomError("invalid_parameter_value", error.getDefaultMessage(), "");
+      return new CustomError("unknown", "Unknown error", "");
     }
   }
 
