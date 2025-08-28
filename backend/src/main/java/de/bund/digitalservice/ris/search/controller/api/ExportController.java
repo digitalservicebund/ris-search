@@ -96,7 +96,7 @@ public class ExportController {
     PageRequest sortedPageable =
         pageable.withSort(
             SortParamsConverter.buildSort(
-                sortParams.getSort(), MappingDefinitions.ResolutionMode.CASE_LAW, true));
+                sortParams.getSort(), MappingDefinitions.ResolutionMode.CASE_LAW));
 
     List<CaseLawDocumentationUnit> results =
         caseLawService.searchCaseLaws(decodedQuery, sortedPageable).getContent().stream()

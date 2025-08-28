@@ -22,7 +22,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.List;
-import org.apache.commons.lang3.StringUtils;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -75,15 +74,12 @@ public class CaseLawSearchController {
       @ParameterObject @Valid CaseLawSortParam sortParams)
       throws CustomValidationException {
 
-    boolean defaultToUnsorted = StringUtils.isNotBlank(universalSearchParams.getSearchTerm());
     var pageRequest = PageRequest.of(paginationParams.getPageIndex(), paginationParams.getSize());
 
     var sortedPageRequest =
         pageRequest.withSort(
             SortParamsConverter.buildSort(
-                sortParams.getSort(),
-                MappingDefinitions.ResolutionMode.CASE_LAW,
-                defaultToUnsorted));
+                sortParams.getSort(), MappingDefinitions.ResolutionMode.CASE_LAW));
 
     try {
       SearchPage<CaseLawDocumentationUnit> page =

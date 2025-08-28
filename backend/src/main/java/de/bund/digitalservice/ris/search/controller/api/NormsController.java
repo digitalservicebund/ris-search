@@ -37,7 +37,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import org.apache.commons.lang3.StringUtils;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -128,12 +127,11 @@ public class NormsController {
 
     normsSearchParams.validate();
 
-    boolean defaultToUnsorted = StringUtils.isNotBlank(universalSearchParams.getSearchTerm());
     var pageRequest = PageRequest.of(pagination.getPageIndex(), pagination.getSize());
     var sortedPageRequest =
         pageRequest.withSort(
             SortParamsConverter.buildSort(
-                sortParams.getSort(), MappingDefinitions.ResolutionMode.NORMS, defaultToUnsorted));
+                sortParams.getSort(), MappingDefinitions.ResolutionMode.NORMS));
 
     try {
       SearchPage<Norm> resultPage =

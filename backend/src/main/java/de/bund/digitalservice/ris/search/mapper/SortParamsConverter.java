@@ -9,9 +9,11 @@ public class SortParamsConverter {
   private SortParamsConverter() {}
 
   public static @NonNull Sort buildSort(
-      String sort, MappingDefinitions.ResolutionMode resolutionMode, boolean sortByRelevance) {
+      String sort, MappingDefinitions.ResolutionMode resolutionMode) {
+
+    Sort relevance = Sort.by(Sort.Order.desc("_score"));
     if (Strings.isEmpty(sort) || sort.equalsIgnoreCase("default")) {
-      return sortByRelevance ? Sort.unsorted() : SortingDefinitions.getDefaultSort(resolutionMode);
+      return relevance.and(SortingDefinitions.getDefaultSort(resolutionMode));
     }
 
     Sort.Direction direction;
@@ -24,10 +26,11 @@ public class SortParamsConverter {
       direction = Sort.Direction.ASC;
     }
 
-    String mappedFieldName = MappingDefinitions.getOpenSearchName(fieldName, resolutionMode);
+    String mappedFieldName =
+        MappingDefinitions.getOpenSearchName(fieldName, MappingDefinitions.ResolutionMode.ALL);
     if (mappedFieldName == null) {
       mappedFieldName = fieldName;
     }
-    return Sort.by(direction, mappedFieldName);
+    return Sort.by(direction, mappedFieldName).and(relevance);
   }
 }

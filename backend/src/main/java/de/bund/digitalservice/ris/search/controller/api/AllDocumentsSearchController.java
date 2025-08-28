@@ -23,7 +23,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.Optional;
-import org.apache.commons.lang3.StringUtils;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.elasticsearch.UncategorizedElasticsearchException;
@@ -77,13 +76,12 @@ public class AllDocumentsSearchController {
       throws CustomValidationException {
     normsSearchParams.validate();
 
-    boolean defaultToUnsorted = StringUtils.isNotBlank(request.getSearchTerm());
     var pageRequest = PageRequest.of(paginationParams.getPageIndex(), paginationParams.getSize());
 
     var sortedPageRequest =
         pageRequest.withSort(
             SortParamsConverter.buildSort(
-                sortParams.getSort(), MappingDefinitions.ResolutionMode.ALL, defaultToUnsorted));
+                sortParams.getSort(), MappingDefinitions.ResolutionMode.ALL));
 
     try {
       SearchPage<AbstractSearchEntity> entitiesPage =

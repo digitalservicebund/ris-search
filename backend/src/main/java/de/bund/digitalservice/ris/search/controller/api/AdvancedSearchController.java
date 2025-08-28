@@ -84,7 +84,7 @@ public class AdvancedSearchController {
     PageRequest sortedPageable =
         pageable.withSort(
             SortParamsConverter.buildSort(
-                sortParams.getSort(), MappingDefinitions.ResolutionMode.ALL, true));
+                sortParams.getSort(), MappingDefinitions.ResolutionMode.ALL));
 
     try {
       SearchPage<AbstractSearchEntity> resultPage =
@@ -131,7 +131,7 @@ public class AdvancedSearchController {
     PageRequest sortedPageable =
         pageable.withSort(
             SortParamsConverter.buildSort(
-                sortParams.getSort(), MappingDefinitions.ResolutionMode.NORMS, true));
+                sortParams.getSort(), MappingDefinitions.ResolutionMode.NORMS));
 
     try {
       SearchPage<Norm> page = normsService.searchNorms(decodedQuery, sortedPageable);
@@ -171,7 +171,7 @@ public class AdvancedSearchController {
     PageRequest sortedPageable =
         pageable.withSort(
             SortParamsConverter.buildSort(
-                sortParams.getSort(), MappingDefinitions.ResolutionMode.CASE_LAW, true));
+                sortParams.getSort(), MappingDefinitions.ResolutionMode.CASE_LAW));
 
     try {
       SearchPage<CaseLawDocumentationUnit> page =
