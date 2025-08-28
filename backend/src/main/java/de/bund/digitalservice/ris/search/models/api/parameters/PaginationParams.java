@@ -23,6 +23,7 @@ public class PaginationParams {
       name = "pageIndex",
       description = "The number of the page to request. The page starts with the value 0",
       example = "0")
+  @Min(value = 0, message = "pageIndex must be at least 0")
   int pageIndex = 0;
 
   @AssertTrue(message = "PageIndex out of Bounds. Result window must not exceed 10000")
