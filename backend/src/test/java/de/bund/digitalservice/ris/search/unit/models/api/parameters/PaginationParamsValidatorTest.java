@@ -10,12 +10,12 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-public class PaginationParamsValidatorTest {
+class PaginationParamsValidatorTest {
 
   private static Validator validator;
 
   @BeforeAll
-  public static void setUpClass() {
+  static void setUpClass() {
     ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
     validator = factory.getValidator();
   }
