@@ -4,6 +4,7 @@ import Menu, { type MenuMethods } from "primevue/menu";
 import type { MenuItem } from "primevue/menuitem";
 import { useToast } from "primevue/usetoast";
 import { createActionMenuItems } from "~/utils/actionMenuUtils";
+import MdiDotsVertical from "~icons/mdi/dots-vertical";
 
 export type ActionsMenuProps = {
   link?: {

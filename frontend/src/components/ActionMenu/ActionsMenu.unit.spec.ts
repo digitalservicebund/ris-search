@@ -1,21 +1,46 @@
 import { mockNuxtImport } from "@nuxt/test-utils/runtime";
-import type { VueWrapper } from "@vue/test-utils";
-import { shallowMount } from "@vue/test-utils";
+import { type DOMWrapper, mount, type VueWrapper } from "@vue/test-utils";
+import Menu from "primevue/menu";
 import { beforeEach, vi } from "vitest";
 import ActionsMenu from "./ActionsMenu.vue";
-import type { ActionsMenuProps } from "~/components/ActionMenu/ActionsMenu.vue";
-import LargeActionsMenu from "~/components/ActionMenu/LargeActionsMenu.vue";
-import SmallActionsMenu from "~/components/ActionMenu/SmallActionsMenu.vue";
-import PDFIcon from "~/components/icons/PDFIcon.vue";
-import UpdatingLinkIcon from "~/components/icons/UpdatingLinkIcon.vue";
-import XMLIcon from "~/components/icons/XMLIcon.vue";
+import * as actionMenuUtils from "~/utils/actionMenuUtils";
 import MaterialSymbolsLink from "~icons/material-symbols/link";
-import MaterialSymbolsPrint from "~icons/material-symbols/print";
 
 const { mockToastAdd, mockNavigateTo } = vi.hoisted(() => ({
   mockNavigateTo: vi.fn(),
   mockToastAdd: vi.fn(),
 }));
+
+const commandEnabled = vi.fn();
+const commandDisabled = vi.fn();
+
+vi.mock("~/utils/actionMenuUtils", () => {
+  return {
+    createActionMenuItems: vi.fn((_, _1, _2) => {
+      return [
+        {
+          key: "link",
+          iconComponent: MaterialSymbolsLink,
+          label: "Link",
+          url: "https://example.com/",
+        },
+        {
+          key: "action",
+          command: commandEnabled,
+          iconComponent: MaterialSymbolsLink,
+          label: "Action",
+        },
+        {
+          key: "action",
+          command: commandDisabled,
+          iconComponent: MaterialSymbolsLink,
+          label: "Disabled Action",
+          disabled: true,
+        },
+      ];
+    }),
+  };
+});
 
 vi.mock("primevue/usetoast", () => ({
   useToast: () => ({
@@ -25,50 +50,17 @@ vi.mock("primevue/usetoast", () => ({
 
 mockNuxtImport("navigateTo", () => mockNavigateTo);
 
-const minimalExpectedActions = [
-  {
-    key: "permalink",
-    label: "Link kopieren",
-    iconComponent: MaterialSymbolsLink,
-    url: "https://permalink.com/",
-    disabled: true,
-  },
-  {
-    key: "print",
-    label: "Drucken",
-    iconComponent: MaterialSymbolsPrint,
-  },
-  {
-    key: "pdf",
-    label: "Als PDF speichern",
-    iconComponent: PDFIcon,
-    disabled: true,
-  },
-];
-
-function shallowMountWithProps(props: ActionsMenuProps): VueWrapper {
-  return shallowMount(ActionsMenu, {
-    props: props,
-    global: {
-      directives: {
-        tooltip: () => {},
-      },
-    },
-  });
-}
-
-function findCommandForActionWithKey(wrapper: VueWrapper, key: string) {
-  const largeActionsMenu = wrapper.findComponent(LargeActionsMenu);
-  return largeActionsMenu.props().actions.find((action) => action.key === key)
-    ?.command;
+async function toggleMenu(wrapper: VueWrapper) {
+  const toggleButton = wrapper.get(
+    'button[aria-label="Aktionen anzeigen"]',
+  ) as DOMWrapper<HTMLButtonElement>;
+  toggleButton.element.click();
+  await nextTick();
 }
 
 describe("ActionsMenu.vue", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    vi.stubGlobal("window", {
-      print: vi.fn(),
-    });
     vi.stubGlobal("navigator", {
       clipboard: {
         writeText: vi.fn(),
@@ -76,179 +68,181 @@ describe("ActionsMenu.vue", () => {
     });
   });
 
-  it("shows small or large ActionMenu depending on screen size", () => {
-    const wrapper = shallowMountWithProps({
+  it("it passes props to createActionMenuItems to create items", () => {
+    const spy = vi.spyOn(actionMenuUtils, "createActionMenuItems");
+
+    const props = {
       permalink: {
         url: "https://permalink.com/",
-        label: "Copy permalink",
+        label: "Link kopieren",
+        disabled: true,
+      },
+    };
+
+    mount(ActionsMenu, {
+      props: props,
+      global: {
+        directives: {
+          tooltip: () => {},
+        },
+      },
+    });
+
+    expect(spy).toHaveBeenCalledTimes(1);
+
+    const receivedProps = spy.mock.calls[0][0];
+
+    expect(receivedProps).toEqual(props);
+  });
+
+  it("can copy link to clipboard and shows a toast", async () => {
+    const spy = vi.spyOn(actionMenuUtils, "createActionMenuItems");
+
+    mount(ActionsMenu, {
+      global: {
+        directives: {
+          tooltip: () => {},
+        },
+      },
+    });
+
+    expect(spy).toHaveBeenCalledTimes(1);
+
+    const copyUrlCommand = spy.mock.calls[0][1];
+
+    const urlToCopy = "https://copy.com";
+    await copyUrlCommand(urlToCopy);
+
+    expect(navigator.clipboard.writeText).toHaveBeenCalledExactlyOnceWith(
+      urlToCopy,
+    );
+
+    expect(mockToastAdd).toHaveBeenCalledExactlyOnceWith(
+      expect.objectContaining({
+        summary: "Kopiert!",
+      }),
+    );
+  });
+
+  it("can navigate to an url", async () => {
+    const spy = vi.spyOn(actionMenuUtils, "createActionMenuItems");
+
+    mount(ActionsMenu, {
+      global: {
+        directives: {
+          tooltip: () => {},
+        },
+      },
+    });
+
+    expect(spy).toHaveBeenCalledTimes(1);
+
+    const navigationCommand = spy.mock.calls[0][2];
+
+    const navigationUrl = "https://navigation.com";
+    await navigationCommand(navigationUrl);
+
+    expect(mockNavigateTo).toHaveBeenCalledExactlyOnceWith(navigationUrl, {
+      external: true,
+    });
+  });
+
+  it("shows small or large ActionMenu depending on screen size", () => {
+    const wrapper = mount(ActionsMenu, {
+      global: {
+        directives: {
+          tooltip: () => {},
+        },
       },
     });
 
     const containers = wrapper.findAll("div");
     expect(containers[0].element.className).toContain("sm:hidden");
-    expect(containers[0].findComponent(SmallActionsMenu).exists()).toBe(true);
     expect(containers[1].element.className).toContain("sm:flex");
     expect(containers[1].element.className).toContain("hidden");
-    expect(containers[1].findComponent(LargeActionsMenu).exists()).toBe(true);
   });
 
-  it("it passes correct props if only permalink is given", () => {
-    const wrapper = shallowMountWithProps({
-      permalink: {
-        url: "https://permalink.com/",
-        label: "Link kopieren",
-        disabled: true,
-      },
-    });
-
-    const expectedActions = {
-      actions: minimalExpectedActions,
-    };
-
-    const largeActionsMenu = wrapper.findComponent(LargeActionsMenu);
-    const smallActionsMenu = wrapper.findComponent(SmallActionsMenu);
-
-    expect(largeActionsMenu.props()).toMatchObject(expectedActions);
-    expect(smallActionsMenu.props()).toMatchObject(expectedActions);
-  });
-
-  it("prepends link action if given", () => {
-    const wrapper = shallowMountWithProps({
-      link: {
-        url: "https://link.com/",
-        label: "Copy link",
-      },
-      permalink: {
-        url: "https://permalink.com/",
-        label: "Link kopieren",
-        disabled: true,
-      },
-    });
-
-    const expectedActions = {
-      actions: [
-        {
-          key: "link",
-          label: "Copy link",
-          iconComponent: UpdatingLinkIcon,
-          url: "https://link.com/",
+  it("correctly render action items on large screen", async () => {
+    const wrapper = mount(ActionsMenu, {
+      global: {
+        directives: {
+          tooltip: () => {},
         },
-        ...minimalExpectedActions,
-      ],
-    };
-
-    const largeActionsMenu = wrapper.findComponent(LargeActionsMenu);
-    const smallActionsMenu = wrapper.findComponent(SmallActionsMenu);
-
-    expect(largeActionsMenu.props()).toMatchObject(expectedActions);
-    expect(smallActionsMenu.props()).toMatchObject(expectedActions);
-  });
-
-  it("appends xml action if given", () => {
-    const wrapper = shallowMountWithProps({
-      permalink: {
-        url: "https://permalink.com/",
-        label: "Link kopieren",
-        disabled: true,
       },
-      xmlUrl: "https://xml.xml",
     });
 
-    const expectedActions = {
-      actions: [
-        ...minimalExpectedActions,
-        {
-          key: "xml",
-          label: "XML anzeigen",
-          iconComponent: XMLIcon,
-          url: "https://xml.xml",
-          dataAttribute: "xml-view",
+    const containers = wrapper.findAll("div");
+    const largeScreenDiv = containers[1];
+
+    const links = largeScreenDiv.findAll("a");
+    expect(links).toHaveLength(1);
+    expect(links[0].attributes("aria-label")).toBe("Link");
+    expect(links[0].element.href).toBe("https://example.com/");
+
+    const actionButtons = largeScreenDiv.findAll("button");
+    expect(actionButtons).toHaveLength(2);
+    expect(actionButtons[0].attributes("aria-label")).toBe("Action");
+    actionButtons[0].element.click();
+    await nextTick();
+    expect(commandEnabled).toHaveBeenCalledOnce();
+
+    expect(actionButtons[1].attributes("aria-label")).toBe("Disabled Action");
+    actionButtons[1].element.click();
+    await nextTick();
+    expect(commandDisabled).not.toHaveBeenCalled();
+  });
+
+  it("shows menu after toggle button is clicked", async () => {
+    const wrapper = mount(ActionsMenu, {
+      global: {
+        stubs: {
+          teleport: true,
         },
-      ],
-    };
+        directives: {
+          tooltip: () => {},
+        },
+      },
+    });
 
-    const largeActionsMenu = wrapper.findComponent(LargeActionsMenu);
-    const smallActionsMenu = wrapper.findComponent(SmallActionsMenu);
-
-    expect(largeActionsMenu.props()).toMatchObject(expectedActions);
-    expect(smallActionsMenu.props()).toMatchObject(expectedActions);
+    expect(wrapper.findComponent(Menu).isVisible()).toBe(false);
+    await toggleMenu(wrapper);
+    expect(wrapper.findComponent(Menu).isVisible()).toBe(true);
   });
 
-  it("can copy link to clipboard and shows a toast", async () => {
-    const wrapper = shallowMountWithProps({
-      link: {
-        url: "https://link.com/",
-        label: "Copy link",
-      },
-      permalink: {
-        label: "Foo",
-      },
-    });
-
-    const command = findCommandForActionWithKey(wrapper, "link");
-    await command?.();
-
-    expect(navigator.clipboard.writeText).toHaveBeenCalledExactlyOnceWith(
-      "https://link.com/",
-    );
-
-    expect(mockToastAdd).toHaveBeenCalledExactlyOnceWith(
-      expect.objectContaining({
-        summary: "Kopiert!",
-      }),
-    );
-  });
-
-  it("can copy permalink to clipboard and shows a toast", async () => {
-    const wrapper = shallowMountWithProps({
-      permalink: {
-        url: "https://permalink.com/",
-        label: "Link kopieren",
-        disabled: true,
+  it("correctly renders action items on small screen", async () => {
+    const wrapper = mount(ActionsMenu, {
+      global: {
+        stubs: {
+          teleport: true,
+        },
+        directives: {
+          tooltip: () => {},
+        },
       },
     });
 
-    const command = findCommandForActionWithKey(wrapper, "permalink");
-    await command?.();
+    await toggleMenu(wrapper);
 
-    expect(navigator.clipboard.writeText).toHaveBeenCalledExactlyOnceWith(
-      "https://permalink.com/",
-    );
-    expect(mockToastAdd).toHaveBeenCalledExactlyOnceWith(
-      expect.objectContaining({
-        summary: "Kopiert!",
-      }),
-    );
-  });
+    const containers = wrapper.findAll("div");
+    const smallScreenDiv = containers[0];
 
-  it("can start print dialog", () => {
-    const wrapper = shallowMountWithProps({
-      permalink: {
-        url: "https://permalink.com/",
-        label: "Link kopieren",
-        disabled: true,
-      },
-    });
+    const actions = smallScreenDiv
+      .get('[data-pc-section="list"]')
+      .findAll("li");
+    expect(actions).toHaveLength(3);
 
-    const command = findCommandForActionWithKey(wrapper, "print");
-    command?.();
+    expect(actions[0].text()).toBe("Link");
+    expect(actions[0].get("a").attributes("href")).toBe("https://example.com/");
 
-    expect(window.print).toHaveBeenCalled();
-  });
+    expect(actions[1].text()).toBe("Action");
+    actions[1].get("a").element.click();
+    await nextTick();
+    expect(commandEnabled).toHaveBeenCalledOnce();
 
-  it("can navigate to xml", async () => {
-    const wrapper = shallowMountWithProps({
-      permalink: {
-        label: "Foo",
-      },
-      xmlUrl: "https://xml.xml",
-    });
-
-    const command = findCommandForActionWithKey(wrapper, "xml");
-    await command?.();
-
-    expect(mockNavigateTo).toHaveBeenCalledExactlyOnceWith("https://xml.xml", {
-      external: true,
-    });
+    expect(actions[2].text()).toBe("Disabled Action");
+    expect(actions[2].attributes("aria-disabled")).toBe("true");
+    actions[2].get("span").element.click();
+    await nextTick();
+    expect(commandDisabled).not.toHaveBeenCalledOnce();
   });
 });
