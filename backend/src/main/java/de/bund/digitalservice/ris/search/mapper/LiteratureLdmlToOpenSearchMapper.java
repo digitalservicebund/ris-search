@@ -8,13 +8,11 @@ import de.bund.digitalservice.ris.search.models.ldml.literature.FrbrNameValueEle
 import de.bund.digitalservice.ris.search.models.ldml.literature.FrbrWork;
 import de.bund.digitalservice.ris.search.models.ldml.literature.Gliederung;
 import de.bund.digitalservice.ris.search.models.ldml.literature.Identification;
-import de.bund.digitalservice.ris.search.models.ldml.literature.ImplicitReference;
 import de.bund.digitalservice.ris.search.models.ldml.literature.Keyword;
 import de.bund.digitalservice.ris.search.models.ldml.literature.LiteratureLdml;
 import de.bund.digitalservice.ris.search.models.ldml.literature.MainBody;
 import de.bund.digitalservice.ris.search.models.ldml.literature.Meta;
 import de.bund.digitalservice.ris.search.models.ldml.literature.Metadata;
-import de.bund.digitalservice.ris.search.models.ldml.literature.OtherReferences;
 import de.bund.digitalservice.ris.search.models.ldml.literature.Proprietary;
 import de.bund.digitalservice.ris.search.models.ldml.literature.References;
 import de.bund.digitalservice.ris.search.models.ldml.literature.TlcPerson;
@@ -27,8 +25,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.function.Function;
-import java.util.stream.Stream;
 import javax.xml.transform.stream.StreamSource;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
@@ -125,12 +121,9 @@ public class LiteratureLdmlToOpenSearchMapper {
         .map(LiteratureLdml::getDoc)
         .map(Doc::getMeta)
         .map(Meta::getAnalysis)
-        .map(Analysis::getOtherReferencesList)
+        .map(Analysis::getFundstelleUnselbstaendigList)
         .orElse(Collections.emptyList())
         .stream()
-        .flatMap(
-            otherReferences ->
-                extractReferences(otherReferences, ImplicitReference::getFundstelleUnselbstaendig))
         .map(
             fundstelle ->
                 buildFundstelleString(fundstelle.getPeriodikum(), fundstelle.getZitstelle()))
@@ -142,19 +135,11 @@ public class LiteratureLdmlToOpenSearchMapper {
         .map(LiteratureLdml::getDoc)
         .map(Doc::getMeta)
         .map(Meta::getAnalysis)
-        .map(Analysis::getOtherReferencesList)
+        .map(Analysis::getFundstelleSelbstaendigList)
         .orElse(Collections.emptyList())
         .stream()
-        .flatMap(
-            otherReferences ->
-                extractReferences(otherReferences, ImplicitReference::getFundstelleSelbstaendig))
         .map(fundstelle -> buildFundstelleString(fundstelle.getTitel(), fundstelle.getZitstelle()))
         .toList();
-  }
-
-  private static <T> Stream<T> extractReferences(
-      OtherReferences otherReferences, Function<ImplicitReference, T> getter) {
-    return otherReferences.getImplicitReferences().stream().map(getter).filter(Objects::nonNull);
   }
 
   private static String buildFundstelleString(String firstPart, String secondPart) {
