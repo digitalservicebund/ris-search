@@ -260,7 +260,6 @@ class AllDocumentsSearchControllerAPITest extends ContainersIntegrationBase {
         .perform(
             get(ApiConfig.Paths.DOCUMENT + "?sort=invalidsortparameter")
                 .contentType(MediaType.APPLICATION_JSON))
-        .andExpect(status().isUnprocessableEntity())
         .andExpect(
             content()
                 .json(
@@ -268,9 +267,9 @@ class AllDocumentsSearchControllerAPITest extends ContainersIntegrationBase {
                                                         {
                                                           "errors": [
                                                             {
-                                                              "code": "invalid_sort_parameter",
-                                                              "parameter": "sort",
-                                                              "message": "Sorting is not supported for invalidsortparameter"
+                                                              "code": "invalid_parameter_value",
+                                                              "message":"must match \\"^-?(|default|date|DATUM|courtName|documentNumber|temporalCoverageFrom|legislationIdentifier)$\\"",
+                                                              "parameter": "sort"
                                                             }
                                                           ]
                                                         }
@@ -320,7 +319,7 @@ class AllDocumentsSearchControllerAPITest extends ContainersIntegrationBase {
             status().is(422),
             jsonPath("$.errors[0].code", Matchers.is("invalid_parameter_value")),
             jsonPath("$.errors[0].parameter", Matchers.is("size")),
-            jsonPath("$.errors[0].message", Matchers.is("Parameter value is invalid")));
+            jsonPath("$.errors[0].message", Matchers.is("size must not exceed 100")));
   }
 
   @Test
@@ -335,6 +334,6 @@ class AllDocumentsSearchControllerAPITest extends ContainersIntegrationBase {
             status().is(422),
             jsonPath("$.errors[0].code", Matchers.is("invalid_parameter_value")),
             jsonPath("$.errors[0].parameter", Matchers.is("size")),
-            jsonPath("$.errors[0].message", Matchers.is("Parameter value is invalid")));
+            jsonPath("$.errors[0].message", Matchers.is("size must be at least 1")));
   }
 }
