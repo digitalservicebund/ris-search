@@ -57,3 +57,10 @@ export function stringToBoolean(
       return undefined;
   }
 }
+
+export function removePrefix(str: string, prefix: string): string {
+  if (str.trimStart().startsWith(prefix)) {
+    return str.substring(str.indexOf(prefix) + prefix.length).trimStart();
+  }
+  return str;
+}
