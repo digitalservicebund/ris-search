@@ -3,7 +3,6 @@ package de.bund.digitalservice.ris.search.controller.api;
 import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.exception.CustomValidationException;
 import de.bund.digitalservice.ris.search.mapper.CaseLawSearchSchemaMapper;
-import de.bund.digitalservice.ris.search.mapper.MappingDefinitions;
 import de.bund.digitalservice.ris.search.mapper.SortParamsConverter;
 import de.bund.digitalservice.ris.search.models.CourtSearchResult;
 import de.bund.digitalservice.ris.search.models.api.parameters.CaseLawSearchParams;
@@ -77,9 +76,7 @@ public class CaseLawSearchController {
     var pageRequest = PageRequest.of(paginationParams.getPageIndex(), paginationParams.getSize());
 
     var sortedPageRequest =
-        pageRequest.withSort(
-            SortParamsConverter.buildSort(
-                sortParams.getSort(), MappingDefinitions.ResolutionMode.CASE_LAW));
+        pageRequest.withSort(SortParamsConverter.buildSort(sortParams.getSort()));
 
     try {
       SearchPage<CaseLawDocumentationUnit> page =

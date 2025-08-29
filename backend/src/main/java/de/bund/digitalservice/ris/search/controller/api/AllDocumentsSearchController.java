@@ -3,7 +3,6 @@ package de.bund.digitalservice.ris.search.controller.api;
 import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.exception.CustomValidationException;
 import de.bund.digitalservice.ris.search.mapper.DocumentResponseMapper;
-import de.bund.digitalservice.ris.search.mapper.MappingDefinitions;
 import de.bund.digitalservice.ris.search.mapper.SortParamsConverter;
 import de.bund.digitalservice.ris.search.models.DocumentKind;
 import de.bund.digitalservice.ris.search.models.api.parameters.CaseLawSearchParams;
@@ -79,9 +78,7 @@ public class AllDocumentsSearchController {
     var pageRequest = PageRequest.of(paginationParams.getPageIndex(), paginationParams.getSize());
 
     var sortedPageRequest =
-        pageRequest.withSort(
-            SortParamsConverter.buildSort(
-                sortParams.getSort(), MappingDefinitions.ResolutionMode.ALL));
+        pageRequest.withSort(SortParamsConverter.buildSort(sortParams.getSort()));
 
     try {
       SearchPage<AbstractSearchEntity> entitiesPage =

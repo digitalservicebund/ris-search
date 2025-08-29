@@ -4,7 +4,6 @@ import static de.bund.digitalservice.ris.search.utils.LuceneQueryTools.validateL
 
 import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.exception.CustomValidationException;
-import de.bund.digitalservice.ris.search.mapper.MappingDefinitions;
 import de.bund.digitalservice.ris.search.mapper.SortParamsConverter;
 import de.bund.digitalservice.ris.search.models.api.parameters.CaseLawSortParam;
 import de.bund.digitalservice.ris.search.models.api.parameters.PaginationParams;
@@ -94,9 +93,7 @@ public class ExportController {
 
     PageRequest pageable = PageRequest.of(pagination.getPageIndex(), pagination.getSize());
     PageRequest sortedPageable =
-        pageable.withSort(
-            SortParamsConverter.buildSort(
-                sortParams.getSort(), MappingDefinitions.ResolutionMode.CASE_LAW));
+        pageable.withSort(SortParamsConverter.buildSort(sortParams.getSort()));
 
     List<CaseLawDocumentationUnit> results =
         caseLawService.searchCaseLaws(decodedQuery, sortedPageable).getContent().stream()

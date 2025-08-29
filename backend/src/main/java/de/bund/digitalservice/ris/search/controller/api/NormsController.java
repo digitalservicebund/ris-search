@@ -5,7 +5,6 @@ import static org.springframework.http.HttpHeaders.CONTENT_DISPOSITION;
 import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.exception.CustomValidationException;
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
-import de.bund.digitalservice.ris.search.mapper.MappingDefinitions;
 import de.bund.digitalservice.ris.search.mapper.NormResponseMapper;
 import de.bund.digitalservice.ris.search.mapper.NormSearchResponseMapper;
 import de.bund.digitalservice.ris.search.mapper.SortParamsConverter;
@@ -129,9 +128,7 @@ public class NormsController {
 
     var pageRequest = PageRequest.of(pagination.getPageIndex(), pagination.getSize());
     var sortedPageRequest =
-        pageRequest.withSort(
-            SortParamsConverter.buildSort(
-                sortParams.getSort(), MappingDefinitions.ResolutionMode.NORMS));
+        pageRequest.withSort(SortParamsConverter.buildSort(sortParams.getSort()));
 
     try {
       SearchPage<Norm> resultPage =

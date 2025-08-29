@@ -11,7 +11,7 @@ import org.springframework.data.domain.Sort;
 @ExtendWith(MockitoExtension.class)
 class SortParamsConverterTest {
 
-  private static Sort RELEVANCE_SORT = Sort.by(Sort.Order.desc("_score"));
+  private static final Sort RELEVANCE = Sort.by(Sort.Order.desc("_score"));
 
   @ParameterizedTest
   @ValueSource(strings = {"default", "", "null"})
@@ -21,27 +21,27 @@ class SortParamsConverterTest {
       value = null;
     }
     // Act
-    Sort result = SortParamsConverter.buildSort(value, MappingDefinitions.ResolutionMode.ALL);
+    Sort result = SortParamsConverter.buildSort(value);
 
     // Assert
-    Assertions.assertEquals(RELEVANCE_SORT.and(Sort.by(Sort.Direction.DESC, "DATUM")), result);
+    Assertions.assertEquals(RELEVANCE.and(Sort.by(Sort.Direction.DESC, "DATUM")), result);
   }
 
   @Test
   void testBuildSort_withValidAscField_shouldReturnAscSort() {
     // Act
-    Sort result = SortParamsConverter.buildSort("date", MappingDefinitions.ResolutionMode.ALL);
+    Sort result = SortParamsConverter.buildSort("date");
 
     // Assert
-    Assertions.assertEquals(Sort.by(Sort.Direction.ASC, "DATUM").and(RELEVANCE_SORT), result);
+    Assertions.assertEquals(Sort.by(Sort.Direction.ASC, "DATUM").and(RELEVANCE), result);
   }
 
   @Test
   void testBuildSort_withValidDescField_shouldReturnDescSort() {
     // Act
-    Sort result = SortParamsConverter.buildSort("-date", MappingDefinitions.ResolutionMode.ALL);
+    Sort result = SortParamsConverter.buildSort("-date");
 
     // Assert
-    Assertions.assertEquals(Sort.by(Sort.Direction.DESC, "DATUM").and(RELEVANCE_SORT), result);
+    Assertions.assertEquals(Sort.by(Sort.Direction.DESC, "DATUM").and(RELEVANCE), result);
   }
 }
