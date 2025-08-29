@@ -8,10 +8,23 @@ public class SortParamsConverter {
 
   private SortParamsConverter() {}
 
-  public static @NonNull Sort buildSort(
-      String sort, MappingDefinitions.ResolutionMode resolutionMode, boolean sortByRelevance) {
+  /**
+   * A universal search alias field that points to more specific date fields, like decision date.
+   */
+  private static final String DATE_ALIAS_FIELD = "DATUM";
+
+  /**
+   * Translate a sort String to a Sort object.
+   *
+   * @param sort SortString to sort by combined with relevance
+   * @param defaultSort Sort to be applied in case sort String is empty or "default"
+   * @return returns the sort together with document relevance
+   */
+  public static @NonNull Sort buildSort(String sort, Sort defaultSort) {
+
+    Sort relevance = Sort.by(Sort.Order.desc("_score"));
     if (Strings.isEmpty(sort) || sort.equalsIgnoreCase("default")) {
-      return sortByRelevance ? Sort.unsorted() : SortingDefinitions.getDefaultSort(resolutionMode);
+      return relevance.and(defaultSort);
     }
 
     Sort.Direction direction;
@@ -24,10 +37,22 @@ public class SortParamsConverter {
       direction = Sort.Direction.ASC;
     }
 
-    String mappedFieldName = MappingDefinitions.getOpenSearchName(fieldName, resolutionMode);
+    String mappedFieldName =
+        MappingDefinitions.getOpenSearchName(fieldName, MappingDefinitions.ResolutionMode.ALL);
     if (mappedFieldName == null) {
       mappedFieldName = fieldName;
     }
-    return Sort.by(direction, mappedFieldName);
+    return Sort.by(direction, mappedFieldName).and(relevance);
+  }
+
+  /**
+   * Translate a sort String to a Sort object. Defaults to sort by relevance and date in case of an
+   * empty String
+   *
+   * @param sort SortString to sort by combined with relevance
+   * @return Sort object
+   */
+  public static @NonNull Sort buildSort(String sort) {
+    return buildSort(sort, Sort.by(Sort.Direction.DESC, DATE_ALIAS_FIELD));
   }
 }

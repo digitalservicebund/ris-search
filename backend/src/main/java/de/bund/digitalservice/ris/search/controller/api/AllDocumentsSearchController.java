@@ -3,7 +3,6 @@ package de.bund.digitalservice.ris.search.controller.api;
 import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.exception.CustomValidationException;
 import de.bund.digitalservice.ris.search.mapper.DocumentResponseMapper;
-import de.bund.digitalservice.ris.search.mapper.MappingDefinitions;
 import de.bund.digitalservice.ris.search.mapper.SortParamsConverter;
 import de.bund.digitalservice.ris.search.models.DocumentKind;
 import de.bund.digitalservice.ris.search.models.api.parameters.CaseLawSearchParams;
@@ -23,7 +22,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.Optional;
-import org.apache.commons.lang3.StringUtils;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.elasticsearch.UncategorizedElasticsearchException;
@@ -77,13 +75,10 @@ public class AllDocumentsSearchController {
       throws CustomValidationException {
     normsSearchParams.validate();
 
-    boolean defaultToUnsorted = StringUtils.isNotBlank(request.getSearchTerm());
     var pageRequest = PageRequest.of(paginationParams.getPageIndex(), paginationParams.getSize());
 
     var sortedPageRequest =
-        pageRequest.withSort(
-            SortParamsConverter.buildSort(
-                sortParams.getSort(), MappingDefinitions.ResolutionMode.ALL, defaultToUnsorted));
+        pageRequest.withSort(SortParamsConverter.buildSort(sortParams.getSort()));
 
     try {
       SearchPage<AbstractSearchEntity> entitiesPage =
