@@ -10,7 +10,7 @@ import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.mapper.NormLdmlToOpenSearchMapper;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
-import de.bund.digitalservice.ris.search.repository.opensearch.NormsSynthesizedRepository;
+import de.bund.digitalservice.ris.search.repository.opensearch.NormsRepository;
 import de.bund.digitalservice.ris.search.service.IndexNormsService;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
@@ -30,7 +30,7 @@ class IndexNormsServiceTest {
   IndexNormsService service;
 
   @Mock NormsBucket bucket;
-  @Mock NormsSynthesizedRepository repo;
+  @Mock NormsRepository repo;
 
   @BeforeEach()
   void setup() {

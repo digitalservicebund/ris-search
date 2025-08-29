@@ -7,7 +7,6 @@ import static org.mockito.Mockito.when;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
 import de.bund.digitalservice.ris.search.repository.opensearch.NormsRepository;
-import de.bund.digitalservice.ris.search.repository.opensearch.NormsSynthesizedRepository;
 import de.bund.digitalservice.ris.search.service.NormsService;
 import java.util.List;
 import org.junit.jupiter.api.Assertions;
@@ -36,8 +35,7 @@ class NormsServiceTest {
 
   @BeforeEach
   void setUp() {
-    NormsRepository normsRepositoryMock =
-        new NormsRepository(Mockito.mock(NormsSynthesizedRepository.class));
+    NormsRepository normsRepositoryMock = Mockito.mock(NormsRepository.class);
     operationsMock = Mockito.mock(ElasticsearchOperations.class);
     NormsBucket normsBucketMock = Mockito.mock(NormsBucket.class);
     this.normsService =

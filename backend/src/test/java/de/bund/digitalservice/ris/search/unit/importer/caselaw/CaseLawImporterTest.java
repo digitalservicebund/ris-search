@@ -11,7 +11,7 @@ import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import de.bund.digitalservice.ris.search.repository.objectstorage.CaseLawBucket;
-import de.bund.digitalservice.ris.search.repository.opensearch.CaseLawSynthesizedRepository;
+import de.bund.digitalservice.ris.search.repository.opensearch.CaseLawRepository;
 import de.bund.digitalservice.ris.search.service.IndexCaselawService;
 import de.bund.digitalservice.ris.search.utils.CaseLawLdmlTemplateUtils;
 import java.io.IOException;
@@ -28,14 +28,14 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 class CaseLawImporterTest {
   private String testCaseLawLdml;
-  private CaseLawSynthesizedRepository caseLawSynthesizedRepositoryMock;
+  private CaseLawRepository caseLawRepositoryMock;
   private CaseLawBucket caseLawBucket;
   private final CaseLawLdmlTemplateUtils caseLawLdmlTemplateUtils = new CaseLawLdmlTemplateUtils();
 
   @BeforeEach
   void beforeEach() throws IOException {
     testCaseLawLdml = caseLawLdmlTemplateUtils.getXmlFromTemplate(null);
-    caseLawSynthesizedRepositoryMock = Mockito.mock(CaseLawSynthesizedRepository.class);
+    caseLawRepositoryMock = Mockito.mock(CaseLawRepository.class);
     caseLawBucket = Mockito.mock(CaseLawBucket.class);
   }
 
@@ -43,20 +43,20 @@ class CaseLawImporterTest {
   @DisplayName("Import one caselaw ldml")
   void canImportLdml() throws ObjectStoreServiceException {
     IndexCaselawService indexCaselawService =
-        new IndexCaselawService(caseLawBucket, caseLawSynthesizedRepositoryMock);
+        new IndexCaselawService(caseLawBucket, caseLawRepositoryMock);
     Changelog mockChangelog = new Changelog();
     mockChangelog.setChangeAll(true);
     when(caseLawBucket.getAllKeys()).thenReturn(List.of("mockFile.xml"));
     when(caseLawBucket.getFileAsString("mockFile.xml")).thenReturn(Optional.of(testCaseLawLdml));
     indexCaselawService.indexChangelog("mockChangelogFileName", mockChangelog);
-    verify(caseLawSynthesizedRepositoryMock, atLeastOnce()).save(any());
+    verify(caseLawRepositoryMock, atLeastOnce()).save(any());
   }
 
   @Test
   // Also tests striping xml tags
   void importerShouldMapToCaseLawDocumentationUnitCorrectly() {
     IndexCaselawService indexCaselawService =
-        new IndexCaselawService(caseLawBucket, caseLawSynthesizedRepositoryMock);
+        new IndexCaselawService(caseLawBucket, caseLawRepositoryMock);
     Optional<CaseLawDocumentationUnit> parseResult =
         indexCaselawService.parseOneDocument("mockFileName", testCaseLawLdml);
     assertTrue(parseResult.isPresent());

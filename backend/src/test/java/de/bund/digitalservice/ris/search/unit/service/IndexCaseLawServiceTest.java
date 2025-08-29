@@ -9,7 +9,7 @@ import static org.mockito.Mockito.when;
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
 import de.bund.digitalservice.ris.search.repository.objectstorage.CaseLawBucket;
-import de.bund.digitalservice.ris.search.repository.opensearch.CaseLawSynthesizedRepository;
+import de.bund.digitalservice.ris.search.repository.opensearch.CaseLawRepository;
 import de.bund.digitalservice.ris.search.service.IndexCaselawService;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
@@ -30,7 +30,7 @@ class IndexCaseLawServiceTest {
   IndexCaselawService service;
 
   @Mock CaseLawBucket bucket;
-  @Mock CaseLawSynthesizedRepository repo;
+  @Mock CaseLawRepository repo;
 
   String caseLawContent =
       """
