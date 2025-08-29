@@ -8,7 +8,6 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.importer.ImportTaskProcessor;
 import de.bund.digitalservice.ris.search.service.CaseLawIndexSyncJob;
 import de.bund.digitalservice.ris.search.service.Job;
@@ -142,8 +141,7 @@ class ImportTaskProcessorTest {
   }
 
   @Test
-  void runTask_withCaselawTarget_callsImportServiceWithCaselawParams()
-      throws ObjectStoreServiceException {
+  void runTask_withCaselawTarget_callsImportServiceWithCaselawParams() {
     // Given
     String target = "import_caselaw";
 
