@@ -185,7 +185,7 @@ public class CaseLawService {
   }
 
   public List<CaseLawDocumentationUnit> getByDocumentNumber(String documentNumber) {
-    return caseLawRepository.getByDocumentNumber(documentNumber);
+    return caseLawRepository.findByDocumentNumber(documentNumber);
   }
 
   public Optional<byte[]> getFileByDocumentNumber(String documentNumber)

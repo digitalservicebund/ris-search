@@ -7,7 +7,7 @@ import de.bund.digitalservice.ris.search.integration.config.ContainersIntegratio
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
 import de.bund.digitalservice.ris.search.repository.objectstorage.PortalBucket;
-import de.bund.digitalservice.ris.search.repository.opensearch.NormsSynthesizedRepository;
+import de.bund.digitalservice.ris.search.repository.opensearch.NormsRepository;
 import de.bund.digitalservice.ris.search.service.IndexStatusService;
 import de.bund.digitalservice.ris.search.service.IndexingState;
 import de.bund.digitalservice.ris.search.service.NormIndexSyncJob;
@@ -31,7 +31,7 @@ class NormsImporterTest extends ContainersIntegrationBase {
 
   @Autowired private NormIndexSyncJob normsImporter;
   @Autowired private IndexStatusService indexStatusService;
-  @Autowired private NormsSynthesizedRepository normIndex;
+  @Autowired private NormsRepository normIndex;
   @Autowired private NormsBucket normsBucket;
   @Autowired private PortalBucket portalBucket;
 

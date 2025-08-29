@@ -12,6 +12,7 @@ const xmlUrl = computed(() =>
 
 const permalink = {
   label: "Link kopieren",
+  url: "",
   disabled: true,
 };
 </script>

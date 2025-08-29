@@ -2,35 +2,20 @@ package de.bund.digitalservice.ris.search.repository.opensearch;
 
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 
-/** Repository for interacting with the persisted caselaw documentation units in OpenSearchIndex */
-@Component
-public class CaseLawRepository {
-  private final CaseLawSynthesizedRepository caseLawSynthesizedRepository;
+/**
+ * Repository interface for interacting with the database and managing {@link
+ * CaseLawDocumentationUnit} entity. This interface extends {@link ElasticsearchRepository} and
+ * focuses on operations related to {@link CaseLawDocumentationUnit}.
+ */
+public interface CaseLawRepository
+    extends ElasticsearchRepository<CaseLawDocumentationUnit, String> {
+  List<CaseLawDocumentationUnit> findByDocumentNumber(String documentNumber);
 
-  /**
-   * Constructor to inject the dependencies
-   *
-   * @param caseLawSynthesizedRepository The synthesized repository to retrieve data from OpenSearch
-   *     via synthesized queries
-   */
-  @Autowired
-  public CaseLawRepository(CaseLawSynthesizedRepository caseLawSynthesizedRepository) {
-    this.caseLawSynthesizedRepository = caseLawSynthesizedRepository;
-  }
+  void deleteByIndexedAtBefore(String indexedAt);
 
-  /**
-   * Saves a list of {@link CaseLawDocumentationUnit}.
-   *
-   * @param caseLaws The list of {@link CaseLawDocumentationUnit}.
-   */
-  public void saveAll(List<CaseLawDocumentationUnit> caseLaws) {
-    caseLawSynthesizedRepository.saveAll(caseLaws);
-  }
+  void deleteByIndexedAtIsNull();
 
-  public List<CaseLawDocumentationUnit> getByDocumentNumber(String documentNumber) {
-    return caseLawSynthesizedRepository.findByDocumentNumber(documentNumber);
-  }
+  void deleteAllById(Iterable<? extends String> ids);
 }

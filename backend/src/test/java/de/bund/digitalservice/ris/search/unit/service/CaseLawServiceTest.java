@@ -9,7 +9,6 @@ import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import de.bund.digitalservice.ris.search.repository.objectstorage.CaseLawBucket;
 import de.bund.digitalservice.ris.search.repository.opensearch.CaseLawRepository;
-import de.bund.digitalservice.ris.search.repository.opensearch.CaseLawSynthesizedRepository;
 import de.bund.digitalservice.ris.search.service.CaseLawService;
 import java.util.List;
 import java.util.Optional;
@@ -40,10 +39,7 @@ class CaseLawServiceTest {
 
   @BeforeEach
   void setUp() {
-    CaseLawSynthesizedRepository caseLawSynthesizedRepositoryMock =
-        Mockito.mock(CaseLawSynthesizedRepository.class);
-    CaseLawRepository caseLawRepositoryMock =
-        new CaseLawRepository(caseLawSynthesizedRepositoryMock);
+    CaseLawRepository caseLawRepositoryMock = Mockito.mock(CaseLawRepository.class);
     caseLawBucketMock = Mockito.mock(CaseLawBucket.class);
     operationsMock = Mockito.mock(ElasticsearchOperations.class);
     Configurations configurations = Mockito.mock(Configurations.class);

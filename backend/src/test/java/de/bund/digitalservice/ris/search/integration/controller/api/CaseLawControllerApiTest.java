@@ -18,7 +18,7 @@ import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.integration.config.ContainersIntegrationBase;
 import de.bund.digitalservice.ris.search.models.PublicationStatus;
 import de.bund.digitalservice.ris.search.repository.objectstorage.CaseLawBucket;
-import de.bund.digitalservice.ris.search.repository.opensearch.CaseLawSynthesizedRepository;
+import de.bund.digitalservice.ris.search.repository.opensearch.CaseLawRepository;
 import de.bund.digitalservice.ris.search.service.IndexCaselawService;
 import de.bund.digitalservice.ris.search.utils.CaseLawLdmlTemplateUtils;
 import java.io.ByteArrayInputStream;
@@ -56,7 +56,7 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 @WithJwt("jwtTokens/ValidAccessToken.json")
 class CaseLawControllerApiTest extends ContainersIntegrationBase {
   @Autowired private IndexCaselawService indexCaselawService;
-  @Autowired private CaseLawSynthesizedRepository caseLawSynthesizedRepository;
+  @Autowired private CaseLawRepository caseLawRepository;
   @Autowired private MockMvc mockMvc;
   @Autowired private CaseLawBucket caseLawBucket;
   private final CaseLawLdmlTemplateUtils caseLawLdmlTemplateUtils = new CaseLawLdmlTemplateUtils();
@@ -119,7 +119,7 @@ class CaseLawControllerApiTest extends ContainersIntegrationBase {
   void shouldReturnSingleCaselawJson() throws Exception {
     indexCaselawService.reindexAll(Instant.now().toString());
 
-    assert caseLawSynthesizedRepository.findById(this.documentNumber).isPresent();
+    assert caseLawRepository.findById(this.documentNumber).isPresent();
 
     mockMvc
         .perform(

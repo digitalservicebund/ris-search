@@ -5,7 +5,7 @@ import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
 import de.bund.digitalservice.ris.search.mapper.NormLdmlToOpenSearchMapper;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
-import de.bund.digitalservice.ris.search.repository.opensearch.NormsSynthesizedRepository;
+import de.bund.digitalservice.ris.search.repository.opensearch.NormsRepository;
 import de.bund.digitalservice.ris.search.utils.eli.ExpressionEli;
 import de.bund.digitalservice.ris.search.utils.eli.ManifestationEli;
 import java.util.ArrayList;
@@ -27,14 +27,13 @@ public class IndexNormsService implements IndexService {
 
   private static final Logger logger = LogManager.getLogger(IndexNormsService.class);
 
-  private final NormsSynthesizedRepository normsSynthesizedRepository;
+  private final NormsRepository normsRepository;
   private final NormsBucket normsBucket;
 
   @Autowired
-  public IndexNormsService(
-      NormsBucket normsBucket, NormsSynthesizedRepository normsSynthesizedRepository) {
+  public IndexNormsService(NormsBucket normsBucket, NormsRepository normsRepository) {
     this.normsBucket = normsBucket;
-    this.normsSynthesizedRepository = normsSynthesizedRepository;
+    this.normsRepository = normsRepository;
   }
 
   public void reindexAll(String startingTimestamp) throws ObjectStoreServiceException {
@@ -82,8 +81,8 @@ public class IndexNormsService implements IndexService {
       deletedWorks.removeAll(changedWorks);
 
       for (String deleted : deletedWorks.stream().map(ExpressionEli::toString).toList()) {
-        if (normsSynthesizedRepository.existsById(deleted)) {
-          normsSynthesizedRepository.deleteById(deleted);
+        if (normsRepository.existsById(deleted)) {
+          normsRepository.deleteById(deleted);
         } else {
           logger.warn(
               "Changelog requested to delete norm {}, but it already doesn't exist.", deleted);
@@ -105,7 +104,7 @@ public class IndexNormsService implements IndexService {
         }
       }
     }
-    normsSynthesizedRepository.saveAll(norms);
+    normsRepository.saveAll(norms);
   }
 
   private List<ManifestationEli> getValidManifestations(String changelogKey, List<String> elis) {
@@ -174,12 +173,12 @@ public class IndexNormsService implements IndexService {
   }
 
   private void clearOldNorms(String timestamp) {
-    normsSynthesizedRepository.deleteByIndexedAtBefore(timestamp);
-    normsSynthesizedRepository.deleteByIndexedAtIsNull();
+    normsRepository.deleteByIndexedAtBefore(timestamp);
+    normsRepository.deleteByIndexedAtIsNull();
   }
 
   public int getNumberOfIndexedDocuments() {
-    return (int) normsSynthesizedRepository.count();
+    return (int) normsRepository.count();
   }
 
   public int getNumberOfFilesInBucket() {

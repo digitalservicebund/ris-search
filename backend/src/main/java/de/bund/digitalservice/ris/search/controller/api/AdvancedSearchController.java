@@ -6,7 +6,6 @@ import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.exception.CustomValidationException;
 import de.bund.digitalservice.ris.search.mapper.CaseLawSearchSchemaMapper;
 import de.bund.digitalservice.ris.search.mapper.DocumentResponseMapper;
-import de.bund.digitalservice.ris.search.mapper.MappingDefinitions;
 import de.bund.digitalservice.ris.search.mapper.NormSearchResponseMapper;
 import de.bund.digitalservice.ris.search.mapper.SortParamsConverter;
 import de.bund.digitalservice.ris.search.models.api.parameters.CaseLawSortParam;
@@ -82,9 +81,7 @@ public class AdvancedSearchController {
 
     PageRequest pageable = PageRequest.of(pagination.getPageIndex(), pagination.getSize());
     PageRequest sortedPageable =
-        pageable.withSort(
-            SortParamsConverter.buildSort(
-                sortParams.getSort(), MappingDefinitions.ResolutionMode.ALL, true));
+        pageable.withSort(SortParamsConverter.buildSort(sortParams.getSort()));
 
     try {
       SearchPage<AbstractSearchEntity> resultPage =
@@ -129,9 +126,7 @@ public class AdvancedSearchController {
 
     PageRequest pageable = PageRequest.of(pagination.getPageIndex(), pagination.getSize());
     PageRequest sortedPageable =
-        pageable.withSort(
-            SortParamsConverter.buildSort(
-                sortParams.getSort(), MappingDefinitions.ResolutionMode.NORMS, true));
+        pageable.withSort(SortParamsConverter.buildSort(sortParams.getSort()));
 
     try {
       SearchPage<Norm> page = normsService.searchNorms(decodedQuery, sortedPageable);
@@ -169,9 +164,7 @@ public class AdvancedSearchController {
 
     PageRequest pageable = PageRequest.of(pagination.getPageIndex(), pagination.getSize());
     PageRequest sortedPageable =
-        pageable.withSort(
-            SortParamsConverter.buildSort(
-                sortParams.getSort(), MappingDefinitions.ResolutionMode.CASE_LAW, true));
+        pageable.withSort(SortParamsConverter.buildSort(sortParams.getSort()));
 
     try {
       SearchPage<CaseLawDocumentationUnit> page =
