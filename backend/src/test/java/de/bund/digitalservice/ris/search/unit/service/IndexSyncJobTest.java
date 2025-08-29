@@ -13,6 +13,7 @@ import de.bund.digitalservice.ris.search.service.IndexNormsService;
 import de.bund.digitalservice.ris.search.service.IndexStatusService;
 import de.bund.digitalservice.ris.search.service.IndexSyncJob;
 import de.bund.digitalservice.ris.search.service.IndexingState;
+import de.bund.digitalservice.ris.search.service.Job;
 import de.bund.digitalservice.ris.search.service.NormIndexSyncJob;
 import java.time.Instant;
 import java.util.List;
@@ -100,5 +101,22 @@ class IndexSyncJobTest {
     String expectedOutput = "IndexNormsService has 99 files in bucket but 100 indexed documents";
 
     assertThat(output).contains(expectedOutput);
+  }
+
+  @Test
+  void itReturnsSuccessOnLockedStatus() throws ObjectStoreServiceException {
+
+    when(indexStatusService.loadStatus(any()))
+        .thenReturn(new IndexingState().withStartTime("mocktime"));
+    when(indexStatusService.lockIndex(any(), any())).thenReturn(false);
+
+    Assertions.assertEquals(Job.ReturnCode.SUCCESS, normIndexSyncJob.runJob());
+  }
+
+  @Test
+  void itReturnsErrorOnObjectStoreServiceException() throws ObjectStoreServiceException {
+
+    when(indexStatusService.loadStatus(any())).thenThrow(new ObjectStoreServiceException("mock"));
+    Assertions.assertEquals(Job.ReturnCode.ERROR, normIndexSyncJob.runJob());
   }
 }
