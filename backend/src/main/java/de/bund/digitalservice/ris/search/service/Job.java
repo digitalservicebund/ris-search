@@ -1,7 +1,19 @@
 package de.bund.digitalservice.ris.search.service;
 
-import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
+import lombok.Getter;
 
 public interface Job {
-  void runJob() throws ObjectStoreServiceException;
+  @Getter
+  enum ReturnCode {
+    SUCCESS(0),
+    ERROR(1);
+
+    private final int value;
+
+    ReturnCode(final int value) {
+      this.value = value;
+    }
+  }
+
+  ReturnCode runJob();
 }

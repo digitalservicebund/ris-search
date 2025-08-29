@@ -4,14 +4,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.importer.ImportTaskProcessor;
 import de.bund.digitalservice.ris.search.service.CaseLawIndexSyncJob;
+import de.bund.digitalservice.ris.search.service.Job;
 import de.bund.digitalservice.ris.search.service.NormIndexSyncJob;
 import de.bund.digitalservice.ris.search.service.SitemapsUpdateJob;
 import java.util.List;
@@ -94,14 +94,14 @@ class ImportTaskProcessorTest {
   }
 
   @Test
-  void run_withValidTargets_returnsZero() throws ObjectStoreServiceException {
+  void run_withValidTargets_returnsZero() {
     // Given
     String[] args = {
       "--task", "import_norms", "--task", "import_caselaw", "--task", "update_sitemaps"
     };
-    doNothing().when(normIndexSyncJob).runJob();
-    doNothing().when(caseLawIndexSyncJob).runJob();
-    doNothing().when(sitemapsUpdateJob).runJob();
+    when(normIndexSyncJob.runJob()).thenReturn(Job.ReturnCode.SUCCESS);
+    when(caseLawIndexSyncJob.runJob()).thenReturn(Job.ReturnCode.SUCCESS);
+    when(sitemapsUpdateJob.runJob()).thenReturn(Job.ReturnCode.SUCCESS);
 
     // When
     int exitCode = processor.run(args);
@@ -114,7 +114,7 @@ class ImportTaskProcessorTest {
   }
 
   @Test
-  void run_withInvalidTarget_returnsOne() throws ObjectStoreServiceException {
+  void run_withInvalidTarget_returnsOne() {
     // Given
     String[] args = {"--task", "invalid-target"};
 
@@ -129,12 +129,12 @@ class ImportTaskProcessorTest {
   }
 
   @Test
-  void runTask_withNormsTarget_callsImportServiceWithNormsParams()
-      throws ObjectStoreServiceException {
+  void runTask_withNormsTarget_callsImportServiceWithNormsParams() {
     // Given
     String target = "import_norms";
 
     // When
+    when(normIndexSyncJob.runJob()).thenReturn(Job.ReturnCode.SUCCESS);
     processor.runTask(target);
 
     // Then
@@ -148,6 +148,7 @@ class ImportTaskProcessorTest {
     String target = "import_caselaw";
 
     // When
+    when(caseLawIndexSyncJob.runJob()).thenReturn(Job.ReturnCode.SUCCESS);
     processor.runTask(target);
 
     // Then
@@ -155,11 +156,12 @@ class ImportTaskProcessorTest {
   }
 
   @Test
-  void runTask_withSitemapsTarget_callsSitemapsUpdateJob() throws ObjectStoreServiceException {
+  void runTask_withSitemapsTarget_callsSitemapsUpdateJob() {
     // Given
     String target = "update_sitemaps";
 
     // When
+    when(sitemapsUpdateJob.runJob()).thenReturn(Job.ReturnCode.SUCCESS);
     processor.runTask(target);
 
     // Then
@@ -178,14 +180,15 @@ class ImportTaskProcessorTest {
   }
 
   @Test
-  void runTask_withNonzeroExitCode_returnsExitCode() throws ObjectStoreServiceException {
+  void runTask_withNonzeroExitCode_returnsExitCode() {
     // Given
     String[] args = {
       "--task", "import_norms", "--task", "import_caselaw", "--task", "update_sitemaps"
     };
-    doThrow(new ObjectStoreServiceException("mock")).when(normIndexSyncJob).runJob();
 
     // When
+    when(normIndexSyncJob.runJob()).thenReturn(Job.ReturnCode.ERROR);
+
     int exitCode = processor.run(args);
 
     // Then

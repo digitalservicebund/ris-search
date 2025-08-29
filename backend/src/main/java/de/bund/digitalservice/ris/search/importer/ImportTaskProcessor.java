@@ -1,6 +1,5 @@
 package de.bund.digitalservice.ris.search.importer;
 
-import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.service.CaseLawIndexSyncJob;
 import de.bund.digitalservice.ris.search.service.Job;
 import de.bund.digitalservice.ris.search.service.NormIndexSyncJob;
@@ -75,13 +74,7 @@ public class ImportTaskProcessor {
   }
 
   private int runTask(Job job) {
-    try {
-      job.runJob();
-      return OK_RETURN_CODE;
-    } catch (ObjectStoreServiceException e) {
-      logger.error(e.getMessage(), e);
-      return ERROR_RETURN_CODE;
-    }
+    return job.runJob().getValue();
   }
 
   public int runTask(String target) {
