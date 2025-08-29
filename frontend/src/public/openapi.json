@@ -187,11 +187,12 @@
           {
             "name": "sort",
             "in": "query",
-            "description": "The field to sort the results by. Default is the relevance score calculated by OpenSearch. Valid usage of the sort field are : date (sort by date ascending), -date (sort by date descending) and not setting the sort field (sort by relevance descending).",
+            "description": "The field to sort the results by. Default is the relevance score calculated by OpenSearch. Valid usage of the sort field are : date, temporalCoverageFrom, legislationIdentifier and not setting the sort field (sort by relevance descending).Add a leading - to set the order to descending (-date)",
             "required": false,
             "schema": {
               "type": "string",
-              "description": "The field to sort the results by. Default is the relevance score calculated by OpenSearch. Valid usage of the sort field are : date (sort by date ascending), -date (sort by date descending) and not setting the sort field (sort by relevance descending)."
+              "description": "The field to sort the results by. Default is the relevance score calculated by OpenSearch. Valid usage of the sort field are : date, temporalCoverageFrom, legislationIdentifier and not setting the sort field (sort by relevance descending).Add a leading - to set the order to descending (-date)",
+              "pattern": "^-?(|default|date|temporalCoverageFrom|legislationIdentifier|DATUM)$"
             }
           }
         ],
@@ -938,6 +939,17 @@
             }
           },
           {
+            "name": "sort",
+            "in": "query",
+            "description": "The field to sort the results by. Default is the relevance score calculated by OpenSearch. Valid usage of the sort field are : date, temporalCoverageFrom, legislationIdentifier, courtName, documentNumber and not setting the sort field (sort by relevance descending).Add a leading - to set the order to descending (-date)",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "The field to sort the results by. Default is the relevance score calculated by OpenSearch. Valid usage of the sort field are : date, temporalCoverageFrom, legislationIdentifier, courtName, documentNumber and not setting the sort field (sort by relevance descending).Add a leading - to set the order to descending (-date)",
+              "pattern": "^-?(|default|date|DATUM|courtName|documentNumber|temporalCoverageFrom|legislationIdentifier)$"
+            }
+          },
+          {
             "name": "documentKind",
             "in": "query",
             "description": "Filter by document kind. Specify R for case law (<u>R</u>echtsprechung), or N for legislation (<u>N</u>ormen).",
@@ -968,16 +980,6 @@
             "required": false,
             "schema": { "type": "integer", "format": "int32" },
             "example": 0
-          },
-          {
-            "name": "sort",
-            "in": "query",
-            "description": "The field to sort the results by. Default is the relevance score calculated by OpenSearch. Valid usage of the sort field are : date (sort by date ascending), -date (sort by date descending) and not setting the sort field (sort by relevance descending).",
-            "required": false,
-            "schema": {
-              "type": "string",
-              "description": "The field to sort the results by. Default is the relevance score calculated by OpenSearch. Valid usage of the sort field are : date (sort by date ascending), -date (sort by date descending) and not setting the sort field (sort by relevance descending)."
-            }
           }
         ],
         "responses": {
@@ -1130,11 +1132,12 @@
           {
             "name": "sort",
             "in": "query",
-            "description": "The field to sort the results by. Default is the relevance score calculated by OpenSearch. Valid usage of the sort field are : date (sort by date ascending), -date (sort by date descending) and not setting the sort field (sort by relevance descending).",
+            "description": "The field to sort the results by. Default is the relevance score calculated by OpenSearch. Valid usage of the sort field are : date, courtName, documentNumber and not setting the sort field (sort by relevance descending).Add a leading - to set the order to descending (-date)",
             "required": false,
             "schema": {
               "type": "string",
-              "description": "The field to sort the results by. Default is the relevance score calculated by OpenSearch. Valid usage of the sort field are : date (sort by date ascending), -date (sort by date descending) and not setting the sort field (sort by relevance descending)."
+              "description": "The field to sort the results by. Default is the relevance score calculated by OpenSearch. Valid usage of the sort field are : date, courtName, documentNumber and not setting the sort field (sort by relevance descending).Add a leading - to set the order to descending (-date)",
+              "pattern": "^-?(|default|date|DATUM|courtName|documentNumber)$"
             }
           }
         ],

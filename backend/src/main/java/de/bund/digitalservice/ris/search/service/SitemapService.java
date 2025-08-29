@@ -10,6 +10,7 @@ import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Marshaller;
 import java.io.StringWriter;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -55,6 +56,12 @@ public class SitemapService {
     this.setSitemapType(SitemapType.CASELAW);
     String path = this.getBatchSitemapPath(batchNumber);
     this.portalBucket.save(path, this.generateCaselawSitemap(paths));
+  }
+
+  public void deleteSitemapFiles(Instant beforeDateTime) {
+    this.portalBucket.getAllKeyInfosByPrefix(SITEMAP_PREFIX).stream()
+        .filter(info -> info.lastModified().isBefore(beforeDateTime))
+        .forEach(info -> portalBucket.delete(info.key()));
   }
 
   private String generateSitemap(List<?> items, Function<Object, Url> urlMapper) {

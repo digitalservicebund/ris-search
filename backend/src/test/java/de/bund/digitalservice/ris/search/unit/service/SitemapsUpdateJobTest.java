@@ -1,5 +1,6 @@
 package de.bund.digitalservice.ris.search.unit.service;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -13,6 +14,7 @@ import de.bund.digitalservice.ris.search.repository.objectstorage.CaseLawBucket;
 import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
 import de.bund.digitalservice.ris.search.service.SitemapService;
 import de.bund.digitalservice.ris.search.service.SitemapsUpdateJob;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -45,7 +47,9 @@ class SitemapsUpdateJobTest {
     List<String> caselawKeys = new ArrayList<>();
     for (int i = 1; i < 3; i++) {
       normsKeys.add(
-          "eli/bund/bgbl-1/1992/s101/1992-01-01/1/deu/1992-01-02/regelungstext-" + i + ".xml");
+          "eli/bund/bgbl-1/1992/s101/1992-01-01/1/deu/1992-01-02/regelungstext-verkuendung-"
+              + i
+              + ".xml");
       caselawKeys.add("case-law/KORE12354" + i + ".xml");
     }
 
@@ -57,5 +61,52 @@ class SitemapsUpdateJobTest {
     verify(this.sitemapService, times(2)).createCaselawBatchSitemap(anyInt(), anyList());
     verify(this.sitemapService, times(1)).createIndexSitemap(anyInt(), eq(SitemapType.NORMS));
     verify(this.sitemapService, times(1)).createIndexSitemap(anyInt(), eq(SitemapType.CASELAW));
+    verify(this.sitemapService, times(1)).deleteSitemapFiles(any(Instant.class));
+  }
+
+  @Test
+  void createSitemapsForNorms_filtersToOnlyNormFileContent() {
+    List<String> normsKeys =
+        List.of(
+            "eli/bund/bgbl-1/1992/s101/1992-01-01/1/deu/1992-01-02/regelungstext-verkuendung-1.xml",
+            "eli/bund/bgbl-1/1992/s101/1992-01-01/1/deu/1992-01-02/regelungstext-2.xml",
+            "eli/bund/bgbl-1/1992/s101/1992-01-01/1/deu/1992-01-02/anlage-regelungstext-1.xml");
+
+    when(this.normsBucket.getAllKeysByPrefix(anyString())).thenReturn(normsKeys);
+
+    this.sitemapsUpdateJob.createSitemapsForNorms();
+
+    verify(this.sitemapService, times(1)).createNormsBatchSitemap(anyInt(), anyList());
+    verify(this.sitemapService, times(1)).createIndexSitemap(1, SitemapType.NORMS);
+  }
+
+  @Test
+  void createSitemapsForNorms_noMatchingKeys_producesEmptyIndexOnly() {
+    List<String> normsKeys =
+        List.of(
+            "eli/bund/bgbl-1/1992/s101/1992-01-01/1/deu/1992-01-02/regelungstext-1.xml",
+            "eli/bund/bgbl-1/1992/s101/1992-01-01/1/deu/1992-01-02/something-else.xml");
+
+    when(this.normsBucket.getAllKeysByPrefix(anyString())).thenReturn(normsKeys);
+
+    this.sitemapsUpdateJob.createSitemapsForNorms();
+
+    verify(this.sitemapService, times(0)).createNormsBatchSitemap(anyInt(), anyList());
+    verify(this.sitemapService, times(1)).createIndexSitemap(0, SitemapType.NORMS);
+  }
+
+  @Test
+  void createSitemapsForNorms_deduplicatesSameExpressionFromMultipleManifestations() {
+    List<String> normsKeys =
+        List.of(
+            "eli/bund/bgbl-1/1992/s101/1992-01-01/1/deu/1992-01-02/regelungstext-verkuendung-1.xml",
+            "eli/bund/bgbl-1/1992/s101/1992-01-01/1/deu/1992-03-10/regelungstext-verkuendung-1.xml");
+
+    when(this.normsBucket.getAllKeysByPrefix(anyString())).thenReturn(normsKeys);
+
+    this.sitemapsUpdateJob.createSitemapsForNorms();
+
+    verify(this.sitemapService, times(1)).createNormsBatchSitemap(anyInt(), anyList());
+    verify(this.sitemapService, times(1)).createIndexSitemap(1, SitemapType.NORMS);
   }
 }

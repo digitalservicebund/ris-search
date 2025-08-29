@@ -13,6 +13,7 @@ import static org.mockito.Mockito.when;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
@@ -32,6 +33,9 @@ import software.amazon.awssdk.services.s3.model.CompleteMultipartUploadResponse;
 import software.amazon.awssdk.services.s3.model.CompletedPart;
 import software.amazon.awssdk.services.s3.model.CreateMultipartUploadRequest;
 import software.amazon.awssdk.services.s3.model.CreateMultipartUploadResponse;
+import software.amazon.awssdk.services.s3.model.ListObjectsV2Request;
+import software.amazon.awssdk.services.s3.model.ListObjectsV2Response;
+import software.amazon.awssdk.services.s3.model.S3Object;
 import software.amazon.awssdk.services.s3.model.UploadPartRequest;
 import software.amazon.awssdk.services.s3.model.UploadPartResponse;
 
@@ -279,5 +283,110 @@ class S3ObjectStorageClientTest {
 
     assertEquals(maxByteCount, totalBytesRead);
     assertArrayEquals(data, readData);
+  }
+
+  @Test
+  void listByPrefixWithLastModified_singlePage_returnsKeyInfos() {
+    String prefix = "sitemaps/";
+    ObjectKeyInfo objectKeyInfo1 =
+        new ObjectKeyInfo("sitemaps/norms/1.xml", Instant.parse("2023-01-01T00:00:00Z"));
+    ObjectKeyInfo objectKeyInfo2 =
+        new ObjectKeyInfo("sitemaps/norms/2.xml", Instant.parse("2023-01-02T00:00:00Z"));
+    S3Object obj1 =
+        S3Object.builder()
+            .key(objectKeyInfo1.key())
+            .lastModified(objectKeyInfo1.lastModified())
+            .build();
+    S3Object obj2 =
+        S3Object.builder()
+            .key(objectKeyInfo2.key())
+            .lastModified(objectKeyInfo2.lastModified())
+            .build();
+
+    ListObjectsV2Response page =
+        ListObjectsV2Response.builder().isTruncated(false).contents(obj1, obj2).build();
+
+    when(s3Client.listObjectsV2(any(ListObjectsV2Request.class))).thenReturn(page);
+
+    assertThat(s3Service.listByPrefixWithLastModified(prefix))
+        .hasSize(2)
+        .containsAll(List.of(objectKeyInfo1, objectKeyInfo2));
+
+    ArgumentCaptor<ListObjectsV2Request> captor =
+        ArgumentCaptor.forClass(ListObjectsV2Request.class);
+    verify(s3Client).listObjectsV2(captor.capture());
+    assertThat(captor.getValue().bucket()).isEqualTo(BUCKET_NAME);
+    assertThat(captor.getValue().prefix()).isEqualTo(prefix);
+  }
+
+  @Test
+  void listByPrefixWithLastModified_handlesPagination_andAggregatesAllPages() {
+    String prefix = "sitemaps/";
+    ObjectKeyInfo objectKeyInfo1 =
+        new ObjectKeyInfo("sitemaps/norms/1.xml", Instant.parse("2023-01-01T00:00:00Z"));
+    ObjectKeyInfo objectKeyInfo2 =
+        new ObjectKeyInfo("sitemaps/norms/2.xml", Instant.parse("2023-01-02T00:00:00Z"));
+    ObjectKeyInfo objectKeyInfo3 =
+        new ObjectKeyInfo("sitemaps/caselaw/3.xml", Instant.parse("2023-01-03T00:00:00Z"));
+    S3Object p1o1 =
+        S3Object.builder()
+            .key(objectKeyInfo1.key())
+            .lastModified(objectKeyInfo1.lastModified())
+            .build();
+    S3Object p1o2 =
+        S3Object.builder()
+            .key(objectKeyInfo2.key())
+            .lastModified(objectKeyInfo2.lastModified())
+            .build();
+    ListObjectsV2Response page1 =
+        ListObjectsV2Response.builder()
+            .isTruncated(true)
+            .nextContinuationToken("token-1")
+            .contents(p1o1, p1o2)
+            .build();
+
+    S3Object p2o1 =
+        S3Object.builder()
+            .key(objectKeyInfo3.key())
+            .lastModified(objectKeyInfo3.lastModified())
+            .build();
+    ListObjectsV2Response page2 =
+        ListObjectsV2Response.builder().isTruncated(false).contents(p2o1).build();
+
+    when(s3Client.listObjectsV2(any(ListObjectsV2Request.class)))
+        .thenReturn(page1)
+        .thenReturn(page2);
+
+    assertThat(s3Service.listByPrefixWithLastModified(prefix))
+        .isEqualTo(List.of(objectKeyInfo1, objectKeyInfo2, objectKeyInfo3));
+
+    ArgumentCaptor<ListObjectsV2Request> captor =
+        ArgumentCaptor.forClass(ListObjectsV2Request.class);
+    verify(s3Client, times(2)).listObjectsV2(captor.capture());
+    List<ListObjectsV2Request> calls = captor.getAllValues();
+
+    assertThat(calls.getFirst().bucket()).isEqualTo(BUCKET_NAME);
+    assertThat(calls.getFirst().prefix()).isEqualTo(prefix);
+    assertThat(calls.getFirst().continuationToken()).isNull();
+
+    assertThat(calls.getLast().bucket()).isEqualTo(BUCKET_NAME);
+    assertThat(calls.getLast().prefix()).isEqualTo(prefix);
+    assertThat(calls.getLast().continuationToken()).isEqualTo("token-1");
+  }
+
+  @Test
+  void listByPrefixWithLastModified_emptyPage_returnsEmptyList() {
+    String prefix = "sitemaps/";
+    ListObjectsV2Response empty =
+        ListObjectsV2Response.builder().isTruncated(false).contents(List.of()).build();
+
+    when(s3Client.listObjectsV2(any(ListObjectsV2Request.class))).thenReturn(empty);
+
+    assertThat(s3Service.listByPrefixWithLastModified(prefix)).isEmpty();
+
+    ArgumentCaptor<ListObjectsV2Request> captor =
+        ArgumentCaptor.forClass(ListObjectsV2Request.class);
+    verify(s3Client).listObjectsV2(captor.capture());
+    assertThat(captor.getValue().prefix()).isEqualTo(prefix);
   }
 }

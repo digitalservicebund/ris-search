@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import software.amazon.awssdk.core.ResponseInputStream;
@@ -36,13 +37,22 @@ public class S3ObjectStorageClient implements ObjectStorageClient {
 
   @Override
   public List<String> listKeysByPrefix(String path) {
-    List<String> keys = new ArrayList<>();
+    return listKeysByPrefix(path, S3Object::key);
+  }
+
+  @Override
+  public List<ObjectKeyInfo> listByPrefixWithLastModified(String path) {
+    return listKeysByPrefix(path, ObjectKeyInfo::fromS3Object);
+  }
+
+  private <T> List<T> listKeysByPrefix(String path, Function<S3Object, T> mappingFunction) {
+    List<T> keys = new ArrayList<>();
     ListObjectsV2Response response;
     ListObjectsV2Request request =
         ListObjectsV2Request.builder().bucket(bucketName).prefix(path).build();
     do {
       response = s3Client.listObjectsV2(request);
-      keys.addAll(response.contents().stream().map(S3Object::key).toList());
+      keys.addAll(response.contents().stream().map(mappingFunction).toList());
       String token = response.nextContinuationToken();
       request =
           ListObjectsV2Request.builder()

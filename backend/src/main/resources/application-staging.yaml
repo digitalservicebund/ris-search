@@ -1,5 +1,6 @@
 server:
   port: 8080
+  front-end-url: https://ris-portal.dev.ds4g.net/
   technical-users: []
 
 spring:
@@ -22,7 +23,7 @@ spring:
 
 swagger:
   server:
-    url: https://ris-search.dev.ds4g.net/
+    url: https://ris-portal.dev.ds4g.net/
     description: Public staging server
 
 sentry:
