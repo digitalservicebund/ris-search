@@ -83,7 +83,7 @@
     "eslint-plugin-unused-imports": "^4.1.4",
     "isomorphic-dompurify": "^2.26.0",
     "jsdom": "^26.1.0",
-    "json-schema-to-typescript-lite": "^14.1.0",
+    "json-schema-to-typescript-lite": "^15.0.0",
     "license-checker": "^25.0.1",
     "msw": "^2.10.2",
     "nuxt": "3.17.5",

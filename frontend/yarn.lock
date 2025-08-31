@@ -78,6 +78,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@apidevtools/json-schema-ref-parser@npm:^14.1.1":
+  version: 14.2.0
+  resolution: "@apidevtools/json-schema-ref-parser@npm:14.2.0"
+  dependencies:
+    js-yaml: "npm:^4.1.0"
+  peerDependencies:
+    "@types/json-schema": ^7.0.15
+  checksum: 10c0/1be9e60af65bdc0c9217aa82930e17e057e26967f157a17fffd7d708a09468aba948882606c47f8c5ab78792789016e8a523fc3a7f48f3409c915740d316f35b
+  languageName: node
+  linkType: hard
+
 "@apidevtools/json-schema-ref-parser@npm:^9.0, @apidevtools/json-schema-ref-parser@npm:^9.0.9":
   version: 9.1.2
   resolution: "@apidevtools/json-schema-ref-parser@npm:9.1.2"
@@ -12805,6 +12816,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"json-schema-to-typescript-lite@npm:^15.0.0":
+  version: 15.0.0
+  resolution: "json-schema-to-typescript-lite@npm:15.0.0"
+  dependencies:
+    "@apidevtools/json-schema-ref-parser": "npm:^14.1.1"
+    "@types/json-schema": "npm:^7.0.15"
+  checksum: 10c0/82af36411d824b26d8a148353c29dbc1adae1c2651c26c9b7a96b8426f553463d828c8dfd5b38cd162dbb4912e8dce17370cf1af981899e342b2b8d98f5699f7
+  languageName: node
+  linkType: hard
+
 "json-schema-traverse@npm:^0.4.1":
   version: 0.4.1
   resolution: "json-schema-traverse@npm:0.4.1"
@@ -17617,7 +17638,7 @@ __metadata:
     isomorphic-dompurify: "npm:^2.26.0"
     js-cookie: "npm:^3.0.5"
     jsdom: "npm:^26.1.0"
-    json-schema-to-typescript-lite: "npm:^14.1.0"
+    json-schema-to-typescript-lite: "npm:^15.0.0"
     jwt-decode: "npm:^4.0.0"
     license-checker: "npm:^25.0.1"
     lodash: "npm:^4.17.21"
