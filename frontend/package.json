@@ -52,7 +52,7 @@
     "primeicons": "^7.0.0",
     "primevue": "^4.3.5",
     "valibot": "^1.1.0",
-    "vitest": "^3.2.3"
+    "vitest": "^3.2.4"
   },
   "devDependencies": {
     "@iconify-json/ic": "^1.2.2",
@@ -96,7 +96,7 @@
     "typescript": "~5.8.3",
     "unplugin-icons": "^22.1.0",
     "unplugin-vue-components": "^29.0.0",
-    "vitest": "^3.2.3",
+    "vitest": "^3.2.4",
     "vue-tsc": "^3.0.1"
   },
   "resolutions": {
