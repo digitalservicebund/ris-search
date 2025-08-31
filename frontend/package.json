@@ -65,7 +65,7 @@
     "@pact-foundation/pact": "^15.0.1",
     "@pinia/testing": "^1.0.2",
     "@playwright/test": "^1.53.2",
-    "@primevue/nuxt-module": "^4.3.5",
+    "@primevue/nuxt-module": "^4.3.7",
     "@testing-library/vue": "^8.1.0",
     "@types/dompurify": "^3.2.0",
     "@types/js-cookie": "^3.0.6",
