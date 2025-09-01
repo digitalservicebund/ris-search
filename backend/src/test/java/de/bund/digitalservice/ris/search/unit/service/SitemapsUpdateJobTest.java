@@ -40,7 +40,7 @@ class SitemapsUpdateJobTest {
   }
 
   @Test
-  void SitemapsUpdateJobCallsSitemapServiceForBatchesAndIndex() throws Exception {
+  void SitemapsUpdateJobCallsSitemapServiceForBatchesAndIndex() {
     List<String> normsKeys = new ArrayList<>();
     List<String> caselawKeys = new ArrayList<>();
     for (int i = 1; i < 3; i++) {
