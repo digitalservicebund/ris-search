@@ -38,23 +38,29 @@ public class IndexSyncJob implements Job {
   }
 
   @Async
-  public void runJobAsync() throws ObjectStoreServiceException {
+  public void runJobAsync() {
     runJob();
   }
 
-  public void runJob() throws ObjectStoreServiceException {
+  public Job.ReturnCode runJob() {
     logger.info("Starting index sync job for {}", statusFileName);
     // load current state and lock if possible
-    IndexingState state =
-        indexStatusService.loadStatus(statusFileName).withStartTime(Instant.now().toString());
-    boolean locked = indexStatusService.lockIndex(statusFileName, state);
-    if (!locked) {
-      return;
-    }
+    try {
+      IndexingState state =
+          indexStatusService.loadStatus(statusFileName).withStartTime(Instant.now().toString());
+      boolean locked = indexStatusService.lockIndex(statusFileName, state);
+      if (!locked) {
+        return ReturnCode.SUCCESS;
+      }
 
-    fetchAndProcessChanges(state);
-    indexStatusService.unlockIndex(statusFileName);
+      fetchAndProcessChanges(state);
+      indexStatusService.unlockIndex(statusFileName);
+    } catch (ObjectStoreServiceException ex) {
+      logger.error(ex);
+      return ReturnCode.ERROR;
+    }
     logger.info("Finished index sync job for {}", statusFileName);
+    return ReturnCode.SUCCESS;
   }
 
   public List<String> getNewChangelogs(

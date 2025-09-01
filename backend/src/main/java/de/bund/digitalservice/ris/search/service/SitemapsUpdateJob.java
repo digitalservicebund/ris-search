@@ -1,6 +1,5 @@
 package de.bund.digitalservice.ris.search.service;
 
-import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.models.sitemap.SitemapType;
 import de.bund.digitalservice.ris.search.repository.objectstorage.CaseLawBucket;
 import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
@@ -30,11 +29,12 @@ public class SitemapsUpdateJob implements Job {
   private final NormsBucket normsBucket;
   private final SitemapService sitemapService;
 
-  public void runJob() throws ObjectStoreServiceException {
+  public Job.ReturnCode runJob() {
     logger.info("Starting sitemaps update job for norms");
     createSitemapsForNorms();
     logger.info("Starting sitemaps update job for caselaw");
     createSitemapsForCaselaw();
+    return ReturnCode.SUCCESS;
   }
 
   public void createSitemapsForNorms() {
