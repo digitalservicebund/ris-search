@@ -1,3 +1,5 @@
 package de.bund.digitalservice.ris.search.sitemap.eclicrawler.service;
 
-public record DeletedDocument(String identifier) implements ChangedDocument {}
+import de.bund.digitalservice.ris.search.sitemap.eclicrawler.repository.EcliSitemapMetadata;
+
+public record DeletedDocument(EcliSitemapMetadata metadata) implements EcliDocumentChange {}

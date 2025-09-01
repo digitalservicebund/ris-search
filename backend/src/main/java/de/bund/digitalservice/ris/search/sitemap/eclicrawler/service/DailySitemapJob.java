@@ -10,6 +10,9 @@ import de.bund.digitalservice.ris.search.service.CaseLawService;
 import de.bund.digitalservice.ris.search.service.IndexStatusService;
 import de.bund.digitalservice.ris.search.service.IndexSyncJob;
 import de.bund.digitalservice.ris.search.service.IndexingState;
+import de.bund.digitalservice.ris.search.sitemap.eclicrawler.mapper.EcliSitemapMetadataMapper;
+import de.bund.digitalservice.ris.search.sitemap.eclicrawler.repository.EcliDocumentRepository;
+import de.bund.digitalservice.ris.search.sitemap.eclicrawler.repository.EcliSitemapMetadata;
 import de.bund.digitalservice.ris.search.sitemap.eclicrawler.schema.sitemap.Sitemap;
 import jakarta.xml.bind.JAXBException;
 import java.io.FileNotFoundException;
@@ -23,9 +26,9 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-@Component
+@Service
 public class DailySitemapJob {
 
   SitemapService sitemapService;
@@ -40,6 +43,8 @@ public class DailySitemapJob {
 
   CaseLawService caseLawService;
 
+  EcliDocumentRepository repository;
+
   final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
   public static final String STATUS_FILE = "caselaw_sitemaps_status.json";
@@ -50,13 +55,15 @@ public class DailySitemapJob {
       PortalBucket portalBucket,
       CaseLawBucket caselawbucket,
       IndexStatusService indexStatusService,
-      CaseLawService caseLawService) {
+      CaseLawService caseLawService,
+      EcliDocumentRepository repository) {
     this.sitemapService = service;
     this.indexJob = indexJob;
     this.portalBucket = portalBucket;
     this.caselawbucket = caselawbucket;
     this.indexStatusService = indexStatusService;
     this.caseLawService = caseLawService;
+    this.repository = repository;
   }
 
   public void run(LocalDate cutOffDate)
@@ -89,23 +96,30 @@ public class DailySitemapJob {
     }
   }
 
-  private Optional<String> createSitemaps(List<ChangedDocument> changed, LocalDate cutoffDate)
+  private List<String> writeSitemaps(List<EcliDocumentChange> ecliDocuments, LocalDate cutoffDate)
       throws JAXBException {
 
-    List<Sitemap> urlSets = sitemapService.createSitemaps(changed);
-    return sitemapService.writeSitemapFiles(urlSets, cutoffDate);
+    List<Sitemap> urlSets = sitemapService.createSitemaps(ecliDocuments);
+    List<String> indexPaths = sitemapService.writeSitemapFiles(urlSets, cutoffDate);
+    if (!indexPaths.isEmpty()) {
+      repository.persistEcliDocumentsChanges(ecliDocuments);
+    }
+    return indexPaths;
   }
 
   private void createAll() throws FatalDailySitemapJobException {
     LocalDate yesterday = LocalDate.now().minusDays(1);
 
-    Stream<List<ChangedDocument>> docUnits = batchStream(caseLawService.getAllEcliDocuments());
+    Stream<List<EcliDocumentChange>> docUnits =
+        getAllCreatedDocumentsFromStream(caseLawService.getAllEcliDocuments());
 
     docUnits.forEach(
         documents -> {
           try {
-            Optional<String> sitemapOption = createSitemaps(documents, yesterday);
-            sitemapOption.ifPresent(sitemap -> sitemapService.writeRobotsTxt(sitemap));
+            List<String> sitemapPaths = writeSitemaps(documents, yesterday);
+            if (!sitemapPaths.isEmpty()) {
+              sitemapService.writeRobotsTxt(sitemapPaths);
+            }
             indexStatusService.saveStatus(
                 STATUS_FILE,
                 new IndexingState()
@@ -119,31 +133,34 @@ public class DailySitemapJob {
 
   /**
    * process the caselawDocumentationUnit stream in batches of 10000 to avoid outOfMemoryErrors in
-   * case we receive too items
+   * case we receive too many items
    *
    * @param stream Original Stream of CaseLawDocumentationUnits
    * @return Returns a stream of CaseLawDocumentationUnit batches
    */
-  private Stream<List<ChangedDocument>> batchStream(Stream<CaseLawDocumentationUnit> stream) {
+  private Stream<List<EcliDocumentChange>> getAllCreatedDocumentsFromStream(
+      Stream<CaseLawDocumentationUnit> stream) {
     Iterator<CaseLawDocumentationUnit> iterator = stream.iterator();
-    Iterator<List<ChangedDocument>> listIterator =
+    Iterator<List<EcliDocumentChange>> listIterator =
         new Iterator<>() {
 
           public boolean hasNext() {
             return iterator.hasNext();
           }
 
-          public List<ChangedDocument> next() {
-            List<ChangedDocument> result = new ArrayList<>(10000);
+          public List<EcliDocumentChange> next() {
+            List<EcliDocumentChange> result = new ArrayList<>(10000);
             for (int i = 0; i < 10000 && iterator.hasNext(); i++) {
-              result.add(new CreatedDocument(iterator.next()));
+              result.add(
+                  new CreatedDocument(
+                      EcliSitemapMetadataMapper.fromCaseLawDocumentationUnit(iterator.next())));
             }
             return result;
           }
         };
 
     return StreamSupport.stream(
-        ((Iterable<List<ChangedDocument>>) () -> listIterator).spliterator(), false);
+        ((Iterable<List<EcliDocumentChange>>) () -> listIterator).spliterator(), false);
   }
 
   private void createFromChangelogs(List<String> filePaths, LocalDate cutoffDate)
@@ -157,37 +174,15 @@ public class DailySitemapJob {
                   String datetimeString =
                       e.substring(datetimeStringOffset, datetimeStringOffset + 10);
                   LocalDate time = LocalDate.parse(datetimeString, formatter);
-
                   return time.isBefore(cutoffDate) || time.isEqual(cutoffDate);
                 })
             .toList();
 
-    List<ChangedDocument> changedDocuments = new ArrayList<>();
-    for (String changelogPath : changelogsUpToCutoff) {
-      Optional<Changelog> logOptional =
-          Optional.ofNullable(this.indexJob.parseOneChangelog(caselawbucket, changelogPath));
-      logOptional.ifPresent(
-          log -> {
-            List<String> documentIdentifiers =
-                log.getChanged().stream().map(c -> c.replace(".xml", "")).toList();
-            List<CreatedDocument> createdDocs =
-                caseLawService.getEcliDocumentsByDocumentNumbers(documentIdentifiers).stream()
-                    .map(CreatedDocument::new)
-                    .toList();
-            changedDocuments.addAll(createdDocs);
-            List<DeletedDocument> deletedDocs =
-                log.getDeleted().stream()
-                    .map(d -> new DeletedDocument(d.replace(".xml", "")))
-                    .toList();
-            changedDocuments.addAll(deletedDocs);
-          });
-    }
+    List<EcliDocumentChange> ecliDocuments = getAllChangesFromChangelogs(changelogsUpToCutoff);
     try {
-      if (!changelogsUpToCutoff.isEmpty()) {
-        Optional<String> sitemapIndexPathOption = createSitemaps(changedDocuments, cutoffDate);
-        if (sitemapIndexPathOption.isPresent()) {
-          sitemapService.updateRobotsTxt(sitemapIndexPathOption.get());
-        }
+      if (!ecliDocuments.isEmpty()) {
+        List<String> sitemapIndexPaths = writeSitemaps(ecliDocuments, cutoffDate);
+        sitemapService.updateRobotsTxt(sitemapIndexPaths);
 
         indexStatusService.saveStatus(
             STATUS_FILE, new IndexingState().withLastProcessedChangelogFile(filePaths.getLast()));
@@ -195,5 +190,36 @@ public class DailySitemapJob {
     } catch (FileNotFoundException | JAXBException ex) {
       throw new FatalDailySitemapJobException(ex.getMessage());
     }
+  }
+
+  private List<EcliDocumentChange> getAllChangesFromChangelogs(List<String> changelogPaths)
+      throws ObjectStoreServiceException {
+    List<EcliDocumentChange> ecliDocuments = new ArrayList<>();
+    for (String changelogPath : changelogPaths) {
+      Optional<Changelog> logOptional =
+          Optional.ofNullable(this.indexJob.parseOneChangelog(caselawbucket, changelogPath));
+      logOptional.ifPresent(
+          log -> {
+            List<String> documentIdentifiers =
+                log.getChanged().stream().map(c -> c.replace(".xml", "")).toList();
+
+            List<CreatedDocument> createdDocs =
+                caseLawService.getEcliDocumentsByDocumentNumbers(documentIdentifiers).stream()
+                    .map(
+                        doc ->
+                            new CreatedDocument(
+                                EcliSitemapMetadataMapper.fromCaseLawDocumentationUnit(doc)))
+                    .toList();
+            ecliDocuments.addAll(createdDocs);
+
+            List<String> toBeDeletedIds =
+                log.getDeleted().stream().map(d -> d.replace(".xml", "")).toList();
+            List<EcliSitemapMetadata> toBeDeleted = repository.getAllMetadataById(toBeDeletedIds);
+            List<DeletedDocument> deletedDocs =
+                toBeDeleted.stream().map(DeletedDocument::new).toList();
+            ecliDocuments.addAll(deletedDocs);
+          });
+    }
+    return ecliDocuments;
   }
 }

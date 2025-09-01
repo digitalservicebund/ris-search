@@ -9,9 +9,9 @@ import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationU
 import de.bund.digitalservice.ris.search.repository.objectstorage.PortalBucket;
 import de.bund.digitalservice.ris.search.sitemap.eclicrawler.schema.sitemap.Sitemap;
 import de.bund.digitalservice.ris.search.sitemap.eclicrawler.schema.sitemap.Url;
-import de.bund.digitalservice.ris.search.sitemap.eclicrawler.service.ChangedDocument;
 import de.bund.digitalservice.ris.search.sitemap.eclicrawler.service.CreatedDocument;
 import de.bund.digitalservice.ris.search.sitemap.eclicrawler.service.DeletedDocument;
+import de.bund.digitalservice.ris.search.sitemap.eclicrawler.service.EcliDocumentChange;
 import de.bund.digitalservice.ris.search.sitemap.eclicrawler.service.SitemapService;
 import jakarta.xml.bind.JAXBException;
 import java.io.FileNotFoundException;
@@ -48,7 +48,7 @@ class SitemapServiceTest {
     String courtType = "BGH";
     String documentType = "docType";
 
-    List<ChangedDocument> changes = new ArrayList<>();
+    List<EcliDocumentChange> changes = new ArrayList<>();
     changes.add(new DeletedDocument("DELETED_IDENTIFIER"));
     changes.add(
         new CreatedDocument(
@@ -72,7 +72,7 @@ class SitemapServiceTest {
 
     String identifier = "identifier";
 
-    List<ChangedDocument> changes = new ArrayList<>();
+    List<EcliDocumentChange> changes = new ArrayList<>();
     changes.add(new CreatedDocument(CaseLawDocumentationUnit.builder().id(identifier).build()));
 
     Assertions.assertTrue(service.createSitemaps(changes).isEmpty());
@@ -81,7 +81,7 @@ class SitemapServiceTest {
   @Test
   void itPartitionsSitemapsAccordingToMaxEntries() {
 
-    List<ChangedDocument> changes = new ArrayList<>();
+    List<EcliDocumentChange> changes = new ArrayList<>();
     changes.add(new DeletedDocument("DELETED_1"));
     changes.add(new DeletedDocument("DELETED_2"));
 

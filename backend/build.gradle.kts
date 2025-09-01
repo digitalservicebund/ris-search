@@ -62,6 +62,9 @@ dependencies {
     implementation(libs.spring.data.jpa)
     implementation(libs.jts.core)
     implementation(libs.spring.boot.starter.webservices)
+    implementation(libs.postgresql)
+    implementation(libs.flyway.core)
+    implementation(libs.flyway.postgres)
 
     implementation(libs.spring.kubernetes.client)
 

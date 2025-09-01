@@ -1,9 +1,8 @@
 package de.bund.digitalservice.ris.search.sitemap.eclicrawler.service;
 
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
-import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import de.bund.digitalservice.ris.search.repository.objectstorage.PortalBucket;
-import de.bund.digitalservice.ris.search.sitemap.eclicrawler.mapper.RisToEcliMapper;
+import de.bund.digitalservice.ris.search.sitemap.eclicrawler.mapper.EcliSitemapMetadataMapper;
 import de.bund.digitalservice.ris.search.sitemap.eclicrawler.schema.sitemap.Sitemap;
 import de.bund.digitalservice.ris.search.sitemap.eclicrawler.schema.sitemapindex.SitemapIndexEntry;
 import de.bund.digitalservice.ris.search.sitemap.eclicrawler.schema.sitemapindex.Sitemapindex;
@@ -14,10 +13,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
-import java.util.function.Predicate;
-import java.util.stream.Stream;
 import org.apache.commons.collections4.ListUtils;
 import org.springframework.stereotype.Service;
 
@@ -37,50 +33,37 @@ public class SitemapService {
   }
 
   public List<Sitemap> createSitemaps(
-      List<ChangedDocument> changedDocuments, int maxSitemapEntries) {
+      List<EcliDocumentChange> ecliDocuments, int maxSitemapEntries) {
 
-    List<ChangedDocument> partsOfSitemap =
-        changedDocuments.stream().filter(filterIncomplete()).toList();
-
-    if (partsOfSitemap.isEmpty()) {
-      return List.of();
-    }
-    List<List<ChangedDocument>> partitioned =
-        ListUtils.partition(partsOfSitemap, maxSitemapEntries);
+    List<List<EcliDocumentChange>> partitioned =
+        ListUtils.partition(ecliDocuments, maxSitemapEntries);
 
     return partitioned.stream().map(this::createSitemap).toList();
   }
 
-  public List<Sitemap> createSitemaps(List<ChangedDocument> changedDocuments) {
-    return createSitemaps(changedDocuments, 10000);
+  public List<Sitemap> createSitemaps(List<EcliDocumentChange> ecliDocuments) {
+    return createSitemaps(ecliDocuments, 10000);
   }
 
-  public Optional<String> writeSitemapFiles(List<Sitemap> urlSets, LocalDate day)
+  public List<String> writeSitemapFiles(List<Sitemap> sitemaps, LocalDate day)
       throws JAXBException {
-    List<String> urlSetLocations = writeSitemaps(urlSets, day);
+    List<String> urlSetLocations = writeSitemaps(sitemaps, day);
 
-    if (!urlSetLocations.isEmpty()) {
+    List<List<Sitemap>> partitionedSitemaps = ListUtils.partition(sitemaps, 10000);
+
+    List<String> sitemapFilePaths = new ArrayList<>();
+    for (int i = 0; i < partitionedSitemaps.size(); i++) {
+      int indexEnumertaor = i + 1;
       Sitemapindex index = createSitemapIndex(urlSetLocations);
-      String indexFilename = writeSitemapIndex(index, day);
-      return Optional.of(indexFilename);
-    } else {
-      return Optional.empty();
+      sitemapFilePaths.add(writeSitemapIndex(index, day, indexEnumertaor));
     }
+
+    return sitemapFilePaths;
   }
 
-  private Sitemap createSitemap(List<ChangedDocument> changedDocuments) {
+  private Sitemap createSitemap(List<EcliDocumentChange> ecliDocuments) {
     Sitemap set = new Sitemap();
-    set.setUrl(
-        changedDocuments.stream()
-            .map(
-                changed ->
-                    switch (changed) {
-                      case CreatedDocument(CaseLawDocumentationUnit docUnit) ->
-                          RisToEcliMapper.caselawDocumentationUnitToEcliUrl(docUnit);
-                      case DeletedDocument(String identifier) ->
-                          RisToEcliMapper.deletedDocumentToEcliUrl(identifier);
-                    })
-            .toList());
+    set.setUrl(ecliDocuments.stream().map(EcliSitemapMetadataMapper::toSitemapItem).toList());
 
     return set;
   }
@@ -93,10 +76,12 @@ public class SitemapService {
     return index;
   }
 
-  private String writeSitemapIndex(Sitemapindex index, LocalDate date) throws JAXBException {
+  private String writeSitemapIndex(Sitemapindex index, LocalDate date, int enumerator)
+      throws JAXBException {
     String content = EcliMarshaller.marshallSitemapIndex(index);
 
-    String filename = String.format(PATH_PREFIX + "%s/sitemap_index_1.xml", getDatePartition(date));
+    String filename =
+        String.format(PATH_PREFIX + "%s/sitemap_index_%s.xml", getDatePartition(date), enumerator);
     portalBucket.save(filename, content);
 
     return filename;
@@ -125,39 +110,32 @@ public class SitemapService {
     return locations;
   }
 
-  public void writeRobotsTxt(String sitemapIndexPath) {
+  public void writeRobotsTxt(List<String> sitemapIndexPaths) {
+
     String header =
         """
             User-agent: DG_JUSTICE_CRAWLER
             Allow: /
             """;
 
-    String content = header + "Sitemap:" + sitemapIndexPath;
-
-    portalBucket.save(ROBOTS_TXT_PATH, content);
+    portalBucket.save(ROBOTS_TXT_PATH, appendSitemapPaths(header, sitemapIndexPaths));
   }
 
-  public void updateRobotsTxt(String sitemapIndexPath)
+  public void updateRobotsTxt(List<String> sitemapIndexPaths)
       throws ObjectStoreServiceException, FileNotFoundException {
     Optional<String> contentOption = portalBucket.getFileAsString(ROBOTS_TXT_PATH);
     if (contentOption.isEmpty()) {
       throw new FileNotFoundException("no robots.txt found");
     }
-    portalBucket.save(ROBOTS_TXT_PATH, contentOption.get() + "\nSitemap:" + sitemapIndexPath);
+    portalBucket.save(ROBOTS_TXT_PATH, appendSitemapPaths(contentOption.get(), sitemapIndexPaths));
   }
 
-  private Predicate<ChangedDocument> filterIncomplete() {
-    return document ->
-        switch (document) {
-          case DeletedDocument ignored -> true;
-          case CreatedDocument(CaseLawDocumentationUnit docUnit) ->
-              Stream.of(
-                      docUnit.ecli(),
-                      docUnit.id(),
-                      docUnit.decisionDate(),
-                      docUnit.courtType(),
-                      docUnit.documentType())
-                  .noneMatch(Objects::isNull);
-        };
+  private String appendSitemapPaths(String content, List<String> sitemapIndexPaths) {
+    StringBuilder sb = new StringBuilder(content);
+
+    for (String indexPath : sitemapIndexPaths) {
+      sb.append("\nSitemap:").append(indexPath);
+    }
+    return sb.toString();
   }
 }

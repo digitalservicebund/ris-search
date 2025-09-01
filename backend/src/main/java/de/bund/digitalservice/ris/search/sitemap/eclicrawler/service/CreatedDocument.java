@@ -1,5 +1,5 @@
 package de.bund.digitalservice.ris.search.sitemap.eclicrawler.service;
 
-import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
+import de.bund.digitalservice.ris.search.sitemap.eclicrawler.repository.EcliSitemapMetadata;
 
-public record CreatedDocument(CaseLawDocumentationUnit docUnit) implements ChangedDocument {}
+public record CreatedDocument(EcliSitemapMetadata metadata) implements EcliDocumentChange {}

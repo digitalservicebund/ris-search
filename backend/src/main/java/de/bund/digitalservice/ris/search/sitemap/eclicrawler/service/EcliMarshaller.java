@@ -24,6 +24,10 @@ public class EcliMarshaller {
   public static String marshallSitemapIndex(Sitemapindex index) throws JAXBException {
     StringWriter sw = new StringWriter();
     Marshaller m = jaxbCtx.createMarshaller();
+    m.setProperty(
+        Marshaller.JAXB_SCHEMA_LOCATION,
+        "http://www.sitemaps.org/schemas/sitemap/0.9 "
+            + "http://www.sitemaps.org/schemas/sitemap/0.9/siteindex.xsd");
     m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
     m.marshal(index, sw);
     return sw.toString();

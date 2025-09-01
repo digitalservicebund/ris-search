@@ -13,6 +13,7 @@ import de.bund.digitalservice.ris.search.service.CaseLawIndexSyncJob;
 import de.bund.digitalservice.ris.search.service.CaseLawService;
 import de.bund.digitalservice.ris.search.service.IndexStatusService;
 import de.bund.digitalservice.ris.search.service.IndexingState;
+import de.bund.digitalservice.ris.search.sitemap.eclicrawler.repository.EcliDocumentRepository;
 import de.bund.digitalservice.ris.search.sitemap.eclicrawler.schema.sitemap.Sitemap;
 import de.bund.digitalservice.ris.search.sitemap.eclicrawler.service.CreatedDocument;
 import de.bund.digitalservice.ris.search.sitemap.eclicrawler.service.DailySitemapJob;
@@ -26,6 +27,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Stream;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -44,6 +46,7 @@ class DailySitemapJobTest {
   @Mock CaseLawBucket caseLawBucket;
   @Mock IndexStatusService indexStatusService;
   @Mock CaseLawService caseLawService;
+  @Mock EcliDocumentRepository repository;
 
   @BeforeEach
   void setup() {
@@ -54,7 +57,8 @@ class DailySitemapJobTest {
             portalBucket,
             caseLawBucket,
             indexStatusService,
-            caseLawService);
+            caseLawService,
+            repository);
   }
 
   @Test
@@ -163,8 +167,8 @@ class DailySitemapJobTest {
     Mockito.when(indexStatusService.loadStatus(DailySitemapJob.STATUS_FILE))
         .thenReturn(new IndexingState(null, null, null));
 
-    List<CaseLawDocumentationUnit> documents =
-        List.of(CaseLawDocumentationUnit.builder().id("id").build());
+    Stream<CaseLawDocumentationUnit> documents =
+        Stream.of(CaseLawDocumentationUnit.builder().id("id").build());
     Mockito.when(caseLawService.getAllEcliDocuments()).thenReturn(documents);
     List<Sitemap> urlSets = List.of(new Sitemap());
     Mockito.when(
