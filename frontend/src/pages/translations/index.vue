@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import MiniSearch from "minisearch";
+import type { SearchResult } from "minisearch";
 import Button from "primevue/button";
 import InputText from "primevue/inputtext";
 import { fetchTranslationList } from "./useTranslationData";
@@ -6,6 +8,11 @@ import type { TranslationContent } from "./useTranslationData";
 import ContentWrapper from "~/components/CustomLayouts/ContentWrapper.vue";
 import type { BreadcrumbItem } from "~/components/Ris/RisBreadcrumb.vue";
 import IconSearch from "~icons/ic/search";
+
+const searchTerm = ref("");
+const activeSearchTerm = ref("");
+
+const searchResults = ref<SearchResult[]>([]);
 
 const breadcrumbItems: ComputedRef<BreadcrumbItem[]> = computed(() => {
   return [
@@ -18,12 +25,53 @@ const breadcrumbItems: ComputedRef<BreadcrumbItem[]> = computed(() => {
 
 const { data: translationsList } = fetchTranslationList();
 
+const translationsMap = computed(() => {
+  const map = new Map<string, TranslationContent>();
+  translationsList.value?.forEach((t) => map.set(t["@id"], t));
+  return map;
+});
+
 const sortedTranslations = computed<TranslationContent[] | undefined>(() => {
   if (!translationsList.value) return undefined;
-  return [...translationsList.value].sort((a, b) =>
-    a.name.localeCompare(b.name),
-  );
+
+  if (activeSearchTerm.value == "") {
+    return [...translationsList.value].sort((a, b) =>
+      a.name.localeCompare(b.name),
+    );
+  }
+  const results = minisearch.value
+    .search(activeSearchTerm.value)
+    .map((r) => translationsMap.value.get(r.id))
+    .filter((doc): doc is TranslationContent => !!doc);
+
+  return results;
 });
+
+const minisearch = computed(() => {
+  const miniSearch = new MiniSearch({
+    fields: ["@id", "name", "translator", "translationOfWork"],
+    storeFields: [
+      "@id",
+      "name",
+      "inLanguage",
+      "translator",
+      "translationOfWork",
+      "about",
+      "ris:filename",
+    ],
+    idField: "@id",
+  });
+  miniSearch.addAll(translationsList.value);
+  return miniSearch;
+});
+
+function handleSearch() {
+  activeSearchTerm.value = searchTerm.value;
+  if (activeSearchTerm.value == "") {
+    return;
+  }
+  searchResults.value = minisearch.value.search(activeSearchTerm.value);
+}
 </script>
 
 <template>
@@ -55,6 +103,7 @@ const sortedTranslations = computed<TranslationContent[] | undefined>(() => {
           :data-full-width="true"
           role="search"
           class="my-48 flex max-w-md flex-row gap-8 data-[full-width='true']:max-w-full"
+          @submit.prevent="handleSearch"
         >
           <InputField
             id="searchInput"
@@ -63,6 +112,7 @@ const sortedTranslations = computed<TranslationContent[] | undefined>(() => {
           >
             <InputText
               id="searchInput"
+              v-model="searchTerm"
               aria-label="Suchbegriff"
               fluid
               placeholder="Enter search term"
@@ -70,9 +120,11 @@ const sortedTranslations = computed<TranslationContent[] | undefined>(() => {
               type="search"
             />
           </InputField>
+
           <Button
             aria-label="Suchen"
             class="h-[3rem] w-[3rem] shrink-0 justify-center"
+            type="submit"
           >
             <template #icon>
               <IconSearch />
