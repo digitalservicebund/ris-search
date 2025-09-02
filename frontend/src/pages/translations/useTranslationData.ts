@@ -11,6 +11,11 @@ export interface TranslationContent {
   "ris:filename": string;
 }
 
+export interface TranslationData {
+  content: TranslationContent;
+  html: string;
+}
+
 export function fetchTranslationList(
   id?: string,
 ): AsyncData<TranslationContent[], NuxtError<TranslationContent> | null> {
@@ -31,7 +36,7 @@ export function fetchTranslationList(
 
 export function fetchTranslationAndHTML(
   id: string,
-): AsyncData<{ content: TranslationContent; html: string }, NuxtError | null> {
+): AsyncData<TranslationData, NuxtError | null> {
   const requestFetch = useRequestFetch();
   const backendURL = useBackendURL();
 
