@@ -24,6 +24,6 @@ public class MixedContentNode {
   }
 
   private static String normalize(String text) {
-    return text.replace("\n", StringUtils.SPACE).replaceAll("\\s+", StringUtils.SPACE).strip();
+    return text.replaceAll("\\s+", StringUtils.SPACE).strip();
   }
 }
