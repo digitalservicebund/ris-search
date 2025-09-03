@@ -14,10 +14,9 @@ import de.bund.digitalservice.ris.search.sitemap.eclicrawler.schema.ecli.Publish
 import de.bund.digitalservice.ris.search.sitemap.eclicrawler.schema.ecli.SupportedLanguages;
 import de.bund.digitalservice.ris.search.sitemap.eclicrawler.schema.ecli.Type;
 import de.bund.digitalservice.ris.search.sitemap.eclicrawler.schema.sitemap.Url;
-import de.bund.digitalservice.ris.search.sitemap.eclicrawler.service.CreatedDocument;
-import de.bund.digitalservice.ris.search.sitemap.eclicrawler.service.DeletedDocument;
 import de.bund.digitalservice.ris.search.sitemap.eclicrawler.service.EcliDocumentChange;
 import java.time.format.DateTimeFormatter;
+import java.util.Objects;
 
 public class EcliSitemapMetadataMapper {
 
@@ -34,33 +33,28 @@ public class EcliSitemapMetadataMapper {
     return metadata;
   }
 
-  public static Url toSitemapItem(EcliDocumentChange document) {
-    return switch (document) {
-      case CreatedDocument created -> mapUrlWithoutDocumentStatus(created.metadata());
-      case DeletedDocument deleted -> {
-        Url url = mapUrlWithoutDocumentStatus(deleted.metadata());
-        url.getDocument().setStatus(Document.STATUS_DELETED);
-        yield url;
-      }
-    };
-  }
-
-  private static Url mapUrlWithoutDocumentStatus(EcliSitemapMetadata metadata) {
-    return new Url()
-        .setLoc(URL_PREFIX + metadata.getId())
-        .setDocument(
-            new Document()
-                .setMetadata(
-                    new Metadata()
-                        .setIdentifier(getIdentifier(metadata))
-                        .setIsVersionOf(getIsVersionOf(metadata))
-                        .setCreator(getCreator())
-                        .setCoverage(getCoverage())
-                        .setDate(metadata.getDecisionDate())
-                        .setLanguage(getLanguage())
-                        .setAccessRights(AccessRights.PUBLIC)
-                        .setPublisher(getPublisher())
-                        .setType(getType(metadata))));
+  public static Url toSitemapItem(EcliDocumentChange change) {
+    EcliSitemapMetadata metadata = change.metadata();
+    Url url =
+        new Url()
+            .setLoc(URL_PREFIX + metadata.getId())
+            .setDocument(
+                new Document()
+                    .setMetadata(
+                        new Metadata()
+                            .setIdentifier(getIdentifier(metadata))
+                            .setIsVersionOf(getIsVersionOf(metadata))
+                            .setCreator(getCreator())
+                            .setCoverage(getCoverage())
+                            .setDate(metadata.getDecisionDate())
+                            .setLanguage(getLanguage())
+                            .setAccessRights(AccessRights.PUBLIC)
+                            .setPublisher(getPublisher())
+                            .setType(getType(metadata))));
+    if (Objects.equals(change.type(), EcliDocumentChange.ChangeType.DELETE)) {
+      url.getDocument().setStatus(Document.STATUS_DELETED);
+    }
+    return url;
   }
 
   private static IsVersionOf getIsVersionOf(EcliSitemapMetadata pub) {

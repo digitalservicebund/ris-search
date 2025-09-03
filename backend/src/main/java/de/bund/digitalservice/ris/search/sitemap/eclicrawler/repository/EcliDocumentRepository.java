@@ -1,7 +1,5 @@
 package de.bund.digitalservice.ris.search.sitemap.eclicrawler.repository;
 
-import de.bund.digitalservice.ris.search.sitemap.eclicrawler.service.CreatedDocument;
-import de.bund.digitalservice.ris.search.sitemap.eclicrawler.service.DeletedDocument;
 import de.bund.digitalservice.ris.search.sitemap.eclicrawler.service.EcliDocumentChange;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,9 +23,10 @@ public class EcliDocumentRepository {
 
     changedDocs.forEach(
         changed -> {
-          switch (changed) {
-            case CreatedDocument created -> toBeUpserted.add(created.metadata());
-            case DeletedDocument deleted -> toBeDeleted.add(deleted.metadata());
+          if (changed.type().equals(EcliDocumentChange.ChangeType.CHANGE)) {
+            toBeUpserted.add(changed.metadata());
+          } else {
+            toBeDeleted.add(changed.metadata());
           }
         });
 

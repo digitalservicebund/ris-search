@@ -12,7 +12,6 @@ import de.bund.digitalservice.ris.search.service.IndexSyncJob;
 import de.bund.digitalservice.ris.search.service.IndexingState;
 import de.bund.digitalservice.ris.search.sitemap.eclicrawler.mapper.EcliSitemapMetadataMapper;
 import de.bund.digitalservice.ris.search.sitemap.eclicrawler.repository.EcliDocumentRepository;
-import de.bund.digitalservice.ris.search.sitemap.eclicrawler.repository.EcliSitemapMetadata;
 import de.bund.digitalservice.ris.search.sitemap.eclicrawler.schema.sitemap.Sitemap;
 import jakarta.xml.bind.JAXBException;
 import java.io.FileNotFoundException;
@@ -20,10 +19,12 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 import org.springframework.stereotype.Service;
@@ -152,8 +153,9 @@ public class DailySitemapJob {
             List<EcliDocumentChange> result = new ArrayList<>(10000);
             for (int i = 0; i < 10000 && iterator.hasNext(); i++) {
               result.add(
-                  new CreatedDocument(
-                      EcliSitemapMetadataMapper.fromCaseLawDocumentationUnit(iterator.next())));
+                  new EcliDocumentChange(
+                      EcliSitemapMetadataMapper.fromCaseLawDocumentationUnit(iterator.next()),
+                      EcliDocumentChange.ChangeType.CHANGE));
             }
             return result;
           }
@@ -194,32 +196,41 @@ public class DailySitemapJob {
 
   private List<EcliDocumentChange> getAllChangesFromChangelogs(List<String> changelogPaths)
       throws ObjectStoreServiceException {
-    List<EcliDocumentChange> ecliDocuments = new ArrayList<>();
+
+    Set<EcliDocumentChange> ecliDocuments = new HashSet<>();
+
     for (String changelogPath : changelogPaths) {
       Optional<Changelog> logOptional =
           Optional.ofNullable(this.indexJob.parseOneChangelog(caselawbucket, changelogPath));
-      logOptional.ifPresent(
-          log -> {
-            List<String> documentIdentifiers =
-                log.getChanged().stream().map(c -> c.replace(".xml", "")).toList();
 
-            List<CreatedDocument> createdDocs =
-                caseLawService.getEcliDocumentsByDocumentNumbers(documentIdentifiers).stream()
-                    .map(
-                        doc ->
-                            new CreatedDocument(
-                                EcliSitemapMetadataMapper.fromCaseLawDocumentationUnit(doc)))
-                    .toList();
-            ecliDocuments.addAll(createdDocs);
+      if (logOptional.isPresent()) {
+        var log = logOptional.get();
 
-            List<String> toBeDeletedIds =
-                log.getDeleted().stream().map(d -> d.replace(".xml", "")).toList();
-            List<EcliSitemapMetadata> toBeDeleted = repository.getAllMetadataById(toBeDeletedIds);
-            List<DeletedDocument> deletedDocs =
-                toBeDeleted.stream().map(DeletedDocument::new).toList();
-            ecliDocuments.addAll(deletedDocs);
-          });
+        // ignore identifiers that are deleted in the same changelog
+        log.getChanged().removeAll(log.getDeleted());
+        List<String> documentIdentifiers =
+            log.getChanged().stream().map(c -> c.replace(".xml", "")).toList();
+        // create
+        ecliDocuments.addAll(
+            caseLawService.getEcliDocumentsByDocumentNumbers(documentIdentifiers).stream()
+                .map(
+                    unit ->
+                        new EcliDocumentChange(
+                            EcliSitemapMetadataMapper.fromCaseLawDocumentationUnit(unit),
+                            EcliDocumentChange.ChangeType.CHANGE))
+                .toList());
+
+        // delete
+        List<String> deletedIdentifiers =
+            log.getDeleted().stream().map(c -> c.replace(".xml", "")).toList();
+
+        ecliDocuments.addAll(
+            repository.getAllMetadataById(deletedIdentifiers).stream()
+                .map(meta -> new EcliDocumentChange(meta, EcliDocumentChange.ChangeType.DELETE))
+                .toList());
+      }
     }
-    return ecliDocuments;
+
+    return ecliDocuments.stream().toList();
   }
 }
