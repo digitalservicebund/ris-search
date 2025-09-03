@@ -19,12 +19,10 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 import org.springframework.stereotype.Service;
@@ -197,22 +195,13 @@ public class DailySitemapJob {
   private List<EcliDocumentChange> getAllChangesFromChangelogs(List<String> changelogPaths)
       throws ObjectStoreServiceException {
 
-    Set<EcliDocumentChange> ecliDocuments = new HashSet<>();
+    Changelog mergedChangelog = mergeChangelogs(changelogPaths);
 
-    for (String changelogPath : changelogPaths) {
-      Optional<Changelog> logOptional =
-          Optional.ofNullable(this.indexJob.parseOneChangelog(caselawbucket, changelogPath));
-
-      if (logOptional.isPresent()) {
-        var log = logOptional.get();
-
-        // ignore identifiers that are deleted in the same changelog
-        log.getChanged().removeAll(log.getDeleted());
-        List<String> documentIdentifiers =
-            log.getChanged().stream().map(c -> c.replace(".xml", "")).toList();
-        // create
-        ecliDocuments.addAll(
-            caseLawService.getEcliDocumentsByDocumentNumbers(documentIdentifiers).stream()
+    List<String> createIdentifiers =
+        mergedChangelog.getChanged().stream().map(i -> i.replace(".xml", "")).toList();
+    List<EcliDocumentChange> changes =
+        new ArrayList<>(
+            caseLawService.getEcliDocumentsByDocumentNumbers(createIdentifiers).stream()
                 .map(
                     unit ->
                         new EcliDocumentChange(
@@ -220,17 +209,33 @@ public class DailySitemapJob {
                             EcliDocumentChange.ChangeType.CHANGE))
                 .toList());
 
-        // delete
-        List<String> deletedIdentifiers =
-            log.getDeleted().stream().map(c -> c.replace(".xml", "")).toList();
+    List<String> deleteIdentifiers =
+        mergedChangelog.getDeleted().stream().map(i -> i.replace(".xml", "")).toList();
+    changes.addAll(
+        repository.getAllMetadataById(deleteIdentifiers).stream()
+            .map(meta -> new EcliDocumentChange(meta, EcliDocumentChange.ChangeType.DELETE))
+            .toList());
 
-        ecliDocuments.addAll(
-            repository.getAllMetadataById(deletedIdentifiers).stream()
-                .map(meta -> new EcliDocumentChange(meta, EcliDocumentChange.ChangeType.DELETE))
-                .toList());
+    return changes;
+  }
+
+  private Changelog mergeChangelogs(List<String> changelogPaths)
+      throws ObjectStoreServiceException {
+    Changelog mergedChangelog = new Changelog();
+    for (String changelogPath : changelogPaths) {
+      Optional<Changelog> logOptional =
+          Optional.ofNullable(this.indexJob.parseOneChangelog(caselawbucket, changelogPath));
+
+      if (logOptional.isPresent()) {
+        var log = logOptional.get();
+
+        mergedChangelog.setChanged(log.getChanged());
+        mergedChangelog.getDeleted().removeAll(log.getChanged());
+
+        mergedChangelog.setDeleted(log.getDeleted());
+        mergedChangelog.getChanged().removeAll(log.getDeleted());
       }
     }
-
-    return ecliDocuments.stream().toList();
+    return mergedChangelog;
   }
 }
