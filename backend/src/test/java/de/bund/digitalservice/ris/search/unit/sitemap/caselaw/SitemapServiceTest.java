@@ -5,12 +5,10 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
-import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import de.bund.digitalservice.ris.search.repository.objectstorage.PortalBucket;
+import de.bund.digitalservice.ris.search.sitemap.eclicrawler.repository.EcliSitemapMetadata;
 import de.bund.digitalservice.ris.search.sitemap.eclicrawler.schema.sitemap.Sitemap;
 import de.bund.digitalservice.ris.search.sitemap.eclicrawler.schema.sitemap.Url;
-import de.bund.digitalservice.ris.search.sitemap.eclicrawler.service.CreatedDocument;
-import de.bund.digitalservice.ris.search.sitemap.eclicrawler.service.DeletedDocument;
 import de.bund.digitalservice.ris.search.sitemap.eclicrawler.service.EcliDocumentChange;
 import de.bund.digitalservice.ris.search.sitemap.eclicrawler.service.SitemapService;
 import jakarta.xml.bind.JAXBException;
@@ -42,48 +40,42 @@ class SitemapServiceTest {
   @Test
   void itCreatesUrlSetsForCreatedAndDeletedFiles() {
 
-    String identifier = "identifier";
-    LocalDate decisionDate = LocalDate.of(2025, 1, 1);
-    String ecli = "ECLI:1234";
-    String courtType = "BGH";
-    String documentType = "docType";
+    EcliSitemapMetadata meta = new EcliSitemapMetadata();
+    meta.setId("identifier");
+    meta.setDecisionDate("2025-01-01");
+    meta.setEcli("ECLI:1234");
+    meta.setCourtType("BGH");
+    meta.setDocumentType("decision");
 
     List<EcliDocumentChange> changes = new ArrayList<>();
-    changes.add(new DeletedDocument("DELETED_IDENTIFIER"));
-    changes.add(
-        new CreatedDocument(
-            CaseLawDocumentationUnit.builder()
-                .id(identifier)
-                .decisionDate(decisionDate)
-                .ecli(ecli)
-                .courtType(courtType)
-                .documentType(documentType)
-                .build()));
+    changes.add(new EcliDocumentChange(meta, EcliDocumentChange.ChangeType.DELETE));
+    changes.add(new EcliDocumentChange(meta, EcliDocumentChange.ChangeType.CHANGE));
 
     Sitemap sitemap = service.createSitemaps(changes).getFirst();
 
-    Assertions.assertEquals("deleted", sitemap.getUrl().getFirst().getDocument().getStatus());
     Assertions.assertEquals(
-        ecli, sitemap.getUrl().get(1).getDocument().getMetadata().getIsVersionOf().getValue());
-  }
-
-  @Test
-  void itIgnoresIncompleteCaseLawDocumentationUnits() {
-
-    String identifier = "identifier";
-
-    List<EcliDocumentChange> changes = new ArrayList<>();
-    changes.add(new CreatedDocument(CaseLawDocumentationUnit.builder().id(identifier).build()));
-
-    Assertions.assertTrue(service.createSitemaps(changes).isEmpty());
+        "ECLI:1234",
+        sitemap.getUrl().get(1).getDocument().getMetadata().getIsVersionOf().getValue());
+    Assertions.assertEquals(
+        "ECLI:1234",
+        sitemap.getUrl().get(1).getDocument().getMetadata().getIsVersionOf().getValue());
   }
 
   @Test
   void itPartitionsSitemapsAccordingToMaxEntries() {
 
     List<EcliDocumentChange> changes = new ArrayList<>();
-    changes.add(new DeletedDocument("DELETED_1"));
-    changes.add(new DeletedDocument("DELETED_2"));
+    EcliSitemapMetadata meta1 = new EcliSitemapMetadata();
+    meta1.setId("DELETED1");
+    EcliDocumentChange deleted1 =
+        new EcliDocumentChange(meta1, EcliDocumentChange.ChangeType.DELETE);
+
+    EcliSitemapMetadata meta2 = new EcliSitemapMetadata();
+    meta2.setId("DELETED1");
+    EcliDocumentChange deleted2 =
+        new EcliDocumentChange(meta1, EcliDocumentChange.ChangeType.DELETE);
+    changes.add(deleted1);
+    changes.add(deleted2);
 
     List<Sitemap> sitemaps = service.createSitemaps(changes, 1);
     Assertions.assertEquals(2, sitemaps.size());
@@ -92,11 +84,12 @@ class SitemapServiceTest {
   @Test
   void itReturnsSitemapFilesForAGivenDay() {
     LocalDate date = LocalDate.of(2025, 1, 1);
-    when(bucket.getAllKeysByPrefix("eclicrawler/2025/1/1"))
-        .thenReturn(List.of("eclicrawler/2025/1/1/sitemap_1.xml"));
+    when(bucket.getAllKeysByPrefix("eclicrawler/2025/01/01"))
+        .thenReturn(List.of("eclicrawler/2025/01/01/sitemap_1.xml"));
 
     Assertions.assertEquals(
-        "eclicrawler/2025/1/1/sitemap_1.xml", service.getSitemapFilesPathsForDay(date).getFirst());
+        "eclicrawler/2025/01/01/sitemap_1.xml",
+        service.getSitemapFilesPathsForDay(date).getFirst());
   }
 
   @Test
@@ -105,8 +98,9 @@ class SitemapServiceTest {
         """
                 User-agent: DG_JUSTICE_CRAWLER
                 Allow: /
+
                 Sitemap:sitemapPath""";
-    service.writeRobotsTxt("sitemapPath");
+    service.writeRobotsTxt(List.of("sitemapPath"));
 
     verify(bucket).save(SitemapService.ROBOTS_TXT_PATH, expectedContent);
   }
@@ -120,7 +114,7 @@ class SitemapServiceTest {
 
     ArgumentCaptor<String> pathArgumentCaptor = ArgumentCaptor.forClass(String.class);
 
-    Optional<String> indexpath = service.writeSitemapFiles(sitemaps, date);
+    List<String> indexpath = service.writeSitemapFiles(sitemaps, date);
 
     verify(bucket, Mockito.times(3)).save(pathArgumentCaptor.capture(), any(String.class));
 
@@ -134,7 +128,7 @@ class SitemapServiceTest {
                     SitemapService.PATH_PREFIX + "2025/01/01/sitemap_index_1.xml")));
 
     Assertions.assertEquals(
-        SitemapService.PATH_PREFIX + "2025/01/01/sitemap_index_1.xml", indexpath.orElseThrow());
+        SitemapService.PATH_PREFIX + "2025/01/01/sitemap_index_1.xml", indexpath.getFirst());
   }
 
   @Test
@@ -151,7 +145,7 @@ class SitemapServiceTest {
                 Sitemap:sitemapPath1
                 Sitemap:sitemapPath2""";
     when(bucket.getFileAsString("eclicrawler/robots.txt")).thenReturn(Optional.of(existingContent));
-    service.updateRobotsTxt("sitemapPath2");
+    service.updateRobotsTxt(List.of("sitemapPath2"));
 
     verify(bucket).save(SitemapService.ROBOTS_TXT_PATH, expectedContent);
   }
@@ -162,7 +156,7 @@ class SitemapServiceTest {
     Assertions.assertThrows(
         FileNotFoundException.class,
         () -> {
-          service.updateRobotsTxt("indexpath");
+          service.updateRobotsTxt(List.of("indexpath"));
         });
   }
 }

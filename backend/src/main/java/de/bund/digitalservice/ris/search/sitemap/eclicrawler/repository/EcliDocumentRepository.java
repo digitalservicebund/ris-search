@@ -21,6 +21,7 @@ public class EcliDocumentRepository {
     List<EcliSitemapMetadata> toBeUpserted = new ArrayList<>();
     List<EcliSitemapMetadata> toBeDeleted = new ArrayList<>();
 
+    // store status instead of actually deleting
     changedDocs.forEach(
         changed -> {
           if (changed.type().equals(EcliDocumentChange.ChangeType.CHANGE)) {

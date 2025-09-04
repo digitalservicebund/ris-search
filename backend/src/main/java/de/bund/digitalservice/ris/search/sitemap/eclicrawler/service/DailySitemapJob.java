@@ -46,7 +46,9 @@ public class DailySitemapJob {
 
   final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
-  public static final String STATUS_FILE = "caselaw_sitemaps_status.json";
+  public static final String STATUS_FILE = "ecli_sitemaps_status.json";
+
+  private final LocalDate now = LocalDate.now();
 
   public DailySitemapJob(
       SitemapService service,
@@ -65,18 +67,17 @@ public class DailySitemapJob {
     this.repository = repository;
   }
 
-  public void run(LocalDate cutOffDate)
-      throws ObjectStoreServiceException, FatalDailySitemapJobException {
+  public void run() throws ObjectStoreServiceException, FatalDailySitemapJobException {
 
-    if (!sitemapService.getSitemapFilesPathsForDay(cutOffDate).isEmpty()) {
+    if (!sitemapService.getSitemapFilesPathsForDay(now).isEmpty()) {
       throw new FatalDailySitemapJobException(
-          String.format("Sitemaps for day %s already exists", cutOffDate.format(formatter)));
+          String.format("Sitemaps for day %s already exists", now.format(formatter)));
     }
 
     IndexingState state = indexStatusService.loadStatus(STATUS_FILE);
-    String lastProcessedChangelogFile = state.lastProcessedChangelogFile();
+    String lastProcessedEcliChangelogFile = state.lastProcessedChangelogFile();
 
-    if (Objects.isNull(lastProcessedChangelogFile)) {
+    if (Objects.isNull(lastProcessedEcliChangelogFile)) {
       createAll();
     } else {
       String lastSuccesfulIndexingJob =
@@ -86,11 +87,11 @@ public class DailySitemapJob {
 
       boolean indexingIsFinished =
           !Objects.isNull(lastSuccesfulIndexingJob)
-              && lastSuccesfulIndexingJob.compareTo(lastProcessedChangelogFile) >= 0;
+              && lastSuccesfulIndexingJob.compareTo(lastProcessedEcliChangelogFile) > 0;
       if (indexingIsFinished) {
         List<String> newChangelogPaths =
-            indexJob.getNewChangelogs(caselawbucket, lastProcessedChangelogFile);
-        createFromChangelogs(newChangelogPaths, cutOffDate);
+            indexJob.getNewChangelogs(caselawbucket, lastProcessedEcliChangelogFile);
+        createFromChangelogs(newChangelogPaths);
       }
     }
   }
@@ -107,15 +108,13 @@ public class DailySitemapJob {
   }
 
   private void createAll() throws FatalDailySitemapJobException {
-    LocalDate yesterday = LocalDate.now().minusDays(1);
-
     Stream<List<EcliDocumentChange>> docUnits =
         getAllCreatedDocumentsFromStream(caseLawService.getAllEcliDocuments());
 
     docUnits.forEach(
         documents -> {
           try {
-            List<String> sitemapPaths = writeSitemaps(documents, yesterday);
+            List<String> sitemapPaths = writeSitemaps(documents, now);
             if (!sitemapPaths.isEmpty()) {
               sitemapService.writeRobotsTxt(sitemapPaths);
             }
@@ -163,25 +162,13 @@ public class DailySitemapJob {
         ((Iterable<List<EcliDocumentChange>>) () -> listIterator).spliterator(), false);
   }
 
-  private void createFromChangelogs(List<String> filePaths, LocalDate cutoffDate)
+  private void createFromChangelogs(List<String> filePaths)
       throws ObjectStoreServiceException, FatalDailySitemapJobException {
 
-    var changelogsUpToCutoff =
-        filePaths.stream()
-            .filter(
-                e -> {
-                  int datetimeStringOffset = IndexSyncJob.CHANGELOGS_PREFIX.length();
-                  String datetimeString =
-                      e.substring(datetimeStringOffset, datetimeStringOffset + 10);
-                  LocalDate time = LocalDate.parse(datetimeString, formatter);
-                  return time.isBefore(cutoffDate) || time.isEqual(cutoffDate);
-                })
-            .toList();
-
-    List<EcliDocumentChange> ecliDocuments = getAllChangesFromChangelogs(changelogsUpToCutoff);
+    List<EcliDocumentChange> ecliDocuments = getAllChangesFromChangelogs(filePaths);
     try {
       if (!ecliDocuments.isEmpty()) {
-        List<String> sitemapIndexPaths = writeSitemaps(ecliDocuments, cutoffDate);
+        List<String> sitemapIndexPaths = writeSitemaps(ecliDocuments, now);
         sitemapService.updateRobotsTxt(sitemapIndexPaths);
 
         indexStatusService.saveStatus(
@@ -199,7 +186,6 @@ public class DailySitemapJob {
     for (String changelogPath : changelogPaths) {
       Optional<Changelog> logOptional =
           Optional.ofNullable(this.indexJob.parseOneChangelog(caselawbucket, changelogPath));
-
       logOptional.ifPresent(changelogs::add);
     }
     Changelog mergedChangelog = ChangelogParser.mergeChangelogs(changelogs);

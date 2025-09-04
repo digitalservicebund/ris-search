@@ -3,11 +3,13 @@ package de.bund.digitalservice.ris.search.unit.sitemap.caselaw.schema;
 import static org.testcontainers.shaded.org.apache.commons.io.FileUtils.getFile;
 
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
-import de.bund.digitalservice.ris.search.sitemap.eclicrawler.mapper.RisToEcliMapper;
+import de.bund.digitalservice.ris.search.sitemap.eclicrawler.mapper.EcliSitemapMetadataMapper;
+import de.bund.digitalservice.ris.search.sitemap.eclicrawler.repository.EcliSitemapMetadata;
 import de.bund.digitalservice.ris.search.sitemap.eclicrawler.schema.sitemap.Sitemap;
-import de.bund.digitalservice.ris.search.sitemap.eclicrawler.schema.sitemap.SitemapIndexEntry;
-import de.bund.digitalservice.ris.search.sitemap.eclicrawler.schema.sitemap.Sitemapindex;
 import de.bund.digitalservice.ris.search.sitemap.eclicrawler.schema.sitemap.Url;
+import de.bund.digitalservice.ris.search.sitemap.eclicrawler.schema.sitemapindex.SitemapIndexEntry;
+import de.bund.digitalservice.ris.search.sitemap.eclicrawler.schema.sitemapindex.Sitemapindex;
+import de.bund.digitalservice.ris.search.sitemap.eclicrawler.service.EcliDocumentChange;
 import de.bund.digitalservice.ris.search.sitemap.eclicrawler.service.EcliMarshaller;
 import jakarta.xml.bind.JAXBException;
 import java.io.IOException;
@@ -53,6 +55,17 @@ class SitemapSchemaTest {
         .build();
   }
 
+  private EcliDocumentChange getTestDocChange() {
+    EcliSitemapMetadata meta = new EcliSitemapMetadata();
+    meta.setId("identifier");
+    meta.setEcli("ECLI:DE:XX:2025:1111111");
+    meta.setCourtType("BGH");
+    meta.setDocumentType("decision");
+    meta.setDecisionDate("2025-01-01");
+
+    return new EcliDocumentChange(meta, EcliDocumentChange.ChangeType.CHANGE);
+  }
+
   @Test
   void itGeneratesAValidSitemap() throws SAXException, JAXBException, IOException {
     SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
@@ -73,7 +86,7 @@ class SitemapSchemaTest {
     Validator validator = schema.newValidator();
 
     Sitemap sitemap = new Sitemap();
-    Url url = RisToEcliMapper.caselawDocumentationUnitToEcliUrl(getTestDocUnit());
+    Url url = EcliSitemapMetadataMapper.toSitemapItem(getTestDocChange());
     List<Url> urls = List.of(url);
     sitemap.setUrl(urls);
 

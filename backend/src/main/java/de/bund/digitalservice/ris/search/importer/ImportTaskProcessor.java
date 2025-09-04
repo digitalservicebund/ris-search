@@ -5,7 +5,6 @@ import de.bund.digitalservice.ris.search.service.CaseLawIndexSyncJob;
 import de.bund.digitalservice.ris.search.service.NormIndexSyncJob;
 import de.bund.digitalservice.ris.search.sitemap.eclicrawler.service.DailySitemapJob;
 import de.bund.digitalservice.ris.search.sitemap.eclicrawler.service.FatalDailySitemapJobException;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -97,7 +96,7 @@ public class ImportTaskProcessor {
       }
       case "import_daily_sitemaps" -> {
         try {
-          this.sitemapJob.run(LocalDate.now().minusDays(1));
+          this.sitemapJob.run();
           yield OK_RETURN_CODE;
         } catch (ObjectStoreServiceException | FatalDailySitemapJobException ex) {
           logger.error(ex.getMessage(), ex);
