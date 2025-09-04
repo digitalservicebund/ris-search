@@ -195,7 +195,14 @@ public class DailySitemapJob {
   private List<EcliDocumentChange> getAllChangesFromChangelogs(List<String> changelogPaths)
       throws ObjectStoreServiceException {
 
-    Changelog mergedChangelog = mergeChangelogs(changelogPaths);
+    List<Changelog> changelogs = new ArrayList<>();
+    for (String changelogPath : changelogPaths) {
+      Optional<Changelog> logOptional =
+          Optional.ofNullable(this.indexJob.parseOneChangelog(caselawbucket, changelogPath));
+
+      logOptional.ifPresent(changelogs::add);
+    }
+    Changelog mergedChangelog = ChangelogParser.mergeChangelogs(changelogs);
 
     List<String> createIdentifiers =
         mergedChangelog.getChanged().stream().map(i -> i.replace(".xml", "")).toList();
@@ -217,25 +224,5 @@ public class DailySitemapJob {
             .toList());
 
     return changes;
-  }
-
-  private Changelog mergeChangelogs(List<String> changelogPaths)
-      throws ObjectStoreServiceException {
-    Changelog mergedChangelog = new Changelog();
-    for (String changelogPath : changelogPaths) {
-      Optional<Changelog> logOptional =
-          Optional.ofNullable(this.indexJob.parseOneChangelog(caselawbucket, changelogPath));
-
-      if (logOptional.isPresent()) {
-        var log = logOptional.get();
-
-        mergedChangelog.setChanged(log.getChanged());
-        mergedChangelog.getDeleted().removeAll(log.getChanged());
-
-        mergedChangelog.setDeleted(log.getDeleted());
-        mergedChangelog.getChanged().removeAll(log.getDeleted());
-      }
-    }
-    return mergedChangelog;
   }
 }
