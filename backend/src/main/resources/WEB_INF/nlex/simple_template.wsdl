@@ -149,10 +149,10 @@
     </wsdl:binding>
     <wsdl:service name="Connector">
         <wsdl:port name="ConnectorSoap" binding="tns:ConnectorSoap">
-            <soap:address location="http://localhost:8090/internal/soap"/>
+            <soap:address location="http://localhost:8090/nlex"/>
         </wsdl:port>
         <wsdl:port name="ConnectorSoap12" binding="tns:ConnectorSoap12">
-            <soap12:address location="http://localhost:8090/internal/soap"/>
+            <soap12:address location="http://localhost:8090/nlex"/>
         </wsdl:port>
     </wsdl:service>
 </wsdl:definitions>
