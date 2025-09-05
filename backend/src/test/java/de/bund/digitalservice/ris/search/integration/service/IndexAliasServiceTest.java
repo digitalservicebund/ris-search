@@ -20,15 +20,21 @@ import org.opensearch.client.RequestOptions;
 import org.opensearch.client.RestHighLevelClient;
 import org.opensearch.client.indices.CreateIndexRequest;
 import org.opensearch.client.indices.GetIndexRequest;
+import org.opensearch.data.client.orhlc.OpenSearchRestTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.elasticsearch.core.index.AliasAction;
+import org.springframework.data.elasticsearch.core.index.AliasActionParameters;
+import org.springframework.data.elasticsearch.core.index.AliasActions;
+import org.springframework.data.elasticsearch.core.mapping.IndexCoordinates;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 @Tag("integration")
 class IndexAliasServiceTest extends ContainersIntegrationBase {
   @Autowired private IndexAliasService indexAliasService;
+  @Autowired private OpenSearchRestTemplate openSearchRestTemplate;
   @Autowired private RestHighLevelClient restHighLevelClient;
 
   @BeforeEach
@@ -36,11 +42,24 @@ class IndexAliasServiceTest extends ContainersIntegrationBase {
 
     Assertions.assertTrue(openSearchContainer.isRunning());
     super.recreateIndex();
+    super.updateMapping();
   }
 
   @Test
   void testCreatesAliases() throws IOException {
+
     final GetAliasesRequest request = new GetAliasesRequest().aliases("documents");
+    if (restHighLevelClient.indices().existsAlias(request, RequestOptions.DEFAULT)) {
+      openSearchRestTemplate
+          .indexOps(IndexCoordinates.of("*"))
+          .alias(
+              new AliasActions(
+                  new AliasAction.Remove(
+                      AliasActionParameters.builder()
+                          .withIndices("*")
+                          .withAliases("documents")
+                          .build())));
+    }
     assertThat(restHighLevelClient.indices().existsAlias(request, RequestOptions.DEFAULT))
         .isFalse();
 

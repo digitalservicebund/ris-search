@@ -159,4 +159,8 @@ public class CaseLawTestData {
                 .filter(d -> Objects.equals(d.publicationStatus(), "PUBLISHED"))
                 .count();
   }
+
+  public static CaseLawDocumentationUnit simple(String documentNumber, String content) {
+    return CaseLawDocumentationUnit.builder().id(documentNumber).caseFacts(content).build();
+  }
 }

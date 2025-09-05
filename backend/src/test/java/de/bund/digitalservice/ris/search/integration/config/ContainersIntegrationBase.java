@@ -4,14 +4,13 @@ import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationU
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import org.opensearch.action.admin.indices.alias.get.GetAliasesRequest;
-import org.opensearch.client.RequestOptions;
-import org.opensearch.client.RestHighLevelClient;
-import org.opensearch.client.indices.DeleteAliasRequest;
 import org.opensearch.data.client.orhlc.OpenSearchRestTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.elasticsearch.core.document.Document;
+import org.springframework.data.elasticsearch.core.index.AliasAction;
+import org.springframework.data.elasticsearch.core.index.AliasActionParameters;
+import org.springframework.data.elasticsearch.core.index.AliasActions;
 import org.springframework.data.elasticsearch.core.mapping.IndexCoordinates;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
@@ -36,39 +35,28 @@ public class ContainersIntegrationBase {
   }
 
   @Autowired private OpenSearchRestTemplate openSearchRestTemplate;
-  @Autowired private RestHighLevelClient restHighLevelClient;
 
-  public void recreateIndex() throws IOException {
+  public void recreateIndex() {
 
-    final GetAliasesRequest request = new GetAliasesRequest().aliases("norms", "caselaws");
-    var aliases =
-        restHighLevelClient.indices().getAlias(request, RequestOptions.DEFAULT).getAliases();
-    aliases.forEach(
-        (index, aliasMetadataSet) ->
-            aliasMetadataSet.forEach(
-                aliasMetadata -> {
-                  try {
-                    restHighLevelClient
-                        .indices()
-                        .deleteAlias(
-                            new DeleteAliasRequest(index, aliasMetadata.alias()),
-                            RequestOptions.DEFAULT);
-                  } catch (IOException e) {
-                    throw new RuntimeException(e);
-                  }
-                }));
+    // delete all indices (side effect of deleting all aliases)
+    openSearchRestTemplate.indexOps(IndexCoordinates.of("*")).delete();
 
-    if (openSearchRestTemplate.indexOps(CaseLawDocumentationUnit.class).exists()) {
-      openSearchRestTemplate.indexOps(CaseLawDocumentationUnit.class).delete();
-    }
+    // recreate indices
     openSearchRestTemplate.indexOps(CaseLawDocumentationUnit.class).create();
     openSearchRestTemplate.indexOps(CaseLawDocumentationUnit.class).refresh();
-
-    if (openSearchRestTemplate.indexOps(Norm.class).exists()) {
-      openSearchRestTemplate.indexOps(Norm.class).delete();
-    }
     openSearchRestTemplate.indexOps(Norm.class).create();
     openSearchRestTemplate.indexOps(Norm.class).refresh();
+
+    // recreate documents alias
+    openSearchRestTemplate
+        .indexOps(IndexCoordinates.of("*"))
+        .alias(
+            new AliasActions(
+                new AliasAction.Add(
+                    AliasActionParameters.builder()
+                        .withIndices("caselaws", "norms")
+                        .withAliases("documents")
+                        .build())));
   }
 
   public void updateMapping() throws IOException {

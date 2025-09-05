@@ -111,4 +111,12 @@ public class NormsTestData {
 
     allDocuments.addAll(List.of(normTestOne, normTestTwo, normTestThree));
   }
+
+  public static Norm simple(String id, String content) {
+    return Norm.builder()
+        .id(id)
+        .articleTexts(List.of(content))
+        .articles(List.of(Article.builder().name("Article 1").text(content).build()))
+        .build();
+  }
 }

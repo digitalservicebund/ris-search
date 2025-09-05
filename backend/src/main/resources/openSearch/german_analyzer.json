@@ -6,10 +6,11 @@
         "tokenizer": "standard",
         "filter": [
           "lowercase",
+          "german_stemmer",
           "court_type_synonyms",
+          "golem_thesaurus_synonyms",
           "german_decompounder",
-          "german_normalization",
-          "german_stemmer"
+          "german_normalization"
         ],
         "char_filter": [
           "replace_article_character",
@@ -69,6 +70,13 @@
           "VGH, Verwaltungsgerichtshof, Verwaltungsgerichtshof (Oberverwaltungsgericht)",
           "VerfG, Verfassungsgericht (Landesverfassungsgericht)",
           "VerfGH, Verfassungsgerichtshof (Landesverfassungsgericht)"
+        ]
+      },
+      "golem_thesaurus_synonyms": {
+        "type": "synonym",
+        "expand": true,
+        "synonyms": [
+          "Abgas Reduzierend, Abgasreduzierend"
         ]
       }
     },
