@@ -36,7 +36,7 @@ public class ContainersIntegrationBase {
 
   @Autowired private OpenSearchRestTemplate openSearchRestTemplate;
 
-  public void recreateIndex() throws IOException {
+  public void recreateIndex() {
 
     // delete all indices (side effect of deleting all aliases)
     openSearchRestTemplate.indexOps(IndexCoordinates.of("*")).delete();
