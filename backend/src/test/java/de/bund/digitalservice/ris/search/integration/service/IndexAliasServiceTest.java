@@ -42,6 +42,7 @@ class IndexAliasServiceTest extends ContainersIntegrationBase {
 
     Assertions.assertTrue(openSearchContainer.isRunning());
     super.recreateIndex();
+    super.updateMapping();
   }
 
   @Test
