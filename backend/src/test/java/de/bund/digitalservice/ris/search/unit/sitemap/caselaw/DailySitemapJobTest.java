@@ -122,7 +122,7 @@ class DailySitemapJobTest {
             sitemapService.createSitemaps(
                 argThat(
                     arg -> {
-                      EcliDocumentChange doc = (EcliDocumentChange) arg.getFirst();
+                      EcliDocumentChange doc = arg.getFirst();
                       return Objects.equals(doc.metadata().getId(), "id");
                     })))
         .thenReturn(sitemaps);
@@ -177,7 +177,7 @@ class DailySitemapJobTest {
                     .build()));
     EcliSitemapMetadata alreadyExistingMetadata = new EcliSitemapMetadata();
     alreadyExistingMetadata.setId("DELETED");
-    Mockito.when(repository.getAllMetadataById(List.of("DELETED")))
+    Mockito.when(repository.getAllPublishedMetadataById(List.of("DELETED")))
         .thenReturn(List.of(alreadyExistingMetadata));
 
     Mockito.when(

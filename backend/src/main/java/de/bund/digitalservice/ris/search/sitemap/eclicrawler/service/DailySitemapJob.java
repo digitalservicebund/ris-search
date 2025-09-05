@@ -205,7 +205,7 @@ public class DailySitemapJob {
     List<String> deleteIdentifiers =
         mergedChangelog.getDeleted().stream().map(i -> i.replace(".xml", "")).toList();
     changes.addAll(
-        repository.getAllMetadataById(deleteIdentifiers).stream()
+        repository.getAllPublishedMetadataById(deleteIdentifiers).stream()
             .map(meta -> new EcliDocumentChange(meta, EcliDocumentChange.ChangeType.DELETE))
             .toList());
 
