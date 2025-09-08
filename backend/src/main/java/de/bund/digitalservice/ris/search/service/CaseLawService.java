@@ -207,11 +207,11 @@ public class CaseLawService {
   }
 
   public Stream<CaseLawDocumentationUnit> getAllEcliDocuments() {
-    return caseLawRepository.getAllEcliDocuments();
+    return caseLawRepository.findAllByEcliNotNull();
   }
 
   public List<CaseLawDocumentationUnit> getEcliDocumentsByDocumentNumbers(
       List<String> documentNumber) {
-    return caseLawRepository.getEcliDocumentsByDocumentNumbers(documentNumber);
+    return caseLawRepository.findAllByDocumentNumberInAndEcliNotNull(documentNumber);
   }
 }

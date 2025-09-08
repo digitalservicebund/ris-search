@@ -10,6 +10,7 @@ import de.bund.digitalservice.ris.search.service.CaseLawService;
 import de.bund.digitalservice.ris.search.service.IndexStatusService;
 import de.bund.digitalservice.ris.search.service.IndexSyncJob;
 import de.bund.digitalservice.ris.search.service.IndexingState;
+import de.bund.digitalservice.ris.search.service.Job;
 import de.bund.digitalservice.ris.search.sitemap.eclicrawler.mapper.EcliCrawlerDocumentMapper;
 import de.bund.digitalservice.ris.search.sitemap.eclicrawler.model.EcliCrawlerDocument;
 import de.bund.digitalservice.ris.search.sitemap.eclicrawler.repository.EcliCrawlerDocumentRepository;
@@ -29,9 +30,9 @@ import java.util.stream.StreamSupport;
 import org.springframework.stereotype.Service;
 
 @Service
-public class DailySitemapJob {
+public class DailyEcliSitemapJob implements Job {
 
-  SitemapService sitemapService;
+  EcliSitemapService sitemapService;
 
   IndexSyncJob indexJob;
 
@@ -51,8 +52,8 @@ public class DailySitemapJob {
 
   private final LocalDate now = LocalDate.now();
 
-  public DailySitemapJob(
-      SitemapService service,
+  public DailyEcliSitemapJob(
+      EcliSitemapService service,
       CaseLawIndexSyncJob indexJob,
       PortalBucket portalBucket,
       CaseLawBucket caselawbucket,
@@ -68,33 +69,38 @@ public class DailySitemapJob {
     this.repository = repository;
   }
 
-  public void run() throws ObjectStoreServiceException, FatalDailySitemapJobException {
-
-    if (!sitemapService.getSitemapFilesPathsForDay(now).isEmpty()) {
-      throw new FatalDailySitemapJobException(
-          String.format("Sitemaps for day %s already exists", now.format(formatter)));
-    }
-
-    IndexingState state = indexStatusService.loadStatus(STATUS_FILE);
-    String lastProcessedEcliChangelogFile = state.lastProcessedChangelogFile();
-
-    if (Objects.isNull(lastProcessedEcliChangelogFile)) {
-      createAll();
-    } else {
-      String lastSuccesfulIndexingJob =
-          indexStatusService
-              .loadStatus(CaseLawIndexSyncJob.CASELAW_STATUS_FILENAME)
-              .lastProcessedChangelogFile();
-
-      boolean indexingIsFinished =
-          !Objects.isNull(lastSuccesfulIndexingJob)
-              && lastSuccesfulIndexingJob.compareTo(lastProcessedEcliChangelogFile) > 0;
-      if (indexingIsFinished) {
-        List<String> newChangelogPaths =
-            indexJob.getNewChangelogs(caselawbucket, lastProcessedEcliChangelogFile);
-        createFromChangelogs(newChangelogPaths);
+  public ReturnCode runJob() {
+    try {
+      if (!sitemapService.getSitemapFilesPathsForDay(now).isEmpty()) {
+        throw new FatalDailySitemapJobException(
+            String.format("Sitemaps for day %s already exists", now.format(formatter)));
       }
+
+      IndexingState state = indexStatusService.loadStatus(STATUS_FILE);
+      String lastProcessedEcliChangelogFile = state.lastProcessedChangelogFile();
+
+      if (Objects.isNull(lastProcessedEcliChangelogFile)) {
+        createAll();
+      } else {
+        String lastSuccesfulIndexingJob =
+            indexStatusService
+                .loadStatus(CaseLawIndexSyncJob.CASELAW_STATUS_FILENAME)
+                .lastProcessedChangelogFile();
+
+        boolean indexingIsFinished =
+            !Objects.isNull(lastSuccesfulIndexingJob)
+                && lastSuccesfulIndexingJob.compareTo(lastProcessedEcliChangelogFile) > 0;
+        if (indexingIsFinished) {
+          List<String> newChangelogPaths =
+              indexJob.getNewChangelogs(caselawbucket, lastProcessedEcliChangelogFile);
+          createFromChangelogs(newChangelogPaths);
+        }
+      }
+    } catch (ObjectStoreServiceException e) {
+      return ReturnCode.ERROR;
     }
+
+    return ReturnCode.SUCCESS;
   }
 
   private List<String> writeSitemaps(List<EcliCrawlerDocument> ecliDocuments, LocalDate cutoffDate)

@@ -9,7 +9,7 @@ import de.bund.digitalservice.ris.search.repository.objectstorage.PortalBucket;
 import de.bund.digitalservice.ris.search.sitemap.eclicrawler.model.EcliCrawlerDocument;
 import de.bund.digitalservice.ris.search.sitemap.eclicrawler.schema.sitemap.Sitemap;
 import de.bund.digitalservice.ris.search.sitemap.eclicrawler.schema.sitemap.Url;
-import de.bund.digitalservice.ris.search.sitemap.eclicrawler.service.SitemapService;
+import de.bund.digitalservice.ris.search.sitemap.eclicrawler.service.EcliSitemapService;
 import jakarta.xml.bind.JAXBException;
 import java.io.FileNotFoundException;
 import java.time.LocalDate;
@@ -28,12 +28,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 class SitemapServiceTest {
 
-  SitemapService service;
+  EcliSitemapService service;
   @Mock PortalBucket bucket;
 
   @BeforeEach
   void setup() throws JAXBException {
-    service = new SitemapService(bucket);
+    service = new EcliSitemapService(bucket);
   }
 
   private EcliCrawlerDocument getTestDocument(boolean isPublished) {
@@ -98,7 +98,7 @@ class SitemapServiceTest {
                 Sitemap:sitemapPath""";
     service.writeRobotsTxt(List.of("sitemapPath"));
 
-    verify(bucket).save(SitemapService.ROBOTS_TXT_PATH, expectedContent);
+    verify(bucket).save(EcliSitemapService.ROBOTS_TXT_PATH, expectedContent);
   }
 
   @Test
@@ -119,12 +119,12 @@ class SitemapServiceTest {
             .getAllValues()
             .containsAll(
                 List.of(
-                    SitemapService.PATH_PREFIX + "2025/01/01/sitemap_1.xml",
-                    SitemapService.PATH_PREFIX + "2025/01/01/sitemap_2.xml",
-                    SitemapService.PATH_PREFIX + "2025/01/01/sitemap_index_1.xml")));
+                    EcliSitemapService.PATH_PREFIX + "2025/01/01/sitemap_1.xml",
+                    EcliSitemapService.PATH_PREFIX + "2025/01/01/sitemap_2.xml",
+                    EcliSitemapService.PATH_PREFIX + "2025/01/01/sitemap_index_1.xml")));
 
     Assertions.assertEquals(
-        SitemapService.PATH_PREFIX + "2025/01/01/sitemap_index_1.xml", indexpath.getFirst());
+        EcliSitemapService.PATH_PREFIX + "2025/01/01/sitemap_index_1.xml", indexpath.getFirst());
   }
 
   @Test
@@ -143,12 +143,12 @@ class SitemapServiceTest {
     when(bucket.getFileAsString("eclicrawler/robots.txt")).thenReturn(Optional.of(existingContent));
     service.updateRobotsTxt(List.of("sitemapPath2"));
 
-    verify(bucket).save(SitemapService.ROBOTS_TXT_PATH, expectedContent);
+    verify(bucket).save(EcliSitemapService.ROBOTS_TXT_PATH, expectedContent);
   }
 
   @Test
   void itThrowsAnErrorOnUpdatingNonExistingRobotsTxt() throws ObjectStoreServiceException {
-    when(bucket.getFileAsString(SitemapService.ROBOTS_TXT_PATH)).thenReturn(Optional.empty());
+    when(bucket.getFileAsString(EcliSitemapService.ROBOTS_TXT_PATH)).thenReturn(Optional.empty());
     Assertions.assertThrows(
         FileNotFoundException.class,
         () -> {

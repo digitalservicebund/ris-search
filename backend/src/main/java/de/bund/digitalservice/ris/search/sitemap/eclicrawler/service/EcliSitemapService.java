@@ -19,7 +19,7 @@ import org.apache.commons.collections4.ListUtils;
 import org.springframework.stereotype.Service;
 
 @Service
-public class SitemapService {
+public class EcliSitemapService {
 
   PortalBucket portalBucket;
 
@@ -28,7 +28,7 @@ public class SitemapService {
   public static final String PATH_PREFIX = "eclicrawler/";
   public static final String ROBOTS_TXT_PATH = PATH_PREFIX + "robots.txt";
 
-  public SitemapService(PortalBucket portalBucket) throws JAXBException {
+  public EcliSitemapService(PortalBucket portalBucket) throws JAXBException {
     this.portalBucket = portalBucket;
     this.jaxbCtx = JAXBContext.newInstance(Sitemapindex.class, Sitemap.class);
   }

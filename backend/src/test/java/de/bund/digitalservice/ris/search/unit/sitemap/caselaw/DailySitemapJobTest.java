@@ -15,9 +15,9 @@ import de.bund.digitalservice.ris.search.service.IndexingState;
 import de.bund.digitalservice.ris.search.sitemap.eclicrawler.model.EcliCrawlerDocument;
 import de.bund.digitalservice.ris.search.sitemap.eclicrawler.repository.EcliCrawlerDocumentRepository;
 import de.bund.digitalservice.ris.search.sitemap.eclicrawler.schema.sitemap.Sitemap;
-import de.bund.digitalservice.ris.search.sitemap.eclicrawler.service.DailySitemapJob;
+import de.bund.digitalservice.ris.search.sitemap.eclicrawler.service.DailyEcliSitemapJob;
+import de.bund.digitalservice.ris.search.sitemap.eclicrawler.service.EcliSitemapService;
 import de.bund.digitalservice.ris.search.sitemap.eclicrawler.service.FatalDailySitemapJobException;
-import de.bund.digitalservice.ris.search.sitemap.eclicrawler.service.SitemapService;
 import java.io.FileNotFoundException;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -38,8 +38,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 class DailySitemapJobTest {
 
-  DailySitemapJob sitemapJob;
-  @Mock SitemapService sitemapService;
+  DailyEcliSitemapJob sitemapJob;
+  @Mock EcliSitemapService sitemapService;
   @Mock CaseLawIndexSyncJob syncJob;
   @Mock PortalBucket portalBucket;
   @Mock CaseLawBucket caseLawBucket;
@@ -50,7 +50,7 @@ class DailySitemapJobTest {
   @BeforeEach
   void setup() {
     sitemapJob =
-        new DailySitemapJob(
+        new DailyEcliSitemapJob(
             sitemapService,
             syncJob,
             portalBucket,
@@ -68,11 +68,11 @@ class DailySitemapJobTest {
     String lastSuccesfullIndexJob = "changelogs/" + timestamp;
     LocalDate date = LocalDate.now();
     Mockito.when(sitemapService.getSitemapFilesPathsForDay(date)).thenReturn(List.of());
-    Mockito.when(indexStatusService.loadStatus(DailySitemapJob.STATUS_FILE))
+    Mockito.when(indexStatusService.loadStatus(DailyEcliSitemapJob.STATUS_FILE))
         .thenReturn(new IndexingState(lastProcessedChangelog, null, null));
     Mockito.when(indexStatusService.loadStatus(CaseLawIndexSyncJob.CASELAW_STATUS_FILENAME))
         .thenReturn(new IndexingState(lastSuccesfullIndexJob, null, null));
-    sitemapJob.run();
+    sitemapJob.runJob();
 
     Mockito.verify(syncJob, Mockito.never()).getNewChangelogs(any(), any());
   }
@@ -87,7 +87,7 @@ class DailySitemapJobTest {
     String newChangelogPath = "changelogs/" + changelogDate;
     Mockito.when(sitemapService.getSitemapFilesPathsForDay(LocalDate.now())).thenReturn(List.of());
 
-    Mockito.when(indexStatusService.loadStatus(DailySitemapJob.STATUS_FILE))
+    Mockito.when(indexStatusService.loadStatus(DailyEcliSitemapJob.STATUS_FILE))
         .thenReturn(new IndexingState(lastProcessedSitemapJobChangelog, null, null));
     Mockito.when(indexStatusService.loadStatus(CaseLawIndexSyncJob.CASELAW_STATUS_FILENAME))
         .thenReturn(new IndexingState(lastSuccesfulIndexJob, null, null));
@@ -96,9 +96,9 @@ class DailySitemapJobTest {
 
     Mockito.verify(indexStatusService, Mockito.atMostOnce())
         .saveStatus(
-            DailySitemapJob.STATUS_FILE,
+            DailyEcliSitemapJob.STATUS_FILE,
             new IndexingState().withLastProcessedChangelogFile(newChangelogPath));
-    sitemapJob.run();
+    sitemapJob.runJob();
   }
 
   @Test
@@ -109,7 +109,7 @@ class DailySitemapJobTest {
           jakarta.xml.bind.JAXBException {
 
     Mockito.when(sitemapService.getSitemapFilesPathsForDay(LocalDate.now())).thenReturn(List.of());
-    Mockito.when(indexStatusService.loadStatus(DailySitemapJob.STATUS_FILE))
+    Mockito.when(indexStatusService.loadStatus(DailyEcliSitemapJob.STATUS_FILE))
         .thenReturn(new IndexingState(null, null, null));
 
     Stream<CaseLawDocumentationUnit> documents =
@@ -130,12 +130,13 @@ class DailySitemapJobTest {
     Mockito.when(sitemapService.writeSitemapFiles(sitemaps, LocalDate.now()))
         .thenReturn(List.of(expectedSitemapIndexPath));
 
-    sitemapJob.run();
+    sitemapJob.runJob();
 
     Mockito.verify(sitemapService).writeRobotsTxt(List.of(expectedSitemapIndexPath));
     Mockito.verify(indexStatusService, Mockito.atMostOnce())
         .saveStatus(
-            DailySitemapJob.STATUS_FILE, new IndexingState().withLastProcessedChangelogFile(""));
+            DailyEcliSitemapJob.STATUS_FILE,
+            new IndexingState().withLastProcessedChangelogFile(""));
   }
 
   @Test
@@ -152,7 +153,7 @@ class DailySitemapJobTest {
     String newChangelogPath = "changelogs/" + newChangelogTimestamp;
     Mockito.when(sitemapService.getSitemapFilesPathsForDay(LocalDate.now())).thenReturn(List.of());
 
-    Mockito.when(indexStatusService.loadStatus(DailySitemapJob.STATUS_FILE))
+    Mockito.when(indexStatusService.loadStatus(DailyEcliSitemapJob.STATUS_FILE))
         .thenReturn(new IndexingState(lastProcessedSitemapJobChangelog, null, null));
     Mockito.when(indexStatusService.loadStatus(CaseLawIndexSyncJob.CASELAW_STATUS_FILENAME))
         .thenReturn(new IndexingState(lastSuccesfulIndexJob, null, null));
@@ -187,12 +188,12 @@ class DailySitemapJobTest {
     Mockito.when(sitemapService.writeSitemapFiles(urlSets, LocalDate.now()))
         .thenReturn(List.of(expectedSitemapIndexPath));
 
-    sitemapJob.run();
+    sitemapJob.runJob();
 
     Mockito.verify(sitemapService).updateRobotsTxt(List.of(expectedSitemapIndexPath));
     Mockito.verify(indexStatusService, Mockito.atMostOnce())
         .saveStatus(
-            DailySitemapJob.STATUS_FILE,
+            DailyEcliSitemapJob.STATUS_FILE,
             new IndexingState().withLastProcessedChangelogFile(newChangelogPath));
   }
 
@@ -204,7 +205,7 @@ class DailySitemapJobTest {
     Assertions.assertThrows(
         FatalDailySitemapJobException.class,
         () -> {
-          sitemapJob.run();
+          sitemapJob.runJob();
         });
   }
 }

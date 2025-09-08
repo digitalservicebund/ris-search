@@ -13,6 +13,7 @@ import de.bund.digitalservice.ris.search.service.CaseLawIndexSyncJob;
 import de.bund.digitalservice.ris.search.service.Job;
 import de.bund.digitalservice.ris.search.service.NormIndexSyncJob;
 import de.bund.digitalservice.ris.search.service.SitemapsUpdateJob;
+import de.bund.digitalservice.ris.search.sitemap.eclicrawler.service.DailyEcliSitemapJob;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,12 +27,15 @@ class ImportTaskProcessorTest {
   @Mock private NormIndexSyncJob normIndexSyncJob;
   @Mock private CaseLawIndexSyncJob caseLawIndexSyncJob;
   @Mock private SitemapsUpdateJob sitemapsUpdateJob;
+  @Mock private DailyEcliSitemapJob ecliSitemapJob;
 
   private ImportTaskProcessor processor;
 
   @BeforeEach
   void setUp() {
-    processor = new ImportTaskProcessor(normIndexSyncJob, caseLawIndexSyncJob, sitemapsUpdateJob);
+    processor =
+        new ImportTaskProcessor(
+            normIndexSyncJob, caseLawIndexSyncJob, sitemapsUpdateJob, ecliSitemapJob);
   }
 
   @Test
@@ -164,6 +168,19 @@ class ImportTaskProcessorTest {
 
     // Then
     verify(sitemapsUpdateJob).runJob();
+  }
+
+  @Test
+  void runTask_withEcliSitemapsTarget_callsEcliSitemapsUpdateJob() {
+    // Given
+    String target = "generate_ecli_sitemaps";
+
+    // When
+    when(ecliSitemapJob.runJob()).thenReturn(Job.ReturnCode.SUCCESS);
+    processor.runTask(target);
+
+    // Then
+    verify(ecliSitemapJob).runJob();
   }
 
   @Test

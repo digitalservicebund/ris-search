@@ -2,6 +2,7 @@ package de.bund.digitalservice.ris.search.repository.opensearch;
 
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import java.util.List;
+import java.util.stream.Stream;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 
 /**
@@ -20,8 +21,7 @@ public interface CaseLawRepository
   void deleteAllById(Iterable<? extends String> ids);
 
   List<CaseLawDocumentationUnit> findAllByDocumentNumberInAndEcliNotNull(
-          List<String> documentNumbers);
+      List<String> documentNumbers);
 
-  List<CaseLawDocumentationUnit> findAllByEcliNotNull();
-
+  Stream<CaseLawDocumentationUnit> findAllByEcliNotNull();
 }
