@@ -22,7 +22,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Stream;
 import lombok.SneakyThrows;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -206,12 +205,8 @@ public class CaseLawService {
     return caseLawBucket.getAllKeysByPrefix(documentNumber);
   }
 
-  public Stream<CaseLawDocumentationUnit> getAllEcliDocuments() {
-    return caseLawRepository.findAllByEcliNotNull();
-  }
-
   public List<CaseLawDocumentationUnit> getEcliDocumentsByDocumentNumbers(
       List<String> documentNumber) {
-    return caseLawRepository.findAllByDocumentNumberInAndEcliNotNull(documentNumber);
+    return caseLawRepository.findAllValidFederalEcliDocumentsIn(documentNumber);
   }
 }

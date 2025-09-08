@@ -5,8 +5,8 @@ import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import de.bund.digitalservice.ris.search.repository.objectstorage.CaseLawBucket;
 import de.bund.digitalservice.ris.search.repository.objectstorage.PortalBucket;
+import de.bund.digitalservice.ris.search.repository.opensearch.CaseLawRepository;
 import de.bund.digitalservice.ris.search.service.CaseLawIndexSyncJob;
-import de.bund.digitalservice.ris.search.service.CaseLawService;
 import de.bund.digitalservice.ris.search.service.IndexStatusService;
 import de.bund.digitalservice.ris.search.service.IndexSyncJob;
 import de.bund.digitalservice.ris.search.service.IndexingState;
@@ -42,7 +42,7 @@ public class DailyEcliSitemapJob implements Job {
 
   IndexStatusService indexStatusService;
 
-  CaseLawService caseLawService;
+  CaseLawRepository caseLawRepo;
 
   EcliCrawlerDocumentRepository repository;
 
@@ -58,14 +58,14 @@ public class DailyEcliSitemapJob implements Job {
       PortalBucket portalBucket,
       CaseLawBucket caselawbucket,
       IndexStatusService indexStatusService,
-      CaseLawService caseLawService,
+      CaseLawRepository caseLawRepo,
       EcliCrawlerDocumentRepository repository) {
     this.sitemapService = service;
     this.indexJob = indexJob;
     this.portalBucket = portalBucket;
     this.caselawbucket = caselawbucket;
     this.indexStatusService = indexStatusService;
-    this.caseLawService = caseLawService;
+    this.caseLawRepo = caseLawRepo;
     this.repository = repository;
   }
 
@@ -116,7 +116,7 @@ public class DailyEcliSitemapJob implements Job {
 
   private void createAll() throws FatalDailySitemapJobException {
     Stream<List<EcliCrawlerDocument>> docUnits =
-        getAllCreatedDocumentsFromStream(caseLawService.getAllEcliDocuments());
+        getAllCreatedDocumentsFromStream(caseLawRepo.findAllValidFederalEcliDocuments());
 
     docUnits.forEach(
         documents -> {
@@ -198,7 +198,7 @@ public class DailyEcliSitemapJob implements Job {
         mergedChangelog.getChanged().stream().map(i -> i.replace(".xml", "")).toList();
     List<EcliCrawlerDocument> changes =
         new ArrayList<>(
-            caseLawService.getEcliDocumentsByDocumentNumbers(createIdentifiers).stream()
+            caseLawRepo.findAllValidFederalEcliDocumentsIn(createIdentifiers).stream()
                 .map(EcliCrawlerDocumentMapper::fromCaseLawDocumentationUnit)
                 .toList());
 

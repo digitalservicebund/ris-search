@@ -8,8 +8,8 @@ import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import de.bund.digitalservice.ris.search.repository.objectstorage.CaseLawBucket;
 import de.bund.digitalservice.ris.search.repository.objectstorage.PortalBucket;
+import de.bund.digitalservice.ris.search.repository.opensearch.CaseLawRepository;
 import de.bund.digitalservice.ris.search.service.CaseLawIndexSyncJob;
-import de.bund.digitalservice.ris.search.service.CaseLawService;
 import de.bund.digitalservice.ris.search.service.IndexStatusService;
 import de.bund.digitalservice.ris.search.service.IndexingState;
 import de.bund.digitalservice.ris.search.sitemap.eclicrawler.model.EcliCrawlerDocument;
@@ -44,7 +44,7 @@ class DailySitemapJobTest {
   @Mock PortalBucket portalBucket;
   @Mock CaseLawBucket caseLawBucket;
   @Mock IndexStatusService indexStatusService;
-  @Mock CaseLawService caseLawService;
+  @Mock CaseLawRepository caselawRepo;
   @Mock EcliCrawlerDocumentRepository repository;
 
   @BeforeEach
@@ -56,7 +56,7 @@ class DailySitemapJobTest {
             portalBucket,
             caseLawBucket,
             indexStatusService,
-            caseLawService,
+            caselawRepo,
             repository);
   }
 
@@ -115,7 +115,7 @@ class DailySitemapJobTest {
     Stream<CaseLawDocumentationUnit> documents =
         Stream.of(
             CaseLawDocumentationUnit.builder().id("id").decisionDate(LocalDate.now()).build());
-    Mockito.when(caseLawService.getAllEcliDocuments()).thenReturn(documents);
+    Mockito.when(caselawRepo.findAllValidFederalEcliDocuments()).thenReturn(documents);
     List<Sitemap> sitemaps = List.of(new Sitemap());
     Mockito.when(
             sitemapService.createSitemaps(
@@ -168,7 +168,7 @@ class DailySitemapJobTest {
     Mockito.when(syncJob.parseOneChangelog(caseLawBucket, newChangelogPath))
         .thenReturn(newChangelog);
 
-    Mockito.when(caseLawService.getEcliDocumentsByDocumentNumbers(List.of("ABCD")))
+    Mockito.when(caselawRepo.findAllValidFederalEcliDocumentsIn(List.of("ABCD")))
         .thenReturn(
             List.of(
                 CaseLawDocumentationUnit.builder()
