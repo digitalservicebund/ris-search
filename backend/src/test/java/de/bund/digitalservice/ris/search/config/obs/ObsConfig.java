@@ -26,6 +26,15 @@ public class ObsConfig {
         new TestMockS3Client("caselaw", relativeLocalStorageDirectory), "caselaw");
   }
 
+  @Bean(name = "literatureS3Client")
+  @Profile({"test"})
+  public ObjectStorageClient mockLiteratureTestS3Client(
+      @Value("${local.file-storage}") String relativeLocalStorageDirectory) {
+    var bucketName = "literature";
+    return new S3ObjectStorageClient(
+        new TestMockS3Client(bucketName, relativeLocalStorageDirectory), bucketName);
+  }
+
   @Bean(name = "portalS3Client")
   @Profile({"test"})
   public ObjectStorageClient mockPortalTestS3Client(
