@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<akn:akomaNtoso xmlns:akn="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" xmlns:ris="http://ldml.neuris.de/literature/metadata/">
+    <akn:doc name="offene-struktur">
+        <akn:meta>
+            <akn:identification source="attributsemantik-noch-undefiniert">
+                <akn:FRBRWork>
+                    <akn:FRBRthis value="regelungstext-1"/>
+                    <akn:FRBRuri value="TODO"/>
+                    <akn:FRBRalias name="haupttitel" value="Drittes Test-Dokument ULI"/>
+                    <akn:FRBRdate date="2013-01-01" name="verkuendungsfassung"/>
+                    <akn:FRBRauthor href="recht.bund.de/institution/foobar"/>
+                    <akn:FRBRauthor as="#verfasser" href="#fee-lilly-verfasser-1"/>
+                    <akn:FRBRcountry value="de"/>
+                    <akn:FRBRsubtype value="LU"/>
+                    <akn:FRBRnumber value="TODO"/>
+                    <akn:FRBRname value="TODO"/>
+                </akn:FRBRWork>
+                <akn:FRBRExpression>
+                    <akn:FRBRthis value="regelungstext-1"/>
+                    <akn:FRBRuri value="regelungstext-1"/>
+                    <akn:FRBRalias name="documentNumber" value="TEST000000003"/>
+                    <akn:FRBRdate date="2013-01-01" name="verkuendung"/>
+                    <akn:FRBRauthor href="recht.bund.de/institution/foobar"/>
+                    <akn:FRBRlanguage language="deu"/>
+                </akn:FRBRExpression>
+                <akn:FRBRManifestation>
+                    <akn:FRBRthis value="TODO"/>
+                    <akn:FRBRuri value="TODO"/>
+                    <akn:FRBRdate date="2013-01-01" name="generierung"/>
+                    <akn:FRBRauthor href="recht.bund.de"/>
+                    <akn:FRBRformat value="xml"/>
+                </akn:FRBRManifestation>
+            </akn:identification>
+            <akn:classification source="doktyp">
+                <akn:keyword dictionary="attributsemantik-noch-undefiniert" showAs="Auf" value="Auf"/>
+            </akn:classification>
+            <akn:classification source="schlagwort">
+                <akn:keyword dictionary="attributsemantik-noch-undefiniert" showAs="Anerkennung" value="Anerkennung"/>
+            </akn:classification>
+            <akn:references source="attributsemantik-noch-undefiniert">
+                <akn:TLCPerson eId="fee-lilly-verfasser-1" href="akn/ontology/persons/de/fee-lilly" ris:name="Fee, Lilly" ris:titel="Prof Dr" showAs="Fee, Lilly, Prof Dr"/>
+                <akn:TLCRole eId="verfasser" href="akn/ontology/roles/de/verfasser" showAs="Verfasser"/>
+            </akn:references>
+            <akn:proprietary source="attributsemantik-noch-undefiniert">
+                <ris:metadata>
+                    <ris:veroeffentlichungsJahre>
+                        <ris:veroeffentlichungsJahr>2015</ris:veroeffentlichungsJahr>
+                    </ris:veroeffentlichungsJahre>
+                </ris:metadata>
+            </akn:proprietary>
+        </akn:meta>
+        <akn:preface>
+            <akn:longTitle>
+                <akn:block name="longTitle">Drittes Test-Dokument ULI</akn:block>
+            </akn:longTitle>
+        </akn:preface>
+        <akn:mainBody>
+            <akn:div>
+                <akn:p>Dies ist das dritte Test-Dokument. Hier gibt es nichts spannendes zu lesen.</akn:p>
+            </akn:div>
+        </akn:mainBody>
+    </akn:doc>
+</akn:akomaNtoso>
