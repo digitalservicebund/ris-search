@@ -18,6 +18,8 @@ import java.time.format.DateTimeFormatter;
 
 public class EcliCrawlerDocumentMapper {
 
+  private EcliCrawlerDocumentMapper() {}
+
   private static final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
   private static final String URL_PREFIX = "http://placeholder_url/to/";
 
