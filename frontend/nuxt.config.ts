@@ -15,8 +15,6 @@ const sentryEnabled = !isStringEmpty(process.env.NUXT_PUBLIC_SENTRY_DSN);
 
 const secureCookie = !config.devMode;
 
-const backendBaseUrl = process.env.NUXT_RIS_BACKEND_URL;
-
 export default defineNuxtConfig({
   app: {
     head: {
@@ -148,17 +146,21 @@ export default defineNuxtConfig({
     },
   },
   routeRules: {
-    "/api/docs/**": {
-      proxy: `${backendBaseUrl}/swagger-ui/**`,
-    },
-    "v3/api-docs/**": {
-      proxy: `${backendBaseUrl}/**`,
-    },
     "/sitemaps/norms/**": {
-      proxy: `${backendBaseUrl}/v1/sitemaps/norms/**`,
+      proxy: {
+        to: "/api/v1/sitemaps/norms/**",
+        headers: {
+          Accept: "application/xml",
+        },
+      },
     },
     "/sitemaps/caselaw/**": {
-      proxy: `${backendBaseUrl}/v1/sitemaps/caselaw/**`,
+      proxy: {
+        to: "/api/v1/sitemaps/caselaw/**",
+        headers: {
+          Accept: "application/xml",
+        },
+      },
     },
   },
   vite: {

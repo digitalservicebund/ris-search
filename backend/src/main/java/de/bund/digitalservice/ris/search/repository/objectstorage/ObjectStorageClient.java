@@ -9,6 +9,8 @@ import java.util.List;
 public interface ObjectStorageClient {
   public List<String> listKeysByPrefix(String path);
 
+  List<ObjectKeyInfo> listByPrefixWithLastModified(String prefix);
+
   public FilterInputStream getStream(String objectKey) throws NoSuchKeyException;
 
   public void save(String fileName, String fileContent);
