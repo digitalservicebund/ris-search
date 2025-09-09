@@ -20,6 +20,7 @@ import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.xml.sax.SAXException;
 
@@ -78,6 +79,9 @@ class SitemapSchemaTest {
     sitemap.setUrl(urls);
 
     String content = EcliMarshaller.marshallSitemap(sitemap);
+
+    Assertions.assertEquals(
+        "Bundesgerichtshof", url.getDocument().getMetadata().getCreator().getValue());
     validator.validate(new StreamSource(new StringReader(content)));
   }
 
