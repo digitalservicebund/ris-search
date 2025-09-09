@@ -1,88 +1,156 @@
 # Swapping indices in OpenSearch
 
-Sometimes, data needs to be re-indexed in OpenSearch, such as when the `index_options` are changed.
+Sometimes, the indexes in Opensearch need to be recreated.
+This is usually the result of the *mappings.json and/or the german_analyzer.json files changing.
 To prevent downtime, it is advisable to build a new index in the background and swap the indices once ready.
+The following commands in this file should be run in the opensearch dev console for the appropriate environment being updated.
 
 ## Initial state
 
-When the backend is connected to a new OpenSearch cluster instance, the main indices `norms` and `caselaws` are used.
-A common alias `documents`, used to enable search across document kinds, points to both indices.
+In staging and prototype `norms` and `caselaws` are not actually indexes, they are aliases.
+Using an alias helps with a zero downtime index recreation.
+Production and UAT should also use aliases instead of indexes, but this is not done yet.
 
-## Migration
+## Make sure everything is the way you expect
+There should already be indexes in the form `caselaws_OLD_DATE` and `norms_OLD_DATE`.
+```shell
+GET _cat/indices
+GET _cat/aliases
+```
 
-When moving to a new index, make sure to use the old index name as a prefix. For global searches, this prefix
-is used to determine how to process individual search hits.
-
-Note that many changes can be performed without re-indexing.
-
-### Create a new index
-
-Using the dev console, a new index with (different) settings or mappings can be created using
-
-```http request
-PUT <index_name>
-
+## Update the common_settings_component
+If german_analyzer.json changed then run this
+```shell
+PUT /_component_template/common_settings_component
 {
-  "mappings": // replace with contents of norms_mapping.json or caselaw_mapping.json (object starting with key "properties")
-  "settings": {
-    "index": // replace with contents from german_analyzer.json (object starting with key "analysis")
+  "template": {
+    "settings":
+    <<Paste entire content of german_analyzer.json here>>
   }
 }
 ```
 
-### Copy the data to the new index
-```http request
-POST _reindex
-
+## Update the norms_mappings_component
+If norms_mapping.json changed then run this
+```shell
+PUT /_component_template/norms_mappings_component
 {
-  "source": {"index":"norms" },
-  "dest": {"index": "norms_2025-01-01"}
+  "template": {
+    "mappings":
+    <<Paste entire content of norms_mapping.json here>>
+  }
 }
 ```
 
-You may check on the progress by polling the tasks endpoint
-```http request
-GET _cat/tasks?actions=*reindex
-```
-
-Take appropriate measures to ensure that new data received by the application makes it to the new index.
-
-The count can be checked by running
-
-```http request
-GET norms/_count
-```
-```http request
-GET norms_2025-01-01/_count
-```
-
-### Replace original index by alias
-
-```http request
-POST _aliases
-
+## Update the caselaw_mappings_component
+If caselaw_mappings.json changed then run this
+```shell
+PUT /_component_template/caselaw_mappings_component
 {
-  "actions": [
-    {
-      "remove_index": {
-        "index": "norms_or_caselaws"
-      }
-    },
-    {
-      "add": {
-        "index": "norms_or_caselaws_2025-01-01",
-        "alias": "norms_or_caselaws",
-        "is_write_index": true
-      }
-    },
-    {
-      "add": {
-        "index": "norms_or_caselaws_2025-01-01",
-        "alias": "documents"
-      }
-    }
+  "template": {
+    "mappings":
+    <<Paste entire content of caselaw_mappings.json here>>
+  }
+}
+```
+
+## Create the norms and caselaws templates
+This only needs to be run if the templates don't already exist in the environement being updated.
+```shell
+PUT /_index_template/norms_template
+{
+  "index_patterns": ["norms*"],
+  "composed_of": [
+    "common_settings_component",
+    "norms_mappings_component"
+  ]
+}
+
+PUT /_index_template/caselaws_template
+{
+  "index_patterns": ["caselaws*"],
+  "composed_of": [
+    "common_settings_component",
+    "caselaw_mappings_component"
   ]
 }
 ```
 
-Specify `"is_write_index": true` to ensure that writes can be performed to the alias.
+## Create the new indexes
+NEW_DATE should be today's date in the format YYYY-MM-DD
+```shell
+PUT /norms_NEW_DATE
+PUT /caselaws_NEW_DATE
+```
+
+## Do the data copy
+```shell
+POST /_reindex?wait_for_completion=false
+{
+  "conflicts": "proceed",
+  "source": {
+    "index": "norms_OLD_DATE"
+  },
+  "dest": {
+    "index": "norms_NEW_DATE"
+  }
+}
+
+POST /_reindex?wait_for_completion=false
+{
+  "source": {
+    "index": "caselaws_OLD_DATE"
+  },
+  "dest": {
+    "index": "caselaws_NEW_DATE"
+  }
+}
+```
+
+## Wait for the copy to finish
+```shell
+GET _cat/tasks?actions=*reindex
+```
+
+## Double checks
+The count of the old and new indexes should match your expectations
+```shell
+GET norms_OLD_DATE/_count
+GET norms_NEW_DATE/_count
+```
+
+## Switch aliases to new indexes
+```shell
+POST /_aliases
+{
+    "actions": [
+        { "remove": { "index": "norms_OLD_DATE", "alias": "norms" } },
+        { "add": { "index": "norms_NEW_DATE", "alias": "norms" } }
+    ]
+}
+POST /_aliases
+{
+    "actions": [
+        { "remove": { "index": "caselaws_OLD_DATE", "alias": "caselaws" } },
+        { "add": { "index": "caselaws_NEW_DATE", "alias": "caselaws" } }
+    ]
+}
+POST /_aliases
+{
+    "actions": [
+        { "remove": { "index": "norms_OLD_DATE", "alias": "documents" } },
+        { "add": { "index": "norms_NEW_DATE", "alias": "documents" } },
+        { "remove": { "index": "caselaws_OLD_DATE", "alias": "documents" } },
+        { "add": { "index": "caselaws_NEW_DATE", "alias": "documents" } }
+    ]
+}
+```
+
+## More double checks
+Check the portal ui by searching and making sure everything is as expected.
+
+## Delete the old indexes
+```shell
+DELETE norms_OLD_DATE
+DELETE caselaws_OLD_DATE
+```
