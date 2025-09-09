@@ -1,4 +1,4 @@
-package de.bund.digitalservice.ris.search.unit.sitemap.caselaw;
+package de.bund.digitalservice.ris.search.unit.sitemap.eclicrawler;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.argThat;
@@ -12,12 +12,12 @@ import de.bund.digitalservice.ris.search.repository.opensearch.CaseLawRepository
 import de.bund.digitalservice.ris.search.service.CaseLawIndexSyncJob;
 import de.bund.digitalservice.ris.search.service.IndexStatusService;
 import de.bund.digitalservice.ris.search.service.IndexingState;
+import de.bund.digitalservice.ris.search.service.Job;
 import de.bund.digitalservice.ris.search.sitemap.eclicrawler.model.EcliCrawlerDocument;
 import de.bund.digitalservice.ris.search.sitemap.eclicrawler.repository.EcliCrawlerDocumentRepository;
 import de.bund.digitalservice.ris.search.sitemap.eclicrawler.schema.sitemap.Sitemap;
 import de.bund.digitalservice.ris.search.sitemap.eclicrawler.service.DailyEcliSitemapJob;
 import de.bund.digitalservice.ris.search.sitemap.eclicrawler.service.EcliSitemapService;
-import de.bund.digitalservice.ris.search.sitemap.eclicrawler.service.FatalDailySitemapJobException;
 import java.io.FileNotFoundException;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -25,7 +25,6 @@ import java.time.temporal.ChronoUnit;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Stream;
 import org.eclipse.persistence.exceptions.JAXBException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -61,8 +60,7 @@ class DailySitemapJobTest {
   }
 
   @Test
-  void itOnlyProcessesNewChangelogFiles()
-      throws ObjectStoreServiceException, FatalDailySitemapJobException {
+  void itOnlyProcessesNewChangelogFiles() throws ObjectStoreServiceException {
     Instant timestamp = Instant.now().minus(1, ChronoUnit.DAYS);
     String lastProcessedChangelog = "changelogs/" + timestamp;
     String lastSuccesfullIndexJob = "changelogs/" + timestamp;
@@ -79,7 +77,7 @@ class DailySitemapJobTest {
 
   @Test
   void itWritesSuccessfulOnValidChangelogWithEmptyDocumentationUnits()
-      throws ObjectStoreServiceException, FatalDailySitemapJobException {
+      throws ObjectStoreServiceException {
     Instant lastProcessedTimestamp = Instant.now().minus(1, ChronoUnit.DAYS);
     Instant changelogDate = Instant.now().minus(2, ChronoUnit.DAYS);
     String lastProcessedSitemapJobChangelog = "changelogs/" + lastProcessedTimestamp;
@@ -103,19 +101,18 @@ class DailySitemapJobTest {
 
   @Test
   void itWritesInitialSitemapFiles()
-      throws ObjectStoreServiceException,
-          JAXBException,
-          FatalDailySitemapJobException,
-          jakarta.xml.bind.JAXBException {
+      throws ObjectStoreServiceException, JAXBException, jakarta.xml.bind.JAXBException {
 
     Mockito.when(sitemapService.getSitemapFilesPathsForDay(LocalDate.now())).thenReturn(List.of());
     Mockito.when(indexStatusService.loadStatus(DailyEcliSitemapJob.STATUS_FILE))
         .thenReturn(new IndexingState(null, null, null));
 
-    Stream<CaseLawDocumentationUnit> documents =
-        Stream.of(
-            CaseLawDocumentationUnit.builder().id("id").decisionDate(LocalDate.now()).build());
-    Mockito.when(caselawRepo.findAllValidFederalEcliDocuments()).thenReturn(documents);
+    Mockito.when(caseLawBucket.getAllKeys()).thenReturn(List.of("docnumber.xml"));
+
+    List<CaseLawDocumentationUnit> documents =
+        List.of(CaseLawDocumentationUnit.builder().id("id").decisionDate(LocalDate.now()).build());
+    Mockito.when(caselawRepo.findAllValidFederalEcliDocumentsIn(List.of("docnumber")))
+        .thenReturn(documents);
     List<Sitemap> sitemaps = List.of(new Sitemap());
     Mockito.when(
             sitemapService.createSitemaps(
@@ -144,7 +141,6 @@ class DailySitemapJobTest {
       throws ObjectStoreServiceException,
           JAXBException,
           FileNotFoundException,
-          FatalDailySitemapJobException,
           jakarta.xml.bind.JAXBException {
     Instant lastProcessedTimestamp = Instant.now().minus(2, ChronoUnit.DAYS);
     Instant newChangelogTimestamp = Instant.now().minus(1, ChronoUnit.DAYS);
@@ -198,14 +194,10 @@ class DailySitemapJobTest {
   }
 
   @Test
-  void itThrowsAnErrorWhenDayWasAlreadyGenerated() {
+  void itReturnsAnErrorWhenDayWasAlreadyGenerated() {
     Mockito.when(sitemapService.getSitemapFilesPathsForDay(LocalDate.now()))
         .thenReturn(List.of("alreadyexists"));
 
-    Assertions.assertThrows(
-        FatalDailySitemapJobException.class,
-        () -> {
-          sitemapJob.runJob();
-        });
+    Assertions.assertEquals(Job.ReturnCode.ERROR, sitemapJob.runJob());
   }
 }

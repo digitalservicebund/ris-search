@@ -2,7 +2,6 @@ package de.bund.digitalservice.ris.search.sitemap.eclicrawler.service;
 
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
-import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import de.bund.digitalservice.ris.search.repository.objectstorage.CaseLawBucket;
 import de.bund.digitalservice.ris.search.repository.objectstorage.PortalBucket;
 import de.bund.digitalservice.ris.search.repository.opensearch.CaseLawRepository;
@@ -19,14 +18,11 @@ import jakarta.xml.bind.JAXBException;
 import java.io.FileNotFoundException;
 import java.time.Instant;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
+import org.apache.commons.collections4.ListUtils;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -45,8 +41,6 @@ public class DailyEcliSitemapJob implements Job {
   CaseLawRepository caseLawRepo;
 
   EcliCrawlerDocumentRepository repository;
-
-  final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
   public static final String STATUS_FILE = "ecli_sitemaps_status.json";
 
@@ -72,8 +66,7 @@ public class DailyEcliSitemapJob implements Job {
   public ReturnCode runJob() {
     try {
       if (!sitemapService.getSitemapFilesPathsForDay(now).isEmpty()) {
-        throw new FatalDailySitemapJobException(
-            String.format("Sitemaps for day %s already exists", now.format(formatter)));
+        return ReturnCode.ERROR;
       }
 
       IndexingState state = indexStatusService.loadStatus(STATUS_FILE);
@@ -96,7 +89,7 @@ public class DailyEcliSitemapJob implements Job {
           createFromChangelogs(newChangelogPaths);
         }
       }
-    } catch (ObjectStoreServiceException e) {
+    } catch (JAXBException | FileNotFoundException | ObjectStoreServiceException e) {
       return ReturnCode.ERROR;
     }
 
@@ -114,72 +107,41 @@ public class DailyEcliSitemapJob implements Job {
     return indexPaths;
   }
 
-  private void createAll() throws FatalDailySitemapJobException {
-    Stream<List<EcliCrawlerDocument>> docUnits =
-        getAllCreatedDocumentsFromStream(caseLawRepo.findAllValidFederalEcliDocuments());
+  private void createAll() throws JAXBException {
 
-    docUnits.forEach(
-        documents -> {
-          try {
-            List<String> sitemapPaths = writeSitemaps(documents, now);
-            if (!sitemapPaths.isEmpty()) {
-              sitemapService.writeRobotsTxt(sitemapPaths);
-            }
-            indexStatusService.saveStatus(
-                STATUS_FILE,
-                new IndexingState()
-                    .withLastProcessedChangelogFile(
-                        IndexSyncJob.CHANGELOGS_PREFIX + Instant.now().toString()));
-          } catch (JAXBException ex) {
-            throw new FatalDailySitemapJobException(ex.getMessage());
-          }
-        });
-  }
+    List<String> allDocnumbers =
+        caselawbucket.getAllKeys().stream().map(s -> s.replace(".xml", "")).toList();
+    List<List<String>> partitionedDocnumbers = ListUtils.partition(allDocnumbers, 10000);
+    List<EcliCrawlerDocument> allDocunits = new ArrayList<>();
 
-  /**
-   * process the caselawDocumentationUnit stream in batches of 10000 to avoid outOfMemoryErrors in
-   * case we receive too many items
-   *
-   * @param stream Original Stream of CaseLawDocumentationUnits
-   * @return Returns a stream of CaseLawDocumentationUnit batches
-   */
-  private Stream<List<EcliCrawlerDocument>> getAllCreatedDocumentsFromStream(
-      Stream<CaseLawDocumentationUnit> stream) {
-    Iterator<CaseLawDocumentationUnit> iterator = stream.iterator();
-    Iterator<List<EcliCrawlerDocument>> listIterator =
-        new Iterator<>() {
+    for (List<String> docNumbers : partitionedDocnumbers) {
+      allDocunits.addAll(
+          caseLawRepo.findAllValidFederalEcliDocumentsIn(docNumbers).stream()
+              .map(EcliCrawlerDocumentMapper::fromCaseLawDocumentationUnit)
+              .toList());
+    }
 
-          public boolean hasNext() {
-            return iterator.hasNext();
-          }
-
-          public List<EcliCrawlerDocument> next() {
-            List<EcliCrawlerDocument> result = new ArrayList<>(10000);
-            for (int i = 0; i < 10000 && iterator.hasNext(); i++) {
-              result.add(EcliCrawlerDocumentMapper.fromCaseLawDocumentationUnit(iterator.next()));
-            }
-            return result;
-          }
-        };
-
-    return StreamSupport.stream(
-        ((Iterable<List<EcliCrawlerDocument>>) () -> listIterator).spliterator(), false);
+    List<String> sitemapIndexPaths = writeSitemaps(allDocunits, now);
+    if (!sitemapIndexPaths.isEmpty()) {
+      sitemapService.writeRobotsTxt(sitemapIndexPaths);
+    }
+    indexStatusService.saveStatus(
+        STATUS_FILE,
+        new IndexingState()
+            .withLastProcessedChangelogFile(
+                IndexSyncJob.CHANGELOGS_PREFIX + Instant.now().toString()));
   }
 
   private void createFromChangelogs(List<String> filePaths)
-      throws ObjectStoreServiceException, FatalDailySitemapJobException {
+      throws ObjectStoreServiceException, FileNotFoundException, JAXBException {
 
     List<EcliCrawlerDocument> ecliDocuments = getAllChangesFromChangelogs(filePaths);
-    try {
-      if (!ecliDocuments.isEmpty()) {
-        List<String> sitemapIndexPaths = writeSitemaps(ecliDocuments, now);
-        sitemapService.updateRobotsTxt(sitemapIndexPaths);
+    if (!ecliDocuments.isEmpty()) {
+      List<String> sitemapIndexPaths = writeSitemaps(ecliDocuments, now);
+      sitemapService.updateRobotsTxt(sitemapIndexPaths);
 
-        indexStatusService.saveStatus(
-            STATUS_FILE, new IndexingState().withLastProcessedChangelogFile(filePaths.getLast()));
-      }
-    } catch (FileNotFoundException | JAXBException ex) {
-      throw new FatalDailySitemapJobException(ex.getMessage());
+      indexStatusService.saveStatus(
+          STATUS_FILE, new IndexingState().withLastProcessedChangelogFile(filePaths.getLast()));
     }
   }
 
@@ -212,7 +174,6 @@ public class DailyEcliSitemapJob implements Job {
                   return ecliSitemap;
                 })
             .toList());
-
     return changes;
   }
 }

@@ -1,4 +1,4 @@
-package de.bund.digitalservice.ris.search.unit.sitemap.caselaw.schema;
+package de.bund.digitalservice.ris.search.unit.sitemap.eclicrawler.schema;
 
 import static org.testcontainers.shaded.org.apache.commons.io.FileUtils.getFile;
 

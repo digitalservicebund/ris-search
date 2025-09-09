@@ -17,7 +17,7 @@ public class EcliMarshaller {
     try {
       jaxbCtx = JAXBContext.newInstance(Sitemapindex.class, Sitemap.class);
     } catch (JAXBException e) {
-      throw new FatalDailySitemapJobException(e.getMessage());
+      throw new RuntimeException(e);
     }
   }
 

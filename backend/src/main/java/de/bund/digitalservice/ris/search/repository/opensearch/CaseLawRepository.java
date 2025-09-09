@@ -2,7 +2,6 @@ package de.bund.digitalservice.ris.search.repository.opensearch;
 
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import java.util.List;
-import java.util.stream.Stream;
 import org.springframework.data.elasticsearch.annotations.Query;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 
@@ -34,17 +33,4 @@ public interface CaseLawRepository
                 ]}}
           """)
   List<CaseLawDocumentationUnit> findAllValidFederalEcliDocumentsIn(List<String> documentNumbers);
-
-  @Query(
-      """
-          {
-              "bool":{
-                "must":[
-                  {"exists" :{"field": "ecli"}},
-                  {"exists" :{"field": "document_type"}},
-                  {"exists" :{"field": "decision_date"}},
-                  {"terms": {"court_type.keyword":["BGH", "BVerwG", "BVerfG", "BFH", "BAG", "BSG", "BPatG"] }}
-                ]}}
-          """)
-  Stream<CaseLawDocumentationUnit> findAllValidFederalEcliDocuments();
 }

@@ -1,4 +1,4 @@
-package de.bund.digitalservice.ris.search.unit.sitemap.caselaw;
+package de.bund.digitalservice.ris.search.unit.sitemap.eclicrawler;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
