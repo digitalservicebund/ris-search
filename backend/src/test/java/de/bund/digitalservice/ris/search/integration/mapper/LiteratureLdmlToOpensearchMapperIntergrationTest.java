@@ -38,5 +38,6 @@ class LiteratureLdmlToOpensearchMapperIntergrationTest {
     assertThat(literatureUnwrapped.shortReport())
         .isEqualTo(
             "1. Dies ist ein literature LDML Dokument für Tests. Es werden sub und sup Elemente unterstützt. Außerdem gib es noch EM, hlj, noindex und strong.");
+    assertThat(literatureUnwrapped.outline()).isEqualTo("I. Äpfel. II. Birnen. III. Orangen.");
   }
 }
