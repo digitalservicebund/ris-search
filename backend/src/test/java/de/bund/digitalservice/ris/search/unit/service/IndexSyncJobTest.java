@@ -92,7 +92,7 @@ class IndexSyncJobTest {
   @Test
   void itLogsAWarningWhenTheNumberInBucketAnIndexDiffer(CapturedOutput output) {
     when(indexNormsService.getNumberOfIndexedDocuments()).thenReturn(100);
-    when(indexNormsService.getNumberOfFilesInBucket()).thenReturn(99);
+    when(indexNormsService.getNumberOfIndexableDocumentsInBucket()).thenReturn(99);
 
     Instant time = Instant.now();
     normIndexSyncJob.alertOnNumberMismatch(

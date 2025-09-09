@@ -134,7 +134,7 @@ public class IndexSyncJob implements Job {
       if (!Collections.disjoint(changelog.getChanged(), changelog.getDeleted())) {
         throw new IllegalArgumentException("duplicate identifier in changed and deleted list");
       }
-      indexService.indexChangelog(changelogFileName, changelog);
+      indexService.indexChangelog(changelog);
     }
   }
 
@@ -145,7 +145,7 @@ public class IndexSyncJob implements Job {
     List<String> unprocessedChangelogs =
         getNewChangelogs(changelogBucket, state.lastProcessedChangelogFile());
     if (unprocessedChangelogs.isEmpty()) {
-      int numberOfFilesInBucket = indexService.getNumberOfFilesInBucket();
+      int numberOfFilesInBucket = indexService.getNumberOfIndexableDocumentsInBucket();
       int numberOfIndexedDocuments = indexService.getNumberOfIndexedDocuments();
       if (numberOfFilesInBucket != numberOfIndexedDocuments) {
         String indexServiceName = indexService.getClass().getSimpleName();

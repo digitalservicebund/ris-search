@@ -23,7 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class IndexNormsService implements IndexService {
+public class IndexNormsService extends IndexService<Norm> {
 
   private static final Logger logger = LogManager.getLogger(IndexNormsService.class);
 
@@ -32,10 +32,12 @@ public class IndexNormsService implements IndexService {
 
   @Autowired
   public IndexNormsService(NormsBucket normsBucket, NormsRepository normsRepository) {
+    super(normsBucket, null, logger);
     this.normsBucket = normsBucket;
     this.normsRepository = normsRepository;
   }
 
+  @Override
   public void reindexAll(String startingTimestamp) throws ObjectStoreServiceException {
     List<ManifestationEli> manifestations =
         normsBucket.getAllKeysByPrefix("eli/").stream()
@@ -59,13 +61,12 @@ public class IndexNormsService implements IndexService {
   }
 
   @Override
-  public void indexChangelog(String changelogKey, Changelog changelog)
-      throws ObjectStoreServiceException {
+  public void indexChangelog(Changelog changelog) throws ObjectStoreServiceException {
     try {
       List<ManifestationEli> changedFiles =
-          getValidManifestations(changelogKey, changelog.getChanged().stream().toList());
+          getValidManifestations(changelog.getChanged().stream().toList());
       List<ManifestationEli> deletedFiles =
-          getValidManifestations(changelogKey, changelog.getDeleted().stream().toList());
+          getValidManifestations(changelog.getDeleted().stream().toList());
       Set<ExpressionEli> changedWorks = getExpressions(changedFiles);
       Set<ExpressionEli> deletedWorks = getExpressions(deletedFiles);
       // We want to process the changes first to have no downtime, but we also want to keep a Norm
@@ -74,7 +75,7 @@ public class IndexNormsService implements IndexService {
       List<List<ExpressionEli>> batches = ListUtils.partition(changedWorks.stream().toList(), 100);
       for (int i = 0; i < batches.size(); i++) {
         List<ExpressionEli> oneBatch = batches.get(i);
-        logger.info("Indexing {}. Batch {} of {}", changelogKey, i + 1, batches.size());
+        logger.info("Indexing batch {} of {}", i + 1, batches.size());
         indexOneNormBatch(oneBatch);
       }
 
@@ -89,7 +90,7 @@ public class IndexNormsService implements IndexService {
         }
       }
     } catch (IllegalArgumentException e) {
-      logger.error("Error while reading changelog file {}. {}", changelogKey, e.getMessage());
+      logger.error("Error while reading changelog file: {}", e.getMessage());
     }
   }
 
@@ -107,14 +108,14 @@ public class IndexNormsService implements IndexService {
     normsRepository.saveAll(norms);
   }
 
-  private List<ManifestationEli> getValidManifestations(String changelogKey, List<String> elis) {
+  private List<ManifestationEli> getValidManifestations(List<String> elis) {
     List<ManifestationEli> result = new ArrayList<>();
     for (String eli : elis) {
       Optional<ManifestationEli> manifestationEli = ManifestationEli.fromString(eli);
       if (manifestationEli.isPresent()) {
         result.add(manifestationEli.get());
       } else {
-        logger.warn("Error processing manifestation {} in {}", eli, changelogKey);
+        logger.warn("Error processing manifestation {}", eli);
       }
     }
     return result;
@@ -177,11 +178,13 @@ public class IndexNormsService implements IndexService {
     normsRepository.deleteByIndexedAtIsNull();
   }
 
+  @Override
   public int getNumberOfIndexedDocuments() {
     return (int) normsRepository.count();
   }
 
-  public int getNumberOfFilesInBucket() {
+  @Override
+  public int getNumberOfIndexableDocumentsInBucket() {
     List<ManifestationEli> norms =
         normsBucket.getAllKeysByPrefix("eli/").stream()
             .map(ManifestationEli::fromString)
@@ -189,5 +192,20 @@ public class IndexNormsService implements IndexService {
             .filter(e -> e.subtype().startsWith("regelungstext-"))
             .toList();
     return norms.size();
+  }
+
+  @Override
+  protected String extractIdFromFilename(String filename) {
+    return "";
+  }
+
+  @Override
+  protected Optional<Norm> mapFileToEntity(String filename, String fileContent) {
+    return Optional.empty();
+  }
+
+  @Override
+  protected List<String> getAllIndexableFilenames() {
+    return List.of();
   }
 }

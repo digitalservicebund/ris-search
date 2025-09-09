@@ -166,6 +166,6 @@ class IndexNormsServiceTest {
                 "eli/bund/bgbl-1/2013/s323/2018-07-02/2/deu/2025-03-08/regelungstext-1.xml",
                 "eli/bund/bgbl-1/2013/s4098/2022-03-15/2/deu/2025-03-08/regelungstext-1.xml",
                 "eli/bund/bgbl-1/2013/s1925/2015-10-12/2/deu/2025-03-08/offenestruktur-1.xml"));
-    assertThat(service.getNumberOfFilesInBucket()).isEqualTo(2);
+    assertThat(service.getNumberOfIndexableDocumentsInBucket()).isEqualTo(2);
   }
 }
