@@ -12,7 +12,7 @@ import org.apache.logging.log4j.Logger;
 import software.amazon.awssdk.awscore.exception.AwsServiceException;
 import software.amazon.awssdk.core.exception.SdkClientException;
 
-public class ObjectStorage {
+public class ObjectStorage implements Bucket {
 
   public static final int MAXIMUM_CALL_ATTEMPTS = 3;
   private final Logger logger;

@@ -192,7 +192,7 @@ class IndexCaseLawServiceTest {
     this.service.reindexAll(startingTimestamp);
 
     verify(repo, times(1))
-        .save(
+        .saveEntity(
             argThat(
                 arg -> {
                   assertThat(arg.id()).isEqualTo("TEST80020093");
@@ -212,7 +212,7 @@ class IndexCaseLawServiceTest {
     service.indexChangelog(changelog);
 
     verify(repo, times(1))
-        .save(
+        .saveEntity(
             argThat(
                 arg -> {
                   assertThat(arg.id()).isEqualTo("TEST80020093");
@@ -233,7 +233,7 @@ class IndexCaseLawServiceTest {
     service.indexChangelog(changelog);
 
     verify(repo, times(1))
-        .save(
+        .saveEntity(
             argThat(
                 arg -> {
                   assertThat(arg.id()).isEqualTo("TEST80020093");
