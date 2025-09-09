@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import org.jose4j.base64url.Base64;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.core.SearchPage;
@@ -24,12 +25,24 @@ import org.springframework.stereotype.Service;
 @Service
 public class NlexService {
 
-  NormsService normsService;
+  private final NormsService normsService;
 
-  public NlexService(NormsService normsService) {
+  private final String frontendUrl;
+
+  public NlexService(
+      NormsService normsService, @Value("${server.front-end-url}") String frontendUrl) {
     this.normsService = normsService;
+    this.frontendUrl = frontendUrl + "norms/";
   }
 
+  /**
+   * Runs a query and returns the result. The searchTerm is either supplied in the words contains
+   * object or with the requestId. The requestId is a base64 encoded searchTerm to enable pagination
+   * without persisting the preceding query.
+   *
+   * @param query Query object
+   * @return RequestResult
+   */
   public RequestResult runRequestQuery(Query query) {
     return getSearchTerm(query)
         .map(
@@ -46,19 +59,24 @@ public class NlexService {
                 .setErrors(List.of(new Error().setCause(Error.STANDARD_ERROR_NO_SEARCHTERM))));
   }
 
+  /**
+   * @param searchTerm searchTerm to query for
+   * @param pageable pagination parameters
+   * @return RequestResult
+   */
   private RequestResult runQuery(String searchTerm, Pageable pageable) {
     UniversalSearchParams searchParams = new UniversalSearchParams();
     searchParams.setSearchTerm(searchTerm);
     SearchPage<Norm> normPage = normsService.searchAndFilterNorms(searchParams, null, pageable);
 
     String requestId = Base64.encode(searchTerm.getBytes());
-    return RisToNlexMapper.normsToNlexRequestResult(requestId, normPage);
+    return RisToNlexMapper.normsToNlexRequestResult(requestId, frontendUrl, normPage);
   }
 
   /**
    * it parses the searchterm either from the base64 encoded id or the given contains tag
    *
-   * @param query
+   * @param query Query object
    * @return a given searchTerm if not empty
    */
   private Optional<String> getSearchTerm(Query query) {

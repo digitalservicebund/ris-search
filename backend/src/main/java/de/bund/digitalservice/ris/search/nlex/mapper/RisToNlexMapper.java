@@ -4,7 +4,6 @@ import de.bund.digitalservice.ris.search.mapper.NormSearchResponseMapper;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.nlex.schema.result.Content;
 import de.bund.digitalservice.ris.search.nlex.schema.result.Document;
-import de.bund.digitalservice.ris.search.nlex.schema.result.Error;
 import de.bund.digitalservice.ris.search.nlex.schema.result.ExternUrl;
 import de.bund.digitalservice.ris.search.nlex.schema.result.Navigation;
 import de.bund.digitalservice.ris.search.nlex.schema.result.Page;
@@ -21,13 +20,8 @@ import org.springframework.data.elasticsearch.core.SearchPage;
 public abstract class RisToNlexMapper {
   private RisToNlexMapper() {}
 
-  public static RequestResult buildNlexStandardErrorRequestResult(String cause) {
-    return new RequestResult()
-        .setStatus(ResultStatus.ERROR)
-        .setErrors(List.of(new Error().setCause(cause)));
-  }
-
-  public static RequestResult normsToNlexRequestResult(String id, SearchPage<Norm> searchPage) {
+  public static RequestResult normsToNlexRequestResult(
+      String requestId, String frontendUrl, SearchPage<Norm> searchPage) {
 
     List<Document> documents =
         searchPage.getSearchHits().stream()
@@ -46,7 +40,9 @@ public abstract class RisToNlexMapper {
                       new Document()
                           .setReferences(
                               new References()
-                                  .setExternUrl(new ExternUrl().setHref(norm.getHtmlContentUrl())));
+                                  .setExternUrl(
+                                      new ExternUrl()
+                                          .setHref(frontendUrl + norm.getExpressionEli())));
                   doc.setContent(
                       new Content()
                           .setTitle(norm.getOfficialTitle())
@@ -62,7 +58,7 @@ public abstract class RisToNlexMapper {
     rl.setDocuments(documents);
     rl.setNavigation(
         new Navigation()
-            .setRequestId(id)
+            .setRequestId(requestId)
             .setHits(searchPage.getTotalElements())
             .setPage(
                 new Page()
