@@ -1,4 +1,3 @@
-import _ from "lodash";
 import { computed } from "vue";
 import { type AsyncDataRequestStatus, useFetch } from "#app";
 import type { JSONLDList, LegislationWork, SearchResult } from "~/types";
@@ -9,13 +8,11 @@ interface UseNormVersions {
 }
 
 export function useNormVersions(workEli?: string): UseNormVersions {
-  const { data, status } = getNorms({ eli: workEli });
-  const sortedVersions = computed(() =>
-    _.sortBy(
-      data.value?.member ?? [],
-      (member) => member.item.workExample.temporalCoverage,
-    ),
-  );
+  const { data, status } = getNorms({
+    eli: workEli,
+    sort: "-temporalCoverageFrom",
+  });
+  const sortedVersions = computed(() => data.value?.member ?? []);
   return { status, sortedVersions };
 }
 
@@ -23,6 +20,7 @@ function getNorms(params: {
   eli?: string;
   temporalCoverageFrom?: string;
   temporalCoverageTo?: string;
+  sort?: string;
 }) {
   const backendURL = useBackendURL();
   const immediate = params.eli !== undefined;
