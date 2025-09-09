@@ -4,7 +4,7 @@ import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
 import de.bund.digitalservice.ris.search.mapper.LiteratureLdmlToOpenSearchMapper;
 import de.bund.digitalservice.ris.search.models.opensearch.Literature;
-import de.bund.digitalservice.ris.search.repository.objectstorage.LiteratureBucket;
+import de.bund.digitalservice.ris.search.repository.objectstorage.literature.LiteratureBucket;
 import de.bund.digitalservice.ris.search.repository.opensearch.LiteratureRepository;
 import java.time.Instant;
 import java.util.Arrays;

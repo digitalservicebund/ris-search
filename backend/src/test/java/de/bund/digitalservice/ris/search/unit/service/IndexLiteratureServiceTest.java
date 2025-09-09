@@ -8,7 +8,7 @@ import static org.mockito.Mockito.when;
 
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
-import de.bund.digitalservice.ris.search.repository.objectstorage.LiteratureBucket;
+import de.bund.digitalservice.ris.search.repository.objectstorage.literature.LiteratureBucket;
 import de.bund.digitalservice.ris.search.repository.opensearch.LiteratureRepository;
 import de.bund.digitalservice.ris.search.service.IndexLiteratureService;
 import java.time.ZoneOffset;
