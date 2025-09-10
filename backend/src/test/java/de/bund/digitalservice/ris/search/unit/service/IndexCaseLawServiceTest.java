@@ -198,7 +198,7 @@ class IndexCaseLawServiceTest {
                   assertThat(arg.id()).isEqualTo("TEST80020093");
                   return true;
                 }));
-    verify(repo, times(1)).deleteByIndexedAtBefore(startingTimestamp);
+    verify(repo, times(1)).deleteEntitiesByIndexedAtBefore(startingTimestamp);
   }
 
   @Test
@@ -247,7 +247,7 @@ class IndexCaseLawServiceTest {
     changelog.setDeleted(Sets.newHashSet(Set.of("TEST080020093.xml")));
     service.indexChangelog(changelog);
 
-    verify(repo, times(1)).deleteAllById(Set.of("TEST080020093"));
+    verify(repo, times(1)).deleteAllEntitiesById(Set.of("TEST080020093"));
   }
 
   @Test

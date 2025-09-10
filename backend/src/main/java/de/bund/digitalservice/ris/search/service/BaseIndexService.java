@@ -29,8 +29,8 @@ public abstract class BaseIndexService<T> implements IndexService {
   public void reindexAll(String startingTimestamp) throws ObjectStoreServiceException {
     List<String> indexableFilenames = getAllIndexableFilenames();
     indexFiles(indexableFilenames);
-    repository.deleteByIndexedAtBefore(startingTimestamp);
-    repository.deleteByIndexedAtIsNull();
+    repository.deleteEntitiesByIndexedAtBefore(startingTimestamp);
+    repository.deleteEntitiesByIndexedAtIsNull();
   }
 
   public void indexChangelog(Changelog changelog) throws ObjectStoreServiceException {
@@ -42,12 +42,12 @@ public abstract class BaseIndexService<T> implements IndexService {
           changelog.getDeleted().stream()
               .map(this::extractIdFromFilename)
               .collect(Collectors.toSet());
-      repository.deleteAllById(deletedIds);
+      repository.deleteAllEntitiesById(deletedIds);
     }
   }
 
   public int getNumberOfIndexedDocuments() {
-    return (int) repository.count();
+    return repository.countEntities();
   }
 
   public int getNumberOfIndexableDocumentsInBucket() {
