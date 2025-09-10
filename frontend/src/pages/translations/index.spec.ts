@@ -48,4 +48,17 @@ describe("translations list page", async () => {
     expect(firstTranslationLink.exists()).toBe(true);
     expect(firstTranslationLink.text()).toContain("Act A");
   });
+
+  it("list can be filteres", async () => {
+    const wrapper = await mountSuspended(TranslationListPage);
+
+    const searchInput = wrapper.find("#searchInput");
+    await searchInput.setValue("Gesetz B");
+    const form = wrapper.find("form");
+    await form.trigger("submit");
+
+    const translationListElements = wrapper.findAll("h3");
+    expect(translationListElements.length).toBe(2);
+    expect(translationListElements[0].text()).toBe("Act B");
+  });
 });
