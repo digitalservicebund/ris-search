@@ -3,6 +3,7 @@ import MaterialSymbolsWarningOutline from "~icons/material-symbols/warning-outli
 </script>
 <template>
   <div
+    role="alert"
     class="ris-body2-regular flex bg-yellow-200 px-8 py-12 sm:px-16 print:hidden"
   >
     <div class="container mx-auto flex gap-16">

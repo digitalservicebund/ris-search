@@ -4,61 +4,67 @@ import { expect, test } from "@playwright/test";
 import { createHtmlReport } from "axe-html-reporter";
 
 const testPages = [
-  {
-    name: "Home Page",
-    url: "/",
-  },
-  {
-    name: "All Search Results Page",
-    url: "/search",
-  },
-  {
-    name: "Contact Page",
-    url: "/kontakt",
-  },
-  {
-    name: "Imprint Page",
-    url: "/impressum",
-  },
-  {
-    name: "Data Protection Page",
-    url: "/datenschutz",
-  },
-  {
-    name: "Accessibility Page",
-    url: "/barrierefreiheit",
-  },
+  // {
+  //   name: "Not Found Page",
+  //   url: "/404",
+  // },
+  // {
+  //   name: "Home Page",
+  //   url: "/",
+  // },
+  // {
+  //   name: "All Search Results Page",
+  //   url: "/search",
+  // },
+  // {
+  //   name: "Contact Page",
+  //   url: "/kontakt",
+  // },
+  // {
+  //   name: "Imprint Page",
+  //   url: "/impressum",
+  // },
+  // {
+  //   name: "Data Protection Page",
+  //   url: "/datenschutz",
+  // },
+  // {
+  //   name: "Accessibility Page",
+  //   url: "/barrierefreiheit",
+  // },
   {
     name: "Cookie Settings Page",
     url: "/cookie-einstellungen",
   },
-  {
-    name: "Open Source Page",
-    url: "/opensource",
-  },
-  {
-    name: "User Tests Page",
-    url: "/nutzungstests",
-  },
-  {
-    name: "Norms Search Page",
-    url: "/search?category=N",
-  },
-  {
-    name: "Caselaw Search Page",
-    url: "/search?category=R",
-  },
-  {
-    name: "Article View Page",
-    url: "/norms/eli/bund/bgbl-1/1972/s2459/1999-04-20/4/deu/regelungstext-1/hauptteil-1_abschnitt-1_art-1",
-  },
+  // {
+  //   name: "Open Source Page",
+  //   url: "/opensource",
+  // },
+  // {
+  //   name: "User Tests Page",
+  //   url: "/nutzungstests",
+  // },
+  // {
+  //   name: "Norms Search Page",
+  //   url: "/search?category=N",
+  // },
+  // {
+  //   name: "Caselaw Search Page",
+  //   url: "/search?category=R",
+  // },
+  // {
+  //   name: "Article View Page",
+  //   url: "/norms/eli/bund/bgbl-1/1972/s2459/1999-04-20/4/deu/regelungstext-1/hauptteil-1_abschnitt-1_art-1",
+  // },
 ];
-test.describe.skip("General Pages Accessibility Tests", () => {
+test.describe("General Pages Accessibility Tests", () => {
   testPages.forEach(({ name, url }) => {
     test(`${name} should not have accessibility issues`, async ({ page }) => {
       await page.goto(url);
       await page.waitForLoadState("networkidle");
-      const accessibilityScanResults = await new AxeBuilder({ page }).analyze();
+      const accessibilityScanResults = await new AxeBuilder({ page })
+        .exclude("nuxt-devtools-frame")
+        .analyze();
       createHtmlReport({
         results: accessibilityScanResults,
         options: {
