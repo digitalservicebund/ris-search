@@ -71,7 +71,7 @@ class IndexSyncJobTest {
     Changelog changelog = new Changelog();
     changelog.setChangeAll(true);
 
-    normIndexSyncJob.importChangelogContent(changelog, Instant.now().toString(), "testFileName");
+    normIndexSyncJob.importChangelogContent(changelog, Instant.now().toString());
 
     verify(indexNormsService, times(1)).reindexAll(any());
   }
@@ -86,7 +86,7 @@ class IndexSyncJobTest {
 
     Assertions.assertThrows(
         IllegalArgumentException.class,
-        () -> normIndexSyncJob.importChangelogContent(changelog, now, "testFileName"));
+        () -> normIndexSyncJob.importChangelogContent(changelog, now));
   }
 
   @Test

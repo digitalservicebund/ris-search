@@ -101,7 +101,7 @@ public class IndexSyncJob implements Job {
       Changelog changelogContent = parseOneChangelog(changelogBucket, fileName);
       if (changelogContent != null) {
         logger.info("Processing changelog {}", fileName);
-        importChangelogContent(changelogContent, state.startTime(), fileName);
+        importChangelogContent(changelogContent, state.startTime());
         indexStatusService.updateLastProcessedChangelog(statusFileName, fileName);
         logger.info("Processed changelog {}", fileName);
       }
