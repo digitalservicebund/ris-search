@@ -4,6 +4,7 @@ import de.bund.digitalservice.ris.search.service.CaseLawIndexSyncJob;
 import de.bund.digitalservice.ris.search.service.Job;
 import de.bund.digitalservice.ris.search.service.NormIndexSyncJob;
 import de.bund.digitalservice.ris.search.service.SitemapsUpdateJob;
+import de.bund.digitalservice.ris.search.sitemap.eclicrawler.service.DailyEcliSitemapJob;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -22,6 +23,7 @@ public class ImportTaskProcessor {
   private final NormIndexSyncJob normIndexSyncJob;
   private final CaseLawIndexSyncJob caseLawIndexSyncJob;
   private final SitemapsUpdateJob sitemapsUpdateJob;
+  private final DailyEcliSitemapJob ecliSitemapJob;
 
   private static final Logger logger = LogManager.getLogger(ImportTaskProcessor.class);
 
@@ -31,10 +33,12 @@ public class ImportTaskProcessor {
   public ImportTaskProcessor(
       NormIndexSyncJob normIndexSyncJob,
       CaseLawIndexSyncJob caseLawIndexSyncJob,
-      SitemapsUpdateJob sitemapsUpdateJob) {
+      SitemapsUpdateJob sitemapsUpdateJob,
+      DailyEcliSitemapJob ecliSitemapJob) {
     this.normIndexSyncJob = normIndexSyncJob;
     this.caseLawIndexSyncJob = caseLawIndexSyncJob;
     this.sitemapsUpdateJob = sitemapsUpdateJob;
+    this.ecliSitemapJob = ecliSitemapJob;
   }
 
   public boolean shouldRun(String[] args) {
@@ -82,6 +86,7 @@ public class ImportTaskProcessor {
       case "import_norms" -> runTask(normIndexSyncJob);
       case "import_caselaw" -> runTask(caseLawIndexSyncJob);
       case "update_sitemaps" -> runTask(sitemapsUpdateJob);
+      case "generate_ecli_sitemaps" -> runTask(ecliSitemapJob);
       default -> throw new IllegalArgumentException("Unexpected target '%s'".formatted(target));
     };
   }

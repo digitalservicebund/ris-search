@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ecli-types="https://e-justice.europa.eu/ecli-types"
+           xmlns="https://e-justice.europa.eu/ecli" targetNamespace="https://e-justice.europa.eu/ecli"
+           elementFormDefault="qualified" attributeFormDefault="unqualified" version="0.0.2">
+    <xs:import namespace="https://e-justice.europa.eu/ecli-types" schemaLocation="ecli_types.xsd"/>
+    <xs:annotation>
+        <xs:documentation xml:lang="en">This schema defines the metadata an ECLI document must have to be valid.
+        </xs:documentation>
+        <xs:documentation xml:lang="fr">Ce schéma définit les métadonnées qu'un document ECLI doit posséder pour être
+            valide.
+        </xs:documentation>
+    </xs:annotation>
+    <xs:element name="document" type="documentType">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">A document presenting ECLI details.</xs:documentation>
+            <xs:documentation xml:lang="fr">Un document présentant les details d'un ECLI.</xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    <xs:complexType name="documentType">
+        <xs:sequence>
+            <xs:element name="status" type="statusType" default="active" minOccurs="0"/>
+            <xs:element name="metadata" type="metadataType"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="metadataType">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">The metadata of this ECLI document.</xs:documentation>
+            <xs:documentation xml:lang="fr">Les métadonées de ce document ECLI.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="identifier" type="identifierWithGroupType" maxOccurs="unbounded">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">URL that allows the access to this ECLI document.</xs:documentation>
+                    <xs:documentation xml:lang="fr">Une URL qui permet d'accéder à ce document ECLI.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="isVersionOf" type="ecliType">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">This element should be formatted as defined in the "ecli" element.
+                    </xs:documentation>
+                    <xs:documentation xml:lang="fr">Cet élément fait référence à un identifiant ECLI. Il doit être
+                        formatté de la même manière.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="creator" type="notEmptyTypeWithLangAndGroup" maxOccurs="unbounded">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">The complete name of the juridiction.</xs:documentation>
+                    <xs:documentation xml:lang="fr">Le nom complet de la juridiction en charge de ce document.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="coverage" type="notEmptyTypeWithLangAndGroup" maxOccurs="unbounded">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">The country of the juridiction.</xs:documentation>
+                    <xs:documentation xml:lang="fr">Le pays de la juridiction en charge de ce document.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="date" type="dateType">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">The date of the decision.</xs:documentation>
+                    <xs:documentation xml:lang="fr">La date de la décision.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="language" type="languageWithGroupType" maxOccurs="unbounded">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">The language of the concerned document.</xs:documentation>
+                    <xs:documentation xml:lang="fr">La langue de ce document.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="publisher" type="notEmptyTypeWithLangAndGroup" maxOccurs="unbounded">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">The responsible organisation for this document.</xs:documentation>
+                    <xs:documentation xml:lang="fr">L'organisation responsable de ce document.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="accessRights" type="accessRightsType">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">"public" or "private".</xs:documentation>
+                    <xs:documentation xml:lang="fr">"public" ou "private".</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="type" type="typeType">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">The type of this ECLI document.</xs:documentation>
+                    <xs:documentation xml:lang="fr">Le type de ce document ECLI.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="title" type="notEmptyTypeWithLangAndGroup" minOccurs="0" maxOccurs="unbounded">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">The title of this ECLI document.</xs:documentation>
+                    <xs:documentation xml:lang="fr">The titre de document ECLI.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="subject" type="notEmptyTypeWithLangAndGroup" minOccurs="0" maxOccurs="unbounded">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">The subject of this ECLI document.</xs:documentation>
+                    <xs:documentation xml:lang="fr">Le sujet de ce document ECLI.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="abstract" type="notEmptyTypeWithLangAndGroup" minOccurs="0" maxOccurs="unbounded">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">A short summary of this document.</xs:documentation>
+                    <xs:documentation xml:lang="fr">Un résumé de ce document.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="description" type="notEmptyTypeWithLangAndGroup" minOccurs="0" maxOccurs="unbounded">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">Some keywords about this document.</xs:documentation>
+                    <xs:documentation xml:lang="fr">Cet élément doit contenir quelques mots clés à propos de ce
+                        document.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="contributor" type="notEmptyTypeWithLangAndGroup" minOccurs="0" maxOccurs="unbounded">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">Judical concerned members.</xs:documentation>
+                    <xs:documentation xml:lang="fr">Les membres concernés.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="issued" type="dateType" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">Publication date of the document.</xs:documentation>
+                    <xs:documentation xml:lang="fr">Date de publication du document.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="reference" type="referenceWithGroupType" minOccurs="0" maxOccurs="unbounded">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">References to other documents.</xs:documentation>
+                    <xs:documentation xml:lang="fr">Références vers d'autres documents.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="isReplacedBy" type="ecliType" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">When a renumerotation occurs, this element should contain the new
+                        ecli number.
+                    </xs:documentation>
+                    <xs:documentation xml:lang="fr">Lorsqu'une renumérotation survient, cet élément doit contenir une
+                        référence vers le nouveau numéro ECLI.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:simpleType name="statusType">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">The status of the document. Default is active</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="active"/>
+            <xs:enumeration value="deleted"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:complexType name="ecliType">
+        <xs:sequence>
+            <xs:element name="country" type="ecli-types:countryType"/>
+            <xs:element name="court" type="ecli-types:courtType" minOccurs="1"/>
+        </xs:sequence>
+        <xs:attribute name="value" type="ecliNumberType" use="required"/>
+    </xs:complexType>
+    <xs:simpleType name="ecliNumberType">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="ECLI:[a-zA-Z]{1,5}:[a-zA-Z]{1}[a-zA-Z0-9]{0,6}:[12][0-9]{3}:[a-zA-Z0-9\.]{1,25}"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="notEmptyType">
+        <xs:restriction base="xs:string">
+            <xs:minLength value="1"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:complexType name="notEmptyWithGroupType">
+        <xs:simpleContent>
+            <xs:extension base="notEmptyType">
+                <xs:attribute name="group" type="notEmptyType"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+    <xs:complexType name="notEmptyTypeWithLang">
+        <xs:simpleContent>
+            <xs:extension base="notEmptyType">
+                <xs:attribute name="lang" type="ecli-types:languageType" use="required"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+    <xs:complexType name="notEmptyTypeWithLangAndGroup">
+        <xs:simpleContent>
+            <xs:extension base="notEmptyTypeWithLang">
+                <xs:attribute name="group" type="notEmptyType"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+    <xs:complexType name="identifierType">
+        <xs:simpleContent>
+            <xs:extension base="httpUriType">
+                <xs:attribute name="lang" type="ecli-types:languageType" use="required"/>
+                <xs:attribute name="format" type="ecli-types:formatType" use="required"/>
+                <xs:attribute name="type" type="ecli-types:identifierTypeType" use="optional"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+    <xs:complexType name="identifierWithGroupType">
+        <xs:simpleContent>
+            <xs:extension base="identifierType">
+                <xs:attribute name="group" type="notEmptyType"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+    <xs:simpleType name="httpUriType">
+        <xs:restriction base="xs:anyURI">
+            <xs:pattern value="http[s]{0,1}://.*"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:complexType name="languageType">
+        <xs:simpleContent>
+            <xs:extension base="ecli-types:languageType">
+                <xs:attribute name="languageType" use="required" fixed="authoritative"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+    <xs:complexType name="languageWithGroupType">
+        <xs:simpleContent>
+            <xs:extension base="languageType">
+                <xs:attribute name="group" type="notEmptyType"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+    <xs:simpleType name="accessRightsType">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="([pP][rR][iI][vV][aA][tT][eE])|([pP][uU][bB][lL][iI][cC])"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:complexType name="typeType">
+        <xs:simpleContent>
+            <xs:extension base="ecli-types:typeType">
+                <xs:attribute name="lang" type="ecli-types:languageType" use="required"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+    <xs:complexType name="referenceType">
+        <xs:simpleContent>
+            <xs:extension base="notEmptyType">
+                <xs:attribute name="type" type="ecli-types:referenceType" use="optional" default="OTHER"/>
+                <xs:attribute name="relation" type="ecli-types:relationType" use="optional"/>
+                <xs:attribute name="lang" type="ecli-types:languageType" use="optional"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+    <xs:complexType name="referenceWithGroupType">
+        <xs:simpleContent>
+            <xs:extension base="referenceType">
+                <xs:attribute name="group" type="notEmptyType"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+    <xs:simpleType name="dateType">
+        <xs:restriction base="xs:date">
+            <xs:pattern value="[0-9]{4}-[0-9]{2}-[0-9]{2}"/>
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>

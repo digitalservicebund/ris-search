@@ -15,6 +15,7 @@ import org.springframework.data.elasticsearch.core.mapping.IndexCoordinates;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.util.FileCopyUtils;
+import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.utility.TestcontainersConfiguration;
 
 public class ContainersIntegrationBase {
@@ -22,16 +23,26 @@ public class ContainersIntegrationBase {
   public static final CustomOpensearchContainer openSearchContainer =
       new CustomOpensearchContainer();
 
+  public static final PostgreSQLContainer<?> postgresContainer =
+      new PostgreSQLContainer<>("postgres:14-alpine");
+
   static {
     TestcontainersConfiguration.getInstance()
         .updateUserConfig("testcontainers.reuse.enable", "true");
     openSearchContainer.withReuse(true);
     openSearchContainer.start();
+    postgresContainer.withDatabaseName("neuris").withPassword("test").withUsername("test").start();
   }
 
   @DynamicPropertySource
   static void registerDynamicProperties(DynamicPropertyRegistry registry) {
     registry.add("opensearch.port", openSearchContainer::getFirstMappedPort);
+
+    registry.add("db.user", postgresContainer::getUsername);
+    registry.add("db.password", postgresContainer::getPassword);
+    registry.add("db.host", postgresContainer::getHost);
+    registry.add("db.port", postgresContainer::getFirstMappedPort);
+    registry.add("db.database", postgresContainer::getDatabaseName);
   }
 
   @Autowired private OpenSearchRestTemplate openSearchRestTemplate;

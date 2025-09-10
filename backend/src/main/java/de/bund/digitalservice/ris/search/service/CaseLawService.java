@@ -204,4 +204,9 @@ public class CaseLawService {
   public List<String> getAllFilenamesByDocumentNumber(String documentNumber) {
     return caseLawBucket.getAllKeysByPrefix(documentNumber);
   }
+
+  public List<CaseLawDocumentationUnit> getEcliDocumentsByDocumentNumbers(
+      List<String> documentNumber) {
+    return caseLawRepository.findAllValidFederalEcliDocumentsIn(documentNumber);
+  }
 }
