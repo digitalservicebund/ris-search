@@ -65,13 +65,10 @@ dependencies {
 
     implementation(libs.spring.kubernetes.client)
 
-    implementation(libs.spring.data.opensearch) {
-        exclude(group = "org.opensearch.client", module = "opensearch-rest-client-sniffer")
-    }
+    implementation(libs.spring.data.opensearch)
 
     implementation(libs.spring.security.oauth2.jose)
 
-    implementation(libs.spring.data.elasticsearch)
     implementation(libs.springdoc.openapi.starter.webmvc.ui)
     implementation(libs.jsoup)
     implementation(libs.amazon.aws.sdk.s3)
@@ -85,8 +82,6 @@ dependencies {
     implementation(libs.posthog)
     implementation(libs.commons.text)
 
-    implementation(libs.lucene.queryparser)
-    implementation(libs.lucene.core)
     implementation(libs.logbook.spring.boot.starter)
     implementation(libs.json)
     implementation(libs.xml.parser)
@@ -111,6 +106,7 @@ dependencies {
 
     testImplementation(libs.testcontainers.junit.jupiter)
     testImplementation(libs.opensearch.testcontainers)
+    testImplementation(libs.opensearch.test.autoconfigure)
     testImplementation(libs.testcontainers.postgresql)
     testImplementation(libs.pact)
     testImplementation(libs.restassured)
