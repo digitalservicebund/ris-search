@@ -2,18 +2,13 @@ package de.bund.digitalservice.ris.search.repository.opensearch;
 
 public interface BaseRepository<T> {
 
-  void deleteByIndexedAtBefore(String indexedAt);
+  void deleteEntitiesByIndexedAtBefore(String indexedAt);
 
-  void deleteByIndexedAtIsNull();
+  void deleteEntitiesByIndexedAtIsNull();
 
-  // Ignoring the warning on the usage of "? extends String" vs just "String"
-  // as this the only way to allow the actual repositories
-  // to implement this interface together with the elasticsearch interface
-  // without a name clash on the deleteAllById method
-  @SuppressWarnings("java:S4968")
-  void deleteAllById(Iterable<? extends String> ids);
+  void deleteAllEntitiesById(Iterable<String> ids);
 
-  long count();
+  int countEntities();
 
   void saveEntity(T entity);
 }
