@@ -124,8 +124,7 @@ public class IndexSyncJob implements Job {
     }
   }
 
-  public void importChangelogContent(
-      Changelog changelog, String startTime, String changelogFileName)
+  public void importChangelogContent(Changelog changelog, String startTime)
       throws ObjectStoreServiceException {
     if (changelog.isChangeAll()) {
       logger.info("Reindexing all");
