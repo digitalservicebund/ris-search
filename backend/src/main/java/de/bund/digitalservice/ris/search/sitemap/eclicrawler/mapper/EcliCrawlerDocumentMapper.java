@@ -1,7 +1,7 @@
 package de.bund.digitalservice.ris.search.sitemap.eclicrawler.mapper;
 
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
-import de.bund.digitalservice.ris.search.sitemap.eclicrawler.model.EcliCrawlerDocument;
+import de.bund.digitalservice.ris.search.sitemap.eclicrawler.model.EcliCrawlerDocumentOS;
 import de.bund.digitalservice.ris.search.sitemap.eclicrawler.schema.ecli.AccessRights;
 import de.bund.digitalservice.ris.search.sitemap.eclicrawler.schema.ecli.Coverage;
 import de.bund.digitalservice.ris.search.sitemap.eclicrawler.schema.ecli.Creator;
@@ -37,8 +37,8 @@ public class EcliCrawlerDocumentMapper {
           new AbstractMap.SimpleEntry<>("BSG", "Bundessozialgericht"),
           new AbstractMap.SimpleEntry<>("BPatG", "Bundespatentgericht"));
 
-  public static EcliCrawlerDocument fromCaseLawDocumentationUnit(CaseLawDocumentationUnit unit) {
-    return new EcliCrawlerDocument(
+  public static EcliCrawlerDocumentOS fromCaseLawDocumentationUnit(CaseLawDocumentationUnit unit) {
+    return new EcliCrawlerDocumentOS(
         unit.id(),
         unit.ecli(),
         unit.courtType(),
@@ -47,10 +47,10 @@ public class EcliCrawlerDocumentMapper {
         true);
   }
 
-  public static Url toSitemapUrl(EcliCrawlerDocument doc) {
+  public static Url toSitemapUrl(EcliCrawlerDocumentOS doc) {
     Url url =
         new Url()
-            .setLoc(URL_PREFIX + doc.getId())
+            .setLoc(URL_PREFIX + doc.id())
             .setDocument(
                 new Document()
                     .setMetadata(
@@ -59,7 +59,7 @@ public class EcliCrawlerDocumentMapper {
                             .setIsVersionOf(getIsVersionOf(doc))
                             .setCreator(getCreator(doc))
                             .setCoverage(getCoverage())
-                            .setDate(doc.getDecisionDate())
+                            .setDate(doc.decisionDate())
                             .setLanguage(getLanguage())
                             .setAccessRights(AccessRights.PUBLIC)
                             .setPublisher(getPublisher())
@@ -70,26 +70,26 @@ public class EcliCrawlerDocumentMapper {
     return url;
   }
 
-  private static IsVersionOf getIsVersionOf(EcliCrawlerDocument doc) {
+  private static IsVersionOf getIsVersionOf(EcliCrawlerDocumentOS doc) {
     return new IsVersionOf()
-        .setValue(doc.getEcli())
+        .setValue(doc.ecli())
         .setCountry(IsVersionOf.COUNTRY_DE)
-        .setCourt(doc.getCourtType());
+        .setCourt(doc.courtType());
   }
 
-  private static Identifier getIdentifier(EcliCrawlerDocument doc) {
+  private static Identifier getIdentifier(EcliCrawlerDocumentOS doc) {
     return new Identifier()
         .setLang(Identifier.LANG_DE)
         .setFormat(Identifier.FORMAT_HTML)
-        .setValue(URL_PREFIX + doc.getId());
+        .setValue(URL_PREFIX + doc.id());
   }
 
-  private static Type getType(EcliCrawlerDocument doc) {
-    return new Type().setLang(LANGUAGE).setValue(doc.getDocumentType());
+  private static Type getType(EcliCrawlerDocumentOS doc) {
+    return new Type().setLang(LANGUAGE).setValue(doc.documentType());
   }
 
-  private static Creator getCreator(EcliCrawlerDocument doc) {
-    return new Creator().setLang(LANGUAGE).setValue(courtLongName.get(doc.getCourtType()));
+  private static Creator getCreator(EcliCrawlerDocumentOS doc) {
+    return new Creator().setLang(LANGUAGE).setValue(courtLongName.get(doc.courtType()));
   }
 
   private static Coverage getCoverage() {

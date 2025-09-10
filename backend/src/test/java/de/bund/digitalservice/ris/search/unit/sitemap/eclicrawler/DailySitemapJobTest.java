@@ -9,12 +9,12 @@ import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationU
 import de.bund.digitalservice.ris.search.repository.objectstorage.CaseLawBucket;
 import de.bund.digitalservice.ris.search.repository.objectstorage.PortalBucket;
 import de.bund.digitalservice.ris.search.repository.opensearch.CaseLawRepository;
+import de.bund.digitalservice.ris.search.repository.opensearch.EcliCrawlerDocumentRepository;
 import de.bund.digitalservice.ris.search.service.CaseLawIndexSyncJob;
 import de.bund.digitalservice.ris.search.service.IndexStatusService;
 import de.bund.digitalservice.ris.search.service.IndexingState;
 import de.bund.digitalservice.ris.search.service.Job;
 import de.bund.digitalservice.ris.search.sitemap.eclicrawler.model.EcliCrawlerDocument;
-import de.bund.digitalservice.ris.search.sitemap.eclicrawler.repository.EcliCrawlerDocumentRepository;
 import de.bund.digitalservice.ris.search.sitemap.eclicrawler.schema.sitemap.Sitemap;
 import de.bund.digitalservice.ris.search.sitemap.eclicrawler.service.DailyEcliSitemapJob;
 import de.bund.digitalservice.ris.search.sitemap.eclicrawler.service.EcliSitemapService;

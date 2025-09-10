@@ -5,14 +5,14 @@ import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
 import de.bund.digitalservice.ris.search.repository.objectstorage.CaseLawBucket;
 import de.bund.digitalservice.ris.search.repository.objectstorage.PortalBucket;
 import de.bund.digitalservice.ris.search.repository.opensearch.CaseLawRepository;
+import de.bund.digitalservice.ris.search.repository.opensearch.EcliCrawlerDocumentRepository;
 import de.bund.digitalservice.ris.search.service.CaseLawIndexSyncJob;
 import de.bund.digitalservice.ris.search.service.IndexStatusService;
 import de.bund.digitalservice.ris.search.service.IndexSyncJob;
 import de.bund.digitalservice.ris.search.service.IndexingState;
 import de.bund.digitalservice.ris.search.service.Job;
 import de.bund.digitalservice.ris.search.sitemap.eclicrawler.mapper.EcliCrawlerDocumentMapper;
-import de.bund.digitalservice.ris.search.sitemap.eclicrawler.model.EcliCrawlerDocument;
-import de.bund.digitalservice.ris.search.sitemap.eclicrawler.repository.EcliCrawlerDocumentRepository;
+import de.bund.digitalservice.ris.search.sitemap.eclicrawler.model.EcliCrawlerDocumentOS;
 import de.bund.digitalservice.ris.search.sitemap.eclicrawler.schema.sitemap.Sitemap;
 import jakarta.xml.bind.JAXBException;
 import java.io.FileNotFoundException;
@@ -96,8 +96,8 @@ public class DailyEcliSitemapJob implements Job {
     return ReturnCode.SUCCESS;
   }
 
-  private List<String> writeSitemaps(List<EcliCrawlerDocument> ecliDocuments, LocalDate cutoffDate)
-      throws JAXBException {
+  private List<String> writeSitemaps(
+      List<EcliCrawlerDocumentOS> ecliDocuments, LocalDate cutoffDate) throws JAXBException {
 
     List<Sitemap> urlSets = sitemapService.createSitemaps(ecliDocuments);
     List<String> indexPaths = sitemapService.writeSitemapFiles(urlSets, cutoffDate);
@@ -112,7 +112,7 @@ public class DailyEcliSitemapJob implements Job {
     List<String> allDocnumbers =
         caselawbucket.getAllKeys().stream().map(s -> s.replace(".xml", "")).toList();
     List<List<String>> partitionedDocnumbers = ListUtils.partition(allDocnumbers, 10000);
-    List<EcliCrawlerDocument> allDocunits = new ArrayList<>();
+    List<EcliCrawlerDocumentOS> allDocunits = new ArrayList<>();
 
     for (List<String> docNumbers : partitionedDocnumbers) {
       allDocunits.addAll(
@@ -135,7 +135,7 @@ public class DailyEcliSitemapJob implements Job {
   private void createFromChangelogs(List<String> filePaths)
       throws ObjectStoreServiceException, FileNotFoundException, JAXBException {
 
-    List<EcliCrawlerDocument> ecliDocuments = getAllChangesFromChangelogs(filePaths);
+    List<EcliCrawlerDocumentOS> ecliDocuments = getAllChangesFromChangelogs(filePaths);
     if (!ecliDocuments.isEmpty()) {
       List<String> sitemapIndexPaths = writeSitemaps(ecliDocuments, now);
       sitemapService.updateRobotsTxt(sitemapIndexPaths);
@@ -145,7 +145,7 @@ public class DailyEcliSitemapJob implements Job {
     }
   }
 
-  private List<EcliCrawlerDocument> getAllChangesFromChangelogs(List<String> changelogPaths)
+  private List<EcliCrawlerDocumentOS> getAllChangesFromChangelogs(List<String> changelogPaths)
       throws ObjectStoreServiceException {
 
     List<Changelog> changelogs = new ArrayList<>();
@@ -158,7 +158,7 @@ public class DailyEcliSitemapJob implements Job {
 
     List<String> createIdentifiers =
         mergedChangelog.getChanged().stream().map(i -> i.replace(".xml", "")).toList();
-    List<EcliCrawlerDocument> changes =
+    List<EcliCrawlerDocumentOS> changes =
         new ArrayList<>(
             caseLawRepo.findAllValidFederalEcliDocumentsIn(createIdentifiers).stream()
                 .map(EcliCrawlerDocumentMapper::fromCaseLawDocumentationUnit)
@@ -169,10 +169,14 @@ public class DailyEcliSitemapJob implements Job {
     changes.addAll(
         repository.findAllByIsPublishedIsTrueAndIdIn(deleteIdentifiers).stream()
             .map(
-                ecliSitemap -> {
-                  ecliSitemap.setPublished(false);
-                  return ecliSitemap;
-                })
+                found ->
+                    new EcliCrawlerDocumentOS(
+                        found.id(),
+                        found.ecli(),
+                        found.courtType(),
+                        found.decisionDate(),
+                        found.documentType(),
+                        false))
             .toList());
     return changes;
   }

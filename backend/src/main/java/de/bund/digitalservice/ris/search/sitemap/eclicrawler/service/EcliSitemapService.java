@@ -3,7 +3,7 @@ package de.bund.digitalservice.ris.search.sitemap.eclicrawler.service;
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.repository.objectstorage.PortalBucket;
 import de.bund.digitalservice.ris.search.sitemap.eclicrawler.mapper.EcliCrawlerDocumentMapper;
-import de.bund.digitalservice.ris.search.sitemap.eclicrawler.model.EcliCrawlerDocument;
+import de.bund.digitalservice.ris.search.sitemap.eclicrawler.model.EcliCrawlerDocumentOS;
 import de.bund.digitalservice.ris.search.sitemap.eclicrawler.schema.sitemap.Sitemap;
 import de.bund.digitalservice.ris.search.sitemap.eclicrawler.schema.sitemapindex.SitemapIndexEntry;
 import de.bund.digitalservice.ris.search.sitemap.eclicrawler.schema.sitemapindex.Sitemapindex;
@@ -34,15 +34,15 @@ public class EcliSitemapService {
   }
 
   public List<Sitemap> createSitemaps(
-      List<EcliCrawlerDocument> ecliDocuments, int maxSitemapEntries) {
+      List<EcliCrawlerDocumentOS> ecliDocuments, int maxSitemapEntries) {
 
-    List<List<EcliCrawlerDocument>> partitioned =
+    List<List<EcliCrawlerDocumentOS>> partitioned =
         ListUtils.partition(ecliDocuments, maxSitemapEntries);
 
     return partitioned.stream().map(this::createSitemap).toList();
   }
 
-  public List<Sitemap> createSitemaps(List<EcliCrawlerDocument> ecliDocuments) {
+  public List<Sitemap> createSitemaps(List<EcliCrawlerDocumentOS> ecliDocuments) {
     return createSitemaps(ecliDocuments, 10000);
   }
 
@@ -62,7 +62,7 @@ public class EcliSitemapService {
     return sitemapFilePaths;
   }
 
-  private Sitemap createSitemap(List<EcliCrawlerDocument> ecliDocuments) {
+  private Sitemap createSitemap(List<EcliCrawlerDocumentOS> ecliDocuments) {
     Sitemap set = new Sitemap();
     set.setUrl(ecliDocuments.stream().map(EcliCrawlerDocumentMapper::toSitemapUrl).toList());
 
