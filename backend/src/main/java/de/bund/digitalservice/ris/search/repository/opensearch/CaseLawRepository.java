@@ -11,7 +11,7 @@ import org.springframework.data.elasticsearch.repository.ElasticsearchRepository
  */
 public interface CaseLawRepository
     extends ElasticsearchRepository<CaseLawDocumentationUnit, String>,
-        OpensearchRepository<CaseLawDocumentationUnit> {
+        BaseRepository<CaseLawDocumentationUnit> {
 
   List<CaseLawDocumentationUnit> findByDocumentNumber(String documentNumber);
 

@@ -23,7 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class IndexNormsService extends IndexService<Norm> {
+public class IndexNormsService implements IndexService {
 
   private static final Logger logger = LogManager.getLogger(IndexNormsService.class);
 
@@ -32,7 +32,6 @@ public class IndexNormsService extends IndexService<Norm> {
 
   @Autowired
   public IndexNormsService(NormsBucket normsBucket, NormsRepository normsRepository) {
-    super(normsBucket, null, logger);
     this.normsBucket = normsBucket;
     this.normsRepository = normsRepository;
   }
@@ -192,20 +191,5 @@ public class IndexNormsService extends IndexService<Norm> {
             .filter(e -> e.subtype().startsWith("regelungstext-"))
             .toList();
     return norms.size();
-  }
-
-  @Override
-  protected String extractIdFromFilename(String filename) {
-    return "";
-  }
-
-  @Override
-  protected Optional<Norm> mapFileToEntity(String filename, String fileContent) {
-    return Optional.empty();
-  }
-
-  @Override
-  protected List<String> getAllIndexableFilenames() {
-    return List.of();
   }
 }

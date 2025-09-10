@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class IndexCaselawService extends IndexService<CaseLawDocumentationUnit> {
+public class IndexCaselawService extends BaseIndexService<CaseLawDocumentationUnit> {
 
   private static final Logger logger = LogManager.getLogger(IndexCaselawService.class);
 

@@ -1,6 +1,6 @@
 package de.bund.digitalservice.ris.search.repository.opensearch;
 
-public interface OpensearchRepository<T> {
+public interface BaseRepository<T> {
 
   void deleteByIndexedAtBefore(String indexedAt);
 
