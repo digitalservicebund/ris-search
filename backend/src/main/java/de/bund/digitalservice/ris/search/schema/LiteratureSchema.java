@@ -12,6 +12,7 @@ import lombok.Builder;
 @JsonldType("Literature")
 public record LiteratureSchema(
     @Schema(example = "KALU000000000") @JsonldId String id,
+    @Schema(example = "de") String inLanguage,
     @Schema(description = "Dokumentnummer", example = "KALU000000000") String documentNumber,
     @Schema(description = "Veröffentlichungsjahre", example = "[2014, 2024-09]")
         List<String> yearsOfPublication,
