@@ -47,43 +47,4 @@ class CaseLawImporterTest {
     indexCaselawService.indexChangelog(mockChangelog);
     verify(caseLawRepositoryMock, atLeastOnce()).saveEntity(any());
   }
-
-  // TODO: this is rather a mapper test
-
-  //  @Test
-  //  // Also tests striping xml tags
-  //  void importerShouldMapToCaseLawDocumentationUnitCorrectly() {
-  //    IndexCaselawService indexCaselawService =
-  //        new IndexCaselawService(caseLawBucket, caseLawRepositoryMock);
-  //    Optional<CaseLawDocumentationUnit> parseResult =
-  //        indexCaselawService.parseOneDocument("mockFileName", testCaseLawLdml);
-  //    assertTrue(parseResult.isPresent());
-  //    CaseLawDocumentationUnit caseLaw = parseResult.get();
-  //
-  //    assertEquals("testDocNumber", caseLaw.id());
-  //    assertEquals("documentationOffice", caseLaw.documentationOffice());
-  //    assertEquals(
-  //        "Example Tatbestand/CaseFacts. More background even more background",
-  // caseLaw.caseFacts());
-  //    assertEquals("Example Entscheidungsgründe/DecisionGrounds", caseLaw.decisionGrounds());
-  //    assertEquals("testDocNumber", caseLaw.documentNumber());
-  //    assertEquals("testEcli", caseLaw.ecli());
-  //    assertEquals("Example Leitsatz/GuidingPrinciple", caseLaw.guidingPrinciple());
-  //    assertEquals("Title", caseLaw.headline());
-  //    assertEquals(LocalDate.of(2020, 1, 1), caseLaw.decisionDate());
-  //    assertEquals("Example Tenor/Tenor", caseLaw.tenor());
-  //    assertEquals("PUBLISHED", caseLaw.publicationStatus());
-  //    assertEquals("[Test file number 1, Test file number 2]", caseLaw.fileNumbers().toString());
-  //
-  //    assertEquals("Test court type", caseLaw.courtType());
-  //    assertEquals("Test court location", caseLaw.location());
-  //    assertEquals("Test court type Test court location", caseLaw.courtKeyword());
-  //    assertEquals("Test document type", caseLaw.documentType());
-  //    assertEquals("Example Gliederung/Outline", caseLaw.outline());
-  //    assertEquals("Test judicial body", caseLaw.judicialBody());
-  //    assertEquals("[keyword1, keyword2]", caseLaw.keywords().toString());
-  //    assertEquals("[Test decision name]", caseLaw.decisionName().toString());
-  //    assertEquals("[Test deviatingDocumentNumber]",
-  // caseLaw.deviatingDocumentNumber().toString());
-  //  }
 }
