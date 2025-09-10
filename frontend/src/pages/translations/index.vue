@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import MiniSearch from "minisearch";
-import type { SearchResult } from "minisearch";
 import Button from "primevue/button";
 import InputText from "primevue/inputtext";
 import { fetchTranslationList } from "./useTranslationData";
@@ -11,8 +10,6 @@ import IconSearch from "~icons/ic/search";
 
 const searchTerm = ref("");
 const activeSearchTerm = ref("");
-
-const searchResults = ref<SearchResult[]>([]);
 
 const breadcrumbItems: ComputedRef<BreadcrumbItem[]> = computed(() => {
   return [
@@ -40,7 +37,7 @@ const sortedTranslations = computed<TranslationContent[] | undefined>(() => {
     );
   }
   const results = minisearch.value
-    .search(activeSearchTerm.value)
+    .search(activeSearchTerm.value, { prefix: true, fuzzy: 0.2 })
     .map((r) => translationsMap.value.get(r.id))
     .filter((doc): doc is TranslationContent => !!doc);
 
@@ -67,10 +64,6 @@ const minisearch = computed(() => {
 
 function handleSearch() {
   activeSearchTerm.value = searchTerm.value;
-  if (activeSearchTerm.value == "") {
-    return;
-  }
-  searchResults.value = minisearch.value.search(activeSearchTerm.value);
 }
 </script>
 
