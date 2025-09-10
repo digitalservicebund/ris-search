@@ -21,8 +21,6 @@ public class ApiConfig {
 
     public static final String LEGISLATION_TRANSLATION = BASE + "/translatedLegislation";
 
-    public static final String EXPORT_ADVANCED_SEARCH = BASE + "/export/lucene-search";
-
     public static final String DOCUMENT_ADVANCED_SEARCH = DOCUMENT + "/lucene-search";
     public static final String CASELAW_ADVANCED_SEARCH = DOCUMENT + "/lucene-search/case-law";
     public static final String LEGISLATION_ADVANCED_SEARCH =
