@@ -21,7 +21,9 @@ import org.springframework.stereotype.Component;
 @Profile({"uat", "production", "prototype"})
 public class LiteratureBucketDummy implements LiteratureBucket {
 
-  public LiteratureBucketDummy() {}
+  public LiteratureBucketDummy() {
+    /**/
+  }
 
   public List<String> getAllKeys() {
     return Collections.emptyList();
@@ -48,11 +50,17 @@ public class LiteratureBucketDummy implements LiteratureBucket {
     return Collections.emptyList();
   }
 
-  public void delete(String fileName) {}
+  public void delete(String fileName) {
+    /**/
+  }
 
-  public void save(String fileName, String fileContent) {}
+  public void save(String fileName, String fileContent) {
+    /**/
+  }
 
-  public void close() {}
+  public void close() {
+    /**/
+  }
 
   public long putStream(String objectKey, InputStream inputStream) throws IOException {
     return 0;
