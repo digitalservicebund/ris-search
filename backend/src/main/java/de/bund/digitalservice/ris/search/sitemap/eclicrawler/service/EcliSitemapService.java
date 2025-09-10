@@ -92,6 +92,10 @@ public class EcliSitemapService {
     return date.format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
   }
 
+  public boolean isSitemapPathEmpty() {
+    return portalBucket.getAllKeysByPrefix(PATH_PREFIX).isEmpty();
+  }
+
   public List<String> getSitemapFilesPathsForDay(LocalDate date) {
     return portalBucket.getAllKeysByPrefix(PATH_PREFIX + getDatePartition(date));
   }

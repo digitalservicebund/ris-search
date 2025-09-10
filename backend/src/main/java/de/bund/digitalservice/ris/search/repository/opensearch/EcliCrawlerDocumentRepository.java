@@ -7,4 +7,8 @@ import org.springframework.data.elasticsearch.repository.ElasticsearchRepository
 public interface EcliCrawlerDocumentRepository
     extends ElasticsearchRepository<EcliCrawlerDocumentOS, String> {
   List<EcliCrawlerDocumentOS> findAllByIsPublishedIsTrueAndIdIn(List<String> ids);
+
+  List<EcliCrawlerDocumentOS> findAllByIsPublishedIsTrue();
+
+  List<EcliCrawlerDocumentOS> findAllByIsPublishedIsTrueAndIdNotIn(List<String> ids);
 }
