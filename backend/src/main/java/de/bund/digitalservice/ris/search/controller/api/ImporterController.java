@@ -30,8 +30,7 @@ public class ImporterController {
   public ResponseEntity<String> importNorms(@RequestBody String changelog) {
     try {
       Changelog changelogContent = new ObjectMapper().readValue(changelog, Changelog.class);
-      normIndexSyncJob.importChangelogContent(
-          changelogContent, Instant.now().toString(), "apiRequest");
+      normIndexSyncJob.importChangelogContent(changelogContent, Instant.now().toString());
       return ResponseEntity.noContent().build();
     } catch (JsonProcessingException | ObjectStoreServiceException e) {
       return ResponseEntity.badRequest().body(e.getMessage());

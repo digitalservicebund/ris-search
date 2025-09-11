@@ -2,6 +2,7 @@ package de.bund.digitalservice.ris.search.repository.opensearch;
 
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import java.util.List;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 
 /**
@@ -11,11 +12,12 @@ import org.springframework.data.elasticsearch.repository.ElasticsearchRepository
  */
 public interface CaseLawRepository
     extends ElasticsearchRepository<CaseLawDocumentationUnit, String> {
+
   List<CaseLawDocumentationUnit> findByDocumentNumber(String documentNumber);
 
   void deleteByIndexedAtBefore(String indexedAt);
 
   void deleteByIndexedAtIsNull();
 
-  void deleteAllById(Iterable<? extends String> ids);
+  void deleteAllById(@NotNull Iterable<? extends String> ids);
 }

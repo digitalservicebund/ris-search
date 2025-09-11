@@ -209,7 +209,7 @@ class IndexCaseLawServiceTest {
 
     Changelog changelog = new Changelog();
     changelog.setChanged(Sets.newHashSet(List.of("TEST080020093.xml")));
-    service.indexChangelog("changelog1", changelog);
+    service.indexChangelog(changelog);
 
     verify(repo, times(1))
         .save(
@@ -230,7 +230,7 @@ class IndexCaseLawServiceTest {
     Changelog changelog = new Changelog();
     changelog.setChanged(
         Sets.newHashSet(List.of("TEST080020093/TEST080020093.xml", "TEST080020093/picture.png")));
-    service.indexChangelog("changelog1", changelog);
+    service.indexChangelog(changelog);
 
     verify(repo, times(1))
         .save(
@@ -245,7 +245,7 @@ class IndexCaseLawServiceTest {
   void itCanDeleteFromOneSpecificChangelog() throws ObjectStoreServiceException {
     Changelog changelog = new Changelog();
     changelog.setDeleted(Sets.newHashSet(Set.of("TEST080020093.xml")));
-    service.indexChangelog("changelog1", changelog);
+    service.indexChangelog(changelog);
 
     verify(repo, times(1)).deleteAllById(Set.of("TEST080020093"));
   }
@@ -258,6 +258,6 @@ class IndexCaseLawServiceTest {
                 "TEST080020093/TEST080020093.xml",
                 "TEST080020093/TEST080020094.xml",
                 "changelogs/2025-03-26T14:13:34.096304815Z-caselaw.json"));
-    assertThat(service.getNumberOfFilesInBucket()).isEqualTo(2);
+    assertThat(service.getNumberOfIndexableDocumentsInBucket()).isEqualTo(2);
   }
 }
