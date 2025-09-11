@@ -18,9 +18,11 @@ function handleSetTracking(value: boolean) {
 
 <template>
   <StaticPageWrapper>
-    <RisBreadcrumb title="Cookie-Einstellungen" base-path="/" />
+    <template #breadcrumb>
+      <RisBreadcrumb title="Cookie-Einstellungen" base-path="/" />
+    </template>
     <div class="ris-body1-regular my-24 flex flex-col space-y-48">
-      <h1 class="ris-heading1-regular">Cookie-Einstellungen</h1>
+      <h1 id="page-title" class="ris-heading1-regular">Cookie-Einstellungen</h1>
       <client-only>
         <div v-if="userConsent == true" class="consent-status-wrapper">
           <div class="consent-status">
