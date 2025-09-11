@@ -4,7 +4,6 @@ import { isPublicProfile } from "~/utils/config";
 
 export default defineEventHandler(async (event) => {
   const userAgent = (getHeader(event, "User-Agent") ?? "").toUpperCase();
-  console.log(userAgent);
   let assetPath = isPublicProfile()
     ? "robots.public.txt"
     : "robots.staging.txt";
