@@ -21,4 +21,13 @@ public record EcliCrawlerDocumentOS(
     @Field(name = "court_type") String courtType,
     @Field(name = "decision_date") String decisionDate,
     @Field(name = "document_type") String documentType,
-    @Field(name = "is_publised") boolean isPublished) {}
+    @Field(name = "is_publised") boolean isPublished) {
+
+  public boolean metadataEquals(EcliCrawlerDocumentOS other) {
+    return other.id().equals(this.id)
+        && other.ecli.equals(this.ecli)
+        && other.courtType.equals(this.courtType)
+        && other.decisionDate.equals(this.decisionDate)
+        && other.documentType.equals(this.documentType);
+  }
+}
