@@ -9,7 +9,7 @@ public interface IndexService {
 
   void indexChangelog(Changelog changelog) throws ObjectStoreServiceException;
 
-  int getNumberOfIndexedDocuments();
+  int getNumberOfIndexedEntities();
 
   int getNumberOfIndexableDocumentsInBucket();
 }

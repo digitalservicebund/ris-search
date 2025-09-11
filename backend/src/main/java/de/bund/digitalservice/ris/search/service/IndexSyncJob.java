@@ -145,7 +145,7 @@ public class IndexSyncJob implements Job {
         getNewChangelogs(changelogBucket, state.lastProcessedChangelogFile());
     if (unprocessedChangelogs.isEmpty()) {
       int numberOfFilesInBucket = indexService.getNumberOfIndexableDocumentsInBucket();
-      int numberOfIndexedDocuments = indexService.getNumberOfIndexedDocuments();
+      int numberOfIndexedDocuments = indexService.getNumberOfIndexedEntities();
       if (numberOfFilesInBucket != numberOfIndexedDocuments) {
         String indexServiceName = indexService.getClass().getSimpleName();
         logger.warn(

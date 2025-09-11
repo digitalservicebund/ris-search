@@ -178,7 +178,7 @@ public class IndexNormsService implements IndexService {
   }
 
   @Override
-  public int getNumberOfIndexedDocuments() {
+  public int getNumberOfIndexedEntities() {
     return (int) normsRepository.count();
   }
 

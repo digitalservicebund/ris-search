@@ -11,8 +11,7 @@ import org.springframework.data.elasticsearch.repository.ElasticsearchRepository
  * focuses on operations related to {@link CaseLawDocumentationUnit}.
  */
 public interface CaseLawRepository
-    extends ElasticsearchRepository<CaseLawDocumentationUnit, String>,
-        BaseRepository<CaseLawDocumentationUnit> {
+    extends ElasticsearchRepository<CaseLawDocumentationUnit, String> {
 
   List<CaseLawDocumentationUnit> findByDocumentNumber(String documentNumber);
 
@@ -21,29 +20,4 @@ public interface CaseLawRepository
   void deleteByIndexedAtIsNull();
 
   void deleteAllById(@NotNull Iterable<? extends String> ids);
-
-  @Override
-  default void deleteEntitiesByIndexedAtBefore(String indexedAt) {
-    deleteByIndexedAtBefore(indexedAt);
-  }
-
-  @Override
-  default void deleteEntitiesByIndexedAtIsNull() {
-    deleteByIndexedAtIsNull();
-  }
-
-  @Override
-  default void deleteAllEntitiesById(Iterable<String> ids) {
-    deleteAllById(ids);
-  }
-
-  @Override
-  default int countEntities() {
-    return (int) count();
-  }
-
-  @Override
-  default void saveEntity(CaseLawDocumentationUnit entity) {
-    save(entity);
-  }
 }

@@ -7,25 +7,31 @@ import de.bund.digitalservice.ris.search.repository.objectstorage.CaseLawBucket;
 import de.bund.digitalservice.ris.search.repository.opensearch.CaseLawRepository;
 import java.util.List;
 import java.util.Optional;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class IndexCaselawService extends BaseIndexService<CaseLawDocumentationUnit> {
 
-  private static final Logger logger = LogManager.getLogger(IndexCaselawService.class);
+  private final CaseLawRepository repository;
 
   @Autowired
   public IndexCaselawService(CaseLawBucket bucket, CaseLawRepository repository) {
-    super(bucket, repository, logger);
+    super(bucket);
+    this.repository = repository;
   }
 
+  @Override
+  public int getNumberOfIndexedEntities() {
+    return (int) repository.count();
+  }
+
+  @Override
   protected String extractIdFromFilename(String filename) {
     return filename.substring(0, filename.lastIndexOf('.'));
   }
 
+  @Override
   protected Optional<CaseLawDocumentationUnit> mapFileToEntity(
       String filename, String fileContent) {
     try {
@@ -36,9 +42,26 @@ public class IndexCaselawService extends BaseIndexService<CaseLawDocumentationUn
     }
   }
 
+  @Override
   protected List<String> getAllIndexableFilenames() {
-    return bucket.getAllKeys().stream()
+    return objectStorage.getAllKeys().stream()
         .filter(s -> s.endsWith(".xml") && !s.contains(IndexSyncJob.CHANGELOGS_PREFIX))
         .toList();
+  }
+
+  @Override
+  protected void deleteAllOldAndNullEntities(String startingTimestamp) {
+    repository.deleteByIndexedAtBefore(startingTimestamp);
+    repository.deleteByIndexedAtIsNull();
+  }
+
+  @Override
+  protected void deleteAllEntitiesById(Iterable<String> ids) {
+    repository.deleteAllById(ids);
+  }
+
+  @Override
+  protected void saveEntity(CaseLawDocumentationUnit entity) {
+    repository.save(entity);
   }
 }

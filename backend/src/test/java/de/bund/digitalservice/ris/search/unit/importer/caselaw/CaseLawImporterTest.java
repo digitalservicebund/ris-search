@@ -45,6 +45,6 @@ class CaseLawImporterTest {
     when(caseLawBucket.getAllKeys()).thenReturn(List.of("mockFile.xml"));
     when(caseLawBucket.getFileAsString("mockFile.xml")).thenReturn(Optional.of(testCaseLawLdml));
     indexCaselawService.indexChangelog(mockChangelog);
-    verify(caseLawRepositoryMock, atLeastOnce()).saveEntity(any());
+    verify(caseLawRepositoryMock, atLeastOnce()).save(any());
   }
 }
