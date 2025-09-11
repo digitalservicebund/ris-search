@@ -14,8 +14,10 @@ import java.io.FileNotFoundException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import org.apache.commons.collections4.ListUtils;
 import org.springframework.stereotype.Service;
 
@@ -56,9 +58,9 @@ public class DailyEcliSitemapJob implements Job {
     try {
       if (sitemapService.isSitemapPathEmpty()) {
         createAll();
+      } else {
+        createFromDiff();
       }
-
-      createFromDiff();
     } catch (JAXBException | FileNotFoundException | ObjectStoreServiceException e) {
       return ReturnCode.ERROR;
     }
@@ -79,22 +81,47 @@ public class DailyEcliSitemapJob implements Job {
 
   private void createAll() throws JAXBException {
 
-    List<String> allDocnumbers =
+    List<String> allDocNumbers =
         caselawbucket.getAllKeys().stream().map(s -> s.replace(".xml", "")).toList();
-    List<List<String>> partitionedDocnumbers = ListUtils.partition(allDocnumbers, 10000);
+
     List<EcliCrawlerDocumentOS> allDocunits = new ArrayList<>();
-
-    for (List<String> docNumbers : partitionedDocnumbers) {
-      allDocunits.addAll(
-          caseLawRepo.findAllValidFederalEcliDocumentsIn(docNumbers).stream()
-              .map(EcliCrawlerDocumentMapper::fromCaseLawDocumentationUnit)
-              .toList());
+    var iterator = getAllEcliDoclumentsIn(allDocNumbers);
+    while (iterator.hasNext()) {
+      allDocunits.addAll(iterator.next());
     }
-
     List<String> sitemapIndexPaths = writeSitemaps(allDocunits, now);
     if (!sitemapIndexPaths.isEmpty()) {
       sitemapService.writeRobotsTxt(sitemapIndexPaths);
     }
+  }
+
+  private Iterator<List<EcliCrawlerDocumentOS>> getAllEcliDoclumentsIn(List<String> ids) {
+
+    List<List<String>> partitionedDocnumberLists = ListUtils.partition(ids, 10000);
+
+    return new Iterator<>() {
+      int index = 0;
+
+      @Override
+      public boolean hasNext() {
+        return index < partitionedDocnumberLists.size();
+      }
+
+      @Override
+      public List<EcliCrawlerDocumentOS> next() {
+        if (!hasNext()) {
+          throw new NoSuchElementException();
+        }
+        List<EcliCrawlerDocumentOS> docList =
+            caseLawRepo
+                .findAllValidFederalEcliDocumentsIn(partitionedDocnumberLists.get(index))
+                .stream()
+                .map(EcliCrawlerDocumentMapper::fromCaseLawDocumentationUnit)
+                .toList();
+        index++;
+        return docList;
+      }
+    };
   }
 
   private void createFromDiff()
@@ -102,18 +129,16 @@ public class DailyEcliSitemapJob implements Job {
     List<String> allDocnumbers =
         caselawbucket.getAllKeys().stream().map(s -> s.replace(".xml", "")).toList();
 
-    List<List<String>> partitionedDocnumbers = ListUtils.partition(allDocnumbers, 10000);
+    var iterator = getAllEcliDoclumentsIn(allDocnumbers);
 
     List<EcliCrawlerDocumentOS> toBeCreated = new ArrayList<>();
-    for (List<String> docNumbers : partitionedDocnumbers) {
+    while (iterator.hasNext()) {
       Map<String, EcliCrawlerDocumentOS> existingDocs = new HashMap<>();
 
-      var fromCaselawRepo =
-          caseLawRepo.findAllValidFederalEcliDocumentsIn(docNumbers).stream()
-              .map(EcliCrawlerDocumentMapper::fromCaseLawDocumentationUnit)
-              .toList();
+      var fromCaselawRepo = iterator.next();
       repository
-          .findAllByIsPublishedIsTrueAndIdIn(docNumbers)
+          .findAllByIsPublishedIsTrueAndIdIn(
+              fromCaselawRepo.stream().map(EcliCrawlerDocumentOS::id).toList())
           .forEach(doc -> existingDocs.put(doc.id(), doc));
 
       toBeCreated.addAll(
@@ -139,6 +164,7 @@ public class DailyEcliSitemapJob implements Job {
                         crawlerDoc.courtType(),
                         crawlerDoc.decisionDate(),
                         crawlerDoc.documentType(),
+                        crawlerDoc.indexedAt(),
                         false))
             .toList();
 

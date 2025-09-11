@@ -44,6 +44,7 @@ public class EcliCrawlerDocumentMapper {
         unit.courtType(),
         unit.decisionDate().format(dateFormatter),
         unit.documentType(),
+        unit.indexedAt(),
         true);
   }
 
