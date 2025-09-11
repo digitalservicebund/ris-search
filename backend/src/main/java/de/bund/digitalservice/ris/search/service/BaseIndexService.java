@@ -78,6 +78,4 @@ public abstract class BaseIndexService<T> implements IndexService {
   protected abstract void deleteAllEntitiesById(Iterable<String> ids);
 
   protected abstract void saveEntity(T entity);
-
-  public abstract int getNumberOfIndexedEntities();
 }
