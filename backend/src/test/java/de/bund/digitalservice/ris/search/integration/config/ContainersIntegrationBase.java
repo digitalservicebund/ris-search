@@ -15,7 +15,6 @@ import org.springframework.data.elasticsearch.core.mapping.IndexCoordinates;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.util.FileCopyUtils;
-import org.testcontainers.utility.TestcontainersConfiguration;
 
 public class ContainersIntegrationBase {
 
@@ -23,9 +22,6 @@ public class ContainersIntegrationBase {
       new CustomOpensearchContainer();
 
   static {
-    TestcontainersConfiguration.getInstance()
-        .updateUserConfig("testcontainers.reuse.enable", "true");
-    openSearchContainer.withReuse(true);
     openSearchContainer.start();
   }
 
