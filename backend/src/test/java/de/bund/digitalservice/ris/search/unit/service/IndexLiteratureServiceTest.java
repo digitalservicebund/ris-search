@@ -80,7 +80,7 @@ class IndexLiteratureServiceTest {
 
     Changelog changelog = new Changelog();
     changelog.setChanged(Sets.newHashSet(List.of("TEST123456789.xml")));
-    service.indexChangelog("changelog1", changelog);
+    service.indexChangelog(changelog);
 
     verify(repo, times(1))
         .save(
@@ -95,7 +95,7 @@ class IndexLiteratureServiceTest {
   void itCanDeleteFromOneSpecificChangelog() throws ObjectStoreServiceException {
     Changelog changelog = new Changelog();
     changelog.setDeleted(Sets.newHashSet(Set.of("TEST123456789.xml")));
-    service.indexChangelog("changelog1", changelog);
+    service.indexChangelog(changelog);
 
     verify(repo, times(1)).deleteAllById(Set.of("TEST123456789"));
   }
@@ -108,6 +108,6 @@ class IndexLiteratureServiceTest {
                 "TEST123456789.xml",
                 "TEST123123123.xml",
                 "changelogs/2025-03-26T14:13:34.096304815Z-literature.json"));
-    assertThat(service.getNumberOfFilesInBucket()).isEqualTo(2);
+    assertThat(service.getNumberOfIndexableDocumentsInBucket()).isEqualTo(2);
   }
 }
