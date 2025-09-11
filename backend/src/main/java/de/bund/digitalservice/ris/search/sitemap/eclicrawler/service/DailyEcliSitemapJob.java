@@ -97,48 +97,37 @@ public class DailyEcliSitemapJob implements Job {
     }
   }
 
-  private List<EcliCrawlerDocumentOS> getAllDocumentsFromCaseLawRepo(List<String> ids) {
-
-    List<List<String>> partitionedDocnumbers = ListUtils.partition(ids, 10000);
-    List<EcliCrawlerDocumentOS> allDocunits = new ArrayList<>();
-
-    for (List<String> docNumbers : partitionedDocnumbers) {
-      allDocunits.addAll(
-          caseLawRepo.findAllValidFederalEcliDocumentsIn(docNumbers).stream()
-              .map(EcliCrawlerDocumentMapper::fromCaseLawDocumentationUnit)
-              .toList());
-    }
-    return allDocunits;
-  }
-
   private void createFromDiff()
       throws JAXBException, FileNotFoundException, ObjectStoreServiceException {
     List<String> allDocnumbers =
         caselawbucket.getAllKeys().stream().map(s -> s.replace(".xml", "")).toList();
 
-    List<EcliCrawlerDocumentOS> allDocumentsFromCaselawRepo =
-        getAllDocumentsFromCaseLawRepo(allDocnumbers);
-
-    Map<String, EcliCrawlerDocumentOS> existingDocs = new HashMap<>();
     List<List<String>> partitionedDocnumbers = ListUtils.partition(allDocnumbers, 10000);
 
+    List<EcliCrawlerDocumentOS> toBeCreated = new ArrayList<>();
     for (List<String> docNumbers : partitionedDocnumbers) {
+      Map<String, EcliCrawlerDocumentOS> existingDocs = new HashMap<>();
+
+      var fromCaselawRepo =
+          caseLawRepo.findAllValidFederalEcliDocumentsIn(docNumbers).stream()
+              .map(EcliCrawlerDocumentMapper::fromCaseLawDocumentationUnit)
+              .toList();
       repository
           .findAllByIsPublishedIsTrueAndIdIn(docNumbers)
           .forEach(doc -> existingDocs.put(doc.id(), doc));
-    }
 
-    List<EcliCrawlerDocumentOS> toBeCreated =
-        allDocumentsFromCaselawRepo.stream()
-            .filter(
-                doc -> {
-                  if (!existingDocs.containsKey(doc.id())) {
-                    return true;
-                  }
-                  EcliCrawlerDocumentOS existingDoc = existingDocs.get(doc.id());
-                  return !existingDoc.metadataEquals(doc);
-                })
-            .toList();
+      toBeCreated.addAll(
+          fromCaselawRepo.stream()
+              .filter(
+                  doc -> {
+                    if (!existingDocs.containsKey(doc.id())) {
+                      return true;
+                    }
+                    EcliCrawlerDocumentOS existingDoc = existingDocs.get(doc.id());
+                    return !existingDoc.metadataEquals(doc);
+                  })
+              .toList());
+    }
 
     List<EcliCrawlerDocumentOS> toBeDeleted =
         repository.findAllByIsPublishedIsTrueAndIdNotIn(allDocnumbers).stream()
