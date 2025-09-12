@@ -1,0 +1,26 @@
+[
+  {
+    "abbreviation": "Abc",
+    "name": "Dummy Data Regulation",
+    "filename": "englisch_abc.html",
+    "german_name": "Dummy Data Gesetz",
+    "translator": "Translation provided by someone and someone.",
+    "version": "Version information: The translation includes the amendment(s) to the Act by Article 1 of the Act of 8 October 2021"
+  },
+  {
+    "abbreviation": "CDe",
+    "name": "Act on Chemistry and Dentists",
+    "filename": "englisch_Cde.html",
+    "german_name": "Zahnarzt-Chemie Gesetz",
+    "translator": "Translation provided by Max Musterman for the Federal Ministry for Everything",
+    "version": "Version information: Act on Chemistry and Dentists as published on 15 July 1985 (Federal Law Gazette I, p. 2010)"
+  },
+  {
+    "abbreviation": "FG",
+    "name": "Act on Friends and Goldfishs",
+    "filename": "englisch_fg.html",
+    "german_name": "Freunde und Goldfische Gesetz",
+    "translator": "Translation provided by the Federal Ministry of Something",
+    "version": "Version information: The translation includes the amendment(s) to the Act by Article 1 of the Act of 03 March 2012."
+  }
+]
