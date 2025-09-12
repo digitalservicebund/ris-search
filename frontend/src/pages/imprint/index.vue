@@ -7,10 +7,12 @@ definePageMeta({ alias: ["/impressum"] });
 
 <template>
   <StaticPageWrapper>
-    <RisBreadcrumb title="Impressum" base-path="/" />
+    <template #breadcrumb>
+      <RisBreadcrumb title="Impressum" base-path="/" />
+    </template>
     <PageHeader title="Impressum" />
     <div class="flex flex-col gap-32">
-      <main class="max-w-prose space-y-48">
+      <div class="max-w-prose space-y-48">
         <section>
           <h2 class="ris-heading3-regular mb-8">Anbieter</h2>
           <p>
@@ -81,7 +83,7 @@ definePageMeta({ alias: ["/impressum"] });
             verstoßen.
           </p>
         </section>
-      </main>
+      </div>
     </div></StaticPageWrapper
   >
 </template>
