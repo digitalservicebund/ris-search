@@ -9,13 +9,15 @@ definePageMeta({ alias: ["/nutzungstests"] });
 
 <template>
   <StaticPageWrapper>
-    <RisBreadcrumb title="Für Nutzungstests registrieren" base-path="/" />
+    <template #breadcrumb>
+      <RisBreadcrumb title="Für Nutzungstests registrieren" base-path="/" />
+    </template>
     <PageHeader
       class="max-w-prose"
       title="Helfen Sie uns, Rechtsinformationen leichter zugänglich zu machen"
     />
     <div class="flex flex-col gap-32">
-      <main class="max-w-prose space-y-64">
+      <div class="max-w-prose space-y-64">
         <section>
           <h2 class="ris-heading2-regular mb-16">Darum brauchen wir Sie</h2>
           <p>
@@ -84,7 +86,7 @@ definePageMeta({ alias: ["/nutzungstests"] });
             </p>
           </div>
         </section>
-      </main>
-    </div></StaticPageWrapper
-  >
+      </div>
+    </div>
+  </StaticPageWrapper>
 </template>

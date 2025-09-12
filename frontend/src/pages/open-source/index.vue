@@ -7,10 +7,12 @@ definePageMeta({ alias: ["/opensource"] });
 
 <template>
   <StaticPageWrapper>
-    <RisBreadcrumb title="Open Source" base-path="/" />
+    <template #breadcrumb>
+      <RisBreadcrumb title="Open Source" base-path="/" />
+    </template>
     <PageHeader title="Open Source" />
     <div class="flex flex-col gap-32">
-      <main class="max-w-prose space-y-24">
+      <div class="max-w-prose space-y-24">
         <p>
           Bei der Entwicklung setzen wir vollständig auf Open Source. Open
           Source bedeutet für uns Transparenz, Vertrauen, Sicherheit, Qualität
@@ -22,6 +24,6 @@ definePageMeta({ alias: ["/opensource"] });
           target="_blank"
           >Zum Github Repository<IcBaselineLaunch
         /></ButtonLink>
-      </main></div
+      </div></div
   ></StaticPageWrapper>
 </template>

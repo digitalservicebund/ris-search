@@ -8,9 +8,11 @@ definePageMeta({ alias: ["/barrierefreiheit"] });
 
 <template>
   <StaticPageWrapper>
-    <RisBreadcrumb title="Barrierefreiheit" base-path="/" />
+    <template #breadcrumb>
+      <RisBreadcrumb title="Barrierefreiheit" base-path="/" />
+    </template>
     <PageHeader title="Erklärung zur Barrierefreiheit" />
-    <main class="max-w-prose space-y-64">
+    <div class="max-w-prose space-y-64">
       <section class="space-y-16">
         <p>
           Diese Erklärung zur Barrierefreiheit gilt für die unter
@@ -46,12 +48,12 @@ definePageMeta({ alias: ["/barrierefreiheit"] });
           Barrierefreiheit arbeiten. Erläuterungen in Deutscher Gebärdensprache
           und Leichter Sprache werden zu einem späteren Zeitpunkt ergänzt.
         </p>
-        <dl>
-          <dd class="ris-body1-bold">
+        <div>
+          <p class="ris-body1-bold">
             Datum der Erstellung bzw. der letzten Aktualisierung der Erklärung
-          </dd>
-          <dt>Diese Erklärung wurde am 31.03.2025 erstellt.</dt>
-        </dl>
+          </p>
+          <p>Diese Erklärung wurde am 31.03.2025 erstellt.</p>
+        </div>
       </section>
       <section class="space-y-16">
         <h2 class="ris-heading2-regular">
@@ -111,6 +113,6 @@ definePageMeta({ alias: ["/barrierefreiheit"] });
           >
         </p>
       </section>
-    </main></StaticPageWrapper
+    </div></StaticPageWrapper
   >
 </template>

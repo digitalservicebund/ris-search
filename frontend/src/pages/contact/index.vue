@@ -8,10 +8,12 @@ definePageMeta({ alias: ["/kontakt"] });
 
 <template>
   <StaticPageWrapper>
-    <RisBreadcrumb title="Kontakt" base-path="/" />
+    <template #breadcrumb>
+      <RisBreadcrumb title="Kontakt" base-path="/" />
+    </template>
     <PageHeader title="Kontakt" />
-    <main class="mb-80">
+    <div class="mb-80">
       <ContactDetails />
-    </main>
+    </div>
   </StaticPageWrapper>
 </template>

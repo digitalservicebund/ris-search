@@ -4,14 +4,14 @@ import { expect, test } from "@playwright/test";
 import { createHtmlReport } from "axe-html-reporter";
 
 const testPages = [
-  // {
-  //   name: "Not Found Page",
-  //   url: "/404",
-  // },
-  // {
-  //   name: "Home Page",
-  //   url: "/",
-  // },
+  {
+    name: "Not Found Page",
+    url: "/404",
+  },
+  {
+    name: "Home Page",
+    url: "/",
+  },
   {
     name: "All Search Results Page",
     url: "/search",
@@ -20,18 +20,18 @@ const testPages = [
   //   name: "Contact Page",
   //   url: "/kontakt",
   // },
-  // {
-  //   name: "Imprint Page",
-  //   url: "/impressum",
-  // },
-  // {
-  //   name: "Data Protection Page",
-  //   url: "/datenschutz",
-  // },
-  // {
-  //   name: "Accessibility Page",
-  //   url: "/barrierefreiheit",
-  // },
+  {
+    name: "Imprint Page",
+    url: "/impressum",
+  },
+  {
+    name: "Data Protection Page",
+    url: "/datenschutz",
+  },
+  {
+    name: "Accessibility Page",
+    url: "/barrierefreiheit",
+  },
   {
     name: "Cookie Settings Page",
     url: "/cookie-einstellungen",
@@ -40,10 +40,10 @@ const testPages = [
   //   name: "Open Source Page",
   //   url: "/opensource",
   // },
-  // {
-  //   name: "User Tests Page",
-  //   url: "/nutzungstests",
-  // },
+  {
+    name: "User Tests Page",
+    url: "/nutzungstests",
+  },
   // {
   //   name: "Norms Search Page",
   //   url: "/search?category=N",

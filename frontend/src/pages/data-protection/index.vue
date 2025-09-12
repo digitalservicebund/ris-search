@@ -7,9 +7,11 @@ definePageMeta({ alias: ["/datenschutz"] });
 
 <template>
   <StaticPageWrapper>
-    <RisBreadcrumb title="Datenschutzerklärung" base-path="/" />
+    <template #breadcrumb>
+      <RisBreadcrumb title="Datenschutzerklärung" base-path="/" />
+    </template>
     <PageHeader title="Datenschutzerklärung" />
-    <main class="max-w-prose space-y-64">
+    <div class="max-w-prose space-y-64">
       <section class="space-y-16">
         <p>Zuletzt aktualisiert: [23. April 2025]</p>
         <p>
@@ -296,7 +298,7 @@ definePageMeta({ alias: ["/datenschutz"] });
           >
         </p>
       </section>
-    </main></StaticPageWrapper
+    </div></StaticPageWrapper
   >
 </template>
 <style scoped>
