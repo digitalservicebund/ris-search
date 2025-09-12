@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://ris-portal.dev.ds4g.net/sitemap_index.xml
