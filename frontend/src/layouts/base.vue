@@ -22,7 +22,9 @@ const showPublicProfileHeader = isPublic || isPrototype;
     <div class="min-h-[50vh] bg-gray-100">
       <AppHeader v-if="showPublicProfileHeader" />
       <NavbarTop v-else />
-      <slot />
+      <main>
+        <slot />
+      </main>
     </div>
     <AppFooterPrototype v-if="true" />
     <AppFooter v-else />

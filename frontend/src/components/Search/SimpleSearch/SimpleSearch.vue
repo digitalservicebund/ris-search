@@ -120,7 +120,7 @@ useHead({ title });
       <CourtFilter />
       <DateRangeFilter v-if="documentKind === DocumentKind.CaseLaw" />
     </fieldset>
-    <main id="main" class="w-full flex-col justify-end gap-8 lg:w-9/12">
+    <div id="main" class="w-full flex-col justify-end gap-8 lg:w-9/12">
       <h1 class="sr-only">Suchergebnisse</h1>
 
       <Pagination
@@ -186,6 +186,6 @@ useHead({ title });
           <DelayedLoadingMessage />
         </div>
       </Pagination>
-    </main>
+    </div>
   </div>
 </template>

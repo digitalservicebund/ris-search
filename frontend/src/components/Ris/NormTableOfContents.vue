@@ -119,6 +119,7 @@ const responsiveStyles = `max-lg:fixed max-lg:left-0 max-lg:top-0 max-lg:h-full 
           v-if="isNestedToC"
           id="toc-expand-collapse-button"
           class="bg-transparent hover:bg-transparent"
+          :aria-label="isExpanded ? 'Alle Einträge einklappen' : 'Alle Einträge ausklappen'"
           @click="toggleExpandCollapse"
         >
           <IcBaselineUnfoldMore
@@ -130,6 +131,7 @@ const responsiveStyles = `max-lg:fixed max-lg:left-0 max-lg:top-0 max-lg:h-full 
         <Button
           id="toc-close-button"
           class="visible bg-transparent hover:bg-transparent lg:hidden"
+          aria-label="Inhaltsverzeichnis schließen"
           @click="toggleTableOfContents"
         >
           <IcBaselineClose class="text-gray-900 hover:text-black" />
@@ -173,8 +175,8 @@ const responsiveStyles = `max-lg:fixed max-lg:left-0 max-lg:top-0 max-lg:h-full 
         </span>
       </template>
       <template #nodetoggleicon="{ expanded }">
-        <ChevronDownIcon v-if="!expanded" />
-        <ChevronUpIcon v-else />
+        <ChevronDownIcon v-if="!expanded" aria-label="Eintrag einklappen" />
+        <ChevronUpIcon v-else aria-label="Eintrag ausklappen" />
       </template>
     </Tree>
   </div>
