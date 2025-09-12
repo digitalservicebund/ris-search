@@ -67,9 +67,6 @@ const isHomeHovered = ref(false);
           :href="href"
           v-bind="breadcrumbProps.action"
           class="link-hover"
-          :aria-label="
-            item.type === 'home' ? 'Startseite' : (item.label as string)
-          "
           @click="navigate"
         >
           <template v-if="item.type === 'home'">

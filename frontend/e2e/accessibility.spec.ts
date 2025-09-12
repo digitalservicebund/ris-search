@@ -12,10 +12,10 @@ const testPages = [
   //   name: "Home Page",
   //   url: "/",
   // },
-  // {
-  //   name: "All Search Results Page",
-  //   url: "/search",
-  // },
+  {
+    name: "All Search Results Page",
+    url: "/search",
+  },
   // {
   //   name: "Contact Page",
   //   url: "/kontakt",
@@ -52,10 +52,10 @@ const testPages = [
   //   name: "Caselaw Search Page",
   //   url: "/search?category=R",
   // },
-  // {
-  //   name: "Article View Page",
-  //   url: "/norms/eli/bund/bgbl-1/1972/s2459/1999-04-20/4/deu/regelungstext-1/hauptteil-1_abschnitt-1_art-1",
-  // },
+  {
+    name: "Article View Page",
+    url: "/norms/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu/regelungstext-1/art-z1",
+  },
 ];
 test.describe("General Pages Accessibility Tests", () => {
   testPages.forEach(({ name, url }) => {

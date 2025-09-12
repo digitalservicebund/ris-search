@@ -2,11 +2,12 @@
 
 <template>
   <div class="pt-20 pb-24 sm:pt-32 sm:pb-40 lg:pt-64 lg:pb-80">
-    <nav aria-label="Brotkrumen" class="">
+    <nav aria-labelledby="breadcrumb-heading">
+      <h2 id="breadcrumb-heading" class="sr-only">Brotkrumen</h2>
       <slot name="breadcrumb" />
     </nav>
-    <main id="main-content" aria-labelledby="page-title">
+    <div id="main-content" aria-labelledby="page-title">
       <slot />
-    </main>
+    </div>
   </div>
 </template>
