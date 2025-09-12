@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Profile({"default", "staging", "uat", "test", "prototype"})
-public class CaseLawBucket extends ObjectStorage {
+public class CaseLawBucket extends S3ObjectStorage {
 
   public CaseLawBucket(@Qualifier("caseLawS3Client") ObjectStorageClient s3Client) {
     super(s3Client, LogManager.getLogger(CaseLawBucket.class));

@@ -2,6 +2,7 @@ package de.bund.digitalservice.ris.search.importer;
 
 import de.bund.digitalservice.ris.search.service.CaseLawIndexSyncJob;
 import de.bund.digitalservice.ris.search.service.Job;
+import de.bund.digitalservice.ris.search.service.LiteratureIndexSyncJob;
 import de.bund.digitalservice.ris.search.service.NormIndexSyncJob;
 import de.bund.digitalservice.ris.search.service.SitemapsUpdateJob;
 import java.util.ArrayList;
@@ -21,6 +22,7 @@ public class ImportTaskProcessor {
 
   private final NormIndexSyncJob normIndexSyncJob;
   private final CaseLawIndexSyncJob caseLawIndexSyncJob;
+  private final LiteratureIndexSyncJob literatureIndexSyncJob;
   private final SitemapsUpdateJob sitemapsUpdateJob;
 
   private static final Logger logger = LogManager.getLogger(ImportTaskProcessor.class);
@@ -31,9 +33,11 @@ public class ImportTaskProcessor {
   public ImportTaskProcessor(
       NormIndexSyncJob normIndexSyncJob,
       CaseLawIndexSyncJob caseLawIndexSyncJob,
+      LiteratureIndexSyncJob literatureIndexSyncJob,
       SitemapsUpdateJob sitemapsUpdateJob) {
     this.normIndexSyncJob = normIndexSyncJob;
     this.caseLawIndexSyncJob = caseLawIndexSyncJob;
+    this.literatureIndexSyncJob = literatureIndexSyncJob;
     this.sitemapsUpdateJob = sitemapsUpdateJob;
   }
 
@@ -81,6 +85,7 @@ public class ImportTaskProcessor {
     return switch (target) {
       case "import_norms" -> runTask(normIndexSyncJob);
       case "import_caselaw" -> runTask(caseLawIndexSyncJob);
+      case "import_literature" -> runTask(literatureIndexSyncJob);
       case "update_sitemaps" -> runTask(sitemapsUpdateJob);
       default -> throw new IllegalArgumentException("Unexpected target '%s'".formatted(target));
     };
