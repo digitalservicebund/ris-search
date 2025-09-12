@@ -124,7 +124,7 @@ describe("[eId].vue", () => {
     mocks.isPrototypeProfile.mockReturnValueOnce(true);
     const wrapper = await mountComponent();
     expect(wrapper.find(".ris-heading2-bold").html()).toBe(
-      `<h1 class="ris-heading2-bold my-24 mb-24 inline-block">${headingInnerHtml}</h1>`,
+      `<h2 class="ris-heading2-bold my-24 mb-24 inline-block">${headingInnerHtml}</h2>`,
     );
     expect(useHeadMock).toHaveBeenCalledWith({ title: "§ 1 Test Article" });
     const metadata = wrapper.find("div[data-testid='metadata']");

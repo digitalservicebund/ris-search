@@ -157,18 +157,20 @@ useHead({ title: article.value?.name });
           :base-path="normPath"
         />
         <div class="max-w-prose">
-          <NuxtLink
-            class="ris-heading3-bold link-hover mt-24 line-clamp-2 items-center text-blue-800"
-            :to="normPath"
-          >
-            <MdiArrowTopLeft class="inline-block" />
-            {{ topNormLinkText }}
-          </NuxtLink>
           <h1
+            class="ris-heading3-bold link-hover mt-24 line-clamp-2 items-center text-blue-800"
+          >
+            <NuxtLink :to="normPath">
+              <MdiArrowTopLeft class="inline-block" />
+              {{ topNormLinkText }}
+            </NuxtLink>
+          </h1>
+          <h2
             class="ris-heading2-bold my-24 mb-24 inline-block"
             v-html="htmlTitle"
           />
         </div>
+
         <ArticleVersionWarning
           v-if="inForceNormLink && article"
           :in-force-version-link="inForceNormLink"
@@ -187,7 +189,6 @@ useHead({ title: article.value?.name });
         />
       </div>
       <div class="bg-white">
-        <h2 class="sr-only">Article content</h2>
         <TableOfContentsLayout class="container py-24">
           <template v-if="!!articleHtml" #content>
             <IncompleteDataMessage />
