@@ -27,7 +27,10 @@ import org.springframework.data.elasticsearch.repository.config.EnableElasticsea
 @Configuration
 @Profile({"staging"})
 @EnableElasticsearchRepositories(
-    basePackages = "de.bund.digitalservice.ris.search.repository.opensearch")
+    basePackages = {
+      "de.bund.digitalservice.ris.search.repository.opensearch",
+      "de.bund.digitalservice.ris.search.eclicrawler.repository"
+    })
 public class RestClientConfigStaging extends AbstractOpenSearchConfiguration {
 
   private static final Logger logger = LogManager.getLogger(RestClientConfigStaging.class);

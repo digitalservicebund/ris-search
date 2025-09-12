@@ -4,12 +4,12 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import de.bund.digitalservice.ris.search.eclicrawler.model.EcliCrawlerDocument;
+import de.bund.digitalservice.ris.search.eclicrawler.schema.sitemap.Sitemap;
+import de.bund.digitalservice.ris.search.eclicrawler.schema.sitemap.Url;
+import de.bund.digitalservice.ris.search.eclicrawler.service.EcliSitemapService;
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.repository.objectstorage.PortalBucket;
-import de.bund.digitalservice.ris.search.sitemap.eclicrawler.model.EcliCrawlerDocument;
-import de.bund.digitalservice.ris.search.sitemap.eclicrawler.schema.sitemap.Sitemap;
-import de.bund.digitalservice.ris.search.sitemap.eclicrawler.schema.sitemap.Url;
-import de.bund.digitalservice.ris.search.sitemap.eclicrawler.service.EcliSitemapService;
 import jakarta.xml.bind.JAXBException;
 import java.io.FileNotFoundException;
 import java.time.LocalDate;

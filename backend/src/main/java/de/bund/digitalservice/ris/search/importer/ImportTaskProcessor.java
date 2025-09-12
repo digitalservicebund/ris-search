@@ -1,10 +1,10 @@
 package de.bund.digitalservice.ris.search.importer;
 
+import de.bund.digitalservice.ris.search.eclicrawler.service.DailyEcliSitemapJob;
 import de.bund.digitalservice.ris.search.service.CaseLawIndexSyncJob;
 import de.bund.digitalservice.ris.search.service.Job;
 import de.bund.digitalservice.ris.search.service.NormIndexSyncJob;
 import de.bund.digitalservice.ris.search.service.SitemapsUpdateJob;
-import de.bund.digitalservice.ris.search.sitemap.eclicrawler.service.DailyEcliSitemapJob;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;

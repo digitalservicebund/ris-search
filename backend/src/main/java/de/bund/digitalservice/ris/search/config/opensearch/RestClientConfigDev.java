@@ -13,7 +13,10 @@ import org.springframework.data.elasticsearch.repository.config.EnableElasticsea
 @Configuration
 @Profile("default | test")
 @EnableElasticsearchRepositories(
-    basePackages = "de.bund.digitalservice.ris.search.repository.opensearch")
+    basePackages = {
+      "de.bund.digitalservice.ris.search.repository.opensearch",
+      "de.bund.digitalservice.ris.search.eclicrawler.repository"
+    })
 public class RestClientConfigDev extends AbstractOpenSearchConfiguration {
 
   private Configurations configurations;

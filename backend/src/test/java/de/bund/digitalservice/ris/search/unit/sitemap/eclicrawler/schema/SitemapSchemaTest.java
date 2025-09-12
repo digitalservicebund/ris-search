@@ -2,13 +2,13 @@ package de.bund.digitalservice.ris.search.unit.sitemap.eclicrawler.schema;
 
 import static org.testcontainers.shaded.org.apache.commons.io.FileUtils.getFile;
 
-import de.bund.digitalservice.ris.search.sitemap.eclicrawler.mapper.EcliCrawlerDocumentMapper;
-import de.bund.digitalservice.ris.search.sitemap.eclicrawler.model.EcliCrawlerDocument;
-import de.bund.digitalservice.ris.search.sitemap.eclicrawler.schema.sitemap.Sitemap;
-import de.bund.digitalservice.ris.search.sitemap.eclicrawler.schema.sitemap.Url;
-import de.bund.digitalservice.ris.search.sitemap.eclicrawler.schema.sitemapindex.SitemapIndexEntry;
-import de.bund.digitalservice.ris.search.sitemap.eclicrawler.schema.sitemapindex.Sitemapindex;
-import de.bund.digitalservice.ris.search.sitemap.eclicrawler.service.EcliMarshaller;
+import de.bund.digitalservice.ris.search.eclicrawler.mapper.EcliCrawlerDocumentMapper;
+import de.bund.digitalservice.ris.search.eclicrawler.model.EcliCrawlerDocument;
+import de.bund.digitalservice.ris.search.eclicrawler.schema.sitemap.Sitemap;
+import de.bund.digitalservice.ris.search.eclicrawler.schema.sitemap.Url;
+import de.bund.digitalservice.ris.search.eclicrawler.schema.sitemapindex.SitemapIndexEntry;
+import de.bund.digitalservice.ris.search.eclicrawler.schema.sitemapindex.Sitemapindex;
+import de.bund.digitalservice.ris.search.eclicrawler.service.EcliMarshaller;
 import jakarta.xml.bind.JAXBException;
 import java.io.IOException;
 import java.io.StringReader;
