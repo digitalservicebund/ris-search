@@ -238,7 +238,7 @@ useHead({ title: article.value?.name });
           </template>
         </TableOfContentsLayout>
       </div>
-    </template>
+  </template>
   </ContentWrapper>
 </template>
 
