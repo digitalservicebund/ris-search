@@ -119,7 +119,9 @@ const responsiveStyles = `max-lg:fixed max-lg:left-0 max-lg:top-0 max-lg:h-full 
           v-if="isNestedToC"
           id="toc-expand-collapse-button"
           class="bg-transparent hover:bg-transparent"
-          :aria-label="isExpanded ? 'Alle Einträge einklappen' : 'Alle Einträge ausklappen'"
+          :aria-label="
+            isExpanded ? 'Alle Einträge einklappen' : 'Alle Einträge ausklappen'
+          "
           @click="toggleExpandCollapse"
         >
           <IcBaselineUnfoldMore
