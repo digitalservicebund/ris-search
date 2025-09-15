@@ -1,6 +1,6 @@
 package de.bund.digitalservice.ris.search.importer;
 
-import de.bund.digitalservice.ris.search.eclicrawler.service.DailyEcliSitemapJob;
+import de.bund.digitalservice.ris.search.eclicrawler.service.EcliSitemapJob;
 import de.bund.digitalservice.ris.search.service.CaseLawIndexSyncJob;
 import de.bund.digitalservice.ris.search.service.Job;
 import de.bund.digitalservice.ris.search.service.NormIndexSyncJob;
@@ -23,7 +23,7 @@ public class ImportTaskProcessor {
   private final NormIndexSyncJob normIndexSyncJob;
   private final CaseLawIndexSyncJob caseLawIndexSyncJob;
   private final SitemapsUpdateJob sitemapsUpdateJob;
-  private final DailyEcliSitemapJob ecliSitemapJob;
+  private final EcliSitemapJob ecliSitemapJob;
 
   private static final Logger logger = LogManager.getLogger(ImportTaskProcessor.class);
 
@@ -34,7 +34,7 @@ public class ImportTaskProcessor {
       NormIndexSyncJob normIndexSyncJob,
       CaseLawIndexSyncJob caseLawIndexSyncJob,
       SitemapsUpdateJob sitemapsUpdateJob,
-      DailyEcliSitemapJob ecliSitemapJob) {
+      EcliSitemapJob ecliSitemapJob) {
     this.normIndexSyncJob = normIndexSyncJob;
     this.caseLawIndexSyncJob = caseLawIndexSyncJob;
     this.sitemapsUpdateJob = sitemapsUpdateJob;

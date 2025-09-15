@@ -38,22 +38,22 @@ public class EcliCrawlerDocumentMapper {
           new AbstractMap.SimpleEntry<>("BPatG", "Bundespatentgericht"));
 
   public static EcliCrawlerDocument fromCaseLawDocumentationUnit(
-      CaseLawDocumentationUnit unit, String now) {
+      String filepath, CaseLawDocumentationUnit unit, String timestamp) {
     return new EcliCrawlerDocument(
-        unit.id(),
+        unit.documentNumber(),
+        filepath,
         unit.ecli(),
         unit.courtType(),
         unit.decisionDate().format(dateFormatter),
         unit.documentType(),
-        unit.indexedAt(),
         true,
-        now);
+        timestamp);
   }
 
   public static Url toSitemapUrl(EcliCrawlerDocument doc) {
     Url url =
         new Url()
-            .setLoc(URL_PREFIX + doc.id())
+            .setLoc(URL_PREFIX + doc.document_number())
             .setDocument(
                 new Document()
                     .setMetadata(
@@ -84,7 +84,7 @@ public class EcliCrawlerDocumentMapper {
     return new Identifier()
         .setLang(Identifier.LANG_DE)
         .setFormat(Identifier.FORMAT_HTML)
-        .setValue(URL_PREFIX + doc.id());
+        .setValue(URL_PREFIX + doc.document_number());
   }
 
   private static Type getType(EcliCrawlerDocument doc) {

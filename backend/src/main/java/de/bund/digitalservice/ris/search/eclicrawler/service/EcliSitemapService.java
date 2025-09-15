@@ -51,7 +51,7 @@ public class EcliSitemapService {
       throws JAXBException {
     List<String> urlSetLocations = writeSitemaps(sitemaps, day);
 
-    List<List<Sitemap>> partitionedSitemaps = ListUtils.partition(sitemaps, 10000);
+    List<List<Sitemap>> partitionedSitemaps = ListUtils.partition(sitemaps, MAX_SITEMAP_URLS);
 
     List<String> sitemapFilePaths = new ArrayList<>();
     for (int i = 0; i < partitionedSitemaps.size(); i++) {

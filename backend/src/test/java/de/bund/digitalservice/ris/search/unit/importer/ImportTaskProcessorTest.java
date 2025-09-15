@@ -8,7 +8,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import de.bund.digitalservice.ris.search.eclicrawler.service.DailyEcliSitemapJob;
+import de.bund.digitalservice.ris.search.eclicrawler.service.EcliSitemapJob;
 import de.bund.digitalservice.ris.search.importer.ImportTaskProcessor;
 import de.bund.digitalservice.ris.search.service.CaseLawIndexSyncJob;
 import de.bund.digitalservice.ris.search.service.Job;
@@ -27,7 +27,7 @@ class ImportTaskProcessorTest {
   @Mock private NormIndexSyncJob normIndexSyncJob;
   @Mock private CaseLawIndexSyncJob caseLawIndexSyncJob;
   @Mock private SitemapsUpdateJob sitemapsUpdateJob;
-  @Mock private DailyEcliSitemapJob ecliSitemapJob;
+  @Mock private EcliSitemapJob ecliSitemapJob;
 
   private ImportTaskProcessor processor;
 

@@ -1,6 +1,7 @@
 package de.bund.digitalservice.ris.search.eclicrawler.service;
 
 import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,6 +9,18 @@ import java.util.Map;
 public class ChangelogParser {
 
   private ChangelogParser() {}
+
+  public static List<Changelog> getLatestReleveantChangelogs(List<Changelog> changelogs) {
+    List<Changelog> relevantChangelogs = new ArrayList<>();
+    changelogs.forEach(
+        changelog -> {
+          if (changelog.isChangeAll()) {
+            relevantChangelogs.clear();
+          }
+          relevantChangelogs.add(changelog);
+        });
+    return relevantChangelogs;
+  }
 
   public static Changelog mergeChangelogs(List<Changelog> changelogs) {
     enum Action {
