@@ -39,7 +39,7 @@ class IndexLiteratureServiceTest {
           <akn:meta>
             <akn:identification>
               <akn:FRBRExpression>
-                <akn:FRBRalias name="documentNumber" value="TEST123456789" />
+                <akn:FRBRalias name="documentNumber" value="TEST000000001" />
               </akn:FRBRExpression>
             </akn:identification>
           </akn:meta>
@@ -55,9 +55,11 @@ class IndexLiteratureServiceTest {
 
   @Test
   void reindexAllIgnoresInvalidFiles() throws ObjectStoreServiceException {
-    when(this.bucket.getAllKeys()).thenReturn(List.of("file1.xml", "file2.xml"));
-    when(this.bucket.getFileAsString("file1.xml")).thenReturn(Optional.of(literatureContent));
-    when(this.bucket.getFileAsString("file2.xml")).thenReturn(Optional.of("this will not parse"));
+    var filenameA = "TEST000000001.akn.xml";
+    var filenameB = "TEST000000002.akn.xml";
+    when(this.bucket.getAllKeys()).thenReturn(List.of(filenameA, filenameB));
+    when(this.bucket.getFileAsString(filenameA)).thenReturn(Optional.of(literatureContent));
+    when(this.bucket.getFileAsString(filenameB)).thenReturn(Optional.of("this will not parse"));
 
     String startingTimestamp =
         ZonedDateTime.now(ZoneOffset.UTC).format(DateTimeFormatter.ISO_INSTANT);
@@ -67,7 +69,7 @@ class IndexLiteratureServiceTest {
         .save(
             argThat(
                 arg -> {
-                  assertThat(arg.id()).isEqualTo("TEST123456789");
+                  assertThat(arg.id()).isEqualTo("TEST000000001");
                   return true;
                 }));
     verify(repo, times(1)).deleteByIndexedAtBefore(startingTimestamp);
@@ -75,18 +77,18 @@ class IndexLiteratureServiceTest {
 
   @Test
   void itCanReindexFromOneSpecificChangelog() throws ObjectStoreServiceException {
-    when(this.bucket.getFileAsString("TEST123456789.xml"))
+    when(this.bucket.getFileAsString("TEST000000001.akn.xml"))
         .thenReturn(Optional.of(literatureContent));
 
     Changelog changelog = new Changelog();
-    changelog.setChanged(Sets.newHashSet(List.of("TEST123456789.xml")));
+    changelog.setChanged(Sets.newHashSet(List.of("TEST000000001.akn.xml")));
     service.indexChangelog(changelog);
 
     verify(repo, times(1))
         .save(
             argThat(
                 arg -> {
-                  assertThat(arg.id()).isEqualTo("TEST123456789");
+                  assertThat(arg.id()).isEqualTo("TEST000000001");
                   return true;
                 }));
   }
@@ -94,10 +96,10 @@ class IndexLiteratureServiceTest {
   @Test
   void itCanDeleteFromOneSpecificChangelog() throws ObjectStoreServiceException {
     Changelog changelog = new Changelog();
-    changelog.setDeleted(Sets.newHashSet(Set.of("TEST123456789.xml")));
+    changelog.setDeleted(Sets.newHashSet(Set.of("TEST000000001.akn.xml")));
     service.indexChangelog(changelog);
 
-    verify(repo, times(1)).deleteAllById(Set.of("TEST123456789"));
+    verify(repo, times(1)).deleteAllById(Set.of("TEST000000001"));
   }
 
   @Test
@@ -105,8 +107,8 @@ class IndexLiteratureServiceTest {
     when(this.bucket.getAllKeys())
         .thenReturn(
             List.of(
-                "TEST123456789.xml",
-                "TEST123123123.xml",
+                "TEST000000001.akn.xml",
+                "TEST000000002.akn.xml",
                 "changelogs/2025-03-26T14:13:34.096304815Z-literature.json"));
     assertThat(service.getNumberOfIndexableDocumentsInBucket()).isEqualTo(2);
   }
