@@ -85,7 +85,7 @@ public class ObsConfig {
   }
 
   @Bean(name = "literatureS3Client")
-  @Profile({"staging", "uat", "prototype"})
+  @Profile({"staging"})
   public ObjectStorageClient literatureS3Client(
       @Value("${s3.file-storage.literature.bucket-name}") String bucket) throws URISyntaxException {
     return new S3ObjectStorageClient(
