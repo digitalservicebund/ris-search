@@ -22,14 +22,5 @@ public record EcliCrawlerDocument(
     @Field(name = "decision_date") String decisionDate,
     @Field(name = "document_type") String documentType,
     @Field(name = "indexed_at") String indexedAt,
-    @Field(name = "is_publised") boolean isPublished) {
-
-  public boolean metadataEquals(EcliCrawlerDocument other) {
-    return other.id().equals(this.id)
-        && other.ecli.equals(this.ecli)
-        && other.courtType.equals(this.courtType)
-        && other.decisionDate.equals(this.decisionDate)
-        && other.documentType.equals(this.documentType)
-        && other.indexedAt.equals(this.indexedAt);
-  }
-}
+    @Field(name = "is_publised") boolean isPublished,
+    @Field(name = "updated_at") String updatedAt) {}

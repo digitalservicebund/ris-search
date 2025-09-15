@@ -9,4 +9,6 @@ public interface EcliCrawlerDocumentRepository
   List<EcliCrawlerDocument> findAllByIsPublishedIsTrueAndIdIn(List<String> ids);
 
   List<EcliCrawlerDocument> findAllByIsPublishedIsTrueAndIdNotIn(List<String> ids);
+
+  EcliCrawlerDocument findTopByOrderByUpdatedAtDesc();
 }

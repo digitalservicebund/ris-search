@@ -5,19 +5,25 @@ import de.bund.digitalservice.ris.search.eclicrawler.model.EcliCrawlerDocument;
 import de.bund.digitalservice.ris.search.eclicrawler.repository.EcliCrawlerDocumentRepository;
 import de.bund.digitalservice.ris.search.eclicrawler.schema.sitemap.Sitemap;
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
+import de.bund.digitalservice.ris.search.exception.OpenSearchMapperException;
+import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
+import de.bund.digitalservice.ris.search.mapper.CaseLawLdmlToOpenSearchMapper;
+import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import de.bund.digitalservice.ris.search.repository.objectstorage.CaseLawBucket;
 import de.bund.digitalservice.ris.search.repository.objectstorage.PortalBucket;
 import de.bund.digitalservice.ris.search.repository.opensearch.CaseLawRepository;
+import de.bund.digitalservice.ris.search.service.CaseLawIndexSyncJob;
 import de.bund.digitalservice.ris.search.service.Job;
 import jakarta.xml.bind.JAXBException;
 import java.io.FileNotFoundException;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.NoSuchElementException;
+import java.util.Objects;
+import java.util.Optional;
 import org.apache.commons.collections4.ListUtils;
 import org.springframework.stereotype.Service;
 
@@ -34,35 +40,47 @@ public class DailyEcliSitemapJob implements Job {
 
   EcliCrawlerDocumentRepository repository;
 
-  private final LocalDate now = LocalDate.now();
+  CaseLawIndexSyncJob indexJob;
+
+  private final LocalDate today = LocalDate.now();
+
+  private final String now = Instant.now().toString();
 
   public DailyEcliSitemapJob(
       EcliSitemapService service,
       PortalBucket portalBucket,
       CaseLawBucket caselawbucket,
       CaseLawRepository caseLawRepo,
-      EcliCrawlerDocumentRepository repository) {
+      EcliCrawlerDocumentRepository repository,
+      CaseLawIndexSyncJob indexJob) {
     this.sitemapService = service;
     this.portalBucket = portalBucket;
     this.caselawbucket = caselawbucket;
     this.caseLawRepo = caseLawRepo;
     this.repository = repository;
+    this.indexJob = indexJob;
   }
 
   public ReturnCode runJob() {
-    if (!sitemapService.getSitemapFilesPathsForDay(now).isEmpty()) {
+    if (!sitemapService.getSitemapFilesPathsForDay(today).isEmpty()) {
       return ReturnCode.ERROR;
     }
 
     boolean isInitialRun = repository.count() == 0;
     try {
-      var sitemapIndexPaths = writeSitemaps();
 
       if (isInitialRun) {
+        List<EcliCrawlerDocument> changes = getAllChanges();
+        var sitemapIndexPaths = persistEcliDcoumentChanges(changes, today);
+
         if (!sitemapIndexPaths.isEmpty()) {
           sitemapService.writeRobotsTxt(sitemapIndexPaths);
         }
       } else {
+        var lastProcessed = repository.findTopByOrderByUpdatedAtDesc().updatedAt();
+        List<EcliCrawlerDocument> changes =
+            getAllChangesFromChangelogs(indexJob.getNewChangelogs(caselawbucket, lastProcessed));
+        var sitemapIndexPaths = persistEcliDcoumentChanges(changes, today);
         if (!sitemapIndexPaths.isEmpty()) {
           sitemapService.updateRobotsTxt(sitemapIndexPaths);
         }
@@ -85,66 +103,44 @@ public class DailyEcliSitemapJob implements Job {
     return indexPaths;
   }
 
-  private Iterator<List<EcliCrawlerDocument>> getAllEcliDocumentsFromIndex(List<String> ids) {
+  private List<EcliCrawlerDocument> getAllChanges() throws ObjectStoreServiceException {
+    List<String> allFiles = caselawbucket.getAllKeys();
+    List<List<String>> filenamebatches = ListUtils.partition(allFiles, 10000);
 
-    List<List<String>> partitionedDocnumberLists = ListUtils.partition(ids, 10000);
+    List<EcliCrawlerDocument> changes = new ArrayList<>();
 
-    return new Iterator<>() {
-      int index = 0;
+    Map<String, EcliCrawlerDocument> existingDocs = new HashMap<>();
+    for (List<String> batch : filenamebatches) {
+      List<String> filenames = batch.stream().map(s -> s.replace(".xml", "")).toList();
 
-      @Override
-      public boolean hasNext() {
-        return index < partitionedDocnumberLists.size();
-      }
-
-      @Override
-      public List<EcliCrawlerDocument> next() {
-        if (!hasNext()) {
-          throw new NoSuchElementException();
-        }
-        List<EcliCrawlerDocument> docList =
-            caseLawRepo
-                .findAllValidFederalEcliDocumentsIn(partitionedDocnumberLists.get(index))
-                .stream()
-                .map(EcliCrawlerDocumentMapper::fromCaseLawDocumentationUnit)
-                .toList();
-        index++;
-        return docList;
-      }
-    };
-  }
-
-  private List<String> writeSitemaps() throws JAXBException {
-    List<String> allDocnumbers =
-        caselawbucket.getAllKeys().stream().map(s -> s.replace(".xml", "")).toList();
-
-    Iterator<List<EcliCrawlerDocument>> iterator = getAllEcliDocumentsFromIndex(allDocnumbers);
-
-    List<EcliCrawlerDocument> toBeCreated = new ArrayList<>();
-    while (iterator.hasNext()) {
-      Map<String, EcliCrawlerDocument> existingDocs = new HashMap<>();
-
-      var fromCaselawRepo = iterator.next();
       repository
-          .findAllByIsPublishedIsTrueAndIdIn(
-              fromCaselawRepo.stream().map(EcliCrawlerDocument::id).toList())
+          .findAllByIsPublishedIsTrueAndIdIn(filenames)
           .forEach(doc -> existingDocs.put(doc.id(), doc));
 
-      toBeCreated.addAll(
-          fromCaselawRepo.stream()
+      var unitsFromBatch =
+          getAllCaseLawDocumentationUnits(batch).stream()
+              .filter(unit -> !Objects.isNull(unit.ecli()));
+
+      changes.addAll(
+          unitsFromBatch
               .filter(
                   doc -> {
                     if (!existingDocs.containsKey(doc.id())) {
                       return true;
                     }
+
                     EcliCrawlerDocument existingDoc = existingDocs.get(doc.id());
-                    return !existingDoc.metadataEquals(doc);
+                    return existingDoc.indexedAt().compareTo(doc.indexedAt()) < 0;
                   })
+              .map(unit -> EcliCrawlerDocumentMapper.fromCaseLawDocumentationUnit(unit, now))
               .toList());
     }
 
-    List<EcliCrawlerDocument> toBeDeleted =
-        repository.findAllByIsPublishedIsTrueAndIdNotIn(allDocnumbers).stream()
+    changes.addAll(
+        repository
+            .findAllByIsPublishedIsTrueAndIdNotIn(
+                allFiles.stream().map(s -> s.replace(".xml", "")).toList())
+            .stream()
             .map(
                 crawlerDoc ->
                     new EcliCrawlerDocument(
@@ -154,13 +150,65 @@ public class DailyEcliSitemapJob implements Job {
                         crawlerDoc.decisionDate(),
                         crawlerDoc.documentType(),
                         crawlerDoc.indexedAt(),
-                        false))
-            .toList();
+                        false,
+                        now))
+            .toList());
+    return changes;
+  }
 
-    List<EcliCrawlerDocument> allChanges = new ArrayList<>();
-    allChanges.addAll(toBeCreated);
-    allChanges.addAll(toBeDeleted);
+  private List<CaseLawDocumentationUnit> getAllCaseLawDocumentationUnits(List<String> filenames)
+      throws ObjectStoreServiceException {
+    List<CaseLawDocumentationUnit> caseLawDocumentationUnits = new ArrayList<>();
+    for (String filename : filenames) {
+      Optional<String> contentOption = caselawbucket.getFileAsString(filename);
+      try {
+        contentOption.ifPresent(
+            content ->
+                caseLawDocumentationUnits.add(CaseLawLdmlToOpenSearchMapper.fromString(content)));
 
-    return persistEcliDcoumentChanges(allChanges, now);
+      } catch (OpenSearchMapperException ex) {
+        System.out.println("skip");
+      }
+    }
+    return caseLawDocumentationUnits;
+  }
+
+  private List<EcliCrawlerDocument> getAllChangesFromChangelogs(List<String> changelogPaths)
+      throws ObjectStoreServiceException {
+
+    List<Changelog> changelogs = new ArrayList<>();
+    for (String changelogPath : changelogPaths) {
+      Optional<Changelog> logOptional =
+          Optional.ofNullable(this.indexJob.parseOneChangelog(caselawbucket, changelogPath));
+      logOptional.ifPresent(changelogs::add);
+    }
+    Changelog mergedChangelog = ChangelogParser.mergeChangelogs(changelogs);
+
+    List<CaseLawDocumentationUnit> caseLawDocumentationUnitsToChange =
+        getAllCaseLawDocumentationUnits(mergedChangelog.getChanged().stream().toList());
+
+    List<EcliCrawlerDocument> changes = new ArrayList<>();
+    caseLawDocumentationUnitsToChange.forEach(
+        unit -> {
+          changes.add(EcliCrawlerDocumentMapper.fromCaseLawDocumentationUnit(unit, now));
+        });
+
+    List<String> deleteIdentifiers =
+        mergedChangelog.getDeleted().stream().map(i -> i.replace(".xml", "")).toList();
+    changes.addAll(
+        repository.findAllByIsPublishedIsTrueAndIdIn(deleteIdentifiers).stream()
+            .map(
+                ecliSitemap ->
+                    new EcliCrawlerDocument(
+                        ecliSitemap.id(),
+                        ecliSitemap.ecli(),
+                        ecliSitemap.courtType(),
+                        ecliSitemap.decisionDate(),
+                        ecliSitemap.documentType(),
+                        ecliSitemap.indexedAt(),
+                        false,
+                        now))
+            .toList());
+    return changes;
   }
 }

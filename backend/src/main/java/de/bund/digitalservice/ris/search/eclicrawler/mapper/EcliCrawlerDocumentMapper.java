@@ -37,7 +37,8 @@ public class EcliCrawlerDocumentMapper {
           new AbstractMap.SimpleEntry<>("BSG", "Bundessozialgericht"),
           new AbstractMap.SimpleEntry<>("BPatG", "Bundespatentgericht"));
 
-  public static EcliCrawlerDocument fromCaseLawDocumentationUnit(CaseLawDocumentationUnit unit) {
+  public static EcliCrawlerDocument fromCaseLawDocumentationUnit(
+      CaseLawDocumentationUnit unit, String now) {
     return new EcliCrawlerDocument(
         unit.id(),
         unit.ecli(),
@@ -45,7 +46,8 @@ public class EcliCrawlerDocumentMapper {
         unit.decisionDate().format(dateFormatter),
         unit.documentType(),
         unit.indexedAt(),
-        true);
+        true,
+        now);
   }
 
   public static Url toSitemapUrl(EcliCrawlerDocument doc) {
