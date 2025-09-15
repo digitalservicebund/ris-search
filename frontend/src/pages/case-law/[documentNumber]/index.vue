@@ -144,7 +144,7 @@ if (contentError?.value) {
           <SidebarLayout class="container">
             <template #content>
               <IncompleteDataMessage class="mb-16" />
-              <main class="case-law" v-html="html"></main>
+              <div class="case-law" v-html="html"></div>
             </template>
             <template #sidebar>
               <client-only>

@@ -111,16 +111,20 @@ test.describe("View Page Accessibility Tests", () => {
       [],
     ]);
   });
-  test.skip(`Caselaw page should not have accessibility issues`, async ({
+  test(`Caselaw page should not have accessibility issues`, async ({
     page,
   }) => {
     await page.goto("/case-law/STRE300770800");
     await page.waitForLoadState("networkidle");
     const tabsAnalysisResults = [];
-    tabsAnalysisResults[0] = await new AxeBuilder({ page }).analyze();
+    tabsAnalysisResults[0] = await new AxeBuilder({ page })
+      .exclude("nuxt-devtools-frame")
+      .analyze();
     await page.getByRole("tab", { name: "Details" }).click();
     await page.waitForLoadState("networkidle");
-    tabsAnalysisResults[1] = await new AxeBuilder({ page }).analyze();
+    tabsAnalysisResults[1] = await new AxeBuilder({ page })
+      .exclude("nuxt-devtools-frame")
+      .analyze();
     tabsAnalysisResults.forEach((result, index) => {
       createHtmlReport({
         results: result,
