@@ -133,6 +133,13 @@ const breadcrumbItems: ComputedRef<BreadcrumbItem[]> = computed(() => {
 
   return list;
 });
+
+const sanitizedHtml = computed(() => {
+  const raw = html.value ?? "";
+  return raw
+    .replace(/<main([^>]*)>/i, '<article role="document"$1>')
+    .replace(/<\/main>/i, "</article>");
+});
 </script>
 
 <template>
@@ -200,7 +207,11 @@ const breadcrumbItems: ComputedRef<BreadcrumbItem[]> = computed(() => {
                 >
                   <div v-html="htmlParts.officialToc" />
                 </Accordion>
-                <div v-observe-elements class="norm-view" v-html="html" />
+                <div
+                  v-observe-elements
+                  class="norm-view"
+                  v-html="sanitizedHtml"
+                />
               </template>
               <template #sidebar>
                 <NormTableOfContents
