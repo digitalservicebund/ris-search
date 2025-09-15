@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 @Component
-public class NormsBucket extends S3ObjectStorage {
+public class NormsBucket extends ObjectStorage {
 
   public NormsBucket(@Qualifier("normS3Client") ObjectStorageClient normS3Client) {
     super(normS3Client, LogManager.getLogger(NormsBucket.class));

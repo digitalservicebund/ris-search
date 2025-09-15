@@ -19,10 +19,10 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Profile({"uat", "production", "prototype"})
-public class LiteratureBucketDummy implements LiteratureBucket {
+public class LiteratureBucketDummy extends LiteratureBucket {
 
   public LiteratureBucketDummy() {
-    /**/
+    super(null, null);
   }
 
   public List<String> getAllKeys() {
