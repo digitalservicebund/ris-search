@@ -66,6 +66,11 @@
                     <ris:veroeffentlichungsJahre>
                         <ris:veroeffentlichungsJahr>2025</ris:veroeffentlichungsJahr>
                     </ris:veroeffentlichungsJahre>
+                    <ris:gliederung>
+                        <ris:gliederungEntry>I. Äpfel.</ris:gliederungEntry>
+                        <ris:gliederungEntry>II. Birnen.</ris:gliederungEntry>
+                        <ris:gliederungEntry>III. Orangen.</ris:gliederungEntry>
+                    </ris:gliederung>
                 </ris:metadata>
             </akn:proprietary>
         </akn:meta>

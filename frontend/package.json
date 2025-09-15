@@ -39,7 +39,7 @@
     "@sentry/nuxt": "^10.0.0",
     "@tailwindcss/vite": "^4.1.8",
     "axe-html-reporter": "^2.2.11",
-    "axios": "^1.11.0",
+    "axios": "^1.12.0",
     "dayjs": "^1.11.13",
     "js-cookie": "^3.0.5",
     "jwt-decode": "^4.0.0",
@@ -52,7 +52,7 @@
     "primeicons": "^7.0.0",
     "primevue": "^4.3.5",
     "valibot": "^1.1.0",
-    "vitest": "^3.2.3"
+    "vitest": "^3.2.4"
   },
   "devDependencies": {
     "@iconify-json/ic": "^1.2.2",
@@ -65,7 +65,7 @@
     "@pact-foundation/pact": "^15.0.1",
     "@pinia/testing": "^1.0.2",
     "@playwright/test": "^1.53.2",
-    "@primevue/nuxt-module": "^4.3.5",
+    "@primevue/nuxt-module": "^4.3.9",
     "@testing-library/vue": "^8.1.0",
     "@types/dompurify": "^3.2.0",
     "@types/js-cookie": "^3.0.6",
@@ -83,7 +83,7 @@
     "eslint-plugin-unused-imports": "^4.1.4",
     "isomorphic-dompurify": "^2.26.0",
     "jsdom": "^26.1.0",
-    "json-schema-to-typescript-lite": "^14.1.0",
+    "json-schema-to-typescript-lite": "^15.0.0",
     "license-checker": "^25.0.1",
     "msw": "^2.10.2",
     "nuxt": "3.17.5",
@@ -96,7 +96,7 @@
     "typescript": "~5.8.3",
     "unplugin-icons": "^22.1.0",
     "unplugin-vue-components": "^29.0.0",
-    "vitest": "^3.2.3",
+    "vitest": "^3.2.4",
     "vue-tsc": "^3.0.1"
   },
   "resolutions": {
@@ -104,7 +104,6 @@
     "rollup": "^4.22.4",
     "unimport": "^3.14.5",
     "path-to-regexp": "^6.3.0",
-    "axios": "^1.8.2",
     "dompurify": "^3.2.5",
     "esbuild": "^0.25.0",
     "@vercel/nft": "^0.27.4",

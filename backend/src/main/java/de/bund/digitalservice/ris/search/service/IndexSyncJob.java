@@ -101,7 +101,7 @@ public class IndexSyncJob implements Job {
       Changelog changelogContent = parseOneChangelog(changelogBucket, fileName);
       if (changelogContent != null) {
         logger.info("Processing changelog {}", fileName);
-        importChangelogContent(changelogContent, state.startTime(), fileName);
+        importChangelogContent(changelogContent, state.startTime());
         indexStatusService.updateLastProcessedChangelog(statusFileName, fileName);
         logger.info("Processed changelog {}", fileName);
       }
@@ -124,8 +124,7 @@ public class IndexSyncJob implements Job {
     }
   }
 
-  public void importChangelogContent(
-      Changelog changelog, String startTime, String changelogFileName)
+  public void importChangelogContent(Changelog changelog, String startTime)
       throws ObjectStoreServiceException {
     if (changelog.isChangeAll()) {
       logger.info("Reindexing all");
@@ -134,7 +133,7 @@ public class IndexSyncJob implements Job {
       if (!Collections.disjoint(changelog.getChanged(), changelog.getDeleted())) {
         throw new IllegalArgumentException("duplicate identifier in changed and deleted list");
       }
-      indexService.indexChangelog(changelogFileName, changelog);
+      indexService.indexChangelog(changelog);
     }
   }
 
@@ -145,8 +144,8 @@ public class IndexSyncJob implements Job {
     List<String> unprocessedChangelogs =
         getNewChangelogs(changelogBucket, state.lastProcessedChangelogFile());
     if (unprocessedChangelogs.isEmpty()) {
-      int numberOfFilesInBucket = indexService.getNumberOfFilesInBucket();
-      int numberOfIndexedDocuments = indexService.getNumberOfIndexedDocuments();
+      int numberOfFilesInBucket = indexService.getNumberOfIndexableDocumentsInBucket();
+      int numberOfIndexedDocuments = indexService.getNumberOfIndexedEntities();
       if (numberOfFilesInBucket != numberOfIndexedDocuments) {
         String indexServiceName = indexService.getClass().getSimpleName();
         logger.warn(

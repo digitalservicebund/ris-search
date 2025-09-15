@@ -36,7 +36,9 @@ defineEmits(["selectItem"]);
           >Über den Service</NuxtLink
         >
       </li>
-      <LoginActions v-if="config.public.authEnabled" />
+      <li>
+        <LoginActions v-if="config.public.authEnabled" />
+      </li>
     </ul>
   </nav>
 </template>

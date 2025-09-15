@@ -151,21 +151,19 @@ public class NormsController {
   @ApiResponse(responseCode = "200")
   @ApiResponse(responseCode = "404", content = @Content)
   public ResponseEntity<LegislationWorkSchema> getLegislation(
-      @Parameter(description = BUND_DESCRIPTION, example = BUND_EXAMPLE)
+      @Parameter(description = BUND_DESCRIPTION, schema = @Schema(allowableValues = {BUND_EXAMPLE}))
           @PathVariable
-          @Schema(allowableValues = {BUND_EXAMPLE})
           String jurisdiction,
-      @Parameter(description = AGENT_DESCRIPTION, example = AGENT_EXAMPLE)
-          @PathVariable
-          @Schema(example = AGENT_EXAMPLE)
+      @Parameter(description = AGENT_DESCRIPTION, example = AGENT_EXAMPLE) @PathVariable
           String agent,
       @Parameter(description = YEAR_DESCRIPTION, example = YEAR_EXAMPLE) @PathVariable String year,
       @Parameter(description = NATURAL_IDENTIFIER_DESCRIPTION, example = NATURAL_IDENTIFIER_EXAMPLE)
           @PathVariable
           String naturalIdentifier,
       @Parameter(example = "2020-06-19") @PathVariable LocalDate pointInTime,
-      @PathVariable @Schema(example = "2") Integer version,
-      @PathVariable @Schema(example = "deu") String language) {
+      @Parameter(example = "2") @PathVariable Integer version,
+      @Parameter(example = "deu") @PathVariable String language,
+      @Parameter(example = "regelungstext-1") @PathVariable String subtype) {
 
     var eli =
         new ExpressionEli(
@@ -196,21 +194,23 @@ public class NormsController {
               mediaType = MediaType.TEXT_HTML_VALUE,
               schema = @Schema(example = HTML_FILE_NOT_FOUND)))
   public ResponseEntity<String> getLegislationSubtypeAsHtml(
-      @Parameter(description = BUND_DESCRIPTION, example = BUND_EXAMPLE)
+      @Parameter(
+              description = BUND_DESCRIPTION,
+              example = BUND_EXAMPLE,
+              schema = @Schema(allowableValues = {BUND_EXAMPLE}))
           @PathVariable
-          @Schema(allowableValues = {BUND_EXAMPLE})
           String jurisdiction,
       @Parameter(description = AGENT_DESCRIPTION, example = AGENT_EXAMPLE) @PathVariable
           String agent,
-      @PathVariable @Parameter(description = YEAR_DESCRIPTION, example = YEAR_EXAMPLE) String year,
+      @Parameter(description = YEAR_DESCRIPTION, example = YEAR_EXAMPLE) @PathVariable String year,
       @Parameter(description = NATURAL_IDENTIFIER_DESCRIPTION, example = NATURAL_IDENTIFIER_EXAMPLE)
           @PathVariable
           String naturalIdentifier,
       @Parameter(example = "2020-06-19") @PathVariable LocalDate pointInTime,
-      @PathVariable @Schema(example = "2") Integer version,
-      @PathVariable @Schema(example = "deu") String language,
-      @PathVariable @Schema(example = "2020-06-19") LocalDate pointInTimeManifestation,
-      @Schema(example = "regelungstext-1") @PathVariable String subtype,
+      @Parameter(example = "2") @PathVariable Integer version,
+      @Parameter(example = "deu") @PathVariable String language,
+      @Parameter(example = "2020-06-19") @PathVariable LocalDate pointInTimeManifestation,
+      @Parameter(example = "regelungstext-1") @PathVariable String subtype,
       @RequestHeader(
               name = ApiConfig.Headers.GET_RESOURCES_VIA,
               required = false,
@@ -265,9 +265,11 @@ public class NormsController {
   @ApiResponse(responseCode = "200")
   @ApiResponse(responseCode = "404", content = @Content(schema = @Schema()))
   public ResponseEntity<byte[]> getLegislationSubtypeAsXml(
-      @Parameter(description = BUND_DESCRIPTION, example = BUND_EXAMPLE)
+      @Parameter(
+              description = BUND_DESCRIPTION,
+              example = BUND_EXAMPLE,
+              schema = @Schema(allowableValues = {BUND_EXAMPLE}))
           @PathVariable
-          @Schema(allowableValues = {BUND_EXAMPLE})
           String jurisdiction,
       @Parameter(description = AGENT_DESCRIPTION, example = AGENT_EXAMPLE) @PathVariable
           String agent,
@@ -276,10 +278,10 @@ public class NormsController {
           @PathVariable
           String naturalIdentifier,
       @Parameter(example = "2020-06-19") @PathVariable LocalDate pointInTime,
-      @PathVariable @Schema(example = "2") Integer version,
-      @PathVariable @Schema(example = "deu") String language,
-      @PathVariable @Schema(example = "2020-06-19") LocalDate pointInTimeManifestation,
-      @Schema(example = "regelungstext-1") @PathVariable String subtype)
+      @Parameter(example = "2") @PathVariable Integer version,
+      @Parameter(example = "deu") @PathVariable String language,
+      @Parameter(example = "2020-06-19") @PathVariable LocalDate pointInTimeManifestation,
+      @Parameter(example = "regelungstext-1") @PathVariable String subtype)
       throws ObjectStoreServiceException {
     var eli =
         new ManifestationEli(
@@ -315,9 +317,11 @@ public class NormsController {
   @ApiResponse(responseCode = "200")
   @ApiResponse(responseCode = "404", content = @Content(schema = @Schema()))
   public ResponseEntity<StreamingResponseBody> getLegislationSubtypeAsZip(
-      @Parameter(description = BUND_DESCRIPTION, example = BUND_EXAMPLE)
+      @Parameter(
+              description = BUND_DESCRIPTION,
+              example = BUND_EXAMPLE,
+              schema = @Schema(allowableValues = {BUND_EXAMPLE}))
           @PathVariable
-          @Schema(allowableValues = {BUND_EXAMPLE})
           String jurisdiction,
       @Parameter(description = AGENT_DESCRIPTION, example = AGENT_EXAMPLE) @PathVariable
           String agent,
@@ -326,9 +330,9 @@ public class NormsController {
           @PathVariable
           String naturalIdentifier,
       @Parameter(example = "2020-06-19") @PathVariable LocalDate pointInTime,
-      @PathVariable @Schema(example = "2") Integer version,
-      @PathVariable @Schema(example = "deu") String language,
-      @PathVariable @Schema(example = "2020-06-19") LocalDate pointInTimeManifestation) {
+      @Parameter(example = "2") @PathVariable Integer version,
+      @Parameter(example = "deu") @PathVariable String language,
+      @Parameter(example = "2020-06-19") @PathVariable LocalDate pointInTimeManifestation) {
     String prefix =
         String.join(
             "/",
@@ -369,13 +373,15 @@ public class NormsController {
   @ApiResponse(responseCode = "200")
   @ApiResponse(responseCode = "404", content = @Content())
   public ResponseEntity<String> getLegislationArticleAsHtml(
-      @PathVariable
-          @Parameter(description = BUND_DESCRIPTION, example = BUND_EXAMPLE)
-          @Schema(allowableValues = {BUND_EXAMPLE})
+      @Parameter(
+              description = BUND_DESCRIPTION,
+              example = BUND_EXAMPLE,
+              schema = @Schema(allowableValues = {BUND_EXAMPLE}))
+          @PathVariable
           String jurisdiction,
       @Parameter(description = AGENT_DESCRIPTION, example = AGENT_EXAMPLE) @PathVariable
           String agent,
-      @PathVariable @Parameter(description = YEAR_DESCRIPTION, example = YEAR_EXAMPLE) String year,
+      @Parameter(description = YEAR_DESCRIPTION, example = YEAR_EXAMPLE) @PathVariable String year,
       @Parameter(description = NATURAL_IDENTIFIER_DESCRIPTION, example = NATURAL_IDENTIFIER_EXAMPLE)
           @PathVariable
           String naturalIdentifier,
@@ -434,24 +440,24 @@ public class NormsController {
   @ApiResponse(responseCode = "200")
   @ApiResponse(responseCode = "404", content = @Content())
   public ResponseEntity<byte[]> getFile(
-      @Parameter(description = BUND_DESCRIPTION, example = BUND_EXAMPLE)
+      @Parameter(
+              description = BUND_DESCRIPTION,
+              example = BUND_EXAMPLE,
+              schema = @Schema(allowableValues = {BUND_EXAMPLE}))
           @PathVariable
-          @Schema(allowableValues = {BUND_EXAMPLE})
           String jurisdiction,
       @Parameter(description = AGENT_DESCRIPTION, example = AGENT_EXAMPLE) @PathVariable
           String agent,
-      @PathVariable @Parameter(description = YEAR_DESCRIPTION, example = YEAR_EXAMPLE) String year,
+      @Parameter(description = YEAR_DESCRIPTION, example = YEAR_EXAMPLE) @PathVariable String year,
       @Parameter(description = NATURAL_IDENTIFIER_DESCRIPTION, example = NATURAL_IDENTIFIER_EXAMPLE)
           @PathVariable
           String naturalIdentifier,
       @Parameter(example = "2020-06-19") @PathVariable LocalDate pointInTime,
-      @PathVariable @Schema(example = "2") Integer version,
-      @PathVariable @Schema(example = "deu") String language,
-      @PathVariable @Schema(example = "2020-06-19") LocalDate pointInTimeManifestation,
-      @Schema(example = "image") @PathVariable String name,
-      @Schema(
-              example = "jpg",
-              allowableValues = {"pdf", "xml", "jpg", "gif"})
+      @Parameter(example = "2") @PathVariable Integer version,
+      @Parameter(example = "deu") @PathVariable String language,
+      @Parameter(example = "2020-06-19") @PathVariable LocalDate pointInTimeManifestation,
+      @Parameter(example = "image") @PathVariable String name,
+      @Parameter(example = "jpg", schema = @Schema(allowableValues = {"pdf", "xml", "jpg", "gif"}))
           @PathVariable
           String extension)
       throws ObjectStoreServiceException {

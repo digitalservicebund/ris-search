@@ -42,18 +42,19 @@ class NlexServiceTest {
 
   NormsService service;
   NlexService nlexService;
+  private static final String FRONTEND_URL = "http://testurl.de/";
 
   @BeforeEach
   void setup() {
     this.service = Mockito.mock(NormsService.class);
-    this.nlexService = new NlexService(service);
+    this.nlexService = new NlexService(service, FRONTEND_URL);
   }
 
   @Test
   void onRequestItReturnsTheProperResult() {
     String searchTerm = "test phrase";
 
-    String manifestationExample = "example.xml";
+    String eliExample = "eli/example";
     String title = "testTitle";
     String innerHitText = "inner hit";
 
@@ -61,12 +62,12 @@ class NlexServiceTest {
     expectedSearch.setSearchTerm(searchTerm);
 
     Query query = buildQuery(searchTerm);
-    configureServiceMock(searchTerm, manifestationExample, title, innerHitText);
+    configureServiceMock(searchTerm, eliExample, title, innerHitText);
 
     RequestResult result = this.nlexService.runRequestQuery(query);
 
     RequestResult expectedResult =
-        buildExpectedRequestResult("/v1/legislation/example.html", title, innerHitText, searchTerm);
+        buildExpectedRequestResult(searchTerm, eliExample, title, innerHitText);
 
     Assertions.assertTrue(EqualsBuilder.reflectionEquals(expectedResult, result));
   }
@@ -104,7 +105,7 @@ class NlexServiceTest {
   }
 
   private RequestResult buildExpectedRequestResult(
-      String href, String title, String innerHitText, String searchTerm) {
+      String searchTerm, String eli, String title, String innerHitText) {
     return new RequestResult()
         .setStatus(ResultStatus.OK)
         .setResultList(
@@ -128,15 +129,17 @@ class NlexServiceTest {
                                         List.of(
                                             new Para().setRoles("zoom").setValue(innerHitText))))
                             .setReferences(
-                                new References().setExternUrl(new ExternUrl().setHref(href))))));
+                                new References()
+                                    .setExternUrl(
+                                        new ExternUrl()
+                                            .setHref("http://testurl.de/norms/" + eli))))));
   }
 
   private void configureServiceMock(
-      String searchTerm, String manifestationEliExample, String title, String innerHitText) {
+      String searchTerm, String eliExample, String title, String innerHitText) {
     Norm expectedNorm = new Norm();
-    expectedNorm.setManifestationEliExample(manifestationEliExample);
     expectedNorm.setOfficialTitle(title);
-
+    expectedNorm.setExpressionEli(eliExample);
     Article expectedArticle = Article.builder().text(innerHitText).build();
     SearchPage<Norm> page = getMockedNormsServiceSearchPage(expectedNorm, expectedArticle);
 

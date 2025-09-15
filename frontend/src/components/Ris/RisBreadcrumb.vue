@@ -22,7 +22,7 @@ const props = defineProps<Props>();
 const items = computed(() => {
   const items: BreadcrumbItem[] = [
     {
-      label: "",
+      label: "Startseite",
       type: "home",
       route: "/",
     },

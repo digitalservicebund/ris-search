@@ -145,11 +145,12 @@ public class CaseLawController {
   @ApiResponse(responseCode = "200")
   @ApiResponse(responseCode = "404", content = @Content())
   public ResponseEntity<byte[]> getImage(
-      @PathVariable @Schema(example = "BDRE000800001") String documentNumber,
-      @Schema(example = "image") @PathVariable String name,
-      @Schema(
+      @Parameter(example = "BDRE000800001") @PathVariable String documentNumber,
+      @Parameter(example = "image") @PathVariable String name,
+      @Parameter(
               example = "jpg",
-              allowableValues = {"png", "jpg", "jpeg", "gif", "wmf", "emf", "bitmap"})
+              schema =
+                  @Schema(allowableValues = {"png", "jpg", "jpeg", "gif", "wmf", "emf", "bitmap"}))
           @PathVariable
           String extension)
       throws ObjectStoreServiceException, FileNotFoundException {

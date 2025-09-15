@@ -21,7 +21,4 @@ public class Meta {
 
   @XmlElement(name = "references", namespace = LiteratureNamespaces.AKN_NS)
   private References references;
-
-  @XmlElement(name = "gliederung", namespace = LiteratureNamespaces.RIS_NS)
-  private Gliederung gliederung;
 }

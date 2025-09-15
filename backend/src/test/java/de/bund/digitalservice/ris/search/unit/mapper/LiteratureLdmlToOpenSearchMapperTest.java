@@ -415,11 +415,15 @@ class LiteratureLdmlToOpenSearchMapperTest {
                                 <akn:FRBRalias name="documentNumber" value="BJLU002758328" />
                               </akn:FRBRExpression>
                             </akn:identification>
-                            <ris:gliederung>
-                                <ris:gliederungEntry>I. Foo.</ris:gliederungEntry>
-                                <ris:gliederungEntry>II. Bar.</ris:gliederungEntry>
-                                <ris:gliederungEntry>III. Baz.</ris:gliederungEntry>
-                            </ris:gliederung>
+                            <akn:proprietary source="attributsemantik-noch-undefiniert">
+                              <ris:metadata>
+                                <ris:gliederung>
+                                    <ris:gliederungEntry>I. Foo.</ris:gliederungEntry>
+                                    <ris:gliederungEntry>II. Bar.</ris:gliederungEntry>
+                                    <ris:gliederungEntry>III. Baz.</ris:gliederungEntry>
+                                </ris:gliederung>
+                              </ris:metadata>
+                            </akn:proprietary>
                         </akn:meta>
                       </akn:doc>
                     </akn:akomaNtoso>

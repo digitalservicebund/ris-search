@@ -75,7 +75,7 @@ test("can search, filter for case law, and view a single case law documentation 
 
       const heading = page
         .getByRole("main")
-        .getByText(sectionName, { exact: true });
+        .getByRole("heading", { name: sectionName });
       await expect(heading).toBeInViewport();
     });
   }

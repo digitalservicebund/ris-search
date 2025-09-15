@@ -170,6 +170,7 @@ test("can navigate to and view an attachment", async ({ page }) => {
     await page
       .getByRole("main")
       .getByRole("link", { name: attachmentTitle })
+      .first()
       .click();
 
     await expect(
@@ -196,6 +197,7 @@ test("can view images", async ({ page }) => {
     await page
       .getByRole("main")
       .getByRole("link", { name: "§ 1 Beispielhafte Illustration" })
+      .first()
       .click();
     await page.waitForURL(/\/art-z1$/g);
     await page.getByRole("img", { name: "Beispielbild" }).isVisible();

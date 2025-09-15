@@ -203,7 +203,9 @@ public class LiteratureLdmlToOpenSearchMapper {
             Optional.ofNullable(literatureLdml)
                 .map(LiteratureLdml::getDoc)
                 .map(Doc::getMeta)
-                .map(Meta::getGliederung)
+                .map(Meta::getProprietary)
+                .map(Proprietary::getMetadata)
+                .map(Metadata::getGliederung)
                 .map(Gliederung::getGliederungEntry)
                 .orElse(Collections.emptyList()));
 

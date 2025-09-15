@@ -71,7 +71,7 @@ class IndexSyncJobTest {
     Changelog changelog = new Changelog();
     changelog.setChangeAll(true);
 
-    normIndexSyncJob.importChangelogContent(changelog, Instant.now().toString(), "testFileName");
+    normIndexSyncJob.importChangelogContent(changelog, Instant.now().toString());
 
     verify(indexNormsService, times(1)).reindexAll(any());
   }
@@ -86,13 +86,13 @@ class IndexSyncJobTest {
 
     Assertions.assertThrows(
         IllegalArgumentException.class,
-        () -> normIndexSyncJob.importChangelogContent(changelog, now, "testFileName"));
+        () -> normIndexSyncJob.importChangelogContent(changelog, now));
   }
 
   @Test
   void itLogsAWarningWhenTheNumberInBucketAnIndexDiffer(CapturedOutput output) {
-    when(indexNormsService.getNumberOfIndexedDocuments()).thenReturn(100);
-    when(indexNormsService.getNumberOfFilesInBucket()).thenReturn(99);
+    when(indexNormsService.getNumberOfIndexedEntities()).thenReturn(100);
+    when(indexNormsService.getNumberOfIndexableDocumentsInBucket()).thenReturn(99);
 
     Instant time = Instant.now();
     normIndexSyncJob.alertOnNumberMismatch(

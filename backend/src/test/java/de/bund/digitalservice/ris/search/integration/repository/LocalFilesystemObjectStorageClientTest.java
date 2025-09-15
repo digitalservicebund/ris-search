@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import de.bund.digitalservice.ris.search.exception.NoSuchKeyException;
 import de.bund.digitalservice.ris.search.repository.objectstorage.LocalFilesystemObjectStorageClient;
+import de.bund.digitalservice.ris.search.repository.objectstorage.ObjectKeyInfo;
 import java.io.ByteArrayInputStream;
 import java.io.FilterInputStream;
 import java.util.List;
@@ -90,5 +91,21 @@ class LocalFilesystemObjectStorageClientTest {
     client.putStream("stream", inputStream);
 
     assertThat(client.getStream("stream")).hasContent("content");
+  }
+
+  @Test
+  void itListsKeysWithLastModified() {
+    client.save("sitemaps/norms/1.xml", "new");
+
+    List<ObjectKeyInfo> infos = client.listByPrefixWithLastModified("sitemaps/");
+    ObjectKeyInfo fileInfo =
+        infos.stream().filter(info -> info.key().contains("1.xml")).toList().getFirst();
+
+    assertThat(fileInfo.lastModified()).isNotNull();
+  }
+
+  @Test
+  void itReturnsEmptyListOnInvalidPathsWithLastModified() {
+    assertThat(client.listByPrefixWithLastModified("another/")).isEmpty();
   }
 }

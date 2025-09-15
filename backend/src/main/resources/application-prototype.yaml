@@ -1,6 +1,7 @@
 server:
   port: 8080
   docs-url: "https://docs.rechtsinformationen.bund.de/"
+  front-end-url: https://testphase.rechtsinformationen.bund.de/
 
 spring:
   config:
