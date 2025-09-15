@@ -12,6 +12,7 @@ import type { LocationQuery } from "#vue-router";
 import { sortMode } from "~/components/types";
 import type { DateSearchMode } from "~/stores/searchParams/dateParams";
 import { useDateParams } from "~/stores/searchParams/dateParams";
+import { usePostHogStore } from "~/stores/usePostHogStore";
 import { DocumentKind } from "~/types";
 
 export { DateSearchMode } from "~/stores/searchParams/dateParams";

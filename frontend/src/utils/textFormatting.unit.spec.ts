@@ -1,6 +1,10 @@
 // @vitest-environment node
 import { describe, expect } from "vitest";
-import { addEllipsis, removeOuterParentheses } from "./textFormatting";
+import {
+  addEllipsis,
+  getStringOrDefault,
+  removeOuterParentheses,
+} from "./textFormatting";
 
 describe("getStringOrDefault", () => {
   it("returns the default value when the input string is undefined", () => {

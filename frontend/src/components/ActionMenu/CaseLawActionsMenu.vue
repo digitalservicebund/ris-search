@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import ActionsMenu from "~/components/ActionMenu/ActionsMenu.vue";
+import { useBackendURL } from "~/composables/useBackendURL";
 import type { CaseLaw } from "~/types";
 import { getEncodingURL } from "~/utils/caseLawUtils";
 

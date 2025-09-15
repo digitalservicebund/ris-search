@@ -3,6 +3,7 @@ import { RisAutoComplete } from "@digitalservicebund/ris-ui/components";
 import _ from "lodash";
 import type { AutoCompleteDropdownClickEvent } from "primevue/autocomplete";
 import { defaultSuggestions } from "~/components/Search/SimpleSearch/CourtFilter.data";
+import { useBackendURL } from "~/composables/useBackendURL";
 import { useSimpleSearchParamsStore } from "~/stores/searchParams";
 import { DocumentKind } from "~/types";
 

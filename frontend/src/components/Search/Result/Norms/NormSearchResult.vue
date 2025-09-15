@@ -1,7 +1,12 @@
 <script setup lang="ts">
 import LegalIcon from "virtual:icons/mdi/legal";
+import { usePostHogStore } from "~/stores/usePostHogStore";
 import type { LegislationWork, SearchResult, TextMatch } from "~/types";
+import { isPrototypeProfile } from "~/utils/config";
 import { dateFormattedDDMMYYYY } from "~/utils/dateFormatting";
+import { temporalCoverageToValidityInterval } from "~/utils/normUtils";
+import { sanitizeSearchResult } from "~/utils/sanitize";
+import { addEllipsis } from "~/utils/textFormatting";
 
 const props = defineProps<{
   searchResult: SearchResult<LegislationWork>;

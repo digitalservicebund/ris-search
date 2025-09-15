@@ -2,7 +2,8 @@
 import type { Dayjs } from "dayjs";
 import MetadataField from "~/components/MetadataField.vue";
 import ValidityDatesMetadataFields from "~/components/Norm/Metadatafields/ValidityDatesMetadataFields.vue";
-import { getValidityStatusLabel } from "~/utils/normUtils";
+import { isPrototypeProfile } from "~/utils/config";
+import { getValidityStatusLabel, type ValidityStatus } from "~/utils/normUtils";
 
 interface Props {
   abbreviation?: string;

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import PrimevueTextarea from "primevue/textarea";
 import { usePostHogStore } from "~/stores/usePostHogStore";
+import { isStringEmpty } from "~/utils/textFormatting";
 import ErrorOutline from "~icons/material-symbols/error-outline";
 
 const store = usePostHogStore();
