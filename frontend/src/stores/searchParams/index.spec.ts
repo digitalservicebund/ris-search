@@ -42,8 +42,11 @@ mockNuxtImport("useRoute", () => {
 mockNuxtImport("useRouter", () => {
   return useRouterMock;
 });
-mockNuxtImport("usePostHogStore", () => {
-  return usePostHogStoreMock;
+
+vi.mock("~/stores/usePostHogStore", () => {
+  return {
+    usePostHogStore: usePostHogStoreMock,
+  };
 });
 
 describe("useSimpleSearchParamsStore", () => {

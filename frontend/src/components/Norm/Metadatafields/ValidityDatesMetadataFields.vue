@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { Dayjs } from "dayjs";
 import MetadataField from "~/components/MetadataField.vue";
+import { dateFormattedDDMMYYYY } from "~/utils/dateFormatting";
 
 interface Props {
   validFrom?: Dayjs;

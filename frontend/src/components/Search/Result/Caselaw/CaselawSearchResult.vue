@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import _ from "lodash";
 import GavelIcon from "virtual:icons/material-symbols/gavel";
+import { usePostHogStore } from "~/stores/usePostHogStore";
 import type { CaseLaw, SearchResult, TextMatch } from "~/types";
+import { dateFormattedDDMMYYYY } from "~/utils/dateFormatting";
 import { sanitizeSearchResult } from "~/utils/sanitize";
 import { addEllipsis, removeOuterParentheses } from "~/utils/textFormatting";
 

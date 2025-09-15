@@ -22,7 +22,10 @@ import {
   tabPanelStyles,
   tabStyles,
 } from "~/components/Tabs.styles";
+import { useBackendURL } from "~/composables/useBackendURL";
 import type { CaseLaw } from "~/types";
+import { getEncodingURL } from "~/utils/caseLawUtils";
+import { dateFormattedDDMMYYYY } from "~/utils/dateFormatting";
 import { getAllSectionsFromHtml } from "~/utils/htmlParser";
 import { removeOuterParentheses } from "~/utils/textFormatting";
 import IcBaselineSubject from "~icons/ic/baseline-subject";

@@ -1,9 +1,10 @@
 import { mockNuxtImport, registerEndpoint } from "@nuxt/test-utils/runtime";
 import { createTestingPinia } from "@pinia/testing";
-import { mount, flushPromises } from "@vue/test-utils";
 import type { VueWrapper } from "@vue/test-utils";
-import { describe, it, expect, vi } from "vitest";
+import { flushPromises, mount } from "@vue/test-utils";
+import { describe, expect, it, vi } from "vitest";
 import FeedbackForm from "./FeedbackForm.vue";
+import { useBackendURL } from "~/composables/useBackendURL";
 import { getPostHogConfig } from "~/utils/testing/postHogUtils";
 
 const { useRuntimeConfigMock } = vi.hoisted(() => {

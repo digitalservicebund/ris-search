@@ -1,8 +1,9 @@
 import { mockNuxtImport } from "@nuxt/test-utils/runtime";
 import { createPinia, setActivePinia } from "pinia";
-import posthog from "posthog-js";
 import type { PostHog } from "posthog-js";
-import { describe, it, expect, beforeEach, vi } from "vitest";
+import posthog from "posthog-js";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { useBackendURL } from "~/composables/useBackendURL";
 import type { QueryParams } from "~/stores/searchParams";
 import { addDefaults } from "~/stores/searchParams/getInitialState";
 import { usePostHogStore } from "~/stores/usePostHogStore";
