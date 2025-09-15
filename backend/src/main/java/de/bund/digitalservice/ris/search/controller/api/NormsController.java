@@ -34,8 +34,6 @@ import java.net.URLConnection;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -167,12 +165,11 @@ public class NormsController {
           String naturalIdentifier,
       @Parameter(example = "2020-06-19") @PathVariable LocalDate pointInTime,
       @PathVariable @Schema(example = "2") Integer version,
-      @PathVariable @Schema(example = "deu") String language,
-      @PathVariable @Schema(example = "regelungstext-1") String subtype) {
+      @PathVariable @Schema(example = "deu") String language) {
 
     var eli =
         new ExpressionEli(
-            jurisdiction, agent, year, naturalIdentifier, pointInTime, version, language, subtype);
+            jurisdiction, agent, year, naturalIdentifier, pointInTime, version, language);
     Optional<Norm> result = normsService.getByExpressionEli(eli);
 
     return result
@@ -333,17 +330,17 @@ public class NormsController {
       @PathVariable @Schema(example = "deu") String language,
       @PathVariable @Schema(example = "2020-06-19") LocalDate pointInTimeManifestation) {
     String prefix =
-        Stream.of(
-                "eli",
-                jurisdiction,
-                agent,
-                year,
-                naturalIdentifier,
-                pointInTime.toString(),
-                version.toString(),
-                language,
-                pointInTimeManifestation.toString())
-            .collect(Collectors.joining("/"));
+        String.join(
+            "/",
+            "eli",
+            jurisdiction,
+            agent,
+            year,
+            naturalIdentifier,
+            pointInTime.toString(),
+            version.toString(),
+            language,
+            pointInTimeManifestation.toString());
 
     String fileName = prefix + ".zip";
 

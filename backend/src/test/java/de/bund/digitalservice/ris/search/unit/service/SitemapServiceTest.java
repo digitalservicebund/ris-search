@@ -10,6 +10,7 @@ import static org.mockito.Mockito.verify;
 import de.bund.digitalservice.ris.search.models.sitemap.SitemapType;
 import de.bund.digitalservice.ris.search.repository.objectstorage.PortalBucket;
 import de.bund.digitalservice.ris.search.service.SitemapService;
+import de.bund.digitalservice.ris.search.utils.eli.EliFile;
 import de.bund.digitalservice.ris.search.utils.eli.ExpressionEli;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,8 +22,8 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 @ExtendWith(MockitoExtension.class)
 class SitemapServiceTest {
-  private static final String TEST_EXPRESSION_ELI =
-      "eli/bund/bgbl-1/1991/s101/1991-01-01/1/deu/regelungstext-1";
+  private static final String TEST_ELI_FILE =
+      "eli/bund/bgbl-1/1991/s101/1991-01-01/1/deu/1991-01-20/regelungstext-1.xml";
   private SitemapService sitemapService;
   @Mock private PortalBucket portalBucket;
 
@@ -44,10 +45,9 @@ class SitemapServiceTest {
 
   @Test
   void testGenerateNormsSitemap() {
-    ExpressionEli norm = ExpressionEli.fromString(TEST_EXPRESSION_ELI);
+    ExpressionEli norm = EliFile.fromString(TEST_ELI_FILE).get().getExpressionEli();
     String normSitemap = sitemapService.generateNormsSitemap(List.of(norm));
-    assertTrue(
-        normSitemap.contains("<loc>https://test.local/norms/" + TEST_EXPRESSION_ELI + "</loc>"));
+    assertTrue(normSitemap.contains("<loc>https://test.local/norms/" + norm + "</loc>"));
   }
 
   @Test

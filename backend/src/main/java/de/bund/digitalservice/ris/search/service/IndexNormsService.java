@@ -6,9 +6,12 @@ import de.bund.digitalservice.ris.search.mapper.NormLdmlToOpenSearchMapper;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
 import de.bund.digitalservice.ris.search.repository.opensearch.NormsRepository;
+import de.bund.digitalservice.ris.search.utils.eli.EliFile;
 import de.bund.digitalservice.ris.search.utils.eli.ExpressionEli;
 import de.bund.digitalservice.ris.search.utils.eli.ManifestationEli;
-import java.util.ArrayList;
+import de.bund.digitalservice.ris.search.utils.eli.WorkEli;
+import java.time.Instant;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,6 +19,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import org.apache.commons.collections4.ListUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -36,119 +40,96 @@ public class IndexNormsService implements IndexService {
     this.normsRepository = normsRepository;
   }
 
-  public void reindexAll(String startingTimestamp) throws ObjectStoreServiceException {
-    List<ManifestationEli> manifestations =
-        normsBucket.getAllKeysByPrefix("eli/").stream()
-            .map(ManifestationEli::fromString)
-            .flatMap(Optional::stream)
-            .toList();
-    Set<ExpressionEli> expressions = getExpressions(manifestations);
-    List<List<ExpressionEli>> batches = ListUtils.partition(expressions.stream().toList(), 100);
-    logger.info("Import norms process will have {} batches", batches.size());
-    for (int i = 0; i < batches.size(); i++) {
-      logger.info("Import norms batch {} of {} complete.", (i + 1), batches.size());
-      indexOneNormBatch(batches.get(i));
-    }
+  public void reindexAll(String startingTimestamp) {
+    Set<WorkEli> workElis = getWorks(normsBucket.getAllKeysByPrefix("eli/").stream());
+    processWorkEliUpdates(workElis, startingTimestamp, "reindex all");
     clearOldNorms(startingTimestamp);
   }
 
-  private Set<ExpressionEli> getExpressions(List<ManifestationEli> manifestations) {
-    return manifestations.stream()
-        .map(ManifestationEli::getExpressionEli)
-        .collect(Collectors.toSet());
-  }
-
   @Override
-  public void indexChangelog(String changelogKey, Changelog changelog)
-      throws ObjectStoreServiceException {
+  public void indexChangelog(String changelogKey, Changelog changelog) {
     try {
-      List<ManifestationEli> changedFiles =
-          getValidManifestations(changelogKey, changelog.getChanged().stream().toList());
-      List<ManifestationEli> deletedFiles =
-          getValidManifestations(changelogKey, changelog.getDeleted().stream().toList());
-      Set<ExpressionEli> changedWorks = getExpressions(changedFiles);
-      Set<ExpressionEli> deletedWorks = getExpressions(deletedFiles);
-      // We want to process the changes first to have no downtime, but we also want to keep a Norm
-      // if it was both deleted and changed. Therefore, process changes first, but also remove
-      // Norms from the delete list if the Norm occurs in both.
-      List<List<ExpressionEli>> batches = ListUtils.partition(changedWorks.stream().toList(), 100);
-      for (int i = 0; i < batches.size(); i++) {
-        List<ExpressionEli> oneBatch = batches.get(i);
-        logger.info("Indexing {}. Batch {} of {}", changelogKey, i + 1, batches.size());
-        indexOneNormBatch(oneBatch);
-      }
-
-      deletedWorks.removeAll(changedWorks);
-
-      for (String deleted : deletedWorks.stream().map(ExpressionEli::toString).toList()) {
-        if (normsRepository.existsById(deleted)) {
-          normsRepository.deleteById(deleted);
-        } else {
-          logger.warn(
-              "Changelog requested to delete norm {}, but it already doesn't exist.", deleted);
-        }
-      }
+      Set<WorkEli> workElis =
+          getWorks(Stream.concat(changelog.getChanged().stream(), changelog.getDeleted().stream()));
+      processWorkEliUpdates(workElis, Instant.now().toString(), changelogKey);
     } catch (IllegalArgumentException e) {
       logger.error("Error while reading changelog file {}. {}", changelogKey, e.getMessage());
     }
   }
 
-  private void indexOneNormBatch(List<ExpressionEli> expressionElis)
+  private Set<WorkEli> getWorks(Stream<String> files) {
+    return files
+        .map(EliFile::fromString)
+        // this filters out the files that are not an EliFile
+        .flatMap(Optional::stream)
+        .map(EliFile::getWorkEli)
+        // collecting to a set makes sure each work eli occurs at most once
+        .collect(Collectors.toSet());
+  }
+
+  private void processWorkEliUpdates(
+      Collection<WorkEli> workElis, String startingTimestamp, String currentFile) {
+    List<List<WorkEli>> batches = ListUtils.partition(workElis.stream().toList(), 100);
+    for (int i = 0; i < batches.size(); i++) {
+      List<WorkEli> oneBatch = batches.get(i);
+      logger.info("Indexing {}. Batch {} of {}", currentFile, i + 1, batches.size());
+      for (WorkEli eli : oneBatch) {
+        processOneNormWork(eli, startingTimestamp);
+      }
+    }
+  }
+
+  private void processOneNormWork(WorkEli workEli, String startingTimestamp) {
+    // Get all expressions for the current work from the bucket
+    Set<ExpressionEli> expressionElis =
+        normsBucket.getAllKeysByPrefix(workEli.toString() + "/").stream()
+            .map(EliFile::fromString)
+            .flatMap(Optional::stream)
+            .map(EliFile::getExpressionEli)
+            .collect(Collectors.toSet());
+
+    for (ExpressionEli expressionEli : expressionElis) {
+      try {
+        getNormFromS3(expressionEli).ifPresent(normsRepository::save);
+      } catch (ObjectStoreServiceException e) {
+        // If we can't get the content of an expression we log an error and move on
+        // That means on failure of a work "changed" it will end up deleted
+        logger.error("Error while reading norm file {}. {}", workEli, e.getMessage());
+      }
+    }
+    // delete the expressions from this work that were indexed before the start time
+    normsRepository.deleteByWorkEliAndIndexedAtBefore(workEli.toString(), startingTimestamp);
+  }
+
+  private Optional<Norm> getNormFromS3(ExpressionEli expressionEli)
       throws ObjectStoreServiceException {
-    List<Norm> norms = new ArrayList<>();
-    for (ExpressionEli eli : expressionElis) {
-      if (eli.subtype().startsWith("regelungstext-")) {
-        Norm norm = getNormFromS3(eli);
-        if (norm != null) {
-          norms.add(norm);
-        }
-      }
-    }
-    normsRepository.saveAll(norms);
-  }
 
-  private List<ManifestationEli> getValidManifestations(String changelogKey, List<String> elis) {
-    List<ManifestationEli> result = new ArrayList<>();
-    for (String eli : elis) {
-      Optional<ManifestationEli> manifestationEli = ManifestationEli.fromString(eli);
-      if (manifestationEli.isPresent()) {
-        result.add(manifestationEli.get());
-      } else {
-        logger.warn("Error processing manifestation {} in {}", eli, changelogKey);
-      }
-    }
-    return result;
-  }
-
-  private Norm getNormFromS3(ExpressionEli expressionEli) throws ObjectStoreServiceException {
-    // Get the newest manifestation for the current expression.
+    // Get all files for the current expression.
     final List<String> keysMatchingExpressionEli =
-        normsBucket.getAllKeysByPrefix(expressionEli.getUriPrefix());
+        normsBucket.getAllKeysByPrefix(expressionEli.toString());
 
     Optional<String> newestFileName =
-        // get all files with the given norm manifestation prefix
         keysMatchingExpressionEli.stream()
-            // filter only valid manifestations
-            .map(ManifestationEli::fromString)
+            // filter only valid Eli files
+            .map(EliFile::fromString)
             .flatMap(Optional::stream)
-            /*
-            Since pre-filtering by prefix, which does not contain the subtype, might include other
-            documents within the same "Mantelgesetz" structure, post-filter by subtype equality.
-             */
-            .filter(e -> e.subtype().equals(expressionEli.subtype()))
-            // take the manifestation with the latest in force date
+            // Convert to manifestation Eli. This will create duplicates, but it doesn't matter
+            .map(EliFile::getManifestationEli)
+            // take the manifestation with the latest pointInTimeManifestation
             .map(ManifestationEli::toString)
             .max(java.util.Comparator.naturalOrder());
 
     if (newestFileName.isEmpty()) {
-      logger.error("Changelog file contained {}, but no files found for that norm.", expressionEli);
-      return null;
+      logger.error(
+          "Changelog file contained {}, but no manifestation files found for that norm expression.",
+          expressionEli);
+      return Optional.empty();
     }
     String fileName = newestFileName.get();
     Optional<String> fileContent = normsBucket.getFileAsString(fileName);
     if (fileContent.isEmpty()) {
       logger.error("Error reading file content for file {} from S3.", fileName);
-      return null;
+      return Optional.empty();
     }
 
     /*
@@ -166,9 +147,9 @@ public class IndexNormsService implements IndexService {
     Optional<Norm> norm = NormLdmlToOpenSearchMapper.parseNorm(fileContent.get(), attachments);
     if (norm.isEmpty()) {
       logger.error("Unknown error while processing file {} during Norm import.", fileName);
-      return null;
+      return Optional.empty();
     } else {
-      return norm.get();
+      return norm;
     }
   }
 
@@ -182,12 +163,12 @@ public class IndexNormsService implements IndexService {
   }
 
   public int getNumberOfFilesInBucket() {
-    List<ManifestationEli> norms =
+    Set<ExpressionEli> norms =
         normsBucket.getAllKeysByPrefix("eli/").stream()
-            .map(ManifestationEli::fromString)
+            .map(EliFile::fromString)
             .flatMap(Optional::stream)
-            .filter(e -> e.subtype().startsWith("regelungstext-"))
-            .toList();
+            .map(EliFile::getExpressionEli)
+            .collect(Collectors.toSet());
     return norms.size();
   }
 }

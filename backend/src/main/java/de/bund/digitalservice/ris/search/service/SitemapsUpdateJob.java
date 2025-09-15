@@ -3,8 +3,8 @@ package de.bund.digitalservice.ris.search.service;
 import de.bund.digitalservice.ris.search.models.sitemap.SitemapType;
 import de.bund.digitalservice.ris.search.repository.objectstorage.CaseLawBucket;
 import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
+import de.bund.digitalservice.ris.search.utils.eli.EliFile;
 import de.bund.digitalservice.ris.search.utils.eli.ExpressionEli;
-import de.bund.digitalservice.ris.search.utils.eli.ManifestationEli;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -38,13 +38,13 @@ public class SitemapsUpdateJob implements Job {
   }
 
   public void createSitemapsForNorms() {
-    List<ManifestationEli> manifestations =
+    List<EliFile> manifestations =
         normsBucket.getAllKeysByPrefix("eli/").stream()
-            .map(ManifestationEli::fromString)
+            .map(EliFile::fromString)
             .flatMap(Optional::stream)
             .toList();
     Set<ExpressionEli> expressions =
-        manifestations.stream().map(ManifestationEli::getExpressionEli).collect(Collectors.toSet());
+        manifestations.stream().map(EliFile::getExpressionEli).collect(Collectors.toSet());
     List<List<ExpressionEli>> batches =
         ListUtils.partition(expressions.stream().toList(), urlsPerPage);
     for (int i = 0; i < batches.size(); i++) {
