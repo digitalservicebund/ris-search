@@ -31,6 +31,10 @@ public class ObjectStorage {
     return client.listKeysByPrefix(path);
   }
 
+  public List<ObjectKeyInfo> getAllKeyInfosByPrefix(String path) {
+    return client.listByPrefixWithLastModified(path);
+  }
+
   public Optional<String> getFileAsString(String filename) throws ObjectStoreServiceException {
     Optional<byte[]> s3Response = get(filename);
     return s3Response.map(bytes -> new String(bytes, StandardCharsets.UTF_8));
@@ -55,10 +59,6 @@ public class ObjectStorage {
     }
     throw new ObjectStoreServiceException(
         "Object storage encountered an issue. All retries failed.");
-  }
-
-  public List<ObjectKeyInfo> getAllKeyInfosByPrefix(String path) {
-    return client.listByPrefixWithLastModified(path);
   }
 
   public FilterInputStream getStream(String objectKey) throws NoSuchKeyException {
