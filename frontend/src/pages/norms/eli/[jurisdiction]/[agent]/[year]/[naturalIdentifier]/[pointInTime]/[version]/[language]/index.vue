@@ -45,9 +45,9 @@ import IcOutlineRestore from "~icons/ic/outline-settings-backup-restore";
 import MaterialSymbolsDownload from "~icons/material-symbols/download";
 
 definePageMeta({
-  // note: this is an expression ELI that additionally specifies the subtype component of a manifestation ELI
+  // note: this is an expression ELI
   alias:
-    "/eli/:jurisdiction/:agent/:year/:naturalIdentifier/:pointInTime/:version/:language/:subtype",
+    "/eli/:jurisdiction/:agent/:year/:naturalIdentifier/:pointInTime/:version/:language",
   layout: "base", // use "base" layout to allow for full-width tab backgrounds
 });
 

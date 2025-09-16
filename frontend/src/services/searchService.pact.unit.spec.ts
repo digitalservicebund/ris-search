@@ -52,27 +52,22 @@ describe("GET /case-law/document", () => {
 
   interface Eli {
     prefix: string;
-    subtype: string;
   }
   const workEli: Eli = {
     prefix: "eli/bund/bgbl-1/2000/s998/",
-    subtype: "regelungstext-1",
   };
   const expressionEli: Eli = {
     prefix: workEli.prefix + "2000-10-06/2/deu/",
-    subtype: "regelungstext-1",
   };
   const manifestationEli: Eli = {
-    prefix: expressionEli.prefix + "2000-10-06/",
-    subtype: "regelungstext-1",
+    prefix: expressionEli.prefix + "2000-10-06/regelungstext-1",
   };
   const zipManifestationEliPrefix: Eli = {
     prefix: expressionEli.prefix + "2000-10-06",
-    subtype: "",
   };
 
   function buildIdentifier(eli: Eli): string {
-    return eli.prefix + eli.subtype;
+    return eli.prefix;
   }
   function buildPath(eli: Eli): string {
     return "/v1/legislation/" + buildIdentifier(eli);

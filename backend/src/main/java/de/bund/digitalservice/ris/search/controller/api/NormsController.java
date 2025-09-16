@@ -108,9 +108,9 @@ public class NormsController {
 
                       ## Example 3
 
-                      Get all legislation that belong to the work eli `eli/bund/bgbl-1/1979/s1325/regelungstext-1`
+                      Get all legislation that belong to the work eli `eli/bund/bgbl-1/1979/s1325`
                       ```http request
-                      GET /v1/legislation?eli=eli/bund/bgbl-1/1979/s1325/regelungstext-1
+                      GET /v1/legislation?eli=eli/bund/bgbl-1/1979/s1325
                       ```
                       """)
   @ApiResponse(responseCode = "200")
@@ -142,7 +142,7 @@ public class NormsController {
   @GetMapping(
       path =
           ApiConfig.Paths.LEGISLATION_SINGLE
-              + "/{jurisdiction}/{agent}/{year}/{naturalIdentifier}/{pointInTime}/{version}/{language}/{subtype}",
+              + "/{jurisdiction}/{agent}/{year}/{naturalIdentifier}/{pointInTime}/{version}/{language}",
       produces = MediaType.APPLICATION_JSON_VALUE)
   @Operation(
       summary = "Work and expression-level metadata",
@@ -162,8 +162,7 @@ public class NormsController {
           String naturalIdentifier,
       @Parameter(example = "2020-06-19") @PathVariable LocalDate pointInTime,
       @Parameter(example = "2") @PathVariable Integer version,
-      @Parameter(example = "deu") @PathVariable String language,
-      @Parameter(example = "regelungstext-1") @PathVariable String subtype) {
+      @Parameter(example = "deu") @PathVariable String language) {
 
     var eli =
         new ExpressionEli(

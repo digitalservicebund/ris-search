@@ -42,18 +42,18 @@ public class IndexNormsService implements IndexService {
 
   public void reindexAll(String startingTimestamp) {
     Set<WorkEli> workElis = getWorks(normsBucket.getAllKeysByPrefix("eli/").stream());
-    processWorkEliUpdates(workElis, startingTimestamp, "reindex all");
+    processWorkEliUpdates(workElis, startingTimestamp);
     clearOldNorms(startingTimestamp);
   }
 
   @Override
-  public void indexChangelog(String changelogKey, Changelog changelog) {
+  public void indexChangelog(Changelog changelog) {
     try {
       Set<WorkEli> workElis =
           getWorks(Stream.concat(changelog.getChanged().stream(), changelog.getDeleted().stream()));
-      processWorkEliUpdates(workElis, Instant.now().toString(), changelogKey);
+      processWorkEliUpdates(workElis, Instant.now().toString());
     } catch (IllegalArgumentException e) {
-      logger.error("Error while reading changelog file {}. {}", changelogKey, e.getMessage());
+      logger.error("Error while reading changelog file: {}", e.getMessage());
     }
   }
 
@@ -67,12 +67,11 @@ public class IndexNormsService implements IndexService {
         .collect(Collectors.toSet());
   }
 
-  private void processWorkEliUpdates(
-      Collection<WorkEli> workElis, String startingTimestamp, String currentFile) {
+  private void processWorkEliUpdates(Collection<WorkEli> workElis, String startingTimestamp) {
     List<List<WorkEli>> batches = ListUtils.partition(workElis.stream().toList(), 100);
     for (int i = 0; i < batches.size(); i++) {
       List<WorkEli> oneBatch = batches.get(i);
-      logger.info("Indexing {}. Batch {} of {}", currentFile, i + 1, batches.size());
+      logger.info("Indexing batch {} of {}", i + 1, batches.size());
       for (WorkEli eli : oneBatch) {
         processOneNormWork(eli, startingTimestamp);
       }
@@ -94,7 +93,7 @@ public class IndexNormsService implements IndexService {
       } catch (ObjectStoreServiceException e) {
         // If we can't get the content of an expression we log an error and move on
         // That means on failure of a work "changed" it will end up deleted
-        logger.error("Error while reading norm file {}. {}", workEli, e.getMessage());
+        logger.error("Error while reading norm file {}. {}", expressionEli, e.getMessage());
       }
     }
     // delete the expressions from this work that were indexed before the start time
@@ -158,11 +157,12 @@ public class IndexNormsService implements IndexService {
     normsRepository.deleteByIndexedAtIsNull();
   }
 
-  public int getNumberOfIndexedDocuments() {
+  @Override
+  public int getNumberOfIndexedEntities() {
     return (int) normsRepository.count();
   }
 
-  public int getNumberOfFilesInBucket() {
+  public int getNumberOfIndexableDocumentsInBucket() {
     Set<ExpressionEli> norms =
         normsBucket.getAllKeysByPrefix("eli/").stream()
             .map(EliFile::fromString)

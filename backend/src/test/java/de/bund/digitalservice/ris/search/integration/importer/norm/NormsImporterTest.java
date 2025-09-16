@@ -88,9 +88,10 @@ class NormsImporterTest extends ContainersIntegrationBase {
   @DisplayName("Deleting a manifestation and adding a new one reindexes the whole work")
   void testDeleteAndUpdate() throws ObjectStoreServiceException {
 
-    final String expressionEli = "eli/bund/bgbl-1/1992/s101/1992-01-01/1/deu";
-    final String oldManifestationEli = expressionEli + "/1992-01-01/regelungstext-1.xml";
-    final String newManifestationEli = expressionEli + "/1992-01-02/regelungstext-1.xml";
+    final String eliBase = "eli/bund/bgbl-1/1992/s101/1992-01-01/1/deu";
+    final String expressionEli = eliBase + "/regelungstext-1";
+    final String oldManifestationEli = eliBase + "/1992-01-01/regelungstext-1.xml";
+    final String newManifestationEli = eliBase + "/1992-01-02/regelungstext-1.xml";
 
     Instant now = Instant.now();
     Instant lastSuccess = now.minus(1, ChronoUnit.HOURS);

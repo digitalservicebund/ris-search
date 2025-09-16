@@ -8,6 +8,172 @@
       "pending": false,
       "providerStates": [
         {
+          "name": "I have a document in the database with eli/bund/bgbl-1/2000/s998/2000-10-06/2/deu/"
+        }
+      ],
+      "request": {
+        "headers": {
+          "Accept": [
+            "application/json"
+          ]
+        },
+        "method": "GET",
+        "path": "/v1/legislation/eli/bund/bgbl-1/2000/s998/2000-10-06/2/deu/"
+      },
+      "response": {
+        "body": {
+          "content": {
+            "@id": "/v1/legislation/eli/bund/bgbl-1/2000/s998/",
+            "@type": "Legislation",
+            "abbreviation": "Fleischhygiene-Verordnung",
+            "alternateName": "Verordnung uber die Nichtanwendung fleisch- und geflugelfleischhygienerechtlicher Vorschriften",
+            "datePublished": "1977-05-22",
+            "isPartOf": {
+              "name": "Bundesgesetzblatt Teil I"
+            },
+            "legislationDate": "1977-05-21",
+            "legislationIdentifier": "eli/bund/bgbl-1/2000/s998/",
+            "name": "Verordnung uber die Nichtanwendung fleisch- und geflugelfleischhygienerechtlicher Vorschriften Artikel 6 der Funften Verordnung zur Anderung von Vorschriften zum Schutz der Verbraucher vor der Bovinen Spongiformen Enzephalopathie",
+            "workExample": {
+              "@id": "/v1/legislation/eli/bund/bgbl-1/2000/s998/2000-10-06/2/deu/",
+              "@type": "Legislation",
+              "encoding": [
+                {
+                  "@id": "/v1/legislation/eli/bund/bgbl-1/2000/s998/2000-10-06/2/deu/2000-10-06/regelungstext-1/html",
+                  "@type": "LegislationObject",
+                  "contentUrl": "/v1/legislation/eli/bund/bgbl-1/2000/s998/2000-10-06/2/deu/2000-10-06/regelungstext-1.html",
+                  "encodingFormat": "text/html",
+                  "inLanguage": "de"
+                },
+                {
+                  "@id": "/v1/legislation/eli/bund/bgbl-1/2000/s998/2000-10-06/2/deu/2000-10-06/regelungstext-1/xml",
+                  "@type": "LegislationObject",
+                  "contentUrl": "/v1/legislation/eli/bund/bgbl-1/2000/s998/2000-10-06/2/deu/2000-10-06/regelungstext-1.xml",
+                  "encodingFormat": "application/xml",
+                  "inLanguage": "de"
+                },
+                {
+                  "@id": "/v1/legislation/eli/bund/bgbl-1/2000/s998/2000-10-06/2/deu/2000-10-06/zip",
+                  "@type": "LegislationObject",
+                  "contentUrl": "/v1/legislation/eli/bund/bgbl-1/2000/s998/2000-10-06/2/deu/2000-10-06.zip",
+                  "encodingFormat": "application/zip",
+                  "inLanguage": "de"
+                }
+              ],
+              "hasPart": [
+                {
+                  "@id": "/v1/legislation/eli/bund/bgbl-1/2000/s998/2000-10-06/2/deu/#art-z1",
+                  "@type": "Legislation",
+                  "eId": "art-z1",
+                  "encoding": null,
+                  "entryIntoForceDate": "2001-06-01",
+                  "expiryDate": "2001-06-30",
+                  "guid": null,
+                  "isActive": false,
+                  "name": "1 Fleischhygiene-Verordnung"
+                },
+                {
+                  "@id": "/v1/legislation/eli/bund/bgbl-1/2000/s998/2000-10-06/2/deu/#art-z2",
+                  "@type": "Legislation",
+                  "eId": "art-z2",
+                  "encoding": null,
+                  "entryIntoForceDate": null,
+                  "expiryDate": null,
+                  "guid": null,
+                  "isActive": true,
+                  "name": "2 Geflugelfleischhygiene-Verordnung"
+                }
+              ],
+              "legislationIdentifier": "eli/bund/bgbl-1/2000/s998/2000-10-06/2/deu/",
+              "legislationLegalForce": "InForce",
+              "tableOfContents": [
+                {
+                  "@type": "TocEntry",
+                  "children": [],
+                  "heading": "Art 1",
+                  "id": "art-z1",
+                  "marker": "1"
+                },
+                {
+                  "@type": "TocEntry",
+                  "children": [],
+                  "heading": "Art 2",
+                  "id": "art-z2",
+                  "marker": "2"
+                },
+                {
+                  "@type": "TocEntry",
+                  "children": [
+                    {
+                      "@type": "TocEntry",
+                      "children": [],
+                      "heading": "Art 3",
+                      "id": "art-z3",
+                      "marker": "3"
+                    },
+                    {
+                      "@type": "TocEntry",
+                      "children": [
+                        {
+                          "@type": "TocEntry",
+                          "children": [],
+                          "heading": "Art 4",
+                          "id": "art-z4",
+                          "marker": "4"
+                        },
+                        {
+                          "@type": "TocEntry",
+                          "children": [
+                            {
+                              "@type": "TocEntry",
+                              "children": [],
+                              "heading": "Art 5",
+                              "id": "art-z5",
+                              "marker": "5"
+                            },
+                            {
+                              "@type": "TocEntry",
+                              "children": [],
+                              "heading": "Art 6",
+                              "id": "art-z6",
+                              "marker": "6"
+                            }
+                          ],
+                          "heading": "Heading 3",
+                          "id": "hauptteil-n1_teil-n1_teil-n1_teil-n1",
+                          "marker": "Teil 3"
+                        }
+                      ],
+                      "heading": "Heading 2",
+                      "id": "hauptteil-n1_teil-n1_teil-n1",
+                      "marker": "Teil 2"
+                    }
+                  ],
+                  "heading": "Heading 1",
+                  "id": "hauptteil-n1_teil-n1",
+                  "marker": "Teil 1"
+                }
+              ],
+              "temporalCoverage": "2001-05-29/.."
+            }
+          },
+          "contentType": "application/json",
+          "encoded": false
+        },
+        "headers": {
+          "Content-Type": [
+            "application/json"
+          ]
+        },
+        "status": 200
+      },
+      "type": "Synchronous/HTTP"
+    },
+    {
+      "description": "a request for retrieving the document with the same eli",
+      "pending": false,
+      "providerStates": [
+        {
           "name": "I have a document in the database with eli/bund/bgbl-1/2000/s998/2000-10-06/2/deu/regelungstext-1"
         }
       ],

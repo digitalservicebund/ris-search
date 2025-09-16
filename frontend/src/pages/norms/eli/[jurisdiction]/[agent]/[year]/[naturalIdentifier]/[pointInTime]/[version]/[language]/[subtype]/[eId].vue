@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { TreeNode } from "primevue/treenode";
-import { getNormBreadcrumbTitle, getNormTitle } from "./titles";
-import { useFetchNormArticleContent } from "./useNormData";
+import { getNormBreadcrumbTitle, getNormTitle } from "../titles";
+import { useFetchNormArticleContent } from "../useNormData";
 import ContentWrapper from "~/components/CustomLayouts/ContentWrapper.vue";
 import TableOfContentsLayout from "~/components/CustomLayouts/SidebarLayout.vue";
 import IncompleteDataMessage from "~/components/IncompleteDataMessage.vue";
