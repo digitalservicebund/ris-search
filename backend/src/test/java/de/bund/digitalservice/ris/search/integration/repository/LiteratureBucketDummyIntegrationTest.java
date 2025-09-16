@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
+@SpringBootTest(classes = LiteratureBucketDummy.class)
 @Tag("integration")
 class LiteratureBucketDummyIntegrationTest {
 
