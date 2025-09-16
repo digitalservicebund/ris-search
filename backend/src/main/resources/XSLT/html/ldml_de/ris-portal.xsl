@@ -158,9 +158,9 @@
     </xsl:template>
 
     <xsl:template match="akn:act">
-        <main class="akn-act">
+        <div class="akn-act">
             <xsl:apply-templates/>
-        </main>
+        </div>
     </xsl:template>
 
     <xsl:template match="akn:body">
