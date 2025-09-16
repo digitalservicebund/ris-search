@@ -19,5 +19,4 @@ public record EcliCrawlerDocument(
     @Field(name = "court_type") String courtType,
     @Field(name = "decision_date") String decisionDate,
     @Field(name = "document_type") String documentType,
-    @Field(name = "is_publised") boolean isPublished,
-    @Field(name = "updated_at") String updatedAt) {}
+    @Field(name = "is_publised") boolean isPublished) {}

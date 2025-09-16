@@ -1,6 +1,5 @@
 package de.bund.digitalservice.ris.search.eclicrawler.service;
 
-import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.eclicrawler.mapper.EcliCrawlerDocumentMapper;
 import de.bund.digitalservice.ris.search.eclicrawler.model.EcliCrawlerDocument;
 import de.bund.digitalservice.ris.search.eclicrawler.schema.sitemap.Sitemap;
@@ -47,17 +46,16 @@ public class EcliSitemapService {
     return partitioned.stream().map(this::createSitemap).toList();
   }
 
-  public List<String> writeSitemapFiles(List<Sitemap> sitemaps, LocalDate day)
+  public List<String> writeSitemapFiles(String path, List<Sitemap> sitemaps, LocalDate day)
       throws JAXBException {
-    List<String> urlSetLocations = writeSitemaps(sitemaps, day);
-
     List<List<Sitemap>> partitionedSitemaps = ListUtils.partition(sitemaps, MAX_SITEMAP_URLS);
 
     List<String> sitemapFilePaths = new ArrayList<>();
     for (int i = 0; i < partitionedSitemaps.size(); i++) {
+      List<String> urlSetLocations = writeSitemaps(path, partitionedSitemaps.get(i), day);
       int indexEnumertaor = i + 1;
       Sitemapindex index = createSitemapIndex(urlSetLocations);
-      sitemapFilePaths.add(writeSitemapIndex(index, day, indexEnumertaor));
+      sitemapFilePaths.add(writeSitemapIndex(path, index, day, indexEnumertaor));
     }
 
     return sitemapFilePaths;
@@ -65,7 +63,11 @@ public class EcliSitemapService {
 
   private Sitemap createSitemap(List<EcliCrawlerDocument> ecliDocuments) {
     Sitemap set = new Sitemap();
-    set.setUrl(ecliDocuments.stream().map(EcliCrawlerDocumentMapper::toSitemapUrl).toList());
+    String url = frontEndUrl + "case-law";
+    set.setUrl(
+        ecliDocuments.stream()
+            .map(doc -> EcliCrawlerDocumentMapper.toSitemapUrl(url, doc))
+            .toList());
 
     return set;
   }
@@ -73,20 +75,25 @@ public class EcliSitemapService {
   private Sitemapindex createSitemapIndex(List<String> sitemapLocations) {
     Sitemapindex index = new Sitemapindex();
     index.setSitemaps(
-        sitemapLocations.stream().map(loc -> new SitemapIndexEntry().setLoc(loc)).toList());
+        sitemapLocations.stream()
+            .map(
+                loc -> {
+                  String url = frontEndUrl + "api/v1/eclicrawler/" + loc;
+                  return new SitemapIndexEntry().setLoc(url);
+                })
+            .toList());
 
     return index;
   }
 
-  private String writeSitemapIndex(Sitemapindex index, LocalDate date, int enumerator)
+  private String writeSitemapIndex(String path, Sitemapindex index, LocalDate date, int enumerator)
       throws JAXBException {
     String content = EcliMarshaller.marshallSitemapIndex(index);
-
-    String filename =
-        String.format(PATH_PREFIX + "%s/sitemap_index_%s.xml", getDatePartition(date), enumerator);
+    String url = String.format("%s/sitemap_index_%s.xml", getDatePartition(date), enumerator);
+    String filename = path + url;
     portalBucket.save(filename, content);
 
-    return filename;
+    return url;
   }
 
   private String getDatePartition(LocalDate date) {
@@ -107,16 +114,16 @@ public class EcliSitemapService {
     }
   }
 
-  private List<String> writeSitemaps(List<Sitemap> sets, LocalDate date) throws JAXBException {
+  private List<String> writeSitemaps(String path, List<Sitemap> sets, LocalDate date)
+      throws JAXBException {
 
     List<String> locations = new ArrayList<>();
     for (int i = 0; i < sets.size(); i++) {
       int sitemapNr = i + 1;
-      String filename =
-          String.format(PATH_PREFIX + "%s/sitemap_%s.xml", getDatePartition(date), sitemapNr);
+      String sitemapUrl = String.format("%s/sitemap_%s.xml", getDatePartition(date), sitemapNr);
       String content = EcliMarshaller.marshallSitemap(sets.get(i));
-      portalBucket.save(filename, content);
-      locations.add(filename);
+      portalBucket.save(path + sitemapUrl, content);
+      locations.add(sitemapUrl);
     }
 
     return locations;
@@ -147,10 +154,8 @@ public class EcliSitemapService {
   private String appendSitemapPaths(String content, List<String> sitemapIndexPaths) {
     StringBuilder sb = new StringBuilder(content);
 
-    for (String indexPath : sitemapIndexPaths) {
-      sb.append("\nSitemap:")
-          .append(ApiConfig.Paths.ECLICRAWLER)
-          .append(indexPath.replace(PATH_PREFIX, "/"));
+    for (String indexUrl : sitemapIndexPaths) {
+      sb.append("\nSitemap:").append(frontEndUrl).append("api/v1/eclicrawler/").append(indexUrl);
     }
     return sb.toString();
   }

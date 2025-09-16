@@ -22,7 +22,6 @@ public class EcliCrawlerDocumentMapper {
   private EcliCrawlerDocumentMapper() {}
 
   private static final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-  private static final String URL_PREFIX = "http://placeholder_url/to/";
   private static final String COVERAGE = "Deutschland";
   private static final String LANGUAGE = "de";
   private static final String LANGUAGE_TYPE = "authoritative";
@@ -38,7 +37,7 @@ public class EcliCrawlerDocumentMapper {
           new AbstractMap.SimpleEntry<>("BPatG", "Bundespatentgericht"));
 
   public static EcliCrawlerDocument fromCaseLawDocumentationUnit(
-      String filepath, CaseLawDocumentationUnit unit, String timestamp) {
+      String filepath, CaseLawDocumentationUnit unit) {
     return new EcliCrawlerDocument(
         unit.documentNumber(),
         filepath,
@@ -46,19 +45,19 @@ public class EcliCrawlerDocumentMapper {
         unit.courtType(),
         unit.decisionDate().format(dateFormatter),
         unit.documentType(),
-        true,
-        timestamp);
+        true);
   }
 
-  public static Url toSitemapUrl(EcliCrawlerDocument doc) {
+  public static Url toSitemapUrl(String baseUrl, EcliCrawlerDocument doc) {
+    String location = baseUrl + "/" + doc.document_number();
     Url url =
         new Url()
-            .setLoc(URL_PREFIX + doc.document_number())
+            .setLoc(location)
             .setDocument(
                 new Document()
                     .setMetadata(
                         new Metadata()
-                            .setIdentifier(getIdentifier(doc))
+                            .setIdentifier(getIdentifier(location))
                             .setIsVersionOf(getIsVersionOf(doc))
                             .setCreator(getCreator(doc))
                             .setCoverage(getCoverage())
@@ -80,11 +79,11 @@ public class EcliCrawlerDocumentMapper {
         .setCourt(doc.courtType());
   }
 
-  private static Identifier getIdentifier(EcliCrawlerDocument doc) {
+  private static Identifier getIdentifier(String location) {
     return new Identifier()
         .setLang(Identifier.LANG_DE)
         .setFormat(Identifier.FORMAT_HTML)
-        .setValue(URL_PREFIX + doc.document_number());
+        .setValue(location);
   }
 
   private static Type getType(EcliCrawlerDocument doc) {
