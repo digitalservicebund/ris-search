@@ -16,10 +16,10 @@ const testPages = [
     name: "All Search Results Page",
     url: "/search",
   },
-  // {
-  //   name: "Contact Page",
-  //   url: "/kontakt",
-  // },
+  {
+    name: "Contact Page",
+    url: "/kontakt",
+  },
   {
     name: "Imprint Page",
     url: "/impressum",
@@ -36,18 +36,18 @@ const testPages = [
     name: "Cookie Settings Page",
     url: "/cookie-einstellungen",
   },
-  // {
-  //   name: "Open Source Page",
-  //   url: "/opensource",
-  // },
+  {
+    name: "Open Source Page",
+    url: "/opensource",
+  },
   {
     name: "User Tests Page",
     url: "/nutzungstests",
   },
-  // {
-  //   name: "Norms Search Page",
-  //   url: "/search?category=N",
-  // },
+  {
+    name: "Norms Search Page",
+    url: "/search?category=N",
+  },
   // {
   //   name: "Caselaw Search Page",
   //   url: "/search?category=R",
@@ -68,7 +68,7 @@ test.describe("General Pages Accessibility Tests", () => {
       createHtmlReport({
         results: accessibilityScanResults,
         options: {
-          outputDir: path.join("e2e", "test-results", "accessibility-results"),
+          outputDir: path.join("test-results", "accessibility-test-results"),
           reportFileName: `${name}.html`,
         },
       });
