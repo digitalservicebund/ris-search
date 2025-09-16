@@ -2,6 +2,7 @@ package de.bund.digitalservice.ris.search.eclicrawler.mapper;
 
 import de.bund.digitalservice.ris.search.eclicrawler.model.EcliCrawlerDocument;
 import de.bund.digitalservice.ris.search.eclicrawler.schema.ecli.AccessRights;
+import de.bund.digitalservice.ris.search.eclicrawler.schema.ecli.Courts;
 import de.bund.digitalservice.ris.search.eclicrawler.schema.ecli.Coverage;
 import de.bund.digitalservice.ris.search.eclicrawler.schema.ecli.Creator;
 import de.bund.digitalservice.ris.search.eclicrawler.schema.ecli.Document;
@@ -14,8 +15,6 @@ import de.bund.digitalservice.ris.search.eclicrawler.schema.ecli.Type;
 import de.bund.digitalservice.ris.search.eclicrawler.schema.sitemap.Url;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import java.time.format.DateTimeFormatter;
-import java.util.AbstractMap;
-import java.util.Map;
 
 public class EcliCrawlerDocumentMapper {
 
@@ -26,18 +25,8 @@ public class EcliCrawlerDocumentMapper {
   private static final String LANGUAGE = "de";
   private static final String LANGUAGE_TYPE = "authoritative";
 
-  private static final Map<String, String> courtLongName =
-      Map.ofEntries(
-          new AbstractMap.SimpleEntry<>("BGH", "Bundesgerichtshof"),
-          new AbstractMap.SimpleEntry<>("BVerwG", "Bundesverwaltungsgericht"),
-          new AbstractMap.SimpleEntry<>("BVerfG", "Bundesverfassungsgericht"),
-          new AbstractMap.SimpleEntry<>("BFH", "Bundesfinanzhof"),
-          new AbstractMap.SimpleEntry<>("BAG", "Bundesarbeitsgericht"),
-          new AbstractMap.SimpleEntry<>("BSG", "Bundessozialgericht"),
-          new AbstractMap.SimpleEntry<>("BPatG", "Bundespatentgericht"));
-
   public static EcliCrawlerDocument fromCaseLawDocumentationUnit(
-      String filepath, CaseLawDocumentationUnit unit) {
+      String url, String filepath, CaseLawDocumentationUnit unit) {
     return new EcliCrawlerDocument(
         unit.documentNumber(),
         filepath,
@@ -45,19 +34,19 @@ public class EcliCrawlerDocumentMapper {
         unit.courtType(),
         unit.decisionDate().format(dateFormatter),
         unit.documentType(),
+        url + unit.documentNumber(),
         true);
   }
 
-  public static Url toSitemapUrl(String baseUrl, EcliCrawlerDocument doc) {
-    String location = baseUrl + "/" + doc.document_number();
+  public static Url toSitemapUrl(EcliCrawlerDocument doc) {
     Url url =
         new Url()
-            .setLoc(location)
+            .setLoc(doc.url())
             .setDocument(
                 new Document()
                     .setMetadata(
                         new Metadata()
-                            .setIdentifier(getIdentifier(location))
+                            .setIdentifier(getIdentifier(doc.url()))
                             .setIsVersionOf(getIsVersionOf(doc))
                             .setCreator(getCreator(doc))
                             .setCoverage(getCoverage())
@@ -91,7 +80,9 @@ public class EcliCrawlerDocumentMapper {
   }
 
   private static Creator getCreator(EcliCrawlerDocument doc) {
-    return new Creator().setLang(LANGUAGE).setValue(courtLongName.get(doc.courtType()));
+    return new Creator()
+        .setLang(LANGUAGE)
+        .setValue(Courts.supportedCourtNames.get(doc.courtType()));
   }
 
   private static Coverage getCoverage() {

@@ -6,11 +6,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ChangelogParser {
+public class BulkChangelogParser {
 
-  private ChangelogParser() {}
+  private BulkChangelogParser() {}
 
-  public static List<Changelog> getLatestReleveantChangelogs(List<Changelog> changelogs) {
+  public static List<Changelog> getLatestRelevantChangelogs(List<Changelog> changelogs) {
     List<Changelog> relevantChangelogs = new ArrayList<>();
     changelogs.forEach(
         changelog -> {

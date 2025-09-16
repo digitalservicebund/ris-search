@@ -3,7 +3,9 @@ package de.bund.digitalservice.ris.search.eclicrawler.service;
 import de.bund.digitalservice.ris.search.eclicrawler.mapper.EcliCrawlerDocumentMapper;
 import de.bund.digitalservice.ris.search.eclicrawler.model.EcliCrawlerDocument;
 import de.bund.digitalservice.ris.search.eclicrawler.repository.EcliCrawlerDocumentRepository;
+import de.bund.digitalservice.ris.search.eclicrawler.schema.ecli.Courts;
 import de.bund.digitalservice.ris.search.eclicrawler.schema.sitemap.Sitemap;
+import de.bund.digitalservice.ris.search.eclicrawler.schema.sitemapindex.Sitemapindex;
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.exception.OpenSearchMapperException;
 import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
@@ -26,6 +28,7 @@ import java.util.Optional;
 import org.apache.commons.collections4.ListUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -46,18 +49,21 @@ public class EcliSitemapJob implements Job {
   private static final Logger logger = LogManager.getLogger(EcliSitemapJob.class);
   public static final String PATH_PREFIX = "eclicrawler/";
   public static final String LAST_PROCESSED_CHANGELOG = PATH_PREFIX + "last_processed_changelog";
+  public final String baseUrl;
 
   public EcliSitemapJob(
       EcliSitemapService service,
       PortalBucket portalBucket,
       CaseLawBucket caselawbucket,
       EcliCrawlerDocumentRepository repository,
-      CaseLawIndexSyncJob indexJob) {
+      CaseLawIndexSyncJob indexJob,
+      @Value("${server.front-end-url}") String frontEndUrl) {
     this.sitemapService = service;
     this.portalBucket = portalBucket;
     this.caselawbucket = caselawbucket;
     this.repository = repository;
     this.indexJob = indexJob;
+    this.baseUrl = frontEndUrl + "case-law/";
   }
 
   public ReturnCode runJob() {
@@ -70,12 +76,11 @@ public class EcliSitemapJob implements Job {
     try {
       if (isInitialRun) {
         logger.info("initial run, publish all");
-        Changelog changelog = getFullDiffChangelog();
+        sitemapService.writeRobotsTxt();
         String lastProcessed = indexJob.getNewChangelogs(caselawbucket, "0").getLast();
+        Changelog changelog = getFullDiffChangelog();
         List<EcliCrawlerDocument> changes = getAllEcliCrawlerDocumentsFromChangelog(changelog);
-        var sitemapIndexPaths = persistEcliDcoumentChanges(changes, today);
-
-        sitemapService.writeRobotsTxt(sitemapIndexPaths);
+        persistEcliDcoumentChanges(changes);
         portalBucket.save(LAST_PROCESSED_CHANGELOG, lastProcessed);
       } else {
         var lastProcessed = getLastProcessedChangelog();
@@ -86,13 +91,24 @@ public class EcliSitemapJob implements Job {
         }
         var changelogs = getNewChangelogs(changelogPaths);
 
-        Changelog mergedChangelog = ChangelogParser.mergeChangelogs(changelogs);
+        var parseChangeAll =
+            changelogs.stream()
+                .map(
+                    log -> {
+                      if (log.isChangeAll()) {
+                        logger.info("change all: doing full diff");
+                        return getFullDiffChangelog();
+                      }
+                      return log;
+                    })
+                .toList();
+
+        Changelog mergedChangelog = BulkChangelogParser.mergeChangelogs(parseChangeAll);
         List<EcliCrawlerDocument> changes =
             getAllEcliCrawlerDocumentsFromChangelog(mergedChangelog);
 
-        var sitemapIndexPaths = persistEcliDcoumentChanges(changes, today);
-        updateRobotsTxt(sitemapIndexPaths);
-        portalBucket.save(LAST_PROCESSED_CHANGELOG, lastProcessed);
+        persistEcliDcoumentChanges(changes);
+        portalBucket.save(LAST_PROCESSED_CHANGELOG, changelogPaths.getLast());
       }
     } catch (FatalEcliSitemapJobException e) {
       logger.error(e.getMessage());
@@ -112,16 +128,6 @@ public class EcliSitemapJob implements Job {
     }
   }
 
-  private void updateRobotsTxt(List<String> sitemapIndexPaths) {
-    if (!sitemapIndexPaths.isEmpty()) {
-      try {
-        sitemapService.updateRobotsTxt(sitemapIndexPaths);
-      } catch (FileNotFoundException | ObjectStoreServiceException ex) {
-        throw new FatalEcliSitemapJobException(ex.getMessage());
-      }
-    }
-  }
-
   private List<Changelog> getNewChangelogs(List<String> changelogPaths) {
     var changelogs =
         changelogPaths.stream()
@@ -138,22 +144,26 @@ public class EcliSitemapJob implements Job {
             .map(Optional::get)
             .toList();
 
-    return ChangelogParser.getLatestReleveantChangelogs(changelogs);
+    return BulkChangelogParser.getLatestRelevantChangelogs(changelogs);
   }
 
-  private List<String> persistEcliDcoumentChanges(
-      List<EcliCrawlerDocument> ecliDocuments, LocalDate cutoffDate) {
+  private void persistEcliDcoumentChanges(List<EcliCrawlerDocument> ecliDocuments) {
 
     logger.info("publish changes {}", ecliDocuments.toArray());
     try {
-      List<Sitemap> urlSets = sitemapService.createSitemaps(ecliDocuments);
-      List<String> indexPaths = sitemapService.writeSitemapFiles(PATH_PREFIX, urlSets, cutoffDate);
-      if (!indexPaths.isEmpty()) {
+      Map<String, Sitemap> sitemaps =
+          sitemapService.writeDocumentsToSitemaps(PATH_PREFIX, today, ecliDocuments);
+      Map<String, Sitemapindex> sitemapIndices =
+          sitemapService.writeSitemapnamesToIndices(
+              PATH_PREFIX, baseUrl, today, sitemaps.keySet().stream().toList());
+      if (!sitemapIndices.isEmpty()) {
         repository.saveAll(ecliDocuments);
       }
-      return indexPaths;
-    } catch (JAXBException ex) {
+      sitemapService.updateRobotsTxt(baseUrl, sitemapIndices.keySet().stream().toList());
+    } catch (JAXBException | ObjectStoreServiceException ex) {
       throw new FatalEcliSitemapJobException(ex.getMessage());
+    } catch (FileNotFoundException e) {
+      throw new FatalEcliSitemapJobException("no robots.txt found");
     }
   }
 
@@ -167,14 +177,8 @@ public class EcliSitemapJob implements Job {
     List<List<String>> filenamebatches = ListUtils.partition(allFiles, 10000);
 
     for (List<String> batch : filenamebatches) {
-      var unitsFromBatch = getAllCaseLawDocumentationUnits(batch);
-
-      unitsFromBatch.forEach(
-          (path, unit) -> {
-            if (!Objects.isNull(unit.ecli())) {
-              changelog.getChanged().add(path);
-            }
-          });
+      var unitsFromBatch = getCaseLawDocumentationUnits(batch);
+      unitsFromBatch.keySet().forEach(key -> changelog.getChanged().add(key));
 
       var docsToBeDeleted = repository.findAllByIsPublishedIsTrueAndFilenameNotIn(allFiles);
       for (EcliCrawlerDocument doc : docsToBeDeleted) {
@@ -184,18 +188,22 @@ public class EcliSitemapJob implements Job {
     return changelog;
   }
 
-  private Map<String, CaseLawDocumentationUnit> getAllCaseLawDocumentationUnits(
+  private Map<String, CaseLawDocumentationUnit> getCaseLawDocumentationUnits(
       List<String> filenames) {
     Map<String, CaseLawDocumentationUnit> caseLawDocumentationUnits = new HashMap<>();
 
     for (String filename : filenames) {
       try {
-
         Optional<String> contentOption = caselawbucket.getFileAsString(filename);
         contentOption.ifPresent(
-            content ->
+            content -> {
+              CaseLawDocumentationUnit unit = CaseLawLdmlToOpenSearchMapper.fromString(content);
+              if (!Objects.isNull(unit.ecli())
+                  && Courts.supportedCourtNames.containsKey(unit.courtType())) {
                 caseLawDocumentationUnits.put(
-                    filename, CaseLawLdmlToOpenSearchMapper.fromString(content)));
+                    filename, CaseLawLdmlToOpenSearchMapper.fromString(content));
+              }
+            });
       } catch (OpenSearchMapperException ex) {
         logger.warn("unable to parse file {} to DocumentationUnit", filename);
       } catch (ObjectStoreServiceException ex) {
@@ -209,15 +217,16 @@ public class EcliSitemapJob implements Job {
       Changelog mergedChangelog) {
 
     var caseLawDocumentationUnitsToChange =
-        getAllCaseLawDocumentationUnits(mergedChangelog.getChanged().stream().toList());
+        getCaseLawDocumentationUnits(mergedChangelog.getChanged().stream().toList());
 
     List<EcliCrawlerDocument> changes = new ArrayList<>();
     caseLawDocumentationUnitsToChange.forEach(
         (path, unit) ->
-            changes.add(EcliCrawlerDocumentMapper.fromCaseLawDocumentationUnit(path, unit)));
+            changes.add(
+                EcliCrawlerDocumentMapper.fromCaseLawDocumentationUnit(baseUrl, path, unit)));
 
     changes.addAll(
-        repository.findAllByIsPublishedIsTrueAndFilenameIn(mergedChangelog.getDeleted()).stream()
+        repository.findAllByFilenameIn(mergedChangelog.getDeleted()).stream()
             .map(
                 ecliSitemap ->
                     new EcliCrawlerDocument(
@@ -227,6 +236,7 @@ public class EcliSitemapJob implements Job {
                         ecliSitemap.courtType(),
                         ecliSitemap.decisionDate(),
                         ecliSitemap.documentType(),
+                        ecliSitemap.url(),
                         false))
             .toList());
     return changes;
