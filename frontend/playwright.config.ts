@@ -21,6 +21,7 @@ export const environment = {
     },
   },
   baseUrl: process.env.RIS_BASE_URL || "http://localhost:3000/",
+  remoteDebuggingPort: 9222,
 };
 
 const browserConfigurations: Project[] = [
@@ -29,6 +30,9 @@ const browserConfigurations: Project[] = [
     use: {
       ...devices["Desktop Chrome"],
       storageState: authFile,
+      launchOptions: {
+        args: ["--remote-debugging-port=9222"],
+      },
     },
     dependencies: ["setup"],
   },
