@@ -1,6 +1,9 @@
 import dayjs from "dayjs";
 import { describe, vi } from "vitest";
-import { getCurrentDateInGermanyFormatted } from "./dateFormatting";
+import {
+  dateFormattedDDMMYYYY,
+  getCurrentDateInGermanyFormatted,
+} from "./dateFormatting";
 
 describe("getCurrentDateInGermany", () => {
   it("returns current date in Germany", () => {

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useFetch } from "#app";
+import { useBackendURL } from "~/composables/useBackendURL";
 import { getMostRelevantExpression } from "~/pages/norms/eli/[jurisdiction]/[agent]/[year]/[naturalIdentifier]/index.logic";
 import type { JSONLDList, LegislationWork, SearchResult } from "~/types";
 

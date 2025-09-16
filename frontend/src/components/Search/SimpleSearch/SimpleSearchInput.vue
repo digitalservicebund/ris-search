@@ -2,6 +2,7 @@
 import Button from "primevue/button";
 import InputText from "primevue/inputtext";
 import { addDefaults } from "~/stores/searchParams/getInitialState";
+import { usePostHogStore } from "~/stores/usePostHogStore";
 import IconSearch from "~icons/ic/search";
 
 const userInputDisabled = ref(true);

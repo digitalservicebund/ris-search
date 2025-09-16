@@ -4,6 +4,7 @@ import ActionsMenu from "~/components/ActionMenu/ActionsMenu.vue";
 import NormActionsMenu from "~/components/ActionMenu/NormActionsMenu.vue";
 import { useBackendURL } from "~/composables/useBackendURL";
 import type { LegislationWork } from "~/types";
+import { getManifestationUrl } from "~/utils/normUtils";
 
 vi.mock("~/utils/normUtils", () => ({
   getManifestationUrl: vi.fn(),

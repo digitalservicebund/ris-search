@@ -4,6 +4,8 @@ The Sentry Nuxt module could not be used together with the strict CSP configurat
 since its client-side script was added without a nonce.
 */
 
+import { getStringOrDefault, isStringEmpty } from "~/utils/textFormatting";
+
 declare global {
   const Sentry: { init: (options: Record<string, unknown>) => void };
 }

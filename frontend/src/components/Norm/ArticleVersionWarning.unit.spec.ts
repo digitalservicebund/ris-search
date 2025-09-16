@@ -1,6 +1,8 @@
 import { mount } from "@vue/test-utils";
 import ArticleVersionWarning from "./ArticleVersionWarning.vue";
 import type { Article } from "~/types";
+import { parseDateGermanLocalTime } from "~/utils/dateFormatting";
+import type { ValidityInterval } from "~/utils/normUtils";
 
 vi.mock("~/utils/normUtils", async (importOriginal) => {
   const mod = await importOriginal<Record<string, unknown>>();

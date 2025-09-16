@@ -2,9 +2,11 @@ import dayjs from "dayjs";
 import timezone from "dayjs/plugin/timezone";
 import utc from "dayjs/plugin/utc";
 import { describe, expect, vi } from "vitest";
+import { parseDateGermanLocalTime } from "./dateFormatting";
 import {
   getValidityStatus,
   temporalCoverageToValidityInterval,
+  type ValidityInterval,
 } from "~/utils/normUtils";
 
 dayjs.extend(utc);

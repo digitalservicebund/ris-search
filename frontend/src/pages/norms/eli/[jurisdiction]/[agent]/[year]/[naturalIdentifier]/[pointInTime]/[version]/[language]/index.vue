@@ -29,16 +29,19 @@ import {
   tabPanelStyles,
   tabStyles,
 } from "~/components/Tabs.styles";
+import { useBackendURL } from "~/composables/useBackendURL";
 import { useIntersectionObserver } from "~/composables/useIntersectionObserver";
 import { useNormVersions } from "~/composables/useNormVersions";
 import type { LegislationWork } from "~/types";
 import { isPrototypeProfile } from "~/utils/config";
+import { dateFormattedDDMMYYYY } from "~/utils/dateFormatting";
 import {
   getValidityStatus,
   getManifestationUrl,
   temporalCoverageToValidityInterval,
 } from "~/utils/normUtils";
 import { tocItemsToTreeNodes } from "~/utils/tableOfContents";
+import { isStringEmpty } from "~/utils/textFormatting";
 import IcBaselineSubject from "~icons/ic/baseline-subject";
 import IcOutlineInfo from "~icons/ic/outline-info";
 import IcOutlineRestore from "~icons/ic/outline-settings-backup-restore";

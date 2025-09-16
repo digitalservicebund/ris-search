@@ -1,6 +1,8 @@
 import { computed } from "vue";
+import { useBackendURL } from "./useBackendURL";
 import { type AsyncDataRequestStatus, useFetch } from "#app";
 import type { JSONLDList, LegislationWork, SearchResult } from "~/types";
+import { getCurrentDateInGermanyFormatted } from "~/utils/dateFormatting";
 
 interface UseNormVersions {
   status: Ref<AsyncDataRequestStatus>;

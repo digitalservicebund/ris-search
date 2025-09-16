@@ -1,6 +1,9 @@
 import dayjs, { type Dayjs } from "dayjs";
 import type { LegislationWork } from "~/types";
-import { parseDateGermanLocalTime } from "~/utils/dateFormatting";
+import {
+  getCurrentDateInGermany,
+  parseDateGermanLocalTime,
+} from "~/utils/dateFormatting";
 
 export interface ValidityInterval {
   from?: Dayjs;

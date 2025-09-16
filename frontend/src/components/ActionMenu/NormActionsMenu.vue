@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import ActionsMenu from "~/components/ActionMenu/ActionsMenu.vue";
+import { useBackendURL } from "~/composables/useBackendURL";
 import type { LegislationWork } from "~/types";
 import { getManifestationUrl } from "~/utils/normUtils";
 

@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import VersionWarningMessage from "~/components/Norm/VersionWarningMessage.vue";
 import type { LegislationWork, SearchResult } from "~/types";
+import {
+  getValidityStatus,
+  temporalCoverageToValidityInterval,
+} from "~/utils/normUtils";
 
 const props = defineProps<{
   versions: SearchResult<LegislationWork>[];
