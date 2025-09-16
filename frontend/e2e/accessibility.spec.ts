@@ -57,7 +57,7 @@ const testPages = [
     url: "/norms/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu/regelungstext-1/art-z1",
   },
 ];
-test.describe.skip("General Pages Accessibility Tests", () => {
+test.describe("General Pages Accessibility Tests", () => {
   testPages.forEach(({ name, url }) => {
     test(`${name} should not have accessibility issues`, async ({ page }) => {
       await page.goto(url);
