@@ -11,7 +11,7 @@ const badgeStyle = computed(() => {
     case BadgeColor.GREEN:
       return "bg-green-100 text-green-800 border-1 border-green-200";
     case BadgeColor.YELLOW:
-      return "bg-yellow-100 text-orange-900 border-1 border-yellow-300";
+      return "bg-yellow-200 text-[#634B18] border-1 border-yellow-300";
     case BadgeColor.BLUE:
       return "bg-blue-200 text-blue-800 border-1 border-blue-500";
     case BadgeColor.RED:

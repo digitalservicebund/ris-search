@@ -76,20 +76,26 @@ test.describe("General Pages Accessibility Tests", () => {
     });
   });
 });
-test.describe.skip("View Page Accessibility Tests", () => {
+test.describe("View Page Accessibility Tests", () => {
   test(`Norms page should not have accessibility issues`, async ({ page }) => {
     await page.goto(
       "/norms/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu/regelungstext-1",
     );
     await page.waitForLoadState("networkidle");
     const tabsAnalysisResults = [];
-    tabsAnalysisResults[0] = await new AxeBuilder({ page }).analyze();
+    tabsAnalysisResults[0] = await new AxeBuilder({ page })
+      .exclude("nuxt-devtools-frame")
+      .analyze();
     await page.getByRole("tab", { name: "Details" }).click();
     await page.waitForLoadState("networkidle");
-    tabsAnalysisResults[1] = await new AxeBuilder({ page }).analyze();
+    tabsAnalysisResults[1] = await new AxeBuilder({ page })
+      .exclude("nuxt-devtools-frame")
+      .analyze();
     await page.getByRole("tab", { name: "Fassungen" }).click();
     await page.waitForLoadState("networkidle");
-    tabsAnalysisResults[2] = await new AxeBuilder({ page }).analyze();
+    tabsAnalysisResults[2] = await new AxeBuilder({ page })
+      .exclude("nuxt-devtools-frame")
+      .analyze();
     tabsAnalysisResults.forEach((result, index) => {
       createHtmlReport({
         results: result,
@@ -111,10 +117,14 @@ test.describe.skip("View Page Accessibility Tests", () => {
     await page.goto("/case-law/STRE300770800");
     await page.waitForLoadState("networkidle");
     const tabsAnalysisResults = [];
-    tabsAnalysisResults[0] = await new AxeBuilder({ page }).analyze();
+    tabsAnalysisResults[0] = await new AxeBuilder({ page })
+      .exclude("nuxt-devtools-frame")
+      .analyze();
     await page.getByRole("tab", { name: "Details" }).click();
     await page.waitForLoadState("networkidle");
-    tabsAnalysisResults[1] = await new AxeBuilder({ page }).analyze();
+    tabsAnalysisResults[1] = await new AxeBuilder({ page })
+      .exclude("nuxt-devtools-frame")
+      .analyze();
     tabsAnalysisResults.forEach((result, index) => {
       createHtmlReport({
         results: result,
