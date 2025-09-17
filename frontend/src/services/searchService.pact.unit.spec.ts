@@ -54,16 +54,16 @@ describe("GET /case-law/document", () => {
     prefix: string;
   }
   const workEli: Eli = {
-    prefix: "eli/bund/bgbl-1/2000/s998/",
+    prefix: "eli/bund/bgbl-1/2000/s998",
   };
   const expressionEli: Eli = {
-    prefix: workEli.prefix + "2000-10-06/2/deu/",
+    prefix: workEli.prefix + "/2000-10-06/2/deu",
   };
   const manifestationEli: Eli = {
-    prefix: expressionEli.prefix + "2000-10-06/regelungstext-1",
+    prefix: expressionEli.prefix + "/2000-10-06/regelungstext-1",
   };
   const zipManifestationEliPrefix: Eli = {
-    prefix: expressionEli.prefix + "2000-10-06",
+    prefix: expressionEli.prefix + "/2000-10-06",
   };
 
   function buildIdentifier(eli: Eli): string {

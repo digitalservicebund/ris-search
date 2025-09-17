@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { TreeNode } from "primevue/treenode";
-import { getNormBreadcrumbTitle, getNormTitle } from "../titles";
-import { useFetchNormArticleContent } from "../useNormData";
+import { getNormBreadcrumbTitle, getNormTitle } from "./titles";
+import { useFetchNormArticleContent } from "./useNormData";
 import ContentWrapper from "~/components/CustomLayouts/ContentWrapper.vue";
 import TableOfContentsLayout from "~/components/CustomLayouts/SidebarLayout.vue";
 import IncompleteDataMessage from "~/components/IncompleteDataMessage.vue";
@@ -21,10 +21,9 @@ import IcBaselineArrowForward from "~icons/ic/baseline-arrow-Forward";
 import MdiArrowTopLeft from "~icons/mdi/arrow-top-left?width=24&height=24";
 
 definePageMeta({
-  // note: this is an expression ELI that additionally specifies the subtype component of a manifestation ELI,
-  // plus the article eId
+  // note: this is an expression ELI plus the article eId
   alias:
-    "/eli/:jurisdiction/:agent/:year/:naturalIdentifier/:pointInTime/:version/:language/:subtype/:eId",
+    "/eli/:jurisdiction/:agent/:year/:naturalIdentifier/:pointInTime/:version/:language/:eId",
   layout: "base", // use "base" layout to allow for full-width text background
 });
 

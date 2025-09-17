@@ -71,4 +71,9 @@ public record EliFile(
         fileName(),
         format());
   }
+
+  @Override
+  public String toString() {
+    return getManifestationEli().toString();
+  }
 }
