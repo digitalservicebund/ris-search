@@ -232,15 +232,14 @@
             "in": "path",
             "description": "Country or regional code for the jurisdiction",
             "required": true,
-            "schema": { "type": "string", "enum": ["bund"] },
-            "example": "bund"
+            "schema": { "type": "string", "enum": ["bund"] }
           },
           {
             "name": "agent",
             "in": "path",
             "description": "Agent or authority issuing the legislation, e.g., 'bgbl-1' for Bundesgesetzblatt Teil I (Federal Law Gazette part I)",
             "required": true,
-            "schema": { "type": "string", "example": "bgbl-1" },
+            "schema": { "type": "string" },
             "example": "bgbl-1"
           },
           {
@@ -270,21 +269,21 @@
             "name": "version",
             "in": "path",
             "required": true,
-            "schema": { "type": "integer", "format": "int32", "example": 2 },
+            "schema": { "type": "integer", "format": "int32" },
             "example": 2
           },
           {
             "name": "language",
             "in": "path",
             "required": true,
-            "schema": { "type": "string", "example": "deu" },
+            "schema": { "type": "string" },
             "example": "deu"
           },
           {
             "name": "subtype",
             "in": "path",
             "required": true,
-            "schema": { "type": "string", "example": "regelungstext-1" },
+            "schema": { "type": "string" },
             "example": "regelungstext-1"
           }
         ],
@@ -456,32 +455,28 @@
             "name": "version",
             "in": "path",
             "required": true,
-            "schema": { "type": "integer", "format": "int32", "example": 2 },
+            "schema": { "type": "integer", "format": "int32" },
             "example": 2
           },
           {
             "name": "language",
             "in": "path",
             "required": true,
-            "schema": { "type": "string", "example": "deu" },
+            "schema": { "type": "string" },
             "example": "deu"
           },
           {
             "name": "pointInTimeManifestation",
             "in": "path",
             "required": true,
-            "schema": {
-              "type": "string",
-              "format": "date",
-              "example": "2020-06-19"
-            },
+            "schema": { "type": "string", "format": "date" },
             "example": "2020-06-19"
           },
           {
             "name": "subtype",
             "in": "path",
             "required": true,
-            "schema": { "type": "string", "example": "regelungstext-1" },
+            "schema": { "type": "string" },
             "example": "regelungstext-1"
           }
         ],
@@ -548,32 +543,28 @@
             "name": "version",
             "in": "path",
             "required": true,
-            "schema": { "type": "integer", "format": "int32", "example": 2 },
+            "schema": { "type": "integer", "format": "int32" },
             "example": 2
           },
           {
             "name": "language",
             "in": "path",
             "required": true,
-            "schema": { "type": "string", "example": "deu" },
+            "schema": { "type": "string" },
             "example": "deu"
           },
           {
             "name": "pointInTimeManifestation",
             "in": "path",
             "required": true,
-            "schema": {
-              "type": "string",
-              "format": "date",
-              "example": "2020-06-19"
-            },
+            "schema": { "type": "string", "format": "date" },
             "example": "2020-06-19"
           },
           {
             "name": "subtype",
             "in": "path",
             "required": true,
-            "schema": { "type": "string", "example": "regelungstext-1" },
+            "schema": { "type": "string" },
             "example": "regelungstext-1"
           },
           {
@@ -657,32 +648,28 @@
             "name": "version",
             "in": "path",
             "required": true,
-            "schema": { "type": "integer", "format": "int32", "example": 2 },
+            "schema": { "type": "integer", "format": "int32" },
             "example": 2
           },
           {
             "name": "language",
             "in": "path",
             "required": true,
-            "schema": { "type": "string", "example": "deu" },
+            "schema": { "type": "string" },
             "example": "deu"
           },
           {
             "name": "pointInTimeManifestation",
             "in": "path",
             "required": true,
-            "schema": {
-              "type": "string",
-              "format": "date",
-              "example": "2020-06-19"
-            },
+            "schema": { "type": "string", "format": "date" },
             "example": "2020-06-19"
           },
           {
             "name": "name",
             "in": "path",
             "required": true,
-            "schema": { "type": "string", "example": "image" },
+            "schema": { "type": "string" },
             "example": "image"
           },
           {
@@ -691,8 +678,7 @@
             "required": true,
             "schema": {
               "type": "string",
-              "enum": ["pdf", "xml", "jpg", "gif"],
-              "example": "jpg"
+              "enum": ["pdf", "xml", "jpg", "gif"]
             },
             "example": "jpg"
           }
@@ -758,25 +744,21 @@
             "name": "version",
             "in": "path",
             "required": true,
-            "schema": { "type": "integer", "format": "int32", "example": 2 },
+            "schema": { "type": "integer", "format": "int32" },
             "example": 2
           },
           {
             "name": "language",
             "in": "path",
             "required": true,
-            "schema": { "type": "string", "example": "deu" },
+            "schema": { "type": "string" },
             "example": "deu"
           },
           {
             "name": "pointInTimeManifestation",
             "in": "path",
             "required": true,
-            "schema": {
-              "type": "string",
-              "format": "date",
-              "example": "2020-06-19"
-            },
+            "schema": { "type": "string", "format": "date" },
             "example": "2020-06-19"
           }
         ],
@@ -1195,14 +1177,14 @@
             "name": "documentNumber",
             "in": "path",
             "required": true,
-            "schema": { "type": "string", "example": "BDRE000800001" },
+            "schema": { "type": "string" },
             "example": "BDRE000800001"
           },
           {
             "name": "name",
             "in": "path",
             "required": true,
-            "schema": { "type": "string", "example": "image" },
+            "schema": { "type": "string" },
             "example": "image"
           },
           {
@@ -1211,8 +1193,7 @@
             "required": true,
             "schema": {
               "type": "string",
-              "enum": ["png", "jpg", "jpeg", "gif", "wmf", "emf", "bitmap"],
-              "example": "jpg"
+              "enum": ["png", "jpg", "jpeg", "gif", "wmf", "emf", "bitmap"]
             },
             "example": "jpg"
           }

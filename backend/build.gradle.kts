@@ -15,6 +15,7 @@ plugins {
     alias(libs.plugins.license.report)
     alias(libs.plugins.test.logger)
     alias(libs.plugins.node.gradle)
+    id("java-test-fixtures")
 }
 
 group = "de.bund.digitalservice"
@@ -114,6 +115,9 @@ dependencies {
     testImplementation(libs.testcontainers.postgresql)
     testImplementation(libs.pact)
     testImplementation(libs.restassured)
+
+    testFixturesCompileOnly("org.jetbrains:annotations:24.0.1")
+    testFixturesImplementation(libs.spring.boot.starter.test)
 }
 
 val pactPath = "pacts/**/*.json"
@@ -163,6 +167,82 @@ project.tasks.sonar {
     dependsOn("jacocoTestReport")
 }
 
+testing {
+    suites {
+        val test by getting(JvmTestSuite::class) {
+            useJUnitJupiter()
+
+            dependencies {
+                implementation(project())
+                implementation(sourceSets.main.get().output)
+                implementation(testFixtures(project()))
+            }
+        }
+
+        register<JvmTestSuite>("integrationTest") {
+            dependencies {
+                implementation(project())
+                implementation(sourceSets.main.get().output)
+                implementation(testFixtures(project()))
+
+                implementation(libs.spring.boot.starter.webservices)
+                implementation(libs.spring.data.elasticsearch)
+                implementation(libs.amazon.aws.sdk.s3)
+                implementation(libs.spring.data.opensearch) {
+                    exclude(group = "org.opensearch.client", module = "opensearch-rest-client-sniffer")
+                }
+                implementation(libs.json)
+                implementation(libs.jsoup)
+
+                // Only used in tests
+                implementation(libs.spring.boot.starter.test)
+                implementation(libs.spring.addons.oauth2.test)
+                implementation(libs.pact)
+                implementation(libs.opensearch.testcontainers)
+                implementation(libs.testcontainers.junit.jupiter)
+            }
+
+//            targets {
+//                all {
+//                    testTask.configure {
+//                        finalizedBy("jacocoTestReport")
+//                    }
+//                }
+//            }
+        }
+
+        register<JvmTestSuite>("dataTest") {
+            useJUnitJupiter()
+            dependencies {
+                implementation(project())
+                implementation(sourceSets.main.get().output)
+                implementation(testFixtures(project()))
+
+                implementation("org.apache.logging.log4j:log4j-core:2.25.1")
+                implementation("commons-io:commons-io:2.20.0")
+
+                implementation(libs.spring.addons.oauth2.test)
+                implementation(libs.spring.security.oauth2.jose)
+                implementation(libs.restassured)
+                implementation(libs.amazon.aws.sdk.s3)
+            }
+
+//            targets {
+//                all {
+//                    testTask.configure {
+//                        finalizedBy("jacocoTestReport")
+//                    }
+//                }
+//            }
+        }
+    }
+}
+
+tasks.named("check") {
+    dependsOn(testing.suites.named("integrationTest"))
+    dependsOn(testing.suites.named("dataTest"))
+}
+
 tasks {
     register("generate-nlex-wsdl", JavaExec::class) {
         doFirst {
@@ -205,31 +285,6 @@ tasks {
                 "docker.io/paketobuildpacks/health-checker:latest",
             ),
         )
-    }
-
-    test {
-        useJUnitPlatform {
-            excludeTags("integration", "data")
-        }
-    }
-
-    register<Test>("dataTest") {
-        description = "Runs the data tests."
-        group = "verification"
-        useJUnitPlatform {
-            includeTags("data")
-        }
-        mustRunAfter(check)
-    }
-
-    register<Test>("integrationTest") {
-        description = "Runs the integration tests."
-        group = "verification"
-        useJUnitPlatform {
-            includeTags("integration")
-        }
-        mustRunAfter(check)
-        finalizedBy("jacocoTestReport")
     }
 
     jacocoTestReport {
