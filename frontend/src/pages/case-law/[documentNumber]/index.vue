@@ -88,6 +88,7 @@ if (contentError?.value) {
         v-if="caseLaw.headline"
         class="ris-heading2-bold max-w-title mt-24 mb-48 overflow-x-auto text-balance"
       >
+        >
         {{ removeOuterParentheses(caseLaw.headline) }}
       </h1>
       <h1
