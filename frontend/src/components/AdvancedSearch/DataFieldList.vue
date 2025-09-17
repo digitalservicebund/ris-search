@@ -21,7 +21,7 @@ defineEmits<{
         size="small"
         rounded
         :label="field.label"
-        class="text-nowrap"
+        class="gap-4! pl-12! text-nowrap"
         @click="$emit('clickDataField', field)"
       >
         <template #icon>
