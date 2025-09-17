@@ -53,90 +53,57 @@ const testPages = [
   //   url: "/search?category=R",
   // },
   {
+    name: "Norm View Page",
+    url: "/norms/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu/regelungstext-1",
+    tabs: ["Details", "Fassungen"],
+  },
+  {
     name: "Article View Page",
     url: "/norms/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu/regelungstext-1/art-z1",
   },
+  {
+    name: "Caselaw View Page",
+    url: "/case-law/STRE300770800",
+    tabs: ["Details"],
+  },
 ];
 test.describe("General Pages Accessibility Tests", () => {
-  testPages.forEach(({ name, url }) => {
+  testPages.forEach(({ name, url, tabs }) => {
     test(`${name} should not have accessibility issues`, async ({ page }) => {
       await page.goto(url);
       await page.waitForLoadState("networkidle");
-      const accessibilityScanResults = await new AxeBuilder({ page })
+      const tabsAnalysisResults = [];
+      let currentTab = 0;
+      tabsAnalysisResults[currentTab] = await new AxeBuilder({ page })
         .exclude("nuxt-devtools-frame")
         .analyze();
-      createHtmlReport({
-        results: accessibilityScanResults,
-        options: {
-          outputDir: path.join("test-results", "accessibility-test-results"),
-          reportFileName: `${name}.html`,
-        },
+      if (tabs) {
+        for (const tab of tabs) {
+          currentTab++;
+          await page.getByRole("tab", { name: tab }).click();
+          await page.waitForLoadState("networkidle");
+          tabsAnalysisResults[currentTab] = await new AxeBuilder({ page })
+            .exclude("nuxt-devtools-frame")
+            .analyze();
+        }
+      }
+      tabsAnalysisResults.forEach((result, index) => {
+        const nameSuffix = index === 0 ? "" : ` - Tab ${index + 1}`;
+        createHtmlReport({
+          results: result,
+          options: {
+            outputDir: path.join(
+              "e2e",
+              "test-results",
+              "accessibility-results",
+            ),
+            reportFileName: `${name} Page${nameSuffix}.html`,
+          },
+        });
       });
-      expect(accessibilityScanResults.violations).toEqual([]);
+      expect(
+        tabsAnalysisResults.flatMap((result) => result.violations),
+      ).toEqual([]);
     });
-  });
-});
-test.describe("View Page Accessibility Tests", () => {
-  test(`Norms page should not have accessibility issues`, async ({ page }) => {
-    await page.goto(
-      "/norms/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu/regelungstext-1",
-    );
-    await page.waitForLoadState("networkidle");
-    const tabsAnalysisResults = [];
-    tabsAnalysisResults[0] = await new AxeBuilder({ page })
-      .exclude("nuxt-devtools-frame")
-      .analyze();
-    await page.getByRole("tab", { name: "Details" }).click();
-    await page.waitForLoadState("networkidle");
-    tabsAnalysisResults[1] = await new AxeBuilder({ page })
-      .exclude("nuxt-devtools-frame")
-      .analyze();
-    await page.getByRole("tab", { name: "Fassungen" }).click();
-    await page.waitForLoadState("networkidle");
-    tabsAnalysisResults[2] = await new AxeBuilder({ page })
-      .exclude("nuxt-devtools-frame")
-      .analyze();
-    tabsAnalysisResults.forEach((result, index) => {
-      createHtmlReport({
-        results: result,
-        options: {
-          outputDir: path.join("e2e", "test-results", "accessibility-results"),
-          reportFileName: `Norms View Page - Tab ${index + 1}.html`,
-        },
-      });
-    });
-    expect(tabsAnalysisResults.map((result) => result.violations)).toEqual([
-      [],
-      [],
-      [],
-    ]);
-  });
-  test(`Caselaw page should not have accessibility issues`, async ({
-    page,
-  }) => {
-    await page.goto("/case-law/STRE300770800");
-    await page.waitForLoadState("networkidle");
-    const tabsAnalysisResults = [];
-    tabsAnalysisResults[0] = await new AxeBuilder({ page })
-      .exclude("nuxt-devtools-frame")
-      .analyze();
-    await page.getByRole("tab", { name: "Details" }).click();
-    await page.waitForLoadState("networkidle");
-    tabsAnalysisResults[1] = await new AxeBuilder({ page })
-      .exclude("nuxt-devtools-frame")
-      .analyze();
-    tabsAnalysisResults.forEach((result, index) => {
-      createHtmlReport({
-        results: result,
-        options: {
-          outputDir: path.join("e2e", "test-results", "accessibility-results"),
-          reportFileName: `Caselaw View Page - Tab ${index + 1}.html`,
-        },
-      });
-    });
-    expect(tabsAnalysisResults.map((result) => result.violations)).toEqual([
-      [],
-      [],
-    ]);
   });
 });
