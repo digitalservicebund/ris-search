@@ -102,7 +102,7 @@ test.describe("General Pages Accessibility Tests", () => {
         });
       });
       expect(
-        tabsAnalysisResults.map((result) => result.violations.flat),
+        tabsAnalysisResults.flatMap((result) => result.violations),
       ).toEqual([]);
     });
   });
