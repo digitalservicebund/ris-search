@@ -21,6 +21,14 @@ env:
 jobs:
   e2e-tests:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - profile: public
+            env_file_name: .env.ci.public
+          - profile: internal
+            env_file_name: .env.ci.internal
     steps:
       - uses: actions/checkout@v4
         with:
@@ -59,6 +67,7 @@ jobs:
         env:
           BACKEND_IMAGE: ${{ env.BACKEND_IMAGE }}
           FRONTEND_IMAGE: ${{ env.FRONTEND_IMAGE }}
+          ENV_FILE_NAME: ${{ matrix.env_file_name }}
       - uses: actions/setup-node@v4
         with:
           node-version: lts/*
@@ -88,32 +97,38 @@ jobs:
             echo "Waiting for containers to be fully up..."
             sleep 15
           done
-      - name: Run Playwright tests
+      - name: Run Playwright tests (${{ matrix.profile }})
         run: npx playwright test --project chromium
         working-directory: ./frontend
         env:
           RIS_BASE_URL: http://localhost:3000
           TZ: Europe/Berlin
-      - name: Upload test reports
+      - name: Upload test reports (${{ matrix.profile }})
         uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
         with:
-          name: playwright-report-public-chromium
+          name: playwright-report-${{ matrix.profile }}-chromium
           path: frontend/playwright-report
           retention-days: 5
-      - name: Output logs
-        run: docker compose -f docker-compose-ci.yml logs > docker-compose-logs.log
+      - name: Output logs on failure (${{ matrix.profile }})
         if: ${{ failure() }}
+        run: docker compose -f docker-compose-ci.yml logs > docker-compose-logs-${{ matrix.profile }}.log
         env:
           BACKEND_IMAGE: ${{ env.BACKEND_IMAGE }}
           FRONTEND_IMAGE: ${{ env.FRONTEND_IMAGE }}
-      - name: Upload docker logs
+          ENV_FILE_NAME: ${{ matrix.env_file_name }}
+      - name: Upload docker logs (${{ matrix.profile }})
         uses: actions/upload-artifact@v4
         if: ${{ failure() }}
         with:
-          name: docker-compose-logs
-          path: docker-compose-logs.log
+          name: docker-compose-logs-${{ matrix.profile }}
+          path: docker-compose-logs-${{ matrix.profile }}.log
           retention-days: 5
+      - name: Tear down services (${{ matrix.profile }})
+        if: ${{ always() }}
+        run: docker compose -f docker-compose-ci.yml down -v
+        env:
+          ENV_FILE_NAME: ${{ matrix.env_file_name }}
       - name: Send status to Slack
         uses: digitalservicebund/notify-on-failure-gha@66c485757701f8d5dbee32f24df38d904ca693ba
         if: ${{ failure() && github.ref == 'refs/heads/main' }}
