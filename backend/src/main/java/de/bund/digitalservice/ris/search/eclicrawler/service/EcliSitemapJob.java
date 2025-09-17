@@ -20,14 +20,13 @@ import jakarta.xml.bind.JAXBException;
 import java.io.FileNotFoundException;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import org.apache.commons.collections4.ListUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -48,8 +47,10 @@ public class EcliSitemapJob implements Job {
 
   private static final Logger logger = LogManager.getLogger(EcliSitemapJob.class);
   public static final String PATH_PREFIX = "eclicrawler/";
+  private static final int OPEN_SEARCH_MAX_RESULT_WINDOW = 10000;
   public static final String LAST_PROCESSED_CHANGELOG = PATH_PREFIX + "last_processed_changelog";
-  public final String baseUrl;
+  private final String documentUrl;
+  private final String apiUrl;
 
   public EcliSitemapJob(
       EcliSitemapService service,
@@ -63,7 +64,8 @@ public class EcliSitemapJob implements Job {
     this.caselawbucket = caselawbucket;
     this.repository = repository;
     this.indexJob = indexJob;
-    this.baseUrl = frontEndUrl + "case-law/";
+    this.documentUrl = frontEndUrl + "case-law/";
+    this.apiUrl = frontEndUrl + "api/v1/eclicrawler/";
   }
 
   public ReturnCode runJob() {
@@ -77,11 +79,11 @@ public class EcliSitemapJob implements Job {
       if (isInitialRun) {
         logger.info("initial run, publish all");
         sitemapService.writeRobotsTxt();
-        String lastProcessed = indexJob.getNewChangelogs(caselawbucket, "0").getLast();
+        String newestChangelog = indexJob.getNewChangelogs(caselawbucket, "0").getLast();
         Changelog changelog = getFullDiffChangelog();
         List<EcliCrawlerDocument> changes = getAllEcliCrawlerDocumentsFromChangelog(changelog);
         persistEcliDcoumentChanges(changes);
-        portalBucket.save(LAST_PROCESSED_CHANGELOG, lastProcessed);
+        portalBucket.save(LAST_PROCESSED_CHANGELOG, newestChangelog);
       } else {
         var lastProcessed = getLastProcessedChangelog();
         List<String> changelogPaths = indexJob.getNewChangelogs(caselawbucket, lastProcessed);
@@ -90,20 +92,9 @@ public class EcliSitemapJob implements Job {
           return ReturnCode.SUCCESS;
         }
         var changelogs = getNewChangelogs(changelogPaths);
+        var fullChangelogs = replaceChangeAllWithActualChanges(changelogs);
 
-        var parseChangeAll =
-            changelogs.stream()
-                .map(
-                    log -> {
-                      if (log.isChangeAll()) {
-                        logger.info("change all: doing full diff");
-                        return getFullDiffChangelog();
-                      }
-                      return log;
-                    })
-                .toList();
-
-        Changelog mergedChangelog = BulkChangelogParser.mergeChangelogs(parseChangeAll);
+        Changelog mergedChangelog = BulkChangelogParser.mergeChangelogs(fullChangelogs);
         List<EcliCrawlerDocument> changes =
             getAllEcliCrawlerDocumentsFromChangelog(mergedChangelog);
 
@@ -116,6 +107,20 @@ public class EcliSitemapJob implements Job {
     }
 
     return ReturnCode.SUCCESS;
+  }
+
+  @NotNull
+  private List<Changelog> replaceChangeAllWithActualChanges(List<Changelog> changelogs) {
+    return changelogs.stream()
+        .map(
+            log -> {
+              if (log.isChangeAll()) {
+                logger.info("change all: doing full diff");
+                return getFullDiffChangelog();
+              }
+              return log;
+            })
+        .toList();
   }
 
   private String getLastProcessedChangelog() {
@@ -134,14 +139,12 @@ public class EcliSitemapJob implements Job {
             .map(
                 path -> {
                   try {
-                    return Optional.ofNullable(
-                        this.indexJob.parseOneChangelog(caselawbucket, path));
+                    return this.indexJob.parseOneChangelog(caselawbucket, path);
                   } catch (ObjectStoreServiceException e) {
                     throw new FatalEcliSitemapJobException(e.getMessage());
                   }
                 })
-            .filter(Optional::isPresent)
-            .map(Optional::get)
+            .filter(changelog -> !Objects.isNull(changelog))
             .toList();
 
     return BulkChangelogParser.getLatestRelevantChangelogs(changelogs);
@@ -151,15 +154,14 @@ public class EcliSitemapJob implements Job {
 
     logger.info("publish changes {}", ecliDocuments.toArray());
     try {
-      Map<String, Sitemap> sitemaps =
+      List<Sitemap> sitemaps =
           sitemapService.writeDocumentsToSitemaps(PATH_PREFIX, today, ecliDocuments);
-      Map<String, Sitemapindex> sitemapIndices =
-          sitemapService.writeSitemapnamesToIndices(
-              PATH_PREFIX, baseUrl, today, sitemaps.keySet().stream().toList());
+      List<Sitemapindex> sitemapIndices =
+          sitemapService.writeSitemapsIndices(PATH_PREFIX, apiUrl, today, sitemaps);
       if (!sitemapIndices.isEmpty()) {
         repository.saveAll(ecliDocuments);
       }
-      sitemapService.updateRobotsTxt(baseUrl, sitemapIndices.keySet().stream().toList());
+      sitemapService.updateRobotsTxt(apiUrl, sitemapIndices);
     } catch (JAXBException | ObjectStoreServiceException ex) {
       throw new FatalEcliSitemapJobException(ex.getMessage());
     } catch (FileNotFoundException e) {
@@ -174,23 +176,23 @@ public class EcliSitemapJob implements Job {
         caselawbucket.getAllKeys().stream()
             .filter(s -> s.endsWith(".xml") && !s.contains(IndexSyncJob.CHANGELOGS_PREFIX))
             .toList();
-    List<List<String>> filenamebatches = ListUtils.partition(allFiles, 10000);
+    List<List<String>> filenamebatches =
+        ListUtils.partition(allFiles, OPEN_SEARCH_MAX_RESULT_WINDOW);
 
     for (List<String> batch : filenamebatches) {
-      var unitsFromBatch = getCaseLawDocumentationUnits(batch);
-      unitsFromBatch.keySet().forEach(key -> changelog.getChanged().add(key));
+      var ecliDocumentsFrombatch = getEcliCrawlerDocuments(batch);
+      ecliDocumentsFrombatch.forEach(doc -> changelog.getChanged().add(doc.filename()));
+    }
 
-      var docsToBeDeleted = repository.findAllByIsPublishedIsTrueAndFilenameNotIn(allFiles);
-      for (EcliCrawlerDocument doc : docsToBeDeleted) {
-        changelog.getDeleted().add(doc.filename());
-      }
+    var docsToBeDeleted = repository.findAllByIsPublishedIsTrueAndFilenameNotIn(allFiles);
+    for (EcliCrawlerDocument doc : docsToBeDeleted) {
+      changelog.getDeleted().add(doc.filename());
     }
     return changelog;
   }
 
-  private Map<String, CaseLawDocumentationUnit> getCaseLawDocumentationUnits(
-      List<String> filenames) {
-    Map<String, CaseLawDocumentationUnit> caseLawDocumentationUnits = new HashMap<>();
+  private List<EcliCrawlerDocument> getEcliCrawlerDocuments(List<String> filenames) {
+    List<EcliCrawlerDocument> ecliDocuments = new ArrayList<>();
 
     for (String filename : filenames) {
       try {
@@ -200,43 +202,39 @@ public class EcliSitemapJob implements Job {
               CaseLawDocumentationUnit unit = CaseLawLdmlToOpenSearchMapper.fromString(content);
               if (!Objects.isNull(unit.ecli())
                   && Courts.supportedCourtNames.containsKey(unit.courtType())) {
-                caseLawDocumentationUnits.put(
-                    filename, CaseLawLdmlToOpenSearchMapper.fromString(content));
+
+                ecliDocuments.add(
+                    EcliCrawlerDocumentMapper.fromCaseLawDocumentationUnit(
+                        documentUrl, filename, unit));
               }
             });
       } catch (OpenSearchMapperException ex) {
-        logger.warn("unable to parse file {} to DocumentationUnit", filename);
+        logger.warn("unable to parse file {} to DocumentationUnit - continue", filename);
       } catch (ObjectStoreServiceException ex) {
         throw new FatalEcliSitemapJobException(ex.getMessage());
       }
     }
-    return caseLawDocumentationUnits;
+    return ecliDocuments;
   }
 
   private List<EcliCrawlerDocument> getAllEcliCrawlerDocumentsFromChangelog(
       Changelog mergedChangelog) {
 
-    var caseLawDocumentationUnitsToChange =
-        getCaseLawDocumentationUnits(mergedChangelog.getChanged().stream().toList());
-
     List<EcliCrawlerDocument> changes = new ArrayList<>();
-    caseLawDocumentationUnitsToChange.forEach(
-        (path, unit) ->
-            changes.add(
-                EcliCrawlerDocumentMapper.fromCaseLawDocumentationUnit(baseUrl, path, unit)));
+    changes.addAll(getEcliCrawlerDocuments(mergedChangelog.getChanged().stream().toList()));
 
     changes.addAll(
         repository.findAllByFilenameIn(mergedChangelog.getDeleted()).stream()
             .map(
-                ecliSitemap ->
+                ecliDocument ->
                     new EcliCrawlerDocument(
-                        ecliSitemap.document_number(),
-                        ecliSitemap.filename(),
-                        ecliSitemap.ecli(),
-                        ecliSitemap.courtType(),
-                        ecliSitemap.decisionDate(),
-                        ecliSitemap.documentType(),
-                        ecliSitemap.url(),
+                        ecliDocument.document_number(),
+                        ecliDocument.filename(),
+                        ecliDocument.ecli(),
+                        ecliDocument.courtType(),
+                        ecliDocument.decisionDate(),
+                        ecliDocument.documentType(),
+                        ecliDocument.url(),
                         false))
             .toList());
     return changes;
