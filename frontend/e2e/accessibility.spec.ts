@@ -48,10 +48,10 @@ const testPages = [
     name: "Norms Search Page",
     url: "/search?category=N",
   },
-  // {
-  //   name: "Caselaw Search Page",
-  //   url: "/search?category=R",
-  // },
+  {
+    name: "Caselaw Search Page",
+    url: "/search?category=R",
+  },
   {
     name: "Norm View Page",
     url: "/norms/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu/regelungstext-1",
