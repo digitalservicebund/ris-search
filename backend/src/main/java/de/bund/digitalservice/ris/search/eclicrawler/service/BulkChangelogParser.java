@@ -10,16 +10,21 @@ public class BulkChangelogParser {
 
   private BulkChangelogParser() {}
 
-  public static List<Changelog> getLatestRelevantChangelogs(List<Changelog> changelogs) {
+  public static List<Changelog> getChangelogsFromLastChangeAll(List<Changelog> changelogs) {
     List<Changelog> relevantChangelogs = new ArrayList<>();
     changelogs.forEach(
         changelog -> {
           if (changelog.isChangeAll()) {
             relevantChangelogs.clear();
+          } else {
+            relevantChangelogs.add(changelog);
           }
-          relevantChangelogs.add(changelog);
         });
     return relevantChangelogs;
+  }
+
+  public static boolean containsChangeAll(List<Changelog> logs) {
+    return !logs.stream().filter(Changelog::isChangeAll).toList().isEmpty();
   }
 
   public static Changelog mergeChangelogs(List<Changelog> changelogs) {

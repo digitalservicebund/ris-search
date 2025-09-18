@@ -4,6 +4,8 @@ import static org.opensearch.index.query.QueryBuilders.queryStringQuery;
 
 import de.bund.digitalservice.ris.search.config.opensearch.Configurations;
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
+import de.bund.digitalservice.ris.search.exception.OpenSearchMapperException;
+import de.bund.digitalservice.ris.search.mapper.CaseLawLdmlToOpenSearchMapper;
 import de.bund.digitalservice.ris.search.models.CourtSearchResult;
 import de.bund.digitalservice.ris.search.models.ParsedSearchTerm;
 import de.bund.digitalservice.ris.search.models.api.parameters.CaseLawSearchParams;
@@ -203,5 +205,19 @@ public class CaseLawService {
 
   public List<String> getAllFilenamesByDocumentNumber(String documentNumber) {
     return caseLawBucket.getAllKeysByPrefix(documentNumber);
+  }
+
+  public Optional<CaseLawDocumentationUnit> getFromBucket(String filename)
+      throws ObjectStoreServiceException {
+    Optional<String> contentOption = caseLawBucket.getFileAsString(filename);
+
+    if (contentOption.isEmpty()) {
+      return Optional.empty();
+    }
+    try {
+      return Optional.of(CaseLawLdmlToOpenSearchMapper.fromString(contentOption.get()));
+    } catch (OpenSearchMapperException ex) {
+      return Optional.empty();
+    }
   }
 }
