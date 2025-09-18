@@ -11,6 +11,7 @@ import static org.mockito.Mockito.when;
 import de.bund.digitalservice.ris.search.importer.ImportTaskProcessor;
 import de.bund.digitalservice.ris.search.service.CaseLawIndexSyncJob;
 import de.bund.digitalservice.ris.search.service.Job;
+import de.bund.digitalservice.ris.search.service.LiteratureIndexSyncJob;
 import de.bund.digitalservice.ris.search.service.NormIndexSyncJob;
 import de.bund.digitalservice.ris.search.service.SitemapsUpdateJob;
 import java.util.List;
@@ -25,13 +26,16 @@ class ImportTaskProcessorTest {
 
   @Mock private NormIndexSyncJob normIndexSyncJob;
   @Mock private CaseLawIndexSyncJob caseLawIndexSyncJob;
+  @Mock private LiteratureIndexSyncJob literatureIndexSyncJob;
   @Mock private SitemapsUpdateJob sitemapsUpdateJob;
 
   private ImportTaskProcessor processor;
 
   @BeforeEach
   void setUp() {
-    processor = new ImportTaskProcessor(normIndexSyncJob, caseLawIndexSyncJob, sitemapsUpdateJob);
+    processor =
+        new ImportTaskProcessor(
+            normIndexSyncJob, caseLawIndexSyncJob, literatureIndexSyncJob, sitemapsUpdateJob);
   }
 
   @Test
@@ -68,6 +72,8 @@ class ImportTaskProcessorTest {
       "--task",
       "import_caselaw",
       "--task",
+      "import_literature",
+      "--task",
       "update_sitemaps"
     };
 
@@ -75,10 +81,11 @@ class ImportTaskProcessorTest {
     List<String> targets = ImportTaskProcessor.parseTargets(args);
 
     // Then
-    assertEquals(3, targets.size());
+    assertEquals(4, targets.size());
     assertEquals("import_norms", targets.get(0));
     assertEquals("import_caselaw", targets.get(1));
-    assertEquals("update_sitemaps", targets.get(2));
+    assertEquals("import_literature", targets.get(2));
+    assertEquals("update_sitemaps", targets.get(3));
   }
 
   @Test
@@ -96,10 +103,18 @@ class ImportTaskProcessorTest {
   void run_withValidTargets_returnsZero() {
     // Given
     String[] args = {
-      "--task", "import_norms", "--task", "import_caselaw", "--task", "update_sitemaps"
+      "--task",
+      "import_norms",
+      "--task",
+      "import_caselaw",
+      "--task",
+      "import_literature",
+      "--task",
+      "update_sitemaps"
     };
     when(normIndexSyncJob.runJob()).thenReturn(Job.ReturnCode.SUCCESS);
     when(caseLawIndexSyncJob.runJob()).thenReturn(Job.ReturnCode.SUCCESS);
+    when(literatureIndexSyncJob.runJob()).thenReturn(Job.ReturnCode.SUCCESS);
     when(sitemapsUpdateJob.runJob()).thenReturn(Job.ReturnCode.SUCCESS);
 
     // When
@@ -109,6 +124,7 @@ class ImportTaskProcessorTest {
     assertEquals(0, exitCode);
     verify(normIndexSyncJob).runJob();
     verify(caseLawIndexSyncJob).runJob();
+    verify(literatureIndexSyncJob).runJob();
     verify(sitemapsUpdateJob).runJob();
   }
 
@@ -124,6 +140,7 @@ class ImportTaskProcessorTest {
     assertEquals(1, exitCode);
     verify(normIndexSyncJob, never()).runJob();
     verify(caseLawIndexSyncJob, never()).runJob();
+    verify(literatureIndexSyncJob, never()).runJob();
     verify(sitemapsUpdateJob, never()).runJob();
   }
 
@@ -154,6 +171,19 @@ class ImportTaskProcessorTest {
   }
 
   @Test
+  void runTask_withLiterature_callsImportServiceWithLiteratureParams() {
+    // Given
+    String target = "import_literature";
+
+    // When
+    when(literatureIndexSyncJob.runJob()).thenReturn(Job.ReturnCode.SUCCESS);
+    processor.runTask(target);
+
+    // Then
+    verify(literatureIndexSyncJob).runJob();
+  }
+
+  @Test
   void runTask_withSitemapsTarget_callsSitemapsUpdateJob() {
     // Given
     String target = "update_sitemaps";
@@ -181,7 +211,14 @@ class ImportTaskProcessorTest {
   void runTask_withNonzeroExitCode_returnsExitCode() {
     // Given
     String[] args = {
-      "--task", "import_norms", "--task", "import_caselaw", "--task", "update_sitemaps"
+      "--task",
+      "import_norms",
+      "--task",
+      "import_caselaw",
+      "--task",
+      "import_literature",
+      "--task",
+      "update_sitemaps"
     };
 
     // When
@@ -193,6 +230,7 @@ class ImportTaskProcessorTest {
     assertEquals(1, exitCode);
     verify(normIndexSyncJob).runJob();
     verify(caseLawIndexSyncJob, never()).runJob();
+    verify(literatureIndexSyncJob, never()).runJob();
     verify(sitemapsUpdateJob, never()).runJob();
   }
 }
