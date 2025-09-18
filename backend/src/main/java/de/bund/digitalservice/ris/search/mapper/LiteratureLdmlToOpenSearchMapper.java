@@ -21,7 +21,6 @@ import jakarta.xml.bind.DataBindingException;
 import jakarta.xml.bind.JAXB;
 import jakarta.xml.bind.ValidationException;
 import java.io.StringReader;
-import java.time.Instant;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -65,7 +64,6 @@ public class LiteratureLdmlToOpenSearchMapper {
             .collaborators(extractCollaborators(literatureLdml))
             .shortReport(extractShortReport(literatureLdml))
             .outline((extractOutline(literatureLdml)))
-            .indexedAt(Instant.now().toString())
             .build());
   }
 

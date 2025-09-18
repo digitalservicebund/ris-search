@@ -22,7 +22,7 @@ public class Configurations {
 
   private String caseLawsIndexName;
 
-  private String literatureIndexName;
+  private String literaturesIndexName;
 
   private String documentsAliasName;
 }

@@ -27,15 +27,6 @@ public class ObsConfig {
   @Value("${s3.file-storage.case-law.secret-access-key}")
   private String caseLawSecretAccessKey;
 
-  @Value("${s3.file-storage.literature.endpoint}")
-  private String literatureEndpoint;
-
-  @Value("${s3.file-storage.literature.access-key-id}")
-  private String literatureAccessKeyId;
-
-  @Value("${s3.file-storage.literature.secret-access-key}")
-  private String literatureSecretAccessKey;
-
   @Value("${s3.file-storage.norm.endpoint}")
   private String normEndpoint;
 
@@ -84,21 +75,6 @@ public class ObsConfig {
         bucket);
   }
 
-  @Bean(name = "literatureS3Client")
-  @Profile({"staging"})
-  public ObjectStorageClient literatureS3Client(
-      @Value("${s3.file-storage.literature.bucket-name}") String bucket) throws URISyntaxException {
-    return new S3ObjectStorageClient(
-        S3Client.builder()
-            .credentialsProvider(
-                StaticCredentialsProvider.create(
-                    AwsBasicCredentials.create(literatureAccessKeyId, literatureSecretAccessKey)))
-            .endpointOverride(new URI(literatureEndpoint))
-            .region(Region.of(REGION))
-            .build(),
-        bucket);
-  }
-
   @Bean(name = "portalS3Client")
   @Profile({"production", "staging", "uat", "prototype"})
   public ObjectStorageClient portalS3Client(
@@ -126,13 +102,6 @@ public class ObsConfig {
   public ObjectStorageClient mockCaseLawS3Client(
       @Value("${local.file-storage}") String relativeLocalStorageDirectory) {
     return new LocalFilesystemObjectStorageClient("caselaw", relativeLocalStorageDirectory);
-  }
-
-  @Bean(name = "literatureS3Client")
-  @Profile({"default"})
-  public ObjectStorageClient mockLiteratureS3Client(
-      @Value("${local.file-storage}") String relativeLocalStorageDirectory) {
-    return new LocalFilesystemObjectStorageClient("literature", relativeLocalStorageDirectory);
   }
 
   @Bean(name = "portalS3Client")
