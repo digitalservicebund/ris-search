@@ -89,7 +89,7 @@ jobs:
       - name: Install Playwright
         run: npm install @playwright/test@${{ env.PLAYWRIGHT_VERSION }} @axe-core/playwright axe-html-reporter
       - name: Install Playwright Browsers
-        run: npx playwright install --with-deps chromium
+        run: npx playwright install --with-deps chromium firefox webkit
       - name: Wait for containers to be fully up
         timeout-minutes: 5
         run: |
@@ -99,7 +99,7 @@ jobs:
           done
       - name: Run Accessibility Playwright tests on staging
         if: ${{ matrix.profile == 'internal' }}
-        run: npx playwright test accessibility.spec.ts --project chromium
+        run: npx playwright test accessibility.spec.ts
         working-directory: ./frontend
         env:
           RIS_BASE_URL: http://localhost:3000
