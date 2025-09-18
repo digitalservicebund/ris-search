@@ -100,14 +100,13 @@ class NormsControllerApiTest extends ContainersIntegrationBase {
   void shouldReturnJsonWhenRequestingNormAsJson() throws Exception {
     mockMvc
         .perform(
-            get(ApiConfig.Paths.LEGISLATION_SINGLE
-                    + "/bund/bgbl-1/1000/test/2000-10-06/2/deu/regelungstext-1")
+            get(ApiConfig.Paths.LEGISLATION_SINGLE + "/bund/bgbl-1/1000/test/2000-10-06/2/deu")
                 .contentType(MediaType.APPLICATION_JSON))
         .andExpectAll(
             status().isOk(),
             jsonPath("$.@type", is("Legislation")),
             jsonPath("$.name", is("Test Gesetz")),
-            jsonPath("$.legislationIdentifier", is("eli/bund/bgbl-1/1000/test/regelungstext-1")),
+            jsonPath("$.legislationIdentifier", is("eli/bund/bgbl-1/1000/test")),
             jsonPath("$.alternateName", is("TestG1")),
             jsonPath("$.abbreviation", is("TeG")),
             jsonPath("$.legislationDate", is("2024-01-02")),
@@ -118,8 +117,7 @@ class NormsControllerApiTest extends ContainersIntegrationBase {
             jsonPath("$.workExample.hasPart[0].guid", is("guid1")),
             jsonPath(
                 "$.workExample.hasPart[0].@id",
-                is(
-                    "/v1/legislation/eli/bund/bgbl-1/1000/test/2000-10-06/2/deu/regelungstext-1#eid1")),
+                is("/v1/legislation/eli/bund/bgbl-1/1000/test/2000-10-06/2/deu#eid1")),
             jsonPath("$.workExample.hasPart[0].name", is("§ 1 Example article")),
             jsonPath("$.workExample.hasPart[0].isActive", is(true)),
             jsonPath("$.workExample.hasPart[0].entryIntoForceDate", is("2023-12-31")),
@@ -135,8 +133,7 @@ class NormsControllerApiTest extends ContainersIntegrationBase {
     var result =
         mockMvc
             .perform(
-                get(ApiConfig.Paths.LEGISLATION_SINGLE
-                        + "/bund/bgbl-1/1000/test/2000-10-06/2/deu/regelungstext-1")
+                get(ApiConfig.Paths.LEGISLATION_SINGLE + "/bund/bgbl-1/1000/test/2000-10-06/2/deu")
                     .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andReturn()
@@ -396,9 +393,7 @@ class NormsControllerApiTest extends ContainersIntegrationBase {
                     + "?searchTerm=Gesetz&dateFrom=2023-01-02&dateTo=2023-01-02")
                 .contentType(MediaType.APPLICATION_JSON))
         .andExpect(jsonPath("$.member", hasSize(1)))
-        .andExpect(
-            jsonPath(
-                "$.member[0]['item'].@id", is("/v1/legislation/eli/2024/teg/2/regelungstext-1")))
+        .andExpect(jsonPath("$.member[0]['item'].@id", is("/v1/legislation/eli/2024/teg/2")))
         .andExpect(status().isOk());
   }
 

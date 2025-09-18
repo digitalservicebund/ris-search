@@ -36,10 +36,10 @@ public class NormLdmlToOpenSearchMapper {
   private static final String X_PATH_SHORT_TITLE_ALTERNATE_NAME =
       "//*[local-name()='shortTitle']/text()";
   private static final String X_PATH_DOC_TITLE_NAME = "//*[local-name()='docTitle']/text()";
-  private static final String X_PATH_WORK_THIS =
-      "//*[local-name()='FRBRWork']/*[local-name()='FRBRthis']/@value";
-  private static final String X_PATH_EXPRESSION_THIS =
-      "//*[local-name()='FRBRExpression']/*[local-name()='FRBRthis']/@value";
+  private static final String X_PATH_WORK_URI =
+      "//*[local-name()='FRBRWork']/*[local-name()='FRBRuri']/@value";
+  private static final String X_PATH_EXPRESSION_URI =
+      "//*[local-name()='FRBRExpression']/*[local-name()='FRBRuri']/@value";
   private static final String X_PATH_MANIFESTATION_THIS =
       "//*[local-name()='FRBRManifestation']/*[local-name()='FRBRthis']/@value";
   private static final String X_PATH_SHORT_TITLE_ABBREVIATION =
@@ -77,8 +77,8 @@ public class NormLdmlToOpenSearchMapper {
       String xmlFile, Map<String, String> attachmentFileContents) {
     try {
       var xmlDocument = new XmlDocument(xmlFile.getBytes(StandardCharsets.UTF_8));
-      @Nullable String workEli = xmlDocument.getElementByXpath(X_PATH_WORK_THIS);
-      @Nullable String expressionEli = xmlDocument.getElementByXpath(X_PATH_EXPRESSION_THIS);
+      @Nullable String workEli = xmlDocument.getElementByXpath(X_PATH_WORK_URI);
+      @Nullable String expressionEli = xmlDocument.getElementByXpath(X_PATH_EXPRESSION_URI);
       @Nullable String manifestationEli = xmlDocument.getElementByXpath(X_PATH_MANIFESTATION_THIS);
 
       if (workEli == null || expressionEli == null || manifestationEli == null) {

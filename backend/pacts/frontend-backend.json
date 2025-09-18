@@ -8,7 +8,7 @@
       "pending": false,
       "providerStates": [
         {
-          "name": "I have a document in the database with eli/bund/bgbl-1/2000/s998/2000-10-06/2/deu/regelungstext-1"
+          "name": "I have a document in the database with eli/bund/bgbl-1/2000/s998/2000-10-06/2/deu"
         }
       ],
       "request": {
@@ -18,12 +18,12 @@
           ]
         },
         "method": "GET",
-        "path": "/v1/legislation/eli/bund/bgbl-1/2000/s998/2000-10-06/2/deu/regelungstext-1"
+        "path": "/v1/legislation/eli/bund/bgbl-1/2000/s998/2000-10-06/2/deu"
       },
       "response": {
         "body": {
           "content": {
-            "@id": "/v1/legislation/eli/bund/bgbl-1/2000/s998/regelungstext-1",
+            "@id": "/v1/legislation/eli/bund/bgbl-1/2000/s998",
             "@type": "Legislation",
             "abbreviation": "Fleischhygiene-Verordnung",
             "alternateName": "Verordnung uber die Nichtanwendung fleisch- und geflugelfleischhygienerechtlicher Vorschriften",
@@ -32,10 +32,10 @@
               "name": "Bundesgesetzblatt Teil I"
             },
             "legislationDate": "1977-05-21",
-            "legislationIdentifier": "eli/bund/bgbl-1/2000/s998/regelungstext-1",
+            "legislationIdentifier": "eli/bund/bgbl-1/2000/s998",
             "name": "Verordnung uber die Nichtanwendung fleisch- und geflugelfleischhygienerechtlicher Vorschriften Artikel 6 der Funften Verordnung zur Anderung von Vorschriften zum Schutz der Verbraucher vor der Bovinen Spongiformen Enzephalopathie",
             "workExample": {
-              "@id": "/v1/legislation/eli/bund/bgbl-1/2000/s998/2000-10-06/2/deu/regelungstext-1",
+              "@id": "/v1/legislation/eli/bund/bgbl-1/2000/s998/2000-10-06/2/deu",
               "@type": "Legislation",
               "encoding": [
                 {
@@ -62,7 +62,7 @@
               ],
               "hasPart": [
                 {
-                  "@id": "/v1/legislation/eli/bund/bgbl-1/2000/s998/2000-10-06/2/deu/regelungstext-1#art-z1",
+                  "@id": "/v1/legislation/eli/bund/bgbl-1/2000/s998/2000-10-06/2/deu#art-z1",
                   "@type": "Legislation",
                   "eId": "art-z1",
                   "encoding": null,
@@ -73,7 +73,7 @@
                   "name": "1 Fleischhygiene-Verordnung"
                 },
                 {
-                  "@id": "/v1/legislation/eli/bund/bgbl-1/2000/s998/2000-10-06/2/deu/regelungstext-1#art-z2",
+                  "@id": "/v1/legislation/eli/bund/bgbl-1/2000/s998/2000-10-06/2/deu#art-z2",
                   "@type": "Legislation",
                   "eId": "art-z2",
                   "encoding": null,
@@ -84,7 +84,7 @@
                   "name": "2 Geflugelfleischhygiene-Verordnung"
                 }
               ],
-              "legislationIdentifier": "eli/bund/bgbl-1/2000/s998/2000-10-06/2/deu/regelungstext-1",
+              "legislationIdentifier": "eli/bund/bgbl-1/2000/s998/2000-10-06/2/deu",
               "legislationLegalForce": "InForce",
               "tableOfContents": [
                 {

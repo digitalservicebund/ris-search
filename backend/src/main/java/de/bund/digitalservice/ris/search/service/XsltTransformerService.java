@@ -4,7 +4,7 @@ import de.bund.digitalservice.ris.search.exception.FileTransformationException;
 import de.bund.digitalservice.ris.search.exception.NoSuchKeyException;
 import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
 import de.bund.digitalservice.ris.search.service.exception.XMLElementNotFoundException;
-import de.bund.digitalservice.ris.search.utils.eli.ManifestationEli;
+import de.bund.digitalservice.ris.search.utils.eli.EliFile;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.StringReader;
@@ -12,6 +12,7 @@ import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Source;
@@ -59,8 +60,8 @@ public class XsltTransformerService {
           } else if (href.startsWith("eli/")) {
             logger.debug("Resolving attachment: {}", href);
             // validate that the href is a valid manifestation ELI
-            var eli = ManifestationEli.fromString(href);
-            return resolveManifestationEliResource(
+            Optional<EliFile> eli = EliFile.fromString(href);
+            return resolveEliResource(
                 eli.orElseThrow(() -> new TransformerException("Invalid ELI: " + href)));
           } else {
             throw new TransformerException("Invalid URI: " + href);
@@ -76,13 +77,12 @@ public class XsltTransformerService {
    *     more specific indications as to where the error occurred.
    */
   @NotNull
-  private StreamSource resolveManifestationEliResource(ManifestationEli eli)
-      throws TransformerException {
+  private StreamSource resolveEliResource(EliFile eliFile) throws TransformerException {
     try {
-      var response = this.normsBucket.getStream(eli.toString());
+      var response = this.normsBucket.getStream(eliFile.toString());
       return new StreamSource(response);
     } catch (NoSuchKeyException | NullPointerException e) {
-      throw new TransformerException("Failed to resolve: " + eli, e);
+      throw new TransformerException("Failed to resolve: " + eliFile, e);
     }
   }
 

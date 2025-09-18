@@ -102,8 +102,7 @@ class PactProviderTest extends ContainersIntegrationBase {
     caseLawRepository.saveAll(List.of(caseLawTestOne));
   }
 
-  @State(
-      "I have a document in the database with eli/bund/bgbl-1/2000/s998/2000-10-06/2/deu/regelungstext-1")
+  @State("I have a document in the database with eli/bund/bgbl-1/2000/s998/2000-10-06/2/deu")
   public void thereIsDocumentWithValidEli() throws IOException {
     assertTrue(openSearchContainer.isRunning());
 
@@ -114,8 +113,8 @@ class PactProviderTest extends ContainersIntegrationBase {
         Norm.builder()
             .id("norm-id")
             .tableOfContents(NormsTestData.nestedToC)
-            .workEli("eli/bund/bgbl-1/2000/s998/regelungstext-1")
-            .expressionEli("eli/bund/bgbl-1/2000/s998/2000-10-06/2/deu/regelungstext-1")
+            .workEli("eli/bund/bgbl-1/2000/s998")
+            .expressionEli("eli/bund/bgbl-1/2000/s998/2000-10-06/2/deu")
             .manifestationEliExample(
                 "eli/bund/bgbl-1/2000/s998/2000-10-06/2/deu/2000-10-06/regelungstext-1.xml")
             .officialTitle(

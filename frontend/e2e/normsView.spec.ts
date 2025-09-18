@@ -44,7 +44,7 @@ test("can search, filter for norms, and view a single norm", async ({
     await page.getByRole("link", { name: expectedNorms[0] }).first().click();
 
     await page.waitForURL(
-      /norms\/eli\/(?<jurisdiction>[^/]+)\/(?<agent>[^/]+)\/(?<year>[^/]+)\/(?<naturalIdentifier>[^/]+)\/(?<pointInTime>[^/]+)\/(?<version>[^/]+)\/(?<language>[^/]+)\/(?<subtype>[^/]+)$/gi,
+      /norms\/eli\/(?<jurisdiction>[^/]+)\/(?<agent>[^/]+)\/(?<year>[^/]+)\/(?<naturalIdentifier>[^/]+)\/(?<pointInTime>[^/]+)\/(?<version>[^/]+)\/(?<language>[^/]+)$/gi,
     );
 
     await expect(
