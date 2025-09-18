@@ -1,7 +1,6 @@
 import { createTestingPinia } from "@pinia/testing";
 import { mount } from "@vue/test-utils";
 import type { VueWrapper } from "@vue/test-utils";
-import PrimeVue from "primevue/config";
 import { beforeEach, describe, expect, it } from "vitest";
 import DateRangeFilter from "./DateRangeFilter.vue";
 import { DateSearchMode } from "~/stores/searchParams";
@@ -19,7 +18,7 @@ describe("date/date range filter", () => {
   beforeEach(() => {
     wrapper = mount(DateRangeFilter, {
       global: {
-        plugins: [createTestingPinia({ stubActions: false }), PrimeVue],
+        plugins: [createTestingPinia({ stubActions: false })],
       },
     });
   });
