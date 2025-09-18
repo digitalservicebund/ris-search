@@ -14,7 +14,6 @@ import de.bund.digitalservice.ris.search.schema.TableOfContentsSchema;
 import de.bund.digitalservice.ris.search.utils.DateUtils;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import javax.annotation.Nullable;
 import org.springframework.http.MediaType;
 
@@ -26,19 +25,7 @@ public class NormSchemaMapper {
     String expressionEli = norm.getExpressionEli();
     String manifestationEliXml = norm.getManifestationEliExample();
 
-    var encodings =
-        Optional.ofNullable(manifestationEliXml)
-            .map(
-                manifestationEli -> {
-                  var encodingBaseUrl = contentBaseUrl + manifestationEli.replace(".xml", "");
-                  var encodingZipBaseUrl =
-                      contentBaseUrl
-                          + manifestationEli.substring(0, manifestationEli.lastIndexOf('/'));
-
-                  return EncodingSchemaFactory.legislationEncodingSchemas(
-                      encodingBaseUrl, encodingZipBaseUrl);
-                })
-            .orElse(Collections.emptyList());
+    var encodings = getEncodings(contentBaseUrl, manifestationEliXml);
 
     LegalForceStatus legislationLegalForce =
         DateUtils.isActive(norm.getEntryIntoForceDate(), norm.getExpiryDate())
@@ -74,6 +61,19 @@ public class NormSchemaMapper {
         .workExample(expression)
         .isPartOf(publicationIssue)
         .build();
+  }
+
+  private static List<LegislationObjectSchema> getEncodings(
+      String contentBaseUrl, @Nullable String manifestationEli) {
+    if (manifestationEli == null) {
+      return Collections.emptyList();
+    }
+
+    var encodingBaseUrl = contentBaseUrl + manifestationEli.replace(".xml", "");
+    var encodingZipBaseUrl =
+        contentBaseUrl + manifestationEli.substring(0, manifestationEli.lastIndexOf('/'));
+
+    return EncodingSchemaFactory.legislationEncodingSchemas(encodingBaseUrl, encodingZipBaseUrl);
   }
 
   private static List<TableOfContentsSchema> buildTableOfContents(
