@@ -5,6 +5,7 @@ import de.bund.digitalservice.ris.search.eclicrawler.model.EcliCrawlerDocument;
 import de.bund.digitalservice.ris.search.eclicrawler.repository.EcliCrawlerDocumentRepository;
 import de.bund.digitalservice.ris.search.eclicrawler.schema.ecli.Courts;
 import de.bund.digitalservice.ris.search.eclicrawler.schema.sitemap.Sitemap;
+import de.bund.digitalservice.ris.search.eclicrawler.schema.sitemap.Url;
 import de.bund.digitalservice.ris.search.eclicrawler.schema.sitemapindex.Sitemapindex;
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.exception.OpenSearchMapperException;
@@ -49,6 +50,7 @@ public class EcliSitemapJob implements Job {
   public static final String PATH_PREFIX = "eclicrawler/";
   private static final int OPEN_SEARCH_MAX_RESULT_WINDOW = 10000;
   public static final String LAST_PROCESSED_CHANGELOG = PATH_PREFIX + "last_processed_changelog";
+  public static final String ROBOTS_TXT_PATH = PATH_PREFIX + "robots.txt";
   private final String documentUrl;
   private final String apiUrl;
 
@@ -69,7 +71,7 @@ public class EcliSitemapJob implements Job {
   }
 
   public ReturnCode runJob() {
-    if (!sitemapService.getSitemapFilesPathsForDay(today).isEmpty()) {
+    if (!sitemapService.getSitemapFilesPathsForDay(PATH_PREFIX, today).isEmpty()) {
       logger.warn("day partition for ecli sitemap run already created");
       return ReturnCode.SUCCESS;
     }
@@ -78,7 +80,7 @@ public class EcliSitemapJob implements Job {
     try {
       if (isInitialRun) {
         logger.info("initial run, publish all");
-        sitemapService.writeRobotsTxt();
+        sitemapService.writeRobotsTxt(ROBOTS_TXT_PATH);
         String newestChangelog = indexJob.getNewChangelogs(caselawbucket, "0").getLast();
         Changelog changelog = getFullDiffChangelog();
         List<EcliCrawlerDocument> changes = getAllEcliCrawlerDocumentsFromChangelog(changelog);
@@ -154,14 +156,14 @@ public class EcliSitemapJob implements Job {
 
     logger.info("publish changes {}", ecliDocuments.toArray());
     try {
-      List<Sitemap> sitemaps =
-          sitemapService.writeDocumentsToSitemaps(PATH_PREFIX, today, ecliDocuments);
+      List<Url> urls = ecliDocuments.stream().map(EcliCrawlerDocumentMapper::toSitemapUrl).toList();
+      List<Sitemap> sitemaps = sitemapService.writeUrlsToSitemaps(PATH_PREFIX, today, urls);
       List<Sitemapindex> sitemapIndices =
           sitemapService.writeSitemapsIndices(PATH_PREFIX, apiUrl, today, sitemaps);
       if (!sitemapIndices.isEmpty()) {
         repository.saveAll(ecliDocuments);
       }
-      sitemapService.updateRobotsTxt(apiUrl, sitemapIndices);
+      sitemapService.updateRobotsTxt(ROBOTS_TXT_PATH, apiUrl, sitemapIndices);
     } catch (JAXBException | ObjectStoreServiceException ex) {
       throw new FatalEcliSitemapJobException(ex.getMessage());
     } catch (FileNotFoundException e) {

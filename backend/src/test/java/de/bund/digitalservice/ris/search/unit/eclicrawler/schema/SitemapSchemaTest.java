@@ -1,4 +1,4 @@
-package de.bund.digitalservice.ris.search.unit.sitemap.eclicrawler.schema;
+package de.bund.digitalservice.ris.search.unit.eclicrawler.schema;
 
 import static org.testcontainers.shaded.org.apache.commons.io.FileUtils.getFile;
 
@@ -44,14 +44,15 @@ class SitemapSchemaTest {
   }
 
   private EcliCrawlerDocument getTestDocChange(boolean isPublished) {
-    EcliCrawlerDocument doc = new EcliCrawlerDocument();
-    doc.setId("identifier");
-    doc.setEcli("ECLI:DE:XX:2025:1111111");
-    doc.setCourtType("BGH");
-    doc.setDocumentType("decision");
-    doc.setDecisionDate("2025-01-01");
-    doc.setPublished(isPublished);
-    return doc;
+    return new EcliCrawlerDocument(
+        "docNumber",
+        "docNumber.xml",
+        "ECLI:DE:XX:2025:1111111",
+        "BGH",
+        "2025-01-01",
+        "documentType",
+        "http://url/to/docNumber",
+        isPublished);
   }
 
   @Test
