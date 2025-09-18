@@ -79,6 +79,7 @@ public class EcliSitemapJob implements Job {
           return ReturnCode.SUCCESS;
         }
         var changelogs = getNewChangelogs(changelogPaths);
+
         List<EcliCrawlerDocument> docs = ecliCrawlerDocumentService.getFromChangelogs(changelogs);
         persistEcliDocumentChanges(docs);
         portalBucket.save(LAST_PROCESSED_CHANGELOG, changelogPaths.getLast());

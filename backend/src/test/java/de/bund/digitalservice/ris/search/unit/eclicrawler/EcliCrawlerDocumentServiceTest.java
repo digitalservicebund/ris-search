@@ -7,11 +7,13 @@ import de.bund.digitalservice.ris.search.eclicrawler.model.EcliCrawlerDocument;
 import de.bund.digitalservice.ris.search.eclicrawler.repository.EcliCrawlerDocumentRepository;
 import de.bund.digitalservice.ris.search.eclicrawler.service.EcliCrawlerDocumentService;
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
+import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import de.bund.digitalservice.ris.search.repository.objectstorage.CaseLawBucket;
 import de.bund.digitalservice.ris.search.service.CaseLawIndexSyncJob;
 import de.bund.digitalservice.ris.search.service.CaseLawService;
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
@@ -76,7 +78,7 @@ public class EcliCrawlerDocumentServiceTest {
   }
 
   @Test
-  void itCreatesAFullAndRemovesOldDocuments() throws ObjectStoreServiceException {
+  void itCreatesAFullDiffAndDetectsRedundantDocuments() throws ObjectStoreServiceException {
     var testUnit = getTestDocUnit();
     var deletedDoc = getTestDocument("abc", false);
 
@@ -89,6 +91,27 @@ public class EcliCrawlerDocumentServiceTest {
         EcliCrawlerDocumentMapper.fromCaseLawDocumentationUnit(
             "frontend-url/case-law/", "key1.xml", testUnit);
     var actualDocuments = documentService.getFullDiff();
+
+    Assertions.assertEquals(expectedDocument, actualDocuments.getFirst());
+    Assertions.assertEquals(deletedDoc, actualDocuments.get(1));
+  }
+
+  @Test
+  void itCreatesChangesFromChangelog() throws ObjectStoreServiceException {
+    var testUnit = getTestDocUnit();
+    var deletedDoc = getTestDocument("abc", false);
+
+    Changelog log = new Changelog();
+    log.setChanged(new HashSet<>(List.of("key1.xml")));
+    log.setDeleted(new HashSet<>(List.of("key2.xml")));
+
+    when(caselawService.getFromBucket("key1.xml")).thenReturn(Optional.of(testUnit));
+    when(repository.findAllByFilenameIn(log.getDeleted())).thenReturn(List.of(deletedDoc));
+
+    var expectedDocument =
+        EcliCrawlerDocumentMapper.fromCaseLawDocumentationUnit(
+            "frontend-url/case-law/", "key1.xml", testUnit);
+    var actualDocuments = documentService.getFromChangelogs(List.of(log));
 
     Assertions.assertEquals(expectedDocument, actualDocuments.getFirst());
     Assertions.assertEquals(deletedDoc, actualDocuments.get(1));
