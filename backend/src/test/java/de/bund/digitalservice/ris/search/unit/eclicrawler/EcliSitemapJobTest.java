@@ -22,7 +22,6 @@ import de.bund.digitalservice.ris.search.eclicrawler.service.EcliSitemapJob;
 import de.bund.digitalservice.ris.search.eclicrawler.service.EcliSitemapService;
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
-import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import de.bund.digitalservice.ris.search.repository.objectstorage.CaseLawBucket;
 import de.bund.digitalservice.ris.search.repository.objectstorage.PortalBucket;
 import de.bund.digitalservice.ris.search.service.CaseLawIndexSyncJob;
@@ -65,16 +64,6 @@ class EcliSitemapJobTest {
 
     Job.ReturnCode code = sitemapJob.runJob();
     assertEquals(Job.ReturnCode.SUCCESS, code);
-  }
-
-  private CaseLawDocumentationUnit getTestDocUnit() {
-    return CaseLawDocumentationUnit.builder()
-        .documentNumber("docNumber")
-        .ecli("ECLI:DE:XX:2025:1111111")
-        .courtType("BGH")
-        .decisionDate(LocalDate.of(2025, 1, 1))
-        .documentType("type")
-        .build();
   }
 
   private EcliCrawlerDocument getTestDocument() {
