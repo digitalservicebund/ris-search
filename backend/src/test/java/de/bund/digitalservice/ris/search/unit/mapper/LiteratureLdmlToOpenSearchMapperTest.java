@@ -4,14 +4,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import de.bund.digitalservice.ris.search.mapper.LiteratureLdmlToOpenSearchMapper;
 import de.bund.digitalservice.ris.search.models.opensearch.Literature;
-import java.time.Instant;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
-import org.mockito.MockedStatic;
-import org.mockito.Mockito;
 
 class LiteratureLdmlToOpenSearchMapperTest {
 
@@ -436,19 +433,6 @@ class LiteratureLdmlToOpenSearchMapperTest {
     Literature literature = LiteratureLdmlToOpenSearchMapper.mapLdml(literatureLdml).get();
 
     assertThat(literature.outline()).isEqualTo("I. Foo. II. Bar. III. Baz.");
-  }
-
-  @Test
-  @DisplayName("Sets indexedAt to current time")
-  void setsIndexedAtToCurrentTime() {
-    Instant fixedInstant = Instant.parse("2025-01-01T10:00:00Z");
-
-    try (MockedStatic<Instant> mockedInstant = Mockito.mockStatic(Instant.class)) {
-      mockedInstant.when(Instant::now).thenReturn(fixedInstant);
-
-      Literature literature = LiteratureLdmlToOpenSearchMapper.mapLdml(minimalValidLdml).get();
-      assertThat(literature.indexedAt()).isEqualTo(fixedInstant.toString());
-    }
   }
 
   @Test

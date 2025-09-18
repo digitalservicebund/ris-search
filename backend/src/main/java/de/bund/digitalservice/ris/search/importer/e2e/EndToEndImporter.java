@@ -2,7 +2,6 @@ package de.bund.digitalservice.ris.search.importer.e2e;
 
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.service.IndexCaselawService;
-import de.bund.digitalservice.ris.search.service.IndexLiteratureService;
 import de.bund.digitalservice.ris.search.service.IndexNormsService;
 import java.time.Instant;
 import java.time.ZoneOffset;
@@ -24,17 +23,13 @@ public class EndToEndImporter {
   private static final Logger logger = LogManager.getLogger(EndToEndImporter.class);
 
   private final IndexCaselawService indexCaselawService;
-  private final IndexLiteratureService indexLiteratureService;
-  private final IndexNormsService indexNormsService;
+  private final IndexNormsService normsImporter;
 
   @Autowired
   public EndToEndImporter(
-      IndexCaselawService indexCaselawService,
-      IndexLiteratureService indexLiteratureService,
-      IndexNormsService indexNormsService) {
+      IndexCaselawService indexCaselawService, IndexNormsService normsImporter) {
     this.indexCaselawService = indexCaselawService;
-    this.indexLiteratureService = indexLiteratureService;
-    this.indexNormsService = indexNormsService;
+    this.normsImporter = normsImporter;
   }
 
   @Async
@@ -44,12 +39,8 @@ public class EndToEndImporter {
     indexCaselawService.reindexAll(Instant.now().toString());
     logger.info("Import E2E caselaw data: done");
 
-    logger.info("Import E2E literature data: started");
-    indexLiteratureService.reindexAll(Instant.now().toString());
-    logger.info("Import E2E literature data: done");
-
     logger.info("Import E2E norms data: started");
-    indexNormsService.reindexAll(
+    normsImporter.reindexAll(
         ZonedDateTime.now(ZoneOffset.UTC).format(DateTimeFormatter.ISO_INSTANT));
     logger.info("Import E2E norms data: done");
   }

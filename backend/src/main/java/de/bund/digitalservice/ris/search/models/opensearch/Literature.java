@@ -1,6 +1,5 @@
 package de.bund.digitalservice.ris.search.models.opensearch;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.ElementCollection;
 import java.util.List;
 import lombok.Builder;
@@ -29,8 +28,7 @@ public record Literature(
     @ElementCollection @Field(name = Fields.AUTHORS) List<String> authors,
     @ElementCollection @Field(name = Fields.COLLABORATORS) List<String> collaborators,
     @Nullable @Field(name = Fields.SHORT_REPORT) String shortReport,
-    @Nullable @Field(name = Fields.OUTLINE) String outline,
-    @JsonIgnore @Field(name = Fields.INDEXED_AT) String indexedAt)
+    @Nullable @Field(name = Fields.OUTLINE) String outline)
     implements AbstractSearchEntity {
   public static class Fields {
     private Fields() {}
@@ -63,8 +61,5 @@ public record Literature(
 
     /** Gliederung * */
     public static final String OUTLINE = "outline";
-
-    /** Used internally to store at what time the document was indexed * */
-    public static final String INDEXED_AT = "indexed_at";
   }
 }
