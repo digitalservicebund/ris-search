@@ -6,6 +6,7 @@ import ioinformarics.oss.jackson.module.jsonld.annotation.JsonldResource;
 import ioinformarics.oss.jackson.module.jsonld.annotation.JsonldType;
 import java.util.List;
 import lombok.Builder;
+import org.jetbrains.annotations.Nullable;
 
 @Builder
 @JsonldResource
@@ -28,4 +29,5 @@ public record LiteratureSchema(
     @Schema(description = "Authoren", example = "[Musterfrau, Sabine]") List<String> authors,
     @Schema(description = "Mitarbeiter", example = "[Mustermann, Max]") List<String> collaborators,
     @Schema(description = "Kurzrefarat") String shortReport,
-    @Schema(description = "Gliederung") String outline) {}
+    @Schema(description = "Gliederung") String outline,
+    @Nullable List<LiteratureEncodingSchema> encoding) {}

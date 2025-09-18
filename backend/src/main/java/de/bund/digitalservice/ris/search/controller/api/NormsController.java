@@ -5,7 +5,7 @@ import static org.springframework.http.HttpHeaders.CONTENT_DISPOSITION;
 import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.exception.CustomValidationException;
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
-import de.bund.digitalservice.ris.search.mapper.NormResponseMapper;
+import de.bund.digitalservice.ris.search.mapper.NormSchemaMapper;
 import de.bund.digitalservice.ris.search.mapper.NormSearchResponseMapper;
 import de.bund.digitalservice.ris.search.mapper.SortParamsConverter;
 import de.bund.digitalservice.ris.search.models.api.parameters.NormsSearchParams;
@@ -173,7 +173,7 @@ public class NormsController {
     Optional<Norm> result = normsService.getByExpressionEli(eli);
 
     return result
-        .map(r -> ResponseEntity.ok(NormResponseMapper.fromDomain(r)))
+        .map(r -> ResponseEntity.ok(NormSchemaMapper.fromDomain(r)))
         .orElse(ResponseEntity.notFound().build());
   }
 

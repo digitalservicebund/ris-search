@@ -9,7 +9,7 @@ public class CaseLawSchemaMapper {
 
   public static CaseLawSchema fromDomain(CaseLawDocumentationUnit doc) {
     String entityURI = ApiConfig.Paths.CASELAW + "/" + doc.documentNumber();
-    var encodings = CaseLawEncodingSchemaMapper.fromDomain(doc);
+    var encodings = EncodingSchemaFactory.caselawEncodingSchemas(entityURI);
 
     return CaseLawSchema.builder()
         // JSON-LD-specific fields
@@ -40,7 +40,6 @@ public class CaseLawSchemaMapper {
         .keywords(doc.keywords())
         .decisionName(doc.decisionName())
         .deviatingDocumentNumber(doc.deviatingDocumentNumber())
-        // .publicationStatus(doc.publicationStatus())
         // fields with different name
         .courtName(doc.courtKeyword())
         // end

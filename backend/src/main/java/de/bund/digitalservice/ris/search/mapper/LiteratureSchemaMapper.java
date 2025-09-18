@@ -8,7 +8,8 @@ public class LiteratureSchemaMapper {
   private LiteratureSchemaMapper() {}
 
   public static LiteratureSchema fromDomain(Literature entity) {
-    String entityURI = ApiConfig.Paths.LITERATURE + "/" + entity.documentNumber();
+    var entityURI = ApiConfig.Paths.LITERATURE + "/" + entity.documentNumber();
+    var encodings = EncodingSchemaFactory.literatureEncodingSchemas(entityURI);
 
     return LiteratureSchema.builder()
         .id(entityURI)
@@ -24,6 +25,7 @@ public class LiteratureSchemaMapper {
         .collaborators(entity.collaborators())
         .shortReport(entity.shortReport())
         .outline(entity.outline())
+        .encoding(encodings)
         .build();
   }
 }
