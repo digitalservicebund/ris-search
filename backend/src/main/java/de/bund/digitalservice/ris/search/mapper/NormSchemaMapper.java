@@ -17,47 +17,15 @@ import java.util.List;
 import javax.annotation.Nullable;
 import org.springframework.http.MediaType;
 
-public class NormResponseMapper {
-  private NormResponseMapper() {}
+public class NormSchemaMapper {
+  private NormSchemaMapper() {}
 
   public static LegislationWorkSchema fromDomain(Norm norm) {
     String contentBaseUrl = ApiConfig.Paths.LEGISLATION + "/";
     String expressionEli = norm.getExpressionEli();
     String manifestationEliXml = norm.getManifestationEliExample();
 
-    List<LegislationObjectSchema> encoding;
-    if (manifestationEliXml != null) {
-      String xmlContentUrl = contentBaseUrl + manifestationEliXml;
-      String htmlContentUrl = norm.getHtmlContentUrl();
-      String zipContentUrl = xmlContentUrl.substring(0, xmlContentUrl.lastIndexOf('/')) + ".zip";
-
-      String htmlId = contentBaseUrl + manifestationEliXml.replace(".xml", "/html");
-      String xmlId = contentBaseUrl + manifestationEliXml.replace(".xml", "/xml");
-      String zipId = zipContentUrl.replace(".zip", "/zip");
-
-      encoding =
-          List.of(
-              LegislationObjectSchema.builder()
-                  .id(htmlId)
-                  .contentUrl(htmlContentUrl)
-                  .encodingFormat("text/html")
-                  .inLanguage("de")
-                  .build(),
-              LegislationObjectSchema.builder()
-                  .id(xmlId)
-                  .contentUrl(xmlContentUrl)
-                  .encodingFormat("application/xml")
-                  .inLanguage("de")
-                  .build(),
-              LegislationObjectSchema.builder()
-                  .id(zipId)
-                  .contentUrl(zipContentUrl)
-                  .encodingFormat("application/zip")
-                  .inLanguage("de")
-                  .build());
-    } else {
-      encoding = Collections.emptyList();
-    }
+    var encodings = getEncodings(contentBaseUrl, manifestationEliXml);
 
     LegalForceStatus legislationLegalForce =
         DateUtils.isActive(norm.getEntryIntoForceDate(), norm.getExpiryDate())
@@ -74,7 +42,7 @@ public class NormResponseMapper {
             .legislationIdentifier(expressionEli)
             .legislationLegalForce(legislationLegalForce)
             .temporalCoverage(temporalCoverage)
-            .encoding(encoding)
+            .encoding(encodings)
             .tableOfContents(buildTableOfContents(norm.getTableOfContents()))
             .hasPart(buildPartList(norm, expressionId))
             .build();
@@ -93,6 +61,19 @@ public class NormResponseMapper {
         .workExample(expression)
         .isPartOf(publicationIssue)
         .build();
+  }
+
+  private static List<LegislationObjectSchema> getEncodings(
+      String contentBaseUrl, @Nullable String manifestationEli) {
+    if (manifestationEli == null) {
+      return Collections.emptyList();
+    }
+
+    var encodingBaseUrl = contentBaseUrl + manifestationEli.replace(".xml", "");
+    var encodingZipBaseUrl =
+        contentBaseUrl + manifestationEli.substring(0, manifestationEli.lastIndexOf('/'));
+
+    return EncodingSchemaFactory.legislationEncodingSchemas(encodingBaseUrl, encodingZipBaseUrl);
   }
 
   private static List<TableOfContentsSchema> buildTableOfContents(

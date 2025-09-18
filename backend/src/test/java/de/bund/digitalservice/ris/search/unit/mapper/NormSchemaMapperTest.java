@@ -1,6 +1,6 @@
 package de.bund.digitalservice.ris.search.unit.mapper;
 
-import de.bund.digitalservice.ris.search.mapper.NormResponseMapper;
+import de.bund.digitalservice.ris.search.mapper.NormSchemaMapper;
 import de.bund.digitalservice.ris.search.models.opensearch.Article;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.models.opensearch.TableOfContentsItem;
@@ -15,7 +15,7 @@ import java.util.Objects;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-class NormResponseMapperTest {
+class NormSchemaMapperTest {
 
   @Test
   void itMapsATableOfContents() {
@@ -53,7 +53,7 @@ class NormResponseMapperTest {
             new TableOfContentsSchema("id2", "marker2", "heading2", List.of()));
 
     List<TableOfContentsSchema> actual =
-        Objects.requireNonNull(NormResponseMapper.fromDomain(norm).workExample()).tableOfContents();
+        Objects.requireNonNull(NormSchemaMapper.fromDomain(norm).workExample()).tableOfContents();
     Assertions.assertEquals(expected, actual);
   }
 
@@ -120,6 +120,6 @@ class NormResponseMapperTest {
                     .build())
             .build();
 
-    Assertions.assertEquals(expectedResponse, NormResponseMapper.fromDomain(norm));
+    Assertions.assertEquals(expectedResponse, NormSchemaMapper.fromDomain(norm));
   }
 }
