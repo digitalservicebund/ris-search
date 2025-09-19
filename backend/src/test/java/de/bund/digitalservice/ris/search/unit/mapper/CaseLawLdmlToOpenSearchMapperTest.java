@@ -14,6 +14,7 @@ class CaseLawLdmlToOpenSearchMapperTest {
 
   private String testCaseLawLdml;
   private final CaseLawLdmlTemplateUtils caseLawLdmlTemplateUtils = new CaseLawLdmlTemplateUtils();
+  private final CaseLawLdmlToOpenSearchMapper mapper = new CaseLawLdmlToOpenSearchMapper();
 
   @BeforeEach
   void beforeEach() throws IOException {
@@ -22,7 +23,7 @@ class CaseLawLdmlToOpenSearchMapperTest {
 
   @Test
   void shouldMapToCaseLawDocumentationUnitCorrectly() {
-    CaseLawDocumentationUnit caseLaw = CaseLawLdmlToOpenSearchMapper.fromString(testCaseLawLdml);
+    CaseLawDocumentationUnit caseLaw = mapper.fromString(testCaseLawLdml);
 
     assertThat(caseLaw.id()).isEqualTo("testDocNumber");
     assertThat(caseLaw.documentationOffice()).isEqualTo("documentationOffice");
