@@ -99,7 +99,7 @@ jobs:
           done
       - name: Run Accessibility Playwright tests on staging - webkit
         if: ${{ matrix.profile == 'internal' }}
-        run: npx playwright test accessibility.spec.ts--project webkit
+        run: npx playwright test accessibility.spec.ts --project webkit
         working-directory: ./frontend
         env:
           RIS_BASE_URL: http://localhost:3000
