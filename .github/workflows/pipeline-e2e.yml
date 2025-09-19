@@ -89,7 +89,7 @@ jobs:
       - name: Install Playwright
         run: npm install @playwright/test@${{ env.PLAYWRIGHT_VERSION }} @axe-core/playwright axe-html-reporter
       - name: Install Playwright Browsers
-        run: npx playwright install --with-deps chromium
+        run: npx playwright install --with-deps chromium firefox webkit
       - name: Wait for containers to be fully up
         timeout-minutes: 5
         run: |
@@ -97,9 +97,16 @@ jobs:
             echo "Waiting for containers to be fully up..."
             sleep 15
           done
-      - name: Run Accessibility Playwright tests on staging
+      - name: Run Accessibility Playwright tests on staging - chromium
         if: ${{ matrix.profile == 'internal' }}
         run: npx playwright test accessibility.spec.ts --project chromium
+        working-directory: ./frontend
+        env:
+          RIS_BASE_URL: http://localhost:3000
+          TZ: Europe/Berlin
+      - name: Run Accessibility Playwright tests on staging - firefox
+        if: ${{ matrix.profile == 'internal' }}
+        run: npx playwright test accessibility.spec.ts --project firefox
         working-directory: ./frontend
         env:
           RIS_BASE_URL: http://localhost:3000
@@ -111,12 +118,14 @@ jobs:
         env:
           RIS_BASE_URL: http://localhost:3000
           TZ: Europe/Berlin
-      - name: Upload test reports (${{ matrix.profile }})
+      - name: Upload screenshots and traces of failed tests (${{ matrix.profile }})
         uses: actions/upload-artifact@v4
-        if: ${{ !cancelled() }}
+        if: ${{ failure() }}
         with:
-          name: playwright-report-${{ matrix.profile }}-chromium
-          path: frontend/playwright-report
+          name: failed-e2e-tests-${{ inputs.project }}-${{ matrix.profile }}
+          path: |
+            frontend/playwright-report/**/*.png
+            frontend/playwright-report/**/*.zip
           retention-days: 5
       - name: Output logs on failure (${{ matrix.profile }})
         if: ${{ failure() }}
