@@ -13,7 +13,7 @@ import org.springframework.data.elasticsearch.annotations.Setting;
 @Setting(settingPath = "/openSearch/german_analyzer.json")
 @Mapping(mappingPath = "/openSearch/caselaw_mappings.json")
 public record EcliCrawlerDocument(
-    @Id @Field(name = "document_number") String document_number,
+    @Id @Field(name = "documentNumber") String documentNumber,
     @Field(name = "filename") String filename,
     @Field(name = "ecli") String ecli,
     @Field(name = "court_type") String courtType,

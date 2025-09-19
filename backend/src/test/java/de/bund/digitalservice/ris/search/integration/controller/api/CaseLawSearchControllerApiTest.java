@@ -260,7 +260,7 @@ class CaseLawSearchControllerApiTest extends ContainersIntegrationBase {
     mockMvc
         .perform(
             MockMvcRequestBuilders.get(
-                    ApiConfig.Paths.CASELAW + "?query=document_number:BFRE000047655")
+                    ApiConfig.Paths.CASELAW + "?query=documentNumber:BFRE000047655")
                 .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk());
   }

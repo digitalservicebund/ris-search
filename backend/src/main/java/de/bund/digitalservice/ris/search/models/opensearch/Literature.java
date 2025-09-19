@@ -34,7 +34,7 @@ public record Literature(
     private Fields() {}
 
     public static final String ID = "id";
-    public static final String DOCUMENT_NUMBER = "document_number";
+    public static final String DOCUMENT_NUMBER = "documentNumber";
     public static final String YEARS_OF_PUBLICATION = "years_of_publication";
     public static final String DOCUMENT_TYPES = "document_types";
 

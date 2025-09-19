@@ -7,6 +7,7 @@ import static org.mockito.Mockito.when;
 
 import de.bund.digitalservice.ris.search.eclicrawler.schema.sitemap.Sitemap;
 import de.bund.digitalservice.ris.search.eclicrawler.schema.sitemap.Url;
+import de.bund.digitalservice.ris.search.eclicrawler.schema.sitemapindex.SitemapIndexEntry;
 import de.bund.digitalservice.ris.search.eclicrawler.schema.sitemapindex.Sitemapindex;
 import de.bund.digitalservice.ris.search.eclicrawler.service.EcliMarshaller;
 import de.bund.digitalservice.ris.search.eclicrawler.service.EcliSitemapService;
@@ -152,5 +153,43 @@ class SitemapServiceTest {
 
     var actual = service.getSitemapFile(filename);
     Assertions.assertEquals(expectedContent, actual);
+  }
+
+  @Test
+  void itWritesSitemapIndices() throws JAXBException {
+    String baseUrl = "http://base/";
+    LocalDate date = LocalDate.of(2025, 1, 1);
+    Sitemap sitemap = new Sitemap().setName("2025/01/01/sitemap_1.xml");
+    Sitemapindex index = new Sitemapindex().setName("2025/01/01/sitemap_index_1.xml");
+    SitemapIndexEntry indexEntry =
+        new SitemapIndexEntry().setLoc(baseUrl + "2025/01/01/sitemap_1.xml");
+    index.setSitemaps(List.of(indexEntry));
+
+    String content = EcliMarshaller.marshallSitemapIndex(index);
+
+    service.writeSitemapsIndices(PATH_PREFIX, baseUrl, date, List.of(sitemap));
+
+    verify(bucket).save(PATH_PREFIX + "2025/01/01/sitemap_index_1.xml", content);
+  }
+
+  @Test
+  void itPartitionsSitemapIndicesAccordingToMaxEntries() throws JAXBException {
+    List<Sitemap> sitemaps = new ArrayList<>();
+    for (int i = 0; i <= 10001; i++) {
+      sitemaps.add(new Sitemap().setName(String.valueOf(i)));
+    }
+    LocalDate day = LocalDate.of(2025, 1, 1);
+
+    ArgumentCaptor<String> argument = ArgumentCaptor.forClass(String.class);
+    Mockito.doNothing().when(bucket).save(argument.capture(), any());
+
+    List<Sitemapindex> indicesList =
+        service.writeSitemapsIndices(PATH_PREFIX, "url", day, sitemaps);
+
+    List<String> values = argument.getAllValues();
+
+    Assertions.assertTrue(values.contains(PATH_PREFIX + "2025/01/01/sitemap_index_1.xml"));
+    Assertions.assertTrue(values.contains(PATH_PREFIX + "2025/01/01/sitemap_index_2.xml"));
+    Assertions.assertEquals(2, indicesList.size());
   }
 }

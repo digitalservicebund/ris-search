@@ -24,7 +24,6 @@ public class EcliSitemapService {
 
   JAXBContext jaxbCtx;
 
-  public static final String ROBOTS_TXT = "robots.txt";
   private static final int MAX_SITEMAP_URLS = 10000;
 
   public EcliSitemapService(PortalBucket portalBucket) throws JAXBException {

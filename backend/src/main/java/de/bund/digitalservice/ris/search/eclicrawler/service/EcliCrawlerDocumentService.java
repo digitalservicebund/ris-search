@@ -67,9 +67,9 @@ public class EcliCrawlerDocumentService {
             .filter(
                 doc ->
                     !changes.stream()
-                        .map(EcliCrawlerDocument::document_number)
+                        .map(EcliCrawlerDocument::documentNumber)
                         .toList()
-                        .contains(doc.document_number()));
+                        .contains(doc.documentNumber()));
 
     return Stream.concat(changes.stream(), removeChangedDocuments).toList();
   }
@@ -125,7 +125,7 @@ public class EcliCrawlerDocumentService {
             .map(
                 ecliDocument ->
                     new EcliCrawlerDocument(
-                        ecliDocument.document_number(),
+                        ecliDocument.documentNumber(),
                         ecliDocument.filename(),
                         ecliDocument.ecli(),
                         ecliDocument.courtType(),

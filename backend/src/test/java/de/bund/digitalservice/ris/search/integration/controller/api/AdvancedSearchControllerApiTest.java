@@ -268,7 +268,7 @@ class AdvancedSearchControllerApiTest extends ContainersIntegrationBase {
   }
 
   @ParameterizedTest
-  @ValueSource(strings = {"document_number", "DOKUMENTNUMMER", "NR"})
+  @ValueSource(strings = {"documentNumber", "DOKUMENTNUMMER", "NR"})
   @DisplayName("Should return 200 when looking for a specific document number and aliases")
   void shouldReturnOkDocumentNumberQuery(String queryParam) throws Exception {
 
@@ -449,7 +449,7 @@ class AdvancedSearchControllerApiTest extends ContainersIntegrationBase {
       strings = {
         ApiConfig.Paths.DOCUMENT_ADVANCED_SEARCH + "?query=id:foobar%20OR",
         ApiConfig.Paths.LEGISLATION_ADVANCED_SEARCH + "?query=work_eli:foobar%20OR",
-        ApiConfig.Paths.CASELAW_ADVANCED_SEARCH + "?query=document_number:BFRE000047655%20OR"
+        ApiConfig.Paths.CASELAW_ADVANCED_SEARCH + "?query=documentNumber:BFRE000047655%20OR"
       })
   @DisplayName("Should return an error when the search has invalid lucene query")
   void invalidLuceneQuery(String url) throws Exception {

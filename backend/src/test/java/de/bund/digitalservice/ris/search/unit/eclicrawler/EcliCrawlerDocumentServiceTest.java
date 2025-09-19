@@ -15,7 +15,10 @@ import de.bund.digitalservice.ris.search.service.CaseLawService;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -39,9 +42,9 @@ public class EcliCrawlerDocumentServiceTest {
         new EcliCrawlerDocumentService(caseLawBucket, repository, caselawService, "frontend-url/");
   }
 
-  private CaseLawDocumentationUnit getTestDocUnit() {
+  private CaseLawDocumentationUnit getTestDocUnit(String docNumber) {
     return CaseLawDocumentationUnit.builder()
-        .documentNumber("docNumber")
+        .documentNumber(docNumber)
         .ecli("ECLI:DE:XX:2025:1111111")
         .courtType("BGH")
         .decisionDate(LocalDate.of(2025, 1, 1))
@@ -52,7 +55,7 @@ public class EcliCrawlerDocumentServiceTest {
   private EcliCrawlerDocument getTestDocument(String docNumber, boolean isPublished) {
     return new EcliCrawlerDocument(
         docNumber,
-        "filename.xml",
+        docNumber + ".xml",
         "ECLI:DE:XX:2025:1111111",
         "BGH",
         "2025-01-01",
@@ -63,7 +66,7 @@ public class EcliCrawlerDocumentServiceTest {
 
   @Test
   void itCreatesAFullDiffWithAnEmptyRepository() throws ObjectStoreServiceException {
-    var testUnit = getTestDocUnit();
+    var testUnit = getTestDocUnit("docNumber");
     when(caseLawBucket.getAllKeys()).thenReturn(List.of("key1.xml"));
     when(caselawService.getFromBucket("key1.xml")).thenReturn(Optional.of(testUnit));
     when(repository.findAllByIsPublishedIsTrueAndFilenameNotIn(List.of("key1.xml")))
@@ -78,8 +81,8 @@ public class EcliCrawlerDocumentServiceTest {
   }
 
   @Test
-  void itCreatesAFullDiffAndDetectsRedundantDocuments() throws ObjectStoreServiceException {
-    var testUnit = getTestDocUnit();
+  void itCreatesAFullDiffAndDetectsDocumentsThatGotRemoved() throws ObjectStoreServiceException {
+    var testUnit = getTestDocUnit("docNumber");
     var deletedDoc = getTestDocument("abc", false);
 
     when(caseLawBucket.getAllKeys()).thenReturn(List.of("key1.xml", "key2.xml"));
@@ -98,7 +101,7 @@ public class EcliCrawlerDocumentServiceTest {
 
   @Test
   void itCreatesChangesFromChangelog() throws ObjectStoreServiceException {
-    var testUnit = getTestDocUnit();
+    var testUnit = getTestDocUnit("docNumber");
     var deletedDoc = getTestDocument("abc", false);
 
     Changelog log = new Changelog();
@@ -115,5 +118,50 @@ public class EcliCrawlerDocumentServiceTest {
 
     Assertions.assertEquals(expectedDocument, actualDocuments.getFirst());
     Assertions.assertEquals(deletedDoc, actualDocuments.get(1));
+  }
+
+  @Test
+  void itCreatesAFullDiffWhenEncounteringAChangeAll() throws ObjectStoreServiceException {
+    var documentToBeChanged = getTestDocUnit("changedDoc");
+    var documentToBeChangedFilename = "changedDoc.xml";
+
+    var documentToBeDeleted = getTestDocument("deleteDoc", false);
+
+    var createdDuringChangeAll = getTestDocument("createdDuringChangeAll", true);
+    var unitCreatedDuringChangeAll = getTestDocUnit("createdDuringChangeAll");
+    var deletedDuringChangeAll = getTestDocument("deletedDuringChangeAll", false);
+
+    Changelog log = new Changelog();
+    log.setChanged(new HashSet<>(List.of(documentToBeChangedFilename)));
+    log.setDeleted(new HashSet<>(List.of(documentToBeDeleted.filename())));
+    Changelog changeAll = new Changelog();
+    changeAll.setChangeAll(true);
+
+    // republish existing files and remove missing ones during changeall
+    when(caseLawBucket.getAllKeys()).thenReturn(List.of(createdDuringChangeAll.filename()));
+    when(caselawService.getFromBucket(createdDuringChangeAll.filename()))
+        .thenReturn(Optional.of(unitCreatedDuringChangeAll));
+    when(repository.findAllByIsPublishedIsTrueAndFilenameNotIn(
+            List.of(createdDuringChangeAll.filename())))
+        .thenReturn(List.of(deletedDuringChangeAll));
+
+    // create and delete files according to changelog
+    when(caselawService.getFromBucket(documentToBeChangedFilename))
+        .thenReturn(Optional.of(documentToBeChanged));
+    when(repository.findAllByFilenameIn(log.getDeleted())).thenReturn(List.of(documentToBeDeleted));
+
+    var actualDocuments = documentService.getFromChangelogs(List.of(changeAll, log));
+
+    Assertions.assertEquals(4, actualDocuments.size());
+
+    Map<String, EcliCrawlerDocument> result =
+        actualDocuments.stream()
+            .collect(Collectors.toMap(EcliCrawlerDocument::documentNumber, Function.identity()));
+
+    Assertions.assertTrue(result.get(documentToBeChanged.documentNumber()).isPublished());
+    Assertions.assertTrue(result.get(createdDuringChangeAll.documentNumber()).isPublished());
+
+    Assertions.assertFalse(result.get(deletedDuringChangeAll.documentNumber()).isPublished());
+    Assertions.assertFalse(result.get(documentToBeDeleted.documentNumber()).isPublished());
   }
 }
