@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { Breadcrumb } from "primevue";
 import { DocumentKind } from "~/types";
 import ChevronRightIcon from "~icons/material-symbols/chevron-right";
 import HomeFilledIcon from "~icons/material-symbols/home";
