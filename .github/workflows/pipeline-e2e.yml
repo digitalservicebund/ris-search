@@ -97,9 +97,23 @@ jobs:
             echo "Waiting for containers to be fully up..."
             sleep 15
           done
-      - name: Run Accessibility Playwright tests on staging
+      - name: Run Accessibility Playwright tests on staging - chromium
         if: ${{ matrix.profile == 'internal' }}
-        run: npx playwright test accessibility.spec.ts
+        run: npx playwright test accessibility.spec.ts --project chromium
+        working-directory: ./frontend
+        env:
+          RIS_BASE_URL: http://localhost:3000
+          TZ: Europe/Berlin
+      - name: Run Accessibility Playwright tests on staging - firefox
+        if: ${{ matrix.profile == 'internal' }}
+        run: npx playwright test accessibility.spec.ts --project firefox
+        working-directory: ./frontend
+        env:
+          RIS_BASE_URL: http://localhost:3000
+          TZ: Europe/Berlin
+      - name: Run Accessibility Playwright tests on staging - webkit
+        if: ${{ matrix.profile == 'internal' }}
+        run: npx playwright test accessibility.spec.ts--project webkit
         working-directory: ./frontend
         env:
           RIS_BASE_URL: http://localhost:3000
@@ -118,7 +132,7 @@ jobs:
           name: failed-e2e-tests-${{ inputs.project }}-${{ matrix.profile }}
           path: |
             frontend/playwright-report/**/*.png
-            frontend/playwright-report/**/trace.zip
+            frontend/playwright-report/**/*.zip
           retention-days: 5
       - name: Output logs on failure (${{ matrix.profile }})
         if: ${{ failure() }}
