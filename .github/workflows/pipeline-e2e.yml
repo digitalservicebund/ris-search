@@ -111,12 +111,14 @@ jobs:
         env:
           RIS_BASE_URL: http://localhost:3000
           TZ: Europe/Berlin
-      - name: Upload test reports (${{ matrix.profile }})
+      - name: Upload screenshots and traces of failed tests (${{ matrix.profile }})
         uses: actions/upload-artifact@v4
-        if: ${{ !cancelled() }}
+        if: ${{ failure() }}
         with:
-          name: playwright-report-${{ matrix.profile }}-chromium
-          path: frontend/playwright-report
+          name: failed-e2e-tests-${{ inputs.project }}-${{ matrix.profile }}
+          path: |
+            frontend/playwright-report/**/*.png
+            frontend/playwright-report/**/trace.zip
           retention-days: 5
       - name: Output logs on failure (${{ matrix.profile }})
         if: ${{ failure() }}
