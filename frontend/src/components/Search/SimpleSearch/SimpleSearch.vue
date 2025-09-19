@@ -100,7 +100,7 @@ useHead({ title });
 
 <template>
   <div class="pb-24">
-    <div class="ris-heading2-regular inline-block font-semibold">Suche</div>
+    <h1 class="ris-heading2-regular inline-block font-semibold">Suche</h1>
   </div>
   <SimpleSearchInput
     :model-value="values.query.value"
@@ -121,8 +121,6 @@ useHead({ title });
       <DateRangeFilter v-if="documentKind === DocumentKind.CaseLaw" />
     </fieldset>
     <div id="main" class="w-full flex-col justify-end gap-8 lg:w-9/12">
-      <h1 class="sr-only">Suchergebnisse</h1>
-
       <Pagination
         :is-loading="isLoading"
         navigation-position="bottom"

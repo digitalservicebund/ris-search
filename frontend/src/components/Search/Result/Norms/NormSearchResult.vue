@@ -93,7 +93,11 @@ function openResult(url: string) {
             :to="`${link}#${highlight.location || ''}`"
             @click="openResult(`${link}#${highlight.location || ''}`)"
           >
-            <span v-html="sanitizeSearchResult(highlight.name)" />
+            <div
+              role="heading"
+              aria-level="3"
+              v-html="sanitizeSearchResult(highlight.name)"
+            />
           </NuxtLink>
         </div>
         <div

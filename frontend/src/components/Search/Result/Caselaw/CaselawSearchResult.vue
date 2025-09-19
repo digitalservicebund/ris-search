@@ -181,7 +181,10 @@ function trackResultClick(url: string) {
           external
           @click="trackResultClick(`${metadata.url}#${section.id}`)"
         >
-          {{ section.title }}:</NuxtLink
+          <div role="heading" aria-level="3">
+            {{ section.title }}
+          </div>
+          : </NuxtLink
         >{{ " " }}
         <span
           data-testid="highlighted-field"

@@ -42,11 +42,10 @@ useHead({ title: pageTitle.value });
 <template>
   <NuxtLayout>
     <div class="container pt-48 pb-24">
-      <h1 class="sr-only">Fehlerseite</h1>
       <template v-if="isNotFoundError">
-        <h2 class="ris-heading2-regular inline-block font-semibold">
+        <h1 class="ris-heading2-regular inline-block font-semibold">
           Diese Seite existiert nicht
-        </h2>
+        </h1>
         <p class="ris-body1-regular mt-8">
           Überprüfen Sie den eingegebenen Link<ClientOnly
             >: {{ locationClientOnly }}</ClientOnly
@@ -64,15 +63,15 @@ useHead({ title: pageTitle.value });
       <template v-else-if="isTokenRefreshError">
         <div class="flex items-center gap-24">
           <LoadingSpinner />
-          <h2 class="ris-heading2-regular inline-block">
+          <h1 class="ris-heading2-regular inline-block">
             Sie werden angemeldet…
-          </h2>
+          </h1>
         </div>
       </template>
       <template v-else>
-        <h2 class="ris-heading2-regular inline-block font-semibold">
+        <h1 class="ris-heading2-regular inline-block font-semibold">
           Es gab leider einen Fehler
-        </h2>
+        </h1>
         <p v-if="isInternalServerError" class="ris-body1-regular mt-24">
           Probieren Sie es zu einem späteren Moment noch einmal.<br />Wir haben
           den Fehler dokumentiert und an unsere Entwickler:innen weitergeleitet.
