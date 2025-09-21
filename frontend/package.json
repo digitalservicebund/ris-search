@@ -86,7 +86,7 @@
     "json-schema-to-typescript-lite": "^15.0.0",
     "license-checker": "^25.0.1",
     "msw": "^2.10.2",
-    "nuxt": "3.17.5",
+    "nuxt": "4.1.2",
     "nuxt-auth-utils": "^0.5.20",
     "nuxt-security": "2.2.0",
     "prettier": "^3.5.3",
