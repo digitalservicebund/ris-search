@@ -13,8 +13,12 @@ describe("DataFieldList", () => {
       },
     });
 
-    expect(screen.getByRole("button", { name: "Field 1" })).toBeVisible();
-    expect(screen.getByRole("button", { name: "Field 2" })).toBeVisible();
+    expect(
+      screen.getByRole("button", { name: "Field 1 suchen" }),
+    ).toBeVisible();
+    expect(
+      screen.getByRole("button", { name: "Field 2 suchen" }),
+    ).toBeVisible();
   });
 
   it("emits the data field on click", async () => {
@@ -29,7 +33,7 @@ describe("DataFieldList", () => {
       },
     });
 
-    await user.click(screen.getByRole("button", { name: "Field 1" }));
+    await user.click(screen.getByRole("button", { name: "Field 1 suchen" }));
     expect(emitted("clickDataField")).toEqual([
       [{ label: "Field 1", pattern: "field1" }],
     ]);

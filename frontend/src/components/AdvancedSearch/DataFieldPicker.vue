@@ -24,6 +24,9 @@ const query = defineModel<string>({ default: "" });
 
 const queryInputEl = useTemplateRef("queryInputEl");
 const queryInputId = useId();
+const queryDescriptionId = useId();
+
+const dataFieldListId = useId();
 
 const formattedCount = computed(() => formatNumberWithSeparators(count));
 const formattedDocumentKind = computed(() => formatDocumentKind(documentKind));
@@ -62,7 +65,10 @@ function insertInQuery({ pattern }: DataField) {
 
 <template>
   <div class="flex flex-col gap-8">
-    <span class="ris-label2-bold lg:ris-label1-regular">
+    <span
+      :id="queryDescriptionId"
+      class="ris-label2-bold lg:ris-label1-regular"
+    >
       In {{ formattedCount }} {{ formattedDocumentKind }} suchen
     </span>
 
@@ -72,6 +78,7 @@ function insertInQuery({ pattern }: DataField) {
         :id="queryInputId"
         ref="queryInputEl"
         v-model="query"
+        :aria-describedby="queryDescriptionId"
         size="large"
         class="grow"
       />
@@ -84,13 +91,14 @@ function insertInQuery({ pattern }: DataField) {
       </InputGroupAddon>
     </InputGroup>
 
-    <span class="ris-label2-bold">
+    <label :id="dataFieldListId" class="ris-label2-bold">
       Diese Datenfelder können gezielt durchsucht werden:
-    </span>
+    </label>
 
     <div class="hidden lg:block">
       <DataFieldList
         :data-fields="dataFieldsForDokumentKind"
+        :label-id="dataFieldListId"
         @click-data-field="insertInQuery"
       />
     </div>
@@ -102,6 +110,7 @@ function insertInQuery({ pattern }: DataField) {
       >
         <DataFieldList
           :data-fields="dataFieldsForDokumentKind"
+          :label-id="dataFieldListId"
           @click-data-field="insertInQuery"
         />
       </RisSingleAccordion>

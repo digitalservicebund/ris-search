@@ -38,11 +38,11 @@ describe("DataFieldPicker", () => {
     });
 
     expect(
-      screen.getByRole("button", { name: "Caselaw 1" }),
+      screen.getByRole("button", { name: "Caselaw 1 suchen" }),
     ).toBeInTheDocument();
 
     expect(
-      screen.getByRole("button", { name: "Caselaw 2" }),
+      screen.getByRole("button", { name: "Caselaw 2 suchen" }),
     ).toBeInTheDocument();
 
     expect(
@@ -51,9 +51,13 @@ describe("DataFieldPicker", () => {
 
     await rerender({ documentKind: DocumentKind.Norm });
 
-    expect(screen.getByRole("button", { name: "Norm 1" })).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Norm 1 suchen" }),
+    ).toBeInTheDocument();
 
-    expect(screen.getByRole("button", { name: "Norm 2" })).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Norm 2 suchen" }),
+    ).toBeInTheDocument();
 
     expect(
       screen.queryByRole("button", { name: /Caselaw/ }),
@@ -108,7 +112,7 @@ describe("DataFieldPicker", () => {
       },
     });
 
-    await user.click(screen.getByRole("button", { name: "Caselaw 1" }));
+    await user.click(screen.getByRole("button", { name: "Caselaw 1 suchen" }));
 
     expect(emitted("update:modelValue")).toEqual([["test query CS:"]]);
   });
@@ -129,7 +133,7 @@ describe("DataFieldPicker", () => {
       },
     });
 
-    await user.click(screen.getByRole("button", { name: "Caselaw 1" }));
+    await user.click(screen.getByRole("button", { name: "Caselaw 1 suchen" }));
 
     expect(emitted("update:modelValue")).toEqual([["test query CS:"]]);
   });
@@ -160,7 +164,7 @@ describe("DataFieldPicker", () => {
       },
     });
 
-    await user.click(screen.getByRole("button", { name: "Caselaw 1" }));
+    await user.click(screen.getByRole("button", { name: "Caselaw 1 suchen" }));
 
     await rerender({ modelValue });
 
@@ -198,7 +202,7 @@ describe("DataFieldPicker", () => {
       },
     });
 
-    await user.click(screen.getByRole("button", { name: "Caselaw 1" }));
+    await user.click(screen.getByRole("button", { name: "Caselaw 1 suchen" }));
 
     await rerender({ modelValue });
 
@@ -226,7 +230,7 @@ describe("DataFieldPicker", () => {
       },
     });
 
-    await user.click(screen.getByRole("button", { name: "Caselaw 1" }));
+    await user.click(screen.getByRole("button", { name: "Caselaw 1 suchen" }));
 
     expect(emitted("update:modelValue")).toEqual([["CS:"]]);
   });
@@ -247,7 +251,7 @@ describe("DataFieldPicker", () => {
       },
     });
 
-    await user.click(screen.getByRole("button", { name: "Caselaw 1" }));
+    await user.click(screen.getByRole("button", { name: "Caselaw 1 suchen" }));
 
     expect(emitted("update:modelValue")).toEqual([["test query CS:"]]);
   });

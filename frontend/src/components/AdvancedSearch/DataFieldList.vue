@@ -15,12 +15,16 @@ defineEmits<{
 </script>
 
 <template>
-  <ul class="flex flex-col gap-4 md:flex-row md:flex-wrap">
+  <ul
+    aria-label="Durchsuchbare Datenfelder"
+    class="flex flex-col gap-4 md:flex-row md:flex-wrap"
+  >
     <li v-for="field in dataFields" :key="field.pattern">
       <Button
         severity="info"
         size="small"
         rounded
+        :aria-label="`${field.label} suchen`"
         :label="field.label"
         class="gap-4! pl-12! text-nowrap"
         @click="$emit('clickDataField', field)"
