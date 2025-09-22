@@ -26,7 +26,7 @@ import { useBackendURL } from "~/composables/useBackendURL";
 import type { CaseLaw } from "~/types";
 import { getEncodingURL } from "~/utils/caseLawUtils";
 import { dateFormattedDDMMYYYY } from "~/utils/dateFormatting";
-import { getAllSectionsFromHtml } from "~/utils/htmlParser";
+import { getAllSectionsFromHtml, parseDocument } from "~/utils/htmlParser";
 import { removeOuterParentheses } from "~/utils/textFormatting";
 import IcBaselineSubject from "~icons/ic/baseline-subject";
 import IcOutlineInfo from "~icons/ic/outline-info";
@@ -48,7 +48,93 @@ const { data: html, error: contentError } = await useFetch<string>(
   },
 );
 
-useHead({ title: caseLaw.value?.fileNumbers?.[0] });
+const truncate = (s: string, n: number) =>
+  s.length <= n ? s : s.slice(0, n).replace(/\s+\S*$/, "") + "…";
+
+const toCourtAbbrev = (full?: string) => {
+  if (!full) return "";
+  const map: Record<string, string> = {
+    Bundesverfassungsgericht: "BVerfG",
+    Bundesgerichtshof: "BGH",
+    Bundessozialgericht: "BSG",
+    Bundesverwaltungsgericht: "BVerwG",
+    Bundesfinanzhof: "BFH",
+    Bundesarbeitsgericht: "BAG",
+  };
+  return map[full] ?? full;
+};
+
+const buildOgTitle = (cl?: CaseLaw) => {
+  if (!cl) return undefined;
+
+  const court = toCourtAbbrev(cl.courtName);
+  const dtype = cl.documentType || "Gerichtsentscheidung";
+  const date = cl.decisionDate ? dateFormattedDDMMYYYY(cl.decisionDate) : "";
+  const file = cl.fileNumbers?.[0] || "";
+
+  const parts = [
+    court && `${court}:`,
+    dtype,
+    date && `vom ${date}`,
+    file && `– ${file}`,
+  ]
+    .filter(Boolean)
+    .join(" ");
+
+    return truncate(parts, 55) || undefined;
+};
+
+const ogTitle = buildOgTitle(caseLaw.value ?? undefined);
+
+const extractDescription = (
+  cl?: CaseLaw | null,
+  htmlContent?: string | null,
+) => {
+  if (!cl) return undefined;
+
+  const leitsatz = cl.guidingPrinciple || cl.headnote || cl.otherHeadnote;
+
+  if (leitsatz) {
+    const sentences = leitsatz.split(/(?<=[.!?])\s+/).filter(Boolean);
+    const firstTwo = sentences.slice(0, 2).join(" ");
+    return truncate(firstTwo, 150);
+  }
+
+  if (!htmlContent) return undefined;
+
+  const doc = parseDocument(htmlContent);
+  const firstP = doc.querySelector("p");
+  const text = firstP?.textContent?.trim();
+
+  if (!text) return undefined;
+
+  const sentences = text.split(/(?<=[.!?])\s+/).filter(Boolean);
+  const firstTwo = sentences.slice(0, 2).join(" ");
+  return truncate(firstTwo, 150);
+};
+
+const ogDescription = extractDescription(
+  caseLaw.value ?? undefined,
+  html.value ?? undefined,
+);
+
+const reqUrl = useRequestURL();
+const canonicalUrl = `${reqUrl.origin}${reqUrl.pathname}`;
+
+useHead({
+  title: ogTitle,
+  link: [{ rel: "canonical", href: canonicalUrl }],
+  meta: [
+    { name: "description", content: ogDescription || "Gerichtsentscheidung" },
+    { property: "og:title", content: ogTitle },
+    { property: "og:description", content: ogDescription },
+    { property: "og:url", content: canonicalUrl },
+    { property: "og:image", content: "/og_image.png" },
+    { name: "twitter:title", content: ogTitle },
+    { name: "twitter:description", content: ogDescription },
+    { name: "twitter:image", content: "/og_image.png" },
+  ],
+});
 
 definePageMeta({ layout: "base" }); // use "base" layout to allow for full-width tab backgrounds
 
