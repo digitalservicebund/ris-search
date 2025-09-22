@@ -54,7 +54,7 @@ const testPages = [
   // },
   {
     name: "Article View Page",
-    url: "/norms/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu/regelungstext-1/art-z1",
+    url: "/norms/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu/art-z1",
   },
 ];
 test.describe("General Pages Accessibility Tests", () => {
@@ -78,9 +78,7 @@ test.describe("General Pages Accessibility Tests", () => {
 });
 test.describe.skip("View Page Accessibility Tests", () => {
   test(`Norms page should not have accessibility issues`, async ({ page }) => {
-    await page.goto(
-      "/norms/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu/regelungstext-1",
-    );
+    await page.goto("/norms/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu");
     await page.waitForLoadState("networkidle");
     const tabsAnalysisResults = [];
     tabsAnalysisResults[0] = await new AxeBuilder({ page }).analyze();

@@ -73,7 +73,7 @@ test("can navigate to a single norm article and between articles", async ({
   page,
 }) => {
   const mainExpressionEliUrl =
-    "/norms/eli/bund/bgbl-1/2000/s1016/2023-04-26/10/deu/regelungstext-1";
+    "/norms/eli/bund/bgbl-1/2000/s1016/2023-04-26/10/deu";
   await page.goto(mainExpressionEliUrl);
 
   await test.step("Navigate from main norm view to a single article", async () => {
@@ -103,7 +103,7 @@ test("can navigate to a single norm article and between articles", async ({
 
   await test.step("Navigate back between single articles", async () => {
     const mainExpressionEliUrl =
-      "/norms/eli/bund/bgbl-1/2000/s1016/2023-04-26/10/deu/regelungstext-1";
+      "/norms/eli/bund/bgbl-1/2000/s1016/2023-04-26/10/deu";
     await page.goto(mainExpressionEliUrl + "/art-z3");
     await expect(
       page.getByRole("heading", {
@@ -156,7 +156,7 @@ test("can navigate to a single norm article and between articles", async ({
 
 test("can navigate to and view an attachment", async ({ page }) => {
   const mainExpressionEliUrl =
-    "/norms/eli/bund/bgbl-1/2000/s1016/2023-04-26/10/deu/regelungstext-1";
+    "/norms/eli/bund/bgbl-1/2000/s1016/2023-04-26/10/deu";
   await page.goto(mainExpressionEliUrl);
 
   const table = page.getByRole("table");
@@ -187,9 +187,7 @@ test("can navigate to and view an attachment", async ({ page }) => {
 });
 
 test("can view images", async ({ page }) => {
-  await page.goto(
-    "/norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu/regelungstext-1",
-  );
+  await page.goto("/norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu");
 
   await page.getByRole("img", { name: "Beispielbild" }).isVisible();
 
@@ -212,10 +210,9 @@ test.describe("actions menu", () => {
   test("can use link action button to copy link to currently valid expression", async ({
     page,
   }) => {
-    await page.goto(
-      "/norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu/regelungstext-1",
-      { waitUntil: "networkidle" },
-    );
+    await page.goto("/norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu", {
+      waitUntil: "networkidle",
+    });
     const button = page.getByRole("link", {
       name: "Link zur jeweils gültigen Fassung",
     });
@@ -236,27 +233,24 @@ test.describe("actions menu", () => {
       });
       expect(
         clipboardContents.endsWith(
-          "/norms/eli/bund/bgbl-1/2024/383/regelungstext-1",
-          // note the omission of 2024-12-19/1/deu/
+          "/norms/eli/bund/bgbl-1/2024/383",
+          // note the omission of /2024-12-19/1/deu/
         ),
       ).toBe(true);
     });
 
     await test.step("can use the copied link to get back to the original URL", async () => {
       await page.goto(clipboardContents);
-      await page.waitForURL(
-        "/norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu/regelungstext-1",
-      );
+      await page.waitForURL("/norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu");
     });
   });
 
   test("can use permalink action button to copy permalink to viewed expression", async ({
     page,
   }) => {
-    await page.goto(
-      "/norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu/regelungstext-1",
-      { waitUntil: "networkidle" },
-    );
+    await page.goto("/norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu", {
+      waitUntil: "networkidle",
+    });
     const button = page.getByRole("link", {
       name: "Permalink zu dieser Fassung",
     });
@@ -277,17 +271,16 @@ test.describe("actions menu", () => {
       });
       expect(
         clipboardContents.endsWith(
-          "/norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu/regelungstext-1",
+          "/norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu",
         ),
       ).toBe(true);
     });
   });
 
   test("can use print action button to open print menu", async ({ page }) => {
-    await page.goto(
-      "/norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu/regelungstext-1",
-      { waitUntil: "networkidle" },
-    );
+    await page.goto("/norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu", {
+      waitUntil: "networkidle",
+    });
     const button = page.getByRole("button", {
       name: "Drucken",
     });
@@ -306,10 +299,9 @@ test.describe("actions menu", () => {
   });
 
   test("can't use PDF action as it is disabled", async ({ page }) => {
-    await page.goto(
-      "/norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu/regelungstext-1",
-      { waitUntil: "networkidle" },
-    );
+    await page.goto("/norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu", {
+      waitUntil: "networkidle",
+    });
     const button = page.getByRole("button", {
       name: "Als PDF speichern",
     });
@@ -324,10 +316,9 @@ test.describe("actions menu", () => {
   });
 
   test("can use XML action to view norms xml file", async ({ page }) => {
-    await page.goto(
-      "/norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu/regelungstext-1",
-      { waitUntil: "networkidle" },
-    );
+    await page.goto("/norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu", {
+      waitUntil: "networkidle",
+    });
     const button = page.getByRole("link", {
       name: "XML anzeigen",
     });
