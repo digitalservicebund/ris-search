@@ -61,7 +61,7 @@ defineProps<{ hideIntro?: boolean }>();
     </div>
     <div v-else class="space-y-24">
       <div v-if="!hideIntro" class="flex flex-col space-y-8">
-        <h3 class="ris-heading3-bold">Geben Sie uns Feedback</h3>
+        <h2 class="ris-heading2-bold">Geben Sie uns Feedback</h2>
         <p class="ris-body1-regular">
           Ihr Feedback hilft uns, den Service an den Bedürfnissen der
           Nutzerinnen und Nutzer auszurichten. Beschreiben Sie Ihr Anliegen so

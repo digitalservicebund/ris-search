@@ -9,11 +9,13 @@ async function readPublicFile(name: string) {
   return readFile(join(PUBLIC, name), "utf-8");
 }
 
+const testCases = [
+  { userAgent: "Mozilla/5.0 (Macintosh)", file: "robots.public.txt" },
+  { userAgent: "DG_JUSTICE_CRAWLER", file: "robots.dg.txt" },
+];
+
 test.describe("robots.public.txt dynamic handler", () => {
-  [
-    { userAgent: "Mozilla/5.0 (Macintosh)", file: "robots.public.txt" },
-    { userAgent: "DG_JUSTICE_CRAWLER", file: "robots.dg.txt" },
-  ].forEach((testCase) => {
+  testCases.forEach((testCase) => {
     test(`public: serves ${testCase.file} for ${testCase.userAgent} user agent`, async ({
       page,
     }) => {

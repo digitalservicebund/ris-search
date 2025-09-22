@@ -1127,14 +1127,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@digitalservicebund/ris-ui@npm:^3.11.1":
-  version: 3.11.1
-  resolution: "@digitalservicebund/ris-ui@npm:3.11.1"
+"@digitalservicebund/ris-ui@npm:^3.14.1":
+  version: 3.14.1
+  resolution: "@digitalservicebund/ris-ui@npm:3.14.1"
   peerDependencies:
     primevue: ^4.0.0
     tailwindcss: ^4.0.0
     vue: ^3.0.0
-  checksum: 10c0/f2c04657108d9979417d5e2b80eea4d2e1bb4aa66c1f9082c173b5c55aea3eeafba129d0bdf184717d8e0c0716bb59fe4c08ad6c02401040f126a89a769e330a
+  checksum: 10c0/84eb3a38ea28fde0c0642fb8a9d382ad7e0a7b23c4420ba4f2b4a4d95554e3ecfe14b4fb2dfab094ac441c5719664f5f6fa45025cf3ae05feb7d181c649525fc
   languageName: node
   linkType: hard
 
@@ -17675,7 +17675,7 @@ __metadata:
   resolution: "ris-portal-frontend@workspace:."
   dependencies:
     "@axe-core/playwright": "npm:^4.10.2"
-    "@digitalservicebund/ris-ui": "npm:^3.11.1"
+    "@digitalservicebund/ris-ui": "npm:^3.14.1"
     "@eslint/plugin-kit": "npm:0.3.5"
     "@hyperdx/lucene": "npm:^3.1.1"
     "@iconify-json/ic": "npm:^1.2.2"
@@ -17692,7 +17692,7 @@ __metadata:
     "@pact-foundation/pact": "npm:^15.0.1"
     "@pinia/nuxt": "npm:^0.11.2"
     "@pinia/testing": "npm:^1.0.2"
-    "@playwright/test": "npm:^1.53.2"
+    "@playwright/test": "npm:^1.55.0"
     "@primevue/nuxt-module": "npm:^4.3.9"
     "@rollup/rollup-linux-x64-gnu": "npm:^4.43.0"
     "@scalar/api-reference": "npm:^1.34.2"
