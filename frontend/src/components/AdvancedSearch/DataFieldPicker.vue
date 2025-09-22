@@ -4,6 +4,8 @@ import { Button, InputGroup, InputGroupAddon, InputText } from "primevue";
 import DataFieldList from "~/components/AdvancedSearch/DataFieldList.vue";
 import type { DataField } from "~/pages/advanced-search/dataFields";
 import type { DocumentKind } from "~/types";
+import { formatDocumentKind } from "~/utils/displayValues";
+import { formatNumberWithSeparators } from "~/utils/numberFormatting";
 import IcBaselineSearch from "~icons/ic/baseline-search";
 
 const {
