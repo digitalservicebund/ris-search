@@ -54,3 +54,9 @@ logging:
             MessageTracing:
               sent: DEBUG
               received: TRACE
+
+# Used for sending feedback to posthog
+posthog:
+  api-key:
+  host:
+  feedback-survey-id:
