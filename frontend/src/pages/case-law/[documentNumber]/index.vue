@@ -86,13 +86,13 @@ if (contentError?.value) {
       </div>
       <h1
         v-if="caseLaw.headline"
-        class="ris-heading2-bold max-w-title mt-24 mb-48 overflow-x-auto text-balance"
+        class="ris-heading2-bold max-w-title mt-24 mb-48 text-balance break-words hyphens-auto max-sm:text-[26px]"
       >
         {{ removeOuterParentheses(caseLaw.headline) }}
       </h1>
       <h1
         v-else
-        class="ris-heading2-bold max-w-title mt-24 mb-48 text-balance text-gray-900"
+        class="ris-heading2-bold max-w-title mt-24 mb-48 text-balance break-words hyphens-auto text-gray-900 max-sm:text-[26px]"
       >
         {{ emptyTitlePlaceholder }}
       </h1>

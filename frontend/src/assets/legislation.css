@@ -137,6 +137,12 @@ Attributes from the Juris CALS format without a corresponding HTML attribute mig
   *[data-longTitle] .titel {
     @apply ris-heading3-bold;
   }
+
+  @media (max-width: 640px) {
+    .titel {
+      font-size: 26px;
+    }
+  }
 }
 
 .dokumentenkopf-fussnoten {

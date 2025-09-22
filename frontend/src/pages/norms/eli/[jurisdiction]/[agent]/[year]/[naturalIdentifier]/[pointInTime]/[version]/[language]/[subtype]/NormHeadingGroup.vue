@@ -23,7 +23,7 @@ const hasHeading = computed(() => !!props.htmlParts.heading);
     <hgroup>
       <p
         v-if="hasHeading"
-        class="word-wrap ris-heading3-regular mb-12 hyphens-auto"
+        class="word-wrap ris-heading3-regular mb-12 break-words hyphens-auto max-sm:text-[20px]"
       >
         {{ metadata.alternateName }}
       </p>
@@ -32,9 +32,10 @@ const hasHeading = computed(() => !!props.htmlParts.heading);
           ><div
             v-if="hasHeading"
             :data-longTitle="isLongTitle || null"
+            class="break-words hyphens-auto max-sm:text-[26px]"
             v-html="props.htmlParts.heading"
           />
-          <div v-else class="titel">
+          <div v-else class="titel break-words max-sm:text-[26px]">
             {{ getNormTitle(props.metadata) }}
           </div>
         </RisExpandableText>
@@ -42,9 +43,10 @@ const hasHeading = computed(() => !!props.htmlParts.heading);
           <div
             v-if="props.htmlParts.heading"
             :data-longTitle="isLongTitle || null"
+            class="break-words hyphens-auto max-sm:text-[26px]"
             v-html="props.htmlParts.heading"
           ></div>
-          <div v-else class="titel">
+          <div v-else class="titel break-words max-sm:text-[26px]">
             {{ getNormTitle(props.metadata) }}
           </div>
         </template>
