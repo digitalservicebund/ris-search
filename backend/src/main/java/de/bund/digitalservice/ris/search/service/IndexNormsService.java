@@ -114,6 +114,8 @@ public class IndexNormsService implements IndexService {
             .flatMap(Optional::stream)
             // Convert to manifestation Eli. This will create duplicates, but it doesn't matter
             .map(EliFile::getManifestationEli)
+            // only get the manifestation files that represent expression xml files
+            .filter(e -> e.subtype().startsWith("regelungstext-"))
             // take the manifestation with the latest pointInTimeManifestation
             .map(ManifestationEli::toString)
             .max(java.util.Comparator.naturalOrder());
@@ -167,6 +169,7 @@ public class IndexNormsService implements IndexService {
         normsBucket.getAllKeysByPrefix("eli/").stream()
             .map(EliFile::fromString)
             .flatMap(Optional::stream)
+            .filter(e -> e.fileName().startsWith("regelungstext-"))
             .map(EliFile::getExpressionEli)
             .collect(Collectors.toSet());
     return norms.size();

@@ -47,9 +47,9 @@ class SitemapsUpdateJobTest {
     List<String> caselawKeys = new ArrayList<>();
     for (int i = 1; i < 3; i++) {
       normsKeys.add(
-          "eli/bund/bgbl-1/1992/s101/1992-01-01/1/deu/1992-01-02/regelungstext-verkuendung-"
+          "eli/bund/bgbl-1/1992/s101-"
               + i
-              + ".xml");
+              + "/1992-01-01/1/deu/1992-01-02/regelungstext-verkuendung-1.xml");
       caselawKeys.add("case-law/KORE12354" + i + ".xml");
     }
 
@@ -82,10 +82,14 @@ class SitemapsUpdateJobTest {
 
   @Test
   void createSitemapsForNorms_noMatchingKeys_producesEmptyIndexOnly() {
+    // files associated with a work will cause a change on all expressions for that work
+    // for example an image changing should cause a change
+    // files not associated with any work should not cause a change
+    // these files don't follow a valid eli structure
     List<String> normsKeys =
         List.of(
-            "eli/bund/bgbl-1/1992/s101/1992-01-01/1/deu/1992-01-02/regelungstext-1.xml",
-            "eli/bund/bgbl-1/1992/s101/1992-01-01/1/deu/1992-01-02/something-else.xml");
+            "eli/bund/bgbl-1/1992/s101/1992-01-01/1/deu/1992-01-02/NOT_VALID/regelungstext-1.xml",
+            "eli/bund/bgbl-1/1992/s101/1992-01-01/1/deu/1992-01-02/NOT_VALID/something-else.xml");
 
     when(this.normsBucket.getAllKeysByPrefix(anyString())).thenReturn(normsKeys);
 
