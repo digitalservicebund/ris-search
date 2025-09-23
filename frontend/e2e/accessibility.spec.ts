@@ -69,7 +69,54 @@ const testPages = [
 ];
 test.describe("General Pages Accessibility Tests", () => {
   testPages.forEach(({ name, url, tabs }) => {
-    test(`${name} should not have accessibility issues`, async ({ page }) => {
+    // Desktop test
+    test(`${name} should not have accessibility issues (desktop)`, async ({
+      page,
+    }) => {
+      await page.setViewportSize({ width: 1280, height: 800 });
+      await page.goto(url);
+      await page.waitForLoadState("networkidle");
+
+      const tabsAnalysisResults = [];
+      let currentTab = 0;
+      tabsAnalysisResults[currentTab] = await new AxeBuilder({ page })
+        .exclude("nuxt-devtools-frame")
+        .analyze();
+
+      if (tabs) {
+        for (const tab of tabs) {
+          currentTab++;
+          await page.getByRole("tab", { name: tab }).click();
+          await page.waitForLoadState("networkidle");
+          tabsAnalysisResults[currentTab] = await new AxeBuilder({ page })
+            .exclude("nuxt-devtools-frame")
+            .analyze();
+        }
+      }
+
+      tabsAnalysisResults.forEach((result, index) => {
+        const nameSuffix = index === 0 ? "" : ` - Tab ${index + 1}`;
+        createHtmlReport({
+          results: result,
+          options: {
+            outputDir: path.join(
+              "e2e",
+              "test-results",
+              "accessibility-results",
+            ),
+            reportFileName: `${name} Page (desktop)${nameSuffix}.html`,
+          },
+        });
+      });
+
+      expect(tabsAnalysisResults.flatMap((r) => r.violations)).toEqual([]);
+    });
+
+    // Mobile test
+    test(`${name} should not have accessibility issues (mobile)`, async ({
+      page,
+    }) => {
+      await page.setViewportSize({ width: 320, height: 600 });
       await page.goto(url);
       await page.waitForLoadState("networkidle");
       const tabsAnalysisResults = [];
@@ -97,13 +144,12 @@ test.describe("General Pages Accessibility Tests", () => {
               "test-results",
               "accessibility-results",
             ),
-            reportFileName: `${name} Page${nameSuffix}.html`,
+            reportFileName: `${name} Page (mobile)${nameSuffix}.html`,
           },
         });
       });
-      expect(
-        tabsAnalysisResults.flatMap((result) => result.violations),
-      ).toEqual([]);
+
+      expect(tabsAnalysisResults.flatMap((r) => r.violations)).toEqual([]);
     });
   });
 });
