@@ -24,7 +24,11 @@ const { data: translationsList } = fetchTranslationList();
 
 const translationsMap = computed(() => {
   const map = new Map<string, TranslationContent>();
-  translationsList.value?.forEach((t) => map.set(t["@id"], t));
+  if (translationsList.value) {
+    for (const t of translationsList.value) {
+      map.set(t["@id"], t);
+    }
+  }
   return map;
 });
 

@@ -32,12 +32,12 @@ const currentTranslation = data.value?.content;
 const html = data.value?.html;
 
 const link = {
-  url: window?.location.href,
+  url: globalThis?.location.href,
   label: "Link to translation",
 };
 
 const permalink = {
-  url: window?.location.href,
+  url: globalThis?.location.href,
   label: "Link to translation",
 };
 
