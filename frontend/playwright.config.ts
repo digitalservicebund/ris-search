@@ -1,5 +1,28 @@
 import { defineConfig, devices, type Project } from "@playwright/test";
+import type { ViewportSize } from "playwright-core";
 export const authFile = "playwright/.auth/user.json";
+
+type DeviceDescriptor = {
+  viewport: ViewportSize;
+  userAgent: string;
+  deviceScaleFactor: number;
+  isMobile: boolean;
+  hasTouch: boolean;
+  defaultBrowserType: "chromium" | "firefox" | "webkit";
+};
+
+const customMobileDevice: DeviceDescriptor = {
+  userAgent:
+    "Mozilla/5.0 (Linux; Android 8.1.0; SM-T837A) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.7204.23 Safari/537.36",
+  viewport: {
+    width: 320,
+    height: 600,
+  },
+  deviceScaleFactor: 3,
+  isMobile: true,
+  hasTouch: true,
+  defaultBrowserType: "firefox",
+};
 
 /**
  * Read environment variables from file.
@@ -43,6 +66,14 @@ const browserConfigurations: Project[] = [
     name: "webkit",
     use: {
       ...devices["Desktop Safari"],
+      storageState: authFile,
+    },
+    dependencies: ["setup"],
+  },
+  {
+    name: "mobile",
+    use: {
+      ...customMobileDevice,
       storageState: authFile,
     },
     dependencies: ["setup"],
