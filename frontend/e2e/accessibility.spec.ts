@@ -53,6 +53,10 @@ const testPages = [
     url: "/search?category=R",
   },
   {
+    name: "Advanced Search Page",
+    url: "/advanced-search",
+  },
+  {
     name: "Norm View Page",
     url: "/norms/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu",
     tabs: ["Details", "Fassungen"],
