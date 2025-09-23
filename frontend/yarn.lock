@@ -14408,6 +14408,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"minisearch@npm:^7.1.2":
+  version: 7.1.2
+  resolution: "minisearch@npm:7.1.2"
+  checksum: 10c0/039f494927a4a932c168654ba8ff434d2be6af8e3393b29577d54da64cd64d6ae9bfbf33b7cd7bdc1783cb354d67c5dc99bac1305599d8d653933676f2d1a355
+  languageName: node
+  linkType: hard
+
 "minizlib@npm:^2.1.1":
   version: 2.1.2
   resolution: "minizlib@npm:2.1.2"
@@ -17710,6 +17717,7 @@ __metadata:
     license-checker: "npm:^25.0.1"
     lodash: "npm:^4.17.21"
     maska: "npm:^3.2.0"
+    minisearch: "npm:^7.1.2"
     msw: "npm:^2.10.2"
     nuxt: "npm:3.17.5"
     nuxt-auth-utils: "npm:^0.5.20"

@@ -4,6 +4,7 @@ import {
   addEllipsis,
   getStringOrDefault,
   removeOuterParentheses,
+  removePrefix,
 } from "./textFormatting";
 
 describe("getStringOrDefault", () => {
@@ -84,5 +85,14 @@ describe("addEllipsis heuristics", () => {
   it("adds ellipses to strings that end with counts", () => {
     expect(addEllipsis("1. first. 2.")).toBe("1. first. 2. …");
     expect(addEllipsis("I. first. II.")).toBe("I. first. II. …");
+  });
+});
+
+describe("removePrefix", () => {
+  it("removes prefix when present", () => {
+    expect(removePrefix("Hello World", "Hello ")).toBe("World");
+  });
+  it("removes original string when prefix not present", () => {
+    expect(removePrefix("Hello World", "Hallo ")).toBe("Hello World");
   });
 });
