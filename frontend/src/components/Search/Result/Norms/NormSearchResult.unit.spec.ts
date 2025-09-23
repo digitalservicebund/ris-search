@@ -3,13 +3,26 @@ import { mount, RouterLinkStub } from "@vue/test-utils";
 import { describe, it, expect, vi, afterEach } from "vitest";
 import NormSearchResult from "./NormSearchResult.vue";
 import type { LegislationWork, SearchResult, TextMatch } from "~/types";
-import * as Config from "~/utils/config";
 
 const NuxtLinkStub = {
   name: "NuxtLink",
   props: ["to"],
   template: '<a :href="to"><slot></slot></a>',
 };
+
+const mocks = vi.hoisted(() => {
+  return {
+    isPrototypeProfile: vi.fn().mockReturnValue(false),
+  };
+});
+
+vi.mock("~/composables/useProfile", () => {
+  return {
+    useProfile: () => {
+      return { isPrototypeProfile: mocks.isPrototypeProfile };
+    },
+  };
+});
 
 describe("NormSearchResult.vue", () => {
   const mockSearchResult: SearchResult<LegislationWork> = {
@@ -112,8 +125,7 @@ describe("NormSearchResult.vue", () => {
   });
 
   it("renders ausfertigungs datum when in prototype environment", () => {
-    const mockedIsPrototypeProfile = vi.spyOn(Config, "isPrototypeProfile");
-    mockedIsPrototypeProfile.mockReturnValue(true);
+    mocks.isPrototypeProfile.mockReturnValue(true);
 
     const wrapper = customMount({
       searchResult: mockSearchResult,

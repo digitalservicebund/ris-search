@@ -10,7 +10,7 @@ import {
   type Feature,
 } from "./data";
 import type { DropdownItem } from "~/components/types";
-import { isInternalProfile, isPublicProfile } from "~/utils/config";
+import { useProfile } from "~/composables/useProfile";
 
 definePageMeta({ alias: "/erweiterte-suche/hilfe" });
 
@@ -28,6 +28,8 @@ const fields = computed(() => {
     ? availableFields
     : availableFields.filter((f) => f.types.includes(filter.value));
 });
+
+const { isInternalProfile, isPublicProfile } = useProfile();
 const isInternal = isInternalProfile();
 const isPublic = isPublicProfile();
 

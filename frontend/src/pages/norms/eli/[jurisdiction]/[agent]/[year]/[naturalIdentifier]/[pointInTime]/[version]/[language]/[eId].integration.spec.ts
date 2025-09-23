@@ -76,8 +76,12 @@ vi.mock("./useNormData", () => {
   return { useFetchNormArticleContent: mocks.useFetchNormArticleContent };
 });
 
-vi.mock("~/utils/config", () => {
-  return { isPrototypeProfile: mocks.isPrototypeProfile };
+vi.mock("~/composables/useProfile", () => {
+  return {
+    useProfile: () => {
+      return { isPrototypeProfile: mocks.isPrototypeProfile };
+    },
+  };
 });
 
 const { useHeadMock } = vi.hoisted(() => {

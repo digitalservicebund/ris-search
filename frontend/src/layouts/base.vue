@@ -5,12 +5,10 @@ import AppFooter from "~/components/AppFooter.vue";
 import AppFooterPrototype from "~/components/AppFooterPrototype.vue";
 import AppHeader from "~/components/AppHeader.vue";
 import NavbarTop from "~/components/NavbarTop.vue";
-import { isPublicProfile, isPrototypeProfile } from "~/utils/config";
-/* v8 ignore start */
-const isPublic = isPublicProfile();
-const isPrototype = isPrototypeProfile();
-const showPublicProfileHeader = isPublic || isPrototype;
-/* v8 ignore stop */
+import { useProfile } from "~/composables/useProfile";
+
+const { isPublicProfile, isPrototypeProfile } = useProfile();
+const showPublicProfileHeader = isPublicProfile() || isPrototypeProfile();
 </script>
 
 <template>

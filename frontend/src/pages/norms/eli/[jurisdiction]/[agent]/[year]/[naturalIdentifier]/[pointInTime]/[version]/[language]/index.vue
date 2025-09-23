@@ -32,8 +32,8 @@ import {
 import { useBackendURL } from "~/composables/useBackendURL";
 import { useIntersectionObserver } from "~/composables/useIntersectionObserver";
 import { useNormVersions } from "~/composables/useNormVersions";
+import { useProfile } from "~/composables/useProfile";
 import type { LegislationWork } from "~/types";
-import { isPrototypeProfile } from "~/utils/config";
 import { dateFormattedDDMMYYYY } from "~/utils/dateFormatting";
 import {
   getValidityStatus,
@@ -56,6 +56,7 @@ definePageMeta({
 
 const route = useRoute();
 const expressionEli = Object.values(route.params).join("/");
+const { isPrototypeProfile } = useProfile();
 
 const { data, error, status } = await useFetchNormContent(expressionEli);
 

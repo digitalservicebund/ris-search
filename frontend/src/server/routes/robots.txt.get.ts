@@ -1,7 +1,8 @@
 import { getRequestURL, getHeader, setHeader } from "h3";
-import { isPublicProfile } from "~/utils/config";
+import { useProfile } from "~/composables/useProfile";
 
 export default defineEventHandler(async (event) => {
+  const { isPublicProfile } = useProfile();
   const userAgent = (getHeader(event, "User-Agent") ?? "").toUpperCase();
   let file = isPublicProfile() ? "robots.public.txt" : "robots.staging.txt";
   if (userAgent === "DG_JUSTICE_CRAWLER") file = "robots.dg.txt";

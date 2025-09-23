@@ -2,7 +2,7 @@
 import type { Dayjs } from "dayjs";
 import MetadataField from "~/components/MetadataField.vue";
 import ValidityDatesMetadataFields from "~/components/Norm/Metadatafields/ValidityDatesMetadataFields.vue";
-import { isPrototypeProfile } from "~/utils/config";
+import { useProfile } from "~/composables/useProfile";
 import { getValidityStatusLabel, type ValidityStatus } from "~/utils/normUtils";
 
 interface Props {
@@ -13,6 +13,8 @@ interface Props {
 }
 
 defineProps<Props>();
+
+const { isPrototypeProfile } = useProfile();
 </script>
 
 <template>

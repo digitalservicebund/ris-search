@@ -11,8 +11,8 @@ import NormTableOfContents from "~/components/Ris/NormTableOfContents.vue";
 import type { BreadcrumbItem } from "~/components/Ris/RisBreadcrumb.vue";
 import RisBreadcrumb from "~/components/Ris/RisBreadcrumb.vue";
 import { useValidNormVersions } from "~/composables/useNormVersions";
+import { useProfile } from "~/composables/useProfile";
 import type { Article, LegislationWork } from "~/types";
-import { isPrototypeProfile } from "~/utils/config";
 import { parseDateGermanLocalTime } from "~/utils/dateFormatting";
 import { temporalCoverageToValidityInterval } from "~/utils/normUtils";
 import { findNodePath, tocItemsToTreeNodes } from "~/utils/tableOfContents";
@@ -28,6 +28,7 @@ definePageMeta({
 });
 
 const route = useRoute();
+const { isPrototypeProfile } = useProfile();
 
 const expressionEli = Object.values(route.params).slice(0, -1).join("/");
 const eId = computed(() => {

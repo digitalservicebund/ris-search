@@ -2,10 +2,23 @@ import { mount } from "@vue/test-utils";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import NormMetadataFields from "~/components/Norm/Metadatafields/NormMetadataFields.vue";
 import ValidityDatesMetadataFields from "~/components/Norm/Metadatafields/ValidityDatesMetadataFields.vue";
-import * as Config from "~/utils/config";
 import { parseDateGermanLocalTime } from "~/utils/dateFormatting";
 import type { ValidityStatus } from "~/utils/normUtils";
 import { findMetadataField } from "~/utils/testing/testUtils";
+
+const mocks = vi.hoisted(() => {
+  return {
+    isPrototypeProfile: vi.fn().mockReturnValue(false),
+  };
+});
+
+vi.mock("~/composables/useProfile", () => {
+  return {
+    useProfile: () => {
+      return { isPrototypeProfile: mocks.isPrototypeProfile };
+    },
+  };
+});
 
 describe("NormMetadataFields.vue", () => {
   afterEach(() => {
@@ -67,8 +80,7 @@ describe("NormMetadataFields.vue", () => {
   });
 
   it("hides valid from and to fields on prototype", () => {
-    const mockedIsPrototypeProfile = vi.spyOn(Config, "isPrototypeProfile");
-    mockedIsPrototypeProfile.mockReturnValue(true);
+    mocks.isPrototypeProfile.mockReturnValue(true);
 
     const wrapper = mount(NormMetadataFields, {});
 

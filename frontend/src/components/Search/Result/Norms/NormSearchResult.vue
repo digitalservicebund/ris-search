@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import LegalIcon from "virtual:icons/mdi/legal";
+import { useProfile } from "~/composables/useProfile";
 import { usePostHogStore } from "~/stores/usePostHogStore";
 import type { LegislationWork, SearchResult, TextMatch } from "~/types";
-import { isPrototypeProfile } from "~/utils/config";
 import { dateFormattedDDMMYYYY } from "~/utils/dateFormatting";
 import { temporalCoverageToValidityInterval } from "~/utils/normUtils";
 import { sanitizeSearchResult } from "~/utils/sanitize";
@@ -32,6 +32,8 @@ const link = computed(() => {
   if (!expressionEli) return null;
   return prefix + expressionEli;
 });
+
+const { isPrototypeProfile } = useProfile();
 
 const formattedDate = computed(() => {
   const date = isPrototypeProfile()
