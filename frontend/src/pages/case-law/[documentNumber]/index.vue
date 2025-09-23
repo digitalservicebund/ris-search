@@ -53,7 +53,8 @@ const truncate = (s: string, n: number) => {
   if (clean.length <= n) return clean;
 
   const cut = clean.slice(0, n);
-  return cut.replace(/\s+\S*$/, "");
+  const lastSpace = cut.lastIndexOf(" ");
+  return lastSpace === -1 ? cut : cut.slice(0, lastSpace);
 };
 
 const buildOgTitle = (cl?: CaseLaw) => {
