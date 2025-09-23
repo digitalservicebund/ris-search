@@ -6,7 +6,6 @@ import TabPanel from "primevue/tabpanel";
 import TabPanels from "primevue/tabpanels";
 import Tabs from "primevue/tabs";
 import { computed } from "vue";
-import { fetchTranslationAndHTML } from "../useTranslationData";
 import ActionsMenu from "~/components/ActionMenu/ActionsMenu.vue";
 import ContentWrapper from "~/components/CustomLayouts/ContentWrapper.vue";
 import Properties from "~/components/Properties.vue";
@@ -17,6 +16,7 @@ import {
   tabPanelStyles,
   tabStyles,
 } from "~/components/Tabs.styles";
+import { fetchTranslationAndHTML } from "~/composables/useTranslationData";
 import { removePrefix } from "~/utils/textFormatting";
 import IcBaselineSubject from "~icons/ic/baseline-subject";
 import IcOutlineInfo from "~icons/ic/outline-info";

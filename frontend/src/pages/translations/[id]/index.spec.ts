@@ -1,8 +1,8 @@
 import { mountSuspended } from "@nuxt/test-utils/runtime";
 import { expect, it, describe, vi } from "vitest";
 import { ref } from "vue";
+import type { TranslationData } from "~/composables/useTranslationData";
 import TranslationDetailPage from "~/pages/translations/[id]/index.vue";
-import type { TranslationData } from "~/pages/translations/useTranslationData";
 
 const mockTranslationData: TranslationData = {
   content: {
@@ -17,7 +17,7 @@ const mockTranslationData: TranslationData = {
   html: '<html><body><p style="text-align: center; font-weight: bold">Chapter 1</p></body></html>',
 };
 
-vi.mock("~/pages/translations/useTranslationData", () => ({
+vi.mock("~/composables/useTranslationData", () => ({
   fetchTranslationAndHTML: vi.fn(() => ({
     data: ref(mockTranslationData),
   })),

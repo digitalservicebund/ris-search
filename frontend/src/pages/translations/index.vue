@@ -2,10 +2,10 @@
 import MiniSearch from "minisearch";
 import Button from "primevue/button";
 import InputText from "primevue/inputtext";
-import { fetchTranslationList } from "./useTranslationData";
-import type { TranslationContent } from "./useTranslationData";
 import ContentWrapper from "~/components/CustomLayouts/ContentWrapper.vue";
 import type { BreadcrumbItem } from "~/components/Ris/RisBreadcrumb.vue";
+import { fetchTranslationList } from "~/composables/useTranslationData";
+import type { TranslationContent } from "~/composables/useTranslationData";
 import IconSearch from "~icons/ic/search";
 
 const searchTerm = ref("");
