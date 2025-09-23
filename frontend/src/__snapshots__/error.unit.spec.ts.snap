@@ -1,7 +1,7 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`error page > shows a generic message for internal server errors (500) 1`] = `"Fehlerseite Es gab leider einen Fehler  Probieren Sie es zu einem späteren Moment noch einmal.Wir haben den Fehler dokumentiert und an unsere Entwickler:innen weitergeleitet."`;
+exports[`error page > shows a generic message for internal server errors (500) 1`] = `"Es gab leider einen Fehler  Probieren Sie es zu einem späteren Moment noch einmal.Wir haben den Fehler dokumentiert und an unsere Entwickler:innen weitergeleitet."`;
 
-exports[`error page > shows a more generic message for other errors 1`] = `"Fehlerseite Es gab leider einen Fehler  Ein unbekannter Fehler ist aufgetreten: 418"`;
+exports[`error page > shows a more generic message for other errors 1`] = `"Es gab leider einen Fehler  Ein unbekannter Fehler ist aufgetreten: 418"`;
 
-exports[`error page > shows a specific message for Not Found errors (404) 1`] = `"Fehlerseite Diese Seite existiert nicht  Überprüfen Sie den eingegebenen Link"`;
+exports[`error page > shows a specific message for Not Found errors (404) 1`] = `"Diese Seite existiert nicht  Überprüfen Sie den eingegebenen Link"`;
