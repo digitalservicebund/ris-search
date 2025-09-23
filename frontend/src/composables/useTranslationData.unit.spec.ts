@@ -28,7 +28,7 @@ const mockTranslationListData: TranslationContent[] = [
 
 vi.mock("~/composables/useBackendURL", () => {
   return {
-    useBackendURL: () => "http://mock-backend",
+    useBackendURL: () => "https://mock-backend",
   };
 });
 
@@ -49,7 +49,7 @@ describe("fetchTranslationList", () => {
     const { data, error } = await fetchTranslationList();
 
     expect(requestFetchMock).toHaveBeenCalledWith(
-      "http://mock-backend/v1/translatedLegislation",
+      "https://mock-backend/v1/translatedLegislation",
     );
     expect(error.value).toBeNull();
     expect(data.value).toHaveLength(2);
@@ -78,11 +78,11 @@ describe("fetchTranslationAndHTML", () => {
     const { data, error } = await fetchTranslationAndHTML("AbC");
 
     expect(requestFetchMock).toHaveBeenCalledWith(
-      "http://mock-backend/v1/translatedLegislation?id=AbC",
+      "https://mock-backend/v1/translatedLegislation?id=AbC",
     );
 
     expect(requestFetchMock).toHaveBeenCalledWith(
-      "http://mock-backend/v1/translatedLegislation/englisch_abc.html",
+      "https://mock-backend/v1/translatedLegislation/englisch_abc.html",
       {
         headers: {
           Accept: "text/html",
