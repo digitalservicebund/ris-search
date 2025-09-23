@@ -33,7 +33,7 @@ const dataFieldListId = useId();
 const formattedCount = computed(() => formatNumberWithSeparators(count));
 const formattedDocumentKind = computed(() => formatDocumentKind(documentKind));
 
-const dataFieldsForDokumentKind = computed(
+const dataFieldsForDocumentKind = computed(
   // Need to cast explicitly because the Vue types don't seem to be working here
   () => (dataFields as Record<DocumentKind, DataField[]>)?.[documentKind] ?? [],
 );
@@ -99,7 +99,7 @@ function insertInQuery({ pattern }: DataField) {
 
     <div class="hidden lg:block">
       <DataFieldList
-        :data-fields="dataFieldsForDokumentKind"
+        :data-fields="dataFieldsForDocumentKind"
         :label-id="dataFieldListId"
         @click-data-field="insertInQuery"
       />
@@ -111,7 +111,7 @@ function insertInQuery({ pattern }: DataField) {
         header-expanded="Auswahl für gezielte Suche"
       >
         <DataFieldList
-          :data-fields="dataFieldsForDokumentKind"
+          :data-fields="dataFieldsForDocumentKind"
           :label-id="dataFieldListId"
           @click-data-field="insertInQuery"
         />
