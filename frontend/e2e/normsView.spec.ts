@@ -206,15 +206,20 @@ test.describe("actions menu", () => {
   test("can use link action button to copy link to currently valid expression", async ({
     page,
     browserName,
+    baseURL,
+    context,
   }) => {
-    if (browserName === "chromium") {
-      test.use({
-        permissions: ["clipboard-write", "clipboard-read"],
-      });
-    }
     await page.goto("/norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu", {
       waitUntil: "networkidle",
     });
+    if (browserName === "chromium") {
+      const origin = baseURL
+        ? new URL(baseURL).origin
+        : new URL(page.url()).origin;
+      await context.grantPermissions(["clipboard-read", "clipboard-write"], {
+        origin,
+      });
+    }
     const button = page.getByRole("link", {
       name: "Link zur jeweils gültigen Fassung",
     });
@@ -250,15 +255,20 @@ test.describe("actions menu", () => {
   test("can use permalink action button to copy permalink to viewed expression", async ({
     page,
     browserName,
+    baseURL,
+    context,
   }) => {
-    if (browserName === "chromium") {
-      test.use({
-        permissions: ["clipboard-write", "clipboard-read"],
-      });
-    }
     await page.goto("/norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu", {
       waitUntil: "networkidle",
     });
+    if (browserName === "chromium") {
+      const origin = baseURL
+        ? new URL(baseURL).origin
+        : new URL(page.url()).origin;
+      await context.grantPermissions(["clipboard-read", "clipboard-write"], {
+        origin,
+      });
+    }
     const button = page.getByRole("link", {
       name: "Permalink zu dieser Fassung",
     });
