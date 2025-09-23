@@ -53,11 +53,11 @@ export const usePostHogStore = defineStore("postHog", () => {
     postHog.value = undefined;
     const cookies = Cookies.get();
     if (cookies) {
-      Object.keys(cookies).forEach((key) => {
+      for (const key of Object.keys(cookies)) {
         if (key.startsWith("ph_")) {
-          Cookies.remove(key, { path: "/" }); // passing the root path is important here, see https://stackoverflow.com/a/61735396/3357175
+          Cookies.remove(key, { path: "/" });
         }
-      });
+      }
     }
   }
 

@@ -6,9 +6,7 @@ type Section = {
 };
 let _JSDOM: typeof JSDOM;
 if (import.meta.server) {
-  import("jsdom").then((module) => {
-    _JSDOM = module.JSDOM;
-  });
+  _JSDOM = await import("jsdom");
 }
 
 export function parseDocument(html: string): Document {

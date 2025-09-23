@@ -31,7 +31,7 @@ const currentVersionValidityStatus = computed(() => {
 
 const latestFutureVersion = computed(() => {
   if (currentVersionValidityStatus.value !== "InForce") return undefined;
-  const last = props.versions[props.versions.length - 1];
+  const last = props.versions.at(-1);
   const latestValidityInterval = temporalCoverageToValidityInterval(
     last.item.workExample.temporalCoverage,
   );

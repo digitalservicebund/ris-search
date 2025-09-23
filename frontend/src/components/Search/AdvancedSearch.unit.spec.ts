@@ -220,7 +220,7 @@ describe("AdvancedSearch.vue", () => {
       state.builderUsed = true;
       state.modeChangeConfirmed = false;
 
-      vi.spyOn(window, "confirm").mockReturnValue(true);
+      vi.spyOn(globalThis, "confirm").mockReturnValue(true);
       state.disableAfterConfirmation();
 
       expect(state.modeChangeConfirmed).toBe(true);
@@ -234,7 +234,7 @@ describe("AdvancedSearch.vue", () => {
       state.modeChangeConfirmed = false;
       state.textEntered = false;
 
-      vi.spyOn(window, "confirm").mockReturnValue(false);
+      vi.spyOn(globalThis, "confirm").mockReturnValue(false);
       state.disableAfterConfirmation();
 
       expect(state.modeChangeConfirmed).toBe(false);
@@ -259,7 +259,7 @@ describe("AdvancedSearch.vue", () => {
 
     const searchSpy = vi.spyOn(state, "search").mockResolvedValue(undefined);
     const scrollToSpy = vi
-      .spyOn(window, "scrollTo")
+      .spyOn(globalThis, "scrollTo")
       .mockImplementation(() => {});
 
     await state.updatePage(2);

@@ -139,7 +139,7 @@ describe("actionMenuUtils.ts", () => {
   });
 
   it("print action command opens print dialog", () => {
-    const printSpy = vi.spyOn(window, "print").mockImplementation(() => {});
+    const printSpy = vi.spyOn(globalThis, "print").mockImplementation(() => {});
     const result = createActionMenuItems(
       {
         permalink: {
