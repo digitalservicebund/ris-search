@@ -48,26 +48,18 @@ const { data: html, error: contentError } = await useFetch<string>(
   },
 );
 
-const truncate = (s: string, n: number) =>
-  s.length <= n ? s : s.slice(0, n).replace(/\s+\S*$/, "") + "…";
+const truncate = (s: string, n: number) => {
+  const clean = s.replace(/\s+/g, " ").trim();
+  if (clean.length <= n) return clean;
 
-const toCourtAbbrev = (full?: string) => {
-  if (!full) return "";
-  const map: Record<string, string> = {
-    Bundesverfassungsgericht: "BVerfG",
-    Bundesgerichtshof: "BGH",
-    Bundessozialgericht: "BSG",
-    Bundesverwaltungsgericht: "BVerwG",
-    Bundesfinanzhof: "BFH",
-    Bundesarbeitsgericht: "BAG",
-  };
-  return map[full] ?? full;
+  const cut = clean.slice(0, n);
+  return cut.replace(/\s+\S*$/, "");
 };
 
 const buildOgTitle = (cl?: CaseLaw) => {
   if (!cl) return undefined;
 
-  const court = toCourtAbbrev(cl.courtName);
+  const court = cl.courtName?.trim() || "";
   const dtype = cl.documentType || "Gerichtsentscheidung";
   const date = cl.decisionDate ? dateFormattedDDMMYYYY(cl.decisionDate) : "";
   const file = cl.fileNumbers?.[0] || "";
@@ -81,7 +73,7 @@ const buildOgTitle = (cl?: CaseLaw) => {
     .filter(Boolean)
     .join(" ");
 
-    return truncate(parts, 55) || undefined;
+  return truncate(parts, 55) || undefined;
 };
 
 const ogTitle = buildOgTitle(caseLaw.value ?? undefined);
@@ -92,12 +84,11 @@ const extractDescription = (
 ) => {
   if (!cl) return undefined;
 
-  const leitsatz = cl.guidingPrinciple || cl.headnote || cl.otherHeadnote;
-
-  if (leitsatz) {
-    const sentences = leitsatz.split(/(?<=[.!?])\s+/).filter(Boolean);
-    const firstTwo = sentences.slice(0, 2).join(" ");
-    return truncate(firstTwo, 150);
+  if (cl.guidingPrinciple) {
+    const sentences = cl.guidingPrinciple
+      .split(/(?<=[.!?])\s+/)
+      .filter(Boolean);
+    return truncate(sentences.slice(0, 2).join(" "), 150);
   }
 
   if (!htmlContent) return undefined;
@@ -108,9 +99,8 @@ const extractDescription = (
 
   if (!text) return undefined;
 
-  const sentences = text.split(/(?<=[.!?])\s+/).filter(Boolean);
-  const firstTwo = sentences.slice(0, 2).join(" ");
-  return truncate(firstTwo, 150);
+  const paragraph = text.replace(/\s+/g, " ").trim();
+  return truncate(paragraph, 150);
 };
 
 const ogDescription = extractDescription(
@@ -119,21 +109,29 @@ const ogDescription = extractDescription(
 );
 
 const reqUrl = useRequestURL();
-const canonicalUrl = `${reqUrl.origin}${reqUrl.pathname}`;
+const config = useRuntimeConfig();
+const siteBaseUrl = config.public.siteBaseUrl || reqUrl.origin;
+const canonicalUrl = `${siteBaseUrl}${reqUrl.pathname}`;
+
+const descriptionContent = ogDescription || "Gerichtsentscheidung";
+
+const metaTags = [
+  { name: "description", content: descriptionContent },
+  { property: "og:type", content: "article" },
+  { property: "og:title", content: ogTitle },
+  { property: "og:description", content: descriptionContent },
+  { property: "og:url", content: canonicalUrl },
+  { property: "og:image", content: "/og_image.png" },
+  { name: "twitter:card", content: "summary_large_image" },
+  { name: "twitter:title", content: ogTitle },
+  { name: "twitter:description", content: descriptionContent },
+  { name: "twitter:image", content: "/og_image.png" },
+].filter((t) => Object.values(t).every(Boolean));
 
 useHead({
   title: ogTitle,
   link: [{ rel: "canonical", href: canonicalUrl }],
-  meta: [
-    { name: "description", content: ogDescription || "Gerichtsentscheidung" },
-    { property: "og:title", content: ogTitle },
-    { property: "og:description", content: ogDescription },
-    { property: "og:url", content: canonicalUrl },
-    { property: "og:image", content: "/og_image.png" },
-    { name: "twitter:title", content: ogTitle },
-    { name: "twitter:description", content: ogDescription },
-    { name: "twitter:image", content: "/og_image.png" },
-  ],
+  meta: metaTags,
 });
 
 definePageMeta({ layout: "base" }); // use "base" layout to allow for full-width tab backgrounds

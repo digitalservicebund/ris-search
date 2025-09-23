@@ -93,6 +93,17 @@ describe("case law single view page", async () => {
     router.addRoute({ path: "/", component: CaseLawPage });
   });
 
+  beforeEach(() => {
+    vi.clearAllMocks();
+    useFetchMock.mockImplementation(async (url: string) => {
+      if (url.includes("html")) {
+        return { data: ref(htmlData), status: ref("success") };
+      } else {
+        return { data: ref(caseLawTestData), status: ref("success") };
+      }
+    });
+  });
+
   it("displays Inhaltsverzeichnis correctly with links to anchors", async () => {
     const wrapper = await mountSuspended(CaseLawPage);
 
@@ -234,10 +245,54 @@ describe("case law single view page", async () => {
     expect(pageHeader.exists()).toBe(false);
   });
 
-  it("uses the first file number as meta title", async () => {
-    mount(CaseLawPage);
+  it("sets meta title and description", async () => {
+    await mountSuspended(CaseLawPage);
     await nextTick();
-    expect(useHeadMock).toHaveBeenCalledWith({ title: "123" });
+
+    expect(useHeadMock).toHaveBeenCalled();
+
+    const headArg = useHeadMock.mock.calls.at(-1)?.[0];
+    expect(headArg).toBeTruthy();
+
+    const title = headArg.title as string;
+    const date = dayjs(caseLawTestData.decisionDate).format("DD.MM.YYYY");
+
+    expect(title).toContain(`${caseLawTestData.courtName}:`);
+    expect(title).toContain(caseLawTestData.documentType);
+    expect(title).toContain(`vom ${date}`);
+    expect(title).toContain(caseLawTestData.fileNumbers[0]);
+    expect(title.length).toBeLessThanOrEqual(55);
+
+    const description = headArg.meta.find(
+      (m: { name?: string; property?: string; content?: string }) =>
+        m.name === "description",
+    )?.content as string;
+
+    expect(description).toContain("Sample guiding principle");
+  });
+
+  it("falls back to first <p> from HTML when guidingPrinciple is missing", async () => {
+    useFetchMock.mockImplementation(async (url: string) => {
+      if (url.includes("html")) {
+        return { data: ref(htmlData), status: ref("success") };
+      }
+      return {
+        data: ref({ ...caseLawTestData, guidingPrinciple: "" }),
+        status: ref("success"),
+      };
+    });
+
+    await mountSuspended(CaseLawPage);
+    await nextTick();
+
+    const headArg = useHeadMock.mock.calls.at(-1)?.[0];
+    const description = headArg.meta.find(
+      (m: { name?: string; property?: string; content?: string }) =>
+        m.name === "description",
+    )?.content as string;
+
+    expect(description).toContain("(Sample headline)");
+    expect(description.length).toBeLessThanOrEqual(150);
   });
 
   it("displays zip link on the details tab", async () => {
