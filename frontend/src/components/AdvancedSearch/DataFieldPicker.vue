@@ -93,9 +93,9 @@ function insertInQuery({ pattern }: DataField) {
       </InputGroupAddon>
     </InputGroup>
 
-    <label :id="dataFieldListId" class="ris-label2-bold">
+    <p class="ris-label2-bold">
       Diese Datenfelder können gezielt durchsucht werden:
-    </label>
+    </p>
 
     <div class="hidden lg:block">
       <DataFieldList

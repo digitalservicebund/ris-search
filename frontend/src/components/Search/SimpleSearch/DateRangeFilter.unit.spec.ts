@@ -40,8 +40,12 @@ describe("date/date range filter", () => {
     it(`correctly stores the input date(s) for mode "${mode}"`, async () => {
       const store = await setStoreValues({ dateSearchMode: mode });
 
-      wrapper.findAll("input").forEach((i) => i.setValue("02.01.2000"));
+      for (const input of wrapper.findAll("input")) {
+        input.setValue("02.01.2000");
+      }
+
       await nextTick();
+
       for (const field of fields) {
         expect((store as unknown as Record<string, string>)[field]).toEqual(
           "2000-01-02",
