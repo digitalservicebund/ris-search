@@ -82,10 +82,6 @@ test("can search, filter for case law, and view a single case law documentation 
 });
 
 test.describe("actions menu", () => {
-  test.use({
-    permissions: ["clipboard-write", "clipboard-read"],
-  });
-
   test("can't use link action button as its disabled", async ({ page }) => {
     await page.goto("/case-law/JURE200030030", { waitUntil: "networkidle" });
     const button = page.getByRole("button", {

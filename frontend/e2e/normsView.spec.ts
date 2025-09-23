@@ -203,13 +203,15 @@ test("can view images", async ({ page }) => {
 });
 
 test.describe("actions menu", () => {
-  test.use({
-    permissions: ["clipboard-write", "clipboard-read"],
-  });
-
   test("can use link action button to copy link to currently valid expression", async ({
     page,
+    browserName,
   }) => {
+    if (browserName === "chromium") {
+      test.use({
+        permissions: ["clipboard-write", "clipboard-read"],
+      });
+    }
     await page.goto("/norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu", {
       waitUntil: "networkidle",
     });
@@ -247,7 +249,13 @@ test.describe("actions menu", () => {
 
   test("can use permalink action button to copy permalink to viewed expression", async ({
     page,
+    browserName,
   }) => {
+    if (browserName === "chromium") {
+      test.use({
+        permissions: ["clipboard-write", "clipboard-read"],
+      });
+    }
     await page.goto("/norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu", {
       waitUntil: "networkidle",
     });
