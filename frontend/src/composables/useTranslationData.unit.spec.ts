@@ -4,6 +4,7 @@ import {
   fetchTranslationList,
   fetchTranslationAndHTML,
 } from "~/composables/useTranslationData";
+import type { TranslationContent } from "~/composables/useTranslationData";
 
 const mockTranslationListData: TranslationContent[] = [
   {
