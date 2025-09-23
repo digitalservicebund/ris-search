@@ -54,12 +54,12 @@ const testPages = [
   },
   {
     name: "Norm View Page",
-    url: "/norms/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu/regelungstext-1",
+    url: "/norms/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu",
     tabs: ["Details", "Fassungen"],
   },
   {
     name: "Article View Page",
-    url: "/norms/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu/regelungstext-1/art-z1",
+    url: "/norms/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu/art-z1",
   },
   {
     name: "Caselaw View Page",

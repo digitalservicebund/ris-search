@@ -34,8 +34,6 @@ import java.net.URLConnection;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -110,9 +108,9 @@ public class NormsController {
 
                       ## Example 3
 
-                      Get all legislation that belong to the work eli `eli/bund/bgbl-1/1979/s1325/regelungstext-1`
+                      Get all legislation that belong to the work eli `eli/bund/bgbl-1/1979/s1325`
                       ```http request
-                      GET /v1/legislation?eli=eli/bund/bgbl-1/1979/s1325/regelungstext-1
+                      GET /v1/legislation?eli=eli/bund/bgbl-1/1979/s1325
                       ```
                       """)
   @ApiResponse(responseCode = "200")
@@ -144,7 +142,7 @@ public class NormsController {
   @GetMapping(
       path =
           ApiConfig.Paths.LEGISLATION_SINGLE
-              + "/{jurisdiction}/{agent}/{year}/{naturalIdentifier}/{pointInTime}/{version}/{language}/{subtype}",
+              + "/{jurisdiction}/{agent}/{year}/{naturalIdentifier}/{pointInTime}/{version}/{language}",
       produces = MediaType.APPLICATION_JSON_VALUE)
   @Operation(
       summary = "Work and expression-level metadata",
@@ -164,12 +162,11 @@ public class NormsController {
           String naturalIdentifier,
       @Parameter(example = "2020-06-19") @PathVariable LocalDate pointInTime,
       @Parameter(example = "2") @PathVariable Integer version,
-      @Parameter(example = "deu") @PathVariable String language,
-      @Parameter(example = "regelungstext-1") @PathVariable String subtype) {
+      @Parameter(example = "deu") @PathVariable String language) {
 
     var eli =
         new ExpressionEli(
-            jurisdiction, agent, year, naturalIdentifier, pointInTime, version, language, subtype);
+            jurisdiction, agent, year, naturalIdentifier, pointInTime, version, language);
     Optional<Norm> result = normsService.getByExpressionEli(eli);
 
     return result
@@ -238,7 +235,7 @@ public class NormsController {
     final Optional<byte[]> normFileByEli = normsService.getNormFileByEli(eli);
     if (normFileByEli.isPresent()) {
       final String body =
-          xsltTransformerService.transformNorm(normFileByEli.get(), subtype, resourceBasePath);
+          xsltTransformerService.transformNorm(normFileByEli.get(), language, resourceBasePath);
       return ResponseEntity.ok(body);
     } else {
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body(HTML_FILE_NOT_FOUND);
@@ -336,17 +333,17 @@ public class NormsController {
       @Parameter(example = "deu") @PathVariable String language,
       @Parameter(example = "2020-06-19") @PathVariable LocalDate pointInTimeManifestation) {
     String prefix =
-        Stream.of(
-                "eli",
-                jurisdiction,
-                agent,
-                year,
-                naturalIdentifier,
-                pointInTime.toString(),
-                version.toString(),
-                language,
-                pointInTimeManifestation.toString())
-            .collect(Collectors.joining("/"));
+        String.join(
+            "/",
+            "eli",
+            jurisdiction,
+            agent,
+            year,
+            naturalIdentifier,
+            pointInTime.toString(),
+            version.toString(),
+            language,
+            pointInTimeManifestation.toString());
 
     String fileName = prefix + ".zip";
 
