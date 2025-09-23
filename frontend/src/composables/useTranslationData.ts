@@ -16,16 +16,15 @@ export interface TranslationData {
   html: string;
 }
 
-export function fetchTranslationList(
-  id?: string,
-): AsyncData<TranslationContent[], NuxtError<TranslationContent> | null> {
+export function fetchTranslationList(): AsyncData<
+  TranslationContent[],
+  NuxtError<TranslationContent> | null
+> {
   const requestFetch = useRequestFetch();
   const backendURL = useBackendURL();
 
   return useAsyncData(`json for translations`, async () => {
-    const url = id
-      ? `${backendURL}/v1/translatedLegislation?id=${id}`
-      : `${backendURL}/v1/translatedLegislation`;
+    const url = `${backendURL}/v1/translatedLegislation`;
     const res = await requestFetch<TranslationContent[]>(url);
     if (!res || res.length === 0) {
       throw createError({ statusCode: 404, statusMessage: "Not Found" });
