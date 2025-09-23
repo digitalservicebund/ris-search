@@ -1,5 +1,5 @@
 import _ from "lodash";
-import { getMostRelevantExpression } from "~/pages/norms/eli/[jurisdiction]/[agent]/[year]/[naturalIdentifier]/[subtype]/index.logic";
+import { getMostRelevantExpression } from "~/pages/norms/eli/[jurisdiction]/[agent]/[year]/[naturalIdentifier]/index.logic";
 import type {
   LegislationExpression,
   LegislationWork,

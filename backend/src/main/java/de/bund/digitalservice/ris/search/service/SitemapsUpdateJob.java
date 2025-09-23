@@ -3,11 +3,13 @@ package de.bund.digitalservice.ris.search.service;
 import de.bund.digitalservice.ris.search.models.sitemap.SitemapType;
 import de.bund.digitalservice.ris.search.repository.objectstorage.CaseLawBucket;
 import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
+import de.bund.digitalservice.ris.search.utils.eli.EliFile;
 import de.bund.digitalservice.ris.search.utils.eli.ExpressionEli;
-import de.bund.digitalservice.ris.search.utils.eli.ManifestationEli;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.collections4.ListUtils;
 import org.apache.logging.log4j.LogManager;
@@ -40,15 +42,15 @@ public class SitemapsUpdateJob implements Job {
   }
 
   public void createSitemapsForNorms() {
-    List<ManifestationEli> manifestations =
+    Set<ExpressionEli> expressions =
         normsBucket.getAllKeysByPrefix("eli/").stream()
-            .filter(path -> path.contains("/regelungstext-verkuendung-"))
-            .map(ManifestationEli::fromString)
+            .map(EliFile::fromString)
             .flatMap(Optional::stream)
-            .toList();
-    List<ExpressionEli> expressions =
-        manifestations.stream().map(ManifestationEli::getExpressionEli).distinct().toList();
-    List<List<ExpressionEli>> batches = ListUtils.partition(expressions, urlsPerPage);
+            .map(EliFile::getExpressionEli)
+            .collect(Collectors.toSet());
+
+    List<List<ExpressionEli>> batches =
+        ListUtils.partition(expressions.stream().toList(), urlsPerPage);
     for (int i = 0; i < batches.size(); i++) {
       logger.info("Creating Sitemap for norms of batch {} of {}.", (i + 1), batches.size());
       sitemapService.createNormsBatchSitemap(i + 1, batches.get(i));

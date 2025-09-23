@@ -32,5 +32,7 @@ public interface NormsRepository extends ElasticsearchRepository<Norm, String> {
 
   void deleteByIndexedAtBefore(String indexedAt);
 
+  void deleteByWorkEliAndIndexedAtBefore(String workEli, String indexedAt);
+
   void deleteByIndexedAtIsNull();
 }

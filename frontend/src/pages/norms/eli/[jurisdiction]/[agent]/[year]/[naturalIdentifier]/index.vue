@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useFetch } from "#app";
 import { useBackendURL } from "~/composables/useBackendURL";
-import { getMostRelevantExpression } from "~/pages/norms/eli/[jurisdiction]/[agent]/[year]/[naturalIdentifier]/[subtype]/index.logic";
+import { getMostRelevantExpression } from "~/pages/norms/eli/[jurisdiction]/[agent]/[year]/[naturalIdentifier]/index.logic";
 import type { JSONLDList, LegislationWork, SearchResult } from "~/types";
 
 const route = useRoute();
@@ -11,7 +11,6 @@ const workEli = [
   route.params.agent,
   route.params.year,
   route.params.naturalIdentifier,
-  route.params.subtype,
 ].join("/");
 
 const backendURL = useBackendURL();

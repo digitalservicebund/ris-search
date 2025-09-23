@@ -4,7 +4,7 @@ import { describe, it, expect, vi } from "vitest";
 import Index from "./index.vue";
 import NormActionsMenu from "~/components/ActionMenu/NormActionsMenu.vue";
 import NormMetadataFields from "~/components/Norm/Metadatafields/NormMetadataFields.vue";
-import type { NormContent } from "~/pages/norms/eli/[jurisdiction]/[agent]/[year]/[naturalIdentifier]/[pointInTime]/[version]/[language]/[subtype]/useNormData";
+import type { NormContent } from "~/pages/norms/eli/[jurisdiction]/[agent]/[year]/[naturalIdentifier]/[pointInTime]/[version]/[language]/useNormData";
 import type { LegislationWork } from "~/types";
 
 const mocks = vi.hoisted(() => {
