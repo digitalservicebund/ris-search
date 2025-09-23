@@ -20,13 +20,15 @@ defineEmits<{
     class="flex flex-col gap-4 md:flex-row md:flex-wrap"
   >
     <li v-for="field in dataFields" :key="field.pattern">
+      <!-- z-index is incresed for focused buttons to prevent visual glitches
+      from overlapping buttons/focus outlines -->
       <Button
         severity="info"
         size="small"
         rounded
         :aria-label="`${field.label} suchen`"
         :label="field.label"
-        class="gap-4! pl-12! text-nowrap"
+        class="gap-4! pl-12! text-nowrap focus-visible:z-10"
         @click="$emit('clickDataField', field)"
       >
         <template #icon>
