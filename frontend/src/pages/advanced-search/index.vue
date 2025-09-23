@@ -3,6 +3,8 @@ import DataFieldPicker from "~/components/AdvancedSearch/DataFieldPicker.vue";
 import ContentWrapper from "~/components/CustomLayouts/ContentWrapper.vue";
 import { queryableDataFields } from "~/pages/advanced-search/dataFields";
 import { DocumentKind } from "~/types";
+
+useHead({ title: "Erweiterte Suche" });
 </script>
 
 <template>
