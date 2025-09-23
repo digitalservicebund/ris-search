@@ -12,10 +12,10 @@ setup("authenticate", async ({ page }) => {
   // going against Playwright recommendations, these locators use XPath expressions
   // to ensure compatibility with different Keycloak implementations
   await page
-    .locator('//*[@autocomplete="username"]')
+    .getByRole("textbox", { name: "Username or email" })
     .fill(credentials.username);
   await page
-    .locator('//*[@autocomplete="current-password"]')
+    .getByRole("textbox", { name: "Password" })
     .fill(credentials.password);
   await page.getByRole("button", { name: "Sign In" }).click();
   // Wait until the page receives the cookies.
