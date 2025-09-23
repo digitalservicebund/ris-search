@@ -36,9 +36,6 @@ const hasHeading = computed(() => !!props.htmlParts.heading);
             v-html="props.htmlParts.heading"
           />
           <div v-else class="titel break-words max-sm:text-[26px]">
-            v-html="props.htmlParts.heading"
-          />
-          <div v-else class="titel">
             {{ getNormTitle(props.metadata) }}
           </div>
         </RisExpandableText>
@@ -50,9 +47,6 @@ const hasHeading = computed(() => !!props.htmlParts.heading);
             v-html="props.htmlParts.heading"
           ></div>
           <div v-else class="titel break-words max-sm:text-[26px]">
-            v-html="props.htmlParts.heading"
-          ></div>
-          <div v-else class="titel">
             {{ getNormTitle(props.metadata) }}
           </div>
         </template>
