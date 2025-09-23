@@ -4,7 +4,7 @@ import {
   addEllipsis,
   getStringOrDefault,
   removeOuterParentheses,
-  removePrefix
+  removePrefix,
 } from "./textFormatting";
 
 describe("getStringOrDefault", () => {
