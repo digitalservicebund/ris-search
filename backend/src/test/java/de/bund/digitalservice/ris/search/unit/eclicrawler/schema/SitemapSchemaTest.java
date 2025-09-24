@@ -59,7 +59,6 @@ class SitemapSchemaTest {
         "ECLI:DE:XX:2025:1111111",
         "BGH",
         "2025-01-01",
-        "documentType",
         "http://url/to/docNumber",
         isPublished);
   }

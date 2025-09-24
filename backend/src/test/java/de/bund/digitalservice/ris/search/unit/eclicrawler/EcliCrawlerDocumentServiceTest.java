@@ -49,7 +49,6 @@ class EcliCrawlerDocumentServiceTest {
         .ecli("ECLI:DE:XX:2025:1111111")
         .courtType("BGH")
         .decisionDate(LocalDate.of(2025, 1, 1))
-        .documentType("type")
         .build();
   }
 
@@ -60,7 +59,6 @@ class EcliCrawlerDocumentServiceTest {
         "ECLI:DE:XX:2025:1111111",
         "BGH",
         "2025-01-01",
-        "type",
         "frontend-url/case-law/" + docNumber,
         isPublished);
   }

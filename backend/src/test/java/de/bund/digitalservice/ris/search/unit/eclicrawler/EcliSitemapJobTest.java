@@ -66,14 +66,7 @@ class EcliSitemapJobTest {
 
   private EcliCrawlerDocument getTestDocument() {
     return new EcliCrawlerDocument(
-        "docNumber",
-        "docNumber.xml",
-        "ECLI:DE:XX:2025:1111111",
-        "BGH",
-        "2025-01-01",
-        "type",
-        "url",
-        true);
+        "docNumber", "docNumber.xml", "ECLI:DE:XX:2025:1111111", "BGH", "2025-01-01", "url", true);
   }
 
   private Sitemap getTestSitemap(EcliCrawlerDocument doc) {

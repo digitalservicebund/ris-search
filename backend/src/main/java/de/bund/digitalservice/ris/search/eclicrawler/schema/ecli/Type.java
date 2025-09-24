@@ -12,5 +12,5 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class Type {
   @XmlAttribute private String lang = Language.GERMAN;
-  @XmlValue private String value;
+  @XmlValue private String value = "Gerichtsentscheidung";
 }

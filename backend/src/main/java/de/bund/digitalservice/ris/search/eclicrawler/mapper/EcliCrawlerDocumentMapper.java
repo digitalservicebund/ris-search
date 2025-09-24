@@ -29,7 +29,6 @@ public class EcliCrawlerDocumentMapper {
         unit.ecli(),
         unit.courtType(),
         unit.decisionDate().format(dateFormatter),
-        unit.documentType(),
         url + unit.documentNumber(),
         true);
   }
@@ -49,7 +48,7 @@ public class EcliCrawlerDocumentMapper {
                             .setDate(doc.decisionDate())
                             .setLanguage(new Language())
                             .setPublisher(new Publisher())
-                            .setType(getType(doc))));
+                            .setType(new Type())));
     if (!doc.isPublished()) {
       url.getDocument().setStatus(Document.STATUS_DELETED);
     }
@@ -62,10 +61,6 @@ public class EcliCrawlerDocumentMapper {
 
   private static Identifier getIdentifier(String location) {
     return new Identifier().setValue(location);
-  }
-
-  private static Type getType(EcliCrawlerDocument doc) {
-    return new Type().setValue(doc.documentType());
   }
 
   private static Creator getCreator(EcliCrawlerDocument doc) {

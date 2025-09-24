@@ -118,7 +118,6 @@ public class EcliCrawlerDocumentService {
         doc.ecli(),
         doc.courtType(),
         doc.decisionDate(),
-        doc.documentType(),
         doc.url(),
         false);
   }
