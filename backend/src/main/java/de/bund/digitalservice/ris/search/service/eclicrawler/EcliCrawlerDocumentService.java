@@ -64,11 +64,13 @@ public class EcliCrawlerDocumentService {
             .toList();
 
     List<EcliCrawlerDocument> allEcliDocuments = new ArrayList<>(getEcliCrawlerDocuments(allFiles));
+    List<String> ecliFilenames =
+        allEcliDocuments.stream().map(EcliCrawlerDocument::filename).toList();
 
     try (Stream<EcliCrawlerDocument> allPublished = repository.findAllByIsPublishedIsTrue()) {
       var obsoleteDocuments =
           allPublished
-              .filter(doc -> !allFiles.contains(doc.filename()))
+              .filter(doc -> !ecliFilenames.contains(doc.filename()))
               .map(this::setDeleted)
               .toList();
       allEcliDocuments.addAll(obsoleteDocuments);

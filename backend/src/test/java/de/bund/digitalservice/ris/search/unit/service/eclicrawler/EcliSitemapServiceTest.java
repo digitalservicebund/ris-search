@@ -1,6 +1,7 @@
 package de.bund.digitalservice.ris.search.unit.service.eclicrawler;
 
-import static de.bund.digitalservice.ris.search.service.eclicrawler.EcliSitemapJob.PATH_PREFIX;
+import static de.bund.digitalservice.ris.search.service.eclicrawler.EcliSitemapService.PATH_PREFIX;
+import static de.bund.digitalservice.ris.search.service.eclicrawler.EcliSitemapService.ROBOTS_TXT_PATH;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -30,7 +31,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-class SitemapServiceTest {
+class EcliSitemapServiceTest {
 
   EcliSitemapService service;
   @Mock PortalBucket bucket;
@@ -54,7 +55,7 @@ class SitemapServiceTest {
 
     String expectedSitemapPath = "eclicrawler/2025/01/01/sitemap_1.xml";
 
-    List<Sitemap> actualSitemaps = service.writeUrlsToSitemaps(PATH_PREFIX, day, urls);
+    List<Sitemap> actualSitemaps = service.writeUrlsToSitemaps(day, urls);
 
     verify(bucket).save(expectedSitemapPath, "xmlContent");
     Assertions.assertEquals(1, actualSitemaps.size());
@@ -77,7 +78,7 @@ class SitemapServiceTest {
     ArgumentCaptor<String> argument = ArgumentCaptor.forClass(String.class);
     Mockito.doNothing().when(bucket).save(argument.capture(), any());
 
-    List<Sitemap> sitemaps = service.writeUrlsToSitemaps(PATH_PREFIX, day, urls);
+    List<Sitemap> sitemaps = service.writeUrlsToSitemaps(day, urls);
 
     List<String> values = argument.getAllValues();
 
@@ -94,7 +95,7 @@ class SitemapServiceTest {
 
     Assertions.assertEquals(
         "eclicrawler/2025/01/01/sitemap_1.xml",
-        service.getSitemapFilesPathsForDay("eclicrawler/", date).getFirst());
+        service.getSitemapFilesPathsForDay(date).getFirst());
   }
 
   @Test
@@ -106,9 +107,9 @@ class SitemapServiceTest {
                 User-agent: DG_JUSTICE_CRAWLER
                 Allow: /
                 """;
-    service.writeRobotsTxt("filename");
+    service.writeRobotsTxt();
 
-    verify(bucket).save("filename", expectedContent);
+    verify(bucket).save(ROBOTS_TXT_PATH, expectedContent);
   }
 
   @Test
@@ -125,23 +126,21 @@ class SitemapServiceTest {
                 Sitemap:sitemapPath1
                 Sitemap:baseUrl/2025/01/01/sitemap_index_1.xml""";
 
-    when(bucket.getFileAsString("filename")).thenReturn(Optional.of(existingContent));
+    when(bucket.getFileAsString(ROBOTS_TXT_PATH)).thenReturn(Optional.of(existingContent));
 
     service.updateRobotsTxt(
-        "filename",
-        "baseUrl/",
-        List.of(new Sitemapindex().setName("2025/01/01/sitemap_index_1.xml")));
+        "baseUrl/", List.of(new Sitemapindex().setName("2025/01/01/sitemap_index_1.xml")));
 
-    verify(bucket).save("filename", expectedContent);
+    verify(bucket).save(ROBOTS_TXT_PATH, expectedContent);
   }
 
   @Test
   void itThrowsAnErrorOnUpdatingNonExistingRobotsTxt() throws ObjectStoreServiceException {
-    when(bucket.getFileAsString("filename")).thenReturn(Optional.empty());
+    when(bucket.getFileAsString(ROBOTS_TXT_PATH)).thenReturn(Optional.empty());
     Assertions.assertThrows(
         FileNotFoundException.class,
         () -> {
-          service.updateRobotsTxt("filename", "baseUrl", List.of(new Sitemapindex()));
+          service.updateRobotsTxt("baseUrl", List.of(new Sitemapindex()));
         });
   }
 
@@ -150,7 +149,7 @@ class SitemapServiceTest {
     String filename = "2025/01/01/sitemap_1.xml";
     Optional<byte[]> expectedContent = Optional.of("test".getBytes(StandardCharsets.UTF_16));
 
-    when(bucket.get(filename)).thenReturn(expectedContent);
+    when(bucket.get(PATH_PREFIX + filename)).thenReturn(expectedContent);
 
     var actual = service.getSitemapFile(filename);
     Assertions.assertEquals(expectedContent, actual);
@@ -168,7 +167,7 @@ class SitemapServiceTest {
 
     when(marshaller.marshallSitemapIndex(index)).thenReturn("xmlContent");
 
-    service.writeSitemapsIndices(PATH_PREFIX, baseUrl, date, List.of(sitemap));
+    service.writeSitemapsIndices(baseUrl, date, List.of(sitemap));
 
     verify(bucket).save(PATH_PREFIX + "2025/01/01/sitemap_index_1.xml", "xmlContent");
   }
@@ -184,8 +183,7 @@ class SitemapServiceTest {
     ArgumentCaptor<String> argument = ArgumentCaptor.forClass(String.class);
     Mockito.doNothing().when(bucket).save(argument.capture(), any());
 
-    List<Sitemapindex> indicesList =
-        service.writeSitemapsIndices(PATH_PREFIX, "url", day, sitemaps);
+    List<Sitemapindex> indicesList = service.writeSitemapsIndices("url", day, sitemaps);
 
     List<String> values = argument.getAllValues();
 

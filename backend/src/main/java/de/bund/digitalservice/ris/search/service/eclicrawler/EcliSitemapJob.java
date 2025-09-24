@@ -37,9 +37,7 @@ public class EcliSitemapJob implements Job {
   private final LocalDate today = LocalDate.now();
 
   private static final Logger logger = LogManager.getLogger(EcliSitemapJob.class);
-  public static final String PATH_PREFIX = "eclicrawler/";
-  public static final String LAST_PROCESSED_CHANGELOG = PATH_PREFIX + "last_processed_changelog";
-  public static final String ROBOTS_TXT_PATH = PATH_PREFIX + "robots.txt";
+  public static final String LAST_PROCESSED_CHANGELOG = "eclicrawler/last_processed_changelog";
   private final String apiUrl;
 
   public EcliSitemapJob(
@@ -58,7 +56,7 @@ public class EcliSitemapJob implements Job {
   }
 
   public ReturnCode runJob() {
-    if (!sitemapService.getSitemapFilesPathsForDay(PATH_PREFIX, today).isEmpty()) {
+    if (!sitemapService.getSitemapFilesPathsForDay(today).isEmpty()) {
       logger.warn("day partition for ecli sitemap run already created");
       return ReturnCode.SUCCESS;
     }
@@ -67,7 +65,7 @@ public class EcliSitemapJob implements Job {
     try {
       if (isInitialRun) {
         logger.info("initial run, publish all");
-        sitemapService.writeRobotsTxt(ROBOTS_TXT_PATH);
+        sitemapService.writeRobotsTxt();
         String newestChangelog = indexJob.getNewChangelogs(caselawbucket, "0").getLast();
         List<EcliCrawlerDocument> changes = ecliCrawlerDocumentService.getFullDiff();
         persistEcliDocumentChanges(changes);
@@ -123,12 +121,12 @@ public class EcliSitemapJob implements Job {
     logger.info("publish changes {}", ecliDocuments.toArray());
     try {
       List<Url> urls = ecliDocuments.stream().map(EcliCrawlerDocumentMapper::toSitemapUrl).toList();
-      List<Sitemap> sitemaps = sitemapService.writeUrlsToSitemaps(PATH_PREFIX, today, urls);
+      List<Sitemap> sitemaps = sitemapService.writeUrlsToSitemaps(today, urls);
       List<Sitemapindex> sitemapIndices =
-          sitemapService.writeSitemapsIndices(PATH_PREFIX, apiUrl, today, sitemaps);
+          sitemapService.writeSitemapsIndices(apiUrl, today, sitemaps);
       if (!sitemapIndices.isEmpty()) {
         ecliCrawlerDocumentService.saveAll(ecliDocuments);
-        sitemapService.updateRobotsTxt(ROBOTS_TXT_PATH, apiUrl, sitemapIndices);
+        sitemapService.updateRobotsTxt(apiUrl, sitemapIndices);
       }
     } catch (JAXBException | ObjectStoreServiceException ex) {
       throw new FatalEcliSitemapJobException(ex.getMessage());

@@ -24,14 +24,15 @@ public class EcliSitemapService {
   EcliMarshaller marshaller;
 
   private static final int MAX_SITEMAP_URLS = 10000;
+  public static final String PATH_PREFIX = "eclicrawler/";
+  public static final String ROBOTS_TXT_PATH = PATH_PREFIX + "robots.txt";
 
   public EcliSitemapService(PortalBucket portalBucket, EcliMarshaller marshaller) {
     this.portalBucket = portalBucket;
     this.marshaller = marshaller;
   }
 
-  public List<Sitemap> writeUrlsToSitemaps(String basepath, LocalDate day, List<Url> urls)
-      throws JAXBException {
+  public List<Sitemap> writeUrlsToSitemaps(LocalDate day, List<Url> urls) throws JAXBException {
 
     List<List<Url>> partitioned = ListUtils.partition(urls, MAX_SITEMAP_URLS);
 
@@ -41,7 +42,7 @@ public class EcliSitemapService {
       Sitemap sitemap = new Sitemap();
       sitemap.setUrl(urls);
       sitemap.setName(String.format("%s/sitemap_%s.xml", getDatePartition(day), sitemapNr));
-      writeSitemap(basepath, sitemap);
+      writeSitemap(PATH_PREFIX, sitemap);
 
       writtenSitemaps.add(sitemap);
     }
@@ -49,7 +50,7 @@ public class EcliSitemapService {
   }
 
   public List<Sitemapindex> writeSitemapsIndices(
-      String basePath, String baseUrl, LocalDate day, List<Sitemap> sitemaps) throws JAXBException {
+      String baseUrl, LocalDate day, List<Sitemap> sitemaps) throws JAXBException {
     List<List<Sitemap>> partitioned = ListUtils.partition(sitemaps, MAX_SITEMAP_URLS);
 
     List<Sitemapindex> writtenIndices = new ArrayList<>();
@@ -62,7 +63,7 @@ public class EcliSitemapService {
               .toList();
       index.setSitemaps(locs);
       index.setName(String.format("%s/sitemap_index_%s.xml", getDatePartition(day), sitemapNr));
-      writeSitemapIndex(basePath, index);
+      writeSitemapIndex(PATH_PREFIX, index);
 
       writtenIndices.add(index);
     }
@@ -83,19 +84,19 @@ public class EcliSitemapService {
     return date.format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
   }
 
-  public List<String> getSitemapFilesPathsForDay(String basePath, LocalDate date) {
-    return portalBucket.getAllKeysByPrefix(basePath + getDatePartition(date));
+  public List<String> getSitemapFilesPathsForDay(LocalDate date) {
+    return portalBucket.getAllKeysByPrefix(PATH_PREFIX + getDatePartition(date));
   }
 
   public Optional<byte[]> getSitemapFile(String filename) {
     try {
-      return portalBucket.get(filename);
+      return portalBucket.get(PATH_PREFIX + filename);
     } catch (ObjectStoreServiceException e) {
       return Optional.empty();
     }
   }
 
-  public void writeRobotsTxt(String filename) {
+  public void writeRobotsTxt() {
 
     String header =
         """
@@ -105,16 +106,17 @@ public class EcliSitemapService {
             Allow: /
             """;
 
-    portalBucket.save(filename, header);
+    portalBucket.save(ROBOTS_TXT_PATH, header);
   }
 
-  public void updateRobotsTxt(String filename, String baseUrl, List<Sitemapindex> sitemapIndinces)
+  public void updateRobotsTxt(String baseUrl, List<Sitemapindex> sitemapIndinces)
       throws ObjectStoreServiceException, FileNotFoundException {
-    Optional<String> contentOption = portalBucket.getFileAsString(filename);
+    Optional<String> contentOption = portalBucket.getFileAsString(ROBOTS_TXT_PATH);
     if (contentOption.isEmpty()) {
       throw new FileNotFoundException("no robots.txt found");
     }
-    portalBucket.save(filename, appendSitemaps(baseUrl, contentOption.get(), sitemapIndinces));
+    portalBucket.save(
+        ROBOTS_TXT_PATH, appendSitemaps(baseUrl, contentOption.get(), sitemapIndinces));
   }
 
   private String appendSitemaps(String baseUrl, String content, List<Sitemapindex> sitemapIndices) {

@@ -4,23 +4,22 @@ import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.service.eclicrawler.EcliSitemapService;
 import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Profile;
+import jakarta.validation.constraints.Pattern;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 /** Controller class for handling REST API requests for sitemaps. */
 @RestController
+@Validated
 @Hidden
-@Profile("staging")
 public class EcliSitemapController {
   public final EcliSitemapService sitemapService;
 
-  @Autowired
   public EcliSitemapController(EcliSitemapService sitemapService) {
     this.sitemapService = sitemapService;
   }
@@ -31,9 +30,9 @@ public class EcliSitemapController {
   @ApiResponse(responseCode = "200")
   @ApiResponse(responseCode = "404")
   public ResponseEntity<byte[]> getEcliSitemapfiles(
-      @PathVariable() String year,
-      @PathVariable() String month,
-      @PathVariable() String day,
+      @PathVariable() @Pattern(regexp = "^[0-9]{4}$") String year,
+      @PathVariable() @Pattern(regexp = "^[0-9]{2}$") String month,
+      @PathVariable() @Pattern(regexp = "^[0-9]{2}$") String day,
       @PathVariable() String filename) {
 
     var file =

@@ -1,8 +1,6 @@
 package de.bund.digitalservice.ris.search.unit.service.eclicrawler;
 
 import static de.bund.digitalservice.ris.search.service.eclicrawler.EcliSitemapJob.LAST_PROCESSED_CHANGELOG;
-import static de.bund.digitalservice.ris.search.service.eclicrawler.EcliSitemapJob.PATH_PREFIX;
-import static de.bund.digitalservice.ris.search.service.eclicrawler.EcliSitemapJob.ROBOTS_TXT_PATH;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.ArgumentMatchers.eq;
@@ -57,8 +55,7 @@ class EcliSitemapJobTest {
   @Test
   void itReturnsSuccessfulIfItRanAlready() {
     LocalDate day = LocalDate.now();
-    when(sitemapService.getSitemapFilesPathsForDay(PATH_PREFIX, day))
-        .thenReturn(List.of("2025/01/01"));
+    when(sitemapService.getSitemapFilesPathsForDay(day)).thenReturn(List.of("2025/01/01"));
 
     Job.ReturnCode code = sitemapJob.runJob();
     assertEquals(Job.ReturnCode.SUCCESS, code);
@@ -83,7 +80,7 @@ class EcliSitemapJobTest {
     var testEcliDocument = getTestDocument();
     var testSitemap = getTestSitemap(testEcliDocument);
 
-    when(sitemapService.getSitemapFilesPathsForDay(PATH_PREFIX, day)).thenReturn(List.of());
+    when(sitemapService.getSitemapFilesPathsForDay(day)).thenReturn(List.of());
     when(syncJob.getNewChangelogs(caseLawBucket, "0")).thenReturn(changelogPaths);
     when(documentService.getFullDiff()).thenReturn(List.of(testEcliDocument));
 
@@ -95,7 +92,7 @@ class EcliSitemapJobTest {
 
     Job.ReturnCode code = sitemapJob.runJob();
 
-    verify(sitemapService).writeUrlsToSitemaps(PATH_PREFIX, day, testSitemap.getUrl());
+    verify(sitemapService).writeUrlsToSitemaps(day, testSitemap.getUrl());
     verifyPersistenceMocks(
         day,
         List.of(testEcliDocument),
@@ -119,7 +116,7 @@ class EcliSitemapJobTest {
     var testSitemap = getTestSitemap(testEcliDocument);
     var testIndex = new Sitemapindex().setName("2025-09-09");
 
-    when(sitemapService.getSitemapFilesPathsForDay(PATH_PREFIX, day)).thenReturn(List.of());
+    when(sitemapService.getSitemapFilesPathsForDay(day)).thenReturn(List.of());
     when(portalBucket.getAllKeysByPrefix(LAST_PROCESSED_CHANGELOG)).thenReturn(List.of("file"));
     when(portalBucket.getFileAsString(LAST_PROCESSED_CHANGELOG))
         .thenReturn(Optional.of("changelog/date"));
@@ -136,7 +133,7 @@ class EcliSitemapJobTest {
 
     Job.ReturnCode code = sitemapJob.runJob();
 
-    verify(sitemapService, never()).writeRobotsTxt(ROBOTS_TXT_PATH);
+    verify(sitemapService, never()).writeRobotsTxt();
     verifyPersistenceMocks(
         day, List.of(testEcliDocument), List.of(testSitemap), List.of(testIndex));
 
@@ -151,11 +148,9 @@ class EcliSitemapJobTest {
       throws JAXBException, FileNotFoundException, ObjectStoreServiceException {
     List<Url> urls = sitemaps.stream().flatMap(sitemap -> sitemap.getUrl().stream()).toList();
 
-    when(sitemapService.writeUrlsToSitemaps(
-            eq(PATH_PREFIX), eq(day), argThat(new UrlListMatcher(urls))))
+    when(sitemapService.writeUrlsToSitemaps(eq(day), argThat(new UrlListMatcher(urls))))
         .thenReturn(sitemaps);
-    when(sitemapService.writeSitemapsIndices(
-            PATH_PREFIX, "frontend/url/api/v1/eclicrawler/", day, sitemaps))
+    when(sitemapService.writeSitemapsIndices("frontend/url/api/v1/eclicrawler/", day, sitemaps))
         .thenReturn(indices);
 
     Mockito.doNothing()
@@ -164,7 +159,7 @@ class EcliSitemapJobTest {
 
     Mockito.doNothing()
         .when(sitemapService)
-        .updateRobotsTxt(ROBOTS_TXT_PATH, "frontend/url/api/v1/eclicrawler/", indices);
+        .updateRobotsTxt("frontend/url/api/v1/eclicrawler/", indices);
   }
 
   private void verifyPersistenceMocks(
@@ -175,11 +170,9 @@ class EcliSitemapJobTest {
       throws JAXBException, FileNotFoundException, ObjectStoreServiceException {
     List<Url> urls = sitemaps.stream().flatMap(sitemap -> sitemap.getUrl().stream()).toList();
 
-    verify(sitemapService).writeUrlsToSitemaps(PATH_PREFIX, day, urls);
-    verify(sitemapService)
-        .writeSitemapsIndices(PATH_PREFIX, "frontend/url/api/v1/eclicrawler/", day, sitemaps);
+    verify(sitemapService).writeUrlsToSitemaps(day, urls);
+    verify(sitemapService).writeSitemapsIndices("frontend/url/api/v1/eclicrawler/", day, sitemaps);
     verify(documentService).saveAll(documents);
-    verify(sitemapService)
-        .updateRobotsTxt(ROBOTS_TXT_PATH, "frontend/url/api/v1/eclicrawler/", indices);
+    verify(sitemapService).updateRobotsTxt("frontend/url/api/v1/eclicrawler/", indices);
   }
 }

@@ -1,7 +1,6 @@
 package de.bund.digitalservice.ris.search.service;
 
 import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,19 +8,6 @@ import java.util.Map;
 public class BulkChangelogParser {
 
   private BulkChangelogParser() {}
-
-  public static List<Changelog> getChangelogsFromLastChangeAll(List<Changelog> changelogs) {
-    List<Changelog> relevantChangelogs = new ArrayList<>();
-    changelogs.forEach(
-        changelog -> {
-          if (changelog.isChangeAll()) {
-            relevantChangelogs.clear();
-          } else {
-            relevantChangelogs.add(changelog);
-          }
-        });
-    return relevantChangelogs;
-  }
 
   public static boolean containsChangeAll(List<Changelog> logs) {
     return !logs.stream().filter(Changelog::isChangeAll).toList().isEmpty();
