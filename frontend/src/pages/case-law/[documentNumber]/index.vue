@@ -49,7 +49,7 @@ const { data: html, error: contentError } = await useFetch<string>(
 );
 
 const truncate = (s: string, n: number) => {
-  const clean = s.replace(/\s+/g, " ").trim();
+  const clean = s.trim().split(/\s+/).join(" ");
   if (clean.length <= n) return clean;
 
   const cut = clean.slice(0, n);
@@ -100,7 +100,7 @@ const extractDescription = (
 
   if (!text) return undefined;
 
-  const paragraph = text.replace(/\s+/g, " ").trim();
+  const paragraph = text.trim().split(/\s+/).join(" ");
   return truncate(paragraph, 150);
 };
 
