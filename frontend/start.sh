@@ -9,7 +9,5 @@ export NUXT_SSR_BACKEND_URL="${NUXT_SSR_BACKEND_URL:=$(cat /etc/secrets/ssr-back
 export NUXT_SESSION_PASSWORD="${NUXT_SESSION_PASSWORD:=$(cat /etc/secrets/session-password/secret)}"
 export SENTRY_AUTH_TOKEN="${SENTRY_AUTH_TOKEN:=$(cat /etc/secrets/sentry-auth/token)}"
 export NUXT_PUBLIC_SENTRY_DSN="${NUXT_PUBLIC_SENTRY_DSN:=$(cat /etc/secrets/sentry-dsn/url)}"
-export NUXT_PUBLIC_ANALYTICS_POSTHOG_KEY="${NUXT_PUBLIC_ANALYTICS_POSTHOG_KEY:=$(cat /etc/secrets/analytics-key/key)}"
-export NUXT_PUBLIC_ANALYTICS_POSTHOG_HOST="${NUXT_PUBLIC_ANALYTICS_POSTHOG_HOST:=$(cat /etc/secrets/analytics-host/host)}"
 
 node --import /app/server/sentry.server.config.mjs /app/server/index.mjs

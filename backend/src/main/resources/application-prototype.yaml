@@ -12,6 +12,7 @@ spring:
         fail-fast: true
         sources:
           - name: ris-search-opensearch-prototype-config
+          - name: posthog-config
       secrets:
         paths: /etc/secrets
   security:
