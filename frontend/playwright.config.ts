@@ -5,7 +5,8 @@ export const authFile = "playwright/.auth/user.json";
 const customMobileDevice = {
   ...devices["Desktop Firefox"],
   viewport: { width: 320, height: 600 },
-  hasTouch: true,
+  // Temporarily disabled because tooltips in ActionMenu are not compatible with touch (needs a different design option)
+  hasTouch: false,
 };
 
 /**
