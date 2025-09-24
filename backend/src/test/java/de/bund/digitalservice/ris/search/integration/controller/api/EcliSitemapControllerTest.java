@@ -5,6 +5,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.c4_soft.springaddons.security.oauth2.test.annotations.WithJwt;
 import de.bund.digitalservice.ris.search.config.ApiConfig;
+import de.bund.digitalservice.ris.search.integration.config.ContainersIntegrationBase;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -17,7 +18,7 @@ import org.springframework.test.web.servlet.MockMvc;
 @AutoConfigureMockMvc
 @Tag("integration")
 @WithJwt("jwtTokens/ValidAccessToken.json")
-class EcliSitemapControllerTest {
+class EcliSitemapControllerTest extends ContainersIntegrationBase {
 
   @Autowired private MockMvc mockMvc;
 
