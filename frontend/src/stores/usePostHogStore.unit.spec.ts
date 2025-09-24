@@ -12,7 +12,7 @@ import { getPostHogConfig } from "~/utils/testing/postHogUtils";
 const { useRuntimeConfigMock } = vi.hoisted(() => {
   return {
     useRuntimeConfigMock: vi.fn(() => {
-      return getPostHogConfig("key", "host", "123");
+      return getPostHogConfig("key", "host");
     }),
   };
 });
@@ -128,30 +128,7 @@ describe("usePostHogStore", () => {
     expect(store.postHog?.opt_in_capturing).toHaveBeenCalled();
   });
 
-  it("sendFeedbackToPostHog returns error when posthog keys are not set", async () => {
-    useRuntimeConfigMock.mockReturnValue(
-      getPostHogConfig(undefined, undefined, "dummy_survey"),
-    );
-    const store = usePostHogStore();
-    await expect(store.sendFeedbackToPostHog("good")).rejects.toThrow(
-      "PostHog configuration is missing!",
-    );
-  });
-
-  it("sendFeedbackToPostHog returns error when surveyId is not set in config", async () => {
-    useRuntimeConfigMock.mockReturnValue(
-      getPostHogConfig("key", "host", undefined),
-    );
-    const store = usePostHogStore();
-    await expect(store.sendFeedbackToPostHog("good")).rejects.toThrow(
-      "PostHog configuration is missing!",
-    );
-  });
-
   it("sendFeedbackToPostHog sends the user feedback and tracking information to backend when user enables tracking", () => {
-    useRuntimeConfigMock.mockReturnValue(
-      getPostHogConfig("key", "host", "123"),
-    );
     const store = usePostHogStore();
     cookiesMock.get.mockReturnValue({
       ph_key_posthog: '{"distinct_id":"12345"}',
@@ -159,23 +136,18 @@ describe("usePostHogStore", () => {
     store.setTracking(true);
     store.sendFeedbackToPostHog("good");
     expect(useFetchMock).toHaveBeenCalledWith(
-      feedbackURL +
-        "?text=good&url=%2F&user_id=12345&ph_host=host&ph_key=key&ph_survey_id=123",
+      feedbackURL + "?text=good&url=%2F&user_id=12345",
       expect.anything(),
     );
     cookiesMock.get.mockRestore();
   });
 
   it("sendFeedbackToPostHog sends the data to backend as anonymous user when the user disables tracking", () => {
-    useRuntimeConfigMock.mockReturnValue(
-      getPostHogConfig("key", "host", "123"),
-    );
     const store = usePostHogStore();
     store.setTracking(false);
     store.sendFeedbackToPostHog("test");
     expect(useFetchMock).toHaveBeenCalledWith(
-      feedbackURL +
-        "?text=test&url=%2F&user_id=anonymous_feedback_user&ph_host=host&ph_key=key&ph_survey_id=123",
+      feedbackURL + "?text=test&url=%2F&user_id=anonymous_feedback_user",
       expect.anything(),
     );
   });

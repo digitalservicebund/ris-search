@@ -45,9 +45,6 @@ public class FeedbackController {
    * @param url The URL to be sent
    * @param userId The user identifier for PostHog. If the user is not opted for tracking then this
    *     field should be "anonymous_feedback"
-   * @param phHost The PostHog host.
-   * @param phKey The PostHog API key.
-   * @param phSurveyId The PostHog survey ID.
    * @return ResponseEntity with message indicating success or failure
    */
   @Hidden
@@ -66,18 +63,9 @@ public class FeedbackController {
           String url,
       @Parameter(name = "user_id", description = "The user identifier to be sent")
           @RequestParam(value = "user_id")
-          String userId,
-      @Parameter(name = "ph_host", description = "The PostHog host")
-          @RequestParam(value = "ph_host")
-          String phHost,
-      @Parameter(name = "ph_key", description = "The PostHog API key")
-          @RequestParam(value = "ph_key")
-          String phKey,
-      @Parameter(name = "pg_survey_id", description = "The PostHog survey ID")
-          @RequestParam(value = "ph_survey_id")
-          String phSurveyId) {
+          String userId) {
     try {
-      postHogService.sendFeedback(userId, url, text, phHost, phKey, phSurveyId);
+      postHogService.sendFeedback(userId, url, text);
       return ResponseEntity.ok()
           .contentType(MediaType.APPLICATION_JSON)
           .body(Map.of("message", "Feedback sent successfully"));

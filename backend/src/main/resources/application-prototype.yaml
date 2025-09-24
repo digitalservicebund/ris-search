@@ -12,6 +12,7 @@ spring:
         fail-fast: true
         sources:
           - name: ris-search-opensearch-prototype-config
+          - name: posthog-config
       secrets:
         paths: /etc/secrets
   security:
@@ -54,3 +55,9 @@ logging:
             MessageTracing:
               sent: DEBUG
               received: TRACE
+
+# Used for sending feedback to posthog
+posthog:
+  api-key:
+  host:
+  feedback-survey-id:

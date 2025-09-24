@@ -8,7 +8,7 @@ import { getPostHogConfig } from "~/utils/testing/postHogUtils";
 const { useRuntimeConfigMock } = vi.hoisted(() => {
   return {
     useRuntimeConfigMock: vi.fn(() => {
-      return getPostHogConfig("key", "host", "123");
+      return getPostHogConfig("key", "host");
     }),
   };
 });

@@ -131,7 +131,6 @@ export default defineNuxtConfig({
       analytics: {
         posthogKey: "", // needs override in env
         posthogHost: "", // needs override in env
-        feedbackSurveyId: "", // needs override in env
       },
     },
   },

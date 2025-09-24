@@ -1,31 +1,7 @@
-import { mockNuxtImport, registerEndpoint } from "@nuxt/test-utils/runtime";
 import { createTestingPinia } from "@pinia/testing";
 import type { VueWrapper } from "@vue/test-utils";
 import { flushPromises, mount } from "@vue/test-utils";
 import { describe, expect, it, vi } from "vitest";
-import FeedbackForm from "./FeedbackForm.vue";
-import { useBackendURL } from "~/composables/useBackendURL";
-import { getPostHogConfig } from "~/utils/testing/postHogUtils";
-
-const { useRuntimeConfigMock } = vi.hoisted(() => {
-  return {
-    useRuntimeConfigMock: vi.fn(() => {
-      return getPostHogConfig(undefined, undefined, "123");
-    }),
-  };
-});
-
-mockNuxtImport("useRuntimeConfig", () => {
-  return useRuntimeConfigMock;
-});
-
-registerEndpoint(`${useBackendURL()}/v1/feedback`, () => ({
-  message: "Success",
-}));
-
-const emptyErrorMessage = "Geben Sie Ihr Feedback in das obere Textfeld ein.";
-const errorFeedbackMessage =
-  "Es gab leider einen Fehler. Probieren Sie es zu einem späteren Moment noch einmal.";
 
 async function clickSubmit(wrapper: VueWrapper) {
   await wrapper
@@ -46,7 +22,18 @@ function getErrorMessage(wrapper: VueWrapper) {
   return wrapper.find('[data-test-id="feedback-error-message"]').text();
 }
 
-const factory = () => {
+function mockSendFeedbackToPostHog(mockedSend: () => Promise<void>) {
+  vi.doMock("~/stores/usePostHogStore", () => ({
+    usePostHogStore: () => ({
+      sendFeedbackToPostHog: mockedSend,
+    }),
+  }));
+}
+
+const factory = async () => {
+  // Dynamically import the component to be able to mock other imports the component depends on
+  // a per-test basis
+  const { default: FeedbackForm } = await import("./FeedbackForm.vue");
   return mount(FeedbackForm, {
     global: {
       plugins: [
@@ -81,26 +68,34 @@ const factory = () => {
 describe("FeedbackForm", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    vi.resetModules();
   });
 
   it("shows an error when feedback input is empty", async () => {
-    const wrapper = factory();
+    const wrapper = await factory();
     await clickSubmit(wrapper);
-    expect(getErrorMessage(wrapper)).toBe(emptyErrorMessage);
+    expect(getErrorMessage(wrapper)).toBe(
+      "Geben Sie Ihr Feedback in das obere Textfeld ein.",
+    );
   });
 
-  it("shows an error when postHog is not initialized", async () => {
-    const wrapper = factory();
+  it("shows an error when sending feedback using posthog store fails", async () => {
+    mockSendFeedbackToPostHog(async () => {
+      throw new Error(`Error sending feedback`);
+    });
+    const wrapper = await factory();
+
     await fillFeedbackForm(wrapper);
     await clickSubmit(wrapper);
-    expect(getErrorMessage(wrapper)).toBe(errorFeedbackMessage);
+    expect(getErrorMessage(wrapper)).toBe(
+      "Es gab leider einen Fehler. Probieren Sie es zu einem späteren Moment noch einmal.",
+    );
   });
 
   it("shows a confirmation message when feedback is sent successfully", async () => {
-    useRuntimeConfigMock.mockReturnValue(
-      getPostHogConfig("key", "host", "123"),
-    );
-    const wrapper = factory();
+    mockSendFeedbackToPostHog(async () => {});
+
+    const wrapper = await factory();
     await fillFeedbackForm(wrapper);
     await clickSubmit(wrapper);
     const confirmationMessage = wrapper.find(
