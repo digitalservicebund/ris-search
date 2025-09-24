@@ -7,5 +7,5 @@ test("is authenticated", async ({ page }, workerInfo) => {
   if (workerInfo.project.name === "mobile")
     await page.getByRole("button", { name: "Menu" }).click();
   const expectedLogoutButtonName = `${displayName} Abmelden`;
-  await expect(page.getByText(expectedLogoutButtonName)).toBeVisible();
+  await expect(page.getByText(expectedLogoutButtonName).first()).toBeVisible();
 });
