@@ -1,5 +1,5 @@
-import { test } from "@playwright/test";
 import type { Page } from "@playwright/test";
+import { test } from "@playwright/test";
 import { expect } from "./fixtures";
 import { getDisplayedResultCount } from "./utils";
 
@@ -16,6 +16,7 @@ test("can search, filter for case law, and view a single case law documentation 
     await page.goto("/");
     await page.getByPlaceholder("Suchbegriff eingeben").fill("Fiktiv");
     await page.getByLabel("Suchen").click();
+    await page.waitForLoadState("networkidle");
 
     expect(await getDisplayedResultCount(page)).toBe(15);
   });
@@ -44,8 +45,7 @@ test("can search, filter for case law, and view a single case law documentation 
 
     const firstSectionHeader = page
       .getByRole("main")
-      .getByRole("heading")
-      .getByText("Tenor")
+      .getByRole("heading", { level: 2 })
       .first();
     await expect(firstSectionHeader).toBeVisible();
 
@@ -57,7 +57,9 @@ test("can search, filter for case law, and view a single case law documentation 
 
   for (const sectionName of ["Tenor", "Orientierungssatz", "Tatbestand"]) {
     await test.step(`Jump straight to a specific section, ${sectionName}`, async () => {
-      await page.goto(resultsListUrl);
+      await page.goto(resultsListUrl, {
+        waitUntil: "networkidle",
+      });
       const link = page.getByRole("link", { name: sectionName }).first();
       await link.click();
 
@@ -89,7 +91,9 @@ test.describe("actions menu", () => {
     const isMobileTest = workerInfo.project.name === "mobile";
     await page.goto("/case-law/JURE200030030", { waitUntil: "networkidle" });
 
-    if (isMobileTest) await page.getByLabel("Aktionen anzeigen").click();
+    if (isMobileTest) {
+      await page.getByLabel("Aktionen anzeigen").click();
+    }
     const button = isMobileTest
       ? page.getByText("Link kopieren")
       : page.getByRole("button", {
@@ -112,7 +116,9 @@ test.describe("actions menu", () => {
   }, workerInfo) => {
     const isMobileTest = workerInfo.project.name === "mobile";
     await page.goto("/case-law/JURE200030030", { waitUntil: "networkidle" });
-    if (isMobileTest) await page.getByLabel("Aktionen anzeigen").click();
+    if (isMobileTest) {
+      await page.getByLabel("Aktionen anzeigen").click();
+    }
     const button = isMobileTest
       ? page.getByRole("menuitem", { name: "Drucken" })
       : page.getByRole("button", {
@@ -140,7 +146,7 @@ test.describe("actions menu", () => {
   test("can't use PDF action as it is disabled", async ({
     page,
   }, workerInfo) => {
-    const isMobileTest = (workerInfo.project.name = "mobile");
+    const isMobileTest = workerInfo.project.name === "mobile";
     await page.goto("/case-law/JURE200030030", { waitUntil: "networkidle" });
     if (isMobileTest) await page.getByLabel("Aktionen anzeigen").click();
     const button = isMobileTest

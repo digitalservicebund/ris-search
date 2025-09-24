@@ -307,7 +307,7 @@ test.describe("actions menu", () => {
   test("can't use PDF action as it is disabled", async ({
     page,
   }, workerInfo) => {
-    const isMobileTest = (workerInfo.project.name = "mobile");
+    const isMobileTest = workerInfo.project.name === "mobile";
     await page.goto("/norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu", {
       waitUntil: "networkidle",
     });
