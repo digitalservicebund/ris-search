@@ -67,6 +67,8 @@
     "@pinia/testing": "^1.0.2",
     "@playwright/test": "^1.55.0",
     "@primevue/nuxt-module": "^4.3.9",
+    "@testing-library/jest-dom": "^6.8.0",
+    "@testing-library/user-event": "^14.6.1",
     "@testing-library/vue": "^8.1.0",
     "@types/dompurify": "^3.2.0",
     "@types/js-cookie": "^3.0.6",
@@ -110,7 +112,8 @@
     "@vercel/nft": "^0.27.4",
     "tar-fs": "^3.0.10",
     "brace-expansion": "^2.0.2",
-    "@playwright/test": "^1.53.2"
+    "@playwright/test": "^1.53.2",
+    "nwsapi": "2.2.20"
   },
   "overrides": {
     "cross-spawn": "7.0.5"

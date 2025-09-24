@@ -1,7 +1,6 @@
 import { createTestingPinia } from "@pinia/testing";
 import { mount, RouterLinkStub } from "@vue/test-utils";
 import type { VueWrapper } from "@vue/test-utils";
-import PrimeVue from "primevue/config";
 import { beforeEach, describe, expect, it } from "vitest";
 import ItemsPerPageDropdown from "./ItemsPerPageDropdown.vue";
 import { useSimpleSearchParamsStore } from "~/stores/searchParams";
@@ -15,7 +14,7 @@ describe("items per page dropdown", () => {
         RouterLink: RouterLinkStub,
       },
       global: {
-        plugins: [createTestingPinia({ stubActions: false }), PrimeVue],
+        plugins: [createTestingPinia({ stubActions: false })],
       },
     });
   });
