@@ -30,9 +30,9 @@ public class EcliSitemapController {
   @ApiResponse(responseCode = "200")
   @ApiResponse(responseCode = "404")
   public ResponseEntity<byte[]> getEcliSitemapfiles(
-      @PathVariable() @Pattern(regexp = "^[0-9]{4}$") String year,
-      @PathVariable() @Pattern(regexp = "^[0-9]{2}$") String month,
-      @PathVariable() @Pattern(regexp = "^[0-9]{2}$") String day,
+      @PathVariable() @Pattern(regexp = "\\d{4}") String year,
+      @PathVariable() @Pattern(regexp = "\\d{2}") String month,
+      @PathVariable() @Pattern(regexp = "\\d{2}") String day,
       @PathVariable() String filename) {
 
     var file =
