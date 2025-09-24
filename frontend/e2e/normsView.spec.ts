@@ -203,108 +203,96 @@ test("can view images", async ({ page }) => {
 });
 
 test.describe("actions menu", () => {
-  test("can use link action button to copy link to currently valid expression", async ({
+  const testCases = [
+    {
+      name: "can use link action button to copy link to currently valid expression",
+      linkText: "Link zur jeweils gültigen Fassung",
+      clipboardText: "/norms/eli/bund/bgbl-1/2024/383",
+    },
+    {
+      name: "can use permalink action button to copy permalink to viewed expression",
+      linkText: "Permalink zu dieser Fassung",
+      clipboardText: "/norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu",
+    },
+  ];
+  for (const testCase of testCases) {
+    test(
+      testCase.name,
+      async ({ page, browserName, baseURL, context }, workerInfo) => {
+        const isMobileTest = workerInfo.project.name === "mobile";
+        await page.goto("/norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu", {
+          waitUntil: "networkidle",
+        });
+
+        if (browserName === "chromium") {
+          const origin = baseURL
+            ? new URL(baseURL).origin
+            : new URL(page.url()).origin;
+          await context.grantPermissions(
+            ["clipboard-read", "clipboard-write"],
+            {
+              origin,
+            },
+          );
+        }
+
+        if (isMobileTest) {
+          await page.getByLabel("Aktionen anzeigen").click();
+        }
+
+        const button = page.getByRole("link", {
+          name: testCase.linkText,
+        });
+
+        await button.isVisible();
+
+        if (!isMobileTest) {
+          await button.hover();
+
+          await expect(
+            page.getByRole("tooltip", {
+              name: testCase.linkText,
+            }),
+          ).toBeVisible();
+        }
+
+        let clipboardContents: string;
+
+        await test.step("can copy the link", async () => {
+          await button.click();
+          if (!isMobileTest)
+            await expect(page.getByText("Kopiert!")).toBeVisible();
+          clipboardContents = await page.evaluate(() => {
+            return navigator.clipboard.readText();
+          });
+          expect(clipboardContents.endsWith(testCase.clipboardText)).toBe(true);
+        });
+      },
+    );
+  }
+
+  test("can use print action button to open print menu", async ({
     page,
-    browserName,
-    baseURL,
-    context,
-  }) => {
+  }, workerInfo) => {
+    const isMobileTest = workerInfo.project.name === "mobile";
     await page.goto("/norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu", {
       waitUntil: "networkidle",
     });
-    if (browserName === "chromium") {
-      const origin = baseURL
-        ? new URL(baseURL).origin
-        : new URL(page.url()).origin;
-      await context.grantPermissions(["clipboard-read", "clipboard-write"], {
-        origin,
-      });
+    if (isMobileTest) await page.getByLabel("Aktionen anzeigen").click();
+
+    const button = isMobileTest
+      ? page.getByRole("menuitem", { name: "Drucken" })
+      : page.getByRole("button", {
+          name: "Drucken",
+        });
+
+    if (!isMobileTest) {
+      await button.hover();
+
+      await expect(
+        page.getByRole("tooltip", { name: "Drucken" }),
+      ).toBeVisible();
     }
-    const button = page.getByRole("link", {
-      name: "Link zur jeweils gültigen Fassung",
-    });
-    await button.hover();
-
-    await expect(
-      page.getByRole("tooltip", { name: "Link zur jeweils gültigen Fassung" }),
-    ).toBeVisible();
-
-    let clipboardContents: string;
-
-    await test.step("can copy the link", async () => {
-      await button.click();
-
-      await expect(page.getByText("Kopiert!")).toBeVisible();
-      clipboardContents = await page.evaluate(() => {
-        return navigator.clipboard.readText();
-      });
-      expect(
-        clipboardContents.endsWith(
-          "/norms/eli/bund/bgbl-1/2024/383",
-          // note the omission of /2024-12-19/1/deu/
-        ),
-      ).toBe(true);
-    });
-
-    await test.step("can use the copied link to get back to the original URL", async () => {
-      await page.goto(clipboardContents);
-      await page.waitForURL("/norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu");
-    });
-  });
-
-  test("can use permalink action button to copy permalink to viewed expression", async ({
-    page,
-    browserName,
-    baseURL,
-    context,
-  }) => {
-    await page.goto("/norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu", {
-      waitUntil: "networkidle",
-    });
-    if (browserName === "chromium") {
-      const origin = baseURL
-        ? new URL(baseURL).origin
-        : new URL(page.url()).origin;
-      await context.grantPermissions(["clipboard-read", "clipboard-write"], {
-        origin,
-      });
-    }
-    const button = page.getByRole("link", {
-      name: "Permalink zu dieser Fassung",
-    });
-    await button.hover();
-
-    await expect(
-      page.getByRole("tooltip", { name: "Permalink zu dieser Fassung" }),
-    ).toBeVisible();
-
-    let clipboardContents: string;
-
-    await test.step("can copy the link", async () => {
-      await button.click();
-
-      await expect(page.getByText("Kopiert!")).toBeVisible();
-      clipboardContents = await page.evaluate(() => {
-        return navigator.clipboard.readText();
-      });
-      expect(
-        clipboardContents.endsWith(
-          "/norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu",
-        ),
-      ).toBe(true);
-    });
-  });
-
-  test("can use print action button to open print menu", async ({ page }) => {
-    await page.goto("/norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu", {
-      waitUntil: "networkidle",
-    });
-    const button = page.getByRole("button", {
-      name: "Drucken",
-    });
-    await button.hover();
-
-    await expect(page.getByRole("tooltip", { name: "Drucken" })).toBeVisible();
 
     await test.step("can open print menu", async () => {
       await page.evaluate(
@@ -316,36 +304,51 @@ test.describe("actions menu", () => {
     });
   });
 
-  test("can't use PDF action as it is disabled", async ({ page }) => {
+  test("can't use PDF action as it is disabled", async ({
+    page,
+  }, workerInfo) => {
+    const isMobileTest = (workerInfo.project.name = "mobile");
     await page.goto("/norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu", {
       waitUntil: "networkidle",
     });
-    const button = page.getByRole("button", {
-      name: "Als PDF speichern",
-    });
+    if (isMobileTest) await page.getByLabel("Aktionen anzeigen").click();
+    const button = isMobileTest
+      ? page.getByText("Als PDF speichern")
+      : page.getByRole("button", {
+          name: "Als PDF speichern",
+        });
 
-    await button.hover();
+    if (!isMobileTest) {
+      await button.hover();
 
-    await expect(
-      page.getByRole("tooltip", { name: "Als PDF speichern" }),
-    ).toBeVisible();
+      await expect(
+        page.getByRole("tooltip", { name: "Als PDF speichern" }),
+      ).toBeVisible();
+    }
 
-    await expect(button).toBeDisabled();
+    if (!isMobileTest) await expect(button).toBeDisabled();
   });
 
-  test("can use XML action to view norms xml file", async ({ page }) => {
+  test("can use XML action to view norms xml file", async ({
+    page,
+  }, workerInfo) => {
+    const isMobileTest = workerInfo.project.name === "mobile";
     await page.goto("/norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu", {
       waitUntil: "networkidle",
     });
+
+    if (isMobileTest) await page.getByLabel("Aktionen anzeigen").click();
     const button = page.getByRole("link", {
       name: "XML anzeigen",
     });
 
-    await button.hover();
+    if (!isMobileTest) {
+      await button.hover();
 
-    await expect(
-      page.getByRole("tooltip", { name: "XML anzeigen" }),
-    ).toBeVisible();
+      await expect(
+        page.getByRole("tooltip", { name: "XML anzeigen" }),
+      ).toBeVisible();
+    }
 
     await button.click();
 

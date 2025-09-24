@@ -2,13 +2,6 @@ import { defineConfig, devices, type Project } from "@playwright/test";
 
 export const authFile = "playwright/.auth/user.json";
 
-const customMobileDevice = {
-  ...devices["Desktop Firefox"],
-  viewport: { width: 320, height: 600 },
-  // Temporarily disabled because tooltips in ActionMenu are not compatible with touch (needs a different design option)
-  hasTouch: false,
-};
-
 /**
  * Read environment variables from file.
  * https://github.com/motdotla/dotenv
@@ -58,7 +51,9 @@ const browserConfigurations: Project[] = [
   {
     name: "mobile",
     use: {
-      ...customMobileDevice,
+      ...devices["Desktop Firefox"],
+      viewport: { width: 320, height: 600 },
+      touch: true,
       storageState: authFile,
     },
     dependencies: ["setup"],
@@ -97,7 +92,7 @@ export default defineConfig({
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */
     baseURL: environment.baseUrl,
-    screenshot: { mode: "only-on-failure", fullPage: true },
+    screenshot: { mode: "on", fullPage: true },
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: "retain-on-first-failure",
     extraHTTPHeaders,

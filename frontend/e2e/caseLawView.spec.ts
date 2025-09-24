@@ -45,6 +45,7 @@ test("can search, filter for case law, and view a single case law documentation 
     const firstSectionHeader = page
       .getByRole("main")
       .getByRole("heading")
+      .getByText("Tenor")
       .first();
     await expect(firstSectionHeader).toBeVisible();
 
@@ -82,28 +83,49 @@ test("can search, filter for case law, and view a single case law documentation 
 });
 
 test.describe("actions menu", () => {
-  test("can't use link action button as its disabled", async ({ page }) => {
+  test("can't use link action button as its disabled", async ({
+    page,
+  }, workerInfo) => {
+    const isMobileTest = workerInfo.project.name === "mobile";
     await page.goto("/case-law/JURE200030030", { waitUntil: "networkidle" });
-    const button = page.getByRole("button", {
-      name: "Link kopieren",
-    });
-    await button.hover();
 
-    await expect(
-      page.getByRole("tooltip", { name: "Link kopieren" }),
-    ).toBeVisible();
+    if (isMobileTest) await page.getByLabel("Aktionen anzeigen").click();
+    const button = isMobileTest
+      ? page.getByText("Link kopieren")
+      : page.getByRole("button", {
+          name: "Link kopieren",
+        });
 
-    await expect(button).toBeDisabled();
+    if (!isMobileTest) {
+      await button.hover();
+
+      await expect(
+        page.getByRole("tooltip", { name: "Link kopieren" }),
+      ).toBeVisible();
+    }
+
+    if (!isMobileTest) await expect(button).toBeDisabled();
   });
 
-  test("can use print action button to open print menu", async ({ page }) => {
+  test("can use print action button to open print menu", async ({
+    page,
+  }, workerInfo) => {
+    const isMobileTest = workerInfo.project.name === "mobile";
     await page.goto("/case-law/JURE200030030", { waitUntil: "networkidle" });
-    const button = page.getByRole("button", {
-      name: "Drucken",
-    });
-    await button.hover();
+    if (isMobileTest) await page.getByLabel("Aktionen anzeigen").click();
+    const button = isMobileTest
+      ? page.getByRole("menuitem", { name: "Drucken" })
+      : page.getByRole("button", {
+          name: "Drucken",
+        });
 
-    await expect(page.getByRole("tooltip", { name: "Drucken" })).toBeVisible();
+    if (!isMobileTest) {
+      await button.hover();
+
+      await expect(
+        page.getByRole("tooltip", { name: "Drucken" }),
+      ).toBeVisible();
+    }
 
     await test.step("can open print menu", async () => {
       await page.evaluate(
@@ -115,32 +137,46 @@ test.describe("actions menu", () => {
     });
   });
 
-  test("can't use PDF action as it is disabled", async ({ page }) => {
+  test("can't use PDF action as it is disabled", async ({
+    page,
+  }, workerInfo) => {
+    const isMobileTest = (workerInfo.project.name = "mobile");
     await page.goto("/case-law/JURE200030030", { waitUntil: "networkidle" });
-    const button = page.getByRole("button", {
-      name: "Als PDF speichern",
-    });
+    if (isMobileTest) await page.getByLabel("Aktionen anzeigen").click();
+    const button = isMobileTest
+      ? page.getByText("Als PDF speichern")
+      : page.getByRole("button", {
+          name: "Als PDF speichern",
+        });
 
-    await button.hover();
+    if (!isMobileTest) {
+      await button.hover();
 
-    await expect(
-      page.getByRole("tooltip", { name: "Als PDF speichern" }),
-    ).toBeVisible();
+      await expect(
+        page.getByRole("tooltip", { name: "Als PDF speichern" }),
+      ).toBeVisible();
+    }
 
-    await expect(button).toBeDisabled();
+    if (!isMobileTest) await expect(button).toBeDisabled();
   });
 
-  test("can use XML action to view norms xml file", async ({ page }) => {
+  test("can use XML action to view norms xml file", async ({
+    page,
+  }, workerInfo) => {
+    const isMobileTest = workerInfo.project.name === "mobile";
     await page.goto("/case-law/JURE200030030", { waitUntil: "networkidle" });
+    if (isMobileTest) await page.getByLabel("Aktionen anzeigen").click();
     const button = page.getByRole("link", {
       name: "XML anzeigen",
     });
 
-    await button.hover();
+    if (!isMobileTest) {
+      await button.hover();
 
-    await expect(
-      page.getByRole("tooltip", { name: "XML anzeigen" }),
-    ).toBeVisible();
+      await expect(
+        page.getByRole("tooltip", { name: "XML anzeigen" }),
+      ).toBeVisible();
+    }
 
     await button.click();
 
