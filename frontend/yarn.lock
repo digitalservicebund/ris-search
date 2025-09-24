@@ -4114,15 +4114,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@primeuix/styled@npm:^0.6.1, @primeuix/styled@npm:^0.6.4":
-  version: 0.6.4
-  resolution: "@primeuix/styled@npm:0.6.4"
-  dependencies:
-    "@primeuix/utils": "npm:^0.5.3"
-  checksum: 10c0/c7d2ae3bdff5aa19f0abb9a61853a57e828d6adc51df34c737d54f8661f09872fe48e84d1dad6c9a4db3ce2b9781c1d8d293d3ed6322500d70de1363f7a6489a
-  languageName: node
-  linkType: hard
-
 "@primeuix/styled@npm:^0.7.2":
   version: 0.7.2
   resolution: "@primeuix/styled@npm:0.7.2"
@@ -4132,28 +4123,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@primeuix/styles@npm:^1.1.1":
-  version: 1.1.1
-  resolution: "@primeuix/styles@npm:1.1.1"
-  dependencies:
-    "@primeuix/styled": "npm:^0.6.1"
-  checksum: 10c0/8df273c06c994f414c3cf403fcf24e0914b5d480bc8eb1874423f2079aa77043935aa331f7e9e92241ce4f8ba3bceafbd3c67bf6ef7e836d371581871117cf52
-  languageName: node
-  linkType: hard
-
 "@primeuix/styles@npm:^1.2.3":
   version: 1.2.3
   resolution: "@primeuix/styles@npm:1.2.3"
   dependencies:
     "@primeuix/styled": "npm:^0.7.2"
   checksum: 10c0/0e3dff8a4b8fb18a78b515fcb6183aa530fae832b87a46574f00d18f2a36653e00acd9e6e497187353352e712c51524a343bf49b7d27e0e76620fc4cbbd687ff
-  languageName: node
-  linkType: hard
-
-"@primeuix/utils@npm:^0.5.3":
-  version: 0.5.4
-  resolution: "@primeuix/utils@npm:0.5.4"
-  checksum: 10c0/702e5b47f2a9520f735ce8d978dfb2c9d222fd2934f9aaf0d9e403d67a4d4e3521d002eec5421685ac9f00d3606b9d04ce9de9464b2477499ddac829789d5275
   languageName: node
   linkType: hard
 
@@ -4170,18 +4145,6 @@ __metadata:
   dependencies:
     "@primevue/metadata": "npm:4.3.9"
   checksum: 10c0/9487afac615fbc2f5acfbbe397d550670b730ebe96fb25c6c34f4e9e3d3d407312de9eb69b4ca1d10081ba1a34cc09faeed73d1c5ff8efe2de6d253d5dfaf634
-  languageName: node
-  linkType: hard
-
-"@primevue/core@npm:4.3.5":
-  version: 4.3.5
-  resolution: "@primevue/core@npm:4.3.5"
-  dependencies:
-    "@primeuix/styled": "npm:^0.6.4"
-    "@primeuix/utils": "npm:^0.5.3"
-  peerDependencies:
-    vue: ^3.5.0
-  checksum: 10c0/365dc4d16043f0b55547ef8b4b44a807c6d054e2bde70f434dacc2a340d0c079834fd18b61510a6d6e9c506fbdbd18882ed59f711039678e005b3bbddd8cc076
   languageName: node
   linkType: hard
 
@@ -4205,16 +4168,6 @@ __metadata:
     "@primeuix/utils": "npm:^0.6.1"
     "@primevue/core": "npm:4.3.9"
   checksum: 10c0/527aea3c04e1a6e1bd8373a7479eb1ff32a101c6953cfae6a65caee66f255c0a7ef7c33cea9b970d7cf0ce69570be5a9e0430b09e401d05282e9d5b0aa6f5b30
-  languageName: node
-  linkType: hard
-
-"@primevue/icons@npm:4.3.5":
-  version: 4.3.5
-  resolution: "@primevue/icons@npm:4.3.5"
-  dependencies:
-    "@primeuix/utils": "npm:^0.5.3"
-    "@primevue/core": "npm:4.3.5"
-  checksum: 10c0/38b37f7cfd80b3d3a34011eeef854be1c92dda43e76f589c3573ab5375123f9f2ce71a342f45c6d2bf04ad7d395d6b6d10739f6e07432b8d8e02b0444c5d2f9e
   languageName: node
   linkType: hard
 
@@ -16886,7 +16839,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"primevue@npm:4.3.9":
+"primevue@npm:4.3.9, primevue@npm:^4.3.9":
   version: 4.3.9
   resolution: "primevue@npm:4.3.9"
   dependencies:
@@ -16896,19 +16849,6 @@ __metadata:
     "@primevue/core": "npm:4.3.9"
     "@primevue/icons": "npm:4.3.9"
   checksum: 10c0/54bf4366dcd314dfa9d20a86b95b90729c108e38da48cd8766a0895eaf3c92d6542e81230708e674c442525f60b2594e5694938ce60bf36ecd9e5b117fca45f0
-  languageName: node
-  linkType: hard
-
-"primevue@npm:^4.3.5":
-  version: 4.3.5
-  resolution: "primevue@npm:4.3.5"
-  dependencies:
-    "@primeuix/styled": "npm:^0.6.4"
-    "@primeuix/styles": "npm:^1.1.1"
-    "@primeuix/utils": "npm:^0.5.3"
-    "@primevue/core": "npm:4.3.5"
-    "@primevue/icons": "npm:4.3.5"
-  checksum: 10c0/95994ce56229437dbe2b1f7de8f5abd4bbbe5d8258f18549aed5af29cbbf838d52ac4c0b1fa92b72233448517758293826907cc631497f615390c73599d81970
   languageName: node
   linkType: hard
 
@@ -17799,7 +17739,7 @@ __metadata:
     prettier: "npm:^3.5.3"
     prettier-plugin-tailwindcss: "npm:^0.6.13"
     primeicons: "npm:^7.0.0"
-    primevue: "npm:^4.3.5"
+    primevue: "npm:^4.3.9"
     sass-embedded: "npm:^1.89.2"
     tailwindcss: "npm:^4.1.11"
     typescript: "npm:~5.8.3"
