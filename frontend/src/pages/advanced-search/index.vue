@@ -5,6 +5,7 @@ import { queryableDataFields } from "~/pages/advanced-search/dataFields";
 import { DocumentKind } from "~/types";
 
 useHead({ title: "Erweiterte Suche" });
+definePageMeta({ alias: "/erweiterte-suche" });
 </script>
 
 <template>
