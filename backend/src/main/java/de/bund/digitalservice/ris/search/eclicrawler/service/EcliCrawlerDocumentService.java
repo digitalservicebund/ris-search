@@ -53,9 +53,9 @@ public class EcliCrawlerDocumentService {
     if (BulkChangelogParser.containsChangeAll(changelogs)) {
       docs.addAll(getFullDiff());
     }
-    Changelog mergedChangelog =
-        BulkChangelogParser.mergeChangelogs(
-            BulkChangelogParser.getChangelogsFromLastChangeAll(changelogs));
+    // apply changelogs happening after the changeAll to catch deletes
+    var latestChangelogs = BulkChangelogParser.getChangelogsFromLastChangeAll(changelogs);
+    Changelog mergedChangelog = BulkChangelogParser.mergeChangelogs(latestChangelogs);
     return applyChangelog(docs, mergedChangelog);
   }
 
@@ -87,7 +87,6 @@ public class EcliCrawlerDocumentService {
       allEcliDocumnets.addAll(getEcliCrawlerDocuments(batch));
     }
 
-    allEcliDocumnets.addAll(repository.findAllByIsPublishedIsTrueAndFilenameNotIn(allFiles));
     return allEcliDocumnets;
   }
 
