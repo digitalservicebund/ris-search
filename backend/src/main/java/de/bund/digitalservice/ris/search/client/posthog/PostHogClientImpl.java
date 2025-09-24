@@ -1,6 +1,7 @@
 package de.bund.digitalservice.ris.search.client.posthog;
 
 import com.posthog.java.PostHog;
+import jakarta.annotation.PreDestroy;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,7 +22,7 @@ public class PostHogClientImpl implements PostHogClient {
     postHog.capture(userId, "survey sent", surveyFeedback);
   }
 
-  @Override
+  @PreDestroy
   public void shutdown() {
     postHog.shutdown();
   }

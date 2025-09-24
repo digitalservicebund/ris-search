@@ -10,9 +10,4 @@ public class PostHogClientDummy implements PostHogClient {
   public void submitFeedback(String feedback, String url, String userId, String surveyId) {
     /**/
   }
-
-  @Override
-  public void shutdown() {
-    /**/
-  }
 }

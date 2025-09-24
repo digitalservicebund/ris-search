@@ -4,7 +4,6 @@ import com.posthog.java.PostHog;
 import de.bund.digitalservice.ris.search.client.posthog.PostHogClient;
 import de.bund.digitalservice.ris.search.client.posthog.PostHogClientDummy;
 import de.bund.digitalservice.ris.search.client.posthog.PostHogClientImpl;
-import org.springframework.beans.factory.DisposableBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -22,10 +21,5 @@ public class PostHogConfig {
   @Profile({"!prototype"})
   public PostHogClient postHogDummy() {
     return new PostHogClientDummy();
-  }
-
-  @Bean
-  public DisposableBean posthogShutdownHook(PostHogClient postHogClient) {
-    return postHogClient::shutdown;
   }
 }
