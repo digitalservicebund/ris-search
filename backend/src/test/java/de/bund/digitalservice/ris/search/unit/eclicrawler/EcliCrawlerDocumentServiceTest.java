@@ -19,6 +19,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -101,17 +102,12 @@ class EcliCrawlerDocumentServiceTest {
 
   @Test
   void itCreatesAFullDiffWhenEncounteringAChangeAll() throws ObjectStoreServiceException {
-    var documentToBeChanged = getTestDocUnit("changedDoc");
-    var documentToBeChangedFilename = "changedDoc.xml";
-
-    var documentToBeDeleted = getTestDocument("deleteDoc", false);
-
     var createdDuringChangeAll = getTestDocument("createdDuringChangeAll", true);
     var unitCreatedDuringChangeAll = getTestDocUnit("createdDuringChangeAll");
+    var deletedDuringChangeAll = getTestDocument("deletedDuringChangeAll", false);
 
     Changelog log = new Changelog();
-    log.setChanged(new HashSet<>(List.of(documentToBeChangedFilename)));
-    log.setDeleted(new HashSet<>(List.of(documentToBeDeleted.filename())));
+    log.setChanged(new HashSet<>(List.of("toBeIgnored.xml")));
     Changelog changeAll = new Changelog();
     changeAll.setChangeAll(true);
 
@@ -119,23 +115,18 @@ class EcliCrawlerDocumentServiceTest {
     when(caseLawBucket.getAllKeys()).thenReturn(List.of(createdDuringChangeAll.filename()));
     when(caselawService.getFromBucket(createdDuringChangeAll.filename()))
         .thenReturn(Optional.of(unitCreatedDuringChangeAll));
-
-    // create and delete files according to changelog
-    when(caselawService.getFromBucket(documentToBeChangedFilename))
-        .thenReturn(Optional.of(documentToBeChanged));
-    when(repository.findAllByFilenameIn(log.getDeleted())).thenReturn(List.of(documentToBeDeleted));
+    when(repository.findAllByIsPublishedIsTrue())
+        .thenAnswer(invocationOnMock -> Stream.of(deletedDuringChangeAll));
 
     var actualDocuments = documentService.getFromChangelogs(List.of(changeAll, log));
 
-    Assertions.assertEquals(3, actualDocuments.size());
+    Assertions.assertEquals(2, actualDocuments.size());
 
     Map<String, EcliCrawlerDocument> result =
         actualDocuments.stream()
             .collect(Collectors.toMap(EcliCrawlerDocument::documentNumber, Function.identity()));
 
-    Assertions.assertTrue(result.get(documentToBeChanged.documentNumber()).isPublished());
     Assertions.assertTrue(result.get(createdDuringChangeAll.documentNumber()).isPublished());
-
-    Assertions.assertFalse(result.get(documentToBeDeleted.documentNumber()).isPublished());
+    Assertions.assertFalse(result.get(deletedDuringChangeAll.documentNumber()).isPublished());
   }
 }

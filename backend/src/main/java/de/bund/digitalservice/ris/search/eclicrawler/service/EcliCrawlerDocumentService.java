@@ -14,8 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Stream;
-import org.apache.commons.collections4.ListUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
@@ -48,30 +46,12 @@ public class EcliCrawlerDocumentService {
   }
 
   public List<EcliCrawlerDocument> getFromChangelogs(List<Changelog> changelogs) {
-    List<EcliCrawlerDocument> docs = new ArrayList<>();
-
     if (BulkChangelogParser.containsChangeAll(changelogs)) {
-      docs.addAll(getFullDiff());
+      return getFullDiff();
+    } else {
+      return getAllEcliCrawlerDocumentsFromChangelog(
+          BulkChangelogParser.mergeChangelogs(changelogs));
     }
-    // apply changelogs happening after the changeAll to catch deletes
-    var latestChangelogs = BulkChangelogParser.getChangelogsFromLastChangeAll(changelogs);
-    Changelog mergedChangelog = BulkChangelogParser.mergeChangelogs(latestChangelogs);
-    return applyChangelog(docs, mergedChangelog);
-  }
-
-  private List<EcliCrawlerDocument> applyChangelog(List<EcliCrawlerDocument> docs, Changelog log) {
-    List<EcliCrawlerDocument> changes = getAllEcliCrawlerDocumentsFromChangelog(log);
-
-    Stream<EcliCrawlerDocument> removeChangedDocuments =
-        docs.stream()
-            .filter(
-                doc ->
-                    !changes.stream()
-                        .map(EcliCrawlerDocument::documentNumber)
-                        .toList()
-                        .contains(doc.documentNumber()));
-
-    return Stream.concat(changes.stream(), removeChangedDocuments).toList();
   }
 
   public List<EcliCrawlerDocument> getFullDiff() {
@@ -80,12 +60,16 @@ public class EcliCrawlerDocumentService {
         caselawBucket.getAllKeys().stream()
             .filter(s -> s.endsWith(".xml") && !s.contains(IndexSyncJob.CHANGELOGS_PREFIX))
             .toList();
-    List<List<String>> filenamebatches =
-        ListUtils.partition(allFiles, OPEN_SEARCH_MAX_RESULT_WINDOW);
 
-    for (List<String> batch : filenamebatches) {
-      allEcliDocumnets.addAll(getEcliCrawlerDocuments(batch));
-    }
+    List<EcliCrawlerDocument> alreadyPublished =
+        repository
+            .findAllByIsPublishedIsTrue()
+            .filter(doc -> !allFiles.contains(doc.filename()))
+            .map(this::setDeleted)
+            .toList();
+
+    allEcliDocumnets.addAll(getEcliCrawlerDocuments(allFiles));
+    allEcliDocumnets.addAll(alreadyPublished);
 
     return allEcliDocumnets;
   }
@@ -121,18 +105,20 @@ public class EcliCrawlerDocumentService {
 
     changes.addAll(
         repository.findAllByFilenameIn(mergedChangelog.getDeleted()).stream()
-            .map(
-                ecliDocument ->
-                    new EcliCrawlerDocument(
-                        ecliDocument.documentNumber(),
-                        ecliDocument.filename(),
-                        ecliDocument.ecli(),
-                        ecliDocument.courtType(),
-                        ecliDocument.decisionDate(),
-                        ecliDocument.documentType(),
-                        ecliDocument.url(),
-                        false))
+            .map(this::setDeleted)
             .toList());
     return changes;
+  }
+
+  private EcliCrawlerDocument setDeleted(EcliCrawlerDocument doc) {
+    return new EcliCrawlerDocument(
+        doc.documentNumber(),
+        doc.filename(),
+        doc.ecli(),
+        doc.courtType(),
+        doc.decisionDate(),
+        doc.documentType(),
+        doc.url(),
+        false);
   }
 }
