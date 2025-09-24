@@ -1,10 +1,5 @@
 import { mockNuxtImport, mountSuspended } from "@nuxt/test-utils/runtime";
-import {
-  type DOMWrapper,
-  mount,
-  type VueWrapper,
-  RouterLinkStub,
-} from "@vue/test-utils";
+import { mount, type VueWrapper, RouterLinkStub } from "@vue/test-utils";
 import dayjs from "dayjs";
 import { expect, it } from "vitest";
 import CaseLawActionsMenu from "~/components/ActionMenu/CaseLawActionsMenu.vue";
@@ -77,13 +72,13 @@ const unavailablePlaceholder = "nicht vorhanden";
 
 function findDefinitions(wrapper: VueWrapper): Record<string, string> {
   const definitions: Record<string, string> = {};
-  wrapper.findAll("dt").forEach((dt: DOMWrapper<HTMLElement>) => {
+  for (const dt of wrapper.findAll("dt")) {
     const key = dt.text();
     const value = dt.element.nextSibling?.textContent;
     if (key && value) {
       definitions[key] = value;
     }
-  });
+  }
   return definitions;
 }
 

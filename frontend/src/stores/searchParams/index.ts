@@ -39,11 +39,11 @@ function normalizeQuery(
   query: LocationQueryRaw,
 ): Record<string, string | undefined> {
   const result: Record<string, string> = {};
-  Object.entries(query).forEach(([key, value]) => {
+  for (const [key, value] of Object.entries(query)) {
     if (value) {
       result[key] = value.toString();
     }
-  });
+  }
   return result;
 }
 
