@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import org.apache.commons.collections4.ListUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,7 +27,6 @@ public class EcliCrawlerDocumentService {
   EcliCrawlerDocumentRepository repository;
   CaseLawService caselawService;
   private final String documentUrl;
-  private static final int OPEN_SEARCH_MAX_RESULT_WINDOW = 10000;
 
   private static final Logger logger = LogManager.getLogger(EcliCrawlerDocumentService.class);
 
@@ -41,8 +41,8 @@ public class EcliCrawlerDocumentService {
     this.documentUrl = frontEndUrl + "case-law/";
   }
 
-  public Iterable<EcliCrawlerDocument> saveAll(List<EcliCrawlerDocument> docs) {
-    return repository.saveAll(docs);
+  public void saveAll(List<EcliCrawlerDocument> docs) {
+    ListUtils.partition(docs, 1000).forEach(i -> repository.saveAll(i));
   }
 
   public List<EcliCrawlerDocument> getFromChangelogs(List<Changelog> changelogs) {

@@ -165,8 +165,9 @@ class EcliSitemapJobTest {
             PATH_PREFIX, "frontend/url/api/v1/eclicrawler/", day, sitemaps))
         .thenReturn(indices);
 
-    when(documentService.saveAll(argThat(new EcliCrawlerDocumentsMatcher(documents))))
-        .thenReturn(documents);
+    Mockito.doNothing()
+        .when(documentService)
+        .saveAll(argThat(new EcliCrawlerDocumentsMatcher(documents)));
 
     Mockito.doNothing()
         .when(sitemapService)
