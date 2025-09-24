@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Stream;
 import org.apache.commons.collections4.ListUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -55,23 +56,23 @@ public class EcliCrawlerDocumentService {
   }
 
   public List<EcliCrawlerDocument> getFullDiff() {
-    List<EcliCrawlerDocument> allEcliDocumnets = new ArrayList<>();
     List<String> allFiles =
         caselawBucket.getAllKeys().stream()
             .filter(s -> s.endsWith(".xml") && !s.contains(IndexSyncJob.CHANGELOGS_PREFIX))
             .toList();
 
-    List<EcliCrawlerDocument> alreadyPublished =
-        repository
-            .findAllByIsPublishedIsTrue()
-            .filter(doc -> !allFiles.contains(doc.filename()))
-            .map(this::setDeleted)
-            .toList();
+    List<EcliCrawlerDocument> allEcliDocuments = new ArrayList<>(getEcliCrawlerDocuments(allFiles));
 
-    allEcliDocumnets.addAll(getEcliCrawlerDocuments(allFiles));
-    allEcliDocumnets.addAll(alreadyPublished);
+    try (Stream<EcliCrawlerDocument> allPublished = repository.findAllByIsPublishedIsTrue()) {
+      var obsoleteDocuments =
+          allPublished
+              .filter(doc -> !allFiles.contains(doc.filename()))
+              .map(this::setDeleted)
+              .toList();
+      allEcliDocuments.addAll(obsoleteDocuments);
+    }
 
-    return allEcliDocumnets;
+    return allEcliDocuments;
   }
 
   private List<EcliCrawlerDocument> getEcliCrawlerDocuments(List<String> filenames) {
