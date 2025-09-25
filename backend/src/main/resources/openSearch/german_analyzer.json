@@ -29,7 +29,7 @@
       },
       "german_decompounder": {
         "type": "dictionary_decompounder",
-        "word_list": ["urteil", "beschluss", "entscheidung"],
+        "word_list": ["decompounding","proofofconcept"],
         "min_subword_size": 4
       },
       "court_type_synonyms": {

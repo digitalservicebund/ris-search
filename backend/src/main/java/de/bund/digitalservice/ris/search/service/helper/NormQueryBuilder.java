@@ -60,10 +60,9 @@ public class NormQueryBuilder {
 
     // Allow searching articles by a combined "search keyword" (e.g., article number and norm
     // abbreviation).
-    // Slop is added to account for re-ordering of the components, and a boost prioritizes these
-    // matches.
+    // Slop is added to account for re-ordering of the components.
     articleNestedQuery.should(
-        new MatchPhraseQueryBuilder("articles.search_keyword", searchTerm).slop(3).boost(3));
+        new MatchPhraseQueryBuilder("articles.search_keyword", searchTerm).slop(3));
 
     // Include a MatchAllQuery with boost 0 to ensure all articles are considered for display,
     // even if they don't explicitly match the query, but without influencing their ranking.
@@ -94,7 +93,7 @@ public class NormQueryBuilder {
     query.should(articleQueryBuilder);
   }
 
-  public static void addNormFilters(
+  public static void addNormsLogic(
       ParsedSearchTerm searchTerm, NormsSearchParams params, BoolQueryBuilder query) {
     if (StringUtils.isNotEmpty(searchTerm.original())) {
       NormQueryBuilder.addSearchTerm(

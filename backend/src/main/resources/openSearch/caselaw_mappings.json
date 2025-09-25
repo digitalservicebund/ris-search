@@ -208,8 +208,7 @@
       "index_options": "offsets"
     },
     "document_number": {
-      "type": "keyword",
-      "boost": 3
+      "type": "keyword"
     },
     "document_type": {
       "type": "text",
@@ -229,8 +228,7 @@
           "type": "keyword",
           "normalizer": "normalized_keyword"
         }
-      },
-      "boost": 2
+      }
     },
     "grounds": {
       "type": "text",
@@ -244,8 +242,7 @@
     },
     "headline": {
       "type": "text",
-      "analyzer": "custom_german_analyzer",
-      "boost": 2
+      "analyzer": "custom_german_analyzer"
     },
     "headnote": {
       "type": "text",
@@ -271,12 +268,10 @@
     "file_numbers": {
       "type": "text",
       "analyzer": "custom_german_analyzer",
-      "boost": 2.5,
       "fields": {
         "keyword": {
           "type": "keyword",
-          "normalizer": "normalized_keyword",
-          "boost": 2.5
+          "normalizer": "normalized_keyword"
         }
       }
     },
@@ -309,13 +304,11 @@
     },
     "decision_name": {
       "type": "text",
-      "analyzer": "custom_german_analyzer",
-      "boost": 2
+      "analyzer": "custom_german_analyzer"
     },
     "deviating_document_number": {
       "type": "text",
-      "analyzer": "custom_german_analyzer",
-      "boost": 3
+      "analyzer": "custom_german_analyzer"
     },
     "publication_status": {
       "type": "keyword"

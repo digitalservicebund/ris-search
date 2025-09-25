@@ -43,7 +43,7 @@ public class NormsService {
 
   private final NormsRepository normsRepository;
   private final ElasticsearchOperations operations;
-  private final SearchTermService searchTermService;
+  private final SearchTermParser searchTermParser;
   private final NormsBucket normsBucket;
 
   @Autowired
@@ -51,11 +51,11 @@ public class NormsService {
       NormsRepository normsRepository,
       NormsBucket normsBucket,
       ElasticsearchOperations operations,
-      SearchTermService searchTermService) {
+      SearchTermParser searchTermParser) {
     this.normsRepository = normsRepository;
     this.normsBucket = normsBucket;
     this.operations = operations;
-    this.searchTermService = searchTermService;
+    this.searchTermParser = searchTermParser;
   }
 
   /**
@@ -74,10 +74,10 @@ public class NormsService {
       Pageable pageable) {
 
     // Transform the request parameters into a BoolQuery
-    ParsedSearchTerm searchTerm = searchTermService.parse(params.getSearchTerm());
+    ParsedSearchTerm searchTerm = searchTermParser.parse(params.getSearchTerm());
     PortalQueryBuilder builder =
         new PortalQueryBuilder(searchTerm, params.getDateFrom(), params.getDateTo());
-    NormQueryBuilder.addNormFilters(searchTerm, normsSearchParams, builder.getQuery());
+    NormQueryBuilder.addNormsLogic(searchTerm, normsSearchParams, builder.getQuery());
 
     // Add pagination and other parameters
     NativeSearchQuery nativeQuery =

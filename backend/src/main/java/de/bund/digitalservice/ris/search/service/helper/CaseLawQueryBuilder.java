@@ -16,7 +16,7 @@ public class CaseLawQueryBuilder {
 
   private CaseLawQueryBuilder() {}
 
-  public static void addCaseLawFilters(CaseLawSearchParams params, BoolQueryBuilder query) {
+  public static void addCaseLawsLogic(CaseLawSearchParams params, BoolQueryBuilder query) {
     if (params == null) {
       return;
     }

@@ -54,7 +54,7 @@ public class CaseLawService {
   private final ElasticsearchOperations operations;
   private final CourtNameAbbreviationExpander courtNameAbbreviationExpander;
   private final Configurations configurations;
-  private final SearchTermService searchTermService;
+  private final SearchTermParser searchTermParser;
 
   @SneakyThrows
   @Autowired
@@ -63,13 +63,13 @@ public class CaseLawService {
       CaseLawBucket caseLawBucket,
       ElasticsearchOperations operations,
       Configurations configurations,
-      SearchTermService searchTermService) {
+      SearchTermParser searchTermParser) {
     this.caseLawRepository = caseLawRepository;
     this.caseLawBucket = caseLawBucket;
     this.operations = operations;
     this.configurations = configurations;
     this.courtNameAbbreviationExpander = new CourtNameAbbreviationExpander();
-    this.searchTermService = searchTermService;
+    this.searchTermParser = searchTermParser;
   }
 
   /**
@@ -88,10 +88,10 @@ public class CaseLawService {
       Pageable pageable) {
 
     // Transform the request parameters into a BoolQuery
-    ParsedSearchTerm searchTerm = searchTermService.parse(params.getSearchTerm());
+    ParsedSearchTerm searchTerm = searchTermParser.parse(params.getSearchTerm());
     PortalQueryBuilder builder =
         new PortalQueryBuilder(searchTerm, params.getDateFrom(), params.getDateTo());
-    CaseLawQueryBuilder.addCaseLawFilters(caseLawParams, builder.getQuery());
+    CaseLawQueryBuilder.addCaseLawsLogic(caseLawParams, builder.getQuery());
 
     // add pagination and other parameters
     NativeSearchQuery nativeQuery =

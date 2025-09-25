@@ -36,7 +36,7 @@ import org.springframework.stereotype.Service;
 public class AllDocumentsService {
 
   private final ElasticsearchOperations operations;
-  private final SearchTermService searchTermService;
+  private final SearchTermParser searchTermParser;
   private final IndexCoordinates allDocumentsIndex;
   private final PageUtils pageUtils;
 
@@ -44,11 +44,11 @@ public class AllDocumentsService {
       ElasticsearchOperations operations,
       Configurations configurations,
       PageUtils pageUtils,
-      SearchTermService searchTermService) {
+      SearchTermParser searchTermParser) {
     this.operations = operations;
     allDocumentsIndex = IndexCoordinates.of(configurations.getDocumentsAliasName());
     this.pageUtils = pageUtils;
-    this.searchTermService = searchTermService;
+    this.searchTermParser = searchTermParser;
   }
 
   /**
@@ -94,11 +94,11 @@ public class AllDocumentsService {
       Pageable pageable) {
 
     // transform the request parameters into a BoolQuery
-    ParsedSearchTerm searchTerm = searchTermService.parse(params.getSearchTerm());
+    ParsedSearchTerm searchTerm = searchTermParser.parse(params.getSearchTerm());
     PortalQueryBuilder builder =
         new PortalQueryBuilder(searchTerm, params.getDateFrom(), params.getDateTo());
-    NormQueryBuilder.addNormFilters(searchTerm, normsParams, builder.getQuery());
-    CaseLawQueryBuilder.addCaseLawFilters(caseLawParams, builder.getQuery());
+    NormQueryBuilder.addNormsLogic(searchTerm, normsParams, builder.getQuery());
+    CaseLawQueryBuilder.addCaseLawsLogic(caseLawParams, builder.getQuery());
 
     // add pagination and other parameters
     NativeSearchQuery nativeQuery =
