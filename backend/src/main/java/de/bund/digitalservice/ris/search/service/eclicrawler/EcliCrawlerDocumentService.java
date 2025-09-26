@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.regex.Pattern;
 import java.util.stream.Stream;
 import org.apache.commons.collections4.ListUtils;
 import org.apache.logging.log4j.LogManager;
@@ -32,6 +33,10 @@ public class EcliCrawlerDocumentService {
   private final String documentUrl;
 
   private static final Logger logger = LogManager.getLogger(EcliCrawlerDocumentService.class);
+
+  // ecli regex provided by the ecli xsd
+  Pattern ecliPattern =
+      Pattern.compile("ECLI:[a-zA-Z]{1,5}:[a-zA-Z][a-zA-Z0-9]{0,6}:[12]\\d{3}:[a-zA-Z0-9.]{1,25}");
 
   public EcliCrawlerDocumentService(
       CaseLawBucket caseLawBucket,
@@ -87,8 +92,7 @@ public class EcliCrawlerDocumentService {
         Optional<CaseLawDocumentationUnit> unitOption = caselawService.getFromBucket(filename);
         unitOption.ifPresentOrElse(
             unit -> {
-              if (!Objects.isNull(unit.ecli())
-                  && Courts.supportedCourtNames.containsKey(unit.courtType())) {
+              if (isValidEcliDocument(unit)) {
                 ecliDocuments.add(
                     EcliCrawlerDocumentMapper.fromCaseLawDocumentationUnit(
                         documentUrl, filename, unit));
@@ -100,6 +104,15 @@ public class EcliCrawlerDocumentService {
       }
     }
     return ecliDocuments;
+  }
+
+  private boolean isValidEcliDocument(CaseLawDocumentationUnit unit) {
+    if (Stream.of(unit.documentNumber(), unit.ecli(), unit.courtType(), unit.decisionDate())
+        .anyMatch(Objects::isNull)) {
+      return false;
+    }
+    return ecliPattern.matcher(unit.ecli()).find()
+        && Courts.supportedCourtNames.containsKey(unit.courtType());
   }
 
   private List<EcliCrawlerDocument> getAllEcliCrawlerDocumentsFromChangelog(

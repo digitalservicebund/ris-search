@@ -41,7 +41,7 @@ class SitemapSchemaTest {
     SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
     String path =
         Objects.requireNonNull(
-                this.getClass().getClassLoader().getResource("schema/sitemap/siteindex.xsd"))
+                this.getClass().getClassLoader().getResource("schema/eclicrawler/siteindex.xsd"))
             .getPath();
     Source schemaFile = new StreamSource(getFile(path));
     Schema schema = factory.newSchema(schemaFile);
@@ -68,11 +68,11 @@ class SitemapSchemaTest {
     SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
     String sitemaPpath =
         Objects.requireNonNull(
-                this.getClass().getClassLoader().getResource("schema/sitemap/sitemap.xsd"))
+                this.getClass().getClassLoader().getResource("schema/eclicrawler/sitemap.xsd"))
             .getPath();
     String ecliPath =
         Objects.requireNonNull(
-                this.getClass().getClassLoader().getResource("schema/sitemap/ecli.xsd"))
+                this.getClass().getClassLoader().getResource("schema/eclicrawler/ecli.xsd"))
             .getPath();
 
     Schema schema =
@@ -100,11 +100,11 @@ class SitemapSchemaTest {
     SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
     String sitemaPpath =
         Objects.requireNonNull(
-                this.getClass().getClassLoader().getResource("schema/sitemap/sitemap.xsd"))
+                this.getClass().getClassLoader().getResource("schema/eclicrawler/sitemap.xsd"))
             .getPath();
     String ecliPath =
         Objects.requireNonNull(
-                this.getClass().getClassLoader().getResource("schema/sitemap/ecli.xsd"))
+                this.getClass().getClassLoader().getResource("schema/eclicrawler/ecli.xsd"))
             .getPath();
 
     Schema schema =

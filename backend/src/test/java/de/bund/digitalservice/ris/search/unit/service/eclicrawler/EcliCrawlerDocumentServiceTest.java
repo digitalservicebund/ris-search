@@ -78,6 +78,33 @@ class EcliCrawlerDocumentServiceTest {
   }
 
   @Test
+  void itIgnoresInvalidCaseLawDocumentationUnits() throws ObjectStoreServiceException {
+    var invalidEcli =
+        CaseLawDocumentationUnit.builder()
+            .documentNumber("docNumber")
+            .ecli("invalidEcli")
+            .courtType("BGH")
+            .decisionDate(LocalDate.of(2025, 1, 1))
+            .build();
+
+    var invalidCourt =
+        CaseLawDocumentationUnit.builder()
+            .documentNumber("docNumber")
+            .ecli("ECLI:DE:XX:2025:1111111")
+            .courtType("AG")
+            .decisionDate(LocalDate.of(2025, 1, 1))
+            .build();
+
+    when(caseLawBucket.getAllKeys()).thenReturn(List.of("key1.xml", "key2.xml"));
+    when(caselawService.getFromBucket("key1.xml")).thenReturn(Optional.of(invalidEcli));
+    when(caselawService.getFromBucket("key2.xml")).thenReturn(Optional.of(invalidCourt));
+
+    var actualDocuments = documentService.getFullDiff();
+
+    Assertions.assertTrue(actualDocuments.isEmpty());
+  }
+
+  @Test
   void itCreatesChangesFromChangelog() throws ObjectStoreServiceException {
     var testUnit = getTestDocUnit("docNumber");
     var deletedDoc = getTestDocument("abc", false);
