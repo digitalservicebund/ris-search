@@ -6,12 +6,12 @@ import static org.mockito.Mockito.when;
 
 import de.bund.digitalservice.ris.search.config.opensearch.Configurations;
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
+import de.bund.digitalservice.ris.search.exception.OpenSearchMapperException;
+import de.bund.digitalservice.ris.search.mapper.CaseLawLdmlToOpenSearchMapper;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import de.bund.digitalservice.ris.search.repository.objectstorage.CaseLawBucket;
 import de.bund.digitalservice.ris.search.repository.opensearch.CaseLawRepository;
 import de.bund.digitalservice.ris.search.service.CaseLawService;
-import de.bund.digitalservice.ris.search.utils.CaseLawLdmlTemplateUtils;
-import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
@@ -19,6 +19,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.PageRequest;
@@ -35,23 +36,23 @@ import org.springframework.data.elasticsearch.core.query.Query;
 @ExtendWith(MockitoExtension.class)
 class CaseLawServiceTest {
 
-  private CaseLawService caseLawService;
-  private ElasticsearchOperations operationsMock;
-  private CaseLawBucket caseLawBucketMock;
-
-  // instead of using this we should make the mapper functions non static to be able to mock
-  // marhshalling an xml file
-  private final CaseLawLdmlTemplateUtils templateUtils = new CaseLawLdmlTemplateUtils();
+  @Mock private CaseLawService caseLawService;
+  @Mock private ElasticsearchOperations operationsMock;
+  @Mock private CaseLawBucket caseLawBucketMock;
+  @Mock private CaseLawLdmlToOpenSearchMapper marshaller;
+  @Mock private CaseLawRepository caseLawRepositoryMock;
 
   @BeforeEach
   void setUp() {
-    CaseLawRepository caseLawRepositoryMock = Mockito.mock(CaseLawRepository.class);
-    caseLawBucketMock = Mockito.mock(CaseLawBucket.class);
-    operationsMock = Mockito.mock(ElasticsearchOperations.class);
     Configurations configurations = Mockito.mock(Configurations.class);
     this.caseLawService =
         new CaseLawService(
-            caseLawRepositoryMock, caseLawBucketMock, operationsMock, configurations, null);
+            caseLawRepositoryMock,
+            caseLawBucketMock,
+            operationsMock,
+            configurations,
+            null,
+            marshaller);
   }
 
   @Test
@@ -111,6 +112,7 @@ class CaseLawServiceTest {
     String filename = "docNr/docNr.xml";
 
     when(caseLawBucketMock.getFileAsString(filename)).thenReturn(Optional.of("content"));
+    when(marshaller.fromString("content")).thenThrow(OpenSearchMapperException.class);
     Assertions.assertTrue(caseLawService.getFromBucket(filename).isEmpty());
   }
 
@@ -123,10 +125,11 @@ class CaseLawServiceTest {
   }
 
   @Test
-  void itReturnsACaseLawDocumentationUnit() throws IOException, ObjectStoreServiceException {
+  void itReturnsACaseLawDocumentationUnit() throws ObjectStoreServiceException {
     String filename = "docNr/docNr.xml";
-    String content = templateUtils.getXmlFromTemplate(null);
-    when(caseLawBucketMock.getFileAsString(filename)).thenReturn(Optional.of(content));
+    CaseLawDocumentationUnit unit = CaseLawDocumentationUnit.builder().id("id").build();
+    when(caseLawBucketMock.getFileAsString(filename)).thenReturn(Optional.of("content"));
+    when(marshaller.fromString("content")).thenReturn(unit);
 
     var result = caseLawService.getFromBucket(filename);
 

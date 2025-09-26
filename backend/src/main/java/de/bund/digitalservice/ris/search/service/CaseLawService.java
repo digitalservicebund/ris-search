@@ -57,6 +57,7 @@ public class CaseLawService {
   private final CourtNameAbbreviationExpander courtNameAbbreviationExpander;
   private final Configurations configurations;
   private final SearchTermService searchTermService;
+  private final CaseLawLdmlToOpenSearchMapper marshaller;
 
   @SneakyThrows
   @Autowired
@@ -65,13 +66,15 @@ public class CaseLawService {
       CaseLawBucket caseLawBucket,
       ElasticsearchOperations operations,
       Configurations configurations,
-      SearchTermService searchTermService) {
+      SearchTermService searchTermService,
+      CaseLawLdmlToOpenSearchMapper marshaller) {
     this.caseLawRepository = caseLawRepository;
     this.caseLawBucket = caseLawBucket;
     this.operations = operations;
     this.configurations = configurations;
     this.courtNameAbbreviationExpander = new CourtNameAbbreviationExpander();
     this.searchTermService = searchTermService;
+    this.marshaller = marshaller;
   }
 
   /**
@@ -215,7 +218,7 @@ public class CaseLawService {
       return Optional.empty();
     }
     try {
-      return Optional.of(CaseLawLdmlToOpenSearchMapper.fromString(contentOption.get()));
+      return Optional.of(marshaller.fromString(contentOption.get()));
     } catch (OpenSearchMapperException ex) {
       return Optional.empty();
     }
