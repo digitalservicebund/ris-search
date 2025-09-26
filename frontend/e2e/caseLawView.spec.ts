@@ -1,6 +1,5 @@
 import type { Page } from "@playwright/test";
-import { test } from "@playwright/test";
-import { expect } from "./fixtures";
+import { expect, test } from "./fixtures";
 import { getDisplayedResultCount } from "./utils";
 
 function getSidebar(page: Page) {
@@ -87,8 +86,8 @@ test("can search, filter for case law, and view a single case law documentation 
 test.describe("actions menu", () => {
   test("can't use link action button as its disabled", async ({
     page,
-  }, workerInfo) => {
-    const isMobileTest = workerInfo.project.name === "mobile";
+    isMobileTest,
+  }) => {
     await page.goto("/case-law/JURE200030030", { waitUntil: "networkidle" });
 
     if (isMobileTest) {
@@ -113,8 +112,8 @@ test.describe("actions menu", () => {
 
   test("can use print action button to open print menu", async ({
     page,
-  }, workerInfo) => {
-    const isMobileTest = workerInfo.project.name === "mobile";
+    isMobileTest,
+  }) => {
     await page.goto("/case-law/JURE200030030", { waitUntil: "networkidle" });
     if (isMobileTest) {
       await page.getByLabel("Aktionen anzeigen").click();
@@ -145,8 +144,8 @@ test.describe("actions menu", () => {
 
   test("can't use PDF action as it is disabled", async ({
     page,
-  }, workerInfo) => {
-    const isMobileTest = workerInfo.project.name === "mobile";
+    isMobileTest,
+  }) => {
     await page.goto("/case-law/JURE200030030", { waitUntil: "networkidle" });
     if (isMobileTest) await page.getByLabel("Aktionen anzeigen").click();
     const button = isMobileTest
@@ -168,8 +167,8 @@ test.describe("actions menu", () => {
 
   test("can use XML action to view norms xml file", async ({
     page,
-  }, workerInfo) => {
-    const isMobileTest = workerInfo.project.name === "mobile";
+    isMobileTest,
+  }) => {
     await page.goto("/case-law/JURE200030030", { waitUntil: "networkidle" });
     if (isMobileTest) await page.getByLabel("Aktionen anzeigen").click();
     const button = page.getByRole("link", {

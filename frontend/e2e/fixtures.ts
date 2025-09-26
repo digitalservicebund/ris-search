@@ -1,7 +1,19 @@
-import { expect as baseExpect } from "@playwright/test";
+import { test as base, expect as baseExpect } from "@playwright/test";
 import type { Locator } from "@playwright/test";
 
-export { test } from "@playwright/test";
+type WorkerFixtures = {
+  isMobileTest: boolean;
+};
+
+export const test = base.extend<{}, WorkerFixtures>({
+  isMobileTest: [
+    async ({}, use, workerInfo) => {
+      const isMobileTest = workerInfo.project.name.toLowerCase() === "mobile";
+      await use(isMobileTest);
+    },
+    { scope: "worker" },
+  ],
+});
 
 export const expect = baseExpect.extend({
   async toHaveSelectedOptionText(

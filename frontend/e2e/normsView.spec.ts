@@ -1,5 +1,4 @@
-import { test } from "@playwright/test";
-import { expect } from "./fixtures";
+import { expect, test } from "./fixtures";
 import { getDisplayedResultCount } from "./utils";
 
 const expectedNorms = [
@@ -218,8 +217,7 @@ test.describe("actions menu", () => {
   for (const testCase of testCases) {
     test(
       testCase.name,
-      async ({ page, browserName, baseURL, context }, workerInfo) => {
-        const isMobileTest = workerInfo.project.name === "mobile";
+      async ({ page, browserName, baseURL, context, isMobileTest }) => {
         await page.goto("/norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu", {
           waitUntil: "networkidle",
         });
@@ -273,8 +271,8 @@ test.describe("actions menu", () => {
 
   test("can use print action button to open print menu", async ({
     page,
-  }, workerInfo) => {
-    const isMobileTest = workerInfo.project.name === "mobile";
+    isMobileTest,
+  }) => {
     await page.goto("/norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu", {
       waitUntil: "networkidle",
     });
@@ -306,8 +304,8 @@ test.describe("actions menu", () => {
 
   test("can't use PDF action as it is disabled", async ({
     page,
-  }, workerInfo) => {
-    const isMobileTest = workerInfo.project.name === "mobile";
+    isMobileTest,
+  }) => {
     await page.goto("/norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu", {
       waitUntil: "networkidle",
     });
@@ -331,8 +329,8 @@ test.describe("actions menu", () => {
 
   test("can use XML action to view norms xml file", async ({
     page,
-  }, workerInfo) => {
-    const isMobileTest = workerInfo.project.name === "mobile";
+    isMobileTest,
+  }) => {
     await page.goto("/norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu", {
       waitUntil: "networkidle",
     });
