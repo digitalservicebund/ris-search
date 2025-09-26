@@ -1,5 +1,6 @@
 package de.bund.digitalservice.ris.search.unit.service.eclicrawler;
 
+import static de.bund.digitalservice.ris.search.service.eclicrawler.EcliSitemapService.MAX_SITEMAP_URLS;
 import static de.bund.digitalservice.ris.search.service.eclicrawler.EcliSitemapService.PATH_PREFIX;
 import static de.bund.digitalservice.ris.search.service.eclicrawler.EcliSitemapService.ROBOTS_TXT_PATH;
 import static org.mockito.ArgumentMatchers.any;
@@ -70,7 +71,7 @@ class EcliSitemapServiceTest {
   @Test
   void itPartitionsSitemapsAccordingToMaxEntries() throws JAXBException {
     List<Url> urls = new ArrayList<>();
-    for (int i = 0; i <= 10001; i++) {
+    for (int i = 0; i <= MAX_SITEMAP_URLS + 1; i++) {
       urls.add(new Url().setLoc(String.valueOf(i)));
     }
     LocalDate day = LocalDate.of(2025, 1, 1);
@@ -175,7 +176,7 @@ class EcliSitemapServiceTest {
   @Test
   void itPartitionsSitemapIndicesAccordingToMaxEntries() throws JAXBException {
     List<Sitemap> sitemaps = new ArrayList<>();
-    for (int i = 0; i <= 10001; i++) {
+    for (int i = 0; i <= MAX_SITEMAP_URLS + 1; i++) {
       sitemaps.add(new Sitemap().setName(String.valueOf(i)));
     }
     LocalDate day = LocalDate.of(2025, 1, 1);

@@ -83,7 +83,7 @@ public class EcliSitemapJob implements Job {
         persistEcliDocumentChanges(docs);
         portalBucket.save(LAST_PROCESSED_CHANGELOG, changelogPaths.getLast());
       }
-    } catch (FatalEcliSitemapJobException e) {
+    } catch (RuntimeException e) {
       logger.error(e.getMessage());
       return ReturnCode.ERROR;
     }

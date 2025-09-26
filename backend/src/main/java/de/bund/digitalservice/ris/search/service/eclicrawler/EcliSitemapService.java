@@ -23,7 +23,7 @@ public class EcliSitemapService {
 
   EcliMarshaller marshaller;
 
-  private static final int MAX_SITEMAP_URLS = 10000;
+  public static final int MAX_SITEMAP_URLS = 50000;
   public static final String PATH_PREFIX = "eclicrawler/";
   public static final String ROBOTS_TXT_PATH = PATH_PREFIX + "robots.txt";
 
@@ -40,7 +40,7 @@ public class EcliSitemapService {
     for (int i = 0; i < partitioned.size(); i++) {
       int sitemapNr = i + 1;
       Sitemap sitemap = new Sitemap();
-      sitemap.setUrl(urls);
+      sitemap.setUrl(partitioned.get(i));
       sitemap.setName(String.format("%s/sitemap_%s.xml", getDatePartition(day), sitemapNr));
       writeSitemap(PATH_PREFIX, sitemap);
 

@@ -31,7 +31,7 @@ public class EcliCrawlerDocumentService {
   EcliCrawlerDocumentRepository repository;
   CaseLawService caselawService;
   private final String documentUrl;
-
+  private static final int DOCUMENT_STORE_BULK_SIZE = 10000;
   private static final Logger logger = LogManager.getLogger(EcliCrawlerDocumentService.class);
 
   // ecli regex provided by the ecli xsd
@@ -50,7 +50,7 @@ public class EcliCrawlerDocumentService {
   }
 
   public void saveAll(List<EcliCrawlerDocument> docs) {
-    ListUtils.partition(docs, 1000).forEach(i -> repository.saveAll(i));
+    ListUtils.partition(docs, DOCUMENT_STORE_BULK_SIZE).forEach(i -> repository.saveAll(i));
   }
 
   public List<EcliCrawlerDocument> getFromChangelogs(List<Changelog> changelogs) {
