@@ -26,7 +26,7 @@ import { useBackendURL } from "~/composables/useBackendURL";
 import type { CaseLaw } from "~/types";
 import { getEncodingURL } from "~/utils/caseLawUtils";
 import { dateFormattedDDMMYYYY } from "~/utils/dateFormatting";
-import { getAllSectionsFromHtml } from "~/utils/htmlParser";
+import { getAllSectionsFromHtml, parseDocument } from "~/utils/htmlParser";
 import { removeOuterParentheses } from "~/utils/textFormatting";
 import IcBaselineSubject from "~icons/ic/baseline-subject";
 import IcOutlineInfo from "~icons/ic/outline-info";
@@ -48,7 +48,92 @@ const { data: html, error: contentError } = await useFetch<string>(
   },
 );
 
-useHead({ title: caseLaw.value?.fileNumbers?.[0] });
+const truncate = (s: string, n: number) => {
+  const clean = s.trim().split(/\s+/).join(" ");
+  if (clean.length <= n) return clean;
+
+  const cut = clean.slice(0, n);
+  const lastSpace = cut.lastIndexOf(" ");
+  return lastSpace === -1 ? cut : cut.slice(0, lastSpace);
+};
+
+const buildOgTitle = (cl?: CaseLaw) => {
+  if (!cl) return undefined;
+
+  const court = cl.courtName?.trim() || "";
+  const dtype = cl.documentType || "Gerichtsentscheidung";
+  const date = cl.decisionDate ? dateFormattedDDMMYYYY(cl.decisionDate) : "";
+  const file = cl.fileNumbers?.[0] || "";
+
+  const parts = [
+    court && `${court}:`,
+    dtype,
+    date && `vom ${date}`,
+    file && `– ${file}`,
+  ]
+    .filter(Boolean)
+    .join(" ");
+
+  return truncate(parts, 55) || undefined;
+};
+
+const ogTitle = buildOgTitle(caseLaw.value ?? undefined);
+
+const extractDescription = (
+  cl?: CaseLaw | null,
+  htmlContent?: string | null,
+) => {
+  if (!cl) return undefined;
+
+  if (cl.guidingPrinciple) {
+    const sentences = cl.guidingPrinciple
+      .split(/(?<=[.!?])\s+/)
+      .filter(Boolean);
+    return truncate(sentences.slice(0, 2).join(" "), 150);
+  }
+
+  if (!htmlContent) return undefined;
+
+  const doc = parseDocument(htmlContent);
+  const firstP = doc.querySelector("p");
+  const text = firstP?.textContent?.trim();
+
+  if (!text) return undefined;
+
+  const paragraph = text.trim().split(/\s+/).join(" ");
+  return truncate(paragraph, 150);
+};
+
+const ogDescription = extractDescription(
+  caseLaw.value ?? undefined,
+  html.value ?? undefined,
+);
+
+const reqUrl = useRequestURL();
+const config = useRuntimeConfig();
+const siteBaseUrl = config.public.siteBaseUrl || reqUrl.origin;
+const canonicalUrl = `${siteBaseUrl}${reqUrl.pathname}`;
+
+const descriptionContent = ogDescription || "Gerichtsentscheidung";
+
+const metaTags = [
+  { name: "description", content: descriptionContent },
+  { property: "og:type", content: "article" },
+  { property: "og:title", content: ogTitle },
+  { property: "og:description", content: descriptionContent },
+  { property: "og:url", content: canonicalUrl },
+  { property: "og:image", content: "/og_image.png" },
+  { name: "twitter:card", content: "summary_large_image" },
+  { name: "twitter:title", content: ogTitle },
+  { name: "twitter:description", content: descriptionContent },
+  { name: "twitter:image", content: "/og_image.png" },
+].filter((t) => Object.values(t).every(Boolean));
+
+useHead({
+  title: ogTitle,
+  link: [{ rel: "canonical", href: canonicalUrl }],
+  meta: metaTags,
+});
 
 definePageMeta({ layout: "base" }); // use "base" layout to allow for full-width tab backgrounds
 
