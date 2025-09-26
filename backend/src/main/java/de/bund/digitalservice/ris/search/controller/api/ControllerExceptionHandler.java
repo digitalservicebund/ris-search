@@ -5,8 +5,11 @@ import de.bund.digitalservice.ris.search.exception.FileTransformationException;
 import de.bund.digitalservice.ris.search.models.errors.CustomError;
 import de.bund.digitalservice.ris.search.models.errors.CustomErrorResponse;
 import de.bund.digitalservice.ris.search.service.exception.XMLElementNotFoundException;
+import jakarta.validation.ConstraintViolationException;
+import jakarta.validation.Path;
 import java.nio.file.AccessDeniedException;
 import java.util.List;
+import java.util.Objects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -34,6 +37,31 @@ public class ControllerExceptionHandler {
         ex.getBindingResult().getAllErrors().stream().map(this::sanitizeError).toList();
     CustomErrorResponse errorResponse = CustomErrorResponse.builder().errors(errors).build();
     return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(errorResponse);
+  }
+
+  @ExceptionHandler({ConstraintViolationException.class})
+  public final ResponseEntity<CustomErrorResponse> handleException(
+      ConstraintViolationException ex) {
+
+    List<CustomError> violations =
+        ex.getConstraintViolations().stream()
+            .map(
+                violation -> {
+                  var iterator = violation.getPropertyPath().iterator();
+                  Path.Node lastNode = null;
+                  while (iterator.hasNext()) {
+                    lastNode = iterator.next();
+                  }
+                  String propertyName = "";
+                  if (!Objects.isNull(lastNode)) {
+                    propertyName = lastNode.getName();
+                  }
+                  return new CustomError("invalid parameter", violation.getMessage(), propertyName);
+                })
+            .toList();
+
+    CustomErrorResponse errorResponse = CustomErrorResponse.builder().errors(violations).build();
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
   }
 
   private CustomError sanitizeError(ObjectError error) {
