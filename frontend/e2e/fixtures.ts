@@ -5,6 +5,7 @@ type WorkerFixtures = {
   isMobileTest: boolean;
 };
 
+/* typescript-eslint-disable @typescript-eslint/no-empty-object-type */
 export const test = base.extend<{}, WorkerFixtures>({
   isMobileTest: [
     async ({}, use, workerInfo) => {
