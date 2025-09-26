@@ -19,6 +19,7 @@ lefthook-local.yml
 postgres-dataset/
 
 playwright/.auth/user.json
+e2e
 
 ### yarn (not using Zero-Installs)
 .pnp.*

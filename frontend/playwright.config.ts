@@ -1,4 +1,5 @@
 import { defineConfig, devices, type Project } from "@playwright/test";
+
 export const authFile = "playwright/.auth/user.json";
 
 /**
@@ -43,6 +44,16 @@ const browserConfigurations: Project[] = [
     name: "webkit",
     use: {
       ...devices["Desktop Safari"],
+      storageState: authFile,
+    },
+    dependencies: ["setup"],
+  },
+  {
+    name: "mobile",
+    use: {
+      ...devices["Desktop Firefox"],
+      viewport: { width: 320, height: 600 },
+      touch: true,
       storageState: authFile,
     },
     dependencies: ["setup"],

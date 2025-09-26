@@ -97,23 +97,16 @@ jobs:
             echo "Waiting for containers to be fully up..."
             sleep 15
           done
-      - name: Run Accessibility Playwright tests on staging - chromium
+      - name: Run Accessibility Playwright tests on staging
         if: ${{ matrix.profile == 'internal' }}
-        run: npx playwright test accessibility.spec.ts --project chromium
-        working-directory: ./frontend
-        env:
-          RIS_BASE_URL: http://localhost:3000
-          TZ: Europe/Berlin
-      - name: Run Accessibility Playwright tests on staging - firefox
-        if: ${{ matrix.profile == 'internal' }}
-        run: npx playwright test accessibility.spec.ts --project firefox
+        run: npx playwright test accessibility.spec.ts --project chromium firefox mobile
         working-directory: ./frontend
         env:
           RIS_BASE_URL: http://localhost:3000
           TZ: Europe/Berlin
       - name: Run All Playwright tests on prototype
         if: ${{ matrix.profile == 'public' }}
-        run: npx playwright test --project chromium
+        run: npx playwright test --project chromium firefox mobile
         working-directory: ./frontend
         env:
           RIS_BASE_URL: http://localhost:3000
