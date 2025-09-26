@@ -15,10 +15,16 @@ public class IndexCaselawService extends BaseIndexService<CaseLawDocumentationUn
 
   private final CaseLawRepository repository;
 
+  private final CaseLawLdmlToOpenSearchMapper marshaller;
+
   @Autowired
-  public IndexCaselawService(CaseLawBucket bucket, CaseLawRepository repository) {
+  public IndexCaselawService(
+      CaseLawBucket bucket,
+      CaseLawRepository repository,
+      CaseLawLdmlToOpenSearchMapper marshaller) {
     super(bucket);
     this.repository = repository;
+    this.marshaller = marshaller;
   }
 
   @Override
@@ -35,7 +41,7 @@ public class IndexCaselawService extends BaseIndexService<CaseLawDocumentationUn
   protected Optional<CaseLawDocumentationUnit> mapFileToEntity(
       String filename, String fileContent) {
     try {
-      return Optional.of(CaseLawLdmlToOpenSearchMapper.fromString(fileContent));
+      return Optional.of(marshaller.fromString(fileContent));
     } catch (OpenSearchMapperException e) {
       logger.error("unable to parse file {}", filename, e);
       return Optional.empty();

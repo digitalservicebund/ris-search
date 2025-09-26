@@ -26,13 +26,12 @@ import java.io.StringReader;
 import java.time.Instant;
 import javax.xml.transform.stream.StreamSource;
 import org.eclipse.persistence.exceptions.DescriptorException;
+import org.springframework.stereotype.Service;
 
+@Service
 public class CaseLawLdmlToOpenSearchMapper {
 
-  private CaseLawLdmlToOpenSearchMapper() {}
-
-  public static CaseLawDocumentationUnit mapToEntity(CaseLawLdml caseLawLdml)
-      throws ValidationException {
+  public CaseLawDocumentationUnit mapToEntity(CaseLawLdml caseLawLdml) throws ValidationException {
     validateNotNull(caseLawLdml.getJudgment(), "Judgment missing");
     Judgment judgment = caseLawLdml.getJudgment();
     validateNotNull(judgment.getMeta(), "Meta missing");
@@ -141,11 +140,11 @@ public class CaseLawLdmlToOpenSearchMapper {
     return MappingUtils.sanitizeHtmlFromString(html.toHtmlString());
   }
 
-  public static CaseLawDocumentationUnit fromString(String ldmlFile) {
+  public CaseLawDocumentationUnit fromString(String ldmlFile) {
     try {
       StreamSource ldmlStreamSource = new StreamSource(new StringReader(ldmlFile));
       CaseLawLdml ldml = JAXB.unmarshal(ldmlStreamSource, CaseLawLdml.class);
-      return CaseLawLdmlToOpenSearchMapper.mapToEntity(ldml);
+      return mapToEntity(ldml);
     } catch (DescriptorException | DataBindingException | ValidationException e) {
       throw new OpenSearchMapperException("unable to parse file to DocumentationUnit", e);
     }
