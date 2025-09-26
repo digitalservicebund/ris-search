@@ -5,9 +5,10 @@ type WorkerFixtures = {
   isMobileTest: boolean;
 };
 
-/* typescript-eslint-disable @typescript-eslint/no-empty-object-type */
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export const test = base.extend<{}, WorkerFixtures>({
   isMobileTest: [
+    // eslint-disable-next-line no-empty-pattern
     async ({}, use, workerInfo) => {
       const isMobileTest = workerInfo.project.name.toLowerCase() === "mobile";
       await use(isMobileTest);
