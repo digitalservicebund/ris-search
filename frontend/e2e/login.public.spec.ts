@@ -7,5 +7,5 @@ test("is authenticated", async ({ page }, workerInfo) => {
   if (workerInfo.project.name === "mobile")
     await page.getByRole("button", { name: "Menu" }).click();
   await page.getByRole("button", { name: `Abmelden` }).isVisible();
-  await page.getByText(displayName).isVisible();
+  await page.getByText(displayName).first().isVisible();
 });
