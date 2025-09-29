@@ -110,7 +110,7 @@ public class LiteratureController {
       path = ApiConfig.Paths.LITERATURE + "/{documentNumber}.xml",
       produces = MediaType.APPLICATION_XML_VALUE)
   @Operation(
-      summary = "Decision XML",
+      summary = "Literature XML",
       description =
           "Returns a literature item as XML. This content is used as a source for the HTML endpoint.")
   @ApiResponse(responseCode = "200")
