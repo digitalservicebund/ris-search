@@ -13,7 +13,7 @@ import de.bund.digitalservice.ris.search.models.api.parameters.UniversalSortPara
 import de.bund.digitalservice.ris.search.models.opensearch.AbstractSearchEntity;
 import de.bund.digitalservice.ris.search.schema.CollectionSchema;
 import de.bund.digitalservice.ris.search.schema.SearchMemberSchema;
-import de.bund.digitalservice.ris.search.service.AllDocumentsService;
+import de.bund.digitalservice.ris.search.service.search.AllDocumentsService;
 import de.bund.digitalservice.ris.search.utils.LuceneQueryTools;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -82,7 +82,7 @@ public class AllDocumentsSearchController {
 
     try {
       SearchPage<AbstractSearchEntity> entitiesPage =
-          allDocumentsService.searchAndFilterAllDocuments(
+          allDocumentsService.simpleSearchAllDocuments(
               request,
               normsSearchParams,
               caseLawSearchParams,

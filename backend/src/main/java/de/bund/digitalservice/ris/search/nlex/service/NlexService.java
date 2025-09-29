@@ -11,7 +11,7 @@ import de.bund.digitalservice.ris.search.nlex.schema.query.Query;
 import de.bund.digitalservice.ris.search.nlex.schema.query.Words;
 import de.bund.digitalservice.ris.search.nlex.schema.result.Error;
 import de.bund.digitalservice.ris.search.nlex.schema.result.RequestResult;
-import de.bund.digitalservice.ris.search.service.NormsService;
+import de.bund.digitalservice.ris.search.service.search.NormsService;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -67,7 +67,7 @@ public class NlexService {
   private RequestResult runQuery(String searchTerm, Pageable pageable) {
     UniversalSearchParams searchParams = new UniversalSearchParams();
     searchParams.setSearchTerm(searchTerm);
-    SearchPage<Norm> normPage = normsService.searchAndFilterNorms(searchParams, null, pageable);
+    SearchPage<Norm> normPage = normsService.simpleSearchNorms(searchParams, null, pageable);
 
     String requestId = Base64.encode(searchTerm.getBytes());
     return RisToNlexMapper.normsToNlexRequestResult(requestId, frontendUrl, normPage);

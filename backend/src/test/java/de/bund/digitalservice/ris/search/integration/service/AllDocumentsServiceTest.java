@@ -11,7 +11,7 @@ import de.bund.digitalservice.ris.search.integration.controller.api.testData.Tes
 import de.bund.digitalservice.ris.search.models.opensearch.AbstractSearchEntity;
 import de.bund.digitalservice.ris.search.repository.opensearch.CaseLawRepository;
 import de.bund.digitalservice.ris.search.repository.opensearch.NormsRepository;
-import de.bund.digitalservice.ris.search.service.AllDocumentsService;
+import de.bund.digitalservice.ris.search.service.search.AllDocumentsService;
 import java.io.IOException;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;

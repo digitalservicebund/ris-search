@@ -9,7 +9,8 @@ import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import de.bund.digitalservice.ris.search.repository.objectstorage.CaseLawBucket;
 import de.bund.digitalservice.ris.search.repository.opensearch.CaseLawRepository;
-import de.bund.digitalservice.ris.search.service.CaseLawService;
+import de.bund.digitalservice.ris.search.service.search.CaseLawService;
+import de.bund.digitalservice.ris.search.service.search.CaseLawSimpleSearchType;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
@@ -45,7 +46,12 @@ class CaseLawServiceTest {
     Configurations configurations = Mockito.mock(Configurations.class);
     this.caseLawService =
         new CaseLawService(
-            caseLawRepositoryMock, caseLawBucketMock, operationsMock, configurations, null);
+            caseLawRepositoryMock,
+            caseLawBucketMock,
+            operationsMock,
+            configurations,
+            null,
+            new CaseLawSimpleSearchType());
   }
 
   @Test
@@ -64,7 +70,7 @@ class CaseLawServiceTest {
     when(operationsMock.search((Query) any(), eq(CaseLawDocumentationUnit.class)))
         .thenReturn(searchHits);
 
-    var actual = caseLawService.searchCaseLaws("anySearch", pageable);
+    var actual = caseLawService.advancedSearchCaseLaw("anySearch", pageable);
     Assertions.assertEquals(searchResultPage, actual);
   }
 

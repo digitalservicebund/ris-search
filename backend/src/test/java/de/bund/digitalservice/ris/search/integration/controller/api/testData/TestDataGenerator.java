@@ -4,7 +4,7 @@ import de.bund.digitalservice.ris.search.models.api.parameters.UniversalSearchPa
 import de.bund.digitalservice.ris.search.models.opensearch.AbstractSearchEntity;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
-import de.bund.digitalservice.ris.search.service.AllDocumentsService;
+import de.bund.digitalservice.ris.search.service.search.AllDocumentsService;
 import java.util.List;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.core.SearchHit;
@@ -18,7 +18,7 @@ public class TestDataGenerator {
 
     universalSearchParams.setSearchTerm(searchTerm);
     SearchPage<AbstractSearchEntity> result =
-        allDocumentsService.searchAndFilterAllDocuments(
+        allDocumentsService.simpleSearchAllDocuments(
             universalSearchParams, null, null, null, Pageable.ofSize(10000));
     return result.get().map(SearchHit::getContent).toList();
   }

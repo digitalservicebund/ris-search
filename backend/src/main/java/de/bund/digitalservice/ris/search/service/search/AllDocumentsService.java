@@ -1,34 +1,30 @@
-package de.bund.digitalservice.ris.search.service;
+package de.bund.digitalservice.ris.search.service.search;
 
 import static org.opensearch.index.query.QueryBuilders.queryStringQuery;
 
 import de.bund.digitalservice.ris.search.config.opensearch.Configurations;
 import de.bund.digitalservice.ris.search.models.DocumentKind;
-import de.bund.digitalservice.ris.search.models.ParsedSearchTerm;
 import de.bund.digitalservice.ris.search.models.api.parameters.CaseLawSearchParams;
 import de.bund.digitalservice.ris.search.models.api.parameters.NormsSearchParams;
 import de.bund.digitalservice.ris.search.models.api.parameters.UniversalSearchParams;
 import de.bund.digitalservice.ris.search.models.opensearch.AbstractSearchEntity;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
-import de.bund.digitalservice.ris.search.service.helper.CaseLawQueryBuilder;
-import de.bund.digitalservice.ris.search.service.helper.FetchSourceFilterDefinitions;
-import de.bund.digitalservice.ris.search.service.helper.NormQueryBuilder;
-import de.bund.digitalservice.ris.search.service.helper.PortalQueryBuilder;
 import de.bund.digitalservice.ris.search.utils.PageUtils;
 import de.bund.digitalservice.ris.search.utils.RisHighlightBuilder;
+import java.util.List;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.opensearch.action.search.SearchType;
 import org.opensearch.data.client.orhlc.NativeSearchQuery;
 import org.opensearch.data.client.orhlc.NativeSearchQueryBuilder;
+import org.opensearch.search.fetch.subphase.highlight.HighlightBuilder;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.data.elasticsearch.core.SearchPage;
 import org.springframework.data.elasticsearch.core.document.Document;
 import org.springframework.data.elasticsearch.core.mapping.IndexCoordinates;
-import org.springframework.data.elasticsearch.core.query.FetchSourceFilter;
 import org.springframework.stereotype.Service;
 
 /** Service for searching all documents. */
@@ -36,19 +32,25 @@ import org.springframework.stereotype.Service;
 public class AllDocumentsService {
 
   private final ElasticsearchOperations operations;
-  private final SearchTermParser searchTermParser;
+  private final SimpleSearchQueryBuilder simpleSearchQueryBuilder;
   private final IndexCoordinates allDocumentsIndex;
   private final PageUtils pageUtils;
+  private final NormSimpleSearchType normSimpleSearchType;
+  private final CaseLawSimpleSearchType caseLawSimpleSearchType;
 
   public AllDocumentsService(
       ElasticsearchOperations operations,
       Configurations configurations,
       PageUtils pageUtils,
-      SearchTermParser searchTermParser) {
+      SimpleSearchQueryBuilder simpleSearchQueryBuilder,
+      NormSimpleSearchType normSimpleSearchType,
+      CaseLawSimpleSearchType caseLawSimpleSearchType) {
     this.operations = operations;
     allDocumentsIndex = IndexCoordinates.of(configurations.getDocumentsAliasName());
     this.pageUtils = pageUtils;
-    this.searchTermParser = searchTermParser;
+    this.simpleSearchQueryBuilder = simpleSearchQueryBuilder;
+    this.normSimpleSearchType = normSimpleSearchType;
+    this.caseLawSimpleSearchType = caseLawSimpleSearchType;
   }
 
   /**
@@ -58,14 +60,18 @@ public class AllDocumentsService {
    * @param pageable Page (offset) and size parameters.
    * @return A new {@link SearchPage} of the containing {@link AbstractSearchEntity}.
    */
-  public SearchPage<AbstractSearchEntity> searchAllDocuments(
-      final String search, Pageable pageable) {
+  public SearchPage<AbstractSearchEntity> advancedSearchAllDocuments(
+      String search, Pageable pageable) {
+    HighlightBuilder highlightBuilder = RisHighlightBuilder.baseHighlighter();
+    normSimpleSearchType.addHighlightedFields(highlightBuilder);
+    caseLawSimpleSearchType.addHighlightedFields(highlightBuilder);
+
     var searchQuery =
         new NativeSearchQueryBuilder()
             .withSearchType(SearchType.DFS_QUERY_THEN_FETCH)
             .withPageable(pageable)
             .withQuery(queryStringQuery(search))
-            .withHighlightBuilder(RisHighlightBuilder.getUniversalHighlighter())
+            .withHighlightBuilder(highlightBuilder)
             .build();
 
     SearchHits<Document> searchHits =
@@ -86,38 +92,25 @@ public class AllDocumentsService {
    * @param pageable Page (offset) and size parameters.
    * @return A new {@link SearchPage} of the containing {@link AbstractSearchEntity}.
    */
-  public SearchPage<AbstractSearchEntity> searchAndFilterAllDocuments(
+  public SearchPage<AbstractSearchEntity> simpleSearchAllDocuments(
       @NotNull UniversalSearchParams params,
       @Nullable NormsSearchParams normsParams,
       @Nullable CaseLawSearchParams caseLawParams,
       @Nullable DocumentKind documentKind,
       Pageable pageable) {
 
-    // transform the request parameters into a BoolQuery
-    ParsedSearchTerm searchTerm = searchTermParser.parse(params.getSearchTerm());
-    PortalQueryBuilder builder =
-        new PortalQueryBuilder(searchTerm, params.getDateFrom(), params.getDateTo());
-    NormQueryBuilder.addNormsLogic(searchTerm, normsParams, builder.getQuery());
-    CaseLawQueryBuilder.addCaseLawsLogic(caseLawParams, builder.getQuery());
-
-    // add pagination and other parameters
-    NativeSearchQuery nativeQuery =
-        new NativeSearchQueryBuilder()
-            .withSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-            .withPageable(pageable)
-            .withQuery(builder.getQuery())
-            .withHighlightBuilder(RisHighlightBuilder.getUniversalHighlighter())
-            .build();
-
-    // exclude fields with long text from search results
-    nativeQuery.addSourceFilter(
-        new FetchSourceFilter(
-            null, FetchSourceFilterDefinitions.getDocumentExcludedFields().toArray(String[]::new)));
+    NativeSearchQuery query =
+        simpleSearchQueryBuilder.buildQuery(
+            List.of(normSimpleSearchType, caseLawSimpleSearchType),
+            params,
+            normsParams,
+            caseLawParams,
+            pageable);
 
     if (documentKind == null) {
-      return searchAllIndices(nativeQuery, pageable);
+      return searchAllIndices(query, pageable);
     } else {
-      return searchSpecificIndex(nativeQuery, pageable, documentKind);
+      return searchSpecificIndex(query, pageable, documentKind);
     }
   }
 

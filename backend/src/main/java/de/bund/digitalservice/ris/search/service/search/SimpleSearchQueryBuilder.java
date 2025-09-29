@@ -1,22 +1,81 @@
-package de.bund.digitalservice.ris.search.service.helper;
+package de.bund.digitalservice.ris.search.service.search;
 
 import de.bund.digitalservice.ris.search.models.ParsedSearchTerm;
+import de.bund.digitalservice.ris.search.models.api.parameters.CaseLawSearchParams;
+import de.bund.digitalservice.ris.search.models.api.parameters.NormsSearchParams;
+import de.bund.digitalservice.ris.search.models.api.parameters.UniversalSearchParams;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
+import de.bund.digitalservice.ris.search.service.SearchTermParser;
 import de.bund.digitalservice.ris.search.utils.DateUtils;
-import java.time.LocalDate;
+import de.bund.digitalservice.ris.search.utils.RisHighlightBuilder;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.NotNull;
+import org.opensearch.action.search.SearchType;
+import org.opensearch.data.client.orhlc.NativeSearchQuery;
+import org.opensearch.data.client.orhlc.NativeSearchQueryBuilder;
 import org.opensearch.index.query.BoolQueryBuilder;
 import org.opensearch.index.query.MultiMatchQueryBuilder;
 import org.opensearch.index.query.Operator;
 import org.opensearch.index.query.QueryBuilders;
 import org.opensearch.index.search.MatchQuery;
+import org.opensearch.search.fetch.subphase.highlight.HighlightBuilder;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.elasticsearch.core.query.FetchSourceFilter;
+import org.springframework.stereotype.Service;
 
-@Getter
-public class PortalQueryBuilder {
+@Service
+public class SimpleSearchQueryBuilder {
+
+  private final SearchTermParser searchTermParser;
+
+  public SimpleSearchQueryBuilder(SearchTermParser searchTermParser) {
+    this.searchTermParser = searchTermParser;
+  }
+
+  public NativeSearchQuery buildQuery(
+      List<SimpleSearchType> searchTypes,
+      @NotNull UniversalSearchParams params,
+      NormsSearchParams normsParams,
+      CaseLawSearchParams caseLawParams,
+      Pageable pageable) {
+    BoolQueryBuilder boolQuery = QueryBuilders.boolQuery();
+
+    // handle searchTerm
+    ParsedSearchTerm searchTerm = searchTermParser.parse(params.getSearchTerm());
+    if (StringUtils.isNotEmpty(searchTerm.original())) {
+      applyMustLogic(searchTerm.unquotedTokens(), searchTerm.quotedSearchPhrases(), boolQuery);
+      applyShouldLogic(searchTerm.original(), boolQuery);
+    }
+    // handle date
+    DateUtils.buildQuery("DATUM", params.getDateFrom(), params.getDateTo())
+        .ifPresent(boolQuery::filter);
+
+    HighlightBuilder highlightBuilder = RisHighlightBuilder.baseHighlighter();
+    List<String> excludedFields = new ArrayList<>();
+    for (SimpleSearchType searchType : searchTypes) {
+      searchType.addHighlightedFields(highlightBuilder);
+      excludedFields.addAll(searchType.getExcludedFields());
+      searchType.addExtraLogic(searchTerm, normsParams, caseLawParams, boolQuery);
+    }
+
+    // add pagination and other parameters
+    NativeSearchQuery result =
+        new NativeSearchQueryBuilder()
+            .withSearchType(SearchType.DFS_QUERY_THEN_FETCH)
+            .withPageable(pageable)
+            .withQuery(boolQuery)
+            .withHighlightBuilder(highlightBuilder)
+            .build();
+
+    // exclude fields with long text from search results
+    result.addSourceFilter(new FetchSourceFilter(null, excludedFields.toArray(String[]::new)));
+
+    return result;
+  }
 
   public static final Map<String, Float> caseLawFieldBoosts =
       Map.of(
@@ -39,18 +98,8 @@ public class PortalQueryBuilder {
           Norm.Fields.ARTICLE_NAMES, convertOrderingToBoost(2),
           Norm.Fields.ARTICLE_TEXTS, convertOrderingToBoost(2));
 
-  private final BoolQueryBuilder query = QueryBuilders.boolQuery();
-
-  public PortalQueryBuilder(ParsedSearchTerm searchTerm, LocalDate from, LocalDate to) {
-    if (StringUtils.isNotEmpty(searchTerm.original())) {
-      applyMustLogic(searchTerm.unquotedTokens(), searchTerm.quotedSearchPhrases());
-      applyShouldLogic(searchTerm.original());
-    }
-
-    DateUtils.buildQuery("DATUM", from, to).ifPresent(query::filter);
-  }
-
-  private void applyMustLogic(List<String> unquotedSearchTokens, List<String> quotedSearchPhrases) {
+  private void applyMustLogic(
+      List<String> unquotedSearchTokens, List<String> quotedSearchPhrases, BoolQueryBuilder query) {
     // Our filtering logic is that all unquotedSearchTokens and all quotedSearchPhrases occur in at
     // least one (not necessarily the same) field. This is the so called "AND" logic.
     // The entirety of our filtering logic is in this method. The QueryBuilder classes only hold
@@ -71,7 +120,7 @@ public class PortalQueryBuilder {
     }
   }
 
-  private void applyShouldLogic(String searchTerm) {
+  private void applyShouldLogic(String searchTerm, BoolQueryBuilder query) {
     // Targeted search. If the entire search term is an exact match for a unique identifier it
     // should get a very large boost.
     query.should(

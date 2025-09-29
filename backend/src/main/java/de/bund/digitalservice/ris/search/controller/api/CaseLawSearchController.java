@@ -13,7 +13,7 @@ import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationU
 import de.bund.digitalservice.ris.search.schema.CaseLawSearchSchema;
 import de.bund.digitalservice.ris.search.schema.CollectionSchema;
 import de.bund.digitalservice.ris.search.schema.SearchMemberSchema;
-import de.bund.digitalservice.ris.search.service.CaseLawService;
+import de.bund.digitalservice.ris.search.service.search.CaseLawService;
 import de.bund.digitalservice.ris.search.utils.LuceneQueryTools;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -80,7 +80,7 @@ public class CaseLawSearchController {
 
     try {
       SearchPage<CaseLawDocumentationUnit> page =
-          caseLawService.searchAndFilterCaseLaw(
+          caseLawService.simpleSearchCaseLaw(
               universalSearchParams, caseLawSearchParams, sortedPageRequest);
       return ResponseEntity.ok()
           .contentType(MediaType.APPLICATION_JSON)

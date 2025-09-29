@@ -18,8 +18,8 @@ import de.bund.digitalservice.ris.search.schema.CollectionSchema;
 import de.bund.digitalservice.ris.search.schema.LegislationWorkSchema;
 import de.bund.digitalservice.ris.search.schema.LegislationWorkSearchSchema;
 import de.bund.digitalservice.ris.search.schema.SearchMemberSchema;
-import de.bund.digitalservice.ris.search.service.NormsService;
 import de.bund.digitalservice.ris.search.service.XsltTransformerService;
+import de.bund.digitalservice.ris.search.service.search.NormsService;
 import de.bund.digitalservice.ris.search.utils.LuceneQueryTools;
 import de.bund.digitalservice.ris.search.utils.eli.ExpressionEli;
 import de.bund.digitalservice.ris.search.utils.eli.ManifestationEli;
@@ -130,7 +130,7 @@ public class NormsController {
 
     try {
       SearchPage<Norm> resultPage =
-          normsService.searchAndFilterNorms(
+          normsService.simpleSearchNorms(
               universalSearchParams, normsSearchParams, sortedPageRequest);
       return NormSearchResponseMapper.fromDomain(resultPage, ApiConfig.Paths.LEGISLATION);
     } catch (UncategorizedElasticsearchException e) {

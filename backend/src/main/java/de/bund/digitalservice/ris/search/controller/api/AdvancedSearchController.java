@@ -19,9 +19,9 @@ import de.bund.digitalservice.ris.search.schema.CaseLawSearchSchema;
 import de.bund.digitalservice.ris.search.schema.CollectionSchema;
 import de.bund.digitalservice.ris.search.schema.LegislationWorkSearchSchema;
 import de.bund.digitalservice.ris.search.schema.SearchMemberSchema;
-import de.bund.digitalservice.ris.search.service.AllDocumentsService;
-import de.bund.digitalservice.ris.search.service.CaseLawService;
-import de.bund.digitalservice.ris.search.service.NormsService;
+import de.bund.digitalservice.ris.search.service.search.AllDocumentsService;
+import de.bund.digitalservice.ris.search.service.search.CaseLawService;
+import de.bund.digitalservice.ris.search.service.search.NormsService;
 import de.bund.digitalservice.ris.search.utils.LuceneQueryTools;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -85,7 +85,7 @@ public class AdvancedSearchController {
 
     try {
       SearchPage<AbstractSearchEntity> resultPage =
-          allDocumentsService.searchAllDocuments(decodedQuery, sortedPageable);
+          allDocumentsService.advancedSearchAllDocuments(decodedQuery, sortedPageable);
 
       return ResponseEntity.ok()
           .contentType(MediaType.APPLICATION_JSON)
@@ -129,7 +129,7 @@ public class AdvancedSearchController {
         pageable.withSort(SortParamsConverter.buildSort(sortParams.getSort()));
 
     try {
-      SearchPage<Norm> page = normsService.searchNorms(decodedQuery, sortedPageable);
+      SearchPage<Norm> page = normsService.advancedSearchNorms(decodedQuery, sortedPageable);
       return ResponseEntity.ok(
           NormSearchResponseMapper.fromDomain(page, ApiConfig.Paths.LEGISLATION_ADVANCED_SEARCH));
     } catch (UncategorizedElasticsearchException e) {
@@ -168,7 +168,7 @@ public class AdvancedSearchController {
 
     try {
       SearchPage<CaseLawDocumentationUnit> page =
-          caseLawService.searchCaseLaws(decodedQuery, sortedPageable);
+          caseLawService.advancedSearchCaseLaw(decodedQuery, sortedPageable);
 
       return ResponseEntity.ok(CaseLawSearchSchemaMapper.fromSearchPage(page));
     } catch (UncategorizedElasticsearchException e) {

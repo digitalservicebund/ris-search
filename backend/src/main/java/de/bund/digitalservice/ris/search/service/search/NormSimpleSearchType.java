@@ -1,8 +1,9 @@
-package de.bund.digitalservice.ris.search.service.helper;
+package de.bund.digitalservice.ris.search.service.search;
 
 import static org.opensearch.index.query.QueryBuilders.matchQuery;
 
 import de.bund.digitalservice.ris.search.models.ParsedSearchTerm;
+import de.bund.digitalservice.ris.search.models.api.parameters.CaseLawSearchParams;
 import de.bund.digitalservice.ris.search.models.api.parameters.NormsSearchParams;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.utils.DateUtils;
@@ -20,12 +21,56 @@ import org.opensearch.index.query.Operator;
 import org.opensearch.index.query.QueryBuilders;
 import org.opensearch.index.search.MatchQuery;
 import org.opensearch.search.fetch.subphase.FetchSourceContext;
+import org.opensearch.search.fetch.subphase.highlight.HighlightBuilder;
+import org.springframework.stereotype.Service;
 
-public class NormQueryBuilder {
-
-  private NormQueryBuilder() {}
+@Service
+public class NormSimpleSearchType implements SimpleSearchType {
 
   static final int ARTICLE_INNER_HITS_SIZE = 3;
+
+  public static final List<String> NORMS_FETCH_EXCLUDED_FIELDS =
+      List.of(
+          Norm.Fields.ARTICLE_NAMES,
+          Norm.Fields.ARTICLE_TEXTS,
+          Norm.Fields.ARTICLES,
+          Norm.Fields.TABLE_OF_CONTENTS);
+
+  @Override
+  public void addHighlightedFields(HighlightBuilder builder) {
+    builder.field(Norm.Fields.OFFICIAL_TITLE);
+  }
+
+  @Override
+  public List<String> getExcludedFields() {
+    return NORMS_FETCH_EXCLUDED_FIELDS;
+  }
+
+  @Override
+  public void addExtraLogic(
+      ParsedSearchTerm searchTerm,
+      NormsSearchParams normsSearchParams,
+      CaseLawSearchParams caseLawSearchParams,
+      BoolQueryBuilder query) {
+    if (StringUtils.isNotEmpty(searchTerm.original())) {
+      addSearchTerm(
+          searchTerm.original(),
+          searchTerm.unquotedTokens(),
+          searchTerm.quotedSearchPhrases(),
+          query);
+    }
+
+    if (normsSearchParams == null) {
+      return;
+    }
+    if (normsSearchParams.getEli() != null) {
+      query.must(
+          matchQuery(Norm.Fields.WORK_ELI, normsSearchParams.getEli()).operator(Operator.AND));
+    }
+    DateUtils.buildQueryForTemporalCoverage(
+            normsSearchParams.getTemporalCoverageFrom(), normsSearchParams.getTemporalCoverageTo())
+        .ifPresent(query::filter);
+  }
 
   public static void addSearchTerm(
       String searchTerm,
@@ -91,26 +136,5 @@ public class NormQueryBuilder {
     articleQueryBuilder.innerHit(articleInnerHitBuilder);
 
     query.should(articleQueryBuilder);
-  }
-
-  public static void addNormsLogic(
-      ParsedSearchTerm searchTerm, NormsSearchParams params, BoolQueryBuilder query) {
-    if (StringUtils.isNotEmpty(searchTerm.original())) {
-      NormQueryBuilder.addSearchTerm(
-          searchTerm.original(),
-          searchTerm.unquotedTokens(),
-          searchTerm.quotedSearchPhrases(),
-          query);
-    }
-
-    if (params == null) {
-      return;
-    }
-    if (params.getEli() != null) {
-      query.must(matchQuery(Norm.Fields.WORK_ELI, params.getEli()).operator(Operator.AND));
-    }
-    DateUtils.buildQueryForTemporalCoverage(
-            params.getTemporalCoverageFrom(), params.getTemporalCoverageTo())
-        .ifPresent(query::filter);
   }
 }

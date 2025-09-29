@@ -7,7 +7,8 @@ import static org.mockito.Mockito.when;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
 import de.bund.digitalservice.ris.search.repository.opensearch.NormsRepository;
-import de.bund.digitalservice.ris.search.service.NormsService;
+import de.bund.digitalservice.ris.search.service.search.NormSimpleSearchType;
+import de.bund.digitalservice.ris.search.service.search.NormsService;
 import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -39,7 +40,8 @@ class NormsServiceTest {
     operationsMock = Mockito.mock(ElasticsearchOperations.class);
     NormsBucket normsBucketMock = Mockito.mock(NormsBucket.class);
     this.normsService =
-        new NormsService(normsRepositoryMock, normsBucketMock, operationsMock, null);
+        new NormsService(
+            normsRepositoryMock, normsBucketMock, operationsMock, null, new NormSimpleSearchType());
   }
 
   @Test
@@ -55,7 +57,7 @@ class NormsServiceTest {
     SearchPage<Norm> searchResultPage = SearchHitSupport.searchPageFor(searchHits, pageable);
     when(operationsMock.search((Query) any(), eq(Norm.class))).thenReturn(searchHits);
 
-    var actual = normsService.searchNorms("anySearch", pageable);
+    var actual = normsService.advancedSearchNorms("anySearch", pageable);
     Assertions.assertEquals(searchResultPage, actual);
   }
 }
