@@ -347,4 +347,25 @@ describe("DateFilter", () => {
   describe.todo("administrative regulations", () => {});
 
   describe.todo("literature", () => {});
+
+  it("sets the default filter when switching document kind", async () => {
+    const { rerender } = render(DateFilter, {
+      props: {
+        documentKind: DocumentKind.CaseLaw,
+      },
+      global: { stubs: { InputMask: InputText } },
+    });
+
+    expect(
+      screen.getByRole("radio", { name: "Keine zeitliche Begrenzung" }),
+    ).toBeChecked();
+
+    await rerender({ documentKind: DocumentKind.Norm });
+    expect(screen.getByRole("radio", { name: "Aktuell gültig" })).toBeChecked();
+
+    await rerender({ documentKind: DocumentKind.CaseLaw });
+    expect(
+      screen.getByRole("radio", { name: "Keine zeitliche Begrenzung" }),
+    ).toBeChecked();
+  });
 });
