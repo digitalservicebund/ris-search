@@ -9,14 +9,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.c4_soft.springaddons.security.oauth2.test.annotations.WithJwt;
 import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.integration.config.ContainersIntegrationBase;
-import de.bund.digitalservice.ris.search.service.PostHogService;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -27,7 +25,6 @@ import org.springframework.util.MultiValueMap;
 @WithJwt("jwtTokens/ValidAccessToken.json")
 class FeedbackControllerTest extends ContainersIntegrationBase {
   @Autowired private MockMvc mockMvc;
-  @MockitoBean private PostHogService postHogService;
 
   MultiValueMap<String, String> testParams =
       new LinkedMultiValueMap<>() {
@@ -35,9 +32,6 @@ class FeedbackControllerTest extends ContainersIntegrationBase {
           add("text", "test feedback");
           add("url", "http://example.com");
           add("user_id", "test-distinct-id");
-          add("ph_host", "http://example.com");
-          add("ph_key", "test-key");
-          add("ph_survey_id", "test-survey-id");
         }
       };
 
@@ -63,7 +57,7 @@ class FeedbackControllerTest extends ContainersIntegrationBase {
   @Test
   void throwsValidationErrorIfAParameterIsMissing() throws Exception {
     MultiValueMap<String, String> invalidParams = testParams;
-    invalidParams.remove("ph_survey_id");
+    invalidParams.remove("user_id");
     mockMvc
         .perform(
             get(ApiConfig.Paths.FEEDBACK)
@@ -73,10 +67,10 @@ class FeedbackControllerTest extends ContainersIntegrationBase {
         .andExpect(status().isUnprocessableEntity())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
         .andExpect(jsonPath("$.errors.*.code").value("information_missing"))
-        .andExpect(jsonPath("$.errors.*.parameter").value("ph_survey_id"))
+        .andExpect(jsonPath("$.errors.*.parameter").value("user_id"))
         .andExpect(
             jsonPath("$.errors.*.message")
                 .value(
-                    "Required request parameter 'ph_survey_id' for method parameter type String is not present"));
+                    "Required request parameter 'user_id' for method parameter type String is not present"));
   }
 }

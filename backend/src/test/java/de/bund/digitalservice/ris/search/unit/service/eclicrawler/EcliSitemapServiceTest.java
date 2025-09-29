@@ -146,6 +146,24 @@ class EcliSitemapServiceTest {
   }
 
   @Test
+  void itReturnsTheRobotsFile() throws ObjectStoreServiceException {
+    var expectedContent = "Allow: *".getBytes();
+    when(bucket.get(ROBOTS_TXT_PATH)).thenReturn(Optional.of(expectedContent));
+
+    var result = service.getRobots();
+    Assertions.assertEquals(expectedContent, result.orElseThrow());
+  }
+
+  @Test
+  void itReturnsEmptyOnObjectStoreExceptionWhileGettingRobotsFile()
+      throws ObjectStoreServiceException {
+    when(bucket.get(ROBOTS_TXT_PATH)).thenThrow(ObjectStoreServiceException.class);
+
+    var result = service.getRobots();
+    Assertions.assertTrue(result.isEmpty());
+  }
+
+  @Test
   void itReturnsASpecificEcliFile() throws ObjectStoreServiceException {
     String filename = "2025/01/01/sitemap_1.xml";
     Optional<byte[]> expectedContent = Optional.of("test".getBytes(StandardCharsets.UTF_16));
