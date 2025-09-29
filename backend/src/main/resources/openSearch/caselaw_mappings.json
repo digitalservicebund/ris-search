@@ -212,7 +212,7 @@
     },
     "document_type": {
       "type": "text",
-      "analyzer": "custom_german_analyzer",
+      "analyzer": "custom_german_decompounding_analyzer",
       "fields": {
         "keyword": {
           "type": "keyword",
