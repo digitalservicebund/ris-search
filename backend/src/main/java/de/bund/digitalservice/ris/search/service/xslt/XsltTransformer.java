@@ -53,20 +53,22 @@ public abstract class XsltTransformer {
       transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
       parameters.forEach(transformer::setParameter);
       transformer.setParameter("outputMode", "HTML_ALL");
-      StringWriter output = new StringWriter();
-      transformer.transform(
-          new StreamSource(new ByteArrayInputStream(source)), new StreamResult(output));
-      return output.toString();
+      try (ByteArrayInputStream in = new ByteArrayInputStream(source);
+          StringWriter output = new StringWriter()) {
+
+        transformer.transform(new StreamSource(in), new StreamResult(output));
+        return output.toString();
+      }
     } catch (TransformerException | IOException e) {
       logger.error("XSLT transformation error.", e);
 
       if (terminationMessage.get() != null) {
         var split = terminationMessage.get().split(": ");
         if (split.length == 2 && split[0].equals("EID_NOT_FOUND")) {
-          throw new XMLElementNotFoundException(terminationMessage.get());
+          throw new XMLElementNotFoundException(terminationMessage.get(), e);
         }
         if (split.length > 0 && split[0].equals("DOCUMENT_REF_NOT_FOUND")) {
-          throw new FileTransformationException(terminationMessage.get());
+          throw new FileTransformationException(terminationMessage.get(), e);
         }
       }
 
@@ -80,7 +82,7 @@ public abstract class XsltTransformer {
       return IOUtils.toString(xsltResource.getInputStream(), StandardCharsets.UTF_8);
     } catch (IOException e) {
       logger.error("XSLT transformation error.", e);
-      throw new FileTransformationException(e.getMessage());
+      throw new FileTransformationException(e.getMessage(), e);
     }
   }
 }
