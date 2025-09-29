@@ -153,18 +153,4 @@ public class LiteratureController {
       throw e;
     }
   }
-
-  /**
-   * Controls how resources like images will be referenced. For example, they might be accessed
-   * through an API endpoint in local development, but served via a CDN in production.
-   *
-   * @param mode Controls which static prefix will be returned.
-   * @return The prefix to use when returning references to resources.
-   */
-  private String getResourceBasePath(ResourceReferenceMode mode, String documentNumber) {
-    return switch (mode) {
-      case API -> ApiConfig.Paths.LITERATURE + "/" + documentNumber + "/";
-      case PROXY -> "/api" + ApiConfig.Paths.LITERATURE + "/" + documentNumber + "/";
-    };
-  }
 }
