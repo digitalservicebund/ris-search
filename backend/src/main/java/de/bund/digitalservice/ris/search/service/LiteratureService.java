@@ -1,0 +1,137 @@
+package de.bund.digitalservice.ris.search.service;
+
+import static org.opensearch.index.query.QueryBuilders.queryStringQuery;
+
+import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
+import de.bund.digitalservice.ris.search.models.ParsedSearchTerm;
+import de.bund.digitalservice.ris.search.models.api.parameters.LiteratureSearchParams;
+import de.bund.digitalservice.ris.search.models.api.parameters.UniversalSearchParams;
+import de.bund.digitalservice.ris.search.models.opensearch.Literature;
+import de.bund.digitalservice.ris.search.repository.objectstorage.literature.LiteratureBucket;
+import de.bund.digitalservice.ris.search.repository.opensearch.LiteratureRepository;
+import de.bund.digitalservice.ris.search.service.helper.FetchSourceFilterDefinitions;
+import de.bund.digitalservice.ris.search.service.helper.LiteratureQueryBuilder;
+import de.bund.digitalservice.ris.search.service.helper.PortalQueryBuilder;
+import de.bund.digitalservice.ris.search.utils.PageUtils;
+import de.bund.digitalservice.ris.search.utils.RisHighlightBuilder;
+import java.util.List;
+import java.util.Optional;
+import lombok.SneakyThrows;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.opensearch.action.search.SearchType;
+import org.opensearch.data.client.orhlc.NativeSearchQuery;
+import org.opensearch.data.client.orhlc.NativeSearchQueryBuilder;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
+import org.springframework.data.elasticsearch.core.SearchHits;
+import org.springframework.data.elasticsearch.core.SearchPage;
+import org.springframework.data.elasticsearch.core.query.FetchSourceFilter;
+import org.springframework.stereotype.Service;
+
+/**
+ * Service class for interacting with the database and return the search results. This class is
+ * annotated with {@link Service} to indicate that it's a service component in the Spring context.
+ */
+@Service
+public class LiteratureService {
+  private final LiteratureRepository literatureRepository;
+  private final LiteratureBucket literatureBucket;
+  private final ElasticsearchOperations operations;
+  private final SearchTermService searchTermService;
+
+  @SneakyThrows
+  @Autowired
+  public LiteratureService(
+      LiteratureRepository literatureRepository,
+      LiteratureBucket literatureBucket,
+      ElasticsearchOperations operations,
+      SearchTermService searchTermService) {
+    this.literatureRepository = literatureRepository;
+    this.literatureBucket = literatureBucket;
+    this.operations = operations;
+    this.searchTermService = searchTermService;
+  }
+
+  /**
+   * Search and filter literature.
+   *
+   * @param params Search parameters
+   * @param literatureParams Literature search parameters
+   * @param pageable Page (offset) and size parameters.
+   * @return A new {@link SearchPage} of the containing {@link Literature}.
+   */
+  public SearchPage<Literature> searchAndFilterLiterature(
+      @NotNull UniversalSearchParams params,
+      @Nullable LiteratureSearchParams literatureParams,
+      Pageable pageable) {
+
+    // Transform the request parameters into a BoolQuery
+    ParsedSearchTerm searchTerm = searchTermService.parse(params.getSearchTerm());
+    PortalQueryBuilder builder =
+        new PortalQueryBuilder(searchTerm, params.getDateFrom(), params.getDateTo());
+    LiteratureQueryBuilder.addLiteratureFilters(literatureParams, builder.getQuery());
+
+    // add pagination and other parameters
+    NativeSearchQuery nativeQuery =
+        new NativeSearchQueryBuilder()
+            .withSearchType(SearchType.DFS_QUERY_THEN_FETCH)
+            .withPageable(pageable)
+            .withQuery(builder.getQuery())
+            .withHighlightBuilder(RisHighlightBuilder.getLiteratureHighlighter())
+            .build();
+
+    // Exclude fields with long text from search results
+    nativeQuery.addSourceFilter(
+        new FetchSourceFilter(
+            null,
+            FetchSourceFilterDefinitions.LITERATURE_FETCH_EXCLUDED_FIELDS.toArray(String[]::new)));
+
+    SearchHits<Literature> searchHits = operations.search(nativeQuery, Literature.class);
+
+    return PageUtils.unwrapSearchHits(searchHits, pageable);
+  }
+
+  /**
+   * Search and retrieve literature items.
+   *
+   * @param search The input {@link String} of lucene query values.
+   * @param pageable Pagination parameters
+   * @return A new {@link SearchPage} of the containing {@link Literature}.
+   */
+  public SearchPage<Literature> searchLiterature(final String search, Pageable pageable) {
+    var searchQuery =
+        new NativeSearchQueryBuilder()
+            .withSearchType(SearchType.DFS_QUERY_THEN_FETCH)
+            .withPageable(pageable)
+            .withQuery(queryStringQuery(search))
+            .withHighlightBuilder(RisHighlightBuilder.getLiteratureHighlighter())
+            .build();
+
+    SearchHits<Literature> searchHits = operations.search(searchQuery, Literature.class);
+    return PageUtils.unwrapSearchHits(searchHits, pageable);
+  }
+
+  /**
+   * Retrieves a list of literature items filtered by the document number
+   *
+   * @param documentNumber the given document number
+   * @return the list of items
+   */
+  public List<Literature> getByDocumentNumber(String documentNumber) {
+    return literatureRepository.findByDocumentNumber(documentNumber);
+  }
+
+  /**
+   * Retrives the file of a literature item by its document number
+   *
+   * @param documentNumber the given document number
+   * @return the file
+   * @throws ObjectStoreServiceException if an issue is encountered with the bucket
+   */
+  public Optional<byte[]> getFileByDocumentNumber(String documentNumber)
+      throws ObjectStoreServiceException {
+    return literatureBucket.get(String.format("%s.xml", documentNumber));
+  }
+}

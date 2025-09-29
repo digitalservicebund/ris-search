@@ -1,6 +1,7 @@
 package de.bund.digitalservice.ris.search.mapper;
 
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
+import de.bund.digitalservice.ris.search.models.opensearch.Literature;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import java.util.HashMap;
 import java.util.Map;
@@ -10,14 +11,35 @@ public class MappingDefinitions {
 
   protected static final Map<String, String> caseLawOpenSearchToSchemaMap;
   protected static final Map<String, String> normsOpenSearchToSchemaMap;
+  protected static final Map<String, String> literatureOpenSearchToSchemaMap;
 
   protected static final Map<String, String> caseLawSchemaToOpenSearchMap;
 
   protected static final Map<String, String> normsSchemaToOpenSearchMap;
 
+  protected static final Map<String, String> literatureSchemaToOpenSearchMap;
+
   protected static final Map<String, String> schemaToOpenSearchMap;
 
+  private static final String DATUM_FIELD = "DATUM";
+
   static {
+    literatureOpenSearchToSchemaMap =
+        Map.ofEntries(
+            Map.entry(Literature.Fields.DOCUMENT_NUMBER, "documentNumber"),
+            Map.entry(Literature.Fields.RECORDING_DATE, "recordingDate"),
+            Map.entry(Literature.Fields.YEARS_OF_PUBLICATION, "yearsOfPublication"),
+            Map.entry(Literature.Fields.DEPENDENT_REFERENCES, "dependentReferences"),
+            Map.entry(Literature.Fields.INDEPENDENT_REFERENCES, "independentReferences"),
+            Map.entry(Literature.Fields.MAIN_TITLE, "mainTitle"),
+            Map.entry(Literature.Fields.DOCUMENTARY_TITLE, "documentaryTitle"),
+            Map.entry(Literature.Fields.AUTHORS, "authors"),
+            Map.entry(Literature.Fields.COLLABORATORS, "collaborators"),
+            Map.entry(Literature.Fields.SHORT_REPORT, "shortReport"),
+            Map.entry(Literature.Fields.OUTLINE, "outline"),
+            Map.entry(Literature.Fields.INDEXED_AT, "indexedAt"),
+            Map.entry(DATUM_FIELD, "date") // alias shared with caseLaw/norms
+            );
     normsOpenSearchToSchemaMap =
         Map.ofEntries(
             Map.entry(Norm.Fields.WORK_ELI_KEYWORD, "legislationIdentifier"),
@@ -26,7 +48,7 @@ public class MappingDefinitions {
             Map.entry(Norm.Fields.OFFICIAL_ABBREVIATION, "abbreviation"),
             Map.entry(Norm.Fields.NORMS_DATE, "legislationDate"),
             Map.entry(Norm.Fields.ENTRY_INTO_FORCE_DATE, "temporalCoverageFrom"),
-            Map.entry("DATUM", "date") // alias shared with caseLaw
+            Map.entry(DATUM_FIELD, "date") // alias shared with caseLaw
             );
     caseLawOpenSearchToSchemaMap =
         Map.ofEntries(
@@ -62,7 +84,7 @@ public class MappingDefinitions {
             Map.entry(CaseLawDocumentationUnit.Fields.PROCEDURES, "procedures"),
             Map.entry(CaseLawDocumentationUnit.Fields.LEGAL_EFFECT, "legalEffect"),
             Map.entry(CaseLawDocumentationUnit.Fields.INDEXED_AT, "indexedAt"),
-            Map.entry("DATUM", "date") // alias shared with norms
+            Map.entry(DATUM_FIELD, "date") // alias shared with norms
             );
     schemaToOpenSearchMap = new HashMap<>();
 
@@ -73,8 +95,13 @@ public class MappingDefinitions {
     normsSchemaToOpenSearchMap = new HashMap<>();
     normsOpenSearchToSchemaMap.forEach((key, value) -> normsSchemaToOpenSearchMap.put(value, key));
 
+    literatureSchemaToOpenSearchMap = new HashMap<>();
+    literatureOpenSearchToSchemaMap.forEach(
+        (key, value) -> literatureSchemaToOpenSearchMap.put(value, key));
+
     schemaToOpenSearchMap.putAll(caseLawSchemaToOpenSearchMap);
     schemaToOpenSearchMap.putAll(normsSchemaToOpenSearchMap);
+    schemaToOpenSearchMap.putAll(literatureSchemaToOpenSearchMap);
   }
 
   public static String getOpenSearchName(String nameInSchema, ResolutionMode mode) {
@@ -82,12 +109,14 @@ public class MappingDefinitions {
       case ALL -> schemaToOpenSearchMap.get(nameInSchema);
       case NORMS -> normsSchemaToOpenSearchMap.get(nameInSchema);
       case CASE_LAW -> caseLawSchemaToOpenSearchMap.get(nameInSchema);
+      case LITERATURE -> literatureSchemaToOpenSearchMap.get(nameInSchema);
     };
   }
 
   public enum ResolutionMode {
     ALL,
     NORMS,
-    CASE_LAW
+    CASE_LAW,
+    LITERATURE
   }
 }
