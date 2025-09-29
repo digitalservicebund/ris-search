@@ -44,7 +44,6 @@
     "js-cookie": "^3.0.5",
     "jwt-decode": "^4.0.0",
     "lodash": "^4.17.21",
-    "maska": "^3.2.0",
     "minisearch": "^7.1.2",
     "openapi-explorer": "^2.2.764",
     "pinia": "^3.0.3",
