@@ -62,4 +62,21 @@ class EcliSitemapControllerTest {
     verify(service).getSitemapFile("2025/01/01/sitemap_1.xml");
     Assertions.assertEquals(HttpStatusCode.valueOf(404), response.getStatusCode());
   }
+
+  @Test
+  void itServesARobotsTxt() {
+
+    when(service.getRobots()).thenReturn(Optional.of("Allow: *".getBytes()));
+    var response = controller.getRobots();
+
+    Assertions.assertEquals(HttpStatusCode.valueOf(200), response.getStatusCode());
+  }
+
+  @Test
+  void itReturnsA404OnMissingRobotsTxt() {
+    when(service.getRobots()).thenReturn(Optional.empty());
+    var response = controller.getRobots();
+
+    Assertions.assertEquals(HttpStatusCode.valueOf(404), response.getStatusCode());
+  }
 }
