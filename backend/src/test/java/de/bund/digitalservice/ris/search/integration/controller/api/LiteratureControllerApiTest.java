@@ -1,8 +1,6 @@
 package de.bund.digitalservice.ris.search.integration.controller.api;
 
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
-import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.startsWithIgnoringCase;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -125,33 +123,21 @@ class LiteratureControllerApiTest extends ContainersIntegrationBase {
             content().contentType("application/xml"));
   }
 
+  // Test needs to be adapted wen actual xslt transform for literature is available
   @Test
-  @DisplayName("Html Endpoint Should return error html when literature not in bucket")
+  @DisplayName("Html Endpoint Should always return error")
   void shouldReturnNotFoundIfHTMLNotPresent() throws Exception {
     mockMvc
         .perform(
             get(ApiConfig.Paths.LITERATURE + "/NOT_PRESENT_IN_BUCKET.html")
                 .contentType(MediaType.TEXT_HTML))
         .andExpect(status().isNotFound());
-  }
 
-  @Test
-  @DisplayName("Should return HTML version of literature item")
-  void shouldReturnSingleLiteratureHtml() throws Exception {
-
-    String responseContent =
-        mockMvc
-            .perform(
-                get(ApiConfig.Paths.LITERATURE + "/" + this.documentNumberPresentInBucket + ".html")
-                    .contentType(MediaType.TEXT_HTML))
-            .andExpect(status().isOk())
-            .andReturn()
-            .getResponse()
-            .getContentAsString();
-
-    assertThat(responseContent, containsString("Literatur Test Dokument"));
-    assertThat(responseContent, containsString("1. Dies ist ein literature"));
-    assertThat(responseContent, containsString("Außerdem gib es noch"));
+    mockMvc
+        .perform(
+            get(ApiConfig.Paths.LITERATURE + "/" + this.documentNumberPresentInBucket + ".html")
+                .contentType(MediaType.TEXT_HTML))
+        .andExpect(status().isNotFound());
   }
 
   @Test
