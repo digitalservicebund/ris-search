@@ -53,13 +53,17 @@ const testPages = [
     url: "/search?category=R",
   },
   {
+    name: "Advanced Search Page",
+    url: "/advanced-search",
+  },
+  {
     name: "Norm View Page",
-    url: "/norms/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu/regelungstext-1",
+    url: "/norms/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu",
     tabs: ["Details", "Fassungen"],
   },
   {
     name: "Article View Page",
-    url: "/norms/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu/regelungstext-1/art-z1",
+    url: "/norms/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu/art-z1",
   },
   {
     name: "Caselaw View Page",
@@ -97,13 +101,12 @@ test.describe("General Pages Accessibility Tests", () => {
               "test-results",
               "accessibility-results",
             ),
-            reportFileName: `${name} Page${nameSuffix}.html`,
+            reportFileName: `${name} Page ${nameSuffix}.html`,
           },
         });
       });
-      expect(
-        tabsAnalysisResults.flatMap((result) => result.violations),
-      ).toEqual([]);
+
+      expect(tabsAnalysisResults.flatMap((r) => r.violations)).toEqual([]);
     });
   });
 });

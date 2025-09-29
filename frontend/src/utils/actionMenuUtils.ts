@@ -28,30 +28,28 @@ export function createActionMenuItems(
   }
 
   items.push(
-    ...[
-      {
-        key: "permalink",
-        label: records.permalink.label,
-        iconComponent: MaterialSymbolsLink,
-        command: async () => await copyUrlCommand(records.permalink.url),
-        url: records.permalink.url,
-        disabled: records.permalink.disabled,
+    {
+      key: "permalink",
+      label: records.permalink.label,
+      iconComponent: MaterialSymbolsLink,
+      command: async () => await copyUrlCommand(records.permalink.url),
+      url: records.permalink.url,
+      disabled: records.permalink.disabled,
+    },
+    {
+      key: "print",
+      label: "Drucken",
+      iconComponent: MaterialSymbolsPrint,
+      command: () => {
+        if (globalThis) globalThis.print();
       },
-      {
-        key: "print",
-        label: "Drucken",
-        iconComponent: MaterialSymbolsPrint,
-        command: () => {
-          if (window) window.print();
-        },
-      },
-      {
-        key: "pdf",
-        label: "Als PDF speichern",
-        iconComponent: PDFIcon,
-        disabled: true,
-      },
-    ],
+    },
+    {
+      key: "pdf",
+      label: "Als PDF speichern",
+      iconComponent: PDFIcon,
+      disabled: true,
+    },
   );
 
   if (xmlUrl) {

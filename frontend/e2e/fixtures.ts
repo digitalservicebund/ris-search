@@ -1,7 +1,21 @@
-import { expect as baseExpect } from "@playwright/test";
+import { test as base, expect as baseExpect } from "@playwright/test";
 import type { Locator } from "@playwright/test";
 
-export { test } from "@playwright/test";
+type WorkerFixtures = {
+  isMobileTest: boolean;
+};
+
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+export const test = base.extend<{}, WorkerFixtures>({
+  isMobileTest: [
+    // eslint-disable-next-line no-empty-pattern
+    async ({}, use, workerInfo) => {
+      const isMobileTest = workerInfo.project.name.toLowerCase() === "mobile";
+      await use(isMobileTest);
+    },
+    { scope: "worker" },
+  ],
+});
 
 export const expect = baseExpect.extend({
   async toHaveSelectedOptionText(

@@ -14,6 +14,7 @@ import de.bund.digitalservice.ris.search.service.Job;
 import de.bund.digitalservice.ris.search.service.LiteratureIndexSyncJob;
 import de.bund.digitalservice.ris.search.service.NormIndexSyncJob;
 import de.bund.digitalservice.ris.search.service.SitemapsUpdateJob;
+import de.bund.digitalservice.ris.search.service.eclicrawler.EcliSitemapJob;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -28,6 +29,7 @@ class ImportTaskProcessorTest {
   @Mock private CaseLawIndexSyncJob caseLawIndexSyncJob;
   @Mock private LiteratureIndexSyncJob literatureIndexSyncJob;
   @Mock private SitemapsUpdateJob sitemapsUpdateJob;
+  @Mock private EcliSitemapJob ecliSitemapJob;
 
   private ImportTaskProcessor processor;
 
@@ -35,7 +37,11 @@ class ImportTaskProcessorTest {
   void setUp() {
     processor =
         new ImportTaskProcessor(
-            normIndexSyncJob, caseLawIndexSyncJob, literatureIndexSyncJob, sitemapsUpdateJob);
+            normIndexSyncJob,
+            caseLawIndexSyncJob,
+            sitemapsUpdateJob,
+            literatureIndexSyncJob,
+            ecliSitemapJob);
   }
 
   @Test
@@ -194,6 +200,19 @@ class ImportTaskProcessorTest {
 
     // Then
     verify(sitemapsUpdateJob).runJob();
+  }
+
+  @Test
+  void runTask_withEcliSitemapsTarget_callsEcliSitemapsUpdateJob() {
+    // Given
+    String target = "generate_ecli_sitemaps";
+
+    // When
+    when(ecliSitemapJob.runJob()).thenReturn(Job.ReturnCode.SUCCESS);
+    processor.runTask(target);
+
+    // Then
+    verify(ecliSitemapJob).runJob();
   }
 
   @Test

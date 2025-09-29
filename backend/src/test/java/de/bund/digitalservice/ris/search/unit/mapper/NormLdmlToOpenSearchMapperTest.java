@@ -38,10 +38,9 @@ class NormLdmlToOpenSearchMapperTest {
     String normFile = "xmlContent.xml";
     Norm norm = NormLdmlToOpenSearchMapper.parseNorm(readXmlTestFile(normFile), Map.of()).get();
 
-    assertEquals("eli/bund/bgbl-1/1962/s514/regelungstext-1", norm.getWorkEli());
-    assertEquals(
-        "eli/bund/bgbl-1/1962/s514/2010-04-27/1/deu/regelungstext-1", norm.getExpressionEli());
-    assertEquals("eli/bund/bgbl-1/1962/s514/2010-04-27/1/deu/regelungstext-1", norm.getId());
+    assertEquals("eli/bund/bgbl-1/1962/s514", norm.getWorkEli());
+    assertEquals("eli/bund/bgbl-1/1962/s514/2010-04-27/1/deu", norm.getExpressionEli());
+    assertEquals("eli/bund/bgbl-1/1962/s514/2010-04-27/1/deu", norm.getId());
     assertEquals(
         "eli/bund/bgbl-1/1962/s514/2010-04-27/1/deu/2010-04-27/regelungstext-1.xml",
         norm.getManifestationEliExample());

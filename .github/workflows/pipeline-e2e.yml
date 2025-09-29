@@ -89,7 +89,7 @@ jobs:
       - name: Install Playwright
         run: npm install @playwright/test@${{ env.PLAYWRIGHT_VERSION }} @axe-core/playwright axe-html-reporter
       - name: Install Playwright Browsers
-        run: npx playwright install --with-deps chromium
+        run: npx playwright install --with-deps chromium firefox webkit
       - name: Wait for containers to be fully up
         timeout-minutes: 5
         run: |
@@ -99,23 +99,32 @@ jobs:
           done
       - name: Run Accessibility Playwright tests on staging
         if: ${{ matrix.profile == 'internal' }}
-        run: npx playwright test accessibility.spec.ts --project chromium
+        run: npx playwright test accessibility.spec.ts --project chromium firefox mobile
         working-directory: ./frontend
         env:
           RIS_BASE_URL: http://localhost:3000
           TZ: Europe/Berlin
       - name: Run All Playwright tests on prototype
         if: ${{ matrix.profile == 'public' }}
-        run: npx playwright test --project chromium
+        run: npx playwright test --project chromium firefox mobile
         working-directory: ./frontend
         env:
           RIS_BASE_URL: http://localhost:3000
           TZ: Europe/Berlin
+      - name: Upload screenshots and traces of failed tests (${{ matrix.profile }})
+        uses: actions/upload-artifact@v4
+        if: ${{ failure() }}
+        with:
+          name: failed-e2e-tests-${{ inputs.project }}-${{ matrix.profile }}
+          path: |
+            frontend/playwright-report/**/*.png
+            frontend/playwright-report/**/*.zip
+          retention-days: 5
       - name: Upload test reports (${{ matrix.profile }})
         uses: actions/upload-artifact@v4
-        if: ${{ !cancelled() }}
+        if: ${{ !failure() }}
         with:
-          name: playwright-report-${{ matrix.profile }}-chromium
+          name: playwright-report-${{ matrix.profile }}
           path: frontend/playwright-report
           retention-days: 5
       - name: Output logs on failure (${{ matrix.profile }})

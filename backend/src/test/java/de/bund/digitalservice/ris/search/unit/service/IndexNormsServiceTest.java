@@ -133,7 +133,11 @@ class IndexNormsServiceTest {
         .thenReturn(
             List.of(
                 "eli/bund/bgbl-1/1992/s101/1992-01-01/1/deu/1992-01-02/regelungstext-1.xml",
-                "not an eli"));
+                "eli/not_an_eli"));
+    when(this.bucket.getAllKeysByPrefix("eli/bund/bgbl-1/1992/s101/"))
+        .thenReturn(
+            List.of("eli/bund/bgbl-1/1992/s101/1992-01-01/1/deu/1992-01-02/regelungstext-1.xml"));
+
     when(this.bucket.getAllKeysByPrefix("eli/bund/bgbl-1/1992/s101/1992-01-01/1/deu"))
         .thenReturn(
             List.of("eli/bund/bgbl-1/1992/s101/1992-01-01/1/deu/1992-01-02/regelungstext-1.xml"));
@@ -149,10 +153,10 @@ class IndexNormsServiceTest {
         NormLdmlToOpenSearchMapper.parseNorm(testContent, Collections.emptyMap()).orElseThrow();
 
     verify(repo, times(1))
-        .saveAll(
+        .save(
             argThat(
                 arg -> {
-                  assertThat(arg.iterator().next().getId()).isEqualTo(exptectedNorm.getId());
+                  assertThat(arg.getId()).isEqualTo(exptectedNorm.getId());
                   return true;
                 }));
     verify(repo, times(1)).deleteByIndexedAtBefore(startingTimestamp);

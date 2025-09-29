@@ -50,16 +50,17 @@ describe("TableOfContents.vue", async () => {
   });
 
   it("renders the correct icon for table of content", async () => {
-    [
+    const icons = [
       "IcBaselineShortText",
       "IcBaselineSubject",
       "IcBaselineGavel",
       "IcOutlineFactCheck",
       "IcBaselineFormatListBulleted",
       "IcBaselineNotes",
-    ].forEach((component) =>
-      expect(wrapper.findComponent({ name: component }).exists()).toBe(true),
-    );
+    ];
+    for (const icon of icons) {
+      expect(wrapper.findComponent({ name: icon }).exists()).toBe(true);
+    }
   });
 
   it("does not call selectItem function when elements are not intersecting", async () => {

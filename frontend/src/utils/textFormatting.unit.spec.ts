@@ -5,6 +5,7 @@ import {
   getStringOrDefault,
   removeOuterParentheses,
   truncateAtWord,
+  removePrefix,
 } from "./textFormatting";
 
 describe("getStringOrDefault", () => {
@@ -115,5 +116,14 @@ describe("truncateAtWord", () => {
   it("works with Unicode letters", () => {
     expect(truncateAtWord("Über schöne Dinge", 8)).toBe("Über");
     expect(truncateAtWord("Äpfel Birnen Kirschen", 12)).toBe("Äpfel Birnen");
+  });
+});
+    
+describe("removePrefix", () => {
+  it("removes prefix when present", () => {
+    expect(removePrefix("Hello World", "Hello ")).toBe("World");
+  });
+  it("removes original string when prefix not present", () => {
+    expect(removePrefix("Hello World", "Hallo ")).toBe("Hello World");
   });
 });

@@ -17,9 +17,7 @@ export const usePostHogStore = defineStore("postHog", () => {
   const router = useRouter();
   const key = getStringOrUndefined(config.public.analytics.posthogKey);
   const host = getStringOrUndefined(config.public.analytics.posthogHost);
-  const surveyId = getStringOrUndefined(
-    config.public.analytics.feedbackSurveyId,
-  );
+
   const postHog: Ref<PostHog | undefined> = ref(undefined);
   const userConsent: Ref<boolean | undefined> = ref(undefined);
   const isBannerVisible = computed(() => {
@@ -53,11 +51,11 @@ export const usePostHogStore = defineStore("postHog", () => {
     postHog.value = undefined;
     const cookies = Cookies.get();
     if (cookies) {
-      Object.keys(cookies).forEach((key) => {
+      for (const key of Object.keys(cookies)) {
         if (key.startsWith("ph_")) {
-          Cookies.remove(key, { path: "/" }); // passing the root path is important here, see https://stackoverflow.com/a/61735396/3357175
+          Cookies.remove(key, { path: "/" });
         }
-      });
+      }
     }
   }
 
@@ -69,17 +67,11 @@ export const usePostHogStore = defineStore("postHog", () => {
   }
 
   async function sendFeedbackToPostHog(text: string) {
-    if (!host || !key || !surveyId) {
-      throw new Error("PostHog configuration is missing!");
-    }
     const backendURL = useBackendURL();
     const params = new URLSearchParams({
       text: text,
       url: router.currentRoute.value.fullPath,
       user_id: getUserPostHogId(),
-      ph_host: host,
-      ph_key: key,
-      ph_survey_id: surveyId,
     });
     const result = await useFetch(
       `${backendURL}/v1/feedback?${params.toString()}`,
@@ -89,6 +81,7 @@ export const usePostHogStore = defineStore("postHog", () => {
       throw new Error(`Error sending feedback`);
     }
   }
+
   function setTracking(userHasAccepted: boolean) {
     Cookies.set(CONSENT_COOKIE_NAME, userHasAccepted.toString(), {
       expires: 365,

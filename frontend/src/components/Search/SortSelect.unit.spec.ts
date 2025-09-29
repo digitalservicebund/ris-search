@@ -1,5 +1,4 @@
 import { mount } from "@vue/test-utils";
-import PrimeVue from "primevue/config";
 import { describe, it, expect } from "vitest";
 import { nextTick } from "vue";
 import SortOptionsComponent from "./SortSelect.vue";
@@ -10,9 +9,6 @@ describe("SortSelect", () => {
     const wrapper = mount(SortOptionsComponent, {
       props: {
         documentKind: DocumentKind.All,
-      },
-      global: {
-        plugins: [PrimeVue],
       },
     });
     await nextTick();
@@ -29,9 +25,6 @@ describe("SortSelect", () => {
       props: {
         documentKind: DocumentKind.Norm,
       },
-      global: {
-        plugins: [PrimeVue],
-      },
     });
 
     const select = wrapper.findComponent({ name: "Select" });
@@ -46,9 +39,6 @@ describe("SortSelect", () => {
     const wrapper = mount(SortOptionsComponent, {
       props: {
         documentKind: DocumentKind.CaseLaw,
-      },
-      global: {
-        plugins: [PrimeVue],
       },
     });
 
@@ -66,9 +56,6 @@ describe("SortSelect", () => {
     const wrapper = mount(SortOptionsComponent, {
       props: {
         documentKind: DocumentKind.All,
-      },
-      global: {
-        plugins: [PrimeVue],
       },
     });
 
@@ -89,9 +76,6 @@ describe("SortSelect", () => {
     const wrapper = mount(SortOptionsComponent, {
       props: {
         documentKind: DocumentKind.All,
-      },
-      global: {
-        plugins: [PrimeVue],
       },
     });
 

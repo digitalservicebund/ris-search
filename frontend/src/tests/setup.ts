@@ -1,10 +1,16 @@
+import "@testing-library/jest-dom";
+import { config } from "@vue/test-utils";
+import PrimeVue from "primevue/config";
 import { vi } from "vitest";
 
 vi.mock("~/middleware/check-login.global.ts", () => ({ default: vi.fn() }));
 
+// Enable PrimeVue plugin because we need that in many tests
+config.global.plugins = [PrimeVue];
+
 // see https://jestjs.io/docs/manual-mocks#mocking-methods-which-are-not-implemented-in-jsdom
-if (global.window) {
-  Object.defineProperty(window, "matchMedia", {
+if (globalThis?.window) {
+  Object.defineProperty(globalThis, "matchMedia", {
     writable: true,
     value: vi.fn().mockImplementation((query) => ({
       matches: false,

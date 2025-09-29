@@ -21,10 +21,10 @@ export function getAccessibilityRelatedMetrics(): AccessibilityRelatedMetrics {
   tempElement.style = "display: block; visibility: hidden; font-size: medium;";
   tempElement.innerText = "M";
   document.body.appendChild(tempElement);
-  const defaultTextSize = window.getComputedStyle(tempElement).fontSize;
-  document.body.removeChild(tempElement);
-  const zoomLevel = Math.round(window.devicePixelRatio * 100);
-  const isDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+  const defaultTextSize = globalThis?.getComputedStyle(tempElement).fontSize;
+  tempElement.remove();
+  const zoomLevel = Math.round(globalThis?.devicePixelRatio * 100);
+  const isDark = globalThis?.matchMedia("(prefers-color-scheme: dark)").matches;
   const themePreference = isDark ? "dark" : "light";
   return {
     zoomLevel: zoomLevel,

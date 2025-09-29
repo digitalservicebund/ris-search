@@ -74,13 +74,13 @@ function getFileNumbers(item: CaseLaw) {
   const matches = getMatches("fileNumbers", props.searchResult.textMatches);
   if (matches.length) {
     const replaced = [...item.fileNumbers];
-    matches.forEach((match) => {
+    for (const match of matches) {
       const stripped = sanitizeSearchResult(match, []);
       const index = item.fileNumbers.indexOf(stripped);
       if (index !== -1) {
         replaced[index] = match;
       }
-    });
+    }
     return replaced.join(", ");
   }
   return item.fileNumbers?.join(", ");
@@ -181,7 +181,10 @@ function trackResultClick(url: string) {
           external
           @click="trackResultClick(`${metadata.url}#${section.id}`)"
         >
-          {{ section.title }}:</NuxtLink
+          <div role="heading" aria-level="3">
+            {{ section.title }}
+          </div>
+          : </NuxtLink
         >{{ " " }}
         <span
           data-testid="highlighted-field"

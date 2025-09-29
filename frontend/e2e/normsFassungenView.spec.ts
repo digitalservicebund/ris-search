@@ -20,10 +20,9 @@ const expectedVersionData = [
 ];
 
 test("can browse different Fassungen of a norm", async ({ page }) => {
-  await page.goto(
-    "/norms/eli/bund/bgbl-1/2020/s1126/2020-08-04/1/deu/regelungstext-1",
-    { waitUntil: "networkidle" },
-  );
+  await page.goto("/norms/eli/bund/bgbl-1/2020/s1126/2020-08-04/1/deu", {
+    waitUntil: "networkidle",
+  });
 
   await page.getByRole("tab", { name: "Fassungen" }).click();
 
@@ -43,10 +42,9 @@ test("can browse different Fassungen of a norm", async ({ page }) => {
 test("can navigate to a Fassung by clicking the table row", async ({
   page,
 }) => {
-  await page.goto(
-    "/norms/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu/regelungstext-1",
-    { waitUntil: "networkidle" },
-  );
+  await page.goto("/norms/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu", {
+    waitUntil: "networkidle",
+  });
 
   await expect(
     page.getByRole("heading", {

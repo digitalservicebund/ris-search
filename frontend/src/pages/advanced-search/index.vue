@@ -1,48 +1,37 @@
 <script setup lang="ts">
-import AdvancedSearch from "~/components/Search/AdvancedSearch.vue";
-import {
-  isPublicProfile,
-  isInternalProfile,
-  isPrototypeProfile,
-} from "~/utils/config";
+import DataFieldPicker from "~/components/AdvancedSearch/DataFieldPicker.vue";
+import ContentWrapper from "~/components/CustomLayouts/ContentWrapper.vue";
+import { queryableDataFields } from "~/pages/advanced-search/dataFields";
+import { DocumentKind } from "~/types";
 
-const isInternal = isInternalProfile();
-const isPublic = isPublicProfile();
-const isPrototype = isPrototypeProfile();
+useHead({ title: "Erweiterte Suche" });
 definePageMeta({ alias: "/erweiterte-suche" });
-useHead({ title: "Suche" });
-
-if (isPrototype) {
-  throw createError({
-    statusCode: 404,
-  });
-}
 </script>
+
 <template>
-  <PageHeader v-if="isInternal" title="Suche">
-    <div class="flex flex-col">
-      <span class="ris-label2-bold">Die Suche ist aktuell ein Prototyp</span>
-      <span class="ris-body1-regular">
-        Die Funktionalität der Suche befindet sich gerade in der Entwicklung und
-        ist zum Testen für
-        <strong>veröffentlichte</strong> Dokumentationseinheiten verfügbar.
-        <router-link
-          class="underline focus:outline-hidden focus-visible:outline-4 focus-visible:outline-offset-4 focus-visible:outline-blue-800"
-          target="_blank"
-          to="/erweiterte-suche/hilfe"
-        >
-          Lesen Sie hier mehr über die aktuelle Funktionalität.
-        </router-link>
-      </span>
+  <ContentWrapper class="pb-32 lg:pb-64">
+    <div class="grid grid-cols-1 gap-40 lg:grid-cols-[330px_1fr] lg:gap-64">
+      <div class="lg:col-span-2">
+        <h1 class="ris-heading2-bold mb-16">Erweiterte Suche</h1>
+        <p class="ris-body1-regular text-balance">
+          Nutzen Sie die erweiterte Suche, um genau das zu finden, was Sie
+          brauchen – ob im Leitsatz, Titel oder direkt im Volltext. Mit
+          Suchoperatoren wie AND, OR und NOT bekommen Sie noch präzisere
+          Ergebnisse.
+        </p>
+      </div>
+
+      <div class="row-start-3 lg:row-start-auto">
+        <div class="h-384 w-full bg-blue-200"></div>
+      </div>
+
+      <div class="row-start-2 lg:row-start-auto">
+        <DataFieldPicker
+          :data-fields="queryableDataFields"
+          :count="100000"
+          :document-kind="DocumentKind.CaseLaw"
+        />
+      </div>
     </div>
-  </PageHeader>
-  <PageHeader v-if="isPublic" title="Erweiterte Suche">
-    Über die erweiterte Suche können Sie gezielt nach Dokumenten suchen. Wählen
-    Sie die Dokumentart und den Sucheingabemodus aus und geben Sie Ihre
-    Suchanfrage ein.
-    <router-link class="" target="_blank" to="/erweiterte-suche/hilfe">
-      Erfahren Sie hier mehr über die Funktionalität der Suche.
-    </router-link>
-  </PageHeader>
-  <AdvancedSearch />
+  </ContentWrapper>
 </template>

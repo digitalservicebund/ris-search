@@ -1,0 +1,1506 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="https://e-justice.europa.eu/ecli-types"
+           targetNamespace="https://e-justice.europa.eu/ecli-types" elementFormDefault="qualified"
+           attributeFormDefault="unqualified" version="0.0.2">
+    <xs:annotation>
+        <xs:documentation xml:lang="en">This schema defines the authority tables used in the ECLI schema.
+        </xs:documentation>
+    </xs:annotation>
+    <xs:simpleType name="countryType">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">This list of organisations is generated from the ECLI system.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="BU"/>
+            <xs:enumeration value="EU"/>
+            <xs:enumeration value="EP"/>
+            <xs:enumeration value="FR"/>
+            <xs:enumeration value="ES"/>
+            <xs:enumeration value="NL"/>
+            <xs:enumeration value="SI"/>
+            <xs:enumeration value="DE"/>
+            <xs:enumeration value="BG"/>
+            <xs:enumeration value="CZ"/>
+            <xs:enumeration value="FI"/>
+            <xs:enumeration value="EL"/>
+            <xs:enumeration value="IT"/>
+            <xs:enumeration value="HR"/>
+            <xs:enumeration value="EE"/>
+            <xs:enumeration value="LV"/>
+            <xs:enumeration value="BE"/>
+            <xs:enumeration value="PT"/>
+            <xs:enumeration value="CY"/>
+            <xs:enumeration value="LT"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="languageType">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">This list of languages is generated from the ECLI system.</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="bg"/>
+            <xs:enumeration value="cs"/>
+            <xs:enumeration value="da"/>
+            <xs:enumeration value="de"/>
+            <xs:enumeration value="et"/>
+            <xs:enumeration value="el"/>
+            <xs:enumeration value="en"/>
+            <xs:enumeration value="es"/>
+            <xs:enumeration value="fr"/>
+            <xs:enumeration value="it"/>
+            <xs:enumeration value="lv"/>
+            <xs:enumeration value="lt"/>
+            <xs:enumeration value="hu"/>
+            <xs:enumeration value="mt"/>
+            <xs:enumeration value="nl"/>
+            <xs:enumeration value="pl"/>
+            <xs:enumeration value="pt"/>
+            <xs:enumeration value="ro"/>
+            <xs:enumeration value="sk"/>
+            <xs:enumeration value="sl"/>
+            <xs:enumeration value="fi"/>
+            <xs:enumeration value="sv"/>
+            <xs:enumeration value="hr"/>
+            <xs:enumeration value="ga"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="referenceType">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">The list of values allowed for the type attribute of the reference
+                element.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="ELI"/>
+            <xs:enumeration value="ECLI"/>
+            <xs:enumeration value="CELEX"/>
+            <xs:enumeration value="PATENT"/>
+            <xs:enumeration value="PATENT_APPLICATION"/>
+            <xs:enumeration value="OTHER"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="relationType">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">The list of values allowed for the relation attribute of the reference
+                element.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="citing"/>
+            <xs:enumeration value="citedBy"/>
+            <xs:enumeration value="followedBy"/>
+            <xs:enumeration value="precededBy"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="courtTypeXX">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">The list of values allowed for the court element not pertaining to any
+                organisation.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="XX"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="courtTypeBU">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">The list of values allowed for the court element for the BU organisation.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="CBNL"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="courtTypeEU">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">The list of values allowed for the court element for the EU organisation.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="F"/>
+            <xs:enumeration value="C"/>
+            <xs:enumeration value="T"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="courtTypeEP">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">The list of values allowed for the court element for the EP organisation.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="BA"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="courtTypeFR">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">The list of values allowed for the court element for the FR organisation.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="CC"/>
+            <xs:enumeration value="CCASS"/>
+            <xs:enumeration value="CEASS"/>
+            <xs:enumeration value="CEORD"/>
+            <xs:enumeration value="CESEC"/>
+            <xs:enumeration value="CESJS"/>
+            <xs:enumeration value="CESSR"/>
+            <xs:enumeration value="TC"/>
+            <xs:enumeration value="CEFSP"/>
+            <xs:enumeration value="CECHR"/>
+            <xs:enumeration value="CECHS"/>
+            <xs:enumeration value="KHO"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="courtTypeES">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">The list of values allowed for the court element for the ES organisation.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="AN"/>
+            <xs:enumeration value="TSJAND"/>
+            <xs:enumeration value="TSJAR"/>
+            <xs:enumeration value="TSJAS"/>
+            <xs:enumeration value="TSJBAL"/>
+            <xs:enumeration value="TSJICAN"/>
+            <xs:enumeration value="TSJCANT"/>
+            <xs:enumeration value="TSJCL"/>
+            <xs:enumeration value="TSJCLM"/>
+            <xs:enumeration value="TSJCAT"/>
+            <xs:enumeration value="TSJCV"/>
+            <xs:enumeration value="TSJEXT"/>
+            <xs:enumeration value="TSJGAL"/>
+            <xs:enumeration value="TSJLR"/>
+            <xs:enumeration value="TSJM"/>
+            <xs:enumeration value="TSJMU"/>
+            <xs:enumeration value="TSJNA"/>
+            <xs:enumeration value="TSJPV"/>
+            <xs:enumeration value="TSJCE"/>
+            <xs:enumeration value="TSJML"/>
+            <xs:enumeration value="TS"/>
+            <xs:enumeration value="APVI"/>
+            <xs:enumeration value="APAB"/>
+            <xs:enumeration value="APA"/>
+            <xs:enumeration value="APAL"/>
+            <xs:enumeration value="APAV"/>
+            <xs:enumeration value="APBA"/>
+            <xs:enumeration value="APIB"/>
+            <xs:enumeration value="APB"/>
+            <xs:enumeration value="APBU"/>
+            <xs:enumeration value="APCC"/>
+            <xs:enumeration value="APCA"/>
+            <xs:enumeration value="APCS"/>
+            <xs:enumeration value="APCR"/>
+            <xs:enumeration value="APCO"/>
+            <xs:enumeration value="APC"/>
+            <xs:enumeration value="APCU"/>
+            <xs:enumeration value="APGI"/>
+            <xs:enumeration value="APGR"/>
+            <xs:enumeration value="APGU"/>
+            <xs:enumeration value="APSS"/>
+            <xs:enumeration value="APH"/>
+            <xs:enumeration value="APHU"/>
+            <xs:enumeration value="APJ"/>
+            <xs:enumeration value="APLE"/>
+            <xs:enumeration value="APL"/>
+            <xs:enumeration value="APLO"/>
+            <xs:enumeration value="APLU"/>
+            <xs:enumeration value="APM"/>
+            <xs:enumeration value="APMA"/>
+            <xs:enumeration value="APMU"/>
+            <xs:enumeration value="APNA"/>
+            <xs:enumeration value="APOU"/>
+            <xs:enumeration value="APO"/>
+            <xs:enumeration value="APP"/>
+            <xs:enumeration value="APGC"/>
+            <xs:enumeration value="APPO"/>
+            <xs:enumeration value="APSA"/>
+            <xs:enumeration value="APTF"/>
+            <xs:enumeration value="APS"/>
+            <xs:enumeration value="APSG"/>
+            <xs:enumeration value="APSE"/>
+            <xs:enumeration value="APSO"/>
+            <xs:enumeration value="APT"/>
+            <xs:enumeration value="APTE"/>
+            <xs:enumeration value="APTO"/>
+            <xs:enumeration value="APV"/>
+            <xs:enumeration value="APVA"/>
+            <xs:enumeration value="APBI"/>
+            <xs:enumeration value="APZA"/>
+            <xs:enumeration value="APZ"/>
+            <xs:enumeration value="APCE"/>
+            <xs:enumeration value="APML"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="courtTypeNL">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">The list of values allowed for the court element for the NL organisation.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="KTGZUI"/>
+            <xs:enumeration value="KTGZUT"/>
+            <xs:enumeration value="KTGZWO"/>
+            <xs:enumeration value="OGAACMB"/>
+            <xs:enumeration value="OGANA"/>
+            <xs:enumeration value="OGEAA"/>
+            <xs:enumeration value="OGEAB"/>
+            <xs:enumeration value="OGEABES"/>
+            <xs:enumeration value="OGEAC"/>
+            <xs:enumeration value="OGEAM"/>
+            <xs:enumeration value="OGEANA"/>
+            <xs:enumeration value="OGHACMB"/>
+            <xs:enumeration value="OGHNAA"/>
+            <xs:enumeration value="OHJNA"/>
+            <xs:enumeration value="ORBAACM"/>
+            <xs:enumeration value="ORBANAA"/>
+            <xs:enumeration value="ORBBACM"/>
+            <xs:enumeration value="ORBBNAA"/>
+            <xs:enumeration value="RVBALK"/>
+            <xs:enumeration value="RVBAMS"/>
+            <xs:enumeration value="RVBARN"/>
+            <xs:enumeration value="RVBBRE"/>
+            <xs:enumeration value="RVBGRO"/>
+            <xs:enumeration value="RVBHAA"/>
+            <xs:enumeration value="RVBLDN"/>
+            <xs:enumeration value="RVBLEE"/>
+            <xs:enumeration value="RVBMID"/>
+            <xs:enumeration value="RVBROE"/>
+            <xs:enumeration value="RVBROT"/>
+            <xs:enumeration value="RVBSGR"/>
+            <xs:enumeration value="RVBSHE"/>
+            <xs:enumeration value="RVBTIL"/>
+            <xs:enumeration value="RVBUTR"/>
+            <xs:enumeration value="RVBZWO"/>
+            <xs:enumeration value="TACAKN"/>
+            <xs:enumeration value="TADRAMS"/>
+            <xs:enumeration value="TADRARN"/>
+            <xs:enumeration value="TADRLEE"/>
+            <xs:enumeration value="TADRSGR"/>
+            <xs:enumeration value="TADRSHE"/>
+            <xs:enumeration value="TAHVD"/>
+            <xs:enumeration value="TAKTPA"/>
+            <xs:enumeration value="TBBBKD"/>
+            <xs:enumeration value="TBPSKAL"/>
+            <xs:enumeration value="TSCTS"/>
+            <xs:enumeration value="TDIVBC"/>
+            <xs:enumeration value="TDIVTC"/>
+            <xs:enumeration value="TGDKG"/>
+            <xs:enumeration value="TGFKCB"/>
+            <xs:enumeration value="TGZCTG"/>
+            <xs:enumeration value="TGZRAMS"/>
+            <xs:enumeration value="TGZREIN"/>
+            <xs:enumeration value="TGZRGRO"/>
+            <xs:enumeration value="TGZRSGR"/>
+            <xs:enumeration value="TGZRZWO"/>
+            <xs:enumeration value="TNOKALK"/>
+            <xs:enumeration value="TNOKALM"/>
+            <xs:enumeration value="TNOKAMS"/>
+            <xs:enumeration value="TNOKARN"/>
+            <xs:enumeration value="TNOKASS"/>
+            <xs:enumeration value="TNOKBRE"/>
+            <xs:enumeration value="TNOKDOR"/>
+            <xs:enumeration value="TNOKGRO"/>
+            <xs:enumeration value="TNOKHAA"/>
+            <xs:enumeration value="TNOKLEE"/>
+            <xs:enumeration value="TNOKMAA"/>
+            <xs:enumeration value="TNOKMID"/>
+            <xs:enumeration value="TNOKROE"/>
+            <xs:enumeration value="TNOKROT"/>
+            <xs:enumeration value="TNOKSGR"/>
+            <xs:enumeration value="TNOKSHE"/>
+            <xs:enumeration value="TNOKUTR"/>
+            <xs:enumeration value="TNOKZLY"/>
+            <xs:enumeration value="TNOKZUT"/>
+            <xs:enumeration value="TPETPVE"/>
+            <xs:enumeration value="TVSTPV"/>
+            <xs:enumeration value="TVVTPVV"/>
+            <xs:enumeration value="AGAMS"/>
+            <xs:enumeration value="AGARN"/>
+            <xs:enumeration value="AGGRO"/>
+            <xs:enumeration value="AGHAA"/>
+            <xs:enumeration value="AGROE"/>
+            <xs:enumeration value="AGROT"/>
+            <xs:enumeration value="AGSGR"/>
+            <xs:enumeration value="AGSHE"/>
+            <xs:enumeration value="AGUTR"/>
+            <xs:enumeration value="AGZWO"/>
+            <xs:enumeration value="CVBSTUF"/>
+            <xs:enumeration value="DETARCO"/>
+            <xs:enumeration value="KTGAAR"/>
+            <xs:enumeration value="KTGALK"/>
+            <xs:enumeration value="KTGALM"/>
+            <xs:enumeration value="KTGAMF"/>
+            <xs:enumeration value="KTGAMS"/>
+            <xs:enumeration value="KTGAPD"/>
+            <xs:enumeration value="KTGARN"/>
+            <xs:enumeration value="KTGASS"/>
+            <xs:enumeration value="KTGBEE"/>
+            <xs:enumeration value="KTGBOX"/>
+            <xs:enumeration value="KTGBOZ"/>
+            <xs:enumeration value="KTGBRE"/>
+            <xs:enumeration value="KTGBRI"/>
+            <xs:enumeration value="KTGDEL"/>
+            <xs:enumeration value="KTGDEV"/>
+            <xs:enumeration value="KTGDHD"/>
+            <xs:enumeration value="KTGDOR"/>
+            <xs:enumeration value="KTGEIN"/>
+            <xs:enumeration value="KTGEMM"/>
+            <xs:enumeration value="KTGENS"/>
+            <xs:enumeration value="KTGGNL"/>
+            <xs:enumeration value="KTGGOU"/>
+            <xs:enumeration value="KTGGRC"/>
+            <xs:enumeration value="KTGGRO"/>
+            <xs:enumeration value="KTGHAA"/>
+            <xs:enumeration value="KTGHAR"/>
+            <xs:enumeration value="KTGHFD"/>
+            <xs:enumeration value="KTGHIL"/>
+            <xs:enumeration value="KTGHMD"/>
+            <xs:enumeration value="KTGHRL"/>
+            <xs:enumeration value="KTGHRN"/>
+            <xs:enumeration value="KTGHRV"/>
+            <xs:enumeration value="KTGLDN"/>
+            <xs:enumeration value="KTGLEE"/>
+            <xs:enumeration value="KTGLLY"/>
+            <xs:enumeration value="KTGMAA"/>
+            <xs:enumeration value="KTGMEP"/>
+            <xs:enumeration value="KTGMID"/>
+            <xs:enumeration value="KTGNMG"/>
+            <xs:enumeration value="KTGOBL"/>
+            <xs:enumeration value="KTGOOS"/>
+            <xs:enumeration value="KTGPAR"/>
+            <xs:enumeration value="KTGROE"/>
+            <xs:enumeration value="KTGROT"/>
+            <xs:enumeration value="KTGSCH"/>
+            <xs:enumeration value="KTGSGR"/>
+            <xs:enumeration value="KTGSHE"/>
+            <xs:enumeration value="KTGSIT"/>
+            <xs:enumeration value="KTGSNK"/>
+            <xs:enumeration value="KTGSOM"/>
+            <xs:enumeration value="KTGSTW"/>
+            <xs:enumeration value="KTGTIE"/>
+            <xs:enumeration value="KTGTIL"/>
+            <xs:enumeration value="KTGTRB"/>
+            <xs:enumeration value="KTGTRN"/>
+            <xs:enumeration value="KTGUTR"/>
+            <xs:enumeration value="KTGVEE"/>
+            <xs:enumeration value="KTGVEN"/>
+            <xs:enumeration value="KTGWAG"/>
+            <xs:enumeration value="KTGWIN"/>
+            <xs:enumeration value="KTGZAA"/>
+            <xs:enumeration value="KTGZEV"/>
+            <xs:enumeration value="KTGZIE"/>
+            <xs:enumeration value="PHR"/>
+            <xs:enumeration value="RVS"/>
+            <xs:enumeration value="CBB"/>
+            <xs:enumeration value="CRVB"/>
+            <xs:enumeration value="HR"/>
+            <xs:enumeration value="RBALK"/>
+            <xs:enumeration value="RBALM"/>
+            <xs:enumeration value="RBAMS"/>
+            <xs:enumeration value="RBARN"/>
+            <xs:enumeration value="RBASS"/>
+            <xs:enumeration value="RBBRE"/>
+            <xs:enumeration value="RBDHA"/>
+            <xs:enumeration value="RBDOR"/>
+            <xs:enumeration value="RBGEL"/>
+            <xs:enumeration value="RBGRO"/>
+            <xs:enumeration value="RBHAA"/>
+            <xs:enumeration value="RBLEE"/>
+            <xs:enumeration value="RBLIM"/>
+            <xs:enumeration value="RBMAA"/>
+            <xs:enumeration value="RBMID"/>
+            <xs:enumeration value="RBMNE"/>
+            <xs:enumeration value="RBNHO"/>
+            <xs:enumeration value="RBNNE"/>
+            <xs:enumeration value="RBOBR"/>
+            <xs:enumeration value="RBONE"/>
+            <xs:enumeration value="RBOVE"/>
+            <xs:enumeration value="RBROE"/>
+            <xs:enumeration value="RBROT"/>
+            <xs:enumeration value="RBSGR"/>
+            <xs:enumeration value="RBSHE"/>
+            <xs:enumeration value="RBUTR"/>
+            <xs:enumeration value="RBZLY"/>
+            <xs:enumeration value="RBZUT"/>
+            <xs:enumeration value="RBZWB"/>
+            <xs:enumeration value="RBZWO"/>
+            <xs:enumeration value="GHAMS"/>
+            <xs:enumeration value="GHARL"/>
+            <xs:enumeration value="GHARN"/>
+            <xs:enumeration value="GHDHA"/>
+            <xs:enumeration value="GHLEE"/>
+            <xs:enumeration value="GHSGR"/>
+            <xs:enumeration value="GHSHE"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="courtTypeSI">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">The list of values allowed for the court element for the SI organisation.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="VSRS"/>
+            <xs:enumeration value="VSLJ"/>
+            <xs:enumeration value="VSMB"/>
+            <xs:enumeration value="VSCE"/>
+            <xs:enumeration value="VSKP"/>
+            <xs:enumeration value="VDSS"/>
+            <xs:enumeration value="UPRS"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="courtTypeDE">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">The list of values allowed for the court element for the DE organisation.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="BVerwG"/>
+            <xs:enumeration value="BVerfG"/>
+            <xs:enumeration value="BGH"/>
+            <xs:enumeration value="BFH"/>
+            <xs:enumeration value="BAG"/>
+            <xs:enumeration value="BSG"/>
+            <xs:enumeration value="BPatG"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="courtTypeBG">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">The list of values allowed for the court element for the BG organisation.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="CC000"/>
+            <xs:enumeration value="SA002"/>
+            <xs:enumeration value="SC001"/>
+            <xs:enumeration value="RC213"/>
+            <xs:enumeration value="RC214"/>
+            <xs:enumeration value="RC215"/>
+            <xs:enumeration value="RC216"/>
+            <xs:enumeration value="RC217"/>
+            <xs:enumeration value="RC218"/>
+            <xs:enumeration value="RC221"/>
+            <xs:enumeration value="RC222"/>
+            <xs:enumeration value="RC223"/>
+            <xs:enumeration value="RC231"/>
+            <xs:enumeration value="RC232"/>
+            <xs:enumeration value="RC233"/>
+            <xs:enumeration value="RC311"/>
+            <xs:enumeration value="RC312"/>
+            <xs:enumeration value="RC313"/>
+            <xs:enumeration value="RC321"/>
+            <xs:enumeration value="RC322"/>
+            <xs:enumeration value="RC323"/>
+            <xs:enumeration value="RC324"/>
+            <xs:enumeration value="RC325"/>
+            <xs:enumeration value="RC331"/>
+            <xs:enumeration value="RC332"/>
+            <xs:enumeration value="RC333"/>
+            <xs:enumeration value="RC341"/>
+            <xs:enumeration value="RC342"/>
+            <xs:enumeration value="RC343"/>
+            <xs:enumeration value="RC351"/>
+            <xs:enumeration value="RC352"/>
+            <xs:enumeration value="RC353"/>
+            <xs:enumeration value="RC361"/>
+            <xs:enumeration value="RC362"/>
+            <xs:enumeration value="RC363"/>
+            <xs:enumeration value="RC411"/>
+            <xs:enumeration value="RC412"/>
+            <xs:enumeration value="RC413"/>
+            <xs:enumeration value="RC414"/>
+            <xs:enumeration value="RC415"/>
+            <xs:enumeration value="RC421"/>
+            <xs:enumeration value="RC422"/>
+            <xs:enumeration value="RC423"/>
+            <xs:enumeration value="RC424"/>
+            <xs:enumeration value="RC431"/>
+            <xs:enumeration value="RC432"/>
+            <xs:enumeration value="RC433"/>
+            <xs:enumeration value="RC434"/>
+            <xs:enumeration value="RC441"/>
+            <xs:enumeration value="RC442"/>
+            <xs:enumeration value="RC443"/>
+            <xs:enumeration value="RC444"/>
+            <xs:enumeration value="RC451"/>
+            <xs:enumeration value="RC452"/>
+            <xs:enumeration value="RC511"/>
+            <xs:enumeration value="RC513"/>
+            <xs:enumeration value="RC514"/>
+            <xs:enumeration value="RC515"/>
+            <xs:enumeration value="RC521"/>
+            <xs:enumeration value="RC522"/>
+            <xs:enumeration value="RC523"/>
+            <xs:enumeration value="RC524"/>
+            <xs:enumeration value="RC531"/>
+            <xs:enumeration value="RC532"/>
+            <xs:enumeration value="RC533"/>
+            <xs:enumeration value="RC534"/>
+            <xs:enumeration value="RC541"/>
+            <xs:enumeration value="RC542"/>
+            <xs:enumeration value="RC543"/>
+            <xs:enumeration value="RC544"/>
+            <xs:enumeration value="RC545"/>
+            <xs:enumeration value="RC551"/>
+            <xs:enumeration value="RC552"/>
+            <xs:enumeration value="RC553"/>
+            <xs:enumeration value="RC554"/>
+            <xs:enumeration value="RC555"/>
+            <xs:enumeration value="RC561"/>
+            <xs:enumeration value="RC562"/>
+            <xs:enumeration value="RC563"/>
+            <xs:enumeration value="RC564"/>
+            <xs:enumeration value="RC565"/>
+            <xs:enumeration value="AD701"/>
+            <xs:enumeration value="AD702"/>
+            <xs:enumeration value="AD703"/>
+            <xs:enumeration value="AD704"/>
+            <xs:enumeration value="AD705"/>
+            <xs:enumeration value="AD706"/>
+            <xs:enumeration value="AD707"/>
+            <xs:enumeration value="AD708"/>
+            <xs:enumeration value="AD709"/>
+            <xs:enumeration value="AD710"/>
+            <xs:enumeration value="AD711"/>
+            <xs:enumeration value="AD712"/>
+            <xs:enumeration value="AD713"/>
+            <xs:enumeration value="AD714"/>
+            <xs:enumeration value="AD715"/>
+            <xs:enumeration value="AD716"/>
+            <xs:enumeration value="AD717"/>
+            <xs:enumeration value="AD718"/>
+            <xs:enumeration value="AD719"/>
+            <xs:enumeration value="AD720"/>
+            <xs:enumeration value="AD721"/>
+            <xs:enumeration value="AD722"/>
+            <xs:enumeration value="AD723"/>
+            <xs:enumeration value="AD724"/>
+            <xs:enumeration value="AD725"/>
+            <xs:enumeration value="AD726"/>
+            <xs:enumeration value="AD727"/>
+            <xs:enumeration value="AD728"/>
+            <xs:enumeration value="DC110"/>
+            <xs:enumeration value="DC120"/>
+            <xs:enumeration value="DC130"/>
+            <xs:enumeration value="DC140"/>
+            <xs:enumeration value="DC150"/>
+            <xs:enumeration value="DC160"/>
+            <xs:enumeration value="DC170"/>
+            <xs:enumeration value="DC180"/>
+            <xs:enumeration value="DC210"/>
+            <xs:enumeration value="DC220"/>
+            <xs:enumeration value="DC230"/>
+            <xs:enumeration value="DC310"/>
+            <xs:enumeration value="DC320"/>
+            <xs:enumeration value="DC330"/>
+            <xs:enumeration value="DC340"/>
+            <xs:enumeration value="DC350"/>
+            <xs:enumeration value="DC360"/>
+            <xs:enumeration value="DC410"/>
+            <xs:enumeration value="DC420"/>
+            <xs:enumeration value="DC430"/>
+            <xs:enumeration value="DC440"/>
+            <xs:enumeration value="DC450"/>
+            <xs:enumeration value="DC510"/>
+            <xs:enumeration value="DC520"/>
+            <xs:enumeration value="DC530"/>
+            <xs:enumeration value="DC540"/>
+            <xs:enumeration value="DC550"/>
+            <xs:enumeration value="DC560"/>
+            <xs:enumeration value="MA600"/>
+            <xs:enumeration value="MC610"/>
+            <xs:enumeration value="MC620"/>
+            <xs:enumeration value="MC630"/>
+            <xs:enumeration value="MC640"/>
+            <xs:enumeration value="MC650"/>
+            <xs:enumeration value="PC105"/>
+            <xs:enumeration value="RC111"/>
+            <xs:enumeration value="RC121"/>
+            <xs:enumeration value="RC122"/>
+            <xs:enumeration value="RC123"/>
+            <xs:enumeration value="RC124"/>
+            <xs:enumeration value="RC125"/>
+            <xs:enumeration value="RC131"/>
+            <xs:enumeration value="RC132"/>
+            <xs:enumeration value="RC133"/>
+            <xs:enumeration value="RC141"/>
+            <xs:enumeration value="RC142"/>
+            <xs:enumeration value="RC143"/>
+            <xs:enumeration value="RC144"/>
+            <xs:enumeration value="RC145"/>
+            <xs:enumeration value="RC146"/>
+            <xs:enumeration value="RC151"/>
+            <xs:enumeration value="RC152"/>
+            <xs:enumeration value="RC161"/>
+            <xs:enumeration value="RC162"/>
+            <xs:enumeration value="RC163"/>
+            <xs:enumeration value="RC171"/>
+            <xs:enumeration value="RC172"/>
+            <xs:enumeration value="RC173"/>
+            <xs:enumeration value="RC174"/>
+            <xs:enumeration value="RC181"/>
+            <xs:enumeration value="RC182"/>
+            <xs:enumeration value="RC183"/>
+            <xs:enumeration value="RC184"/>
+            <xs:enumeration value="RC185"/>
+            <xs:enumeration value="RC186"/>
+            <xs:enumeration value="RC187"/>
+            <xs:enumeration value="RC188"/>
+            <xs:enumeration value="RC189"/>
+            <xs:enumeration value="RC211"/>
+            <xs:enumeration value="RC212"/>
+            <xs:enumeration value="AP100"/>
+            <xs:enumeration value="AP200"/>
+            <xs:enumeration value="AP300"/>
+            <xs:enumeration value="AP400"/>
+            <xs:enumeration value="AP500"/>
+            <xs:enumeration value="PA101"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="courtTypeCZ">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">The list of values allowed for the court element for the CZ organisation.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="US"/>
+            <xs:enumeration value="NS"/>
+            <xs:enumeration value="NSS"/>
+            <xs:enumeration value="OSBV"/>
+            <xs:enumeration value="OSCL"/>
+            <xs:enumeration value="OSCB"/>
+            <xs:enumeration value="OSCK"/>
+            <xs:enumeration value="OSDC"/>
+            <xs:enumeration value="OSDO"/>
+            <xs:enumeration value="OSFM"/>
+            <xs:enumeration value="OSHB"/>
+            <xs:enumeration value="OSHO"/>
+            <xs:enumeration value="OSHK"/>
+            <xs:enumeration value="OSCH"/>
+            <xs:enumeration value="OSCV"/>
+            <xs:enumeration value="OSCR"/>
+            <xs:enumeration value="OSJN"/>
+            <xs:enumeration value="OSJE"/>
+            <xs:enumeration value="OSJI"/>
+            <xs:enumeration value="OSJC"/>
+            <xs:enumeration value="OSJH"/>
+            <xs:enumeration value="OSKV"/>
+            <xs:enumeration value="OSKI"/>
+            <xs:enumeration value="OSKD"/>
+            <xs:enumeration value="OSKT"/>
+            <xs:enumeration value="OSKO"/>
+            <xs:enumeration value="OSKM"/>
+            <xs:enumeration value="OSKH"/>
+            <xs:enumeration value="OSLI"/>
+            <xs:enumeration value="OSLT"/>
+            <xs:enumeration value="OSLN"/>
+            <xs:enumeration value="OSME"/>
+            <xs:enumeration value="OSMB"/>
+            <xs:enumeration value="OSMO"/>
+            <xs:enumeration value="OSNA"/>
+            <xs:enumeration value="OSNJ"/>
+            <xs:enumeration value="OSNB"/>
+            <xs:enumeration value="OSOL"/>
+            <xs:enumeration value="OSOP"/>
+            <xs:enumeration value="OSOV"/>
+            <xs:enumeration value="OSPU"/>
+            <xs:enumeration value="OSPE"/>
+            <xs:enumeration value="OSPI"/>
+            <xs:enumeration value="OSPJ"/>
+            <xs:enumeration value="OSPM"/>
+            <xs:enumeration value="OSPS"/>
+            <xs:enumeration value="OSPY"/>
+            <xs:enumeration value="OSPZ"/>
+            <xs:enumeration value="OSPT"/>
+            <xs:enumeration value="OSPV"/>
+            <xs:enumeration value="OSPR"/>
+            <xs:enumeration value="OSPB"/>
+            <xs:enumeration value="OSRA"/>
+            <xs:enumeration value="OSRO"/>
+            <xs:enumeration value="OSRK"/>
+            <xs:enumeration value="OSSM"/>
+            <xs:enumeration value="OSSO"/>
+            <xs:enumeration value="OSST"/>
+            <xs:enumeration value="OSSY"/>
+            <xs:enumeration value="OSSU"/>
+            <xs:enumeration value="OSTA"/>
+            <xs:enumeration value="OSTC"/>
+            <xs:enumeration value="OSTP"/>
+            <xs:enumeration value="OSTU"/>
+            <xs:enumeration value="OSTR"/>
+            <xs:enumeration value="OSUH"/>
+            <xs:enumeration value="OSUL"/>
+            <xs:enumeration value="OSUO"/>
+            <xs:enumeration value="OSVS"/>
+            <xs:enumeration value="OSVY"/>
+            <xs:enumeration value="OSZL"/>
+            <xs:enumeration value="OSZN"/>
+            <xs:enumeration value="OSZR"/>
+            <xs:enumeration value="MSBR"/>
+            <xs:enumeration value="OSP1"/>
+            <xs:enumeration value="OSP2"/>
+            <xs:enumeration value="OSP3"/>
+            <xs:enumeration value="OSP4"/>
+            <xs:enumeration value="OSP5"/>
+            <xs:enumeration value="OSP6"/>
+            <xs:enumeration value="OSP7"/>
+            <xs:enumeration value="OSP8"/>
+            <xs:enumeration value="OSP9"/>
+            <xs:enumeration value="OSP0"/>
+            <xs:enumeration value="OSBN"/>
+            <xs:enumeration value="OSBR"/>
+            <xs:enumeration value="OSBK"/>
+            <xs:enumeration value="OSBI"/>
+            <xs:enumeration value="OSBU"/>
+            <xs:enumeration value="VSOL"/>
+            <xs:enumeration value="VSPH"/>
+            <xs:enumeration value="MSPH"/>
+            <xs:enumeration value="KSPH"/>
+            <xs:enumeration value="KSCB"/>
+            <xs:enumeration value="KSPL"/>
+            <xs:enumeration value="KSUL"/>
+            <xs:enumeration value="KSHK"/>
+            <xs:enumeration value="KSBR"/>
+            <xs:enumeration value="KSOS"/>
+            <xs:enumeration value="KSBRJI"/>
+            <xs:enumeration value="KSBRZL"/>
+            <xs:enumeration value="KSCBTA"/>
+            <xs:enumeration value="KSULLI"/>
+            <xs:enumeration value="KSHKPA"/>
+            <xs:enumeration value="KSOSOL"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="courtTypeFI">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">The list of values allowed for the court element for the FI organisation.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="MAO"/>
+            <xs:enumeration value="TTO"/>
+            <xs:enumeration value="VAKO"/>
+            <xs:enumeration value="KKO"/>
+            <xs:enumeration value="KHO"/>
+            <xs:enumeration value="HAMHAO"/>
+            <xs:enumeration value="HELHAO"/>
+            <xs:enumeration value="KOUHAO"/>
+            <xs:enumeration value="KUOHAO"/>
+            <xs:enumeration value="OULHAO"/>
+            <xs:enumeration value="ROVHAO"/>
+            <xs:enumeration value="TURHAO"/>
+            <xs:enumeration value="VAAHAO"/>
+            <xs:enumeration value="AALFD"/>
+            <xs:enumeration value="HELHO"/>
+            <xs:enumeration value="ISHO"/>
+            <xs:enumeration value="KOUHO"/>
+            <xs:enumeration value="RHO"/>
+            <xs:enumeration value="THO"/>
+            <xs:enumeration value="VAAHO"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="courtTypeEL">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">The list of values allowed for the court element for the EL organisation.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="COS"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="courtTypeIT">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">The list of values allowed for the court element for the IT organisation.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="COST"/>
+            <xs:enumeration value="CASS"/>
+            <xs:enumeration value="CONT"/>
+            <xs:enumeration value="CDS"/>
+            <xs:enumeration value="CGARS"/>
+            <xs:enumeration value="TARVEN"/>
+            <xs:enumeration value="TARAQ"/>
+            <xs:enumeration value="TARPE"/>
+            <xs:enumeration value="TARBAS"/>
+            <xs:enumeration value="TARCZ"/>
+            <xs:enumeration value="TARRC"/>
+            <xs:enumeration value="TARNA"/>
+            <xs:enumeration value="TARSA"/>
+            <xs:enumeration value="TARBO"/>
+            <xs:enumeration value="TARPR"/>
+            <xs:enumeration value="TARFVG"/>
+            <xs:enumeration value="TARLAZ"/>
+            <xs:enumeration value="TARLT"/>
+            <xs:enumeration value="TARLIG"/>
+            <xs:enumeration value="TARMI"/>
+            <xs:enumeration value="TARBS"/>
+            <xs:enumeration value="TARMAR"/>
+            <xs:enumeration value="TARMOL"/>
+            <xs:enumeration value="TARPIE"/>
+            <xs:enumeration value="TARBA"/>
+            <xs:enumeration value="TARLE"/>
+            <xs:enumeration value="TARSAR"/>
+            <xs:enumeration value="TARPA"/>
+            <xs:enumeration value="TARCT"/>
+            <xs:enumeration value="TARTOS"/>
+            <xs:enumeration value="TRGATN"/>
+            <xs:enumeration value="TRGABZ"/>
+            <xs:enumeration value="TARUMB"/>
+            <xs:enumeration value="TARVDA"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="courtTypeHR">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">The list of values allowed for the court element for the HR organisation.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="VSRH"/>
+            <xs:enumeration value="TSPA"/>
+            <xs:enumeration value="OSBJ"/>
+            <xs:enumeration value="OSCK"/>
+            <xs:enumeration value="OSDU"/>
+            <xs:enumeration value="OSGS"/>
+            <xs:enumeration value="OSKA"/>
+            <xs:enumeration value="OSKC"/>
+            <xs:enumeration value="OSOS"/>
+            <xs:enumeration value="OSPZ"/>
+            <xs:enumeration value="OSPU"/>
+            <xs:enumeration value="OSRI"/>
+            <xs:enumeration value="OSSK"/>
+            <xs:enumeration value="OSSB"/>
+            <xs:enumeration value="OSST"/>
+            <xs:enumeration value="OSSI"/>
+            <xs:enumeration value="OSVZ"/>
+            <xs:enumeration value="OSVG"/>
+            <xs:enumeration value="OSVR"/>
+            <xs:enumeration value="OSVU"/>
+            <xs:enumeration value="OSZD"/>
+            <xs:enumeration value="OGSZG"/>
+            <xs:enumeration value="OKSZG"/>
+            <xs:enumeration value="ORSZG"/>
+            <xs:enumeration value="OSNZ"/>
+            <xs:enumeration value="OSZL"/>
+            <xs:enumeration value="ZSBJ"/>
+            <xs:enumeration value="ZSDU"/>
+            <xs:enumeration value="ZSKA"/>
+            <xs:enumeration value="ZSOS"/>
+            <xs:enumeration value="ZSPU"/>
+            <xs:enumeration value="ZSRI"/>
+            <xs:enumeration value="ZSSK"/>
+            <xs:enumeration value="ZSSB"/>
+            <xs:enumeration value="ZSST"/>
+            <xs:enumeration value="ZSSI"/>
+            <xs:enumeration value="ZSVZ"/>
+            <xs:enumeration value="ZSVG"/>
+            <xs:enumeration value="ZSVU"/>
+            <xs:enumeration value="ZSZD"/>
+            <xs:enumeration value="ZSZG"/>
+            <xs:enumeration value="PSBJ"/>
+            <xs:enumeration value="PSCK"/>
+            <xs:enumeration value="PSDU"/>
+            <xs:enumeration value="PSGS"/>
+            <xs:enumeration value="PSKA"/>
+            <xs:enumeration value="PSKC"/>
+            <xs:enumeration value="PSOS"/>
+            <xs:enumeration value="PSPU"/>
+            <xs:enumeration value="PSPZ"/>
+            <xs:enumeration value="PSRI"/>
+            <xs:enumeration value="PSSK"/>
+            <xs:enumeration value="PSSB"/>
+            <xs:enumeration value="PSST"/>
+            <xs:enumeration value="PSSI"/>
+            <xs:enumeration value="PSVZ"/>
+            <xs:enumeration value="PSVG"/>
+            <xs:enumeration value="PSVR"/>
+            <xs:enumeration value="PSVU"/>
+            <xs:enumeration value="PSZD"/>
+            <xs:enumeration value="PSZG"/>
+            <xs:enumeration value="PSNZ"/>
+            <xs:enumeration value="PSZL"/>
+            <xs:enumeration value="TSBJ"/>
+            <xs:enumeration value="TSOS"/>
+            <xs:enumeration value="TSRI"/>
+            <xs:enumeration value="TSST"/>
+            <xs:enumeration value="TSVZ"/>
+            <xs:enumeration value="TSZD"/>
+            <xs:enumeration value="TSZG"/>
+            <xs:enumeration value="USOS"/>
+            <xs:enumeration value="USRI"/>
+            <xs:enumeration value="USST"/>
+            <xs:enumeration value="USZG"/>
+            <xs:enumeration value="OSCR"/>
+            <xs:enumeration value="OSDJ"/>
+            <xs:enumeration value="OSKT"/>
+            <xs:enumeration value="OSMA"/>
+            <xs:enumeration value="OSME"/>
+            <xs:enumeration value="OSPA"/>
+            <xs:enumeration value="OSSS"/>
+            <xs:enumeration value="OSVI"/>
+            <xs:enumeration value="TSDU"/>
+            <xs:enumeration value="OPSST"/>
+            <xs:enumeration value="OPSZG"/>
+            <xs:enumeration value="VPS"/>
+            <xs:enumeration value="VTS"/>
+            <xs:enumeration value="VUS"/>
+            <xs:enumeration value="VKS"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="courtTypeEE">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">The list of values allowed for the court element for the EE organisation.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="RK"/>
+            <xs:enumeration value="TLHK"/>
+            <xs:enumeration value="TRHK"/>
+            <xs:enumeration value="HMK"/>
+            <xs:enumeration value="PMK"/>
+            <xs:enumeration value="TMK"/>
+            <xs:enumeration value="VMK"/>
+            <xs:enumeration value="VRK"/>
+            <xs:enumeration value="TLRK"/>
+            <xs:enumeration value="TRRK"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="courtTypeLV">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">The list of values allowed for the court element for the LV organisation.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="AAAA"/>
+            <xs:enumeration value="AT"/>
+            <xs:enumeration value="ADRJJTN"/>
+            <xs:enumeration value="ADRJLTN"/>
+            <xs:enumeration value="ADRJRIT"/>
+            <xs:enumeration value="ADRJRTN"/>
+            <xs:enumeration value="ADRJVTN"/>
+            <xs:enumeration value="AIRTZG"/>
+            <xs:enumeration value="AIZRT"/>
+            <xs:enumeration value="ALRTZG"/>
+            <xs:enumeration value="BSRTZG"/>
+            <xs:enumeration value="CERTZG"/>
+            <xs:enumeration value="DAUTZG"/>
+            <xs:enumeration value="DORTZG"/>
+            <xs:enumeration value="GURTZG"/>
+            <xs:enumeration value="JELTZG"/>
+            <xs:enumeration value="JERTZG"/>
+            <xs:enumeration value="KURTZG"/>
+            <xs:enumeration value="LIETZG"/>
+            <xs:enumeration value="LIRTZG"/>
+            <xs:enumeration value="MARTM"/>
+            <xs:enumeration value="MARTZG"/>
+            <xs:enumeration value="OGRTZG"/>
+            <xs:enumeration value="REZTB"/>
+            <xs:enumeration value="REZTL"/>
+            <xs:enumeration value="REZTZG"/>
+            <xs:enumeration value="RIRTJ"/>
+            <xs:enumeration value="RIRTS"/>
+            <xs:enumeration value="RIRTZG"/>
+            <xs:enumeration value="RPPTB"/>
+            <xs:enumeration value="RVPTZG"/>
+            <xs:enumeration value="SARTZG"/>
+            <xs:enumeration value="TARTZG"/>
+            <xs:enumeration value="TURTZG"/>
+            <xs:enumeration value="VARTZG"/>
+            <xs:enumeration value="VENTZG"/>
+            <xs:enumeration value="VLRTZG"/>
+            <xs:enumeration value="VRT"/>
+            <xs:enumeration value="ZRT"/>
+            <xs:enumeration value="ADRJ"/>
+            <xs:enumeration value="AIRT"/>
+            <xs:enumeration value="ALRT"/>
+            <xs:enumeration value="BSRT"/>
+            <xs:enumeration value="CERT"/>
+            <xs:enumeration value="DAUT"/>
+            <xs:enumeration value="DORT"/>
+            <xs:enumeration value="GURT"/>
+            <xs:enumeration value="JELT"/>
+            <xs:enumeration value="JERT"/>
+            <xs:enumeration value="KURT"/>
+            <xs:enumeration value="LIET"/>
+            <xs:enumeration value="LIRT"/>
+            <xs:enumeration value="MART"/>
+            <xs:enumeration value="OGRT"/>
+            <xs:enumeration value="REZT"/>
+            <xs:enumeration value="RLPT"/>
+            <xs:enumeration value="RPPT"/>
+            <xs:enumeration value="RVPT"/>
+            <xs:enumeration value="RZRT"/>
+            <xs:enumeration value="RIRT"/>
+            <xs:enumeration value="SART"/>
+            <xs:enumeration value="TART"/>
+            <xs:enumeration value="TURT"/>
+            <xs:enumeration value="VART"/>
+            <xs:enumeration value="VLRT"/>
+            <xs:enumeration value="VENT"/>
+            <xs:enumeration value="ELT"/>
+            <xs:enumeration value="RPT"/>
+            <xs:enumeration value="KUATK"/>
+            <xs:enumeration value="KUATV"/>
+            <xs:enumeration value="LAATD"/>
+            <xs:enumeration value="ADAT"/>
+            <xs:enumeration value="KUAT"/>
+            <xs:enumeration value="LAAT"/>
+            <xs:enumeration value="RAT"/>
+            <xs:enumeration value="VAT"/>
+            <xs:enumeration value="ZAT"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="courtTypeBE">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">The list of values allowed for the court element for the BE organisation.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="CASS"/>
+            <xs:enumeration value="GHCC"/>
+            <xs:enumeration value="RVSCE"/>
+            <xs:enumeration value="EAANT"/>
+            <xs:enumeration value="EAWVL"/>
+            <xs:enumeration value="EAOVL"/>
+            <xs:enumeration value="EALIM"/>
+            <xs:enumeration value="EALEU"/>
+            <xs:enumeration value="EABRL"/>
+            <xs:enumeration value="PIBRL"/>
+            <xs:enumeration value="PIHAI"/>
+            <xs:enumeration value="PINAM"/>
+            <xs:enumeration value="TREUP"/>
+            <xs:enumeration value="PILIE"/>
+            <xs:enumeration value="PILUX"/>
+            <xs:enumeration value="PIBRW"/>
+            <xs:enumeration value="ARANT"/>
+            <xs:enumeration value="ARGNT"/>
+            <xs:enumeration value="ARLEU"/>
+            <xs:enumeration value="ARBRL"/>
+            <xs:enumeration value="TTBRL"/>
+            <xs:enumeration value="TTHAI"/>
+            <xs:enumeration value="TTLIE"/>
+            <xs:enumeration value="TTBRW"/>
+            <xs:enumeration value="KHANT"/>
+            <xs:enumeration value="KHBRL"/>
+            <xs:enumeration value="TCBRL"/>
+            <xs:enumeration value="KHLEU"/>
+            <xs:enumeration value="TCBRW"/>
+            <xs:enumeration value="KHGNT"/>
+            <xs:enumeration value="TCLIE"/>
+            <xs:enumeration value="TCHAI"/>
+            <xs:enumeration value="ORANT"/>
+            <xs:enumeration value="ORBRL"/>
+            <xs:enumeration value="TEBRL"/>
+            <xs:enumeration value="ORLEU"/>
+            <xs:enumeration value="TEBRW"/>
+            <xs:enumeration value="ORGNT"/>
+            <xs:enumeration value="TELIE"/>
+            <xs:enumeration value="TEHAI"/>
+            <xs:enumeration value="CABRL"/>
+            <xs:enumeration value="CALIE"/>
+            <xs:enumeration value="CAMON"/>
+            <xs:enumeration value="HBANT"/>
+            <xs:enumeration value="HBGNT"/>
+            <xs:enumeration value="AHGNT"/>
+            <xs:enumeration value="AHANT"/>
+            <xs:enumeration value="CTBRL"/>
+            <xs:enumeration value="CTLIE"/>
+            <xs:enumeration value="CTMON"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="courtTypePT">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">The list of values allowed for the court element for the PT organisation.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="STJ"/>
+            <xs:enumeration value="TCONS"/>
+            <xs:enumeration value="STA"/>
+            <xs:enumeration value="TPI"/>
+            <xs:enumeration value="TCRS"/>
+            <xs:enumeration value="TJRAA"/>
+            <xs:enumeration value="TJAVR"/>
+            <xs:enumeration value="TJBJA"/>
+            <xs:enumeration value="TJBRG"/>
+            <xs:enumeration value="TJBGC"/>
+            <xs:enumeration value="TJCTB"/>
+            <xs:enumeration value="TJCBR"/>
+            <xs:enumeration value="TJEVR"/>
+            <xs:enumeration value="TJFAR"/>
+            <xs:enumeration value="TJGRD"/>
+            <xs:enumeration value="TJLRA"/>
+            <xs:enumeration value="TJLIS"/>
+            <xs:enumeration value="TJLISN"/>
+            <xs:enumeration value="TJLISO"/>
+            <xs:enumeration value="TJRAM"/>
+            <xs:enumeration value="TJPTG"/>
+            <xs:enumeration value="TJPRT"/>
+            <xs:enumeration value="TJPRTE"/>
+            <xs:enumeration value="TJSTR"/>
+            <xs:enumeration value="TJSTB"/>
+            <xs:enumeration value="TJVCT"/>
+            <xs:enumeration value="TJVRL"/>
+            <xs:enumeration value="TJVIS"/>
+            <xs:enumeration value="TRL"/>
+            <xs:enumeration value="TRP"/>
+            <xs:enumeration value="TRG"/>
+            <xs:enumeration value="TRC"/>
+            <xs:enumeration value="TRE"/>
+            <xs:enumeration value="TCAN"/>
+            <xs:enumeration value="TCAS"/>
+            <xs:enumeration value="TCONF"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="courtTypeCY">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">The list of values allowed for the court element for the CY organisation.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="AD"/>
+            <xs:enumeration value="DOD"/>
+            <xs:enumeration value="ASD"/>
+            <xs:enumeration value="DD"/>
+            <xs:enumeration value="EDLEF"/>
+            <xs:enumeration value="EDLEM"/>
+            <xs:enumeration value="EDLAR"/>
+            <xs:enumeration value="EDAMM"/>
+            <xs:enumeration value="EDPAF"/>
+            <xs:enumeration value="EDKER"/>
+            <xs:enumeration value="KDLEF"/>
+            <xs:enumeration value="KDLEM"/>
+            <xs:enumeration value="KDLAR"/>
+            <xs:enumeration value="KDAMM"/>
+            <xs:enumeration value="KDPAF"/>
+            <xs:enumeration value="KDKER"/>
+            <xs:enumeration value="ODLEF"/>
+            <xs:enumeration value="ODLEM"/>
+            <xs:enumeration value="ODLAR"/>
+            <xs:enumeration value="ODPAF"/>
+            <xs:enumeration value="DEELEF"/>
+            <xs:enumeration value="DEELEM"/>
+            <xs:enumeration value="DEELAR"/>
+            <xs:enumeration value="DEEPAF"/>
+            <xs:enumeration value="DEDLEF"/>
+            <xs:enumeration value="DEDLEM"/>
+            <xs:enumeration value="DEDLAR"/>
+            <xs:enumeration value="DEDPAF"/>
+            <xs:enumeration value="SDLEF"/>
+            <xs:enumeration value="SDLEM"/>
+            <xs:enumeration value="SDLAR"/>
+            <xs:enumeration value="DDDP"/>
+            <xs:enumeration value="ODTHO"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="courtTypeLT">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">The list of values allowed for the court element for the LT organisation.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="LAT"/>
+            <xs:enumeration value="KAUAPL"/>
+            <xs:enumeration value="KLAAPL"/>
+            <xs:enumeration value="MARAPL"/>
+            <xs:enumeration value="ALYAPL"/>
+            <xs:enumeration value="PANAPL"/>
+            <xs:enumeration value="REGADM"/>
+            <xs:enumeration value="SIAAPL"/>
+            <xs:enumeration value="TAUAPL"/>
+            <xs:enumeration value="TELAPL"/>
+            <xs:enumeration value="UTEAPL"/>
+            <xs:enumeration value="VILMAPL"/>
+            <xs:enumeration value="VILRAPL"/>
+            <xs:enumeration value="PANAPG"/>
+            <xs:enumeration value="KAUAPG"/>
+            <xs:enumeration value="KLAAPG"/>
+            <xs:enumeration value="LAPT"/>
+            <xs:enumeration value="LVAT"/>
+            <xs:enumeration value="SIAAPG"/>
+            <xs:enumeration value="VILAPG"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="courtType">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">The list of values allowed for the court element, third part of the ECLI
+                identifier. This list has to be completed by each national ECLI co-ordinator.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:union
+                memberTypes="courtTypeXX courtTypeCZ courtTypeBU courtTypeSI courtTypeCY courtTypeEU courtTypeFR courtTypeEP courtTypeIT courtTypeES courtTypeLT courtTypeEL courtTypeHR courtTypeLV courtTypePT courtTypeFI courtTypeBE courtTypeBG courtTypeEE courtTypeDE courtTypeNL"/>
+    </xs:simpleType>
+    <xs:simpleType name="typeTypeBG">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">The list of values allowed for the type element for the BG language.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+    <xs:simpleType name="typeTypeCS">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">The list of values allowed for the type element for the CS language.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+    <xs:simpleType name="typeTypeDA">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">The list of values allowed for the type element for the DA language.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+    <xs:simpleType name="typeTypeDE">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">The list of values allowed for the type element for the DE language.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+    <xs:simpleType name="typeTypeET">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">The list of values allowed for the type element for the ET language.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+    <xs:simpleType name="typeTypeEL">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">The list of values allowed for the type element for the EL language.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+    <xs:simpleType name="typeTypeEN">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">The list of values allowed for the type element for the EN language.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+    <xs:simpleType name="typeTypeES">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">The list of values allowed for the type element for the ES language.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+    <xs:simpleType name="typeTypeFR">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">The list of values allowed for the type element for the FR language.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+    <xs:simpleType name="typeTypeIT">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">The list of values allowed for the type element for the IT language.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+    <xs:simpleType name="typeTypeLV">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">The list of values allowed for the type element for the LV language.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+    <xs:simpleType name="typeTypeLT">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">The list of values allowed for the type element for the LT language.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+    <xs:simpleType name="typeTypeHU">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">The list of values allowed for the type element for the HU language.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+    <xs:simpleType name="typeTypeMT">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">The list of values allowed for the type element for the MT language.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+    <xs:simpleType name="typeTypeNL">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">The list of values allowed for the type element for the NL language.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+    <xs:simpleType name="typeTypePL">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">The list of values allowed for the type element for the PL language.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+    <xs:simpleType name="typeTypePT">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">The list of values allowed for the type element for the PT language.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+    <xs:simpleType name="typeTypeRO">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">The list of values allowed for the type element for the RO language.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+    <xs:simpleType name="typeTypeSK">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">The list of values allowed for the type element for the SK language.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+    <xs:simpleType name="typeTypeSL">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">The list of values allowed for the type element for the SL language.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+    <xs:simpleType name="typeTypeFI">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">The list of values allowed for the type element for the FI language.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+    <xs:simpleType name="typeTypeSV">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">The list of values allowed for the type element for the SV language.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+    <xs:simpleType name="typeTypeHR">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">The list of values allowed for the type element for the HR language.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+    <xs:simpleType name="typeTypeGA">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">The list of values allowed for the type element for the GA language.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+    <xs:simpleType name="typeType">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">The list of values allowed for the type element. This type aggregates all
+                multilang values.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:union
+                memberTypes="typeTypeSL typeTypeSK typeTypeGA typeTypeCS typeTypeHU typeTypeFR typeTypeET typeTypeES typeTypeEN typeTypeLT typeTypeIT typeTypeLV typeTypeHR typeTypeBG typeTypePT typeTypeEL typeTypeMT typeTypeDE typeTypeFI typeTypeSV typeTypeDA typeTypeRO typeTypePL typeTypeNL"/>
+    </xs:simpleType>
+    <xs:simpleType name="identifierTypeType">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">The list of values allowed for the format attribute of the identifier
+                element.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="nonauthorised"/>
+            <xs:enumeration value="summarised"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="formatType">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">The list of values allowed for the format attribute of the identifier
+                element.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="sasa_test"/>
+            <xs:enumeration value="68"/>
+            <xs:enumeration value="application/applefile"/>
+            <xs:enumeration value="application/atom+xml"/>
+            <xs:enumeration value="application/http"/>
+            <xs:enumeration value="application/mathml+xml"/>
+            <xs:enumeration value="application/msword"/>
+            <xs:enumeration value="application/octet-stream"/>
+            <xs:enumeration value="application/ogg"/>
+            <xs:enumeration value="application/pdf"/>
+            <xs:enumeration value="application/pgp-encrypted"/>
+            <xs:enumeration value="application/pgp-keys"/>
+            <xs:enumeration value="application/pgp-signature"/>
+            <xs:enumeration value="application/postscript"/>
+            <xs:enumeration value="application/rdf+xml"/>
+            <xs:enumeration value="application/rtf"/>
+            <xs:enumeration value="application/sgml"/>
+            <xs:enumeration value="application/smil"/>
+            <xs:enumeration value="application/srgs"/>
+            <xs:enumeration value="application/srgs+xml"/>
+            <xs:enumeration value="application/vnd.ms-excel"/>
+            <xs:enumeration value="application/vnd.ms-powerpoint"/>
+            <xs:enumeration value="application/vnd.oasis.opendocument.base"/>
+            <xs:enumeration value="application/vnd.oasis.opendocument.chart"/>
+            <xs:enumeration value="application/vnd.oasis.opendocument.database"/>
+            <xs:enumeration value="application/vnd.oasis.opendocument.formula"/>
+            <xs:enumeration value="application/vnd.oasis.opendocument.graphics"/>
+            <xs:enumeration value="application/vnd.oasis.opendocument.image"/>
+            <xs:enumeration value="application/vnd.oasis.opendocument.presentation"/>
+            <xs:enumeration value="application/vnd.oasis.opendocument.spreadsheet"/>
+            <xs:enumeration value="application/vnd.oasis.opendocument.text"/>
+            <xs:enumeration value="application/vnd.oasis.opendocument.text-master"/>
+            <xs:enumeration value="application/vnd.openxmlformats-officedocument.presentationml.presentation"/>
+            <xs:enumeration value="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"/>
+            <xs:enumeration value="application/vnd.openxmlformats-officedocument.wordprocessingml.document"/>
+            <xs:enumeration value="application/vnd.rn-realmedia"/>
+            <xs:enumeration value="application/vnd.sun.xml.base"/>
+            <xs:enumeration value="application/xhtml+xml"/>
+            <xs:enumeration value="application/xml"/>
+            <xs:enumeration value="application/xml-dtd"/>
+            <xs:enumeration value="application/zip"/>
+            <xs:enumeration value="audio/basic"/>
+            <xs:enumeration value="audio/midi"/>
+            <xs:enumeration value="audio/mpeg"/>
+            <xs:enumeration value="audio/mpeg4-generic"/>
+            <xs:enumeration value="audio/x-aiff"/>
+            <xs:enumeration value="audio/x-mpegurl"/>
+            <xs:enumeration value="audio/x-pn-realaudio"/>
+            <xs:enumeration value="audio/x-pn-realaudio-plugin"/>
+            <xs:enumeration value="audio/x-wav"/>
+            <xs:enumeration value="image/bmp"/>
+            <xs:enumeration value="image/gif"/>
+            <xs:enumeration value="image/jpeg"/>
+            <xs:enumeration value="image/png"/>
+            <xs:enumeration value="image/svg+xml"/>
+            <xs:enumeration value="image/tiff"/>
+            <xs:enumeration value="image/vnd.wap.wbmp"/>
+            <xs:enumeration value="image/x-icon"/>
+            <xs:enumeration value="message/http"/>
+            <xs:enumeration value="message/news"/>
+            <xs:enumeration value="text/calendar"/>
+            <xs:enumeration value="text/css"/>
+            <xs:enumeration value="text/directory"/>
+            <xs:enumeration value="text/html"/>
+            <xs:enumeration value="text/plain"/>
+            <xs:enumeration value="text/richtext"/>
+            <xs:enumeration value="text/rtf"/>
+            <xs:enumeration value="text/sgml"/>
+            <xs:enumeration value="text/uri-list"/>
+            <xs:enumeration value="text/vnd.wap.wml"/>
+            <xs:enumeration value="text/xml"/>
+            <xs:enumeration value="video/mpeg"/>
+            <xs:enumeration value="video/quicktime"/>
+            <xs:enumeration value="video/vnd.mpegurl"/>
+            <xs:enumeration value="video/x-msvideo"/>
+            <xs:enumeration value="video/x-sgi-movie"/>
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>

@@ -1,3 +1,7 @@
+<script setup lang="ts">
+import { Message } from "primevue";
+</script>
+
 <template>
   <Message severity="warn" class="ris-body2-regular mt-16 max-w-prose">
     <p class="ris-body2-bold mt-2">

@@ -1,5 +1,4 @@
-import { test } from "@playwright/test";
-import { expect } from "./fixtures";
+import { expect, test } from "./fixtures";
 import { getDisplayedResultCount } from "./utils";
 
 const expectedNorms = [
@@ -44,7 +43,7 @@ test("can search, filter for norms, and view a single norm", async ({
     await page.getByRole("link", { name: expectedNorms[0] }).first().click();
 
     await page.waitForURL(
-      /norms\/eli\/(?<jurisdiction>[^/]+)\/(?<agent>[^/]+)\/(?<year>[^/]+)\/(?<naturalIdentifier>[^/]+)\/(?<pointInTime>[^/]+)\/(?<version>[^/]+)\/(?<language>[^/]+)\/(?<subtype>[^/]+)$/gi,
+      /norms\/eli\/(?<jurisdiction>[^/]+)\/(?<agent>[^/]+)\/(?<year>[^/]+)\/(?<naturalIdentifier>[^/]+)\/(?<pointInTime>[^/]+)\/(?<version>[^/]+)\/(?<language>[^/]+)$/gi,
     );
 
     await expect(
@@ -73,7 +72,7 @@ test("can navigate to a single norm article and between articles", async ({
   page,
 }) => {
   const mainExpressionEliUrl =
-    "/norms/eli/bund/bgbl-1/2000/s1016/2023-04-26/10/deu/regelungstext-1";
+    "/norms/eli/bund/bgbl-1/2000/s1016/2023-04-26/10/deu";
   await page.goto(mainExpressionEliUrl);
 
   await test.step("Navigate from main norm view to a single article", async () => {
@@ -103,7 +102,7 @@ test("can navigate to a single norm article and between articles", async ({
 
   await test.step("Navigate back between single articles", async () => {
     const mainExpressionEliUrl =
-      "/norms/eli/bund/bgbl-1/2000/s1016/2023-04-26/10/deu/regelungstext-1";
+      "/norms/eli/bund/bgbl-1/2000/s1016/2023-04-26/10/deu";
     await page.goto(mainExpressionEliUrl + "/art-z3");
     await expect(
       page.getByRole("heading", {
@@ -156,7 +155,7 @@ test("can navigate to a single norm article and between articles", async ({
 
 test("can navigate to and view an attachment", async ({ page }) => {
   const mainExpressionEliUrl =
-    "/norms/eli/bund/bgbl-1/2000/s1016/2023-04-26/10/deu/regelungstext-1";
+    "/norms/eli/bund/bgbl-1/2000/s1016/2023-04-26/10/deu";
   await page.goto(mainExpressionEliUrl);
 
   const table = page.getByRole("table");
@@ -187,9 +186,7 @@ test("can navigate to and view an attachment", async ({ page }) => {
 });
 
 test("can view images", async ({ page }) => {
-  await page.goto(
-    "/norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu/regelungstext-1",
-  );
+  await page.goto("/norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu");
 
   await page.getByRole("img", { name: "Beispielbild" }).isVisible();
 
@@ -205,95 +202,95 @@ test("can view images", async ({ page }) => {
 });
 
 test.describe("actions menu", () => {
-  test.use({
-    permissions: ["clipboard-write", "clipboard-read"],
-  });
+  const testCases = [
+    {
+      name: "can use link action button to copy link to currently valid expression",
+      linkText: "Link zur jeweils gültigen Fassung",
+      clipboardText: "/norms/eli/bund/bgbl-1/2024/383",
+    },
+    {
+      name: "can use permalink action button to copy permalink to viewed expression",
+      linkText: "Permalink zu dieser Fassung",
+      clipboardText: "/norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu",
+    },
+  ];
+  for (const testCase of testCases) {
+    test(
+      testCase.name,
+      async ({ page, browserName, baseURL, context, isMobileTest }) => {
+        await page.goto("/norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu", {
+          waitUntil: "networkidle",
+        });
 
-  test("can use link action button to copy link to currently valid expression", async ({
+        if (browserName === "chromium") {
+          const origin = baseURL
+            ? new URL(baseURL).origin
+            : new URL(page.url()).origin;
+          await context.grantPermissions(
+            ["clipboard-read", "clipboard-write"],
+            {
+              origin,
+            },
+          );
+        }
+
+        if (isMobileTest) {
+          await page.getByLabel("Aktionen anzeigen").click();
+        }
+
+        const button = page.getByRole("link", {
+          name: testCase.linkText,
+        });
+
+        await button.isVisible();
+
+        if (!isMobileTest) {
+          await button.hover();
+
+          await expect(
+            page.getByRole("tooltip", {
+              name: testCase.linkText,
+            }),
+          ).toBeVisible();
+        }
+
+        let clipboardContents: string;
+
+        await test.step("can copy the link", async () => {
+          await button.click();
+          if (!isMobileTest)
+            await expect(page.getByText("Kopiert!")).toBeVisible();
+          clipboardContents = await page.evaluate(() => {
+            return navigator.clipboard.readText();
+          });
+          expect(clipboardContents.endsWith(testCase.clipboardText)).toBe(true);
+        });
+      },
+    );
+  }
+
+  test("can use print action button to open print menu", async ({
     page,
+    isMobileTest,
   }) => {
-    await page.goto(
-      "/norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu/regelungstext-1",
-      { waitUntil: "networkidle" },
-    );
-    const button = page.getByRole("link", {
-      name: "Link zur jeweils gültigen Fassung",
+    await page.goto("/norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu", {
+      waitUntil: "networkidle",
     });
-    await button.hover();
+    if (isMobileTest) await page.getByLabel("Aktionen anzeigen").click();
 
-    await expect(
-      page.getByRole("tooltip", { name: "Link zur jeweils gültigen Fassung" }),
-    ).toBeVisible();
+    const button = isMobileTest
+      ? page.getByRole("menuitem", { name: "Drucken" })
+      : page.getByRole("button", {
+          name: "Drucken",
+        });
 
-    let clipboardContents: string;
+    if (!isMobileTest) {
+      await button.hover();
 
-    await test.step("can copy the link", async () => {
-      await button.click();
-
-      await expect(page.getByText("Kopiert!")).toBeVisible();
-      clipboardContents = await page.evaluate(() => {
-        return navigator.clipboard.readText();
-      });
-      expect(
-        clipboardContents.endsWith(
-          "/norms/eli/bund/bgbl-1/2024/383/regelungstext-1",
-          // note the omission of 2024-12-19/1/deu/
-        ),
-      ).toBe(true);
-    });
-
-    await test.step("can use the copied link to get back to the original URL", async () => {
-      await page.goto(clipboardContents);
-      await page.waitForURL(
-        "/norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu/regelungstext-1",
-      );
-    });
-  });
-
-  test("can use permalink action button to copy permalink to viewed expression", async ({
-    page,
-  }) => {
-    await page.goto(
-      "/norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu/regelungstext-1",
-      { waitUntil: "networkidle" },
-    );
-    const button = page.getByRole("link", {
-      name: "Permalink zu dieser Fassung",
-    });
-    await button.hover();
-
-    await expect(
-      page.getByRole("tooltip", { name: "Permalink zu dieser Fassung" }),
-    ).toBeVisible();
-
-    let clipboardContents: string;
-
-    await test.step("can copy the link", async () => {
-      await button.click();
-
-      await expect(page.getByText("Kopiert!")).toBeVisible();
-      clipboardContents = await page.evaluate(() => {
-        return navigator.clipboard.readText();
-      });
-      expect(
-        clipboardContents.endsWith(
-          "/norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu/regelungstext-1",
-        ),
-      ).toBe(true);
-    });
-  });
-
-  test("can use print action button to open print menu", async ({ page }) => {
-    await page.goto(
-      "/norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu/regelungstext-1",
-      { waitUntil: "networkidle" },
-    );
-    const button = page.getByRole("button", {
-      name: "Drucken",
-    });
-    await button.hover();
-
-    await expect(page.getByRole("tooltip", { name: "Drucken" })).toBeVisible();
+      await expect(
+        page.getByRole("tooltip", { name: "Drucken" }),
+      ).toBeVisible();
+    }
 
     await test.step("can open print menu", async () => {
       await page.evaluate(
@@ -305,38 +302,51 @@ test.describe("actions menu", () => {
     });
   });
 
-  test("can't use PDF action as it is disabled", async ({ page }) => {
-    await page.goto(
-      "/norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu/regelungstext-1",
-      { waitUntil: "networkidle" },
-    );
-    const button = page.getByRole("button", {
-      name: "Als PDF speichern",
+  test("can't use PDF action as it is disabled", async ({
+    page,
+    isMobileTest,
+  }) => {
+    await page.goto("/norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu", {
+      waitUntil: "networkidle",
     });
+    if (isMobileTest) await page.getByLabel("Aktionen anzeigen").click();
+    const button = isMobileTest
+      ? page.getByText("Als PDF speichern")
+      : page.getByRole("button", {
+          name: "Als PDF speichern",
+        });
 
-    await button.hover();
+    if (!isMobileTest) {
+      await button.hover();
 
-    await expect(
-      page.getByRole("tooltip", { name: "Als PDF speichern" }),
-    ).toBeVisible();
+      await expect(
+        page.getByRole("tooltip", { name: "Als PDF speichern" }),
+      ).toBeVisible();
+    }
 
-    await expect(button).toBeDisabled();
+    if (!isMobileTest) await expect(button).toBeDisabled();
   });
 
-  test("can use XML action to view norms xml file", async ({ page }) => {
-    await page.goto(
-      "/norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu/regelungstext-1",
-      { waitUntil: "networkidle" },
-    );
+  test("can use XML action to view norms xml file", async ({
+    page,
+    isMobileTest,
+  }) => {
+    await page.goto("/norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu", {
+      waitUntil: "networkidle",
+    });
+
+    if (isMobileTest) await page.getByLabel("Aktionen anzeigen").click();
     const button = page.getByRole("link", {
       name: "XML anzeigen",
     });
 
-    await button.hover();
+    if (!isMobileTest) {
+      await button.hover();
 
-    await expect(
-      page.getByRole("tooltip", { name: "XML anzeigen" }),
-    ).toBeVisible();
+      await expect(
+        page.getByRole("tooltip", { name: "XML anzeigen" }),
+      ).toBeVisible();
+    }
 
     await button.click();
 

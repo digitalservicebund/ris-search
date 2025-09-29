@@ -11,6 +11,7 @@ import de.bund.digitalservice.ris.search.repository.opensearch.NormsRepository;
 import de.bund.digitalservice.ris.search.service.IndexStatusService;
 import de.bund.digitalservice.ris.search.service.IndexingState;
 import de.bund.digitalservice.ris.search.service.NormIndexSyncJob;
+import de.bund.digitalservice.ris.search.utils.eli.EliFile;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -54,10 +55,12 @@ class NormsImporterTest extends ContainersIntegrationBase {
   @Test
   @DisplayName("Only unprocessed changelogs are considered")
   void testProcessedChangelogIsIgnored() throws ObjectStoreServiceException {
-    final String ignoredManifestationEli =
+    final String ignoredEliFile =
         "eli/bund/bgbl-1/1991/s101/1991-01-01/1/deu/1991-01-01/regelungstext-1.xml";
-    final String nonIgnoredManifestationEli =
+    final String nonIgnoredEliFile =
         "eli/bund/bgbl-1/1992/s101/1992-01-01/1/deu/1992-01-02/regelungstext-1.xml";
+    final String relatedByWorkEliFile =
+        "eli/bund/bgbl-1/1992/s101/1992-02-01/2/deu/1992-02-02/regelungstext-1.xml";
 
     Instant now = Instant.now();
     String firstChangelogFileName =
@@ -66,12 +69,11 @@ class NormsImporterTest extends ContainersIntegrationBase {
         "changelogs/%s-changelog.json".formatted(now.minus(1, ChronoUnit.HOURS).toString());
 
     // changelog1.json contains Norm 1...
-    normsBucket.save(
-        firstChangelogFileName, "{\"changed\": [\"%s\"]}".formatted(ignoredManifestationEli));
+    normsBucket.save(firstChangelogFileName, "{\"changed\": [\"%s\"]}".formatted(ignoredEliFile));
 
     // opposite case: verify that the file can actually be imported
     normsBucket.save(
-        secondChangelogFileName, "{\"changed\": [\"%s\"]}".formatted(nonIgnoredManifestationEli));
+        secondChangelogFileName, "{\"changed\": [\"%s\"]}".formatted(nonIgnoredEliFile));
 
     assertThat(normIndex.count()).isZero();
 
@@ -80,24 +82,27 @@ class NormsImporterTest extends ContainersIntegrationBase {
 
     assertThat(normIndex.findAll())
         .map(Norm::getManifestationEliExample)
-        .containsExactly(nonIgnoredManifestationEli);
+        .containsExactlyInAnyOrder(nonIgnoredEliFile, relatedByWorkEliFile);
   }
 
   @Test
-  @DisplayName("Updating the manifestation for an expression ELI only keeps the new manifestation")
+  @DisplayName("Deleting a manifestation and adding a new one reindexes the whole work")
   void testDeleteAndUpdate() throws ObjectStoreServiceException {
-    final String expressionEli = "eli/bund/bgbl-1/1992/s101/1992-01-01/1/deu/regelungstext-1";
 
-    final String expressionEliUriPart = "eli/bund/bgbl-1/1992/s101/1992-01-01/1/deu";
-    final String oldManifestationEli = expressionEliUriPart + "/1992-01-01/regelungstext-1.xml";
-    final String newManifestationEli = expressionEliUriPart + "/1992-01-02/regelungstext-1.xml";
-
-    normIndex.save(
-        Norm.builder().id(expressionEli).manifestationEliExample(oldManifestationEli).build());
-    assertThat(normIndex.count()).isEqualTo(1);
+    final String expressionEli = "eli/bund/bgbl-1/1992/s101/1992-01-01/1/deu";
+    final String oldManifestationEli = expressionEli + "/1992-01-01/regelungstext-1.xml";
+    final String newManifestationEli = expressionEli + "/1992-01-02/regelungstext-1.xml";
 
     Instant now = Instant.now();
     Instant lastSuccess = now.minus(1, ChronoUnit.HOURS);
+
+    normIndex.save(
+        Norm.builder()
+            .id(expressionEli)
+            .manifestationEliExample(oldManifestationEli)
+            .indexedAt(lastSuccess.toString())
+            .build());
+    assertThat(normIndex.count()).isEqualTo(1);
 
     normsBucket.save(
         "changelogs/%s-changelog.json".formatted(now),
@@ -106,12 +111,11 @@ class NormsImporterTest extends ContainersIntegrationBase {
 
     IndexingState mockState =
         getMockState()
-            .withLastProcessedChangelogFile(
-                NormIndexSyncJob.CHANGELOGS_PREFIX + lastSuccess.toString());
+            .withLastProcessedChangelogFile(NormIndexSyncJob.CHANGELOGS_PREFIX + lastSuccess);
 
     normsImporter.fetchAndProcessChanges(mockState);
 
-    assertThat(normIndex.count()).isEqualTo(1);
+    assertThat(normIndex.count()).isEqualTo(2);
     assertThat(normIndex.findById(expressionEli).get().getManifestationEliExample())
         .isEqualTo(newManifestationEli);
   }
@@ -119,31 +123,41 @@ class NormsImporterTest extends ContainersIntegrationBase {
   @Test
   @DisplayName("Delete removes the norm")
   void testDelete() throws ObjectStoreServiceException {
-    final String expressionEliToDelete =
-        "eli/bund/bgbl-1/1993/s101/1993-01-01/1/deu/regelungstext-1";
-    final String expressionEliToKeep = "eli/bund/bgbl-1/1994/s101/1994-01-01/1/deu/regelungstext-1";
 
-    final String manifestationEliToDelete =
-        "eli/bund/bgbl-1/1993/s101/1993-01-01/1/deu/1993-01-01/regelungstext-1.xml";
+    Instant now = Instant.now();
+    Instant lastSuccess = now.minus(1, ChronoUnit.HOURS);
+
+    final EliFile toKeep =
+        EliFile.fromString("eli/bund/bgbl-1/1994/s101/1994-01-01/1/deu/0000-01-01/abc.xml").get();
+    final EliFile toDelete =
+        EliFile.fromString(
+                "eli/bund/bgbl-1/1993/s101/1993-01-01/1/deu/1993-01-01/regelungstext-1.xml")
+            .get();
 
     List<Norm> initialState = new ArrayList<>();
-    initialState.add(Norm.builder().id(expressionEliToDelete).build());
-    initialState.add(Norm.builder().id(expressionEliToKeep).build());
+    initialState.add(
+        Norm.builder()
+            .id(toDelete.getExpressionEli().toString())
+            .workEli(toDelete.getWorkEli().toString())
+            .indexedAt(lastSuccess.toString())
+            .build());
+    initialState.add(
+        Norm.builder()
+            .id(toKeep.getExpressionEli().toString())
+            .workEli(toKeep.getWorkEli().toString())
+            .indexedAt(lastSuccess.toString())
+            .build());
     normIndex.saveAll(initialState);
 
     assertThat(normIndex.count()).isEqualTo(2);
 
-    Instant now = Instant.now();
     String changelogFileName = "changelogs/%s-changelog.json".formatted(now);
 
-    normsBucket.save(
-        changelogFileName, "{ \"deleted\": [ \"%s\" ] }".formatted(manifestationEliToDelete));
+    normsBucket.save(changelogFileName, "{ \"deleted\": [ \"%s\" ] }".formatted(toDelete));
 
-    Instant lastSuccess = now.minus(1, ChronoUnit.HOURS);
     IndexingState mockState =
         getMockState()
-            .withLastProcessedChangelogFile(
-                NormIndexSyncJob.CHANGELOGS_PREFIX + lastSuccess.toString());
+            .withLastProcessedChangelogFile(NormIndexSyncJob.CHANGELOGS_PREFIX + lastSuccess);
 
     normsImporter.fetchAndProcessChanges(mockState);
 
@@ -151,7 +165,7 @@ class NormsImporterTest extends ContainersIntegrationBase {
         indexStatusService.loadStatus(NormIndexSyncJob.NORM_STATUS_FILENAME);
     assertThat(indexingState.lastProcessedChangelogFile()).isEqualTo(changelogFileName);
     assertThat(normIndex.count()).isEqualTo(1);
-    assertThat(normIndex.findById(expressionEliToKeep)).isPresent();
+    assertThat(normIndex.findById(toKeep.getExpressionEli().toString())).isPresent();
   }
 
   private IndexingState getMockState() {
