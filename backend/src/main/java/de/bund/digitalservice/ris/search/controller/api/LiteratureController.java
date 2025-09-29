@@ -17,7 +17,6 @@ import de.bund.digitalservice.ris.search.schema.LiteratureSchema;
 import de.bund.digitalservice.ris.search.schema.LiteratureSearchSchema;
 import de.bund.digitalservice.ris.search.schema.SearchMemberSchema;
 import de.bund.digitalservice.ris.search.service.LiteratureService;
-import de.bund.digitalservice.ris.search.service.XsltTransformerService;
 import de.bund.digitalservice.ris.search.utils.LuceneQueryTools;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -47,13 +46,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class LiteratureController {
 
   private final LiteratureService literatureService;
-  private final XsltTransformerService xsltTransformerService;
 
   @Autowired
-  public LiteratureController(
-      LiteratureService literatureService, XsltTransformerService xsltTransformerService) {
+  public LiteratureController(LiteratureService literatureService) {
     this.literatureService = literatureService;
-    this.xsltTransformerService = xsltTransformerService;
   }
 
   @GetMapping(
@@ -93,17 +89,9 @@ public class LiteratureController {
           @Parameter(
               description =
                   "Used to select a different prefix for referenced resources, like images. Selecting 'PROXY' will prepend `/api`. Otherwise, the API base URL will be used.")
-          ResourceReferenceMode resourceReferenceMode)
-      throws ObjectStoreServiceException {
-    final String resourcePath = getResourceBasePath(resourceReferenceMode, documentNumber);
-    Optional<byte[]> bytes = literatureService.getFileByDocumentNumber(documentNumber);
-
-    if (bytes.isPresent()) {
-      String html = xsltTransformerService.transformCaseLaw(bytes.get(), resourcePath);
-      return ResponseEntity.ok(html);
-    } else {
-      return ResponseEntity.notFound().build();
-    }
+          ResourceReferenceMode resourceReferenceMode) {
+    // implement this correctly when the literature xslt transformer is available
+    return ResponseEntity.notFound().build();
   }
 
   @GetMapping(
