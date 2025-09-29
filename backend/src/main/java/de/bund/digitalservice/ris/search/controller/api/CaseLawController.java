@@ -10,7 +10,7 @@ import de.bund.digitalservice.ris.search.models.api.parameters.ResourceReference
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import de.bund.digitalservice.ris.search.schema.CaseLawSchema;
 import de.bund.digitalservice.ris.search.service.CaseLawService;
-import de.bund.digitalservice.ris.search.service.XsltTransformerService;
+import de.bund.digitalservice.ris.search.service.xslt.CaselawXsltTransformerService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -39,11 +39,11 @@ import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBo
 public class CaseLawController {
 
   private final CaseLawService caseLawService;
-  private final XsltTransformerService xsltTransformerService;
+  private final CaselawXsltTransformerService xsltTransformerService;
 
   @Autowired
   public CaseLawController(
-      CaseLawService caseLawService, XsltTransformerService xsltTransformerService) {
+      CaseLawService caseLawService, CaselawXsltTransformerService xsltTransformerService) {
     this.caseLawService = caseLawService;
     this.xsltTransformerService = xsltTransformerService;
   }
