@@ -118,7 +118,7 @@ describe("truncateAtWord", () => {
     expect(truncateAtWord("Äpfel Birnen Kirschen", 12)).toBe("Äpfel Birnen");
   });
 });
-    
+
 describe("removePrefix", () => {
   it("removes prefix when present", () => {
     expect(removePrefix("Hello World", "Hello ")).toBe("World");
