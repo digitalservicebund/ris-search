@@ -152,7 +152,6 @@ class LiteratureControllerApiTest extends ContainersIntegrationBase {
             get(ApiConfig.Paths.LITERATURE + "/NOT_PRESENT_IN_BUCKET.html")
                 .contentType(MediaType.TEXT_HTML))
         .andExpect(status().isNotFound());
-  }
 
   @Disabled("Enable after literature xslt transformer is implemented")
   @Test
