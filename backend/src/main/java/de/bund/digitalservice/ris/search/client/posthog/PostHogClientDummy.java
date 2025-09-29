@@ -8,6 +8,6 @@ public class PostHogClientDummy implements PostHogClient {
 
   @Override
   public void submitFeedback(String feedback, String url, String userId, String surveyId) {
-    /**/
+    throw new UnsupportedOperationException("Feedback submission is not supported");
   }
 }

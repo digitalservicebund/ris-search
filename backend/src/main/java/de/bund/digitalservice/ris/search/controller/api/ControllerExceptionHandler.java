@@ -158,6 +158,13 @@ public class ControllerExceptionHandler {
     return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
   }
 
+  @ExceptionHandler(UnsupportedOperationException.class)
+  public ResponseEntity<CustomErrorResponse> handleUnsupportedOperationException(
+      UnsupportedOperationException ex) {
+    logger.warn(ex.getMessage());
+    return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).build();
+  }
+
   public static ResponseEntity<CustomErrorResponse> return403() {
     CustomError error =
         CustomError.builder()

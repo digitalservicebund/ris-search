@@ -8,10 +8,8 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.Map;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.ErrorResponseException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -64,13 +62,10 @@ public class FeedbackController {
       @Parameter(name = "user_id", description = "The user identifier to be sent")
           @RequestParam(value = "user_id")
           String userId) {
-    try {
-      postHogService.sendFeedback(userId, url, text);
-      return ResponseEntity.ok()
-          .contentType(MediaType.APPLICATION_JSON)
-          .body(Map.of("message", "Feedback sent successfully"));
-    } catch (Exception exception) {
-      throw new ErrorResponseException(HttpStatusCode.valueOf(500), exception.getCause());
-    }
+
+    postHogService.sendFeedback(userId, url, text);
+    return ResponseEntity.ok()
+        .contentType(MediaType.APPLICATION_JSON)
+        .body(Map.of("message", "Feedback sent successfully"));
   }
 }
