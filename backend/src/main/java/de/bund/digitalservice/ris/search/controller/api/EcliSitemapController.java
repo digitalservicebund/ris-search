@@ -25,6 +25,23 @@ public class EcliSitemapController {
   }
 
   @GetMapping(
+      path = ApiConfig.Paths.ECLICRAWLER + "/robots.txt",
+      produces = MediaType.TEXT_PLAIN_VALUE)
+  @ApiResponse(responseCode = "200")
+  @ApiResponse(responseCode = "404")
+  public ResponseEntity<byte[]> getRobots() {
+
+    return sitemapService
+        .getRobots()
+        .map(
+            body ->
+                ResponseEntity.status(HttpStatus.OK)
+                    .header("Content-Type", MediaType.TEXT_PLAIN_VALUE)
+                    .body(body))
+        .orElseGet(() -> ResponseEntity.notFound().build());
+  }
+
+  @GetMapping(
       path = ApiConfig.Paths.ECLICRAWLER + "/{year}/{month}/{day}/{filename}",
       produces = MediaType.APPLICATION_XML_VALUE)
   @ApiResponse(responseCode = "200")

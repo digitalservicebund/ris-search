@@ -96,6 +96,14 @@ public class EcliSitemapService {
     }
   }
 
+  public Optional<byte[]> getRobots() {
+    try {
+      return portalBucket.get(ROBOTS_TXT_PATH);
+    } catch (ObjectStoreServiceException e) {
+      return Optional.empty();
+    }
+  }
+
   public void writeRobotsTxt() {
 
     String header =
