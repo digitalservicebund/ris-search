@@ -4,6 +4,13 @@
       "type": "text",
       "analyzer": "custom_german_analyzer"
     },
+    "DATUM": {
+      "type": "alias",
+      "path": "recording_date"
+    },
+    "recording_date": {
+      "type": "date"
+    },
     "years_of_publication": {
       "type": "text",
       "analyzer": "custom_german_analyzer"

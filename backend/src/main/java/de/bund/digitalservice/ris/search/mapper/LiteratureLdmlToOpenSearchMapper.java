@@ -17,11 +17,13 @@ import de.bund.digitalservice.ris.search.models.ldml.literature.Proprietary;
 import de.bund.digitalservice.ris.search.models.ldml.literature.References;
 import de.bund.digitalservice.ris.search.models.ldml.literature.TlcPerson;
 import de.bund.digitalservice.ris.search.models.opensearch.Literature;
+import de.bund.digitalservice.ris.search.utils.DateUtils;
 import jakarta.xml.bind.DataBindingException;
 import jakarta.xml.bind.JAXB;
 import jakarta.xml.bind.ValidationException;
 import java.io.StringReader;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -55,6 +57,7 @@ public class LiteratureLdmlToOpenSearchMapper {
         Literature.builder()
             .id(documentNumber)
             .documentNumber(documentNumber)
+            .recordingDate(extractRecordingDate(literatureLdml))
             .yearsOfPublication(extractYearsOfPublication(literatureLdml))
             .documentTypes(extractDocumentTypes(literatureLdml))
             .dependentReferences(extractDependentReferences(literatureLdml))
@@ -90,6 +93,16 @@ public class LiteratureLdmlToOpenSearchMapper {
     }
 
     return documentNumber;
+  }
+
+  private static LocalDate extractRecordingDate(LiteratureLdml literatureLdml) {
+    FrbrWork frbrWork = literatureLdml.getDoc().getMeta().getIdentification().getFrbrWork();
+    if (frbrWork == null
+        || frbrWork.getFrbrDate() == null
+        || frbrWork.getFrbrDate().getDate() == null) {
+      return null;
+    }
+    return DateUtils.nullSafeParseyyyyMMdd(frbrWork.getFrbrDate().getDate());
   }
 
   private static List<String> extractYearsOfPublication(LiteratureLdml literatureLdml) {

@@ -4,6 +4,7 @@ import static org.opensearch.search.fetch.subphase.highlight.HighlightBuilder.Bo
 import static org.opensearch.search.fetch.subphase.highlight.HighlightBuilder.Field;
 
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
+import de.bund.digitalservice.ris.search.models.opensearch.Literature;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import java.util.List;
 import org.opensearch.search.fetch.subphase.highlight.HighlightBuilder;
@@ -70,11 +71,19 @@ public final class RisHighlightBuilder {
     return builder;
   }
 
+  private static HighlightBuilder addLiteratureFields(HighlightBuilder builder) {
+    return builder.field(Literature.Fields.MAIN_TITLE);
+  }
+
   public static HighlightBuilder getNormsHighlighter() {
     return addNormsFields(baseHighlighter());
   }
 
   public static HighlightBuilder getCaseLawHighlighter() {
     return addCaseLawFields(baseHighlighter());
+  }
+
+  public static HighlightBuilder getLiteratureHighlighter() {
+    return addLiteratureFields(baseHighlighter());
   }
 }

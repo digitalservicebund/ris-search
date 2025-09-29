@@ -92,12 +92,220 @@
         }
       }
     },
+    "/v1/literature": {
+      "get": {
+        "tags": ["Literature"],
+        "summary": "List and search literature",
+        "description": "The endpoint returns a list of literature from our database. The list is paginated and can be filtered and sorted.",
+        "operationId": "searchAndFilter",
+        "parameters": [
+          {
+            "name": "documentNumber",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "yearOfPublication",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "array", "items": { "type": "string" } }
+          },
+          {
+            "name": "documentType",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "array", "items": { "type": "string" } }
+          },
+          {
+            "name": "author",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "array", "items": { "type": "string" } }
+          },
+          {
+            "name": "collaborator",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "array", "items": { "type": "string" } }
+          },
+          {
+            "name": "searchTerm",
+            "in": "query",
+            "description": "Searches for the given tokens in searchTerm. If searchTerm contains more than one token, all tokens must be in the document for the document to match.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Searches for the given tokens in searchTerm. If searchTerm contains more than one token, all tokens must be in the document for the document to match."
+            }
+          },
+          {
+            "name": "dateFrom",
+            "in": "query",
+            "description": "The from (greater than or equal) parameter returns all entities where date is later than, or equal to, the given date.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "description": "The from (greater than or equal) parameter returns all entities where date is later than, or equal to, the given date."
+            }
+          },
+          {
+            "name": "dateTo",
+            "in": "query",
+            "description": "The to (less than or equal) parameter returns all entities where date is earlier than, or equal to, the given date.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "description": "The to (less than or equal) parameter returns all entities where date is earlier than, or equal to, the given date."
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "description": "The number of entities per page",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "maximum": 100,
+              "minimum": 1
+            },
+            "example": 100
+          },
+          {
+            "name": "pageIndex",
+            "in": "query",
+            "description": "The number of the page to request. The page starts with the value 0",
+            "required": false,
+            "schema": { "type": "integer", "format": "int32", "minimum": 0 },
+            "example": 0
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "description": "The field to sort the results by. Default is the relevance score calculated by OpenSearch. Valid usage of the sort field are : date and documentNumber and not setting the sort field (sort by relevance descending).Add a leading - to set the order to descending (-date)",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "The field to sort the results by. Default is the relevance score calculated by OpenSearch. Valid usage of the sort field are : date and documentNumber and not setting the sort field (sort by relevance descending).Add a leading - to set the order to descending (-date)",
+              "pattern": "^-?(|default|date|DATUM|documentNumber)$"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CollectionSchemaSearchMemberSchemaLiteratureSearchSchema"
+                }
+              }
+            }
+          },
+          "500": { "description": "Internal Server Error" }
+        }
+      }
+    },
+    "/v1/literature/{documentNumber}": {
+      "get": {
+        "tags": ["Literature"],
+        "summary": "Literature metadata",
+        "description": "The endpoint returns the metadata of a single literature from our database.",
+        "operationId": "getLiteratureMetadata",
+        "parameters": [
+          {
+            "name": "documentNumber",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" },
+            "example": "STRE201770751"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/LiteratureSchema" }
+              }
+            }
+          },
+          "404": { "description": "Not Found" }
+        }
+      }
+    },
+    "/v1/literature/{documentNumber}.xml": {
+      "get": {
+        "tags": ["Literature"],
+        "summary": "Decision XML",
+        "description": "Returns a literature item as XML. This content is used as a source for the HTML endpoint.",
+        "operationId": "getLiteratureAsXml",
+        "parameters": [
+          {
+            "name": "documentNumber",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" },
+            "example": "BJLU075748788"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/xml": {
+                "schema": { "type": "string", "format": "byte" }
+              }
+            }
+          },
+          "404": { "description": "Not Found" }
+        }
+      }
+    },
+    "/v1/literature/{documentNumber}.html": {
+      "get": {
+        "tags": ["Literature"],
+        "summary": "Literature HTML",
+        "description": "Renders and returns a literature item as HTML.",
+        "operationId": "getLiteratureAsHtml",
+        "parameters": [
+          {
+            "name": "documentNumber",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" },
+            "example": "BJLU075748788"
+          },
+          {
+            "name": "get-resources-via",
+            "in": "header",
+            "description": "Used to select a different prefix for referenced resources, like images. Selecting 'PROXY' will prepend `/api`. Otherwise, the API base URL will be used.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "API",
+              "enum": ["API", "PROXY"]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": { "text/html": { "schema": { "type": "string" } } }
+          },
+          "404": { "description": "Not Found" }
+        }
+      }
+    },
     "/v1/legislation": {
       "get": {
         "tags": ["Legislation"],
         "summary": "List and search legislation",
-        "description": "List all legislation in our database with support for filtering and pagination.\n\n## Example 1\n\nGet all legislation containing the tokens :` Gesetz`, `über`,`das`, `Verfahren`, `bei`, `sonstigen` and `Änderungen`.\n```http request\nGET /v1/legislation?searchTerm=Gesetz%20über%20das%20Verfahren%20bei%20sonstigen%20Änderungen\n```\nThe API will return only the legislation that contains all these terms. Please note that in practice very common tokens such as `das` are ignored\n(please see <a href=\"https://en.wikipedia.org/wiki/Stop_word\">https://en.wikipedia.org/wiki/Stop_word</a> for more details).\n\n## Example 2\n\nGet all legislation containing the tokens :` Gesetz` and `über` and were valid on 2020-01-01\n```http request\nGET /v1/legislation?temporalCoverageFrom=2020-01-01&temporalCoverageTo=2020-01-01&searchTerm=Gesetz%20über\n```\nThis example can be used to only return currently valid legislation by replacing 2020-01-01 with today's date.\n\n## Example 3\n\nGet all legislation that belong to the work eli `eli/bund/bgbl-1/1979/s1325/regelungstext-1`\n```http request\nGET /v1/legislation?eli=eli/bund/bgbl-1/1979/s1325/regelungstext-1\n```\n",
-        "operationId": "searchAndFilter",
+        "description": "List all legislation in our database with support for filtering and pagination.\n\n## Example 1\n\nGet all legislation containing the tokens :` Gesetz`, `über`,`das`, `Verfahren`, `bei`, `sonstigen` and `Änderungen`.\n```http request\nGET /v1/legislation?searchTerm=Gesetz%20über%20das%20Verfahren%20bei%20sonstigen%20Änderungen\n```\nThe API will return only the legislation that contains all these terms. Please note that in practice very common tokens such as `das` are ignored\n(please see <a href=\"https://en.wikipedia.org/wiki/Stop_word\">https://en.wikipedia.org/wiki/Stop_word</a> for more details).\n\n## Example 2\n\nGet all legislation containing the tokens :` Gesetz` and `über` and were valid on 2020-01-01\n```http request\nGET /v1/legislation?temporalCoverageFrom=2020-01-01&temporalCoverageTo=2020-01-01&searchTerm=Gesetz%20über\n```\nThis example can be used to only return currently valid legislation by replacing 2020-01-01 with today's date.\n\n## Example 3\n\nGet all legislation that belong to the work eli `eli/bund/bgbl-1/1979/s1325`\n```http request\nGET /v1/legislation?eli=eli/bund/bgbl-1/1979/s1325\n```\n",
+        "operationId": "searchAndFilter_1",
         "parameters": [
           {
             "name": "eli",
@@ -220,7 +428,7 @@
         }
       }
     },
-    "/v1/legislation/eli/{jurisdiction}/{agent}/{year}/{naturalIdentifier}/{pointInTime}/{version}/{language}/{subtype}": {
+    "/v1/legislation/eli/{jurisdiction}/{agent}/{year}/{naturalIdentifier}/{pointInTime}/{version}/{language}": {
       "get": {
         "tags": ["Legislation"],
         "summary": "Work and expression-level metadata",
@@ -232,15 +440,14 @@
             "in": "path",
             "description": "Country or regional code for the jurisdiction",
             "required": true,
-            "schema": { "type": "string", "enum": ["bund"] },
-            "example": "bund"
+            "schema": { "type": "string", "enum": ["bund"] }
           },
           {
             "name": "agent",
             "in": "path",
             "description": "Agent or authority issuing the legislation, e.g., 'bgbl-1' for Bundesgesetzblatt Teil I (Federal Law Gazette part I)",
             "required": true,
-            "schema": { "type": "string", "example": "bgbl-1" },
+            "schema": { "type": "string" },
             "example": "bgbl-1"
           },
           {
@@ -270,22 +477,15 @@
             "name": "version",
             "in": "path",
             "required": true,
-            "schema": { "type": "integer", "format": "int32", "example": 2 },
+            "schema": { "type": "integer", "format": "int32" },
             "example": 2
           },
           {
             "name": "language",
             "in": "path",
             "required": true,
-            "schema": { "type": "string", "example": "deu" },
+            "schema": { "type": "string" },
             "example": "deu"
-          },
-          {
-            "name": "subtype",
-            "in": "path",
-            "required": true,
-            "schema": { "type": "string", "example": "regelungstext-1" },
-            "example": "regelungstext-1"
           }
         ],
         "responses": {
@@ -456,32 +656,28 @@
             "name": "version",
             "in": "path",
             "required": true,
-            "schema": { "type": "integer", "format": "int32", "example": 2 },
+            "schema": { "type": "integer", "format": "int32" },
             "example": 2
           },
           {
             "name": "language",
             "in": "path",
             "required": true,
-            "schema": { "type": "string", "example": "deu" },
+            "schema": { "type": "string" },
             "example": "deu"
           },
           {
             "name": "pointInTimeManifestation",
             "in": "path",
             "required": true,
-            "schema": {
-              "type": "string",
-              "format": "date",
-              "example": "2020-06-19"
-            },
+            "schema": { "type": "string", "format": "date" },
             "example": "2020-06-19"
           },
           {
             "name": "subtype",
             "in": "path",
             "required": true,
-            "schema": { "type": "string", "example": "regelungstext-1" },
+            "schema": { "type": "string" },
             "example": "regelungstext-1"
           }
         ],
@@ -548,32 +744,28 @@
             "name": "version",
             "in": "path",
             "required": true,
-            "schema": { "type": "integer", "format": "int32", "example": 2 },
+            "schema": { "type": "integer", "format": "int32" },
             "example": 2
           },
           {
             "name": "language",
             "in": "path",
             "required": true,
-            "schema": { "type": "string", "example": "deu" },
+            "schema": { "type": "string" },
             "example": "deu"
           },
           {
             "name": "pointInTimeManifestation",
             "in": "path",
             "required": true,
-            "schema": {
-              "type": "string",
-              "format": "date",
-              "example": "2020-06-19"
-            },
+            "schema": { "type": "string", "format": "date" },
             "example": "2020-06-19"
           },
           {
             "name": "subtype",
             "in": "path",
             "required": true,
-            "schema": { "type": "string", "example": "regelungstext-1" },
+            "schema": { "type": "string" },
             "example": "regelungstext-1"
           },
           {
@@ -657,32 +849,28 @@
             "name": "version",
             "in": "path",
             "required": true,
-            "schema": { "type": "integer", "format": "int32", "example": 2 },
+            "schema": { "type": "integer", "format": "int32" },
             "example": 2
           },
           {
             "name": "language",
             "in": "path",
             "required": true,
-            "schema": { "type": "string", "example": "deu" },
+            "schema": { "type": "string" },
             "example": "deu"
           },
           {
             "name": "pointInTimeManifestation",
             "in": "path",
             "required": true,
-            "schema": {
-              "type": "string",
-              "format": "date",
-              "example": "2020-06-19"
-            },
+            "schema": { "type": "string", "format": "date" },
             "example": "2020-06-19"
           },
           {
             "name": "name",
             "in": "path",
             "required": true,
-            "schema": { "type": "string", "example": "image" },
+            "schema": { "type": "string" },
             "example": "image"
           },
           {
@@ -691,8 +879,7 @@
             "required": true,
             "schema": {
               "type": "string",
-              "enum": ["pdf", "xml", "jpg", "gif"],
-              "example": "jpg"
+              "enum": ["pdf", "xml", "jpg", "gif"]
             },
             "example": "jpg"
           }
@@ -758,25 +945,21 @@
             "name": "version",
             "in": "path",
             "required": true,
-            "schema": { "type": "integer", "format": "int32", "example": 2 },
+            "schema": { "type": "integer", "format": "int32" },
             "example": 2
           },
           {
             "name": "language",
             "in": "path",
             "required": true,
-            "schema": { "type": "string", "example": "deu" },
+            "schema": { "type": "string" },
             "example": "deu"
           },
           {
             "name": "pointInTimeManifestation",
             "in": "path",
             "required": true,
-            "schema": {
-              "type": "string",
-              "format": "date",
-              "example": "2020-06-19"
-            },
+            "schema": { "type": "string", "format": "date" },
             "example": "2020-06-19"
           }
         ],
@@ -800,7 +983,7 @@
         "tags": ["All documents"],
         "summary": "Global search / list",
         "description": "This endpoint can be used to search for documents across different document kinds. Currently we support case law and legislation document kinds. The endpoint provides a paginated response with up to 10,000 results with at most 100 results per page.\n\nThe searchTerm parameter searches across multiple fields of a document at the same time. The fields searched depend on the document kind. See the filters guide for more information.\n\nDefault sorting is by relevance from most relevant to least relevant. Multiple factors are combined to boost the most relevant documents to the top of the result list. Additionally, sorting by date is possible by setting the sort query parameter to date.\n",
-        "operationId": "searchAndFilter_1",
+        "operationId": "searchAndFilter_2",
         "parameters": [
           {
             "name": "searchTerm",
@@ -1002,7 +1185,7 @@
         "tags": ["Case Law"],
         "summary": "List and search decisions",
         "description": "The endpoint returns a list of decisions from our database. The list is paginated and can be filtered and sorted.",
-        "operationId": "searchAndFilter_2",
+        "operationId": "searchAndFilter_3",
         "parameters": [
           {
             "name": "fileNumber",
@@ -1195,14 +1378,14 @@
             "name": "documentNumber",
             "in": "path",
             "required": true,
-            "schema": { "type": "string", "example": "BDRE000800001" },
+            "schema": { "type": "string" },
             "example": "BDRE000800001"
           },
           {
             "name": "name",
             "in": "path",
             "required": true,
-            "schema": { "type": "string", "example": "image" },
+            "schema": { "type": "string" },
             "example": "image"
           },
           {
@@ -1211,8 +1394,7 @@
             "required": true,
             "schema": {
               "type": "string",
-              "enum": ["png", "jpg", "jpeg", "gif", "wmf", "emf", "bitmap"],
-              "example": "jpg"
+              "enum": ["png", "jpg", "jpeg", "gif", "wmf", "emf", "bitmap"]
             },
             "example": "jpg"
           }
@@ -1367,6 +1549,202 @@
           "@type": { "type": "string", "example": "Legislation" }
         }
       },
+      "CollectionSchemaSearchMemberSchemaLiteratureSearchSchema": {
+        "type": "object",
+        "properties": {
+          "@id": {
+            "type": "string",
+            "example": "/v1/document?pageIndex=0&size=5"
+          },
+          "totalItems": { "type": "integer", "format": "int64", "example": 1 },
+          "member": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SearchMemberSchemaLiteratureSearchSchema"
+            }
+          },
+          "view": {
+            "$ref": "#/components/schemas/PartialCollectionViewSchema"
+          },
+          "@type": { "type": "string", "example": "hydra:Collection" }
+        }
+      },
+      "LiteratureEncodingSchema": {
+        "type": "object",
+        "properties": {
+          "@id": { "type": "string" },
+          "contentUrl": { "type": "string" },
+          "encodingFormat": { "type": "string", "example": "text/html" },
+          "inLanguage": { "type": "string", "example": "de" },
+          "@type": { "type": "string", "example": "MediaObject" }
+        }
+      },
+      "LiteratureSearchSchema": {
+        "allOf": [
+          { "$ref": "#/components/schemas/AbstractDocumentSchema" },
+          {
+            "type": "object",
+            "properties": {
+              "@id": { "type": "string", "example": "KALU000000000" },
+              "inLanguage": { "type": "string", "example": "de" },
+              "documentNumber": {
+                "type": "string",
+                "description": "Dokumentnummer",
+                "example": "KALU000000000"
+              },
+              "recordingDate": {
+                "type": "string",
+                "format": "date",
+                "description": "The date on which the literature piece was recorded.",
+                "example": "2003-12-15"
+              },
+              "yearsOfPublication": {
+                "type": "array",
+                "description": "Veröffentlichungsjahre",
+                "example": "[2014, 2024-09]",
+                "items": { "type": "string" }
+              },
+              "documentTypes": {
+                "type": "array",
+                "description": "Dokumenttypen",
+                "example": "[Auf]",
+                "items": { "type": "string" }
+              },
+              "dependentReferences": {
+                "type": "array",
+                "description": "Unselbstständige Fundstellen",
+                "example": "[BUV, 1982, 123-123]",
+                "items": { "type": "string" }
+              },
+              "independentReferences": {
+                "type": "array",
+                "description": "Selbstständige Fundstellen",
+                "example": "[50 Jahre Betriebs-Berater, 1987, 123-456]",
+                "items": { "type": "string" }
+              },
+              "headline": { "type": "string", "description": "Haupttitel" },
+              "alternativeTitle": {
+                "type": "string",
+                "description": "Dokumentarischer Titel"
+              },
+              "authors": {
+                "type": "array",
+                "description": "Authoren",
+                "example": "[Musterfrau, Sabine]",
+                "items": { "type": "string" }
+              },
+              "collaborators": {
+                "type": "array",
+                "description": "Mitarbeiter",
+                "example": "[Mustermann, Max]",
+                "items": { "type": "string" }
+              },
+              "shortReport": { "type": "string", "description": "Kurzrefarat" },
+              "outline": { "type": "string", "description": "Gliederung" },
+              "encoding": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/LiteratureEncodingSchema"
+                }
+              }
+            }
+          }
+        ],
+        "properties": { "@type": { "type": "string", "example": "Literature" } }
+      },
+      "PartialCollectionViewSchema": {
+        "type": "object",
+        "properties": {
+          "first": { "type": "string" },
+          "previous": { "type": "string" },
+          "next": { "type": "string" },
+          "last": { "type": "string" },
+          "@type": {
+            "type": "string",
+            "example": "hydra:PartialCollectionView"
+          }
+        }
+      },
+      "SearchMemberSchemaLiteratureSearchSchema": {
+        "type": "object",
+        "properties": {
+          "item": { "$ref": "#/components/schemas/LiteratureSearchSchema" },
+          "textMatches": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/TextMatchSchema" }
+          },
+          "@type": { "type": "string", "example": "SearchResult" }
+        }
+      },
+      "TextMatchSchema": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "text": { "type": "string" },
+          "location": { "type": "string" },
+          "@type": { "type": "string", "example": "SearchResultMatch" }
+        }
+      },
+      "LiteratureSchema": {
+        "type": "object",
+        "properties": {
+          "@id": { "type": "string", "example": "KALU000000000" },
+          "inLanguage": { "type": "string", "example": "de" },
+          "documentNumber": {
+            "type": "string",
+            "description": "Dokumentnummer",
+            "example": "KALU000000000"
+          },
+          "yearsOfPublication": {
+            "type": "array",
+            "description": "Veröffentlichungsjahre",
+            "example": "[2014, 2024-09]",
+            "items": { "type": "string" }
+          },
+          "documentTypes": {
+            "type": "array",
+            "description": "Dokumenttypen",
+            "example": "[Auf]",
+            "items": { "type": "string" }
+          },
+          "dependentReferences": {
+            "type": "array",
+            "description": "Unselbstständige Fundstellen",
+            "example": "[BUV, 1982, 123-123]",
+            "items": { "type": "string" }
+          },
+          "independentReferences": {
+            "type": "array",
+            "description": "Selbstständige Fundstellen",
+            "example": "[50 Jahre Betriebs-Berater, 1987, 123-456]",
+            "items": { "type": "string" }
+          },
+          "headline": { "type": "string", "description": "Haupttitel" },
+          "alternativeTitle": {
+            "type": "string",
+            "description": "Dokumentarischer Titel"
+          },
+          "authors": {
+            "type": "array",
+            "description": "Authoren",
+            "example": "[Musterfrau, Sabine]",
+            "items": { "type": "string" }
+          },
+          "collaborators": {
+            "type": "array",
+            "description": "Mitarbeiter",
+            "example": "[Mustermann, Max]",
+            "items": { "type": "string" }
+          },
+          "shortReport": { "type": "string", "description": "Kurzrefarat" },
+          "outline": { "type": "string", "description": "Gliederung" },
+          "encoding": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/LiteratureEncodingSchema" }
+          },
+          "@type": { "type": "string", "example": "Literature" }
+        }
+      },
       "CollectionSchemaSearchMemberSchemaLegislationWorkSearchSchema": {
         "type": "object",
         "properties": {
@@ -1461,19 +1839,6 @@
           "@type": { "type": "string", "example": "Legislation" }
         }
       },
-      "PartialCollectionViewSchema": {
-        "type": "object",
-        "properties": {
-          "first": { "type": "string" },
-          "previous": { "type": "string" },
-          "next": { "type": "string" },
-          "last": { "type": "string" },
-          "@type": {
-            "type": "string",
-            "example": "hydra:PartialCollectionView"
-          }
-        }
-      },
       "PublicationIssueSchema": {
         "type": "object",
         "properties": {
@@ -1492,15 +1857,6 @@
             "items": { "$ref": "#/components/schemas/TextMatchSchema" }
           },
           "@type": { "type": "string", "example": "SearchResult" }
-        }
-      },
-      "TextMatchSchema": {
-        "type": "object",
-        "properties": {
-          "name": { "type": "string" },
-          "text": { "type": "string" },
-          "location": { "type": "string" },
-          "@type": { "type": "string", "example": "SearchResultMatch" }
         }
       },
       "LegislationExpressionPartSchema": {
@@ -1736,7 +2092,8 @@
           "item": {
             "oneOf": [
               { "$ref": "#/components/schemas/CaseLawSearchSchema" },
-              { "$ref": "#/components/schemas/LegislationWorkSearchSchema" }
+              { "$ref": "#/components/schemas/LegislationWorkSearchSchema" },
+              { "$ref": "#/components/schemas/LiteratureSearchSchema" }
             ]
           },
           "textMatches": {

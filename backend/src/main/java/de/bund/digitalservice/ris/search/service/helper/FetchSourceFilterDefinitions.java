@@ -1,6 +1,7 @@
 package de.bund.digitalservice.ris.search.service.helper;
 
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
+import de.bund.digitalservice.ris.search.models.opensearch.Literature;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import java.util.List;
 import java.util.stream.Stream;
@@ -26,6 +27,9 @@ public class FetchSourceFilterDefinitions {
           Norm.Fields.ARTICLE_TEXTS,
           Norm.Fields.ARTICLES,
           Norm.Fields.TABLE_OF_CONTENTS);
+
+  public static final List<String> LITERATURE_FETCH_EXCLUDED_FIELDS =
+      List.of(Literature.Fields.OUTLINE, Literature.Fields.SHORT_REPORT);
 
   public static List<String> getDocumentExcludedFields() {
     return Stream.concat(
