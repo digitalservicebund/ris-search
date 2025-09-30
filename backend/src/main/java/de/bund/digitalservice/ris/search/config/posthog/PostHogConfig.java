@@ -11,14 +11,14 @@ import org.springframework.context.annotation.Profile;
 @Configuration
 public class PostHogConfig {
   @Bean
-  @Profile({"prototype"})
+  @Profile({"test", "prototype"})
   public PostHogClient postHog(PosthogProperties properties) {
     var postHog = new PostHog.Builder(properties.getApiKey()).host(properties.getHost()).build();
     return new PostHogClientImpl(postHog);
   }
 
   @Bean
-  @Profile({"!prototype"})
+  @Profile({"default", "production", "uat", "staging"})
   public PostHogClient postHogDummy() {
     return new PostHogClientDummy();
   }
