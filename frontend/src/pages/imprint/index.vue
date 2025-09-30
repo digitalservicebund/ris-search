@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import StaticPageWrapper from "~/components/CustomLayouts/StaticPageWrapper.vue";
+import { useStaticPageSeo } from "~/composables/useStaticPageSeo";
 
-useHead({ title: "Impressum" });
 definePageMeta({ alias: ["/impressum"] });
+
+useStaticPageSeo("impressum");
 </script>
 
 <template>

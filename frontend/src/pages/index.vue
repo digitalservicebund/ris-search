@@ -4,11 +4,14 @@ import bmjvLogo from "~/assets/img/BMJV_de_v1__Web_farbig.svg";
 import ButtonLink from "~/components/ButtonLink.vue";
 import SimpleSearchInput from "~/components/Search/SimpleSearch/SimpleSearchInput.vue";
 import { useRedirectToSearch } from "~/composables/useRedirectToSearch";
+import { useStaticPageSeo } from "~/composables/useStaticPageSeo";
 import IcBaselineLaunch from "~icons/ic/baseline-launch";
 
 const redirectToSearch = useRedirectToSearch();
 
 definePageMeta({ layout: "base" });
+
+useStaticPageSeo("startseite");
 </script>
 
 <template>
