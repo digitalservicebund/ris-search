@@ -14,8 +14,10 @@ import { useValidNormVersions } from "~/composables/useNormVersions";
 import type { Article, LegislationWork } from "~/types";
 import { isPrototypeProfile } from "~/utils/config";
 import { parseDateGermanLocalTime } from "~/utils/dateFormatting";
+import { parseDocument } from "~/utils/htmlParser";
 import { temporalCoverageToValidityInterval } from "~/utils/normUtils";
 import { findNodePath, tocItemsToTreeNodes } from "~/utils/tableOfContents";
+import { truncateAtWord } from "~/utils/textFormatting";
 import IcBaselineArrowBack from "~icons/ic/baseline-arrow-back";
 import IcBaselineArrowForward from "~icons/ic/baseline-arrow-Forward";
 import MdiArrowTopLeft from "~icons/mdi/arrow-top-left?width=24&height=24";
@@ -143,7 +145,62 @@ const inForceNormLink = computed(() => {
   return `/norms/${validVersion.item.workExample.legislationIdentifier}`;
 });
 
-useHead({ title: article.value?.name });
+function htmlToPlainText(html?: string): string {
+  if (!html) return "";
+  const doc = parseDocument(`<div>${html}</div>`);
+  const text = doc.body?.textContent ?? "";
+  return text.replace(/\s+/g, " ").trim();
+}
+
+const buildOgTitleForArticle = (
+  norm: LegislationWork,
+  articleHeadlineHtml?: string,
+): string | undefined => {
+  const abbreviation = norm.abbreviation?.trim();
+  const headlineText = htmlToPlainText(articleHeadlineHtml);
+
+  const base = abbreviation || headlineText;
+  if (!base) return undefined;
+
+  const full =
+    abbreviation && headlineText ? `${abbreviation}: ${headlineText}` : base;
+
+  return truncateAtWord(full, 55) || undefined;
+};
+
+const title = computed(() =>
+  norm.value ? buildOgTitleForArticle(norm.value, htmlTitle.value) : "",
+);
+
+const description = computed<string | undefined>(() => {
+  if (!articleHtml.value) return undefined;
+  const doc = parseDocument(articleHtml.value);
+  const firstParagraph = doc.querySelector("p");
+  const text = firstParagraph?.textContent?.trim();
+  return text ? truncateAtWord(text, 150) : undefined;
+});
+
+const url = useRequestURL();
+
+const meta = computed(() =>
+  [
+    { name: "description", content: description.value },
+    { property: "og:type", content: "article" },
+    { property: "og:title", content: title.value },
+    { property: "og:description", content: description.value },
+    { property: "og:url", content: url.href },
+    { name: "twitter:title", content: title.value },
+    { name: "twitter:description", content: description.value },
+  ].filter(
+    (tag) => typeof tag.content === "string" && tag.content.trim() !== "",
+  ),
+);
+
+useHead({
+  title,
+  link: [{ rel: "canonical", href: url.href }],
+  meta,
+});
 </script>
 
 <template>
@@ -163,7 +220,7 @@ useHead({ title: article.value?.name });
           >
             <NuxtLink :to="normPath">
               <MdiArrowTopLeft class="inline-block" />
-              {{ topNormLinkText }}
+              {{ topNormLinkText }} TESTING
             </NuxtLink>
           </h1>
           <h2

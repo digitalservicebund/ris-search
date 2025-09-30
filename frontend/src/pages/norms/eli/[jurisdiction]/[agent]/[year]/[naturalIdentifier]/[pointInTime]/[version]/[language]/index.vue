@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { Dayjs } from "dayjs";
 import Tab from "primevue/tab";
 import TabList from "primevue/tablist";
 import TabPanel from "primevue/tabpanel";
@@ -39,9 +40,11 @@ import {
   getValidityStatus,
   getManifestationUrl,
   temporalCoverageToValidityInterval,
+  getValidityStatusLabel,
 } from "~/utils/normUtils";
+import type { ValidityStatus } from "~/utils/normUtils";
 import { tocItemsToTreeNodes } from "~/utils/tableOfContents";
-import { isStringEmpty } from "~/utils/textFormatting";
+import { truncateAtWord } from "~/utils/textFormatting";
 import IcBaselineSubject from "~icons/ic/baseline-subject";
 import IcOutlineInfo from "~icons/ic/outline-info";
 import IcOutlineRestore from "~icons/ic/outline-settings-backup-restore";
@@ -62,13 +65,6 @@ const { data, error, status } = await useFetchNormContent(expressionEli);
 const metadata: Ref<LegislationWork | undefined> = computed(() => {
   return data.value?.legislationWork;
 });
-
-const title = computed(() => {
-  return [metadata.value?.abbreviation, metadata.value?.name]
-    .filter((titlePart) => !isStringEmpty(titlePart))
-    .join(" – ");
-});
-useHead({ title: title.value });
 
 const html: Ref<string> = computed(() => data.value.html);
 const htmlParts = computed(() => data.value.htmlParts);
@@ -132,6 +128,84 @@ const breadcrumbItems: ComputedRef<BreadcrumbItem[]> = computed(() => {
   }
 
   return list;
+});
+
+const prototypeMode = isPrototypeProfile();
+const buildOgTitle = (
+  norm: LegislationWork,
+  validFrom?: Dayjs,
+  status?: ValidityStatus,
+) => {
+  const abbreviation = norm.abbreviation?.trim();
+  const shortTitle = norm.alternateName?.trim();
+  const baseTitle = abbreviation || shortTitle || "";
+
+  if (!baseTitle) return undefined;
+
+  if (prototypeMode) {
+    const parts: string[] = [baseTitle];
+
+    if (validFrom) {
+      parts.push("Fassung vom [Inkrafttreten]");
+    }
+
+    if (status) {
+      parts.push("[Status]");
+    }
+    const placeholder = parts.join(", ");
+    return truncateAtWord(placeholder, 55) || undefined;
+  }
+  const parts: string[] = [baseTitle];
+
+  const formattedValidFrom = dateFormattedDDMMYYYY(validFrom);
+  if (formattedValidFrom) {
+    parts.push(`Fassung vom ${formattedValidFrom}`);
+  }
+
+  const statusLabel = getValidityStatusLabel(status);
+  if (statusLabel) {
+    parts.push(statusLabel);
+  }
+
+  return truncateAtWord(parts.join(", "), 55) || undefined;
+};
+
+const title = computed<string | undefined>(() =>
+  metadata.value
+    ? buildOgTitle(
+        metadata.value,
+        validityInterval.value?.from,
+        validityStatus.value,
+      )
+    : undefined,
+);
+
+const description = computed<string | undefined>(() => {
+  const shortTitle = metadata.value?.alternateName?.trim();
+  const longTitle = metadata.value?.name?.trim();
+  const chosen = shortTitle || longTitle || "";
+  return chosen ? truncateAtWord(chosen, 150) : undefined;
+});
+const genericUrl = "https://testphase.rechtsinformationen.bund.de";
+
+const meta = computed(() =>
+  [
+    { name: "description", content: description.value },
+    { property: "og:type", content: "article" },
+    { property: "og:title", content: title.value },
+    { property: "og:description", content: description.value },
+    { property: "og:url", content: genericUrl },
+    { name: "twitter:title", content: title.value },
+    { name: "twitter:description", content: description.value },
+  ].filter(
+    (tag) => typeof tag.content === "string" && tag.content.trim() !== "",
+  ),
+);
+
+useHead({
+  title,
+  link: [{ rel: "canonical", href: genericUrl }],
+  meta,
 });
 </script>
 
