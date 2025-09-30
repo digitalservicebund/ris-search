@@ -1,5 +1,6 @@
 import { getRequestURL, getHeader, setHeader, defineEventHandler } from "h3";
 import { requireAccessTokenWithRefresh } from "../auth";
+import { useRuntimeConfig } from "#imports";
 import { isInternalProfile } from "~/utils/config";
 
 export default defineEventHandler(async (event) => {
