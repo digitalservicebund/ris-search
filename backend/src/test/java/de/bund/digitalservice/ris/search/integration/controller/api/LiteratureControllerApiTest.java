@@ -1,8 +1,7 @@
 package de.bund.digitalservice.ris.search.integration.controller.api;
 
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
-import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.startsWithIgnoringCase;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -19,6 +18,7 @@ import de.bund.digitalservice.ris.search.repository.opensearch.LiteratureReposit
 import java.io.IOException;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -125,8 +125,27 @@ class LiteratureControllerApiTest extends ContainersIntegrationBase {
             content().contentType("application/xml"));
   }
 
+  // Remove this test and enable the following after the endpoint serves the actual html using
+  // the literature xslt transformer
   @Test
-  @DisplayName("Html Endpoint Should return error html when literature not in bucket")
+  @DisplayName("Html Endpoint Should always return 500")
+  void shouldAlwaysReturnError() throws Exception {
+    mockMvc
+        .perform(
+            get(ApiConfig.Paths.LITERATURE + "/NOT_PRESENT_IN_BUCKET.html")
+                .contentType(MediaType.TEXT_HTML))
+        .andExpect(status().isInternalServerError());
+
+    mockMvc
+        .perform(
+            get(ApiConfig.Paths.LITERATURE + "/" + this.documentNumberPresentInBucket + ".html")
+                .contentType(MediaType.TEXT_HTML))
+        .andExpect(status().isInternalServerError());
+  }
+
+  @Disabled("Enable after literature xslt transformer is implemented")
+  @Test
+  @DisplayName("Html Endpoint Should return error when literature not in bucket")
   void shouldReturnNotFoundIfHTMLNotPresent() throws Exception {
     mockMvc
         .perform(
@@ -135,6 +154,7 @@ class LiteratureControllerApiTest extends ContainersIntegrationBase {
         .andExpect(status().isNotFound());
   }
 
+  @Disabled("Enable after literature xslt transformer is implemented")
   @Test
   @DisplayName("Should return HTML version of literature item")
   void shouldReturnSingleLiteratureHtml() throws Exception {
@@ -149,9 +169,8 @@ class LiteratureControllerApiTest extends ContainersIntegrationBase {
             .getResponse()
             .getContentAsString();
 
-    assertThat(responseContent, containsString("Literatur Test Dokument"));
-    assertThat(responseContent, containsString("1. Dies ist ein literature"));
-    assertThat(responseContent, containsString("Außerdem gib es noch"));
+    assertThat(responseContent)
+        .contains("Literatur Test Dokument", "1. Dies ist ein literature", "Außerdem gib es noch");
   }
 
   @Test
