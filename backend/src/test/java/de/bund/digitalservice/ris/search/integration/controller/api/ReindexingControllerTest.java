@@ -30,4 +30,9 @@ class ReindexingControllerTest extends ContainersIntegrationBase {
   void syncNormSuccess() throws Exception {
     mockMvc.perform(post(ApiConfig.Paths.SYNC_NORMS).with(csrf())).andExpect(status().isOk());
   }
+
+  @Test
+  void syncLiteratureSuccess() throws Exception {
+    mockMvc.perform(post(ApiConfig.Paths.SYNC_LITERATURE).with(csrf())).andExpect(status().isOk());
+  }
 }

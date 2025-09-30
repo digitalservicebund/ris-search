@@ -29,6 +29,13 @@
     }
   ],
   "paths": {
+    "/internal/literature/sync": {
+      "post": {
+        "tags": ["reindexing-controller"],
+        "operationId": "syncLiteratureIndex",
+        "responses": { "200": { "description": "OK" } }
+      }
+    },
     "/internal/legislation/sync": {
       "post": {
         "tags": ["reindexing-controller"],
@@ -240,7 +247,7 @@
     "/v1/literature/{documentNumber}.xml": {
       "get": {
         "tags": ["Literature"],
-        "summary": "Decision XML",
+        "summary": "Literature XML",
         "description": "Returns a literature item as XML. This content is used as a source for the HTML endpoint.",
         "operationId": "getLiteratureAsXml",
         "parameters": [
