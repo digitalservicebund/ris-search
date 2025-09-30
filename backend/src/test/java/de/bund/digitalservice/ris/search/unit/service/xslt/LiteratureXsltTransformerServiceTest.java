@@ -1,145 +1,75 @@
 package de.bund.digitalservice.ris.search.unit.service.xslt;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.testcontainers.shaded.org.apache.commons.lang3.StringUtils.deleteWhitespace;
 
 import de.bund.digitalservice.ris.search.service.xslt.LiteratureXsltTransformerService;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.util.HashMap;
-import java.util.Map;
-import org.apache.commons.lang3.StringUtils;
-import org.junit.jupiter.api.DisplayName;
+import java.nio.file.Path;
+import java.util.Objects;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvSource;
 
 class LiteratureXsltTransformerServiceTest {
   private final LiteratureXsltTransformerService service = new LiteratureXsltTransformerService();
-  private final String resourcesBasePath = getClass().getResource("/data").getPath();
+  private final byte[] exampleLiteratureBytes;
 
-  private byte[] getExampleListeratureAsBytes() {
-    var exampleFilePath = resourcesBasePath + "/literature-example.xml";
-    try (byte[] fileContent = Files.readAllBytes(exampleFilePath.)) {
-
-    }
+  LiteratureXsltTransformerServiceTest() throws IOException {
+    String resourcesBasePath = Objects.requireNonNull(getClass().getResource("/data")).getPath();
+    exampleLiteratureBytes =
+        Files.readAllBytes(Path.of(resourcesBasePath + "/literature-example.xml"));
   }
 
   @Test
-  void testTransformsCaselawHeaderCorrectly() throws IOException {
-    var actualXml = caseLawLdmlTemplateUtils.getXmlFromTemplate(null);
-    var actualHtml =
-        service.transformCaseLaw(actualXml.getBytes(StandardCharsets.UTF_8), "api/v1/");
-    var expectedHeader =
-        """
-        <h1 id="title">
-          <p>Title</p>
-        </h1>
-        """;
-    assertTrue(StringUtils.deleteWhitespace(actualHtml).contains(deleteWhitespace(expectedHeader)));
+  void testTransformsMainTitleCorrectly() {
+    var result = service.transformLiterature(exampleLiteratureBytes);
+
+    Document doc = Jsoup.parse(result);
+
+    Elements h1Elements = doc.select("html > body > h1");
+
+    assertThat(h1Elements).hasSize(1);
+    assertThat(Objects.requireNonNull(h1Elements.first()).text())
+        .isEqualTo("Erstes Test-Dokument ULI");
   }
 
   @Test
-  void testTransformsCaselawBorderNumberCorrectly() throws IOException {
-    var actualXml = caseLawLdmlTemplateUtils.getXmlFromTemplate(null);
-    var actualHtml =
-        service.transformCaseLaw(actualXml.getBytes(StandardCharsets.UTF_8), "api/v1/");
-    var expectedBorderNumber =
-        """
-            <dl class="border-number">
-              <dt class="number" id="border-number-link-1">1</dt>
-              <dd class="content"><p>Example Tatbestand/CaseFacts. More background</p></dd>
-            </dl>
-            """;
-    String actual = StringUtils.deleteWhitespace(actualHtml);
-    assertThat(actual).contains(deleteWhitespace(expectedBorderNumber));
+  void testTransformsOutlineCorrectly() {
+    var result = service.transformLiterature(exampleLiteratureBytes);
 
-    var otherBorderNumber =
-        """
-            <dl class="border-number">
-               <dt class="number" id="border-number-link-2">2</dt>
-               <dd class="content">
-                  <p>even more background</p>
-               </dd>
-            </dl>
-            """;
-    assertThat(actual).contains(deleteWhitespace(otherBorderNumber));
+    Document doc = Jsoup.parse(result);
+
+    Elements h2Elements = doc.select("html > body > h2");
+    assertThat(Objects.requireNonNull(h2Elements.first()).text()).isEqualTo("Gliederung");
+
+    Elements outlineItems = doc.select("li");
+    assertThat(outlineItems).hasSize(3);
+    assertThat(outlineItems.stream().map(Element::text))
+        .containsExactly("I. Problemstellung.", "II. Lösung.", "III. Zusammenfassung.");
   }
 
   @Test
-  void testTransformsCaselawTableCorrectlyWithStyles() throws IOException {
-    var actualXml = caseLawLdmlTemplateUtils.getXmlFromTemplate(null);
-    var actualHtml =
-        service.transformCaseLaw(actualXml.getBytes(StandardCharsets.UTF_8), "api/v1/");
-    var expectedTable =
-        """
-            <table cellpadding="2" cellspacing="0">
-              <tbody>
-                <tr>
-                  <td colspan="2" rowspan="1">
-                    <p style="text-align:center">
-                      <strong>Spalte 1</strong>
-                    </p>
-                  </td>
-                  <td colspan="1" rowspan="1">
-                    <p style="text-align:center">
-                      <strong>Spalte 2</strong>
-                    </p>
-                  </td>
-                    <td colspan="1" rowspan="1">
-                      <p style="text-align:center">
-                       <strong>Spalte 3</strong>
-                      </p>
-                  </td>
-                    <td colspan="1" rowspan="1">
-                      <p style="text-align:center">
-                        <strong>Spalte 4</strong>
-                      </p>
-                    </td>
-                    <td colspan="1" rowspan="1">
-                      <p style="text-align:center">
-                        <strong>Spalte <br>5- <br>text</strong>
-                      </p>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            """;
-    assertThat(StringUtils.deleteWhitespace(actualHtml)).contains(deleteWhitespace(expectedTable));
-  }
+  void testTransformsShortReportCorrectly() {
+    var result = service.transformLiterature(exampleLiteratureBytes);
 
-  @ParameterizedTest
-  @CsvSource({"akn:p,p", "akn:div,div", "akn:span,span", "akn:sub,sub", "akn:sup,sup"})
-  @DisplayName("Test if AKN tags are transformed to HTML tags correctly")
-  void testAknTagsToHtmlTransformation(String input, String expected) throws IOException {
-    String text = "<%s>Das ist der Leitsatz</%s>".formatted(input, input);
-    Map<String, Object> context = new HashMap<>();
-    context.put("outline", text);
-    var actualXml = caseLawLdmlTemplateUtils.getXmlFromTemplate(context);
-    var actualHtml =
-        service.transformCaseLaw(actualXml.getBytes(StandardCharsets.UTF_8), "api/v1/");
-    String expectedSubstring = "<%s>Das ist der Leitsatz</%s>".formatted(expected, expected);
-    assertThat(actualHtml).contains(expectedSubstring);
-  }
+    Document doc = Jsoup.parse(result);
 
-  @Test
-  void testReturnsSourceInImageTagWhenPresent() throws IOException {
-    String image =
-        """
-            <akn:img src="bild1.jpg" alt="Abbildung" title="bild1.jpg"/>
-            """;
-    Map<String, Object> context = new HashMap<>();
-    context.put("outline", image);
+    Elements h2Elements = doc.select("html > body > h2");
+    assertThat(Objects.requireNonNull(h2Elements.get(1)).text()).isEqualTo("Kurzrefarat");
 
-    var actualXml = caseLawLdmlTemplateUtils.getXmlFromTemplate(context);
-    var actualHtml =
-        service.transformCaseLaw(actualXml.getBytes(StandardCharsets.UTF_8), "api/v1/");
-    var expectedImage =
-        """
-            <img src="api/v1/bild1.jpg" alt="Abbildung" title="bild1.jpg">
-            """;
-    assertTrue(StringUtils.deleteWhitespace(actualHtml).contains(deleteWhitespace(expectedImage)));
+    Elements divs = doc.select("div");
+    assertThat(divs).hasSize(1);
+    Element div = divs.getFirst();
+    String divText = div.html().stripIndent();
+    assertThat(divText)
+        .isEqualTo(
+            """
+            <p>A <a href="http://www.foo.de">foo</a> is <span>bar</span>. <br>
+              Bar <sub>baz</sub> or <sup>bas</sup>.</p> Bar.
+            <p>1. <em>EM</em> 2. hlj 3. noindex 4. <strong>strong</strong></p>"""
+                .stripIndent());
   }
 }
