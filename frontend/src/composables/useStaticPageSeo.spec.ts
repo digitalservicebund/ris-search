@@ -4,10 +4,10 @@ import { useStaticPageSeo } from "./useStaticPageSeo";
 import type staticPageSeo from "~/i18n/staticPageSeo.json";
 
 const mockUseHead = vi.fn();
-mockNuxtImport("useHead", () => mockUseHead);
-
 const mockUrl = new URL("https://example.com/test-page");
 const mockUseRequestURL = vi.fn(() => mockUrl);
+
+mockNuxtImport("useHead", () => mockUseHead);
 mockNuxtImport("useRequestURL", () => mockUseRequestURL);
 
 type MetaTag = {
