@@ -14,12 +14,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Getter
 @Builder
-@XmlRootElement(name = "akomaNtoso", namespace = CaseLawLdml.AKN_NS)
+@XmlRootElement(name = "akomaNtoso", namespace = CaseLawLdmlNamespaces.AKN_NS)
 @XmlAccessorType(XmlAccessType.FIELD)
 public class CaseLawLdml {
-  public static final String AKN_NS = "http://docs.oasis-open.org/legaldocml/ns/akn/3.0/WD17";
-  public static final String XSI_NS = "http://www.w3.org/2001/XMLSchema-instance";
-  public static final String RIS_NS = "http://example.com/0.1/";
 
   @Builder.Default
   @XmlAttribute(name = "xsi:schemaLocation")
@@ -27,7 +24,7 @@ public class CaseLawLdml {
       "http://docs.oasis-open.org/legaldocml/ns/akn/3.0/WD17 "
           + "https://docs.oasis-open.org/legaldocml/akn-core/v1.0/csprd02/part2-specs/schemas/akomantoso30.xsd";
 
-  @XmlElement(name = "judgment", namespace = CaseLawLdml.AKN_NS)
+  @XmlElement(name = "judgment", namespace = CaseLawLdmlNamespaces.AKN_NS)
   private Judgment judgment;
 
   public String getUniqueId() {

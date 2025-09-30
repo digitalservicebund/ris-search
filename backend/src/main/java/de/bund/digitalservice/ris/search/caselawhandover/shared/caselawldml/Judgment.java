@@ -16,12 +16,12 @@ public class Judgment {
   @XmlAttribute(name = "name")
   private String name = "attributsemantik-noch-undefiniert";
 
-  @XmlElement(name = "meta", namespace = CaseLawLdml.AKN_NS)
+  @XmlElement(name = "meta", namespace = CaseLawLdmlNamespaces.AKN_NS)
   private Meta meta;
 
-  @XmlElement(name = "header", namespace = CaseLawLdml.AKN_NS)
+  @XmlElement(name = "header", namespace = CaseLawLdmlNamespaces.AKN_NS)
   private JaxbHtml header;
 
-  @XmlElement(name = "judgmentBody", namespace = CaseLawLdml.AKN_NS)
+  @XmlElement(name = "judgmentBody", namespace = CaseLawLdmlNamespaces.AKN_NS)
   private JudgmentBody judgmentBody;
 }

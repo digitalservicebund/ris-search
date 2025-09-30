@@ -14,12 +14,12 @@ import lombok.NoArgsConstructor;
 public class RelatedDecision {
   @XmlAttribute private String date;
 
-  @XmlElement(name = "documentNumber", namespace = CaseLawLdml.RIS_NS)
+  @XmlElement(name = "documentNumber", namespace = CaseLawLdmlNamespaces.RIS_NS)
   private String documentNumber;
 
-  @XmlElement(name = "fileNumber", namespace = CaseLawLdml.RIS_NS)
+  @XmlElement(name = "fileNumber", namespace = CaseLawLdmlNamespaces.RIS_NS)
   private String fileNumber;
 
-  @XmlElement(name = "courtType", namespace = CaseLawLdml.RIS_NS)
+  @XmlElement(name = "courtType", namespace = CaseLawLdmlNamespaces.RIS_NS)
   private String courtType;
 }
