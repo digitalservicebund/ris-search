@@ -24,7 +24,7 @@ describe("robots txt route", () => {
       node: {
         req: {
           headers: {
-            host: "localhost",
+            host: "origin",
             "user-agent": "DG_JUSTICE_CRAWLER",
           },
           originalUrl: "url",
@@ -35,16 +35,11 @@ describe("robots txt route", () => {
       },
     } as unknown as H3Event<EventHandlerRequest>;
 
-    vi.mock("../auth", async (importOriginal) => {
+    vi.mock("../auth", async () => {
       return {
-        ...(await importOriginal()),
         requireAccessTokenWithRefresh: () => "mockToken",
       };
     });
-
-    const mockFetch = vi.fn();
-    vi.stubGlobal("$fetch", mockFetch);
-    vi.stubGlobal("setUserSession", vi.fn());
 
     await middleware(mockEvent);
     expect(mockFetch).toHaveBeenCalledWith(
