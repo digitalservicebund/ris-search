@@ -27,6 +27,10 @@
 		<h1><xsl:value-of select="@value"/></h1>
 	</xsl:template>
 
+	<xsl:template match="akn:FRBRalias[@name='dokumentarischerTitel']">
+		<h3><xsl:value-of select="@value"/></h3>
+	</xsl:template>
+
 	<!-- Outline -->
 	<xsl:template match="ris:gliederung">
 		<h2>Gliederung</h2>

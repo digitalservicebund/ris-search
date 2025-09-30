@@ -37,6 +37,19 @@ class LiteratureXsltTransformerServiceTest {
   }
 
   @Test
+  void testTransformsDocumentaryTitleCorrectly() {
+    var result = service.transformLiterature(exampleLiteratureBytes);
+
+    Document doc = Jsoup.parse(result);
+
+    Elements h3Elements = doc.select("html > body > h3");
+
+    assertThat(h3Elements).hasSize(1);
+    assertThat(Objects.requireNonNull(h3Elements.first()).text())
+        .isEqualTo("Dokumentarischer Test-Titel");
+  }
+
+  @Test
   void testTransformsOutlineCorrectly() {
     var result = service.transformLiterature(exampleLiteratureBytes);
 
