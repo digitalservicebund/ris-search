@@ -1,13 +1,21 @@
 <script setup lang="ts">
 import { PanelMenu } from "primevue";
 import type { MenuItem } from "primevue/menuitem";
+import { useRoute } from "#app";
 import DataFieldPicker from "~/components/AdvancedSearch/DataFieldPicker.vue";
-import type { DateFilterValue } from "~/components/AdvancedSearch/DateFilter.vue";
 import DateFilter from "~/components/AdvancedSearch/DateFilter.vue";
+import {
+  isFilterType,
+  type DateFilterValue,
+} from "~/components/AdvancedSearch/filterType";
 import ContentWrapper from "~/components/CustomLayouts/ContentWrapper.vue";
+import { useAdvancedSearch } from "~/composables/useAdvancedSearch";
 import { queryableDataFields } from "~/pages/advanced-search/dataFields";
 import { DocumentKind } from "~/types";
 import { formatDocumentKind } from "~/utils/displayValues";
+import { isDocumentKind } from "~/utils/documentKind";
+
+const route = useRoute();
 
 useHead({ title: "Erweiterte Suche" });
 definePageMeta({ alias: "/erweiterte-suche" });
@@ -30,11 +38,48 @@ const documentKindMenuItems: MenuItem[] = [
   },
 ];
 
-const documentKind = ref<DocumentKind>(DocumentKind.Norm);
+const documentKind = ref<DocumentKind>(
+  typeof route.query.documentKind === "string" &&
+    isDocumentKind(route.query.documentKind)
+    ? route.query.documentKind
+    : DocumentKind.Norm,
+);
 
-const dateFilter = ref<DateFilterValue>({ type: "allTime" });
+const dateFilter = ref<DateFilterValue>({
+  type:
+    typeof route.query.dateFilterType === "string" &&
+    isFilterType(route.query.dateFilterType)
+      ? route.query.dateFilterType
+      : "allTime",
+  from: route.query.dateFilterFrom?.toString(),
+  to: route.query.dateFilterTo?.toString(),
+});
 
-const query = ref("");
+const query = ref(route.query.q?.toString() ?? "");
+
+function saveFilterStateToRoute() {
+  navigateTo({
+    query: {
+      ...route.query,
+      q: query.value,
+      documentKind: documentKind.value,
+      dateFilterType: dateFilter.value.type,
+      dateFilterFrom: dateFilter.value.from ?? "",
+      dateFilterTo: dateFilter.value.to ?? "",
+    },
+  });
+}
+
+const { searchResults, submitSearch } = await useAdvancedSearch(
+  query,
+  documentKind,
+  dateFilter,
+);
+
+function submit() {
+  saveFilterStateToRoute();
+  submitSearch();
+}
 </script>
 
 <template>
@@ -77,7 +122,17 @@ const query = ref("");
           :data-fields="queryableDataFields"
           :count="100000"
           :document-kind
+          @submit="submit"
         />
+
+        <output v-if="searchResults">
+          <!-- eslint-disable-next-line vue/valid-v-for TODO: provide proper key -->
+          <SearchResult
+            v-for="searchResult in searchResults.member"
+            :search-result
+            :order="1"
+          />
+        </output>
       </div>
     </div>
   </ContentWrapper>
