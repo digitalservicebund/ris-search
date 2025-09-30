@@ -22,13 +22,22 @@
 		</html>
 	</xsl:template>
 
-	<!-- Main Title-->
+	<!-- always render main title if it exists -->
 	<xsl:template match="akn:FRBRalias[@name='haupttitel']">
 		<h1><xsl:value-of select="@value"/></h1>
 	</xsl:template>
 
+	<!-- render documentary title differently based on main title existence -->
 	<xsl:template match="akn:FRBRalias[@name='dokumentarischerTitel']">
-		<h3><xsl:value-of select="@value"/></h3>
+		<xsl:variable name="haupttitelExists" select="../akn:FRBRalias[@name='haupttitel']/@value"/>
+		<xsl:choose>
+			<xsl:when test="$haupttitelExists">
+				<h3><xsl:value-of select="@value"/></h3>
+			</xsl:when>
+			<xsl:otherwise>
+				<h1><xsl:value-of select="@value"/></h1>
+			</xsl:otherwise>
+		</xsl:choose>
 	</xsl:template>
 
 	<!-- Outline -->
@@ -44,9 +53,12 @@
 	</xsl:template>
 
 	<!-- Short Report -->
+	<!-- if there is no short report the main body only contains an empty hcontainer -->
 	<xsl:template match="akn:mainBody">
-		<h2>Kurzrefarat</h2>
-		<xsl:apply-templates />
+		<xsl:if test="not(akn:hcontainer)">
+			<h2>Kurzrefarat</h2>
+			<xsl:apply-templates />
+		</xsl:if>
 	</xsl:template>
 
 	<!--***************************************************************************************-->
