@@ -17,6 +17,6 @@ public class Classification {
   @XmlAttribute(name = "source")
   private String name = "attributsemantik-noch-undefiniert";
 
-  @XmlElement(name = "keyword", namespace = CaseLawLdml.AKN_NS)
+  @XmlElement(name = "keyword", namespace = CaseLawLdmlNamespaces.AKN_NS)
   private List<AknKeyword> keyword;
 }

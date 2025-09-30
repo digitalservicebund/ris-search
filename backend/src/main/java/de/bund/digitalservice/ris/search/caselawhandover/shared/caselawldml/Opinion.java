@@ -18,7 +18,7 @@ public class Opinion {
   @XmlAttribute(name = "type")
   private String name = "dissenting";
 
-  @XmlElement(name = "embeddedStructure", namespace = CaseLawLdml.AKN_NS)
+  @XmlElement(name = "embeddedStructure", namespace = CaseLawLdmlNamespaces.AKN_NS)
   private JaxbHtml content;
 
   public Opinion(List<Object> content) {

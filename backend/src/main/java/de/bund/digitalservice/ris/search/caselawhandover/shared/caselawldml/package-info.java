@@ -1,8 +1,8 @@
 @XmlSchema(
     xmlns = {
-      @XmlNs(prefix = "akn", namespaceURI = CaseLawLdml.AKN_NS),
-      @XmlNs(prefix = "xsi", namespaceURI = CaseLawLdml.XSI_NS),
-      @XmlNs(prefix = "ris", namespaceURI = CaseLawLdml.RIS_NS)
+      @XmlNs(prefix = "akn", namespaceURI = CaseLawLdmlNamespaces.AKN_NS),
+      @XmlNs(prefix = "xsi", namespaceURI = CaseLawLdmlNamespaces.XSI_NS),
+      @XmlNs(prefix = "ris", namespaceURI = CaseLawLdmlNamespaces.RIS_NS)
     })
 package de.bund.digitalservice.ris.search.caselawhandover.shared.caselawldml;
 

@@ -13,25 +13,25 @@ import lombok.NoArgsConstructor;
 @Builder
 public class FrbrElement {
 
-  @XmlElement(name = "FRBRthis", namespace = CaseLawLdml.AKN_NS)
+  @XmlElement(name = "FRBRthis", namespace = CaseLawLdmlNamespaces.AKN_NS)
   private FrbrThis frbrThis;
 
-  @XmlElement(name = "FRBRuri", namespace = CaseLawLdml.AKN_NS)
+  @XmlElement(name = "FRBRuri", namespace = CaseLawLdmlNamespaces.AKN_NS)
   private FrbrUri frbrUri;
 
-  @XmlElement(name = "FRBRalias", namespace = CaseLawLdml.AKN_NS)
+  @XmlElement(name = "FRBRalias", namespace = CaseLawLdmlNamespaces.AKN_NS)
   private List<FrbrAlias> frbrAlias;
 
-  @XmlElement(name = "FRBRdate", namespace = CaseLawLdml.AKN_NS)
+  @XmlElement(name = "FRBRdate", namespace = CaseLawLdmlNamespaces.AKN_NS)
   private FrbrDate frbrDate;
 
-  @XmlElement(name = "FRBRauthor", namespace = CaseLawLdml.AKN_NS)
+  @XmlElement(name = "FRBRauthor", namespace = CaseLawLdmlNamespaces.AKN_NS)
   private FrbrAuthor frbrAuthor;
 
-  @XmlElement(name = "FRBRcountry", namespace = CaseLawLdml.AKN_NS)
+  @XmlElement(name = "FRBRcountry", namespace = CaseLawLdmlNamespaces.AKN_NS)
   private FrbrCountry frbrCountry;
 
-  @XmlElement(name = "FRBRlanguage", namespace = CaseLawLdml.AKN_NS)
+  @XmlElement(name = "FRBRlanguage", namespace = CaseLawLdmlNamespaces.AKN_NS)
   private FrbrLanguage frbrLanguage;
 
   private String getAliasValueByName(String aliasName) {
