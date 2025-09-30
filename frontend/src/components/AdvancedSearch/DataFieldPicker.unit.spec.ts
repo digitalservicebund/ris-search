@@ -255,4 +255,39 @@ describe("DataFieldPicker", () => {
 
     expect(emitted("update:modelValue")).toEqual([["test query CS:"]]);
   });
+
+  it("emits the submit event on button click", async () => {
+    const user = userEvent.setup();
+
+    const { emitted } = render(DataFieldPicker, {
+      props: {
+        dataFields: undefined,
+        count: 1000,
+        documentKind: DocumentKind.CaseLaw,
+      },
+    });
+
+    await user.click(screen.getByRole("button", { name: "Suchen" }));
+
+    expect(emitted("submit")).toBeTruthy();
+  });
+
+  it("emits the submit event on enter press", async () => {
+    const user = userEvent.setup();
+
+    const { emitted } = render(DataFieldPicker, {
+      props: {
+        dataFields: undefined,
+        count: 1000,
+        documentKind: DocumentKind.CaseLaw,
+      },
+    });
+
+    await user.type(
+      screen.getByRole("textbox", { name: "Suchanfrage" }),
+      "{enter}",
+    );
+
+    expect(emitted("submit")).toBeTruthy();
+  });
 });

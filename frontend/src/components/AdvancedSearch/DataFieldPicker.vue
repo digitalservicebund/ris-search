@@ -24,6 +24,14 @@ const {
 /** The current search query. */
 const query = defineModel<string>({ default: "" });
 
+defineEmits<{
+  /**
+   * Emitted when the search button is clicked or the query is submitted
+   * by pressing Enter
+   */
+  submit: [];
+}>();
+
 const queryInputEl = useTemplateRef("queryInputEl");
 const queryInputId = useId();
 const queryDescriptionId = useId();
@@ -74,24 +82,26 @@ function insertInQuery({ pattern }: DataField) {
       In {{ formattedCount }} {{ formattedDocumentKind }} suchen
     </span>
 
-    <InputGroup>
-      <label class="sr-only" :for="queryInputId">Suchanfrage</label>
-      <InputText
-        :id="queryInputId"
-        ref="queryInputEl"
-        v-model="query"
-        :aria-describedby="queryDescriptionId"
-        size="large"
-        class="grow"
-      />
-      <InputGroupAddon>
-        <Button aria-label="Suchen" size="large">
-          <template #icon>
-            <IcBaselineSearch />
-          </template>
-        </Button>
-      </InputGroupAddon>
-    </InputGroup>
+    <form @submit.prevent="$emit('submit')">
+      <InputGroup>
+        <label class="sr-only" :for="queryInputId">Suchanfrage</label>
+        <InputText
+          :id="queryInputId"
+          ref="queryInputEl"
+          v-model="query"
+          :aria-describedby="queryDescriptionId"
+          size="large"
+          class="grow"
+        />
+        <InputGroupAddon>
+          <Button aria-label="Suchen" size="large" type="submit">
+            <template #icon>
+              <IcBaselineSearch />
+            </template>
+          </Button>
+        </InputGroupAddon>
+      </InputGroup>
+    </form>
 
     <p class="ris-label2-bold">
       Diese Datenfelder können gezielt durchsucht werden:
