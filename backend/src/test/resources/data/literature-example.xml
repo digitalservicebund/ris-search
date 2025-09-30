@@ -7,6 +7,7 @@
                     <akn:FRBRthis value="regelungstext-1"/>
                     <akn:FRBRuri value="TODO"/>
                     <akn:FRBRalias name="haupttitel" value="Erstes Test-Dokument ULI"/>
+                    <akn:FRBRalias name="dokumentarischerTitel" value="Dokumentarischer Test-Titel"/>
                     <akn:FRBRdate date="2024-01-01" name="verkuendungsfassung"/>
                     <akn:FRBRauthor href="recht.bund.de/institution/foobar"/>
                     <akn:FRBRauthor as="#verfasser" href="#musterfrau-sabine-verfasser-1"/>

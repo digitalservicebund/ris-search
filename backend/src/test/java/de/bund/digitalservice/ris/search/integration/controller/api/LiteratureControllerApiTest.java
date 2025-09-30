@@ -18,7 +18,6 @@ import de.bund.digitalservice.ris.search.repository.opensearch.LiteratureReposit
 import java.io.IOException;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -125,25 +124,6 @@ class LiteratureControllerApiTest extends ContainersIntegrationBase {
             content().contentType("application/xml"));
   }
 
-  // Remove this test and enable the following after the endpoint serves the actual html using
-  // the literature xslt transformer
-  @Test
-  @DisplayName("Html Endpoint Should always return 500")
-  void shouldAlwaysReturnError() throws Exception {
-    mockMvc
-        .perform(
-            get(ApiConfig.Paths.LITERATURE + "/NOT_PRESENT_IN_BUCKET.html")
-                .contentType(MediaType.TEXT_HTML))
-        .andExpect(status().isInternalServerError());
-
-    mockMvc
-        .perform(
-            get(ApiConfig.Paths.LITERATURE + "/" + this.documentNumberPresentInBucket + ".html")
-                .contentType(MediaType.TEXT_HTML))
-        .andExpect(status().isInternalServerError());
-  }
-
-  @Disabled("Enable after literature xslt transformer is implemented")
   @Test
   @DisplayName("Html Endpoint Should return error when literature not in bucket")
   void shouldReturnNotFoundIfHTMLNotPresent() throws Exception {
@@ -152,8 +132,8 @@ class LiteratureControllerApiTest extends ContainersIntegrationBase {
             get(ApiConfig.Paths.LITERATURE + "/NOT_PRESENT_IN_BUCKET.html")
                 .contentType(MediaType.TEXT_HTML))
         .andExpect(status().isNotFound());
+  }
 
-  @Disabled("Enable after literature xslt transformer is implemented")
   @Test
   @DisplayName("Should return HTML version of literature item")
   void shouldReturnSingleLiteratureHtml() throws Exception {
@@ -169,7 +149,37 @@ class LiteratureControllerApiTest extends ContainersIntegrationBase {
             .getContentAsString();
 
     assertThat(responseContent)
-        .contains("Literatur Test Dokument", "1. Dies ist ein literature", "Außerdem gib es noch");
+        .isEqualTo(
+            """
+      <!DOCTYPE HTML>
+      <html>
+         <head>
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+            <title>Literatur Test Dokument</title>
+         </head>
+         <body>
+            <h1>Literatur Test Dokument</h1>
+            <h3>Dokumentarischer Titel</h3>
+            <h2>Gliederung</h2>
+            <ul>
+               <li>I. Äpfel.</li>
+               <li>II. Birnen.</li>
+               <li>III. Orangen.</li>
+            </ul>
+            <h2>Kurzrefarat</h2>
+            <div>
+               <p>
+                  1. Dies ist ein literature <a href="http://www.foo.de">LDML</a> Dokument für <span>Tests</span>.
+                  <br>
+                  Es werden <sub>sub</sub> und <sup>sup</sup> Elemente unterstützt.
+                  </p>
+               <p>
+                  Außerdem gib es noch <em>EM</em>, hlj, noindex und <strong>strong</strong>.
+                  </p>
+            </div>
+         </body>
+      </html>"""
+                .stripIndent());
   }
 
   @Test
