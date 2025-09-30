@@ -87,7 +87,7 @@ jobs:
           path: /home/runner/.npm
           key: npm-cache-${{ runner.os }}-playwright-${{ env.PLAYWRIGHT_VERSION }}
       - name: Install Playwright
-        run: npm install @playwright/test@${{ env.PLAYWRIGHT_VERSION }} @axe-core/playwright axe-html-reporter
+        run: npm install @playwright/test@${{ env.PLAYWRIGHT_VERSION }} @axe-core/playwright axe-html-reporter lighthouse playwright-lighthouse
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps chromium firefox webkit
       - name: Wait for containers to be fully up
