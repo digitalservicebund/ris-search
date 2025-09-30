@@ -1,24 +1,8 @@
 <script setup lang="ts">
 import { RadioButton } from "primevue";
 import RisDateInput from "../Ris/RisDateInput.vue";
+import type { DateFilterValue, FilterType } from "./filterType";
 import { DocumentKind } from "~/types";
-
-/** Different ways of filtering by date */
-export type FilterType =
-  | "allTime"
-  | "specificDate"
-  | "period"
-  | "currentlyInForce";
-
-/** Active date filter */
-export type DateFilterValue = {
-  /** The type of the filter */
-  type: FilterType;
-  /** Start date of the filter if applicable */
-  from?: string;
-  /** End date of the filter if applicable */
-  to?: string;
-};
 
 const { documentKind } = defineProps<{
   /* Document kind for which the filter should be used */
@@ -68,7 +52,6 @@ watch(
     // Set a reasonable default filter when the document type is changed
     setFilterType(is === DocumentKind.Norm ? "currentlyInForce" : "allTime");
   },
-  { immediate: true },
 );
 
 function setFilterType(type: FilterType) {

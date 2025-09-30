@@ -1,8 +1,8 @@
 import userEvent from "@testing-library/user-event";
 import { render, screen } from "@testing-library/vue";
 import { InputText } from "primevue";
-import type { DateFilterValue } from "./DateFilter.vue";
 import DateFilter from "./DateFilter.vue";
+import type { DateFilterValue } from "./filterType";
 import { DocumentKind } from "~/types";
 
 describe("DateFilter", () => {
