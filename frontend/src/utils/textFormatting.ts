@@ -58,6 +58,25 @@ export function stringToBoolean(
   }
 }
 
+export function normalizeSpaces(text: string): string {
+  return text.trim().split(/\s+/).join(" ");
+}
+
+export function truncateAtWord(text: string, maxLength: number): string {
+  const cleanText = normalizeSpaces(text);
+  if (cleanText.length <= maxLength) return cleanText;
+
+  const cut = cleanText.slice(0, maxLength);
+
+  const nextChar = cleanText.charAt(maxLength);
+  if (nextChar === "" || nextChar === " ") {
+    return cut.trimEnd();
+  }
+
+  const lastSpace = cut.lastIndexOf(" ");
+  return lastSpace === -1 ? cut : cut.slice(0, lastSpace);
+}
+
 export function removePrefix(str: string, prefix: string): string {
   if (str.trimStart().startsWith(prefix)) {
     return str.substring(str.indexOf(prefix) + prefix.length).trimStart();

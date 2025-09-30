@@ -25,6 +25,9 @@ export default defineNuxtConfig({
           content:
             "Gesetze & Verordnungen, Gerichtsentscheidungen und Verwaltungsvorschriften",
         },
+        { property: "og:image", content: "/og_image.png" },
+        { name: "twitter:image", content: "/og_image.png" },
+        { name: "twitter:card", content: "summary_large_image" },
         { name: "theme-color", content: "#ffffff" },
         { name: "msapplication-TileColor", content: "#ffffff" },
       ],
