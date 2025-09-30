@@ -7,6 +7,7 @@ import static org.testcontainers.shaded.org.apache.commons.lang3.StringUtils.del
 import de.bund.digitalservice.ris.search.service.xslt.LiteratureXsltTransformerService;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
@@ -19,7 +20,12 @@ class LiteratureXsltTransformerServiceTest {
   private final LiteratureXsltTransformerService service = new LiteratureXsltTransformerService();
   private final String resourcesBasePath = getClass().getResource("/data").getPath();
 
-  private byte[] getExampleListeratureAsBytes() {}
+  private byte[] getExampleListeratureAsBytes() {
+    var exampleFilePath = resourcesBasePath + "/literature-example.xml";
+    try (byte[] fileContent = Files.readAllBytes(exampleFilePath.)) {
+
+    }
+  }
 
   @Test
   void testTransformsCaselawHeaderCorrectly() throws IOException {
