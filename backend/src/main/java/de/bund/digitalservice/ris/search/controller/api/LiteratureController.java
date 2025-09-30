@@ -33,12 +33,14 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.elasticsearch.UncategorizedElasticsearchException;
 import org.springframework.data.elasticsearch.core.SearchPage;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 @Tag(name = "Literature")
 @RestController
@@ -91,7 +93,7 @@ public class LiteratureController {
                   "Used to select a different prefix for referenced resources, like images. Selecting 'PROXY' will prepend `/api`. Otherwise, the API base URL will be used.")
           ResourceReferenceMode resourceReferenceMode) {
     // implement this correctly when the literature xslt transformer is available
-    return ResponseEntity.notFound().build();
+    throw new ResponseStatusException(HttpStatus.NOT_IMPLEMENTED, "Not implemented yet");
   }
 
   @GetMapping(
