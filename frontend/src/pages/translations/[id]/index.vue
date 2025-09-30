@@ -17,7 +17,7 @@ import {
   tabStyles,
 } from "~/components/Tabs.styles";
 import { fetchTranslationAndHTML } from "~/composables/useTranslationData";
-import { removePrefix } from "~/utils/textFormatting";
+import { removePrefix, truncateAtWord } from "~/utils/textFormatting";
 import IcBaselineSubject from "~icons/ic/baseline-subject";
 import IcOutlineInfo from "~icons/ic/outline-info";
 
@@ -27,7 +27,6 @@ const route = useRoute();
 const id = route.params.id as string;
 
 const { data } = await fetchTranslationAndHTML(id);
-
 const currentTranslation = data.value?.content;
 const html = data.value?.html;
 
@@ -63,6 +62,57 @@ const breadcrumbItems = computed(() => {
     });
   }
   return items;
+});
+
+const buildOgForTranslation = (
+  name?: string,
+  translationOfWork?: string,
+): { title?: string; description?: string } => {
+  const base = name?.trim() || translationOfWork?.trim();
+  if (!base) return {};
+
+  const title = truncateAtWord(`${base} – English Translation`, 55);
+
+  const description = truncateAtWord(
+    `This is the English translation of the ${base}, provided by the German Federal Legal Information Portal. ` +
+      `This translation is for informational purposes only. The German version is the only legally binding text.`,
+    150,
+  );
+
+  return { title, description };
+};
+
+const translationSeo = computed(() =>
+  currentTranslation
+    ? buildOgForTranslation(
+        currentTranslation?.name,
+        currentTranslation?.translationOfWork,
+      )
+    : {},
+);
+
+const title = computed(() => translationSeo.value.title);
+const description = computed(() => translationSeo.value.description);
+const url = useRequestURL();
+
+const meta = computed(() =>
+  [
+    { name: "description", content: description.value },
+    { property: "og:type", content: "article" },
+    { property: "og:title", content: title.value },
+    { property: "og:description", content: description.value },
+    { property: "og:url", content: url.href },
+    { name: "twitter:title", content: title.value },
+    { name: "twitter:description", content: description.value },
+  ].filter(
+    (tag) => typeof tag.content === "string" && tag.content.trim() !== "",
+  ),
+);
+
+useHead({
+  title,
+  link: [{ rel: "canonical", href: url.href }],
+  meta,
 });
 </script>
 

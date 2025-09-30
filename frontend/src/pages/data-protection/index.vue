@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import StaticPageWrapper from "~/components/CustomLayouts/StaticPageWrapper.vue";
+import { useStaticPageSeo } from "~/composables/useStaticPageSeo";
 
-useHead({ title: "Datenschutzerklärung" });
 definePageMeta({ alias: ["/datenschutz"] });
+
+useStaticPageSeo("datenschutz");
 </script>
 
 <template>
