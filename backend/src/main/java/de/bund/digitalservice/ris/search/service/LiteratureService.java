@@ -133,6 +133,6 @@ public class LiteratureService {
    */
   public Optional<byte[]> getFileByDocumentNumber(String documentNumber)
       throws ObjectStoreServiceException {
-    return literatureBucket.get(String.format("%s.xml", documentNumber));
+    return literatureBucket.get(String.format("%s.akn.xml", documentNumber));
   }
 }
