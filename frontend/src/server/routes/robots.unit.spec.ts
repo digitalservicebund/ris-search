@@ -60,14 +60,13 @@ describe("robots txt route", () => {
     );
   });
 
-
   const testCases = [
-  ["public", "robots.public.txt"],
-  ["internal", "robots.staging.txt"],
-  ["prototype", "robots.public.txt"],
-];
+    ["public", "robots.public.txt"],
+    ["internal", "robots.staging.txt"],
+    ["prototype", "robots.public.txt"],
+  ];
 
-test.for(testCases)("profile %s serves %s", async ([profile, file]) => {
+  test.for(testCases)("profile %s serves %s", async ([profile, file]) => {
     mockUseRuntimeConfig.mockImplementation(() => ({
       risBackendUrl: "http://backend.example.com",
       public: {
@@ -96,5 +95,3 @@ test.for(testCases)("profile %s serves %s", async ([profile, file]) => {
     });
   });
 });
-
-
