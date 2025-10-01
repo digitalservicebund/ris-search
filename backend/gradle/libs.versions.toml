@@ -52,6 +52,7 @@ spring-oauth2 = { module = "org.springframework.boot:spring-boot-starter-oauth2-
 spring-data-jpa = { module = "org.springframework.boot:spring-boot-starter-data-jpa", version.ref = "spring-boot-starter" }
 spring-kubernetes-client = { module = "org.springframework.cloud:spring-cloud-starter-kubernetes-client-config", version.ref = "spring-cloud-k8s" }
 spring-data-opensearch = { module = "org.opensearch.client:spring-data-opensearch-starter", version.ref = "spring-data-opensearch-starter" }
+opensearch-test-autoconfigure = { module = "org.opensearch.client:spring-data-opensearch-test-autoconfigure", version.ref = "opensearch-test-autoconfigure"}
 spring-security-oauth2-jose = { module = "org.springframework.security:spring-security-oauth2-jose", version.ref = "spring-security" }
 springdoc-openapi-starter-webmvc-ui = { module = "org.springdoc:springdoc-openapi-starter-webmvc-ui", version.ref = "springdoc-openapi" }
 pact = { module = "au.com.dius.pact.provider:junit5spring", version.ref = "pact" }

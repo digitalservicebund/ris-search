@@ -85,6 +85,7 @@ public class LiteratureService {
     // Exclude fields with long text from search results
     nativeQuery.addSourceFilter(
         new FetchSourceFilter(
+            true,
             null,
             FetchSourceFilterDefinitions.LITERATURE_FETCH_EXCLUDED_FIELDS.toArray(String[]::new)));
 

@@ -9,6 +9,8 @@ import de.bund.digitalservice.ris.search.models.opensearch.Literature;
 import de.bund.digitalservice.ris.search.repository.objectstorage.literature.LiteratureBucket;
 import de.bund.digitalservice.ris.search.repository.opensearch.LiteratureRepository;
 import de.bund.digitalservice.ris.search.service.LiteratureService;
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
@@ -55,7 +57,16 @@ class LiteratureServiceTest {
     Pageable pageable = PageRequest.of(0, 10);
     SearchHits<Literature> searchHits =
         new SearchHitsImpl<>(
-            1, TotalHitsRelation.EQUAL_TO, 1.0f, "", "", List.of(searchHit), null, null, null);
+            1,
+            TotalHitsRelation.EQUAL_TO,
+            1.0f,
+            Duration.of(3, ChronoUnit.SECONDS),
+            "",
+            "",
+            List.of(searchHit),
+            null,
+            null,
+            null);
     SearchPage<Literature> searchResultPage = SearchHitSupport.searchPageFor(searchHits, pageable);
 
     when(operationsMock.search((Query) any(), eq(Literature.class))).thenReturn(searchHits);
