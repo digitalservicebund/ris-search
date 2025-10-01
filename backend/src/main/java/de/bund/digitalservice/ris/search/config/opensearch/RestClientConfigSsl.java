@@ -28,16 +28,16 @@ import org.springframework.data.elasticsearch.repository.config.EnableElasticsea
 @Profile({"opensearch-ssl"})
 @EnableElasticsearchRepositories(
     basePackages = "de.bund.digitalservice.ris.search.repository.opensearch")
-public class RestClientConfigStaging extends AbstractOpenSearchConfiguration {
+public class RestClientConfigSsl extends AbstractOpenSearchConfiguration {
 
-  private static final Logger logger = LogManager.getLogger(RestClientConfigStaging.class);
+  private static final Logger logger = LogManager.getLogger(RestClientConfigSsl.class);
 
   private static final long OPENSEARCH_TIMEOUT = 30000;
 
   private Configurations configurations;
 
   @Autowired
-  public RestClientConfigStaging(Configurations configurationsOpensearch) {
+  public RestClientConfigSsl(Configurations configurationsOpensearch) {
     this.configurations = configurationsOpensearch;
   }
 
