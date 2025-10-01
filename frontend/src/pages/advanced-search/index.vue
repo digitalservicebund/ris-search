@@ -209,9 +209,9 @@ function submit() {
           </Message>
 
           <output v-if="searchResults">
-            <!-- eslint-disable-next-line vue/valid-v-for TODO: provide proper key -->
             <SearchResult
               v-for="searchResult in searchResults.member"
+              :key="searchResult.item['@id']"
               :search-result
               :order="1"
             />
