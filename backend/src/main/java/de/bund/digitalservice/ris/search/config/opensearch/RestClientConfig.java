@@ -1,15 +1,6 @@
 package de.bund.digitalservice.ris.search.config.opensearch;
 
-import java.security.KeyManagementException;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import javax.net.ssl.SSLContext;
-import org.apache.http.conn.ssl.NoopHostnameVerifier;
-import org.apache.http.conn.ssl.TrustAllStrategy;
 import org.apache.http.impl.nio.reactor.IOReactorConfig;
-import org.apache.http.ssl.SSLContextBuilder;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.opensearch.client.RestHighLevelClient;
 import org.opensearch.data.client.orhlc.AbstractOpenSearchConfiguration;
 import org.opensearch.data.client.orhlc.ClientConfiguration;
@@ -23,22 +14,18 @@ import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.convert.ElasticsearchConverter;
 import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories;
 
-/** Class to configure the REST client which connects to opensearch in non-local environment */
+/** Class to configure the REST client which connects to opensearch in production without ssl. */
 @Configuration
-@Profile({"opensearch-ssl"})
+@Profile({"staging", "uat", "production", "prototype"})
 @EnableElasticsearchRepositories(
     basePackages = "de.bund.digitalservice.ris.search.repository.opensearch")
-public class RestClientConfigSsl extends AbstractOpenSearchConfiguration {
+public class RestClientConfig extends AbstractOpenSearchConfiguration {
 
-  private static final Logger logger = LogManager.getLogger(RestClientConfigSsl.class);
-
-  private static final long OPENSEARCH_TIMEOUT = 30000;
-
-  private Configurations configurations;
+  private final Configurations configurationsOpensearch;
 
   @Autowired
-  public RestClientConfigSsl(Configurations configurationsOpensearch) {
-    this.configurations = configurationsOpensearch;
+  public RestClientConfig(Configurations configurationsOpensearch) {
+    this.configurationsOpensearch = configurationsOpensearch;
   }
 
   @Override
@@ -49,19 +36,17 @@ public class RestClientConfigSsl extends AbstractOpenSearchConfiguration {
                 clientConfigurer.setDefaultIOReactorConfig(
                     IOReactorConfig.custom().setSoKeepAlive(true).build()));
 
-    SSLContext sslContext = buildSSLContext();
-
-    ClientConfiguration config =
+    final ClientConfiguration clientConfiguration =
         ClientConfiguration.builder()
-            .connectedTo(String.format("%s:%s", configurations.getHost(), configurations.getPort()))
-            .usingSsl(sslContext, NoopHostnameVerifier.INSTANCE)
+            .connectedTo(
+                this.configurationsOpensearch.getHost()
+                    + ":"
+                    + this.configurationsOpensearch.getPort())
             .withClientConfigurer(keepAliveCallback)
-            .withConnectTimeout(OPENSEARCH_TIMEOUT)
-            .withSocketTimeout(OPENSEARCH_TIMEOUT)
-            .withBasicAuth(configurations.getUsername(), configurations.getPassword())
             .build();
+
     return RestClients.create( // NOSONAR java:S2095 closed by spring @Bean(destroyMethod = "close")
-            config)
+            clientConfiguration)
         .rest();
   }
 
@@ -74,21 +59,9 @@ public class RestClientConfigSsl extends AbstractOpenSearchConfiguration {
         try {
           return super.execute(callback);
         } catch (DataAccessResourceFailureException e) {
-          logger.warn(
-              "retrying elasticsearch operation after DataAccessResourceFailureException", e);
           return super.execute(callback);
         }
       }
     };
-  }
-
-  private SSLContext buildSSLContext() {
-    try {
-      SSLContextBuilder contextBuilder =
-          new SSLContextBuilder().loadTrustMaterial(null, new TrustAllStrategy());
-      return contextBuilder.build();
-    } catch (KeyManagementException | NoSuchAlgorithmException | KeyStoreException ex) {
-      throw new IllegalArgumentException("Failed to initialize SSL Context instance", ex);
-    }
   }
 }
