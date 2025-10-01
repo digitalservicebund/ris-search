@@ -92,10 +92,7 @@ const description = computed<string>(() => {
   return "Gerichtsentscheidung";
 });
 
-const reqUrl = useRequestURL();
-const config = useRuntimeConfig();
-const siteBaseUrl = config.public.siteBaseUrl || reqUrl.origin;
-const canonicalUrl = `${siteBaseUrl}${reqUrl.pathname}`;
+const url = useRequestURL();
 
 const meta = computed(() =>
   [
@@ -103,7 +100,7 @@ const meta = computed(() =>
     { property: "og:type", content: "article" },
     { property: "og:title", content: title.value },
     { property: "og:description", content: description.value },
-    { property: "og:url", content: canonicalUrl },
+    { property: "og:url", content: url.href },
     { name: "twitter:title", content: title.value },
     { name: "twitter:description", content: description.value },
   ].filter(
@@ -113,7 +110,7 @@ const meta = computed(() =>
 
 useHead({
   title,
-  link: [{ rel: "canonical", href: canonicalUrl }],
+  link: [{ rel: "canonical", href: url.href }],
   meta,
 });
 
