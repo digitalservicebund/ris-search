@@ -264,6 +264,7 @@ describe("DataFieldPicker", () => {
         dataFields: undefined,
         count: 1000,
         documentKind: DocumentKind.CaseLaw,
+        loading: false,
       },
     });
 
@@ -280,6 +281,7 @@ describe("DataFieldPicker", () => {
         dataFields: undefined,
         count: 1000,
         documentKind: DocumentKind.CaseLaw,
+        loading: false,
       },
     });
 
@@ -289,5 +291,27 @@ describe("DataFieldPicker", () => {
     );
 
     expect(emitted("submit")).toBeTruthy();
+  });
+
+  it("does not emit submit events when the component is loading", async () => {
+    const user = userEvent.setup();
+
+    const { emitted } = render(DataFieldPicker, {
+      props: {
+        dataFields: undefined,
+        count: 1000,
+        documentKind: DocumentKind.CaseLaw,
+        loading: true,
+      },
+    });
+
+    await user.click(screen.getByRole("button", { name: "Suchen" }));
+
+    await user.type(
+      screen.getByRole("textbox", { name: "Suchanfrage" }),
+      "{enter}",
+    );
+
+    expect(emitted("submit")).toBeFalsy();
   });
 });

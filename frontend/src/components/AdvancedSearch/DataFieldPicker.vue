@@ -12,6 +12,7 @@ const {
   dataFields = {},
   count,
   documentKind,
+  loading = false,
 } = defineProps<{
   /** All data fields for all supported document kinds. */
   dataFields?: Record<DocumentKind, DataField[]>;
@@ -19,12 +20,14 @@ const {
   count: number;
   /** Kind of document that will be searched. */
   documentKind: DocumentKind;
+  /** True if the component should be displayed in a loading state */
+  loading?: boolean;
 }>();
 
 /** The current search query. */
 const query = defineModel<string>({ default: "" });
 
-defineEmits<{
+const emit = defineEmits<{
   /**
    * Emitted when the search button is clicked or the query is submitted
    * by pressing Enter
@@ -71,6 +74,10 @@ function insertInQuery({ pattern }: DataField) {
     focusableInput.setSelectionRange(nextCursorPosition, nextCursorPosition);
   });
 }
+
+function submitUnlessLoading() {
+  if (!loading) emit("submit");
+}
 </script>
 
 <template>
@@ -82,7 +89,7 @@ function insertInQuery({ pattern }: DataField) {
       In {{ formattedCount }} {{ formattedDocumentKind }} suchen
     </span>
 
-    <form @submit.prevent="$emit('submit')">
+    <form @submit.prevent="submitUnlessLoading()">
       <InputGroup>
         <label class="sr-only" :for="queryInputId">Suchanfrage</label>
         <InputText
@@ -94,7 +101,7 @@ function insertInQuery({ pattern }: DataField) {
           class="grow"
         />
         <InputGroupAddon>
-          <Button aria-label="Suchen" size="large" type="submit">
+          <Button aria-label="Suchen" size="large" type="submit" :loading>
             <template #icon>
               <IcBaselineSearch />
             </template>

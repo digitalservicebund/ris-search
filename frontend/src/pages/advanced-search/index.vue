@@ -122,6 +122,7 @@ function submit() {
           :data-fields="queryableDataFields"
           :count="100000"
           :document-kind
+          :loading="searchStatus === 'pending'"
           @submit="submit"
         />
 
