@@ -21,9 +21,7 @@ const [
   periodId,
   periodFromInputId,
   periodToInputId,
-] = Array(8)
-  .fill("")
-  .map(() => useId());
+] = new Array(8).fill("").map(() => useId());
 
 const filterLabel = computed(() => {
   switch (documentKind) {

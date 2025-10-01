@@ -145,9 +145,9 @@ describe("dateInput", () => {
 
     const array = emitted()["update:validationError"] as ValidationError[][];
 
-    expect(
-      array.filter((element) => element[0] !== undefined)[0][0].message,
-    ).toBe("Kein valides Datum");
+    expect(array.find((element) => element[0] !== undefined)?.[0].message).toBe(
+      "Kein valides Datum",
+    );
   });
 
   it("does not allow letters", async () => {
