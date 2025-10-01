@@ -1,4 +1,4 @@
-import { getRequestURL, getHeader, setHeader } from "h3";
+import { getRequestURL, getHeader, setHeader, defineEventHandler } from "h3";
 import { isInternalProfile } from "~/utils/config";
 
 export default defineEventHandler(async (event) => {
