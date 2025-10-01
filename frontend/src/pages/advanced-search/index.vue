@@ -177,7 +177,6 @@ function submit() {
         <DataFieldPicker
           v-model="query"
           :data-fields="queryableDataFields"
-          :count="100000"
           :document-kind
           :loading="searchStatus === 'pending'"
           @submit="submit"

@@ -17,7 +17,7 @@ const {
   /** All data fields for all supported document kinds. */
   dataFields?: Record<DocumentKind, DataField[]>;
   /** Number of data sets that can be searched. */
-  count: number;
+  count?: number;
   /** Kind of document that will be searched. */
   documentKind: DocumentKind;
   /** True if the component should be displayed in a loading state */
@@ -41,7 +41,10 @@ const queryDescriptionId = useId();
 
 const dataFieldListId = useId();
 
-const formattedCount = computed(() => formatNumberWithSeparators(count));
+const formattedCount = computed(() =>
+  typeof count === "number" ? formatNumberWithSeparators(count) : "",
+);
+
 const formattedDocumentKind = computed(() => formatDocumentKind(documentKind));
 
 const dataFieldsForDocumentKind = computed(

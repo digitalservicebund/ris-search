@@ -4,6 +4,19 @@ import DataFieldPicker from "./DataFieldPicker.vue";
 import { DocumentKind } from "~/types";
 
 describe("DataFieldPicker", () => {
+  it("displays the document kind name without count", () => {
+    render(DataFieldPicker, {
+      props: {
+        dataFields: undefined,
+        documentKind: DocumentKind.CaseLaw,
+      },
+    });
+
+    expect(
+      screen.getByText("In Gerichtsentscheidungen suchen"),
+    ).toBeInTheDocument();
+  });
+
   it("displays the document kind name and count", () => {
     render(DataFieldPicker, {
       props: {
@@ -32,7 +45,6 @@ describe("DataFieldPicker", () => {
             { label: "Norm 2", pattern: "N2:" },
           ],
         },
-        count: 1000,
         documentKind: DocumentKind.CaseLaw,
       },
     });
@@ -68,7 +80,6 @@ describe("DataFieldPicker", () => {
     render(DataFieldPicker, {
       props: {
         dataFields: undefined,
-        count: 1000,
         documentKind: DocumentKind.CaseLaw,
         modelValue: "test query",
       },
@@ -85,7 +96,6 @@ describe("DataFieldPicker", () => {
     const { emitted } = render(DataFieldPicker, {
       props: {
         dataFields: undefined,
-        count: 1000,
         documentKind: DocumentKind.CaseLaw,
         modelValue: "test query",
       },
@@ -106,7 +116,6 @@ describe("DataFieldPicker", () => {
           [DocumentKind.CaseLaw]: [{ label: "Caselaw 1", pattern: "CS:" }],
           [DocumentKind.Norm]: [],
         },
-        count: 1000,
         documentKind: DocumentKind.CaseLaw,
         modelValue: "test query",
       },
@@ -127,7 +136,6 @@ describe("DataFieldPicker", () => {
           [DocumentKind.CaseLaw]: [{ label: "Caselaw 1", pattern: "CS:$" }],
           [DocumentKind.Norm]: [],
         },
-        count: 1000,
         documentKind: DocumentKind.CaseLaw,
         modelValue: "test query",
       },
@@ -157,7 +165,6 @@ describe("DataFieldPicker", () => {
           [DocumentKind.CaseLaw]: [{ label: "Caselaw 1", pattern: "CS:" }],
           [DocumentKind.Norm]: [],
         },
-        count: 1000,
         documentKind: DocumentKind.CaseLaw,
         modelValue,
         "onUpdate:modelValue": (val) => (modelValue = val),
@@ -195,7 +202,6 @@ describe("DataFieldPicker", () => {
           [DocumentKind.CaseLaw]: [{ label: "Caselaw 1", pattern: "CS:($)" }],
           [DocumentKind.Norm]: [],
         },
-        count: 1000,
         documentKind: DocumentKind.CaseLaw,
         modelValue,
         "onUpdate:modelValue": (val) => (modelValue = val),
@@ -224,7 +230,6 @@ describe("DataFieldPicker", () => {
           [DocumentKind.CaseLaw]: [{ label: "Caselaw 1", pattern: "CS:" }],
           [DocumentKind.Norm]: [],
         },
-        count: 1000,
         documentKind: DocumentKind.CaseLaw,
         modelValue: "",
       },
@@ -245,7 +250,6 @@ describe("DataFieldPicker", () => {
           [DocumentKind.CaseLaw]: [{ label: "Caselaw 1", pattern: "CS:" }],
           [DocumentKind.Norm]: [],
         },
-        count: 1000,
         documentKind: DocumentKind.CaseLaw,
         modelValue: "test query ",
       },
@@ -262,7 +266,6 @@ describe("DataFieldPicker", () => {
     const { emitted } = render(DataFieldPicker, {
       props: {
         dataFields: undefined,
-        count: 1000,
         documentKind: DocumentKind.CaseLaw,
         loading: false,
       },
@@ -279,7 +282,6 @@ describe("DataFieldPicker", () => {
     const { emitted } = render(DataFieldPicker, {
       props: {
         dataFields: undefined,
-        count: 1000,
         documentKind: DocumentKind.CaseLaw,
         loading: false,
       },
@@ -299,7 +301,6 @@ describe("DataFieldPicker", () => {
     const { emitted } = render(DataFieldPicker, {
       props: {
         dataFields: undefined,
-        count: 1000,
         documentKind: DocumentKind.CaseLaw,
         loading: true,
       },
