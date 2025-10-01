@@ -8,7 +8,6 @@ import org.opensearch.data.client.orhlc.OpenSearchRestTemplate;
 import org.opensearch.data.client.orhlc.RestClients;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
 import org.springframework.dao.DataAccessResourceFailureException;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.convert.ElasticsearchConverter;
@@ -16,7 +15,6 @@ import org.springframework.data.elasticsearch.repository.config.EnableElasticsea
 
 /** Class to configure the REST client which connects to opensearch in production without ssl. */
 @Configuration
-@Profile({"production", "prototype", "uat"})
 @EnableElasticsearchRepositories(
     basePackages = "de.bund.digitalservice.ris.search.repository.opensearch")
 public class RestClientConfigProd extends AbstractOpenSearchConfiguration {

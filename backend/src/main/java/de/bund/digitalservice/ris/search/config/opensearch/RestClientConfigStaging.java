@@ -25,7 +25,7 @@ import org.springframework.data.elasticsearch.repository.config.EnableElasticsea
 
 /** Class to configure the REST client which connects to opensearch in non-local environment */
 @Configuration
-@Profile({"staging"})
+@Profile({"opensearch-ssl"})
 @EnableElasticsearchRepositories(
     basePackages = "de.bund.digitalservice.ris.search.repository.opensearch")
 public class RestClientConfigStaging extends AbstractOpenSearchConfiguration {
