@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { PanelMenu, Select } from "primevue";
+import { Message, PanelMenu, Select } from "primevue";
 import type { MenuItem } from "primevue/menuitem";
 import type { LocationQueryValue } from "vue-router";
 import { useRoute } from "#app";
@@ -113,12 +113,17 @@ function setPageNumber(page: number) {
 
 // Search results -----------------------------------------
 
-const { searchResults, searchStatus, submitSearch, totalItemCount } =
-  await useAdvancedSearch(query, documentKind, dateFilter, {
-    itemsPerPage,
-    sort,
-    pageIndex,
-  });
+const {
+  searchError,
+  searchResults,
+  searchStatus,
+  submitSearch,
+  totalItemCount,
+} = await useAdvancedSearch(query, documentKind, dateFilter, {
+  itemsPerPage,
+  sort,
+  pageIndex,
+});
 
 const formattedResultCount = computed(() =>
   formatNumberWithSeparators(totalItemCount.value),
@@ -198,6 +203,10 @@ function submit() {
               />
             </label>
           </div>
+
+          <Message v-if="!!searchError" severity="error" class="max-w-prose">
+            {{ searchError.message }}
+          </Message>
 
           <output v-if="searchResults">
             <!-- eslint-disable-next-line vue/valid-v-for TODO: provide proper key -->
