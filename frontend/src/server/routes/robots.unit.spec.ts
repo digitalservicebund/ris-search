@@ -1,6 +1,6 @@
 import { mockNuxtImport } from "@nuxt/test-utils/runtime";
 import type { EventHandlerRequest, H3Event } from "h3";
-import { beforeEach, describe, expect, it, test, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi, test } from "vitest";
 import middleware from "./robots.txt.get";
 
 const mockFetch = vi.fn();
@@ -20,6 +20,13 @@ describe("robots txt route", () => {
   });
 
   it("should serve robots txt from backend api on justice crawler", async () => {
+    mockUseRuntimeConfig.mockImplementation(() => ({
+      risBackendUrl: "backendUrl",
+      public: {
+        profile: "public",
+      },
+    }));
+
     const mockEvent: H3Event<EventHandlerRequest> = {
       node: {
         req: {
@@ -43,7 +50,7 @@ describe("robots txt route", () => {
 
     await middleware(mockEvent);
     expect(mockFetch).toHaveBeenCalledWith(
-      "http://localhost:8090/v1/eclicrawler/robots.txt",
+      "backendUrl/v1/eclicrawler/robots.txt",
       {
         method: "GET",
         headers: {
