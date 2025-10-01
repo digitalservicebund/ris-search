@@ -6,12 +6,27 @@ import {
 import type { Page } from "~/components/Pagination/Pagination";
 import { DocumentKind } from "~/types";
 
+/** Additional configuration for search API calls */
 type UseAdvancedSearchOptions = {
+  /** Number of search results per page */
   itemsPerPage: MaybeRefOrGetter<string>;
+
+  /** Index (0-based) of the page that should be loaded */
   pageIndex: MaybeRefOrGetter<number>;
+
+  /** Sorting order */
   sort: MaybeRefOrGetter<string>;
 };
 
+/**
+ * Provides access to the advanced search API.
+ *
+ * @param query Lucene search query to be submitted
+ * @param documentKind Type of documents to search for
+ * @param dateFilter Date filter to apply to the results
+ * @param options Additional configuration
+ * @returns State and context for interacting with advanced search
+ */
 export async function useAdvancedSearch(
   query: MaybeRefOrGetter<string>,
   documentKind: MaybeRefOrGetter<DocumentKind>,
@@ -72,11 +87,10 @@ export async function useAdvancedSearch(
   }
 
   return {
-    searchResults: data,
     searchError: error,
-    searchStatus: status,
     searchIsPending: pending,
-    submitSearch: execute,
+    searchResults: data,
+    searchStatus: status,
     submitSearch: executeWhenValid,
     totalItemCount: computed(() => data.value?.totalItems ?? 0),
   };
