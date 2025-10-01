@@ -120,6 +120,9 @@ const {
   pageIndex,
 });
 
+// Perform initial search with any existing filter + query params
+await submitSearch();
+
 const formattedResultCount = computed(() =>
   formatNumberWithSeparators(totalItemCount.value),
 );

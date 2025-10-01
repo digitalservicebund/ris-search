@@ -54,13 +54,22 @@ export async function useAdvancedSearch(
     searchEndpointUrl,
     {
       query: combinedQuery,
-      immediate: true,
+
+      // immediate always executes even if the query is empty. Instead the
+      // component should execute manually using `executeWhenValid` to make
+      // sure only useful requests are submitted.
+      immediate: false,
+
       // default watch is too eager to reload even when manually specifying
       // watch sources, so disabling it and leaving it at the discretion of the
-      // component to decide when to reload
+      // component to decide when to reload.
       watch: false,
     },
   );
+
+  async function executeWhenValid() {
+    if (toValue(query)) await execute();
+  }
 
   return {
     searchResults: data,
@@ -68,6 +77,7 @@ export async function useAdvancedSearch(
     searchStatus: status,
     searchIsPending: pending,
     submitSearch: execute,
+    submitSearch: executeWhenValid,
     totalItemCount: computed(() => data.value?.totalItems ?? 0),
   };
 }
