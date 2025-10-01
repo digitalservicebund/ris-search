@@ -106,11 +106,6 @@ const itemsPerPageOptions = ["10", "50", "100"];
 
 const pageIndex = ref(tryGetPageIndexFromQuery(route.query.pageIndex));
 
-function setPageNumber(page: number) {
-  pageIndex.value = page;
-  saveFilterStateToRoute();
-}
-
 // Search results -----------------------------------------
 
 const {
@@ -127,6 +122,12 @@ const {
 
 const formattedResultCount = computed(() =>
   formatNumberWithSeparators(totalItemCount.value),
+);
+
+// Auto reload for "discrete" actions
+watch(
+  () => [documentKind.value, sort.value, itemsPerPage.value, pageIndex.value],
+  () => submit(),
 );
 
 function submit() {
@@ -183,7 +184,7 @@ function submit() {
           :is-loading="searchStatus === 'pending'"
           :page="searchResults"
           navigation-position="bottom"
-          @update-page="setPageNumber"
+          @update-page="pageIndex = $event"
         >
           <div class="my-32 flex items-center gap-48">
             <span class="ris-subhead-regular mr-auto">

@@ -1,3 +1,4 @@
+import { toValue } from "vue";
 import {
   dateFilterToQuery,
   type DateFilterValue,
@@ -51,7 +52,14 @@ export async function useAdvancedSearch(
 
   const { data, error, status, pending, execute } = await useFetch<Page>(
     searchEndpointUrl,
-    { query: combinedQuery, immediate: true, watch: false },
+    {
+      query: combinedQuery,
+      immediate: true,
+      // default watch is too eager to reload even when manually specifying
+      // watch sources, so disabling it and leaving it at the discretion of the
+      // component to decide when to reload
+      watch: false,
+    },
   );
 
   return {
