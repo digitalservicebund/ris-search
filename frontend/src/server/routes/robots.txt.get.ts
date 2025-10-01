@@ -1,9 +1,9 @@
-import { getRequestURL, getHeader, setHeader } from "h3";
-import { isPublicProfile } from "~/utils/config";
+import { getRequestURL, getHeader, setHeader, defineEventHandler } from "h3";
+import { isInternalProfile } from "~/utils/config";
 
 export default defineEventHandler(async (event) => {
   const userAgent = (getHeader(event, "User-Agent") ?? "").toUpperCase();
-  let file = isPublicProfile() ? "robots.public.txt" : "robots.staging.txt";
+  let file = isInternalProfile() ? "robots.staging.txt" : "robots.public.txt";
   if (userAgent === "DG_JUSTICE_CRAWLER") file = "robots.dg.txt";
 
   setHeader(event, "Content-Type", "text/plain; charset=utf-8");
