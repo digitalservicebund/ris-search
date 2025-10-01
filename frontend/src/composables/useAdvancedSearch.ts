@@ -5,10 +5,21 @@ import {
 import type { Page } from "~/components/Pagination/Pagination";
 import { DocumentKind } from "~/types";
 
+type UseAdvancedSearchOptions = {
+  itemsPerPage: MaybeRefOrGetter<string>;
+  pageIndex: MaybeRefOrGetter<number>;
+  sort: MaybeRefOrGetter<string>;
+};
+
 export async function useAdvancedSearch(
   query: MaybeRefOrGetter<string>,
   documentKind: MaybeRefOrGetter<DocumentKind>,
   dateFilter: MaybeRefOrGetter<DateFilterValue>,
+  {
+    itemsPerPage = "50",
+    pageIndex = 0,
+    sort = "default",
+  }: Partial<UseAdvancedSearchOptions>,
 ) {
   const searchEndpointUrl = computed(() => {
     const documentKindVal = toValue(documentKind);
@@ -29,7 +40,13 @@ export async function useAdvancedSearch(
     );
 
     if (dateQuery) result = `(${result}) AND (${dateQuery})`;
-    return { query: result };
+
+    return {
+      query: result,
+      size: toValue(itemsPerPage),
+      sort: toValue(sort),
+      pageIndex: toValue(pageIndex),
+    };
   });
 
   const { data, error, status, pending, execute } = await useFetch<Page>(
@@ -43,5 +60,6 @@ export async function useAdvancedSearch(
     searchStatus: status,
     searchIsPending: pending,
     submitSearch: execute,
+    totalItemCount: computed(() => data.value?.totalItems ?? 0),
   };
 }

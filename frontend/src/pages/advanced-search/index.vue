@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { PanelMenu } from "primevue";
+import { PanelMenu, Select } from "primevue";
 import type { MenuItem } from "primevue/menuitem";
+import type { LocationQueryValue } from "vue-router";
 import { useRoute } from "#app";
 import DataFieldPicker from "~/components/AdvancedSearch/DataFieldPicker.vue";
 import DateFilter from "~/components/AdvancedSearch/DateFilter.vue";
@@ -9,16 +10,21 @@ import {
   type DateFilterValue,
 } from "~/components/AdvancedSearch/filterType";
 import ContentWrapper from "~/components/CustomLayouts/ContentWrapper.vue";
+import Pagination from "~/components/Pagination/Pagination.vue";
+import SortSelect from "~/components/Search/SortSelect.vue";
 import { useAdvancedSearch } from "~/composables/useAdvancedSearch";
 import { queryableDataFields } from "~/pages/advanced-search/dataFields";
 import { DocumentKind } from "~/types";
 import { formatDocumentKind } from "~/utils/displayValues";
 import { isDocumentKind } from "~/utils/documentKind";
+import { formatNumberWithSeparators } from "~/utils/numberFormatting";
 
 const route = useRoute();
 
 useHead({ title: "Erweiterte Suche" });
 definePageMeta({ alias: "/erweiterte-suche" });
+
+// Document kind -------------------------------------------
 
 const setDocumentKind: MenuItem["command"] = (e) => {
   if (!e.item.key) return;
@@ -45,6 +51,8 @@ const documentKind = ref<DocumentKind>(
     : DocumentKind.Norm,
 );
 
+// Date filter --------------------------------------------
+
 const dateFilter = ref<DateFilterValue>({
   type:
     typeof route.query.dateFilterType === "string" &&
@@ -66,14 +74,54 @@ function saveFilterStateToRoute() {
       dateFilterType: dateFilter.value.type,
       dateFilterFrom: dateFilter.value.from ?? "",
       dateFilterTo: dateFilter.value.to ?? "",
+      pageIndex: pageIndex.value,
+      sort: sort.value,
+      itemsPerPage: itemsPerPage.value,
     },
   });
 }
 
-const { searchResults, submitSearch } = await useAdvancedSearch(
-  query,
-  documentKind,
-  dateFilter,
+// Sorting and pagination ---------------------------------
+
+function tryGetPageIndexFromQuery(
+  query: LocationQueryValue | LocationQueryValue[],
+) {
+  let result = 0;
+
+  if (query) {
+    const parsedNumber = Number.parseInt(query.toString());
+    if (Number.isFinite(parsedNumber)) result = parsedNumber;
+  }
+
+  return result;
+}
+
+const sort = ref(route.query.sort?.toString() ?? "default");
+
+const itemsPerPageDropdownId = useId();
+
+const itemsPerPage = ref(route.query.itemsPerPage?.toString() ?? "50");
+
+const itemsPerPageOptions = ["10", "50", "100"];
+
+const pageIndex = ref(tryGetPageIndexFromQuery(route.query.pageIndex));
+
+function setPageNumber(page: number) {
+  pageIndex.value = page;
+  saveFilterStateToRoute();
+}
+
+// Search results -----------------------------------------
+
+const { searchResults, searchStatus, submitSearch, totalItemCount } =
+  await useAdvancedSearch(query, documentKind, dateFilter, {
+    itemsPerPage,
+    sort,
+    pageIndex,
+  });
+
+const formattedResultCount = computed(() =>
+  formatNumberWithSeparators(totalItemCount.value),
 );
 
 function submit() {
@@ -126,14 +174,40 @@ function submit() {
           @submit="submit"
         />
 
-        <output v-if="searchResults">
-          <!-- eslint-disable-next-line vue/valid-v-for TODO: provide proper key -->
-          <SearchResult
-            v-for="searchResult in searchResults.member"
-            :search-result
-            :order="1"
-          />
-        </output>
+        <Pagination
+          :is-loading="searchStatus === 'pending'"
+          :page="searchResults"
+          navigation-position="bottom"
+          @update-page="setPageNumber"
+        >
+          <div class="my-32 flex items-center gap-48">
+            <span class="ris-subhead-regular mr-auto">
+              {{ formattedResultCount }} Suchergebnisse
+            </span>
+            <SortSelect v-model="sort" :document-kind />
+
+            <label
+              :for="itemsPerPageDropdownId"
+              class="ris-label2-regular flex items-center gap-8"
+            >
+              Einträge pro Seite
+              <Select
+                :id="itemsPerPageDropdownId"
+                v-model="itemsPerPage"
+                :options="itemsPerPageOptions"
+              />
+            </label>
+          </div>
+
+          <output v-if="searchResults">
+            <!-- eslint-disable-next-line vue/valid-v-for TODO: provide proper key -->
+            <SearchResult
+              v-for="searchResult in searchResults.member"
+              :search-result
+              :order="1"
+            />
+          </output>
+        </Pagination>
       </div>
     </div>
   </ContentWrapper>
