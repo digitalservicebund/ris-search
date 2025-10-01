@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import StaticPageWrapper from "~/components/CustomLayouts/StaticPageWrapper.vue";
+import { useStaticPageSeo } from "~/composables/useStaticPageSeo";
 import IcBaselineLaunch from "~icons/ic/baseline-launch";
-useHead({ title: "Open Source" });
+
 definePageMeta({ alias: ["/opensource"] });
+
+useStaticPageSeo("opensource");
 </script>
 
 <template>

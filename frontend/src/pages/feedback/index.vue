@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import FeedbackForm from "~/components/Analytics/FeedbackForm.vue";
 import StaticPageWrapper from "~/components/CustomLayouts/StaticPageWrapper.vue";
+import { useStaticPageSeo } from "~/composables/useStaticPageSeo";
 
-useHead({ title: "Feedback geben" });
+useStaticPageSeo("feedback");
 </script>
 
 <template>
