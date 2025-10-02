@@ -7,7 +7,7 @@ import type { Page } from "~/components/Pagination/Pagination";
 import { DocumentKind } from "~/types";
 
 /** Additional configuration for search API calls */
-type UseAdvancedSearchOptions = {
+type AdvancedSearchOptions = {
   /** Number of search results per page */
   itemsPerPage: MaybeRefOrGetter<string>;
 
@@ -35,7 +35,7 @@ export async function useAdvancedSearch(
     itemsPerPage = "50",
     pageIndex = 0,
     sort = "default",
-  }: Partial<UseAdvancedSearchOptions>,
+  }: Partial<AdvancedSearchOptions>,
 ) {
   const searchEndpointUrl = computed(() => {
     const documentKindVal = toValue(documentKind);
