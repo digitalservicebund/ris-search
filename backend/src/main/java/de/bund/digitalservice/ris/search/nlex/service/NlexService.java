@@ -11,7 +11,7 @@ import de.bund.digitalservice.ris.search.nlex.schema.query.Query;
 import de.bund.digitalservice.ris.search.nlex.schema.query.Words;
 import de.bund.digitalservice.ris.search.nlex.schema.result.Error;
 import de.bund.digitalservice.ris.search.nlex.schema.result.RequestResult;
-import de.bund.digitalservice.ris.search.service.search.NormsService;
+import de.bund.digitalservice.ris.search.service.NormsService;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;

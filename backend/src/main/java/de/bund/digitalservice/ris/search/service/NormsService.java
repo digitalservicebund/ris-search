@@ -1,4 +1,4 @@
-package de.bund.digitalservice.ris.search.service.search;
+package de.bund.digitalservice.ris.search.service;
 
 import static org.opensearch.index.query.QueryBuilders.queryStringQuery;
 

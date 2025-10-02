@@ -11,7 +11,8 @@ import de.bund.digitalservice.ris.search.mapper.CaseLawLdmlToOpenSearchMapper;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import de.bund.digitalservice.ris.search.repository.objectstorage.CaseLawBucket;
 import de.bund.digitalservice.ris.search.repository.opensearch.CaseLawRepository;
-import de.bund.digitalservice.ris.search.service.search.CaseLawService;
+import de.bund.digitalservice.ris.search.service.CaseLawService;
+import de.bund.digitalservice.ris.search.service.SimpleSearchQueryBuilder;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
@@ -51,8 +52,8 @@ class CaseLawServiceTest {
             caseLawBucketMock,
             operationsMock,
             configurations,
-            null,
-            marshaller);
+            marshaller,
+            new SimpleSearchQueryBuilder(null));
   }
 
   @Test

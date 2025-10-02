@@ -1,4 +1,4 @@
-package de.bund.digitalservice.ris.search.service.search;
+package de.bund.digitalservice.ris.search.service;
 
 import static org.opensearch.index.query.QueryBuilders.matchQuery;
 
@@ -26,6 +26,9 @@ public class NormSimpleSearchType implements SimpleSearchType {
 
   private static final int ARTICLE_INNER_HITS_SIZE = 3;
 
+  private static final List<String> NORMS_HIGHLIGHT_CONTENT_FIELDS =
+      List.of(Norm.Fields.OFFICIAL_TITLE);
+
   private static final List<String> NORMS_FETCH_EXCLUDED_FIELDS =
       List.of(
           Norm.Fields.ARTICLE_NAMES,
@@ -41,7 +44,7 @@ public class NormSimpleSearchType implements SimpleSearchType {
 
   @Override
   public void addHighlightedFields(HighlightBuilder builder) {
-    builder.field(Norm.Fields.OFFICIAL_TITLE);
+    NORMS_HIGHLIGHT_CONTENT_FIELDS.forEach(builder::field);
   }
 
   @Override
@@ -126,7 +129,7 @@ public class NormSimpleSearchType implements SimpleSearchType {
     InnerHitBuilder articleInnerHitBuilder =
         new InnerHitBuilder()
             .setSize(ARTICLE_INNER_HITS_SIZE)
-            .setHighlightBuilder(RisHighlightBuilder.getArticleFieldsHighlighter())
+            .setHighlightBuilder(getArticleFieldsHighlighter())
             .setFetchSourceContext(
                 new FetchSourceContext(
                     true,
@@ -135,5 +138,9 @@ public class NormSimpleSearchType implements SimpleSearchType {
     articleQueryBuilder.innerHit(articleInnerHitBuilder);
 
     query.should(articleQueryBuilder);
+  }
+
+  private static HighlightBuilder getArticleFieldsHighlighter() {
+    return RisHighlightBuilder.baseHighlighter().field("articles.text").field("articles.name");
   }
 }

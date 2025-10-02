@@ -1,4 +1,4 @@
-package de.bund.digitalservice.ris.search.service.search;
+package de.bund.digitalservice.ris.search.service;
 
 import de.bund.digitalservice.ris.search.models.ParsedSearchTerm;
 import java.util.List;

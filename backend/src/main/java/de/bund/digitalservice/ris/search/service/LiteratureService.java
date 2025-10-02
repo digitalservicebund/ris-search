@@ -3,15 +3,11 @@ package de.bund.digitalservice.ris.search.service;
 import static org.opensearch.index.query.QueryBuilders.queryStringQuery;
 
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
-import de.bund.digitalservice.ris.search.models.ParsedSearchTerm;
 import de.bund.digitalservice.ris.search.models.api.parameters.LiteratureSearchParams;
 import de.bund.digitalservice.ris.search.models.api.parameters.UniversalSearchParams;
 import de.bund.digitalservice.ris.search.models.opensearch.Literature;
 import de.bund.digitalservice.ris.search.repository.objectstorage.literature.LiteratureBucket;
 import de.bund.digitalservice.ris.search.repository.opensearch.LiteratureRepository;
-import de.bund.digitalservice.ris.search.service.helper.FetchSourceFilterDefinitions;
-import de.bund.digitalservice.ris.search.service.helper.LiteratureQueryBuilder;
-import de.bund.digitalservice.ris.search.service.helper.PortalQueryBuilder;
 import de.bund.digitalservice.ris.search.utils.PageUtils;
 import de.bund.digitalservice.ris.search.utils.RisHighlightBuilder;
 import java.util.List;
@@ -22,12 +18,12 @@ import org.jetbrains.annotations.Nullable;
 import org.opensearch.action.search.SearchType;
 import org.opensearch.data.client.orhlc.NativeSearchQuery;
 import org.opensearch.data.client.orhlc.NativeSearchQueryBuilder;
+import org.opensearch.search.fetch.subphase.highlight.HighlightBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.data.elasticsearch.core.SearchPage;
-import org.springframework.data.elasticsearch.core.query.FetchSourceFilter;
 import org.springframework.stereotype.Service;
 
 /**
@@ -39,7 +35,7 @@ public class LiteratureService {
   private final LiteratureRepository literatureRepository;
   private final LiteratureBucket literatureBucket;
   private final ElasticsearchOperations operations;
-  private final SearchTermService searchTermService;
+  private final SimpleSearchQueryBuilder simpleSearchQueryBuilder;
 
   @SneakyThrows
   @Autowired
@@ -47,11 +43,11 @@ public class LiteratureService {
       LiteratureRepository literatureRepository,
       LiteratureBucket literatureBucket,
       ElasticsearchOperations operations,
-      SearchTermService searchTermService) {
+      SimpleSearchQueryBuilder simpleSearchQueryBuilder) {
     this.literatureRepository = literatureRepository;
     this.literatureBucket = literatureBucket;
     this.operations = operations;
-    this.searchTermService = searchTermService;
+    this.simpleSearchQueryBuilder = simpleSearchQueryBuilder;
   }
 
   /**
@@ -62,33 +58,15 @@ public class LiteratureService {
    * @param pageable Page (offset) and size parameters.
    * @return A new {@link SearchPage} of the containing {@link Literature}.
    */
-  public SearchPage<Literature> searchAndFilterLiterature(
+  public SearchPage<Literature> simpleSearchLiterature(
       @NotNull UniversalSearchParams params,
       @Nullable LiteratureSearchParams literatureParams,
       Pageable pageable) {
 
-    // Transform the request parameters into a BoolQuery
-    ParsedSearchTerm searchTerm = searchTermService.parse(params.getSearchTerm());
-    PortalQueryBuilder builder =
-        new PortalQueryBuilder(searchTerm, params.getDateFrom(), params.getDateTo());
-    LiteratureQueryBuilder.addLiteratureFilters(literatureParams, builder.getQuery());
-
-    // add pagination and other parameters
-    NativeSearchQuery nativeQuery =
-        new NativeSearchQueryBuilder()
-            .withSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-            .withPageable(pageable)
-            .withQuery(builder.getQuery())
-            .withHighlightBuilder(RisHighlightBuilder.getLiteratureHighlighter())
-            .build();
-
-    // Exclude fields with long text from search results
-    nativeQuery.addSourceFilter(
-        new FetchSourceFilter(
-            null,
-            FetchSourceFilterDefinitions.LITERATURE_FETCH_EXCLUDED_FIELDS.toArray(String[]::new)));
-
-    SearchHits<Literature> searchHits = operations.search(nativeQuery, Literature.class);
+    NativeSearchQuery query =
+        simpleSearchQueryBuilder.buildQuery(
+            List.of(new LiteratureSimpleSearchType(literatureParams)), params, pageable);
+    SearchHits<Literature> searchHits = operations.search(query, Literature.class);
 
     return PageUtils.unwrapSearchHits(searchHits, pageable);
   }
@@ -101,12 +79,16 @@ public class LiteratureService {
    * @return A new {@link SearchPage} of the containing {@link Literature}.
    */
   public SearchPage<Literature> searchLiterature(final String search, Pageable pageable) {
+
+    HighlightBuilder highlightBuilder = RisHighlightBuilder.baseHighlighter();
+    new LiteratureSimpleSearchType(null).addHighlightedFields(highlightBuilder);
+
     var searchQuery =
         new NativeSearchQueryBuilder()
             .withSearchType(SearchType.DFS_QUERY_THEN_FETCH)
             .withPageable(pageable)
             .withQuery(queryStringQuery(search))
-            .withHighlightBuilder(RisHighlightBuilder.getLiteratureHighlighter())
+            .withHighlightBuilder(highlightBuilder)
             .build();
 
     SearchHits<Literature> searchHits = operations.search(searchQuery, Literature.class);

@@ -19,7 +19,6 @@ import de.bund.digitalservice.ris.search.schema.LegislationWorkSchema;
 import de.bund.digitalservice.ris.search.schema.LegislationWorkSearchSchema;
 import de.bund.digitalservice.ris.search.schema.SearchMemberSchema;
 import de.bund.digitalservice.ris.search.service.NormsService;
-import de.bund.digitalservice.ris.search.service.search.NormsService;
 import de.bund.digitalservice.ris.search.service.xslt.NormXsltTransformerService;
 import de.bund.digitalservice.ris.search.utils.LuceneQueryTools;
 import de.bund.digitalservice.ris.search.utils.eli.ExpressionEli;

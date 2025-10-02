@@ -4,7 +4,7 @@ import de.bund.digitalservice.ris.search.models.api.parameters.UniversalSearchPa
 import de.bund.digitalservice.ris.search.models.opensearch.AbstractSearchEntity;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
-import de.bund.digitalservice.ris.search.service.search.AllDocumentsService;
+import de.bund.digitalservice.ris.search.service.AllDocumentsService;
 import java.util.List;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.core.SearchHit;

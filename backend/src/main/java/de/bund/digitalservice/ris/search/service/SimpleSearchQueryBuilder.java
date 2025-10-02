@@ -1,10 +1,9 @@
-package de.bund.digitalservice.ris.search.service.search;
+package de.bund.digitalservice.ris.search.service;
 
 import de.bund.digitalservice.ris.search.models.ParsedSearchTerm;
 import de.bund.digitalservice.ris.search.models.api.parameters.UniversalSearchParams;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
-import de.bund.digitalservice.ris.search.service.SearchTermParser;
 import de.bund.digitalservice.ris.search.utils.DateUtils;
 import de.bund.digitalservice.ris.search.utils.RisHighlightBuilder;
 import java.util.ArrayList;
