@@ -10,6 +10,8 @@ import de.bund.digitalservice.ris.search.models.opensearch.Literature;
 import de.bund.digitalservice.ris.search.schema.CollectionSchema;
 import de.bund.digitalservice.ris.search.schema.LiteratureSearchSchema;
 import de.bund.digitalservice.ris.search.schema.SearchMemberSchema;
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.function.IntFunction;
 import java.util.stream.IntStream;
@@ -35,7 +37,16 @@ class LiteratureSearchSchemaMapperTest {
         new SearchHit<>("1", "1", "routing", 1, null, null, null, null, null, null, literature);
     SearchHits<Literature> searchHits =
         new SearchHitsImpl<>(
-            1, TotalHitsRelation.EQUAL_TO, 1, null, null, List.of(searchHit), null, null, null);
+            1,
+            TotalHitsRelation.EQUAL_TO,
+            1,
+            Duration.of(3, ChronoUnit.SECONDS),
+            null,
+            "",
+            List.of(searchHit),
+            null,
+            null,
+            null);
     SearchPage<Literature> source =
         SearchHitSupport.searchPageFor(searchHits, PageRequest.of(0, 1));
 
@@ -117,7 +128,16 @@ class LiteratureSearchSchemaMapperTest {
       List<SearchHit<AbstractSearchEntity>> searchHits, int pageNumber, int pageSize, int total) {
     return SearchHitSupport.searchPageFor(
         new SearchHitsImpl<>(
-            total, TotalHitsRelation.EQUAL_TO, 1, null, null, searchHits, null, null, null),
+            total,
+            TotalHitsRelation.EQUAL_TO,
+            1,
+            Duration.of(3, ChronoUnit.SECONDS),
+            null,
+            "",
+            searchHits,
+            null,
+            null,
+            null),
         PageRequest.of(pageNumber, pageSize));
   }
 

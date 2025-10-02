@@ -8,6 +8,8 @@ import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
 import de.bund.digitalservice.ris.search.repository.opensearch.NormsRepository;
 import de.bund.digitalservice.ris.search.service.NormsService;
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -51,7 +53,16 @@ class NormsServiceTest {
     Pageable pageable = PageRequest.of(0, 10);
     SearchHits<Norm> searchHits =
         new SearchHitsImpl<>(
-            1, TotalHitsRelation.EQUAL_TO, 1.0f, "", "", List.of(searchHit), null, null, null);
+            1,
+            TotalHitsRelation.EQUAL_TO,
+            1.0f,
+            Duration.of(10, ChronoUnit.SECONDS),
+            "",
+            "",
+            List.of(searchHit),
+            null,
+            null,
+            null);
     SearchPage<Norm> searchResultPage = SearchHitSupport.searchPageFor(searchHits, pageable);
     when(operationsMock.search((Query) any(), eq(Norm.class))).thenReturn(searchHits);
 

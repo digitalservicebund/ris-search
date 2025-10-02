@@ -112,7 +112,9 @@ public class AllDocumentsService {
     // exclude fields with long text from search results
     nativeQuery.addSourceFilter(
         new FetchSourceFilter(
-            null, FetchSourceFilterDefinitions.getDocumentExcludedFields().toArray(String[]::new)));
+            true,
+            null,
+            FetchSourceFilterDefinitions.getDocumentExcludedFields().toArray(String[]::new)));
 
     if (documentKind == null) {
       return searchAllIndices(nativeQuery, pageable);

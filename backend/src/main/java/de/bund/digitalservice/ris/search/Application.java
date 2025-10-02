@@ -5,6 +5,7 @@ import lombok.Generated;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.data.elasticsearch.ElasticsearchDataAutoConfiguration;
 import org.springframework.boot.autoconfigure.elasticsearch.ElasticsearchRestClientAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.context.ApplicationContext;
@@ -17,7 +18,11 @@ import org.springframework.scheduling.annotation.EnableScheduling;
  * to enable various configuration settings.
  */
 @SpringBootApplication(
-    exclude = {ElasticsearchRestClientAutoConfiguration.class, DataSourceAutoConfiguration.class})
+    exclude = {
+      ElasticsearchDataAutoConfiguration.class,
+      ElasticsearchRestClientAutoConfiguration.class,
+      DataSourceAutoConfiguration.class
+    })
 @EnableScheduling
 public class Application {
 

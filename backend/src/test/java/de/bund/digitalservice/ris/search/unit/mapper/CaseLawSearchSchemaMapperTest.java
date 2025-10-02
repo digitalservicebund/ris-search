@@ -10,6 +10,8 @@ import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationU
 import de.bund.digitalservice.ris.search.schema.CaseLawSearchSchema;
 import de.bund.digitalservice.ris.search.schema.CollectionSchema;
 import de.bund.digitalservice.ris.search.schema.SearchMemberSchema;
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.function.IntFunction;
 import java.util.stream.IntStream;
@@ -38,7 +40,16 @@ class CaseLawSearchSchemaMapperTest {
         new SearchHit<>("1", "1", "routing", 1, null, null, null, null, null, null, element);
     SearchHits<CaseLawDocumentationUnit> searchHits =
         new SearchHitsImpl<>(
-            1, TotalHitsRelation.EQUAL_TO, 1, null, null, List.of(searchHit), null, null, null);
+            1,
+            TotalHitsRelation.EQUAL_TO,
+            1,
+            Duration.of(10, ChronoUnit.SECONDS),
+            null,
+            null,
+            List.of(searchHit),
+            null,
+            null,
+            null);
     SearchPage<CaseLawDocumentationUnit> source =
         SearchHitSupport.searchPageFor(searchHits, PageRequest.of(0, 1));
 
@@ -121,7 +132,16 @@ class CaseLawSearchSchemaMapperTest {
       List<SearchHit<AbstractSearchEntity>> searchHits, int pageNumber, int pageSize, int total) {
     return SearchHitSupport.searchPageFor(
         new SearchHitsImpl<>(
-            total, TotalHitsRelation.EQUAL_TO, 1, null, null, searchHits, null, null, null),
+            total,
+            TotalHitsRelation.EQUAL_TO,
+            1,
+            Duration.of(10, ChronoUnit.SECONDS),
+            null,
+            null,
+            searchHits,
+            null,
+            null,
+            null),
         PageRequest.of(pageNumber, pageSize));
   }
 
