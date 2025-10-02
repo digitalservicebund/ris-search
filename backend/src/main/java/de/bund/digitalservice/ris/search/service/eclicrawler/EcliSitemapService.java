@@ -111,7 +111,6 @@ public class EcliSitemapService {
             User-agent: *
             Disallow: /
             User-agent: DG_JUSTICE_CRAWLER
-            Allow: /
             """;
 
     portalBucket.save(ROBOTS_TXT_PATH, header);
