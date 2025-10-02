@@ -192,12 +192,12 @@ describe("dateInput", () => {
 
   it("shows error message block for external validation errors", async () => {
     const validationError = {
-      message: "Externes Fehler",
+      message: "Externer Fehler",
       instance: "identifier",
     };
     renderComponent({ validationError });
 
-    const errorBlock = screen.getByText("Externes Fehler");
+    const errorBlock = screen.getByText("Externer Fehler");
     expect(errorBlock).toBeInTheDocument();
   });
 });
