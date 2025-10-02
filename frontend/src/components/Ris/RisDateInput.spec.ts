@@ -200,4 +200,20 @@ describe("dateInput", () => {
     const errorBlock = screen.getByText("Externer Fehler");
     expect(errorBlock).toBeInTheDocument();
   });
+
+  it("shows error message block for internal validation errors", async () => {
+    renderComponent({
+      stubs: {
+        InputMask: InputText,
+      },
+    });
+
+    const input = screen.getByRole("textbox");
+    await userEvent.type(input, "29.02.2001");
+    await nextTick();
+
+    expect(input).toHaveValue("29.02.2001");
+
+    expect(screen.getByText("Ungültige Eingabe")).toBeInTheDocument();
+  });
 });

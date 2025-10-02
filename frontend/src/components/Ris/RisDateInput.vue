@@ -110,8 +110,11 @@ watch(
 );
 
 const errorMessage = computed(() => {
-  if (!localValidationError.value) return undefined;
-  return localValidationError.value.message || "Ungültige Eingabe";
+  if (internalHasError.value && !localValidationError.value) {
+    return "Ungültige Eingabe";
+  } else if (localValidationError.value) {
+    return localValidationError.value.message ?? "Ungültige Eingabe";
+  } else return undefined;
 });
 
 const isValidDate = computed(() => {
@@ -163,7 +166,7 @@ defineExpose({ focus });
 </script>
 
 <template>
-  <div class="flex w-full gap-2">
+  <div class="flex w-full flex-col gap-2">
     <InputMask
       :id="id"
       ref="inputMaskEl"
@@ -179,7 +182,7 @@ defineExpose({ focus });
       @keydown="backspaceDelete"
     />
 
-    <small v-if="localValidationError" :id="`${id}-hint`">
+    <small v-if="errorMessage" :id="`${id}-hint`">
       <IconErrorOutline />
       {{ errorMessage }}
     </small>
