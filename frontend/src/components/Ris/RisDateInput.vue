@@ -61,17 +61,22 @@ const emit = defineEmits<{
   "update:validationError": [value?: ValidationError];
 }>();
 
+const HUMAN_READABLE_FORMAT = "DD.MM.YYYY";
+const MACHINE_FORMAT = "YYYY-MM-DD";
+
 dayjs.extend(customParseFormat);
 
 const inputValue = ref(
-  props.modelValue ? dayjs(props.modelValue).format("DD.MM.YYYY") : undefined,
+  props.modelValue
+    ? dayjs(props.modelValue).format(HUMAN_READABLE_FORMAT)
+    : undefined,
 );
 
 watch(
   () => props.modelValue,
   (is) => {
     inputValue.value = is
-      ? dayjs(is, "YYYY-MM-DD", true).format("DD.MM.YYYY")
+      ? dayjs(is, MACHINE_FORMAT, true).format(HUMAN_READABLE_FORMAT)
       : undefined;
   },
 );
@@ -81,7 +86,7 @@ watch(inputValue, (is) => {
   else if (isValidDate.value) {
     emit(
       "update:modelValue",
-      dayjs(is, "DD.MM.YYYY", true).format("YYYY-MM-DD"),
+      dayjs(is, HUMAN_READABLE_FORMAT, true).format(MACHINE_FORMAT),
     );
   }
 });
@@ -118,7 +123,7 @@ const errorMessage = computed(() => {
 });
 
 const isValidDate = computed(() => {
-  return dayjs(inputValue.value, "DD.MM.YYYY", true).isValid();
+  return dayjs(inputValue.value, HUMAN_READABLE_FORMAT, true).isValid();
 });
 
 function validateInput() {
