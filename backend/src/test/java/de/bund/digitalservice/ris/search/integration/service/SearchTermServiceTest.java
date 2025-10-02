@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import de.bund.digitalservice.ris.search.integration.config.ContainersIntegrationBase;
 import de.bund.digitalservice.ris.search.models.ParsedSearchTerm;
-import de.bund.digitalservice.ris.search.service.SearchTermService;
+import de.bund.digitalservice.ris.search.service.SearchTermParser;
 import java.util.List;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -16,7 +16,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 @Tag("integration")
 class SearchTermServiceTest extends ContainersIntegrationBase {
 
-  @Autowired SearchTermService searchTermService;
+  @Autowired SearchTermParser searchTermService;
 
   @Test
   void testEmptyString() {

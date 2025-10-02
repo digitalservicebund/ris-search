@@ -9,6 +9,21 @@
           "german_stemmer",
           "court_type_synonyms",
           "golem_thesaurus_synonyms",
+          "german_normalization"
+        ],
+        "char_filter": [
+          "replace_article_character",
+          "replace_euro_character"
+        ]
+      },
+      "custom_german_decompounding_analyzer": {
+        "type": "custom",
+        "tokenizer": "standard",
+        "filter": [
+          "lowercase",
+          "german_stemmer",
+          "court_type_synonyms",
+          "golem_thesaurus_synonyms",
           "german_decompounder",
           "german_normalization"
         ],

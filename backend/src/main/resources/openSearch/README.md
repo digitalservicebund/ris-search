@@ -13,14 +13,14 @@ The `analysis` section specifies custom analyzer definitions for text data in th
 #### `custom_german_analyzer`
 
 This analyzer is used for all text content in the project, such as headlines, document body, or metadata such as
-location. The fields need to use the same analyzer in order to support our needed `CROSS_FIELDS` logic
+location.
 
 ## Normalizer Settings
 
 The normalizer section is used for keyword fields.
 
 ### `normalized_keyword`
-All keyword fields are currently indexed twice. Once as text (for the filtering logic using `CROSS_FIELDS`) and once
+All keyword fields are currently indexed twice. Once as text (for the filtering logic) and once
 as keyword (with an exact match on keyword providing a large boost). Exact match means after normalization. The keyword
 fields use `normalized_keyword` to apply `lowercase` and `asciifolding` so that "exact" match works as expected. In
 particular "Abcü/123" will match "abcue/123", but will NOT match "Abcü 123".

@@ -82,7 +82,7 @@ public class AllDocumentsSearchController {
 
     try {
       SearchPage<AbstractSearchEntity> entitiesPage =
-          allDocumentsService.searchAndFilterAllDocuments(
+          allDocumentsService.simpleSearchAllDocuments(
               request,
               normsSearchParams,
               caseLawSearchParams,

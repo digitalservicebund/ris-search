@@ -15,13 +15,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
-public class SearchTermService {
+public class SearchTermParser {
   private final RestHighLevelClient client;
 
   @Value("${opensearch.norms-index-name}")
   private String normsIndexName;
 
-  public SearchTermService(AbstractOpenSearchConfiguration abstractOpenSearchConfiguration) {
+  public SearchTermParser(AbstractOpenSearchConfiguration abstractOpenSearchConfiguration) {
     this.client = abstractOpenSearchConfiguration.opensearchClient();
   }
 
