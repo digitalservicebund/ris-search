@@ -1,8 +1,6 @@
 package de.bund.digitalservice.ris.search.service.search;
 
 import de.bund.digitalservice.ris.search.models.ParsedSearchTerm;
-import de.bund.digitalservice.ris.search.models.api.parameters.CaseLawSearchParams;
-import de.bund.digitalservice.ris.search.models.api.parameters.NormsSearchParams;
 import de.bund.digitalservice.ris.search.models.api.parameters.UniversalSearchParams;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
@@ -39,8 +37,6 @@ public class SimpleSearchQueryBuilder {
   public NativeSearchQuery buildQuery(
       List<SimpleSearchType> searchTypes,
       @NotNull UniversalSearchParams params,
-      NormsSearchParams normsParams,
-      CaseLawSearchParams caseLawParams,
       Pageable pageable) {
     BoolQueryBuilder boolQuery = QueryBuilders.boolQuery();
 
@@ -59,7 +55,7 @@ public class SimpleSearchQueryBuilder {
     for (SimpleSearchType searchType : searchTypes) {
       searchType.addHighlightedFields(highlightBuilder);
       excludedFields.addAll(searchType.getExcludedFields());
-      searchType.addExtraLogic(searchTerm, normsParams, caseLawParams, boolQuery);
+      searchType.addExtraLogic(searchTerm, boolQuery);
     }
 
     // add pagination and other parameters

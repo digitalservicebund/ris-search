@@ -10,7 +10,6 @@ import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationU
 import de.bund.digitalservice.ris.search.repository.objectstorage.CaseLawBucket;
 import de.bund.digitalservice.ris.search.repository.opensearch.CaseLawRepository;
 import de.bund.digitalservice.ris.search.service.search.CaseLawService;
-import de.bund.digitalservice.ris.search.service.search.CaseLawSimpleSearchType;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
@@ -46,12 +45,7 @@ class CaseLawServiceTest {
     Configurations configurations = Mockito.mock(Configurations.class);
     this.caseLawService =
         new CaseLawService(
-            caseLawRepositoryMock,
-            caseLawBucketMock,
-            operationsMock,
-            configurations,
-            null,
-            new CaseLawSimpleSearchType());
+            caseLawRepositoryMock, caseLawBucketMock, operationsMock, configurations, null);
   }
 
   @Test

@@ -3,7 +3,6 @@ package de.bund.digitalservice.ris.search.service.search;
 import static org.opensearch.index.query.QueryBuilders.matchQuery;
 
 import de.bund.digitalservice.ris.search.models.ParsedSearchTerm;
-import de.bund.digitalservice.ris.search.models.api.parameters.CaseLawSearchParams;
 import de.bund.digitalservice.ris.search.models.api.parameters.NormsSearchParams;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.utils.DateUtils;
@@ -22,19 +21,23 @@ import org.opensearch.index.query.QueryBuilders;
 import org.opensearch.index.search.MatchQuery;
 import org.opensearch.search.fetch.subphase.FetchSourceContext;
 import org.opensearch.search.fetch.subphase.highlight.HighlightBuilder;
-import org.springframework.stereotype.Service;
 
-@Service
 public class NormSimpleSearchType implements SimpleSearchType {
 
-  static final int ARTICLE_INNER_HITS_SIZE = 3;
+  private static final int ARTICLE_INNER_HITS_SIZE = 3;
 
-  public static final List<String> NORMS_FETCH_EXCLUDED_FIELDS =
+  private static final List<String> NORMS_FETCH_EXCLUDED_FIELDS =
       List.of(
           Norm.Fields.ARTICLE_NAMES,
           Norm.Fields.ARTICLE_TEXTS,
           Norm.Fields.ARTICLES,
           Norm.Fields.TABLE_OF_CONTENTS);
+
+  private final NormsSearchParams normsSearchParams;
+
+  public NormSimpleSearchType(NormsSearchParams normsSearchParams) {
+    this.normsSearchParams = normsSearchParams;
+  }
 
   @Override
   public void addHighlightedFields(HighlightBuilder builder) {
@@ -47,11 +50,7 @@ public class NormSimpleSearchType implements SimpleSearchType {
   }
 
   @Override
-  public void addExtraLogic(
-      ParsedSearchTerm searchTerm,
-      NormsSearchParams normsSearchParams,
-      CaseLawSearchParams caseLawSearchParams,
-      BoolQueryBuilder query) {
+  public void addExtraLogic(ParsedSearchTerm searchTerm, BoolQueryBuilder query) {
     if (StringUtils.isNotEmpty(searchTerm.original())) {
       addSearchTerm(
           searchTerm.original(),

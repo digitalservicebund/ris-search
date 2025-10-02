@@ -6,7 +6,6 @@ import static org.opensearch.index.query.QueryBuilders.multiMatchQuery;
 import de.bund.digitalservice.ris.search.models.ParsedSearchTerm;
 import de.bund.digitalservice.ris.search.models.api.parameters.CaseLawDocumentTypeGroup;
 import de.bund.digitalservice.ris.search.models.api.parameters.CaseLawSearchParams;
-import de.bund.digitalservice.ris.search.models.api.parameters.NormsSearchParams;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import java.util.Arrays;
 import java.util.List;
@@ -15,12 +14,10 @@ import org.opensearch.index.query.BoolQueryBuilder;
 import org.opensearch.index.query.Operator;
 import org.opensearch.index.query.QueryBuilders;
 import org.opensearch.search.fetch.subphase.highlight.HighlightBuilder;
-import org.springframework.stereotype.Service;
 
-@Service
 public class CaseLawSimpleSearchType implements SimpleSearchType {
 
-  public static final List<String> CASE_LAW_HIGHLIGHT_CONTENT_FIELDS =
+  private static final List<String> CASE_LAW_HIGHLIGHT_CONTENT_FIELDS =
       List.of(
           CaseLawDocumentationUnit.Fields.HEADLINE,
           CaseLawDocumentationUnit.Fields.GUIDING_PRINCIPLE,
@@ -34,7 +31,7 @@ public class CaseLawSimpleSearchType implements SimpleSearchType {
           CaseLawDocumentationUnit.Fields.OTHER_LONG_TEXT,
           CaseLawDocumentationUnit.Fields.DISSENTING_OPINION);
 
-  public static final List<String> CASE_LAW_FETCH_EXCLUDED_FIELDS =
+  private static final List<String> CASE_LAW_FETCH_EXCLUDED_FIELDS =
       List.of(
           CaseLawDocumentationUnit.Fields.CASE_FACTS,
           CaseLawDocumentationUnit.Fields.HEADNOTE,
@@ -45,6 +42,12 @@ public class CaseLawSimpleSearchType implements SimpleSearchType {
           CaseLawDocumentationUnit.Fields.DECISION_GROUNDS,
           CaseLawDocumentationUnit.Fields.GUIDING_PRINCIPLE,
           CaseLawDocumentationUnit.Fields.KEYWORDS);
+
+  private final CaseLawSearchParams searchParams;
+
+  public CaseLawSimpleSearchType(CaseLawSearchParams searchParams) {
+    this.searchParams = searchParams;
+  }
 
   @Override
   public void addHighlightedFields(HighlightBuilder builder) {
@@ -61,45 +64,40 @@ public class CaseLawSimpleSearchType implements SimpleSearchType {
   }
 
   @Override
-  public void addExtraLogic(
-      ParsedSearchTerm searchTerm,
-      NormsSearchParams normsSearchParams,
-      CaseLawSearchParams caseLawSearchParams,
-      BoolQueryBuilder query) {
-    if (caseLawSearchParams == null) {
+  public void addExtraLogic(ParsedSearchTerm searchTerm, BoolQueryBuilder query) {
+    if (searchParams == null) {
       return;
     }
-    if (caseLawSearchParams.getEcli() != null) {
+    if (searchParams.getEcli() != null) {
       query.must(
-          matchQuery(CaseLawDocumentationUnit.Fields.ECLI, caseLawSearchParams.getEcli())
+          matchQuery(CaseLawDocumentationUnit.Fields.ECLI, searchParams.getEcli())
               .operator(Operator.AND));
     }
-    if (caseLawSearchParams.getFileNumber() != null) {
+    if (searchParams.getFileNumber() != null) {
       query.must(
-          matchQuery(
-                  CaseLawDocumentationUnit.Fields.FILE_NUMBERS, caseLawSearchParams.getFileNumber())
+          matchQuery(CaseLawDocumentationUnit.Fields.FILE_NUMBERS, searchParams.getFileNumber())
               .operator(Operator.AND));
     }
-    if (caseLawSearchParams.getCourt() != null) {
+    if (searchParams.getCourt() != null) {
       query.must(
           multiMatchQuery(
-                  caseLawSearchParams.getCourt(),
+                  searchParams.getCourt(),
                   CaseLawDocumentationUnit.Fields.COURT_KEYWORD_KEYWORD,
                   CaseLawDocumentationUnit.Fields.COURT_TYPE)
               .operator(Operator.AND));
     }
-    if (caseLawSearchParams.getLegalEffect() != null) {
+    if (searchParams.getLegalEffect() != null) {
       query.must(
           matchQuery(
                   CaseLawDocumentationUnit.Fields.LEGAL_EFFECT,
-                  caseLawSearchParams.getLegalEffect().toString())
+                  searchParams.getLegalEffect().toString())
               .operator(Operator.AND));
     }
-    if (caseLawSearchParams.getType() != null) {
-      queryDocumentType(caseLawSearchParams.getType(), query);
+    if (searchParams.getType() != null) {
+      queryDocumentType(searchParams.getType(), query);
     }
-    if (caseLawSearchParams.getTypeGroup() != null) {
-      queryDocumentTypeGroup(caseLawSearchParams.getTypeGroup(), query);
+    if (searchParams.getTypeGroup() != null) {
+      queryDocumentTypeGroup(searchParams.getTypeGroup(), query);
     }
   }
 

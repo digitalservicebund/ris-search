@@ -35,22 +35,16 @@ public class AllDocumentsService {
   private final SimpleSearchQueryBuilder simpleSearchQueryBuilder;
   private final IndexCoordinates allDocumentsIndex;
   private final PageUtils pageUtils;
-  private final NormSimpleSearchType normSimpleSearchType;
-  private final CaseLawSimpleSearchType caseLawSimpleSearchType;
 
   public AllDocumentsService(
       ElasticsearchOperations operations,
       Configurations configurations,
       PageUtils pageUtils,
-      SimpleSearchQueryBuilder simpleSearchQueryBuilder,
-      NormSimpleSearchType normSimpleSearchType,
-      CaseLawSimpleSearchType caseLawSimpleSearchType) {
+      SimpleSearchQueryBuilder simpleSearchQueryBuilder) {
     this.operations = operations;
     allDocumentsIndex = IndexCoordinates.of(configurations.getDocumentsAliasName());
     this.pageUtils = pageUtils;
     this.simpleSearchQueryBuilder = simpleSearchQueryBuilder;
-    this.normSimpleSearchType = normSimpleSearchType;
-    this.caseLawSimpleSearchType = caseLawSimpleSearchType;
   }
 
   /**
@@ -63,8 +57,8 @@ public class AllDocumentsService {
   public SearchPage<AbstractSearchEntity> advancedSearchAllDocuments(
       String search, Pageable pageable) {
     HighlightBuilder highlightBuilder = RisHighlightBuilder.baseHighlighter();
-    normSimpleSearchType.addHighlightedFields(highlightBuilder);
-    caseLawSimpleSearchType.addHighlightedFields(highlightBuilder);
+    new NormSimpleSearchType(null).addHighlightedFields(highlightBuilder);
+    new CaseLawSimpleSearchType(null).addHighlightedFields(highlightBuilder);
 
     var searchQuery =
         new NativeSearchQueryBuilder()
@@ -101,10 +95,9 @@ public class AllDocumentsService {
 
     NativeSearchQuery query =
         simpleSearchQueryBuilder.buildQuery(
-            List.of(normSimpleSearchType, caseLawSimpleSearchType),
+            List.of(
+                new NormSimpleSearchType(normsParams), new CaseLawSimpleSearchType(caseLawParams)),
             params,
-            normsParams,
-            caseLawParams,
             pageable);
 
     if (documentKind == null) {

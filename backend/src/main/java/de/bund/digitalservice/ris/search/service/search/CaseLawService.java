@@ -51,7 +51,6 @@ public class CaseLawService {
   private final CourtNameAbbreviationExpander courtNameAbbreviationExpander;
   private final Configurations configurations;
   private final SimpleSearchQueryBuilder simpleSearchQueryBuilder;
-  private final CaseLawSimpleSearchType caseLawSimpleSearchType;
 
   @SneakyThrows
   @Autowired
@@ -60,15 +59,13 @@ public class CaseLawService {
       CaseLawBucket caseLawBucket,
       ElasticsearchOperations operations,
       Configurations configurations,
-      SimpleSearchQueryBuilder simpleSearchQueryBuilder,
-      CaseLawSimpleSearchType caseLawSimpleSearchType) {
+      SimpleSearchQueryBuilder simpleSearchQueryBuilder) {
     this.caseLawRepository = caseLawRepository;
     this.caseLawBucket = caseLawBucket;
     this.operations = operations;
     this.configurations = configurations;
     this.courtNameAbbreviationExpander = new CourtNameAbbreviationExpander();
     this.simpleSearchQueryBuilder = simpleSearchQueryBuilder;
-    this.caseLawSimpleSearchType = caseLawSimpleSearchType;
   }
 
   /**
@@ -88,7 +85,7 @@ public class CaseLawService {
 
     NativeSearchQuery query =
         simpleSearchQueryBuilder.buildQuery(
-            List.of(caseLawSimpleSearchType), params, null, caseLawParams, pageable);
+            List.of(new CaseLawSimpleSearchType(caseLawParams)), params, pageable);
     SearchHits<CaseLawDocumentationUnit> searchHits =
         operations.search(query, CaseLawDocumentationUnit.class);
 
@@ -105,7 +102,7 @@ public class CaseLawService {
   public SearchPage<CaseLawDocumentationUnit> advancedSearchCaseLaw(
       final String search, Pageable pageable) {
     HighlightBuilder highlightBuilder = RisHighlightBuilder.baseHighlighter();
-    caseLawSimpleSearchType.addHighlightedFields(highlightBuilder);
+    new CaseLawSimpleSearchType(null).addHighlightedFields(highlightBuilder);
 
     var searchQuery =
         new NativeSearchQueryBuilder()

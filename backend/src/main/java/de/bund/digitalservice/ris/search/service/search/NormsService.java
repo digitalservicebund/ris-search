@@ -41,20 +41,17 @@ public class NormsService {
   private final ElasticsearchOperations operations;
   private final SimpleSearchQueryBuilder simpleSearchQueryBuilder;
   private final NormsBucket normsBucket;
-  private final NormSimpleSearchType normSimpleSearchType;
 
   @Autowired
   public NormsService(
       NormsRepository normsRepository,
       NormsBucket normsBucket,
       ElasticsearchOperations operations,
-      SimpleSearchQueryBuilder simpleSearchQueryBuilder,
-      NormSimpleSearchType normSimpleSearchType) {
+      SimpleSearchQueryBuilder simpleSearchQueryBuilder) {
     this.normsRepository = normsRepository;
     this.normsBucket = normsBucket;
     this.operations = operations;
     this.simpleSearchQueryBuilder = simpleSearchQueryBuilder;
-    this.normSimpleSearchType = normSimpleSearchType;
   }
 
   /**
@@ -74,7 +71,7 @@ public class NormsService {
 
     NativeSearchQuery query =
         simpleSearchQueryBuilder.buildQuery(
-            List.of(normSimpleSearchType), params, normsSearchParams, null, pageable);
+            List.of(new NormSimpleSearchType(normsSearchParams)), params, pageable);
     SearchHits<Norm> searchHits = operations.search(query, Norm.class);
 
     return PageUtils.unwrapSearchHits(searchHits, pageable);
@@ -87,7 +84,7 @@ public class NormsService {
    */
   public SearchPage<Norm> advancedSearchNorms(final String search, final Pageable pageable) {
     HighlightBuilder highlightBuilder = RisHighlightBuilder.baseHighlighter();
-    normSimpleSearchType.addHighlightedFields(highlightBuilder);
+    new NormSimpleSearchType(null).addHighlightedFields(highlightBuilder);
     var searchQuery =
         new NativeSearchQueryBuilder()
             .withSearchType(SearchType.DFS_QUERY_THEN_FETCH)
