@@ -21,7 +21,7 @@ services:
         ipv4_address: 172.18.0.3
 
   opensearch:
-    image: opensearchproject/opensearch:2
+    image: opensearchproject/opensearch:2.11.0
     container_name: opensearch
     restart: unless-stopped
     ports:

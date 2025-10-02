@@ -1,6 +1,6 @@
 services:
   opensearch:
-    image: opensearchproject/opensearch:2
+    image: opensearchproject/opensearch:2.11.0
     container_name: opensearch
     restart: unless-stopped
     ports:
@@ -26,7 +26,7 @@ services:
       - ./backend/src/main/resources/openSearch/mounted/:/usr/share/opensearch/config/mounted/
 
   opensearch-dashboards:
-    image: opensearchproject/opensearch-dashboards:2
+    image: opensearchproject/opensearch-dashboards:2.11.0
     restart: unless-stopped
     ports:
       - "5601:5601"
@@ -58,71 +58,6 @@ services:
       - ./local/keycloak/realm.json:/opt/keycloak/data/import/realm.json:ro
     networks:
       - ris-portal
-
-#  backend:
-#    build: ./backend
-#    container_name: backend
-#    restart: unless-stopped
-#    volumes:
-#      - ./backend:/app/backend
-#    environment:
-#      - POSTGRES_CASELAW_HOST=postgres14-caselaw
-#      - POSTGRES_NORMS_HOST=postgres14-norms
-#      - POSTGRES_NORMS_PORT=5432
-#      - OPENSEARCH_HOST=opensearch
-#    depends_on:
-#      postgres14-norms:
-#        condition: service_healthy
-#      postgres14-caselaw:
-#        condition: service_healthy
-#      opensearch:
-#        condition: service_healthy
-#    healthcheck:
-#      test: curl --silent --fail http://localhost:8090/actuator/health | grep UP || exit 1
-#      interval: 10s
-#      retries: 20
-#      start_period: 60s
-#      timeout: 3s
-#    ports:
-#      - "8090:8090"
-#    networks:
-#      - ris-portal
-#
-#  frontend-public:
-#    build:
-#      context: ./frontend
-#      dockerfile: public/local.Dockerfile
-#    container_name: frontend-public
-#    depends_on:
-#      backend:
-#        condition: service_healthy
-#    volumes:
-#      - ./frontend/:/app/
-#      - node_modules_public:/app/node_modules  # https://stackoverflow.com/a/78474868/3357175
-#    env_file:
-#      - ./frontend/public/.env.local
-#    ports:
-#      - "3001:3001"
-#    networks:
-#      - ris-portal
-#
-#  frontend-internal:
-#    build:
-#      context: ./frontend
-#      dockerfile: internal/local.Dockerfile
-#    container_name: frontend-internal
-#    depends_on:
-#      backend:
-#        condition: service_healthy
-#    volumes:
-#      - ./frontend/:/app/
-#      - node_modules_internal:/app/node_modules  # https://stackoverflow.com/a/78474868/3357175
-#    env_file:
-#      - ./frontend/internal/.env.local
-#    ports:
-#      - "3000:3000"
-#    networks:
-#      - ris-portal
 
 networks:
   ris-portal:
