@@ -1,4 +1,5 @@
 import { defineConfig, devices, type Project } from "@playwright/test";
+
 export const authFile = "playwright/.auth/user.json";
 
 /**
@@ -47,6 +48,16 @@ const browserConfigurations: Project[] = [
     },
     dependencies: ["setup"],
   },
+  {
+    name: "mobile",
+    use: {
+      ...devices["Desktop Firefox"],
+      viewport: { width: 320, height: 600 },
+      touch: true,
+      storageState: authFile,
+    },
+    dependencies: ["setup"],
+  },
 ];
 
 const projects: Project[] = [
@@ -81,7 +92,7 @@ export default defineConfig({
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */
     baseURL: environment.baseUrl,
-    screenshot: { mode: "only-on-failure", fullPage: true },
+    screenshot: { mode: "on", fullPage: true },
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: "retain-on-first-failure",
     extraHTTPHeaders,

@@ -11,12 +11,12 @@ import lombok.NoArgsConstructor;
 @Getter
 @Builder
 public class Meta {
-  @XmlElement(name = "identification", namespace = CaseLawLdml.AKN_NS)
+  @XmlElement(name = "identification", namespace = CaseLawLdmlNamespaces.AKN_NS)
   private Identification identification;
 
-  @XmlElement(name = "classification", namespace = CaseLawLdml.AKN_NS)
+  @XmlElement(name = "classification", namespace = CaseLawLdmlNamespaces.AKN_NS)
   private Classification classification;
 
-  @XmlElement(name = "proprietary", namespace = CaseLawLdml.AKN_NS)
+  @XmlElement(name = "proprietary", namespace = CaseLawLdmlNamespaces.AKN_NS)
   private Proprietary proprietary;
 }

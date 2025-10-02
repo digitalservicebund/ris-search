@@ -1,6 +1,7 @@
 package de.bund.digitalservice.ris.search.integration.config;
 
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
+import de.bund.digitalservice.ris.search.models.opensearch.Literature;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -46,6 +47,8 @@ public class ContainersIntegrationBase {
     openSearchRestTemplate.indexOps(CaseLawDocumentationUnit.class).refresh();
     openSearchRestTemplate.indexOps(Norm.class).create();
     openSearchRestTemplate.indexOps(Norm.class).refresh();
+    openSearchRestTemplate.indexOps(Literature.class).create();
+    openSearchRestTemplate.indexOps(Literature.class).refresh();
 
     // recreate documents alias
     openSearchRestTemplate
@@ -54,7 +57,7 @@ public class ContainersIntegrationBase {
             new AliasActions(
                 new AliasAction.Add(
                     AliasActionParameters.builder()
-                        .withIndices("caselaws", "norms")
+                        .withIndices("caselaws", "norms", "literature")
                         .withAliases("documents")
                         .build())));
   }
@@ -76,5 +79,16 @@ public class ContainersIntegrationBase {
 
     Document mappingDocumentNorms = Document.parse(mappingJsonNorms);
     openSearchRestTemplate.indexOps(IndexCoordinates.of("norms")).putMapping(mappingDocumentNorms);
+
+    // literature mapping
+    ClassPathResource resourceLiterature =
+        new ClassPathResource("/openSearch/literature_mappings.json");
+    InputStreamReader readerLiterature = new InputStreamReader(resourceLiterature.getInputStream());
+    String mappingJsonLiterature = FileCopyUtils.copyToString(readerLiterature);
+
+    Document mappingDocumentLiterature = Document.parse(mappingJsonLiterature);
+    openSearchRestTemplate
+        .indexOps(IndexCoordinates.of("literature"))
+        .putMapping(mappingDocumentLiterature);
   }
 }

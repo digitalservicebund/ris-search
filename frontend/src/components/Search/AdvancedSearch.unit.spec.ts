@@ -1,7 +1,6 @@
 import { mountSuspended } from "@nuxt/test-utils/runtime";
 import { mount, flushPromises } from "@vue/test-utils";
 import type { AxiosResponse } from "axios";
-import PrimeVue from "primevue/config";
 import { vi } from "vitest";
 import { nextTick } from "vue";
 import AdvancedSearch from "./AdvancedSearch.vue";
@@ -85,7 +84,7 @@ const stubs = {
 };
 
 const wrapper = mount(AdvancedSearch, {
-  global: { stubs, plugins: [PrimeVue] },
+  global: { stubs },
 });
 
 describe("AdvancedSearch.vue", () => {
@@ -95,7 +94,7 @@ describe("AdvancedSearch.vue", () => {
 
   it("should disable user input initially if component is not ready", async () => {
     const notReadyComponent = await mountSuspended(AdvancedSearch, {
-      global: { stubs, plugins: [PrimeVue] },
+      global: { stubs },
     });
     expect(notReadyComponent.html()).toContain("Lade Suche...");
   });
@@ -220,7 +219,7 @@ describe("AdvancedSearch.vue", () => {
       state.builderUsed = true;
       state.modeChangeConfirmed = false;
 
-      vi.spyOn(window, "confirm").mockReturnValue(true);
+      vi.spyOn(globalThis, "confirm").mockReturnValue(true);
       state.disableAfterConfirmation();
 
       expect(state.modeChangeConfirmed).toBe(true);
@@ -234,7 +233,7 @@ describe("AdvancedSearch.vue", () => {
       state.modeChangeConfirmed = false;
       state.textEntered = false;
 
-      vi.spyOn(window, "confirm").mockReturnValue(false);
+      vi.spyOn(globalThis, "confirm").mockReturnValue(false);
       state.disableAfterConfirmation();
 
       expect(state.modeChangeConfirmed).toBe(false);
@@ -259,7 +258,7 @@ describe("AdvancedSearch.vue", () => {
 
     const searchSpy = vi.spyOn(state, "search").mockResolvedValue(undefined);
     const scrollToSpy = vi
-      .spyOn(window, "scrollTo")
+      .spyOn(globalThis, "scrollTo")
       .mockImplementation(() => {});
 
     await state.updatePage(2);

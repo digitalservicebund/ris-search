@@ -9,7 +9,7 @@ import org.eclipse.persistence.oxm.annotations.XmlDiscriminatorValue;
 @Getter
 public abstract class AknEmbeddedStructureInBlock extends AknBlock {
 
-  @XmlElement(name = "embeddedStructure", namespace = CaseLawLdml.AKN_NS)
+  @XmlElement(name = "embeddedStructure", namespace = CaseLawLdmlNamespaces.AKN_NS)
   protected JaxbHtml content;
 
   public abstract String getName();

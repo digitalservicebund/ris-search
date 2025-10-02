@@ -26,10 +26,10 @@ describe("NavigationMenu.vue", () => {
     expect(items.length).toBe(data.length);
 
     const stubs = wrapper.findAllComponents(MenuItemStub);
-    stubs.forEach((stub, idx) => {
+    for (const [idx, stub] of stubs.entries()) {
       expect(stub.props("root")).toBe(true);
       expect(stub.props("item")).toEqual(data[idx]);
-    });
+    }
   });
 
   it('emits "selectLeaf" for leaf items and not for parents', async () => {

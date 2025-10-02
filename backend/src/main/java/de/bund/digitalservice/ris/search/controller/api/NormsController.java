@@ -18,8 +18,9 @@ import de.bund.digitalservice.ris.search.schema.CollectionSchema;
 import de.bund.digitalservice.ris.search.schema.LegislationWorkSchema;
 import de.bund.digitalservice.ris.search.schema.LegislationWorkSearchSchema;
 import de.bund.digitalservice.ris.search.schema.SearchMemberSchema;
-import de.bund.digitalservice.ris.search.service.XsltTransformerService;
+import de.bund.digitalservice.ris.search.service.NormsService;
 import de.bund.digitalservice.ris.search.service.search.NormsService;
+import de.bund.digitalservice.ris.search.service.xslt.NormXsltTransformerService;
 import de.bund.digitalservice.ris.search.utils.LuceneQueryTools;
 import de.bund.digitalservice.ris.search.utils.eli.ExpressionEli;
 import de.bund.digitalservice.ris.search.utils.eli.ManifestationEli;
@@ -74,10 +75,11 @@ public class NormsController {
   public static final String NATURAL_IDENTIFIER_EXAMPLE = "s1325";
 
   private final NormsService normsService;
-  private final XsltTransformerService xsltTransformerService;
+  private final NormXsltTransformerService xsltTransformerService;
 
   @Autowired
-  public NormsController(NormsService normsService, XsltTransformerService xsltTransformerService) {
+  public NormsController(
+      NormsService normsService, NormXsltTransformerService xsltTransformerService) {
     this.normsService = normsService;
     this.xsltTransformerService = xsltTransformerService;
   }

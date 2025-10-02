@@ -15,7 +15,7 @@ import org.eclipse.persistence.oxm.annotations.XmlDiscriminatorValue;
 public class Opinions extends AknBlock {
   public static final String NAME = "Abweichende Meinung";
 
-  @XmlElement(name = "opinion", namespace = CaseLawLdml.AKN_NS)
+  @XmlElement(name = "opinion", namespace = CaseLawLdmlNamespaces.AKN_NS)
   private Opinion opinion;
 
   public static Opinions build(List<Object> content) {

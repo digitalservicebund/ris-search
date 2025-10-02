@@ -26,8 +26,8 @@ import { useBackendURL } from "~/composables/useBackendURL";
 import type { CaseLaw } from "~/types";
 import { getEncodingURL } from "~/utils/caseLawUtils";
 import { dateFormattedDDMMYYYY } from "~/utils/dateFormatting";
-import { getAllSectionsFromHtml } from "~/utils/htmlParser";
-import { removeOuterParentheses } from "~/utils/textFormatting";
+import { getAllSectionsFromHtml, parseDocument } from "~/utils/htmlParser";
+import { removeOuterParentheses, truncateAtWord } from "~/utils/textFormatting";
 import IcBaselineSubject from "~icons/ic/baseline-subject";
 import IcOutlineInfo from "~icons/ic/outline-info";
 import MaterialSymbolsDownload from "~icons/material-symbols/download";
@@ -48,7 +48,74 @@ const { data: html, error: contentError } = await useFetch<string>(
   },
 );
 
-useHead({ title: caseLaw.value?.fileNumbers?.[0] });
+const buildOgTitle = (caseLaw: CaseLaw) => {
+  const court = caseLaw.courtName?.trim() || "";
+  const dtype = caseLaw.documentType || "Gerichtsentscheidung";
+  const date = caseLaw.decisionDate
+    ? dateFormattedDDMMYYYY(caseLaw.decisionDate)
+    : "";
+  const file = caseLaw.fileNumbers?.[0] || "";
+
+  const parts = [
+    court && `${court}:`,
+    dtype,
+    date && `vom ${date}`,
+    file && `– ${file}`,
+  ]
+    .filter(Boolean)
+    .join(" ");
+
+  return truncateAtWord(parts, 55) || undefined;
+};
+
+const title = computed(() => {
+  return caseLaw.value ? buildOgTitle(caseLaw.value) : undefined;
+});
+const description = computed<string>(() => {
+  if (caseLaw.value?.guidingPrinciple) {
+    const sentences = caseLaw.value.guidingPrinciple
+      .split(/(?<=[.!?])\s+/)
+      .filter(Boolean);
+
+    return truncateAtWord(sentences.slice(0, 2).join(" "), 150);
+  }
+
+  if (html.value) {
+    const doc = parseDocument(html.value);
+    const firstParagraph = doc.querySelector("section p");
+    const firstParagraphText = firstParagraph?.textContent?.trim();
+    if (firstParagraphText) {
+      return truncateAtWord(firstParagraphText, 150);
+    }
+  }
+
+  return "Gerichtsentscheidung";
+});
+
+const reqUrl = useRequestURL();
+const config = useRuntimeConfig();
+const siteBaseUrl = config.public.siteBaseUrl || reqUrl.origin;
+const canonicalUrl = `${siteBaseUrl}${reqUrl.pathname}`;
+
+const meta = computed(() =>
+  [
+    { name: "description", content: description.value },
+    { property: "og:type", content: "article" },
+    { property: "og:title", content: title.value },
+    { property: "og:description", content: description.value },
+    { property: "og:url", content: canonicalUrl },
+    { name: "twitter:title", content: title.value },
+    { name: "twitter:description", content: description.value },
+  ].filter(
+    (tag) => typeof tag.content === "string" && tag.content.trim() !== "",
+  ),
+);
+
+useHead({
+  title,
+  link: [{ rel: "canonical", href: canonicalUrl }],
+  meta,
+});
 
 definePageMeta({ layout: "base" }); // use "base" layout to allow for full-width tab backgrounds
 

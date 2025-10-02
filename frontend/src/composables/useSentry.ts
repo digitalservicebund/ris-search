@@ -28,7 +28,7 @@ export function useSentry() {
     Sentry.init({
       enabled,
       dsn,
-      tracesSampleRate: 1.0,
+      tracesSampleRate: 1,
       debug: false,
       release,
       environment,

@@ -20,14 +20,14 @@ public class AknMultipleBlock {
   // This enables deterministic element order when using the withBlock method
   @XmlTransient private Map<String, AknBlock> blocks = new LinkedHashMap<>();
 
-  @XmlElement(name = "block", namespace = CaseLawLdml.AKN_NS)
+  @XmlElement(name = "block", namespace = CaseLawLdmlNamespaces.AKN_NS)
   public void setJaxbBlocks(List<AknBlock> blocks) {
     for (AknBlock block : blocks) {
       this.blocks.put(block.getName(), block);
     }
   }
 
-  @XmlElement(name = "block", namespace = CaseLawLdml.AKN_NS)
+  @XmlElement(name = "block", namespace = CaseLawLdmlNamespaces.AKN_NS)
   public List<AknBlock> getJaxbBlocks() {
     return new ArrayList<>(blocks.values());
   }

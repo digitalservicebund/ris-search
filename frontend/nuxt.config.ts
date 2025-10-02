@@ -25,12 +25,50 @@ export default defineNuxtConfig({
           content:
             "Gesetze & Verordnungen, Gerichtsentscheidungen und Verwaltungsvorschriften",
         },
+        { property: "og:image", content: "/og_image.png" },
+        { name: "twitter:image", content: "/og_image.png" },
+        { name: "twitter:card", content: "summary_large_image" },
+        { name: "theme-color", content: "#ffffff" },
+        { name: "msapplication-TileColor", content: "#ffffff" },
       ],
       htmlAttrs: {
         lang: "de",
       },
       charset: "utf-8",
       viewport: "width=device-width, initial-scale=1",
+      link: [
+        { rel: "icon", type: "image/x-icon", href: "/favicon.ico" },
+        {
+          rel: "icon",
+          type: "image/png",
+          sizes: "16x16",
+          href: "/favicon-16x16.png",
+        },
+        {
+          rel: "icon",
+          type: "image/png",
+          sizes: "32x32",
+          href: "/favicon-32x32.png",
+        },
+        {
+          rel: "apple-touch-icon",
+          sizes: "180x180",
+          href: "/apple-touch-icon.png",
+        },
+        {
+          rel: "icon",
+          type: "image/png",
+          sizes: "192x192",
+          href: "/android-chrome-192x192.png",
+        },
+        {
+          rel: "icon",
+          type: "image/png",
+          sizes: "512x512",
+          href: "/android-chrome-512x512.png",
+        },
+        { rel: "manifest", href: "/site.webmanifest" },
+      ],
     },
   },
   srcDir: "src/",
@@ -96,7 +134,6 @@ export default defineNuxtConfig({
       analytics: {
         posthogKey: "", // needs override in env
         posthogHost: "", // needs override in env
-        feedbackSurveyId: "", // needs override in env
       },
     },
   },

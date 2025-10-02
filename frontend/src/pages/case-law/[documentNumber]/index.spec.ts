@@ -1,12 +1,8 @@
 import { mockNuxtImport, mountSuspended } from "@nuxt/test-utils/runtime";
-import {
-  type DOMWrapper,
-  mount,
-  type VueWrapper,
-  RouterLinkStub,
-} from "@vue/test-utils";
+import { mount, type VueWrapper, RouterLinkStub } from "@vue/test-utils";
 import dayjs from "dayjs";
 import { expect, it } from "vitest";
+import { unref } from "vue";
 import CaseLawActionsMenu from "~/components/ActionMenu/CaseLawActionsMenu.vue";
 import CaseLawPage from "~/pages/case-law/[documentNumber]/index.vue";
 import type { CaseLaw } from "~/types";
@@ -77,13 +73,13 @@ const unavailablePlaceholder = "nicht vorhanden";
 
 function findDefinitions(wrapper: VueWrapper): Record<string, string> {
   const definitions: Record<string, string> = {};
-  wrapper.findAll("dt").forEach((dt: DOMWrapper<HTMLElement>) => {
+  for (const dt of wrapper.findAll("dt")) {
     const key = dt.text();
     const value = dt.element.nextSibling?.textContent;
     if (key && value) {
       definitions[key] = value;
     }
-  });
+  }
   return definitions;
 }
 
@@ -93,11 +89,21 @@ describe("case law single view page", async () => {
     router.addRoute({ path: "/", component: CaseLawPage });
   });
 
+  beforeEach(() => {
+    vi.clearAllMocks();
+    useFetchMock.mockImplementation(async (url: string) => {
+      if (url.includes("html")) {
+        return { data: ref(htmlData), status: ref("success") };
+      } else {
+        return { data: ref(caseLawTestData), status: ref("success") };
+      }
+    });
+  });
+
   it("displays Inhaltsverzeichnis correctly with links to anchors", async () => {
     const wrapper = await mountSuspended(CaseLawPage);
 
     const tocLinks = wrapper.findAll(".case-law h2");
-    console.log(tocLinks);
     const expectedLinks = [
       { id: "leitsatz", title: "Leitsatz" },
       { id: "orientierungssatz", title: "Orientierungssatz" },
@@ -234,10 +240,67 @@ describe("case law single view page", async () => {
     expect(pageHeader.exists()).toBe(false);
   });
 
-  it("uses the first file number as meta title", async () => {
-    mount(CaseLawPage);
+  it("sets meta title and description", async () => {
+    await mountSuspended(CaseLawPage);
     await nextTick();
-    expect(useHeadMock).toHaveBeenCalledWith({ title: "123" });
+
+    expect(useHeadMock).toHaveBeenCalled();
+
+    const headArg = useHeadMock.mock.calls.at(-1)?.[0];
+    expect(headArg).toBeTruthy();
+
+    const title = unref(headArg.title) as string;
+    const date = dayjs(caseLawTestData.decisionDate).format("DD.MM.YYYY");
+
+    expect(title).toContain(`${caseLawTestData.courtName}:`);
+    expect(title).toContain(caseLawTestData.documentType);
+    expect(title).toContain(`vom ${date}`);
+    expect(title).toContain(caseLawTestData.fileNumbers[0]);
+    expect(title.length).toBeLessThanOrEqual(55);
+
+    const meta = unref(headArg.meta) as Array<{
+      name?: string;
+      property?: string;
+      content?: string;
+    }>;
+    const description = meta.find(
+      (tag: { name?: string; property?: string; content?: string }) =>
+        tag.name === "description",
+    )?.content as string;
+
+    expect(description).toContain("Sample guiding principle");
+  });
+
+  it("falls back to first p from HTML when guidingPrinciple is missing", async () => {
+    const htmlDataWithBodyP =
+      "<!DOCTYPE HTML><html><body>" +
+      '<h1 id="title"><p>(Sample headline)</p></h1>' +
+      '<section id="content"><p>First body paragraph used for description.</p></section>' +
+      "</body></html>";
+
+    useFetchMock.mockImplementation(async (url: string) => {
+      if (url.includes("html")) {
+        return { data: ref(htmlDataWithBodyP), status: ref("success") };
+      }
+      return {
+        data: ref({ ...caseLawTestData, guidingPrinciple: "" }),
+        status: ref("success"),
+      };
+    });
+
+    await mountSuspended(CaseLawPage);
+    await nextTick();
+
+    const headArg = useHeadMock.mock.calls.at(-1)?.[0];
+    const meta = unref(headArg.meta) as Array<{
+      name?: string;
+      content?: string;
+    }>;
+    const description = meta.find((metaTag) => metaTag.name === "description")
+      ?.content as string;
+
+    expect(description).toContain("First body paragraph used for description.");
+    expect(description.length).toBeLessThanOrEqual(150);
   });
 
   it("displays zip link on the details tab", async () => {

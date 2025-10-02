@@ -4,6 +4,8 @@ import static org.opensearch.index.query.QueryBuilders.queryStringQuery;
 
 import de.bund.digitalservice.ris.search.config.opensearch.Configurations;
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
+import de.bund.digitalservice.ris.search.exception.OpenSearchMapperException;
+import de.bund.digitalservice.ris.search.mapper.CaseLawLdmlToOpenSearchMapper;
 import de.bund.digitalservice.ris.search.models.CourtSearchResult;
 import de.bund.digitalservice.ris.search.models.api.parameters.CaseLawSearchParams;
 import de.bund.digitalservice.ris.search.models.api.parameters.UniversalSearchParams;
@@ -50,6 +52,7 @@ public class CaseLawService {
   private final ElasticsearchOperations operations;
   private final CourtNameAbbreviationExpander courtNameAbbreviationExpander;
   private final Configurations configurations;
+  private final CaseLawLdmlToOpenSearchMapper marshaller;
   private final SimpleSearchQueryBuilder simpleSearchQueryBuilder;
 
   @SneakyThrows
@@ -59,12 +62,14 @@ public class CaseLawService {
       CaseLawBucket caseLawBucket,
       ElasticsearchOperations operations,
       Configurations configurations,
+      CaseLawLdmlToOpenSearchMapper marshaller,
       SimpleSearchQueryBuilder simpleSearchQueryBuilder) {
     this.caseLawRepository = caseLawRepository;
     this.caseLawBucket = caseLawBucket;
     this.operations = operations;
     this.configurations = configurations;
     this.courtNameAbbreviationExpander = new CourtNameAbbreviationExpander();
+    this.marshaller = marshaller;
     this.simpleSearchQueryBuilder = simpleSearchQueryBuilder;
   }
 
@@ -184,5 +189,19 @@ public class CaseLawService {
 
   public List<String> getAllFilenamesByDocumentNumber(String documentNumber) {
     return caseLawBucket.getAllKeysByPrefix(documentNumber);
+  }
+
+  public Optional<CaseLawDocumentationUnit> getFromBucket(String filename)
+      throws ObjectStoreServiceException {
+    Optional<String> contentOption = caseLawBucket.getFileAsString(filename);
+
+    if (contentOption.isEmpty()) {
+      return Optional.empty();
+    }
+    try {
+      return Optional.of(marshaller.fromString(contentOption.get()));
+    } catch (OpenSearchMapperException ex) {
+      return Optional.empty();
+    }
   }
 }

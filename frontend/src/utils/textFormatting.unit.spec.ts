@@ -4,6 +4,8 @@ import {
   addEllipsis,
   getStringOrDefault,
   removeOuterParentheses,
+  truncateAtWord,
+  removePrefix,
 } from "./textFormatting";
 
 describe("getStringOrDefault", () => {
@@ -84,5 +86,44 @@ describe("addEllipsis heuristics", () => {
   it("adds ellipses to strings that end with counts", () => {
     expect(addEllipsis("1. first. 2.")).toBe("1. first. 2. …");
     expect(addEllipsis("I. first. II.")).toBe("I. first. II. …");
+  });
+});
+
+describe("truncateAtWord", () => {
+  it("returns the string unchanged when length ≤ max", () => {
+    expect(truncateAtWord("Hello world", 20)).toBe("Hello world");
+  });
+
+  it("truncates at the last whole word before the limit", () => {
+    expect(truncateAtWord("Hello brave world", 13)).toBe("Hello brave");
+    expect(truncateAtWord("Alpha Beta Gamma", 10)).toBe("Alpha Beta");
+  });
+
+  it("normalizes internal whitespace before truncating", () => {
+    expect(truncateAtWord("  Hello   \n  world  ", 12)).toBe("Hello world");
+    expect(truncateAtWord("\tOne   two\tthree\nfour", 9)).toBe("One two");
+  });
+
+  it("falls back to a hard cut when there is no space before the limit", () => {
+    expect(truncateAtWord("Supercalifragilistic", 5)).toBe("Super");
+  });
+
+  it("handles tiny limits", () => {
+    expect(truncateAtWord("Hi there", 1)).toBe("H");
+    expect(truncateAtWord("Hi there", 0)).toBe("");
+  });
+
+  it("works with Unicode letters", () => {
+    expect(truncateAtWord("Über schöne Dinge", 8)).toBe("Über");
+    expect(truncateAtWord("Äpfel Birnen Kirschen", 12)).toBe("Äpfel Birnen");
+  });
+});
+
+describe("removePrefix", () => {
+  it("removes prefix when present", () => {
+    expect(removePrefix("Hello World", "Hello ")).toBe("World");
+  });
+  it("removes original string when prefix not present", () => {
+    expect(removePrefix("Hello World", "Hallo ")).toBe("Hello World");
   });
 });

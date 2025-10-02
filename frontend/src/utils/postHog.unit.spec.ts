@@ -3,11 +3,11 @@ import { getAccessibilityRelatedMetrics } from "~/utils/postHog";
 
 describe("getAccessibilityRelatedMetrics", () => {
   beforeEach(() => {
-    Object.defineProperty(window, "devicePixelRatio", {
+    Object.defineProperty(globalThis, "devicePixelRatio", {
       value: 1.25,
       configurable: true,
     });
-    vi.spyOn(window, "getComputedStyle").mockImplementation(() => {
+    vi.spyOn(globalThis, "getComputedStyle").mockImplementation(() => {
       return { fontSize: "16px" } as CSSStyleDeclaration;
     });
   });
@@ -18,7 +18,7 @@ describe("getAccessibilityRelatedMetrics", () => {
   });
 
   it("returns correct page info for dark theme", () => {
-    vi.spyOn(window, "matchMedia").mockImplementation(() => {
+    vi.spyOn(globalThis, "matchMedia").mockImplementation(() => {
       return {
         matches: true,
         addListener: vi.fn(),
@@ -36,7 +36,7 @@ describe("getAccessibilityRelatedMetrics", () => {
   });
 
   it("returns correct page info for light theme", () => {
-    vi.spyOn(window, "matchMedia").mockImplementation(() => {
+    vi.spyOn(globalThis, "matchMedia").mockImplementation(() => {
       return {
         matches: false,
         addListener: vi.fn(),

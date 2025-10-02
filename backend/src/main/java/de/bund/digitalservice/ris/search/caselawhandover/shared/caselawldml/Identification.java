@@ -16,12 +16,12 @@ public class Identification {
   @XmlAttribute(name = "source")
   private String name = "attributsemantik-noch-undefiniert";
 
-  @XmlElement(name = "FRBRWork", namespace = CaseLawLdml.AKN_NS)
+  @XmlElement(name = "FRBRWork", namespace = CaseLawLdmlNamespaces.AKN_NS)
   private FrbrElement frbrWork;
 
-  @XmlElement(name = "FRBRExpression", namespace = CaseLawLdml.AKN_NS)
+  @XmlElement(name = "FRBRExpression", namespace = CaseLawLdmlNamespaces.AKN_NS)
   private FrbrElement frbrExpression;
 
-  @XmlElement(name = "FRBRManifestation", namespace = CaseLawLdml.AKN_NS)
+  @XmlElement(name = "FRBRManifestation", namespace = CaseLawLdmlNamespaces.AKN_NS)
   private FrbrElement frbrManifestation;
 }
