@@ -4,7 +4,6 @@ import static de.bund.digitalservice.ris.search.service.eclicrawler.EcliSitemapJ
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -12,8 +11,6 @@ import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
 import de.bund.digitalservice.ris.search.mapper.EcliCrawlerDocumentMapper;
 import de.bund.digitalservice.ris.search.models.eclicrawler.sitemap.Sitemap;
-import de.bund.digitalservice.ris.search.models.eclicrawler.sitemap.Url;
-import de.bund.digitalservice.ris.search.models.eclicrawler.sitemapindex.Sitemapindex;
 import de.bund.digitalservice.ris.search.models.opensearch.EcliCrawlerDocument;
 import de.bund.digitalservice.ris.search.repository.objectstorage.CaseLawBucket;
 import de.bund.digitalservice.ris.search.repository.objectstorage.PortalBucket;
@@ -22,8 +19,6 @@ import de.bund.digitalservice.ris.search.service.Job;
 import de.bund.digitalservice.ris.search.service.eclicrawler.EcliCrawlerDocumentService;
 import de.bund.digitalservice.ris.search.service.eclicrawler.EcliSitemapJob;
 import de.bund.digitalservice.ris.search.service.eclicrawler.EcliSitemapService;
-import jakarta.xml.bind.JAXBException;
-import java.io.FileNotFoundException;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.List;
@@ -31,8 +26,8 @@ import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentMatcher;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
@@ -44,12 +39,13 @@ class EcliSitemapJobTest {
   @Mock PortalBucket portalBucket;
   @Mock CaseLawBucket caseLawBucket;
   @Mock EcliCrawlerDocumentService documentService;
+  String apiUrl = "frontend/url/";
 
   @BeforeEach
   void setup() {
     sitemapJob =
         new EcliSitemapJob(
-            sitemapService, portalBucket, caseLawBucket, syncJob, documentService, "frontend/url/");
+            sitemapService, portalBucket, caseLawBucket, syncJob, documentService, apiUrl);
   }
 
   @Test
@@ -73,48 +69,27 @@ class EcliSitemapJobTest {
   }
 
   @Test
-  void itWritesFullDiffOnInitialRun()
-      throws JAXBException, FileNotFoundException, ObjectStoreServiceException {
+  void itWritesFullDiffOnInitialRun() {
     List<String> changelogPaths = List.of("changelog0.xml", "changelog1.xml");
     LocalDate day = LocalDate.now();
     var testEcliDocument = getTestDocument();
-    var testSitemap = getTestSitemap(testEcliDocument);
 
     when(sitemapService.getSitemapFilesPathsForDay(day)).thenReturn(List.of());
     when(syncJob.getNewChangelogs(caseLawBucket, "0")).thenReturn(changelogPaths);
-    when(documentService.getFullDiff()).thenReturn(List.of(testEcliDocument));
-
-    configurePersistenceMocks(
-        day,
-        List.of(testEcliDocument),
-        List.of(testSitemap),
-        List.of(new Sitemapindex().setName("2025-09-09")));
 
     Job.ReturnCode code = sitemapJob.runJob();
 
-    verify(sitemapService).writeUrlsToSitemaps(day, testSitemap.getUrl());
-    verifyPersistenceMocks(
-        day,
-        List.of(testEcliDocument),
-        List.of(testSitemap),
-        List.of(new Sitemapindex().setName("2025-09-09")));
+    verify(documentService).writeFullDiff(apiUrl + "api/v1/eclicrawler/", day);
 
     assertEquals(Job.ReturnCode.SUCCESS, code);
   }
 
   @Test
-  void itWritesIncrementalChangelogDiff()
-      throws JAXBException, FileNotFoundException, ObjectStoreServiceException {
-    List<String> changelogPaths = List.of("changelog0.xml", "changelog1.xml");
+  void itWritesIncrementalChangelogDiff() throws ObjectStoreServiceException {
+    List<String> changelogPaths = List.of("changelog0.xml");
     Changelog log1 = new Changelog();
     log1.setChanged(new HashSet<>(List.of("file1")));
-    Changelog log2 = new Changelog();
-    log2.setChanged(new HashSet<>(List.of("file2")));
-    List<Changelog> changelogs = List.of(log1, log2);
     LocalDate day = LocalDate.now();
-    var testEcliDocument = getTestDocument();
-    var testSitemap = getTestSitemap(testEcliDocument);
-    var testIndex = new Sitemapindex().setName("2025-09-09");
 
     when(sitemapService.getSitemapFilesPathsForDay(day)).thenReturn(List.of());
     when(portalBucket.getAllKeysByPrefix(LAST_PROCESSED_CHANGELOG)).thenReturn(List.of("file"));
@@ -122,57 +97,22 @@ class EcliSitemapJobTest {
         .thenReturn(Optional.of("changelog/date"));
     when(syncJob.getNewChangelogs(caseLawBucket, "changelog/date")).thenReturn(changelogPaths);
 
-    when(syncJob.parseOneChangelog(caseLawBucket, "changelog0.xml"))
-        .thenReturn(changelogs.getFirst());
-    when(syncJob.parseOneChangelog(caseLawBucket, "changelog1.xml")).thenReturn(changelogs.get(1));
-
-    when(documentService.getFromChangelogs(changelogs)).thenReturn(List.of(testEcliDocument));
-
-    configurePersistenceMocks(
-        day, List.of(testEcliDocument), List.of(testSitemap), List.of(testIndex));
+    when(syncJob.parseOneChangelog(caseLawBucket, "changelog0.xml")).thenReturn(log1);
 
     Job.ReturnCode code = sitemapJob.runJob();
 
-    verify(sitemapService, never()).writeRobotsTxt();
-    verifyPersistenceMocks(
-        day, List.of(testEcliDocument), List.of(testSitemap), List.of(testIndex));
+    verify(documentService)
+        .writeFromChangelog(
+            eq(apiUrl + "api/v1/eclicrawler/"),
+            eq(day),
+            argThat(
+                new ArgumentMatcher<Changelog>() {
+                  @Override
+                  public boolean matches(Changelog changelog) {
+                    return changelog.getChanged().equals(log1.getChanged());
+                  }
+                }));
 
     assertEquals(Job.ReturnCode.SUCCESS, code);
-  }
-
-  private void configurePersistenceMocks(
-      LocalDate day,
-      List<EcliCrawlerDocument> documents,
-      List<Sitemap> sitemaps,
-      List<Sitemapindex> indices)
-      throws JAXBException, FileNotFoundException, ObjectStoreServiceException {
-    List<Url> urls = sitemaps.stream().flatMap(sitemap -> sitemap.getUrl().stream()).toList();
-
-    when(sitemapService.writeUrlsToSitemaps(eq(day), argThat(new UrlListMatcher(urls))))
-        .thenReturn(sitemaps);
-    when(sitemapService.writeSitemapsIndices("frontend/url/api/v1/eclicrawler/", day, sitemaps))
-        .thenReturn(indices);
-
-    Mockito.doNothing()
-        .when(documentService)
-        .saveAll(argThat(new EcliCrawlerDocumentsMatcher(documents)));
-
-    Mockito.doNothing()
-        .when(sitemapService)
-        .updateRobotsTxt("frontend/url/api/v1/eclicrawler/", indices);
-  }
-
-  private void verifyPersistenceMocks(
-      LocalDate day,
-      List<EcliCrawlerDocument> documents,
-      List<Sitemap> sitemaps,
-      List<Sitemapindex> indices)
-      throws JAXBException, FileNotFoundException, ObjectStoreServiceException {
-    List<Url> urls = sitemaps.stream().flatMap(sitemap -> sitemap.getUrl().stream()).toList();
-
-    verify(sitemapService).writeUrlsToSitemaps(day, urls);
-    verify(sitemapService).writeSitemapsIndices("frontend/url/api/v1/eclicrawler/", day, sitemaps);
-    verify(documentService).saveAll(documents);
-    verify(sitemapService).updateRobotsTxt("frontend/url/api/v1/eclicrawler/", indices);
   }
 }

@@ -119,7 +119,7 @@ public class EcliCrawlerDocumentService {
     writeFilesFromIterator(apiUrl, day, iterator);
   }
 
-  public void writeFilesFromIterator(
+  private void writeFilesFromIterator(
       String apiUrl, LocalDate day, ChangedEcliCrawlerDocumentsIterator iterator) {
     try {
       List<Sitemap> writtenSitemaps = new ArrayList<>();
@@ -141,16 +141,16 @@ public class EcliCrawlerDocumentService {
     }
   }
 
-  private Optional<EcliCrawlerDocument> getFromBucket(String id) {
+  private Optional<EcliCrawlerDocument> getFromBucket(String filename) {
     try {
       return caselawService
-          .getFromBucket(id)
+          .getFromBucket(filename)
           .flatMap(
               unit -> {
                 if (isValidEcliDocument(unit)) {
                   return Optional.of(
                       EcliCrawlerDocumentMapper.fromCaseLawDocumentationUnit(
-                          documentUrl, "path", unit));
+                          documentUrl, filename, unit));
                 }
                 return Optional.empty();
               });
@@ -159,11 +159,7 @@ public class EcliCrawlerDocumentService {
     }
   }
 
-  private Optional<EcliCrawlerDocument> getPublishedDocument(String id) {
-    var found = repository.findAllByFilenameIn(List.of(id));
-    if (found.isEmpty()) {
-      return Optional.empty();
-    }
-    return Optional.of(setDeleted(found.getFirst()));
+  private Optional<EcliCrawlerDocument> getPublishedDocument(String filename) {
+    return repository.findByFilenameIn(filename).map(this::setDeleted);
   }
 }
