@@ -106,7 +106,6 @@ class EcliSitemapServiceTest {
                 User-agent: *
                 Disallow: /
                 User-agent: DG_JUSTICE_CRAWLER
-                Allow: /
                 """;
     service.writeRobotsTxt();
 

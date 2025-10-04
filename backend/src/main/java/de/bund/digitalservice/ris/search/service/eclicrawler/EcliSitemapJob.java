@@ -19,10 +19,7 @@ import java.util.List;
 import java.util.Objects;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
 
-@Service
 public class EcliSitemapJob implements Job {
 
   EcliSitemapService sitemapService;
@@ -46,13 +43,13 @@ public class EcliSitemapJob implements Job {
       CaseLawBucket caselawbucket,
       CaseLawIndexSyncJob indexJob,
       EcliCrawlerDocumentService ecliCrawlerDocumentService,
-      @Value("${server.front-end-url}") String frontEndUrl) {
+      String apiUrl) {
     this.sitemapService = service;
     this.portalBucket = portalBucket;
     this.caselawbucket = caselawbucket;
     this.indexJob = indexJob;
     this.ecliCrawlerDocumentService = ecliCrawlerDocumentService;
-    this.apiUrl = frontEndUrl + "api/v1/eclicrawler/";
+    this.apiUrl = apiUrl;
   }
 
   public ReturnCode runJob() {

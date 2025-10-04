@@ -49,7 +49,12 @@ class EcliSitemapJobTest {
   void setup() {
     sitemapJob =
         new EcliSitemapJob(
-            sitemapService, portalBucket, caseLawBucket, syncJob, documentService, "frontend/url/");
+            sitemapService,
+            portalBucket,
+            caseLawBucket,
+            syncJob,
+            documentService,
+            "frontend/url/api/v1/eclicrawler/");
   }
 
   @Test
