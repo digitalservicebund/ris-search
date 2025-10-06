@@ -1,4 +1,4 @@
-import type { DocumentKind } from "~/types";
+import { DocumentKind } from "~/types";
 
 /**
  * Queryable fields that can be added to the search query for advanced searches.
@@ -21,15 +21,15 @@ export type DataField = {
  * Query fields that should be displayed for each document kind.
  */
 export const queryableDataFields: Record<DocumentKind, DataField[]> = {
-  A: [],
-  N: [
+  [DocumentKind.All]: [],
+  [DocumentKind.Norm]: [
     { label: "Überschriften der Paragraphen", pattern: "UP:($)" },
     { label: "Text der Paragraphen", pattern: "TP:($)" },
     { label: "Kurzüberschrift ", pattern: "KU:($)" },
     { label: "Langüberschrift", pattern: "LU:($)" },
     { label: "Buchstabenabkürzung", pattern: "AB:($)" },
   ],
-  R: [
+  [DocumentKind.CaseLaw]: [
     { label: "Aktenzeichen", pattern: "AZ:($)" },
     { label: "Leitsatz", pattern: "LS:($)" },
     { label: "Gericht", pattern: "G:($)" },

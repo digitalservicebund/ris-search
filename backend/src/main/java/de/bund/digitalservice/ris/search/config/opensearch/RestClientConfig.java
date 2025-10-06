@@ -1,6 +1,6 @@
 package de.bund.digitalservice.ris.search.config.opensearch;
 
-import org.apache.http.impl.nio.reactor.IOReactorConfig;
+import org.apache.hc.core5.reactor.IOReactorConfig;
 import org.opensearch.client.RestHighLevelClient;
 import org.opensearch.data.client.orhlc.AbstractOpenSearchConfiguration;
 import org.opensearch.data.client.orhlc.ClientConfiguration;
@@ -33,7 +33,7 @@ public class RestClientConfig extends AbstractOpenSearchConfiguration {
     final var keepAliveCallback =
         RestClients.RestClientConfigurationCallback.from(
             clientConfigurer ->
-                clientConfigurer.setDefaultIOReactorConfig(
+                clientConfigurer.setIOReactorConfig(
                     IOReactorConfig.custom().setSoKeepAlive(true).build()));
 
     final ClientConfiguration clientConfiguration =

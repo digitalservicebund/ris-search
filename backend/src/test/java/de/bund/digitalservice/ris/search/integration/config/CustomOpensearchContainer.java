@@ -7,7 +7,7 @@ import org.testcontainers.containers.SelinuxContext;
 @SuppressWarnings("rawtypes")
 public class CustomOpensearchContainer extends OpensearchContainer {
 
-  private static final String DOCKER_IMAGE_OPEN_SEARCH = "opensearchproject/opensearch:1.3.19";
+  private static final String DOCKER_IMAGE_OPEN_SEARCH = "opensearchproject/opensearch:2.11.0";
   private static final String CLUSTER_NAME = "cluster.name";
   private static final String OPEN_SEARCH = "opensearch";
   private static final String DISCOVERY_TYPE = "discovery.type";

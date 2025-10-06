@@ -12,17 +12,28 @@ const {
   dataFields = {},
   count,
   documentKind,
+  loading = false,
 } = defineProps<{
   /** All data fields for all supported document kinds. */
   dataFields?: Record<DocumentKind, DataField[]>;
   /** Number of data sets that can be searched. */
-  count: number;
+  count?: number;
   /** Kind of document that will be searched. */
   documentKind: DocumentKind;
+  /** True if the component should be displayed in a loading state */
+  loading?: boolean;
 }>();
 
 /** The current search query. */
 const query = defineModel<string>({ default: "" });
+
+const emit = defineEmits<{
+  /**
+   * Emitted when the search button is clicked or the query is submitted
+   * by pressing Enter
+   */
+  submit: [];
+}>();
 
 const queryInputEl = useTemplateRef("queryInputEl");
 const queryInputId = useId();
@@ -30,7 +41,10 @@ const queryDescriptionId = useId();
 
 const dataFieldListId = useId();
 
-const formattedCount = computed(() => formatNumberWithSeparators(count));
+const formattedCount = computed(() =>
+  typeof count === "number" ? formatNumberWithSeparators(count) : "",
+);
+
 const formattedDocumentKind = computed(() => formatDocumentKind(documentKind));
 
 const dataFieldsForDocumentKind = computed(
@@ -63,6 +77,10 @@ function insertInQuery({ pattern }: DataField) {
     focusableInput.setSelectionRange(nextCursorPosition, nextCursorPosition);
   });
 }
+
+function submitUnlessLoading() {
+  if (!loading) emit("submit");
+}
 </script>
 
 <template>
@@ -74,24 +92,26 @@ function insertInQuery({ pattern }: DataField) {
       In {{ formattedCount }} {{ formattedDocumentKind }} suchen
     </span>
 
-    <InputGroup>
-      <label class="sr-only" :for="queryInputId">Suchanfrage</label>
-      <InputText
-        :id="queryInputId"
-        ref="queryInputEl"
-        v-model="query"
-        :aria-describedby="queryDescriptionId"
-        size="large"
-        class="grow"
-      />
-      <InputGroupAddon>
-        <Button aria-label="Suchen" size="large">
-          <template #icon>
-            <IcBaselineSearch />
-          </template>
-        </Button>
-      </InputGroupAddon>
-    </InputGroup>
+    <form @submit.prevent="submitUnlessLoading()">
+      <InputGroup>
+        <label class="sr-only" :for="queryInputId">Suchanfrage</label>
+        <InputText
+          :id="queryInputId"
+          ref="queryInputEl"
+          v-model="query"
+          :aria-describedby="queryDescriptionId"
+          size="large"
+          class="grow"
+        />
+        <InputGroupAddon>
+          <Button aria-label="Suchen" size="large" type="submit" :loading>
+            <template #icon>
+              <IcBaselineSearch />
+            </template>
+          </Button>
+        </InputGroupAddon>
+      </InputGroup>
+    </form>
 
     <p class="ris-label2-bold">
       Diese Datenfelder können gezielt durchsucht werden:
