@@ -67,7 +67,8 @@ public class SimpleSearchQueryBuilder {
             .build();
 
     // exclude fields with long text from search results
-    result.addSourceFilter(new FetchSourceFilter(null, excludedFields.toArray(String[]::new)));
+    result.addSourceFilter(
+        new FetchSourceFilter(true, null, excludedFields.toArray(String[]::new)));
 
     return result;
   }
