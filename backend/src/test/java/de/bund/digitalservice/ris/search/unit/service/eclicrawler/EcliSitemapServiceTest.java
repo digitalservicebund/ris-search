@@ -115,10 +115,11 @@ class EcliSitemapServiceTest {
   @Test
   void itThrowsAnErrorOnUpdatingNonExistingRobotsTxt() throws ObjectStoreServiceException {
     when(bucket.getFileAsString(ROBOTS_TXT_PATH)).thenReturn(Optional.empty());
+    List<Sitemapindex> indices = List.of(new Sitemapindex());
     Assertions.assertThrows(
         FileNotFoundException.class,
         () -> {
-          service.updateRobotsTxt("baseUrl", List.of(new Sitemapindex()));
+          service.updateRobotsTxt("baseUrl", indices);
         });
   }
 

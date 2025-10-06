@@ -9,9 +9,6 @@ import static org.mockito.Mockito.when;
 
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
-import de.bund.digitalservice.ris.search.mapper.EcliCrawlerDocumentMapper;
-import de.bund.digitalservice.ris.search.models.eclicrawler.sitemap.Sitemap;
-import de.bund.digitalservice.ris.search.models.opensearch.EcliCrawlerDocument;
 import de.bund.digitalservice.ris.search.repository.objectstorage.CaseLawBucket;
 import de.bund.digitalservice.ris.search.repository.objectstorage.PortalBucket;
 import de.bund.digitalservice.ris.search.service.CaseLawIndexSyncJob;
@@ -57,23 +54,10 @@ class EcliSitemapJobTest {
     assertEquals(Job.ReturnCode.SUCCESS, code);
   }
 
-  private EcliCrawlerDocument getTestDocument() {
-    return new EcliCrawlerDocument(
-        "docNumber", "docNumber.xml", "ECLI:DE:XX:2025:1111111", "BGH", "2025-01-01", "url", true);
-  }
-
-  private Sitemap getTestSitemap(EcliCrawlerDocument doc) {
-    var sitemap = new Sitemap().setName("name");
-    EcliCrawlerDocumentMapper.toSitemapUrl(doc);
-    return sitemap.setUrl(List.of(EcliCrawlerDocumentMapper.toSitemapUrl(doc)));
-  }
-
   @Test
   void itWritesFullDiffOnInitialRun() {
     List<String> changelogPaths = List.of("changelog0.xml", "changelog1.xml");
     LocalDate day = LocalDate.now();
-    var testEcliDocument = getTestDocument();
-
     when(sitemapService.getSitemapFilesPathsForDay(day)).thenReturn(List.of());
     when(syncJob.getNewChangelogs(caseLawBucket, "0")).thenReturn(changelogPaths);
 
