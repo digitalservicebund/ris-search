@@ -60,7 +60,7 @@ async function handleSearchSubmit(value?: string) {
 
 function scrollToResults() {
   const element = document.getElementById("result-count");
-  const prefersReducedMotion = window.matchMedia(
+  const prefersReducedMotion = globalThis.matchMedia(
     "(prefers-reduced-motion: reduce)",
   ).matches;
   const behavior: ScrollBehavior = prefersReducedMotion ? "instant" : "smooth";
