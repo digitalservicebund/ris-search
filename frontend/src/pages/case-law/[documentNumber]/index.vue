@@ -93,7 +93,7 @@ const description = computed<string>(() => {
 });
 
 const url = useRequestURL();
-
+const link = computed(() => [{ rel: "canonical", href: url.href }]);
 const meta = computed(() =>
   [
     { name: "description", content: description.value },
@@ -110,7 +110,7 @@ const meta = computed(() =>
 
 useHead({
   title,
-  link: [{ rel: "canonical", href: url.href }],
+  link,
   meta,
 });
 

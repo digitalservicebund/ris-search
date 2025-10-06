@@ -250,13 +250,27 @@ describe("index.vue", () => {
     );
   });
 
-  it("uses the abbreviation as meta title", async () => {
+  it("uses the abbreviation as meta title and sets up comprehensive meta tags", async () => {
     mockMetadata();
     await mountComponent();
     await nextTick();
-    expect(useHeadMock).toHaveBeenCalledWith({
-      title: "abbreviation – Sample Norm",
-    });
+      
+    expect(useHeadMock).toHaveBeenCalled();
+    
+    const callArgs = useHeadMock.mock.calls[0][0];
+    
+    expect(callArgs.title.value).toBe("abbreviation, Fassung vom 01.01.2024, Außer Kraft");
+    expect(callArgs.link.value).toEqual([{ rel: "canonical", href: expect.any(String) }]);
+    expect(callArgs.meta.value).toHaveLength(7);
+    
+    const metaTags = callArgs.meta.value;
+    expect(metaTags).toContainEqual({ name: "description", content: "alternateName" });
+    expect(metaTags).toContainEqual({ property: "og:type", content: "article" });
+    expect(metaTags).toContainEqual({ property: "og:title", content: "abbreviation, Fassung vom 01.01.2024, Außer Kraft" });
+    expect(metaTags).toContainEqual({ property: "og:description", content: "alternateName" });
+    expect(metaTags).toContainEqual({ property: "og:url", content: expect.any(String) });
+    expect(metaTags).toContainEqual({ name: "twitter:title", content: "abbreviation, Fassung vom 01.01.2024, Außer Kraft" });
+    expect(metaTags).toContainEqual({ name: "twitter:description", content: "alternateName" });
   });
 
   it("renders metadata fields", async () => {

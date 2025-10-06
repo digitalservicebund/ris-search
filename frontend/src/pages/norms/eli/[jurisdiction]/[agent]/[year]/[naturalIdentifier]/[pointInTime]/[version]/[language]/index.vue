@@ -154,20 +154,21 @@ const buildOgTitle = (
     }
     const placeholder = parts.join(", ");
     return truncateAtWord(placeholder, 55) || undefined;
-  }
-  const parts: string[] = [baseTitle];
+  } else {
+    const parts: string[] = [baseTitle];
 
-  const formattedValidFrom = dateFormattedDDMMYYYY(validFrom);
-  if (formattedValidFrom) {
-    parts.push(`Fassung vom ${formattedValidFrom}`);
-  }
+    const formattedValidFrom = dateFormattedDDMMYYYY(validFrom);
+    if (formattedValidFrom) {
+      parts.push(`Fassung vom ${formattedValidFrom}`);
+    }
 
-  const statusLabel = getValidityStatusLabel(status);
-  if (statusLabel) {
-    parts.push(statusLabel);
-  }
+    const statusLabel = getValidityStatusLabel(status);
+    if (statusLabel) {
+      parts.push(statusLabel);
+    }
 
-  return truncateAtWord(parts.join(", "), 55) || undefined;
+    return truncateAtWord(parts.join(", "), 55) || undefined;
+  }
 };
 
 const title = computed<string | undefined>(() =>
@@ -186,7 +187,8 @@ const description = computed<string | undefined>(() => {
   const chosen = shortTitle || longTitle || "";
   return chosen ? truncateAtWord(chosen, 150) : undefined;
 });
-const genericUrl = "https://testphase.rechtsinformationen.bund.de";
+const url = useRequestURL();
+const link = computed(() => [{ rel: "canonical", href: url.href }]);
 
 const meta = computed(() =>
   [
@@ -194,7 +196,7 @@ const meta = computed(() =>
     { property: "og:type", content: "article" },
     { property: "og:title", content: title.value },
     { property: "og:description", content: description.value },
-    { property: "og:url", content: genericUrl },
+    { property: "og:url", content: url.href },
     { name: "twitter:title", content: title.value },
     { name: "twitter:description", content: description.value },
   ].filter(
@@ -204,7 +206,7 @@ const meta = computed(() =>
 
 useHead({
   title,
-  link: [{ rel: "canonical", href: genericUrl }],
+  link,
   meta,
 });
 </script>
