@@ -66,7 +66,7 @@ function openResult(url: string) {
     <NuxtLink
       v-if="!!link"
       :to="link"
-      class="ris-heading3-bold max-w-title link-hover mt-8 block text-balance text-blue-800"
+      class="ris-heading3-bold max-w-title link-hover mt-8 block text-blue-800"
       @click="openResult(link)"
     >
       <div
@@ -93,11 +93,7 @@ function openResult(url: string) {
             :to="`${link}#${highlight.location || ''}`"
             @click="openResult(`${link}#${highlight.location || ''}`)"
           >
-            <div
-              role="heading"
-              aria-level="3"
-              v-html="sanitizeSearchResult(highlight.name)"
-            />
+            <h3 v-html="sanitizeSearchResult(highlight.name)" />
           </NuxtLink>
         </div>
         <div
