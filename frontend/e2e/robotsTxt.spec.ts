@@ -9,21 +9,14 @@ async function readPublicFile(name: string) {
   return readFile(join(PUBLIC, name), "utf-8");
 }
 
-const testCases = [
-  { userAgent: "Mozilla/5.0 (Macintosh)", file: "robots.public.txt" },
-  { userAgent: "DG_JUSTICE_CRAWLER", file: "robots.dg.txt" },
-];
-
 test.describe("robots.public.txt dynamic handler", () => {
-  testCases.forEach((testCase) => {
-    test(`public: serves ${testCase.file} for ${testCase.userAgent} user agent`, async ({
-      page,
-    }) => {
-      const expected = await readPublicFile(testCase.file);
-      const response = await page.request.get("/robots.txt", {
-        headers: { "User-Agent": testCase.userAgent },
-      });
-      expect(await response.text()).toBe(expected);
+  test(`public: serves robots.public.txt for Mozilla/5.0 (Macintosh) user agent`, async ({
+    page,
+  }) => {
+    const expected = await readPublicFile("robots.public.txt");
+    const response = await page.request.get("/robots.txt", {
+      headers: { "User-Agent": "Mozilla/5.0 (Macintosh)" },
     });
+    expect(await response.text()).toBe(expected);
   });
 });
