@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public class ChangedEcliCrawlerDocumentsIterator implements Iterator<List<EcliCrawlerDocument>> {
 
-  List<EcliCrawlerDocument> ecliDocuments;
+  List<EcliCrawlerDocument> ecliDocumentsBuffer;
   Supplier changedSupplier;
   Supplier deleteSupplier;
   List<String> changed;
@@ -31,20 +31,20 @@ public class ChangedEcliCrawlerDocumentsIterator implements Iterator<List<EcliCr
     this.deleteSupplier = deleteSupplier;
     this.changed = new ArrayList<>(changed);
     this.deleted = new ArrayList<>(deleted);
-    ecliDocuments = new ArrayList<>();
+    ecliDocumentsBuffer = new ArrayList<>();
     this.resultSize = resultSize;
     getNext();
   }
 
   /** populate desired changes for changed and deleted until the resultSize is reached */
   private void getNext() {
-    ecliDocuments.clear();
+    ecliDocumentsBuffer.clear();
 
     if (!changed.isEmpty()) {
-      changed = fillAccumulator(changed, id -> changedSupplier.get(id), ecliDocuments);
+      changed = fillBuffer(changed, id -> changedSupplier.get(id));
     }
     if (!deleted.isEmpty()) {
-      deleted = fillAccumulator(deleted, id -> deleteSupplier.get(id), ecliDocuments);
+      deleted = fillBuffer(deleted, id -> deleteSupplier.get(id));
     }
   }
 
@@ -54,14 +54,12 @@ public class ChangedEcliCrawlerDocumentsIterator implements Iterator<List<EcliCr
    * @param ids list of ids that return an Optional of EcliCrawlerDocument
    * @param supplier Function that returns an Optional of EcliCrawlerDocument based on its
    *     identifier
-   * @param acc Accumulated List of returned EcliCrawlerDocuments
    * @return remaining ids
    */
-  private List<String> fillAccumulator(
-      List<String> ids, Supplier supplier, List<EcliCrawlerDocument> acc) {
+  private List<String> fillBuffer(List<String> ids, Supplier supplier) {
     int numTaken = 0;
-    for (int i = 0; i < ids.size() && acc.size() < resultSize; i++) {
-      supplier.get(ids.get(i)).ifPresent(acc::add);
+    for (int i = 0; i < ids.size() && ecliDocumentsBuffer.size() < resultSize; i++) {
+      supplier.get(ids.get(i)).ifPresent(ecliDocumentsBuffer::add);
       numTaken++;
     }
     return ids.subList(numTaken, ids.size());
@@ -69,15 +67,15 @@ public class ChangedEcliCrawlerDocumentsIterator implements Iterator<List<EcliCr
 
   @Override
   public boolean hasNext() {
-    return !ecliDocuments.isEmpty();
+    return !ecliDocumentsBuffer.isEmpty();
   }
 
   @Override
   public List<EcliCrawlerDocument> next() {
-    if (ecliDocuments.isEmpty()) {
+    if (ecliDocumentsBuffer.isEmpty()) {
       throw new NoSuchElementException();
     }
-    List<EcliCrawlerDocument> next = new ArrayList<>(ecliDocuments);
+    List<EcliCrawlerDocument> next = new ArrayList<>(ecliDocumentsBuffer);
     // populate upcoming iterator result in advance
     getNext();
     return next;
