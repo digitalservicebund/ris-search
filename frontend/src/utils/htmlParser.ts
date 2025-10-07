@@ -12,13 +12,16 @@ if (import.meta.server) {
 }
 
 export function parseDocument(html: string): Document {
+  const needsWrapper = !/<html[\s>]/i.test(html) && !/<body[\s>]/i.test(html);
+  const source = needsWrapper ? `<div>${html}</div>` : html;
+
   if (import.meta.client) {
     // Client-side: use DOMParser
     const parser = new DOMParser();
-    return parser.parseFromString(html, "text/html");
+    return parser.parseFromString(source, "text/html");
   } else {
     /* v8 ignore next 2 */
-    const dom = new _JSDOM(html);
+    const dom = new _JSDOM(source);
     return dom.window.document;
   }
 }
