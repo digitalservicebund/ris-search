@@ -1,20 +1,8 @@
-// frontend/src/composables/useDynamicSeo.spec.ts
 import { mockNuxtImport } from "@nuxt/test-utils/runtime";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { computed } from "vue";
 import { useDynamicSeo } from "./useDynamicSeo";
-
-type MetaTag =
-  | {
-      name: "description" | "twitter:title" | "twitter:description";
-      content: string | undefined;
-    }
-  | {
-      property: "og:type" | "og:title" | "og:description" | "og:url";
-      content: string | undefined;
-    };
-
-type CanonicalLink = { rel: "canonical"; href: string };
+import type { SeoMetaTag as MetaTag, CanonicalLink } from "./useDynamicSeo";
 
 const { useHead, useRequestURL } = vi.hoisted(() => ({
   useHead: vi.fn(),

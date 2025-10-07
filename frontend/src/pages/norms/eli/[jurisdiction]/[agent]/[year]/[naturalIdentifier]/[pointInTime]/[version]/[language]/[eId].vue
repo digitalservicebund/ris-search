@@ -146,19 +146,17 @@ const inForceNormLink = computed(() => {
   return `/norms/${validVersion.item.workExample.legislationIdentifier}`;
 });
 
-function htmlToPlainText(html?: string): string {
-  if (!html) return "";
-  const doc = parseDocument(`<div>${html}</div>`);
-  const text = doc.body?.textContent ?? "";
-  return text.replaceAll(/\s+/g, " ").trim();
-}
-
 const buildOgTitleForArticle = (
   norm: LegislationWork,
   articleHeadlineHtml?: string,
 ): string | undefined => {
   const abbreviation = norm.abbreviation?.trim();
-  const headlineText = htmlToPlainText(articleHeadlineHtml);
+  const headlineText = (() => {
+    if (!articleHeadlineHtml) return "";
+    const doc = parseDocument(articleHeadlineHtml);
+    const text = doc.body?.textContent ?? "";
+    return text.replaceAll(/\s+/g, " ").trim();
+  })();
 
   const base = abbreviation || headlineText;
   if (!base) return undefined;
