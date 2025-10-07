@@ -2,10 +2,9 @@
 <xsl:stylesheet version="1.0"
 				xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 				xmlns:akn="http://docs.oasis-open.org/legaldocml/ns/akn/3.0"
-				xmlns:ris="http://ldml.neuris.de/literature/metadata/"
-				exclude-result-prefixes="akn ris">
+				exclude-result-prefixes="akn">
 
-	<xsl:output method="html"/>
+	<xsl:output method="html" encoding="UTF-8" indent="yes"/>
 
 	<xsl:strip-space elements="*"/>
 
@@ -41,14 +40,14 @@
 	</xsl:template>
 
 	<!-- Outline -->
-	<xsl:template match="ris:gliederung">
+	<xsl:template match="*[local-name()='gliederung']">
 		<h2>Gliederung</h2>
 		<ul>
 			<xsl:apply-templates/>
 		</ul>
 	</xsl:template>
 
-	<xsl:template match="ris:gliederungEntry">
+	<xsl:template match="*[local-name()='gliederungEntry']">
 		<li><xsl:value-of select="."/></li>
 	</xsl:template>
 
@@ -76,11 +75,8 @@
 		<br />
 	</xsl:template>
 
-	<xsl:template match="akn:a">
-		<a>
-			<xsl:attribute name="href">
-				<xsl:value-of select="@href"/>
-			</xsl:attribute>
+	<xsl:template match="akn:a[@href]">
+		<a href="{@href}">
 			<xsl:apply-templates/>
 		</a>
 	</xsl:template>

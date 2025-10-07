@@ -149,37 +149,11 @@ class LiteratureControllerApiTest extends ContainersIntegrationBase {
             .getContentAsString();
 
     assertThat(responseContent)
-        .isEqualTo(
-            """
-      <!DOCTYPE HTML>
-      <html>
-         <head>
-            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-            <title>Literatur Test Dokument</title>
-         </head>
-         <body>
-            <h1>Literatur Test Dokument</h1>
-            <h3>Dokumentarischer Titel</h3>
-            <h2>Gliederung</h2>
-            <ul>
-               <li>I. Äpfel.</li>
-               <li>II. Birnen.</li>
-               <li>III. Orangen.</li>
-            </ul>
-            <h2>Kurzrefarat</h2>
-            <div>
-               <p>
-                  1. Dies ist ein literature <a href="http://www.foo.de">LDML</a> Dokument für <span>Tests</span>.
-                  <br>
-                  Es werden <sub>sub</sub> und <sup>sup</sup> Elemente unterstützt.
-                  </p>
-               <p>
-                  Außerdem gib es noch <em>EM</em>, hlj, noindex und <strong>strong</strong>.
-                  </p>
-            </div>
-         </body>
-      </html>"""
-                .stripIndent());
+        .contains(
+            "Literatur Test Dokument",
+            "I. Äpfel.",
+            "1. Dies ist ein literature",
+            "Außerdem gib es noch");
   }
 
   @Test

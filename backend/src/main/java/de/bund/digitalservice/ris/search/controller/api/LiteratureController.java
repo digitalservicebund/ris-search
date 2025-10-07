@@ -86,14 +86,11 @@ public class LiteratureController {
   public ResponseEntity<String> getLiteratureAsHtml(
       @Parameter(example = "BJLU075748788") @PathVariable String documentNumber)
       throws ObjectStoreServiceException {
-    Optional<byte[]> bytes = literatureService.getFileByDocumentNumber(documentNumber);
-
-    if (bytes.isPresent()) {
-      String html = xsltTransformerService.transformLiterature(bytes.get());
-      return ResponseEntity.ok(html);
-    } else {
-      return ResponseEntity.notFound().build();
-    }
+    return literatureService
+        .getFileByDocumentNumber(documentNumber)
+        .map(xsltTransformerService::transformLiterature)
+        .map(ResponseEntity::ok)
+        .orElseGet(() -> ResponseEntity.notFound().build());
   }
 
   @GetMapping(
