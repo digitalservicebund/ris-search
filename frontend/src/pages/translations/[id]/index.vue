@@ -20,6 +20,7 @@ import { fetchTranslationAndHTML } from "~/composables/useTranslationData";
 import { removePrefix, truncateAtWord } from "~/utils/textFormatting";
 import IcBaselineSubject from "~icons/ic/baseline-subject";
 import IcOutlineInfo from "~icons/ic/outline-info";
+import { useDynamicSeo } from "~/composables/useDynamicSeo";
 
 definePageMeta({ layout: "base" });
 
@@ -93,27 +94,8 @@ const translationSeo = computed(() => {
 
 const title = computed(() => translationSeo.value.title);
 const description = computed(() => translationSeo.value.description);
-const url = useRequestURL();
+useDynamicSeo({ title, description });
 
-const meta = computed(() =>
-  [
-    { name: "description", content: description.value },
-    { property: "og:type", content: "article" },
-    { property: "og:title", content: title.value },
-    { property: "og:description", content: description.value },
-    { property: "og:url", content: url.href },
-    { name: "twitter:title", content: title.value },
-    { name: "twitter:description", content: description.value },
-  ].filter(
-    (tag) => typeof tag.content === "string" && tag.content.trim() !== "",
-  ),
-);
-
-useHead({
-  title,
-  link: [{ rel: "canonical", href: url.href }],
-  meta,
-});
 </script>
 
 <template>
