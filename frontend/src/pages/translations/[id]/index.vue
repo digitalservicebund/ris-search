@@ -65,31 +65,31 @@ const breadcrumbItems = computed(() => {
 });
 
 const buildOgForTranslation = (
-  name?: string,
-  translationOfWork?: string,
-): { title?: string; description?: string } => {
-  const base = name?.trim() || translationOfWork?.trim();
-  if (!base) return {};
+  name: string,
+  translationOfWork: string,
+): { title: string; description: string } => {
+  const base = name.trim() || translationOfWork.trim();
 
   const title = truncateAtWord(`${base} – English Translation`, 55);
 
   const description = truncateAtWord(
-    `This is the English translation of the ${base}, provided by the German Federal Legal Information Portal. ` +
-      `This translation is for informational purposes only. The German version is the only legally binding text.`,
+    `This is the English translation of the ${base}, provided by the German Federal Legal Information Portal. This translation is for informational purposes only. The German version is the only legally binding text.`,
     150,
   );
 
   return { title, description };
 };
 
-const translationSeo = computed(() =>
-  currentTranslation
-    ? buildOgForTranslation(
-        currentTranslation?.name,
-        currentTranslation?.translationOfWork,
-      )
-    : {},
-);
+const translationSeo = computed(() => {
+  if (!currentTranslation?.name && !currentTranslation?.translationOfWork) {
+    return { title: "", description: "" };
+  }
+
+  return buildOgForTranslation(
+    currentTranslation.name || "",
+    currentTranslation.translationOfWork || "",
+  );
+});
 
 const title = computed(() => translationSeo.value.title);
 const description = computed(() => translationSeo.value.description);

@@ -1,11 +1,11 @@
-import staticPageSeo from "~/i18n/staticPageSeo.json";
+import { staticPageSeo } from "~/i18n/staticPageSeo";
+import type { StaticPage } from "~/i18n/staticPageSeo";
 
-export function useStaticPageSeo(page: keyof typeof staticPageSeo) {
+export function useStaticPageSeo(page: StaticPage) {
   const entry = staticPageSeo[page];
-  if (!entry) return;
 
-  const title = entry.titel;
-  const description = entry.beschreibung;
+  const title = entry.title;
+  const description = entry.description;
   const url = useRequestURL();
 
   useHead({

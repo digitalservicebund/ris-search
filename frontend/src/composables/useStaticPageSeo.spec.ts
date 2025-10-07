@@ -1,7 +1,8 @@
 import { mockNuxtImport } from "@nuxt/test-utils/runtime";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { useStaticPageSeo } from "./useStaticPageSeo";
-import staticPageSeo from "~/i18n/staticPageSeo.json";
+import { staticPageSeo } from "~/i18n/staticPageSeo";
+import type { StaticPage } from "~/i18n/staticPageSeo";
 
 const { useHead, useRequestURL } = vi.hoisted(() => ({
   useHead: vi.fn(),
@@ -21,7 +22,7 @@ describe("useStaticPageSeo composable", () => {
     );
   });
 
-  it.each(Object.keys(staticPageSeo) as (keyof typeof staticPageSeo)[])(
+  it.each(Object.keys(staticPageSeo) as StaticPage[])(
     "sets correct meta tags",
     (key) => {
       const entry = staticPageSeo[key];
@@ -30,7 +31,7 @@ describe("useStaticPageSeo composable", () => {
 
       expect(useHead).toHaveBeenCalledWith(
         expect.objectContaining({
-          title: entry.titel,
+          title: entry.title,
           link: [
             {
               rel: "canonical",
@@ -38,33 +39,20 @@ describe("useStaticPageSeo composable", () => {
             },
           ],
           meta: expect.arrayContaining([
-            { name: "description", content: entry.beschreibung },
-            { property: "og:title", content: entry.titel },
-            { property: "og:description", content: entry.beschreibung },
+            { name: "description", content: entry.description },
+            { property: "og:title", content: entry.title },
+            { property: "og:description", content: entry.description },
             {
               property: "og:url",
               content: "https://testphase.rechtsinformationen.bund.de/example",
             },
-            { name: "twitter:title", content: entry.titel },
-            { name: "twitter:description", content: entry.beschreibung },
+            { name: "twitter:title", content: entry.title },
+            { name: "twitter:description", content: entry.description },
           ]),
         }),
       );
     },
   );
-  describe("called with invalid page keys", () => {
-    const invalidKeys = ["nonexistent-page", undefined, null, ""] as const;
-
-    it.each(invalidKeys)(
-      "returns early and does not call useHead for invalid entry",
-      (invalidKey) => {
-        // @ts-expect-error – intentionally invalid
-        useStaticPageSeo(invalidKey);
-        expect(useHead).not.toHaveBeenCalled();
-      },
-    );
-  });
-
   describe("URL handling", () => {
     it.each([
       "https://testphase.rechtsinformationen.bund.de/custom-path",
