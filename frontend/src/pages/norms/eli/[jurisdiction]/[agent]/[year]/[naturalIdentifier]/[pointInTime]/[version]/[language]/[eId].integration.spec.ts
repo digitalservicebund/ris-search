@@ -6,6 +6,7 @@ import type { LegislationWork } from "~/types";
 
 const headingInnerHtml = `<span class="akn-num">§ 1</span> <span class="akn-heading">Erster Paragraf<sup>1</sup></span>`;
 const headingHtml = `<h2 class="einzelvorschrift">${headingInnerHtml}</h2>`;
+const articleHtmlWithDescription = `${headingHtml}<p>Dies ist der erste Absatz des Artikels mit einer Beschreibung des Inhalts.</p>`;
 
 export const legislationWork = (
   eId: string = "article_eId",
@@ -53,7 +54,7 @@ export const legislationWork = (
 
 const articleContent: NormArticleContent = {
   legislationWork: legislationWork(),
-  html: headingHtml,
+  html: articleHtmlWithDescription,
   articleHeading: headingInnerHtml,
 };
 
@@ -126,7 +127,6 @@ describe("[eId].vue", () => {
     expect(wrapper.find(".ris-heading2-bold").html()).toBe(
       `<h2 class="ris-heading2-bold my-24 mb-24 inline-block">${headingInnerHtml}</h2>`,
     );
-    expect(useHeadMock).toHaveBeenCalledWith({ title: "§ 1 Test Article" });
     const metadata = wrapper.find("div[data-testid='metadata']");
     expect(metadata.exists()).toBe(false);
   });
@@ -141,5 +141,52 @@ describe("[eId].vue", () => {
     expect(metadataText).toContain(
       "Gültig ab 01.01.2000 Gültig bis 01.01.2300".replaceAll(" ", ""),
     );
+  });
+  it("sets up comprehensive meta tags for article page", async () => {
+    await mountComponent();
+    await nextTick();
+
+    expect(useHeadMock).toHaveBeenCalled();
+
+    const callArgs = useHeadMock.mock.calls[0][0];
+
+    expect(callArgs.title.value).toBe("abbreviation: § 1 Erster Paragraf1");
+    expect(callArgs.link.value).toEqual([
+      { rel: "canonical", href: expect.any(String) },
+    ]);
+    expect(callArgs.meta.value).toHaveLength(7);
+
+    const metaTags = callArgs.meta.value;
+    expect(metaTags).toContainEqual({
+      name: "description",
+      content:
+        "Dies ist der erste Absatz des Artikels mit einer Beschreibung des Inhalts.",
+    });
+    expect(metaTags).toContainEqual({
+      property: "og:type",
+      content: "article",
+    });
+    expect(metaTags).toContainEqual({
+      property: "og:title",
+      content: "abbreviation: § 1 Erster Paragraf1",
+    });
+    expect(metaTags).toContainEqual({
+      property: "og:description",
+      content:
+        "Dies ist der erste Absatz des Artikels mit einer Beschreibung des Inhalts.",
+    });
+    expect(metaTags).toContainEqual({
+      property: "og:url",
+      content: expect.any(String),
+    });
+    expect(metaTags).toContainEqual({
+      name: "twitter:title",
+      content: "abbreviation: § 1 Erster Paragraf1",
+    });
+    expect(metaTags).toContainEqual({
+      name: "twitter:description",
+      content:
+        "Dies ist der erste Absatz des Artikels mit einer Beschreibung des Inhalts.",
+    });
   });
 });

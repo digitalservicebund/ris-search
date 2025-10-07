@@ -100,6 +100,10 @@ describe("case law single view page", async () => {
     });
   });
 
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
   it("displays Inhaltsverzeichnis correctly with links to anchors", async () => {
     const wrapper = await mountSuspended(CaseLawPage);
 
