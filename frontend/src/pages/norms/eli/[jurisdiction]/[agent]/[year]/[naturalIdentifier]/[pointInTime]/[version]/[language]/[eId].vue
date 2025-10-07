@@ -150,7 +150,7 @@ function htmlToPlainText(html?: string): string {
   if (!html) return "";
   const doc = parseDocument(`<div>${html}</div>`);
   const text = doc.body?.textContent ?? "";
-  return text.replace(/\s+/g, " ").trim();
+  return text.replaceAll(/\s+/g, " ").trim();
 }
 
 const buildOgTitleForArticle = (
