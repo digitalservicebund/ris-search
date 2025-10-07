@@ -53,7 +53,7 @@ describe("Access Token Middleware", () => {
   beforeEach(() => {
     vi.clearAllMocks();
 
-    global.getUserSession = vi.fn().mockResolvedValue(mockSession);
+    globalThis.getUserSession = vi.fn().mockResolvedValue(mockSession);
 
     // Mock getRequestURL
     getRequestURL.mockReturnValue({
@@ -92,7 +92,7 @@ describe("Access Token Middleware", () => {
   });
 
   it("should throw unauthorized error when no access token exists", async () => {
-    global.getUserSession.mockResolvedValueOnce({
+    globalThis.getUserSession.mockResolvedValueOnce({
       secure: {
         tokens: {
           accessToken: null,
