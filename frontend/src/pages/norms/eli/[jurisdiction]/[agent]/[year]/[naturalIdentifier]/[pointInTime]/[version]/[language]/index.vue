@@ -31,6 +31,7 @@ import {
   tabStyles,
 } from "~/components/Tabs.styles";
 import { useBackendURL } from "~/composables/useBackendURL";
+import { useDynamicSeo } from "~/composables/useDynamicSeo";
 import { useIntersectionObserver } from "~/composables/useIntersectionObserver";
 import { useNormVersions } from "~/composables/useNormVersions";
 import type { LegislationWork } from "~/types";
@@ -187,28 +188,8 @@ const description = computed<string | undefined>(() => {
   const chosen = shortTitle || longTitle || "";
   return chosen ? truncateAtWord(chosen, 150) : undefined;
 });
-const url = useRequestURL();
-const link = computed(() => [{ rel: "canonical", href: url.href }]);
 
-const meta = computed(() =>
-  [
-    { name: "description", content: description.value },
-    { property: "og:type", content: "article" },
-    { property: "og:title", content: title.value },
-    { property: "og:description", content: description.value },
-    { property: "og:url", content: url.href },
-    { name: "twitter:title", content: title.value },
-    { name: "twitter:description", content: description.value },
-  ].filter(
-    (tag) => typeof tag.content === "string" && tag.content.trim() !== "",
-  ),
-);
-
-useHead({
-  title,
-  link,
-  meta,
-});
+useDynamicSeo({ title, description });
 </script>
 
 <template>
