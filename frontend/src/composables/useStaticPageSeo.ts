@@ -13,6 +13,7 @@ export function useStaticPageSeo(page: StaticPage) {
     link: [{ rel: "canonical", href: url.href }],
     meta: [
       { name: "description", content: description },
+      { property: "og:type", content: "article" },
       { property: "og:title", content: title },
       { property: "og:description", content: description },
       { property: "og:url", content: url.href },

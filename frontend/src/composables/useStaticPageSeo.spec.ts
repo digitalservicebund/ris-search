@@ -3,12 +3,14 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { useStaticPageSeo } from "./useStaticPageSeo";
 import { staticPageSeo } from "~/i18n/staticPageSeo";
 import type { StaticPage } from "~/i18n/staticPageSeo";
+import {
+  TEST_URL,
+  createExpectedHeadCall,
+} from "~/utils/testing/seoTestHelpers";
 
 const { useHead, useRequestURL } = vi.hoisted(() => ({
   useHead: vi.fn(),
-  useRequestURL: vi.fn(
-    () => new URL("https://testphase.rechtsinformationen.bund.de/example"),
-  ),
+  useRequestURL: vi.fn(() => new URL(TEST_URL)),
 }));
 
 mockNuxtImport("useHead", () => useHead);
@@ -17,9 +19,7 @@ mockNuxtImport("useRequestURL", () => useRequestURL);
 describe("useStaticPageSeo composable", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    useRequestURL.mockReturnValue(
-      new URL("https://testphase.rechtsinformationen.bund.de/example"),
-    );
+    useRequestURL.mockReturnValue(new URL(TEST_URL));
   });
 
   it.each(Object.keys(staticPageSeo) as StaticPage[])(
@@ -30,29 +30,11 @@ describe("useStaticPageSeo composable", () => {
       useStaticPageSeo(key);
 
       expect(useHead).toHaveBeenCalledWith(
-        expect.objectContaining({
-          title: entry.title,
-          link: [
-            {
-              rel: "canonical",
-              href: "https://testphase.rechtsinformationen.bund.de/example",
-            },
-          ],
-          meta: expect.arrayContaining([
-            { name: "description", content: entry.description },
-            { property: "og:title", content: entry.title },
-            { property: "og:description", content: entry.description },
-            {
-              property: "og:url",
-              content: "https://testphase.rechtsinformationen.bund.de/example",
-            },
-            { name: "twitter:title", content: entry.title },
-            { name: "twitter:description", content: entry.description },
-          ]),
-        }),
+        createExpectedHeadCall(entry.title, entry.description, TEST_URL),
       );
     },
   );
+
   describe("URL handling", () => {
     it.each([
       "https://testphase.rechtsinformationen.bund.de/custom-path",
@@ -64,10 +46,11 @@ describe("useStaticPageSeo composable", () => {
 
       expect(useRequestURL).toHaveBeenCalled();
       expect(useHead).toHaveBeenCalledWith(
-        expect.objectContaining({
-          link: [{ rel: "canonical", href }],
-          meta: expect.arrayContaining([{ property: "og:url", content: href }]),
-        }),
+        createExpectedHeadCall(
+          staticPageSeo.startseite.title,
+          staticPageSeo.startseite.description,
+          href,
+        ),
       );
     });
   });

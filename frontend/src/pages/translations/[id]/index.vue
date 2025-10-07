@@ -16,11 +16,11 @@ import {
   tabPanelStyles,
   tabStyles,
 } from "~/components/Tabs.styles";
+import { useDynamicSeo } from "~/composables/useDynamicSeo";
 import { fetchTranslationAndHTML } from "~/composables/useTranslationData";
 import { removePrefix, truncateAtWord } from "~/utils/textFormatting";
 import IcBaselineSubject from "~icons/ic/baseline-subject";
 import IcOutlineInfo from "~icons/ic/outline-info";
-import { useDynamicSeo } from "~/composables/useDynamicSeo";
 
 definePageMeta({ layout: "base" });
 
@@ -95,7 +95,6 @@ const translationSeo = computed(() => {
 const title = computed(() => translationSeo.value.title);
 const description = computed(() => translationSeo.value.description);
 useDynamicSeo({ title, description });
-
 </script>
 
 <template>
