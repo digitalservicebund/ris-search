@@ -47,15 +47,6 @@ public class SecurityConfig {
     this.authProperties = authProperties;
   }
 
-  @Bean
-  // For local development profile (default) allow usage of API without credentials
-  @Profile({"default"})
-  public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
-    http.authorizeHttpRequests(requests -> requests.anyRequest().permitAll());
-    http.csrf(customizer -> customizer.ignoringRequestMatchers(internalPaths));
-    return http.build();
-  }
-
   /**
    * Method to configure security for the application
    *
@@ -64,7 +55,7 @@ public class SecurityConfig {
    * @throws Exception If an error occurs
    */
   @Bean
-  @Profile({"staging", "uat"})
+  @Profile({"staging", "uat", "default"})
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     http.authorizeHttpRequests(
             requests ->

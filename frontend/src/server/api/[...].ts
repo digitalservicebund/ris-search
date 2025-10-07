@@ -28,9 +28,7 @@ export default defineEventHandler(async (event): Promise<unknown> => {
   try {
     const requestedUrl = getRequestURL(event);
     const newUrl =
-      runtimeConfig.risBackendUrl +
-      requestedUrl.pathname.replace("/api/v1", "/v1") +
-      requestedUrl.search;
+      runtimeConfig.risBackendUrl + requestedUrl.pathname + requestedUrl.search;
 
     const headers: Record<string, string> = {
       Accept: event.headers.get("Accept") ?? "application/json",
