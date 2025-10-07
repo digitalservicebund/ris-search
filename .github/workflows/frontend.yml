@@ -60,6 +60,14 @@ jobs:
             -Dsonar.sources=src
             -Dsonar.javascript.lcov.reportPaths=src/coverage/lcov.info
         if: ${{  github.actor != 'dependabot[bot]' }}
+      - name: Check SonarCloud Quality Gate
+        uses: sonarsource/sonarqube-quality-gate-action@dc2f7b0dd95544cd550de3028f89193576e958b9
+        with:
+          scanMetadataReportFile: frontend/.scannerwork/report-task.txt
+        timeout-minutes: 3
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        if: ${{ github.actor != 'dependabot[bot]' }}
       - name: Send status to Slack
         uses: digitalservicebund/notify-on-failure-gha@66c485757701f8d5dbee32f24df38d904ca693ba
         if: ${{ failure() && github.ref == 'refs/heads/main' }}
