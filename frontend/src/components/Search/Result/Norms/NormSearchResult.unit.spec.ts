@@ -220,7 +220,7 @@ describe("NormSearchResult.vue", () => {
     const titleContent = wrapper.find("a > div");
     expect(titleContent.element.innerHTML).toBe(expectedSanitized);
 
-    const contentItems = wrapper.findAll('[data-testid="highlights"] a div');
+    const contentItems = wrapper.findAll('[data-testid="highlights"] a h3');
     expect(contentItems.length).toBe(1);
     expect(contentItems[0].element.innerHTML).toBe(expectedSanitized);
   });
