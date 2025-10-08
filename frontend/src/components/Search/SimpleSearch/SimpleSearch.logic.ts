@@ -6,11 +6,11 @@ export function getUrl(category?: string): string {
   const backendURL = useBackendURL();
   if (category?.startsWith(DocumentKind.CaseLaw)) {
     // covers cases such as R and R.urteil
-    return `${backendURL}/case-law`;
+    return `${backendURL}/v1/case-law`;
   } else if (category?.startsWith(DocumentKind.Norm)) {
-    return `${backendURL}/legislation`;
+    return `${backendURL}/v1/legislation`;
   } else {
-    return `${backendURL}/document`;
+    return `${backendURL}/v1/document`;
   }
 }
 
