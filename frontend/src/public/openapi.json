@@ -285,17 +285,6 @@
             "required": true,
             "schema": { "type": "string" },
             "example": "BJLU075748788"
-          },
-          {
-            "name": "get-resources-via",
-            "in": "header",
-            "description": "Used to select a different prefix for referenced resources, like images. Selecting 'PROXY' will prepend `/api`. Otherwise, the API base URL will be used.",
-            "required": false,
-            "schema": {
-              "type": "string",
-              "default": "API",
-              "enum": ["API", "PROXY"]
-            }
           }
         ],
         "responses": {

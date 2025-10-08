@@ -17,7 +17,7 @@ class LiteratureLdmlToOpensearchMapperIntergrationTest {
 
   @Test
   void mapLiteratureLdmlToOpensearchIndex() throws IOException {
-    File file = ResourceUtils.getFile("classpath:data/LDML/literature/literatureLdml-1.xml");
+    File file = ResourceUtils.getFile("classpath:data/LDML/literature/literatureLdml-1.akn.xml");
     String literatureContent = new String(Files.readAllBytes(file.toPath()));
 
     Optional<Literature> literature = LiteratureLdmlToOpenSearchMapper.mapLdml(literatureContent);

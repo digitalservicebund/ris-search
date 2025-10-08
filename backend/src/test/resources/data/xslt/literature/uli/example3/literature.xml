@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<akn:akomaNtoso xmlns:akn="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" xmlns:ris="http://ldml.neuris.de/literature/unselbstaendig/metadata/">
+    <akn:doc name="offene-struktur">
+        <akn:meta>
+            <akn:identification source="attributsemantik-noch-undefiniert">
+                <akn:FRBRWork>
+                    <akn:FRBRthis value="regelungstext-1"/>
+                    <akn:FRBRalias name="haupttitel" value="Erstes Test-Dokument ULI"/>
+                </akn:FRBRWork>
+            </akn:identification>
+            <akn:proprietary source="attributsemantik-noch-undefiniert">
+                <ris:metadata>
+                    <ris:gliederung>
+                        <ris:gliederungEntry>I. Problemstellung.</ris:gliederungEntry>
+                        <ris:gliederungEntry>II. Lösung.</ris:gliederungEntry>
+                        <ris:gliederungEntry>III. Zusammenfassung.</ris:gliederungEntry>
+                    </ris:gliederung>
+                </ris:metadata>
+            </akn:proprietary>
+        </akn:meta>
+        <akn:mainBody>
+            <akn:hcontainer name="crossheading"/>
+        </akn:mainBody>
+    </akn:doc>
+</akn:akomaNtoso>
