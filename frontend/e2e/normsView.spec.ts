@@ -351,7 +351,7 @@ test.describe("actions menu", () => {
     await button.click();
 
     await page.waitForURL(
-      "/api/v1/legislation/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu/2024-12-19/regelungstext-1.xml",
+      "v1/legislation/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu/2024-12-19/regelungstext-1.xml",
     );
   });
 });
