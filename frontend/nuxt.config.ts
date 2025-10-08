@@ -107,7 +107,7 @@ export default defineNuxtConfig({
     /* Backend URL to use when performing authenticated server-side rendering
      (SSR), which might go to the Nuxt middleware at /api, or against the
       backend directly. */
-    ssrBackendUrl: "/api",
+    ssrBackendUrl: "/v1",
     session: {
       cookie: {
         secure: secureCookie, // workaround needed for Safari on localhost
@@ -123,7 +123,7 @@ export default defineNuxtConfig({
        * 3. in public production, leave empty to route requests directly
        *    to e.g. /v1
        */
-      backendURL: "/api",
+      backendURL: "/v1",
       /*
        * Controls whether the frontend should try to obtain an API token,
        * and whether to accept requests at /api (Nuxt middleware)

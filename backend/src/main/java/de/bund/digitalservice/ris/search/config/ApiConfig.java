@@ -8,7 +8,7 @@ public class ApiConfig {
   public static class Paths {
     private Paths() {}
 
-    public static final String BASE = "/api/v1";
+    public static final String BASE = "/v1";
 
     public static final String DOCUMENT = BASE + "/document";
 

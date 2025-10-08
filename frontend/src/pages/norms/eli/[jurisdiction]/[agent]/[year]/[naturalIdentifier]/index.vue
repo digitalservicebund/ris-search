@@ -16,7 +16,7 @@ const workEli = [
 const backendURL = useBackendURL();
 const { data, error: loadError } = await useFetch<
   JSONLDList<SearchResult<LegislationWork>>
->(`${backendURL}/v1/legislation`, {
+>(`${backendURL}/legislation`, {
   params: {
     eli: workEli,
   },

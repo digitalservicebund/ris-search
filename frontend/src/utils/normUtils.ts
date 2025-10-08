@@ -73,5 +73,5 @@ export function getManifestationUrl(
   const encoding = metadata?.workExample?.encoding.find(
     (e) => e.encodingFormat === format,
   );
-  return encoding?.contentUrl ? backendURL + encoding.contentUrl : undefined;
+  return encoding?.contentUrl ? encoding.contentUrl : undefined;
 }

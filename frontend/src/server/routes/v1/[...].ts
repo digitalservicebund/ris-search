@@ -1,7 +1,7 @@
 import { HttpStatusCode } from "axios";
 import { defineEventHandler, getRequestURL, createError } from "h3";
 import { FetchError } from "ofetch";
-import { requireAccessTokenWithRefresh } from "../auth";
+import { requireAccessTokenWithRefresh } from "../../auth";
 import { useRuntimeConfig } from "#imports";
 
 export default defineEventHandler(async (event): Promise<unknown> => {
@@ -29,7 +29,6 @@ export default defineEventHandler(async (event): Promise<unknown> => {
     const requestedUrl = getRequestURL(event);
     const newUrl =
       runtimeConfig.risBackendUrl + requestedUrl.pathname + requestedUrl.search;
-
     const headers: Record<string, string> = {
       Accept: event.headers.get("Accept") ?? "application/json",
       Authorization: `Bearer ${token}`,

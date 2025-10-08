@@ -28,7 +28,7 @@ function getNorms(params: {
   const immediate = params.eli !== undefined;
   const { status, data, error } = useFetch<
     JSONLDList<SearchResult<LegislationWork>>
-  >(`${backendURL}/v1/legislation`, {
+  >(`${backendURL}/legislation`, {
     params: params,
     immediate: immediate,
   });
