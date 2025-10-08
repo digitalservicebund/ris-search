@@ -8,6 +8,7 @@
     "coverage": "TZ=UTC vitest run --coverage",
     "test": "TZ=UTC vitest run",
     "test:watch": "TZ=UTC vitest",
+    "e2e:seo": "playwright test e2e/seo.spec.ts --project chromium --no-deps --workers=1",
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",

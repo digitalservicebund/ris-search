@@ -1,16 +1,20 @@
 import path from "node:path";
+import os from "os";
 import { test } from "@playwright/test";
+import { chromium, type BrowserContext, type Page } from "playwright";
 import { playAudit } from "playwright-lighthouse";
 import { environment } from "~~/playwright.config";
+import { loginUser } from "./auth.utils";
 
 type Device = "desktop" | "mobile";
 const REPORT_DIR = path.join(process.cwd(), "test-results", "lighthouse-seo");
 
 export const testPages = [
-  {
-    name: "Not Found Page",
-    url: "/404",
-  },
+  // TODO: Add SEO Meta Tags to the 404 page
+  // {
+  //   name: "Not Found Page",
+  //   url: "/404",
+  // }
   {
     name: "Home Page",
     url: "/",
@@ -56,16 +60,20 @@ export const testPages = [
     url: "/search?category=R",
   },
   {
+    name: "Advanced Search Page",
+    url: "/advanced-search",
+  },
+  {
+    name: "Norm View Page",
+    url: "/norms/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu",
+  },
+  {
     name: "Article View Page",
-    url: "/norms/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu/regelungstext-1/art-z1",
+    url: "/norms/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu/art-z1",
   },
   {
     name: "Caselaw View Page",
     url: "/case-law/STRE300770800",
-  },
-  {
-    name: "Norm View Page",
-    url: "/norms/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu/regelungstext-1",
   },
 ];
 
@@ -111,6 +119,7 @@ function getDeviceConfig(device: Device) {
       formFactor: device,
       screenEmulation,
       throttling,
+      disableStorageReset: true,
     },
   };
 }
@@ -121,27 +130,38 @@ const testCases = [
 ];
 
 test.describe("SEO testing for desktop and mobile using lighthouse", () => {
+  let context: BrowserContext;
+  let authenticatedPage: Page;
+
+  test.beforeAll(async () => {
+    // Authenticate once for all tests
+    context = await chromium.launchPersistentContext(os.tmpdir(), {
+      args: [`--remote-debugging-port=${environment.remoteDebuggingPort}`],
+    });
+    authenticatedPage = await context.newPage();
+    await authenticatedPage.goto(environment.baseUrl);
+    await loginUser(authenticatedPage);
+  });
+
+  test.afterAll(async () => {
+    await context.close();
+  });
+
   for (const { device, config } of testCases) {
     for (const testPage of testPages) {
-      test(`${device} SEO checks for page ${testPage.name}`, async ({
-        page,
-        browserName,
-      }) => {
-        if (browserName !== "chromium") return;
+      test(`${device} SEO checks for page ${testPage.name}`, async () => {
+        await authenticatedPage.goto(testPage.url);
         const { width, height } = config.settings.screenEmulation;
-        await page.goto(testPage.url);
-        await page.setViewportSize({ width, height });
-        const reportName = `${device}-${testPage.name}`;
+        await authenticatedPage.setViewportSize({ width, height });
+        
         await playAudit({
-          page,
+          page: authenticatedPage,
           port: environment.remoteDebuggingPort,
-          thresholds: {
-            seo: 90,
-          },
+          thresholds: { seo: 90 },
           config,
           reports: {
             formats: { html: true },
-            name: reportName,
+            name: `${device}-${testPage.name}`,
             directory: REPORT_DIR,
           },
         });

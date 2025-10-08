@@ -111,6 +111,12 @@ jobs:
         env:
           RIS_BASE_URL: http://localhost:3000
           TZ: Europe/Berlin
+      - name: Run SEO Lighthouse tests
+        run: npx playwright test seo.spec.ts --project=chromium --no-deps
+        working-directory: ./frontend
+        env:
+          RIS_BASE_URL: http://localhost:3000
+          TZ: Europe/Berlin
       - name: Upload screenshots and traces of failed tests (${{ matrix.profile }})
         uses: actions/upload-artifact@v4
         if: ${{ failure() }}
