@@ -2,11 +2,11 @@
 import { storeToRefs } from "pinia";
 import PrimeVueButton from "primevue/button";
 import StaticPageWrapper from "~/components/CustomLayouts/StaticPageWrapper.vue";
+import { useStaticPageSeo } from "~/composables/useStaticPageSeo";
 import { usePostHogStore } from "~/stores/usePostHogStore";
 import IconCheck from "~icons/ic/check";
 import IconClose from "~icons/ic/close";
 
-useHead({ title: "Cookie-Einstellungen" });
 definePageMeta({ alias: ["/cookie-einstellungen"] });
 
 const store = usePostHogStore();
@@ -14,6 +14,8 @@ const { userConsent } = storeToRefs(store);
 function handleSetTracking(value: boolean) {
   store.setTracking(value);
 }
+
+useStaticPageSeo("cookies");
 </script>
 
 <template>

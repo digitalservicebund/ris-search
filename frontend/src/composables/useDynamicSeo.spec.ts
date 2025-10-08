@@ -3,12 +3,11 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { computed } from "vue";
 import { useDynamicSeo } from "./useDynamicSeo";
 import type { SeoMetaTag as MetaTag, CanonicalLink } from "./useDynamicSeo";
+import { TEST_URL } from "~/utils/testing/seoTestHelpers";
 
 const { useHead, useRequestURL } = vi.hoisted(() => ({
   useHead: vi.fn(),
-  useRequestURL: vi.fn(
-    () => new URL("https://testphase.rechtsinformationen.bund.de/example"),
-  ),
+  useRequestURL: vi.fn(() => new URL(TEST_URL)),
 }));
 
 mockNuxtImport("useHead", () => useHead);
@@ -17,9 +16,7 @@ mockNuxtImport("useRequestURL", () => useRequestURL);
 describe("useDynamicSeo composable", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    useRequestURL.mockReturnValue(
-      new URL("https://testphase.rechtsinformationen.bund.de/example"),
-    );
+    useRequestURL.mockReturnValue(new URL(TEST_URL));
   });
 
   it("sets correct meta tags with title and description", () => {
@@ -31,26 +28,15 @@ describe("useDynamicSeo composable", () => {
     expect(useHead).toHaveBeenCalledTimes(1);
     const headArgs = useHead.mock.calls[0][0];
 
-    const canonicalLinks = headArgs.link.value as CanonicalLink[];
-    const metaTags = headArgs.meta.value as MetaTag[];
-
-    expect(canonicalLinks).toEqual([
-      {
-        rel: "canonical",
-        href: "https://testphase.rechtsinformationen.bund.de/example",
-      },
-    ]);
-
-    expect(metaTags).toEqual(
-      expect.arrayContaining<MetaTag>([
+    expect(headArgs.title.value).toBe("Test Title");
+    expect(headArgs.link.value).toEqual([{ rel: "canonical", href: TEST_URL }]);
+    expect(headArgs.meta.value).toEqual(
+      expect.arrayContaining([
         { name: "description", content: "Test Description" },
         { property: "og:type", content: "article" },
         { property: "og:title", content: "Test Title" },
         { property: "og:description", content: "Test Description" },
-        {
-          property: "og:url",
-          content: "https://testphase.rechtsinformationen.bund.de/example",
-        },
+        { property: "og:url", content: TEST_URL },
         { name: "twitter:title", content: "Test Title" },
         { name: "twitter:description", content: "Test Description" },
       ]),
@@ -70,7 +56,7 @@ describe("useDynamicSeo composable", () => {
     expect(canonicalLinks).toEqual([
       {
         rel: "canonical",
-        href: "https://testphase.rechtsinformationen.bund.de/example",
+        href: TEST_URL,
       },
     ]);
 
@@ -79,7 +65,7 @@ describe("useDynamicSeo composable", () => {
         { property: "og:type", content: "article" },
         {
           property: "og:url",
-          content: "https://testphase.rechtsinformationen.bund.de/example",
+          content: TEST_URL,
         },
       ]),
     );
@@ -99,7 +85,7 @@ describe("useDynamicSeo composable", () => {
         { property: "og:type", content: "article" },
         {
           property: "og:url",
-          content: "https://testphase.rechtsinformationen.bund.de/example",
+          content: TEST_URL,
         },
       ]),
     );
@@ -118,14 +104,9 @@ describe("useDynamicSeo composable", () => {
       useDynamicSeo({ title, description });
 
       const headArgs = useHead.mock.calls[0][0];
-      const canonicalLinks = headArgs.link.value as CanonicalLink[];
-      const metaTags = headArgs.meta.value as MetaTag[];
-
-      expect(canonicalLinks).toEqual([{ rel: "canonical", href }]);
-      expect(metaTags).toEqual(
-        expect.arrayContaining<MetaTag>([
-          { property: "og:url", content: href },
-        ]),
+      expect(headArgs.link.value).toEqual([{ rel: "canonical", href }]);
+      expect(headArgs.meta.value).toEqual(
+        expect.arrayContaining([{ property: "og:url", content: href }]),
       );
     });
   });
