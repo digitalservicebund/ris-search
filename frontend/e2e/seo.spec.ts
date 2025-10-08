@@ -3,8 +3,8 @@ import os from "os";
 import { test } from "@playwright/test";
 import { chromium, type BrowserContext, type Page } from "playwright";
 import { playAudit } from "playwright-lighthouse";
+import { environment } from "../playwright.config";
 import { loginUser } from "./auth.utils";
-import { environment } from "~~/playwright.config";
 
 type Device = "desktop" | "mobile";
 const REPORT_DIR = path.join(process.cwd(), "test-results", "lighthouse-seo");
