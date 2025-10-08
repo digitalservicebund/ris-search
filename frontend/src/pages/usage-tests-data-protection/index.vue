@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import StaticPageWrapper from "~/components/CustomLayouts/StaticPageWrapper.vue";
+import { useStaticPageSeo } from "~/composables/useStaticPageSeo";
 
-useHead({
-  title: "Datenschutzerklärung für Nutzungstests",
-});
 definePageMeta({ alias: ["/nutzungstests-datenschutz"] });
+
+useStaticPageSeo("nutzungstests-datenschutz");
 const title =
   "Datenschutzerklärung für die Registrierung für Nutzungsstudien für das Projekt „Testphase Rechtsinformationsportal“";
 </script>

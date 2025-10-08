@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import StaticPageWrapper from "~/components/CustomLayouts/StaticPageWrapper.vue";
+import { useStaticPageSeo } from "~/composables/useStaticPageSeo";
 import ContactDetails from "~/pages/contact/ContactDetails.vue";
 
-useHead({ title: "Erklärung zur Barrierefreiheit" });
 definePageMeta({ alias: ["/barrierefreiheit"] });
+
+useStaticPageSeo("barrierefreiheit");
 </script>
 
 <template>

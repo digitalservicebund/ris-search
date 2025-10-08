@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import StaticPageWrapper from "~/components/CustomLayouts/StaticPageWrapper.vue";
 import { StatusCardType } from "~/components/types";
+import { useStaticPageSeo } from "~/composables/useStaticPageSeo";
 
-useHead({ title: "Über den Service" });
 definePageMeta({ alias: ["/ueber"] });
+
+useStaticPageSeo("ueber");
 </script>
 
 <template>
