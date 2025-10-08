@@ -85,7 +85,7 @@ public class AdvancedSearchController {
 
     try {
       SearchPage<AbstractSearchEntity> resultPage =
-          allDocumentsService.searchAllDocuments(decodedQuery, sortedPageable);
+          allDocumentsService.advancedSearchAllDocuments(decodedQuery, sortedPageable);
 
       return ResponseEntity.ok()
           .contentType(MediaType.APPLICATION_JSON)
@@ -129,7 +129,7 @@ public class AdvancedSearchController {
         pageable.withSort(SortParamsConverter.buildSort(sortParams.getSort()));
 
     try {
-      SearchPage<Norm> page = normsService.searchNorms(decodedQuery, sortedPageable);
+      SearchPage<Norm> page = normsService.advancedSearchNorms(decodedQuery, sortedPageable);
       return ResponseEntity.ok(
           NormSearchResponseMapper.fromDomain(page, ApiConfig.Paths.LEGISLATION_ADVANCED_SEARCH));
     } catch (UncategorizedElasticsearchException e) {
@@ -168,7 +168,7 @@ public class AdvancedSearchController {
 
     try {
       SearchPage<CaseLawDocumentationUnit> page =
-          caseLawService.searchCaseLaws(decodedQuery, sortedPageable);
+          caseLawService.advancedSearchCaseLaw(decodedQuery, sortedPageable);
 
       return ResponseEntity.ok(CaseLawSearchSchemaMapper.fromSearchPage(page));
     } catch (UncategorizedElasticsearchException e) {

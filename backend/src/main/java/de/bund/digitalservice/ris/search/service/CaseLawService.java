@@ -7,16 +7,12 @@ import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.exception.OpenSearchMapperException;
 import de.bund.digitalservice.ris.search.mapper.CaseLawLdmlToOpenSearchMapper;
 import de.bund.digitalservice.ris.search.models.CourtSearchResult;
-import de.bund.digitalservice.ris.search.models.ParsedSearchTerm;
 import de.bund.digitalservice.ris.search.models.api.parameters.CaseLawSearchParams;
 import de.bund.digitalservice.ris.search.models.api.parameters.UniversalSearchParams;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import de.bund.digitalservice.ris.search.repository.objectstorage.CaseLawBucket;
 import de.bund.digitalservice.ris.search.repository.opensearch.CaseLawRepository;
-import de.bund.digitalservice.ris.search.service.helper.CaseLawQueryBuilder;
 import de.bund.digitalservice.ris.search.service.helper.CourtNameAbbreviationExpander;
-import de.bund.digitalservice.ris.search.service.helper.FetchSourceFilterDefinitions;
-import de.bund.digitalservice.ris.search.service.helper.PortalQueryBuilder;
 import de.bund.digitalservice.ris.search.service.helper.ZipManager;
 import de.bund.digitalservice.ris.search.utils.PageUtils;
 import de.bund.digitalservice.ris.search.utils.RisHighlightBuilder;
@@ -36,13 +32,13 @@ import org.opensearch.search.aggregations.Aggregations;
 import org.opensearch.search.aggregations.bucket.terms.ParsedStringTerms;
 import org.opensearch.search.aggregations.bucket.terms.Terms;
 import org.opensearch.search.aggregations.bucket.terms.TermsAggregationBuilder;
+import org.opensearch.search.fetch.subphase.highlight.HighlightBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.data.elasticsearch.core.SearchPage;
 import org.springframework.data.elasticsearch.core.mapping.IndexCoordinates;
-import org.springframework.data.elasticsearch.core.query.FetchSourceFilter;
 import org.springframework.stereotype.Service;
 
 /**
@@ -56,8 +52,8 @@ public class CaseLawService {
   private final ElasticsearchOperations operations;
   private final CourtNameAbbreviationExpander courtNameAbbreviationExpander;
   private final Configurations configurations;
-  private final SearchTermService searchTermService;
   private final CaseLawLdmlToOpenSearchMapper marshaller;
+  private final SimpleSearchQueryBuilder simpleSearchQueryBuilder;
 
   @SneakyThrows
   @Autowired
@@ -66,15 +62,15 @@ public class CaseLawService {
       CaseLawBucket caseLawBucket,
       ElasticsearchOperations operations,
       Configurations configurations,
-      SearchTermService searchTermService,
-      CaseLawLdmlToOpenSearchMapper marshaller) {
+      CaseLawLdmlToOpenSearchMapper marshaller,
+      SimpleSearchQueryBuilder simpleSearchQueryBuilder) {
     this.caseLawRepository = caseLawRepository;
     this.caseLawBucket = caseLawBucket;
     this.operations = operations;
     this.configurations = configurations;
     this.courtNameAbbreviationExpander = new CourtNameAbbreviationExpander();
-    this.searchTermService = searchTermService;
     this.marshaller = marshaller;
+    this.simpleSearchQueryBuilder = simpleSearchQueryBuilder;
   }
 
   /**
@@ -87,35 +83,16 @@ public class CaseLawService {
    * @param pageable Page (offset) and size parameters.
    * @return A new {@link SearchPage} of the containing {@link CaseLawDocumentationUnit}.
    */
-  public SearchPage<CaseLawDocumentationUnit> searchAndFilterCaseLaw(
+  public SearchPage<CaseLawDocumentationUnit> simpleSearchCaseLaw(
       @NotNull UniversalSearchParams params,
       @Nullable CaseLawSearchParams caseLawParams,
       Pageable pageable) {
 
-    // Transform the request parameters into a BoolQuery
-    ParsedSearchTerm searchTerm = searchTermService.parse(params.getSearchTerm());
-    PortalQueryBuilder builder =
-        new PortalQueryBuilder(searchTerm, params.getDateFrom(), params.getDateTo());
-    CaseLawQueryBuilder.addCaseLawFilters(caseLawParams, builder.getQuery());
-
-    // add pagination and other parameters
-    NativeSearchQuery nativeQuery =
-        new NativeSearchQueryBuilder()
-            .withSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-            .withPageable(pageable)
-            .withQuery(builder.getQuery())
-            .withHighlightBuilder(RisHighlightBuilder.getCaseLawHighlighter())
-            .build();
-
-    // Exclude fields with long text from search results
-    nativeQuery.addSourceFilter(
-        new FetchSourceFilter(
-            true,
-            null,
-            FetchSourceFilterDefinitions.CASE_LAW_FETCH_EXCLUDED_FIELDS.toArray(String[]::new)));
-
+    NativeSearchQuery query =
+        simpleSearchQueryBuilder.buildQuery(
+            List.of(new CaseLawSimpleSearchType(caseLawParams)), params, pageable);
     SearchHits<CaseLawDocumentationUnit> searchHits =
-        operations.search(nativeQuery, CaseLawDocumentationUnit.class);
+        operations.search(query, CaseLawDocumentationUnit.class);
 
     return PageUtils.unwrapSearchHits(searchHits, pageable);
   }
@@ -127,14 +104,17 @@ public class CaseLawService {
    * @param pageable Pagination parameters
    * @return A new {@link SearchPage} of the containing {@link CaseLawDocumentationUnit}.
    */
-  public SearchPage<CaseLawDocumentationUnit> searchCaseLaws(
+  public SearchPage<CaseLawDocumentationUnit> advancedSearchCaseLaw(
       final String search, Pageable pageable) {
+    HighlightBuilder highlightBuilder = RisHighlightBuilder.baseHighlighter();
+    CaseLawSimpleSearchType.addHighlightedFieldsStatic(highlightBuilder);
+
     var searchQuery =
         new NativeSearchQueryBuilder()
             .withSearchType(SearchType.DFS_QUERY_THEN_FETCH)
             .withPageable(pageable)
             .withQuery(queryStringQuery(search))
-            .withHighlightBuilder(RisHighlightBuilder.getCaseLawHighlighter())
+            .withHighlightBuilder(highlightBuilder)
             .build();
 
     SearchHits<CaseLawDocumentationUnit> searchHits =

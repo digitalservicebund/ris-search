@@ -58,20 +58,20 @@ class NormsServiceTest extends ContainersIntegrationBase {
     universalSearchParams.setSearchTerm("text");
     PageRequest pageable = PageRequest.of(pagination.getPageIndex(), pagination.getSize());
     SearchPage<Norm> result =
-        normsService.searchAndFilterNorms(universalSearchParams, normsSearchParams, pageable);
+        normsService.simpleSearchNorms(universalSearchParams, normsSearchParams, pageable);
     assertThat(result.getContent()).hasSize(1);
-    var searchHits = result.getContent().get(0).getInnerHits().get("articles").getSearchHits();
+    var searchHits = result.getContent().getFirst().getInnerHits().get("articles").getSearchHits();
     assertThat(searchHits).hasSize(2);
 
-    var textHighlight = searchHits.get(0).getHighlightField("articles.text");
+    var textHighlight = searchHits.getFirst().getHighlightField("articles.text");
     assertThat(textHighlight).hasSize(1);
-    assertThat(textHighlight.get(0)).isEqualTo("example <mark>text</mark> 1");
+    assertThat(textHighlight.getFirst()).isEqualTo("example <mark>text</mark> 1");
 
     var textHighlight2 = searchHits.get(1).getHighlightField("articles.text");
     assertThat(textHighlight).hasSize(1);
-    assertThat(textHighlight2.get(0)).isEqualTo("example <mark>text</mark> 2");
+    assertThat(textHighlight2.getFirst()).isEqualTo("example <mark>text</mark> 2");
 
-    Article firstArticle = (Article) searchHits.get(0).getContent();
+    Article firstArticle = (Article) searchHits.getFirst().getContent();
     assertThat(firstArticle.name()).contains(articleName);
   }
 }

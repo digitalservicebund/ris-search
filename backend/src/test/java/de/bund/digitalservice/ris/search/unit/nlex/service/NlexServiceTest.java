@@ -6,7 +6,6 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
 import static org.testcontainers.shaded.org.bouncycastle.util.Longs.valueOf;
 
-import de.bund.digitalservice.ris.search.models.api.parameters.UniversalSearchParams;
 import de.bund.digitalservice.ris.search.models.opensearch.Article;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.nlex.schema.query.BooleanAnd;
@@ -58,9 +57,6 @@ class NlexServiceTest {
     String title = "testTitle";
     String innerHitText = "inner hit";
 
-    UniversalSearchParams expectedSearch = new UniversalSearchParams();
-    expectedSearch.setSearchTerm(searchTerm);
-
     Query query = buildQuery(searchTerm);
     configureServiceMock(searchTerm, eliExample, title, innerHitText);
 
@@ -74,9 +70,6 @@ class NlexServiceTest {
 
   @Test
   void itDefaultsToFirstPageOnMissingParameter() {
-    UniversalSearchParams expectedSearch = new UniversalSearchParams();
-    expectedSearch.setSearchTerm("test");
-
     Query query =
         new Query()
             .setNavigation(new Navigation())
@@ -89,12 +82,12 @@ class NlexServiceTest {
     Article expectedArticle = Article.builder().text("innerHitText").build();
     SearchPage<Norm> expectedPage = getMockedNormsServiceSearchPage(expectedNorm, expectedArticle);
 
-    Mockito.when(service.searchAndFilterNorms(any(), any(), any())).thenReturn(expectedPage);
+    Mockito.when(service.simpleSearchNorms(any(), any(), any())).thenReturn(expectedPage);
 
     nlexService.runRequestQuery(query);
 
     Mockito.verify(service, times(1))
-        .searchAndFilterNorms(any(), any(), argThat(searchpage -> searchpage.getPageNumber() == 0));
+        .simpleSearchNorms(any(), any(), argThat(searchpage -> searchpage.getPageNumber() == 0));
   }
 
   private Query buildQuery(String searchTerm) {
@@ -144,7 +137,7 @@ class NlexServiceTest {
     SearchPage<Norm> page = getMockedNormsServiceSearchPage(expectedNorm, expectedArticle);
 
     Mockito.when(
-            service.searchAndFilterNorms(
+            service.simpleSearchNorms(
                 argThat(
                     universalSearchParams ->
                         universalSearchParams.getSearchTerm().equals(searchTerm)),

@@ -3,15 +3,11 @@ package de.bund.digitalservice.ris.search.service;
 import static org.opensearch.index.query.QueryBuilders.queryStringQuery;
 
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
-import de.bund.digitalservice.ris.search.models.ParsedSearchTerm;
 import de.bund.digitalservice.ris.search.models.api.parameters.NormsSearchParams;
 import de.bund.digitalservice.ris.search.models.api.parameters.UniversalSearchParams;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
 import de.bund.digitalservice.ris.search.repository.opensearch.NormsRepository;
-import de.bund.digitalservice.ris.search.service.helper.FetchSourceFilterDefinitions;
-import de.bund.digitalservice.ris.search.service.helper.NormQueryBuilder;
-import de.bund.digitalservice.ris.search.service.helper.PortalQueryBuilder;
 import de.bund.digitalservice.ris.search.service.helper.ZipManager;
 import de.bund.digitalservice.ris.search.utils.PageUtils;
 import de.bund.digitalservice.ris.search.utils.RisHighlightBuilder;
@@ -26,12 +22,12 @@ import org.jetbrains.annotations.Nullable;
 import org.opensearch.action.search.SearchType;
 import org.opensearch.data.client.orhlc.NativeSearchQuery;
 import org.opensearch.data.client.orhlc.NativeSearchQueryBuilder;
+import org.opensearch.search.fetch.subphase.highlight.HighlightBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.data.elasticsearch.core.SearchPage;
-import org.springframework.data.elasticsearch.core.query.FetchSourceFilter;
 import org.springframework.stereotype.Service;
 
 /**
@@ -43,7 +39,7 @@ public class NormsService {
 
   private final NormsRepository normsRepository;
   private final ElasticsearchOperations operations;
-  private final SearchTermService searchTermService;
+  private final SimpleSearchQueryBuilder simpleSearchQueryBuilder;
   private final NormsBucket normsBucket;
 
   @Autowired
@@ -51,11 +47,11 @@ public class NormsService {
       NormsRepository normsRepository,
       NormsBucket normsBucket,
       ElasticsearchOperations operations,
-      SearchTermService searchTermService) {
+      SimpleSearchQueryBuilder simpleSearchQueryBuilder) {
     this.normsRepository = normsRepository;
     this.normsBucket = normsBucket;
     this.operations = operations;
-    this.searchTermService = searchTermService;
+    this.simpleSearchQueryBuilder = simpleSearchQueryBuilder;
   }
 
   /**
@@ -68,35 +64,15 @@ public class NormsService {
    * @param pageable Page (offset) and size parameters.
    * @return A new {@link SearchPage} of the containing {@link Norm}.
    */
-  public SearchPage<Norm> searchAndFilterNorms(
+  public SearchPage<Norm> simpleSearchNorms(
       @NotNull UniversalSearchParams params,
       @Nullable NormsSearchParams normsSearchParams,
       Pageable pageable) {
 
-    // Transform the request parameters into a BoolQuery
-    ParsedSearchTerm searchTerm = searchTermService.parse(params.getSearchTerm());
-    PortalQueryBuilder builder =
-        new PortalQueryBuilder(searchTerm, params.getDateFrom(), params.getDateTo());
-    NormQueryBuilder.addNormFilters(searchTerm, normsSearchParams, builder.getQuery());
-
-    // Add pagination and other parameters
-    NativeSearchQuery nativeQuery =
-        new NativeSearchQueryBuilder()
-            .withSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-            .withPageable(pageable)
-            .withQuery(builder.getQuery())
-            .withHighlightBuilder(RisHighlightBuilder.getNormsHighlighter())
-            .build();
-    // articles are highlighted using the HighlightBuilder added in the inner query
-
-    // Exclude fields with long text from search results
-    nativeQuery.addSourceFilter(
-        new FetchSourceFilter(
-            true,
-            null,
-            FetchSourceFilterDefinitions.NORMS_FETCH_EXCLUDED_FIELDS.toArray(String[]::new)));
-
-    SearchHits<Norm> searchHits = operations.search(nativeQuery, Norm.class);
+    NativeSearchQuery query =
+        simpleSearchQueryBuilder.buildQuery(
+            List.of(new NormSimpleSearchType(normsSearchParams)), params, pageable);
+    SearchHits<Norm> searchHits = operations.search(query, Norm.class);
 
     return PageUtils.unwrapSearchHits(searchHits, pageable);
   }
@@ -106,13 +82,15 @@ public class NormsService {
    *
    * @param search The input {@link String} of Lucene query values.
    */
-  public SearchPage<Norm> searchNorms(final String search, final Pageable pageable) {
+  public SearchPage<Norm> advancedSearchNorms(final String search, final Pageable pageable) {
+    HighlightBuilder highlightBuilder = RisHighlightBuilder.baseHighlighter();
+    NormSimpleSearchType.addHighlightedFieldsStatic(highlightBuilder);
     var searchQuery =
         new NativeSearchQueryBuilder()
             .withSearchType(SearchType.DFS_QUERY_THEN_FETCH)
             .withPageable(pageable)
             .withQuery(queryStringQuery(search))
-            .withHighlightBuilder(RisHighlightBuilder.getNormsHighlighter())
+            .withHighlightBuilder(highlightBuilder)
             .build();
 
     SearchHits<Norm> searchHits = operations.search(searchQuery, Norm.class);

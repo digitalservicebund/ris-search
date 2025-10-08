@@ -142,7 +142,7 @@ public class LiteratureController {
 
     try {
       SearchPage<Literature> page =
-          literatureService.searchAndFilterLiterature(
+          literatureService.simpleSearchLiterature(
               universalSearchParams, literatureSearchParams, sortedPageRequest);
       return ResponseEntity.ok()
           .contentType(MediaType.APPLICATION_JSON)

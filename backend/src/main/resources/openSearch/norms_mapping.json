@@ -40,8 +40,7 @@
           "type": "keyword",
           "normalizer": "normalized_keyword"
         }
-      },
-      "boost": 2
+      }
     },
     "norms_date": {
       "type": "date"
@@ -57,18 +56,15 @@
           "type": "keyword",
           "normalizer": "normalized_keyword"
         }
-      },
-      "boost": 2
+      }
     },
     "official_abbreviation": {
       "type": "text",
       "analyzer": "custom_german_analyzer",
-      "boost": 3,
       "fields": {
         "keyword": {
           "type": "keyword",
-          "normalizer": "normalized_keyword",
-          "boost": 3
+          "normalizer": "normalized_keyword"
         }
       }
     },
@@ -80,8 +76,7 @@
           "type": "keyword",
           "normalizer": "normalized_keyword"
         }
-      },
-      "boost": 2
+      }
     },
     "expression_eli": {
       "type": "text",
@@ -91,12 +86,10 @@
           "type": "keyword",
           "normalizer": "normalized_keyword"
         }
-      },
-      "boost": 2
+      }
     },
     "manifestation_eli": {
-      "type": "keyword",
-      "boost": 2
+      "type": "keyword"
     },
     "articles": {
       "type": "nested",
@@ -128,15 +121,13 @@
         },
         "search_keyword": {
           "type": "text",
-          "analyzer": "custom_german_analyzer",
-          "boost": 10
+          "analyzer": "custom_german_analyzer"
         }
       }
     },
     "article_names": {
       "type": "text",
-      "analyzer": "custom_german_analyzer",
-      "boost": 2
+      "analyzer": "custom_german_analyzer"
     },
     "article_texts": {
       "type": "text",
