@@ -44,6 +44,10 @@ public class NormSimpleSearchType implements SimpleSearchType {
 
   @Override
   public void addHighlightedFields(HighlightBuilder builder) {
+    addHighlightedFieldsStatic(builder);
+  }
+
+  public static void addHighlightedFieldsStatic(HighlightBuilder builder) {
     NORMS_HIGHLIGHT_CONTENT_FIELDS.forEach(builder::field);
   }
 

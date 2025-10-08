@@ -57,8 +57,8 @@ public class AllDocumentsService {
   public SearchPage<AbstractSearchEntity> advancedSearchAllDocuments(
       String search, Pageable pageable) {
     HighlightBuilder highlightBuilder = RisHighlightBuilder.baseHighlighter();
-    new NormSimpleSearchType(null).addHighlightedFields(highlightBuilder);
-    new CaseLawSimpleSearchType(null).addHighlightedFields(highlightBuilder);
+    NormSimpleSearchType.addHighlightedFieldsStatic(highlightBuilder);
+    CaseLawSimpleSearchType.addHighlightedFieldsStatic(highlightBuilder);
 
     var searchQuery =
         new NativeSearchQueryBuilder()

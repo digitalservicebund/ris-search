@@ -51,6 +51,10 @@ public class CaseLawSimpleSearchType implements SimpleSearchType {
 
   @Override
   public void addHighlightedFields(HighlightBuilder builder) {
+    addHighlightedFieldsStatic(builder);
+  }
+
+  public static void addHighlightedFieldsStatic(HighlightBuilder builder) {
     CASE_LAW_HIGHLIGHT_CONTENT_FIELDS.forEach(builder::field);
     // ECLI and FILE_NUMBERS are returned in _source and therefore not needed when not matched
     builder.field(new HighlightBuilder.Field(CaseLawDocumentationUnit.Fields.ECLI).noMatchSize(0));

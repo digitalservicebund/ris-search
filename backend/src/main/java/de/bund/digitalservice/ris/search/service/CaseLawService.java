@@ -107,7 +107,7 @@ public class CaseLawService {
   public SearchPage<CaseLawDocumentationUnit> advancedSearchCaseLaw(
       final String search, Pageable pageable) {
     HighlightBuilder highlightBuilder = RisHighlightBuilder.baseHighlighter();
-    new CaseLawSimpleSearchType(null).addHighlightedFields(highlightBuilder);
+    CaseLawSimpleSearchType.addHighlightedFieldsStatic(highlightBuilder);
 
     var searchQuery =
         new NativeSearchQueryBuilder()

@@ -84,7 +84,7 @@ public class NormsService {
    */
   public SearchPage<Norm> advancedSearchNorms(final String search, final Pageable pageable) {
     HighlightBuilder highlightBuilder = RisHighlightBuilder.baseHighlighter();
-    new NormSimpleSearchType(null).addHighlightedFields(highlightBuilder);
+    NormSimpleSearchType.addHighlightedFieldsStatic(highlightBuilder);
     var searchQuery =
         new NativeSearchQueryBuilder()
             .withSearchType(SearchType.DFS_QUERY_THEN_FETCH)
