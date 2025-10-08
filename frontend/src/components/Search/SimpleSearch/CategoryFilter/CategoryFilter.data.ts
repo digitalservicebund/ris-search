@@ -32,6 +32,10 @@ export const items: MenuItem[] = [
       },
     ],
   },
+  {
+    label: "Literaturnachweise",
+    key: DocumentKind.Literature,
+  },
 ];
 
 export const computeExpandedKeys = (category: string) => {

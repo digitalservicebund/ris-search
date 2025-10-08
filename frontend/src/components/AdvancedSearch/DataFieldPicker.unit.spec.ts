@@ -44,6 +44,10 @@ describe("DataFieldPicker", () => {
             { label: "Norm 1", pattern: "N1:($)" },
             { label: "Norm 2", pattern: "N2:" },
           ],
+          [DocumentKind.Literature]: [
+            { label: "Literature 1", pattern: "L1:($)" },
+            { label: "Literature 2", pattern: "L2:" },
+          ],
         },
         documentKind: DocumentKind.CaseLaw,
       },
@@ -61,6 +65,10 @@ describe("DataFieldPicker", () => {
       screen.queryByRole("button", { name: /Norm/ }),
     ).not.toBeInTheDocument();
 
+    expect(
+      screen.queryByRole("button", { name: /Literature/ }),
+    ).not.toBeInTheDocument();
+
     await rerender({ documentKind: DocumentKind.Norm });
 
     expect(
@@ -73,6 +81,28 @@ describe("DataFieldPicker", () => {
 
     expect(
       screen.queryByRole("button", { name: /Caselaw/ }),
+    ).not.toBeInTheDocument();
+
+    expect(
+      screen.queryByRole("button", { name: /Literature/ }),
+    ).not.toBeInTheDocument();
+
+    await rerender({ documentKind: DocumentKind.Literature });
+
+    expect(
+      screen.getByRole("button", { name: "Literature 1 suchen" }),
+    ).toBeInTheDocument();
+
+    expect(
+      screen.getByRole("button", { name: "Literature 2 suchen" }),
+    ).toBeInTheDocument();
+
+    expect(
+      screen.queryByRole("button", { name: /Caselaw/ }),
+    ).not.toBeInTheDocument();
+
+    expect(
+      screen.queryByRole("button", { name: /Norm/ }),
     ).not.toBeInTheDocument();
   });
 
@@ -115,6 +145,7 @@ describe("DataFieldPicker", () => {
           [DocumentKind.All]: [],
           [DocumentKind.CaseLaw]: [{ label: "Caselaw 1", pattern: "CS:" }],
           [DocumentKind.Norm]: [],
+          [DocumentKind.Literature]: [],
         },
         documentKind: DocumentKind.CaseLaw,
         modelValue: "test query",
@@ -135,6 +166,7 @@ describe("DataFieldPicker", () => {
           [DocumentKind.All]: [],
           [DocumentKind.CaseLaw]: [{ label: "Caselaw 1", pattern: "CS:$" }],
           [DocumentKind.Norm]: [],
+          [DocumentKind.Literature]: [],
         },
         documentKind: DocumentKind.CaseLaw,
         modelValue: "test query",
@@ -164,6 +196,7 @@ describe("DataFieldPicker", () => {
           [DocumentKind.All]: [],
           [DocumentKind.CaseLaw]: [{ label: "Caselaw 1", pattern: "CS:" }],
           [DocumentKind.Norm]: [],
+          [DocumentKind.Literature]: [],
         },
         documentKind: DocumentKind.CaseLaw,
         modelValue,
@@ -201,6 +234,7 @@ describe("DataFieldPicker", () => {
           [DocumentKind.All]: [],
           [DocumentKind.CaseLaw]: [{ label: "Caselaw 1", pattern: "CS:($)" }],
           [DocumentKind.Norm]: [],
+          [DocumentKind.Literature]: [],
         },
         documentKind: DocumentKind.CaseLaw,
         modelValue,
@@ -229,6 +263,7 @@ describe("DataFieldPicker", () => {
           [DocumentKind.All]: [],
           [DocumentKind.CaseLaw]: [{ label: "Caselaw 1", pattern: "CS:" }],
           [DocumentKind.Norm]: [],
+          [DocumentKind.Literature]: [],
         },
         documentKind: DocumentKind.CaseLaw,
         modelValue: "",
@@ -249,6 +284,7 @@ describe("DataFieldPicker", () => {
           [DocumentKind.All]: [],
           [DocumentKind.CaseLaw]: [{ label: "Caselaw 1", pattern: "CS:" }],
           [DocumentKind.Norm]: [],
+          [DocumentKind.Literature]: [],
         },
         documentKind: DocumentKind.CaseLaw,
         modelValue: "test query ",

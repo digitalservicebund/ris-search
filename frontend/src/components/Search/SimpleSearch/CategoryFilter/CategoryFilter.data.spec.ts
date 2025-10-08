@@ -29,4 +29,11 @@ describe("computeExpandedKeys", () => {
       "R.urteil": true,
     });
   });
+
+  it("expands literature", () => {
+    const result = computeExpandedKeys("L");
+    expect(result).toEqual({
+      L: true,
+    });
+  });
 });

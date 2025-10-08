@@ -117,7 +117,34 @@ export interface CaseLawEncoding {
   inLanguage: string;
 }
 
-export type AnyDocument = CaseLaw | LegislationWork;
+export interface Literature {
+  "@type": "Literature";
+  "@id": string;
+  inLanguage: string;
+  documentNumber: string;
+  recordingDate: string; // LocalDate in backend -> string in ISO format
+  yearsOfPublication: string[];
+  documentTypes: string[];
+  dependentReferences: string[];
+  independentReferences: string[];
+  headline?: string;
+  alternativeTitle?: string;
+  authors?: string[];
+  collaborators?: string[];
+  shortReport?: string;
+  outline?: string;
+  encoding: LiteratureEncoding[];
+}
+
+export interface LiteratureEncoding {
+  "@type": "LiteratureObject";
+  "@id": string;
+  contentUrl: string;
+  encodingFormat: string;
+  inLanguage: string;
+}
+
+export type AnyDocument = CaseLaw | LegislationWork | Literature;
 
 export enum DocumentKind {
   /**
@@ -128,16 +155,24 @@ export enum DocumentKind {
    * Rechtsnorm: Gesetze, Satzungen und Rechtsverordnungen
    */
   Norm = "N",
+  /**
+   * Literatur
+   */
+  Literature = "L",
 
   All = "A",
 }
 
-export function shortDocumentType(kind: "Legislation" | "Decision") {
+export function shortDocumentType(
+  kind: "Legislation" | "Decision" | "Literature",
+) {
   switch (kind) {
     case "Decision":
       return "R"; // Rechtsprechung
     case "Legislation":
       return "N"; // Norm
+    case "Literature":
+      return "L"; // Literatur
     default:
       return "-";
   }

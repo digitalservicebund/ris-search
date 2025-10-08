@@ -15,6 +15,12 @@ describe("displayValues", () => {
       );
     });
 
+    it("formats literature", () => {
+      expect(formatDocumentKind(DocumentKind.Literature)).toBe(
+        "Literaturnachweise",
+      );
+    });
+
     it("formats all", () => {
       expect(formatDocumentKind(DocumentKind.All)).toBe("Datensätze");
     });
