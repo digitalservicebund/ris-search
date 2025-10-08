@@ -1,4 +1,6 @@
-export async function loginUser(page: any) {
+import type { Page } from "playwright";
+
+export async function loginUser(page: Page) {
   const credentials = {
     username: process.env.E2E_KEYCLOAK_USERNAME ?? "jane.doe",
     password: process.env.E2E_KEYCLOAK_PASSWORD ?? "test",
