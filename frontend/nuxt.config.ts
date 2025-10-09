@@ -102,12 +102,8 @@ export default defineNuxtConfig({
     auth: {
       webAuth: false,
     },
-    /* Backend URL to talk to the backend, used by the /api and /proxy routes */
+    /* Backend host to the spring backend, used by /proxy routes */
     risBackendUrl: "http://localhost:8090",
-    /* Backend URL to use when performing authenticated server-side rendering
-     (SSR), which might go to the Nuxt middleware at /api, or against the
-      backend directly. */
-    ssrBackendUrl: "",
     session: {
       cookie: {
         secure: secureCookie, // workaround needed for Safari on localhost
@@ -116,12 +112,9 @@ export default defineNuxtConfig({
     },
     public: {
       /*
-       * For backendUrl, either
-       * 1. use /api to use the Nuxt middleware defined in server/api/[...].ts
-       *    using sealed session cookies, or
-       * 2. use http://localhost:8090 to connect to the backend directly
-       * 3. in public production, leave empty to route requests directly
-       *    to e.g. /v1
+       * Host that is used by the browser to retrieve resources from the backend
+       * 1. use http://localhost:8090 to connect to the spring backend directly
+       * 2. leave empty to route requests through the nuxt backend
        */
       backendURL: "",
       /*
