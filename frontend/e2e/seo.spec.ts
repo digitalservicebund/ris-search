@@ -1,8 +1,8 @@
 import path from "node:path";
 import { playAudit } from "playwright-lighthouse";
 import { environment } from "../playwright.config";
+import { loginUser } from "./auth.utils";
 import { test } from "./fixtures";
-import { loginUser } from "~~/e2e/auth.utils";
 
 type Device = "desktop" | "mobile";
 const REPORT_DIR = path.join(process.cwd(), "test-results", "lighthouse-seo");
