@@ -80,7 +80,7 @@ public class CaseLawSearchController {
 
     try {
       SearchPage<CaseLawDocumentationUnit> page =
-          caseLawService.searchAndFilterCaseLaw(
+          caseLawService.simpleSearchCaseLaw(
               universalSearchParams, caseLawSearchParams, sortedPageRequest);
       return ResponseEntity.ok()
           .contentType(MediaType.APPLICATION_JSON)

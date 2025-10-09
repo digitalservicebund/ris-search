@@ -66,7 +66,7 @@ class NormsServiceTest {
     SearchPage<Norm> searchResultPage = SearchHitSupport.searchPageFor(searchHits, pageable);
     when(operationsMock.search((Query) any(), eq(Norm.class))).thenReturn(searchHits);
 
-    var actual = normsService.searchNorms("anySearch", pageable);
+    var actual = normsService.advancedSearchNorms("anySearch", pageable);
     Assertions.assertEquals(searchResultPage, actual);
   }
 }

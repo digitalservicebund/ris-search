@@ -4,6 +4,7 @@ import Button from "primevue/button";
 import InputText from "primevue/inputtext";
 import ContentWrapper from "~/components/CustomLayouts/ContentWrapper.vue";
 import type { BreadcrumbItem } from "~/components/Ris/RisBreadcrumb.vue";
+import { useStaticPageSeo } from "~/composables/useStaticPageSeo";
 import { fetchTranslationList } from "~/composables/useTranslationData";
 import type { TranslationContent } from "~/composables/useTranslationData";
 import IconSearch from "~icons/ic/search";
@@ -69,6 +70,8 @@ const minisearch = computed(() => {
 function handleSearch() {
   activeSearchTerm.value = searchTerm.value;
 }
+
+useStaticPageSeo("translations-list");
 </script>
 
 <template>

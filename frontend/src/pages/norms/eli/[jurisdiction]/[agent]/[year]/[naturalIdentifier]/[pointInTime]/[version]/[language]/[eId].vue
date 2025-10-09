@@ -10,12 +10,15 @@ import ValidityDatesMetadataFields from "~/components/Norm/Metadatafields/Validi
 import NormTableOfContents from "~/components/Ris/NormTableOfContents.vue";
 import type { BreadcrumbItem } from "~/components/Ris/RisBreadcrumb.vue";
 import RisBreadcrumb from "~/components/Ris/RisBreadcrumb.vue";
+import { useDynamicSeo } from "~/composables/useDynamicSeo";
 import { useValidNormVersions } from "~/composables/useNormVersions";
 import type { Article, LegislationWork } from "~/types";
 import { isPrototypeProfile } from "~/utils/config";
 import { parseDateGermanLocalTime } from "~/utils/dateFormatting";
+import { parseDocument } from "~/utils/htmlParser";
 import { temporalCoverageToValidityInterval } from "~/utils/normUtils";
 import { findNodePath, tocItemsToTreeNodes } from "~/utils/tableOfContents";
+import { truncateAtWord } from "~/utils/textFormatting";
 import IcBaselineArrowBack from "~icons/ic/baseline-arrow-back";
 import IcBaselineArrowForward from "~icons/ic/baseline-arrow-Forward";
 import MdiArrowTopLeft from "~icons/mdi/arrow-top-left?width=24&height=24";
@@ -143,7 +146,40 @@ const inForceNormLink = computed(() => {
   return `/norms/${validVersion.item.workExample.legislationIdentifier}`;
 });
 
-useHead({ title: article.value?.name });
+const buildOgTitleForArticle = (
+  norm: LegislationWork,
+  articleHeadlineHtml?: string,
+): string | undefined => {
+  const abbreviation = norm.abbreviation?.trim();
+  const headlineText = (() => {
+    if (!articleHeadlineHtml) return "";
+    const doc = parseDocument(articleHeadlineHtml);
+    const text = doc.body?.textContent ?? "";
+    return text.replaceAll(/\s+/g, " ").trim();
+  })();
+
+  const base = abbreviation || headlineText;
+  if (!base) return undefined;
+
+  const full =
+    abbreviation && headlineText ? `${abbreviation}: ${headlineText}` : base;
+
+  return truncateAtWord(full, 55) || undefined;
+};
+
+const title = computed(() =>
+  norm.value ? buildOgTitleForArticle(norm.value, htmlTitle.value) : "",
+);
+
+const description = computed<string | undefined>(() => {
+  if (!articleHtml.value) return undefined;
+  const doc = parseDocument(articleHtml.value);
+  const firstParagraph = doc.querySelector("p");
+  const text = firstParagraph?.textContent?.trim();
+  return text ? truncateAtWord(text, 150) : undefined;
+});
+
+useDynamicSeo({ title, description });
 </script>
 
 <template>
@@ -163,7 +199,7 @@ useHead({ title: article.value?.name });
           >
             <NuxtLink :to="normPath">
               <MdiArrowTopLeft class="inline-block" />
-              {{ topNormLinkText }}
+              {{ topNormLinkText }} TESTING
             </NuxtLink>
           </h1>
           <h2

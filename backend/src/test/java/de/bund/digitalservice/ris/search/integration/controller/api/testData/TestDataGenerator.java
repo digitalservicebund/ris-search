@@ -18,7 +18,7 @@ public class TestDataGenerator {
 
     universalSearchParams.setSearchTerm(searchTerm);
     SearchPage<AbstractSearchEntity> result =
-        allDocumentsService.searchAndFilterAllDocuments(
+        allDocumentsService.simpleSearchAllDocuments(
             universalSearchParams, null, null, null, Pageable.ofSize(10000));
     return result.get().map(SearchHit::getContent).toList();
   }

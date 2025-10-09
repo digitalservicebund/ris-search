@@ -1,5 +1,5 @@
 import { afterEach } from "vitest";
-import { getTextFromElements } from "./htmlParser";
+import { getTextFromElements, parseDocument } from "./htmlParser";
 
 describe("getTextFromElements", () => {
   afterEach(() => {
@@ -42,5 +42,17 @@ describe("getTextFromElements", () => {
 
     const result = getTextFromElements(elements);
     expect(result).toEqual(["Hello"]);
+  });
+});
+
+describe("parseDocument", () => {
+  it("parses full HTML without wrapping", () => {
+    const doc = parseDocument("<html><body><p>Hi</p></body></html>");
+    expect(doc.querySelector("p")?.textContent).toBe("Hi");
+  });
+
+  it("parses fragments by auto-wrapping", () => {
+    const doc = parseDocument("<p>Hello</p><p>World</p>");
+    expect(doc.body?.textContent).toMatch(/Hello\s*World/);
   });
 });

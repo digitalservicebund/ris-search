@@ -131,7 +131,7 @@ public class NormsController {
 
     try {
       SearchPage<Norm> resultPage =
-          normsService.searchAndFilterNorms(
+          normsService.simpleSearchNorms(
               universalSearchParams, normsSearchParams, sortedPageRequest);
       return NormSearchResponseMapper.fromDomain(resultPage, ApiConfig.Paths.LEGISLATION);
     } catch (UncategorizedElasticsearchException e) {

@@ -1,4 +1,4 @@
-package de.bund.digitalservice.ris.search.service.helper;
+package de.bund.digitalservice.ris.search.service;
 
 import static org.opensearch.index.query.QueryBuilders.matchQuery;
 
@@ -20,12 +20,63 @@ import org.opensearch.index.query.Operator;
 import org.opensearch.index.query.QueryBuilders;
 import org.opensearch.index.search.MatchQuery;
 import org.opensearch.search.fetch.subphase.FetchSourceContext;
+import org.opensearch.search.fetch.subphase.highlight.HighlightBuilder;
 
-public class NormQueryBuilder {
+public class NormSimpleSearchType implements SimpleSearchType {
 
-  private NormQueryBuilder() {}
+  private static final int ARTICLE_INNER_HITS_SIZE = 3;
 
-  static final int ARTICLE_INNER_HITS_SIZE = 3;
+  private static final List<String> NORMS_HIGHLIGHT_CONTENT_FIELDS =
+      List.of(Norm.Fields.OFFICIAL_TITLE);
+
+  private static final List<String> NORMS_FETCH_EXCLUDED_FIELDS =
+      List.of(
+          Norm.Fields.ARTICLE_NAMES,
+          Norm.Fields.ARTICLE_TEXTS,
+          Norm.Fields.ARTICLES,
+          Norm.Fields.TABLE_OF_CONTENTS);
+
+  private final NormsSearchParams normsSearchParams;
+
+  public NormSimpleSearchType(NormsSearchParams normsSearchParams) {
+    this.normsSearchParams = normsSearchParams;
+  }
+
+  @Override
+  public void addHighlightedFields(HighlightBuilder builder) {
+    addHighlightedFieldsStatic(builder);
+  }
+
+  public static void addHighlightedFieldsStatic(HighlightBuilder builder) {
+    NORMS_HIGHLIGHT_CONTENT_FIELDS.forEach(builder::field);
+  }
+
+  @Override
+  public List<String> getExcludedFields() {
+    return NORMS_FETCH_EXCLUDED_FIELDS;
+  }
+
+  @Override
+  public void addExtraLogic(ParsedSearchTerm searchTerm, BoolQueryBuilder query) {
+    if (StringUtils.isNotEmpty(searchTerm.original())) {
+      addSearchTerm(
+          searchTerm.original(),
+          searchTerm.unquotedTokens(),
+          searchTerm.quotedSearchPhrases(),
+          query);
+    }
+
+    if (normsSearchParams == null) {
+      return;
+    }
+    if (normsSearchParams.getEli() != null) {
+      query.must(
+          matchQuery(Norm.Fields.WORK_ELI, normsSearchParams.getEli()).operator(Operator.AND));
+    }
+    DateUtils.buildQueryForTemporalCoverage(
+            normsSearchParams.getTemporalCoverageFrom(), normsSearchParams.getTemporalCoverageTo())
+        .ifPresent(query::filter);
+  }
 
   public static void addSearchTerm(
       String searchTerm,
@@ -60,10 +111,9 @@ public class NormQueryBuilder {
 
     // Allow searching articles by a combined "search keyword" (e.g., article number and norm
     // abbreviation).
-    // Slop is added to account for re-ordering of the components, and a boost prioritizes these
-    // matches.
+    // Slop is added to account for re-ordering of the components.
     articleNestedQuery.should(
-        new MatchPhraseQueryBuilder("articles.search_keyword", searchTerm).slop(3).boost(3));
+        new MatchPhraseQueryBuilder("articles.search_keyword", searchTerm).slop(3));
 
     // Include a MatchAllQuery with boost 0 to ensure all articles are considered for display,
     // even if they don't explicitly match the query, but without influencing their ranking.
@@ -83,7 +133,7 @@ public class NormQueryBuilder {
     InnerHitBuilder articleInnerHitBuilder =
         new InnerHitBuilder()
             .setSize(ARTICLE_INNER_HITS_SIZE)
-            .setHighlightBuilder(RisHighlightBuilder.getArticleFieldsHighlighter())
+            .setHighlightBuilder(getArticleFieldsHighlighter())
             .setFetchSourceContext(
                 new FetchSourceContext(
                     true,
@@ -94,24 +144,7 @@ public class NormQueryBuilder {
     query.should(articleQueryBuilder);
   }
 
-  public static void addNormFilters(
-      ParsedSearchTerm searchTerm, NormsSearchParams params, BoolQueryBuilder query) {
-    if (StringUtils.isNotEmpty(searchTerm.original())) {
-      NormQueryBuilder.addSearchTerm(
-          searchTerm.original(),
-          searchTerm.unquotedTokens(),
-          searchTerm.quotedSearchPhrases(),
-          query);
-    }
-
-    if (params == null) {
-      return;
-    }
-    if (params.getEli() != null) {
-      query.must(matchQuery(Norm.Fields.WORK_ELI, params.getEli()).operator(Operator.AND));
-    }
-    DateUtils.buildQueryForTemporalCoverage(
-            params.getTemporalCoverageFrom(), params.getTemporalCoverageTo())
-        .ifPresent(query::filter);
+  private static HighlightBuilder getArticleFieldsHighlighter() {
+    return RisHighlightBuilder.baseHighlighter().field("articles.text").field("articles.name");
   }
 }

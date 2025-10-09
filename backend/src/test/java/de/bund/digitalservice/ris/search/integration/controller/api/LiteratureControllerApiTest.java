@@ -16,7 +16,6 @@ import de.bund.digitalservice.ris.search.integration.controller.api.testData.Lit
 import de.bund.digitalservice.ris.search.repository.opensearch.LiteratureRepository;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -119,25 +118,6 @@ class LiteratureControllerApiTest extends ContainersIntegrationBase {
             content().contentType("application/xml"));
   }
 
-  // Remove this test and enable the following after the endpoint serves the actual html using
-  // the literature xslt transformer
-  @Test
-  @DisplayName("Html Endpoint Should always return 500")
-  void shouldAlwaysReturnError() throws Exception {
-    mockMvc
-        .perform(
-            get(ApiConfig.Paths.LITERATURE + "/NOT_PRESENT_IN_BUCKET.html")
-                .contentType(MediaType.TEXT_HTML))
-        .andExpect(status().isInternalServerError());
-
-    mockMvc
-        .perform(
-            get(ApiConfig.Paths.LITERATURE + "/" + this.documentNumberPresentInBucket + ".html")
-                .contentType(MediaType.TEXT_HTML))
-        .andExpect(status().isInternalServerError());
-  }
-
-  @Disabled("Enable after literature xslt transformer is implemented")
   @Test
   @DisplayName("Html Endpoint Should return error when literature not in bucket")
   void shouldReturnNotFoundIfHTMLNotPresent() throws Exception {
@@ -148,7 +128,6 @@ class LiteratureControllerApiTest extends ContainersIntegrationBase {
         .andExpect(status().isNotFound());
   }
 
-  @Disabled("Enable after literature xslt transformer is implemented")
   @Test
   @DisplayName("Should return HTML version of literature item")
   void shouldReturnSingleLiteratureHtml() throws Exception {
@@ -164,7 +143,11 @@ class LiteratureControllerApiTest extends ContainersIntegrationBase {
             .getContentAsString();
 
     assertThat(responseContent)
-        .contains("Literatur Test Dokument", "1. Dies ist ein literature", "Außerdem gib es noch");
+        .contains(
+            "Literatur Test Dokument",
+            "I. Äpfel.",
+            "1. Dies ist ein literature",
+            "Außerdem gib es noch");
   }
 
   @Test

@@ -159,7 +159,7 @@ function trackResultClick(url: string) {
     </div>
     <NuxtLink
       :to="metadata.url"
-      class="ris-heading3-bold max-w-title link-hover mt-8 block text-balance text-blue-800"
+      class="ris-heading3-bold max-w-title link-hover mt-8 block text-blue-800"
       @click="trackResultClick(metadata.url)"
     >
       <h2>
@@ -181,9 +181,9 @@ function trackResultClick(url: string) {
           external
           @click="trackResultClick(`${metadata.url}#${section.id}`)"
         >
-          <div role="heading" aria-level="3">
+          <h3>
             {{ section.title }}
-          </div>
+          </h3>
           : </NuxtLink
         >{{ " " }}
         <span

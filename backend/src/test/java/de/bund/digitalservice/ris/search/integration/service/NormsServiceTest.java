@@ -47,7 +47,7 @@ class NormsServiceTest extends ContainersIntegrationBase {
     universalSearchParams.setSearchTerm("text");
     PageRequest pageable = PageRequest.of(pagination.getPageIndex(), pagination.getSize());
     SearchPage<Norm> result =
-        normsService.searchAndFilterNorms(universalSearchParams, normsSearchParams, pageable);
+        normsService.simpleSearchNorms(universalSearchParams, normsSearchParams, pageable);
     assertThat(result.getContent()).hasSize(1);
     var searchHits = result.getContent().getFirst().getInnerHits().get("articles").getSearchHits();
     assertThat(searchHits).hasSize(2);

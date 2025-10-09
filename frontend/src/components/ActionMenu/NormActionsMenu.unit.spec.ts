@@ -24,10 +24,8 @@ describe("NormActionsMenu.vue", () => {
   const expressionUrl = workUrl + "/expression";
   beforeEach(() => {
     vi.clearAllMocks();
-    vi.stubGlobal("window", {
-      location: {
-        href: expressionUrl,
-      },
+    vi.stubGlobal("location", {
+      href: expressionUrl,
     });
   });
 

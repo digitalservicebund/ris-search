@@ -1,6 +1,5 @@
 package de.bund.digitalservice.ris.search.models.opensearch;
 
-import de.bund.digitalservice.ris.search.config.ApiConfig;
 import java.time.LocalDate;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -94,11 +93,6 @@ public final class Norm implements AbstractSearchEntity {
 
   @Field(name = Fields.PREAMBLE_FORMULA)
   private List<String> preambleFormula;
-
-  public String getHtmlContentUrl() {
-    String contentBaseUrl = ApiConfig.Paths.LEGISLATION + "/";
-    return (contentBaseUrl + getManifestationEliExample()).replace(".xml", ".html");
-  }
 
   public static class Fields {
     private Fields() {}

@@ -12,6 +12,7 @@ import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationU
 import de.bund.digitalservice.ris.search.repository.objectstorage.CaseLawBucket;
 import de.bund.digitalservice.ris.search.repository.opensearch.CaseLawRepository;
 import de.bund.digitalservice.ris.search.service.CaseLawService;
+import de.bund.digitalservice.ris.search.service.SimpleSearchQueryBuilder;
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
@@ -53,8 +54,8 @@ class CaseLawServiceTest {
             caseLawBucketMock,
             operationsMock,
             configurations,
-            null,
-            marshaller);
+            marshaller,
+            new SimpleSearchQueryBuilder(null));
   }
 
   @Test
@@ -82,7 +83,7 @@ class CaseLawServiceTest {
     when(operationsMock.search((Query) any(), eq(CaseLawDocumentationUnit.class)))
         .thenReturn(searchHits);
 
-    var actual = caseLawService.searchCaseLaws("anySearch", pageable);
+    var actual = caseLawService.advancedSearchCaseLaw("anySearch", pageable);
     Assertions.assertEquals(searchResultPage, actual);
   }
 

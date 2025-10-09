@@ -3,6 +3,7 @@ import { DocumentKind } from "~/types";
 const documentKindDisplayValues: Record<DocumentKind, string> = {
   [DocumentKind.CaseLaw]: "Gerichtsentscheidungen",
   [DocumentKind.Norm]: "Gesetze und Verordnungen",
+  [DocumentKind.Literature]: "Literaturnachweise",
   [DocumentKind.All]: "Datensätze",
 };
 
