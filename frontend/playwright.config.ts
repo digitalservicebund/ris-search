@@ -26,7 +26,7 @@ export const environment = {
 
 const browserConfigurations: Project[] = [
   {
-    name: "chromium",
+    name: "seo",
     use: {
       ...devices["Desktop Chrome"],
       storageState: authFile,
@@ -37,12 +37,22 @@ const browserConfigurations: Project[] = [
     dependencies: ["setup"],
   },
   {
+    name: "chromium",
+    use: {
+      ...devices["Desktop Chrome"],
+      storageState: authFile,
+    },
+    dependencies: ["setup"],
+    testIgnore: "seo.spec.ts",
+  },
+  {
     name: "firefox",
     use: {
       ...devices["Desktop Firefox"],
       storageState: authFile,
     },
     dependencies: ["setup"],
+    testIgnore: "seo.spec.ts",
   },
   {
     name: "webkit",
@@ -51,6 +61,7 @@ const browserConfigurations: Project[] = [
       storageState: authFile,
     },
     dependencies: ["setup"],
+    testIgnore: "seo.spec.ts",
   },
   {
     name: "mobile",
@@ -61,6 +72,7 @@ const browserConfigurations: Project[] = [
       storageState: authFile,
     },
     dependencies: ["setup"],
+    testIgnore: "seo.spec.ts",
   },
 ];
 

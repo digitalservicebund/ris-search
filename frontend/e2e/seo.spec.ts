@@ -2,6 +2,7 @@ import path from "node:path";
 import { playAudit } from "playwright-lighthouse";
 import { environment } from "../playwright.config";
 import { test } from "./fixtures";
+import { loginUser } from "~~/e2e/auth.utils";
 
 type Device = "desktop" | "mobile";
 const REPORT_DIR = path.join(process.cwd(), "test-results", "lighthouse-seo");
@@ -125,12 +126,12 @@ test.describe("SEO testing for desktop and mobile using lighthouse", () => {
   for (const { device, config } of testCases) {
     for (const testPage of testPages) {
       test(`${device} SEO checks for page ${testPage.name}`, async ({
-        browserName,
         page,
       }) => {
-        if (browserName !== "chromium") return;
         const { width, height } = config.settings.screenEmulation;
         await page.setViewportSize({ width, height });
+        await loginUser(page);
+        await page.goto(testPage.url);
 
         await playAudit({
           page: page,
