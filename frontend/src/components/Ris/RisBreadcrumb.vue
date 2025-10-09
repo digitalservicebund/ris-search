@@ -11,11 +11,39 @@ export interface BreadcrumbItem {
   type?: string;
 }
 
+type BreadcrumbType = "norm" | "caselaw" | "literature";
+
 interface Props {
-  type?: "norm" | "caselaw";
+  type?: BreadcrumbType;
   items?: BreadcrumbItem[];
   title?: string;
   basePath?: string;
+}
+
+function getItemForType(type: BreadcrumbType): BreadcrumbItem {
+  let label: string;
+  let documentKind: string;
+
+  switch (type) {
+    case "norm":
+      label = "Gesetze & Verordnungen";
+      documentKind = DocumentKind.Norm;
+      break;
+    case "caselaw":
+      label = "Gerichtsentscheidungen";
+      documentKind = DocumentKind.CaseLaw;
+      break;
+    case "literature":
+      label = "Literaturnachweise";
+      documentKind = DocumentKind.Literature;
+  }
+
+  const route = `/search?category=${documentKind}`;
+
+  return {
+    label,
+    route,
+  };
 }
 
 const props = defineProps<Props>();
@@ -30,17 +58,8 @@ const items = computed(() => {
   ];
 
   if (props.type) {
-    const label =
-      props.type === "norm"
-        ? "Gesetze & Verordnungen"
-        : "Gerichtsentscheidungen";
-    const documentKind =
-      props.type === "norm" ? DocumentKind.Norm : DocumentKind.CaseLaw;
-    const route = `/search?category=${documentKind}`;
-    items.push({
-      label,
-      route,
-    });
+    const item = getItemForType(props.type);
+    items.push(item);
   }
 
   if (props.title) {

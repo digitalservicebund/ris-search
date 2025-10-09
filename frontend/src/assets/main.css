@@ -66,6 +66,7 @@ mark {
 /* Workaround for https://github.com/tailwindlabs/tailwindcss/discussions/16429 */
 @import "./legislation.css";
 @import "./caselaw.css";
+@import "./literature.css";
 
 @import "./print.css";
 

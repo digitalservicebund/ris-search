@@ -54,7 +54,7 @@
             </akn:analysis>
             <akn:references source="attributsemantik-noch-undefiniert">
                 <akn:TLCPerson eId="mustermann-max-verfasser-1" href="akn/ontology/persons/de/mustermann-max" ris:name="Mustermann, Max" ris:titel="Dr" showAs="Mustermann, Max, Dr"/>
-                <akn:TLCPerson eId="pan-peter-verfasser-1" href="akn/ontology/persons/de/pan-peter" ris:name="Pan, Peter" showAs="Pan, Max"/>
+                <akn:TLCPerson eId="pan-peter-verfasser-2" href="akn/ontology/persons/de/pan-peter" ris:name="Pan, Peter" showAs="Pan, Max"/>
                 <akn:TLCRole eId="verfasser" href="akn/ontology/roles/de/verfasser" showAs="Verfasser"/>
             </akn:references>
             <akn:proprietary source="attributsemantik-noch-undefiniert">

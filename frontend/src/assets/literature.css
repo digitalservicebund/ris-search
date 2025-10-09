@@ -1,0 +1,19 @@
+.literature {
+  @apply max-w-prose print:max-w-none;
+
+  #title {
+    display: none;
+  }
+
+  #dokumentarischerTitel {
+    @apply ris-subhead-regular mt-16 block;
+  }
+
+  h2 {
+    @apply ris-heading3-bold my-16 inline-block;
+  }
+
+  p {
+    @apply mb-16 overflow-x-auto;
+  }
+}
