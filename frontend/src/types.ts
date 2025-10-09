@@ -120,28 +120,28 @@ export interface CaseLawEncoding {
 export interface Literature {
   "@type": "Literature";
   "@id": string;
-  inLanguage: string;
-  documentNumber: string;
-  recordingDate: string; // LocalDate in backend -> string in ISO format
+  inLanguage: string | null;
+  documentNumber: string | null;
+  recordingDate: string | null; // LocalDate in backend -> string in ISO format
   yearsOfPublication: string[];
   documentTypes: string[];
   dependentReferences: string[];
   independentReferences: string[];
-  headline?: string;
-  alternativeTitle?: string;
-  authors?: string[];
-  collaborators?: string[];
-  shortReport?: string;
-  outline?: string;
-  encoding: LiteratureEncoding[];
+  headline: string | null;
+  alternativeTitle: string | null;
+  authors: string[];
+  collaborators: string[];
+  shortReport: string | null;
+  outline: string | null;
+  encoding: LiteratureEncoding[] | null;
 }
 
 export interface LiteratureEncoding {
   "@type": "LiteratureObject";
   "@id": string;
-  contentUrl: string;
-  encodingFormat: string;
-  inLanguage: string;
+  contentUrl: string | null;
+  encodingFormat: string | null;
+  inLanguage: string | null;
 }
 
 export type AnyDocument = CaseLaw | LegislationWork | Literature;
