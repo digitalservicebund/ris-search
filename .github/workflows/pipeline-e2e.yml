@@ -97,7 +97,7 @@ jobs:
             echo "Waiting for containers to be fully up..."
             sleep 15
           done
-      - name: Run Accessibility Playwright tests on staging
+      - name: Run Playwright tests on staging
         if: ${{ matrix.profile == 'internal' }}
         run: npx playwright test accessibility.spec.ts seo.spec.ts --project chromium firefox mobile seo
         working-directory: ./frontend

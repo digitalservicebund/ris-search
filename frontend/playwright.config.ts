@@ -34,7 +34,7 @@ const browserConfigurations: Project[] = [
         args: ["--remote-debugging-port=9222"],
       },
     },
-    dependencies: ["setup"],
+    workers: 1,
   },
   {
     name: "chromium",

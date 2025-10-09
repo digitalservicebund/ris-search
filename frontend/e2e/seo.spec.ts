@@ -130,6 +130,7 @@ test.describe("SEO testing for desktop and mobile using lighthouse", () => {
       }) => {
         const { width, height } = config.settings.screenEmulation;
         await page.setViewportSize({ width, height });
+        await page.goto("/");
         await loginUser(page);
         await page.goto(testPage.url);
 
