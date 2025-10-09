@@ -1,20 +1,12 @@
 import path from "node:path";
-import os from "os";
-import { test } from "@playwright/test";
-import { chromium, type BrowserContext, type Page } from "playwright";
 import { playAudit } from "playwright-lighthouse";
 import { environment } from "../playwright.config";
-import { loginUser } from "./auth.utils";
+import { test } from "./fixtures";
 
 type Device = "desktop" | "mobile";
 const REPORT_DIR = path.join(process.cwd(), "test-results", "lighthouse-seo");
 
 export const testPages = [
-  // TODO: Add SEO Meta Tags to the 404 page
-  // {
-  //   name: "Not Found Page",
-  //   url: "/404",
-  // }
   {
     name: "Home Page",
     url: "/",
@@ -130,32 +122,18 @@ const testCases = [
 ];
 
 test.describe("SEO testing for desktop and mobile using lighthouse", () => {
-  let context: BrowserContext;
-  let authenticatedPage: Page;
-
-  test.beforeAll(async () => {
-    // Authenticate once for all tests
-    context = await chromium.launchPersistentContext(os.tmpdir(), {
-      args: [`--remote-debugging-port=${environment.remoteDebuggingPort}`],
-    });
-    authenticatedPage = await context.newPage();
-    await authenticatedPage.goto(environment.baseUrl);
-    await loginUser(authenticatedPage);
-  });
-
-  test.afterAll(async () => {
-    await context.close();
-  });
-
   for (const { device, config } of testCases) {
     for (const testPage of testPages) {
-      test(`${device} SEO checks for page ${testPage.name}`, async () => {
-        await authenticatedPage.goto(testPage.url);
+      test(`${device} SEO checks for page ${testPage.name}`, async ({
+        browserName,
+        page,
+      }) => {
+        if (browserName !== "chromium") return;
         const { width, height } = config.settings.screenEmulation;
-        await authenticatedPage.setViewportSize({ width, height });
+        await page.setViewportSize({ width, height });
 
         await playAudit({
-          page: authenticatedPage,
+          page: page,
           port: environment.remoteDebuggingPort,
           thresholds: { seo: 90 },
           config,
