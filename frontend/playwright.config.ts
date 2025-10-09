@@ -34,7 +34,7 @@ const browserConfigurations: Project[] = [
         args: ["--remote-debugging-port=9222"],
       },
     },
-    workers: 1,
+    testMatch: "seo.spec.ts",
   },
   {
     name: "chromium",

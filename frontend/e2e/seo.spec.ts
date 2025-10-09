@@ -1,8 +1,6 @@
 import path from "node:path";
 import { playAudit } from "playwright-lighthouse";
-import { environment } from "../playwright.config";
-import { loginUser } from "./auth.utils";
-import { test } from "./fixtures";
+import { seoTest as test } from "./fixtures";
 
 type Device = "desktop" | "mobile";
 const REPORT_DIR = path.join(process.cwd(), "test-results", "lighthouse-seo");
@@ -87,23 +85,6 @@ function getDeviceConfig(device: Device) {
         deviceScaleRatio: 1,
         disabled: false,
       };
-  const throttling = isMobile
-    ? {
-        rttMs: 150,
-        throughputKbps: 1638.4,
-        cpuSlowdownMultiplier: 4,
-        requestLatencyMs: 0,
-        downloadThroughputKbps: 0,
-        uploadThroughputKbps: 0,
-      }
-    : {
-        rttMs: 40,
-        throughputKbps: 10240,
-        cpuSlowdownMultiplier: 1,
-        requestLatencyMs: 0,
-        downloadThroughputKbps: 0,
-        uploadThroughputKbps: 0,
-      };
 
   return {
     extends: "lighthouse:default",
@@ -111,15 +92,14 @@ function getDeviceConfig(device: Device) {
       onlyCategories: ["seo"],
       formFactor: device,
       screenEmulation,
-      throttling,
       disableStorageReset: true,
     },
   };
 }
 
 const testCases = [
-  { device: "desktop" as const, config: getDeviceConfig("desktop") },
-  { device: "mobile" as const, config: getDeviceConfig("mobile") },
+  { device: "desktop", config: getDeviceConfig("desktop") },
+  { device: "mobile", config: getDeviceConfig("mobile") },
 ];
 
 test.describe("SEO testing for desktop and mobile using lighthouse", () => {
@@ -130,13 +110,10 @@ test.describe("SEO testing for desktop and mobile using lighthouse", () => {
       }) => {
         const { width, height } = config.settings.screenEmulation;
         await page.setViewportSize({ width, height });
-        await page.goto("/");
-        await loginUser(page);
-        await page.goto(testPage.url);
-
+        await page.goto(testPage.url, { waitUntil: "networkidle" });
         await playAudit({
-          page: page,
-          port: environment.remoteDebuggingPort,
+          page,
+          port: 9222,
           thresholds: { seo: 90 },
           config,
           reports: {
