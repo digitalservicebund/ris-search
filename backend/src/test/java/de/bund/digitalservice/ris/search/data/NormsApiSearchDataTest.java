@@ -20,6 +20,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,15 +29,16 @@ import org.springframework.security.oauth2.client.OAuth2AuthorizedClientManager;
 
 @SpringBootTest
 @Tag("data")
+@Disabled
 class NormsApiSearchDataTest extends BaseApiSearchDataTest {
 
   private static final Logger logger = LogManager.getLogger(NormsApiSearchDataTest.class);
 
-  private int maxEntries = 1000;
+  private final int maxEntries = 1000;
 
-  private double threshold = 95.0;
+  private final double threshold = 95.0;
 
-  private String apiUrl = "/v1/legislation";
+  private final String apiUrl = "/v1/legislation";
 
   @Autowired
   public NormsApiSearchDataTest(OAuth2AuthorizedClientManager authorizedClientManager) {

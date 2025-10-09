@@ -19,8 +19,6 @@ import de.bund.digitalservice.ris.search.integration.controller.api.testData.Sha
 import de.bund.digitalservice.ris.search.integration.controller.api.values.SortingTestArguments;
 import de.bund.digitalservice.ris.search.repository.opensearch.CaseLawRepository;
 import de.bund.digitalservice.ris.search.repository.opensearch.NormsRepository;
-import de.bund.digitalservice.ris.search.service.IndexAliasService;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.stream.Stream;
@@ -52,20 +50,9 @@ class AdvancedSearchControllerApiTest extends ContainersIntegrationBase {
   @Autowired private NormsRepository normsRepository;
   @Autowired private MockMvc mockMvc;
 
-  Boolean initialized = false;
-  @Autowired private IndexAliasService indexAliasService;
-
   @BeforeEach
-  void setUpSearchControllerApiTest() throws IOException {
-    if (initialized) return; // replacement for @BeforeAll setup, which causes errors
-    initialized = true;
-
-    Assertions.assertTrue(openSearchContainer.isRunning());
-    super.recreateIndex();
-    super.updateMapping();
-
-    indexAliasService.setIndexAlias();
-
+  void setUpSearchControllerApiTest() {
+    clearData();
     caseLawRepository.saveAll(CaseLawTestData.allDocuments);
     normsRepository.saveAll(NormsTestData.allDocuments);
   }

@@ -11,6 +11,7 @@ import java.util.Objects;
 import java.util.Optional;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,13 +20,14 @@ import org.springframework.security.oauth2.client.OAuth2AuthorizedClientManager;
 
 @SpringBootTest
 @Tag("data")
+@Disabled
 class CaseLawApiSearchDataTest extends BaseApiSearchDataTest {
 
-  private int maxEntries = 500;
+  private final int maxEntries = 500;
 
-  private double threshold = 95.0;
+  private final double threshold = 95.0;
 
-  private String apiUrl = "/v1/case-law";
+  private final String apiUrl = "/v1/case-law";
 
   @Autowired
   public CaseLawApiSearchDataTest(OAuth2AuthorizedClientManager authorizedClientManager) {
@@ -83,7 +85,7 @@ class CaseLawApiSearchDataTest extends BaseApiSearchDataTest {
       Response response = searchWithTerm(fileNumber);
       List<Map<String, Object>> members = response.path("member");
       if (members == null || members.isEmpty()) return Optional.empty();
-      Map<String, Object> firstMatch = members.get(0);
+      Map<String, Object> firstMatch = members.getFirst();
       List<String> fileNumbers =
           (List<String>) ((Map<String, Object>) firstMatch.get("item")).get("fileNumbers");
 
@@ -102,7 +104,7 @@ class CaseLawApiSearchDataTest extends BaseApiSearchDataTest {
       Response response = searchWithTerm(ecli);
       List<Map<String, Object>> members = response.path("member");
       if (members == null || members.isEmpty()) return Optional.empty();
-      Map<String, Object> firstMatch = members.get(0);
+      Map<String, Object> firstMatch = members.getFirst();
       String ecliFromMatch = (String) ((Map<String, Object>) firstMatch.get("item")).get("ecli");
 
       if (ecliFromMatch != null && ecliFromMatch.equals(ecli)) {

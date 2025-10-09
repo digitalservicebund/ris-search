@@ -2,7 +2,6 @@ package de.bund.digitalservice.ris.search.integration.controller.api;
 
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.is;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -12,7 +11,6 @@ import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.integration.config.ContainersIntegrationBase;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.repository.opensearch.NormsRepository;
-import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
@@ -41,8 +39,6 @@ class NormsTemporalCoverageTest extends ContainersIntegrationBase {
   @Autowired private NormsRepository normsRepository;
   @Autowired private MockMvc mockMvc;
 
-  Boolean initialized = false;
-
   final List<Norm> allNorms =
       List.of(
           Norm.builder().expressionEli("1-5").entryIntoForceDate(day(1)).expiryDate(day(5)).build(),
@@ -58,15 +54,8 @@ class NormsTemporalCoverageTest extends ContainersIntegrationBase {
           Norm.builder().expressionEli("5-").entryIntoForceDate(day(5)).build());
 
   @BeforeEach
-  void setUpSearchControllerApiTest() throws IOException {
-    if (initialized) return; // replacement for @BeforeAll setup, which causes errors
-    initialized = true;
-
-    assertTrue(openSearchContainer.isRunning());
-
-    super.recreateIndex();
-    super.updateMapping();
-
+  void setUpSearchControllerApiTest() {
+    clearData();
     normsRepository.saveAll(allNorms);
   }
 

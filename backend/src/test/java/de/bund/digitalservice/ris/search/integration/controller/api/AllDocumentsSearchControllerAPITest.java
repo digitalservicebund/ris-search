@@ -8,7 +8,6 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.matchesRegex;
 import static org.hamcrest.Matchers.oneOf;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -23,8 +22,6 @@ import de.bund.digitalservice.ris.search.integration.controller.api.testData.Sha
 import de.bund.digitalservice.ris.search.integration.controller.api.values.SortingTestArguments;
 import de.bund.digitalservice.ris.search.repository.opensearch.CaseLawRepository;
 import de.bund.digitalservice.ris.search.repository.opensearch.NormsRepository;
-import de.bund.digitalservice.ris.search.service.IndexAliasService;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Map;
@@ -58,18 +55,11 @@ class AllDocumentsSearchControllerAPITest extends ContainersIntegrationBase {
 
   @Autowired private CaseLawRepository caseLawRepository;
 
-  @Autowired private IndexAliasService indexAliasService;
-
   @Autowired private MockMvc mockMvc;
 
   @BeforeEach
-  void setUpSearchControllerApiTest() throws IOException {
-    assertTrue(openSearchContainer.isRunning());
-
-    super.recreateIndex();
-    super.updateMapping();
-
-    indexAliasService.setIndexAlias();
+  void setUpSearchControllerApiTest() {
+    clearData();
 
     caseLawRepository.saveAll(CaseLawTestData.allDocuments);
     normsRepository.saveAll(NormsTestData.allDocuments);

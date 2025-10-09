@@ -5,7 +5,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.startsWithIgnoringCase;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -104,11 +103,7 @@ class CaseLawControllerApiTest extends ContainersIntegrationBase {
 
   @BeforeEach
   void setUpSearchControllerApiTest() throws IOException {
-    assertTrue(openSearchContainer.isRunning());
-
-    super.recreateIndex();
-    super.updateMapping();
-
+    clearData();
     String testCaseLawLdml = createTestCaseLawLdml();
     caseLawBucket.save(this.documentNumber + "/" + this.documentNumber + ".xml", testCaseLawLdml);
     caseLawBucket.save(this.documentNumber + "/Attachment.png", "picture");

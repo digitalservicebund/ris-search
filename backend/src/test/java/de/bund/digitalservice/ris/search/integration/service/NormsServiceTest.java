@@ -1,7 +1,6 @@
 package de.bund.digitalservice.ris.search.integration.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.c4_soft.springaddons.security.oauth2.test.annotations.WithJwt;
 import de.bund.digitalservice.ris.search.integration.config.ContainersIntegrationBase;
@@ -13,7 +12,6 @@ import de.bund.digitalservice.ris.search.models.opensearch.Article;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.repository.opensearch.NormsRepository;
 import de.bund.digitalservice.ris.search.service.NormsService;
-import java.io.IOException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
@@ -33,18 +31,9 @@ class NormsServiceTest extends ContainersIntegrationBase {
   @Autowired private NormsRepository normsRepository;
   @Autowired private NormsService normsService;
 
-  Boolean initialized = false;
-
   @BeforeEach
-  void setUpSearchControllerApiTest() throws IOException {
-    if (initialized) return; // replacement for @BeforeAll setup, which causes errors
-    initialized = true;
-
-    assertTrue(openSearchContainer.isRunning());
-
-    super.recreateIndex();
-    super.updateMapping();
-
+  void setUpSearchControllerApiTest() {
+    clearData();
     normsRepository.saveAll(NormsTestData.allDocuments);
   }
 
@@ -60,18 +49,18 @@ class NormsServiceTest extends ContainersIntegrationBase {
     SearchPage<Norm> result =
         normsService.searchAndFilterNorms(universalSearchParams, normsSearchParams, pageable);
     assertThat(result.getContent()).hasSize(1);
-    var searchHits = result.getContent().get(0).getInnerHits().get("articles").getSearchHits();
+    var searchHits = result.getContent().getFirst().getInnerHits().get("articles").getSearchHits();
     assertThat(searchHits).hasSize(2);
 
-    var textHighlight = searchHits.get(0).getHighlightField("articles.text");
+    var textHighlight = searchHits.getFirst().getHighlightField("articles.text");
     assertThat(textHighlight).hasSize(1);
-    assertThat(textHighlight.get(0)).isEqualTo("example <mark>text</mark> 1");
+    assertThat(textHighlight.getFirst()).isEqualTo("example <mark>text</mark> 1");
 
     var textHighlight2 = searchHits.get(1).getHighlightField("articles.text");
     assertThat(textHighlight).hasSize(1);
-    assertThat(textHighlight2.get(0)).isEqualTo("example <mark>text</mark> 2");
+    assertThat(textHighlight2.getFirst()).isEqualTo("example <mark>text</mark> 2");
 
-    Article firstArticle = (Article) searchHits.get(0).getContent();
+    Article firstArticle = (Article) searchHits.getFirst().getContent();
     assertThat(firstArticle.name()).contains(articleName);
   }
 }

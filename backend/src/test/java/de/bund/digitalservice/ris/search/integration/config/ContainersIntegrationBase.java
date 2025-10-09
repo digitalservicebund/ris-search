@@ -1,21 +1,11 @@
 package de.bund.digitalservice.ris.search.integration.config;
 
-import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
-import de.bund.digitalservice.ris.search.models.opensearch.Literature;
-import de.bund.digitalservice.ris.search.models.opensearch.Norm;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import org.opensearch.data.client.orhlc.OpenSearchRestTemplate;
+import de.bund.digitalservice.ris.search.repository.opensearch.CaseLawRepository;
+import de.bund.digitalservice.ris.search.repository.opensearch.LiteratureRepository;
+import de.bund.digitalservice.ris.search.repository.opensearch.NormsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.data.elasticsearch.core.document.Document;
-import org.springframework.data.elasticsearch.core.index.AliasAction;
-import org.springframework.data.elasticsearch.core.index.AliasActionParameters;
-import org.springframework.data.elasticsearch.core.index.AliasActions;
-import org.springframework.data.elasticsearch.core.mapping.IndexCoordinates;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
-import org.springframework.util.FileCopyUtils;
 import org.testcontainers.utility.TestcontainersConfiguration;
 
 public class ContainersIntegrationBase {
@@ -35,60 +25,13 @@ public class ContainersIntegrationBase {
     registry.add("opensearch.port", openSearchContainer::getFirstMappedPort);
   }
 
-  @Autowired private OpenSearchRestTemplate openSearchRestTemplate;
+  @Autowired private CaseLawRepository caseLawRepository;
+  @Autowired private LiteratureRepository literatureRepository;
+  @Autowired private NormsRepository normsRepository;
 
-  public void recreateIndex() {
-
-    // delete all indices (side effect of deleting all aliases)
-    openSearchRestTemplate.indexOps(IndexCoordinates.of("*")).delete();
-
-    // recreate indices
-    openSearchRestTemplate.indexOps(CaseLawDocumentationUnit.class).create();
-    openSearchRestTemplate.indexOps(CaseLawDocumentationUnit.class).refresh();
-    openSearchRestTemplate.indexOps(Norm.class).create();
-    openSearchRestTemplate.indexOps(Norm.class).refresh();
-    openSearchRestTemplate.indexOps(Literature.class).create();
-    openSearchRestTemplate.indexOps(Literature.class).refresh();
-
-    // recreate documents alias
-    openSearchRestTemplate
-        .indexOps(IndexCoordinates.of("*"))
-        .alias(
-            new AliasActions(
-                new AliasAction.Add(
-                    AliasActionParameters.builder()
-                        .withIndices("caselaws", "norms", "literature")
-                        .withAliases("documents")
-                        .build())));
-  }
-
-  public void updateMapping() throws IOException {
-
-    // Case law mapping
-    ClassPathResource resource = new ClassPathResource("/openSearch/caselaw_mappings.json");
-    InputStreamReader reader = new InputStreamReader(resource.getInputStream());
-    String mappingJson = FileCopyUtils.copyToString(reader);
-
-    Document mappingDocument = Document.parse(mappingJson);
-    openSearchRestTemplate.indexOps(IndexCoordinates.of("caselaws")).putMapping(mappingDocument);
-
-    // norms mapping
-    ClassPathResource resourceNorms = new ClassPathResource("/openSearch/norms_mapping.json");
-    InputStreamReader readerNorms = new InputStreamReader(resourceNorms.getInputStream());
-    String mappingJsonNorms = FileCopyUtils.copyToString(readerNorms);
-
-    Document mappingDocumentNorms = Document.parse(mappingJsonNorms);
-    openSearchRestTemplate.indexOps(IndexCoordinates.of("norms")).putMapping(mappingDocumentNorms);
-
-    // literature mapping
-    ClassPathResource resourceLiterature =
-        new ClassPathResource("/openSearch/literature_mappings.json");
-    InputStreamReader readerLiterature = new InputStreamReader(resourceLiterature.getInputStream());
-    String mappingJsonLiterature = FileCopyUtils.copyToString(readerLiterature);
-
-    Document mappingDocumentLiterature = Document.parse(mappingJsonLiterature);
-    openSearchRestTemplate
-        .indexOps(IndexCoordinates.of("literature"))
-        .putMapping(mappingDocumentLiterature);
+  public void clearData() {
+    caseLawRepository.deleteAll();
+    literatureRepository.deleteAll();
+    normsRepository.deleteAll();
   }
 }

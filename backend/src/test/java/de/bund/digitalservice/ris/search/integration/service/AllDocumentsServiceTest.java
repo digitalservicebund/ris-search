@@ -1,7 +1,6 @@
 package de.bund.digitalservice.ris.search.integration.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.c4_soft.springaddons.security.oauth2.test.annotations.WithJwt;
 import de.bund.digitalservice.ris.search.integration.config.ContainersIntegrationBase;
@@ -12,7 +11,6 @@ import de.bund.digitalservice.ris.search.models.opensearch.AbstractSearchEntity;
 import de.bund.digitalservice.ris.search.repository.opensearch.CaseLawRepository;
 import de.bund.digitalservice.ris.search.repository.opensearch.NormsRepository;
 import de.bund.digitalservice.ris.search.service.AllDocumentsService;
-import java.io.IOException;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -32,17 +30,9 @@ class AllDocumentsServiceTest extends ContainersIntegrationBase {
   @Autowired private NormsRepository normsRepository;
   @Autowired private AllDocumentsService allDocumentsService;
 
-  Boolean initialized = false;
-
   @BeforeEach
-  void setUpSearchControllerApiTest() throws IOException {
-    if (initialized) return; // replacement for @BeforeAll setup, which causes errors
-    initialized = true;
-
-    assertTrue(openSearchContainer.isRunning());
-
-    super.recreateIndex();
-    super.updateMapping();
+  void setUpSearchControllerApiTest() {
+    clearData();
   }
 
   @Test

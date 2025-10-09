@@ -10,7 +10,6 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.startsWith;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -28,7 +27,6 @@ import de.bund.digitalservice.ris.search.repository.opensearch.NormsRepository;
 import de.bund.digitalservice.ris.search.schema.TableOfContentsSchema;
 import de.bund.digitalservice.ris.search.utils.DateUtils;
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDate;
@@ -72,7 +70,6 @@ class NormsControllerApiTest extends ContainersIntegrationBase {
       ApiConfig.Paths.LEGISLATION_SINGLE
           + "/bund/bgbl-1/1991/s101/1991-01-01/1/deu/1991-01-01/regelungstext-1";
   static final String MANIFESTATION_URL_HTML = MANIFESTATION_URL_PREFIX + ".html";
-  static final String MANIFESTATION_URL_PDF = MANIFESTATION_URL_PREFIX + ".pdf";
   static final String MANIFESTATION_URL_XML = MANIFESTATION_URL_PREFIX + ".xml";
   static final String MANIFESTATION_PREFIX_URL_ZIP =
       ApiConfig.Paths.LEGISLATION_SINGLE + "/bund/bgbl-1/1991/s101/1991-01-01/1/deu/1991-01-01.zip";
@@ -80,18 +77,9 @@ class NormsControllerApiTest extends ContainersIntegrationBase {
   @Autowired private NormsRepository normsRepository;
   @Autowired private MockMvc mockMvc;
 
-  Boolean initialized = false;
-
   @BeforeEach
-  void setUpSearchControllerApiTest() throws IOException {
-    if (initialized) return; // replacement for @BeforeAll setup, which causes errors
-    initialized = true;
-
-    assertTrue(openSearchContainer.isRunning());
-
-    super.recreateIndex();
-    super.updateMapping();
-
+  void setUpSearchControllerApiTest() {
+    clearData();
     normsRepository.saveAll(NormsTestData.allDocuments);
   }
 
@@ -554,8 +542,7 @@ class NormsControllerApiTest extends ContainersIntegrationBase {
   @Test
   void itSortsByTemporalCoverageFrom() throws Exception {
 
-    super.recreateIndex();
-    super.updateMapping();
+    normsRepository.deleteAll();
 
     var normTestOne =
         Norm.builder()

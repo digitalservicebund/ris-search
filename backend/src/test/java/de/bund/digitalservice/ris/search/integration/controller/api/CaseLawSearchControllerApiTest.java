@@ -21,13 +21,11 @@ import de.bund.digitalservice.ris.search.integration.config.ContainersIntegratio
 import de.bund.digitalservice.ris.search.integration.controller.api.testData.CaseLawTestData;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import de.bund.digitalservice.ris.search.repository.opensearch.CaseLawRepository;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
 import org.hamcrest.Matchers;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
@@ -55,11 +53,8 @@ class CaseLawSearchControllerApiTest extends ContainersIntegrationBase {
   @Autowired private MockMvc mockMvc;
 
   @BeforeEach
-  void setUpSearchControllerApiTest() throws IOException {
-    Assertions.assertTrue(openSearchContainer.isRunning());
-    super.recreateIndex();
-    super.updateMapping();
-
+  void setUpSearchControllerApiTest() {
+    clearData();
     caseLawRepository.saveAll(CaseLawTestData.allDocuments);
   }
 
