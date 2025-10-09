@@ -188,7 +188,7 @@ export default defineNuxtConfig({
   routeRules: {
     "/sitemaps/norms/**": {
       proxy: {
-        to: "/api/v1/sitemaps/norms/**",
+        to: "/v1/sitemaps/norms/**",
         headers: {
           Accept: "application/xml",
         },
@@ -196,7 +196,7 @@ export default defineNuxtConfig({
     },
     "/sitemaps/caselaw/**": {
       proxy: {
-        to: "/api/v1/sitemaps/caselaw/**",
+        to: "/v1/sitemaps/caselaw/**",
         headers: {
           Accept: "application/xml",
         },
