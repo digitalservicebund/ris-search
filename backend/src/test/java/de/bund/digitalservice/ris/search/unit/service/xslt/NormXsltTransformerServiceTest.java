@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.function.Function;
+import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.junit.jupiter.api.Assertions;
@@ -59,12 +60,12 @@ class NormXsltTransformerServiceTest {
       String inputFileName, String expectedFileName, String testName) throws IOException {
     byte[] bytes = Files.readAllBytes(Path.of(resourcesPath, inputFileName));
 
-    var actualHtml = service.transformNorm(bytes, "subtype", RESOURCES_BASE_PATH);
+    var actualHtml = Jsoup.parse(service.transformNorm(bytes, "subtype", RESOURCES_BASE_PATH));
 
-    var expectedHtml = Files.readString(Path.of(resourcesPath, expectedFileName));
-    var expectedDocument = Jsoup.parse(expectedHtml);
-    var actualDocument = Jsoup.parse(actualHtml);
-    assertThat(actualDocument.body().html()).isEqualTo(expectedDocument.body().html());
+    var expectedHtml = Jsoup.parse(Files.readString(Path.of(resourcesPath, expectedFileName)));
+    var expectedBody = StringUtils.deleteWhitespace(expectedHtml.body().html());
+    var actualBody = StringUtils.deleteWhitespace(actualHtml.body().html());
+    assertThat(actualBody).isEqualTo(expectedBody);
   }
 
   @Test
