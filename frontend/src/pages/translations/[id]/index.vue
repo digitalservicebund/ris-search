@@ -17,10 +17,14 @@ import {
   tabStyles,
 } from "~/components/Tabs.styles";
 import { useDynamicSeo } from "~/composables/useDynamicSeo";
-import { fetchTranslationAndHTML } from "~/composables/useTranslationData";
+import {
+  fetchTranslationAndHTML,
+  getGermanOriginal,
+} from "~/composables/useTranslationData";
 import { removePrefix, truncateAtWord } from "~/utils/textFormatting";
 import IcBaselineSubject from "~icons/ic/baseline-subject";
 import IcOutlineInfo from "~icons/ic/outline-info";
+import IcOutlineWarning from "~icons/material-symbols/warning-outline";
 
 definePageMeta({ layout: "base" });
 
@@ -28,6 +32,8 @@ const route = useRoute();
 const id = route.params.id as string;
 
 const { data } = await fetchTranslationAndHTML(id);
+const { data: germanOriginal } = await getGermanOriginal(id);
+
 const currentTranslation = data.value?.content;
 const html = data.value?.html;
 
@@ -47,6 +53,10 @@ const versionInformation = computed(() => {
 
 const translatedBy = computed(() => {
   return removePrefix(currentTranslation.translator, "Translation provided by");
+});
+
+const germanOriginalWorkEli = computed(() => {
+  return germanOriginal.value?.item?.legislationIdentifier;
 });
 
 const breadcrumbItems = computed(() => {
@@ -124,9 +134,23 @@ useDynamicSeo({ title, description });
           </h1>
         </hgroup>
       </div>
-      <Message :closable="false" class="mb-48 max-w-prose space-y-24"
-        >TO DO</Message
+      <Message
+        v-if="germanOriginal"
+        :closable="false"
+        class="mb-48 max-w-prose space-y-24"
       >
+        <template #icon>
+          <IcOutlineWarning />
+        </template>
+        <p class="ris-body2-bold mt-2">Version Information</p>
+        <p class="mt-2">
+          Translations may not be updated at the same time as the German legal
+          provision.
+          <NuxtLink :to="`/norms/${germanOriginalWorkEli}`"
+            >Go to the German version</NuxtLink
+          >.
+        </p>
+      </Message>
     </div>
     <Tabs value="0">
       <TabList :pt="tabListStyles">

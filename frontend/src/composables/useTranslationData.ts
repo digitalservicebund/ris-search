@@ -1,5 +1,7 @@
 import type { AsyncData, NuxtError } from "#app";
 import { useBackendURL } from "~/composables/useBackendURL";
+import type { LegislationWork, JSONLDList, SearchResult } from "~/types";
+import { getCurrentDateInGermanyFormatted } from "~/utils/dateFormatting";
 
 export interface TranslationContent {
   "@id": string;
@@ -71,5 +73,30 @@ export function fetchTranslationAndHTML(
       content: translationContent,
       html: htmlData,
     };
+  });
+}
+
+export function getGermanOriginal(
+  id: string,
+): AsyncData<SearchResult<LegislationWork> | null, NuxtError | null> {
+  const requestFetch = useRequestFetch();
+  const backendURL = useBackendURL();
+
+  return useAsyncData(async () => {
+    const currentDate = getCurrentDateInGermanyFormatted();
+    const url = `${backendURL}/v1/legislation?searchTerm=${id}&temporalCoverageFrom=${currentDate}&temporalCoverageTo=${currentDate}&size=100&pageIndex=0`;
+
+    const res =
+      await requestFetch<JSONLDList<SearchResult<LegislationWork>>>(url);
+
+    if (!res || res.member.length === 0) {
+      throw createError({
+        statusCode: 404,
+        statusMessage: "Not Found",
+        fatal: true,
+      });
+    }
+
+    return res.member[0];
   });
 }

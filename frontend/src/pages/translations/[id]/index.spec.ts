@@ -17,9 +17,18 @@ const mockTranslationData: TranslationData = {
   html: '<html><body><p style="text-align: center; font-weight: bold">Chapter 1</p></body></html>',
 };
 
+const mockGermanOriginal = {
+  workExample: {
+    legislationIdentifier: "eli/bund/bgbl-1/1964/s902/2009-02-05/19/deu",
+  },
+};
+
 vi.mock("~/composables/useTranslationData", () => ({
   fetchTranslationAndHTML: vi.fn(() => ({
     data: ref(mockTranslationData),
+  })),
+  getGermanOriginal: vi.fn(() => ({
+    data: ref(mockGermanOriginal),
   })),
 }));
 
