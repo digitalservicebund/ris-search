@@ -2919,7 +2919,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nuxt/schema@npm:3.17.5, @nuxt/schema@npm:^3.17.4, @nuxt/schema@npm:^3.17.5":
+"@nuxt/schema@npm:3.17.5, @nuxt/schema@npm:^3.17.4":
   version: 3.17.5
   resolution: "@nuxt/schema@npm:3.17.5"
   dependencies:
@@ -2942,6 +2942,21 @@ __metadata:
     pathe: "npm:^2.0.3"
     std-env: "npm:^3.9.0"
   checksum: 10c0/85c3e58dbb85a658df8faa3b3665def7f71dd4032405bab7c82c99dfbb73a2e24ffcb9753c612af9f8db99888ba7c1376e5eb1114c0fa85da2d10e892ad9aecd
+  languageName: node
+  linkType: hard
+
+"@nuxt/schema@npm:^4.1.3":
+  version: 4.1.3
+  resolution: "@nuxt/schema@npm:4.1.3"
+  dependencies:
+    "@vue/shared": "npm:^3.5.22"
+    consola: "npm:^3.4.2"
+    defu: "npm:^6.1.4"
+    pathe: "npm:^2.0.3"
+    pkg-types: "npm:^2.3.0"
+    std-env: "npm:^3.9.0"
+    ufo: "npm:1.6.1"
+  checksum: 10c0/57e97bf8ac05e04407e64b7d8221430e717aa57eaef7af733a5579ed102c58c2f394fdb1d98c78cd28859f267115e952431e6f5899fd513bbdc5de15b64f355b
   languageName: node
   linkType: hard
 
@@ -7421,6 +7436,13 @@ __metadata:
   version: 3.5.14
   resolution: "@vue/shared@npm:3.5.14"
   checksum: 10c0/cf1fc42fd318e876dcdafb6ca2584498e55012f48487b4f8e3a7d209c35415a779600bd1288c171095518fbf6fc90efea75a06937fdc4d3f316a12bc7c7dd94b
+  languageName: node
+  linkType: hard
+
+"@vue/shared@npm:^3.5.22":
+  version: 3.5.22
+  resolution: "@vue/shared@npm:3.5.22"
+  checksum: 10c0/5866eab1dd6caa949f4ae2da2a7bac69612b35e316a298785279fb4de101bfe89a3572db56448aa35023b01d069b80a664be4fe22847ce5e5fbc1990e5970ec5
   languageName: node
   linkType: hard
 
@@ -17032,6 +17054,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"pkg-types@npm:^2.3.0":
+  version: 2.3.0
+  resolution: "pkg-types@npm:2.3.0"
+  dependencies:
+    confbox: "npm:^0.2.2"
+    exsolve: "npm:^1.0.7"
+    pathe: "npm:^2.0.3"
+  checksum: 10c0/d2bbddc5b81bd4741e1529c08ef4c5f1542bbdcf63498b73b8e1d84cff71806d1b8b1577800549bb569cb7aa20056257677b979bff48c97967cba7e64f72ae12
+  languageName: node
+  linkType: hard
+
 "playwright-core@npm:1.53.2":
   version: 1.53.2
   resolution: "playwright-core@npm:1.53.2"
@@ -18648,7 +18681,7 @@ __metadata:
     "@nuxt/eslint": "npm:^1.4.1"
     "@nuxt/image": "npm:^1.10.0"
     "@nuxt/kit": "npm:^3.17.6"
-    "@nuxt/schema": "npm:^3.17.5"
+    "@nuxt/schema": "npm:^4.1.3"
     "@nuxt/scripts": "npm:0.11.9"
     "@nuxt/test-utils": "npm:^3.19.1"
     "@nuxtjs/sitemap": "npm:^7.4.3"
@@ -20644,17 +20677,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"ufo@npm:1.6.1, ufo@npm:^1.6.1":
+  version: 1.6.1
+  resolution: "ufo@npm:1.6.1"
+  checksum: 10c0/5a9f041e5945fba7c189d5410508cbcbefef80b253ed29aa2e1f8a2b86f4bd51af44ee18d4485e6d3468c92be9bf4a42e3a2b72dcaf27ce39ce947ec994f1e6b
+  languageName: node
+  linkType: hard
+
 "ufo@npm:^1.1.2, ufo@npm:^1.3.2, ufo@npm:^1.5.4":
   version: 1.5.4
   resolution: "ufo@npm:1.5.4"
   checksum: 10c0/b5dc4dc435c49c9ef8890f1b280a19ee4d0954d1d6f9ab66ce62ce64dd04c7be476781531f952a07c678d51638d02ad4b98e16237be29149295b0f7c09cda765
-  languageName: node
-  linkType: hard
-
-"ufo@npm:^1.6.1":
-  version: 1.6.1
-  resolution: "ufo@npm:1.6.1"
-  checksum: 10c0/5a9f041e5945fba7c189d5410508cbcbefef80b253ed29aa2e1f8a2b86f4bd51af44ee18d4485e6d3468c92be9bf4a42e3a2b72dcaf27ce39ce947ec994f1e6b
   languageName: node
   linkType: hard
 
