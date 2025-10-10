@@ -56,7 +56,7 @@ const legislationWork: LegislationWork = {
         "@id": "id-xml",
         encodingFormat: "application/xml",
         contentUrl:
-          "/eli/work-LEG12345/expression-LEG12345/manifestation-LEG12345/regelungstext-1.xml",
+          "/v1/legislation/eli/work-LEG12345/expression-LEG12345/manifestation-LEG12345/regelungstext-1.xml",
         inLanguage: "test",
       },
       {
@@ -64,7 +64,7 @@ const legislationWork: LegislationWork = {
         "@id": "id-zip",
         encodingFormat: "application/zip",
         contentUrl:
-          "/eli/work-LEG12345/expression-LEG12345/manifestation-LEG12345.zip",
+          "/v1/legislation/eli/work-LEG12345/expression-LEG12345/manifestation-LEG12345.zip",
         inLanguage: "test",
       },
     ],
@@ -246,7 +246,7 @@ describe("index.vue", () => {
 
     const zipDownload = getDDElement(wrapper, "Download:");
     expect(zipDownload?.querySelector("a")?.href).toBe(
-      "http://localhost:3000/api/eli/work-LEG12345/expression-LEG12345/manifestation-LEG12345.zip",
+      "http://localhost:3000/v1/legislation/eli/work-LEG12345/expression-LEG12345/manifestation-LEG12345.zip",
     );
   });
 

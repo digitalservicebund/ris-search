@@ -40,7 +40,6 @@ export function useFetchNormContent(
       `${backendURL}/v1/legislation/eli/${expressionEli}`,
     );
     const contentUrl = backendURL + getContentUrl(metadata);
-
     const html = await requestFetch<string>(contentUrl, {
       headers: {
         Accept: "text/html",

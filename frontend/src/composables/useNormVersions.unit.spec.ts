@@ -36,7 +36,7 @@ describe("useNormVersions", () => {
   it("returns a sorted list when there is no error", () => {
     const { sortedVersions } = useNormVersions("dummy-eli");
     expect(useFetchMock).toBeCalledWith(
-      "/api/v1/legislation",
+      "/v1/legislation",
       {
         immediate: true,
         params: {

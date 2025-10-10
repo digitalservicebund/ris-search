@@ -21,8 +21,8 @@ describe("robots txt route", () => {
 
   it("should serve robots txt from backend api on justice crawler", async () => {
     mockUseRuntimeConfig.mockImplementation(() => ({
-      risBackendUrl: "backendUrl",
       public: {
+        backendURL: "backendUrl",
         profile: "public",
       },
     }));
@@ -68,7 +68,6 @@ describe("robots txt route", () => {
 
   test.for(testCases)("profile %s serves %s", async ([profile, file]) => {
     mockUseRuntimeConfig.mockImplementation(() => ({
-      risBackendUrl: "http://backend.example.com",
       public: {
         profile: profile,
       },

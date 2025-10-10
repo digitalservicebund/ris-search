@@ -39,7 +39,7 @@ export async function useAdvancedSearch(
 ) {
   const searchEndpointUrl = computed(() => {
     const documentKindVal = toValue(documentKind);
-    const baseUrl = "/api/v1/document/lucene-search";
+    const baseUrl = "/v1/document/lucene-search";
 
     if (documentKindVal === DocumentKind.CaseLaw) {
       return baseUrl + "/case-law";

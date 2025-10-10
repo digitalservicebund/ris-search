@@ -185,6 +185,6 @@ test.describe("actions menu", () => {
 
     await button.click();
 
-    await page.waitForURL("api/v1/case-law/JURE200030030.xml");
+    await page.waitForURL("v1/case-law/JURE200030030.xml");
   });
 });
