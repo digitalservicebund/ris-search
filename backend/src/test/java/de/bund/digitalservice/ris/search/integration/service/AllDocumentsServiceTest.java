@@ -86,10 +86,11 @@ class AllDocumentsServiceTest extends ContainersIntegrationBase {
   @Test
   @DisplayName("Three Different Document kinds are all found")
   void threeDifferentDocumentKindsAreAllFoundTest() {
-    caseLawRepository.save(CaseLawTestData.simple("caselaw1", ""));
-    literatureRepository.save(LiteratureTestData.simple("literature1", ""));
-    normsRepository.save(NormsTestData.simple("norm1", ""));
-    List<AbstractSearchEntity> searchResults = TestDataGenerator.searchAll(allDocumentsService, "");
+    caseLawRepository.save(CaseLawTestData.simple("caselaw1", "urlaub"));
+    literatureRepository.save(LiteratureTestData.simple("literature1", "urlaub"));
+    normsRepository.save(NormsTestData.simple("norm1", "urlaub"));
+    List<AbstractSearchEntity> searchResults =
+        TestDataGenerator.searchAll(allDocumentsService, "urlaub");
     List<String> caselawIds = TestDataGenerator.getCaseLawIds(searchResults);
     assertThat(caselawIds).containsExactlyInAnyOrder("caselaw1");
     List<String> literatureIds = TestDataGenerator.getLiteratureIds(searchResults);
