@@ -68,9 +68,9 @@ describe("robots txt route", () => {
 
   test.for(testCases)("profile %s serves %s", async ([profile, file]) => {
     mockUseRuntimeConfig.mockImplementation(() => ({
-      risBackendUrl: "http://backend.example.com",
       public: {
         profile: profile,
+        backendUrl: "http://backend.example.com",
       },
     }));
 

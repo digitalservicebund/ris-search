@@ -102,7 +102,7 @@ export default defineNuxtConfig({
     auth: {
       webAuth: false,
     },
-    /* Backend host to the spring backend, used by /proxy routes */
+    /* Backend host to the spring backend, used by /proxy and /v1 routes  */
     risBackendUrl: "http://localhost:8090",
     session: {
       cookie: {
