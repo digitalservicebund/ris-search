@@ -6,10 +6,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.concurrent.ArrayBlockingQueue;
 
 public class ChangedEcliCrawlerDocumentsIterator implements Iterator<List<EcliCrawlerDocument>> {
 
-  List<EcliCrawlerDocument> ecliDocumentsBuffer;
+  ArrayBlockingQueue<EcliCrawlerDocument> ecliDocumentsBuffer;
   Supplier changedSupplier;
   Supplier deleteSupplier;
   List<String> changed;
@@ -31,7 +32,7 @@ public class ChangedEcliCrawlerDocumentsIterator implements Iterator<List<EcliCr
     this.deleteSupplier = deleteSupplier;
     this.changed = new ArrayList<>(changed);
     this.deleted = new ArrayList<>(deleted);
-    ecliDocumentsBuffer = new ArrayList<>();
+    ecliDocumentsBuffer = new ArrayBlockingQueue<>(resultSize);
     this.resultSize = resultSize;
     getNext();
   }
@@ -58,7 +59,7 @@ public class ChangedEcliCrawlerDocumentsIterator implements Iterator<List<EcliCr
    */
   private List<String> fillBuffer(List<String> ids, Supplier supplier) {
     int numTaken = 0;
-    for (int i = 0; i < ids.size() && ecliDocumentsBuffer.size() < resultSize; i++) {
+    for (int i = 0; i < ids.size() && ecliDocumentsBuffer.remainingCapacity() > 0; i++) {
       supplier.get(ids.get(i)).ifPresent(ecliDocumentsBuffer::add);
       numTaken++;
     }
