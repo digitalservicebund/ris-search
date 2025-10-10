@@ -7,6 +7,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import de.bund.digitalservice.ris.search.exception.FileNotFoundException;
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.models.eclicrawler.sitemap.Sitemap;
 import de.bund.digitalservice.ris.search.models.eclicrawler.sitemap.Url;
@@ -16,7 +17,6 @@ import de.bund.digitalservice.ris.search.repository.objectstorage.PortalBucket;
 import de.bund.digitalservice.ris.search.service.eclicrawler.EcliMarshaller;
 import de.bund.digitalservice.ris.search.service.eclicrawler.EcliSitemapService;
 import jakarta.xml.bind.JAXBException;
-import java.io.FileNotFoundException;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -56,36 +56,14 @@ class EcliSitemapServiceTest {
 
     String expectedSitemapPath = "eclicrawler/2025/01/01/sitemap_1.xml";
 
-    List<Sitemap> actualSitemaps = service.writeUrlsToSitemaps(day, urls);
+    Sitemap actual = service.writeUrlsToSitemap(day, urls, 1);
 
     verify(bucket).save(expectedSitemapPath, "xmlContent");
-    Assertions.assertEquals(1, actualSitemaps.size());
-
-    List<Url> actualUrls = actualSitemaps.getFirst().getUrl();
+    List<Url> actualUrls = actual.getUrl();
 
     Assertions.assertEquals("loc1", actualUrls.getFirst().getLoc());
     Assertions.assertEquals("loc2", actualUrls.get(1).getLoc());
-    Assertions.assertEquals("2025/01/01/sitemap_1.xml", actualSitemaps.getFirst().getName());
-  }
-
-  @Test
-  void itPartitionsSitemapsAccordingToMaxEntries() throws JAXBException {
-    List<Url> urls = new ArrayList<>();
-    for (int i = 0; i <= MAX_SITEMAP_URLS + 1; i++) {
-      urls.add(new Url().setLoc(String.valueOf(i)));
-    }
-    LocalDate day = LocalDate.of(2025, 1, 1);
-
-    ArgumentCaptor<String> argument = ArgumentCaptor.forClass(String.class);
-    Mockito.doNothing().when(bucket).save(argument.capture(), any());
-
-    List<Sitemap> sitemaps = service.writeUrlsToSitemaps(day, urls);
-
-    List<String> values = argument.getAllValues();
-
-    Assertions.assertTrue(values.contains(PATH_PREFIX + "2025/01/01/sitemap_1.xml"));
-    Assertions.assertTrue(values.contains(PATH_PREFIX + "2025/01/01/sitemap_2.xml"));
-    Assertions.assertEquals(2, sitemaps.size());
+    Assertions.assertEquals("2025/01/01/sitemap_1.xml", actual.getName());
   }
 
   @Test
@@ -106,7 +84,6 @@ class EcliSitemapServiceTest {
                 User-agent: *
                 Disallow: /
                 User-agent: DG_JUSTICE_CRAWLER
-                Allow: /
                 """;
     service.writeRobotsTxt();
 
@@ -138,10 +115,11 @@ class EcliSitemapServiceTest {
   @Test
   void itThrowsAnErrorOnUpdatingNonExistingRobotsTxt() throws ObjectStoreServiceException {
     when(bucket.getFileAsString(ROBOTS_TXT_PATH)).thenReturn(Optional.empty());
+    List<Sitemapindex> indices = List.of(new Sitemapindex());
     Assertions.assertThrows(
         FileNotFoundException.class,
         () -> {
-          service.updateRobotsTxt("baseUrl", List.of(new Sitemapindex()));
+          service.updateRobotsTxt("baseUrl", indices);
         });
   }
 
