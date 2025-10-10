@@ -87,7 +87,7 @@ jobs:
           path: /home/runner/.npm
           key: npm-cache-${{ runner.os }}-playwright-${{ env.PLAYWRIGHT_VERSION }}
       - name: Install Playwright
-        run: npm install @playwright/test@${{ env.PLAYWRIGHT_VERSION }} @axe-core/playwright axe-html-reporter
+        run: npm install @playwright/test@${{ env.PLAYWRIGHT_VERSION }} @axe-core/playwright axe-html-reporter lighthouse playwright-lighthouse
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps chromium firefox webkit
       - name: Wait for containers to be fully up
@@ -97,16 +97,16 @@ jobs:
             echo "Waiting for containers to be fully up..."
             sleep 15
           done
-      - name: Run Accessibility Playwright tests on staging
+      - name: Run Playwright tests on staging
         if: ${{ matrix.profile == 'internal' }}
-        run: npx playwright test accessibility.spec.ts --project chromium firefox mobile
+        run: npx playwright test accessibility.spec.ts seo.spec.ts --project chromium firefox mobile seoMobile seoDesktop
         working-directory: ./frontend
         env:
           RIS_BASE_URL: http://localhost:3000
           TZ: Europe/Berlin
       - name: Run All Playwright tests on prototype
         if: ${{ matrix.profile == 'public' }}
-        run: npx playwright test --project chromium firefox mobile
+        run: npx playwright test --project chromium firefox mobile --grep-invert "seo\.spec\.ts"
         working-directory: ./frontend
         env:
           RIS_BASE_URL: http://localhost:3000

@@ -1,5 +1,9 @@
-import { test as base, expect as baseExpect } from "@playwright/test";
-import type { Locator } from "@playwright/test";
+import os from "os";
+import path from "path";
+import { test as base, expect as baseExpect, chromium } from "@playwright/test";
+import type { Locator, BrowserContext } from "@playwright/test";
+import { environment } from "../playwright.config";
+import { loginUser } from "./auth.utils";
 
 type WorkerFixtures = {
   isMobileTest: boolean;
@@ -15,6 +19,40 @@ export const test = base.extend<{}, WorkerFixtures>({
     },
     { scope: "worker" },
   ],
+});
+
+type SeoWorkerFixtures = {
+  persistentContext: BrowserContext;
+};
+
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+export const seoTest = base.extend<{}, SeoWorkerFixtures>({
+  persistentContext: [
+    // eslint-disable-next-line no-empty-pattern
+    async ({}, use) => {
+      const userDataDir = path.join(os.tmpdir(), "playwright-seo-userdata");
+
+      const context = await chromium.launchPersistentContext(userDataDir, {
+        headless: true,
+        args: [`--remote-debugging-port=${environment.remoteDebuggingPort}`],
+      });
+
+      const bootstrapPage = await context.newPage();
+      await bootstrapPage.goto(environment.baseUrl);
+      await loginUser(bootstrapPage);
+      await bootstrapPage.close();
+
+      await use(context);
+      await context.close();
+    },
+    { scope: "worker" },
+  ],
+
+  page: async ({ persistentContext }, use) => {
+    const page = await persistentContext.newPage();
+    await use(page);
+    await page.close();
+  },
 });
 
 export const expect = baseExpect.extend({

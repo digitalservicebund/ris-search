@@ -21,9 +21,29 @@ export const environment = {
     },
   },
   baseUrl: process.env.RIS_BASE_URL || "http://localhost:3000/",
+  remoteDebuggingPort: 9222,
 };
 
 const browserConfigurations: Project[] = [
+  {
+    name: "seoMobile",
+    use: {
+      ...devices["Desktop Chrome"],
+      viewport: { width: 320, height: 600 },
+      storageState: authFile,
+      headless: true,
+    },
+    testMatch: "seo.spec.ts",
+  },
+  {
+    name: "seoDesktop",
+    use: {
+      ...devices["Desktop Chrome"],
+      storageState: authFile,
+      headless: true,
+    },
+    testMatch: "seo.spec.ts",
+  },
   {
     name: "chromium",
     use: {
@@ -31,6 +51,7 @@ const browserConfigurations: Project[] = [
       storageState: authFile,
     },
     dependencies: ["setup"],
+    testIgnore: "seo.spec.ts",
   },
   {
     name: "firefox",
@@ -39,6 +60,7 @@ const browserConfigurations: Project[] = [
       storageState: authFile,
     },
     dependencies: ["setup"],
+    testIgnore: "seo.spec.ts",
   },
   {
     name: "webkit",
@@ -47,6 +69,7 @@ const browserConfigurations: Project[] = [
       storageState: authFile,
     },
     dependencies: ["setup"],
+    testIgnore: "seo.spec.ts",
   },
   {
     name: "mobile",
@@ -57,6 +80,7 @@ const browserConfigurations: Project[] = [
       storageState: authFile,
     },
     dependencies: ["setup"],
+    testIgnore: "seo.spec.ts",
   },
 ];
 

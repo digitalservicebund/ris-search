@@ -1,0 +1,93 @@
+import path from "node:path";
+import { playAudit } from "playwright-lighthouse";
+import { seoTest as test } from "./fixtures";
+
+const REPORT_DIR = path.join(process.cwd(), "test-results", "lighthouse-seo");
+
+export const testPages = [
+  {
+    name: "Home Page",
+    url: "/",
+  },
+  {
+    name: "All Search Results Page",
+    url: "/search",
+  },
+  {
+    name: "Contact Page",
+    url: "/kontakt",
+  },
+  {
+    name: "Imprint Page",
+    url: "/impressum",
+  },
+  {
+    name: "Data Protection Page",
+    url: "/datenschutz",
+  },
+  {
+    name: "Accessibility Page",
+    url: "/barrierefreiheit",
+  },
+  {
+    name: "Cookie Settings Page",
+    url: "/cookie-einstellungen",
+  },
+  {
+    name: "Open Source Page",
+    url: "/opensource",
+  },
+  {
+    name: "User Tests Page",
+    url: "/nutzungstests",
+  },
+  {
+    name: "Norms Search Page",
+    url: "/search?category=N",
+  },
+  {
+    name: "Caselaw Search Page",
+    url: "/search?category=R",
+  },
+  {
+    name: "Advanced Search Page",
+    url: "/advanced-search",
+  },
+  {
+    name: "Norm View Page",
+    url: "/norms/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu",
+  },
+  {
+    name: "Article View Page",
+    url: "/norms/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu/art-z1",
+  },
+  {
+    name: "Caselaw View Page",
+    url: "/case-law/STRE300770800",
+  },
+];
+
+test.describe("SEO testing for desktop and mobile using lighthouse", () => {
+  for (const testPage of testPages) {
+    test(`SEO checks for page ${testPage.name}`, async ({ page }) => {
+      await page.goto(testPage.url, { waitUntil: "networkidle" });
+      await playAudit({
+        page,
+        port: 9222,
+        thresholds: { seo: 90 },
+        config: {
+          extends: "lighthouse:default",
+          settings: {
+            onlyCategories: ["seo"],
+            disableStorageReset: true,
+          },
+        },
+        reports: {
+          formats: { html: true },
+          name: testPage.name,
+          directory: REPORT_DIR,
+        },
+      });
+    });
+  }
+});
