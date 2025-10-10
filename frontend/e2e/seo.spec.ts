@@ -2,7 +2,6 @@ import path from "node:path";
 import { playAudit } from "playwright-lighthouse";
 import { seoTest as test } from "./fixtures";
 
-type Device = "desktop" | "mobile";
 const REPORT_DIR = path.join(process.cwd(), "test-results", "lighthouse-seo");
 
 export const testPages = [
@@ -68,61 +67,27 @@ export const testPages = [
   },
 ];
 
-function getDeviceConfig(device: Device) {
-  const isMobile = device === "mobile";
-  const screenEmulation = isMobile
-    ? {
-        mobile: true,
-        width: 320,
-        height: 600,
-        deviceScaleRatio: 2.5,
-        disabled: false,
-      }
-    : {
-        mobile: false,
-        width: 1350,
-        height: 940,
-        deviceScaleRatio: 1,
-        disabled: false,
-      };
-
-  return {
-    extends: "lighthouse:default",
-    settings: {
-      onlyCategories: ["seo"],
-      formFactor: device,
-      screenEmulation,
-      disableStorageReset: true,
-    },
-  };
-}
-
-const testCases = [
-  { device: "desktop", config: getDeviceConfig("desktop") },
-  { device: "mobile", config: getDeviceConfig("mobile") },
-];
-
 test.describe("SEO testing for desktop and mobile using lighthouse", () => {
-  for (const { device, config } of testCases) {
-    for (const testPage of testPages) {
-      test(`${device} SEO checks for page ${testPage.name}`, async ({
+  for (const testPage of testPages) {
+    test(`SEO checks for page ${testPage.name}`, async ({ page }) => {
+      await page.goto(testPage.url, { waitUntil: "networkidle" });
+      await playAudit({
         page,
-      }) => {
-        const { width, height } = config.settings.screenEmulation;
-        await page.setViewportSize({ width, height });
-        await page.goto(testPage.url, { waitUntil: "networkidle" });
-        await playAudit({
-          page,
-          port: 9222,
-          thresholds: { seo: 90 },
-          config,
-          reports: {
-            formats: { html: true },
-            name: `${device}-${testPage.name}`,
-            directory: REPORT_DIR,
+        port: 9222,
+        thresholds: { seo: 90 },
+        config: {
+          extends: "lighthouse:default",
+          settings: {
+            onlyCategories: ["seo"],
+            disableStorageReset: true,
           },
-        });
+        },
+        reports: {
+          formats: { html: true },
+          name: testPage.name,
+          directory: REPORT_DIR,
+        },
       });
-    }
+    });
   }
 });

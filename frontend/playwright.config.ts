@@ -26,13 +26,21 @@ export const environment = {
 
 const browserConfigurations: Project[] = [
   {
-    name: "seo",
+    name: "seoMobile",
+    use: {
+      ...devices["Desktop Chrome"],
+      viewport: { width: 320, height: 600 },
+      storageState: authFile,
+      headless: true,
+    },
+    testMatch: "seo.spec.ts",
+  },
+  {
+    name: "seoDesktop",
     use: {
       ...devices["Desktop Chrome"],
       storageState: authFile,
-      launchOptions: {
-        args: ["--remote-debugging-port=9222"],
-      },
+      headless: true,
     },
     testMatch: "seo.spec.ts",
   },
