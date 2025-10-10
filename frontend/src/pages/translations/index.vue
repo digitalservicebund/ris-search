@@ -89,7 +89,7 @@ useStaticPageSeo("translations-list");
       <h1
         class="ris-heading2-bold max-w-title mt-24 mb-48 overflow-x-auto text-balance"
       >
-        English translations of German laws and regulations
+        English Translations of German Federal Laws and Regulations
       </h1>
       <section class="max-w-prose space-y-24">
         <p>
@@ -149,11 +149,11 @@ useStaticPageSeo("translations-list");
           <span class="mr-24">{{ t["@id"] }}</span>
           <span>{{ t.translationOfWork }}</span>
 
-          <h3
+          <h2
             class="ris-heading3-bold max-w-title mt-8 block text-balance text-blue-800 group-hover:underline"
           >
             {{ t.name }}
-          </h3>
+          </h2>
 
           <p class="text-gray-900">{{ t.translator }}</p>
         </div>

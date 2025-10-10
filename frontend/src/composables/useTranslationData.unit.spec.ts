@@ -3,6 +3,7 @@ import { describe, it, expect, beforeEach, vi } from "vitest";
 import {
   fetchTranslationList,
   fetchTranslationAndHTML,
+  getGermanOriginal,
 } from "~/composables/useTranslationData";
 import type { TranslationContent } from "~/composables/useTranslationData";
 
@@ -21,6 +22,10 @@ mockNuxtImport("useRequestFetch", () => {
 beforeEach(() => {
   requestFetchMock.mockReset();
 });
+
+vi.mock("~/composables/useDate", () => ({
+  getCurrentDateInGermanyFormatted: () => "2025-10-13",
+}));
 
 describe("fetchTranslationList", () => {
   it("returns a list when there is no error", async () => {
@@ -141,5 +146,42 @@ describe("fetchTranslationAndHTML", () => {
     expect(error.value?.statusMessage).toBe("Translation filename not found");
 
     expect(data.value).toBeNull();
+  });
+});
+
+describe("getGermanOriginal", () => {
+  it("returns first legislation work when API returns results", async () => {
+    const mockResult = { id: "abc123" };
+    requestFetchMock.mockResolvedValueOnce({ member: [mockResult] });
+
+    const { data, error } = await getGermanOriginal("test-id");
+
+    expect(data.value).toEqual(mockResult);
+    expect(error.value).toBeNull();
+    expect(requestFetchMock).toHaveBeenCalledWith(
+      "https://mock-backend/v1/legislation?searchTerm=test-id&temporalCoverageFrom=2025-10-13&temporalCoverageTo=2025-10-13&size=100&pageIndex=0",
+    );
+  });
+
+  it("returns 404 error when API returns empty member list", async () => {
+    requestFetchMock.mockResolvedValueOnce({ member: [] });
+
+    const { data, error } = await getGermanOriginal("test-id");
+
+    expect(data.value).toBeNull();
+    expect(error.value).not.toBeNull();
+    expect(error.value?.statusCode).toBe(404);
+    expect(error.value?.statusMessage).toBe("Not Found");
+  });
+
+  it("returns 404 error when API returns null", async () => {
+    requestFetchMock.mockResolvedValueOnce(null);
+
+    const { data, error } = await getGermanOriginal("test-id");
+
+    expect(data.value).toBeNull();
+    expect(error.value).not.toBeNull();
+    expect(error.value?.statusCode).toBe(404);
+    expect(error.value?.statusMessage).toBe("Not Found");
   });
 });
