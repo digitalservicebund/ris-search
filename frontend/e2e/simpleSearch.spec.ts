@@ -27,14 +27,14 @@ test("can enter a query on the start page and go back", async ({ page }) => {
 
 test("can use pagination to switch pages", async ({ page }) => {
   await page.goto("/search");
-  expect(await getDisplayedResultCount(page)).toBe(17);
+  expect(await getDisplayedResultCount(page)).toBe(20);
 
   const searchResults = page.getByTestId("searchResult");
   expect(await searchResults.count()).toBe(10);
 
   await page.getByLabel("nächste Ergebnisse").click();
   await page.waitForURL("/search?pageNumber=1");
-  expect(await getDisplayedResultCount(page)).toBe(17);
+  expect(await getDisplayedResultCount(page)).toBe(20);
   expect(await searchResults.count()).toBe(7);
 
   await page.getByLabel("vorherige Ergebnisse").click();
