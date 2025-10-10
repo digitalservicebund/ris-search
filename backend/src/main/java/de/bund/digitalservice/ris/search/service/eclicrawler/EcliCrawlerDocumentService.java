@@ -99,13 +99,9 @@ public class EcliCrawlerDocumentService {
             .toList();
 
     List<String> toBeDeleted;
-    try (Stream<EcliCrawlerDocument> allPublished = repository.findAllByIsPublishedIsTrue()) {
+    try (Stream<String> allPublished = repository.findFilenameByIsPublishedIsTrue()) {
       toBeDeleted =
-          new ArrayList<>(
-              allPublished
-                  .map(EcliCrawlerDocument::filename)
-                  .filter(filename -> !allFiles.contains(filename))
-                  .toList());
+          new ArrayList<>(allPublished.filter(filename -> !allFiles.contains(filename)).toList());
     }
 
     ChangedEcliCrawlerDocumentsIterator iterator =

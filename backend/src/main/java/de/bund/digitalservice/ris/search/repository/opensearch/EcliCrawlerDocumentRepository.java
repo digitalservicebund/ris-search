@@ -9,5 +9,5 @@ public interface EcliCrawlerDocumentRepository
     extends ElasticsearchRepository<EcliCrawlerDocument, String> {
   Optional<EcliCrawlerDocument> findByFilenameIn(String filename);
 
-  Stream<EcliCrawlerDocument> findAllByIsPublishedIsTrue();
+  Stream<String> findFilenameByIsPublishedIsTrue();
 }
