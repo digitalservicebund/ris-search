@@ -99,7 +99,7 @@ jobs:
           done
       - name: Run Playwright tests on staging
         if: ${{ matrix.profile == 'internal' }}
-        run: npx playwright test accessibility.spec.ts seo.spec.ts --project chromium firefox mobile seo
+        run: npx playwright test accessibility.spec.ts seo.spec.ts --project chromium firefox mobile seoMobile seoDesktop
         working-directory: ./frontend
         env:
           RIS_BASE_URL: http://localhost:3000
