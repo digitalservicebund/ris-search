@@ -8,7 +8,6 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.matchesRegex;
 import static org.hamcrest.Matchers.oneOf;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -18,13 +17,13 @@ import com.c4_soft.springaddons.security.oauth2.test.annotations.WithJwt;
 import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.integration.config.ContainersIntegrationBase;
 import de.bund.digitalservice.ris.search.integration.controller.api.testData.CaseLawTestData;
+import de.bund.digitalservice.ris.search.integration.controller.api.testData.LiteratureTestData;
 import de.bund.digitalservice.ris.search.integration.controller.api.testData.NormsTestData;
 import de.bund.digitalservice.ris.search.integration.controller.api.testData.SharedTestConstants;
 import de.bund.digitalservice.ris.search.integration.controller.api.values.SortingTestArguments;
 import de.bund.digitalservice.ris.search.repository.opensearch.CaseLawRepository;
+import de.bund.digitalservice.ris.search.repository.opensearch.LiteratureRepository;
 import de.bund.digitalservice.ris.search.repository.opensearch.NormsRepository;
-import de.bund.digitalservice.ris.search.service.IndexAliasService;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Map;
@@ -54,24 +53,18 @@ import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 @WithJwt("jwtTokens/ValidAccessToken.json")
 class AllDocumentsSearchControllerAPITest extends ContainersIntegrationBase {
 
-  @Autowired private NormsRepository normsRepository;
-
   @Autowired private CaseLawRepository caseLawRepository;
-
-  @Autowired private IndexAliasService indexAliasService;
+  @Autowired private LiteratureRepository literatureRepository;
+  @Autowired private NormsRepository normsRepository;
 
   @Autowired private MockMvc mockMvc;
 
   @BeforeEach
-  void setUpSearchControllerApiTest() throws IOException {
-    assertTrue(openSearchContainer.isRunning());
-
-    super.recreateIndex();
-    super.updateMapping();
-
-    indexAliasService.setIndexAlias();
+  void setUpSearchControllerApiTest() {
+    clearData();
 
     caseLawRepository.saveAll(CaseLawTestData.allDocuments);
+    literatureRepository.saveAll(LiteratureTestData.allDocuments);
     normsRepository.saveAll(NormsTestData.allDocuments);
   }
 
@@ -209,8 +202,9 @@ class AllDocumentsSearchControllerAPITest extends ContainersIntegrationBase {
 
   static Stream<Arguments> provideOrderingTestArgs() {
     int caseLawSize = CaseLawTestData.allDocuments.size();
+    int literatureSize = LiteratureTestData.allDocuments.size();
     int normsSize = NormsTestData.allDocuments.size();
-    int combinedSize = caseLawSize + normsSize;
+    int combinedSize = caseLawSize + literatureSize + normsSize;
 
     var stream = SortingTestArguments.provideSortingTestArguments();
     final ResultMatcher dateDescendingResultMatcher =
@@ -223,6 +217,8 @@ class AllDocumentsSearchControllerAPITest extends ContainersIntegrationBase {
               dates.add(item.getString("decisionDate"));
             } else if (item.has("legislationDate")) {
               dates.add(item.getString("legislationDate"));
+            } else if (item.has("recordingDate")) {
+              dates.add(item.getString("recordingDate"));
             }
           }
           assertThat(dates).isSortedAccordingTo(Comparator.reverseOrder());

@@ -27,14 +27,10 @@ particular "Abcü/123" will match "abcue/123", but will NOT match "Abcü 123".
 
 ## Document index definition
 
-The document alias can be used to query case law and norms at once.
+The document alias can be used to query all document kinds at once.
 See [IndexAliasService.java](../../java/de/bund/digitalservice/ris/search/service/IndexAliasService.java) for reference.
 
-## CaseLaw index definiton
+## index definitions
 
-The [caselaw_mappings.json](./caselaw_mappings.json) document defines a list of aliases, so that both e.g. AZ,
-AKTENZEICHEN, and file_numbers may be used in Lucene queries to refer to document_numbers.
-
-### `articles`
-
-This field is not actually used in the case law index. It is included to mirror the norms mapping, to enable queries that reference `articles` in the global `document` alias.
+The schema of each index is defined in it's template file. For example, norms is defined in [norms_index_template.json](norms_index_template.json).
+They all reference the same analyzer which is defined in [german_analyzer_template.json](german_analyzer_template.json).

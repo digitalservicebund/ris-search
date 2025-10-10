@@ -12,8 +12,6 @@ import org.springframework.data.elasticsearch.annotations.DateFormat;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
-import org.springframework.data.elasticsearch.annotations.Mapping;
-import org.springframework.data.elasticsearch.annotations.Setting;
 
 /**
  * Model class representing a norms to opensearch index. This class is annotated with Lombok
@@ -25,8 +23,6 @@ import org.springframework.data.elasticsearch.annotations.Setting;
 @AllArgsConstructor // need only for unit tests
 @EqualsAndHashCode
 @Document(indexName = "#{@configurations.getNormsIndexName()}")
-@Setting(settingPath = "/openSearch/german_analyzer.json")
-@Mapping(mappingPath = "/openSearch/norms_mapping.json")
 public final class Norm implements AbstractSearchEntity {
   @Id
   @Field(name = Fields.ID)

@@ -3,6 +3,7 @@ package de.bund.digitalservice.ris.search.integration.controller.api.testData;
 import de.bund.digitalservice.ris.search.models.api.parameters.UniversalSearchParams;
 import de.bund.digitalservice.ris.search.models.opensearch.AbstractSearchEntity;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
+import de.bund.digitalservice.ris.search.models.opensearch.Literature;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.service.AllDocumentsService;
 import java.util.List;
@@ -27,6 +28,10 @@ public class TestDataGenerator {
     return get(searchEntities, CaseLawDocumentationUnit.class).stream()
         .map(CaseLawDocumentationUnit::id)
         .toList();
+  }
+
+  public static List<String> getLiteratureIds(List<AbstractSearchEntity> searchEntities) {
+    return get(searchEntities, Literature.class).stream().map(Literature::id).toList();
   }
 
   public static List<String> getNormIds(List<AbstractSearchEntity> searchEntities) {

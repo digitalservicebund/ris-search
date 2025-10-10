@@ -1,7 +1,5 @@
 package de.bund.digitalservice.ris.search.contract.controller.api;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import au.com.dius.pact.provider.junit5.PactVerificationContext;
 import au.com.dius.pact.provider.junit5.PactVerificationInvocationContextProvider;
 import au.com.dius.pact.provider.junitsupport.Provider;
@@ -19,7 +17,6 @@ import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationU
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.repository.opensearch.CaseLawRepository;
 import de.bund.digitalservice.ris.search.repository.opensearch.NormsRepository;
-import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -55,14 +52,11 @@ class PactProviderTest extends ContainersIntegrationBase {
     MockMvcTestTarget testTarget = new MockMvcTestTarget(mockMvc);
     testTarget.setControllers(caseLawController, normsController);
     context.setTarget(testTarget);
+    clearData();
   }
 
   @State("I have a document in the database with number 12345")
-  public void thereIsDocument12345() throws IOException {
-    assertTrue(openSearchContainer.isRunning());
-
-    super.recreateIndex();
-    super.updateMapping();
+  public void thereIsDocument12345() {
 
     var caseLawTestOne =
         CaseLawDocumentationUnit.builder()
@@ -103,11 +97,7 @@ class PactProviderTest extends ContainersIntegrationBase {
   }
 
   @State("I have a document in the database with eli/bund/bgbl-1/2000/s998/2000-10-06/2/deu")
-  public void thereIsDocumentWithValidEli() throws IOException {
-    assertTrue(openSearchContainer.isRunning());
-
-    super.recreateIndex();
-    super.updateMapping();
+  public void thereIsDocumentWithValidEli() {
 
     Norm testNorm =
         Norm.builder()

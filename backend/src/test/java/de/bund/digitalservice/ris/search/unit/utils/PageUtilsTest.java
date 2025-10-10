@@ -31,6 +31,7 @@ class PageUtilsTest {
     ElasticsearchConverter mockConverter = Mockito.mock(ElasticsearchConverter.class);
     Configurations mockConfigurations = Mockito.mock(Configurations.class);
     Mockito.when(mockConfigurations.getCaseLawsIndexName()).thenReturn("caselaws");
+    Mockito.when(mockConfigurations.getLiteratureIndexName()).thenReturn("literature");
     Mockito.when(mockConfigurations.getNormsIndexName()).thenReturn("norms");
     Mockito.when(mockSearchHit.getIndex()).thenReturn("unexpectedIndex");
 
@@ -52,6 +53,7 @@ class PageUtilsTest {
     ElasticsearchConverter mockConverter = Mockito.mock(ElasticsearchConverter.class);
     Configurations mockConfigurations = Mockito.mock(Configurations.class);
     Mockito.when(mockConfigurations.getCaseLawsIndexName()).thenReturn("caselaws");
+    Mockito.when(mockConfigurations.getLiteratureIndexName()).thenReturn("literature");
     Mockito.when(mockConfigurations.getNormsIndexName()).thenReturn("norms");
 
     PageUtils instance = new PageUtils(mockConfigurations);

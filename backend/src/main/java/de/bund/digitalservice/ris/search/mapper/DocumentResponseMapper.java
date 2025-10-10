@@ -1,6 +1,7 @@
 package de.bund.digitalservice.ris.search.mapper;
 
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
+import de.bund.digitalservice.ris.search.models.opensearch.Literature;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.schema.CollectionSchema;
 import de.bund.digitalservice.ris.search.schema.PartialCollectionViewSchema;
@@ -14,6 +15,8 @@ public class DocumentResponseMapper {
   public static <T> SearchMemberSchema convertSingle(SearchHit<T> searchHit) {
     if (searchHit.getContent() instanceof CaseLawDocumentationUnit) {
       return CaseLawSearchSchemaMapper.fromSearchHit(searchHit);
+    } else if (searchHit.getContent() instanceof Literature) {
+      return LiteratureSearchSchemaMapper.fromSearchHit(searchHit);
     } else if (searchHit.getContent() instanceof Norm) {
       return NormSearchResponseMapper.fromSearchHit(searchHit);
     } else {

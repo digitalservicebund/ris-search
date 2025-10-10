@@ -1,18 +1,18 @@
 package de.bund.digitalservice.ris.search.integration.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.c4_soft.springaddons.security.oauth2.test.annotations.WithJwt;
 import de.bund.digitalservice.ris.search.integration.config.ContainersIntegrationBase;
 import de.bund.digitalservice.ris.search.integration.controller.api.testData.CaseLawTestData;
+import de.bund.digitalservice.ris.search.integration.controller.api.testData.LiteratureTestData;
 import de.bund.digitalservice.ris.search.integration.controller.api.testData.NormsTestData;
 import de.bund.digitalservice.ris.search.integration.controller.api.testData.TestDataGenerator;
 import de.bund.digitalservice.ris.search.models.opensearch.AbstractSearchEntity;
 import de.bund.digitalservice.ris.search.repository.opensearch.CaseLawRepository;
+import de.bund.digitalservice.ris.search.repository.opensearch.LiteratureRepository;
 import de.bund.digitalservice.ris.search.repository.opensearch.NormsRepository;
 import de.bund.digitalservice.ris.search.service.AllDocumentsService;
-import java.io.IOException;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -29,20 +29,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 class AllDocumentsServiceTest extends ContainersIntegrationBase {
 
   @Autowired private CaseLawRepository caseLawRepository;
+  @Autowired private LiteratureRepository literatureRepository;
   @Autowired private NormsRepository normsRepository;
   @Autowired private AllDocumentsService allDocumentsService;
 
-  Boolean initialized = false;
-
   @BeforeEach
-  void setUpSearchControllerApiTest() throws IOException {
-    if (initialized) return; // replacement for @BeforeAll setup, which causes errors
-    initialized = true;
-
-    assertTrue(openSearchContainer.isRunning());
-
-    super.recreateIndex();
-    super.updateMapping();
+  void setUpSearchControllerApiTest() {
+    clearData();
   }
 
   @Test
@@ -88,5 +81,21 @@ class AllDocumentsServiceTest extends ContainersIntegrationBase {
         TestDataGenerator.searchAll(allDocumentsService, "Abgas reduzierendes");
     List<String> caselawIds = TestDataGenerator.getCaseLawIds(searchResults);
     assertThat(caselawIds).containsExactlyInAnyOrder("caselaw1", "caselaw2");
+  }
+
+  @Test
+  @DisplayName("Three Different Document kinds are all found")
+  void threeDifferentDocumentKindsAreAllFoundTest() {
+    caseLawRepository.save(CaseLawTestData.simple("caselaw1", "urlaub"));
+    literatureRepository.save(LiteratureTestData.simple("literature1", "urlaub"));
+    normsRepository.save(NormsTestData.simple("norm1", "urlaub"));
+    List<AbstractSearchEntity> searchResults =
+        TestDataGenerator.searchAll(allDocumentsService, "urlaub");
+    List<String> caselawIds = TestDataGenerator.getCaseLawIds(searchResults);
+    assertThat(caselawIds).containsExactlyInAnyOrder("caselaw1");
+    List<String> literatureIds = TestDataGenerator.getLiteratureIds(searchResults);
+    assertThat(literatureIds).containsExactlyInAnyOrder("literature1");
+    List<String> normIds = TestDataGenerator.getNormIds(searchResults);
+    assertThat(normIds).containsExactlyInAnyOrder("norm1");
   }
 }

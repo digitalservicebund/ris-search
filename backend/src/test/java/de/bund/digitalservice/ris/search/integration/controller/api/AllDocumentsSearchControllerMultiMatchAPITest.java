@@ -1,6 +1,5 @@
 package de.bund.digitalservice.ris.search.integration.controller.api;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
@@ -11,8 +10,6 @@ import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationU
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.repository.opensearch.CaseLawRepository;
 import de.bund.digitalservice.ris.search.repository.opensearch.NormsRepository;
-import de.bund.digitalservice.ris.search.service.IndexAliasService;
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -43,25 +40,12 @@ import org.springframework.test.web.servlet.ResultMatcher;
 class AllDocumentsSearchControllerMultiMatchAPITest extends ContainersIntegrationBase {
 
   @Autowired private NormsRepository normsRepository;
-
   @Autowired private CaseLawRepository caseLawRepository;
-
-  @Autowired private IndexAliasService indexAliasService;
-
   @Autowired private MockMvc mockMvc;
 
-  Boolean initialized = false;
-
   @BeforeEach
-  void setUpSearchControllerApiTest() throws IOException {
-    if (initialized) return; // replacement for @BeforeAll setup, which causes errors
-
-    assertTrue(openSearchContainer.isRunning());
-
-    super.recreateIndex();
-    super.updateMapping();
-
-    indexAliasService.setIndexAlias();
+  void setUpSearchControllerApiTest() {
+    clearData();
 
     // ecli and workEli are mis-used to carry assertion information
     var caseLawData =
@@ -100,8 +84,6 @@ class AllDocumentsSearchControllerMultiMatchAPITest extends ContainersIntegratio
 
     caseLawRepository.saveAll(caseLawData);
     normsRepository.saveAll(normsData);
-
-    initialized = true;
   }
 
   /** Asserts that every ID contains one of the values specified. */

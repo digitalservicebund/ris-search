@@ -3,6 +3,7 @@ package de.bund.digitalservice.ris.search.utils;
 import de.bund.digitalservice.ris.search.config.opensearch.Configurations;
 import de.bund.digitalservice.ris.search.models.opensearch.AbstractSearchEntity;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
+import de.bund.digitalservice.ris.search.models.opensearch.Literature;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -21,11 +22,13 @@ import org.springframework.stereotype.Component;
 public class PageUtils {
 
   private final String caseLawsIndexName;
+  private final String literatureIndexName;
   private final String normsIndexName;
 
   @Autowired
   public PageUtils(Configurations configurations) {
     caseLawsIndexName = configurations.getCaseLawsIndexName();
+    literatureIndexName = configurations.getLiteratureIndexName();
     normsIndexName = configurations.getNormsIndexName();
   }
 
@@ -63,6 +66,8 @@ public class PageUtils {
 
     if (indexName != null && indexName.startsWith(caseLawsIndexName)) {
       entity = converter.read(CaseLawDocumentationUnit.class, searchHit.getContent());
+    } else if (indexName != null && indexName.startsWith(literatureIndexName)) {
+      entity = converter.read(Literature.class, searchHit.getContent());
     } else if (indexName != null && indexName.startsWith(normsIndexName)) {
       entity = converter.read(Norm.class, searchHit.getContent());
     } else {

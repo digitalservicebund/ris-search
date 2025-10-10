@@ -1,0 +1,395 @@
+{
+  "index_patterns": [
+    "caselaws_*"
+  ],
+  "composed_of": [
+    "german_analyzer_template"
+  ],
+  "priority": 500,
+  "template": {
+    "mappings": {
+      "properties": {
+        "ABWMEIN": {
+          "type": "alias",
+          "path": "dissenting_opinion"
+        },
+        "DATUM": {
+          "type": "alias",
+          "path": "decision_date"
+        },
+        "DAT": {
+          "type": "alias",
+          "path": "decision_date"
+        },
+        "DOKUMENTNUMMER": {
+          "type": "alias",
+          "path": "document_number"
+        },
+        "DOKUMENTTYP": {
+          "type": "alias",
+          "path": "document_type"
+        },
+        "DOKUMENTATIONSSTELLE": {
+          "type": "alias",
+          "path": "documentation_office"
+        },
+        "DOKSTELLE": {
+          "type": "alias",
+          "path": "documentation_office"
+        },
+        "ECLI": {
+          "type": "alias",
+          "path": "ecli"
+        },
+        "ENTSCHEIDUNGSGRUENDE": {
+          "type": "alias",
+          "path": "decision_grounds"
+        },
+        "EGR": {
+          "type": "alias",
+          "path": "decision_grounds"
+        },
+        "GRUENDE": {
+          "type": "alias",
+          "path": "grounds"
+        },
+        "GR": {
+          "type": "alias",
+          "path": "grounds"
+        },
+        "LEITSATZ": {
+          "type": "alias",
+          "path": "guiding_principle"
+        },
+        "LS": {
+          "type": "alias",
+          "path": "guiding_principle"
+        },
+        "NR": {
+          "type": "alias",
+          "path": "document_number"
+        },
+        "ORIENTIERUNGSSATZ": {
+          "type": "alias",
+          "path": "headnote"
+        },
+        "OSATZ": {
+          "type": "alias",
+          "path": "headnote"
+        },
+        "SLANGTEXT": {
+          "type": "alias",
+          "path": "other_long_text"
+        },
+        "SORIENTIERUNGSSATZ": {
+          "type": "alias",
+          "path": "other_headnote"
+        },
+        "SOSATZ": {
+          "type": "alias",
+          "path": "other_headnote"
+        },
+        "STEXT": {
+          "type": "alias",
+          "path": "other_long_text"
+        },
+        "TATBESTAND": {
+          "type": "alias",
+          "path": "case_facts"
+        },
+        "TB": {
+          "type": "alias",
+          "path": "case_facts"
+        },
+        "TENOR": {
+          "type": "alias",
+          "path": "tenor"
+        },
+        "TITELZEILE": {
+          "type": "alias",
+          "path": "headline"
+        },
+        "TITEL": {
+          "type": "alias",
+          "path": "headline"
+        },
+        "TTZE": {
+          "type": "alias",
+          "path": "headline"
+        },
+        "TYP": {
+          "type": "alias",
+          "path": "document_type"
+        },
+        "GERICHT": {
+          "type": "alias",
+          "path": "court_keyword"
+        },
+        "GER": {
+          "type": "alias",
+          "path": "court_keyword"
+        },
+        "SLW": {
+          "type": "alias",
+          "path": "keywords"
+        },
+        "SCHLAGWOERTER": {
+          "type": "alias",
+          "path": "keywords"
+        },
+        "GERICHTSTYP": {
+          "type": "alias",
+          "path": "court_type"
+        },
+        "GERTYP": {
+          "type": "alias",
+          "path": "court_type"
+        },
+        "GERICHTSORT": {
+          "type": "alias",
+          "path": "location"
+        },
+        "GERORT": {
+          "type": "alias",
+          "path": "location"
+        },
+        "AKTENZEICHEN": {
+          "type": "alias",
+          "path": "file_numbers"
+        },
+        "AZ": {
+          "type": "alias",
+          "path": "file_numbers"
+        },
+        "SPRUCHKOERPER": {
+          "type": "alias",
+          "path": "judicial_body"
+        },
+        "SK": {
+          "type": "alias",
+          "path": "judicial_body"
+        },
+        "GLIEDERUNG": {
+          "type": "alias",
+          "path": "outline"
+        },
+        "GD": {
+          "type": "alias",
+          "path": "outline"
+        },
+        "ENTSCHEIDUNGSNAME": {
+          "type": "alias",
+          "path": "decision_name"
+        },
+        "ENAME": {
+          "type": "alias",
+          "path": "decision_name"
+        },
+        "ABWNR": {
+          "type": "alias",
+          "path": "deviating_document_number"
+        },
+        "case_facts": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer",
+          "index_options": "offsets"
+        },
+        "court_type": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer",
+          "fields": {
+            "keyword": {
+              "type": "keyword"
+            }
+          }
+        },
+        "decision_date": {
+          "type": "date"
+        },
+        "decision_grounds": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer",
+          "index_options": "offsets"
+        },
+        "dissenting_opinion": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer",
+          "index_options": "offsets"
+        },
+        "document_number": {
+          "type": "keyword"
+        },
+        "document_type": {
+          "type": "text",
+          "analyzer": "custom_german_decompounding_analyzer",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "normalizer": "normalized_keyword"
+            }
+          }
+        },
+        "ecli": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "normalizer": "normalized_keyword"
+            }
+          }
+        },
+        "grounds": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer",
+          "index_options": "offsets"
+        },
+        "guiding_principle": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer",
+          "index_options": "offsets"
+        },
+        "headline": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
+        "headnote": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
+        "id": {
+          "type": "keyword"
+        },
+        "location": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
+        "other_headnote": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer",
+          "index_options": "offsets"
+        },
+        "other_long_text": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer",
+          "index_options": "offsets"
+        },
+        "file_numbers": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "normalizer": "normalized_keyword"
+            }
+          }
+        },
+        "tenor": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer",
+          "index_options": "offsets"
+        },
+        "outline": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer",
+          "index_options": "offsets"
+        },
+        "judicial_body": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
+        "keywords": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
+        "court_keyword": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer",
+          "fields": {
+            "keyword": {
+              "type": "keyword"
+            }
+          }
+        },
+        "decision_name": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
+        "deviating_document_number": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
+        "publication_status": {
+          "type": "keyword"
+        },
+        "STATUS": {
+          "type": "alias",
+          "path": "publication_status"
+        },
+        "error": {
+          "type": "boolean"
+        },
+        "FEHLER": {
+          "type": "alias",
+          "path": "error"
+        },
+        "documentation_office": {
+          "type": "keyword"
+        },
+        "procedures": {
+          "type": "keyword"
+        },
+        "VORGANG": {
+          "type": "alias",
+          "path": "procedures"
+        },
+        "VG": {
+          "type": "alias",
+          "path": "procedures"
+        },
+        "legal_effect": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
+        "RECHTSKRAFT": {
+          "type": "alias",
+          "path": "legal_effect"
+        },
+        "RK": {
+          "type": "alias",
+          "path": "legal_effect"
+        },
+        "indexed_at": {
+          "type": "date"
+        },
+        "articles": {
+          "type": "nested",
+          "properties": {
+            "eid": {
+              "type": "text"
+            },
+            "guid": {
+              "type": "text"
+            },
+            "name": {
+              "type": "text",
+              "analyzer": "custom_german_analyzer"
+            },
+            "text": {
+              "type": "text",
+              "analyzer": "custom_german_analyzer",
+              "index_options": "offsets"
+            },
+            "entry_into_force_date": {
+              "type": "date"
+            },
+            "expiry_date": {
+              "type": "date"
+            }
+          }
+        }
+      }
+    }
+
+  }
+}

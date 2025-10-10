@@ -14,13 +14,13 @@ import com.c4_soft.springaddons.security.oauth2.test.annotations.WithJwt;
 import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.integration.config.ContainersIntegrationBase;
 import de.bund.digitalservice.ris.search.integration.controller.api.testData.CaseLawTestData;
+import de.bund.digitalservice.ris.search.integration.controller.api.testData.LiteratureTestData;
 import de.bund.digitalservice.ris.search.integration.controller.api.testData.NormsTestData;
 import de.bund.digitalservice.ris.search.integration.controller.api.testData.SharedTestConstants;
 import de.bund.digitalservice.ris.search.integration.controller.api.values.SortingTestArguments;
 import de.bund.digitalservice.ris.search.repository.opensearch.CaseLawRepository;
+import de.bund.digitalservice.ris.search.repository.opensearch.LiteratureRepository;
 import de.bund.digitalservice.ris.search.repository.opensearch.NormsRepository;
-import de.bund.digitalservice.ris.search.service.IndexAliasService;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.stream.Stream;
@@ -49,24 +49,15 @@ import org.springframework.test.web.servlet.ResultMatcher;
 class AdvancedSearchControllerApiTest extends ContainersIntegrationBase {
 
   @Autowired private CaseLawRepository caseLawRepository;
+  @Autowired private LiteratureRepository literatureRepository;
   @Autowired private NormsRepository normsRepository;
   @Autowired private MockMvc mockMvc;
 
-  Boolean initialized = false;
-  @Autowired private IndexAliasService indexAliasService;
-
   @BeforeEach
-  void setUpSearchControllerApiTest() throws IOException {
-    if (initialized) return; // replacement for @BeforeAll setup, which causes errors
-    initialized = true;
-
-    Assertions.assertTrue(openSearchContainer.isRunning());
-    super.recreateIndex();
-    super.updateMapping();
-
-    indexAliasService.setIndexAlias();
-
+  void setUpSearchControllerApiTest() {
+    clearData();
     caseLawRepository.saveAll(CaseLawTestData.allDocuments);
+    literatureRepository.saveAll(LiteratureTestData.allDocuments);
     normsRepository.saveAll(NormsTestData.allDocuments);
   }
 
@@ -295,8 +286,9 @@ class AdvancedSearchControllerApiTest extends ContainersIntegrationBase {
     Stream.Builder<Arguments> stream = SortingTestArguments.provideSortingTestArguments();
 
     int caseLawSize = CaseLawTestData.allDocuments.size();
+    int literatureSize = LiteratureTestData.allDocuments.size();
     int normsSize = NormsTestData.allDocuments.size();
-    int combinedSize = caseLawSize + normsSize;
+    int combinedSize = caseLawSize + literatureSize + normsSize;
     stream.add(Arguments.of("", combinedSize, null, null));
 
     return stream.build();
@@ -310,7 +302,7 @@ class AdvancedSearchControllerApiTest extends ContainersIntegrationBase {
       throws Exception {
     String url =
         ApiConfig.Paths.DOCUMENT_ADVANCED_SEARCH
-            + "?query=TITEL:Test OR %s".formatted(CaseLawTestData.matchAllTerm)
+            + "?query=*:*"
             + String.format("&sort=%s", sortParam);
 
     var perform =

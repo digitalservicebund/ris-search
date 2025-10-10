@@ -61,4 +61,8 @@ public class LiteratureTestData {
             .outline("Teil 1: Staatsorganisationsrecht; Teil 2: Grundrechte")
             .build());
   }
+
+  public static Literature simple(String id, String content) {
+    return Literature.builder().id(id).outline(content).build();
+  }
 }

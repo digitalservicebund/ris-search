@@ -22,10 +22,13 @@ import org.springframework.data.elasticsearch.repository.config.EnableElasticsea
 public class RestClientConfig extends AbstractOpenSearchConfiguration {
 
   private final Configurations configurationsOpensearch;
+  private final OpensearchSchemaSetup schemaSetup;
 
   @Autowired
-  public RestClientConfig(Configurations configurationsOpensearch) {
+  public RestClientConfig(
+      Configurations configurationsOpensearch, OpensearchSchemaSetup schemaSetup) {
     this.configurationsOpensearch = configurationsOpensearch;
+    this.schemaSetup = schemaSetup;
   }
 
   @Override
@@ -45,9 +48,12 @@ public class RestClientConfig extends AbstractOpenSearchConfiguration {
             .withClientConfigurer(keepAliveCallback)
             .build();
 
-    return RestClients.create( // NOSONAR java:S2095 closed by spring @Bean(destroyMethod = "close")
-            clientConfiguration)
-        .rest();
+    RestHighLevelClient restHighLevelClient =
+        RestClients.create( // NOSONAR java:S2095 closed by spring @Bean(destroyMethod = "close")
+                clientConfiguration)
+            .rest();
+    schemaSetup.updateOpensearchSchema(restHighLevelClient);
+    return restHighLevelClient;
   }
 
   @Override
