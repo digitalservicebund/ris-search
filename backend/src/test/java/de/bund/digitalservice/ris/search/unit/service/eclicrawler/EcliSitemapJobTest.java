@@ -63,7 +63,7 @@ class EcliSitemapJobTest {
 
     Job.ReturnCode code = sitemapJob.runJob();
 
-    verify(documentService).writeFullDiff(apiUrl + "api/v1/eclicrawler/", day);
+    verify(documentService).writeFullDiff(apiUrl + "v1/eclicrawler/", day);
 
     assertEquals(Job.ReturnCode.SUCCESS, code);
   }
@@ -87,7 +87,7 @@ class EcliSitemapJobTest {
 
     verify(documentService)
         .writeFromChangelog(
-            eq(apiUrl + "api/v1/eclicrawler/"),
+            eq(apiUrl + "v1/eclicrawler/"),
             eq(day),
             argThat(
                 new ArgumentMatcher<Changelog>() {
