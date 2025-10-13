@@ -5,11 +5,6 @@ import { addDefaults } from "~/stores/searchParams/getInitialState";
 import { usePostHogStore } from "~/stores/usePostHogStore";
 import IconSearch from "~icons/ic/search";
 
-const userInputDisabled = ref(true);
-onNuxtReady(() => {
-  userInputDisabled.value = false;
-});
-
 const model = defineModel<string>();
 const props = defineProps<{ fullWidth?: boolean }>();
 const postHogStore = usePostHogStore();
@@ -51,6 +46,7 @@ const onKeyup = (event: KeyboardEvent) => {
     role="search"
     class="flex max-w-md flex-row gap-8 data-[full-width='true']:max-w-full"
     :data-full-width="props.fullWidth"
+    action="/search"
     @submit.prevent="performSearch"
   >
     <InputField
@@ -64,16 +60,16 @@ const onKeyup = (event: KeyboardEvent) => {
         aria-label="Suchbegriff"
         fluid
         placeholder="Suchbegriff eingeben"
-        :disabled="userInputDisabled"
         autofocus
         type="search"
+        name="query"
         @keyup="onKeyup"
       />
     </InputField>
     <Button
       aria-label="Suchen"
       class="h-48 w-48 shrink-0 justify-center"
-      :disabled="userInputDisabled"
+      type="submit"
       @click="performSearch"
     >
       <template #icon><IconSearch /></template>
