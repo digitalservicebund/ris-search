@@ -15,7 +15,7 @@ import de.bund.digitalservice.ris.search.service.CaseLawIndexSyncJob;
 import de.bund.digitalservice.ris.search.service.Job;
 import de.bund.digitalservice.ris.search.service.eclicrawler.EcliCrawlerDocumentService;
 import de.bund.digitalservice.ris.search.service.eclicrawler.EcliSitemapJob;
-import de.bund.digitalservice.ris.search.service.eclicrawler.EcliSitemapService;
+import de.bund.digitalservice.ris.search.service.eclicrawler.EcliSitemapWriter;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.List;
@@ -31,7 +31,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 class EcliSitemapJobTest {
 
   EcliSitemapJob sitemapJob;
-  @Mock EcliSitemapService sitemapService;
+  @Mock EcliSitemapWriter sitemapWriter;
   @Mock CaseLawIndexSyncJob syncJob;
   @Mock PortalBucket portalBucket;
   @Mock CaseLawBucket caseLawBucket;
@@ -42,13 +42,13 @@ class EcliSitemapJobTest {
   void setup() {
     sitemapJob =
         new EcliSitemapJob(
-            sitemapService, portalBucket, caseLawBucket, syncJob, documentService, apiUrl);
+            sitemapWriter, portalBucket, caseLawBucket, syncJob, documentService, apiUrl);
   }
 
   @Test
   void itReturnsSuccessfulIfItRanAlready() {
     LocalDate day = LocalDate.now();
-    when(sitemapService.getSitemapFilesPathsForDay(day)).thenReturn(List.of("2025/01/01"));
+    when(sitemapWriter.getSitemapFilesPathsForDay(day)).thenReturn(List.of("2025/01/01"));
 
     Job.ReturnCode code = sitemapJob.runJob();
     assertEquals(Job.ReturnCode.SUCCESS, code);
@@ -58,7 +58,7 @@ class EcliSitemapJobTest {
   void itWritesFullDiffOnInitialRun() {
     List<String> changelogPaths = List.of("changelog0.xml", "changelog1.xml");
     LocalDate day = LocalDate.now();
-    when(sitemapService.getSitemapFilesPathsForDay(day)).thenReturn(List.of());
+    when(sitemapWriter.getSitemapFilesPathsForDay(day)).thenReturn(List.of());
     when(syncJob.getNewChangelogs(caseLawBucket, "0")).thenReturn(changelogPaths);
 
     Job.ReturnCode code = sitemapJob.runJob();
@@ -75,7 +75,7 @@ class EcliSitemapJobTest {
     log1.setChanged(new HashSet<>(List.of("file1")));
     LocalDate day = LocalDate.now();
 
-    when(sitemapService.getSitemapFilesPathsForDay(day)).thenReturn(List.of());
+    when(sitemapWriter.getSitemapFilesPathsForDay(day)).thenReturn(List.of());
     when(portalBucket.getAllKeysByPrefix(LAST_PROCESSED_CHANGELOG)).thenReturn(List.of("file"));
     when(portalBucket.getFileAsString(LAST_PROCESSED_CHANGELOG))
         .thenReturn(Optional.of("changelog/date"));

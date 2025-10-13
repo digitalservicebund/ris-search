@@ -23,7 +23,7 @@ import de.bund.digitalservice.ris.search.repository.opensearch.EcliCrawlerDocume
 import de.bund.digitalservice.ris.search.service.CaseLawIndexSyncJob;
 import de.bund.digitalservice.ris.search.service.CaseLawService;
 import de.bund.digitalservice.ris.search.service.eclicrawler.EcliCrawlerDocumentService;
-import de.bund.digitalservice.ris.search.service.eclicrawler.EcliSitemapService;
+import de.bund.digitalservice.ris.search.service.eclicrawler.EcliSitemapWriter;
 import jakarta.xml.bind.JAXBException;
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -45,7 +45,7 @@ class EcliCrawlerDocumentServiceTest {
   @Mock CaseLawIndexSyncJob syncJob;
   @Mock CaseLawBucket caseLawBucket;
   @Mock CaseLawService caselawService;
-  @Mock EcliSitemapService sitemapService;
+  @Mock EcliSitemapWriter sitemapWriter;
 
   EcliCrawlerDocumentService documentService;
 
@@ -55,7 +55,7 @@ class EcliCrawlerDocumentServiceTest {
   void setup() {
     documentService =
         new EcliCrawlerDocumentService(
-            caseLawBucket, repository, caselawService, sitemapService, frontendUrl);
+            caseLawBucket, repository, caselawService, sitemapWriter, frontendUrl);
   }
 
   private CaseLawDocumentationUnit getTestDocUnit(String docNumber) {
@@ -86,20 +86,20 @@ class EcliCrawlerDocumentServiceTest {
     when(caseLawBucket.getAllKeys()).thenReturn(filenames);
     when(caselawService.getFromBucket(any())).thenReturn(Optional.of(getTestDocUnit("docNumber")));
 
-    when(sitemapService.writeUrlsToSitemap(eq(day), any(), eq(1)))
+    when(sitemapWriter.writeUrlsToSitemap(eq(day), any(), eq(1)))
         .thenReturn(new Sitemap().setName("1"));
-    when(sitemapService.writeUrlsToSitemap(eq(day), any(), eq(2)))
+    when(sitemapWriter.writeUrlsToSitemap(eq(day), any(), eq(2)))
         .thenReturn(new Sitemap().setName("2"));
 
-    when(sitemapService.writeSitemapsIndices(eq("apiUrl"), eq(day), any()))
+    when(sitemapWriter.writeSitemapsIndices(eq("apiUrl"), eq(day), any()))
         .thenReturn(List.of(new Sitemapindex().setName("index")));
 
     documentService.writeFullDiff("apiUrl", day);
-    InOrder orderVerify = inOrder(sitemapService);
+    InOrder orderVerify = inOrder(sitemapWriter);
 
-    orderVerify.verify(sitemapService).writeUrlsToSitemap(eq(day), any(), eq(1));
-    orderVerify.verify(sitemapService).writeUrlsToSitemap(eq(day), any(), eq(2));
-    verify(sitemapService)
+    orderVerify.verify(sitemapWriter).writeUrlsToSitemap(eq(day), any(), eq(1));
+    orderVerify.verify(sitemapWriter).writeUrlsToSitemap(eq(day), any(), eq(2));
+    verify(sitemapWriter)
         .writeSitemapsIndices(
             eq("apiUrl"),
             eq(day),
@@ -109,7 +109,7 @@ class EcliCrawlerDocumentServiceTest {
                         && sitemaps.get(1).getName().equals("2")));
 
     verify(repository, times(6)).saveAll(any());
-    verify(sitemapService)
+    verify(sitemapWriter)
         .updateRobotsTxt(
             eq("apiUrl"),
             argThat(sitemapindices -> sitemapindices.getFirst().getName().equals("index")));
@@ -150,7 +150,7 @@ class EcliCrawlerDocumentServiceTest {
                             .setIsVersionOf(
                                 new IsVersionOf().setValue("ECLI:DE:XX:2025:1111112"))));
 
-    when(sitemapService.writeUrlsToSitemap(
+    when(sitemapWriter.writeUrlsToSitemap(
             eq(day),
             argThat(
                 left ->
@@ -160,7 +160,7 @@ class EcliCrawlerDocumentServiceTest {
         .thenReturn(new Sitemap().setName("sitemap_name"));
 
     var expectedSitemapIndex = List.of(new Sitemapindex());
-    when(sitemapService.writeSitemapsIndices(
+    when(sitemapWriter.writeSitemapsIndices(
             eq("apiUrl"),
             eq(day),
             argThat(sitemaps -> sitemaps.getFirst().getName().equals("sitemap_name"))))
@@ -175,6 +175,6 @@ class EcliCrawlerDocumentServiceTest {
                     new EcliCrawlerDocumentsMatcher(
                             List.of(expectedCretedDocument, expectedDeletedDocument))
                         .matches(IteratorUtils.toList(docs.iterator()))));
-    verify(sitemapService).updateRobotsTxt("apiUrl", expectedSitemapIndex);
+    verify(sitemapWriter).updateRobotsTxt("apiUrl", expectedSitemapIndex);
   }
 }

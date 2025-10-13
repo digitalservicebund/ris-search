@@ -1,8 +1,8 @@
 package de.bund.digitalservice.ris.search.unit.service.eclicrawler;
 
-import static de.bund.digitalservice.ris.search.service.eclicrawler.EcliSitemapService.MAX_SITEMAP_URLS;
-import static de.bund.digitalservice.ris.search.service.eclicrawler.EcliSitemapService.PATH_PREFIX;
-import static de.bund.digitalservice.ris.search.service.eclicrawler.EcliSitemapService.ROBOTS_TXT_PATH;
+import static de.bund.digitalservice.ris.search.service.eclicrawler.EcliSitemapWriter.MAX_SITEMAP_URLS;
+import static de.bund.digitalservice.ris.search.service.eclicrawler.EcliSitemapWriter.PATH_PREFIX;
+import static de.bund.digitalservice.ris.search.service.eclicrawler.EcliSitemapWriter.ROBOTS_TXT_PATH;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -15,7 +15,7 @@ import de.bund.digitalservice.ris.search.models.eclicrawler.sitemapindex.Sitemap
 import de.bund.digitalservice.ris.search.models.eclicrawler.sitemapindex.Sitemapindex;
 import de.bund.digitalservice.ris.search.repository.objectstorage.PortalBucket;
 import de.bund.digitalservice.ris.search.service.eclicrawler.EcliMarshaller;
-import de.bund.digitalservice.ris.search.service.eclicrawler.EcliSitemapService;
+import de.bund.digitalservice.ris.search.service.eclicrawler.EcliSitemapWriter;
 import jakarta.xml.bind.JAXBException;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
@@ -32,15 +32,15 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-class EcliSitemapServiceTest {
+class EcliSitemapWriterTest {
 
-  EcliSitemapService service;
+  EcliSitemapWriter service;
   @Mock PortalBucket bucket;
   @Mock EcliMarshaller marshaller;
 
   @BeforeEach
   void setup() {
-    service = new EcliSitemapService(bucket, marshaller);
+    service = new EcliSitemapWriter(bucket, marshaller);
   }
 
   @Test

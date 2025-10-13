@@ -1,7 +1,7 @@
 package de.bund.digitalservice.ris.search.controller.api;
 
 import de.bund.digitalservice.ris.search.config.ApiConfig;
-import de.bund.digitalservice.ris.search.service.eclicrawler.EcliSitemapService;
+import de.bund.digitalservice.ris.search.service.eclicrawler.EcliSitemapWriter;
 import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.constraints.Pattern;
@@ -18,9 +18,9 @@ import org.springframework.web.bind.annotation.RestController;
 @Validated
 @Hidden
 public class EcliSitemapController {
-  public final EcliSitemapService sitemapService;
+  public final EcliSitemapWriter sitemapService;
 
-  public EcliSitemapController(EcliSitemapService sitemapService) {
+  public EcliSitemapController(EcliSitemapWriter sitemapService) {
     this.sitemapService = sitemapService;
   }
 

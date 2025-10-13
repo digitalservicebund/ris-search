@@ -17,7 +17,7 @@ import org.apache.commons.collections4.ListUtils;
 import org.springframework.stereotype.Service;
 
 @Service
-public class EcliSitemapService {
+public class EcliSitemapWriter {
 
   PortalBucket portalBucket;
 
@@ -27,7 +27,7 @@ public class EcliSitemapService {
   public static final String PATH_PREFIX = "eclicrawler/";
   public static final String ROBOTS_TXT_PATH = PATH_PREFIX + "robots.txt";
 
-  public EcliSitemapService(PortalBucket portalBucket, EcliMarshaller marshaller) {
+  public EcliSitemapWriter(PortalBucket portalBucket, EcliMarshaller marshaller) {
     this.portalBucket = portalBucket;
     this.marshaller = marshaller;
   }

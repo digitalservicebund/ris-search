@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class EcliSitemapJob implements Job {
 
-  EcliSitemapService sitemapService;
+  EcliSitemapWriter sitemapWriter;
 
   PortalBucket portalBucket;
 
@@ -35,22 +35,22 @@ public class EcliSitemapJob implements Job {
   private final String apiUrl;
 
   public EcliSitemapJob(
-      EcliSitemapService service,
+      EcliSitemapWriter service,
       PortalBucket portalBucket,
       CaseLawBucket caselawbucket,
       CaseLawIndexSyncJob indexJob,
       EcliCrawlerDocumentService ecliCrawlerDocumentService,
       @Value("${server.front-end-url}") String frontEndUrl) {
-    this.sitemapService = service;
+    this.sitemapWriter = service;
     this.portalBucket = portalBucket;
     this.caselawbucket = caselawbucket;
     this.indexJob = indexJob;
     this.ecliCrawlerDocumentService = ecliCrawlerDocumentService;
-    this.apiUrl = frontEndUrl + "api/v1/eclicrawler/";
+    this.apiUrl = frontEndUrl + "v1/eclicrawler/";
   }
 
   public ReturnCode runJob() {
-    if (!sitemapService.getSitemapFilesPathsForDay(today).isEmpty()) {
+    if (!sitemapWriter.getSitemapFilesPathsForDay(today).isEmpty()) {
       logger.warn("day partition for ecli sitemap run already created");
       return ReturnCode.SUCCESS;
     }
@@ -59,7 +59,7 @@ public class EcliSitemapJob implements Job {
     try {
       if (isInitialRun) {
         logger.info("initial run, publish all");
-        sitemapService.writeRobotsTxt();
+        sitemapWriter.writeRobotsTxt();
         String newestChangelog = indexJob.getNewChangelogs(caselawbucket, "0").getLast();
         ecliCrawlerDocumentService.writeFullDiff(apiUrl, today);
         portalBucket.save(LAST_PROCESSED_CHANGELOG, newestChangelog);

@@ -4,7 +4,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import de.bund.digitalservice.ris.search.controller.api.EcliSitemapController;
-import de.bund.digitalservice.ris.search.service.eclicrawler.EcliSitemapService;
+import de.bund.digitalservice.ris.search.service.eclicrawler.EcliSitemapWriter;
 import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,7 +20,7 @@ class EcliSitemapControllerTest {
 
   EcliSitemapController controller;
 
-  @Mock EcliSitemapService service;
+  @Mock EcliSitemapWriter service;
 
   @BeforeEach()
   void setup() {

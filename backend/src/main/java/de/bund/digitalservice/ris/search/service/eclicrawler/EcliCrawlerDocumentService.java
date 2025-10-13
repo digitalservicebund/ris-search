@@ -32,7 +32,7 @@ public class EcliCrawlerDocumentService {
   CaseLawBucket caselawBucket;
   EcliCrawlerDocumentRepository repository;
   CaseLawService caselawService;
-  EcliSitemapService sitemapService;
+  EcliSitemapWriter sitemapWriter;
   private final String documentUrl;
   private static final int DOCUMENT_STORE_BULK_SIZE = 10000;
   public static final int MAX_SITEMAP_URLS = 50000;
@@ -46,12 +46,12 @@ public class EcliCrawlerDocumentService {
       CaseLawBucket caseLawBucket,
       EcliCrawlerDocumentRepository repository,
       CaseLawService caselawService,
-      EcliSitemapService sitemapService,
+      EcliSitemapWriter sitemapWriter,
       @Value("${server.front-end-url}") String frontEndUrl) {
     this.caselawBucket = caseLawBucket;
     this.repository = repository;
     this.caselawService = caselawService;
-    this.sitemapService = sitemapService;
+    this.sitemapWriter = sitemapWriter;
     this.documentUrl = frontEndUrl + "case-law/";
   }
 
@@ -123,15 +123,15 @@ public class EcliCrawlerDocumentService {
         var docs = iterator.next();
         logger.info("write {} urls to sitemap", docs.size());
         writtenSitemaps.add(
-            sitemapService.writeUrlsToSitemap(
+            sitemapWriter.writeUrlsToSitemap(
                 day,
                 docs.stream().map(EcliCrawlerDocumentMapper::toSitemapUrl).toList(),
                 writtenSitemaps.size() + 1));
         saveAll(docs);
       }
       logger.info("write {} sitemapindices", writtenSitemaps.size());
-      var sitemapIndices = sitemapService.writeSitemapsIndices(apiUrl, day, writtenSitemaps);
-      sitemapService.updateRobotsTxt(apiUrl, sitemapIndices);
+      var sitemapIndices = sitemapWriter.writeSitemapsIndices(apiUrl, day, writtenSitemaps);
+      sitemapWriter.updateRobotsTxt(apiUrl, sitemapIndices);
     } catch (JAXBException | ObjectStoreServiceException e) {
       throw new FatalEcliSitemapJobException(e.getMessage());
     }
