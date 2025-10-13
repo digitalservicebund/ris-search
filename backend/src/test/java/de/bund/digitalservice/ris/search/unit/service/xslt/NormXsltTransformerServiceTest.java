@@ -19,6 +19,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.Mockito;
+import org.xmlunit.builder.DiffBuilder;
+import org.xmlunit.diff.Diff;
 import software.amazon.awssdk.core.ResponseInputStream;
 import software.amazon.awssdk.services.s3.model.GetObjectResponse;
 
@@ -33,38 +35,58 @@ class NormXsltTransformerServiceTest {
 
   @ParameterizedTest(name = "{2}")
   @CsvSource({
-    "twoParagraphArticle.xml, twoParagraphArticle.html, Should transform an article with two paragraphs",
-    "list.xml, list.html, Should transform list to HTML",
-    "fullDepthArticle.xml, fullDepthArticle.html, Should transform full depth article to HTML",
-    "nestedArticles.xml, nestedArticles.html, Should transform articles at every level to HTML",
-    "formatting.xml, formatting.html, Should transform an article with formatting to HTML",
-    "heading.xml, heading.html, Should transform a heading with marker inside",
-    "authorialNote.xml, authorialNote.html, Should transform authorialNotes to HTML",
-    "authorialNoteWithPlacementBase.xml, authorialNoteWithPlacementBase.html, Should transform authorialNotes with placementBase",
-    "authorialNoteInDocTitle.xml, authorialNoteInDocTitle.html, Should transform authorialNotes in title",
-    "authorialNoteInDoc.xml, authorialNoteInDoc.html, Should transform authorialNotes in attachment body",
-    "notes.xml, notes.html, Should transform notes",
-    "image.xml, image.html, Should transform img tag",
-    "pdf.xml, pdf.html, Should transform links with pdf file",
-    "noPdfLinks.xml, noPdfLinks.html, Should not apply any special transformation to non-pdf links",
-    "container.xml, container.html, Should transform container elements in the preface",
-    "preambleFormula.xml, preambleFormula.html, Should transform a preamble formula",
-    "conclusionsFormula.xml, conclusionsFormula.html, Should transform a conclusions formula",
-    "blockList.xml, blockList.html, Should transform a blockList",
-    "preformatted.xml, preformatted.html, Should transform preformatted paragraphs",
-    "proprietary.xml, proprietary.html, Should transform proprietary metadata",
+    "twoParagraphArticle.xml, twoParagraphArticle.html,                               Should transform an article with two paragraphs",
+    "list.xml, list.html,                                                             Should transform list to HTML",
+    "fullDepthArticle.xml, fullDepthArticle.html,                                     Should transform full depth article to HTML",
+    "nestedArticles.xml, nestedArticles.html,                                         Should transform articles at every level to HTML",
+    "formatting.xml, formatting.html,                                                 Should transform an article with formatting to HTML",
+    "heading.xml, heading.html,                                                       Should transform a heading with marker inside",
+    "authorialNote.xml, authorialNote.html,                                           Should transform authorialNotes to HTML",
+    "authorialNoteWithPlacementBase.xml, authorialNoteWithPlacementBase.html,         Should transform authorialNotes with placementBase",
+    "authorialNoteInDocTitle.xml, authorialNoteInDocTitle.html,                       Should transform authorialNotes in title",
+    "authorialNoteInDoc.xml, authorialNoteInDoc.html,                                 Should transform authorialNotes in attachment body",
+    "notes.xml, notes.html,                                                           Should transform notes",
+    "image.xml, image.html,                                                           Should transform img tag",
+    "pdf.xml, pdf.html,                                                               Should transform links with pdf file",
+    "noPdfLinks.xml, noPdfLinks.html,                                                 Should not apply any special transformation to non-pdf links",
+    "container.xml, container.html,                                                   Should transform container elements in the preface",
+    "preambleFormula.xml, preambleFormula.html,                                       Should transform a preamble formula",
+    "conclusionsFormula.xml, conclusionsFormula.html,                                 Should transform a conclusions formula",
+    "blockList.xml, blockList.html,                                                   Should transform a blockList",
+    "preformatted.xml, preformatted.html,                                             Should transform preformatted paragraphs",
+    "proprietary.xml, proprietary.html,                                               Should transform proprietary metadata",
     "anlage-regelungstext-without-title.xml, anlage-regelungstext-without-title.html, Should transform an attachment without title",
   })
   void testTransformNormLegalDocMlFull(
       String inputFileName, String expectedFileName, String testName) throws IOException {
     byte[] bytes = Files.readAllBytes(Path.of(resourcesPath, inputFileName));
 
-    var actualHtml = service.transformNorm(bytes, "subtype", RESOURCES_BASE_PATH);
+    var result = service.transformNorm(bytes, "subtype", RESOURCES_BASE_PATH);
 
-    var expectedHtml = Files.readString(Path.of(resourcesPath, expectedFileName));
-    var expectedDocument = Jsoup.parse(expectedHtml);
-    var actualDocument = Jsoup.parse(actualHtml);
-    assertThat(actualDocument.body().html()).isEqualTo(expectedDocument.body().html());
+    var outputSettings =
+        new Document.OutputSettings()
+            // Needed so not closing tags in html like <br> are transformed to self-closing tags
+            // e.g. </br>
+            .syntax(Document.OutputSettings.Syntax.xml)
+            .prettyPrint(true);
+
+    var expectedHtml =
+        Jsoup.parse(Files.readString(Path.of(resourcesPath, expectedFileName)))
+            .outputSettings(outputSettings)
+            .body()
+            .html();
+    var actualHtml = Jsoup.parse(result).outputSettings(outputSettings).body().html();
+
+    // Use xml Diffbuilder to be able to do a structural comparison not affected by whitespaces
+    // around nodes
+    Diff diff =
+        DiffBuilder.compare(expectedHtml)
+            .withTest(actualHtml)
+            .ignoreWhitespace()
+            .checkForIdentical()
+            .build();
+
+    assertThat(diff.hasDifferences()).describedAs(diff::toString).isFalse();
   }
 
   @Test
