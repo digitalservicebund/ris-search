@@ -41,13 +41,14 @@ describe("LiteratureMetadata", () => {
       props: {
         documentTypes: ["Foo"],
         references: ["Ref"],
-        authors: [],
+        authors: ["Mustermann, Max"],
         yearsOfPublication: ["2015"],
       },
     });
 
     expect(screen.getByLabelText("Dokumenttyp")).toHaveTextContent("Foo");
     expect(screen.getByLabelText("Fundstelle")).toHaveTextContent("Ref");
+    expect(screen.getByLabelText("Author")).toHaveTextContent("Max Mustermann");
     expect(screen.getByLabelText("Veröffentlichungsjahr")).toHaveTextContent(
       "2015",
     );
@@ -58,43 +59,18 @@ describe("LiteratureMetadata", () => {
       props: {
         documentTypes: ["Foo", "Bar"],
         references: ["Ref1", "Ref2"],
-        authors: [],
+        authors: ["Mustermann, Max", "Musterfrau, Sabine"],
         yearsOfPublication: ["2015", "2016"],
       },
     });
 
     expect(screen.getByLabelText("Dokumenttyp")).toHaveTextContent("Foo, Bar");
     expect(screen.getByLabelText("Fundstelle")).toHaveTextContent("Ref1, Ref2");
-    expect(screen.getByLabelText("Veröffentlichungsjahr")).toHaveTextContent(
-      "2015, 2016",
-    );
-  });
-
-  it("renders single author", () => {
-    render(LiteratureMetadata, {
-      props: {
-        documentTypes: [],
-        references: [],
-        authors: ["Mustermann, Max"],
-        yearsOfPublication: [],
-      },
-    });
-
-    expect(screen.getByLabelText("Author")).toHaveTextContent("Max Mustermann");
-  });
-
-  it("renders multiple authors", () => {
-    render(LiteratureMetadata, {
-      props: {
-        documentTypes: [],
-        references: [],
-        authors: ["Mustermann, Max", "Musterfrau, Sabine"],
-        yearsOfPublication: [],
-      },
-    });
-
     expect(screen.getByLabelText("Author")).toHaveTextContent(
       "Max Mustermann, Sabine Musterfrau",
+    );
+    expect(screen.getByLabelText("Veröffentlichungsjahr")).toHaveTextContent(
+      "2015, 2016",
     );
   });
 });
