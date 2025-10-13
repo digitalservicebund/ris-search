@@ -29,8 +29,13 @@ public record Literature(
         List<String> independentReferences,
     @Nullable @Field(name = Fields.MAIN_TITLE) String mainTitle,
     @Nullable @Field(name = Fields.DOCUMENTARY_TITLE) String documentaryTitle,
+    @Nullable @Field(name = Fields.MAIN_TITLE_ADDITIONS) String mainTitleAdditions,
     @ElementCollection @Field(name = Fields.AUTHORS) List<String> authors,
     @ElementCollection @Field(name = Fields.COLLABORATORS) List<String> collaborators,
+    @ElementCollection @Field(name = Fields.LANGUAGE) List<String> languages,
+    @ElementCollection @Field(name = Fields.ORIGINATOR) List<String> originators,
+    @ElementCollection @Field(name = Fields.NORM) List<String> norms,
+    @ElementCollection @Field(name = Fields.CONFERENCE_NOTE) List<String> conferenceNotes,
     @Nullable @Field(name = Fields.SHORT_REPORT) String shortReport,
     @Nullable @Field(name = Fields.OUTLINE) String outline,
     @JsonIgnore @Field(name = Fields.INDEXED_AT) String indexedAt)
@@ -54,6 +59,9 @@ public record Literature(
     /** Haupttitel* */
     public static final String MAIN_TITLE = "main_title";
 
+    /** Zusätze zum Hauptsachtitel * */
+    public static final String MAIN_TITLE_ADDITIONS = "main_title_additions";
+
     /** Dokumentarischer Titel * */
     public static final String DOCUMENTARY_TITLE = "documentary_title";
 
@@ -68,6 +76,18 @@ public record Literature(
 
     /** Gliederung * */
     public static final String OUTLINE = "outline";
+
+    /** Urheber * */
+    public static final String ORIGINATOR = "originator";
+
+    /** Sprache * */
+    public static final String LANGUAGE = "language";
+
+    /** Kongressvermerk * */
+    public static final String CONFERENCE_NOTE = "conference_note";
+
+    /** Norm * */
+    public static final String NORM = "norm";
 
     /** Used internally to store at what time the document was indexed * */
     public static final String INDEXED_AT = "indexed_at";
