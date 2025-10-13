@@ -63,7 +63,7 @@ describe("CaselawSearchResult.vue", () => {
     const wrapper = await mountComponent({ textMatches: [textMatch] });
     const highlightedElements = wrapper.findAll("mark");
     expect(highlightedElements).length(1);
-    expect(highlightedElements[0].text()).toBe(`highlighted headline`);
+    expect(highlightedElements[0]?.text()).toBe(`highlighted headline`);
   });
 
   it("displays highlighted file numbers", async () => {
@@ -76,7 +76,7 @@ describe("CaselawSearchResult.vue", () => {
     const wrapper = await mountComponent({ textMatches: [textMatch] });
     const highlightedElements = wrapper.findAll("mark");
     expect(highlightedElements).length(1);
-    expect(highlightedElements[0].text()).toBe(`highlighted file number`);
+    expect(highlightedElements[0]?.text()).toBe(`highlighted file number`);
 
     expect(wrapper.get("[aria-label='Aktenzeichen']").html()).toBe(
       `<span aria-label="Aktenzeichen">123, testing <mark>highlighted file number</mark> is here</span>`,
@@ -94,7 +94,7 @@ describe("CaselawSearchResult.vue", () => {
 
     const highlightedElements = wrapper.findAll("mark");
     expect(highlightedElements).length(1);
-    expect(highlightedElements[0].text()).toBe("highlighted Text");
+    expect(highlightedElements[0]?.text()).toBe("highlighted Text");
   });
 
   it("filters HTML tags except mark, i, b", async () => {
@@ -122,7 +122,7 @@ describe("CaselawSearchResult.vue", () => {
     expect(headlineContent.element.innerHTML).toBe(expectedSanitized);
     const contentItems = wrapper.findAll('[data-testid="highlighted-field"]');
     expect(contentItems.length).toBe(1);
-    expect(contentItems[0].element.innerHTML).toBe(expectedSanitized);
+    expect(contentItems[0]?.element.innerHTML).toBe(expectedSanitized);
   });
 
   it("displays static text when title is not present", async () => {
@@ -156,7 +156,7 @@ describe("CaselawSearchResult.vue", () => {
       const wrapper = await mountComponent({ textMatches });
       const contentItems = wrapper.findAll('[data-testid="highlighted-field"]');
       expect(contentItems.length).toBe(1);
-      expect(contentItems[0].text()).toBe(value);
+      expect(contentItems[0]?.text()).toBe(value);
     });
   });
 
@@ -178,7 +178,7 @@ describe("CaselawSearchResult.vue", () => {
     const wrapper = await mountComponent({ textMatches });
     const contentItems = wrapper.findAll('[data-testid="highlighted-field"]');
     expect(contentItems).toHaveLength(1);
-    expect(contentItems[0].text()).toBe("Leitsatz.");
+    expect(contentItems[0]?.text()).toBe("Leitsatz.");
   });
 
   it("displays guiding principle first, if available, then up to 3 other matching items", async () => {
@@ -219,10 +219,10 @@ describe("CaselawSearchResult.vue", () => {
     const wrapper = await mountComponent({ textMatches });
     const contentItems = wrapper.findAll('[data-testid="highlighted-field"]');
     expect(contentItems.length).toBe(4);
-    expect(contentItems[0].element.innerHTML).toBe(guidingPrinciple.text);
-    expect(contentItems[1].element.innerHTML).toBe(textMatches[0].text);
-    expect(contentItems[2].element.innerHTML).toBe(textMatches[2].text);
-    expect(contentItems[3].element.innerHTML).toBe(textMatches[3].text);
+    expect(contentItems[0]?.element.innerHTML).toBe(guidingPrinciple.text);
+    expect(contentItems[1]?.element.innerHTML).toBe(textMatches[0]?.text);
+    expect(contentItems[2]?.element.innerHTML).toBe(textMatches[2]?.text);
+    expect(contentItems[3]?.element.innerHTML).toBe(textMatches[3]?.text);
   });
 
   it("returns an empty array when there are no caselaw fields", async () => {
@@ -265,7 +265,7 @@ describe("CaselawSearchResult.vue", () => {
     const wrapper = await mountComponent(searchResultWithoutHighlights);
     const contentItems = wrapper.findAll('[data-testid="highlighted-field"]');
     expect(contentItems.length).toBe(1);
-    expect(contentItems[0].text()).toBe("Guiding Principle.");
+    expect(contentItems[0]?.text()).toBe("Guiding Principle.");
   });
 
   it("returns the first field from caselaw fields and up to three highlighted fields if highlights are present", async () => {
@@ -299,9 +299,9 @@ describe("CaselawSearchResult.vue", () => {
     const wrapper = await mountComponent({ textMatches });
     const contentItems = wrapper.findAll('[data-testid="highlighted-field"]');
     expect(contentItems).toHaveLength(4);
-    expect(contentItems[0].element.innerHTML).toBe("Guiding Principle.");
-    expect(contentItems[1].element.innerHTML).toBe(textMatches[1].text);
-    expect(contentItems[2].element.innerHTML).toBe(textMatches[2].text);
-    expect(contentItems[3].element.innerHTML).toBe(textMatches[3].text);
+    expect(contentItems[0]?.element.innerHTML).toBe("Guiding Principle.");
+    expect(contentItems[1]?.element.innerHTML).toBe(textMatches[1]?.text);
+    expect(contentItems[2]?.element.innerHTML).toBe(textMatches[2]?.text);
+    expect(contentItems[3]?.element.innerHTML).toBe(textMatches[3]?.text);
   });
 });

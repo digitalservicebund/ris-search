@@ -5,7 +5,7 @@ import { getNormTitle } from "./titles";
 import type { NormContent } from "./useNormData";
 import type { LegislationWork } from "~/types";
 const props = defineProps<{
-  htmlParts: NormContent["htmlParts"];
+  htmlParts?: NormContent["htmlParts"];
   metadata: LegislationWork;
 }>();
 
@@ -16,7 +16,7 @@ const isLongTitle = computed(
 );
 
 // only show the alternate name as secondary if it isn't already being used as the main title
-const hasHeading = computed(() => !!props.htmlParts.heading);
+const hasHeading = computed(() => !!props.htmlParts?.heading);
 </script>
 <template>
   <div class="dokumentenkopf mt-24 mb-48 max-w-prose">
@@ -33,7 +33,7 @@ const hasHeading = computed(() => !!props.htmlParts.heading);
             v-if="hasHeading"
             :data-longTitle="isLongTitle || null"
             class="break-words hyphens-auto max-sm:text-[26px]"
-            v-html="props.htmlParts.heading"
+            v-html="props.htmlParts?.heading"
           />
           <div v-else class="titel break-words max-sm:text-[26px]">
             {{ getNormTitle(props.metadata) }}
@@ -41,7 +41,7 @@ const hasHeading = computed(() => !!props.htmlParts.heading);
         </RisExpandableText>
         <template #fallback>
           <div
-            v-if="props.htmlParts.heading"
+            v-if="props.htmlParts?.heading"
             :data-longTitle="isLongTitle || null"
             class="break-words hyphens-auto max-sm:text-[26px]"
             v-html="props.htmlParts.heading"
@@ -53,8 +53,8 @@ const hasHeading = computed(() => !!props.htmlParts.heading);
       </client-only>
     </hgroup>
     <NormHeadingFootnotes
-      :html="props.htmlParts.headingAuthorialNotes"
-      :text-length="props.htmlParts.headingAuthorialNotesLength"
+      :html="props.htmlParts?.headingAuthorialNotes"
+      :text-length="props.htmlParts?.headingAuthorialNotesLength"
     />
   </div>
 </template>

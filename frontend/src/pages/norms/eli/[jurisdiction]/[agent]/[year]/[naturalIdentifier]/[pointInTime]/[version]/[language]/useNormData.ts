@@ -1,4 +1,3 @@
-import type { AsyncData, NuxtError } from "#app";
 import { useBackendURL } from "~/composables/useBackendURL";
 import type { LegislationWork } from "~/types";
 import { getTextFromElements, parseDocument } from "~/utils/htmlParser";
@@ -30,9 +29,7 @@ export interface NormContent {
  * manifestation ELI of the HTML version will be derived from metadata (from
  * first API call).
  */
-export function useFetchNormContent(
-  expressionEli: string,
-): AsyncData<NormContent, NuxtError<NormContent> | null> {
+export function useFetchNormContent(expressionEli: string) {
   const requestFetch = useRequestFetch(); // unlike $fetch, useRequestFetch forwards client cookies
   return useAsyncData(`json+html for ${expressionEli}`, async () => {
     const backendURL = useBackendURL();
@@ -117,7 +114,7 @@ export interface NormArticleContent {
 export function useFetchNormArticleContent(
   expressionEli: string,
   articleEId?: string,
-): AsyncData<NormArticleContent, NuxtError<NormContent> | null> {
+) {
   const requestFetch = useRequestFetch(); // unlike $fetch, useRequestFetch forwards client cookies
   const backendURL = useBackendURL();
   return useAsyncData(

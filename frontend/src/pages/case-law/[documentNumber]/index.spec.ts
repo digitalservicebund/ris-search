@@ -119,7 +119,7 @@ describe("case law single view page", async () => {
 
     expect(tocLinks.length).toBe(expectedLinks.length);
     expectedLinks.forEach((link, index) => {
-      expect(tocLinks[index].text()).toBe(link.title);
+      expect(tocLinks[index]?.text()).toBe(link.title);
     });
   });
 

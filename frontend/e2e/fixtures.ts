@@ -67,10 +67,10 @@ export const expect = baseExpect.extend({
     try {
       const matcherResult = await locator.evaluate(
         (select: HTMLSelectElement) =>
-          select.options[select.options.selectedIndex].textContent,
+          select.options[select.options.selectedIndex]?.textContent,
         options,
       );
-      await baseExpect(matcherResult).toBe(expected);
+      baseExpect(matcherResult).toBe(expected);
       pass = true;
     } catch (e: unknown) {
       if ((e as { matcherResult: string }).matcherResult) {

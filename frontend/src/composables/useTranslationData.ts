@@ -1,4 +1,3 @@
-import type { AsyncData, NuxtError } from "#app";
 import { useBackendURL } from "~/composables/useBackendURL";
 import type { LegislationWork, JSONLDList, SearchResult } from "~/types";
 import { getCurrentDateInGermanyFormatted } from "~/utils/dateFormatting";

@@ -21,7 +21,7 @@ describe("NormMetadataFields.vue", () => {
     });
 
     const abbreviationField = findMetadataField(wrapper, "Abkürzung");
-    expect(abbreviationField.props().value).toBe(expectedAbbreviation);
+    expect(abbreviationField?.props().value).toBe(expectedAbbreviation);
   });
 
   it("does not show abbreviation if abbreviation is undefined", () => {
@@ -41,7 +41,7 @@ describe("NormMetadataFields.vue", () => {
     });
 
     const statusField = findMetadataField(wrapper, "Status");
-    expect(statusField.props().value).toBe(expected);
+    expect(statusField?.props().value).toBe(expected);
   });
 
   it("shows validity dates metadata fields", () => {

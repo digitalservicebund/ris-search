@@ -26,7 +26,7 @@ describe("useDynamicSeo composable", () => {
     useDynamicSeo({ title, description });
 
     expect(useHead).toHaveBeenCalledTimes(1);
-    const headArgs = useHead.mock.calls[0][0];
+    const headArgs = useHead.mock.calls?.at(0)?.at(0);
 
     expect(headArgs.title.value).toBe("Test Title");
     expect(headArgs.link.value).toEqual([{ rel: "canonical", href: TEST_URL }]);
@@ -49,7 +49,7 @@ describe("useDynamicSeo composable", () => {
 
     useDynamicSeo({ title, description });
 
-    const headArgs = useHead.mock.calls[0][0];
+    const headArgs = useHead.mock.calls?.at(0)?.at(0);
     const canonicalLinks = headArgs.link.value as CanonicalLink[];
     const metaTags = headArgs.meta.value as MetaTag[];
 
@@ -77,7 +77,7 @@ describe("useDynamicSeo composable", () => {
 
     useDynamicSeo({ title, description });
 
-    const headArgs = useHead.mock.calls[0][0];
+    const headArgs = useHead.mock.calls?.at(0)?.at(0);
     const metaTags = headArgs.meta.value as MetaTag[];
 
     expect(metaTags).toEqual(
@@ -103,7 +103,7 @@ describe("useDynamicSeo composable", () => {
 
       useDynamicSeo({ title, description });
 
-      const headArgs = useHead.mock.calls[0][0];
+      const headArgs = useHead.mock.calls?.at(0)?.at(0);
       expect(headArgs.link.value).toEqual([{ rel: "canonical", href }]);
       expect(headArgs.meta.value).toEqual(
         expect.arrayContaining([{ property: "og:url", content: href }]),

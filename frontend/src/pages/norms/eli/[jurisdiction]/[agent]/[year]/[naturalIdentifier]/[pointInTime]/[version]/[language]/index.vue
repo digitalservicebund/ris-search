@@ -68,8 +68,8 @@ const metadata: Ref<LegislationWork | undefined> = computed(() => {
   return data.value?.legislationWork;
 });
 
-const html: Ref<string> = computed(() => data.value.html);
-const htmlParts = computed(() => data.value.htmlParts);
+const html = computed(() => data.value?.html);
+const htmlParts = computed(() => data.value?.htmlParts);
 
 const backendURL = useBackendURL();
 
@@ -256,11 +256,11 @@ useDynamicSeo({ title, description });
               <template #content>
                 <IncompleteDataMessage />
                 <Accordion
-                  v-if="htmlParts.officialToc"
+                  v-if="htmlParts?.officialToc"
                   header-expanded="Amtliches Inhaltsverzeichnis ausblenden"
                   header-collapsed="Amtliches Inhaltsverzeichnis einblenden"
                 >
-                  <div v-html="htmlParts.officialToc" />
+                  <div v-html="htmlParts?.officialToc" />
                 </Accordion>
                 <div v-observe-elements class="norm-view" v-html="html" />
               </template>
@@ -286,26 +286,26 @@ useDynamicSeo({ title, description });
                 />
                 <PropertiesItem
                   label="Vollzitat:"
-                  :value="htmlParts.vollzitat"
+                  :value="htmlParts?.vollzitat"
                 />
                 <PropertiesItem
                   label="Stand:"
-                  :value-list="htmlParts.standangaben"
+                  :value-list="htmlParts?.standangaben"
                 >
                 </PropertiesItem>
                 <PropertiesItem
                   label="Hinweis zum Stand:"
-                  :value-list="htmlParts.standangabenHinweis"
+                  :value-list="htmlParts?.standangabenHinweis"
                 />
                 <PropertiesItem
-                  v-if="htmlParts.prefaceContainer"
+                  v-if="htmlParts?.prefaceContainer"
                   label="Besonderer Hinweis:"
                 >
-                  <div v-html="htmlParts.prefaceContainer" />
+                  <div v-html="htmlParts?.prefaceContainer" />
                 </PropertiesItem>
                 <PropertiesItem label="Fußnoten:">
-                  <template v-if="htmlParts.headingNotes" #default>
-                    <div v-html="htmlParts.headingNotes" />
+                  <template v-if="htmlParts?.headingNotes" #default>
+                    <div v-html="htmlParts?.headingNotes" />
                   </template>
                 </PropertiesItem>
                 <PropertiesItem label="Download:">

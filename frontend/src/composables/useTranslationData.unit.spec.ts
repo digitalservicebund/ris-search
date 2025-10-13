@@ -93,8 +93,8 @@ describe("fetchTranslationAndHTML", () => {
 
     expect(error.value).toBeNull();
 
-    expect(data.value.content).toEqual(mockTranslationResponse[0]);
-    expect(data.value.html).toEqual(mockHtmlResponse);
+    expect(data.value?.content).toEqual(mockTranslationResponse[0]);
+    expect(data.value?.html).toEqual(mockHtmlResponse);
   });
 
   it("returns 404 when list is empty", async () => {

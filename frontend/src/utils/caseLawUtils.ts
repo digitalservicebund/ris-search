@@ -1,7 +1,7 @@
 import type { CaseLaw } from "~/types";
 
 export function getEncodingURL(
-  caseLaw: CaseLaw | null,
+  caseLaw: CaseLaw | null | undefined,
   backendURL: string,
   format: string,
 ) {

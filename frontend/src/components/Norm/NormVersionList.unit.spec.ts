@@ -32,7 +32,7 @@ describe("NormVersionList", () => {
       props: {
         status: "success",
         currentLegislationIdentifier:
-          data.member[1].item.workExample.legislationIdentifier,
+          data.member[1]?.item.workExample.legislationIdentifier ?? "",
         versions: data.member,
       },
       global: {
@@ -52,22 +52,22 @@ describe("NormVersionList", () => {
     const tableBodyRows = wrapper.find("tbody").findAll("tr");
     expect(tableBodyRows).toHaveLength(3);
 
-    const futureVersionRowCells = tableBodyRows[0].findAll("td");
-    expect(futureVersionRowCells.map((cell) => cell.text())).toEqual([
+    const futureVersionRowCells = tableBodyRows?.at(0)?.findAll("td");
+    expect(futureVersionRowCells?.map((cell) => cell.text())).toEqual([
       "01.01.2031",
       "-",
       "Zukünftig in Kraft",
     ]);
 
-    const currentVersionRowCells = tableBodyRows[1].findAll("td");
-    expect(currentVersionRowCells.map((cell) => cell.text())).toEqual([
+    const currentVersionRowCells = tableBodyRows?.at(1)?.findAll("td");
+    expect(currentVersionRowCells?.map((cell) => cell.text())).toEqual([
       "01.01.2020",
       "-",
       "Aktuell gültig",
     ]);
 
-    const pastVersionRowCells = tableBodyRows[2].findAll("td");
-    expect(pastVersionRowCells.map((cell) => cell.text())).toEqual([
+    const pastVersionRowCells = tableBodyRows?.at(2)?.findAll("td");
+    expect(pastVersionRowCells?.map((cell) => cell.text())).toEqual([
       "05.01.2000",
       "31.12.2019",
       "Außer Kraft",
@@ -79,7 +79,7 @@ describe("NormVersionList", () => {
       props: {
         status: "success",
         currentLegislationIdentifier:
-          data.member[1].item.workExample.legislationIdentifier,
+          data.member[1]?.item.workExample.legislationIdentifier ?? "",
         versions: data.member,
       },
       global: {
@@ -90,7 +90,7 @@ describe("NormVersionList", () => {
     });
 
     const futureVersionRow = wrapper.find("tbody").findAll("tr")[0];
-    await futureVersionRow.trigger("click");
+    await futureVersionRow?.trigger("click");
 
     expect(mockNavigateTo).toHaveBeenCalledTimes(1);
     expect(mockNavigateTo).toHaveBeenCalledWith(
@@ -103,7 +103,7 @@ describe("NormVersionList", () => {
       props: {
         status: "success",
         currentLegislationIdentifier:
-          data.member[1].item.workExample.legislationIdentifier,
+          data.member[1]?.item.workExample.legislationIdentifier ?? "",
         versions: data.member,
       },
       global: {
@@ -114,7 +114,7 @@ describe("NormVersionList", () => {
     });
 
     const futureVersionRow = wrapper.find("tbody").findAll("tr")[1];
-    await futureVersionRow.trigger("click");
+    await futureVersionRow?.trigger("click");
 
     expect(mockNavigateTo).toHaveBeenCalledTimes(0);
   });

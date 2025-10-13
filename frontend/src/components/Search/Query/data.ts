@@ -82,9 +82,16 @@ export interface RowLogicOperator {
   value: string;
 }
 
+export const andLogicOperator: RowLogicOperator = {
+  label: "und",
+  value: "AND",
+};
+
+export const orLogicOperator: RowLogicOperator = { label: "oder", value: "OR" };
+
 export const rowLogicOperators: RowLogicOperator[] = [
-  { label: "und", value: "AND" },
-  { label: "oder", value: "OR" },
+  andLogicOperator,
+  orLogicOperator,
 ];
 
 const logicOptionsDate: (SelectedLogic | SelectedLogicDateRange)[] = [

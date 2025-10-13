@@ -4,7 +4,7 @@ import { getCurrentDateInGermanyFormatted } from "~/utils/dateFormatting";
 
 export function getMostRelevantExpression(
   list: SearchResult<LegislationWork>[],
-): string | null {
+): string | null | undefined {
   if (list.length === 0) {
     return null;
   }
@@ -19,7 +19,7 @@ export function getMostRelevantExpression(
         activeExpressions,
       );
     }
-    return activeExpressions[0].legislationIdentifier;
+    return activeExpressions[0]?.legislationIdentifier;
   }
   const referenceDate = getCurrentDateInGermanyFormatted();
   const [future, past] = _.partition(
@@ -27,7 +27,7 @@ export function getMostRelevantExpression(
     (item) => item.temporalCoverage >= referenceDate,
   );
   if (future.length > 0) {
-    return _.sortBy(future, "legislationLegalForce")[0].legislationIdentifier;
+    return _.sortBy(future, "legislationLegalForce")[0]?.legislationIdentifier;
   }
   if (past.length > 0) {
     return (

@@ -41,8 +41,8 @@ describe("translations list page", async () => {
 
     const translationListElements = wrapper.findAll("h2");
     expect(translationListElements.length).toBe(2);
-    expect(translationListElements[0].text()).toBe("Act A");
-    expect(translationListElements[1].text()).toBe("Act B");
+    expect(translationListElements[0]?.text()).toBe("Act A");
+    expect(translationListElements[1]?.text()).toBe("Act B");
 
     const firstTranslationLink = wrapper.find("a[href='translations/AbC']");
     expect(firstTranslationLink.exists()).toBe(true);
@@ -59,6 +59,6 @@ describe("translations list page", async () => {
 
     const translationListElements = wrapper.findAll("h2");
     expect(translationListElements.length).toBe(2);
-    expect(translationListElements[0].text()).toBe("Act B");
+    expect(translationListElements[0]?.text()).toBe("Act B");
   });
 });
