@@ -1,5 +1,6 @@
 package de.bund.digitalservice.ris.search.service.eclicrawler;
 
+import de.bund.digitalservice.ris.search.exception.FileNotFoundException;
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.models.eclicrawler.sitemap.Sitemap;
 import de.bund.digitalservice.ris.search.models.eclicrawler.sitemap.Url;
@@ -7,7 +8,6 @@ import de.bund.digitalservice.ris.search.models.eclicrawler.sitemapindex.Sitemap
 import de.bund.digitalservice.ris.search.models.eclicrawler.sitemapindex.Sitemapindex;
 import de.bund.digitalservice.ris.search.repository.objectstorage.PortalBucket;
 import jakarta.xml.bind.JAXBException;
-import java.io.FileNotFoundException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -17,7 +17,7 @@ import org.apache.commons.collections4.ListUtils;
 import org.springframework.stereotype.Service;
 
 @Service
-public class EcliSitemapService {
+public class EcliSitemapWriter {
 
   PortalBucket portalBucket;
 
@@ -27,26 +27,18 @@ public class EcliSitemapService {
   public static final String PATH_PREFIX = "eclicrawler/";
   public static final String ROBOTS_TXT_PATH = PATH_PREFIX + "robots.txt";
 
-  public EcliSitemapService(PortalBucket portalBucket, EcliMarshaller marshaller) {
+  public EcliSitemapWriter(PortalBucket portalBucket, EcliMarshaller marshaller) {
     this.portalBucket = portalBucket;
     this.marshaller = marshaller;
   }
 
-  public List<Sitemap> writeUrlsToSitemaps(LocalDate day, List<Url> urls) throws JAXBException {
-
-    List<List<Url>> partitioned = ListUtils.partition(urls, MAX_SITEMAP_URLS);
-
-    List<Sitemap> writtenSitemaps = new ArrayList<>();
-    for (int i = 0; i < partitioned.size(); i++) {
-      int sitemapNr = i + 1;
-      Sitemap sitemap = new Sitemap();
-      sitemap.setUrl(partitioned.get(i));
-      sitemap.setName(String.format("%s/sitemap_%s.xml", getDatePartition(day), sitemapNr));
-      writeSitemap(PATH_PREFIX, sitemap);
-
-      writtenSitemaps.add(sitemap);
-    }
-    return writtenSitemaps;
+  public Sitemap writeUrlsToSitemap(LocalDate day, List<Url> urls, int sitemapNr)
+      throws JAXBException {
+    Sitemap sitemap = new Sitemap();
+    sitemap.setUrl(urls);
+    sitemap.setName(String.format("%s/sitemap_%s.xml", getDatePartition(day), sitemapNr));
+    writeSitemap(PATH_PREFIX, sitemap);
+    return sitemap;
   }
 
   public List<Sitemapindex> writeSitemapsIndices(
@@ -111,7 +103,6 @@ public class EcliSitemapService {
             User-agent: *
             Disallow: /
             User-agent: DG_JUSTICE_CRAWLER
-            Allow: /
             """;
 
     portalBucket.save(ROBOTS_TXT_PATH, header);
