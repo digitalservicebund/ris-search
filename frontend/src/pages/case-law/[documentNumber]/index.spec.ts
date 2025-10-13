@@ -336,7 +336,7 @@ describe("case law single view page", async () => {
     const zipLink = wrapper.get("[data-attr='xml-zip-view']");
     expect(zipLink).toBeTruthy();
     expect(zipLink.text()).toBe("12345 als ZIP herunterladen");
-    expect(zipLink.attributes("href")).toBe("/api/v1/case-law/12345.zip");
+    expect(zipLink.attributes("href")).toBe("/v1/case-law/12345.zip");
   });
 
   it("passes caseLaw to the CaseLawActionsMenu", async () => {

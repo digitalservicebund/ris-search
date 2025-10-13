@@ -57,7 +57,7 @@ describe("Access Token Middleware", () => {
 
     // Mock getRequestURL
     getRequestURL.mockReturnValue({
-      pathname: "/api/v1/resource",
+      pathname: "/v1/resource",
       search: "?query=test",
     });
 
@@ -83,7 +83,6 @@ describe("Access Token Middleware", () => {
         headers: {
           Accept: "application/json",
           Authorization: "Bearer valid-token",
-          "get-resources-via": "PROXY",
         },
         responseType: "stream",
       },
