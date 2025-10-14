@@ -126,10 +126,6 @@ public class OpensearchSchemaSetup {
     }
     String documentsAliasName = configurations.getDocumentsAliasName();
     if (!allAliasNames.contains(documentsAliasName)) {
-      logger.info(
-          "Debug : OpenSearch schema Step 1 complete for {}. allAliasNames is {}",
-          aliasName,
-          allAliasNames);
       createAlias(restHighLevelClient, latestIndex, documentsAliasName);
     }
   }
