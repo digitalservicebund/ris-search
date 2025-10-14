@@ -4,6 +4,7 @@ import de.bund.digitalservice.ris.search.caselawhandover.shared.caselawldml.Frbr
 import de.bund.digitalservice.ris.search.models.ldml.literature.Analysis;
 import de.bund.digitalservice.ris.search.models.ldml.literature.Classification;
 import de.bund.digitalservice.ris.search.models.ldml.literature.Doc;
+import de.bund.digitalservice.ris.search.models.ldml.literature.FrbrDate;
 import de.bund.digitalservice.ris.search.models.ldml.literature.FrbrExpression;
 import de.bund.digitalservice.ris.search.models.ldml.literature.FrbrNameValueElement;
 import de.bund.digitalservice.ris.search.models.ldml.literature.FrbrWork;
@@ -140,13 +141,15 @@ public class LiteratureLdmlToOpenSearchMapper {
   }
 
   private static LocalDate extractRecordingDate(LiteratureLdml literatureLdml) {
-    FrbrWork frbrWork = literatureLdml.getDoc().getMeta().getIdentification().getFrbrWork();
-    if (frbrWork == null
-        || frbrWork.getFrbrDate() == null
-        || frbrWork.getFrbrDate().getDate() == null) {
-      return null;
-    }
-    return DateUtils.nullSafeParseyyyyMMdd(frbrWork.getFrbrDate().getDate());
+    return Optional.ofNullable(literatureLdml)
+        .map(LiteratureLdml::getDoc)
+        .map(Doc::getMeta)
+        .map(Meta::getIdentification)
+        .map(Identification::getFrbrWork)
+        .map(FrbrWork::getFrbrDate)
+        .map(FrbrDate::getDate)
+        .map(DateUtils::nullSafeParseyyyyMMdd)
+        .orElse(null);
   }
 
   private static List<String> extractYearsOfPublication(LiteratureLdml literatureLdml) {
