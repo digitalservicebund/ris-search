@@ -109,17 +109,27 @@ public class OpensearchSchemaSetup {
             aliasName);
       }
     }
+
     List<String> allAliasNames =
         indexState.getAliases().entrySet().stream()
             .flatMap(e -> e.getValue().stream())
             .map(AliasMetadata::alias)
             .toList();
 
+    logger.info(
+        "Debug : OpenSearch schema Step 1 complete for {}. allAliasNames is {}",
+        aliasName,
+        allAliasNames);
+
     if (!allAliasNames.contains(aliasName)) {
       createAlias(restHighLevelClient, latestIndex, aliasName);
     }
     String documentsAliasName = configurations.getDocumentsAliasName();
     if (!allAliasNames.contains(documentsAliasName)) {
+      logger.info(
+          "Debug : OpenSearch schema Step 1 complete for {}. allAliasNames is {}",
+          aliasName,
+          allAliasNames);
       createAlias(restHighLevelClient, latestIndex, documentsAliasName);
     }
   }
