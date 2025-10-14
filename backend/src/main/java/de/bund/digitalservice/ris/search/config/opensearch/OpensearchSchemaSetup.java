@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.opensearch.action.admin.indices.alias.IndicesAliasesRequest;
@@ -108,7 +109,10 @@ public class OpensearchSchemaSetup {
     }
 
     List<String> lastIndexAliases =
-        indexState.getAliases().get(latestIndex).stream().map(AliasMetadata::alias).toList();
+        Optional.ofNullable(indexState.getAliases().get(latestIndex)).stream()
+            .flatMap(List::stream)
+            .map(AliasMetadata::alias)
+            .toList();
 
     if (!lastIndexAliases.contains(aliasName)) {
       createAlias(restHighLevelClient, latestIndex, aliasName);
