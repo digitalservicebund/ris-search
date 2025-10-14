@@ -33,6 +33,7 @@ public class OpensearchSchemaSetup {
 
   public void updateOpensearchSchema(RestHighLevelClient restHighLevelClient) {
     try {
+      logger.info("Updating OpenSearch schema");
       upsertTemplates(restHighLevelClient);
       GetIndexResponse indexResponse =
           restHighLevelClient.indices().get(new GetIndexRequest("*"), RequestOptions.DEFAULT);
@@ -86,6 +87,8 @@ public class OpensearchSchemaSetup {
       RestHighLevelClient restHighLevelClient, GetIndexResponse indexState, String aliasName)
       throws IOException {
 
+    logger.info("Updating OpenSearch schema for {}", aliasName);
+
     String latestIndex =
         Arrays.stream(indexState.getIndices())
             .filter(e -> e.startsWith(aliasName))
@@ -93,6 +96,7 @@ public class OpensearchSchemaSetup {
             .orElse(null);
     if (latestIndex == null) {
       latestIndex = aliasName + "_" + LocalDate.now();
+      logger.info("Creating index {}", latestIndex);
 
       boolean acknowledged =
           restHighLevelClient
@@ -123,6 +127,7 @@ public class OpensearchSchemaSetup {
   private void createAlias(
       RestHighLevelClient restHighLevelClient, String indexName, String aliasName)
       throws IOException {
+    logger.info("Creating alias '{}' for index '{}'", aliasName, indexName);
     IndicesAliasesRequest aliasRequest = new IndicesAliasesRequest();
     aliasRequest.addAliasAction(
         new IndicesAliasesRequest.AliasActions(IndicesAliasesRequest.AliasActions.Type.ADD)
