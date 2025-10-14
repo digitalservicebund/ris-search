@@ -16,6 +16,7 @@ spring-cloud-k8s = "3.3.0"
 spring-data-elasticsearch = "5.3.6"
 springdoc-openapi = "2.8.9"
 prometheus = "1.14.5"
+protobuf = "4.32.1"
 sentry = "8.16.0"
 commons-text = "1.13.1"
 junit5 = "1.4.1"
@@ -40,7 +41,7 @@ jackson-datatype-jsr310 = "2.19.1"
 jaxb-moxy = "4.0.7"
 pact = "4.6.17"
 posthog = "1.2.0"
-pebble = "3.2.3"
+pebble = "3.2.4"
 rest-assured = "5.5.5"
 
 [libraries]
@@ -88,6 +89,7 @@ jaxb-moxy-xjc = {module = "org.eclipse.persistence:org.eclipse.persistence.moxy.
 pebble = { module = "io.pebbletemplates:pebble-spring-boot-starter", version.ref = "pebble" }
 streamex = { module = 'one.util:streamex', version.ref = "streamex" }
 restassured = { module = 'io.rest-assured:rest-assured', version.ref = "rest-assured" }
+protobuf = { module= 'com.google.protobuf:protobuf-java', version.ref = "protobuf"}
 
 [plugins]
 spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }

@@ -93,6 +93,9 @@ dependencies {
     implementation(libs.pebble)
     implementation(libs.streamex)
 
+    // CVE-2024-7254
+    implementation(libs.protobuf)
+
     compileOnly(libs.lombok)
     annotationProcessor(libs.lombok)
 
