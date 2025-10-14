@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { Breadcrumb } from "primevue";
-import { DocumentKind } from "~/types";
 import ChevronRightIcon from "~icons/material-symbols/chevron-right";
 import HomeFilledIcon from "~icons/material-symbols/home";
 import HomeOutlineIcon from "~icons/material-symbols/home-outline";
@@ -11,39 +10,8 @@ export interface BreadcrumbItem {
   type?: string;
 }
 
-type BreadcrumbType = "norm" | "caselaw" | "literature";
-
 interface Props {
-  type?: BreadcrumbType;
   items?: BreadcrumbItem[];
-  title?: string;
-  basePath?: string;
-}
-
-function getItemForType(type: BreadcrumbType): BreadcrumbItem {
-  let label: string;
-  let documentKind: string;
-
-  switch (type) {
-    case "norm":
-      label = "Gesetze & Verordnungen";
-      documentKind = DocumentKind.Norm;
-      break;
-    case "caselaw":
-      label = "Gerichtsentscheidungen";
-      documentKind = DocumentKind.CaseLaw;
-      break;
-    case "literature":
-      label = "Literaturnachweise";
-      documentKind = DocumentKind.Literature;
-  }
-
-  const route = `/search?category=${documentKind}`;
-
-  return {
-    label,
-    route,
-  };
 }
 
 const props = defineProps<Props>();
@@ -55,22 +23,12 @@ const items = computed(() => {
       type: "home",
       route: "/",
     },
+    ...(props.items ?? []),
   ];
 
-  if (props.type) {
-    const item = getItemForType(props.type);
-    items.push(item);
-  }
-
-  if (props.title) {
-    items.push({
-      label: props.title,
-      route: props.basePath,
-    });
-  }
-
-  return items.concat(...(props.items ?? []));
+  return items;
 });
+
 const isHomeHovered = ref(false);
 </script>
 

@@ -12,9 +12,10 @@ import type { BreadcrumbItem } from "~/components/Ris/RisBreadcrumb.vue";
 import RisBreadcrumb from "~/components/Ris/RisBreadcrumb.vue";
 import { useDynamicSeo } from "~/composables/useDynamicSeo";
 import { useValidNormVersions } from "~/composables/useNormVersions";
-import type { Article, LegislationWork } from "~/types";
+import { type Article, DocumentKind, type LegislationWork } from "~/types";
 import { isPrototypeProfile } from "~/utils/config";
 import { parseDateGermanLocalTime } from "~/utils/dateFormatting";
+import { formatDocumentKind } from "~/utils/displayValues";
 import { parseDocument } from "~/utils/htmlParser";
 import { temporalCoverageToValidityInterval } from "~/utils/normUtils";
 import { findNodePath, tocItemsToTreeNodes } from "~/utils/tableOfContents";
@@ -96,8 +97,18 @@ function getRouteForSiblingArticle(
 const currentNodePath = findNodePath(tableOfContents.value, eId.value ?? "");
 const normTitle = computed(() => getNormTitle(norm.value));
 const normBreadcrumbTitle = computed(() => getNormBreadcrumbTitle(norm.value));
-const items: Ref<BreadcrumbItem[]> = computed(() => {
-  const list: BreadcrumbItem[] = [];
+const breadcrumbItems: Ref<BreadcrumbItem[]> = computed(() => {
+  const list: BreadcrumbItem[] = [
+    {
+      label: formatDocumentKind(DocumentKind.Norm),
+      route: `/search?category=${DocumentKind.Norm}`,
+    },
+    {
+      label: normBreadcrumbTitle.value,
+      route: normPath,
+    },
+  ];
+
   if (article.value && !article.value?.isActive) {
     list.push({
       label: [article.value.entryIntoForceDate, article.value.expiryDate].join(
@@ -114,6 +125,7 @@ const items: Ref<BreadcrumbItem[]> = computed(() => {
   );
   return list;
 });
+
 const htmlTitle = computed(() => data.value.articleHeading);
 const topNormLinkText = computed(() => {
   if (!norm.value) return "";
@@ -187,19 +199,14 @@ useDynamicSeo({ title, description });
     <div v-if="status == 'pending'" class="container">Lade ...</div>
     <template v-if="!!norm">
       <div class="container">
-        <RisBreadcrumb
-          type="norm"
-          :items="items"
-          :title="normBreadcrumbTitle"
-          :base-path="normPath"
-        />
+        <RisBreadcrumb :items="breadcrumbItems" />
         <div class="max-w-prose">
           <h1
             class="ris-heading3-bold link-hover mt-24 line-clamp-2 items-center text-blue-800"
           >
             <NuxtLink :to="normPath">
               <MdiArrowTopLeft class="inline-block" />
-              {{ topNormLinkText }} TESTING
+              {{ topNormLinkText }}
             </NuxtLink>
           </h1>
           <h2

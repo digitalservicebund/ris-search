@@ -7,6 +7,8 @@ import type { BreadcrumbItem } from "~/components/Ris/RisBreadcrumb.vue";
 import { useStaticPageSeo } from "~/composables/useStaticPageSeo";
 import { fetchTranslationList } from "~/composables/useTranslationData";
 import type { TranslationContent } from "~/composables/useTranslationData";
+import { DocumentKind } from "~/types";
+import { formatDocumentKind } from "~/utils/displayValues";
 import IconSearch from "~icons/ic/search";
 
 const searchTerm = ref("");
@@ -14,6 +16,10 @@ const activeSearchTerm = ref("");
 
 const breadcrumbItems: ComputedRef<BreadcrumbItem[]> = computed(() => {
   return [
+    {
+      label: formatDocumentKind(DocumentKind.Norm),
+      route: `/search?category=${DocumentKind.Norm}`,
+    },
     {
       label: "Translations",
       route: "/tranlsations",
@@ -78,7 +84,7 @@ useStaticPageSeo("translations-list");
   <ContentWrapper>
     <div class="container">
       <div class="flex items-center gap-8 print:hidden">
-        <RisBreadcrumb type="norm" :items="breadcrumbItems" />
+        <RisBreadcrumb :items="breadcrumbItems" />
       </div>
       <h1
         class="ris-heading2-bold max-w-title mt-24 mb-48 overflow-x-auto text-balance"

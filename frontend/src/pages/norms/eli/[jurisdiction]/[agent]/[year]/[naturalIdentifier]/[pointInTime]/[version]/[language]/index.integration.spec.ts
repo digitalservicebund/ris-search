@@ -155,10 +155,16 @@ describe("index.vue", () => {
     expect(wrapper.get(".ris-heading3-regular").text()).toBe("alternateName");
     expect(wrapper.find(".titel").text()).toBe("Sample Norm");
     expect(getBreadcrumbStub(wrapper).props("items")).toStrictEqual(
-      Array.of({
-        route: "/norms/eli/work-LEG12345",
-        label: "abbreviation",
-      }),
+      Array.of(
+        {
+          label: "Gesetze & Verordnungen",
+          route: "/search?category=N",
+        },
+        {
+          label: "abbreviation",
+          route: "/norms/eli/work-LEG12345",
+        },
+      ),
     );
   });
 
@@ -178,10 +184,16 @@ describe("index.vue", () => {
     expect(wrapper.find(".ris-heading2-regular").exists()).toBe(false);
     expect(wrapper.find(".titel").text()).toBe("alternateName");
     expect(getBreadcrumbStub(wrapper).props("items")).toStrictEqual(
-      Array.of({
-        route: "/norms/eli/work-LEG12345",
-        label: "abbreviation",
-      }),
+      Array.of(
+        {
+          label: "Gesetze & Verordnungen",
+          route: "/search?category=N",
+        },
+        {
+          route: "/norms/eli/work-LEG12345",
+          label: "abbreviation",
+        },
+      ),
     );
   });
 
@@ -198,10 +210,16 @@ describe("index.vue", () => {
     expect(wrapper.find(".ris-heading2-regular").exists()).toBe(false);
     expect(wrapper.find(".titel").text()).toBe("abbreviation");
     expect(getBreadcrumbStub(wrapper).props("items")).toStrictEqual(
-      Array.of({
-        route: "/norms/eli/work-LEG12345",
-        label: "abbreviation",
-      }),
+      Array.of(
+        {
+          label: "Gesetze & Verordnungen",
+          route: "/search?category=N",
+        },
+        {
+          route: "/norms/eli/work-LEG12345",
+          label: "abbreviation",
+        },
+      ),
     );
   });
 

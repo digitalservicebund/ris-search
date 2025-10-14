@@ -12,7 +12,7 @@ useStaticPageSeo("ueber");
   <StaticPageWrapper>
     <main class="space-y-48">
       <section class="max-w-prose">
-        <RisBreadcrumb title="Über den Service" base-path="/" />
+        <RisBreadcrumb :items="[{ label: 'Über den Service' }]" />
         <PageHeader
           class="pb-8"
           title="Rechtsinformationen zentral an einem Ort"

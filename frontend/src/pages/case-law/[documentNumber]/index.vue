@@ -24,9 +24,10 @@ import {
   tabStyles,
 } from "~/components/Tabs.styles";
 import { useBackendURL } from "~/composables/useBackendURL";
-import type { CaseLaw } from "~/types";
+import { type CaseLaw, DocumentKind } from "~/types";
 import { getEncodingURL } from "~/utils/caseLawUtils";
 import { dateFormattedDDMMYYYY } from "~/utils/dateFormatting";
+import { formatDocumentKind } from "~/utils/displayValues";
 import { getAllSectionsFromHtml, parseDocument } from "~/utils/htmlParser";
 import { removeOuterParentheses, truncateAtWord } from "~/utils/textFormatting";
 import IcBaselineSubject from "~icons/ic/baseline-subject";
@@ -131,6 +132,17 @@ const title = computed(() => {
     : undefined;
 });
 
+const breadcrumbItems = computed(() => [
+  {
+    label: formatDocumentKind(DocumentKind.CaseLaw),
+    route: `/search?category=${DocumentKind.CaseLaw}`,
+  },
+  {
+    label:
+      removeOuterParentheses(caseLaw.value?.headline) || emptyTitlePlaceholder,
+  },
+]);
+
 if (metadataError?.value) {
   showError(metadataError.value);
 }
@@ -144,13 +156,7 @@ if (contentError?.value) {
     <div v-if="status == 'pending'" class="container">Lade ...</div>
     <div v-if="!!caseLaw" class="container text-left">
       <div class="flex items-center gap-8 print:hidden">
-        <RisBreadcrumb
-          class="grow"
-          type="caselaw"
-          :title="
-            removeOuterParentheses(caseLaw.headline) || emptyTitlePlaceholder
-          "
-        />
+        <RisBreadcrumb :items="breadcrumbItems" class="grow" />
         <CaseLawActionsMenu :case-law="caseLaw" />
       </div>
       <RisDocumentTitle :title="title" :placeholder="emptyTitlePlaceholder" />

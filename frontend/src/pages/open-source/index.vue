@@ -11,7 +11,7 @@ useStaticPageSeo("opensource");
 <template>
   <StaticPageWrapper>
     <template #breadcrumb>
-      <RisBreadcrumb title="Open Source" base-path="/" />
+      <RisBreadcrumb :items="[{ label: 'Open Source' }]" />
     </template>
     <PageHeader title="Open Source" />
     <div class="flex flex-col gap-32">

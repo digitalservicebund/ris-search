@@ -17,7 +17,8 @@ import {
 } from "~/components/Tabs.styles";
 import { useBackendURL } from "~/composables/useBackendURL";
 import LiteratureMetadata from "~/pages/literature/[documentNumber]/LiteratureMetadata.vue";
-import type { Literature } from "~/types";
+import { DocumentKind, type Literature } from "~/types";
+import { formatDocumentKind } from "~/utils/displayValues";
 import IcBaselineSubject from "~icons/ic/baseline-subject";
 import IcOutlineInfo from "~icons/ic/outline-info";
 
@@ -50,6 +51,16 @@ const title = computed(() => {
   );
 });
 
+const breadcrumbItems = computed(() => [
+  {
+    label: formatDocumentKind(DocumentKind.Literature),
+    route: `/search?category=${DocumentKind.CaseLaw}`,
+  },
+  {
+    label: title.value ?? emptyTitlePlaceholder,
+  },
+]);
+
 if (metadataError?.value) {
   showError(metadataError.value);
 }
@@ -63,11 +74,7 @@ if (contentError?.value) {
     <div v-if="status == 'pending'" class="container">Lade ...</div>
     <div v-if="!!literature" class="container text-left">
       <div class="flex items-center gap-8 print:hidden">
-        <RisBreadcrumb
-          class="grow"
-          type="literature"
-          :title="title ?? emptyTitlePlaceholder"
-        />
+        <RisBreadcrumb :items="breadcrumbItems" class="grow" />
       </div>
       <RisDocumentTitle :title="title" :placeholder="emptyTitlePlaceholder" />
       <LiteratureMetadata

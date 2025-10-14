@@ -11,7 +11,7 @@ useStaticPageSeo("barrierefreiheit");
 <template>
   <StaticPageWrapper>
     <template #breadcrumb>
-      <RisBreadcrumb title="Barrierefreiheit" base-path="/" />
+      <RisBreadcrumb :items="[{ label: 'Barrierefreiheit' }]" />
     </template>
     <PageHeader title="Erklärung zur Barrierefreiheit" />
     <div class="max-w-prose space-y-64">

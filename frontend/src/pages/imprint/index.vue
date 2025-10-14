@@ -10,7 +10,7 @@ useStaticPageSeo("impressum");
 <template>
   <StaticPageWrapper>
     <template #breadcrumb>
-      <RisBreadcrumb title="Impressum" base-path="/" />
+      <RisBreadcrumb :items="[{ label: 'Impressum' }]" />
     </template>
     <PageHeader title="Impressum" />
     <div class="flex flex-col gap-32">

@@ -11,7 +11,7 @@ useStaticPageSeo("kontakt");
 <template>
   <StaticPageWrapper>
     <template #breadcrumb>
-      <RisBreadcrumb title="Kontakt" base-path="/" />
+      <RisBreadcrumb :items="[{ label: 'Kontakt' }]" />
     </template>
     <PageHeader title="Kontakt" />
     <div class="mb-80">
