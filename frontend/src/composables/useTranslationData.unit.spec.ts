@@ -23,10 +23,6 @@ beforeEach(() => {
   requestFetchMock.mockReset();
 });
 
-vi.mock("~/composables/useDate", () => ({
-  getCurrentDateInGermanyFormatted: () => "2025-10-13",
-}));
-
 describe("fetchTranslationList", () => {
   it("returns a list when there is no error", async () => {
     const mockTranslationListData: TranslationContent[] = [
@@ -150,6 +146,14 @@ describe("fetchTranslationAndHTML", () => {
 });
 
 describe("getGermanOriginal", () => {
+  beforeAll(() => {
+    vi.setSystemTime(new Date("2025-10-13T00:00:00.000Z"));
+  });
+
+  afterAll(() => {
+    vi.useRealTimers();
+  });
+
   it("returns first legislation work when API returns results", async () => {
     const mockResult = { id: "abc123" };
     requestFetchMock.mockResolvedValueOnce({ member: [mockResult] });
