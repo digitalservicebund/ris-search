@@ -82,6 +82,32 @@
         "outline": {
           "type": "text",
           "analyzer": "custom_german_analyzer"
+        },
+        "articles": {
+          "type": "nested",
+          "properties": {
+            "eid": {
+              "type": "text"
+            },
+            "guid": {
+              "type": "text"
+            },
+            "name": {
+              "type": "text",
+              "analyzer": "custom_german_analyzer"
+            },
+            "text": {
+              "type": "text",
+              "analyzer": "custom_german_analyzer",
+              "index_options": "offsets"
+            },
+            "entry_into_force_date": {
+              "type": "date"
+            },
+            "expiry_date": {
+              "type": "date"
+            }
+          }
         }
       }
     }
