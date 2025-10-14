@@ -83,3 +83,7 @@ export function removePrefix(str: string, prefix: string): string {
   }
   return str;
 }
+
+export function formatArrayProperty(property: string[]): string {
+  return property.join(", ") || "-";
+}

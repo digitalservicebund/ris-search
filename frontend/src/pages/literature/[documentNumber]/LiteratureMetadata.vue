@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import MetadataField from "~/components/MetadataField.vue";
+import { formatArrayProperty } from "~/utils/textFormatting";
 
 interface Props {
   documentTypes: string[];
@@ -25,10 +26,6 @@ const author = computed(() => {
 const yearOfPublication = computed(() =>
   formatArrayProperty(props.yearsOfPublication),
 );
-
-function formatArrayProperty(property: string[]): string {
-  return property.join(", ") || "-";
-}
 </script>
 
 <template>
