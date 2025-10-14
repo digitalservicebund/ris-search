@@ -23,7 +23,7 @@
 
 	<!-- always render main title if it exists -->
 	<xsl:template match="akn:FRBRalias[@name='haupttitel']">
-		<h1 id="title"><xsl:value-of select="@value"/></h1>
+		<h1><xsl:value-of select="@value"/></h1>
 	</xsl:template>
 
 	<!-- render documentary title differently based on main title existence -->
@@ -31,10 +31,10 @@
 		<xsl:variable name="haupttitelExists" select="../akn:FRBRalias[@name='haupttitel']/@value"/>
 		<xsl:choose>
 			<xsl:when test="$haupttitelExists">
-				<h3 id="dokumentarischerTitel"><xsl:value-of select="@value"/></h3>
+				<h3><xsl:value-of select="@value"/></h3>
 			</xsl:when>
 			<xsl:otherwise>
-				<h1 id="title"><xsl:value-of select="@value"/></h1>
+				<h1><xsl:value-of select="@value"/></h1>
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
