@@ -218,7 +218,7 @@ class CaseLawControllerApiTest extends ContainersIntegrationBase {
   }
 
   @ParameterizedTest
-  @CsvSource({",/v1/case-law/", "PROXY,/api/v1/case-law/"})
+  @CsvSource({",/v1/case-law/"})
   @DisplayName("Html endpoint should adapt img src paths")
   void shouldReturnHtmlWithAdaptedImgSrcAttributes(String header, String expectedPrefix)
       throws Exception {

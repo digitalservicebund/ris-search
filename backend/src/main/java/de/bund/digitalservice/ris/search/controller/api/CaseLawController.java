@@ -6,7 +6,6 @@ import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.exception.FileNotFoundException;
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.mapper.CaseLawSchemaMapper;
-import de.bund.digitalservice.ris.search.models.api.parameters.ResourceReferenceMode;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import de.bund.digitalservice.ris.search.schema.CaseLawSchema;
 import de.bund.digitalservice.ris.search.service.CaseLawService;
@@ -29,7 +28,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
@@ -77,17 +75,9 @@ public class CaseLawController {
   @ApiResponse(responseCode = "200")
   @ApiResponse(responseCode = "404", content = @Content)
   public ResponseEntity<String> getCaseLawDocumentationUnitAsHtml(
-      @Parameter(example = "STRE201770751") @PathVariable String documentNumber,
-      @RequestHeader(
-              name = ApiConfig.Headers.GET_RESOURCES_VIA,
-              required = false,
-              defaultValue = ResourceReferenceMode.DEFAULT_VALUE)
-          @Parameter(
-              description =
-                  "Used to select a different prefix for referenced resources, like images. Selecting 'PROXY' will prepend `/api`. Otherwise, the API base URL will be used.")
-          ResourceReferenceMode resourceReferenceMode)
+      @Parameter(example = "STRE201770751") @PathVariable String documentNumber)
       throws ObjectStoreServiceException {
-    final String resourcePath = getResourceBasePath(resourceReferenceMode, documentNumber);
+    final String resourcePath = getResourceBasePath(documentNumber);
     Optional<byte[]> bytes = caseLawService.getFileByDocumentNumber(documentNumber);
 
     if (bytes.isPresent()) {
@@ -177,16 +167,12 @@ public class CaseLawController {
   }
 
   /**
-   * Controls how resources like images will be referenced. For example, they might be accessed
-   * through an API endpoint in local development, but served via a CDN in production.
+   * Controls how resources like images will be referenced.
    *
-   * @param mode Controls which static prefix will be returned.
+   * @param documentNumber parent Document that resources belong to
    * @return The prefix to use when returning references to resources.
    */
-  private String getResourceBasePath(ResourceReferenceMode mode, String documentNumber) {
-    return switch (mode) {
-      case API -> ApiConfig.Paths.CASELAW + "/" + documentNumber + "/";
-      case PROXY -> "/api" + ApiConfig.Paths.CASELAW + "/" + documentNumber + "/";
-    };
+  private String getResourceBasePath(String documentNumber) {
+    return ApiConfig.Paths.CASELAW + "/" + documentNumber + "/";
   }
 }
