@@ -33,10 +33,17 @@ class LiteratureLdmlToOpensearchMapperIntergrationTest {
     assertThat(literatureUnwrapped.independentReferences())
         .containsExactly("Titel einer Fundstelle 1979, 1298-1300");
     assertThat(literatureUnwrapped.mainTitle()).isEqualTo("Literatur Test Dokument");
+    assertThat(literatureUnwrapped.mainTitleAdditions()).isEqualTo("Titelzusatz");
     assertThat(literatureUnwrapped.documentaryTitle()).isEqualTo("Dokumentarischer Titel");
     assertThat(literatureUnwrapped.authors())
         .containsExactly("Mustermann, Max", "Musterfrau, Susanne");
     assertThat(literatureUnwrapped.collaborators()).containsExactly("Foo, Peter");
+    assertThat(literatureUnwrapped.originators()).containsExactly("FOO");
+    assertThat(literatureUnwrapped.conferenceNotes())
+        .containsExactly("Internationaler Kongreß für das Recht, 1991, Athen, GRC");
+    assertThat(literatureUnwrapped.languages()).containsExactly("deu");
+    assertThat(literatureUnwrapped.normReferences())
+        .containsExactly("GG, Art 6 Abs 2 S 1, 1949-05-23");
     assertThat(literatureUnwrapped.shortReport())
         .isEqualTo(
             "1. Dies ist ein literature LDML Dokument für Tests. Es werden sub und sup Elemente unterstützt. Außerdem gib es noch EM, hlj, noindex und strong.");

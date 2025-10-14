@@ -34,7 +34,7 @@ public record Literature(
     @ElementCollection @Field(name = Fields.COLLABORATORS) List<String> collaborators,
     @ElementCollection @Field(name = Fields.LANGUAGE) List<String> languages,
     @ElementCollection @Field(name = Fields.ORIGINATOR) List<String> originators,
-    @ElementCollection @Field(name = Fields.NORM) List<String> norms,
+    @ElementCollection @Field(name = Fields.NORM) List<String> normReferences,
     @ElementCollection @Field(name = Fields.CONFERENCE_NOTE) List<String> conferenceNotes,
     @Nullable @Field(name = Fields.SHORT_REPORT) String shortReport,
     @Nullable @Field(name = Fields.OUTLINE) String outline,

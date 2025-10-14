@@ -9,8 +9,6 @@ import java.time.LocalDate;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 
@@ -132,63 +130,49 @@ class LiteratureLdmlToOpenSearchMapperTest {
     assertThat(literature.documentTypes()).containsExactly("Auf");
   }
 
-  @ParameterizedTest
-  @CsvSource(
-      delimiter = '|',
-      value = {
-        "<ris:fundstelleUnselbstaendig zitatstelle=\"1982, 122\"/>| 1982, 122",
-        "<ris:fundstelleUnselbstaendig periodikum=\"RdA\"/>| RdA",
-        "<ris:fundstelleUnselbstaendig periodikum=\"RdA\" zitatstelle=\"1982, 122\"/>| RdA 1982, 122"
-      })
+  @Test
   @DisplayName("Extracts and sets dependent reference")
-  void extractsDependentReference(String fundstelle, String expected) {
+  void extractsDependentReference() {
     String literatureLdml =
-        String.format(
-                """
-                                  <akn:akomaNtoso xmlns:akn="http://docs.oasis-open.org/legaldocml/ns/akn/3.0"
-                                   xmlns:ris="http://ldml.neuris.de/literature/unselbstaendig/metadata/">
-                                   <akn:doc name="offene-struktur">
-                                     <akn:meta>
-                                         <akn:identification>
-                                           <akn:FRBRExpression>
-                                             <akn:FRBRalias name="documentNumber" value="BJLU002758328" />
-                                           </akn:FRBRExpression>
-                                         </akn:identification>
-                                        <akn:analysis source="attributsemantik-noch-undefiniert">
-                                          <akn:otherReferences source="attributsemantik-noch-undefiniert">
-                                            <akn:implicitReference showAs="">
-                                              %s
-                                            </akn:implicitReference>
-                                          </akn:otherReferences>
-                                        </akn:analysis>
-                                     </akn:meta>
-                                   </akn:doc>
-                                 </akn:akomaNtoso>
-                                 """,
-                fundstelle)
+        """
+                 <akn:akomaNtoso xmlns:akn="http://docs.oasis-open.org/legaldocml/ns/akn/3.0"
+                   xmlns:ris="http://ldml.neuris.de/literature/metadata/">
+                     <akn:doc name="offene-struktur">
+                       <akn:meta>
+                           <akn:identification>
+                             <akn:FRBRExpression>
+                               <akn:FRBRalias name="documentNumber" value="BJLU002758328" />
+                             </akn:FRBRExpression>
+                           </akn:identification>
+                          <akn:analysis source="attributsemantik-noch-undefiniert">
+                            <akn:otherReferences source="attributsemantik-noch-undefiniert">
+                              <akn:implicitReference showAs="2024, 123">
+                                <ris:fundstelleUnselbstaendig zitatstelle="2024, 123"/>
+                              </akn:implicitReference>
+                              <akn:implicitReference showAs="RdA 1982, 122">
+                                <ris:fundstelleUnselbstaendig periodikum="RdA" zitatstelle="1982, 122"/>
+                              </akn:implicitReference>
+                            </akn:otherReferences>
+                          </akn:analysis>
+                       </akn:meta>
+                     </akn:doc>
+                 </akn:akomaNtoso>
+                 """
             .stripIndent();
 
     Literature literature = LiteratureLdmlToOpenSearchMapper.mapLdml(literatureLdml).get();
 
     var dependentReferences = literature.dependentReferences();
-    assertThat(dependentReferences).hasSize(1).containsExactly(expected);
+    assertThat(dependentReferences).hasSize(2).containsExactly("2024, 123", "RdA 1982, 122");
   }
 
-  @ParameterizedTest
-  @CsvSource(
-      delimiter = '|',
-      value = {
-        "<ris:fundstelleSelbstaendig zitatstelle=\"1982, 122\"/>| 1982, 122",
-        "<ris:fundstelleSelbstaendig titel=\"Foo\"/>| Foo",
-        "<ris:fundstelleSelbstaendig titel=\"Foo\" zitatstelle=\"1982, 122\"/>| Foo 1982, 122"
-      })
+  @Test
   @DisplayName("Extracts and sets independent reference")
-  void extractsIndependentReference(String fundstelle, String expected) {
+  void extractsIndependentReference() {
     String literatureLdml =
-        String.format(
-                """
-                   <akn:akomaNtoso xmlns:akn="http://docs.oasis-open.org/legaldocml/ns/akn/3.0"
-                  xmlns:ris="http://ldml.neuris.de/literature/unselbstaendig/metadata/">
+        """
+                  <akn:akomaNtoso xmlns:akn="http://docs.oasis-open.org/legaldocml/ns/akn/3.0"
+                  xmlns:ris="http://ldml.neuris.de/literature/metadata/">
                    <akn:doc name="offene-struktur">
                      <akn:meta>
                          <akn:identification>
@@ -198,22 +182,24 @@ class LiteratureLdmlToOpenSearchMapperTest {
                          </akn:identification>
                         <akn:analysis source="attributsemantik-noch-undefiniert">
                           <akn:otherReferences source="attributsemantik-noch-undefiniert">
-                            <akn:implicitReference showAs="">
-                              %s
+                            <akn:implicitReference showAs="2023, 432">
+                              <ris:fundstelleSelbstaendig zitatstelle="2023, 432"/>
+                            </akn:implicitReference>
+                            <akn:implicitReference showAs="Foo 1982, 122">
+                              <ris:fundstelleSelbstaendig titel="Foo" zitatstelle="1982, 122"/>
                             </akn:implicitReference>
                           </akn:otherReferences>
                         </akn:analysis>
                      </akn:meta>
                    </akn:doc>
                  </akn:akomaNtoso>
-                 """,
-                fundstelle)
+                 """
             .stripIndent();
 
     Literature literature = LiteratureLdmlToOpenSearchMapper.mapLdml(literatureLdml).get();
 
     var independentReferences = literature.independentReferences();
-    assertThat(independentReferences).hasSize(1).containsExactly(expected);
+    assertThat(independentReferences).hasSize(2).containsExactly("2023, 432", "Foo 1982, 122");
   }
 
   @Test
@@ -242,6 +228,35 @@ class LiteratureLdmlToOpenSearchMapperTest {
     Literature literature = LiteratureLdmlToOpenSearchMapper.mapLdml(literatureLdml).get();
 
     assertThat(literature.mainTitle()).isEqualTo("This is a long title");
+  }
+
+  @Test
+  @DisplayName("Extracts and sets main title additions")
+  void extractsAndSetsMainTitleAdditions() {
+    String literatureLdml =
+        """
+                  <akn:akomaNtoso xmlns:akn="http://docs.oasis-open.org/legaldocml/ns/akn/3.0"
+                   xmlns:ris="http://ldml.neuris.de/literature/metadata/">
+                   <akn:doc name="offene-struktur">
+                     <akn:meta>
+                         <akn:identification>
+                           <akn:FRBRWork>
+                              <akn:FRBRalias name="haupttitel" value="This is a long title"/>
+                              <akn:FRBRalias name="hauptsachtitelZusatz" value="Some additional infos"/>
+                           </akn:FRBRWork>
+                           <akn:FRBRExpression>
+                             <akn:FRBRalias name="documentNumber" value="BJLU002758328" />
+                           </akn:FRBRExpression>
+                         </akn:identification>
+                     </akn:meta>
+                   </akn:doc>
+                 </akn:akomaNtoso>
+                 """
+            .stripIndent();
+
+    Literature literature = LiteratureLdmlToOpenSearchMapper.mapLdml(literatureLdml).get();
+
+    assertThat(literature.mainTitleAdditions()).isEqualTo("Some additional infos");
   }
 
   @Test
@@ -340,6 +355,157 @@ class LiteratureLdmlToOpenSearchMapperTest {
 
     var collaborators = literature.collaborators();
     assertThat(collaborators).hasSize(2).containsExactly("Foo, Peter", "Bar, Janine");
+  }
+
+  @Test
+  @DisplayName("Extracts and sets originators")
+  void extractsAndSetsOriginators() {
+    String literatureLdml =
+        """
+            <akn:akomaNtoso xmlns:akn="http://docs.oasis-open.org/legaldocml/ns/akn/3.0"
+             xmlns:ris="http://ldml.neuris.de/literature/metadata/">
+             <akn:doc name="offene-struktur">
+               <akn:meta>
+                   <akn:identification>
+                    <akn:FRBRWork>
+                      <akn:FRBRauthor as="#urheber" href="#dgb-urheber-1"/>
+                      <akn:FRBRauthor as="#urheber" href="#foo-urheber-2"/>
+                    </akn:FRBRWork>
+                    <akn:FRBRExpression>
+                      <akn:FRBRalias name="documentNumber" value="BJLU002758328" />
+                     </akn:FRBRExpression>
+                   </akn:identification>
+                   <akn:references source="attributsemantik-noch-undefiniert">
+                        <akn:TLCOrganization eId="dgb-urheber-1" href="akn/ontology/organizations/de/dgb" ris:name="DGB" ris:zusatz="Bundesausschuß" showAs="DGB, Bundesauschuß"/>
+                        <akn:TLCOrganization eId="foo-urheber-2" href="akn/ontology/organizations/de/foo" ris:name="FOO" ris:zusatz="Foofaafee" showAs="FOO, Foofaafee"/>
+                        <akn:TLCRole eId="urheber" href="akn/ontology/roles/de/urheber" showAs="Urheber"/>
+                      </akn:references>
+                 </akn:meta>
+               </akn:doc>
+             </akn:akomaNtoso>
+             """
+            .stripIndent();
+
+    Literature literature = LiteratureLdmlToOpenSearchMapper.mapLdml(literatureLdml).get();
+
+    var originators = literature.originators();
+    assertThat(originators).hasSize(2).containsExactly("DGB", "FOO");
+  }
+
+  @Test
+  @DisplayName("Extracts and sets conference notes")
+  void extractsAndSetsConferenceNotes() {
+    String literatureLdml =
+        """
+            <akn:akomaNtoso xmlns:akn="http://docs.oasis-open.org/legaldocml/ns/akn/3.0"
+             xmlns:ris="http://ldml.neuris.de/literature/metadata/">
+             <akn:doc name="offene-struktur">
+               <akn:meta>
+                   <akn:identification>
+                    <akn:FRBRWork>
+                      <akn:FRBRauthor as="#kongress" href="#foo-kongress-1"/>
+                      <akn:FRBRauthor as="#kongress" href="#bar-kongress-2"/>
+                    </akn:FRBRWork>
+                    <akn:FRBRExpression>
+                      <akn:FRBRalias name="documentNumber" value="BJLU002758328" />
+                     </akn:FRBRExpression>
+                   </akn:identification>
+                   <akn:references source="attributsemantik-noch-undefiniert">
+                      <akn:TLCEvent eId="foo-kongress-1" href="akn/ontology/organizations/de/kongress"
+                          ris:name="Internationaler Kongreß für das Recht"
+                          ris:jahr="1991"
+                          ris:ort="Athen"
+                          ris:land="GRC"
+                          showAs="Internationaler Kongreß für das Recht, 1991, Athen, GRC"
+                      />
+                      <akn:TLCEvent eId="bar-kongress-2" href="akn/ontology/organizations/de/kongress"
+                          ris:name="Kongreß für Bar"
+                          ris:jahr="2024"
+                          ris:ort="Berlin"
+                          ris:land="GER"
+                          showAs="Kongreß für Bar, 2024, Berlin, GER"
+                      />
+                      <akn:TLCRole eId="kongress" href="akn/ontology/roles/de/kongress" showAs="Kongress"/>
+                      </akn:references>
+                 </akn:meta>
+               </akn:doc>
+             </akn:akomaNtoso>
+             """
+            .stripIndent();
+
+    Literature literature = LiteratureLdmlToOpenSearchMapper.mapLdml(literatureLdml).get();
+
+    var conferenceNotes = literature.conferenceNotes();
+    assertThat(conferenceNotes)
+        .hasSize(2)
+        .containsExactly(
+            "Internationaler Kongreß für das Recht, 1991, Athen, GRC",
+            "Kongreß für Bar, 2024, Berlin, GER");
+  }
+
+  @Test
+  @DisplayName("Extracts and sets languages")
+  void extractsAndSetsLanguages() {
+    String literatureLdml =
+        """
+            <akn:akomaNtoso xmlns:akn="http://docs.oasis-open.org/legaldocml/ns/akn/3.0">
+              <akn:doc name="offene-struktur">
+                <akn:meta>
+                  <akn:identification>
+                    <akn:FRBRExpression>
+                      <akn:FRBRalias name="documentNumber" value="BJLU002758328" />
+                      <akn:FRBRlanguage language="deu"/>
+                      <akn:FRBRlanguage language="eng"/>
+                    </akn:FRBRExpression>
+                  </akn:identification>
+                </akn:meta>
+              </akn:doc>
+            </akn:akomaNtoso>
+            """
+            .stripIndent();
+
+    Literature literature = LiteratureLdmlToOpenSearchMapper.mapLdml(literatureLdml).get();
+
+    var languages = literature.languages();
+    assertThat(languages).hasSize(2).containsExactly("deu", "eng");
+  }
+
+  @Test
+  @DisplayName("Extracts and sets norm reference")
+  void extractsAndSetsNormReference() {
+    String literatureLdml =
+        """
+                             <akn:akomaNtoso xmlns:akn="http://docs.oasis-open.org/legaldocml/ns/akn/3.0"
+                               xmlns:ris="http://ldml.neuris.de/literature/metadata/">
+                                 <akn:doc name="offene-struktur">
+                                   <akn:meta>
+                                       <akn:identification>
+                                         <akn:FRBRExpression>
+                                           <akn:FRBRalias name="documentNumber" value="BJLU002758328" />
+                                         </akn:FRBRExpression>
+                                       </akn:identification>
+                                      <akn:analysis source="attributsemantik-noch-undefiniert">
+                                        <akn:otherReferences source="attributsemantik-noch-undefiniert">
+                                           <akn:implicitReference showAs="BMV-Ä">
+                                             <ris:normReference abbreviation="BMV-Ä" />
+                                           </akn:implicitReference>
+                                           <akn:implicitReference showAs="GG, Art 6 Abs 2 S 1, 1949-05-23">
+                                             <ris:normReference abbreviation="GG" dateOfVersion="1949-05-23" singleNorm="Art 6 Abs 2 S 1"/>
+                                           </akn:implicitReference>
+                                        </akn:otherReferences>
+                                      </akn:analysis>
+                                   </akn:meta>
+                                 </akn:doc>
+                             </akn:akomaNtoso>
+                             """
+            .stripIndent();
+
+    Literature literature = LiteratureLdmlToOpenSearchMapper.mapLdml(literatureLdml).get();
+
+    var normReferences = literature.normReferences();
+    assertThat(normReferences)
+        .hasSize(2)
+        .containsExactly("BMV-Ä", "GG, Art 6 Abs 2 S 1, 1949-05-23");
   }
 
   @Test
@@ -473,9 +639,14 @@ class LiteratureLdmlToOpenSearchMapperTest {
     assertThat(literature.independentReferences()).isEmpty();
     assertThat(literature.yearsOfPublication()).isEmpty();
     assertThat(literature.mainTitle()).isNull();
+    assertThat(literature.mainTitleAdditions()).isNull();
     assertThat(literature.documentaryTitle()).isNull();
     assertThat(literature.authors()).isEmpty();
     assertThat(literature.collaborators()).isEmpty();
+    assertThat(literature.originators()).isEmpty();
+    assertThat(literature.conferenceNotes()).isEmpty();
+    assertThat(literature.languages()).isEmpty();
+    assertThat(literature.normReferences()).isEmpty();
     assertThat(literature.shortReport()).isNull();
     assertThat(literature.outline()).isNull();
   }
