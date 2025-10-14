@@ -9,4 +9,10 @@ public class References {
 
   @XmlElement(name = "TLCPerson", namespace = LiteratureNamespaces.AKN_NS)
   private List<TlcPerson> tlcPersons;
+
+  @XmlElement(name = "TLCOrganization", namespace = LiteratureNamespaces.AKN_NS)
+  private List<TlcOrganization> tlcOrganizations;
+
+  @XmlElement(name = "TLCEvent", namespace = LiteratureNamespaces.AKN_NS)
+  private List<TlcEvent> tlcEvents;
 }

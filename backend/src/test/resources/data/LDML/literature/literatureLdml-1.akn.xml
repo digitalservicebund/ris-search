@@ -63,7 +63,7 @@
             <akn:references source="attributsemantik-noch-undefiniert">
                 <akn:TLCPerson eId="mustermann-max-verfasser-1" href="akn/ontology/persons/de/mustermann-max" ris:name="Mustermann, Max" showAs="Mustermann, Max"/>
                 <akn:TLCPerson eId="musterfrau-susanne-verfasser-2" href="" ris:titel="Prof Dr" ris:name="Musterfrau, Susanne"/>
-                <akn:TLCPerson eId="foo-peter-mitarbeiter-1" href=""  ris:titel="Dr" ris:name="Foo, Peter"/>
+                <akn:TLCPerson eId="foo-peter-mitarbeiter-1" href="" ris:titel="Dr" ris:name="Foo, Peter"/>
                 <akn:TLCOrganization eId="foo-urheber-1" href="akn/ontology/organizations/de/foo" ris:name="FOO" ris:zusatz="Foofaafee" showAs="FOO, Foofaafee"/>
                 <akn:TLCEvent eId="foo-kongress-1" href="akn/ontology/organizations/de/kongress"
                               ris:name="Internationaler Kongreß für das Recht"

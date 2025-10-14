@@ -27,9 +27,9 @@ class LiteratureLdmlToOpensearchMapperIntergrationTest {
     assertThat(literatureUnwrapped.documentNumber()).isEqualTo("ABCD0000000001");
     assertThat(literatureUnwrapped.yearsOfPublication()).containsExactly("2025");
     assertThat(literatureUnwrapped.documentTypes()).containsExactly("Auf", "Foo");
-    assertThat(literatureUnwrapped.dependentReferences()).containsExactly("BB 1979, 1298-1300");
+    assertThat(literatureUnwrapped.dependentReferences()).containsExactly("BB, 1979, 1298-1300");
     assertThat(literatureUnwrapped.independentReferences())
-        .containsExactly("Titel einer Fundstelle 1979, 1298-1300");
+        .containsExactly("Titel einer Fundstelle, 1979, 1298-1300");
     assertThat(literatureUnwrapped.mainTitle()).isEqualTo("Literatur Test Dokument");
     assertThat(literatureUnwrapped.mainTitleAdditions()).isEqualTo("Titelzusatz");
     assertThat(literatureUnwrapped.documentaryTitle()).isEqualTo("Dokumentarischer Titel");
