@@ -104,6 +104,11 @@ jobs:
         run: |
           if grep -qE 'HIGH|CRITICAL' trivy-results.sarif; then
             echo "Vulnerabilities found"
+            echo "### Found vulnerabilities in trivy results" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            RESULT=$(cat trivy-results.sarif | jq -r '[.runs[].results[].message.text] | join("\\n\\n")')
+            echo -e $RESULT >> $GITHUB_STEP_SUMMARY
+            echo -e $RESULT
             exit 1
           else
             echo "No significant vulnerabilities found"
