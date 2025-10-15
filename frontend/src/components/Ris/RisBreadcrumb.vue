@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Breadcrumb } from "primevue";
+import { NuxtLink } from "#components";
 import ChevronRightIcon from "~icons/material-symbols/chevron-right";
 import HomeFilledIcon from "~icons/material-symbols/home";
 import HomeOutlineIcon from "~icons/material-symbols/home-outline";
@@ -35,7 +36,7 @@ const isHomeHovered = ref(false);
 <template>
   <Breadcrumb :model="items" aria-label="Pfadnavigation">
     <template #item="{ item, props: breadcrumbProps }">
-      <router-link
+      <NuxtLink
         v-if="item.route && item != items[items.length - 1]"
         v-slot="{ href, navigate }"
         :to="item.route"
@@ -66,7 +67,7 @@ const isHomeHovered = ref(false);
             {{ item.label }}
           </span>
         </a>
-      </router-link>
+      </NuxtLink>
       <span v-else class="ris-body2-regular line-clamp-1 text-gray-900">{{
         item.label
       }}</span>
