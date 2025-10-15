@@ -104,6 +104,10 @@ export default defineNuxtConfig({
     },
     /* Backend host to the spring backend, used by /proxy and /v1 routes  */
     risBackendUrl: "http://localhost:8090",
+    /* Backend host to use when performing authenticated server-side rendering
+     (SSR), which might go to the Nuxt middleware when empty, or to the
+      backend host provided. */
+    ssrBackendUrl: "",
     session: {
       cookie: {
         secure: secureCookie, // workaround needed for Safari on localhost
