@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import ioinformarics.oss.jackson.module.jsonld.annotation.JsonldId;
 import ioinformarics.oss.jackson.module.jsonld.annotation.JsonldResource;
 import ioinformarics.oss.jackson.module.jsonld.annotation.JsonldType;
+import java.time.LocalDate;
 import java.util.List;
 import lombok.Builder;
 import org.jetbrains.annotations.Nullable;
@@ -14,6 +15,10 @@ import org.jetbrains.annotations.Nullable;
 public record LiteratureSchema(
     @Schema(example = "KALU000000000") @JsonldId String id,
     @Schema(example = "de") String inLanguage,
+    @Schema(
+            example = "2003-12-15",
+            description = "The date on which the literature piece was recorded.")
+        LocalDate recordingDate,
     @Schema(description = "Dokumentnummer", example = "KALU000000000") String documentNumber,
     @Schema(description = "Veröffentlichungsjahre", example = "[2014, 2024-09]")
         List<String> yearsOfPublication,
