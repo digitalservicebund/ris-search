@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.opensearch.action.admin.indices.alias.IndicesAliasesRequest;
@@ -33,7 +34,6 @@ public class OpensearchSchemaSetup {
 
   public void updateOpensearchSchema(RestHighLevelClient restHighLevelClient) {
     try {
-      logger.info("Updating OpenSearch schema");
       upsertTemplates(restHighLevelClient);
       GetIndexResponse indexResponse =
           restHighLevelClient.indices().get(new GetIndexRequest("*"), RequestOptions.DEFAULT);
@@ -87,8 +87,6 @@ public class OpensearchSchemaSetup {
       RestHighLevelClient restHighLevelClient, GetIndexResponse indexState, String aliasName)
       throws IOException {
 
-    logger.info("Updating OpenSearch schema for {}", aliasName);
-
     String latestIndex =
         Arrays.stream(indexState.getIndices())
             .filter(e -> e.startsWith(aliasName))
@@ -109,17 +107,18 @@ public class OpensearchSchemaSetup {
             aliasName);
       }
     }
-    List<String> allAliasNames =
-        indexState.getAliases().entrySet().stream()
-            .flatMap(e -> e.getValue().stream())
+
+    List<String> lastIndexAliases =
+        Optional.ofNullable(indexState.getAliases().get(latestIndex)).stream()
+            .flatMap(List::stream)
             .map(AliasMetadata::alias)
             .toList();
 
-    if (!allAliasNames.contains(aliasName)) {
+    if (!lastIndexAliases.contains(aliasName)) {
       createAlias(restHighLevelClient, latestIndex, aliasName);
     }
     String documentsAliasName = configurations.getDocumentsAliasName();
-    if (!allAliasNames.contains(documentsAliasName)) {
+    if (!lastIndexAliases.contains(documentsAliasName)) {
       createAlias(restHighLevelClient, latestIndex, documentsAliasName);
     }
   }
