@@ -7,6 +7,18 @@ import axios, { type AxiosResponse } from "axios";
 import { describe, expect, it } from "vitest";
 import type { CaseLaw, LegislationWork, Literature } from "~/types";
 
+function runGetRequest(
+  server: MatchersV3.V3MockServer,
+  url: string,
+): Promise<AxiosResponse> {
+  return axios.request({
+    baseURL: server.url,
+    headers: { Accept: "application/json" },
+    method: "GET",
+    url: url,
+  });
+}
+
 describe("get a document", () => {
   // Create a 'pact' between the two applications in the integration we are testing
   const targetDir = path.resolve(process.cwd(), "../backend/pacts");
@@ -23,18 +35,6 @@ describe("get a document", () => {
     provider: "backend",
     spec: SpecificationVersion.SPECIFICATION_VERSION_V4, // Modify this as needed for your use case
   });
-
-  function getRequest(
-    server: MatchersV3.V3MockServer,
-    url: string,
-  ): Promise<AxiosResponse> {
-    return axios.request({
-      baseURL: server.url,
-      headers: { Accept: "application/json" },
-      method: "GET",
-      url: url,
-    });
-  }
 
   interface Eli {
     prefix: string;
@@ -317,7 +317,7 @@ describe("get a document", () => {
         // Act: test our API client behaves correctly
         // Note we configure the GetCaseLawDocument API client dynamically to
         // point to the mock service Pact created for us, instead of the real one
-        return await getRequest(mockserver, requestUrl).then((response) => {
+        return await runGetRequest(mockserver, requestUrl).then((response) => {
           expect(response.data).to.deep.eq(caseLawDocumentExample);
         });
       });
@@ -338,7 +338,7 @@ describe("get a document", () => {
         builder.jsonBody(normDocumentExample);
       })
       .executeTest(async (mockserver) => {
-        return await getRequest(mockserver, buildPath(expressionEli)).then(
+        return await runGetRequest(mockserver, buildPath(expressionEli)).then(
           (response) => {
             expect(response.data).to.deep.eq(normDocumentExample);
           },
@@ -364,7 +364,7 @@ describe("get a document", () => {
         builder.jsonBody(literatureDocumentExample);
       })
       .executeTest(async (mockserver) => {
-        return await getRequest(mockserver, requestUrl).then((response) => {
+        return await runGetRequest(mockserver, requestUrl).then((response) => {
           expect(response.data).to.deep.eq(literatureDocumentExample);
         });
       });
