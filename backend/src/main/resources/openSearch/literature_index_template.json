@@ -36,6 +36,10 @@
           "type": "text",
           "analyzer": "custom_german_analyzer"
         },
+        "norm_references": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
         "main_title": {
           "type": "text",
           "analyzer": "custom_german_analyzer"
@@ -65,10 +69,6 @@
           "analyzer": "custom_german_analyzer"
         },
         "conference_note": {
-          "type": "text",
-          "analyzer": "custom_german_analyzer"
-        },
-        "norm": {
           "type": "text",
           "analyzer": "custom_german_analyzer"
         },
