@@ -73,11 +73,11 @@ export const usePostHogStore = defineStore("postHog", () => {
       url: router.currentRoute.value.fullPath,
       user_id: getUserPostHogId(),
     });
-    const result = await useFetch(
+    const { error } = await useFetch(
       `${backendURL}/v1/feedback?${params.toString()}`,
     );
 
-    if (!result) {
+    if (error.value) {
       throw new Error(`Error sending feedback`);
     }
   }
