@@ -127,17 +127,22 @@ export interface Literature {
   documentTypes: string[];
   dependentReferences: string[];
   independentReferences: string[];
+  normReferences: string[];
   headline: string | null;
   alternativeHeadline: string | null;
+  headlineAdditions: string | null;
   authors: string[];
   collaborators: string[];
+  originators: string[];
+  conferenceNotes: string[];
+  languages: string[];
   shortReport: string | null;
   outline: string | null;
   encoding: LiteratureEncoding[] | null;
 }
 
 export interface LiteratureEncoding {
-  "@type": "LiteratureObject";
+  "@type": "MediaObject";
   "@id": string;
   contentUrl: string | null;
   encodingFormat: string | null;
