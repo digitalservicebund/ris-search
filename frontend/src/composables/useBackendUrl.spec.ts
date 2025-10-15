@@ -23,21 +23,21 @@ describe("useBackendUrl", () => {
     metaMock.isServer = true;
 
     mockUseRuntimeConfig.mockImplementation(() => ({
-      ssrBackendUrl: "http://backendservice",
+      ssrBackendUrl: "https://backendservice",
       public: {
         backendURL: "publicBackendUrl",
       },
     }));
 
     const backendUrl = useBackendURL();
-    expect(backendUrl).toEqual("http://backendservice");
+    expect(backendUrl).toEqual("https://backendservice");
   });
 
   it("should return the public backend URL when no SSR is required", async () => {
     metaMock.isServer = false;
 
     mockUseRuntimeConfig.mockImplementation(() => ({
-      ssrBackendUrl: "http://backendservice",
+      ssrBackendUrl: "https://backendservice",
       public: {
         backendURL: "publicBackendUrl",
       },
