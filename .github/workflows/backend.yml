@@ -100,6 +100,26 @@ jobs:
           format: "sarif"
           output: "trivy-results.sarif"
           cache-dir: .trivy
+      - name: Check trivy results
+        run: |
+          if grep -qE 'HIGH|CRITICAL' trivy-results.sarif; then
+            echo "Vulnerabilities found"
+            echo "### Found vulnerabilities in trivy results" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            RESULT=$(cat trivy-results.sarif | jq -r '[.runs[].results[].message.text] | join("\\n\\n")')
+            echo -e $RESULT >> $GITHUB_STEP_SUMMARY
+            echo -e $RESULT
+            exit 1
+          else
+            echo "No significant vulnerabilities found"
+            exit 0
+          fi
+      - name: Upload Trivy image scan results to GitHub Security tab (on 'main' only)
+        uses: github/codeql-action/upload-sarif@v4
+        if: ${{ github.ref == 'refs/heads/main' }} # Bypass non-zero exit code..
+        with:
+          sarif_file: "trivy-results.sarif"
+          category: trivy-image-scan
       - name: Generate cosign vulnerability scan record
         # Third-party action, pin to commit SHA!
         # See https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions
