@@ -27,6 +27,7 @@ public record Literature(
     @ElementCollection @Field(name = Fields.DEPENDENT_REFERENCES) List<String> dependentReferences,
     @ElementCollection @Field(name = Fields.INDEPENDENT_REFERENCES)
         List<String> independentReferences,
+    @ElementCollection @Field(name = Fields.NORM) List<String> normReferences,
     @Nullable @Field(name = Fields.MAIN_TITLE) String mainTitle,
     @Nullable @Field(name = Fields.DOCUMENTARY_TITLE) String documentaryTitle,
     @Nullable @Field(name = Fields.MAIN_TITLE_ADDITIONS) String mainTitleAdditions,
@@ -34,7 +35,6 @@ public record Literature(
     @ElementCollection @Field(name = Fields.COLLABORATORS) List<String> collaborators,
     @ElementCollection @Field(name = Fields.LANGUAGE) List<String> languages,
     @ElementCollection @Field(name = Fields.ORIGINATOR) List<String> originators,
-    @ElementCollection @Field(name = Fields.NORM) List<String> normReferences,
     @ElementCollection @Field(name = Fields.CONFERENCE_NOTE) List<String> conferenceNotes,
     @Nullable @Field(name = Fields.SHORT_REPORT) String shortReport,
     @Nullable @Field(name = Fields.OUTLINE) String outline,
