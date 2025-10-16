@@ -2,7 +2,6 @@ package de.bund.digitalservice.ris.search.service;
 
 import static org.opensearch.index.query.QueryBuilders.matchQuery;
 
-import de.bund.digitalservice.ris.search.models.ParsedSearchTerm;
 import de.bund.digitalservice.ris.search.models.api.parameters.NormsSearchParams;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.utils.DateUtils;
@@ -57,13 +56,9 @@ public class NormSimpleSearchType implements SimpleSearchType {
   }
 
   @Override
-  public void addExtraLogic(ParsedSearchTerm searchTerm, BoolQueryBuilder query) {
-    if (StringUtils.isNotEmpty(searchTerm.original())) {
-      addSearchTerm(
-          searchTerm.original(),
-          searchTerm.unquotedTokens(),
-          searchTerm.quotedSearchPhrases(),
-          query);
+  public void addExtraLogic(String searchTerm, BoolQueryBuilder query) {
+    if (StringUtils.isNotEmpty(searchTerm)) {
+      addSearchTerm(searchTerm, query);
     }
 
     if (normsSearchParams == null) {
@@ -78,36 +73,22 @@ public class NormSimpleSearchType implements SimpleSearchType {
         .ifPresent(query::filter);
   }
 
-  public static void addSearchTerm(
-      String searchTerm,
-      List<String> unquotedSearchTerms,
-      List<String> quotedSearchPhrases,
-      BoolQueryBuilder query) {
+  public static void addSearchTerm(String searchTerm, BoolQueryBuilder query) {
     // --- Article Search within Nested Documents ---
     // Norm articles are stored as nested documents and require a dedicated nested query.
     // This query aims to find relevant articles, even if only a single term within the article
     // matches.
     BoolQueryBuilder articleNestedQuery = QueryBuilders.boolQuery();
-    articleNestedQuery.minimumShouldMatch(1); // At least one clause must match within an article
 
-    for (String term : unquotedSearchTerms) {
-      // Use a Multi-Match query to search across multiple fields.
-      // ZeroTermsQuery.ALL ensures that if the analyzer removes all terms (e.g., stop words),
-      // the query still matches all documents instead of returning an empty result set.
-      MultiMatchQueryBuilder nestedMatchQuery =
-          new MultiMatchQueryBuilder(term)
-              .zeroTermsQuery(MatchQuery.ZeroTermsQuery.ALL)
-              .operator(Operator.OR)
-              .type(MultiMatchQueryBuilder.Type.BEST_FIELDS);
-      articleNestedQuery.should(nestedMatchQuery);
-    }
-
-    for (String phrase : quotedSearchPhrases) {
-      // Quoted terms are treated as phrases using a Multi-Match query with type PHRASE.
-      MultiMatchQueryBuilder quotedQuery =
-          new MultiMatchQueryBuilder(phrase).type(MultiMatchQueryBuilder.Type.PHRASE);
-      articleNestedQuery.should(quotedQuery);
-    }
+    // Use a Multi-Match query to search across multiple fields.
+    // ZeroTermsQuery.ALL ensures that if the analyzer removes all terms (e.g., stop words),
+    // the query still matches all documents instead of returning an empty result set.
+    MultiMatchQueryBuilder nestedMatchQuery =
+        new MultiMatchQueryBuilder(searchTerm)
+            .zeroTermsQuery(MatchQuery.ZeroTermsQuery.ALL)
+            .operator(Operator.OR)
+            .type(MultiMatchQueryBuilder.Type.CROSS_FIELDS);
+    articleNestedQuery.should(nestedMatchQuery);
 
     // Allow searching articles by a combined "search keyword" (e.g., article number and norm
     // abbreviation).
