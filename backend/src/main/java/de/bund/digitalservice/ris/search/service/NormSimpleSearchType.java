@@ -102,11 +102,10 @@ public class NormSimpleSearchType implements SimpleSearchType {
     articleNestedQuery.should(new MatchAllQueryBuilder().boost(0));
 
     // Construct the nested query for articles.
-    // ScoreMode.Max ensures that documents are ranked by their highest-scoring matching article,
-    // preventing documents with many low-scoring articles from outranking those with fewer,
-    // highly relevant ones.
+    // ScoreMode.None maxes the nested query ranking not impact the main query ranking.
+    // This is wanted because the main query already uses article_names and article_texts
     NestedQueryBuilder articleQueryBuilder =
-        QueryBuilders.nestedQuery(Norm.Fields.ARTICLES, articleNestedQuery, ScoreMode.Max);
+        QueryBuilders.nestedQuery(Norm.Fields.ARTICLES, articleNestedQuery, ScoreMode.None);
 
     // Configure inner hits for the nested article query.
     // Inner hits enable highlighting and extraction of specific article context (name, eId)
