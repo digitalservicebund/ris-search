@@ -11,7 +11,7 @@ const title =
 
 <template>
   <StaticPageWrapper>
-    <RisBreadcrumb :title="title" base-path="/" />
+    <RisBreadcrumb :items="[{ label: title }]" />
 
     <PageHeader class="max-w-prose" :title="title" />
     <div class="mb-48">

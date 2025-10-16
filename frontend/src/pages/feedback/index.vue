@@ -8,7 +8,7 @@ useStaticPageSeo("feedback");
 
 <template>
   <StaticPageWrapper>
-    <RisBreadcrumb title="Feedback" base-path="/" />
+    <RisBreadcrumb :items="[{ label: 'Feedback' }]" />
     <PageHeader title="Geben Sie uns Feedback" />
     <main class="max-w-prose">
       <p>

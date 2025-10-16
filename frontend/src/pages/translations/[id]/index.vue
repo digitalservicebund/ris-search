@@ -18,6 +18,8 @@ import {
 } from "~/components/Tabs.styles";
 import { useDynamicSeo } from "~/composables/useDynamicSeo";
 import { fetchTranslationAndHTML } from "~/composables/useTranslationData";
+import { DocumentKind } from "~/types";
+import { formatDocumentKind } from "~/utils/displayValues";
 import { removePrefix, truncateAtWord } from "~/utils/textFormatting";
 import IcBaselineSubject from "~icons/ic/baseline-subject";
 import IcOutlineInfo from "~icons/ic/outline-info";
@@ -51,6 +53,10 @@ const translatedBy = computed(() => {
 
 const breadcrumbItems = computed(() => {
   const items: BreadcrumbItem[] = [
+    {
+      label: formatDocumentKind(DocumentKind.Norm),
+      route: `/search?category=${DocumentKind.Norm}`,
+    },
     {
       label: "Translations",
       route: "/translations",
@@ -101,7 +107,7 @@ useDynamicSeo({ title, description });
   <ContentWrapper border>
     <div v-if="currentTranslation" class="container">
       <div class="flex items-center gap-8 print:hidden">
-        <RisBreadcrumb type="norm" :items="breadcrumbItems" class="grow" />
+        <RisBreadcrumb :items="breadcrumbItems" class="grow" />
         <client-only>
           <ActionsMenu :link="link" :permalink="permalink" />
         </client-only>

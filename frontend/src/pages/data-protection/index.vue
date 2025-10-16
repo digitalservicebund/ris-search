@@ -10,7 +10,7 @@ useStaticPageSeo("datenschutz");
 <template>
   <StaticPageWrapper>
     <template #breadcrumb>
-      <RisBreadcrumb title="Datenschutzerklärung" base-path="/" />
+      <RisBreadcrumb :items="[{ label: 'Datenschutzerklärung' }]" />
     </template>
     <PageHeader title="Datenschutzerklärung" />
     <div class="max-w-prose space-y-64">

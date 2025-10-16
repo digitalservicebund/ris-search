@@ -141,8 +141,7 @@ function submit() {
 
 <template>
   <ContentWrapper class="pb-32 lg:pb-64">
-    <RisBreadcrumb title="Erweiterte Suche" base-path="/" />
-
+    <RisBreadcrumb :items="[{ label: 'Erweiterte Suche' }]" />
     <div
       class="mt-24 grid grid-cols-1 gap-40 lg:grid-cols-[330px_1fr] lg:gap-64"
     >

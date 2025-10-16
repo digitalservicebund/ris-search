@@ -162,18 +162,3 @@ export enum DocumentKind {
 
   All = "A",
 }
-
-export function shortDocumentType(
-  kind: "Legislation" | "Decision" | "Literature",
-) {
-  switch (kind) {
-    case "Decision":
-      return "R"; // Rechtsprechung
-    case "Legislation":
-      return "N"; // Norm
-    case "Literature":
-      return "L"; // Literatur
-    default:
-      return "-";
-  }
-}

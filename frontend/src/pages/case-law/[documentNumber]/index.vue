@@ -17,15 +17,17 @@ import MetadataField from "~/components/MetadataField.vue";
 import Properties from "~/components/Properties.vue";
 import PropertiesItem from "~/components/PropertiesItem.vue";
 import RisBreadcrumb from "~/components/Ris/RisBreadcrumb.vue";
+import RisDocumentTitle from "~/components/Ris/RisDocumentTitle.vue";
 import {
   tabListStyles,
   tabPanelStyles,
   tabStyles,
 } from "~/components/Tabs.styles";
 import { useBackendURL } from "~/composables/useBackendURL";
-import type { CaseLaw } from "~/types";
+import { type CaseLaw, DocumentKind } from "~/types";
 import { getEncodingURL } from "~/utils/caseLawUtils";
 import { dateFormattedDDMMYYYY } from "~/utils/dateFormatting";
+import { formatDocumentKind } from "~/utils/displayValues";
 import { getAllSectionsFromHtml, parseDocument } from "~/utils/htmlParser";
 import { removeOuterParentheses, truncateAtWord } from "~/utils/textFormatting";
 import IcBaselineSubject from "~icons/ic/baseline-subject";
@@ -68,7 +70,7 @@ const buildOgTitle = (caseLaw: CaseLaw) => {
   return truncateAtWord(parts, 55) || undefined;
 };
 
-const title = computed(() => {
+const ogTitle = computed(() => {
   return caseLaw.value ? buildOgTitle(caseLaw.value) : undefined;
 });
 const description = computed<string>(() => {
@@ -98,10 +100,10 @@ const meta = computed(() =>
   [
     { name: "description", content: description.value },
     { property: "og:type", content: "article" },
-    { property: "og:title", content: title.value },
+    { property: "og:title", content: ogTitle.value },
     { property: "og:description", content: description.value },
     { property: "og:url", content: url.href },
-    { name: "twitter:title", content: title.value },
+    { name: "twitter:title", content: ogTitle.value },
     { name: "twitter:description", content: description.value },
   ].filter(
     (tag) => typeof tag.content === "string" && tag.content.trim() !== "",
@@ -109,7 +111,7 @@ const meta = computed(() =>
 );
 
 useHead({
-  title,
+  title: ogTitle,
   link,
   meta,
 });
@@ -124,7 +126,22 @@ const zipUrl = computed(() =>
   getEncodingURL(caseLaw.value, backendURL, "application/zip"),
 );
 
-console.log(`Zip url: ${zipUrl.value}` + caseLaw.value?.encoding.values);
+const title = computed(() => {
+  return caseLaw.value?.headline
+    ? removeOuterParentheses(caseLaw.value?.headline)
+    : undefined;
+});
+
+const breadcrumbItems = computed(() => [
+  {
+    label: formatDocumentKind(DocumentKind.CaseLaw),
+    route: `/search?category=${DocumentKind.CaseLaw}`,
+  },
+  {
+    label:
+      removeOuterParentheses(caseLaw.value?.headline) || emptyTitlePlaceholder,
+  },
+]);
 
 if (metadataError?.value) {
   showError(metadataError.value);
@@ -139,27 +156,10 @@ if (contentError?.value) {
     <div v-if="status == 'pending'" class="container">Lade ...</div>
     <div v-if="!!caseLaw" class="container text-left">
       <div class="flex items-center gap-8 print:hidden">
-        <RisBreadcrumb
-          class="grow"
-          type="caselaw"
-          :title="
-            removeOuterParentheses(caseLaw.headline) || emptyTitlePlaceholder
-          "
-        />
+        <RisBreadcrumb :items="breadcrumbItems" class="grow" />
         <CaseLawActionsMenu :case-law="caseLaw" />
       </div>
-      <h1
-        v-if="caseLaw.headline"
-        class="ris-heading2-bold max-w-title mt-24 mb-48 text-balance break-words hyphens-auto max-sm:text-[26px]"
-      >
-        {{ removeOuterParentheses(caseLaw.headline) }}
-      </h1>
-      <h1
-        v-else
-        class="ris-heading2-bold max-w-title mt-24 mb-48 text-balance break-words hyphens-auto text-gray-900 max-sm:text-[26px]"
-      >
-        {{ emptyTitlePlaceholder }}
-      </h1>
+      <RisDocumentTitle :title="title" :placeholder="emptyTitlePlaceholder" />
       <!-- Metadata -->
       <div class="mb-48 flex flex-row flex-wrap gap-24">
         <MetadataField

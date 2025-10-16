@@ -34,9 +34,10 @@ import { useBackendURL } from "~/composables/useBackendURL";
 import { useDynamicSeo } from "~/composables/useDynamicSeo";
 import { useIntersectionObserver } from "~/composables/useIntersectionObserver";
 import { useNormVersions } from "~/composables/useNormVersions";
-import type { LegislationWork } from "~/types";
+import { DocumentKind, type LegislationWork } from "~/types";
 import { isPrototypeProfile } from "~/utils/config";
 import { dateFormattedDDMMYYYY } from "~/utils/dateFormatting";
+import { formatDocumentKind } from "~/utils/displayValues";
 import {
   getValidityStatus,
   getManifestationUrl,
@@ -115,6 +116,10 @@ const { status: normVersionsStatus, sortedVersions: normVersions } =
 
 const breadcrumbItems: ComputedRef<BreadcrumbItem[]> = computed(() => {
   const list = [
+    {
+      label: formatDocumentKind(DocumentKind.Norm),
+      route: `/search?category=${DocumentKind.Norm}`,
+    },
     {
       route: `/norms/${metadata.value?.legislationIdentifier}`,
       label: normBreadcrumbTitle.value,
@@ -198,7 +203,7 @@ useDynamicSeo({ title, description });
     <div v-if="!!metadata">
       <div class="container">
         <div class="flex items-center gap-8 print:hidden">
-          <RisBreadcrumb type="norm" :items="breadcrumbItems" class="grow" />
+          <RisBreadcrumb :items="breadcrumbItems" class="grow" />
           <client-only> <NormActionsMenu :metadata="metadata" /></client-only>
         </div>
         <NormHeadingGroup :metadata="metadata" :html-parts="htmlParts" />

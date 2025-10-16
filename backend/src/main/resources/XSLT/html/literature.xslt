@@ -55,7 +55,7 @@
 	<!-- if there is no short report the main body only contains an empty hcontainer -->
 	<xsl:template match="akn:mainBody">
 		<xsl:if test="not(akn:hcontainer)">
-			<h2>Kurzrefarat</h2>
+			<h2>Kurzreferat</h2>
 			<xsl:apply-templates />
 		</xsl:if>
 	</xsl:template>

@@ -70,6 +70,11 @@ const testPages = [
     url: "/case-law/STRE300770800",
     tabs: ["Details"],
   },
+  {
+    name: "Literature View Page",
+    url: "/literature/TEST000000001",
+    tabs: ["Details"],
+  },
 ];
 test.describe("General Pages Accessibility Tests", () => {
   testPages.forEach(({ name, url, tabs }) => {

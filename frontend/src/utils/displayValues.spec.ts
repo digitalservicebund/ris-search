@@ -11,7 +11,7 @@ describe("displayValues", () => {
 
     it("formats norms", () => {
       expect(formatDocumentKind(DocumentKind.Norm)).toBe(
-        "Gesetze und Verordnungen",
+        "Gesetze & Verordnungen",
       );
     });
 
