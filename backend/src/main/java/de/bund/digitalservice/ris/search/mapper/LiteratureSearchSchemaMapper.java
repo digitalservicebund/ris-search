@@ -65,7 +65,7 @@ public class LiteratureSearchSchemaMapper {
         .dependentReferences(doc.dependentReferences())
         .independentReferences(doc.independentReferences())
         .headline(doc.mainTitle())
-        .alternativeTitle(doc.documentaryTitle())
+        .documentaryTitle(doc.documentaryTitle())
         .authors(doc.authors())
         .collaborators(doc.collaborators())
         .shortReport(doc.shortReport())

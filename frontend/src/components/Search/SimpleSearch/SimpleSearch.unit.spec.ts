@@ -34,6 +34,7 @@ describe("SimpleSearch", () => {
     { documentKind: DocumentKind.All, isFilterVisible: false },
     { documentKind: DocumentKind.Norm, isFilterVisible: false },
     { documentKind: DocumentKind.CaseLaw, isFilterVisible: true },
+    { documentKind: DocumentKind.Literature, isFilterVisible: false },
   ]) {
     it(`sets the visibility of the duration filter to ${testCase.isFilterVisible} when the document kind is ${testCase.documentKind}`, async () => {
       const wrapper = await mountSuspended(SimpleSearch);

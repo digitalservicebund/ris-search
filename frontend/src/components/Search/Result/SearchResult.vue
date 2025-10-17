@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import CaselawSearchResult from "~/components/Search/Result/Caselaw/CaselawSearchResult.vue";
+import LiteratureSearchResult from "~/components/Search/Result/Literature/LiteratureSearchResult.vue";
 import NormSearchResult from "~/components/Search/Result/Norms/NormSearchResult.vue";
 import type {
   CaseLaw,
   LegislationWork,
   AnyDocument,
   SearchResult,
+  Literature,
 } from "~/types";
 
 const props = defineProps<{
@@ -23,6 +25,11 @@ const props = defineProps<{
   <NormSearchResult
     v-else-if="props.searchResult.item['@type'] === 'Legislation'"
     :search-result="props.searchResult as SearchResult<LegislationWork>"
+    :order="props.order"
+  />
+  <LiteratureSearchResult
+    v-else-if="props.searchResult.item['@type'] === 'Literature'"
+    :search-result="props.searchResult as SearchResult<Literature>"
     :order="props.order"
   />
 </template>

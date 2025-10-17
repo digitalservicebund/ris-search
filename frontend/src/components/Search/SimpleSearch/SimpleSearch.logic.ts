@@ -4,14 +4,15 @@ import { DocumentKind } from "~/types";
 
 export function getUrl(category?: string): string {
   const backendURL = useBackendURL();
-  if (category?.startsWith(DocumentKind.CaseLaw)) {
-    // covers cases such as R and R.urteil
-    return `${backendURL}/v1/case-law`;
-  } else if (category?.startsWith(DocumentKind.Norm)) {
-    return `${backendURL}/v1/legislation`;
-  } else {
-    return `${backendURL}/v1/document`;
-  }
+  const routes: [DocumentKind, string][] = [
+    [DocumentKind.CaseLaw, "case-law"],
+    [DocumentKind.Norm, "legislation"],
+    [DocumentKind.Literature, "literature"],
+  ];
+
+  const match = routes.find(([kind]) => category?.startsWith(kind));
+
+  return `${backendURL}/v1/${match?.[1] ?? "document"}`;
 }
 
 export interface SearchEndpointParams {
