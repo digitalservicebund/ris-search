@@ -75,6 +75,10 @@ const testPages = [
     url: "/literature/TEST000000001",
     tabs: ["Details"],
   },
+  {
+    name: "Translations List View",
+    url: "/literature/translations",
+  },
 ];
 test.describe("General Pages Accessibility Tests", () => {
   testPages.forEach(({ name, url, tabs }) => {
