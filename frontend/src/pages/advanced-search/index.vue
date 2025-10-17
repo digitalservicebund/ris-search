@@ -55,12 +55,29 @@ const documentKind = ref<DocumentKind>(
 
 // Date filter --------------------------------------------
 
+function getInitialFilterType(
+  init: LocationQueryValue | LocationQueryValue[] | undefined,
+): DateFilterValue["type"] {
+  if (typeof init !== "string" || !isFilterType(init)) {
+    // If the initial value is no valid filter, return the default filter
+    // based on the selected document kind
+    return documentKind.value === DocumentKind.Norm
+      ? "currentlyInForce"
+      : "allTime";
+  } else if (
+    init === "currentlyInForce" &&
+    documentKind.value !== DocumentKind.Norm
+  ) {
+    // If the current filter is not valid for the current selection, return
+    // a different filter
+    return "allTime";
+  }
+  // Return parsed filter
+  else return init;
+}
+
 const dateFilter = ref<DateFilterValue>({
-  type:
-    typeof route.query.dateFilterType === "string" &&
-    isFilterType(route.query.dateFilterType)
-      ? route.query.dateFilterType
-      : "allTime",
+  type: getInitialFilterType(route.query.dateFilterType),
   from: route.query.dateFilterFrom?.toString(),
   to: route.query.dateFilterTo?.toString(),
 });
@@ -197,7 +214,7 @@ function submit() {
           <div
             class="mb-32 flex flex-col gap-16 md:flex-row md:items-center md:gap-48"
           >
-            <span class="ris-subhead-regular mr-auto">
+            <span class="ris-subhead-regular mr-auto text-nowrap">
               {{ formattedResultCount }} Suchergebnisse
             </span>
             <SortSelect v-model="sort" :document-kind />
