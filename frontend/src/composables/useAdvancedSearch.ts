@@ -1,4 +1,5 @@
 import { toValue } from "vue";
+import { useFetch } from "#app";
 import {
   dateFilterToQuery,
   type DateFilterValue,
