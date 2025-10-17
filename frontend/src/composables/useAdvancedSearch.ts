@@ -24,7 +24,6 @@ type AdvancedSearchOptions = {
  * @param query Lucene search query to be submitted
  * @param documentKind Type of documents to search for
  * @param dateFilter Date filter to apply to the results
- * @param options Additional configuration
  * @returns State and context for interacting with advanced search
  */
 export async function useAdvancedSearch(
