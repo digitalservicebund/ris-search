@@ -65,10 +65,14 @@ export async function useAdvancedSearch(
     };
   });
 
+  const config = useRuntimeConfig();
+
   const { data, error, status, pending, execute } = await useFetch<Page>(
     searchEndpointUrl,
     {
       query: combinedQuery,
+
+      baseURL: config.public.backendURL,
 
       // immediate always executes even if the query is empty. Instead the
       // component should execute manually using `executeWhenValid` to make
