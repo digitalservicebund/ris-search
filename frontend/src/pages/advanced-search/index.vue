@@ -31,6 +31,8 @@ const setDocumentKind: MenuItem["command"] = (e) => {
   documentKind.value = e.item.key as DocumentKind;
 };
 
+const documentKindGroupId = useId();
+
 const documentKindMenuItems: MenuItem[] = [
   {
     key: DocumentKind.Norm,
@@ -155,9 +157,11 @@ function submit() {
         </p>
       </div>
 
-      <div class="row-start-3 lg:row-start-auto">
-        <div class="mb-40">
-          <div class="ris-label1-regular mb-8">Dokumentart</div>
+      <div class="row-start-3 lg:row-span-2 lg:row-start-auto">
+        <div class="mb-40" role="group" :aria-labelledby="documentKindGroupId">
+          <div :id="documentKindGroupId" class="ris-label1-regular mb-8">
+            Dokumentart
+          </div>
           <PanelMenu
             :model="documentKindMenuItems"
             :expanded-keys="{ [documentKind]: true }"
@@ -180,7 +184,9 @@ function submit() {
           :loading="searchStatus === 'pending'"
           @submit="submit"
         />
+      </div>
 
+      <div>
         <Pagination
           v-if="searchStatus !== 'idle'"
           :is-loading="searchStatus === 'pending'"
@@ -189,7 +195,7 @@ function submit() {
           @update-page="pageIndex = $event"
         >
           <div
-            class="my-32 flex flex-col gap-16 md:flex-row md:items-center md:gap-48"
+            class="mb-32 flex flex-col gap-16 md:flex-row md:items-center md:gap-48"
           >
             <span class="ris-subhead-regular mr-auto">
               {{ formattedResultCount }} Suchergebnisse
