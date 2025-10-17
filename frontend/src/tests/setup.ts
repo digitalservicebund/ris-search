@@ -3,7 +3,7 @@ import { config } from "@vue/test-utils";
 import PrimeVue from "primevue/config";
 import { vi } from "vitest";
 
-vi.mock("~/middleware/check-login.global.ts", () => ({ default: vi.fn() }));
+vi.mock("~/middleware/checkLogin.global.ts", () => ({ default: vi.fn() }));
 
 // Enable PrimeVue plugin because we need that in many tests
 config.global.plugins = [PrimeVue];
