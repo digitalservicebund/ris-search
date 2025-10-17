@@ -5,6 +5,7 @@ import type {
   AnyDocument,
   CaseLaw,
   LegislationWork,
+  Literature,
   SearchResult,
 } from "~/types";
 
@@ -34,6 +35,21 @@ describe("SearchResult.vue", () => {
     });
 
     expect(wrapper.find("norm-search-result-stub").isVisible()).toBe(true);
+  });
+  it("shows the correct result for literature", () => {
+    const wrapper = mount(SearchResultComponent, {
+      props: {
+        searchResult: {
+          item: { "@type": "Literature" },
+        } as SearchResult<Literature>,
+        order: 0,
+      },
+      shallow: true,
+    });
+
+    expect(wrapper.find("literature-search-result-stub").isVisible()).toBe(
+      true,
+    );
   });
   it("shows nothing for another type", () => {
     const wrapper = mount(SearchResultComponent, {

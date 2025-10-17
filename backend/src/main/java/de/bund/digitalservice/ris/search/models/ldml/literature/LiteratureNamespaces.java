@@ -3,7 +3,10 @@ package de.bund.digitalservice.ris.search.models.ldml.literature;
 public class LiteratureNamespaces {
 
   public static final String AKN_NS = "http://docs.oasis-open.org/legaldocml/ns/akn/3.0";
-  public static final String RIS_NS = "http://ldml.neuris.de/literature/unselbstaendig/metadata/";
+  public static final String RIS_SELBSTSTAENDIG_NS =
+      "http://ldml.neuris.de/literature/selbstaendig/metadata/";
+  public static final String RIS_UNSELBSTSTAENDIG_NS =
+      "http://ldml.neuris.de/literature/unselbstaendig/metadata/";
 
   private LiteratureNamespaces() {}
 }

@@ -25,7 +25,7 @@ public record LiteratureSchema(
             example = "[50 Jahre Betriebs-Berater, 1987, 123-456]")
         List<String> independentReferences,
     @Schema(description = "Haupttitel") String headline,
-    @Schema(description = "Dokumentarischer Titel") String alternativeTitle,
+    @Schema(description = "Dokumentarischer Titel") String documentaryTitle,
     @Schema(description = "Authoren", example = "[Musterfrau, Sabine]") List<String> authors,
     @Schema(description = "Mitarbeiter", example = "[Mustermann, Max]") List<String> collaborators,
     @Schema(description = "Kurzrefarat") String shortReport,
