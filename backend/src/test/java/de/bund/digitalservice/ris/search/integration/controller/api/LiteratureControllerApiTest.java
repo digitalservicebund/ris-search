@@ -61,7 +61,7 @@ class LiteratureControllerApiTest extends ContainersIntegrationBase {
                 "$.independentReferences",
                 Matchers.contains("Festschrift für Müller, 2001, 12-34")),
             jsonPath("$.headline", Matchers.is("Zivilprozessrecht im Wandel")),
-            jsonPath("$.alternativeTitle", Matchers.is("Dokumentation ZPO")),
+            jsonPath("$.documentaryTitle", Matchers.is("Dokumentation ZPO")),
             jsonPath("$.authors", Matchers.containsInAnyOrder("Schmidt, Hans", "Becker, Anna")),
             jsonPath("$.collaborators", Matchers.contains("Meier, Karl")),
             jsonPath(
@@ -179,14 +179,14 @@ class LiteratureControllerApiTest extends ContainersIntegrationBase {
             jsonPath("$.member[0]['item'].headline", Matchers.is("Einführung in das Handelsrecht")))
         .andExpect(
             jsonPath(
-                "$.member[0]['item'].alternativeTitle", Matchers.is("Dokumentation Handelsrecht")))
+                "$.member[0]['item'].documentaryTitle", Matchers.is("Dokumentation Handelsrecht")))
         .andExpect(jsonPath("$.member[0]['item'].authors", Matchers.contains("Musterfrau, Sabine")))
         .andExpect(
             jsonPath("$.member[0]['item'].collaborators", Matchers.contains("Mustermann, Max")))
         .andExpect(
             jsonPath(
                 "$.member[0]['item'].shortReport",
-                Matchers.nullValue())) // excluded from search results
+                Matchers.is("Kurzer Bericht über die Entwicklung des Handelsrechts")))
         .andExpect(
             jsonPath(
                 "$.member[0]['item'].outline",
