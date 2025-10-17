@@ -1,0 +1,104 @@
+import { test } from "@playwright/test";
+import { expect } from "./fixtures";
+
+test(
+  "can navigate from list to single translation",
+  { tag: ["@RISDEV-8950"] },
+  async ({ page }) => {
+    await page.goto("/translations");
+    const links = page.locator('a[href^="translations"]');
+    await expect(links).toHaveCount(3);
+
+    const title = "Act on Chemistry and Dentists";
+
+    await page.getByRole("link", { name: title }).first().click();
+
+    await page.waitForURL("/translations/CDe");
+
+    await expect(
+      page.getByRole("heading", {
+        name: title,
+      }),
+    ).toBeVisible();
+  },
+);
+
+test("opens the page via URL", { tag: ["@RISDEV-8950"] }, async ({ page }) => {
+  await page.goto("/translations/TestV");
+  await expect(
+    page.getByRole("heading", {
+      name: "Dummy Data Regulation",
+    }),
+  ).toBeVisible();
+  await expect(page).toHaveTitle(
+    "Dummy Data Regulation – English Translation | Rechtsinformationen des Bundes",
+  );
+});
+
+test("has text and detail tab", { tag: ["@RISDEV-8950"] }, async ({ page }) => {
+  await page.goto("/translations/TestV");
+
+  const tabs = page.getByRole("tab");
+
+  await expect(tabs).toHaveCount(2);
+
+  const firstTabText = await tabs.nth(0).textContent();
+  expect(firstTabText).toBe("Text ");
+
+  const secondTabText = await tabs.nth(1).textContent();
+  expect(secondTabText).toBe("Details ");
+});
+
+test(
+  "detail tab shows details",
+  { tag: ["@RISDEV-8950"] },
+  async ({ page }) => {
+    await page.goto("/translations/TestV");
+    await page.waitForLoadState("networkidle");
+
+    const heading = page.getByRole("heading", { name: " Details " });
+    const translator = page.getByText("someone and someone.");
+    const version = page.getByText(
+      "The translation includes the amendment(s) to the Act by Article 1 of the Act of 8 October 2021",
+    );
+    await expect(heading).not.toBeVisible();
+    await expect(translator).not.toBeVisible();
+    await expect(version).not.toBeVisible();
+
+    const detailTab = page.getByRole("tab", { name: "Details " });
+    await detailTab.click();
+
+    await expect(heading).toBeVisible();
+    await expect(translator).toBeVisible();
+    await expect(version).toBeVisible();
+  },
+);
+
+test(
+  "text tab shows text of translated norm",
+  { tag: ["@RISDEV-8950"] },
+  async ({ page }) => {
+    await page.goto("/translations/TestV");
+    await page.waitForLoadState("networkidle");
+
+    const section = page.getByText("Section 1Dummy data");
+
+    await expect(section).toBeVisible();
+
+    await page.getByRole("tab", { name: "Details " }).click();
+    await expect(section).not.toBeVisible();
+  },
+);
+
+test(
+  "has link to german original",
+  { tag: ["@RISDEV-8950"] },
+  async ({ page }) => {
+    await page.goto("/translations/TestV");
+    const link = page.getByRole("link", { name: "Go to the German version" });
+    await expect(link).toHaveAttribute(
+      "href",
+      "/norms/eli/bund/bgbl-1/1964/s902",
+    );
+  },
+);
