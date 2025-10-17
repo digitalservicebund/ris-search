@@ -7,6 +7,7 @@ import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.models.TranslatedLegislationsJson;
 import de.bund.digitalservice.ris.search.repository.objectstorage.PortalBucket;
 import de.bund.digitalservice.ris.search.schema.LegislationTranslationSchema;
+import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Parameter;
 import java.io.IOException;
 import java.util.Collections;
@@ -34,6 +35,7 @@ public class TranslatedLegislationController {
   @GetMapping(
       value = ApiConfig.Paths.LEGISLATION_TRANSLATION,
       produces = MediaType.APPLICATION_JSON_VALUE)
+  @Hidden
   public List<LegislationTranslationSchema> listAndFilter(
       @Parameter @RequestParam(required = false) String id)
       throws IOException, ObjectStoreServiceException {
@@ -55,6 +57,7 @@ public class TranslatedLegislationController {
   @GetMapping(
       value = ApiConfig.Paths.LEGISLATION_TRANSLATION + "/{filename}",
       produces = MediaType.TEXT_HTML_VALUE)
+  @Hidden
   public ResponseEntity<String> getTranslationHTML(@PathVariable String filename) {
     try {
       Optional<String> translationHtmlString =

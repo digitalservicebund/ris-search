@@ -11,7 +11,15 @@
           "type": "alias",
           "path": "official_title"
         },
+        "LU": {
+          "type": "alias",
+          "path": "official_title"
+        },
         "AK": {
+          "type": "alias",
+          "path": "official_short_title"
+        },
+        "KU": {
           "type": "alias",
           "path": "official_short_title"
         },

@@ -319,7 +319,7 @@ class AdvancedSearchControllerApiTest extends ContainersIntegrationBase {
   }
 
   @ParameterizedTest
-  @ValueSource(strings = {"official_title", "AL"})
+  @ValueSource(strings = {"official_title", "AL", "LU"})
   @DisplayName("Should return 200 when looking for a specific official title and aliases")
   void shouldReturnOkOfficialTitleQuery(String queryParam) throws Exception {
 
@@ -335,7 +335,7 @@ class AdvancedSearchControllerApiTest extends ContainersIntegrationBase {
   }
 
   @ParameterizedTest
-  @ValueSource(strings = {"official_short_title", "AK"})
+  @ValueSource(strings = {"official_short_title", "AK", "KU"})
   @DisplayName("Should return 200 when looking for official short title and aliases")
   void shouldReturnOkOfficialShortTitleQuery(String queryParam) throws Exception {
 
