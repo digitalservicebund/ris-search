@@ -109,11 +109,6 @@ function submit() {
           <PanelMenu
             :model="documentKindMenuItems"
             :expanded-keys="{ [documentKind]: true }"
-            :pt="{
-              headercontent: { class: 'group' },
-              headerlink: { class: 'no-underline group-hover:underline' },
-              itemlink: { class: 'no-underline group-hover:underline' },
-            }"
           />
         </div>
 

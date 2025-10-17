@@ -36,11 +36,6 @@ const expandedKeys = computed(() => computeExpandedKeys(store.category));
       :model="model"
       :expanded-keys="expandedKeys"
       class="w-full md:w-200"
-      :pt="{
-        headercontent: { class: 'group' },
-        headerlink: { class: 'no-underline group-hover:underline' },
-        itemlink: { class: 'no-underline group-hover:underline' },
-      }"
       ><template #submenuicon><i /></template
     ></PanelMenu>
   </fieldset>
