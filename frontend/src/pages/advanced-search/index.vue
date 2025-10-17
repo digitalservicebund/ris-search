@@ -188,7 +188,9 @@ function submit() {
           navigation-position="bottom"
           @update-page="pageIndex = $event"
         >
-          <div class="my-32 flex items-center gap-48">
+          <div
+            class="my-32 flex flex-col gap-16 md:flex-row md:items-center md:gap-48"
+          >
             <span class="ris-subhead-regular mr-auto">
               {{ formattedResultCount }} Suchergebnisse
             </span>
