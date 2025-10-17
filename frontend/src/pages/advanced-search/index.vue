@@ -1,28 +1,30 @@
 <script setup lang="ts">
 import { Message, PanelMenu, Select } from "primevue";
 import type { MenuItem } from "primevue/menuitem";
-import type { LocationQueryValue } from "vue-router";
-import { useRoute } from "#app";
 import DataFieldPicker from "~/components/AdvancedSearch/DataFieldPicker.vue";
 import DateFilter from "~/components/AdvancedSearch/DateFilter.vue";
-import {
-  isFilterType,
-  type DateFilterValue,
-} from "~/components/AdvancedSearch/filterType";
 import ContentWrapper from "~/components/CustomLayouts/ContentWrapper.vue";
 import Pagination from "~/components/Pagination/Pagination.vue";
 import SortSelect from "~/components/Search/SortSelect.vue";
 import { useAdvancedSearch } from "~/composables/useAdvancedSearch";
+import { useAdvancedSearchRouteParams } from "~/composables/useAdvancedSearchRouteParams";
 import { queryableDataFields } from "~/pages/advanced-search/dataFields";
 import { DocumentKind } from "~/types";
 import { formatDocumentKind } from "~/utils/displayValues";
-import { isDocumentKind } from "~/utils/documentKind";
 import { formatNumberWithSeparators } from "~/utils/numberFormatting";
-
-const route = useRoute();
 
 useHead({ title: "Erweiterte Suche" });
 definePageMeta({ alias: "/erweiterte-suche" });
+
+const {
+  dateFilter,
+  documentKind,
+  itemsPerPage,
+  pageIndex,
+  query,
+  saveFilterStateToRoute,
+  sort,
+} = useAdvancedSearchRouteParams();
 
 // Document kind -------------------------------------------
 
@@ -46,86 +48,11 @@ const documentKindMenuItems: MenuItem[] = [
   },
 ];
 
-const documentKind = ref<DocumentKind>(
-  typeof route.query.documentKind === "string" &&
-    isDocumentKind(route.query.documentKind)
-    ? route.query.documentKind
-    : DocumentKind.Norm,
-);
-
-// Date filter --------------------------------------------
-
-function getInitialFilterType(
-  init: LocationQueryValue | LocationQueryValue[] | undefined,
-): DateFilterValue["type"] {
-  if (typeof init !== "string" || !isFilterType(init)) {
-    // If the initial value is no valid filter, return the default filter
-    // based on the selected document kind
-    return documentKind.value === DocumentKind.Norm
-      ? "currentlyInForce"
-      : "allTime";
-  } else if (
-    init === "currentlyInForce" &&
-    documentKind.value !== DocumentKind.Norm
-  ) {
-    // If the current filter is not valid for the current selection, return
-    // a different filter
-    return "allTime";
-  }
-  // Return parsed filter
-  else return init;
-}
-
-const dateFilter = ref<DateFilterValue>({
-  type: getInitialFilterType(route.query.dateFilterType),
-  from: route.query.dateFilterFrom?.toString(),
-  to: route.query.dateFilterTo?.toString(),
-});
-
-const query = ref(route.query.q?.toString() ?? "");
-
-function saveFilterStateToRoute() {
-  navigateTo({
-    query: {
-      ...route.query,
-      q: query.value,
-      documentKind: documentKind.value,
-      dateFilterType: dateFilter.value.type,
-      dateFilterFrom: dateFilter.value.from ?? "",
-      dateFilterTo: dateFilter.value.to ?? "",
-      pageIndex: pageIndex.value,
-      sort: sort.value,
-      itemsPerPage: itemsPerPage.value,
-    },
-  });
-}
-
-// Sorting and pagination ---------------------------------
-
-function tryGetPageIndexFromQuery(
-  query: LocationQueryValue | LocationQueryValue[],
-) {
-  let result = 0;
-
-  if (query) {
-    const parsedNumber = Number.parseInt(query.toString());
-    if (Number.isFinite(parsedNumber)) result = parsedNumber;
-  }
-
-  return result;
-}
-
-const sort = ref(route.query.sort?.toString() ?? "default");
+// Search results -----------------------------------------
 
 const itemsPerPageDropdownId = useId();
 
-const itemsPerPage = ref(route.query.itemsPerPage?.toString() ?? "50");
-
 const itemsPerPageOptions = ["10", "50", "100"];
-
-const pageIndex = ref(tryGetPageIndexFromQuery(route.query.pageIndex));
-
-// Search results -----------------------------------------
 
 const {
   searchError,
