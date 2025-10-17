@@ -182,6 +182,7 @@ function submit() {
         />
 
         <Pagination
+          v-if="searchStatus !== 'idle'"
           :is-loading="searchStatus === 'pending'"
           :page="searchResults"
           navigation-position="bottom"
