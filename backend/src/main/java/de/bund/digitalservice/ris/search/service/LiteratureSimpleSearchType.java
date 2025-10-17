@@ -2,7 +2,6 @@ package de.bund.digitalservice.ris.search.service;
 
 import static org.opensearch.index.query.QueryBuilders.matchQuery;
 
-import de.bund.digitalservice.ris.search.models.ParsedSearchTerm;
 import de.bund.digitalservice.ris.search.models.api.parameters.LiteratureSearchParams;
 import de.bund.digitalservice.ris.search.models.opensearch.Literature;
 import java.util.Arrays;
@@ -47,7 +46,7 @@ public class LiteratureSimpleSearchType implements SimpleSearchType {
    * @param query the main BoolQueryBuilder to which filters will be added
    */
   @Override
-  public void addExtraLogic(ParsedSearchTerm searchTerm, BoolQueryBuilder query) {
+  public void addExtraLogic(String searchTerm, BoolQueryBuilder query) {
     if (searchParams == null) {
       return;
     }

@@ -40,10 +40,11 @@ public class SimpleSearchQueryBuilder {
     BoolQueryBuilder boolQuery = QueryBuilders.boolQuery();
 
     // handle searchTerm
-    ParsedSearchTerm searchTerm = searchTermParser.parse(params.getSearchTerm());
-    if (StringUtils.isNotEmpty(searchTerm.original())) {
-      applyMustLogic(searchTerm.unquotedTokens(), searchTerm.quotedSearchPhrases(), boolQuery);
-      applyShouldLogic(searchTerm.original(), boolQuery);
+    ParsedSearchTerm parsedSearchTerm = searchTermParser.parse(params.getSearchTerm());
+    if (StringUtils.isNotEmpty(parsedSearchTerm.original())) {
+      applyMustLogic(
+          parsedSearchTerm.unquotedTokens(), parsedSearchTerm.quotedSearchPhrases(), boolQuery);
+      applyShouldLogic(parsedSearchTerm.original(), boolQuery);
     }
     // handle date
     DateUtils.buildQuery("DATUM", params.getDateFrom(), params.getDateTo())
@@ -54,7 +55,7 @@ public class SimpleSearchQueryBuilder {
     for (SimpleSearchType searchType : searchTypes) {
       searchType.addHighlightedFields(highlightBuilder);
       excludedFields.addAll(searchType.getExcludedFields());
-      searchType.addExtraLogic(searchTerm, boolQuery);
+      searchType.addExtraLogic(params.getSearchTerm(), boolQuery);
     }
 
     // add pagination and other parameters

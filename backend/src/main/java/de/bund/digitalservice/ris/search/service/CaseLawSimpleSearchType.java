@@ -3,7 +3,6 @@ package de.bund.digitalservice.ris.search.service;
 import static org.opensearch.index.query.QueryBuilders.matchQuery;
 import static org.opensearch.index.query.QueryBuilders.multiMatchQuery;
 
-import de.bund.digitalservice.ris.search.models.ParsedSearchTerm;
 import de.bund.digitalservice.ris.search.models.api.parameters.CaseLawDocumentTypeGroup;
 import de.bund.digitalservice.ris.search.models.api.parameters.CaseLawSearchParams;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
@@ -68,7 +67,7 @@ public class CaseLawSimpleSearchType implements SimpleSearchType {
   }
 
   @Override
-  public void addExtraLogic(ParsedSearchTerm searchTerm, BoolQueryBuilder query) {
+  public void addExtraLogic(String searchTerm, BoolQueryBuilder query) {
     if (searchParams == null) {
       return;
     }
