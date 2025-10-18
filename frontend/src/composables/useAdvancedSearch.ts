@@ -1,4 +1,5 @@
 import { toValue } from "vue";
+import { useFetch } from "#app";
 import {
   dateFilterToQuery,
   type DateFilterValue,
@@ -24,7 +25,6 @@ type AdvancedSearchOptions = {
  * @param query Lucene search query to be submitted
  * @param documentKind Type of documents to search for
  * @param dateFilter Date filter to apply to the results
- * @param options Additional configuration
  * @returns State and context for interacting with advanced search
  */
 export async function useAdvancedSearch(
@@ -65,10 +65,14 @@ export async function useAdvancedSearch(
     };
   });
 
+  const config = useRuntimeConfig();
+
   const { data, error, status, pending, execute } = await useFetch<Page>(
     searchEndpointUrl,
     {
       query: combinedQuery,
+
+      baseURL: config.public.backendURL,
 
       // immediate always executes even if the query is empty. Instead the
       // component should execute manually using `executeWhenValid` to make

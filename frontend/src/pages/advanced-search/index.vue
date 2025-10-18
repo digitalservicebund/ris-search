@@ -1,28 +1,30 @@
 <script setup lang="ts">
 import { Message, PanelMenu, Select } from "primevue";
 import type { MenuItem } from "primevue/menuitem";
-import type { LocationQueryValue } from "vue-router";
-import { useRoute } from "#app";
 import DataFieldPicker from "~/components/AdvancedSearch/DataFieldPicker.vue";
 import DateFilter from "~/components/AdvancedSearch/DateFilter.vue";
-import {
-  isFilterType,
-  type DateFilterValue,
-} from "~/components/AdvancedSearch/filterType";
 import ContentWrapper from "~/components/CustomLayouts/ContentWrapper.vue";
 import Pagination from "~/components/Pagination/Pagination.vue";
 import SortSelect from "~/components/Search/SortSelect.vue";
 import { useAdvancedSearch } from "~/composables/useAdvancedSearch";
+import { useAdvancedSearchRouteParams } from "~/composables/useAdvancedSearchRouteParams";
 import { queryableDataFields } from "~/pages/advanced-search/dataFields";
 import { DocumentKind } from "~/types";
 import { formatDocumentKind } from "~/utils/displayValues";
-import { isDocumentKind } from "~/utils/documentKind";
 import { formatNumberWithSeparators } from "~/utils/numberFormatting";
-
-const route = useRoute();
 
 useHead({ title: "Erweiterte Suche" });
 definePageMeta({ alias: "/erweiterte-suche" });
+
+const {
+  dateFilter,
+  documentKind,
+  itemsPerPage,
+  pageIndex,
+  query,
+  saveFilterStateToRoute,
+  sort,
+} = useAdvancedSearchRouteParams();
 
 // Document kind -------------------------------------------
 
@@ -30,6 +32,8 @@ const setDocumentKind: MenuItem["command"] = (e) => {
   if (!e.item.key) return;
   documentKind.value = e.item.key as DocumentKind;
 };
+
+const documentKindGroupId = useId();
 
 const documentKindMenuItems: MenuItem[] = [
   {
@@ -44,69 +48,11 @@ const documentKindMenuItems: MenuItem[] = [
   },
 ];
 
-const documentKind = ref<DocumentKind>(
-  typeof route.query.documentKind === "string" &&
-    isDocumentKind(route.query.documentKind)
-    ? route.query.documentKind
-    : DocumentKind.Norm,
-);
-
-// Date filter --------------------------------------------
-
-const dateFilter = ref<DateFilterValue>({
-  type:
-    typeof route.query.dateFilterType === "string" &&
-    isFilterType(route.query.dateFilterType)
-      ? route.query.dateFilterType
-      : "allTime",
-  from: route.query.dateFilterFrom?.toString(),
-  to: route.query.dateFilterTo?.toString(),
-});
-
-const query = ref(route.query.q?.toString() ?? "");
-
-function saveFilterStateToRoute() {
-  navigateTo({
-    query: {
-      ...route.query,
-      q: query.value,
-      documentKind: documentKind.value,
-      dateFilterType: dateFilter.value.type,
-      dateFilterFrom: dateFilter.value.from ?? "",
-      dateFilterTo: dateFilter.value.to ?? "",
-      pageIndex: pageIndex.value,
-      sort: sort.value,
-      itemsPerPage: itemsPerPage.value,
-    },
-  });
-}
-
-// Sorting and pagination ---------------------------------
-
-function tryGetPageIndexFromQuery(
-  query: LocationQueryValue | LocationQueryValue[],
-) {
-  let result = 0;
-
-  if (query) {
-    const parsedNumber = Number.parseInt(query.toString());
-    if (Number.isFinite(parsedNumber)) result = parsedNumber;
-  }
-
-  return result;
-}
-
-const sort = ref(route.query.sort?.toString() ?? "default");
+// Search results -----------------------------------------
 
 const itemsPerPageDropdownId = useId();
 
-const itemsPerPage = ref(route.query.itemsPerPage?.toString() ?? "50");
-
 const itemsPerPageOptions = ["10", "50", "100"];
-
-const pageIndex = ref(tryGetPageIndexFromQuery(route.query.pageIndex));
-
-// Search results -----------------------------------------
 
 const {
   searchError,
@@ -155,17 +101,14 @@ function submit() {
         </p>
       </div>
 
-      <div class="row-start-3 lg:row-start-auto">
-        <div class="mb-40">
-          <div class="ris-label1-regular mb-8">Dokumentart</div>
+      <div class="row-start-3 lg:row-span-2 lg:row-start-auto">
+        <div class="mb-40" role="group" :aria-labelledby="documentKindGroupId">
+          <div :id="documentKindGroupId" class="ris-label1-regular mb-8">
+            Dokumentart
+          </div>
           <PanelMenu
             :model="documentKindMenuItems"
             :expanded-keys="{ [documentKind]: true }"
-            :pt="{
-              headercontent: { class: 'group' },
-              headerlink: { class: 'no-underline group-hover:underline' },
-              itemlink: { class: 'no-underline group-hover:underline' },
-            }"
           />
         </div>
 
@@ -180,15 +123,20 @@ function submit() {
           :loading="searchStatus === 'pending'"
           @submit="submit"
         />
+      </div>
 
+      <div>
         <Pagination
+          v-if="searchStatus !== 'idle'"
           :is-loading="searchStatus === 'pending'"
           :page="searchResults"
           navigation-position="bottom"
           @update-page="pageIndex = $event"
         >
-          <div class="my-32 flex items-center gap-48">
-            <span class="ris-subhead-regular mr-auto">
+          <div
+            class="mb-32 flex flex-col gap-16 md:flex-row md:items-center md:gap-48"
+          >
+            <span class="ris-subhead-regular mr-auto text-nowrap">
               {{ formattedResultCount }} Suchergebnisse
             </span>
             <SortSelect v-model="sort" :document-kind />
