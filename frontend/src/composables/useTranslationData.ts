@@ -23,9 +23,9 @@ function throwNotFound(message: string) {
 }
 
 function useApi() {
-  const requestFetch = useRequestFetch();
+  const apiFetch = useRequestFetch();
   const backendURL = useBackendURL();
-  return { requestFetch, backendURL };
+  return { apiFetch, backendURL };
 }
 
 function translationsListURL(backendURL: string) {
@@ -52,10 +52,10 @@ export function fetchTranslationList(): AsyncData<
   TranslationContent[],
   NuxtError<TranslationContent> | null
 > {
-  const { requestFetch, backendURL } = useApi();
+  const { apiFetch, backendURL } = useApi();
 
   return useAsyncData("translations-list", async () => {
-    const response = await requestFetch<TranslationContent[]>(
+    const response = await apiFetch<TranslationContent[]>(
       translationsListURL(backendURL),
     );
     if (!response || response.length === 0) throwNotFound("Not Found");
@@ -66,10 +66,10 @@ export function fetchTranslationList(): AsyncData<
 export function fetchTranslationAndHTML(
   id: string,
 ): AsyncData<TranslationData, NuxtError | null> {
-  const { requestFetch, backendURL } = useApi();
+  const { apiFetch, backendURL } = useApi();
 
   return useAsyncData(`translation-and-html-${id}`, async () => {
-    const translationsList = await requestFetch<TranslationContent[]>(
+    const translationsList = await apiFetch<TranslationContent[]>(
       translationDetailURL(backendURL, id),
     );
 
@@ -80,7 +80,7 @@ export function fetchTranslationAndHTML(
     const htmlFilename = firstTranslationsListElement["ris:filename"];
     if (!htmlFilename) throwNotFound("Translation filename not found");
 
-    const htmlData = await requestFetch<string>(
+    const htmlData = await apiFetch<string>(
       translationHtmlURL(backendURL, htmlFilename),
       {
         headers: { Accept: "text/html" },
@@ -94,13 +94,13 @@ export function fetchTranslationAndHTML(
 export function getGermanOriginal(
   id: string,
 ): AsyncData<SearchResult<LegislationWork> | null, NuxtError | null> {
-  const { requestFetch, backendURL } = useApi();
+  const { apiFetch, backendURL } = useApi();
 
   return useAsyncData(`german-original-${id}`, async () => {
     const currentDateInGermanyFormatted = getCurrentDateInGermanyFormatted();
-    const response = await requestFetch<
-      JSONLDList<SearchResult<LegislationWork>>
-    >(legislationSearchURL(backendURL, id, currentDateInGermanyFormatted));
+    const response = await apiFetch<JSONLDList<SearchResult<LegislationWork>>>(
+      legislationSearchURL(backendURL, id, currentDateInGermanyFormatted),
+    );
 
     if (!response || response.member.length === 0) throwNotFound("Not Found");
 
