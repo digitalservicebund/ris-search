@@ -159,9 +159,7 @@ public class LiteratureLdmlToOpenSearchMapper {
         .map(OtherReferences::getImplicitReferences)
         .orElse(Collections.emptyList())
         .stream()
-        .filter(
-            implicitReference ->
-                implicitReference.getType() == ImplicitReference.Type.DEPENDENT_REFERENCE)
+        .filter(implicitReference -> implicitReference.getFundstelleUnselbstaendig() != null)
         .map(ImplicitReference::getShowAs)
         .toList();
   }
@@ -175,9 +173,7 @@ public class LiteratureLdmlToOpenSearchMapper {
         .map(OtherReferences::getImplicitReferences)
         .orElse(Collections.emptyList())
         .stream()
-        .filter(
-            implicitReference ->
-                implicitReference.getType() == ImplicitReference.Type.INDEPENDENT_REFERENCE)
+        .filter(implicitReference -> implicitReference.getFundstelleSelbstaendig() != null)
         .map(ImplicitReference::getShowAs)
         .toList();
   }
@@ -191,9 +187,7 @@ public class LiteratureLdmlToOpenSearchMapper {
         .map(OtherReferences::getImplicitReferences)
         .orElse(Collections.emptyList())
         .stream()
-        .filter(
-            implicitReference ->
-                implicitReference.getType() == ImplicitReference.Type.NORM_REFERENCE)
+        .filter(implicitReference -> implicitReference.getNormReference() != null)
         .map(ImplicitReference::getShowAs)
         .toList();
   }

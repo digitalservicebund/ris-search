@@ -6,13 +6,12 @@ import lombok.Getter;
 @Getter
 public class ImplicitReference {
 
-  @XmlElement(
-      name = "fundstelleUnselbstaendig",
-      namespace = LiteratureNamespaces.RIS_UNSELBSTSTAENDIG_NS)
-  private FundstelleUnselbstaendig fundstelleUnselbstaendig;
+  @XmlElement(name = "fundstelleUnselbstaendig", namespace = LiteratureNamespaces.RIS_UNSELBSTSTAENDIG_NS)
+  private String fundstelleUnselbstaendig;
 
-  @XmlElement(
-      name = "fundstelleSelbstaendig",
-      namespace = LiteratureNamespaces.RIS_UNSELBSTSTAENDIG_NS)
-  private FundstelleSelbstaendig fundstelleSelbstaendig;
+  @XmlElement(name = "fundstelleSelbstaendig", namespace = LiteratureNamespaces.RIS_UNSELBSTSTAENDIG_NS)
+  private String fundstelleSelbstaendig;
+
+  @XmlElement(name = "normReference", namespace = LiteratureNamespaces.RIS_UNSELBSTSTAENDIG_NS)
+  private String normReference;
 }

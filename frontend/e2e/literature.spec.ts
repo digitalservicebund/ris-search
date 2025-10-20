@@ -25,7 +25,7 @@ test("displays literature page with metadata and text tab by default", async ({
   // Metadata section
   await expect(page.getByLabel("Dokumenttyp")).toHaveText("Auf");
   await expect(page.getByLabel("Fundstelle")).toHaveText(
-    "FooBar 1982, 123-123",
+    "FooBar, 1982, 123-123",
   );
   await expect(page.getByLabel("Author")).toHaveText("Sabine Musterfrau");
   await expect(page.getByLabel("Veröffentlichungsjahr")).toHaveText("2024");
