@@ -18,10 +18,10 @@ test(
   { tag: ["@RISDEV-8949"] },
   async ({ page }) => {
     await page.goto("/translations");
-    const searchInput = page.locator('input[type="search"]');
+    const searchInput = page.getByRole("searchbox");
     await expect(searchInput).toHaveCount(1);
 
-    const links = page.locator('a[href^="translations"]');
+    const links = page.getByTestId("translations").getByRole("link");
     await expect(links).toHaveCount(3);
   },
 );
@@ -34,14 +34,14 @@ test(
     await page.waitForLoadState("networkidle");
     const searchTerm = "Dentist";
 
-    const input = page.getByPlaceholder("Enter search term");
+    const input = page.getByRole("searchbox", { name: "search term" });
     await input.fill(searchTerm);
 
     await expect(input).toHaveValue(searchTerm);
 
     await input.press("Enter");
 
-    const links = page.locator('a[href^="translations"]');
+    const links = page.getByTestId("translations").getByRole("link");
     await expect(links).toHaveCount(1);
   },
 );

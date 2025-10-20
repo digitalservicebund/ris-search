@@ -113,13 +113,13 @@ useStaticPageSeo("translations-list");
         >
           <InputField
             id="searchInput"
-            label="Suche nach Rechtsinformationen"
+            label="Search for english translation of a german federal law or regulation"
             visually-hide-label
           >
+            <label for="searchInput" class="sr-only">Search term</label>
             <InputText
               id="searchInput"
               v-model="searchTerm"
-              aria-label="Suchbegriff"
               fluid
               placeholder="Enter search term"
               autofocus
@@ -138,26 +138,27 @@ useStaticPageSeo("translations-list");
           </Button>
         </form>
       </section>
+      <div data-testid="translations">
+        <a
+          v-for="t in sortedTranslations"
+          :key="t['@id']"
+          :href="`translations/${t['@id']}`"
+          class="group my-16 block bg-white p-8 px-32 py-24 no-underline hover:no-underline"
+        >
+          <div class="max-w-prose space-y-24">
+            <span class="mr-24">{{ t["@id"] }}</span>
+            <span>{{ t.translationOfWork }}</span>
 
-      <a
-        v-for="t in sortedTranslations"
-        :key="t['@id']"
-        :href="`translations/${t['@id']}`"
-        class="group my-16 block bg-white p-8 px-32 py-24 no-underline hover:no-underline"
-      >
-        <div class="max-w-prose space-y-24">
-          <span class="mr-24">{{ t["@id"] }}</span>
-          <span>{{ t.translationOfWork }}</span>
+            <h2
+              class="ris-heading3-bold max-w-title mt-8 block text-balance text-blue-800 group-hover:underline"
+            >
+              {{ t.name }}
+            </h2>
 
-          <h2
-            class="ris-heading3-bold max-w-title mt-8 block text-balance text-blue-800 group-hover:underline"
-          >
-            {{ t.name }}
-          </h2>
-
-          <p class="text-gray-900">{{ t.translator }}</p>
-        </div>
-      </a>
+            <p class="text-gray-900">{{ t.translator }}</p>
+          </div>
+        </a>
+      </div>
     </div>
   </ContentWrapper>
 </template>

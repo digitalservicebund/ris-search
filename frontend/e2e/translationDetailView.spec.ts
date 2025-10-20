@@ -6,7 +6,8 @@ test(
   { tag: ["@RISDEV-8950"] },
   async ({ page }) => {
     await page.goto("/translations");
-    const links = page.locator('a[href^="translations"]');
+    const links = page.getByTestId("translations").getByRole("link");
+
     await expect(links).toHaveCount(3);
 
     const title = "Act on Chemistry and Dentists";
