@@ -56,10 +56,9 @@ function getShortReportSnippet(
   if (start > 0) snippet = "… " + snippet;
   if (end < fullText.length) snippet += " …";
 
-  const regex = new RegExp(
-    `(${keyword.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")})`,
-    "gi",
-  );
+  const escapedKeyword = keyword.replaceAll(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const regex = new RegExp(`(${escapedKeyword})`, "gi");
+
   return snippet.replace(regex, "<mark>$1</mark>");
 }
 
