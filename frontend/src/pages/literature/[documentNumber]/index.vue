@@ -18,6 +18,8 @@ import {
   tabStyles,
 } from "~/components/Tabs.styles";
 import { useBackendURL } from "~/composables/useBackendURL";
+import LiteratureDetails from "~/pages/literature/[documentNumber]/LiteratureDetails.vue";
+import LiteratureMetadata from "~/pages/literature/[documentNumber]/LiteratureMetadata.vue";
 import { DocumentKind, type Literature } from "~/types";
 import { formatDocumentKind } from "~/utils/displayValues";
 import IcBaselineSubject from "~icons/ic/baseline-subject";
