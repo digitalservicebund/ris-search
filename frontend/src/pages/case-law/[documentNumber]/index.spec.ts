@@ -99,7 +99,9 @@ describe("case law single view page", async () => {
   it("displays Inhaltsverzeichnis correctly with links to anchors", async () => {
     const wrapper = await mountSuspended(CaseLawPage);
 
-    const tocLinks = wrapper.findAll(".case-law h2");
+    const content = wrapper.find(".js-content");
+
+    const tocLinks = content.findAll(".case-law h2");
     const expectedLinks = [
       { id: "leitsatz", title: "Leitsatz" },
       { id: "orientierungssatz", title: "Orientierungssatz" },

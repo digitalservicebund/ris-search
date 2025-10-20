@@ -156,50 +156,84 @@ useDynamicSeo({ title, description });
         </p>
       </Message>
     </div>
-    <Tabs value="0">
-      <TabList :pt="tabListStyles">
-        <Tab
-          class="flex items-center gap-8"
-          :pt="tabStyles"
-          value="0"
-          aria-label="Text of the translation"
-        >
-          <IcBaselineSubject />Text
-        </Tab>
-        <Tab
-          data-attr="translation-metadata-tab"
-          class="flex items-center gap-8"
-          :pt="tabStyles"
-          value="1"
-          aria-label="Details of the translation"
-        >
-          <IcOutlineInfo />Details
-        </Tab>
-      </TabList>
-      <TabPanels>
-        <TabPanel value="0" :pt="tabPanelStyles">
-          <div class="container">
-            <main class="max-w-prose" v-html="html"></main>
-          </div>
-        </TabPanel>
-        <TabPanel value="1" :pt="tabPanelStyles">
-          <section aria-labelledby="detailsTabPanelTitle" class="container">
-            <h2 id="detailsTabPanelTitle" class="ris-heading3-bold my-24">
-              Details
-            </h2>
-            <Properties>
-              <PropertiesItem
-                label="Translation provided by:"
-                :value="translatedBy"
-              />
-              <PropertiesItem
-                label="Version information:"
-                :value="versionInformation"
-              />
-            </Properties>
-          </section>
-        </TabPanel>
-      </TabPanels>
-    </Tabs>
+
+    <div v-if="currentTranslation" class="no-js-content">
+      <nav class="container py-16">
+        <h2 class="ris-heading3-bold mb-16">Contents</h2>
+        <ul class="flex gap-16">
+          <li><a href="#text" class="ris-link1-regular">Text</a></li>
+          <li><a href="#details" class="ris-link1-regular">Details</a></li>
+        </ul>
+      </nav>
+
+      <section id="text" class="container">
+        <h2 class="ris-heading3-bold mb-24">Text</h2>
+        <main class="max-w-prose" v-html="html"></main>
+      </section>
+
+      <section id="details" class="container pt-24 pb-80">
+        <h2 class="ris-heading3-bold mb-24">Details</h2>
+        <Properties>
+          <PropertiesItem
+            label="Translation provided by:"
+            :value="translatedBy"
+          />
+          <PropertiesItem
+            label="Version information:"
+            :value="versionInformation"
+          />
+        </Properties>
+      </section>
+    </div>
+
+    <div v-if="currentTranslation" class="js-content">
+      <client-only>
+        <Tabs value="0">
+          <TabList :pt="tabListStyles">
+            <Tab
+              class="flex items-center gap-8"
+              :pt="tabStyles"
+              value="0"
+              aria-label="Text of the translation"
+            >
+              <IcBaselineSubject />Text
+            </Tab>
+            <Tab
+              data-attr="translation-metadata-tab"
+              class="flex items-center gap-8"
+              :pt="tabStyles"
+              value="1"
+              aria-label="Details of the translation"
+            >
+              <IcOutlineInfo />Details
+            </Tab>
+          </TabList>
+          <TabPanels>
+            <TabPanel value="0" :pt="tabPanelStyles">
+              <div class="container">
+                <main class="max-w-prose" v-html="html"></main>
+              </div>
+            </TabPanel>
+            <TabPanel value="1" :pt="tabPanelStyles">
+              <section aria-labelledby="detailsTabPanelTitle" class="container">
+                <h2 id="detailsTabPanelTitle" class="ris-heading3-bold my-24">
+                  Details
+                </h2>
+                <Properties>
+                  <PropertiesItem
+                    label="Translation provided by:"
+                    :value="translatedBy"
+                  />
+                  <PropertiesItem
+                    label="Version information:"
+                    :value="versionInformation"
+                  />
+                </Properties>
+              </section>
+            </TabPanel>
+          </TabPanels>
+        </Tabs>
+      </client-only>
+    </div>
   </ContentWrapper>
 </template>

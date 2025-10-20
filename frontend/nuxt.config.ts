@@ -81,6 +81,12 @@ export default defineNuxtConfig({
         { rel: "mask-icon", href: "/favicon.svg", color: "#0b3d91" },
         { rel: "manifest", href: "/site.webmanifest" },
       ],
+      script: [
+        {
+          innerHTML: 'document.documentElement.classList.add("js");',
+          tagPosition: "head",
+        },
+      ],
     },
   },
   srcDir: "src/",
