@@ -29,15 +29,18 @@ const currentVersionValidityStatus = computed(() => {
   return getValidityStatus(validityInterval);
 });
 
-const latestFutureVersion = computed(() => {
+const firstFutureVersion = computed(() => {
   if (currentVersionValidityStatus.value !== "InForce") return undefined;
-  const last = props.versions[props.versions.length - 1];
-  const latestValidityInterval = temporalCoverageToValidityInterval(
-    last.item.workExample.temporalCoverage,
-  );
-  return getValidityStatus(latestValidityInterval) === "FutureInForce"
-    ? last.item
-    : undefined;
+
+  const firstFutureInForce = props.versions.find((v) => {
+    return (
+      getValidityStatus(
+        temporalCoverageToValidityInterval(v.item.workExample.temporalCoverage),
+      ) === "FutureInForce"
+    );
+  });
+
+  return firstFutureInForce?.item;
 });
 </script>
 
@@ -45,7 +48,7 @@ const latestFutureVersion = computed(() => {
   <VersionWarningMessage
     :current-version-validity-status="currentVersionValidityStatus"
     :in-force-version-link="inForceVersionLink"
-    :future-version="latestFutureVersion"
+    :future-version="firstFutureVersion"
     historical-warning-message="Historische Fassung."
     future-warning-message="Zukünftige Fassung."
   />
