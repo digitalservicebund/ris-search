@@ -19,10 +19,21 @@ describe("NormVersionWarning", () => {
       item: {
         legislationIdentifier: "eli/bund/bgbl-1/2020/s1126/regelungstext-1",
         workExample: {
-          temporalCoverage: "2023-01-01/2923-12-31",
+          temporalCoverage: "2023-01-01/2823-12-31",
           legislationIdentifier:
             "eli/bund/bgbl-1/2020/s1126/2023-01-01/1/deu/regelungstext-1",
           legislationLegalForce: "InForce",
+        },
+      },
+    },
+    {
+      item: {
+        legislationIdentifier: "eli/bund/bgbl-1/2020/s1126/regelungstext-1",
+        workExample: {
+          temporalCoverage: "2824-01-01/2923-12-31",
+          legislationIdentifier:
+            "eli/bund/bgbl-1/2020/s1126/2024-01-01/1/deu/regelungstext-1",
+          legislationLegalForce: "NotInForce",
         },
       },
     },
@@ -39,7 +50,7 @@ describe("NormVersionWarning", () => {
     },
   ] as SearchResult<LegislationWork>[];
 
-  it("renders message when a future version exists for the current in force version", () => {
+  it("renders message with the first future version for the current in force version", () => {
     const wrapper = mount(NormVersionWarning, {
       props: {
         versions: testVersions,
@@ -47,7 +58,7 @@ describe("NormVersionWarning", () => {
       },
       global: { stubs: ["RouterLink"] },
     });
-    expect(wrapper.html()).toContain("Neue Fassung ab 01.01.2924");
+    expect(wrapper.html()).toContain("Neue Fassung ab 01.01.2824");
     expect(wrapper.html()).toContain(
       `/norms/${testVersions[2].item.workExample.legislationIdentifier}`,
     );
