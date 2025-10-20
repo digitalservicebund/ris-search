@@ -1,9 +1,5 @@
 {
   "properties": [
-    {
-      "name": "feature-flags.advanced-search",
-      "type": "java.lang.Boolean",
-      "description": "Whether to enable advanced search endpoints. Accessed by @ConditionalOnProperty."
-    }
+
   ]
 }
