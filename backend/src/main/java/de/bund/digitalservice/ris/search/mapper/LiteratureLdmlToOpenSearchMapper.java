@@ -35,40 +35,12 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import javax.xml.transform.stream.StreamSource;
-import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.eclipse.persistence.exceptions.DescriptorException;
 
 public class LiteratureLdmlToOpenSearchMapper {
-
-  @Getter
-  private enum FrbrAuthorType {
-    AUTHOR("#verfasser"),
-    COLLABORATOR("#mitarbeiter"),
-    ORIGINATOR("#urheber"),
-    CONFERENCE("#kongress");
-
-    private final String value;
-
-    FrbrAuthorType(String value) {
-      this.value = value;
-    }
-  }
-
-  @Getter
-  private enum FrbrAliasType {
-    MAIN_TITLE("haupttitel"),
-    MAIN_TITLE_ADDITION("hauptsachtitelZusatz"),
-    DOCUMENTARY_TITLE("dokumentarischerTitel");
-
-    private final String value;
-
-    FrbrAliasType(String value) {
-      this.value = value;
-    }
-  }
 
   private static final Logger logger = LogManager.getLogger(LiteratureLdmlToOpenSearchMapper.class);
 
@@ -227,27 +199,27 @@ public class LiteratureLdmlToOpenSearchMapper {
   }
 
   private static String extractMainTitle(LiteratureLdml literatureLdml) {
-    return extractFrbrAlias(literatureLdml, FrbrAliasType.MAIN_TITLE);
+    return extractFrbrAlias(literatureLdml, "haupttitel");
   }
 
   private static String extractMainTitleAdditions(LiteratureLdml literatureLdml) {
-    return extractFrbrAlias(literatureLdml, FrbrAliasType.MAIN_TITLE_ADDITION);
+    return extractFrbrAlias(literatureLdml, "hauptsachtitelZusatz");
   }
 
   private static String extractDocumentaryTitle(LiteratureLdml literatureLdml) {
-    return extractFrbrAlias(literatureLdml, FrbrAliasType.DOCUMENTARY_TITLE);
+    return extractFrbrAlias(literatureLdml, "dokumentarischerTitel");
   }
 
   private static List<String> extractAuthors(LiteratureLdml literatureLdml) {
-    return extractPerson(literatureLdml, FrbrAuthorType.AUTHOR);
+    return extractPerson(literatureLdml, "#verfasser");
   }
 
   private static List<String> extractCollaborators(LiteratureLdml literatureLdml) {
-    return extractPerson(literatureLdml, FrbrAuthorType.COLLABORATOR);
+    return extractPerson(literatureLdml, "#mitarbeiter");
   }
 
   private static List<String> extractOriginators(LiteratureLdml literatureLdml) {
-    var originatorEids = getFrbrAuthorReferenceLinks(literatureLdml, FrbrAuthorType.ORIGINATOR);
+    var originatorEids = getFrbrAuthorReferenceLinks(literatureLdml, "#urheber");
 
     return Optional.ofNullable(literatureLdml)
         .map(LiteratureLdml::getDoc)
@@ -262,7 +234,7 @@ public class LiteratureLdmlToOpenSearchMapper {
   }
 
   private static List<String> extractConferenceNotes(LiteratureLdml literatureLdml) {
-    var conferenceEids = getFrbrAuthorReferenceLinks(literatureLdml, FrbrAuthorType.CONFERENCE);
+    var conferenceEids = getFrbrAuthorReferenceLinks(literatureLdml, "#kongress");
 
     return Optional.ofNullable(literatureLdml)
         .map(LiteratureLdml::getDoc)
@@ -315,19 +287,17 @@ public class LiteratureLdmlToOpenSearchMapper {
   }
 
   private static List<String> getFrbrAuthorReferenceLinks(
-      LiteratureLdml literatureLdml, FrbrAuthorType type) {
-    var frbrAuthors =
-        Optional.ofNullable(literatureLdml)
-            .map(LiteratureLdml::getDoc)
-            .map(Doc::getMeta)
-            .map(Meta::getIdentification)
-            .map(Identification::getFrbrWork)
-            .map(FrbrWork::getFrbrAuthors)
-            .orElse(Collections.emptyList())
-            .stream()
-            .filter(author -> Objects.equals(author.getAs(), type.getValue()));
+      LiteratureLdml literatureLdml, String type) {
 
-    return frbrAuthors
+    return Optional.ofNullable(literatureLdml)
+        .map(LiteratureLdml::getDoc)
+        .map(Doc::getMeta)
+        .map(Meta::getIdentification)
+        .map(Identification::getFrbrWork)
+        .map(FrbrWork::getFrbrAuthors)
+        .orElse(Collections.emptyList())
+        .stream()
+        .filter(author -> Objects.equals(author.getAs(), type))
         .map(
             author ->
                 Optional.ofNullable(author.getHref())
@@ -337,8 +307,8 @@ public class LiteratureLdmlToOpenSearchMapper {
         .toList();
   }
 
-  private static List<String> extractPerson(LiteratureLdml literatureLdml, FrbrAuthorType type) {
-    var personEids = getFrbrAuthorReferenceLinks(literatureLdml, type);
+  private static List<String> extractPerson(LiteratureLdml literatureLdml, String authorType) {
+    var personEids = getFrbrAuthorReferenceLinks(literatureLdml, authorType);
 
     return Optional.ofNullable(literatureLdml)
         .map(LiteratureLdml::getDoc)
@@ -352,7 +322,7 @@ public class LiteratureLdmlToOpenSearchMapper {
         .toList();
   }
 
-  private static String extractFrbrAlias(LiteratureLdml literatureLdml, FrbrAliasType type) {
+  private static String extractFrbrAlias(LiteratureLdml literatureLdml, String aliasType) {
     return Optional.ofNullable(literatureLdml)
         .map(LiteratureLdml::getDoc)
         .map(Doc::getMeta)
@@ -361,7 +331,7 @@ public class LiteratureLdmlToOpenSearchMapper {
         .map(FrbrWork::getFrbrAliasList)
         .orElse(Collections.emptyList())
         .stream()
-        .filter(alias -> Objects.equals(alias.getName(), type.getValue()))
+        .filter(alias -> Objects.equals(alias.getName(), aliasType))
         .findFirst()
         .map(FrbrNameValueElement::getValue)
         .orElse(null);

@@ -136,7 +136,7 @@ class LiteratureLdmlToOpenSearchMapperTest {
     String literatureLdml =
         """
                  <akn:akomaNtoso xmlns:akn="http://docs.oasis-open.org/legaldocml/ns/akn/3.0"
-                   xmlns:ris="http://ldml.neuris.de/literature/metadata/">
+                   xmlns:ris="http://ldml.neuris.de/literature/unselbstaendig/metadata/">
                      <akn:doc name="offene-struktur">
                        <akn:meta>
                            <akn:identification>
@@ -172,7 +172,7 @@ class LiteratureLdmlToOpenSearchMapperTest {
     String literatureLdml =
         """
                   <akn:akomaNtoso xmlns:akn="http://docs.oasis-open.org/legaldocml/ns/akn/3.0"
-                  xmlns:ris="http://ldml.neuris.de/literature/metadata/">
+                  xmlns:ris="http://ldml.neuris.de/literature/unselbstaendig/metadata/">
                    <akn:doc name="offene-struktur">
                      <akn:meta>
                          <akn:identification>
@@ -236,7 +236,7 @@ class LiteratureLdmlToOpenSearchMapperTest {
     String literatureLdml =
         """
                   <akn:akomaNtoso xmlns:akn="http://docs.oasis-open.org/legaldocml/ns/akn/3.0"
-                   xmlns:ris="http://ldml.neuris.de/literature/metadata/">
+                   xmlns:ris="http://ldml.neuris.de/literature/unselbstaendig/metadata/">
                    <akn:doc name="offene-struktur">
                      <akn:meta>
                          <akn:identification>
@@ -363,7 +363,7 @@ class LiteratureLdmlToOpenSearchMapperTest {
     String literatureLdml =
         """
             <akn:akomaNtoso xmlns:akn="http://docs.oasis-open.org/legaldocml/ns/akn/3.0"
-             xmlns:ris="http://ldml.neuris.de/literature/metadata/">
+             xmlns:ris="http://ldml.neuris.de/literature/unselbstaendig/metadata/">
              <akn:doc name="offene-struktur">
                <akn:meta>
                    <akn:identification>
@@ -398,7 +398,7 @@ class LiteratureLdmlToOpenSearchMapperTest {
     String literatureLdml =
         """
             <akn:akomaNtoso xmlns:akn="http://docs.oasis-open.org/legaldocml/ns/akn/3.0"
-             xmlns:ris="http://ldml.neuris.de/literature/metadata/">
+             xmlns:ris="http://ldml.neuris.de/literature/unselbstaendig/metadata/">
              <akn:doc name="offene-struktur">
                <akn:meta>
                    <akn:identification>
@@ -476,7 +476,7 @@ class LiteratureLdmlToOpenSearchMapperTest {
     String literatureLdml =
         """
                              <akn:akomaNtoso xmlns:akn="http://docs.oasis-open.org/legaldocml/ns/akn/3.0"
-                               xmlns:ris="http://ldml.neuris.de/literature/metadata/">
+                               xmlns:ris="http://ldml.neuris.de/literature/unselbstaendig/metadata/">
                                  <akn:doc name="offene-struktur">
                                    <akn:meta>
                                        <akn:identification>
