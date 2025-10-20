@@ -72,6 +72,10 @@ export default defineNuxtConfig({
     },
   },
   srcDir: "src/",
+  dir: {
+    public: "src/public",
+  },
+  serverDir: "src/server",
   css: ["~/assets/main.css"],
   devServer: {
     port: parseInt(getStringOrDefault(process.env.PORT, "3000")),

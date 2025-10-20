@@ -1,3 +1,4 @@
+import type { AsyncData, NuxtError } from "#app";
 import { useBackendURL } from "~/composables/useBackendURL";
 import type { LegislationWork } from "~/types";
 import { getTextFromElements, parseDocument } from "~/utils/htmlParser";
@@ -29,7 +30,12 @@ export interface NormContent {
  * manifestation ELI of the HTML version will be derived from metadata (from
  * first API call).
  */
-export function useFetchNormContent(expressionEli: string) {
+export function useFetchNormContent(
+  expressionEli: string,
+): AsyncData<
+  NormContent,
+  NuxtError<NormContent> | NuxtError<null> | undefined
+> {
   const requestFetch = useRequestFetch(); // unlike $fetch, useRequestFetch forwards client cookies
   return useAsyncData(`json+html for ${expressionEli}`, async () => {
     const backendURL = useBackendURL();
@@ -114,7 +120,10 @@ export interface NormArticleContent {
 export function useFetchNormArticleContent(
   expressionEli: string,
   articleEId?: string,
-) {
+): AsyncData<
+  NormArticleContent,
+  NuxtError<NormContent> | NuxtError<null> | undefined
+> {
   const requestFetch = useRequestFetch(); // unlike $fetch, useRequestFetch forwards client cookies
   const backendURL = useBackendURL();
   return useAsyncData(
@@ -162,5 +171,6 @@ function getContentUrl(metadata: LegislationWork) {
   } else {
     console.info("using manifestation", encoding?.["@id"]);
   }
+
   return contentUrl;
 }

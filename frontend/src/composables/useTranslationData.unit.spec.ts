@@ -52,7 +52,7 @@ describe("fetchTranslationList", () => {
     expect(requestFetchMock).toHaveBeenCalledWith(
       "https://mock-backend/v1/translatedLegislation",
     );
-    expect(error.value).toBeNull();
+    expect(error.value).toBeUndefined();
     expect(data.value).toHaveLength(2);
   });
 });
@@ -91,7 +91,7 @@ describe("fetchTranslationAndHTML", () => {
       },
     );
 
-    expect(error.value).toBeNull();
+    expect(error.value).toBeUndefined();
 
     expect(data.value?.content).toEqual(mockTranslationResponse[0]);
     expect(data.value?.html).toEqual(mockHtmlResponse);
@@ -113,7 +113,7 @@ describe("fetchTranslationAndHTML", () => {
     expect(error.value?.statusCode).toBe(404);
     expect(error.value?.statusMessage).toBe("Translation not found");
 
-    expect(data.value).toBeNull();
+    expect(data.value).toBeUndefined();
   });
 
   it("returns 404 when there is no entry for ris:filename", async () => {
@@ -141,7 +141,7 @@ describe("fetchTranslationAndHTML", () => {
     expect(error.value?.statusCode).toBe(404);
     expect(error.value?.statusMessage).toBe("Translation filename not found");
 
-    expect(data.value).toBeNull();
+    expect(data.value).toBeUndefined();
   });
 });
 

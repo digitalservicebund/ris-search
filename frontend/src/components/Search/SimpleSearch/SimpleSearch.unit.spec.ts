@@ -1,50 +1,61 @@
-import { mountSuspended } from "@nuxt/test-utils/runtime";
+import { renderSuspended } from "@nuxt/test-utils/runtime";
+import userEvent from "@testing-library/user-event";
+import { screen, waitFor } from "@testing-library/vue";
 import { vi } from "vitest";
 import SimpleSearch from "./SimpleSearch.vue";
-import { useSimpleSearchParamsStore } from "~/stores/searchParams";
-import { DocumentKind } from "~/types";
 
 vi.mock("~/services/searchService", () => {
   return { search: () => ({}) };
 });
 
-interface SimpleSearchVM extends ComponentPublicInstance {
-  title: string;
-}
-
 describe("SimpleSearch", () => {
   it("sets the title attribute", async () => {
-    const wrapper = await mountSuspended(SimpleSearch);
-    const store = useSimpleSearchParamsStore();
-    await nextTick();
-    expect((wrapper.vm as SimpleSearchVM).title).toBe("Suche");
+    const user = userEvent.setup();
 
-    store.category = DocumentKind.CaseLaw;
+    await renderSuspended(SimpleSearch);
     await nextTick();
-    expect((wrapper.vm as SimpleSearchVM).title).toBe("Rechtsprechung — Suche");
 
-    store.query = "frühstück brötchen";
-    await nextTick();
-    expect((wrapper.vm as SimpleSearchVM).title).toBe(
-      "frühstück brötchen — Suche",
+    await waitFor(() => {
+      expect(document.title).toBe("Suche");
+    });
+
+    await user.click(
+      screen.getByRole("button", { name: "Gerichtsentscheidungen" }),
     );
+
+    expect(document.title).toBe("Rechtsprechung — Suche");
+
+    await user.type(
+      screen.getByRole("searchbox", { name: "Suchbegriff" }),
+      "frühstück brötchen",
+    );
+    await user.click(screen.getByRole("button", { name: "Suchen" }));
+    await nextTick();
+
+    expect(document.title).toBe("frühstück brötchen — Suche");
   });
 
   for (const testCase of [
-    { documentKind: DocumentKind.All, isFilterVisible: false },
-    { documentKind: DocumentKind.Norm, isFilterVisible: false },
-    { documentKind: DocumentKind.CaseLaw, isFilterVisible: true },
-    { documentKind: DocumentKind.Literature, isFilterVisible: false },
+    { category: "Alle Dokumentarten", filterShouldBeVisible: false },
+    { category: "Gesetze & Verordnungen", filterShouldBeVisible: false },
+    { category: "Gerichtsentscheidungen", filterShouldBeVisible: true },
+    { category: "Literaturnachweise", filterShouldBeVisible: false },
   ]) {
-    it(`sets the visibility of the duration filter to ${testCase.isFilterVisible} when the document kind is ${testCase.documentKind}`, async () => {
-      const wrapper = await mountSuspended(SimpleSearch);
-      const store = useSimpleSearchParamsStore();
-      store.category = testCase.documentKind;
-      await nextTick();
+    it(`sets the visibility of the duration filter to ${testCase.filterShouldBeVisible} when the category is ${testCase.category}`, async () => {
+      const user = userEvent.setup();
 
-      expect(wrapper.findComponent({ name: "DateRangeFilter" }).exists()).toBe(
-        testCase.isFilterVisible,
-      );
+      await renderSuspended(SimpleSearch);
+      await user.click(screen.getByRole("button", { name: testCase.category }));
+
+      const dateRangeSelect = screen.queryByRole("combobox", {
+        name: "Keine zeitliche Begrenzung",
+      });
+
+      if (testCase.filterShouldBeVisible) {
+        expect(dateRangeSelect).toBeInTheDocument();
+      } else {
+        expect(dateRangeSelect).not.toBeInTheDocument();
+      }
     });
   }
 });
