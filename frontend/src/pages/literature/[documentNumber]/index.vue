@@ -17,6 +17,8 @@ import {
   tabStyles,
 } from "~/components/Tabs.styles";
 import { useBackendURL } from "~/composables/useBackendURL";
+import LiteratureDetails from "~/pages/literature/[documentNumber]/LiteratureDetails.vue";
+import LiteratureMetadata from "~/pages/literature/[documentNumber]/LiteratureMetadata.vue";
 import { DocumentKind, type Literature } from "~/types";
 import { formatDocumentKind } from "~/utils/displayValues";
 import IcBaselineSubject from "~icons/ic/baseline-subject";
@@ -113,13 +115,13 @@ if (contentError?.value) {
         </TabPanel>
         <TabPanel value="1" :pt="tabPanelStyles" class="pt-24 pb-80">
           <section aria-labelledby="detailsTabPanelTitle" class="container">
-            <h2 id="detailsTabPanelTitle" class="ris-heading3-bold my-24">
-              Details
-            </h2>
-            <IncompleteDataMessage class="my-24" />
-            <Properties>
-              <PropertiesItem label="Property:" value="todo" />
-            </Properties>
+            <LiteratureDetails
+              :languages="['FooBar']"
+              :authors="['FooBar']"
+              :collaborators="['FooBar']"
+              :conference-notes="['FooBar']"
+              :norm-references="['FooBar']"
+            />
           </section>
         </TabPanel>
       </TabPanels> </Tabs
