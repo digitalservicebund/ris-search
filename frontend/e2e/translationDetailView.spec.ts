@@ -12,7 +12,7 @@ test(
 
     const title = "Act on Chemistry and Dentists";
 
-    await page.getByRole("link", { name: title }).first().click();
+    await page.getByRole("link", { name: title }).click();
 
     await page.waitForURL("/translations/CDe");
 
@@ -28,11 +28,11 @@ test("opens the page via URL", { tag: ["@RISDEV-8950"] }, async ({ page }) => {
   await page.goto("/translations/TestV");
   await expect(
     page.getByRole("heading", {
-      name: "Dummy Data Regulation",
+      name: "Test Regulation for the Model Framework of the Public Service",
     }),
   ).toBeVisible();
   await expect(page).toHaveTitle(
-    "Dummy Data Regulation – English Translation | Rechtsinformationen des Bundes",
+    "Test Regulation for the Model Framework of the Public | Rechtsinformationen des Bundes",
   );
 });
 
@@ -96,10 +96,11 @@ test(
   { tag: ["@RISDEV-8950"] },
   async ({ page }) => {
     await page.goto("/translations/TestV");
-    const link = page.getByRole("link", { name: "Go to the German version" });
-    await expect(link).toHaveAttribute(
-      "href",
-      "/norms/eli/bund/bgbl-1/1964/s902",
-    );
+    await page.getByRole("link", { name: "Go to the German version" }).click();
+    await expect(
+      page.getByRole("heading", {
+        name: "Testverordnung zur Musterregelung des öffentlichen Dienstes",
+      }),
+    ).toBeVisible();
   },
 );

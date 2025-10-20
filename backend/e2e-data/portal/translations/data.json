@@ -1,9 +1,9 @@
 [
   {
     "abbreviation": "TestV",
-    "name": "Dummy Data Regulation",
-    "filename": "englisch_abc.html",
-    "german_name": "Dummy Data Gesetz",
+    "name": "Test Regulation for the Model Framework of the Public Service",
+    "filename": "englisch_TestV.html",
+    "german_name": "Testverordnung zur Musterregelung des öffentlichen Dienstes",
     "translator": "Translation provided by someone and someone.",
     "version": "Version information: The translation includes the amendment(s) to the Act by Article 1 of the Act of 8 October 2021"
   },
