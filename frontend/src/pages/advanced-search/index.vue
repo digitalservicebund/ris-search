@@ -9,7 +9,8 @@ import SortSelect from "~/components/Search/SortSelect.vue";
 import { useAdvancedSearch } from "~/composables/useAdvancedSearch";
 import { useAdvancedSearchRouteParams } from "~/composables/useAdvancedSearchRouteParams";
 import { queryableDataFields } from "~/pages/advanced-search/dataFields";
-import { DocumentKind } from "~/types";
+import { DocumentKind, type SearchResult } from "~/types";
+import { getIdentifier } from "~/utils/anyDocument";
 import { formatDocumentKind } from "~/utils/displayValues";
 import { formatNumberWithSeparators } from "~/utils/numberFormatting";
 
@@ -161,7 +162,7 @@ function submit() {
           <output v-if="searchResults">
             <SearchResult
               v-for="searchResult in searchResults.member"
-              :key="searchResult.item['@id']"
+              :key="getIdentifier(searchResult.item)"
               :search-result
               :order="1"
             />
