@@ -184,73 +184,148 @@ if (contentError?.value) {
         />
       </div>
     </div>
-    <Tabs v-if="!!caseLaw" value="0">
-      <TabList :pt="tabListStyles">
-        <Tab
-          class="flex items-center gap-8"
-          :pt="tabStyles"
-          value="0"
-          aria-label="Text der Gerichtsentscheidung"
-          ><IcBaselineSubject />Text</Tab
-        >
-        <Tab
-          data-attr="caselaw-metadata-tab"
-          class="flex items-center gap-8"
-          :pt="tabStyles"
-          value="1"
-          aria-label="Details zur Gerichtsentscheidung"
-          ><IcOutlineInfo />Details</Tab
-        >
-      </TabList>
-      <TabPanels>
-        <TabPanel value="0" :pt="tabPanelStyles">
-          <!-- Content -->
-          <SidebarLayout class="container">
-            <template #content>
-              <IncompleteDataMessage class="mb-16" />
-              <div class="case-law" v-html="html"></div>
-            </template>
-            <template #sidebar>
-              <client-only>
-                <TableOfContents :table-of-content-entries="tocEntries || []" />
-              </client-only>
-            </template>
-          </SidebarLayout>
-        </TabPanel>
-        <TabPanel value="1" :pt="tabPanelStyles" class="pt-24 pb-80">
-          <section aria-labelledby="detailsTabPanelTitle" class="container">
-            <h2 id="detailsTabPanelTitle" class="ris-heading3-bold my-24">
-              Details
-            </h2>
-            <IncompleteDataMessage class="my-24" />
 
-            <Properties>
-              <PropertiesItem
-                label="Spruchkörper:"
-                :value="caseLaw.judicialBody"
-              />
-              <PropertiesItem label="ECLI:" :value="caseLaw.ecli" />
-              <PropertiesItem label="Normen:" value="" />
-              <PropertiesItem
-                label="Entscheidungsname:"
-                :value="caseLaw.decisionName?.join(', ')"
-              />
-              <PropertiesItem label="Vorinstanz:" value="" />
-              <PropertiesItem label="Download:">
-                <NuxtLink
-                  data-attr="xml-zip-view"
-                  class="ris-link1-regular"
-                  external
-                  :href="zipUrl"
-                >
-                  <MaterialSymbolsDownload class="mr-2 inline" />
-                  {{ caseLaw.documentNumber }} als ZIP herunterladen
-                </NuxtLink>
-              </PropertiesItem>
-            </Properties>
-          </section>
-        </TabPanel>
-      </TabPanels>
-    </Tabs></ContentWrapper
-  >
+    <div v-if="caseLaw" class="no-js-content">
+      <nav class="container py-16">
+        <h2 class="ris-heading3-bold mb-16">Contents</h2>
+        <ul class="flex gap-16">
+          <li><a href="#text" class="ris-link1-regular">Text</a></li>
+          <li><a href="#details" class="ris-link1-regular">Details</a></li>
+        </ul>
+      </nav>
+      <section id="text" class="container">
+        <h2 class="ris-heading3-bold mb-24">Text</h2>
+        <SidebarLayout class="container">
+          <template #content>
+            <IncompleteDataMessage class="mb-16" />
+            <div class="case-law" v-html="html"></div>
+          </template>
+          <template #sidebar>
+            <client-only>
+              <TableOfContents :table-of-content-entries="tocEntries || []" />
+            </client-only>
+          </template>
+        </SidebarLayout>
+      </section>
+
+      <section id="details" class="container pt-24 pb-80">
+        <h2 class="ris-heading3-bold mb-24">Details</h2>
+        <IncompleteDataMessage class="my-24" />
+        <Properties>
+          <PropertiesItem label="Spruchkörper:" :value="caseLaw.judicialBody" />
+          <PropertiesItem label="ECLI:" :value="caseLaw.ecli" />
+          <PropertiesItem label="Normen:" value="" />
+          <PropertiesItem
+            label="Entscheidungsname:"
+            :value="caseLaw.decisionName?.join(', ')"
+          />
+          <PropertiesItem label="Vorinstanz:" value="" />
+          <PropertiesItem label="Download:">
+            <NuxtLink
+              data-attr="xml-zip-view"
+              class="ris-link1-regular"
+              external
+              :href="zipUrl"
+            >
+              <MaterialSymbolsDownload class="mr-2 inline" />
+              {{ caseLaw.documentNumber }} als ZIP herunterladen
+            </NuxtLink>
+          </PropertiesItem>
+        </Properties>
+      </section>
+    </div>
+
+    <div v-if="caseLaw" class="js-content">
+      <client-only>
+        <Tabs v-if="!!caseLaw" value="0">
+          <TabList :pt="tabListStyles">
+            <Tab
+              class="flex items-center gap-8"
+              :pt="tabStyles"
+              value="0"
+              aria-label="Text der Gerichtsentscheidung"
+              ><IcBaselineSubject />Text</Tab
+            >
+            <Tab
+              data-attr="caselaw-metadata-tab"
+              class="flex items-center gap-8"
+              :pt="tabStyles"
+              value="1"
+              aria-label="Details zur Gerichtsentscheidung"
+              ><IcOutlineInfo />Details</Tab
+            >
+          </TabList>
+          <TabPanels>
+            <TabPanel value="0" :pt="tabPanelStyles">
+              <!-- Content -->
+              <SidebarLayout class="container">
+                <template #content>
+                  <IncompleteDataMessage class="mb-16" />
+                  <div class="case-law" v-html="html"></div>
+                </template>
+                <template #sidebar>
+                  <client-only>
+                    <TableOfContents
+                      :table-of-content-entries="tocEntries || []"
+                    />
+                  </client-only>
+                </template>
+              </SidebarLayout>
+            </TabPanel>
+            <TabPanel value="1" :pt="tabPanelStyles" class="pt-24 pb-80">
+              <section aria-labelledby="detailsTabPanelTitle" class="container">
+                <h2 id="detailsTabPanelTitle" class="ris-heading3-bold my-24">
+                  Details
+                </h2>
+                <IncompleteDataMessage class="my-24" />
+
+                <Properties>
+                  <PropertiesItem
+                    label="Spruchkörper:"
+                    :value="caseLaw.judicialBody"
+                  />
+                  <PropertiesItem label="ECLI:" :value="caseLaw.ecli" />
+                  <PropertiesItem label="Normen:" value="" />
+                  <PropertiesItem
+                    label="Entscheidungsname:"
+                    :value="caseLaw.decisionName?.join(', ')"
+                  />
+                  <PropertiesItem label="Vorinstanz:" value="" />
+                  <PropertiesItem label="Download:">
+                    <NuxtLink
+                      data-attr="xml-zip-view"
+                      class="ris-link1-regular"
+                      external
+                      :href="zipUrl"
+                    >
+                      <MaterialSymbolsDownload class="mr-2 inline" />
+                      {{ caseLaw.documentNumber }} als ZIP herunterladen
+                    </NuxtLink>
+                  </PropertiesItem>
+                </Properties>
+              </section>
+            </TabPanel>
+          </TabPanels>
+        </Tabs>
+      </client-only>
+    </div>
+  </ContentWrapper>
 </template>
+
+<style>
+.no-js-content {
+  display: block;
+}
+
+.js-content {
+  display: none;
+}
+
+.js .no-js-content {
+  display: none;
+}
+
+.js .js-content {
+  display: block;
+}
+</style>
