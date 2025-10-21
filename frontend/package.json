@@ -90,7 +90,7 @@
     "license-checker": "^25.0.1",
     "lighthouse": "^12.8.2",
     "msw": "^2.10.2",
-    "nuxt": "3.17.5",
+    "nuxt": "4.1.3",
     "nuxt-auth-utils": "^0.5.20",
     "nuxt-security": "2.2.0",
     "playwright-lighthouse": "^4.0.0",
