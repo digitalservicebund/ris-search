@@ -50,6 +50,16 @@ const validSortOptions = computed(() => {
       return sharedSortOptions;
   }
 });
+
+watch(validSortOptions, (newVal) => {
+  // Reset to a sensible default if the document kind doesn't support the current
+  // sort value
+  if (!model.value) return;
+  const optionsForDocumentKind = newVal.map((i) => i.value);
+  if (!optionsForDocumentKind.includes(model.value)) {
+    model.value = newVal[0]?.value;
+  }
+});
 </script>
 
 <template>
