@@ -27,14 +27,14 @@ const {
   sort,
 } = useAdvancedSearchRouteParams();
 
+const searchFormId = useId();
+
 // Document kind -------------------------------------------
 
 const setDocumentKind: MenuItem["command"] = (e) => {
   if (!e.item.key) return;
   documentKind.value = e.item.key as DocumentKind;
 };
-
-const documentKindGroupId = useId();
 
 const documentKindMenuItems: MenuItem[] = [
   {
@@ -103,15 +103,13 @@ function submit() {
       </div>
 
       <div class="row-start-3 lg:row-span-2 lg:row-start-auto">
-        <div class="mb-40" role="group" :aria-labelledby="documentKindGroupId">
-          <div :id="documentKindGroupId" class="ris-label1-regular mb-8">
-            Dokumentart
-          </div>
+        <fieldset class="mb-40">
+          <legend class="ris-label1-regular mb-8">Dokumentart</legend>
           <PanelMenu
             :model="documentKindMenuItems"
             :expanded-keys="{ [documentKind]: true }"
           />
-        </div>
+        </fieldset>
 
         <DateFilter v-model="dateFilter" :document-kind />
       </div>
@@ -122,6 +120,7 @@ function submit() {
           :data-fields="queryableDataFields"
           :document-kind
           :loading="searchStatus === 'pending'"
+          :form-id="searchFormId"
           @submit="submit"
         />
       </div>
