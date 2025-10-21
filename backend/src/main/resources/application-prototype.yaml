@@ -26,9 +26,6 @@ swagger:
     url: https://testphase.rechtsinformationen.bund.de/
     description: Public API (preview)
 
-feature-flags:
-  advanced-search: false
-
 springdoc:
   swagger-ui:
     supportedSubmitMethods: []

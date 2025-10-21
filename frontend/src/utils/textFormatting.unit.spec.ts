@@ -6,6 +6,7 @@ import {
   removeOuterParentheses,
   truncateAtWord,
   removePrefix,
+  formatArrayProperty,
 } from "./textFormatting";
 
 describe("getStringOrDefault", () => {
@@ -125,5 +126,19 @@ describe("removePrefix", () => {
   });
   it("removes original string when prefix not present", () => {
     expect(removePrefix("Hello World", "Hallo ")).toBe("Hello World");
+  });
+});
+
+describe("formatArrayProperty", () => {
+  it("returns placeholder if array is empty", () => {
+    expect(formatArrayProperty([])).toBe("-");
+  });
+
+  it("returns single value if array contains one element", () => {
+    expect(formatArrayProperty(["foo"])).toBe("foo");
+  });
+
+  it("returns elements joined with comma", () => {
+    expect(formatArrayProperty(["foo", "bar", "baz"])).toBe("foo, bar, baz");
   });
 });

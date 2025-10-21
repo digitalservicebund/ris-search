@@ -10,7 +10,7 @@ useStaticPageSeo("nutzungstests");
 <template>
   <StaticPageWrapper>
     <template #breadcrumb>
-      <RisBreadcrumb title="Für Nutzungstests registrieren" base-path="/" />
+      <RisBreadcrumb :items="[{ label: 'Für Nutzungstests registrieren' }]" />
     </template>
     <PageHeader
       class="max-w-prose"

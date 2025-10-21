@@ -6,7 +6,6 @@
                 <akn:FRBRWork>
                     <akn:FRBRthis value="regelungstext-1"/>
                     <akn:FRBRuri value="TODO"/>
-                    <akn:FRBRalias name="haupttitel" value="Zweites Test-Dokument ULI"/>
                     <akn:FRBRalias name="dokumentarischerTitel" value="Dokumentarischer Titel"/>
                     <akn:FRBRdate date="2022-01-01" name="verkuendungsfassung"/>
                     <akn:FRBRauthor href="recht.bund.de/institution/foobar"/>
@@ -20,7 +19,7 @@
                 <akn:FRBRExpression>
                     <akn:FRBRthis value="regelungstext-1"/>
                     <akn:FRBRuri value="regelungstext-1"/>
-                    <akn:FRBRalias name="documentNumber" value="TEST000000002"/>
+                    <akn:FRBRalias name="documentNumber" value="TEST000000004"/>
                     <akn:FRBRdate date="2022-01-01" name="verkuendung"/>
                     <akn:FRBRauthor href="recht.bund.de/institution/foobar"/>
                     <akn:FRBRlanguage language="deu"/>
@@ -54,7 +53,7 @@
             </akn:analysis>
             <akn:references source="attributsemantik-noch-undefiniert">
                 <akn:TLCPerson eId="mustermann-max-verfasser-1" href="akn/ontology/persons/de/mustermann-max" ris:name="Mustermann, Max" ris:titel="Dr" showAs="Mustermann, Max, Dr"/>
-                <akn:TLCPerson eId="pan-peter-verfasser-2" href="akn/ontology/persons/de/pan-peter" ris:name="Pan, Peter" showAs="Pan, Max"/>
+                <akn:TLCPerson eId="pan-peter-verfasser-1" href="akn/ontology/persons/de/pan-peter" ris:name="Pan, Peter" showAs="Pan, Max"/>
                 <akn:TLCRole eId="verfasser" href="akn/ontology/roles/de/verfasser" showAs="Verfasser"/>
             </akn:references>
             <akn:proprietary source="attributsemantik-noch-undefiniert">
@@ -64,20 +63,17 @@
                         <ris:veroeffentlichungsJahr>2024</ris:veroeffentlichungsJahr>
                     </ris:veroeffentlichungsJahre>
                     <ris:gliederung>
-                        <ris:gliederungEntry>I. Äpfel.</ris:gliederungEntry>
-                        <ris:gliederungEntry>II. Birnen.</ris:gliederungEntry>
-                        <ris:gliederungEntry>III. Orangen.</ris:gliederungEntry>
+                        <ris:gliederungEntry>A. Foo.</ris:gliederungEntry>
+                        <ris:gliederungEntry>B. Bar.</ris:gliederungEntry>
+                        <ris:gliederungEntry>C. Baz.</ris:gliederungEntry>
                     </ris:gliederung>
                 </ris:metadata>
             </akn:proprietary>
         </akn:meta>
-        <akn:preface>
-            <akn:longTitle>
-                <akn:block name="longTitle">Zweites Test-Dokument ULI</akn:block>
-            </akn:longTitle>
-        </akn:preface>
         <akn:mainBody>
-            <akn:hcontainer name="crossheading"/>
+            <akn:div>
+                <akn:p>Sed at nibh est. Aliquam risus orci, lacinia nec ipsum et, mattis iaculis massa. In id enim sit amet diam rutrum pulvinar. Mauris sit amet sapien egestas, feugiat tortor non, egestas mauris. Sed pretium pellentesque faucibus. Nullam porta enim in risus imperdiet, luctus sollicitudin odio placerat. In eu sapien erat. Donec nec venenatis orci, quis tincidunt ante. Aliquam sem velit, blandit ac gravida at, condimentum ac enim. Suspendisse ut eleifend est.</akn:p>
+            </akn:div>
         </akn:mainBody>
     </akn:doc>
 </akn:akomaNtoso>
