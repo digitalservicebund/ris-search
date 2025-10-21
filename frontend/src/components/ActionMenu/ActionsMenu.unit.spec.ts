@@ -90,7 +90,7 @@ describe("ActionsMenu.vue", () => {
 
     expect(spy).toHaveBeenCalledTimes(1);
 
-    const receivedProps = spy.mock.calls?.at(0)?.at(0);
+    const receivedProps = spy.mock.calls[0]?.[0];
 
     expect(receivedProps).toEqual(props);
   });
@@ -108,7 +108,7 @@ describe("ActionsMenu.vue", () => {
 
     expect(spy).toHaveBeenCalledTimes(1);
 
-    const copyUrlCommand = spy.mock.calls?.at(0)?.at(1) as (
+    const copyUrlCommand = spy.mock.calls[0]?.[1] as (
       url: string,
     ) => Promise<void>;
 
@@ -139,7 +139,7 @@ describe("ActionsMenu.vue", () => {
 
     expect(spy).toHaveBeenCalledTimes(1);
 
-    const navigationCommand = spy.mock.calls?.at(0)?.at(2) as (
+    const navigationCommand = spy.mock.calls[0]?.[2] as (
       url: string,
     ) => Promise<void>;
 
@@ -180,20 +180,20 @@ describe("ActionsMenu.vue", () => {
 
     const links = largeScreenDiv?.findAll("a");
     expect(links).toHaveLength(1);
-    expect(links?.at(0)?.attributes("aria-label")).toBe("Link");
-    expect(links?.at(0)?.element.href).toBe("https://example.com/");
+    expect(links?.[0]?.attributes("aria-label")).toBe("Link");
+    expect(links?.[0]?.element.href).toBe("https://example.com/");
 
     const actionButtons = largeScreenDiv?.findAll("button");
     expect(actionButtons).toHaveLength(2);
-    expect(actionButtons?.at(0)?.attributes("aria-label")).toBe("Action");
-    actionButtons?.at(0)?.element.click();
+    expect(actionButtons?.[0]?.attributes("aria-label")).toBe("Action");
+    actionButtons?.[0]?.element.click();
     await nextTick();
     expect(commandEnabled).toHaveBeenCalledOnce();
 
-    expect(actionButtons?.at(1)?.attributes("aria-label")).toBe(
+    expect(actionButtons?.[1]?.attributes("aria-label")).toBe(
       "Disabled Action",
     );
-    actionButtons?.at(1)?.element.click();
+    actionButtons?.[1]?.element.click();
     await nextTick();
     expect(commandDisabled).not.toHaveBeenCalled();
   });
@@ -237,19 +237,19 @@ describe("ActionsMenu.vue", () => {
       .findAll("li");
     expect(actions).toHaveLength(3);
 
-    expect(actions?.at(0)?.text()).toBe("Link");
-    expect(actions?.at(0)?.get("a").attributes("href")).toBe(
+    expect(actions?.[0]?.text()).toBe("Link");
+    expect(actions?.[0]?.get("a").attributes("href")).toBe(
       "https://example.com/",
     );
 
-    expect(actions?.at(1)?.text()).toBe("Action");
-    actions?.at(1)?.get("a").element.click();
+    expect(actions?.[1]?.text()).toBe("Action");
+    actions?.[1]?.get("a").element.click();
     await nextTick();
     expect(commandEnabled).toHaveBeenCalledOnce();
 
-    expect(actions?.at(2)?.text()).toBe("Disabled Action");
-    expect(actions?.at(2)?.attributes("aria-disabled")).toBe("true");
-    actions?.at(2)?.get("span").element.click();
+    expect(actions?.[2]?.text()).toBe("Disabled Action");
+    expect(actions?.[2]?.attributes("aria-disabled")).toBe("true");
+    actions?.[2]?.get("span").element.click();
     await nextTick();
     expect(commandDisabled).not.toHaveBeenCalledOnce();
   });

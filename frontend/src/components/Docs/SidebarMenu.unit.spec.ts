@@ -39,12 +39,12 @@ describe("NavigationMenu.vue", () => {
     });
     const stubs = wrapper.findAllComponents(MenuItemStub);
 
-    await stubs?.at(0)?.trigger("click"); // Get Started
-    await stubs?.at(1)?.trigger("click"); // Standards
-    await stubs?.at(3)?.trigger("click"); // Changelog
-    await stubs?.at(4)?.trigger("click"); // Endpoints (items: [])
-    await stubs?.at(5)?.trigger("click"); // Feedback
-    await stubs?.at(2)?.trigger("click"); // Guides - Non-Leaf
+    await stubs[0]?.trigger("click"); // Get Started
+    await stubs[1]?.trigger("click"); // Standards
+    await stubs[3]?.trigger("click"); // Changelog
+    await stubs[4]?.trigger("click"); // Endpoints (items: [])
+    await stubs[5]?.trigger("click"); // Feedback
+    await stubs[2]?.trigger("click"); // Guides - Non-Leaf
 
     const emitted = wrapper.emitted("selectLeaf") ?? [];
     expect(emitted.length).toBe(5);

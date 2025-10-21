@@ -275,7 +275,7 @@ describe("index.vue", () => {
 
     expect(useHeadMock).toHaveBeenCalled();
 
-    const callArgs = useHeadMock.mock.calls?.at(0)?.at(0);
+    const callArgs = useHeadMock.mock.calls[0]?.[0];
 
     expect(callArgs.title.value).toBe(
       "abbreviation, Fassung vom 01.01.2024, Außer Kraft",

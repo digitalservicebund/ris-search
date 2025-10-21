@@ -52,21 +52,21 @@ describe("NormVersionList", () => {
     const tableBodyRows = wrapper.find("tbody").findAll("tr");
     expect(tableBodyRows).toHaveLength(3);
 
-    const futureVersionRowCells = tableBodyRows?.at(0)?.findAll("td");
+    const futureVersionRowCells = tableBodyRows[0]?.findAll("td");
     expect(futureVersionRowCells?.map((cell) => cell.text())).toEqual([
       "01.01.2031",
       "-",
       "Zukünftig in Kraft",
     ]);
 
-    const currentVersionRowCells = tableBodyRows?.at(1)?.findAll("td");
+    const currentVersionRowCells = tableBodyRows[1]?.findAll("td");
     expect(currentVersionRowCells?.map((cell) => cell.text())).toEqual([
       "01.01.2020",
       "-",
       "Aktuell gültig",
     ]);
 
-    const pastVersionRowCells = tableBodyRows?.at(2)?.findAll("td");
+    const pastVersionRowCells = tableBodyRows[2]?.findAll("td");
     expect(pastVersionRowCells?.map((cell) => cell.text())).toEqual([
       "05.01.2000",
       "31.12.2019",

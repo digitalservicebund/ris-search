@@ -148,7 +148,7 @@ describe("[eId].vue", () => {
 
     expect(useHeadMock).toHaveBeenCalled();
 
-    const callArgs = useHeadMock.mock.calls?.at(0)?.at(0);
+    const callArgs = useHeadMock.mock.calls[0]?.[0];
 
     expect(callArgs.title.value).toBe("abbreviation: § 1 Erster Paragraf1");
     expect(callArgs.link.value).toEqual([
