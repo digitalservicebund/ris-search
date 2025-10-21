@@ -1,6 +1,4 @@
-import { mountSuspended } from "@nuxt/test-utils/runtime";
-import { RouterLinkStub } from "@vue/test-utils";
-import { describe, expect, it } from "vitest";
+import { render, screen } from "@testing-library/vue";
 import LiteratureSearchResult from "~/components/Search/Result/Literature/LiteratureSearchResult.vue";
 import type { Literature, SearchResult, TextMatch } from "~/types";
 
@@ -16,9 +14,9 @@ const searchResult: SearchResult<Literature> = {
     dependentReferences: ["LIT-122", "LIT-121"],
     independentReferences: ["LIT-124", "LIT-125"],
     headline: "Eine Untersuchung der juristischen Methoden im 21. Jahrhundert",
-    documentaryTitle: "Study of Legal Methodologies in the 21st Century",
-    authors: ["Dr. Max Mustermann", "Prof. Erika Musterfrau"],
-    collaborators: ["John Doe (Translator)", "Jane Doe (Editor)"],
+    alternativeHeadline: "Study of Legal Methodologies in the 21st Century",
+    authors: ["Mustermann, Max", "Musterfrau, Erika"],
+    collaborators: ["Doe, John", "Doe, Jane"],
     shortReport: `Dieses Werk analysiert die Entwicklung der juristischen Methoden seit Beginn des 21. Jahrhunderts mit besonderem Fokus auf europäische Rechtssysteme.
 Es werden die Unterschiede zwischen nationalen Rechtstraditionen dargestellt und ihre Auswirkungen auf internationale Verträge erläutert.
 Darüber hinaus untersucht die Studie die Rolle von Präzedenzfällen in modernen Gerichtsbarkeiten und diskutiert aktuelle Trends in der Gesetzesauslegung.
@@ -30,28 +28,29 @@ Abschließend gibt das Werk Empfehlungen für die praktische Anwendung juristisc
   textMatches: [],
 };
 
-async function mountComponent({
+async function renderComponent({
   item = searchResult.item,
   textMatches = [],
-}: Partial<SearchResult<Literature>>) {
+}: Partial<SearchResult<Literature>> = {}) {
   const searchResult: SearchResult<Literature> = {
     item,
     textMatches,
   };
-  return await mountSuspended(LiteratureSearchResult, {
+
+  return render(LiteratureSearchResult, {
     props: { searchResult, order: 0 },
-    stubs: {
-      RouterLink: RouterLinkStub,
-    },
+    global: { stubs: { RouterLink: true }, renderStubDefaultSlot: true },
   });
 }
 
 describe("LiteratureSearchResult.vue", () => {
   it("renders the expected title", async () => {
-    const wrapper = await mountComponent({});
-    expect(wrapper.get("a").text()).toBe(
-      "Eine Untersuchung der juristischen Methoden im 21. Jahrhundert",
-    );
+    await renderComponent({});
+    expect(
+      screen.getByText(
+        "Eine Untersuchung der juristischen Methoden im 21. Jahrhundert",
+      ),
+    ).toBeInTheDocument();
   });
 
   it("displays highlighted headline", async () => {
@@ -61,21 +60,19 @@ describe("LiteratureSearchResult.vue", () => {
       text: `testing <mark>highlighted headline</mark> is here`,
       location: null,
     };
-    const wrapper = await mountComponent({ textMatches: [textMatch] });
-    const highlightedElements = wrapper.findAll("mark");
-    expect(highlightedElements).length(1);
-    expect(highlightedElements[0].text()).toBe(`highlighted headline`);
+
+    await renderComponent({ textMatches: [textMatch] });
+
+    const mark = await screen.getByText("highlighted headline");
+    expect(mark.tagName).toBe("MARK");
   });
 
   it("displays alternative title when headline is not present", async () => {
-    const searchResultWithoutHeadline = {
-      item: { ...searchResult.item, headline: "" },
-      textMatches: [],
-    };
-    const wrapper = await mountComponent(searchResultWithoutHeadline);
-    expect(wrapper.html()).toContain(
-      "Study of Legal Methodologies in the 21st Century",
-    );
+    const itemWithoutHeadline = { ...searchResult.item, headline: "" };
+    await renderComponent({ item: itemWithoutHeadline });
+    expect(
+      screen.getByText("Study of Legal Methodologies in the 21st Century"),
+    ).toBeInTheDocument();
   });
 
   it("displays highlighted text with correct class", async () => {
@@ -85,32 +82,39 @@ describe("LiteratureSearchResult.vue", () => {
       text: "testing <mark>highlighted Text</mark> is here",
       location: null,
     };
-    const wrapper = await mountComponent({ textMatches: [textMatch] });
 
-    const highlightedElements = wrapper.findAll("mark");
-    expect(highlightedElements).length(1);
-    expect(highlightedElements[0].text()).toBe("highlighted Text");
+    await renderComponent({ textMatches: [textMatch] });
+
+    const mark = await screen.getByText("highlighted Text");
+    expect(mark.tagName).toBe("MARK");
   });
 
   it("renders full shortReport when no match is present", async () => {
-    const wrapper = await mountComponent({});
-    expect(wrapper.text()).toContain(
-      "Dieses Werk analysiert die Entwicklung der juristischen Methoden",
-    );
+    await renderComponent({});
+    expect(
+      screen.getByText(/Dieses Werk analysiert die Entwicklung/),
+    ).toBeInTheDocument();
   });
 
-  it("highlights a word at the beginning of shortReport", async () => {
+  it("applies line-clamp-3 class only when no highlight exists", async () => {
+    // No highlight
+    const { rerender } = await renderComponent({});
+    const span = screen.getByTestId("highlighted-field");
+    expect(span).toHaveClass("line-clamp-3");
+
+    // With highlight
     const match: TextMatch = {
       "@type": "SearchResultMatch",
       name: "shortReport",
-      text: `<mark>Dieses</mark> Werk analysiert die Entwicklung der juristischen Methoden`,
+      text: `<mark>Dieses</mark> Werk analysiert`,
       location: null,
     };
-    const wrapper = await mountComponent({ textMatches: [match] });
-
-    const mark = wrapper.find("mark");
-    expect(mark.exists()).toBe(true);
-    expect(mark.text()).toBe("Dieses");
+    await rerender({
+      searchResult: { item: searchResult.item, textMatches: [match] },
+    });
+    expect(screen.getByTestId("highlighted-field")).not.toHaveClass(
+      "line-clamp-3",
+    );
   });
 
   it("highlights a word in the middle of shortReport", async () => {
@@ -120,11 +124,12 @@ describe("LiteratureSearchResult.vue", () => {
       text: `… Rolle von <mark>Präzedenzfällen</mark> in modernen Gerichtsbarkeiten …`,
       location: null,
     };
-    const wrapper = await mountComponent({ textMatches: [match] });
 
-    const mark = wrapper.find("mark");
-    expect(mark.exists()).toBe(true);
-    expect(mark.text()).toBe("Präzedenzfällen");
+    await renderComponent({ textMatches: [match] });
+
+    const mark = await screen.getByText("Präzedenzfällen");
+    expect(mark).toBeInTheDocument();
+    expect(mark.tagName).toBe("MARK");
   });
 
   it("highlights a word at the end of shortReport", async () => {
@@ -134,11 +139,12 @@ describe("LiteratureSearchResult.vue", () => {
       text: `… automatisierter <mark>Entscheidungsfindung</mark>`,
       location: null,
     };
-    const wrapper = await mountComponent({ textMatches: [match] });
 
-    const mark = wrapper.find("mark");
-    expect(mark.exists()).toBe(true);
-    expect(mark.text()).toBe("Entscheidungsfindung");
+    await renderComponent({ textMatches: [match] });
+
+    const mark = await screen.getByText("Entscheidungsfindung");
+    expect(mark).toBeInTheDocument();
+    expect(mark.tagName).toBe("MARK");
   });
 
   it("limits shortReport snippet length and preserves highlight", async () => {
@@ -148,18 +154,19 @@ describe("LiteratureSearchResult.vue", () => {
       text: `… Rolle von <mark>Präzedenzfällen</mark> in modernen Gerichtsbarkeiten …`,
       location: null,
     };
-    const wrapper = await mountComponent({ textMatches: [match] });
 
-    const snippet = wrapper.find("[data-testid='highlighted-field']");
-    expect(snippet.text()).toContain("Präzedenzfällen");
-    expect(snippet.text().length).toBeLessThanOrEqual(280); // small tolerance for ellipses
+    await renderComponent({ textMatches: [match] });
+
+    const snippet = screen.getByTestId("highlighted-field");
+    expect(snippet).toHaveTextContent("Präzedenzfällen");
+    expect(snippet.textContent?.length ?? 0).toBeLessThanOrEqual(280);
   });
 
   it("applies line-clamp-3 class only when no highlight exists", async () => {
     // No match
-    let wrapper = await mountComponent({});
-    let span = wrapper.find("[data-testid='highlighted-field']");
-    expect(span.classes()).toContain("line-clamp-3");
+    const { rerender } = await renderComponent({});
+    let span = screen.getByTestId("highlighted-field");
+    expect(span).toHaveClass("line-clamp-3");
 
     // With match
     const match: TextMatch = {
@@ -168,8 +175,10 @@ describe("LiteratureSearchResult.vue", () => {
       text: `<mark>Dieses</mark> Werk analysiert`,
       location: null,
     };
-    wrapper = await mountComponent({ textMatches: [match] });
-    span = wrapper.find("[data-testid='highlighted-field']");
-    expect(span.classes()).not.toContain("line-clamp-3");
+    await rerender({
+      searchResult: { item: searchResult.item, textMatches: [match] },
+    });
+    span = screen.getByTestId("highlighted-field");
+    expect(span).not.toHaveClass("line-clamp-3");
   });
 });

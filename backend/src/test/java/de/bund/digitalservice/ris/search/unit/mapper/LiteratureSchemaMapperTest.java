@@ -24,7 +24,7 @@ class LiteratureSchemaMapperTest {
             .dependentReferences(List.of("BUV, 1982, 123-123"))
             .independentReferences(List.of("50 Jahre Betriebs-Berater, 1987, 123-456"))
             .mainTitle("Hauptüberschrift")
-            .documentaryTitle("Dokumentarischer Titel")
+            .alternativeHeadline("Dokumentarischer Titel")
             .authors(List.of("Musterfrau, Sabine"))
             .collaborators(List.of("Mustermann, Max"))
             .shortReport("Kurzreferat")
@@ -42,7 +42,7 @@ class LiteratureSchemaMapperTest {
     assertThat(literatureSchema.independentReferences())
         .containsExactly("50 Jahre Betriebs-Berater, 1987, 123-456");
     assertThat(literatureSchema.headline()).isEqualTo("Hauptüberschrift");
-    assertThat(literatureSchema.documentaryTitle()).isEqualTo("Dokumentarischer Titel");
+    assertThat(literatureSchema.alternativeHeadline()).isEqualTo("Dokumentarischer Titel");
     assertThat(literatureSchema.authors()).containsExactly("Musterfrau, Sabine");
     assertThat(literatureSchema.collaborators()).containsExactly("Mustermann, Max");
     assertThat(literatureSchema.shortReport()).isEqualTo("Kurzreferat");

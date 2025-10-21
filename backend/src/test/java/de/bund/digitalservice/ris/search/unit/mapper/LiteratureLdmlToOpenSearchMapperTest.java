@@ -258,7 +258,7 @@ class LiteratureLdmlToOpenSearchMapperTest {
 
     Literature literature = LiteratureLdmlToOpenSearchMapper.mapLdml(literatureLdml).get();
 
-    assertThat(literature.documentaryTitle()).isEqualTo("Dokumentarischer Titel");
+    assertThat(literature.alternativeHeadline()).isEqualTo("Dokumentarischer Titel");
   }
 
   @Test
@@ -462,7 +462,7 @@ class LiteratureLdmlToOpenSearchMapperTest {
     assertThat(literature.independentReferences()).isEmpty();
     assertThat(literature.yearsOfPublication()).isEmpty();
     assertThat(literature.mainTitle()).isNull();
-    assertThat(literature.documentaryTitle()).isNull();
+    assertThat(literature.alternativeHeadline()).isNull();
     assertThat(literature.authors()).isEmpty();
     assertThat(literature.collaborators()).isEmpty();
     assertThat(literature.shortReport()).isNull();

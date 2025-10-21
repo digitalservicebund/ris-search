@@ -3,6 +3,7 @@ import OutlineBookIcon from "virtual:icons/ic/outline-book";
 import { usePostHogStore } from "~/stores/usePostHogStore";
 import type { Literature, SearchResult, TextMatch } from "~/types";
 import { sanitizeSearchResult } from "~/utils/sanitize";
+import { addEllipsis } from "~/utils/textFormatting";
 
 const postHogStore = usePostHogStore();
 
@@ -13,7 +14,7 @@ const props = defineProps<{
 
 type LiteratureMetadata = {
   headline: string;
-  documentaryTitle: string;
+  alternativeHeadline: string;
   url: string;
   documentType: string;
   dependentReference: string;
@@ -26,43 +27,23 @@ function getMatch(match: string, highlights: TextMatch[]) {
 }
 
 function getShortReportSnippet(
-  fullText: string | null,
-  matches: TextMatch[] | undefined,
-): string | null {
-  if (!fullText) return null;
+  shortReport: string | null,
+  textMatches: TextMatch[],
+): string | undefined {
+  if (!shortReport) return undefined;
 
-  const match = matches?.find((m) => m.name === "shortReport");
-  if (!match?.text?.includes("<mark>")) return fullText;
-
-  const keywordMatch = match.text.match(/<mark>(.*?)<\/mark>/);
-  if (!keywordMatch) return fullText;
-
-  const keyword = keywordMatch[1];
-  const index = fullText.toLowerCase().indexOf(keyword.toLowerCase());
-  if (index === -1) return match.text;
-
-  const desiredLength = 270;
-  const start = Math.max(
-    0,
-    Math.min(
-      index - Math.floor(desiredLength / 2),
-      fullText.length - desiredLength,
-    ),
+  // Find the relevant highlight for "shortReport"
+  const match = textMatches.find(
+    (hl) => hl.name === "shortReport" && hl.text?.includes("<mark>"),
   );
-  const end = Math.min(fullText.length, start + desiredLength);
 
-  let snippet = fullText.slice(start, end).trim();
+  if (!match) {
+    // No highlight — just return the whole text, will be truncated with line-clamp because of 3 lines wanted and not only 2
+    return shortReport;
+  }
 
-  if (start > 0) snippet = "… " + snippet;
-  if (end < fullText.length) snippet += " …";
-
-  const escapedKeyword = keyword.replaceAll(
-    /[.*+?^${}()|[\]\\]/g,
-    String.raw`\$&`,
-  );
-  const regex = new RegExp(`(${escapedKeyword})`, "gi");
-
-  return snippet.replace(regex, "<mark>$1</mark>");
+  // Return the highlighted text (with ellipsis if needed)
+  return addEllipsis(match.text);
 }
 
 const metadata = computed(() => {
@@ -70,9 +51,9 @@ const metadata = computed(() => {
   return {
     headline:
       getMatch("headline", props.searchResult.textMatches) || item.headline,
-    documentaryTitle:
-      getMatch("documentaryTitle", props.searchResult.textMatches) ||
-      item.documentaryTitle,
+    alternativeHeadline:
+      getMatch("alternativeHeadline", props.searchResult.textMatches) ||
+      item.alternativeHeadline,
     url: `/literature/${props.searchResult.item.documentNumber}`,
     documentType: item.documentTypes?.at(0),
     dependentReference: item.dependentReferences?.at(0),
@@ -87,6 +68,20 @@ const metadata = computed(() => {
 function trackResultClick(url: string) {
   postHogStore.searchResultClicked(url, props.order);
 }
+
+const sanitizedHeadline = computed(() =>
+  sanitizeSearchResult(
+    metadata.value.headline || metadata.value.alternativeHeadline,
+  ),
+);
+
+const shortReportIncludesHighlight = computed(
+  () => metadata.value.shortReport?.includes("<mark>") ?? false,
+);
+
+const sanitizedShortReport = computed(() =>
+  sanitizeSearchResult(metadata.value.shortReport),
+);
 </script>
 
 <template>
@@ -107,18 +102,14 @@ function trackResultClick(url: string) {
       @click="trackResultClick(metadata.url)"
     >
       <h2>
-        <span
-          v-html="
-            sanitizeSearchResult(metadata.headline || metadata.documentaryTitle)
-          "
-        />
+        <span v-html="sanitizedHeadline" />
       </h2>
     </NuxtLink>
     <div class="mt-6 flex w-full max-w-prose flex-col gap-6">
       <span
         data-testid="highlighted-field"
-        :class="{ 'line-clamp-3': !metadata.shortReport?.includes('<mark>') }"
-        v-html="sanitizeSearchResult(metadata.shortReport)"
+        :class="{ 'line-clamp-3': !shortReportIncludesHighlight }"
+        v-html="sanitizedShortReport"
       />
     </div>
   </div>

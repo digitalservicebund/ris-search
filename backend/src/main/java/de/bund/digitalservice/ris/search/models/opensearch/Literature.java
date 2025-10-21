@@ -26,7 +26,7 @@ public record Literature(
     @ElementCollection @Field(name = Fields.INDEPENDENT_REFERENCES)
         List<String> independentReferences,
     @Nullable @Field(name = Fields.MAIN_TITLE) String mainTitle,
-    @Nullable @Field(name = Fields.DOCUMENTARY_TITLE) String documentaryTitle,
+    @Nullable @Field(name = Fields.ALTERNATIVE_HEADLINE) String alternativeHeadline,
     @ElementCollection @Field(name = Fields.AUTHORS) List<String> authors,
     @ElementCollection @Field(name = Fields.COLLABORATORS) List<String> collaborators,
     @Nullable @Field(name = Fields.SHORT_REPORT) String shortReport,
@@ -52,7 +52,7 @@ public record Literature(
     public static final String MAIN_TITLE = "main_title";
 
     /** Dokumentarischer Titel * */
-    public static final String DOCUMENTARY_TITLE = "documentary_title";
+    public static final String ALTERNATIVE_HEADLINE = "alternative_headline";
 
     /** Verfasser * */
     public static final String AUTHORS = "authors";

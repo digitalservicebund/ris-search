@@ -46,7 +46,7 @@ const emptyTitlePlaceholder = "Titelzeile nicht vorhanden";
 const title = computed(() => {
   return (
     literature.value?.headline ??
-    literature.value?.documentaryTitle ??
+    literature.value?.alternativeHeadline ??
     undefined
   );
 });

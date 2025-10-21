@@ -63,7 +63,7 @@ public class LiteratureLdmlToOpenSearchMapper {
             .dependentReferences(extractDependentReferences(literatureLdml))
             .independentReferences(extractIndependentReferences(literatureLdml))
             .mainTitle(extractMainTitle(literatureLdml))
-            .documentaryTitle(extractDocumentaryTitle(literatureLdml))
+            .alternativeHeadline(extractAlternativeHeadline(literatureLdml))
             .authors(extractAuthors(literatureLdml))
             .collaborators(extractCollaborators(literatureLdml))
             .shortReport(extractShortReport(literatureLdml))
@@ -179,7 +179,7 @@ public class LiteratureLdmlToOpenSearchMapper {
         .orElse(null);
   }
 
-  private static String extractDocumentaryTitle(LiteratureLdml literatureLdml) {
+  private static String extractAlternativeHeadline(LiteratureLdml literatureLdml) {
     return Optional.ofNullable(literatureLdml)
         .map(LiteratureLdml::getDoc)
         .map(Doc::getMeta)

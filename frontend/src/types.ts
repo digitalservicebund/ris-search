@@ -128,7 +128,7 @@ export interface Literature {
   dependentReferences: string[];
   independentReferences: string[];
   headline: string | null;
-  documentaryTitle: string | null;
+  alternativeHeadline: string | null;
   authors: string[];
   collaborators: string[];
   shortReport: string | null;
