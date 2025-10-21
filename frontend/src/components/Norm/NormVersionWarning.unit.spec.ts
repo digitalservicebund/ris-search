@@ -1,4 +1,4 @@
-import { mount } from "@vue/test-utils";
+import { render, screen } from "@testing-library/vue";
 import NormVersionWarning from "./NormVersionWarning.vue";
 import type { LegislationWork, SearchResult } from "~/types";
 
@@ -50,57 +50,101 @@ describe("NormVersionWarning", () => {
     },
   ] as SearchResult<LegislationWork>[];
 
-  it("renders message with the first future version for the current in force version", () => {
-    const wrapper = mount(NormVersionWarning, {
+  it("renders message with the first future version for the current in force version", async () => {
+    render(NormVersionWarning, {
       props: {
         versions: testVersions,
         currentVersion: testVersions[1].item,
       },
-      global: { stubs: ["RouterLink"] },
+      global: {
+        stubs: {
+          RouterLink: {
+            props: ["to"],
+            template: '<a :href="to"></a>',
+          },
+        },
+      },
     });
-    expect(wrapper.html()).toContain("Neue Fassung ab 01.01.2824");
-    expect(wrapper.html()).toContain(
+
+    const fassungText = await screen.findByText((content) =>
+      content.includes("Neue Fassung ab 01.01.2824"),
+    );
+    const link = screen.getByRole("link");
+
+    expect(fassungText).toBeInTheDocument();
+    expect(link).toHaveAttribute(
+      "href",
       `/norms/${testVersions[2].item.workExample.legislationIdentifier}`,
     );
   });
 
-  it("renders message when the current version is a future version", () => {
-    const wrapper = mount(NormVersionWarning, {
+  it("renders message when the current version is a future version", async () => {
+    render(NormVersionWarning, {
       props: {
         versions: testVersions,
         currentVersion: testVersions[0].item,
       },
-      global: { stubs: ["RouterLink"] },
+      global: {
+        stubs: {
+          RouterLink: {
+            props: ["to"],
+            template: '<a :href="to"></a>',
+          },
+        },
+      },
     });
-    expect(wrapper.html()).toContain("Historische Fassung.");
-    expect(wrapper.html()).toContain(
+
+    const fassungText = await screen.findByText((content) =>
+      content.includes("Historische Fassung."),
+    );
+    const link = screen.getByRole("link");
+
+    expect(fassungText).toBeInTheDocument();
+    expect(link).toHaveAttribute(
+      "href",
       `/norms/${testVersions[1].item.workExample.legislationIdentifier}`,
     );
   });
 
-  it("renders message when the current version is a historical version", () => {
-    const wrapper = mount(NormVersionWarning, {
+  it("renders message when the current version is a historical version", async () => {
+    render(NormVersionWarning, {
       props: {
         versions: testVersions,
         currentVersion: testVersions[2].item,
       },
-      global: { stubs: ["RouterLink"] },
+      global: {
+        stubs: {
+          RouterLink: {
+            props: ["to"],
+            template: '<a :href="to"></a>',
+          },
+        },
+      },
     });
-    expect(wrapper.html()).toContain("Zukünftige Fassung.");
-    expect(wrapper.html()).toContain(
+
+    const fassungText = await screen.findByText((content) =>
+      content.includes("Zukünftige Fassung"),
+    );
+    const link = screen.getByRole("link");
+
+    expect(fassungText).toBeInTheDocument();
+    expect(link).toHaveAttribute(
+      "href",
       `/norms/${testVersions[1].item.workExample.legislationIdentifier}`,
     );
   });
 
   it("does not render a message if there are no future versions existing for the current in force version", () => {
-    const wrapper = mount(NormVersionWarning, {
+    const { container } = render(NormVersionWarning, {
       props: {
         versions: [testVersions[0], testVersions[1]],
         currentVersion: testVersions[1].item,
       },
-      global: { stubs: ["RouterLink"] },
+      global: {
+        stubs: ["RouterLink"],
+      },
     });
-    expect(wrapper.html()).not.toContain("Neue Fassung");
-    expect(wrapper.findComponent({ name: "Message" }).exists()).toBe(false);
+
+    expect(container).toBeEmptyDOMElement();
   });
 });
