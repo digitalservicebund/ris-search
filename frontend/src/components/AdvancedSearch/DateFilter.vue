@@ -12,25 +12,14 @@ const { documentKind } = defineProps<{
 /** The currently active filter */
 const filter = defineModel<DateFilterValue>({ default: { type: "allTime" } });
 
-const [
-  formId,
-  currentlyInForceId,
-  allTimeId,
-  specificDateId,
-  specificDateInputId,
-  periodId,
-  periodFromInputId,
-  periodToInputId,
-] = Array.from({ length: 8 }, () => useId()) as [
-  string,
-  string,
-  string,
-  string,
-  string,
-  string,
-  string,
-  string,
-];
+const formId = useId();
+const currentlyInForceId = useId();
+const allTimeId = useId();
+const specificDateId = useId();
+const specificDateInputId = useId();
+const periodId = useId();
+const periodFromInputId = useId();
+const periodToInputId = useId();
 
 const filterLabel = computed(() => {
   switch (documentKind) {

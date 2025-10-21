@@ -17,6 +17,7 @@ const isLongTitle = computed(
 
 // only show the alternate name as secondary if it isn't already being used as the main title
 const hasHeading = computed(() => !!props.htmlParts?.heading);
+const normTitle = computed(() => getNormTitle(props.metadata));
 </script>
 <template>
   <div class="dokumentenkopf mt-24 mb-48 max-w-prose">
@@ -36,7 +37,7 @@ const hasHeading = computed(() => !!props.htmlParts?.heading);
             v-html="props.htmlParts?.heading"
           />
           <div v-else class="titel break-words max-sm:text-[26px]">
-            {{ getNormTitle(props.metadata) }}
+            {{ normTitle }}
           </div>
         </RisExpandableText>
         <template #fallback>
@@ -47,7 +48,7 @@ const hasHeading = computed(() => !!props.htmlParts?.heading);
             v-html="props.htmlParts.heading"
           ></div>
           <div v-else class="titel break-words max-sm:text-[26px]">
-            {{ getNormTitle(props.metadata) }}
+            {{ normTitle }}
           </div>
         </template>
       </client-only>
