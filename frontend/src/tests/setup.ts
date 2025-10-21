@@ -24,3 +24,17 @@ if (globalThis?.window) {
     })),
   });
 }
+
+class ResizeObserver {
+  observe() {
+    // empty mock method
+  }
+  unobserve() {
+    // empty mock method
+  }
+  disconnect() {
+    // empty mock method
+  }
+}
+
+global.ResizeObserver = ResizeObserver;
