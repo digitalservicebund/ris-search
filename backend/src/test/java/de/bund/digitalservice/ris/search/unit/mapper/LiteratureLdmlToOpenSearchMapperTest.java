@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import de.bund.digitalservice.ris.search.mapper.LiteratureLdmlToOpenSearchMapper;
 import de.bund.digitalservice.ris.search.models.opensearch.Literature;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -64,7 +65,7 @@ class LiteratureLdmlToOpenSearchMapperTest {
   }
 
   @Test
-  @DisplayName("Extracts and sets years of publication")
+  @DisplayName("Extracts and sets years of publication and first publication date")
   void extractsAndSetsYearsOfPublication() {
     String literatureLdml =
         """
@@ -92,6 +93,32 @@ class LiteratureLdmlToOpenSearchMapperTest {
     Literature literature = LiteratureLdmlToOpenSearchMapper.mapLdml(literatureLdml).get();
 
     assertThat(literature.yearsOfPublication()).containsExactly("2009");
+    assertThat(literature.firstPublicationDate()).isEqualTo(LocalDate.of(2009, 1, 1));
+  }
+
+  @Test
+  @DisplayName("Sets first publication date to default min date if years of publication missing")
+  void setFirstPublicationDateToDefaultMinDate() {
+    String literatureLdml =
+        """
+                <akn:akomaNtoso xmlns:akn="http://docs.oasis-open.org/legaldocml/ns/akn/3.0"
+                 xmlns:ris="http://ldml.neuris.de/literature/unselbstaendig/metadata/">
+                 <akn:doc name="offene-struktur">
+                   <akn:meta>
+                       <akn:identification>
+                         <akn:FRBRExpression>
+                           <akn:FRBRalias name="documentNumber" value="BJLU002758328" />
+                         </akn:FRBRExpression>
+                       </akn:identification>
+                   </akn:meta>
+                 </akn:doc>
+               </akn:akomaNtoso>
+               """
+            .stripIndent();
+    Literature literature = LiteratureLdmlToOpenSearchMapper.mapLdml(literatureLdml).get();
+
+    assertThat(literature.yearsOfPublication()).isEmpty();
+    assertThat(literature.firstPublicationDate()).isEqualTo(LocalDate.MIN);
   }
 
   @Test

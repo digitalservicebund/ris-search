@@ -341,4 +341,16 @@ class LiteratureControllerApiTest extends ContainersIntegrationBase {
             jsonPath(
                 "$.member[*].item.documentNumber", Matchers.containsInAnyOrder("KALU000000002")));
   }
+
+  @Test
+  @DisplayName("Should return literature items sorted by default")
+  void shouldReturnedDefaultSort() throws Exception {
+    mockMvc
+        .perform(get(ApiConfig.Paths.LITERATURE).contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.member", hasSize(3)))
+        .andExpect(jsonPath("$.member[0]['item'].documentNumber", Matchers.is("KALU000000003")))
+        .andExpect(jsonPath("$.member[1]['item'].documentNumber", Matchers.is("KALU000000001")))
+        .andExpect(jsonPath("$.member[2]['item'].documentNumber", Matchers.is("KALU000000002")));
+  }
 }

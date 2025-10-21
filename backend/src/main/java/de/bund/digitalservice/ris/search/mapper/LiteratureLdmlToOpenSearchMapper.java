@@ -53,12 +53,17 @@ public class LiteratureLdmlToOpenSearchMapper {
   private static Optional<Literature> mapToEntity(LiteratureLdml literatureLdml)
       throws ValidationException {
     var documentNumber = extractDocumentNumber(literatureLdml);
+    var yearsOfPublication = extractYearsOfPublication(literatureLdml);
     return Optional.of(
         Literature.builder()
             .id(documentNumber)
             .documentNumber(documentNumber)
             .recordingDate(extractRecordingDate(literatureLdml))
             .yearsOfPublication(extractYearsOfPublication(literatureLdml))
+            .firstPublicationDate(
+                yearsOfPublication.isEmpty()
+                    ? LocalDate.MIN
+                    : LocalDate.of(Integer.parseInt(yearsOfPublication.getFirst()), 1, 1))
             .documentTypes(extractDocumentTypes(literatureLdml))
             .dependentReferences(extractDependentReferences(literatureLdml))
             .independentReferences(extractIndependentReferences(literatureLdml))

@@ -21,6 +21,8 @@ public record Literature(
     @Field(name = Fields.RECORDING_DATE, type = FieldType.Date, format = DateFormat.date)
         LocalDate recordingDate,
     @ElementCollection @Field(name = Fields.YEARS_OF_PUBLICATION) List<String> yearsOfPublication,
+    @Field(name = Fields.FIRST_PUBLICATION_DATE, type = FieldType.Date, format = DateFormat.date)
+        LocalDate firstPublicationDate,
     @ElementCollection @Field(name = Fields.DOCUMENT_TYPES) List<String> documentTypes,
     @ElementCollection @Field(name = Fields.DEPENDENT_REFERENCES) List<String> dependentReferences,
     @ElementCollection @Field(name = Fields.INDEPENDENT_REFERENCES)
@@ -40,6 +42,7 @@ public record Literature(
     public static final String DOCUMENT_NUMBER = "document_number";
     public static final String RECORDING_DATE = "recording_date";
     public static final String YEARS_OF_PUBLICATION = "years_of_publication";
+    public static final String FIRST_PUBLICATION_DATE = "first_publication_date";
     public static final String DOCUMENT_TYPES = "document_types";
 
     /** unselbstständige Fundstellen * */
