@@ -19,11 +19,12 @@ describe("robots txt route", () => {
     vi.clearAllMocks();
   });
 
-  it("should serve robots txt from backend api on justice crawler", async () => {
+  it("should serve robots txt with auth enabled from backend api on justice crawler", async () => {
     mockUseRuntimeConfig.mockImplementation(() => ({
+      risBackendUrl: "backendUrl",
       public: {
-        backendURL: "backendUrl",
         profile: "public",
+        authEnabled: true,
       },
     }));
 
@@ -60,6 +61,40 @@ describe("robots txt route", () => {
     );
   });
 
+  it("should serve robots txt with auth disabled from backend api on justice crawler", async () => {
+    mockUseRuntimeConfig.mockImplementation(() => ({
+      risBackendUrl: "backendUrl",
+      public: {
+        profile: "public",
+        authEnabled: false,
+      },
+    }));
+
+    const mockEvent: H3Event<EventHandlerRequest> = {
+      node: {
+        req: {
+          headers: {
+            host: "origin",
+            "user-agent": "DG_JUSTICE_CRAWLER",
+          },
+          originalUrl: "url",
+        },
+        res: {
+          setHeader: vi.fn(),
+        },
+      },
+    } as unknown as H3Event<EventHandlerRequest>;
+
+    await middleware(mockEvent);
+    expect(mockFetch).toHaveBeenCalledWith(
+      "backendUrl/v1/eclicrawler/robots.txt",
+      {
+        headers: {},
+        method: "GET",
+      },
+    );
+  });
+
   const testCases = [
     ["public", "robots.public.txt"],
     ["internal", "robots.staging.txt"],
@@ -68,6 +103,7 @@ describe("robots txt route", () => {
 
   test.for(testCases)("profile %s serves %s", async ([profile, file]) => {
     mockUseRuntimeConfig.mockImplementation(() => ({
+      risBackendUrl: "backendUrl",
       public: {
         profile: profile,
       },
