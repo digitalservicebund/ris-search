@@ -1,3 +1,4 @@
+import type { AsyncData, NuxtError } from "#app";
 import { useBackendURL } from "~/composables/useBackendURL";
 import type { LegislationWork, JSONLDList, SearchResult } from "~/types";
 import { getCurrentDateInGermanyFormatted } from "~/utils/dateFormatting";
@@ -17,8 +18,8 @@ export interface TranslationData {
   html: string;
 }
 
-function throwNotFound(message: string) {
-  throw createError({ statusCode: 404, statusMessage: message });
+function notFoundError(message: string) {
+  return createError({ statusCode: 404, statusMessage: message });
 }
 
 function useApi() {
@@ -49,7 +50,7 @@ function legislationSearchURL(
 
 export function fetchTranslationList(): AsyncData<
   TranslationContent[],
-  NuxtError<TranslationContent> | null
+  NuxtError<TranslationContent> | NuxtError<null> | undefined
 > {
   const { apiFetch, backendURL } = useApi();
 
@@ -57,14 +58,16 @@ export function fetchTranslationList(): AsyncData<
     const response = await apiFetch<TranslationContent[]>(
       translationsListURL(backendURL),
     );
-    if (!response || response.length === 0) throwNotFound("Not Found");
+
+    if (!response || response.length === 0) throw notFoundError("Not Found");
+
     return response;
   });
 }
 
 export function fetchTranslationAndHTML(
   id: string,
-): AsyncData<TranslationData, NuxtError | null> {
+): AsyncData<TranslationData, NuxtError | undefined> {
   const { apiFetch, backendURL } = useApi();
 
   return useAsyncData(`translation-and-html-${id}`, async () => {
@@ -72,12 +75,15 @@ export function fetchTranslationAndHTML(
       translationDetailURL(backendURL, id),
     );
 
-    if (!translationsList || translationsList.length === 0)
-      throwNotFound("Translation not found");
+    if (!translationsList || translationsList.length === 0) {
+      throw notFoundError("Translation not found");
+    }
 
     const firstTranslationsListElement = translationsList[0];
-    const htmlFilename = firstTranslationsListElement["ris:filename"];
-    if (!htmlFilename) throwNotFound("Translation filename not found");
+    const htmlFilename = firstTranslationsListElement?.["ris:filename"];
+    if (htmlFilename === undefined) {
+      throw notFoundError("Translation filename not found");
+    }
 
     const htmlData = await apiFetch<string>(
       translationHtmlURL(backendURL, htmlFilename),
@@ -92,7 +98,7 @@ export function fetchTranslationAndHTML(
 
 export function getGermanOriginal(
   id: string,
-): AsyncData<SearchResult<LegislationWork> | null, NuxtError | null> {
+): AsyncData<SearchResult<LegislationWork> | null, NuxtError | undefined> {
   const { apiFetch, backendURL } = useApi();
 
   return useAsyncData(`german-original-${id}`, async () => {
@@ -101,7 +107,9 @@ export function getGermanOriginal(
       legislationSearchURL(backendURL, id, currentDateInGermanyFormatted),
     );
 
-    if (!response || response.member.length === 0) throwNotFound("Not Found");
+    if (!response || response.member.length === 0) {
+      throw notFoundError("Not Found");
+    }
 
     return response.member[0];
   });

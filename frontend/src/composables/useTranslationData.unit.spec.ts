@@ -150,6 +150,10 @@ describe("getGermanOriginal", () => {
     vi.setSystemTime(new Date("2025-10-13T00:00:00.000Z"));
   });
 
+  beforeEach(() => {
+    clearNuxtData();
+  });
+
   afterAll(() => {
     vi.useRealTimers();
   });
@@ -161,7 +165,7 @@ describe("getGermanOriginal", () => {
     const { data, error } = await getGermanOriginal("test-id");
 
     expect(data.value).toEqual(mockResult);
-    expect(error.value).toBeNull();
+    expect(error.value).toBeUndefined();
     expect(requestFetchMock).toHaveBeenCalledWith(
       "https://mock-backend/v1/legislation?searchTerm=test-id&temporalCoverageFrom=2025-10-13&temporalCoverageTo=2025-10-13&size=100&pageIndex=0",
     );
@@ -172,7 +176,7 @@ describe("getGermanOriginal", () => {
 
     const { data, error } = await getGermanOriginal("test-id");
 
-    expect(data.value).toBeNull();
+    expect(data.value).toBeUndefined();
     expect(error.value).not.toBeNull();
     expect(error.value?.statusCode).toBe(404);
     expect(error.value?.statusMessage).toBe("Not Found");
@@ -183,7 +187,7 @@ describe("getGermanOriginal", () => {
 
     const { data, error } = await getGermanOriginal("test-id");
 
-    expect(data.value).toBeNull();
+    expect(data.value).toBeUndefined();
     expect(error.value).not.toBeNull();
     expect(error.value?.statusCode).toBe(404);
     expect(error.value?.statusMessage).toBe("Not Found");

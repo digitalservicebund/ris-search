@@ -71,15 +71,11 @@ describe("TranslationDetailPage", () => {
     });
   });
 
-    const tabButton = wrapper.get("button[aria-label*='Details']");
-    await tabButton.trigger("click");
   describe("Details tab", () => {
     it("shows translator and version info after opening Details tab", async () => {
       const detailsTabButton = pageWrapper.get("button[aria-label*='Details']");
       await detailsTabButton.trigger("click");
 
-    const metaData = wrapper.findAll("dd");
-    expect(metaData.length).toBe(2);
       const detailsListItems = pageWrapper.findAll("dd");
       expect(detailsListItems).toHaveLength(2);
 
