@@ -35,7 +35,7 @@ public class EcliCrawlerDocumentService {
   EcliSitemapWriter sitemapWriter;
   private final String documentUrl;
   private static final int DOCUMENT_STORE_BULK_SIZE = 10000;
-  public static final int MAX_SITEMAP_URLS = 50000;
+  public static final int MAX_SITEMAP_URLS = 10000;
   private static final Logger logger = LogManager.getLogger(EcliCrawlerDocumentService.class);
 
   // ecli regex provided by the ecli xsd
