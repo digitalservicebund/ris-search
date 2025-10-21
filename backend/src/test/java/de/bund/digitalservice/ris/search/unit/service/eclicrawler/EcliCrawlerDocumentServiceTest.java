@@ -81,7 +81,7 @@ class EcliCrawlerDocumentServiceTest {
   @Test
   void itSplitsSitemapsByMaxNumberOfUrls() throws ObjectStoreServiceException, JAXBException {
     LocalDate day = LocalDate.of(2025, 1, 1);
-    var filenames = IntStream.range(0, 51000).boxed().map(i -> "file_" + i + ".xml").toList();
+    var filenames = IntStream.range(0, 11000).boxed().map(i -> "file_" + i + ".xml").toList();
 
     when(caseLawBucket.getAllKeys()).thenReturn(filenames);
     when(caselawService.getFromBucket(any())).thenReturn(Optional.of(getTestDocUnit("docNumber")));
@@ -108,7 +108,7 @@ class EcliCrawlerDocumentServiceTest {
                     sitemaps.getFirst().getName().equals("1")
                         && sitemaps.get(1).getName().equals("2")));
 
-    verify(repository, times(6)).saveAll(any());
+    verify(repository, times(2)).saveAll(any());
     verify(sitemapWriter)
         .updateRobotsTxt(
             eq("apiUrl"),
