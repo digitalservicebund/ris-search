@@ -63,7 +63,7 @@ describe("LiteratureSearchResult.vue", () => {
 
     await renderComponent({ textMatches: [textMatch] });
 
-    const mark = await screen.getByText("highlighted headline");
+    const mark = screen.getByText("highlighted headline");
     expect(mark.tagName).toBe("MARK");
   });
 
@@ -85,7 +85,7 @@ describe("LiteratureSearchResult.vue", () => {
 
     await renderComponent({ textMatches: [textMatch] });
 
-    const mark = await screen.getByText("highlighted Text");
+    const mark = screen.getByText("highlighted Text");
     expect(mark.tagName).toBe("MARK");
   });
 
@@ -127,7 +127,7 @@ describe("LiteratureSearchResult.vue", () => {
 
     await renderComponent({ textMatches: [match] });
 
-    const mark = await screen.getByText("Präzedenzfällen");
+    const mark = screen.getByText("Präzedenzfällen");
     expect(mark).toBeInTheDocument();
     expect(mark.tagName).toBe("MARK");
   });
@@ -142,7 +142,7 @@ describe("LiteratureSearchResult.vue", () => {
 
     await renderComponent({ textMatches: [match] });
 
-    const mark = await screen.getByText("Entscheidungsfindung");
+    const mark = screen.getByText("Entscheidungsfindung");
     expect(mark).toBeInTheDocument();
     expect(mark.tagName).toBe("MARK");
   });
