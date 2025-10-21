@@ -7,6 +7,19 @@ import {
 import { DocumentKind } from "~/types";
 import { isDocumentKind } from "~/utils/documentKind";
 
+function tryGetPageIndexFromQuery(
+  query: LocationQueryValue | LocationQueryValue[],
+) {
+  let result = 0;
+
+  if (query) {
+    const parsedNumber = Number.parseInt(query.toString());
+    if (Number.isFinite(parsedNumber)) result = parsedNumber;
+  }
+
+  return result;
+}
+
 export function useAdvancedSearchRouteParams() {
   const route = useRoute();
 
@@ -51,19 +64,6 @@ export function useAdvancedSearchRouteParams() {
   });
 
   // Sort & pagination --------------------------------------
-
-  function tryGetPageIndexFromQuery(
-    query: LocationQueryValue | LocationQueryValue[],
-  ) {
-    let result = 0;
-
-    if (query) {
-      const parsedNumber = Number.parseInt(query.toString());
-      if (Number.isFinite(parsedNumber)) result = parsedNumber;
-    }
-
-    return result;
-  }
 
   const sort = ref(route.query.sort?.toString() ?? "default");
 
