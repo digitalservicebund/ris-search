@@ -53,17 +53,34 @@ describe("LiteratureSearchResult.vue", () => {
     ).toBeInTheDocument();
   });
 
-  it("displays highlighted headline", async () => {
+  it("displays highlighted headline when mainTitle", async () => {
     const textMatch: TextMatch = {
       "@type": "SearchResultMatch",
-      name: "headline",
-      text: `testing <mark>highlighted headline</mark> is here`,
+      name: "mainTitle",
+      text: `testing <mark>highlighted main title</mark> is here`,
       location: null,
     };
 
     renderComponent({ textMatches: [textMatch] });
 
-    const mark = screen.getByText("highlighted headline");
+    const mark = screen.getByText("highlighted main title");
+    expect(mark.tagName).toBe("MARK");
+  });
+
+  it("displays highlighted headline when documentary title", async () => {
+    const textMatch: TextMatch = {
+      "@type": "SearchResultMatch",
+      name: "documentaryTitle",
+      text: `testing <mark>highlighted documentary title</mark> is here`,
+      location: null,
+    };
+
+    // Clone the item but set headline to null
+    const itemWithoutHeadline = { ...searchResult.item, headline: null };
+
+    renderComponent({ item: itemWithoutHeadline, textMatches: [textMatch] });
+
+    const mark = screen.getByText("highlighted documentary title");
     expect(mark.tagName).toBe("MARK");
   });
 
