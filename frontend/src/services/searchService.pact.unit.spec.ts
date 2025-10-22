@@ -263,7 +263,7 @@ describe("get a document", () => {
     normReferences: ["GG, Art 6 Abs 2 S 1, 1949-05-23"],
     headline: "Hauptüberschrift",
     headlineAdditions: "Zusatz zur Hauptüberschrift",
-    alternativeTitle: "Dokumentarischer Titel",
+    alternativeHeadline: "Dokumentarischer Titel",
     authors: ["Musterfrau, Sabine"],
     collaborators: ["Mustermann, Max"],
     originators: ["FOO"],
