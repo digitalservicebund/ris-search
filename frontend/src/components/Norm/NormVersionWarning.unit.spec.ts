@@ -50,11 +50,35 @@ describe("NormVersionWarning", () => {
     },
   ] as SearchResult<LegislationWork>[];
 
-  it("renders message with the first future version for the current in force version", async () => {
+  const testCases = [
+    {
+      label: "inForce points to next neue Fassung",
+      currentlyRendered: testVersions[1].item,
+      messageText: "Neue Fassung ab 01.01.2824",
+      link: `/norms/${testVersions[2].item.workExample.legislationIdentifier}`,
+      linkText: "Zur zukünftigen Fassung",
+    },
+    {
+      label: "historic version points to inForce Fassung",
+      currentlyRendered: testVersions[0].item,
+      messageText: "Historische Fassung.",
+      link: `/norms/${testVersions[1].item.workExample.legislationIdentifier}`,
+      linkText: "Zur aktuell gültigen Fassung",
+    },
+    {
+      label: "futureInForce points to inForce Fassung",
+      currentlyRendered: testVersions[2].item,
+      messageText: "Zukünftige Fassung",
+      link: `/norms/${testVersions[1].item.workExample.legislationIdentifier}`,
+      linkText: "Zur aktuell gültigen Fassung",
+    },
+  ];
+
+  test.for(testCases)("$label", async (testData) => {
     render(NormVersionWarning, {
       props: {
         versions: testVersions,
-        currentVersion: testVersions[1].item,
+        currentVersion: testData.currentlyRendered,
       },
       global: {
         stubs: {
@@ -67,74 +91,13 @@ describe("NormVersionWarning", () => {
     });
 
     const fassungText = await screen.findByText((content) =>
-      content.includes("Neue Fassung ab 01.01.2824"),
+      content.includes(testData.messageText),
     );
     const link = screen.getByRole("link");
 
     expect(fassungText).toBeInTheDocument();
-    expect(link).toHaveAttribute(
-      "href",
-      `/norms/${testVersions[2].item.workExample.legislationIdentifier}`,
-    );
-    expect(link).toHaveTextContent("Zur zukünftigen Fassung");
-  });
-
-  it("renders message when the current version is a future version", async () => {
-    render(NormVersionWarning, {
-      props: {
-        versions: testVersions,
-        currentVersion: testVersions[0].item,
-      },
-      global: {
-        stubs: {
-          RouterLink: {
-            props: ["to"],
-            template: '<a :href="to"><slot/></a>',
-          },
-        },
-      },
-    });
-
-    const fassungText = await screen.findByText((content) =>
-      content.includes("Historische Fassung."),
-    );
-    const link = screen.getByRole("link");
-
-    expect(fassungText).toBeInTheDocument();
-    expect(link).toHaveAttribute(
-      "href",
-      `/norms/${testVersions[1].item.workExample.legislationIdentifier}`,
-    );
-    expect(link).toHaveTextContent("Zur aktuell gültigen Fassung");
-  });
-
-  it("renders message when the current version is a historical version", async () => {
-    render(NormVersionWarning, {
-      props: {
-        versions: testVersions,
-        currentVersion: testVersions[2].item,
-      },
-      global: {
-        stubs: {
-          RouterLink: {
-            props: ["to"],
-            template: '<a :href="to"><slot/></a>',
-          },
-        },
-      },
-    });
-
-    const fassungText = await screen.findByText((content) =>
-      content.includes("Zukünftige Fassung"),
-    );
-    const link = screen.getByRole("link");
-
-    expect(fassungText).toBeInTheDocument();
-    expect(link).toHaveAttribute(
-      "href",
-      `/norms/${testVersions[1].item.workExample.legislationIdentifier}`,
-    );
-    expect(link).toHaveTextContent("Zur aktuell gültigen Fassung");
+    expect(link).toHaveAttribute("href", testData.link);
+    expect(link).toHaveTextContent(testData.linkText);
   });
 
   it("does not render a message if there are no future versions existing for the current in force version", () => {
