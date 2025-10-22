@@ -49,59 +49,7 @@ const documentKindMenuItems: MenuItem[] = [
   },
 ];
 
-const documentKind = ref<DocumentKind>(
-  typeof route.query.documentKind === "string" &&
-    isDocumentKind(route.query.documentKind)
-    ? route.query.documentKind
-    : DocumentKind.Norm,
-);
-
-// Date filter --------------------------------------------
-
-const dateFilter = ref<DateFilterValue>({
-  type:
-    typeof route.query.dateFilterType === "string" &&
-    isFilterType(route.query.dateFilterType)
-      ? route.query.dateFilterType
-      : "allTime",
-  from: route.query.dateFilterFrom?.toString(),
-  to: route.query.dateFilterTo?.toString(),
-});
-
-const query = ref(route.query.q?.toString() ?? "");
-
-function saveFilterStateToRoute() {
-  navigateTo({
-    query: {
-      ...route.query,
-      q: query.value,
-      documentKind: documentKind.value,
-      dateFilterType: dateFilter.value.type,
-      dateFilterFrom: dateFilter.value.from ?? "",
-      dateFilterTo: dateFilter.value.to ?? "",
-      pageIndex: pageIndex.value,
-      sort: sort.value,
-      itemsPerPage: itemsPerPage.value,
-    },
-  });
-}
-
-// Sorting and pagination ---------------------------------
-
-function tryGetPageIndexFromQuery(
-  query: LocationQueryValue | LocationQueryValue[],
-) {
-  let result = 0;
-
-  if (query) {
-    const parsedNumber = Number.parseInt(query.toString());
-    if (Number.isFinite(parsedNumber)) result = parsedNumber;
-  }
-
-  return result;
-}
-
-const sort = ref(route.query.sort?.toString() ?? "default");
+// Search results -----------------------------------------
 
 const itemsPerPageDropdownId = useId();
 
