@@ -1,6 +1,6 @@
 package de.bund.digitalservice.ris.search.config;
 
-import de.bund.digitalservice.ris.search.config.security.RateLimitInterceptor;
+import de.bund.digitalservice.ris.search.config.ratelimiting.FeedbackRateLimitInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -8,9 +8,9 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class WebMvcConfig implements WebMvcConfigurer {
 
-  private final RateLimitInterceptor interceptor;
+  private final FeedbackRateLimitInterceptor interceptor;
 
-  WebMvcConfig(RateLimitInterceptor interceptor) {
+  WebMvcConfig(FeedbackRateLimitInterceptor interceptor) {
     this.interceptor = interceptor;
   }
 

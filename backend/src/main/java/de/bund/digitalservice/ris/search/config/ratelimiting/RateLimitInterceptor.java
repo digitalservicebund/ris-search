@@ -1,4 +1,4 @@
-package de.bund.digitalservice.ris.search.config.security;
+package de.bund.digitalservice.ris.search.config.ratelimiting;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -8,15 +8,17 @@ import java.time.Instant;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
-import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
-@Component
-public class RateLimitInterceptor implements HandlerInterceptor {
+public abstract class RateLimitInterceptor implements HandlerInterceptor {
   private final Map<String, AtomicInteger> requestCountsPerIpAddress = new ConcurrentHashMap<>();
   private final Map<String, Long> requestTimestamps = new ConcurrentHashMap<>();
-  private static final int MAX_REQUESTS_PER_MINUTE = 1;
-  private static final long TIME_LIMIT = 60000; // 1 minute
+  private final int maxRequestsPerMinute;
+  private static final long TIME_LIMIT = 60000;
+
+  public RateLimitInterceptor(int maxRequestsPerMinute) {
+    this.maxRequestsPerMinute = maxRequestsPerMinute;
+  }
 
   @Override
   public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
@@ -38,7 +40,7 @@ public class RateLimitInterceptor implements HandlerInterceptor {
     }
 
     int requests = requestCount.incrementAndGet();
-    if (requests > MAX_REQUESTS_PER_MINUTE) {
+    if (requests > maxRequestsPerMinute) {
       response.sendError(429);
       return false;
     }
