@@ -60,7 +60,7 @@ describe("NormVersionWarning", () => {
         stubs: {
           RouterLink: {
             props: ["to"],
-            template: '<a :href="to"></a>',
+            template: '<a :href="to"><slot/></a>',
           },
         },
       },
@@ -76,6 +76,7 @@ describe("NormVersionWarning", () => {
       "href",
       `/norms/${testVersions[2].item.workExample.legislationIdentifier}`,
     );
+    expect(link).toHaveTextContent("Zur zukünftigen Fassung");
   });
 
   it("renders message when the current version is a future version", async () => {
@@ -88,7 +89,7 @@ describe("NormVersionWarning", () => {
         stubs: {
           RouterLink: {
             props: ["to"],
-            template: '<a :href="to"></a>',
+            template: '<a :href="to"><slot/></a>',
           },
         },
       },
@@ -104,6 +105,7 @@ describe("NormVersionWarning", () => {
       "href",
       `/norms/${testVersions[1].item.workExample.legislationIdentifier}`,
     );
+    expect(link).toHaveTextContent("Zur aktuell gültigen Fassung");
   });
 
   it("renders message when the current version is a historical version", async () => {
@@ -116,7 +118,7 @@ describe("NormVersionWarning", () => {
         stubs: {
           RouterLink: {
             props: ["to"],
-            template: '<a :href="to"></a>',
+            template: '<a :href="to"><slot/></a>',
           },
         },
       },
@@ -132,6 +134,7 @@ describe("NormVersionWarning", () => {
       "href",
       `/norms/${testVersions[1].item.workExample.legislationIdentifier}`,
     );
+    expect(link).toHaveTextContent("Zur aktuell gültigen Fassung");
   });
 
   it("does not render a message if there are no future versions existing for the current in force version", () => {
