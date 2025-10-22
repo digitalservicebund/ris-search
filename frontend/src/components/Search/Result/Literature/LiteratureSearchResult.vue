@@ -50,7 +50,7 @@ const metadata = computed(() => {
   const item = props.searchResult.item;
   return {
     headline:
-      getMatch("headline", props.searchResult.textMatches) || item.headline,
+      getMatch("mainTitle", props.searchResult.textMatches) || item.headline,
     alternativeHeadline:
       getMatch("documentaryTitle", props.searchResult.textMatches) ||
       item.alternativeHeadline,
