@@ -52,7 +52,7 @@ const metadata = computed(() => {
     headline:
       getMatch("headline", props.searchResult.textMatches) || item.headline,
     alternativeHeadline:
-      getMatch("alternativeHeadline", props.searchResult.textMatches) ||
+      getMatch("documentaryTitle", props.searchResult.textMatches) ||
       item.alternativeHeadline,
     url: `/literature/${props.searchResult.item.documentNumber}`,
     documentType: item.documentTypes?.at(0),
