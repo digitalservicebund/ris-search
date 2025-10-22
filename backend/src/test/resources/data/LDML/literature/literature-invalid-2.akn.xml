@@ -1,0 +1,20 @@
+<!-- MISSING DOCUMENT TYPE -->
+<akn:akomaNtoso xmlns:akn="http://docs.oasis-open.org/legaldocml/ns/akn/3.0"
+                xmlns:ris="http://ldml.neuris.de/literature/unselbstaendig/metadata/">
+    <akn:doc name="offene-struktur">
+        <akn:meta>
+            <akn:identification>
+                <akn:FRBRExpression>
+                    <akn:FRBRalias name="documentNumber" value="BJLU002758328" />
+                </akn:FRBRExpression>
+            </akn:identification>
+            <akn:proprietary>
+                <ris:metadata>
+                    <ris:veroeffentlichungsJahre>
+                        <ris:veroeffentlichungsJahr>2024</ris:veroeffentlichungsJahr>
+                    </ris:veroeffentlichungsJahre>
+                </ris:metadata>
+            </akn:proprietary>
+        </akn:meta>
+    </akn:doc>
+</akn:akomaNtoso>

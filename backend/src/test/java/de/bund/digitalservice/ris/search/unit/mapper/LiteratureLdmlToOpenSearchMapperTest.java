@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 
@@ -59,50 +60,17 @@ class LiteratureLdmlToOpenSearchMapperTest {
     assertThat(literature.outline()).isEqualTo("I. Äpfel. II. Birnen. III. Orangen.");
   }
 
-  @Test
-  @DisplayName("Throws if document number is missing")
-  void returnsEmptyOptionalIfDocumentNumberIsMissing() {
-    String literatureLdml =
-        """
-        <akn:akomaNtoso xmlns:akn="http://docs.oasis-open.org/legaldocml/ns/akn/3.0">
-          <akn:doc name="offene-struktur">
-          </akn:doc>
-        </akn:akomaNtoso>
-        """
-            .stripIndent();
-
-    assertThatThrownBy(() -> LiteratureLdmlToOpenSearchMapper.mapLdml(literatureLdml))
-        .isInstanceOf(OpenSearchMapperException.class)
-        .hasMessageContaining("unable to parse file to Literature");
-  }
-
-  @Test
-  @DisplayName("Throws document type is missing")
-  void throwsIfDocumentTypeIsMissing() {
-    String literatureLdml =
-        """
-        <akn:akomaNtoso xmlns:akn="http://docs.oasis-open.org/legaldocml/ns/akn/3.0"
-         xmlns:ris="http://ldml.neuris.de/literature/unselbstaendig/metadata/">
-         <akn:doc name="offene-struktur">
-           <akn:meta>
-               <akn:identification>
-                 <akn:FRBRExpression>
-                   <akn:FRBRalias name="documentNumber" value="BJLU002758328" />
-                 </akn:FRBRExpression>
-               </akn:identification>
-               <akn:proprietary>
-                   <ris:metadata>
-                     <ris:veroeffentlichungsJahre>
-                       <ris:veroeffentlichungsJahr>2024</ris:veroeffentlichungsJahr>
-                     </ris:veroeffentlichungsJahre>
-                   </ris:metadata>
-               </akn:proprietary>
-           </akn:meta>
-         </akn:doc>
-       </akn:akomaNtoso>
-       """
-            .stripIndent();
-
+  @ParameterizedTest
+  @ValueSource(
+      strings = {
+        "literature-invalid-1.akn.xml",
+        "literature-invalid-2.akn.xml",
+        "literature-invalid-3.akn.xml",
+        "literature-invalid-4.akn.xml"
+      })
+  @DisplayName("Throws if document is invalid")
+  void throwsIfDocumentIsInvalid(String filename) {
+    var literatureLdml = LoadXmlUtils.loadXmlAsString(Literature.class, filename);
     assertThatThrownBy(() -> LiteratureLdmlToOpenSearchMapper.mapLdml(literatureLdml))
         .isInstanceOf(OpenSearchMapperException.class)
         .hasMessageContaining("unable to parse file to Literature");
@@ -166,62 +134,6 @@ class LiteratureLdmlToOpenSearchMapperTest {
 
     assertThat(literature.yearsOfPublication()).containsExactly(input);
     assertThat(literature.firstPublicationDate()).isEqualTo(expectedDate);
-  }
-
-  @Test
-  @DisplayName("Throws if years of publication is empty")
-  void throwsIfYearsOfPublicationIsEmpty() {
-    String literatureLdml =
-        """
-        <akn:akomaNtoso xmlns:akn="http://docs.oasis-open.org/legaldocml/ns/akn/3.0"
-         xmlns:ris="http://ldml.neuris.de/literature/unselbstaendig/metadata/">
-         <akn:doc name="offene-struktur">
-           <akn:meta>
-               <akn:identification>
-                 <akn:FRBRExpression>
-                   <akn:FRBRalias name="documentNumber" value="BJLU002758328" />
-                 </akn:FRBRExpression>
-               </akn:identification>
-           </akn:meta>
-         </akn:doc>
-       </akn:akomaNtoso>
-       """
-            .stripIndent();
-
-    assertThatThrownBy(() -> LiteratureLdmlToOpenSearchMapper.mapLdml(literatureLdml))
-        .isInstanceOf(OpenSearchMapperException.class)
-        .hasMessageContaining("unable to parse file to Literature");
-  }
-
-  @Test
-  @DisplayName("Throws if first year of publication is invalid")
-  void throwsIfFirstYearOfPublicationIsInvalid() {
-    String literatureLdml =
-        """
-                        <akn:akomaNtoso xmlns:akn="http://docs.oasis-open.org/legaldocml/ns/akn/3.0"
-                         xmlns:ris="http://ldml.neuris.de/literature/unselbstaendig/metadata/">
-                         <akn:doc name="offene-struktur">
-                           <akn:meta>
-                               <akn:identification>
-                                 <akn:FRBRExpression>
-                                   <akn:FRBRalias name="documentNumber" value="BJLU002758328" />
-                                 </akn:FRBRExpression>
-                               </akn:identification>
-                                <akn:proprietary>
-                                 <ris:metadata>
-                                   <ris:veroeffentlichungsJahre>
-                                     <ris:veroeffentlichungsJahr>invalid</ris:veroeffentlichungsJahr>
-                                   </ris:veroeffentlichungsJahre>
-                                 </ris:metadata>
-                             </akn:proprietary>
-                           </akn:meta>
-                         </akn:doc>
-                       </akn:akomaNtoso>
-                       """
-            .stripIndent();
-    assertThatThrownBy(() -> LiteratureLdmlToOpenSearchMapper.mapLdml(literatureLdml))
-        .isInstanceOf(OpenSearchMapperException.class)
-        .hasMessageContaining("unable to parse file to Literature");
   }
 
   @Test

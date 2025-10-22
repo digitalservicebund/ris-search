@@ -1,0 +1,12 @@
+<!-- MISSING YEARS OF PUBLICATION -->
+<akn:akomaNtoso xmlns:akn="http://docs.oasis-open.org/legaldocml/ns/akn/3.0">
+    <akn:doc name="offene-struktur">
+        <akn:meta>
+            <akn:identification>
+                <akn:FRBRExpression>
+                    <akn:FRBRalias name="documentNumber" value="BJLU002758328" />
+                </akn:FRBRExpression>
+            </akn:identification>
+        </akn:meta>
+    </akn:doc>
+</akn:akomaNtoso>
