@@ -1,1 +1,2414 @@
-{"openapi":"3.1.0","info":{"title":"RIS API","contact":{"name":"DigitalService GmbH des Bundes","url":"https://digitalservice.bund.de"},"version":"1"},"servers":[{"url":"https://testphase.rechtsinformationen.bund.de","description":"Public API (preview)"}],"tags":[{"name":"All documents","description":"Use this endpoint to search across all document types in our database."},{"name":"Case Law","description":"This group of endpoints provides judgments and decisions of the Federal Constitutional Court, the supreme courts of the Federal Republic of Germany, the Federal Patent Court, and others that were documented by the documentation units of these courts. The documents are anonymized and published in full, and the database is updated daily."},{"name":"Legislation","description":"Retrieve current and historical versions of laws and decrees.\nThe endpoints operate on the levels of \"work\", \"expression\", and \"manifestation\". See\n<a href=\"https://en.wikipedia.org/wiki/Functional_Requirements_for_Bibliographic_Records\">Functional\nRequirements for Bibliographic Records (FRBR)</a> for more information.\n"}],"paths":{"/v1/literature":{"get":{"tags":["Literature"],"summary":"List and search literature","description":"The endpoint returns a list of literature from our database. The list is paginated and can be filtered and sorted.","operationId":"searchAndFilter","parameters":[{"name":"documentNumber","in":"query","required":false,"schema":{"type":"string"}},{"name":"yearOfPublication","in":"query","required":false,"schema":{"type":"array","items":{"type":"string"}}},{"name":"documentType","in":"query","required":false,"schema":{"type":"array","items":{"type":"string"}}},{"name":"author","in":"query","required":false,"schema":{"type":"array","items":{"type":"string"}}},{"name":"collaborator","in":"query","required":false,"schema":{"type":"array","items":{"type":"string"}}},{"name":"searchTerm","in":"query","description":"Searches for the given tokens in searchTerm. If searchTerm contains more than one token, all tokens must be in the document for the document to match.","required":false,"schema":{"type":"string","description":"Searches for the given tokens in searchTerm. If searchTerm contains more than one token, all tokens must be in the document for the document to match."}},{"name":"dateFrom","in":"query","description":"The from (greater than or equal) parameter returns all entities where date is later than, or equal to, the given date.","required":false,"schema":{"type":"string","format":"date","description":"The from (greater than or equal) parameter returns all entities where date is later than, or equal to, the given date."}},{"name":"dateTo","in":"query","description":"The to (less than or equal) parameter returns all entities where date is earlier than, or equal to, the given date.","required":false,"schema":{"type":"string","format":"date","description":"The to (less than or equal) parameter returns all entities where date is earlier than, or equal to, the given date."}},{"name":"size","in":"query","description":"The number of entities per page","required":false,"schema":{"type":"integer","format":"int32","maximum":100,"minimum":1},"example":100},{"name":"pageIndex","in":"query","description":"The number of the page to request. The page starts with the value 0","required":false,"schema":{"type":"integer","format":"int32","minimum":0},"example":0},{"name":"sort","in":"query","description":"The field to sort the results by. Default is the relevance score calculated by OpenSearch. Valid usage of the sort field are : date and documentNumber and not setting the sort field (sort by relevance descending).Add a leading - to set the order to descending (-date)","required":false,"schema":{"type":"string","description":"The field to sort the results by. Default is the relevance score calculated by OpenSearch. Valid usage of the sort field are : date and documentNumber and not setting the sort field (sort by relevance descending).Add a leading - to set the order to descending (-date)","pattern":"^-?(|default|date|DATUM|documentNumber)$"}}],"responses":{"200":{"description":"Success","content":{"application/json":{"schema":{"$ref":"#/components/schemas/CollectionSchemaSearchMemberSchemaLiteratureSearchSchema"}}}},"500":{"description":"Internal Server Error"}}}},"/v1/literature/{documentNumber}":{"get":{"tags":["Literature"],"summary":"Literature metadata","description":"The endpoint returns the metadata of a single literature from our database.","operationId":"getLiteratureMetadata","parameters":[{"name":"documentNumber","in":"path","required":true,"schema":{"type":"string"},"example":"STRE201770751"}],"responses":{"200":{"description":"OK","content":{"application/json":{"schema":{"$ref":"#/components/schemas/LiteratureSchema"}}}},"404":{"description":"Not Found"}}}},"/v1/literature/{documentNumber}.xml":{"get":{"tags":["Literature"],"summary":"Literature XML","description":"Returns a literature item as XML. This content is used as a source for the HTML endpoint.","operationId":"getLiteratureAsXml","parameters":[{"name":"documentNumber","in":"path","required":true,"schema":{"type":"string"},"example":"BJLU075748788"}],"responses":{"200":{"description":"OK","content":{"application/xml":{"schema":{"type":"string","format":"byte"}}}},"404":{"description":"Not Found"}}}},"/v1/literature/{documentNumber}.html":{"get":{"tags":["Literature"],"summary":"Literature HTML","description":"Renders and returns a literature item as HTML.","operationId":"getLiteratureAsHtml","parameters":[{"name":"documentNumber","in":"path","required":true,"schema":{"type":"string"},"example":"BJLU075748788"}],"responses":{"200":{"description":"OK","content":{"text/html":{"schema":{"type":"string"}}}},"404":{"description":"Not Found"}}}},"/v1/legislation":{"get":{"tags":["Legislation"],"summary":"List and search legislation","description":"List all legislation in our database with support for filtering and pagination.\n\n## Example 1\n\nGet all legislation containing the tokens :` Gesetz`, `über`,`das`, `Verfahren`, `bei`, `sonstigen` and `Änderungen`.\n```http request\nGET /v1/legislation?searchTerm=Gesetz%20über%20das%20Verfahren%20bei%20sonstigen%20Änderungen\n```\nThe API will return only the legislation that contains all these terms. Please note that in practice very common tokens such as `das` are ignored\n(please see <a href=\"https://en.wikipedia.org/wiki/Stop_word\">https://en.wikipedia.org/wiki/Stop_word</a> for more details).\n\n## Example 2\n\nGet all legislation containing the tokens :` Gesetz` and `über` and were valid on 2020-01-01\n```http request\nGET /v1/legislation?temporalCoverageFrom=2020-01-01&temporalCoverageTo=2020-01-01&searchTerm=Gesetz%20über\n```\nThis example can be used to only return currently valid legislation by replacing 2020-01-01 with today's date.\n\n## Example 3\n\nGet all legislation that belong to the work eli `eli/bund/bgbl-1/1979/s1325`\n```http request\nGET /v1/legislation?eli=eli/bund/bgbl-1/1979/s1325\n```\n","operationId":"searchAndFilter_1","parameters":[{"name":"eli","in":"query","description":"Search by European Legislation Identifier (ELI). Right now only searching by work ELI is supported, but a general eli prefix match might be supported in the future.","required":false,"schema":{"type":"string","description":"Search by European Legislation Identifier (ELI). Right now only searching by work ELI is supported, but a general eli prefix match might be supported in the future."}},{"name":"temporalCoverageFrom","in":"query","description":"Filters the result set to only return expressions that are in force *on or after* the provided date. The parameter should be provided in `YYYY-MM-DD` format. Differs from `dateFrom`, which refers to the date of adoption or signature of the legislation. If both `temporalCoverageFrom` and `temporalCoverageTo` are given, this will output all expressions that were in force during at least one day between the two dates. To get all expressions for one specific day, set both parameters to the same day.","required":false,"schema":{"type":"string","format":"date","description":"Filters the result set to only return expressions that are in force *on or after* the provided date. The parameter should be provided in `YYYY-MM-DD` format. Differs from `dateFrom`, which refers to the date of adoption or signature of the legislation. If both `temporalCoverageFrom` and `temporalCoverageTo` are given, this will output all expressions that were in force during at least one day between the two dates. To get all expressions for one specific day, set both parameters to the same day."}},{"name":"temporalCoverageTo","in":"query","description":"Filters the result set to only return expressions that are in force *on or before* the provided date. The parameter should be provided in `YYYY-MM-DD` format. Differs from `dateTo`, which refers to the date of adoption or signature of the legislation.","required":false,"schema":{"type":"string","format":"date","description":"Filters the result set to only return expressions that are in force *on or before* the provided date. The parameter should be provided in `YYYY-MM-DD` format. Differs from `dateTo`, which refers to the date of adoption or signature of the legislation."}},{"name":"searchTerm","in":"query","description":"Searches for the given tokens in searchTerm. If searchTerm contains more than one token, all tokens must be in the document for the document to match.","required":false,"schema":{"type":"string","description":"Searches for the given tokens in searchTerm. If searchTerm contains more than one token, all tokens must be in the document for the document to match."}},{"name":"dateFrom","in":"query","description":"The from (greater than or equal) parameter returns all entities where date is later than, or equal to, the given date.","required":false,"schema":{"type":"string","format":"date","description":"The from (greater than or equal) parameter returns all entities where date is later than, or equal to, the given date."}},{"name":"dateTo","in":"query","description":"The to (less than or equal) parameter returns all entities where date is earlier than, or equal to, the given date.","required":false,"schema":{"type":"string","format":"date","description":"The to (less than or equal) parameter returns all entities where date is earlier than, or equal to, the given date."}},{"name":"size","in":"query","description":"The number of entities per page","required":false,"schema":{"type":"integer","format":"int32","maximum":100,"minimum":1},"example":100},{"name":"pageIndex","in":"query","description":"The number of the page to request. The page starts with the value 0","required":false,"schema":{"type":"integer","format":"int32","minimum":0},"example":0},{"name":"sort","in":"query","description":"The field to sort the results by. Default is the relevance score calculated by OpenSearch. Valid usage of the sort field are : date, temporalCoverageFrom, legislationIdentifier and not setting the sort field (sort by relevance descending).Add a leading - to set the order to descending (-date)","required":false,"schema":{"type":"string","description":"The field to sort the results by. Default is the relevance score calculated by OpenSearch. Valid usage of the sort field are : date, temporalCoverageFrom, legislationIdentifier and not setting the sort field (sort by relevance descending).Add a leading - to set the order to descending (-date)","pattern":"^-?(|default|date|temporalCoverageFrom|legislationIdentifier|DATUM)$"}}],"responses":{"200":{"description":"OK","content":{"application/json":{"schema":{"$ref":"#/components/schemas/CollectionSchemaSearchMemberSchemaLegislationWorkSearchSchema"}}}},"422":{"description":"Unprocessable Entity","content":{"application/json":{"schema":{"$ref":"#/components/schemas/CollectionSchemaSearchMemberSchemaLegislationWorkSearchSchema"}}}}}}},"/v1/legislation/eli/{jurisdiction}/{agent}/{year}/{naturalIdentifier}/{pointInTime}/{version}/{language}":{"get":{"tags":["Legislation"],"summary":"Work and expression-level metadata","description":"Returns the work and expression-level (\"workExample\") metadata of a legislation item.","operationId":"getLegislation","parameters":[{"name":"jurisdiction","in":"path","description":"Country or regional code for the jurisdiction","required":true,"schema":{"type":"string","enum":["bund"]}},{"name":"agent","in":"path","description":"Agent or authority issuing the legislation, e.g., 'bgbl-1' for Bundesgesetzblatt Teil I (Federal Law Gazette part I)","required":true,"schema":{"type":"string"},"example":"bgbl-1"},{"name":"year","in":"path","description":"Year the legislation was enacted or published","required":true,"schema":{"type":"string"},"example":1979},{"name":"naturalIdentifier","in":"path","description":"Unique natural identifier for the legislation, specific to the jurisdiction and agent","required":true,"schema":{"type":"string"},"example":"s1325"},{"name":"pointInTime","in":"path","required":true,"schema":{"type":"string","format":"date"},"example":"2020-06-19"},{"name":"version","in":"path","required":true,"schema":{"type":"integer","format":"int32"},"example":2},{"name":"language","in":"path","required":true,"schema":{"type":"string"},"example":"deu"}],"responses":{"200":{"description":"OK","content":{"application/json":{"schema":{"$ref":"#/components/schemas/LegislationWorkSchema"}}}},"404":{"description":"Not Found"}}}},"/v1/legislation/eli/{jurisdiction}/{agent}/{year}/{naturalIdentifier}/{pointInTime}/{version}/{language}/{pointInTimeManifestation}/{subtype}/{articleEid}.html":{"get":{"tags":["Legislation"],"summary":"Manifestation article (§) HTML","description":"Returns a specific article (§) of particular manifestation of a piece of legislation, converted to HTML.\n","operationId":"getLegislationArticleAsHtml","parameters":[{"name":"jurisdiction","in":"path","description":"Country or regional code for the jurisdiction","required":true,"schema":{"type":"string","enum":["bund"]},"example":"bund"},{"name":"agent","in":"path","description":"Agent or authority issuing the legislation, e.g., 'bgbl-1' for Bundesgesetzblatt Teil I (Federal Law Gazette part I)","required":true,"schema":{"type":"string"},"example":"bgbl-1"},{"name":"year","in":"path","description":"Year the legislation was enacted or published","required":true,"schema":{"type":"string"},"example":1979},{"name":"naturalIdentifier","in":"path","description":"Unique natural identifier for the legislation, specific to the jurisdiction and agent","required":true,"schema":{"type":"string"},"example":"s1325"},{"name":"pointInTime","in":"path","required":true,"schema":{"type":"string","format":"date"},"example":"2020-06-19"},{"name":"version","in":"path","required":true,"schema":{"type":"integer","format":"int32"},"example":2},{"name":"language","in":"path","required":true,"schema":{"type":"string"},"example":"deu"},{"name":"pointInTimeManifestation","in":"path","required":true,"schema":{"type":"string","format":"date"},"example":"2020-06-19"},{"name":"subtype","in":"path","required":true,"schema":{"type":"string"},"example":"regelungstext-1"},{"name":"articleEid","in":"path","description":"The expression identifier, denoting elements inside an expression","required":true,"schema":{"type":"string"},"example":"art-z1"},{"name":"get-resources-via","in":"header","description":"Used to select a different prefix for referenced resources, like images. Selecting 'PROXY' will prepend `/api`. Otherwise, the API base URL will be used.","required":false,"schema":{"type":"string","default":"API","enum":["API","PROXY"]}}],"responses":{"200":{"description":"OK","content":{"text/html":{"schema":{"type":"string"}}}},"404":{"description":"Not Found"}}}},"/v1/legislation/eli/{jurisdiction}/{agent}/{year}/{naturalIdentifier}/{pointInTime}/{version}/{language}/{pointInTimeManifestation}/{subtype}.xml":{"get":{"tags":["Legislation"],"summary":"Manifestation XML","description":"Returns a particular manifestation of a piece of legislation in XML format.\n\n## Example\n\nDownload the LegalDocML format for the piece of legislation with a manifestation eli of `eli/bund/bgbl-1/1979/s1325/2020-06-19/2/deu/2020-06-19/regelungstext-1.xml`\n\n```http request\nGET /v1/eli/bund/bgbl-1/1979/s1325/2020-06-19/2/deu/2020-06-19/regelungstext-1.xml\n```\n","operationId":"getLegislationSubtypeAsXml","parameters":[{"name":"jurisdiction","in":"path","description":"Country or regional code for the jurisdiction","required":true,"schema":{"type":"string","enum":["bund"]},"example":"bund"},{"name":"agent","in":"path","description":"Agent or authority issuing the legislation, e.g., 'bgbl-1' for Bundesgesetzblatt Teil I (Federal Law Gazette part I)","required":true,"schema":{"type":"string"},"example":"bgbl-1"},{"name":"year","in":"path","description":"Year the legislation was enacted or published","required":true,"schema":{"type":"string"},"example":1979},{"name":"naturalIdentifier","in":"path","description":"Unique natural identifier for the legislation, specific to the jurisdiction and agent","required":true,"schema":{"type":"string"},"example":"s1325"},{"name":"pointInTime","in":"path","required":true,"schema":{"type":"string","format":"date"},"example":"2020-06-19"},{"name":"version","in":"path","required":true,"schema":{"type":"integer","format":"int32"},"example":2},{"name":"language","in":"path","required":true,"schema":{"type":"string"},"example":"deu"},{"name":"pointInTimeManifestation","in":"path","required":true,"schema":{"type":"string","format":"date"},"example":"2020-06-19"},{"name":"subtype","in":"path","required":true,"schema":{"type":"string"},"example":"regelungstext-1"}],"responses":{"200":{"description":"OK","content":{"application/xml":{"schema":{"type":"string","format":"byte"}}}},"404":{"description":"Not Found"}}}},"/v1/legislation/eli/{jurisdiction}/{agent}/{year}/{naturalIdentifier}/{pointInTime}/{version}/{language}/{pointInTimeManifestation}/{subtype}.html":{"get":{"tags":["Legislation"],"summary":"Manifestation HTML","description":"Returns a particular manifestation of a piece of legislation, converted to HTML.\n","operationId":"getLegislationSubtypeAsHtml","parameters":[{"name":"jurisdiction","in":"path","description":"Country or regional code for the jurisdiction","required":true,"schema":{"type":"string","enum":["bund"]},"example":"bund"},{"name":"agent","in":"path","description":"Agent or authority issuing the legislation, e.g., 'bgbl-1' for Bundesgesetzblatt Teil I (Federal Law Gazette part I)","required":true,"schema":{"type":"string"},"example":"bgbl-1"},{"name":"year","in":"path","description":"Year the legislation was enacted or published","required":true,"schema":{"type":"string"},"example":1979},{"name":"naturalIdentifier","in":"path","description":"Unique natural identifier for the legislation, specific to the jurisdiction and agent","required":true,"schema":{"type":"string"},"example":"s1325"},{"name":"pointInTime","in":"path","required":true,"schema":{"type":"string","format":"date"},"example":"2020-06-19"},{"name":"version","in":"path","required":true,"schema":{"type":"integer","format":"int32"},"example":2},{"name":"language","in":"path","required":true,"schema":{"type":"string"},"example":"deu"},{"name":"pointInTimeManifestation","in":"path","required":true,"schema":{"type":"string","format":"date"},"example":"2020-06-19"},{"name":"subtype","in":"path","required":true,"schema":{"type":"string"},"example":"regelungstext-1"},{"name":"get-resources-via","in":"header","description":"Used to select a different prefix for referenced resources, like images. Selecting 'PROXY' will prepend `/api`. Otherwise, the API base URL will be used.","required":false,"schema":{"type":"string","default":"API","enum":["API","PROXY"]}}],"responses":{"200":{"description":"OK","content":{"text/html":{"schema":{"type":"string"}}}},"404":{"description":"Not Found","content":{"text/html":{"schema":{"type":"string","example":"<div>LegalDocML file not found</div>"}}}}}}},"/v1/legislation/eli/{jurisdiction}/{agent}/{year}/{naturalIdentifier}/{pointInTime}/{version}/{language}/{pointInTimeManifestation}/{name}.{extension}":{"get":{"tags":["Legislation"],"summary":"Manifestation resource","description":"Returns a specific resource of a particular manifestation of a piece of legislation.\n","operationId":"getFile","parameters":[{"name":"jurisdiction","in":"path","description":"Country or regional code for the jurisdiction","required":true,"schema":{"type":"string","enum":["bund"]},"example":"bund"},{"name":"agent","in":"path","description":"Agent or authority issuing the legislation, e.g., 'bgbl-1' for Bundesgesetzblatt Teil I (Federal Law Gazette part I)","required":true,"schema":{"type":"string"},"example":"bgbl-1"},{"name":"year","in":"path","description":"Year the legislation was enacted or published","required":true,"schema":{"type":"string"},"example":1979},{"name":"naturalIdentifier","in":"path","description":"Unique natural identifier for the legislation, specific to the jurisdiction and agent","required":true,"schema":{"type":"string"},"example":"s1325"},{"name":"pointInTime","in":"path","required":true,"schema":{"type":"string","format":"date"},"example":"2020-06-19"},{"name":"version","in":"path","required":true,"schema":{"type":"integer","format":"int32"},"example":2},{"name":"language","in":"path","required":true,"schema":{"type":"string"},"example":"deu"},{"name":"pointInTimeManifestation","in":"path","required":true,"schema":{"type":"string","format":"date"},"example":"2020-06-19"},{"name":"name","in":"path","required":true,"schema":{"type":"string"},"example":"image"},{"name":"extension","in":"path","required":true,"schema":{"type":"string","enum":["pdf","xml","jpg","gif"]},"example":"jpg"}],"responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"type":"string","format":"byte"}}}},"404":{"description":"Not Found"}}}},"/v1/legislation/eli/{jurisdiction}/{agent}/{year}/{naturalIdentifier}/{pointInTime}/{version}/{language}/{pointInTimeManifestation}.zip":{"get":{"tags":["Legislation"],"summary":"Manifestation ZIP (XML and attachments)","description":"Returns a particular manifestation of a piece of legislation, including attachments, as a ZIP archive.\nNote the omission of the subtype path parameter.\n","operationId":"getLegislationSubtypeAsZip","parameters":[{"name":"jurisdiction","in":"path","description":"Country or regional code for the jurisdiction","required":true,"schema":{"type":"string","enum":["bund"]},"example":"bund"},{"name":"agent","in":"path","description":"Agent or authority issuing the legislation, e.g., 'bgbl-1' for Bundesgesetzblatt Teil I (Federal Law Gazette part I)","required":true,"schema":{"type":"string"},"example":"bgbl-1"},{"name":"year","in":"path","description":"Year the legislation was enacted or published","required":true,"schema":{"type":"string"},"example":1979},{"name":"naturalIdentifier","in":"path","description":"Unique natural identifier for the legislation, specific to the jurisdiction and agent","required":true,"schema":{"type":"string"},"example":"s1325"},{"name":"pointInTime","in":"path","required":true,"schema":{"type":"string","format":"date"},"example":"2020-06-19"},{"name":"version","in":"path","required":true,"schema":{"type":"integer","format":"int32"},"example":2},{"name":"language","in":"path","required":true,"schema":{"type":"string"},"example":"deu"},{"name":"pointInTimeManifestation","in":"path","required":true,"schema":{"type":"string","format":"date"},"example":"2020-06-19"}],"responses":{"200":{"description":"OK","content":{"application/zip":{"schema":{"$ref":"#/components/schemas/StreamingResponseBody"}}}},"404":{"description":"Not Found"}}}},"/v1/document":{"get":{"tags":["All documents"],"summary":"Global search / list","description":"This endpoint can be used to search for documents across different document kinds. Currently we support case law and legislation document kinds. The endpoint provides a paginated response with up to 10,000 results with at most 100 results per page.\n\nThe searchTerm parameter searches across multiple fields of a document at the same time. The fields searched depend on the document kind. See the filters guide for more information.\n\nDefault sorting is by relevance from most relevant to least relevant. Multiple factors are combined to boost the most relevant documents to the top of the result list. Additionally, sorting by date is possible by setting the sort query parameter to date.\n","operationId":"searchAndFilter_2","parameters":[{"name":"searchTerm","in":"query","description":"Searches for the given tokens in searchTerm. If searchTerm contains more than one token, all tokens must be in the document for the document to match.","required":false,"schema":{"type":"string","description":"Searches for the given tokens in searchTerm. If searchTerm contains more than one token, all tokens must be in the document for the document to match."}},{"name":"dateFrom","in":"query","description":"The from (greater than or equal) parameter returns all entities where date is later than, or equal to, the given date.","required":false,"schema":{"type":"string","format":"date","description":"The from (greater than or equal) parameter returns all entities where date is later than, or equal to, the given date."}},{"name":"dateTo","in":"query","description":"The to (less than or equal) parameter returns all entities where date is earlier than, or equal to, the given date.","required":false,"schema":{"type":"string","format":"date","description":"The to (less than or equal) parameter returns all entities where date is earlier than, or equal to, the given date."}},{"name":"eli","in":"query","description":"Search by European Legislation Identifier (ELI). Right now only searching by work ELI is supported, but a general eli prefix match might be supported in the future.","required":false,"schema":{"type":"string","description":"Search by European Legislation Identifier (ELI). Right now only searching by work ELI is supported, but a general eli prefix match might be supported in the future."}},{"name":"temporalCoverageFrom","in":"query","description":"Filters the result set to only return expressions that are in force *on or after* the provided date. The parameter should be provided in `YYYY-MM-DD` format. Differs from `dateFrom`, which refers to the date of adoption or signature of the legislation. If both `temporalCoverageFrom` and `temporalCoverageTo` are given, this will output all expressions that were in force during at least one day between the two dates. To get all expressions for one specific day, set both parameters to the same day.","required":false,"schema":{"type":"string","format":"date","description":"Filters the result set to only return expressions that are in force *on or after* the provided date. The parameter should be provided in `YYYY-MM-DD` format. Differs from `dateFrom`, which refers to the date of adoption or signature of the legislation. If both `temporalCoverageFrom` and `temporalCoverageTo` are given, this will output all expressions that were in force during at least one day between the two dates. To get all expressions for one specific day, set both parameters to the same day."}},{"name":"temporalCoverageTo","in":"query","description":"Filters the result set to only return expressions that are in force *on or before* the provided date. The parameter should be provided in `YYYY-MM-DD` format. Differs from `dateTo`, which refers to the date of adoption or signature of the legislation.","required":false,"schema":{"type":"string","format":"date","description":"Filters the result set to only return expressions that are in force *on or before* the provided date. The parameter should be provided in `YYYY-MM-DD` format. Differs from `dateTo`, which refers to the date of adoption or signature of the legislation."}},{"name":"fileNumber","in":"query","required":false,"schema":{"type":"string"}},{"name":"ecli","in":"query","required":false,"schema":{"type":"string"}},{"name":"court","in":"query","description":"Filter by court name (Finanzgericht Münster, FG Münster, ArbG Köln) or court type (Finanzgericht, FG, ArbG). Supports both long and short names.","required":false,"schema":{"type":"string","description":"Filter by court name (Finanzgericht Münster, FG Münster, ArbG Köln) or court type (Finanzgericht, FG, ArbG). Supports both long and short names."}},{"name":"legalEffect","in":"query","description":"Corresponds to “Rechtskraft”, meaning that the decision referred to is legally binding.","required":false,"schema":{"type":"string","description":"Corresponds to “Rechtskraft”, meaning that the decision referred to is legally binding.","enum":["JA","NEIN","KEINE_ANGABE","FALSCHE_ANGABE"]}},{"name":"type","in":"query","description":"Filter by document type (Urteil, Versäumnisurteil, Entscheidung etc.). Multiple values may be specified as a comma-separated list or by repeating the parameter.","required":false,"schema":{"type":"array","description":"Filter by document type (Urteil, Versäumnisurteil, Entscheidung etc.). Multiple values may be specified as a comma-separated list or by repeating the parameter.","examples":["Versäumnisurteil","Entscheidung"],"items":{"type":"string","description":"Filter by document type (Urteil, Versäumnisurteil, Entscheidung etc.). Multiple values may be specified as a comma-separated list or by repeating the parameter.","examples":["Versäumnisurteil","Entscheidung"]}}},{"name":"typeGroup","in":"query","description":"Extended filter by type group. Multiple values may be specified as a comma-separated list or by repeating the parameter.","required":false,"schema":{"type":"array","description":"Extended filter by type group. Multiple values may be specified as a comma-separated list or by repeating the parameter.","enum":["Urteil","Beschluss","other"],"items":{"type":"string","description":"Extended filter by type group. Multiple values may be specified as a comma-separated list or by repeating the parameter.","enum":["URTEIL","BESCHLUSS","OTHER","Urteil","Beschluss","other"]}}},{"name":"sort","in":"query","description":"The field to sort the results by. Default is the relevance score calculated by OpenSearch. Valid usage of the sort field are : date, temporalCoverageFrom, legislationIdentifier, courtName, documentNumber and not setting the sort field (sort by relevance descending).Add a leading - to set the order to descending (-date)","required":false,"schema":{"type":"string","description":"The field to sort the results by. Default is the relevance score calculated by OpenSearch. Valid usage of the sort field are : date, temporalCoverageFrom, legislationIdentifier, courtName, documentNumber and not setting the sort field (sort by relevance descending).Add a leading - to set the order to descending (-date)","pattern":"^-?(|default|date|DATUM|courtName|documentNumber|temporalCoverageFrom|legislationIdentifier)$"}},{"name":"documentKind","in":"query","description":"Filter by document kind. Specify R for case law (<u>R</u>echtsprechung), or N for legislation (<u>N</u>ormen).","required":false,"schema":{"type":"string","description":"Filter by document kind. Specify R for case law (<u>R</u>echtsprechung), or N for legislation (<u>N</u>ormen).","enum":["R","N"]}},{"name":"size","in":"query","description":"The number of entities per page","required":false,"schema":{"type":"integer","format":"int32","maximum":100,"minimum":1},"example":100},{"name":"pageIndex","in":"query","description":"The number of the page to request. The page starts with the value 0","required":false,"schema":{"type":"integer","format":"int32","minimum":0},"example":0}],"responses":{"200":{"description":"Success","content":{"application/json":{"schema":{"$ref":"#/components/schemas/CollectionSchemaSearchMemberSchema"}}}},"500":{"description":"Internal Server Error"}}}},"/v1/document/lucene-search":{"get":{"tags":["All documents"],"summary":"Advanced search using Lucene query syntax","operationId":"search","parameters":[{"name":"query","in":"query","description":"The query filter based on Lucene query","required":true,"schema":{"type":"string"}},{"name":"size","in":"query","description":"The number of entities per page","required":false,"schema":{"type":"integer","format":"int32","maximum":100,"minimum":1},"example":100},{"name":"pageIndex","in":"query","description":"The number of the page to request. The page starts with the value 0","required":false,"schema":{"type":"integer","format":"int32","minimum":0},"example":0},{"name":"sort","in":"query","description":"The field to sort the results by. Default is the relevance score calculated by OpenSearch. Valid usage of the sort field are : date, temporalCoverageFrom, legislationIdentifier, courtName, documentNumber and not setting the sort field (sort by relevance descending).Add a leading - to set the order to descending (-date)","required":false,"schema":{"type":"string","description":"The field to sort the results by. Default is the relevance score calculated by OpenSearch. Valid usage of the sort field are : date, temporalCoverageFrom, legislationIdentifier, courtName, documentNumber and not setting the sort field (sort by relevance descending).Add a leading - to set the order to descending (-date)","pattern":"^-?(|default|date|DATUM|courtName|documentNumber|temporalCoverageFrom|legislationIdentifier)$"}}],"responses":{"200":{"description":"Success","content":{"*/*":{"schema":{"$ref":"#/components/schemas/CollectionSchemaSearchMemberSchema"}}}},"500":{"description":"Internal Server Error"}}}},"/v1/document/lucene-search/legislation":{"get":{"tags":["Legislation"],"summary":"Advanced search using Lucene query syntax","operationId":"searchLegislation","parameters":[{"name":"query","in":"query","description":"The query filter based on Lucene query","required":true,"schema":{"type":"string"}},{"name":"size","in":"query","description":"The number of entities per page","required":false,"schema":{"type":"integer","format":"int32","maximum":100,"minimum":1},"example":100},{"name":"pageIndex","in":"query","description":"The number of the page to request. The page starts with the value 0","required":false,"schema":{"type":"integer","format":"int32","minimum":0},"example":0},{"name":"sort","in":"query","description":"The field to sort the results by. Default is the relevance score calculated by OpenSearch. Valid usage of the sort field are : date, temporalCoverageFrom, legislationIdentifier and not setting the sort field (sort by relevance descending).Add a leading - to set the order to descending (-date)","required":false,"schema":{"type":"string","description":"The field to sort the results by. Default is the relevance score calculated by OpenSearch. Valid usage of the sort field are : date, temporalCoverageFrom, legislationIdentifier and not setting the sort field (sort by relevance descending).Add a leading - to set the order to descending (-date)","pattern":"^-?(|default|date|temporalCoverageFrom|legislationIdentifier|DATUM)$"}}],"responses":{"200":{"description":"Success","content":{"*/*":{"schema":{"$ref":"#/components/schemas/CollectionSchemaSearchMemberSchemaLegislationWorkSearchSchema"}}}},"500":{"description":"Internal Server Error"}}}},"/v1/document/lucene-search/case-law":{"get":{"tags":["Case Law"],"summary":"Advanced search using Lucene query syntax","operationId":"caseLawSearch","parameters":[{"name":"query","in":"query","description":"The query filter based on Lucene query syntax","required":true,"schema":{"type":"string"}},{"name":"size","in":"query","description":"The number of entities per page","required":false,"schema":{"type":"integer","format":"int32","maximum":100,"minimum":1},"example":100},{"name":"pageIndex","in":"query","description":"The number of the page to request. The page starts with the value 0","required":false,"schema":{"type":"integer","format":"int32","minimum":0},"example":0},{"name":"sort","in":"query","description":"The field to sort the results by. Default is the relevance score calculated by OpenSearch. Valid usage of the sort field are : date, courtName, documentNumber and not setting the sort field (sort by relevance descending).Add a leading - to set the order to descending (-date)","required":false,"schema":{"type":"string","description":"The field to sort the results by. Default is the relevance score calculated by OpenSearch. Valid usage of the sort field are : date, courtName, documentNumber and not setting the sort field (sort by relevance descending).Add a leading - to set the order to descending (-date)","pattern":"^-?(|default|date|DATUM|courtName|documentNumber)$"}}],"responses":{"200":{"description":"Success","content":{"*/*":{"schema":{"$ref":"#/components/schemas/CollectionSchemaSearchMemberSchemaCaseLawSearchSchema"}}}},"500":{"description":"Internal Server Error"}}}},"/v1/case-law":{"get":{"tags":["Case Law"],"summary":"List and search decisions","description":"The endpoint returns a list of decisions from our database. The list is paginated and can be filtered and sorted.","operationId":"searchAndFilter_3","parameters":[{"name":"fileNumber","in":"query","required":false,"schema":{"type":"string"}},{"name":"ecli","in":"query","required":false,"schema":{"type":"string"}},{"name":"court","in":"query","description":"Filter by court name (Finanzgericht Münster, FG Münster, ArbG Köln) or court type (Finanzgericht, FG, ArbG). Supports both long and short names.","required":false,"schema":{"type":"string","description":"Filter by court name (Finanzgericht Münster, FG Münster, ArbG Köln) or court type (Finanzgericht, FG, ArbG). Supports both long and short names."}},{"name":"legalEffect","in":"query","description":"Corresponds to “Rechtskraft”, meaning that the decision referred to is legally binding.","required":false,"schema":{"type":"string","description":"Corresponds to “Rechtskraft”, meaning that the decision referred to is legally binding.","enum":["JA","NEIN","KEINE_ANGABE","FALSCHE_ANGABE"]}},{"name":"type","in":"query","description":"Filter by document type (Urteil, Versäumnisurteil, Entscheidung etc.). Multiple values may be specified as a comma-separated list or by repeating the parameter.","required":false,"schema":{"type":"array","description":"Filter by document type (Urteil, Versäumnisurteil, Entscheidung etc.). Multiple values may be specified as a comma-separated list or by repeating the parameter.","examples":["Versäumnisurteil","Entscheidung"],"items":{"type":"string","description":"Filter by document type (Urteil, Versäumnisurteil, Entscheidung etc.). Multiple values may be specified as a comma-separated list or by repeating the parameter.","examples":["Versäumnisurteil","Entscheidung"]}}},{"name":"typeGroup","in":"query","description":"Extended filter by type group. Multiple values may be specified as a comma-separated list or by repeating the parameter.","required":false,"schema":{"type":"array","description":"Extended filter by type group. Multiple values may be specified as a comma-separated list or by repeating the parameter.","enum":["Urteil","Beschluss","other"],"items":{"type":"string","description":"Extended filter by type group. Multiple values may be specified as a comma-separated list or by repeating the parameter.","enum":["URTEIL","BESCHLUSS","OTHER","Urteil","Beschluss","other"]}}},{"name":"searchTerm","in":"query","description":"Searches for the given tokens in searchTerm. If searchTerm contains more than one token, all tokens must be in the document for the document to match.","required":false,"schema":{"type":"string","description":"Searches for the given tokens in searchTerm. If searchTerm contains more than one token, all tokens must be in the document for the document to match."}},{"name":"dateFrom","in":"query","description":"The from (greater than or equal) parameter returns all entities where date is later than, or equal to, the given date.","required":false,"schema":{"type":"string","format":"date","description":"The from (greater than or equal) parameter returns all entities where date is later than, or equal to, the given date."}},{"name":"dateTo","in":"query","description":"The to (less than or equal) parameter returns all entities where date is earlier than, or equal to, the given date.","required":false,"schema":{"type":"string","format":"date","description":"The to (less than or equal) parameter returns all entities where date is earlier than, or equal to, the given date."}},{"name":"size","in":"query","description":"The number of entities per page","required":false,"schema":{"type":"integer","format":"int32","maximum":100,"minimum":1},"example":100},{"name":"pageIndex","in":"query","description":"The number of the page to request. The page starts with the value 0","required":false,"schema":{"type":"integer","format":"int32","minimum":0},"example":0},{"name":"sort","in":"query","description":"The field to sort the results by. Default is the relevance score calculated by OpenSearch. Valid usage of the sort field are : date, courtName, documentNumber and not setting the sort field (sort by relevance descending).Add a leading - to set the order to descending (-date)","required":false,"schema":{"type":"string","description":"The field to sort the results by. Default is the relevance score calculated by OpenSearch. Valid usage of the sort field are : date, courtName, documentNumber and not setting the sort field (sort by relevance descending).Add a leading - to set the order to descending (-date)","pattern":"^-?(|default|date|DATUM|courtName|documentNumber)$"}}],"responses":{"200":{"description":"Success","content":{"application/json":{"schema":{"$ref":"#/components/schemas/CollectionSchemaSearchMemberSchemaCaseLawSearchSchema"}}}},"500":{"description":"Internal Server Error"}}}},"/v1/case-law/{documentNumber}":{"get":{"tags":["Case Law"],"summary":"Decision metadata","description":"The endpoint returns a single decision from our database.","operationId":"getCaseLaw","parameters":[{"name":"documentNumber","in":"path","required":true,"schema":{"type":"string"},"example":"STRE201770751"}],"responses":{"200":{"description":"OK","content":{"application/json":{"schema":{"$ref":"#/components/schemas/CaseLawSchema"}}}},"404":{"description":"Not Found"}}}},"/v1/case-law/{documentNumber}/{name}.{extension}":{"get":{"tags":["Case Law"],"summary":"Caselaw resource","description":"Returns a specific resource of a particular caselaw.","operationId":"getImage","parameters":[{"name":"documentNumber","in":"path","required":true,"schema":{"type":"string"},"example":"BDRE000800001"},{"name":"name","in":"path","required":true,"schema":{"type":"string"},"example":"image"},{"name":"extension","in":"path","required":true,"schema":{"type":"string","enum":["png","jpg","jpeg","gif","wmf","emf","bitmap"]},"example":"jpg"}],"responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"type":"string","format":"byte"}}}},"404":{"description":"Not Found"}}}},"/v1/case-law/{documentNumber}.zip":{"get":{"tags":["Case Law"],"summary":"Decision ZIP (XML and attachments)","description":"Returns a case law decision, including attachments, as a ZIP archive.","operationId":"getCaseLawDocumentationUnitAsZip","parameters":[{"name":"documentNumber","in":"path","required":true,"schema":{"type":"string"},"example":"STRE201770751"}],"responses":{"200":{"description":"OK","content":{"application/zip":{"schema":{"$ref":"#/components/schemas/StreamingResponseBody"}}}},"404":{"description":"Not Found"}}}},"/v1/case-law/{documentNumber}.xml":{"get":{"tags":["Case Law"],"summary":"Decision XML","description":"Returns a case law decision as XML. This content is used as a source for the HTML endpoint.","operationId":"getCaseLawDocumentationUnitAsXml","parameters":[{"name":"documentNumber","in":"path","required":true,"schema":{"type":"string"},"example":"STRE201770751"}],"responses":{"200":{"description":"OK","content":{"application/xml":{"schema":{"type":"string","format":"byte"}}}},"404":{"description":"Not Found"}}}},"/v1/case-law/{documentNumber}.html":{"get":{"tags":["Case Law"],"summary":"Decision HTML","description":"Renders and returns a case law decision as HTML.","operationId":"getCaseLawDocumentationUnitAsHtml","parameters":[{"name":"documentNumber","in":"path","required":true,"schema":{"type":"string"},"example":"STRE201770751"},{"name":"get-resources-via","in":"header","description":"Used to select a different prefix for referenced resources, like images. Selecting 'PROXY' will prepend `/api`. Otherwise, the API base URL will be used.","required":false,"schema":{"type":"string","default":"API","enum":["API","PROXY"]}}],"responses":{"200":{"description":"OK","content":{"text/html":{"schema":{"type":"string"}}}},"404":{"description":"Not Found"}}}},"/v1/case-law/courts":{"get":{"tags":["Case Law"],"summary":"List courts","description":"Lists courts with long and short name and number of associated decisions. The prefix parameter may be used to filter this list. Only includes courts whose decisions have been published in this database.","operationId":"getCourts","parameters":[{"name":"prefix","in":"query","required":false,"schema":{"type":"string"}}],"responses":{"200":{"description":"OK","content":{"application/json":{"schema":{"type":"array","items":{"$ref":"#/components/schemas/CourtSearchResult"}}}}}}}}},"components":{"schemas":{"CollectionSchemaSearchMemberSchemaLiteratureSearchSchema":{"type":"object","properties":{"@id":{"type":"string","example":"/v1/document?pageIndex=0&size=5"},"totalItems":{"type":"integer","format":"int64","example":1},"member":{"type":"array","items":{"$ref":"#/components/schemas/SearchMemberSchemaLiteratureSearchSchema"}},"view":{"$ref":"#/components/schemas/PartialCollectionViewSchema"},"@type":{"type":"string","example":"hydra:Collection"}}},"LiteratureEncodingSchema":{"type":"object","properties":{"@id":{"type":"string"},"contentUrl":{"type":"string"},"encodingFormat":{"type":"string","example":"text/html"},"inLanguage":{"type":"string","example":"de"},"@type":{"type":"string","example":"MediaObject"}}},"LiteratureSearchSchema":{"allOf":[{"$ref":"#/components/schemas/AbstractDocumentSchema"},{"type":"object","properties":{"@id":{"type":"string","example":"KALU000000000"},"inLanguage":{"type":"string","example":"de"},"documentNumber":{"type":"string","description":"Dokumentnummer","example":"KALU000000000"},"recordingDate":{"type":"string","format":"date","description":"The date on which the literature piece was recorded.","example":"2003-12-15"},"yearsOfPublication":{"type":"array","description":"Veröffentlichungsjahre","example":"[2014, 2024-09]","items":{"type":"string"}},"documentTypes":{"type":"array","description":"Dokumenttypen","example":"['Auf']","items":{"type":"string"}},"dependentReferences":{"type":"array","description":"Unselbstständige Fundstellen","example":"['BUV, 1982, 123-123']","items":{"type":"string"}},"independentReferences":{"type":"array","description":"Selbstständige Fundstellen","example":"['50 Jahre Betriebs-Berater, 1987, 123-456']","items":{"type":"string"}},"normReferences":{"type":"array","description":"Norm Verweise","example":"['GG, Art 6 Abs 2 S 1, 1949-05-23']","items":{"type":"string"}},"headline":{"type":"string","description":"Haupttitel"},"headlineAdditions":{"type":"string","description":"Zusätze zum Haupttitel"},"alternativeHeadline":{"type":"string","description":"Dokumentarischer Titel"},"authors":{"type":"array","description":"Authoren","example":"['Musterfrau, Sabine']","items":{"type":"string"}},"collaborators":{"type":"array","description":"Mitarbeiter","example":"['Mustermann, Max']","items":{"type":"string"}},"languages":{"type":"array","description":"Sprachen","example":"['deu', 'eng']","items":{"type":"string"}},"originators":{"type":"array","description":"Urheber","example":"['DGB']","items":{"type":"string"}},"conferenceNotes":{"type":"array","description":"Kongressvermerke","example":"['Nationaler Beispiel Kongress, 2024, Berlin, GER']","items":{"type":"string"}},"shortReport":{"type":"string","description":"Kurzreferat"},"outline":{"type":"string","description":"Gliederung"},"encoding":{"type":"array","items":{"$ref":"#/components/schemas/LiteratureEncodingSchema"}}}}],"properties":{"@type":{"type":"string","example":"Literature"}}},"PartialCollectionViewSchema":{"type":"object","properties":{"first":{"type":"string"},"previous":{"type":"string"},"next":{"type":"string"},"last":{"type":"string"},"@type":{"type":"string","example":"hydra:PartialCollectionView"}}},"SearchMemberSchemaLiteratureSearchSchema":{"type":"object","properties":{"item":{"$ref":"#/components/schemas/LiteratureSearchSchema"},"textMatches":{"type":"array","items":{"$ref":"#/components/schemas/TextMatchSchema"}},"@type":{"type":"string","example":"SearchResult"}}},"TextMatchSchema":{"type":"object","properties":{"name":{"type":"string"},"text":{"type":"string"},"location":{"type":"string"},"@type":{"type":"string","example":"SearchResultMatch"}}},"LiteratureSchema":{"type":"object","properties":{"@id":{"type":"string","example":"KALU000000000"},"inLanguage":{"type":"string","example":"de"},"recordingDate":{"type":"string","format":"date","description":"The date on which the literature piece was recorded.","example":"2003-12-15"},"documentNumber":{"type":"string","description":"Dokumentnummer","example":"KALU000000000"},"yearsOfPublication":{"type":"array","description":"Veröffentlichungsjahre","example":"[2014, 2024-09]","items":{"type":"string"}},"documentTypes":{"type":"array","description":"Dokumenttypen","example":"['Auf']","items":{"type":"string"}},"dependentReferences":{"type":"array","description":"Unselbstständige Fundstellen","example":"['BUV, 1982, 123-123']","items":{"type":"string"}},"independentReferences":{"type":"array","description":"Selbstständige Fundstellen","example":"['50 Jahre Betriebs-Berater, 1987, 123-456']","items":{"type":"string"}},"normReferences":{"type":"array","description":"Norm Verweise","example":"['GG, Art 6 Abs 2 S 1, 1949-05-23']","items":{"type":"string"}},"headline":{"type":"string","description":"Haupttitel"},"headlineAdditions":{"type":"string","description":"Zusätze zum Haupttitel"},"alternativeHeadline":{"type":"string","description":"Dokumentarischer Titel"},"authors":{"type":"array","description":"Authoren","example":"['Musterfrau, Sabine']","items":{"type":"string"}},"collaborators":{"type":"array","description":"Mitarbeiter","example":"['Mustermann, Max']","items":{"type":"string"}},"languages":{"type":"array","description":"Sprachen","example":"['deu', 'eng']","items":{"type":"string"}},"originators":{"type":"array","description":"Urheber","example":"['DGB']","items":{"type":"string"}},"conferenceNotes":{"type":"array","description":"Kongressvermerke","example":"['Nationaler Beispiel Kongress, 2024, Berlin, GER']","items":{"type":"string"}},"shortReport":{"type":"string","description":"Kurzreferat"},"outline":{"type":"string","description":"Gliederung"},"encoding":{"type":"array","items":{"$ref":"#/components/schemas/LiteratureEncodingSchema"}},"@type":{"type":"string","example":"Literature"}}},"CollectionSchemaSearchMemberSchemaLegislationWorkSearchSchema":{"type":"object","properties":{"@id":{"type":"string","example":"/v1/document?pageIndex=0&size=5"},"totalItems":{"type":"integer","format":"int64","example":1},"member":{"type":"array","items":{"$ref":"#/components/schemas/SearchMemberSchemaLegislationWorkSearchSchema"}},"view":{"$ref":"#/components/schemas/PartialCollectionViewSchema"},"@type":{"type":"string","example":"hydra:Collection"}}},"LegislationExpressionSearchSchema":{"type":"object","description":"A legislation item, across different expressions and manifestations. May be used to provide context to a `LegislationExpression` (under key `workExample`).","properties":{"@id":{"type":"string","example":"/v1/legislation/eli/bund/bgbl-1/1975/s1760/1998-01-29/10/deu"},"legislationIdentifier":{"type":"string","example":"eli/bund/bgbl-1/1975/s1760/1998-01-29/10/deu"},"temporalCoverage":{"type":"string","description":"Textual string indicating a time period in [ISO 8601 time interval format](https://en.wikipedia.org/wiki/ISO_8601#Time_intervals)\n","example":"1998-02-06/.."},"legislationLegalForce":{"type":"string","description":"Whether the legislation expression is currently in force.","enum":["InForce","NotInForce","PartiallyInForce"]},"@type":{"type":"string","example":"Legislation"}}},"LegislationWorkSearchSchema":{"allOf":[{"$ref":"#/components/schemas/AbstractDocumentSchema"},{"type":"object","properties":{"@id":{"type":"string","example":"/v1/legislation/eli/bund/bgbl-1/1975/s1760"},"name":{"type":"string","example":"Verordnung über Kakao und Kakaoerzeugnisse"},"legislationIdentifier":{"type":"string","example":"eli/bund/bgbl-1/1975/s1760"},"alternateName":{"type":"string","example":"Kakaoverordnung"},"abbreviation":{"type":"string","example":"KakaoV 2003"},"legislationDate":{"type":"string","format":"date","description":"The date of adoption or signature of the legislation. This is the date at which the text is officially acknowledged to be a legislation, even though it might not even be published or in force.\n","example":"2003-12-15"},"datePublished":{"type":"string","format":"date","description":"The date of first publication of the legislation, when it was published in the official gazette. This may be later than the `legislationDate`.\"\"\n","example":"2003-12-16"},"isPartOf":{"$ref":"#/components/schemas/PublicationIssueSchema"},"workExample":{"$ref":"#/components/schemas/LegislationExpressionSearchSchema"}}}],"description":"A legislation item, across different expressions and manifestations. May be used to provide context to a `LegislationExpression` (under key `workExample`).","properties":{"@type":{"type":"string","example":"Legislation"}}},"PublicationIssueSchema":{"type":"object","properties":{"name":{"type":"string","example":"BGBL I 2003, 1760"},"@type":{"type":"string","example":"PublicationIssue"}}},"SearchMemberSchemaLegislationWorkSearchSchema":{"type":"object","properties":{"item":{"$ref":"#/components/schemas/LegislationWorkSearchSchema"},"textMatches":{"type":"array","items":{"$ref":"#/components/schemas/TextMatchSchema"}},"@type":{"type":"string","example":"SearchResult"}}},"LegislationExpressionPartSchema":{"type":"object","properties":{"@id":{"type":"string","example":"/v1/legislation/eli/bund/bgbl-1/1975/s1760/regelungstext-1.xml#hauptteitel-para-1"},"eId":{"type":"string","description":"Expression-level identifier, uniquely identifying this element in an FRBR expression","example":"hauptteitel-para-1"},"guid":{"type":"string","example":"550e8400-e29b-41d4-a716-446655440000"},"name":{"type":"string","example":"§ 1"},"isActive":{"type":"boolean","example":true},"entryIntoForceDate":{"type":"string","format":"date","example":"2003-12-15"},"expiryDate":{"type":"string","format":"date","example":"2003-12-15"},"encoding":{"type":"array","description":"The source data for this part, if available on its own","items":{"$ref":"#/components/schemas/LegislationObjectSchema"}},"@type":{"type":"string","example":"Legislation"}}},"LegislationExpressionSchema":{"type":"object","description":"A legislation item, across different expressions and manifestations. May be used to provide context to a `LegislationExpression` (under key `workExample`).","properties":{"@id":{"type":"string","example":"/v1/legislation/eli/bund/bgbl-1/1975/s1760/1998-01-29/10/deu"},"legislationIdentifier":{"type":"string","example":"eli/bund/bgbl-1/1975/s1760/1998-01-29/10/deu"},"temporalCoverage":{"type":"string","description":"Textual string indicating a time period in [ISO 8601 time interval format](https://en.wikipedia.org/wiki/ISO_8601#Time_intervals)\n","example":"1998-02-06/.."},"legislationLegalForce":{"type":"string","description":"Whether the legislation expression is currently in force.","enum":["InForce","NotInForce","PartiallyInForce"]},"tableOfContents":{"type":"array","items":{"$ref":"#/components/schemas/TableOfContentsSchema"}},"hasPart":{"type":"array","description":"List of components (articles, preambles, conclusions, attachments, …) that form this legislation item.","items":{"$ref":"#/components/schemas/LegislationExpressionPartSchema"}},"encoding":{"type":"array","items":{"$ref":"#/components/schemas/LegislationObjectSchema"}},"@type":{"type":"string","example":"Legislation"}}},"LegislationObjectSchema":{"type":"object","properties":{"@id":{"type":"string","example":"/v1/legislation/eli/bund/bgbl-1/1975/s1760/1998-01-29/10/deu/1998-01-29/regelungstext-1/html"},"contentUrl":{"type":"string","example":"/v1/legislation/eli/bund/bgbl-1/1975/s1760/1998-01-29/10/deu/1998-01-29/regelungstext-1.html"},"encodingFormat":{"type":"string","example":"text/html"},"inLanguage":{"type":"string","example":"de"},"@type":{"type":"string","example":"LegislationObject"}}},"LegislationWorkSchema":{"type":"object","description":"A legislation item, across different expressions and manifestations. May be used to provide context to a `LegislationExpression` (under key `workExample`).","properties":{"@id":{"type":"string","description":"Based on the European Legislation Identifier (ELI)","example":"/v1/legislation/eli/bund/bgbl-1/1975/s1760"},"name":{"type":"string","description":"Amtliche Langüberschrift","example":"Verordnung über Kakao und Kakaoerzeugnisse"},"legislationIdentifier":{"type":"string","description":"European Legislation Identifier (ELI)","example":"eli/bund/bgbl-1/1975/s1760/regelungstext-1"},"alternateName":{"type":"string","description":"Amtliche Kurzüberschrift","example":"Kakaoverordnung"},"abbreviation":{"type":"string","description":"Amtliche Buchstabenabkürzung","example":"KakaoV 2003"},"legislationDate":{"type":"string","format":"date","description":"Ausfertigungsdatum (The date of adoption or signature of the legislation. This is the date at which the text is officially acknowledged to be a legislation, even though it might not even be published or in force.)\n","example":"2003-12-15"},"datePublished":{"type":"string","format":"date","description":"Verkündungsdatum (The date of first publication of the legislation, when it was published in the official gazette. This may be later than the `legislationDate`.)\n","example":"2003-12-16"},"isPartOf":{"$ref":"#/components/schemas/PublicationIssueSchema"},"workExample":{"$ref":"#/components/schemas/LegislationExpressionSchema","description":"Expression-level details (<i>an \"exemplary\" expression of this work</i>)"},"@type":{"type":"string","example":"Legislation"}}},"TableOfContentsSchema":{"type":"object","properties":{"id":{"type":"string","example":"hauptteil-1_para-1"},"marker":{"type":"string","example":1},"heading":{"type":"string","example":"Art 1"},"@type":{"type":"string","example":"TocEntry"}}},"StreamingResponseBody":{},"AbstractDocumentSchema":{},"CaseLawSearchSchema":{"allOf":[{"$ref":"#/components/schemas/AbstractDocumentSchema"},{"type":"object","properties":{"documentNumber":{"type":"string","example":"KARE000000000"},"ecli":{"type":"string","example":"ECLI:DE:FGRLP:1969:0905.IV85.68.0A"},"headline":{"type":"string","example":"Überschrift"},"otherLongText":{"type":"string","example":"Sonstiger Langtext"},"decisionDate":{"type":"string","format":"date"},"fileNumbers":{"type":"array","example":"BGH 123/23","items":{"type":"string"}},"courtType":{"type":"string","example":"FG"},"location":{"type":"string","example":"Berlin"},"documentType":{"type":"string","example":"Urteil"},"outline":{"type":"string","example":"Leitsatz"},"judicialBody":{"type":"string","example":"Gericht"},"courtName":{"type":"string","example":"LArbG Hamm"},"decisionName":{"type":"array","items":{"type":"string"}},"deviatingDocumentNumber":{"type":"array","example":"DEV-123","items":{"type":"string"}},"@id":{"type":"string","example":"/v1/case-law/ECLI:DE:FGRLP:1969:0905.IV85.68.0A"},"inLanguage":{"type":"string","example":"de"},"highlightedFields":{"type":"object","additionalProperties":{"type":"array","items":{"type":"string"}}}}}],"properties":{"@type":{"type":"string","example":"Decision"}}},"CollectionSchemaSearchMemberSchema":{"type":"object","properties":{"@id":{"type":"string","example":"/v1/document?pageIndex=0&size=5"},"totalItems":{"type":"integer","format":"int64","example":1},"member":{"type":"array","items":{"$ref":"#/components/schemas/SearchMemberSchema"}},"view":{"$ref":"#/components/schemas/PartialCollectionViewSchema"},"@type":{"type":"string","example":"hydra:Collection"}}},"SearchMemberSchema":{"type":"object","properties":{"item":{"oneOf":[{"$ref":"#/components/schemas/CaseLawSearchSchema"},{"$ref":"#/components/schemas/LegislationWorkSearchSchema"},{"$ref":"#/components/schemas/LiteratureSearchSchema"}]},"textMatches":{"type":"array","items":{"$ref":"#/components/schemas/TextMatchSchema"}},"@type":{"type":"string","example":"SearchResult"}}},"CollectionSchemaSearchMemberSchemaCaseLawSearchSchema":{"type":"object","properties":{"@id":{"type":"string","example":"/v1/document?pageIndex=0&size=5"},"totalItems":{"type":"integer","format":"int64","example":1},"member":{"type":"array","items":{"$ref":"#/components/schemas/SearchMemberSchemaCaseLawSearchSchema"}},"view":{"$ref":"#/components/schemas/PartialCollectionViewSchema"},"@type":{"type":"string","example":"hydra:Collection"}}},"SearchMemberSchemaCaseLawSearchSchema":{"type":"object","properties":{"item":{"$ref":"#/components/schemas/CaseLawSearchSchema"},"textMatches":{"type":"array","items":{"$ref":"#/components/schemas/TextMatchSchema"}},"@type":{"type":"string","example":"SearchResult"}}},"CaseLawEncodingSchema":{"type":"object","properties":{"@id":{"type":"string"},"contentUrl":{"type":"string"},"encodingFormat":{"type":"string","example":"text/html"},"inLanguage":{"type":"string","example":"de"},"@type":{"type":"string","example":"DecisionObject"}}},"CaseLawSchema":{"type":"object","properties":{"documentNumber":{"type":"string","example":"KARE000000000"},"ecli":{"type":"string","description":"European Case Law Identifier","example":"ECLI:DE:FGRLP:1969:0905.IV85.68.0A"},"caseFacts":{"type":"string","description":"Tatbestand"},"decisionGrounds":{"type":"string","description":"Entscheidungsgründe"},"dissentingOpinion":{"type":"string","description":"Abweichende Meinung"},"grounds":{"type":"string","description":"Gründe"},"guidingPrinciple":{"type":"string","description":"Leitsatz"},"headline":{"type":"string","description":"Überschrift"},"headnote":{"type":"string","description":"Orientierungssatz"},"otherHeadnote":{"type":"string","description":"Sonstiger Orientierungssatz"},"otherLongText":{"type":"string","description":"Sonstiger Langtext"},"tenor":{"type":"string","description":"Tenor"},"decisionDate":{"type":"string","format":"date","description":"Entscheidungsdatum"},"fileNumbers":{"type":"array","description":"Aktenzeichen","example":"BGH 123/23","items":{"type":"string"}},"courtType":{"type":"string","description":"Gerichtstyp","example":"FG"},"location":{"type":"string","description":"Gerichtssitz","example":"Berlin"},"documentType":{"type":"string","example":"Urteil"},"outline":{"type":"string","description":"Leitsatz"},"judicialBody":{"type":"string","description":"Spruchkörper","example":"Gericht"},"keywords":{"type":"array","description":"Schlagworte","example":"3. Kammer","items":{"type":"string"}},"courtName":{"type":"string","example":"LArbG Hamm"},"decisionName":{"type":"array","description":"Entscheidungsname","examples":["Beispielentscheidung"],"items":{"type":"string"}},"deviatingDocumentNumber":{"type":"array","description":"Abweichende Dokumentnummer","example":"DEV-123","items":{"type":"string"}},"@id":{"type":"string","example":"/v1/case-law/ECLI:DE:FGRLP:1969:0905.IV85.68.0A"},"inLanguage":{"type":"string","example":"de"},"encoding":{"type":"array","items":{"$ref":"#/components/schemas/CaseLawEncodingSchema"}},"highlightedFields":{"type":"object","additionalProperties":{"type":"array","items":{"type":"string"}}},"@type":{"type":"string","example":"Decision"}}},"CourtSearchResult":{"type":"object","properties":{"id":{"type":"string","example":"BGH Karlsruhe"},"count":{"type":"integer","format":"int64","example":10000},"label":{"type":"string","example":"Bundesgerichtshof Karlsruhe"}}}}}}
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "RIS API",
+    "contact": {
+      "name": "DigitalService GmbH des Bundes",
+      "url": "https://digitalservice.bund.de"
+    },
+    "version": "1"
+  },
+  "servers": [
+    {
+      "url": "https://testphase.rechtsinformationen.bund.de",
+      "description": "Public API (preview)"
+    }
+  ],
+  "tags": [
+    {
+      "name": "All documents",
+      "description": "Use this endpoint to search across all document types in our database."
+    },
+    {
+      "name": "Case Law",
+      "description": "This group of endpoints provides judgments and decisions of the Federal Constitutional Court, the supreme courts of the Federal Republic of Germany, the Federal Patent Court, and others that were documented by the documentation units of these courts. The documents are anonymized and published in full, and the database is updated daily."
+    },
+    {
+      "name": "Legislation",
+      "description": "Retrieve current and historical versions of laws and decrees.\nThe endpoints operate on the levels of \"work\", \"expression\", and \"manifestation\". See\n<a href=\"https://en.wikipedia.org/wiki/Functional_Requirements_for_Bibliographic_Records\">Functional\nRequirements for Bibliographic Records (FRBR)</a> for more information.\n"
+    }
+  ],
+  "paths": {
+    "/v1/literature": {
+      "get": {
+        "tags": ["Literature"],
+        "summary": "List and search literature",
+        "description": "The endpoint returns a list of literature from our database. The list is paginated and can be filtered and sorted.",
+        "operationId": "searchAndFilter",
+        "parameters": [
+          {
+            "name": "documentNumber",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "yearOfPublication",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "array", "items": { "type": "string" } }
+          },
+          {
+            "name": "documentType",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "array", "items": { "type": "string" } }
+          },
+          {
+            "name": "author",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "array", "items": { "type": "string" } }
+          },
+          {
+            "name": "collaborator",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "array", "items": { "type": "string" } }
+          },
+          {
+            "name": "searchTerm",
+            "in": "query",
+            "description": "Searches for the given tokens in searchTerm. If searchTerm contains more than one token, all tokens must be in the document for the document to match.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Searches for the given tokens in searchTerm. If searchTerm contains more than one token, all tokens must be in the document for the document to match."
+            }
+          },
+          {
+            "name": "dateFrom",
+            "in": "query",
+            "description": "The from (greater than or equal) parameter returns all entities where date is later than, or equal to, the given date.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "description": "The from (greater than or equal) parameter returns all entities where date is later than, or equal to, the given date."
+            }
+          },
+          {
+            "name": "dateTo",
+            "in": "query",
+            "description": "The to (less than or equal) parameter returns all entities where date is earlier than, or equal to, the given date.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "description": "The to (less than or equal) parameter returns all entities where date is earlier than, or equal to, the given date."
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "description": "The number of entities per page",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "maximum": 100,
+              "minimum": 1
+            },
+            "example": 100
+          },
+          {
+            "name": "pageIndex",
+            "in": "query",
+            "description": "The number of the page to request. The page starts with the value 0",
+            "required": false,
+            "schema": { "type": "integer", "format": "int32", "minimum": 0 },
+            "example": 0
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "description": "The field to sort the results by. Default is the relevance score calculated by OpenSearch. Valid usage of the sort field are : date and documentNumber and not setting the sort field (sort by relevance descending).Add a leading - to set the order to descending (-date)",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "The field to sort the results by. Default is the relevance score calculated by OpenSearch. Valid usage of the sort field are : date and documentNumber and not setting the sort field (sort by relevance descending).Add a leading - to set the order to descending (-date)",
+              "pattern": "^-?(|default|date|DATUM|documentNumber)$"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CollectionSchemaSearchMemberSchemaLiteratureSearchSchema"
+                }
+              }
+            }
+          },
+          "500": { "description": "Internal Server Error" }
+        }
+      }
+    },
+    "/v1/literature/{documentNumber}": {
+      "get": {
+        "tags": ["Literature"],
+        "summary": "Literature metadata",
+        "description": "The endpoint returns the metadata of a single literature from our database.",
+        "operationId": "getLiteratureMetadata",
+        "parameters": [
+          {
+            "name": "documentNumber",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" },
+            "example": "STRE201770751"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/LiteratureSchema" }
+              }
+            }
+          },
+          "404": { "description": "Not Found" }
+        }
+      }
+    },
+    "/v1/literature/{documentNumber}.xml": {
+      "get": {
+        "tags": ["Literature"],
+        "summary": "Literature XML",
+        "description": "Returns a literature item as XML. This content is used as a source for the HTML endpoint.",
+        "operationId": "getLiteratureAsXml",
+        "parameters": [
+          {
+            "name": "documentNumber",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" },
+            "example": "BJLU075748788"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/xml": {
+                "schema": { "type": "string", "format": "byte" }
+              }
+            }
+          },
+          "404": { "description": "Not Found" }
+        }
+      }
+    },
+    "/v1/literature/{documentNumber}.html": {
+      "get": {
+        "tags": ["Literature"],
+        "summary": "Literature HTML",
+        "description": "Renders and returns a literature item as HTML.",
+        "operationId": "getLiteratureAsHtml",
+        "parameters": [
+          {
+            "name": "documentNumber",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" },
+            "example": "BJLU075748788"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": { "text/html": { "schema": { "type": "string" } } }
+          },
+          "404": { "description": "Not Found" }
+        }
+      }
+    },
+    "/v1/legislation": {
+      "get": {
+        "tags": ["Legislation"],
+        "summary": "List and search legislation",
+        "description": "List all legislation in our database with support for filtering and pagination.\n\n## Example 1\n\nGet all legislation containing the tokens :` Gesetz`, `über`,`das`, `Verfahren`, `bei`, `sonstigen` and `Änderungen`.\n```http request\nGET /v1/legislation?searchTerm=Gesetz%20über%20das%20Verfahren%20bei%20sonstigen%20Änderungen\n```\nThe API will return only the legislation that contains all these terms. Please note that in practice very common tokens such as `das` are ignored\n(please see <a href=\"https://en.wikipedia.org/wiki/Stop_word\">https://en.wikipedia.org/wiki/Stop_word</a> for more details).\n\n## Example 2\n\nGet all legislation containing the tokens :` Gesetz` and `über` and were valid on 2020-01-01\n```http request\nGET /v1/legislation?temporalCoverageFrom=2020-01-01&temporalCoverageTo=2020-01-01&searchTerm=Gesetz%20über\n```\nThis example can be used to only return currently valid legislation by replacing 2020-01-01 with today's date.\n\n## Example 3\n\nGet all legislation that belong to the work eli `eli/bund/bgbl-1/1979/s1325`\n```http request\nGET /v1/legislation?eli=eli/bund/bgbl-1/1979/s1325\n```\n",
+        "operationId": "searchAndFilter_1",
+        "parameters": [
+          {
+            "name": "eli",
+            "in": "query",
+            "description": "Search by European Legislation Identifier (ELI). Right now only searching by work ELI is supported, but a general eli prefix match might be supported in the future.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Search by European Legislation Identifier (ELI). Right now only searching by work ELI is supported, but a general eli prefix match might be supported in the future."
+            }
+          },
+          {
+            "name": "temporalCoverageFrom",
+            "in": "query",
+            "description": "Filters the result set to only return expressions that are in force *on or after* the provided date. The parameter should be provided in `YYYY-MM-DD` format. Differs from `dateFrom`, which refers to the date of adoption or signature of the legislation. If both `temporalCoverageFrom` and `temporalCoverageTo` are given, this will output all expressions that were in force during at least one day between the two dates. To get all expressions for one specific day, set both parameters to the same day.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "description": "Filters the result set to only return expressions that are in force *on or after* the provided date. The parameter should be provided in `YYYY-MM-DD` format. Differs from `dateFrom`, which refers to the date of adoption or signature of the legislation. If both `temporalCoverageFrom` and `temporalCoverageTo` are given, this will output all expressions that were in force during at least one day between the two dates. To get all expressions for one specific day, set both parameters to the same day."
+            }
+          },
+          {
+            "name": "temporalCoverageTo",
+            "in": "query",
+            "description": "Filters the result set to only return expressions that are in force *on or before* the provided date. The parameter should be provided in `YYYY-MM-DD` format. Differs from `dateTo`, which refers to the date of adoption or signature of the legislation.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "description": "Filters the result set to only return expressions that are in force *on or before* the provided date. The parameter should be provided in `YYYY-MM-DD` format. Differs from `dateTo`, which refers to the date of adoption or signature of the legislation."
+            }
+          },
+          {
+            "name": "searchTerm",
+            "in": "query",
+            "description": "Searches for the given tokens in searchTerm. If searchTerm contains more than one token, all tokens must be in the document for the document to match.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Searches for the given tokens in searchTerm. If searchTerm contains more than one token, all tokens must be in the document for the document to match."
+            }
+          },
+          {
+            "name": "dateFrom",
+            "in": "query",
+            "description": "The from (greater than or equal) parameter returns all entities where date is later than, or equal to, the given date.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "description": "The from (greater than or equal) parameter returns all entities where date is later than, or equal to, the given date."
+            }
+          },
+          {
+            "name": "dateTo",
+            "in": "query",
+            "description": "The to (less than or equal) parameter returns all entities where date is earlier than, or equal to, the given date.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "description": "The to (less than or equal) parameter returns all entities where date is earlier than, or equal to, the given date."
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "description": "The number of entities per page",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "maximum": 100,
+              "minimum": 1
+            },
+            "example": 100
+          },
+          {
+            "name": "pageIndex",
+            "in": "query",
+            "description": "The number of the page to request. The page starts with the value 0",
+            "required": false,
+            "schema": { "type": "integer", "format": "int32", "minimum": 0 },
+            "example": 0
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "description": "The field to sort the results by. Default is the relevance score calculated by OpenSearch. Valid usage of the sort field are : date, temporalCoverageFrom, legislationIdentifier and not setting the sort field (sort by relevance descending).Add a leading - to set the order to descending (-date)",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "The field to sort the results by. Default is the relevance score calculated by OpenSearch. Valid usage of the sort field are : date, temporalCoverageFrom, legislationIdentifier and not setting the sort field (sort by relevance descending).Add a leading - to set the order to descending (-date)",
+              "pattern": "^-?(|default|date|temporalCoverageFrom|legislationIdentifier|DATUM)$"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CollectionSchemaSearchMemberSchemaLegislationWorkSearchSchema"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CollectionSchemaSearchMemberSchemaLegislationWorkSearchSchema"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/legislation/eli/{jurisdiction}/{agent}/{year}/{naturalIdentifier}/{pointInTime}/{version}/{language}": {
+      "get": {
+        "tags": ["Legislation"],
+        "summary": "Work and expression-level metadata",
+        "description": "Returns the work and expression-level (\"workExample\") metadata of a legislation item.",
+        "operationId": "getLegislation",
+        "parameters": [
+          {
+            "name": "jurisdiction",
+            "in": "path",
+            "description": "Country or regional code for the jurisdiction",
+            "required": true,
+            "schema": { "type": "string", "enum": ["bund"] }
+          },
+          {
+            "name": "agent",
+            "in": "path",
+            "description": "Agent or authority issuing the legislation, e.g., 'bgbl-1' for Bundesgesetzblatt Teil I (Federal Law Gazette part I)",
+            "required": true,
+            "schema": { "type": "string" },
+            "example": "bgbl-1"
+          },
+          {
+            "name": "year",
+            "in": "path",
+            "description": "Year the legislation was enacted or published",
+            "required": true,
+            "schema": { "type": "string" },
+            "example": 1979
+          },
+          {
+            "name": "naturalIdentifier",
+            "in": "path",
+            "description": "Unique natural identifier for the legislation, specific to the jurisdiction and agent",
+            "required": true,
+            "schema": { "type": "string" },
+            "example": "s1325"
+          },
+          {
+            "name": "pointInTime",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "format": "date" },
+            "example": "2020-06-19"
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "format": "int32" },
+            "example": 2
+          },
+          {
+            "name": "language",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" },
+            "example": "deu"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LegislationWorkSchema"
+                }
+              }
+            }
+          },
+          "404": { "description": "Not Found" }
+        }
+      }
+    },
+    "/v1/legislation/eli/{jurisdiction}/{agent}/{year}/{naturalIdentifier}/{pointInTime}/{version}/{language}/{pointInTimeManifestation}/{subtype}/{articleEid}.html": {
+      "get": {
+        "tags": ["Legislation"],
+        "summary": "Manifestation article (§) HTML",
+        "description": "Returns a specific article (§) of particular manifestation of a piece of legislation, converted to HTML.\n",
+        "operationId": "getLegislationArticleAsHtml",
+        "parameters": [
+          {
+            "name": "jurisdiction",
+            "in": "path",
+            "description": "Country or regional code for the jurisdiction",
+            "required": true,
+            "schema": { "type": "string", "enum": ["bund"] },
+            "example": "bund"
+          },
+          {
+            "name": "agent",
+            "in": "path",
+            "description": "Agent or authority issuing the legislation, e.g., 'bgbl-1' for Bundesgesetzblatt Teil I (Federal Law Gazette part I)",
+            "required": true,
+            "schema": { "type": "string" },
+            "example": "bgbl-1"
+          },
+          {
+            "name": "year",
+            "in": "path",
+            "description": "Year the legislation was enacted or published",
+            "required": true,
+            "schema": { "type": "string" },
+            "example": 1979
+          },
+          {
+            "name": "naturalIdentifier",
+            "in": "path",
+            "description": "Unique natural identifier for the legislation, specific to the jurisdiction and agent",
+            "required": true,
+            "schema": { "type": "string" },
+            "example": "s1325"
+          },
+          {
+            "name": "pointInTime",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "format": "date" },
+            "example": "2020-06-19"
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "format": "int32" },
+            "example": 2
+          },
+          {
+            "name": "language",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" },
+            "example": "deu"
+          },
+          {
+            "name": "pointInTimeManifestation",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "format": "date" },
+            "example": "2020-06-19"
+          },
+          {
+            "name": "subtype",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" },
+            "example": "regelungstext-1"
+          },
+          {
+            "name": "articleEid",
+            "in": "path",
+            "description": "The expression identifier, denoting elements inside an expression",
+            "required": true,
+            "schema": { "type": "string" },
+            "example": "art-z1"
+          },
+          {
+            "name": "get-resources-via",
+            "in": "header",
+            "description": "Used to select a different prefix for referenced resources, like images. Selecting 'PROXY' will prepend `/api`. Otherwise, the API base URL will be used.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "API",
+              "enum": ["API", "PROXY"]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": { "text/html": { "schema": { "type": "string" } } }
+          },
+          "404": { "description": "Not Found" }
+        }
+      }
+    },
+    "/v1/legislation/eli/{jurisdiction}/{agent}/{year}/{naturalIdentifier}/{pointInTime}/{version}/{language}/{pointInTimeManifestation}/{subtype}.xml": {
+      "get": {
+        "tags": ["Legislation"],
+        "summary": "Manifestation XML",
+        "description": "Returns a particular manifestation of a piece of legislation in XML format.\n\n## Example\n\nDownload the LegalDocML format for the piece of legislation with a manifestation eli of `eli/bund/bgbl-1/1979/s1325/2020-06-19/2/deu/2020-06-19/regelungstext-1.xml`\n\n```http request\nGET /v1/eli/bund/bgbl-1/1979/s1325/2020-06-19/2/deu/2020-06-19/regelungstext-1.xml\n```\n",
+        "operationId": "getLegislationSubtypeAsXml",
+        "parameters": [
+          {
+            "name": "jurisdiction",
+            "in": "path",
+            "description": "Country or regional code for the jurisdiction",
+            "required": true,
+            "schema": { "type": "string", "enum": ["bund"] },
+            "example": "bund"
+          },
+          {
+            "name": "agent",
+            "in": "path",
+            "description": "Agent or authority issuing the legislation, e.g., 'bgbl-1' for Bundesgesetzblatt Teil I (Federal Law Gazette part I)",
+            "required": true,
+            "schema": { "type": "string" },
+            "example": "bgbl-1"
+          },
+          {
+            "name": "year",
+            "in": "path",
+            "description": "Year the legislation was enacted or published",
+            "required": true,
+            "schema": { "type": "string" },
+            "example": 1979
+          },
+          {
+            "name": "naturalIdentifier",
+            "in": "path",
+            "description": "Unique natural identifier for the legislation, specific to the jurisdiction and agent",
+            "required": true,
+            "schema": { "type": "string" },
+            "example": "s1325"
+          },
+          {
+            "name": "pointInTime",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "format": "date" },
+            "example": "2020-06-19"
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "format": "int32" },
+            "example": 2
+          },
+          {
+            "name": "language",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" },
+            "example": "deu"
+          },
+          {
+            "name": "pointInTimeManifestation",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "format": "date" },
+            "example": "2020-06-19"
+          },
+          {
+            "name": "subtype",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" },
+            "example": "regelungstext-1"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/xml": {
+                "schema": { "type": "string", "format": "byte" }
+              }
+            }
+          },
+          "404": { "description": "Not Found" }
+        }
+      }
+    },
+    "/v1/legislation/eli/{jurisdiction}/{agent}/{year}/{naturalIdentifier}/{pointInTime}/{version}/{language}/{pointInTimeManifestation}/{subtype}.html": {
+      "get": {
+        "tags": ["Legislation"],
+        "summary": "Manifestation HTML",
+        "description": "Returns a particular manifestation of a piece of legislation, converted to HTML.\n",
+        "operationId": "getLegislationSubtypeAsHtml",
+        "parameters": [
+          {
+            "name": "jurisdiction",
+            "in": "path",
+            "description": "Country or regional code for the jurisdiction",
+            "required": true,
+            "schema": { "type": "string", "enum": ["bund"] },
+            "example": "bund"
+          },
+          {
+            "name": "agent",
+            "in": "path",
+            "description": "Agent or authority issuing the legislation, e.g., 'bgbl-1' for Bundesgesetzblatt Teil I (Federal Law Gazette part I)",
+            "required": true,
+            "schema": { "type": "string" },
+            "example": "bgbl-1"
+          },
+          {
+            "name": "year",
+            "in": "path",
+            "description": "Year the legislation was enacted or published",
+            "required": true,
+            "schema": { "type": "string" },
+            "example": 1979
+          },
+          {
+            "name": "naturalIdentifier",
+            "in": "path",
+            "description": "Unique natural identifier for the legislation, specific to the jurisdiction and agent",
+            "required": true,
+            "schema": { "type": "string" },
+            "example": "s1325"
+          },
+          {
+            "name": "pointInTime",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "format": "date" },
+            "example": "2020-06-19"
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "format": "int32" },
+            "example": 2
+          },
+          {
+            "name": "language",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" },
+            "example": "deu"
+          },
+          {
+            "name": "pointInTimeManifestation",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "format": "date" },
+            "example": "2020-06-19"
+          },
+          {
+            "name": "subtype",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" },
+            "example": "regelungstext-1"
+          },
+          {
+            "name": "get-resources-via",
+            "in": "header",
+            "description": "Used to select a different prefix for referenced resources, like images. Selecting 'PROXY' will prepend `/api`. Otherwise, the API base URL will be used.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "API",
+              "enum": ["API", "PROXY"]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": { "text/html": { "schema": { "type": "string" } } }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string",
+                  "example": "<div>LegalDocML file not found</div>"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/legislation/eli/{jurisdiction}/{agent}/{year}/{naturalIdentifier}/{pointInTime}/{version}/{language}/{pointInTimeManifestation}/{name}.{extension}": {
+      "get": {
+        "tags": ["Legislation"],
+        "summary": "Manifestation resource",
+        "description": "Returns a specific resource of a particular manifestation of a piece of legislation.\n",
+        "operationId": "getFile",
+        "parameters": [
+          {
+            "name": "jurisdiction",
+            "in": "path",
+            "description": "Country or regional code for the jurisdiction",
+            "required": true,
+            "schema": { "type": "string", "enum": ["bund"] },
+            "example": "bund"
+          },
+          {
+            "name": "agent",
+            "in": "path",
+            "description": "Agent or authority issuing the legislation, e.g., 'bgbl-1' for Bundesgesetzblatt Teil I (Federal Law Gazette part I)",
+            "required": true,
+            "schema": { "type": "string" },
+            "example": "bgbl-1"
+          },
+          {
+            "name": "year",
+            "in": "path",
+            "description": "Year the legislation was enacted or published",
+            "required": true,
+            "schema": { "type": "string" },
+            "example": 1979
+          },
+          {
+            "name": "naturalIdentifier",
+            "in": "path",
+            "description": "Unique natural identifier for the legislation, specific to the jurisdiction and agent",
+            "required": true,
+            "schema": { "type": "string" },
+            "example": "s1325"
+          },
+          {
+            "name": "pointInTime",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "format": "date" },
+            "example": "2020-06-19"
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "format": "int32" },
+            "example": 2
+          },
+          {
+            "name": "language",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" },
+            "example": "deu"
+          },
+          {
+            "name": "pointInTimeManifestation",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "format": "date" },
+            "example": "2020-06-19"
+          },
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" },
+            "example": "image"
+          },
+          {
+            "name": "extension",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": ["pdf", "xml", "jpg", "gif"]
+            },
+            "example": "jpg"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": { "schema": { "type": "string", "format": "byte" } }
+            }
+          },
+          "404": { "description": "Not Found" }
+        }
+      }
+    },
+    "/v1/legislation/eli/{jurisdiction}/{agent}/{year}/{naturalIdentifier}/{pointInTime}/{version}/{language}/{pointInTimeManifestation}.zip": {
+      "get": {
+        "tags": ["Legislation"],
+        "summary": "Manifestation ZIP (XML and attachments)",
+        "description": "Returns a particular manifestation of a piece of legislation, including attachments, as a ZIP archive.\nNote the omission of the subtype path parameter.\n",
+        "operationId": "getLegislationSubtypeAsZip",
+        "parameters": [
+          {
+            "name": "jurisdiction",
+            "in": "path",
+            "description": "Country or regional code for the jurisdiction",
+            "required": true,
+            "schema": { "type": "string", "enum": ["bund"] },
+            "example": "bund"
+          },
+          {
+            "name": "agent",
+            "in": "path",
+            "description": "Agent or authority issuing the legislation, e.g., 'bgbl-1' for Bundesgesetzblatt Teil I (Federal Law Gazette part I)",
+            "required": true,
+            "schema": { "type": "string" },
+            "example": "bgbl-1"
+          },
+          {
+            "name": "year",
+            "in": "path",
+            "description": "Year the legislation was enacted or published",
+            "required": true,
+            "schema": { "type": "string" },
+            "example": 1979
+          },
+          {
+            "name": "naturalIdentifier",
+            "in": "path",
+            "description": "Unique natural identifier for the legislation, specific to the jurisdiction and agent",
+            "required": true,
+            "schema": { "type": "string" },
+            "example": "s1325"
+          },
+          {
+            "name": "pointInTime",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "format": "date" },
+            "example": "2020-06-19"
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "format": "int32" },
+            "example": 2
+          },
+          {
+            "name": "language",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" },
+            "example": "deu"
+          },
+          {
+            "name": "pointInTimeManifestation",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "format": "date" },
+            "example": "2020-06-19"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/zip": {
+                "schema": {
+                  "$ref": "#/components/schemas/StreamingResponseBody"
+                }
+              }
+            }
+          },
+          "404": { "description": "Not Found" }
+        }
+      }
+    },
+    "/v1/document": {
+      "get": {
+        "tags": ["All documents"],
+        "summary": "Global search / list",
+        "description": "This endpoint can be used to search for documents across different document kinds. Currently we support case law and legislation document kinds. The endpoint provides a paginated response with up to 10,000 results with at most 100 results per page.\n\nThe searchTerm parameter searches across multiple fields of a document at the same time. The fields searched depend on the document kind. See the filters guide for more information.\n\nDefault sorting is by relevance from most relevant to least relevant. Multiple factors are combined to boost the most relevant documents to the top of the result list. Additionally, sorting by date is possible by setting the sort query parameter to date.\n",
+        "operationId": "searchAndFilter_2",
+        "parameters": [
+          {
+            "name": "searchTerm",
+            "in": "query",
+            "description": "Searches for the given tokens in searchTerm. If searchTerm contains more than one token, all tokens must be in the document for the document to match.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Searches for the given tokens in searchTerm. If searchTerm contains more than one token, all tokens must be in the document for the document to match."
+            }
+          },
+          {
+            "name": "dateFrom",
+            "in": "query",
+            "description": "The from (greater than or equal) parameter returns all entities where date is later than, or equal to, the given date.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "description": "The from (greater than or equal) parameter returns all entities where date is later than, or equal to, the given date."
+            }
+          },
+          {
+            "name": "dateTo",
+            "in": "query",
+            "description": "The to (less than or equal) parameter returns all entities where date is earlier than, or equal to, the given date.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "description": "The to (less than or equal) parameter returns all entities where date is earlier than, or equal to, the given date."
+            }
+          },
+          {
+            "name": "eli",
+            "in": "query",
+            "description": "Search by European Legislation Identifier (ELI). Right now only searching by work ELI is supported, but a general eli prefix match might be supported in the future.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Search by European Legislation Identifier (ELI). Right now only searching by work ELI is supported, but a general eli prefix match might be supported in the future."
+            }
+          },
+          {
+            "name": "temporalCoverageFrom",
+            "in": "query",
+            "description": "Filters the result set to only return expressions that are in force *on or after* the provided date. The parameter should be provided in `YYYY-MM-DD` format. Differs from `dateFrom`, which refers to the date of adoption or signature of the legislation. If both `temporalCoverageFrom` and `temporalCoverageTo` are given, this will output all expressions that were in force during at least one day between the two dates. To get all expressions for one specific day, set both parameters to the same day.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "description": "Filters the result set to only return expressions that are in force *on or after* the provided date. The parameter should be provided in `YYYY-MM-DD` format. Differs from `dateFrom`, which refers to the date of adoption or signature of the legislation. If both `temporalCoverageFrom` and `temporalCoverageTo` are given, this will output all expressions that were in force during at least one day between the two dates. To get all expressions for one specific day, set both parameters to the same day."
+            }
+          },
+          {
+            "name": "temporalCoverageTo",
+            "in": "query",
+            "description": "Filters the result set to only return expressions that are in force *on or before* the provided date. The parameter should be provided in `YYYY-MM-DD` format. Differs from `dateTo`, which refers to the date of adoption or signature of the legislation.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "description": "Filters the result set to only return expressions that are in force *on or before* the provided date. The parameter should be provided in `YYYY-MM-DD` format. Differs from `dateTo`, which refers to the date of adoption or signature of the legislation."
+            }
+          },
+          {
+            "name": "fileNumber",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "ecli",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "court",
+            "in": "query",
+            "description": "Filter by court name (Finanzgericht Münster, FG Münster, ArbG Köln) or court type (Finanzgericht, FG, ArbG). Supports both long and short names.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Filter by court name (Finanzgericht Münster, FG Münster, ArbG Köln) or court type (Finanzgericht, FG, ArbG). Supports both long and short names."
+            }
+          },
+          {
+            "name": "legalEffect",
+            "in": "query",
+            "description": "Corresponds to “Rechtskraft”, meaning that the decision referred to is legally binding.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Corresponds to “Rechtskraft”, meaning that the decision referred to is legally binding.",
+              "enum": ["JA", "NEIN", "KEINE_ANGABE", "FALSCHE_ANGABE"]
+            }
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "description": "Filter by document type (Urteil, Versäumnisurteil, Entscheidung etc.). Multiple values may be specified as a comma-separated list or by repeating the parameter.",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "description": "Filter by document type (Urteil, Versäumnisurteil, Entscheidung etc.). Multiple values may be specified as a comma-separated list or by repeating the parameter.",
+              "examples": ["Versäumnisurteil", "Entscheidung"],
+              "items": {
+                "type": "string",
+                "description": "Filter by document type (Urteil, Versäumnisurteil, Entscheidung etc.). Multiple values may be specified as a comma-separated list or by repeating the parameter.",
+                "examples": ["Versäumnisurteil", "Entscheidung"]
+              }
+            }
+          },
+          {
+            "name": "typeGroup",
+            "in": "query",
+            "description": "Extended filter by type group. Multiple values may be specified as a comma-separated list or by repeating the parameter.",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "description": "Extended filter by type group. Multiple values may be specified as a comma-separated list or by repeating the parameter.",
+              "enum": ["Urteil", "Beschluss", "other"],
+              "items": {
+                "type": "string",
+                "description": "Extended filter by type group. Multiple values may be specified as a comma-separated list or by repeating the parameter.",
+                "enum": [
+                  "URTEIL",
+                  "BESCHLUSS",
+                  "OTHER",
+                  "Urteil",
+                  "Beschluss",
+                  "other"
+                ]
+              }
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "description": "The field to sort the results by. Default is the relevance score calculated by OpenSearch. Valid usage of the sort field are : date, temporalCoverageFrom, legislationIdentifier, courtName, documentNumber and not setting the sort field (sort by relevance descending).Add a leading - to set the order to descending (-date)",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "The field to sort the results by. Default is the relevance score calculated by OpenSearch. Valid usage of the sort field are : date, temporalCoverageFrom, legislationIdentifier, courtName, documentNumber and not setting the sort field (sort by relevance descending).Add a leading - to set the order to descending (-date)",
+              "pattern": "^-?(|default|date|DATUM|courtName|documentNumber|temporalCoverageFrom|legislationIdentifier)$"
+            }
+          },
+          {
+            "name": "documentKind",
+            "in": "query",
+            "description": "Filter by document kind. Specify R for case law (<u>R</u>echtsprechung), or N for legislation (<u>N</u>ormen).",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Filter by document kind. Specify R for case law (<u>R</u>echtsprechung), or N for legislation (<u>N</u>ormen).",
+              "enum": ["R", "N"]
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "description": "The number of entities per page",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "maximum": 100,
+              "minimum": 1
+            },
+            "example": 100
+          },
+          {
+            "name": "pageIndex",
+            "in": "query",
+            "description": "The number of the page to request. The page starts with the value 0",
+            "required": false,
+            "schema": { "type": "integer", "format": "int32", "minimum": 0 },
+            "example": 0
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CollectionSchemaSearchMemberSchema"
+                }
+              }
+            }
+          },
+          "500": { "description": "Internal Server Error" }
+        }
+      }
+    },
+    "/v1/document/lucene-search": {
+      "get": {
+        "tags": ["All documents"],
+        "summary": "Advanced search using Lucene query syntax",
+        "operationId": "search",
+        "parameters": [
+          {
+            "name": "query",
+            "in": "query",
+            "description": "The query filter based on Lucene query",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "description": "The number of entities per page",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "maximum": 100,
+              "minimum": 1
+            },
+            "example": 100
+          },
+          {
+            "name": "pageIndex",
+            "in": "query",
+            "description": "The number of the page to request. The page starts with the value 0",
+            "required": false,
+            "schema": { "type": "integer", "format": "int32", "minimum": 0 },
+            "example": 0
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "description": "The field to sort the results by. Default is the relevance score calculated by OpenSearch. Valid usage of the sort field are : date, temporalCoverageFrom, legislationIdentifier, courtName, documentNumber and not setting the sort field (sort by relevance descending).Add a leading - to set the order to descending (-date)",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "The field to sort the results by. Default is the relevance score calculated by OpenSearch. Valid usage of the sort field are : date, temporalCoverageFrom, legislationIdentifier, courtName, documentNumber and not setting the sort field (sort by relevance descending).Add a leading - to set the order to descending (-date)",
+              "pattern": "^-?(|default|date|DATUM|courtName|documentNumber|temporalCoverageFrom|legislationIdentifier)$"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/CollectionSchemaSearchMemberSchema"
+                }
+              }
+            }
+          },
+          "500": { "description": "Internal Server Error" }
+        }
+      }
+    },
+    "/v1/document/lucene-search/legislation": {
+      "get": {
+        "tags": ["Legislation"],
+        "summary": "Advanced search using Lucene query syntax",
+        "operationId": "searchLegislation",
+        "parameters": [
+          {
+            "name": "query",
+            "in": "query",
+            "description": "The query filter based on Lucene query",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "description": "The number of entities per page",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "maximum": 100,
+              "minimum": 1
+            },
+            "example": 100
+          },
+          {
+            "name": "pageIndex",
+            "in": "query",
+            "description": "The number of the page to request. The page starts with the value 0",
+            "required": false,
+            "schema": { "type": "integer", "format": "int32", "minimum": 0 },
+            "example": 0
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "description": "The field to sort the results by. Default is the relevance score calculated by OpenSearch. Valid usage of the sort field are : date, temporalCoverageFrom, legislationIdentifier and not setting the sort field (sort by relevance descending).Add a leading - to set the order to descending (-date)",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "The field to sort the results by. Default is the relevance score calculated by OpenSearch. Valid usage of the sort field are : date, temporalCoverageFrom, legislationIdentifier and not setting the sort field (sort by relevance descending).Add a leading - to set the order to descending (-date)",
+              "pattern": "^-?(|default|date|temporalCoverageFrom|legislationIdentifier|DATUM)$"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/CollectionSchemaSearchMemberSchemaLegislationWorkSearchSchema"
+                }
+              }
+            }
+          },
+          "500": { "description": "Internal Server Error" }
+        }
+      }
+    },
+    "/v1/document/lucene-search/case-law": {
+      "get": {
+        "tags": ["Case Law"],
+        "summary": "Advanced search using Lucene query syntax",
+        "operationId": "caseLawSearch",
+        "parameters": [
+          {
+            "name": "query",
+            "in": "query",
+            "description": "The query filter based on Lucene query syntax",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "description": "The number of entities per page",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "maximum": 100,
+              "minimum": 1
+            },
+            "example": 100
+          },
+          {
+            "name": "pageIndex",
+            "in": "query",
+            "description": "The number of the page to request. The page starts with the value 0",
+            "required": false,
+            "schema": { "type": "integer", "format": "int32", "minimum": 0 },
+            "example": 0
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "description": "The field to sort the results by. Default is the relevance score calculated by OpenSearch. Valid usage of the sort field are : date, courtName, documentNumber and not setting the sort field (sort by relevance descending).Add a leading - to set the order to descending (-date)",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "The field to sort the results by. Default is the relevance score calculated by OpenSearch. Valid usage of the sort field are : date, courtName, documentNumber and not setting the sort field (sort by relevance descending).Add a leading - to set the order to descending (-date)",
+              "pattern": "^-?(|default|date|DATUM|courtName|documentNumber)$"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/CollectionSchemaSearchMemberSchemaCaseLawSearchSchema"
+                }
+              }
+            }
+          },
+          "500": { "description": "Internal Server Error" }
+        }
+      }
+    },
+    "/v1/case-law": {
+      "get": {
+        "tags": ["Case Law"],
+        "summary": "List and search decisions",
+        "description": "The endpoint returns a list of decisions from our database. The list is paginated and can be filtered and sorted.",
+        "operationId": "searchAndFilter_3",
+        "parameters": [
+          {
+            "name": "fileNumber",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "ecli",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "court",
+            "in": "query",
+            "description": "Filter by court name (Finanzgericht Münster, FG Münster, ArbG Köln) or court type (Finanzgericht, FG, ArbG). Supports both long and short names.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Filter by court name (Finanzgericht Münster, FG Münster, ArbG Köln) or court type (Finanzgericht, FG, ArbG). Supports both long and short names."
+            }
+          },
+          {
+            "name": "legalEffect",
+            "in": "query",
+            "description": "Corresponds to “Rechtskraft”, meaning that the decision referred to is legally binding.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Corresponds to “Rechtskraft”, meaning that the decision referred to is legally binding.",
+              "enum": ["JA", "NEIN", "KEINE_ANGABE", "FALSCHE_ANGABE"]
+            }
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "description": "Filter by document type (Urteil, Versäumnisurteil, Entscheidung etc.). Multiple values may be specified as a comma-separated list or by repeating the parameter.",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "description": "Filter by document type (Urteil, Versäumnisurteil, Entscheidung etc.). Multiple values may be specified as a comma-separated list or by repeating the parameter.",
+              "examples": ["Versäumnisurteil", "Entscheidung"],
+              "items": {
+                "type": "string",
+                "description": "Filter by document type (Urteil, Versäumnisurteil, Entscheidung etc.). Multiple values may be specified as a comma-separated list or by repeating the parameter.",
+                "examples": ["Versäumnisurteil", "Entscheidung"]
+              }
+            }
+          },
+          {
+            "name": "typeGroup",
+            "in": "query",
+            "description": "Extended filter by type group. Multiple values may be specified as a comma-separated list or by repeating the parameter.",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "description": "Extended filter by type group. Multiple values may be specified as a comma-separated list or by repeating the parameter.",
+              "enum": ["Urteil", "Beschluss", "other"],
+              "items": {
+                "type": "string",
+                "description": "Extended filter by type group. Multiple values may be specified as a comma-separated list or by repeating the parameter.",
+                "enum": [
+                  "URTEIL",
+                  "BESCHLUSS",
+                  "OTHER",
+                  "Urteil",
+                  "Beschluss",
+                  "other"
+                ]
+              }
+            }
+          },
+          {
+            "name": "searchTerm",
+            "in": "query",
+            "description": "Searches for the given tokens in searchTerm. If searchTerm contains more than one token, all tokens must be in the document for the document to match.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Searches for the given tokens in searchTerm. If searchTerm contains more than one token, all tokens must be in the document for the document to match."
+            }
+          },
+          {
+            "name": "dateFrom",
+            "in": "query",
+            "description": "The from (greater than or equal) parameter returns all entities where date is later than, or equal to, the given date.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "description": "The from (greater than or equal) parameter returns all entities where date is later than, or equal to, the given date."
+            }
+          },
+          {
+            "name": "dateTo",
+            "in": "query",
+            "description": "The to (less than or equal) parameter returns all entities where date is earlier than, or equal to, the given date.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "description": "The to (less than or equal) parameter returns all entities where date is earlier than, or equal to, the given date."
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "description": "The number of entities per page",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "maximum": 100,
+              "minimum": 1
+            },
+            "example": 100
+          },
+          {
+            "name": "pageIndex",
+            "in": "query",
+            "description": "The number of the page to request. The page starts with the value 0",
+            "required": false,
+            "schema": { "type": "integer", "format": "int32", "minimum": 0 },
+            "example": 0
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "description": "The field to sort the results by. Default is the relevance score calculated by OpenSearch. Valid usage of the sort field are : date, courtName, documentNumber and not setting the sort field (sort by relevance descending).Add a leading - to set the order to descending (-date)",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "The field to sort the results by. Default is the relevance score calculated by OpenSearch. Valid usage of the sort field are : date, courtName, documentNumber and not setting the sort field (sort by relevance descending).Add a leading - to set the order to descending (-date)",
+              "pattern": "^-?(|default|date|DATUM|courtName|documentNumber)$"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CollectionSchemaSearchMemberSchemaCaseLawSearchSchema"
+                }
+              }
+            }
+          },
+          "500": { "description": "Internal Server Error" }
+        }
+      }
+    },
+    "/v1/case-law/{documentNumber}": {
+      "get": {
+        "tags": ["Case Law"],
+        "summary": "Decision metadata",
+        "description": "The endpoint returns a single decision from our database.",
+        "operationId": "getCaseLaw",
+        "parameters": [
+          {
+            "name": "documentNumber",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" },
+            "example": "STRE201770751"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/CaseLawSchema" }
+              }
+            }
+          },
+          "404": { "description": "Not Found" }
+        }
+      }
+    },
+    "/v1/case-law/{documentNumber}/{name}.{extension}": {
+      "get": {
+        "tags": ["Case Law"],
+        "summary": "Caselaw resource",
+        "description": "Returns a specific resource of a particular caselaw.",
+        "operationId": "getImage",
+        "parameters": [
+          {
+            "name": "documentNumber",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" },
+            "example": "BDRE000800001"
+          },
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" },
+            "example": "image"
+          },
+          {
+            "name": "extension",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": ["png", "jpg", "jpeg", "gif", "wmf", "emf", "bitmap"]
+            },
+            "example": "jpg"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": { "schema": { "type": "string", "format": "byte" } }
+            }
+          },
+          "404": { "description": "Not Found" }
+        }
+      }
+    },
+    "/v1/case-law/{documentNumber}.zip": {
+      "get": {
+        "tags": ["Case Law"],
+        "summary": "Decision ZIP (XML and attachments)",
+        "description": "Returns a case law decision, including attachments, as a ZIP archive.",
+        "operationId": "getCaseLawDocumentationUnitAsZip",
+        "parameters": [
+          {
+            "name": "documentNumber",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" },
+            "example": "STRE201770751"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/zip": {
+                "schema": {
+                  "$ref": "#/components/schemas/StreamingResponseBody"
+                }
+              }
+            }
+          },
+          "404": { "description": "Not Found" }
+        }
+      }
+    },
+    "/v1/case-law/{documentNumber}.xml": {
+      "get": {
+        "tags": ["Case Law"],
+        "summary": "Decision XML",
+        "description": "Returns a case law decision as XML. This content is used as a source for the HTML endpoint.",
+        "operationId": "getCaseLawDocumentationUnitAsXml",
+        "parameters": [
+          {
+            "name": "documentNumber",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" },
+            "example": "STRE201770751"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/xml": {
+                "schema": { "type": "string", "format": "byte" }
+              }
+            }
+          },
+          "404": { "description": "Not Found" }
+        }
+      }
+    },
+    "/v1/case-law/{documentNumber}.html": {
+      "get": {
+        "tags": ["Case Law"],
+        "summary": "Decision HTML",
+        "description": "Renders and returns a case law decision as HTML.",
+        "operationId": "getCaseLawDocumentationUnitAsHtml",
+        "parameters": [
+          {
+            "name": "documentNumber",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" },
+            "example": "STRE201770751"
+          },
+          {
+            "name": "get-resources-via",
+            "in": "header",
+            "description": "Used to select a different prefix for referenced resources, like images. Selecting 'PROXY' will prepend `/api`. Otherwise, the API base URL will be used.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "API",
+              "enum": ["API", "PROXY"]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": { "text/html": { "schema": { "type": "string" } } }
+          },
+          "404": { "description": "Not Found" }
+        }
+      }
+    },
+    "/v1/case-law/courts": {
+      "get": {
+        "tags": ["Case Law"],
+        "summary": "List courts",
+        "description": "Lists courts with long and short name and number of associated decisions. The prefix parameter may be used to filter this list. Only includes courts whose decisions have been published in this database.",
+        "operationId": "getCourts",
+        "parameters": [
+          {
+            "name": "prefix",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/CourtSearchResult" }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "CollectionSchemaSearchMemberSchemaLiteratureSearchSchema": {
+        "type": "object",
+        "properties": {
+          "@id": {
+            "type": "string",
+            "example": "/v1/document?pageIndex=0&size=5"
+          },
+          "totalItems": { "type": "integer", "format": "int64", "example": 1 },
+          "member": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SearchMemberSchemaLiteratureSearchSchema"
+            }
+          },
+          "view": {
+            "$ref": "#/components/schemas/PartialCollectionViewSchema"
+          },
+          "@type": { "type": "string", "example": "hydra:Collection" }
+        }
+      },
+      "LiteratureEncodingSchema": {
+        "type": "object",
+        "properties": {
+          "@id": { "type": "string" },
+          "contentUrl": { "type": "string" },
+          "encodingFormat": { "type": "string", "example": "text/html" },
+          "inLanguage": { "type": "string", "example": "de" },
+          "@type": { "type": "string", "example": "MediaObject" }
+        }
+      },
+      "LiteratureSearchSchema": {
+        "allOf": [
+          { "$ref": "#/components/schemas/AbstractDocumentSchema" },
+          {
+            "type": "object",
+            "properties": {
+              "@id": { "type": "string", "example": "KALU000000000" },
+              "inLanguage": { "type": "string", "example": "de" },
+              "documentNumber": {
+                "type": "string",
+                "description": "Dokumentnummer",
+                "example": "KALU000000000"
+              },
+              "recordingDate": {
+                "type": "string",
+                "format": "date",
+                "description": "The date on which the literature piece was recorded.",
+                "example": "2003-12-15"
+              },
+              "yearsOfPublication": {
+                "type": "array",
+                "description": "Veröffentlichungsjahre",
+                "example": "[2014, 2024-09]",
+                "items": { "type": "string" }
+              },
+              "documentTypes": {
+                "type": "array",
+                "description": "Dokumenttypen",
+                "example": "['Auf']",
+                "items": { "type": "string" }
+              },
+              "dependentReferences": {
+                "type": "array",
+                "description": "Unselbstständige Fundstellen",
+                "example": "['BUV, 1982, 123-123']",
+                "items": { "type": "string" }
+              },
+              "independentReferences": {
+                "type": "array",
+                "description": "Selbstständige Fundstellen",
+                "example": "['50 Jahre Betriebs-Berater, 1987, 123-456']",
+                "items": { "type": "string" }
+              },
+              "normReferences": {
+                "type": "array",
+                "description": "Norm Verweise",
+                "example": "['GG, Art 6 Abs 2 S 1, 1949-05-23']",
+                "items": { "type": "string" }
+              },
+              "headline": { "type": "string", "description": "Haupttitel" },
+              "headlineAdditions": {
+                "type": "string",
+                "description": "Zusätze zum Haupttitel"
+              },
+              "alternativeHeadline": {
+                "type": "string",
+                "description": "Dokumentarischer Titel"
+              },
+              "authors": {
+                "type": "array",
+                "description": "Authoren",
+                "example": "['Musterfrau, Sabine']",
+                "items": { "type": "string" }
+              },
+              "collaborators": {
+                "type": "array",
+                "description": "Mitarbeiter",
+                "example": "['Mustermann, Max']",
+                "items": { "type": "string" }
+              },
+              "languages": {
+                "type": "array",
+                "description": "Sprachen",
+                "example": "['deu', 'eng']",
+                "items": { "type": "string" }
+              },
+              "originators": {
+                "type": "array",
+                "description": "Urheber",
+                "example": "['DGB']",
+                "items": { "type": "string" }
+              },
+              "conferenceNotes": {
+                "type": "array",
+                "description": "Kongressvermerke",
+                "example": "['Nationaler Beispiel Kongress, 2024, Berlin, GER']",
+                "items": { "type": "string" }
+              },
+              "shortReport": { "type": "string", "description": "Kurzreferat" },
+              "outline": { "type": "string", "description": "Gliederung" },
+              "encoding": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/LiteratureEncodingSchema"
+                }
+              }
+            }
+          }
+        ],
+        "properties": { "@type": { "type": "string", "example": "Literature" } }
+      },
+      "PartialCollectionViewSchema": {
+        "type": "object",
+        "properties": {
+          "first": { "type": "string" },
+          "previous": { "type": "string" },
+          "next": { "type": "string" },
+          "last": { "type": "string" },
+          "@type": {
+            "type": "string",
+            "example": "hydra:PartialCollectionView"
+          }
+        }
+      },
+      "SearchMemberSchemaLiteratureSearchSchema": {
+        "type": "object",
+        "properties": {
+          "item": { "$ref": "#/components/schemas/LiteratureSearchSchema" },
+          "textMatches": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/TextMatchSchema" }
+          },
+          "@type": { "type": "string", "example": "SearchResult" }
+        }
+      },
+      "TextMatchSchema": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "text": { "type": "string" },
+          "location": { "type": "string" },
+          "@type": { "type": "string", "example": "SearchResultMatch" }
+        }
+      },
+      "LiteratureSchema": {
+        "type": "object",
+        "properties": {
+          "@id": { "type": "string", "example": "KALU000000000" },
+          "inLanguage": { "type": "string", "example": "de" },
+          "recordingDate": {
+            "type": "string",
+            "format": "date",
+            "description": "The date on which the literature piece was recorded.",
+            "example": "2003-12-15"
+          },
+          "documentNumber": {
+            "type": "string",
+            "description": "Dokumentnummer",
+            "example": "KALU000000000"
+          },
+          "yearsOfPublication": {
+            "type": "array",
+            "description": "Veröffentlichungsjahre",
+            "example": "[2014, 2024-09]",
+            "items": { "type": "string" }
+          },
+          "documentTypes": {
+            "type": "array",
+            "description": "Dokumenttypen",
+            "example": "['Auf']",
+            "items": { "type": "string" }
+          },
+          "dependentReferences": {
+            "type": "array",
+            "description": "Unselbstständige Fundstellen",
+            "example": "['BUV, 1982, 123-123']",
+            "items": { "type": "string" }
+          },
+          "independentReferences": {
+            "type": "array",
+            "description": "Selbstständige Fundstellen",
+            "example": "['50 Jahre Betriebs-Berater, 1987, 123-456']",
+            "items": { "type": "string" }
+          },
+          "normReferences": {
+            "type": "array",
+            "description": "Norm Verweise",
+            "example": "['GG, Art 6 Abs 2 S 1, 1949-05-23']",
+            "items": { "type": "string" }
+          },
+          "headline": { "type": "string", "description": "Haupttitel" },
+          "headlineAdditions": {
+            "type": "string",
+            "description": "Zusätze zum Haupttitel"
+          },
+          "alternativeHeadline": {
+            "type": "string",
+            "description": "Dokumentarischer Titel"
+          },
+          "authors": {
+            "type": "array",
+            "description": "Authoren",
+            "example": "['Musterfrau, Sabine']",
+            "items": { "type": "string" }
+          },
+          "collaborators": {
+            "type": "array",
+            "description": "Mitarbeiter",
+            "example": "['Mustermann, Max']",
+            "items": { "type": "string" }
+          },
+          "languages": {
+            "type": "array",
+            "description": "Sprachen",
+            "example": "['deu', 'eng']",
+            "items": { "type": "string" }
+          },
+          "originators": {
+            "type": "array",
+            "description": "Urheber",
+            "example": "['DGB']",
+            "items": { "type": "string" }
+          },
+          "conferenceNotes": {
+            "type": "array",
+            "description": "Kongressvermerke",
+            "example": "['Nationaler Beispiel Kongress, 2024, Berlin, GER']",
+            "items": { "type": "string" }
+          },
+          "shortReport": { "type": "string", "description": "Kurzreferat" },
+          "outline": { "type": "string", "description": "Gliederung" },
+          "encoding": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/LiteratureEncodingSchema" }
+          },
+          "@type": { "type": "string", "example": "Literature" }
+        }
+      },
+      "CollectionSchemaSearchMemberSchemaLegislationWorkSearchSchema": {
+        "type": "object",
+        "properties": {
+          "@id": {
+            "type": "string",
+            "example": "/v1/document?pageIndex=0&size=5"
+          },
+          "totalItems": { "type": "integer", "format": "int64", "example": 1 },
+          "member": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SearchMemberSchemaLegislationWorkSearchSchema"
+            }
+          },
+          "view": {
+            "$ref": "#/components/schemas/PartialCollectionViewSchema"
+          },
+          "@type": { "type": "string", "example": "hydra:Collection" }
+        }
+      },
+      "LegislationExpressionSearchSchema": {
+        "type": "object",
+        "description": "A legislation item, across different expressions and manifestations. May be used to provide context to a `LegislationExpression` (under key `workExample`).",
+        "properties": {
+          "@id": {
+            "type": "string",
+            "example": "/v1/legislation/eli/bund/bgbl-1/1975/s1760/1998-01-29/10/deu"
+          },
+          "legislationIdentifier": {
+            "type": "string",
+            "example": "eli/bund/bgbl-1/1975/s1760/1998-01-29/10/deu"
+          },
+          "temporalCoverage": {
+            "type": "string",
+            "description": "Textual string indicating a time period in [ISO 8601 time interval format](https://en.wikipedia.org/wiki/ISO_8601#Time_intervals)\n",
+            "example": "1998-02-06/.."
+          },
+          "legislationLegalForce": {
+            "type": "string",
+            "description": "Whether the legislation expression is currently in force.",
+            "enum": ["InForce", "NotInForce", "PartiallyInForce"]
+          },
+          "@type": { "type": "string", "example": "Legislation" }
+        }
+      },
+      "LegislationWorkSearchSchema": {
+        "allOf": [
+          { "$ref": "#/components/schemas/AbstractDocumentSchema" },
+          {
+            "type": "object",
+            "properties": {
+              "@id": {
+                "type": "string",
+                "example": "/v1/legislation/eli/bund/bgbl-1/1975/s1760"
+              },
+              "name": {
+                "type": "string",
+                "example": "Verordnung über Kakao und Kakaoerzeugnisse"
+              },
+              "legislationIdentifier": {
+                "type": "string",
+                "example": "eli/bund/bgbl-1/1975/s1760"
+              },
+              "alternateName": {
+                "type": "string",
+                "example": "Kakaoverordnung"
+              },
+              "abbreviation": { "type": "string", "example": "KakaoV 2003" },
+              "legislationDate": {
+                "type": "string",
+                "format": "date",
+                "description": "The date of adoption or signature of the legislation. This is the date at which the text is officially acknowledged to be a legislation, even though it might not even be published or in force.\n",
+                "example": "2003-12-15"
+              },
+              "datePublished": {
+                "type": "string",
+                "format": "date",
+                "description": "The date of first publication of the legislation, when it was published in the official gazette. This may be later than the `legislationDate`.\"\"\n",
+                "example": "2003-12-16"
+              },
+              "isPartOf": {
+                "$ref": "#/components/schemas/PublicationIssueSchema"
+              },
+              "workExample": {
+                "$ref": "#/components/schemas/LegislationExpressionSearchSchema"
+              }
+            }
+          }
+        ],
+        "description": "A legislation item, across different expressions and manifestations. May be used to provide context to a `LegislationExpression` (under key `workExample`).",
+        "properties": {
+          "@type": { "type": "string", "example": "Legislation" }
+        }
+      },
+      "PublicationIssueSchema": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string", "example": "BGBL I 2003, 1760" },
+          "@type": { "type": "string", "example": "PublicationIssue" }
+        }
+      },
+      "SearchMemberSchemaLegislationWorkSearchSchema": {
+        "type": "object",
+        "properties": {
+          "item": {
+            "$ref": "#/components/schemas/LegislationWorkSearchSchema"
+          },
+          "textMatches": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/TextMatchSchema" }
+          },
+          "@type": { "type": "string", "example": "SearchResult" }
+        }
+      },
+      "LegislationExpressionPartSchema": {
+        "type": "object",
+        "properties": {
+          "@id": {
+            "type": "string",
+            "example": "/v1/legislation/eli/bund/bgbl-1/1975/s1760/regelungstext-1.xml#hauptteitel-para-1"
+          },
+          "eId": {
+            "type": "string",
+            "description": "Expression-level identifier, uniquely identifying this element in an FRBR expression",
+            "example": "hauptteitel-para-1"
+          },
+          "guid": {
+            "type": "string",
+            "example": "550e8400-e29b-41d4-a716-446655440000"
+          },
+          "name": { "type": "string", "example": "§ 1" },
+          "isActive": { "type": "boolean", "example": true },
+          "entryIntoForceDate": {
+            "type": "string",
+            "format": "date",
+            "example": "2003-12-15"
+          },
+          "expiryDate": {
+            "type": "string",
+            "format": "date",
+            "example": "2003-12-15"
+          },
+          "encoding": {
+            "type": "array",
+            "description": "The source data for this part, if available on its own",
+            "items": { "$ref": "#/components/schemas/LegislationObjectSchema" }
+          },
+          "@type": { "type": "string", "example": "Legislation" }
+        }
+      },
+      "LegislationExpressionSchema": {
+        "type": "object",
+        "description": "A legislation item, across different expressions and manifestations. May be used to provide context to a `LegislationExpression` (under key `workExample`).",
+        "properties": {
+          "@id": {
+            "type": "string",
+            "example": "/v1/legislation/eli/bund/bgbl-1/1975/s1760/1998-01-29/10/deu"
+          },
+          "legislationIdentifier": {
+            "type": "string",
+            "example": "eli/bund/bgbl-1/1975/s1760/1998-01-29/10/deu"
+          },
+          "temporalCoverage": {
+            "type": "string",
+            "description": "Textual string indicating a time period in [ISO 8601 time interval format](https://en.wikipedia.org/wiki/ISO_8601#Time_intervals)\n",
+            "example": "1998-02-06/.."
+          },
+          "legislationLegalForce": {
+            "type": "string",
+            "description": "Whether the legislation expression is currently in force.",
+            "enum": ["InForce", "NotInForce", "PartiallyInForce"]
+          },
+          "tableOfContents": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/TableOfContentsSchema" }
+          },
+          "hasPart": {
+            "type": "array",
+            "description": "List of components (articles, preambles, conclusions, attachments, …) that form this legislation item.",
+            "items": {
+              "$ref": "#/components/schemas/LegislationExpressionPartSchema"
+            }
+          },
+          "encoding": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/LegislationObjectSchema" }
+          },
+          "@type": { "type": "string", "example": "Legislation" }
+        }
+      },
+      "LegislationObjectSchema": {
+        "type": "object",
+        "properties": {
+          "@id": {
+            "type": "string",
+            "example": "/v1/legislation/eli/bund/bgbl-1/1975/s1760/1998-01-29/10/deu/1998-01-29/regelungstext-1/html"
+          },
+          "contentUrl": {
+            "type": "string",
+            "example": "/v1/legislation/eli/bund/bgbl-1/1975/s1760/1998-01-29/10/deu/1998-01-29/regelungstext-1.html"
+          },
+          "encodingFormat": { "type": "string", "example": "text/html" },
+          "inLanguage": { "type": "string", "example": "de" },
+          "@type": { "type": "string", "example": "LegislationObject" }
+        }
+      },
+      "LegislationWorkSchema": {
+        "type": "object",
+        "description": "A legislation item, across different expressions and manifestations. May be used to provide context to a `LegislationExpression` (under key `workExample`).",
+        "properties": {
+          "@id": {
+            "type": "string",
+            "description": "Based on the European Legislation Identifier (ELI)",
+            "example": "/v1/legislation/eli/bund/bgbl-1/1975/s1760"
+          },
+          "name": {
+            "type": "string",
+            "description": "Amtliche Langüberschrift",
+            "example": "Verordnung über Kakao und Kakaoerzeugnisse"
+          },
+          "legislationIdentifier": {
+            "type": "string",
+            "description": "European Legislation Identifier (ELI)",
+            "example": "eli/bund/bgbl-1/1975/s1760/regelungstext-1"
+          },
+          "alternateName": {
+            "type": "string",
+            "description": "Amtliche Kurzüberschrift",
+            "example": "Kakaoverordnung"
+          },
+          "abbreviation": {
+            "type": "string",
+            "description": "Amtliche Buchstabenabkürzung",
+            "example": "KakaoV 2003"
+          },
+          "legislationDate": {
+            "type": "string",
+            "format": "date",
+            "description": "Ausfertigungsdatum (The date of adoption or signature of the legislation. This is the date at which the text is officially acknowledged to be a legislation, even though it might not even be published or in force.)\n",
+            "example": "2003-12-15"
+          },
+          "datePublished": {
+            "type": "string",
+            "format": "date",
+            "description": "Verkündungsdatum (The date of first publication of the legislation, when it was published in the official gazette. This may be later than the `legislationDate`.)\n",
+            "example": "2003-12-16"
+          },
+          "isPartOf": { "$ref": "#/components/schemas/PublicationIssueSchema" },
+          "workExample": {
+            "$ref": "#/components/schemas/LegislationExpressionSchema",
+            "description": "Expression-level details (<i>an \"exemplary\" expression of this work</i>)"
+          },
+          "@type": { "type": "string", "example": "Legislation" }
+        }
+      },
+      "TableOfContentsSchema": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string", "example": "hauptteil-1_para-1" },
+          "marker": { "type": "string", "example": 1 },
+          "heading": { "type": "string", "example": "Art 1" },
+          "@type": { "type": "string", "example": "TocEntry" }
+        }
+      },
+      "StreamingResponseBody": {},
+      "AbstractDocumentSchema": {},
+      "CaseLawSearchSchema": {
+        "allOf": [
+          { "$ref": "#/components/schemas/AbstractDocumentSchema" },
+          {
+            "type": "object",
+            "properties": {
+              "documentNumber": {
+                "type": "string",
+                "example": "KARE000000000"
+              },
+              "ecli": {
+                "type": "string",
+                "example": "ECLI:DE:FGRLP:1969:0905.IV85.68.0A"
+              },
+              "headline": { "type": "string", "example": "Überschrift" },
+              "otherLongText": {
+                "type": "string",
+                "example": "Sonstiger Langtext"
+              },
+              "decisionDate": { "type": "string", "format": "date" },
+              "fileNumbers": {
+                "type": "array",
+                "example": "BGH 123/23",
+                "items": { "type": "string" }
+              },
+              "courtType": { "type": "string", "example": "FG" },
+              "location": { "type": "string", "example": "Berlin" },
+              "documentType": { "type": "string", "example": "Urteil" },
+              "outline": { "type": "string", "example": "Leitsatz" },
+              "judicialBody": { "type": "string", "example": "Gericht" },
+              "courtName": { "type": "string", "example": "LArbG Hamm" },
+              "decisionName": {
+                "type": "array",
+                "items": { "type": "string" }
+              },
+              "deviatingDocumentNumber": {
+                "type": "array",
+                "example": "DEV-123",
+                "items": { "type": "string" }
+              },
+              "@id": {
+                "type": "string",
+                "example": "/v1/case-law/ECLI:DE:FGRLP:1969:0905.IV85.68.0A"
+              },
+              "inLanguage": { "type": "string", "example": "de" },
+              "highlightedFields": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "array",
+                  "items": { "type": "string" }
+                }
+              }
+            }
+          }
+        ],
+        "properties": { "@type": { "type": "string", "example": "Decision" } }
+      },
+      "CollectionSchemaSearchMemberSchema": {
+        "type": "object",
+        "properties": {
+          "@id": {
+            "type": "string",
+            "example": "/v1/document?pageIndex=0&size=5"
+          },
+          "totalItems": { "type": "integer", "format": "int64", "example": 1 },
+          "member": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/SearchMemberSchema" }
+          },
+          "view": {
+            "$ref": "#/components/schemas/PartialCollectionViewSchema"
+          },
+          "@type": { "type": "string", "example": "hydra:Collection" }
+        }
+      },
+      "SearchMemberSchema": {
+        "type": "object",
+        "properties": {
+          "item": {
+            "oneOf": [
+              { "$ref": "#/components/schemas/CaseLawSearchSchema" },
+              { "$ref": "#/components/schemas/LegislationWorkSearchSchema" },
+              { "$ref": "#/components/schemas/LiteratureSearchSchema" }
+            ]
+          },
+          "textMatches": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/TextMatchSchema" }
+          },
+          "@type": { "type": "string", "example": "SearchResult" }
+        }
+      },
+      "CollectionSchemaSearchMemberSchemaCaseLawSearchSchema": {
+        "type": "object",
+        "properties": {
+          "@id": {
+            "type": "string",
+            "example": "/v1/document?pageIndex=0&size=5"
+          },
+          "totalItems": { "type": "integer", "format": "int64", "example": 1 },
+          "member": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SearchMemberSchemaCaseLawSearchSchema"
+            }
+          },
+          "view": {
+            "$ref": "#/components/schemas/PartialCollectionViewSchema"
+          },
+          "@type": { "type": "string", "example": "hydra:Collection" }
+        }
+      },
+      "SearchMemberSchemaCaseLawSearchSchema": {
+        "type": "object",
+        "properties": {
+          "item": { "$ref": "#/components/schemas/CaseLawSearchSchema" },
+          "textMatches": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/TextMatchSchema" }
+          },
+          "@type": { "type": "string", "example": "SearchResult" }
+        }
+      },
+      "CaseLawEncodingSchema": {
+        "type": "object",
+        "properties": {
+          "@id": { "type": "string" },
+          "contentUrl": { "type": "string" },
+          "encodingFormat": { "type": "string", "example": "text/html" },
+          "inLanguage": { "type": "string", "example": "de" },
+          "@type": { "type": "string", "example": "DecisionObject" }
+        }
+      },
+      "CaseLawSchema": {
+        "type": "object",
+        "properties": {
+          "documentNumber": { "type": "string", "example": "KARE000000000" },
+          "ecli": {
+            "type": "string",
+            "description": "European Case Law Identifier",
+            "example": "ECLI:DE:FGRLP:1969:0905.IV85.68.0A"
+          },
+          "caseFacts": { "type": "string", "description": "Tatbestand" },
+          "decisionGrounds": {
+            "type": "string",
+            "description": "Entscheidungsgründe"
+          },
+          "dissentingOpinion": {
+            "type": "string",
+            "description": "Abweichende Meinung"
+          },
+          "grounds": { "type": "string", "description": "Gründe" },
+          "guidingPrinciple": { "type": "string", "description": "Leitsatz" },
+          "headline": { "type": "string", "description": "Überschrift" },
+          "headnote": { "type": "string", "description": "Orientierungssatz" },
+          "otherHeadnote": {
+            "type": "string",
+            "description": "Sonstiger Orientierungssatz"
+          },
+          "otherLongText": {
+            "type": "string",
+            "description": "Sonstiger Langtext"
+          },
+          "tenor": { "type": "string", "description": "Tenor" },
+          "decisionDate": {
+            "type": "string",
+            "format": "date",
+            "description": "Entscheidungsdatum"
+          },
+          "fileNumbers": {
+            "type": "array",
+            "description": "Aktenzeichen",
+            "example": "BGH 123/23",
+            "items": { "type": "string" }
+          },
+          "courtType": {
+            "type": "string",
+            "description": "Gerichtstyp",
+            "example": "FG"
+          },
+          "location": {
+            "type": "string",
+            "description": "Gerichtssitz",
+            "example": "Berlin"
+          },
+          "documentType": { "type": "string", "example": "Urteil" },
+          "outline": { "type": "string", "description": "Leitsatz" },
+          "judicialBody": {
+            "type": "string",
+            "description": "Spruchkörper",
+            "example": "Gericht"
+          },
+          "keywords": {
+            "type": "array",
+            "description": "Schlagworte",
+            "example": "3. Kammer",
+            "items": { "type": "string" }
+          },
+          "courtName": { "type": "string", "example": "LArbG Hamm" },
+          "decisionName": {
+            "type": "array",
+            "description": "Entscheidungsname",
+            "examples": ["Beispielentscheidung"],
+            "items": { "type": "string" }
+          },
+          "deviatingDocumentNumber": {
+            "type": "array",
+            "description": "Abweichende Dokumentnummer",
+            "example": "DEV-123",
+            "items": { "type": "string" }
+          },
+          "@id": {
+            "type": "string",
+            "example": "/v1/case-law/ECLI:DE:FGRLP:1969:0905.IV85.68.0A"
+          },
+          "inLanguage": { "type": "string", "example": "de" },
+          "encoding": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/CaseLawEncodingSchema" }
+          },
+          "highlightedFields": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "array",
+              "items": { "type": "string" }
+            }
+          },
+          "@type": { "type": "string", "example": "Decision" }
+        }
+      },
+      "CourtSearchResult": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string", "example": "BGH Karlsruhe" },
+          "count": { "type": "integer", "format": "int64", "example": 10000 },
+          "label": {
+            "type": "string",
+            "example": "Bundesgerichtshof Karlsruhe"
+          }
+        }
+      }
+    }
+  }
+}
