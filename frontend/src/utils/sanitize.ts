@@ -1,12 +1,19 @@
-import DOMPurify from "isomorphic-dompurify";
+import type DOMPurify from "isomorphic-dompurify";
+
+let _DOMPurify: typeof DOMPurify;
+
+if (import.meta.client) {
+  import("isomorphic-dompurify").then((module) => {
+    _DOMPurify = module.default;
+  });
+}
 
 export function sanitizeSearchResult(
   html: string | undefined,
-  allowedTags: string[] | undefined = ["b", "i", "mark"],
+  allowedTags: string[] = ["b", "i", "mark"],
 ) {
-  if (!html) {
+  if (!import.meta.client || !html || !_DOMPurify) {
     return "";
   }
-
-  return DOMPurify.sanitize(html, { ALLOWED_TAGS: allowedTags });
+  return _DOMPurify.sanitize(html, { ALLOWED_TAGS: allowedTags });
 }

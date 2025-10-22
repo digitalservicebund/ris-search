@@ -1,11 +1,7 @@
 <script setup lang="ts">
 import { storeToRefs } from "pinia";
 import Message from "primevue/message";
-import {
-  convertParams,
-  getUrl,
-  type SearchEndpointParams,
-} from "./SimpleSearch.logic";
+import { convertParams, getUrl } from "./SimpleSearch.logic";
 import type { Page } from "~/components/Pagination/Pagination";
 import SearchResult from "~/components/Search/Result/SearchResult.vue";
 import CategoryFilter from "~/components/Search/SimpleSearch/CategoryFilter/CategoryFilter.vue";
@@ -22,7 +18,7 @@ import { buildResultCountString } from "~/utils/paginationUtils";
 const store = useSimpleSearchParamsStore();
 const values = storeToRefs(store);
 
-const params: ComputedRef<SearchEndpointParams> = computed(() =>
+const params = computed(() =>
   convertParams({
     ...values.params.value,
     temporalCoverage: getCurrentDateInGermanyFormatted(),
@@ -73,7 +69,7 @@ async function updatePage(page: number) {
   store.setPageNumber(page);
 }
 
-const documentKind: ComputedRef<DocumentKind> = computed(() => {
+const documentKind = computed(() => {
   if (values.category.value.length > 0) {
     return values.category.value[0] as DocumentKind;
   }
