@@ -9,7 +9,7 @@ RUN yarn install --immutable
 COPY playwright.config.ts nuxt.config.ts nuxt.config.d.ts libraries.d.ts tsconfig.json \
     eslint.config.mjs sentry.server.config.ts ./
 COPY src ./src
-RUN yarn run prepare && yarn build
+RUN yarn run prepare && NODE_OPTIONS="--max-old-space-size=4096" yarn build
 
 
 FROM node:22.17.0-alpine3.22

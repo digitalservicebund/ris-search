@@ -16,13 +16,8 @@ export NUXT_SESSION_PASSWORD="${NUXT_SESSION_PASSWORD:-$(read_secret /etc/secret
 export SENTRY_AUTH_TOKEN="${SENTRY_AUTH_TOKEN:-$(read_secret /etc/secrets/sentry-auth/token)}"
 export NUXT_PUBLIC_SENTRY_DSN="${NUXT_PUBLIC_SENTRY_DSN:-$(read_secret /etc/secrets/sentry-dsn/url)}"
 
-SENTRY_IMPORT="/app/server/sentry.server.config.mjs"
-
-NODE_ARGS=""
-if [ -f "$SENTRY_IMPORT" ] && [ -n "${NUXT_PUBLIC_SENTRY_DSN:-}" ]; then
-  NODE_ARGS="--import $SENTRY_IMPORT"
+if [ -f "/app/server/sentry.server.config.mjs" ] && [ -n "${NUXT_PUBLIC_SENTRY_DSN:-}" ]; then
+  exec node --import /app/server/sentry.server.config.mjs /app/server/index.mjs
 else
-  echo "Skipping Sentry import (file missing or DSN empty)"
+  exec node /app/server/index.mjs
 fi
-
-node "$NODE_ARGS" /app/server/index.mjs
