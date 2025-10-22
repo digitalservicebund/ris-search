@@ -20,6 +20,11 @@ WORKDIR /app
 COPY --chown=node:node --from=build /app/.output/server ./server
 COPY --chown=node:node --from=build /app/.output/public ./public
 COPY --chown=node:node --from=build /app/.output/nitro.json ./nitro.json
+RUN \
+  echo "export { default } from './index.js';" > ./server/node_modules/async-function/require.mjs && \
+  echo "export { default } from './index.js';" > ./server/node_modules/generator-function/require.mjs && \
+  echo "export { default } from './index.js';" > ./server/node_modules/async-generator-function/require.mjs
+
 COPY start.sh ./
 EXPOSE 3000
 ENV HOST=0.0.0.0 PORT=3000 NODE_ENV=production
