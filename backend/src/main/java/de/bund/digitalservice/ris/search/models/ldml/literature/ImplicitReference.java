@@ -10,10 +10,14 @@ public class ImplicitReference {
   @XmlAttribute(name = "showAs")
   private String showAs;
 
-  @XmlElement(name = "fundstelleUnselbstaendig", namespace = LiteratureNamespaces.RIS_UNSELBSTSTAENDIG_NS)
+  @XmlElement(
+      name = "fundstelleUnselbstaendig",
+      namespace = LiteratureNamespaces.RIS_UNSELBSTSTAENDIG_NS)
   private String fundstelleUnselbstaendig;
 
-  @XmlElement(name = "fundstelleSelbstaendig", namespace = LiteratureNamespaces.RIS_UNSELBSTSTAENDIG_NS)
+  @XmlElement(
+      name = "fundstelleSelbstaendig",
+      namespace = LiteratureNamespaces.RIS_UNSELBSTSTAENDIG_NS)
   private String fundstelleSelbstaendig;
 
   @XmlElement(name = "normReference", namespace = LiteratureNamespaces.RIS_UNSELBSTSTAENDIG_NS)
