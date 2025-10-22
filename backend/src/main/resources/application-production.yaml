@@ -37,6 +37,8 @@ management:
 sentry:
   environment: production
   traces-sample-rate: 0.01
+  logging:
+    minimum-event-level: error
 
 logging:
   level:
