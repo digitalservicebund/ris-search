@@ -1,8 +1,8 @@
 package de.bund.digitalservice.ris.search.mapper;
 
 import de.bund.digitalservice.ris.search.caselawhandover.shared.caselawldml.FrbrLanguage;
+import de.bund.digitalservice.ris.search.exception.OpenSearchMapperException;
 import de.bund.digitalservice.ris.search.models.ldml.literature.Analysis;
-import de.bund.digitalservice.ris.search.models.ldml.literature.Classification;
 import de.bund.digitalservice.ris.search.models.ldml.literature.Doc;
 import de.bund.digitalservice.ris.search.models.ldml.literature.FrbrDate;
 import de.bund.digitalservice.ris.search.models.ldml.literature.FrbrExpression;
@@ -36,57 +36,47 @@ import java.util.Objects;
 import java.util.Optional;
 import javax.xml.transform.stream.StreamSource;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.eclipse.persistence.exceptions.DescriptorException;
 
 public class LiteratureLdmlToOpenSearchMapper {
 
-  private static final Logger logger = LogManager.getLogger(LiteratureLdmlToOpenSearchMapper.class);
-
   private LiteratureLdmlToOpenSearchMapper() {}
 
-  public static Optional<Literature> mapLdml(String ldmlString) {
+  public static Literature mapLdml(String ldmlString) {
     try {
       StreamSource ldmlStreamSource = new StreamSource(new StringReader(ldmlString));
       var literatureLdml = JAXB.unmarshal(ldmlStreamSource, LiteratureLdml.class);
       return mapToEntity(literatureLdml);
     } catch (DescriptorException | DataBindingException | ValidationException e) {
-      logger.warn("Error creating literature opensearch entity.", e);
-      return Optional.empty();
+      throw new OpenSearchMapperException("unable to parse file to Literature", e);
     }
   }
 
-  private static Optional<Literature> mapToEntity(LiteratureLdml literatureLdml)
-      throws ValidationException {
+  private static Literature mapToEntity(LiteratureLdml literatureLdml) throws ValidationException {
     var documentNumber = extractDocumentNumber(literatureLdml);
     var yearsOfPublication = extractYearsOfPublication(literatureLdml);
-    return Optional.of(
-        Literature.builder()
-            .id(documentNumber)
-            .documentNumber(documentNumber)
-            .recordingDate(extractRecordingDate(literatureLdml))
-            .yearsOfPublication(extractYearsOfPublication(literatureLdml))
-            .firstPublicationDate(
-                yearsOfPublication.isEmpty()
-                    ? LocalDate.MIN
-                    : LocalDate.of(Integer.parseInt(yearsOfPublication.getFirst()), 1, 1))
-            .documentTypes(extractDocumentTypes(literatureLdml))
-            .dependentReferences(extractDependentReferences(literatureLdml))
-            .independentReferences(extractIndependentReferences(literatureLdml))
-            .normReferences(extractNormReferences(literatureLdml))
-            .mainTitle(extractMainTitle(literatureLdml))
-            .mainTitleAdditions(extractMainTitleAdditions(literatureLdml))
-            .documentaryTitle(extractDocumentaryTitle(literatureLdml))
-            .authors(extractAuthors(literatureLdml))
-            .collaborators(extractCollaborators(literatureLdml))
-            .originators(extractOriginators(literatureLdml))
-            .conferenceNotes(extractConferenceNotes(literatureLdml))
-            .languages(extractLanguages(literatureLdml))
-            .shortReport(extractShortReport(literatureLdml))
-            .outline((extractOutline(literatureLdml)))
-            .indexedAt(Instant.now().toString())
-            .build());
+    return Literature.builder()
+        .id(documentNumber)
+        .documentNumber(documentNumber)
+        .recordingDate(extractRecordingDate(literatureLdml))
+        .yearsOfPublication(extractYearsOfPublication(literatureLdml))
+        .firstPublicationDate(LocalDate.of(Integer.parseInt(yearsOfPublication.getFirst()), 1, 1))
+        .documentTypes(extractDocumentTypes(literatureLdml))
+        .dependentReferences(extractDependentReferences(literatureLdml))
+        .independentReferences(extractIndependentReferences(literatureLdml))
+        .normReferences(extractNormReferences(literatureLdml))
+        .mainTitle(extractMainTitle(literatureLdml))
+        .mainTitleAdditions(extractMainTitleAdditions(literatureLdml))
+        .documentaryTitle(extractDocumentaryTitle(literatureLdml))
+        .authors(extractAuthors(literatureLdml))
+        .collaborators(extractCollaborators(literatureLdml))
+        .originators(extractOriginators(literatureLdml))
+        .conferenceNotes(extractConferenceNotes(literatureLdml))
+        .languages(extractLanguages(literatureLdml))
+        .shortReport(extractShortReport(literatureLdml))
+        .outline((extractOutline(literatureLdml)))
+        .indexedAt(Instant.now().toString())
+        .build();
   }
 
   private static String extractDocumentNumber(LiteratureLdml literatureLdml)
@@ -124,30 +114,43 @@ public class LiteratureLdmlToOpenSearchMapper {
         .orElse(null);
   }
 
-  private static List<String> extractYearsOfPublication(LiteratureLdml literatureLdml) {
-    return Optional.ofNullable(literatureLdml)
-        .map(LiteratureLdml::getDoc)
-        .map(Doc::getMeta)
-        .map(Meta::getProprietary)
-        .map(Proprietary::getMetadata)
-        .map(Metadata::getYearsOfPublication)
-        .orElse(Collections.emptyList());
+  private static List<String> extractYearsOfPublication(LiteratureLdml literatureLdml)
+      throws ValidationException {
+    List<String> yearsOfPublication =
+        Optional.ofNullable(literatureLdml)
+            .map(LiteratureLdml::getDoc)
+            .map(Doc::getMeta)
+            .map(Meta::getProprietary)
+            .map(Proprietary::getMetadata)
+            .map(Metadata::getYearsOfPublication)
+            .orElse(Collections.emptyList());
+
+    if (yearsOfPublication.isEmpty()) {
+      throw new ValidationException("Missing years of publication");
+    }
+
+    return yearsOfPublication;
   }
 
-  private static List<String> extractDocumentTypes(LiteratureLdml literatureLdml) {
-    return Optional.ofNullable(literatureLdml)
-        .map(LiteratureLdml::getDoc)
-        .map(Doc::getMeta)
-        .map(Meta::getClassifications)
-        .orElse(Collections.emptyList())
-        .stream()
-        .filter(classification -> Objects.equals(classification.getSource(), "doktyp"))
-        .findFirst()
-        .map(Classification::getKeywords)
-        .orElse(Collections.emptyList())
-        .stream()
-        .map(Keyword::getValue)
-        .toList();
+  private static List<String> extractDocumentTypes(LiteratureLdml literatureLdml)
+      throws ValidationException {
+    final List<String> documentTypes =
+        Optional.ofNullable(literatureLdml)
+            .map(LiteratureLdml::getDoc)
+            .map(Doc::getMeta)
+            .map(Meta::getClassifications)
+            .orElse(Collections.emptyList())
+            .stream()
+            .filter(classification -> "doktyp".equals(classification.getSource()))
+            .flatMap(classification -> classification.getKeywords().stream())
+            .map(Keyword::getValue)
+            .toList();
+
+    if (documentTypes.isEmpty()) {
+      throw new ValidationException("No document types found in LDML metadata.");
+    }
+
+    return documentTypes;
   }
 
   private static List<String> extractDependentReferences(LiteratureLdml literatureLdml) {

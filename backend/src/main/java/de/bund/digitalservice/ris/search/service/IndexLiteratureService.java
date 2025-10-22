@@ -1,5 +1,6 @@
 package de.bund.digitalservice.ris.search.service;
 
+import de.bund.digitalservice.ris.search.exception.OpenSearchMapperException;
 import de.bund.digitalservice.ris.search.mapper.LiteratureLdmlToOpenSearchMapper;
 import de.bund.digitalservice.ris.search.models.opensearch.Literature;
 import de.bund.digitalservice.ris.search.repository.objectstorage.literature.LiteratureBucket;
@@ -33,7 +34,12 @@ public class IndexLiteratureService extends BaseIndexService<Literature> {
 
   @Override
   protected Optional<Literature> mapFileToEntity(String filename, String fileContent) {
-    return LiteratureLdmlToOpenSearchMapper.mapLdml(fileContent);
+    try {
+      return Optional.of(LiteratureLdmlToOpenSearchMapper.mapLdml(fileContent));
+    } catch (OpenSearchMapperException e) {
+      logger.error("unable to parse file {}", filename, e);
+      return Optional.empty();
+    }
   }
 
   @Override
