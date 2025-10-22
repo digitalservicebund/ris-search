@@ -19,8 +19,10 @@ public class CustomErrorController implements ErrorController {
 
     if (statusCode == HttpStatus.FORBIDDEN.value()) {
       return ControllerExceptionHandler.return403();
-    } else {
-      return ControllerExceptionHandler.return500();
     }
+    if (statusCode == HttpStatus.TOO_MANY_REQUESTS.value()) {
+      return ControllerExceptionHandler.return429();
+    }
+    return ControllerExceptionHandler.return500();
   }
 }
