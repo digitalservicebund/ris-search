@@ -60,7 +60,7 @@ public class LiteratureLdmlToOpenSearchMapper {
         .documentNumber(documentNumber)
         .recordingDate(extractRecordingDate(literatureLdml))
         .yearsOfPublication(extractYearsOfPublication(literatureLdml))
-        .firstPublicationDate(LocalDate.of(Integer.parseInt(yearsOfPublication.getFirst()), 1, 1))
+        .firstPublicationDate(firstYearOfPublicationToDate(yearsOfPublication.getFirst()))
         .documentTypes(extractDocumentTypes(literatureLdml))
         .dependentReferences(extractDependentReferences(literatureLdml))
         .independentReferences(extractIndependentReferences(literatureLdml))
@@ -130,6 +130,20 @@ public class LiteratureLdmlToOpenSearchMapper {
     }
 
     return yearsOfPublication;
+  }
+
+  private static LocalDate firstYearOfPublicationToDate(String firstYearOfPublication)
+      throws ValidationException {
+    var parts = firstYearOfPublication.split("-");
+    try {
+      var year = Integer.parseInt(parts[0]);
+      var month = parts.length > 1 ? Integer.parseInt(parts[1]) : 1;
+      var day = parts.length > 2 ? Integer.parseInt(parts[2]) : 1;
+      return LocalDate.of(year, month, day);
+    } catch (NumberFormatException | IndexOutOfBoundsException e) {
+      throw new ValidationException(
+          String.format("Unable to parse first year of publication: '%s'", firstYearOfPublication));
+    }
   }
 
   private static List<String> extractDocumentTypes(LiteratureLdml literatureLdml)
