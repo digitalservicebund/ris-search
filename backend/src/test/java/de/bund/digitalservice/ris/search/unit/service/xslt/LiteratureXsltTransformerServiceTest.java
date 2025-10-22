@@ -21,8 +21,8 @@ class LiteratureXsltTransformerServiceTest {
 
   @ParameterizedTest(name = "{2}")
   @CsvSource({
-    "uli/example1/literature.xml, uli/example1/literature.html, Should transform literature with mainTitel, documentaryTitle, outline and mainBody",
-    "uli/example2/literature.xml, uli/example2/literature.html, Should transform literature with only documentaryTitle and mainBody",
+    "uli/example1/literature.xml, uli/example1/literature.html, Should transform literature with mainTitel, alternativeHeadline, outline and mainBody",
+    "uli/example2/literature.xml, uli/example2/literature.html, Should transform literature with only alternativeHeadline and mainBody",
     "uli/example3/literature.xml, uli/example3/literature.html, Should transform literature with only mainTitel and outline",
   })
   void testTransformLiteratureXmlDocuments(

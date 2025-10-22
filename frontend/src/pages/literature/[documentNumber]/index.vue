@@ -46,7 +46,7 @@ const emptyTitlePlaceholder = "Titelzeile nicht vorhanden";
 const title = computed(() => {
   return (
     literature.value?.headline ??
-    literature.value?.alternativeTitle ??
+    literature.value?.alternativeHeadline ??
     undefined
   );
 });
@@ -54,7 +54,7 @@ const title = computed(() => {
 const breadcrumbItems = computed(() => [
   {
     label: formatDocumentKind(DocumentKind.Literature),
-    route: `/search?category=${DocumentKind.CaseLaw}`,
+    route: `/search?category=${DocumentKind.Literature}`,
   },
   {
     label: title.value ?? emptyTitlePlaceholder,

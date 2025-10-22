@@ -12,6 +12,7 @@ describe("SimpleSearch.logic", () => {
     expect(getUrl("A")).toBe("backend/v1/document");
     expect(getUrl("R")).toBe("backend/v1/case-law");
     expect(getUrl("N")).toBe("backend/v1/legislation");
+    expect(getUrl("L")).toBe("backend/v1/literature");
   });
 
   it("should convert the parameters correctly", async () => {

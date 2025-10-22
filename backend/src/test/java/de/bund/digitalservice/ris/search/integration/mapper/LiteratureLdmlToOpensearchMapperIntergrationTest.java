@@ -7,6 +7,7 @@ import de.bund.digitalservice.ris.search.models.opensearch.Literature;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.time.LocalDate;
 import java.util.Optional;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -26,6 +27,7 @@ class LiteratureLdmlToOpensearchMapperIntergrationTest {
     assertThat(literatureUnwrapped.id()).isEqualTo("ABCD0000000001");
     assertThat(literatureUnwrapped.documentNumber()).isEqualTo("ABCD0000000001");
     assertThat(literatureUnwrapped.yearsOfPublication()).containsExactly("2025");
+    assertThat(literatureUnwrapped.firstPublicationDate()).isEqualTo(LocalDate.of(2025, 1, 1));
     assertThat(literatureUnwrapped.documentTypes()).containsExactly("Auf", "Foo");
     assertThat(literatureUnwrapped.dependentReferences()).containsExactly("BB 1979, 1298-1300");
     assertThat(literatureUnwrapped.independentReferences())

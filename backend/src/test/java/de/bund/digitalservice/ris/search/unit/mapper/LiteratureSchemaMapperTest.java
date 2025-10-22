@@ -42,7 +42,7 @@ class LiteratureSchemaMapperTest {
     assertThat(literatureSchema.independentReferences())
         .containsExactly("50 Jahre Betriebs-Berater, 1987, 123-456");
     assertThat(literatureSchema.headline()).isEqualTo("Hauptüberschrift");
-    assertThat(literatureSchema.alternativeTitle()).isEqualTo("Dokumentarischer Titel");
+    assertThat(literatureSchema.alternativeHeadline()).isEqualTo("Dokumentarischer Titel");
     assertThat(literatureSchema.authors()).containsExactly("Musterfrau, Sabine");
     assertThat(literatureSchema.collaborators()).containsExactly("Mustermann, Max");
     assertThat(literatureSchema.shortReport()).isEqualTo("Kurzreferat");
