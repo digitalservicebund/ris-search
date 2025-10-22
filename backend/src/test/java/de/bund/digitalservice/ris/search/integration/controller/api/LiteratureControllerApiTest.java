@@ -12,10 +12,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.c4_soft.springaddons.security.oauth2.test.annotations.WithJwt;
 import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.integration.config.ContainersIntegrationBase;
-import de.bund.digitalservice.ris.search.integration.controller.api.testData.LiteratureTestData;
-import de.bund.digitalservice.ris.search.repository.opensearch.LiteratureRepository;
 import org.hamcrest.Matchers;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -31,22 +28,15 @@ import org.springframework.test.web.servlet.MockMvc;
 @WithJwt("jwtTokens/ValidAccessToken.json")
 class LiteratureControllerApiTest extends ContainersIntegrationBase {
 
-  @Autowired private LiteratureRepository literatureRepository;
   @Autowired private MockMvc mockMvc;
 
-  private final String documentNumberPersistedInTest = "KALU000000002";
   private final String documentNumberPresentInBucket = "literatureLdml-1";
-
-  @BeforeEach
-  void setUpSearchControllerApiTest() {
-    clearData();
-    literatureRepository.saveAll(LiteratureTestData.allDocuments);
-  }
 
   @Test
   @DisplayName("Should return literature when using api endpoint with document number")
   void shouldReturnSingleLiteratureJson() throws Exception {
 
+    String documentNumberPersistedInTest = "KALU000000002";
     mockMvc
         .perform(
             get(ApiConfig.Paths.LITERATURE + "/" + documentNumberPersistedInTest)
@@ -254,6 +244,7 @@ class LiteratureControllerApiTest extends ContainersIntegrationBase {
         .andExpect(jsonPath("$.member[0].item.documentNumber", Matchers.is("KALU000000003")));
   }
 
+  @Test
   @DisplayName("Search by collaborator")
   void shouldReturnItemWhenSearchingByCollaborator() throws Exception {
     final String collaborator = "Mustermann, Max";

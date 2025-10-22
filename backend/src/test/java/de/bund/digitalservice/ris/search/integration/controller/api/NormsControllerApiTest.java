@@ -79,7 +79,7 @@ class NormsControllerApiTest extends ContainersIntegrationBase {
 
   @BeforeEach
   void setUpSearchControllerApiTest() {
-    clearData();
+    clearRepositoryData();
     normsRepository.saveAll(NormsTestData.allDocuments);
   }
 
@@ -168,7 +168,7 @@ class NormsControllerApiTest extends ContainersIntegrationBase {
   @MethodSource("fileTestArguments")
   @DisplayName("File endpoint should {0}")
   void shouldReturnFilesWhenRequestedAndIfExtensionIsSupported(
-      String testDescription, int status, String path) throws Exception {
+      String ignoredTestDescription, int status, String path) throws Exception {
     mockMvc.perform(get(path)).andExpect(status().is(status));
   }
 
