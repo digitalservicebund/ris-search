@@ -17,7 +17,9 @@ RUN apk update && apk upgrade && apk add dumb-init && apk cache clean && \
     rm -r /usr/local/lib/node_modules/npm/node_modules/cross-spawn
 USER node
 WORKDIR /app
-COPY --chown=node:node --from=build /app/.output ./
+COPY --chown=node:node --from=build /app/.output/server ./server
+COPY --chown=node:node --from=build /app/.output/public ./public
+COPY --chown=node:node --from=build /app/.output/nitro.json ./nitro.json
 COPY start.sh ./
 EXPOSE 3000
 ENV HOST=0.0.0.0 PORT=3000 NODE_ENV=production

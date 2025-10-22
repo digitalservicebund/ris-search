@@ -159,6 +159,7 @@ export default defineNuxtConfig({
       org: "digitalservice",
       project: "ris-search",
       authToken: process.env.SENTRY_AUTH_TOKEN,
+      telemetry: sentryEnabled,
       sourcemaps: {
         filesToDeleteAfterUpload: [".*/**/public/**/*.map"],
       },
