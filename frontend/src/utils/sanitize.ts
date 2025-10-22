@@ -3,9 +3,8 @@ import type DOMPurify from "isomorphic-dompurify";
 let _DOMPurify: typeof DOMPurify;
 
 if (import.meta.client) {
-  import("isomorphic-dompurify").then((module) => {
-    _DOMPurify = module.default;
-  });
+  const module = await import("isomorphic-dompurify");
+  _DOMPurify = module.default;
 }
 
 export function sanitizeSearchResult(
