@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import dayjs from "dayjs";
 import VersionWarningMessage from "~/components/Norm/VersionWarningMessage.vue";
 import type { LegislationWork, SearchResult } from "~/types";
 import {
