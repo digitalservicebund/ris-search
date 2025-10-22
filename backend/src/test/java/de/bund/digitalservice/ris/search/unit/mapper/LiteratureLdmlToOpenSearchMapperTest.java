@@ -99,23 +99,7 @@ class LiteratureLdmlToOpenSearchMapperTest {
   @Test
   @DisplayName("Sets first publication date to default min date if years of publication missing")
   void setFirstPublicationDateToDefaultMinDate() {
-    String literatureLdml =
-        """
-                <akn:akomaNtoso xmlns:akn="http://docs.oasis-open.org/legaldocml/ns/akn/3.0"
-                 xmlns:ris="http://ldml.neuris.de/literature/unselbstaendig/metadata/">
-                 <akn:doc name="offene-struktur">
-                   <akn:meta>
-                       <akn:identification>
-                         <akn:FRBRExpression>
-                           <akn:FRBRalias name="documentNumber" value="BJLU002758328" />
-                         </akn:FRBRExpression>
-                       </akn:identification>
-                   </akn:meta>
-                 </akn:doc>
-               </akn:akomaNtoso>
-               """
-            .stripIndent();
-    Literature literature = LiteratureLdmlToOpenSearchMapper.mapLdml(literatureLdml).get();
+    Literature literature = LiteratureLdmlToOpenSearchMapper.mapLdml(minimalValidLdml).get();
 
     assertThat(literature.yearsOfPublication()).isEmpty();
     assertThat(literature.firstPublicationDate()).isEqualTo(LocalDate.MIN);
@@ -285,7 +269,7 @@ class LiteratureLdmlToOpenSearchMapperTest {
 
     Literature literature = LiteratureLdmlToOpenSearchMapper.mapLdml(literatureLdml).get();
 
-    assertThat(literature.alternativeHeadline()).isEqualTo("Dokumentarischer Titel");
+    assertThat(literature.documentaryTitle()).isEqualTo("Dokumentarischer Titel");
   }
 
   @Test
@@ -489,7 +473,7 @@ class LiteratureLdmlToOpenSearchMapperTest {
     assertThat(literature.independentReferences()).isEmpty();
     assertThat(literature.yearsOfPublication()).isEmpty();
     assertThat(literature.mainTitle()).isNull();
-    assertThat(literature.alternativeHeadline()).isNull();
+    assertThat(literature.documentaryTitle()).isNull();
     assertThat(literature.authors()).isEmpty();
     assertThat(literature.collaborators()).isEmpty();
     assertThat(literature.shortReport()).isNull();

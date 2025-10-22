@@ -20,7 +20,7 @@ public class LiteratureSchemaMapper {
         .dependentReferences(entity.dependentReferences())
         .independentReferences(entity.independentReferences())
         .headline(entity.mainTitle())
-        .alternativeHeadline(entity.alternativeHeadline())
+        .alternativeHeadline(entity.documentaryTitle())
         .authors(entity.authors())
         .collaborators(entity.collaborators())
         .shortReport(entity.shortReport())

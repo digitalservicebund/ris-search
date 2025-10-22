@@ -28,7 +28,7 @@ Abschließend gibt das Werk Empfehlungen für die praktische Anwendung juristisc
   textMatches: [],
 };
 
-async function renderComponent({
+function renderComponent({
   item = searchResult.item,
   textMatches = [],
 }: Partial<SearchResult<Literature>> = {}) {
@@ -45,7 +45,7 @@ async function renderComponent({
 
 describe("LiteratureSearchResult.vue", () => {
   it("renders the expected title", async () => {
-    await renderComponent({});
+    renderComponent({});
     expect(
       screen.getByText(
         "Eine Untersuchung der juristischen Methoden im 21. Jahrhundert",
@@ -61,7 +61,7 @@ describe("LiteratureSearchResult.vue", () => {
       location: null,
     };
 
-    await renderComponent({ textMatches: [textMatch] });
+    renderComponent({ textMatches: [textMatch] });
 
     const mark = screen.getByText("highlighted headline");
     expect(mark.tagName).toBe("MARK");
@@ -69,7 +69,7 @@ describe("LiteratureSearchResult.vue", () => {
 
   it("displays alternative title when headline is not present", async () => {
     const itemWithoutHeadline = { ...searchResult.item, headline: "" };
-    await renderComponent({ item: itemWithoutHeadline });
+    renderComponent({ item: itemWithoutHeadline });
     expect(
       screen.getByText("Study of Legal Methodologies in the 21st Century"),
     ).toBeInTheDocument();
@@ -83,14 +83,14 @@ describe("LiteratureSearchResult.vue", () => {
       location: null,
     };
 
-    await renderComponent({ textMatches: [textMatch] });
+    renderComponent({ textMatches: [textMatch] });
 
     const mark = screen.getByText("highlighted Text");
     expect(mark.tagName).toBe("MARK");
   });
 
   it("renders full shortReport when no match is present", async () => {
-    await renderComponent({});
+    renderComponent({});
     expect(
       screen.getByText(/Dieses Werk analysiert die Entwicklung/),
     ).toBeInTheDocument();
@@ -98,7 +98,7 @@ describe("LiteratureSearchResult.vue", () => {
 
   it("applies line-clamp-3 class only when no highlight exists", async () => {
     // No highlight
-    const { rerender } = await renderComponent({});
+    const { rerender } = renderComponent({});
     const span = screen.getByTestId("highlighted-field");
     expect(span).toHaveClass("line-clamp-3");
 
@@ -125,7 +125,7 @@ describe("LiteratureSearchResult.vue", () => {
       location: null,
     };
 
-    await renderComponent({ textMatches: [match] });
+    renderComponent({ textMatches: [match] });
 
     const mark = screen.getByText("Präzedenzfällen");
     expect(mark).toBeInTheDocument();
@@ -140,7 +140,7 @@ describe("LiteratureSearchResult.vue", () => {
       location: null,
     };
 
-    await renderComponent({ textMatches: [match] });
+    renderComponent({ textMatches: [match] });
 
     const mark = screen.getByText("Entscheidungsfindung");
     expect(mark).toBeInTheDocument();
@@ -155,7 +155,7 @@ describe("LiteratureSearchResult.vue", () => {
       location: null,
     };
 
-    await renderComponent({ textMatches: [match] });
+    renderComponent({ textMatches: [match] });
 
     const snippet = screen.getByTestId("highlighted-field");
     expect(snippet).toHaveTextContent("Präzedenzfällen");
@@ -164,7 +164,7 @@ describe("LiteratureSearchResult.vue", () => {
 
   it("applies line-clamp-3 class only when no highlight exists", async () => {
     // No match
-    const { rerender } = await renderComponent({});
+    const { rerender } = renderComponent({});
     let span = screen.getByTestId("highlighted-field");
     expect(span).toHaveClass("line-clamp-3");
 

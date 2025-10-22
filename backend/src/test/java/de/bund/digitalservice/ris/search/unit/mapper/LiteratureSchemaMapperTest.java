@@ -24,7 +24,7 @@ class LiteratureSchemaMapperTest {
             .dependentReferences(List.of("BUV, 1982, 123-123"))
             .independentReferences(List.of("50 Jahre Betriebs-Berater, 1987, 123-456"))
             .mainTitle("Hauptüberschrift")
-            .alternativeHeadline("Dokumentarischer Titel")
+            .documentaryTitle("Dokumentarischer Titel")
             .authors(List.of("Musterfrau, Sabine"))
             .collaborators(List.of("Mustermann, Max"))
             .shortReport("Kurzreferat")

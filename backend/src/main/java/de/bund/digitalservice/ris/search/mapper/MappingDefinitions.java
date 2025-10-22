@@ -32,7 +32,7 @@ public class MappingDefinitions {
             Map.entry(Literature.Fields.DEPENDENT_REFERENCES, "dependentReferences"),
             Map.entry(Literature.Fields.INDEPENDENT_REFERENCES, "independentReferences"),
             Map.entry(Literature.Fields.MAIN_TITLE, "mainTitle"),
-            Map.entry(Literature.Fields.ALTERNATIVE_HEADLINE, "alternativeHeadline"),
+            Map.entry(Literature.Fields.DOCUMENTARY_TITLE, "documentaryTitle"),
             Map.entry(Literature.Fields.AUTHORS, "authors"),
             Map.entry(Literature.Fields.COLLABORATORS, "collaborators"),
             Map.entry(Literature.Fields.SHORT_REPORT, "shortReport"),

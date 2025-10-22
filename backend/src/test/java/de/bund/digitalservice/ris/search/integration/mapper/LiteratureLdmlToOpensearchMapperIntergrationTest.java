@@ -33,7 +33,7 @@ class LiteratureLdmlToOpensearchMapperIntergrationTest {
     assertThat(literatureUnwrapped.independentReferences())
         .containsExactly("Titel einer Fundstelle 1979, 1298-1300");
     assertThat(literatureUnwrapped.mainTitle()).isEqualTo("Literatur Test Dokument");
-    assertThat(literatureUnwrapped.alternativeHeadline()).isEqualTo("Dokumentarischer Titel");
+    assertThat(literatureUnwrapped.documentaryTitle()).isEqualTo("Dokumentarischer Titel");
     assertThat(literatureUnwrapped.authors())
         .containsExactly("Mustermann, Max", "Musterfrau, Susanne");
     assertThat(literatureUnwrapped.collaborators()).containsExactly("Foo, Peter");
