@@ -47,8 +47,10 @@ watch(
   () => documentKind,
   (is, was) => {
     if (is === was) return;
-    // Set a reasonable default filter when the document type is changed
-    setFilterType(is === DocumentKind.Norm ? "currentlyInForce" : "allTime");
+
+    if (was === DocumentKind.Norm && filter.value.type === "currentlyInForce") {
+      setFilterType("allTime");
+    }
   },
 );
 

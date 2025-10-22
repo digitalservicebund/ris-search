@@ -1,16 +1,30 @@
-import { RisUiTheme, RisUiLocale } from "@digitalservicebund/ris-ui/primevue";
-import PrimeVue from "primevue/config";
 import "@digitalservicebund/ris-ui/fonts.css";
+import { RisUiLocale, RisUiTheme } from "@digitalservicebund/ris-ui/primevue";
+import PrimeVue from "primevue/config";
+import { usePassThrough } from "primevue/passthrough";
 import ToastService from "primevue/toastservice";
 import Tooltip from "primevue/tooltip";
 
-export default defineNuxtPlugin((nuxtApp) => {
-  const app = nuxtApp.vueApp;
+const theme = usePassThrough(
+  RisUiTheme,
+  {
+    panelmenu: {
+      headercontent: { class: "group" },
+      headerlink: { class: "no-underline group-hover:underline" },
+      itemlink: { class: "no-underline group-hover:underline" },
+    },
+  },
+  { mergeProps: false, mergeSections: true },
+);
+
+export default defineNuxtPlugin(({ vueApp: app }) => {
   app.use(PrimeVue, {
-    pt: RisUiTheme,
+    pt: theme,
     unstyled: true,
     locale: RisUiLocale.deDE,
   });
+
   app.use(ToastService);
+
   app.directive("tooltip", Tooltip);
 });

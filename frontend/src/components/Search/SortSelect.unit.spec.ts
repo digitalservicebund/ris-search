@@ -1,88 +1,129 @@
-import { mount } from "@vue/test-utils";
+import userEvent from "@testing-library/user-event";
+import { render, screen } from "@testing-library/vue";
 import { describe, it, expect } from "vitest";
-import { nextTick } from "vue";
+import { sortMode } from "../types";
 import SortOptionsComponent from "./SortSelect.vue";
 import { DocumentKind } from "~/types";
 
 describe("SortSelect", () => {
-  it("computes correct validSortOptions for DocumentKind.All", async () => {
-    const wrapper = mount(SortOptionsComponent, {
+  it("computes correct sort options for 'all' document kind", async () => {
+    const user = userEvent.setup();
+
+    render(SortOptionsComponent, {
       props: {
         documentKind: DocumentKind.All,
       },
     });
-    await nextTick();
-    const select = wrapper.findComponent({ name: "Select" });
-    expect(select.props("options")).toEqual([
-      { label: "Relevanz", value: "default" },
-      { label: "Datum: Älteste zuerst", value: "date" },
-      { label: "Datum: Neueste zuerst", value: "-date" },
-    ]);
+
+    await user.click(screen.getByRole("combobox"));
+
+    const options = screen.getAllByRole("option");
+    expect(options).toHaveLength(3);
+    expect(options[0]).toHaveTextContent("Relevanz");
+    expect(options[1]).toHaveTextContent("Datum: Älteste zuerst");
+    expect(options[2]).toHaveTextContent("Datum: Neueste zuerst");
   });
 
-  it("computes correct validSortOptions for DocumentKind.Norm", async () => {
-    const wrapper = mount(SortOptionsComponent, {
+  it("computes correct sort options for 'norm' document kind", async () => {
+    const user = userEvent.setup();
+
+    render(SortOptionsComponent, {
       props: {
         documentKind: DocumentKind.Norm,
       },
     });
 
-    const select = wrapper.findComponent({ name: "Select" });
-    expect(select.props("options")).toEqual([
-      { label: "Relevanz", value: "default" },
-      { label: "Ausfertigungsdatum: Älteste zuerst", value: "date" },
-      { label: "Ausfertigungsdatum: Neueste zuerst", value: "-date" },
-    ]);
+    await user.click(screen.getByRole("combobox"));
+
+    const options = screen.getAllByRole("option");
+    expect(options).toHaveLength(3);
+    expect(options[0]).toHaveTextContent("Relevanz");
+    expect(options[1]).toHaveTextContent("Ausfertigungsdatum: Älteste zuerst");
+    expect(options[2]).toHaveTextContent("Ausfertigungsdatum: Neueste zuerst");
   });
 
-  it("computes correct validSortOptions for DocumentKind.CaseLaw", async () => {
-    const wrapper = mount(SortOptionsComponent, {
+  it("computes correct sort options for 'caselaw' document kind", async () => {
+    const user = userEvent.setup();
+
+    render(SortOptionsComponent, {
       props: {
         documentKind: DocumentKind.CaseLaw,
       },
     });
 
-    const select = wrapper.findComponent({ name: "Select" });
-    expect(select.props("options")).toEqual([
-      { label: "Relevanz", value: "default" },
-      { label: "Gericht: Von A nach Z", value: "courtName" },
-      { label: "Gericht: Von Z nach A", value: "-courtName" },
-      { label: "Entscheidungsdatum: Älteste zuerst", value: "date" },
-      { label: "Entscheidungsdatum: Neueste zuerst", value: "-date" },
-    ]);
+    await user.click(screen.getByRole("combobox"));
+
+    const options = screen.getAllByRole("option");
+    expect(options).toHaveLength(5);
+    expect(options[0]).toHaveTextContent("Relevanz");
+    expect(options[1]).toHaveTextContent("Gericht: Von A nach Z");
+    expect(options[2]).toHaveTextContent("Gericht: Von Z nach A");
+    expect(options[3]).toHaveTextContent("Entscheidungsdatum: Älteste zuerst");
+    expect(options[4]).toHaveTextContent("Entscheidungsdatum: Neueste zuerst");
   });
 
-  it("updates validSortOptions when documentKind prop changes", async () => {
-    const wrapper = mount(SortOptionsComponent, {
+  it("updates sort options when the document kind changes", async () => {
+    const user = userEvent.setup();
+
+    const { rerender } = render(SortOptionsComponent, {
       props: {
         documentKind: DocumentKind.All,
       },
     });
 
-    await wrapper.setProps({ documentKind: DocumentKind.CaseLaw });
-    await nextTick();
+    await rerender({ documentKind: DocumentKind.CaseLaw });
 
-    const select = wrapper.findComponent({ name: "Select" });
-    expect(select.props("options")).toEqual([
-      { label: "Relevanz", value: "default" },
-      { label: "Gericht: Von A nach Z", value: "courtName" },
-      { label: "Gericht: Von Z nach A", value: "-courtName" },
-      { label: "Entscheidungsdatum: Älteste zuerst", value: "date" },
-      { label: "Entscheidungsdatum: Neueste zuerst", value: "-date" },
-    ]);
+    await user.click(screen.getByRole("combobox"));
+
+    const options = screen.getAllByRole("option");
+    expect(options).toHaveLength(5);
+    expect(options[0]).toHaveTextContent("Relevanz");
+    expect(options[1]).toHaveTextContent("Gericht: Von A nach Z");
+    expect(options[2]).toHaveTextContent("Gericht: Von Z nach A");
+    expect(options[3]).toHaveTextContent("Entscheidungsdatum: Älteste zuerst");
+    expect(options[4]).toHaveTextContent("Entscheidungsdatum: Neueste zuerst");
   });
 
-  it("emits update:modelValue event when dropdown value changes", async () => {
-    const wrapper = mount(SortOptionsComponent, {
+  it("emits the new model value when the dropdown value changes", async () => {
+    const user = userEvent.setup();
+
+    const { emitted } = render(SortOptionsComponent, {
       props: {
         documentKind: DocumentKind.All,
       },
     });
 
-    const dropdownInput = wrapper.findComponent({ name: "Select" });
-    await dropdownInput.setValue("date");
+    await user.click(screen.getByRole("combobox"));
+    await user.click(
+      screen.getByRole("option", { name: "Datum: Älteste zuerst" }),
+    );
 
-    expect(wrapper.emitted("update:modelValue")).toBeTruthy();
-    expect(wrapper.emitted("update:modelValue")![0]).toEqual(["date"]);
+    expect(emitted("update:modelValue")).toContainEqual(["date"]);
+  });
+
+  it("resets the filter value when the filter is not supported by the new document kind", async () => {
+    const { emitted, rerender } = render(SortOptionsComponent, {
+      props: {
+        documentKind: DocumentKind.CaseLaw,
+        modelValue: sortMode.courtName,
+      },
+    });
+
+    await rerender({ documentKind: DocumentKind.Norm });
+
+    expect(emitted("update:modelValue")).toContainEqual(["default"]);
+  });
+
+  it("keeps the filter value when the filter is supported by the new document kind", async () => {
+    const { emitted, rerender } = render(SortOptionsComponent, {
+      props: {
+        documentKind: DocumentKind.CaseLaw,
+        modelValue: sortMode.date,
+      },
+    });
+
+    await rerender({ documentKind: DocumentKind.Norm });
+
+    expect(emitted("update:modelValue")).toBeFalsy();
   });
 });
