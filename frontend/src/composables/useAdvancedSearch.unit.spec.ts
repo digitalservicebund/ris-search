@@ -40,7 +40,7 @@ describe("useAdvancedSearch", () => {
     );
 
     expect(useFetchMock).toHaveBeenCalled();
-    const url = useFetchMock.mock.calls[0][0];
+    const url = useFetchMock.mock.calls[0]![0];
     expect(url.value).toBe("/v1/document/lucene-search/case-law");
   });
 
@@ -53,7 +53,7 @@ describe("useAdvancedSearch", () => {
     );
 
     expect(useFetchMock).toHaveBeenCalled();
-    const url = useFetchMock.mock.calls[0][0];
+    const url = useFetchMock.mock.calls[0]![0];
     expect(url.value).toBe("/v1/document/lucene-search/legislation");
   });
 
@@ -66,7 +66,7 @@ describe("useAdvancedSearch", () => {
     );
 
     expect(useFetchMock).toHaveBeenCalled();
-    const url = useFetchMock.mock.calls[0][0];
+    const url = useFetchMock.mock.calls[0]![0];
     expect(url.value).toBe("/v1/document/lucene-search");
   });
 
@@ -79,7 +79,7 @@ describe("useAdvancedSearch", () => {
     );
 
     expect(useFetchMock).toHaveBeenCalled();
-    const urlQuery = useFetchMock.mock.calls[0][1].query;
+    const urlQuery = useFetchMock.mock.calls[0]![1].query;
     expect(urlQuery.value).toMatchObject({ query: "test query" });
   });
 
@@ -92,7 +92,7 @@ describe("useAdvancedSearch", () => {
     );
 
     expect(useFetchMock).toHaveBeenCalled();
-    const urlQuery = useFetchMock.mock.calls[0][1].query;
+    const urlQuery = useFetchMock.mock.calls[0]![1].query;
     expect(urlQuery.value).toMatchObject({ size: "25", pageIndex: 2 });
   });
 
@@ -105,7 +105,7 @@ describe("useAdvancedSearch", () => {
     );
 
     expect(useFetchMock).toHaveBeenCalled();
-    const urlQuery = useFetchMock.mock.calls[0][1].query;
+    const urlQuery = useFetchMock.mock.calls[0]![1].query;
     expect(urlQuery.value).toMatchObject({ sort: "relevance" });
   });
 
@@ -118,7 +118,7 @@ describe("useAdvancedSearch", () => {
     );
 
     expect(useFetchMock).toHaveBeenCalled();
-    const immediate = useFetchMock.mock.calls[0][1].immediate;
+    const immediate = useFetchMock.mock.calls[0]![1].immediate;
     expect(immediate).toBe(false);
   });
 
@@ -131,7 +131,7 @@ describe("useAdvancedSearch", () => {
     );
 
     expect(useFetchMock).toHaveBeenCalled();
-    const watch = useFetchMock.mock.calls[0][1].watch;
+    const watch = useFetchMock.mock.calls[0]![1].watch;
     expect(watch).toBe(false);
   });
 
