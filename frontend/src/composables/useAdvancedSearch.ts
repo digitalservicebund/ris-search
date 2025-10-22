@@ -1,4 +1,5 @@
 import { toValue } from "vue";
+import { useBackendURL } from "./useBackendURL";
 import { useFetch } from "#app";
 import {
   dateFilterToQuery,
@@ -65,14 +66,14 @@ export async function useAdvancedSearch(
     };
   });
 
-  const config = useRuntimeConfig();
+  const backendUrl = useBackendURL();
 
   const { data, error, status, pending, execute } = await useFetch<Page>(
     searchEndpointUrl,
     {
       query: combinedQuery,
 
-      baseURL: config.public.backendURL,
+      baseURL: backendUrl,
 
       // immediate always executes even if the query is empty. Instead the
       // component should execute manually using `executeWhenValid` to make
