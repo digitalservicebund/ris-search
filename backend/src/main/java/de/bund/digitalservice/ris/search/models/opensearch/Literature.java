@@ -27,10 +27,15 @@ public record Literature(
     @ElementCollection @Field(name = Fields.DEPENDENT_REFERENCES) List<String> dependentReferences,
     @ElementCollection @Field(name = Fields.INDEPENDENT_REFERENCES)
         List<String> independentReferences,
+    @ElementCollection @Field(name = Fields.NORM_REFERENCES) List<String> normReferences,
     @Nullable @Field(name = Fields.MAIN_TITLE) String mainTitle,
     @Nullable @Field(name = Fields.DOCUMENTARY_TITLE) String documentaryTitle,
+    @Nullable @Field(name = Fields.MAIN_TITLE_ADDITIONS) String mainTitleAdditions,
     @ElementCollection @Field(name = Fields.AUTHORS) List<String> authors,
     @ElementCollection @Field(name = Fields.COLLABORATORS) List<String> collaborators,
+    @ElementCollection @Field(name = Fields.LANGUAGE) List<String> languages,
+    @ElementCollection @Field(name = Fields.ORIGINATOR) List<String> originators,
+    @ElementCollection @Field(name = Fields.CONFERENCE_NOTE) List<String> conferenceNotes,
     @Nullable @Field(name = Fields.SHORT_REPORT) String shortReport,
     @Nullable @Field(name = Fields.OUTLINE) String outline,
     @JsonIgnore @Field(name = Fields.INDEXED_AT) String indexedAt)
@@ -51,8 +56,14 @@ public record Literature(
     /** selbständige Fundstellen * */
     public static final String INDEPENDENT_REFERENCES = "independent_references";
 
+    /** Norm Verweise* */
+    public static final String NORM_REFERENCES = "norm_references";
+
     /** Haupttitel* */
     public static final String MAIN_TITLE = "main_title";
+
+    /** Zusätze zum Hauptsachtitel * */
+    public static final String MAIN_TITLE_ADDITIONS = "main_title_additions";
 
     /** Dokumentarischer Titel * */
     public static final String DOCUMENTARY_TITLE = "documentary_title";
@@ -68,6 +79,15 @@ public record Literature(
 
     /** Gliederung * */
     public static final String OUTLINE = "outline";
+
+    /** Urheber * */
+    public static final String ORIGINATOR = "originator";
+
+    /** Sprache * */
+    public static final String LANGUAGE = "language";
+
+    /** Kongressvermerk * */
+    public static final String CONFERENCE_NOTE = "conference_note";
 
     /** Used internally to store at what time the document was indexed * */
     public static final String INDEXED_AT = "indexed_at";

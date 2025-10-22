@@ -1702,22 +1702,32 @@
               "documentTypes": {
                 "type": "array",
                 "description": "Dokumenttypen",
-                "example": "[Auf]",
+                "example": "['Auf']",
                 "items": { "type": "string" }
               },
               "dependentReferences": {
                 "type": "array",
                 "description": "Unselbstständige Fundstellen",
-                "example": "[BUV, 1982, 123-123]",
+                "example": "['BUV, 1982, 123-123']",
                 "items": { "type": "string" }
               },
               "independentReferences": {
                 "type": "array",
                 "description": "Selbstständige Fundstellen",
-                "example": "[50 Jahre Betriebs-Berater, 1987, 123-456]",
+                "example": "['50 Jahre Betriebs-Berater, 1987, 123-456']",
+                "items": { "type": "string" }
+              },
+              "normReferences": {
+                "type": "array",
+                "description": "Norm Verweise",
+                "example": "['GG, Art 6 Abs 2 S 1, 1949-05-23']",
                 "items": { "type": "string" }
               },
               "headline": { "type": "string", "description": "Haupttitel" },
+              "headlineAdditions": {
+                "type": "string",
+                "description": "Zusätze zum Haupttitel"
+              },
               "alternativeHeadline": {
                 "type": "string",
                 "description": "Dokumentarischer Titel"
@@ -1725,16 +1735,34 @@
               "authors": {
                 "type": "array",
                 "description": "Authoren",
-                "example": "[Musterfrau, Sabine]",
+                "example": "['Musterfrau, Sabine']",
                 "items": { "type": "string" }
               },
               "collaborators": {
                 "type": "array",
                 "description": "Mitarbeiter",
-                "example": "[Mustermann, Max]",
+                "example": "['Mustermann, Max']",
                 "items": { "type": "string" }
               },
-              "shortReport": { "type": "string", "description": "Kurzrefarat" },
+              "languages": {
+                "type": "array",
+                "description": "Sprachen",
+                "example": "['deu', 'eng']",
+                "items": { "type": "string" }
+              },
+              "originators": {
+                "type": "array",
+                "description": "Urheber",
+                "example": "['DGB']",
+                "items": { "type": "string" }
+              },
+              "conferenceNotes": {
+                "type": "array",
+                "description": "Kongressvermerke",
+                "example": "['Nationaler Beispiel Kongress, 2024, Berlin, GER']",
+                "items": { "type": "string" }
+              },
+              "shortReport": { "type": "string", "description": "Kurzreferat" },
               "outline": { "type": "string", "description": "Gliederung" },
               "encoding": {
                 "type": "array",
@@ -1785,6 +1813,12 @@
         "properties": {
           "@id": { "type": "string", "example": "KALU000000000" },
           "inLanguage": { "type": "string", "example": "de" },
+          "recordingDate": {
+            "type": "string",
+            "format": "date",
+            "description": "The date on which the literature piece was recorded.",
+            "example": "2003-12-15"
+          },
           "documentNumber": {
             "type": "string",
             "description": "Dokumentnummer",
@@ -1799,22 +1833,32 @@
           "documentTypes": {
             "type": "array",
             "description": "Dokumenttypen",
-            "example": "[Auf]",
+            "example": "['Auf']",
             "items": { "type": "string" }
           },
           "dependentReferences": {
             "type": "array",
             "description": "Unselbstständige Fundstellen",
-            "example": "[BUV, 1982, 123-123]",
+            "example": "['BUV, 1982, 123-123']",
             "items": { "type": "string" }
           },
           "independentReferences": {
             "type": "array",
             "description": "Selbstständige Fundstellen",
-            "example": "[50 Jahre Betriebs-Berater, 1987, 123-456]",
+            "example": "['50 Jahre Betriebs-Berater, 1987, 123-456']",
+            "items": { "type": "string" }
+          },
+          "normReferences": {
+            "type": "array",
+            "description": "Norm Verweise",
+            "example": "['GG, Art 6 Abs 2 S 1, 1949-05-23']",
             "items": { "type": "string" }
           },
           "headline": { "type": "string", "description": "Haupttitel" },
+          "headlineAdditions": {
+            "type": "string",
+            "description": "Zusätze zum Haupttitel"
+          },
           "alternativeHeadline": {
             "type": "string",
             "description": "Dokumentarischer Titel"
@@ -1822,16 +1866,34 @@
           "authors": {
             "type": "array",
             "description": "Authoren",
-            "example": "[Musterfrau, Sabine]",
+            "example": "['Musterfrau, Sabine']",
             "items": { "type": "string" }
           },
           "collaborators": {
             "type": "array",
             "description": "Mitarbeiter",
-            "example": "[Mustermann, Max]",
+            "example": "['Mustermann, Max']",
             "items": { "type": "string" }
           },
-          "shortReport": { "type": "string", "description": "Kurzrefarat" },
+          "languages": {
+            "type": "array",
+            "description": "Sprachen",
+            "example": "['deu', 'eng']",
+            "items": { "type": "string" }
+          },
+          "originators": {
+            "type": "array",
+            "description": "Urheber",
+            "example": "['DGB']",
+            "items": { "type": "string" }
+          },
+          "conferenceNotes": {
+            "type": "array",
+            "description": "Kongressvermerke",
+            "example": "['Nationaler Beispiel Kongress, 2024, Berlin, GER']",
+            "items": { "type": "string" }
+          },
+          "shortReport": { "type": "string", "description": "Kurzreferat" },
           "outline": { "type": "string", "description": "Gliederung" },
           "encoding": {
             "type": "array",

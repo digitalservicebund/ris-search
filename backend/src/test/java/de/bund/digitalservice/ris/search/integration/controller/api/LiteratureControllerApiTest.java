@@ -54,16 +54,24 @@ class LiteratureControllerApiTest extends ContainersIntegrationBase {
         .andExpectAll(
             status().isOk(),
             jsonPath("$.documentNumber", Matchers.is(documentNumberPersistedInTest)),
+            jsonPath("$.recordingDate", Matchers.is("1998-01-01")),
             jsonPath("$.yearsOfPublication", Matchers.containsInAnyOrder("1999", "2000", "2001")),
             jsonPath("$.documentTypes", Matchers.containsInAnyOrder("Kommentar", "Aufsatz")),
             jsonPath("$.dependentReferences", Matchers.contains("NJW, 2000, 456-789")),
             jsonPath(
                 "$.independentReferences",
                 Matchers.contains("Festschrift für Müller, 2001, 12-34")),
+            jsonPath("$.normReferences", Matchers.contains("GG, Art 6 Abs 2 S 1")),
             jsonPath("$.headline", Matchers.is("Zivilprozessrecht im Wandel")),
             jsonPath("$.alternativeHeadline", Matchers.is("Dokumentation ZPO")),
+            jsonPath("$.headlineAdditions", Matchers.is("Zusatz zu Zivilprozessrecht im Wandel")),
             jsonPath("$.authors", Matchers.containsInAnyOrder("Schmidt, Hans", "Becker, Anna")),
             jsonPath("$.collaborators", Matchers.contains("Meier, Karl")),
+            jsonPath("$.originators", Matchers.contains("FOO")),
+            jsonPath(
+                "$.conferenceNotes",
+                Matchers.contains("Internationaler Kongress 2025, Berlin, GER")),
+            jsonPath("$.languages", Matchers.contains("deu", "eng")),
             jsonPath(
                 "$.shortReport",
                 Matchers.is("Ein Überblick über die Entwicklung der Rechtsprechung")),

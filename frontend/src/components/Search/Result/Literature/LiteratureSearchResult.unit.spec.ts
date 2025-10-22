@@ -13,10 +13,15 @@ const searchResult: SearchResult<Literature> = {
     documentTypes: ["Book", "Article"],
     dependentReferences: ["LIT-122", "LIT-121"],
     independentReferences: ["LIT-124", "LIT-125"],
+    normReferences: ["GG, Art 6 Abs 2 S 1, 1949-05-23"],
     headline: "Eine Untersuchung der juristischen Methoden im 21. Jahrhundert",
     alternativeHeadline: "Study of Legal Methodologies in the 21st Century",
+    headlineAdditions: "Zusatz zur Hauptüberschrift",
     authors: ["Mustermann, Max", "Musterfrau, Erika"],
     collaborators: ["Doe, John", "Doe, Jane"],
+    originators: ["FOO"],
+    conferenceNotes: ["Internationaler Kongress 2025, Berlin, GER"],
+    languages: ["deu", "eng"],
     shortReport: `Dieses Werk analysiert die Entwicklung der juristischen Methoden seit Beginn des 21. Jahrhunderts mit besonderem Fokus auf europäische Rechtssysteme.
 Es werden die Unterschiede zwischen nationalen Rechtstraditionen dargestellt und ihre Auswirkungen auf internationale Verträge erläutert.
 Darüber hinaus untersucht die Studie die Rolle von Präzedenzfällen in modernen Gerichtsbarkeiten und diskutiert aktuelle Trends in der Gesetzesauslegung.
