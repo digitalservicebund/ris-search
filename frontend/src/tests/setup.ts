@@ -37,4 +37,4 @@ class ResizeObserver {
   }
 }
 
-global.ResizeObserver = ResizeObserver;
+globalThis.ResizeObserver = ResizeObserver;
