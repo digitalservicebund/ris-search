@@ -109,12 +109,17 @@ describe("anyDocument", () => {
       dependentReferences: [],
       independentReferences: [],
       headline: null,
-      alternativeTitle: null,
       authors: [],
       collaborators: [],
       shortReport: null,
       outline: null,
       encoding: [],
+      alternativeHeadline: "",
+      conferenceNotes: [],
+      headlineAdditions: "",
+      languages: [],
+      normReferences: [],
+      originators: [],
     };
 
     expect(isLiterature(doc)).toBe(true);
@@ -201,12 +206,17 @@ describe("anyDocument", () => {
         dependentReferences: [],
         independentReferences: [],
         headline: null,
-        alternativeTitle: null,
         authors: [],
         collaborators: [],
         shortReport: null,
         outline: null,
         encoding: [],
+        alternativeHeadline: "",
+        conferenceNotes: [],
+        headlineAdditions: "",
+        languages: [],
+        normReferences: [],
+        originators: [],
       };
 
       expect(getIdentifier(doc)).toBe("4711");
@@ -224,12 +234,17 @@ describe("anyDocument", () => {
         dependentReferences: [],
         independentReferences: [],
         headline: null,
-        alternativeTitle: null,
         authors: [],
         collaborators: [],
         shortReport: null,
         outline: null,
         encoding: [],
+        alternativeHeadline: "",
+        conferenceNotes: [],
+        headlineAdditions: "",
+        languages: [],
+        normReferences: [],
+        originators: [],
       };
 
       expect(() => getIdentifier(doc)).toThrow();
