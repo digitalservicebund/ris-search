@@ -1,21 +1,16 @@
 <script setup lang="ts">
 import Message from "primevue/message";
-import Tab from "primevue/tab";
-import TabList from "primevue/tablist";
-import TabPanel from "primevue/tabpanel";
-import TabPanels from "primevue/tabpanels";
-import Tabs from "primevue/tabs";
-import { computed } from "vue";
+import { computed, ref, onMounted } from "vue";
 import ActionsMenu from "~/components/ActionMenu/ActionsMenu.vue";
 import ContentWrapper from "~/components/CustomLayouts/ContentWrapper.vue";
+import {
+  linkTabBase,
+  linkTabActive,
+  linkTabInactive,
+} from "~/components/LinkTabs.styles";
 import Properties from "~/components/Properties.vue";
 import PropertiesItem from "~/components/PropertiesItem.vue";
 import type { BreadcrumbItem } from "~/components/Ris/RisBreadcrumb.vue";
-import {
-  tabListStyles,
-  tabPanelStyles,
-  tabStyles,
-} from "~/components/Tabs.styles";
 import { useDynamicSeo } from "~/composables/useDynamicSeo";
 import {
   fetchTranslationAndHTML,
@@ -109,6 +104,17 @@ const translationSeo = computed(() => {
 const title = computed(() => translationSeo.value.title);
 const description = computed(() => translationSeo.value.description);
 useDynamicSeo({ title, description });
+
+useHead({
+  htmlAttrs: {
+    lang: "en",
+  },
+});
+
+const isClient = ref(false);
+onMounted(() => (isClient.value = true));
+
+const activeSection = ref<"text" | "details">("text");
 </script>
 
 <template>
@@ -132,7 +138,7 @@ useDynamicSeo({ title, description });
 
           <h1
             v-if="currentTranslation?.name"
-            class="ris-heading2-bold max-w-title mb-48 overflow-x-auto text-balance"
+            class="ris-heading2-bold max-w-title mb-48 text-balance break-words hyphens-auto"
           >
             {{ currentTranslation.name }}
           </h1>
@@ -157,22 +163,60 @@ useDynamicSeo({ title, description });
       </Message>
     </div>
 
-    <div v-if="currentTranslation" class="no-js-content">
-      <nav class="container py-16">
-        <h2 class="ris-heading3-bold mb-16">Contents</h2>
-        <ul class="flex gap-16">
-          <li><a href="#text" class="ris-link1-regular">Text</a></li>
-          <li><a href="#details" class="ris-link1-regular">Details</a></li>
-        </ul>
-      </nav>
+    <nav
+      class="relative before:absolute before:bottom-0 before:left-1/2 before:h-px before:w-full before:-translate-x-1/2 before:bg-gray-600 print:hidden"
+      aria-label="Translation views"
+    >
+      <div class="container flex">
+        <NuxtLink
+          href="#text"
+          :aria-current="activeSection === 'text' ? 'page' : undefined"
+          :class="[
+            linkTabBase,
+            activeSection === 'text' ? linkTabActive : linkTabInactive,
+          ]"
+          @click.prevent="activeSection = 'text'"
+        >
+          <IcBaselineSubject aria-hidden="true" class="mr-8" />
+          Text
+        </NuxtLink>
 
-      <section id="text" class="container">
-        <h2 class="ris-heading3-bold mb-24">Text</h2>
-        <main class="max-w-prose" v-html="html"></main>
-      </section>
+        <NuxtLink
+          href="#details"
+          :aria-current="activeSection === 'details' ? 'page' : undefined"
+          :class="[
+            linkTabBase,
+            activeSection === 'details' ? linkTabActive : linkTabInactive,
+          ]"
+          @click.prevent="activeSection = 'details'"
+        >
+          <IcOutlineInfo aria-hidden="true" class="mr-8" />
+          Details
+        </NuxtLink>
+      </div>
+    </nav>
 
-      <section id="details" class="container pt-24 pb-80">
-        <h2 class="ris-heading3-bold mb-24">Details</h2>
+    <section
+      id="text"
+      class="min-h-96 bg-white py-24 print:py-0"
+      :class="isClient && activeSection !== 'text' ? 'hidden' : ''"
+    >
+      <div class="container">
+        <h2 class="sr-only">Text</h2>
+        <section class="max-w-prose" v-html="html" />
+      </div>
+    </section>
+
+    <section
+      id="details"
+      class="min-h-96 bg-white py-24 print:py-0"
+      :class="isClient && activeSection !== 'details' ? 'hidden' : ''"
+      aria-labelledby="detailsTabPanelTitle"
+    >
+      <div class="container">
+        <h2 id="detailsTabPanelTitle" class="ris-heading3-bold my-24">
+          Details
+        </h2>
         <Properties>
           <PropertiesItem
             label="Translation provided by:"
@@ -183,57 +227,7 @@ useDynamicSeo({ title, description });
             :value="versionInformation"
           />
         </Properties>
-      </section>
-    </div>
-
-    <div v-if="currentTranslation" class="js-content">
-      <client-only>
-        <Tabs value="0">
-          <TabList :pt="tabListStyles">
-            <Tab
-              class="flex items-center gap-8"
-              :pt="tabStyles"
-              value="0"
-              aria-label="Text of the translation"
-            >
-              <IcBaselineSubject />Text
-            </Tab>
-            <Tab
-              data-attr="translation-metadata-tab"
-              class="flex items-center gap-8"
-              :pt="tabStyles"
-              value="1"
-              aria-label="Details of the translation"
-            >
-              <IcOutlineInfo />Details
-            </Tab>
-          </TabList>
-          <TabPanels>
-            <TabPanel value="0" :pt="tabPanelStyles">
-              <div class="container">
-                <main class="max-w-prose" v-html="html"></main>
-              </div>
-            </TabPanel>
-            <TabPanel value="1" :pt="tabPanelStyles">
-              <section aria-labelledby="detailsTabPanelTitle" class="container">
-                <h2 id="detailsTabPanelTitle" class="ris-heading3-bold my-24">
-                  Details
-                </h2>
-                <Properties>
-                  <PropertiesItem
-                    label="Translation provided by:"
-                    :value="translatedBy"
-                  />
-                  <PropertiesItem
-                    label="Version information:"
-                    :value="versionInformation"
-                  />
-                </Properties>
-              </section>
-            </TabPanel>
-          </TabPanels>
-        </Tabs>
-      </client-only>
-    </div>
+      </div>
+    </section>
   </ContentWrapper>
 </template>
