@@ -13,13 +13,13 @@ public class ImplicitReference {
   @XmlElement(
       name = "fundstelleUnselbstaendig",
       namespace = LiteratureNamespaces.RIS_UNSELBSTSTAENDIG_NS)
-  private String fundstelleUnselbstaendig;
+  private FundstelleUnselbstaendig fundstelleUnselbstaendig;
 
   @XmlElement(
       name = "fundstelleSelbstaendig",
       namespace = LiteratureNamespaces.RIS_UNSELBSTSTAENDIG_NS)
-  private String fundstelleSelbstaendig;
+  private FundstelleSelbstaendig fundstelleSelbstaendig;
 
   @XmlElement(name = "normReference", namespace = LiteratureNamespaces.RIS_UNSELBSTSTAENDIG_NS)
-  private String normReference;
+  private NormReference normReference;
 }
