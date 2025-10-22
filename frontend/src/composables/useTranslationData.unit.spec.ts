@@ -52,7 +52,7 @@ describe("fetchTranslationList", () => {
     expect(requestFetchMock).toHaveBeenCalledWith(
       "https://mock-backend/v1/translatedLegislation",
     );
-    expect(error.value).toBeNull();
+    expect(error.value).toBeUndefined();
     expect(data.value).toHaveLength(2);
   });
 });
@@ -91,10 +91,10 @@ describe("fetchTranslationAndHTML", () => {
       },
     );
 
-    expect(error.value).toBeNull();
+    expect(error.value).toBeUndefined();
 
-    expect(data.value.content).toEqual(mockTranslationResponse[0]);
-    expect(data.value.html).toEqual(mockHtmlResponse);
+    expect(data.value?.content).toEqual(mockTranslationResponse[0]);
+    expect(data.value?.html).toEqual(mockHtmlResponse);
   });
 
   it("returns 404 when list is empty", async () => {
@@ -113,7 +113,7 @@ describe("fetchTranslationAndHTML", () => {
     expect(error.value?.statusCode).toBe(404);
     expect(error.value?.statusMessage).toBe("Translation not found");
 
-    expect(data.value).toBeNull();
+    expect(data.value).toBeUndefined();
   });
 
   it("returns 404 when there is no entry for ris:filename", async () => {
@@ -141,13 +141,17 @@ describe("fetchTranslationAndHTML", () => {
     expect(error.value?.statusCode).toBe(404);
     expect(error.value?.statusMessage).toBe("Translation filename not found");
 
-    expect(data.value).toBeNull();
+    expect(data.value).toBeUndefined();
   });
 });
 
 describe("getGermanOriginal", () => {
   beforeAll(() => {
     vi.setSystemTime(new Date("2025-10-13T00:00:00.000Z"));
+  });
+
+  beforeEach(() => {
+    clearNuxtData();
   });
 
   afterAll(() => {
@@ -161,7 +165,7 @@ describe("getGermanOriginal", () => {
     const { data, error } = await getGermanOriginal("test-id");
 
     expect(data.value).toEqual(mockResult);
-    expect(error.value).toBeNull();
+    expect(error.value).toBeUndefined();
     expect(requestFetchMock).toHaveBeenCalledWith(
       "https://mock-backend/v1/legislation?searchTerm=test-id&temporalCoverageFrom=2025-10-13&temporalCoverageTo=2025-10-13&size=100&pageIndex=0",
     );
@@ -172,7 +176,7 @@ describe("getGermanOriginal", () => {
 
     const { data, error } = await getGermanOriginal("test-id");
 
-    expect(data.value).toBeNull();
+    expect(data.value).toBeUndefined();
     expect(error.value).not.toBeNull();
     expect(error.value?.statusCode).toBe(404);
     expect(error.value?.statusMessage).toBe("Not Found");
@@ -183,7 +187,7 @@ describe("getGermanOriginal", () => {
 
     const { data, error } = await getGermanOriginal("test-id");
 
-    expect(data.value).toBeNull();
+    expect(data.value).toBeUndefined();
     expect(error.value).not.toBeNull();
     expect(error.value?.statusCode).toBe(404);
     expect(error.value?.statusMessage).toBe("Not Found");

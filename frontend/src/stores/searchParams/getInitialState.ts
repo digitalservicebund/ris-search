@@ -30,8 +30,10 @@ export const addDefaults = (value: LocationQueryRaw) => {
   };
 };
 
-const getFirstInt = (param: LocationQueryValue | LocationQueryValue[]) => {
-  let value: LocationQueryValue;
+const getFirstInt = (
+  param: LocationQueryValue | LocationQueryValue[] | undefined,
+) => {
+  let value: LocationQueryValue | undefined;
   if (Array.isArray(param)) {
     value = param[0];
   } else {
@@ -41,7 +43,7 @@ const getFirstInt = (param: LocationQueryValue | LocationQueryValue[]) => {
 };
 
 function getFirstValue(
-  value: LocationQueryValue | LocationQueryValue[],
+  value: LocationQueryValue | LocationQueryValue[] | undefined,
 ): string | undefined {
   return (Array.isArray(value) ? value[0] : value) ?? undefined;
 }

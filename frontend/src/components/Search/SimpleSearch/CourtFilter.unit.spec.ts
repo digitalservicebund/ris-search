@@ -111,7 +111,7 @@ describe("court autocomplete", () => {
 
     it("it displays the store value", async () => {
       const wrapper = await getWrapper();
-      const courtId = mockData[0].id;
+      const courtId = mockData[0]?.id;
       await setStoreValues({ court: courtId });
       const autoComplete = wrapper.findComponent(
         "auto-complete-stub",

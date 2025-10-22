@@ -56,6 +56,11 @@ function findActiveItem(
   result: Record<string, boolean>,
 ) {
   const key = prefix ? prefix + "." + parts[0] : parts[0];
+
+  if (!key) {
+    return;
+  }
+
   result[key] = true;
 
   const activeItem = subtree.find((item) => item.key === key);
@@ -64,7 +69,7 @@ function findActiveItem(
   if (parts.length === 1 && children && children.length > 0) {
     // no specific child selected, highlight "all" subtype, which comes first
     const firstChild = children[0];
-    if (firstChild.key) {
+    if (firstChild?.key) {
       result[firstChild.key] = true;
     }
   }

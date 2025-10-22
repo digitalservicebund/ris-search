@@ -50,11 +50,14 @@ const permalink = {
 };
 
 const versionInformation = computed(() => {
-  return removePrefix(currentTranslation.about, "Version information:");
+  return removePrefix(currentTranslation?.about, "Version information:");
 });
 
 const translatedBy = computed(() => {
-  return removePrefix(currentTranslation.translator, "Translation provided by");
+  return removePrefix(
+    currentTranslation?.translator,
+    "Translation provided by",
+  );
 });
 
 const germanOriginalWorkEli = computed(() => {

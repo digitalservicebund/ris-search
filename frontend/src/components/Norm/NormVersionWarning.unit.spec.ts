@@ -53,23 +53,23 @@ describe("NormVersionWarning", () => {
   const testCases = [
     {
       label: "inForce points to next neue Fassung",
-      currentlyRendered: testVersions[1].item,
+      currentlyRendered: testVersions[1]!.item,
       messageText: "Neue Fassung ab 01.01.2824",
-      link: `/norms/${testVersions[2].item.workExample.legislationIdentifier}`,
+      link: `/norms/${testVersions[2]!.item.workExample.legislationIdentifier}`,
       linkText: "Zur zukünftigen Fassung",
     },
     {
       label: "historic version points to inForce Fassung",
-      currentlyRendered: testVersions[0].item,
+      currentlyRendered: testVersions[0]!.item,
       messageText: "Historische Fassung.",
-      link: `/norms/${testVersions[1].item.workExample.legislationIdentifier}`,
+      link: `/norms/${testVersions[1]!.item.workExample.legislationIdentifier}`,
       linkText: "Zur aktuell gültigen Fassung",
     },
     {
       label: "futureInForce points to inForce Fassung",
-      currentlyRendered: testVersions[2].item,
+      currentlyRendered: testVersions[2]!.item,
       messageText: "Zukünftige Fassung",
-      link: `/norms/${testVersions[1].item.workExample.legislationIdentifier}`,
+      link: `/norms/${testVersions[1]!.item.workExample.legislationIdentifier}`,
       linkText: "Zur aktuell gültigen Fassung",
     },
   ];
@@ -103,8 +103,8 @@ describe("NormVersionWarning", () => {
   it("does not render a message if there are no future versions existing for the current in force version", () => {
     const { container } = render(NormVersionWarning, {
       props: {
-        versions: [testVersions[0], testVersions[1]],
-        currentVersion: testVersions[1].item,
+        versions: [testVersions[0]!, testVersions[1]!],
+        currentVersion: testVersions[1]!.item,
       },
       global: {
         stubs: ["RouterLink"],

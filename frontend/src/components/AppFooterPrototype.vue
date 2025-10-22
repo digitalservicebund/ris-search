@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import bmjvLogo from "assets/img/BMJV_de_v1__Web_farbig.svg";
+import bmjvLogo from "~/assets/img/BMJV_de_v1__Web_farbig.svg";
 import FeedbackForm from "~/components/Analytics/FeedbackForm.vue";
 import BackToTopLink from "~/components/BackToTopLink.vue";
 

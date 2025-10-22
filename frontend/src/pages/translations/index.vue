@@ -69,7 +69,7 @@ const minisearch = computed(() => {
     ],
     idField: "@id",
   });
-  miniSearch.addAll(translationsList.value);
+  miniSearch.addAll(translationsList.value ?? []);
   return miniSearch;
 });
 

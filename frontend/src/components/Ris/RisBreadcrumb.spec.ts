@@ -32,12 +32,12 @@ describe("RisBreadcrumb", () => {
     const home = links[0];
     expect(home).toBeVisible();
     expect(home).toHaveTextContent("Startseite");
-    expect(home.getAttribute("href")).toEqual("/");
+    expect(home?.getAttribute("href")).toEqual("/");
 
     const foo = links[1];
     expect(foo).toBeVisible();
     expect(foo).toHaveTextContent("Foo");
-    expect(foo.getAttribute("href")).toEqual("/foo");
+    expect(foo?.getAttribute("href")).toEqual("/foo");
 
     expect(screen.getByText("LastItem")).toBeVisible();
   });

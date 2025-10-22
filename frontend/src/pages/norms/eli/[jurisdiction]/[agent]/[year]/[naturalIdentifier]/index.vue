@@ -22,7 +22,7 @@ const { data, error: loadError } = await useFetch<
   },
 });
 
-const matchedExpressionEli: ComputedRef<string | null> = computed(() => {
+const matchedExpressionEli = computed(() => {
   if (!data.value) return null;
   return getMostRelevantExpression(data.value?.member);
 });

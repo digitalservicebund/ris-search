@@ -46,7 +46,7 @@ export const useIntersectionObserver = () => {
     }
 
     if (sorted.length > 0) {
-      selectedEntry.value = sorted[0] ?? null;
+      selectedEntry.value = sorted[0] ?? undefined;
     } else {
       // handle the case when no headers are currently visible
       if (!scrollingDown) {
