@@ -8,14 +8,15 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class WebMvcConfig implements WebMvcConfigurer {
 
-  private final FeedbackRateLimitInterceptor interceptor;
+  private final FeedbackRateLimitInterceptor feedbackInterceptor;
 
   WebMvcConfig(FeedbackRateLimitInterceptor interceptor) {
-    this.interceptor = interceptor;
+    this.feedbackInterceptor = interceptor;
   }
 
   @Override
   public void addInterceptors(InterceptorRegistry registry) {
-    registry.addInterceptor(interceptor).addPathPatterns(ApiConfig.Paths.FEEDBACK);
+    registry.addInterceptor(feedbackInterceptor).addPathPatterns(ApiConfig.Paths.FEEDBACK);
+    // registry.addInterceptor("/v1")
   }
 }

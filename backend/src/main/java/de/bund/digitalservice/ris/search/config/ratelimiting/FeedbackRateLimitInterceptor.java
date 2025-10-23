@@ -7,7 +7,8 @@ import org.springframework.stereotype.Component;
 public class FeedbackRateLimitInterceptor extends RateLimitInterceptor {
 
   public FeedbackRateLimitInterceptor(
-      @Value("${rate-limit.feedback.rpm}") int maxRequestsPerMinute) {
-    super(maxRequestsPerMinute);
+      @Value("${rate-limit.feedback.requests}") int maxRequests,
+      @Value("${rate-limit.feedback.seconds}") int seconds) {
+    super(maxRequests, seconds);
   }
 }

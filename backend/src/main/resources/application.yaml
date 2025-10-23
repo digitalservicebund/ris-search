@@ -26,7 +26,8 @@ server:
 
 rate-limit:
   feedback:
-    rpm: 5
+    requests: 5
+    seconds: 60
 
 swagger:
   server:
