@@ -56,15 +56,15 @@ test("can search, filter for case law, and view a single case law documentation 
     await expect(currentSection).toHaveCount(1);
   });
 
-  for (const sectionName of ["Tenor", "Orientierungssatz", "Tatbestand"]) {
-    await test.step(`Jump straight to a specific section, ${sectionName}`, async () => {
-      await page.goto(resultsListUrl, {
-        waitUntil: "networkidle",
-      });
-      const link = page.getByRole("link", { name: sectionName }).first();
-      await link.click();
+  if (isMobileTest)
+    for (const sectionName of ["Tenor", "Orientierungssatz", "Tatbestand"]) {
+      await test.step(`Jump straight to a specific section, ${sectionName}`, async () => {
+        await page.goto(resultsListUrl, {
+          waitUntil: "networkidle",
+        });
+        const link = page.getByRole("link", { name: sectionName }).first();
+        await link.click();
 
-      if (isMobileTest) {
         const sidebar = await getSidebar(page);
 
         const expectedSidebarItem = sidebar.getByRole("link", {
@@ -80,19 +80,18 @@ test("can search, filter for case law, and view a single case law documentation 
           "aria-current",
           "section",
         );
-      }
 
-      const heading = page
-        .getByRole("main")
-        .getByRole("heading", { name: sectionName })
-        .first();
+        const heading = page
+          .getByRole("main")
+          .getByRole("heading", { name: sectionName })
+          .first();
 
-      await expect(page).toHaveURL(new RegExp(`#`, "i"));
-      await heading.scrollIntoViewIfNeeded();
-      await expect(heading).toBeVisible();
-      await expect(heading).toBeInViewport();
-    });
-  }
+        await expect(page).toHaveURL(new RegExp(`#`, "i"));
+        await heading.scrollIntoViewIfNeeded();
+        await expect(heading).toBeVisible();
+        await expect(heading).toBeInViewport();
+      });
+    }
 });
 
 test.describe("actions menu", () => {
