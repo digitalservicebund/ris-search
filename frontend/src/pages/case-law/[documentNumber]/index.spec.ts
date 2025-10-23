@@ -99,9 +99,7 @@ describe("case law single view page", async () => {
   it("displays Inhaltsverzeichnis correctly with links to anchors", async () => {
     const wrapper = await mountSuspended(CaseLawPage);
 
-    const content = wrapper.find(".js-content");
-
-    const tocLinks = content.findAll(".case-law h2");
+    const tocLinks = wrapper.findAll(".case-law h2");
     const expectedLinks = [
       { id: "leitsatz", title: "Leitsatz" },
       { id: "orientierungssatz", title: "Orientierungssatz" },
@@ -399,8 +397,8 @@ describe("case law single view page", async () => {
       },
     });
 
-    const tabButton = wrapper.get("button[aria-label*='Details']");
-    await tabButton.trigger("click");
+    const detailsTabLink = wrapper.get("a[href='#details']");
+    await detailsTabLink.trigger("click");
 
     const zipLink = wrapper.get("[data-attr='xml-zip-view']");
     expect(zipLink).toBeTruthy();

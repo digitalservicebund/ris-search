@@ -7,6 +7,9 @@ import {
   linkTabBase,
   linkTabActive,
   linkTabInactive,
+  linkTabNav,
+  linkTabNavContainer,
+  linkTabPanel,
 } from "~/components/LinkTabs.styles";
 import Properties from "~/components/Properties.vue";
 import PropertiesItem from "~/components/PropertiesItem.vue";
@@ -163,14 +166,12 @@ const activeSection = ref<"text" | "details">("text");
       </Message>
     </div>
 
-    <nav
-      class="relative before:absolute before:bottom-0 before:left-1/2 before:h-px before:w-full before:-translate-x-1/2 before:bg-gray-600 print:hidden"
-      aria-label="Translation views"
-    >
-      <div class="container flex">
+    <nav :class="linkTabNav" aria-label="Ansichten der Übersetzung">
+      <div :class="linkTabNavContainer">
         <a
           href="#text"
           :aria-current="activeSection === 'text' ? 'page' : undefined"
+          aria-label="Text der Übersetzung"
           :class="[
             linkTabBase,
             activeSection === 'text' ? linkTabActive : linkTabInactive,
@@ -184,6 +185,7 @@ const activeSection = ref<"text" | "details">("text");
         <a
           href="#details"
           :aria-current="activeSection === 'details' ? 'page' : undefined"
+          aria-label="Details zur Übersetzung"
           :class="[
             linkTabBase,
             activeSection === 'details' ? linkTabActive : linkTabInactive,
@@ -198,8 +200,10 @@ const activeSection = ref<"text" | "details">("text");
 
     <section
       id="text"
-      class="min-h-96 bg-white py-24 print:py-0"
-      :class="isClient && activeSection !== 'text' ? 'hidden' : ''"
+      :class="[
+        linkTabPanel,
+        isClient && activeSection !== 'text' ? 'hidden' : '',
+      ]"
     >
       <div class="container">
         <h2 class="sr-only">Text</h2>
@@ -209,8 +213,10 @@ const activeSection = ref<"text" | "details">("text");
 
     <section
       id="details"
-      class="min-h-96 bg-white py-24 print:py-0"
-      :class="isClient && activeSection !== 'details' ? 'hidden' : ''"
+      :class="[
+        linkTabPanel,
+        isClient && activeSection !== 'details' ? 'hidden' : '',
+      ]"
       aria-labelledby="detailsTabPanelTitle"
     >
       <div class="container">
