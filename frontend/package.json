@@ -19,6 +19,7 @@
     "prettier:fix": "prettier . --write --ignore-unknown",
     "style:check": "yarn prettier:check && yarn eslint:check",
     "style:fix": "yarn prettier:fix && yarn eslint:fix",
+    "typecheck": "vue-tsc",
     "audit:licences": "license-checker --production --excludePrivatePackages --onlyAllow \"$(. ../scripts/parseAllowedLicences.sh)\" --csv --out ./licence-report.csv"
   },
   "engines": {
