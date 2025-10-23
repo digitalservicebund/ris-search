@@ -122,6 +122,7 @@ public class SimpleSearchQueryBuilder {
     // should get a very large boost.
     query.should(
         new MultiMatchQueryBuilder(searchTerm)
+            .field(CaseLawDocumentationUnit.Fields.DOCUMENT_NUMBER_KEYWORD)
             .field(CaseLawDocumentationUnit.Fields.ECLI_KEYWORD)
             .field(CaseLawDocumentationUnit.Fields.FILE_NUMBERS_KEYWORD)
             .field(Norm.Fields.WORK_ELI_KEYWORD)
