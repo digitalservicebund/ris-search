@@ -1102,23 +1102,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@eslint/plugin-kit@npm:0.3.5, @eslint/plugin-kit@npm:^0.3.3":
-  version: 0.3.5
-  resolution: "@eslint/plugin-kit@npm:0.3.5"
-  dependencies:
-    "@eslint/core": "npm:^0.15.2"
-    levn: "npm:^0.4.1"
-  checksum: 10c0/c178c1b58c574200c0fd125af3e4bc775daba7ce434ba6d1eeaf9bcb64b2e9fea75efabffb3ed3ab28858e55a016a5efa95f509994ee4341b341199ca630b89e
-  languageName: node
-  linkType: hard
-
-"@eslint/plugin-kit@npm:^0.4.0":
+"@eslint/plugin-kit@npm:0.4.0, @eslint/plugin-kit@npm:^0.4.0":
   version: 0.4.0
   resolution: "@eslint/plugin-kit@npm:0.4.0"
   dependencies:
     "@eslint/core": "npm:^0.16.0"
     levn: "npm:^0.4.1"
   checksum: 10c0/125614e902bb34c041da859794c47ac2ec4a814f5d9e7c4d37fcd34b38d8ee5cf1f97020d38d168885d9bf4046a9a7decb86b4cee8dac9eedcc6ad08ebafe204
+  languageName: node
+  linkType: hard
+
+"@eslint/plugin-kit@npm:^0.3.3":
+  version: 0.3.5
+  resolution: "@eslint/plugin-kit@npm:0.3.5"
+  dependencies:
+    "@eslint/core": "npm:^0.15.2"
+    levn: "npm:^0.4.1"
+  checksum: 10c0/c178c1b58c574200c0fd125af3e4bc775daba7ce434ba6d1eeaf9bcb64b2e9fea75efabffb3ed3ab28858e55a016a5efa95f509994ee4341b341199ca630b89e
   languageName: node
   linkType: hard
 
@@ -16325,7 +16325,7 @@ __metadata:
   dependencies:
     "@axe-core/playwright": "npm:^4.10.2"
     "@digitalservicebund/ris-ui": "npm:^3.14.1"
-    "@eslint/plugin-kit": "npm:0.3.5"
+    "@eslint/plugin-kit": "npm:0.4.0"
     "@hyperdx/lucene": "npm:^3.1.1"
     "@iconify-json/ic": "npm:^1.2.2"
     "@iconify-json/material-symbols": "npm:^1.2.33"

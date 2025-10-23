@@ -29,7 +29,7 @@
   "dependencies": {
     "@axe-core/playwright": "^4.10.2",
     "@digitalservicebund/ris-ui": "^3.14.1",
-    "@eslint/plugin-kit": "0.3.5",
+    "@eslint/plugin-kit": "0.4.0",
     "@hyperdx/lucene": "^3.1.1",
     "@nuxt/image": "^1.10.0",
     "@nuxtjs/sitemap": "^7.4.3",
