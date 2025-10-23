@@ -18,6 +18,8 @@ updates:
     schedule:
       interval: "weekly"
       day: "sunday"
+    ignore:
+      - dependency-name: "isomorphic-dompurify"
   - package-ecosystem: "npm"
     directory: "/frontend/_shared"
     schedule:

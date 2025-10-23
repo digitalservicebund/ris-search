@@ -83,7 +83,7 @@
     "eslint-config-prettier": "^10.1.5",
     "eslint-plugin-prettier": "^5.4.1",
     "eslint-plugin-unused-imports": "^4.1.4",
-    "isomorphic-dompurify": "^2.26.0",
+    "isomorphic-dompurify": "2.26.0",
     "jsdom": "^26.1.0",
     "json-schema-to-typescript-lite": "^15.0.0",
     "license-checker-rseidelsohn": "^4.4.2",
