@@ -3,7 +3,7 @@ import Button from "primevue/button";
 import InputText from "primevue/inputtext";
 import Select from "primevue/select";
 import { computed } from "vue";
-import type { Page } from "~/components/Pagination/Pagination";
+import type { Page } from "~/components/Pagination/Pagination.vue";
 import SearchResult from "~/components/Search/Result/SearchResult.vue";
 import SortSelect from "~/components/Search/SortSelect.vue";
 import { type DropdownItem, sortMode } from "~/components/types";

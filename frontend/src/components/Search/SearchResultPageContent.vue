@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Page } from "~/components/Pagination/Pagination";
+import type { Page } from "~/components/Pagination/Pagination.vue";
 import SearchResult from "~/components/Search/Result/SearchResult.vue";
 import { buildResultCountString } from "~/utils/paginationUtils";
 

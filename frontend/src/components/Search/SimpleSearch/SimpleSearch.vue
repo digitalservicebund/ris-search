@@ -2,7 +2,7 @@
 import { storeToRefs } from "pinia";
 import Message from "primevue/message";
 import { convertParams, getUrl } from "./SimpleSearch.logic";
-import type { Page } from "~/components/Pagination/Pagination";
+import type { Page } from "~/components/Pagination/Pagination.vue";
 import SearchResult from "~/components/Search/Result/SearchResult.vue";
 import CategoryFilter from "~/components/Search/SimpleSearch/CategoryFilter/CategoryFilter.vue";
 import CourtFilter from "~/components/Search/SimpleSearch/CourtFilter.vue";

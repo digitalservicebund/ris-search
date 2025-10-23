@@ -5,7 +5,7 @@ import {
   dateFilterToQuery,
   type DateFilterValue,
 } from "~/components/AdvancedSearch/filterType";
-import type { Page } from "~/components/Pagination/Pagination";
+import type { Page } from "~/components/Pagination/Pagination.vue";
 import { DocumentKind } from "~/types";
 
 /** Additional configuration for search API calls */
