@@ -25,6 +25,9 @@ server:
   api-keys: []
 
 rate-limit:
+  default:
+    requests: 600
+    seconds: 60
   feedback:
     requests: 5
     seconds: 60
