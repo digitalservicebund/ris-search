@@ -2,7 +2,6 @@ export const useIntersectionObserver = () => {
   const route = useRoute();
   const hash = computed(() => route.hash);
   const selectedEntry = ref<string | undefined>(hash.value.substring(1));
-  console.log(selectedEntry.value);
   const lastScrollY = ref(0);
   const visibleIds = ref<string[]>([]);
   const allIds = ref<string[]>([]);
