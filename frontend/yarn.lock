@@ -11586,13 +11586,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"isomorphic-dompurify@npm:^2.26.0":
-  version: 2.29.0
-  resolution: "isomorphic-dompurify@npm:2.29.0"
+"isomorphic-dompurify@npm:^2.30.1":
+  version: 2.30.1
+  resolution: "isomorphic-dompurify@npm:2.30.1"
   dependencies:
     dompurify: "npm:^3.3.0"
-    jsdom: "npm:^27.0.0"
-  checksum: 10c0/63ac69697665c3c2b92a3779d34425d7d280a0c245b4ef8f69882ce8e9970456251012813d41ab30e40a7b65b023f0df44448abc8efb56ddaf8e045d052092ff
+    jsdom: "npm:^27.0.1"
+  checksum: 10c0/af73180a8116bdd1b835ac92b6e5b95513217b0d74aa02d4094130cede1c6a350d2c87624346f27af0c55cecca0f3c6d78e1f9fcccf5fbd81a410a8e769f7469
   languageName: node
   linkType: hard
 
@@ -11788,7 +11788,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jsdom@npm:^27.0.0":
+"jsdom@npm:^27.0.1":
   version: 27.0.1
   resolution: "jsdom@npm:27.0.1"
   dependencies:
@@ -16365,7 +16365,7 @@ __metadata:
     eslint-config-prettier: "npm:^10.1.5"
     eslint-plugin-prettier: "npm:^5.4.1"
     eslint-plugin-unused-imports: "npm:^4.1.4"
-    isomorphic-dompurify: "npm:^2.26.0"
+    isomorphic-dompurify: "npm:^2.30.1"
     js-cookie: "npm:^3.0.5"
     jsdom: "npm:^26.1.0"
     json-schema-to-typescript-lite: "npm:^15.0.0"
