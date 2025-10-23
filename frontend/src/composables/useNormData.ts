@@ -165,11 +165,11 @@ function getContentUrl(metadata: LegislationWork) {
     (e) => e.encodingFormat === "text/html",
   );
   const contentUrl = encoding?.contentUrl;
-  if (!contentUrl) {
+  if (contentUrl) {
+    console.info("using manifestation", encoding?.["@id"]);
+  } else {
     console.error("contentUrl is missing", metadata?.workExample?.encoding);
     throw new Error("contentUrl is missing");
-  } else {
-    console.info("using manifestation", encoding?.["@id"]);
   }
 
   return contentUrl;
