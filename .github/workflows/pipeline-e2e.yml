@@ -30,7 +30,7 @@ jobs:
           - profile: internal
             env_file_name: .env.ci.internal
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           fetch-depth: 40
       - name: Log into container registry
@@ -173,7 +173,7 @@ jobs:
       - e2e-tests
     if: ${{ github.ref == 'refs/heads/main' }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v5
         with:
           repository: ${{ env.reports-repo }}
           ssh-key: ${{ secrets.REPORTS_DEPLOY_KEY }}
