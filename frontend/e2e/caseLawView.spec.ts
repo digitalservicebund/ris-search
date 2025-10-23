@@ -1,12 +1,10 @@
 import type { Page } from "@playwright/test";
-import { nextTick } from "vue";
 import { expect, test } from "./fixtures";
 import { getDisplayedResultCount } from "./utils";
 
 async function getSidebar(page: Page) {
   const navigation = page.getByRole("navigation", { name: "Seiteninhalte" });
   await navigation.scrollIntoViewIfNeeded();
-  await nextTick();
   await expect(navigation).toBeVisible();
   return navigation;
 }
@@ -76,7 +74,6 @@ test("can search, filter for case law, and view a single case law documentation 
         .getByRole("heading", { name: sectionName })
         .first();
       await sectionHeading.scrollIntoViewIfNeeded();
-      await nextTick();
       await expect(expectedSidebarItem).toHaveAttribute(
         "aria-current",
         "section",
@@ -89,7 +86,6 @@ test("can search, filter for case law, and view a single case law documentation 
 
       await expect(page).toHaveURL(new RegExp(`#`, "i"));
       await heading.scrollIntoViewIfNeeded();
-      await nextTick();
       await expect(heading).toBeVisible();
       await expect(heading).toBeInViewport();
     });

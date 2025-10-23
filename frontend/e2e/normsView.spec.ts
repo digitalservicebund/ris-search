@@ -1,4 +1,3 @@
-import { nextTick } from "vue";
 import { expect, test } from "./fixtures";
 import { getDisplayedResultCount } from "./utils";
 
@@ -92,7 +91,6 @@ test("can navigate to a single norm article and between articles", async ({
       .getByRole("heading", { name: /§\s*2\s+Zutaten/i })
       .first();
     await h2Art2.scrollIntoViewIfNeeded();
-    await nextTick();
     await expect(h2Art2).toBeVisible();
     await expect(
       page.getByRole("heading", {
@@ -106,7 +104,6 @@ test("can navigate to a single norm article and between articles", async ({
       .getByRole("heading", { name: /§\s*3\s+Kennzeichnung/i })
       .first();
     await h2Art3.scrollIntoViewIfNeeded();
-    await nextTick();
     await expect(h2Art3).toBeVisible();
     await expect(
       page.getByRole("heading", {
@@ -124,7 +121,6 @@ test("can navigate to a single norm article and between articles", async ({
       .getByRole("heading", { name: /§\s*3\s+Kennzeichnung/i })
       .first();
     await h2Art3Back.scrollIntoViewIfNeeded();
-    await nextTick();
     await expect(h2Art3Back).toBeVisible();
     await expect(
       page.getByRole("heading", {
@@ -139,7 +135,6 @@ test("can navigate to a single norm article and between articles", async ({
       .getByRole("heading", { name: /§\s*2\s+Zutaten/i })
       .first();
     await h2Art2Back.scrollIntoViewIfNeeded();
-    await nextTick();
     await expect(h2Art2Back).toBeVisible();
     await expect(
       page.getByRole("heading", {
