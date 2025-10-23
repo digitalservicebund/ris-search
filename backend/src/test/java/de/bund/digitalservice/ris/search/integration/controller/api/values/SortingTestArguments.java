@@ -6,6 +6,7 @@ import de.bund.digitalservice.ris.search.integration.controller.api.testData.Cas
 import de.bund.digitalservice.ris.search.integration.controller.api.testData.LiteratureTestData;
 import de.bund.digitalservice.ris.search.integration.controller.api.testData.NormsTestData;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
+import de.bund.digitalservice.ris.search.models.opensearch.Literature;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -23,14 +24,15 @@ public class SortingTestArguments {
     int combinedSize = caseLawSize + literatureSize + normsSize;
 
     List<String> sortedDocumentNumbers =
-        CaseLawTestData.allDocuments.stream()
-            .map(CaseLawDocumentationUnit::documentNumber)
+        Stream.concat(
+                CaseLawTestData.allDocuments.stream().map(CaseLawDocumentationUnit::documentNumber),
+                LiteratureTestData.allDocuments.stream().map(Literature::documentNumber))
             .sorted()
             .toList();
     stream.add(
         Arguments.of(
             "documentNumber",
-            caseLawSize,
+            caseLawSize + literatureSize,
             jsonPath("$.member[*].item.documentNumber", Matchers.is(sortedDocumentNumbers)),
             null));
 
@@ -39,7 +41,7 @@ public class SortingTestArguments {
     stream.add(
         Arguments.of(
             "-documentNumber",
-            caseLawSize,
+            caseLawSize + literatureSize,
             jsonPath("$.member[*].item.documentNumber", Matchers.is(inverseSortedDocumentNumbers)),
             null));
 
