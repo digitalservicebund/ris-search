@@ -113,6 +113,35 @@ test("can navigate to a single norm article and between articles", async ({
   });
 });
 
+test("tabs work without JavaScript", async ({ browser }) => {
+  const context = await browser.newContext({ javaScriptEnabled: false });
+  const page = await context.newPage();
+
+  await page.goto("/norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu", {
+    waitUntil: "networkidle",
+  });
+
+  await expect(page.getByRole("heading", { name: "Details" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Fassungen" })).toBeVisible();
+
+  await test.step("Navigate to Details tab", async () => {
+    await page.getByRole("link", { name: "Details des Gesetzes" }).click();
+    await expect(page).toHaveURL(/#details$/);
+  });
+
+  await test.step("Navigate to Fassungen tab", async () => {
+    await page.getByRole("link", { name: "Fassungen des Gesetzes" }).click();
+    await expect(page).toHaveURL(/#versions$/);
+  });
+
+  await test.step("Navigate back to Text tab", async () => {
+    await page.getByRole("link", { name: "Text des Gesetzes" }).click();
+    await expect(page).toHaveURL(/#text$/);
+  });
+
+  await context.close();
+});
+
 test("can navigate to and view an attachment", async ({ page }) => {
   const mainExpressionEliUrl =
     "/norms/eli/bund/bgbl-1/2000/s1016/2023-04-26/10/deu";

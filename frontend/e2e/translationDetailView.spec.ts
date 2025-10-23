@@ -40,15 +40,13 @@ test("opens the page via URL", { tag: ["@RISDEV-8950"] }, async ({ page }) => {
 test("has text and detail tab", { tag: ["@RISDEV-8950"] }, async ({ page }) => {
   await page.goto("/translations/TestV");
 
-  const tabs = page.getByRole("tab");
+  const textTab = page.getByRole("link", { name: "Text der Übersetzung" });
+  const detailsTab = page.getByRole("link", {
+    name: "Details zur Übersetzung",
+  });
 
-  await expect(tabs).toHaveCount(2);
-
-  const firstTabText = await tabs.nth(0).textContent();
-  expect(firstTabText).toBe("Text ");
-
-  const secondTabText = await tabs.nth(1).textContent();
-  expect(secondTabText).toBe("Details ");
+  await expect(textTab).toBeVisible();
+  await expect(detailsTab).toBeVisible();
 });
 
 test(
@@ -67,8 +65,7 @@ test(
     await expect(translator).not.toBeVisible();
     await expect(version).not.toBeVisible();
 
-    const detailTab = page.getByRole("tab", { name: "Details " });
-    await detailTab.click();
+    await page.getByRole("link", { name: "Details zur Übersetzung" }).click();
 
     await expect(heading).toBeVisible();
     await expect(translator).toBeVisible();
@@ -87,7 +84,7 @@ test(
 
     await expect(section).toBeVisible();
 
-    await page.getByRole("tab", { name: "Details " }).click();
+    await page.getByRole("link", { name: "Details zur Übersetzung" }).click();
     await expect(section).not.toBeVisible();
   },
 );
@@ -157,5 +154,26 @@ test(
       await expect(pdfButton).toBeVisible();
       await expect(pdfButton).toBeDisabled();
     }
+  },
+);
+
+test(
+  "tabs work without JavaScript",
+  { tag: ["@RISDEV-8979"] },
+  async ({ browser }) => {
+    const context = await browser.newContext({ javaScriptEnabled: false });
+    const page = await context.newPage();
+
+    await page.goto("/translations/TestV", {
+      waitUntil: "networkidle",
+    });
+
+    await page.getByRole("link", { name: "Details zur Übersetzung" }).click();
+    await expect(page).toHaveURL(/#details$/);
+
+    await page.getByRole("link", { name: "Text der Übersetzung" }).click();
+    await expect(page).toHaveURL(/#text$/);
+
+    await context.close();
   },
 );

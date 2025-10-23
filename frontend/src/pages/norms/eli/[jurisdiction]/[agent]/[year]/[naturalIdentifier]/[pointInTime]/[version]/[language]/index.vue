@@ -6,6 +6,7 @@ import TabPanel from "primevue/tabpanel";
 import TabPanels from "primevue/tabpanels";
 import Tabs from "primevue/tabs";
 import type { TreeNode } from "primevue/treenode";
+import type { ComputedRef } from "vue";
 import { computed } from "vue";
 import { useRoute } from "#app";
 import Accordion from "~/components/Accordion.vue";
@@ -23,11 +24,6 @@ import PropertiesItem from "~/components/PropertiesItem.vue";
 import NormTableOfContents from "~/components/Ris/NormTableOfContents.vue";
 import RisBreadcrumb from "~/components/Ris/RisBreadcrumb.vue";
 import type { BreadcrumbItem } from "~/components/Ris/RisBreadcrumb.vue";
-import {
-  tabListStyles,
-  tabPanelStyles,
-  tabStyles,
-} from "~/components/Tabs.styles";
 import { useBackendURL } from "~/composables/useBackendURL";
 import { useDynamicSeo } from "~/composables/useDynamicSeo";
 import { useIntersectionObserver } from "~/composables/useIntersectionObserver";

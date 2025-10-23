@@ -215,3 +215,16 @@ test.describe("actions menu", () => {
     await page.waitForURL("v1/case-law/JURE200030030.xml");
   });
 });
+
+test("tabs work without JavaScript", async ({ browser }) => {
+  const context = await browser.newContext({ javaScriptEnabled: false });
+  const page = await context.newPage();
+
+  await page.goto("/case-law/JURE200030030");
+  await expect(page.getByRole("heading", { name: "Details" })).toBeVisible();
+  await page
+    .getByRole("link", { name: "Details zur Gerichtsentscheidung" })
+    .click();
+  await expect(page).toHaveURL(/#details$/);
+  await context.close();
+});
