@@ -11,7 +11,6 @@ import de.bund.digitalservice.ris.search.mapper.SortParamsConverter;
 import de.bund.digitalservice.ris.search.models.api.parameters.NormsSearchParams;
 import de.bund.digitalservice.ris.search.models.api.parameters.NormsSortParam;
 import de.bund.digitalservice.ris.search.models.api.parameters.PaginationParams;
-import de.bund.digitalservice.ris.search.models.api.parameters.ResourceReferenceMode;
 import de.bund.digitalservice.ris.search.models.api.parameters.UniversalSearchParams;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.schema.CollectionSchema;
@@ -44,7 +43,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
@@ -210,17 +208,9 @@ public class NormsController {
       @Parameter(example = "2") @PathVariable Integer version,
       @Parameter(example = "deu") @PathVariable String language,
       @Parameter(example = "2020-06-19") @PathVariable LocalDate pointInTimeManifestation,
-      @Parameter(example = "regelungstext-1") @PathVariable String subtype,
-      @RequestHeader(
-              name = ApiConfig.Headers.GET_RESOURCES_VIA,
-              required = false,
-              defaultValue = ResourceReferenceMode.DEFAULT_VALUE)
-          @Parameter(
-              description =
-                  "Used to select a different prefix for referenced resources, like images. Selecting 'PROXY' will prepend `/api`. Otherwise, the API base URL will be used.")
-          ResourceReferenceMode resourceReferenceMode)
+      @Parameter(example = "regelungstext-1") @PathVariable String subtype)
       throws ObjectStoreServiceException {
-    final String resourceBasePath = getResourceBasePath(resourceReferenceMode);
+    final String resourceBasePath = getResourceBasePath();
     var eli =
         new ManifestationEli(
             jurisdiction,
@@ -394,17 +384,9 @@ public class NormsController {
               description = "The expression identifier, denoting elements inside an expression",
               example = "art-z1")
           @PathVariable
-          String articleEid,
-      @RequestHeader(
-              name = ApiConfig.Headers.GET_RESOURCES_VIA,
-              required = false,
-              defaultValue = ResourceReferenceMode.DEFAULT_VALUE)
-          @Parameter(
-              description =
-                  "Used to select a different prefix for referenced resources, like images. Selecting 'PROXY' will prepend `/api`. Otherwise, the API base URL will be used.")
-          ResourceReferenceMode resourceReferenceMode)
+          String articleEid)
       throws ObjectStoreServiceException {
-    final String resourceBasePath = getResourceBasePath(resourceReferenceMode);
+    final String resourceBasePath = getResourceBasePath();
 
     var eli =
         new ManifestationEli(
@@ -490,16 +472,11 @@ public class NormsController {
   }
 
   /**
-   * Controls how resources like images will be referenced. For example, they might be accessed
-   * through an API endpoint in local development, but served via a CDN in production.
+   * Controls how resources like images will be referenced.
    *
-   * @param mode Controls which static prefix will be returned.
    * @return The prefix to use when returning references to resources.
    */
-  private String getResourceBasePath(ResourceReferenceMode mode) {
-    return switch (mode) {
-      case API -> ApiConfig.Paths.LEGISLATION + "/";
-      case PROXY -> "/api" + ApiConfig.Paths.LEGISLATION + "/";
-    };
+  private String getResourceBasePath() {
+    return ApiConfig.Paths.LEGISLATION + "/";
   }
 }

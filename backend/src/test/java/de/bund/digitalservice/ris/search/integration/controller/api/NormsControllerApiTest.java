@@ -49,7 +49,6 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
-import org.opensearch.core.common.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -173,16 +172,12 @@ class NormsControllerApiTest extends ContainersIntegrationBase {
   }
 
   @ParameterizedTest
-  @CsvSource({",/v1/legislation/", "PROXY,/api/v1/legislation/"})
+  @CsvSource({",/v1/legislation/"})
   @DisplayName("Html endpoint should adapt img src paths")
   void shouldReturnHtmlWithAdaptedImgSrcAttributes(String header, String expectedPrefix)
       throws Exception {
     final MockHttpServletRequestBuilder requestBuilder =
         get(MANIFESTATION_URL_HTML).contentType(MediaType.TEXT_HTML);
-
-    if (!Strings.isEmpty(header)) {
-      requestBuilder.header("get-resources-via", header);
-    }
 
     var response =
         mockMvc
