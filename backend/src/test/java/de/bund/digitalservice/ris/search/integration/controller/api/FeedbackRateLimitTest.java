@@ -7,6 +7,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.c4_soft.springaddons.security.oauth2.test.annotations.WithJwt;
 import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.config.ratelimiting.FeedbackRateLimitInterceptor;
+import de.bund.digitalservice.ris.search.integration.config.ContainersIntegrationBase;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,13 +23,13 @@ import org.springframework.util.MultiValueMap;
 @AutoConfigureMockMvc
 @Tag("integration")
 @WithJwt("jwtTokens/ValidAccessToken.json")
-public class FeedbackRateLimitTest {
+class FeedbackRateLimitTest extends ContainersIntegrationBase {
 
   @Autowired private MockMvc mockMvc;
 
-  @TestBean private FeedbackRateLimitInterceptor myFakeService;
+  @TestBean private FeedbackRateLimitInterceptor testInterceptor;
 
-  static FeedbackRateLimitInterceptor myFakeService() {
+  static FeedbackRateLimitInterceptor testInterceptor() {
     return new FeedbackRateLimitInterceptor(2, 10);
   }
 
@@ -42,7 +43,7 @@ public class FeedbackRateLimitTest {
       };
 
   @Test
-  void feedbackCanBeSentSuccessfullyToPostHog() throws Exception {
+  void feedbackGetsRateLimited() throws Exception {
     // first 2 calls will go through
     for (int i = 0; i < 2; i++) {
       mockMvc
