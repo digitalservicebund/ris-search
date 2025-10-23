@@ -1,4 +1,3 @@
-// @vitest-environment node
 import { describe, expect } from "vitest";
 import {
   addEllipsis,

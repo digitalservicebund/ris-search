@@ -1,4 +1,3 @@
-// @vitest-environment node
 // @ts-nocheck
 import { describe } from "vitest";
 import {

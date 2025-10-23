@@ -1,4 +1,3 @@
-// @vitest-environment node
 import fs from "fs";
 import * as path from "node:path";
 import { PactV4, SpecificationVersion } from "@pact-foundation/pact";

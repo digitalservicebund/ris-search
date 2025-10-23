@@ -1,4 +1,3 @@
-// @vitest-environment node
 import { describe, expect } from "vitest";
 import type { LocationQueryRaw } from "vue-router";
 import { dateSearchFromQuery } from "~/stores/searchParams/dateParams";
