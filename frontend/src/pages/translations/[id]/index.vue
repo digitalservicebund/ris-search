@@ -173,7 +173,7 @@ const activeSection = ref<"text" | "details">("text");
       aria-label="Translation views"
     >
       <div class="container flex">
-        <NuxtLink
+        <a
           href="#text"
           :aria-current="activeSection === 'text' ? 'page' : undefined"
           :class="[
@@ -184,9 +184,9 @@ const activeSection = ref<"text" | "details">("text");
         >
           <IcBaselineSubject aria-hidden="true" class="mr-8" />
           Text
-        </NuxtLink>
+        </a>
 
-        <NuxtLink
+        <a
           href="#details"
           :aria-current="activeSection === 'details' ? 'page' : undefined"
           :class="[
@@ -197,7 +197,7 @@ const activeSection = ref<"text" | "details">("text");
         >
           <IcOutlineInfo aria-hidden="true" class="mr-8" />
           Details
-        </NuxtLink>
+        </a>
       </div>
     </nav>
 
