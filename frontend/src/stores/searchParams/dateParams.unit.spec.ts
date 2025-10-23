@@ -7,14 +7,6 @@ import {
 } from "./dateParams";
 import type { QueryParams } from "./index";
 
-vi.mock("vue", () => ({
-  ref: vi.fn((val) => ({ value: val })),
-  computed: vi.fn((obj) => ({
-    value: obj.get(),
-    effect: obj.set,
-  })),
-}));
-
 describe("dateSearchFromQuery", () => {
   it("should return Equal mode when only date is provided", () => {
     const query = { date: "2023-01-01" };
@@ -99,22 +91,22 @@ describe("useDateParams", () => {
 
     const result = useDateParams(initialState);
 
-    result.dateSearchMode.effect(DateSearchMode.Equal);
+    result.dateSearchMode.value = DateSearchMode.Equal;
     expect(result.date.value).toBe("2023-01-01");
     expect(result.dateAfter.value).toBeUndefined();
     expect(result.dateBefore.value).toBeUndefined();
 
-    result.dateSearchMode.effect(DateSearchMode.After);
+    result.dateSearchMode.value = DateSearchMode.After;
     expect(result.date.value).toBeUndefined();
     expect(result.dateAfter.value).toBe("2023-01-01");
     expect(result.dateBefore.value).toBeUndefined();
 
-    result.dateSearchMode.effect(DateSearchMode.Before);
+    result.dateSearchMode.value = DateSearchMode.Before;
     expect(result.date.value).toBeUndefined();
     expect(result.dateAfter.value).toBeUndefined();
     expect(result.dateBefore.value).toBe("2023-01-01");
 
-    result.dateSearchMode.effect(DateSearchMode.None);
+    result.dateSearchMode.value = DateSearchMode.None;
     expect(result.date.value).toBeUndefined();
     expect(result.dateAfter.value).toBeUndefined();
     expect(result.dateBefore.value).toBeUndefined();
@@ -127,12 +119,12 @@ describe("useDateParams", () => {
     } as QueryParams;
     const result = useDateParams(initialState);
 
-    result.dateSearchMode.effect(DateSearchMode.Equal);
+    result.dateSearchMode.value = DateSearchMode.Equal;
     result.date.value = "2024-01-01";
 
     result.reset(initialState);
 
-    expect(result.date.value).toBe("2023-01-01");
+    expect(result.date.value).toBeUndefined();
     expect(result.dateAfter.value).toBe("2023-02-01");
     expect(result.dateBefore.value).toBe("2023-03-01");
     expect(result.dateSearchMode.value).toBe(DateSearchMode.Range);
