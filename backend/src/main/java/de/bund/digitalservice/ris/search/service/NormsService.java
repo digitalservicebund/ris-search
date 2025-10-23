@@ -28,6 +28,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.data.elasticsearch.core.SearchPage;
+import org.springframework.data.elasticsearch.core.query.FetchSourceFilter;
 import org.springframework.stereotype.Service;
 
 /**
@@ -91,6 +92,13 @@ public class NormsService {
             .withPageable(pageable)
             .withQuery(queryStringQuery(search))
             .withHighlightBuilder(highlightBuilder)
+            // despite setting fetchSource false we still need to supply the excludedFields to not
+            // be part of the response
+            .withSourceFilter(
+                new FetchSourceFilter(
+                    false,
+                    null,
+                    NormSimpleSearchType.NORMS_FETCH_EXCLUDED_FIELDS.toArray(String[]::new)))
             .build();
 
     SearchHits<Norm> searchHits = operations.search(searchQuery, Norm.class);
