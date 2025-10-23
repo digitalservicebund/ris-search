@@ -6,6 +6,7 @@ import {
   truncateAtWord,
   removePrefix,
   formatArrayProperty,
+  formatNames,
 } from "./textFormatting";
 
 describe("getStringOrDefault", () => {
@@ -123,7 +124,7 @@ describe("removePrefix", () => {
   it("removes prefix when present", () => {
     expect(removePrefix("Hello World", "Hello ")).toBe("World");
   });
-  it("removes original string when prefix not present", () => {
+  it("keeps original string when prefix not present", () => {
     expect(removePrefix("Hello World", "Hallo ")).toBe("Hello World");
   });
 });
@@ -139,5 +140,28 @@ describe("formatArrayProperty", () => {
 
   it("returns elements joined with comma", () => {
     expect(formatArrayProperty(["foo", "bar", "baz"])).toBe("foo, bar, baz");
+  });
+});
+
+describe("formatNames", () => {
+  it("returns empty array if input is empty", () => {
+    expect(formatNames([])).toHaveLength(0);
+  });
+
+  it("returns formatted names", () => {
+    expect(formatNames(["Mustermann, Max", "Musterfrau, Sabine"])).toEqual([
+      "Max Mustermann",
+      "Sabine Musterfrau",
+    ]);
+  });
+
+  it("keeps name unchanged if it contains no comma", () => {
+    expect(formatNames(["Max Mustermann"])).toEqual(["Max Mustermann"]);
+  });
+
+  it("keeps name unchanged if it contains more than one comma", () => {
+    expect(formatNames(["Mustermann, Max, Augustus"])).toEqual([
+      "Mustermann, Max, Augustus",
+    ]);
   });
 });

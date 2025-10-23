@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import MetadataField from "~/components/MetadataField.vue";
-import { formatArrayProperty } from "~/utils/textFormatting";
+import { formatArrayProperty, formatNames } from "~/utils/textFormatting";
 
 interface Props {
   documentTypes: string[];
@@ -15,11 +15,7 @@ const documentType = computed(() => formatArrayProperty(props.documentTypes));
 const reference = computed(() => formatArrayProperty(props.references));
 
 const author = computed(() => {
-  const convertedNames = props.authors.map((author) => {
-    const [lastName, firstName] = author.split(",");
-    return `${firstName} ${lastName}`;
-  });
-
+  const convertedNames = formatNames(props.authors);
   return formatArrayProperty(convertedNames);
 });
 

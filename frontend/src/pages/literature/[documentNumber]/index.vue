@@ -116,11 +116,11 @@ if (contentError?.value) {
         <TabPanel value="1" :pt="tabPanelStyles" class="pt-24 pb-80">
           <section aria-labelledby="detailsTabPanelTitle" class="container">
             <LiteratureDetails
-              :languages="['FooBar']"
-              :authors="['FooBar']"
-              :collaborators="['FooBar']"
-              :conference-notes="['FooBar']"
-              :norm-references="['FooBar']"
+              :norm-references="literature.normReferences"
+              :collaborators="literature.collaborators"
+              :originators="literature.originators"
+              :languages="literature.languages"
+              :conference-notes="literature.conferenceNotes"
             />
           </section>
         </TabPanel>

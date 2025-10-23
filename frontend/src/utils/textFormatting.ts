@@ -88,3 +88,22 @@ export function removePrefix(str: string | undefined, prefix: string) {
 export function formatArrayProperty(property: string[]): string {
   return property.join(", ") || "-";
 }
+
+/**
+ * Expects an array of strings where each element is a name in the format
+ * "Lastname, Firstname". The names are converted to "Firstname Lastname".
+ * If an element contains no or more than one comma, it is kept unchanged.
+ * @param names
+ */
+export function formatNames(names: string[]): string[] {
+  return names.map((name) => {
+    const parts = name.split(",");
+    if (parts.length == 2) {
+      const lastname = parts[0]?.trim();
+      const firstname = parts[1]?.trim();
+      return `${firstname} ${lastname}`;
+    } else {
+      return name;
+    }
+  });
+}
