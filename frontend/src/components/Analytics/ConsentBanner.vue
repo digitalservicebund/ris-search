@@ -13,31 +13,31 @@ const handleSetTracking = (value: boolean) => {
 </script>
 
 <template>
-  <div
+  <section
     v-if="isBannerVisible"
     class="ris-body2-regular lg:ris-body1-regular flex flex-col gap-24 bg-blue-200 px-8 py-16 lg:p-24"
-    aria-label="Cookie banner"
+    aria-label="Cookie-Einstellungen akzeptieren oder ablehnen"
     data-testid="cookie-banner"
   >
     <div class="container mx-auto">
       <h2 class="ris-heading3-bold text-xl lg:text-2xl">
-        Dürfen wir anonyme Nutzungsdaten speichern?
+        Cookie-Einstellungen akzeptieren oder ablehnen
       </h2>
 
       <div class="pt-8">
         <p>
-          Wir möchten verstehen, wie Sie die Website nutzen. Dadurch können wir
-          sie für alle Nutzenden verbessern. Wir möchten zum Beispiel folgende
-          Daten speichern: Wie Sie suchen, welche Seiten Sie besuchen und welche
-          Funktionen Sie benutzen. Diese anonymen Nutzungsdaten werden nur mit
-          Ihrer Einwilligung gespeichert.
+          Um zu verstehen, wie Sie den Service nutzen und um Verbesserungen
+          vornehmen zu können, kann ein Analyse-Cookie durch die Firma PostHog,
+          Inc. eingesetzt werden. Der Einsatz des Analyse-Cookies ist freiwillig
+          und erfolgt nur mit Ihrer Einwilligung. Sie können Ihre Einwilligung
+          jederzeit in den Cookie-Einstellungen widerrufen.
         </p>
       </div>
 
       <div class="flex flex-wrap items-center gap-x-24 gap-y-12 pt-16 lg:pt-24">
         <PrimeVueButton
           aria-label="Cookie-Akzeptieren-Button"
-          label="Ja, erlauben"
+          label="Akzeptieren"
           data-testid="accept-cookie"
           @click="handleSetTracking(true)"
         >
@@ -47,7 +47,7 @@ const handleSetTracking = (value: boolean) => {
         </PrimeVueButton>
         <PrimeVueButton
           aria-label="Cookie-Ablehnen-Button"
-          label="Nein, nicht erlauben"
+          label="Ablehnen"
           data-testid="decline-cookie"
           @click="handleSetTracking(false)"
         >
@@ -63,5 +63,5 @@ const handleSetTracking = (value: boolean) => {
         </NuxtLink>
       </div>
     </div>
-  </div>
+  </section>
 </template>
