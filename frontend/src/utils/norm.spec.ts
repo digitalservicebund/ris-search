@@ -110,9 +110,12 @@ describe("getValidityStatus", () => {
 });
 
 describe("getMostRelevantExpression", () => {
-  vi.mock("~/utils/dateFormatting", () => ({
-    getCurrentDateInGermanyFormatted: vi.fn().mockReturnValue("2000-01-01"),
-  }));
+  beforeAll(() => {
+    vi.useFakeTimers();
+    vi.setSystemTime("2000-01-01");
+  });
+
+  afterAll(() => vi.useRealTimers());
 
   type PartialExpression = Pick<
     LegislationExpression,
