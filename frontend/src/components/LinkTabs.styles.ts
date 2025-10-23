@@ -6,3 +6,10 @@ export const linkTabActive =
 
 export const linkTabInactive =
   "text-blue-800 hover:border-b-blue-800 cursor-pointer";
+
+export const linkTabNav =
+  "relative before:absolute before:bottom-0 before:left-1/2 before:h-px before:w-full before:-translate-x-1/2 before:bg-gray-600 print:hidden";
+
+export const linkTabNavContainer = "container flex";
+
+export const linkTabPanel = "min-h-96 bg-white py-24 print:py-0";
