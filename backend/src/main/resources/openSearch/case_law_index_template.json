@@ -217,7 +217,14 @@
           "index_options": "offsets"
         },
         "document_number": {
-          "type": "keyword"
+          "type": "text",
+          "analyzer": "custom_german_analyzer",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "normalizer": "normalized_keyword"
+            }
+          }
         },
         "document_type": {
           "type": "text",

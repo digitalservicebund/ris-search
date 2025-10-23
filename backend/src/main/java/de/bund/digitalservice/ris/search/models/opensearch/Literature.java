@@ -45,6 +45,7 @@ public record Literature(
 
     public static final String ID = "id";
     public static final String DOCUMENT_NUMBER = "document_number";
+    public static final String DOCUMENT_NUMBER_KEYWORD = "document_number.keyword";
     public static final String RECORDING_DATE = "recording_date";
     public static final String YEARS_OF_PUBLICATION = "years_of_publication";
     public static final String FIRST_PUBLICATION_DATE = "first_publication_date";

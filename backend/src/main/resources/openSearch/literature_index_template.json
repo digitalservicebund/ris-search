@@ -11,7 +11,13 @@
       "properties": {
         "document_number": {
           "type": "text",
-          "analyzer": "custom_german_analyzer"
+          "analyzer": "custom_german_analyzer",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "normalizer": "normalized_keyword"
+            }
+          }
         },
         "recording_date": {
           "type": "date"
