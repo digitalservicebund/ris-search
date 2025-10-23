@@ -98,7 +98,7 @@
     "tailwindcss": "^4.1.11",
     "typescript": "~5.8.3",
     "unplugin-icons": "^22.1.0",
-    "unplugin-vue-components": "^29.0.0",
+    "unplugin-vue-components": "^30.0.0",
     "vitest": "^3.2.4",
     "vue-tsc": "^3.0.1"
   },
