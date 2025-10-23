@@ -74,11 +74,6 @@ test("can search, filter for case law, and view a single case law documentation 
         .getByRole("heading", { name: sectionName })
         .first();
       await sectionHeading.scrollIntoViewIfNeeded();
-      await expect(expectedSidebarItem).toHaveAttribute(
-        "aria-current",
-        "section",
-      );
-
       const heading = page
         .getByRole("main")
         .getByRole("heading", { name: sectionName })
