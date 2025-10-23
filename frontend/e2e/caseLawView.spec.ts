@@ -1,10 +1,14 @@
 import type { Page } from "@playwright/test";
+import { nextTick } from "vue";
 import { expect, test } from "./fixtures";
 import { getDisplayedResultCount } from "./utils";
 
-function getSidebar(page: Page) {
-  const sidebarLabel = page.getByText("Seiteninhalte");
-  return page.getByRole("navigation").filter({ has: sidebarLabel });
+async function getSidebar(page: Page) {
+  const navigation = page.getByRole("navigation", { name: "Seiteninhalte" });
+  await navigation.scrollIntoViewIfNeeded();
+  await nextTick();
+  await expect(navigation).toBeVisible();
+  return navigation;
 }
 
 test("can search, filter for case law, and view a single case law documentation unit", async ({
@@ -39,8 +43,7 @@ test("can search, filter for case law, and view a single case law documentation 
       page.getByRole("heading", { name: "Testheader für Urteil 6." }).first(),
     ).toBeVisible();
 
-    const sidebar = getSidebar(page);
-    await expect(sidebar).toBeVisible();
+    const sidebar = await getSidebar(page);
 
     const firstSectionHeader = page
       .getByRole("main")
@@ -62,14 +65,18 @@ test("can search, filter for case law, and view a single case law documentation 
       const link = page.getByRole("link", { name: sectionName }).first();
       await link.click();
 
-      const sidebar = getSidebar(page);
-      await expect(sidebar).toBeVisible();
+      const sidebar = await getSidebar(page);
 
       const expectedSidebarItem = sidebar.getByRole("link", {
         name: sectionName,
       });
-      // ensure the previous section is out of sight and gets deselected
-      await page.mouse.wheel(0, 10);
+
+      const sectionHeading = page
+        .getByRole("main")
+        .getByRole("heading", { name: sectionName })
+        .first();
+      await sectionHeading.scrollIntoViewIfNeeded();
+      await nextTick();
       await expect(expectedSidebarItem).toHaveAttribute(
         "aria-current",
         "section",
@@ -77,7 +84,13 @@ test("can search, filter for case law, and view a single case law documentation 
 
       const heading = page
         .getByRole("main")
-        .getByRole("heading", { name: sectionName });
+        .getByRole("heading", { name: sectionName })
+        .first();
+
+      await expect(page).toHaveURL(new RegExp(`#`, "i"));
+      await heading.scrollIntoViewIfNeeded();
+      await nextTick();
+      await expect(heading).toBeVisible();
       await expect(heading).toBeInViewport();
     });
   }

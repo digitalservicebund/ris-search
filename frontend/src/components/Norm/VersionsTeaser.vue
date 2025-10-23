@@ -2,9 +2,9 @@
 <template>
   <div class="container">
     <div class="max-w-prose">
-      <h3 class="ris-heading3-bold my-24">
+      <h2 class="ris-heading3-bold my-24">
         Fassungen sind noch nicht verfügbar
-      </h3>
+      </h2>
       <p class="ris-body1-regular">
         Mit dem Livegang des neuen Rechtsinformationsportals werden auch außer
         Kraft getretene und zukünftig in Kraft tretende Fassungen der Gesetze

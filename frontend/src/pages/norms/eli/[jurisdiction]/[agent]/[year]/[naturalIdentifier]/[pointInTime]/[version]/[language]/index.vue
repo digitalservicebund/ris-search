@@ -219,7 +219,7 @@ useDynamicSeo({ title, description });
           :valid-to="validityInterval?.to"
         />
       </div>
-      <Tabs value="0" lazy>
+      <Tabs value="0">
         <TabList :pt="tabListStyles">
           <Tab
             class="flex items-center gap-8"
