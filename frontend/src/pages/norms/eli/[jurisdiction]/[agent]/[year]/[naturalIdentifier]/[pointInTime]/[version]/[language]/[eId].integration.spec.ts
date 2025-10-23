@@ -77,7 +77,7 @@ vi.mock("./useNormData", () => {
   return { useFetchNormArticleContent: mocks.useFetchNormArticleContent };
 });
 
-vi.mock("~/utils/config", () => {
+vi.mock("~/utils/profile", () => {
   return { isPrototypeProfile: mocks.isPrototypeProfile };
 });
 

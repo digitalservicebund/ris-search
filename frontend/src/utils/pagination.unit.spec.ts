@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
 import type { Page } from "~/components/Pagination/Pagination.vue";
 import type { AnyDocument, SearchResult } from "~/types";
-import { buildItemsOnPageString } from "~/utils/paginationUtils";
+import { buildItemsOnPageString } from "~/utils/pagination";
 
 function getPage(params: {
   page: number;

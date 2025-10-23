@@ -5,7 +5,7 @@ import type { LegislationWork, SearchResult } from "~/types";
 import {
   getValidityStatus,
   temporalCoverageToValidityInterval,
-} from "~/utils/normUtils";
+} from "~/utils/norm";
 
 const props = defineProps<{
   versions: SearchResult<LegislationWork>[];

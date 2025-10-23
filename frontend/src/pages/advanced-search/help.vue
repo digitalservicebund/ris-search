@@ -10,7 +10,7 @@ import {
   type Feature,
 } from "./data";
 import type { DropdownItem } from "~/components/types";
-import { isInternalProfile, isPublicProfile } from "~/utils/config";
+import { isInternalProfile, isPublicProfile } from "~/utils/profile";
 
 definePageMeta({ alias: "/erweiterte-suche/hilfe" });
 

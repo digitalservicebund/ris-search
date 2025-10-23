@@ -3,7 +3,7 @@ import { type DOMWrapper, mount, type VueWrapper } from "@vue/test-utils";
 import Menu from "primevue/menu";
 import { beforeEach, vi } from "vitest";
 import ActionsMenu from "./ActionsMenu.vue";
-import * as actionMenuUtils from "~/utils/actionMenuUtils";
+import * as actionMenuUtils from "~/utils/actionMenu";
 import MaterialSymbolsLink from "~icons/material-symbols/link";
 
 const { mockToastAdd, mockNavigateTo } = vi.hoisted(() => ({
@@ -14,7 +14,7 @@ const { mockToastAdd, mockNavigateTo } = vi.hoisted(() => ({
 const commandEnabled = vi.fn();
 const commandDisabled = vi.fn();
 
-vi.mock("~/utils/actionMenuUtils", () => {
+vi.mock("~/utils/actionMenu", () => {
   return {
     createActionMenuItems: vi.fn((_, _1, _2) => {
       return [

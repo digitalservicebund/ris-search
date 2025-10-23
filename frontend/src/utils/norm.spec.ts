@@ -7,7 +7,7 @@ import {
   getValidityStatus,
   temporalCoverageToValidityInterval,
   type ValidityInterval,
-} from "~/utils/normUtils";
+} from "~/utils/norm";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);

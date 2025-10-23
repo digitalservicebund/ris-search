@@ -1,8 +1,8 @@
 import { mount } from "@vue/test-utils";
 import { describe, it, expect } from "vitest";
 import ValidityDatesMetadataFields from "~/components/Norm/Metadatafields/ValidityDatesMetadataFields.vue";
+import { findMetadataField } from "~/tests/testUtils";
 import { parseDateGermanLocalTime } from "~/utils/dateFormatting";
-import { findMetadataField } from "~/utils/testing/testUtils";
 
 describe("ValidityDatesMetadataFields.vue", () => {
   it("displays formatted valid from date if present", () => {

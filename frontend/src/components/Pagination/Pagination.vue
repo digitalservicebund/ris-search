@@ -1,10 +1,7 @@
 <script setup lang="ts">
 import Button from "primevue/button";
 import type { AnyDocument, SearchResult } from "~/types";
-import {
-  buildItemsOnPageString,
-  parsePageNumber,
-} from "~/utils/paginationUtils";
+import { buildItemsOnPageString, parsePageNumber } from "~/utils/pagination";
 import IconArrowBack from "~icons/ic/baseline-arrow-back";
 import IconArrowForward from "~icons/ic/baseline-arrow-forward";
 

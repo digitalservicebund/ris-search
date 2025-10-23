@@ -4,8 +4,8 @@ import type { AxiosResponse } from "axios";
 import { vi } from "vitest";
 import { nextTick } from "vue";
 import AdvancedSearch from "./AdvancedSearch.vue";
-import * as searchService from "~/services/searchService";
 import { DocumentKind } from "~/types";
+import * as searchService from "~/utils/services/searchService";
 
 type SearchResultPage = {
   member: [{ id: string; title: string }];

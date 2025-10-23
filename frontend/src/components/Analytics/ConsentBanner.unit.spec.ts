@@ -3,7 +3,7 @@ import { createTestingPinia } from "@pinia/testing";
 import { mount, RouterLinkStub } from "@vue/test-utils";
 import { vi } from "vitest";
 import ConsentBanner from "./ConsentBanner.vue";
-import { getPostHogConfig } from "~/utils/testing/postHogUtils";
+import { getPostHogConfig } from "~/tests/postHogUtils";
 
 const { useRuntimeConfigMock } = vi.hoisted(() => {
   return {

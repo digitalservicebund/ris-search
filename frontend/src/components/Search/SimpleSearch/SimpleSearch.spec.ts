@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { convertParams, getUrl } from "./SimpleSearch.logic";
+import { convertParams, getUrl } from "./SimpleSearch";
 
 vi.mock("~/composables/useBackendURL", () => {
   return {

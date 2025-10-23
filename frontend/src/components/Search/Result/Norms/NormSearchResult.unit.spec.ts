@@ -3,7 +3,7 @@ import { mount, RouterLinkStub } from "@vue/test-utils";
 import { describe, it, expect, vi, afterEach } from "vitest";
 import NormSearchResult from "./NormSearchResult.vue";
 import type { LegislationWork, SearchResult, TextMatch } from "~/types";
-import * as Config from "~/utils/config";
+import * as Config from "~/utils/profile";
 
 const NuxtLinkStub = {
   name: "NuxtLink",

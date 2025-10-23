@@ -1,6 +1,6 @@
 import { getRequestURL, getHeader, setHeader, defineEventHandler } from "h3";
 import { requireAccessTokenWithRefresh } from "../auth";
-import { isInternalProfile } from "~/utils/config";
+import { isInternalProfile } from "~/utils/profile";
 
 export default defineEventHandler(async (event) => {
   const userAgent = (getHeader(event, "User-Agent") ?? "").toUpperCase();

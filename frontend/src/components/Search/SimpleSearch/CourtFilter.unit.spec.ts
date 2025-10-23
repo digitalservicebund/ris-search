@@ -5,8 +5,8 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { defaultSuggestions } from "./CourtFilter.data";
 import CourtFilter from "~/components/Search/SimpleSearch/CourtFilter.vue";
 import { useSimpleSearchParamsStore } from "~/stores/searchParams";
+import { setStoreValues } from "~/tests/piniaUtils";
 import { DocumentKind } from "~/types";
-import { setStoreValues } from "~/utils/testing/piniaUtils";
 
 const mockData = [{ id: "TG Berlin", label: "Tagesgericht Berlin", count: 1 }];
 const mockFetch = vi.fn().mockResolvedValue(mockData);

@@ -11,7 +11,7 @@ import {
   getValidityStatusLabel,
   temporalCoverageToValidityInterval,
   type ValidityStatus,
-} from "~/utils/normUtils";
+} from "~/utils/norm";
 import IcBaselineLaunch from "~icons/ic/baseline-launch";
 
 const props = defineProps<{

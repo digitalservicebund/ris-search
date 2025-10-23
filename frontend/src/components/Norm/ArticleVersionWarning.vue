@@ -2,7 +2,7 @@
 import VersionWarningMessage from "~/components/Norm/VersionWarningMessage.vue";
 import type { Article } from "~/types";
 import { parseDateGermanLocalTime } from "~/utils/dateFormatting";
-import { getValidityStatus } from "~/utils/normUtils";
+import { getValidityStatus } from "~/utils/norm";
 
 const props = defineProps<{
   inForceVersionLink: string;

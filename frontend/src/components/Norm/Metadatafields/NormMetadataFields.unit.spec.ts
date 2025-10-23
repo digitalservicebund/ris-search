@@ -2,10 +2,10 @@ import { mount } from "@vue/test-utils";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import NormMetadataFields from "~/components/Norm/Metadatafields/NormMetadataFields.vue";
 import ValidityDatesMetadataFields from "~/components/Norm/Metadatafields/ValidityDatesMetadataFields.vue";
-import * as Config from "~/utils/config";
+import { findMetadataField } from "~/tests/testUtils";
 import { parseDateGermanLocalTime } from "~/utils/dateFormatting";
-import type { ValidityStatus } from "~/utils/normUtils";
-import { findMetadataField } from "~/utils/testing/testUtils";
+import type { ValidityStatus } from "~/utils/norm";
+import * as Config from "~/utils/profile";
 
 describe("NormMetadataFields.vue", () => {
   afterEach(() => {

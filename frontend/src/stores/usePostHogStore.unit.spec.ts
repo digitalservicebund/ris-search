@@ -7,7 +7,7 @@ import { useBackendURL } from "~/composables/useBackendURL";
 import type { QueryParams } from "~/stores/searchParams";
 import { addDefaults } from "~/stores/searchParams/getInitialState";
 import { usePostHogStore } from "~/stores/usePostHogStore";
-import { getPostHogConfig } from "~/utils/testing/postHogUtils";
+import { getPostHogConfig } from "~/tests/postHogUtils";
 
 const { useRuntimeConfigMock } = vi.hoisted(() => {
   return {

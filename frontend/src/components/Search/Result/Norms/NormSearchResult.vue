@@ -2,9 +2,9 @@
 import LegalIcon from "virtual:icons/mdi/legal";
 import { usePostHogStore } from "~/stores/usePostHogStore";
 import type { LegislationWork, SearchResult, TextMatch } from "~/types";
-import { isPrototypeProfile } from "~/utils/config";
 import { dateFormattedDDMMYYYY } from "~/utils/dateFormatting";
-import { temporalCoverageToValidityInterval } from "~/utils/normUtils";
+import { temporalCoverageToValidityInterval } from "~/utils/norm";
+import { isPrototypeProfile } from "~/utils/profile";
 import { sanitizeSearchResult } from "~/utils/sanitize";
 import { addEllipsis } from "~/utils/textFormatting";
 

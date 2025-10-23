@@ -7,9 +7,9 @@ import type { Page } from "~/components/Pagination/Pagination.vue";
 import SearchResult from "~/components/Search/Result/SearchResult.vue";
 import SortSelect from "~/components/Search/SortSelect.vue";
 import { type DropdownItem, sortMode } from "~/components/types";
-import * as searchService from "~/services/searchService";
 import { DocumentKind } from "~/types";
-import { buildResultCountString } from "~/utils/paginationUtils";
+import { buildResultCountString } from "~/utils/pagination";
+import * as searchService from "~/utils/services/searchService";
 
 const userInputDisabled = ref(true);
 onNuxtReady(() => {

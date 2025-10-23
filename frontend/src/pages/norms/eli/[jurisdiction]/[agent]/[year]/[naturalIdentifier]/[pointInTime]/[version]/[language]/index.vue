@@ -35,7 +35,6 @@ import { useDynamicSeo } from "~/composables/useDynamicSeo";
 import { useIntersectionObserver } from "~/composables/useIntersectionObserver";
 import { useNormVersions } from "~/composables/useNormVersions";
 import { DocumentKind, type LegislationWork } from "~/types";
-import { isPrototypeProfile } from "~/utils/config";
 import { dateFormattedDDMMYYYY } from "~/utils/dateFormatting";
 import { formatDocumentKind } from "~/utils/displayValues";
 import {
@@ -43,8 +42,9 @@ import {
   getManifestationUrl,
   temporalCoverageToValidityInterval,
   getValidityStatusLabel,
-} from "~/utils/normUtils";
-import type { ValidityStatus } from "~/utils/normUtils";
+} from "~/utils/norm";
+import type { ValidityStatus } from "~/utils/norm";
+import { isPrototypeProfile } from "~/utils/profile";
 import { tocItemsToTreeNodes } from "~/utils/tableOfContents";
 import { truncateAtWord } from "~/utils/textFormatting";
 import IcBaselineSubject from "~icons/ic/baseline-subject";
