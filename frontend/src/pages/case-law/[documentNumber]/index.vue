@@ -282,21 +282,3 @@ if (contentError?.value) {
     </section>
   </ContentWrapper>
 </template>
-
-<style>
-.no-js-content {
-  display: block;
-}
-
-.js-content {
-  display: none;
-}
-
-.js .no-js-content {
-  display: none;
-}
-
-.js .js-content {
-  display: block;
-}
-</style>
