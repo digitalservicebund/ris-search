@@ -32,7 +32,10 @@ export interface NormContent {
  */
 export function useFetchNormContent(
   expressionEli: string,
-): AsyncData<NormContent, NuxtError<NormContent> | null> {
+): AsyncData<
+  NormContent,
+  NuxtError<NormContent> | NuxtError<null> | undefined
+> {
   const requestFetch = useRequestFetch(); // unlike $fetch, useRequestFetch forwards client cookies
   return useAsyncData(`json+html for ${expressionEli}`, async () => {
     const backendURL = useBackendURL();
@@ -117,7 +120,10 @@ export interface NormArticleContent {
 export function useFetchNormArticleContent(
   expressionEli: string,
   articleEId?: string,
-): AsyncData<NormArticleContent, NuxtError<NormContent> | null> {
+): AsyncData<
+  NormArticleContent,
+  NuxtError<NormContent> | NuxtError<null> | undefined
+> {
   const requestFetch = useRequestFetch(); // unlike $fetch, useRequestFetch forwards client cookies
   const backendURL = useBackendURL();
   return useAsyncData(
@@ -159,11 +165,12 @@ function getContentUrl(metadata: LegislationWork) {
     (e) => e.encodingFormat === "text/html",
   );
   const contentUrl = encoding?.contentUrl;
-  if (!contentUrl) {
+  if (contentUrl) {
+    console.info("using manifestation", encoding?.["@id"]);
+  } else {
     console.error("contentUrl is missing", metadata?.workExample?.encoding);
     throw new Error("contentUrl is missing");
-  } else {
-    console.info("using manifestation", encoding?.["@id"]);
   }
+
   return contentUrl;
 }

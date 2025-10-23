@@ -2,8 +2,8 @@ import userEvent from "@testing-library/user-event";
 import { render, screen } from "@testing-library/vue";
 import { InputText } from "primevue";
 import DateFilter from "./DateFilter.vue";
-import type { DateFilterValue } from "./filterType";
 import { DocumentKind } from "~/types";
+import type { DateFilterValue } from "~/utils/advancedSearch/filterType";
 
 describe("DateFilter", () => {
   describe("caselaw", () => {
@@ -351,19 +351,20 @@ describe("DateFilter", () => {
   it("sets the default filter when switching document kind", async () => {
     const { rerender } = render(DateFilter, {
       props: {
-        documentKind: DocumentKind.CaseLaw,
+        documentKind: DocumentKind.Norm,
+        modelValue: { type: "currentlyInForce" },
       },
       global: { stubs: { InputMask: InputText } },
     });
 
+    expect(screen.getByRole("radio", { name: "Aktuell gültig" })).toBeChecked();
+
+    await rerender({ documentKind: DocumentKind.CaseLaw });
     expect(
       screen.getByRole("radio", { name: "Keine zeitliche Begrenzung" }),
     ).toBeChecked();
 
     await rerender({ documentKind: DocumentKind.Norm });
-    expect(screen.getByRole("radio", { name: "Aktuell gültig" })).toBeChecked();
-
-    await rerender({ documentKind: DocumentKind.CaseLaw });
     expect(
       screen.getByRole("radio", { name: "Keine zeitliche Begrenzung" }),
     ).toBeChecked();

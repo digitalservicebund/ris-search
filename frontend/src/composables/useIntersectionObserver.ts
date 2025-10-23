@@ -1,20 +1,8 @@
-import type { RouteQueryAndHash } from "vue-router";
-
 export const useIntersectionObserver = () => {
-  const route = useRoute() as RouteQueryAndHash;
-  const hash = route.hash;
-  const selectedEntry = ref<string | undefined>();
-
-  onMounted(() => {
-    selectedEntry.value = hash?.substring(1);
-    lastScrollY = window.scrollY;
-
-    window?.addEventListener("hashchange", () => {
-      selectedEntry.value = location.hash?.substring(1);
-    });
-  });
-
-  let lastScrollY = 0;
+  const route = useRoute();
+  const hash = computed(() => route.hash);
+  const selectedEntry = ref<string | undefined>(hash.value.substring(1));
+  const lastScrollY = ref(0);
   const visibleIds = ref<string[]>([]);
   const allIds = ref<string[]>([]);
 
@@ -22,8 +10,9 @@ export const useIntersectionObserver = () => {
 
   function handleIntersection(entries: IntersectionObserverEntry[]) {
     const currentScrollY = window.scrollY;
-    const scrollingDown = currentScrollY > lastScrollY;
-    lastScrollY = currentScrollY;
+    const scrollingDown = currentScrollY > lastScrollY.value;
+    lastScrollY.value = currentScrollY;
+
     entries.forEach((entry) => {
       if (entry.isIntersecting) {
         if (scrollingDown) {
@@ -46,7 +35,7 @@ export const useIntersectionObserver = () => {
     }
 
     if (sorted.length > 0) {
-      selectedEntry.value = sorted[0] ?? null;
+      selectedEntry.value = sorted[0] ?? undefined;
     } else {
       // handle the case when no headers are currently visible
       if (!scrollingDown) {
@@ -80,7 +69,7 @@ export const useIntersectionObserver = () => {
   const vObserveElements = {
     mounted: (element: HTMLElement) => {
       if (import.meta.server) return;
-      selectedEntry.value = hash?.substring(1);
+      selectedEntry.value = hash.value?.substring(1);
       observeSections(element);
     },
     updated: (element: HTMLElement) => {

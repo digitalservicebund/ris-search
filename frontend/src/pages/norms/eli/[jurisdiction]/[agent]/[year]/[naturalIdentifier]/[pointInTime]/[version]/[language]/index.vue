@@ -7,9 +7,6 @@ import TabPanels from "primevue/tabpanels";
 import Tabs from "primevue/tabs";
 import Toast from "primevue/toast";
 import type { TreeNode } from "primevue/treenode";
-import NormHeadingGroup from "./NormHeadingGroup.vue";
-import { getNormBreadcrumbTitle } from "./titles";
-import { useFetchNormContent } from "./useNormData";
 import { useRoute } from "#app";
 import Accordion from "~/components/Accordion.vue";
 import NormActionsMenu from "~/components/ActionMenu/NormActionsMenu.vue";
@@ -20,6 +17,7 @@ import NormMetadataFields from "~/components/Norm/Metadatafields/NormMetadataFie
 import NormVersionList from "~/components/Norm/NormVersionList.vue";
 import NormVersionWarning from "~/components/Norm/NormVersionWarning.vue";
 import VersionsTeaser from "~/components/Norm/VersionsTeaser.vue";
+import NormHeadingGroup from "~/components/NormHeadingGroup.vue";
 import Properties from "~/components/Properties.vue";
 import PropertiesItem from "~/components/PropertiesItem.vue";
 import NormTableOfContents from "~/components/Ris/NormTableOfContents.vue";
@@ -33,18 +31,20 @@ import {
 import { useBackendURL } from "~/composables/useBackendURL";
 import { useDynamicSeo } from "~/composables/useDynamicSeo";
 import { useIntersectionObserver } from "~/composables/useIntersectionObserver";
+import { useFetchNormContent } from "~/composables/useNormData";
 import { useNormVersions } from "~/composables/useNormVersions";
 import { DocumentKind, type LegislationWork } from "~/types";
-import { isPrototypeProfile } from "~/utils/config";
 import { dateFormattedDDMMYYYY } from "~/utils/dateFormatting";
 import { formatDocumentKind } from "~/utils/displayValues";
 import {
+  getNormBreadcrumbTitle,
   getValidityStatus,
   getManifestationUrl,
   temporalCoverageToValidityInterval,
   getValidityStatusLabel,
-} from "~/utils/normUtils";
-import type { ValidityStatus } from "~/utils/normUtils";
+} from "~/utils/norm";
+import type { ValidityStatus } from "~/utils/norm";
+import { isPrototypeProfile } from "~/utils/profile";
 import { tocItemsToTreeNodes } from "~/utils/tableOfContents";
 import { truncateAtWord } from "~/utils/textFormatting";
 import IcBaselineSubject from "~icons/ic/baseline-subject";
@@ -68,8 +68,8 @@ const metadata: Ref<LegislationWork | undefined> = computed(() => {
   return data.value?.legislationWork;
 });
 
-const html: Ref<string> = computed(() => data.value.html);
-const htmlParts = computed(() => data.value.htmlParts);
+const html = computed(() => data.value?.html);
+const htmlParts = computed(() => data.value?.htmlParts);
 
 const backendURL = useBackendURL();
 
@@ -219,7 +219,7 @@ useDynamicSeo({ title, description });
           :valid-to="validityInterval?.to"
         />
       </div>
-      <Tabs value="0" lazy>
+      <Tabs value="0">
         <TabList :pt="tabListStyles">
           <Tab
             class="flex items-center gap-8"
@@ -256,11 +256,11 @@ useDynamicSeo({ title, description });
               <template #content>
                 <IncompleteDataMessage />
                 <Accordion
-                  v-if="htmlParts.officialToc"
+                  v-if="htmlParts?.officialToc"
                   header-expanded="Amtliches Inhaltsverzeichnis ausblenden"
                   header-collapsed="Amtliches Inhaltsverzeichnis einblenden"
                 >
-                  <div v-html="htmlParts.officialToc" />
+                  <div v-html="htmlParts?.officialToc" />
                 </Accordion>
                 <div v-observe-elements class="norm-view" v-html="html" />
               </template>
@@ -286,26 +286,26 @@ useDynamicSeo({ title, description });
                 />
                 <PropertiesItem
                   label="Vollzitat:"
-                  :value="htmlParts.vollzitat"
+                  :value="htmlParts?.vollzitat"
                 />
                 <PropertiesItem
                   label="Stand:"
-                  :value-list="htmlParts.standangaben"
+                  :value-list="htmlParts?.standangaben"
                 >
                 </PropertiesItem>
                 <PropertiesItem
                   label="Hinweis zum Stand:"
-                  :value-list="htmlParts.standangabenHinweis"
+                  :value-list="htmlParts?.standangabenHinweis"
                 />
                 <PropertiesItem
-                  v-if="htmlParts.prefaceContainer"
+                  v-if="htmlParts?.prefaceContainer"
                   label="Besonderer Hinweis:"
                 >
-                  <div v-html="htmlParts.prefaceContainer" />
+                  <div v-html="htmlParts?.prefaceContainer" />
                 </PropertiesItem>
                 <PropertiesItem label="Fußnoten:">
-                  <template v-if="htmlParts.headingNotes" #default>
-                    <div v-html="htmlParts.headingNotes" />
+                  <template v-if="htmlParts?.headingNotes" #default>
+                    <div v-html="htmlParts?.headingNotes" />
                   </template>
                 </PropertiesItem>
                 <PropertiesItem label="Download:">

@@ -1,4 +1,3 @@
-// @vitest-environment node
 import { describe, expect } from "vitest";
 import type { QueryBuilderRow } from "~/components/Search/Query/data";
 import { FIELD_TYPE, INPUT_ELEMENT } from "~/components/Search/Query/data";

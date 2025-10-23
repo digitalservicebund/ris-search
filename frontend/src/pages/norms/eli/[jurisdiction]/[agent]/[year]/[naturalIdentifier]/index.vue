@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { useFetch } from "#app";
 import { useBackendURL } from "~/composables/useBackendURL";
-import { getMostRelevantExpression } from "~/pages/norms/eli/[jurisdiction]/[agent]/[year]/[naturalIdentifier]/index.logic";
 import type { JSONLDList, LegislationWork, SearchResult } from "~/types";
+import { getMostRelevantExpression } from "~/utils/norm";
 
 const route = useRoute();
 const workEli = [
@@ -22,7 +22,7 @@ const { data, error: loadError } = await useFetch<
   },
 });
 
-const matchedExpressionEli: ComputedRef<string | null> = computed(() => {
+const matchedExpressionEli = computed(() => {
   if (!data.value) return null;
   return getMostRelevantExpression(data.value?.member);
 });

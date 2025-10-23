@@ -51,6 +51,7 @@ test("the main category filters are mutually exclusive", async ({ page }) => {
   let totalCount = 0;
   let legislationCount = 0;
   let caseLawCount = 0;
+  let literatureCount = 0;
   await test.step("Basic search", async () => {
     await page.goto("/");
     await page.getByPlaceholder("Suchbegriff eingeben").fill("Fiktiv");
@@ -83,7 +84,18 @@ test("the main category filters are mutually exclusive", async ({ page }) => {
     caseLawCount = await getDisplayedResultCount(page);
   });
 
-  expect(caseLawCount + legislationCount, {
+  await test.step("Filter for literature", async () => {
+    await page.getByRole("button", { name: "Literaturnachweise" }).click();
+
+    await expect
+      .poll(() => getDisplayedResultCount(page), {
+        message: "the count should decrease",
+      })
+      .toBeLessThan(totalCount);
+    literatureCount = await getDisplayedResultCount(page);
+  });
+
+  expect(caseLawCount + legislationCount + literatureCount, {
     message: "The sum should equal the previous total",
   }).toEqual(totalCount);
 });

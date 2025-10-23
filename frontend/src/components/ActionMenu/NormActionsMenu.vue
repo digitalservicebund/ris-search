@@ -2,7 +2,7 @@
 import ActionsMenu from "~/components/ActionMenu/ActionsMenu.vue";
 import { useBackendURL } from "~/composables/useBackendURL";
 import type { LegislationWork } from "~/types";
-import { getManifestationUrl } from "~/utils/normUtils";
+import { getManifestationUrl } from "~/utils/norm";
 
 const { metadata } = defineProps<{ metadata: LegislationWork | undefined }>();
 

@@ -2,8 +2,8 @@
 import { RisSingleAccordion } from "@digitalservicebund/ris-ui/components";
 import { Button, InputGroup, InputGroupAddon, InputText } from "primevue";
 import DataFieldList from "~/components/AdvancedSearch/DataFieldList.vue";
-import type { DataField } from "~/pages/advanced-search/dataFields";
 import type { DocumentKind } from "~/types";
+import type { DataField } from "~/utils/advancedSearch/dataFields";
 import { formatDocumentKind } from "~/utils/displayValues";
 import { formatNumberWithSeparators } from "~/utils/numberFormatting";
 import IcBaselineSearch from "~icons/ic/baseline-search";
@@ -22,6 +22,8 @@ const {
   documentKind: DocumentKind;
   /** True if the component should be displayed in a loading state */
   loading?: boolean;
+  /** ID of the underlying form element to connect it with other items on the screen */
+  formId?: string;
 }>();
 
 /** The current search query. */
@@ -92,14 +94,17 @@ function submitUnlessLoading() {
       In {{ formattedCount }} {{ formattedDocumentKind }} suchen
     </span>
 
-    <form @submit.prevent="submitUnlessLoading()">
+    <form
+      :id="formId"
+      :aria-labelledby="queryDescriptionId"
+      @submit.prevent="submitUnlessLoading()"
+    >
       <InputGroup>
         <label class="sr-only" :for="queryInputId">Suchanfrage</label>
         <InputText
           :id="queryInputId"
           ref="queryInputEl"
           v-model="query"
-          :aria-describedby="queryDescriptionId"
           size="large"
           class="grow"
         />

@@ -1,13 +1,24 @@
-// @vitest-environment node
-import fs from "fs";
+import fs from "node:fs";
 import * as path from "node:path";
 import { PactV4, SpecificationVersion } from "@pact-foundation/pact";
 import type { MatchersV3 } from "@pact-foundation/pact";
 import axios, { type AxiosResponse } from "axios";
 import { describe, expect, it } from "vitest";
-import type { CaseLaw, LegislationWork } from "~/types";
+import type { CaseLaw, LegislationWork, Literature } from "~/types";
 
-describe("GET /case-law/document", () => {
+function runGetRequest(
+  server: MatchersV3.V3MockServer,
+  url: string,
+): Promise<AxiosResponse> {
+  return axios.request({
+    baseURL: server.url,
+    headers: { Accept: "application/json" },
+    method: "GET",
+    url: url,
+  });
+}
+
+describe("get a document", () => {
   // Create a 'pact' between the two applications in the integration we are testing
   const targetDir = path.resolve(process.cwd(), "../backend/pacts");
 
@@ -23,32 +34,6 @@ describe("GET /case-law/document", () => {
     provider: "backend",
     spec: SpecificationVersion.SPECIFICATION_VERSION_V4, // Modify this as needed for your use case
   });
-
-  // API Client that will fetch a single case-law document from the backend API
-  // This is the target of our Pact test
-  function getCaseLawDocument(
-    server: MatchersV3.V3MockServer,
-    documentNumber: string,
-  ): Promise<AxiosResponse> {
-    return axios.request({
-      baseURL: server.url,
-      headers: { Accept: "application/json" },
-      method: "GET",
-      url: `/v1/case-law/${documentNumber}`,
-    });
-  }
-
-  function getNormDocument(
-    server: MatchersV3.V3MockServer,
-    url: string,
-  ): Promise<AxiosResponse> {
-    return axios.request({
-      baseURL: server.url,
-      headers: { Accept: "application/json" },
-      method: "GET",
-      url,
-    });
-  }
 
   interface Eli {
     prefix: string;
@@ -264,16 +249,63 @@ describe("GET /case-law/document", () => {
     ],
   };
 
+  const literatureDocumentExample: Literature = {
+    "@type": "Literature",
+    "@id": "/v1/literature/TEST000000001",
+    inLanguage: "de",
+    documentNumber: "TEST000000001",
+    recordingDate: "1998-01-01",
+    yearsOfPublication: ["1979", "2004-09"],
+    documentTypes: ["Auf"],
+    dependentReferences: ["BUV, 1982, 123-123"],
+    independentReferences: ["50 Jahre Betriebs-Berater, 1987, 123-456"],
+    normReferences: ["GG, Art 6 Abs 2 S 1, 1949-05-23"],
+    headline: "Hauptüberschrift",
+    headlineAdditions: "Zusatz zur Hauptüberschrift",
+    alternativeHeadline: "Dokumentarischer Titel",
+    authors: ["Musterfrau, Sabine"],
+    collaborators: ["Mustermann, Max"],
+    originators: ["FOO"],
+    conferenceNotes: ["Internationaler Kongress 2025, Berlin, GER"],
+    languages: ["deu", "eng"],
+    shortReport: "Kurzreferat",
+    outline: "Gliederung",
+    encoding: [
+      {
+        "@type": "MediaObject",
+        "@id": "/v1/literature/TEST000000001/html",
+        contentUrl: "/v1/literature/TEST000000001.html",
+        encodingFormat: "text/html",
+        inLanguage: "de",
+      },
+      {
+        "@type": "MediaObject",
+        "@id": "/v1/literature/TEST000000001/xml",
+        contentUrl: "/v1/literature/TEST000000001.xml",
+        encodingFormat: "application/xml",
+        inLanguage: "de",
+      },
+      {
+        "@type": "MediaObject",
+        "@id": "/v1/literature/TEST000000001/zip",
+        contentUrl: "/v1/literature/TEST000000001.zip",
+        encodingFormat: "application/zip",
+        inLanguage: "de",
+      },
+    ],
+  };
+
   it("returns an HTTP 200 and a case law document", () => {
     // Arrange: set up our expected interactions
     // We use Pact to mock out the backend API
+    const requestUrl = "/v1/case-law/12345";
     return provider
       .addInteraction()
       .given("I have a document in the database with number 12345")
       .uponReceiving(
         "a request for retrieving the document with the same number",
       )
-      .withRequest("GET", "/v1/case-law/12345", (builder) => {
+      .withRequest("GET", requestUrl, (builder) => {
         builder.headers({ Accept: "application/json" });
       })
       .willRespondWith(200, (builder) => {
@@ -284,11 +316,9 @@ describe("GET /case-law/document", () => {
         // Act: test our API client behaves correctly
         // Note we configure the GetCaseLawDocument API client dynamically to
         // point to the mock service Pact created for us, instead of the real one
-        return await getCaseLawDocument(mockserver, "12345").then(
-          (response) => {
-            expect(response.data).to.deep.eq(caseLawDocumentExample);
-          },
-        );
+        return await runGetRequest(mockserver, requestUrl).then((response) => {
+          expect(response.data).to.deep.eq(caseLawDocumentExample);
+        });
       });
   });
 
@@ -307,11 +337,35 @@ describe("GET /case-law/document", () => {
         builder.jsonBody(normDocumentExample);
       })
       .executeTest(async (mockserver) => {
-        return await getNormDocument(mockserver, buildPath(expressionEli)).then(
+        return await runGetRequest(mockserver, buildPath(expressionEli)).then(
           (response) => {
             expect(response.data).to.deep.eq(normDocumentExample);
           },
         );
+      });
+  });
+
+  it("returns an HTTP 200 and a literature document", () => {
+    const requestUrl = "/v1/literature/TEST000000001";
+    return provider
+      .addInteraction()
+      .given(
+        "I have a literature document in the database with number TEST000000001",
+      )
+      .uponReceiving(
+        "a request for retrieving a literature document with the same document number",
+      )
+      .withRequest("GET", requestUrl, (builder) => {
+        builder.headers({ Accept: "application/json" });
+      })
+      .willRespondWith(200, (builder) => {
+        builder.headers({ "Content-Type": "application/json" });
+        builder.jsonBody(literatureDocumentExample);
+      })
+      .executeTest(async (mockserver) => {
+        return await runGetRequest(mockserver, requestUrl).then((response) => {
+          expect(response.data).to.deep.eq(literatureDocumentExample);
+        });
       });
   });
 });

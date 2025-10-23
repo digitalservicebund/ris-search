@@ -1,5 +1,5 @@
 import { mockNuxtImport } from "@nuxt/test-utils/runtime";
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { useFetchNormArticleContent, useFetchNormContent } from "./useNormData";
 import type {
   LegislationExpression,
@@ -29,8 +29,10 @@ describe("useNormData", () => {
     consoleInfoMock.mockReset();
     consoleErrorMock.mockReset();
   });
-  afterEach(() => {
+  beforeEach(() => {
     mockFetch.mockReset();
+    // Needed because useAsyncData caches its result for the same keys
+    clearNuxtData();
   });
 
   const expressionEli = "test-eli";

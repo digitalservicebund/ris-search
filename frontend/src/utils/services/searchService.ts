@@ -1,5 +1,5 @@
-import { axiosInstance } from "~/services/httpClient";
 import { DocumentKind } from "~/types";
+import { axiosInstance } from "~/utils/services/httpClient";
 
 const timeout = 10000;
 

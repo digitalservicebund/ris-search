@@ -118,7 +118,7 @@ class LiteratureSearchSchemaMapperTest {
     assertEquals(total, middlePage.totalItems());
     assertEquals(total, lastPage.totalItems());
 
-    // all IDs should point to case law resources
+    // all IDs should point to literature resources
     assertTrue(firstPage.id().startsWith(ApiConfig.Paths.LITERATURE));
     assertTrue(middlePage.id().startsWith(ApiConfig.Paths.LITERATURE));
     assertTrue(lastPage.id().startsWith(ApiConfig.Paths.LITERATURE));

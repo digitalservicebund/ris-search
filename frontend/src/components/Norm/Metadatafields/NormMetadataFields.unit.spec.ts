@@ -2,10 +2,10 @@ import { mount } from "@vue/test-utils";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import NormMetadataFields from "~/components/Norm/Metadatafields/NormMetadataFields.vue";
 import ValidityDatesMetadataFields from "~/components/Norm/Metadatafields/ValidityDatesMetadataFields.vue";
-import * as Config from "~/utils/config";
+import { findMetadataField } from "~/tests/testUtils";
 import { parseDateGermanLocalTime } from "~/utils/dateFormatting";
-import type { ValidityStatus } from "~/utils/normUtils";
-import { findMetadataField } from "~/utils/testing/testUtils";
+import type { ValidityStatus } from "~/utils/norm";
+import * as Config from "~/utils/profile";
 
 describe("NormMetadataFields.vue", () => {
   afterEach(() => {
@@ -21,7 +21,7 @@ describe("NormMetadataFields.vue", () => {
     });
 
     const abbreviationField = findMetadataField(wrapper, "Abkürzung");
-    expect(abbreviationField.props().value).toBe(expectedAbbreviation);
+    expect(abbreviationField?.props().value).toBe(expectedAbbreviation);
   });
 
   it("does not show abbreviation if abbreviation is undefined", () => {
@@ -41,7 +41,7 @@ describe("NormMetadataFields.vue", () => {
     });
 
     const statusField = findMetadataField(wrapper, "Status");
-    expect(statusField.props().value).toBe(expected);
+    expect(statusField?.props().value).toBe(expected);
   });
 
   it("shows validity dates metadata fields", () => {

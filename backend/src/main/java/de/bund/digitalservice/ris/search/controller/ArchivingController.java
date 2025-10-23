@@ -4,6 +4,7 @@ import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
 import de.bund.digitalservice.ris.search.repository.objectstorage.PortalBucket;
 import de.bund.digitalservice.ris.search.service.BulkExportService;
+import io.swagger.v3.oas.annotations.Hidden;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +28,7 @@ public class ArchivingController {
   }
 
   @PostMapping(value = ApiConfig.Paths.GENERATE_ARCHIVE)
+  @Hidden
   public ResponseEntity<Void> generateArchive() {
     bulkExportService.updateExportAsync(normsBucket, portalBucket, "norms", "eli/");
     return ResponseEntity.noContent().build();

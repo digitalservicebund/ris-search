@@ -62,6 +62,7 @@ public record CaseLawDocumentationUnit(
     public static final String COURT_KEYWORD_KEYWORD = "court_keyword.keyword";
     public static final String ID = "id";
     public static final String DOCUMENT_NUMBER = "document_number";
+    public static final String DOCUMENT_NUMBER_KEYWORD = "document_number.keyword";
     public static final String ECLI = "ecli";
     public static final String ECLI_KEYWORD = "ecli.keyword";
     public static final String CASE_FACTS = "case_facts";

@@ -90,6 +90,11 @@ services:
       # the browser accessing keycloak doesn't know about the keycloak name, so we use localhost
       # and redefine localhost to point to keycloak instead
       - "localhost:172.18.0.3"
+    healthcheck:
+      test: [ "CMD", "wget", "-q", "-O", "-", "http://localhost:3000/" ]
+      interval: 5s
+      timeout: 3s
+      retries: 60
 
 networks:
   ris-portal:

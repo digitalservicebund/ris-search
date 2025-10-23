@@ -1,5 +1,5 @@
-import { staticPageSeo } from "~/i18n/staticPageSeo";
-import type { StaticPage } from "~/i18n/staticPageSeo";
+import { staticPageSeo } from "~/utils/i18n/staticPageSeo";
+import type { StaticPage } from "~/utils/i18n/staticPageSeo";
 
 export function useStaticPageSeo(page: StaticPage) {
   const entry = staticPageSeo[page];

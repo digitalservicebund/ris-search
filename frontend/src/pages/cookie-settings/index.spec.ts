@@ -4,7 +4,7 @@ import { mount, RouterLinkStub } from "@vue/test-utils";
 import type { VueWrapper } from "@vue/test-utils";
 import { describe, it, expect, vi } from "vitest";
 import CookieSettings from "~/pages/cookie-settings/index.vue";
-import { getPostHogConfig } from "~/utils/testing/postHogUtils";
+import { getPostHogConfig } from "~/tests/postHogUtils";
 
 const { useRuntimeConfigMock } = vi.hoisted(() => {
   return {

@@ -8,14 +8,17 @@ import au.com.dius.pact.provider.junitsupport.loader.PactFolder;
 import au.com.dius.pact.provider.spring.junit5.MockMvcTestTarget;
 import com.c4_soft.springaddons.security.oauth2.test.annotations.WithJwt;
 import de.bund.digitalservice.ris.search.controller.api.CaseLawController;
+import de.bund.digitalservice.ris.search.controller.api.LiteratureController;
 import de.bund.digitalservice.ris.search.controller.api.NormsController;
 import de.bund.digitalservice.ris.search.integration.config.ContainersIntegrationBase;
 import de.bund.digitalservice.ris.search.integration.controller.api.testData.NormsTestData;
 import de.bund.digitalservice.ris.search.models.PublicationStatus;
 import de.bund.digitalservice.ris.search.models.opensearch.Article;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
+import de.bund.digitalservice.ris.search.models.opensearch.Literature;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.repository.opensearch.CaseLawRepository;
+import de.bund.digitalservice.ris.search.repository.opensearch.LiteratureRepository;
 import de.bund.digitalservice.ris.search.repository.opensearch.NormsRepository;
 import java.time.LocalDate;
 import java.util.List;
@@ -37,6 +40,8 @@ import org.springframework.test.web.servlet.MockMvc;
 class PactProviderTest extends ContainersIntegrationBase {
   @Autowired private CaseLawRepository caseLawRepository;
   @Autowired private CaseLawController caseLawController;
+  @Autowired private LiteratureRepository literatureRepository;
+  @Autowired private LiteratureController literatureController;
   @Autowired private NormsRepository normsRepository;
   @Autowired private NormsController normsController;
   @Autowired private MockMvc mockMvc;
@@ -50,7 +55,7 @@ class PactProviderTest extends ContainersIntegrationBase {
   @BeforeEach
   void before(PactVerificationContext context) {
     MockMvcTestTarget testTarget = new MockMvcTestTarget(mockMvc);
-    testTarget.setControllers(caseLawController, normsController);
+    testTarget.setControllers(caseLawController, literatureController, normsController);
     context.setTarget(testTarget);
   }
 
@@ -93,6 +98,34 @@ class PactProviderTest extends ContainersIntegrationBase {
             .build();
 
     caseLawRepository.saveAll(List.of(caseLawTestOne));
+  }
+
+  @State("I have a literature document in the database with number TEST000000001")
+  public void thereIsALiteratureDocumentTEST000000001() {
+
+    var literatureTestData =
+        Literature.builder()
+            .id("TEST000000001")
+            .documentNumber("TEST000000001")
+            .recordingDate(LocalDate.parse("1998-01-01"))
+            .yearsOfPublication(List.of("1979", "2004-09"))
+            .documentTypes(List.of("Auf"))
+            .dependentReferences(List.of("BUV, 1982, 123-123"))
+            .independentReferences(List.of("50 Jahre Betriebs-Berater, 1987, 123-456"))
+            .normReferences(List.of("GG, Art 6 Abs 2 S 1, 1949-05-23"))
+            .mainTitle("Hauptüberschrift")
+            .mainTitleAdditions("Zusatz zur Hauptüberschrift")
+            .documentaryTitle("Dokumentarischer Titel")
+            .authors(List.of("Musterfrau, Sabine"))
+            .collaborators(List.of("Mustermann, Max"))
+            .originators(List.of("FOO"))
+            .conferenceNotes(List.of("Internationaler Kongress 2025, Berlin, GER"))
+            .languages(List.of("deu", "eng"))
+            .shortReport("Kurzreferat")
+            .outline("Gliederung")
+            .build();
+
+    literatureRepository.save(literatureTestData);
   }
 
   @State("I have a document in the database with eli/bund/bgbl-1/2000/s998/2000-10-06/2/deu")

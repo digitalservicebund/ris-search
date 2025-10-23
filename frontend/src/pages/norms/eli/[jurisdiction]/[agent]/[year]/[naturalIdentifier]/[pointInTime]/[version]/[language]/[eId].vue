@@ -1,7 +1,5 @@
 <script setup lang="ts">
 import type { TreeNode } from "primevue/treenode";
-import { getNormBreadcrumbTitle, getNormTitle } from "./titles";
-import { useFetchNormArticleContent } from "./useNormData";
 import ContentWrapper from "~/components/CustomLayouts/ContentWrapper.vue";
 import TableOfContentsLayout from "~/components/CustomLayouts/SidebarLayout.vue";
 import IncompleteDataMessage from "~/components/IncompleteDataMessage.vue";
@@ -11,13 +9,18 @@ import NormTableOfContents from "~/components/Ris/NormTableOfContents.vue";
 import type { BreadcrumbItem } from "~/components/Ris/RisBreadcrumb.vue";
 import RisBreadcrumb from "~/components/Ris/RisBreadcrumb.vue";
 import { useDynamicSeo } from "~/composables/useDynamicSeo";
+import { useFetchNormArticleContent } from "~/composables/useNormData";
 import { useValidNormVersions } from "~/composables/useNormVersions";
 import { type Article, DocumentKind, type LegislationWork } from "~/types";
-import { isPrototypeProfile } from "~/utils/config";
 import { parseDateGermanLocalTime } from "~/utils/dateFormatting";
 import { formatDocumentKind } from "~/utils/displayValues";
 import { parseDocument } from "~/utils/htmlParser";
-import { temporalCoverageToValidityInterval } from "~/utils/normUtils";
+import {
+  getNormBreadcrumbTitle,
+  getNormTitle,
+  temporalCoverageToValidityInterval,
+} from "~/utils/norm";
+import { isPrototypeProfile } from "~/utils/profile";
 import { findNodePath, tocItemsToTreeNodes } from "~/utils/tableOfContents";
 import { truncateAtWord } from "~/utils/textFormatting";
 import IcBaselineArrowBack from "~icons/ic/baseline-arrow-back";
@@ -35,7 +38,7 @@ const route = useRoute();
 
 const expressionEli = Object.values(route.params).slice(0, -1).join("/");
 const eId = computed(() => {
-  const eIdParam: string = Array.isArray(route.params.eId)
+  const eIdParam = Array.isArray(route.params.eId)
     ? route.params.eId[0]
     : route.params.eId;
   if (!eIdParam) return undefined;
@@ -47,8 +50,8 @@ const { data, error, status } = await useFetchNormArticleContent(
   eId.value,
 );
 
-const norm: Ref<LegislationWork> = computed(() => data.value?.legislationWork);
-const articleHtml: Ref<string> = computed(() => data.value?.html);
+const norm = computed(() => data.value?.legislationWork);
+const articleHtml = computed(() => data.value?.html);
 
 if (error.value) {
   showError(error.value);
@@ -90,7 +93,7 @@ function getRouteForSiblingArticle(
     return undefined;
   return route.fullPath.replace(
     /\/[^/]*$/,
-    `/${norm.value.workExample.hasPart[newIndex].eId}`,
+    `/${norm.value.workExample.hasPart[newIndex]?.eId}`,
   );
 }
 
@@ -126,7 +129,7 @@ const breadcrumbItems: Ref<BreadcrumbItem[]> = computed(() => {
   return list;
 });
 
-const htmlTitle = computed(() => data.value.articleHeading);
+const htmlTitle = computed(() => data.value?.articleHeading);
 const topNormLinkText = computed(() => {
   if (!norm.value) return "";
   const baseText = norm.value.name || norm.value.alternateName;
@@ -140,7 +143,7 @@ const topNormLinkText = computed(() => {
 });
 
 const validVersions =
-  norm.value.workExample.legislationLegalForce !== "InForce"
+  norm.value?.workExample.legislationLegalForce !== "InForce"
     ? useValidNormVersions(norm.value?.legislationIdentifier)
     : undefined;
 
@@ -155,7 +158,7 @@ const inForceNormLink = computed(() => {
   }
 
   const validVersion = validVersions.data.value.member[0];
-  return `/norms/${validVersion.item.workExample.legislationIdentifier}`;
+  return `/norms/${validVersion?.item.workExample.legislationIdentifier}`;
 });
 
 const buildOgTitleForArticle = (

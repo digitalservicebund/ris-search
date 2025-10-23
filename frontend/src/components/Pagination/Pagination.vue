@@ -1,12 +1,23 @@
 <script setup lang="ts">
 import Button from "primevue/button";
-import type { Page } from "~/components/Pagination/Pagination";
-import {
-  buildItemsOnPageString,
-  parsePageNumber,
-} from "~/utils/paginationUtils";
+import type { AnyDocument, SearchResult } from "~/types";
+import { buildItemsOnPageString, parsePageNumber } from "~/utils/pagination";
 import IconArrowBack from "~icons/ic/baseline-arrow-back";
 import IconArrowForward from "~icons/ic/baseline-arrow-forward";
+
+export interface PartialCollectionView {
+  first?: string;
+  previous?: string;
+  next?: string;
+  last?: string;
+}
+
+export type Page = {
+  member: SearchResult<AnyDocument>[];
+  "@id": string;
+  totalItems?: number;
+  view: PartialCollectionView;
+};
 
 const props = withDefaults(
   defineProps<{

@@ -11,11 +11,13 @@
       "properties": {
         "document_number": {
           "type": "text",
-          "analyzer": "custom_german_analyzer"
-        },
-        "DATUM": {
-          "type": "alias",
-          "path": "recording_date"
+          "analyzer": "custom_german_analyzer",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "normalizer": "normalized_keyword"
+            }
+          }
         },
         "recording_date": {
           "type": "date"
@@ -23,6 +25,13 @@
         "years_of_publication": {
           "type": "text",
           "analyzer": "custom_german_analyzer"
+        },
+        "DATUM": {
+          "type": "alias",
+          "path": "first_publication_date"
+        },
+        "first_publication_date": {
+          "type": "date"
         },
         "document_types": {
           "type": "text",
@@ -36,7 +45,15 @@
           "type": "text",
           "analyzer": "custom_german_analyzer"
         },
+        "norm_references": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
         "main_title": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
+        "main_title_additions": {
           "type": "text",
           "analyzer": "custom_german_analyzer"
         },
@@ -49,6 +66,18 @@
           "analyzer": "custom_german_analyzer"
         },
         "collaborators": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
+        "originator": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
+        "language": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
+        "conference_note": {
           "type": "text",
           "analyzer": "custom_german_analyzer"
         },

@@ -34,7 +34,11 @@ pre-commit:
 pre-push:
   parallel: true
   commands:
-    licenses-audit:
+    licenses-audit-backend:
       tags: licenses audit
       root: backend
       run: ./gradlew checkLicense
+    licenses-audit-frontend:
+      tags: licenses audit
+      root: frontend
+      run: yarn audit:licences

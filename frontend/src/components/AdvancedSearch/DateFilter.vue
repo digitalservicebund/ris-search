@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import { RadioButton } from "primevue";
 import RisDateInput from "../Ris/RisDateInput.vue";
-import type { DateFilterValue, FilterType } from "./filterType";
 import { DocumentKind } from "~/types";
+import type {
+  DateFilterValue,
+  FilterType,
+} from "~/utils/advancedSearch/filterType";
 
 const { documentKind } = defineProps<{
   /* Document kind for which the filter should be used */
@@ -12,16 +15,14 @@ const { documentKind } = defineProps<{
 /** The currently active filter */
 const filter = defineModel<DateFilterValue>({ default: { type: "allTime" } });
 
-const [
-  formId,
-  currentlyInForceId,
-  allTimeId,
-  specificDateId,
-  specificDateInputId,
-  periodId,
-  periodFromInputId,
-  periodToInputId,
-] = new Array(8).fill("").map(() => useId());
+const formId = useId();
+const currentlyInForceId = useId();
+const allTimeId = useId();
+const specificDateId = useId();
+const specificDateInputId = useId();
+const periodId = useId();
+const periodFromInputId = useId();
+const periodToInputId = useId();
 
 const filterLabel = computed(() => {
   switch (documentKind) {
@@ -47,8 +48,10 @@ watch(
   () => documentKind,
   (is, was) => {
     if (is === was) return;
-    // Set a reasonable default filter when the document type is changed
-    setFilterType(is === DocumentKind.Norm ? "currentlyInForce" : "allTime");
+
+    if (was === DocumentKind.Norm && filter.value.type === "currentlyInForce") {
+      setFilterType("allTime");
+    }
   },
 );
 

@@ -14,10 +14,13 @@ import org.opensearch.search.fetch.subphase.highlight.HighlightBuilder;
 public class LiteratureSimpleSearchType implements SimpleSearchType {
 
   private static final List<String> LITERATURE_HIGHLIGHT_CONTENT_FIELDS =
-      List.of(Literature.Fields.MAIN_TITLE);
+      List.of(
+          Literature.Fields.MAIN_TITLE,
+          Literature.Fields.DOCUMENTARY_TITLE,
+          Literature.Fields.SHORT_REPORT);
 
   private static final List<String> LITERATURE_FETCH_EXCLUDED_FIELDS =
-      List.of(Literature.Fields.OUTLINE, Literature.Fields.SHORT_REPORT);
+      List.of(Literature.Fields.OUTLINE);
 
   private final LiteratureSearchParams searchParams;
 

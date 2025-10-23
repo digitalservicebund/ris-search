@@ -98,7 +98,7 @@ describe("TableOfContents.vue", async () => {
       props: { tableOfContentEntries },
     });
 
-    const link = wrapper.find(`a[href="#${tableOfContentEntries[1].id}"]`);
+    const link = wrapper.find(`a[href="#${tableOfContentEntries[1]?.id}"]`);
     await link.trigger("click");
 
     await wrapper.vm.$nextTick();

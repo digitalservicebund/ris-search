@@ -3,7 +3,7 @@ import { mount, RouterLinkStub } from "@vue/test-utils";
 import { describe, it, expect, vi, afterEach } from "vitest";
 import NormSearchResult from "./NormSearchResult.vue";
 import type { LegislationWork, SearchResult, TextMatch } from "~/types";
-import * as Config from "~/utils/config";
+import * as Config from "~/utils/profile";
 
 const NuxtLinkStub = {
   name: "NuxtLink",
@@ -186,7 +186,7 @@ describe("NormSearchResult.vue", () => {
     });
     const highlightedElements = wrapper.findAll("mark");
     expect(highlightedElements).length(1);
-    expect(highlightedElements[0].text()).toBe("highlighted Text");
+    expect(highlightedElements[0]?.text()).toBe("highlighted Text");
   });
 
   it("filters HTML tags except mark, i, b", async () => {
@@ -222,6 +222,6 @@ describe("NormSearchResult.vue", () => {
 
     const contentItems = wrapper.findAll('[data-testid="highlights"] a h3');
     expect(contentItems.length).toBe(1);
-    expect(contentItems[0].element.innerHTML).toBe(expectedSanitized);
+    expect(contentItems[0]?.element.innerHTML).toBe(expectedSanitized);
   });
 });

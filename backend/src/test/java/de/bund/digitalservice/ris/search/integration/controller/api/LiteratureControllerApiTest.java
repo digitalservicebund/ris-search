@@ -44,16 +44,24 @@ class LiteratureControllerApiTest extends ContainersIntegrationBase {
         .andExpectAll(
             status().isOk(),
             jsonPath("$.documentNumber", Matchers.is(documentNumberPersistedInTest)),
+            jsonPath("$.recordingDate", Matchers.is("1998-01-01")),
             jsonPath("$.yearsOfPublication", Matchers.containsInAnyOrder("1999", "2000", "2001")),
             jsonPath("$.documentTypes", Matchers.containsInAnyOrder("Kommentar", "Aufsatz")),
             jsonPath("$.dependentReferences", Matchers.contains("NJW, 2000, 456-789")),
             jsonPath(
                 "$.independentReferences",
                 Matchers.contains("Festschrift für Müller, 2001, 12-34")),
+            jsonPath("$.normReferences", Matchers.contains("GG, Art 6 Abs 2 S 1")),
             jsonPath("$.headline", Matchers.is("Zivilprozessrecht im Wandel")),
-            jsonPath("$.alternativeTitle", Matchers.is("Dokumentation ZPO")),
+            jsonPath("$.alternativeHeadline", Matchers.is("Dokumentation ZPO")),
+            jsonPath("$.headlineAdditions", Matchers.is("Zusatz zu Zivilprozessrecht im Wandel")),
             jsonPath("$.authors", Matchers.containsInAnyOrder("Schmidt, Hans", "Becker, Anna")),
             jsonPath("$.collaborators", Matchers.contains("Meier, Karl")),
+            jsonPath("$.originators", Matchers.contains("FOO")),
+            jsonPath(
+                "$.conferenceNotes",
+                Matchers.contains("Internationaler Kongress 2025, Berlin, GER")),
+            jsonPath("$.languages", Matchers.contains("deu", "eng")),
             jsonPath(
                 "$.shortReport",
                 Matchers.is("Ein Überblick über die Entwicklung der Rechtsprechung")),
@@ -169,14 +177,15 @@ class LiteratureControllerApiTest extends ContainersIntegrationBase {
             jsonPath("$.member[0]['item'].headline", Matchers.is("Einführung in das Handelsrecht")))
         .andExpect(
             jsonPath(
-                "$.member[0]['item'].alternativeTitle", Matchers.is("Dokumentation Handelsrecht")))
+                "$.member[0]['item'].alternativeHeadline",
+                Matchers.is("Dokumentation Handelsrecht")))
         .andExpect(jsonPath("$.member[0]['item'].authors", Matchers.contains("Musterfrau, Sabine")))
         .andExpect(
             jsonPath("$.member[0]['item'].collaborators", Matchers.contains("Mustermann, Max")))
         .andExpect(
             jsonPath(
                 "$.member[0]['item'].shortReport",
-                Matchers.nullValue())) // excluded from search results
+                Matchers.is("Kurzer Bericht über die Entwicklung des Handelsrechts")))
         .andExpect(
             jsonPath(
                 "$.member[0]['item'].outline",
@@ -330,5 +339,17 @@ class LiteratureControllerApiTest extends ContainersIntegrationBase {
         .andExpect(
             jsonPath(
                 "$.member[*].item.documentNumber", Matchers.containsInAnyOrder("KALU000000002")));
+  }
+
+  @Test
+  @DisplayName("Should return literature items sorted by default")
+  void shouldReturnedDefaultSort() throws Exception {
+    mockMvc
+        .perform(get(ApiConfig.Paths.LITERATURE).contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.member", hasSize(3)))
+        .andExpect(jsonPath("$.member[0]['item'].documentNumber", Matchers.is("KALU000000003")))
+        .andExpect(jsonPath("$.member[1]['item'].documentNumber", Matchers.is("KALU000000001")))
+        .andExpect(jsonPath("$.member[2]['item'].documentNumber", Matchers.is("KALU000000002")));
   }
 }

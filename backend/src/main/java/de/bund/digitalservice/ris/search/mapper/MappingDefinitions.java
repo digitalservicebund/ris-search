@@ -26,7 +26,7 @@ public class MappingDefinitions {
   static {
     literatureOpenSearchToSchemaMap =
         Map.ofEntries(
-            Map.entry(Literature.Fields.DOCUMENT_NUMBER, "documentNumber"),
+            Map.entry(Literature.Fields.DOCUMENT_NUMBER_KEYWORD, "documentNumber"),
             Map.entry(Literature.Fields.RECORDING_DATE, "recordingDate"),
             Map.entry(Literature.Fields.YEARS_OF_PUBLICATION, "yearsOfPublication"),
             Map.entry(Literature.Fields.DEPENDENT_REFERENCES, "dependentReferences"),
@@ -52,7 +52,7 @@ public class MappingDefinitions {
             );
     caseLawOpenSearchToSchemaMap =
         Map.ofEntries(
-            Map.entry(CaseLawDocumentationUnit.Fields.DOCUMENT_NUMBER, "documentNumber"),
+            Map.entry(CaseLawDocumentationUnit.Fields.DOCUMENT_NUMBER_KEYWORD, "documentNumber"),
             Map.entry(CaseLawDocumentationUnit.Fields.ECLI, "ecli"),
             Map.entry(CaseLawDocumentationUnit.Fields.CASE_FACTS, "caseFacts"),
             Map.entry(CaseLawDocumentationUnit.Fields.DECISION_GROUNDS, "decisionGrounds"),

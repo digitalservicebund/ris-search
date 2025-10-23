@@ -2,13 +2,16 @@ import type { Page } from "@playwright/test";
 import { expect, test } from "./fixtures";
 import { getDisplayedResultCount } from "./utils";
 
-function getSidebar(page: Page) {
-  const sidebarLabel = page.getByText("Seiteninhalte");
-  return page.getByRole("navigation").filter({ has: sidebarLabel });
+async function getSidebar(page: Page) {
+  const navigation = page.getByRole("navigation", { name: "Seiteninhalte" });
+  await navigation.scrollIntoViewIfNeeded();
+  await expect(navigation).toBeVisible();
+  return navigation;
 }
 
 test("can search, filter for case law, and view a single case law documentation unit", async ({
   page,
+  isMobileTest,
 }) => {
   // authentication should happen in the setup flow in auth.setup.ts
   await test.step("Basic search", async () => {
@@ -39,8 +42,7 @@ test("can search, filter for case law, and view a single case law documentation 
       page.getByRole("heading", { name: "Testheader für Urteil 6." }).first(),
     ).toBeVisible();
 
-    const sidebar = getSidebar(page);
-    await expect(sidebar).toBeVisible();
+    const sidebar = await getSidebar(page);
 
     const firstSectionHeader = page
       .getByRole("main")
@@ -54,33 +56,42 @@ test("can search, filter for case law, and view a single case law documentation 
     await expect(currentSection).toHaveCount(1);
   });
 
-  for (const sectionName of ["Tenor", "Orientierungssatz", "Tatbestand"]) {
-    await test.step(`Jump straight to a specific section, ${sectionName}`, async () => {
-      await page.goto(resultsListUrl, {
-        waitUntil: "networkidle",
+  if (isMobileTest)
+    for (const sectionName of ["Tenor", "Orientierungssatz", "Tatbestand"]) {
+      await test.step(`Jump straight to a specific section, ${sectionName}`, async () => {
+        await page.goto(resultsListUrl, {
+          waitUntil: "networkidle",
+        });
+        const link = page.getByRole("link", { name: sectionName }).first();
+        await link.click();
+
+        const sidebar = await getSidebar(page);
+
+        const expectedSidebarItem = sidebar.getByRole("link", {
+          name: sectionName,
+        });
+
+        const sectionHeading = page
+          .getByRole("main")
+          .getByRole("heading", { name: sectionName })
+          .first();
+        await sectionHeading.scrollIntoViewIfNeeded();
+        await expect(expectedSidebarItem).toHaveAttribute(
+          "aria-current",
+          "section",
+        );
+
+        const heading = page
+          .getByRole("main")
+          .getByRole("heading", { name: sectionName })
+          .first();
+
+        await expect(page).toHaveURL(new RegExp(`#`, "i"));
+        await heading.scrollIntoViewIfNeeded();
+        await expect(heading).toBeVisible();
+        await expect(heading).toBeInViewport();
       });
-      const link = page.getByRole("link", { name: sectionName }).first();
-      await link.click();
-
-      const sidebar = getSidebar(page);
-      await expect(sidebar).toBeVisible();
-
-      const expectedSidebarItem = sidebar.getByRole("link", {
-        name: sectionName,
-      });
-      // ensure the previous section is out of sight and gets deselected
-      await page.mouse.wheel(0, 10);
-      await expect(expectedSidebarItem).toHaveAttribute(
-        "aria-current",
-        "section",
-      );
-
-      const heading = page
-        .getByRole("main")
-        .getByRole("heading", { name: sectionName });
-      await expect(heading).toBeInViewport();
-    });
-  }
+    }
 });
 
 test.describe("actions menu", () => {

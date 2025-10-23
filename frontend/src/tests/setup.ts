@@ -3,7 +3,7 @@ import { config } from "@vue/test-utils";
 import PrimeVue from "primevue/config";
 import { vi } from "vitest";
 
-vi.mock("~/middleware/check-login.global.ts", () => ({ default: vi.fn() }));
+vi.mock("~/middleware/checkLogin.global.ts", () => ({ default: vi.fn() }));
 
 // Enable PrimeVue plugin because we need that in many tests
 config.global.plugins = [PrimeVue];
@@ -24,3 +24,17 @@ if (globalThis?.window) {
     })),
   });
 }
+
+class ResizeObserver {
+  observe() {
+    // empty mock method
+  }
+  unobserve() {
+    // empty mock method
+  }
+  disconnect() {
+    // empty mock method
+  }
+}
+
+globalThis.ResizeObserver = ResizeObserver;

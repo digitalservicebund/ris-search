@@ -102,7 +102,7 @@ const metadata = computed(() => {
   } as CaseLawMetadata;
 });
 
-const previewSections: ComputedRef<ExtendedTextMatch[]> = computed(() => {
+const previewSections = computed(() => {
   const textMatches = props.searchResult.textMatches;
   const foundFields = new Set<Key>();
   const relevantMatches = textMatches
@@ -174,22 +174,19 @@ function trackResultClick(url: string) {
       </h2>
     </NuxtLink>
     <div class="mt-6 flex w-full max-w-prose flex-col gap-6">
-      <div v-for="section in previewSections" :key="section.id">
+      <div v-for="section in previewSections" :key="section?.id">
         <NuxtLink
-          :to="`${metadata.url}#${section.id}`"
+          :to="`${metadata.url}#${section?.id}`"
           class="ris-label1-bold link-hover text-blue-800"
           external
-          @click="trackResultClick(`${metadata.url}#${section.id}`)"
+          @click="trackResultClick(`${metadata.url}#${section?.id}`)"
         >
-          <h3>
-            {{ section.title }}
-          </h3>
-          : </NuxtLink
+          <h3>{{ section?.title }}:</h3> </NuxtLink
         >{{ " " }}
         <span
           data-testid="highlighted-field"
           class="text-lg"
-          v-html="sanitizeSearchResult(section.text)"
+          v-html="sanitizeSearchResult(section?.text)"
         />
       </div>
     </div>

@@ -1,12 +1,7 @@
 <script setup lang="ts">
 import { storeToRefs } from "pinia";
 import Message from "primevue/message";
-import {
-  convertParams,
-  getUrl,
-  type SearchEndpointParams,
-} from "./SimpleSearch.logic";
-import type { Page } from "~/components/Pagination/Pagination";
+import type { Page } from "~/components/Pagination/Pagination.vue";
 import SearchResult from "~/components/Search/Result/SearchResult.vue";
 import CategoryFilter from "~/components/Search/SimpleSearch/CategoryFilter/CategoryFilter.vue";
 import CourtFilter from "~/components/Search/SimpleSearch/CourtFilter.vue";
@@ -17,12 +12,13 @@ import SortSelect from "~/components/Search/SortSelect.vue";
 import { useSimpleSearchParamsStore } from "~/stores/searchParams";
 import { DocumentKind } from "~/types";
 import { getCurrentDateInGermanyFormatted } from "~/utils/dateFormatting";
-import { buildResultCountString } from "~/utils/paginationUtils";
+import { buildResultCountString } from "~/utils/pagination";
+import { convertParams, getUrl } from "~/utils/simpleSearch";
 
 const store = useSimpleSearchParamsStore();
 const values = storeToRefs(store);
 
-const params: ComputedRef<SearchEndpointParams> = computed(() =>
+const params = computed(() =>
   convertParams({
     ...values.params.value,
     temporalCoverage: getCurrentDateInGermanyFormatted(),
@@ -73,7 +69,7 @@ async function updatePage(page: number) {
   store.setPageNumber(page);
 }
 
-const documentKind: ComputedRef<DocumentKind> = computed(() => {
+const documentKind = computed(() => {
   if (values.category.value.length > 0) {
     return values.category.value[0] as DocumentKind;
   }
@@ -89,6 +85,8 @@ const title = computed(() => {
         return "Gesetze & Verordnungen — Suche";
       case DocumentKind.CaseLaw:
         return "Rechtsprechung — Suche";
+      case DocumentKind.Literature:
+        return "Literatur — Suche";
       default:
         return "Suche";
     }

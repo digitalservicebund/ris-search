@@ -7,10 +7,14 @@ import lombok.Getter;
 
 @Getter
 public class Metadata {
-  @XmlElementWrapper(name = "veroeffentlichungsJahre", namespace = LiteratureNamespaces.RIS_NS)
-  @XmlElement(name = "veroeffentlichungsJahr", namespace = LiteratureNamespaces.RIS_NS)
+  @XmlElementWrapper(
+      name = "veroeffentlichungsJahre",
+      namespace = LiteratureNamespaces.RIS_UNSELBSTSTAENDIG_NS)
+  @XmlElement(
+      name = "veroeffentlichungsJahr",
+      namespace = LiteratureNamespaces.RIS_UNSELBSTSTAENDIG_NS)
   private List<String> yearsOfPublication;
 
-  @XmlElement(name = "gliederung", namespace = LiteratureNamespaces.RIS_NS)
+  @XmlElement(name = "gliederung", namespace = LiteratureNamespaces.RIS_UNSELBSTSTAENDIG_NS)
   private Gliederung gliederung;
 }

@@ -90,13 +90,26 @@ jobs:
         run: npm install @playwright/test@${{ env.PLAYWRIGHT_VERSION }} @axe-core/playwright axe-html-reporter lighthouse playwright-lighthouse
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps chromium firefox webkit
-      - name: Wait for containers to be fully up
+      - name: Wait for frontend to respond or dump logs if fail
         timeout-minutes: 5
         run: |
+          echo "Waiting for frontend to respond at http://localhost:3000 ..."
+          set +e
           until curl --silent --fail http://localhost:3000; do
-            echo "Waiting for containers to be fully up..."
+            echo "Still waiting for frontend..."
             sleep 15
+            # Optionally add a max iteration guard
           done
+          curl_exit=$?
+          set -e
+          if [ $curl_exit -ne 0 ]; then
+            echo "❌ Frontend did not respond in time. Dumping logs:"
+            docker compose -f docker-compose-ci.yml logs frontend
+            exit 1
+          else
+            echo "Frontend is responding."
+          fi
+
       - name: Run Playwright tests on staging
         if: ${{ matrix.profile == 'internal' }}
         run: npx playwright test accessibility.spec.ts seo.spec.ts --project chromium firefox mobile seoMobile seoDesktop

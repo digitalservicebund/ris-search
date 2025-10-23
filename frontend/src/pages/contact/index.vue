@@ -1,8 +1,7 @@
 <script setup lang="ts">
+import ContactDetails from "~/components/ContactDetails.vue";
 import StaticPageWrapper from "~/components/CustomLayouts/StaticPageWrapper.vue";
 import { useStaticPageSeo } from "~/composables/useStaticPageSeo";
-import ContactDetails from "~/pages/contact/ContactDetails.vue";
-
 definePageMeta({ alias: ["/kontakt"] });
 
 useStaticPageSeo("kontakt");

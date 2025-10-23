@@ -1,12 +1,9 @@
 import { mockNuxtImport } from "@nuxt/test-utils/runtime";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { useStaticPageSeo } from "./useStaticPageSeo";
-import { staticPageSeo } from "~/i18n/staticPageSeo";
-import type { StaticPage } from "~/i18n/staticPageSeo";
-import {
-  TEST_URL,
-  createExpectedHeadCall,
-} from "~/utils/testing/seoTestHelpers";
+import { TEST_URL, createExpectedHeadCall } from "~/tests/seoTestHelpers";
+import { staticPageSeo } from "~/utils/i18n/staticPageSeo";
+import type { StaticPage } from "~/utils/i18n/staticPageSeo";
 
 const { useHead, useRequestURL } = vi.hoisted(() => ({
   useHead: vi.fn(),

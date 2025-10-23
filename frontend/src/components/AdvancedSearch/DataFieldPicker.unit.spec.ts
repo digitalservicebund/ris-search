@@ -351,4 +351,15 @@ describe("DataFieldPicker", () => {
 
     expect(emitted("submit")).toBeFalsy();
   });
+
+  it("associates the ID with the underlying form element", () => {
+    render(DataFieldPicker, {
+      props: {
+        documentKind: DocumentKind.CaseLaw,
+        formId: "example",
+      },
+    });
+
+    expect(screen.getByRole("form")).toHaveAttribute("id", "example");
+  });
 });

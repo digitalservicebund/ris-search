@@ -5,8 +5,8 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { defaultSuggestions } from "./CourtFilter.data";
 import CourtFilter from "~/components/Search/SimpleSearch/CourtFilter.vue";
 import { useSimpleSearchParamsStore } from "~/stores/searchParams";
+import { setStoreValues } from "~/tests/piniaUtils";
 import { DocumentKind } from "~/types";
-import { setStoreValues } from "~/utils/testing/piniaUtils";
 
 const mockData = [{ id: "TG Berlin", label: "Tagesgericht Berlin", count: 1 }];
 const mockFetch = vi.fn().mockResolvedValue(mockData);
@@ -111,7 +111,7 @@ describe("court autocomplete", () => {
 
     it("it displays the store value", async () => {
       const wrapper = await getWrapper();
-      const courtId = mockData[0].id;
+      const courtId = mockData[0]?.id;
       await setStoreValues({ court: courtId });
       const autoComplete = wrapper.findComponent(
         "auto-complete-stub",

@@ -25,7 +25,7 @@ import {
 } from "~/components/Tabs.styles";
 import { useBackendURL } from "~/composables/useBackendURL";
 import { type CaseLaw, DocumentKind } from "~/types";
-import { getEncodingURL } from "~/utils/caseLawUtils";
+import { getEncodingURL } from "~/utils/caseLaw";
 import { dateFormattedDDMMYYYY } from "~/utils/dateFormatting";
 import { formatDocumentKind } from "~/utils/displayValues";
 import { getAllSectionsFromHtml, parseDocument } from "~/utils/htmlParser";

@@ -1,4 +1,4 @@
-import type { Page } from "~/components/Pagination/Pagination";
+import type { Page } from "~/components/Pagination/Pagination.vue";
 import { usePostHogStore } from "~/stores/usePostHogStore";
 
 export const parsePageNumber = (id?: string) => {

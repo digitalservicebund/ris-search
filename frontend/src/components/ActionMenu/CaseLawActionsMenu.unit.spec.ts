@@ -4,9 +4,9 @@ import ActionsMenu from "~/components/ActionMenu/ActionsMenu.vue";
 import CaseLawActionsMenu from "~/components/ActionMenu/CaseLawActionsMenu.vue";
 import { useBackendURL } from "~/composables/useBackendURL";
 import type { CaseLaw } from "~/types";
-import { getEncodingURL } from "~/utils/caseLawUtils";
+import { getEncodingURL } from "~/utils/caseLaw";
 
-vi.mock("~/utils/caseLawUtils", () => ({
+vi.mock("~/utils/caseLaw", () => ({
   getEncodingURL: vi.fn(),
 }));
 

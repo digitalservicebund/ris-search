@@ -3,7 +3,7 @@ import type { ActionMenuItem } from "~/components/ActionMenu/ActionsMenu.vue";
 import PDFIcon from "~/components/icons/PDFIcon.vue";
 import UpdatingLinkIcon from "~/components/icons/UpdatingLinkIcon.vue";
 import XMLIcon from "~/components/icons/XMLIcon.vue";
-import { createActionMenuItems } from "~/utils/actionMenuUtils";
+import { createActionMenuItems } from "~/utils/actionMenu";
 import MaterialSymbolsLink from "~icons/material-symbols/link";
 import MaterialSymbolsPrint from "~icons/material-symbols/print";
 

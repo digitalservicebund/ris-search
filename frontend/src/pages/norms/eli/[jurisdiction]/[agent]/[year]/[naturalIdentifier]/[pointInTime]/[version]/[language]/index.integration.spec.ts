@@ -4,7 +4,7 @@ import { describe, it, expect, vi } from "vitest";
 import Index from "./index.vue";
 import NormActionsMenu from "~/components/ActionMenu/NormActionsMenu.vue";
 import NormMetadataFields from "~/components/Norm/Metadatafields/NormMetadataFields.vue";
-import type { NormContent } from "~/pages/norms/eli/[jurisdiction]/[agent]/[year]/[naturalIdentifier]/[pointInTime]/[version]/[language]/useNormData";
+import type { NormContent } from "~/composables/useNormData";
 import type { LegislationWork } from "~/types";
 
 const mocks = vi.hoisted(() => {
@@ -14,16 +14,12 @@ const mocks = vi.hoisted(() => {
   };
 });
 
-vi.mock("./useNormData", () => {
+vi.mock("~/composables/useNormData", () => {
   return {
     useFetchNormContent: mocks.useFetchNormContent,
     useFetchNormArticleContent: mocks.useFetchNormArticleContent,
   };
 });
-
-vi.mock("./useNormActions", () => ({
-  useNormActions: () => ({ actions: ref([{ key: "mockAction" }]) }),
-}));
 
 const { useHeadMock } = vi.hoisted(() => {
   return {
@@ -275,7 +271,7 @@ describe("index.vue", () => {
 
     expect(useHeadMock).toHaveBeenCalled();
 
-    const callArgs = useHeadMock.mock.calls[0][0];
+    const callArgs = useHeadMock.mock.calls[0]?.[0];
 
     expect(callArgs.title.value).toBe(
       "abbreviation, Fassung vom 01.01.2024, Außer Kraft",

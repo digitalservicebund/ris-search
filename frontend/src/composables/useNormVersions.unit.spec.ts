@@ -47,10 +47,10 @@ describe("useNormVersions", () => {
       expect.anything(),
     );
     expect(sortedVersions.value.length).toBe(2);
-    expect(sortedVersions.value[0].item.workExample.temporalCoverage).toBe(
+    expect(sortedVersions.value[0]?.item.workExample.temporalCoverage).toBe(
       "2023-12-01/2300-10-01",
     );
-    expect(sortedVersions.value[1].item.workExample.temporalCoverage).toBe(
+    expect(sortedVersions.value[1]?.item.workExample.temporalCoverage).toBe(
       "2021-12-01/2023-11-30",
     );
   });

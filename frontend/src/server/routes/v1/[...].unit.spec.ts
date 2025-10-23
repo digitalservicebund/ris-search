@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { mockNuxtImport } from "@nuxt/test-utils/runtime";
 import { HttpStatusCode } from "axios";
 import type { EventHandlerRequest, H3Event } from "h3";
@@ -53,6 +52,7 @@ describe("Access Token Middleware", () => {
   beforeEach(() => {
     vi.clearAllMocks();
 
+    // @ts-expect-error -- missing on globalThis types
     globalThis.getUserSession = vi.fn().mockResolvedValue(mockSession);
 
     // Mock getRequestURL
@@ -91,6 +91,7 @@ describe("Access Token Middleware", () => {
   });
 
   it("should throw unauthorized error when no access token exists", async () => {
+    // @ts-expect-error -- missing on globalThis types
     globalThis.getUserSession.mockResolvedValueOnce({
       secure: {
         tokens: {

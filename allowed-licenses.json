@@ -68,6 +68,25 @@
     },
     {
       "moduleLicense": "Mozilla Public License Version 2.0"
+    },
+    {
+      "moduleLicense": "MPL-2.0"
+    },
+    {
+      "moduleLicense": "GPL-3.0-only"
+    },
+    {
+      "moduleLicense": "CC-BY-3.0"
+    },
+    {
+      "moduleLicense": "CC-BY-4.0"
+    },
+    {
+      "moduleLicense": "0BSD"
+    },
+    {
+      "moduleLicense": "Custom: LICENSE",
+      "moduleName": "posthog-js"
     }
   ]
 }

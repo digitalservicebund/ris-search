@@ -72,6 +72,10 @@ export default defineNuxtConfig({
     },
   },
   srcDir: "src/",
+  dir: {
+    public: "src/public",
+  },
+  serverDir: "src/server",
   css: ["~/assets/main.css"],
   devServer: {
     port: parseInt(getStringOrDefault(process.env.PORT, "3000")),
@@ -155,6 +159,7 @@ export default defineNuxtConfig({
       org: "digitalservice",
       project: "ris-search",
       authToken: process.env.SENTRY_AUTH_TOKEN,
+      telemetry: sentryEnabled,
       sourcemaps: {
         filesToDeleteAfterUpload: [".*/**/public/**/*.map"],
       },

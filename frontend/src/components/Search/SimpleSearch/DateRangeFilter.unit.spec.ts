@@ -4,7 +4,7 @@ import type { VueWrapper } from "@vue/test-utils";
 import { beforeEach, describe, expect, it } from "vitest";
 import DateRangeFilter from "./DateRangeFilter.vue";
 import { DateSearchMode } from "~/stores/searchParams";
-import { setStoreValues } from "~/utils/testing/piniaUtils";
+import { setStoreValues } from "~/tests/piniaUtils";
 
 const testDates = {
   date: "1999-12-31",

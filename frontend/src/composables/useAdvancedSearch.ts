@@ -1,10 +1,12 @@
 import { toValue } from "vue";
+import { useBackendURL } from "./useBackendURL";
+import { useFetch } from "#app";
+import type { Page } from "~/components/Pagination/Pagination.vue";
+import { DocumentKind } from "~/types";
 import {
   dateFilterToQuery,
   type DateFilterValue,
-} from "~/components/AdvancedSearch/filterType";
-import type { Page } from "~/components/Pagination/Pagination";
-import { DocumentKind } from "~/types";
+} from "~/utils/advancedSearch/filterType";
 
 /** Additional configuration for search API calls */
 type AdvancedSearchOptions = {
@@ -24,7 +26,6 @@ type AdvancedSearchOptions = {
  * @param query Lucene search query to be submitted
  * @param documentKind Type of documents to search for
  * @param dateFilter Date filter to apply to the results
- * @param options Additional configuration
  * @returns State and context for interacting with advanced search
  */
 export async function useAdvancedSearch(
@@ -65,10 +66,14 @@ export async function useAdvancedSearch(
     };
   });
 
+  const backendUrl = useBackendURL();
+
   const { data, error, status, pending, execute } = await useFetch<Page>(
     searchEndpointUrl,
     {
       query: combinedQuery,
+
+      baseURL: backendUrl,
 
       // immediate always executes even if the query is empty. Instead the
       // component should execute manually using `executeWhenValid` to make

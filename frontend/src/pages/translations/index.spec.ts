@@ -37,12 +37,12 @@ describe("translations list page", async () => {
 
     const pageHeader = wrapper.find("h1");
     expect(pageHeader.exists()).toBe(true);
-    expect(pageHeader.text()).toContain("English translations");
+    expect(pageHeader.text()).toContain("English Translations");
 
-    const translationListElements = wrapper.findAll("h3");
+    const translationListElements = wrapper.findAll("h2");
     expect(translationListElements.length).toBe(2);
-    expect(translationListElements[0].text()).toBe("Act A");
-    expect(translationListElements[1].text()).toBe("Act B");
+    expect(translationListElements[0]?.text()).toBe("Act A");
+    expect(translationListElements[1]?.text()).toBe("Act B");
 
     const firstTranslationLink = wrapper.find("a[href='translations/AbC']");
     expect(firstTranslationLink.exists()).toBe(true);
@@ -57,8 +57,8 @@ describe("translations list page", async () => {
     const form = wrapper.find("form");
     await form.trigger("submit");
 
-    const translationListElements = wrapper.findAll("h3");
+    const translationListElements = wrapper.findAll("h2");
     expect(translationListElements.length).toBe(2);
-    expect(translationListElements[0].text()).toBe("Act B");
+    expect(translationListElements[0]?.text()).toBe("Act B");
   });
 });

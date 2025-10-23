@@ -9,7 +9,7 @@ RUN yarn install --immutable
 COPY playwright.config.ts nuxt.config.ts nuxt.config.d.ts libraries.d.ts tsconfig.json \
     eslint.config.mjs sentry.server.config.ts ./
 COPY src ./src
-RUN yarn run prepare && yarn build
+RUN yarn run prepare && NODE_OPTIONS="--max-old-space-size=4096" yarn build
 
 
 FROM node:22.17.0-alpine3.22
@@ -17,7 +17,14 @@ RUN apk update && apk upgrade && apk add dumb-init && apk cache clean && \
     rm -r /usr/local/lib/node_modules/npm/node_modules/cross-spawn
 USER node
 WORKDIR /app
-COPY --chown=node:node --from=build /app/.output ./
+COPY --chown=node:node --from=build /app/.output/server ./server
+COPY --chown=node:node --from=build /app/.output/public ./public
+COPY --chown=node:node --from=build /app/.output/nitro.json ./nitro.json
+RUN \
+  echo "export { default } from './index.js';" > ./server/node_modules/async-function/require.mjs && \
+  echo "export { default } from './index.js';" > ./server/node_modules/generator-function/require.mjs && \
+  echo "export { default } from './index.js';" > ./server/node_modules/async-generator-function/require.mjs
+
 COPY start.sh ./
 EXPOSE 3000
 ENV HOST=0.0.0.0 PORT=3000 NODE_ENV=production

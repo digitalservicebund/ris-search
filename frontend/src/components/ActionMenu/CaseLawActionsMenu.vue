@@ -2,7 +2,7 @@
 import ActionsMenu from "~/components/ActionMenu/ActionsMenu.vue";
 import { useBackendURL } from "~/composables/useBackendURL";
 import type { CaseLaw } from "~/types";
-import { getEncodingURL } from "~/utils/caseLawUtils";
+import { getEncodingURL } from "~/utils/caseLaw";
 
 const { caseLaw } = defineProps<{ caseLaw: CaseLaw | null }>();
 

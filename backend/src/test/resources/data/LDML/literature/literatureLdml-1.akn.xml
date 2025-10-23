@@ -8,11 +8,14 @@
                     <akn:FRBRuri value="TODO"/>
                     <akn:FRBRalias name="haupttitel" value="Literatur Test Dokument"/>
                     <akn:FRBRalias name="dokumentarischerTitel" value="Dokumentarischer Titel"/>
+                    <akn:FRBRalias name="hauptsachtitelZusatz" value="Titelzusatz"/>
                     <akn:FRBRdate date="2024-01-01" name="verkuendungsfassung"/>
                     <akn:FRBRauthor href="recht.bund.de/institution/bundesregierung"/>
                     <akn:FRBRauthor as="#verfasser" href="#mustermann-max-verfasser-1"/>
                     <akn:FRBRauthor as="#verfasser" href="#musterfrau-susanne-verfasser-2"/>
                     <akn:FRBRauthor as="#mitarbeiter" href="#foo-peter-mitarbeiter-1"/>
+                    <akn:FRBRauthor as="#urheber" href="#foo-urheber-1"/>
+                    <akn:FRBRauthor as="#kongress" href="#foo-kongress-1"/>
                     <akn:FRBRcountry value="de"/>
                     <akn:FRBRsubtype value="LU"/>
                     <akn:FRBRnumber value="TODO"/>
@@ -52,12 +55,25 @@
                     <akn:implicitReference showAs="Titel einer Fundstelle, 1979, 1298-1300">
                         <ris:fundstelleSelbstaendig titel="Titel einer Fundstelle" zitatstelle="1979, 1298-1300"/>
                     </akn:implicitReference>
+                    <akn:implicitReference showAs="GG, Art 6 Abs 2 S 1, 1949-05-23">
+                        <ris:normReference abbreviation="GG" dateOfVersion="1949-05-23" singleNorm="Art 6 Abs 2 S 1"/>
+                    </akn:implicitReference>
                 </akn:otherReferences>
             </akn:analysis>
             <akn:references source="attributsemantik-noch-undefiniert">
                 <akn:TLCPerson eId="mustermann-max-verfasser-1" href="akn/ontology/persons/de/mustermann-max" ris:name="Mustermann, Max" showAs="Mustermann, Max"/>
                 <akn:TLCPerson eId="musterfrau-susanne-verfasser-2" href="" ris:titel="Prof Dr" ris:name="Musterfrau, Susanne"/>
-                <akn:TLCPerson eId="foo-peter-mitarbeiter-1" href=""  ris:titel="Dr" ris:name="Foo, Peter"/>
+                <akn:TLCPerson eId="foo-peter-mitarbeiter-1" href="" ris:titel="Dr" ris:name="Foo, Peter"/>
+                <akn:TLCOrganization eId="foo-urheber-1" href="akn/ontology/organizations/de/foo" ris:name="FOO" ris:zusatz="Foofaafee" showAs="FOO, Foofaafee"/>
+                <akn:TLCEvent eId="foo-kongress-1" href="akn/ontology/organizations/de/kongress"
+                              ris:name="Internationaler Kongreß für das Recht"
+                              ris:jahr="1991"
+                              ris:ort="Athen"
+                              ris:land="GRC"
+                              showAs="Internationaler Kongreß für das Recht, 1991, Athen, GRC"
+                />
+                <akn:TLCRole eId="kongress" href="akn/ontology/roles/de/kongress" showAs="Kongress"/>
+                <akn:TLCRole eId="urheber" href="akn/ontology/roles/de/urheber" showAs="Urheber"/>
                 <akn:TLCRole eId="mitarbeiter" href="akn/ontology/roles/de/mitarbeiter" showAs="Mitarbeiter"/>
                 <akn:TLCRole eId="verfasser" href="akn/ontology/roles/de/verfasser" showAs="Verfasser"/>
             </akn:references>

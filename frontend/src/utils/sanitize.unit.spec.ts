@@ -1,4 +1,3 @@
-// @vitest-environment jsdom
 import { sanitizeSearchResult } from "./sanitize";
 
 describe("sanitizeSearchResult", () => {

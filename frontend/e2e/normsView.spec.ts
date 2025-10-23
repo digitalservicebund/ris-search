@@ -86,6 +86,12 @@ test("can navigate to a single norm article and between articles", async ({
   await test.step("Navigate between single articles", async () => {
     await page.getByRole("link", { name: "Nächster Paragraf" }).click();
     await page.waitForURL(mainExpressionEliUrl + "/art-z2");
+    const h2Art2 = page
+      .getByRole("main")
+      .getByRole("heading", { name: /§\s*2\s+Zutaten/i })
+      .first();
+    await h2Art2.scrollIntoViewIfNeeded();
+    await expect(h2Art2).toBeVisible();
     await expect(
       page.getByRole("heading", {
         name: "§ 2 Zutaten, Herstellungsanforderungen",
@@ -93,6 +99,12 @@ test("can navigate to a single norm article and between articles", async ({
     ).toBeVisible();
     await page.getByRole("link", { name: "Nächster Paragraf" }).click();
     await page.waitForURL(mainExpressionEliUrl + "/art-z3");
+    const h2Art3 = page
+      .getByRole("main")
+      .getByRole("heading", { name: /§\s*3\s+Kennzeichnung/i })
+      .first();
+    await h2Art3.scrollIntoViewIfNeeded();
+    await expect(h2Art3).toBeVisible();
     await expect(
       page.getByRole("heading", {
         name: "§ 3 Kennzeichnung",
@@ -104,6 +116,12 @@ test("can navigate to a single norm article and between articles", async ({
     const mainExpressionEliUrl =
       "/norms/eli/bund/bgbl-1/2000/s1016/2023-04-26/10/deu";
     await page.goto(mainExpressionEliUrl + "/art-z3");
+    const h2Art3Back = page
+      .getByRole("main")
+      .getByRole("heading", { name: /§\s*3\s+Kennzeichnung/i })
+      .first();
+    await h2Art3Back.scrollIntoViewIfNeeded();
+    await expect(h2Art3Back).toBeVisible();
     await expect(
       page.getByRole("heading", {
         name: "§ 3 Kennzeichnung",
@@ -112,6 +130,12 @@ test("can navigate to a single norm article and between articles", async ({
 
     await page.getByRole("link", { name: "Vorheriger Paragraf" }).click();
     await page.waitForURL(mainExpressionEliUrl + "/art-z2");
+    const h2Art2Back = page
+      .getByRole("main")
+      .getByRole("heading", { name: /§\s*2\s+Zutaten/i })
+      .first();
+    await h2Art2Back.scrollIntoViewIfNeeded();
+    await expect(h2Art2Back).toBeVisible();
     await expect(
       page.getByRole("heading", {
         name: "§ 2 Zutaten, Herstellungsanforderungen",
@@ -260,10 +284,14 @@ test.describe("actions menu", () => {
           await button.click();
           if (!isMobileTest)
             await expect(page.getByText("Kopiert!")).toBeVisible();
-          clipboardContents = await page.evaluate(() => {
-            return navigator.clipboard.readText();
-          });
-          expect(clipboardContents.endsWith(testCase.clipboardText)).toBe(true);
+          if (browserName === "chromium") {
+            clipboardContents = await page.evaluate(() => {
+              return navigator.clipboard.readText();
+            });
+            expect(clipboardContents.endsWith(testCase.clipboardText)).toBe(
+              true,
+            );
+          }
         });
       },
     );

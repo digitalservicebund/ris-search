@@ -52,7 +52,7 @@ public class LiteratureController {
       LiteratureService literatureService,
       LiteratureXsltTransformerService literatureXsltTransformerService) {
     this.literatureService = literatureService;
-    this.xsltTransformerService = new LiteratureXsltTransformerService();
+    this.xsltTransformerService = literatureXsltTransformerService;
   }
 
   @GetMapping(

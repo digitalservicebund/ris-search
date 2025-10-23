@@ -122,6 +122,7 @@ public class SimpleSearchQueryBuilder {
     // should get a very large boost.
     query.should(
         new MultiMatchQueryBuilder(searchTerm)
+            .field(CaseLawDocumentationUnit.Fields.DOCUMENT_NUMBER_KEYWORD)
             .field(CaseLawDocumentationUnit.Fields.ECLI_KEYWORD)
             .field(CaseLawDocumentationUnit.Fields.FILE_NUMBERS_KEYWORD)
             .field(Norm.Fields.WORK_ELI_KEYWORD)
@@ -152,12 +153,15 @@ public class SimpleSearchQueryBuilder {
   }
 
   static Float convertOrderingToBoost(Integer ordering) {
-    // This method calculates boosts for the specified field ordering. Fields were ordered from 1
-    // (most important) to 9 (least important)
-    // This calculation is done so that a 9 would get a boost of 1.1 (10% boost) and a 1 would get a
-    // boost of 1.9 (90% boost)
-    // These are relatively conservative boost values as the intention is supposed to be a
-    // tiebreaker when results are otherwise equally relevant
-    return 1.0f + 0.1f * (10 - ordering);
+    return switch (ordering) {
+      case 1 -> 5.0f;
+      case 2 -> 1.8f;
+      case 3 -> 1.7f;
+      case 4 -> 1.6f;
+      case 5 -> 1.5f;
+      case 6 -> 1.4f;
+      case 7 -> 1.3f;
+      default -> throw new IllegalArgumentException("Unknown ordering: " + ordering);
+    };
   }
 }

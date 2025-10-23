@@ -5,6 +5,7 @@ import InputText from "primevue/inputtext";
 import Select from "primevue/select";
 import { computed, reactive, ref } from "vue";
 import {
+  andLogicOperator,
   fields,
   fieldTypeToLogicOptions,
   INPUT_ELEMENT,
@@ -37,7 +38,7 @@ const rows: QueryBuilderRow[] = reactive([]);
 
 function handleAddRow() {
   rows.push({
-    rowLogicOp: rowLogicOperators[0],
+    rowLogicOp: andLogicOperator,
     selectedField: "",
     selectedLogic: "",
     searchValue: "",

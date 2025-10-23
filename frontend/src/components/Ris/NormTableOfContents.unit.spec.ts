@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { mount, RouterLinkStub } from "@vue/test-utils";
 import type { TreeNode } from "primevue/treenode";
 import { describe, it, expect, beforeEach } from "vitest";
@@ -7,7 +6,8 @@ import type { TableOfContentsItem } from "~/types";
 import { tocItemsToTreeNodes } from "~/utils/tableOfContents";
 
 describe("TableOfContents Component", () => {
-  let wrapper: ReturnType;
+  /* eslint-disable-next-line @typescript-eslint/no-explicit-any -- No proper way of typing this */
+  let wrapper: any;
 
   const mockTocItems: TableOfContentsItem[] = [
     {
