@@ -1,12 +1,12 @@
 import { toValue } from "vue";
 import { useBackendURL } from "./useBackendURL";
 import { useFetch } from "#app";
+import type { Page } from "~/components/Pagination/Pagination.vue";
+import { DocumentKind } from "~/types";
 import {
   dateFilterToQuery,
   type DateFilterValue,
-} from "~/components/AdvancedSearch/filterType";
-import type { Page } from "~/components/Pagination/Pagination.vue";
-import { DocumentKind } from "~/types";
+} from "~/utils/advancedSearch/filterType";
 
 /** Additional configuration for search API calls */
 type AdvancedSearchOptions = {

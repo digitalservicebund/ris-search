@@ -1,7 +1,5 @@
 <script setup lang="ts">
 import type { TreeNode } from "primevue/treenode";
-import { getNormBreadcrumbTitle, getNormTitle } from "./titles";
-import { useFetchNormArticleContent } from "./useNormData";
 import ContentWrapper from "~/components/CustomLayouts/ContentWrapper.vue";
 import TableOfContentsLayout from "~/components/CustomLayouts/SidebarLayout.vue";
 import IncompleteDataMessage from "~/components/IncompleteDataMessage.vue";
@@ -11,12 +9,17 @@ import NormTableOfContents from "~/components/Ris/NormTableOfContents.vue";
 import type { BreadcrumbItem } from "~/components/Ris/RisBreadcrumb.vue";
 import RisBreadcrumb from "~/components/Ris/RisBreadcrumb.vue";
 import { useDynamicSeo } from "~/composables/useDynamicSeo";
+import { useFetchNormArticleContent } from "~/composables/useNormData";
 import { useValidNormVersions } from "~/composables/useNormVersions";
 import { type Article, DocumentKind, type LegislationWork } from "~/types";
 import { parseDateGermanLocalTime } from "~/utils/dateFormatting";
 import { formatDocumentKind } from "~/utils/displayValues";
 import { parseDocument } from "~/utils/htmlParser";
-import { temporalCoverageToValidityInterval } from "~/utils/norm";
+import {
+  getNormBreadcrumbTitle,
+  getNormTitle,
+  temporalCoverageToValidityInterval,
+} from "~/utils/norm";
 import { isPrototypeProfile } from "~/utils/profile";
 import { findNodePath, tocItemsToTreeNodes } from "~/utils/tableOfContents";
 import { truncateAtWord } from "~/utils/textFormatting";

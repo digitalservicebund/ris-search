@@ -7,9 +7,6 @@ import TabPanels from "primevue/tabpanels";
 import Tabs from "primevue/tabs";
 import Toast from "primevue/toast";
 import type { TreeNode } from "primevue/treenode";
-import NormHeadingGroup from "./NormHeadingGroup.vue";
-import { getNormBreadcrumbTitle } from "./titles";
-import { useFetchNormContent } from "./useNormData";
 import { useRoute } from "#app";
 import Accordion from "~/components/Accordion.vue";
 import NormActionsMenu from "~/components/ActionMenu/NormActionsMenu.vue";
@@ -20,6 +17,7 @@ import NormMetadataFields from "~/components/Norm/Metadatafields/NormMetadataFie
 import NormVersionList from "~/components/Norm/NormVersionList.vue";
 import NormVersionWarning from "~/components/Norm/NormVersionWarning.vue";
 import VersionsTeaser from "~/components/Norm/VersionsTeaser.vue";
+import NormHeadingGroup from "~/components/NormHeadingGroup.vue";
 import Properties from "~/components/Properties.vue";
 import PropertiesItem from "~/components/PropertiesItem.vue";
 import NormTableOfContents from "~/components/Ris/NormTableOfContents.vue";
@@ -33,11 +31,13 @@ import {
 import { useBackendURL } from "~/composables/useBackendURL";
 import { useDynamicSeo } from "~/composables/useDynamicSeo";
 import { useIntersectionObserver } from "~/composables/useIntersectionObserver";
+import { useFetchNormContent } from "~/composables/useNormData";
 import { useNormVersions } from "~/composables/useNormVersions";
 import { DocumentKind, type LegislationWork } from "~/types";
 import { dateFormattedDDMMYYYY } from "~/utils/dateFormatting";
 import { formatDocumentKind } from "~/utils/displayValues";
 import {
+  getNormBreadcrumbTitle,
   getValidityStatus,
   getManifestationUrl,
   temporalCoverageToValidityInterval,

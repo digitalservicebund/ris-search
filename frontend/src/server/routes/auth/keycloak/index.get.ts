@@ -1,5 +1,5 @@
 import type { H3Event } from "h3";
-import { buildSessionAttributes } from "./keycloakUtils";
+import { buildSessionAttributes } from "~/server/utils/keycloak";
 
 export default defineOAuthKeycloakEventHandler({
   async onSuccess(event, { user, tokens }) {

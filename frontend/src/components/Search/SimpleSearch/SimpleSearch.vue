@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { storeToRefs } from "pinia";
 import Message from "primevue/message";
-import { convertParams, getUrl } from "./SimpleSearch";
 import type { Page } from "~/components/Pagination/Pagination.vue";
 import SearchResult from "~/components/Search/Result/SearchResult.vue";
 import CategoryFilter from "~/components/Search/SimpleSearch/CategoryFilter/CategoryFilter.vue";
@@ -14,6 +13,7 @@ import { useSimpleSearchParamsStore } from "~/stores/searchParams";
 import { DocumentKind } from "~/types";
 import { getCurrentDateInGermanyFormatted } from "~/utils/dateFormatting";
 import { buildResultCountString } from "~/utils/pagination";
+import { convertParams, getUrl } from "~/utils/simpleSearch";
 
 const store = useSimpleSearchParamsStore();
 const values = storeToRefs(store);

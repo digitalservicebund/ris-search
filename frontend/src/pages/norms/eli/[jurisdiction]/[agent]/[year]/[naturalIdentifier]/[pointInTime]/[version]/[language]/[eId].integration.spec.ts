@@ -1,7 +1,7 @@
 import { mockNuxtImport, mountSuspended } from "@nuxt/test-utils/runtime";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import ArticlePage from "./[eId].vue";
-import type { NormArticleContent } from "./useNormData";
+import type { NormArticleContent } from "~/composables/useNormData";
 import type { LegislationWork } from "~/types";
 
 const headingInnerHtml = `<span class="akn-num">§ 1</span> <span class="akn-heading">Erster Paragraf<sup>1</sup></span>`;
@@ -73,7 +73,7 @@ const mocks = vi.hoisted(() => {
   };
 });
 
-vi.mock("./useNormData", () => {
+vi.mock("~/composables/useNormData", () => {
   return { useFetchNormArticleContent: mocks.useFetchNormArticleContent };
 });
 
