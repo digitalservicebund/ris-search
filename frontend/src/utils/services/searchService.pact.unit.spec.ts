@@ -1,4 +1,4 @@
-import fs from "fs";
+import fs from "node:fs";
 import * as path from "node:path";
 import { PactV4, SpecificationVersion } from "@pact-foundation/pact";
 import type { MatchersV3 } from "@pact-foundation/pact";

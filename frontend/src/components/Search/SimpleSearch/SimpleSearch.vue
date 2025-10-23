@@ -1,11 +1,7 @@
 <script setup lang="ts">
 import { storeToRefs } from "pinia";
 import Message from "primevue/message";
-import {
-  convertParams,
-  getUrl,
-  type SearchEndpointParams,
-} from "./SimpleSearch";
+import { convertParams, getUrl } from "./SimpleSearch";
 import type { Page } from "~/components/Pagination/Pagination.vue";
 import SearchResult from "~/components/Search/Result/SearchResult.vue";
 import CategoryFilter from "~/components/Search/SimpleSearch/CategoryFilter/CategoryFilter.vue";

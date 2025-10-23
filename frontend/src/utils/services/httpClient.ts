@@ -22,13 +22,13 @@ axiosInstance.interceptors.response.use(
   },
   async (error: AxiosError) => {
     if (error.code === "ECONNABORTED") {
-      return Promise.reject(new Error("Zeitüberschreitung der Anfrage"));
+      throw new Error("Zeitüberschreitung der Anfrage");
     }
     switch (error.response?.status) {
       case HttpStatusCode.GatewayTimeout:
-        return Promise.reject(new Error("Zeitüberschreitung der Anfrage"));
+        throw new Error("Zeitüberschreitung der Anfrage");
       case HttpStatusCode.InternalServerError:
-        return Promise.reject(new Error("Interner Serverfehler"));
+        throw new Error("Interner Serverfehler");
     }
     throw error.response;
   },

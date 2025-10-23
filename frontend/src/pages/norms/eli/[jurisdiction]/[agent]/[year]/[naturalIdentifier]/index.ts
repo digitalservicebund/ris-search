@@ -31,9 +31,9 @@ export function getMostRelevantExpression(
   }
   if (past.length > 0) {
     return (
-      _.last(_.sortBy(past, "legislationLegalForce"))?.legislationIdentifier ??
+      _.sortBy(past, "legislationLegalForce").at(-1)?.legislationIdentifier ??
       null
     );
   }
-  throw new Error();
+  throw new Error("Could not identify the most relevant expression");
 }

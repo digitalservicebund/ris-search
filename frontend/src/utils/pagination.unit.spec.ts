@@ -12,7 +12,7 @@ function getPage(params: {
   return {
     "@id": `list?pageIndex=${params.page}&size=${params.size}`,
     totalItems: params.totalItems,
-    member: Array(params.itemsOnPage) as SearchResult<AnyDocument>[],
+    member: new Array(params.itemsOnPage) as SearchResult<AnyDocument>[],
     view: {},
   };
 }
