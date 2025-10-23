@@ -11,6 +11,7 @@ async function getSidebar(page: Page) {
 
 test("can search, filter for case law, and view a single case law documentation unit", async ({
   page,
+  isMobileTest,
 }) => {
   // authentication should happen in the setup flow in auth.setup.ts
   await test.step("Basic search", async () => {
@@ -63,17 +64,24 @@ test("can search, filter for case law, and view a single case law documentation 
       const link = page.getByRole("link", { name: sectionName }).first();
       await link.click();
 
-      const sidebar = await getSidebar(page);
+      if (isMobileTest) {
+        const sidebar = await getSidebar(page);
 
-      const expectedSidebarItem = sidebar.getByRole("link", {
-        name: sectionName,
-      });
+        const expectedSidebarItem = sidebar.getByRole("link", {
+          name: sectionName,
+        });
 
-      const sectionHeading = page
-        .getByRole("main")
-        .getByRole("heading", { name: sectionName })
-        .first();
-      await sectionHeading.scrollIntoViewIfNeeded();
+        const sectionHeading = page
+          .getByRole("main")
+          .getByRole("heading", { name: sectionName })
+          .first();
+        await sectionHeading.scrollIntoViewIfNeeded();
+        await expect(expectedSidebarItem).toHaveAttribute(
+          "aria-current",
+          "section",
+        );
+      }
+
       const heading = page
         .getByRole("main")
         .getByRole("heading", { name: sectionName })
