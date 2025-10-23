@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { describe } from "vitest";
 import {
   DateSearchMode,
@@ -6,6 +5,7 @@ import {
   dateSearchToQuery,
   useDateParams,
 } from "./dateParams";
+import type { QueryParams } from "./index";
 
 vi.mock("vue", () => ({
   ref: vi.fn((val) => ({ value: val })),
@@ -68,12 +68,12 @@ describe("dateSearchToQuery", () => {
     const params = {
       ...sampleDates,
       someOtherParam: "value",
-    };
+    } as unknown as QueryParams;
     expect(dateSearchToQuery(params)).toEqual(sampleDates);
   });
 
   it("should return an empty object if no date params are present", () => {
-    const params = { someOtherParam: "value" };
+    const params = { someOtherParam: "value" } as unknown as QueryParams;
     expect(dateSearchToQuery(params)).toEqual({});
   });
 });
@@ -83,7 +83,7 @@ describe("useDateParams", () => {
     const initialState = {
       ...sampleDates,
       dateSearchMode: DateSearchMode.Range,
-    };
+    } as QueryParams;
     const result = useDateParams(initialState);
     expect(result.date.value).toBe("2023-01-01");
     expect(result.dateAfter.value).toBe("2023-02-01");
@@ -95,7 +95,8 @@ describe("useDateParams", () => {
     const initialState = {
       ...sampleDates,
       dateSearchMode: DateSearchMode.Range,
-    };
+    } as QueryParams;
+
     const result = useDateParams(initialState);
 
     result.dateSearchMode.effect(DateSearchMode.Equal);
@@ -123,7 +124,7 @@ describe("useDateParams", () => {
     const initialState = {
       ...sampleDates,
       dateSearchMode: DateSearchMode.Range,
-    };
+    } as QueryParams;
     const result = useDateParams(initialState);
 
     result.dateSearchMode.effect(DateSearchMode.Equal);

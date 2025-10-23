@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { mountSuspended } from "@nuxt/test-utils/runtime";
 import { RouterLinkStub } from "@vue/test-utils";
 import { describe, expect, it } from "vitest";
@@ -14,6 +13,7 @@ const searchResult: SearchResult<LegislationWork> = {
     alternateName: "alternateName",
     abbreviation: "abbreviation",
     legislationDate: "2024-10-05",
+    datePublished: "2024-10-05",
     isPartOf: {
       name: "The Official Gazette",
     },
@@ -24,6 +24,8 @@ const searchResult: SearchResult<LegislationWork> = {
       legislationIdentifier: "eli/work-LEG12345/expression-LEG12345",
       encoding: [],
       tableOfContents: [],
+      legislationLegalForce: "InForce",
+      temporalCoverage: "",
     },
   },
   textMatches: [],
