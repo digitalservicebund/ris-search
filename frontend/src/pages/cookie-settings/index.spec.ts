@@ -49,7 +49,7 @@ describe("CookieSettings Page", () => {
 
   function assertConsentGiven(wrapper: VueWrapper) {
     expect(wrapper.text()).toContain(
-      "Es werden anonyme Nutzungsdaten gespeichert",
+      "Ich bin mit der Nutzung von Analyse-Cookies einverstanden.",
     );
     expect(findAcceptButton(wrapper).exists()).toBe(false);
     expect(findDeclineButton(wrapper).exists()).toBe(true);
@@ -57,7 +57,7 @@ describe("CookieSettings Page", () => {
 
   function assertConsentRejected(wrapper: VueWrapper) {
     expect(wrapper.text()).toContain(
-      "Es werden keine anonymen Nutzungsdaten gespeichert",
+      "Ich bin mit der Nutzung von Analyse-Cookies nicht einverstanden.",
     );
     expect(findAcceptButton(wrapper).exists()).toBe(true);
     expect(findDeclineButton(wrapper).exists()).toBe(false);
@@ -65,6 +65,11 @@ describe("CookieSettings Page", () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
+  });
+
+  it("renders the noscript content", () => {
+    const wrapper = factory(false);
+    expect(wrapper.html()).toContain("</noscript>");
   });
 
   it("shows that tracking not accepted if userConsent is undefined or false", async () => {
@@ -86,6 +91,7 @@ describe("CookieSettings Page", () => {
     await findAcceptButton(wrapper).trigger("click");
     await wrapper.vm.$nextTick();
     expect(setTrackingSpy).toHaveBeenCalledWith(true);
+    assertConsentGiven(wrapper);
   });
 
   it("clicking the Decline button sets the tracking to inactive and changes the UI", async () => {
@@ -95,5 +101,6 @@ describe("CookieSettings Page", () => {
     await findDeclineButton(wrapper).trigger("click");
     await wrapper.vm.$nextTick();
     expect(setTrackingSpy).toHaveBeenCalledWith(false);
+    assertConsentRejected(wrapper);
   });
 });
