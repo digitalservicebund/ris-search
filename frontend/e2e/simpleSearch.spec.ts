@@ -525,3 +525,26 @@ test("search works without JavaScript", async ({ browser }) => {
 
   await context.close();
 });
+
+test("pagination works without JavaScript", async ({ browser }) => {
+  const context = await browser.newContext({ javaScriptEnabled: false });
+  const page = await context.newPage();
+
+  await page.goto("/search?query=und", { waitUntil: "networkidle" });
+
+  expect(await getDisplayedResultCount(page)).toBe(12);
+
+  await page.getByLabel("nächste Ergebnisse").click();
+  await page.waitForURL("/search?query=und&pageNumber=1", {
+    waitUntil: "networkidle",
+  });
+
+  expect(await getDisplayedResultCount(page)).toBe(12);
+
+  await page.getByLabel("vorherige Ergebnisse").click();
+  await page.waitForURL("/search?query=und", { waitUntil: "networkidle" });
+
+  expect(await getDisplayedResultCount(page)).toBe(12);
+
+  await context.close();
+});
