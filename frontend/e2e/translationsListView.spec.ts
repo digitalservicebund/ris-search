@@ -40,7 +40,15 @@ test(
 
     await input.press("Enter");
 
-    const links = page.getByTestId("translations").getByRole("link");
+    const translations = page.getByTestId("translations");
+
+    const links = translations.getByRole("link");
     await expect(links).toHaveCount(1);
+
+    await input.fill("not there");
+    await input.press("Enter");
+    await expect(translations).not.toBeVisible();
+
+    await expect(page.getByText("Nothing found")).toBeVisible();
   },
 );
