@@ -1,5 +1,4 @@
-import { expect, test } from "./fixtures";
-import { getDisplayedResultCount } from "./utils";
+import { expect, test } from "./utils/fixtures";
 
 const expectedNorms = [
   "Fiktive Fruchtsaft- und Erfrischungsgetränkeverordnung zu Testzwecken",

@@ -1,5 +1,4 @@
-import { test } from "@playwright/test";
-import { expect } from "./fixtures";
+import { expect, test } from "./utils/fixtures";
 
 test("opens the page via URL", { tag: ["@RISDEV-8949"] }, async ({ page }) => {
   await page.goto("/translations");

@@ -1,9 +1,9 @@
-import os from "os";
-import path from "path";
+import os from "node:os";
+import path from "node:path";
+import type { BrowserContext, Locator } from "@playwright/test";
 import { test as base, expect as baseExpect, chromium } from "@playwright/test";
-import type { Locator, BrowserContext } from "@playwright/test";
-import { environment } from "../playwright.config";
-import { loginUser } from "./auth.utils";
+import { environment } from "../../playwright.config";
+import { loginUser } from "./auth";
 
 type WorkerFixtures = {
   isMobileTest: boolean;
