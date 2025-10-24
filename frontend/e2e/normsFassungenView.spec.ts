@@ -30,7 +30,7 @@ test("can browse different Fassungen of a norm", async ({ page }) => {
     waitUntil: "networkidle",
   });
 
-  await page.getByRole("tab", { name: "Fassungen" }).click();
+  await page.getByRole("link", { name: "Fassungen des Gesetzes" }).click();
 
   const tableBodyLocator = page.getByRole("table").getByRole("rowgroup").nth(1);
 
@@ -58,7 +58,7 @@ test("can navigate to a Fassung by clicking the table row", async ({
     }),
   ).toBeVisible();
 
-  await page.getByRole("tab", { name: "Fassungen" }).click();
+  await page.getByRole("link", { name: "Fassungen des Gesetzes" }).click();
 
   await test.step("Navigate to future fassung", async () => {
     const tableBodyLocator = page
