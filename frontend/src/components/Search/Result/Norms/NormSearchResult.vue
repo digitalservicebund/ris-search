@@ -57,7 +57,7 @@ function openResult(url: string) {
   <div class="my-36 hyphens-auto" data-testid="searchResult">
     <div class="ris-label2-regular flex flex-row flex-wrap items-center gap-8">
       <div class="flex items-center">
-        <LegalIcon class="mr-4 h-[1rem] text-gray-900" />
+        <LegalIcon class="mr-4 h-16 text-gray-900" />
         <span>Norm</span>
       </div>
       <span v-if="item.abbreviation">{{ item.abbreviation }}</span>

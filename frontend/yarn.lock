@@ -118,39 +118,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@asamuzakjp/css-color@npm:^4.0.3":
-  version: 4.0.5
-  resolution: "@asamuzakjp/css-color@npm:4.0.5"
-  dependencies:
-    "@csstools/css-calc": "npm:^2.1.4"
-    "@csstools/css-color-parser": "npm:^3.1.0"
-    "@csstools/css-parser-algorithms": "npm:^3.0.5"
-    "@csstools/css-tokenizer": "npm:^3.0.4"
-    lru-cache: "npm:^11.2.1"
-  checksum: 10c0/0683266cfb58ea96c01af04d4c030f55bc51bf600a24e3fbaee74276916f588993696b874dff05d3d6742bc20a7b2f0affe9b0593d67308d18737b5f41b14a1f
-  languageName: node
-  linkType: hard
-
-"@asamuzakjp/dom-selector@npm:^6.7.2":
-  version: 6.7.2
-  resolution: "@asamuzakjp/dom-selector@npm:6.7.2"
-  dependencies:
-    "@asamuzakjp/nwsapi": "npm:^2.3.9"
-    bidi-js: "npm:^1.0.3"
-    css-tree: "npm:^3.1.0"
-    is-potential-custom-element-name: "npm:^1.0.1"
-    lru-cache: "npm:^11.2.2"
-  checksum: 10c0/b0cb6a5540dc70c9ace3fa91bdd84cf12be7817451d8522d8aaa19f806edc52f500647055ac2b806a93213b9756cd8cae9958fac8dcffbaecaef5dadabf1674f
-  languageName: node
-  linkType: hard
-
-"@asamuzakjp/nwsapi@npm:^2.3.9":
-  version: 2.3.9
-  resolution: "@asamuzakjp/nwsapi@npm:2.3.9"
-  checksum: 10c0/869b81382e775499c96c45c6dbe0d0766a6da04bcf0abb79f5333535c4e19946851acaa43398f896e2ecc5a1de9cf3db7cf8c4b1afac1ee3d15e21584546d74d
-  languageName: node
-  linkType: hard
-
 "@authress/login@npm:^2.0":
   version: 2.5.388
   resolution: "@authress/login@npm:2.5.388"
@@ -701,7 +668,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@csstools/css-color-parser@npm:^3.0.9, @csstools/css-color-parser@npm:^3.1.0":
+"@csstools/css-color-parser@npm:^3.0.9":
   version: 3.1.0
   resolution: "@csstools/css-color-parser@npm:3.1.0"
   dependencies:
@@ -714,7 +681,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@csstools/css-parser-algorithms@npm:^3.0.4, @csstools/css-parser-algorithms@npm:^3.0.5":
+"@csstools/css-parser-algorithms@npm:^3.0.4":
   version: 3.0.5
   resolution: "@csstools/css-parser-algorithms@npm:3.0.5"
   peerDependencies:
@@ -723,16 +690,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@csstools/css-syntax-patches-for-csstree@npm:^1.0.14":
-  version: 1.0.14
-  resolution: "@csstools/css-syntax-patches-for-csstree@npm:1.0.14"
-  peerDependencies:
-    postcss: ^8.4
-  checksum: 10c0/e431cf5aa4ccd6a40f4a417663ac7178c822c5427b9c8473e466257dc46dd9698e3852d5517ec220b7d1d1ea911e9007ecb429464329ae169a0aa68b56f1c3ac
-  languageName: node
-  linkType: hard
-
-"@csstools/css-tokenizer@npm:^3.0.3, @csstools/css-tokenizer@npm:^3.0.4":
+"@csstools/css-tokenizer@npm:^3.0.3":
   version: 3.0.4
   resolution: "@csstools/css-tokenizer@npm:3.0.4"
   checksum: 10c0/3b589f8e9942075a642213b389bab75a2d50d05d203727fcdac6827648a5572674caff07907eff3f9a2389d86a4ee47308fafe4f8588f4a77b7167c588d2559f
@@ -2095,7 +2053,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nuxt/kit@npm:^3, @nuxt/kit@npm:^3.11.2, @nuxt/kit@npm:^3.13.2, @nuxt/kit@npm:^3.15.4, @nuxt/kit@npm:^3.17.5, @nuxt/kit@npm:^3.17.6, @nuxt/kit@npm:^3.18.0, @nuxt/kit@npm:^3.19.2, @nuxt/kit@npm:^3.9.0":
+"@nuxt/kit@npm:^3, @nuxt/kit@npm:^3.11.2, @nuxt/kit@npm:^3.13.2, @nuxt/kit@npm:^3.15.4, @nuxt/kit@npm:^3.17.5, @nuxt/kit@npm:^3.18.0, @nuxt/kit@npm:^3.19.2, @nuxt/kit@npm:^3.9.0":
   version: 3.19.3
   resolution: "@nuxt/kit@npm:3.19.3"
   dependencies:
@@ -2141,34 +2099,39 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nuxt/scripts@npm:0.11.9":
-  version: 0.11.9
-  resolution: "@nuxt/scripts@npm:0.11.9"
+"@nuxt/scripts@npm:0.13.0":
+  version: 0.13.0
+  resolution: "@nuxt/scripts@npm:0.13.0"
   dependencies:
-    "@nuxt/kit": "npm:^3.17.6"
-    "@vueuse/core": "npm:^13.5.0"
+    "@nuxt/kit": "npm:^4.1.3"
+    "@vueuse/core": "npm:^13.9.0"
     consola: "npm:^3.4.2"
     defu: "npm:^6.1.4"
-    h3: "npm:^1.15.3"
-    magic-string: "npm:^0.30.17"
+    h3: "npm:^1.15.4"
+    magic-string: "npm:^0.30.19"
     ofetch: "npm:^1.4.1"
     ohash: "npm:^2.0.11"
     pathe: "npm:^2.0.3"
-    pkg-types: "npm:^2.2.0"
-    sirv: "npm:^3.0.1"
-    std-env: "npm:^3.9.0"
+    pkg-types: "npm:^2.3.0"
+    sirv: "npm:^3.0.2"
+    std-env: "npm:^3.10.0"
     ufo: "npm:^1.6.1"
-    unplugin: "npm:^2.3.5"
-    unstorage: "npm:^1.16.0"
+    unplugin: "npm:^2.3.10"
+    unstorage: "npm:^1.17.1"
     valibot: "npm:^1.1.0"
   peerDependencies:
+    "@googlemaps/markerclusterer": ^2.6.2
+    "@paypal/paypal-js": ^8.1.2
     "@stripe/stripe-js": ^7.0.0
     "@types/google.maps": ^3.58.1
     "@types/vimeo__player": ^2.18.3
     "@types/youtube": ^0.1.0
     "@unhead/vue": ^2.0.3
-    nuxt: ^3.16.2
   peerDependenciesMeta:
+    "@googlemaps/markerclusterer":
+      optional: true
+    "@paypal/paypal-js":
+      optional: true
     "@stripe/stripe-js":
       optional: true
     "@types/google.maps":
@@ -2177,7 +2140,7 @@ __metadata:
       optional: true
     "@types/youtube":
       optional: true
-  checksum: 10c0/7c5e3b3448698b1f69fccf4c633b8030c71d3c710c80441c94741e7fc5b655fc229526480d407f4251e9ad46f16ca98d4059360efa34dfdb4d1f5d315409989e
+  checksum: 10c0/4e86987888d9fd44029df4bf9283fc451b1a47307c4befcb0153e9f087b8db0c051bb6083df58334ab1c7232c9252e83b9cc6f41dc47c14f06bae436aabc5f74
   languageName: node
   linkType: hard
 
@@ -6507,7 +6470,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vueuse/core@npm:13.9.0, @vueuse/core@npm:^13.5.0":
+"@vueuse/core@npm:13.9.0, @vueuse/core@npm:^13.9.0":
   version: 13.9.0
   resolution: "@vueuse/core@npm:13.9.0"
   dependencies:
@@ -7203,15 +7166,6 @@ __metadata:
   version: 5.0.5
   resolution: "basic-ftp@npm:5.0.5"
   checksum: 10c0/be983a3997749856da87b839ffce6b8ed6c7dbf91ea991d5c980d8add275f9f2926c19f80217ac3e7f353815be879371d636407ca72b038cea8cab30e53928a6
-  languageName: node
-  linkType: hard
-
-"bidi-js@npm:^1.0.3":
-  version: 1.0.3
-  resolution: "bidi-js@npm:1.0.3"
-  dependencies:
-    require-from-string: "npm:^2.0.2"
-  checksum: 10c0/fdddea4aa4120a34285486f2267526cd9298b6e8b773ad25e765d4f104b6d7437ab4ba542e6939e3ac834a7570bcf121ee2cf6d3ae7cd7082c4b5bedc8f271e1
   languageName: node
   linkType: hard
 
@@ -8134,7 +8088,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"css-tree@npm:^3.0.1, css-tree@npm:^3.1.0":
+"css-tree@npm:^3.0.1":
   version: 3.1.0
   resolution: "css-tree@npm:3.1.0"
   dependencies:
@@ -8264,17 +8218,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cssstyle@npm:^5.3.1":
-  version: 5.3.1
-  resolution: "cssstyle@npm:5.3.1"
-  dependencies:
-    "@asamuzakjp/css-color": "npm:^4.0.3"
-    "@csstools/css-syntax-patches-for-csstree": "npm:^1.0.14"
-    css-tree: "npm:^3.1.0"
-  checksum: 10c0/41c93a6816337403f6107adb76d06989155523842a6c1c070436af13e9ff2bc72031cf469cd1d86ca1b9e1edacbe07b1c2dea5aaf5b530b982878844ba7f2b25
-  languageName: node
-  linkType: hard
-
 "csstype@npm:^3.1.3":
   version: 3.1.3
   resolution: "csstype@npm:3.1.3"
@@ -8310,16 +8253,6 @@ __metadata:
     whatwg-mimetype: "npm:^4.0.0"
     whatwg-url: "npm:^14.0.0"
   checksum: 10c0/1b894d7d41c861f3a4ed2ae9b1c3f0909d4575ada02e36d3d3bc584bdd84278e20709070c79c3b3bff7ac98598cb191eb3e86a89a79ea4ee1ef360e1694f92ad
-  languageName: node
-  linkType: hard
-
-"data-urls@npm:^6.0.0":
-  version: 6.0.0
-  resolution: "data-urls@npm:6.0.0"
-  dependencies:
-    whatwg-mimetype: "npm:^4.0.0"
-    whatwg-url: "npm:^15.0.0"
-  checksum: 10c0/952102a8e6282fea112f7120d79fac482a2f99e20c67f9cb069d661c00627305b042e1f7e3cef8e4bbc795b42c5d481bbc9c6effeff5bb1427f9acaf1722bd35
   languageName: node
   linkType: hard
 
@@ -8385,7 +8318,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"decimal.js@npm:^10.4.3, decimal.js@npm:^10.5.0, decimal.js@npm:^10.6.0":
+"decimal.js@npm:^10.4.3, decimal.js@npm:^10.5.0":
   version: 10.6.0
   resolution: "decimal.js@npm:10.6.0"
   checksum: 10c0/07d69fbcc54167a340d2d97de95f546f9ff1f69d2b45a02fd7a5292412df3cd9eb7e23065e532a318f5474a2e1bccf8392fdf0443ef467f97f3bf8cb0477e5aa
@@ -11518,13 +11451,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"isomorphic-dompurify@npm:^2.26.0":
-  version: 2.30.1
-  resolution: "isomorphic-dompurify@npm:2.30.1"
+"isomorphic-dompurify@npm:2.26.0":
+  version: 2.26.0
+  resolution: "isomorphic-dompurify@npm:2.26.0"
   dependencies:
-    dompurify: "npm:^3.3.0"
-    jsdom: "npm:^27.0.1"
-  checksum: 10c0/af73180a8116bdd1b835ac92b6e5b95513217b0d74aa02d4094130cede1c6a350d2c87624346f27af0c55cecca0f3c6d78e1f9fcccf5fbd81a410a8e769f7469
+    dompurify: "npm:^3.2.6"
+    jsdom: "npm:^26.1.0"
+  checksum: 10c0/d6d4f7850180a77d9c8966feb27df46bd8f719c656320936d134ee25f939f15d90c901561251853047d7df240625318656f0f8ba7ac9a75b32a844b103a2178e
   languageName: node
   linkType: hard
 
@@ -11717,39 +11650,6 @@ __metadata:
     canvas:
       optional: true
   checksum: 10c0/5b14a5bc32ce077a06fb42d1ab95b1191afa5cbbce8859e3b96831c5143becbbcbf0511d4d4934e922d2901443ced2cdc3b734c1cf30b5f73b3e067ce457d0f4
-  languageName: node
-  linkType: hard
-
-"jsdom@npm:^27.0.1":
-  version: 27.0.1
-  resolution: "jsdom@npm:27.0.1"
-  dependencies:
-    "@asamuzakjp/dom-selector": "npm:^6.7.2"
-    cssstyle: "npm:^5.3.1"
-    data-urls: "npm:^6.0.0"
-    decimal.js: "npm:^10.6.0"
-    html-encoding-sniffer: "npm:^4.0.0"
-    http-proxy-agent: "npm:^7.0.2"
-    https-proxy-agent: "npm:^7.0.6"
-    is-potential-custom-element-name: "npm:^1.0.1"
-    parse5: "npm:^8.0.0"
-    rrweb-cssom: "npm:^0.8.0"
-    saxes: "npm:^6.0.0"
-    symbol-tree: "npm:^3.2.4"
-    tough-cookie: "npm:^6.0.0"
-    w3c-xmlserializer: "npm:^5.0.0"
-    webidl-conversions: "npm:^8.0.0"
-    whatwg-encoding: "npm:^3.1.1"
-    whatwg-mimetype: "npm:^4.0.0"
-    whatwg-url: "npm:^15.1.0"
-    ws: "npm:^8.18.3"
-    xml-name-validator: "npm:^5.0.0"
-  peerDependencies:
-    canvas: ^3.0.0
-  peerDependenciesMeta:
-    canvas:
-      optional: true
-  checksum: 10c0/563ff3ebfd9a3dc66082cdf2427198b647993753b4c37b2d0064b5b47cf7be5154c62df10eb8122254f7b89c73ecb6fc870fa038e22ab9975b23079ee62e050e
   languageName: node
   linkType: hard
 
@@ -12360,13 +12260,6 @@ __metadata:
   version: 10.4.3
   resolution: "lru-cache@npm:10.4.3"
   checksum: 10c0/ebd04fbca961e6c1d6c0af3799adcc966a1babe798f685bb84e6599266599cd95d94630b10262f5424539bc4640107e8a33aa28585374abf561d30d16f4b39fb
-  languageName: node
-  linkType: hard
-
-"lru-cache@npm:^11.2.1, lru-cache@npm:^11.2.2":
-  version: 11.2.2
-  resolution: "lru-cache@npm:11.2.2"
-  checksum: 10c0/72d7831bbebc85e2bdefe01047ee5584db69d641c48d7a509e86f66f6ee111b30af7ec3bd68a967d47b69a4b1fa8bbf3872630bd06a63b6735e6f0a5f1c8e83d
   languageName: node
   linkType: hard
 
@@ -14547,15 +14440,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"parse5@npm:^8.0.0":
-  version: 8.0.0
-  resolution: "parse5@npm:8.0.0"
-  dependencies:
-    entities: "npm:^6.0.0"
-  checksum: 10c0/8279892dcd77b2f2229707f60eb039e303adf0288812b2a8fd5acf506a4d432da833c6c5d07a6554bef722c2367a81ef4a1f7e9336564379a7dba3e798bf16b3
-  languageName: node
-  linkType: hard
-
 "parseurl@npm:^1.3.3, parseurl@npm:~1.3.3":
   version: 1.3.3
   resolution: "parseurl@npm:1.3.3"
@@ -16206,7 +16090,7 @@ __metadata:
     "@iconify/json": "npm:^2.2.347"
     "@nuxt/eslint": "npm:^1.4.1"
     "@nuxt/image": "npm:^1.10.0"
-    "@nuxt/scripts": "npm:0.11.9"
+    "@nuxt/scripts": "npm:0.13.0"
     "@nuxt/test-utils": "npm:^3.19.1"
     "@nuxtjs/sitemap": "npm:^7.4.3"
     "@nuxtjs/tailwindcss": "npm:^7.0.0-beta.0"
@@ -16239,7 +16123,7 @@ __metadata:
     eslint-config-prettier: "npm:^10.1.5"
     eslint-plugin-prettier: "npm:^5.4.1"
     eslint-plugin-unused-imports: "npm:^4.1.4"
-    isomorphic-dompurify: "npm:^2.26.0"
+    isomorphic-dompurify: "npm:2.26.0"
     js-cookie: "npm:^3.0.5"
     jsdom: "npm:^26.1.0"
     json-schema-to-typescript-lite: "npm:^15.0.0"
@@ -17921,15 +17805,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tr46@npm:^6.0.0":
-  version: 6.0.0
-  resolution: "tr46@npm:6.0.0"
-  dependencies:
-    punycode: "npm:^2.3.1"
-  checksum: 10c0/83130df2f649228aa91c17754b66248030a3af34911d713b5ea417066fa338aa4bc8668d06bd98aa21a2210f43fc0a3db8b9099e7747fb5830e40e39a6a1058e
-  languageName: node
-  linkType: hard
-
 "tr46@npm:~0.0.3":
   version: 0.0.3
   resolution: "tr46@npm:0.0.3"
@@ -18580,7 +18455,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"unstorage@npm:^1.10.1, unstorage@npm:^1.16.0, unstorage@npm:^1.17.1":
+"unstorage@npm:^1.10.1, unstorage@npm:^1.17.1":
   version: 1.17.1
   resolution: "unstorage@npm:1.17.1"
   dependencies:
@@ -19236,13 +19111,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webidl-conversions@npm:^8.0.0":
-  version: 8.0.0
-  resolution: "webidl-conversions@npm:8.0.0"
-  checksum: 10c0/3244e8a6534163bc3ee5f5f48b507b4bb74e34e7cc7c86a50cd02734753042b88343dae48321f34ad61ddc6b5c90cb1a5b2ee757b8be8e6fadc587a9f3db76cd
-  languageName: node
-  linkType: hard
-
 "webpack-sources@npm:^3.2.3":
   version: 3.3.3
   resolution: "webpack-sources@npm:3.3.3"
@@ -19287,16 +19155,6 @@ __metadata:
     tr46: "npm:^5.1.0"
     webidl-conversions: "npm:^7.0.0"
   checksum: 10c0/f746fc2f4c906607d09537de1227b13f9494c171141e5427ed7d2c0dd0b6a48b43d8e71abaae57d368d0c06b673fd8ec63550b32ad5ed64990c7b0266c2b4272
-  languageName: node
-  linkType: hard
-
-"whatwg-url@npm:^15.0.0, whatwg-url@npm:^15.1.0":
-  version: 15.1.0
-  resolution: "whatwg-url@npm:15.1.0"
-  dependencies:
-    tr46: "npm:^6.0.0"
-    webidl-conversions: "npm:^8.0.0"
-  checksum: 10c0/40c49b47044787c87486aaaa5b504da122820661c45ae20ab466c62595ed03c64be7c10c1d180d028949a393cd455db14144966a68359cd37fe6417e3426d128
   languageName: node
   linkType: hard
 

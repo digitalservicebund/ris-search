@@ -102,7 +102,7 @@ const metadata = computed(() => {
   } as CaseLawMetadata;
 });
 
-const previewSections = computed(() => {
+const previewSections = computed<ExtendedTextMatch[]>(() => {
   const textMatches = props.searchResult.textMatches;
   const foundFields = new Set<Key>();
   const relevantMatches = textMatches
@@ -124,15 +124,19 @@ const previewSections = computed(() => {
   );
 
   // show up to 4 fields
-  const slice: ExtendedTextMatch[] = [...firstFields, ...otherFields].slice(
-    0,
-    4,
-  );
+  const slice: ExtendedTextMatch[] = [...firstFields, ...otherFields]
+    .slice(0, 4)
+    .filter((i) => !!i);
+
   if (slice.length === 0) return [];
+
   const haveHighlight =
     slice.find((field) => field.text.includes("<mark>")) !== undefined;
+
   // if no fields have a highlight, show only the first one
-  if (!haveHighlight) return [slice[0]];
+  // casting because TypeScript doesn't realize we already ensured it's not undefined
+  if (!haveHighlight) return [slice[0] as ExtendedTextMatch];
+
   return slice;
 });
 
@@ -145,7 +149,7 @@ function trackResultClick(url: string) {
   <div class="my-36 hyphens-auto" data-testid="searchResult">
     <div class="ris-label2-regular flex flex-row flex-wrap items-center gap-8">
       <div class="flex items-center">
-        <GavelIcon class="mr-4 h-[1rem] text-gray-900" />
+        <GavelIcon class="mr-4 h-16 text-gray-900" />
         <span>
           {{ metadata.documentType }}
         </span>
@@ -184,9 +188,10 @@ function trackResultClick(url: string) {
           <h3>{{ section?.title }}:</h3> </NuxtLink
         >{{ " " }}
         <span
+          v-if="section.text"
           data-testid="highlighted-field"
           class="text-lg"
-          v-html="sanitizeSearchResult(section?.text)"
+          v-html="sanitizeSearchResult(section.text)"
         />
       </div>
     </div>

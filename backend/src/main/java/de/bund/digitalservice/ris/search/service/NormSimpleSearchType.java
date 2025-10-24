@@ -28,7 +28,7 @@ public class NormSimpleSearchType implements SimpleSearchType {
   private static final List<String> NORMS_HIGHLIGHT_CONTENT_FIELDS =
       List.of(Norm.Fields.OFFICIAL_TITLE);
 
-  private static final List<String> NORMS_FETCH_EXCLUDED_FIELDS =
+  public static final List<String> NORMS_FETCH_EXCLUDED_FIELDS =
       List.of(
           Norm.Fields.ARTICLE_NAMES,
           Norm.Fields.ARTICLE_TEXTS,

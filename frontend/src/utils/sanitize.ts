@@ -1,18 +1,8 @@
-import type DOMPurify from "isomorphic-dompurify";
-
-let _DOMPurify: typeof DOMPurify;
-
-if (import.meta.client) {
-  const module = await import("isomorphic-dompurify");
-  _DOMPurify = module.default;
-}
+import DOMPurify from "isomorphic-dompurify";
 
 export function sanitizeSearchResult(
-  html: string | undefined,
-  allowedTags: string[] = ["b", "i", "mark"],
+  html: string,
+  allowedTags: string[] | undefined = ["b", "i", "mark"],
 ) {
-  if (!import.meta.client || !html || !_DOMPurify) {
-    return "";
-  }
-  return _DOMPurify.sanitize(html, { ALLOWED_TAGS: allowedTags });
+  return DOMPurify.sanitize(html, { ALLOWED_TAGS: allowedTags });
 }
