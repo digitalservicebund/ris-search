@@ -112,4 +112,57 @@ describe("FeedbackForm", () => {
       "Vielen Dank für Ihr Feedback!",
     );
   });
+
+  it("renders form with correct action URL for no-JS fallback", async () => {
+    const wrapper = await factory();
+    const form = wrapper.find("form");
+
+    expect(form.attributes("action")).toContain("/v1/feedback");
+    expect(form.attributes("action")).toContain("url=");
+    expect(form.attributes("action")).toContain(
+      "user_id=anonymous_feedback_user",
+    );
+    expect(form.attributes("method")).toBe("GET");
+  });
+
+  it("hides intro when hideIntro prop is true", async () => {
+    const { default: FeedbackForm } = await import("./FeedbackForm.vue");
+    const wrapper = mount(FeedbackForm, {
+      props: { hideIntro: true },
+      global: {
+        plugins: [createTestingPinia({ stubActions: false })],
+        stubs: {
+          Textarea: {
+            name: "Textarea",
+            props: ["modelValue"],
+            template:
+              '<textarea :value="modelValue" @input="$emit(\'update:modelValue\', $event.target.value)" />',
+          },
+          Button: {
+            name: "Button",
+            props: ["type"],
+            template: '<button :type="type"><slot /></button>',
+          },
+          "router-link": { template: "<a><slot /></a>" },
+        },
+      },
+    });
+
+    expect(wrapper.find("h2").exists()).toBe(false);
+    expect(wrapper.text()).not.toContain("Geben Sie uns Feedback");
+  });
+
+  it("clears error message when user types in textarea", async () => {
+    const wrapper = await factory();
+
+    await clickSubmit(wrapper);
+    expect(getErrorMessage(wrapper)).toBeTruthy();
+
+    const textarea = wrapper.findComponent({ name: "Textarea" });
+    await textarea.setValue("New feedback");
+
+    expect(
+      wrapper.find('[data-test-id="feedback-error-message"]').exists(),
+    ).toBe(false);
+  });
 });
