@@ -24,6 +24,7 @@ const logout = () => {
 <template>
   <nav
     class="flex items-center justify-between border-b border-gray-400 bg-white px-16 py-24"
+    aria-label="Hauptnavigation"
   >
     <div class="flex items-center gap-44">
       <Logo />
