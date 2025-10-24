@@ -45,6 +45,9 @@ jobs:
       - name: Prepare nuxt
         run: yarn run prepare
         working-directory: ./frontend
+      - name: Check style
+        run: yarn run style:check
+        working-directory: ./frontend
       - name: Run tests with coverage
         run: yarn run coverage
         working-directory: ./frontend
@@ -75,9 +78,6 @@ jobs:
         if: ${{ failure() && github.ref == 'refs/heads/main' }}
         with:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-      - name: Check style
-        run: yarn run style:check
-        working-directory: ./frontend
 
   audit-licenses-frontend:
     runs-on: ubuntu-latest
