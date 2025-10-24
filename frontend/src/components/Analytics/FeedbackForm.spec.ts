@@ -4,9 +4,7 @@ import { flushPromises, mount } from "@vue/test-utils";
 import { describe, expect, it, vi } from "vitest";
 
 async function clickSubmit(wrapper: VueWrapper) {
-  await wrapper
-    .find('[data-test-id="submit-feedback-button"]')
-    .trigger("click");
+  await wrapper.find("form").trigger("submit");
   await flushPromises();
 }
 
@@ -55,7 +53,8 @@ const factory = async () => {
         },
         Button: {
           name: "Button",
-          template: "<button><slot /></button>",
+          props: ["type"],
+          template: '<button :type="type"><slot /></button>',
         },
         "router-link": {
           template: "<a><slot /></a>",
