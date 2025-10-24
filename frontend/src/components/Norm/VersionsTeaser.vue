@@ -10,15 +10,23 @@
         Kraft getretene und zukünftig in Kraft tretende Fassungen der Gesetze
         und Verordnungen zur Verfügung gestellt.
       </p>
-      <h3 class="ris-heading3-bold mt-48 mb-24">
+      <!-- Temporarily disabled due to data issue with Form bricks -->
+      <h3 v-if="false" class="ris-heading3-bold mt-48 mb-24">
         Unterstützen Sie uns bei der Entwicklung dieser Funktion
       </h3>
-      <p class="ris-body1-regular">
+      <!-- Temporarily disabled due to data issue with Form bricks -->
+      <p v-if="false" class="ris-body1-regular">
         Unser Ziel ist es, Rechtsinformationen für Bürgerinnen und Bürger
         leichter zugänglich zu machen. Deshalb suchen wir Menschen, die ihre
         Erfahrungen mit uns teilen und unseren Service testen.
       </p>
-      <ButtonLink class="mt-16" variant="primary" href="/nutzungstests">
+      <!-- Temporarily disabled due to data issue with Form bricks -->
+      <ButtonLink
+        v-if="false"
+        class="mt-16"
+        variant="primary"
+        href="/nutzungstests"
+      >
         Mehr über Nutzungstest erfahren
       </ButtonLink>
     </div>

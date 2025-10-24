@@ -80,7 +80,8 @@ const hideFeedbackForm = computed(() => route.path === "/feedback");
               >API-Dokumentation</ExternalLink
             >
           </li>
-          <li>
+          <!-- Temporarily disabled due to data issue with Form bricks -->
+          <li v-if="false">
             <NuxtLink class="ris-link2-regular link-hover" to="/nutzungstests"
               >Nutzungstests</NuxtLink
             >
