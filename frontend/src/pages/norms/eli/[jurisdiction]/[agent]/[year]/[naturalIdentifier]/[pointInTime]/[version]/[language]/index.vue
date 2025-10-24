@@ -274,10 +274,8 @@ useDynamicSeo({ title, description });
 
       <section
         id="text"
-        :class="[
-          linkTabPanel,
-          isClient && activeSection !== 'text' ? 'hidden' : '',
-        ]"
+        :class="linkTabPanel"
+        :hidden="isClient && activeSection !== 'text'"
       >
         <TableOfContentsLayout class="container">
           <template #content>
@@ -306,11 +304,8 @@ useDynamicSeo({ title, description });
 
       <section
         id="details"
-        :class="[
-          linkTabPanel,
-          'pt-24 pb-80',
-          isClient && activeSection !== 'details' ? 'hidden' : '',
-        ]"
+        :class="linkTabPanel"
+        :hidden="isClient && activeSection !== 'details'"
         aria-labelledby="detailsTabPanelTitle"
       >
         <div class="container">
@@ -360,11 +355,8 @@ useDynamicSeo({ title, description });
 
       <section
         id="versions"
-        :class="[
-          linkTabPanel,
-          'pt-24 pb-80',
-          isClient && activeSection !== 'versions' ? 'hidden' : '',
-        ]"
+        :class="linkTabPanel"
+        :hidden="isClient && activeSection !== 'versions'"
       >
         <div class="container">
           <NormVersionList

@@ -222,10 +222,8 @@ if (contentError?.value) {
 
     <section
       id="text"
-      :class="[
-        linkTabPanel,
-        isClient && activeSection !== 'text' ? 'hidden' : '',
-      ]"
+      :class="linkTabPanel"
+      :hidden="isClient && activeSection !== 'text'"
     >
       <SidebarLayout class="container">
         <template #content>
@@ -243,10 +241,8 @@ if (contentError?.value) {
 
     <section
       id="details"
-      :class="[
-        linkTabPanel,
-        isClient && activeSection !== 'details' ? 'hidden' : '',
-      ]"
+      :class="linkTabPanel"
+      :hidden="isClient && activeSection !== 'details'"
       aria-labelledby="detailsTabPanelTitle"
     >
       <div class="container">
