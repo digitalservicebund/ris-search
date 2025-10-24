@@ -24,6 +24,14 @@ server:
   docs-url: "https://localhost::5173/"
   api-keys: []
 
+rate-limit:
+  default:
+    requests: 600
+    seconds: 60
+  feedback:
+    requests: 5
+    seconds: 60
+
 swagger:
   server:
     url: http://localhost:8090
