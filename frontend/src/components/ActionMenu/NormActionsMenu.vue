@@ -4,7 +4,10 @@ import { useBackendURL } from "~/composables/useBackendURL";
 import type { LegislationWork } from "~/types";
 import { getManifestationUrl } from "~/utils/norm";
 
-const { metadata } = defineProps<{ metadata: LegislationWork | undefined }>();
+const { metadata } = defineProps<{
+  metadata: LegislationWork | undefined;
+  hasTranslation: boolean | undefined;
+}>();
 
 const backendURL = useBackendURL();
 const xmlUrl = computed(() =>
@@ -28,6 +31,8 @@ const link = computed(() => {
   return undefined;
 });
 
+const translationUrl = `/translations/${metadata?.abbreviation}`;
+
 const permalink = {
   url: globalThis?.location.href,
   label: "Permalink zu dieser Fassung",
@@ -35,5 +40,12 @@ const permalink = {
 </script>
 
 <template>
-  <ActionsMenu :link="link" :permalink="permalink" :xml-url="xmlUrl" />
+  <ActionsMenu
+    v-if="hasTranslation"
+    :link="link"
+    :permalink="permalink"
+    :xml-url="xmlUrl"
+    :translation-url="translationUrl"
+  />
+  <ActionsMenu v-else :link="link" :permalink="permalink" :xml-url="xmlUrl" />
 </template>
