@@ -54,17 +54,6 @@ async function handleSearchSubmit(value?: string) {
   await execute();
 }
 
-function scrollToResults() {
-  const element = document.getElementById("result-count");
-  const prefersReducedMotion = globalThis.matchMedia(
-    "(prefers-reduced-motion: reduce)",
-  ).matches;
-  const behavior: ScrollBehavior = prefersReducedMotion ? "instant" : "smooth";
-  element?.scrollIntoView({ behavior });
-}
-
-watch(data, scrollToResults);
-
 async function updatePage(page: number) {
   store.setPageNumber(page);
 }
