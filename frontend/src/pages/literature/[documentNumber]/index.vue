@@ -1,23 +1,23 @@
 <script setup lang="ts">
-import Tab from "primevue/tab";
-import TabList from "primevue/tablist";
-import TabPanel from "primevue/tabpanel";
-import TabPanels from "primevue/tabpanels";
-import Tabs from "primevue/tabs";
+import { computed, ref, onMounted } from "vue";
 import { useFetch } from "#app";
 import LiteratureActionsMenu from "~/components/ActionMenu/LiteratureActionsMenu.vue";
 import ContentWrapper from "~/components/CustomLayouts/ContentWrapper.vue";
 import SidebarLayout from "~/components/CustomLayouts/SidebarLayout.vue";
 import IncompleteDataMessage from "~/components/IncompleteDataMessage.vue";
+import {
+  linkTabBase,
+  linkTabActive,
+  linkTabInactive,
+  linkTabNav,
+  linkTabNavContainer,
+  linkTabPanel,
+} from "~/components/LinkTabs.styles";
+import LiteratureMetadata from "~/components/LiteratureMetadata.vue";
 import LiteratureDetails from "~/components/Literature/LiteratureDetails.vue";
 import LiteratureMetadata from "~/components/Literature/LiteratureMetadata.vue";
 import RisBreadcrumb from "~/components/Ris/RisBreadcrumb.vue";
 import RisDocumentTitle from "~/components/Ris/RisDocumentTitle.vue";
-import {
-  tabListStyles,
-  tabPanelStyles,
-  tabStyles,
-} from "~/components/Tabs.styles";
 import { useBackendURL } from "~/composables/useBackendURL";
 import { DocumentKind, type Literature } from "~/types";
 import { formatDocumentKind } from "~/utils/displayValues";

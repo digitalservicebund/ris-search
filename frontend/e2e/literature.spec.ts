@@ -29,27 +29,38 @@ test("displays literature page with metadata and text tab by default", async ({
   await expect(page.getByLabel("Author")).toHaveText("Sabine Musterfrau");
   await expect(page.getByLabel("Veröffentlichungsjahr")).toHaveText("2024");
 
-  const tabpanel = page.getByRole("tabpanel");
-
-  // Testphase alert should be shown
-  await expect(tabpanel.getByRole("alert")).toContainText(
+  const textSection = page.getByRole("region", { name: "Text" });
+  await expect(textSection.getByRole("alert")).toContainText(
     "Dieser Service befindet sich in der Testphase",
   );
 
   await expect(
-    tabpanel.getByRole("heading", { name: "Gliederung" }),
+    textSection.getByRole("heading", { name: "Gliederung" }),
   ).toBeVisible();
-  await expect(tabpanel.getByText("I. Problemstellung.")).toBeVisible();
-  await expect(tabpanel.getByText("II. Lösung.")).toBeVisible();
-  await expect(tabpanel.getByText("III. Zusammenfassung.")).toBeVisible();
+  await expect(textSection.getByText("I. Problemstellung.")).toBeVisible();
+  await expect(textSection.getByText("II. Lösung.")).toBeVisible();
+  await expect(textSection.getByText("III. Zusammenfassung.")).toBeVisible();
 
   await expect(
-    tabpanel.getByRole("heading", { name: "Kurzreferat" }),
+    textSection.getByRole("heading", { name: "Kurzreferat" }),
   ).toBeVisible();
   await expect(
-    tabpanel.getByText("Dies ist ein einfaches Test-Dokument."),
+    textSection.getByText("Dies ist ein einfaches Test-Dokument."),
   ).toBeVisible();
-  await expect(tabpanel.getByText("In sem neque")).toBeVisible();
+  await expect(textSection.getByText("In sem neque")).toBeVisible();
+});
+
+test("tabs work without JavaScript", async ({ browser }) => {
+  const context = await browser.newContext({ javaScriptEnabled: false });
+  const page = await context.newPage();
+
+  await page.goto("/literature/TEST000000001", { waitUntil: "networkidle" });
+  await expect(page.getByRole("heading", { name: "Details" })).toBeVisible();
+  await page
+    .getByRole("link", { name: "Details zum Literaturnachweis" })
+    .click();
+  await expect(page).toHaveURL(/#details$/);
+  await context.close();
 });
 
 test("shows detailed information in the 'Details' tab", async ({ page }) => {

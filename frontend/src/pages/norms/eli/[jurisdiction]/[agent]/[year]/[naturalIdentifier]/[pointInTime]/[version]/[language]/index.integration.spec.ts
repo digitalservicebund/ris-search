@@ -235,7 +235,7 @@ describe("index.vue", () => {
     mockMetadata();
     const wrapper = await mountComponent();
 
-    const tabButton = wrapper.get("button[aria-label*='Details']");
+    const tabButton = wrapper.get("a[aria-label='Details des Gesetzes']");
     await tabButton.trigger("click");
 
     const ausfertigungsDatum = getDDElement(wrapper, "Ausfertigungsdatum:");
