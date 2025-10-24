@@ -21,9 +21,6 @@ import de.bund.digitalservice.ris.search.integration.controller.api.testData.Lit
 import de.bund.digitalservice.ris.search.integration.controller.api.testData.NormsTestData;
 import de.bund.digitalservice.ris.search.integration.controller.api.testData.SharedTestConstants;
 import de.bund.digitalservice.ris.search.integration.controller.api.values.SortingTestArguments;
-import de.bund.digitalservice.ris.search.repository.opensearch.CaseLawRepository;
-import de.bund.digitalservice.ris.search.repository.opensearch.LiteratureRepository;
-import de.bund.digitalservice.ris.search.repository.opensearch.NormsRepository;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Map;
@@ -32,7 +29,6 @@ import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -53,20 +49,7 @@ import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 @WithJwt("jwtTokens/ValidAccessToken.json")
 class AllDocumentsSearchControllerAPITest extends ContainersIntegrationBase {
 
-  @Autowired private CaseLawRepository caseLawRepository;
-  @Autowired private LiteratureRepository literatureRepository;
-  @Autowired private NormsRepository normsRepository;
-
   @Autowired private MockMvc mockMvc;
-
-  @BeforeEach
-  void setUpSearchControllerApiTest() {
-    clearData();
-
-    caseLawRepository.saveAll(CaseLawTestData.allDocuments);
-    literatureRepository.saveAll(LiteratureTestData.allDocuments);
-    normsRepository.saveAll(NormsTestData.allDocuments);
-  }
 
   @Test
   @DisplayName("Should return correct result for term search, with textMatches")

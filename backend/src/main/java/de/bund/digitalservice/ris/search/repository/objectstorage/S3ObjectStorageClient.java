@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
+import lombok.Getter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import software.amazon.awssdk.core.ResponseInputStream;
@@ -26,7 +27,8 @@ import software.amazon.awssdk.services.s3.model.UploadPartRequest;
 import software.amazon.awssdk.services.s3.model.UploadPartResponse;
 
 public class S3ObjectStorageClient implements ObjectStorageClient {
-  private final S3Client s3Client;
+
+  @Getter private final S3Client s3Client;
   private final String bucketName;
   private final Logger logger = LogManager.getLogger(S3ObjectStorageClient.class);
 

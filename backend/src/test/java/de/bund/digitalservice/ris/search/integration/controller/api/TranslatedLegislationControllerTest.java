@@ -32,7 +32,6 @@ class TranslatedLegislationControllerTest extends ContainersIntegrationBase {
 
   @BeforeEach
   void setUpTranslatedLegislationControllerTest() {
-    clearData();
 
     String translationsJson =
         """

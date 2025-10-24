@@ -57,7 +57,6 @@ class PactProviderTest extends ContainersIntegrationBase {
     MockMvcTestTarget testTarget = new MockMvcTestTarget(mockMvc);
     testTarget.setControllers(caseLawController, literatureController, normsController);
     context.setTarget(testTarget);
-    clearData();
   }
 
   @State("I have a document in the database with number 12345")

@@ -103,7 +103,7 @@ class CaseLawControllerApiTest extends ContainersIntegrationBase {
 
   @BeforeEach
   void setUpSearchControllerApiTest() throws IOException {
-    clearData();
+    clearRepositoryData();
     String testCaseLawLdml = createTestCaseLawLdml();
     caseLawBucket.save(this.documentNumber + "/" + this.documentNumber + ".xml", testCaseLawLdml);
     caseLawBucket.save(this.documentNumber + "/Attachment.png", "picture");
@@ -281,7 +281,7 @@ class CaseLawControllerApiTest extends ContainersIntegrationBase {
   @Test
   @DisplayName("Returns 500 if placeholder.png is missing")
   void shouldReturn500IfPlaceholderMissing() throws Exception {
-    try (MockedConstruction<ClassPathResource> mocked =
+    try (MockedConstruction<ClassPathResource> ignored =
         Mockito.mockConstruction(
             ClassPathResource.class,
             (mock, context) ->
