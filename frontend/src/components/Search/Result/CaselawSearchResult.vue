@@ -146,29 +146,25 @@ function trackResultClick(url: string) {
 </script>
 
 <template>
-  <div class="my-36 hyphens-auto" data-testid="searchResult">
-    <div class="ris-label2-regular flex flex-row flex-wrap items-center gap-8">
-      <div class="flex items-center">
+  <article class="my-36 flex flex-col gap-8 hyphens-auto">
+    <p class="ris-label2-regular flex flex-row flex-wrap items-center gap-8">
+      <span class="flex items-center">
         <GavelIcon class="mr-4 h-16 text-gray-900" />
-        <span>
-          {{ metadata.documentType }}
-        </span>
-      </div>
+        <span>{{ metadata.documentType }}</span>
+      </span>
       <span>{{ metadata.courtName }}</span>
-      <span
-        ><span class="sr-only">Entscheidungsdatum </span
-        >{{ metadata.decisionDate }}</span
-      >
-      <span aria-label="Aktenzeichen" v-html="metadata.fileNumbers" />
-    </div>
+      <span>{{ metadata.decisionDate }}</span>
+      <span v-html="metadata.fileNumbers" />
+    </p>
+
     <NuxtLink
       :to="metadata.url"
-      class="ris-heading3-bold max-w-title link-hover mt-8 block text-blue-800"
+      class="ris-heading3-bold max-w-title link-hover block text-blue-800"
       @click="trackResultClick(metadata.url)"
     >
       <h2>
-        <span v-if="!!metadata.decisionName"
-          >{{ metadata.decisionName }} —
+        <span v-if="!!metadata.decisionName">
+          {{ metadata.decisionName }} —
         </span>
         <span
           v-html="
@@ -177,23 +173,23 @@ function trackResultClick(url: string) {
         />
       </h2>
     </NuxtLink>
-    <div class="mt-6 flex w-full max-w-prose flex-col gap-6">
+
+    <div class="flex w-full max-w-prose flex-col gap-6">
       <div v-for="section in previewSections" :key="section?.id">
         <NuxtLink
           :to="`${metadata.url}#${section?.id}`"
           class="ris-label1-bold link-hover text-blue-800"
           external
           @click="trackResultClick(`${metadata.url}#${section?.id}`)"
-        >
-          <h3>{{ section?.title }}:</h3> </NuxtLink
+          >{{ section?.title }}:</NuxtLink
         >{{ " " }}
         <span
           v-if="section.text"
           data-testid="highlighted-field"
-          class="text-lg"
+          class="ris-label1-regular"
           v-html="sanitizeSearchResult(section.text)"
         />
       </div>
     </div>
-  </div>
+  </article>
 </template>
