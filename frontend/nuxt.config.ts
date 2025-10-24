@@ -69,6 +69,12 @@ export default defineNuxtConfig({
         },
         { rel: "manifest", href: "/site.webmanifest" },
       ],
+      script: [
+        {
+          innerHTML: 'document.documentElement.classList.add("js");',
+          tagPosition: "head",
+        },
+      ],
     },
   },
   srcDir: "src/",

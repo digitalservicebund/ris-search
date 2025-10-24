@@ -4,9 +4,7 @@ import FeedbackForm from "~/components/Analytics/FeedbackForm.vue";
 
 <template>
   <footer class="flex flex-col gap-32 px-16 py-32">
-    <client-only>
-      <FeedbackForm />
-    </client-only>
+    <FeedbackForm />
     <hr />
     <div class="grid grid-cols-1 gap-48 md:grid-cols-2 lg:grid-cols-3">
       <div class="space-y-16">

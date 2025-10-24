@@ -1,18 +1,23 @@
 <script setup lang="ts">
 import type { Dayjs } from "dayjs";
-import Tab from "primevue/tab";
-import TabList from "primevue/tablist";
-import TabPanel from "primevue/tabpanel";
-import TabPanels from "primevue/tabpanels";
-import Tabs from "primevue/tabs";
 import Toast from "primevue/toast";
 import type { TreeNode } from "primevue/treenode";
+import { computed, ref, onMounted } from "vue";
+import type { ComputedRef } from "vue";
 import { useRoute } from "#app";
 import Accordion from "~/components/Accordion.vue";
 import NormActionsMenu from "~/components/ActionMenu/NormActionsMenu.vue";
 import ContentWrapper from "~/components/CustomLayouts/ContentWrapper.vue";
 import TableOfContentsLayout from "~/components/CustomLayouts/SidebarLayout.vue";
 import IncompleteDataMessage from "~/components/IncompleteDataMessage.vue";
+import {
+  linkTabBase,
+  linkTabActive,
+  linkTabInactive,
+  linkTabNav,
+  linkTabNavContainer,
+  linkTabPanel,
+} from "~/components/LinkTabs.styles";
 import NormMetadataFields from "~/components/Norm/Metadatafields/NormMetadataFields.vue";
 import NormVersionList from "~/components/Norm/NormVersionList.vue";
 import NormVersionWarning from "~/components/Norm/NormVersionWarning.vue";
@@ -23,11 +28,6 @@ import PropertiesItem from "~/components/PropertiesItem.vue";
 import NormTableOfContents from "~/components/Ris/NormTableOfContents.vue";
 import RisBreadcrumb from "~/components/Ris/RisBreadcrumb.vue";
 import type { BreadcrumbItem } from "~/components/Ris/RisBreadcrumb.vue";
-import {
-  tabListStyles,
-  tabPanelStyles,
-  tabStyles,
-} from "~/components/Tabs.styles";
 import { useBackendURL } from "~/composables/useBackendURL";
 import { useDynamicSeo } from "~/composables/useDynamicSeo";
 import { useIntersectionObserver } from "~/composables/useIntersectionObserver";
@@ -113,6 +113,11 @@ const normBreadcrumbTitle = computed(() =>
 
 const { status: normVersionsStatus, sortedVersions: normVersions } =
   useNormVersions(metadata.value?.legislationIdentifier);
+
+const isClient = ref(false);
+onMounted(() => (isClient.value = true));
+
+const activeSection = ref<"text" | "details" | "versions">("text");
 
 const breadcrumbItems: ComputedRef<BreadcrumbItem[]> = computed(() => {
   const list = [
@@ -219,124 +224,152 @@ useDynamicSeo({ title, description });
           :valid-to="validityInterval?.to"
         />
       </div>
-      <Tabs value="0">
-        <TabList :pt="tabListStyles">
-          <Tab
-            class="flex items-center gap-8"
-            :pt="tabStyles"
-            value="0"
-            aria-label="Gesetzestext"
+      <nav :class="linkTabNav" aria-label="Ansichten des Gesetzes">
+        <div :class="linkTabNavContainer">
+          <a
+            href="#text"
+            :aria-current="activeSection === 'text' ? 'page' : undefined"
+            aria-label="Text des Gesetzes"
+            :class="[
+              linkTabBase,
+              activeSection === 'text' ? linkTabActive : linkTabInactive,
+            ]"
+            @click.prevent="activeSection = 'text'"
           >
-            <IcBaselineSubject />
+            <IcBaselineSubject aria-hidden="true" />
             Text
-          </Tab>
-          <Tab
+          </a>
+
+          <a
+            href="#details"
             data-attr="norm-metadata-tab"
-            class="flex items-center gap-8"
-            :pt="tabStyles"
-            value="1"
-            aria-label="Details zum Gesetz"
+            :aria-current="activeSection === 'details' ? 'page' : undefined"
+            aria-label="Details des Gesetzes"
+            :class="[
+              linkTabBase,
+              activeSection === 'details' ? linkTabActive : linkTabInactive,
+            ]"
+            @click.prevent="activeSection = 'details'"
           >
-            <IcOutlineInfo />
+            <IcOutlineInfo aria-hidden="true" />
             Details
-          </Tab>
-          <Tab
+          </a>
+
+          <a
+            href="#versions"
             data-attr="norm-versions-tab"
-            class="flex items-center gap-8"
-            :pt="tabStyles"
-            value="2"
+            :aria-current="activeSection === 'versions' ? 'page' : undefined"
+            aria-label="Fassungen des Gesetzes"
+            :class="[
+              linkTabBase,
+              activeSection === 'versions' ? linkTabActive : linkTabInactive,
+            ]"
+            @click.prevent="activeSection = 'versions'"
           >
-            <IcOutlineRestore />
+            <IcOutlineRestore aria-hidden="true" />
             Fassungen
-          </Tab>
-        </TabList>
-        <TabPanels>
-          <TabPanel value="0" :pt="tabPanelStyles">
-            <TableOfContentsLayout class="container">
-              <template #content>
-                <IncompleteDataMessage />
-                <Accordion
-                  v-if="htmlParts?.officialToc"
-                  header-expanded="Amtliches Inhaltsverzeichnis ausblenden"
-                  header-collapsed="Amtliches Inhaltsverzeichnis einblenden"
-                >
-                  <div v-html="htmlParts?.officialToc" />
-                </Accordion>
-                <div v-observe-elements class="norm-view" v-html="html" />
-              </template>
-              <template #sidebar>
-                <NormTableOfContents
-                  v-if="metadata.workExample.tableOfContents.length > 0"
-                  :table-of-contents="tableOfContents"
-                  :selected-key="selectedEntry"
-                />
-              </template>
-            </TableOfContentsLayout>
-          </TabPanel>
-          <TabPanel value="1" :pt="tabPanelStyles" class="pt-24 pb-80">
-            <section aria-labelledby="detailsTabPanelTitle" class="container">
-              <h2 id="detailsTabPanelTitle" class="ris-heading3-bold my-24">
-                Details
-              </h2>
-              <IncompleteDataMessage class="my-24" />
-              <Properties>
-                <PropertiesItem
-                  label="Ausfertigungsdatum:"
-                  :value="dateFormattedDDMMYYYY(metadata.legislationDate)"
-                />
-                <PropertiesItem
-                  label="Vollzitat:"
-                  :value="htmlParts?.vollzitat"
-                />
-                <PropertiesItem
-                  label="Stand:"
-                  :value-list="htmlParts?.standangaben"
-                >
-                </PropertiesItem>
-                <PropertiesItem
-                  label="Hinweis zum Stand:"
-                  :value-list="htmlParts?.standangabenHinweis"
-                />
-                <PropertiesItem
-                  v-if="htmlParts?.prefaceContainer"
-                  label="Besonderer Hinweis:"
-                >
-                  <div v-html="htmlParts?.prefaceContainer" />
-                </PropertiesItem>
-                <PropertiesItem label="Fußnoten:">
-                  <template v-if="htmlParts?.headingNotes" #default>
-                    <div v-html="htmlParts?.headingNotes" />
-                  </template>
-                </PropertiesItem>
-                <PropertiesItem label="Download:">
-                  <NuxtLink
-                    data-attr="xml-zip-view"
-                    class="ris-link1-regular"
-                    external
-                    :href="zipUrl"
-                  >
-                    <MaterialSymbolsDownload class="mr-2 inline" />
-                    {{ metadata.abbreviation ?? "Inhalte" }} als ZIP
-                    herunterladen
-                  </NuxtLink>
-                </PropertiesItem>
-              </Properties>
-            </section>
-          </TabPanel>
-          <TabPanel value="2" :pt="tabPanelStyles" class="pt-24 pb-80">
-            <NormVersionList
-              v-if="!isPrototypeProfile()"
-              class="container"
-              :status="normVersionsStatus"
-              :current-legislation-identifier="
-                metadata.workExample.legislationIdentifier
-              "
-              :versions="normVersions"
+          </a>
+        </div>
+      </nav>
+
+      <section
+        id="text"
+        :class="linkTabPanel"
+        :hidden="isClient && activeSection !== 'text'"
+      >
+        <TableOfContentsLayout class="container">
+          <template #content>
+            <h2 class="sr-only">Text</h2>
+            <IncompleteDataMessage />
+            <Accordion
+              v-if="htmlParts.officialToc"
+              header-expanded="Amtliches Inhaltsverzeichnis ausblenden"
+              header-collapsed="Amtliches Inhaltsverzeichnis einblenden"
+            >
+              <div v-html="htmlParts.officialToc" />
+            </Accordion>
+            <div v-observe-elements class="norm-view" v-html="html" />
+          </template>
+          <template #sidebar>
+            <client-only>
+              <NormTableOfContents
+                v-if="metadata.workExample.tableOfContents.length > 0"
+                :table-of-contents="tableOfContents"
+                :selected-key="selectedEntry"
+              />
+            </client-only>
+          </template>
+        </TableOfContentsLayout>
+      </section>
+
+      <section
+        id="details"
+        :class="linkTabPanel"
+        :hidden="isClient && activeSection !== 'details'"
+        aria-labelledby="detailsTabPanelTitle"
+      >
+        <div class="container">
+          <h2 id="detailsTabPanelTitle" class="ris-heading3-bold my-24">
+            Details
+          </h2>
+          <IncompleteDataMessage class="my-24" />
+          <Properties>
+            <PropertiesItem
+              label="Ausfertigungsdatum:"
+              :value="dateFormattedDDMMYYYY(metadata.legislationDate)"
             />
-            <VersionsTeaser v-else />
-          </TabPanel>
-        </TabPanels>
-      </Tabs>
+            <PropertiesItem label="Vollzitat:" :value="htmlParts.vollzitat" />
+            <PropertiesItem
+              label="Stand:"
+              :value-list="htmlParts.standangaben"
+            />
+            <PropertiesItem
+              label="Hinweis zum Stand:"
+              :value-list="htmlParts.standangabenHinweis"
+            />
+            <PropertiesItem
+              v-if="htmlParts.prefaceContainer"
+              label="Besonderer Hinweis:"
+            >
+              <div v-html="htmlParts.prefaceContainer" />
+            </PropertiesItem>
+            <PropertiesItem label="Fußnoten:">
+              <template v-if="htmlParts.headingNotes" #default>
+                <div v-html="htmlParts.headingNotes" />
+              </template>
+            </PropertiesItem>
+            <PropertiesItem label="Download:">
+              <NuxtLink
+                data-attr="xml-zip-view"
+                class="ris-link1-regular"
+                external
+                :href="zipUrl"
+              >
+                <MaterialSymbolsDownload class="mr-2 inline" />
+                {{ metadata.abbreviation ?? "Inhalte" }} als ZIP herunterladen
+              </NuxtLink>
+            </PropertiesItem>
+          </Properties>
+        </div>
+      </section>
+
+      <section
+        id="versions"
+        :class="linkTabPanel"
+        :hidden="isClient && activeSection !== 'versions'"
+      >
+        <div class="container">
+          <NormVersionList
+            v-if="!isPrototypeProfile()"
+            :status="normVersionsStatus"
+            :current-legislation-identifier="
+              metadata.workExample.legislationIdentifier
+            "
+            :versions="normVersions"
+          />
+          <VersionsTeaser v-else />
+        </div>
+      </section>
     </div>
   </ContentWrapper>
   <Toast />
