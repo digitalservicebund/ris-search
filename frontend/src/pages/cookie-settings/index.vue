@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { storeToRefs } from "pinia";
 import PrimeVueButton from "primevue/button";
+import Message from "primevue/message";
 import StaticPageWrapper from "~/components/CustomLayouts/StaticPageWrapper.vue";
 import { useStaticPageSeo } from "~/composables/useStaticPageSeo";
 import { usePostHogStore } from "~/stores/usePostHogStore";
@@ -23,45 +24,74 @@ useStaticPageSeo("cookies");
     <template #breadcrumb>
       <RisBreadcrumb :items="[{ label: 'Cookie-Einstellungen' }]" />
     </template>
-    <div class="ris-body1-regular my-24 flex flex-col space-y-48">
+    <div class="ris-body1-regular my-24 flex max-w-prose flex-col space-y-48">
       <h1 id="page-title" class="ris-heading1-regular">Cookie-Einstellungen</h1>
-      <client-only>
-        <div v-if="userConsent == true" class="consent-status-wrapper">
-          <div class="consent-status">
-            <IconCheck class="text-blue-800" />
-            <div>Es werden anonyme Nutzungsdaten gespeichert</div>
+      <aside aria-label="Einstellungen ändern">
+        <h2 class="ris-heading2-regular mb-40 hidden md:block">
+          Sind Sie mit der Nutzung von Analyse-Cookies einverstanden?
+        </h2>
+        <noscript>
+          <div class="w-fit" data-testid="no-javascript-warning">
+            <Message severity="info" class="ris-body2-regular bg-white">
+              <template #icon>
+                <IconClose class="text-blue-800" />
+              </template>
+              <p class="ris-body2-bold">
+                Es werden keine Analyse-Cookies erfasst.
+              </p>
+            </Message>
           </div>
-          <div>
+        </noscript>
+        <client-only>
+          <div class="mb-40 w-fit" data-testid="consent-status-wrapper">
+            <Message severity="info" class="ris-body2-regular mb-40 bg-white">
+              <template #icon>
+                <IconCheck v-if="userConsent === true" class="text-blue-800" />
+                <IconClose v-else class="text-blue-800" />
+              </template>
+              <div v-if="userConsent === true">
+                <p class="ris-body2-bold">
+                  Ich bin mit der Nutzung von Analyse-Cookies einverstanden.
+                </p>
+                <p>Damit helfen Sie uns, das Portal weiter zu verbessern.</p>
+              </div>
+              <div v-else>
+                <p class="ris-body2-bold">
+                  Ich bin mit der Nutzung von Analyse-Cookies nicht
+                  einverstanden.
+                </p>
+                <p>
+                  Ihre Nutzung des Portals wird nicht zu Analysezwecken erfasst.
+                </p>
+              </div>
+            </Message>
             <PrimeVueButton
+              v-if="userConsent === true"
               aria-label="Cookie-Ablehnen-Button"
-              label="Anonyme Nutzungsdaten nicht speichern"
+              label="Cookies ablehnen"
               data-testid="settings-decline-cookie"
               @click="handleSetTracking(false)"
             />
-          </div>
-        </div>
-        <div v-else class="consent-status-wrapper">
-          <div class="consent-status">
-            <IconClose class="text-blue-800" />
-            <div>Es werden keine anonymen Nutzungsdaten gespeichert</div>
-          </div>
-          <div>
             <PrimeVueButton
+              v-else
               aria-label="Cookie-Akzeptieren-Button"
-              label="Anonyme Nutzungsdaten speichern"
+              label="Cookies akzeptieren"
               data-testid="settings-accept-cookie"
               @click="handleSetTracking(true)"
             />
           </div>
-        </div>
-      </client-only>
+        </client-only>
+      </aside>
       <div class="mb-80 max-w-prose space-y-64">
         <p>
           Nachfolgend informieren wir Sie darüber, welche Cookies auf der
-          Webseite testphase.rechtsinformationen.bund.de eingesetzt werden.
-          Cookies sind kleine Textdateien, die auf dem Datenträger des Nutzenden
-          gespeichert werden und über den Browser bestimmte Einstellungen und
-          Daten mit dem System des BMJV austauschen.
+          Webseite
+          <span class="ris-body1-bold">
+            testphase.rechtsinformationen.bund.de
+          </span>
+          eingesetzt werden. Cookies sind kleine Textdateien, die auf dem
+          Datenträger des Nutzenden gespeichert werden und über den Browser
+          bestimmte Einstellungen und Daten mit dem System des BMJ austauschen.
         </p>
         <div class="space-y-24">
           <h2 class="ris-heading2-regular">Notwendige (essenzielle) Cookies</h2>
@@ -98,9 +128,9 @@ useStaticPageSeo("cookies");
               Warum werden die Daten verarbeitet? (Zwecke der Verarbeitung)
             </p>
             <p>
-              Das Consent Management Tool Cookie speichert Ihre
-              Cookie-Einstellungen und somit, ob Sie dem Setzen eines
-              Analyse-Cookies (Ziffer 2, s.u.) zugestimmt haben oder nicht.
+              Das Consent Management Cookie speichert Ihre Cookie-Einstellungen
+              und somit, ob Sie dem Setzen eines Analyse-Cookies (Ziffer 2,
+              s.u.) zugestimmt haben oder nicht.
             </p>
           </div>
           <div>
@@ -112,7 +142,7 @@ useStaticPageSeo("cookies");
               Gesetzes über den Datenschutz und den Schutz der Privatsphäre in
               der Telekommunikation bei digitalen Diensten (TDDDG)) im Rahmen
               der Öffentlichkeitsarbeit zur bedarfsorientierten Bereitstellung
-              von Informationen zu den dem BMJV übertragenen Aufgaben.
+              von Informationen zu den dem BMJ übertragenen Aufgaben.
             </p>
           </div>
           <div>
@@ -120,13 +150,13 @@ useStaticPageSeo("cookies");
               Wie lange werden die Daten gespeichert?
             </p>
             <p>
-              Das Consent Management Tool Cookie speichert in Ihrem Browser die
+              Das Consent Management Cookie speichert in Ihrem Browser die
               Einstellung, ob Sie der Verwendung von Analyse-Cookies zugestimmt
-              haben oder nicht. Das Consent Management Tool Cookie hat eine
-              maximale Speicherdauer von 365 Tagen. Das Consent Management Tool
-              Cookie kann jederzeit über die Browser-Einstellungen gelöscht
-              werden. Alternativ kann jederzeit die Vorauswahl über die
-              Cookie-Einstellungen auf der Webseite geändert werden.
+              haben oder nicht. Der Consent-Cookie hat eine maximale
+              Speicherdauer von 365 Tagen. Der Consent-Cookie kann jederzeit
+              über die Browser-Einstellungen gelöscht werden. Alternativ kann
+              jederzeit die Vorauswahl über die Cookie-Einstellungen auf der
+              Webseite geändert werden.
             </p>
           </div>
         </div>
@@ -226,8 +256,8 @@ useStaticPageSeo("cookies");
           </div>
         </div>
       </div>
-    </div></StaticPageWrapper
-  >
+    </div>
+  </StaticPageWrapper>
 </template>
 
 <style scoped>
