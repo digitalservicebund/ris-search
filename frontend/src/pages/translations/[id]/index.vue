@@ -205,10 +205,8 @@ const activeSection = ref<"text" | "details">("text");
 
     <section
       id="text"
-      :class="[
-        linkTabPanel,
-        isClient && activeSection !== 'text' ? 'hidden' : '',
-      ]"
+      :class="linkTabPanel"
+      :hidden="isClient && activeSection !== 'text'"
     >
       <div class="container">
         <h2 class="sr-only">Text</h2>
@@ -218,10 +216,8 @@ const activeSection = ref<"text" | "details">("text");
 
     <section
       id="details"
-      :class="[
-        linkTabPanel,
-        isClient && activeSection !== 'details' ? 'hidden' : '',
-      ]"
+      :class="linkTabPanel"
+      :hidden="isClient && activeSection !== 'details'"
       aria-labelledby="detailsTabPanelTitle"
     >
       <div class="container">

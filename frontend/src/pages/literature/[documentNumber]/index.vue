@@ -1,21 +1,20 @@
 <script setup lang="ts">
-import Tab from "primevue/tab";
-import TabList from "primevue/tablist";
-import TabPanel from "primevue/tabpanel";
-import TabPanels from "primevue/tabpanels";
-import Tabs from "primevue/tabs";
+import { computed, ref, onMounted } from "vue";
 import { useFetch } from "#app";
 import ContentWrapper from "~/components/CustomLayouts/ContentWrapper.vue";
 import SidebarLayout from "~/components/CustomLayouts/SidebarLayout.vue";
 import IncompleteDataMessage from "~/components/IncompleteDataMessage.vue";
+import {
+  linkTabBase,
+  linkTabActive,
+  linkTabInactive,
+  linkTabNav,
+  linkTabNavContainer,
+  linkTabPanel,
+} from "~/components/LinkTabs.styles";
 import LiteratureMetadata from "~/components/LiteratureMetadata.vue";
 import RisBreadcrumb from "~/components/Ris/RisBreadcrumb.vue";
 import RisDocumentTitle from "~/components/Ris/RisDocumentTitle.vue";
-import {
-  tabListStyles,
-  tabPanelStyles,
-  tabStyles,
-} from "~/components/Tabs.styles";
 import { useBackendURL } from "~/composables/useBackendURL";
 import { DocumentKind, type Literature } from "~/types";
 import { formatDocumentKind } from "~/utils/displayValues";
@@ -61,6 +60,11 @@ const breadcrumbItems = computed(() => [
   },
 ]);
 
+const isClient = ref(false);
+onMounted(() => (isClient.value = true));
+
+const activeSection = ref<"text" | "details">("text");
+
 if (metadataError?.value) {
   showError(metadataError.value);
 }
@@ -84,44 +88,69 @@ if (contentError?.value) {
         :years-of-publication="literature.yearsOfPublication"
       />
     </div>
-    <Tabs v-if="!!literature" value="0">
-      <TabList :pt="tabListStyles">
-        <Tab
-          class="flex items-center gap-8"
-          :pt="tabStyles"
-          value="0"
+    <nav :class="linkTabNav" aria-label="Ansichten des Literaturnachweises">
+      <div :class="linkTabNavContainer">
+        <a
+          href="#text"
+          :aria-current="activeSection === 'text' ? 'page' : undefined"
           aria-label="Text des Literaturnachweises"
-          ><IcBaselineSubject />Text</Tab
+          :class="[
+            linkTabBase,
+            activeSection === 'text' ? linkTabActive : linkTabInactive,
+          ]"
+          @click.prevent="activeSection = 'text'"
         >
-        <Tab
-          data-attr="caselaw-metadata-tab"
-          class="flex items-center gap-8"
-          :pt="tabStyles"
-          value="1"
+          <IcBaselineSubject aria-hidden="true" />
+          Text
+        </a>
+
+        <a
+          href="#details"
+          data-attr="literature-metadata-tab"
+          :aria-current="activeSection === 'details' ? 'page' : undefined"
           aria-label="Details zum Literaturnachweis"
-          ><IcOutlineInfo />Details</Tab
+          :class="[
+            linkTabBase,
+            activeSection === 'details' ? linkTabActive : linkTabInactive,
+          ]"
+          @click.prevent="activeSection = 'details'"
         >
-      </TabList>
-      <TabPanels>
-        <TabPanel value="0" :pt="tabPanelStyles">
-          <SidebarLayout class="container">
-            <template #content>
-              <IncompleteDataMessage class="mb-16" />
-              <div class="literature" v-html="html"></div>
-            </template>
-          </SidebarLayout>
-        </TabPanel>
-        <TabPanel value="1" :pt="tabPanelStyles" class="pt-24 pb-80">
-          <section aria-labelledby="detailsTabPanelTitle" class="container">
-            <h2 id="detailsTabPanelTitle" class="ris-heading3-bold my-24">
-              Details
-            </h2>
-            <IncompleteDataMessage class="my-24" />
-            <Properties>
-              <PropertiesItem label="Property:" value="todo" />
-            </Properties>
-          </section>
-        </TabPanel>
-      </TabPanels> </Tabs
-  ></ContentWrapper>
+          <IcOutlineInfo aria-hidden="true" />
+          Details
+        </a>
+      </div>
+    </nav>
+
+    <section
+      id="text"
+      :class="linkTabPanel"
+      :hidden="isClient && activeSection !== 'text'"
+      aria-labelledby="textSectionHeading"
+    >
+      <SidebarLayout class="container">
+        <template #content>
+          <h2 id="textSectionHeading" class="sr-only">Text</h2>
+          <IncompleteDataMessage class="mb-16" />
+          <div class="literature" v-html="html"></div>
+        </template>
+      </SidebarLayout>
+    </section>
+
+    <section
+      id="details"
+      :class="linkTabPanel"
+      :hidden="isClient && activeSection !== 'details'"
+      aria-labelledby="detailsTabPanelTitle"
+    >
+      <div class="container pt-24 pb-80">
+        <h2 id="detailsTabPanelTitle" class="ris-heading3-bold my-24">
+          Details
+        </h2>
+        <IncompleteDataMessage class="my-24" />
+        <Properties>
+          <PropertiesItem label="Property:" value="todo" />
+        </Properties>
+      </div>
+    </section>
+  </ContentWrapper>
 </template>
