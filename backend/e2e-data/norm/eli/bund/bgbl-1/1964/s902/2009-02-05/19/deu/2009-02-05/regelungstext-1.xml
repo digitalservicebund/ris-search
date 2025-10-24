@@ -59,7 +59,7 @@
                 <akn:p GUID="dddddddd-eeee-4fff-0000-111111111111" eId="einleitung-n1_doktitel-n1_text-n1">
                     <akn:docStage GUID="eeeeeeee-ffff-4000-1111-222222222222" eId="einleitung-n1_doktitel-n1_text-n1_docstadium-n1"/>
                     <akn:docTitle GUID="ffffffff-0000-4111-2222-333333333333" eId="einleitung-n1_doktitel-n1_text-n1_doctitel-n1">Testverordnung zur Musterregelung des öffentlichen Dienstes</akn:docTitle>
-                    <akn:shortTitle GUID="11111111-0000-4222-3333-444444444444" eId="einleitung-n1_doktitel-n1_text-n1_kurztitel-n1">(Musterverordnung - TestV)</akn:shortTitle>
+                    <akn:shortTitle GUID="11111111-0000-4222-3333-444444444444" eId="einleitung-n1_doktitel-n1_text-n1_kurztitel-n1">(Musterverordnung - <akn:inline GUID="d3825aa3-315c-4346-a690-bc09c49b63e6" eId="einleitung-n1_doktitel-n1_text-n1_kurztitel-n1_inline-n1" name="attributsemantik-noch-undefiniert" refersTo="amtliche-abkuerzung">TestV</akn:inline></akn:shortTitle>
                 </akn:p>
             </akn:longTitle>
             <akn:block eId="einleitung-n1_block-n1" GUID="11111111-0000-4222-3333-444444444456" name="attributsemantik-noch-undefiniert">

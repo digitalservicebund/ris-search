@@ -39,8 +39,8 @@ const translationsMap = computed(() => {
   return map;
 });
 
-const sortedTranslations = computed<TranslationContent[] | undefined>(() => {
-  if (!translationsList.value) return undefined;
+const sortedTranslations = computed<TranslationContent[] | null>(() => {
+  if (!translationsList.value) return null;
 
   if (activeSearchTerm.value == "") {
     return [...translationsList.value].sort((a, b) =>
@@ -57,7 +57,7 @@ const sortedTranslations = computed<TranslationContent[] | undefined>(() => {
 
 const minisearch = computed(() => {
   const miniSearch = new MiniSearch({
-    fields: ["@id", "name", "translator", "translationOfWork"],
+    fields: ["@id", "name", "translationOfWork"],
     storeFields: [
       "@id",
       "name",
@@ -106,7 +106,7 @@ useStaticPageSeo("translations-list");
           consent of the author or other rights holder.
         </p>
         <form
-          :data-full-width="true"
+          :data-full-width="false"
           role="search"
           class="my-48 flex max-w-md flex-row gap-8 data-[full-width='true']:max-w-full"
           @submit.prevent="handleSearch"
@@ -121,7 +121,7 @@ useStaticPageSeo("translations-list");
               id="searchInput"
               v-model="searchTerm"
               fluid
-              placeholder="Enter search term"
+              placeholder="Search by title or abbreviation"
               autofocus
               type="search"
             />
@@ -138,7 +138,10 @@ useStaticPageSeo("translations-list");
           </Button>
         </form>
       </section>
-      <div data-testid="translations">
+      <div
+        v-if="sortedTranslations !== null && sortedTranslations.length > 0"
+        data-testid="translations"
+      >
         <a
           v-for="t in sortedTranslations"
           :key="t['@id']"
@@ -146,8 +149,8 @@ useStaticPageSeo("translations-list");
           class="group my-16 block bg-white p-8 px-32 py-24 no-underline hover:no-underline"
         >
           <div class="max-w-prose space-y-24">
-            <span class="mr-24">{{ t["@id"] }}</span>
-            <span>{{ t.translationOfWork }}</span>
+            <span class="mr-24 group-hover:underline">{{ t["@id"] }}</span>
+            <span class="group-hover:underline">{{ t.translationOfWork }}</span>
 
             <h2
               class="ris-heading3-bold max-w-title mt-8 block text-balance text-blue-800 group-hover:underline"
@@ -159,6 +162,7 @@ useStaticPageSeo("translations-list");
           </div>
         </a>
       </div>
+      <div v-else><p class="mb-16">Nothing found</p></div>
     </div>
   </ContentWrapper>
 </template>
