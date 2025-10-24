@@ -2,6 +2,7 @@ import type {
   ActionMenuItem,
   ActionsMenuProps,
 } from "~/components/ActionMenu/ActionsMenu.vue";
+import ENGIcon from "~/components/icons/ENGIcon.vue";
 import PDFIcon from "~/components/icons/PDFIcon.vue";
 import UpdatingLinkIcon from "~/components/icons/UpdatingLinkIcon.vue";
 import XMLIcon from "~/components/icons/XMLIcon.vue";
@@ -11,11 +12,12 @@ import MaterialSymbolsPrint from "~icons/material-symbols/print";
 export function createActionMenuItems(
   records: ActionsMenuProps,
   copyUrlCommand: (url: string) => Promise<void>,
-  navigationCommand: (xmlUrl: string) => Promise<void>,
+  navigationCommand: (url: string) => Promise<void>,
 ): ActionMenuItem[] {
   const items: ActionMenuItem[] = [];
   const link = records.link;
   const xmlUrl = records.xmlUrl;
+  const translationUrl = records.translationUrl;
 
   if (link) {
     items.push({
@@ -60,6 +62,16 @@ export function createActionMenuItems(
       command: async () => await navigationCommand(xmlUrl),
       url: records.xmlUrl,
       dataAttribute: "xml-view",
+    });
+  }
+
+  if (translationUrl) {
+    items.push({
+      key: "translation",
+      label: "Show translation",
+      iconComponent: ENGIcon,
+      command: async () => await navigationCommand(translationUrl),
+      url: translationUrl,
     });
   }
   return items;

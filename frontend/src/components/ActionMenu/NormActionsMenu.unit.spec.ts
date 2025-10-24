@@ -37,6 +37,7 @@ describe("NormActionsMenu.vue", () => {
     const wrapper = shallowMount(NormActionsMenu, {
       props: {
         metadata: mockLegislationWork,
+        hasTranslation: undefined,
       },
     });
 

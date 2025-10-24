@@ -17,6 +17,7 @@ export type ActionsMenuProps = {
     disabled?: boolean;
   };
   xmlUrl?: string;
+  translationUrl?: string;
 };
 
 export type ActionMenuItem = Omit<MenuItem, "icon"> & {

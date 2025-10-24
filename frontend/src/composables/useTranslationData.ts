@@ -65,6 +65,25 @@ export function fetchTranslationList(): AsyncData<
   });
 }
 
+export function fetchTranslationListWithIdFilter(
+  id: string,
+): AsyncData<
+  TranslationContent[],
+  NuxtError<TranslationContent> | NuxtError<null> | undefined
+> {
+  const { apiFetch, backendURL } = useApi();
+
+  return useAsyncData("translations-list-with_id", async () => {
+    const response = await apiFetch<TranslationContent[]>(
+      translationDetailURL(backendURL, id),
+    );
+
+    if (!response || response.length === 0) throw notFoundError("Not Found");
+
+    return response;
+  });
+}
+
 export function fetchTranslationAndHTML(
   id: string,
 ): AsyncData<TranslationData, NuxtError | undefined> {
