@@ -6,6 +6,7 @@ import TabPanel from "primevue/tabpanel";
 import TabPanels from "primevue/tabpanels";
 import Tabs from "primevue/tabs";
 import type { TreeNode } from "primevue/treenode";
+import { computed } from "vue";
 import { useRoute } from "#app";
 import Accordion from "~/components/Accordion.vue";
 import NormActionsMenu from "~/components/ActionMenu/NormActionsMenu.vue";
@@ -33,6 +34,7 @@ import { useIntersectionObserver } from "~/composables/useIntersectionObserver";
 import { useFetchNormContent } from "~/composables/useNormData";
 import { useNormVersions } from "~/composables/useNormVersions";
 import { usePrivateFeaturesFlag } from "~/composables/usePrivateFeaturesFlag";
+import { fetchTranslationListWithIdFilter } from "~/composables/useTranslationData";
 import { DocumentKind, type LegislationWork } from "~/types";
 import { dateFormattedDDMMYYYY } from "~/utils/dateFormatting";
 import { formatDocumentKind } from "~/utils/displayValues";
@@ -67,6 +69,16 @@ const { data, error, status } = await useFetchNormContent(expressionEli);
 const metadata: Ref<LegislationWork | undefined> = computed(() => {
   return data.value?.legislationWork;
 });
+
+const abbreviation = data.value?.legislationWork.abbreviation;
+
+const { data: translation, error: _translationFetchError } = abbreviation
+  ? fetchTranslationListWithIdFilter(abbreviation)
+  : { data: { value: [] }, error: null };
+
+const hasTranslation = computed(
+  () => !!(translation.value && translation.value.length > 0),
+);
 
 const html = computed(() => data.value?.html);
 const htmlParts = computed(() => data.value?.htmlParts);
@@ -200,7 +212,11 @@ useDynamicSeo({ title, description });
       <div class="container">
         <div class="flex items-center gap-8 print:hidden">
           <RisBreadcrumb :items="breadcrumbItems" class="grow" />
-          <client-only> <NormActionsMenu :metadata="metadata" /></client-only>
+          <client-only>
+            <NormActionsMenu
+              :metadata="metadata"
+              :has-translation="hasTranslation"
+          /></client-only>
         </div>
         <NormHeadingGroup :metadata="metadata" :html-parts="htmlParts" />
         <NormVersionWarning
