@@ -2,12 +2,12 @@ name: Frontend
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
     paths:
       - frontend/**
       - .github/workflows/frontend.yml
   pull_request:
-    branches: [ main ]
+    branches: [main]
     paths:
       - frontend/**
       - .github/workflows/frontend.yml
@@ -78,15 +78,34 @@ jobs:
       - name: Check style
         run: yarn run style:check
         working-directory: ./frontend
+
+  audit-licenses-frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.17.0
+          cache: yarn
+          cache-dependency-path: ./frontend/yarn.lock
+      - name: Install node modules
+        run: yarn install --immutable
+        working-directory: ./frontend
       - name: Run license scanner
-        run: yarn run audit:licences
+        run: yarn audit:licences
         working-directory: ./frontend
       - name: Upload licence report
         uses: actions/upload-artifact@v4
         with:
-          name: frontend-licence-report.csv
+          name: licence-reports-frontend
           retention-days: 3
-          path: ./frontend/licence-report.csv
+          path: frontend/frontend-licence-report.csv
+      - name: Send status to Slack
+        uses: digitalservicebund/notify-on-failure-gha@66c485757701f8d5dbee32f24df38d904ca693ba
+        if: ${{ failure() && github.ref == 'refs/heads/main' }}
+        with:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 
   frontend-file-scan:
     runs-on: ubuntu-latest
@@ -239,7 +258,6 @@ jobs:
         if: ${{ github.actor != 'dependabot[bot]' && github.ref == 'refs/heads/main' }}
         env:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-
 
   deploy-staging-portal:
     runs-on: ubuntu-latest
