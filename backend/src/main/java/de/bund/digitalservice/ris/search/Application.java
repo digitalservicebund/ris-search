@@ -26,6 +26,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableScheduling
 public class Application {
 
+  // Non changing commit to test E2E tests
   @Generated // Making (mis)use of @lombok.Generated to exclude from JaCoCo report
   public static void main(String[] args) {
     SpringApplication.run(Application.class, args);
