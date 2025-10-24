@@ -188,6 +188,10 @@ export default defineNuxtConfig({
     },
   },
   routeRules: {
+    // Temporarily disabled due to data issue with Form bricks
+    "/nutzungstests": {
+      redirect: "/",
+    },
     "/sitemaps/norms/**": {
       proxy: {
         to: "/v1/sitemaps/norms/**",
