@@ -104,3 +104,22 @@ test(
     ).toBeVisible();
   },
 );
+
+test(
+  "Links in action menu are correct",
+  { tag: ["@RISDEV-8950"] },
+  async ({ page }) => {
+    const url = "/translations/TestV";
+    await page.goto(url);
+
+    await page.waitForLoadState("networkidle");
+
+    await expect(page.getByRole("button", { name: "Link to translation" }))
+      .toBeVisible;
+    await expect(page.getByRole("button", { name: "Drucken" })).toBeVisible;
+    const pdfButton = page.getByRole("button", { name: "Als PDF Drucken" });
+
+    await expect(pdfButton).toBeVisible;
+    await expect(pdfButton).toBeDisabled;
+  },
+);
