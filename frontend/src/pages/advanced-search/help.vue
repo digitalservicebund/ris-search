@@ -126,11 +126,11 @@ const availableFeatures: Feature[] = isPublic
               :key="field.label"
               class="hover:bg-gray-100"
             >
-              <td class="border-b-1 border-blue-300 px-16 py-12 align-middle">
+              <td class="border-b border-blue-300 px-16 py-12 align-middle">
                 {{ field.label }}
               </td>
               <td
-                class="ris-body2-regular border-b-1 border-blue-300 px-16 py-12 align-middle"
+                class="ris-body2-regular border-b border-blue-300 px-16 py-12 align-middle"
               >
                 <template v-for="alias in field.aliases" :key="alias">
                   <code>{{ alias }}</code>
@@ -138,7 +138,7 @@ const availableFeatures: Feature[] = isPublic
                 </template>
               </td>
               <td
-                class="ris-body2-regular border-b-1 border-blue-300 px-16 py-12 align-middle"
+                class="ris-body2-regular border-b border-blue-300 px-16 py-12 align-middle"
               >
                 <template v-for="example in field.examples" :key="example">
                   <pre
@@ -243,11 +243,11 @@ const availableFeatures: Feature[] = isPublic
               :key="field.label"
               class="hover:bg-gray-100"
             >
-              <td class="border-b-1 border-blue-300 px-16 py-12 align-middle">
+              <td class="border-b border-blue-300 px-16 py-12 align-middle">
                 {{ field.label }}
               </td>
               <td
-                class="ris-body2-regular border-b-1 border-blue-300 px-16 py-12 align-middle"
+                class="ris-body2-regular border-b border-blue-300 px-16 py-12 align-middle"
               >
                 <template v-for="alias in field.aliases" :key="alias">
                   <code>{{ alias }}</code>
@@ -255,7 +255,7 @@ const availableFeatures: Feature[] = isPublic
                 </template>
               </td>
               <td
-                class="ris-body2-regular border-b-1 border-blue-300 px-16 py-12 align-middle"
+                class="ris-body2-regular border-b border-blue-300 px-16 py-12 align-middle"
               >
                 <template v-for="example in field.examples" :key="example">
                   <pre

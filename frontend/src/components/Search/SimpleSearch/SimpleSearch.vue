@@ -111,9 +111,7 @@ useHead({ title });
     <fieldset
       class="top-8 flex w-full flex-col gap-24 pb-10 lg:sticky lg:max-h-screen lg:w-3/12 lg:overflow-y-auto"
     >
-      <legend class="ris-label1-regular flex h-[3rem] items-center">
-        Filter
-      </legend>
+      <legend class="ris-label1-regular flex h-48 items-center">Filter</legend>
       <CategoryFilter />
       <CourtFilter />
       <DateRangeFilter v-if="documentKind === DocumentKind.CaseLaw" />

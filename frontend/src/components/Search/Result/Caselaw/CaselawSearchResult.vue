@@ -149,7 +149,7 @@ function trackResultClick(url: string) {
   <div class="my-36 hyphens-auto" data-testid="searchResult">
     <div class="ris-label2-regular flex flex-row flex-wrap items-center gap-8">
       <div class="flex items-center">
-        <GavelIcon class="mr-4 h-[1rem] text-gray-900" />
+        <GavelIcon class="mr-4 h-16 text-gray-900" />
         <span>
           {{ metadata.documentType }}
         </span>

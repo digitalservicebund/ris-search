@@ -24,7 +24,7 @@ const normTitle = computed(() => getNormTitle(props.metadata));
     <hgroup>
       <p
         v-if="hasHeading"
-        class="word-wrap ris-heading3-regular mb-12 break-words hyphens-auto max-sm:text-[20px]"
+        class="word-wrap ris-heading3-regular mb-12 wrap-break-word hyphens-auto max-sm:text-[20px]"
       >
         {{ metadata.alternateName }}
       </p>
@@ -33,10 +33,10 @@ const normTitle = computed(() => getNormTitle(props.metadata));
           ><div
             v-if="hasHeading"
             :data-longTitle="isLongTitle || null"
-            class="break-words hyphens-auto max-sm:text-[26px]"
+            class="wrap-break-word hyphens-auto max-sm:text-[26px]"
             v-html="props.htmlParts?.heading"
           />
-          <div v-else class="titel break-words max-sm:text-[26px]">
+          <div v-else class="titel wrap-break-word max-sm:text-[26px]">
             {{ normTitle }}
           </div>
         </RisExpandableText>
@@ -44,10 +44,10 @@ const normTitle = computed(() => getNormTitle(props.metadata));
           <div
             v-if="props.htmlParts?.heading"
             :data-longTitle="isLongTitle || null"
-            class="break-words hyphens-auto max-sm:text-[26px]"
+            class="wrap-break-word hyphens-auto max-sm:text-[26px]"
             v-html="props.htmlParts.heading"
           ></div>
-          <div v-else class="titel break-words max-sm:text-[26px]">
+          <div v-else class="titel wrap-break-word max-sm:text-[26px]">
             {{ normTitle }}
           </div>
         </template>
