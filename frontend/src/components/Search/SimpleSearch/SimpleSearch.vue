@@ -151,17 +151,19 @@ useHead({ title });
             Wir arbeiten an der Ergänzung und Darstellung aller Inhalte.
           </p>
         </Message>
-        <div
+        <ul
           v-if="currentPage && currentPage?.member?.length > 0"
           class="w-full"
         >
-          <SearchResult
-            v-for="(element, index) in currentPage.member"
-            :key="index"
-            :search-result="element"
-            :order="index"
-          />
-        </div>
+          <li>
+            <SearchResult
+              v-for="(element, index) in currentPage.member"
+              :key="index"
+              :search-result="element"
+              :order="index"
+            />
+          </li>
+        </ul>
         <div
           v-if="isLoading"
           class="flex h-full min-h-48 w-full items-center justify-center"
