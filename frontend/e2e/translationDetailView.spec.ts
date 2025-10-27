@@ -91,7 +91,7 @@ test(
 );
 
 test(
-  "has link to german original",
+  "has link to german original, german version has link to english version",
   { tag: ["@RISDEV-8950"] },
   async ({ page }) => {
     await page.goto("/translations/TestV");
@@ -100,6 +100,17 @@ test(
     await expect(
       page.getByRole("heading", {
         name: "Testverordnung zur Musterregelung des öffentlichen Dienstes",
+      }),
+    ).toBeVisible();
+    const translationButton = page.getByRole("link", {
+      name: "Show translation",
+    });
+    await expect(translationButton).toBeVisible();
+    translationButton.click();
+    await page.waitForLoadState("networkidle");
+    await expect(
+      page.getByRole("heading", {
+        name: "Test Regulation for the Model Framework of the Public Service",
       }),
     ).toBeVisible();
   },
@@ -114,12 +125,16 @@ test(
 
     await page.waitForLoadState("networkidle");
 
-    await expect(page.getByRole("button", { name: "Link to translation" }))
-      .toBeVisible;
-    await expect(page.getByRole("button", { name: "Drucken" })).toBeVisible;
-    const pdfButton = page.getByRole("button", { name: "Als PDF Drucken" });
+    await expect(
+      page.getByRole("link", { name: "Link to translation" }),
+    ).toBeVisible();
+    const printButton = page.getByRole("button", { name: "Drucken" });
+    await printButton.waitFor({ state: "visible" });
+    await expect(printButton).toBeVisible();
 
-    await expect(pdfButton).toBeVisible;
-    await expect(pdfButton).toBeDisabled;
+    const pdfButton = page.getByRole("button", { name: "Als PDF speichern" });
+    await pdfButton.waitFor({ state: "visible" });
+    await expect(pdfButton).toBeVisible();
+    await expect(pdfButton).toBeDisabled();
   },
 );
