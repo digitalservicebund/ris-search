@@ -107,6 +107,9 @@ describe("usePostHogStore", () => {
     expect(store.postHog).toBeUndefined();
     expect(cookiesMock.set).toHaveBeenCalledWith("consent_given", "false", {
       expires: 365,
+      path: "/",
+      sameSite: "lax",
+      secure: expect.anything(),
     });
     expect(store.userConsent).toBe(false);
     expect(cookiesMock.remove).toHaveBeenCalledWith("ph_key_posthog", {
@@ -123,6 +126,9 @@ describe("usePostHogStore", () => {
     expect(store.postHog).toBeDefined();
     expect(cookiesMock.set).toHaveBeenCalledWith("consent_given", "true", {
       expires: 365,
+      path: "/",
+      sameSite: "lax",
+      secure: expect.anything(),
     });
     expect(store.userConsent).toBe(true);
     expect(store.postHog?.opt_in_capturing).toHaveBeenCalled();
