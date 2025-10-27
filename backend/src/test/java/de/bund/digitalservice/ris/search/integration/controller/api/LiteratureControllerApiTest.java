@@ -34,7 +34,6 @@ class LiteratureControllerApiTest extends ContainersIntegrationBase {
   @Autowired private LiteratureRepository literatureRepository;
   @Autowired private MockMvc mockMvc;
 
-  private final String documentNumberPersistedInTest = "KALU000000002";
   private final String documentNumberPresentInBucket = "literatureLdml-1";
 
   @BeforeEach
@@ -47,6 +46,7 @@ class LiteratureControllerApiTest extends ContainersIntegrationBase {
   @DisplayName("Should return literature when using api endpoint with document number")
   void shouldReturnSingleLiteratureJson() throws Exception {
 
+    final String documentNumberPersistedInTest = "KALU000000002";
     mockMvc
         .perform(
             get(ApiConfig.Paths.LITERATURE + "/" + documentNumberPersistedInTest)
