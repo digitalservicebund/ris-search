@@ -11,7 +11,6 @@ import org.springframework.data.domain.Sort;
 @ExtendWith(MockitoExtension.class)
 class SortParamsConverterTest {
 
-  private static final Sort RELEVANCE = Sort.by(Sort.Order.desc("_score"));
   private static final String DATE_FIELD = "DATUM";
 
   @ParameterizedTest
