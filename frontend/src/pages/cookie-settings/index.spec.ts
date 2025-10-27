@@ -18,6 +18,18 @@ mockNuxtImport("useRuntimeConfig", () => {
   return useRuntimeConfigMock;
 });
 
+const cookiesMock = vi.hoisted(() => {
+  return {
+    get: vi.fn(),
+    set: vi.fn(),
+    remove: vi.fn(),
+  };
+});
+
+vi.mock("js-cookie", () => ({
+  default: cookiesMock,
+}));
+
 const factory = (userConsent: boolean | undefined) =>
   mount(CookieSettings, {
     global: {
@@ -79,26 +91,37 @@ describe("CookieSettings Page", () => {
   });
 
   it("shows that tracking is accepted if userConsent is true", async () => {
+    cookiesMock.get.mockReturnValue("true");
     const wrapper = factory(true);
     await wrapper.vm.$nextTick();
     assertConsentGiven(wrapper);
   });
 
   it("clicking the Accept button sets the tracking to active and changes the UI", async () => {
+    cookiesMock.get.mockReturnValue("false");
     const wrapper = factory(false);
     await wrapper.vm.$nextTick();
     const setTrackingSpy = vi.spyOn(wrapper.vm, "handleSetTracking");
-    await findAcceptButton(wrapper).trigger("click");
+    const forms = wrapper.findAll("form");
+    const acceptForm = forms.find((form) =>
+      form.find('[data-testid="settings-accept-cookie"]').exists(),
+    );
+    await acceptForm?.trigger("submit");
     await wrapper.vm.$nextTick();
     expect(setTrackingSpy).toHaveBeenCalledWith(true);
     assertConsentGiven(wrapper);
   });
 
   it("clicking the Decline button sets the tracking to inactive and changes the UI", async () => {
+    cookiesMock.get.mockReturnValue("true");
     const wrapper = factory(true);
     await wrapper.vm.$nextTick();
     const setTrackingSpy = vi.spyOn(wrapper.vm, "handleSetTracking");
-    await findDeclineButton(wrapper).trigger("click");
+    const forms = wrapper.findAll("form");
+    const declineForm = forms.find((form) =>
+      form.find(declineButtonSelector).exists(),
+    );
+    await declineForm?.trigger("submit");
     await wrapper.vm.$nextTick();
     expect(setTrackingSpy).toHaveBeenCalledWith(false);
     assertConsentRejected(wrapper);
