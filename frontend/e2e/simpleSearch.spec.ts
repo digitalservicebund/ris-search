@@ -1,142 +1,424 @@
+import type { Page } from "@playwright/test";
 import { expect, test } from "./utils/fixtures";
 
-test("can enter a query on the start page and go back", async ({ page }) => {
-  const searchTerm = "Fiktiv";
+function getSearchResults(page: Page) {
+  return page
+    .getByRole("list", { name: "Suchergebnisse" })
+    .getByRole("listitem");
+}
 
-  await page.goto("/");
-  await page.getByPlaceholder("Suchbegriff eingeben").fill(searchTerm);
+function getResultCounter(page: Page) {
+  // Not an ideal way for selecting this but I can't find a more semantic option
+  // of doing it given the current page structure
+  return page.getByText(/\d+ Suchergebnis(se)?/, { exact: true });
+}
 
-  const searchButton = page.getByRole("button", { name: "Suchen" });
-  await expect(searchButton).not.toBeDisabled();
-  await searchButton.click();
-  expect(await getDisplayedResultCount(page)).toBeGreaterThan(0);
-  await expect(page.getByPlaceholder("Suchbegriff eingeben")).toHaveValue(
-    searchTerm,
-  );
-
-  await test.step("go back to home page by clicking the logo", async () => {
-    await page.getByLabel("Zur Startseite").click();
-    await expect(
-      page.getByPlaceholder("Suchbegriff eingeben"),
-      "should be reset",
-    ).not.toHaveValue(searchTerm);
-  });
-});
-
-test("can use pagination to switch pages", async ({ page }) => {
-  await page.goto("/search?query=und");
-  // expect(await getDisplayedResultCount(page)).toBe(12);
-
-  const searchResults = page.getByTestId("searchResult");
-  expect(await searchResults.count()).toBe(10);
-
-  await page.getByLabel("nächste Ergebnisse").click();
-  await page.waitForURL("/search?query=und&pageNumber=1");
-  // expect(await getDisplayedResultCount(page)).toBe(12);
-  expect(await searchResults.count()).toBe(2);
-
-  await page.getByLabel("vorherige Ergebnisse").click();
-  await page.waitForURL("/search?query=und");
-
-  await expect
-    .poll(() => searchResults.count(), {
-      message: "the count should go back to 10",
-    })
-    .toBe(10);
-});
-
-test("the main category filters are mutually exclusive", async ({ page }) => {
-  const totalCount = 0;
-  let legislationCount = 0;
-  let caseLawCount = 0;
-  let literatureCount = 0;
-  await test.step("Basic search", async () => {
+test.describe("reach search from start page", () => {
+  test("searches for a query from the start page", async ({ page }) => {
     await page.goto("/");
-    await page.getByPlaceholder("Suchbegriff eingeben").fill("Fiktiv");
-    await page.getByLabel("Suchen").click();
+    const searchInput = page.getByRole("searchbox", { name: "Suchbegriff" });
+    await searchInput.fill("Fiktiv");
 
-    // totalCount = await getDisplayedResultCount(page);
-    // expect(totalCount).toBeGreaterThan(0);
+    const searchButton = page.getByRole("button", { name: "Suchen" });
+    await expect(searchButton).not.toBeDisabled();
+    await searchButton.click();
+
+    await expect(getResultCounter(page)).toHaveText("15 Suchergebnisse");
+    await expect(searchInput).toHaveValue("Fiktiv");
   });
 
-  await test.step("Filter for norms", async () => {
-    await page.getByRole("button", { name: "Gesetze & Verordnungen" }).click();
-    await expect
-      .poll(() => getDisplayedResultCount(page), {
-        message: "the count should decrease",
-      })
-      .toBeLessThan(totalCount);
-    legislationCount = await getDisplayedResultCount(page);
-    expect(legislationCount).toBeGreaterThan(0);
-    await page.getByRole("button", { name: "Alle Dokumentarten" }).click();
+  test("navigates back to the start page", async ({ page }) => {
+    await page.goto("/search?query=Fiktiv");
+    await page.getByRole("link", { name: "Zur Startseite" }).click();
+
+    await expect(
+      page.getByRole("searchbox", { name: "Suchbegriff" }),
+      "should be reset",
+    ).toBeEmpty();
   });
-
-  await test.step("Filter for case law", async () => {
-    await page.getByRole("button", { name: "Gerichtsentscheidungen" }).click();
-
-    await expect
-      .poll(() => getDisplayedResultCount(page), {
-        message: "the count should decrease",
-      })
-      .toBeLessThan(totalCount);
-    caseLawCount = await getDisplayedResultCount(page);
-  });
-
-  await test.step("Filter for literature", async () => {
-    await page.getByRole("button", { name: "Literaturnachweise" }).click();
-
-    await expect
-      .poll(() => getDisplayedResultCount(page), {
-        message: "the count should decrease",
-      })
-      .toBeLessThan(totalCount);
-    literatureCount = await getDisplayedResultCount(page);
-  });
-
-  expect(caseLawCount + legislationCount + literatureCount, {
-    message: "The sum should equal the previous total",
-  }).toEqual(totalCount);
 });
 
-test("can select courts for case law", async ({ page }) => {
-  const courtName = "LG Hamburg";
+test.describe("general search page features", () => {
+  test("pagination switches pages", async ({ page }) => {
+    await page.goto("/search?query=und");
 
-  await page.goto("/search?query=Fiktiv&category=R", {
-    waitUntil: "networkidle",
+    const resultCounter = getResultCounter(page);
+    await expect(resultCounter).toHaveText("12 Suchergebnisse");
+
+    const searchResults = getSearchResults(page);
+
+    await expect(searchResults).toHaveCount(10);
+
+    await page.getByLabel("nächste Ergebnisse").click();
+    await page.waitForURL("/search?query=und&pageNumber=1");
+
+    expect(resultCounter).toHaveText("12 Suchergebnisse");
+    await expect(searchResults).toHaveCount(2);
+
+    await page.getByLabel("vorherige Ergebnisse").click();
+    await page.waitForURL("/search?query=und");
+    await expect(searchResults).toHaveCount(10);
   });
 
-  const panel = page.getByLabel("Optionsliste");
-  const suggestions = panel.getByRole("option");
-  const firstSuggestion = suggestions.first();
+  test("sort by date in ascending order", async ({ page }) => {
+    await page.goto("/search?query=fiktiv", { waitUntil: "networkidle" });
 
-  await expect
-    .poll(
-      async () => {
-        const openButton = page
-          .getByRole("group", { name: "Filter" })
-          .locator("button");
-        await openButton.click();
-        return firstSuggestion.isVisible();
-      },
-      { message: "Wait for the autocomplete to be interactive" },
-    )
-    .toBeTruthy();
+    await page.getByRole("combobox", { name: "Relevanz" }).click();
+    await page.getByRole("option", { name: "Datum: Älteste zuerst" }).click();
 
-  await page.getByLabel("Gericht", { exact: true }).pressSequentially("LG ");
+    await expect(page).toHaveURL(/sort=date/);
+  });
 
-  await expect(firstSuggestion).toBeVisible();
+  test("sort by date in descending order", async ({ page }) => {
+    await page.goto("/search?query=fiktiv", { waitUntil: "networkidle" });
 
-  await expect.poll(() => suggestions.count()).toBe(4);
+    await page.getByRole("combobox", { name: "Relevanz" }).click();
+    await page.getByRole("option", { name: "Datum: Neueste zuerst" }).click();
 
-  await firstSuggestion.click();
-  const searchResults = page.getByTestId("searchResult");
-  for (let i = 0; i < (await searchResults.count()); i++) {
-    await expect(searchResults.nth(i)).toContainText(courtName);
-  }
+    await expect(page).toHaveURL(/sort=-date/);
+  });
 
-  await test.step("updates the URL accordingly", async () => {
-    const expectedUrlParameter =
-      "court=" + encodeURIComponent(courtName).replace(/%20/g, "+");
-    await expect.poll(() => page.url()).toContain(expectedUrlParameter);
+  test("sort by relevance", async ({ page }) => {
+    await page.goto("/search?query=fiktiv&sort=date", {
+      waitUntil: "networkidle",
+    });
+
+    await page.getByRole("combobox", { name: "Datum: Älteste zuerst" }).click();
+    await page.getByRole("option", { name: "Relevanz" }).click();
+
+    await expect(page).not.toHaveURL(/sort=/);
+  });
+
+  test("change number of results per page", async ({ page }) => {
+    await page.goto("/search?query=fiktiv", { waitUntil: "networkidle" });
+
+    const searchResults = getSearchResults(page);
+
+    await expect(searchResults).toHaveCount(10);
+
+    await page.getByRole("combobox", { name: "10" }).click();
+    await page.getByRole("option", { name: "50" }).click();
+
+    await expect(searchResults).toHaveCount(15);
+  });
+});
+
+test.describe("searching legislation", () => {
+  test("narrows search", async ({ page }) => {
+    await page.goto("/search?query=fiktiv", { waitUntil: "networkidle" });
+
+    const searchResults = getSearchResults(page);
+    const resultCounter = getResultCounter(page);
+
+    await expect(resultCounter).toHaveText("15 Suchergebnisse");
+
+    await page
+      .getByRole("group", { name: "Filter" })
+      .getByRole("button", { name: "Gesetze & Verordnungen" })
+      .click();
+
+    await expect(page).toHaveURL(/category=N/);
+
+    await expect(resultCounter).toHaveText("5 Suchergebnisse");
+
+    // Ensure all visible entries are of type legislation
+    await expect(searchResults).toHaveText(Array(5).fill(/^Norm/));
+  });
+
+  test("shows the search result contents", async ({ page }) => {
+    await page.goto("/search?query=FrSaftErfrischV&category=N", {
+      waitUntil: "networkidle",
+    });
+
+    const searchResult = getSearchResults(page).first();
+
+    // Header
+    await expect(searchResult).toHaveText(/Norm/);
+    await expect(searchResult).toHaveText(/FrSaftErfrischV/);
+    await expect(searchResult).toHaveText(/29.04.2023/);
+
+    // Result detail link
+    await expect(
+      searchResult.getByRole("link", {
+        name: "Fiktive Fruchtsaft- und Erfrischungsgetränkeverordnung zu Testzwecken",
+      }),
+    ).toBeVisible();
+
+    // Highlights
+    await expect(
+      searchResult.getByRole("link", { name: "§ 1 Anwendungsbereich" }),
+    ).toBeVisible();
+    await expect(
+      searchResult.getByText(
+        /\(1\) Die in Anlage 1 aufgeführten Erzeugnisse unterliegen/,
+      ),
+    ).toBeVisible();
+
+    await expect(
+      searchResult.getByRole("link", {
+        name: "§ 2 Zutaten, Herstellungsanforderungen",
+      }),
+    ).toBeVisible();
+    await expect(
+      searchResult.getByText(
+        /\(1\) Die Ausgangserzeugnisse für Erzeugnisse gemäß/,
+      ),
+    ).toBeVisible();
+
+    await expect(
+      searchResult.getByRole("link", { name: "§ 3 Kennzeichnung" }),
+    ).toBeVisible();
+    await expect(
+      searchResult.getByText(
+        /\(1\) Die Kennzeichnung der Erzeugnisse erfolgt nach/,
+      ),
+    ).toBeVisible();
+  });
+
+  test("navigates to the document detail page", async ({ page }) => {
+    await page.goto("/search?query=FrSaftErfrischV&category=N", {
+      waitUntil: "networkidle",
+    });
+
+    // Result detail link
+    await page
+      .getByRole("link", {
+        name: "Fiktive Fruchtsaft- und Erfrischungsgetränkeverordnung zu Testzwecken",
+      })
+      .click();
+
+    await expect(
+      page.getByRole("heading", {
+        level: 1,
+        name: "Fiktive Fruchtsaft- und Erfrischungsgetränkeverordnung zu Testzwecken",
+      }),
+    ).toBeVisible();
+  });
+});
+
+test.describe("searching caselaw", () => {
+  test("narrows search", async ({ page }) => {
+    await page.goto("/search?query=fiktiv", { waitUntil: "networkidle" });
+
+    const searchResults = getSearchResults(page);
+    const resultCounter = getResultCounter(page);
+
+    await expect(resultCounter).toHaveText("15 Suchergebnisse");
+
+    await page
+      .getByRole("group", { name: "Filter" })
+      .getByRole("button", { name: "Gerichtsentscheidungen" })
+      .click();
+
+    await expect(page).toHaveURL(/category=R/);
+
+    await expect(resultCounter).toHaveText("10 Suchergebnisse");
+
+    // Ensure all visible entries are of type caselaw
+    await expect(searchResults).toHaveText(
+      Array(10).fill(/^(Beschluss|Urteil)/),
+    );
+  });
+
+  test("shows the search result contents", async ({ page }) => {
+    await page.goto("/search?query=34+X+(xyz)+456/78&category=R", {
+      waitUntil: "networkidle",
+    });
+
+    const searchResult = getSearchResults(page).first();
+
+    // Header
+    await expect(searchResult).toHaveText(/Beschluss/);
+    await expect(searchResult).toHaveText(/BPatG Teststadt/);
+    await expect(searchResult).toHaveText(/09.04.2025/);
+    await expect(searchResult).toHaveText(/34 X \(xyz\) 456\/78/);
+
+    // Result detail link
+    await expect(
+      searchResult.getByRole("link", {
+        name: "Beispielentscheid — Beispielheader für den Beschlusstext.",
+      }),
+    ).toBeVisible();
+
+    // Highlights
+    await expect(
+      searchResult.getByRole("link", { name: "Orientierungssatz:" }),
+    ).toBeVisible();
+    await expect(
+      searchResult.getByText(/1. Fiktiver Satz für Testzwecke im Beschluss/),
+    ).toBeVisible();
+  });
+
+  test("navigates to the document detail page", async ({ page }) => {
+    await page.goto("/search?query=34+X+(xyz)+456/78&category=R", {
+      waitUntil: "networkidle",
+    });
+
+    // Result detail link
+    await page
+      .getByRole("link", {
+        name: "Beispielentscheid — Beispielheader für den Beschlusstext.",
+      })
+      .click();
+
+    await expect(
+      page.getByRole("heading", {
+        level: 1,
+        name: "Beispielheader für den Beschlusstext.",
+      }),
+    ).toBeVisible();
+  });
+
+  test("narrows by subtypes", async ({ page }) => {
+    await page.goto("/search?category=R", { waitUntil: "networkidle" });
+
+    await test.step("Urteil", async () => {
+      await page
+        .getByRole("group", { name: "Dokumentarten" })
+        .getByRole("treeitem", { name: "Urteil" })
+        .click();
+
+      await expect(page).toHaveURL(/category=R\.urteil/);
+
+      await expect(getSearchResults(page)).toHaveText(
+        new Array(8).fill(/^Urteil/),
+      );
+    });
+
+    await test.step("Beschluss", async () => {
+      await page
+        .getByRole("group", { name: "Dokumentarten" })
+        .getByRole("treeitem", { name: "Beschluss" })
+        .click();
+
+      await expect(page).toHaveURL(/category=R\.beschluss/);
+
+      await expect(getSearchResults(page)).toHaveText(
+        new Array(2).fill(/^Beschluss/),
+      );
+    });
+
+    await test.step("Other", async () => {
+      await page
+        .getByRole("group", { name: "Dokumentarten" })
+        .getByRole("treeitem", { name: "Sonstige Entscheidungen" })
+        .click();
+
+      await expect(page).toHaveURL(/category=R\.other/);
+
+      await expect(getSearchResults(page)).toHaveCount(0);
+    });
+
+    await test.step("reset", async () => {
+      await page
+        .getByRole("group", { name: "Dokumentarten" })
+        .getByRole("treeitem", { name: "Alle Gerichtsentscheidungen" })
+        .click();
+
+      await expect(page).toHaveURL(/category=R/);
+
+      await expect(getSearchResults(page)).toHaveText(
+        Array(10).fill(/^(Beschluss|Urteil)/),
+      );
+    });
+  });
+
+  test("searches by suggested court", async ({ page }) => {
+    await page.goto("/search?category=R", { waitUntil: "networkidle" });
+
+    await page.getByRole("button", { name: "Vorschläge anzeigen" }).click();
+    await page
+      .getByRole("option", { name: "Bundesverfassungsgericht" })
+      .click();
+
+    await expect(page).toHaveURL(/court=BVerfG/);
+
+    // No search results
+  });
+
+  test("searches by custom court", async ({ page }) => {
+    await page.goto("/search?category=R", { waitUntil: "networkidle" });
+
+    await page.getByRole("combobox", { name: "Gericht" }).fill("LG");
+    await page.getByRole("option", { name: "LG Hamburg" }).click();
+
+    await expect(page).toHaveURL(/court=LG\+Hamburg/);
+
+    await expect(getSearchResults(page)).toHaveText(
+      Array(2).fill(/LG Hamburg/),
+    );
+  });
+
+  test.skip("filters by date", async () => {
+    // Filters will be aligned with the advanced search, so test will be added
+    // later
+  });
+});
+
+test.describe("searching literature", () => {
+  test("narrows search", async ({ page }) => {
+    await page.goto("/search?query=ein", { waitUntil: "networkidle" });
+
+    const searchResults = getSearchResults(page);
+    const resultCounter = getResultCounter(page);
+
+    await expect(resultCounter).toHaveText("12 Suchergebnisse");
+
+    await page
+      .getByRole("group", { name: "Filter" })
+      .getByRole("button", { name: "Literaturnachweise" })
+      .click();
+
+    await expect(page).toHaveURL(/category=L/);
+
+    await expect(resultCounter).toHaveText("1 Suchergebnis");
+
+    // Ensure all visible entries are of type literature
+    await expect(searchResults).toHaveText(/^Auf/);
+  });
+
+  test("shows the search result contents", async ({ page }) => {
+    await page.goto("/search?query=FooBar,+1982,+123-123&category=L", {
+      waitUntil: "networkidle",
+    });
+
+    const searchResult = getSearchResults(page).first();
+
+    // Header
+    await expect(searchResult).toHaveText(/Auf/);
+    await expect(searchResult).toHaveText(/FooBar, 1982, 123-123/);
+    await expect(searchResult).toHaveText(/2024/);
+
+    // Result detail link
+    await expect(
+      searchResult.getByRole("link", {
+        name: "Erstes Test-Dokument ULI",
+      }),
+    ).toBeVisible();
+
+    // Highlights
+    await expect(
+      searchResult.getByText(/Dies ist ein einfaches Test-Dokument./),
+    ).toBeVisible();
+  });
+
+  test("navigates to the document detail page", async ({ page }) => {
+    await page.goto("/search?query=FooBar,+1982,+123-123&category=L", {
+      waitUntil: "networkidle",
+    });
+
+    // Result detail link
+    await page
+      .getByRole("link", {
+        name: "Erstes Test-Dokument ULI",
+      })
+      .click();
+
+    await expect(
+      page.getByRole("heading", {
+        level: 1,
+        name: "Erstes Test-Dokument ULI",
+      }),
+    ).toBeVisible();
   });
 });

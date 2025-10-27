@@ -153,15 +153,11 @@ useHead({ title });
         </Message>
         <ul
           v-if="currentPage && currentPage?.member?.length > 0"
+          aria-label="Suchergebnisse"
           class="w-full"
         >
-          <li>
-            <SearchResult
-              v-for="(element, index) in currentPage.member"
-              :key="index"
-              :search-result="element"
-              :order="index"
-            />
+          <li v-for="(element, index) in currentPage.member" :key="index">
+            <SearchResult :search-result="element" :order="index" />
           </li>
         </ul>
         <div
