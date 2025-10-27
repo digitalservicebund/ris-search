@@ -36,7 +36,8 @@ defineProps<{ hideIntro?: boolean }>();
       data-test-id="feedback-sent-confirmation"
     >
       <div class="ris-heading3-bold">Vielen Dank für Ihr Feedback!</div>
-      <div class="flex flex-col space-y-8">
+      <!-- Temporarily disabled due to data issue with Form bricks -->
+      <div v-if="false" class="flex flex-col space-y-8">
         <div class="ris-heading3-bold">
           Möchten Sie an Nutzungsstudien teilnehmen?
         </div>
@@ -50,12 +51,14 @@ defineProps<{ hideIntro?: boolean }>();
           brauchen für die Teilnahme:
         </p>
       </div>
-      <ul class="list-inside list-disc">
+      <!-- Temporarily disabled due to data issue with Form bricks -->
+      <ul v-if="false" class="list-inside list-disc">
         <li>einen Computer oder ein Smartphone,</li>
         <li>eine stabile Internetverbindung</li>
         <li>und eine ruhige Umgebung</li>
       </ul>
-      <ButtonLink href="/nutzungstests" class="flex flex-row"
+      <!-- Temporarily disabled due to data issue with Form bricks -->
+      <ButtonLink v-if="false" href="/nutzungstests" class="flex flex-row"
         >Für Nutzungsstudien registrieren
       </ButtonLink>
     </div>

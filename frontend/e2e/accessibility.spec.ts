@@ -40,10 +40,10 @@ const testPages = [
     name: "Open Source Page",
     url: "/opensource",
   },
-  {
-    name: "User Tests Page",
-    url: "/nutzungstests",
-  },
+  // {
+  //   name: "User Tests Page",
+  //   url: "/nutzungstests",
+  // },
   {
     name: "Norms Search Page",
     url: "/search?category=N",

@@ -71,12 +71,19 @@ describe("FeedbackForm", () => {
     vi.resetModules();
   });
 
-  it("shows an error when feedback input is empty", async () => {
+  it("shows an error when feedback input is empty and clears after the input is cleared", async () => {
     const wrapper = await factory();
     await clickSubmit(wrapper);
     expect(getErrorMessage(wrapper)).toBe(
       "Geben Sie Ihr Feedback in das obere Textfeld ein.",
     );
+
+    const textarea = wrapper.findComponent({ name: "Textarea" });
+    await textarea.setValue("A new message to clear the error");
+
+    expect(
+      wrapper.find('[data-test-id="feedback-error-message"]').exists(),
+    ).toBe(false);
   });
 
   it("shows an error when sending feedback using posthog store fails", async () => {
