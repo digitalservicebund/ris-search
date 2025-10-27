@@ -138,7 +138,8 @@ public class LiteratureController {
     var pageRequest = PageRequest.of(paginationParams.getPageIndex(), paginationParams.getSize());
 
     var sortedPageRequest =
-        pageRequest.withSort(SortParamsConverter.buildSort(sortParams.getSort()));
+        pageRequest.withSort(
+            SortParamsConverter.buildSortWithNullHandlingLast(sortParams.getSort()));
 
     try {
       SearchPage<Literature> page =

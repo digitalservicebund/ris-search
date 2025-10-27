@@ -14,16 +14,18 @@ public class SortParamsConverter {
   private static final String DATE_ALIAS_FIELD = "DATUM";
 
   /**
-   * Translate a sort String to a Sort object.
+   * Translate a sort String to a Sort object. Defaults to sort by relevance and date in case of an
+   * empty String.
    *
    * @param sort SortString to sort by combined with relevance
-   * @param defaultSort Sort to be applied in case sort String is empty or "default"
+   * @param nullHandling how to handle null values during sorting
    * @return returns the sort together with document relevance
    */
-  public static @NonNull Sort buildSort(String sort, Sort defaultSort) {
+  public static @NonNull Sort buildSort(String sort, Sort.NullHandling nullHandling) {
 
-    Sort relevance = Sort.by(Sort.Order.desc("_score"));
+    Sort relevance = Sort.by(Sort.Order.desc("_score").with(nullHandling));
     if (Strings.isEmpty(sort) || sort.equalsIgnoreCase("default")) {
+      Sort defaultSort = Sort.by(Sort.Order.desc(DATE_ALIAS_FIELD).with(nullHandling));
       return relevance.and(defaultSort);
     }
 
@@ -42,17 +44,38 @@ public class SortParamsConverter {
     if (mappedFieldName == null) {
       mappedFieldName = fieldName;
     }
-    return Sort.by(direction, mappedFieldName).and(relevance);
+
+    Sort.Order order = new Sort.Order(direction, mappedFieldName).with(nullHandling);
+
+    return Sort.by(order).and(relevance);
   }
 
   /**
-   * Translate a sort String to a Sort object. Defaults to sort by relevance and date in case of an
-   * empty String
+   * Translate a sort String to a Sort object adding the handling of null values as native
+   * (default).
    *
    * @param sort SortString to sort by combined with relevance
    * @return Sort object
    */
   public static @NonNull Sort buildSort(String sort) {
-    return buildSort(sort, Sort.by(Sort.Direction.DESC, DATE_ALIAS_FIELD));
+    return buildSort(
+        sort,
+        Sort.NullHandling
+            .NATIVE); // Default null handling, Spring data does not add any special handling for
+    // nulls
+  }
+
+  /**
+   * Translate a sort String to a Sort object adding the handling of null values as last.
+   *
+   * @param sort SortString to sort by combined with relevance
+   * @return Sort object
+   */
+  public static @NonNull Sort buildSortWithNullHandlingLast(String sort) {
+    return buildSort(
+        sort,
+        Sort.NullHandling
+            .NULLS_LAST); // Those null values in the sorting date will always appear last, both in
+    // ASC and DESC
   }
 }

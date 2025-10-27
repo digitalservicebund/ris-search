@@ -12,6 +12,7 @@ import org.springframework.data.domain.Sort;
 class SortParamsConverterTest {
 
   private static final Sort RELEVANCE = Sort.by(Sort.Order.desc("_score"));
+  private static final String DATE_FIELD = "DATUM";
 
   @ParameterizedTest
   @ValueSource(strings = {"default", "", "null"})
@@ -24,24 +25,69 @@ class SortParamsConverterTest {
     Sort result = SortParamsConverter.buildSort(value);
 
     // Assert
-    Assertions.assertEquals(RELEVANCE.and(Sort.by(Sort.Direction.DESC, "DATUM")), result);
+    Sort expected =
+        Sort.by(Sort.Order.desc("_score").with(Sort.NullHandling.NATIVE))
+            .and(Sort.by(Sort.Order.desc(DATE_FIELD).with(Sort.NullHandling.NATIVE)));
+    Assertions.assertEquals(expected, result);
   }
 
   @Test
-  void testBuildSort_withValidAscField_shouldReturnAscSort() {
+  void testBuildSort_withValidAscField_shouldReturnAscSortWithNativeNullHandling() {
     // Act
     Sort result = SortParamsConverter.buildSort("date");
 
     // Assert
-    Assertions.assertEquals(Sort.by(Sort.Direction.ASC, "DATUM").and(RELEVANCE), result);
+    Sort expected =
+        Sort.by(Sort.Order.asc(DATE_FIELD).with(Sort.NullHandling.NATIVE))
+            .and(Sort.by(Sort.Order.desc("_score").with(Sort.NullHandling.NATIVE)));
+    Assertions.assertEquals(expected, result);
   }
 
   @Test
-  void testBuildSort_withValidDescField_shouldReturnDescSort() {
+  void testBuildSort_withValidDescField_shouldReturnDescSortWithNativeNullHandling() {
     // Act
     Sort result = SortParamsConverter.buildSort("-date");
 
     // Assert
-    Assertions.assertEquals(Sort.by(Sort.Direction.DESC, "DATUM").and(RELEVANCE), result);
+    Sort expected =
+        Sort.by(Sort.Order.desc(DATE_FIELD).with(Sort.NullHandling.NATIVE))
+            .and(Sort.by(Sort.Order.desc("_score").with(Sort.NullHandling.NATIVE)));
+    Assertions.assertEquals(expected, result);
+  }
+
+  @Test
+  void testBuildSortWithNullHandlingLast_asc_shouldApplyNullsLast() {
+    // Act
+    Sort result = SortParamsConverter.buildSortWithNullHandlingLast("date");
+
+    // Assert
+    Sort expected =
+        Sort.by(Sort.Order.asc(DATE_FIELD).with(Sort.NullHandling.NULLS_LAST))
+            .and(Sort.by(Sort.Order.desc("_score").with(Sort.NullHandling.NULLS_LAST)));
+    Assertions.assertEquals(expected, result);
+  }
+
+  @Test
+  void testBuildSortWithNullHandlingLast_desc_shouldApplyNullsLast() {
+    // Act
+    Sort result = SortParamsConverter.buildSortWithNullHandlingLast("-date");
+
+    // Assert
+    Sort expected =
+        Sort.by(Sort.Order.desc(DATE_FIELD).with(Sort.NullHandling.NULLS_LAST))
+            .and(Sort.by(Sort.Order.desc("_score").with(Sort.NullHandling.NULLS_LAST)));
+    Assertions.assertEquals(expected, result);
+  }
+
+  @Test
+  void testBuildSortWithNullHandlingLast_default_shouldApplyNullsLast() {
+    // Act
+    Sort result = SortParamsConverter.buildSortWithNullHandlingLast(null);
+
+    // Assert
+    Sort expected =
+        Sort.by(Sort.Order.desc("_score").with(Sort.NullHandling.NULLS_LAST))
+            .and(Sort.by(Sort.Order.desc(DATE_FIELD).with(Sort.NullHandling.NULLS_LAST)));
+    Assertions.assertEquals(expected, result);
   }
 }

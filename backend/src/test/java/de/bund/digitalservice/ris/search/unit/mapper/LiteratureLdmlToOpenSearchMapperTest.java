@@ -9,8 +9,12 @@ import de.bund.digitalservice.ris.search.mapper.LiteratureLdmlToOpenSearchMapper
 import de.bund.digitalservice.ris.search.models.opensearch.Literature;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.util.stream.Stream;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 
@@ -129,5 +133,55 @@ class LiteratureLdmlToOpenSearchMapperTest {
     assertThat(literature.normReferences()).isEmpty();
     assertThat(literature.shortReport()).isNull();
     assertThat(literature.outline()).isNull();
+  }
+
+  @ParameterizedTest(name = "Parses \"{0}\" → {1}")
+  @MethodSource("provideYearsOfPublication")
+  @DisplayName("Correctly parses veroeffentlichungsJahr into firstPublicationDate")
+  void parsesVariousYearFormats(String yearValue, LocalDate expectedDate) {
+    final String xmlTemplate =
+        """
+                  <akn:akomaNtoso xmlns:akn="http://docs.oasis-open.org/legaldocml/ns/akn/3.0"
+                                   xmlns:ris="http://ldml.neuris.de/literature/unselbstaendig/metadata/">
+                    <akn:doc name="offene-struktur">
+                      <akn:meta>
+                        <akn:identification>
+                          <akn:FRBRExpression>
+                            <akn:FRBRalias name="documentNumber" value="DOC-PARAM" />
+                          </akn:FRBRExpression>
+                        </akn:identification>
+                        <akn:classification source="doktyp">
+                          <akn:keyword dictionary="attributsemantik-noch-undefiniert" showAs="Auf" value="Auf"/>
+                        </akn:classification>
+                        <akn:proprietary source="test">
+                          <ris:metadata>
+                            <ris:veroeffentlichungsJahre>
+                              <ris:veroeffentlichungsJahr>%s</ris:veroeffentlichungsJahr>
+                            </ris:veroeffentlichungsJahre>
+                          </ris:metadata>
+                        </akn:proprietary>
+                      </akn:meta>
+                    </akn:doc>
+                  </akn:akomaNtoso>
+                  """;
+
+    String xml = xmlTemplate.formatted(yearValue);
+    Literature literature = LiteratureLdmlToOpenSearchMapper.mapLdml(xml);
+
+    assertThat(literature.firstPublicationDate()).isEqualTo(expectedDate);
+  }
+
+  private static Stream<Arguments> provideYearsOfPublication() {
+    return Stream.of(
+        Arguments.of(" 2020 ", LocalDate.of(2020, 1, 1)),
+        Arguments.of("2020", LocalDate.of(2020, 1, 1)),
+        Arguments.of(" 2020-05 ", LocalDate.of(2020, 5, 1)),
+        Arguments.of("2020-05", LocalDate.of(2020, 5, 1)),
+        Arguments.of(" 2020-05-23 ", LocalDate.of(2020, 5, 23)),
+        Arguments.of("2020-05-23", LocalDate.of(2020, 5, 23)),
+        Arguments.of("XX", null),
+        Arguments.of("1986 - 1987", null),
+        Arguments.of("2001 (vermutlich)", null),
+        Arguments.of("2003, 127-133 (Schriften des Vereins für Socialpolitik", null));
   }
 }
