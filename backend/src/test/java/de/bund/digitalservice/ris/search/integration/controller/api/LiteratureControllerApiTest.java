@@ -352,4 +352,34 @@ class LiteratureControllerApiTest extends ContainersIntegrationBase {
         .andExpect(jsonPath("$.member[1]['item'].documentNumber", Matchers.is("KALU000000001")))
         .andExpect(jsonPath("$.member[2]['item'].documentNumber", Matchers.is("KALU000000002")));
   }
+
+  @Test
+  @DisplayName("Should return literature items sorted by date asc")
+  void shouldReturnElementsSortedByDateAsc() throws Exception {
+    final String sortParam = "date";
+    mockMvc
+        .perform(
+            get(ApiConfig.Paths.LITERATURE + String.format("?sort=%s", sortParam))
+                .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.member", hasSize(3)))
+        .andExpect(jsonPath("$.member[0]['item'].documentNumber", Matchers.is("KALU000000002")))
+        .andExpect(jsonPath("$.member[1]['item'].documentNumber", Matchers.is("KALU000000001")))
+        .andExpect(jsonPath("$.member[2]['item'].documentNumber", Matchers.is("KALU000000003")));
+  }
+
+  @Test
+  @DisplayName("Should return literature items sorted by date desc")
+  void shouldReturnElementsSortedByDateDesc() throws Exception {
+    final String sortParam = "-date";
+    mockMvc
+        .perform(
+            get(ApiConfig.Paths.LITERATURE + String.format("?sort=%s", sortParam))
+                .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.member", hasSize(3)))
+        .andExpect(jsonPath("$.member[0]['item'].documentNumber", Matchers.is("KALU000000003")))
+        .andExpect(jsonPath("$.member[1]['item'].documentNumber", Matchers.is("KALU000000001")))
+        .andExpect(jsonPath("$.member[2]['item'].documentNumber", Matchers.is("KALU000000002")));
+  }
 }

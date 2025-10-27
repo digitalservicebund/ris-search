@@ -30,6 +30,8 @@ import jakarta.xml.bind.ValidationException;
 import java.io.StringReader;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.YearMonth;
+import java.time.format.DateTimeParseException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -55,12 +57,13 @@ public class LiteratureLdmlToOpenSearchMapper {
   private static Literature mapToEntity(LiteratureLdml literatureLdml) throws ValidationException {
     var documentNumber = extractDocumentNumber(literatureLdml);
     var yearsOfPublication = extractYearsOfPublication(literatureLdml);
+    var firstYearOfPublication = extractFirstYearOfPublication(yearsOfPublication);
     return Literature.builder()
         .id(documentNumber)
         .documentNumber(documentNumber)
         .recordingDate(extractRecordingDate(literatureLdml))
         .yearsOfPublication(extractYearsOfPublication(literatureLdml))
-        .firstPublicationDate(LocalDate.of(Integer.parseInt(yearsOfPublication.getFirst()), 1, 1))
+        .firstPublicationDate(firstYearOfPublication)
         .documentTypes(extractDocumentTypes(literatureLdml))
         .dependentReferences(extractDependentReferences(literatureLdml))
         .independentReferences(extractIndependentReferences(literatureLdml))
@@ -77,6 +80,29 @@ public class LiteratureLdmlToOpenSearchMapper {
         .outline((extractOutline(literatureLdml)))
         .indexedAt(Instant.now().toString())
         .build();
+  }
+
+  private static LocalDate extractFirstYearOfPublication(List<String> yearsOfPublication) {
+    final String firstValue = yearsOfPublication.getFirst().trim();
+    try {
+      if (firstValue.matches("\\d{4}")) {
+        // Format: YYYY → YYYY-01-01
+        return LocalDate.of(Integer.parseInt(firstValue), 1, 1);
+      } else if (firstValue.matches("\\d{4}-\\d{2}")) {
+        // Format: YYYY-MM → YYYY-MM-01
+        YearMonth yearMonth = YearMonth.parse(firstValue);
+        return yearMonth.atDay(1);
+      } else if (firstValue.matches("\\d{4}-\\d{2}-\\d{2}")) {
+        // Format: YYYY-MM-DD
+        return LocalDate.parse(firstValue);
+      } else {
+        // Any other unexpected format → return null or handle differently
+        return null;
+      }
+    } catch (DateTimeParseException | NumberFormatException e) {
+      // Handle malformed numeric values gracefully
+      return null;
+    }
   }
 
   private static String extractDocumentNumber(LiteratureLdml literatureLdml)
