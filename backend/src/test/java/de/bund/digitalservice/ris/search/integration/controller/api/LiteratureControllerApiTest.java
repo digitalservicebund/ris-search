@@ -264,6 +264,7 @@ class LiteratureControllerApiTest extends ContainersIntegrationBase {
   }
 
   @DisplayName("Search by collaborator")
+  @Test
   void shouldReturnItemWhenSearchingByCollaborator() throws Exception {
     final String collaborator = "Mustermann, Max";
 
