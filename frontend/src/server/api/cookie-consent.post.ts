@@ -1,3 +1,12 @@
+import {
+  defineEventHandler,
+  readBody,
+  setCookie,
+  getHeader,
+  getRequestURL,
+  sendRedirect,
+} from "h3";
+
 export default defineEventHandler(async (event) => {
   const body = await readBody(event);
   const consent = body.consent === "true" || body.consent === true;
