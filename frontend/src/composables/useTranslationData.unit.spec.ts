@@ -2,6 +2,7 @@ import { mockNuxtImport } from "@nuxt/test-utils/runtime";
 import { describe, it, expect, beforeEach, vi } from "vitest";
 import {
   fetchTranslationList,
+  fetchTranslationListWithIdFilter,
   fetchTranslationAndHTML,
   getGermanOriginal,
 } from "~/composables/useTranslationData";
@@ -54,6 +55,33 @@ describe("fetchTranslationList", () => {
     );
     expect(error.value).toBeUndefined();
     expect(data.value).toHaveLength(2);
+  });
+});
+
+describe("fetchTranslationListWithIdFilter", () => {
+  it("fetches a filtered list of translation", async () => {
+    const mockTranslationResponse = [
+      {
+        "@id": "AbC",
+        name: "Act A",
+        inLanguage: "en",
+        translator: "…",
+        translationOfWork: "Gesetz A",
+        about: "…",
+        "ris:filename": "englisch_abc.html",
+      },
+    ];
+
+    requestFetchMock.mockResolvedValueOnce(mockTranslationResponse);
+
+    const { data, error } = await fetchTranslationListWithIdFilter("AbC");
+
+    expect(requestFetchMock).toHaveBeenCalledWith(
+      "https://mock-backend/v1/translatedLegislation?id=AbC",
+    );
+
+    expect(error.value).toBeUndefined();
+    expect(data.value).toHaveLength(1);
   });
 });
 
