@@ -156,6 +156,18 @@ public class ControllerExceptionHandler {
     return ResponseEntity.status(HttpStatus.FORBIDDEN).body(errorResponse);
   }
 
+  public static ResponseEntity<CustomErrorResponse> return429() {
+    CustomError error =
+        CustomError.builder()
+            .code("too_many_requests")
+            .message("Too many requests. Please try again later")
+            .parameter("")
+            .build();
+    CustomErrorResponse errorResponse =
+        CustomErrorResponse.builder().errors(List.of(error)).build();
+    return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body(errorResponse);
+  }
+
   public static ResponseEntity<CustomErrorResponse> return500() {
     CustomError error =
         new CustomError(
