@@ -130,8 +130,7 @@ const previewSections = computed<ExtendedTextMatch[]>(() => {
 
   if (slice.length === 0) return [];
 
-  const haveHighlight =
-    slice.find((field) => field.text.includes("<mark>")) !== undefined;
+  const haveHighlight = slice.some((field) => field.text.includes("<mark>"));
 
   // if no fields have a highlight, show only the first one
   // casting because TypeScript doesn't realize we already ensured it's not undefined
