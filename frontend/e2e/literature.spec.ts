@@ -51,3 +51,34 @@ test("displays literature page with metadata and text tab by default", async ({
   ).toBeVisible();
   await expect(tabpanel.getByText("In sem neque")).toBeVisible();
 });
+
+test("shows detailed information in the 'Details' tab", async ({ page }) => {
+  await page.goto("/literature/TEST000000001");
+  await page.waitForLoadState("networkidle");
+
+  const detailsTabButton = page.getByRole("tab", {
+    name: "Details zum Literaturnachweis",
+  });
+  await detailsTabButton.click();
+
+  const tabpanel = page.getByRole("tabpanel", {
+    name: "Details zum Literaturnachweis",
+  });
+
+  await expect(
+    tabpanel.getByRole("heading", { name: "Details" }),
+  ).toBeVisible();
+  await expect(tabpanel.getByRole("alert")).toContainText(
+    "Dieser Service befindet sich in der Testphase",
+  );
+
+  await expect(tabpanel.getByLabel("Norm:")).toContainText(
+    "BMV-Ä, GG, Art 6 Abs 2 S 1, 1949-05-23",
+  );
+  await expect(tabpanel.getByLabel("Mitarbeiter:")).toContainText("Peter Foo");
+  await expect(tabpanel.getByLabel("Urheber:")).toContainText("DGB");
+  await expect(tabpanel.getByLabel("Sprache:")).toContainText("deu");
+  await expect(tabpanel.getByLabel("Kongress:")).toContainText(
+    "Internationaler Kongreß für das Recht, 1991, Athen, GRC",
+  );
+});

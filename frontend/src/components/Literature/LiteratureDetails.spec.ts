@@ -2,7 +2,7 @@ import { render, screen } from "@testing-library/vue";
 import LiteratureDetails from "./LiteratureDetails.vue";
 
 describe("LiteratureDetails", () => {
-  it("renders headline", () => {
+  it("renders headline and testphase alert", () => {
     render(LiteratureDetails, {
       props: {
         normReferences: [],
@@ -14,6 +14,9 @@ describe("LiteratureDetails", () => {
     });
 
     expect(screen.getByRole("heading", { name: "Details" })).toBeVisible();
+    expect(screen.getByRole("alert")).toHaveTextContent(
+      "Dieser Service befindet sich in der Testphase",
+    );
   });
 
   it("renders all terms", () => {
