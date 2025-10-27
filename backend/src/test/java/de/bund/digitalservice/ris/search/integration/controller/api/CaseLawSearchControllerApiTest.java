@@ -20,13 +20,11 @@ import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.integration.config.ContainersIntegrationBase;
 import de.bund.digitalservice.ris.search.integration.controller.api.testData.CaseLawTestData;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
-import de.bund.digitalservice.ris.search.repository.opensearch.CaseLawRepository;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
 import org.hamcrest.Matchers;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -49,14 +47,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 @WithJwt("jwtTokens/ValidAccessToken.json")
 class CaseLawSearchControllerApiTest extends ContainersIntegrationBase {
 
-  @Autowired private CaseLawRepository caseLawRepository;
   @Autowired private MockMvc mockMvc;
-
-  @BeforeEach
-  void setUpSearchControllerApiTest() {
-    clearData();
-    caseLawRepository.saveAll(CaseLawTestData.allDocuments);
-  }
 
   @Test
   @DisplayName("Should return correct item when filtering for ECLI and using filter")
