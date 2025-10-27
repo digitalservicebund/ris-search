@@ -81,7 +81,7 @@ describe("parsePageNumber", () => {
   });
 
   it("handles undefined", () => {
-    expect(parsePageNumber(undefined)).toEqual({
+    expect(parsePageNumber()).toEqual({
       page: undefined,
       size: undefined,
     });
@@ -122,7 +122,7 @@ describe("buildResultCountString", () => {
 
   it("returns special message for 10000 results", () => {
     const page = {
-      member: Array(10),
+      member: new Array(10),
       totalItems: 10000,
       "@id": "",
       view: {},
