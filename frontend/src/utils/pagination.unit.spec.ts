@@ -1,7 +1,11 @@
 import { describe, it, expect } from "vitest";
 import type { Page } from "~/components/Pagination/Pagination.vue";
 import type { AnyDocument, SearchResult } from "~/types";
-import { buildItemsOnPageString } from "~/utils/pagination";
+import {
+  buildItemsOnPageString,
+  buildResultCountString,
+  parsePageNumber,
+} from "~/utils/pagination";
 
 function getPage(params: {
   page: number;
@@ -65,5 +69,64 @@ describe("buildItemsOnPageString", () => {
       getPage({ page: 0, size: 10, itemsOnPage: 10, totalItems: 10000 }),
     );
     expect(string).toBe("Treffer 1–10 von mehr als 10.000");
+  });
+});
+
+describe("parsePageNumber", () => {
+  it("parses valid URL", () => {
+    expect(parsePageNumber("list?pageIndex=2&size=10")).toEqual({
+      page: 2,
+      size: 10,
+    });
+  });
+
+  it("handles undefined", () => {
+    expect(parsePageNumber(undefined)).toEqual({
+      page: undefined,
+      size: undefined,
+    });
+  });
+
+  it("handles empty string", () => {
+    expect(parsePageNumber("")).toEqual({ page: undefined, size: undefined });
+  });
+
+  it("handles missing parameters", () => {
+    expect(parsePageNumber("list")).toEqual({
+      page: undefined,
+      size: undefined,
+    });
+  });
+});
+
+describe("buildResultCountString", () => {
+  it("returns no results message", () => {
+    const page = { member: [], totalItems: 0, "@id": "", view: {} } as Page;
+    expect(buildResultCountString(page)).toBe("Keine Suchergebnisse gefunden");
+  });
+
+  it("returns singular for one result", () => {
+    const page = { member: [{}], totalItems: 1, "@id": "", view: {} } as Page;
+    expect(buildResultCountString(page)).toBe("1 Suchergebnis");
+  });
+
+  it("returns formatted count for multiple results", () => {
+    const page = {
+      member: [{}, {}],
+      totalItems: 1234,
+      "@id": "",
+      view: {},
+    } as Page;
+    expect(buildResultCountString(page)).toBe("1.234 Suchergebnisse");
+  });
+
+  it("returns special message for 10000 results", () => {
+    const page = {
+      member: Array(10),
+      totalItems: 10000,
+      "@id": "",
+      view: {},
+    } as Page;
+    expect(buildResultCountString(page)).toBe("Mehr als 10.000 Suchergebnisse");
   });
 });
