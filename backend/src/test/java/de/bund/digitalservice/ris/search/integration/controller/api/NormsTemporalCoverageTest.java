@@ -55,7 +55,7 @@ class NormsTemporalCoverageTest extends ContainersIntegrationBase {
 
   @BeforeEach
   void setUpSearchControllerApiTest() {
-    clearData();
+    clearRepositoryData();
     normsRepository.saveAll(allNorms);
   }
 

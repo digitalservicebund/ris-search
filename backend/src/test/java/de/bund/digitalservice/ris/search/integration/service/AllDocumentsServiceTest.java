@@ -35,7 +35,7 @@ class AllDocumentsServiceTest extends ContainersIntegrationBase {
 
   @BeforeEach
   void setUpSearchControllerApiTest() {
-    clearData();
+    clearRepositoryData();
   }
 
   @Test

@@ -46,7 +46,7 @@ public class TestMockS3Client extends MockS3Client implements S3Client {
     try {
       localStorageDirectory = findProjectRoot().resolve(relativeLocalStorageDirectory);
       Files.createDirectories(localStorageDirectory.resolve(bucketname));
-      loadFilesToMap();
+      loadDefaultFiles();
     } catch (IOException e) {
       LOGGER.error("Couldn't load files to map: " + e.getMessage(), e);
     }
@@ -63,7 +63,11 @@ public class TestMockS3Client extends MockS3Client implements S3Client {
     fileMap = null;
   }
 
-  private void loadFilesToMap() throws IOException {
+  public void removeAllFiles() {
+    fileMap.clear();
+  }
+
+  public void loadDefaultFiles() throws IOException {
     fileMap = new HashMap<>();
     File bucket = localStorageDirectory.resolve(bucketname).toFile();
     List<String> files = getFileNamesByPath(bucket.getAbsolutePath());

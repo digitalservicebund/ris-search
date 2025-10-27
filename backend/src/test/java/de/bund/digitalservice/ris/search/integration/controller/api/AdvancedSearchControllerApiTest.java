@@ -18,15 +18,11 @@ import de.bund.digitalservice.ris.search.integration.controller.api.testData.Lit
 import de.bund.digitalservice.ris.search.integration.controller.api.testData.NormsTestData;
 import de.bund.digitalservice.ris.search.integration.controller.api.testData.SharedTestConstants;
 import de.bund.digitalservice.ris.search.integration.controller.api.values.SortingTestArguments;
-import de.bund.digitalservice.ris.search.repository.opensearch.CaseLawRepository;
-import de.bund.digitalservice.ris.search.repository.opensearch.LiteratureRepository;
-import de.bund.digitalservice.ris.search.repository.opensearch.NormsRepository;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.stream.Stream;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -48,18 +44,7 @@ import org.springframework.test.web.servlet.ResultMatcher;
 @WithJwt("jwtTokens/ValidAccessToken.json")
 class AdvancedSearchControllerApiTest extends ContainersIntegrationBase {
 
-  @Autowired private CaseLawRepository caseLawRepository;
-  @Autowired private LiteratureRepository literatureRepository;
-  @Autowired private NormsRepository normsRepository;
   @Autowired private MockMvc mockMvc;
-
-  @BeforeEach
-  void setUpSearchControllerApiTest() {
-    clearData();
-    caseLawRepository.saveAll(CaseLawTestData.allDocuments);
-    literatureRepository.saveAll(LiteratureTestData.allDocuments);
-    normsRepository.saveAll(NormsTestData.allDocuments);
-  }
 
   static String buildAdvancedQuery(String key, String value) {
     return "?query=%s:%s".formatted(key, value);

@@ -45,7 +45,7 @@ class AllDocumentsSearchControllerMultiMatchAPITest extends ContainersIntegratio
 
   @BeforeEach
   void setUpSearchControllerApiTest() {
-    clearData();
+    clearRepositoryData();
 
     // ecli and workEli are mis-used to carry assertion information
     var caseLawData =

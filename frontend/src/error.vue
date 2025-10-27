@@ -28,7 +28,7 @@ const locationClientOnly = computed(() => window.location.href);
 const route = useRoute();
 onMounted(() => {
   // handle the login redirect client-side in order to preserve the
-  // query hash, which isn't available during SSR
+  // query hash, which isn't available during SSR.
   if (isTokenRefreshError.value) {
     redirectToLogin(route.fullPath);
   }
