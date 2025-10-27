@@ -8,7 +8,8 @@ import { useFetch } from "#app";
 import ContentWrapper from "~/components/CustomLayouts/ContentWrapper.vue";
 import SidebarLayout from "~/components/CustomLayouts/SidebarLayout.vue";
 import IncompleteDataMessage from "~/components/IncompleteDataMessage.vue";
-import LiteratureMetadata from "~/components/LiteratureMetadata.vue";
+import LiteratureDetails from "~/components/Literature/LiteratureDetails.vue";
+import LiteratureMetadata from "~/components/Literature/LiteratureMetadata.vue";
 import RisBreadcrumb from "~/components/Ris/RisBreadcrumb.vue";
 import RisDocumentTitle from "~/components/Ris/RisDocumentTitle.vue";
 import {
@@ -17,8 +18,6 @@ import {
   tabStyles,
 } from "~/components/Tabs.styles";
 import { useBackendURL } from "~/composables/useBackendURL";
-import LiteratureDetails from "~/pages/literature/[documentNumber]/LiteratureDetails.vue";
-import LiteratureMetadata from "~/pages/literature/[documentNumber]/LiteratureMetadata.vue";
 import { DocumentKind, type Literature } from "~/types";
 import { formatDocumentKind } from "~/utils/displayValues";
 import IcBaselineSubject from "~icons/ic/baseline-subject";
