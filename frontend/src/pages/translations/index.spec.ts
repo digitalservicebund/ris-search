@@ -52,7 +52,7 @@ describe("translations list page", async () => {
   it("list can be filteres", async () => {
     const wrapper = await mountSuspended(TranslationListPage);
 
-    const searchInput = wrapper.find("#searchInput");
+    const searchInput = wrapper.find("input[type='search']");
     await searchInput.setValue("Gesetz B");
     const form = wrapper.find("form");
     await form.trigger("submit");

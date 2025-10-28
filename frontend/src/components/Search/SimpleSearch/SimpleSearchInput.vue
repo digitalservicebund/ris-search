@@ -50,7 +50,7 @@ const onKeyup = (event: KeyboardEvent) => {
     @submit.prevent="performSearch"
   >
     <InputField
-      id="searchInput"
+      id="searchInputField"
       label="Suche nach Rechtsinformationen"
       visually-hide-label
     >

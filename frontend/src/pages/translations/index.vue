@@ -112,7 +112,7 @@ useStaticPageSeo("translations-list");
           @submit.prevent="handleSearch"
         >
           <InputField
-            id="searchInput"
+            id="searchInputField"
             label="Search for english translation of a german federal law or regulation"
             visually-hide-label
           >
