@@ -85,8 +85,18 @@ export function removePrefix(str: string | undefined, prefix: string) {
   return str;
 }
 
-export function formatArrayProperty(property: string[]): string {
-  return property.join(", ") || "-";
+/**
+ * Returns a string constructed by joining the array elements with ', '.
+ * If the array only contains one element, the element is returned.
+ * Returns undefined if the array is empty
+ * @param array
+ */
+export function formatArray(array: string[]): string | undefined {
+  if (array.length == 0) {
+    return undefined;
+  }
+
+  return array.join(", ");
 }
 
 /**

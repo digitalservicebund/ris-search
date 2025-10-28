@@ -29,7 +29,11 @@ import { getEncodingURL } from "~/utils/caseLaw";
 import { dateFormattedDDMMYYYY } from "~/utils/dateFormatting";
 import { formatDocumentKind } from "~/utils/displayValues";
 import { getAllSectionsFromHtml, parseDocument } from "~/utils/htmlParser";
-import { removeOuterParentheses, truncateAtWord } from "~/utils/textFormatting";
+import {
+  formatArray,
+  removeOuterParentheses,
+  truncateAtWord,
+} from "~/utils/textFormatting";
 import IcBaselineSubject from "~icons/ic/baseline-subject";
 import IcOutlineInfo from "~icons/ic/outline-info";
 import MaterialSymbolsDownload from "~icons/material-symbols/download";
@@ -149,6 +153,16 @@ if (metadataError?.value) {
 if (contentError?.value) {
   showError(contentError.value);
 }
+
+const formattedDecisionDate = computed(() =>
+  dateFormattedDDMMYYYY(caseLaw.value?.decisionDate),
+);
+const formattedFileNumbers = computed(() =>
+  formatArray(caseLaw.value?.fileNumbers ?? []),
+);
+const formattedDescisionNames = computed(() =>
+  formatArray(caseLaw.value?.decisionName ?? []),
+);
 </script>
 
 <template>
@@ -162,26 +176,13 @@ if (contentError?.value) {
       <RisDocumentTitle :title="title" :placeholder="emptyTitlePlaceholder" />
       <!-- Metadata -->
       <div class="mb-48 flex flex-row flex-wrap gap-24">
+        <MetadataField label="Gericht" :value="caseLaw.courtName" />
+        <MetadataField label="Dokumenttyp" :value="caseLaw.documentType" />
         <MetadataField
-          id="court_name"
-          label="Gericht"
-          :value="caseLaw.courtName"
-        />
-        <MetadataField
-          id="document_type"
-          label="Dokumenttyp"
-          :value="caseLaw.documentType"
-        />
-        <MetadataField
-          id="decision_date"
           label="Entscheidungsdatum"
-          :value="dateFormattedDDMMYYYY(caseLaw.decisionDate)"
+          :value="formattedDecisionDate"
         />
-        <MetadataField
-          id="file_numbers"
-          label="Aktenzeichen"
-          :value="caseLaw.fileNumbers?.join(', ')"
-        />
+        <MetadataField label="Aktenzeichen" :value="formattedFileNumbers" />
       </div>
     </div>
     <Tabs v-if="!!caseLaw" value="0">
@@ -233,7 +234,7 @@ if (contentError?.value) {
               <PropertiesItem label="Normen:" value="" />
               <PropertiesItem
                 label="Entscheidungsname:"
-                :value="caseLaw.decisionName?.join(', ')"
+                :value="formattedDescisionNames"
               />
               <PropertiesItem label="Vorinstanz:" value="" />
               <PropertiesItem label="Download:">

@@ -12,22 +12,18 @@ interface Props {
   validTo?: Dayjs;
 }
 
-defineProps<Props>();
+const props = defineProps<Props>();
+const formattedStatus = computed(() => getValidityStatusLabel(props.status));
 </script>
 
 <template>
   <div class="mt-8 mb-48 flex flex-wrap items-end gap-24">
     <MetadataField
       v-if="abbreviation"
-      id="abbreviation"
       label="Abkürzung"
       :value="abbreviation"
     />
-    <MetadataField
-      id="status"
-      label="Status"
-      :value="getValidityStatusLabel(status)"
-    />
+    <MetadataField label="Status" :value="formattedStatus" />
     <ValidityDatesMetadataFields
       v-if="!isPrototypeProfile()"
       :valid-from="validFrom"

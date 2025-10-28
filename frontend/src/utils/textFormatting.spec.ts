@@ -5,7 +5,7 @@ import {
   removeOuterParentheses,
   truncateAtWord,
   removePrefix,
-  formatArrayProperty,
+  formatArray,
   formatNames,
 } from "./textFormatting";
 
@@ -129,17 +129,17 @@ describe("removePrefix", () => {
   });
 });
 
-describe("formatArrayProperty", () => {
-  it("returns placeholder if array is empty", () => {
-    expect(formatArrayProperty([])).toBe("-");
+describe("formatArray", () => {
+  it("returns undefined if array is empty", () => {
+    expect(formatArray([])).toBeUndefined();
   });
 
   it("returns single value if array contains one element", () => {
-    expect(formatArrayProperty(["foo"])).toBe("foo");
+    expect(formatArray(["foo"])).toBe("foo");
   });
 
   it("returns elements joined with comma", () => {
-    expect(formatArrayProperty(["foo", "bar", "baz"])).toBe("foo, bar, baz");
+    expect(formatArray(["foo", "bar", "baz"])).toBe("foo, bar, baz");
   });
 });
 
