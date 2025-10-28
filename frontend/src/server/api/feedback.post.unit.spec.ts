@@ -18,7 +18,7 @@ const {
     mockSendRedirect: vi.fn(),
     mockFetch: vi.fn(),
     mockUseRuntimeConfig: vi.fn(() => ({
-      risBackendUrl: "http://backend",
+      risBackendUrl: "https://backend",
     })),
   };
 });
@@ -47,16 +47,16 @@ describe("feedback.post", () => {
 
   it("forwards feedback to backend", async () => {
     mockReadBody.mockResolvedValue({ text: "Great app!" });
-    mockGetHeader.mockReturnValue("http://example.com/search?query=test");
+    mockGetHeader.mockReturnValue("https://example.com/search?query=test");
     mockGetRequestURL.mockReturnValue(
-      new URL("http://example.com/api/feedback"),
+      new URL("https://example.com/api/feedback"),
     );
     mockFetch.mockResolvedValue({});
 
     await feedbackHandler(mockEvent);
 
     expect(mockFetch).toHaveBeenCalledWith(
-      "http://backend/v1/feedback?text=Great+app%21&url=%2Fsearch%3Fquery%3Dtest&user_id=anonymous_feedback_user",
+      "https://backend/v1/feedback?text=Great+app%21&url=%2Fsearch%3Fquery%3Dtest&user_id=anonymous_feedback_user",
     );
   });
 
@@ -72,15 +72,15 @@ describe("feedback.post", () => {
     await feedbackHandler(mockEvent);
 
     expect(mockFetch).toHaveBeenCalledWith(
-      "http://backend/v1/feedback?text=Feedback+text&url=%2Fcustom-page&user_id=user123",
+      "https://backend/v1/feedback?text=Feedback+text&url=%2Fcustom-page&user_id=user123",
     );
   });
 
   it("redirects with error parameter when backend fails", async () => {
     mockReadBody.mockResolvedValue({ text: "Feedback" });
-    mockGetHeader.mockReturnValue("http://example.com/test");
+    mockGetHeader.mockReturnValue("https://example.com/test");
     mockGetRequestURL.mockReturnValue(
-      new URL("http://example.com/api/feedback"),
+      new URL("https://example.com/api/feedback"),
     );
     mockFetch.mockRejectedValue(new Error("Backend error"));
 
@@ -96,7 +96,7 @@ describe("feedback.post", () => {
     mockReadBody.mockResolvedValue({ text: "Feedback" });
     mockGetHeader.mockReturnValue("https://evil.com/steal");
     mockGetRequestURL.mockReturnValue(
-      new URL("http://example.com/api/feedback"),
+      new URL("https://example.com/api/feedback"),
     );
     mockFetch.mockResolvedValue({});
 
@@ -107,13 +107,13 @@ describe("feedback.post", () => {
 
   it("extracts url from referer when no url in body", async () => {
     mockReadBody.mockResolvedValue({ text: "Feedback" });
-    mockGetHeader.mockReturnValue("http://example.com/page?param=value");
+    mockGetHeader.mockReturnValue("https://example.com/page?param=value");
     mockFetch.mockResolvedValue({});
 
     await feedbackHandler(mockEvent);
 
     expect(mockFetch).toHaveBeenCalledWith(
-      "http://backend/v1/feedback?text=Feedback&url=%2Fpage%3Fparam%3Dvalue&user_id=anonymous_feedback_user",
+      "https://backend/v1/feedback?text=Feedback&url=%2Fpage%3Fparam%3Dvalue&user_id=anonymous_feedback_user",
     );
   });
 });
