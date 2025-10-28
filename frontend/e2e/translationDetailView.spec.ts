@@ -91,10 +91,15 @@ test(
 );
 
 test(
-  "has link to german original, german version has link to english version",
+  "german original and english version link to each other",
   { tag: ["@RISDEV-8950"] },
   async ({ page }) => {
     await page.goto("/translations/TestV");
+    await expect(
+      page.getByRole("heading", {
+        name: "Test Regulation for the Model Framework of the Public Service",
+      }),
+    ).toBeVisible();
     await page.getByRole("link", { name: "Go to the German version" }).click();
     await expect(
       page.getByRole("heading", {
@@ -106,7 +111,6 @@ test(
     });
     await expect(translationButton).toBeVisible();
     translationButton.click();
-    await page.waitForLoadState("networkidle");
     await expect(
       page.getByRole("heading", {
         name: "Test Regulation for the Model Framework of the Public Service",
