@@ -45,19 +45,6 @@ useStaticPageSeo("cookies");
         <h2 class="ris-heading2-regular mb-40 hidden md:block">
           Sind Sie mit der Nutzung von Analyse-Cookies einverstanden?
         </h2>
-        <noscript>
-          <div class="w-fit" data-testid="no-javascript-warning">
-            <Message severity="info" class="ris-body2-regular bg-white">
-              <template #icon>
-                <IconClose class="text-blue-800" />
-              </template>
-              <p class="ris-body2-bold">
-                JavaScript ist deaktiviert. Sie können Ihre Cookie-Einstellungen
-                dennoch ändern.
-              </p>
-            </Message>
-          </div>
-        </noscript>
         <div class="mb-40 w-fit" data-testid="consent-status-wrapper">
           <Message severity="info" class="ris-body2-regular mb-40 bg-white">
             <template #icon>

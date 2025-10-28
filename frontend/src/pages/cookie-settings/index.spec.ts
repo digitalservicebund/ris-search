@@ -79,11 +79,6 @@ describe("CookieSettings Page", () => {
     vi.clearAllMocks();
   });
 
-  it("renders the noscript content", () => {
-    const wrapper = factory(false);
-    expect(wrapper.html()).toContain("</noscript>");
-  });
-
   it("shows that tracking not accepted if userConsent is undefined or false", async () => {
     const wrapper = factory(false);
     await wrapper.vm.$nextTick();
