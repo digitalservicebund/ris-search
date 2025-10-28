@@ -169,7 +169,7 @@ test.describe("shows link to translation if exists", () => {
       await page.getByLabel("Aktionen anzeigen").click();
     }
     const translationButton = page.getByRole("link", {
-      name: "Show translation",
+      name: "Zur englischen Übersetzung",
     });
     await expect(translationButton).toBeVisible();
     translationButton.click();
@@ -190,7 +190,7 @@ test.describe("shows link to translation if exists", () => {
       await page.getByLabel("Aktionen anzeigen").click();
     }
     await expect(
-      page.getByRole("link", { name: "Show translation" }),
+      page.getByRole("link", { name: "Zur englischen Übersetzung" }),
     ).toHaveCount(0);
   });
 });

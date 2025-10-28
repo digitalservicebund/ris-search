@@ -68,7 +68,7 @@ export function createActionMenuItems(
   if (translationUrl) {
     items.push({
       key: "translation",
-      label: "Show translation",
+      label: "Zur englischen Übersetzung",
       iconComponent: ENGIcon,
       command: async () => await navigationCommand(translationUrl),
       url: translationUrl,

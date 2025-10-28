@@ -113,7 +113,7 @@ test(
       await page.getByLabel("Aktionen anzeigen").click();
     }
     const translationButton = page.getByRole("link", {
-      name: "Show translation",
+      name: "Zur englischen Übersetzung",
     });
 
     await expect(translationButton).toBeVisible();
