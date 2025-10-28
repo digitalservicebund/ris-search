@@ -40,7 +40,7 @@ public class CaseLawTestData {
             .otherHeadnote("Sonstiger Orientierungssatz")
             .otherLongText(matchAllTerm)
             .caseFacts("Tatbestand")
-            //            .outline("outlineTest")
+            .outline("outlineTest")
             .judicialBody("judicialbodyTest")
             .courtKeyword("KG Berlin")
             .keywords(keywords)
