@@ -165,26 +165,3 @@ describe("formatNames", () => {
     ]);
   });
 });
-
-describe("formatNames", () => {
-  it("returns empty array if input is empty", () => {
-    expect(formatNames([])).toHaveLength(0);
-  });
-
-  it("returns formatted names", () => {
-    expect(formatNames(["Mustermann, Max", "Musterfrau, Sabine"])).toEqual([
-      "Max Mustermann",
-      "Sabine Musterfrau",
-    ]);
-  });
-
-  it("keeps name unchanged if it contains no comma", () => {
-    expect(formatNames(["Max Mustermann"])).toEqual(["Max Mustermann"]);
-  });
-
-  it("keeps name unchanged if it contains more than one comma", () => {
-    expect(formatNames(["Mustermann, Max, Augustus"])).toEqual([
-      "Mustermann, Max, Augustus",
-    ]);
-  });
-});
