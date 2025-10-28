@@ -7,6 +7,8 @@ import java.util.List;
 
 public class LiteratureTestData {
 
+  public static String matchAllTerm = "Literatur. ";
+
   public static final List<Literature> allDocuments = new ArrayList<>();
 
   static {
@@ -20,7 +22,7 @@ public class LiteratureTestData {
             .documentTypes(List.of("Auf"))
             .dependentReferences(List.of("BUV, 1982, 123-123"))
             .independentReferences(List.of("50 Jahre Betriebs-Berater, 1987, 123-456"))
-            .mainTitle("Einführung in das Handelsrecht")
+            .mainTitle(matchAllTerm + "Einführung in das Handelsrecht")
             .documentaryTitle("Dokumentation Handelsrecht")
             .authors(List.of("Musterfrau, Sabine"))
             .collaborators(List.of("Mustermann, Max"))
@@ -39,7 +41,7 @@ public class LiteratureTestData {
             .dependentReferences(List.of("NJW, 2000, 456-789"))
             .independentReferences(List.of("Festschrift für Müller, 2001, 12-34"))
             .normReferences(List.of("GG, Art 6 Abs 2 S 1"))
-            .mainTitle("Zivilprozessrecht im Wandel")
+            .mainTitle(matchAllTerm + "Zivilprozessrecht im Wandel")
             .mainTitleAdditions("Zusatz zu Zivilprozessrecht im Wandel")
             .documentaryTitle("Dokumentation ZPO")
             .authors(List.of("Schmidt, Hans", "Becker, Anna"))
@@ -61,7 +63,7 @@ public class LiteratureTestData {
             .documentTypes(List.of("Buch"))
             .dependentReferences(List.of())
             .independentReferences(List.of("Juristische Ausbildung, 2020, 567-890"))
-            .mainTitle("Öffentliches Recht kompakt")
+            .mainTitle(matchAllTerm + "Öffentliches Recht kompakt")
             .documentaryTitle(null)
             .authors(List.of("Hoffmann, Clara"))
             .collaborators(List.of())

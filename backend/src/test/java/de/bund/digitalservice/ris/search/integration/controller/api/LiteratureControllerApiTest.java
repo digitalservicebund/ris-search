@@ -52,7 +52,7 @@ class LiteratureControllerApiTest extends ContainersIntegrationBase {
                 "$.independentReferences",
                 Matchers.contains("Festschrift für Müller, 2001, 12-34")),
             jsonPath("$.normReferences", Matchers.contains("GG, Art 6 Abs 2 S 1")),
-            jsonPath("$.headline", Matchers.is("Zivilprozessrecht im Wandel")),
+            jsonPath("$.headline", Matchers.is("Literatur. Zivilprozessrecht im Wandel")),
             jsonPath("$.alternativeHeadline", Matchers.is("Dokumentation ZPO")),
             jsonPath("$.headlineAdditions", Matchers.is("Zusatz zu Zivilprozessrecht im Wandel")),
             jsonPath("$.authors", Matchers.containsInAnyOrder("Schmidt, Hans", "Becker, Anna")),
@@ -174,7 +174,9 @@ class LiteratureControllerApiTest extends ContainersIntegrationBase {
                 "$.member[0]['item'].independentReferences",
                 Matchers.contains("50 Jahre Betriebs-Berater, 1987, 123-456")))
         .andExpect(
-            jsonPath("$.member[0]['item'].headline", Matchers.is("Einführung in das Handelsrecht")))
+            jsonPath(
+                "$.member[0]['item'].headline",
+                Matchers.is("Literatur. Einführung in das Handelsrecht")))
         .andExpect(
             jsonPath(
                 "$.member[0]['item'].alternativeHeadline",

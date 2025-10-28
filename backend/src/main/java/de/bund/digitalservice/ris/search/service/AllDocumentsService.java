@@ -5,10 +5,12 @@ import static org.opensearch.index.query.QueryBuilders.queryStringQuery;
 import de.bund.digitalservice.ris.search.config.opensearch.Configurations;
 import de.bund.digitalservice.ris.search.models.DocumentKind;
 import de.bund.digitalservice.ris.search.models.api.parameters.CaseLawSearchParams;
+import de.bund.digitalservice.ris.search.models.api.parameters.LiteratureSearchParams;
 import de.bund.digitalservice.ris.search.models.api.parameters.NormsSearchParams;
 import de.bund.digitalservice.ris.search.models.api.parameters.UniversalSearchParams;
 import de.bund.digitalservice.ris.search.models.opensearch.AbstractSearchEntity;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
+import de.bund.digitalservice.ris.search.models.opensearch.Literature;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.utils.PageUtils;
 import de.bund.digitalservice.ris.search.utils.RisHighlightBuilder;
@@ -82,6 +84,7 @@ public class AllDocumentsService {
    * @param params Search parameters
    * @param normsParams Norms search parameters
    * @param caseLawParams Case law search parameters
+   * @param literatureSearchParams Literature search parameters
    * @param documentKind The kind of document to search for.
    * @param pageable Page (offset) and size parameters.
    * @return A new {@link SearchPage} of the containing {@link AbstractSearchEntity}.
@@ -90,13 +93,16 @@ public class AllDocumentsService {
       @NotNull UniversalSearchParams params,
       @Nullable NormsSearchParams normsParams,
       @Nullable CaseLawSearchParams caseLawParams,
+      @Nullable LiteratureSearchParams literatureSearchParams,
       @Nullable DocumentKind documentKind,
       Pageable pageable) {
 
     NativeSearchQuery query =
         simpleSearchQueryBuilder.buildQuery(
             List.of(
-                new NormSimpleSearchType(normsParams), new CaseLawSimpleSearchType(caseLawParams)),
+                new NormSimpleSearchType(normsParams),
+                new CaseLawSimpleSearchType(caseLawParams),
+                new LiteratureSimpleSearchType(literatureSearchParams)),
             params,
             pageable);
 
@@ -120,6 +126,7 @@ public class AllDocumentsService {
         switch (documentKind) {
           case LEGISLATION -> operations.search(nativeQuery, Norm.class);
           case CASELAW -> operations.search(nativeQuery, CaseLawDocumentationUnit.class);
+          case LITERATURE -> operations.search(nativeQuery, Literature.class);
         };
     @SuppressWarnings("unchecked")
     SearchHits<AbstractSearchEntity> castSearchHits = (SearchHits<AbstractSearchEntity>) searchHits;
