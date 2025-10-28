@@ -75,9 +75,12 @@ const { data: translation, error: _translationFetchError } = abbreviation
   ? fetchTranslationListWithIdFilter(abbreviation)
   : { data: { value: [] }, error: null };
 
-const hasTranslation = computed(
-  () => !!(translation.value && translation.value.length > 0),
-);
+const translationUrl = computed(() => {
+  if (translation.value && translation.value.length > 0) {
+    return `/translations/${abbreviation}`;
+  }
+  return "";
+});
 
 const html = computed(() => data.value?.html);
 const htmlParts = computed(() => data.value?.htmlParts);
@@ -218,7 +221,7 @@ useDynamicSeo({ title, description });
           <client-only>
             <NormActionsMenu
               :metadata="metadata"
-              :has-translation="hasTranslation"
+              :translation-url="translationUrl"
           /></client-only>
         </div>
         <NormHeadingGroup :metadata="metadata" :html-parts="htmlParts" />

@@ -6,7 +6,7 @@ import { getManifestationUrl } from "~/utils/norm";
 
 const { metadata } = defineProps<{
   metadata: LegislationWork | undefined;
-  hasTranslation: boolean | undefined;
+  translationUrl: string;
 }>();
 
 const backendURL = useBackendURL();
@@ -31,8 +31,6 @@ const link = computed(() => {
   return undefined;
 });
 
-const translationUrl = `/translations/${metadata?.abbreviation}`;
-
 const permalink = {
   url: globalThis?.location.href,
   label: "Permalink zu dieser Fassung",
@@ -41,7 +39,7 @@ const permalink = {
 
 <template>
   <ActionsMenu
-    v-if="hasTranslation"
+    v-if="translationUrl !== ''"
     :link="link"
     :permalink="permalink"
     :xml-url="xmlUrl"
