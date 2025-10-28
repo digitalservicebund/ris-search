@@ -117,12 +117,11 @@ describe("FeedbackForm", () => {
     const wrapper = await factory();
     const form = wrapper.find("form");
 
-    expect(form.attributes("action")).toContain("/v1/feedback");
-    expect(form.attributes("action")).toContain("url=");
-    expect(form.attributes("action")).toContain(
-      "user_id=anonymous_feedback_user",
-    );
-    expect(form.attributes("method")).toBe("GET");
+    expect(form.attributes("action")).toBe("/api/feedback");
+    expect(form.attributes("method")).toBe("POST");
+
+    const textarea = wrapper.findComponent({ name: "Textarea" });
+    expect(textarea.attributes("name")).toBe("text");
   });
 
   it("hides intro when hideIntro prop is true", async () => {

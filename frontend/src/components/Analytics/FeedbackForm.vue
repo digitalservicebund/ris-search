@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import PrimevueTextarea from "primevue/textarea";
-import { useBackendURL } from "~/composables/useBackendURL";
 import { usePostHogStore } from "~/stores/usePostHogStore";
 import { isStringEmpty } from "~/utils/textFormatting";
 import ErrorOutline from "~icons/material-symbols/error-outline";
@@ -28,15 +27,21 @@ const submitFeedback = async () => {
 };
 defineProps<{ hideIntro?: boolean }>();
 
-const backendURL = useBackendURL();
+const feedbackAction = "/api/feedback";
+
 const route = useRoute();
-const feedbackAction = computed(() => {
-  const params = new URLSearchParams({
-    url: route.fullPath,
-    user_id: "anonymous_feedback_user",
-  });
-  return `${backendURL}/v1/feedback?${params.toString()}`;
-});
+
+watch(
+  () => route.query.feedback,
+  (feedbackParam) => {
+    if (feedbackParam === "sent") {
+      isSent.value = true;
+    } else if (feedbackParam === "error") {
+      errorMessage.value = sendingError;
+    }
+  },
+  { immediate: true },
+);
 </script>
 
 <template>
@@ -77,7 +82,7 @@ const feedbackAction = computed(() => {
       v-else
       class="space-y-24"
       :action="feedbackAction"
-      method="GET"
+      method="POST"
       @submit.prevent="submitFeedback"
     >
       <div v-if="!hideIntro" class="flex flex-col space-y-8">
