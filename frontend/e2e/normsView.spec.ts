@@ -163,31 +163,35 @@ test("can view images", async ({ page }) => {
 
 test.describe("shows link to translation if exists", () => {
   test("has link to translation", async ({ page, isMobileTest }) => {
-    if (!isMobileTest) {
-      await page.goto("/norms/eli/bund/bgbl-1/1964/s902/2009-02-05/19/deu");
-      const translationButton = page.getByRole("link", {
-        name: "Show translation",
-      });
-      await expect(translationButton).toBeVisible();
-      translationButton.click();
-      await expect(
-        page.getByRole("heading", {
-          name: "Test Regulation for the Model Framework of the Public Service",
-        }),
-      ).toBeVisible();
+    await page.goto("/norms/eli/bund/bgbl-1/1964/s902/2009-02-05/19/deu");
+    await page.waitForLoadState("networkidle");
+    if (isMobileTest) {
+      await page.getByLabel("Aktionen anzeigen").click();
     }
+    const translationButton = page.getByRole("link", {
+      name: "Show translation",
+    });
+    await expect(translationButton).toBeVisible();
+    translationButton.click();
+    await expect(
+      page.getByRole("heading", {
+        name: "Test Regulation for the Model Framework of the Public Service",
+      }),
+    ).toBeVisible();
   });
 
   test("if there is no translation, there is not link", async ({
     page,
     isMobileTest,
   }) => {
-    if (!isMobileTest) {
-      await page.goto("/norms/eli/bund/bgbl-1/2000/s1016/2023-04-26/10/deu");
-      await expect(
-        page.getByRole("link", { name: "Show translation" }),
-      ).toHaveCount(0);
+    await page.goto("/norms/eli/bund/bgbl-1/2000/s1016/2023-04-26/10/deu");
+    await page.waitForLoadState("networkidle");
+    if (isMobileTest) {
+      await page.getByLabel("Aktionen anzeigen").click();
     }
+    await expect(
+      page.getByRole("link", { name: "Show translation" }),
+    ).toHaveCount(0);
   });
 });
 
