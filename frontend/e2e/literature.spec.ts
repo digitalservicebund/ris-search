@@ -82,3 +82,134 @@ test("shows detailed information in the 'Details' tab", async ({ page }) => {
     "Internationaler Kongreß für das Recht, 1991, Athen, GRC",
   );
 });
+
+test.describe("actions menu", () => {
+  test("can use 'copy link' button to copy url to clipboard", async ({
+    page,
+    browserName,
+    context,
+    isMobile,
+  }) => {
+    await page.goto("/literature/TEST000000001", {
+      waitUntil: "networkidle",
+    });
+
+    if (browserName === "chromium") {
+      await context.grantPermissions(["clipboard-read", "clipboard-write"]);
+    }
+
+    if (isMobile) {
+      await page.getByLabel("Aktionen anzeigen").click();
+    }
+
+    const button = page.getByRole("link", {
+      name: "Link kopieren",
+    });
+
+    await button.isVisible();
+
+    if (!isMobile) {
+      await button.hover();
+
+      await expect(
+        page.getByRole("tooltip", {
+          name: "Link kopieren",
+        }),
+      ).toBeVisible();
+    }
+
+    await button.click();
+    if (!isMobile) await expect(page.getByText("Kopiert!")).toBeVisible();
+    if (browserName === "chromium") {
+      const clipboardContents = await page.evaluate(() => {
+        return navigator.clipboard.readText();
+      });
+      expect(clipboardContents.endsWith("/literature/TEST000000001")).toBe(
+        true,
+      );
+    }
+  });
+
+  test("can use 'print button' to open print menu", async ({
+    page,
+    isMobile,
+  }) => {
+    await page.goto("/norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu", {
+      waitUntil: "networkidle",
+    });
+    if (isMobile) await page.getByLabel("Aktionen anzeigen").click();
+
+    const button = isMobile
+      ? page.getByRole("menuitem", { name: "Drucken" })
+      : page.getByRole("button", {
+          name: "Drucken",
+        });
+
+    if (!isMobile) {
+      await button.hover();
+
+      await expect(
+        page.getByRole("tooltip", { name: "Drucken" }),
+      ).toBeVisible();
+    }
+
+    await test.step("can open print menu", async () => {
+      await page.evaluate(
+        "(() => {window.waitForPrintDialog = new Promise(f => window.print = f);})()",
+      );
+      await button.click();
+
+      await page.waitForFunction("window.waitForPrintDialog");
+    });
+  });
+
+  test("can't use PDF action as it is disabled", async ({ page, isMobile }) => {
+    await page.goto("/norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu", {
+      waitUntil: "networkidle",
+    });
+    if (isMobile) await page.getByLabel("Aktionen anzeigen").click();
+    const button = isMobile
+      ? page.getByText("Als PDF speichern")
+      : page.getByRole("button", {
+          name: "Als PDF speichern",
+        });
+
+    if (!isMobile) {
+      await button.hover();
+
+      await expect(
+        page.getByRole("tooltip", { name: "Als PDF speichern" }),
+      ).toBeVisible();
+    }
+
+    if (!isMobile) await expect(button).toBeDisabled();
+  });
+
+  test("can use XML action to view norms xml file", async ({
+    page,
+    isMobile,
+  }) => {
+    await page.goto("/norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu", {
+      waitUntil: "networkidle",
+    });
+
+    if (isMobile) await page.getByLabel("Aktionen anzeigen").click();
+    const button = page.getByRole("link", {
+      name: "XML anzeigen",
+    });
+
+    if (!isMobile) {
+      await button.hover();
+
+      await expect(
+        page.getByRole("tooltip", { name: "XML anzeigen" }),
+      ).toBeVisible();
+    }
+
+    await button.click();
+
+    await page.waitForURL(
+      "v1/legislation/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu/2024-12-19/regelungstext-1.xml",
+    );
+  });
+});
