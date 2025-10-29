@@ -20,8 +20,7 @@ const descriptionTermId = useId();
   <div
     class="flex flex-col gap-8 md:grid md:grid-cols-4 md:gap-8 md:px-0 lg:grid-cols-5 xl:grid-cols-6"
   >
-    <!-- prettier-ignore -->
-    <dt :id="descriptionTermId" class="ris-label1-bold hyphens-auto"><!-- //NOSONAR -->
+    <dt :id="descriptionTermId" class="ris-label1-bold hyphens-auto">
       {{ label }}
     </dt>
     <dd
