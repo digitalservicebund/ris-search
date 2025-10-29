@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { formatNames } from "~/utils/textFormatting";
+import { formatArray, formatNames } from "~/utils/textFormatting";
 
 interface Props {
   normReferences: string[];
@@ -11,31 +11,27 @@ interface Props {
 
 const props = defineProps<Props>();
 
-function format(arrayProperty: string[]) {
-  return arrayProperty.join(", ");
-}
-
 const properties = computed(() => {
   return [
     {
       label: "Norm:",
-      value: format(props.normReferences),
+      value: formatArray(props.normReferences),
     },
     {
       label: "Mitarbeiter:",
-      value: format(formatNames(props.collaborators)),
+      value: formatArray(formatNames(props.collaborators)),
     },
     {
       label: "Urheber:",
-      value: format(props.originators),
+      value: formatArray(props.originators),
     },
     {
       label: "Sprache:",
-      value: format(props.languages),
+      value: formatArray(props.languages),
     },
     {
       label: "Kongress:",
-      value: format(props.conferenceNotes),
+      value: formatArray(props.conferenceNotes),
     },
   ];
 });
