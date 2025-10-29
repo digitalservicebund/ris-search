@@ -84,6 +84,21 @@ useStaticPageSeo("startseite");
     <FeatureCard>
       <div>
         <h2 class="ris-heading3-bold break-words hyphens-auto">
+          English translation of German laws and regulations
+        </h2>
+        <p class="mt-8">
+          We provide translations of our German content to help you. Please note
+          that the original German versions are the only authoritative source.
+        </p>
+      </div>
+
+      <div>
+        <ButtonLink href="/translations"> Go to translations </ButtonLink>
+      </div>
+    </FeatureCard>
+    <FeatureCard>
+      <div>
+        <h2 class="ris-heading3-bold break-words hyphens-auto">
           Testen Sie die Programmierschnittstelle
         </h2>
         <p class="mt-8">
