@@ -84,6 +84,10 @@ const testPages = [
     url: "/translations/FG",
     tabs: ["Text", "Details"],
   },
+  {
+    name: "Introduction Page",
+    url: "/einfuehrung",
+  },
 ];
 
 test.describe("General Pages Accessibility Tests", () => {
