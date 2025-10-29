@@ -14,7 +14,7 @@ export type TableOfContentsEntry = {
 };
 
 const props = defineProps<{
-  entries: TableOfContentsEntry[];
+  tableOfContentEntries: TableOfContentsEntry[];
 }>();
 
 const selectedEntry = ref<string | null>(null);
@@ -61,7 +61,7 @@ function handleIntersection(entries: IntersectionObserverEntry[]) {
         visibleIds.value?.filter((id) => id !== entry.target.id) ?? [];
     }
   });
-  const orderedVisibleSections = props.entries.filter((entry) =>
+  const orderedVisibleSections = props.tableOfContentEntries.filter((entry) =>
     visibleIds.value.includes(entry.id),
   );
   // prevent overriding the entry selected based on the hash, only set it if none is selected
@@ -77,7 +77,7 @@ onMounted(() => {
     threshold: 0,
   });
 
-  props.entries.forEach((entry) => {
+  props.tableOfContentEntries.forEach((entry) => {
     const element = document.getElementById(entry.id);
     if (element) {
       observer.observe(element);
@@ -100,7 +100,7 @@ onMounted(() => {
       Seiteninhalte
     </div>
     <div>
-      <div v-for="entry in entries" :key="entry.id">
+      <div v-for="entry in tableOfContentEntries" :key="entry.id">
         <NuxtLink
           :aria-current="selectedEntry === entry.id ? 'section' : null"
           replace

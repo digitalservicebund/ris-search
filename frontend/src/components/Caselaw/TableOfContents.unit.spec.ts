@@ -36,7 +36,7 @@ describe("TableOfContents.vue", async () => {
   beforeEach(async () => {
     vi.restoreAllMocks();
     wrapper = await mountSuspended(TableOfContents, {
-      props: { entries: tableOfContentEntries },
+      props: { tableOfContentEntries },
     });
   });
 
@@ -80,7 +80,7 @@ describe("TableOfContents.vue", async () => {
     const router = useRouter();
     await router.push("/#leitsatz"); // tests fail without this duplication when running the whole file
     wrapper = await mountSuspended(TableOfContents, {
-      props: { entries: tableOfContentEntries },
+      props: { tableOfContentEntries },
       route: { path: "/", hash: "#leitsatz" },
       shallow: true,
     });
@@ -95,7 +95,7 @@ describe("TableOfContents.vue", async () => {
     const routerReplace = vi.spyOn(router, "replace");
 
     const wrapper = await mountSuspended(TableOfContents, {
-      props: { entries: tableOfContentEntries },
+      props: { tableOfContentEntries },
     });
 
     const link = wrapper.find(`a[href="#${tableOfContentEntries[1]?.id}"]`);
