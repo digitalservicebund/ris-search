@@ -3,17 +3,50 @@ import { expect, test } from "./utils/fixtures";
 
 async function getSidebar(page: Page) {
   const navigation = page.getByRole("navigation", { name: "Seiteninhalte" });
+  await navigation.scrollIntoViewIfNeeded();
   await expect(navigation).toBeVisible();
   return navigation;
 }
 
-test("can view a single case law documentation unit", async ({
+async function getDisplayedResultCount(page: Page) {
+  const resultCountElement = page.locator("output", {
+    hasText: "Suchergebnis",
+  });
+  const text = await resultCountElement.innerText();
+  if (text.startsWith("Keine Suchergebnisse")) return 0;
+  const digits = text.replace(/\D+/g, "");
+  return Number.parseInt(digits);
+}
+
+test("can search, filter for case law, and view a single case law documentation unit", async ({
   page,
   isMobileTest,
 }) => {
-  await page.goto("/case-law/KORE600500000", { waitUntil: "networkidle" });
+  // authentication should happen in the setup flow in auth.setup.ts
+  await test.step("Basic search", async () => {
+    await page.goto("/");
+    await page.getByPlaceholder("Suchbegriff eingeben").fill("Fiktiv");
+    await page.getByLabel("Suchen").click();
+    await page.waitForLoadState("networkidle");
+
+    expect(await getDisplayedResultCount(page)).toBe(15);
+  });
+
+  let resultsListUrl: string;
+
+  await test.step("Filter for Gerichtsentscheidungen", async () => {
+    await page.getByRole("button", { name: "Gerichtsentscheidungen" }).click();
+    await expect
+      .poll(() => getDisplayedResultCount(page), {
+        message: "the count should decrease",
+      })
+      .toBe(10);
+
+    resultsListUrl = page.url();
+  });
 
   await test.step("View a caselaw documentation unit", async () => {
+    await page.getByRole("link", { name: "Testheader für Urteil 6." }).click();
     await expect(
       page.getByRole("heading", { name: "Testheader für Urteil 6." }).first(),
     ).toBeVisible();
@@ -28,16 +61,14 @@ test("can view a single case law documentation unit", async ({
 
     await firstSectionHeader.scrollIntoViewIfNeeded();
 
-    await expect(async () => {
-      const currentSection = sidebar.locator('a[aria-current="section"]');
-      await expect(currentSection).toHaveCount(1);
-    }).toPass();
+    const currentSection = sidebar.locator('a[aria-current="section"]');
+    await expect(currentSection).toHaveCount(1);
   });
 
   if (isMobileTest)
     for (const sectionName of ["Tenor", "Orientierungssatz", "Tatbestand"]) {
       await test.step(`Jump straight to a specific section, ${sectionName}`, async () => {
-        await page.goto("/search?query=fiktiv&category=R", {
+        await page.goto(resultsListUrl, {
           waitUntil: "networkidle",
         });
         const link = page.getByRole("link", { name: sectionName }).first();
@@ -54,13 +85,10 @@ test("can view a single case law documentation unit", async ({
           .getByRole("heading", { name: sectionName })
           .first();
         await sectionHeading.scrollIntoViewIfNeeded();
-
-        await expect(async () => {
-          await expect(expectedSidebarItem).toHaveAttribute(
-            "aria-current",
-            "section",
-          );
-        }).toPass();
+        await expect(expectedSidebarItem).toHaveAttribute(
+          "aria-current",
+          "section",
+        );
 
         const heading = page
           .getByRole("main")
