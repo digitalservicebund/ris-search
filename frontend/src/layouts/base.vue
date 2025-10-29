@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { NuxtLoadingIndicator } from "#components";
 import ConsentBanner from "~/components/Analytics/ConsentBanner.vue";
-import AppFooterPrototype from "~/components/AppFooterPrototype.vue";
+import AppFooter from "~/components/AppFooter.vue";
 import AppHeader from "~/components/AppHeader.vue";
 import NavbarTop from "~/components/NavbarTop.vue";
 import { isPublicProfile, isPrototypeProfile } from "~/utils/profile";
@@ -25,6 +25,6 @@ const showPublicProfileHeader = isPublic || isPrototype;
         <slot />
       </main>
     </div>
-    <AppFooterPrototype />
+    <AppFooter />
   </div>
 </template>
