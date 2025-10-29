@@ -21,7 +21,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 public class XmlDocument {
-  private Document document;
+  private final Document document;
   private final XPath xpathInstance = XPathFactory.newInstance().newXPath();
   private final Logger logger = LogManager.getLogger(XmlDocument.class);
 
@@ -51,6 +51,10 @@ public class XmlDocument {
   public String getSimpleElementByXpath(String xpath) throws XPathExpressionException {
     Node node = (Node) xpathInstance.evaluate(xpath, document, XPathConstants.NODE);
     return node != null ? node.getTextContent() : null;
+  }
+
+  public boolean getElementExistByXpath(String xpath) throws XPathExpressionException {
+    return (boolean) xpathInstance.evaluate(xpath, document, XPathConstants.BOOLEAN);
   }
 
   public NodeList getNodesByXpath(String xpath) throws XPathExpressionException {

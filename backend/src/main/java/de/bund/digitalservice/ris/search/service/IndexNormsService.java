@@ -11,7 +11,11 @@ import de.bund.digitalservice.ris.search.utils.eli.ExpressionEli;
 import de.bund.digitalservice.ris.search.utils.eli.ManifestationEli;
 import de.bund.digitalservice.ris.search.utils.eli.WorkEli;
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.Period;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,6 +37,10 @@ public class IndexNormsService implements IndexService {
 
   private final NormsRepository normsRepository;
   private final NormsBucket normsBucket;
+
+  // We can't use LocalDate.MIN or LocalDate.MAX because opensearch min and max differ from java
+  public static final LocalDate RELEVANCE_MIN = LocalDate.of(1, 1, 1);
+  public static final LocalDate RELEVANCE_MAX = LocalDate.of(9999, 1, 1);
 
   @Autowired
   public IndexNormsService(NormsBucket normsBucket, NormsRepository normsRepository) {
@@ -87,17 +95,82 @@ public class IndexNormsService implements IndexService {
             .map(EliFile::getExpressionEli)
             .collect(Collectors.toSet());
 
+    // parse the norms
+    List<Norm> normsToIndex = new ArrayList<>();
     for (ExpressionEli expressionEli : expressionElis) {
       try {
-        getNormFromS3(expressionEli).ifPresent(normsRepository::save);
+        getNormFromS3(expressionEli).ifPresent(normsToIndex::add);
       } catch (ObjectStoreServiceException e) {
         // If we can't get the content of an expression we log an error and move on
         // That means on failure of a work "changed" it will end up deleted
         logger.error("Error while reading norm file {}. {}", expressionEli, e.getMessage());
       }
     }
+
+    addRelevanceWindows(workEli.toString(), normsToIndex);
+    normsRepository.saveAll(normsToIndex);
+
     // delete the expressions from this work that were indexed before the start time
     normsRepository.deleteByWorkEliAndIndexedAtBefore(workEli.toString(), startingTimestamp);
+  }
+
+  private void addRelevanceWindows(String workEli, List<Norm> norms) {
+    // Prototype won't have valid norms (in terms of ris:inkraft) until 2028
+    // This check is for prototype
+    if (norms.size() == 1) {
+      norms.getFirst().setRelevanceStartDate(RELEVANCE_MIN);
+      norms.getFirst().setRelevanceEndDate(RELEVANCE_MAX);
+      return;
+    }
+
+    filterAndSortNorms(workEli, norms);
+
+    if (norms.isEmpty()) {
+      return;
+    }
+
+    // At this point filterAndSortNorms has already run, and we know
+    // * norms has at least 1 norm
+    // * All entries have inkraft not null
+    // * All entries except possibly the last one have ausserkraft not null
+
+    norms.getFirst().setRelevanceStartDate(RELEVANCE_MIN);
+    for (int i = 0; i < norms.size() - 1; i++) {
+      LocalDate relevanceEndDate = norms.get(i).getExpiryDate();
+      norms.get(i).setRelevanceEndDate(relevanceEndDate);
+      norms.get(i + 1).setRelevanceStartDate(relevanceEndDate.plus(Period.ofDays(1)));
+    }
+    norms.getLast().setRelevanceEndDate(RELEVANCE_MAX);
+  }
+
+  private void filterAndSortNorms(String workEli, List<Norm> norms) {
+    // remove the norms that don't have inkraft defined
+    norms.removeIf(e -> e.getEntryIntoForceDate() == null);
+
+    if (norms.isEmpty()) {
+      logger.warn("Trying to index {}, but no expressions have EntryIntoForce defined", workEli);
+      return;
+    }
+
+    // Sort the list in ascending order by inkraft
+    norms.sort(Comparator.comparing(Norm::getEntryIntoForceDate));
+
+    // Only the norm with the largest ris:inkraft can have ris:ausserkraft null, so we remove others
+    // with ris:ausserkraft null
+    Norm lastNorm = norms.getLast();
+    norms.remove(lastNorm);
+    norms.removeIf(e -> e.getExpiryDate() == null);
+    norms.add(lastNorm);
+
+    // validate that in force ranges don't overlap
+    for (int i = 1; i < norms.size(); i++) {
+      if (!norms.get(i).getEntryIntoForceDate().isAfter(norms.get(i - 1).getExpiryDate())) {
+        logger.warn(
+            "Trying to index {}, but expressions' inkraft and ausserkraft overlap.", workEli);
+        norms.clear();
+        return;
+      }
+    }
   }
 
   private Optional<Norm> getNormFromS3(ExpressionEli expressionEli)

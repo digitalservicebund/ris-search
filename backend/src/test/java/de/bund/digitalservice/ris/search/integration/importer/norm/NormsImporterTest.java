@@ -6,7 +6,6 @@ import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.integration.config.ContainersIntegrationBase;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
-import de.bund.digitalservice.ris.search.repository.objectstorage.PortalBucket;
 import de.bund.digitalservice.ris.search.repository.opensearch.NormsRepository;
 import de.bund.digitalservice.ris.search.service.IndexStatusService;
 import de.bund.digitalservice.ris.search.service.IndexingState;
@@ -16,7 +15,6 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Predicate;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
@@ -34,22 +32,12 @@ class NormsImporterTest extends ContainersIntegrationBase {
   @Autowired private IndexStatusService indexStatusService;
   @Autowired private NormsRepository normIndex;
   @Autowired private NormsBucket normsBucket;
-  @Autowired private PortalBucket portalBucket;
 
   @BeforeEach
   void beforeEach() {
-    final Predicate<String> isChangelogOrStatus =
-        s -> s.contains("changelog") || s.equals(NormIndexSyncJob.NORM_STATUS_FILENAME);
-    portalBucket.getAllKeys().stream()
-        .filter(isChangelogOrStatus)
-        .forEach(filename -> portalBucket.delete(filename));
-
+    resetBuckets();
+    clearRepositoryData();
     indexStatusService.saveStatus(NormIndexSyncJob.NORM_STATUS_FILENAME, getMockState());
-
-    normsBucket.getAllKeys().stream()
-        .filter(isChangelogOrStatus)
-        .forEach(filename -> normsBucket.delete(filename));
-    normIndex.deleteAll();
   }
 
   @Test

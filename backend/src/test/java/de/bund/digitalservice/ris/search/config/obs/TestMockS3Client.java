@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -63,10 +64,6 @@ public class TestMockS3Client extends MockS3Client implements S3Client {
     fileMap = null;
   }
 
-  public void removeAllFiles() {
-    fileMap.clear();
-  }
-
   public void loadDefaultFiles() throws IOException {
     fileMap = new HashMap<>();
     File bucket = localStorageDirectory.resolve(bucketname).toFile();
@@ -76,6 +73,10 @@ public class TestMockS3Client extends MockS3Client implements S3Client {
           file.substring(bucket.getAbsolutePath().length() + 1),
           Files.readAllBytes(Paths.get(file)));
     }
+  }
+
+  public void putFile(String fileName, String fileContent) {
+    fileMap.put(fileName, fileContent.getBytes(StandardCharsets.UTF_8));
   }
 
   @Override

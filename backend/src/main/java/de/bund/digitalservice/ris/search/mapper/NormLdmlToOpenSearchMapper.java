@@ -62,7 +62,10 @@ public class NormLdmlToOpenSearchMapper {
       "/akn:akomaNtoso/akn:act/akn:meta/akn:proprietary/ris:legalDocML.de_metadaten/ris:inkraft/@date";
   private static final String X_PATH_EXPIRY_DATE =
       "/akn:akomaNtoso/akn:act/akn:meta/akn:proprietary/ris:legalDocML.de_metadaten/ris:ausserkraft/@date";
-
+  private static final String X_PATH_GEGENSTANDSLOS =
+      "/akn:akomaNtoso/akn:act/akn:meta/akn:proprietary/ris:legalDocML.de_metadaten/ris:gegenstandlos";
+  private static final String X_PATH_BEDINGTES_INKRAFTTRETEN =
+      "/akn:akomaNtoso/akn:act/akn:meta/akn:proprietary/ris:legalDocML.de_metadaten/ris:bedingtesInkrafttreten";
   private static final String X_PATH_BODY = "//*[local-name()='body']";
   private static final String X_PATH_CONCLUSIONS_FORMULA =
       "//*[local-name()='conclusions']/*[local-name()='formula']";
@@ -83,6 +86,20 @@ public class NormLdmlToOpenSearchMapper {
 
       if (workEli == null || expressionEli == null || manifestationEli == null) {
         logger.warn("Could not parse ELI");
+        return Optional.empty();
+      }
+
+      boolean isGegenstandslos = xmlDocument.getElementExistByXpath(X_PATH_GEGENSTANDSLOS);
+      boolean isBedingtesInkrafttreten =
+          xmlDocument.getElementExistByXpath(X_PATH_BEDINGTES_INKRAFTTRETEN);
+
+      if (isGegenstandslos) {
+        logger.warn("Ignoring Gegenstandslos until logic is defined");
+        return Optional.empty();
+      }
+
+      if (isBedingtesInkrafttreten) {
+        logger.warn("Ignoring BedingtesInkrafttreten until logic is defined");
         return Optional.empty();
       }
 

@@ -48,6 +48,12 @@
           <akn:timeInterval start="#meta-n1_lebzykl-n1_ereignis-n1" refersTo="geltungszeit" eId="meta-n1_geltzeiten-n1_geltungszeitgr-n1_gelzeitintervall-n1" GUID="90afcb18-ec43-468b-b914-d37d4c60bf76"></akn:timeInterval>
         </akn:temporalGroup>
       </akn:temporalData>
+      <akn:proprietary GUID="2983c8d3-2f94-41ba-907c-b9aee90a04eb" eId="meta-n1_proprietary-n1" source="attributsemantik-noch-undefiniert">
+        <ris:legalDocML.de_metadaten xmlns:ris="http://MetadatenRIS.LegalDocML.de/1.8.2/" xsi:schemaLocation="http://MetadatenRIS.LegalDocML.de/1.8.2/ ../ris-norms-ldml-schema-extensions/1.8.2/legalDocML.de-metadaten-ris.xsd">
+          <ris:inkraft date="1992-02-01"/>
+          <ris:ausserkraft date="1992-12-31"/>
+        </ris:legalDocML.de_metadaten>
+      </akn:proprietary>
     </akn:meta>
 
     <akn:preface eId="einleitung-n1" GUID="a3399d47-218a-46cf-939c-685f884ed724">
