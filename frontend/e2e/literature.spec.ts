@@ -134,7 +134,7 @@ test.describe("actions menu", () => {
     page,
     isMobile,
   }) => {
-    await page.goto("/norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu", {
+    await page.goto("/literature/TEST000000001", {
       waitUntil: "networkidle",
     });
     if (isMobile) await page.getByLabel("Aktionen anzeigen").click();
@@ -164,7 +164,7 @@ test.describe("actions menu", () => {
   });
 
   test("can't use PDF action as it is disabled", async ({ page, isMobile }) => {
-    await page.goto("/norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu", {
+    await page.goto("/literature/TEST000000001", {
       waitUntil: "networkidle",
     });
     if (isMobile) await page.getByLabel("Aktionen anzeigen").click();
@@ -185,11 +185,11 @@ test.describe("actions menu", () => {
     if (!isMobile) await expect(button).toBeDisabled();
   });
 
-  test("can use XML action to view norms xml file", async ({
+  test("can use XML action to view literature xml file", async ({
     page,
     isMobile,
   }) => {
-    await page.goto("/norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu", {
+    await page.goto("/literature/TEST000000001", {
       waitUntil: "networkidle",
     });
 
@@ -208,8 +208,6 @@ test.describe("actions menu", () => {
 
     await button.click();
 
-    await page.waitForURL(
-      "v1/legislation/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu/2024-12-19/regelungstext-1.xml",
-    );
+    await page.waitForURL("v1/literature/TEST000000001.xml");
   });
 });
