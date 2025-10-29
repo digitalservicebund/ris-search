@@ -15,7 +15,6 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,36 +22,90 @@ import java.util.Map;
 public class NormsTestData {
 
   public static final String NORM_LDML_TEMPLATE = "templates/norm/ldml-base.xml";
+  public static final String S_102_WORK_ELI = "eli/bund/bgbl-1/1991/s102";
 
+  public static Map<String, String> s102WorkExpressions = createS102Work();
+  public static Map<String, String> allNormXml = new HashMap<>(s102WorkExpressions);
   public static List<TableOfContentsItem> nestedToC = setupNestedToC();
-
   public static List<Norm> allDocuments = setupCommonNormEntities();
-  public static Map<String, String> allNormXml = setupCommonNormXmlFiles();
+
+  public static Map<String, String> createS102Work() {
+    try {
+      Map<String, String> result = new HashMap<>();
+
+      String work1expression1 = S_102_WORK_ELI + "/1991-01-01/1/deu/1991-01-01/regelungstext-1.xml";
+      result.put(
+          work1expression1,
+          simpleNormXml(
+              work1expression1, Map.of("inkraft", "1991-01-01", "ausserkraft", "1995-01-01")));
+
+      String work1expression2 = S_102_WORK_ELI + "/2020-01-01/1/deu/2020-01-01/regelungstext-1.xml";
+      result.put(
+          work1expression2,
+          simpleNormXml(
+              work1expression2, Map.of("inkraft", "2020-01-01", "ausserkraft", "2049-12-31")));
+
+      String work1expression3 = S_102_WORK_ELI + "/2050-01-01/1/deu/2050-01-01/regelungstext-1.xml";
+      result.put(
+          work1expression3, simpleNormXml(work1expression3, Map.of("inkraft", "2050-01-01")));
+
+      return result;
+    } catch (IOException e) {
+      throw new IllegalArgumentException("Invalid norms being created at test startup.");
+    }
+  }
+
+  public static String simpleNormXml(String fileName, Map<String, Object> context)
+      throws IOException {
+    if (context == null) {
+      context = new HashMap<>();
+    }
+    context = new HashMap<>(context);
+    EliFile eliFile =
+        EliFile.fromString(fileName)
+            .orElseThrow(() -> new IllegalArgumentException("Invalid eli file"));
+    context.put("work_eli", eliFile.getWorkEli().toString());
+    context.put("expression_eli", eliFile.getExpressionEli().toString());
+    context.put("manifestation_eli", eliFile.getManifestationEli().toString());
+    return getXmlFromTemplate(context);
+  }
+
+  private static String getXmlFromTemplate(Map<String, Object> context) throws IOException {
+    PebbleEngine engine = new PebbleEngine.Builder().build();
+    PebbleTemplate compiledTemplate = engine.getTemplate(NORM_LDML_TEMPLATE);
+    if (context == null) {
+      context = new HashMap<>();
+    }
+    Writer writer = new StringWriter();
+    compiledTemplate.evaluate(writer, context);
+    return writer.toString();
+  }
+
+  private static TableOfContentsItem simpleToc(String number) {
+    return new TableOfContentsItem("art-z" + number, number, "Art " + number, new ArrayList<>());
+  }
 
   private static List<TableOfContentsItem> setupNestedToC() {
     return List.of(
-        new TableOfContentsItem("art-z1", "1", "Art 1", new ArrayList<>()),
-        new TableOfContentsItem("art-z2", "2", "Art 2", new ArrayList<>()),
+        simpleToc("1"),
+        simpleToc("2"),
         new TableOfContentsItem(
             "hauptteil-n1_teil-n1",
             "Teil 1",
             "Heading 1",
             List.of(
-                new TableOfContentsItem("art-z3", "3", "Art 3", new ArrayList<>()),
+                simpleToc("3"),
                 new TableOfContentsItem(
                     "hauptteil-n1_teil-n1_teil-n1",
                     "Teil 2",
                     "Heading 2",
                     List.of(
-                        new TableOfContentsItem("art-z4", "4", "Art 4", new ArrayList<>()),
+                        simpleToc("4"),
                         new TableOfContentsItem(
                             "hauptteil-n1_teil-n1_teil-n1_teil-n1",
                             "Teil 3",
                             "Heading 3",
-                            List.of(
-                                new TableOfContentsItem("art-z5", "5", "Art 5", new ArrayList<>()),
-                                new TableOfContentsItem(
-                                    "art-z6", "6", "Art 6", new ArrayList<>()))))))));
+                            List.of(simpleToc("5"), simpleToc("6"))))))));
   }
 
   public static List<Norm> setupCommonNormEntities() {
@@ -124,7 +177,7 @@ public class NormsTestData {
             .expiryDate(LocalDate.now().minusDays(1))
             .build();
 
-    return Arrays.asList(normTestOne, normTestTwo, normTestThree);
+    return new ArrayList<>(List.of(normTestOne, normTestTwo, normTestThree));
   }
 
   public static Norm simple(String id, String content) {
@@ -133,58 +186,5 @@ public class NormsTestData {
         .articleTexts(List.of(content))
         .articles(List.of(Article.builder().name("Article 1").text(content).build()))
         .build();
-  }
-
-  public static Map<String, String> setupCommonNormXmlFiles() {
-    try {
-      Map<String, String> result = new HashMap<>();
-      String work1 = "eli/bund/bgbl-1/1991/s102";
-
-      String work1expression1 = work1 + "/1991-01-01/1/deu/1991-01-01/regelungstext-1.xml";
-      result.put(
-          work1expression1,
-          simpleNormXml(
-              work1expression1, Map.of("inkraft", "1991-01-01", "ausserkraft", "1995-01-01")));
-
-      String work1expression2 = work1 + "/2020-01-01/1/deu/2020-01-01/regelungstext-1.xml";
-      result.put(
-          work1expression2,
-          simpleNormXml(
-              work1expression2, Map.of("inkraft", "2020-01-01", "ausserkraft", "2049-12-31")));
-
-      String work1expression3 = work1 + "/2050-01-01/1/deu/2050-01-01/regelungstext-1.xml";
-      result.put(
-          work1expression3, simpleNormXml(work1expression3, Map.of("inkraft", "2050-01-01")));
-
-      return result;
-    } catch (IOException e) {
-      throw new IllegalArgumentException("Invalid norms being created at test startup.");
-    }
-  }
-
-  public static String simpleNormXml(String fileName, Map<String, Object> context)
-      throws IOException {
-    if (context == null) {
-      context = new HashMap<>();
-    }
-    context = new HashMap<>(context);
-    EliFile eliFile =
-        EliFile.fromString(fileName)
-            .orElseThrow(() -> new IllegalArgumentException("Invalid eli file"));
-    context.put("work_eli", eliFile.getWorkEli().toString());
-    context.put("expression_eli", eliFile.getExpressionEli().toString());
-    context.put("manifestation_eli", eliFile.getManifestationEli().toString());
-    return getXmlFromTemplate(context);
-  }
-
-  private static String getXmlFromTemplate(Map<String, Object> context) throws IOException {
-    PebbleEngine engine = new PebbleEngine.Builder().build();
-    PebbleTemplate compiledTemplate = engine.getTemplate(NORM_LDML_TEMPLATE);
-    if (context == null) {
-      context = new HashMap<>();
-    }
-    Writer writer = new StringWriter();
-    compiledTemplate.evaluate(writer, context);
-    return writer.toString();
   }
 }

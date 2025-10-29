@@ -68,6 +68,14 @@ public class NormSimpleSearchType implements SimpleSearchType {
       query.must(
           matchQuery(Norm.Fields.WORK_ELI, normsSearchParams.getEli()).operator(Operator.AND));
     }
+    if (normsSearchParams.getMostRelevantOn() != null) {
+      query.filter(
+          QueryBuilders.rangeQuery(Norm.Fields.RELEVANCE_START_DATE)
+              .lte(normsSearchParams.getMostRelevantOn()));
+      query.filter(
+          QueryBuilders.rangeQuery(Norm.Fields.RELEVANCE_END_DATE)
+              .gte(normsSearchParams.getMostRelevantOn()));
+    }
     DateUtils.buildQueryForTemporalCoverage(
             normsSearchParams.getTemporalCoverageFrom(), normsSearchParams.getTemporalCoverageTo())
         .ifPresent(query::filter);

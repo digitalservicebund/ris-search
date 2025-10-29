@@ -18,6 +18,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.c4_soft.springaddons.security.oauth2.test.annotations.WithJwt;
+import com.jayway.jsonpath.JsonPath;
 import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.integration.config.ContainersIntegrationBase;
 import de.bund.digitalservice.ris.search.integration.controller.api.testData.NormsTestData;
@@ -25,10 +26,12 @@ import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.models.opensearch.TableOfContentsItem;
 import de.bund.digitalservice.ris.search.repository.opensearch.NormsRepository;
 import de.bund.digitalservice.ris.search.schema.TableOfContentsSchema;
+import de.bund.digitalservice.ris.search.service.IndexNormsService;
 import de.bund.digitalservice.ris.search.utils.DateUtils;
 import java.io.ByteArrayInputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -74,6 +77,7 @@ class NormsControllerApiTest extends ContainersIntegrationBase {
       ApiConfig.Paths.LEGISLATION_SINGLE + "/bund/bgbl-1/1991/s101/1991-01-01/1/deu/1991-01-01.zip";
 
   @Autowired private NormsRepository normsRepository;
+  @Autowired private IndexNormsService indexNormsService;
   @Autowired private MockMvc mockMvc;
 
   @BeforeEach
@@ -127,6 +131,14 @@ class NormsControllerApiTest extends ContainersIntegrationBase {
             .getResponse()
             .getContentAsString();
     assertThat(result).contains(expectedToc);
+  }
+
+  private TableOfContentsSchema mapToTableOfContentsSchema(TableOfContentsItem item) {
+    return new TableOfContentsSchema(
+        item.id(),
+        item.marker(),
+        item.heading(),
+        item.children().stream().map(this::mapToTableOfContentsSchema).toList());
   }
 
   @Test
@@ -568,11 +580,82 @@ class NormsControllerApiTest extends ContainersIntegrationBase {
         .andExpect(jsonPath("$.member[*].item.name", is(List.of("title1", "title2"))));
   }
 
-  private TableOfContentsSchema mapToTableOfContentsSchema(TableOfContentsItem item) {
-    return new TableOfContentsSchema(
-        item.id(),
-        item.marker(),
-        item.heading(),
-        item.children().stream().map(this::mapToTableOfContentsSchema).toList());
+  @Test
+  @DisplayName("Should return most relevant expression for a day")
+  void shouldReturnMostRelevantExpressionForADay() throws Exception {
+    addNormXmlFiles(NormsTestData.s102WorkExpressions);
+    indexNormsService.reindexAll(Instant.now().toString());
+
+    // A very old date should return the oldest expression
+    Object result =
+        JsonPath.parse(
+                mockMvc
+                    .perform(
+                        get(ApiConfig.Paths.LEGISLATION
+                                + "?eli="
+                                + NormsTestData.S_102_WORK_ELI
+                                + "&mostRelevantOn=1900-01-01")
+                            .contentType(MediaType.APPLICATION_JSON))
+                    .andReturn()
+                    .getResponse()
+                    .getContentAsString())
+            .json();
+    assertThat((Integer) JsonPath.read(result, "$.member.length()")).isEqualTo(1);
+    assertThat((String) JsonPath.read(result, "$.member[0].item.workExample.legislationIdentifier"))
+        .isEqualTo("eli/bund/bgbl-1/1991/s102/1991-01-01/1/deu");
+
+    // A date where 1 expression was in force return that expression
+    result =
+        JsonPath.parse(
+                mockMvc
+                    .perform(
+                        get(ApiConfig.Paths.LEGISLATION
+                                + "?eli="
+                                + NormsTestData.S_102_WORK_ELI
+                                + "&mostRelevantOn=1991-06-01")
+                            .contentType(MediaType.APPLICATION_JSON))
+                    .andReturn()
+                    .getResponse()
+                    .getContentAsString())
+            .json();
+    assertThat((Integer) JsonPath.read(result, "$.member.length()")).isEqualTo(1);
+    assertThat((String) JsonPath.read(result, "$.member[0].item.workExample.legislationIdentifier"))
+        .isEqualTo("eli/bund/bgbl-1/1991/s102/1991-01-01/1/deu");
+
+    // A date where no expressions were in force should return the next to be in force
+    result =
+        JsonPath.parse(
+                mockMvc
+                    .perform(
+                        get(ApiConfig.Paths.LEGISLATION
+                                + "?eli="
+                                + NormsTestData.S_102_WORK_ELI
+                                + "&mostRelevantOn=1996-01-01")
+                            .contentType(MediaType.APPLICATION_JSON))
+                    .andReturn()
+                    .getResponse()
+                    .getContentAsString())
+            .json();
+    assertThat((Integer) JsonPath.read(result, "$.member.length()")).isEqualTo(1);
+    assertThat((String) JsonPath.read(result, "$.member[0].item.workExample.legislationIdentifier"))
+        .isEqualTo("eli/bund/bgbl-1/1991/s102/2020-01-01/1/deu");
+
+    // A date far in the future will return the last expression (ausserkraft undefined)
+    result =
+        JsonPath.parse(
+                mockMvc
+                    .perform(
+                        get(ApiConfig.Paths.LEGISLATION
+                                + "?eli="
+                                + NormsTestData.S_102_WORK_ELI
+                                + "&mostRelevantOn=5000-01-01")
+                            .contentType(MediaType.APPLICATION_JSON))
+                    .andReturn()
+                    .getResponse()
+                    .getContentAsString())
+            .json();
+    assertThat((Integer) JsonPath.read(result, "$.member.length()")).isEqualTo(1);
+    assertThat((String) JsonPath.read(result, "$.member[0].item.workExample.legislationIdentifier"))
+        .isEqualTo("eli/bund/bgbl-1/1991/s102/2050-01-01/1/deu");
   }
 }
