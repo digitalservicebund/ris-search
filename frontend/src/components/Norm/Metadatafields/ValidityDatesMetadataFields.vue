@@ -8,18 +8,12 @@ interface Props {
   validTo?: Dayjs;
 }
 
-defineProps<Props>();
+const { validFrom, validTo } = defineProps<Props>();
+const formattedValidFrom = computed(() => dateFormattedDDMMYYYY(validFrom));
+const formattedValidTo = computed(() => dateFormattedDDMMYYYY(validTo));
 </script>
 
 <template>
-  <MetadataField
-    id="validFrom"
-    label="Gültig ab"
-    :value="dateFormattedDDMMYYYY(validFrom) ?? '-'"
-  />
-  <MetadataField
-    id="validTo"
-    label="Gültig bis"
-    :value="dateFormattedDDMMYYYY(validTo) ?? '-'"
-  />
+  <MetadataField label="Gültig ab" :value="formattedValidFrom" />
+  <MetadataField label="Gültig bis" :value="formattedValidTo" />
 </template>
