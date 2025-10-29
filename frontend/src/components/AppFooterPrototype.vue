@@ -62,6 +62,11 @@ const hideFeedbackForm = computed(() => route.path === "/feedback");
             >
           </li>
           <li>
+            <NuxtLink class="ris-link2-regular link-hover" to="/translations"
+              >English translations</NuxtLink
+            >
+          </li>
+          <li>
             <NuxtLink
               class="ris-link2-regular link-hover"
               to="/cookie-einstellungen"
