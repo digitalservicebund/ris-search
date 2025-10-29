@@ -2,9 +2,11 @@
 import bmjvLogo from "~/assets/img/BMJV_de_v1__Web_farbig.svg";
 import FeedbackForm from "~/components/Analytics/FeedbackForm.vue";
 import BackToTopLink from "~/components/BackToTopLink.vue";
+import { isPrototypeProfile } from "~/utils/profile";
 
 const route = useRoute();
 const hideFeedbackForm = computed(() => route.path === "/feedback");
+const isPrototype = isPrototypeProfile();
 </script>
 
 <template>
@@ -38,7 +40,7 @@ const hideFeedbackForm = computed(() => route.path === "/feedback");
         </div>
       </div>
       <div class="space-y-16">
-        <ul class="grid grid-flow-col grid-cols-2 grid-rows-4 gap-8">
+        <ul class="grid grid-flow-col grid-cols-2 grid-rows-5 gap-8">
           <li>
             <NuxtLink class="ris-link2-regular link-hover" to="/kontakt"
               >Kontakt</NuxtLink
@@ -71,6 +73,11 @@ const hideFeedbackForm = computed(() => route.path === "/feedback");
               class="ris-link2-regular link-hover"
               to="/cookie-einstellungen"
               >Cookie-Einstellungen</NuxtLink
+            >
+          </li>
+          <li v-if="!isPrototype">
+            <NuxtLink class="ris-link2-regular link-hover" href="/translations"
+              >English translations</NuxtLink
             >
           </li>
           <li>
