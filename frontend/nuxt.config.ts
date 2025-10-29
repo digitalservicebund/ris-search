@@ -69,6 +69,12 @@ export default defineNuxtConfig({
         },
         { rel: "manifest", href: "/site.webmanifest" },
       ],
+      script: [
+        {
+          innerHTML: 'document.documentElement.classList.add("js");',
+          tagPosition: "head",
+        },
+      ],
     },
   },
   srcDir: "src/",
@@ -141,6 +147,7 @@ export default defineNuxtConfig({
   security: {
     strict: config.production,
     headers: {
+      referrerPolicy: "same-origin",
       contentSecurityPolicy: {
         "style-src": ["'self'", "https:", "'unsafe-inline'"],
         "img-src": ["'self'", "data:", "'unsafe-inline'"],

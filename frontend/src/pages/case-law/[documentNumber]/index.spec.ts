@@ -330,8 +330,8 @@ describe("case law single view page", async () => {
       },
     });
 
-    const tabButton = wrapper.get("button[aria-label*='Details']");
-    await tabButton.trigger("click");
+    const detailsTabLink = wrapper.get("a[href='#details']");
+    await detailsTabLink.trigger("click");
 
     const zipLink = wrapper.get("[data-attr='xml-zip-view']");
     expect(zipLink).toBeTruthy();

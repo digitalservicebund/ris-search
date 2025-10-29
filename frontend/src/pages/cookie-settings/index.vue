@@ -11,6 +11,21 @@ import IconClose from "~icons/ic/close";
 definePageMeta({ alias: ["/cookie-einstellungen"] });
 
 const store = usePostHogStore();
+
+if (import.meta.server) {
+  const cookieHeader = useRequestHeaders(["cookie"]);
+  const cookies = cookieHeader.cookie || "";
+  const consentMatch = cookies.match(/consent_given=([^;]+)/);
+  if (consentMatch) {
+    const consentValue = consentMatch[1];
+    store.userConsent = consentValue === "true";
+  }
+}
+
+onMounted(() => {
+  store.initialize();
+});
+
 const { userConsent } = storeToRefs(store);
 function handleSetTracking(value: boolean) {
   store.setTracking(value);
@@ -30,57 +45,56 @@ useStaticPageSeo("cookies");
         <h2 class="ris-heading2-regular mb-40 hidden md:block">
           Sind Sie mit der Nutzung von Analyse-Cookies einverstanden?
         </h2>
-        <noscript>
-          <div class="w-fit" data-testid="no-javascript-warning">
-            <Message severity="info" class="ris-body2-regular bg-white">
-              <template #icon>
-                <IconClose class="text-blue-800" />
-              </template>
+        <div class="mb-40 w-fit" data-testid="consent-status-wrapper">
+          <Message severity="info" class="ris-body2-regular mb-40 bg-white">
+            <template #icon>
+              <IconCheck v-if="userConsent === true" class="text-blue-800" />
+              <IconClose v-else class="text-blue-800" />
+            </template>
+            <div v-if="userConsent === true">
               <p class="ris-body2-bold">
-                Es werden keine Analyse-Cookies erfasst.
+                Ich bin mit der Nutzung von Analyse-Cookies einverstanden.
               </p>
-            </Message>
-          </div>
-        </noscript>
-        <client-only>
-          <div class="mb-40 w-fit" data-testid="consent-status-wrapper">
-            <Message severity="info" class="ris-body2-regular mb-40 bg-white">
-              <template #icon>
-                <IconCheck v-if="userConsent === true" class="text-blue-800" />
-                <IconClose v-else class="text-blue-800" />
-              </template>
-              <div v-if="userConsent === true">
-                <p class="ris-body2-bold">
-                  Ich bin mit der Nutzung von Analyse-Cookies einverstanden.
-                </p>
-                <p>Damit helfen Sie uns, das Portal weiter zu verbessern.</p>
-              </div>
-              <div v-else>
-                <p class="ris-body2-bold">
-                  Ich bin mit der Nutzung von Analyse-Cookies nicht
-                  einverstanden.
-                </p>
-                <p>
-                  Ihre Nutzung des Portals wird nicht zu Analysezwecken erfasst.
-                </p>
-              </div>
-            </Message>
+              <p>Damit helfen Sie uns, das Portal weiter zu verbessern.</p>
+            </div>
+            <div v-else>
+              <p class="ris-body2-bold">
+                Ich bin mit der Nutzung von Analyse-Cookies nicht einverstanden.
+              </p>
+              <p>
+                Ihre Nutzung des Portals wird nicht zu Analysezwecken erfasst.
+              </p>
+            </div>
+          </Message>
+          <form
+            v-if="userConsent === true"
+            action="/api/cookie-consent"
+            method="POST"
+            @submit.prevent="handleSetTracking(false)"
+          >
+            <input type="hidden" name="consent" value="false" />
             <PrimeVueButton
-              v-if="userConsent === true"
               aria-label="Cookie-Ablehnen-Button"
               label="Cookies ablehnen"
               data-testid="settings-decline-cookie"
-              @click="handleSetTracking(false)"
+              type="submit"
             />
+          </form>
+          <form
+            v-else
+            action="/api/cookie-consent"
+            method="POST"
+            @submit.prevent="handleSetTracking(true)"
+          >
+            <input type="hidden" name="consent" value="true" />
             <PrimeVueButton
-              v-else
               aria-label="Cookie-Akzeptieren-Button"
               label="Cookies akzeptieren"
               data-testid="settings-accept-cookie"
-              @click="handleSetTracking(true)"
+              type="submit"
             />
-          </div>
-        </client-only>
+          </form>
+        </div>
       </aside>
       <div class="mb-80 max-w-prose space-y-64">
         <p>

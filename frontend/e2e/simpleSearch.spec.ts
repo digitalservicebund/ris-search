@@ -422,3 +422,59 @@ test.describe("searching literature", () => {
     ).toBeVisible();
   });
 });
+
+test("search works without JavaScript", async ({ browser }) => {
+  const searchTerm = "Fiktiv";
+
+  const context = await browser.newContext({ javaScriptEnabled: false });
+  const page = await context.newPage();
+
+  await test.step("search from landing page", async () => {
+    await page.goto("/");
+    await page.getByPlaceholder("Suchbegriff eingeben").fill(searchTerm);
+    await page.getByRole("button", { name: "Suchen" }).click();
+
+    await page.waitForURL(`/search?query=${searchTerm}`);
+    expect(await getDisplayedResultCount(page)).toBeGreaterThan(0);
+    await expect(page.getByPlaceholder("Suchbegriff eingeben")).toHaveValue(
+      searchTerm,
+    );
+  });
+
+  await test.step("search from search page", async () => {
+    const newSearchTerm = "Test";
+    await page.getByPlaceholder("Suchbegriff eingeben").fill(newSearchTerm);
+    await page.getByRole("button", { name: "Suchen" }).click();
+
+    await page.waitForURL(`/search?query=${newSearchTerm}`);
+    expect(await getDisplayedResultCount(page)).toBeGreaterThan(0);
+    await expect(page.getByPlaceholder("Suchbegriff eingeben")).toHaveValue(
+      newSearchTerm,
+    );
+  });
+
+  await context.close();
+});
+
+test("pagination works without JavaScript", async ({ browser }) => {
+  const context = await browser.newContext({ javaScriptEnabled: false });
+  const page = await context.newPage();
+
+  await page.goto("/search?query=und", { waitUntil: "networkidle" });
+
+  expect(await getDisplayedResultCount(page)).toBe(12);
+
+  await page.getByLabel("nächste Ergebnisse").click();
+  await page.waitForURL("/search?query=und&pageNumber=1", {
+    waitUntil: "networkidle",
+  });
+
+  expect(await getDisplayedResultCount(page)).toBe(12);
+
+  await page.getByLabel("vorherige Ergebnisse").click();
+  await page.waitForURL("/search?query=und", { waitUntil: "networkidle" });
+
+  expect(await getDisplayedResultCount(page)).toBe(12);
+
+  await context.close();
+});
