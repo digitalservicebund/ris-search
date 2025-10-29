@@ -23,6 +23,7 @@ describe("SearchResult.vue", () => {
 
     expect(wrapper.find("caselaw-search-result-stub").isVisible()).toBe(true);
   });
+
   it("shows the correct result for Legislation", () => {
     const wrapper = mount(SearchResultComponent, {
       props: {
@@ -36,6 +37,7 @@ describe("SearchResult.vue", () => {
 
     expect(wrapper.find("norm-search-result-stub").isVisible()).toBe(true);
   });
+
   it("shows the correct result for literature", () => {
     const wrapper = mount(SearchResultComponent, {
       props: {
@@ -51,6 +53,7 @@ describe("SearchResult.vue", () => {
       true,
     );
   });
+
   it("shows nothing for another type", () => {
     const wrapper = mount(SearchResultComponent, {
       props: {
@@ -62,6 +65,6 @@ describe("SearchResult.vue", () => {
       shallow: true,
     });
 
-    expect(wrapper.html()).toBe("<!--v-if-->");
+    expect(wrapper.html()).toBe("<!-- @vue-expect-error -->\n<!--v-if-->");
   });
 });

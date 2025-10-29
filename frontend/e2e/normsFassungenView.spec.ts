@@ -1,5 +1,4 @@
-import { test } from "@playwright/test";
-import { expect } from "./fixtures";
+import { expect, test } from "./utils/fixtures";
 
 const expectedVersionData = [
   {

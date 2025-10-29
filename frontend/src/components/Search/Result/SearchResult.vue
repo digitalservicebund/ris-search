@@ -1,14 +1,13 @@
 <script setup lang="ts">
-import CaselawSearchResult from "~/components/Search/Result/Caselaw/CaselawSearchResult.vue";
-import LiteratureSearchResult from "~/components/Search/Result/Literature/LiteratureSearchResult.vue";
-import NormSearchResult from "~/components/Search/Result/Norms/NormSearchResult.vue";
-import type {
-  CaseLaw,
-  LegislationWork,
-  AnyDocument,
-  SearchResult,
-  Literature,
-} from "~/types";
+import CaselawSearchResult from "~/components/Search/Result/CaselawSearchResult.vue";
+import LiteratureSearchResult from "~/components/Search/Result/LiteratureSearchResult.vue";
+import NormSearchResult from "~/components/Search/Result/NormSearchResult.vue";
+import type { AnyDocument, SearchResult } from "~/types";
+import {
+  isCaselaw,
+  isLegislationWork,
+  isLiterature,
+} from "~/utils/anyDocument";
 
 const props = defineProps<{
   searchResult: SearchResult<AnyDocument>;
@@ -17,19 +16,22 @@ const props = defineProps<{
 </script>
 
 <template>
+  <!-- @vue-expect-error -->
   <CaselawSearchResult
-    v-if="props.searchResult.item['@type'] === 'Decision'"
-    :search-result="props.searchResult as SearchResult<CaseLaw>"
+    v-if="isCaselaw(props.searchResult.item)"
+    :search-result="props.searchResult"
     :order="props.order"
   />
+
   <NormSearchResult
-    v-else-if="props.searchResult.item['@type'] === 'Legislation'"
-    :search-result="props.searchResult as SearchResult<LegislationWork>"
+    v-else-if="isLegislationWork(props.searchResult.item)"
+    :search-result="props.searchResult"
     :order="props.order"
   />
+
   <LiteratureSearchResult
-    v-else-if="props.searchResult.item['@type'] === 'Literature'"
-    :search-result="props.searchResult as SearchResult<Literature>"
+    v-else-if="isLiterature(props.searchResult.item)"
+    :search-result="props.searchResult"
     :order="props.order"
   />
 </template>

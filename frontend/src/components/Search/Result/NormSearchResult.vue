@@ -54,22 +54,23 @@ function openResult(url: string) {
 </script>
 
 <template>
-  <div class="my-36 hyphens-auto" data-testid="searchResult">
-    <div class="ris-label2-regular flex flex-row flex-wrap items-center gap-8">
-      <div class="flex items-center">
+  <article class="my-36 flex flex-col gap-8 hyphens-auto">
+    <p class="ris-label2-regular flex flex-row flex-wrap items-center gap-8">
+      <span class="flex items-center">
         <LegalIcon class="mr-4 h-16 text-gray-900" />
         <span>Norm</span>
-      </div>
+      </span>
       <span v-if="item.abbreviation">{{ item.abbreviation }}</span>
       <span v-if="formattedDate">{{ formattedDate }}</span>
-    </div>
+    </p>
+
     <NuxtLink
       v-if="!!link"
       :to="link"
-      class="ris-heading3-bold max-w-title link-hover mt-8 block text-blue-800"
+      class="ris-heading3-bold max-w-title link-hover block text-blue-800"
       @click="openResult(link)"
     >
-      <div
+      <h2
         v-html="
           headline
             ? sanitizeSearchResult(headline)
@@ -79,7 +80,7 @@ function openResult(url: string) {
     </NuxtLink>
 
     <div
-      class="mt-6 flex w-full max-w-prose flex-col gap-6"
+      class="flex w-full max-w-prose flex-col gap-6"
       data-testid="highlights"
     >
       <div
@@ -87,7 +88,7 @@ function openResult(url: string) {
         :key="highlight.name + index"
         class="flex flex-col"
       >
-        <div class="ris-label1-bold mt-8">
+        <div class="ris-label1-bold">
           <NuxtLink
             class="link-hover text-blue-800"
             :to="`${link}#${highlight.location || ''}`"
@@ -101,5 +102,5 @@ function openResult(url: string) {
         />
       </div>
     </div>
-  </div>
+  </article>
 </template>
