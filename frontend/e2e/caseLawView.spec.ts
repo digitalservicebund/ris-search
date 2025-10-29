@@ -3,7 +3,6 @@ import { expect, test } from "./utils/fixtures";
 
 async function getSidebar(page: Page) {
   const navigation = page.getByRole("navigation", { name: "Seiteninhalte" });
-  await navigation.scrollIntoViewIfNeeded();
   await expect(navigation).toBeVisible();
   return navigation;
 }
@@ -29,8 +28,10 @@ test("can view a single case law documentation unit", async ({
 
     await firstSectionHeader.scrollIntoViewIfNeeded();
 
-    const currentSection = sidebar.locator('a[aria-current="section"]');
-    await expect(currentSection).toHaveCount(1);
+    await expect(async () => {
+      const currentSection = sidebar.locator('a[aria-current="section"]');
+      await expect(currentSection).toHaveCount(1);
+    }).toPass();
   });
 
   if (isMobileTest)
@@ -53,10 +54,13 @@ test("can view a single case law documentation unit", async ({
           .getByRole("heading", { name: sectionName })
           .first();
         await sectionHeading.scrollIntoViewIfNeeded();
-        await expect(expectedSidebarItem).toHaveAttribute(
-          "aria-current",
-          "section",
-        );
+
+        await expect(async () => {
+          await expect(expectedSidebarItem).toHaveAttribute(
+            "aria-current",
+            "section",
+          );
+        }).toPass();
 
         const heading = page
           .getByRole("main")
