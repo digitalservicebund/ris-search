@@ -8,6 +8,7 @@ import CourtFilter from "~/components/Search/SimpleSearch/CourtFilter.vue";
 import DateRangeFilter from "~/components/Search/SimpleSearch/DateRangeFilter.vue";
 import ItemsPerPageDropdown from "~/components/Search/SimpleSearch/ItemsPerPageDropdown.vue";
 import SimpleSearchInput from "~/components/Search/SimpleSearch/SimpleSearchInput.vue";
+import YearRangeFilter from "~/components/Search/SimpleSearch/YearRangeFilter.vue";
 import SortSelect from "~/components/Search/SortSelect.vue";
 import { useSimpleSearchParamsStore } from "~/stores/searchParams";
 import { DocumentKind } from "~/types";
@@ -104,6 +105,7 @@ useHead({ title });
       <CategoryFilter />
       <CourtFilter />
       <DateRangeFilter v-if="documentKind === DocumentKind.CaseLaw" />
+      <YearRangeFilter v-if="documentKind === DocumentKind.Literature" />
     </fieldset>
     <div id="main" class="w-full flex-col justify-end gap-8 lg:w-9/12">
       <Pagination
