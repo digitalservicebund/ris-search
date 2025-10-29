@@ -9,7 +9,7 @@ import IcBaselineUpdate from "~icons/ic/baseline-update";
 
 export interface VersionWarningMessageProps {
   currentVersionValidityStatus?: ValidityStatus;
-  inForceVersionLink: string;
+  inForceVersionLink?: string;
   futureVersion?: LegislationWork;
   historicalWarningMessage: string;
   futureWarningMessage: string;
