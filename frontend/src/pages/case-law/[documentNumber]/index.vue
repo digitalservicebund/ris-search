@@ -211,9 +211,7 @@ if (contentError?.value) {
               <div class="case-law" v-html="html"></div>
             </template>
             <template #sidebar>
-              <client-only>
-                <TableOfContents :table-of-content-entries="tocEntries || []" />
-              </client-only>
+              <TableOfContents :entries="tocEntries || []" />
             </template>
           </SidebarLayout>
         </TabPanel>
