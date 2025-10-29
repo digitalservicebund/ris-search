@@ -113,4 +113,31 @@ describe("NormVersionWarning", () => {
 
     expect(container).toBeEmptyDOMElement();
   });
+
+  it("renders message but no link when no InForce version exists", () => {
+    const versionsWithoutInForce = [
+      testVersions[0]!,
+      testVersions[2]!,
+      testVersions[3]!,
+    ];
+
+    const { container } = render(NormVersionWarning, {
+      props: {
+        versions: versionsWithoutInForce,
+        currentVersion: testVersions[0]!.item,
+      },
+      global: {
+        stubs: {
+          RouterLink: {
+            props: ["to"],
+            template: '<a :href="to"><slot/></a>',
+          },
+        },
+      },
+    });
+
+    expect(screen.getByText("Historische Fassung.")).toBeInTheDocument();
+    expect(screen.queryByRole("link")).toBeNull();
+    expect(container).not.toBeEmptyDOMElement();
+  });
 });
