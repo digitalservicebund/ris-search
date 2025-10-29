@@ -51,6 +51,7 @@
             <akn:proprietary GUID="b0c1d2e3-f4a5-4890-abcd-901abcde1234" eId="meta-n1_proprietary-n1" source="attributsemantik-noch-undefiniert">
                 <ris:legalDocML.de_metadaten xmlns:ris="http://MetadatenRIS.LegalDocML.de/1.8.2/" xsi:schemaLocation="http://MetadatenRIS.LegalDocML.de/1.8.2/ ../schema/legalDocML.de-metadaten-ris.xsd">
                     <ris:inkraft date="2022-08-04"/>
+                    <ris:ausserkraft date="2030-01-01"/>
                 </ris:legalDocML.de_metadaten>
             </akn:proprietary>
         </akn:meta>
