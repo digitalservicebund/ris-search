@@ -84,7 +84,9 @@ describe("NormSearchResult.vue", () => {
 
   it("renders correctly with all props", () => {
     renderComponent();
-
+    vi.mock("~/utils/featureFlags", () => {
+      return { privateFeaturesEnabled: vi.fn().mockReturnValue(true) };
+    });
     expect(screen.getByText("TN")).toBeInTheDocument();
     expect(screen.getByText(/Norm/)).toBeInTheDocument();
     expect(screen.getByText("01.01.2000")).toBeInTheDocument();
