@@ -88,7 +88,7 @@ test.describe("actions menu", () => {
     page,
     browserName,
     context,
-    isMobile,
+    isMobileTest,
   }) => {
     await page.goto("/literature/TEST000000001", {
       waitUntil: "networkidle",
@@ -98,7 +98,7 @@ test.describe("actions menu", () => {
       await context.grantPermissions(["clipboard-read", "clipboard-write"]);
     }
 
-    if (isMobile) {
+    if (isMobileTest) {
       await page.getByLabel("Aktionen anzeigen").click();
     }
 
@@ -108,7 +108,7 @@ test.describe("actions menu", () => {
 
     await button.isVisible();
 
-    if (!isMobile) {
+    if (!isMobileTest) {
       await button.hover();
 
       await expect(
@@ -119,7 +119,7 @@ test.describe("actions menu", () => {
     }
 
     await button.click();
-    if (!isMobile) await expect(page.getByText("Kopiert!")).toBeVisible();
+    if (!isMobileTest) await expect(page.getByText("Kopiert!")).toBeVisible();
     if (browserName === "chromium") {
       const clipboardContents = await page.evaluate(() => {
         return navigator.clipboard.readText();
@@ -132,20 +132,20 @@ test.describe("actions menu", () => {
 
   test("can use 'print button' to open print menu", async ({
     page,
-    isMobile,
+    isMobileTest,
   }) => {
     await page.goto("/literature/TEST000000001", {
       waitUntil: "networkidle",
     });
-    if (isMobile) await page.getByLabel("Aktionen anzeigen").click();
+    if (isMobileTest) await page.getByLabel("Aktionen anzeigen").click();
 
-    const button = isMobile
+    const button = isMobileTest
       ? page.getByRole("menuitem", { name: "Drucken" })
       : page.getByRole("button", {
           name: "Drucken",
         });
 
-    if (!isMobile) {
+    if (!isMobileTest) {
       await button.hover();
 
       await expect(
@@ -163,18 +163,21 @@ test.describe("actions menu", () => {
     });
   });
 
-  test("can't use PDF action as it is disabled", async ({ page, isMobile }) => {
+  test("can't use PDF action as it is disabled", async ({
+    page,
+    isMobileTest,
+  }) => {
     await page.goto("/literature/TEST000000001", {
       waitUntil: "networkidle",
     });
-    if (isMobile) await page.getByLabel("Aktionen anzeigen").click();
-    const button = isMobile
+    if (isMobileTest) await page.getByLabel("Aktionen anzeigen").click();
+    const button = isMobileTest
       ? page.getByText("Als PDF speichern")
       : page.getByRole("button", {
           name: "Als PDF speichern",
         });
 
-    if (!isMobile) {
+    if (!isMobileTest) {
       await button.hover();
 
       await expect(
@@ -182,23 +185,23 @@ test.describe("actions menu", () => {
       ).toBeVisible();
     }
 
-    if (!isMobile) await expect(button).toBeDisabled();
+    if (!isMobileTest) await expect(button).toBeDisabled();
   });
 
   test("can use XML action to view literature xml file", async ({
     page,
-    isMobile,
+    isMobileTest,
   }) => {
     await page.goto("/literature/TEST000000001", {
       waitUntil: "networkidle",
     });
 
-    if (isMobile) await page.getByLabel("Aktionen anzeigen").click();
+    if (isMobileTest) await page.getByLabel("Aktionen anzeigen").click();
     const button = page.getByRole("link", {
       name: "XML anzeigen",
     });
 
-    if (!isMobile) {
+    if (!isMobileTest) {
       await button.hover();
 
       await expect(
