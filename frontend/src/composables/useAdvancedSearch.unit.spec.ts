@@ -80,7 +80,7 @@ describe("useAdvancedSearch", () => {
 
     expect(useFetchMock).toHaveBeenCalled();
     const urlQuery = useFetchMock.mock.calls[0]![1].query;
-    expect(urlQuery.value).toMatchObject({ query: "test query" });
+    expect(urlQuery.value).toMatchObject({ query: "test%20query" });
   });
 
   it("submits pagination parameters correctly", async () => {
