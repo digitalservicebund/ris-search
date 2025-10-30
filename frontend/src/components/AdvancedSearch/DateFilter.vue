@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { RadioButton } from "primevue";
-import RisDateInput from "../Ris/RisDateInput.vue";
+import RisDateInput from "~/components/Ris/RisDateInput.vue";
 import { DocumentKind } from "~/types";
 import type {
   DateFilterValue,
@@ -69,7 +69,6 @@ function setPeriodFrom(value: string | undefined) {
 
 function setPeriodTo(value: string | undefined) {
   filter.value = { type: "period", from: filter.value.from, to: value };
-  nextTick().then(() => console.log("setPeriodTo", filter.value, value));
 }
 </script>
 
