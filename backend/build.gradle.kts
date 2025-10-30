@@ -188,7 +188,7 @@ tasks {
         val containerImageVersion = System.getenv("CONTAINER_IMAGE_VERSION") ?: "latest"
 
         imageName.set("$containerRegistry/$containerImageName:$containerImageVersion")
-        builder.set("paketobuildpacks/builder-jammy-tiny")
+        builder.set("paketobuildpacks/builder-jammy-tiny:latest")
         publish.set(false)
         docker {
             publishRegistry {
