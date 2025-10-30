@@ -97,14 +97,19 @@ public class AllDocumentsService {
       @Nullable DocumentKind documentKind,
       Pageable pageable) {
 
-    NativeSearchQuery query =
-        simpleSearchQueryBuilder.buildQuery(
-            List.of(
-                new NormSimpleSearchType(normsParams),
-                new CaseLawSimpleSearchType(caseLawParams),
-                new LiteratureSimpleSearchType(literatureSearchParams)),
-            params,
-            pageable);
+    List<SimpleSearchType> searchTypes =
+        switch (documentKind) {
+          case LEGISLATION -> List.of(new NormSimpleSearchType(normsParams));
+          case CASELAW -> List.of(new CaseLawSimpleSearchType(caseLawParams));
+          case LITERATURE -> List.of(new LiteratureSimpleSearchType(literatureSearchParams));
+          case null ->
+              List.of(
+                  new NormSimpleSearchType(normsParams),
+                  new CaseLawSimpleSearchType(caseLawParams),
+                  new LiteratureSimpleSearchType(literatureSearchParams));
+        };
+
+    NativeSearchQuery query = simpleSearchQueryBuilder.buildQuery(searchTypes, params, pageable);
 
     if (documentKind == null) {
       return searchAllIndices(query, pageable);
