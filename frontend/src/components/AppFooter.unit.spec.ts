@@ -3,7 +3,7 @@ import { describe, it, expect, vi } from "vitest";
 import AppFooter from "~/components/AppFooter.vue";
 import { privateFeaturesEnabled } from "~/utils/featureFlags";
 
-vi.mock("~/utils/profile", () => ({
+vi.mock("~/utils/featureFlags", () => ({
   privateFeaturesEnabled: vi.fn<() => boolean>(),
 }));
 
@@ -17,7 +17,7 @@ describe("AppFooter", () => {
     },
   };
 
-  it("does not render 'English translations' when profile is prototype", () => {
+  it("does not render 'English translations' when privateFeatureEnabled is false", () => {
     mockedPrivateFeaturesEnabled.mockReturnValue(false);
     render(AppFooter, { global: { stubs: globalStubs } });
     expect(
@@ -25,7 +25,7 @@ describe("AppFooter", () => {
     ).toBeNull();
   });
 
-  it("renders 'English translations' when profile is not prototype", () => {
+  it("renders 'English translations' when privateFeatureEnabled is true", () => {
     mockedPrivateFeaturesEnabled.mockReturnValue(true);
     render(AppFooter, { global: { stubs: globalStubs } });
     const link = screen.getByRole("link", { name: "English translations" });

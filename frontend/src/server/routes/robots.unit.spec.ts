@@ -96,37 +96,39 @@ describe("robots txt route", () => {
   });
 
   const testCases = [
-    ["public", "robots.public.txt"],
-    ["internal", "robots.staging.txt"],
-    ["prototype", "robots.public.txt"],
+    [false, "robots.public.txt"],
+    [true, "robots.staging.txt"],
   ];
 
-  test.for(testCases)("profile %s serves %s", async ([profile, file]) => {
-    mockUseRuntimeConfig.mockImplementation(() => ({
-      risBackendUrl: "backendUrl",
-      public: {
-        profile: profile,
-      },
-    }));
+  test.for(testCases)(
+    "privateFeaturesEnabled flag = %s serves %s",
+    async ([privateFeaturesEnabled, file]) => {
+      mockUseRuntimeConfig.mockImplementation(() => ({
+        risBackendUrl: "backendUrl",
+        public: {
+          privateFeaturesEnabled,
+        },
+      }));
 
-    const mockEvent: H3Event<EventHandlerRequest> = {
-      node: {
-        req: {
-          originalUrl: "url",
-          headers: {
-            host: "origin",
-            "user-agent": "default",
+      const mockEvent: H3Event<EventHandlerRequest> = {
+        node: {
+          req: {
+            originalUrl: "url",
+            headers: {
+              host: "origin",
+              "user-agent": "default",
+            },
+          },
+          res: {
+            setHeader: vi.fn(),
           },
         },
-        res: {
-          setHeader: vi.fn(),
-        },
-      },
-    } as unknown as H3Event<EventHandlerRequest>;
+      } as unknown as H3Event<EventHandlerRequest>;
 
-    await middleware(mockEvent);
-    expect(mockFetch).toHaveBeenCalledWith(`http://origin/${file}`, {
-      method: "GET",
-    });
-  });
+      await middleware(mockEvent);
+      expect(mockFetch).toHaveBeenCalledWith(`http://origin/${file}`, {
+        method: "GET",
+      });
+    },
+  );
 });

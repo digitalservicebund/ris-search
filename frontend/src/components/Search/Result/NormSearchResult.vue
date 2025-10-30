@@ -35,10 +35,10 @@ const link = computed(() => {
 
 const formattedDate = computed(() => {
   const date = privateFeaturesEnabled()
-    ? item.value?.legislationDate
-    : temporalCoverageToValidityInterval(
+    ? temporalCoverageToValidityInterval(
         item.value?.workExample?.temporalCoverage,
-      )?.from;
+      )?.from
+    : item.value?.legislationDate;
 
   return dateFormattedDDMMYYYY(date);
 });
