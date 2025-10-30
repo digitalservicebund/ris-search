@@ -24,18 +24,18 @@ class LdmlTestDataSchemaConformanceTest {
 
   private static final List<String> SCHEMA_METADATA_FILES =
       List.of(
-          "Grammatiken/legalDocML.de-metadaten-ris.xsd",
-          "Grammatiken/legalDocML.de-metadaten-regelungstext.xsd",
-          "Grammatiken/legalDocML.de-metadaten-rechtsetzungsdokument.xsd");
+          "Grammatiken/Norms/legalDocML.de-metadaten-ris.xsd",
+          "Grammatiken/Norms/legalDocML.de-metadaten-regelungstext.xsd",
+          "Grammatiken/Norms/legalDocML.de-metadaten-rechtsetzungsdokument.xsd");
 
   private List<String> schemaFilesFor(String ldmlFile) {
     List<String> schemaFiles = new ArrayList<>(SCHEMA_METADATA_FILES);
     if (ldmlFile.contains("anlage-regelungstext")) {
-      schemaFiles.add("Grammatiken/legalDocML.de-offenestruktur.xsd");
+      schemaFiles.add("Grammatiken/Norms/legalDocML.de-offenestruktur.xsd");
     } else if (ldmlFile.contains("rechtsetzungsdokument")) {
-      schemaFiles.add("Grammatiken/legalDocML.de-rechtsetzungsdokument.xsd");
+      schemaFiles.add("Grammatiken/Norms/legalDocML.de-rechtsetzungsdokument.xsd");
     } else {
-      schemaFiles.add("Grammatiken/legalDocML.de-regelungstextverkuendungsfassung.xsd");
+      schemaFiles.add("Grammatiken/Norms/legalDocML.de-regelungstextverkuendungsfassung.xsd");
     }
 
     return schemaFiles;
