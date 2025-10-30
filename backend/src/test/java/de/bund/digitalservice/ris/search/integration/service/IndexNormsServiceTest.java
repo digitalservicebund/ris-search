@@ -38,8 +38,8 @@ class IndexNormsServiceTest extends ContainersIntegrationBase {
   }
 
   @Test
-  @DisplayName("One expression has full relevance window")
-  void oneExpressionHasFullRelevanceWindow() throws IOException {
+  @DisplayName("One expression has full time relevance window")
+  void oneExpressionHasFullTimeRelevanceWindow() throws IOException {
     // This test is for the prototype which won't have inkraft properly defined until 2028
     String workEli = "eli/bund/bgbl-1/1991/s101";
     String normFile1 = workEli + "/1991-01-01/1/deu/1991-01-01/regelungstext-1.xml";
@@ -47,28 +47,30 @@ class IndexNormsServiceTest extends ContainersIntegrationBase {
     indexNormsService.reindexAll(Instant.now().toString());
     List<Norm> expressions = normsRepository.getByWorkEli(workEli);
     assertThat(expressions).hasSize(1);
-    assertThat(expressions.getFirst().getRelevanceStartDate())
-        .isEqualTo(IndexNormsService.RELEVANCE_MIN);
-    assertThat(expressions.getFirst().getRelevanceEndDate())
-        .isEqualTo(IndexNormsService.RELEVANCE_MAX);
+    assertThat(expressions.getFirst().getTimeRelevanceStartDate())
+        .isEqualTo(IndexNormsService.TIME_RELEVANCE_MIN);
+    assertThat(expressions.getFirst().getTimeRelevanceEndDate())
+        .isEqualTo(IndexNormsService.TIME_RELEVANCE_MAX);
   }
 
   @Test
-  @DisplayName("Two expressions cover full relevance window")
-  void twoExpressionsCoverFullRelevanceWindow() {
+  @DisplayName("Three expressions cover full time relevance window")
+  void threeExpressionsCoverFullTimeRelevanceWindow() {
     indexNormsService.reindexAll(Instant.now().toString());
     List<Norm> expressions = normsRepository.getByWorkEli("eli/bund/bgbl-1/1991/s102");
     assertThat(expressions).hasSize(3);
 
     expressions.sort(Comparator.comparing(Norm::getId));
 
-    assertThat(expressions.getFirst().getRelevanceStartDate())
-        .isEqualTo(IndexNormsService.RELEVANCE_MIN);
-    assertThat(expressions.getFirst().getRelevanceEndDate()).isEqualTo(LocalDate.of(1995, 1, 1));
-    assertThat(expressions.get(1).getRelevanceStartDate()).isEqualTo(LocalDate.of(1995, 1, 2));
-    assertThat(expressions.get(1).getRelevanceEndDate()).isEqualTo(LocalDate.of(2049, 12, 31));
-    assertThat(expressions.getLast().getRelevanceStartDate()).isEqualTo(LocalDate.of(2050, 1, 1));
-    assertThat(expressions.getLast().getRelevanceEndDate())
-        .isEqualTo(IndexNormsService.RELEVANCE_MAX);
+    assertThat(expressions.getFirst().getTimeRelevanceStartDate())
+        .isEqualTo(IndexNormsService.TIME_RELEVANCE_MIN);
+    assertThat(expressions.getFirst().getTimeRelevanceEndDate())
+        .isEqualTo(LocalDate.of(1995, 1, 1));
+    assertThat(expressions.get(1).getTimeRelevanceStartDate()).isEqualTo(LocalDate.of(1995, 1, 2));
+    assertThat(expressions.get(1).getTimeRelevanceEndDate()).isEqualTo(LocalDate.of(2049, 12, 31));
+    assertThat(expressions.getLast().getTimeRelevanceStartDate())
+        .isEqualTo(LocalDate.of(2050, 1, 1));
+    assertThat(expressions.getLast().getTimeRelevanceEndDate())
+        .isEqualTo(IndexNormsService.TIME_RELEVANCE_MAX);
   }
 }

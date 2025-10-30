@@ -70,10 +70,10 @@ public class NormSimpleSearchType implements SimpleSearchType {
     }
     if (normsSearchParams.getMostRelevantOn() != null) {
       query.filter(
-          QueryBuilders.rangeQuery(Norm.Fields.RELEVANCE_START_DATE)
+          QueryBuilders.rangeQuery(Norm.Fields.TIME_RELEVANCE_START_DATE)
               .lte(normsSearchParams.getMostRelevantOn()));
       query.filter(
-          QueryBuilders.rangeQuery(Norm.Fields.RELEVANCE_END_DATE)
+          QueryBuilders.rangeQuery(Norm.Fields.TIME_RELEVANCE_END_DATE)
               .gte(normsSearchParams.getMostRelevantOn()));
     }
     DateUtils.buildQueryForTemporalCoverage(

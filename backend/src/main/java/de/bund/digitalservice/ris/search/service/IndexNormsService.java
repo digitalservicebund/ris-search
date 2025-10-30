@@ -39,8 +39,8 @@ public class IndexNormsService implements IndexService {
   private final NormsBucket normsBucket;
 
   // We can't use LocalDate.MIN or LocalDate.MAX because opensearch min and max differ from java
-  public static final LocalDate RELEVANCE_MIN = LocalDate.of(1, 1, 1);
-  public static final LocalDate RELEVANCE_MAX = LocalDate.of(9999, 1, 1);
+  public static final LocalDate TIME_RELEVANCE_MIN = LocalDate.of(1, 1, 1);
+  public static final LocalDate TIME_RELEVANCE_MAX = LocalDate.of(9999, 1, 1);
 
   @Autowired
   public IndexNormsService(NormsBucket normsBucket, NormsRepository normsRepository) {
@@ -107,19 +107,19 @@ public class IndexNormsService implements IndexService {
       }
     }
 
-    addRelevanceWindows(workEli.toString(), normsToIndex);
+    addTimeRelevanceWindows(workEli.toString(), normsToIndex);
     normsRepository.saveAll(normsToIndex);
 
     // delete the expressions from this work that were indexed before the start time
     normsRepository.deleteByWorkEliAndIndexedAtBefore(workEli.toString(), startingTimestamp);
   }
 
-  private void addRelevanceWindows(String workEli, List<Norm> norms) {
+  private void addTimeRelevanceWindows(String workEli, List<Norm> norms) {
     // Prototype won't have valid norms (in terms of ris:inkraft) until 2028
     // This check is for prototype
     if (norms.size() == 1) {
-      norms.getFirst().setRelevanceStartDate(RELEVANCE_MIN);
-      norms.getFirst().setRelevanceEndDate(RELEVANCE_MAX);
+      norms.getFirst().setTimeRelevanceStartDate(TIME_RELEVANCE_MIN);
+      norms.getFirst().setTimeRelevanceEndDate(TIME_RELEVANCE_MAX);
       return;
     }
 
@@ -134,13 +134,13 @@ public class IndexNormsService implements IndexService {
     // * All entries have inkraft not null
     // * All entries except possibly the last one have ausserkraft not null
 
-    norms.getFirst().setRelevanceStartDate(RELEVANCE_MIN);
+    norms.getFirst().setTimeRelevanceStartDate(TIME_RELEVANCE_MIN);
     for (int i = 0; i < norms.size() - 1; i++) {
       LocalDate relevanceEndDate = norms.get(i).getExpiryDate();
-      norms.get(i).setRelevanceEndDate(relevanceEndDate);
-      norms.get(i + 1).setRelevanceStartDate(relevanceEndDate.plus(Period.ofDays(1)));
+      norms.get(i).setTimeRelevanceEndDate(relevanceEndDate);
+      norms.get(i + 1).setTimeRelevanceStartDate(relevanceEndDate.plus(Period.ofDays(1)));
     }
-    norms.getLast().setRelevanceEndDate(RELEVANCE_MAX);
+    norms.getLast().setTimeRelevanceEndDate(TIME_RELEVANCE_MAX);
   }
 
   private void filterAndSortNorms(String workEli, List<Norm> norms) {
@@ -157,20 +157,26 @@ public class IndexNormsService implements IndexService {
 
     // Only the norm with the largest ris:inkraft can have ris:ausserkraft null, so we remove others
     // with ris:ausserkraft null
-    Norm lastNorm = norms.getLast();
-    norms.remove(lastNorm);
-    norms.removeIf(e -> e.getExpiryDate() == null);
-    norms.add(lastNorm);
+    String lastNormId = norms.getLast().getId();
+    norms.removeIf(e -> e.getExpiryDate() == null && !lastNormId.equals(e.getId()));
 
     // validate that in force ranges don't overlap
+    validateExpressionsDontOverlap(workEli, norms);
+  }
+
+  private static void validateExpressionsDontOverlap(String workEli, List<Norm> norms) {
     for (int i = 1; i < norms.size(); i++) {
-      if (!norms.get(i).getEntryIntoForceDate().isAfter(norms.get(i - 1).getExpiryDate())) {
+      if (norm2StartsBeforeNorm1Ends(norms.get(i - 1), norms.get(i))) {
         logger.warn(
             "Trying to index {}, but expressions' inkraft and ausserkraft overlap.", workEli);
         norms.clear();
         return;
       }
     }
+  }
+
+  private static boolean norm2StartsBeforeNorm1Ends(Norm norm1, Norm norm2) {
+    return !norm2.getEntryIntoForceDate().isAfter(norm1.getExpiryDate());
   }
 
   private Optional<Norm> getNormFromS3(ExpressionEli expressionEli)

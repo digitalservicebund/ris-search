@@ -73,11 +73,11 @@ public final class Norm implements AbstractSearchEntity {
   @Field(name = Fields.EXPIRY_DATE, type = FieldType.Date, format = DateFormat.date)
   private LocalDate expiryDate;
 
-  @Field(name = Fields.RELEVANCE_START_DATE, type = FieldType.Date, format = DateFormat.date)
-  private LocalDate relevanceStartDate;
+  @Field(name = Fields.TIME_RELEVANCE_START_DATE, type = FieldType.Date, format = DateFormat.date)
+  private LocalDate timeRelevanceStartDate;
 
-  @Field(name = Fields.RELEVANCE_END_DATE, type = FieldType.Date, format = DateFormat.date)
-  private LocalDate relevanceEndDate;
+  @Field(name = Fields.TIME_RELEVANCE_END_DATE, type = FieldType.Date, format = DateFormat.date)
+  private LocalDate timeRelevanceEndDate;
 
   @Field(name = Fields.ARTICLES, type = FieldType.Nested)
   private List<Article> articles;
@@ -108,8 +108,8 @@ public final class Norm implements AbstractSearchEntity {
     public static final String ARTICLE_TEXTS = "article_texts";
     public static final String ENTRY_INTO_FORCE_DATE = "entry_into_force_date";
     public static final String EXPIRY_DATE = "expiry_date";
-    public static final String RELEVANCE_START_DATE = "relevance_start_date";
-    public static final String RELEVANCE_END_DATE = "relevance_end_date";
+    public static final String TIME_RELEVANCE_START_DATE = "time_relevance_start_date";
+    public static final String TIME_RELEVANCE_END_DATE = "time_relevance_end_date";
     public static final String ID = "id";
     public static final String INDEXED_AT = "indexed_at";
     public static final String NORMS_DATE = "norms_date";
