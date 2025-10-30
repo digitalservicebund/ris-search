@@ -33,10 +33,10 @@ import { useDynamicSeo } from "~/composables/useDynamicSeo";
 import { useIntersectionObserver } from "~/composables/useIntersectionObserver";
 import { useFetchNormContent } from "~/composables/useNormData";
 import { useNormVersions } from "~/composables/useNormVersions";
+import { usePrivateFeaturesFlag } from "~/composables/usePrivateFeaturesFlag";
 import { DocumentKind, type LegislationWork } from "~/types";
 import { dateFormattedDDMMYYYY } from "~/utils/dateFormatting";
 import { formatDocumentKind } from "~/utils/displayValues";
-import { privateFeaturesEnabled } from "~/utils/featureFlags";
 import {
   getNormBreadcrumbTitle,
   getValidityStatus,
@@ -61,6 +61,7 @@ definePageMeta({
 
 const route = useRoute();
 const expressionEli = Object.values(route.params).join("/");
+const privateFeaturesEnabled = usePrivateFeaturesFlag();
 
 const { data, error, status } = await useFetchNormContent(expressionEli);
 
@@ -92,7 +93,7 @@ const tableOfContents: Ref<TreeNode[]> = computed(() => {
 });
 
 const validityInterval = computed(() =>
-  privateFeaturesEnabled()
+  privateFeaturesEnabled
     ? temporalCoverageToValidityInterval(
         metadata.value?.workExample.temporalCoverage,
       )
@@ -146,22 +147,9 @@ const buildOgTitle = (
   const baseTitle = abbreviation || shortTitle || "";
 
   if (!baseTitle) return undefined;
+  const parts: string[] = [baseTitle];
 
-  if (!privateFeaturesEnabled()) {
-    const parts: string[] = [baseTitle];
-
-    if (validFrom) {
-      parts.push("Fassung vom [Inkrafttreten]");
-    }
-
-    if (status) {
-      parts.push("[Status]");
-    }
-    const placeholder = parts.join(", ");
-    return truncateAtWord(placeholder, 55) || undefined;
-  } else {
-    const parts: string[] = [baseTitle];
-
+  if (privateFeaturesEnabled) {
     const formattedValidFrom = dateFormattedDDMMYYYY(validFrom);
     if (formattedValidFrom) {
       parts.push(`Fassung vom ${formattedValidFrom}`);
@@ -174,6 +162,16 @@ const buildOgTitle = (
 
     return truncateAtWord(parts.join(", "), 55) || undefined;
   }
+
+  if (validFrom) {
+    parts.push("Fassung vom [Inkrafttreten]");
+  }
+
+  if (status) {
+    parts.push("[Status]");
+  }
+  const placeholder = parts.join(", ");
+  return truncateAtWord(placeholder, 55) || undefined;
 };
 
 const title = computed<string | undefined>(() =>
@@ -324,7 +322,7 @@ useDynamicSeo({ title, description });
           </TabPanel>
           <TabPanel value="2" :pt="tabPanelStyles" class="pt-24 pb-80">
             <NormVersionList
-              v-if="privateFeaturesEnabled()"
+              v-if="privateFeaturesEnabled"
               class="container"
               :status="normVersionsStatus"
               :current-legislation-identifier="

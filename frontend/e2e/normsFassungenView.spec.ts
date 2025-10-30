@@ -18,6 +18,13 @@ const expectedVersionData = [
   },
 ];
 
+test.beforeAll(async ({ privateFeaturesEnabled }) => {
+  test.skip(
+    !privateFeaturesEnabled,
+    "This feature is not available for public",
+  );
+});
+
 test("can browse different Fassungen of a norm", async ({ page }) => {
   await page.goto("/norms/eli/bund/bgbl-1/2020/s1126/2020-08-04/1/deu", {
     waitUntil: "networkidle",

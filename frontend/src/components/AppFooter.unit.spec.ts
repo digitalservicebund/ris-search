@@ -1,13 +1,13 @@
 import { render, screen } from "@testing-library/vue";
 import { describe, it, expect, vi } from "vitest";
 import AppFooter from "~/components/AppFooter.vue";
-import { privateFeaturesEnabled } from "~/utils/featureFlags";
+import { usePrivateFeaturesFlag } from "~/composables/usePrivateFeaturesFlag";
 
-vi.mock("~/utils/featureFlags", () => ({
-  privateFeaturesEnabled: vi.fn<() => boolean>(),
+vi.mock("~/composables/usePrivateFeaturesFlag", () => ({
+  usePrivateFeaturesFlag: vi.fn<() => boolean>(),
 }));
 
-const mockedPrivateFeaturesEnabled = vi.mocked(privateFeaturesEnabled);
+const mockedPrivateFeaturesEnabled = vi.mocked(usePrivateFeaturesFlag);
 
 describe("AppFooter", () => {
   const globalStubs = {

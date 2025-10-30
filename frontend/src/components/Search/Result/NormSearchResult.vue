@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import LegalIcon from "virtual:icons/mdi/legal";
+import { usePrivateFeaturesFlag } from "~/composables/usePrivateFeaturesFlag";
 import { usePostHogStore } from "~/stores/usePostHogStore";
 import type { LegislationWork, SearchResult, TextMatch } from "~/types";
 import { dateFormattedDDMMYYYY } from "~/utils/dateFormatting";
-import { privateFeaturesEnabled } from "~/utils/featureFlags";
 import { temporalCoverageToValidityInterval } from "~/utils/norm";
 import { sanitizeSearchResult } from "~/utils/sanitize";
 import { addEllipsis } from "~/utils/textFormatting";
@@ -33,8 +33,10 @@ const link = computed(() => {
   return prefix + expressionEli;
 });
 
+const privateFeaturesEnabled = usePrivateFeaturesFlag();
+
 const formattedDate = computed(() => {
-  const date = privateFeaturesEnabled()
+  const date = privateFeaturesEnabled
     ? temporalCoverageToValidityInterval(
         item.value?.workExample?.temporalCoverage,
       )?.from

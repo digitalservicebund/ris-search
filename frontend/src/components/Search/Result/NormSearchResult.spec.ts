@@ -1,8 +1,7 @@
 import { render, screen } from "@testing-library/vue";
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import NormSearchResult from "./NormSearchResult.vue";
 import type { LegislationWork, SearchResult, TextMatch } from "~/types";
-import * as Config from "~/utils/featureFlags";
 
 const mockSearchResult: SearchResult<LegislationWork> = {
   item: {
@@ -77,16 +76,25 @@ function renderComponent(
   });
 }
 
+const mocks = vi.hoisted(() => {
+  return {
+    usePrivateFeaturesFlag: vi.fn().mockReturnValue(false),
+  };
+});
+
+vi.mock("~/composables/usePrivateFeaturesFlag", () => {
+  return { usePrivateFeaturesFlag: mocks.usePrivateFeaturesFlag };
+});
+
 describe("NormSearchResult.vue", () => {
-  afterEach(() => {
+  beforeEach(() => {
+    vi.clearAllMocks();
     vi.restoreAllMocks();
   });
 
   it("renders correctly with all props", () => {
+    mocks.usePrivateFeaturesFlag.mockReturnValue(true);
     renderComponent();
-    vi.mock("~/utils/featureFlags", () => {
-      return { privateFeaturesEnabled: vi.fn().mockReturnValue(true) };
-    });
     expect(screen.getByText("TN")).toBeInTheDocument();
     expect(screen.getByText(/Norm/)).toBeInTheDocument();
     expect(screen.getByText("01.01.2000")).toBeInTheDocument();
@@ -103,14 +111,7 @@ describe("NormSearchResult.vue", () => {
   });
 
   it("renders ausfertigungs datum when in prototype environment", () => {
-    const mockedPrivateFeaturesEnabled = vi.spyOn(
-      Config,
-      "privateFeaturesEnabled",
-    );
-    mockedPrivateFeaturesEnabled.mockReturnValue(false);
-
     renderComponent();
-
     expect(screen.getByText("14.12.1999")).toBeInTheDocument();
     expect(screen.queryByText("01.01.2000")).not.toBeInTheDocument();
   });

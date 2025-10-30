@@ -2,10 +2,11 @@
 import bmjvLogo from "~/assets/img/BMJV_de_v1__Web_farbig.svg";
 import FeedbackForm from "~/components/Analytics/FeedbackForm.vue";
 import BackToTopLink from "~/components/BackToTopLink.vue";
-import { privateFeaturesEnabled } from "~/utils/featureFlags";
+import { usePrivateFeaturesFlag } from "~/composables/usePrivateFeaturesFlag";
 
 const route = useRoute();
 const hideFeedbackForm = computed(() => route.path === "/feedback");
+const privateFeaturesEnabled = usePrivateFeaturesFlag();
 </script>
 
 <template>
@@ -69,7 +70,7 @@ const hideFeedbackForm = computed(() => route.path === "/feedback");
               >Cookie-Einstellungen</NuxtLink
             >
           </li>
-          <li v-if="privateFeaturesEnabled()">
+          <li v-if="privateFeaturesEnabled">
             <NuxtLink class="ris-link2-regular link-hover" href="/translations"
               >English translations</NuxtLink
             >

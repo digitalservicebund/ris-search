@@ -6,12 +6,12 @@ import type { ValidityStatus } from "~/utils/norm";
 
 const mocks = vi.hoisted(() => {
   return {
-    privateFeaturesEnabled: vi.fn().mockReturnValue(false),
+    usePrivateFeaturesFlag: vi.fn().mockReturnValue(false),
   };
 });
 
-vi.mock("~/utils/featureFlags", () => {
-  return { privateFeaturesEnabled: mocks.privateFeaturesEnabled };
+vi.mock("~/composables/usePrivateFeaturesFlag", () => {
+  return { usePrivateFeaturesFlag: mocks.usePrivateFeaturesFlag };
 });
 
 describe("NormMetadataFields.vue", () => {
@@ -55,7 +55,7 @@ describe("NormMetadataFields.vue", () => {
   });
 
   it("shows validity dates metadata fields", () => {
-    mocks.privateFeaturesEnabled.mockReturnValue(true);
+    mocks.usePrivateFeaturesFlag.mockReturnValue(true);
     const validFrom = parseDateGermanLocalTime("2025-01-01");
     const validTo = parseDateGermanLocalTime("2025-06-01");
 
@@ -73,7 +73,7 @@ describe("NormMetadataFields.vue", () => {
   });
 
   it("hides 'valid from' and 'valid to' fields on prototype", () => {
-    mocks.privateFeaturesEnabled.mockReturnValue(false);
+    mocks.usePrivateFeaturesFlag.mockReturnValue(false);
 
     expect(screen.queryByText("Gültig ab")).not.toBeInTheDocument();
     expect(screen.queryByText("01.01.2025")).not.toBeInTheDocument();

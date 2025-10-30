@@ -26,32 +26,12 @@ export const environment = {
 
 const browserConfigurations: Project[] = [
   {
-    name: "seoMobile",
-    use: {
-      ...devices["Desktop Chrome"],
-      viewport: { width: 320, height: 600 },
-      storageState: authFile,
-      headless: true,
-    },
-    testMatch: "seo.spec.ts",
-  },
-  {
-    name: "seoDesktop",
-    use: {
-      ...devices["Desktop Chrome"],
-      storageState: authFile,
-      headless: true,
-    },
-    testMatch: "seo.spec.ts",
-  },
-  {
     name: "chromium",
     use: {
       ...devices["Desktop Chrome"],
       storageState: authFile,
     },
     dependencies: ["setup"],
-    testIgnore: "seo.spec.ts",
   },
   {
     name: "firefox",
@@ -80,7 +60,6 @@ const browserConfigurations: Project[] = [
       storageState: authFile,
     },
     dependencies: ["setup"],
-    testIgnore: "seo.spec.ts",
   },
 ];
 
