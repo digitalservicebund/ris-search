@@ -5,7 +5,8 @@ import {
   removeOuterParentheses,
   truncateAtWord,
   removePrefix,
-  formatArrayProperty,
+  formatArray,
+  formatNames,
 } from "./textFormatting";
 
 describe("getStringOrDefault", () => {
@@ -123,21 +124,44 @@ describe("removePrefix", () => {
   it("removes prefix when present", () => {
     expect(removePrefix("Hello World", "Hello ")).toBe("World");
   });
-  it("removes original string when prefix not present", () => {
+  it("keeps original string when prefix not present", () => {
     expect(removePrefix("Hello World", "Hallo ")).toBe("Hello World");
   });
 });
 
-describe("formatArrayProperty", () => {
-  it("returns placeholder if array is empty", () => {
-    expect(formatArrayProperty([])).toBe("-");
+describe("formatArray", () => {
+  it("returns undefined if array is empty", () => {
+    expect(formatArray([])).toBeUndefined();
   });
 
   it("returns single value if array contains one element", () => {
-    expect(formatArrayProperty(["foo"])).toBe("foo");
+    expect(formatArray(["foo"])).toBe("foo");
   });
 
   it("returns elements joined with comma", () => {
-    expect(formatArrayProperty(["foo", "bar", "baz"])).toBe("foo, bar, baz");
+    expect(formatArray(["foo", "bar", "baz"])).toBe("foo, bar, baz");
+  });
+});
+
+describe("formatNames", () => {
+  it("returns empty array if input is empty", () => {
+    expect(formatNames([])).toHaveLength(0);
+  });
+
+  it("returns formatted names", () => {
+    expect(formatNames(["Mustermann, Max", "Musterfrau, Sabine"])).toEqual([
+      "Max Mustermann",
+      "Sabine Musterfrau",
+    ]);
+  });
+
+  it("keeps name unchanged if it contains no comma", () => {
+    expect(formatNames(["Max Mustermann"])).toEqual(["Max Mustermann"]);
+  });
+
+  it("keeps name unchanged if it contains more than one comma", () => {
+    expect(formatNames(["Mustermann, Max, Augustus"])).toEqual([
+      "Mustermann, Max, Augustus",
+    ]);
   });
 });

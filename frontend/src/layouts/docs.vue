@@ -2,7 +2,6 @@
 import { NuxtLoadingIndicator } from "#components";
 import ConsentBanner from "~/components/Analytics/ConsentBanner.vue";
 import AppFooter from "~/components/AppFooter.vue";
-import AppFooterPrototype from "~/components/AppFooterPrototype.vue";
 import Banner from "~/components/Docs/Banner.vue";
 import MobileNav from "~/components/Docs/MobileNav.vue";
 import Sidebar from "~/components/Docs/Sidebar.vue";
@@ -29,8 +28,7 @@ import Sidebar from "~/components/Docs/Sidebar.vue";
           </div>
         </article>
       </div>
-      <AppFooterPrototype v-if="true" />
-      <AppFooter v-else />
+      <AppFooter />
     </div>
   </div>
 </template>

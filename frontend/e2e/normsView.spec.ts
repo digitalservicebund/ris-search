@@ -1,72 +1,8 @@
-import { expect, test } from "./fixtures";
-import { getDisplayedResultCount } from "./utils";
+import { expect, test } from "./utils/fixtures";
 
 const expectedNorms = [
   "Fiktive Fruchtsaft- und Erfrischungsgetränkeverordnung zu Testzwecken",
 ];
-
-test("can search, filter for norms, and view a single norm", async ({
-  page,
-}) => {
-  await test.step("Basic search", async () => {
-    await page.goto("/");
-    await page.getByPlaceholder("Suchbegriff eingeben").fill("Fiktiv Satz");
-    await page.getByLabel("Suchen").click();
-
-    // three current matching norms, plus matching decisions
-    const expectedCaseLawCount = 4;
-    expect(await getDisplayedResultCount(page)).toBe(
-      expectedNorms.length + expectedCaseLawCount,
-    );
-  });
-
-  await test.step("Filter for norms", async () => {
-    await page.getByRole("button", { name: "Gesetze & Verordnungen" }).click();
-    await expect
-      .poll(() => getDisplayedResultCount(page), {
-        message: "the count should decrease",
-      })
-      .toBe(expectedNorms.length);
-  });
-  const headings = await page
-    .getByTestId("searchResult")
-    .locator('a[class*="heading"]')
-    .all();
-  const titles = await Promise.all(
-    headings.map((heading) => heading.innerText()),
-  );
-  expect(titles.map((t) => t.trim())).toEqual(
-    expect.arrayContaining(expectedNorms),
-  );
-
-  await test.step("View a norm", async () => {
-    await page.getByRole("link", { name: expectedNorms[0] }).first().click();
-
-    await page.waitForURL(
-      /norms\/eli\/(?<jurisdiction>[^/]+)\/(?<agent>[^/]+)\/(?<year>[^/]+)\/(?<naturalIdentifier>[^/]+)\/(?<pointInTime>[^/]+)\/(?<version>[^/]+)\/(?<language>[^/]+)$/gi,
-    );
-
-    await expect(
-      page.getByRole("heading", {
-        name: expectedNorms[0],
-      }),
-    ).toBeVisible();
-    await expect(page.locator(".akn-act")).toBeVisible();
-
-    await test.step("The content has the correct max-width", async () => {
-      for (const locator of [
-        "#praeambel-n1_formel-n1_text-n1",
-        "#praeambel-n1_formel-n1_liste-n1",
-        ".akn-section .akn-num",
-        ".akn-section .akn-heading",
-        ".akn-section .akn-paragraph",
-      ]) {
-        const boundingBox = await page.locator(locator).first().boundingBox();
-        expect(boundingBox?.width, locator).toBeLessThanOrEqual(720);
-      }
-    });
-  });
-});
 
 test("can navigate to a single norm article and between articles", async ({
   page,

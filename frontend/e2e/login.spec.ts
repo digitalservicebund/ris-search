@@ -1,4 +1,4 @@
-import { test } from "./fixtures";
+import { test } from "./utils/fixtures";
 
 const displayName = process.env.E2E_KEYCLOAK_USER_DISPLAY_NAME ?? "Jane Doe";
 

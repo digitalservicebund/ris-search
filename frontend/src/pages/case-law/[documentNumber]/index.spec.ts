@@ -1,5 +1,11 @@
-import { mockNuxtImport, mountSuspended } from "@nuxt/test-utils/runtime";
-import { mount, type VueWrapper, RouterLinkStub } from "@vue/test-utils";
+import {
+  mockNuxtImport,
+  mountSuspended,
+  renderSuspended,
+} from "@nuxt/test-utils/runtime";
+import userEvent from "@testing-library/user-event";
+import { screen } from "@testing-library/vue";
+import { mount, RouterLinkStub } from "@vue/test-utils";
 import dayjs from "dayjs";
 import { expect, it } from "vitest";
 import { unref } from "vue";
@@ -69,20 +75,6 @@ const htmlData =
 
 const expectedRenderedHeadline = "Sample headline";
 
-const unavailablePlaceholder = "nicht vorhanden";
-
-function findDefinitions(wrapper: VueWrapper): Record<string, string> {
-  const definitions: Record<string, string> = {};
-  for (const dt of wrapper.findAll("dt")) {
-    const key = dt.text();
-    const value = dt.element.nextSibling?.textContent;
-    if (key && value) {
-      definitions[key] = value;
-    }
-  }
-  return definitions;
-}
-
 describe("case law single view page", async () => {
   const router = useRouter();
   beforeAll(() => {
@@ -123,45 +115,83 @@ describe("case law single view page", async () => {
     });
   });
 
-  it("displays case law data correctly", async () => {
-    const wrapper = await mountSuspended(CaseLawPage);
+  it("displays case law metadata and text", async () => {
+    await renderSuspended(CaseLawPage);
 
-    const pageHeader = wrapper.find("h1");
-    expect(pageHeader.exists()).toBe(true);
-    expect(pageHeader.text()).toBe(expectedRenderedHeadline);
+    expect(
+      screen.getByRole("heading", { name: expectedRenderedHeadline }),
+    ).toBeInTheDocument();
 
-    expect(wrapper.find("#court_name").text()).toContain(
-      caseLawTestData.courtName,
-    );
-    expect(wrapper.find("#document_type").text()).toContain(
-      caseLawTestData.documentType,
-    );
-    expect(wrapper.find("#decision_date").text()).toContain(
-      dayjs(caseLawTestData.decisionDate).format("DD.MM.YYYY"),
-    );
-    expect(wrapper.find("#file_numbers").text()).toContain(
-      caseLawTestData.fileNumbers.join(", "),
+    // Metadata
+    expect(screen.getByText("Gericht")).toBeInTheDocument();
+    expect(screen.getByLabelText("Gericht")).toHaveTextContent("Sample court");
+
+    expect(screen.getByText("Dokumenttyp")).toBeInTheDocument();
+    expect(screen.getByLabelText("Dokumenttyp")).toHaveTextContent(
+      "Sample type",
     );
 
-    const definitions = findDefinitions(wrapper);
-    expect(definitions["Spruchkörper:"]).toBe(caseLawTestData.judicialBody);
-    expect(definitions["ECLI:"]).toBe(caseLawTestData.ecli);
-    expect(definitions["Normen:"]).toBe(unavailablePlaceholder);
-    expect(definitions["Entscheidungsname:"]).toBe(
-      caseLawTestData.decisionName.join(", "),
+    expect(screen.getByText("Entscheidungsdatum")).toBeInTheDocument();
+    expect(screen.getByLabelText("Entscheidungsdatum")).toHaveTextContent(
+      "01.01.2023",
     );
-    expect(definitions["Vorinstanz:"]).toBe(unavailablePlaceholder);
 
-    expect(wrapper.find("#orientierungssatz").text()).toContain(
-      "Orientierungssatz",
+    expect(screen.getByText("Aktenzeichen")).toBeInTheDocument();
+    expect(screen.getByLabelText("Aktenzeichen")).toHaveTextContent("123, 456");
+
+    // Text content
+    expect(
+      screen.getByRole("heading", { name: "Orientierungssatz" }),
+    ).toBeInTheDocument();
+
+    expect(screen.getByRole("heading", { name: "Tenor" })).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: "Tatbestand" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: "Entscheidungsgründe" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: "Leitsatz" }),
+    ).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Gründe" })).toBeInTheDocument();
+  });
+
+  it("displayes detailed information in the details tab", async () => {
+    const user = userEvent.setup();
+    await renderSuspended(CaseLawPage);
+
+    await user.click(
+      screen.getByRole("tab", { name: "Details zur Gerichtsentscheidung" }),
     );
-    expect(wrapper.find("#tenor").text()).toContain("Tenor");
-    expect(wrapper.find("#tatbestand").text()).toContain("Tatbestand");
-    expect(wrapper.find("#entscheidungsgruende").text()).toContain(
-      "Entscheidungsgründe",
+
+    expect(screen.getByText("Spruchkörper:")).toBeInTheDocument();
+    expect(screen.getByLabelText("Spruchkörper:")).toHaveTextContent(
+      "Sample judicial body",
     );
-    expect(wrapper.find("#leitsatz").text()).toContain("Leitsatz");
-    expect(wrapper.find("#gruende").text()).toContain("Gründe");
+
+    expect(screen.getByText("ECLI:")).toBeInTheDocument();
+    expect(screen.getByLabelText("ECLI:")).toHaveTextContent("Sample ecli");
+
+    expect(screen.getByText("Normen:")).toBeInTheDocument();
+    expect(screen.getByLabelText("Normen:")).toHaveTextContent(
+      "nicht vorhanden",
+    );
+
+    expect(screen.getByText("Entscheidungsname:")).toBeInTheDocument();
+    expect(screen.getByLabelText("Entscheidungsname:")).toHaveTextContent(
+      "Sample decision",
+    );
+
+    expect(screen.getByText("Vorinstanz:")).toBeInTheDocument();
+    expect(screen.getByLabelText("Vorinstanz:")).toHaveTextContent(
+      "nicht vorhanden",
+    );
+
+    expect(screen.getByText("Download:")).toBeInTheDocument();
+    expect(screen.getByLabelText("Download:")).toHaveTextContent(
+      "12345 als ZIP herunterladen",
+    );
   });
 
   it('displays "Nicht verfügbar" for empty case law data', async () => {
@@ -204,30 +234,67 @@ describe("case law single view page", async () => {
       }
     });
 
-    const wrapper = await mountSuspended(CaseLawPage);
+    const user = userEvent.setup();
+    await renderSuspended(CaseLawPage);
 
-    const pageHeader = wrapper.find("h1");
-    expect(pageHeader.exists()).toBe(true);
-    expect(pageHeader.text()).toBe("Titelzeile nicht vorhanden");
-    expect(pageHeader.attributes("class")).toContain("text-gray-900");
+    const pageHeader = screen.getByRole("heading", {
+      name: "Titelzeile nicht vorhanden",
+    });
+    expect(pageHeader).toBeInTheDocument();
+    expect(pageHeader).toHaveClass("text-gray-900");
 
-    expect(wrapper.find("#court_name").text()).toBe(unavailablePlaceholder);
-    expect(wrapper.find("#document_type").text()).toBe(unavailablePlaceholder);
-    expect(wrapper.find("#decision_date").text()).toBe(unavailablePlaceholder);
-    expect(wrapper.find("#file_numbers").text()).toBe(unavailablePlaceholder);
+    // Metadata
+    expect(screen.getByLabelText("Gericht")).toHaveTextContent("—");
+    expect(screen.getByLabelText("Dokumenttyp")).toHaveTextContent("—");
+    expect(screen.getByLabelText("Entscheidungsdatum")).toHaveTextContent("—");
+    expect(screen.getByLabelText("Aktenzeichen")).toHaveTextContent("—");
 
-    const definitions = findDefinitions(wrapper);
+    // Text content
+    expect(
+      screen.queryByRole("heading", { name: "Orientierungssatz" }),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole("heading", { name: "Tenor" }),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole("heading", { name: "Tatbestand" }),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole("heading", { name: "Entscheidungsgründe" }),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole("heading", { name: "Leitsatz" }),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole("heading", { name: "Gründe" }),
+    ).not.toBeInTheDocument();
 
-    expect(definitions["Spruchkörper:"]).toBe(unavailablePlaceholder);
-    expect(definitions["ECLI:"]).toBe(unavailablePlaceholder);
-    expect(definitions["Normen:"]).toBe(unavailablePlaceholder);
-    expect(definitions["Entscheidungsname:"]).toBe(unavailablePlaceholder);
-    expect(definitions["Vorinstanz:"]).toBe(unavailablePlaceholder);
+    await user.click(
+      screen.getByRole("tab", { name: "Details zur Gerichtsentscheidung" }),
+    );
 
-    expect(wrapper.find("#headnote").exists()).toBe(false);
-    expect(wrapper.find("#tenor").exists()).toBe(false);
-    expect(wrapper.find("#case_facts").exists()).toBe(false);
-    expect(wrapper.find("#decision_grounds").exists()).toBe(false);
+    // Details tab
+    expect(screen.getByLabelText("Spruchkörper:")).toHaveTextContent(
+      "nicht vorhanden",
+    );
+
+    expect(screen.getByLabelText("ECLI:")).toHaveTextContent("nicht vorhanden");
+
+    expect(screen.getByLabelText("Normen:")).toHaveTextContent(
+      "nicht vorhanden",
+    );
+
+    expect(screen.getByLabelText("Entscheidungsname:")).toHaveTextContent(
+      "nicht vorhanden",
+    );
+
+    expect(screen.getByLabelText("Vorinstanz:")).toHaveTextContent(
+      "nicht vorhanden",
+    );
+
+    expect(screen.getByLabelText("Download:")).toHaveTextContent(
+      "als ZIP herunterladen",
+    );
   });
 
   it("displays 404 error page when case law is not found", async () => {

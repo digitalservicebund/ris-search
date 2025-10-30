@@ -85,32 +85,34 @@ const sanitizedShortReport = computed(() =>
 </script>
 
 <template>
-  <div class="my-36 hyphens-auto" data-testid="searchResult">
-    <div class="ris-label2-regular flex flex-row flex-wrap items-center gap-8">
-      <div class="flex items-center">
+  <article class="my-36 flex flex-col gap-8 hyphens-auto">
+    <p class="ris-label2-regular flex flex-row flex-wrap items-center gap-8">
+      <span class="flex items-center">
         <OutlineBookIcon class="mr-4 h-16 text-gray-900" />
         <span>
           {{ metadata.documentType }}
         </span>
-      </div>
+      </span>
       <span>{{ metadata.dependentReference }}</span>
       <span>{{ metadata.yearOfPublication }}</span>
-    </div>
+    </p>
+
     <NuxtLink
       :to="metadata.url"
-      class="ris-heading3-bold max-w-title link-hover mt-8 block text-balance text-blue-800"
+      class="ris-heading3-bold max-w-title link-hover block text-balance text-blue-800"
       @click="trackResultClick(metadata.url)"
     >
       <h2>
         <span v-html="sanitizedHeadline" />
       </h2>
     </NuxtLink>
-    <div class="mt-6 flex w-full max-w-prose flex-col gap-6">
+
+    <div class="flex w-full max-w-prose flex-col gap-6">
       <span
         data-testid="highlighted-field"
         :class="{ 'line-clamp-3': !shortReportIncludesHighlight }"
         v-html="sanitizedShortReport"
       />
     </div>
-  </div>
+  </article>
 </template>
