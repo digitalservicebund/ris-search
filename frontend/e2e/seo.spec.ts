@@ -1,6 +1,6 @@
 import path from "node:path";
 import { playAudit } from "playwright-lighthouse";
-import { seoTest as test } from "./fixtures";
+import { seoTest as test } from "./utils/fixtures";
 
 const REPORT_DIR = path.join(process.cwd(), "test-results", "lighthouse-seo");
 

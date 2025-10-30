@@ -5,10 +5,12 @@ import TabPanel from "primevue/tabpanel";
 import TabPanels from "primevue/tabpanels";
 import Tabs from "primevue/tabs";
 import { useFetch } from "#app";
+import LiteratureActionsMenu from "~/components/ActionMenu/LiteratureActionsMenu.vue";
 import ContentWrapper from "~/components/CustomLayouts/ContentWrapper.vue";
 import SidebarLayout from "~/components/CustomLayouts/SidebarLayout.vue";
 import IncompleteDataMessage from "~/components/IncompleteDataMessage.vue";
-import LiteratureMetadata from "~/components/LiteratureMetadata.vue";
+import LiteratureDetails from "~/components/Literature/LiteratureDetails.vue";
+import LiteratureMetadata from "~/components/Literature/LiteratureMetadata.vue";
 import RisBreadcrumb from "~/components/Ris/RisBreadcrumb.vue";
 import RisDocumentTitle from "~/components/Ris/RisDocumentTitle.vue";
 import {
@@ -75,6 +77,9 @@ if (contentError?.value) {
     <div v-if="!!literature" class="container text-left">
       <div class="flex items-center gap-8 print:hidden">
         <RisBreadcrumb :items="breadcrumbItems" class="grow" />
+        <client-only
+          ><LiteratureActionsMenu :literature="literature"
+        /></client-only>
       </div>
       <RisDocumentTitle :title="title" :placeholder="emptyTitlePlaceholder" />
       <LiteratureMetadata
@@ -113,13 +118,13 @@ if (contentError?.value) {
         </TabPanel>
         <TabPanel value="1" :pt="tabPanelStyles" class="pt-24 pb-80">
           <section aria-labelledby="detailsTabPanelTitle" class="container">
-            <h2 id="detailsTabPanelTitle" class="ris-heading3-bold my-24">
-              Details
-            </h2>
-            <IncompleteDataMessage class="my-24" />
-            <Properties>
-              <PropertiesItem label="Property:" value="todo" />
-            </Properties>
+            <LiteratureDetails
+              :norm-references="literature.normReferences"
+              :collaborators="literature.collaborators"
+              :originators="literature.originators"
+              :languages="literature.languages"
+              :conference-notes="literature.conferenceNotes"
+            />
           </section>
         </TabPanel>
       </TabPanels> </Tabs

@@ -80,6 +80,7 @@ const testPages = [
     url: "/literature/translations",
   },
 ];
+
 test.describe("General Pages Accessibility Tests", () => {
   testPages.forEach(({ name, url, tabs }) => {
     test(`${name} should not have accessibility issues`, async ({ page }) => {

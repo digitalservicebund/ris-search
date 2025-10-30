@@ -18,9 +18,10 @@ const inForceVersion = computed(() =>
   ),
 );
 
-const inForceVersionLink = computed(
-  () =>
-    `/norms/${inForceVersion.value?.item.workExample.legislationIdentifier}`,
+const inForceVersionLink = computed(() =>
+  inForceVersion.value
+    ? `/norms/${inForceVersion.value?.item.workExample.legislationIdentifier}`
+    : undefined,
 );
 
 const currentVersionValidityStatus = computed(() => {

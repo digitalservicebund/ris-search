@@ -28,11 +28,11 @@ describe("LiteratureMetadata", () => {
       },
     });
 
-    expect(screen.getByLabelText("Dokumenttyp")).toHaveTextContent("-");
-    expect(screen.getByLabelText("Fundstelle")).toHaveTextContent("-");
-    expect(screen.getByLabelText("Author")).toHaveTextContent("-");
+    expect(screen.getByLabelText("Dokumenttyp")).toHaveTextContent("—");
+    expect(screen.getByLabelText("Fundstelle")).toHaveTextContent("—");
+    expect(screen.getByLabelText("Author")).toHaveTextContent("—");
     expect(screen.getByLabelText("Veröffentlichungsjahr")).toHaveTextContent(
-      "-",
+      "—",
     );
   });
 

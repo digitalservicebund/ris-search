@@ -1,12 +1,21 @@
 import type { Page } from "@playwright/test";
-import { expect, test } from "./fixtures";
-import { getDisplayedResultCount } from "./utils";
+import { expect, test } from "./utils/fixtures";
 
 async function getSidebar(page: Page) {
   const navigation = page.getByRole("navigation", { name: "Seiteninhalte" });
   await navigation.scrollIntoViewIfNeeded();
   await expect(navigation).toBeVisible();
   return navigation;
+}
+
+async function getDisplayedResultCount(page: Page) {
+  const resultCountElement = page.locator("output", {
+    hasText: "Suchergebnis",
+  });
+  const text = await resultCountElement.innerText();
+  if (text.startsWith("Keine Suchergebnisse")) return 0;
+  const digits = text.replace(/\D+/g, "");
+  return Number.parseInt(digits);
 }
 
 test("can search, filter for case law, and view a single case law documentation unit", async ({
