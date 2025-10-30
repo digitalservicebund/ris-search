@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import Toast from "primevue/toast";
 import { useSentry } from "~/composables/useSentry";
 useHead({
   titleTemplate: (pageTitle) =>
@@ -13,4 +14,5 @@ useSentry();
   <NuxtLayout>
     <NuxtPage />
   </NuxtLayout>
+  <Toast />
 </template>
