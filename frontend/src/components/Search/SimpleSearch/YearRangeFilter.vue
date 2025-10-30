@@ -17,90 +17,109 @@ const items: DropdownItem[] = [
   { label: "In einem Zeitraum", value: DateSearchMode.Range },
 ];
 
-// Local reactive values for the year inputs
-const yearAfter = ref<string | null>(null);
-const yearBefore = ref<string | null>(null);
-const yearEqual = ref<string | null>(null);
-
-const showYearField = computed(
-  () => store.dateSearchMode === DateSearchMode.Equal,
-);
-const showYearAfterField = computed(
-  () =>
-    store.dateSearchMode === DateSearchMode.After ||
-    store.dateSearchMode === DateSearchMode.Range,
-);
-const showYearBeforeField = computed(
-  () =>
-    store.dateSearchMode === DateSearchMode.Before ||
-    store.dateSearchMode === DateSearchMode.Range,
-);
-const hasMultipleInputs = computed(
-  () => showYearAfterField.value && showYearBeforeField.value,
-);
-
+// Helpers
+function parseYearFromDate(date?: string): string | null {
+  return date?.split("-")[0] ?? null;
+}
 function isYearValid(year: string | null) {
   return !!year && /^\d{4}$/.test(year);
 }
-
 function formatYearStart(year: string | null) {
   return `${year}-01-01`;
 }
-
 function formatYearEnd(year: string | null) {
   return `${year}-12-31`;
 }
 
-// watching the local refs for updating the store
-watch(
-  [yearAfter, yearBefore, yearEqual],
-  () => {
+//  Years Computed(s)
+const yearAfter = computed<string | null>({
+  get() {
+    return parseYearFromDate(store.dateAfter);
+  },
+  set(value) {
+    if (!isYearValid(value)) {
+      store.dateAfter = undefined;
+      return;
+    }
     switch (store.dateSearchMode) {
-      case DateSearchMode.None:
-        store.dateAfter = undefined;
+      case DateSearchMode.After:
+        store.dateAfter = formatYearStart(value);
         store.dateBefore = undefined;
         break;
-      case DateSearchMode.After:
-        if (isYearValid(yearAfter.value)) {
-          store.dateAfter = formatYearStart(yearAfter.value);
-          store.dateBefore = undefined;
-        }
-        break;
-      case DateSearchMode.Before:
-        if (isYearValid(yearBefore.value)) {
-          store.dateBefore = formatYearEnd(yearBefore.value);
-          store.dateAfter = undefined;
-        }
-        break;
-      case DateSearchMode.Equal:
-        if (isYearValid(yearEqual.value)) {
-          store.dateAfter = formatYearStart(yearEqual.value);
-          store.dateBefore = formatYearEnd(yearEqual.value);
-        }
-        break;
       case DateSearchMode.Range:
-        if (isYearValid(yearAfter.value) && isYearValid(yearBefore.value)) {
-          store.dateAfter = formatYearStart(yearAfter.value);
-          store.dateBefore = formatYearEnd(yearBefore.value);
+        store.dateAfter = formatYearStart(value);
+        // keep dateBefore only if valid
+        if (!isYearValid(parseYearFromDate(store.dateBefore))) {
+          store.dateBefore = undefined;
         }
         break;
     }
   },
-  { immediate: true },
-);
+});
 
-//
-watch(
-  [store.dateSearchMode],
-  () => {
-    yearAfter.value = null;
-    yearBefore.value = null;
-    yearEqual.value = null;
-
-    store.dateBefore = undefined;
-    store.dateAfter = undefined;
+const yearBefore = computed<string | null>({
+  get() {
+    return parseYearFromDate(store.dateBefore);
   },
-  { immediate: true },
+  set(value) {
+    if (!isYearValid(value)) {
+      store.dateBefore = undefined;
+      return;
+    }
+    switch (store.dateSearchMode) {
+      case DateSearchMode.Before:
+        store.dateBefore = formatYearEnd(value);
+        store.dateAfter = undefined;
+        break;
+      case DateSearchMode.Range:
+        store.dateBefore = formatYearEnd(value);
+        if (!isYearValid(parseYearFromDate(store.dateAfter))) {
+          store.dateAfter = undefined;
+        }
+        break;
+    }
+  },
+});
+
+const yearEqual = computed<string | null>({
+  get() {
+    const yAfter = parseYearFromDate(store.dateAfter);
+    const yBefore = parseYearFromDate(store.dateBefore);
+    // Only show value if both exist and equal
+    if (yAfter && yBefore && yAfter === yBefore) return yAfter;
+    return null;
+  },
+  set(value) {
+    if (!isYearValid(value)) {
+      store.dateAfter = undefined;
+      store.dateBefore = undefined;
+      return;
+    }
+    store.dateAfter = formatYearStart(value);
+    store.dateBefore = formatYearEnd(value);
+  },
+});
+
+// UI logic
+const show = computed(() => ({
+  equal: store.dateSearchMode === DateSearchMode.Equal,
+  after: [DateSearchMode.After, DateSearchMode.Range].includes(
+    store.dateSearchMode,
+  ),
+  before: [DateSearchMode.Before, DateSearchMode.Range].includes(
+    store.dateSearchMode,
+  ),
+}));
+const hasMultipleInputs = computed(() => show.value.after && show.value.before);
+
+// Reset on mode change
+watch(
+  () => store.dateSearchMode,
+  () => {
+    store.dateAfter = undefined;
+    store.dateBefore = undefined;
+  },
+  { immediate: false },
 );
 </script>
 
@@ -122,7 +141,7 @@ watch(
     </span>
 
     <InputField
-      v-if="showYearField"
+      v-if="show.equal"
       id="yearEqual"
       v-slot="slotProps"
       label="Jahr"
@@ -138,7 +157,7 @@ watch(
     </InputField>
 
     <InputField
-      v-if="showYearAfterField"
+      v-if="show.after"
       id="yearAfter"
       v-slot="slotProps"
       :label="hasMultipleInputs ? 'Ab dem Jahr' : 'Jahr'"
@@ -154,7 +173,7 @@ watch(
     </InputField>
 
     <InputField
-      v-if="showYearBeforeField"
+      v-if="show.before"
       id="yearBefore"
       v-slot="slotProps"
       :label="hasMultipleInputs ? 'Bis zum Jahr' : 'Jahr'"
@@ -163,7 +182,7 @@ watch(
         :id="slotProps.id"
         v-model="yearBefore"
         mask="9999"
-        placeholder="YYYY"
+        placeholder="JJJJ"
         :has-error="slotProps.hasError"
         @update:validation-error="slotProps.updateValidationError"
       />

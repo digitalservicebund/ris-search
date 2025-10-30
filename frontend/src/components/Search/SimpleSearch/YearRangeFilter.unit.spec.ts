@@ -6,11 +6,6 @@ import YearRangeFilter from "./YearRangeFilter.vue";
 import { DateSearchMode } from "~/stores/searchParams";
 import { setStoreValues } from "~/tests/piniaUtils";
 
-const testYears = {
-  dateAfter: "2000-01-01",
-  dateBefore: "2025-12-31",
-};
-
 describe("year/year range filter", () => {
   let wrapper: VueWrapper;
 
@@ -23,90 +18,125 @@ describe("year/year range filter", () => {
   });
 
   const scenarios = [
-    { mode: DateSearchMode.None, fields: [] },
-    { mode: DateSearchMode.Equal, fields: ["yearEqual"] },
-    { mode: DateSearchMode.After, fields: ["yearAfter"] },
-    { mode: DateSearchMode.Before, fields: ["yearBefore"] },
-    { mode: DateSearchMode.Range, fields: ["yearAfter", "yearBefore"] },
+    {
+      mode: DateSearchMode.None,
+      fields: [],
+      expectations: {},
+    },
+    {
+      mode: DateSearchMode.Equal,
+      fields: ["yearEqual"],
+      expectations: { dateAfter: "2000-01-01", dateBefore: "2000-12-31" },
+    },
+    {
+      mode: DateSearchMode.After,
+      fields: ["yearAfter"],
+      expectations: { dateAfter: "2000-01-01" },
+    },
+    {
+      mode: DateSearchMode.Before,
+      fields: ["yearBefore"],
+      expectations: { dateBefore: "2000-12-31" },
+    },
+    {
+      mode: DateSearchMode.Range,
+      fields: ["yearAfter", "yearBefore"],
+      expectations: { dateAfter: "2000-01-01", dateBefore: "2000-12-31" },
+    },
   ];
 
-  for (const { fields, mode } of scenarios) {
-    it(`renders ${fields.length ? fields : "nothing"} for mode "${mode}"`, async () => {
-      await setStoreValues({ dateSearchMode: mode });
-      expect(wrapper.findAll("input").map((e) => e.element.id)).toEqual(fields);
-    });
-
-    it(`correctly stores the input year(s) for mode "${mode}"`, async () => {
+  for (const { mode, fields, expectations } of scenarios) {
+    it(`renders inputs ${fields.length ? fields.join(", ") : "none"} and stores correct values for mode "${mode}"`, async () => {
       const store = await setStoreValues({ dateSearchMode: mode });
 
-      for (const input of wrapper.findAll("input")) {
-        input.setValue("2000");
+      // check rendered inputs
+      const inputIds = wrapper.findAll("input").map((e) => e.element.id);
+      expect(inputIds).toEqual(fields);
+
+      // set values if any
+      for (const id of fields) {
+        wrapper.find(`input[id="${id}"]`).setValue("2000");
       }
 
       await nextTick();
 
-      for (const field of fields) {
-        if (field === "yearBefore") {
-          expect(store.dateBefore).toBe("2000-12-31");
-        } else {
-          expect(store.dateAfter).toBe("2000-01-01");
-        }
+      // verify store state
+      if ("dateAfter" in expectations) {
+        expect(store.dateAfter).toBe(expectations.dateAfter);
+      } else {
+        expect(store.dateAfter).toBeUndefined();
+      }
+
+      if ("dateBefore" in expectations) {
+        expect(store.dateBefore).toBe(expectations.dateBefore);
+      } else {
+        expect(store.dateBefore).toBeUndefined();
       }
     });
   }
 
-  it("renders just the dropdown if no mode is set", async () => {
+  it("it renders no input fields if non data search mode selected", async () => {
     await setStoreValues({ dateSearchMode: DateSearchMode.None });
     expect(wrapper.findComponent({ name: "Select" }).vm.modelValue).toBe("");
 
     expect(wrapper.findAll("input")).toHaveLength(0);
   });
 
-  it.skip("ignores other parameters in the store", async () => {
-    await setStoreValues({
-      dateSearchMode: DateSearchMode.Equal,
-      ...testYears,
-    });
-
-    expect(wrapper.findAll("input").map((e) => e.element.id)).toEqual([
-      "yearEqual",
-    ]);
-    expect((wrapper.find("#yearEqual").element as HTMLInputElement).value).toBe(
-      "2000",
-    );
-  });
-
-  it.skip("renders a correct year range", async () => {
-    await setStoreValues({
+  it("resets date values when mode changes", async () => {
+    const store = await setStoreValues({
       dateSearchMode: DateSearchMode.Range,
-      ...testYears,
     });
+    await nextTick();
 
-    expect(wrapper.findComponent({ name: "Select" }).vm.modelValue).toBe(
-      DateSearchMode.Range,
+    expect((wrapper.get("#yearBefore").element as HTMLInputElement).value).toBe(
+      "",
     );
-
-    expect(wrapper.findAll("input").map((e) => e.element.id)).toEqual([
-      "yearAfter",
-      "yearBefore",
-    ]);
-    const inputAfter = wrapper.find("#yearAfter").element as HTMLInputElement;
-    expect(inputAfter.value).toBe("2000");
-    expect(inputAfter?.labels?.[0]?.textContent?.trim()).toBe("Ab dem Jahr");
-
-    const inputBefore = wrapper.find("#yearBefore").element as HTMLInputElement;
-    expect(inputBefore.value).toBe("2025");
-    expect(inputBefore?.labels?.[0]?.textContent?.trim()).toBe("Bis zum Jahr");
-  });
-
-  it("correctly switches from a single year input to range", async () => {
-    await setStoreValues({
-      dateSearchMode: DateSearchMode.After,
-      dateAfter: "1949-01-01",
-    });
-
     expect((wrapper.get("#yearAfter").element as HTMLInputElement).value).toBe(
       "",
     );
+
+    expect(store.dateAfter).toBeUndefined();
+    expect(store.dateBefore).toBeUndefined();
+  });
+
+  it('keeps "Equal" mode start and end synchronized', async () => {
+    const store = await setStoreValues({
+      dateSearchMode: DateSearchMode.Equal,
+    });
+
+    const input = wrapper.get("#yearEqual");
+    await input.setValue("2022");
+    await nextTick();
+
+    expect(store.dateAfter).toBe("2022-01-01");
+    expect(store.dateBefore).toBe("2022-12-31");
+  });
+
+  it("clears store values for invalid year input", async () => {
+    const store = await setStoreValues({
+      dateSearchMode: DateSearchMode.After,
+    });
+    await nextTick();
+
+    const input = wrapper.get("#yearAfter");
+    await input.setValue("abcd");
+    await nextTick();
+
+    expect(store.dateAfter).toBeUndefined();
+  });
+
+  it("updates inputs when store values change", async () => {
+    await setStoreValues({
+      dateSearchMode: DateSearchMode.Range,
+      dateAfter: "2010-01-01",
+      dateBefore: "2020-12-31",
+    });
+
+    // expect(store.dateAfter).toBe("2010-01-01");
+    // expect(store.dateBefore).toBe("2020-12-31");
+
+    const inputs = wrapper.findAll("input");
+    const values = inputs.map((el) => (el.element as HTMLInputElement).value);
+    expect(values).toEqual(["2010", "2020"]);
   });
 });
