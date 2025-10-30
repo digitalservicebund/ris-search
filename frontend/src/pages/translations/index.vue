@@ -108,7 +108,7 @@ useStaticPageSeo("translations-list");
         <form
           :data-full-width="false"
           role="search"
-          class="my-48 flex max-w-md flex-row gap-8 data-[full-width='true']:max-w-full"
+          class="mt-48 flex max-w-md flex-row gap-8 data-[full-width='true']:max-w-full"
           @submit.prevent="handleSearch"
         >
           <InputField
@@ -141,6 +141,7 @@ useStaticPageSeo("translations-list");
       <div
         v-if="sortedTranslations !== null && sortedTranslations.length > 0"
         data-testid="translations"
+        class="mt-48"
       >
         <a
           v-for="t in sortedTranslations"
@@ -162,7 +163,12 @@ useStaticPageSeo("translations-list");
           </div>
         </a>
       </div>
-      <div v-else><p class="mb-16">Nothing found</p></div>
+      <div v-else class="mt-8">
+        <p class="font-bold">We didn’t find anything.</p>
+        <p class="mb-16">
+          Try checking the spelling or using a different title.
+        </p>
+      </div>
     </div>
   </ContentWrapper>
 </template>
