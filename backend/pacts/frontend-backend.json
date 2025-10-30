@@ -8,7 +8,7 @@
       "pending": false,
       "providerStates": [
         {
-          "name": "I have a literature document in the database with number TEST000000001"
+          "name": "I have a literature document in the database with number XXLU000000001"
         }
       ],
       "request": {
@@ -18,12 +18,12 @@
           ]
         },
         "method": "GET",
-        "path": "/v1/literature/TEST000000001"
+        "path": "/v1/literature/XXLU000000001"
       },
       "response": {
         "body": {
           "content": {
-            "@id": "/v1/literature/TEST000000001",
+            "@id": "/v1/literature/XXLU000000001",
             "@type": "Literature",
             "alternativeHeadline": "Dokumentarischer Titel",
             "authors": [
@@ -38,29 +38,29 @@
             "dependentReferences": [
               "BUV, 1982, 123-123"
             ],
-            "documentNumber": "TEST000000001",
+            "documentNumber": "XXLU000000001",
             "documentTypes": [
               "Auf"
             ],
             "encoding": [
               {
-                "@id": "/v1/literature/TEST000000001/html",
+                "@id": "/v1/literature/XXLU000000001/html",
                 "@type": "MediaObject",
-                "contentUrl": "/v1/literature/TEST000000001.html",
+                "contentUrl": "/v1/literature/XXLU000000001.html",
                 "encodingFormat": "text/html",
                 "inLanguage": "de"
               },
               {
-                "@id": "/v1/literature/TEST000000001/xml",
+                "@id": "/v1/literature/XXLU000000001/xml",
                 "@type": "MediaObject",
-                "contentUrl": "/v1/literature/TEST000000001.xml",
+                "contentUrl": "/v1/literature/XXLU000000001.xml",
                 "encodingFormat": "application/xml",
                 "inLanguage": "de"
               },
               {
-                "@id": "/v1/literature/TEST000000001/zip",
+                "@id": "/v1/literature/XXLU000000001/zip",
                 "@type": "MediaObject",
-                "contentUrl": "/v1/literature/TEST000000001.zip",
+                "contentUrl": "/v1/literature/XXLU000000001.zip",
                 "encodingFormat": "application/zip",
                 "inLanguage": "de"
               }
