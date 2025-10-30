@@ -1,6 +1,5 @@
 import { expect, test } from "./utils/fixtures";
 
-
 test(
   "can navigate from list to single translation",
   { tag: ["@RISDEV-8950"] },

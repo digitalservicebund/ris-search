@@ -49,6 +49,6 @@ test(
     await input.press("Enter");
     await expect(translations).not.toBeVisible();
 
-    await expect(page.getByText("Nothing found")).toBeVisible();
+    await expect(page.getByText("We didn’t find anything.")).toBeVisible();
   },
 );
