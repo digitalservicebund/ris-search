@@ -41,8 +41,8 @@ class IndexLiteratureServiceTest {
 
   @Test
   void reindexAllIgnoresInvalidFiles() throws ObjectStoreServiceException {
-    var filenameA = "literatureLdml-1.akn.xml";
-    var filenameB = "TEST000000002.akn.xml";
+    var filenameA = "XXLU000000001.akn.xml";
+    var filenameB = "XXLU000000002.akn.xml";
     final String xml = LoadXmlUtils.loadXmlAsString(Literature.class, filenameA);
 
     when(this.bucket.getAllKeys()).thenReturn(List.of(filenameA, filenameB));
@@ -57,7 +57,36 @@ class IndexLiteratureServiceTest {
         .save(
             argThat(
                 arg -> {
-                  assertThat(arg.id()).isEqualTo("ABCD0000000001");
+                  assertThat(arg.id()).isEqualTo("XXLU000000001");
+                  return true;
+                }));
+    verify(repo, times(1)).deleteByIndexedAtBefore(startingTimestamp);
+  }
+
+  @Test
+  void reindexAllIgnoresFilesNotIdentifiedAsDependentLiterature()
+      throws ObjectStoreServiceException {
+    var filenameA = "XXLU000000001.akn.xml"; // Only file identified as dependent literature
+    var filenameB = "XXLS000000002.akn.xml";
+    var filenameC = "XLU0000000002.akn.xml";
+    var filenameD = "XXXLU000000002.akn.xml";
+    final String xml = LoadXmlUtils.loadXmlAsString(Literature.class, filenameA);
+
+    when(this.bucket.getAllKeys()).thenReturn(List.of(filenameA, filenameB, filenameC, filenameD));
+    when(this.bucket.getFileAsString(filenameA)).thenReturn(Optional.of(xml));
+    when(this.bucket.getFileAsString(filenameB)).thenReturn(Optional.of(xml));
+    when(this.bucket.getFileAsString(filenameC)).thenReturn(Optional.of(xml));
+    when(this.bucket.getFileAsString(filenameD)).thenReturn(Optional.of(xml));
+
+    String startingTimestamp =
+        ZonedDateTime.now(ZoneOffset.UTC).format(DateTimeFormatter.ISO_INSTANT);
+    this.service.reindexAll(startingTimestamp);
+
+    verify(repo, times(1))
+        .save(
+            argThat(
+                arg -> {
+                  assertThat(arg.id()).isEqualTo("XXLU000000001");
                   return true;
                 }));
     verify(repo, times(1)).deleteByIndexedAtBefore(startingTimestamp);
@@ -65,7 +94,7 @@ class IndexLiteratureServiceTest {
 
   @Test
   void itCanReindexFromOneSpecificChangelog() throws ObjectStoreServiceException {
-    final String xmlFileName = "literatureLdml-1.akn.xml";
+    final String xmlFileName = "XXLU000000001.akn.xml";
     final String xml = LoadXmlUtils.loadXmlAsString(Literature.class, xmlFileName);
     when(this.bucket.getFileAsString(xmlFileName)).thenReturn(Optional.of(xml));
 
@@ -77,7 +106,26 @@ class IndexLiteratureServiceTest {
         .save(
             argThat(
                 arg -> {
-                  assertThat(arg.id()).isEqualTo("ABCD0000000001");
+                  assertThat(arg.id()).isEqualTo("XXLU000000001");
+                  return true;
+                }));
+  }
+
+  @Test
+  void ignoredNoneDependentLiteratureFilesInChangelog() throws ObjectStoreServiceException {
+    final String xmlFileName = "XXLU000000001.akn.xml";
+    final String xml = LoadXmlUtils.loadXmlAsString(Literature.class, xmlFileName);
+    when(this.bucket.getFileAsString(xmlFileName)).thenReturn(Optional.of(xml));
+
+    Changelog changelog = new Changelog();
+    changelog.setChanged(Sets.newHashSet(List.of(xmlFileName, "TESL000000001.akn.xml")));
+    service.indexChangelog(changelog);
+
+    verify(repo, times(1))
+        .save(
+            argThat(
+                arg -> {
+                  assertThat(arg.id()).isEqualTo("XXLU000000001");
                   return true;
                 }));
   }
@@ -85,10 +133,10 @@ class IndexLiteratureServiceTest {
   @Test
   void itCanDeleteFromOneSpecificChangelog() throws ObjectStoreServiceException {
     Changelog changelog = new Changelog();
-    changelog.setDeleted(Sets.newHashSet(Set.of("TEST000000001.akn.xml")));
+    changelog.setDeleted(Sets.newHashSet(Set.of("XXLU000000001.akn.xml")));
     service.indexChangelog(changelog);
 
-    verify(repo, times(1)).deleteAllById(Set.of("TEST000000001"));
+    verify(repo, times(1)).deleteAllById(Set.of("XXLU000000001"));
   }
 
   @Test
@@ -96,8 +144,8 @@ class IndexLiteratureServiceTest {
     when(this.bucket.getAllKeys())
         .thenReturn(
             List.of(
-                "TEST000000001.akn.xml",
-                "TEST000000002.akn.xml",
+                "XXLU000000001.akn.xml",
+                "XXLU000000002.akn.xml",
                 "changelogs/2025-03-26T14:13:34.096304815Z-literature.json"));
     assertThat(service.getNumberOfIndexableDocumentsInBucket()).isEqualTo(2);
   }

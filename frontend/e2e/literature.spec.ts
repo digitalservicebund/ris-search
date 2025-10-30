@@ -3,7 +3,7 @@ import { expect, test } from "./utils/fixtures";
 test("displays literature page with metadata and text tab by default", async ({
   page,
 }) => {
-  await page.goto("/literature/TEST000000001");
+  await page.goto("/literature/XXLU000000001");
 
   // Breadcrumb navigation
   const breadcrumb = page.getByRole("navigation", { name: "Pfadnavigation" });
@@ -53,7 +53,7 @@ test("displays literature page with metadata and text tab by default", async ({
 });
 
 test("shows detailed information in the 'Details' tab", async ({ page }) => {
-  await page.goto("/literature/TEST000000001");
+  await page.goto("/literature/XXLU000000001");
   await page.waitForLoadState("networkidle");
 
   const detailsTabButton = page.getByRole("tab", {

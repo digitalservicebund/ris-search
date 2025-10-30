@@ -31,7 +31,7 @@ class LiteratureSearchSchemaMapperTest {
   @DisplayName("correctly maps a single Page")
   void fromDomainPage() {
     var literature =
-        Literature.builder().id("TEST000000001").documentNumber("TEST000000001").build();
+        Literature.builder().id("XXLU000000001").documentNumber("XXLU000000001").build();
 
     SearchHit<Literature> searchHit =
         new SearchHit<>("1", "1", "routing", 1, null, null, null, null, null, null, literature);

@@ -26,9 +26,10 @@ class LiteratureBucketIntegrationTest {
 
   @Test
   void getAllKeysReturnsAllKeys() {
-    bucket.save("TEST000000001.akn.xml", "");
+    bucket.save("XXLU000000001.akn.xml", "");
     bucket.save("changelog.json", "");
-    assertThat(bucket.getAllKeys()).containsExactly("changelog.json", "TEST000000001.akn.xml");
+    assertThat(bucket.getAllKeys())
+        .containsExactlyInAnyOrder("changelog.json", "XXLU000000001.akn.xml");
   }
 
   @Test
@@ -38,60 +39,60 @@ class LiteratureBucketIntegrationTest {
 
   @Test
   void getAllKeysByPrefixReturnsOnlyKeysWithMatchingPrefix() {
-    bucket.save("TEST010000001.akn.xml", "");
-    bucket.save("TEST020000001.akn.xml", "");
+    bucket.save("XXLU010000001.akn.xml", "");
+    bucket.save("XXLU020000001.akn.xml", "");
     bucket.save("changelog.json", "");
-    assertThat(bucket.getAllKeysByPrefix("TEST01")).containsExactly("TEST010000001.akn.xml");
+    assertThat(bucket.getAllKeysByPrefix("XXLU01")).containsExactly("XXLU010000001.akn.xml");
   }
 
   @Test
   void getAllKeysByPrefixReturnsEmptyListIfNoKeysMatchThePrefix() {
-    bucket.save("TEST010000001.akn.xml", "");
-    bucket.save("TEST020000001.akn.xml", "");
+    bucket.save("XXLU010000001.akn.xml", "");
+    bucket.save("XXLU020000001.akn.xml", "");
     assertThat(bucket.getAllKeysByPrefix("FOO")).isEmpty();
   }
 
   @Test
   void getAllKeyInfosByPrefixReturnsMatchingKeyInfos() {
-    bucket.save("TEST010000001.akn.xml", "");
-    bucket.save("TEST020000001.akn.xml", "");
+    bucket.save("XXLU010000001.akn.xml", "");
+    bucket.save("XXLU020000001.akn.xml", "");
     bucket.save("changelog.json", "");
-    assertThat(bucket.getAllKeyInfosByPrefix("TEST01")).hasSize(1);
+    assertThat(bucket.getAllKeyInfosByPrefix("XXLU01")).hasSize(1);
   }
 
   @Test
   void getAllKeyInfosByPrefixReturnEmptyListIfNoKeysMatchThePrefix() {
-    bucket.save("TEST010000001.akn.xml", "");
-    bucket.save("TEST020000001.akn.xml", "");
+    bucket.save("XXLU010000001.akn.xml", "");
+    bucket.save("XXLU020000001.akn.xml", "");
     assertThat(bucket.getAllKeyInfosByPrefix("FOO")).isEmpty();
   }
 
   @Test
   void getFileAsStringReturnsContentAsString() throws ObjectStoreServiceException {
-    bucket.save("TEST010000001.akn.xml", "This is a test!");
-    assertThat(bucket.getFileAsString("TEST010000001.akn.xml")).get().isEqualTo("This is a test!");
+    bucket.save("XXLU010000001.akn.xml", "This is a test!");
+    assertThat(bucket.getFileAsString("XXLU010000001.akn.xml")).get().isEqualTo("This is a test!");
   }
 
   @Test
   void getFileAsStringReturnsEmptyOptionalIfObjectDoesntExist() throws ObjectStoreServiceException {
-    assertThat(bucket.getFileAsString("TEST010000001.akn.xml")).isEmpty();
+    assertThat(bucket.getFileAsString("XXLU010000001.akn.xml")).isEmpty();
   }
 
   @Test
   void getBytesReturnsContentAsBytes() throws ObjectStoreServiceException {
-    bucket.save("TEST010000001.akn.xml", "This is a test!");
-    assertThat(bucket.get("TEST010000001.akn.xml").get()).asString().isEqualTo("This is a test!");
+    bucket.save("XXLU010000001.akn.xml", "This is a test!");
+    assertThat(bucket.get("XXLU010000001.akn.xml").get()).asString().isEqualTo("This is a test!");
   }
 
   @Test
   void getBytesReturnsEmptyOptionalIfObjectDoesNotExist() throws ObjectStoreServiceException {
-    assertThat(bucket.get("TEST010000001.akn.xml")).isEmpty();
+    assertThat(bucket.get("XXLU010000001.akn.xml")).isEmpty();
   }
 
   @Test
   void getStreamReturnsFilterInputStream() throws NoSuchKeyException {
-    bucket.save("TEST010000001.akn.xml", "This is a test!");
-    assertThat(bucket.getStream("TEST010000001.akn.xml")).hasContent("This is a test!");
+    bucket.save("XXLU010000001.akn.xml", "This is a test!");
+    assertThat(bucket.getStream("XXLU010000001.akn.xml")).hasContent("This is a test!");
   }
 
   @Test

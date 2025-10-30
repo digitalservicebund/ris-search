@@ -18,7 +18,7 @@ class LiteratureRepositoryIntegrationTest extends ContainersIntegrationBase {
 
   @Autowired private LiteratureRepository literatureRepository;
 
-  private final Literature literature = mockLiterature("TEST000000001", "2025-04-02T00:00:00Z");
+  private final Literature literature = mockLiterature("XXLU000000001", "2025-04-02T00:00:00Z");
 
   @BeforeEach
   void setUp() {
@@ -37,7 +37,7 @@ class LiteratureRepositoryIntegrationTest extends ContainersIntegrationBase {
 
   @Test
   void deleteByIndexedAtNullDeletesOnlyEntriesWithNoIndexedAtDate() {
-    literatureRepository.save(mockLiterature("TEST000000002", null));
+    literatureRepository.save(mockLiterature("XXLU000000002", null));
     assertThat(literatureRepository.findAll()).hasSize(2);
     literatureRepository.deleteByIndexedAtIsNull();
     assertThat(literatureRepository.findAll()).hasSize(1).containsExactly(literature);
@@ -45,10 +45,10 @@ class LiteratureRepositoryIntegrationTest extends ContainersIntegrationBase {
 
   @Test
   void deleteAllByIdDeletesOnlyEntriesWhichMatchOneOfTheIds() {
-    literatureRepository.save(mockLiterature("TEST000000002", null));
-    literatureRepository.save(mockLiterature("TEST000000003", null));
+    literatureRepository.save(mockLiterature("XXLU000000002", null));
+    literatureRepository.save(mockLiterature("XXLU000000003", null));
     assertThat(literatureRepository.findAll()).hasSize(3);
-    literatureRepository.deleteAllById(List.of("TEST000000002", "TEST000000003"));
+    literatureRepository.deleteAllById(List.of("XXLU000000002", "XXLU000000003"));
     assertThat(literatureRepository.findAll()).hasSize(1).containsExactly(literature);
   }
 

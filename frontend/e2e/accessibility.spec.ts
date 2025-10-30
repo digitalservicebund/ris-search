@@ -72,7 +72,7 @@ const testPages = [
   },
   {
     name: "Literature View Page",
-    url: "/literature/TEST000000001",
+    url: "/literature/XXLU000000001",
     tabs: ["Details"],
   },
   {
