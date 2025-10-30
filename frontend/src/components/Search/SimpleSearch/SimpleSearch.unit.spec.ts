@@ -39,7 +39,7 @@ describe("SimpleSearch", () => {
     { category: "Alle Dokumentarten", filterShouldBeVisible: false },
     { category: "Gesetze & Verordnungen", filterShouldBeVisible: false },
     { category: "Gerichtsentscheidungen", filterShouldBeVisible: true },
-    { category: "Literaturnachweise", filterShouldBeVisible: false },
+    { category: "Literaturnachweise", filterShouldBeVisible: true },
   ]) {
     it(`sets the visibility of the duration filter to ${testCase.filterShouldBeVisible} when the category is ${testCase.category}`, async () => {
       const user = userEvent.setup();
