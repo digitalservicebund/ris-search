@@ -30,7 +30,7 @@ class LiteratureControllerApiTest extends ContainersIntegrationBase {
 
   @Autowired private MockMvc mockMvc;
 
-  private final String documentNumberPresentInBucket = "literatureLdml-1";
+  private final String documentNumberPresentInBucket = "XXLU000000001";
 
   @Test
   @DisplayName("Should return literature when using api endpoint with document number")

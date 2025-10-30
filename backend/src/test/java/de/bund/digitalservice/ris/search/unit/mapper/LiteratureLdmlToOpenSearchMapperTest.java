@@ -21,7 +21,7 @@ import org.mockito.Mockito;
 class LiteratureLdmlToOpenSearchMapperTest {
 
   private static final String VALID_XML =
-      LoadXmlUtils.loadXmlAsString(Literature.class, "literatureLdml-1.akn.xml");
+      LoadXmlUtils.loadXmlAsString(Literature.class, "XXLU000000001.akn.xml");
 
   @Test
   @DisplayName("Correctly maps all available fields from valid literature LDML XML")
@@ -29,8 +29,8 @@ class LiteratureLdmlToOpenSearchMapperTest {
     Literature literature = LiteratureLdmlToOpenSearchMapper.mapLdml(VALID_XML);
 
     // Core identifiers
-    assertThat(literature.id()).isEqualTo("ABCD0000000001");
-    assertThat(literature.documentNumber()).isEqualTo("ABCD0000000001");
+    assertThat(literature.id()).isEqualTo("XXLU000000001");
+    assertThat(literature.documentNumber()).isEqualTo("XXLU000000001");
 
     // Publication info
     assertThat(literature.yearsOfPublication()).containsExactly("2025");

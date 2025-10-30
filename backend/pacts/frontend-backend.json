@@ -102,6 +102,104 @@
       "type": "Synchronous/HTTP"
     },
     {
+      "description": "a request for retrieving a literature document with the same document number",
+      "pending": false,
+      "providerStates": [
+        {
+          "name": "I have a literature document in the database with number XXLU000000001"
+        }
+      ],
+      "request": {
+        "headers": {
+          "Accept": [
+            "application/json"
+          ]
+        },
+        "method": "GET",
+        "path": "/v1/literature/XXLU000000001"
+      },
+      "response": {
+        "body": {
+          "content": {
+            "@id": "/v1/literature/XXLU000000001",
+            "@type": "Literature",
+            "alternativeHeadline": "Dokumentarischer Titel",
+            "authors": [
+              "Musterfrau, Sabine"
+            ],
+            "collaborators": [
+              "Mustermann, Max"
+            ],
+            "conferenceNotes": [
+              "Internationaler Kongress 2025, Berlin, GER"
+            ],
+            "dependentReferences": [
+              "BUV, 1982, 123-123"
+            ],
+            "documentNumber": "XXLU000000001",
+            "documentTypes": [
+              "Auf"
+            ],
+            "encoding": [
+              {
+                "@id": "/v1/literature/XXLU000000001/html",
+                "@type": "MediaObject",
+                "contentUrl": "/v1/literature/XXLU000000001.html",
+                "encodingFormat": "text/html",
+                "inLanguage": "de"
+              },
+              {
+                "@id": "/v1/literature/XXLU000000001/xml",
+                "@type": "MediaObject",
+                "contentUrl": "/v1/literature/XXLU000000001.xml",
+                "encodingFormat": "application/xml",
+                "inLanguage": "de"
+              },
+              {
+                "@id": "/v1/literature/XXLU000000001/zip",
+                "@type": "MediaObject",
+                "contentUrl": "/v1/literature/XXLU000000001.zip",
+                "encodingFormat": "application/zip",
+                "inLanguage": "de"
+              }
+            ],
+            "headline": "Hauptüberschrift",
+            "headlineAdditions": "Zusatz zur Hauptüberschrift",
+            "inLanguage": "de",
+            "independentReferences": [
+              "50 Jahre Betriebs-Berater, 1987, 123-456"
+            ],
+            "languages": [
+              "deu",
+              "eng"
+            ],
+            "normReferences": [
+              "GG, Art 6 Abs 2 S 1, 1949-05-23"
+            ],
+            "originators": [
+              "FOO"
+            ],
+            "outline": "Gliederung",
+            "recordingDate": "1998-01-01",
+            "shortReport": "Kurzreferat",
+            "yearsOfPublication": [
+              "1979",
+              "2004-09"
+            ]
+          },
+          "contentType": "application/json",
+          "encoded": false
+        },
+        "headers": {
+          "Content-Type": [
+            "application/json"
+          ]
+        },
+        "status": 200
+      },
+      "type": "Synchronous/HTTP"
+    },
+    {
       "description": "a request for retrieving the document with the same eli",
       "pending": false,
       "providerStates": [
