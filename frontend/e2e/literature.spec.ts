@@ -90,7 +90,7 @@ test.describe("actions menu", () => {
     context,
     isMobileTest,
   }) => {
-    await page.goto("/literature/TEST000000001", {
+    await page.goto("/literature/XXLU000000001", {
       waitUntil: "networkidle",
     });
 
@@ -124,7 +124,7 @@ test.describe("actions menu", () => {
       const clipboardContents = await page.evaluate(() => {
         return navigator.clipboard.readText();
       });
-      expect(clipboardContents.endsWith("/literature/TEST000000001")).toBe(
+      expect(clipboardContents.endsWith("/literature/XXLU000000001")).toBe(
         true,
       );
     }
@@ -134,7 +134,7 @@ test.describe("actions menu", () => {
     page,
     isMobileTest,
   }) => {
-    await page.goto("/literature/TEST000000001", {
+    await page.goto("/literature/XXLU000000001", {
       waitUntil: "networkidle",
     });
     if (isMobileTest) await page.getByLabel("Aktionen anzeigen").click();
@@ -167,7 +167,7 @@ test.describe("actions menu", () => {
     page,
     isMobileTest,
   }) => {
-    await page.goto("/literature/TEST000000001", {
+    await page.goto("/literature/XXLU000000001", {
       waitUntil: "networkidle",
     });
     if (isMobileTest) await page.getByLabel("Aktionen anzeigen").click();
@@ -192,7 +192,7 @@ test.describe("actions menu", () => {
     page,
     isMobileTest,
   }) => {
-    await page.goto("/literature/TEST000000001", {
+    await page.goto("/literature/XXLU000000001", {
       waitUntil: "networkidle",
     });
 
@@ -211,6 +211,6 @@ test.describe("actions menu", () => {
 
     await button.click();
 
-    await page.waitForURL("v1/literature/TEST000000001.xml");
+    await page.waitForURL("v1/literature/XXLU000000001.xml");
   });
 });
