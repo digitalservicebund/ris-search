@@ -32,7 +32,7 @@ export function useAdvancedSearchRouteParams() {
       : DocumentKind.Norm,
   );
 
-  const query = ref(route.query.q?.toString() ?? "");
+  const query = ref(decodeURIComponent(route.query.q?.toString() ?? ""));
 
   // Date filter --------------------------------------------
 
@@ -77,7 +77,7 @@ export function useAdvancedSearchRouteParams() {
     navigateTo({
       query: {
         ...route.query,
-        q: query.value,
+        q: encodeURIComponent(query.value),
         documentKind: documentKind.value,
         dateFilterType: dateFilter.value.type,
         dateFilterFrom: dateFilter.value.from ?? "",

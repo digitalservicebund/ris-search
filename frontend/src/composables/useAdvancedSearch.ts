@@ -59,7 +59,7 @@ export async function useAdvancedSearch(
     if (dateQuery) result = `(${result}) AND (${dateQuery})`;
 
     return {
-      query: result,
+      query: encodeURIComponent(result),
       size: toValue(itemsPerPage),
       sort: toValue(sort),
       pageIndex: toValue(pageIndex),
