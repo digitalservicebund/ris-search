@@ -1,12 +1,13 @@
 import os from "node:os";
 import path from "node:path";
 import type { BrowserContext, Locator } from "@playwright/test";
-import { test as base, expect as baseExpect, chromium } from "@playwright/test";
+import { chromium, expect as baseExpect, test as base } from "@playwright/test";
 import { environment } from "../../playwright.config";
 import { loginUser } from "./auth";
 
 type WorkerFixtures = {
   isMobileTest: boolean;
+  privateFeaturesEnabled: boolean;
 };
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
@@ -19,10 +20,20 @@ export const test = base.extend<{}, WorkerFixtures>({
     },
     { scope: "worker" },
   ],
+  privateFeaturesEnabled: [
+    // eslint-disable-next-line no-empty-pattern
+    async ({}, use) => {
+      const privateFeaturesEnabled =
+        process.env.NUXT_PUBLIC_PRIVATE_FEATURES_ENABLED === "true";
+      await use(privateFeaturesEnabled);
+    },
+    { scope: "worker" },
+  ],
 });
 
 type SeoWorkerFixtures = {
   persistentContext: BrowserContext;
+  privateFeaturesEnabled: boolean;
 };
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
@@ -47,7 +58,15 @@ export const seoTest = base.extend<{}, SeoWorkerFixtures>({
     },
     { scope: "worker" },
   ],
-
+  privateFeaturesEnabled: [
+    // eslint-disable-next-line no-empty-pattern
+    async ({}, use) => {
+      const privateFeaturesEnabled =
+        process.env.NUXT_PUBLIC_PRIVATE_FEATURES_ENABLED === "true";
+      await use(privateFeaturesEnabled);
+    },
+    { scope: "worker" },
+  ],
   page: async ({ persistentContext }, use) => {
     const page = await persistentContext.newPage();
     await use(page);

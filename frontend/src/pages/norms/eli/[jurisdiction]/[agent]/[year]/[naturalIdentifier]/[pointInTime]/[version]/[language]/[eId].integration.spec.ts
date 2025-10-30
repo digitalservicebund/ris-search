@@ -69,7 +69,7 @@ const mocks = vi.hoisted(() => {
         status: { value: "success" },
       }),
     ),
-    isPrototypeProfile: vi.fn().mockReturnValue(false),
+    usePrivateFeaturesFlag: vi.fn().mockReturnValue(true),
   };
 });
 
@@ -77,8 +77,8 @@ vi.mock("~/composables/useNormData", () => {
   return { useFetchNormArticleContent: mocks.useFetchNormArticleContent };
 });
 
-vi.mock("~/utils/profile", () => {
-  return { isPrototypeProfile: mocks.isPrototypeProfile };
+vi.mock("~/composables/usePrivateFeaturesFlag", () => {
+  return { usePrivateFeaturesFlag: mocks.usePrivateFeaturesFlag };
 });
 
 const { useHeadMock } = vi.hoisted(() => {
@@ -122,7 +122,7 @@ describe("[eId].vue", () => {
     vi.clearAllMocks();
   });
   it("shows the article data properly on prototype", async () => {
-    mocks.isPrototypeProfile.mockReturnValueOnce(true);
+    mocks.usePrivateFeaturesFlag.mockReturnValueOnce(false);
     const wrapper = await mountComponent();
     expect(wrapper.find(".ris-heading2-bold").html()).toBe(
       `<h2 class="ris-heading2-bold my-24 mb-24 inline-block">${headingInnerHtml}</h2>`,
@@ -131,7 +131,7 @@ describe("[eId].vue", () => {
     expect(metadata.exists()).toBe(false);
   });
   it("shows entry into force and expiry dates if not prototype", async () => {
-    mocks.isPrototypeProfile.mockReturnValue(false);
+    mocks.usePrivateFeaturesFlag.mockReturnValue(true);
     const wrapper = await mountComponent();
     await nextTick();
     const metadataText = wrapper
