@@ -110,7 +110,7 @@ jobs:
             echo "Frontend is responding."
           fi
 
-      - name: Run Playwright accessibility tests with private features enabled
+      - name: Run Playwright tests with private features enabled
         if: ${{ matrix.profile == 'internal' }}
         run: npx playwright test --project chromium firefox mobile
         working-directory: ./frontend
@@ -118,7 +118,7 @@ jobs:
           RIS_BASE_URL: http://localhost:3000
           NUXT_PUBLIC_PRIVATE_FEATURES_ENABLED: true
           TZ: Europe/Berlin
-      - name: Run All Playwright tests with private features disabled
+      - name: Run Playwright tests with private features disabled
         if: ${{ matrix.profile == 'public' }}
         run: npx playwright test --project chromium firefox mobile
         working-directory: ./frontend
