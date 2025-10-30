@@ -130,7 +130,11 @@ export default defineNuxtConfig({
        * and whether to accept requests at /api (Nuxt middleware)
        */
       authEnabled: true,
-      profile: "public",
+      /*
+       * A feature flag that controls whether the private annotated features should,
+       * be displayed or not, such features are for example: metadata, fassungen ...etc
+       */
+      privateFeaturesEnabled: false,
       sentryDSN: "",
       analytics: {
         posthogKey: "", // needs override in env

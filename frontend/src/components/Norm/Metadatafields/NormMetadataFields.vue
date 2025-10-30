@@ -2,8 +2,8 @@
 import type { Dayjs } from "dayjs";
 import MetadataField from "~/components/MetadataField.vue";
 import ValidityDatesMetadataFields from "~/components/Norm/Metadatafields/ValidityDatesMetadataFields.vue";
+import { privateFeaturesEnabled } from "~/utils/featureFlags";
 import { getValidityStatusLabel, type ValidityStatus } from "~/utils/norm";
-import { isPrototypeProfile } from "~/utils/profile";
 
 interface Props {
   abbreviation?: string;
@@ -25,7 +25,7 @@ const formattedStatus = computed(() => getValidityStatusLabel(props.status));
     />
     <MetadataField label="Status" :value="formattedStatus" />
     <ValidityDatesMetadataFields
-      v-if="!isPrototypeProfile()"
+      v-if="privateFeaturesEnabled()"
       :valid-from="validFrom"
       :valid-to="validTo"
     />

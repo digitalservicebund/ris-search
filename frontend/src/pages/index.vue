@@ -5,7 +5,7 @@ import ButtonLink from "~/components/ButtonLink.vue";
 import SimpleSearchInput from "~/components/Search/SimpleSearch/SimpleSearchInput.vue";
 import { useRedirectToSearch } from "~/composables/useRedirectToSearch";
 import { useStaticPageSeo } from "~/composables/useStaticPageSeo";
-import { isPrototypeProfile } from "~/utils/profile";
+import { privateFeaturesEnabled } from "~/utils/featureFlags";
 import IcBaselineLaunch from "~icons/ic/baseline-launch";
 
 const redirectToSearch = useRedirectToSearch();
@@ -83,7 +83,7 @@ useStaticPageSeo("startseite");
       </div>
     </FeatureCard>
 
-    <FeatureCard v-if="!isPrototypeProfile()">
+    <FeatureCard v-if="privateFeaturesEnabled()">
       <div>
         <h2 class="ris-heading3-bold break-words hyphens-auto">
           English translation of German laws and regulations

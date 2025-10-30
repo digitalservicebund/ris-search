@@ -2,8 +2,8 @@ import { render, screen } from "@testing-library/vue";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import NormMetadataFields from "./NormMetadataFields.vue";
 import { parseDateGermanLocalTime } from "~/utils/dateFormatting";
+import * as Config from "~/utils/featureFlags";
 import type { ValidityStatus } from "~/utils/norm";
-import * as Config from "~/utils/profile";
 
 describe("NormMetadataFields.vue", () => {
   afterEach(() => {
@@ -62,8 +62,11 @@ describe("NormMetadataFields.vue", () => {
   });
 
   it("hides 'valid from' and 'valid to' fields on prototype", () => {
-    const mockedIsPrototypeProfile = vi.spyOn(Config, "isPrototypeProfile");
-    mockedIsPrototypeProfile.mockReturnValue(true);
+    const mockedPrivateFeaturesEnabled = vi.spyOn(
+      Config,
+      "privateFeaturesEnabled",
+    );
+    mockedPrivateFeaturesEnabled.mockReturnValue(false);
 
     expect(screen.queryByText("Gültig ab")).not.toBeInTheDocument();
     expect(screen.queryByText("01.01.2025")).not.toBeInTheDocument();

@@ -2,7 +2,7 @@ import { render, screen } from "@testing-library/vue";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import NormSearchResult from "./NormSearchResult.vue";
 import type { LegislationWork, SearchResult, TextMatch } from "~/types";
-import * as Config from "~/utils/profile";
+import * as Config from "~/utils/featureFlags";
 
 const mockSearchResult: SearchResult<LegislationWork> = {
   item: {
@@ -101,8 +101,11 @@ describe("NormSearchResult.vue", () => {
   });
 
   it("renders ausfertigungs datum when in prototype environment", () => {
-    const mockedIsPrototypeProfile = vi.spyOn(Config, "isPrototypeProfile");
-    mockedIsPrototypeProfile.mockReturnValue(true);
+    const mockedPrivateFeaturesEnabled = vi.spyOn(
+      Config,
+      "privateFeaturesEnabled",
+    );
+    mockedPrivateFeaturesEnabled.mockReturnValue(false);
 
     renderComponent();
 

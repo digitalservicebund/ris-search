@@ -22,19 +22,18 @@ the [main README](../README.md) for further instructions.
 
 The frontend will be available at [localhost:3000](http://localhost:3000).
 
-The frontend comes in different variants,
+The frontend has a feature flag that enables or disables private features distinguishing internal from public features,
 
-- public: the version to be released to the public end-of-year 2025
-- prototype: a test phase version of the public prototype with fewer data fields
-- internal: an advanced version showing additional metadata, to be used internally by public administration officials
+- public: the features are allowed to be seen by the public and are accessible online without authentication
+- private: the features require authentication and are nto allowed to be shown yet to the public
 
-The default one is public. Set `NUXT_PUBLIC_PROFILE=internal`
-to see the internal variant (the NUXT_PUBLIC prefix only means that the value will be accessible in the browser).
+The default one is that private features are disabled. Set `NUXT_PUBLIC_PRIVATE_FEATURES_ENABLED=false`
+to see the feature flag variant (the NUXT_PUBLIC prefix only means that the value will be accessible in the browser).
 
-To use the prototype profile, you may use the prototype env file by running
+To use the public profile (e.g. for prototype), you may use the public env file by running
 
 ```shell
-yarn dev --dotenv .env.prototype
+yarn dev --dotenv .env.public
 ```
 
 ## Logging in

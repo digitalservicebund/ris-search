@@ -23,7 +23,7 @@ describe("robots txt route", () => {
     mockUseRuntimeConfig.mockImplementation(() => ({
       risBackendUrl: "backendUrl",
       public: {
-        profile: "public",
+        privateFeaturesEnabled: false,
         authEnabled: true,
       },
     }));
@@ -65,7 +65,7 @@ describe("robots txt route", () => {
     mockUseRuntimeConfig.mockImplementation(() => ({
       risBackendUrl: "backendUrl",
       public: {
-        profile: "public",
+        privateFeaturesEnabled: false,
         authEnabled: false,
       },
     }));

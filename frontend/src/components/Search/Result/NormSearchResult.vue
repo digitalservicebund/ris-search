@@ -3,8 +3,8 @@ import LegalIcon from "virtual:icons/mdi/legal";
 import { usePostHogStore } from "~/stores/usePostHogStore";
 import type { LegislationWork, SearchResult, TextMatch } from "~/types";
 import { dateFormattedDDMMYYYY } from "~/utils/dateFormatting";
+import { privateFeaturesEnabled } from "~/utils/featureFlags";
 import { temporalCoverageToValidityInterval } from "~/utils/norm";
-import { isPrototypeProfile } from "~/utils/profile";
 import { sanitizeSearchResult } from "~/utils/sanitize";
 import { addEllipsis } from "~/utils/textFormatting";
 
@@ -34,7 +34,7 @@ const link = computed(() => {
 });
 
 const formattedDate = computed(() => {
-  const date = isPrototypeProfile()
+  const date = privateFeaturesEnabled()
     ? item.value?.legislationDate
     : temporalCoverageToValidityInterval(
         item.value?.workExample?.temporalCoverage,

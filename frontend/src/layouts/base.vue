@@ -4,12 +4,7 @@ import ConsentBanner from "~/components/Analytics/ConsentBanner.vue";
 import AppFooter from "~/components/AppFooter.vue";
 import AppHeader from "~/components/AppHeader.vue";
 import NavbarTop from "~/components/NavbarTop.vue";
-import { isPublicProfile, isPrototypeProfile } from "~/utils/profile";
-/* v8 ignore start */
-const isPublic = isPublicProfile();
-const isPrototype = isPrototypeProfile();
-const showPublicProfileHeader = isPublic || isPrototype;
-/* v8 ignore stop */
+import { privateFeaturesEnabled } from "~/utils/featureFlags";
 </script>
 
 <template>
@@ -19,7 +14,7 @@ const showPublicProfileHeader = isPublic || isPrototype;
   </client-only>
   <div class="flex flex-col gap-48">
     <div class="min-h-[50vh] bg-gray-100">
-      <AppHeader v-if="showPublicProfileHeader" />
+      <AppHeader v-if="!privateFeaturesEnabled()" />
       <NavbarTop v-else />
       <main>
         <slot />

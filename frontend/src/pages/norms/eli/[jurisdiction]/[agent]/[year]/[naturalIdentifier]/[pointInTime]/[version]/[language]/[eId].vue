@@ -14,13 +14,13 @@ import { useValidNormVersions } from "~/composables/useNormVersions";
 import { type Article, DocumentKind, type LegislationWork } from "~/types";
 import { parseDateGermanLocalTime } from "~/utils/dateFormatting";
 import { formatDocumentKind } from "~/utils/displayValues";
+import { privateFeaturesEnabled } from "~/utils/featureFlags";
 import { parseDocument } from "~/utils/htmlParser";
 import {
   getNormBreadcrumbTitle,
   getNormTitle,
   temporalCoverageToValidityInterval,
 } from "~/utils/norm";
-import { isPrototypeProfile } from "~/utils/profile";
 import { findNodePath, tocItemsToTreeNodes } from "~/utils/tableOfContents";
 import { truncateAtWord } from "~/utils/textFormatting";
 import IcBaselineArrowBack from "~icons/ic/baseline-arrow-back";
@@ -226,7 +226,7 @@ useDynamicSeo({ title, description });
       </div>
 
       <div
-        v-if="!isPrototypeProfile()"
+        v-if="privateFeaturesEnabled()"
         class="container mb-24 flex flex-col space-y-16 space-x-0 md:space-y-0 lg:flex-row lg:space-x-24"
         data-testid="metadata"
       >

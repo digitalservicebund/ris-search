@@ -36,6 +36,7 @@ import { useNormVersions } from "~/composables/useNormVersions";
 import { DocumentKind, type LegislationWork } from "~/types";
 import { dateFormattedDDMMYYYY } from "~/utils/dateFormatting";
 import { formatDocumentKind } from "~/utils/displayValues";
+import { privateFeaturesEnabled } from "~/utils/featureFlags";
 import {
   getNormBreadcrumbTitle,
   getValidityStatus,
@@ -44,7 +45,6 @@ import {
   getValidityStatusLabel,
 } from "~/utils/norm";
 import type { ValidityStatus } from "~/utils/norm";
-import { isPrototypeProfile } from "~/utils/profile";
 import { tocItemsToTreeNodes } from "~/utils/tableOfContents";
 import { truncateAtWord } from "~/utils/textFormatting";
 import IcBaselineSubject from "~icons/ic/baseline-subject";
@@ -92,11 +92,11 @@ const tableOfContents: Ref<TreeNode[]> = computed(() => {
 });
 
 const validityInterval = computed(() =>
-  isPrototypeProfile()
-    ? undefined
-    : temporalCoverageToValidityInterval(
+  privateFeaturesEnabled()
+    ? temporalCoverageToValidityInterval(
         metadata.value?.workExample.temporalCoverage,
-      ),
+      )
+    : undefined,
 );
 
 const validityStatus = computed(() => {
@@ -136,7 +136,6 @@ const breadcrumbItems: ComputedRef<BreadcrumbItem[]> = computed(() => {
   return list;
 });
 
-const prototypeMode = isPrototypeProfile();
 const buildOgTitle = (
   norm: LegislationWork,
   validFrom?: Dayjs,
@@ -148,7 +147,7 @@ const buildOgTitle = (
 
   if (!baseTitle) return undefined;
 
-  if (prototypeMode) {
+  if (!privateFeaturesEnabled()) {
     const parts: string[] = [baseTitle];
 
     if (validFrom) {
@@ -325,7 +324,7 @@ useDynamicSeo({ title, description });
           </TabPanel>
           <TabPanel value="2" :pt="tabPanelStyles" class="pt-24 pb-80">
             <NormVersionList
-              v-if="!isPrototypeProfile()"
+              v-if="privateFeaturesEnabled()"
               class="container"
               :status="normVersionsStatus"
               :current-legislation-identifier="
