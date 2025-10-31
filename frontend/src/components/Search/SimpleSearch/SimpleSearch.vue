@@ -105,7 +105,7 @@ useHead({ title });
       <CategoryFilter />
       <CourtFilter />
       <DateRangeFilter v-if="documentKind === DocumentKind.CaseLaw" />
-      <YearRangeFilter v-if="documentKind === DocumentKind.Literature" />
+      <YearRangeFilter v-else-if="documentKind === DocumentKind.Literature" />
     </fieldset>
     <div id="main" class="w-full flex-col justify-end gap-8 lg:w-9/12">
       <Pagination

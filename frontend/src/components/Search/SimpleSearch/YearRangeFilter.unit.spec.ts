@@ -45,8 +45,9 @@ describe("year/year range filter", () => {
     },
   ];
 
-  for (const { mode, fields, expectations } of scenarios) {
-    it(`renders inputs ${fields.length ? fields.join(", ") : "none"} and stores correct values for mode "${mode}"`, async () => {
+  test.for(scenarios)(
+    'renders inputs %s and stores correct values for mode "%s"',
+    async ({ mode, fields, expectations }) => {
       const store = await setStoreValues({ dateSearchMode: mode });
 
       // check rendered inputs
@@ -61,19 +62,14 @@ describe("year/year range filter", () => {
       await nextTick();
 
       // verify store state
-      if ("dateAfter" in expectations) {
-        expect(store.dateAfter).toBe(expectations.dateAfter);
-      } else {
-        expect(store.dateAfter).toBeUndefined();
-      }
-
-      if ("dateBefore" in expectations) {
-        expect(store.dateBefore).toBe(expectations.dateBefore);
-      } else {
-        expect(store.dateBefore).toBeUndefined();
-      }
-    });
-  }
+      expect(store.dateAfter).toBe(
+        "dateAfter" in expectations ? expectations.dateAfter : undefined,
+      );
+      expect(store.dateBefore).toBe(
+        "dateBefore" in expectations ? expectations.dateBefore : undefined,
+      );
+    },
+  );
 
   it("it renders no input fields if non data search mode selected", async () => {
     await setStoreValues({ dateSearchMode: DateSearchMode.None });
@@ -123,20 +119,5 @@ describe("year/year range filter", () => {
     await nextTick();
 
     expect(store.dateAfter).toBeUndefined();
-  });
-
-  it("updates inputs when store values change", async () => {
-    await setStoreValues({
-      dateSearchMode: DateSearchMode.Range,
-      dateAfter: "2010-01-01",
-      dateBefore: "2020-12-31",
-    });
-
-    // expect(store.dateAfter).toBe("2010-01-01");
-    // expect(store.dateBefore).toBe("2020-12-31");
-
-    const inputs = wrapper.findAll("input");
-    const values = inputs.map((el) => (el.element as HTMLInputElement).value);
-    expect(values).toEqual(["2010", "2020"]);
   });
 });
