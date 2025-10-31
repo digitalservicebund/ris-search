@@ -87,6 +87,22 @@ describe("useAdvancedSearchRouteParams", () => {
 
       expect(query.value).toBe("");
     });
+
+    it("decodes a URI encoded query", async () => {
+      vi.doMock("#app", () => ({
+        useRoute: vi.fn().mockReturnValue({
+          query: { q: encodeURIComponent("DATUM:>2021-01-01") },
+        }),
+      }));
+
+      const { useAdvancedSearchRouteParams } = await import(
+        "./useAdvancedSearchRouteParams"
+      );
+
+      const { query } = useAdvancedSearchRouteParams();
+
+      expect(query.value).toBe("DATUM:>2021-01-01");
+    });
   });
 
   describe("date filter", () => {
@@ -379,7 +395,7 @@ describe("useAdvancedSearchRouteParams", () => {
       expect(navigateToMock).toHaveBeenCalledWith({
         query: {
           existingParam: "value",
-          q: "test search",
+          q: "test%20search",
           documentKind: "R",
           dateFilterType: "allTime",
           dateFilterFrom: "2023-01-01",
@@ -388,6 +404,32 @@ describe("useAdvancedSearchRouteParams", () => {
           sort: "relevance",
           itemsPerPage: "100",
         },
+      });
+    });
+
+    it("encodes the query string", async () => {
+      const navigateToMock = vi.fn();
+
+      vi.doMock("#app", () => ({
+        useRoute: vi.fn().mockReturnValue({
+          query: {},
+        }),
+        navigateTo: navigateToMock,
+      }));
+
+      const { useAdvancedSearchRouteParams } = await import(
+        "./useAdvancedSearchRouteParams"
+      );
+
+      const { query, saveFilterStateToRoute } = useAdvancedSearchRouteParams();
+
+      query.value = "DATUM:>2021-01-01";
+      saveFilterStateToRoute();
+
+      expect(navigateToMock).toHaveBeenCalledWith({
+        query: expect.objectContaining({
+          q: encodeURIComponent("DATUM:>2021-01-01"),
+        }),
       });
     });
 

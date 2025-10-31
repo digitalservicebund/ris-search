@@ -76,6 +76,19 @@ function renderComponent(
   });
 }
 
+function withTemporalCoverage(temporalCoverage: string | undefined) {
+  return {
+    ...mockSearchResult,
+    item: {
+      ...mockSearchResult.item,
+      workExample: {
+        ...mockSearchResult.item.workExample,
+        temporalCoverage,
+      },
+    },
+  } as SearchResult<LegislationWork>;
+}
+
 const mocks = vi.hoisted(() => {
   return {
     usePrivateFeaturesFlag: vi.fn().mockReturnValue(false),
@@ -202,5 +215,62 @@ describe("NormSearchResult.vue", () => {
 
     const contentHeading = screen.getAllByRole("heading")[1];
     expect(contentHeading?.innerHTML).toBe(expectedSanitized);
+  });
+
+  describe("validity status badge", () => {
+    beforeEach(() => {
+      vi.useFakeTimers();
+      vi.setSystemTime("2025-01-15");
+    });
+
+    afterEach(() => {
+      vi.useRealTimers();
+    });
+
+    it("displays green badge for currently valid norm", () => {
+      const { container } = renderComponent(
+        withTemporalCoverage("2024-01-01/2025-12-31"),
+      );
+
+      expect(screen.getByText("Aktuell gültig")).toBeInTheDocument();
+      const badge = container.querySelector(".border-green-200");
+      expect(badge).toBeInTheDocument();
+    });
+
+    it("displays yellow badge for future norm", () => {
+      const { container } = renderComponent(
+        withTemporalCoverage("2025-02-01/2025-12-31"),
+      );
+
+      expect(screen.getByText("Zukünftig in Kraft")).toBeInTheDocument();
+      const badge = container.querySelector(".border-yellow-300");
+      expect(badge).toBeInTheDocument();
+    });
+
+    it("displays red badge for expired norm", () => {
+      const { container } = renderComponent(
+        withTemporalCoverage("2020-01-01/2024-12-31"),
+      );
+
+      expect(screen.getByText("Außer Kraft")).toBeInTheDocument();
+      const badge = container.querySelector(".border-red-400");
+      expect(badge).toBeInTheDocument();
+    });
+
+    it("does not display badge when temporal coverage is undefined", () => {
+      renderComponent(withTemporalCoverage(undefined));
+
+      expect(screen.queryByText("Aktuell gültig")).not.toBeInTheDocument();
+      expect(screen.queryByText("Zukünftig in Kraft")).not.toBeInTheDocument();
+      expect(screen.queryByText("Außer Kraft")).not.toBeInTheDocument();
+    });
+
+    it("does not display badge when temporal coverage is completely open", () => {
+      renderComponent(withTemporalCoverage("../.."));
+
+      expect(screen.queryByText("Aktuell gültig")).not.toBeInTheDocument();
+      expect(screen.queryByText("Zukünftig in Kraft")).not.toBeInTheDocument();
+      expect(screen.queryByText("Außer Kraft")).not.toBeInTheDocument();
+    });
   });
 });

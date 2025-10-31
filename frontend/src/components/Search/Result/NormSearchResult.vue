@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import LegalIcon from "virtual:icons/mdi/legal";
+import Badge from "~/components/Badge.vue";
 import { usePrivateFeaturesFlag } from "~/composables/usePrivateFeaturesFlag";
 import { usePostHogStore } from "~/stores/usePostHogStore";
 import type { LegislationWork, SearchResult, TextMatch } from "~/types";
 import { dateFormattedDDMMYYYY } from "~/utils/dateFormatting";
+import { formatNormValidity } from "~/utils/displayValues";
 import { temporalCoverageToValidityInterval } from "~/utils/norm";
 import { sanitizeSearchResult } from "~/utils/sanitize";
 import { addEllipsis } from "~/utils/textFormatting";
@@ -12,8 +14,11 @@ const props = defineProps<{
   searchResult: SearchResult<LegislationWork>;
   order: number;
 }>();
+
 const postHogStore = usePostHogStore();
+
 const item = computed(() => props.searchResult.item);
+
 const highlights: ComputedRef<TextMatch[]> = computed(
   () => props.searchResult.textMatches,
 );
@@ -50,9 +55,14 @@ const relevantHighlights = computed(() => {
     .filter((highlight) => highlight.name != "name")
     .map((hl) => ({ ...hl, text: addEllipsis(hl.text) }));
 });
+
 function openResult(url: string) {
   postHogStore.searchResultClicked(url, props.order);
 }
+
+const validityStatus = computed(() => {
+  return formatNormValidity(item.value.workExample.temporalCoverage);
+});
 </script>
 
 <template>
@@ -64,6 +74,7 @@ function openResult(url: string) {
       </span>
       <span v-if="item.abbreviation">{{ item.abbreviation }}</span>
       <span v-if="formattedDate">{{ formattedDate }}</span>
+      <Badge v-if="validityStatus" class="md:ml-auto" v-bind="validityStatus" />
     </p>
 
     <NuxtLink
