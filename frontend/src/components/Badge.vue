@@ -15,7 +15,7 @@ export enum BadgeColor {
 </script>
 
 <template>
-  <div
+  <span
     class="ris-label3-bold inline-block px-8 py-4"
     :class="{
       'border border-green-200 bg-green-100 text-green-800':
@@ -28,5 +28,5 @@ export enum BadgeColor {
     }"
   >
     {{ label }}
-  </div>
+  </span>
 </template>
