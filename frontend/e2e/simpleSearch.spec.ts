@@ -421,4 +421,67 @@ test.describe("searching literature", () => {
       }),
     ).toBeVisible();
   });
+
+  test("searches by publication year with dateBefore", async ({ page }) => {
+    await page.goto("/search?category=L", { waitUntil: "networkidle" });
+
+    await page
+      .getByRole("combobox", { name: "Keine zeitliche Begrenzung" })
+      .click();
+    await page.getByRole("option", { name: "Bis zu einem Jahr" }).click();
+
+    await page.getByRole("textbox", { name: "Jahr" }).fill("2013");
+
+    await expect(page).toHaveURL(/dateBefore=2013-12-31/);
+
+    await expect(getSearchResults(page)).toHaveCount(2);
+  });
+
+  test("searches by publication year with dateAfter", async ({ page }) => {
+    await page.goto("/search?category=L", { waitUntil: "networkidle" });
+
+    await page
+      .getByRole("combobox", { name: "Keine zeitliche Begrenzung" })
+      .click();
+    await page.getByRole("option", { name: "Ab einem Jahr" }).click();
+
+    await page.getByRole("textbox", { name: "Jahr" }).fill("2024");
+
+    await expect(page).toHaveURL(/dateAfter=2024-01-01/);
+
+    await expect(getSearchResults(page)).toHaveCount(1);
+  });
+
+  test("searches by publication year with dateBefore and dateAfter", async ({
+    page,
+  }) => {
+    await page.goto("/search?category=L", { waitUntil: "networkidle" });
+
+    await page
+      .getByRole("combobox", { name: "Keine zeitliche Begrenzung" })
+      .click();
+    await page.getByRole("option", { name: "In einem Jahr" }).click();
+
+    await page.getByRole("textbox", { name: "Jahr" }).fill("2015");
+
+    await expect(page).toHaveURL(/dateAfter=2015-01-01&dateBefore=2015-12-31/);
+
+    await expect(getSearchResults(page)).toHaveCount(1);
+  });
+
+  test("searches by publication year with range", async ({ page }) => {
+    await page.goto("/search?category=L", { waitUntil: "networkidle" });
+
+    await page
+      .getByRole("combobox", { name: "Keine zeitliche Begrenzung" })
+      .click();
+    await page.getByRole("option", { name: "In einem Zeitraum" }).click();
+
+    await page.getByRole("textbox", { name: "Ab dem Jahr" }).fill("2015");
+    await page.getByRole("textbox", { name: "Bis zum Jahr" }).fill("2024");
+
+    await expect(page).toHaveURL(/dateAfter=2015-01-01&dateBefore=2024-12-31/);
+
+    await expect(getSearchResults(page)).toHaveCount(2);
+  });
 });
