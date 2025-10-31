@@ -117,7 +117,7 @@ useDynamicSeo({ title, description });
       <div class="flex items-center gap-8 print:hidden">
         <RisBreadcrumb :items="breadcrumbItems" class="grow" />
         <client-only>
-          <ActionsMenu :permalink="permalink" />
+          <ActionsMenu :permalink />
         </client-only>
       </div>
 

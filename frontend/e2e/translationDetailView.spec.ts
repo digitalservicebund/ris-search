@@ -5,9 +5,11 @@ test(
   { tag: ["@RISDEV-8950"] },
   async ({ page }) => {
     await page.goto("/translations");
-    const links = page.getByTestId("translations").getByRole("link");
-
-    await expect(links).toHaveCount(3);
+    const translationListRegion = page.getByRole("region", {
+      name: "Translations List",
+    });
+    const items = translationListRegion.getByRole("listitem");
+    await expect(items).toHaveCount(3);
 
     const title = "Act on Chemistry and Dentists";
 

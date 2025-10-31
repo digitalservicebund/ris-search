@@ -72,9 +72,9 @@ const metadata: Ref<LegislationWork | undefined> = computed(() => {
 
 const abbreviation = data.value?.legislationWork.abbreviation;
 
-const { data: translation, error: _translationFetchError } = abbreviation
+const { data: translation } = abbreviation
   ? fetchTranslationListWithIdFilter(abbreviation)
-  : { data: { value: [] }, error: null };
+  : { data: { value: [] } };
 
 const translationUrl = computed(() => {
   if (translation.value && translation.value.length > 0) {

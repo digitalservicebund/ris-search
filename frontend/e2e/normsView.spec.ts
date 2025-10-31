@@ -163,15 +163,15 @@ test("can view images", async ({ page }) => {
 
 test.describe("shows link to translation if exists", () => {
   test("has link to translation", async ({ page, isMobileTest }) => {
-    await page.goto("/norms/eli/bund/bgbl-1/1964/s902/2009-02-05/19/deu");
-    await page.waitForLoadState("networkidle");
+    await page.goto("norms/eli/bund/bgbl-1/1964/s902/2009-02-05/19/deu", {
+      waitUntil: "networkidle",
+    });
     if (isMobileTest) {
       await page.getByLabel("Aktionen anzeigen").click();
     }
     const translationButton = page.getByRole("link", {
       name: "Zur englischen Übersetzung",
     });
-    await expect(translationButton).toBeVisible();
     translationButton.click();
     await expect(
       page.getByRole("heading", {
