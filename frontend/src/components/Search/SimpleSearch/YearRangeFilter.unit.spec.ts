@@ -1,22 +1,12 @@
 import { createTestingPinia } from "@pinia/testing";
 import { mount } from "@vue/test-utils";
-import type { VueWrapper } from "@vue/test-utils";
-import { beforeEach, describe, expect, it } from "vitest";
+import { describe, expect, it } from "vitest";
+import { nextTick } from "vue";
 import YearRangeFilter from "./YearRangeFilter.vue";
 import { DateSearchMode } from "~/stores/searchParams";
 import { setStoreValues } from "~/tests/piniaUtils";
 
 describe("year/year range filter", () => {
-  let wrapper: VueWrapper;
-
-  beforeEach(() => {
-    wrapper = mount(YearRangeFilter, {
-      global: {
-        plugins: [createTestingPinia({ stubActions: false })],
-      },
-    });
-  });
-
   const scenarios = [
     {
       mode: DateSearchMode.None,
@@ -45,9 +35,12 @@ describe("year/year range filter", () => {
     },
   ];
 
-  test.for(scenarios)(
-    'renders inputs %s and stores correct values for mode "%s"',
-    async ({ mode, fields, expectations }) => {
+  scenarios.forEach(({ mode, fields, expectations }) => {
+    it(`renders inputs ${fields.length ? fields.join(", ") : "none"} and stores correct values for mode "${mode}"`, async () => {
+      const wrapper = mount(YearRangeFilter, {
+        global: { plugins: [createTestingPinia({ stubActions: false })] },
+      });
+
       const store = await setStoreValues({ dateSearchMode: mode });
 
       // check rendered inputs
@@ -56,7 +49,7 @@ describe("year/year range filter", () => {
 
       // set values if any
       for (const id of fields) {
-        wrapper.find(`input[id="${id}"]`).setValue("2000");
+        await wrapper.find(`input[id="${id}"]`).setValue("2000");
       }
 
       await nextTick();
@@ -68,17 +61,25 @@ describe("year/year range filter", () => {
       expect(store.dateBefore).toBe(
         "dateBefore" in expectations ? expectations.dateBefore : undefined,
       );
-    },
-  );
+    });
+  });
 
-  it("it renders no input fields if non data search mode selected", async () => {
+  it("renders no input fields if non data search mode selected", async () => {
+    const wrapper = mount(YearRangeFilter, {
+      global: { plugins: [createTestingPinia({ stubActions: false })] },
+    });
+
     await setStoreValues({ dateSearchMode: DateSearchMode.None });
-    expect(wrapper.findComponent({ name: "Select" }).vm.modelValue).toBe("");
 
+    expect(wrapper.findComponent({ name: "Select" }).vm.modelValue).toBe("");
     expect(wrapper.findAll("input")).toHaveLength(0);
   });
 
   it("resets date values when mode changes", async () => {
+    const wrapper = mount(YearRangeFilter, {
+      global: { plugins: [createTestingPinia({ stubActions: false })] },
+    });
+
     const store = await setStoreValues({
       dateSearchMode: DateSearchMode.Range,
     });
@@ -96,6 +97,10 @@ describe("year/year range filter", () => {
   });
 
   it('keeps "Equal" mode start and end synchronized', async () => {
+    const wrapper = mount(YearRangeFilter, {
+      global: { plugins: [createTestingPinia({ stubActions: false })] },
+    });
+
     const store = await setStoreValues({
       dateSearchMode: DateSearchMode.Equal,
     });
@@ -109,6 +114,10 @@ describe("year/year range filter", () => {
   });
 
   it("clears store values for invalid year input", async () => {
+    const wrapper = mount(YearRangeFilter, {
+      global: { plugins: [createTestingPinia({ stubActions: false })] },
+    });
+
     const store = await setStoreValues({
       dateSearchMode: DateSearchMode.After,
     });
