@@ -2,16 +2,12 @@
 import _ from "lodash";
 import Column from "primevue/column";
 import DataTable from "primevue/datatable";
-import Badge, { BadgeColor } from "~/components/Badge.vue";
+import Badge from "~/components/Badge.vue";
 import IncompleteDataMessage from "~/components/IncompleteDataMessage.vue";
 import type { LegislationWork, SearchResult } from "~/types";
 import { dateFormattedDDMMYYYY } from "~/utils/dateFormatting";
-import {
-  getValidityStatus,
-  getValidityStatusLabel,
-  temporalCoverageToValidityInterval,
-  type ValidityStatus,
-} from "~/utils/norm";
+import { formatNormValidity } from "~/utils/displayValues";
+import { temporalCoverageToValidityInterval } from "~/utils/norm";
 import IcBaselineLaunch from "~icons/ic/baseline-launch";
 
 const props = defineProps<{
@@ -24,14 +20,9 @@ interface TableRowData {
   id: number;
   fromDate: string;
   toDate: string;
-  status?: Status;
+  status?: ReturnType<typeof formatNormValidity>;
   link: string;
   selectable: boolean;
-}
-
-interface Status {
-  label: string;
-  color: BadgeColor;
 }
 
 const selectedVersion = ref<TableRowData>();
@@ -48,13 +39,14 @@ const tableRowData = computed<TableRowData[]>(() => {
       version.item.workExample.temporalCoverage,
     );
 
+    const status = formatNormValidity(
+      version.item.workExample.temporalCoverage,
+    );
+
     const id = index;
-    const validityStatus = getValidityStatus(validityInterval);
-    const status: Status = {
-      label: getValidityStatusLabel(validityStatus) ?? "Unbekannt",
-      color: getStatusColor(validityStatus),
-    };
+
     const link = `/norms/${version.item.workExample.legislationIdentifier}`;
+
     const selectable =
       version.item.workExample.legislationIdentifier !==
       props.currentLegislationIdentifier;
@@ -71,19 +63,6 @@ const tableRowData = computed<TableRowData[]>(() => {
     return rowData;
   });
 });
-
-function getStatusColor(validityStatus?: ValidityStatus): BadgeColor {
-  switch (validityStatus) {
-    case "InForce":
-      return BadgeColor.GREEN;
-    case "FutureInForce":
-      return BadgeColor.YELLOW;
-    case "Expired":
-      return BadgeColor.RED;
-    default:
-      return BadgeColor.BLUE;
-  }
-}
 
 const rowClass = (row: TableRowData) => {
   return row.selectable
