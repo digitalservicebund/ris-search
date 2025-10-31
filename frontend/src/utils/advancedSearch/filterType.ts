@@ -100,8 +100,10 @@ function validAtPointInTime(pointInTime: string): string {
 /**
  * Converts a date filter to a Lucene query string.
  *
- * @param strictFilter Date filter to convert
+ * @param filter Date filter to convert
  * @returns Lucene query string or undefined if the filter is "allTime"
+ * @throws if the provided filter is in an inconsistent state (e.g. required
+ *  parameters for the current type are missing)
  */
 export function dateFilterToQuery(
   filter: DateFilterValue,
