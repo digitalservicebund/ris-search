@@ -362,4 +362,14 @@ describe("DataFieldPicker", () => {
 
     expect(screen.getByRole("form")).toHaveAttribute("id", "example");
   });
+
+  it("shows the operators help", () => {
+    render(DataFieldPicker, {
+      props: {
+        documentKind: DocumentKind.CaseLaw,
+      },
+    });
+
+    expect(screen.getAllByText("Hilfestellung zu Suchoperatoren")).toBeTruthy();
+  });
 });
