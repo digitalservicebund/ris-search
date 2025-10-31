@@ -1,5 +1,5 @@
+import { mountSuspended } from "@nuxt/test-utils/runtime";
 import { createTestingPinia } from "@pinia/testing";
-import { mount } from "@vue/test-utils";
 import { describe, expect, it } from "vitest";
 import { nextTick } from "vue";
 import YearRangeFilter from "./YearRangeFilter.vue";
@@ -37,7 +37,7 @@ describe("year/year range filter", () => {
 
   scenarios.forEach(({ mode, fields, expectations }) => {
     it(`renders inputs ${fields.length ? fields.join(", ") : "none"} and stores correct values for mode "${mode}"`, async () => {
-      const wrapper = mount(YearRangeFilter, {
+      const wrapper = await mountSuspended(YearRangeFilter, {
         global: { plugins: [createTestingPinia({ stubActions: false })] },
       });
 
@@ -65,7 +65,7 @@ describe("year/year range filter", () => {
   });
 
   it("renders no input fields if non data search mode selected", async () => {
-    const wrapper = mount(YearRangeFilter, {
+    const wrapper = await mountSuspended(YearRangeFilter, {
       global: { plugins: [createTestingPinia({ stubActions: false })] },
     });
 
@@ -76,7 +76,7 @@ describe("year/year range filter", () => {
   });
 
   it("resets date values when mode changes", async () => {
-    const wrapper = mount(YearRangeFilter, {
+    const wrapper = await mountSuspended(YearRangeFilter, {
       global: { plugins: [createTestingPinia({ stubActions: false })] },
     });
 
@@ -97,7 +97,7 @@ describe("year/year range filter", () => {
   });
 
   it('keeps "Equal" mode start and end synchronized', async () => {
-    const wrapper = mount(YearRangeFilter, {
+    const wrapper = await mountSuspended(YearRangeFilter, {
       global: { plugins: [createTestingPinia({ stubActions: false })] },
     });
 
@@ -114,7 +114,7 @@ describe("year/year range filter", () => {
   });
 
   it("clears store values for invalid year input", async () => {
-    const wrapper = mount(YearRangeFilter, {
+    const wrapper = await mountSuspended(YearRangeFilter, {
       global: { plugins: [createTestingPinia({ stubActions: false })] },
     });
 
