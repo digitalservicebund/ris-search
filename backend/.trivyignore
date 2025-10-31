@@ -12,3 +12,7 @@ CVE-2025-58187
 CVE-2025-58188
 CVE-2025-61723
 CVE-2025-61724
+
+# Ignore MEDIUM CVEs because of missing artifact location and coming from paketo
+CVE-2025-58189
+CVE-2025-61725
