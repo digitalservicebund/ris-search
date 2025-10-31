@@ -96,6 +96,7 @@ test(
   async ({ page }) => {
     await page.goto("/translations/TestV");
     await page.getByRole("link", { name: "Go to the German version" }).click();
+    await page.waitForLoadState("networkidle");
     await expect(
       page.getByRole("heading", {
         name: "Testverordnung zur Musterregelung des öffentlichen Dienstes",

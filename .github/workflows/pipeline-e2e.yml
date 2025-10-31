@@ -110,19 +110,21 @@ jobs:
             echo "Frontend is responding."
           fi
 
-      - name: Run Playwright tests on staging
+      - name: Run Playwright tests with private features enabled
         if: ${{ matrix.profile == 'internal' }}
-        run: npx playwright test accessibility.spec.ts seo.spec.ts --project chromium firefox mobile seoMobile seoDesktop
+        run: npx playwright test --project chromium firefox mobile
         working-directory: ./frontend
         env:
           RIS_BASE_URL: http://localhost:3000
+          NUXT_PUBLIC_PRIVATE_FEATURES_ENABLED: true
           TZ: Europe/Berlin
-      - name: Run All Playwright tests on prototype
+      - name: Run Playwright tests with private features disabled
         if: ${{ matrix.profile == 'public' }}
-        run: npx playwright test --project chromium firefox mobile --grep-invert "seo\.spec\.ts"
+        run: npx playwright test --project chromium firefox mobile
         working-directory: ./frontend
         env:
           RIS_BASE_URL: http://localhost:3000
+          NUXT_PUBLIC_PRIVATE_FEATURES_ENABLED: false
           TZ: Europe/Berlin
       - name: Upload screenshots and traces of failed tests (${{ matrix.profile }})
         uses: actions/upload-artifact@v4
@@ -200,7 +202,7 @@ jobs:
         run: |
           git diff-index --cached --quiet HEAD ||
             git commit \
-              -m ${{ toJSON(github.event.head_commit.message) }} \
+              -m "Update from ${{ github.repository }}" \
               -m "From commit: ${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }}" &&
             git push origin main &&
             echo "Pushed reports to ${{ github.server_url }}/${{ env.reports-repo }}" >> $GITHUB_STEP_SUMMARY

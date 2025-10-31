@@ -10,14 +10,6 @@ import org.springframework.context.annotation.Profile;
 @Configuration
 public class ObsConfig {
 
-  @Bean(name = "normS3Client")
-  @Profile({"test"})
-  public ObjectStorageClient mockNormTestS3Client(
-      @Value("${local.file-storage}") String relativeLocalStorageDirectory) {
-    return new S3ObjectStorageClient(
-        new TestMockS3Client("norm", relativeLocalStorageDirectory), "norm");
-  }
-
   @Bean(name = "caseLawS3Client")
   @Profile({"test"})
   public ObjectStorageClient mockCaseLawTestS3Client(
@@ -33,6 +25,14 @@ public class ObsConfig {
     var bucketName = "literature";
     return new S3ObjectStorageClient(
         new TestMockS3Client(bucketName, relativeLocalStorageDirectory), bucketName);
+  }
+
+  @Bean(name = "normS3Client")
+  @Profile({"test"})
+  public ObjectStorageClient mockNormTestS3Client(
+      @Value("${local.file-storage}") String relativeLocalStorageDirectory) {
+    return new S3ObjectStorageClient(
+        new TestMockS3Client("norm", relativeLocalStorageDirectory), "norm");
   }
 
   @Bean(name = "portalS3Client")

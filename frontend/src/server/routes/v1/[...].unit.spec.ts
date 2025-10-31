@@ -131,7 +131,7 @@ describe("Access Token Middleware", () => {
   it("should throw an error if auth is not enabled", async () => {
     mockUseRuntimeConfig.mockImplementation(() => ({
       public: {
-        authEnabled: false,
+        privateFeaturesEnabled: false,
       },
     }));
     await expect(middleware(mockEvent)).rejects.toThrowError();

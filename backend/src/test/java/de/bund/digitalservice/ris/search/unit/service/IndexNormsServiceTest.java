@@ -37,7 +37,7 @@ class IndexNormsServiceTest {
     this.service = new IndexNormsService(bucket, repo);
   }
 
-  private String testContent =
+  private final String testContent =
       """
           <?xml version="1.0" encoding="UTF-8"?>
           <?xml-model href="../../../Grammatiken/legalDocML.de.sch" schematypens="http://purl.oclc.org/dsdl/schematron"?>
@@ -153,10 +153,10 @@ class IndexNormsServiceTest {
         NormLdmlToOpenSearchMapper.parseNorm(testContent, Collections.emptyMap()).orElseThrow();
 
     verify(repo, times(1))
-        .save(
+        .saveAll(
             argThat(
                 arg -> {
-                  assertThat(arg.getId()).isEqualTo(exptectedNorm.getId());
+                  assertThat(arg.iterator().next().getId()).isEqualTo(exptectedNorm.getId());
                   return true;
                 }));
     verify(repo, times(1)).deleteByIndexedAtBefore(startingTimestamp);

@@ -9,6 +9,7 @@ import de.bund.digitalservice.ris.search.repository.opensearch.CaseLawRepository
 import de.bund.digitalservice.ris.search.repository.opensearch.LiteratureRepository;
 import de.bund.digitalservice.ris.search.repository.opensearch.NormsRepository;
 import java.io.IOException;
+import java.util.Map;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,8 +27,20 @@ public class ContainersIntegrationBase {
   @Autowired private NormsRepository normsRepository;
 
   @Autowired
+  @Qualifier("caseLawS3Client")
+  private S3ObjectStorageClient caseLawS3Client;
+
+  @Autowired
+  @Qualifier("literatureS3Client")
+  private S3ObjectStorageClient literatureS3Client;
+
+  @Autowired
   @Qualifier("normS3Client")
   private S3ObjectStorageClient normS3Client;
+
+  @Autowired
+  @Qualifier("portalS3Client")
+  private S3ObjectStorageClient portalS3Client;
 
   public static final CustomOpensearchContainer openSearchContainer =
       new CustomOpensearchContainer();
@@ -50,13 +63,16 @@ public class ContainersIntegrationBase {
     resetRepositories();
   }
 
-  public void clearBuckets() {
-    ((TestMockS3Client) normS3Client.getS3Client()).removeAllFiles();
-  }
-
   public void resetBuckets() {
     try {
+      ((TestMockS3Client) caseLawS3Client.getS3Client()).loadDefaultFiles();
+      ((TestMockS3Client) literatureS3Client.getS3Client()).loadDefaultFiles();
       ((TestMockS3Client) normS3Client.getS3Client()).loadDefaultFiles();
+      for (var normFile : NormsTestData.allNormXml.entrySet()) {
+        ((TestMockS3Client) normS3Client.getS3Client())
+            .putFile(normFile.getKey(), normFile.getValue());
+      }
+      ((TestMockS3Client) portalS3Client.getS3Client()).loadDefaultFiles();
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
@@ -73,5 +89,12 @@ public class ContainersIntegrationBase {
     caseLawRepository.deleteAll();
     literatureRepository.deleteAll();
     normsRepository.deleteAll();
+  }
+
+  public void addNormXmlFiles(Map<String, String> files) {
+    for (var normFile : files.entrySet()) {
+      ((TestMockS3Client) normS3Client.getS3Client())
+          .putFile(normFile.getKey(), normFile.getValue());
+    }
   }
 }

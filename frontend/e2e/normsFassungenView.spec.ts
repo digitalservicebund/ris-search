@@ -8,7 +8,7 @@ const expectedVersionData = [
   },
   {
     dateFrom: "04.08.2022",
-    dateTo: "-",
+    dateTo: "01.01.2030",
     status: "Aktuell gültig",
   },
   {
@@ -17,6 +17,13 @@ const expectedVersionData = [
     status: "Außer Kraft",
   },
 ];
+
+test.beforeAll(async ({ privateFeaturesEnabled }) => {
+  test.skip(
+    !privateFeaturesEnabled,
+    "This feature is not available for public",
+  );
+});
 
 test("can browse different Fassungen of a norm", async ({ page }) => {
   await page.goto("/norms/eli/bund/bgbl-1/2020/s1126/2020-08-04/1/deu", {

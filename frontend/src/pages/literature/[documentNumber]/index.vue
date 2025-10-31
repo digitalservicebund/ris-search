@@ -5,6 +5,7 @@ import TabPanel from "primevue/tabpanel";
 import TabPanels from "primevue/tabpanels";
 import Tabs from "primevue/tabs";
 import { useFetch } from "#app";
+import LiteratureActionsMenu from "~/components/ActionMenu/LiteratureActionsMenu.vue";
 import ContentWrapper from "~/components/CustomLayouts/ContentWrapper.vue";
 import SidebarLayout from "~/components/CustomLayouts/SidebarLayout.vue";
 import IncompleteDataMessage from "~/components/IncompleteDataMessage.vue";
@@ -76,6 +77,9 @@ if (contentError?.value) {
     <div v-if="!!literature" class="container text-left">
       <div class="flex items-center gap-8 print:hidden">
         <RisBreadcrumb :items="breadcrumbItems" class="grow" />
+        <client-only
+          ><LiteratureActionsMenu :literature="literature"
+        /></client-only>
       </div>
       <RisDocumentTitle :title="title" :placeholder="emptyTitlePlaceholder" />
       <LiteratureMetadata

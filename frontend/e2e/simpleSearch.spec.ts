@@ -125,7 +125,10 @@ test.describe("searching legislation", () => {
     await expect(searchResults).toHaveText(Array(5).fill(/^Norm/));
   });
 
-  test("shows the search result contents", async ({ page }) => {
+  test("shows the search result contents", async ({
+    page,
+    privateFeaturesEnabled,
+  }) => {
     await page.goto("/search?query=FrSaftErfrischV&category=N", {
       waitUntil: "networkidle",
     });
@@ -135,7 +138,11 @@ test.describe("searching legislation", () => {
     // Header
     await expect(searchResult).toHaveText(/Norm/);
     await expect(searchResult).toHaveText(/FrSaftErfrischV/);
-    await expect(searchResult).toHaveText(/29.04.2023/);
+    if (privateFeaturesEnabled) {
+      await expect(searchResult).toHaveText(/29.04.2023/);
+    } else {
+      await expect(searchResult).not.toHaveText(/29.04.2023/);
+    }
 
     // Result detail link
     await expect(

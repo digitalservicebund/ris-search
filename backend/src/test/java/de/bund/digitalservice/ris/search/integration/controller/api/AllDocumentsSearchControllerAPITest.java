@@ -162,12 +162,18 @@ class AllDocumentsSearchControllerAPITest extends ContainersIntegrationBase {
             ApiConfig.Paths.CASELAW + "?searchTerm=" + CaseLawTestData.matchAllTerm),
         Arguments.of(
             ApiConfig.Paths.DOCUMENT + "?searchTerm=Gesetz&documentKind=N",
-            ApiConfig.Paths.LEGISLATION + "?searchTerm=Gesetz"));
+            ApiConfig.Paths.LEGISLATION + "?searchTerm=Gesetz"),
+        Arguments.of(
+            ApiConfig.Paths.DOCUMENT
+                + "?searchTerm="
+                + LiteratureTestData.matchAllTerm
+                + "&documentKind=L",
+            ApiConfig.Paths.LITERATURE + "?searchTerm=" + LiteratureTestData.matchAllTerm));
   }
 
   @ParameterizedTest
   @MethodSource("testArgsSameResultsAsOtherControllers")
-  @DisplayName("Returns the same contents as Norms and CaseLaw search controllers")
+  @DisplayName("Returns the same contents as Norms, CaseLaw and Literature search controllers")
   void testConsistencyWithOtherSearchControllers(String firstPath, String secondPath)
       throws Exception {
     var firstResponse =

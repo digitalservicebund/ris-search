@@ -5,7 +5,6 @@ import TabList from "primevue/tablist";
 import TabPanel from "primevue/tabpanel";
 import TabPanels from "primevue/tabpanels";
 import Tabs from "primevue/tabs";
-import Toast from "primevue/toast";
 import type { TreeNode } from "primevue/treenode";
 import { useRoute } from "#app";
 import Accordion from "~/components/Accordion.vue";
@@ -33,6 +32,7 @@ import { useDynamicSeo } from "~/composables/useDynamicSeo";
 import { useIntersectionObserver } from "~/composables/useIntersectionObserver";
 import { useFetchNormContent } from "~/composables/useNormData";
 import { useNormVersions } from "~/composables/useNormVersions";
+import { usePrivateFeaturesFlag } from "~/composables/usePrivateFeaturesFlag";
 import { DocumentKind, type LegislationWork } from "~/types";
 import { dateFormattedDDMMYYYY } from "~/utils/dateFormatting";
 import { formatDocumentKind } from "~/utils/displayValues";
@@ -44,7 +44,6 @@ import {
   getValidityStatusLabel,
 } from "~/utils/norm";
 import type { ValidityStatus } from "~/utils/norm";
-import { isPrototypeProfile } from "~/utils/profile";
 import { tocItemsToTreeNodes } from "~/utils/tableOfContents";
 import { truncateAtWord } from "~/utils/textFormatting";
 import IcBaselineSubject from "~icons/ic/baseline-subject";
@@ -61,6 +60,7 @@ definePageMeta({
 
 const route = useRoute();
 const expressionEli = Object.values(route.params).join("/");
+const privateFeaturesEnabled = usePrivateFeaturesFlag();
 
 const { data, error, status } = await useFetchNormContent(expressionEli);
 
@@ -92,11 +92,11 @@ const tableOfContents: Ref<TreeNode[]> = computed(() => {
 });
 
 const validityInterval = computed(() =>
-  isPrototypeProfile()
-    ? undefined
-    : temporalCoverageToValidityInterval(
+  privateFeaturesEnabled
+    ? temporalCoverageToValidityInterval(
         metadata.value?.workExample.temporalCoverage,
-      ),
+      )
+    : undefined,
 );
 
 const validityStatus = computed(() => {
@@ -136,7 +136,6 @@ const breadcrumbItems: ComputedRef<BreadcrumbItem[]> = computed(() => {
   return list;
 });
 
-const prototypeMode = isPrototypeProfile();
 const buildOgTitle = (
   norm: LegislationWork,
   validFrom?: Dayjs,
@@ -147,22 +146,9 @@ const buildOgTitle = (
   const baseTitle = abbreviation || shortTitle || "";
 
   if (!baseTitle) return undefined;
+  const parts: string[] = [baseTitle];
 
-  if (prototypeMode) {
-    const parts: string[] = [baseTitle];
-
-    if (validFrom) {
-      parts.push("Fassung vom [Inkrafttreten]");
-    }
-
-    if (status) {
-      parts.push("[Status]");
-    }
-    const placeholder = parts.join(", ");
-    return truncateAtWord(placeholder, 55) || undefined;
-  } else {
-    const parts: string[] = [baseTitle];
-
+  if (privateFeaturesEnabled) {
     const formattedValidFrom = dateFormattedDDMMYYYY(validFrom);
     if (formattedValidFrom) {
       parts.push(`Fassung vom ${formattedValidFrom}`);
@@ -175,6 +161,16 @@ const buildOgTitle = (
 
     return truncateAtWord(parts.join(", "), 55) || undefined;
   }
+
+  if (validFrom) {
+    parts.push("Fassung vom [Inkrafttreten]");
+  }
+
+  if (status) {
+    parts.push("[Status]");
+  }
+  const placeholder = parts.join(", ");
+  return truncateAtWord(placeholder, 55) || undefined;
 };
 
 const title = computed<string | undefined>(() =>
@@ -325,7 +321,7 @@ useDynamicSeo({ title, description });
           </TabPanel>
           <TabPanel value="2" :pt="tabPanelStyles" class="pt-24 pb-80">
             <NormVersionList
-              v-if="!isPrototypeProfile()"
+              v-if="privateFeaturesEnabled"
               class="container"
               :status="normVersionsStatus"
               :current-legislation-identifier="
@@ -339,5 +335,4 @@ useDynamicSeo({ title, description });
       </Tabs>
     </div>
   </ContentWrapper>
-  <Toast />
 </template>

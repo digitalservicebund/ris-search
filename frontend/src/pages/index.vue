@@ -3,6 +3,7 @@ import Message from "primevue/message";
 import bmjvLogo from "~/assets/img/BMJV_de_v1__Web_farbig.svg";
 import ButtonLink from "~/components/ButtonLink.vue";
 import SimpleSearchInput from "~/components/Search/SimpleSearch/SimpleSearchInput.vue";
+import { usePrivateFeaturesFlag } from "~/composables/usePrivateFeaturesFlag";
 import { useRedirectToSearch } from "~/composables/useRedirectToSearch";
 import { useStaticPageSeo } from "~/composables/useStaticPageSeo";
 import IcBaselineLaunch from "~icons/ic/baseline-launch";
@@ -12,6 +13,7 @@ const redirectToSearch = useRedirectToSearch();
 definePageMeta({ layout: "base" });
 
 useStaticPageSeo("startseite");
+const privateFeaturesEnabled = usePrivateFeaturesFlag();
 </script>
 
 <template>
@@ -81,6 +83,23 @@ useStaticPageSeo("startseite");
         >
       </div>
     </FeatureCard>
+
+    <FeatureCard v-if="privateFeaturesEnabled">
+      <div>
+        <h2 class="ris-heading3-bold break-words hyphens-auto">
+          English translation of German laws and regulations
+        </h2>
+        <p class="mt-8">
+          We provide translations of our German content to help you. Please note
+          that the original German versions are the only authoritative source.
+        </p>
+      </div>
+
+      <div>
+        <ButtonLink href="translations">Go to translations</ButtonLink>
+      </div>
+    </FeatureCard>
+
     <FeatureCard>
       <div>
         <h2 class="ris-heading3-bold break-words hyphens-auto">

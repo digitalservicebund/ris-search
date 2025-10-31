@@ -6,6 +6,7 @@ import de.bund.digitalservice.ris.search.mapper.DocumentResponseMapper;
 import de.bund.digitalservice.ris.search.mapper.SortParamsConverter;
 import de.bund.digitalservice.ris.search.models.DocumentKind;
 import de.bund.digitalservice.ris.search.models.api.parameters.CaseLawSearchParams;
+import de.bund.digitalservice.ris.search.models.api.parameters.LiteratureSearchParams;
 import de.bund.digitalservice.ris.search.models.api.parameters.NormsSearchParams;
 import de.bund.digitalservice.ris.search.models.api.parameters.PaginationParams;
 import de.bund.digitalservice.ris.search.models.api.parameters.UniversalSearchParams;
@@ -53,7 +54,7 @@ public class AllDocumentsSearchController {
       summary = "Global search / list",
       description =
           """
-          This endpoint can be used to search for documents across different document kinds. Currently we support case law and legislation document kinds. The endpoint provides a paginated response with up to 10,000 results with at most 100 results per page.
+          This endpoint can be used to search for documents across different document kinds. Currently we support case law, legislation and literature document kinds. The endpoint provides a paginated response with up to 10,000 results with at most 100 results per page.
 
           The searchTerm parameter searches across multiple fields of a document at the same time. The fields searched depend on the document kind. See the filters guide for more information.
 
@@ -65,11 +66,12 @@ public class AllDocumentsSearchController {
       @ParameterObject UniversalSearchParams request,
       @ParameterObject NormsSearchParams normsSearchParams,
       @ParameterObject CaseLawSearchParams caseLawSearchParams,
+      @ParameterObject LiteratureSearchParams literatureSearchParams,
       @ParameterObject @Valid UniversalSortParam sortParams,
       @RequestParam("documentKind")
           @Schema(
               description =
-                  "Filter by document kind. Specify R for case law (<u>R</u>echtsprechung), or N for legislation (<u>N</u>ormen).")
+                  "Filter by document kind. Specify R for case law (<u>R</u>echtsprechung), N for legislation (<u>N</u>ormen) or L for literature (<u>L</u>iteratur).")
           Optional<DocumentKind> documentKind,
       @ParameterObject @Valid PaginationParams paginationParams)
       throws CustomValidationException {
@@ -86,6 +88,7 @@ public class AllDocumentsSearchController {
               request,
               normsSearchParams,
               caseLawSearchParams,
+              literatureSearchParams,
               documentKind.orElse(null),
               sortedPageRequest);
 
