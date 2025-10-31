@@ -103,6 +103,12 @@ jobs:
           output: "trivy-results.sarif"
           cache-dir: .trivy
           trivyignores: backend/.trivyignore
+      - name: Upload Trivy vulnerability image scanner results (as artifact)
+        uses: actions/upload-artifact@v4
+        with:
+          name: "trivy-image-results-${{ matrix.app }}.sarif"
+          path: "trivy-results.sarif"
+          if-no-files-found: error
       - name: Check trivy results
         run: |
           if grep -qE 'HIGH|CRITICAL' trivy-results.sarif; then
