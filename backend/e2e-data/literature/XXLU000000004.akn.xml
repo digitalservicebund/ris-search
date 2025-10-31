@@ -6,10 +6,11 @@
                 <akn:FRBRWork>
                     <akn:FRBRthis value="regelungstext-1"/>
                     <akn:FRBRuri value="TODO"/>
-                    <akn:FRBRalias name="haupttitel" value="Drittes Test-Dokument ULI"/>
-                    <akn:FRBRdate date="2013-01-01" name="verkuendungsfassung"/>
+                    <akn:FRBRalias name="dokumentarischerTitel" value="Dokumentarischer Titel"/>
+                    <akn:FRBRdate date="2022-01-01" name="verkuendungsfassung"/>
                     <akn:FRBRauthor href="recht.bund.de/institution/foobar"/>
-                    <akn:FRBRauthor as="#verfasser" href="#fee-lilly-verfasser-1"/>
+                    <akn:FRBRauthor as="#verfasser" href="#mustermann-max-verfasser-1"/>
+                    <akn:FRBRauthor as="#verfasser" href="#pan-peter-verfasser-2"/>
                     <akn:FRBRcountry value="de"/>
                     <akn:FRBRsubtype value="LU"/>
                     <akn:FRBRnumber value="TODO"/>
@@ -18,46 +19,59 @@
                 <akn:FRBRExpression>
                     <akn:FRBRthis value="regelungstext-1"/>
                     <akn:FRBRuri value="regelungstext-1"/>
-                    <akn:FRBRalias name="documentNumber" value="TEST000000003"/>
-                    <akn:FRBRdate date="2013-01-01" name="verkuendung"/>
+                    <akn:FRBRalias name="documentNumber" value="XXLU000000004"/>
+                    <akn:FRBRdate date="2022-01-01" name="verkuendung"/>
                     <akn:FRBRauthor href="recht.bund.de/institution/foobar"/>
                     <akn:FRBRlanguage language="deu"/>
                 </akn:FRBRExpression>
                 <akn:FRBRManifestation>
                     <akn:FRBRthis value="TODO"/>
                     <akn:FRBRuri value="TODO"/>
-                    <akn:FRBRdate date="2013-01-01" name="generierung"/>
+                    <akn:FRBRdate date="2022-01-01" name="generierung"/>
                     <akn:FRBRauthor href="recht.bund.de"/>
                     <akn:FRBRformat value="xml"/>
                 </akn:FRBRManifestation>
             </akn:identification>
             <akn:classification source="doktyp">
                 <akn:keyword dictionary="attributsemantik-noch-undefiniert" showAs="Auf" value="Auf"/>
+                <akn:keyword dictionary="attributsemantik-noch-undefiniert" showAs="Auf" value="Foo"/>
+                <akn:keyword dictionary="attributsemantik-noch-undefiniert" showAs="Auf" value="Bar"/>
             </akn:classification>
             <akn:classification source="schlagwort">
                 <akn:keyword dictionary="attributsemantik-noch-undefiniert" showAs="Anerkennung" value="Anerkennung"/>
+                <akn:keyword dictionary="attributsemantik-noch-undefiniert" showAs="Anerkennungsbescheid" value="Anerkennungsbescheid"/>
             </akn:classification>
+            <akn:analysis source="attributsemantik-noch-undefiniert">
+                <akn:otherReferences source="attributsemantik-noch-undefiniert">
+                    <akn:implicitReference showAs="FooBar, 1982, 123-123">
+                        <ris:fundstelleUnselbstaendig periodikum="FooBar" zitatstelle="1982, 123-123"/>
+                    </akn:implicitReference>
+                    <akn:implicitReference showAs="Baz, 1999, 123-123">
+                        <ris:fundstelleUnselbstaendig periodikum="Baz" zitatstelle="1999, 123-123"/>
+                    </akn:implicitReference>
+                </akn:otherReferences>
+            </akn:analysis>
             <akn:references source="attributsemantik-noch-undefiniert">
-                <akn:TLCPerson eId="fee-lilly-verfasser-1" href="akn/ontology/persons/de/fee-lilly" ris:name="Fee, Lilly" ris:titel="Prof Dr" showAs="Fee, Lilly, Prof Dr"/>
+                <akn:TLCPerson eId="mustermann-max-verfasser-1" href="akn/ontology/persons/de/mustermann-max" ris:name="Mustermann, Max" ris:titel="Dr" showAs="Mustermann, Max, Dr"/>
+                <akn:TLCPerson eId="pan-peter-verfasser-1" href="akn/ontology/persons/de/pan-peter" ris:name="Pan, Peter" showAs="Pan, Max"/>
                 <akn:TLCRole eId="verfasser" href="akn/ontology/roles/de/verfasser" showAs="Verfasser"/>
             </akn:references>
             <akn:proprietary source="attributsemantik-noch-undefiniert">
                 <ris:metadata>
                     <ris:veroeffentlichungsJahre>
-                        <ris:veroeffentlichungsJahr>2015</ris:veroeffentlichungsJahr>
+                        <ris:veroeffentlichungsJahr>2013</ris:veroeffentlichungsJahr>
+                        <ris:veroeffentlichungsJahr>2024</ris:veroeffentlichungsJahr>
                     </ris:veroeffentlichungsJahre>
+                    <ris:gliederung>
+                        <ris:gliederungEntry>A. Foo.</ris:gliederungEntry>
+                        <ris:gliederungEntry>B. Bar.</ris:gliederungEntry>
+                        <ris:gliederungEntry>C. Baz.</ris:gliederungEntry>
+                    </ris:gliederung>
                 </ris:metadata>
             </akn:proprietary>
         </akn:meta>
-        <akn:preface>
-            <akn:longTitle>
-                <akn:block name="longTitle">Drittes Test-Dokument ULI</akn:block>
-            </akn:longTitle>
-        </akn:preface>
         <akn:mainBody>
             <akn:div>
-                <akn:p>Dies ist das dritte Test-Dokument. Hier gibt es nichts spannendes zu lesen.</akn:p>
-                <akn:p>In sem neque, sagittis sed nunc eget, rutrum tempor dolor. Nulla arcu dui, tempor sed lorem sed, facilisis ornare sem. Duis ut rutrum orci. Sed pretium, nisl ut feugiat volutpat, mauris justo tempor eros, sit amet dapibus libero ligula non urna. Phasellus vitae rhoncus mauris, ac bibendum sapien. Suspendisse sagittis libero nec congue volutpat. Integer a ante quis augue ornare pharetra sit amet non orci.</akn:p>
                 <akn:p>Sed at nibh est. Aliquam risus orci, lacinia nec ipsum et, mattis iaculis massa. In id enim sit amet diam rutrum pulvinar. Mauris sit amet sapien egestas, feugiat tortor non, egestas mauris. Sed pretium pellentesque faucibus. Nullam porta enim in risus imperdiet, luctus sollicitudin odio placerat. In eu sapien erat. Donec nec venenatis orci, quis tincidunt ante. Aliquam sem velit, blandit ac gravida at, condimentum ac enim. Suspendisse ut eleifend est.</akn:p>
             </akn:div>
         </akn:mainBody>

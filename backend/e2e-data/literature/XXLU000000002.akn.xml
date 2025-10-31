@@ -20,7 +20,7 @@
                 <akn:FRBRExpression>
                     <akn:FRBRthis value="regelungstext-1"/>
                     <akn:FRBRuri value="regelungstext-1"/>
-                    <akn:FRBRalias name="documentNumber" value="TEST000000002"/>
+                    <akn:FRBRalias name="documentNumber" value="XXLU000000002"/>
                     <akn:FRBRdate date="2022-01-01" name="verkuendung"/>
                     <akn:FRBRauthor href="recht.bund.de/institution/foobar"/>
                     <akn:FRBRlanguage language="deu"/>

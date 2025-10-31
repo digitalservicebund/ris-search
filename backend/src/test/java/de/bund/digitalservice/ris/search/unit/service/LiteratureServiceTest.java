@@ -79,9 +79,9 @@ class LiteratureServiceTest {
   @DisplayName("Should return an existing literature item by its document number")
   void shouldReturnLiteratureByDocumentNumber() {
     var expectedResult = List.of(Literature.builder().build());
-    when(literatureRepositoryMock.findByDocumentNumber("TEST000000001")).thenReturn(expectedResult);
+    when(literatureRepositoryMock.findByDocumentNumber("XXLU000000001")).thenReturn(expectedResult);
 
-    var actual = literatureService.getByDocumentNumber("TEST000000001");
+    var actual = literatureService.getByDocumentNumber("XXLU000000001");
     Assertions.assertEquals(expectedResult, actual);
   }
 
@@ -89,9 +89,9 @@ class LiteratureServiceTest {
   @DisplayName("Should return existing file as bytes from folder")
   void shouldReturnFileAsBytesFromFolder() throws ObjectStoreServiceException {
     Optional<byte[]> expectedResult = Optional.of("file-content".getBytes());
-    when(literatureBucketMock.get("TEST000000001.akn.xml")).thenReturn(expectedResult);
+    when(literatureBucketMock.get("XXLU000000001.akn.xml")).thenReturn(expectedResult);
 
-    var actual = literatureService.getFileByDocumentNumber("TEST000000001");
+    var actual = literatureService.getFileByDocumentNumber("XXLU000000001");
     Assertions.assertEquals(expectedResult, actual);
   }
 
@@ -102,6 +102,6 @@ class LiteratureServiceTest {
 
     Assertions.assertThrows(
         ObjectStoreServiceException.class,
-        () -> literatureService.getFileByDocumentNumber("TEST000000001"));
+        () -> literatureService.getFileByDocumentNumber("XXLU000000001"));
   }
 }
