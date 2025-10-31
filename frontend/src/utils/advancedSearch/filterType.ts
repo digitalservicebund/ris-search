@@ -37,8 +37,8 @@ export function isFilterType(maybe: string): maybe is FilterType {
  * need to be specified.
  */
 export type StrictDateFilterValue =
-  | { type: "allTime" | "currentlyInForce"; to?: undefined; from?: undefined }
-  | { type: "specificDate"; to?: undefined; from: string }
+  | { type: "allTime" | "currentlyInForce"; to: undefined; from: undefined }
+  | { type: "specificDate"; to: undefined; from: string }
   | { type: "period"; to: string; from: string };
 
 /**

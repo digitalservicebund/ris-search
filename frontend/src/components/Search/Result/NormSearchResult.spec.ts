@@ -76,6 +76,19 @@ function renderComponent(
   });
 }
 
+function withTemporalCoverage(temporalCoverage: string | undefined) {
+  return {
+    ...mockSearchResult,
+    item: {
+      ...mockSearchResult.item,
+      workExample: {
+        ...mockSearchResult.item.workExample,
+        temporalCoverage,
+      },
+    },
+  } as SearchResult<LegislationWork>;
+}
+
 const mocks = vi.hoisted(() => {
   return {
     usePrivateFeaturesFlag: vi.fn().mockReturnValue(false),
@@ -205,19 +218,6 @@ describe("NormSearchResult.vue", () => {
   });
 
   describe("validity status badge", () => {
-    function withTemporalCoverage(temporalCoverage: string | undefined) {
-      return {
-        ...mockSearchResult,
-        item: {
-          ...mockSearchResult.item,
-          workExample: {
-            ...mockSearchResult.item.workExample,
-            temporalCoverage,
-          },
-        },
-      } as SearchResult<LegislationWork>;
-    }
-
     beforeEach(() => {
       vi.useFakeTimers();
       vi.setSystemTime("2025-01-15");

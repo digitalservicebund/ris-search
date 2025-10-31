@@ -35,7 +35,7 @@ describe("useAdvancedSearch", () => {
     await useAdvancedSearch(
       "example",
       DocumentKind.CaseLaw,
-      { type: "allTime" },
+      { type: "allTime", from: undefined, to: undefined },
       {},
     );
 
@@ -48,7 +48,7 @@ describe("useAdvancedSearch", () => {
     await useAdvancedSearch(
       "example",
       DocumentKind.Norm,
-      { type: "allTime" },
+      { type: "allTime", from: undefined, to: undefined },
       {},
     );
 
@@ -61,7 +61,7 @@ describe("useAdvancedSearch", () => {
     await useAdvancedSearch(
       "example",
       DocumentKind.All,
-      { type: "allTime" },
+      { type: "allTime", from: undefined, to: undefined },
       {},
     );
 
@@ -74,7 +74,7 @@ describe("useAdvancedSearch", () => {
     await useAdvancedSearch(
       "test query",
       DocumentKind.CaseLaw,
-      { type: "allTime" },
+      { type: "allTime", from: undefined, to: undefined },
       {},
     );
 
@@ -87,7 +87,7 @@ describe("useAdvancedSearch", () => {
     await useAdvancedSearch(
       "example",
       DocumentKind.CaseLaw,
-      { type: "allTime" },
+      { type: "allTime", from: undefined, to: undefined },
       { itemsPerPage: "25", pageIndex: 2 },
     );
 
@@ -100,7 +100,7 @@ describe("useAdvancedSearch", () => {
     await useAdvancedSearch(
       "example",
       DocumentKind.CaseLaw,
-      { type: "allTime" },
+      { type: "allTime", from: undefined, to: undefined },
       { sort: "relevance" },
     );
 
@@ -113,7 +113,7 @@ describe("useAdvancedSearch", () => {
     await useAdvancedSearch(
       "example",
       DocumentKind.CaseLaw,
-      { type: "allTime" },
+      { type: "allTime", from: undefined, to: undefined },
       {},
     );
 
@@ -126,7 +126,7 @@ describe("useAdvancedSearch", () => {
     await useAdvancedSearch(
       "example",
       DocumentKind.CaseLaw,
-      { type: "allTime" },
+      { type: "allTime", from: undefined, to: undefined },
       {},
     );
 
@@ -139,7 +139,7 @@ describe("useAdvancedSearch", () => {
     const { submitSearch } = await useAdvancedSearch(
       "",
       DocumentKind.CaseLaw,
-      { type: "allTime" },
+      { type: "allTime", from: undefined, to: undefined },
       {},
     );
 
@@ -152,7 +152,7 @@ describe("useAdvancedSearch", () => {
     const { submitSearch } = await useAdvancedSearch(
       "test query",
       DocumentKind.CaseLaw,
-      { type: "allTime" },
+      { type: "allTime", from: undefined, to: undefined },
       {},
     );
 
