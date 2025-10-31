@@ -31,9 +31,14 @@ export function isFilterType(maybe: string): maybe is FilterType {
   return filterTypes.includes(maybe as FilterType);
 }
 
-type StrictDateFilterValue =
-  | { type: "allTime" | "currentlyInForce"; to: undefined; from: undefined }
-  | { type: "specificDate"; to: undefined; from: string }
+/**
+ * Similar to DateFilterValue, except that the properties need to be consistent
+ * with the type. E.g. when the type is "period", both the "from" and "to" dates
+ * need to be specified.
+ */
+export type StrictDateFilterValue =
+  | { type: "allTime" | "currentlyInForce"; to?: undefined; from?: undefined }
+  | { type: "specificDate"; to?: undefined; from: string }
   | { type: "period"; to: string; from: string };
 
 /**
