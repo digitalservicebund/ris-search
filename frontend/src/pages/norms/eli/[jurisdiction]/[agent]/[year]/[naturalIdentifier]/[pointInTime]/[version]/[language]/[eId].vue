@@ -11,6 +11,7 @@ import RisBreadcrumb from "~/components/Ris/RisBreadcrumb.vue";
 import { useDynamicSeo } from "~/composables/useDynamicSeo";
 import { useFetchNormArticleContent } from "~/composables/useNormData";
 import { useValidNormVersions } from "~/composables/useNormVersions";
+import { usePrivateFeaturesFlag } from "~/composables/usePrivateFeaturesFlag";
 import { type Article, DocumentKind, type LegislationWork } from "~/types";
 import { parseDateGermanLocalTime } from "~/utils/dateFormatting";
 import { formatDocumentKind } from "~/utils/displayValues";
@@ -20,7 +21,6 @@ import {
   getNormTitle,
   temporalCoverageToValidityInterval,
 } from "~/utils/norm";
-import { isPrototypeProfile } from "~/utils/profile";
 import { findNodePath, tocItemsToTreeNodes } from "~/utils/tableOfContents";
 import { truncateAtWord } from "~/utils/textFormatting";
 import IcBaselineArrowBack from "~icons/ic/baseline-arrow-back";
@@ -35,6 +35,7 @@ definePageMeta({
 });
 
 const route = useRoute();
+const privateFeaturesEnabled = usePrivateFeaturesFlag();
 
 const expressionEli = Object.values(route.params).slice(0, -1).join("/");
 const eId = computed(() => {
@@ -226,7 +227,7 @@ useDynamicSeo({ title, description });
       </div>
 
       <div
-        v-if="!isPrototypeProfile()"
+        v-if="privateFeaturesEnabled"
         class="container mb-24 flex flex-col space-y-16 space-x-0 md:space-y-0 lg:flex-row lg:space-x-24"
         data-testid="metadata"
       >

@@ -1,10 +1,13 @@
 import { getRequestURL, getHeader, setHeader, defineEventHandler } from "h3";
 import { requireAccessTokenWithRefresh } from "../auth";
-import { isInternalProfile } from "~/utils/profile";
+import { usePrivateFeaturesFlag } from "~/composables/usePrivateFeaturesFlag";
 
 export default defineEventHandler(async (event) => {
   const userAgent = (getHeader(event, "User-Agent") ?? "").toUpperCase();
-  let file = isInternalProfile() ? "robots.staging.txt" : "robots.public.txt";
+  const privateFeaturesEnabled = usePrivateFeaturesFlag();
+  let file = privateFeaturesEnabled
+    ? "robots.staging.txt"
+    : "robots.public.txt";
   const config = useRuntimeConfig();
   if (userAgent === "DG_JUSTICE_CRAWLER") file = "robots.dg.txt";
 
