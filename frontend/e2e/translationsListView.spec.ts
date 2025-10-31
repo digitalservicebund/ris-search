@@ -20,8 +20,11 @@ test(
     const searchInput = page.getByRole("searchbox");
     await expect(searchInput).toHaveCount(1);
 
-    const links = page.getByTestId("translations").getByRole("link");
-    await expect(links).toHaveCount(3);
+    const resultsRegion = page.getByRole("region", {
+      name: "Translations List",
+    });
+    const items = resultsRegion.getByRole("listitem");
+    await expect(items).toHaveCount(3);
   },
 );
 
@@ -40,7 +43,16 @@ test(
 
     await input.press("Enter");
 
-    const links = page.getByTestId("translations").getByRole("link");
-    await expect(links).toHaveCount(1);
+    const translationListRegion = page.getByRole("region", {
+      name: "Translations List",
+    });
+    const items = translationListRegion.getByRole("listitem");
+    await expect(items).toHaveCount(1);
+
+    await input.fill("not there");
+    await input.press("Enter");
+    await expect(translationListRegion.getByRole("listitem")).toHaveCount(0);
+
+    await expect(page.getByText("We didn’t find anything.")).toBeVisible();
   },
 );

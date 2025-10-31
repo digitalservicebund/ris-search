@@ -39,11 +39,6 @@ const { data: germanOriginal } = await getGermanOriginal(id);
 const currentTranslation = data.value?.content;
 const html = data.value?.html;
 
-const link = {
-  url: globalThis?.location?.href,
-  label: "Link to translation",
-};
-
 const permalink = {
   url: globalThis?.location?.href,
   label: "Link to translation",
@@ -122,7 +117,7 @@ useDynamicSeo({ title, description });
       <div class="flex items-center gap-8 print:hidden">
         <RisBreadcrumb :items="breadcrumbItems" class="grow" />
         <client-only>
-          <ActionsMenu :link="link" :permalink="permalink" />
+          <ActionsMenu :permalink />
         </client-only>
       </div>
 

@@ -39,8 +39,8 @@ const translationsMap = computed(() => {
   return map;
 });
 
-const sortedTranslations = computed<TranslationContent[] | undefined>(() => {
-  if (!translationsList.value) return undefined;
+const sortedTranslations = computed<TranslationContent[] | null>(() => {
+  if (!translationsList.value) return null;
 
   if (activeSearchTerm.value == "") {
     return [...translationsList.value].sort((a, b) =>
@@ -57,7 +57,7 @@ const sortedTranslations = computed<TranslationContent[] | undefined>(() => {
 
 const minisearch = computed(() => {
   const miniSearch = new MiniSearch({
-    fields: ["@id", "name", "translator", "translationOfWork"],
+    fields: ["@id", "name", "translationOfWork"],
     storeFields: [
       "@id",
       "name",
@@ -106,9 +106,9 @@ useStaticPageSeo("translations-list");
           consent of the author or other rights holder.
         </p>
         <form
-          :data-full-width="true"
+          :data-full-width="false"
           role="search"
-          class="my-48 flex max-w-md flex-row gap-8 data-[full-width='true']:max-w-full"
+          class="mt-48 flex max-w-md flex-row gap-8 data-[full-width='true']:max-w-full"
           @submit.prevent="handleSearch"
         >
           <InputField
@@ -121,7 +121,7 @@ useStaticPageSeo("translations-list");
               id="searchInput"
               v-model="searchTerm"
               fluid
-              placeholder="Enter search term"
+              placeholder="Search by title or abbreviation"
               autofocus
               type="search"
             />
@@ -138,27 +138,43 @@ useStaticPageSeo("translations-list");
           </Button>
         </form>
       </section>
-      <div data-testid="translations">
-        <a
-          v-for="t in sortedTranslations"
-          :key="t['@id']"
-          :href="`translations/${t['@id']}`"
-          class="group my-16 block bg-white p-8 px-32 py-24 no-underline hover:no-underline"
+
+      <section aria-labelledby="translations-list" class="mt-48">
+        <h2 id="translations-list" class="sr-only">Translations List</h2>
+
+        <ul
+          v-if="sortedTranslations !== null && sortedTranslations.length > 0"
+          class="mt-48"
         >
-          <div class="max-w-prose space-y-24">
-            <span class="mr-24">{{ t["@id"] }}</span>
-            <span>{{ t.translationOfWork }}</span>
-
-            <h2
-              class="ris-heading3-bold max-w-title mt-8 block text-balance text-blue-800 group-hover:underline"
+          <li v-for="t in sortedTranslations" :key="t['@id']">
+            <a
+              :href="`translations/${t['@id']}`"
+              class="group my-16 block bg-white p-8 px-32 py-24 no-underline hover:no-underline"
             >
-              {{ t.name }}
-            </h2>
+              <div class="max-w-prose space-y-24">
+                <span class="mr-24 group-hover:underline">{{ t["@id"] }}</span>
+                <span class="group-hover:underline">{{
+                  t.translationOfWork
+                }}</span>
 
-            <p class="text-gray-900">{{ t.translator }}</p>
-          </div>
-        </a>
-      </div>
+                <h3
+                  class="ris-heading3-bold max-w-title mt-8 block text-balance text-blue-800 group-hover:underline"
+                >
+                  {{ t.name }}
+                </h3>
+
+                <p class="text-gray-900">{{ t.translator }}</p>
+              </div>
+            </a>
+          </li>
+        </ul>
+        <div v-else class="mt-8">
+          <p class="font-bold">We didn’t find anything.</p>
+          <p class="mb-16">
+            Try checking the spelling or using a different title.
+          </p>
+        </div>
+      </section>
     </div>
   </ContentWrapper>
 </template>

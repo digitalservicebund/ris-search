@@ -32,11 +32,13 @@ describe("NormActionsMenu.vue", () => {
   it("passes correct props to ActionMenu", () => {
     vi.mocked(useBackendURL).mockReturnValue(normsBaseUrl);
     const expectedXmlUrl = expressionUrl + "/manifestation/xml";
+    const expectedTranslationUrl = "/translations/abc";
     vi.mocked(getManifestationUrl).mockReturnValue(expectedXmlUrl);
 
     const wrapper = shallowMount(NormActionsMenu, {
       props: {
         metadata: mockLegislationWork,
+        translationUrl: expectedTranslationUrl,
       },
     });
 
@@ -56,6 +58,7 @@ describe("NormActionsMenu.vue", () => {
         label: "Permalink zu dieser Fassung",
       },
       xmlUrl: expectedXmlUrl,
+      translationUrl: expectedTranslationUrl,
     });
   });
 });
