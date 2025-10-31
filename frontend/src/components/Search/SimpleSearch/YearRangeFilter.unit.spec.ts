@@ -6,12 +6,6 @@ import YearRangeFilter from "./YearRangeFilter.vue";
 import { DateSearchMode } from "~/stores/searchParams";
 import { setStoreValues } from "~/tests/piniaUtils";
 
-// Mock vue-router because of errors in github pipeline about ReferenceError: history is not defined
-vi.mock("vue-router", () => ({
-  useRouter: () => ({ push: vi.fn(), replace: vi.fn() }),
-  useRoute: () => ({ query: {}, params: {} }),
-}));
-
 describe("year/year range filter", () => {
   let wrapper: VueWrapper;
 
