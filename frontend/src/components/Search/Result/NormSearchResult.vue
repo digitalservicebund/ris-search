@@ -60,9 +60,9 @@ function openResult(url: string) {
   postHogStore.searchResultClicked(url, props.order);
 }
 
-const validityStatus = computed(() =>
-  formatNormValidity(item.value.workExample.temporalCoverage),
-);
+const validityStatus = computed(() => {
+  return formatNormValidity(item.value.workExample.temporalCoverage);
+});
 </script>
 
 <template>
