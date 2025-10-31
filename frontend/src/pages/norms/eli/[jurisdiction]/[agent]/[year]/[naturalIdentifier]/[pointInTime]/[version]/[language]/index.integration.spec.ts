@@ -11,6 +11,7 @@ const mocks = vi.hoisted(() => {
   return {
     useFetchNormContent: vi.fn(),
     useFetchNormArticleContent: vi.fn(),
+    usePrivateFeaturesFlag: vi.fn().mockReturnValue(false),
   };
 });
 
@@ -19,6 +20,10 @@ vi.mock("~/composables/useNormData", () => {
     useFetchNormContent: mocks.useFetchNormContent,
     useFetchNormArticleContent: mocks.useFetchNormArticleContent,
   };
+});
+
+vi.mock("~/composables/usePrivateFeaturesFlag", () => {
+  return { usePrivateFeaturesFlag: mocks.usePrivateFeaturesFlag };
 });
 
 const { useHeadMock } = vi.hoisted(() => {
@@ -265,10 +270,10 @@ describe("index.vue", () => {
   });
 
   it("uses the abbreviation as meta title and sets up comprehensive meta tags", async () => {
+    mocks.usePrivateFeaturesFlag.mockReturnValue(true);
     mockMetadata();
     await mountComponent();
     await nextTick();
-
     expect(useHeadMock).toHaveBeenCalled();
 
     const callArgs = useHeadMock.mock.calls[0]?.[0];

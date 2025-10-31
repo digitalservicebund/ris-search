@@ -1,4 +1,4 @@
-# 13. S3 Buckets and OpenSearch Synchronization
+# 14. S3 Buckets and OpenSearch Synchronization
 
 Date: 2025-05-05
 

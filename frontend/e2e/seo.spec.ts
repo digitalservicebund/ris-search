@@ -1,8 +1,5 @@
-import path from "node:path";
 import { playAudit } from "playwright-lighthouse";
 import { seoTest as test } from "./utils/fixtures";
-
-const REPORT_DIR = path.join(process.cwd(), "test-results", "lighthouse-seo");
 
 export const testPages = [
   {
@@ -67,6 +64,10 @@ export const testPages = [
   },
 ];
 
+test.beforeAll(async ({ privateFeaturesEnabled, browserName }) => {
+  test.skip(!privateFeaturesEnabled || browserName !== "chromium");
+});
+
 test.describe("SEO testing for desktop and mobile using lighthouse", () => {
   for (const testPage of testPages) {
     test(`SEO checks for page ${testPage.name}`, async ({ page }) => {
@@ -81,11 +82,6 @@ test.describe("SEO testing for desktop and mobile using lighthouse", () => {
             onlyCategories: ["seo"],
             disableStorageReset: true,
           },
-        },
-        reports: {
-          formats: { html: true },
-          name: testPage.name,
-          directory: REPORT_DIR,
         },
       });
     });

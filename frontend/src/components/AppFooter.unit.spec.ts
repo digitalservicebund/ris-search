@@ -1,13 +1,13 @@
 import { render, screen } from "@testing-library/vue";
 import { describe, it, expect, vi } from "vitest";
 import AppFooter from "~/components/AppFooter.vue";
-import { isPrototypeProfile } from "~/utils/profile";
+import { usePrivateFeaturesFlag } from "~/composables/usePrivateFeaturesFlag";
 
-vi.mock("~/utils/profile", () => ({
-  isPrototypeProfile: vi.fn<() => boolean>(),
+vi.mock("~/composables/usePrivateFeaturesFlag", () => ({
+  usePrivateFeaturesFlag: vi.fn<() => boolean>(),
 }));
 
-const mockedIsPrototypeProfile = vi.mocked(isPrototypeProfile);
+const mockedPrivateFeaturesEnabled = vi.mocked(usePrivateFeaturesFlag);
 
 describe("AppFooter", () => {
   const globalStubs = {
@@ -17,16 +17,16 @@ describe("AppFooter", () => {
     },
   };
 
-  it("does not render 'English translations' when profile is prototype", () => {
-    mockedIsPrototypeProfile.mockReturnValue(true);
+  it("does not render 'English translations' when privateFeatureEnabled is false", () => {
+    mockedPrivateFeaturesEnabled.mockReturnValue(false);
     render(AppFooter, { global: { stubs: globalStubs } });
     expect(
       screen.queryByRole("link", { name: "English translations" }),
     ).toBeNull();
   });
 
-  it("renders 'English translations' when profile is not prototype", () => {
-    mockedIsPrototypeProfile.mockReturnValue(false);
+  it("renders 'English translations' when privateFeatureEnabled is true", () => {
+    mockedPrivateFeaturesEnabled.mockReturnValue(true);
     render(AppFooter, { global: { stubs: globalStubs } });
     const link = screen.getByRole("link", { name: "English translations" });
     expect(link).toBeVisible();

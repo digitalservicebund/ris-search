@@ -1,12 +1,22 @@
 import { render, screen } from "@testing-library/vue";
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import NormMetadataFields from "./NormMetadataFields.vue";
 import { parseDateGermanLocalTime } from "~/utils/dateFormatting";
 import type { ValidityStatus } from "~/utils/norm";
-import * as Config from "~/utils/profile";
+
+const mocks = vi.hoisted(() => {
+  return {
+    usePrivateFeaturesFlag: vi.fn().mockReturnValue(false),
+  };
+});
+
+vi.mock("~/composables/usePrivateFeaturesFlag", () => {
+  return { usePrivateFeaturesFlag: mocks.usePrivateFeaturesFlag };
+});
 
 describe("NormMetadataFields.vue", () => {
-  afterEach(() => {
+  beforeEach(() => {
+    vi.clearAllMocks();
     vi.restoreAllMocks();
   });
 
@@ -45,6 +55,7 @@ describe("NormMetadataFields.vue", () => {
   });
 
   it("shows validity dates metadata fields", () => {
+    mocks.usePrivateFeaturesFlag.mockReturnValue(true);
     const validFrom = parseDateGermanLocalTime("2025-01-01");
     const validTo = parseDateGermanLocalTime("2025-06-01");
 
@@ -62,8 +73,7 @@ describe("NormMetadataFields.vue", () => {
   });
 
   it("hides 'valid from' and 'valid to' fields on prototype", () => {
-    const mockedIsPrototypeProfile = vi.spyOn(Config, "isPrototypeProfile");
-    mockedIsPrototypeProfile.mockReturnValue(true);
+    mocks.usePrivateFeaturesFlag.mockReturnValue(false);
 
     expect(screen.queryByText("Gültig ab")).not.toBeInTheDocument();
     expect(screen.queryByText("01.01.2025")).not.toBeInTheDocument();

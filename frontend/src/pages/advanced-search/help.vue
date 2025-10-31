@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import Select from "primevue/select";
 import type { DropdownItem } from "~/components/types";
+import { usePrivateFeaturesFlag } from "~/composables/usePrivateFeaturesFlag";
 import {
   type FieldType,
   type Field,
@@ -10,10 +11,10 @@ import {
   availableInternalFeatures,
   type Feature,
 } from "~/utils/advancedSearch/data";
-import { isInternalProfile, isPublicProfile } from "~/utils/profile";
 
 definePageMeta({ alias: "/erweiterte-suche/hilfe" });
 
+const privateFeaturesEnabled = usePrivateFeaturesFlag();
 const filter = ref<FieldType>("all");
 const filters: DropdownItem[] = [
   { label: "Alle", value: "all" },
@@ -28,19 +29,17 @@ const fields = computed(() => {
     ? availableFields
     : availableFields.filter((f) => f.types.includes(filter.value));
 });
-const isInternal = isInternalProfile();
-const isPublic = isPublicProfile();
 
-const availableFields: Field[] = isPublic
-  ? availablePublicFields
-  : availableInternalFields;
-const availableFeatures: Feature[] = isPublic
-  ? availablePublicFeatures
-  : availableInternalFeatures;
+const availableFields: Field[] = privateFeaturesEnabled
+  ? availableInternalFields
+  : availablePublicFields;
+const availableFeatures: Feature[] = privateFeaturesEnabled
+  ? availableInternalFeatures
+  : availablePublicFeatures;
 </script>
 
 <template>
-  <div v-if="isInternal" class="container mx-auto py-16">
+  <div v-if="privateFeaturesEnabled" class="container mx-auto py-16">
     <div class="flex flex-col gap-48">
       <div>
         <h1 class="ris-heading2-regular mt-24 mb-8">Hilfe zur Suche</h1>
@@ -159,7 +158,7 @@ const availableFeatures: Feature[] = isPublic
       </div>
     </div>
   </div>
-  <div v-if="isPublic">
+  <div v-if="!privateFeaturesEnabled">
     <PageHeader title="Hilfe zur Suche">
       <p>
         Hier finden Sie eine Übersicht über die aktuell verfügbaren Funktionen
