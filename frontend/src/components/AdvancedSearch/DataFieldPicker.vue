@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { RisSingleAccordion } from "@digitalservicebund/ris-ui/components";
 import { Button, InputGroup, InputGroupAddon, InputText } from "primevue";
+import OperatorsHelp from "./OperatorsHelp.vue";
 import DataFieldList from "~/components/AdvancedSearch/DataFieldList.vue";
 import type { DocumentKind } from "~/types";
 import type { DataField } from "~/utils/advancedSearch/dataFields";
@@ -118,11 +119,11 @@ function submitUnlessLoading() {
       </InputGroup>
     </form>
 
-    <p class="ris-label2-bold">
-      Diese Datenfelder können gezielt durchsucht werden:
-    </p>
-
     <div class="hidden lg:block">
+      <p class="ris-label2-bold mb-8">
+        Diese Datenfelder können gezielt durchsucht werden:
+      </p>
+
       <DataFieldList
         :data-fields="dataFieldsForDocumentKind"
         :label-id="dataFieldListId"
@@ -130,7 +131,7 @@ function submitUnlessLoading() {
       />
     </div>
 
-    <div class="lg:hidden">
+    <div class="mt-8 lg:hidden">
       <RisSingleAccordion
         header-collapsed="Auswahl für gezielte Suche"
         header-expanded="Auswahl für gezielte Suche"
@@ -142,5 +143,7 @@ function submitUnlessLoading() {
         />
       </RisSingleAccordion>
     </div>
+
+    <OperatorsHelp class="lg:mt-32" />
   </div>
 </template>
