@@ -58,11 +58,15 @@ public class NormLdmlToOpenSearchMapper {
   private static final String X_PATH_ARTICLE_HEADING = ".//*[local-name()='heading']";
   private static final String X_PATH_ARTICLE_NUM = ".//*[local-name()='num']/text()";
   private static final String X_PATH_ARTICLE_PARAGRAPHS = ".//*[local-name()='paragraph']";
+  private static final String AKN_PROPERTY = "/akn:akomaNtoso/akn:act/akn:meta/akn:proprietary/";
   private static final String X_PATH_ENTRY_INTO_FORCE_DATE =
-      "/akn:akomaNtoso/akn:act/akn:meta/akn:proprietary/ris:legalDocML.de_metadaten/ris:inkraft/@date";
+      AKN_PROPERTY + "ris:legalDocML.de_metadaten/ris:inkraft/@date";
   private static final String X_PATH_EXPIRY_DATE =
-      "/akn:akomaNtoso/akn:act/akn:meta/akn:proprietary/ris:legalDocML.de_metadaten/ris:ausserkraft/@date";
-
+      AKN_PROPERTY + "ris:legalDocML.de_metadaten/ris:ausserkraft/@date";
+  private static final String X_PATH_GEGENSTANDSLOS =
+      AKN_PROPERTY + "ris:legalDocML.de_metadaten/ris:gegenstandlos";
+  private static final String X_PATH_BEDINGTES_INKRAFTTRETEN =
+      AKN_PROPERTY + "ris:legalDocML.de_metadaten/ris:bedingtesInkrafttreten";
   private static final String X_PATH_BODY = "//*[local-name()='body']";
   private static final String X_PATH_CONCLUSIONS_FORMULA =
       "//*[local-name()='conclusions']/*[local-name()='formula']";
@@ -83,6 +87,20 @@ public class NormLdmlToOpenSearchMapper {
 
       if (workEli == null || expressionEli == null || manifestationEli == null) {
         logger.warn("Could not parse ELI");
+        return Optional.empty();
+      }
+
+      boolean isGegenstandslos = xmlDocument.getElementExistByXpath(X_PATH_GEGENSTANDSLOS);
+      boolean isBedingtesInkrafttreten =
+          xmlDocument.getElementExistByXpath(X_PATH_BEDINGTES_INKRAFTTRETEN);
+
+      if (isGegenstandslos) {
+        logger.warn("Ignoring Gegenstandslos until logic is defined");
+        return Optional.empty();
+      }
+
+      if (isBedingtesInkrafttreten) {
+        logger.warn("Ignoring BedingtesInkrafttreten until logic is defined");
         return Optional.empty();
       }
 

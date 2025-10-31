@@ -8,7 +8,7 @@ const expectedVersionData = [
   },
   {
     dateFrom: "04.08.2022",
-    dateTo: "-",
+    dateTo: "01.01.2030",
     status: "Aktuell gültig",
   },
   {
