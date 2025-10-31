@@ -102,6 +102,7 @@ jobs:
           format: "sarif"
           output: "trivy-results.sarif"
           cache-dir: .trivy
+          trivyignores: backend/.trivyignore
       - name: Check trivy results
         run: |
           if grep -qE 'HIGH|CRITICAL' trivy-results.sarif; then
@@ -118,7 +119,7 @@ jobs:
           fi
       - name: Upload Trivy image scan results to GitHub Security tab (on 'main' only)
         uses: github/codeql-action/upload-sarif@v4
-        if: ${{ github.ref == 'refs/heads/main' }} # Bypass non-zero exit code..
+        if: ${{ always() && github.ref == 'refs/heads/main' }} # Bypass non-zero exit code..
         with:
           sarif_file: "trivy-results.sarif"
           category: trivy-backend-image-scan
@@ -138,6 +139,11 @@ jobs:
           name: "vuln.json"
           path: "vuln.json"
           if-no-files-found: error
+      - name: Send status to Slack
+        uses: digitalservicebund/notify-on-failure-gha@66c485757701f8d5dbee32f24df38d904ca693ba
+        if: ${{ failure() && github.ref == 'refs/heads/main' }}
+        with:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 
   backend-tests-and-code-quality:
     name: Backend tests and code quality checks

@@ -30,6 +30,10 @@ export default defineNuxtConfig({
         { name: "twitter:card", content: "summary_large_image" },
         { name: "theme-color", content: "#ffffff" },
         { name: "msapplication-TileColor", content: "#ffffff" },
+        {
+          name: "apple-mobile-web-app-title",
+          content: "Rechtsinformationen des Bundes",
+        },
       ],
       htmlAttrs: {
         lang: "de",
@@ -38,6 +42,7 @@ export default defineNuxtConfig({
       viewport: "width=device-width, initial-scale=1",
       link: [
         { rel: "icon", type: "image/x-icon", href: "/favicon.ico" },
+        { rel: "icon", type: "image/svg+xml", href: "/favicon.svg" },
         {
           rel: "icon",
           type: "image/png",
@@ -49,6 +54,12 @@ export default defineNuxtConfig({
           type: "image/png",
           sizes: "32x32",
           href: "/favicon-32x32.png",
+        },
+        {
+          rel: "icon",
+          type: "image/png",
+          sizes: "96x96",
+          href: "/favicon-96x96.png",
         },
         {
           rel: "apple-touch-icon",
@@ -67,6 +78,7 @@ export default defineNuxtConfig({
           sizes: "512x512",
           href: "/android-chrome-512x512.png",
         },
+        { rel: "mask-icon", href: "/favicon.svg", color: "#0b3d91" },
         { rel: "manifest", href: "/site.webmanifest" },
       ],
     },
