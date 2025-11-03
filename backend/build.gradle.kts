@@ -96,6 +96,9 @@ dependencies {
     // CVE-2024-7254
     implementation(libs.protobuf)
 
+    implementation(libs.spring.cache)
+    implementation(libs.caffeine)
+
     compileOnly(libs.lombok)
     annotationProcessor(libs.lombok)
 

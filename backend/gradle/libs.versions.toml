@@ -43,6 +43,7 @@ pact = "4.6.17"
 posthog = "1.2.0"
 pebble = "3.2.4"
 rest-assured = "5.5.5"
+caffeine = "3.1.8"
 
 [libraries]
 spring-actuator = { module="org.springframework.boot:spring-boot-starter-actuator", version.ref="spring-boot-starter" }
@@ -51,6 +52,7 @@ spring-web = { module = "org.springframework.boot:spring-boot-starter-web", vers
 spring-security = { module = "org.springframework.boot:spring-boot-starter-security", version.ref = "spring-boot-starter" }
 spring-oauth2 = { module = "org.springframework.boot:spring-boot-starter-oauth2-resource-server", version.ref = "spring-boot-starter" }
 spring-data-jpa = { module = "org.springframework.boot:spring-boot-starter-data-jpa", version.ref = "spring-boot-starter" }
+spring-cache = { module = "org.springframework.boot:spring-boot-starter-cache", version.ref = "spring-boot-starter"}
 spring-kubernetes-client = { module = "org.springframework.cloud:spring-cloud-starter-kubernetes-client-config", version.ref = "spring-cloud-k8s" }
 spring-data-opensearch = { module = "org.opensearch.client:spring-data-opensearch-starter", version.ref = "spring-data-opensearch-starter" }
 opensearch-test-autoconfigure = { module = "org.opensearch.client:spring-data-opensearch-test-autoconfigure", version.ref = "opensearch-test-autoconfigure"}
@@ -90,6 +92,7 @@ pebble = { module = "io.pebbletemplates:pebble-spring-boot-starter", version.ref
 streamex = { module = 'one.util:streamex', version.ref = "streamex" }
 restassured = { module = 'io.rest-assured:rest-assured', version.ref = "rest-assured" }
 protobuf = { module= 'com.google.protobuf:protobuf-java', version.ref = "protobuf"}
+caffeine = { module= 'com.github.ben-manes.caffeine:caffeine', version.ref = "caffeine"}
 
 [plugins]
 spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
