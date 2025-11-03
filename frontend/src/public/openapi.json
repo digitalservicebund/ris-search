@@ -16,6 +16,10 @@
   ],
   "tags": [
     {
+      "name": "Statistics",
+      "description": "Use this endpoint to get insides of the number of documents provided by this API."
+    },
+    {
       "name": "All documents",
       "description": "Use this endpoint to search across all document types in our database."
     },
@@ -29,6 +33,22 @@
     }
   ],
   "paths": {
+    "/v1/statistics": {
+      "get": {
+        "tags": ["Statistics"],
+        "operationId": "getStatisticsData",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/StatisticsApiSchema" }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/literature": {
       "get": {
         "tags": ["Literature"],
@@ -263,6 +283,17 @@
               "type": "string",
               "format": "date",
               "description": "Filters the result set to only return expressions that are in force *on or before* the provided date. The parameter should be provided in `YYYY-MM-DD` format. Differs from `dateTo`, which refers to the date of adoption or signature of the legislation."
+            }
+          },
+          {
+            "name": "mostRelevantOn",
+            "in": "query",
+            "description": "Filters the result set so every work returns exactly one expression. Most relevant is defined as : The expression in force on that date if it exists, then the expression that would next be in force if that exists, then the most recent expression that was in force. If other filters are used the work may return 0 expressions due to the most relevant expression being filtered out.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "description": "Filters the result set so every work returns exactly one expression. Most relevant is defined as : The expression in force on that date if it exists, then the expression that would next be in force if that exists, then the most recent expression that was in force. If other filters are used the work may return 0 expressions due to the most relevant expression being filtered out."
             }
           },
           {
@@ -954,6 +985,17 @@
             }
           },
           {
+            "name": "mostRelevantOn",
+            "in": "query",
+            "description": "Filters the result set so every work returns exactly one expression. Most relevant is defined as : The expression in force on that date if it exists, then the expression that would next be in force if that exists, then the most recent expression that was in force. If other filters are used the work may return 0 expressions due to the most relevant expression being filtered out.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "description": "Filters the result set so every work returns exactly one expression. Most relevant is defined as : The expression in force on that date if it exists, then the expression that would next be in force if that exists, then the most recent expression that was in force. If other filters are used the work may return 0 expressions due to the most relevant expression being filtered out."
+            }
+          },
+          {
             "name": "fileNumber",
             "in": "query",
             "required": false,
@@ -1641,6 +1683,20 @@
   },
   "components": {
     "schemas": {
+      "StatisticsApiSchema": {
+        "type": "object",
+        "properties": {
+          "legislation": {
+            "$ref": "#/components/schemas/StatisticsCountSchema"
+          },
+          "case-law": { "$ref": "#/components/schemas/StatisticsCountSchema" },
+          "literature": { "$ref": "#/components/schemas/StatisticsCountSchema" }
+        }
+      },
+      "StatisticsCountSchema": {
+        "type": "object",
+        "properties": { "count": { "type": "integer", "format": "int64" } }
+      },
       "CollectionSchemaSearchMemberSchemaLiteratureSearchSchema": {
         "type": "object",
         "properties": {
