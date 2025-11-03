@@ -6,6 +6,7 @@
                 <akn:FRBRWork>
                     <akn:FRBRthis value="regelungstext-1"/>
                     <akn:FRBRuri value="TODO"/>
+                    <akn:FRBRalias name="Dokumentnummer" value="XXLU000000001"/>
                     <akn:FRBRalias name="haupttitel" value="Erstes Test-Dokument ULI"/>
                     <akn:FRBRalias name="hauptsachtitelZusatz" value="Some additional infos"/>
                     <akn:FRBRdate date="2024-01-01" name="verkuendungsfassung"/>
@@ -22,7 +23,6 @@
                 <akn:FRBRExpression>
                     <akn:FRBRthis value="regelungstext-1"/>
                     <akn:FRBRuri value="regelungstext-1"/>
-                    <akn:FRBRalias name="documentNumber" value="XXLU000000001"/>
                     <akn:FRBRdate date="2024-01-01" name="verkuendung"/>
                     <akn:FRBRauthor href="recht.bund.de/institution/foobar"/>
                     <akn:FRBRlanguage language="deu"/>

@@ -98,9 +98,9 @@ class LiteratureLdmlToOpenSearchMapperTest {
                   <akn:doc name="offene-struktur">
                     <akn:meta>
                       <akn:identification>
-                        <akn:FRBRExpression>
-                          <akn:FRBRalias name="documentNumber" value="BJLU002758328" />
-                        </akn:FRBRExpression>
+                        <akn:FRBRWork>
+                          <akn:FRBRalias name="Dokumentnummer" value="BJLU002758328" />
+                        </akn:FRBRWork>
                       </akn:identification>
                                   <akn:classification source="doktyp">
                                       <akn:keyword dictionary="attributsemantik-noch-undefiniert" showAs="Auf" value="Auf"/>
@@ -146,9 +146,9 @@ class LiteratureLdmlToOpenSearchMapperTest {
                     <akn:doc name="offene-struktur">
                       <akn:meta>
                         <akn:identification>
-                          <akn:FRBRExpression>
-                            <akn:FRBRalias name="documentNumber" value="DOC-PARAM" />
-                          </akn:FRBRExpression>
+                          <akn:FRBRWork>
+                            <akn:FRBRalias name="Dokumentnummer" value="XXLU000000001" />
+                          </akn:FRBRWork>
                         </akn:identification>
                         <akn:classification source="doktyp">
                           <akn:keyword dictionary="attributsemantik-noch-undefiniert" showAs="Auf" value="Auf"/>
