@@ -1,11 +1,13 @@
 package de.bund.digitalservice.ris.search.unit.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import de.bund.digitalservice.ris.search.service.StatisticsService;
+import java.io.IOException;
 import java.util.Map;
 import org.apache.hc.core5.http.ContentType;
 import org.apache.hc.core5.http.io.entity.StringEntity;
@@ -32,7 +34,7 @@ class StatisticsServiceTest {
   }
 
   @Test
-  void testGetAllCounts_success() throws Exception {
+  void testGetAllCountsSuccess() throws Exception {
     Response aliasResponse =
         mockResponse(
             "[{\"alias\":\"norms\"},{\"alias\":\"literature\"},{\"alias\":\"caselaws\"},{\"alias\":\"test\"}]");
@@ -49,6 +51,25 @@ class StatisticsServiceTest {
     Map<String, Long> counts = statisticsService.getAllCounts();
 
     assertEquals(Map.of("norms", 123L, "literature", 456L, "caselaws", 500L), counts);
+  }
+
+  @Test
+  void testGetAllCountsFetchAliasesFails() throws Exception {
+    when(lowLevelClient.performRequest(any(Request.class)))
+        .thenThrow(new IOException("Connection failed"));
+
+    IOException ex = assertThrows(IOException.class, () -> statisticsService.getAllCounts());
+  }
+
+  @Test
+  void testGetAllCountsFetchCountFails() throws Exception {
+    Response aliasResponse = mockResponse("[{\"alias\":\"norms\"}]");
+    when(lowLevelClient.performRequest(any(Request.class)))
+        .thenReturn(aliasResponse)
+        .thenThrow(new IOException("Count fetch failed"));
+
+    IOException ex = assertThrows(IOException.class, () -> statisticsService.getAllCounts());
+    assertEquals("Count fetch failed", ex.getMessage());
   }
 
   private Response mockResponse(String json) throws Exception {
