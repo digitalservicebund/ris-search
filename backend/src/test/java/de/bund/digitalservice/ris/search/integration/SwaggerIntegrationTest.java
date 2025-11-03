@@ -67,6 +67,7 @@ class SwaggerIntegrationTest extends ContainersIntegrationBase {
         .andExpect(
             jsonPath(
                 "$.tags[*].name",
-                Matchers.containsInAnyOrder("All documents", "Legislation", "Case Law")));
+                Matchers.containsInAnyOrder(
+                    "All documents", "Legislation", "Case Law", "Statistics")));
   }
 }
