@@ -39,7 +39,7 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Adjust permissions to docker
+      - name: Adjust permissions to Docker
         run: sudo chmod 666 /var/run/docker.sock
       - name: Set environment variables for backend and frontend
         env:
@@ -88,7 +88,7 @@ jobs:
           key: npm-cache-${{ runner.os }}-playwright-${{ env.PLAYWRIGHT_VERSION }}
       - name: Install Playwright
         run: npm install @playwright/test@${{ env.PLAYWRIGHT_VERSION }} @axe-core/playwright axe-html-reporter lighthouse playwright-lighthouse
-      - name: Install Playwright Browsers
+      - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium firefox webkit
       - name: Wait for frontend to respond or dump logs if fail
         timeout-minutes: 5
@@ -149,7 +149,7 @@ jobs:
           BACKEND_IMAGE: ${{ env.BACKEND_IMAGE }}
           FRONTEND_IMAGE: ${{ env.FRONTEND_IMAGE }}
           ENV_FILE_NAME: ${{ matrix.env_file_name }}
-      - name: Upload docker logs (${{ matrix.profile }})
+      - name: Upload Docker logs (${{ matrix.profile }})
         uses: actions/upload-artifact@v4
         if: ${{ failure() }}
         with:

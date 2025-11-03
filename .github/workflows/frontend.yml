@@ -39,10 +39,10 @@ jobs:
           node-version: 20.17.0
           cache: yarn
           cache-dependency-path: ./frontend/yarn.lock
-      - name: Install node modules
+      - name: Install Node modules
         run: yarn install --immutable
         working-directory: ./frontend
-      - name: Prepare nuxt
+      - name: Prepare Nuxt
         run: yarn run prepare
         working-directory: ./frontend
       - name: Check style
@@ -79,7 +79,7 @@ jobs:
         with:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 
-  audit-licenses-frontend:
+  audit-licences-frontend:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
@@ -89,10 +89,10 @@ jobs:
           node-version: 20.17.0
           cache: yarn
           cache-dependency-path: ./frontend/yarn.lock
-      - name: Install node modules
+      - name: Install Node modules
         run: yarn install --immutable
         working-directory: ./frontend
-      - name: Run license scanner
+      - name: Run licence scanner
         run: yarn audit:licences
         working-directory: ./frontend
       - name: Upload licence report
@@ -126,7 +126,7 @@ jobs:
           skip-dirs: node_modules # See https://github.com/aquasecurity/trivy/issues/1283
           format: "sarif"
           output: "trivy-results.sarif"
-      - name: Check trivy results
+      - name: Check Trivy results
         run: |
           if grep -qE 'HIGH|CRITICAL' trivy-results.sarif; then
             echo "Vulnerabilities found"
@@ -159,7 +159,7 @@ jobs:
       contents: read
     steps:
       - uses: actions/checkout@v5
-      - name: "Set environmental variables"
+      - name: "Set environment variables"
         run: |
           echo "IMAGE_NAME_WITH_TAG=$CONTAINER_IMAGE_NAME:$CONTAINER_IMAGE_VERSION" >> $GITHUB_ENV
           BRANCH_NAME_TAG=$(echo $BRANCH_NAME | sed -e 's/[^[:alnum:]]/-/g')
@@ -203,7 +203,7 @@ jobs:
         with:
           sarif_file: "trivy-results.sarif"
           category: trivy-frontend-image-scan
-      - name: Check trivy results
+      - name: Check Trivy results
         run: |
           if grep -qE 'HIGH|CRITICAL' trivy-results.sarif; then
             echo "Vulnerabilities found"
@@ -217,7 +217,7 @@ jobs:
             echo "No significant vulnerabilities found"
             exit 0
           fi
-      - name: Generate cosign vulnerability scan record
+      - name: Generate Cosign vulnerability scan record
         # Third-party action, pin to commit SHA!
         # See https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions
         uses: aquasecurity/trivy-action@a20de5420d57c4102486cdd9578b45609c99d7eb
@@ -226,14 +226,14 @@ jobs:
           image-ref: ${{ env.IMAGE_NAME_WITH_TAG }}
           format: "cosign-vuln"
           output: "vuln-frontend.json"
-      - name: Upload cosign vulnerability scan record
+      - name: Upload Cosign vulnerability scan record
         uses: actions/upload-artifact@v4
         if: ${{ github.actor != 'dependabot[bot]' }}
         with:
           name: "vuln-frontend.json"
           path: "vuln-frontend.json"
           if-no-files-found: error
-      - name: Install cosign
+      - name: Install Cosign
         if: ${{ github.actor != 'dependabot[bot]' && github.ref == 'refs/heads/main' }}
         # Third-party action, pin to commit SHA!
         # See https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions
@@ -246,11 +246,11 @@ jobs:
         if: ${{ github.actor != 'dependabot[bot]' && github.ref == 'refs/heads/main' }}
       - id: set-version
         run: echo "version=$CONTAINER_IMAGE_VERSION" >> "$GITHUB_OUTPUT"
-      - name: Install sentry-cli using official script
+      - name: Install Sentry CLI using official script
         run: |
           curl -sL https://sentry.io/get-cli/ | bash
         if: ${{ github.actor != 'dependabot[bot]' && github.ref == 'refs/heads/main' }}
-      - name: Create and finalize Sentry release for Frontend
+      - name: Create and finalize Sentry release for frontend
         run: |
           sentry-cli releases new $CONTAINER_IMAGE_VERSION
           sentry-cli releases set-commits --auto $CONTAINER_IMAGE_VERSION

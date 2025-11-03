@@ -22,7 +22,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        profile: [ internal, public ]
+        profile: [internal, public]
     steps:
       - uses: actions/checkout@v5
       - uses: actions/setup-node@v4
@@ -37,7 +37,7 @@ jobs:
         with:
           path: /home/runner/.cache/ms-playwright
           key: ${{ runner.os }}-playwright-${{ env.PLAYWRIGHT_VERSION }}-${{ inputs.browser }}
-      - name: Cache browser binaries chromium (for authentication)
+      - name: Cache browser binaries Chromium (for authentication)
         id: playwright-cache-chromium
         uses: actions/cache@v4
         with:
@@ -52,13 +52,13 @@ jobs:
           key: npm-cache-${{ runner.os }}-playwright-${{ env.PLAYWRIGHT_VERSION }}
       - name: Install Playwright and accessibility test libraries
         run: npm install @playwright/test@${{ env.PLAYWRIGHT_VERSION }} @axe-core/playwright axe-html-reporter
-      - name: Install Playwright Browsers
+      - name: Install Playwright browsers
         run: npx playwright install --with-deps ${{ inputs.browser }}
       - name: Install system dependencies for WebKit
         # Some WebKit dependencies seem to lay outside the cache and will need to be installed separately
         if: ${{ inputs.browser == 'webkit' && steps.playwright-cache.outputs.cache-hit == 'true' }}
         run: npx playwright install-deps webkit
-      - name: Install chromium (for authentication)
+      - name: Install Chromium (for authentication)
         run: npx playwright install --with-deps chromium
         if: steps.playwright-cache-chromium.outputs.cache-hit != 'true' && inputs.browser != 'chromium'
       - name: Run Playwright tests
