@@ -18,7 +18,10 @@ test("displays literature page with metadata and text tab by default", async ({
   await expect(breadcrumb.getByText("Erstes Test-Dokument ULI")).toBeVisible();
 
   await expect(
-    page.getByRole("heading", { name: "Erstes Test-Dokument ULI" }),
+    page
+      .getByRole("main")
+      .getByRole("heading", { level: 1, name: "Erstes Test-Dokument ULI" })
+      .first(),
   ).toBeVisible();
 
   // Metadata section
@@ -53,13 +56,20 @@ test("displays literature page with metadata and text tab by default", async ({
 noJsTest("tabs work without JavaScript", async ({ page }) => {
   await page.goto("/literature/TEST000000001", { waitUntil: "networkidle" });
   await expect(
-    page.getByRole("heading", { name: "Details" }).first(),
+    page.getByRole("link", { name: "Details zum Literaturnachweis" }),
   ).toBeVisible();
+
   await page
     .getByRole("link", { name: "Details zum Literaturnachweis" })
     .first()
     .click();
+
   await expect(page).toHaveURL(/#details$/);
+
+  const detailsRegion = page.getByRole("region", { name: "Details" });
+  await expect(
+    detailsRegion.getByRole("heading", { name: "Details" }),
+  ).toBeVisible();
 });
 
 test("shows detailed information in the 'Details' tab", async ({ page }) => {
