@@ -11,7 +11,7 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
 
 <template>
   <footer class="container flex flex-col gap-32 px-16 py-32 print:hidden">
-      <FeedbackForm v-if="!hideFeedbackForm" class="mb-80" />
+    <FeedbackForm v-if="!hideFeedbackForm" class="mb-80" />
     <div class="grid grid-cols-1 gap-48 md:grid-cols-2">
       <div class="space-y-16">
         <img
