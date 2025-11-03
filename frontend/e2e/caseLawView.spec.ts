@@ -18,12 +18,10 @@ async function getDisplayedResultCount(page: Page) {
   return Number.parseInt(digits);
 }
 
-test.beforeAll(async ({ privateFeaturesEnabled }) => {
-  test.skip(
-    !privateFeaturesEnabled,
-    "Removed redundant testing since there are no specific functionality marked as private",
-  );
-});
+test.skip(
+  process.env.NUXT_PUBLIC_PRIVATE_FEATURES_ENABLED !== "true",
+  "Removed redundant testing since there are no specific functionality marked as private",
+);
 
 test("can search, filter for case law, and view a single case law documentation unit", async ({
   page,

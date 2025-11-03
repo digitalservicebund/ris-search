@@ -1,3 +1,4 @@
+import userEvent from "@testing-library/user-event";
 import { render, screen } from "@testing-library/vue";
 import { nextTick } from "vue";
 import RisTabs from "./RisTabs.vue";
@@ -97,7 +98,7 @@ describe("RisTabs.vue", () => {
     expect(links[0]).toHaveAttribute("aria-current", "page");
     expect(links[1]).not.toHaveAttribute("aria-current");
 
-    await links[1]?.click();
+    await userEvent.click(links[1]!);
 
     const updatedLinks = screen.getAllByRole("link");
     expect(updatedLinks[0]).not.toHaveAttribute("aria-current");
