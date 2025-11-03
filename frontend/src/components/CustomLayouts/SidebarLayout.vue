@@ -1,9 +1,7 @@
 <script setup lang="ts">
-import type { VNodeChild } from "vue";
-
 defineSlots<{
-  content(): VNodeChild;
-  sidebar(): VNodeChild;
+  content(): unknown;
+  sidebar(): unknown;
 }>();
 </script>
 
