@@ -17,7 +17,7 @@ env:
   CONTAINER_REGISTRY: ghcr.io
   CONTAINER_IMAGE_NAME: ${{ github.repository }}
   CONTAINER_IMAGE_VERSION: ${{ github.sha }}
-  REPORTS_REPOSITORY: digitalservicebund/ris-search
+
 jobs:
   e2e-tests:
     runs-on: ubuntu-latest
@@ -39,7 +39,7 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Adjust permissions to docker
+      - name: Adjust permissions to Docker
         run: sudo chmod 666 /var/run/docker.sock
       - name: Set environment variables for backend and frontend
         env:
@@ -68,28 +68,24 @@ jobs:
           BACKEND_IMAGE: ${{ env.BACKEND_IMAGE }}
           FRONTEND_IMAGE: ${{ env.FRONTEND_IMAGE }}
           ENV_FILE_NAME: ${{ matrix.env_file_name }}
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
-          node-version: lts/*
-      - name: Get Playwright version
+          node-version: 24
+      - name: Install Node modules
+        run: yarn install --immutable
         working-directory: ./frontend
+      - name: Get Playwright version
         run: echo "PLAYWRIGHT_VERSION=$(yarn list --pattern @playwright/test | awk -F "@" 'NR==2 {print $NF}')" >> $GITHUB_ENV
+        working-directory: ./frontend
       - name: Cache browser binaries
         id: playwright-cache
         uses: actions/cache@v4
         with:
           path: /home/runner/.cache/ms-playwright
           key: ${{ runner.os }}-playwright-${{ env.PLAYWRIGHT_VERSION }}-chromium
-      - name: Cache npm cache
-        uses: actions/cache@v4
-        id: cache-npm-cache
-        with:
-          path: /home/runner/.npm
-          key: npm-cache-${{ runner.os }}-playwright-${{ env.PLAYWRIGHT_VERSION }}
-      - name: Install Playwright
-        run: npm install @playwright/test@${{ env.PLAYWRIGHT_VERSION }} @axe-core/playwright axe-html-reporter lighthouse playwright-lighthouse
-      - name: Install Playwright Browsers
-        run: npx playwright install --with-deps chromium firefox webkit
+      - name: Install Playwright browsers
+        run: yarn exec playwright install --with-deps chromium firefox webkit
+        working-directory: ./frontend
       - name: Wait for frontend to respond or dump logs if fail
         timeout-minutes: 5
         run: |
@@ -109,10 +105,9 @@ jobs:
           else
             echo "Frontend is responding."
           fi
-
       - name: Run Playwright tests with private features enabled
         if: ${{ matrix.profile == 'internal' }}
-        run: npx playwright test --project chromium firefox mobile
+        run: yarn exec playwright test --project chromium firefox mobile
         working-directory: ./frontend
         env:
           RIS_BASE_URL: http://localhost:3000
@@ -120,7 +115,7 @@ jobs:
           TZ: Europe/Berlin
       - name: Run Playwright tests with private features disabled
         if: ${{ matrix.profile == 'public' }}
-        run: npx playwright test --project chromium firefox mobile
+        run: yarn exec playwright test --project chromium firefox mobile
         working-directory: ./frontend
         env:
           RIS_BASE_URL: http://localhost:3000
@@ -149,7 +144,7 @@ jobs:
           BACKEND_IMAGE: ${{ env.BACKEND_IMAGE }}
           FRONTEND_IMAGE: ${{ env.FRONTEND_IMAGE }}
           ENV_FILE_NAME: ${{ matrix.env_file_name }}
-      - name: Upload docker logs (${{ matrix.profile }})
+      - name: Upload Docker logs (${{ matrix.profile }})
         uses: actions/upload-artifact@v4
         if: ${{ failure() }}
         with:
