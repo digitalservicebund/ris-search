@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<akn:akomaNtoso xmlns:akn="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" xmlns:ris="http://ldml.neuris.de/literature/unselbstaendig/metadata/">
+<akn:akomaNtoso xmlns:akn="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" xmlns:ris="http://ldml.neuris.de/literature/unselbstaendig/meta/">
     <akn:doc name="offene-struktur">
         <akn:meta>
             <akn:identification source="attributsemantik-noch-undefiniert">
@@ -57,7 +57,7 @@
             </akn:analysis>
             <akn:references source="attributsemantik-noch-undefiniert">
                 <akn:TLCPerson eId="musterfrau-sabine-verfasser-1" href="akn/ontology/persons/de/musterfrau-sabine" ris:name="Musterfrau, Sabine" ris:titel="Prof" showAs="Musterfrau, Sabine, Prof"/>
-                <akn:TLCPerson eId="foo-peter-mitarbeiter-1" href="" ris:titel="Dr" ris:name="Foo, Peter"/>
+                <akn:TLCPerson eId="foo-peter-mitarbeiter-1" href="" ris:titel="Dr" ris:name="Foo, Peter" showAs="Foo, Peter, Dr"/>
                 <akn:TLCOrganization eId="dgb-urheber-1" href="akn/ontology/organizations/de/dgb" ris:name="DGB" ris:zusatz="Bundesausschuß" showAs="DGB, Bundesauschuß"/>
                 <akn:TLCEvent eId="foo-kongress-1" href="akn/ontology/organizations/de/kongress"
                               ris:name="Internationaler Kongreß für das Recht"

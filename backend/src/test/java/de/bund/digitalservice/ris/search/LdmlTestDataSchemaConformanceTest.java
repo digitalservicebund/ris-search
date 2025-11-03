@@ -22,20 +22,34 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 class LdmlTestDataSchemaConformanceTest {
 
-  private static final List<String> SCHEMA_METADATA_FILES =
+  private static final List<String> NORM_SCHEMA_METADATA_FILES =
       List.of(
           "Grammatiken/Norms/legalDocML.de-metadaten-ris.xsd",
           "Grammatiken/Norms/legalDocML.de-metadaten-regelungstext.xsd",
           "Grammatiken/Norms/legalDocML.de-metadaten-rechtsetzungsdokument.xsd");
 
-  private List<String> schemaFilesFor(String ldmlFile) {
-    List<String> schemaFiles = new ArrayList<>(SCHEMA_METADATA_FILES);
+  private static final List<String> LITERATURE_SCHEMA_METADATA_FILES =
+      List.of("Grammatiken/Literature/akomantoso30.xsd");
+
+  private List<String> schemaFilesForNorm(String ldmlFile) {
+    List<String> schemaFiles = new ArrayList<>(NORM_SCHEMA_METADATA_FILES);
     if (ldmlFile.contains("anlage-regelungstext")) {
       schemaFiles.add("Grammatiken/Norms/legalDocML.de-offenestruktur.xsd");
     } else if (ldmlFile.contains("rechtsetzungsdokument")) {
       schemaFiles.add("Grammatiken/Norms/legalDocML.de-rechtsetzungsdokument.xsd");
     } else {
       schemaFiles.add("Grammatiken/Norms/legalDocML.de-regelungstextverkuendungsfassung.xsd");
+    }
+
+    return schemaFiles;
+  }
+
+  private List<String> schemaFilesForLiterature(String ldmlFile) {
+    List<String> schemaFiles = new ArrayList<>(LITERATURE_SCHEMA_METADATA_FILES);
+    if (ldmlFile.substring(2, 4).equals("LU")) {
+      schemaFiles.add("Grammatiken/Literature/ldml-ris-literature-unselbstaendig-meta.xsd");
+    } else {
+      schemaFiles.add("Grammatiken/Literature/ldml-ris-literature-selbstaendig-meta.xsd");
     }
 
     return schemaFiles;
@@ -55,11 +69,11 @@ class LdmlTestDataSchemaConformanceTest {
         .filter(Objects::nonNull);
   }
 
-  private void assertSchemaValid(Path ldmlFilePath) {
+  private void assertSchemaValid(Path ldmlFilePath, List<String> schamaFilePaths) {
     try {
       ClassLoader classLoader = LdmlTestDataSchemaConformanceTest.class.getClassLoader();
       List<StreamSource> schemaSources =
-          schemaFilesFor(ldmlFilePath.toString()).stream()
+          schamaFilePaths.stream()
               .map(
                   schema -> {
                     URL schemaUrl = classLoader.getResource(schema);
@@ -83,24 +97,45 @@ class LdmlTestDataSchemaConformanceTest {
     }
   }
 
-  private static Stream<Arguments> argumentsForE2EDataSchemaConformance() throws IOException {
+  private void assertNormIsSchemaValid(Path ldmlFilePath) {
+    var schemaFiles = schemaFilesForNorm(ldmlFilePath.toString());
+    assertSchemaValid(ldmlFilePath, schemaFiles);
+  }
+
+  private void assertLiteratureIsSchemaValid(Path ldmlFilePath) {
+    var schemaFiles = schemaFilesForLiterature(ldmlFilePath.toString());
+    assertSchemaValid(ldmlFilePath, schemaFiles);
+  }
+
+  private static Stream<Arguments> argumentsForNormE2EDataSchemaConformance() throws IOException {
     return testDataPathForDirectory("e2e-data/norm/eli/");
   }
 
   @ParameterizedTest
-  @MethodSource("argumentsForE2EDataSchemaConformance")
-  void ldmlE2ETestDataShouldBeSchemaConform(Path ldmlFilePath) {
-    assertSchemaValid(ldmlFilePath);
+  @MethodSource("argumentsForNormE2EDataSchemaConformance")
+  void normLdmlE2ETestDataShouldBeSchemaConform(Path ldmlFilePath) {
+    assertNormIsSchemaValid(ldmlFilePath);
   }
 
-  private static Stream<Arguments> argumentsForIntegrationTestDataSchemaConformance()
+  private static Stream<Arguments> argumentsForNormIntegrationTestDataSchemaConformance()
       throws IOException {
     return testDataPathForDirectory("src/test/resources/data/LDML/norm/eli");
   }
 
   @ParameterizedTest
-  @MethodSource("argumentsForIntegrationTestDataSchemaConformance")
-  void ldmlIntegrationTestDataShouldBeSchemaConform(Path ldmlFilePath) {
-    assertSchemaValid(ldmlFilePath);
+  @MethodSource("argumentsForNormIntegrationTestDataSchemaConformance")
+  void normLdmlIntegrationTestDataShouldBeSchemaConform(Path ldmlFilePath) {
+    assertNormIsSchemaValid(ldmlFilePath);
+  }
+
+  private static Stream<Arguments> argumentsForLiteratureE2EDataSchemaConformance()
+      throws IOException {
+    return testDataPathForDirectory("e2e-data/literature/");
+  }
+
+  @ParameterizedTest
+  @MethodSource("argumentsForLiteratureE2EDataSchemaConformance")
+  void literatureLdmlE2ETestDataShouldBeSchemaConform(Path ldmlFilePath) {
+    assertLiteratureIsSchemaValid(ldmlFilePath);
   }
 }

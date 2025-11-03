@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns="http://ldml.neuris.de/literature/meta/"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
+           version="1.0" targetNamespace="http://ldml.neuris.de/literature/meta/">
+  <xs:complexType name="normReferenceType">
+    <xs:attribute name="abbreviation" type="xs:string"/>
+    <xs:attribute name="dateOfVersion" type="xs:date"/>
+    <xs:attribute name="singleNorm" type="xs:string"/>
+  </xs:complexType>
+  <xs:complexType name="caselawReferenceAttributeType" abstract="true">
+    <xs:attribute name="abbreviation" type="xs:string" use="required"/>
+    <xs:attribute name="court" type="xs:string" use="required"/>
+    <xs:attribute name="courtLocation" type="xs:string"/>
+    <xs:attribute name="date" type="xs:date" use="required"/>
+    <xs:attribute name="referenceNumber" type="xs:string" use="required"/>
+    <xs:attribute name="documentNumber" type="xs:string"/>
+  </xs:complexType>
+  <xs:complexType name="vvReferenceAttributeType" abstract="true">
+    <xs:attribute name="abbreviation" type="xs:string" use="required"/>
+    <xs:attribute name="reference" type="xs:string" use="required"/>
+    <xs:attribute name="documentNumber" type="xs:string"/>
+  </xs:complexType>
+  <!-- Used by caselawReference and vvReference -->
+  <xs:complexType name="fundstelleAttributeType" abstract="true">
+    <xs:attribute name="periodikum" type="xs:string" use="required"/>
+    <xs:attribute name="zitatstelle" type="xs:string" use="required"/>
+  </xs:complexType>
+  <xs:complexType name="unselbstaendigeLiteraturReferenceType">
+    <xs:attribute name="dokumentTyp" type="xs:string"/>
+    <xs:attribute name="documentNumber" type="xs:string"/>
+    <xs:attribute name="periodikum" type="xs:string" use="required"/>
+    <xs:attribute name="verfasser" type="xs:string" use="required"/>
+    <xs:attribute name="zitatstelle" type="xs:string" use="required"/>
+  </xs:complexType>
+  <xs:complexType name="selbstaendigeLiteraturReferenceType">
+    <xs:attribute name="documentNumber" type="xs:string"/>
+    <xs:attribute name="veroeffentlichungsJahr" type="xs:string" use="required"/>
+    <xs:attribute name="autor" type="xs:string" use="required"/>
+    <xs:attribute name="buchtitel" type="xs:string" use="required"/>
+  </xs:complexType>
+</xs:schema>
