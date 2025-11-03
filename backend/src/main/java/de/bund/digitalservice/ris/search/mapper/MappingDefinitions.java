@@ -27,7 +27,6 @@ public class MappingDefinitions {
     literatureOpenSearchToSchemaMap =
         Map.ofEntries(
             Map.entry(Literature.Fields.DOCUMENT_NUMBER_KEYWORD, "documentNumber"),
-            Map.entry(Literature.Fields.RECORDING_DATE, "recordingDate"),
             Map.entry(Literature.Fields.YEARS_OF_PUBLICATION, "yearsOfPublication"),
             Map.entry(Literature.Fields.DEPENDENT_REFERENCES, "dependentReferences"),
             Map.entry(Literature.Fields.INDEPENDENT_REFERENCES, "independentReferences"),

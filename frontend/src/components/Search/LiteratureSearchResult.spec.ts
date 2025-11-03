@@ -8,7 +8,6 @@ const searchResult: SearchResult<Literature> = {
     "@type": "Literature",
     inLanguage: "de",
     documentNumber: "LIT-123",
-    recordingDate: "2023-02-15",
     yearsOfPublication: ["2021", "2022", "2023"],
     documentTypes: ["Book", "Article"],
     dependentReferences: ["LIT-122", "LIT-121"],

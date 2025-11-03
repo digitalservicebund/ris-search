@@ -122,7 +122,6 @@ export interface Literature {
   "@id": string;
   inLanguage: string | null;
   documentNumber: string | null;
-  recordingDate: string | null; // LocalDate in backend -> string in ISO format
   yearsOfPublication: string[];
   documentTypes: string[];
   dependentReferences: string[];

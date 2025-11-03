@@ -14,7 +14,6 @@ public class LiteratureSchemaMapper {
     return LiteratureSchema.builder()
         .id(entityURI)
         .inLanguage("de")
-        .recordingDate(entity.recordingDate())
         .documentNumber(entity.documentNumber())
         .yearsOfPublication(entity.yearsOfPublication())
         .documentTypes(entity.documentTypes())

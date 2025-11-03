@@ -1706,17 +1706,17 @@
                 "description": "Dokumentnummer",
                 "example": "KALU000000000"
               },
-              "recordingDate": {
-                "type": "string",
-                "format": "date",
-                "description": "The date on which the literature piece was recorded.",
-                "example": "2003-12-15"
-              },
               "yearsOfPublication": {
                 "type": "array",
                 "description": "Veröffentlichungsjahre",
                 "example": "[2014, 2024-09]",
                 "items": { "type": "string" }
+              },
+              "firstPublicationDate": {
+                "type": "string",
+                "format": "date",
+                "description": "Erstes Veröffentlichungsdatum",
+                "example": "2014-01-01"
               },
               "documentTypes": {
                 "type": "array",
@@ -1832,12 +1832,6 @@
         "properties": {
           "@id": { "type": "string", "example": "KALU000000000" },
           "inLanguage": { "type": "string", "example": "de" },
-          "recordingDate": {
-            "type": "string",
-            "format": "date",
-            "description": "The date on which the literature piece was recorded.",
-            "example": "2003-12-15"
-          },
           "documentNumber": {
             "type": "string",
             "description": "Dokumentnummer",
