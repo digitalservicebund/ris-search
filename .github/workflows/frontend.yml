@@ -21,8 +21,6 @@ env:
   CONTAINER_IMAGE_NAME: ghcr.io/digitalservicebund/ris-search/frontend
   CONTAINER_IMAGE_VERSION: ${{ github.sha }}
   BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
-  REPORTS_REPOSITORY: digitalservicebund/ris-search
-  TRIVY_DB_REPOSITORY: ghcr.io/aquasecurity/trivy-db,public.ecr.aws/aquasecurity/trivy-db
   SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
   SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
   SENTRY_RELEASE: ${{ github.sha }}
