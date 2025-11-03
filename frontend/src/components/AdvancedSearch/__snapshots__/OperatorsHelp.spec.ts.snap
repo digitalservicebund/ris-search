@@ -1,0 +1,3 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`OperatorsHelp > should render 1`] = `" Hilfestellung zu Suchoperatoren OperatorBedeutungANDZeigt nur Ergebnisse, die beide Begriffe enthaltenORZeigt Ergebnisse mit einem oder beiden BegriffenNOTSchließt Ergebnisse mit dem folgenden Begriff aus"genaue Phrase"Findet genau diese Wortfolge~5Findet Treffer, in denen zwei Wörter max. 5 Wörter auseinander stehen "`;
