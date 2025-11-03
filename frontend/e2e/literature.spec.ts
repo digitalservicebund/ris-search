@@ -3,7 +3,7 @@ import { expect, test } from "./utils/fixtures";
 test("displays literature page with metadata and text tab by default", async ({
   page,
 }) => {
-  await page.goto("/literature/TEST000000001");
+  await page.goto("/literature/XXLU000000001");
 
   // Breadcrumb navigation
   const breadcrumb = page.getByRole("navigation", { name: "Pfadnavigation" });
@@ -53,7 +53,7 @@ test("displays literature page with metadata and text tab by default", async ({
 });
 
 test("shows detailed information in the 'Details' tab", async ({ page }) => {
-  await page.goto("/literature/TEST000000001");
+  await page.goto("/literature/XXLU000000001");
   await page.waitForLoadState("networkidle");
 
   const detailsTabButton = page.getByRole("tab", {
@@ -90,7 +90,7 @@ test.describe("actions menu", () => {
     context,
     isMobileTest,
   }) => {
-    await page.goto("/literature/TEST000000001", {
+    await page.goto("/literature/XXLU000000001", {
       waitUntil: "networkidle",
     });
 
@@ -124,7 +124,7 @@ test.describe("actions menu", () => {
       const clipboardContents = await page.evaluate(() => {
         return navigator.clipboard.readText();
       });
-      expect(clipboardContents.endsWith("/literature/TEST000000001")).toBe(
+      expect(clipboardContents.endsWith("/literature/XXLU000000001")).toBe(
         true,
       );
     }
@@ -134,7 +134,7 @@ test.describe("actions menu", () => {
     page,
     isMobileTest,
   }) => {
-    await page.goto("/literature/TEST000000001", {
+    await page.goto("/literature/XXLU000000001", {
       waitUntil: "networkidle",
     });
     if (isMobileTest) await page.getByLabel("Aktionen anzeigen").click();
@@ -167,7 +167,7 @@ test.describe("actions menu", () => {
     page,
     isMobileTest,
   }) => {
-    await page.goto("/literature/TEST000000001", {
+    await page.goto("/literature/XXLU000000001", {
       waitUntil: "networkidle",
     });
     if (isMobileTest) await page.getByLabel("Aktionen anzeigen").click();
@@ -192,7 +192,7 @@ test.describe("actions menu", () => {
     page,
     isMobileTest,
   }) => {
-    await page.goto("/literature/TEST000000001", {
+    await page.goto("/literature/XXLU000000001", {
       waitUntil: "networkidle",
     });
 
@@ -211,6 +211,6 @@ test.describe("actions menu", () => {
 
     await button.click();
 
-    await page.waitForURL("v1/literature/TEST000000001.xml");
+    await page.waitForURL("v1/literature/XXLU000000001.xml");
   });
 });

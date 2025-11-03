@@ -251,9 +251,9 @@ describe("get a document", () => {
 
   const literatureDocumentExample: Literature = {
     "@type": "Literature",
-    "@id": "/v1/literature/TEST000000001",
+    "@id": "/v1/literature/XXLU000000001",
     inLanguage: "de",
-    documentNumber: "TEST000000001",
+    documentNumber: "XXLU000000001",
     recordingDate: "1998-01-01",
     yearsOfPublication: ["1979", "2004-09"],
     documentTypes: ["Auf"],
@@ -273,22 +273,22 @@ describe("get a document", () => {
     encoding: [
       {
         "@type": "MediaObject",
-        "@id": "/v1/literature/TEST000000001/html",
-        contentUrl: "/v1/literature/TEST000000001.html",
+        "@id": "/v1/literature/XXLU000000001/html",
+        contentUrl: "/v1/literature/XXLU000000001.html",
         encodingFormat: "text/html",
         inLanguage: "de",
       },
       {
         "@type": "MediaObject",
-        "@id": "/v1/literature/TEST000000001/xml",
-        contentUrl: "/v1/literature/TEST000000001.xml",
+        "@id": "/v1/literature/XXLU000000001/xml",
+        contentUrl: "/v1/literature/XXLU000000001.xml",
         encodingFormat: "application/xml",
         inLanguage: "de",
       },
       {
         "@type": "MediaObject",
-        "@id": "/v1/literature/TEST000000001/zip",
-        contentUrl: "/v1/literature/TEST000000001.zip",
+        "@id": "/v1/literature/XXLU000000001/zip",
+        contentUrl: "/v1/literature/XXLU000000001.zip",
         encodingFormat: "application/zip",
         inLanguage: "de",
       },
@@ -346,11 +346,11 @@ describe("get a document", () => {
   });
 
   it("returns an HTTP 200 and a literature document", () => {
-    const requestUrl = "/v1/literature/TEST000000001";
+    const requestUrl = "/v1/literature/XXLU000000001";
     return provider
       .addInteraction()
       .given(
-        "I have a literature document in the database with number TEST000000001",
+        "I have a literature document in the database with number XXLU000000001",
       )
       .uponReceiving(
         "a request for retrieving a literature document with the same document number",

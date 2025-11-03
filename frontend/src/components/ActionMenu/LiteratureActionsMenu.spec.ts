@@ -21,7 +21,7 @@ describe("LiteratureActionsMenu.vue", () => {
     const mockedLiterature = {
       encoding: [
         {
-          contentUrl: "/literature/TEST000000001.xml",
+          contentUrl: "/literature/XXLU000000001.xml",
           encodingFormat: "application/xml",
         },
       ],
@@ -39,7 +39,7 @@ describe("LiteratureActionsMenu.vue", () => {
         label: "Link kopieren",
         url: "https://test.com",
       },
-      xmlUrl: "https://literature.example.com/literature/TEST000000001.xml",
+      xmlUrl: "https://literature.example.com/literature/XXLU000000001.xml",
     });
   });
 });

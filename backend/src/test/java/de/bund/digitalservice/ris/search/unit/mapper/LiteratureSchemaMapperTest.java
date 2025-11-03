@@ -18,8 +18,8 @@ class LiteratureSchemaMapperTest {
   void fromDomainSingle() {
     var literature =
         Literature.builder()
-            .id("TEST000000001")
-            .documentNumber("TEST000000001")
+            .id("XXLU000000001")
+            .documentNumber("XXLU000000001")
             .recordingDate(LocalDate.parse("1998-01-01"))
             .yearsOfPublication(List.of("1979", "2004-09"))
             .documentTypes(List.of("Auf"))
@@ -40,10 +40,10 @@ class LiteratureSchemaMapperTest {
 
     LiteratureSchema literatureSchema = LiteratureSchemaMapper.fromDomain(literature);
 
-    assertThat(literatureSchema.id()).isEqualTo("/v1/literature/TEST000000001");
+    assertThat(literatureSchema.id()).isEqualTo("/v1/literature/XXLU000000001");
     assertThat(literatureSchema.inLanguage()).isEqualTo("de");
     assertThat(literatureSchema.recordingDate()).isEqualTo(LocalDate.parse("1998-01-01"));
-    assertThat(literatureSchema.documentNumber()).isEqualTo("TEST000000001");
+    assertThat(literatureSchema.documentNumber()).isEqualTo("XXLU000000001");
     assertThat(literatureSchema.yearsOfPublication()).containsExactly("1979", "2004-09");
     assertThat(literatureSchema.documentTypes()).containsExactly("Auf");
     assertThat(literatureSchema.dependentReferences()).containsExactly("BUV, 1982, 123-123");
@@ -68,27 +68,27 @@ class LiteratureSchemaMapperTest {
   @DisplayName("Creates encodings for html, xml and zip")
   void createsEncodings() {
     var literature =
-        Literature.builder().id("TEST000000001").documentNumber("TEST000000001").build();
+        Literature.builder().id("XXLU000000001").documentNumber("XXLU000000001").build();
 
     LiteratureSchema literatureSchema = LiteratureSchemaMapper.fromDomain(literature);
 
     assertThat(literatureSchema.encoding())
         .containsExactly(
             LiteratureEncodingSchema.builder()
-                .id("/v1/literature/TEST000000001/html")
-                .contentUrl("/v1/literature/TEST000000001.html")
+                .id("/v1/literature/XXLU000000001/html")
+                .contentUrl("/v1/literature/XXLU000000001.html")
                 .encodingFormat("text/html")
                 .inLanguage("de")
                 .build(),
             LiteratureEncodingSchema.builder()
-                .id("/v1/literature/TEST000000001/xml")
-                .contentUrl("/v1/literature/TEST000000001.xml")
+                .id("/v1/literature/XXLU000000001/xml")
+                .contentUrl("/v1/literature/XXLU000000001.xml")
                 .encodingFormat("application/xml")
                 .inLanguage("de")
                 .build(),
             LiteratureEncodingSchema.builder()
-                .id("/v1/literature/TEST000000001/zip")
-                .contentUrl("/v1/literature/TEST000000001.zip")
+                .id("/v1/literature/XXLU000000001/zip")
+                .contentUrl("/v1/literature/XXLU000000001.zip")
                 .encodingFormat("application/zip")
                 .inLanguage("de")
                 .build());
