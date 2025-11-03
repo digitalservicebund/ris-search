@@ -2,8 +2,6 @@
 import { storeToRefs } from "pinia";
 import PrimeVueButton from "primevue/button";
 import { usePostHogStore } from "~/stores/usePostHogStore";
-import IconCheck from "~icons/ic/check";
-import IconClose from "~icons/ic/close";
 
 const store = usePostHogStore();
 
@@ -60,11 +58,7 @@ const consentAction = "/api/cookie-consent";
             label="Akzeptieren"
             data-testid="accept-cookie"
             type="submit"
-          >
-            <template #icon>
-              <IconCheck />
-            </template>
-          </PrimeVueButton>
+          />
         </form>
         <form
           :action="consentAction"
@@ -78,11 +72,7 @@ const consentAction = "/api/cookie-consent";
             label="Ablehnen"
             data-testid="decline-cookie"
             type="submit"
-          >
-            <template #icon>
-              <IconClose />
-            </template>
-          </PrimeVueButton>
+          />
         </form>
         <NuxtLink to="/datenschutz" class="ris-link1-regular">
           Datenschutzerklärung

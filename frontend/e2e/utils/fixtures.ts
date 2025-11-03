@@ -129,3 +129,23 @@ export const expect = baseExpect.extend({
     };
   },
 });
+
+// Fixture for tests that need JavaScript disabled
+type NoJsFixtures = {
+  noJsContext: BrowserContext;
+  page: import("@playwright/test").Page;
+};
+
+export const noJsTest = base.extend<NoJsFixtures>({
+  noJsContext: async ({ browser }, use) => {
+    const context = await browser.newContext({ javaScriptEnabled: false });
+    await use(context);
+    await context.close();
+  },
+
+  page: async ({ noJsContext }, use) => {
+    const page = await noJsContext.newPage();
+    await use(page);
+    await page.close();
+  },
+});

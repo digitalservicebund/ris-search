@@ -29,10 +29,14 @@ export default defineEventHandler(async (event) => {
       const requestUrl = getRequestURL(event);
 
       if (refererUrl.origin === requestUrl.origin) {
-        redirectPath = refererUrl.pathname + refererUrl.search;
+        redirectPath = `${refererUrl.pathname}${refererUrl.search}`;
       }
-    } catch {
-      redirectPath = "/";
+    } catch (error) {
+      // Invalid URL, fall back to default redirect path
+      console.error("Failed to parse referer URL:", {
+        referer,
+        error: error instanceof Error ? error.message : String(error),
+      });
     }
   }
 

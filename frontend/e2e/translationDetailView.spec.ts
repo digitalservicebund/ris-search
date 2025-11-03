@@ -1,4 +1,4 @@
-import { expect, test } from "./utils/fixtures";
+import { expect, test, noJsTest } from "./utils/fixtures";
 
 test(
   "can navigate from list to single translation",
@@ -157,13 +157,10 @@ test(
   },
 );
 
-test(
+noJsTest(
   "tabs work without JavaScript",
   { tag: ["@RISDEV-8979"] },
-  async ({ browser }) => {
-    const context = await browser.newContext({ javaScriptEnabled: false });
-    const page = await context.newPage();
-
+  async ({ page }) => {
     await page.goto("/translations/TestV", {
       waitUntil: "networkidle",
     });
@@ -173,7 +170,5 @@ test(
 
     await page.getByRole("link", { name: "Text der Übersetzung" }).click();
     await expect(page).toHaveURL(/#text$/);
-
-    await context.close();
   },
 );

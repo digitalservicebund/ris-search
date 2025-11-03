@@ -21,10 +21,14 @@ function buildRedirectPath(
         const url = new URL(refererUrl);
         url.searchParams.delete("feedback");
         url.searchParams.set("feedback", feedbackStatus);
-        redirectPath = url.pathname + url.search;
+        redirectPath = `${url.pathname}${url.search}`;
       }
-    } catch {
-      // Invalid URL, fall back
+    } catch (error) {
+      // Invalid URL, fall back to default redirect path
+      console.error("Failed to parse referer URL:", {
+        referer,
+        error: error instanceof Error ? error.message : String(error),
+      });
     }
   }
 
@@ -40,9 +44,13 @@ export default defineEventHandler(async (event) => {
   if (referer) {
     try {
       const refererUrl = new URL(referer);
-      currentUrl = refererUrl.pathname + refererUrl.search;
-    } catch {
-      // Invalid URL, fall back
+      currentUrl = `${refererUrl.pathname}${refererUrl.search}`;
+    } catch (error) {
+      // Invalid URL, fall back to default
+      console.error("Failed to parse referer URL for currentUrl:", {
+        referer,
+        error: error instanceof Error ? error.message : String(error),
+      });
     }
   }
 
@@ -59,7 +67,13 @@ export default defineEventHandler(async (event) => {
       event,
       buildRedirectPath(referer, getRequestURL(event), "sent"),
     );
-  } catch {
+  } catch (error) {
+    // Log feedback submission errors for debugging
+    // This catches network errors, HTTP errors etc
+    // We redirect the user with error status so they see feedback was not sent
+    console.error("Failed to submit feedback:", error, {
+      body: { text: body.text, url: body.url, user_id: body.user_id },
+    });
     return sendRedirect(
       event,
       buildRedirectPath(referer, getRequestURL(event), "error"),

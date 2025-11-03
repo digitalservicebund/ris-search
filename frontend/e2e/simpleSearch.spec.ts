@@ -1,5 +1,5 @@
 import type { Page } from "@playwright/test";
-import { expect, test } from "./utils/fixtures";
+import { expect, test, noJsTest } from "./utils/fixtures";
 
 function getSearchResults(page: Page) {
   return page
@@ -493,11 +493,8 @@ test.describe("searching literature", () => {
   });
 });
 
-test("search works without JavaScript", async ({ browser }) => {
+noJsTest("search works without JavaScript", async ({ page }) => {
   const searchTerm = "Fiktiv";
-
-  const context = await browser.newContext({ javaScriptEnabled: false });
-  const page = await context.newPage();
 
   await test.step("search from landing page", async () => {
     await page.goto("/");
@@ -522,14 +519,9 @@ test("search works without JavaScript", async ({ browser }) => {
       newSearchTerm,
     );
   });
-
-  await context.close();
 });
 
-test("pagination works without JavaScript", async ({ browser }) => {
-  const context = await browser.newContext({ javaScriptEnabled: false });
-  const page = await context.newPage();
-
+noJsTest("pagination works without JavaScript", async ({ page }) => {
   await page.goto("/search?query=und", { waitUntil: "networkidle" });
 
   expect(await getDisplayedResultCount(page)).toBe(12);
@@ -545,6 +537,4 @@ test("pagination works without JavaScript", async ({ browser }) => {
   await page.waitForURL("/search?query=und", { waitUntil: "networkidle" });
 
   expect(await getDisplayedResultCount(page)).toBe(12);
-
-  await context.close();
 });

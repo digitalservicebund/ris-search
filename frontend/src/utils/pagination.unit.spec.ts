@@ -73,29 +73,29 @@ describe("buildItemsOnPageString", () => {
 });
 
 describe("parsePageNumber", () => {
-  it("parses valid URL", () => {
-    expect(parsePageNumber("list?pageIndex=2&size=10")).toEqual({
-      page: 2,
-      size: 10,
-    });
-  });
-
-  it("handles undefined", () => {
-    expect(parsePageNumber()).toEqual({
-      page: undefined,
-      size: undefined,
-    });
-  });
-
-  it("handles empty string", () => {
-    expect(parsePageNumber("")).toEqual({ page: undefined, size: undefined });
-  });
-
-  it("handles missing parameters", () => {
-    expect(parsePageNumber("list")).toEqual({
-      page: undefined,
-      size: undefined,
-    });
+  it.each([
+    {
+      description: "parses valid URL",
+      input: "list?pageIndex=2&size=10",
+      expected: { page: 2, size: 10 },
+    },
+    {
+      description: "handles undefined",
+      input: undefined,
+      expected: { page: undefined, size: undefined },
+    },
+    {
+      description: "handles empty string",
+      input: "",
+      expected: { page: undefined, size: undefined },
+    },
+    {
+      description: "handles missing parameters",
+      input: "list",
+      expected: { page: undefined, size: undefined },
+    },
+  ])("$description", ({ input, expected }) => {
+    expect(parsePageNumber(input)).toEqual(expected);
   });
 });
 

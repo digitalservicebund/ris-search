@@ -22,8 +22,10 @@ if (import.meta.server) {
   }
 }
 
+const isClient = ref(false);
 onMounted(() => {
   store.initialize();
+  isClient.value = true;
 });
 
 const { userConsent } = storeToRefs(store);
@@ -40,7 +42,9 @@ useStaticPageSeo("cookies");
       <RisBreadcrumb :items="[{ label: 'Cookie-Einstellungen' }]" />
     </template>
     <div class="ris-body1-regular my-24 flex max-w-prose flex-col space-y-48">
-      <h1 id="page-title" class="ris-heading1-regular">Cookie-Einstellungen</h1>
+      <h1 id="page-title" class="ris-heading1-regular mb-64">
+        Cookie-Einstellungen
+      </h1>
       <aside aria-label="Einstellungen ändern">
         <h2 class="ris-heading2-regular mb-40 hidden md:block">
           Sind Sie mit der Nutzung von Analyse-Cookies einverstanden?
@@ -48,26 +52,49 @@ useStaticPageSeo("cookies");
         <div class="mb-40 w-fit" data-testid="consent-status-wrapper">
           <Message severity="info" class="ris-body2-regular mb-40 bg-white">
             <template #icon>
-              <IconCheck v-if="userConsent === true" class="text-blue-800" />
+              <IconCheck v-if="userConsent" class="text-blue-800" />
               <IconClose v-else class="text-blue-800" />
             </template>
-            <div v-if="userConsent === true">
-              <p class="ris-body2-bold">
-                Ich bin mit der Nutzung von Analyse-Cookies einverstanden.
-              </p>
-              <p>Damit helfen Sie uns, das Portal weiter zu verbessern.</p>
-            </div>
-            <div v-else>
-              <p class="ris-body2-bold">
-                Ich bin mit der Nutzung von Analyse-Cookies nicht einverstanden.
-              </p>
-              <p>
-                Ihre Nutzung des Portals wird nicht zu Analysezwecken erfasst.
-              </p>
-            </div>
+            <template v-if="isClient">
+              <div v-if="userConsent">
+                <p class="ris-body2-bold">
+                  Ich bin mit der Nutzung von Analyse-Cookies einverstanden.
+                </p>
+                <p>Damit helfen Sie uns, das Portal weiter zu verbessern.</p>
+              </div>
+              <div v-else>
+                <p class="ris-body2-bold">
+                  Ich bin mit der Nutzung von Analyse-Cookies nicht
+                  einverstanden.
+                </p>
+                <p>
+                  Ihre Nutzung des Portals wird nicht zu Analysezwecken erfasst.
+                </p>
+              </div>
+            </template>
+            <template v-else>
+              <div v-if="userConsent">
+                <p class="ris-body2-bold">
+                  Ich bin mit der Nutzung von System-Cookies einverstanden.
+                </p>
+                <p>
+                  Wir verwenden aktuell keine Analyse-Cookies, weil JavaScript
+                  ausgeschaltet ist.
+                </p>
+              </div>
+              <div v-else>
+                <p class="ris-body2-bold">
+                  Ich bin mit der Nutzung von Analyse-Cookies nicht
+                  einverstanden.
+                </p>
+                <p>
+                  Ihre Nutzung des Portals wird nicht zu Analysezwecken erfasst.
+                </p>
+              </div>
+            </template>
           </Message>
           <form
-            v-if="userConsent === true"
+            v-if="userConsent"
             action="/api/cookie-consent"
             method="POST"
             @submit.prevent="handleSetTracking(false)"

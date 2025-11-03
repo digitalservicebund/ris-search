@@ -1,4 +1,4 @@
-import { expect, test } from "./utils/fixtures";
+import { expect, test, noJsTest } from "./fixtures";
 
 const expectedNorms = [
   "Fiktive Fruchtsaft- und Erfrischungsgetränkeverordnung zu Testzwecken",
@@ -113,10 +113,7 @@ test("can navigate to a single norm article and between articles", async ({
   });
 });
 
-test("tabs work without JavaScript", async ({ browser }) => {
-  const context = await browser.newContext({ javaScriptEnabled: false });
-  const page = await context.newPage();
-
+noJsTest("tabs work without JavaScript", async ({ page }) => {
   await page.goto("/norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu", {
     waitUntil: "networkidle",
   });
@@ -138,8 +135,6 @@ test("tabs work without JavaScript", async ({ browser }) => {
     await page.getByRole("link", { name: "Text des Gesetzes" }).click();
     await expect(page).toHaveURL(/#text$/);
   });
-
-  await context.close();
 });
 
 test("can navigate to and view an attachment", async ({ page }) => {

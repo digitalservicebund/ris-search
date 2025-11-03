@@ -1,4 +1,5 @@
-import { expect, test } from "./utils/fixtures";
+import { test } from "@playwright/test";
+import { expect, noJsTest } from "./fixtures";
 
 test("displays literature page with metadata and text tab by default", async ({
   page,
@@ -50,17 +51,13 @@ test("displays literature page with metadata and text tab by default", async ({
   await expect(textSection.getByText("In sem neque")).toBeVisible();
 });
 
-test("tabs work without JavaScript", async ({ browser }) => {
-  const context = await browser.newContext({ javaScriptEnabled: false });
-  const page = await context.newPage();
-
+noJsTest("tabs work without JavaScript", async ({ page }) => {
   await page.goto("/literature/TEST000000001", { waitUntil: "networkidle" });
   await expect(page.getByRole("heading", { name: "Details" })).toBeVisible();
   await page
     .getByRole("link", { name: "Details zum Literaturnachweis" })
     .click();
   await expect(page).toHaveURL(/#details$/);
-  await context.close();
 });
 
 test("shows detailed information in the 'Details' tab", async ({ page }) => {

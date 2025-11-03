@@ -70,7 +70,6 @@ const onKeyup = (event: KeyboardEvent) => {
       aria-label="Suchen"
       class="h-48 w-48 shrink-0 justify-center"
       type="submit"
-      @click="performSearch"
     >
       <template #icon><IconSearch /></template>
     </Button>
