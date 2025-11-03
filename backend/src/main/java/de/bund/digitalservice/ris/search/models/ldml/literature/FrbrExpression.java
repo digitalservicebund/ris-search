@@ -8,9 +8,6 @@ import lombok.Getter;
 @Getter
 public class FrbrExpression {
 
-  @XmlElement(name = "FRBRalias", namespace = LiteratureNamespaces.AKN_NS)
-  private List<FrbrNameValueElement> frbrAlias;
-
   @XmlElement(name = "FRBRlanguage", namespace = LiteratureNamespaces.AKN_NS)
   private List<FrbrLanguage> frbrLanguages;
 }

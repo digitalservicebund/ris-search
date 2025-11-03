@@ -40,10 +40,10 @@ class IndexNormsServiceTest {
   private final String testContent =
       """
           <?xml version="1.0" encoding="UTF-8"?>
-          <?xml-model href="../../../Grammatiken/legalDocML.de.sch" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+          <?xml-model href="../../../Grammatiken/Norms/legalDocML.de.sch" schematypens="http://purl.oclc.org/dsdl/schematron"?>
           <akn:akomaNtoso xmlns:akn="http://Inhaltsdaten.LegalDocML.de/1.8.2/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-            xsi:schemaLocation="http://Metadaten.LegalDocML.de/1.8.2/ ../../../Grammatiken/legalDocML.de-metadaten.xsd
-                                http://Inhaltsdaten.LegalDocML.de/1.8.2/ ../../../Grammatiken/legalDocML.de-regelungstextverkuendungsfassung.xsd">
+            xsi:schemaLocation="http://Metadaten.LegalDocML.de/1.8.2/ ../../../Grammatiken/Norms/legalDocML.de-metadaten.xsd
+                                http://Inhaltsdaten.LegalDocML.de/1.8.2/ ../../../Grammatiken/Norms/legalDocML.de-regelungstextverkuendungsfassung.xsd">
             <akn:act name="regelungstext">
               <akn:meta eId="meta-1" GUID="40a13276-39ac-4fc9-aafd-3fbfea0df2b0">
                 <akn:identification eId="meta-1_ident-1" GUID="6098a736-d359-4caf-a45e-dfa3792f2bc4" source="attributsemantik-noch-undefiniert">
