@@ -58,7 +58,7 @@ class StatisticsServiceTest {
     when(lowLevelClient.performRequest(any(Request.class)))
         .thenThrow(new IOException("Connection failed"));
 
-    IOException ex = assertThrows(IOException.class, () -> statisticsService.getAllCounts());
+    assertThrows(IOException.class, () -> statisticsService.getAllCounts());
   }
 
   @Test
@@ -72,7 +72,7 @@ class StatisticsServiceTest {
     assertEquals("Count fetch failed", ex.getMessage());
   }
 
-  private Response mockResponse(String json) throws Exception {
+  private Response mockResponse(String json) {
     Response response = mock(Response.class);
     when(response.getEntity()).thenReturn(new StringEntity(json, ContentType.APPLICATION_JSON));
     return response;

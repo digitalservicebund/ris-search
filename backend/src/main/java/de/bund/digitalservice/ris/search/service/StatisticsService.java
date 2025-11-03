@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class StatisticsService {
-  private List<String> indexNames = Arrays.asList("norms", "literature", "caselaws");
+  private final List<String> indexNames = Arrays.asList("norms", "literature", "caselaws");
 
   protected static final Logger logger = LogManager.getLogger(StatisticsService.class);
   private final RestHighLevelClient client;
@@ -37,17 +37,12 @@ public class StatisticsService {
 
       for (String alias : aliases) {
         if (indexNames.contains(alias)) {
-          try {
-            counts.put(alias, fetchCount(alias));
-          } catch (IOException e) {
-            logger.warn("Failed to fetch count for index '{}': {}", alias, e.getMessage());
-            throw e;
-          }
+          counts.put(alias, fetchCountWithLogging(alias));
         }
       }
       return counts;
     } catch (IOException e) {
-      logger.info("Failed to fetch Elasticsearch counts: " + e.getMessage());
+      logger.info(String.format("Failed to fetch Elasticsearch counts: %s", e.getMessage()));
       throw e;
     }
   }
@@ -62,6 +57,15 @@ public class StatisticsService {
       aliases.add(aliasNode.get("alias").asText());
     }
     return aliases;
+  }
+
+  private long fetchCountWithLogging(String alias) throws IOException {
+    try {
+      return fetchCount(alias); // your existing method
+    } catch (IOException e) {
+      logger.warn("Failed to fetch count for index '{}': {}", alias, e.getMessage());
+      throw e;
+    }
   }
 
   private long fetchCount(String alias) throws IOException {
