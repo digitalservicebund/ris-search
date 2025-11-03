@@ -502,7 +502,7 @@ noJsTest("search works without JavaScript", async ({ page }) => {
     await page.getByRole("button", { name: "Suchen" }).click();
 
     await page.waitForURL(`/search?query=${searchTerm}`);
-    expect(await getDisplayedResultCount(page)).toBeGreaterThan(0);
+    expect(await getSearchResults(page).count()).toBeGreaterThan(0);
     await expect(page.getByPlaceholder("Suchbegriff eingeben")).toHaveValue(
       searchTerm,
     );
@@ -514,7 +514,7 @@ noJsTest("search works without JavaScript", async ({ page }) => {
     await page.getByRole("button", { name: "Suchen" }).click();
 
     await page.waitForURL(`/search?query=${newSearchTerm}`);
-    expect(await getDisplayedResultCount(page)).toBeGreaterThan(0);
+    expect(await getSearchResults(page).count()).toBeGreaterThan(0);
     await expect(page.getByPlaceholder("Suchbegriff eingeben")).toHaveValue(
       newSearchTerm,
     );
@@ -524,17 +524,20 @@ noJsTest("search works without JavaScript", async ({ page }) => {
 noJsTest("pagination works without JavaScript", async ({ page }) => {
   await page.goto("/search?query=und", { waitUntil: "networkidle" });
 
-  expect(await getDisplayedResultCount(page)).toBe(12);
+  await expect(getResultCounter(page)).toHaveText("12 Suchergebnisse");
+  await expect(getSearchResults(page)).toHaveCount(10);
 
   await page.getByLabel("nächste Ergebnisse").click();
   await page.waitForURL("/search?query=und&pageNumber=1", {
     waitUntil: "networkidle",
   });
 
-  expect(await getDisplayedResultCount(page)).toBe(12);
+  await expect(getResultCounter(page)).toHaveText("12 Suchergebnisse");
+  await expect(getSearchResults(page)).toHaveCount(2);
 
   await page.getByLabel("vorherige Ergebnisse").click();
   await page.waitForURL("/search?query=und", { waitUntil: "networkidle" });
 
-  expect(await getDisplayedResultCount(page)).toBe(12);
+  await expect(getResultCounter(page)).toHaveText("12 Suchergebnisse");
+  await expect(getSearchResults(page)).toHaveCount(10);
 });

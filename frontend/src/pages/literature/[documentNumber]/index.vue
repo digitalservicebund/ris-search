@@ -5,7 +5,6 @@ import LiteratureActionsMenu from "~/components/ActionMenu/LiteratureActionsMenu
 import ContentWrapper from "~/components/CustomLayouts/ContentWrapper.vue";
 import SidebarLayout from "~/components/CustomLayouts/SidebarLayout.vue";
 import IncompleteDataMessage from "~/components/IncompleteDataMessage.vue";
-import LiteratureMetadata from "~/components/LiteratureMetadata.vue";
 import LiteratureDetails from "~/components/Literature/LiteratureDetails.vue";
 import LiteratureMetadata from "~/components/Literature/LiteratureMetadata.vue";
 import RisBreadcrumb from "~/components/Ris/RisBreadcrumb.vue";
@@ -123,15 +122,12 @@ const tabs = computed(() => [
           aria-labelledby="detailsTabPanelTitle"
         >
           <div class="container pt-24 pb-80">
-            <h2 id="detailsTabPanelTitle" class="ris-heading3-bold my-24">
-              Details
-            </h2>
             <LiteratureDetails
-              :norm-references="literature.normReferences"
-              :collaborators="literature.collaborators"
-              :originators="literature.originators"
-              :languages="literature.languages"
-              :conference-notes="literature.conferenceNotes"
+              :norm-references="literature?.normReferences ?? []"
+              :collaborators="literature?.collaborators ?? []"
+              :originators="literature?.originators ?? []"
+              :languages="literature?.languages ?? []"
+              :conference-notes="literature?.conferenceNotes ?? []"
             />
           </div>
         </section>

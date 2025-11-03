@@ -1,5 +1,4 @@
-import { test } from "@playwright/test";
-import { expect, noJsTest } from "./fixtures";
+import { expect, test, noJsTest } from "./utils/fixtures";
 
 test("displays literature page with metadata and text tab by default", async ({
   page,
@@ -53,9 +52,12 @@ test("displays literature page with metadata and text tab by default", async ({
 
 noJsTest("tabs work without JavaScript", async ({ page }) => {
   await page.goto("/literature/TEST000000001", { waitUntil: "networkidle" });
-  await expect(page.getByRole("heading", { name: "Details" })).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "Details" }).first(),
+  ).toBeVisible();
   await page
     .getByRole("link", { name: "Details zum Literaturnachweis" })
+    .first()
     .click();
   await expect(page).toHaveURL(/#details$/);
 });
@@ -64,29 +66,28 @@ test("shows detailed information in the 'Details' tab", async ({ page }) => {
   await page.goto("/literature/XXLU000000001");
   await page.waitForLoadState("networkidle");
 
-  const detailsTabButton = page.getByRole("tab", {
+  const detailsLink = page.getByRole("link", {
     name: "Details zum Literaturnachweis",
   });
-  await detailsTabButton.click();
+  await detailsLink.click();
 
-  const tabpanel = page.getByRole("tabpanel", {
-    name: "Details zum Literaturnachweis",
-  });
+  const detailsRegion = page.getByRole("region", { name: "Details" });
 
   await expect(
-    tabpanel.getByRole("heading", { name: "Details" }),
+    detailsRegion.getByRole("heading", { name: "Details" }),
   ).toBeVisible();
-  await expect(tabpanel.getByRole("alert")).toContainText(
+  await expect(detailsRegion.getByRole("alert")).toContainText(
     "Dieser Service befindet sich in der Testphase",
   );
-
-  await expect(tabpanel.getByLabel("Norm:")).toContainText(
+  await expect(detailsRegion.getByLabel("Norm:")).toContainText(
     "BMV-Ä, GG, Art 6 Abs 2 S 1, 1949-05-23",
   );
-  await expect(tabpanel.getByLabel("Mitarbeiter:")).toContainText("Peter Foo");
-  await expect(tabpanel.getByLabel("Urheber:")).toContainText("DGB");
-  await expect(tabpanel.getByLabel("Sprache:")).toContainText("deu");
-  await expect(tabpanel.getByLabel("Kongress:")).toContainText(
+  await expect(detailsRegion.getByLabel("Mitarbeiter:")).toContainText(
+    "Peter Foo",
+  );
+  await expect(detailsRegion.getByLabel("Urheber:")).toContainText("DGB");
+  await expect(detailsRegion.getByLabel("Sprache:")).toContainText("deu");
+  await expect(detailsRegion.getByLabel("Kongress:")).toContainText(
     "Internationaler Kongreß für das Recht, 1991, Athen, GRC",
   );
 });

@@ -162,7 +162,7 @@ describe("case law single view page", async () => {
     await renderSuspended(CaseLawPage);
 
     await user.click(
-      screen.getByRole("tab", { name: "Details zur Gerichtsentscheidung" }),
+      screen.getByRole("link", { name: "Details zur Gerichtsentscheidung" }),
     );
 
     expect(screen.getByText("Spruchkörper:")).toBeInTheDocument();
@@ -270,7 +270,7 @@ describe("case law single view page", async () => {
     ).not.toBeInTheDocument();
 
     await user.click(
-      screen.getByRole("tab", { name: "Details zur Gerichtsentscheidung" }),
+      screen.getByRole("link", { name: "Details zur Gerichtsentscheidung" }),
     );
 
     // Details tab

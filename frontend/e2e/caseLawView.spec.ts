@@ -1,6 +1,5 @@
 import type { Page } from "@playwright/test";
-import { expect, test, noJsTest } from "./fixtures";
-import { getDisplayedResultCount } from "./utils";
+import { expect, test, noJsTest } from "./utils/fixtures";
 
 async function getSidebar(page: Page) {
   const navigation = page.getByRole("navigation", { name: "Seiteninhalte" });
