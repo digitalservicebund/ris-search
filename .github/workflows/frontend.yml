@@ -36,9 +36,9 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 20.17.0
           cache: yarn
           cache-dependency-path: ./frontend/yarn.lock
+          node-version: 24
       - name: Install Node modules
         run: yarn install --immutable
         working-directory: ./frontend
@@ -86,9 +86,9 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 20.17.0
           cache: yarn
           cache-dependency-path: ./frontend/yarn.lock
+          node-version: 24
       - name: Install Node modules
         run: yarn install --immutable
         working-directory: ./frontend
