@@ -99,7 +99,7 @@ const sanitizedShortReport = computed(() =>
 
     <NuxtLink
       :to="metadata.url"
-      class="ris-heading3-bold max-w-title link-hover block text-balance text-blue-800"
+      class="ris-heading3-bold max-w-title link-hover block text-blue-800"
       @click="trackResultClick(metadata.url)"
     >
       <h2>
