@@ -1,23 +1,17 @@
 <script setup lang="ts">
-import { computed, ref, onMounted } from "vue";
+import { computed } from "vue";
 import { useFetch } from "#app";
 import LiteratureActionsMenu from "~/components/ActionMenu/LiteratureActionsMenu.vue";
 import ContentWrapper from "~/components/CustomLayouts/ContentWrapper.vue";
 import SidebarLayout from "~/components/CustomLayouts/SidebarLayout.vue";
 import IncompleteDataMessage from "~/components/IncompleteDataMessage.vue";
-import {
-  linkTabBase,
-  linkTabActive,
-  linkTabInactive,
-  linkTabNav,
-  linkTabNavContainer,
-  linkTabPanel,
-} from "~/components/LinkTabs.styles";
 import LiteratureMetadata from "~/components/LiteratureMetadata.vue";
 import LiteratureDetails from "~/components/Literature/LiteratureDetails.vue";
 import LiteratureMetadata from "~/components/Literature/LiteratureMetadata.vue";
 import RisBreadcrumb from "~/components/Ris/RisBreadcrumb.vue";
 import RisDocumentTitle from "~/components/Ris/RisDocumentTitle.vue";
+import RisTabs from "~/components/Ris/RisTabs.vue";
+import { tabPanelClass } from "~/components/Tabs.styles";
 import { useBackendURL } from "~/composables/useBackendURL";
 import { DocumentKind, type Literature } from "~/types";
 import { formatDocumentKind } from "~/utils/displayValues";
@@ -69,6 +63,22 @@ if (metadataError?.value) {
 if (contentError?.value) {
   showError(contentError.value);
 }
+const tabs = computed(() => [
+  {
+    id: "text",
+    href: "#text",
+    label: "Text",
+    ariaLabel: "Text des Literaturnachweises",
+    icon: IcBaselineSubject,
+  },
+  {
+    id: "details",
+    href: "#details",
+    label: "Details",
+    ariaLabel: "Details zum Literaturnachweis",
+    icon: IcOutlineInfo,
+  },
+]);
 </script>
 
 <template>
@@ -89,35 +99,33 @@ if (contentError?.value) {
         :years-of-publication="literature.yearsOfPublication"
       />
     </div>
-    <Tabs v-if="!!literature" value="0">
-      <TabList :pt="tabListStyles">
-        <Tab
-          class="flex items-center gap-8"
-          :pt="tabStyles"
-          value="0"
-          aria-label="Text des Literaturnachweises"
-          ><IcBaselineSubject />Text</Tab
+    <RisTabs :tabs="tabs" aria-label="Ansichten des Literaturnachweises">
+      <template #default="{ activeTab, isClient }">
+        <section
+          id="text"
+          :class="tabPanelClass"
+          :hidden="isClient && activeTab !== 'text'"
+          aria-labelledby="textSectionHeading"
         >
-        <Tab
-          data-attr="caselaw-metadata-tab"
-          class="flex items-center gap-8"
-          :pt="tabStyles"
-          value="1"
-          aria-label="Details zum Literaturnachweis"
-          ><IcOutlineInfo />Details</Tab
-        >
-      </TabList>
-      <TabPanels>
-        <TabPanel value="0" :pt="tabPanelStyles">
           <SidebarLayout class="container">
             <template #content>
+              <h2 id="textSectionHeading" class="sr-only">Text</h2>
               <IncompleteDataMessage class="mb-16" />
               <div class="literature" v-html="html"></div>
             </template>
           </SidebarLayout>
-        </TabPanel>
-        <TabPanel value="1" :pt="tabPanelStyles" class="pt-24 pb-80">
-          <section aria-labelledby="detailsTabPanelTitle" class="container">
+        </section>
+
+        <section
+          id="details"
+          :class="tabPanelClass"
+          :hidden="isClient && activeTab !== 'details'"
+          aria-labelledby="detailsTabPanelTitle"
+        >
+          <div class="container pt-24 pb-80">
+            <h2 id="detailsTabPanelTitle" class="ris-heading3-bold my-24">
+              Details
+            </h2>
             <LiteratureDetails
               :norm-references="literature.normReferences"
               :collaborators="literature.collaborators"
@@ -125,8 +133,9 @@ if (contentError?.value) {
               :languages="literature.languages"
               :conference-notes="literature.conferenceNotes"
             />
-          </section>
-        </TabPanel>
-      </TabPanels> </Tabs
-  ></ContentWrapper>
+          </div>
+        </section>
+      </template>
+    </RisTabs>
+  </ContentWrapper>
 </template>

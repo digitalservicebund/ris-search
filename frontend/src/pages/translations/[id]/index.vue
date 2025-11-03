@@ -1,19 +1,13 @@
 <script setup lang="ts">
 import Message from "primevue/message";
-import { computed, ref, onMounted } from "vue";
+import { computed } from "vue";
 import ActionsMenu from "~/components/ActionMenu/ActionsMenu.vue";
 import ContentWrapper from "~/components/CustomLayouts/ContentWrapper.vue";
-import {
-  linkTabBase,
-  linkTabActive,
-  linkTabInactive,
-  linkTabNav,
-  linkTabNavContainer,
-  linkTabPanel,
-} from "~/components/LinkTabs.styles";
 import Properties from "~/components/Properties.vue";
 import PropertiesItem from "~/components/PropertiesItem.vue";
 import type { BreadcrumbItem } from "~/components/Ris/RisBreadcrumb.vue";
+import RisTabs from "~/components/Ris/RisTabs.vue";
+import { tabPanelClass } from "~/components/Tabs.styles";
 import { useDynamicSeo } from "~/composables/useDynamicSeo";
 import {
   fetchTranslationAndHTML,
@@ -114,10 +108,22 @@ useHead({
   },
 });
 
-const isClient = ref(false);
-onMounted(() => (isClient.value = true));
-
-const activeSection = ref<"text" | "details">("text");
+const tabs = computed(() => [
+  {
+    id: "text",
+    href: "#text",
+    label: "Text",
+    ariaLabel: "Text der Übersetzung",
+    icon: IcBaselineSubject,
+  },
+  {
+    id: "details",
+    href: "#details",
+    label: "Details",
+    ariaLabel: "Details zur Übersetzung",
+    icon: IcOutlineInfo,
+  },
+]);
 </script>
 
 <template>
@@ -166,70 +172,42 @@ const activeSection = ref<"text" | "details">("text");
       </Message>
     </div>
 
-    <nav :class="linkTabNav" aria-label="Ansichten der Übersetzung">
-      <div :class="linkTabNavContainer">
-        <a
-          href="#text"
-          :aria-current="activeSection === 'text' ? 'page' : undefined"
-          aria-label="Text der Übersetzung"
-          :class="[
-            linkTabBase,
-            activeSection === 'text' ? linkTabActive : linkTabInactive,
-          ]"
-          @click.prevent="activeSection = 'text'"
+    <RisTabs :tabs="tabs" aria-label="Ansichten der Übersetzung">
+      <template #default="{ activeTab, isClient }">
+        <section
+          id="text"
+          :class="tabPanelClass"
+          :hidden="isClient && activeTab !== 'text'"
         >
-          <IcBaselineSubject aria-hidden="true" class="mr-8" />
-          Text
-        </a>
+          <div class="container">
+            <h2 class="sr-only">Text</h2>
+            <section class="max-w-prose" v-html="html" />
+          </div>
+        </section>
 
-        <a
-          href="#details"
-          :aria-current="activeSection === 'details' ? 'page' : undefined"
-          aria-label="Details zur Übersetzung"
-          :class="[
-            linkTabBase,
-            activeSection === 'details' ? linkTabActive : linkTabInactive,
-          ]"
-          @click.prevent="activeSection = 'details'"
+        <section
+          id="details"
+          :class="tabPanelClass"
+          :hidden="isClient && activeTab !== 'details'"
+          aria-labelledby="detailsTabPanelTitle"
         >
-          <IcOutlineInfo aria-hidden="true" class="mr-8" />
-          Details
-        </a>
-      </div>
-    </nav>
-
-    <section
-      id="text"
-      :class="linkTabPanel"
-      :hidden="isClient && activeSection !== 'text'"
-    >
-      <div class="container">
-        <h2 class="sr-only">Text</h2>
-        <section class="max-w-prose" v-html="html" />
-      </div>
-    </section>
-
-    <section
-      id="details"
-      :class="linkTabPanel"
-      :hidden="isClient && activeSection !== 'details'"
-      aria-labelledby="detailsTabPanelTitle"
-    >
-      <div class="container">
-        <h2 id="detailsTabPanelTitle" class="ris-heading3-bold my-24">
-          Details
-        </h2>
-        <Properties>
-          <PropertiesItem
-            label="Translation provided by:"
-            :value="translatedBy"
-          />
-          <PropertiesItem
-            label="Version information:"
-            :value="versionInformation"
-          />
-        </Properties>
-      </div>
-    </section>
+          <div class="container">
+            <h2 id="detailsTabPanelTitle" class="ris-heading3-bold my-24">
+              Details
+            </h2>
+            <Properties>
+              <PropertiesItem
+                label="Translation provided by:"
+                :value="translatedBy"
+              />
+              <PropertiesItem
+                label="Version information:"
+                :value="versionInformation"
+              />
+            </Properties>
+          </div>
+        </section>
+      </template>
+    </RisTabs>
   </ContentWrapper>
 </template>

@@ -1,13 +1,8 @@
 <script setup lang="ts">
 import type { Dayjs } from "dayjs";
-import Tab from "primevue/tab";
-import TabList from "primevue/tablist";
-import TabPanel from "primevue/tabpanel";
-import TabPanels from "primevue/tabpanels";
-import Tabs from "primevue/tabs";
 import type { TreeNode } from "primevue/treenode";
-import type { ComputedRef } from "vue";
 import { computed } from "vue";
+import type { ComputedRef } from "vue";
 import { useRoute } from "#app";
 import Accordion from "~/components/Accordion.vue";
 import NormActionsMenu from "~/components/ActionMenu/NormActionsMenu.vue";
@@ -24,6 +19,8 @@ import PropertiesItem from "~/components/PropertiesItem.vue";
 import NormTableOfContents from "~/components/Ris/NormTableOfContents.vue";
 import RisBreadcrumb from "~/components/Ris/RisBreadcrumb.vue";
 import type { BreadcrumbItem } from "~/components/Ris/RisBreadcrumb.vue";
+import RisTabs from "~/components/Ris/RisTabs.vue";
+import { tabPanelClass } from "~/components/Tabs.styles";
 import { useBackendURL } from "~/composables/useBackendURL";
 import { useDynamicSeo } from "~/composables/useDynamicSeo";
 import { useIntersectionObserver } from "~/composables/useIntersectionObserver";
@@ -201,6 +198,30 @@ const description = computed<string | undefined>(() => {
   return chosen ? truncateAtWord(chosen, 150) : undefined;
 });
 
+const tabs = computed(() => [
+  {
+    id: "text",
+    href: "#text",
+    label: "Text",
+    ariaLabel: "Text des Gesetzes",
+    icon: IcBaselineSubject,
+  },
+  {
+    id: "details",
+    href: "#details",
+    label: "Details",
+    ariaLabel: "Details des Gesetzes",
+    icon: IcOutlineInfo,
+  },
+  {
+    id: "versions",
+    href: "#versions",
+    label: "Fassungen",
+    ariaLabel: "Fassungen des Gesetzes",
+    icon: IcOutlineRestore,
+  },
+]);
+
 useDynamicSeo({ title, description });
 </script>
 
@@ -230,62 +251,45 @@ useDynamicSeo({ title, description });
           :valid-to="validityInterval?.to"
         />
       </div>
-      <Tabs value="0">
-        <TabList :pt="tabListStyles">
-          <Tab
-            class="flex items-center gap-8"
-            :pt="tabStyles"
-            value="0"
-            aria-label="Gesetzestext"
+      <RisTabs :tabs="tabs" aria-label="Ansichten des Gesetzes">
+        <template #default="{ activeTab, isClient }">
+          <section
+            id="text"
+            :class="tabPanelClass"
+            :hidden="isClient && activeTab !== 'text'"
           >
-            <IcBaselineSubject />
-            Text
-          </Tab>
-          <Tab
-            data-attr="norm-metadata-tab"
-            class="flex items-center gap-8"
-            :pt="tabStyles"
-            value="1"
-            aria-label="Details zum Gesetz"
-          >
-            <IcOutlineInfo />
-            Details
-          </Tab>
-          <Tab
-            data-attr="norm-versions-tab"
-            class="flex items-center gap-8"
-            :pt="tabStyles"
-            value="2"
-          >
-            <IcOutlineRestore />
-            Fassungen
-          </Tab>
-        </TabList>
-        <TabPanels>
-          <TabPanel value="0" :pt="tabPanelStyles">
             <TableOfContentsLayout class="container">
               <template #content>
+                <h2 class="sr-only">Text</h2>
                 <IncompleteDataMessage />
                 <Accordion
-                  v-if="htmlParts?.officialToc"
+                  v-if="htmlParts.officialToc"
                   header-expanded="Amtliches Inhaltsverzeichnis ausblenden"
                   header-collapsed="Amtliches Inhaltsverzeichnis einblenden"
                 >
-                  <div v-html="htmlParts?.officialToc" />
+                  <div v-html="htmlParts.officialToc" />
                 </Accordion>
                 <div v-observe-elements class="norm-view" v-html="html" />
               </template>
               <template #sidebar>
-                <NormTableOfContents
-                  v-if="metadata.workExample.tableOfContents.length > 0"
-                  :table-of-contents="tableOfContents"
-                  :selected-key="selectedEntry"
-                />
+                <client-only>
+                  <NormTableOfContents
+                    v-if="metadata.workExample.tableOfContents.length > 0"
+                    :table-of-contents="tableOfContents"
+                    :selected-key="selectedEntry"
+                  />
+                </client-only>
               </template>
             </TableOfContentsLayout>
-          </TabPanel>
-          <TabPanel value="1" :pt="tabPanelStyles" class="pt-24 pb-80">
-            <section aria-labelledby="detailsTabPanelTitle" class="container">
+          </section>
+
+          <section
+            id="details"
+            :class="tabPanelClass"
+            :hidden="isClient && activeTab !== 'details'"
+            aria-labelledby="detailsTabPanelTitle"
+          >
+            <div class="container">
               <h2 id="detailsTabPanelTitle" class="ris-heading3-bold my-24">
                 Details
               </h2>
@@ -297,26 +301,25 @@ useDynamicSeo({ title, description });
                 />
                 <PropertiesItem
                   label="Vollzitat:"
-                  :value="htmlParts?.vollzitat"
+                  :value="htmlParts.vollzitat"
                 />
                 <PropertiesItem
                   label="Stand:"
-                  :value-list="htmlParts?.standangaben"
-                >
-                </PropertiesItem>
-                <PropertiesItem
-                  label="Hinweis zum Stand:"
-                  :value-list="htmlParts?.standangabenHinweis"
+                  :value-list="htmlParts.standangaben"
                 />
                 <PropertiesItem
-                  v-if="htmlParts?.prefaceContainer"
+                  label="Hinweis zum Stand:"
+                  :value-list="htmlParts.standangabenHinweis"
+                />
+                <PropertiesItem
+                  v-if="htmlParts.prefaceContainer"
                   label="Besonderer Hinweis:"
                 >
-                  <div v-html="htmlParts?.prefaceContainer" />
+                  <div v-html="htmlParts.prefaceContainer" />
                 </PropertiesItem>
                 <PropertiesItem label="Fußnoten:">
-                  <template v-if="htmlParts?.headingNotes" #default>
-                    <div v-html="htmlParts?.headingNotes" />
+                  <template v-if="htmlParts.headingNotes" #default>
+                    <div v-html="htmlParts.headingNotes" />
                   </template>
                 </PropertiesItem>
                 <PropertiesItem label="Download:">
@@ -332,22 +335,28 @@ useDynamicSeo({ title, description });
                   </NuxtLink>
                 </PropertiesItem>
               </Properties>
-            </section>
-          </TabPanel>
-          <TabPanel value="2" :pt="tabPanelStyles" class="pt-24 pb-80">
-            <NormVersionList
-              v-if="privateFeaturesEnabled"
-              class="container"
-              :status="normVersionsStatus"
-              :current-legislation-identifier="
-                metadata.workExample.legislationIdentifier
-              "
-              :versions="normVersions"
-            />
-            <VersionsTeaser v-else />
-          </TabPanel>
-        </TabPanels>
-      </Tabs>
+            </div>
+          </section>
+
+          <section
+            id="versions"
+            :class="tabPanelClass"
+            :hidden="isClient && activeTab !== 'versions'"
+          >
+            <div class="container">
+              <NormVersionList
+                v-if="privateFeaturesEnabled"
+                :status="normVersionsStatus"
+                :current-legislation-identifier="
+                  metadata.workExample.legislationIdentifier
+                "
+                :versions="normVersions"
+              />
+              <VersionsTeaser v-else />
+            </div>
+          </section>
+        </template>
+      </RisTabs>
     </div>
   </ContentWrapper>
 </template>

@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import { Button } from "primevue";
+import type { RouteLocationRaw } from "vue-router";
+import { NuxtLink } from "#components";
 import type { AnyDocument, SearchResult } from "~/types";
 import { buildItemsOnPageString, parsePageNumber } from "~/utils/pagination";
 import IconArrowBack from "~icons/ic/baseline-arrow-back";
@@ -40,7 +43,7 @@ const nextPageNumber = computed(() => {
   return parsePageNumber(props.page.view.next).page;
 });
 
-const previousPageUrl = computed(() => {
+const previousPageRoute = computed<RouteLocationRaw | undefined>(() => {
   if (previousPageNumber.value === undefined) return undefined;
   const query = { ...route.query };
   if (previousPageNumber.value === 0) {
@@ -48,10 +51,13 @@ const previousPageUrl = computed(() => {
   } else {
     query.pageNumber = previousPageNumber.value.toString();
   }
-  return `${route.path}?${new URLSearchParams(query as Record<string, string>).toString()}`;
+  return {
+    path: route.path,
+    query,
+  };
 });
 
-const nextPageUrl = computed(() => {
+const nextPageRoute = computed<RouteLocationRaw | undefined>(() => {
   if (nextPageNumber.value === undefined) return undefined;
   const query = { ...route.query };
   if (nextPageNumber.value === 0) {
@@ -59,7 +65,10 @@ const nextPageUrl = computed(() => {
   } else {
     query.pageNumber = nextPageNumber.value.toString();
   }
-  return `${route.path}?${new URLSearchParams(query as Record<string, string>).toString()}`;
+  return {
+    path: route.path,
+    query,
+  };
 });
 
 async function nextPage() {
@@ -84,12 +93,8 @@ const isOnlyPage = computed(
 
 const itemsOnPage = computed(() => buildItemsOnPageString(props.page));
 
-const paginationLinkBase =
-  "ris-body2-bold relative inline-flex h-48 max-w-full items-center justify-center gap-8 border-2 bg-white px-16 py-4 text-center";
-
-const paginationLinkEnabled = `${paginationLinkBase} border-blue-800 text-blue-800 no-underline outline-blue-800 outline-0 outline-offset-4 hover:bg-gray-200 focus:bg-gray-200 focus-visible:outline-4 active:border-white active:bg-white cursor-pointer`;
-
-const paginationLinkDisabled = `${paginationLinkBase} border-blue-500 text-blue-500 cursor-not-allowed`;
+const paginationLinkDisabled =
+  "ris-body2-bold relative inline-flex h-48 max-w-full items-center justify-center gap-8 border-2 border-blue-500 text-blue-500 cursor-not-allowed bg-white px-16 py-4 text-center";
 </script>
 
 <template>
@@ -102,16 +107,18 @@ const paginationLinkDisabled = `${paginationLinkBase} border-blue-500 text-blue-
       <div
         class="relative flex grow flex-wrap items-center justify-between gap-8"
       >
-        <a
+        <Button
           v-if="!isOnlyPage && page?.view.previous"
-          :href="previousPageUrl"
+          :to="previousPageRoute"
+          :as="NuxtLink"
           aria-label="vorherige Ergebnisse"
-          :class="paginationLinkEnabled"
-          @click.prevent="previousPage"
+          severity="secondary"
+          icon-position="left"
+          label="Zurück"
+          @click="previousPage"
         >
-          <IconArrowBack aria-hidden="true" />
-          Zurück
-        </a>
+          <template #icon><IconArrowBack /></template>
+        </Button>
         <span
           v-else-if="!isOnlyPage"
           aria-disabled="true"
@@ -127,24 +134,26 @@ const paginationLinkDisabled = `${paginationLinkBase} border-blue-500 text-blue-
           </b>
           <span> {{ itemsOnPage }}</span>
         </span>
-        <a
+        <Button
           v-if="!isOnlyPage && page?.view.next"
-          :href="nextPageUrl"
+          :to="nextPageRoute"
+          :as="NuxtLink"
           aria-label="nächste Ergebnisse"
-          :class="paginationLinkEnabled"
-          @click.prevent="nextPage"
+          severity="secondary"
+          icon-position="left"
+          label="Weiter"
+          @click="nextPage"
         >
-          Weiter
-          <IconArrowForward aria-hidden="true" />
-        </a>
+          <template #icon><IconArrowForward /></template>
+        </Button>
         <span
           v-else-if="!isOnlyPage"
           aria-disabled="true"
           aria-label="nächste Ergebnisse"
           :class="paginationLinkDisabled"
         >
-          Weiter
           <IconArrowForward aria-hidden="true" />
+          Weiter
         </span>
       </div>
     </div>
