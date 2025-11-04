@@ -11,30 +11,22 @@ on:
 env:
   RUN_ID: ${{ github.run_id }}
 
-  # Container image variables
-  CONTAINER_REGISTRY: ghcr.io
-  CONTAINER_IMAGE_VERSION: ${{ github.sha }}
-  BACKEND_CONTAINER_IMAGE_NAMESPACE: ${{ github.repository }}
-  BACKEND_CONTAINER_IMAGE_TAG: ghcr.io/${{ github.repository }}:${{ github.sha }}
-  FRONTEND_CONTAINER_IMAGE_NAMESPACE: ${{ github.repository }}/frontend
-  FRONTEND_CONTAINER_IMAGE_TAG: ghcr.io/${{ github.repository }}/frontend:${{ github.sha }}
-
 jobs:
   backend-jobs:
     uses: ./.github/workflows/backend.yml
     secrets: inherit
     with:
-      container-registry: ${{ env.CONTAINER_REGISTRY }}
-      container-image-tag: ${{ env.BACKEND_CONTAINER_IMAGE_TAG }}
-      container-image-version: ${{ env.CONTAINER_IMAGE_VERSION }}
+      container-registry: ghcr.io
+      container-image-tag: ghcr.io/${{ github.repository }}:${{ github.sha }}
+      container-image-version: ${{ github.sha }}
 
   frontend-jobs:
     uses: ./.github/workflows/frontend.yml
     secrets: inherit
     with:
-      container-registry: ${{ env.CONTAINER_REGISTRY }}
-      container-image-tag: ${{ env.FRONTEND_CONTAINER_IMAGE_TAG }}
-      container-image-version: ${{ env.CONTAINER_IMAGE_VERSION }}
+      container-registry: ghcr.io
+      container-image-tag: ghcr.io/${{ github.repository }}/frontend:${{ github.sha }}
+      container-image-version: ${{ github.sha }}
 
   e2e-tests:
     needs:
@@ -43,8 +35,8 @@ jobs:
     uses: ./.github/workflows/pipeline-e2e.yml
     secrets: inherit
     with:
-      backend-container-image-tag: ${{ env.BACKEND_CONTAINER_IMAGE_TAG }}
-      frontend-container-image-tag:  ${{ env.FRONTEND_CONTAINER_IMAGE_TAG }}
+      backend-container-image-tag: ghcr.io/${{ github.repository }}:${{ github.sha }}
+      frontend-container-image-tag:  ghcr.io/${{ github.repository }}/frontend:${{ github.sha }}
 
   deploy-backend-staging-and-uat:
     needs:
@@ -53,8 +45,8 @@ jobs:
     uses: ./.github/workflows/deploy.yml
     secrets: inherit
     with:
-      container-image-namespace: ${{ env.BACKEND_CONTAINER_IMAGE_NAMESPACE}}
-      container-image-version: ${{ env.CONTAINER_IMAGE_VERSION }}
+      container-image-namespace: ${{ github.repository }}
+      container-image-version: ${{ github.sha }}
 
   deploy-frontend-staging-and-uat:
     needs:
@@ -63,5 +55,5 @@ jobs:
     uses: ./.github/workflows/deploy.yml
     secrets: inherit
     with:
-      container-image-namespace: ${{ env.FRONTEND_CONTAINER_IMAGE_NAMESPACE}}
-      container-image-version: ${{ env.CONTAINER_IMAGE_VERSION }}
+      container-image-namespace: ${{ github.repository }}/frontend
+      container-image-version: ${{ github.sha }}
