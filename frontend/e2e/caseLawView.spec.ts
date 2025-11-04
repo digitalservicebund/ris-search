@@ -27,7 +27,6 @@ test("can search, filter for case law, and view a single case law documentation 
   page,
   isMobileTest,
 }) => {
-  // authentication should happen in the setup flow in auth.setup.ts
   await test.step("Basic search", async () => {
     await page.goto("/");
     await page.getByPlaceholder("Suchbegriff eingeben").fill("Fiktiv");

@@ -3,7 +3,6 @@ import path from "node:path";
 import type { BrowserContext, Locator } from "@playwright/test";
 import { chromium, expect as baseExpect, test as base } from "@playwright/test";
 import { environment } from "../../playwright.config";
-import { loginUser } from "./auth";
 
 type WorkerFixtures = {
   isMobileTest: boolean;
@@ -50,7 +49,6 @@ export const seoTest = base.extend<{}, SeoWorkerFixtures>({
 
       const bootstrapPage = await context.newPage();
       await bootstrapPage.goto(environment.baseUrl);
-      await loginUser(bootstrapPage);
       await bootstrapPage.close();
 
       await use(context);
