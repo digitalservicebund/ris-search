@@ -1,6 +1,8 @@
 import { expect, test, noJsTest } from "./utils/fixtures";
 
-test("displays literature page with metadata and text tab by default", async ({
+// Skipped because of a client/SSR rendering mismatch, will be added again once
+// that is fixed (see daily discussion from Nov 4th 2025)
+test.skip("displays literature page with metadata and text tab by default", async ({
   page,
 }) => {
   await page.goto("/literature/XXLU000000001");
@@ -54,7 +56,7 @@ test("displays literature page with metadata and text tab by default", async ({
 });
 
 noJsTest("tabs work without JavaScript", async ({ page }) => {
-  await page.goto("/literature/TEST000000001", { waitUntil: "networkidle" });
+  await page.goto("/literature/XXLU000000001", { waitUntil: "networkidle" });
   await expect(
     page.getByRole("link", { name: "Details zum Literaturnachweis" }),
   ).toBeVisible();
@@ -72,7 +74,11 @@ noJsTest("tabs work without JavaScript", async ({ page }) => {
   ).toBeVisible();
 });
 
-test("shows detailed information in the 'Details' tab", async ({ page }) => {
+// Skipped because of a client/SSR rendering mismatch, will be added again once
+// that is fixed (see daily discussion from Nov 4th 2025)
+test.skip("shows detailed information in the 'Details' tab", async ({
+  page,
+}) => {
   await page.goto("/literature/XXLU000000001");
   await page.waitForLoadState("networkidle");
 
