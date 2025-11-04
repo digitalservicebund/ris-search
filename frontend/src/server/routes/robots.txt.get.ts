@@ -3,11 +3,11 @@ import { usePrivateFeaturesFlag } from "~/composables/usePrivateFeaturesFlag";
 
 export default defineEventHandler(async (event) => {
   const userAgent = (getHeader(event, "User-Agent") ?? "").toUpperCase();
+  const config = useRuntimeConfig();
   const privateFeaturesEnabled = usePrivateFeaturesFlag();
   let file = privateFeaturesEnabled
     ? "robots.staging.txt"
     : "robots.public.txt";
-  const config = useRuntimeConfig();
   if (userAgent === "DG_JUSTICE_CRAWLER") file = "robots.dg.txt";
 
   setHeader(event, "Content-Type", "text/plain; charset=utf-8");

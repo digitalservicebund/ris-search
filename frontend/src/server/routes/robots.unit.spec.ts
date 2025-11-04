@@ -1,6 +1,6 @@
 import { mockNuxtImport } from "@nuxt/test-utils/runtime";
 import type { EventHandlerRequest, H3Event } from "h3";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, test, vi } from "vitest";
 import middleware from "./robots.txt.get";
 
 const mockFetch = vi.fn();
@@ -51,29 +51,40 @@ describe("robots txt route", () => {
     );
   });
 
-  it("serves robots.txt file in case there is no ecli crawler", async () => {
-    mockUseRuntimeConfig.mockImplementation(() => ({
-      risBackendUrl: "backendUrl",
-    }));
+  const testCases = [
+    [false, "robots.public.txt"],
+    [true, "robots.staging.txt"],
+  ];
 
-    const mockEvent: H3Event<EventHandlerRequest> = {
-      node: {
-        req: {
-          originalUrl: "url",
-          headers: {
-            host: "origin",
-            "user-agent": "default",
+  test.for(testCases)(
+    "privateFeaturesEnabled flag = %s serves %s",
+    async ([privateFeaturesEnabled, file]) => {
+      mockUseRuntimeConfig.mockImplementation(() => ({
+        risBackendUrl: "backendUrl",
+        public: {
+          privateFeaturesEnabled,
+        },
+      }));
+
+      const mockEvent: H3Event<EventHandlerRequest> = {
+        node: {
+          req: {
+            originalUrl: "url",
+            headers: {
+              host: "origin",
+              "user-agent": "default",
+            },
+          },
+          res: {
+            setHeader: vi.fn(),
           },
         },
-        res: {
-          setHeader: vi.fn(),
-        },
-      },
-    } as unknown as H3Event<EventHandlerRequest>;
+      } as unknown as H3Event<EventHandlerRequest>;
 
-    await middleware(mockEvent);
-    expect(mockFetch).toHaveBeenCalledWith(`http://origin/robots.txt`, {
-      method: "GET",
-    });
-  });
+      await middleware(mockEvent);
+      expect(mockFetch).toHaveBeenCalledWith(`http://origin/${file}`, {
+        method: "GET",
+      });
+    },
+  );
 });

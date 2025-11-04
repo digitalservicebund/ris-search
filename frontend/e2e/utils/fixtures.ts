@@ -47,10 +47,6 @@ export const seoTest = base.extend<{}, SeoWorkerFixtures>({
         args: [`--remote-debugging-port=${environment.remoteDebuggingPort}`],
       });
 
-      const bootstrapPage = await context.newPage();
-      await bootstrapPage.goto(environment.baseUrl);
-      await bootstrapPage.close();
-
       await use(context);
       await context.close();
     },
