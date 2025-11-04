@@ -38,7 +38,7 @@ jobs:
 
   check-source-code-formatting:
     runs-on: ubuntu-latest
-    needs: [ validate-gradle-wrapper ]
+    needs: validate-gradle-wrapper
     steps:
       - uses: actions/checkout@v5
       - name: Set up JDK

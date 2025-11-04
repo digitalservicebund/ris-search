@@ -143,6 +143,8 @@ jobs:
   frontend-image-build-scan-and-push:
     runs-on: ubuntu-latest
     needs:
+      - check-frontend
+      - audit-licences-frontend
       - frontend-file-scan
     permissions:
       security-events: write

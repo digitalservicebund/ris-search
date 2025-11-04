@@ -26,12 +26,12 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - private_features_enabled: false
+          - configuration_label: prototype
             env_file_name: .env.ci.prototype
-            configuration_label: prototype
-          - private_features_enabled: true
+            private_features_enabled: false
+          - configuration_label: private
             env_file_name: .env.ci.private
-            configuration_label: private
+            private_features_enabled: true
     steps:
       - uses: actions/checkout@v5
         with:
