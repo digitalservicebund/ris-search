@@ -184,10 +184,9 @@ tasks {
 
     bootBuildImage {
         val containerRegistry = System.getenv("CONTAINER_REGISTRY") ?: "ghcr.io"
-        val containerImageName = System.getenv("CONTAINER_IMAGE_NAME") ?: "digitalservicebund/${project.name}"
-        val containerImageVersion = System.getenv("CONTAINER_IMAGE_VERSION") ?: "latest"
+        val containerImageTag = System.getenv("CONTAINER_IMAGE_TAG")
 
-        imageName.set("$containerRegistry/$containerImageName:$containerImageVersion")
+        imageName.set(containerImageTag)
         builder.set("paketobuildpacks/builder-jammy-tiny")
         publish.set(false)
         docker {

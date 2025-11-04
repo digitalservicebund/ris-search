@@ -46,13 +46,10 @@ services:
       - ./backend/src/main/resources/openSearch/mounted/:/usr/share/opensearch/config/mounted/
 
   backend:
-    image: ${BACKEND_IMAGE:-ghcr.io/digitalservicebund/ris-search:RISDEV-4628-end-to-end}
-    container_name: backend
+    image: ${BACKEND_IMAGE}
+    container_name: backend-e2e
     restart: unless-stopped
     environment:
-      - POSTGRES_CASELAW_HOST=postgres14-caselaw
-      - POSTGRES_NORMS_HOST=postgres14-norms
-      - POSTGRES_NORMS_PORT=5432
       - OPENSEARCH_HOST=opensearch
       - SPRING_PROFILES_ACTIVE=e2e,default
       - THC_PATH=/actuator/health
@@ -74,14 +71,14 @@ services:
       - ris-portal
 
   frontend:
-    image: ${FRONTEND_IMAGE:-ghcr.io/digitalservicebund/ris-search/public-frontend:RISDEV-4628-end-to-end}
-    container_name: frontend
+    image: ${FRONTEND_IMAGE}
+    container_name: frontend-e2e
     depends_on:
       backend:
         condition: service_healthy
     env_file:
       # these values are important to ensure start.sh runs correctly, without trying to read secrets from mounts
-      - ./frontend/${ENV_FILE_NAME:-.env.ci.internal}
+      - ./frontend/${ENV_FILE_NAME:-.env.ci.private}
     ports:
       - "3000:3000"
     networks:
