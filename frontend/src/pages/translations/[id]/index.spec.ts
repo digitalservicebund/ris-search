@@ -73,8 +73,8 @@ describe("TranslationDetailPage", () => {
 
   describe("Details tab", () => {
     it("shows translator and version info after opening Details tab", async () => {
-      const detailsTabButton = pageWrapper.get("button[aria-label*='Details']");
-      await detailsTabButton.trigger("click");
+      const detailsTabLink = pageWrapper.get("a[href='#details']");
+      await detailsTabLink.trigger("click");
 
       const detailsListItems = pageWrapper.findAll("dd");
       expect(detailsListItems).toHaveLength(2);

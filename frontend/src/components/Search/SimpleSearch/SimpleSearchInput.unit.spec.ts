@@ -63,16 +63,10 @@ describe("SearchComponent", () => {
     expect(wrapper.vm.model).toBe("test query");
   });
 
-  it("submits search on button click", async () => {
+  it("submits search on form submit", async () => {
     const input = wrapper.findComponent("input") as VueWrapper;
     input.vm.$emit("update:modelValue", "test query");
-    // @ts-expect-error private property access
-    expect(wrapper.vm.currentText).toBe("test query");
-    // @ts-expect-error private property access
-    expect(wrapper.vm.model).toBeFalsy();
-
-    const button = wrapper.findComponent("button") as VueWrapper;
-    button.vm.$emit("click");
+    await wrapper.find("form").trigger("submit");
     // @ts-expect-error private property access
     expect(wrapper.vm.model).toBe("test query");
   });

@@ -1,5 +1,5 @@
 import type { Page } from "@playwright/test";
-import { expect, test } from "./utils/fixtures";
+import { expect, test, noJsTest } from "./utils/fixtures";
 
 function getSearchResults(page: Page) {
   return page
@@ -491,4 +491,53 @@ test.describe("searching literature", () => {
 
     await expect(getSearchResults(page)).toHaveCount(2);
   });
+});
+
+noJsTest("search works without JavaScript", async ({ page }) => {
+  const searchTerm = "Fiktiv";
+
+  await test.step("search from landing page", async () => {
+    await page.goto("/");
+    await page.getByPlaceholder("Suchbegriff eingeben").fill(searchTerm);
+    await page.getByRole("button", { name: "Suchen" }).click();
+
+    await page.waitForURL(`/search?query=${searchTerm}`);
+    expect(await getSearchResults(page).count()).toBeGreaterThan(0);
+    await expect(page.getByPlaceholder("Suchbegriff eingeben")).toHaveValue(
+      searchTerm,
+    );
+  });
+
+  await test.step("search from search page", async () => {
+    const newSearchTerm = "Test";
+    await page.getByPlaceholder("Suchbegriff eingeben").fill(newSearchTerm);
+    await page.getByRole("button", { name: "Suchen" }).click();
+
+    await page.waitForURL(`/search?query=${newSearchTerm}`);
+    expect(await getSearchResults(page).count()).toBeGreaterThan(0);
+    await expect(page.getByPlaceholder("Suchbegriff eingeben")).toHaveValue(
+      newSearchTerm,
+    );
+  });
+});
+
+noJsTest("pagination works without JavaScript", async ({ page }) => {
+  await page.goto("/search?query=und", { waitUntil: "networkidle" });
+
+  await expect(getResultCounter(page)).toHaveText("12 Suchergebnisse");
+  await expect(getSearchResults(page)).toHaveCount(10);
+
+  await page.getByLabel("nächste Ergebnisse").click();
+  await page.waitForURL("/search?query=und&pageNumber=1", {
+    waitUntil: "networkidle",
+  });
+
+  await expect(getResultCounter(page)).toHaveText("12 Suchergebnisse");
+  await expect(getSearchResults(page)).toHaveCount(2);
+
+  await page.getByLabel("vorherige Ergebnisse").click();
+  await page.waitForURL("/search?query=und", { waitUntil: "networkidle" });
+
+  await expect(getResultCounter(page)).toHaveText("12 Suchergebnisse");
+  await expect(getSearchResults(page)).toHaveCount(10);
 });

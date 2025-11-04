@@ -9,9 +9,7 @@ import Sidebar from "~/components/Docs/Sidebar.vue";
 
 <template>
   <NuxtLoadingIndicator :color="false" class="bg-blue-800" />
-  <client-only>
-    <ConsentBanner />
-  </client-only>
+  <ConsentBanner />
   <div>
     <Sidebar
       class="fixed hidden h-full w-[252px] border-r-[1px] border-gray-400 lg:inline-block"
