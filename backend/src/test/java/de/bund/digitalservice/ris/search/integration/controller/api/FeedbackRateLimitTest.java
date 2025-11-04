@@ -4,7 +4,6 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.c4_soft.springaddons.security.oauth2.test.annotations.WithJwt;
 import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.config.ratelimiting.FeedbackRateLimitInterceptor;
 import de.bund.digitalservice.ris.search.integration.config.ContainersIntegrationBase;
@@ -22,7 +21,6 @@ import org.springframework.util.MultiValueMap;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 @Tag("integration")
-@WithJwt("jwtTokens/ValidAccessToken.json")
 class FeedbackRateLimitTest extends ContainersIntegrationBase {
 
   @Autowired private MockMvc mockMvc;

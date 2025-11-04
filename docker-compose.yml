@@ -40,25 +40,6 @@ services:
     networks:
       - ris-portal
 
-  keycloak:
-    image: quay.io/keycloak/keycloak:26.0
-    command: ["start-dev", "--import-realm"]
-    container_name: keycloak
-    restart: unless-stopped
-    environment:
-      KEYCLOAK_ADMIN: admin
-      KEYCLOAK_ADMIN_PASSWORD: test
-      KC_HEALTH_ENABLED: true
-      KC_METRICS_ENABLED: true
-    ports:
-      - "8443:8080"
-    expose:
-      - 8080
-    volumes:
-      - ./local/keycloak/realm.json:/opt/keycloak/data/import/realm.json:ro
-    networks:
-      - ris-portal
-
 networks:
   ris-portal:
     driver: bridge

@@ -8,7 +8,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.c4_soft.springaddons.security.oauth2.test.annotations.WithJwt;
 import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
 import de.bund.digitalservice.ris.search.config.ApiConfig;
@@ -41,7 +40,6 @@ import org.springframework.test.web.servlet.ResultMatcher;
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 @Tag("integration")
-@WithJwt("jwtTokens/ValidAccessToken.json")
 class AdvancedSearchControllerApiTest extends ContainersIntegrationBase {
 
   @Autowired private MockMvc mockMvc;
@@ -190,7 +188,6 @@ class AdvancedSearchControllerApiTest extends ContainersIntegrationBase {
 
   @ParameterizedTest
   @ValueSource(strings = {"decision_date", "DATUM", "DAT"})
-  @WithJwt("jwtTokens/ValidAccessToken.json")
   @DisplayName("Case law date and alias field find 2 documents")
   void caseLawDateAndAliasFieldsFind2Documents(String queryParam) throws Exception {
     mockMvc
@@ -204,7 +201,6 @@ class AdvancedSearchControllerApiTest extends ContainersIntegrationBase {
 
   @ParameterizedTest
   @ValueSource(strings = {"entry_into_force_date", "DATUM", "DAT"})
-  @WithJwt("jwtTokens/ValidAccessToken.json")
   @DisplayName("Legislation entry_into_force_date and aliases find 3 documents")
   void legislationEntryIntoForceDateAndAliasesFind3Documents(String queryParam) throws Exception {
     mockMvc
@@ -387,6 +383,22 @@ class AdvancedSearchControllerApiTest extends ContainersIntegrationBase {
                     + String.format("?query=%s:TeG2 AND %s:TeG2", "official_abbreviation", "AB"))
                 .contentType(MediaType.APPLICATION_JSON))
         .andExpect(jsonPath("$.member", hasSize(1)))
+        .andExpect(status().isOk());
+  }
+
+  @ParameterizedTest
+  @ValueSource(strings = {"norms_date", "DATUM", "DAT"})
+  @WithJwt("jwtTokens/ValidAccessToken.json")
+  @DisplayName("Should return 200 when looking for decision date and aliases")
+  void shouldReturnOkDecisionDateQueryForLegislation(String queryParam) throws Exception {
+
+    mockMvc
+        .perform(
+            get(ApiConfig.Paths.LEGISLATION_ADVANCED_SEARCH
+                    + String.format("?query=%s:[2024-01-01 TO 2024-12-31]", queryParam))
+                .contentType(MediaType.APPLICATION_JSON))
+        .andDo(print())
+        .andExpect(jsonPath("$.member", hasSize(2)))
         .andExpect(status().isOk());
   }
 

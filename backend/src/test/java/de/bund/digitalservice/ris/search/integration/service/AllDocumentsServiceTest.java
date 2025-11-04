@@ -2,7 +2,6 @@ package de.bund.digitalservice.ris.search.integration.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.c4_soft.springaddons.security.oauth2.test.annotations.WithJwt;
 import de.bund.digitalservice.ris.search.integration.config.ContainersIntegrationBase;
 import de.bund.digitalservice.ris.search.integration.controller.api.testData.CaseLawTestData;
 import de.bund.digitalservice.ris.search.integration.controller.api.testData.LiteratureTestData;
@@ -25,7 +24,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 @Tag("integration")
-@WithJwt("jwtTokens/ValidAccessToken.json")
 class AllDocumentsServiceTest extends ContainersIntegrationBase {
 
   @Autowired private CaseLawRepository caseLawRepository;

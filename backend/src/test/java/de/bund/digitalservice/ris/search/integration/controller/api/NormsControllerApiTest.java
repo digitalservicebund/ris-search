@@ -16,7 +16,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.request;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.c4_soft.springaddons.security.oauth2.test.annotations.WithJwt;
 import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
 import de.bund.digitalservice.ris.search.config.ApiConfig;
@@ -60,7 +59,6 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 @Tag("integration")
-@WithJwt("jwtTokens/ValidAccessToken.json")
 class NormsControllerApiTest extends ContainersIntegrationBase {
 
   // there should be a corresponding XML file in resources/data/LDML/norm

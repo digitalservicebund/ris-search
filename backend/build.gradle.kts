@@ -55,17 +55,11 @@ dependencies {
     implementation(libs.spring.validation)
     implementation(libs.spring.web)
     implementation(libs.spring.security)
-    implementation(libs.spring.oauth2)
     implementation(libs.spring.data.jpa)
     implementation(libs.jts.core)
     implementation(libs.spring.boot.starter.webservices)
-
     implementation(libs.spring.kubernetes.client)
-
     implementation(libs.spring.data.opensearch)
-
-    implementation(libs.spring.security.oauth2.jose)
-
     implementation(libs.springdoc.openapi.starter.webmvc.ui)
     implementation(libs.jsoup)
     implementation(libs.amazon.aws.sdk.s3)
@@ -101,7 +95,6 @@ dependencies {
     testImplementation(libs.spring.security.test)
     testImplementation(libs.archunit.junit5)
     testImplementation(libs.mockito.junit.jupiter)
-    testImplementation(libs.spring.addons.oauth2.test)
 
     testImplementation(libs.testcontainers.junit.jupiter)
     testImplementation(libs.opensearch.testcontainers)

@@ -6,10 +6,3 @@ opensearch:
   caselaws-index-name: caselaws_e2e
   literature-index-name: literature_e2e
   documents-alias-name: documents_e2e
-
-spring:
-  security:
-    oauth2:
-      resourceserver:
-        jwt:
-          jwk-set-uri: http://keycloak:8443/realms/ris/protocol/openid-connect/certs

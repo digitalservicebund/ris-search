@@ -31,7 +31,6 @@ jsoup = "1.21.2"
 logbook = "3.12.3"
 org-json = "20250517"
 commons-csv = "1.13.0"
-oauth2-test-addon = "8.1.23"
 amazon-aws-sdk-s3 = "2.29.45"
 saxon-he = "12.5"
 streamex = "0.8.4"
@@ -48,12 +47,10 @@ spring-actuator = { module="org.springframework.boot:spring-boot-starter-actuato
 spring-validation = { module="org.springframework.boot:spring-boot-starter-validation", version.ref="spring-boot-starter" }
 spring-web = { module = "org.springframework.boot:spring-boot-starter-web", version.ref = "spring-boot-starter" }
 spring-security = { module = "org.springframework.boot:spring-boot-starter-security", version.ref = "spring-boot-starter" }
-spring-oauth2 = { module = "org.springframework.boot:spring-boot-starter-oauth2-resource-server", version.ref = "spring-boot-starter" }
 spring-data-jpa = { module = "org.springframework.boot:spring-boot-starter-data-jpa", version.ref = "spring-boot-starter" }
 spring-kubernetes-client = { module = "org.springframework.cloud:spring-cloud-starter-kubernetes-client-config", version.ref = "spring-cloud-k8s" }
 spring-data-opensearch = { module = "org.opensearch.client:spring-data-opensearch-starter", version.ref = "spring-data-opensearch-starter" }
 opensearch-test-autoconfigure = { module = "org.opensearch.client:spring-data-opensearch-test-autoconfigure", version.ref = "opensearch-test-autoconfigure"}
-spring-security-oauth2-jose = { module = "org.springframework.security:spring-security-oauth2-jose", version.ref = "spring-security" }
 springdoc-openapi-starter-webmvc-ui = { module = "org.springdoc:springdoc-openapi-starter-webmvc-ui", version.ref = "springdoc-openapi" }
 pact = { module = "au.com.dius.pact.provider:junit5spring", version.ref = "pact" }
 jsoup = { module = "org.jsoup:jsoup", version.ref = "jsoup" }
@@ -78,7 +75,6 @@ spring-boot-starter-webservices = { module = "org.springframework.boot:spring-bo
 spring-security-test = { module = "org.springframework.security:spring-security-test", version.ref = "spring-security-test" }
 archunit-junit5 = { module = "com.tngtech.archunit:archunit-junit5", version.ref = "junit5" }
 mockito-junit-jupiter = { module = "org.mockito:mockito-junit-jupiter", version.ref = "mockito" }
-spring-addons-oauth2-test = { module = "com.c4-soft.springaddons:spring-addons-oauth2-test", version.ref = "oauth2-test-addon" }
 testcontainers-junit-jupiter = { module = "org.testcontainers:junit-jupiter", version.ref = "test-containers" }
 opensearch-testcontainers = { module = "org.opensearch:opensearch-testcontainers", version.ref = "opensearch-test-containers" }
 testcontainers-postgresql = { module = "org.testcontainers:postgresql", version.ref = "test-containers" }

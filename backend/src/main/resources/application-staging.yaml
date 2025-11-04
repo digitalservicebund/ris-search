@@ -15,11 +15,6 @@ spring:
           - name: ris-search-postgres-config
       secrets:
         paths: /etc/secrets
-  security:
-    oauth2:
-      resourceserver:
-        jwt:
-          jwk-set-uri: https://neuris.login.bare.id/auth/realms/development/protocol/openid-connect/certs
 
 swagger:
   server:

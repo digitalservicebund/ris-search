@@ -117,10 +117,6 @@ export default defineNuxtConfig({
     },
     /* Backend host to the spring backend, used by /proxy and /v1 routes  */
     risBackendUrl: "http://localhost:8090",
-    /* Backend host to use when performing authenticated server-side rendering
-     (SSR), which might go to the Nuxt middleware when empty, or to the
-      backend host provided. */
-    ssrBackendUrl: "",
     session: {
       cookie: {
         secure: secureCookie, // workaround needed for Safari on localhost
@@ -134,11 +130,6 @@ export default defineNuxtConfig({
        * 2. leave empty to route requests through the nuxt backend
        */
       backendURL: "",
-      /*
-       * Controls whether the frontend should try to obtain an API token,
-       * and whether to accept requests at /api (Nuxt middleware)
-       */
-      authEnabled: true,
       /*
        * A feature flag that controls whether the private annotated features should,
        * be displayed or not, such features are for example: metadata, fassungen ...etc
@@ -221,6 +212,9 @@ export default defineNuxtConfig({
           Accept: "application/xml",
         },
       },
+    },
+    "/v1/**": {
+      proxy: `${process.env.NUXT_RIS_BACKEND_URL}/v1/**`,
     },
   },
   vite: {
