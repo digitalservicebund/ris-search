@@ -1,4 +1,3 @@
-import { mockNuxtImport } from "@nuxt/test-utils/runtime";
 import { mount, RouterLinkStub } from "@vue/test-utils";
 import { describe, it, expect } from "vitest";
 import AppHeaderNav from "./AppHeaderNav.vue";

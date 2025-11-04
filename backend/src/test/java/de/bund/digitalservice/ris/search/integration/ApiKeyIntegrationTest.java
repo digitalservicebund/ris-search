@@ -28,7 +28,7 @@ class ApiKeyIntegrationTest extends ContainersIntegrationBase {
   }
 
   @Test
-  @Disabled
+  @Disabled("Pending An addition of a Profile for testing Production API")
   void testInvalidApiKey_ShouldBeUnauthorized() throws Exception {
     // Test with missing API key
     mockMvc.perform(get("/your-endpoint")).andExpect(status().isUnauthorized());
