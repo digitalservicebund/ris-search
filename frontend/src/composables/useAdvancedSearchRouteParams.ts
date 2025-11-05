@@ -1,11 +1,8 @@
 import type { LocationQueryValue } from "vue-router";
 import { navigateTo, useRoute } from "#app";
 import { DocumentKind } from "~/types";
-import {
-  type DateFilterValue,
-  isFilterType,
-} from "~/utils/advancedSearch/filterType";
 import { isDocumentKind } from "~/utils/documentKind";
+import { type DateFilterValue, isFilterType } from "~/utils/search/filterType";
 
 function tryGetPageIndexFromQuery(
   query: LocationQueryValue | LocationQueryValue[] | undefined,

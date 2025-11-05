@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import CaselawSearchResult from "~/components/Search/Result/CaselawSearchResult.vue";
-import LiteratureSearchResult from "~/components/Search/Result/LiteratureSearchResult.vue";
-import NormSearchResult from "~/components/Search/Result/NormSearchResult.vue";
+import CaselawSearchResult from "~/components/Search/CaselawSearchResult.vue";
+import LiteratureSearchResult from "~/components/Search/LiteratureSearchResult.vue";
+import NormSearchResult from "~/components/Search/NormSearchResult.vue";
 import type { AnyDocument, SearchResult } from "~/types";
 import {
   isCaselaw,

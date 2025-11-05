@@ -1,7 +1,7 @@
 import type { MenuItem } from "primevue/menuitem";
 import { DocumentKind } from "~/types";
 
-export const items: MenuItem[] = [
+export const categoryFilterItems: MenuItem[] = [
   {
     label: "Alle Dokumentarten",
     key: DocumentKind.All,
@@ -45,7 +45,7 @@ export const computeExpandedKeys = (category: string) => {
   const parts = category.split("."); // split e.g., R.urteil into R and urteil
   const result: Record<string, boolean> = {};
 
-  findActiveItem(items, "", parts, result);
+  findActiveItem(categoryFilterItems, "", parts, result);
   return result;
 };
 

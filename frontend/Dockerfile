@@ -6,7 +6,7 @@ WORKDIR /app
 COPY .yarn/releases/yarn-4.9.2.cjs .yarn/releases/yarn-4.9.2.cjs
 COPY package.json yarn.lock .yarnrc.yml ./
 RUN yarn install --immutable
-COPY playwright.config.ts nuxt.config.ts nuxt.config.d.ts libraries.d.ts tsconfig.json \
+COPY playwright.config.ts nuxt.config.ts nuxt.config.d.ts tsconfig.json \
     eslint.config.mjs sentry.server.config.ts ./
 COPY src ./src
 RUN yarn run prepare && NODE_OPTIONS="--max-old-space-size=4096" yarn build

@@ -2,10 +2,10 @@
 import { RisAutoComplete } from "@digitalservicebund/ris-ui/components";
 import _ from "lodash";
 import type { AutoCompleteDropdownClickEvent } from "primevue/autocomplete";
-import { defaultSuggestions } from "~/components/Search/SimpleSearch/CourtFilter.data";
 import { useBackendURL } from "~/composables/useBackendURL";
 import { useSimpleSearchParamsStore } from "~/stores/searchParams";
 import { DocumentKind } from "~/types";
+import { courtFilterDefaultSuggestions } from "~/utils/search/courtFilter";
 
 const store = useSimpleSearchParamsStore();
 
@@ -49,7 +49,7 @@ const onComplete = (
   } else {
     // dropdown was opened without any text entered or value pre-selected
     // a copy of the default suggestions is required since the loading
-    suggestions.value = [...defaultSuggestions];
+    suggestions.value = [...courtFilterDefaultSuggestions];
   }
 };
 

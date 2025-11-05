@@ -3,7 +3,7 @@ import { render, screen } from "@testing-library/vue";
 import { InputText } from "primevue";
 import DateFilter from "./DateFilter.vue";
 import { DocumentKind } from "~/types";
-import type { DateFilterValue } from "~/utils/advancedSearch/filterType";
+import type { DateFilterValue } from "~/utils/search/filterType";
 
 describe("DateFilter", () => {
   describe("caselaw", () => {

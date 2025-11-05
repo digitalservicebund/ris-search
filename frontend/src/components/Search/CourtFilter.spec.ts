@@ -2,11 +2,11 @@ import { mountSuspended } from "@nuxt/test-utils/runtime";
 import { flushPromises } from "@vue/test-utils";
 import type { VueWrapper } from "@vue/test-utils";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { defaultSuggestions } from "./CourtFilter.data";
-import CourtFilter from "~/components/Search/SimpleSearch/CourtFilter.vue";
+import CourtFilter from "~/components/Search/CourtFilter.vue";
 import { useSimpleSearchParamsStore } from "~/stores/searchParams";
 import { setStoreValues } from "~/tests/piniaUtils";
 import { DocumentKind } from "~/types";
+import { courtFilterDefaultSuggestions } from "~/utils/search/courtFilter";
 
 const mockData = [{ id: "TG Berlin", label: "Tagesgericht Berlin", count: 1 }];
 const mockFetch = vi.fn().mockResolvedValue(mockData);
@@ -105,7 +105,9 @@ describe("court autocomplete", () => {
         await flushPromises();
         expect(mockFetch).not.toHaveBeenCalled();
 
-        expect(autoComplete.vm.suggestions).toStrictEqual(defaultSuggestions);
+        expect(autoComplete.vm.suggestions).toStrictEqual(
+          courtFilterDefaultSuggestions,
+        );
       });
     });
 

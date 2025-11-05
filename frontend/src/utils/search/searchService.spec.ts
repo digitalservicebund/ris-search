@@ -1,10 +1,10 @@
 import { mockNuxtImport } from "@nuxt/test-utils/runtime";
 import { describe, it, expect, vi, type Mock } from "vitest";
-import { axiosInstance } from "./httpClient";
 import { advancedSearch } from "./searchService";
 import { DocumentKind } from "~/types";
+import { axiosInstance } from "~/utils/services/httpClient";
 
-vi.mock("./httpClient");
+vi.mock("~/utils/services/httpClient");
 
 const { useRuntimeConfigMock } = vi.hoisted(() => {
   return {

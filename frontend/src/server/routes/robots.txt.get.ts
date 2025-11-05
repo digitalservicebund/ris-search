@@ -1,6 +1,6 @@
 import { getRequestURL, getHeader, setHeader, defineEventHandler } from "h3";
-import { requireAccessTokenWithRefresh } from "../auth";
 import { usePrivateFeaturesFlag } from "~/composables/usePrivateFeaturesFlag";
+import { requireAccessTokenWithRefresh } from "~/server/auth";
 
 export default defineEventHandler(async (event) => {
   const userAgent = (getHeader(event, "User-Agent") ?? "").toUpperCase();
