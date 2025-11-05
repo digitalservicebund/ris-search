@@ -105,9 +105,6 @@ export default defineNuxtConfig({
     "@nuxt/scripts",
     "@nuxtjs/sitemap",
   ],
-  imports: {
-    scan: false,
-  },
   devtools: {
     enabled: true,
   },
