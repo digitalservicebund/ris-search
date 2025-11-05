@@ -44,7 +44,7 @@ jobs:
     uses: ./.github/workflows/deploy.yml
     secrets: inherit
     with:
-      container-image-namespace: ${{ github.repository }}
+      deploying-repo: ris-search
       container-image-version: ${{ github.sha }}
 
   deploy-frontend-staging-and-uat:
@@ -53,5 +53,5 @@ jobs:
     uses: ./.github/workflows/deploy.yml
     secrets: inherit
     with:
-      container-image-namespace: ${{ github.repository }}/frontend
+      deploying-repo: ris-search/frontend
       container-image-version: ${{ github.sha }}

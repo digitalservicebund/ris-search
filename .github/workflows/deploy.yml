@@ -3,8 +3,8 @@ name: Deploy Staging and UAT
 on:
   workflow_call:
     inputs:
-      container-image-namespace:
-        description: 'Namespace of the image tag, either "ris-search" or "ris-search/frontend"'
+      deploying-repo:
+        description: 'Name of the repo that is deploying, either "ris-search" or "ris-search/frontend"'
         required: true
         type: string
       container-image-version:
@@ -25,7 +25,7 @@ jobs:
         with:
           environment: staging
           version: ${{ inputs.container-image-version }}
-          deploying_repo: ${{ inputs.container-image-namespace}}
+          deploying_repo: ${{ inputs.deploying-repo }}
           infra_repo: neuris-portal-infra
           deploy_key: ${{ secrets.PORTAL_INFRA_DEPLOY_KEY }}
           app: ris-portal-staging
@@ -47,7 +47,7 @@ jobs:
         with:
           environment: uat
           version: ${{ inputs.container-image-version }}
-          deploying_repo: ${{ inputs.container-image-namespace}}
+          deploying_repo: ${{ inputs.deploying-repo }}
           infra_repo: neuris-portal-infra
           deploy_key: ${{ secrets.PORTAL_INFRA_DEPLOY_KEY }}
           app: ris-portal-uat
