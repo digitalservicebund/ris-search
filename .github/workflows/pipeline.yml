@@ -40,7 +40,6 @@ jobs:
 
   deploy-backend-staging-and-uat:
     needs:
-      - backend-jobs
       - e2e-tests
     uses: ./.github/workflows/deploy.yml
     secrets: inherit
@@ -50,7 +49,6 @@ jobs:
 
   deploy-frontend-staging-and-uat:
     needs:
-      - frontend-jobs
       - e2e-tests
     uses: ./.github/workflows/deploy.yml
     secrets: inherit
