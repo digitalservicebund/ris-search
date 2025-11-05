@@ -1,0 +1,4 @@
+fileignoreconfig:
+- filename: .github/workflows/pipeline-e2e.yml
+  checksum: cad4e74fa2b61b9b339043d0aa34f85fdd4539ec0687a375e1dead7cb822000e
+version: "1.0"
