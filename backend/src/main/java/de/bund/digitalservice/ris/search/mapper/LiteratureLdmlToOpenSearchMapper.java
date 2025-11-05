@@ -14,10 +14,10 @@ import de.bund.digitalservice.ris.search.models.ldml.literature.Keyword;
 import de.bund.digitalservice.ris.search.models.ldml.literature.LiteratureLdml;
 import de.bund.digitalservice.ris.search.models.ldml.literature.MainBody;
 import de.bund.digitalservice.ris.search.models.ldml.literature.Meta;
-import de.bund.digitalservice.ris.search.models.ldml.literature.Metadata;
 import de.bund.digitalservice.ris.search.models.ldml.literature.OtherReferences;
 import de.bund.digitalservice.ris.search.models.ldml.literature.Proprietary;
 import de.bund.digitalservice.ris.search.models.ldml.literature.References;
+import de.bund.digitalservice.ris.search.models.ldml.literature.RisMeta;
 import de.bund.digitalservice.ris.search.models.ldml.literature.TlcEvent;
 import de.bund.digitalservice.ris.search.models.ldml.literature.TlcOrganization;
 import de.bund.digitalservice.ris.search.models.ldml.literature.TlcPerson;
@@ -132,8 +132,8 @@ public class LiteratureLdmlToOpenSearchMapper {
             .map(LiteratureLdml::getDoc)
             .map(Doc::getMeta)
             .map(Meta::getProprietary)
-            .map(Proprietary::getMetadata)
-            .map(Metadata::getYearsOfPublication)
+            .map(Proprietary::getMeta)
+            .map(RisMeta::getYearsOfPublication)
             .orElse(Collections.emptyList());
 
     if (yearsOfPublication.isEmpty()) {
@@ -286,8 +286,8 @@ public class LiteratureLdmlToOpenSearchMapper {
                 .map(LiteratureLdml::getDoc)
                 .map(Doc::getMeta)
                 .map(Meta::getProprietary)
-                .map(Proprietary::getMetadata)
-                .map(Metadata::getGliederung)
+                .map(Proprietary::getMeta)
+                .map(RisMeta::getGliederung)
                 .map(Gliederung::getGliederungEntry)
                 .orElse(Collections.emptyList()));
 

@@ -6,7 +6,7 @@ import java.util.List;
 import lombok.Getter;
 
 @Getter
-public class Metadata {
+public class RisMeta {
   @XmlElementWrapper(
       name = "veroeffentlichungsJahre",
       namespace = LiteratureNamespaces.RIS_UNSELBSTSTAENDIG_NS)

@@ -72,7 +72,7 @@
                 <akn:TLCRole eId="verfasser" href="akn/ontology/roles/de/verfasser" showAs="Verfasser"/>
             </akn:references>
             <akn:proprietary source="attributsemantik-noch-undefiniert">
-                <ris:metadata>
+                <ris:meta>
                     <ris:veroeffentlichungsJahre>
                         <ris:veroeffentlichungsJahr>2024</ris:veroeffentlichungsJahr>
                     </ris:veroeffentlichungsJahre>
@@ -81,7 +81,7 @@
                         <ris:gliederungEntry>II. Lösung.</ris:gliederungEntry>
                         <ris:gliederungEntry>III. Zusammenfassung.</ris:gliederungEntry>
                     </ris:gliederung>
-                </ris:metadata>
+                </ris:meta>
             </akn:proprietary>
         </akn:meta>
         <akn:preface>
