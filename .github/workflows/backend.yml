@@ -4,26 +4,25 @@
 name: Backend
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - backend/**
-      - .github/workflows/backend.yml
-  pull_request:
-    branches: [main]
-    paths:
-      - backend/**
-      - .github/workflows/backend.yml
-  # Allow to run this workflow manually
-  workflow_dispatch:
+  workflow_call:
+    inputs:
+      container-image-tag:
+        description: 'The full tag for the backend container image'
+        required: true
+        type: string
+      container-image-version:
+        description: 'The sha of the commit that triggered the pipeline'
+        required: true
+        type: string
+      container-registry:
+        description: 'Name of the container registry'
+        required: false
+        type: string
+        default: ghcr.io
 
 env:
   RUN_ID: ${{ github.run_id }}
-  CONTAINER_REGISTRY: ghcr.io
-  CONTAINER_IMAGE_NAME: ${{ github.repository }}
-  CONTAINER_IMAGE_VERSION: ${{ github.sha }}
-  BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
-  REPORTS_REPOSITORY: digitalservicebund/ris-search
+
   TRIVY_DB_REPOSITORY: ghcr.io/aquasecurity/trivy-db,public.ecr.aws/aquasecurity/trivy-db
   TRIVY_JAVA_DB_REPOSITORY: ghcr.io/aquasecurity/trivy-java-db,public.ecr.aws/aquasecurity/trivy-java-db
   SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
@@ -39,7 +38,7 @@ jobs:
 
   check-source-code-formatting:
     runs-on: ubuntu-latest
-    needs: [ validate-gradle-wrapper ]
+    needs: validate-gradle-wrapper
     steps:
       - uses: actions/checkout@v5
       - name: Set up JDK
@@ -57,7 +56,7 @@ jobs:
 
   audit-licenses:
     runs-on: ubuntu-latest
-    needs: [ validate-gradle-wrapper ]
+    needs: validate-gradle-wrapper
     steps:
       - uses: actions/checkout@v5
       - name: Set up JDK
@@ -75,7 +74,7 @@ jobs:
 
   vulnerability-scan:
     runs-on: ubuntu-latest
-    needs: [ validate-gradle-wrapper ]
+    needs: validate-gradle-wrapper
     permissions:
       contents: read
       security-events: write
@@ -91,6 +90,8 @@ jobs:
       - name: Build container image
         working-directory: ./backend
         run: ./gradlew bootBuildImage
+        env:
+          CONTAINER_IMAGE_TAG: ${{ inputs.container-image-tag }}
       - name: Run Trivy vulnerability scanner
         # Third-party action, pin to commit SHA!
         # See https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions
@@ -98,7 +99,7 @@ jobs:
         env:
           TRIVY_OFFLINE_SCAN: true
         with:
-          image-ref: ${{ env.CONTAINER_REGISTRY }}/${{ env.CONTAINER_IMAGE_NAME }}:${{ env.CONTAINER_IMAGE_VERSION }}
+          image-ref: ${{ inputs.container-image-tag }}
           format: "sarif"
           output: "trivy-results.sarif"
           cache-dir: .trivy
@@ -106,7 +107,7 @@ jobs:
       - name: Upload Trivy vulnerability image scanner results (as artifact)
         uses: actions/upload-artifact@v4
         with:
-          name: "trivy-image-results-${{ matrix.app }}.sarif"
+          name: "trivy-image-results-backend.sarif"
           path: "trivy-results.sarif"
           if-no-files-found: error
       - name: Check trivy results
@@ -136,7 +137,7 @@ jobs:
         env:
           TRIVY_OFFLINE_SCAN: true
         with:
-          image-ref: ${{ env.CONTAINER_REGISTRY }}/${{ env.CONTAINER_IMAGE_NAME }}:${{ env.CONTAINER_IMAGE_VERSION }}
+          image-ref: ${{ inputs.container-image-tag }}
           format: "cosign-vuln"
           output: "vuln.json"
       - name: Upload cosign vulnerability scan record
@@ -173,38 +174,38 @@ jobs:
         working-directory: ./backend
         run: chmod +x gradlew
       - name: Run Tests and Scan with SonarQube
+        if: ${{ github.actor != 'dependabot[bot]' }}
         id: sonarqube-tests
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         working-directory: ./backend
         run: ./gradlew sonar
-        if: ${{ github.actor != 'dependabot[bot]' }}
       - name: Upload OpenAPI specification
+        if: ${{ steps.sonarqube-tests.outcome == 'success' }}
         uses: actions/upload-artifact@v4
         with:
           name: openapi.json
           retention-days: 3
           path: backend/out/openapi.json
-        if: ${{ steps.sonarqube-tests.outcome == 'success' }}
       - name: Run unit tests ( without SonarQube)
-        working-directory: ./backend
-        run: ./gradlew integrationTest
         if: ${{ github.actor != 'dependabot[bot]' }}
-      - name: Run integration tests (without SonarQube, for dependabot)
         working-directory: ./backend
         run: ./gradlew integrationTest
+      - name: Run integration tests (without SonarQube, for dependabot)
         if: ${{ github.actor == 'dependabot[bot]' }}
+        working-directory: ./backend
+        run: ./gradlew integrationTest
       - name: Check SonarQube Quality Gate
         # Third-party action, pin to commit SHA!
         # See https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions
         uses: sonarsource/sonarqube-quality-gate-action@dc2f7b0dd95544cd550de3028f89193576e958b9
+        if: ${{ github.actor != 'dependabot[bot]' }}
         with:
           scanMetadataReportFile: backend/build/sonar/report-task.txt
         timeout-minutes: 3 # Force to fail step after specific time
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        if: ${{ github.actor != 'dependabot[bot]' }}
       - name: Send status to Slack
         uses: digitalservicebund/notify-on-failure-gha@66c485757701f8d5dbee32f24df38d904ca693ba
         if: ${{ failure() && github.ref == 'refs/heads/main' }}
@@ -223,8 +224,6 @@ jobs:
       contents: read
       id-token: write # This is used to complete the identity challenge with sigstore/fulcio..
       packages: write
-    outputs:
-      version: ${{ steps.set-version.outputs.version }}
     steps:
       - uses: actions/checkout@v5
       - name: Set up JDK
@@ -241,102 +240,42 @@ jobs:
         # See https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions
         uses: docker/login-action@28fdb31ff34708d19615a74d67103ddc2ea9725c
         with:
-          registry: ${{ env.CONTAINER_REGISTRY }}
+          registry: ${{ inputs.container-registry }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Build and publish container image
         working-directory: ./backend
         run: CONTAINER_REGISTRY_USER=${{ github.actor }} CONTAINER_REGISTRY_PASSWORD=${{ secrets.GITHUB_TOKEN }} ./gradlew bootBuildImage --publishImage
-      - name: Set branch image name
-        run: |
-          BRANCH_NAME_TAG=$(echo $BRANCH_NAME | sed -e 's/[^[:alnum:]]/-/g')
-          echo "IMAGE_NAME_BRANCH=$CONTAINER_REGISTRY/$CONTAINER_IMAGE_NAME:$BRANCH_NAME_TAG" >> $GITHUB_ENV
-      - name: Tag and push latest
-        run: |
-          docker pull $CONTAINER_REGISTRY/$CONTAINER_IMAGE_NAME:$CONTAINER_IMAGE_VERSION
-          docker tag $CONTAINER_REGISTRY/$CONTAINER_IMAGE_NAME:$CONTAINER_IMAGE_VERSION $IMAGE_NAME_BRANCH
-          docker push $IMAGE_NAME_BRANCH
+        env:
+          CONTAINER_REGISTRY: ${{ inputs.container-registry }}
+          CONTAINER_IMAGE_TAG: ${{ inputs.container-image-tag}}
       - name: Install cosign
         # Third-party action, pin to commit SHA!
         # See https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions
         uses: sigstore/cosign-installer@4959ce089c160fddf62f7b42464195ba1a56d382
       - name: Sign the published Docker image
-        run: cosign sign --yes ${{ env.CONTAINER_REGISTRY }}/${{ env.CONTAINER_IMAGE_NAME }}:${{ env.CONTAINER_IMAGE_VERSION }}
+        run: cosign sign --yes ${{ inputs.container-image-tag}}
       - name: Download cosign vulnerability scan record
         uses: actions/download-artifact@v4
         with:
           name: "vuln.json"
       - name: Attest vulnerability scan
-        run: cosign attest --yes --replace --predicate vuln.json --type vuln ${{ env.CONTAINER_REGISTRY }}/${{ env.CONTAINER_IMAGE_NAME }}:${{ env.CONTAINER_IMAGE_VERSION }}
-      - id: set-version
-        run: echo "version=$CONTAINER_IMAGE_VERSION" >> $GITHUB_OUTPUT
+        run: cosign attest --yes --replace --predicate vuln.json --type vuln ${{ inputs.container-image-tag}}
       - name: Install sentry-cli using official script
+        if: ${{ env.SENTRY_AUTH_TOKEN != '' }}
         run: |
           curl -sL https://sentry.io/get-cli/ | bash
         env:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-        if: ${{ env.SENTRY_AUTH_TOKEN != '' }}
       - name: Create and finalize Sentry release for Backend
+        if: ${{ env.SENTRY_AUTH_TOKEN != '' }}
         run: |
-          sentry-cli releases new $CONTAINER_IMAGE_VERSION
-          sentry-cli releases set-commits --auto $CONTAINER_IMAGE_VERSION
-          sentry-cli releases finalize $CONTAINER_IMAGE_VERSION
+          sentry-cli releases new ${{ inputs.container-image-version }}
+          sentry-cli releases set-commits --auto ${{ inputs.container-image-version }}
+          sentry-cli releases finalize ${{ inputs.container-image-version }}
         env:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-        if: ${{ env.SENTRY_AUTH_TOKEN != '' }}
 
-  deploy-staging-portal:
-    runs-on: ubuntu-latest
-    if: ${{ github.ref == 'refs/heads/main' }}
-    concurrency: deploy-staging
-    environment: staging
-    needs:
-      - validate-gradle-wrapper
-      - check-source-code-formatting
-      - audit-licenses
-      - vulnerability-scan
-      - backend-tests-and-code-quality
-      - build-and-push-image
-      - run-e2e-tests
-    permissions:
-      id-token: write
-    steps:
-      - uses: chainguard-dev/actions/setup-gitsign@29fb6e979a0b3efc79748a17e8cec08d0594cbfd
-      - name: Deploy new images
-        uses: digitalservicebund/argocd-deploy@4fac1bb67c92ed168f6d9b22f8779ce241a9e412 # v1.0.0
-        with:
-          environment: staging
-          version: ${{ env.CONTAINER_IMAGE_VERSION }}
-          deploying_repo: ris-search # doesn't change anything, the public portal relies on the internal ("search") backend
-          infra_repo: neuris-portal-infra
-          deploy_key: ${{ secrets.PORTAL_INFRA_DEPLOY_KEY }}
-          app: ris-portal-staging
-          argocd_pipeline_password: ${{ secrets.ARGOCD_PIPELINE_PASSWORD }}
-          argocd_server: ${{ secrets.ARGOCD_SERVER }}
-          argocd_sync_timeout: 420
-
-  deploy-uat-portal:
-    runs-on: ubuntu-latest
-    if: ${{ github.ref == 'refs/heads/main' }}
-    environment: staging
-    needs:
-      - deploy-staging-portal
-    permissions:
-      id-token: write
-    steps:
-      - uses: chainguard-dev/actions/setup-gitsign@29fb6e979a0b3efc79748a17e8cec08d0594cbfd
-      - name: Deploy new images
-        uses: digitalservicebund/argocd-deploy@4fac1bb67c92ed168f6d9b22f8779ce241a9e412 # v1.0.0
-        with:
-          environment: uat
-          version: ${{ env.CONTAINER_IMAGE_VERSION }}
-          deploying_repo: ris-search
-          infra_repo: neuris-portal-infra
-          deploy_key: ${{ secrets.PORTAL_INFRA_DEPLOY_KEY }}
-          app: ris-portal-uat
-          argocd_pipeline_password: ${{ secrets.ARGOCD_PIPELINE_PASSWORD }}
-          argocd_server: ${{ secrets.ARGOCD_SERVER }}
-          argocd_sync_timeout: 420
 
   generate-backend-code-documentation:
     runs-on: ubuntu-latest
@@ -429,12 +368,3 @@ jobs:
               -m "From commit: ${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }}" &&
             git push origin main &&
             echo "Pushed documentation to ${{ github.server_url }}/${{ env.documentation-repo }}" >> $GITHUB_STEP_SUMMARY
-
-  run-e2e-tests:
-    needs:
-      - backend-tests-and-code-quality
-      - build-and-push-image
-    uses: ./.github/workflows/pipeline-e2e.yml
-    secrets: inherit
-    with:
-      backend_tag: ${{ github.sha }}

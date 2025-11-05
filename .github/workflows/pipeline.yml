@@ -1,0 +1,57 @@
+name: CI-CD-Pipeline
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  # Allow to run this workflow manually
+  workflow_dispatch:
+
+env:
+  RUN_ID: ${{ github.run_id }}
+
+jobs:
+  backend-jobs:
+    uses: ./.github/workflows/backend.yml
+    secrets: inherit
+    with:
+      container-registry: ghcr.io
+      container-image-tag: ghcr.io/${{ github.repository }}:${{ github.sha }}
+      container-image-version: ${{ github.sha }}
+
+  frontend-jobs:
+    uses: ./.github/workflows/frontend.yml
+    secrets: inherit
+    with:
+      container-registry: ghcr.io
+      container-image-tag: ghcr.io/${{ github.repository }}/frontend:${{ github.sha }}
+      container-image-version: ${{ github.sha }}
+
+  e2e-tests:
+    needs:
+      - backend-jobs
+      - frontend-jobs
+    uses: ./.github/workflows/pipeline-e2e.yml
+    secrets: inherit
+    with:
+      backend-container-image-tag: ghcr.io/${{ github.repository }}:${{ github.sha }}
+      frontend-container-image-tag:  ghcr.io/${{ github.repository }}/frontend:${{ github.sha }}
+
+  deploy-backend-staging-and-uat:
+    needs:
+      - e2e-tests
+    uses: ./.github/workflows/deploy.yml
+    secrets: inherit
+    with:
+      container-image-namespace: ${{ github.repository }}
+      container-image-version: ${{ github.sha }}
+
+  deploy-frontend-staging-and-uat:
+    needs:
+      - e2e-tests
+    uses: ./.github/workflows/deploy.yml
+    secrets: inherit
+    with:
+      container-image-namespace: ${{ github.repository }}/frontend
+      container-image-version: ${{ github.sha }}

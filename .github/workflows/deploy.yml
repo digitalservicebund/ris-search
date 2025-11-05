@@ -1,0 +1,56 @@
+name: Deploy Staging and UAT
+
+on:
+  workflow_call:
+    inputs:
+      container-image-namespace:
+        description: 'Namespace of the image tag, either "ris-search" or "ris-search/frontend"'
+        required: true
+        type: string
+      container-image-version:
+        description: 'The sha which identifies the image'
+        required: true
+        type: string
+
+jobs:
+  deploy-staging:
+    runs-on: ubuntu-latest
+    if: ${{ github.ref == 'refs/heads/main' }}
+    permissions:
+      id-token: write
+    steps:
+      - uses: chainguard-dev/actions/setup-gitsign@29fb6e979a0b3efc79748a17e8cec08d0594cbfd
+      - name: Deploy new images
+        uses: digitalservicebund/argocd-deploy@4fac1bb67c92ed168f6d9b22f8779ce241a9e412 # v1.0.0
+        with:
+          environment: staging
+          version: ${{ inputs.container-image-version }}
+          deploying_repo: ${{ inputs.container-image-namespace}}
+          infra_repo: neuris-portal-infra
+          deploy_key: ${{ secrets.PORTAL_INFRA_DEPLOY_KEY }}
+          app: ris-portal-staging
+          argocd_pipeline_password: ${{ secrets.ARGOCD_PIPELINE_PASSWORD }}
+          argocd_server: ${{ secrets.ARGOCD_SERVER }}
+          argocd_sync_timeout: 420
+
+  deploy-uat:
+    runs-on: ubuntu-latest
+    if: ${{ github.ref == 'refs/heads/main' }}
+    needs:
+      - deploy-staging
+    permissions:
+      id-token: write
+    steps:
+      - uses: chainguard-dev/actions/setup-gitsign@29fb6e979a0b3efc79748a17e8cec08d0594cbfd
+      - name: Deploy new images
+        uses: digitalservicebund/argocd-deploy@4fac1bb67c92ed168f6d9b22f8779ce241a9e412 # v1.0.0
+        with:
+          environment: uat
+          version: ${{ inputs.container-image-version }}
+          deploying_repo: ${{ inputs.container-image-namespace}}
+          infra_repo: neuris-portal-infra
+          deploy_key: ${{ secrets.PORTAL_INFRA_DEPLOY_KEY }}
+          app: ris-portal-uat
+          argocd_pipeline_password: ${{ secrets.ARGOCD_PIPELINE_PASSWORD }}
+          argocd_server: ${{ secrets.ARGOCD_SERVER }}
+          argocd_sync_timeout: 420

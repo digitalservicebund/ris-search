@@ -1,26 +1,24 @@
 name: Frontend
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - frontend/**
-      - .github/workflows/frontend.yml
-  pull_request:
-    branches: [main]
-    paths:
-      - frontend/**
-      - .github/workflows/frontend.yml
-  # Allow to run this workflow manually
-  workflow_dispatch:
+  workflow_call:
+    inputs:
+      container-image-tag:
+        description: 'The full tag for the frontend container image'
+        required: true
+        type: string
+      container-image-version:
+        description: 'The sha of the commit that triggered the pipeline'
+        required: true
+        type: string
+      container-registry:
+        description: 'Name of the container registry'
+        required: false
+        type: string
+        default: ghcr.io
 
 env:
   RUN_ID: ${{ github.run_id }}
-  CONTAINER_REGISTRY: ghcr.io
-  CONTAINER_IMAGE_NAME_IN_ORG: ris-search/frontend
-  CONTAINER_IMAGE_NAME: ghcr.io/digitalservicebund/ris-search/frontend
-  CONTAINER_IMAGE_VERSION: ${{ github.sha }}
-  BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
   SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
   SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
   SENTRY_RELEASE: ${{ github.sha }}
@@ -48,6 +46,7 @@ jobs:
         run: yarn run coverage
         working-directory: ./frontend
       - name: Set up SonarCloud
+        if: ${{  github.actor != 'dependabot[bot]' }}
         # Third-party action, pin to commit SHA!
         # See https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions
         uses: sonarsource/sonarcloud-github-action@eb211723266fe8e83102bac7361f0a05c3ac1d1b
@@ -60,15 +59,14 @@ jobs:
             -Dsonar.projectBaseDir=frontend
             -Dsonar.sources=src
             -Dsonar.javascript.lcov.reportPaths=src/coverage/lcov.info
-        if: ${{  github.actor != 'dependabot[bot]' }}
       - name: Check SonarCloud Quality Gate
+        if: ${{ github.actor != 'dependabot[bot]' }}
         uses: sonarsource/sonarqube-quality-gate-action@dc2f7b0dd95544cd550de3028f89193576e958b9
         with:
           scanMetadataReportFile: frontend/.scannerwork/report-task.txt
         timeout-minutes: 3
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        if: ${{ github.actor != 'dependabot[bot]' }}
       - name: Send status to Slack
         uses: digitalservicebund/notify-on-failure-gha@66c485757701f8d5dbee32f24df38d904ca693ba
         if: ${{ failure() && github.ref == 'refs/heads/main' }}
@@ -145,6 +143,8 @@ jobs:
   frontend-image-build-scan-and-push:
     runs-on: ubuntu-latest
     needs:
+      - check-frontend
+      - audit-licences-frontend
       - frontend-file-scan
     permissions:
       security-events: write
@@ -153,11 +153,6 @@ jobs:
       contents: read
     steps:
       - uses: actions/checkout@v5
-      - name: "Set environment variables"
-        run: |
-          echo "IMAGE_NAME_WITH_TAG=$CONTAINER_IMAGE_NAME:$CONTAINER_IMAGE_VERSION" >> $GITHUB_ENV
-          BRANCH_NAME_TAG=$(echo $BRANCH_NAME | sed -e 's/[^[:alnum:]]/-/g')
-          echo "IMAGE_NAME_BRANCH=$CONTAINER_IMAGE_NAME:$BRANCH_NAME_TAG" >> $GITHUB_ENV
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
       - name: Log into container registry
@@ -165,7 +160,7 @@ jobs:
         # See https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions
         uses: docker/login-action@28fdb31ff34708d19615a74d67103ddc2ea9725c
         with:
-          registry: ${{ env.CONTAINER_REGISTRY }}
+          registry: ${{ inputs.container-registry }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Build frontend image
@@ -173,7 +168,7 @@ jobs:
         with:
           file: frontend/Dockerfile
           context: frontend
-          tags: ${{ env.IMAGE_NAME_WITH_TAG }},${{ env.IMAGE_NAME_BRANCH }}
+          tags: ${{ inputs.container-image-tag}}
           push: true
           cache-from: type=gha
           cache-to: type=gha,mode=max
@@ -182,13 +177,13 @@ jobs:
         # See https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions
         uses: aquasecurity/trivy-action@a20de5420d57c4102486cdd9578b45609c99d7eb
         with:
-          image-ref: ${{ env.IMAGE_NAME_WITH_TAG }}
+          image-ref: ${{ inputs.container-image-tag}}
           format: "sarif"
           output: "trivy-results.sarif"
       - name: Upload Trivy vulnerability image scanner results (as artifact)
         uses: actions/upload-artifact@v4
         with:
-          name: "trivy-image-results-${{ matrix.app }}.sarif"
+          name: "trivy-image-results-frontend.sarif"
           path: "trivy-results.sarif"
           if-no-files-found: error
       - name: Upload Trivy image scan results to GitHub Security tab (on 'main' only)
@@ -217,7 +212,7 @@ jobs:
         uses: aquasecurity/trivy-action@a20de5420d57c4102486cdd9578b45609c99d7eb
         if: ${{ github.actor != 'dependabot[bot]' }}
         with:
-          image-ref: ${{ env.IMAGE_NAME_WITH_TAG }}
+          image-ref: ${{ inputs.container-image-tag }}
           format: "cosign-vuln"
           output: "vuln-frontend.json"
       - name: Upload Cosign vulnerability scan record
@@ -233,89 +228,25 @@ jobs:
         # See https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions
         uses: sigstore/cosign-installer@4959ce089c160fddf62f7b42464195ba1a56d382
       - name: Sign the published Docker image
-        run: cosign sign --yes ${{ env.IMAGE_NAME_WITH_TAG }}
         if: ${{ github.actor != 'dependabot[bot]' && github.ref == 'refs/heads/main' }}
+        run: cosign sign --yes ${{ inputs.container-image-tag }}
       - name: Attest vulnerability scan
-        run: cosign attest --yes --replace --predicate vuln-frontend.json --type vuln ${{ env.IMAGE_NAME_WITH_TAG }}
         if: ${{ github.actor != 'dependabot[bot]' && github.ref == 'refs/heads/main' }}
-      - id: set-version
-        run: echo "version=$CONTAINER_IMAGE_VERSION" >> "$GITHUB_OUTPUT"
+        run: cosign attest --yes --replace --predicate vuln-frontend.json --type vuln ${{ inputs.container-image-tag }}
       - name: Install Sentry CLI using official script
+        if: ${{ github.actor != 'dependabot[bot]' && github.ref == 'refs/heads/main' }}
         run: |
           curl -sL https://sentry.io/get-cli/ | bash
-        if: ${{ github.actor != 'dependabot[bot]' && github.ref == 'refs/heads/main' }}
       - name: Create and finalize Sentry release for frontend
-        run: |
-          sentry-cli releases new $CONTAINER_IMAGE_VERSION
-          sentry-cli releases set-commits --auto $CONTAINER_IMAGE_VERSION
-          sentry-cli releases finalize $CONTAINER_IMAGE_VERSION
         if: ${{ github.actor != 'dependabot[bot]' && github.ref == 'refs/heads/main' }}
+        run: |
+          sentry-cli releases new ${{ inputs.container-image-version }}
+          sentry-cli releases set-commits --auto ${{ inputs.container-image-version }}
+          sentry-cli releases finalize ${{ inputs.container-image-version }}
         env:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
       - name: Send status to Slack
-        uses: digitalservicebund/notify-on-failure-gha@66c485757701f8d5dbee32f24df38d904ca693ba
         if: ${{ failure() && github.ref == 'refs/heads/main' }}
+        uses: digitalservicebund/notify-on-failure-gha@66c485757701f8d5dbee32f24df38d904ca693ba
         with:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-
-  deploy-staging-portal:
-    runs-on: ubuntu-latest
-    if: ${{ github.ref == 'refs/heads/main' }}
-    concurrency: deploy-staging
-    environment:
-      name: staging
-      url: https://ris-portal.dev.ds4g.net/
-    needs:
-      - check-frontend
-      - frontend-file-scan
-      - frontend-image-build-scan-and-push
-      - run-e2e-tests
-    permissions:
-      id-token: write
-    steps:
-      - uses: chainguard-dev/actions/setup-gitsign@29fb6e979a0b3efc79748a17e8cec08d0594cbfd
-      - name: Deploy new images
-        uses: digitalservicebund/argocd-deploy@4fac1bb67c92ed168f6d9b22f8779ce241a9e412 # v1.0.0
-        with:
-          environment: staging
-          version: ${{ env.CONTAINER_IMAGE_VERSION }}
-          deploying_repo: ${{ env.CONTAINER_IMAGE_NAME_IN_ORG }}
-          infra_repo: neuris-portal-infra
-          deploy_key: ${{ secrets.PORTAL_INFRA_DEPLOY_KEY }}
-          app: ris-portal-staging
-          argocd_pipeline_password: ${{ secrets.ARGOCD_PIPELINE_PASSWORD }}
-          argocd_server: ${{ secrets.ARGOCD_SERVER }}
-          argocd_sync_timeout: 600
-
-  deploy-uat-portal:
-    runs-on: ubuntu-latest
-    if: ${{ github.ref == 'refs/heads/main' }}
-    environment:
-      name: staging
-      url: https://ris-portal.uat.ds4g.net/
-    needs:
-      - deploy-staging-portal
-    permissions:
-      id-token: write
-    steps:
-      - uses: chainguard-dev/actions/setup-gitsign@29fb6e979a0b3efc79748a17e8cec08d0594cbfd
-      - name: Deploy new images
-        uses: digitalservicebund/argocd-deploy@4fac1bb67c92ed168f6d9b22f8779ce241a9e412 # v1.0.0
-        with:
-          environment: uat
-          version: ${{ env.CONTAINER_IMAGE_VERSION }}
-          deploying_repo: ${{ env.CONTAINER_IMAGE_NAME_IN_ORG }}
-          infra_repo: neuris-portal-infra
-          deploy_key: ${{ secrets.PORTAL_INFRA_DEPLOY_KEY }}
-          app: ris-portal-uat
-          argocd_pipeline_password: ${{ secrets.ARGOCD_PIPELINE_PASSWORD }}
-          argocd_server: ${{ secrets.ARGOCD_SERVER }}
-          argocd_sync_timeout: 600
-
-  run-e2e-tests:
-    needs:
-      - frontend-image-build-scan-and-push
-    uses: ./.github/workflows/pipeline-e2e.yml
-    secrets: inherit
-    with:
-      frontend_tag: ${{ github.sha }}

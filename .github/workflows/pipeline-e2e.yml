@@ -1,22 +1,23 @@
-# A pipeline definition to run just the E2E tests
 name: End-to-end tests
 
 on:
   workflow_call:
     inputs:
-      backend_tag:
+      backend-container-image-tag:
+        description: 'The full tag for the backend container image'
+        required: true
         type: string
-        required: false
-      frontend_tag:
+      frontend-container-image-tag:
+        description: 'The full tag for the frontend container image'
+        required: true
         type: string
-        required: false
-  workflow_dispatch:
+
 
 env:
   RUN_ID: ${{ github.run_id }}
-  CONTAINER_REGISTRY: ghcr.io
-  CONTAINER_IMAGE_NAME: ${{ github.repository }}
-  CONTAINER_IMAGE_VERSION: ${{ github.sha }}
+  # Used by the docker-compose-ci.yml to load the correct images
+  BACKEND_IMAGE: ${{ inputs.backend-container-image-tag}}
+  FRONTEND_IMAGE: ${{ inputs.frontend-container-image-tag}}
 
 jobs:
   e2e-tests:
@@ -25,10 +26,12 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - profile: public
-            env_file_name: .env.ci.public
-          - profile: internal
-            env_file_name: .env.ci.internal
+          - configuration_label: prototype
+            env_file_name: .env.ci.prototype
+            private_features_enabled: false
+          - configuration_label: private
+            env_file_name: .env.ci.private
+            private_features_enabled: true
     steps:
       - uses: actions/checkout@v5
         with:
@@ -41,32 +44,9 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Adjust permissions to Docker
         run: sudo chmod 666 /var/run/docker.sock
-      - name: Set environment variables for backend and frontend
-        env:
-          INPUT_BACKEND_TAG: ${{ inputs.backend_tag }}
-          INPUT_FRONTEND_TAG: ${{ inputs.frontend_tag }}
-        run: |
-          BRANCH_NAME=${{ github.head_ref || github.ref_name }}
-          BRANCH_NAME_TAG=$(echo $BRANCH_NAME | sed -e 's/[^[:alnum:]]/-/g')
-          if [[ -n "${INPUT_BACKEND_TAG}" ]]; then
-            echo "BACKEND_IMAGE=ghcr.io/digitalservicebund/ris-search:${INPUT_BACKEND_TAG}" >> $GITHUB_ENV
-          elif docker pull ghcr.io/digitalservicebund/ris-search:${BRANCH_NAME_TAG}; then
-            echo "BACKEND_IMAGE=ghcr.io/digitalservicebund/ris-search:${BRANCH_NAME_TAG}" >> $GITHUB_ENV
-          else
-            echo "BACKEND_IMAGE=ghcr.io/digitalservicebund/ris-search:main" >> $GITHUB_ENV
-          fi
-          if [[ -n "${INPUT_FRONTEND_TAG}" ]]; then
-            echo "FRONTEND_IMAGE=ghcr.io/digitalservicebund/ris-search/frontend:${INPUT_FRONTEND_TAG}" >> $GITHUB_ENV
-          elif docker pull ghcr.io/digitalservicebund/ris-search/frontend:${BRANCH_NAME_TAG}; then
-            echo "FRONTEND_IMAGE=ghcr.io/digitalservicebund/ris-search/frontend:${BRANCH_NAME_TAG}" >> $GITHUB_ENV
-          else
-            echo "FRONTEND_IMAGE=ghcr.io/digitalservicebund/ris-search/frontend:main" >> $GITHUB_ENV
-          fi
-      - name: Run needed services
+      - name: Run backend and frontend
         run: docker compose -f docker-compose-ci.yml up -d
         env:
-          BACKEND_IMAGE: ${{ env.BACKEND_IMAGE }}
-          FRONTEND_IMAGE: ${{ env.FRONTEND_IMAGE }}
           ENV_FILE_NAME: ${{ matrix.env_file_name }}
       - uses: actions/setup-node@v6
         with:
@@ -94,64 +74,43 @@ jobs:
           until curl --silent --fail http://localhost:3000; do
             echo "Still waiting for frontend..."
             sleep 15
-            # Optionally add a max iteration guard
           done
-          curl_exit=$?
-          set -e
-          if [ $curl_exit -ne 0 ]; then
-            echo "❌ Frontend did not respond in time. Dumping logs:"
-            docker compose -f docker-compose-ci.yml logs frontend
-            exit 1
-          else
-            echo "Frontend is responding."
-          fi
-      - name: Run Playwright tests with private features enabled
-        if: ${{ matrix.profile == 'internal' }}
+      - name: Run Playwright tests
         run: yarn exec playwright test --project chromium firefox mobile
         working-directory: ./frontend
         env:
           RIS_BASE_URL: http://localhost:3000
-          NUXT_PUBLIC_PRIVATE_FEATURES_ENABLED: true
+          NUXT_PUBLIC_PRIVATE_FEATURES_ENABLED: ${{ matrix.private_features_enabled }}
           TZ: Europe/Berlin
-      - name: Run Playwright tests with private features disabled
-        if: ${{ matrix.profile == 'public' }}
-        run: yarn exec playwright test --project chromium firefox mobile
-        working-directory: ./frontend
-        env:
-          RIS_BASE_URL: http://localhost:3000
-          NUXT_PUBLIC_PRIVATE_FEATURES_ENABLED: false
-          TZ: Europe/Berlin
-      - name: Upload screenshots and traces of failed tests (${{ matrix.profile }})
+      - name: Upload test reports
+        uses: actions/upload-artifact@v4
+        if: ${{ !failure() }}
+        with:
+          name: playwright-e2e-tests-report-${{ matrix.configuration_label }}
+          path: frontend/playwright-report
+          retention-days: 5
+      - name: Upload screenshots and traces of failed tests
         uses: actions/upload-artifact@v4
         if: ${{ failure() }}
         with:
-          name: failed-e2e-tests-${{ inputs.project }}-${{ matrix.profile }}
+          name: failed-e2e-tests-${{ matrix.configuration_label }}
           path: |
             frontend/playwright-report/**/*.png
             frontend/playwright-report/**/*.zip
           retention-days: 5
-      - name: Upload test reports (${{ matrix.profile }})
-        uses: actions/upload-artifact@v4
-        if: ${{ !failure() }}
-        with:
-          name: playwright-report-${{ matrix.profile }}
-          path: frontend/playwright-report
-          retention-days: 5
-      - name: Output logs on failure (${{ matrix.profile }})
+      - name: Output logs on failure
         if: ${{ failure() }}
-        run: docker compose -f docker-compose-ci.yml logs > docker-compose-logs-${{ matrix.profile }}.log
+        run: docker compose -f docker-compose-ci.yml logs > docker-compose-logs-${{ matrix.configuration_label }}.log
         env:
-          BACKEND_IMAGE: ${{ env.BACKEND_IMAGE }}
-          FRONTEND_IMAGE: ${{ env.FRONTEND_IMAGE }}
           ENV_FILE_NAME: ${{ matrix.env_file_name }}
-      - name: Upload Docker logs (${{ matrix.profile }})
+      - name: Upload Docker logs
         uses: actions/upload-artifact@v4
         if: ${{ failure() }}
         with:
-          name: docker-compose-logs-${{ matrix.profile }}
-          path: docker-compose-logs-${{ matrix.profile }}.log
+          name: docker-compose-logs-${{ matrix.configuration_label }}
+          path: docker-compose-logs-${{ matrix.configuration_label }}.log
           retention-days: 5
-      - name: Tear down services (${{ matrix.profile }})
+      - name: Tear down services
         if: ${{ always() }}
         run: docker compose -f docker-compose-ci.yml down -v
         env:
