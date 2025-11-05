@@ -6,7 +6,6 @@ import de.bund.digitalservice.ris.search.mapper.LiteratureSchemaMapper;
 import de.bund.digitalservice.ris.search.models.opensearch.Literature;
 import de.bund.digitalservice.ris.search.schema.LiteratureEncodingSchema;
 import de.bund.digitalservice.ris.search.schema.LiteratureSchema;
-import java.time.LocalDate;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -20,7 +19,6 @@ class LiteratureSchemaMapperTest {
         Literature.builder()
             .id("XXLU000000001")
             .documentNumber("XXLU000000001")
-            .recordingDate(LocalDate.parse("1998-01-01"))
             .yearsOfPublication(List.of("1979", "2004-09"))
             .documentTypes(List.of("Auf"))
             .dependentReferences(List.of("BUV, 1982, 123-123"))
@@ -42,7 +40,6 @@ class LiteratureSchemaMapperTest {
 
     assertThat(literatureSchema.id()).isEqualTo("/v1/literature/XXLU000000001");
     assertThat(literatureSchema.inLanguage()).isEqualTo("de");
-    assertThat(literatureSchema.recordingDate()).isEqualTo(LocalDate.parse("1998-01-01"));
     assertThat(literatureSchema.documentNumber()).isEqualTo("XXLU000000001");
     assertThat(literatureSchema.yearsOfPublication()).containsExactly("1979", "2004-09");
     assertThat(literatureSchema.documentTypes()).containsExactly("Auf");

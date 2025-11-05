@@ -44,7 +44,6 @@ class LiteratureControllerApiTest extends ContainersIntegrationBase {
         .andExpectAll(
             status().isOk(),
             jsonPath("$.documentNumber", Matchers.is(documentNumberPersistedInTest)),
-            jsonPath("$.recordingDate", Matchers.is("1998-01-01")),
             jsonPath("$.yearsOfPublication", Matchers.containsInAnyOrder("1999", "2000", "2001")),
             jsonPath("$.documentTypes", Matchers.containsInAnyOrder("Kommentar", "Aufsatz")),
             jsonPath("$.dependentReferences", Matchers.contains("NJW, 2000, 456-789")),
@@ -160,7 +159,6 @@ class LiteratureControllerApiTest extends ContainersIntegrationBase {
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.member", hasSize(1)))
         .andExpect(jsonPath("$.member[0]['item'].documentNumber", Matchers.is("KALU000000001")))
-        .andExpect(jsonPath("$.member[0]['item'].recordingDate", Matchers.is("2013-01-01")))
         .andExpect(
             jsonPath(
                 "$.member[0]['item'].yearsOfPublication",

@@ -254,7 +254,6 @@ describe("get a document", () => {
     "@id": "/v1/literature/XXLU000000001",
     inLanguage: "de",
     documentNumber: "XXLU000000001",
-    recordingDate: "1998-01-01",
     yearsOfPublication: ["1979", "2004-09"],
     documentTypes: ["Auf"],
     dependentReferences: ["BUV, 1982, 123-123"],

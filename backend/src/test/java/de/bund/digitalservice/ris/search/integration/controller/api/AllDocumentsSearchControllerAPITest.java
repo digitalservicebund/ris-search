@@ -206,8 +206,8 @@ class AllDocumentsSearchControllerAPITest extends ContainersIntegrationBase {
               dates.add(item.getString("decisionDate"));
             } else if (item.has("legislationDate")) {
               dates.add(item.getString("legislationDate"));
-            } else if (item.has("recordingDate")) {
-              dates.add(item.getString("recordingDate"));
+            } else if (item.has("firstPublicationDate")) {
+              dates.add(item.getString("firstPublicationDate"));
             }
           }
           assertThat(dates).isSortedAccordingTo(Comparator.reverseOrder());

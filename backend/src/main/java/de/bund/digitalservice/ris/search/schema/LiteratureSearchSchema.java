@@ -16,12 +16,10 @@ public record LiteratureSearchSchema(
     @Schema(example = "KALU000000000") @JsonldId String id,
     @Schema(example = "de") String inLanguage,
     @Schema(description = "Dokumentnummer", example = "KALU000000000") String documentNumber,
-    @Schema(
-            example = "2003-12-15",
-            description = "The date on which the literature piece was recorded.")
-        LocalDate recordingDate,
     @Schema(description = "Veröffentlichungsjahre", example = "[2014, 2024-09]")
         List<String> yearsOfPublication,
+    @Schema(description = "Erstes Veröffentlichungsdatum", example = "2014-01-01")
+        LocalDate firstPublicationDate,
     @Schema(description = "Dokumenttypen", example = "['Auf']") List<String> documentTypes,
     @Schema(description = "Unselbstständige Fundstellen", example = "['BUV, 1982, 123-123']")
         List<String> dependentReferences,
