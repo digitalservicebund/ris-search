@@ -113,7 +113,7 @@ public class ContainersIntegrationBase {
 
     List<String> result = new ArrayList<>();
     result.addAll(allCaseLaw.stream().map(e -> e.decisionDate().toString()).toList());
-    result.addAll(allLiterature.stream().map(e -> e.recordingDate().toString()).toList());
+    result.addAll(allLiterature.stream().map(e -> e.firstPublicationDate().toString()).toList());
     result.addAll(allNorms.stream().map(e -> e.getEntryIntoForceDate().toString()).toList());
     return result;
   }

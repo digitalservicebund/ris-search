@@ -44,7 +44,7 @@ public class TestJsonUtils {
   private static String getDate(AbstractDocumentSchema entity) {
     return switch (entity) {
       case CaseLawSearchSchema c -> c.decisionDate().toString();
-      case LiteratureSearchSchema l -> l.recordingDate().toString();
+      case LiteratureSearchSchema l -> l.firstPublicationDate().toString();
       case LegislationWorkSearchSchema n ->
           Objects.requireNonNull(n.workExample()).temporalCoverage().substring(0, 10);
     };
