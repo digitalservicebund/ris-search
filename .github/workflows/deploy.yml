@@ -16,6 +16,8 @@ jobs:
   deploy-staging:
     runs-on: ubuntu-latest
     if: ${{ github.ref == 'refs/heads/main' }}
+    concurrency: deploy
+    environment: staging
     permissions:
       id-token: write
     steps:
@@ -36,6 +38,8 @@ jobs:
   deploy-uat:
     runs-on: ubuntu-latest
     if: ${{ github.ref == 'refs/heads/main' }}
+    concurrency: deploy
+    environment: staging
     needs:
       - deploy-staging
     permissions:
