@@ -61,7 +61,7 @@ public class StatisticsService {
 
   private long fetchCountWithLogging(String alias) throws IOException {
     try {
-      return fetchCount(alias); // your existing method
+      return fetchCount(alias);
     } catch (IOException e) {
       logger.warn("Failed to fetch count for index '{}': {}", alias, e.getMessage());
       throw e;
