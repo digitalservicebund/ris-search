@@ -21,7 +21,7 @@ import org.mockito.Mockito;
 class LiteratureLdmlToOpenSearchMapperTest {
 
   private static final String VALID_XML =
-      LoadXmlUtils.loadXmlAsString(Literature.class, "literatureLdml-1.akn.xml");
+      LoadXmlUtils.loadXmlAsString(Literature.class, "XXLU000000001.akn.xml");
 
   @Test
   @DisplayName("Correctly maps all available fields from valid literature LDML XML")
@@ -29,8 +29,8 @@ class LiteratureLdmlToOpenSearchMapperTest {
     Literature literature = LiteratureLdmlToOpenSearchMapper.mapLdml(VALID_XML);
 
     // Core identifiers
-    assertThat(literature.id()).isEqualTo("ABCD0000000001");
-    assertThat(literature.documentNumber()).isEqualTo("ABCD0000000001");
+    assertThat(literature.id()).isEqualTo("XXLU000000001");
+    assertThat(literature.documentNumber()).isEqualTo("XXLU000000001");
 
     // Publication info
     assertThat(literature.yearsOfPublication()).containsExactly("2025");
@@ -94,13 +94,13 @@ class LiteratureLdmlToOpenSearchMapperTest {
   void doesNotSetValuesForMissingOptionalDatapoints() {
     final String minimalValidLdml =
         """
-                <akn:akomaNtoso xmlns:akn="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" xmlns:ris="http://ldml.neuris.de/literature/unselbstaendig/metadata/">
+                <akn:akomaNtoso xmlns:akn="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" xmlns:ris="http://ldml.neuris.de/literature/unselbstaendig/meta/">
                   <akn:doc name="offene-struktur">
                     <akn:meta>
                       <akn:identification>
-                        <akn:FRBRExpression>
-                          <akn:FRBRalias name="documentNumber" value="BJLU002758328" />
-                        </akn:FRBRExpression>
+                        <akn:FRBRWork>
+                          <akn:FRBRalias name="Dokumentnummer" value="BJLU002758328" />
+                        </akn:FRBRWork>
                       </akn:identification>
                                   <akn:classification source="doktyp">
                                       <akn:keyword dictionary="attributsemantik-noch-undefiniert" showAs="Auf" value="Auf"/>
@@ -142,13 +142,13 @@ class LiteratureLdmlToOpenSearchMapperTest {
     final String xmlTemplate =
         """
                   <akn:akomaNtoso xmlns:akn="http://docs.oasis-open.org/legaldocml/ns/akn/3.0"
-                                   xmlns:ris="http://ldml.neuris.de/literature/unselbstaendig/metadata/">
+                                   xmlns:ris="http://ldml.neuris.de/literature/unselbstaendig/meta/">
                     <akn:doc name="offene-struktur">
                       <akn:meta>
                         <akn:identification>
-                          <akn:FRBRExpression>
-                            <akn:FRBRalias name="documentNumber" value="DOC-PARAM" />
-                          </akn:FRBRExpression>
+                          <akn:FRBRWork>
+                            <akn:FRBRalias name="Dokumentnummer" value="XXLU000000001" />
+                          </akn:FRBRWork>
                         </akn:identification>
                         <akn:classification source="doktyp">
                           <akn:keyword dictionary="attributsemantik-noch-undefiniert" showAs="Auf" value="Auf"/>

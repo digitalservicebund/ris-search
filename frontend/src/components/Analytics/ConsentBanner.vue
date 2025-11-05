@@ -2,14 +2,25 @@
 import { storeToRefs } from "pinia";
 import PrimeVueButton from "primevue/button";
 import { usePostHogStore } from "~/stores/usePostHogStore";
-import IconCheck from "~icons/ic/check";
-import IconClose from "~icons/ic/close";
 
 const store = usePostHogStore();
+
+if (import.meta.server) {
+  const cookieHeader = useRequestHeaders(["cookie"]);
+  const cookies = cookieHeader.cookie || "";
+  const consentMatch = cookies.match(/consent_given=([^;]+)/);
+  if (consentMatch) {
+    const consentValue = consentMatch[1];
+    store.userConsent = consentValue === "true";
+  }
+}
+
 const { isBannerVisible } = storeToRefs(store);
 const handleSetTracking = (value: boolean) => {
   store.setTracking(value);
 };
+
+const consentAction = "/api/cookie-consent";
 </script>
 
 <template>
@@ -35,26 +46,34 @@ const handleSetTracking = (value: boolean) => {
       </div>
 
       <div class="flex flex-wrap items-center gap-x-24 gap-y-12 pt-16 lg:pt-24">
-        <PrimeVueButton
-          aria-label="Cookie-Akzeptieren-Button"
-          label="Akzeptieren"
-          data-testid="accept-cookie"
-          @click="handleSetTracking(true)"
+        <form
+          :action="consentAction"
+          method="POST"
+          class="inline"
+          @submit.prevent="handleSetTracking(true)"
         >
-          <template #icon>
-            <IconCheck />
-          </template>
-        </PrimeVueButton>
-        <PrimeVueButton
-          aria-label="Cookie-Ablehnen-Button"
-          label="Ablehnen"
-          data-testid="decline-cookie"
-          @click="handleSetTracking(false)"
+          <input type="hidden" name="consent" value="true" />
+          <PrimeVueButton
+            aria-label="Cookie-Akzeptieren-Button"
+            label="Akzeptieren"
+            data-testid="accept-cookie"
+            type="submit"
+          />
+        </form>
+        <form
+          :action="consentAction"
+          method="POST"
+          class="inline"
+          @submit.prevent="handleSetTracking(false)"
         >
-          <template #icon>
-            <IconClose />
-          </template>
-        </PrimeVueButton>
+          <input type="hidden" name="consent" value="false" />
+          <PrimeVueButton
+            aria-label="Cookie-Ablehnen-Button"
+            label="Ablehnen"
+            data-testid="decline-cookie"
+            type="submit"
+          />
+        </form>
         <NuxtLink to="/datenschutz" class="ris-link1-regular">
           Datenschutzerklärung
         </NuxtLink>

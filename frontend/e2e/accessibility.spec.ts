@@ -72,12 +72,21 @@ const testPages = [
   },
   {
     name: "Literature View Page",
-    url: "/literature/TEST000000001",
+    url: "/literature/XXLU000000001",
     tabs: ["Details"],
   },
   {
     name: "Translations List View",
     url: "/literature/translations",
+  },
+  {
+    name: "Translation View Page",
+    url: "/translations/FG",
+    tabs: ["Text", "Details"],
+  },
+  {
+    name: "Introduction Page",
+    url: "/einfuehrung",
   },
 ];
 
@@ -94,7 +103,7 @@ test.describe("General Pages Accessibility Tests", () => {
       if (tabs) {
         for (const tab of tabs) {
           currentTab++;
-          await page.getByRole("tab", { name: tab }).click();
+          await page.getByRole("link", { name: tab }).click();
           await page.waitForLoadState("networkidle");
           tabsAnalysisResults[currentTab] = await new AxeBuilder({ page })
             .exclude("nuxt-devtools-frame")

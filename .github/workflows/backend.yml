@@ -35,7 +35,7 @@ jobs:
     steps:
       - uses: actions/checkout@v5
       - name: Validate gradle wrapper
-        uses: gradle/actions/wrapper-validation@v3.5.0
+        uses: gradle/actions/wrapper-validation@v5.0.0
 
   check-source-code-formatting:
     runs-on: ubuntu-latest
@@ -87,7 +87,7 @@ jobs:
           java-version: "21.0"
           distribution: "temurin"
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v3.5.0
+        uses: gradle/actions/setup-gradle@v5.0.0
       - name: Build container image
         working-directory: ./backend
         run: ./gradlew bootBuildImage
@@ -239,7 +239,7 @@ jobs:
       - name: Log into container registry
         # Third-party action, pin to commit SHA!
         # See https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions
-        uses: docker/login-action@3b8fed7e4b60203b2aa0ecc6c6d6d91d12c06760
+        uses: docker/login-action@28fdb31ff34708d19615a74d67103ddc2ea9725c
         with:
           registry: ${{ env.CONTAINER_REGISTRY }}
           username: ${{ github.actor }}

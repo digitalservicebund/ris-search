@@ -1,9 +1,5 @@
 <script setup lang="ts">
-import Tab from "primevue/tab";
-import TabList from "primevue/tablist";
-import TabPanel from "primevue/tabpanel";
-import TabPanels from "primevue/tabpanels";
-import Tabs from "primevue/tabs";
+import { computed } from "vue";
 import type { ComputedRef } from "vue";
 import { useFetch } from "#app";
 import CaseLawActionsMenu from "~/components/ActionMenu/CaseLawActionsMenu.vue";
@@ -18,11 +14,8 @@ import Properties from "~/components/Properties.vue";
 import PropertiesItem from "~/components/PropertiesItem.vue";
 import RisBreadcrumb from "~/components/Ris/RisBreadcrumb.vue";
 import RisDocumentTitle from "~/components/Ris/RisDocumentTitle.vue";
-import {
-  tabListStyles,
-  tabPanelStyles,
-  tabStyles,
-} from "~/components/Tabs.styles";
+import RisTabs from "~/components/Ris/RisTabs.vue";
+import { tabPanelClass } from "~/components/Tabs.styles";
 import { useBackendURL } from "~/composables/useBackendURL";
 import { type CaseLaw, DocumentKind } from "~/types";
 import { getEncodingURL } from "~/utils/caseLaw";
@@ -163,6 +156,23 @@ const formattedFileNumbers = computed(() =>
 const formattedDescisionNames = computed(() =>
   formatArray(caseLaw.value?.decisionName ?? []),
 );
+
+const tabs = computed(() => [
+  {
+    id: "text",
+    href: "#text",
+    label: "Text",
+    ariaLabel: "Text der Gerichtsentscheidung",
+    icon: IcBaselineSubject,
+  },
+  {
+    id: "details",
+    href: "#details",
+    label: "Details",
+    ariaLabel: "Details zur Gerichtsentscheidung",
+    icon: IcOutlineInfo,
+  },
+]);
 </script>
 
 <template>
@@ -185,29 +195,17 @@ const formattedDescisionNames = computed(() =>
         <MetadataField label="Aktenzeichen" :value="formattedFileNumbers" />
       </div>
     </div>
-    <Tabs v-if="!!caseLaw" value="0">
-      <TabList :pt="tabListStyles">
-        <Tab
-          class="flex items-center gap-8"
-          :pt="tabStyles"
-          value="0"
-          aria-label="Text der Gerichtsentscheidung"
-          ><IcBaselineSubject />Text</Tab
+
+    <RisTabs :tabs="tabs" aria-label="Ansichten der Gerichtsentscheidung">
+      <template #default="{ activeTab, isClient }">
+        <section
+          id="text"
+          :class="tabPanelClass"
+          :hidden="isClient && activeTab !== 'text'"
         >
-        <Tab
-          data-attr="caselaw-metadata-tab"
-          class="flex items-center gap-8"
-          :pt="tabStyles"
-          value="1"
-          aria-label="Details zur Gerichtsentscheidung"
-          ><IcOutlineInfo />Details</Tab
-        >
-      </TabList>
-      <TabPanels>
-        <TabPanel value="0" :pt="tabPanelStyles">
-          <!-- Content -->
           <SidebarLayout class="container">
             <template #content>
+              <h2 class="sr-only">Text</h2>
               <IncompleteDataMessage class="mb-16" />
               <div class="case-law" v-html="html"></div>
             </template>
@@ -217,20 +215,25 @@ const formattedDescisionNames = computed(() =>
               </client-only>
             </template>
           </SidebarLayout>
-        </TabPanel>
-        <TabPanel value="1" :pt="tabPanelStyles" class="pt-24 pb-80">
-          <section aria-labelledby="detailsTabPanelTitle" class="container">
+        </section>
+
+        <section
+          id="details"
+          :class="tabPanelClass"
+          :hidden="isClient && activeTab !== 'details'"
+          aria-labelledby="detailsTabPanelTitle"
+        >
+          <div class="container">
             <h2 id="detailsTabPanelTitle" class="ris-heading3-bold my-24">
               Details
             </h2>
             <IncompleteDataMessage class="my-24" />
-
             <Properties>
               <PropertiesItem
                 label="Spruchkörper:"
-                :value="caseLaw.judicialBody"
+                :value="caseLaw?.judicialBody"
               />
-              <PropertiesItem label="ECLI:" :value="caseLaw.ecli" />
+              <PropertiesItem label="ECLI:" :value="caseLaw?.ecli" />
               <PropertiesItem label="Normen:" value="" />
               <PropertiesItem
                 label="Entscheidungsname:"
@@ -245,13 +248,13 @@ const formattedDescisionNames = computed(() =>
                   :href="zipUrl"
                 >
                   <MaterialSymbolsDownload class="mr-2 inline" />
-                  {{ caseLaw.documentNumber }} als ZIP herunterladen
+                  {{ caseLaw?.documentNumber }} als ZIP herunterladen
                 </NuxtLink>
               </PropertiesItem>
             </Properties>
-          </section>
-        </TabPanel>
-      </TabPanels>
-    </Tabs></ContentWrapper
-  >
+          </div>
+        </section>
+      </template>
+    </RisTabs>
+  </ContentWrapper>
 </template>

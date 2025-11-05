@@ -26,9 +26,9 @@ class LdmlTemporalDataTest {
 
   private String testContent =
       """
-         <?xml-model href="../../../Grammatiken/legalDocML.de.sch" schematypens="http://purl.oclc.org/dsdl/schematron"?>
-         <?xml-model href="../../../Grammatiken/legalDocML.de.sch" schematypens="http://purl.oclc.org/dsdl/schematron"?>
-         <?xml-model href="../../../Grammatiken/legalDocML.de.sch" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+         <?xml-model href="../../../Grammatiken/Norms/legalDocML.de.sch" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+         <?xml-model href="../../../Grammatiken/Norms/legalDocML.de.sch" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+         <?xml-model href="../../../Grammatiken/Norms/legalDocML.de.sch" schematypens="http://purl.oclc.org/dsdl/schematron"?>
          <akn:akomaNtoso xmlns:akn="http://Inhaltsdaten.LegalDocML.de/1.8.2/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://Inhaltsdaten.LegalDocML.de/1.8.2/ ../schema/legalDocML.de-regelungstextverkuendungsfassung.xsd">
            <akn:act name="regelungstext">
              <akn:meta GUID="87b3446a-faa1-4d81-bb34-48ce7929de86" eId="meta-1">

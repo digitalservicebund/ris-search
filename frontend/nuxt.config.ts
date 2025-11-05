@@ -105,9 +105,6 @@ export default defineNuxtConfig({
     "@nuxt/scripts",
     "@nuxtjs/sitemap",
   ],
-  imports: {
-    scan: false,
-  },
   devtools: {
     enabled: true,
   },
@@ -157,6 +154,7 @@ export default defineNuxtConfig({
   security: {
     strict: config.production,
     headers: {
+      referrerPolicy: "same-origin",
       contentSecurityPolicy: {
         "style-src": ["'self'", "https:", "'unsafe-inline'"],
         "img-src": ["'self'", "data:", "'unsafe-inline'"],
@@ -227,7 +225,7 @@ export default defineNuxtConfig({
   },
   vite: {
     optimizeDeps: {
-      include: ["cookie", "hyperdx/lucene"],
+      include: ["cookie"],
     },
     build: {
       sourcemap: "inline",
@@ -253,9 +251,6 @@ export default defineNuxtConfig({
         types: ["unplugin-icons/types/vue"],
       },
     },
-  },
-  build: {
-    transpile: ["hyperdx/lucene"],
   },
   ignore: [
     "**/**/*.{spec,test}.{js,cts,mts,ts,jsx,tsx}",

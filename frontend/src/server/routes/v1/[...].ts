@@ -1,8 +1,8 @@
 import { HttpStatusCode } from "axios";
 import { defineEventHandler, getRequestURL, createError } from "h3";
 import { FetchError } from "ofetch";
-import { requireAccessTokenWithRefresh } from "../../auth";
 import { useRuntimeConfig } from "#imports";
+import { requireAccessTokenWithRefresh } from "~/server/auth";
 
 export default defineEventHandler(async (event): Promise<unknown> => {
   const runtimeConfig = useRuntimeConfig(event);

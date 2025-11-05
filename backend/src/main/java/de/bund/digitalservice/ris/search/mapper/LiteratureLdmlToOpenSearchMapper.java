@@ -4,7 +4,6 @@ import de.bund.digitalservice.ris.search.caselawhandover.shared.caselawldml.Frbr
 import de.bund.digitalservice.ris.search.exception.OpenSearchMapperException;
 import de.bund.digitalservice.ris.search.models.ldml.literature.Analysis;
 import de.bund.digitalservice.ris.search.models.ldml.literature.Doc;
-import de.bund.digitalservice.ris.search.models.ldml.literature.FrbrDate;
 import de.bund.digitalservice.ris.search.models.ldml.literature.FrbrExpression;
 import de.bund.digitalservice.ris.search.models.ldml.literature.FrbrNameValueElement;
 import de.bund.digitalservice.ris.search.models.ldml.literature.FrbrWork;
@@ -23,7 +22,6 @@ import de.bund.digitalservice.ris.search.models.ldml.literature.TlcEvent;
 import de.bund.digitalservice.ris.search.models.ldml.literature.TlcOrganization;
 import de.bund.digitalservice.ris.search.models.ldml.literature.TlcPerson;
 import de.bund.digitalservice.ris.search.models.opensearch.Literature;
-import de.bund.digitalservice.ris.search.utils.DateUtils;
 import jakarta.xml.bind.DataBindingException;
 import jakarta.xml.bind.JAXB;
 import jakarta.xml.bind.ValidationException;
@@ -61,7 +59,6 @@ public class LiteratureLdmlToOpenSearchMapper {
     return Literature.builder()
         .id(documentNumber)
         .documentNumber(documentNumber)
-        .recordingDate(extractRecordingDate(literatureLdml))
         .yearsOfPublication(extractYearsOfPublication(literatureLdml))
         .firstPublicationDate(firstYearOfPublication)
         .documentTypes(extractDocumentTypes(literatureLdml))
@@ -112,11 +109,11 @@ public class LiteratureLdmlToOpenSearchMapper {
             .map(LiteratureLdml::getDoc)
             .map(Doc::getMeta)
             .map(Meta::getIdentification)
-            .map(Identification::getFrbrExpression)
-            .map(FrbrExpression::getFrbrAlias)
+            .map(Identification::getFrbrWork)
+            .map(FrbrWork::getFrbrAliasList)
             .orElse(Collections.emptyList())
             .stream()
-            .filter(alias -> Objects.equals(alias.getName(), "documentNumber"))
+            .filter(alias -> Objects.equals(alias.getName(), "Dokumentnummer"))
             .findFirst()
             .map(FrbrNameValueElement::getValue)
             .orElse(null);
@@ -126,18 +123,6 @@ public class LiteratureLdmlToOpenSearchMapper {
     }
 
     return documentNumber;
-  }
-
-  private static LocalDate extractRecordingDate(LiteratureLdml literatureLdml) {
-    return Optional.ofNullable(literatureLdml)
-        .map(LiteratureLdml::getDoc)
-        .map(Doc::getMeta)
-        .map(Meta::getIdentification)
-        .map(Identification::getFrbrWork)
-        .map(FrbrWork::getFrbrDate)
-        .map(FrbrDate::getDate)
-        .map(DateUtils::nullSafeParseyyyyMMdd)
-        .orElse(null);
   }
 
   private static List<String> extractYearsOfPublication(LiteratureLdml literatureLdml)

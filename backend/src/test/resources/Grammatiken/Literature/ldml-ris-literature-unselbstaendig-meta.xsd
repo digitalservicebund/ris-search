@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns="http://ldml.neuris.de/literature/unselbstaendig/meta/"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:risCommon="http://ldml.neuris.de/literature/meta/"
+           elementFormDefault="qualified"
+           targetNamespace="http://ldml.neuris.de/literature/unselbstaendig/meta/" version="1.0">
+  <xs:import namespace="http://ldml.neuris.de/literature/meta/" schemaLocation="ldml-ris-literature.xsd"/>
+  <xs:element name="meta">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="sachgebiete" minOccurs="0">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="sachgebiet" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:simpleContent>
+                    <xs:extension base="xs:string">
+                      <xs:attribute name="notation" type="xs:string" use="required"/>
+                    </xs:extension>
+                  </xs:simpleContent>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="veroeffentlichungsJahre">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="veroeffentlichungsJahr" type="xs:string" maxOccurs="unbounded"/>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="gliederung" minOccurs="0">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="gliederungEntry" type="xs:string" maxOccurs="unbounded"/>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="regionen" minOccurs="0">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="region" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:simpleContent>
+                    <xs:extension base="xs:string">
+                      <xs:attribute name="domainTerm" type="xs:string" use="required"/>
+                    </xs:extension>
+                  </xs:simpleContent>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+            <xs:attribute name="domainTerm" type="xs:string" use="required"/>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="zuordnungen" minOccurs="0">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="zuordnung" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:attribute name="aspekt" use="required"/>
+                  <xs:attribute name="begriff" use="required"/>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="historicAdministrativeData" minOccurs="0">
+          <xs:complexType mixed="true">
+            <xs:choice>
+              <xs:any processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:choice>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="dubletteToleriert" minOccurs="0"/>
+        <xs:element name="verweisnotationen" minOccurs="0">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="verweisnotation" type="xs:string" maxOccurs="unbounded"/>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="problemkreise" minOccurs="0">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="problemkreis" type="xs:string" maxOccurs="unbounded"/>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="fundstelleUnselbstaendig">
+    <xs:complexType>
+      <xs:attribute name="periodikum" type="xs:string" use="required"/>
+      <xs:attribute name="zitatstelle" type="xs:string" use="required"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="fundstelleSelbstaendig">
+    <xs:complexType>
+      <xs:attribute name="titel" type="xs:string" use="required"/>
+      <xs:attribute name="zitatstelle" type="xs:string" use="required"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="normReference" type="risCommon:normReferenceType"/>
+  <xs:element name="caselawReference">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="risCommon:caselawReferenceAttributeType">
+          <xs:sequence>
+            <xs:element name="fundstelle" minOccurs="0">
+              <xs:complexType>
+                <xs:complexContent>
+                  <xs:extension base="risCommon:fundstelleAttributeType"/>
+                </xs:complexContent>
+              </xs:complexType>
+            </xs:element>
+          </xs:sequence>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="vvReference">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="risCommon:vvReferenceAttributeType">
+          <xs:sequence>
+            <xs:element name="fundstelle" minOccurs="0">
+              <xs:complexType>
+                <xs:complexContent>
+                  <xs:extension base="risCommon:fundstelleAttributeType"/>
+                </xs:complexContent>
+              </xs:complexType>
+            </xs:element>
+          </xs:sequence>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="unselbstaendigeLiteraturReference" type="risCommon:unselbstaendigeLiteraturReferenceType"/>
+  <xs:element name="selbstaendigeLiteraturReference" type="risCommon:selbstaendigeLiteraturReferenceType"/>
+  <xs:attribute name="name" type="xs:string"/>
+  <xs:attribute name="titel" type="xs:string"/>
+  <xs:attribute name="zusatz" type="xs:string"/>
+  <xs:attribute name="jahr" type="xs:gYear"/>
+  <xs:attribute name="ort" type="xs:string"/>
+  <xs:attribute name="land" type="xs:string"/>
+</xs:schema>

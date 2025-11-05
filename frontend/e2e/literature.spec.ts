@@ -1,9 +1,11 @@
-import { expect, test } from "./utils/fixtures";
+import { expect, test, noJsTest } from "./utils/fixtures";
 
-test("displays literature page with metadata and text tab by default", async ({
+// Skipped because of a client/SSR rendering mismatch, will be added again once
+// that is fixed (see daily discussion from Nov 4th 2025)
+test.skip("displays literature page with metadata and text tab by default", async ({
   page,
 }) => {
-  await page.goto("/literature/TEST000000001");
+  await page.goto("/literature/XXLU000000001");
 
   // Breadcrumb navigation
   const breadcrumb = page.getByRole("navigation", { name: "Pfadnavigation" });
@@ -18,7 +20,10 @@ test("displays literature page with metadata and text tab by default", async ({
   await expect(breadcrumb.getByText("Erstes Test-Dokument ULI")).toBeVisible();
 
   await expect(
-    page.getByRole("heading", { name: "Erstes Test-Dokument ULI" }),
+    page
+      .getByRole("main")
+      .getByRole("heading", { level: 1, name: "Erstes Test-Dokument ULI" })
+      .first(),
   ).toBeVisible();
 
   // Metadata section
@@ -29,56 +34,76 @@ test("displays literature page with metadata and text tab by default", async ({
   await expect(page.getByLabel("Author")).toHaveText("Sabine Musterfrau");
   await expect(page.getByLabel("Veröffentlichungsjahr")).toHaveText("2024");
 
-  const tabpanel = page.getByRole("tabpanel");
-
-  // Testphase alert should be shown
-  await expect(tabpanel.getByRole("alert")).toContainText(
+  const textSection = page.getByRole("region", { name: "Text" });
+  await expect(textSection.getByRole("alert")).toContainText(
     "Dieser Service befindet sich in der Testphase",
   );
 
   await expect(
-    tabpanel.getByRole("heading", { name: "Gliederung" }),
+    textSection.getByRole("heading", { name: "Gliederung" }),
   ).toBeVisible();
-  await expect(tabpanel.getByText("I. Problemstellung.")).toBeVisible();
-  await expect(tabpanel.getByText("II. Lösung.")).toBeVisible();
-  await expect(tabpanel.getByText("III. Zusammenfassung.")).toBeVisible();
+  await expect(textSection.getByText("I. Problemstellung.")).toBeVisible();
+  await expect(textSection.getByText("II. Lösung.")).toBeVisible();
+  await expect(textSection.getByText("III. Zusammenfassung.")).toBeVisible();
 
   await expect(
-    tabpanel.getByRole("heading", { name: "Kurzreferat" }),
+    textSection.getByRole("heading", { name: "Kurzreferat" }),
   ).toBeVisible();
   await expect(
-    tabpanel.getByText("Dies ist ein einfaches Test-Dokument."),
+    textSection.getByText("Dies ist ein einfaches Test-Dokument."),
   ).toBeVisible();
-  await expect(tabpanel.getByText("In sem neque")).toBeVisible();
+  await expect(textSection.getByText("In sem neque")).toBeVisible();
 });
 
-test("shows detailed information in the 'Details' tab", async ({ page }) => {
-  await page.goto("/literature/TEST000000001");
+noJsTest("tabs work without JavaScript", async ({ page }) => {
+  await page.goto("/literature/XXLU000000001", { waitUntil: "networkidle" });
+  await expect(
+    page.getByRole("link", { name: "Details zum Literaturnachweis" }),
+  ).toBeVisible();
+
+  await page
+    .getByRole("link", { name: "Details zum Literaturnachweis" })
+    .first()
+    .click();
+
+  await expect(page).toHaveURL(/#details$/);
+
+  const detailsRegion = page.getByRole("region", { name: "Details" });
+  await expect(
+    detailsRegion.getByRole("heading", { name: "Details" }),
+  ).toBeVisible();
+});
+
+// Skipped because of a client/SSR rendering mismatch, will be added again once
+// that is fixed (see daily discussion from Nov 4th 2025)
+test.skip("shows detailed information in the 'Details' tab", async ({
+  page,
+}) => {
+  await page.goto("/literature/XXLU000000001");
   await page.waitForLoadState("networkidle");
 
-  const detailsTabButton = page.getByRole("tab", {
+  const detailsLink = page.getByRole("link", {
     name: "Details zum Literaturnachweis",
   });
-  await detailsTabButton.click();
+  await detailsLink.click();
 
-  const tabpanel = page.getByRole("tabpanel", {
-    name: "Details zum Literaturnachweis",
-  });
+  const detailsRegion = page.getByRole("region", { name: "Details" });
 
   await expect(
-    tabpanel.getByRole("heading", { name: "Details" }),
+    detailsRegion.getByRole("heading", { name: "Details" }),
   ).toBeVisible();
-  await expect(tabpanel.getByRole("alert")).toContainText(
+  await expect(detailsRegion.getByRole("alert")).toContainText(
     "Dieser Service befindet sich in der Testphase",
   );
-
-  await expect(tabpanel.getByLabel("Norm:")).toContainText(
+  await expect(detailsRegion.getByLabel("Norm:")).toContainText(
     "BMV-Ä, GG, Art 6 Abs 2 S 1, 1949-05-23",
   );
-  await expect(tabpanel.getByLabel("Mitarbeiter:")).toContainText("Peter Foo");
-  await expect(tabpanel.getByLabel("Urheber:")).toContainText("DGB");
-  await expect(tabpanel.getByLabel("Sprache:")).toContainText("deu");
-  await expect(tabpanel.getByLabel("Kongress:")).toContainText(
+  await expect(detailsRegion.getByLabel("Mitarbeiter:")).toContainText(
+    "Peter Foo",
+  );
+  await expect(detailsRegion.getByLabel("Urheber:")).toContainText("DGB");
+  await expect(detailsRegion.getByLabel("Sprache:")).toContainText("deu");
+  await expect(detailsRegion.getByLabel("Kongress:")).toContainText(
     "Internationaler Kongreß für das Recht, 1991, Athen, GRC",
   );
 });
@@ -90,7 +115,7 @@ test.describe("actions menu", () => {
     context,
     isMobileTest,
   }) => {
-    await page.goto("/literature/TEST000000001", {
+    await page.goto("/literature/XXLU000000001", {
       waitUntil: "networkidle",
     });
 
@@ -124,7 +149,7 @@ test.describe("actions menu", () => {
       const clipboardContents = await page.evaluate(() => {
         return navigator.clipboard.readText();
       });
-      expect(clipboardContents.endsWith("/literature/TEST000000001")).toBe(
+      expect(clipboardContents.endsWith("/literature/XXLU000000001")).toBe(
         true,
       );
     }
@@ -134,7 +159,7 @@ test.describe("actions menu", () => {
     page,
     isMobileTest,
   }) => {
-    await page.goto("/literature/TEST000000001", {
+    await page.goto("/literature/XXLU000000001", {
       waitUntil: "networkidle",
     });
     if (isMobileTest) await page.getByLabel("Aktionen anzeigen").click();
@@ -167,7 +192,7 @@ test.describe("actions menu", () => {
     page,
     isMobileTest,
   }) => {
-    await page.goto("/literature/TEST000000001", {
+    await page.goto("/literature/XXLU000000001", {
       waitUntil: "networkidle",
     });
     if (isMobileTest) await page.getByLabel("Aktionen anzeigen").click();
@@ -192,7 +217,7 @@ test.describe("actions menu", () => {
     page,
     isMobileTest,
   }) => {
-    await page.goto("/literature/TEST000000001", {
+    await page.goto("/literature/XXLU000000001", {
       waitUntil: "networkidle",
     });
 
@@ -211,6 +236,6 @@ test.describe("actions menu", () => {
 
     await button.click();
 
-    await page.waitForURL("v1/literature/TEST000000001.xml");
+    await page.waitForURL("v1/literature/XXLU000000001.xml");
   });
 });

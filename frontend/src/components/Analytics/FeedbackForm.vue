@@ -26,6 +26,22 @@ const submitFeedback = async () => {
   }
 };
 defineProps<{ hideIntro?: boolean }>();
+
+const feedbackAction = "/api/feedback";
+
+const route = useRoute();
+
+watch(
+  () => route.query.feedback,
+  (feedbackParam) => {
+    if (feedbackParam === "sent") {
+      isSent.value = true;
+    } else if (feedbackParam === "error") {
+      errorMessage.value = sendingError;
+    }
+  },
+  { immediate: true },
+);
 </script>
 
 <template>
@@ -62,7 +78,13 @@ defineProps<{ hideIntro?: boolean }>();
         >Für Nutzungsstudien registrieren
       </ButtonLink>
     </div>
-    <div v-else class="space-y-24">
+    <form
+      v-else
+      class="space-y-24"
+      :action="feedbackAction"
+      method="POST"
+      @submit.prevent="submitFeedback"
+    >
       <div v-if="!hideIntro" class="flex flex-col space-y-8">
         <h2 class="ris-heading2-bold">Geben Sie uns Feedback</h2>
         <p class="ris-body1-regular">
@@ -72,13 +94,16 @@ defineProps<{ hideIntro?: boolean }>();
         </p>
       </div>
       <div class="flex flex-col space-y-2">
-        <p class="ris-label2-regular">Feedback</p>
+        <label for="feedback-message" class="ris-label2-regular"
+          >Feedback</label
+        >
         <PrimevueTextarea
           id="feedback-message"
           v-model="feedback"
           :invalid="!isStringEmpty(errorMessage)"
           class="min-h-160 w-full"
           placeholder="Feedback eingeben"
+          name="text"
           @update:model-value="
             () => {
               errorMessage = undefined;
@@ -94,10 +119,10 @@ defineProps<{ hideIntro?: boolean }>();
         <Button
           data-test-id="submit-feedback-button"
           class="w-auto"
-          @click="submitFeedback"
+          type="submit"
           >Feedback senden</Button
         >
       </div>
-    </div>
+    </form>
   </div>
 </template>

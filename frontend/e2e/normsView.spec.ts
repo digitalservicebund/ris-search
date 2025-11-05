@@ -1,4 +1,4 @@
-import { expect, test } from "./utils/fixtures";
+import { expect, test, noJsTest } from "./utils/fixtures";
 
 const expectedNorms = [
   "Fiktive Fruchtsaft- und Erfrischungsgetränkeverordnung zu Testzwecken",
@@ -110,6 +110,30 @@ test("can navigate to a single norm article and between articles", async ({
 
     await page.getByRole("button", { name: "Fußnote ausblenden" }).click();
     await expect(footnotesContent).not.toBeVisible();
+  });
+});
+
+noJsTest("tabs work without JavaScript", async ({ page }) => {
+  await page.goto("/norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu", {
+    waitUntil: "networkidle",
+  });
+
+  await expect(page.getByRole("heading", { name: "Details" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Fassungen" })).toBeVisible();
+
+  await test.step("Navigate to Details tab", async () => {
+    await page.getByRole("link", { name: "Details des Gesetzes" }).click();
+    await expect(page).toHaveURL(/#details$/);
+  });
+
+  await test.step("Navigate to Fassungen tab", async () => {
+    await page.getByRole("link", { name: "Fassungen des Gesetzes" }).click();
+    await expect(page).toHaveURL(/#versions$/);
+  });
+
+  await test.step("Navigate back to Text tab", async () => {
+    await page.getByRole("link", { name: "Text des Gesetzes" }).click();
+    await expect(page).toHaveURL(/#text$/);
   });
 });
 

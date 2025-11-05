@@ -1,18 +1,19 @@
 <script setup lang="ts">
 import { Message, PanelMenu, Select } from "primevue";
 import type { MenuItem } from "primevue/menuitem";
-import DataFieldPicker from "~/components/AdvancedSearch/DataFieldPicker.vue";
-import DateFilter from "~/components/AdvancedSearch/DateFilter.vue";
 import ContentWrapper from "~/components/CustomLayouts/ContentWrapper.vue";
 import Pagination from "~/components/Pagination/Pagination.vue";
+import DataFieldPicker from "~/components/Search/DataFieldPicker.vue";
+import DateFilter from "~/components/Search/DateFilter.vue";
 import SortSelect from "~/components/Search/SortSelect.vue";
 import { useAdvancedSearch } from "~/composables/useAdvancedSearch";
 import { useAdvancedSearchRouteParams } from "~/composables/useAdvancedSearchRouteParams";
-import { DocumentKind, type SearchResult } from "~/types";
-import { queryableDataFields } from "~/utils/advancedSearch/dataFields";
+import { DocumentKind } from "~/types";
 import { getIdentifier } from "~/utils/anyDocument";
 import { formatDocumentKind } from "~/utils/displayValues";
 import { formatNumberWithSeparators } from "~/utils/numberFormatting";
+import { queryableDataFields } from "~/utils/search/dataFields";
+import { isStrictDateFilterValue } from "~/utils/search/filterType";
 
 useHead({ title: "Erweiterte Suche" });
 definePageMeta({ alias: "/erweiterte-suche" });
@@ -28,6 +29,16 @@ const {
 } = useAdvancedSearchRouteParams();
 
 const searchFormId = useId();
+
+// Date filter ---------------------------------------------
+
+const strictDateFilter = ref(
+  isStrictDateFilterValue(dateFilter.value) ? dateFilter.value : undefined,
+);
+
+watch(dateFilter, (newVal) => {
+  if (isStrictDateFilterValue(newVal)) strictDateFilter.value = newVal;
+});
 
 // Document kind -------------------------------------------
 
@@ -61,7 +72,7 @@ const {
   searchStatus,
   submitSearch,
   totalItemCount,
-} = await useAdvancedSearch(query, documentKind, dateFilter, {
+} = await useAdvancedSearch(query, documentKind, strictDateFilter, {
   itemsPerPage,
   sort,
   pageIndex,
@@ -76,7 +87,13 @@ const formattedResultCount = computed(() =>
 
 // Auto reload for "discrete" actions
 watch(
-  () => [documentKind.value, sort.value, itemsPerPage.value, pageIndex.value],
+  () => [
+    documentKind.value,
+    sort.value,
+    itemsPerPage.value,
+    pageIndex.value,
+    strictDateFilter.value,
+  ],
   () => submit(),
 );
 

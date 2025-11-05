@@ -7,9 +7,7 @@ import AppHeader from "~/components/AppHeader.vue";
 
 <template>
   <NuxtLoadingIndicator :color="false" class="bg-blue-800" />
-  <client-only>
-    <ConsentBanner />
-  </client-only>
+  <ConsentBanner />
   <div class="flex flex-col gap-48">
     <div class="min-h-[50vh] bg-gray-100">
       <AppHeader />

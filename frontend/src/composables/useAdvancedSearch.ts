@@ -5,8 +5,8 @@ import type { Page } from "~/components/Pagination/Pagination.vue";
 import { DocumentKind } from "~/types";
 import {
   dateFilterToQuery,
-  type DateFilterValue,
-} from "~/utils/advancedSearch/filterType";
+  type StrictDateFilterValue,
+} from "~/utils/search/filterType";
 
 /** Additional configuration for search API calls */
 type AdvancedSearchOptions = {
@@ -31,7 +31,7 @@ type AdvancedSearchOptions = {
 export async function useAdvancedSearch(
   query: MaybeRefOrGetter<string>,
   documentKind: MaybeRefOrGetter<DocumentKind>,
-  dateFilter: MaybeRefOrGetter<DateFilterValue>,
+  dateFilter: MaybeRefOrGetter<StrictDateFilterValue | undefined>,
   {
     itemsPerPage = "50",
     pageIndex = 0,
@@ -51,15 +51,15 @@ export async function useAdvancedSearch(
 
   const combinedQuery = computed(() => {
     let result = toValue(query);
-    const dateQuery = dateFilterToQuery(
-      toValue(dateFilter),
-      toValue(documentKind),
-    );
 
-    if (dateQuery) result = `(${result}) AND (${dateQuery})`;
+    const filterVal = toValue(dateFilter);
+    if (filterVal) {
+      const dateQuery = dateFilterToQuery(filterVal, toValue(documentKind));
+      if (dateQuery) result = `(${result}) AND (${dateQuery})`;
+    }
 
     return {
-      query: result,
+      query: encodeURIComponent(result),
       size: toValue(itemsPerPage),
       sort: toValue(sort),
       pageIndex: toValue(pageIndex),

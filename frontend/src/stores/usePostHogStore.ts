@@ -83,8 +83,12 @@ export const usePostHogStore = defineStore("postHog", () => {
   }
 
   function setTracking(userHasAccepted: boolean) {
+    const isDevMode = process.env.NODE_ENV === "development";
     Cookies.set(CONSENT_COOKIE_NAME, userHasAccepted.toString(), {
       expires: 365,
+      path: "/",
+      sameSite: "lax",
+      secure: !isDevMode,
     });
     userConsent.value = userHasAccepted;
     if (userHasAccepted) {

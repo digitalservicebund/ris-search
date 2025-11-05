@@ -100,14 +100,13 @@ class PactProviderTest extends ContainersIntegrationBase {
     caseLawRepository.saveAll(List.of(caseLawTestOne));
   }
 
-  @State("I have a literature document in the database with number TEST000000001")
-  public void thereIsALiteratureDocumentTEST000000001() {
+  @State("I have a literature document in the database with number XXLU000000001")
+  public void thereIsALiteratureDocumentXXLU000000001() {
 
     var literatureTestData =
         Literature.builder()
-            .id("TEST000000001")
-            .documentNumber("TEST000000001")
-            .recordingDate(LocalDate.parse("1998-01-01"))
+            .id("XXLU000000001")
+            .documentNumber("XXLU000000001")
             .yearsOfPublication(List.of("1979", "2004-09"))
             .documentTypes(List.of("Auf"))
             .dependentReferences(List.of("BUV, 1982, 123-123"))

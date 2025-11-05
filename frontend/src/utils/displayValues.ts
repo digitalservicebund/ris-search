@@ -1,4 +1,10 @@
+import { BadgeColor } from "~/components/Badge.vue";
 import { DocumentKind } from "~/types";
+import {
+  getValidityStatus,
+  getValidityStatusLabel,
+  temporalCoverageToValidityInterval,
+} from "~/utils/norm";
 
 const documentKindDisplayValues: Record<DocumentKind, string> = {
   [DocumentKind.CaseLaw]: "Gerichtsentscheidungen",
@@ -15,4 +21,46 @@ const documentKindDisplayValues: Record<DocumentKind, string> = {
  */
 export function formatDocumentKind(documentKind: DocumentKind): string {
   return documentKindDisplayValues[documentKind] ?? documentKindDisplayValues.A;
+}
+
+/**
+ * Returns a human readable label and status color for the validity status of
+ * a norm.
+ *
+ * @param temporalCoverage Temporal coverage, must conform to the format of
+ *  LegislationExpression.workExample
+ * @returns Formatted status or undefined if no status can be determined based
+ *  on the temporal coverage
+ */
+export function formatNormValidity(
+  temporalCoverage: string,
+): { label: string; color: BadgeColor } | undefined {
+  let interval;
+  try {
+    interval = temporalCoverageToValidityInterval(temporalCoverage);
+  } catch {
+    return undefined;
+  }
+
+  const validityStatus = getValidityStatus(interval);
+  const label = getValidityStatusLabel(validityStatus);
+
+  let color: BadgeColor;
+
+  switch (validityStatus) {
+    case "InForce":
+      color = BadgeColor.GREEN;
+      break;
+    case "FutureInForce":
+      color = BadgeColor.YELLOW;
+      break;
+    case "Expired":
+      color = BadgeColor.RED;
+      break;
+    default:
+      color = BadgeColor.BLUE;
+      break;
+  }
+
+  return label ? { label, color } : undefined;
 }

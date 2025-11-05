@@ -53,7 +53,11 @@ describe("ConsentBanner.vue", () => {
   it("calls handleSetTracking when clicking the Decline button", async () => {
     const wrapper = factory(undefined);
     const setTrackingSpy = vi.spyOn(wrapper.vm, "handleSetTracking");
-    await wrapper.find(declineButton).trigger("click");
+
+    const forms = wrapper.findAll("form");
+    const declineForm = forms.find((form) => form.find(declineButton).exists());
+    await declineForm?.trigger("submit");
+
     expect(setTrackingSpy).toHaveBeenCalledWith(false);
   });
 });

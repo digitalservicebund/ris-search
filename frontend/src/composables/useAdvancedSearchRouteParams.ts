@@ -1,11 +1,8 @@
 import type { LocationQueryValue } from "vue-router";
 import { navigateTo, useRoute } from "#app";
 import { DocumentKind } from "~/types";
-import {
-  type DateFilterValue,
-  isFilterType,
-} from "~/utils/advancedSearch/filterType";
 import { isDocumentKind } from "~/utils/documentKind";
+import { type DateFilterValue, isFilterType } from "~/utils/search/filterType";
 
 function tryGetPageIndexFromQuery(
   query: LocationQueryValue | LocationQueryValue[] | undefined,
@@ -32,7 +29,7 @@ export function useAdvancedSearchRouteParams() {
       : DocumentKind.Norm,
   );
 
-  const query = ref(route.query.q?.toString() ?? "");
+  const query = ref(decodeURIComponent(route.query.q?.toString() ?? ""));
 
   // Date filter --------------------------------------------
 
@@ -77,7 +74,7 @@ export function useAdvancedSearchRouteParams() {
     navigateTo({
       query: {
         ...route.query,
-        q: query.value,
+        q: encodeURIComponent(query.value),
         documentKind: documentKind.value,
         dateFilterType: dateFilter.value.type,
         dateFilterFrom: dateFilter.value.from ?? "",
