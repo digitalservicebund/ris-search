@@ -28,7 +28,7 @@ import org.springframework.test.web.servlet.MockMvc;
 @AutoConfigureMockMvc
 @Tag("integration")
 @WithJwt("jwtTokens/ValidAccessToken.json")
-public class StatisticsControllerTest extends ContainersIntegrationBase {
+class StatisticsControllerTest extends ContainersIntegrationBase {
 
   @Autowired private MockMvc mockMvc;
   @Autowired private CaseLawRepository caseLawRepository;
