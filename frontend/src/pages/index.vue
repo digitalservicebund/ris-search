@@ -2,7 +2,7 @@
 import Message from "primevue/message";
 import bmjvLogo from "~/assets/img/BMJV_de_v1__Web_farbig.svg";
 import ButtonLink from "~/components/ButtonLink.vue";
-import SimpleSearchInput from "~/components/Search/SimpleSearch/SimpleSearchInput.vue";
+import SimpleSearchInput from "~/components/Search/SimpleSearchInput.vue";
 import { usePrivateFeaturesFlag } from "~/composables/usePrivateFeaturesFlag";
 import { useRedirectToSearch } from "~/composables/useRedirectToSearch";
 import { useStaticPageSeo } from "~/composables/useStaticPageSeo";

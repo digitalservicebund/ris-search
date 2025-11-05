@@ -2,11 +2,11 @@
 import { RisSingleAccordion } from "@digitalservicebund/ris-ui/components";
 import { Button, InputGroup, InputGroupAddon, InputText } from "primevue";
 import OperatorsHelp from "./OperatorsHelp.vue";
-import DataFieldList from "~/components/AdvancedSearch/DataFieldList.vue";
+import DataFieldList from "~/components/Search/DataFieldList.vue";
 import type { DocumentKind } from "~/types";
-import type { DataField } from "~/utils/advancedSearch/dataFields";
 import { formatDocumentKind } from "~/utils/displayValues";
 import { formatNumberWithSeparators } from "~/utils/numberFormatting";
+import type { DataField } from "~/utils/search/dataFields";
 import IcBaselineSearch from "~icons/ic/baseline-search";
 
 const {

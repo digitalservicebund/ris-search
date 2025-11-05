@@ -2,10 +2,7 @@
 import { RadioButton } from "primevue";
 import RisDateInput from "~/components/Ris/RisDateInput.vue";
 import { DocumentKind } from "~/types";
-import type {
-  DateFilterValue,
-  FilterType,
-} from "~/utils/advancedSearch/filterType";
+import type { DateFilterValue, FilterType } from "~/utils/search/filterType";
 
 const { documentKind } = defineProps<{
   /* Document kind for which the filter should be used */

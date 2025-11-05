@@ -1,4 +1,4 @@
-export const defaultSuggestions = [
+export const courtFilterDefaultSuggestions = [
   { id: "BVerfG", label: "Bundesverfassungsgericht" },
   { id: "BGH", label: "Bundesgerichtshof" },
   { id: "BVerwG", label: "Bundesverwaltungsgericht" },

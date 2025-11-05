@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import type { MenuItem, MenuItemCommandEvent } from "primevue/menuitem";
 import PanelMenu from "primevue/panelmenu";
-import { computeExpandedKeys, items } from "./CategoryFilter.data";
 import { useSimpleSearchParamsStore } from "~/stores/searchParams";
+import {
+  computeExpandedKeys,
+  categoryFilterItems,
+} from "~/utils/search/categoryFilter";
 
 const store = useSimpleSearchParamsStore();
 
@@ -24,7 +27,7 @@ const addUpdate = (items: MenuItem[]) => {
   );
 };
 
-const model = addUpdate(items);
+const model = addUpdate(categoryFilterItems);
 
 const expandedKeys = computed(() => computeExpandedKeys(store.category));
 </script>

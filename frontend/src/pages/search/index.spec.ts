@@ -2,7 +2,7 @@ import { renderSuspended } from "@nuxt/test-utils/runtime";
 import userEvent from "@testing-library/user-event";
 import { screen, waitFor } from "@testing-library/vue";
 import { vi } from "vitest";
-import SimpleSearch from "./SimpleSearch.vue";
+import SimpleSearch from "./index.vue";
 
 vi.mock("~/services/searchService", () => {
   return { search: () => ({}) };

@@ -1,19 +1,19 @@
 <script setup lang="ts">
 import { Message, PanelMenu, Select } from "primevue";
 import type { MenuItem } from "primevue/menuitem";
-import DataFieldPicker from "~/components/AdvancedSearch/DataFieldPicker.vue";
-import DateFilter from "~/components/AdvancedSearch/DateFilter.vue";
 import ContentWrapper from "~/components/CustomLayouts/ContentWrapper.vue";
 import Pagination from "~/components/Pagination/Pagination.vue";
+import DataFieldPicker from "~/components/Search/DataFieldPicker.vue";
+import DateFilter from "~/components/Search/DateFilter.vue";
 import SortSelect from "~/components/Search/SortSelect.vue";
 import { useAdvancedSearch } from "~/composables/useAdvancedSearch";
 import { useAdvancedSearchRouteParams } from "~/composables/useAdvancedSearchRouteParams";
 import { DocumentKind } from "~/types";
-import { queryableDataFields } from "~/utils/advancedSearch/dataFields";
-import { isStrictDateFilterValue } from "~/utils/advancedSearch/filterType";
 import { getIdentifier } from "~/utils/anyDocument";
 import { formatDocumentKind } from "~/utils/displayValues";
 import { formatNumberWithSeparators } from "~/utils/numberFormatting";
+import { queryableDataFields } from "~/utils/search/dataFields";
+import { isStrictDateFilterValue } from "~/utils/search/filterType";
 
 useHead({ title: "Erweiterte Suche" });
 definePageMeta({ alias: "/erweiterte-suche" });

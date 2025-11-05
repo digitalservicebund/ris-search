@@ -1,4 +1,7 @@
 <script lang="ts" setup>
+// This is an old version of the help page that is not currently in use, but will
+// be reworked at some point.
+
 import Select from "primevue/select";
 import type { DropdownItem } from "~/components/types";
 import { usePrivateFeaturesFlag } from "~/composables/usePrivateFeaturesFlag";
@@ -10,7 +13,7 @@ import {
   availablePublicFeatures,
   availableInternalFeatures,
   type Feature,
-} from "~/utils/advancedSearch/data";
+} from "~/utils/search/helpPageData";
 
 definePageMeta({ alias: "/erweiterte-suche/hilfe" });
 

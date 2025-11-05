@@ -1,4 +1,4 @@
-import { computeExpandedKeys } from "./CategoryFilter.data";
+import { computeExpandedKeys } from "./categoryFilter";
 import { DocumentKind } from "~/types";
 
 describe("computeExpandedKeys", () => {
