@@ -42,11 +42,11 @@
                 <akn:TLCRole eId="verfasser" href="akn/ontology/roles/de/verfasser" showAs="Verfasser"/>
             </akn:references>
             <akn:proprietary source="attributsemantik-noch-undefiniert">
-                <ris:metadata>
+                <ris:meta>
                     <ris:veroeffentlichungsJahre>
                         <ris:veroeffentlichungsJahr>2015</ris:veroeffentlichungsJahr>
                     </ris:veroeffentlichungsJahre>
-                </ris:metadata>
+                </ris:meta>
             </akn:proprietary>
         </akn:meta>
         <akn:preface>

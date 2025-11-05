@@ -106,11 +106,11 @@ class LiteratureLdmlToOpenSearchMapperTest {
                                       <akn:keyword dictionary="attributsemantik-noch-undefiniert" showAs="Auf" value="Auf"/>
                                   </akn:classification>
                        <akn:proprietary source="attributsemantik-noch-undefiniert">
-                                          <ris:metadata>
+                                          <ris:meta>
                                               <ris:veroeffentlichungsJahre>
                                                   <ris:veroeffentlichungsJahr>2025</ris:veroeffentlichungsJahr>
                                               </ris:veroeffentlichungsJahre>
-                                          </ris:metadata>
+                                          </ris:meta>
                                       </akn:proprietary>
                     </akn:meta>
                   </akn:doc>
@@ -154,11 +154,11 @@ class LiteratureLdmlToOpenSearchMapperTest {
                           <akn:keyword dictionary="attributsemantik-noch-undefiniert" showAs="Auf" value="Auf"/>
                         </akn:classification>
                         <akn:proprietary source="test">
-                          <ris:metadata>
+                          <ris:meta>
                             <ris:veroeffentlichungsJahre>
                               <ris:veroeffentlichungsJahr>%s</ris:veroeffentlichungsJahr>
                             </ris:veroeffentlichungsJahre>
-                          </ris:metadata>
+                          </ris:meta>
                         </akn:proprietary>
                       </akn:meta>
                     </akn:doc>

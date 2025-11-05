@@ -82,7 +82,7 @@
                 <akn:TLCRole eId="verfasser" href="akn/ontology/roles/de/verfasser" showAs="Verfasser"/>
             </akn:references>
             <akn:proprietary source="attributsemantik-noch-undefiniert">
-                <ris:metadata>
+                <ris:meta>
                     <ris:veroeffentlichungsJahre>
                         <ris:veroeffentlichungsJahr>2013</ris:veroeffentlichungsJahr>
                         <ris:veroeffentlichungsJahr>2024</ris:veroeffentlichungsJahr>
@@ -92,7 +92,7 @@
                         <ris:gliederungEntry>II. Birnen.</ris:gliederungEntry>
                         <ris:gliederungEntry>III. Orangen.</ris:gliederungEntry>
                     </ris:gliederung>
-                </ris:metadata>
+                </ris:meta>
             </akn:proprietary>
         </akn:meta>
         <akn:preface>

@@ -57,7 +57,7 @@
                 <akn:TLCRole eId="verfasser" href="akn/ontology/roles/de/verfasser" showAs="Verfasser"/>
             </akn:references>
             <akn:proprietary source="attributsemantik-noch-undefiniert">
-                <ris:metadata>
+                <ris:meta>
                     <ris:veroeffentlichungsJahre>
                         <ris:veroeffentlichungsJahr>2013</ris:veroeffentlichungsJahr>
                         <ris:veroeffentlichungsJahr>2024</ris:veroeffentlichungsJahr>
@@ -67,7 +67,7 @@
                         <ris:gliederungEntry>B. Bar.</ris:gliederungEntry>
                         <ris:gliederungEntry>C. Baz.</ris:gliederungEntry>
                     </ris:gliederung>
-                </ris:metadata>
+                </ris:meta>
             </akn:proprietary>
         </akn:meta>
         <akn:mainBody>
