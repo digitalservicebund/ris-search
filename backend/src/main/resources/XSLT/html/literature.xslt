@@ -12,7 +12,10 @@
 		<html>
 			<head>
 				<title>
-					<xsl:value-of select="//akn:FRBRalias[@name='haupttitel']/@value"/>
+					<xsl:value-of
+							select="(//akn:FRBRalias[@name='haupttitel']/@value
+								   | //akn:FRBRalias[@name='dokumentarischerTitel']/@value
+								   | //akn:FRBRalias[@name='hauptsachtitelZusatz']/@value)[1]" />
 				</title>
 			</head>
 			<body>
@@ -31,6 +34,23 @@
 		<xsl:variable name="haupttitelExists" select="../akn:FRBRalias[@name='haupttitel']/@value"/>
 		<xsl:choose>
 			<xsl:when test="$haupttitelExists">
+				<h3><xsl:value-of select="@value"/></h3>
+			</xsl:when>
+			<xsl:otherwise>
+				<h1><xsl:value-of select="@value"/></h1>
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+
+	<!-- render mainTitleAdditions differently based on main title and documentary title existence -->
+	<xsl:template match="akn:FRBRalias[@name='hauptsachtitelZusatz']">
+		<xsl:variable name="haupttitelExists" select="../akn:FRBRalias[@name='haupttitel']/@value"/>
+		<xsl:variable name="documentaryTitleExists" select="../akn:FRBRalias[@name='dokumentarischerTitel']/@value"/>
+		<xsl:choose>
+			<xsl:when test="$haupttitelExists and $documentaryTitleExists">
+				<h4><xsl:value-of select="@value"/></h4>
+			</xsl:when>
+			<xsl:when test="($haupttitelExists and not($documentaryTitleExists)) or (not($haupttitelExists) and $documentaryTitleExists)">
 				<h3><xsl:value-of select="@value"/></h3>
 			</xsl:when>
 			<xsl:otherwise>

@@ -20,11 +20,17 @@ class LiteratureXsltTransformerServiceTest {
   LiteratureXsltTransformerServiceTest() throws IOException {}
 
   @ParameterizedTest(name = "{2}")
-  @CsvSource({
-    "uli/example1/literature.xml, uli/example1/literature.html, Should transform literature with mainTitel, alternativeHeadline, outline and mainBody",
-    "uli/example2/literature.xml, uli/example2/literature.html, Should transform literature with only alternativeHeadline and mainBody",
-    "uli/example3/literature.xml, uli/example3/literature.html, Should transform literature with only mainTitel and outline",
-  })
+  @CsvSource(
+      value = {
+        "uli/example1/literature.xml| uli/example1/literature.html| Transforms literature with mainTitle, alternativeHeadline, outline and mainBody",
+        "uli/example2/literature.xml| uli/example2/literature.html| Transforms literature with only alternativeHeadline and mainBody",
+        "uli/example3/literature.xml| uli/example3/literature.html| Transforms literature with only mainTitle and outline",
+        "uli/example4/literature.xml| uli/example4/literature.html| Transforms literature with mainTitle, alternativeHeadline and mainTitleAdditions",
+        "uli/example5/literature.xml| uli/example5/literature.html| Transforms literature with alternativeHeadline and mainTitleAdditions",
+        "uli/example6/literature.xml| uli/example6/literature.html| Transforms literature with mainTitleAdditions",
+        "uli/example7/literature.xml| uli/example7/literature.html| Transforms literature with mainTitle and mainTitleAdditions",
+      },
+      delimiter = '|')
   void testTransformLiteratureXmlDocuments(
       String inputFileName, String expectedFileName, String testName) throws IOException {
     byte[] bytes = Files.readAllBytes(Path.of(resourcesBasePath, inputFileName));
@@ -34,6 +40,6 @@ class LiteratureXsltTransformerServiceTest {
     var expectedHtml = Files.readString(Path.of(resourcesBasePath, expectedFileName));
     var expectedDocument = Jsoup.parse(expectedHtml);
     var actualDocument = Jsoup.parse(result);
-    assertThat(actualDocument.body().html()).isEqualTo(expectedDocument.body().html());
+    assertThat(actualDocument.html()).isEqualTo(expectedDocument.html());
   }
 }
