@@ -228,7 +228,7 @@ export default defineNuxtConfig({
   },
   vite: {
     optimizeDeps: {
-      include: ["cookie", "hyperdx/lucene"],
+      include: ["cookie"],
     },
     build: {
       sourcemap: "inline",
@@ -254,9 +254,6 @@ export default defineNuxtConfig({
         types: ["unplugin-icons/types/vue"],
       },
     },
-  },
-  build: {
-    transpile: ["hyperdx/lucene"],
   },
   ignore: [
     "**/**/*.{spec,test}.{js,cts,mts,ts,jsx,tsx}",
