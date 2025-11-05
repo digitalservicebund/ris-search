@@ -2,6 +2,7 @@ package de.bund.digitalservice.ris.search.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import de.bund.digitalservice.ris.search.exception.OpenSearchFetchException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -43,7 +44,7 @@ public class StatisticsService {
       return counts;
     } catch (IOException e) {
       logger.info(String.format("Failed to fetch Elasticsearch counts: %s", e.getMessage()));
-      throw e;
+      throw new OpenSearchFetchException("Failed to fetch aliases from Opensearch", e);
     }
   }
 
@@ -64,7 +65,8 @@ public class StatisticsService {
       return fetchCount(alias);
     } catch (IOException e) {
       logger.warn("Failed to fetch count for index '{}': {}", alias, e.getMessage());
-      throw e;
+      throw new OpenSearchFetchException(
+          String.format("Failed to fetch count for index %s", alias), e);
     }
   }
 

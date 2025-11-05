@@ -6,6 +6,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import de.bund.digitalservice.ris.search.exception.OpenSearchFetchException;
 import de.bund.digitalservice.ris.search.service.StatisticsService;
 import java.io.IOException;
 import java.util.Map;
@@ -58,7 +59,7 @@ class StatisticsServiceTest {
     when(lowLevelClient.performRequest(any(Request.class)))
         .thenThrow(new IOException("Connection failed"));
 
-    assertThrows(IOException.class, () -> statisticsService.getAllCounts());
+    assertThrows(OpenSearchFetchException.class, () -> statisticsService.getAllCounts());
   }
 
   @Test
@@ -68,8 +69,9 @@ class StatisticsServiceTest {
         .thenReturn(aliasResponse)
         .thenThrow(new IOException("Count fetch failed"));
 
-    IOException ex = assertThrows(IOException.class, () -> statisticsService.getAllCounts());
-    assertEquals("Count fetch failed", ex.getMessage());
+    OpenSearchFetchException ex =
+        assertThrows(OpenSearchFetchException.class, () -> statisticsService.getAllCounts());
+    assertEquals("Failed to fetch count for index norms", ex.getMessage());
   }
 
   private Response mockResponse(String json) {

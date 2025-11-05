@@ -2,6 +2,7 @@ package de.bund.digitalservice.ris.search.controller.api;
 
 import de.bund.digitalservice.ris.search.exception.CustomValidationException;
 import de.bund.digitalservice.ris.search.exception.FileTransformationException;
+import de.bund.digitalservice.ris.search.exception.OpenSearchFetchException;
 import de.bund.digitalservice.ris.search.models.errors.CustomError;
 import de.bund.digitalservice.ris.search.models.errors.CustomErrorResponse;
 import de.bund.digitalservice.ris.search.service.exception.XMLElementNotFoundException;
@@ -141,6 +142,20 @@ public class ControllerExceptionHandler {
     CustomErrorResponse errorResponse =
         CustomErrorResponse.builder().errors(List.of(error)).build();
     return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+  }
+
+  @ExceptionHandler(OpenSearchFetchException.class)
+  public ResponseEntity<CustomErrorResponse> handleElasticsearchException(
+      OpenSearchFetchException ex) {
+    logger.error("Opensearch fetch error", ex);
+    CustomError error =
+        new CustomError(
+            HttpStatus.INTERNAL_SERVER_ERROR.toString(),
+            "The requested data could not be fetched.",
+            "");
+    CustomErrorResponse errorResponse =
+        CustomErrorResponse.builder().errors(List.of(error)).build();
+    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
   }
 
   public static ResponseEntity<CustomErrorResponse> return403() {
