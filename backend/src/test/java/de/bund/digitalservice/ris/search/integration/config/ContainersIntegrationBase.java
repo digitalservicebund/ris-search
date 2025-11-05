@@ -4,12 +4,18 @@ import de.bund.digitalservice.ris.search.config.obs.TestMockS3Client;
 import de.bund.digitalservice.ris.search.integration.controller.api.testData.CaseLawTestData;
 import de.bund.digitalservice.ris.search.integration.controller.api.testData.LiteratureTestData;
 import de.bund.digitalservice.ris.search.integration.controller.api.testData.NormsTestData;
+import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
+import de.bund.digitalservice.ris.search.models.opensearch.Literature;
+import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.repository.objectstorage.S3ObjectStorageClient;
 import de.bund.digitalservice.ris.search.repository.opensearch.CaseLawRepository;
 import de.bund.digitalservice.ris.search.repository.opensearch.LiteratureRepository;
 import de.bund.digitalservice.ris.search.repository.opensearch.NormsRepository;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+import org.apache.commons.collections4.IteratorUtils;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -96,5 +102,19 @@ public class ContainersIntegrationBase {
       ((TestMockS3Client) normS3Client.getS3Client())
           .putFile(normFile.getKey(), normFile.getValue());
     }
+  }
+
+  protected List<String> getAllRepositoryEntityDates() {
+    List<CaseLawDocumentationUnit> allCaseLaw =
+        IteratorUtils.toList(caseLawRepository.findAll().iterator());
+    List<Literature> allLiterature =
+        IteratorUtils.toList(literatureRepository.findAll().iterator());
+    List<Norm> allNorms = IteratorUtils.toList(normsRepository.findAll().iterator());
+
+    List<String> result = new ArrayList<>();
+    result.addAll(allCaseLaw.stream().map(e -> e.decisionDate().toString()).toList());
+    result.addAll(allLiterature.stream().map(e -> e.recordingDate().toString()).toList());
+    result.addAll(allNorms.stream().map(e -> e.getEntryIntoForceDate().toString()).toList());
+    return result;
   }
 }

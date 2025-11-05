@@ -123,7 +123,7 @@ public class NormsTestData {
             .datePublished(DATE_2_2.plusDays(1))
             .articleTexts(List.of("example text 1", "example text 2"))
             .articleNames(List.of("§ 1 Example article", "§ 2 Example article"))
-            .entryIntoForceDate(LocalDate.now().minusDays(1))
+            .entryIntoForceDate(LocalDate.of(2025, 11, 1))
             .articles(
                 List.of(
                     new Article(
@@ -159,8 +159,8 @@ public class NormsTestData {
             .expressionEli("eli/2024/teg/2/exp")
             .normsDate(DATE_1_1)
             .datePublished(DATE_1_1)
-            .entryIntoForceDate(LocalDate.now().minusDays(1))
-            .expiryDate(LocalDate.now().plusDays(1))
+            .entryIntoForceDate(LocalDate.of(2025, 11, 2))
+            .expiryDate(LocalDate.of(2025, 11, 3))
             .build();
 
     var normTestThree =
@@ -174,7 +174,8 @@ public class NormsTestData {
             .expressionEli("eli/2024/teg/3/exp")
             .normsDate(DATE_2_1)
             .datePublished(DATE_2_1)
-            .expiryDate(LocalDate.now().minusDays(1))
+            .entryIntoForceDate(LocalDate.of(2025, 11, 3))
+            .expiryDate(LocalDate.of(2025, 11, 3))
             .build();
 
     return new ArrayList<>(List.of(normTestOne, normTestTwo, normTestThree));
