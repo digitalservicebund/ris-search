@@ -29,9 +29,6 @@ configurations {
 
 repositories {
     mavenCentral()
-    maven {
-        setUrl("https://jitpack.io")
-    }
 }
 
 jacoco { toolVersion = libs.versions.jacoco.get() }
