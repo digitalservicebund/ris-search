@@ -81,7 +81,6 @@ dependencies {
 
     implementation(libs.logbook.spring.boot.starter)
     implementation(libs.json)
-    implementation(libs.xml.parser)
     implementation(libs.commons.csv)
 
     implementation(libs.jackson.jsonld)
