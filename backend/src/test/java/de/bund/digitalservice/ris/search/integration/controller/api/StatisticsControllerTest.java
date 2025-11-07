@@ -1,6 +1,5 @@
 package de.bund.digitalservice.ris.search.integration.controller.api;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -56,28 +55,5 @@ class StatisticsControllerTest extends ContainersIntegrationBase {
         .andExpect(jsonPath("$.legislation.count").value(normsCount))
         .andExpect(jsonPath("$.case-law.count").value(caseLawCount))
         .andExpect(jsonPath("$.literature.count").value(literatureCount));
-  }
-
-  @Test
-  @DisplayName("Should return cached count Values")
-  void endpointShouldReturnCachedCount() throws Exception {
-    long caseLawCount = caseLawRepository.count();
-    long literatureCount = literatureRepository.count();
-    long normsCount = normsRepository.count();
-
-    mockMvc
-        .perform(get(ApiConfig.Paths.STATISTICS).contentType(MediaType.APPLICATION_JSON))
-        .andExpect(status().isOk())
-        .andExpect(jsonPath("$.legislation.count").value(normsCount))
-        .andExpect(jsonPath("$.case-law.count").value(caseLawCount))
-        .andExpect(jsonPath("$.literature.count").value(literatureCount));
-
-    normsRepository.deleteAll();
-    literatureRepository.deleteAll();
-    caseLawRepository.deleteAll();
-
-    assertEquals(0L, caseLawRepository.count());
-    assertEquals(0L, literatureRepository.count());
-    assertEquals(0L, normsRepository.count());
   }
 }

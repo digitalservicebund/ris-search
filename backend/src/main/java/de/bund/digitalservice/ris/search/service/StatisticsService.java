@@ -14,7 +14,6 @@ import org.apache.logging.log4j.Logger;
 import org.opensearch.client.Request;
 import org.opensearch.client.Response;
 import org.opensearch.client.RestHighLevelClient;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -29,7 +28,6 @@ public class StatisticsService {
     this.client = client;
   }
 
-  @Cacheable(value = "allCounts", sync = true)
   public Map<String, Long> getAllCounts() throws IOException {
 
     try {
