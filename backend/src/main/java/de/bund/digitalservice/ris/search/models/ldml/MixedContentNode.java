@@ -1,4 +1,4 @@
-package de.bund.digitalservice.ris.search.models.ldml.literature;
+package de.bund.digitalservice.ris.search.models.ldml;
 
 import jakarta.xml.bind.annotation.XmlAnyElement;
 import jakarta.xml.bind.annotation.XmlMixed;
