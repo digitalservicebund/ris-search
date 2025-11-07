@@ -109,6 +109,7 @@ const paginationLinkDisabled =
       >
         <Button
           v-if="!isOnlyPage && page?.view.previous"
+          class="no-underline"
           :to="previousPageRoute"
           :as="NuxtLink"
           aria-label="vorherige Ergebnisse"
@@ -138,6 +139,7 @@ const paginationLinkDisabled =
           v-if="!isOnlyPage && page?.view.next"
           :to="nextPageRoute"
           :as="NuxtLink"
+          class="no-underline"
           aria-label="nächste Ergebnisse"
           severity="secondary"
           icon-position="left"

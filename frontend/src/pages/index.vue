@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import Message from "primevue/message";
+import { NuxtLink } from "#components";
 import bmjvLogo from "~/assets/img/BMJV_de_v1__Web_farbig.svg";
 import ButtonLink from "~/components/ButtonLink.vue";
 import SimpleSearchInput from "~/components/Search/SimpleSearchInput.vue";
@@ -75,10 +76,17 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
         </p>
       </div>
       <div class="flex flex-wrap gap-16">
-        <Button @click="() => redirectToSearch({ category: 'N' })">
+        <Button
+          class="no-underline"
+          :as="NuxtLink"
+          @click="() => redirectToSearch({ category: 'N' })"
+        >
           Zu den Gesetzen und Verordnungen</Button
         >
-        <Button @click="() => redirectToSearch({ category: 'R' })"
+        <Button
+          class="no-underline"
+          :as="NuxtLink"
+          @click="() => redirectToSearch({ category: 'R' })"
           >Zu den Gerichtsentscheidungen</Button
         >
       </div>
