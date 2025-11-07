@@ -38,11 +38,25 @@ definePageMeta({ layout: "base" }); // use "base" layout to allow for full-width
 
 const emptyTitlePlaceholder = "Titelzeile nicht vorhanden";
 
-const title = computed(() => {
+const titles = computed(() => {
+  const titles = [
+    literature.value?.headline,
+    literature.value?.alternativeHeadline,
+    literature.value?.headlineAdditions,
+  ];
+
+  const availableTitles = titles.filter((title) => title);
+  return {
+    mainTitle: availableTitles[0] ?? emptyTitlePlaceholder,
+    hasMultipleTitles: availableTitles.length > 1,
+  };
+});
+
+const isEmptyDocument = computed(() => {
   return (
-    literature.value?.headline ??
-    literature.value?.alternativeHeadline ??
-    undefined
+    !literature.value?.outline &&
+    !literature.value?.shortReport &&
+    !titles.value.hasMultipleTitles
   );
 });
 
@@ -52,7 +66,7 @@ const breadcrumbItems = computed(() => [
     route: `/search?category=${DocumentKind.Literature}`,
   },
   {
-    label: title.value ?? emptyTitlePlaceholder,
+    label: titles.value.mainTitle ?? emptyTitlePlaceholder,
   },
 ]);
 
@@ -62,6 +76,7 @@ if (metadataError?.value) {
 if (contentError?.value) {
   showError(contentError.value);
 }
+
 const tabs = computed(() => [
   {
     id: "text",
@@ -90,7 +105,10 @@ const tabs = computed(() => [
           ><LiteratureActionsMenu :literature="literature"
         /></client-only>
       </div>
-      <RisDocumentTitle :title="title" :placeholder="emptyTitlePlaceholder" />
+      <RisDocumentTitle
+        :title="titles.mainTitle"
+        :placeholder="emptyTitlePlaceholder"
+      />
       <LiteratureMetadata
         :document-types="literature.documentTypes"
         :references="literature.dependentReferences"
@@ -98,40 +116,52 @@ const tabs = computed(() => [
         :years-of-publication="literature.yearsOfPublication"
       />
     </div>
-    <RisTabs :tabs="tabs" label="Ansichten des Literaturnachweises">
-      <template #default="{ activeTab, isClient }">
-        <section
-          id="text"
-          :class="tabPanelClass"
-          :hidden="isClient && activeTab !== 'text'"
-          aria-labelledby="textSectionHeading"
-        >
-          <SidebarLayout class="container">
-            <template #content>
-              <h2 id="textSectionHeading" class="sr-only">Text</h2>
-              <IncompleteDataMessage class="mb-16" />
-              <div class="literature" v-html="html"></div>
-            </template>
-          </SidebarLayout>
-        </section>
-
-        <section
-          id="details"
-          :class="tabPanelClass"
-          :hidden="isClient && activeTab !== 'details'"
-          aria-labelledby="detailsTabPanelTitle"
-        >
-          <div class="container pt-24 pb-80">
-            <LiteratureDetails
-              :norm-references="literature?.normReferences ?? []"
-              :collaborators="literature?.collaborators ?? []"
-              :originators="literature?.originators ?? []"
-              :languages="literature?.languages ?? []"
-              :conference-notes="literature?.conferenceNotes ?? []"
-            />
-          </div>
-        </section>
-      </template>
-    </RisTabs>
+    <div v-if="html && !isEmptyDocument">
+      <RisTabs :tabs="tabs" label="Ansichten des Literaturnachweises">
+        <template #default="{ activeTab, isClient }">
+          <section
+            id="text"
+            :class="tabPanelClass"
+            :hidden="isClient && activeTab !== 'text'"
+            aria-labelledby="textSectionHeading"
+          >
+            <SidebarLayout class="container">
+              <template #content>
+                <h2 id="textSectionHeading" class="sr-only">Text</h2>
+                <IncompleteDataMessage class="mb-16" />
+                <div class="literature" v-html="html"></div>
+              </template>
+            </SidebarLayout>
+          </section>
+          <section
+            id="details"
+            :class="tabPanelClass"
+            :hidden="isClient && activeTab !== 'details'"
+            aria-labelledby="detailsTabPanelTitle"
+          >
+            <div class="container pt-24 pb-80">
+              <LiteratureDetails
+                :norm-references="literature?.normReferences ?? []"
+                :collaborators="literature?.collaborators ?? []"
+                :originators="literature?.originators ?? []"
+                :languages="literature?.languages ?? []"
+                :conference-notes="literature?.conferenceNotes ?? []"
+              />
+            </div>
+          </section>
+        </template>
+      </RisTabs>
+    </div>
+    <div v-else class="min-h-96 border-t border-t-gray-400 bg-white print:py-0">
+      <div class="container pt-24 pb-80">
+        <LiteratureDetails
+          :norm-references="literature?.normReferences ?? []"
+          :collaborators="literature?.collaborators ?? []"
+          :originators="literature?.originators ?? []"
+          :languages="literature?.languages ?? []"
+          :conference-notes="literature?.conferenceNotes ?? []"
+        />
+      </div>
+    </div>
   </ContentWrapper>
 </template>
