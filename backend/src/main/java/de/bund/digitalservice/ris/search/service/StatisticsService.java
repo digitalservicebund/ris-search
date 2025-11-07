@@ -14,18 +14,25 @@ import org.apache.logging.log4j.Logger;
 import org.opensearch.client.Request;
 import org.opensearch.client.Response;
 import org.opensearch.client.RestHighLevelClient;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
 public class StatisticsService {
-  private final List<String> indexNames = Arrays.asList("norms", "literature", "caselaws");
+
+  private final List<String> indexNames;
 
   protected static final Logger logger = LogManager.getLogger(StatisticsService.class);
   private final RestHighLevelClient client;
   private final ObjectMapper objectMapper = new ObjectMapper();
 
-  public StatisticsService(RestHighLevelClient client) {
+  public StatisticsService(
+      RestHighLevelClient client,
+      @Value("${opensearch.norms-index-name}") String normsIndexName,
+      @Value("${opensearch.literature-index-name}") String literatureIndexName,
+      @Value("${opensearch.caselaws-index-name}") String caselawsIndexName) {
     this.client = client;
+    this.indexNames = Arrays.asList(normsIndexName, literatureIndexName, caselawsIndexName);
   }
 
   public Map<String, Long> getAllCounts() throws OpenSearchFetchException {

@@ -7,9 +7,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.c4_soft.springaddons.security.oauth2.test.annotations.WithJwt;
 import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.integration.config.ContainersIntegrationBase;
-import de.bund.digitalservice.ris.search.integration.controller.api.testData.CaseLawTestData;
-import de.bund.digitalservice.ris.search.integration.controller.api.testData.LiteratureTestData;
-import de.bund.digitalservice.ris.search.integration.controller.api.testData.NormsTestData;
 import de.bund.digitalservice.ris.search.repository.opensearch.CaseLawRepository;
 import de.bund.digitalservice.ris.search.repository.opensearch.LiteratureRepository;
 import de.bund.digitalservice.ris.search.repository.opensearch.NormsRepository;
@@ -36,10 +33,7 @@ class StatisticsControllerTest extends ContainersIntegrationBase {
 
   @BeforeEach
   void setUpSearchControllerApiTest() {
-    clearRepositoryData();
-    normsRepository.saveAll(NormsTestData.allDocuments);
-    caseLawRepository.saveAll(CaseLawTestData.allDocuments);
-    literatureRepository.saveAll(LiteratureTestData.allDocuments);
+    resetRepositories();
   }
 
   @Test

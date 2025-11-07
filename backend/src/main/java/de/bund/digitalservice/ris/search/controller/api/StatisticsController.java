@@ -7,6 +7,7 @@ import de.bund.digitalservice.ris.search.schema.StatisticsCountSchema;
 import de.bund.digitalservice.ris.search.service.StatisticsService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.Map;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,16 +15,26 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Tag(
     name = "Statistics",
-    description =
-        "Use this endpoint to get insides of the number of documents provided by this API.")
+    description = "Returns document count statistics for all document kinds exposed by the API.")
 @RestController
 @RequestMapping(ApiConfig.Paths.STATISTICS)
 public class StatisticsController {
 
+  private final Map<String, String> indexNames;
+
   private final StatisticsService statisticsService;
 
-  public StatisticsController(StatisticsService statisticsService) {
+  public StatisticsController(
+      StatisticsService statisticsService,
+      @Value("${opensearch.norms-index-name}") String normsIndexName,
+      @Value("${opensearch.literature-index-name}") String literatureIndexName,
+      @Value("${opensearch.caselaws-index-name}") String caselawsIndexName) {
     this.statisticsService = statisticsService;
+    this.indexNames =
+        Map.of(
+            "norms", normsIndexName,
+            "literature", literatureIndexName,
+            "caselaws", caselawsIndexName);
   }
 
   @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
@@ -32,8 +43,8 @@ public class StatisticsController {
     Map<String, Long> indexCount = statisticsService.getAllCounts();
 
     return new StatisticsApiSchema(
-        new StatisticsCountSchema(indexCount.get("norms")),
-        new StatisticsCountSchema(indexCount.get("caselaws")),
-        new StatisticsCountSchema(indexCount.get("literature")));
+        new StatisticsCountSchema(indexCount.get(this.indexNames.get("norms"))),
+        new StatisticsCountSchema(indexCount.get(this.indexNames.get("caselaws"))),
+        new StatisticsCountSchema(indexCount.get(this.indexNames.get("literature"))));
   }
 }

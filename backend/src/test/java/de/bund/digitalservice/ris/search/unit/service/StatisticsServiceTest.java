@@ -31,7 +31,11 @@ class StatisticsServiceTest {
     lowLevelClient = mock(RestClient.class);
     when(client.getLowLevelClient()).thenReturn(lowLevelClient);
 
-    statisticsService = new StatisticsService(client);
+    String normsIndex = "norms";
+    String literatureIndex = "literature";
+    String caselawsIndex = "caselaws";
+
+    statisticsService = new StatisticsService(client, normsIndex, literatureIndex, caselawsIndex);
   }
 
   @Test
