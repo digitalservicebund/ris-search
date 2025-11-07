@@ -14,6 +14,7 @@ import de.bund.digitalservice.ris.search.caselawhandover.shared.caselawldml.Jaxb
 import de.bund.digitalservice.ris.search.caselawhandover.shared.caselawldml.Judgment;
 import de.bund.digitalservice.ris.search.caselawhandover.shared.caselawldml.JudgmentBody;
 import de.bund.digitalservice.ris.search.caselawhandover.shared.caselawldml.Meta;
+import de.bund.digitalservice.ris.search.caselawhandover.shared.caselawldml.RelatedDecision;
 import de.bund.digitalservice.ris.search.caselawhandover.shared.caselawldml.RisMeta;
 import de.bund.digitalservice.ris.search.exception.OpenSearchMapperException;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
@@ -24,6 +25,10 @@ import jakarta.xml.bind.JAXB;
 import jakarta.xml.bind.ValidationException;
 import java.io.StringReader;
 import java.time.Instant;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import javax.xml.transform.stream.StreamSource;
 import org.eclipse.persistence.exceptions.DescriptorException;
 import org.springframework.stereotype.Service;
@@ -86,6 +91,14 @@ public class CaseLawLdmlToOpenSearchMapper {
     JaxbHtml grounds = nullSafeGet(groundsBlock, AknBlock::getContent);
     AknBlock otherLongTextBlock = nullSafeGet(decision, e -> e.getBlock("Sonstiger Langtext"));
     JaxbHtml otherLongText = nullSafeGet(otherLongTextBlock, AknBlock::getContent);
+    List<String> previousDecisions =
+        nullSafeGet(
+            risMeta.getPreviousDecision(),
+            e -> e.stream().map(this::relatedDecisionToString).toList());
+    List<String> ensuingDecisions =
+        nullSafeGet(
+            risMeta.getEnsuingDecision(),
+            e -> e.stream().map(this::relatedDecisionToString).toList());
 
     // some fields not in ldml are commented for now
     return CaseLawDocumentationUnit.builder()
@@ -126,6 +139,8 @@ public class CaseLawLdmlToOpenSearchMapper {
         .grounds(jaxbToSanitizedHtml(grounds))
         .otherLongText(jaxbToSanitizedHtml(otherLongText))
         .dissentingOpinion(jaxbToSanitizedHtml(dissentingOpinion))
+        .previousDecisions(previousDecisions)
+        .ensuingDecisions(ensuingDecisions)
 
         // Internal (portal team) fields
         .indexedAt(Instant.now().toString())
@@ -148,5 +163,14 @@ public class CaseLawLdmlToOpenSearchMapper {
     } catch (DescriptorException | DataBindingException | ValidationException e) {
       throw new OpenSearchMapperException("unable to parse file to DocumentationUnit", e);
     }
+  }
+
+  private String relatedDecisionToString(RelatedDecision relatedDecision) {
+    return Stream.of(
+            relatedDecision.getDocumentNumber(),
+            relatedDecision.getFileNumber(),
+            relatedDecision.getCourtType())
+        .filter(Objects::nonNull)
+        .collect(Collectors.joining(" "));
   }
 }
