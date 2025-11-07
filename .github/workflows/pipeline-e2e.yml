@@ -89,14 +89,12 @@ jobs:
           name: playwright-e2e-tests-report-${{ matrix.configuration_label }}
           path: frontend/playwright-report
           retention-days: 5
-      - name: Upload screenshots and traces of failed tests
+      - name: Upload traces of failed tests
         uses: actions/upload-artifact@v4
         if: ${{ failure() }}
         with:
           name: failed-e2e-tests-${{ matrix.configuration_label }}
-          path: |
-            frontend/playwright-report/**/*.png
-            frontend/playwright-report/**/*.zip
+          path: frontend/playwright-report/**/*.zip
           retention-days: 5
       - name: Output logs on failure
         if: ${{ failure() }}
