@@ -8,14 +8,15 @@
 
 	<xsl:strip-space elements="*"/>
 
+	<xsl:variable name="titles" as="node()*" select="(//akn:FRBRWork/akn:FRBRalias[@name='haupttitel']/@value
+									| //akn:FRBRWork/akn:FRBRalias[@name='dokumentarischerTitel']/@value
+									| //akn:FRBRWork/akn:FRBRalias[@name='hauptsachtitelZusatz']/@value)"/>
+
 	<xsl:template match="akn:doc">
 		<html>
 			<head>
 				<title>
-					<xsl:value-of
-							select="(//akn:FRBRalias[@name='haupttitel']/@value
-								   | //akn:FRBRalias[@name='dokumentarischerTitel']/@value
-								   | //akn:FRBRalias[@name='hauptsachtitelZusatz']/@value)[1]" />
+					<xsl:value-of select="$titles[1]" />
 				</title>
 			</head>
 			<body>
@@ -24,39 +25,22 @@
 		</html>
 	</xsl:template>
 
-	<!-- always render main title if it exists -->
-	<xsl:template match="akn:FRBRalias[@name='haupttitel']">
-		<h1><xsl:value-of select="@value"/></h1>
-	</xsl:template>
 
-	<!-- render documentary title differently based on main title existence -->
-	<xsl:template match="akn:FRBRalias[@name='dokumentarischerTitel']">
-		<xsl:variable name="haupttitelExists" select="../akn:FRBRalias[@name='haupttitel']/@value"/>
-		<xsl:choose>
-			<xsl:when test="$haupttitelExists">
-				<h3><xsl:value-of select="@value"/></h3>
-			</xsl:when>
-			<xsl:otherwise>
-				<h1><xsl:value-of select="@value"/></h1>
-			</xsl:otherwise>
-		</xsl:choose>
-	</xsl:template>
-
-	<!-- render mainTitleAdditions differently based on main title and documentary title existence -->
-	<xsl:template match="akn:FRBRalias[@name='hauptsachtitelZusatz']">
-		<xsl:variable name="haupttitelExists" select="../akn:FRBRalias[@name='haupttitel']/@value"/>
-		<xsl:variable name="documentaryTitleExists" select="../akn:FRBRalias[@name='dokumentarischerTitel']/@value"/>
-		<xsl:choose>
-			<xsl:when test="$haupttitelExists and $documentaryTitleExists">
-				<h4><xsl:value-of select="@value"/></h4>
-			</xsl:when>
-			<xsl:when test="($haupttitelExists and not($documentaryTitleExists)) or (not($haupttitelExists) and $documentaryTitleExists)">
-				<h3><xsl:value-of select="@value"/></h3>
-			</xsl:when>
-			<xsl:otherwise>
-				<h1><xsl:value-of select="@value"/></h1>
-			</xsl:otherwise>
-		</xsl:choose>
+	<!-- render titles -->
+	<xsl:template match="akn:FRBRWork">
+		<xsl:for-each select="$titles">
+			<xsl:choose>
+				<xsl:when test="position() = 1">
+					<h1><xsl:value-of select="."/></h1>
+				</xsl:when>
+				<xsl:when test="position() = 2">
+					<h3><xsl:value-of select="."/></h3>
+				</xsl:when>
+				<xsl:when test="position() = 3">
+					<h4><xsl:value-of select="."/></h4>
+				</xsl:when>
+			</xsl:choose>
+		</xsl:for-each>
 	</xsl:template>
 
 	<!-- Outline -->
