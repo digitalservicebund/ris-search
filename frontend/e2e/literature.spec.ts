@@ -55,6 +55,28 @@ test.skip("displays literature page with metadata and text tab by default", asyn
   await expect(textSection.getByText("In sem neque")).toBeVisible();
 });
 
+test("displays all titles", async ({ page }) => {
+  await page.goto("/literature/XXLU000000002");
+
+  await expect(
+    page
+      .getByRole("main")
+      .getByRole("heading", { level: 1, name: "Zweites Test-Dokument ULI" })
+      .first(),
+  ).toBeVisible();
+
+  const textSection = page.getByRole("region", { name: "Text" });
+  await expect(
+    textSection.getByRole("heading", {
+      level: 2,
+      name: "Zusätzliche Titel",
+    }),
+  ).toBeVisible();
+
+  await expect(textSection).toContainText("Dokumentarischer Titel");
+  await expect(textSection).toContainText("Zusatz zum Haupttitel");
+});
+
 noJsTest("tabs work without JavaScript", async ({ page }) => {
   await page.goto("/literature/XXLU000000001", { waitUntil: "networkidle" });
   await expect(
