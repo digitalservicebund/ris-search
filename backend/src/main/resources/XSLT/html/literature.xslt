@@ -34,10 +34,11 @@
 					<h1><xsl:value-of select="."/></h1>
 				</xsl:when>
 				<xsl:when test="position() = 2">
-					<h3><xsl:value-of select="."/></h3>
+					<h2>Zusätzliche Titel</h2>
+					<p><xsl:value-of select="."/></p>
 				</xsl:when>
 				<xsl:when test="position() = 3">
-					<h4><xsl:value-of select="."/></h4>
+					<p><xsl:value-of select="."/></p>
 				</xsl:when>
 			</xsl:choose>
 		</xsl:for-each>

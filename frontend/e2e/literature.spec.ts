@@ -68,17 +68,13 @@ test("displays all titles", async ({ page }) => {
   const textSection = page.getByRole("region", { name: "Text" });
   await expect(
     textSection.getByRole("heading", {
-      level: 3,
-      name: "Dokumentarischer Titel",
+      level: 2,
+      name: "Zusätzliche Titel",
     }),
   ).toBeVisible();
 
-  await expect(
-    textSection.getByRole("heading", {
-      level: 4,
-      name: "Zusatz zum Haupttitel",
-    }),
-  ).toBeVisible();
+  await expect(textSection).toContainText("Dokumentarischer Titel");
+  await expect(textSection).toContainText("Zusatz zum Haupttitel");
 });
 
 noJsTest("tabs work without JavaScript", async ({ page }) => {
