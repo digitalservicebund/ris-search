@@ -16,6 +16,10 @@
   ],
   "tags": [
     {
+      "name": "Statistics",
+      "description": "Use this endpoint to get insides of the number of documents provided by this API."
+    },
+    {
       "name": "All documents",
       "description": "Use this endpoint to search across all document types in our database."
     },
@@ -29,6 +33,22 @@
     }
   ],
   "paths": {
+    "/v1/statistics": {
+      "get": {
+        "tags": ["Statistics"],
+        "operationId": "getStatisticsData",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/StatisticsApiSchema" }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/literature": {
       "get": {
         "tags": ["Literature"],
@@ -1663,6 +1683,20 @@
   },
   "components": {
     "schemas": {
+      "StatisticsApiSchema": {
+        "type": "object",
+        "properties": {
+          "legislation": {
+            "$ref": "#/components/schemas/StatisticsCountSchema"
+          },
+          "case-law": { "$ref": "#/components/schemas/StatisticsCountSchema" },
+          "literature": { "$ref": "#/components/schemas/StatisticsCountSchema" }
+        }
+      },
+      "StatisticsCountSchema": {
+        "type": "object",
+        "properties": { "count": { "type": "integer", "format": "int64" } }
+      },
       "CollectionSchemaSearchMemberSchemaLiteratureSearchSchema": {
         "type": "object",
         "properties": {
