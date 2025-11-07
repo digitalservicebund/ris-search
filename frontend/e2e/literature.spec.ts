@@ -262,9 +262,7 @@ test.describe("actions menu", () => {
   });
 });
 
-test("hides tabs and shows details only if document is empty", async ({
-  page,
-}) => {
+test("hides tabs and shows details if document is empty", async ({ page }) => {
   await page.goto("/literature/XXLU000000005");
   await page.waitForLoadState("networkidle");
 

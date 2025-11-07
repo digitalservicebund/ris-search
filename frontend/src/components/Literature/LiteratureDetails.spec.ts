@@ -5,11 +5,13 @@ describe("LiteratureDetails", () => {
   it("renders headline and testphase alert", () => {
     render(LiteratureDetails, {
       props: {
-        normReferences: [],
-        collaborators: [],
-        originators: [],
-        languages: [],
-        conferenceNotes: [],
+        details: {
+          normReferences: [],
+          collaborators: [],
+          originators: [],
+          languages: [],
+          conferenceNotes: [],
+        },
       },
     });
 
@@ -22,11 +24,13 @@ describe("LiteratureDetails", () => {
   it("renders all terms", () => {
     render(LiteratureDetails, {
       props: {
-        normReferences: [],
-        collaborators: [],
-        originators: [],
-        languages: [],
-        conferenceNotes: [],
+        details: {
+          normReferences: [],
+          collaborators: [],
+          originators: [],
+          languages: [],
+          conferenceNotes: [],
+        },
       },
     });
 
@@ -43,11 +47,13 @@ describe("LiteratureDetails", () => {
   it("renders placeholders if no values given", () => {
     render(LiteratureDetails, {
       props: {
-        normReferences: [],
-        collaborators: [],
-        originators: [],
-        languages: [],
-        conferenceNotes: [],
+        details: {
+          normReferences: [],
+          collaborators: [],
+          originators: [],
+          languages: [],
+          conferenceNotes: [],
+        },
       },
     });
 
@@ -75,11 +81,13 @@ describe("LiteratureDetails", () => {
   it("renders single values", () => {
     render(LiteratureDetails, {
       props: {
-        normReferences: ["Some Norm Reference"],
-        collaborators: ["Mustermann, Max"],
-        originators: ["Foo"],
-        languages: ["deu"],
-        conferenceNotes: ["Some Conference Note"],
+        details: {
+          normReferences: ["Some Norm Reference"],
+          collaborators: ["Mustermann, Max"],
+          originators: ["Foo"],
+          languages: ["deu"],
+          conferenceNotes: ["Some Conference Note"],
+        },
       },
     });
 
@@ -107,11 +115,13 @@ describe("LiteratureDetails", () => {
   it("renders multiple values", () => {
     render(LiteratureDetails, {
       props: {
-        normReferences: ["Some Norm Reference", "Another Reference"],
-        collaborators: ["Mustermann, Max", "Bar, Foo", "Baz"],
-        originators: ["Foo", "Bar"],
-        languages: ["deu", "eng"],
-        conferenceNotes: ["Some Conference Note", "Another Note"],
+        details: {
+          normReferences: ["Some Norm Reference", "Another Reference"],
+          collaborators: ["Mustermann, Max", "Bar, Foo", "Baz"],
+          originators: ["Foo", "Bar"],
+          languages: ["deu", "eng"],
+          conferenceNotes: ["Some Conference Note", "Another Note"],
+        },
       },
     });
 

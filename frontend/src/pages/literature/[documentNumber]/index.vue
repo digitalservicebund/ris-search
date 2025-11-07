@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import { useFetch } from "#app";
 import LiteratureActionsMenu from "~/components/ActionMenu/LiteratureActionsMenu.vue";
 import ContentWrapper from "~/components/CustomLayouts/ContentWrapper.vue";
 import SidebarLayout from "~/components/CustomLayouts/SidebarLayout.vue";
@@ -11,53 +10,28 @@ import RisBreadcrumb from "~/components/Ris/RisBreadcrumb.vue";
 import RisDocumentTitle from "~/components/Ris/RisDocumentTitle.vue";
 import RisTabs from "~/components/Ris/RisTabs.vue";
 import { tabPanelClass } from "~/components/Tabs.styles";
-import { useBackendURL } from "~/composables/useBackendURL";
-import { DocumentKind, type Literature } from "~/types";
+import { useLiterature } from "~/composables/useLiterature";
+import { DocumentKind } from "~/types";
 import { formatDocumentKind } from "~/utils/displayValues";
+import { getTitle } from "~/utils/literature";
 import IcBaselineSubject from "~icons/ic/baseline-subject";
 import IcOutlineInfo from "~icons/ic/outline-info";
 
-const route = useRoute();
-const documentNumber = route.params.documentNumber as string;
-const documentMetadataUrl = `${useBackendURL()}/v1/literature/${documentNumber}`;
-
-const {
-  status,
-  data: literature,
-  error: metadataError,
-} = await useFetch<Literature>(documentMetadataUrl);
-
-const { data: html, error: contentError } = await useFetch<string>(
-  `${documentMetadataUrl}.html`,
-  {
-    headers: { Accept: "text/html" },
-  },
-);
-
 definePageMeta({ layout: "base" }); // use "base" layout to allow for full-width tab backgrounds
 
+const { loading, error, data: literature, html } = await useLiterature();
+
 const emptyTitlePlaceholder = "Titelzeile nicht vorhanden";
-
-const titles = computed(() => {
-  const titles = [
-    literature.value?.headline,
-    literature.value?.alternativeHeadline,
-    literature.value?.headlineAdditions,
-  ];
-
-  const availableTitles = titles.filter((title) => title);
+const title = computed(() => getTitle(literature.value));
+const isEmptyDocument = computed(() => isDocumentEmpty(literature.value));
+const details = computed(() => {
   return {
-    mainTitle: availableTitles[0] ?? emptyTitlePlaceholder,
-    hasMultipleTitles: availableTitles.length > 1,
+    normReferences: literature.value?.normReferences ?? [],
+    collaborators: literature.value?.collaborators ?? [],
+    originators: literature.value?.originators ?? [],
+    languages: literature.value?.languages ?? [],
+    conferenceNotes: literature.value?.conferenceNotes ?? [],
   };
-});
-
-const isEmptyDocument = computed(() => {
-  return (
-    !literature.value?.outline &&
-    !literature.value?.shortReport &&
-    !titles.value.hasMultipleTitles
-  );
 });
 
 const breadcrumbItems = computed(() => [
@@ -66,16 +40,9 @@ const breadcrumbItems = computed(() => [
     route: `/search?category=${DocumentKind.Literature}`,
   },
   {
-    label: titles.value.mainTitle ?? emptyTitlePlaceholder,
+    label: title?.value ?? emptyTitlePlaceholder,
   },
 ]);
-
-if (metadataError?.value) {
-  showError(metadataError.value);
-}
-if (contentError?.value) {
-  showError(contentError.value);
-}
 
 const tabs = computed(() => [
   {
@@ -93,11 +60,15 @@ const tabs = computed(() => [
     icon: IcOutlineInfo,
   },
 ]);
+
+if (error?.value) {
+  showError(error?.value);
+}
 </script>
 
 <template>
   <ContentWrapper border>
-    <div v-if="status == 'pending'" class="container">Lade ...</div>
+    <div v-if="loading" class="container">Lade ...</div>
     <div v-if="!!literature" class="container text-left">
       <div class="flex items-center gap-8 print:hidden">
         <RisBreadcrumb :items="breadcrumbItems" class="grow" />
@@ -105,10 +76,7 @@ const tabs = computed(() => [
           ><LiteratureActionsMenu :literature="literature"
         /></client-only>
       </div>
-      <RisDocumentTitle
-        :title="titles.mainTitle"
-        :placeholder="emptyTitlePlaceholder"
-      />
+      <RisDocumentTitle :title="title" :placeholder="emptyTitlePlaceholder" />
       <LiteratureMetadata
         :document-types="literature.documentTypes"
         :references="literature.dependentReferences"
@@ -116,7 +84,15 @@ const tabs = computed(() => [
         :years-of-publication="literature.yearsOfPublication"
       />
     </div>
-    <div v-if="html && !isEmptyDocument">
+    <div
+      v-if="isEmptyDocument"
+      class="min-h-96 border-t border-t-gray-400 bg-white print:py-0"
+    >
+      <div class="container pt-24 pb-80">
+        <LiteratureDetails :details="details" />
+      </div>
+    </div>
+    <div v-else>
       <RisTabs :tabs="tabs" label="Ansichten des Literaturnachweises">
         <template #default="{ activeTab, isClient }">
           <section
@@ -139,29 +115,12 @@ const tabs = computed(() => [
             :hidden="isClient && activeTab !== 'details'"
             aria-labelledby="detailsTabPanelTitle"
           >
-            <div class="container pt-24 pb-80">
-              <LiteratureDetails
-                :norm-references="literature?.normReferences ?? []"
-                :collaborators="literature?.collaborators ?? []"
-                :originators="literature?.originators ?? []"
-                :languages="literature?.languages ?? []"
-                :conference-notes="literature?.conferenceNotes ?? []"
-              />
+            <div class="container pb-56">
+              <LiteratureDetails :details="details" />
             </div>
           </section>
         </template>
       </RisTabs>
-    </div>
-    <div v-else class="min-h-96 border-t border-t-gray-400 bg-white print:py-0">
-      <div class="container pt-24 pb-80">
-        <LiteratureDetails
-          :norm-references="literature?.normReferences ?? []"
-          :collaborators="literature?.collaborators ?? []"
-          :originators="literature?.originators ?? []"
-          :languages="literature?.languages ?? []"
-          :conference-notes="literature?.conferenceNotes ?? []"
-        />
-      </div>
     </div>
   </ContentWrapper>
 </template>
