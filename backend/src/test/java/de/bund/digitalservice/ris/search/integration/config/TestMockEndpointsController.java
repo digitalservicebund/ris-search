@@ -19,4 +19,9 @@ public class TestMockEndpointsController {
   public ResponseEntity<String> internalErrorResponse() throws Exception {
     throw new Exception("Unknown error");
   }
+
+  @GetMapping("/notSupported")
+  public ResponseEntity<String> NotSupportedResponse() throws UnsupportedOperationException {
+    throw new UnsupportedOperationException("Not implemented yet");
+  }
 }

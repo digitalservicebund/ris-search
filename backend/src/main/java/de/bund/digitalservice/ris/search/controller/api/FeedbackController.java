@@ -53,6 +53,7 @@ public class FeedbackController {
   @ApiResponse(responseCode = "200", description = "Success")
   @ApiResponse(responseCode = "422", description = "Required feedback data is missing")
   @ApiResponse(responseCode = "500", description = "Internal Server Error")
+  @ApiResponse(responseCode = "501", description = "Operation not supported")
   public ResponseEntity<Map<String, String>> sendFeedback(
       @Parameter(name = "text", description = "The feedback text to be sent")
           @RequestParam(value = "text")

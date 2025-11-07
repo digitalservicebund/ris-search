@@ -68,4 +68,12 @@ class ErrorResponseTest extends ContainersIntegrationBase {
                 Matchers.is("An unexpected error occurred. Please try again later.")))
         .andExpect(jsonPath("$.errors[0].parameter", Matchers.is("")));
   }
+
+  @Test
+  @DisplayName("Should return 501 error response when operation is not supported")
+  void shouldReturn501() throws Exception {
+    mockMvc
+        .perform(get("/notSupported").contentType(MediaType.TEXT_HTML))
+        .andExpect(status().is(501));
+  }
 }
