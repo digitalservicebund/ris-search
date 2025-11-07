@@ -28,7 +28,7 @@ public class StatisticsService {
     this.client = client;
   }
 
-  public Map<String, Long> getAllCounts() throws IOException {
+  public Map<String, Long> getAllCounts() throws OpenSearchFetchException {
 
     try {
       List<String> aliases = fetchAliases();
@@ -58,7 +58,7 @@ public class StatisticsService {
     return aliases;
   }
 
-  private long fetchCountWithLogging(String alias) throws IOException {
+  private long fetchCountWithLogging(String alias) throws OpenSearchFetchException {
     try {
       return fetchCount(alias);
     } catch (IOException e) {

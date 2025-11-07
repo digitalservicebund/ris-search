@@ -1,11 +1,11 @@
 package de.bund.digitalservice.ris.search.controller.api;
 
 import de.bund.digitalservice.ris.search.config.ApiConfig;
+import de.bund.digitalservice.ris.search.exception.OpenSearchFetchException;
 import de.bund.digitalservice.ris.search.schema.StatisticsApiSchema;
 import de.bund.digitalservice.ris.search.schema.StatisticsCountSchema;
 import de.bund.digitalservice.ris.search.service.StatisticsService;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import java.io.IOException;
 import java.util.Map;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,7 +27,7 @@ public class StatisticsController {
   }
 
   @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-  public StatisticsApiSchema getStatisticsData() throws IOException {
+  public StatisticsApiSchema getStatisticsData() throws OpenSearchFetchException {
 
     Map<String, Long> indexCount = statisticsService.getAllCounts();
 
