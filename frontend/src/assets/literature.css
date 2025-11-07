@@ -9,14 +9,6 @@
     @apply ris-heading3-bold my-16 inline-block;
   }
 
-  h3 {
-    @apply ris-subhead-regular mt-16 block;
-  }
-
-  h4 {
-    @apply ris-body1-regular mt-16 block;
-  }
-
   p {
     @apply mb-16 overflow-x-auto;
   }
