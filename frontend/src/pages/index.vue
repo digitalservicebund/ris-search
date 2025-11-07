@@ -75,10 +75,17 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
         </p>
       </div>
       <div class="flex flex-wrap gap-16">
-        <Button @click="() => redirectToSearch({ category: 'N' })">
+        <Button
+          class="no-underline"
+          :as="NuxtLink"
+          @click="() => redirectToSearch({ category: 'N' })"
+        >
           Zu den Gesetzen und Verordnungen</Button
         >
-        <Button @click="() => redirectToSearch({ category: 'R' })"
+        <Button
+          class="no-underline"
+          :as="NuxtLink"
+          @click="() => redirectToSearch({ category: 'R' })"
           >Zu den Gerichtsentscheidungen</Button
         >
       </div>
