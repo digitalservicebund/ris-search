@@ -4,14 +4,6 @@ import { nextTick } from "vue";
 import Pagination from "./Pagination.vue";
 import type { Page } from "~/components/Pagination/Pagination.vue";
 
-vi.mock("#components", () => ({
-  Button: {
-    name: "Button",
-    props: ["to"],
-    template: '<a :href="to?.path" data-test="nuxt-link"><slot /></a>',
-  },
-}));
-
 const { useRouteMock } = vi.hoisted(() => {
   return {
     useRouteMock: vi.fn(() => {
