@@ -112,7 +112,7 @@ class CaseLawControllerApiTest extends ContainersIntegrationBase {
   void shouldReturnSingleCaselawJson() throws Exception {
     indexCaselawService.reindexAll(Instant.now().toString());
 
-    assert caseLawRepository.findById(this.documentNumber).isPresent();
+    assert !caseLawRepository.findByDocumentNumber(this.documentNumber).isEmpty();
 
     mockMvc
         .perform(

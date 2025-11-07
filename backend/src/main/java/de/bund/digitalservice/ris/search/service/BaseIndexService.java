@@ -3,7 +3,9 @@ package de.bund.digitalservice.ris.search.service;
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
 import de.bund.digitalservice.ris.search.repository.objectstorage.ObjectStorage;
+import de.bund.digitalservice.ris.search.repository.opensearch.DocumentRepository;
 import java.time.Instant;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -19,8 +21,12 @@ public abstract class BaseIndexService<T> implements IndexService {
 
   protected final ObjectStorage objectStorage;
 
-  protected BaseIndexService(ObjectStorage objectStorage) {
+  protected final DocumentRepository<T> documentRepository;
+
+  protected BaseIndexService(ObjectStorage objectStorage, DocumentRepository<T> repository) {
+
     this.objectStorage = objectStorage;
+    this.documentRepository = repository;
   }
 
   public void reindexAll(String startingTimestamp) throws ObjectStoreServiceException {
@@ -67,15 +73,32 @@ public abstract class BaseIndexService<T> implements IndexService {
     }
   }
 
-  protected abstract String extractIdFromFilename(String filename);
+  protected String extractIdFromFilename(String filename) {
+    return Arrays.stream(filename.split("\\.")).findFirst().orElse(null);
+  }
 
   protected abstract Optional<T> mapFileToEntity(String filename, String fileContent);
 
-  protected abstract List<String> getAllIndexableFilenames();
+  protected List<String> getAllIndexableFilenames() {
+    return objectStorage.getAllKeys().stream()
+        .filter(s -> s.endsWith(".xml") && !s.contains(IndexSyncJob.CHANGELOGS_PREFIX))
+        .toList();
+  }
 
-  protected abstract void deleteAllOldAndNullEntities(String startingTimestamp);
+  protected void deleteAllOldAndNullEntities(String startingTimestamp) {
+    documentRepository.deleteByIndexedAtBefore(startingTimestamp);
+    documentRepository.deleteByIndexedAtIsNull();
+  }
 
-  protected abstract void deleteAllEntitiesById(Iterable<String> ids);
+  protected void deleteAllEntitiesById(Iterable<String> ids) {
+    documentRepository.deleteAllById(ids);
+  }
 
-  protected abstract void saveEntity(T entity);
+  protected void saveEntity(T entity) {
+    documentRepository.save(entity);
+  }
+
+  public int getNumberOfIndexedEntities() {
+    return (int) documentRepository.count();
+  }
 }

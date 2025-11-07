@@ -24,5 +24,7 @@ public class Configurations {
 
   private String literatureIndexName;
 
+  private String administrativeDirectiveIndexName;
+
   private String documentsAliasName;
 }
