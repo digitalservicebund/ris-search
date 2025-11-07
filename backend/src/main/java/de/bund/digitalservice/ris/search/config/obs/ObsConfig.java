@@ -36,6 +36,15 @@ public class ObsConfig {
   @Value("${s3.file-storage.literature.secret-access-key}")
   private String literatureSecretAccessKey;
 
+  @Value("${s3.file-storage.administrative-directive.endpoint}")
+  private String administrativeDirectiveEndpoint;
+
+  @Value("${s3.file-storage.administrative-directive.access-key-id}")
+  private String administrativeDirectiveAccessKeyId;
+
+  @Value("${s3.file-storage.administrative-directive.secret-access-key}")
+  private String administrativeDirectiveSecretAccessKey;
+
   @Value("${s3.file-storage.norm.endpoint}")
   private String normEndpoint;
 
@@ -99,6 +108,22 @@ public class ObsConfig {
         bucket);
   }
 
+  @Bean(name = "administrativeDirectiveS3Client")
+  @Profile({"staging"})
+  public ObjectStorageClient administrativeDirectiveS3Client(
+      @Value("${s3.file-storage.administrative-directive.bucket-name}") String bucket)
+      throws URISyntaxException {
+    return new S3ObjectStorageClient(
+        S3Client.builder()
+            .credentialsProvider(
+                StaticCredentialsProvider.create(
+                    AwsBasicCredentials.create(literatureAccessKeyId, literatureSecretAccessKey)))
+            .endpointOverride(new URI(literatureEndpoint))
+            .region(Region.of(REGION))
+            .build(),
+        bucket);
+  }
+
   @Bean(name = "portalS3Client")
   @Profile({"production", "staging", "uat", "prototype"})
   public ObjectStorageClient portalS3Client(
@@ -133,6 +158,14 @@ public class ObsConfig {
   public ObjectStorageClient mockLiteratureS3Client(
       @Value("${local.file-storage}") String relativeLocalStorageDirectory) {
     return new LocalFilesystemObjectStorageClient("literature", relativeLocalStorageDirectory);
+  }
+
+  @Bean(name = "administrativeDirectiveS3Client")
+  @Profile({"default"})
+  public ObjectStorageClient mockAdministrativeDirectiveS3Client(
+      @Value("${local.file-storage}") String relativeLocalStorageDirectory) {
+    return new LocalFilesystemObjectStorageClient(
+        "administrative-directive", relativeLocalStorageDirectory);
   }
 
   @Bean(name = "portalS3Client")

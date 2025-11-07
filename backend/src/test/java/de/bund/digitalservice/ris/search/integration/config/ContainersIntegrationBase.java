@@ -47,6 +47,10 @@ public class ContainersIntegrationBase {
   private S3ObjectStorageClient literatureS3Client;
 
   @Autowired
+  @Qualifier("administrativeDirectiveS3Client")
+  private S3ObjectStorageClient administrativeDirectiveS3Client;
+
+  @Autowired
   @Qualifier("normS3Client")
   private S3ObjectStorageClient normS3Client;
 
