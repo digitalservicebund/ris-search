@@ -121,49 +121,42 @@ jobs:
         with:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 
-################################################################################################
-# Deactivating pushes to ris-reports as they have blown up repo too 11GB with binary artifacts
-#
-# /danielburgmann 2025-11-05
-################################################################################################
-#
-#  push-reports:
-#    runs-on: ubuntu-latest
-#    env:
-#      reports-repo: digitalservicebund/ris-reports
-#    needs:
-#      - e2e-tests
-#    if: ${{ github.ref == 'refs/heads/main' }}
-#    steps:
-#      - uses: actions/checkout@v5
-#        with:
-#          repository: ${{ env.reports-repo }}
-#          ssh-key: ${{ secrets.REPORTS_DEPLOY_KEY }}
-#          ref: main
-#      - name: Setup git config
-#        run: |
-#          git config user.name "${{ github.repository }}"
-#          # This email identifies the commit as GitHub Actions - see https://github.com/orgs/community/discussions/26560
-#          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-#      - name: E2E test reports - Download
-#        uses: actions/download-artifact@v4
-#        with:
-#          path: tmp/playwright-report/
-#          pattern: playwright-e2e-tests-report-*
-#      - name: Add latest directory
-#        run: mkdir -p test-reports/ris-search/latest
-#      - name: E2E test reports - git add report
-#        uses: digitalservicebund/add-ris-report@c6c8735d23295c36a271c75e7dedc9b6b9a9ef5e
-#        with:
-#          filePath: tmp/playwright-report/
-#          destinationDir: test-reports/ris-search
-#          reportIsDirectory: true
-#      - name: Push reports
-#        run: |
-#          git diff-index --cached --quiet HEAD ||
-#            git commit \
-#              -m "Update from ${{ github.repository }}" \
-#              -m "From commit: ${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }}" &&
-#            git push origin main &&
-#            echo "Pushed reports to ${{ github.server_url }}/${{ env.reports-repo }}" >> $GITHUB_STEP_SUMMARY
-#
+  push-reports:
+    runs-on: ubuntu-latest
+    env:
+      reports-repo: digitalservicebund/ris-reports
+    needs:
+      - e2e-tests
+    if: ${{ github.ref == 'refs/heads/main' }}
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          repository: ${{ env.reports-repo }}
+          ssh-key: ${{ secrets.REPORTS_DEPLOY_KEY }}
+          ref: main
+      - name: Setup git config
+        run: |
+          git config user.name "${{ github.repository }}"
+          # This email identifies the commit as GitHub Actions - see https://github.com/orgs/community/discussions/26560
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+      - name: E2E test reports - Download
+        uses: actions/download-artifact@v4
+        with:
+          path: tmp/playwright-report/
+          pattern: playwright-e2e-tests-report-*
+      - name: Add latest directory
+        run: mkdir -p test-reports/ris-search/latest
+      - name: E2E test reports - git add report
+        uses: digitalservicebund/add-ris-report@c6c8735d23295c36a271c75e7dedc9b6b9a9ef5e
+        with:
+          filePath: tmp/playwright-report/
+          destinationDir: test-reports/ris-search
+          reportIsDirectory: true
+      - name: Push reports
+        run: |
+          git diff-index --cached --quiet HEAD ||
+            git commit \
+              -m "Update from ${{ github.repository }}" \
+              -m "From commit: ${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }}" &&
+            git push origin main &&
+            echo "Pushed reports to ${{ github.server_url }}/${{ env.reports-repo }}" >> $GITHUB_STEP_SUMMARY
