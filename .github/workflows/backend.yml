@@ -256,7 +256,7 @@ jobs:
       - name: Sign the published Docker image
         run: cosign sign --yes ${{ inputs.container-image-tag}}
       - name: Download cosign vulnerability scan record
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v6
         with:
           name: "vuln.json"
       - name: Attest vulnerability scan
@@ -318,7 +318,7 @@ jobs:
           # This email identifies the commit as GitHub Actions - see https://github.com/orgs/community/discussions/26560
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
       - name: Backend Code Documentation - Download
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v6
         with:
           name: backend-code-documentation
           path: tmp/backend-code-documentation/
@@ -355,7 +355,7 @@ jobs:
           # This email identifies the commit as GitHub Actions - see https://github.com/orgs/community/discussions/26560
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
       - name: Download OpenAPI spec artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v6
         with:
           path: docs/data/
           name: openapi.json
