@@ -3845,10 +3845,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@posthog/core@npm:1.3.1":
-  version: 1.3.1
-  resolution: "@posthog/core@npm:1.3.1"
-  checksum: 10c0/448f974be9f383609653c74742f6c474cfaa84f333f466a8291e07a16e386032ad02657096a2d059ceb2d608feeba76245e14ffeda39c9ef92625b4a6ed567fe
+"@posthog/core@npm:1.5.2":
+  version: 1.5.2
+  resolution: "@posthog/core@npm:1.5.2"
+  dependencies:
+    cross-spawn: "npm:^7.0.6"
+  checksum: 10c0/89fc7b090f657c4e0a241fbaed928cb49a2b02cae91655bd172b12b23ecabd91e3ba8efb5437d2fcd5887ed8768be08bc948f50ca23b58137c654ce0030dd5e7
   languageName: node
   linkType: hard
 
@@ -15195,16 +15197,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"posthog-js@npm:^1.250.2":
-  version: 1.279.3
-  resolution: "posthog-js@npm:1.279.3"
+"posthog-js@npm:^1.290.0":
+  version: 1.290.0
+  resolution: "posthog-js@npm:1.290.0"
   dependencies:
-    "@posthog/core": "npm:1.3.1"
+    "@posthog/core": "npm:1.5.2"
     core-js: "npm:^3.38.1"
     fflate: "npm:^0.4.8"
     preact: "npm:^10.19.3"
     web-vitals: "npm:^4.2.4"
-  checksum: 10c0/bc4659dfa7db5d48fa20d2a78b92b83c70e31c19b6b31ee2ca33463a75b55fe4edecbf3573ea3de30dcbfe5868c2902c3425a90d5dcc60053110e3d2d8cb0fa0
+  checksum: 10c0/941fbb23c99933d0cfb3b6f1eefc6ed35c00e1016798ee9a3e4183672075d06c66be204f59436b8dafb3db7cf1cd19b723443bc5e948696f893538eb84e54bc4
   languageName: node
   linkType: hard
 
@@ -16170,7 +16172,7 @@ __metadata:
     pinia: "npm:^3.0.3"
     playwright-lighthouse: "npm:^4.0.0"
     postcss-import: "npm:^16.1.0"
-    posthog-js: "npm:^1.250.2"
+    posthog-js: "npm:^1.290.0"
     prettier: "npm:^3.5.3"
     prettier-plugin-tailwindcss: "npm:^0.7.1"
     primeicons: "npm:^7.0.0"
