@@ -85,9 +85,8 @@ describe("TableOfContents.vue", async () => {
       shallow: true,
     });
     expect(router.currentRoute.value.hash).toBe("#leitsatz");
-    expect(
-      (wrapper.vm as unknown as typeof TableOfContents).selectedEntry.value,
-    ).toBe("leitsatz");
+    // @ts-expect-error -- shouldn't be accessed like this but here we are
+    expect(wrapper.vm.selectedEntry).toBe("leitsatz");
   });
 
   it("replaces the route on hash change", async () => {

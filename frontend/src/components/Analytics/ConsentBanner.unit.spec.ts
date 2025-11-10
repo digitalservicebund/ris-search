@@ -22,7 +22,7 @@ const factory = (userConsent: boolean | undefined) =>
     global: {
       plugins: [
         createTestingPinia({
-          stubActions: false,
+          stubActions: ["setTracking"],
           initialState: {
             postHog: {
               userConsent: userConsent,
@@ -50,14 +50,14 @@ describe("ConsentBanner.vue", () => {
     expect(wrapper.find(cookieBanner).exists()).toBe(false);
   });
 
-  it("calls handleSetTracking when clicking the Decline button", async () => {
+  it("sets tracking when clicking the Decline button", async () => {
     const wrapper = factory(undefined);
-    const setTrackingSpy = vi.spyOn(wrapper.vm, "handleSetTracking");
+    const store = usePostHogStore();
 
     const forms = wrapper.findAll("form");
     const declineForm = forms.find((form) => form.find(declineButton).exists());
     await declineForm?.trigger("submit");
 
-    expect(setTrackingSpy).toHaveBeenCalledWith(false);
+    expect(store.setTracking).toHaveBeenCalledWith(false);
   });
 });
