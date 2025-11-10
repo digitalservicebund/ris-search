@@ -29,6 +29,7 @@ class LiteratureXsltTransformerServiceTest {
         "uli/example5/literature.xml| uli/example5/literature.html| Transforms literature with alternativeHeadline and mainTitleAdditions",
         "uli/example6/literature.xml| uli/example6/literature.html| Transforms literature with mainTitleAdditions",
         "uli/example7/literature.xml| uli/example7/literature.html| Transforms literature with mainTitle and mainTitleAdditions",
+        "uli/example8/literature.xml| uli/example8/literature.html| Transforms literature citations",
       },
       delimiter = '|')
   void testTransformLiteratureXmlDocuments(
