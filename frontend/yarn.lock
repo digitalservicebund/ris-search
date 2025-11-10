@@ -5567,7 +5567,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*, @types/node@npm:^24.3.0":
+"@types/node@npm:*":
   version: 24.9.1
   resolution: "@types/node@npm:24.9.1"
   dependencies:
@@ -5582,6 +5582,15 @@ __metadata:
   dependencies:
     undici-types: "npm:~6.21.0"
   checksum: 10c0/13a4638f2baba3efba2b8bc369dd6f950dccbfca78f318f9c9f2c7adc11fce14fc119723c38567dada2d57a873c092b7356c024924d5974a08f3c1f93dc706c6
+  languageName: node
+  linkType: hard
+
+"@types/node@npm:^24.10.0":
+  version: 24.10.0
+  resolution: "@types/node@npm:24.10.0"
+  dependencies:
+    undici-types: "npm:~7.16.0"
+  checksum: 10c0/f82ed7194e16f5590ef7afdc20c6d09068c76d50278b485ede8f0c5749683536e3064ffa8def8db76915196afb3724b854aa5723c64d6571b890b14492943b46
   languageName: node
   linkType: hard
 
@@ -16162,7 +16171,7 @@ __metadata:
     "@types/js-cookie": "npm:^3.0.6"
     "@types/jsdom": "npm:^21.1.7"
     "@types/lodash": "npm:^4.17.20"
-    "@types/node": "npm:^24.3.0"
+    "@types/node": "npm:^24.10.0"
     "@types/sanitize-html": "npm:^2.16.0"
     "@unhead/vue": "npm:^2.0.10"
     "@vitejs/plugin-vue": "npm:^5.2.4"
