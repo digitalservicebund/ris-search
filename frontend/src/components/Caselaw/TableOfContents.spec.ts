@@ -68,8 +68,8 @@ describe("TableOfContents.vue", async () => {
       wrapper.vm as unknown as typeof TableOfContents,
       "selectEntry",
     );
-    Object.defineProperty(window, "scrollY", { value: 0, writable: true });
-    window.dispatchEvent(new Event("scroll"));
+    Object.defineProperty(globalThis, "scrollY", { value: 0, writable: true });
+    globalThis.dispatchEvent(new Event("scroll"));
 
     await wrapper.vm.$nextTick();
 
