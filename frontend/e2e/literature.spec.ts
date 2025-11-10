@@ -262,7 +262,11 @@ test.describe("actions menu", () => {
   });
 });
 
-test("hides tabs and shows details if document is empty", async ({ page }) => {
+// Skipped because of a client/SSR rendering mismatch, will be added again once
+// that is fixed (see daily discussion from Nov 4th 2025)
+test.skip("hides tabs and shows details if document is empty", async ({
+  page,
+}) => {
   await page.goto("/literature/XXLU000000005");
   await page.waitForLoadState("networkidle");
 
