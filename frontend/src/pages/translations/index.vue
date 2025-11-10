@@ -41,18 +41,18 @@ const translationsMap = computed(() => {
 
 const sortedTranslations = computed<TranslationContent[] | null>(() => {
   if (!translationsList.value) return null;
+  let results: TranslationContent[] = [];
 
   if (activeSearchTerm.value == "") {
-    return [...translationsList.value].sort((a, b) =>
-      a.name.localeCompare(b.name),
-    );
+    results = [...translationsList.value];
+  } else {
+    results = minisearch.value
+      .search(activeSearchTerm.value, { prefix: true, fuzzy: 0.2 })
+      .map((r) => translationsMap.value.get(r.id))
+      .filter((doc): doc is TranslationContent => !!doc);
   }
-  const results = minisearch.value
-    .search(activeSearchTerm.value, { prefix: true, fuzzy: 0.2 })
-    .map((r) => translationsMap.value.get(r.id))
-    .filter((doc): doc is TranslationContent => !!doc);
 
-  return results;
+  return results.sort((a, b) => a.name.localeCompare(b.name));
 });
 
 const minisearch = computed(() => {
@@ -149,7 +149,7 @@ useStaticPageSeo("translations-list");
           <li v-for="t in sortedTranslations" :key="t['@id']">
             <a
               :href="`translations/${t['@id']}`"
-              class="group my-16 block bg-white p-8 px-32 py-24 no-underline hover:no-underline"
+              class="group my-16 block border-4 border-transparent bg-white p-8 px-32 py-24 no-underline hover:text-blue-800 hover:no-underline focus:border-blue-800"
             >
               <div class="max-w-prose space-y-24">
                 <span class="mr-24 group-hover:underline">{{ t["@id"] }}</span>
