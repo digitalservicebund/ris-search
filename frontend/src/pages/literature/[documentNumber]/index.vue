@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from "vue";
+import { useFetch } from "#app";
 import LiteratureActionsMenu from "~/components/ActionMenu/LiteratureActionsMenu.vue";
 import ContentWrapper from "~/components/CustomLayouts/ContentWrapper.vue";
 import SidebarLayout from "~/components/CustomLayouts/SidebarLayout.vue";
@@ -10,8 +11,8 @@ import RisBreadcrumb from "~/components/Ris/RisBreadcrumb.vue";
 import RisDocumentTitle from "~/components/Ris/RisDocumentTitle.vue";
 import RisTabs from "~/components/Ris/RisTabs.vue";
 import { tabPanelClass } from "~/components/Tabs.styles";
-import { useLiterature } from "~/composables/useLiterature";
-import { DocumentKind } from "~/types";
+import { useBackendURL } from "~/composables/useBackendURL";
+import { DocumentKind, type Literature } from "~/types";
 import { formatDocumentKind } from "~/utils/displayValues";
 import { getTitle } from "~/utils/literature";
 import IcBaselineSubject from "~icons/ic/baseline-subject";
@@ -19,7 +20,22 @@ import IcOutlineInfo from "~icons/ic/outline-info";
 
 definePageMeta({ layout: "base" }); // use "base" layout to allow for full-width tab backgrounds
 
-const { loading, error, data: literature, html } = await useLiterature();
+const route = useRoute();
+const documentNumber = route.params.documentNumber as string;
+const documentMetadataUrl = `${useBackendURL()}/v1/literature/${documentNumber}`;
+
+const {
+  status,
+  data: literature,
+  error: metadataError,
+} = await useFetch<Literature>(documentMetadataUrl);
+
+const { data: html, error: contentError } = await useFetch<string>(
+  `${documentMetadataUrl}.html`,
+  {
+    headers: { Accept: "text/html" },
+  },
+);
 
 const emptyTitlePlaceholder = "Titelzeile nicht vorhanden";
 const title = computed(() => getTitle(literature.value));
@@ -61,14 +77,17 @@ const tabs = computed(() => [
   },
 ]);
 
-if (error?.value) {
-  showError(error?.value);
+if (metadataError?.value) {
+  showError(metadataError.value);
+}
+if (contentError?.value) {
+  showError(contentError.value);
 }
 </script>
 
 <template>
   <ContentWrapper border>
-    <div v-if="loading" class="container">Lade ...</div>
+    <div v-if="status == 'pending'" class="container">Lade ...</div>
     <div v-if="!!literature" class="container text-left">
       <div class="flex items-center gap-8 print:hidden">
         <RisBreadcrumb :items="breadcrumbItems" class="grow" />
