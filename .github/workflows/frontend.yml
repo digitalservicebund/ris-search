@@ -226,7 +226,7 @@ jobs:
         if: ${{ github.actor != 'dependabot[bot]' && github.ref == 'refs/heads/main' }}
         # Third-party action, pin to commit SHA!
         # See https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions
-        uses: sigstore/cosign-installer@4959ce089c160fddf62f7b42464195ba1a56d382
+        uses: sigstore/cosign-installer@faadad0cce49287aee09b3a48701e75088a2c6ad
       - name: Sign the published Docker image
         if: ${{ github.actor != 'dependabot[bot]' && github.ref == 'refs/heads/main' }}
         run: cosign sign --yes ${{ inputs.container-image-tag }}
