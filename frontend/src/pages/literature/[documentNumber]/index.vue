@@ -56,7 +56,7 @@ const breadcrumbItems = computed(() => [
     route: `/search?category=${DocumentKind.Literature}`,
   },
   {
-    label: title?.value ?? emptyTitlePlaceholder,
+    label: title.value ?? emptyTitlePlaceholder,
   },
 ]);
 
