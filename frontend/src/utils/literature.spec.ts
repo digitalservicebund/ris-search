@@ -1,23 +1,13 @@
 import { describe, expect } from "vitest";
 import type { Literature } from "~/types";
 
-const isDocumentEmptyTestData = [
-  ["outline", undefined, undefined],
-  ["outline", undefined, "headline"],
-  ["outline", "shortReport", undefined],
-  ["outline", "shortReport", "headline"],
-  [undefined, undefined, "headline"],
-  [undefined, "shortReport", undefined],
-  [undefined, "shortReport", "headline"],
-];
-
 describe("isDocumentEmpty", () => {
   it("returns true if document is undefined", () => {
     const result = isDocumentEmpty(undefined);
     expect(result).toBeTruthy();
   });
 
-  it("returns true if document has neither title, outline or short report", () => {
+  it("returns true if document has no title, outline or short report", () => {
     const result = isDocumentEmpty({
       outline: null,
       shortReport: null,
@@ -25,17 +15,70 @@ describe("isDocumentEmpty", () => {
     expect(result).toBeTruthy();
   });
 
-  it.each(isDocumentEmptyTestData)(
-    "returns false given outline: '%s', shortReport: '%s', headline: '%s'",
-    (outline, shortReport, headline) => {
-      const result = isDocumentEmpty({
-        outline: outline,
-        shortReport: shortReport,
-        headline: headline,
-      } as Literature);
-      expect(result).toBeFalsy();
-    },
-  );
+  it("returns true if document has only headline and no outline or short report", () => {
+    const result = isDocumentEmpty({
+      outline: null,
+      shortReport: null,
+      headline: "headline",
+    } as Literature);
+    expect(result).toBeTruthy();
+  });
+
+  it("returns true if document has only alternativeHeadline and no outline or short report", () => {
+    const result = isDocumentEmpty({
+      outline: null,
+      shortReport: null,
+      alternativeHeadline: "alternativeHeadline",
+    } as Literature);
+    expect(result).toBeTruthy();
+  });
+
+  it("returns true if document has only headlineAdditions and no outline or short report", () => {
+    const result = isDocumentEmpty({
+      outline: null,
+      shortReport: null,
+      headlineAdditions: "headlineAdditions",
+    } as Literature);
+    expect(result).toBeTruthy();
+  });
+
+  it("returns false if document has outline", () => {
+    const result = isDocumentEmpty({
+      outline: "outline",
+    } as Literature);
+    expect(result).toBeFalsy();
+  });
+
+  it("returns false if document has shortReport", () => {
+    const result = isDocumentEmpty({
+      shortReport: "shortReport",
+    } as Literature);
+    expect(result).toBeFalsy();
+  });
+
+  it("returns false if document has headline and alternativeHeadline", () => {
+    const result = isDocumentEmpty({
+      headline: "headline",
+      alternativeHeadline: "alternativeHeadline",
+    } as Literature);
+    expect(result).toBeFalsy();
+  });
+
+  it("returns false if document has headline and headlineAdditions", () => {
+    const result = isDocumentEmpty({
+      headline: "headline",
+      headlineAdditions: "headlineAdditions",
+    } as Literature);
+    expect(result).toBeFalsy();
+  });
+
+  it("returns false if document has alternativeHeadline and headlineAdditions", () => {
+    const result = isDocumentEmpty({
+      alternativeHeadline: "alternativeHeadline",
+      headlineAdditions: "headlineAdditions",
+    } as Literature);
+    expect(result).toBeFalsy();
+  });
 });
 
 const getTitleDataTestData = [
