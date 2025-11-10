@@ -9,7 +9,7 @@
   --shadow-active-tab:
     -1px -1px 0 0 var(--color-gray-600), 1px -1px 0 0 var(--color-gray-600);
 }
-@custom-variant aria-current-section (&[aria-current="section"]);
+@custom-variant aria-current-location (&[aria-current="location"]);
 .max-w-prose {
   max-width: var(--spacing-prose);
 }
