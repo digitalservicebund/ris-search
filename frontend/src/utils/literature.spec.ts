@@ -3,7 +3,7 @@ import type { Literature } from "~/types";
 
 describe("isDocumentEmpty", () => {
   it("returns true if document is undefined", () => {
-    const result = isDocumentEmpty(undefined);
+    const result = isDocumentEmpty();
     expect(result).toBeTruthy();
   });
 
@@ -94,7 +94,7 @@ const getTitleDataTestData = [
 
 describe("getTitle", () => {
   it("returns undefined if literature is undefined", () => {
-    expect(getTitle(undefined)).toBeUndefined();
+    expect(getTitle()).toBeUndefined();
   });
 
   it.each(getTitleDataTestData)(
