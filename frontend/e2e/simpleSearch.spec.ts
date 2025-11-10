@@ -43,7 +43,7 @@ test.describe("general search page features", () => {
     await page.goto("/search?query=und");
 
     const resultCounter = getResultCounter(page);
-    await expect(resultCounter).toHaveText("12 Suchergebnisse");
+    await expect(resultCounter).toHaveText("13 Suchergebnisse");
 
     const searchResults = getSearchResults(page);
 
@@ -52,8 +52,8 @@ test.describe("general search page features", () => {
     await page.getByLabel("nächste Ergebnisse").click();
     await page.waitForURL("/search?query=und&pageNumber=1");
 
-    expect(resultCounter).toHaveText("12 Suchergebnisse");
-    await expect(searchResults).toHaveCount(2);
+    expect(resultCounter).toHaveText("13 Suchergebnisse");
+    await expect(searchResults).toHaveCount(3);
 
     await page.getByLabel("vorherige Ergebnisse").click();
     await page.waitForURL("/search?query=und");
@@ -441,7 +441,7 @@ test.describe("searching literature", () => {
 
     await expect(page).toHaveURL(/dateBefore=2013-12-31/);
 
-    await expect(getSearchResults(page)).toHaveCount(2);
+    await expect(getSearchResults(page)).toHaveCount(3);
   });
 
   test("searches by publication year with dateAfter", async ({ page }) => {
@@ -489,7 +489,7 @@ test.describe("searching literature", () => {
 
     await expect(page).toHaveURL(/dateAfter=2015-01-01&dateBefore=2024-12-31/);
 
-    await expect(getSearchResults(page)).toHaveCount(2);
+    await expect(getSearchResults(page)).toHaveCount(4);
   });
 });
 
@@ -524,7 +524,7 @@ noJsTest("search works without JavaScript", async ({ page }) => {
 noJsTest("pagination works without JavaScript", async ({ page }) => {
   await page.goto("/search?query=und", { waitUntil: "networkidle" });
 
-  await expect(getResultCounter(page)).toHaveText("12 Suchergebnisse");
+  await expect(getResultCounter(page)).toHaveText("13 Suchergebnisse");
   await expect(getSearchResults(page)).toHaveCount(10);
 
   await page.getByLabel("nächste Ergebnisse").click();
@@ -532,12 +532,12 @@ noJsTest("pagination works without JavaScript", async ({ page }) => {
     waitUntil: "networkidle",
   });
 
-  await expect(getResultCounter(page)).toHaveText("12 Suchergebnisse");
-  await expect(getSearchResults(page)).toHaveCount(2);
+  await expect(getResultCounter(page)).toHaveText("13 Suchergebnisse");
+  await expect(getSearchResults(page)).toHaveCount(3);
 
   await page.getByLabel("vorherige Ergebnisse").click();
   await page.waitForURL("/search?query=und", { waitUntil: "networkidle" });
 
-  await expect(getResultCounter(page)).toHaveText("12 Suchergebnisse");
+  await expect(getResultCounter(page)).toHaveText("13 Suchergebnisse");
   await expect(getSearchResults(page)).toHaveCount(10);
 });
