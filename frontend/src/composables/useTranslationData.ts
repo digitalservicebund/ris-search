@@ -130,6 +130,11 @@ export function getGermanOriginal(
       throw notFoundError("Not Found");
     }
 
-    return response.member[0];
+    const [firstResult] = response.member;
+
+    if (firstResult?.item?.abbreviation === id) {
+      return firstResult;
+    }
+    throw notFoundError(`Not Found: Abbreviation mismatch for ID: ${id}`);
   });
 }

@@ -187,7 +187,7 @@ describe("getGermanOriginal", () => {
   });
 
   it("returns first legislation work when API returns results", async () => {
-    const mockResult = { id: "abc123" };
+    const mockResult = { item: { abbreviation: "test-id" } };
     requestFetchMock.mockResolvedValueOnce({ member: [mockResult] });
 
     const { data, error } = await getGermanOriginal("test-id");
@@ -219,5 +219,16 @@ describe("getGermanOriginal", () => {
     expect(error.value).not.toBeNull();
     expect(error.value?.statusCode).toBe(404);
     expect(error.value?.statusMessage).toBe("Not Found");
+  });
+  it("throws an error when the ids don't macht", async () => {
+    const mockTranslationResponse = {
+      member: [{ item: { abbreviation: "test-id" } }],
+    };
+
+    requestFetchMock.mockResolvedValueOnce(mockTranslationResponse);
+    const { error } = await getGermanOriginal("cde");
+    expect(error.value?.message).toBe(
+      "Not Found: Abbreviation mismatch for ID: cde",
+    );
   });
 });
