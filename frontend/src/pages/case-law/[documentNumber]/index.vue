@@ -196,7 +196,7 @@ const tabs = computed(() => [
       </div>
     </div>
 
-    <RisTabs :tabs="tabs" aria-label="Ansichten der Gerichtsentscheidung">
+    <RisTabs :tabs="tabs" label="Ansichten der Gerichtsentscheidung">
       <template #default="{ activeTab, isClient }">
         <section
           id="text"

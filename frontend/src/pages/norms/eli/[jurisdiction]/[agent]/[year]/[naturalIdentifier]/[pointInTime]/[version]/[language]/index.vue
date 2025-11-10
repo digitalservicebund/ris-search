@@ -251,7 +251,7 @@ useDynamicSeo({ title, description });
           :valid-to="validityInterval?.to"
         />
       </div>
-      <RisTabs :tabs="tabs" aria-label="Ansichten des Gesetzes">
+      <RisTabs :tabs="tabs" label="Ansichten des Gesetzes">
         <template #default="{ activeTab, isClient }">
           <section
             id="text"
