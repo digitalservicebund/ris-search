@@ -51,9 +51,9 @@ public class FeedbackController {
       summary = "Sends the user feedback to PostHog",
       description = "Sends the user feedback to PostHog to avoid recording user data.")
   @ApiResponse(responseCode = "200", description = "Success")
+  @ApiResponse(responseCode = "404", description = "Not found")
   @ApiResponse(responseCode = "422", description = "Required feedback data is missing")
   @ApiResponse(responseCode = "500", description = "Internal Server Error")
-  @ApiResponse(responseCode = "501", description = "Operation not supported")
   public ResponseEntity<Map<String, String>> sendFeedback(
       @Parameter(name = "text", description = "The feedback text to be sent")
           @RequestParam(value = "text")
