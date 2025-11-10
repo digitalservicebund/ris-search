@@ -162,7 +162,10 @@ public class ControllerExceptionHandler {
   public ResponseEntity<CustomErrorResponse> handleUnsupportedOperationException(
       UnsupportedOperationException ex) {
     logger.warn(ex.getMessage());
-    return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).build();
+    CustomError error = new CustomError(CODE_FOR_404, ex.getMessage(), "");
+    CustomErrorResponse errorResponse =
+        CustomErrorResponse.builder().errors(List.of(error)).build();
+    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
   }
 
   public static ResponseEntity<CustomErrorResponse> return403() {

@@ -22,6 +22,6 @@ public class TestMockEndpointsController {
 
   @GetMapping("/notSupported")
   public ResponseEntity<String> NotSupportedResponse() throws UnsupportedOperationException {
-    throw new UnsupportedOperationException("Not implemented yet");
+    throw new UnsupportedOperationException("Operation not supported");
   }
 }

@@ -70,10 +70,11 @@ class ErrorResponseTest extends ContainersIntegrationBase {
   }
 
   @Test
-  @DisplayName("Should return 501 error response when operation is not supported")
+  @DisplayName("Should return 404 error response when unsupported operation exception is thrown")
   void shouldReturn501() throws Exception {
     mockMvc
         .perform(get("/notSupported").contentType(MediaType.TEXT_HTML))
-        .andExpect(status().is(501));
+        .andExpect(status().is(404))
+        .andExpect(jsonPath("$.errors[0].message", Matchers.is("Operation not supported")));
   }
 }
