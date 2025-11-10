@@ -19,7 +19,7 @@ export interface LinkTab {
 
 const props = defineProps<{
   tabs: LinkTab[];
-  ariaLabel: string;
+  label: string;
   defaultTab?: string;
 }>();
 
@@ -42,7 +42,7 @@ const getTabClasses = (tabId: string) => {
 </script>
 
 <template>
-  <nav :class="tabListContentClass" :aria-label="ariaLabel">
+  <nav :class="tabListContentClass" :aria-label="label">
     <div :class="tabListClass">
       <a
         v-for="tab in tabs"

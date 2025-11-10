@@ -29,7 +29,7 @@ describe("RisTabs.vue", () => {
     render(RisTabs, {
       props: {
         tabs: mockTabs,
-        ariaLabel: "Test tabs",
+        label: "Test tabs",
       },
     });
 
@@ -49,7 +49,7 @@ describe("RisTabs.vue", () => {
     render(RisTabs, {
       props: {
         tabs: mockTabs,
-        ariaLabel: "Test tabs",
+        label: "Test tabs",
       },
     });
 
@@ -61,7 +61,7 @@ describe("RisTabs.vue", () => {
     render(RisTabs, {
       props: {
         tabs: mockTabs,
-        ariaLabel: "Test tabs",
+        label: "Test tabs",
       },
     });
 
@@ -74,7 +74,7 @@ describe("RisTabs.vue", () => {
     render(RisTabs, {
       props: {
         tabs: mockTabs,
-        ariaLabel: "Test tabs",
+        label: "Test tabs",
         defaultTab: "details",
       },
     });
@@ -88,7 +88,7 @@ describe("RisTabs.vue", () => {
     render(RisTabs, {
       props: {
         tabs: mockTabs,
-        ariaLabel: "Test tabs",
+        label: "Test tabs",
       },
     });
 
@@ -124,7 +124,7 @@ describe("RisTabs.vue", () => {
     render(RisTabs, {
       props: {
         tabs: tabsWithoutIcons,
-        ariaLabel: "Test tabs",
+        label: "Test tabs",
       },
     });
 

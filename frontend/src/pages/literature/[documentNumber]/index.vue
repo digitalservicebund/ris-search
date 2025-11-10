@@ -98,7 +98,7 @@ const tabs = computed(() => [
         :years-of-publication="literature.yearsOfPublication"
       />
     </div>
-    <RisTabs :tabs="tabs" aria-label="Ansichten des Literaturnachweises">
+    <RisTabs :tabs="tabs" label="Ansichten des Literaturnachweises">
       <template #default="{ activeTab, isClient }">
         <section
           id="text"

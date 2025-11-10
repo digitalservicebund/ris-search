@@ -248,8 +248,11 @@ export default defineNuxtConfig({
     typeCheck: true,
     tsConfig: {
       compilerOptions: {
-        types: ["unplugin-icons/types/vue"],
+        types: ["node", "vitest", "vitest/globals", "unplugin-icons/types/vue"],
       },
+    },
+    nodeTsConfig: {
+      include: ["../e2e/**/*.ts"],
     },
   },
   ignore: [

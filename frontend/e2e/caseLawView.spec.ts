@@ -70,7 +70,7 @@ test("can search, filter for case law, and view a single case law documentation 
     // Fix Intersection Observer logic (broken since Nuxt upgrade) - see ticket RISDEV-
     // Once fixed, remove the isMobileTest check and enable aria-current verification for mobile too
     if (!isMobileTest) {
-      const currentSection = sidebar.locator('a[aria-current="section"]');
+      const currentSection = sidebar.locator('a[aria-current="location"]');
       await expect(currentSection).toHaveCount(1);
     }
   });
