@@ -105,7 +105,7 @@ jobs:
           cache-dir: .trivy
           trivyignores: backend/.trivyignore
       - name: Upload Trivy vulnerability image scanner results (as artifact)
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: "trivy-image-results-backend.sarif"
           path: "trivy-results.sarif"
@@ -141,7 +141,7 @@ jobs:
           format: "cosign-vuln"
           output: "vuln.json"
       - name: Upload cosign vulnerability scan record
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: "vuln.json"
           path: "vuln.json"
@@ -183,7 +183,7 @@ jobs:
         run: ./gradlew sonar
       - name: Upload OpenAPI specification
         if: ${{ steps.sonarqube-tests.outcome == 'success' }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: openapi.json
           retention-days: 3
@@ -294,7 +294,7 @@ jobs:
         working-directory: ./backend
         run: ./gradlew javadoc
       - name: Upload documentation
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: backend-code-documentation
           retention-days: 3
