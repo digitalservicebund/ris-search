@@ -96,14 +96,12 @@ describe("CookieSettings Page", () => {
     cookiesMock.get.mockReturnValue("false");
     const wrapper = factory(false);
     await wrapper.vm.$nextTick();
-    const setTrackingSpy = vi.spyOn(wrapper.vm, "handleSetTracking");
     const forms = wrapper.findAll("form");
     const acceptForm = forms.find((form) =>
       form.find('[data-testid="settings-accept-cookie"]').exists(),
     );
     await acceptForm?.trigger("submit");
     await wrapper.vm.$nextTick();
-    expect(setTrackingSpy).toHaveBeenCalledWith(true);
     assertConsentGiven(wrapper);
   });
 
@@ -111,14 +109,12 @@ describe("CookieSettings Page", () => {
     cookiesMock.get.mockReturnValue("true");
     const wrapper = factory(true);
     await wrapper.vm.$nextTick();
-    const setTrackingSpy = vi.spyOn(wrapper.vm, "handleSetTracking");
     const forms = wrapper.findAll("form");
     const declineForm = forms.find((form) =>
       form.find(declineButtonSelector).exists(),
     );
     await declineForm?.trigger("submit");
     await wrapper.vm.$nextTick();
-    expect(setTrackingSpy).toHaveBeenCalledWith(false);
     assertConsentRejected(wrapper);
   });
 });

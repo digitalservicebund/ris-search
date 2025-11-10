@@ -68,8 +68,8 @@ describe("TableOfContents.vue", async () => {
       wrapper.vm as unknown as typeof TableOfContents,
       "selectEntry",
     );
-    Object.defineProperty(window, "scrollY", { value: 0, writable: true });
-    window.dispatchEvent(new Event("scroll"));
+    Object.defineProperty(globalThis, "scrollY", { value: 0, writable: true });
+    globalThis.dispatchEvent(new Event("scroll"));
 
     await wrapper.vm.$nextTick();
 
@@ -85,9 +85,8 @@ describe("TableOfContents.vue", async () => {
       shallow: true,
     });
     expect(router.currentRoute.value.hash).toBe("#leitsatz");
-    expect(
-      (wrapper.vm as unknown as typeof TableOfContents).selectedEntry.value,
-    ).toBe("leitsatz");
+    // @ts-expect-error -- shouldn't be accessed like this but here we are
+    expect(wrapper.vm.selectedEntry).toBe("leitsatz");
   });
 
   it("replaces the route on hash change", async () => {
