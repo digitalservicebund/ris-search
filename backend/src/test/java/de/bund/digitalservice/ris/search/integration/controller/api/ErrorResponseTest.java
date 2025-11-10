@@ -71,7 +71,7 @@ class ErrorResponseTest extends ContainersIntegrationBase {
 
   @Test
   @DisplayName("Should return 404 error response when unsupported operation exception is thrown")
-  void shouldReturn501() throws Exception {
+  void shouldReturn404ForUnsupportedOperations() throws Exception {
     mockMvc
         .perform(get("/notSupported").contentType(MediaType.TEXT_HTML))
         .andExpect(status().is(404))
