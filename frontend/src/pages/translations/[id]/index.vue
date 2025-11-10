@@ -166,7 +166,7 @@ const tabs = computed(() => [
           Translations may not be updated at the same time as the German legal
           provision.
           <NuxtLink
-            class="focus:outline focus:outline-4 focus:outline-offset-4 focus:outline-blue-800"
+            class="ris-link1-regular focus:outline focus:outline-4 focus:outline-offset-4 focus:outline-blue-800"
             :to="`/norms/${germanOriginalWorkEli}`"
             >Go to the German version</NuxtLink
           >.
