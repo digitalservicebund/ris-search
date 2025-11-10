@@ -30,7 +30,6 @@ opensearch-test-containers = "2.1.3"
 jsoup = "1.21.2"
 logbook = "3.12.3"
 org-json = "20250517"
-ds-xml-parser = "0.8"
 commons-csv = "1.13.0"
 oauth2-test-addon = "8.1.23"
 amazon-aws-sdk-s3 = "2.29.45"
@@ -68,7 +67,6 @@ posthog = { module = "com.posthog.java:posthog", version.ref = "posthog" }
 commons-text = { module = "org.apache.commons:commons-text", version.ref = "commons-text" }
 logbook-spring-boot-starter = { module = "org.zalando:logbook-spring-boot-starter", version.ref = "logbook" }
 json = { module = "org.json:json", version.ref = "org-json" }
-xml-parser = { module = "com.github.digitalservicebund:xml-parser", version.ref = "ds-xml-parser" }
 commons-csv = { module = "org.apache.commons:commons-csv", version.ref = "commons-csv" }
 jackson-jsonld = { module = "com.io-informatics.oss:jackson-jsonld", version.ref = "jackson-json-ld" }
 jackson-datatype-jsr310 = { module = "com.fasterxml.jackson.datatype:jackson-datatype-jsr310", version.ref = "jackson-datatype-jsr310"}

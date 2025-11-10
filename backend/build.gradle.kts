@@ -29,9 +29,6 @@ configurations {
 
 repositories {
     mavenCentral()
-    maven {
-        setUrl("https://jitpack.io")
-    }
 }
 
 jacoco { toolVersion = libs.versions.jacoco.get() }
@@ -84,7 +81,6 @@ dependencies {
 
     implementation(libs.logbook.spring.boot.starter)
     implementation(libs.json)
-    implementation(libs.xml.parser)
     implementation(libs.commons.csv)
 
     implementation(libs.jackson.jsonld)

@@ -29,11 +29,11 @@
         },
         "DATUM": {
           "type": "alias",
-          "path": "norms_date"
+          "path": "entry_into_force_date"
         },
         "DAT": {
           "type": "alias",
-          "path": "norms_date"
+          "path": "entry_into_force_date"
         },
         "TE": {
           "type": "alias",

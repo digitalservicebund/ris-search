@@ -2214,7 +2214,11 @@
         }
       },
       "StreamingResponseBody": {},
-      "AbstractDocumentSchema": {},
+      "AbstractDocumentSchema": {
+        "discriminator": { "propertyName": "@type" },
+        "properties": { "@type": { "type": "string" } },
+        "required": ["@type"]
+      },
       "CaseLawSearchSchema": {
         "allOf": [
           { "$ref": "#/components/schemas/AbstractDocumentSchema" },
