@@ -1,0 +1,132 @@
+name: Build, scan and push Frontend image
+
+on:
+  workflow_call:
+    inputs:
+      container-image-tag:
+        description: 'The full tag for the frontend container image'
+        required: true
+        type: string
+      container-image-version:
+        description: 'The sha of the commit that triggered the pipeline'
+        required: true
+        type: string
+      container-registry:
+        description: 'Name of the container registry'
+        required: false
+        type: string
+        default: ghcr.io
+
+env:
+  RUN_ID: ${{ github.run_id }}
+  SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
+  SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+  SENTRY_RELEASE: ${{ github.sha }}
+
+jobs:
+  build-scan-and-push-image:
+    runs-on: ubuntu-latest
+    permissions:
+      security-events: write
+      packages: write
+      id-token: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v5
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      - name: Log into container registry
+        # Third-party action, pin to commit SHA!
+        # See https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions
+        uses: docker/login-action@28fdb31ff34708d19615a74d67103ddc2ea9725c
+        with:
+          registry: ${{ inputs.container-registry }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build frontend image
+        uses: docker/build-push-action@v4
+        with:
+          file: frontend/Dockerfile
+          context: frontend
+          tags: ${{ inputs.container-image-tag}}
+          push: true
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+      - name: Run Trivy vulnerability image scanner
+        # Third-party action, pin to commit SHA!
+        # See https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions
+        uses: aquasecurity/trivy-action@a20de5420d57c4102486cdd9578b45609c99d7eb
+        with:
+          image-ref: ${{ inputs.container-image-tag}}
+          format: "sarif"
+          output: "trivy-results.sarif"
+      - name: Upload Trivy vulnerability image scanner results (as artifact)
+        uses: actions/upload-artifact@v5
+        with:
+          name: "trivy-image-results-frontend.sarif"
+          path: "trivy-results.sarif"
+          if-no-files-found: error
+      - name: Upload Trivy image scan results to GitHub Security tab (on 'main' only)
+        uses: github/codeql-action/upload-sarif@v4
+        if: ${{ always() &&  github.ref == 'refs/heads/main' }} # Bypass non-zero exit code..
+        with:
+          sarif_file: "trivy-results.sarif"
+          category: trivy-frontend-image-scan
+      - name: Check Trivy results
+        run: |
+          if grep -qE 'HIGH|CRITICAL' trivy-results.sarif; then
+            echo "Vulnerabilities found"
+            echo "### Found vulnerabilities in trivy results" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            RESULT=$(cat trivy-results.sarif | jq -r '[.runs[].results[].message.text] | join("\\n\\n")')
+            echo -e $RESULT >> $GITHUB_STEP_SUMMARY
+            echo -e $RESULT
+            exit 1
+          else
+            echo "No significant vulnerabilities found"
+            exit 0
+          fi
+      - name: Generate Cosign vulnerability scan record
+        # Third-party action, pin to commit SHA!
+        # See https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions
+        uses: aquasecurity/trivy-action@a20de5420d57c4102486cdd9578b45609c99d7eb
+        if: ${{ github.actor != 'dependabot[bot]' }}
+        with:
+          image-ref: ${{ inputs.container-image-tag }}
+          format: "cosign-vuln"
+          output: "vuln-frontend.json"
+      - name: Upload Cosign vulnerability scan record
+        uses: actions/upload-artifact@v5
+        if: ${{ github.actor != 'dependabot[bot]' }}
+        with:
+          name: "vuln-frontend.json"
+          path: "vuln-frontend.json"
+          if-no-files-found: error
+      - name: Install Cosign
+        if: ${{ github.actor != 'dependabot[bot]' && github.ref == 'refs/heads/main' }}
+        # Third-party action, pin to commit SHA!
+        # See https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions
+        uses: sigstore/cosign-installer@faadad0cce49287aee09b3a48701e75088a2c6ad
+      - name: Sign the published Docker image
+        if: ${{ github.actor != 'dependabot[bot]' && github.ref == 'refs/heads/main' }}
+        run: cosign sign --yes ${{ inputs.container-image-tag }}
+      - name: Attest vulnerability scan
+        if: ${{ github.actor != 'dependabot[bot]' && github.ref == 'refs/heads/main' }}
+        run: cosign attest --yes --replace --predicate vuln-frontend.json --type vuln ${{ inputs.container-image-tag }}
+      - name: Install Sentry CLI using official script
+        if: ${{ github.actor != 'dependabot[bot]' && github.ref == 'refs/heads/main' }}
+        run: |
+          curl -sL https://sentry.io/get-cli/ | bash
+      - name: Create and finalize Sentry release for frontend
+        if: ${{ github.actor != 'dependabot[bot]' && github.ref == 'refs/heads/main' }}
+        run: |
+          sentry-cli releases new ${{ inputs.container-image-version }}
+          sentry-cli releases set-commits --auto ${{ inputs.container-image-version }}
+          sentry-cli releases finalize ${{ inputs.container-image-version }}
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+      - name: Send status to Slack
+        if: ${{ failure() && github.ref == 'refs/heads/main' }}
+        uses: digitalservicebund/notify-on-failure-gha@66c485757701f8d5dbee32f24df38d904ca693ba
+        with:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
