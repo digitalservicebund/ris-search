@@ -1,4 +1,5 @@
 import { playAudit } from "playwright-lighthouse";
+import { environment } from "../playwright.config";
 import { seoTest as test } from "./utils/fixtures";
 
 export const testPages = [
@@ -74,7 +75,7 @@ test.describe("SEO testing for desktop and mobile using lighthouse", () => {
       await page.goto(testPage.url, { waitUntil: "networkidle" });
       await playAudit({
         page,
-        port: 9222,
+        port: environment.remoteDebuggingPort,
         thresholds: { seo: 90 },
         config: {
           extends: "lighthouse:default",

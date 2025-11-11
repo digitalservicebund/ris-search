@@ -40,15 +40,20 @@ export const seoTest = base.extend<{}, SeoWorkerFixtures>({
   persistentContext: [
     // eslint-disable-next-line no-empty-pattern
     async ({}, use) => {
-      const userDataDir = path.join(os.tmpdir(), "playwright-seo-userdata");
+      const port = environment.remoteDebuggingPort;
+      const userDataDir = path.join(os.tmpdir(), `playwright-seo-${port}`);
 
       const context = await chromium.launchPersistentContext(userDataDir, {
         headless: true,
-        args: [`--remote-debugging-port=${environment.remoteDebuggingPort}`],
+        args: [
+          `--remote-debugging-port=${port}`,
+          "--no-sandbox",
+          "--disable-setuid-sandbox",
+        ],
       });
 
       await use(context);
-      await context.close();
+      await context.close().catch(() => {});
     },
     { scope: "worker" },
   ],
