@@ -1,10 +1,10 @@
 <script setup lang="ts">
+import { RisSingleAccordion } from "@digitalservicebund/ris-ui/components";
 import type { Dayjs } from "dayjs";
 import type { TreeNode } from "primevue/treenode";
 import { computed } from "vue";
 import type { ComputedRef } from "vue";
 import { useRoute } from "#app";
-import Accordion from "~/components/Accordion.vue";
 import NormActionsMenu from "~/components/ActionMenu/NormActionsMenu.vue";
 import ContentWrapper from "~/components/CustomLayouts/ContentWrapper.vue";
 import TableOfContentsLayout from "~/components/CustomLayouts/SidebarLayout.vue";
@@ -259,13 +259,15 @@ useDynamicSeo({ title, description });
               <template #content>
                 <h2 class="sr-only">Text</h2>
                 <IncompleteDataMessage />
-                <Accordion
+
+                <RisSingleAccordion
                   v-if="htmlParts.officialToc"
+                  class="mt-24"
                   header-expanded="Amtliches Inhaltsverzeichnis ausblenden"
                   header-collapsed="Amtliches Inhaltsverzeichnis einblenden"
                 >
                   <div v-html="htmlParts.officialToc" />
-                </Accordion>
+                </RisSingleAccordion>
                 <div v-observe-elements class="norm-view" v-html="html" />
               </template>
               <template #sidebar>
