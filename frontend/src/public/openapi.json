@@ -16,10 +16,6 @@
   ],
   "tags": [
     {
-      "name": "Statistics",
-      "description": "Use this endpoint to get insides of the number of documents provided by this API."
-    },
-    {
       "name": "All documents",
       "description": "Use this endpoint to search across all document types in our database."
     },
@@ -30,6 +26,10 @@
     {
       "name": "Legislation",
       "description": "Retrieve current and historical versions of laws and decrees.\nThe endpoints operate on the levels of \"work\", \"expression\", and \"manifestation\". See\n<a href=\"https://en.wikipedia.org/wiki/Functional_Requirements_for_Bibliographic_Records\">Functional\nRequirements for Bibliographic Records (FRBR)</a> for more information.\n"
+    },
+    {
+      "name": "Statistics",
+      "description": "Returns document count statistics for all document kinds exposed by the API."
     }
   ],
   "paths": {
