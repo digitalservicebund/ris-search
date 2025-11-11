@@ -63,9 +63,9 @@ describe("useIntersectionObserver", () => {
     };
 
     // Mock IntersectionObserver constructor
-    global.IntersectionObserver = vi
-      .fn()
-      .mockImplementation(() => mockObserver);
+    global.IntersectionObserver = vi.fn().mockImplementation(function () {
+      return mockObserver;
+    });
 
     const wrapper = mount(TestComponent, {});
     const { vObserveElements } = wrapper.vm;
@@ -90,9 +90,9 @@ describe("useIntersectionObserver", () => {
       disconnect: vi.fn(),
     };
 
-    global.IntersectionObserver = vi
-      .fn()
-      .mockImplementation(() => mockObserver);
+    global.IntersectionObserver = vi.fn().mockImplementation(function () {
+      return mockObserver;
+    });
 
     const wrapper = mount(TestComponent, {});
 
