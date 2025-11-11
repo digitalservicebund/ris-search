@@ -388,7 +388,6 @@ class AdvancedSearchControllerApiTest extends ContainersIntegrationBase {
 
   @ParameterizedTest
   @ValueSource(strings = {"norms_date", "DATUM", "DAT"})
-  @WithJwt("jwtTokens/ValidAccessToken.json")
   @DisplayName("Should return 200 when looking for decision date and aliases")
   void shouldReturnOkDecisionDateQueryForLegislation(String queryParam) throws Exception {
 
