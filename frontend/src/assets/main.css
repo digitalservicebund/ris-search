@@ -9,7 +9,7 @@
   --shadow-active-tab:
     -1px -1px 0 0 var(--color-gray-600), 1px -1px 0 0 var(--color-gray-600);
 }
-@custom-variant aria-current-location (&[aria-current="location"]);
+
 .max-w-prose {
   max-width: var(--spacing-prose);
 }
@@ -20,15 +20,6 @@
 @layer base {
   body {
     @apply text-[18px] font-normal text-black antialiased;
-  }
-
-  a {
-    @apply underline;
-  }
-
-  a:hover,
-  a:focus {
-    @apply text-blue-800;
   }
 }
 

@@ -129,7 +129,7 @@ useStaticPageSeo("translations-list");
 
           <Button
             aria-label="Suchen"
-            class="h-[3rem] w-[3rem] shrink-0 justify-center"
+            class="h-48 w-48 shrink-0 justify-center"
             type="submit"
           >
             <template #icon>

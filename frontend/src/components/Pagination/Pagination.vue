@@ -30,7 +30,8 @@ const props = withDefaults(
   { page: undefined, navigationPosition: "top", isLoading: false },
 );
 
-const emits = defineEmits<(e: "updatePage", page: number) => void>();
+const emit = defineEmits<(e: "updatePage", page: number) => void>();
+
 const route = useRoute();
 
 const previousPageNumber = computed(() => {
@@ -73,13 +74,13 @@ const nextPageRoute = computed<RouteLocationRaw | undefined>(() => {
 
 async function nextPage() {
   if (nextPageNumber.value !== undefined) {
-    emits("updatePage", nextPageNumber.value);
+    emit("updatePage", nextPageNumber.value);
   }
 }
 
 async function previousPage() {
   if (previousPageNumber.value !== undefined) {
-    emits("updatePage", previousPageNumber.value);
+    emit("updatePage", previousPageNumber.value);
   }
 }
 
@@ -87,18 +88,17 @@ const currentPageIndex = computed(() => {
   if (!props.page?.["@id"]) return undefined;
   return parsePageNumber(props.page["@id"]).page;
 });
+
 const isOnlyPage = computed(
   () => !(props.page?.view.previous || props.page?.view.next),
 );
 
 const itemsOnPage = computed(() => buildItemsOnPageString(props.page));
-
-const paginationLinkDisabled =
-  "ris-body2-bold relative inline-flex h-48 max-w-full items-center justify-center gap-8 border-2 border-blue-500 text-blue-500 cursor-not-allowed bg-white px-16 py-4 text-center";
 </script>
 
 <template>
   <slot v-if="props.navigationPosition == 'bottom'" />
+
   <div
     v-if="page?.member && page?.member.length && !isLoading"
     class="my-32 mt-20 mb-10 flex flex-col items-center"
@@ -108,55 +108,43 @@ const paginationLinkDisabled =
         class="relative flex grow flex-wrap items-center justify-between gap-8"
       >
         <Button
-          v-if="!isOnlyPage && page?.view.previous"
+          v-if="!isOnlyPage"
           :to="previousPageRoute"
-          :as="NuxtLink"
+          :as="previousPageRoute ? NuxtLink : undefined"
           aria-label="vorherige Ergebnisse"
           severity="secondary"
-          icon-position="left"
           label="Zurück"
-          @click="previousPage"
+          :disabled="!previousPageRoute"
+          @click.prevent="previousPage()"
         >
           <template #icon><IconArrowBack /></template>
         </Button>
-        <span
-          v-else-if="!isOnlyPage"
-          aria-disabled="true"
-          aria-label="vorherige Ergebnisse"
-          :class="paginationLinkDisabled"
-        >
-          <IconArrowBack aria-hidden="true" />
-          Zurück
-        </span>
+
         <span class="only:m-auto">
           <b v-if="!isOnlyPage && currentPageIndex !== undefined"
             >Seite {{ currentPageIndex + 1 }}:
           </b>
-          <span> {{ itemsOnPage }}</span>
+          <span>{{ itemsOnPage }}</span>
         </span>
+
         <Button
-          v-if="!isOnlyPage && page?.view.next"
+          v-if="!isOnlyPage"
           :to="nextPageRoute"
-          :as="NuxtLink"
+          :as="nextPageRoute ? NuxtLink : undefined"
           aria-label="nächste Ergebnisse"
           severity="secondary"
-          icon-position="left"
+          icon-pos="right"
           label="Weiter"
-          @click="nextPage"
+          :disabled="!nextPageRoute"
+          @click.prevent="nextPage()"
         >
-          <template #icon><IconArrowForward /></template>
+          <template #icon="slot">
+            <IconArrowForward :class="slot.class" />
+          </template>
         </Button>
-        <span
-          v-else-if="!isOnlyPage"
-          aria-disabled="true"
-          aria-label="nächste Ergebnisse"
-          :class="paginationLinkDisabled"
-        >
-          <IconArrowForward aria-hidden="true" />
-          Weiter
-        </span>
       </div>
     </div>
   </div>
+
   <slot v-if="props.navigationPosition == 'top'" />
 </template>
