@@ -20,7 +20,6 @@ import NormTableOfContents from "~/components/Ris/NormTableOfContents.vue";
 import RisBreadcrumb from "~/components/Ris/RisBreadcrumb.vue";
 import type { BreadcrumbItem } from "~/components/Ris/RisBreadcrumb.vue";
 import RisTabs from "~/components/Ris/RisTabs.vue";
-import { tabPanelClass } from "~/components/Tabs.styles";
 import { useBackendURL } from "~/composables/useBackendURL";
 import { useDynamicSeo } from "~/composables/useDynamicSeo";
 import { useIntersectionObserver } from "~/composables/useIntersectionObserver";
@@ -40,6 +39,7 @@ import {
 } from "~/utils/norm";
 import type { ValidityStatus } from "~/utils/norm";
 import { tocItemsToTreeNodes } from "~/utils/tableOfContents";
+import { tabPanelClass } from "~/utils/tabsStyles";
 import { truncateAtWord } from "~/utils/textFormatting";
 import IcBaselineSubject from "~icons/ic/baseline-subject";
 import IcOutlineInfo from "~icons/ic/outline-info";

@@ -7,7 +7,6 @@ import Properties from "~/components/Properties.vue";
 import PropertiesItem from "~/components/PropertiesItem.vue";
 import type { BreadcrumbItem } from "~/components/Ris/RisBreadcrumb.vue";
 import RisTabs from "~/components/Ris/RisTabs.vue";
-import { tabPanelClass } from "~/components/Tabs.styles";
 import { useDynamicSeo } from "~/composables/useDynamicSeo";
 import {
   fetchTranslationAndHTML,
@@ -15,6 +14,7 @@ import {
 } from "~/composables/useTranslationData";
 import { DocumentKind } from "~/types";
 import { formatDocumentKind } from "~/utils/displayValues";
+import { tabPanelClass } from "~/utils/tabsStyles";
 import { removePrefix, truncateAtWord } from "~/utils/textFormatting";
 import IcBaselineSubject from "~icons/ic/baseline-subject";
 import IcOutlineInfo from "~icons/ic/outline-info";

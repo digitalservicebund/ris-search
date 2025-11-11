@@ -15,13 +15,13 @@ import PropertiesItem from "~/components/PropertiesItem.vue";
 import RisBreadcrumb from "~/components/Ris/RisBreadcrumb.vue";
 import RisDocumentTitle from "~/components/Ris/RisDocumentTitle.vue";
 import RisTabs from "~/components/Ris/RisTabs.vue";
-import { tabPanelClass } from "~/components/Tabs.styles";
 import { useBackendURL } from "~/composables/useBackendURL";
 import { type CaseLaw, DocumentKind } from "~/types";
 import { getEncodingURL } from "~/utils/caseLaw";
 import { dateFormattedDDMMYYYY } from "~/utils/dateFormatting";
 import { formatDocumentKind } from "~/utils/displayValues";
 import { getAllSectionsFromHtml, parseDocument } from "~/utils/htmlParser";
+import { tabPanelClass } from "~/utils/tabsStyles";
 import {
   formatArray,
   removeOuterParentheses,
