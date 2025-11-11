@@ -1,4 +1,3 @@
-import { useBackendURL } from "../src/composables/useBackendURL";
 import { expect, navigate, noJsTest, test } from "./utils/fixtures";
 
 const expectedNorms = [
@@ -372,9 +371,8 @@ test.describe("actions menu", () => {
     }
 
     await button.click();
-    const backendUrl = useBackendURL();
     await page.waitForURL(
-      `${backendUrl}/v1/legislation/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu/2024-12-19/regelungstext-1.xml`,
+      `v1/legislation/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu/2024-12-19/regelungstext-1.xml`,
       { waitUntil: "networkidle" },
     );
   });

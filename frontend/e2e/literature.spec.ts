@@ -1,4 +1,3 @@
-import { useBackendURL } from "../src/composables/useBackendURL";
 import { expect, test, noJsTest, navigate } from "./utils/fixtures";
 
 // Skipped because of a client/SSR rendering mismatch, will be added again once
@@ -249,8 +248,7 @@ test.describe("actions menu", () => {
     }
 
     await button.click();
-    const backendUrl = useBackendURL();
-    await page.waitForURL(`${backendUrl}/v1/literature/XXLU000000001.xml`, {
+    await page.waitForURL(`v1/literature/XXLU000000001.xml`, {
       waitUntil: "networkidle",
     });
   });

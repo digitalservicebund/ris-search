@@ -1,5 +1,4 @@
 import type { Page } from "@playwright/test";
-import { useBackendURL } from "../src/composables/useBackendURL";
 import { expect, test, noJsTest, navigate } from "./utils/fixtures";
 
 async function getSidebar(page: Page) {
@@ -202,8 +201,7 @@ test.describe("actions menu", () => {
     }
 
     await button.click();
-    const backendUrl = useBackendURL();
-    await page.waitForURL(`${backendUrl}/v1/case-law/JURE200030030.xml`, {
+    await page.waitForURL(`v1/case-law/JURE200030030.xml`, {
       waitUntil: "networkidle",
     });
   });
