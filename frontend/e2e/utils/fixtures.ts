@@ -64,6 +64,7 @@ export const seoTest = base.extend<{}, SeoWorkerFixtures>({
   page: async ({ persistentContext }, use) => {
     const page = await persistentContext.newPage();
     await use(page);
+    await page.close();
   },
 });
 
@@ -138,5 +139,6 @@ export const noJsTest = base.extend<NoJsFixtures>({
   page: async ({ noJsContext }, use) => {
     const page = await noJsContext.newPage();
     await use(page);
+    await page.close();
   },
 });

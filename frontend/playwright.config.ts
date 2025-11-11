@@ -5,7 +5,7 @@ export const environment = {
   remoteDebuggingPort: 9222,
 };
 
-const browserConfigurations: Project[] = [
+const projects: Project[] = [
   {
     name: "chromium",
     use: {
@@ -34,14 +34,6 @@ const browserConfigurations: Project[] = [
       touch: true,
     },
   },
-];
-
-const projects: Project[] = [
-  {
-    name: "setup",
-    testMatch: /.*\.setup\.ts/,
-  },
-  ...browserConfigurations,
 ];
 
 /**
