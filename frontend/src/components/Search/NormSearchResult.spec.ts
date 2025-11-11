@@ -101,8 +101,7 @@ vi.mock("~/composables/usePrivateFeaturesFlag", () => {
 
 describe("NormSearchResult.vue", () => {
   beforeEach(() => {
-    vi.clearAllMocks();
-    vi.restoreAllMocks();
+    vi.resetAllMocks();
   });
 
   it("renders correctly with all props", () => {
