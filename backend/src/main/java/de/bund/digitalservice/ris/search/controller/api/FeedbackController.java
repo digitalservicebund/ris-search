@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.Map;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
  * with {@link RestController} and {@link RequestMapping} to define the base URL for handling export
  * in the API.
  */
+@Profile({"test", "prototype"})
 @Tag(name = "Feedback", description = "API endpoints to send feedback to posthog.")
 @RestController
 @RequestMapping(ApiConfig.Paths.FEEDBACK)
@@ -51,7 +53,6 @@ public class FeedbackController {
       summary = "Sends the user feedback to PostHog",
       description = "Sends the user feedback to PostHog to avoid recording user data.")
   @ApiResponse(responseCode = "200", description = "Success")
-  @ApiResponse(responseCode = "404", description = "Not found")
   @ApiResponse(responseCode = "422", description = "Required feedback data is missing")
   @ApiResponse(responseCode = "500", description = "Internal Server Error")
   public ResponseEntity<Map<String, String>> sendFeedback(
