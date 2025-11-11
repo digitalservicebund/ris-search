@@ -137,7 +137,7 @@ public class NormSearchResponseMapper {
 
   public static CollectionSchema<SearchMemberSchema<LegislationWorkSearchSchema>> fromDomain(
       final SearchPage<Norm> page, String path) {
-    String id = String.format("%s?page=%d&size=%d", path, page.getNumber(), page.getSize());
+    String id = String.format("%s?pageIndex=%d&size=%d", path, page.getNumber(), page.getSize());
     PartialCollectionViewSchema view = PartialCollectionViewMapper.fromPage(path, page);
 
     return CollectionSchema.<SearchMemberSchema<LegislationWorkSearchSchema>>builder()

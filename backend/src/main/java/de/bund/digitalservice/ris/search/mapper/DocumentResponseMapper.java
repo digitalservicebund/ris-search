@@ -27,7 +27,7 @@ public class DocumentResponseMapper {
 
   public static <T> CollectionSchema<SearchMemberSchema> fromDomain(
       final SearchPage<T> page, String path) {
-    String id = String.format("%s?page=%d&size=%d", path, page.getNumber(), page.getSize());
+    String id = String.format("%s?pageIndex=%d&size=%d", path, page.getNumber(), page.getSize());
     PartialCollectionViewSchema view = PartialCollectionViewMapper.fromPage(path, page);
 
     return CollectionSchema.<SearchMemberSchema>builder()
