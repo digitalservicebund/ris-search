@@ -81,7 +81,7 @@ jobs:
         env:
           NUXT_PUBLIC_PRIVATE_FEATURES_ENABLED: ${{ matrix.private_features_enabled }}
           NUXT_PUBLIC_FRONTEND_URL: http://localhost:3000
-          NUXT_RIS_BACKEND_URL: http://backend:8090
+          NUXT_RIS_BACKEND_URL: http://localhost:8090
           TZ: Europe/Berlin
       - name: Upload test reports
         uses: actions/upload-artifact@v5
