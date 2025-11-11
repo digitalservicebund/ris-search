@@ -21,6 +21,9 @@ public class NormAttachmentMapper {
 
   private static final Logger logger = LogManager.getLogger(NormAttachmentMapper.class);
 
+  private static final String AKN_ACT = "/akn:akomaNtoso/akn:act/";
+  private static final String X_PATH_ATTACHMENT = AKN_ACT + "akn:attachments/akn:attachment";
+
   /**
    * Extracts the document title and eId from attachments.
    *
@@ -47,20 +50,29 @@ public class NormAttachmentMapper {
                 }
                 XmlDocument attachmentDocument =
                     new XmlDocument(attachmentFileString.getBytes(StandardCharsets.UTF_8));
-                Optional<Node> docTitleNode =
-                    attachmentDocument.getFirstMatchedNodeByXpath(
-                        "/akn:akomaNtoso/akn:doc/akn:preface/akn:block/akn:docTitle");
+                Node docTitleNode =
+                    attachmentDocument
+                        .getFirstMatchedNodeByXpath(
+                            "/akn:akomaNtoso/akn:doc/akn:preface/akn:block/akn:docTitle")
+                        .orElseThrow(
+                            () ->
+                                new XPathExpressionException(
+                                    "Norm xml missing madatory field akn:docTitle"));
 
                 Optional<Node> numNode =
                     attachmentDocument.getFirstMatchedNodeByXpath(
-                        "./akn:inline[@refersTo='anlageregelungstext-num']", docTitleNode.get());
+                        "./akn:inline[@refersTo='anlageregelungstext-num']", docTitleNode);
                 Optional<Node> referenceNode =
                     attachmentDocument.getFirstMatchedNodeByXpath(
-                        "./akn:inline[@refersTo='anlageregelungstext-bezug']", docTitleNode.get());
+                        "./akn:inline[@refersTo='anlageregelungstext-bezug']", docTitleNode);
 
                 String text =
                     attachmentDocument.extractCleanedText(
                         "/akn:akomaNtoso/akn:doc/akn:mainBody//text()");
+
+                String officialFootNotes =
+                    attachmentDocument.extractCleanedText(
+                        NormLdmlToOpenSearchMapper.X_PATH_OFFICIAL_FOOTNOTES);
 
                 var attachment =
                     Attachment.builder()
@@ -69,6 +81,7 @@ public class NormAttachmentMapper {
                         .eId(eId)
                         .textContent(text)
                         .manifestationEli(href)
+                        .officialFootNotes(officialFootNotes)
                         .build();
                 return Optional.of(attachment);
               } catch (ParserConfigurationException
@@ -85,7 +98,6 @@ public class NormAttachmentMapper {
   }
 
   private static List<Node> getAttachmentReferences(XmlDocument mainDocument) {
-    final String X_PATH_ATTACHMENT = "/akn:akomaNtoso/akn:act/akn:attachments/akn:attachment";
     try {
       NodeList attachmentNodes = mainDocument.getNodesByXpath(X_PATH_ATTACHMENT);
       return XmlDocument.asList(attachmentNodes);
