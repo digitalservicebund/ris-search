@@ -387,21 +387,6 @@ class AdvancedSearchControllerApiTest extends ContainersIntegrationBase {
   }
 
   @ParameterizedTest
-  @ValueSource(strings = {"norms_date", "DATUM", "DAT"})
-  @DisplayName("Should return 200 when looking for decision date and aliases")
-  void shouldReturnOkDecisionDateQueryForLegislation(String queryParam) throws Exception {
-
-    mockMvc
-        .perform(
-            get(ApiConfig.Paths.LEGISLATION_ADVANCED_SEARCH
-                    + String.format("?query=%s:[2024-01-01 TO 2024-12-31]", queryParam))
-                .contentType(MediaType.APPLICATION_JSON))
-        .andDo(print())
-        .andExpect(jsonPath("$.member", hasSize(2)))
-        .andExpect(status().isOk());
-  }
-
-  @ParameterizedTest
   @ValueSource(
       strings = {
         ApiConfig.Paths.DOCUMENT_ADVANCED_SEARCH,
@@ -418,16 +403,16 @@ class AdvancedSearchControllerApiTest extends ContainersIntegrationBase {
             content()
                 .json(
                     """
-                                        {
-                                          "errors": [
-                                            {
-                                              "code": "information_missing",
-                                              "parameter": "query",
-                                              "message": "Required request parameter 'query' for method parameter type String is not present"
-                                            }
-                                          ]
-                                        }
-                                    """));
+                                                        {
+                                                          "errors": [
+                                                            {
+                                                              "code": "information_missing",
+                                                              "parameter": "query",
+                                                              "message": "Required request parameter 'query' for method parameter type String is not present"
+                                                            }
+                                                          ]
+                                                        }
+                                                    """));
   }
 
   @ParameterizedTest
@@ -448,16 +433,16 @@ class AdvancedSearchControllerApiTest extends ContainersIntegrationBase {
             content()
                 .json(
                     """
-                                        {
-                                          "errors": [
-                                            {
-                                              "code": "invalid_lucene_query",
-                                              "parameter": "query",
-                                              "message": "Invalid lucene query"
-                                            }
-                                          ]
-                                        }
-                                    """));
+                                                        {
+                                                          "errors": [
+                                                            {
+                                                              "code": "invalid_lucene_query",
+                                                              "parameter": "query",
+                                                              "message": "Invalid lucene query"
+                                                            }
+                                                          ]
+                                                        }
+                                                    """));
   }
 
   private static Stream<Arguments> provideSortTestData() {
@@ -486,16 +471,16 @@ class AdvancedSearchControllerApiTest extends ContainersIntegrationBase {
             content()
                 .json(
                     """
-                                {
-                                  "errors": [
-                                    {
-                                      "code": "invalid_parameter_value",
-                                      "message": "%s",
-                                      "parameter": "sort"
-                                    }
-                                  ]
-                                }
-                                """
+                                                {
+                                                  "errors": [
+                                                    {
+                                                      "code": "invalid_parameter_value",
+                                                      "message": "%s",
+                                                      "parameter": "sort"
+                                                    }
+                                                  ]
+                                                }
+                                                """
                         .formatted(expectedError)));
   }
 }

@@ -100,7 +100,6 @@ export default defineNuxtConfig({
     "@pinia/nuxt",
     "@nuxt/test-utils/module",
     "@sentry/nuxt/module",
-    "nuxt-auth-utils",
     "nuxt-security",
     "@nuxt/scripts",
     "@nuxtjs/sitemap",
