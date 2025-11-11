@@ -12,7 +12,8 @@ const config = {
 };
 
 const sentryEnabled = !isStringEmpty(process.env.NUXT_PUBLIC_SENTRY_DSN);
-
+const risBackendUrl =
+  process.env.NUXT_RIS_BACKEND_URL ?? "http://localhost:8090";
 const secureCookie = !config.devMode;
 
 export default defineNuxtConfig({
@@ -190,7 +191,7 @@ export default defineNuxtConfig({
     },
     "/sitemaps/norms/**": {
       proxy: {
-        to: "/v1/sitemaps/norms/**",
+        to: `${risBackendUrl}/v1/sitemaps/norms/**`,
         headers: {
           Accept: "application/xml",
         },
@@ -198,10 +199,15 @@ export default defineNuxtConfig({
     },
     "/sitemaps/caselaw/**": {
       proxy: {
-        to: "/v1/sitemaps/caselaw/**",
+        to: `${risBackendUrl}/v1/sitemaps/caselaw/**`,
         headers: {
           Accept: "application/xml",
         },
+      },
+    },
+    "/v1/**": {
+      proxy: {
+        to: `${risBackendUrl}/v1/**`,
       },
     },
   },
