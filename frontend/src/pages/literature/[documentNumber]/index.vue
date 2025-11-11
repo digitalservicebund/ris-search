@@ -14,8 +14,11 @@ import { tabPanelClass } from "~/components/Tabs.styles";
 import { useBackendURL } from "~/composables/useBackendURL";
 import { DocumentKind, type Literature } from "~/types";
 import { formatDocumentKind } from "~/utils/displayValues";
+import { getTitle } from "~/utils/literature";
 import IcBaselineSubject from "~icons/ic/baseline-subject";
 import IcOutlineInfo from "~icons/ic/outline-info";
+
+definePageMeta({ layout: "base" }); // use "base" layout to allow for full-width tab backgrounds
 
 const route = useRoute();
 const documentNumber = route.params.documentNumber as string;
@@ -34,16 +37,17 @@ const { data: html, error: contentError } = await useFetch<string>(
   },
 );
 
-definePageMeta({ layout: "base" }); // use "base" layout to allow for full-width tab backgrounds
-
 const emptyTitlePlaceholder = "Titelzeile nicht vorhanden";
-
-const title = computed(() => {
-  return (
-    literature.value?.headline ??
-    literature.value?.alternativeHeadline ??
-    undefined
-  );
+const title = computed(() => getTitle(literature.value));
+const isEmptyDocument = computed(() => isDocumentEmpty(literature.value));
+const details = computed(() => {
+  return {
+    normReferences: literature.value?.normReferences ?? [],
+    collaborators: literature.value?.collaborators ?? [],
+    originators: literature.value?.originators ?? [],
+    languages: literature.value?.languages ?? [],
+    conferenceNotes: literature.value?.conferenceNotes ?? [],
+  };
 });
 
 const breadcrumbItems = computed(() => [
@@ -56,12 +60,6 @@ const breadcrumbItems = computed(() => [
   },
 ]);
 
-if (metadataError?.value) {
-  showError(metadataError.value);
-}
-if (contentError?.value) {
-  showError(contentError.value);
-}
 const tabs = computed(() => [
   {
     id: "text",
@@ -78,6 +76,13 @@ const tabs = computed(() => [
     icon: IcOutlineInfo,
   },
 ]);
+
+if (metadataError?.value) {
+  showError(metadataError.value);
+}
+if (contentError?.value) {
+  showError(contentError.value);
+}
 </script>
 
 <template>
@@ -98,40 +103,43 @@ const tabs = computed(() => [
         :years-of-publication="literature.yearsOfPublication"
       />
     </div>
-    <RisTabs :tabs="tabs" label="Ansichten des Literaturnachweises">
-      <template #default="{ activeTab, isClient }">
-        <section
-          id="text"
-          :class="tabPanelClass"
-          :hidden="isClient && activeTab !== 'text'"
-          aria-labelledby="textSectionHeading"
-        >
-          <SidebarLayout class="container">
-            <template #content>
-              <h2 id="textSectionHeading" class="sr-only">Text</h2>
-              <IncompleteDataMessage class="mb-16" />
-              <div class="literature" v-html="html"></div>
-            </template>
-          </SidebarLayout>
-        </section>
-
-        <section
-          id="details"
-          :class="tabPanelClass"
-          :hidden="isClient && activeTab !== 'details'"
-          aria-labelledby="detailsTabPanelTitle"
-        >
-          <div class="container pt-24 pb-80">
-            <LiteratureDetails
-              :norm-references="literature?.normReferences ?? []"
-              :collaborators="literature?.collaborators ?? []"
-              :originators="literature?.originators ?? []"
-              :languages="literature?.languages ?? []"
-              :conference-notes="literature?.conferenceNotes ?? []"
-            />
-          </div>
-        </section>
-      </template>
-    </RisTabs>
+    <div
+      v-if="isEmptyDocument"
+      class="min-h-96 border-t border-t-gray-400 bg-white print:py-0"
+    >
+      <div class="container pt-24 pb-80">
+        <LiteratureDetails :details="details" />
+      </div>
+    </div>
+    <div v-else>
+      <RisTabs :tabs="tabs" label="Ansichten des Literaturnachweises">
+        <template #default="{ activeTab, isClient }">
+          <section
+            id="text"
+            :class="tabPanelClass"
+            :hidden="isClient && activeTab !== 'text'"
+            aria-labelledby="textSectionHeading"
+          >
+            <SidebarLayout class="container">
+              <template #content>
+                <h2 id="textSectionHeading" class="sr-only">Text</h2>
+                <IncompleteDataMessage class="mb-16" />
+                <div class="literature" v-html="html"></div>
+              </template>
+            </SidebarLayout>
+          </section>
+          <section
+            id="details"
+            :class="tabPanelClass"
+            :hidden="isClient && activeTab !== 'details'"
+            aria-labelledby="detailsTabPanelTitle"
+          >
+            <div class="container pb-56">
+              <LiteratureDetails :details="details" />
+            </div>
+          </section>
+        </template>
+      </RisTabs>
+    </div>
   </ContentWrapper>
 </template>
