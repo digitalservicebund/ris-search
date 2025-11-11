@@ -1,4 +1,4 @@
-import { expect, test } from "./utils/fixtures";
+import { expect, navigate, test } from "./utils/fixtures";
 
 const expectedVersionData = [
   {
@@ -26,9 +26,7 @@ test.beforeAll(async ({ privateFeaturesEnabled }) => {
 });
 
 test("can browse different Fassungen of a norm", async ({ page }) => {
-  await page.goto("/norms/eli/bund/bgbl-1/2020/s1126/2020-08-04/1/deu", {
-    waitUntil: "networkidle",
-  });
+  await navigate(page, "/norms/eli/bund/bgbl-1/2020/s1126/2020-08-04/1/deu");
 
   await page.getByRole("link", { name: "Fassungen des Gesetzes" }).click();
 
@@ -48,9 +46,7 @@ test("can browse different Fassungen of a norm", async ({ page }) => {
 test("can navigate to a Fassung by clicking the table row", async ({
   page,
 }) => {
-  await page.goto("/norms/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu", {
-    waitUntil: "networkidle",
-  });
+  await navigate(page, "/norms/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu");
 
   await expect(
     page.getByRole("heading", {

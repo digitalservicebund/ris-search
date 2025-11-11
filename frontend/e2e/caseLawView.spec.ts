@@ -1,5 +1,6 @@
 import type { Page } from "@playwright/test";
-import { expect, test, noJsTest } from "./utils/fixtures";
+import { useBackendURL } from "../src/composables/useBackendURL";
+import { expect, test, noJsTest, navigate } from "./utils/fixtures";
 
 async function getSidebar(page: Page) {
   const navigation = page.getByRole("navigation", { name: "Seiteninhalte" });
@@ -28,7 +29,7 @@ test("can search, filter for case law, and view a single case law documentation 
   isMobileTest,
 }) => {
   await test.step("Basic search", async () => {
-    await page.goto("/");
+    await navigate(page, "/");
     await page.getByPlaceholder("Suchbegriff eingeben").fill("Fiktiv");
     await page.getByLabel("Suchen").click();
     await page.waitForLoadState("networkidle");
@@ -77,9 +78,7 @@ test("can search, filter for case law, and view a single case law documentation 
   if (isMobileTest)
     for (const sectionName of ["Tenor", "Orientierungssatz", "Tatbestand"]) {
       await test.step(`Jump straight to a specific section, ${sectionName}`, async () => {
-        await page.goto(resultsListUrl, {
-          waitUntil: "networkidle",
-        });
+        await navigate(page, resultsListUrl);
         const link = page.getByRole("link", { name: sectionName }).first();
         await link.click();
 
@@ -107,7 +106,7 @@ test.describe("actions menu", () => {
     page,
     isMobileTest,
   }) => {
-    await page.goto("/case-law/JURE200030030", { waitUntil: "networkidle" });
+    await navigate(page, "/case-law/JURE200030030");
 
     if (isMobileTest) {
       await page.getByLabel("Aktionen anzeigen").click();
@@ -133,7 +132,7 @@ test.describe("actions menu", () => {
     page,
     isMobileTest,
   }) => {
-    await page.goto("/case-law/JURE200030030", { waitUntil: "networkidle" });
+    await navigate(page, "/case-law/JURE200030030");
     if (isMobileTest) {
       await page.getByLabel("Aktionen anzeigen").click();
     }
@@ -165,7 +164,7 @@ test.describe("actions menu", () => {
     page,
     isMobileTest,
   }) => {
-    await page.goto("/case-law/JURE200030030", { waitUntil: "networkidle" });
+    await navigate(page, "/case-law/JURE200030030");
     if (isMobileTest) await page.getByLabel("Aktionen anzeigen").click();
     const button = isMobileTest
       ? page.getByText("Als PDF speichern")
@@ -188,7 +187,7 @@ test.describe("actions menu", () => {
     page,
     isMobileTest,
   }) => {
-    await page.goto("/case-law/JURE200030030", { waitUntil: "networkidle" });
+    await navigate(page, "/case-law/JURE200030030");
     if (isMobileTest) await page.getByLabel("Aktionen anzeigen").click();
     const button = page.getByRole("link", {
       name: "XML anzeigen",
@@ -203,13 +202,15 @@ test.describe("actions menu", () => {
     }
 
     await button.click();
-
-    await page.waitForURL("v1/case-law/JURE200030030.xml");
+    const backendUrl = useBackendURL();
+    await page.waitForURL(`${backendUrl}/v1/case-law/JURE200030030.xml`, {
+      waitUntil: "networkidle",
+    });
   });
 });
 
 noJsTest("tabs work without JavaScript", async ({ page }) => {
-  await page.goto("/case-law/JURE200030030");
+  await navigate(page, "/case-law/JURE200030030");
   await expect(page.getByRole("heading", { name: "Details" })).toBeVisible();
   await page
     .getByRole("link", { name: "Details zur Gerichtsentscheidung" })

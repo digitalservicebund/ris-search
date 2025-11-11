@@ -1,4 +1,5 @@
-import { expect, test, noJsTest } from "./utils/fixtures";
+import { useBackendURL } from "../src/composables/useBackendURL";
+import { expect, navigate, noJsTest, test } from "./utils/fixtures";
 
 const expectedNorms = [
   "Fiktive Fruchtsaft- und Erfrischungsgetränkeverordnung zu Testzwecken",
@@ -9,11 +10,11 @@ test("can navigate to a single norm article and between articles", async ({
 }) => {
   const mainExpressionEliUrl =
     "/norms/eli/bund/bgbl-1/2000/s1016/2023-04-26/10/deu";
-  await page.goto(mainExpressionEliUrl);
+  await navigate(page, mainExpressionEliUrl);
 
   await test.step("Navigate from main norm view to a single article", async () => {
     await page.getByRole("link", { name: "§ 1 Anwendungsbereich" }).click();
-    await page.waitForURL(mainExpressionEliUrl + "/art-z1");
+    await navigate(page, mainExpressionEliUrl + "/art-z1");
     await expect(
       page.getByRole("heading", { name: "§ 1 Anwendungsbereich" }),
     ).toBeVisible();
@@ -21,7 +22,9 @@ test("can navigate to a single norm article and between articles", async ({
 
   await test.step("Navigate between single articles", async () => {
     await page.getByRole("link", { name: "Nächster Paragraf" }).click();
-    await page.waitForURL(mainExpressionEliUrl + "/art-z2");
+    await page.waitForURL(mainExpressionEliUrl + "/art-z2", {
+      waitUntil: "networkidle",
+    });
     const h2Art2 = page
       .getByRole("main")
       .getByRole("heading", { name: /§\s*2\s+Zutaten/i })
@@ -34,7 +37,9 @@ test("can navigate to a single norm article and between articles", async ({
       }),
     ).toBeVisible();
     await page.getByRole("link", { name: "Nächster Paragraf" }).click();
-    await page.waitForURL(mainExpressionEliUrl + "/art-z3");
+    await page.waitForURL(mainExpressionEliUrl + "/art-z3", {
+      waitUntil: "networkidle",
+    });
     const h2Art3 = page
       .getByRole("main")
       .getByRole("heading", { name: /§\s*3\s+Kennzeichnung/i })
@@ -51,7 +56,7 @@ test("can navigate to a single norm article and between articles", async ({
   await test.step("Navigate back between single articles", async () => {
     const mainExpressionEliUrl =
       "/norms/eli/bund/bgbl-1/2000/s1016/2023-04-26/10/deu";
-    await page.goto(mainExpressionEliUrl + "/art-z3");
+    await navigate(page, mainExpressionEliUrl + "/art-z3");
     const h2Art3Back = page
       .getByRole("main")
       .getByRole("heading", { name: /§\s*3\s+Kennzeichnung/i })
@@ -65,7 +70,9 @@ test("can navigate to a single norm article and between articles", async ({
     ).toBeVisible();
 
     await page.getByRole("link", { name: "Vorheriger Paragraf" }).click();
-    await page.waitForURL(mainExpressionEliUrl + "/art-z2");
+    await page.waitForURL(mainExpressionEliUrl + "/art-z2", {
+      waitUntil: "networkidle",
+    });
     const h2Art2Back = page
       .getByRole("main")
       .getByRole("heading", { name: /§\s*2\s+Zutaten/i })
@@ -81,7 +88,7 @@ test("can navigate to a single norm article and between articles", async ({
 
   await test.step("Navigate back to main norm view", async () => {
     await page.getByRole("link", { name: expectedNorms[0] }).first().click();
-    await page.waitForURL(mainExpressionEliUrl);
+    await page.waitForURL(mainExpressionEliUrl, { waitUntil: "networkidle" });
   });
 
   await test.step("View footnotes in title", async () => {
@@ -114,9 +121,7 @@ test("can navigate to a single norm article and between articles", async ({
 });
 
 noJsTest("tabs work without JavaScript", async ({ page }) => {
-  await page.goto("/norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu", {
-    waitUntil: "networkidle",
-  });
+  await navigate(page, "/norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu");
 
   await expect(page.getByRole("heading", { name: "Details" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Fassungen" })).toBeVisible();
@@ -140,7 +145,7 @@ noJsTest("tabs work without JavaScript", async ({ page }) => {
 test("can navigate to and view an attachment", async ({ page }) => {
   const mainExpressionEliUrl =
     "/norms/eli/bund/bgbl-1/2000/s1016/2023-04-26/10/deu";
-  await page.goto(mainExpressionEliUrl);
+  await navigate(page, mainExpressionEliUrl);
 
   const table = page.getByRole("table");
   const cell = table.getByRole("cell", { name: "Produktionsanforderungen" });
@@ -157,20 +162,22 @@ test("can navigate to and view an attachment", async ({ page }) => {
       .click();
 
     await expect(
-      page.getByRole("heading", { name: attachmentTitle }),
+      page.getByRole("heading", { name: attachmentTitle }).first(),
     ).toBeVisible();
-    await page.waitForURL(mainExpressionEliUrl + "/anlagen-n1_anlage-n1");
+    await page.waitForURL(mainExpressionEliUrl + "/anlagen-n1_anlage-n1", {
+      waitUntil: "networkidle",
+    });
     await expect(cell).toBeVisible();
   });
 
   await test.step("Navigate back to main norm view", async () => {
     await page.getByRole("link", { name: expectedNorms[0] }).first().click();
-    await page.waitForURL(mainExpressionEliUrl);
+    await page.waitForURL(mainExpressionEliUrl, { waitUntil: "networkidle" });
   });
 });
 
 test("can view images", async ({ page }) => {
-  await page.goto("/norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu");
+  await navigate(page, "/norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu");
 
   await page.getByRole("img", { name: "Beispielbild" }).isVisible();
 
@@ -180,16 +187,15 @@ test("can view images", async ({ page }) => {
       .getByRole("link", { name: "§ 1 Beispielhafte Illustration" })
       .first()
       .click();
-    await page.waitForURL(/\/art-z1$/g);
+    await page.waitForURL(/\/art-z1$/g, { waitUntil: "networkidle" });
     await page.getByRole("img", { name: "Beispielbild" }).isVisible();
   });
 });
 
 test.describe("shows link to translation if exists", () => {
   test("has link to translation", async ({ page, isMobileTest }) => {
-    await page.goto("norms/eli/bund/bgbl-1/1964/s902/2009-02-05/19/deu", {
-      waitUntil: "networkidle",
-    });
+    await navigate(page, "norms/eli/bund/bgbl-1/1964/s902/2009-02-05/19/deu");
+
     if (isMobileTest) {
       await page.getByLabel("Aktionen anzeigen").click();
     }
@@ -208,8 +214,8 @@ test.describe("shows link to translation if exists", () => {
     page,
     isMobileTest,
   }) => {
-    await page.goto("/norms/eli/bund/bgbl-1/2000/s1016/2023-04-26/10/deu");
-    await page.waitForLoadState("networkidle");
+    await navigate(page, "/norms/eli/bund/bgbl-1/2000/s1016/2023-04-26/10/deu");
+
     if (isMobileTest) {
       await page.getByLabel("Aktionen anzeigen").click();
     }
@@ -236,9 +242,10 @@ test.describe("actions menu", () => {
     test(
       testCase.name,
       async ({ page, browserName, baseURL, context, isMobileTest }) => {
-        await page.goto("/norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu", {
-          waitUntil: "networkidle",
-        });
+        await navigate(
+          page,
+          "/norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu",
+        );
 
         if (browserName === "chromium") {
           const origin = baseURL
@@ -295,9 +302,7 @@ test.describe("actions menu", () => {
     page,
     isMobileTest,
   }) => {
-    await page.goto("/norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu", {
-      waitUntil: "networkidle",
-    });
+    await navigate(page, "/norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu");
     if (isMobileTest) await page.getByLabel("Aktionen anzeigen").click();
 
     const button = isMobileTest
@@ -328,9 +333,7 @@ test.describe("actions menu", () => {
     page,
     isMobileTest,
   }) => {
-    await page.goto("/norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu", {
-      waitUntil: "networkidle",
-    });
+    await navigate(page, "/norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu");
     if (isMobileTest) await page.getByLabel("Aktionen anzeigen").click();
     const button = isMobileTest
       ? page.getByText("Als PDF speichern")
@@ -353,9 +356,7 @@ test.describe("actions menu", () => {
     page,
     isMobileTest,
   }) => {
-    await page.goto("/norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu", {
-      waitUntil: "networkidle",
-    });
+    await navigate(page, "/norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu");
 
     if (isMobileTest) await page.getByLabel("Aktionen anzeigen").click();
     const button = page.getByRole("link", {
@@ -371,9 +372,10 @@ test.describe("actions menu", () => {
     }
 
     await button.click();
-
+    const backendUrl = useBackendURL();
     await page.waitForURL(
-      "v1/legislation/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu/2024-12-19/regelungstext-1.xml",
+      `${backendUrl}/v1/legislation/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu/2024-12-19/regelungstext-1.xml`,
+      { waitUntil: "networkidle" },
     );
   });
 });

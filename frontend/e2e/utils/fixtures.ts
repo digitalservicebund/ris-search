@@ -1,6 +1,6 @@
 import os from "node:os";
 import path from "node:path";
-import type { BrowserContext, Locator } from "@playwright/test";
+import type { BrowserContext, Locator, Page } from "@playwright/test";
 import { chromium, expect as baseExpect, test as base } from "@playwright/test";
 import { environment } from "../../playwright.config";
 
@@ -147,3 +147,8 @@ export const noJsTest = base.extend<NoJsFixtures>({
     await page.close();
   },
 });
+
+export async function navigate(page: Page, url: string) {
+  await page.goto(url, { waitUntil: "domcontentloaded" });
+  return await page.waitForLoadState("networkidle");
+}

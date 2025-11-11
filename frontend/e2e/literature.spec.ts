@@ -1,11 +1,12 @@
-import { expect, test, noJsTest } from "./utils/fixtures";
+import { useBackendURL } from "../src/composables/useBackendURL";
+import { expect, test, noJsTest, navigate } from "./utils/fixtures";
 
 // Skipped because of a client/SSR rendering mismatch, will be added again once
 // that is fixed (see daily discussion from Nov 4th 2025)
 test.skip("displays literature page with metadata and text tab by default", async ({
   page,
 }) => {
-  await page.goto("/literature/XXLU000000001");
+  await navigate(page, "/literature/XXLU000000001");
 
   // Breadcrumb navigation
   const breadcrumb = page.getByRole("navigation", { name: "Pfadnavigation" });
@@ -56,7 +57,7 @@ test.skip("displays literature page with metadata and text tab by default", asyn
 });
 
 test("displays all titles", async ({ page }) => {
-  await page.goto("/literature/XXLU000000002");
+  await navigate(page, "/literature/XXLU000000002");
 
   await expect(
     page
@@ -78,7 +79,7 @@ test("displays all titles", async ({ page }) => {
 });
 
 noJsTest("tabs work without JavaScript", async ({ page }) => {
-  await page.goto("/literature/XXLU000000001", { waitUntil: "networkidle" });
+  await navigate(page, "/literature/XXLU000000001");
   await expect(
     page.getByRole("link", { name: "Details zum Literaturnachweis" }),
   ).toBeVisible();
@@ -101,8 +102,7 @@ noJsTest("tabs work without JavaScript", async ({ page }) => {
 test.skip("shows detailed information in the 'Details' tab", async ({
   page,
 }) => {
-  await page.goto("/literature/XXLU000000001");
-  await page.waitForLoadState("networkidle");
+  await navigate(page, "/literature/XXLU000000001");
 
   const detailsLink = page.getByRole("link", {
     name: "Details zum Literaturnachweis",
@@ -137,9 +137,7 @@ test.describe("actions menu", () => {
     context,
     isMobileTest,
   }) => {
-    await page.goto("/literature/XXLU000000001", {
-      waitUntil: "networkidle",
-    });
+    await navigate(page, "/literature/XXLU000000001");
 
     if (browserName === "chromium") {
       await context.grantPermissions(["clipboard-read", "clipboard-write"]);
@@ -181,9 +179,7 @@ test.describe("actions menu", () => {
     page,
     isMobileTest,
   }) => {
-    await page.goto("/literature/XXLU000000001", {
-      waitUntil: "networkidle",
-    });
+    await navigate(page, "/literature/XXLU000000001");
     if (isMobileTest) await page.getByLabel("Aktionen anzeigen").click();
 
     const button = isMobileTest
@@ -214,9 +210,7 @@ test.describe("actions menu", () => {
     page,
     isMobileTest,
   }) => {
-    await page.goto("/literature/XXLU000000001", {
-      waitUntil: "networkidle",
-    });
+    await navigate(page, "/literature/XXLU000000001");
     if (isMobileTest) await page.getByLabel("Aktionen anzeigen").click();
     const button = isMobileTest
       ? page.getByText("Als PDF speichern")
@@ -239,9 +233,7 @@ test.describe("actions menu", () => {
     page,
     isMobileTest,
   }) => {
-    await page.goto("/literature/XXLU000000001", {
-      waitUntil: "networkidle",
-    });
+    await navigate(page, "/literature/XXLU000000001");
 
     if (isMobileTest) await page.getByLabel("Aktionen anzeigen").click();
     const button = page.getByRole("link", {
@@ -257,8 +249,10 @@ test.describe("actions menu", () => {
     }
 
     await button.click();
-
-    await page.waitForURL("v1/literature/XXLU000000001.xml");
+    const backendUrl = useBackendURL();
+    await page.waitForURL(`${backendUrl}/v1/literature/XXLU000000001.xml`, {
+      waitUntil: "networkidle",
+    });
   });
 });
 
@@ -267,8 +261,7 @@ test.describe("actions menu", () => {
 test.skip("hides tabs and shows details if document is empty", async ({
   page,
 }) => {
-  await page.goto("/literature/XXLU000000005");
-  await page.waitForLoadState("networkidle");
+  await navigate(page, "/literature/XXLU000000005");
 
   await expect(
     page.getByRole("navigation", {

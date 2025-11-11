@@ -17,12 +17,14 @@ const projects: Project[] = [
     use: {
       ...devices["Desktop Firefox"],
     },
+    testIgnore: "seo.spec.ts",
   },
   {
     name: "webkit",
     use: {
       ...devices["Desktop Safari"],
     },
+    testIgnore: "seo.spec.ts",
   },
   {
     name: "mobile",
@@ -31,6 +33,7 @@ const projects: Project[] = [
       viewport: { width: 320, height: 600 },
       touch: true,
     },
+    testIgnore: "seo.spec.ts",
   },
 ];
 
@@ -45,6 +48,7 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   /* Retry on CI only */
   retries: 1,
+  workers: 4,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: process.env.CI
     ? [

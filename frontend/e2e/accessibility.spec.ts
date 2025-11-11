@@ -2,6 +2,7 @@ import path from "node:path";
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
 import { createHtmlReport } from "axe-html-reporter";
+import { navigate } from "./utils/fixtures";
 
 const testPages = [
   {
@@ -93,8 +94,7 @@ const testPages = [
 test.describe("General Pages Accessibility Tests", () => {
   testPages.forEach(({ name, url, tabs }) => {
     test(`${name} should not have accessibility issues`, async ({ page }) => {
-      await page.goto(url);
-      await page.waitForLoadState("networkidle");
+      await navigate(page, url);
       const tabsAnalysisResults = [];
       let currentTab = 0;
       tabsAnalysisResults[currentTab] = await new AxeBuilder({ page })

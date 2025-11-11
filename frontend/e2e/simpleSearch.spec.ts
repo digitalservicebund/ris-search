@@ -1,5 +1,5 @@
 import type { Page } from "@playwright/test";
-import { expect, test, noJsTest } from "./utils/fixtures";
+import { expect, test, noJsTest, navigate } from "./utils/fixtures";
 
 function getSearchResults(page: Page) {
   return page
@@ -15,7 +15,7 @@ function getResultCounter(page: Page) {
 
 test.describe("reach search from start page", () => {
   test("searches for a query from the start page", async ({ page }) => {
-    await page.goto("/");
+    await navigate(page, "/");
     const searchInput = page.getByRole("searchbox", { name: "Suchbegriff" });
     await searchInput.fill("Fiktiv");
 
@@ -28,7 +28,7 @@ test.describe("reach search from start page", () => {
   });
 
   test("navigates back to the start page", async ({ page }) => {
-    await page.goto("/search?query=Fiktiv");
+    await navigate(page, "/search?query=Fiktiv");
     await page.getByRole("link", { name: "Zur Startseite" }).click();
 
     await expect(
@@ -40,7 +40,7 @@ test.describe("reach search from start page", () => {
 
 test.describe("general search page features", () => {
   test("pagination switches pages", async ({ page }) => {
-    await page.goto("/search?query=und");
+    await navigate(page, "/search?query=und");
 
     const resultCounter = getResultCounter(page);
     await expect(resultCounter).toHaveText("13 Suchergebnisse");
@@ -50,18 +50,20 @@ test.describe("general search page features", () => {
     await expect(searchResults).toHaveCount(10);
 
     await page.getByLabel("nächste Ergebnisse").click();
-    await page.waitForURL("/search?query=und&pageNumber=1");
+    await page.waitForURL("/search?query=und&pageNumber=1", {
+      waitUntil: "networkidle",
+    });
 
     expect(resultCounter).toHaveText("13 Suchergebnisse");
     await expect(searchResults).toHaveCount(3);
 
     await page.getByLabel("vorherige Ergebnisse").click();
-    await page.waitForURL("/search?query=und");
+    await page.waitForURL("/search?query=und", { waitUntil: "networkidle" });
     await expect(searchResults).toHaveCount(10);
   });
 
   test("sort by date in ascending order", async ({ page }) => {
-    await page.goto("/search?query=fiktiv", { waitUntil: "networkidle" });
+    await navigate(page, "/search?query=fiktiv");
 
     await page.getByRole("combobox", { name: "Relevanz" }).click();
     await page.getByRole("option", { name: "Datum: Älteste zuerst" }).click();
@@ -70,7 +72,7 @@ test.describe("general search page features", () => {
   });
 
   test("sort by date in descending order", async ({ page }) => {
-    await page.goto("/search?query=fiktiv", { waitUntil: "networkidle" });
+    await navigate(page, "/search?query=fiktiv");
 
     await page.getByRole("combobox", { name: "Relevanz" }).click();
     await page.getByRole("option", { name: "Datum: Neueste zuerst" }).click();
@@ -79,9 +81,7 @@ test.describe("general search page features", () => {
   });
 
   test("sort by relevance", async ({ page }) => {
-    await page.goto("/search?query=fiktiv&sort=date", {
-      waitUntil: "networkidle",
-    });
+    await navigate(page, "/search?query=fiktiv&sort=date");
 
     await page.getByRole("combobox", { name: "Datum: Älteste zuerst" }).click();
     await page.getByRole("option", { name: "Relevanz" }).click();
@@ -90,7 +90,7 @@ test.describe("general search page features", () => {
   });
 
   test("change number of results per page", async ({ page }) => {
-    await page.goto("/search?query=fiktiv", { waitUntil: "networkidle" });
+    await navigate(page, "/search?query=fiktiv");
 
     const searchResults = getSearchResults(page);
 
@@ -105,7 +105,7 @@ test.describe("general search page features", () => {
 
 test.describe("searching legislation", () => {
   test("narrows search", async ({ page }) => {
-    await page.goto("/search?query=fiktiv", { waitUntil: "networkidle" });
+    await navigate(page, "/search?query=fiktiv");
 
     const searchResults = getSearchResults(page);
     const resultCounter = getResultCounter(page);
@@ -129,9 +129,7 @@ test.describe("searching legislation", () => {
     page,
     privateFeaturesEnabled,
   }) => {
-    await page.goto("/search?query=FrSaftErfrischV&category=N", {
-      waitUntil: "networkidle",
-    });
+    await navigate(page, "/search?query=FrSaftErfrischV&category=N");
 
     const searchResult = getSearchResults(page).first();
 
@@ -183,9 +181,7 @@ test.describe("searching legislation", () => {
   });
 
   test("navigates to the document detail page", async ({ page }) => {
-    await page.goto("/search?query=FrSaftErfrischV&category=N", {
-      waitUntil: "networkidle",
-    });
+    await navigate(page, "/search?query=FrSaftErfrischV&category=N");
 
     // Result detail link
     await page
@@ -205,7 +201,7 @@ test.describe("searching legislation", () => {
 
 test.describe("searching caselaw", () => {
   test("narrows search", async ({ page }) => {
-    await page.goto("/search?query=fiktiv", { waitUntil: "networkidle" });
+    await navigate(page, "/search?query=fiktiv");
 
     const searchResults = getSearchResults(page);
     const resultCounter = getResultCounter(page);
@@ -228,9 +224,7 @@ test.describe("searching caselaw", () => {
   });
 
   test("shows the search result contents", async ({ page }) => {
-    await page.goto("/search?query=34+X+(xyz)+456/78&category=R", {
-      waitUntil: "networkidle",
-    });
+    await navigate(page, "/search?query=34+X+(xyz)+456/78&category=R");
 
     const searchResult = getSearchResults(page).first();
 
@@ -257,9 +251,7 @@ test.describe("searching caselaw", () => {
   });
 
   test("navigates to the document detail page", async ({ page }) => {
-    await page.goto("/search?query=34+X+(xyz)+456/78&category=R", {
-      waitUntil: "networkidle",
-    });
+    await navigate(page, "/search?query=34+X+(xyz)+456/78&category=R");
 
     // Result detail link
     await page
@@ -277,7 +269,7 @@ test.describe("searching caselaw", () => {
   });
 
   test("narrows by subtypes", async ({ page }) => {
-    await page.goto("/search?category=R", { waitUntil: "networkidle" });
+    await navigate(page, "/search?category=R");
 
     await test.step("Urteil", async () => {
       await page
@@ -331,7 +323,7 @@ test.describe("searching caselaw", () => {
   });
 
   test("searches by suggested court", async ({ page }) => {
-    await page.goto("/search?category=R", { waitUntil: "networkidle" });
+    await navigate(page, "/search?category=R");
 
     await page.getByRole("button", { name: "Vorschläge anzeigen" }).click();
     await page
@@ -344,7 +336,7 @@ test.describe("searching caselaw", () => {
   });
 
   test("searches by custom court", async ({ page }) => {
-    await page.goto("/search?category=R", { waitUntil: "networkidle" });
+    await navigate(page, "/search?category=R");
 
     await page.getByRole("combobox", { name: "Gericht" }).fill("LG");
     await page.getByRole("option", { name: "LG Hamburg" }).click();
@@ -364,7 +356,7 @@ test.describe("searching caselaw", () => {
 
 test.describe("searching literature", () => {
   test("narrows search", async ({ page }) => {
-    await page.goto("/search?query=ein", { waitUntil: "networkidle" });
+    await navigate(page, "/search?query=ein");
 
     const searchResults = getSearchResults(page);
     const resultCounter = getResultCounter(page);
@@ -385,9 +377,7 @@ test.describe("searching literature", () => {
   });
 
   test("shows the search result contents", async ({ page }) => {
-    await page.goto("/search?query=FooBar,+1982,+123-123&category=L", {
-      waitUntil: "networkidle",
-    });
+    await navigate(page, "/search?query=FooBar,+1982,+123-123&category=L");
 
     const searchResult = getSearchResults(page).first();
 
@@ -410,9 +400,7 @@ test.describe("searching literature", () => {
   });
 
   test("navigates to the document detail page", async ({ page }) => {
-    await page.goto("/search?query=FooBar,+1982,+123-123&category=L", {
-      waitUntil: "networkidle",
-    });
+    await navigate(page, "/search?query=FooBar,+1982,+123-123&category=L");
 
     // Result detail link
     await page
@@ -430,7 +418,7 @@ test.describe("searching literature", () => {
   });
 
   test("searches by publication year with dateBefore", async ({ page }) => {
-    await page.goto("/search?category=L", { waitUntil: "networkidle" });
+    await navigate(page, "/search?category=L");
 
     await page
       .getByRole("combobox", { name: "Keine zeitliche Begrenzung" })
@@ -445,7 +433,7 @@ test.describe("searching literature", () => {
   });
 
   test("searches by publication year with dateAfter", async ({ page }) => {
-    await page.goto("/search?category=L", { waitUntil: "networkidle" });
+    await navigate(page, "/search?category=L");
 
     await page
       .getByRole("combobox", { name: "Keine zeitliche Begrenzung" })
@@ -462,7 +450,7 @@ test.describe("searching literature", () => {
   test("searches by publication year with dateBefore and dateAfter", async ({
     page,
   }) => {
-    await page.goto("/search?category=L", { waitUntil: "networkidle" });
+    await navigate(page, "/search?category=L");
 
     await page
       .getByRole("combobox", { name: "Keine zeitliche Begrenzung" })
@@ -477,7 +465,7 @@ test.describe("searching literature", () => {
   });
 
   test("searches by publication year with range", async ({ page }) => {
-    await page.goto("/search?category=L", { waitUntil: "networkidle" });
+    await navigate(page, "/search?category=L");
 
     await page
       .getByRole("combobox", { name: "Keine zeitliche Begrenzung" })
@@ -497,11 +485,13 @@ noJsTest("search works without JavaScript", async ({ page }) => {
   const searchTerm = "Fiktiv";
 
   await test.step("search from landing page", async () => {
-    await page.goto("/");
+    await navigate(page, "/");
     await page.getByPlaceholder("Suchbegriff eingeben").fill(searchTerm);
     await page.getByRole("button", { name: "Suchen" }).click();
 
-    await page.waitForURL(`/search?query=${searchTerm}`);
+    await page.waitForURL(`/search?query=${searchTerm}`, {
+      waitUntil: "networkidle",
+    });
     expect(await getSearchResults(page).count()).toBeGreaterThan(0);
     await expect(page.getByPlaceholder("Suchbegriff eingeben")).toHaveValue(
       searchTerm,
@@ -513,7 +503,9 @@ noJsTest("search works without JavaScript", async ({ page }) => {
     await page.getByPlaceholder("Suchbegriff eingeben").fill(newSearchTerm);
     await page.getByRole("button", { name: "Suchen" }).click();
 
-    await page.waitForURL(`/search?query=${newSearchTerm}`);
+    await page.waitForURL(`/search?query=${newSearchTerm}`, {
+      waitUntil: "networkidle",
+    });
     expect(await getSearchResults(page).count()).toBeGreaterThan(0);
     await expect(page.getByPlaceholder("Suchbegriff eingeben")).toHaveValue(
       newSearchTerm,
@@ -522,7 +514,7 @@ noJsTest("search works without JavaScript", async ({ page }) => {
 });
 
 noJsTest("pagination works without JavaScript", async ({ page }) => {
-  await page.goto("/search?query=und", { waitUntil: "networkidle" });
+  await navigate(page, "/search?query=und");
 
   await expect(getResultCounter(page)).toHaveText("13 Suchergebnisse");
   await expect(getSearchResults(page)).toHaveCount(10);
