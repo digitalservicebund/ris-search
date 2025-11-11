@@ -28,6 +28,12 @@ mockNuxtImport("useFetch", () => {
   return useFetchMock;
 });
 
+vi.mock("~/composables/useBackendURL", () => {
+  return {
+    useBackendURL: vi.fn().mockReturnValue(""),
+  };
+});
+
 beforeEach(() => {
   vi.mocked(useFetch).mockReset();
 });

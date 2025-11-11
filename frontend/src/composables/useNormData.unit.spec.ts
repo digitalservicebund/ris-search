@@ -17,6 +17,12 @@ mockNuxtImport("useRequestFetch", () => {
   return () => mockFetch;
 });
 
+vi.mock("~/composables/useBackendURL", () => {
+  return {
+    useBackendURL: vi.fn().mockReturnValue(""),
+  };
+});
+
 describe("useNormData", () => {
   const consoleInfoMock = vi
     .spyOn(console, "info")

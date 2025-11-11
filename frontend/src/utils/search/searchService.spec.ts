@@ -1,4 +1,3 @@
-import { mockNuxtImport } from "@nuxt/test-utils/runtime";
 import { describe, it, expect, vi, type Mock } from "vitest";
 import { advancedSearch } from "./searchService";
 import { DocumentKind } from "~/types";
@@ -6,20 +5,10 @@ import { axiosInstance } from "~/utils/services/httpClient";
 
 vi.mock("~/utils/services/httpClient");
 
-const { useRuntimeConfigMock } = vi.hoisted(() => {
+vi.mock("~/composables/useBackendURL", () => {
   return {
-    useRuntimeConfigMock: vi.fn(() => {
-      return {
-        public: {
-          backendURL: "https://backend",
-        },
-      };
-    }),
+    useBackendURL: vi.fn().mockReturnValue("https://backend"),
   };
-});
-
-mockNuxtImport("useRuntimeConfig", () => {
-  return useRuntimeConfigMock;
 });
 
 describe("searchService", () => {

@@ -28,13 +28,11 @@ export async function advancedSearch(params: {
   });
   const url = `${getAdvancedSearchUrl(params.documentKind)}?${convertedParams}`;
 
-  const config = useRuntimeConfig();
-  const baseURL = config.public.backendURL;
   return await axiosInstance.get(url, {
     timeout,
     headers: {
       Accept: "application/json",
     },
-    baseURL,
+    baseURL: useBackendURL(),
   });
 }

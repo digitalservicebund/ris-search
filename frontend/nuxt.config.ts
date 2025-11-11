@@ -114,8 +114,6 @@ export default defineNuxtConfig({
     auth: {
       webAuth: false,
     },
-    /* Backend host to the spring backend, used by /proxy and /v1 routes  */
-    risBackendUrl: "http://localhost:8090",
     session: {
       cookie: {
         secure: secureCookie, // workaround needed for Safari on localhost
@@ -123,12 +121,6 @@ export default defineNuxtConfig({
       password: "", // needs override in env
     },
     public: {
-      /*
-       * Host that is used by the browser to retrieve resources from the backend
-       * 1. use http://localhost:8090 to connect to the spring backend directly
-       * 2. leave empty to route requests through the nuxt backend
-       */
-      backendURL: "",
       /*
        * A feature flag that controls whether the private annotated features should,
        * be displayed or not, such features are for example: metadata, fassungen ...etc
@@ -211,9 +203,6 @@ export default defineNuxtConfig({
           Accept: "application/xml",
         },
       },
-    },
-    "/v1/**": {
-      proxy: `${process.env.NUXT_RIS_BACKEND_URL}/v1/**`,
     },
   },
   vite: {

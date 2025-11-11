@@ -7,7 +7,7 @@ import userEvent from "@testing-library/user-event";
 import { screen } from "@testing-library/vue";
 import { mount, RouterLinkStub } from "@vue/test-utils";
 import dayjs from "dayjs";
-import { expect, it } from "vitest";
+import { expect, it, vi } from "vitest";
 import { unref } from "vue";
 import CaseLawActionsMenu from "~/components/ActionMenu/CaseLawActionsMenu.vue";
 import CaseLawPage from "~/pages/case-law/[documentNumber]/index.vue";
@@ -35,6 +35,12 @@ mockNuxtImport("useFetch", async () => {
 });
 mockNuxtImport("useHead", async () => {
   return useHeadMock;
+});
+
+vi.mock("~/composables/useBackendURL", () => {
+  return {
+    useBackendURL: vi.fn().mockReturnValue(""),
+  };
 });
 
 const caseLawTestData: CaseLaw = {

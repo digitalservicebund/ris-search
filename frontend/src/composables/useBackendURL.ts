@@ -1,4 +1,3 @@
 export const useBackendURL = () => {
-  const config = useRuntimeConfig();
-  return config.public.backendURL;
+  return process.env.NUXT_RIS_BACKEND_URL ?? "http://localhost:8090";
 };
