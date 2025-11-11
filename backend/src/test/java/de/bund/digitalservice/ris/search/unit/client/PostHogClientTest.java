@@ -34,4 +34,12 @@ class PostHogClientTest {
 
     verify(postHog).capture(userId, "survey sent", expectedData);
   }
+
+  @Test
+  void shutdownCallPosthogShutdown() {
+    var postHogClient = new PostHogClient(postHog);
+
+    postHogClient.shutdown();
+    verify(postHog).shutdown();
+  }
 }
