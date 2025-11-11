@@ -12,24 +12,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@adonisjs/hash@npm:^9.1.1":
-  version: 9.1.1
-  resolution: "@adonisjs/hash@npm:9.1.1"
-  dependencies:
-    "@phc/format": "npm:^1.0.0"
-    "@poppinss/utils": "npm:^6.9.3"
-  peerDependencies:
-    argon2: ^0.31.2 || ^0.41.0 || ^0.43.0
-    bcrypt: ^5.1.1 || ^6.0.0
-  peerDependenciesMeta:
-    argon2:
-      optional: true
-    bcrypt:
-      optional: true
-  checksum: 10c0/87f366bd742fd0b1a46cc25e53dd06a25d3f38990a1dcf624ecd0c455dc90b07b32d56274c104bda8048cc10121e9506f109e4b731630bad13dc8c73c60cd012
-  languageName: node
-  linkType: hard
-
 "@antfu/install-pkg@npm:^1.1.0":
   version: 1.1.0
   resolution: "@antfu/install-pkg@npm:1.1.0"
