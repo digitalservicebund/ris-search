@@ -34,7 +34,6 @@ export default defineVitestConfig({
         "lcov",
       ],
       reportsDirectory: "./coverage",
-      all: false,
       include: ["*/**/*.ts", "*/**/*.vue"],
       exclude: [
         "**/**/*.generated.ts",
