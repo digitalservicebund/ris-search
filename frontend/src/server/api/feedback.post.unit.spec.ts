@@ -9,7 +9,6 @@ const {
   mockGetRequestURL,
   mockSendRedirect,
   mockFetch,
-  mockUseRuntimeConfig,
 } = vi.hoisted(() => {
   return {
     mockReadBody: vi.fn(),
@@ -17,13 +16,14 @@ const {
     mockGetRequestURL: vi.fn(),
     mockSendRedirect: vi.fn(),
     mockFetch: vi.fn(),
-    mockUseRuntimeConfig: vi.fn(() => ({
-      risBackendUrl: "https://backend",
-    })),
   };
 });
 
-mockNuxtImport("useRuntimeConfig", () => mockUseRuntimeConfig);
+vi.mock("~/composables/useBackendURL", () => {
+  return {
+    useBackendURL: vi.fn().mockReturnValue("https://backend"),
+  };
+});
 
 vi.mock("h3", () => ({
   defineEventHandler: vi.fn((handler) => handler),

@@ -10,6 +10,12 @@ const { mockUseRuntimeConfig } = vi.hoisted(() => {
   return { getRequestURL: vi.fn(), mockUseRuntimeConfig: vi.fn() };
 });
 
+vi.mock("~/composables/useBackendURL", () => {
+  return {
+    useBackendURL: vi.fn().mockReturnValue("backendUrl"),
+  };
+});
+
 mockNuxtImport("useRuntimeConfig", () => {
   return mockUseRuntimeConfig;
 });
@@ -21,7 +27,6 @@ describe("robots txt route", () => {
 
   it("should serve robots txt from backend api on justice crawler", async () => {
     mockUseRuntimeConfig.mockImplementation(() => ({
-      risBackendUrl: "backendUrl",
       public: {
         privateFeaturesEnabled: false,
       },
@@ -60,7 +65,6 @@ describe("robots txt route", () => {
     "privateFeaturesEnabled flag = %s serves %s",
     async ([privateFeaturesEnabled, file]) => {
       mockUseRuntimeConfig.mockImplementation(() => ({
-        risBackendUrl: "backendUrl",
         public: {
           privateFeaturesEnabled,
         },
