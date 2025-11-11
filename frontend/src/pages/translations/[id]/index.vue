@@ -7,7 +7,6 @@ import Properties from "~/components/Properties.vue";
 import PropertiesItem from "~/components/PropertiesItem.vue";
 import type { BreadcrumbItem } from "~/components/Ris/RisBreadcrumb.vue";
 import RisTabs from "~/components/Ris/RisTabs.vue";
-import { tabPanelClass } from "~/components/Tabs.styles";
 import { useDynamicSeo } from "~/composables/useDynamicSeo";
 import {
   fetchTranslationAndHTML,
@@ -15,6 +14,7 @@ import {
 } from "~/composables/useTranslationData";
 import { DocumentKind } from "~/types";
 import { formatDocumentKind } from "~/utils/displayValues";
+import { tabPanelClass } from "~/utils/tabsStyles";
 import { removePrefix, truncateAtWord } from "~/utils/textFormatting";
 import IcBaselineSubject from "~icons/ic/baseline-subject";
 import IcOutlineInfo from "~icons/ic/outline-info";
@@ -147,7 +147,7 @@ const tabs = computed(() => [
 
           <h1
             v-if="currentTranslation?.name"
-            class="ris-heading2-bold max-w-title mb-48 text-balance break-words hyphens-auto"
+            class="ris-heading2-bold max-w-title mb-48 text-balance wrap-break-word hyphens-auto"
           >
             {{ currentTranslation.name }}
           </h1>
@@ -166,7 +166,7 @@ const tabs = computed(() => [
           Translations may not be updated at the same time as the German legal
           provision.
           <NuxtLink
-            class="ris-link1-regular focus:outline focus:outline-4 focus:outline-offset-4 focus:outline-blue-800"
+            class="ris-link1-regular"
             :to="`/norms/${germanOriginalWorkEli}`"
             >Go to the German version</NuxtLink
           >.

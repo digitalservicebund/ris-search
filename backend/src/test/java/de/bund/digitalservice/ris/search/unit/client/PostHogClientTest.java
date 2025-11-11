@@ -3,7 +3,7 @@ package de.bund.digitalservice.ris.search.unit.client;
 import static org.mockito.Mockito.verify;
 
 import com.posthog.java.PostHog;
-import de.bund.digitalservice.ris.search.client.posthog.PostHogClientImpl;
+import de.bund.digitalservice.ris.search.client.posthog.PostHogClient;
 import java.util.HashMap;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
@@ -12,13 +12,13 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-class PostHogClientImplTest {
+class PostHogClientTest {
 
   @Mock private PostHog postHog;
 
   @Test
   void callsPostHogWithValidParameters() {
-    var postHogClient = new PostHogClientImpl(postHog);
+    var postHogClient = new PostHogClient(postHog);
 
     String text = "Test feedback";
     String url = "http://user-url.test";
@@ -33,5 +33,13 @@ class PostHogClientImplTest {
     expectedData.put("$current_url", url);
 
     verify(postHog).capture(userId, "survey sent", expectedData);
+  }
+
+  @Test
+  void shutdownCallPosthogShutdown() {
+    var postHogClient = new PostHogClient(postHog);
+
+    postHogClient.shutdown();
+    verify(postHog).shutdown();
   }
 }
