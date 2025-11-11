@@ -21,15 +21,6 @@
   body {
     @apply text-[18px] font-normal text-black antialiased;
   }
-
-  a {
-    @apply underline;
-  }
-
-  a:hover,
-  a:focus {
-    @apply text-blue-800;
-  }
 }
 
 @utility container {
