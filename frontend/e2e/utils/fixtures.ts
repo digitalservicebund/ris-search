@@ -123,7 +123,6 @@ export const expect = baseExpect.extend({
   },
 });
 
-// Fixture for tests that need JavaScript disabled
 type NoJsFixtures = {
   noJsContext: BrowserContext;
   page: import("@playwright/test").Page;
