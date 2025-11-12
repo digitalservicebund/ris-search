@@ -38,10 +38,11 @@ export function useFetchNormContent(
 > {
   const requestFetch = useRequestFetch(); // unlike $fetch, useRequestFetch forwards client cookies
   return useAsyncData(`json+html for ${expressionEli}`, async () => {
+    const backendUrl = useBackendUrl();
     const metadata = await requestFetch<LegislationWork>(
-      useBackendUrl(`/v1/legislation/eli/${expressionEli}`),
+      `${backendUrl}/v1/legislation/eli/${expressionEli}`,
     );
-    const contentUrl = getContentUrl(metadata);
+    const contentUrl = backendUrl + getContentUrl(metadata);
     const html = await requestFetch<string>(contentUrl, {
       headers: {
         Accept: "text/html",
@@ -127,15 +128,16 @@ export function useFetchNormArticleContent(
   return useAsyncData(
     `json+html for ${expressionEli}/${articleEId}`,
     async () => {
+      const backendUrl = useBackendUrl();
       const metadata = await requestFetch<LegislationWork>(
-        useBackendUrl(`/v1/legislation/eli/${expressionEli}`),
+        `${backendUrl}/v1/legislation/eli/${expressionEli}`,
       );
       // build the article URL by appending the eId in front of the .html suffix
       const adaptedContentUrl = getContentUrl(metadata).replace(
         /\.html$/,
         `/${articleEId}.html`,
       );
-      const html = await requestFetch<string>(adaptedContentUrl, {
+      const html = await requestFetch<string>(backendUrl + adaptedContentUrl, {
         headers: {
           Accept: "text/html",
         },
