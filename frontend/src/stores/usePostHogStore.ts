@@ -2,6 +2,7 @@ import Cookies from "js-cookie";
 import { defineStore } from "pinia";
 import type { PostHog } from "posthog-js";
 import posthog from "posthog-js";
+import useBackendUrl from "~/composables/useBackendUrl";
 import type { QueryParams } from "~/stores/searchParams";
 import {
   getStringOrUndefined,
@@ -71,7 +72,9 @@ export const usePostHogStore = defineStore("postHog", () => {
       url: router.currentRoute.value.fullPath,
       user_id: getUserPostHogId(),
     });
-    const { error } = await useFetch(`/v1/feedback?${params.toString()}`);
+    const { error } = await useFetch(
+      useBackendUrl(`/v1/feedback?${params.toString()}`),
+    );
 
     if (error.value) {
       throw new Error(`Error sending feedback`);

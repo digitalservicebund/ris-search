@@ -1,15 +1,17 @@
+import useBackendUrl from "~/composables/useBackendUrl";
 import { DocumentKind } from "~/types";
 import { axiosInstance } from "~/utils/services/httpClient";
 
 const timeout = 10000;
 
 function getAdvancedSearchUrl(documentKind: DocumentKind) {
+  const baseUrl = useBackendUrl("/v1/document/lucene-search");
   if (documentKind === DocumentKind.CaseLaw) {
-    return `/v1/document/lucene-search/case-law`;
+    return `${baseUrl}/case-law`;
   } else if (documentKind === DocumentKind.Norm) {
-    return `/v1/document/lucene-search/legislation`;
+    return `${baseUrl}/legislation`;
   } else {
-    return `/v1/document/lucene-search`;
+    return baseUrl;
   }
 }
 

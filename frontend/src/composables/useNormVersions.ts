@@ -1,5 +1,6 @@
 import { computed } from "vue";
 import { type AsyncDataRequestStatus, useFetch } from "#app";
+import useBackendUrl from "~/composables/useBackendUrl";
 import type { JSONLDList, LegislationWork, SearchResult } from "~/types";
 import { getCurrentDateInGermanyFormatted } from "~/utils/dateFormatting";
 
@@ -26,7 +27,7 @@ function getNorms(params: {
   const immediate = params.eli !== undefined;
   const { status, data, error } = useFetch<
     JSONLDList<SearchResult<LegislationWork>>
-  >(`/v1/legislation`, {
+  >(useBackendUrl(`/v1/legislation`), {
     params: params,
     immediate: immediate,
   });

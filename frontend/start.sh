@@ -8,7 +8,6 @@ read_secret() {
 }
 
 # Exporting only if not already set, see https://stackoverflow.com/a/11686912
-export NUXT_RIS_BACKEND_URL="${NUXT_RIS_BACKEND_URL:-$(read_secret /etc/secrets/ris-backend-url/url)}"
 export NUXT_SESSION_PASSWORD="${NUXT_SESSION_PASSWORD:-$(read_secret /etc/secrets/session-password/secret)}"
 export SENTRY_AUTH_TOKEN="${SENTRY_AUTH_TOKEN:-$(read_secret /etc/secrets/sentry-auth/token)}"
 export NUXT_PUBLIC_SENTRY_DSN="${NUXT_PUBLIC_SENTRY_DSN:-$(read_secret /etc/secrets/sentry-dsn/url)}"

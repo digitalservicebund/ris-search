@@ -15,6 +15,7 @@ import PropertiesItem from "~/components/PropertiesItem.vue";
 import RisBreadcrumb from "~/components/Ris/RisBreadcrumb.vue";
 import RisDocumentTitle from "~/components/Ris/RisDocumentTitle.vue";
 import RisTabs from "~/components/Ris/RisTabs.vue";
+import useBackendUrl from "~/composables/useBackendUrl";
 import { type CaseLaw, DocumentKind } from "~/types";
 import { getEncodingURL } from "~/utils/caseLaw";
 import { dateFormattedDDMMYYYY } from "~/utils/dateFormatting";
@@ -37,9 +38,9 @@ const {
   status,
   data: caseLaw,
   error: metadataError,
-} = await useFetch<CaseLaw>(`/v1/case-law/${documentNumber}`);
+} = await useFetch<CaseLaw>(useBackendUrl(`/v1/case-law/${documentNumber}`));
 const { data: html, error: contentError } = await useFetch<string>(
-  `/v1/case-law/${documentNumber}.html`,
+  useBackendUrl(`/v1/case-law/${documentNumber}.html`),
   {
     headers: { Accept: "text/html" },
   },

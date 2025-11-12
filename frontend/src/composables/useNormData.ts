@@ -1,4 +1,5 @@
 import type { AsyncData, NuxtError } from "#app";
+import useBackendUrl from "~/composables/useBackendUrl";
 import type { LegislationWork } from "~/types";
 import { getTextFromElements, parseDocument } from "~/utils/htmlParser";
 
@@ -38,7 +39,7 @@ export function useFetchNormContent(
   const requestFetch = useRequestFetch(); // unlike $fetch, useRequestFetch forwards client cookies
   return useAsyncData(`json+html for ${expressionEli}`, async () => {
     const metadata = await requestFetch<LegislationWork>(
-      `/v1/legislation/eli/${expressionEli}`,
+      useBackendUrl(`/v1/legislation/eli/${expressionEli}`),
     );
     const contentUrl = getContentUrl(metadata);
     const html = await requestFetch<string>(contentUrl, {
@@ -127,7 +128,7 @@ export function useFetchNormArticleContent(
     `json+html for ${expressionEli}/${articleEId}`,
     async () => {
       const metadata = await requestFetch<LegislationWork>(
-        `/v1/legislation/eli/${expressionEli}`,
+        useBackendUrl(`/v1/legislation/eli/${expressionEli}`),
       );
       // build the article URL by appending the eId in front of the .html suffix
       const adaptedContentUrl = getContentUrl(metadata).replace(

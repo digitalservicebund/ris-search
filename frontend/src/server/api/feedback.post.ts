@@ -5,6 +5,7 @@ import {
   getHeader,
   getRequestURL,
 } from "h3";
+import useBackendUrl from "~/composables/useBackendUrl";
 
 function buildRedirectPath(
   referer: string | undefined,
@@ -60,7 +61,7 @@ export default defineEventHandler(async (event) => {
       user_id: body.user_id || "anonymous_feedback_user",
     });
 
-    await $fetch(`/v1/feedback?${params.toString()}`);
+    await $fetch(useBackendUrl(`/v1/feedback?${params.toString()}`));
 
     return sendRedirect(
       event,
