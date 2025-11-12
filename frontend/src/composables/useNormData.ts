@@ -1,5 +1,4 @@
 import type { AsyncData, NuxtError } from "#app";
-import { useBackendURL } from "~/composables/useBackendURL";
 import type { LegislationWork } from "~/types";
 import { getTextFromElements, parseDocument } from "~/utils/htmlParser";
 
@@ -38,11 +37,10 @@ export function useFetchNormContent(
 > {
   const requestFetch = useRequestFetch(); // unlike $fetch, useRequestFetch forwards client cookies
   return useAsyncData(`json+html for ${expressionEli}`, async () => {
-    const backendURL = useBackendURL();
     const metadata = await requestFetch<LegislationWork>(
-      `${backendURL}/v1/legislation/eli/${expressionEli}`,
+      `/v1/legislation/eli/${expressionEli}`,
     );
-    const contentUrl = backendURL + getContentUrl(metadata);
+    const contentUrl = getContentUrl(metadata);
     const html = await requestFetch<string>(contentUrl, {
       headers: {
         Accept: "text/html",
@@ -125,17 +123,17 @@ export function useFetchNormArticleContent(
   NuxtError<NormContent> | NuxtError<null> | undefined
 > {
   const requestFetch = useRequestFetch(); // unlike $fetch, useRequestFetch forwards client cookies
-  const backendURL = useBackendURL();
   return useAsyncData(
     `json+html for ${expressionEli}/${articleEId}`,
     async () => {
       const metadata = await requestFetch<LegislationWork>(
-        `${backendURL}/v1/legislation/eli/${expressionEli}`,
+        `/v1/legislation/eli/${expressionEli}`,
       );
       // build the article URL by appending the eId in front of the .html suffix
-      const adaptedContentUrl =
-        backendURL +
-        getContentUrl(metadata).replace(/\.html$/, `/${articleEId}.html`);
+      const adaptedContentUrl = getContentUrl(metadata).replace(
+        /\.html$/,
+        `/${articleEId}.html`,
+      );
       const html = await requestFetch<string>(adaptedContentUrl, {
         headers: {
           Accept: "text/html",

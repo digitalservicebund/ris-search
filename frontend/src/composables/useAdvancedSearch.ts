@@ -1,5 +1,4 @@
 import { toValue } from "vue";
-import { useBackendURL } from "./useBackendURL";
 import { useFetch } from "#app";
 import type { Page } from "~/components/Pagination/Pagination.vue";
 import { DocumentKind } from "~/types";
@@ -66,14 +65,10 @@ export async function useAdvancedSearch(
     };
   });
 
-  const backendUrl = useBackendURL();
-
   const { data, error, status, pending, execute } = await useFetch<Page>(
     searchEndpointUrl,
     {
       query: combinedQuery,
-
-      baseURL: backendUrl,
 
       // immediate always executes even if the query is empty. Instead the
       // component should execute manually using `executeWhenValid` to make

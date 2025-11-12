@@ -16,7 +16,6 @@ import RisBreadcrumb from "~/components/Ris/RisBreadcrumb.vue";
 import RisDocumentTitle from "~/components/Ris/RisDocumentTitle.vue";
 import RisTabs from "~/components/Ris/RisTabs.vue";
 import { tabPanelClass } from "~/components/Tabs.styles";
-import { useBackendURL } from "~/composables/useBackendURL";
 import { type CaseLaw, DocumentKind } from "~/types";
 import { getEncodingURL } from "~/utils/caseLaw";
 import { dateFormattedDDMMYYYY } from "~/utils/dateFormatting";
@@ -34,14 +33,13 @@ import MaterialSymbolsDownload from "~icons/material-symbols/download";
 const route = useRoute();
 const documentNumber = route.params.documentNumber as string;
 const emptyTitlePlaceholder = "Titelzeile nicht vorhanden";
-const backendURL = useBackendURL();
 const {
   status,
   data: caseLaw,
   error: metadataError,
-} = await useFetch<CaseLaw>(`${backendURL}/v1/case-law/${documentNumber}`);
+} = await useFetch<CaseLaw>(`/v1/case-law/${documentNumber}`);
 const { data: html, error: contentError } = await useFetch<string>(
-  `${backendURL}/v1/case-law/${documentNumber}.html`,
+  `/v1/case-law/${documentNumber}.html`,
   {
     headers: { Accept: "text/html" },
   },
@@ -119,9 +117,7 @@ const tocEntries: ComputedRef<TableOfContentsEntry[] | null> = computed(() => {
   return html.value ? getAllSectionsFromHtml(html.value, "section") : null;
 });
 
-const zipUrl = computed(() =>
-  getEncodingURL(caseLaw.value, backendURL, "application/zip"),
-);
+const zipUrl = computed(() => getEncodingURL(caseLaw.value, "application/zip"));
 
 const title = computed(() => {
   return caseLaw.value?.headline

@@ -88,7 +88,7 @@ jobs:
         if: ${{ !failure() }}
         with:
           name: playwright-e2e-tests-report-${{ matrix.configuration_label }}
-          path: frontend/playwright-report/**/*.zip
+          path: frontend/playwright-report
           retention-days: 5
       - name: Upload traces of failed tests
         uses: actions/upload-artifact@v5

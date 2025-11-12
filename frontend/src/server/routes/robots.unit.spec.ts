@@ -10,12 +10,6 @@ const { mockUseRuntimeConfig } = vi.hoisted(() => {
   return { getRequestURL: vi.fn(), mockUseRuntimeConfig: vi.fn() };
 });
 
-vi.mock("~/composables/useBackendURL", () => {
-  return {
-    useBackendURL: vi.fn().mockReturnValue("backendUrl"),
-  };
-});
-
 mockNuxtImport("useRuntimeConfig", () => {
   return mockUseRuntimeConfig;
 });
@@ -48,12 +42,9 @@ describe("robots txt route", () => {
     } as unknown as H3Event<EventHandlerRequest>;
 
     await middleware(mockEvent);
-    expect(mockFetch).toHaveBeenCalledWith(
-      "backendUrl/v1/eclicrawler/robots.txt",
-      {
-        method: "GET",
-      },
-    );
+    expect(mockFetch).toHaveBeenCalledWith("/v1/eclicrawler/robots.txt", {
+      method: "GET",
+    });
   });
 
   const testCases = [

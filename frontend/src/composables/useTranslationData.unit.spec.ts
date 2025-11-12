@@ -8,12 +8,6 @@ import {
 } from "~/composables/useTranslationData";
 import type { TranslationContent } from "~/composables/useTranslationData";
 
-vi.mock("~/composables/useBackendURL", () => {
-  return {
-    useBackendURL: () => "https://mock-backend",
-  };
-});
-
 const requestFetchMock = vi.fn();
 
 mockNuxtImport("useRequestFetch", () => {
@@ -50,9 +44,7 @@ describe("fetchTranslationList", () => {
     requestFetchMock.mockResolvedValueOnce(mockTranslationListData);
     const { data, error } = await fetchTranslationList();
 
-    expect(requestFetchMock).toHaveBeenCalledWith(
-      "https://mock-backend/v1/translatedLegislation",
-    );
+    expect(requestFetchMock).toHaveBeenCalledWith("/v1/translatedLegislation");
     expect(error.value).toBeUndefined();
     expect(data.value).toHaveLength(2);
   });
@@ -77,7 +69,7 @@ describe("fetchTranslationListWithIdFilter", () => {
     const { data, error } = await fetchTranslationListWithIdFilter("AbC");
 
     expect(requestFetchMock).toHaveBeenCalledWith(
-      "https://mock-backend/v1/translatedLegislation?id=AbC",
+      "/v1/translatedLegislation?id=AbC",
     );
 
     expect(error.value).toBeUndefined();
@@ -107,11 +99,11 @@ describe("fetchTranslationAndHTML", () => {
     const { data, error } = await fetchTranslationAndHTML("AbC");
 
     expect(requestFetchMock).toHaveBeenCalledWith(
-      "https://mock-backend/v1/translatedLegislation?id=AbC",
+      "/v1/translatedLegislation?id=AbC",
     );
 
     expect(requestFetchMock).toHaveBeenCalledWith(
-      "https://mock-backend/v1/translatedLegislation/englisch_abc.html",
+      "/v1/translatedLegislation/englisch_abc.html",
       {
         headers: {
           Accept: "text/html",
@@ -132,7 +124,7 @@ describe("fetchTranslationAndHTML", () => {
     const { data, error } = await fetchTranslationAndHTML("FgH");
 
     expect(requestFetchMock).toHaveBeenCalledWith(
-      "https://mock-backend/v1/translatedLegislation?id=FgH",
+      "/v1/translatedLegislation?id=FgH",
     );
 
     expect(requestFetchMock).toHaveBeenCalledTimes(1);
@@ -160,7 +152,7 @@ describe("fetchTranslationAndHTML", () => {
     const { data, error } = await fetchTranslationAndHTML("FgH");
 
     expect(requestFetchMock).toHaveBeenCalledWith(
-      "https://mock-backend/v1/translatedLegislation?id=FgH",
+      "/v1/translatedLegislation?id=FgH",
     );
 
     expect(requestFetchMock).toHaveBeenCalledTimes(1);
@@ -195,7 +187,7 @@ describe("getGermanOriginal", () => {
     expect(data.value).toEqual(mockResult);
     expect(error.value).toBeUndefined();
     expect(requestFetchMock).toHaveBeenCalledWith(
-      "https://mock-backend/v1/legislation?searchTerm=test-id&temporalCoverageFrom=2025-10-13&temporalCoverageTo=2025-10-13&size=100&pageIndex=0",
+      "/v1/legislation?searchTerm=test-id&temporalCoverageFrom=2025-10-13&temporalCoverageTo=2025-10-13&size=100&pageIndex=0",
     );
   });
 

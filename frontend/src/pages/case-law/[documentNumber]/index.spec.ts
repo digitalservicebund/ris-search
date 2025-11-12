@@ -37,12 +37,6 @@ mockNuxtImport("useHead", async () => {
   return useHeadMock;
 });
 
-vi.mock("~/composables/useBackendURL", () => {
-  return {
-    useBackendURL: vi.fn().mockReturnValue(""),
-  };
-});
-
 const caseLawTestData: CaseLaw = {
   "@id": "123",
   "@type": "Decision",

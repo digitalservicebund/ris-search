@@ -18,12 +18,6 @@ const {
   };
 });
 
-vi.mock("~/composables/useBackendURL", () => {
-  return {
-    useBackendURL: vi.fn().mockReturnValue("https://backend"),
-  };
-});
-
 vi.mock("h3", () => ({
   defineEventHandler: vi.fn((handler) => handler),
   readBody: mockReadBody,
@@ -55,7 +49,7 @@ describe("feedback.post", () => {
     await feedbackHandler(mockEvent);
 
     expect(mockFetch).toHaveBeenCalledWith(
-      "https://backend/v1/feedback?text=Great+app%21&url=%2Fsearch%3Fquery%3Dtest&user_id=anonymous_feedback_user",
+      "/v1/feedback?text=Great+app%21&url=%2Fsearch%3Fquery%3Dtest&user_id=anonymous_feedback_user",
     );
   });
 
@@ -71,7 +65,7 @@ describe("feedback.post", () => {
     await feedbackHandler(mockEvent);
 
     expect(mockFetch).toHaveBeenCalledWith(
-      "https://backend/v1/feedback?text=Feedback+text&url=%2Fcustom-page&user_id=user123",
+      "/v1/feedback?text=Feedback+text&url=%2Fcustom-page&user_id=user123",
     );
   });
 
@@ -112,7 +106,7 @@ describe("feedback.post", () => {
     await feedbackHandler(mockEvent);
 
     expect(mockFetch).toHaveBeenCalledWith(
-      "https://backend/v1/feedback?text=Feedback&url=%2Fpage%3Fparam%3Dvalue&user_id=anonymous_feedback_user",
+      "/v1/feedback?text=Feedback&url=%2Fpage%3Fparam%3Dvalue&user_id=anonymous_feedback_user",
     );
   });
 });

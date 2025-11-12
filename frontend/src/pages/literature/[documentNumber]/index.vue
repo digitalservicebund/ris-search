@@ -11,7 +11,6 @@ import RisBreadcrumb from "~/components/Ris/RisBreadcrumb.vue";
 import RisDocumentTitle from "~/components/Ris/RisDocumentTitle.vue";
 import RisTabs from "~/components/Ris/RisTabs.vue";
 import { tabPanelClass } from "~/components/Tabs.styles";
-import { useBackendURL } from "~/composables/useBackendURL";
 import { DocumentKind, type Literature } from "~/types";
 import { formatDocumentKind } from "~/utils/displayValues";
 import { getTitle } from "~/utils/literature";
@@ -22,7 +21,7 @@ definePageMeta({ layout: "base" }); // use "base" layout to allow for full-width
 
 const route = useRoute();
 const documentNumber = route.params.documentNumber as string;
-const documentMetadataUrl = `${useBackendURL()}/v1/literature/${documentNumber}`;
+const documentMetadataUrl = `/v1/literature/${documentNumber}`;
 
 const {
   status,

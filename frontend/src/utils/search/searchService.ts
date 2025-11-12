@@ -33,6 +33,5 @@ export async function advancedSearch(params: {
     headers: {
       Accept: "application/json",
     },
-    baseURL: useBackendURL(),
   });
 }

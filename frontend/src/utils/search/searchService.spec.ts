@@ -5,12 +5,6 @@ import { axiosInstance } from "~/utils/services/httpClient";
 
 vi.mock("~/utils/services/httpClient");
 
-vi.mock("~/composables/useBackendURL", () => {
-  return {
-    useBackendURL: vi.fn().mockReturnValue("https://backend"),
-  };
-});
-
 describe("searchService", () => {
   describe("advancedSearch", () => {
     it("should call axios.get with the correct URL and parameters", async () => {
@@ -36,7 +30,6 @@ describe("searchService", () => {
         headers: {
           Accept: "application/json",
         },
-        baseURL: "https://backend",
       };
 
       (axiosInstance.get as Mock).mockResolvedValue({ data: {} });

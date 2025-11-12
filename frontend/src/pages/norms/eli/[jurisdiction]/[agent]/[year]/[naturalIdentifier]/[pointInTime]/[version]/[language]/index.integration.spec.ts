@@ -26,12 +26,6 @@ vi.mock("~/composables/usePrivateFeaturesFlag", () => {
   return { usePrivateFeaturesFlag: mocks.usePrivateFeaturesFlag };
 });
 
-vi.mock("~/composables/useBackendURL", () => {
-  return {
-    useBackendURL: vi.fn().mockReturnValue(""),
-  };
-});
-
 const { useHeadMock } = vi.hoisted(() => {
   return {
     useHeadMock: vi.fn(),

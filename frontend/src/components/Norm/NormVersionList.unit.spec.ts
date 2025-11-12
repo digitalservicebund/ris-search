@@ -6,9 +6,8 @@ import {
 import { vi } from "vitest";
 import NormVersionList from "./NormVersionList.vue";
 import { data } from "~/components/Norm/NormVersions.spec.data";
-import { useBackendURL } from "~/composables/useBackendURL";
 
-registerEndpoint(`${useBackendURL()}/v1/legislation`, () => {
+registerEndpoint(`/v1/legislation`, () => {
   return data;
 });
 
