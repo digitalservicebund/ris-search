@@ -49,16 +49,21 @@ export async function useAdvancedSearch(
   });
 
   const combinedQuery = computed(() => {
-    let result = toValue(query);
+    const result = [toValue(query)];
 
     const filterVal = toValue(dateFilter);
     if (filterVal) {
       const dateQuery = dateFilterToQuery(filterVal, toValue(documentKind));
-      if (dateQuery) result = `(${result}) AND (${dateQuery})`;
+      if (dateQuery) result.push(dateQuery);
     }
 
+    const resultStr = result
+      .filter((i) => !!i.trim())
+      .map((i) => `(${i.trim()})`)
+      .join(" AND ");
+
     return {
-      query: encodeURIComponent(result),
+      query: encodeURIComponent(resultStr),
       size: toValue(itemsPerPage),
       sort: toValue(sort),
       pageIndex: toValue(pageIndex),
@@ -83,7 +88,7 @@ export async function useAdvancedSearch(
   );
 
   async function executeWhenValid() {
-    if (toValue(query)) await execute();
+    if (combinedQuery.value.query) await execute();
   }
 
   return {

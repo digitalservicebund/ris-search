@@ -80,7 +80,7 @@ describe("useAdvancedSearch", () => {
 
     expect(useFetchMock).toHaveBeenCalled();
     const urlQuery = useFetchMock.mock.calls[0]![1].query;
-    expect(urlQuery.value).toMatchObject({ query: "test%20query" });
+    expect(urlQuery.value).toMatchObject({ query: "(test%20query)" });
   });
 
   it("submits pagination parameters correctly", async () => {
@@ -146,6 +146,19 @@ describe("useAdvancedSearch", () => {
     await submitSearch();
 
     expect(executeMock).not.toHaveBeenCalled();
+  });
+
+  it("submits with a date filter but empty query string", async () => {
+    const { submitSearch } = await useAdvancedSearch(
+      "",
+      DocumentKind.Norm,
+      { type: "currentlyInForce", from: undefined, to: undefined },
+      {},
+    );
+
+    await submitSearch();
+
+    expect(executeMock).toHaveBeenCalled();
   });
 
   it("submits with a valid query string", async () => {
