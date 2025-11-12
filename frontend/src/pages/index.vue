@@ -24,7 +24,7 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
       >
         Testphase
       </div>
-      <h1 class="ris-heading1-regular break-words hyphens-auto">
+      <h1 class="ris-heading1-regular wrap-break-word hyphens-auto">
         Rechtsinformationen des Bundes
       </h1>
       <p class="ris-subhead-regular mt-24">
@@ -37,7 +37,7 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
   <div class="my-56 flex flex-col gap-24 pb-48">
     <FeatureCard>
       <div>
-        <h2 class="ris-heading3-bold break-words hyphens-auto">
+        <h2 class="ris-heading3-bold wrap-break-word hyphens-auto">
           Testen Sie die Suche
         </h2>
         <p class="mt-8">
@@ -65,7 +65,7 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
     </FeatureCard>
     <FeatureCard>
       <div>
-        <h2 class="ris-heading3-bold break-words hyphens-auto">
+        <h2 class="ris-heading3-bold wrap-break-word hyphens-auto">
           Testen Sie die Darstellung aktueller Gesetze, Verordnungen und
           Gerichtsentscheidungen
         </h2>
@@ -86,7 +86,7 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
 
     <FeatureCard v-if="privateFeaturesEnabled">
       <div>
-        <h2 class="ris-heading3-bold break-words hyphens-auto">
+        <h2 class="ris-heading3-bold wrap-break-word hyphens-auto">
           English translation of German laws and regulations
         </h2>
         <p class="mt-8">
@@ -102,7 +102,7 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
 
     <FeatureCard>
       <div>
-        <h2 class="ris-heading3-bold break-words hyphens-auto">
+        <h2 class="ris-heading3-bold wrap-break-word hyphens-auto">
           Testen Sie die Programmierschnittstelle
         </h2>
         <p class="mt-8">
@@ -128,7 +128,7 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
         alt="Bundesministerium der Justiz und für Verbraucherschutz"
       />
       <div class="space-y-8">
-        <p class="ris-body2-bold break-words hyphens-auto">
+        <p class="ris-body2-bold wrap-break-word hyphens-auto">
           Ein Service im Auftrag des Bundesministeriums der Justiz und für
           Verbraucherschutz
         </p>
