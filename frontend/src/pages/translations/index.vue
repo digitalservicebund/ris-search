@@ -1,17 +1,14 @@
 <script setup lang="ts">
 import MiniSearch from "minisearch";
-import Button from "primevue/button";
-import InputText from "primevue/inputtext";
 import ContentWrapper from "~/components/CustomLayouts/ContentWrapper.vue";
 import type { BreadcrumbItem } from "~/components/Ris/RisBreadcrumb.vue";
+import SimpleSearchInput from "~/components/Search/SimpleSearchInput.vue";
 import { useStaticPageSeo } from "~/composables/useStaticPageSeo";
 import { fetchTranslationList } from "~/composables/useTranslationData";
 import type { TranslationContent } from "~/composables/useTranslationData";
 import { DocumentKind } from "~/types";
 import { formatDocumentKind } from "~/utils/displayValues";
-import IconSearch from "~icons/ic/search";
 
-const searchTerm = ref("");
 const activeSearchTerm = ref("");
 
 const breadcrumbItems: ComputedRef<BreadcrumbItem[]> = computed(() => {
@@ -73,10 +70,6 @@ const minisearch = computed(() => {
   return miniSearch;
 });
 
-function handleSearch() {
-  activeSearchTerm.value = searchTerm.value;
-}
-
 useStaticPageSeo("translations-list");
 </script>
 
@@ -105,38 +98,13 @@ useStaticPageSeo("translations-list");
           fall within the relevant copyright exceptions requires the prior
           consent of the author or other rights holder.
         </p>
-        <form
-          :data-full-width="false"
-          role="search"
-          class="mt-48 flex max-w-md flex-row gap-8 data-[full-width='true']:max-w-full"
-          @submit.prevent="handleSearch"
-        >
-          <InputField
-            id="searchInputField"
-            label="Search for english translation of a german federal law or regulation"
-            visually-hide-label
-          >
-            <label for="searchInput" class="sr-only">Search term</label>
-            <InputText
-              id="searchInput"
-              v-model="searchTerm"
-              fluid
-              placeholder="Search by title or abbreviation"
-              autofocus
-              type="search"
-            />
-          </InputField>
-
-          <Button
-            aria-label="Suchen"
-            class="h-48 w-48 shrink-0 justify-center"
-            type="submit"
-          >
-            <template #icon>
-              <IconSearch />
-            </template>
-          </Button>
-        </form>
+        <SimpleSearchInput
+          v-model="activeSearchTerm"
+          class="mt-48"
+          input-label="Search term"
+          input-placeholder="Search by title or abbreviation"
+          submit-label="Search"
+        />
       </section>
 
       <section aria-labelledby="translations-list" class="mt-48">

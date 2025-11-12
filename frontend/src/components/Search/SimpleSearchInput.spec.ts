@@ -1,73 +1,92 @@
-import { mount, type VueWrapper } from "@vue/test-utils";
-import { describe, it, expect, vi, beforeEach } from "vitest";
-import { ref } from "vue";
+import userEvent from "@testing-library/user-event";
+import { render, screen } from "@testing-library/vue";
+import { describe, it, expect } from "vitest";
 import SimpleSearchInput from "./SimpleSearchInput.vue";
 
-vi.mock("primevue/button", () => ({
-  default: {
-    name: "Button",
-    template: "<button><slot></slot></button>",
-  },
-}));
-vi.mock("primevue/inputtext", () => ({
-  default: {
-    name: "InputText",
-    template: "<input />",
-  },
-}));
-
-// Mock Nuxt functionality
-vi.mock("#imports", () => {
-  return {
-    onNuxtReady: vi.fn((callback) => callback()),
-    defineModel: vi.fn(() => ref("")),
-  };
-});
-
-describe("SearchComponent", () => {
-  let wrapper: VueWrapper;
-
-  beforeEach(() => {
-    wrapper = mount(SimpleSearchInput);
-  });
-
+describe("SimpleSearchInput", () => {
   it("renders correctly", () => {
-    expect(wrapper.find("input").exists()).toBe(true);
-    expect(wrapper.find("button").exists()).toBe(true);
+    render(SimpleSearchInput);
+
+    expect(
+      screen.getByRole("searchbox", { name: "Suchbegriff" }),
+    ).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Suchen" })).toBeInTheDocument();
   });
 
   it("enables input after Nuxt is ready", async () => {
-    expect(wrapper.find("input").attributes("disabled")).toBeFalsy();
+    render(SimpleSearchInput);
+
+    expect(
+      screen.getByRole("searchbox", { name: "Suchbegriff" }),
+    ).not.toBeDisabled();
   });
 
   it("updates currentText, but not model on input change", async () => {
-    const input = wrapper.findComponent("input") as VueWrapper;
-    input.vm.$emit("update:modelValue", "test query");
-    // @ts-expect-error private property access
-    expect(wrapper.vm.currentText).toBe("test query");
-    // @ts-expect-error private property access
-    expect(wrapper.vm.model).toBeFalsy();
+    const user = userEvent.setup();
+
+    const { emitted } = render(SimpleSearchInput);
+
+    await user.type(
+      screen.getByRole("searchbox", { name: "Suchbegriff" }),
+      "test query",
+    );
+
+    expect(screen.getByRole("searchbox", { name: "Suchbegriff" })).toHaveValue(
+      "test query",
+    );
+    expect(emitted("update:modelValue")).toBeFalsy();
   });
 
   it("updates input on model change", async () => {
-    await wrapper.setProps({ modelValue: "updated model" });
-    const input = wrapper.findComponent("input") as VueWrapper;
-    expect(input.attributes("modelvalue")).toBe("updated model");
+    render(SimpleSearchInput, {
+      props: { modelValue: "updated model" },
+    });
+
+    expect(screen.getByRole("searchbox", { name: "Suchbegriff" })).toHaveValue(
+      "updated model",
+    );
   });
 
   it("submits search on Enter key press", async () => {
-    const input = wrapper.findComponent("input") as VueWrapper;
-    input.vm.$emit("update:modelValue", "test query");
-    input.vm.$emit("keyup", { key: "Enter" });
-    // @ts-expect-error private property access
-    expect(wrapper.vm.model).toBe("test query");
+    const user = userEvent.setup();
+
+    const { emitted } = render(SimpleSearchInput);
+
+    const input = screen.getByRole("searchbox", { name: "Suchbegriff" });
+    await user.type(input, "test query");
+    await user.type(input, "{enter}");
+
+    expect(emitted("update:modelValue")).toEqual([["test query"]]);
   });
 
   it("submits search on form submit", async () => {
-    const input = wrapper.findComponent("input") as VueWrapper;
-    input.vm.$emit("update:modelValue", "test query");
-    await wrapper.find("form").trigger("submit");
-    // @ts-expect-error private property access
-    expect(wrapper.vm.model).toBe("test query");
+    const user = userEvent.setup();
+
+    const { emitted } = render(SimpleSearchInput);
+
+    await user.type(
+      screen.getByRole("searchbox", { name: "Suchbegriff" }),
+      "test query",
+    );
+    await user.click(screen.getByRole("button", { name: "Suchen" }));
+
+    expect(emitted("update:modelValue")).toEqual([["test query"]]);
+  });
+
+  it("allows customizing labels via props", () => {
+    render(SimpleSearchInput, {
+      props: {
+        inputLabel: "Custom Input Label",
+        inputPlaceholder: "Custom placeholder text",
+        submitLabel: "Custom Submit",
+      },
+    });
+
+    const input = screen.getByRole("searchbox", { name: "Custom Input Label" });
+    expect(input).toBeInTheDocument();
+    expect(input).toHaveAttribute("placeholder", "Custom placeholder text");
+    expect(
+      screen.getByRole("button", { name: "Custom Submit" }),
+    ).toBeInTheDocument();
   });
 });
