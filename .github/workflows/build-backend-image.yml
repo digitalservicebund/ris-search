@@ -29,6 +29,7 @@ jobs:
   build-scan-and-push-image:
     runs-on: ubuntu-latest
     permissions:
+      security-events: write
       contents: read
       id-token: write # This is used to complete the identity challenge with sigstore/fulcio..
       packages: write
@@ -96,7 +97,7 @@ jobs:
         with:
           sarif_file: "trivy-results.sarif"
           category: trivy-backend-image-scan
-      - name: Generate cosign vulnerability scan record
+      - name: Generate trivy vulnerability record for cosign
         # Third-party action, pin to commit SHA!
         # See https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions
         uses: aquasecurity/trivy-action@a20de5420d57c4102486cdd9578b45609c99d7eb
@@ -106,23 +107,12 @@ jobs:
           image-ref: ${{ inputs.container-image-tag }}
           format: "cosign-vuln"
           output: "vuln.json"
-      - name: Upload cosign vulnerability scan record
-        uses: actions/upload-artifact@v5
-        with:
-          name: "vuln.json"
-          path: "vuln.json"
-          if-no-files-found: error
-
       - name: Install cosign
         # Third-party action, pin to commit SHA!
         # See https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions
         uses: sigstore/cosign-installer@faadad0cce49287aee09b3a48701e75088a2c6ad
       - name: Sign the published Docker image
-        run: cosign sign --yes ${{ inputs.container-image-tag}}
-      - name: Download cosign vulnerability scan record
-        uses: actions/download-artifact@v6
-        with:
-          name: "vuln.json"
+        run: cosign sign --yes ${{ inputs.container-image-tag }}
       - name: Attest vulnerability scan
         run: cosign attest --yes --replace --predicate vuln.json --type vuln ${{ inputs.container-image-tag}}
       - name: Install sentry-cli using official script
@@ -139,3 +129,8 @@ jobs:
           sentry-cli releases finalize ${{ inputs.container-image-version }}
         env:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+      - name: Send status to Slack
+        if: ${{ failure() && github.ref == 'refs/heads/main' }}
+        uses: digitalservicebund/notify-on-failure-gha@66c485757701f8d5dbee32f24df38d904ca693ba
+        with:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
