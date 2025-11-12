@@ -1,12 +1,13 @@
 import { mockNuxtImport } from "@nuxt/test-utils/runtime";
-import { describe, it, expect, beforeEach, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import useBackendUrl from "~/composables/useBackendUrl";
+import type { TranslationContent } from "~/composables/useTranslationData";
 import {
+  fetchTranslationAndHTML,
   fetchTranslationList,
   fetchTranslationListWithIdFilter,
-  fetchTranslationAndHTML,
   getGermanOriginal,
 } from "~/composables/useTranslationData";
-import type { TranslationContent } from "~/composables/useTranslationData";
 
 const requestFetchMock = vi.fn();
 
@@ -44,7 +45,9 @@ describe("fetchTranslationList", () => {
     requestFetchMock.mockResolvedValueOnce(mockTranslationListData);
     const { data, error } = await fetchTranslationList();
 
-    expect(requestFetchMock).toHaveBeenCalledWith("/v1/translatedLegislation");
+    expect(requestFetchMock).toHaveBeenCalledWith(
+      useBackendUrl("/v1/translatedLegislation"),
+    );
     expect(error.value).toBeUndefined();
     expect(data.value).toHaveLength(2);
   });
@@ -69,7 +72,7 @@ describe("fetchTranslationListWithIdFilter", () => {
     const { data, error } = await fetchTranslationListWithIdFilter("AbC");
 
     expect(requestFetchMock).toHaveBeenCalledWith(
-      "/v1/translatedLegislation?id=AbC",
+      useBackendUrl("/v1/translatedLegislation?id=AbC"),
     );
 
     expect(error.value).toBeUndefined();
@@ -99,11 +102,11 @@ describe("fetchTranslationAndHTML", () => {
     const { data, error } = await fetchTranslationAndHTML("AbC");
 
     expect(requestFetchMock).toHaveBeenCalledWith(
-      "/v1/translatedLegislation?id=AbC",
+      useBackendUrl("/v1/translatedLegislation?id=AbC"),
     );
 
     expect(requestFetchMock).toHaveBeenCalledWith(
-      "/v1/translatedLegislation/englisch_abc.html",
+      useBackendUrl("/v1/translatedLegislation/englisch_abc.html"),
       {
         headers: {
           Accept: "text/html",
@@ -124,7 +127,7 @@ describe("fetchTranslationAndHTML", () => {
     const { data, error } = await fetchTranslationAndHTML("FgH");
 
     expect(requestFetchMock).toHaveBeenCalledWith(
-      "/v1/translatedLegislation?id=FgH",
+      useBackendUrl("/v1/translatedLegislation?id=FgH"),
     );
 
     expect(requestFetchMock).toHaveBeenCalledTimes(1);
@@ -152,7 +155,7 @@ describe("fetchTranslationAndHTML", () => {
     const { data, error } = await fetchTranslationAndHTML("FgH");
 
     expect(requestFetchMock).toHaveBeenCalledWith(
-      "/v1/translatedLegislation?id=FgH",
+      useBackendUrl("/v1/translatedLegislation?id=FgH"),
     );
 
     expect(requestFetchMock).toHaveBeenCalledTimes(1);
@@ -187,7 +190,9 @@ describe("getGermanOriginal", () => {
     expect(data.value).toEqual(mockResult);
     expect(error.value).toBeUndefined();
     expect(requestFetchMock).toHaveBeenCalledWith(
-      "/v1/legislation?searchTerm=test-id&temporalCoverageFrom=2025-10-13&temporalCoverageTo=2025-10-13&size=100&pageIndex=0",
+      useBackendUrl(
+        "/v1/legislation?searchTerm=test-id&temporalCoverageFrom=2025-10-13&temporalCoverageTo=2025-10-13&size=100&pageIndex=0",
+      ),
     );
   });
 

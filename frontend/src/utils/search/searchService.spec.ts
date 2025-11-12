@@ -23,8 +23,9 @@ describe("searchService", () => {
         pageIndex: "1",
         sort: "date",
       });
-      const expectedURL =
-        "/v1/document/lucene-search/case-law?" + expectedParams;
+      const expectedURL = useBackendUrl(
+        "/v1/document/lucene-search/case-law?" + expectedParams,
+      );
       const expectedConfig = {
         timeout: 10000,
         headers: {
