@@ -1,7 +1,7 @@
-import { expect, test } from "./utils/fixtures";
+import { expect, navigate, test } from "./utils/fixtures";
 
 test("opens the page via URL", { tag: ["@RISDEV-8949"] }, async ({ page }) => {
-  await page.goto("/translations");
+  await navigate(page, "/translations");
   await expect(
     page.getByRole("heading", {
       name: "English Translations of German Federal Laws and Regulations",
@@ -16,7 +16,7 @@ test(
   "displays search bar and list",
   { tag: ["@RISDEV-8949"] },
   async ({ page }) => {
-    await page.goto("/translations");
+    await navigate(page, "/translations");
     const searchInput = page.getByRole("searchbox");
     await expect(searchInput).toHaveCount(1);
 
@@ -32,8 +32,7 @@ test(
   "filters translations correctly",
   { tag: ["@RISDEV-8949"] },
   async ({ page }) => {
-    await page.goto("/translations");
-    await page.waitForLoadState("networkidle");
+    await navigate(page, "/translations");
     const searchTerm = "Dentist";
 
     const input = page.getByRole("searchbox", { name: "search term" });

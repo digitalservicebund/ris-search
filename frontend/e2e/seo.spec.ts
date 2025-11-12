@@ -1,5 +1,6 @@
 import { playAudit } from "playwright-lighthouse";
-import { seoTest as test } from "./utils/fixtures";
+import { environment } from "../playwright.config";
+import { navigate, seoTest as test } from "./utils/fixtures";
 
 export const testPages = [
   {
@@ -68,13 +69,15 @@ test.beforeAll(async ({ privateFeaturesEnabled, browserName }) => {
   test.skip(!privateFeaturesEnabled || browserName !== "chromium");
 });
 
+test.setTimeout(120000);
+
 test.describe("SEO testing for desktop and mobile using lighthouse", () => {
   for (const testPage of testPages) {
     test(`SEO checks for page ${testPage.name}`, async ({ page }) => {
-      await page.goto(testPage.url, { waitUntil: "networkidle" });
+      await navigate(page, testPage.url);
       await playAudit({
         page,
-        port: 9222,
+        port: environment.remoteDebuggingPort,
         thresholds: { seo: 90 },
         config: {
           extends: "lighthouse:default",

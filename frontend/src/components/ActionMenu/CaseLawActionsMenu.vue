@@ -1,15 +1,11 @@
 <script setup lang="ts">
 import ActionsMenu from "~/components/ActionMenu/ActionsMenu.vue";
-import { useBackendURL } from "~/composables/useBackendURL";
 import type { CaseLaw } from "~/types";
 import { getEncodingURL } from "~/utils/caseLaw";
 
 const { caseLaw } = defineProps<{ caseLaw: CaseLaw | null }>();
 
-const backendURL = useBackendURL();
-const xmlUrl = computed(() =>
-  getEncodingURL(caseLaw, backendURL, "application/xml"),
-);
+const xmlUrl = computed(() => getEncodingURL(caseLaw, "application/xml"));
 
 const permalink = {
   label: "Link kopieren",

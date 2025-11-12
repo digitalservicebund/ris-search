@@ -8,7 +8,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.c4_soft.springaddons.security.oauth2.test.annotations.WithJwt;
 import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
 import de.bund.digitalservice.ris.search.config.ApiConfig;
@@ -41,7 +40,6 @@ import org.springframework.test.web.servlet.ResultMatcher;
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 @Tag("integration")
-@WithJwt("jwtTokens/ValidAccessToken.json")
 class AdvancedSearchControllerApiTest extends ContainersIntegrationBase {
 
   @Autowired private MockMvc mockMvc;
@@ -190,7 +188,6 @@ class AdvancedSearchControllerApiTest extends ContainersIntegrationBase {
 
   @ParameterizedTest
   @ValueSource(strings = {"decision_date", "DATUM", "DAT"})
-  @WithJwt("jwtTokens/ValidAccessToken.json")
   @DisplayName("Case law date and alias field find 2 documents")
   void caseLawDateAndAliasFieldsFind2Documents(String queryParam) throws Exception {
     mockMvc
@@ -204,7 +201,6 @@ class AdvancedSearchControllerApiTest extends ContainersIntegrationBase {
 
   @ParameterizedTest
   @ValueSource(strings = {"entry_into_force_date", "DATUM", "DAT"})
-  @WithJwt("jwtTokens/ValidAccessToken.json")
   @DisplayName("Legislation entry_into_force_date and aliases find 3 documents")
   void legislationEntryIntoForceDateAndAliasesFind3Documents(String queryParam) throws Exception {
     mockMvc
@@ -407,16 +403,16 @@ class AdvancedSearchControllerApiTest extends ContainersIntegrationBase {
             content()
                 .json(
                     """
-                                        {
-                                          "errors": [
-                                            {
-                                              "code": "information_missing",
-                                              "parameter": "query",
-                                              "message": "Required request parameter 'query' for method parameter type String is not present"
-                                            }
-                                          ]
-                                        }
-                                    """));
+                                                        {
+                                                          "errors": [
+                                                            {
+                                                              "code": "information_missing",
+                                                              "parameter": "query",
+                                                              "message": "Required request parameter 'query' for method parameter type String is not present"
+                                                            }
+                                                          ]
+                                                        }
+                                                    """));
   }
 
   @ParameterizedTest
@@ -437,16 +433,16 @@ class AdvancedSearchControllerApiTest extends ContainersIntegrationBase {
             content()
                 .json(
                     """
-                                        {
-                                          "errors": [
-                                            {
-                                              "code": "invalid_lucene_query",
-                                              "parameter": "query",
-                                              "message": "Invalid lucene query"
-                                            }
-                                          ]
-                                        }
-                                    """));
+                                                        {
+                                                          "errors": [
+                                                            {
+                                                              "code": "invalid_lucene_query",
+                                                              "parameter": "query",
+                                                              "message": "Invalid lucene query"
+                                                            }
+                                                          ]
+                                                        }
+                                                    """));
   }
 
   private static Stream<Arguments> provideSortTestData() {
@@ -475,16 +471,16 @@ class AdvancedSearchControllerApiTest extends ContainersIntegrationBase {
             content()
                 .json(
                     """
-                                {
-                                  "errors": [
-                                    {
-                                      "code": "invalid_parameter_value",
-                                      "message": "%s",
-                                      "parameter": "sort"
-                                    }
-                                  ]
-                                }
-                                """
+                                                {
+                                                  "errors": [
+                                                    {
+                                                      "code": "invalid_parameter_value",
+                                                      "message": "%s",
+                                                      "parameter": "sort"
+                                                    }
+                                                  ]
+                                                }
+                                                """
                         .formatted(expectedError)));
   }
 }

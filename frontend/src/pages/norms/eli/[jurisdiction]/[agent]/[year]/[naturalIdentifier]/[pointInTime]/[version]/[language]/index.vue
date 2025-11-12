@@ -20,7 +20,6 @@ import NormTableOfContents from "~/components/Ris/NormTableOfContents.vue";
 import RisBreadcrumb from "~/components/Ris/RisBreadcrumb.vue";
 import type { BreadcrumbItem } from "~/components/Ris/RisBreadcrumb.vue";
 import RisTabs from "~/components/Ris/RisTabs.vue";
-import { useBackendURL } from "~/composables/useBackendURL";
 import { useDynamicSeo } from "~/composables/useDynamicSeo";
 import { useIntersectionObserver } from "~/composables/useIntersectionObserver";
 import { useFetchNormContent } from "~/composables/useNormData";
@@ -79,10 +78,8 @@ const translationUrl = computed(() => {
 const html = computed(() => data.value?.html);
 const htmlParts = computed(() => data.value?.htmlParts);
 
-const backendURL = useBackendURL();
-
 const zipUrl = computed(() =>
-  getManifestationUrl(metadata.value, backendURL, "application/zip"),
+  getManifestationUrl(metadata.value, "application/zip"),
 );
 
 if (error.value) {

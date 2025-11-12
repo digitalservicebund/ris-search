@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import ActionsMenu from "~/components/ActionMenu/ActionsMenu.vue";
-import { useBackendURL } from "~/composables/useBackendURL";
 import type { LegislationWork } from "~/types";
 import { getManifestationUrl } from "~/utils/norm";
 
@@ -9,10 +8,7 @@ const { metadata } = defineProps<{
   translationUrl: string;
 }>();
 
-const backendURL = useBackendURL();
-const xmlUrl = computed(() =>
-  getManifestationUrl(metadata, backendURL, "application/xml"),
-);
+const xmlUrl = computed(() => getManifestationUrl(metadata, "application/xml"));
 
 const workUrl = computed(() => {
   if (!import.meta.client || !metadata) return undefined;

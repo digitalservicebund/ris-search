@@ -1,54 +1,29 @@
 import { defineConfig, devices, type Project } from "@playwright/test";
 
-export const authFile = "playwright/.auth/user.json";
-
-/**
- * Read environment variables from file.
- * https://github.com/motdotla/dotenv
- */
-
-const extraHTTPHeaders: Record<string, string> = {};
-if (process.env.E2E_RIS_BASIC_AUTH) {
-  extraHTTPHeaders["Authorization"] = `Basic ${process.env.E2E_RIS_BASIC_AUTH}`;
-}
-
 export const environment = {
-  user: {
-    displayName: process.env.E2E_KEYCLOAK_USER_DISPLAY_NAME || "Jane Doe",
-    credentials: {
-      username: process.env.E2E_KEYCLOAK_USERNAME || "jane.doe",
-      password: process.env.E2E_KEYCLOAK_PASSWORD || "test",
-    },
-  },
   baseUrl: process.env.RIS_BASE_URL || "http://localhost:3000/",
   remoteDebuggingPort: 9222,
 };
 
-const browserConfigurations: Project[] = [
+const projects: Project[] = [
   {
     name: "chromium",
     use: {
       ...devices["Desktop Chrome"],
-      storageState: authFile,
     },
-    dependencies: ["setup"],
   },
   {
     name: "firefox",
     use: {
       ...devices["Desktop Firefox"],
-      storageState: authFile,
     },
-    dependencies: ["setup"],
     testIgnore: "seo.spec.ts",
   },
   {
     name: "webkit",
     use: {
       ...devices["Desktop Safari"],
-      storageState: authFile,
     },
-    dependencies: ["setup"],
     testIgnore: "seo.spec.ts",
   },
   {
@@ -57,18 +32,9 @@ const browserConfigurations: Project[] = [
       ...devices["Desktop Firefox"],
       viewport: { width: 320, height: 600 },
       touch: true,
-      storageState: authFile,
     },
-    dependencies: ["setup"],
+    testIgnore: "seo.spec.ts",
   },
-];
-
-const projects: Project[] = [
-  {
-    name: "setup",
-    testMatch: /.*\.setup\.ts/,
-  },
-  ...browserConfigurations,
 ];
 
 /**
@@ -82,8 +48,7 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   /* Retry on CI only */
   retries: 1,
-  /* Opt out of parallel tests on CI. */
-  workers: process.env.CI ? 1 : undefined,
+  workers: 4,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: process.env.CI
     ? [
@@ -98,7 +63,6 @@ export default defineConfig({
     screenshot: { mode: "only-on-failure", fullPage: true },
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: "retain-on-first-failure",
-    extraHTTPHeaders,
   },
 
   /* Configure projects for major browsers */

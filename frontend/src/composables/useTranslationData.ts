@@ -1,5 +1,4 @@
 import type { AsyncData, NuxtError } from "#app";
-import { useBackendURL } from "~/composables/useBackendURL";
 import type { LegislationWork, JSONLDList, SearchResult } from "~/types";
 import { getCurrentDateInGermanyFormatted } from "~/utils/dateFormatting";
 
@@ -24,39 +23,34 @@ function notFoundError(message: string) {
 
 function useApi() {
   const apiFetch = useRequestFetch();
-  const backendURL = useBackendURL();
-  return { apiFetch, backendURL };
+  return { apiFetch };
 }
 
-function translationsListURL(backendURL: string) {
-  return `${backendURL}/v1/translatedLegislation`;
+function translationsListURL() {
+  return `/v1/translatedLegislation`;
 }
 
-function translationDetailURL(backendURL: string, id: string) {
-  return `${backendURL}/v1/translatedLegislation?id=${id}`;
+function translationDetailURL(id: string) {
+  return `/v1/translatedLegislation?id=${id}`;
 }
 
-function translationHtmlURL(backendURL: string, filename: string) {
-  return `${backendURL}/v1/translatedLegislation/${filename}`;
+function translationHtmlURL(filename: string) {
+  return `/v1/translatedLegislation/${filename}`;
 }
 
-function legislationSearchURL(
-  backendURL: string,
-  id: string,
-  currentDate: string,
-) {
-  return `${backendURL}/v1/legislation?searchTerm=${id}&temporalCoverageFrom=${currentDate}&temporalCoverageTo=${currentDate}&size=100&pageIndex=0`;
+function legislationSearchURL(id: string, currentDate: string) {
+  return `/v1/legislation?searchTerm=${id}&temporalCoverageFrom=${currentDate}&temporalCoverageTo=${currentDate}&size=100&pageIndex=0`;
 }
 
 export function fetchTranslationList(): AsyncData<
   TranslationContent[],
   NuxtError<TranslationContent> | NuxtError<null> | undefined
 > {
-  const { apiFetch, backendURL } = useApi();
+  const { apiFetch } = useApi();
 
   return useAsyncData("translations-list", async () => {
     const response = await apiFetch<TranslationContent[]>(
-      translationsListURL(backendURL),
+      translationsListURL(),
     );
 
     if (!response || response.length === 0) throw notFoundError("Not Found");
@@ -71,11 +65,11 @@ export function fetchTranslationListWithIdFilter(
   TranslationContent[],
   NuxtError<TranslationContent> | NuxtError<null> | undefined
 > {
-  const { apiFetch, backendURL } = useApi();
+  const { apiFetch } = useApi();
 
   return useAsyncData("translations-list-with_id", async () => {
     const response = await apiFetch<TranslationContent[]>(
-      translationDetailURL(backendURL, id),
+      translationDetailURL(id),
     );
 
     if (!response || response.length === 0) throw notFoundError("Not Found");
@@ -87,11 +81,11 @@ export function fetchTranslationListWithIdFilter(
 export function fetchTranslationAndHTML(
   id: string,
 ): AsyncData<TranslationData, NuxtError | undefined> {
-  const { apiFetch, backendURL } = useApi();
+  const { apiFetch } = useApi();
 
   return useAsyncData(`translation-and-html-${id}`, async () => {
     const translationsList = await apiFetch<TranslationContent[]>(
-      translationDetailURL(backendURL, id),
+      translationDetailURL(id),
     );
 
     if (!translationsList || translationsList.length === 0) {
@@ -104,12 +98,9 @@ export function fetchTranslationAndHTML(
       throw notFoundError("Translation filename not found");
     }
 
-    const htmlData = await apiFetch<string>(
-      translationHtmlURL(backendURL, htmlFilename),
-      {
-        headers: { Accept: "text/html" },
-      },
-    );
+    const htmlData = await apiFetch<string>(translationHtmlURL(htmlFilename), {
+      headers: { Accept: "text/html" },
+    });
 
     return { content: firstTranslationsListElement, html: htmlData };
   });
@@ -118,12 +109,12 @@ export function fetchTranslationAndHTML(
 export function getGermanOriginal(
   id: string,
 ): AsyncData<SearchResult<LegislationWork> | null, NuxtError | undefined> {
-  const { apiFetch, backendURL } = useApi();
+  const { apiFetch } = useApi();
 
   return useAsyncData(`german-original-${id}`, async () => {
     const currentDateInGermanyFormatted = getCurrentDateInGermanyFormatted();
     const response = await apiFetch<JSONLDList<SearchResult<LegislationWork>>>(
-      legislationSearchURL(backendURL, id, currentDateInGermanyFormatted),
+      legislationSearchURL(id, currentDateInGermanyFormatted),
     );
 
     if (!response || response.member.length === 0) {

@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { useFetch } from "#app";
-import { useBackendURL } from "~/composables/useBackendURL";
 import type { JSONLDList, LegislationWork, SearchResult } from "~/types";
 import { getMostRelevantExpression } from "~/utils/norm";
 
@@ -13,10 +12,9 @@ const workEli = [
   route.params.naturalIdentifier,
 ].join("/");
 
-const backendURL = useBackendURL();
 const { data, error: loadError } = await useFetch<
   JSONLDList<SearchResult<LegislationWork>>
->(`${backendURL}/v1/legislation`, {
+>(`/v1/legislation`, {
   params: {
     eli: workEli,
   },

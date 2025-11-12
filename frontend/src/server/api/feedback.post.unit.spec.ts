@@ -1,4 +1,3 @@
-import { mockNuxtImport } from "@nuxt/test-utils/runtime";
 import type { EventHandlerRequest, H3Event } from "h3";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import feedbackHandler from "./feedback.post";
@@ -9,7 +8,6 @@ const {
   mockGetRequestURL,
   mockSendRedirect,
   mockFetch,
-  mockUseRuntimeConfig,
 } = vi.hoisted(() => {
   return {
     mockReadBody: vi.fn(),
@@ -17,13 +15,8 @@ const {
     mockGetRequestURL: vi.fn(),
     mockSendRedirect: vi.fn(),
     mockFetch: vi.fn(),
-    mockUseRuntimeConfig: vi.fn(() => ({
-      risBackendUrl: "https://backend",
-    })),
   };
 });
-
-mockNuxtImport("useRuntimeConfig", () => mockUseRuntimeConfig);
 
 vi.mock("h3", () => ({
   defineEventHandler: vi.fn((handler) => handler),
@@ -56,7 +49,7 @@ describe("feedback.post", () => {
     await feedbackHandler(mockEvent);
 
     expect(mockFetch).toHaveBeenCalledWith(
-      "https://backend/v1/feedback?text=Great+app%21&url=%2Fsearch%3Fquery%3Dtest&user_id=anonymous_feedback_user",
+      "/v1/feedback?text=Great+app%21&url=%2Fsearch%3Fquery%3Dtest&user_id=anonymous_feedback_user",
     );
   });
 
@@ -72,7 +65,7 @@ describe("feedback.post", () => {
     await feedbackHandler(mockEvent);
 
     expect(mockFetch).toHaveBeenCalledWith(
-      "https://backend/v1/feedback?text=Feedback+text&url=%2Fcustom-page&user_id=user123",
+      "/v1/feedback?text=Feedback+text&url=%2Fcustom-page&user_id=user123",
     );
   });
 
@@ -113,7 +106,7 @@ describe("feedback.post", () => {
     await feedbackHandler(mockEvent);
 
     expect(mockFetch).toHaveBeenCalledWith(
-      "https://backend/v1/feedback?text=Feedback&url=%2Fpage%3Fparam%3Dvalue&user_id=anonymous_feedback_user",
+      "/v1/feedback?text=Feedback&url=%2Fpage%3Fparam%3Dvalue&user_id=anonymous_feedback_user",
     );
   });
 });

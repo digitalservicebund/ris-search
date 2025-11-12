@@ -37,7 +37,6 @@ function buildRedirectPath(
 
 export default defineEventHandler(async (event) => {
   const body = await readBody(event);
-  const config = useRuntimeConfig();
 
   const referer = getHeader(event, "referer");
   let currentUrl = "/";
@@ -61,7 +60,7 @@ export default defineEventHandler(async (event) => {
       user_id: body.user_id || "anonymous_feedback_user",
     });
 
-    await $fetch(`${config.risBackendUrl}/v1/feedback?${params.toString()}`);
+    await $fetch(`/v1/feedback?${params.toString()}`);
 
     return sendRedirect(
       event,

@@ -1,8 +1,5 @@
 <script lang="ts" setup>
-import LoginActions from "~/components/LoginActions.vue";
 import IconSearch from "~icons/ic/search?width=20&height=20";
-
-const config = useRuntimeConfig();
 
 defineProps<{ listClass: string }>();
 
@@ -35,9 +32,6 @@ defineEmits(["selectItem"]);
           to="/ueber"
           >Über den Service</NuxtLink
         >
-      </li>
-      <li>
-        <LoginActions v-if="config.public.authEnabled" />
       </li>
     </ul>
   </nav>

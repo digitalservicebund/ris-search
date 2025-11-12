@@ -1,5 +1,4 @@
 import { computed } from "vue";
-import { useBackendURL } from "./useBackendURL";
 import { type AsyncDataRequestStatus, useFetch } from "#app";
 import type { JSONLDList, LegislationWork, SearchResult } from "~/types";
 import { getCurrentDateInGermanyFormatted } from "~/utils/dateFormatting";
@@ -24,11 +23,10 @@ function getNorms(params: {
   temporalCoverageTo?: string;
   sort?: string;
 }) {
-  const backendURL = useBackendURL();
   const immediate = params.eli !== undefined;
   const { status, data, error } = useFetch<
     JSONLDList<SearchResult<LegislationWork>>
-  >(`${backendURL}/v1/legislation`, {
+  >(`/v1/legislation`, {
     params: params,
     immediate: immediate,
   });

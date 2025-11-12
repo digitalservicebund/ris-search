@@ -2,24 +2,16 @@ package de.bund.digitalservice.ris.search.data;
 
 import static io.restassured.RestAssured.given;
 
-import de.bund.digitalservice.ris.search.util.OAuthTokenProvider;
 import io.restassured.response.Response;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
-import org.springframework.security.oauth2.client.OAuth2AuthorizedClientManager;
 
 public abstract class BaseApiSearchDataTest {
 
   public static final String BASE_URL = "http://localhost:8090";
-
-  private final OAuthTokenProvider tokenProvider;
-
-  public BaseApiSearchDataTest(OAuth2AuthorizedClientManager authorizedClientManager) {
-    this.tokenProvider = new OAuthTokenProvider(authorizedClientManager);
-  }
 
   public <T> List<T> fetchSearchStrings(
       int maxEntries, String apiUrl, Function<Response, List<T>> extractor) {
@@ -39,13 +31,7 @@ public abstract class BaseApiSearchDataTest {
   }
 
   public Response searchWithTerm(String searchTerm) {
-    return given()
-        .header("Authorization", "Bearer " + this.tokenProvider.getTokenValue())
-        .when()
-        .get("/v1/document?searchTerm=" + searchTerm)
-        .then()
-        .extract()
-        .response();
+    return given().when().get("/v1/document?searchTerm=" + searchTerm).then().extract().response();
   }
 
   public <T> List<T> searchForSearchTerm(
@@ -76,12 +62,6 @@ public abstract class BaseApiSearchDataTest {
   }
 
   Response fetchPageResponse(String url) {
-    return given()
-        .header("Authorization", "Bearer " + this.tokenProvider.getTokenValue())
-        .when()
-        .get(url)
-        .then()
-        .extract()
-        .response();
+    return given().when().get(url).then().extract().response();
   }
 }

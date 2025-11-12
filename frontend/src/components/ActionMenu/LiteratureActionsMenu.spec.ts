@@ -2,18 +2,10 @@ import { shallowMount } from "@vue/test-utils";
 import { describe, expect, it, vi } from "vitest";
 import ActionsMenu from "~/components/ActionMenu/ActionsMenu.vue";
 import LiteratureActionsMenu from "~/components/ActionMenu/LiteratureActionsMenu.vue";
-import { useBackendURL } from "~/composables/useBackendURL";
 import type { Literature } from "~/types";
-
-vi.mock("~/composables/useBackendURL", () => ({
-  useBackendURL: vi.fn(),
-}));
 
 describe("LiteratureActionsMenu.vue", () => {
   it("passes correct props to ActionMenu", () => {
-    const baseUrl = "https://literature.example.com";
-    vi.mocked(useBackendURL).mockReturnValue(baseUrl);
-
     vi.stubGlobal("location", {
       href: "https://test.com",
     });
@@ -39,7 +31,7 @@ describe("LiteratureActionsMenu.vue", () => {
         label: "Link kopieren",
         url: "https://test.com",
       },
-      xmlUrl: "https://literature.example.com/literature/XXLU000000001.xml",
+      xmlUrl: "/literature/XXLU000000001.xml",
     });
   });
 });

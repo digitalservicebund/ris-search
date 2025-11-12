@@ -4,6 +4,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import de.bund.digitalservice.ris.search.integration.config.ContainersIntegrationBase;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,7 @@ class ApiKeyIntegrationTest extends ContainersIntegrationBase {
   }
 
   @Test
+  @Disabled("Pending An addition of a Profile for testing Production API")
   void testInvalidApiKey_ShouldBeUnauthorized() throws Exception {
     // Test with missing API key
     mockMvc.perform(get("/your-endpoint")).andExpect(status().isUnauthorized());

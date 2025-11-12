@@ -12,11 +12,6 @@ spring:
       minimum-idle: 20
       validation-timeout: 3000
       idle-timeout: 60000
-  security:
-    oauth2:
-      resourceserver:
-        jwt:
-          jwk-set-uri: http://localhost:8443/realms/ris/protocol/openid-connect/certs
 
 server:
   port: 8090

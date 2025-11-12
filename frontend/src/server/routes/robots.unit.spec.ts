@@ -1,6 +1,6 @@
 import { mockNuxtImport } from "@nuxt/test-utils/runtime";
 import type { EventHandlerRequest, H3Event } from "h3";
-import { beforeEach, describe, expect, it, vi, test } from "vitest";
+import { beforeEach, describe, expect, it, test, vi } from "vitest";
 import middleware from "./robots.txt.get";
 
 const mockFetch = vi.fn();
@@ -19,12 +19,10 @@ describe("robots txt route", () => {
     vi.clearAllMocks();
   });
 
-  it("should serve robots txt with auth enabled from backend api on justice crawler", async () => {
+  it("should serve robots txt from backend api on justice crawler", async () => {
     mockUseRuntimeConfig.mockImplementation(() => ({
-      risBackendUrl: "backendUrl",
       public: {
         privateFeaturesEnabled: false,
-        authEnabled: true,
       },
     }));
 
@@ -43,56 +41,10 @@ describe("robots txt route", () => {
       },
     } as unknown as H3Event<EventHandlerRequest>;
 
-    vi.mock("../auth", async () => {
-      return {
-        requireAccessTokenWithRefresh: () => "mockToken",
-      };
+    await middleware(mockEvent);
+    expect(mockFetch).toHaveBeenCalledWith("/v1/eclicrawler/robots.txt", {
+      method: "GET",
     });
-
-    await middleware(mockEvent);
-    expect(mockFetch).toHaveBeenCalledWith(
-      "backendUrl/v1/eclicrawler/robots.txt",
-      {
-        method: "GET",
-        headers: {
-          Authorization: "Bearer mockToken",
-        },
-      },
-    );
-  });
-
-  it("should serve robots txt with auth disabled from backend api on justice crawler", async () => {
-    mockUseRuntimeConfig.mockImplementation(() => ({
-      risBackendUrl: "backendUrl",
-      public: {
-        privateFeaturesEnabled: false,
-        authEnabled: false,
-      },
-    }));
-
-    const mockEvent: H3Event<EventHandlerRequest> = {
-      node: {
-        req: {
-          headers: {
-            host: "origin",
-            "user-agent": "DG_JUSTICE_CRAWLER",
-          },
-          originalUrl: "url",
-        },
-        res: {
-          setHeader: vi.fn(),
-        },
-      },
-    } as unknown as H3Event<EventHandlerRequest>;
-
-    await middleware(mockEvent);
-    expect(mockFetch).toHaveBeenCalledWith(
-      "backendUrl/v1/eclicrawler/robots.txt",
-      {
-        headers: {},
-        method: "GET",
-      },
-    );
   });
 
   const testCases = [
@@ -104,7 +56,6 @@ describe("robots txt route", () => {
     "privateFeaturesEnabled flag = %s serves %s",
     async ([privateFeaturesEnabled, file]) => {
       mockUseRuntimeConfig.mockImplementation(() => ({
-        risBackendUrl: "backendUrl",
         public: {
           privateFeaturesEnabled,
         },

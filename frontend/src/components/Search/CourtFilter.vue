@@ -2,7 +2,6 @@
 import { RisAutoComplete } from "@digitalservicebund/ris-ui/components";
 import _ from "lodash";
 import type { AutoCompleteDropdownClickEvent } from "primevue/autocomplete";
-import { useBackendURL } from "~/composables/useBackendURL";
 import { useSimpleSearchParamsStore } from "~/stores/searchParams";
 import { DocumentKind } from "~/types";
 import { courtFilterDefaultSuggestions } from "~/utils/search/courtFilter";
@@ -16,12 +15,10 @@ const isCaseLaw = computed(() =>
 type CourtSearchResult = { id: string; label: string; count?: number };
 
 const suggestions = ref<CourtSearchResult[]>([]);
-const backendURL = useBackendURL();
 
 const search = async (prefix?: string) => {
   const params = prefix ? { prefix } : {};
   suggestions.value = await $fetch<CourtSearchResult[]>("/v1/case-law/courts", {
-    baseURL: backendURL,
     params: params,
   });
 };

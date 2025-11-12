@@ -4,7 +4,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.c4_soft.springaddons.security.oauth2.test.annotations.WithJwt;
 import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.integration.config.ContainersIntegrationBase;
 import org.junit.jupiter.api.DisplayName;
@@ -25,7 +24,6 @@ class RedirectTest extends ContainersIntegrationBase {
 
   @Test
   @DisplayName("In case the API path has trailing slash, it should redirect without traling slash")
-  @WithJwt("jwtTokens/ValidAccessToken.json")
   void shouldRedirectedWithTrailingSlash() throws Exception {
     mockMvc
         .perform(get(ApiConfig.Paths.CASELAW + SLASH))
@@ -36,7 +34,6 @@ class RedirectTest extends ContainersIntegrationBase {
   @Test
   @DisplayName(
       "In case the API path has trailing slash and with query parameters, it should redirect without traling slash and with the query parameters")
-  @WithJwt("jwtTokens/ValidAccessToken.json")
   void shouldRedirectedWithTrailingSlashAndQueryParameters() throws Exception {
     String queryParametersMock = "?q=test&test=anotherTest";
     mockMvc
