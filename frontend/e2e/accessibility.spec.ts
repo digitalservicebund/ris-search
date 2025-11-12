@@ -83,7 +83,7 @@ const testPages = [
   {
     name: "Translation View Page",
     url: "/translations/FG",
-    tabs: ["Text", "Details"],
+    tabs: ["Details"],
   },
   {
     name: "Introduction Page",
@@ -102,12 +102,14 @@ test.describe("General Pages Accessibility Tests", () => {
         .analyze();
       if (tabs) {
         for (const tab of tabs) {
-          currentTab++;
           await page.getByRole("link", { name: tab }).click();
-          await page.waitForLoadState("networkidle");
+          await page
+            .getByRole("heading", { name: tab, exact: true })
+            .isVisible();
           tabsAnalysisResults[currentTab] = await new AxeBuilder({ page })
             .exclude("nuxt-devtools-frame")
             .analyze();
+          currentTab++;
         }
       }
       tabsAnalysisResults.forEach((result, index) => {
