@@ -15,7 +15,6 @@ import PropertiesItem from "~/components/PropertiesItem.vue";
 import RisBreadcrumb from "~/components/Ris/RisBreadcrumb.vue";
 import RisDocumentTitle from "~/components/Ris/RisDocumentTitle.vue";
 import RisTabs from "~/components/Ris/RisTabs.vue";
-import { tabPanelClass } from "~/components/Tabs.styles";
 import { type CaseLaw, DocumentKind } from "~/types";
 import { getEncodingURL } from "~/utils/caseLaw";
 import { dateFormattedDDMMYYYY } from "~/utils/dateFormatting";

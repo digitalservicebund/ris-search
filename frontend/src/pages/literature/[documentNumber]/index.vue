@@ -10,7 +10,6 @@ import LiteratureMetadata from "~/components/Literature/LiteratureMetadata.vue";
 import RisBreadcrumb from "~/components/Ris/RisBreadcrumb.vue";
 import RisDocumentTitle from "~/components/Ris/RisDocumentTitle.vue";
 import RisTabs from "~/components/Ris/RisTabs.vue";
-import { tabPanelClass } from "~/components/Tabs.styles";
 import { DocumentKind, type Literature } from "~/types";
 import { formatDocumentKind } from "~/utils/displayValues";
 import { getTitle } from "~/utils/literature";

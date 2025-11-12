@@ -20,7 +20,6 @@ import NormTableOfContents from "~/components/Ris/NormTableOfContents.vue";
 import RisBreadcrumb from "~/components/Ris/RisBreadcrumb.vue";
 import type { BreadcrumbItem } from "~/components/Ris/RisBreadcrumb.vue";
 import RisTabs from "~/components/Ris/RisTabs.vue";
-import { tabPanelClass } from "~/components/Tabs.styles";
 import { useDynamicSeo } from "~/composables/useDynamicSeo";
 import { useIntersectionObserver } from "~/composables/useIntersectionObserver";
 import { useFetchNormContent } from "~/composables/useNormData";
