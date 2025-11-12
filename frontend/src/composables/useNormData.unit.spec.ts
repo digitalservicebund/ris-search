@@ -43,7 +43,7 @@ describe("useNormData", () => {
         {
           "@id": "test-encoding-id",
           encodingFormat: "text/html",
-          contentUrl: useBackendUrl("/v1/test-content-url.html"),
+          contentUrl: "/v1/test-content-url.html",
           "@type": "LegislationObject",
           inLanguage: "deu",
         },
