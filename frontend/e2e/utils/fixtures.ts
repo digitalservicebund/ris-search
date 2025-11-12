@@ -149,6 +149,6 @@ export const noJsTest = base.extend<NoJsFixtures>({
 });
 
 export async function navigate(page: Page, url: string) {
-  await page.goto(url, { waitUntil: "domcontentloaded" });
-  return await page.waitForLoadState("networkidle");
+  await page.goto(url, { waitUntil: "networkidle" });
+  return await page.waitForLoadState("domcontentloaded");
 }

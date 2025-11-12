@@ -51,14 +51,14 @@ test.describe("general search page features", () => {
 
     await page.getByLabel("nächste Ergebnisse").click();
     await page.waitForURL("/search?query=und&pageNumber=1", {
-      waitUntil: "networkidle",
+      waitUntil: "commit",
     });
 
     expect(resultCounter).toHaveText("13 Suchergebnisse");
     await expect(searchResults).toHaveCount(3);
 
     await page.getByLabel("vorherige Ergebnisse").click();
-    await page.waitForURL("/search?query=und", { waitUntil: "networkidle" });
+    await page.waitForURL("/search?query=und", { waitUntil: "commit" });
     await expect(searchResults).toHaveCount(10);
   });
 
@@ -490,7 +490,7 @@ noJsTest("search works without JavaScript", async ({ page }) => {
     await page.getByRole("button", { name: "Suchen" }).click();
 
     await page.waitForURL(`/search?query=${searchTerm}`, {
-      waitUntil: "networkidle",
+      waitUntil: "commit",
     });
     expect(await getSearchResults(page).count()).toBeGreaterThan(0);
     await expect(page.getByPlaceholder("Suchbegriff eingeben")).toHaveValue(
@@ -504,7 +504,7 @@ noJsTest("search works without JavaScript", async ({ page }) => {
     await page.getByRole("button", { name: "Suchen" }).click();
 
     await page.waitForURL(`/search?query=${newSearchTerm}`, {
-      waitUntil: "networkidle",
+      waitUntil: "commit",
     });
     expect(await getSearchResults(page).count()).toBeGreaterThan(0);
     await expect(page.getByPlaceholder("Suchbegriff eingeben")).toHaveValue(
@@ -521,14 +521,14 @@ noJsTest("pagination works without JavaScript", async ({ page }) => {
 
   await page.getByLabel("nächste Ergebnisse").click();
   await page.waitForURL("/search?query=und&pageNumber=1", {
-    waitUntil: "networkidle",
+    waitUntil: "commit",
   });
 
   await expect(getResultCounter(page)).toHaveText("13 Suchergebnisse");
   await expect(getSearchResults(page)).toHaveCount(3);
 
   await page.getByLabel("vorherige Ergebnisse").click();
-  await page.waitForURL("/search?query=und", { waitUntil: "networkidle" });
+  await page.waitForURL("/search?query=und", { waitUntil: "commit" });
 
   await expect(getResultCounter(page)).toHaveText("13 Suchergebnisse");
   await expect(getSearchResults(page)).toHaveCount(10);

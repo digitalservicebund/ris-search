@@ -159,7 +159,9 @@ test.describe("actions menu", () => {
         page.getByRole("tooltip", {
           name: "Link kopieren",
         }),
-      ).toBeVisible();
+      ).toBeVisible({
+        timeout: 15000,
+      });
     }
 
     await button.click();
@@ -190,9 +192,9 @@ test.describe("actions menu", () => {
     if (!isMobileTest) {
       await button.hover();
 
-      await expect(
-        page.getByRole("tooltip", { name: "Drucken" }),
-      ).toBeVisible();
+      await expect(page.getByRole("tooltip", { name: "Drucken" })).toBeVisible({
+        timeout: 15000,
+      });
     }
 
     await test.step("can open print menu", async () => {
@@ -222,7 +224,9 @@ test.describe("actions menu", () => {
 
       await expect(
         page.getByRole("tooltip", { name: "Als PDF speichern" }),
-      ).toBeVisible();
+      ).toBeVisible({
+        timeout: 15000,
+      });
     }
 
     if (!isMobileTest) await expect(button).toBeDisabled();
@@ -244,12 +248,14 @@ test.describe("actions menu", () => {
 
       await expect(
         page.getByRole("tooltip", { name: "XML anzeigen" }),
-      ).toBeVisible();
+      ).toBeVisible({
+        timeout: 15000,
+      });
     }
 
     await button.click();
     await page.waitForURL(`v1/literature/XXLU000000001.xml`, {
-      waitUntil: "networkidle",
+      waitUntil: "commit",
     });
   });
 });

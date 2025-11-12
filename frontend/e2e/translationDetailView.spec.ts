@@ -15,7 +15,7 @@ test(
 
     await page.getByRole("link", { name: title }).click();
 
-    await page.waitForURL("/translations/CDe", { waitUntil: "networkidle" });
+    await page.waitForURL("/translations/CDe", { waitUntil: "commit" });
 
     await expect(
       page.getByRole("heading", {

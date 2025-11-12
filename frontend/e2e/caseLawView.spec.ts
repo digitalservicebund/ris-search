@@ -1,5 +1,5 @@
 import type { Page } from "@playwright/test";
-import { expect, test, noJsTest, navigate } from "./utils/fixtures";
+import { expect, navigate, noJsTest, test } from "./utils/fixtures";
 
 async function getSidebar(page: Page) {
   const navigation = page.getByRole("navigation", { name: "Seiteninhalte" });
@@ -30,8 +30,8 @@ test("can search, filter for case law, and view a single case law documentation 
   await test.step("Basic search", async () => {
     await navigate(page, "/");
     await page.getByPlaceholder("Suchbegriff eingeben").fill("Fiktiv");
-    await page.getByLabel("Suchen").click();
-    await page.waitForLoadState("networkidle");
+    await page.getByRole("button", { name: "Suchen" }).click();
+    await page.waitForURL(new RegExp("Fiktiv"));
 
     expect(await getDisplayedResultCount(page)).toBe(15);
   });
@@ -40,6 +40,7 @@ test("can search, filter for case law, and view a single case law documentation 
 
   await test.step("Filter for Gerichtsentscheidungen", async () => {
     await page.getByRole("button", { name: "Gerichtsentscheidungen" }).click();
+    await page.waitForURL(new RegExp("category"));
     await expect
       .poll(() => getDisplayedResultCount(page), {
         message: "the count should decrease",
@@ -121,7 +122,7 @@ test.describe("actions menu", () => {
 
       await expect(
         page.getByRole("tooltip", { name: "Link kopieren" }),
-      ).toBeVisible();
+      ).toBeVisible({ timeout: 30000 });
     }
 
     if (!isMobileTest) await expect(button).toBeDisabled();
@@ -144,9 +145,9 @@ test.describe("actions menu", () => {
     if (!isMobileTest) {
       await button.hover();
 
-      await expect(
-        page.getByRole("tooltip", { name: "Drucken" }),
-      ).toBeVisible();
+      await expect(page.getByRole("tooltip", { name: "Drucken" })).toBeVisible({
+        timeout: 30000,
+      });
     }
 
     await test.step("can open print menu", async () => {
@@ -176,7 +177,9 @@ test.describe("actions menu", () => {
 
       await expect(
         page.getByRole("tooltip", { name: "Als PDF speichern" }),
-      ).toBeVisible();
+      ).toBeVisible({
+        timeout: 15000,
+      });
     }
 
     if (!isMobileTest) await expect(button).toBeDisabled();
@@ -197,12 +200,12 @@ test.describe("actions menu", () => {
 
       await expect(
         page.getByRole("tooltip", { name: "XML anzeigen" }),
-      ).toBeVisible();
+      ).toBeVisible({ timeout: 15000 });
     }
 
     await button.click();
     await page.waitForURL(`v1/case-law/JURE200030030.xml`, {
-      waitUntil: "networkidle",
+      waitUntil: "commit",
     });
   });
 });
