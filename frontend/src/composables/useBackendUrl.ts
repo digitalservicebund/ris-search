@@ -7,7 +7,7 @@
  */
 function useBackendUrl(url?: string) {
   const config = useRuntimeConfig();
-  const backendUrl = config.public.risBackendUrl as string;
+  const backendUrl = config.public.risBackendUrl;
   return url ? `${backendUrl}${url}` : backendUrl;
 }
 
