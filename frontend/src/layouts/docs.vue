@@ -12,7 +12,7 @@ import Sidebar from "~/components/Docs/Sidebar.vue";
   <ConsentBanner />
   <div>
     <Sidebar
-      class="fixed hidden h-full w-[252px] border-r-[1px] border-gray-400 lg:inline-block"
+      class="fixed hidden h-full w-[252px] border-r border-gray-400 lg:inline-block"
     />
     <MobileNav class="lg:hidden" />
     <div class="flex flex-col gap-32 lg:ml-[252px] lg:w-[calc(100%-252px)]">

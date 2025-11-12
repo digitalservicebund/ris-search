@@ -21,6 +21,7 @@ import { getEncodingURL } from "~/utils/caseLaw";
 import { dateFormattedDDMMYYYY } from "~/utils/dateFormatting";
 import { formatDocumentKind } from "~/utils/displayValues";
 import { getAllSectionsFromHtml, parseDocument } from "~/utils/htmlParser";
+import { tabPanelClass } from "~/utils/tabsStyles";
 import {
   formatArray,
   removeOuterParentheses,

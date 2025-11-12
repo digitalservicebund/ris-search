@@ -4,7 +4,7 @@
   @apply max-w-prose print:max-w-none;
 
   table[border="1"] :is(th, td) {
-    @apply border-1 border-solid border-black px-4;
+    @apply border border-solid border-black px-4;
   }
 
   table {
@@ -42,7 +42,7 @@
   }
 
   #gruende blockquote {
-    @apply ml-[var(--border-number-min-width)] border-l-2 border-gray-700 pl-16 sm:ml-[calc(var(--border-number-min-width)+2rem)];
+    @apply ml-(--border-number-min-width) border-l-2 border-gray-700 pl-16 sm:ml-[calc(var(--border-number-min-width)+2rem)];
 
     & + * {
       @apply mt-16;

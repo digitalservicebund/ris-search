@@ -39,6 +39,7 @@ import {
 } from "~/utils/norm";
 import type { ValidityStatus } from "~/utils/norm";
 import { tocItemsToTreeNodes } from "~/utils/tableOfContents";
+import { tabPanelClass } from "~/utils/tabsStyles";
 import { truncateAtWord } from "~/utils/textFormatting";
 import IcBaselineSubject from "~icons/ic/baseline-subject";
 import IcOutlineInfo from "~icons/ic/outline-info";

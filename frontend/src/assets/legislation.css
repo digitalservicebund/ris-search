@@ -72,19 +72,19 @@
 }
 
 .akn-act .frame-all {
-  @apply border-1;
+  @apply border;
 }
 .akn-act .frame-top {
-  @apply border-t-1;
+  @apply border-t;
 }
 .akn-act .frame-right {
-  @apply border-r-1;
+  @apply border-r;
 }
 .akn-act .frame-bottom {
-  @apply border-b-1;
+  @apply border-b;
 }
 .akn-act .frame-left {
-  @apply border-l-1;
+  @apply border-l;
 }
 
 .akn-act pre {
@@ -226,7 +226,7 @@ h2.einzelvorschrift {
 }
 
 hr.trennlinie {
-  @apply border-t-1 border-black;
+  @apply border-t border-black;
   @apply mx-[30%] my-28;
 }
 
@@ -264,10 +264,10 @@ hr.trennlinie {
 }
 .akn-book > .akn-heading,
 .akn-part > .akn-heading {
-  @apply border-b-[10px];
+  @apply border-b-10;
 }
 .akn-chapter > .akn-heading {
-  @apply border-b-[8px];
+  @apply border-b-8;
 }
 .akn-subchapter > .akn-heading,
 .akn-section > .akn-heading {

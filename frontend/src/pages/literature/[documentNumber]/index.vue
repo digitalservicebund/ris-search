@@ -14,6 +14,7 @@ import { tabPanelClass } from "~/components/Tabs.styles";
 import { DocumentKind, type Literature } from "~/types";
 import { formatDocumentKind } from "~/utils/displayValues";
 import { getTitle } from "~/utils/literature";
+import { tabPanelClass } from "~/utils/tabsStyles";
 import IcBaselineSubject from "~icons/ic/baseline-subject";
 import IcOutlineInfo from "~icons/ic/outline-info";
 

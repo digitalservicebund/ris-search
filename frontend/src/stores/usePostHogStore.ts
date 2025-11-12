@@ -71,9 +71,9 @@ export const usePostHogStore = defineStore("postHog", () => {
       url: router.currentRoute.value.fullPath,
       user_id: getUserPostHogId(),
     });
-    const result = await useFetch(`/v1/feedback?${params.toString()}`);
+    const { error } = await useFetch(`/v1/feedback?${params.toString()}`);
 
-    if (!result) {
+    if (error.value) {
       throw new Error(`Error sending feedback`);
     }
   }
