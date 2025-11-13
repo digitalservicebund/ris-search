@@ -26,7 +26,11 @@ const matchedExpressionEli = computed(() => {
 });
 
 if (matchedExpressionEli.value) {
-  globalThis.location.assign(`/norms/${matchedExpressionEli.value}`);
+  if (import.meta.client) {
+    globalThis.location.href = `/norms/${matchedExpressionEli.value}`;
+  } else {
+    navigateTo(`/norms/${matchedExpressionEli.value}`, { external: true });
+  }
 }
 
 if (loadError?.value) {
