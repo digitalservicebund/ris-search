@@ -5,26 +5,27 @@ import { useAdvancedSearch } from "./useAdvancedSearch";
 import useBackendUrl from "~/composables/useBackendUrl";
 import { DocumentKind } from "~/types";
 
-const { useFetchMock, executeMock } = vi.hoisted(() => {
+const { useRisBackendMock, executeMock } = vi.hoisted(() => {
   const executeMock = vi.fn();
 
   return {
-    /* eslint-disable-next-line @typescript-eslint/no-explicit-any -- Simplified for testing */
-    useFetchMock: vi.fn((_url: Ref<string>, _opts: Record<string, any>) => ({
-      status: ref("success"),
-      data: computed(() => ref({ content: [], totalItems: 0 })),
-      error: ref(null),
-      pending: ref(false),
-      execute: executeMock,
-      refresh: vi.fn(),
-      clear: vi.fn(),
-    })),
+    useRisBackendMock: vi.fn(
+      (_url: Ref<string>, _opts: Record<string, any>) => ({
+        status: ref("success"),
+        data: computed(() => ref({ content: [], totalItems: 0 })),
+        error: ref(null),
+        pending: ref(false),
+        execute: executeMock,
+        refresh: vi.fn(),
+        clear: vi.fn(),
+      }),
+    ),
     executeMock,
   };
 });
 
-mockNuxtImport("useFetch", () => {
-  return useFetchMock;
+mockNuxtImport("useRisBackend", () => {
+  return useRisBackendMock;
 });
 
 describe("useAdvancedSearch", () => {
@@ -40,8 +41,8 @@ describe("useAdvancedSearch", () => {
       {},
     );
 
-    expect(useFetchMock).toHaveBeenCalled();
-    const url = useFetchMock.mock.calls[0]![0];
+    expect(useRisBackendMock).toHaveBeenCalled();
+    const url = useRisBackendMock.mock.calls[0]![0];
     expect(url.value).toBe(
       useBackendUrl("/v1/document/lucene-search/case-law"),
     );
@@ -55,8 +56,8 @@ describe("useAdvancedSearch", () => {
       {},
     );
 
-    expect(useFetchMock).toHaveBeenCalled();
-    const url = useFetchMock.mock.calls[0]![0];
+    expect(useRisBackendMock).toHaveBeenCalled();
+    const url = useRisBackendMock.mock.calls[0]![0];
     expect(url.value).toBe(
       useBackendUrl("/v1/document/lucene-search/legislation"),
     );
@@ -70,8 +71,8 @@ describe("useAdvancedSearch", () => {
       {},
     );
 
-    expect(useFetchMock).toHaveBeenCalled();
-    const url = useFetchMock.mock.calls[0]![0];
+    expect(useRisBackendMock).toHaveBeenCalled();
+    const url = useRisBackendMock.mock.calls[0]![0];
     expect(url.value).toBe(useBackendUrl("/v1/document/lucene-search"));
   });
 
@@ -83,8 +84,8 @@ describe("useAdvancedSearch", () => {
       {},
     );
 
-    expect(useFetchMock).toHaveBeenCalled();
-    const urlQuery = useFetchMock.mock.calls[0]![1].query;
+    expect(useRisBackendMock).toHaveBeenCalled();
+    const urlQuery = useRisBackendMock.mock.calls[0]![1].query;
     expect(urlQuery.value).toMatchObject({ query: "(test%20query)" });
   });
 
@@ -96,8 +97,8 @@ describe("useAdvancedSearch", () => {
       { itemsPerPage: "25", pageIndex: 2 },
     );
 
-    expect(useFetchMock).toHaveBeenCalled();
-    const urlQuery = useFetchMock.mock.calls[0]![1].query;
+    expect(useRisBackendMock).toHaveBeenCalled();
+    const urlQuery = useRisBackendMock.mock.calls[0]![1].query;
     expect(urlQuery.value).toMatchObject({ size: "25", pageIndex: 2 });
   });
 
@@ -109,8 +110,8 @@ describe("useAdvancedSearch", () => {
       { sort: "relevance" },
     );
 
-    expect(useFetchMock).toHaveBeenCalled();
-    const urlQuery = useFetchMock.mock.calls[0]![1].query;
+    expect(useRisBackendMock).toHaveBeenCalled();
+    const urlQuery = useRisBackendMock.mock.calls[0]![1].query;
     expect(urlQuery.value).toMatchObject({ sort: "relevance" });
   });
 
@@ -122,8 +123,8 @@ describe("useAdvancedSearch", () => {
       {},
     );
 
-    expect(useFetchMock).toHaveBeenCalled();
-    const immediate = useFetchMock.mock.calls[0]![1].immediate;
+    expect(useRisBackendMock).toHaveBeenCalled();
+    const immediate = useRisBackendMock.mock.calls[0]![1].immediate;
     expect(immediate).toBe(false);
   });
 
@@ -135,8 +136,8 @@ describe("useAdvancedSearch", () => {
       {},
     );
 
-    expect(useFetchMock).toHaveBeenCalled();
-    const watch = useFetchMock.mock.calls[0]![1].watch;
+    expect(useRisBackendMock).toHaveBeenCalled();
+    const watch = useRisBackendMock.mock.calls[0]![1].watch;
     expect(watch).toBe(false);
   });
 

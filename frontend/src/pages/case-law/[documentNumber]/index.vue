@@ -37,12 +37,11 @@ const {
   status,
   data: caseLaw,
   error: metadataError,
-} = await useFetch<CaseLaw>(useBackendUrl(`/v1/case-law/${documentNumber}`));
-const { data: html, error: contentError } = await useFetch<string>(
+} = await useRisBackend<CaseLaw>(
+  useBackendUrl(`/v1/case-law/${documentNumber}`),
+);
+const { data: html, error: contentError } = await useRisBackend<string>(
   useBackendUrl(`/v1/case-law/${documentNumber}.html`),
-  {
-    headers: { Accept: "text/html", ...useRequestHeaders(["authorization"]) },
-  },
 );
 
 const buildOgTitle = (caseLaw: CaseLaw) => {

@@ -111,6 +111,7 @@ export default defineNuxtConfig({
     renderJsonPayloads: true,
   },
   runtimeConfig: {
+    basicAuth: "",
     auth: {
       webAuth: false,
     },

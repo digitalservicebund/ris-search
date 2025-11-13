@@ -96,7 +96,9 @@ describe("useNormData", () => {
     expect(mockFetch).toHaveBeenCalledWith(
       useBackendUrl("/v1/legislation/eli/test-eli"),
       {
-        headers: {},
+        headers: {
+          Authorization: "",
+        },
       },
     );
     expect(mockFetch).toHaveBeenCalledWith(
@@ -105,6 +107,7 @@ describe("useNormData", () => {
         // note the /api prefix
         headers: {
           Accept: "text/html",
+          Authorization: "",
         },
       },
     );
@@ -131,7 +134,9 @@ describe("useNormData", () => {
     expect(mockFetch).toHaveBeenCalledWith(
       useBackendUrl("/v1/legislation/eli/test-eli"),
       {
-        headers: {},
+        headers: {
+          Authorization: "",
+        },
       },
     );
 
@@ -140,6 +145,7 @@ describe("useNormData", () => {
       {
         headers: {
           Accept: "text/html",
+          Authorization: "",
         },
       },
     );
@@ -166,7 +172,9 @@ describe("useNormData", () => {
     expect(mockFetch).toHaveBeenCalledWith(
       useBackendUrl("/v1/legislation/eli/test-eli"),
       {
-        headers: {},
+        headers: {
+          Authorization: "",
+        },
       },
     );
   });

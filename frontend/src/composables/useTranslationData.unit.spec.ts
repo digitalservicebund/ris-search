@@ -47,6 +47,11 @@ describe("fetchTranslationList", () => {
 
     expect(requestFetchMock).toHaveBeenCalledWith(
       useBackendUrl("/v1/translatedLegislation"),
+      {
+        headers: {
+          Authorization: "",
+        },
+      },
     );
     expect(error.value).toBeUndefined();
     expect(data.value).toHaveLength(2);
@@ -73,6 +78,11 @@ describe("fetchTranslationListWithIdFilter", () => {
 
     expect(requestFetchMock).toHaveBeenCalledWith(
       useBackendUrl("/v1/translatedLegislation?id=AbC"),
+      {
+        headers: {
+          Authorization: "",
+        },
+      },
     );
 
     expect(error.value).toBeUndefined();
@@ -103,6 +113,11 @@ describe("fetchTranslationAndHTML", () => {
 
     expect(requestFetchMock).toHaveBeenCalledWith(
       useBackendUrl("/v1/translatedLegislation?id=AbC"),
+      {
+        headers: {
+          Authorization: "",
+        },
+      },
     );
 
     expect(requestFetchMock).toHaveBeenCalledWith(
@@ -110,6 +125,7 @@ describe("fetchTranslationAndHTML", () => {
       {
         headers: {
           Accept: "text/html",
+          Authorization: "",
         },
       },
     );
@@ -128,6 +144,11 @@ describe("fetchTranslationAndHTML", () => {
 
     expect(requestFetchMock).toHaveBeenCalledWith(
       useBackendUrl("/v1/translatedLegislation?id=FgH"),
+      {
+        headers: {
+          Authorization: "",
+        },
+      },
     );
 
     expect(requestFetchMock).toHaveBeenCalledTimes(1);
@@ -156,6 +177,11 @@ describe("fetchTranslationAndHTML", () => {
 
     expect(requestFetchMock).toHaveBeenCalledWith(
       useBackendUrl("/v1/translatedLegislation?id=FgH"),
+      {
+        headers: {
+          Authorization: "",
+        },
+      },
     );
 
     expect(requestFetchMock).toHaveBeenCalledTimes(1);
@@ -193,6 +219,11 @@ describe("getGermanOriginal", () => {
       useBackendUrl(
         "/v1/legislation?searchTerm=test-id&temporalCoverageFrom=2025-10-13&temporalCoverageTo=2025-10-13&size=100&pageIndex=0",
       ),
+      {
+        headers: {
+          Authorization: "",
+        },
+      },
     );
   });
 

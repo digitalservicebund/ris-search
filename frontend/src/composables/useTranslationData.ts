@@ -52,8 +52,14 @@ export function fetchTranslationList(): AsyncData<
   const { apiFetch } = useApi();
 
   return useAsyncData("translations-list", async () => {
+    const config = useRuntimeConfig();
     const response = await apiFetch<TranslationContent[]>(
       translationsListURL(),
+      {
+        headers: {
+          Authorization: config.basicAuth,
+        },
+      },
     );
 
     if (!response || response.length === 0) throw notFoundError("Not Found");
@@ -70,9 +76,15 @@ export function fetchTranslationListWithIdFilter(
 > {
   const { apiFetch } = useApi();
 
+  const config = useRuntimeConfig();
   return useAsyncData("translations-list-with_id", async () => {
     const response = await apiFetch<TranslationContent[]>(
       translationDetailURL(id),
+      {
+        headers: {
+          Authorization: config.basicAuth,
+        },
+      },
     );
 
     if (!response || response.length === 0) throw notFoundError("Not Found");
@@ -85,10 +97,15 @@ export function fetchTranslationAndHTML(
   id: string,
 ): AsyncData<TranslationData, NuxtError | undefined> {
   const { apiFetch } = useApi();
-
+  const config = useRuntimeConfig();
   return useAsyncData(`translation-and-html-${id}`, async () => {
     const translationsList = await apiFetch<TranslationContent[]>(
       translationDetailURL(id),
+      {
+        headers: {
+          Authorization: config.basicAuth,
+        },
+      },
     );
 
     if (!translationsList || translationsList.length === 0) {
@@ -102,7 +119,7 @@ export function fetchTranslationAndHTML(
     }
 
     const htmlData = await apiFetch<string>(translationHtmlURL(htmlFilename), {
-      headers: { Accept: "text/html" },
+      headers: { Accept: "text/html", Authorization: config.basicAuth },
     });
 
     return { content: firstTranslationsListElement, html: htmlData };
@@ -114,10 +131,16 @@ export function getGermanOriginal(
 ): AsyncData<SearchResult<LegislationWork> | null, NuxtError | undefined> {
   const { apiFetch } = useApi();
 
+  const config = useRuntimeConfig();
   return useAsyncData(`german-original-${id}`, async () => {
     const currentDateInGermanyFormatted = getCurrentDateInGermanyFormatted();
     const response = await apiFetch<JSONLDList<SearchResult<LegislationWork>>>(
       legislationSearchURL(id, currentDateInGermanyFormatted),
+      {
+        headers: {
+          Authorization: config.basicAuth,
+        },
+      },
     );
 
     if (!response || response.member.length === 0) {

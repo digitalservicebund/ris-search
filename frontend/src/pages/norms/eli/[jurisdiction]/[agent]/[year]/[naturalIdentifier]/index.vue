@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { useFetch } from "#app";
 import useBackendUrl from "~/composables/useBackendUrl";
 import type { JSONLDList, LegislationWork, SearchResult } from "~/types";
 import { getMostRelevantExpression } from "~/utils/norm";
@@ -13,13 +12,12 @@ const workEli = [
   route.params.naturalIdentifier,
 ].join("/");
 
-const { data, error: loadError } = await useFetch<
+const { data, error: loadError } = await useRisBackend<
   JSONLDList<SearchResult<LegislationWork>>
 >(useBackendUrl(`/v1/legislation`), {
   params: {
     eli: workEli,
   },
-  headers: useRequestHeaders(["authorization"]),
 });
 
 const matchedExpressionEli = computed(() => {
