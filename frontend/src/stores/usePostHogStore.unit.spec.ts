@@ -48,16 +48,16 @@ vi.mock("js-cookie", () => ({
   default: cookiesMock,
 }));
 
-const { useFetchMock } = vi.hoisted(() => {
+const { useRisBackendMock } = vi.hoisted(() => {
   return {
-    useFetchMock: vi.fn(() => {
+    useRisBackendMock: vi.fn(() => {
       return { error: ref(null) };
     }),
   };
 });
 
-mockNuxtImport("useFetch", () => {
-  return useFetchMock;
+mockNuxtImport("useRisBackend", () => {
+  return useRisBackendMock;
 });
 
 const feedbackURL = useBackendUrl(`/v1/feedback`);
@@ -141,12 +141,8 @@ describe("usePostHogStore", () => {
     });
     store.setTracking(true);
     store.sendFeedbackToPostHog("good");
-    expect(useFetchMock).toHaveBeenCalledWith(
+    expect(useRisBackendMock).toHaveBeenCalledWith(
       feedbackURL + "?text=good&url=%2F&user_id=12345",
-      {
-        headers: {},
-      },
-      expect.anything(),
     );
     cookiesMock.get.mockRestore();
   });
@@ -155,12 +151,8 @@ describe("usePostHogStore", () => {
     const store = usePostHogStore();
     store.setTracking(false);
     store.sendFeedbackToPostHog("test");
-    expect(useFetchMock).toHaveBeenCalledWith(
+    expect(useRisBackendMock).toHaveBeenCalledWith(
       feedbackURL + "?text=test&url=%2F&user_id=anonymous_feedback_user",
-      {
-        headers: {},
-      },
-      expect.anything(),
     );
   });
 

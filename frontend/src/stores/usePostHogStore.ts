@@ -72,9 +72,8 @@ export const usePostHogStore = defineStore("postHog", () => {
       url: router.currentRoute.value.fullPath,
       user_id: getUserPostHogId(),
     });
-    const { error } = await useFetch(
+    const { error } = await useRisBackend(
       useBackendUrl(`/v1/feedback?${params.toString()}`),
-      { headers: useRequestHeaders(["authorization"]) },
     );
 
     if (error.value) {

@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import { useFetch } from "#app";
 import LiteratureActionsMenu from "~/components/ActionMenu/LiteratureActionsMenu.vue";
 import ContentWrapper from "~/components/CustomLayouts/ContentWrapper.vue";
 import SidebarLayout from "~/components/CustomLayouts/SidebarLayout.vue";
@@ -28,11 +27,9 @@ const {
   status,
   data: literature,
   error: metadataError,
-} = await useFetch<Literature>(documentMetadataUrl, {
-  headers: useRequestHeaders(["authorization"]),
-});
+} = await useRisBackend<Literature>(documentMetadataUrl);
 
-const { data: html, error: contentError } = await useFetch<string>(
+const { data: html, error: contentError } = await useRisBackend<string>(
   `${documentMetadataUrl}.html`,
   {
     headers: { Accept: "text/html" },

@@ -70,7 +70,7 @@ export async function useAdvancedSearch(
     };
   });
 
-  const { data, error, status, pending, execute } = await useFetch<Page>(
+  const { data, error, status, pending, execute } = await useRisBackend<Page>(
     searchEndpointUrl,
     {
       query: combinedQuery,
@@ -84,7 +84,6 @@ export async function useAdvancedSearch(
       // watch sources, so disabling it and leaving it at the discretion of the
       // component to decide when to reload.
       watch: false,
-      headers: useRequestHeaders(["authorization"]),
     },
   );
 

@@ -35,18 +35,24 @@ export function useFetchNormContent(
   NormContent,
   NuxtError<NormContent> | NuxtError<null> | undefined
 > {
-  const backendUrl = useRuntimeConfig().public.risBackendUrl;
-  const requestFetch = useRequestFetch(); // unlike $fetch, useRequestFetch forwards client cookies
+  const config = useRuntimeConfig();
+  const backendUrl = config.public.risBackendUrl;
+  const requestFetch = useRequestFetch();
+  // unlike $fetch, useRequestFetch forwards client cookies
   return useAsyncData(`json+html for ${expressionEli}`, async () => {
     const metadata = await requestFetch<LegislationWork>(
       `${backendUrl}/v1/legislation/eli/${expressionEli}`,
-      { headers: useRequestHeaders(["authorization"]) },
+      {
+        headers: {
+          Authorization: config.basicAuth,
+        },
+      },
     );
     const contentUrl = getContentUrl(metadata);
     const html = await requestFetch<string>(backendUrl + contentUrl, {
       headers: {
         Accept: "text/html",
-        ...useRequestHeaders(["authorization"]),
+        Authorization: config.basicAuth,
       },
     });
     const document = parseDocument(html);
@@ -125,14 +131,19 @@ export function useFetchNormArticleContent(
   NormArticleContent,
   NuxtError<NormContent> | NuxtError<null> | undefined
 > {
-  const backendUrl = useRuntimeConfig().public.risBackendUrl;
+  const config = useRuntimeConfig();
+  const backendUrl = config.public.risBackendUrl;
   const requestFetch = useRequestFetch(); // unlike $fetch, useRequestFetch forwards client cookies
   return useAsyncData(
     `json+html for ${expressionEli}/${articleEId}`,
     async () => {
       const metadata = await requestFetch<LegislationWork>(
         `${backendUrl}/v1/legislation/eli/${expressionEli}`,
-        { headers: useRequestHeaders(["authorization"]) },
+        {
+          headers: {
+            Authorization: config.basicAuth,
+          },
+        },
       );
       // build the article URL by appending the eId in front of the .html suffix
       const adaptedContentUrl = getContentUrl(metadata).replace(
@@ -142,7 +153,7 @@ export function useFetchNormArticleContent(
       const html = await requestFetch<string>(backendUrl + adaptedContentUrl, {
         headers: {
           Accept: "text/html",
-          ...useRequestHeaders(["authorization"]),
+          Authorization: config.basicAuth,
         },
       });
       const document = parseDocument(html);
