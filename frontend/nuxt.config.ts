@@ -244,5 +244,4 @@ export default defineNuxtConfig({
     "**/**/*.{spec,test}.data.ts",
   ],
   compatibilityDate: "2024-11-01",
-  ssr: false,
 });
