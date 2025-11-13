@@ -49,7 +49,7 @@ describe("fetchTranslationList", () => {
       useBackendUrl("/v1/translatedLegislation"),
       {
         headers: {
-          Authorization: "",
+          Authorization: "Basic ",
         },
       },
     );
@@ -80,7 +80,7 @@ describe("fetchTranslationListWithIdFilter", () => {
       useBackendUrl("/v1/translatedLegislation?id=AbC"),
       {
         headers: {
-          Authorization: "",
+          Authorization: "Basic ",
         },
       },
     );
@@ -115,7 +115,7 @@ describe("fetchTranslationAndHTML", () => {
       useBackendUrl("/v1/translatedLegislation?id=AbC"),
       {
         headers: {
-          Authorization: "",
+          Authorization: "Basic ",
         },
       },
     );
@@ -125,7 +125,7 @@ describe("fetchTranslationAndHTML", () => {
       {
         headers: {
           Accept: "text/html",
-          Authorization: "",
+          Authorization: "Basic ",
         },
       },
     );
@@ -146,7 +146,7 @@ describe("fetchTranslationAndHTML", () => {
       useBackendUrl("/v1/translatedLegislation?id=FgH"),
       {
         headers: {
-          Authorization: "",
+          Authorization: "Basic ",
         },
       },
     );
@@ -179,7 +179,7 @@ describe("fetchTranslationAndHTML", () => {
       useBackendUrl("/v1/translatedLegislation?id=FgH"),
       {
         headers: {
-          Authorization: "",
+          Authorization: "Basic ",
         },
       },
     );
@@ -221,7 +221,7 @@ describe("getGermanOriginal", () => {
       ),
       {
         headers: {
-          Authorization: "",
+          Authorization: "Basic ",
         },
       },
     );

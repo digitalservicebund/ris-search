@@ -97,7 +97,7 @@ describe("useNormData", () => {
       useBackendUrl("/v1/legislation/eli/test-eli"),
       {
         headers: {
-          Authorization: "",
+          Authorization: "Basic ",
         },
       },
     );
@@ -107,7 +107,7 @@ describe("useNormData", () => {
         // note the /api prefix
         headers: {
           Accept: "text/html",
-          Authorization: "",
+          Authorization: "Basic ",
         },
       },
     );
@@ -135,7 +135,7 @@ describe("useNormData", () => {
       useBackendUrl("/v1/legislation/eli/test-eli"),
       {
         headers: {
-          Authorization: "",
+          Authorization: "Basic ",
         },
       },
     );
@@ -145,7 +145,7 @@ describe("useNormData", () => {
       {
         headers: {
           Accept: "text/html",
-          Authorization: "",
+          Authorization: "Basic ",
         },
       },
     );
@@ -173,7 +173,7 @@ describe("useNormData", () => {
       useBackendUrl("/v1/legislation/eli/test-eli"),
       {
         headers: {
-          Authorization: "",
+          Authorization: "Basic ",
         },
       },
     );

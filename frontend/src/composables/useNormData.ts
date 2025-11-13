@@ -44,7 +44,7 @@ export function useFetchNormContent(
       `${backendUrl}/v1/legislation/eli/${expressionEli}`,
       {
         headers: {
-          Authorization: config.basicAuth,
+          Authorization: `Basic ${config.basicAuth}`,
         },
       },
     );
@@ -52,7 +52,7 @@ export function useFetchNormContent(
     const html = await requestFetch<string>(backendUrl + contentUrl, {
       headers: {
         Accept: "text/html",
-        Authorization: config.basicAuth,
+        Authorization: `Basic ${config.basicAuth}`,
       },
     });
     const document = parseDocument(html);
@@ -141,7 +141,7 @@ export function useFetchNormArticleContent(
         `${backendUrl}/v1/legislation/eli/${expressionEli}`,
         {
           headers: {
-            Authorization: config.basicAuth,
+            Authorization: `Basic ${config.basicAuth}`,
           },
         },
       );
@@ -153,7 +153,7 @@ export function useFetchNormArticleContent(
       const html = await requestFetch<string>(backendUrl + adaptedContentUrl, {
         headers: {
           Accept: "text/html",
-          Authorization: config.basicAuth,
+          Authorization: `Basic ${config.basicAuth}`,
         },
       });
       const document = parseDocument(html);

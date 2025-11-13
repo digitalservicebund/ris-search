@@ -57,7 +57,7 @@ export function fetchTranslationList(): AsyncData<
       translationsListURL(),
       {
         headers: {
-          Authorization: config.basicAuth,
+          Authorization: `Basic ${config.basicAuth}`,
         },
       },
     );
@@ -82,7 +82,7 @@ export function fetchTranslationListWithIdFilter(
       translationDetailURL(id),
       {
         headers: {
-          Authorization: config.basicAuth,
+          Authorization: `Basic ${config.basicAuth}`,
         },
       },
     );
@@ -103,7 +103,7 @@ export function fetchTranslationAndHTML(
       translationDetailURL(id),
       {
         headers: {
-          Authorization: config.basicAuth,
+          Authorization: `Basic ${config.basicAuth}`,
         },
       },
     );
@@ -119,7 +119,10 @@ export function fetchTranslationAndHTML(
     }
 
     const htmlData = await apiFetch<string>(translationHtmlURL(htmlFilename), {
-      headers: { Accept: "text/html", Authorization: config.basicAuth },
+      headers: {
+        Accept: "text/html",
+        Authorization: `Basic ${config.basicAuth}`,
+      },
     });
 
     return { content: firstTranslationsListElement, html: htmlData };
@@ -138,7 +141,7 @@ export function getGermanOriginal(
       legislationSearchURL(id, currentDateInGermanyFormatted),
       {
         headers: {
-          Authorization: config.basicAuth,
+          Authorization: `Basic ${config.basicAuth}`,
         },
       },
     );
