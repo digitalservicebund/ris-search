@@ -10,7 +10,7 @@ const { useRisBackendMock, executeMock } = vi.hoisted(() => {
 
   return {
     useRisBackendMock: vi.fn(
-      (_url: Ref<string>, _opts: Record<string, any>) => ({
+      (_url: Ref<string>, _opts: Record<string, Ref<string>>) => ({
         status: ref("success"),
         data: computed(() => ref({ content: [], totalItems: 0 })),
         error: ref(null),
@@ -86,7 +86,7 @@ describe("useAdvancedSearch", () => {
 
     expect(useRisBackendMock).toHaveBeenCalled();
     const urlQuery = useRisBackendMock.mock.calls[0]![1].query;
-    expect(urlQuery.value).toMatchObject({ query: "(test%20query)" });
+    expect(urlQuery?.value).toMatchObject({ query: "(test%20query)" });
   });
 
   it("submits pagination parameters correctly", async () => {
@@ -99,7 +99,7 @@ describe("useAdvancedSearch", () => {
 
     expect(useRisBackendMock).toHaveBeenCalled();
     const urlQuery = useRisBackendMock.mock.calls[0]![1].query;
-    expect(urlQuery.value).toMatchObject({ size: "25", pageIndex: 2 });
+    expect(urlQuery?.value).toMatchObject({ size: "25", pageIndex: 2 });
   });
 
   it("submits sort order parameter correctly", async () => {
@@ -112,7 +112,7 @@ describe("useAdvancedSearch", () => {
 
     expect(useRisBackendMock).toHaveBeenCalled();
     const urlQuery = useRisBackendMock.mock.calls[0]![1].query;
-    expect(urlQuery.value).toMatchObject({ sort: "relevance" });
+    expect(urlQuery?.value).toMatchObject({ sort: "relevance" });
   });
 
   it("does not eagerly execute the query", async () => {
