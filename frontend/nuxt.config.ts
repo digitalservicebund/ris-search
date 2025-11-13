@@ -12,8 +12,7 @@ const config = {
 };
 
 const sentryEnabled = !isStringEmpty(process.env.NUXT_PUBLIC_SENTRY_DSN);
-const risBackendUrl =
-  process.env.NUXT_RIS_BACKEND_URL ?? "http://localhost:8090";
+
 const secureCookie = !config.devMode;
 
 export default defineNuxtConfig({
@@ -122,6 +121,7 @@ export default defineNuxtConfig({
       password: "", // needs override in env
     },
     public: {
+      risBackendUrl: "http://localhost:8090",
       /*
        * A feature flag that controls whether the private annotated features should,
        * be displayed or not, such features are for example: metadata, fassungen ...etc
@@ -191,7 +191,7 @@ export default defineNuxtConfig({
     },
     "/sitemaps/norms/**": {
       proxy: {
-        to: `${risBackendUrl}/v1/sitemaps/norms/**`,
+        to: `${process.env.NUXT_PUBLIC_RIS_BACKEND_URL}/v1/sitemaps/norms/**`,
         headers: {
           Accept: "application/xml",
         },
@@ -199,15 +199,10 @@ export default defineNuxtConfig({
     },
     "/sitemaps/caselaw/**": {
       proxy: {
-        to: `${risBackendUrl}/v1/sitemaps/caselaw/**`,
+        to: `${process.env.NUXT_PUBLIC_RIS_BACKEND_URL}/v1/sitemaps/caselaw/**`,
         headers: {
           Accept: "application/xml",
         },
-      },
-    },
-    "/v1/**": {
-      proxy: {
-        to: `${risBackendUrl}/v1/**`,
       },
     },
   },

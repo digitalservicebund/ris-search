@@ -1,4 +1,5 @@
 import type { AsyncData, NuxtError } from "#app";
+import useBackendUrl from "~/composables/useBackendUrl";
 import type { LegislationWork, JSONLDList, SearchResult } from "~/types";
 import { getCurrentDateInGermanyFormatted } from "~/utils/dateFormatting";
 
@@ -27,19 +28,21 @@ function useApi() {
 }
 
 function translationsListURL() {
-  return `/v1/translatedLegislation`;
+  return useBackendUrl(`/v1/translatedLegislation`);
 }
 
 function translationDetailURL(id: string) {
-  return `/v1/translatedLegislation?id=${id}`;
+  return useBackendUrl(`/v1/translatedLegislation?id=${id}`);
 }
 
 function translationHtmlURL(filename: string) {
-  return `/v1/translatedLegislation/${filename}`;
+  return useBackendUrl(`/v1/translatedLegislation/${filename}`);
 }
 
 function legislationSearchURL(id: string, currentDate: string) {
-  return `/v1/legislation?searchTerm=${id}&temporalCoverageFrom=${currentDate}&temporalCoverageTo=${currentDate}&size=100&pageIndex=0`;
+  return useBackendUrl(
+    `/v1/legislation?searchTerm=${id}&temporalCoverageFrom=${currentDate}&temporalCoverageTo=${currentDate}&size=100&pageIndex=0`,
+  );
 }
 
 export function fetchTranslationList(): AsyncData<

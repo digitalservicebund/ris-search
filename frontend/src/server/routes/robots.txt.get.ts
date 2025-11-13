@@ -1,4 +1,5 @@
 import { getRequestURL, getHeader, setHeader, defineEventHandler } from "h3";
+import useBackendUrl from "~/composables/useBackendUrl";
 import { usePrivateFeaturesFlag } from "~/composables/usePrivateFeaturesFlag";
 
 export default defineEventHandler(async (event) => {
@@ -14,7 +15,7 @@ export default defineEventHandler(async (event) => {
   const { origin } = getRequestURL(event);
 
   if (userAgent === "DG_JUSTICE_CRAWLER") {
-    return await $fetch<string>(`/v1/eclicrawler/robots.txt`, {
+    return await $fetch<string>(useBackendUrl(`/v1/eclicrawler/robots.txt`), {
       method: "GET",
     });
   }

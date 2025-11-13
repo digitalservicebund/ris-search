@@ -1,3 +1,4 @@
+import useBackendUrl from "~/composables/useBackendUrl";
 import type { QueryParams } from "~/stores/searchParams";
 import { DocumentKind } from "~/types";
 
@@ -10,7 +11,7 @@ export function getUrl(category?: string): string {
 
   const match = routes.find(([kind]) => category?.startsWith(kind));
 
-  return `/v1/${match?.[1] ?? "document"}`;
+  return useBackendUrl(`/v1/${match?.[1] ?? "document"}`);
 }
 
 export interface SearchEndpointParams {

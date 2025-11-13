@@ -1,6 +1,7 @@
 import type { EventHandlerRequest, H3Event } from "h3";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import feedbackHandler from "./feedback.post";
+import useBackendUrl from "~/composables/useBackendUrl";
 
 const {
   mockReadBody,
@@ -49,7 +50,9 @@ describe("feedback.post", () => {
     await feedbackHandler(mockEvent);
 
     expect(mockFetch).toHaveBeenCalledWith(
-      "/v1/feedback?text=Great+app%21&url=%2Fsearch%3Fquery%3Dtest&user_id=anonymous_feedback_user",
+      useBackendUrl(
+        "/v1/feedback?text=Great+app%21&url=%2Fsearch%3Fquery%3Dtest&user_id=anonymous_feedback_user",
+      ),
     );
   });
 
@@ -65,7 +68,9 @@ describe("feedback.post", () => {
     await feedbackHandler(mockEvent);
 
     expect(mockFetch).toHaveBeenCalledWith(
-      "/v1/feedback?text=Feedback+text&url=%2Fcustom-page&user_id=user123",
+      useBackendUrl(
+        "/v1/feedback?text=Feedback+text&url=%2Fcustom-page&user_id=user123",
+      ),
     );
   });
 
@@ -106,7 +111,9 @@ describe("feedback.post", () => {
     await feedbackHandler(mockEvent);
 
     expect(mockFetch).toHaveBeenCalledWith(
-      "/v1/feedback?text=Feedback&url=%2Fpage%3Fparam%3Dvalue&user_id=anonymous_feedback_user",
+      useBackendUrl(
+        "/v1/feedback?text=Feedback&url=%2Fpage%3Fparam%3Dvalue&user_id=anonymous_feedback_user",
+      ),
     );
   });
 });

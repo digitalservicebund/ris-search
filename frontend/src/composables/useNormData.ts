@@ -35,13 +35,14 @@ export function useFetchNormContent(
   NormContent,
   NuxtError<NormContent> | NuxtError<null> | undefined
 > {
+  const backendUrl = useRuntimeConfig().public.risBackendUrl;
   const requestFetch = useRequestFetch(); // unlike $fetch, useRequestFetch forwards client cookies
   return useAsyncData(`json+html for ${expressionEli}`, async () => {
     const metadata = await requestFetch<LegislationWork>(
-      `/v1/legislation/eli/${expressionEli}`,
+      `${backendUrl}/v1/legislation/eli/${expressionEli}`,
     );
     const contentUrl = getContentUrl(metadata);
-    const html = await requestFetch<string>(contentUrl, {
+    const html = await requestFetch<string>(backendUrl + contentUrl, {
       headers: {
         Accept: "text/html",
       },
@@ -122,19 +123,20 @@ export function useFetchNormArticleContent(
   NormArticleContent,
   NuxtError<NormContent> | NuxtError<null> | undefined
 > {
+  const backendUrl = useRuntimeConfig().public.risBackendUrl;
   const requestFetch = useRequestFetch(); // unlike $fetch, useRequestFetch forwards client cookies
   return useAsyncData(
     `json+html for ${expressionEli}/${articleEId}`,
     async () => {
       const metadata = await requestFetch<LegislationWork>(
-        `/v1/legislation/eli/${expressionEli}`,
+        `${backendUrl}/v1/legislation/eli/${expressionEli}`,
       );
       // build the article URL by appending the eId in front of the .html suffix
       const adaptedContentUrl = getContentUrl(metadata).replace(
         /\.html$/,
         `/${articleEId}.html`,
       );
-      const html = await requestFetch<string>(adaptedContentUrl, {
+      const html = await requestFetch<string>(backendUrl + adaptedContentUrl, {
         headers: {
           Accept: "text/html",
         },

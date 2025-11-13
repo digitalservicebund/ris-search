@@ -1,6 +1,6 @@
 import { toValue } from "vue";
-import { useFetch } from "#app";
 import type { Page } from "~/components/Pagination/Pagination.vue";
+import useBackendUrl from "~/composables/useBackendUrl";
 import { DocumentKind } from "~/types";
 import {
   dateFilterToQuery,
@@ -39,7 +39,7 @@ export async function useAdvancedSearch(
 ) {
   const searchEndpointUrl = computed(() => {
     const documentKindVal = toValue(documentKind);
-    const baseUrl = "/v1/document/lucene-search";
+    const baseUrl = useBackendUrl("/v1/document/lucene-search");
 
     if (documentKindVal === DocumentKind.CaseLaw) {
       return baseUrl + "/case-law";

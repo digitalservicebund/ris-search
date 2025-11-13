@@ -2,6 +2,7 @@ import { mockNuxtImport } from "@nuxt/test-utils/runtime";
 import type { EventHandlerRequest, H3Event } from "h3";
 import { beforeEach, describe, expect, it, test, vi } from "vitest";
 import middleware from "./robots.txt.get";
+import useBackendUrl from "~/composables/useBackendUrl";
 
 const mockFetch = vi.fn();
 vi.stubGlobal("$fetch", mockFetch);
@@ -42,9 +43,12 @@ describe("robots txt route", () => {
     } as unknown as H3Event<EventHandlerRequest>;
 
     await middleware(mockEvent);
-    expect(mockFetch).toHaveBeenCalledWith("/v1/eclicrawler/robots.txt", {
-      method: "GET",
-    });
+    expect(mockFetch).toHaveBeenCalledWith(
+      useBackendUrl("/v1/eclicrawler/robots.txt"),
+      {
+        method: "GET",
+      },
+    );
   });
 
   const testCases = [

@@ -38,7 +38,7 @@ async function copyUrlCommand(url: string) {
 }
 
 async function navigationToXml(xmlUrl: string) {
-  await navigateTo(xmlUrl, { external: true });
+  await navigateTo(useBackendUrl(xmlUrl), { external: true });
 }
 
 const actions = createActionMenuItems(props, copyUrlCommand, navigationToXml);
