@@ -1,7 +1,7 @@
 import type { UseFetchOptions } from "nuxt/app";
 
 export function useRisBackend<T>(
-  url: string | (() => string),
+  url: ComputedRef<string> | string | (() => string),
   options?: UseFetchOptions<T>,
 ) {
   return useFetch(url, {
