@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { HttpStatusCode } from "axios";
-import { redirectToLogin } from "./utils/redirectToLogin";
 import type { NuxtError } from "#app";
 import SimpleSearchInput from "~/components/Search/SimpleSearchInput.vue";
 import { useRedirectToSearch } from "~/composables/useRedirectToSearch";
@@ -16,23 +15,12 @@ const props = defineProps({
 const isNotFoundError = computed(
   () => props.error?.statusCode === HttpStatusCode.NotFound,
 );
-const isTokenRefreshError = computed(
-  () => props.error?.statusCode === HttpStatusCode.Unauthorized,
-);
 
 const isInternalServerError = computed(
   () => props.error?.statusCode === HttpStatusCode.InternalServerError,
 );
 const locationClientOnly = computed(() => window.location.href);
 
-const route = useRoute();
-onMounted(() => {
-  // handle the login redirect client-side in order to preserve the
-  // query hash, which isn't available during SSR.
-  if (isTokenRefreshError.value) {
-    redirectToLogin(route.fullPath);
-  }
-});
 const pageTitle = computed(() => {
   return `${isNotFoundError.value ? "Diese Seite existiert nicht" : "Es gab leider einen Fehler"}`;
 });
@@ -59,14 +47,6 @@ useHead({ title: pageTitle.value });
           "
           @empty-search="() => onSearchInputChange()"
         />
-      </template>
-      <template v-else-if="isTokenRefreshError">
-        <div class="flex items-center gap-24">
-          <LoadingSpinner />
-          <h1 class="ris-heading2-regular inline-block">
-            Sie werden angemeldet…
-          </h1>
-        </div>
       </template>
       <template v-else>
         <h1 class="ris-heading2-regular inline-block font-semibold">

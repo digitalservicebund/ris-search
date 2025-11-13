@@ -121,7 +121,7 @@ export default defineNuxtConfig({
       password: "", // needs override in env
     },
     public: {
-      risBackendUrl: "http://localhost:8090",
+      risBackendUrl: "",
       /*
        * A feature flag that controls whether the private annotated features should,
        * be displayed or not, such features are for example: metadata, fassungen ...etc
