@@ -26,7 +26,7 @@ const matchedExpressionEli = computed(() => {
 });
 
 if (matchedExpressionEli.value) {
-  window.location.assign(`/norms/${matchedExpressionEli.value}`);
+  globalThis.location.assign(`/norms/${matchedExpressionEli.value}`);
 }
 
 if (loadError?.value) {
