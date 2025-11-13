@@ -1,4 +1,3 @@
-import { mockNuxtImport } from "@nuxt/test-utils/runtime";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import useBackendUrl from "~/composables/useBackendUrl";
 import type { TranslationContent } from "~/composables/useTranslationData";
@@ -11,9 +10,7 @@ import {
 
 const requestFetchMock = vi.fn();
 
-mockNuxtImport("useRequestFetch", () => {
-  return () => requestFetchMock;
-});
+vi.stubGlobal("$fetch", requestFetchMock);
 
 beforeEach(() => {
   requestFetchMock.mockReset();

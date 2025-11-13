@@ -29,7 +29,10 @@ if (matchedExpressionEli.value) {
   if (import.meta.client) {
     globalThis.location.href = `/norms/${matchedExpressionEli.value}`;
   } else {
-    navigateTo(`/norms/${matchedExpressionEli.value}`, { external: true });
+    navigateTo(`/norms/${matchedExpressionEli.value}`, {
+      external: true,
+      replace: true,
+    });
   }
 }
 

@@ -1,4 +1,3 @@
-import { mockNuxtImport } from "@nuxt/test-utils/runtime";
 import { describe, expect, it, vi } from "vitest";
 import { useFetchNormArticleContent, useFetchNormContent } from "./useNormData";
 import useBackendUrl from "~/composables/useBackendUrl";
@@ -14,9 +13,7 @@ const { mockFetch } = vi.hoisted(() => {
   };
 });
 
-mockNuxtImport("useRequestFetch", () => {
-  return () => mockFetch;
-});
+vi.stubGlobal("$fetch", mockFetch);
 
 describe("useNormData", () => {
   const consoleInfoMock = vi

@@ -22,11 +22,6 @@ function notFoundError(message: string) {
   return createError({ statusCode: 404, statusMessage: message });
 }
 
-function useApi() {
-  const apiFetch = useRequestFetch();
-  return { apiFetch };
-}
-
 function translationsListURL() {
   return useBackendUrl(`/v1/translatedLegislation`);
 }
@@ -49,23 +44,25 @@ export function fetchTranslationList(): AsyncData<
   TranslationContent[],
   NuxtError<TranslationContent> | NuxtError<null> | undefined
 > {
-  const { apiFetch } = useApi();
-
-  return useAsyncData("translations-list", async () => {
-    const config = useRuntimeConfig();
-    const response = await apiFetch<TranslationContent[]>(
-      translationsListURL(),
-      {
-        headers: {
-          Authorization: `Basic ${config.basicAuth}`,
+  return useAsyncData(
+    "translations-list",
+    async () => {
+      const config = useRuntimeConfig();
+      const response = await $fetch<TranslationContent[]>(
+        translationsListURL(),
+        {
+          headers: {
+            Authorization: `Basic ${config.basicAuth}`,
+          },
         },
-      },
-    );
+      );
 
-    if (!response || response.length === 0) throw notFoundError("Not Found");
+      if (!response || response.length === 0) throw notFoundError("Not Found");
 
-    return response;
-  });
+      return response;
+    },
+    { server: true, lazy: false },
+  );
 }
 
 export function fetchTranslationListWithIdFilter(
@@ -74,87 +71,94 @@ export function fetchTranslationListWithIdFilter(
   TranslationContent[],
   NuxtError<TranslationContent> | NuxtError<null> | undefined
 > {
-  const { apiFetch } = useApi();
-
   const config = useRuntimeConfig();
-  return useAsyncData("translations-list-with_id", async () => {
-    const response = await apiFetch<TranslationContent[]>(
-      translationDetailURL(id),
-      {
-        headers: {
-          Authorization: `Basic ${config.basicAuth}`,
+  return useAsyncData(
+    "translations-list-with_id",
+    async () => {
+      const response = await $fetch<TranslationContent[]>(
+        translationDetailURL(id),
+        {
+          headers: {
+            Authorization: `Basic ${config.basicAuth}`,
+          },
         },
-      },
-    );
+      );
 
-    if (!response || response.length === 0) throw notFoundError("Not Found");
+      if (!response || response.length === 0) throw notFoundError("Not Found");
 
-    return response;
-  });
+      return response;
+    },
+    { server: true, lazy: false },
+  );
 }
 
 export function fetchTranslationAndHTML(
   id: string,
 ): AsyncData<TranslationData, NuxtError | undefined> {
-  const { apiFetch } = useApi();
   const config = useRuntimeConfig();
-  return useAsyncData(`translation-and-html-${id}`, async () => {
-    const translationsList = await apiFetch<TranslationContent[]>(
-      translationDetailURL(id),
-      {
+  return useAsyncData(
+    `translation-and-html-${id}`,
+    async () => {
+      const translationsList = await $fetch<TranslationContent[]>(
+        translationDetailURL(id),
+        {
+          headers: {
+            Authorization: `Basic ${config.basicAuth}`,
+          },
+        },
+      );
+
+      if (!translationsList || translationsList.length === 0) {
+        throw notFoundError("Translation not found");
+      }
+
+      const firstTranslationsListElement = translationsList[0];
+      const htmlFilename = firstTranslationsListElement?.["ris:filename"];
+      if (htmlFilename === undefined) {
+        throw notFoundError("Translation filename not found");
+      }
+
+      const htmlData = await $fetch<string>(translationHtmlURL(htmlFilename), {
         headers: {
+          Accept: "text/html",
           Authorization: `Basic ${config.basicAuth}`,
         },
-      },
-    );
+      });
 
-    if (!translationsList || translationsList.length === 0) {
-      throw notFoundError("Translation not found");
-    }
-
-    const firstTranslationsListElement = translationsList[0];
-    const htmlFilename = firstTranslationsListElement?.["ris:filename"];
-    if (htmlFilename === undefined) {
-      throw notFoundError("Translation filename not found");
-    }
-
-    const htmlData = await apiFetch<string>(translationHtmlURL(htmlFilename), {
-      headers: {
-        Accept: "text/html",
-        Authorization: `Basic ${config.basicAuth}`,
-      },
-    });
-
-    return { content: firstTranslationsListElement, html: htmlData };
-  });
+      return { content: firstTranslationsListElement, html: htmlData };
+    },
+    { server: true, lazy: false },
+  );
 }
 
 export function getGermanOriginal(
   id: string,
 ): AsyncData<SearchResult<LegislationWork> | null, NuxtError | undefined> {
-  const { apiFetch } = useApi();
-
   const config = useRuntimeConfig();
-  return useAsyncData(`german-original-${id}`, async () => {
-    const currentDateInGermanyFormatted = getCurrentDateInGermanyFormatted();
-    const response = await apiFetch<JSONLDList<SearchResult<LegislationWork>>>(
-      legislationSearchURL(id, currentDateInGermanyFormatted),
-      {
-        headers: {
-          Authorization: `Basic ${config.basicAuth}`,
+  return useAsyncData(
+    `german-original-${id}`,
+    async () => {
+      const currentDateInGermanyFormatted = getCurrentDateInGermanyFormatted();
+      const response = await $fetch<JSONLDList<SearchResult<LegislationWork>>>(
+        legislationSearchURL(id, currentDateInGermanyFormatted),
+        {
+          headers: {
+            Authorization: `Basic ${config.basicAuth}`,
+          },
         },
-      },
-    );
+      );
 
-    if (!response || response.member.length === 0) {
-      throw notFoundError("Not Found");
-    }
+      if (!response || response.member.length === 0) {
+        throw notFoundError("Not Found");
+      }
 
-    const [firstResult] = response.member;
+      const [firstResult] = response.member;
 
-    if (firstResult?.item?.abbreviation === id) {
-      return firstResult;
-    }
-    throw notFoundError(`Not Found: Abbreviation mismatch for ID: ${id}`);
-  });
+      if (firstResult?.item?.abbreviation === id) {
+        return firstResult;
+      }
+      throw notFoundError(`Not Found: Abbreviation mismatch for ID: ${id}`);
+    },
+    { server: true, lazy: false },
+  );
 }

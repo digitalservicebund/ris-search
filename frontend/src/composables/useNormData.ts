@@ -37,33 +37,36 @@ export function useFetchNormContent(
 > {
   const config = useRuntimeConfig();
   const backendUrl = config.public.risBackendUrl;
-  const requestFetch = useRequestFetch();
   // unlike $fetch, useRequestFetch forwards client cookies
-  return useAsyncData(`json+html for ${expressionEli}`, async () => {
-    const metadata = await requestFetch<LegislationWork>(
-      `${backendUrl}/v1/legislation/eli/${expressionEli}`,
-      {
+  return useAsyncData(
+    `json+html for ${expressionEli}`,
+    async () => {
+      const metadata = await $fetch<LegislationWork>(
+        `${backendUrl}/v1/legislation/eli/${expressionEli}`,
+        {
+          headers: {
+            Authorization: `Basic ${config.basicAuth}`,
+          },
+        },
+      );
+      const contentUrl = getContentUrl(metadata);
+      const html = await $fetch<string>(backendUrl + contentUrl, {
         headers: {
+          Accept: "text/html",
           Authorization: `Basic ${config.basicAuth}`,
         },
-      },
-    );
-    const contentUrl = getContentUrl(metadata);
-    const html = await requestFetch<string>(backendUrl + contentUrl, {
-      headers: {
-        Accept: "text/html",
-        Authorization: `Basic ${config.basicAuth}`,
-      },
-    });
-    const document = parseDocument(html);
-    const htmlParts = extractHtmlParts(document);
+      });
+      const document = parseDocument(html);
+      const htmlParts = extractHtmlParts(document);
 
-    return {
-      legislationWork: metadata,
-      html,
-      htmlParts,
-    };
-  });
+      return {
+        legislationWork: metadata,
+        html,
+        htmlParts,
+      };
+    },
+    { server: true, lazy: false },
+  );
 }
 
 function extractHtmlParts(document: Document): NormContent["htmlParts"] {
@@ -133,11 +136,10 @@ export function useFetchNormArticleContent(
 > {
   const config = useRuntimeConfig();
   const backendUrl = config.public.risBackendUrl;
-  const requestFetch = useRequestFetch(); // unlike $fetch, useRequestFetch forwards client cookies
   return useAsyncData(
     `json+html for ${expressionEli}/${articleEId}`,
     async () => {
-      const metadata = await requestFetch<LegislationWork>(
+      const metadata = await $fetch<LegislationWork>(
         `${backendUrl}/v1/legislation/eli/${expressionEli}`,
         {
           headers: {
@@ -150,7 +152,7 @@ export function useFetchNormArticleContent(
         /\.html$/,
         `/${articleEId}.html`,
       );
-      const html = await requestFetch<string>(backendUrl + adaptedContentUrl, {
+      const html = await $fetch<string>(backendUrl + adaptedContentUrl, {
         headers: {
           Accept: "text/html",
           Authorization: `Basic ${config.basicAuth}`,
@@ -167,7 +169,7 @@ export function useFetchNormArticleContent(
         articleHeading,
       };
     },
-    { immediate: !!articleEId },
+    { immediate: !!articleEId, server: true, lazy: false },
   );
 }
 
