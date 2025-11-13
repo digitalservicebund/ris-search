@@ -32,7 +32,7 @@ function getMatch(match: string, highlights: TextMatch[]) {
 }
 
 const link = computed(() => {
-  const prefix = "norms/";
+  const prefix = "/norms/";
   const expressionEli = item.value.workExample.legislationIdentifier;
   if (!expressionEli) return null;
   return prefix + expressionEli;

@@ -163,7 +163,7 @@ describe("NormSearchResult.vue", () => {
     const link = screen.getByRole("link", { name: /Test Title/i });
     expect(link).toHaveAttribute(
       "href",
-      `norms/${mockSearchResult.item.workExample.legislationIdentifier}`,
+      `/norms/${mockSearchResult.item.workExample.legislationIdentifier}`,
     );
   });
 
