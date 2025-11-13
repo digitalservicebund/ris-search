@@ -84,6 +84,7 @@ export async function useAdvancedSearch(
       // watch sources, so disabling it and leaving it at the discretion of the
       // component to decide when to reload.
       watch: false,
+      headers: useRequestHeaders(["authorization"]),
     },
   );
 

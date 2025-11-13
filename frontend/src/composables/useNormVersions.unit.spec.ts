@@ -43,6 +43,7 @@ describe("useNormVersions", () => {
           eli: "dummy-eli",
           sort: "-temporalCoverageFrom",
         },
+        headers: {},
       },
       expect.anything(),
     );

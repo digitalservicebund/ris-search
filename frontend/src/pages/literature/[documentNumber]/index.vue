@@ -28,7 +28,9 @@ const {
   status,
   data: literature,
   error: metadataError,
-} = await useFetch<Literature>(documentMetadataUrl);
+} = await useFetch<Literature>(documentMetadataUrl, {
+  headers: useRequestHeaders(["authorization"]),
+});
 
 const { data: html, error: contentError } = await useFetch<string>(
   `${documentMetadataUrl}.html`,

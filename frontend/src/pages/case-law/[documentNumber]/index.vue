@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import type { ComputedRef } from "vue";
-import { useFetch } from "#app";
 import CaseLawActionsMenu from "~/components/ActionMenu/CaseLawActionsMenu.vue";
 import TableOfContents, {
   type TableOfContentsEntry,
@@ -42,7 +41,7 @@ const {
 const { data: html, error: contentError } = await useFetch<string>(
   useBackendUrl(`/v1/case-law/${documentNumber}.html`),
   {
-    headers: { Accept: "text/html" },
+    headers: { Accept: "text/html", ...useRequestHeaders(["authorization"]) },
   },
 );
 

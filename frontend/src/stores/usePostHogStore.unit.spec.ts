@@ -143,6 +143,9 @@ describe("usePostHogStore", () => {
     store.sendFeedbackToPostHog("good");
     expect(useFetchMock).toHaveBeenCalledWith(
       feedbackURL + "?text=good&url=%2F&user_id=12345",
+      {
+        headers: {},
+      },
       expect.anything(),
     );
     cookiesMock.get.mockRestore();
@@ -154,6 +157,9 @@ describe("usePostHogStore", () => {
     store.sendFeedbackToPostHog("test");
     expect(useFetchMock).toHaveBeenCalledWith(
       feedbackURL + "?text=test&url=%2F&user_id=anonymous_feedback_user",
+      {
+        headers: {},
+      },
       expect.anything(),
     );
   });

@@ -19,6 +19,7 @@ const { data, error: loadError } = await useFetch<
   params: {
     eli: workEli,
   },
+  headers: useRequestHeaders(["authorization"]),
 });
 
 const matchedExpressionEli = computed(() => {

@@ -95,6 +95,9 @@ describe("useNormData", () => {
     expect(mockFetch).toHaveBeenCalledTimes(2);
     expect(mockFetch).toHaveBeenCalledWith(
       useBackendUrl("/v1/legislation/eli/test-eli"),
+      {
+        headers: {},
+      },
     );
     expect(mockFetch).toHaveBeenCalledWith(
       useBackendUrl("/v1/test-content-url.html"),
@@ -127,6 +130,9 @@ describe("useNormData", () => {
     expect(mockFetch).toHaveBeenCalledTimes(2);
     expect(mockFetch).toHaveBeenCalledWith(
       useBackendUrl("/v1/legislation/eli/test-eli"),
+      {
+        headers: {},
+      },
     );
 
     expect(mockFetch).toHaveBeenCalledWith(
@@ -159,6 +165,9 @@ describe("useNormData", () => {
     expect(mockFetch).toHaveBeenCalledTimes(1);
     expect(mockFetch).toHaveBeenCalledWith(
       useBackendUrl("/v1/legislation/eli/test-eli"),
+      {
+        headers: {},
+      },
     );
   });
 });

@@ -40,11 +40,13 @@ export function useFetchNormContent(
   return useAsyncData(`json+html for ${expressionEli}`, async () => {
     const metadata = await requestFetch<LegislationWork>(
       `${backendUrl}/v1/legislation/eli/${expressionEli}`,
+      { headers: useRequestHeaders(["authorization"]) },
     );
     const contentUrl = getContentUrl(metadata);
     const html = await requestFetch<string>(backendUrl + contentUrl, {
       headers: {
         Accept: "text/html",
+        ...useRequestHeaders(["authorization"]),
       },
     });
     const document = parseDocument(html);
@@ -130,6 +132,7 @@ export function useFetchNormArticleContent(
     async () => {
       const metadata = await requestFetch<LegislationWork>(
         `${backendUrl}/v1/legislation/eli/${expressionEli}`,
+        { headers: useRequestHeaders(["authorization"]) },
       );
       // build the article URL by appending the eId in front of the .html suffix
       const adaptedContentUrl = getContentUrl(metadata).replace(
@@ -139,6 +142,7 @@ export function useFetchNormArticleContent(
       const html = await requestFetch<string>(backendUrl + adaptedContentUrl, {
         headers: {
           Accept: "text/html",
+          ...useRequestHeaders(["authorization"]),
         },
       });
       const document = parseDocument(html);

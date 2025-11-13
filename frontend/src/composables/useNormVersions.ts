@@ -30,6 +30,7 @@ function getNorms(params: {
   >(useBackendUrl(`/v1/legislation`), {
     params: params,
     immediate: immediate,
+    headers: useRequestHeaders(["authorization"]),
   });
 
   if (error?.value) {

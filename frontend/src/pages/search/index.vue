@@ -38,6 +38,7 @@ const {
 } = await useFetch<Page>(() => getUrl(values.category.value), {
   query: params,
   watch: [params],
+  headers: useRequestHeaders(["authorization"]),
 });
 
 watch(

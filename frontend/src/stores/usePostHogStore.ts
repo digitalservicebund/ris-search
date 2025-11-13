@@ -74,6 +74,7 @@ export const usePostHogStore = defineStore("postHog", () => {
     });
     const { error } = await useFetch(
       useBackendUrl(`/v1/feedback?${params.toString()}`),
+      { headers: useRequestHeaders(["authorization"]) },
     );
 
     if (error.value) {
