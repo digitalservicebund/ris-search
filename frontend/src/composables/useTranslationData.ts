@@ -43,17 +43,13 @@ export function fetchTranslationList(): AsyncData<
   TranslationContent[],
   NuxtError<TranslationContent> | NuxtError<null> | undefined
 > {
+  const { $risBackend } = useNuxtApp();
+
   return useAsyncData(
     "translations-list",
     async () => {
-      const config = useRuntimeConfig();
-      const response = await $fetch<TranslationContent[]>(
+      const response = await $risBackend<TranslationContent[]>(
         translationsListURL(),
-        {
-          headers: {
-            Authorization: `Basic ${config.basicAuth}`,
-          },
-        },
       );
 
       if (!response || response.length === 0) throw notFoundError("Not Found");
@@ -70,17 +66,13 @@ export function fetchTranslationListWithIdFilter(
   TranslationContent[],
   NuxtError<TranslationContent> | NuxtError<null> | undefined
 > {
+  const { $risBackend } = useNuxtApp();
+
   return useAsyncData(
     `translations-list-with_id-${id}`,
     async () => {
-      const config = useRuntimeConfig();
-      const response = await $fetch<TranslationContent[]>(
+      const response = await $risBackend<TranslationContent[]>(
         translationDetailURL(id),
-        {
-          headers: {
-            Authorization: `Basic ${config.basicAuth}`,
-          },
-        },
       );
 
       if (!response || response.length === 0) throw notFoundError("Not Found");
@@ -94,17 +86,13 @@ export function fetchTranslationListWithIdFilter(
 export function fetchTranslationAndHTML(
   id: string,
 ): AsyncData<TranslationData, NuxtError | undefined> {
+  const { $risBackend } = useNuxtApp();
+
   return useAsyncData(
     `translation-and-html-${id}`,
     async () => {
-      const config = useRuntimeConfig();
-      const translationsList = await $fetch<TranslationContent[]>(
+      const translationsList = await $risBackend<TranslationContent[]>(
         translationDetailURL(id),
-        {
-          headers: {
-            Authorization: `Basic ${config.basicAuth}`,
-          },
-        },
       );
 
       if (!translationsList || translationsList.length === 0) {
@@ -117,12 +105,14 @@ export function fetchTranslationAndHTML(
         throw notFoundError("Translation filename not found");
       }
 
-      const htmlData = await $fetch<string>(translationHtmlURL(htmlFilename), {
-        headers: {
-          Accept: "text/html",
-          Authorization: `Basic ${config.basicAuth}`,
+      const htmlData = await $risBackend<string>(
+        translationHtmlURL(htmlFilename),
+        {
+          headers: {
+            Accept: "text/html",
+          },
         },
-      });
+      );
 
       return { content: firstTranslationsListElement, html: htmlData };
     },
@@ -133,19 +123,15 @@ export function fetchTranslationAndHTML(
 export function getGermanOriginal(
   id: string,
 ): AsyncData<SearchResult<LegislationWork> | null, NuxtError | undefined> {
+  const { $risBackend } = useNuxtApp();
+
   return useAsyncData(
     `german-original-${id}`,
     async () => {
-      const config = useRuntimeConfig();
       const currentDateInGermanyFormatted = getCurrentDateInGermanyFormatted();
-      const response = await $fetch<JSONLDList<SearchResult<LegislationWork>>>(
-        legislationSearchURL(id, currentDateInGermanyFormatted),
-        {
-          headers: {
-            Authorization: `Basic ${config.basicAuth}`,
-          },
-        },
-      );
+      const response = await $risBackend<
+        JSONLDList<SearchResult<LegislationWork>>
+      >(legislationSearchURL(id, currentDateInGermanyFormatted));
 
       if (!response || response.member.length === 0) {
         throw notFoundError("Not Found");

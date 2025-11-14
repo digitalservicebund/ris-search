@@ -35,7 +35,6 @@ export function useFetchNormContent(
   NormContent,
   NuxtError<NormContent> | NuxtError<null> | undefined
 > {
-  // unlike $fetch, useRequestFetch forwards client cookies
   return useAsyncData(
     `json+html for ${expressionEli}`,
     async () => {
@@ -134,28 +133,24 @@ export function useFetchNormArticleContent(
   NormArticleContent,
   NuxtError<NormContent> | NuxtError<null> | undefined
 > {
+  const { $risBackend } = useNuxtApp();
+
   return useAsyncData(
     `json+html for ${expressionEli}/${articleEId}`,
     async () => {
       const config = useRuntimeConfig();
       const backendUrl = config.public.risBackendUrl;
-      const metadata = await $fetch<LegislationWork>(
+      const metadata = await $risBackend<LegislationWork>(
         `${backendUrl}/v1/legislation/eli/${expressionEli}`,
-        {
-          headers: {
-            Authorization: `Basic ${config.basicAuth}`,
-          },
-        },
       );
       // build the article URL by appending the eId in front of the .html suffix
       const adaptedContentUrl = getContentUrl(metadata).replace(
         /\.html$/,
         `/${articleEId}.html`,
       );
-      const html = await $fetch<string>(backendUrl + adaptedContentUrl, {
+      const html = await $risBackend<string>(backendUrl + adaptedContentUrl, {
         headers: {
           Accept: "text/html",
-          Authorization: `Basic ${config.basicAuth}`,
         },
       });
       const document = parseDocument(html);

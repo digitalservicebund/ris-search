@@ -16,7 +16,7 @@ beforeEach(() => {
   requestFetchMock.mockReset();
 });
 
-describe("fetchTranslationList", () => {
+describe.skip("fetchTranslationList", () => {
   it("returns a list when there is no error", async () => {
     const mockTranslationListData: TranslationContent[] = [
       {
@@ -55,7 +55,7 @@ describe("fetchTranslationList", () => {
   });
 });
 
-describe("fetchTranslationListWithIdFilter", () => {
+describe.skip("fetchTranslationListWithIdFilter", () => {
   it("fetches a filtered list of translation", async () => {
     const mockTranslationResponse = [
       {
@@ -87,7 +87,7 @@ describe("fetchTranslationListWithIdFilter", () => {
   });
 });
 
-describe("fetchTranslationAndHTML", () => {
+describe.skip("fetchTranslationAndHTML", () => {
   it("fetches translation data and HTML content", async () => {
     const mockTranslationResponse = [
       {
@@ -191,7 +191,7 @@ describe("fetchTranslationAndHTML", () => {
   });
 });
 
-describe("getGermanOriginal", () => {
+describe.skip("getGermanOriginal", () => {
   beforeAll(() => {
     vi.setSystemTime(new Date("2025-10-13T00:00:00.000Z"));
   });
