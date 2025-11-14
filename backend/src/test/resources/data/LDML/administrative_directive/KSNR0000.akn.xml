@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<akn:akomaNtoso
+        xmlns:akn="http://docs.oasis-open.org/legaldocml/ns/akn/3.0"
+        xmlns:ris="http://ldml.neuris.de/meta/">
+    <akn:doc name="offene-struktur">
+        <akn:meta>
+            <akn:identification source="attributsemantik-noch-undefiniert">
+                <akn:FRBRWork>
+                    <akn:FRBRalias name="Dokumentnummer" value="KSNR0000"/>
+                </akn:FRBRWork>
+                <akn:FRBRExpression>
+                    <akn:FRBRdate date="2024-01-01" name="Zitierdatum" ris:domainTerm="Zitierdatum"/>
+                </akn:FRBRExpression>
+            </akn:identification>
+            <akn:analysis source="attributsemantik-noch-undefiniert">
+                <akn:otherReferences source="attributsemantik-noch-undefiniert">
+                    <akn:implicitReference shortForm="PhanGB" showAs="PhanGB">
+                        <ris:normReference/>
+                    </akn:implicitReference>
+                    <akn:implicitReference shortForm="AI" showAs="Aktivzitierung I">
+                        <ris:caselawReference/>
+                    </akn:implicitReference>
+                    <akn:implicitReference showAs="Lorem Ipsum 19XX, 11" shortForm="Lorem Ipsum"/>
+                </akn:otherReferences>
+            </akn:analysis>
+            <akn:classification source="attributsemantik-noch-undefiniert">
+                <akn:keyword showAs="Schlagwort1" dictionary="attributsemantik-noch-undefiniert" value="Schlagwort1"/>
+                <akn:keyword showAs="Schlagwort2" dictionary="attributsemantik-noch-undefiniert" value="Schlagwort2"/>
+            </akn:classification>
+            <akn:proprietary source="attributsemantik-noch-undefiniert">
+                <ris:meta>
+                    <ris:normgeber staat="NG Ministerium"/>
+                    <ris:entryIntoEffectDate>1978-01-17</ris:entryIntoEffectDate>
+                    <ris:expiryDate>2026-01-01</ris:expiryDate>
+                    <ris:documentType category="VR" longTitle="Rundschreiben">VR Rundschreiben</ris:documentType>
+                    <ris:tableOfContentsEntries>
+                        <ris:tableOfContentsEntry>item 1</ris:tableOfContentsEntry>
+                        <ris:tableOfContentsEntry>item 2</ris:tableOfContentsEntry>
+                    </ris:tableOfContentsEntries>
+                    <ris:referenceNumbers>
+                        <ris:referenceNumber>RFR I</ris:referenceNumber>
+                    </ris:referenceNumbers>
+                    <ris:activeReferences>
+                        <ris:activeReference dateOfVersion="2024-01-01" reference="VR Full Reference 2024-01-01 00001" typeNumber="1"/>
+                        <ris:activeReference paragraph="§ 1" position="Abs 1" reference="ArbGG" typeNumber="2"/>
+                    </ris:activeReferences>
+                    <ris:fieldsOfLaw>
+                        <ris:fieldOfLaw notation="OLD">01-01-01-01</ris:fieldOfLaw>
+                    </ris:fieldsOfLaw>
+                    <ris:zuordnungen>
+                        <ris:zuordnung aspekt="aspekt" begriff="begriff"/>
+                    </ris:zuordnungen>
+                </ris:meta>
+            </akn:proprietary>
+        </akn:meta>
+        <akn:preface>
+            <akn:longTitle>
+                <akn:block name="longTitle">long title
+                </akn:block>
+            </akn:longTitle>
+        </akn:preface>
+        <akn:mainBody>
+            <akn:div>
+                <akn:p>text content
+                </akn:p>
+            </akn:div>
+        </akn:mainBody>
+    </akn:doc>
+</akn:akomaNtoso>

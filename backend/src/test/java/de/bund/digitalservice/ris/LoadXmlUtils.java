@@ -1,5 +1,6 @@
 package de.bund.digitalservice.ris;
 
+import de.bund.digitalservice.ris.search.models.opensearch.AdministrativeDirective;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import de.bund.digitalservice.ris.search.models.opensearch.Literature;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
@@ -27,6 +28,8 @@ public class LoadXmlUtils {
   private static final String CASELAW_FOLDER = TEST_DATA_FOLDER + "/caselaw/";
   private static final String NORM_FOLDER = TEST_DATA_FOLDER + "/norm/";
   private static final String LITERATURE_FOLDER = TEST_DATA_FOLDER + "/literature/";
+  private static final String ADMINISTRATIVE_REGULATION_FOLDER =
+      TEST_DATA_FOLDER + "/administrative_directive/";
 
   /**
    * Loads an XML test file from the appropriate folder under {@code src/test/resources/data/LDML/}
@@ -57,6 +60,8 @@ public class LoadXmlUtils {
       folder = CASELAW_FOLDER;
     } else if (clazz == Norm.class) {
       folder = NORM_FOLDER;
+    } else if (clazz == AdministrativeDirective.class) {
+      folder = ADMINISTRATIVE_REGULATION_FOLDER;
     } else {
       throw new IllegalArgumentException("Unsupported class type: " + clazz.getSimpleName());
     }

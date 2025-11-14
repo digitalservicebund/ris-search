@@ -1,0 +1,13 @@
+package de.bund.digitalservice.ris.search.models.ldml.directive;
+
+import jakarta.xml.bind.annotation.XmlElement;
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
+public class Preface {
+
+  @XmlElement(namespace = AdministrativeDirectiveLdml.AKN_NS)
+  LongTitle longTitle;
+}
