@@ -27,7 +27,7 @@ useStaticPageSeo("ueber");
         <p>
           Der Service befindet sich in der Testphase. Sie haben die Möglichkeit,
           frühzeitig erste Funktionen zu testen und uns
-          <NuxtLink class="ris-link1-regular" to="/feedback"
+          <NuxtLink class="ris-link1-regular" :to="{ name: 'feedback' }"
             >Feedback zu geben</NuxtLink
           >. Die Funktionen und der Umfang der Daten werden schrittweise
           erweitert.
@@ -123,7 +123,7 @@ useStaticPageSeo("ueber");
         </div>
         <div class="max-w-prose">
           Ihnen fehlen noch Funktionen?
-          <NuxtLink class="ris-link1-regular" to="/feedback"
+          <NuxtLink class="ris-link1-regular" :to="{ name: 'feedback' }"
             >Teilen Sie uns mit</NuxtLink
           >, welche Funktionen wir noch berücksichtigen oder priorisieren
           sollten.

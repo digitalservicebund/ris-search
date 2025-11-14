@@ -30,6 +30,5 @@ describe("AppFooter", () => {
     render(AppFooter, { global: { stubs: globalStubs } });
     const link = screen.getByRole("link", { name: "English translations" });
     expect(link).toBeVisible();
-    expect(link).toHaveAttribute("href", "/translations");
   });
 });

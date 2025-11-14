@@ -11,7 +11,7 @@ import IconSearch from "~icons/ic/search?width=20&height=20";
       <Logo />
       <NuxtLink
         class="ris-link1-regular link-hover flex items-center gap-4 decoration-3 aria-[current=page]:underline"
-        to="/search"
+        :to="{ name: 'search' }"
         ><IconSearch />Suche</NuxtLink
       >
     </div>

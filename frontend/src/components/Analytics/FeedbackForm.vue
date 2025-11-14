@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import PrimevueTextarea from "primevue/textarea";
+import { NuxtLink } from "#components";
 import { usePostHogStore } from "~/stores/usePostHogStore";
 import { isStringEmpty } from "~/utils/textFormatting";
 import ErrorOutline from "~icons/material-symbols/error-outline";
@@ -74,9 +75,14 @@ watch(
         <li>und eine ruhige Umgebung</li>
       </ul>
       <!-- Temporarily disabled due to data issue with Form bricks -->
-      <ButtonLink v-if="false" href="/nutzungstests" class="flex flex-row"
-        >Für Nutzungsstudien registrieren
-      </ButtonLink>
+      <Button
+        v-if="false"
+        :as="NuxtLink"
+        :to="{ name: 'usage-tests' }"
+        class="flex flex-row"
+      >
+        Für Nutzungsstudien registrieren
+      </Button>
     </div>
     <form
       v-else

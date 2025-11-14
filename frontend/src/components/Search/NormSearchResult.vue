@@ -104,7 +104,10 @@ const validityStatus = computed(() => {
         <div class="ris-label1-bold">
           <NuxtLink
             class="link-hover text-blue-800"
-            :to="`${link}#${highlight.location || ''}`"
+            :to="{
+              path: `${link}`,
+              hash: highlight.location ? `#${highlight.location}` : undefined,
+            }"
             @click="openResult(`${link}#${highlight.location || ''}`)"
           >
             <h3 v-html="sanitizeSearchResult(highlight.name)" />

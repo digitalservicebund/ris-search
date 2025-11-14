@@ -7,7 +7,11 @@ const handleClick = () => {
 };
 </script>
 <template>
-  <a href="#top" aria-label="zum Seitenanfang" @click.prevent="handleClick">
+  <NuxtLink
+    :to="{ hash: '#top' }"
+    aria-label="zum Seitenanfang"
+    @click.prevent="handleClick"
+  >
     <svg
       viewBox="0 0 42 42"
       width="42"
@@ -23,5 +27,5 @@ const handleClick = () => {
         d="M21.2 16.5a.3.3 0 0 0-.4 0l-6.6 6.6a.2.2 0 0 0 0 .3l1 1.1a.2.2 0 0 0 .4 0l5.4-5.4 5.4 5.4a.2.2 0 0 0 .3 0l1-1a.2.2 0 0 0 0-.4Z"
       />
     </svg>
-  </a>
+  </NuxtLink>
 </template>

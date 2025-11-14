@@ -7,8 +7,8 @@ const item = props.item;
 
 <template>
   <div>
-    <NuxtLink :to="'norms/' + item.workExample.legislationIdentifier"
-      ><h2 class="ris-link3-bold max-w-title">
+    <NuxtLink :to="`/norms/${item.workExample.legislationIdentifier}`">
+      <h2 class="ris-link3-bold max-w-title">
         {{ item.name }}
         <span v-if="item.abbreviation">({{ item.abbreviation }})</span>
       </h2>

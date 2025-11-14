@@ -40,41 +40,51 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
       <div class="space-y-16">
         <ul class="grid grid-flow-col grid-cols-2 grid-rows-5 gap-8">
           <li>
-            <NuxtLink class="ris-link2-regular link-hover" to="/kontakt"
+            <NuxtLink
+              class="ris-link2-regular link-hover"
+              :to="{ name: 'contact' }"
               >Kontakt</NuxtLink
             >
           </li>
           <li>
-            <NuxtLink class="ris-link2-regular link-hover" to="/impressum"
+            <NuxtLink
+              class="ris-link2-regular link-hover"
+              :to="{ name: 'imprint' }"
               >Impressum</NuxtLink
             >
           </li>
           <li>
-            <NuxtLink class="ris-link2-regular link-hover" to="/datenschutz"
+            <NuxtLink
+              class="ris-link2-regular link-hover"
+              :to="{ name: 'data-protection' }"
               >Datenschutzerklärung</NuxtLink
             >
           </li>
           <li>
             <NuxtLink
               class="ris-link2-regular link-hover"
-              to="/barrierefreiheit"
+              :to="{ name: 'accessibility' }"
               >Barrierefreiheit</NuxtLink
             >
           </li>
           <li>
             <NuxtLink
               class="ris-link2-regular link-hover"
-              to="/cookie-einstellungen"
+              :to="{ name: 'cookie-settings' }"
               >Cookie-Einstellungen</NuxtLink
             >
           </li>
           <li v-if="privateFeaturesEnabled">
-            <NuxtLink class="ris-link2-regular link-hover" href="/translations"
+            <NuxtLink
+              class="ris-link2-regular link-hover"
+              :to="{ name: 'translations' }"
               >English translations</NuxtLink
             >
           </li>
           <li>
-            <NuxtLink class="ris-link2-regular link-hover" href="/opensource"
+            <NuxtLink
+              class="ris-link2-regular link-hover"
+              :to="{ name: 'open-source' }"
               >Open Source</NuxtLink
             >
           </li>
@@ -87,7 +97,9 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
           </li>
           <!-- Temporarily disabled due to data issue with Form bricks -->
           <li v-if="false">
-            <NuxtLink class="ris-link2-regular link-hover" to="/nutzungstests"
+            <NuxtLink
+              class="ris-link2-regular link-hover"
+              :to="{ name: 'usage-tests' }"
               >Nutzungstests</NuxtLink
             >
           </li>

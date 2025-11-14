@@ -10,15 +10,15 @@ import MaterialSymbolsWarningOutline from "~icons/material-symbols/warning-outli
       <MaterialSymbolsWarningOutline class="shrink-0" />
       <div>
         <p>
-          <span class="ris-body2-bold"
-            >Dieser Service befindet sich in der Testphase.</span
-          >
+          <span class="ris-body2-bold">
+            Dieser Service befindet sich in der Testphase.
+          </span>
           Testen Sie erste Funktionen und geben Sie Feedback für die
           Weiterentwicklung.
         </p>
-        <NuxtLink class="ris-link2-regular text-black" to="/ueber"
-          >Finden Sie heraus, was das bedeutet</NuxtLink
-        >
+        <NuxtLink class="ris-link2-regular text-black" :to="{ name: 'about' }">
+          Finden Sie heraus, was das bedeutet
+        </NuxtLink>
       </div>
     </div>
   </div>

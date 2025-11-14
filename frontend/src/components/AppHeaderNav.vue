@@ -15,21 +15,21 @@ defineEmits(["selectItem"]);
       <li @click="$emit('selectItem')">
         <NuxtLink
           class="ris-link1-regular link-hover flex items-center gap-4 decoration-3 aria-[current=page]:underline"
-          to="/search"
+          :to="{ name: 'search' }"
           ><IconSearch />Suche</NuxtLink
         >
       </li>
       <li @click="$emit('selectItem')">
         <NuxtLink
           class="ris-link1-regular link-hover decoration-3 aria-[current=page]:underline"
-          to="/feedback"
+          :to="{ name: 'feedback' }"
           >Feedback geben</NuxtLink
         >
       </li>
       <li @click="$emit('selectItem')">
         <NuxtLink
           class="ris-link1-regular link-hover decoration-3 aria-[current=page]:underline"
-          to="/ueber"
+          :to="{ name: 'about' }"
           >Über den Service</NuxtLink
         >
       </li>
