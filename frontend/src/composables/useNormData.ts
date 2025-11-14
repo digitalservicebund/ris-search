@@ -41,7 +41,7 @@ export function useFetchNormContent(
     `json+html for ${expressionEli}`,
     async () => {
       const metadata = await $risBackend<LegislationWork>(
-        useBackendUrl(`v1/legislation/eli/${expressionEli}`),
+        useBackendUrl(`/v1/legislation/eli/${expressionEli}`),
       );
       const contentUrl = getContentUrl(metadata);
       const html = await $risBackend<string>(useBackendUrl(contentUrl), {
