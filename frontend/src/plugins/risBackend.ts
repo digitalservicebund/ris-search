@@ -1,9 +1,12 @@
 export default defineNuxtPlugin(() => {
-  const basicAuth = useRuntimeConfig().basicAuth;
+  const config = useRuntimeConfig();
+  const basicAuth = config.basicAuth;
 
   const risBackend = $fetch.create({
     onRequest({ options }) {
-      options.headers.set("Authorization", `Basic ${basicAuth}`);
+      if (import.meta.server && basicAuth) {
+        options.headers.set("Authorization", `Basic ${basicAuth}`);
+      }
     },
   });
 
