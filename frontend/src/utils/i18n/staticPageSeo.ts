@@ -8,7 +8,7 @@ export type StaticPage =
   | "datenschutz"
   | "barrierefreiheit"
   | "cookies"
-  | "opensource"
+  | "open-source"
   | "nutzungstests"
   | "api"
   | "nutzungstests-datenschutz"
@@ -65,7 +65,7 @@ export const staticPageSeo: Record<StaticPage, StaticPageSeo> = {
     description:
       "Wählen Sie, welche Cookies Sie zulassen – für eine bessere, datenschutzgerechte Nutzung.",
   },
-  opensource: {
+  "open-source": {
     title: "Open Source im Rechtsinformationsportal des Bundes",
     description:
       "Informationen zur verwendeten Open-Source-Software, zu Lizenzen und Beteiligungsmöglichkeiten.",

@@ -153,7 +153,7 @@ const responsiveStyles = `max-lg:fixed max-lg:left-0 max-lg:top-0 max-lg:h-full 
       aria-label="Inhaltsverzeichnis des aktuellen Gesetzes"
     >
       <template #default="{ node }">
-        <router-link
+        <NuxtLink
           v-if="node.route"
           :to="node.route"
           class="no-underline"
@@ -164,7 +164,7 @@ const responsiveStyles = `max-lg:fixed max-lg:left-0 max-lg:top-0 max-lg:h-full 
           "
         >
           {{ node.label }}
-        </router-link>
+        </NuxtLink>
         <span v-else class="w-full no-underline" @click="toggleNode(node)">
           {{ node.label }}
         </span>

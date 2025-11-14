@@ -3,6 +3,7 @@ import Properties from "~/components/Properties.vue";
 import PropertiesItem from "~/components/PropertiesItem.vue";
 
 definePageMeta({ alias: "/ecli/:ecli" });
+
 const route = useRoute();
 
 const ecli = computed(() => {

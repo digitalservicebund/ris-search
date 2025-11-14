@@ -104,7 +104,7 @@ onMounted(() => {
         <NuxtLink
           :aria-current="selectedEntry === entry.id ? 'location' : undefined"
           replace
-          :to="`#${entry.id}`"
+          :to="{ hash: `#${entry.id}` }"
           class="flex flex-row items-center space-x-12 py-8 text-blue-800 underline hover:text-black hover:underline aria-[current=location]:bg-blue-300 aria-[current=location]:text-black aria-[current=location]:hover:bg-blue-300 lg:px-24 lg:py-20 lg:no-underline lg:hover:bg-blue-200 lg:aria-[current=location]:border-l-4 lg:aria-[current=location]:border-blue-900 lg:aria-[current=location]:bg-blue-200 lg:aria-[current=location]:pl-20"
           @click="selectEntry(entry.id)"
         >

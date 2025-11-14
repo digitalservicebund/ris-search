@@ -18,12 +18,12 @@ useStaticPageSeo("barrierefreiheit");
       <section class="space-y-16">
         <p>
           Diese Erklärung zur Barrierefreiheit gilt für die unter
-          <a
-            href="https://testphase.rechtsinformationen.bund.de"
+          <NuxtLink
+            to="https://testphase.rechtsinformationen.bund.de"
             class="ris-link1-regular"
           >
-            testphase.rechtsinformationen.bund.de</a
-          >
+            testphase.rechtsinformationen.bund.de
+          </NuxtLink>
           veröffentlichte Website des Bundesministeriums der Justiz und für
           Verbraucherschutz.
         </p>
@@ -31,17 +31,19 @@ useStaticPageSeo("barrierefreiheit");
           Als öffentliche Stelle im Sinne der Richtlinie (EU) 2016/2102 sind wir
           bemüht, unsere Website und unsere mobilen Anwendungen im Einklang mit
           den Bestimmungen des Behindertengleichstellungsgesetzes
-          <a
-            href="https://www.gesetze-im-internet.de/bgg/BJNR146800002.html"
+          <NuxtLink
+            to="https://www.gesetze-im-internet.de/bgg/BJNR146800002.html"
             class="ris-link1-regular"
-            >(BGG)</a
           >
+            (BGG)
+          </NuxtLink>
           und der Barrierefreie-Informationstechnik-Verordnung
-          <a
-            href="https://www.gesetze-im-internet.de/bitv_2_0/"
+          <NuxtLink
+            to="https://www.gesetze-im-internet.de/bitv_2_0/"
             class="ris-link1-regular"
-            >(BITV 2.0)</a
           >
+            (BITV 2.0)
+          </NuxtLink>
           zur Umsetzung der Richtlinie (EU) 2016/2102 barrierefrei zu machen.
         </p>
         <p>
@@ -100,11 +102,12 @@ useStaticPageSeo("barrierefreiheit");
           Schlichtungsverfahren ist kostenlos. Es muss kein Rechtsbeistand
           eingeschaltet werden. Weitere Informationen zum Schlichtungsverfahren
           und den Möglichkeiten der Antragstellung erhalten Sie unter:
-          <a
-            href="https://www.schlichtungsstelle-bgg.de"
+          <NuxtLink
+            to="https://www.schlichtungsstelle-bgg.de"
             class="ris-link1-regular"
-            >www.schlichtungsstelle-bgg.de</a
           >
+            www.schlichtungsstelle-bgg.de
+          </NuxtLink>
         </p>
         <p>
           Direkt kontaktieren können Sie die Schlichtungsstelle BGG unter:<br />

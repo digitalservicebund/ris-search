@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import { useRoute, useRouter } from "#imports";
+import { useRoute } from "#imports";
 import MdiChevronRight from "~icons/mdi/chevron-right";
 import MdiChevronUp from "~icons/mdi/chevron-up";
 
@@ -19,7 +19,6 @@ export type MenuItemProps = {
 const props = defineProps<MenuItemProps>();
 const emit = defineEmits<(e: "click") => void>();
 const route = useRoute();
-const router = useRouter();
 const isMenuDisabled = true;
 
 const currentHash = computed(() => (route.hash ?? "").replace("#", ""));
@@ -62,7 +61,7 @@ function handleClick(e: MouseEvent) {
       ?.find((c) => c.link.includes("#"))
       ?.link.split("#")[1];
     const targetHash = ownHash || firstChildHash;
-    if (targetHash) router.replace({ hash: `#${targetHash}` });
+    if (targetHash) navigateTo({ hash: `#${targetHash}` }, { replace: true });
     emit("click");
   } else {
     emit("click");

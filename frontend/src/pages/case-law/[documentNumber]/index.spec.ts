@@ -5,7 +5,7 @@ import {
 } from "@nuxt/test-utils/runtime";
 import userEvent from "@testing-library/user-event";
 import { screen } from "@testing-library/vue";
-import { mount, RouterLinkStub } from "@vue/test-utils";
+import { mount } from "@vue/test-utils";
 import dayjs from "dayjs";
 import { expect, it, vi } from "vitest";
 import { unref } from "vue";
@@ -392,7 +392,10 @@ describe("case law single view page", async () => {
     const wrapper = await mountSuspended(CaseLawPage, {
       global: {
         stubs: {
-          NuxtLink: RouterLinkStub,
+          NuxtLink: {
+            props: ["to"],
+            template: `<a :href="to"><slot /></a>`,
+          },
         },
       },
     });

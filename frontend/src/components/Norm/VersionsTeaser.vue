@@ -1,4 +1,6 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { NuxtLink } from "#components";
+</script>
 <template>
   <div class="container">
     <div class="max-w-prose">
@@ -21,14 +23,14 @@
         Erfahrungen mit uns teilen und unseren Service testen.
       </p>
       <!-- Temporarily disabled due to data issue with Form bricks -->
-      <ButtonLink
+      <Button
         v-if="false"
+        :as="NuxtLink"
         class="mt-16"
-        variant="primary"
-        href="/nutzungstests"
+        :to="{ name: 'usage-tests' }"
       >
         Mehr über Nutzungstest erfahren
-      </ButtonLink>
+      </Button>
     </div>
   </div>
 </template>
