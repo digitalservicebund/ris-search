@@ -40,11 +40,13 @@ export function useFetchNormContent(
   return useAsyncData(
     `json+html for ${expressionEli}`,
     async () => {
+      const backendUrl = useBackendUrl();
       const metadata = await $risBackend<LegislationWork>(
-        useBackendUrl(`/v1/legislation/eli/${expressionEli}`),
+        backendUrl + `/v1/legislation/eli/${expressionEli}`,
       );
       const contentUrl = getContentUrl(metadata);
-      const html = await $risBackend<string>(useBackendUrl(contentUrl), {
+
+      const html = await $risBackend<string>(backendUrl + contentUrl, {
         headers: {
           Accept: "text/html",
         },
@@ -132,15 +134,16 @@ export function useFetchNormArticleContent(
   return useAsyncData(
     `json+html for ${expressionEli}/${articleEId}`,
     async () => {
+      const backendUrl = useBackendUrl();
       const metadata = await $risBackend<LegislationWork>(
-        useBackendUrl(`/v1/legislation/eli/${expressionEli}`),
+        `${backendUrl}/v1/legislation/eli/${expressionEli}`,
       );
       // build the article URL by appending the eId in front of the .html suffix
       const adaptedContentUrl = getContentUrl(metadata).replace(
         /\.html$/,
         `/${articleEId}.html`,
       );
-      const html = await $risBackend<string>(useBackendUrl(adaptedContentUrl), {
+      const html = await $risBackend<string>(backendUrl + adaptedContentUrl, {
         headers: {
           Accept: "text/html",
         },
