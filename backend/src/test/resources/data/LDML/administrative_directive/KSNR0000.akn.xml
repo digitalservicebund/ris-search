@@ -47,6 +47,9 @@
                     <ris:fieldsOfLaw>
                         <ris:fieldOfLaw notation="OLD">01-01-01-01</ris:fieldOfLaw>
                     </ris:fieldsOfLaw>
+                    <ris:zuordnungen>
+                        <ris:zuordnung aspekt="aspekt" begriff="begriff"/>
+                    </ris:zuordnungen>
                 </ris:meta>
             </akn:proprietary>
         </akn:meta>

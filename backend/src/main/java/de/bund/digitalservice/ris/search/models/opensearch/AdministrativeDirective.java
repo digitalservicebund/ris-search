@@ -34,6 +34,7 @@ public record AdministrativeDirective(
         List<String> activeNormReferences,
     @ElementCollection @Field(name = Fields.KEYWORDS) List<String> keywords,
     @ElementCollection @Field(name = Fields.FIELDS_OF_LAW) List<String> fieldsOfLaw,
+    @ElementCollection @Field(name = Fields.ZUORDNUNGEN) List<String> zuordnungen,
     @JsonIgnore @Field(name = Literature.Fields.INDEXED_AT) String indexedAt) {
 
   public static class Fields {
@@ -77,5 +78,7 @@ public record AdministrativeDirective(
     public static final String KEYWORDS = "keywords";
 
     public static final String FIELDS_OF_LAW = "fields_of_law";
+
+    public static final String ZUORDNUNGEN = "zuordnungen";
   }
 }

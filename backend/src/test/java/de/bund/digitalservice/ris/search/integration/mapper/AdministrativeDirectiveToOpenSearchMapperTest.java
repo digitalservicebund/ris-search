@@ -39,6 +39,7 @@ class AdministrativeDirectiveToOpenSearchMapperTest {
             .activeNormReferences(List.of("ArbGG § 1 Abs 1"))
             .keywords(List.of("Schlagwort1", "Schlagwort2"))
             .fieldsOfLaw(List.of("01-01-01-01"))
+            .zuordnungen(List.of("aspekt begriff"))
             .build();
 
     assertThat(entity).isEqualTo(expected);

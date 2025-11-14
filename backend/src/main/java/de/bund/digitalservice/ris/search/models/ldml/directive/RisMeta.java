@@ -40,4 +40,8 @@ public class RisMeta {
   @XmlElementWrapper(name = "fieldsOfLaw", namespace = AdministrativeDirectiveLdml.RIS_NS)
   @XmlElement(name = "fieldOfLaw", namespace = AdministrativeDirectiveLdml.RIS_NS)
   private List<FieldOfLaw> fieldsOfLaw;
+
+  @XmlElementWrapper(name = "zuordnungen", namespace = AdministrativeDirectiveLdml.RIS_NS)
+  @XmlElement(name = "zuordnung", namespace = AdministrativeDirectiveLdml.RIS_NS)
+  private List<Zuordnung> zuordnungen;
 }

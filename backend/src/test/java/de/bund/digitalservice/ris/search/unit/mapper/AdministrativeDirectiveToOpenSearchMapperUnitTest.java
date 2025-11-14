@@ -17,6 +17,7 @@ import de.bund.digitalservice.ris.search.models.ldml.directive.Meta;
 import de.bund.digitalservice.ris.search.models.ldml.directive.Normgeber;
 import de.bund.digitalservice.ris.search.models.ldml.directive.Proprietary;
 import de.bund.digitalservice.ris.search.models.ldml.directive.RisMeta;
+import de.bund.digitalservice.ris.search.models.ldml.directive.Zuordnung;
 import de.bund.digitalservice.ris.search.models.opensearch.AdministrativeDirective;
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -104,5 +105,21 @@ class AdministrativeDirectiveToOpenSearchMapperUnitTest {
             });
 
     assertThat(e.getMessage()).isEqualTo("field of law value is null");
+  }
+
+  @Test
+  void itThrowsAnOpenSearchMapperExceptionOnInvalidZuordnung() {
+    AdministrativeDirectiveLdml ldml = getLdmlWithMandatoryFields();
+
+    ldml.getDoc().getMeta().getProprietary().getMeta().setZuordnungen(List.of(new Zuordnung()));
+
+    OpenSearchMapperException e =
+        assertThrows(
+            OpenSearchMapperException.class,
+            () -> {
+              AdministrativeDirectiveLdmlToOpenSearchMapper.map(ldml);
+            });
+
+    assertThat(e.getMessage()).isEqualTo("invalid zuordnung");
   }
 }

@@ -22,6 +22,7 @@ import de.bund.digitalservice.ris.search.models.ldml.directive.OtherReferences;
 import de.bund.digitalservice.ris.search.models.ldml.directive.Preface;
 import de.bund.digitalservice.ris.search.models.ldml.directive.Proprietary;
 import de.bund.digitalservice.ris.search.models.ldml.directive.RisMeta;
+import de.bund.digitalservice.ris.search.models.ldml.directive.Zuordnung;
 import de.bund.digitalservice.ris.search.models.opensearch.AdministrativeDirective;
 import jakarta.xml.bind.DataBindingException;
 import jakarta.xml.bind.JAXB;
@@ -64,6 +65,7 @@ public class AdministrativeDirectiveLdmlToOpenSearchMapper {
           .activeNormReferences(getActiveNormReferences(ldml))
           .keywords(getKeywords(ldml))
           .fieldsOfLaw(getFieldsOfLaw(ldml))
+          .zuordnungen(getZuordnungen(ldml))
           .build();
     } catch (ValidationException e) {
       throw new OpenSearchMapperException(e.getMessage());
@@ -280,5 +282,19 @@ public class AdministrativeDirectiveLdmlToOpenSearchMapper {
       }
     }
     return fieldsOfLaw.stream().map(FieldOfLaw::getValue).toList();
+  }
+
+  private static List<String> getZuordnungen(AdministrativeDirectiveLdml ldml)
+      throws ValidationException {
+    List<Zuordnung> zuordnungen = getRisMeta(ldml).map(RisMeta::getZuordnungen).orElse(List.of());
+
+    for (Zuordnung zuordnung : zuordnungen) {
+      if (Objects.isNull(zuordnung.getAspekt()) || Objects.isNull(zuordnung.getBegriff())) {
+        throw new ValidationException("invalid zuordnung");
+      }
+    }
+    return zuordnungen.stream()
+        .map(z -> String.format("%s %s", z.getAspekt(), z.getBegriff()))
+        .toList();
   }
 }
