@@ -60,7 +60,7 @@ export function fetchTranslationList(): AsyncData<
 
       return response;
     },
-    { server: false },
+    { server: true, lazy: false },
   );
 }
 
@@ -87,7 +87,7 @@ export function fetchTranslationListWithIdFilter(
 
       return response;
     },
-    { server: false },
+    { server: true, lazy: false },
   );
 }
 
@@ -126,7 +126,7 @@ export function fetchTranslationAndHTML(
 
       return { content: firstTranslationsListElement, html: htmlData };
     },
-    { server: false },
+    { server: true, lazy: false },
   );
 }
 
@@ -158,6 +158,6 @@ export function getGermanOriginal(
       }
       throw notFoundError(`Not Found: Abbreviation mismatch for ID: ${id}`);
     },
-    { server: false },
+    { server: true, lazy: false },
   );
 }
