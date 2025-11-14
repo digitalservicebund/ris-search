@@ -189,6 +189,30 @@
           "type": "alias",
           "path": "deviating_document_number"
         },
+        "STATUS": {
+          "type": "alias",
+          "path": "publication_status"
+        },
+        "FEHLER": {
+          "type": "alias",
+          "path": "error"
+        },
+        "VORGANG": {
+          "type": "alias",
+          "path": "procedures"
+        },
+        "VG": {
+          "type": "alias",
+          "path": "procedures"
+        },
+        "RECHTSKRAFT": {
+          "type": "alias",
+          "path": "legal_effect"
+        },
+        "RK": {
+          "type": "alias",
+          "path": "legal_effect"
+        },
         "case_facts": {
           "type": "text",
           "analyzer": "custom_german_analyzer",
@@ -329,16 +353,8 @@
         "publication_status": {
           "type": "keyword"
         },
-        "STATUS": {
-          "type": "alias",
-          "path": "publication_status"
-        },
         "error": {
           "type": "boolean"
-        },
-        "FEHLER": {
-          "type": "alias",
-          "path": "error"
         },
         "documentation_office": {
           "type": "keyword"
@@ -346,25 +362,25 @@
         "procedures": {
           "type": "keyword"
         },
-        "VORGANG": {
-          "type": "alias",
-          "path": "procedures"
-        },
-        "VG": {
-          "type": "alias",
-          "path": "procedures"
-        },
         "legal_effect": {
           "type": "text",
           "analyzer": "custom_german_analyzer"
         },
-        "RECHTSKRAFT": {
-          "type": "alias",
-          "path": "legal_effect"
+        "previous_decisions" : {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
         },
-        "RK": {
-          "type": "alias",
-          "path": "legal_effect"
+        "ensuing_decisions" : {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
+        "pending_decisions" : {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
+        "has_legislative_mandate" : {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
         },
         "indexed_at": {
           "type": "date"

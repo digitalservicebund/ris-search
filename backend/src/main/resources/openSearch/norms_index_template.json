@@ -156,11 +156,23 @@
           "type": "text",
           "analyzer": "custom_german_analyzer"
         },
+        "entry_into_force_date": {
+          "type": "date"
+        },
         "expiry_date": {
           "type": "date"
         },
-        "entry_into_force_date": {
-          "type": "date"
+        "full_citation": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
+        "official_toc": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
+        "official_foot_notes": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
         }
       }
     }

@@ -73,4 +73,33 @@ class IndexNormsServiceTest extends ContainersIntegrationBase {
     assertThat(expressions.getLast().getTimeRelevanceEndDate())
         .isEqualTo(IndexNormsService.TIME_RELEVANCE_MAX);
   }
+
+  @Test
+  @DisplayName("Full citation indexes properly")
+  void fullCitationIndexesProperly() {
+    indexNormsService.reindexAll(Instant.now().toString());
+    Norm expression =
+        normsRepository.getByExpressionEli("eli/bund/bgbl-1/1991/s102/1991-01-01/1/deu");
+    assertThat(expression.getFullCitation()).startsWith("Verordnung");
+  }
+
+  @Test
+  @DisplayName("Official Toc indexes properly")
+  void officialTocIndexesProperly() {
+    indexNormsService.reindexAll(Instant.now().toString());
+    Norm expression =
+        normsRepository.getByExpressionEli("eli/bund/bgbl-1/1991/s102/1991-01-01/1/deu");
+    assertThat(expression.getOfficialToc()).startsWith("Abschnitt 1");
+  }
+
+  @Test
+  @DisplayName("Official foot notes index properly")
+  void officialFootNotesIndexProperly() {
+    indexNormsService.reindexAll(Instant.now().toString());
+    Norm expression =
+        normsRepository.getByExpressionEli("eli/bund/bgbl-1/1991/s102/1991-01-01/1/deu");
+    assertThat(expression.getOfficialFootNotes())
+        .isEqualTo(
+            "Authorial note in the norm title. Authorial note in an article title. Authorial note in attachment contents");
+  }
 }

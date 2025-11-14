@@ -58,20 +58,24 @@ public class NormLdmlToOpenSearchMapper {
   private static final String X_PATH_ARTICLE_HEADING = ".//*[local-name()='heading']";
   private static final String X_PATH_ARTICLE_NUM = ".//*[local-name()='num']/text()";
   private static final String X_PATH_ARTICLE_PARAGRAPHS = ".//*[local-name()='paragraph']";
-  private static final String AKN_PROPERTY = "/akn:akomaNtoso/akn:act/akn:meta/akn:proprietary/";
-  private static final String X_PATH_ENTRY_INTO_FORCE_DATE =
-      AKN_PROPERTY + "ris:legalDocML.de_metadaten/ris:inkraft/@date";
-  private static final String X_PATH_EXPIRY_DATE =
-      AKN_PROPERTY + "ris:legalDocML.de_metadaten/ris:ausserkraft/@date";
-  private static final String X_PATH_GEGENSTANDSLOS =
-      AKN_PROPERTY + "ris:legalDocML.de_metadaten/ris:gegenstandlos";
+  private static final String AKN_ACT = "/akn:akomaNtoso/akn:act/";
+  private static final String AKN_RIS_METADATA =
+      AKN_ACT + "akn:meta/akn:proprietary/ris:legalDocML.de_metadaten/";
+  private static final String X_PATH_ENTRY_INTO_FORCE_DATE = AKN_RIS_METADATA + "ris:inkraft/@date";
+  private static final String X_PATH_EXPIRY_DATE = AKN_RIS_METADATA + "ris:ausserkraft/@date";
+  private static final String X_PATH_GEGENSTANDSLOS = AKN_RIS_METADATA + "ris:gegenstandlos";
   private static final String X_PATH_BEDINGTES_INKRAFTTRETEN =
-      AKN_PROPERTY + "ris:legalDocML.de_metadaten/ris:bedingtesInkrafttreten";
+      AKN_RIS_METADATA + "ris:bedingtesInkrafttreten";
+  private static final String X_PATH_FULL_CITATION = AKN_RIS_METADATA + "ris:vollzitat";
+  private static final String X_PATH_OFFICIAL_TOC =
+      AKN_ACT + "akn:preamble/akn:blockContainer[@refersTo='inhaltsuebersicht']/akn:toc";
   private static final String X_PATH_BODY = "//*[local-name()='body']";
   private static final String X_PATH_CONCLUSIONS_FORMULA =
       "//*[local-name()='conclusions']/*[local-name()='formula']";
   private static final String X_PATH_PREAMBLE_FORMULA =
       "//*[local-name()='preamble']/*[local-name()='formula']";
+  public static final String X_PATH_OFFICIAL_FOOTNOTES = "//*[local-name()='authorialNote']";
+
   private static final String EINGANGSFORMEL = "Eingangsformel";
   private static final String SCHLUSSFORMEL = "Schlussformel";
 
@@ -113,8 +117,14 @@ public class NormLdmlToOpenSearchMapper {
           getArticlesByXmlDocument(xmlDocument, attachments, officialAbbreviation);
       List<String> articleNames = articles.stream().map(Article::name).toList();
       List<String> articleTexts = articles.stream().map(Article::text).toList();
-      LocalDate expiryDate = getDateByXpath(xmlDocument, X_PATH_EXPIRY_DATE);
       LocalDate entryIntoForceDate = getDateByXpath(xmlDocument, X_PATH_ENTRY_INTO_FORCE_DATE);
+      LocalDate expiryDate = getDateByXpath(xmlDocument, X_PATH_EXPIRY_DATE);
+      String fullCitation = xmlDocument.getElementByXpath(X_PATH_FULL_CITATION);
+      String officialToc =
+          Optional.ofNullable(xmlDocument.getElementByXpath(X_PATH_OFFICIAL_TOC))
+              .map(String::strip)
+              .map(e -> e.replaceAll("\\s+", " "))
+              .orElse(null);
 
       /*
       For differentiation of legislationDate and datePublished, see comments on Norm::normsDate and Norm::datePublished
@@ -138,17 +148,32 @@ public class NormLdmlToOpenSearchMapper {
               .normsDate(legislationDate)
               .datePublished(datePublished)
               .publishedIn(getPublishedInByXmlDocument(xmlDocument, datePublished))
-              .expiryDate(expiryDate)
               .entryIntoForceDate(entryIntoForceDate)
+              .expiryDate(expiryDate)
+              .fullCitation(fullCitation)
+              .officialToc(officialToc)
               .articles(articles)
               .articleNames(articleNames)
               .articleTexts(articleTexts)
+              .officialFootNotes(getOfficialFootNotes(xmlDocument, attachments))
               .indexedAt(Instant.now().toString())
               .build());
     } catch (Exception e) {
       logger.warn("Error to create Norms from XML content.", e);
       return Optional.empty();
     }
+  }
+
+  private static String getOfficialFootNotes(XmlDocument xmlDocument, List<Attachment> attachments)
+      throws XPathExpressionException {
+    String result =
+        Stream.concat(
+                Stream.ofNullable(xmlDocument.extractCleanedText(X_PATH_OFFICIAL_FOOTNOTES)),
+                attachments.stream().map(Attachment::officialFootNotes))
+            .filter(Objects::nonNull)
+            .collect(Collectors.joining(" "))
+            .replaceAll("\\s+", " ");
+    return result.isEmpty() ? null : result;
   }
 
   private static String appendWithSeparator(String base, String addition, String separator) {

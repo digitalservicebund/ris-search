@@ -50,6 +50,13 @@ public record CaseLawDocumentationUnit(
     @JsonIgnore @Field(name = Fields.DOCUMENTATION_OFFICE) String documentationOffice,
     @JsonIgnore @ElementCollection @Field(name = Fields.PROCEDURES) List<String> procedures,
     @JsonIgnore @Field(name = Fields.LEGAL_EFFECT) String legalEffect,
+    @JsonIgnore @ElementCollection @Field(name = Fields.PREVIOUS_DECISIONS)
+        List<String> previousDecisions,
+    @JsonIgnore @ElementCollection @Field(name = Fields.ENSUING_DECISIONS)
+        List<String> ensuingDecisions,
+    @JsonIgnore @ElementCollection @Field(name = Fields.PENDING_DECISIONS)
+        List<String> pendingDecisions,
+    @JsonIgnore @Field(name = Fields.HAS_LEGISLATIVE_MANDATE) String hasLegislativeMandate,
     @JsonIgnore @Field(name = Fields.INDEXED_AT) String indexedAt,
     @Nullable @Field(name = Fields.ARTICLES) List<Article> articles)
     implements AbstractSearchEntity {
@@ -94,6 +101,10 @@ public record CaseLawDocumentationUnit(
     public static final String DOCUMENTATION_OFFICE = "documentation_office";
     public static final String PROCEDURES = "procedures";
     public static final String LEGAL_EFFECT = "legal_effect";
+    public static final String PREVIOUS_DECISIONS = "previous_decisions";
+    public static final String ENSUING_DECISIONS = "ensuing_decisions";
+    public static final String PENDING_DECISIONS = "pending_decisions";
+    public static final String HAS_LEGISLATIVE_MANDATE = "has_legislative_mandate";
     public static final String INDEXED_AT = "indexed_at";
     public static final String ARTICLES = "articles";
   }

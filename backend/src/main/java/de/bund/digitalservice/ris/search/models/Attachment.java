@@ -9,4 +9,5 @@ public record Attachment(
     @Nullable String docTitle,
     String eId,
     String textContent,
-    String manifestationEli) {}
+    String manifestationEli,
+    @Nullable String officialFootNotes) {}
