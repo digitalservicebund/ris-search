@@ -1,13 +1,14 @@
 <script setup lang="ts">
 import { Breadcrumb } from "primevue";
 import { NuxtLink } from "#components";
+import type { RouteLocationRaw } from "#vue-router";
 import ChevronRightIcon from "~icons/material-symbols/chevron-right";
 import HomeFilledIcon from "~icons/material-symbols/home";
 import HomeOutlineIcon from "~icons/material-symbols/home-outline";
 
 export interface BreadcrumbItem {
   label: string;
-  route?: string;
+  route?: RouteLocationRaw;
   type?: string;
 }
 

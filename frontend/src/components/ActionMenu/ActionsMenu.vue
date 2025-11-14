@@ -3,6 +3,7 @@ import Button from "primevue/button";
 import Menu, { type MenuMethods } from "primevue/menu";
 import type { MenuItem } from "primevue/menuitem";
 import { useToast } from "primevue/usetoast";
+import { NuxtLink } from "#components";
 import { createActionMenuItems } from "~/utils/actionMenu";
 import MdiDotsVertical from "~icons/mdi/dots-vertical";
 
@@ -63,16 +64,16 @@ const toggle = (event: Event) => {
           data-pc-section="itemcontent"
           bis_skin_checked="1"
         >
-          <a
+          <NuxtLink
             v-if="!item.disabled"
             class="flex cursor-pointer items-center gap-8 no-underline"
-            :href="item.url"
+            :to="item.url"
             data-pc-section="itemlink"
             :data-attr="item.dataAttribute"
           >
             <component :is="(item as ActionMenuItem).iconComponent" />
             <span>{{ item.label }}</span>
-          </a>
+          </NuxtLink>
           <span
             v-else
             class="flex cursor-not-allowed items-center gap-8 text-gray-800"
@@ -93,8 +94,8 @@ const toggle = (event: Event) => {
         text
         :disabled="item.disabled"
         :aria-label="item.label"
-        :href="item.url"
-        :as="item.url ? 'a' : undefined"
+        :to="item.url"
+        :as="item.url ? NuxtLink : undefined"
         @click.prevent="item.command && item.command()"
       >
         <template #icon

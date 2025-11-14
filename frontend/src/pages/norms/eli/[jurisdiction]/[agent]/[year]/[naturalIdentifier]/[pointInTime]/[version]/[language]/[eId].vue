@@ -243,7 +243,7 @@ useDynamicSeo({ title, description });
             <article class="single-article akn-act" v-html="articleHtml" />
             <div class="flex flex-row justify-between">
               <div class="flex flex-col">
-                <router-link
+                <NuxtLink
                   v-if="previousArticleUrl"
                   :to="previousArticleUrl"
                   class="text-blue-800 hover:underline"
@@ -252,10 +252,10 @@ useDynamicSeo({ title, description });
                     <IcBaselineArrowBack class="mt-1 shrink-0" />
                     <span>Vorheriger Paragraf</span>
                   </div>
-                </router-link>
+                </NuxtLink>
               </div>
               <div class="flex flex-col">
-                <router-link
+                <NuxtLink
                   v-if="nextArticleUrl"
                   :to="nextArticleUrl"
                   class="text-blue-800 hover:underline"
@@ -264,7 +264,7 @@ useDynamicSeo({ title, description });
                     <span>Nächster Paragraf</span>
                     <IcBaselineArrowForward class="mt-1 shrink-0" />
                   </div>
-                </router-link>
+                </NuxtLink>
               </div>
             </div>
           </template>
@@ -275,13 +275,13 @@ useDynamicSeo({ title, description });
               :selected-key="eId"
             >
               <template #header>
-                <router-link
+                <NuxtLink
                   v-if="normTitle"
                   :to="normPath"
                   class="link-hover font-bold text-blue-800"
                 >
                   {{ normTitle }}
-                </router-link>
+                </NuxtLink>
               </template>
             </NormTableOfContents>
           </template>
