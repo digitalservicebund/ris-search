@@ -26,14 +26,9 @@ const matchedExpressionEli = computed(() => {
 });
 
 if (matchedExpressionEli.value) {
-  if (import.meta.client) {
-    globalThis.location.href = `/norms/${matchedExpressionEli.value}`;
-  } else {
-    navigateTo(`/norms/${matchedExpressionEli.value}`, {
-      external: true,
-      replace: true,
-    });
-  }
+  navigateTo(`/norms/${matchedExpressionEli.value}`, {
+    replace: true,
+  });
 }
 
 if (loadError?.value) {
