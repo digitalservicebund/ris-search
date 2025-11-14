@@ -35,24 +35,18 @@ export function useFetchNormContent(
   NormContent,
   NuxtError<NormContent> | NuxtError<null> | undefined
 > {
+  const { $risBackend } = useNuxtApp();
+
   return useAsyncData(
     `json+html for ${expressionEli}`,
     async () => {
-      const config = useRuntimeConfig();
-      const backendUrl = config.public.risBackendUrl;
-      const metadata = await $fetch<LegislationWork>(
-        `${backendUrl}/v1/legislation/eli/${expressionEli}`,
-        {
-          headers: {
-            Authorization: `Basic ${config.basicAuth}`,
-          },
-        },
+      const metadata = await $risBackend<LegislationWork>(
+        useBackendUrl(`v1/legislation/eli/${expressionEli}`),
       );
       const contentUrl = getContentUrl(metadata);
-      const html = await $fetch<string>(backendUrl + contentUrl, {
+      const html = await $risBackend<string>(useBackendUrl(contentUrl), {
         headers: {
           Accept: "text/html",
-          Authorization: `Basic ${config.basicAuth}`,
         },
       });
       const document = parseDocument(html);
@@ -138,17 +132,15 @@ export function useFetchNormArticleContent(
   return useAsyncData(
     `json+html for ${expressionEli}/${articleEId}`,
     async () => {
-      const config = useRuntimeConfig();
-      const backendUrl = config.public.risBackendUrl;
       const metadata = await $risBackend<LegislationWork>(
-        `${backendUrl}/v1/legislation/eli/${expressionEli}`,
+        useBackendUrl(`/v1/legislation/eli/${expressionEli}`),
       );
       // build the article URL by appending the eId in front of the .html suffix
       const adaptedContentUrl = getContentUrl(metadata).replace(
         /\.html$/,
         `/${articleEId}.html`,
       );
-      const html = await $risBackend<string>(backendUrl + adaptedContentUrl, {
+      const html = await $risBackend<string>(useBackendUrl(adaptedContentUrl), {
         headers: {
           Accept: "text/html",
         },
