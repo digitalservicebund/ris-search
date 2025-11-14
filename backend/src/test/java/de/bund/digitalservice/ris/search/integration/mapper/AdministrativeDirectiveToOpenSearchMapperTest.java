@@ -38,6 +38,7 @@ class AdministrativeDirectiveToOpenSearchMapperTest {
             .activeAdministrativeReferences(List.of("VR Full Reference 2024-01-01 00001"))
             .activeNormReferences(List.of("ArbGG § 1 Abs 1"))
             .keywords(List.of("Schlagwort1", "Schlagwort2"))
+            .fieldsOfLaw(List.of("01-01-01-01"))
             .build();
 
     assertThat(entity).isEqualTo(expected);

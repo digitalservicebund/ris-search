@@ -8,6 +8,7 @@ import de.bund.digitalservice.ris.search.models.ldml.directive.Block;
 import de.bund.digitalservice.ris.search.models.ldml.directive.Doc;
 import de.bund.digitalservice.ris.search.models.ldml.directive.DocumentType;
 import de.bund.digitalservice.ris.search.models.ldml.directive.DocumentTypeCategory;
+import de.bund.digitalservice.ris.search.models.ldml.directive.FieldOfLaw;
 import de.bund.digitalservice.ris.search.models.ldml.directive.FrbrExpression;
 import de.bund.digitalservice.ris.search.models.ldml.directive.FrbrNameValueElement;
 import de.bund.digitalservice.ris.search.models.ldml.directive.FrbrWork;
@@ -62,9 +63,10 @@ public class AdministrativeDirectiveLdmlToOpenSearchMapper {
           .activeAdministrativeReferences(getActiveAdministrativeReferences(ldml))
           .activeNormReferences(getActiveNormReferences(ldml))
           .keywords(getKeywords(ldml))
+          .fieldsOfLaw(getFieldsOfLaw(ldml))
           .build();
     } catch (ValidationException e) {
-      throw new OpenSearchMapperException("unable to parse file to administrative directive", e);
+      throw new OpenSearchMapperException(e.getMessage());
     }
   }
 
@@ -266,5 +268,17 @@ public class AdministrativeDirectiveLdmlToOpenSearchMapper {
     }
 
     return documentNumber;
+  }
+
+  private static List<String> getFieldsOfLaw(AdministrativeDirectiveLdml ldml)
+      throws ValidationException {
+    List<FieldOfLaw> fieldsOfLaw = getRisMeta(ldml).map(RisMeta::getFieldsOfLaw).orElse(List.of());
+
+    for (FieldOfLaw law : fieldsOfLaw) {
+      if (Objects.isNull(law.getValue())) {
+        throw new ValidationException("field of law value is null");
+      }
+    }
+    return fieldsOfLaw.stream().map(FieldOfLaw::getValue).toList();
   }
 }
