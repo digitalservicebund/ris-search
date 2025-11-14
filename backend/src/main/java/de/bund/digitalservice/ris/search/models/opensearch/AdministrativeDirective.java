@@ -1,13 +1,16 @@
 package de.bund.digitalservice.ris.search.models.opensearch;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.ElementCollection;
-import jakarta.persistence.Id;
 import java.util.List;
 import lombok.Builder;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.lang.Nullable;
 
 @Builder
+@Document(indexName = "administrative_directive")
 public record AdministrativeDirective(
     @Id @Field(name = Fields.ID) String id,
     @Field(name = Fields.DOCUMENT_NUMBER) String documentNumber,
@@ -29,7 +32,8 @@ public record AdministrativeDirective(
         List<String> activeAdministrativeReferences,
     @ElementCollection @Field(name = Fields.ACTIVE_NORM_REFERENCES)
         List<String> activeNormReferences,
-    @ElementCollection @Field(name = Fields.KEYWORDS) List<String> keywords) {
+    @ElementCollection @Field(name = Fields.KEYWORDS) List<String> keywords,
+    @JsonIgnore @Field(name = Literature.Fields.INDEXED_AT) String indexedAt) {
 
   public static class Fields {
     private Fields() {}
