@@ -1,5 +1,4 @@
 import type { AsyncData, NuxtError } from "#app";
-import useBackendUrl from "~/composables/useBackendUrl";
 import type { LegislationWork, JSONLDList, SearchResult } from "~/types";
 import { getCurrentDateInGermanyFormatted } from "~/utils/dateFormatting";
 
@@ -61,7 +60,7 @@ export function fetchTranslationList(): AsyncData<
 
       return response;
     },
-    { server: true, lazy: false },
+    { server: false },
   );
 }
 
@@ -88,7 +87,7 @@ export function fetchTranslationListWithIdFilter(
 
       return response;
     },
-    { server: true, lazy: false },
+    { server: false },
   );
 }
 
@@ -127,7 +126,7 @@ export function fetchTranslationAndHTML(
 
       return { content: firstTranslationsListElement, html: htmlData };
     },
-    { server: true, lazy: false },
+    { server: false },
   );
 }
 
@@ -159,6 +158,6 @@ export function getGermanOriginal(
       }
       throw notFoundError(`Not Found: Abbreviation mismatch for ID: ${id}`);
     },
-    { server: true, lazy: false },
+    { server: false },
   );
 }

@@ -65,7 +65,7 @@ export function useFetchNormContent(
         htmlParts,
       };
     },
-    { server: true, lazy: false },
+    { server: false },
   );
 }
 
@@ -169,7 +169,7 @@ export function useFetchNormArticleContent(
         articleHeading,
       };
     },
-    { immediate: !!articleEId, server: true, lazy: false },
+    { immediate: !!articleEId, server: false },
   );
 }
 
