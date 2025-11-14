@@ -35,12 +35,12 @@ export function useFetchNormContent(
   NormContent,
   NuxtError<NormContent> | NuxtError<null> | undefined
 > {
-  const config = useRuntimeConfig();
-  const backendUrl = config.public.risBackendUrl;
   // unlike $fetch, useRequestFetch forwards client cookies
   return useAsyncData(
     `json+html for ${expressionEli}`,
     async () => {
+      const config = useRuntimeConfig();
+      const backendUrl = config.public.risBackendUrl;
       const metadata = await $fetch<LegislationWork>(
         `${backendUrl}/v1/legislation/eli/${expressionEli}`,
         {
@@ -134,11 +134,11 @@ export function useFetchNormArticleContent(
   NormArticleContent,
   NuxtError<NormContent> | NuxtError<null> | undefined
 > {
-  const config = useRuntimeConfig();
-  const backendUrl = config.public.risBackendUrl;
   return useAsyncData(
     `json+html for ${expressionEli}/${articleEId}`,
     async () => {
+      const config = useRuntimeConfig();
+      const backendUrl = config.public.risBackendUrl;
       const metadata = await $fetch<LegislationWork>(
         `${backendUrl}/v1/legislation/eli/${expressionEli}`,
         {

@@ -70,10 +70,10 @@ export function fetchTranslationListWithIdFilter(
   TranslationContent[],
   NuxtError<TranslationContent> | NuxtError<null> | undefined
 > {
-  const config = useRuntimeConfig();
   return useAsyncData(
-    "translations-list-with_id",
+    `translations-list-with_id-${id}`,
     async () => {
+      const config = useRuntimeConfig();
       const response = await $fetch<TranslationContent[]>(
         translationDetailURL(id),
         {
@@ -94,10 +94,10 @@ export function fetchTranslationListWithIdFilter(
 export function fetchTranslationAndHTML(
   id: string,
 ): AsyncData<TranslationData, NuxtError | undefined> {
-  const config = useRuntimeConfig();
   return useAsyncData(
     `translation-and-html-${id}`,
     async () => {
+      const config = useRuntimeConfig();
       const translationsList = await $fetch<TranslationContent[]>(
         translationDetailURL(id),
         {
@@ -133,10 +133,10 @@ export function fetchTranslationAndHTML(
 export function getGermanOriginal(
   id: string,
 ): AsyncData<SearchResult<LegislationWork> | null, NuxtError | undefined> {
-  const config = useRuntimeConfig();
   return useAsyncData(
     `german-original-${id}`,
     async () => {
+      const config = useRuntimeConfig();
       const currentDateInGermanyFormatted = getCurrentDateInGermanyFormatted();
       const response = await $fetch<JSONLDList<SearchResult<LegislationWork>>>(
         legislationSearchURL(id, currentDateInGermanyFormatted),
