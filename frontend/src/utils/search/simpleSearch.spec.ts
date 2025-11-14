@@ -3,10 +3,10 @@ import { convertParams, getUrl } from "./simpleSearch";
 
 describe("SimpleSearch.logic", () => {
   it("returns the correct URL", async () => {
-    expect(getUrl("A")).toBe(useBackendUrl("/v1/document"));
-    expect(getUrl("R")).toBe(useBackendUrl("/v1/case-law"));
-    expect(getUrl("N")).toBe(useBackendUrl("/v1/legislation"));
-    expect(getUrl("L")).toBe(useBackendUrl("/v1/literature"));
+    expect(getUrl("A")).toBe("/v1/document");
+    expect(getUrl("R")).toBe("/v1/case-law");
+    expect(getUrl("N")).toBe("/v1/legislation");
+    expect(getUrl("L")).toBe("/v1/literature");
   });
 
   it("should convert the parameters correctly", async () => {

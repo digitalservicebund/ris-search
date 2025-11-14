@@ -1,6 +1,5 @@
 import { computed } from "vue";
 import type { AsyncDataRequestStatus } from "#app";
-import useBackendUrl from "~/composables/useBackendUrl";
 import type { JSONLDList, LegislationWork, SearchResult } from "~/types";
 import { getCurrentDateInGermanyFormatted } from "~/utils/dateFormatting";
 
@@ -27,7 +26,7 @@ function getNorms(params: {
   const immediate = params.eli !== undefined;
   const { status, data, error } = useRisBackend<
     JSONLDList<SearchResult<LegislationWork>>
-  >(useBackendUrl(`/v1/legislation`), {
+  >(`/v1/legislation`, {
     params: params,
     immediate: immediate,
   });

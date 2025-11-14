@@ -2,7 +2,6 @@ import { mockNuxtImport } from "@nuxt/test-utils/runtime";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { ref } from "vue";
 import { useAdvancedSearch } from "./useAdvancedSearch";
-import useBackendUrl from "~/composables/useBackendUrl";
 import { DocumentKind } from "~/types";
 
 const { useRisBackendMock, executeMock } = vi.hoisted(() => {
@@ -43,9 +42,7 @@ describe("useAdvancedSearch", () => {
 
     expect(useRisBackendMock).toHaveBeenCalled();
     const url = useRisBackendMock.mock.calls[0]![0];
-    expect(url.value).toBe(
-      useBackendUrl("/v1/document/lucene-search/case-law"),
-    );
+    expect(url.value).toBe("/v1/document/lucene-search/case-law");
   });
 
   it("calls the endpoint for legislation with correct URL", async () => {
@@ -58,9 +55,7 @@ describe("useAdvancedSearch", () => {
 
     expect(useRisBackendMock).toHaveBeenCalled();
     const url = useRisBackendMock.mock.calls[0]![0];
-    expect(url.value).toBe(
-      useBackendUrl("/v1/document/lucene-search/legislation"),
-    );
+    expect(url.value).toBe("/v1/document/lucene-search/legislation");
   });
 
   it("defaults to document search for other document kinds", async () => {
@@ -73,7 +68,7 @@ describe("useAdvancedSearch", () => {
 
     expect(useRisBackendMock).toHaveBeenCalled();
     const url = useRisBackendMock.mock.calls[0]![0];
-    expect(url.value).toBe(useBackendUrl("/v1/document/lucene-search"));
+    expect(url.value).toBe("/v1/document/lucene-search");
   });
 
   it("submits the query string", async () => {

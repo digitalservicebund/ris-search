@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { computed } from "vue";
 import type { ComputedRef } from "vue";
+import { computed } from "vue";
 import CaseLawActionsMenu from "~/components/ActionMenu/CaseLawActionsMenu.vue";
 import TableOfContents, {
   type TableOfContentsEntry,
@@ -14,7 +14,6 @@ import PropertiesItem from "~/components/PropertiesItem.vue";
 import RisBreadcrumb from "~/components/Ris/RisBreadcrumb.vue";
 import RisDocumentTitle from "~/components/Ris/RisDocumentTitle.vue";
 import RisTabs from "~/components/Ris/RisTabs.vue";
-import useBackendUrl from "~/composables/useBackendUrl";
 import { type CaseLaw, DocumentKind } from "~/types";
 import { getEncodingURL } from "~/utils/caseLaw";
 import { dateFormattedDDMMYYYY } from "~/utils/dateFormatting";
@@ -37,11 +36,9 @@ const {
   status,
   data: caseLaw,
   error: metadataError,
-} = await useRisBackend<CaseLaw>(
-  useBackendUrl(`/v1/case-law/${documentNumber}`),
-);
+} = await useRisBackend<CaseLaw>(`/v1/case-law/${documentNumber}`);
 const { data: html, error: contentError } = await useRisBackend<string>(
-  useBackendUrl(`/v1/case-law/${documentNumber}.html`),
+  `/v1/case-law/${documentNumber}.html`,
 );
 
 const buildOgTitle = (caseLaw: CaseLaw) => {

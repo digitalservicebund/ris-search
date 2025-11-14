@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import useBackendUrl from "~/composables/useBackendUrl";
 import type { JSONLDList, LegislationWork, SearchResult } from "~/types";
 import { getMostRelevantExpression } from "~/utils/norm";
 
@@ -14,7 +13,7 @@ const workEli = [
 
 const { data, error: loadError } = await useRisBackend<
   JSONLDList<SearchResult<LegislationWork>>
->(useBackendUrl(`/v1/legislation`), {
+>(`/v1/legislation`, {
   params: {
     eli: workEli,
   },

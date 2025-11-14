@@ -3,7 +3,6 @@ import { createPinia, setActivePinia } from "pinia";
 import type { PostHog } from "posthog-js";
 import posthog from "posthog-js";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import useBackendUrl from "~/composables/useBackendUrl";
 import type { QueryParams } from "~/stores/searchParams";
 import { addDefaults } from "~/stores/searchParams/getInitialState";
 import { usePostHogStore } from "~/stores/usePostHogStore";
@@ -60,7 +59,7 @@ mockNuxtImport("useRisBackend", () => {
   return useRisBackendMock;
 });
 
-const feedbackURL = useBackendUrl(`/v1/feedback`);
+const feedbackURL = `/v1/feedback`;
 
 describe("usePostHogStore", () => {
   beforeEach(() => {

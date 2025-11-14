@@ -34,7 +34,7 @@ beforeEach(() => {
 describe("useNormVersions", () => {
   it("returns a sorted list when there is no error", () => {
     const { sortedVersions } = useNormVersions("dummy-eli");
-    expect(useRisBackendMock).toBeCalledWith(useBackendUrl("/v1/legislation"), {
+    expect(useRisBackendMock).toBeCalledWith("/v1/legislation", {
       immediate: true,
       params: {
         eli: "dummy-eli",
