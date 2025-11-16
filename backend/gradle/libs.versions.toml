@@ -10,7 +10,7 @@ test-logger = "4.0.0"
 node-gradle = "7.1.0"
 # libraries
 jts = "1.20.0"
-spring-boot-starter = "3.5.6"
+spring-boot-starter = "3.5.7"
 test-containers = "1.21.3"
 spring-cloud-k8s = "3.3.0"
 spring-data-elasticsearch = "5.3.6"
