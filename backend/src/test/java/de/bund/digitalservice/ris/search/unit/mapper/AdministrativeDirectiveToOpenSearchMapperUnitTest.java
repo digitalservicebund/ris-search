@@ -19,6 +19,7 @@ import de.bund.digitalservice.ris.search.models.ldml.directive.Proprietary;
 import de.bund.digitalservice.ris.search.models.ldml.directive.RisMeta;
 import de.bund.digitalservice.ris.search.models.ldml.directive.Zuordnung;
 import de.bund.digitalservice.ris.search.models.opensearch.AdministrativeDirective;
+import java.time.Instant;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 
@@ -61,7 +62,8 @@ class AdministrativeDirectiveToOpenSearchMapperUnitTest {
     normgeber.setOrgan("Ministerium");
 
     ldml.getDoc().getMeta().getProprietary().getMeta().setNormgeber(normgeber);
-    AdministrativeDirective entity = AdministrativeDirectiveLdmlToOpenSearchMapper.map(ldml);
+    AdministrativeDirective entity =
+        AdministrativeDirectiveLdmlToOpenSearchMapper.map(ldml, Instant.now());
     assertThat(entity.normgeber()).isEqualTo("BB Ministerium");
   }
 
@@ -72,7 +74,8 @@ class AdministrativeDirectiveToOpenSearchMapperUnitTest {
     normgeber.setStaat("BB");
 
     ldml.getDoc().getMeta().getProprietary().getMeta().setNormgeber(normgeber);
-    AdministrativeDirective entity = AdministrativeDirectiveLdmlToOpenSearchMapper.map(ldml);
+    AdministrativeDirective entity =
+        AdministrativeDirectiveLdmlToOpenSearchMapper.map(ldml, Instant.now());
     assertThat(entity.normgeber()).isEqualTo("BB");
   }
 
@@ -85,7 +88,7 @@ class AdministrativeDirectiveToOpenSearchMapperUnitTest {
         assertThrows(
             OpenSearchMapperException.class,
             () -> {
-              AdministrativeDirectiveLdmlToOpenSearchMapper.map(ldml);
+              AdministrativeDirectiveLdmlToOpenSearchMapper.map(ldml, Instant.now());
             });
 
     assertThat(e.getMessage()).isEqualTo("ldml has no documentNumber");
@@ -101,7 +104,7 @@ class AdministrativeDirectiveToOpenSearchMapperUnitTest {
         assertThrows(
             OpenSearchMapperException.class,
             () -> {
-              AdministrativeDirectiveLdmlToOpenSearchMapper.map(ldml);
+              AdministrativeDirectiveLdmlToOpenSearchMapper.map(ldml, Instant.now());
             });
 
     assertThat(e.getMessage()).isEqualTo("field of law value is null");
@@ -117,7 +120,7 @@ class AdministrativeDirectiveToOpenSearchMapperUnitTest {
         assertThrows(
             OpenSearchMapperException.class,
             () -> {
-              AdministrativeDirectiveLdmlToOpenSearchMapper.map(ldml);
+              AdministrativeDirectiveLdmlToOpenSearchMapper.map(ldml, Instant.now());
             });
 
     assertThat(e.getMessage()).isEqualTo("invalid zuordnung");

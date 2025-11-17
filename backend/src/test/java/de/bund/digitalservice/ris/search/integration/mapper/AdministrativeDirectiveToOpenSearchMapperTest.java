@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import de.bund.digitalservice.ris.LoadXmlUtils;
 import de.bund.digitalservice.ris.search.mapper.AdministrativeDirectiveLdmlToOpenSearchMapper;
 import de.bund.digitalservice.ris.search.models.opensearch.AdministrativeDirective;
+import java.time.Instant;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 
@@ -16,7 +17,9 @@ class AdministrativeDirectiveToOpenSearchMapperTest {
     String ldmlString =
         LoadXmlUtils.loadXmlAsString(AdministrativeDirective.class, "KSNR0000.akn.xml");
 
-    AdministrativeDirective entity = AdministrativeDirectiveLdmlToOpenSearchMapper.map(ldmlString);
+    Instant now = Instant.now();
+    AdministrativeDirective entity =
+        AdministrativeDirectiveLdmlToOpenSearchMapper.map(ldmlString, now);
 
     AdministrativeDirective expected =
         AdministrativeDirective.builder()
@@ -40,6 +43,7 @@ class AdministrativeDirectiveToOpenSearchMapperTest {
             .keywords(List.of("Schlagwort1", "Schlagwort2"))
             .fieldsOfLaw(List.of("01-01-01-01"))
             .zuordnungen(List.of("aspekt begriff"))
+            .indexedAt(now.toString())
             .build();
 
     assertThat(entity).isEqualTo(expected);

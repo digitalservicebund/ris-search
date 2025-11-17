@@ -1,0 +1,121 @@
+{
+  "index_patterns": [
+    "administrative_directive_*"
+  ],
+  "composed_of": [
+    "german_analyzer_template"
+  ],
+  "priority": 500,
+  "template": {
+    "mappings": {
+      "properties": {
+        "document_number": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "normalizer": "normalized_keyword"
+            }
+          }
+        },
+        "recording_date": {
+          "type": "date"
+        },
+        "years_of_publication": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
+        "DATUM": {
+          "type": "alias",
+          "path": "first_publication_date"
+        },
+        "first_publication_date": {
+          "type": "date"
+        },
+        "document_types": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
+        "dependent_references": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
+        "independent_references": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
+        "norm_references": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
+        "main_title": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
+        "main_title_additions": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
+        "documentary_title": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
+        "authors": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
+        "collaborators": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
+        "originator": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
+        "language": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
+        "conference_note": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
+        "short_report": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
+        "outline": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
+        "articles": {
+          "type": "nested",
+          "properties": {
+            "eid": {
+              "type": "text"
+            },
+            "guid": {
+              "type": "text"
+            },
+            "name": {
+              "type": "text",
+              "analyzer": "custom_german_analyzer"
+            },
+            "text": {
+              "type": "text",
+              "analyzer": "custom_german_analyzer",
+              "index_options": "offsets"
+            },
+            "entry_into_force_date": {
+              "type": "date"
+            },
+            "expiry_date": {
+              "type": "date"
+            }
+          }
+        }
+      }
+    }
+  }
+}

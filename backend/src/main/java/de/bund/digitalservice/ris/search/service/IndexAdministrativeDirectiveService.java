@@ -5,6 +5,7 @@ import de.bund.digitalservice.ris.search.mapper.AdministrativeDirectiveLdmlToOpe
 import de.bund.digitalservice.ris.search.models.opensearch.AdministrativeDirective;
 import de.bund.digitalservice.ris.search.repository.objectstorage.AdministrativeDirectiveBucket;
 import de.bund.digitalservice.ris.search.repository.opensearch.AdministrativeDirectiveRepository;
+import java.time.Instant;
 import java.util.Optional;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +20,8 @@ public class IndexAdministrativeDirectiveService extends BaseIndexService<Admini
   @Override
   protected Optional<AdministrativeDirective> mapFileToEntity(String filename, String fileContent) {
     try {
-      return Optional.of(AdministrativeDirectiveLdmlToOpenSearchMapper.map(fileContent));
+      return Optional.of(
+          AdministrativeDirectiveLdmlToOpenSearchMapper.map(fileContent, Instant.now()));
     } catch (OpenSearchMapperException e) {
       logger.error("unable to parse file {}", filename, e);
       return Optional.empty();

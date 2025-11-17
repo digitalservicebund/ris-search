@@ -41,7 +41,7 @@ import org.springframework.lang.Nullable;
 public class AdministrativeDirectiveLdmlToOpenSearchMapper {
   private AdministrativeDirectiveLdmlToOpenSearchMapper() {}
 
-  public static AdministrativeDirective map(AdministrativeDirectiveLdml ldml) {
+  public static AdministrativeDirective map(AdministrativeDirectiveLdml ldml, Instant now) {
     try {
 
       String documentNumber = getDocumentNumber(ldml);
@@ -67,18 +67,18 @@ public class AdministrativeDirectiveLdmlToOpenSearchMapper {
           .keywords(getKeywords(ldml))
           .fieldsOfLaw(getFieldsOfLaw(ldml))
           .zuordnungen(getZuordnungen(ldml))
-          .indexedAt(Instant.now().toString())
+          .indexedAt(now.toString())
           .build();
     } catch (ValidationException e) {
       throw new OpenSearchMapperException(e.getMessage());
     }
   }
 
-  public static AdministrativeDirective map(String ldmlString) {
+  public static AdministrativeDirective map(String ldmlString, Instant now) {
     try {
       StreamSource ldmlStreamSource = new StreamSource(new StringReader(ldmlString));
       var ldml = JAXB.unmarshal(ldmlStreamSource, AdministrativeDirectiveLdml.class);
-      return map(ldml);
+      return map(ldml, now);
     } catch (DescriptorException | DataBindingException e) {
       throw new OpenSearchMapperException("unable to parse file to administrative directive", e);
     }
