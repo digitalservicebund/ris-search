@@ -84,11 +84,12 @@ class AdministrativeDirectiveToOpenSearchMapperUnitTest {
     AdministrativeDirectiveLdml ldml = new AdministrativeDirectiveLdml();
     ldml.setDoc(new Doc());
 
+    var now = Instant.now();
     OpenSearchMapperException e =
         assertThrows(
             OpenSearchMapperException.class,
             () -> {
-              AdministrativeDirectiveLdmlToOpenSearchMapper.map(ldml, Instant.now());
+              AdministrativeDirectiveLdmlToOpenSearchMapper.map(ldml, now);
             });
 
     assertThat(e.getMessage()).isEqualTo("ldml has no documentNumber");
@@ -100,11 +101,12 @@ class AdministrativeDirectiveToOpenSearchMapperUnitTest {
 
     ldml.getDoc().getMeta().getProprietary().getMeta().setFieldsOfLaw(List.of(new FieldOfLaw()));
 
+    var now = Instant.now();
     OpenSearchMapperException e =
         assertThrows(
             OpenSearchMapperException.class,
             () -> {
-              AdministrativeDirectiveLdmlToOpenSearchMapper.map(ldml, Instant.now());
+              AdministrativeDirectiveLdmlToOpenSearchMapper.map(ldml, now);
             });
 
     assertThat(e.getMessage()).isEqualTo("field of law value is null");
@@ -116,11 +118,12 @@ class AdministrativeDirectiveToOpenSearchMapperUnitTest {
 
     ldml.getDoc().getMeta().getProprietary().getMeta().setZuordnungen(List.of(new Zuordnung()));
 
+    var now = Instant.now();
     OpenSearchMapperException e =
         assertThrows(
             OpenSearchMapperException.class,
             () -> {
-              AdministrativeDirectiveLdmlToOpenSearchMapper.map(ldml, Instant.now());
+              AdministrativeDirectiveLdmlToOpenSearchMapper.map(ldml, now);
             });
 
     assertThat(e.getMessage()).isEqualTo("invalid zuordnung");
