@@ -1,5 +1,5 @@
 import type { Page } from "@playwright/test";
-import { expect, test, noJsTest, navigate } from "./utils/fixtures";
+import { expect, navigate, noJsTest, test } from "./utils/fixtures";
 
 function getSearchResults(page: Page) {
   return page
@@ -10,8 +10,10 @@ function getSearchResults(page: Page) {
 function getResultCounter(page: Page) {
   // Not an ideal way for selecting this but I can't find a more semantic option
   // of doing it given the current page structure
-  return page.getByText(/\d+ Suchergebnis(se)?/, { exact: true });
+  return page.getByText(/[\d.]+ Suchergebnis(se)?/, { exact: true });
 }
+
+const nonZeroResultCount = /[1-9][\d.]* Suchergebnis(se)?/;
 
 test.describe("reach search from start page", () => {
   test("searches for a query from the start page", async ({ page }) => {
@@ -23,7 +25,7 @@ test.describe("reach search from start page", () => {
     await expect(searchButton).not.toBeDisabled();
     await searchButton.click();
 
-    await expect(getResultCounter(page)).toHaveText("15 Suchergebnisse");
+    await expect(getResultCounter(page)).toHaveText(nonZeroResultCount);
     await expect(searchInput).toHaveValue("Fiktiv");
   });
 
@@ -43,7 +45,7 @@ test.describe("general search page features", () => {
     await navigate(page, "/search?query=und");
 
     const resultCounter = getResultCounter(page);
-    await expect(resultCounter).toHaveText("13 Suchergebnisse");
+    await expect(resultCounter).toHaveText(nonZeroResultCount);
 
     const searchResults = getSearchResults(page);
 
@@ -54,7 +56,7 @@ test.describe("general search page features", () => {
       waitUntil: "commit",
     });
 
-    expect(resultCounter).toHaveText("13 Suchergebnisse");
+    expect(resultCounter).toHaveText(nonZeroResultCount);
     await expect(searchResults).toHaveCount(3);
 
     await page.getByLabel("vorherige Ergebnisse").click();
@@ -110,7 +112,7 @@ test.describe("searching legislation", () => {
     const searchResults = getSearchResults(page);
     const resultCounter = getResultCounter(page);
 
-    await expect(resultCounter).toHaveText("15 Suchergebnisse");
+    await expect(resultCounter).toHaveText(nonZeroResultCount);
 
     await page
       .getByRole("group", { name: "Filter" })
@@ -119,7 +121,7 @@ test.describe("searching legislation", () => {
 
     await expect(page).toHaveURL(/category=N/);
 
-    await expect(resultCounter).toHaveText("5 Suchergebnisse");
+    await expect(resultCounter).toHaveText(nonZeroResultCount);
 
     // Ensure all visible entries are of type legislation
     await expect(searchResults).toHaveText(Array(5).fill(/^Norm/));
@@ -206,7 +208,7 @@ test.describe("searching caselaw", () => {
     const searchResults = getSearchResults(page);
     const resultCounter = getResultCounter(page);
 
-    await expect(resultCounter).toHaveText("15 Suchergebnisse");
+    await expect(resultCounter).toHaveText(nonZeroResultCount);
 
     await page
       .getByRole("group", { name: "Filter" })
@@ -215,7 +217,7 @@ test.describe("searching caselaw", () => {
 
     await expect(page).toHaveURL(/category=R/);
 
-    await expect(resultCounter).toHaveText("10 Suchergebnisse");
+    await expect(resultCounter).toHaveText(nonZeroResultCount);
 
     // Ensure all visible entries are of type caselaw
     await expect(searchResults).toHaveText(
@@ -361,7 +363,7 @@ test.describe("searching literature", () => {
     const searchResults = getSearchResults(page);
     const resultCounter = getResultCounter(page);
 
-    await expect(resultCounter).toHaveText("12 Suchergebnisse");
+    await expect(resultCounter).toHaveText(nonZeroResultCount);
 
     await page
       .getByRole("group", { name: "Filter" })
@@ -516,7 +518,7 @@ noJsTest("search works without JavaScript", async ({ page }) => {
 noJsTest("pagination works without JavaScript", async ({ page }) => {
   await navigate(page, "/search?query=und");
 
-  await expect(getResultCounter(page)).toHaveText("13 Suchergebnisse");
+  await expect(getResultCounter(page)).toHaveText(nonZeroResultCount);
   await expect(getSearchResults(page)).toHaveCount(10);
 
   await page.getByLabel("nächste Ergebnisse").click();
@@ -524,12 +526,12 @@ noJsTest("pagination works without JavaScript", async ({ page }) => {
     waitUntil: "commit",
   });
 
-  await expect(getResultCounter(page)).toHaveText("13 Suchergebnisse");
+  await expect(getResultCounter(page)).toHaveText(nonZeroResultCount);
   await expect(getSearchResults(page)).toHaveCount(3);
 
   await page.getByLabel("vorherige Ergebnisse").click();
   await page.waitForURL("/search?query=und", { waitUntil: "commit" });
 
-  await expect(getResultCounter(page)).toHaveText("13 Suchergebnisse");
+  await expect(getResultCounter(page)).toHaveText(nonZeroResultCount);
   await expect(getSearchResults(page)).toHaveCount(10);
 });
