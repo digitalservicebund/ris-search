@@ -49,6 +49,7 @@ opensearch:
   caselaws-index-name: caselaws
   literature-index-name: literature
   documents-alias-name: documents
+  administrative-directive-index-name: administrative_directive
 
 # The user and password to access postgres was created in the neuris-infra following the variable convention in that repo
 search:

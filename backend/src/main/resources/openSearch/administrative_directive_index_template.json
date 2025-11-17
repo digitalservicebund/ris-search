@@ -19,29 +19,50 @@
             }
           }
         },
+        "keywords": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "normalizer": "normalized_keyword"
+            }
+          }
+        },
         "recording_date": {
           "type": "date"
         },
-        "years_of_publication": {
+        "caselaw_references": {
           "type": "text",
           "analyzer": "custom_german_analyzer"
         },
-        "DATUM": {
-          "type": "alias",
-          "path": "first_publication_date"
+        "content": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
         },
-        "first_publication_date": {
+        "document_category": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
+        "document_type": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
+        "entry_into_effect_date": {
           "type": "date"
         },
-        "document_types": {
+        "fields_of_law": {
           "type": "text",
           "analyzer": "custom_german_analyzer"
         },
-        "dependent_references": {
+        "fundstelle_references": {
           "type": "text",
           "analyzer": "custom_german_analyzer"
         },
-        "independent_references": {
+        "indexed_at": {
+          "type": "date"
+        },
+        "long_title": {
           "type": "text",
           "analyzer": "custom_german_analyzer"
         },
@@ -49,45 +70,24 @@
           "type": "text",
           "analyzer": "custom_german_analyzer"
         },
-        "main_title": {
+        "normgeber": {
           "type": "text",
           "analyzer": "custom_german_analyzer"
         },
-        "main_title_additions": {
+        "reference_numbers": {
           "type": "text",
           "analyzer": "custom_german_analyzer"
         },
-        "documentary_title": {
+        "zitierdatum_items": {
+          "type": "date"
+        },
+        "zuordnungen": {
           "type": "text",
           "analyzer": "custom_german_analyzer"
         },
-        "authors": {
-          "type": "text",
-          "analyzer": "custom_german_analyzer"
-        },
-        "collaborators": {
-          "type": "text",
-          "analyzer": "custom_german_analyzer"
-        },
-        "originator": {
-          "type": "text",
-          "analyzer": "custom_german_analyzer"
-        },
-        "language": {
-          "type": "text",
-          "analyzer": "custom_german_analyzer"
-        },
-        "conference_note": {
-          "type": "text",
-          "analyzer": "custom_german_analyzer"
-        },
-        "short_report": {
-          "type": "text",
-          "analyzer": "custom_german_analyzer"
-        },
-        "outline": {
-          "type": "text",
-          "analyzer": "custom_german_analyzer"
+        "DATUM": {
+          "type": "alias",
+          "path": "zitierdatum_items"
         },
         "articles": {
           "type": "nested",

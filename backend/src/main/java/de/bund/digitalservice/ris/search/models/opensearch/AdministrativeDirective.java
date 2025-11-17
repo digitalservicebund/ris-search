@@ -10,7 +10,7 @@ import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.lang.Nullable;
 
 @Builder
-@Document(indexName = "administrative_directive")
+@Document(indexName = "#{@configurations.getAdministrativeDirectiveIndexName()}")
 public record AdministrativeDirective(
     @Id @Field(name = Fields.ID) String id,
     @Field(name = Fields.DOCUMENT_NUMBER) String documentNumber,
@@ -35,7 +35,8 @@ public record AdministrativeDirective(
     @ElementCollection @Field(name = Fields.KEYWORDS) List<String> keywords,
     @ElementCollection @Field(name = Fields.FIELDS_OF_LAW) List<String> fieldsOfLaw,
     @ElementCollection @Field(name = Fields.ZUORDNUNGEN) List<String> zuordnungen,
-    @JsonIgnore @Field(name = Literature.Fields.INDEXED_AT) String indexedAt) {
+    @JsonIgnore @Field(name = Literature.Fields.INDEXED_AT) String indexedAt)
+    implements AbstractSearchEntity {
 
   public static class Fields {
     private Fields() {}
