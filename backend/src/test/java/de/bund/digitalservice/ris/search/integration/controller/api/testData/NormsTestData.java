@@ -8,11 +8,7 @@ import de.bund.digitalservice.ris.search.models.opensearch.Article;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.models.opensearch.TableOfContentsItem;
 import de.bund.digitalservice.ris.search.utils.eli.EliFile;
-import io.pebbletemplates.pebble.PebbleEngine;
-import io.pebbletemplates.pebble.template.PebbleTemplate;
 import java.io.IOException;
-import java.io.StringWriter;
-import java.io.Writer;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -81,7 +77,7 @@ public class NormsTestData {
     context.put("work_eli", eliFile.getWorkEli().toString());
     context.put("expression_eli", eliFile.getExpressionEli().toString());
     context.put("manifestation_eli", eliFile.getManifestationEli().toString());
-    return getXmlFromTemplate(context, NORM_LDML_TEMPLATE);
+    return SharedTestConstants.getXmlFromTemplate(context, NORM_LDML_TEMPLATE);
   }
 
   public static String simpleNormXmlAttachment(String fileName, Map<String, Object> context)
@@ -96,19 +92,7 @@ public class NormsTestData {
     context.put("work_eli", eliFile.getWorkEli().toString());
     context.put("expression_eli", eliFile.getExpressionEli().toString());
     context.put("attachment_name", eliFile.fileName());
-    return getXmlFromTemplate(context, NORM_ATTACHMENT_LDML_TEMPLATE);
-  }
-
-  private static String getXmlFromTemplate(Map<String, Object> context, String template)
-      throws IOException {
-    PebbleEngine engine = new PebbleEngine.Builder().build();
-    PebbleTemplate compiledTemplate = engine.getTemplate(template);
-    if (context == null) {
-      context = new HashMap<>();
-    }
-    Writer writer = new StringWriter();
-    compiledTemplate.evaluate(writer, context);
-    return writer.toString();
+    return SharedTestConstants.getXmlFromTemplate(context, NORM_ATTACHMENT_LDML_TEMPLATE);
   }
 
   private static TableOfContentsItem simpleToc(String number) {

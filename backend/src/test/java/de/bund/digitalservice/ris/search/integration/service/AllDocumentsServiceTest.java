@@ -9,9 +9,6 @@ import de.bund.digitalservice.ris.search.integration.controller.api.testData.Lit
 import de.bund.digitalservice.ris.search.integration.controller.api.testData.NormsTestData;
 import de.bund.digitalservice.ris.search.integration.controller.api.testData.TestDataGenerator;
 import de.bund.digitalservice.ris.search.models.opensearch.AbstractSearchEntity;
-import de.bund.digitalservice.ris.search.repository.opensearch.CaseLawRepository;
-import de.bund.digitalservice.ris.search.repository.opensearch.LiteratureRepository;
-import de.bund.digitalservice.ris.search.repository.opensearch.NormsRepository;
 import de.bund.digitalservice.ris.search.service.AllDocumentsService;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,9 +25,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 @WithJwt("jwtTokens/ValidAccessToken.json")
 class AllDocumentsServiceTest extends ContainersIntegrationBase {
 
-  @Autowired private CaseLawRepository caseLawRepository;
-  @Autowired private LiteratureRepository literatureRepository;
-  @Autowired private NormsRepository normsRepository;
   @Autowired private AllDocumentsService allDocumentsService;
 
   @BeforeEach

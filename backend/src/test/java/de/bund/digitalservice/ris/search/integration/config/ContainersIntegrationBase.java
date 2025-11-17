@@ -4,7 +4,10 @@ import de.bund.digitalservice.ris.search.config.obs.TestMockS3Client;
 import de.bund.digitalservice.ris.search.integration.controller.api.testData.CaseLawTestData;
 import de.bund.digitalservice.ris.search.integration.controller.api.testData.LiteratureTestData;
 import de.bund.digitalservice.ris.search.integration.controller.api.testData.NormsTestData;
+import de.bund.digitalservice.ris.search.repository.objectstorage.CaseLawBucket;
+import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
 import de.bund.digitalservice.ris.search.repository.objectstorage.S3ObjectStorageClient;
+import de.bund.digitalservice.ris.search.repository.objectstorage.literature.LiteratureBucket;
 import de.bund.digitalservice.ris.search.repository.opensearch.CaseLawRepository;
 import de.bund.digitalservice.ris.search.repository.opensearch.LiteratureRepository;
 import de.bund.digitalservice.ris.search.repository.opensearch.NormsRepository;
@@ -22,9 +25,12 @@ import org.testcontainers.utility.TestcontainersConfiguration;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class ContainersIntegrationBase {
 
-  @Autowired private CaseLawRepository caseLawRepository;
-  @Autowired private LiteratureRepository literatureRepository;
-  @Autowired private NormsRepository normsRepository;
+  @Autowired protected CaseLawRepository caseLawRepository;
+  @Autowired protected LiteratureRepository literatureRepository;
+  @Autowired protected NormsRepository normsRepository;
+  @Autowired protected CaseLawBucket caseLawBucket;
+  @Autowired protected LiteratureBucket literatureBucket;
+  @Autowired protected NormsBucket normsBucket;
 
   @Autowired
   @Qualifier("caseLawS3Client")
@@ -93,8 +99,7 @@ public class ContainersIntegrationBase {
 
   public void addNormXmlFiles(Map<String, String> files) {
     for (var normFile : files.entrySet()) {
-      ((TestMockS3Client) normS3Client.getS3Client())
-          .putFile(normFile.getKey(), normFile.getValue());
+      normsBucket.save(normFile.getKey(), normFile.getValue());
     }
   }
 }

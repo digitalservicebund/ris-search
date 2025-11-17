@@ -5,8 +5,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.integration.config.ContainersIntegrationBase;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
-import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
-import de.bund.digitalservice.ris.search.repository.opensearch.NormsRepository;
 import de.bund.digitalservice.ris.search.service.IndexStatusService;
 import de.bund.digitalservice.ris.search.service.IndexingState;
 import de.bund.digitalservice.ris.search.service.NormIndexSyncJob;
@@ -30,8 +28,6 @@ class NormsImporterTest extends ContainersIntegrationBase {
 
   @Autowired private NormIndexSyncJob normsImporter;
   @Autowired private IndexStatusService indexStatusService;
-  @Autowired private NormsRepository normIndex;
-  @Autowired private NormsBucket normsBucket;
 
   @BeforeEach
   void beforeEach() {
@@ -63,12 +59,12 @@ class NormsImporterTest extends ContainersIntegrationBase {
     normsBucket.save(
         secondChangelogFileName, "{\"changed\": [\"%s\"]}".formatted(nonIgnoredEliFile));
 
-    assertThat(normIndex.count()).isZero();
+    assertThat(normsRepository.count()).isZero();
 
     IndexingState mockState = getMockState().withLastProcessedChangelogFile(firstChangelogFileName);
     normsImporter.fetchAndProcessChanges(mockState);
 
-    assertThat(normIndex.findAll())
+    assertThat(normsRepository.findAll())
         .map(Norm::getManifestationEliExample)
         .containsExactlyInAnyOrder(nonIgnoredEliFile, relatedByWorkEliFile);
   }
@@ -84,13 +80,13 @@ class NormsImporterTest extends ContainersIntegrationBase {
     Instant now = Instant.now();
     Instant lastSuccess = now.minus(1, ChronoUnit.HOURS);
 
-    normIndex.save(
+    normsRepository.save(
         Norm.builder()
             .id(expressionEli)
             .manifestationEliExample(oldManifestationEli)
             .indexedAt(lastSuccess.toString())
             .build());
-    assertThat(normIndex.count()).isEqualTo(1);
+    assertThat(normsRepository.count()).isEqualTo(1);
 
     normsBucket.save(
         "changelogs/%s-changelog.json".formatted(now),
@@ -103,8 +99,8 @@ class NormsImporterTest extends ContainersIntegrationBase {
 
     normsImporter.fetchAndProcessChanges(mockState);
 
-    assertThat(normIndex.count()).isEqualTo(2);
-    assertThat(normIndex.findById(expressionEli).get().getManifestationEliExample())
+    assertThat(normsRepository.count()).isEqualTo(2);
+    assertThat(normsRepository.findById(expressionEli).get().getManifestationEliExample())
         .isEqualTo(newManifestationEli);
   }
 
@@ -135,9 +131,9 @@ class NormsImporterTest extends ContainersIntegrationBase {
             .workEli(toKeep.getWorkEli().toString())
             .indexedAt(lastSuccess.toString())
             .build());
-    normIndex.saveAll(initialState);
+    normsRepository.saveAll(initialState);
 
-    assertThat(normIndex.count()).isEqualTo(2);
+    assertThat(normsRepository.count()).isEqualTo(2);
 
     String changelogFileName = "changelogs/%s-changelog.json".formatted(now);
 
@@ -152,8 +148,8 @@ class NormsImporterTest extends ContainersIntegrationBase {
     IndexingState indexingState =
         indexStatusService.loadStatus(NormIndexSyncJob.NORM_STATUS_FILENAME);
     assertThat(indexingState.lastProcessedChangelogFile()).isEqualTo(changelogFileName);
-    assertThat(normIndex.count()).isEqualTo(1);
-    assertThat(normIndex.findById(toKeep.getExpressionEli().toString())).isPresent();
+    assertThat(normsRepository.count()).isEqualTo(1);
+    assertThat(normsRepository.findById(toKeep.getExpressionEli().toString())).isPresent();
   }
 
   private IndexingState getMockState() {

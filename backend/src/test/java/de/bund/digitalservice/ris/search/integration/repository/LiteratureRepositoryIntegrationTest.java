@@ -4,19 +4,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import de.bund.digitalservice.ris.search.integration.config.ContainersIntegrationBase;
 import de.bund.digitalservice.ris.search.models.opensearch.Literature;
-import de.bund.digitalservice.ris.search.repository.opensearch.LiteratureRepository;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 @Tag("integration")
 class LiteratureRepositoryIntegrationTest extends ContainersIntegrationBase {
-
-  @Autowired private LiteratureRepository literatureRepository;
 
   private final Literature literature = mockLiterature("XXLU000000001", "2025-04-02T00:00:00Z");
 
