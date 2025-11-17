@@ -116,7 +116,7 @@ useStaticPageSeo("translations-list");
         >
           <li v-for="t in sortedTranslations" :key="t['@id']">
             <NuxtLink
-              :to="{ name: 'translations', params: { id: t['@id'] } }"
+              :to="{ name: 'translations-id', params: { id: t['@id'] } }"
               class="group my-16 block border-4 border-transparent bg-white p-8 px-32 py-24 no-underline hover:text-blue-800 hover:no-underline focus:border-blue-800"
             >
               <div class="max-w-prose space-y-24">
