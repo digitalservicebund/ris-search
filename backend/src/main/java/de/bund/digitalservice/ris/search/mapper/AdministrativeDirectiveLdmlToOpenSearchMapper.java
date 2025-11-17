@@ -8,6 +8,7 @@ import de.bund.digitalservice.ris.search.models.ldml.directive.Block;
 import de.bund.digitalservice.ris.search.models.ldml.directive.Doc;
 import de.bund.digitalservice.ris.search.models.ldml.directive.DocumentType;
 import de.bund.digitalservice.ris.search.models.ldml.directive.DocumentTypeCategory;
+import de.bund.digitalservice.ris.search.models.ldml.directive.FieldOfLaw;
 import de.bund.digitalservice.ris.search.models.ldml.directive.FrbrExpression;
 import de.bund.digitalservice.ris.search.models.ldml.directive.FrbrNameValueElement;
 import de.bund.digitalservice.ris.search.models.ldml.directive.FrbrWork;
@@ -21,6 +22,7 @@ import de.bund.digitalservice.ris.search.models.ldml.directive.OtherReferences;
 import de.bund.digitalservice.ris.search.models.ldml.directive.Preface;
 import de.bund.digitalservice.ris.search.models.ldml.directive.Proprietary;
 import de.bund.digitalservice.ris.search.models.ldml.directive.RisMeta;
+import de.bund.digitalservice.ris.search.models.ldml.directive.Zuordnung;
 import de.bund.digitalservice.ris.search.models.opensearch.AdministrativeDirective;
 import jakarta.xml.bind.DataBindingException;
 import jakarta.xml.bind.JAXB;
@@ -62,9 +64,11 @@ public class AdministrativeDirectiveLdmlToOpenSearchMapper {
           .activeAdministrativeReferences(getActiveAdministrativeReferences(ldml))
           .activeNormReferences(getActiveNormReferences(ldml))
           .keywords(getKeywords(ldml))
+          .fieldsOfLaw(getFieldsOfLaw(ldml))
+          .zuordnungen(getZuordnungen(ldml))
           .build();
     } catch (ValidationException e) {
-      throw new OpenSearchMapperException("unable to parse file to administrative directive", e);
+      throw new OpenSearchMapperException(e.getMessage());
     }
   }
 
@@ -114,7 +118,7 @@ public class AdministrativeDirectiveLdmlToOpenSearchMapper {
     return getRisMeta(ldml)
         .map(RisMeta::getDocumentType)
         .map(DocumentType::getCategory)
-        .map(DocumentTypeCategory::getValue)
+        .map(DocumentTypeCategory::getLongName)
         .orElseThrow(() -> new ValidationException("missing documentCategory"));
   }
 
@@ -266,5 +270,31 @@ public class AdministrativeDirectiveLdmlToOpenSearchMapper {
     }
 
     return documentNumber;
+  }
+
+  private static List<String> getFieldsOfLaw(AdministrativeDirectiveLdml ldml)
+      throws ValidationException {
+    List<FieldOfLaw> fieldsOfLaw = getRisMeta(ldml).map(RisMeta::getFieldsOfLaw).orElse(List.of());
+
+    for (FieldOfLaw law : fieldsOfLaw) {
+      if (Objects.isNull(law.getValue())) {
+        throw new ValidationException("field of law value is null");
+      }
+    }
+    return fieldsOfLaw.stream().map(FieldOfLaw::getValue).toList();
+  }
+
+  private static List<String> getZuordnungen(AdministrativeDirectiveLdml ldml)
+      throws ValidationException {
+    List<Zuordnung> zuordnungen = getRisMeta(ldml).map(RisMeta::getZuordnungen).orElse(List.of());
+
+    for (Zuordnung zuordnung : zuordnungen) {
+      if (Objects.isNull(zuordnung.getAspekt()) || Objects.isNull(zuordnung.getBegriff())) {
+        throw new ValidationException("invalid zuordnung");
+      }
+    }
+    return zuordnungen.stream()
+        .map(z -> String.format("%s %s", z.getAspekt(), z.getBegriff()))
+        .toList();
   }
 }

@@ -44,6 +44,12 @@
                         <ris:activeReference dateOfVersion="2024-01-01" reference="VR Full Reference 2024-01-01 00001" typeNumber="1"/>
                         <ris:activeReference paragraph="§ 1" position="Abs 1" reference="ArbGG" typeNumber="2"/>
                     </ris:activeReferences>
+                    <ris:fieldsOfLaw>
+                        <ris:fieldOfLaw notation="OLD">01-01-01-01</ris:fieldOfLaw>
+                    </ris:fieldsOfLaw>
+                    <ris:zuordnungen>
+                        <ris:zuordnung aspekt="aspekt" begriff="begriff"/>
+                    </ris:zuordnungen>
                 </ris:meta>
             </akn:proprietary>
         </akn:meta>
