@@ -6,7 +6,9 @@ import de.bund.digitalservice.ris.search.models.opensearch.AdministrativeDirecti
 import de.bund.digitalservice.ris.search.repository.objectstorage.AdministrativeDirectiveBucket;
 import de.bund.digitalservice.ris.search.repository.opensearch.AdministrativeDirectiveRepository;
 import java.util.Optional;
+import org.springframework.stereotype.Service;
 
+@Service
 public class IndexAdministrativeDirectiveService extends BaseIndexService<AdministrativeDirective> {
 
   public IndexAdministrativeDirectiveService(

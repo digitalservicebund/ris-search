@@ -28,6 +28,7 @@ import jakarta.xml.bind.DataBindingException;
 import jakarta.xml.bind.JAXB;
 import jakarta.xml.bind.ValidationException;
 import java.io.StringReader;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
@@ -66,6 +67,7 @@ public class AdministrativeDirectiveLdmlToOpenSearchMapper {
           .keywords(getKeywords(ldml))
           .fieldsOfLaw(getFieldsOfLaw(ldml))
           .zuordnungen(getZuordnungen(ldml))
+          .indexedAt(Instant.now().toString())
           .build();
     } catch (ValidationException e) {
       throw new OpenSearchMapperException(e.getMessage());

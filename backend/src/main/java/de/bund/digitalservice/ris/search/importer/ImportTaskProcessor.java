@@ -1,5 +1,6 @@
 package de.bund.digitalservice.ris.search.importer;
 
+import de.bund.digitalservice.ris.search.service.AdministrativeDirectiveIndexSyncJob;
 import de.bund.digitalservice.ris.search.service.CaseLawIndexSyncJob;
 import de.bund.digitalservice.ris.search.service.Job;
 import de.bund.digitalservice.ris.search.service.LiteratureIndexSyncJob;
@@ -26,6 +27,7 @@ public class ImportTaskProcessor {
   private final LiteratureIndexSyncJob literatureIndexSyncJob;
   private final SitemapsUpdateJob sitemapsUpdateJob;
   private final EcliSitemapJob ecliSitemapJob;
+  private final AdministrativeDirectiveIndexSyncJob administrativeDirectiveUpdateJob;
 
   private static final Logger logger = LogManager.getLogger(ImportTaskProcessor.class);
 
@@ -37,12 +39,14 @@ public class ImportTaskProcessor {
       CaseLawIndexSyncJob caseLawIndexSyncJob,
       SitemapsUpdateJob sitemapsUpdateJob,
       LiteratureIndexSyncJob literatureIndexSyncJob,
-      EcliSitemapJob ecliSitemapJob) {
+      EcliSitemapJob ecliSitemapJob,
+      AdministrativeDirectiveIndexSyncJob administrativeDirectiveUpdateJob) {
     this.normIndexSyncJob = normIndexSyncJob;
     this.caseLawIndexSyncJob = caseLawIndexSyncJob;
     this.literatureIndexSyncJob = literatureIndexSyncJob;
     this.sitemapsUpdateJob = sitemapsUpdateJob;
     this.ecliSitemapJob = ecliSitemapJob;
+    this.administrativeDirectiveUpdateJob = administrativeDirectiveUpdateJob;
   }
 
   public boolean shouldRun(String[] args) {
@@ -90,6 +94,7 @@ public class ImportTaskProcessor {
       case "import_norms" -> runTask(normIndexSyncJob);
       case "import_caselaw" -> runTask(caseLawIndexSyncJob);
       case "import_literature" -> runTask(literatureIndexSyncJob);
+      case "import_administrative_directive" -> runTask(administrativeDirectiveUpdateJob);
       case "update_sitemaps" -> runTask(sitemapsUpdateJob);
       case "generate_ecli_sitemaps" -> runTask(ecliSitemapJob);
       default -> throw new IllegalArgumentException("Unexpected target '%s'".formatted(target));

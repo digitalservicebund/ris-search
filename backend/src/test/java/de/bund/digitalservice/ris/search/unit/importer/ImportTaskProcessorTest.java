@@ -9,6 +9,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import de.bund.digitalservice.ris.search.importer.ImportTaskProcessor;
+import de.bund.digitalservice.ris.search.service.AdministrativeDirectiveIndexSyncJob;
 import de.bund.digitalservice.ris.search.service.CaseLawIndexSyncJob;
 import de.bund.digitalservice.ris.search.service.Job;
 import de.bund.digitalservice.ris.search.service.LiteratureIndexSyncJob;
@@ -30,6 +31,7 @@ class ImportTaskProcessorTest {
   @Mock private LiteratureIndexSyncJob literatureIndexSyncJob;
   @Mock private SitemapsUpdateJob sitemapsUpdateJob;
   @Mock private EcliSitemapJob ecliSitemapJob;
+  @Mock private AdministrativeDirectiveIndexSyncJob administrativeDirectiveUpdateJob;
 
   private ImportTaskProcessor processor;
 
@@ -41,7 +43,8 @@ class ImportTaskProcessorTest {
             caseLawIndexSyncJob,
             sitemapsUpdateJob,
             literatureIndexSyncJob,
-            ecliSitemapJob);
+            ecliSitemapJob,
+            administrativeDirectiveUpdateJob);
   }
 
   @Test
@@ -187,6 +190,19 @@ class ImportTaskProcessorTest {
 
     // Then
     verify(literatureIndexSyncJob).runJob();
+  }
+
+  @Test
+  void runTask_withAdministrativeDirective_callsImportServiceWithLiteratureParams() {
+    // Given
+    String target = "import_administrative_directive";
+
+    // When
+    when(administrativeDirectiveUpdateJob.runJob()).thenReturn(Job.ReturnCode.SUCCESS);
+    processor.runTask(target);
+
+    // Then
+    verify(administrativeDirectiveUpdateJob).runJob();
   }
 
   @Test
