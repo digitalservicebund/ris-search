@@ -144,7 +144,7 @@ export default defineNuxtConfig({
         "style-src": ["'self'", "https:", "'unsafe-inline'"],
         "img-src": ["'self'", "data:", "'unsafe-inline'"],
         "script-src": ["'strict-dynamic'", "'nonce-{{nonce}}'"],
-        "connect-src": ["'self", "http://backend:8090", "https://backend:8090"],
+        "connect-src": ["'self", "http:", "https:"],
       },
     },
     rateLimiter: {
