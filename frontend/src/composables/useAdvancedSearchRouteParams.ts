@@ -71,7 +71,7 @@ export function useAdvancedSearchRouteParams() {
   // Saving -------------------------------------------------
 
   function saveFilterStateToRoute() {
-    navigateTo({
+    return navigateTo({
       query: {
         ...route.query,
         q: encodeURIComponent(query.value),

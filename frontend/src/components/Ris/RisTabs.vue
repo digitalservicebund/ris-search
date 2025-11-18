@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
+import type { RouteLocationRaw } from "#vue-router";
 
 export interface LinkTab {
   id: string;
-  href: string;
+  href: RouteLocationRaw;
   label: string;
   ariaLabel: string;
   icon?: Component;
@@ -40,10 +41,10 @@ const getTabClasses = (tabId: string) => {
     :aria-label="label"
   >
     <div class="container flex">
-      <a
+      <NuxtLink
         v-for="tab in tabs"
         :key="tab.id"
-        :href="tab.href"
+        :to="tab.href"
         :aria-current="activeTab === tab.id ? 'page' : undefined"
         :aria-label="tab.ariaLabel"
         :class="getTabClasses(tab.id)"
@@ -51,7 +52,7 @@ const getTabClasses = (tabId: string) => {
       >
         <component :is="tab.icon" v-if="tab.icon" aria-hidden="true" />
         {{ tab.label }}
-      </a>
+      </NuxtLink>
     </div>
   </nav>
   <div>

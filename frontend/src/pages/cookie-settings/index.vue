@@ -214,8 +214,8 @@ useStaticPageSeo("cookies");
             der Sitzungsdaten wird die Webanalysedienst-Software von Posthog,
             Market Street, San Francisco, CA 94114, USA, verwendet. Weitere
             Informationen zum Datenschutz dieses Dienstleisters finden Sie unter
-            <a href="https://posthog.com/privacy" class="ris-link1-regular"
-              >https://posthog.com/privacy</a
+            <NuxtLink to="https://posthog.com/privacy" class="ris-link1-regular"
+              >https://posthog.com/privacy</NuxtLink
             >. Ihre Daten werden wie folgt verarbeitet:
           </p>
           <div>

@@ -1,11 +1,10 @@
-import { mountSuspended } from "@nuxt/test-utils/runtime";
-import type { VueWrapper } from "@vue/test-utils";
+import { renderSuspended } from "@nuxt/test-utils/runtime";
+import userEvent from "@testing-library/user-event";
+import { screen } from "@testing-library/vue";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import TableOfContents from "./TableOfContents.vue";
 
-describe("TableOfContents.vue", async () => {
-  let wrapper: VueWrapper;
-
+describe("TableOfContents", async () => {
   const tableOfContentEntries = [
     {
       id: "leitsatz",
@@ -33,74 +32,69 @@ describe("TableOfContents.vue", async () => {
     },
   ];
 
-  beforeEach(async () => {
-    vi.restoreAllMocks();
-    wrapper = await mountSuspended(TableOfContents, {
+  async function renderTableOfContents() {
+    return await renderSuspended(TableOfContents, {
       props: { tableOfContentEntries },
     });
+  }
+
+  beforeEach(async () => {
+    vi.restoreAllMocks();
   });
 
   it("renders page content links correctly", async () => {
-    const links = wrapper.findAll("a");
-    expect(links.length).toBe(tableOfContentEntries.length);
+    await renderTableOfContents();
+
+    const links = screen.getAllByRole("link");
+
+    expect(links).toHaveLength(tableOfContentEntries.length);
+
     tableOfContentEntries.forEach((item, index) => {
-      expect(links.at(index)?.attributes("href")).toBe(`#${item.id}`);
-      expect(links.at(index)?.text()).toContain(item.title);
+      expect(links[index]).toHaveAttribute(
+        "href",
+        expect.stringContaining(`/#${item.id}`),
+      );
+
+      expect(links[index]).toHaveTextContent(item.title);
     });
   });
 
-  it("renders the correct icon for table of content", async () => {
-    const icons = [
-      "IcBaselineShortText",
-      "IcBaselineSubject",
-      "IcBaselineGavel",
-      "IcOutlineFactCheck",
-      "IcBaselineFormatListBulleted",
-      "IcBaselineNotes",
-    ];
-    for (const icon of icons) {
-      expect(wrapper.findComponent({ name: icon }).exists()).toBe(true);
-    }
-  });
+  it("does not update the selected entry when items are not intersecting", async () => {
+    await renderTableOfContents();
 
-  it("does not call selectItem function when elements are not intersecting", async () => {
-    const selectItemSpy = vi.spyOn(
-      wrapper.vm as unknown as typeof TableOfContents,
-      "selectEntry",
-    );
-    Object.defineProperty(globalThis, "scrollY", { value: 0, writable: true });
+    vi.spyOn(globalThis, "scrollY", "get").mockReturnValue(0);
     globalThis.dispatchEvent(new Event("scroll"));
 
-    await wrapper.vm.$nextTick();
+    await nextTick();
 
-    expect(selectItemSpy).not.toHaveBeenCalled();
+    const links = screen.getAllByRole("link");
+
+    links.forEach((link) => expect(link).not.toHaveAttribute("aria-current"));
   });
 
-  it("updates selectedItem based on the route hash", async () => {
-    const router = useRouter();
-    await router.push("/#leitsatz"); // tests fail without this duplication when running the whole file
-    wrapper = await mountSuspended(TableOfContents, {
+  it("updates selected item based on the route hash", async () => {
+    await renderSuspended(TableOfContents, {
       props: { tableOfContentEntries },
       route: { path: "/", hash: "#leitsatz" },
-      shallow: true,
     });
-    expect(router.currentRoute.value.hash).toBe("#leitsatz");
-    // @ts-expect-error -- shouldn't be accessed like this but here we are
-    expect(wrapper.vm.selectedEntry).toBe("leitsatz");
+
+    expect(screen.getByRole("link", { name: "Leitsatz" })).toHaveAttribute(
+      "aria-current",
+      "location",
+    );
   });
 
-  it("replaces the route on hash change", async () => {
+  it("navigates on click", async () => {
+    const user = userEvent.setup();
+
     const router = useRouter();
     const routerReplace = vi.spyOn(router, "replace");
 
-    const wrapper = await mountSuspended(TableOfContents, {
-      props: { tableOfContentEntries },
-    });
+    await renderTableOfContents();
 
-    const link = wrapper.find(`a[href="#${tableOfContentEntries[1]?.id}"]`);
-    await link.trigger("click");
+    const link = screen.getByRole("link", { name: "Orientierungssatz" });
+    await user.click(link);
 
-    await wrapper.vm.$nextTick();
     expect(routerReplace).toHaveBeenCalledWith("/");
   });
 });

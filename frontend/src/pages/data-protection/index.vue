@@ -26,7 +26,9 @@ useStaticPageSeo("datenschutz");
           <li>
             unsere Webseiten testphase.rechtsinformationen.bund.de
             (Informationen zum Einsatz von Cookies finden Sie
-            <NuxtLink class="ris-link1-regular" to="/cookie-einstellungen"
+            <NuxtLink
+              class="ris-link1-regular"
+              :to="{ name: 'cookie-settings' }"
               >hier</NuxtLink
             >) bzw. docs.rechtsinformationen.bund.de besuchen (siehe Abschnitt
             A);

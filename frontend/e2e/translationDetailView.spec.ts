@@ -88,7 +88,7 @@ test(
 );
 
 test(
-  "german original and english version link to each other",
+  "German original and English version link to each other",
   { tag: ["@RISDEV-8950"] },
   async ({ page, isMobileTest }) => {
     await navigate(page, "/translations/TestV");
@@ -113,7 +113,7 @@ test(
     });
 
     await expect(translationButton).toBeVisible();
-    translationButton.click();
+    await translationButton.click();
     await expect(
       page.getByRole("heading", {
         name: "Test Regulation for the Model Framework of the Public Service",
@@ -123,7 +123,7 @@ test(
 );
 
 test(
-  "Links in action menu are correct",
+  "links in action menu are correct",
   { tag: ["@RISDEV-8950"] },
   async ({ page, isMobileTest }) => {
     const url = "/translations/TestV";

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import _ from "lodash";
 import GavelIcon from "virtual:icons/material-symbols/gavel";
+import type { RouteLocationRaw } from "#vue-router";
 import { usePostHogStore } from "~/stores/usePostHogStore";
 import type { CaseLaw, SearchResult, TextMatch } from "~/types";
 import { dateFormattedDDMMYYYY } from "~/utils/dateFormatting";
@@ -16,6 +17,7 @@ const props = defineProps<{
 
 type CaseLawMetadata = {
   headline: string;
+  route: RouteLocationRaw;
   url: string;
   courtName: string;
   decisionDate: string;
@@ -93,6 +95,12 @@ const metadata = computed(() => {
       getMatch("headline", props.searchResult.textMatches) ||
       item.headline ||
       "Titelzeile nicht vorhanden",
+    route: {
+      name: "case-law-documentNumber",
+      params: { documentNumber: props.searchResult.item.documentNumber },
+    },
+    // The URL is currently needed for PostHog tracking but should not be used
+    // for navigation. Use `route` for navigation instead.
     url: `/case-law/${props.searchResult.item.documentNumber}`,
     courtName: item.courtName,
     decisionDate: dateFormattedDDMMYYYY(item.decisionDate),
@@ -176,7 +184,7 @@ function trackResultClick(url: string) {
     <div class="flex w-full max-w-prose flex-col gap-6">
       <div v-for="section in previewSections" :key="section?.id">
         <NuxtLink
-          :to="`${metadata.url}#${section?.id}`"
+          :to="{ path: `${metadata.url}`, hash: `#${section?.id}` }"
           class="ris-label1-bold link-hover text-blue-800"
           external
           @click="trackResultClick(`${metadata.url}#${section?.id}`)"

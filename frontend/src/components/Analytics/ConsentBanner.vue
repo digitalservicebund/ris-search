@@ -74,10 +74,10 @@ const consentAction = "/api/cookie-consent";
             type="submit"
           />
         </form>
-        <NuxtLink to="/datenschutz" class="ris-link1-regular">
+        <NuxtLink :to="{ name: 'data-protection' }" class="ris-link1-regular">
           Datenschutzerklärung
         </NuxtLink>
-        <NuxtLink to="/cookie-einstellungen" class="ris-link1-regular">
+        <NuxtLink :to="{ name: 'cookie-settings' }" class="ris-link1-regular">
           Cookie-Einstellungen
         </NuxtLink>
       </div>

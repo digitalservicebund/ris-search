@@ -35,11 +35,12 @@ useStaticPageSeo("nutzungstests");
                 Registrieren Sie sich in wenigen Minuten, um über neue
                 Interviews und Nutzungstests informiert zu werden.
               </p>
-              <a
-                href="https://app.formbricks.com/s/cm1gatpbv0001zm7bryylwzyw"
+              <NuxtLink
+                to="https://app.formbricks.com/s/cm1gatpbv0001zm7bryylwzyw"
                 class="ris-link1-bold"
-                >Jetzt registrieren</a
               >
+                Jetzt registrieren
+              </NuxtLink>
             </li>
             <li>
               <h3 class="ris-body1-bold">Einladungen erhalten</h3>

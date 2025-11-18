@@ -25,7 +25,7 @@ const matchedExpressionEli = computed(() => {
 });
 
 if (matchedExpressionEli.value) {
-  navigateTo(`/norms/${matchedExpressionEli.value}`, {
+  await navigateTo(`/norms/${matchedExpressionEli.value}`, {
     replace: true,
   });
 }

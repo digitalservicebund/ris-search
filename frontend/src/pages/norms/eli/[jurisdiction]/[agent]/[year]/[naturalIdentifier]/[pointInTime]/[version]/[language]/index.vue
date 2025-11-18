@@ -326,7 +326,7 @@ useDynamicSeo({ title, description });
                     data-attr="xml-zip-view"
                     class="ris-link1-regular"
                     external
-                    :href="zipUrl"
+                    :to="zipUrl"
                   >
                     <MaterialSymbolsDownload class="mr-2 inline" />
                     {{ metadata.abbreviation ?? "Inhalte" }} als ZIP

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Button } from "primevue";
-import type { RouteLocationRaw } from "vue-router";
 import { NuxtLink } from "#components";
+import type { RouteLocationRaw } from "#vue-router";
 import type { AnyDocument, SearchResult } from "~/types";
 import { buildItemsOnPageString, parsePageNumber } from "~/utils/pagination";
 import IconArrowBack from "~icons/ic/baseline-arrow-back";

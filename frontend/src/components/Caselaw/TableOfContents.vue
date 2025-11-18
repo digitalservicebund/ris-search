@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { useRoute } from "#app";
-import type { RouteQueryAndHash } from "#vue-router";
 import IcBaselineFormatListBulleted from "~icons/ic/baseline-format-list-bulleted";
 import IcBaselineGavel from "~icons/ic/baseline-gavel";
 import IcBaselineNotes from "~icons/ic/baseline-notes";
@@ -48,7 +47,9 @@ function getIcon(title: string) {
 function handleIntersection(entries: IntersectionObserverEntry[]) {
   const currentScrollY = window.scrollY;
   const scrollingDown = currentScrollY > lastScrollY;
+
   lastScrollY = currentScrollY;
+
   entries.forEach((entry) => {
     if (entry.isIntersecting) {
       if (scrollingDown) {
@@ -61,33 +62,33 @@ function handleIntersection(entries: IntersectionObserverEntry[]) {
         visibleIds.value?.filter((id) => id !== entry.target.id) ?? [];
     }
   });
+
   const orderedVisibleSections = props.tableOfContentEntries.filter((entry) =>
     visibleIds.value.includes(entry.id),
   );
+
   // prevent overriding the entry selected based on the hash, only set it if none is selected
   if (!initialLoad.value || !selectedEntry.value) {
     selectedEntry.value = orderedVisibleSections[0]?.id ?? null;
   }
+
   initialLoad.value = false;
 }
 
 onMounted(() => {
   lastScrollY = window.scrollY;
+
   const observer = new IntersectionObserver(handleIntersection, {
     threshold: 0,
   });
 
   props.tableOfContentEntries.forEach((entry) => {
     const element = document.getElementById(entry.id);
-    if (element) {
-      observer.observe(element);
-    }
+    if (element) observer.observe(element);
   });
 
-  const { hash } = route as RouteQueryAndHash;
-  if (hash) {
-    selectedEntry.value = hash.substring(1); // drop leading #
-  }
+  const { hash } = route;
+  if (hash) selectedEntry.value = hash.substring(1); // drop leading #
 });
 </script>
 
@@ -102,19 +103,19 @@ onMounted(() => {
     <div>
       <div v-for="entry in tableOfContentEntries" :key="entry.id">
         <NuxtLink
-          :aria-current="selectedEntry === entry.id ? 'location' : undefined"
-          replace
-          :to="`#${entry.id}`"
           class="flex flex-row items-center space-x-12 py-8 text-blue-800 underline hover:text-black hover:underline aria-[current=location]:bg-blue-300 aria-[current=location]:text-black aria-[current=location]:hover:bg-blue-300 lg:px-24 lg:py-20 lg:no-underline lg:hover:bg-blue-200 lg:aria-[current=location]:border-l-4 lg:aria-[current=location]:border-blue-900 lg:aria-[current=location]:bg-blue-200 lg:aria-[current=location]:pl-20"
+          :aria-current="selectedEntry === entry.id ? 'location' : undefined"
+          :to="{ hash: `#${entry.id}` }"
+          replace
           @click="selectEntry(entry.id)"
         >
           <component :is="getIcon(entry.title)"></component>
-          <p
+          <span
             :data-selected="selectedEntry === entry.id"
             class="ris-subhead-regular lg:data-[selected=true]:font-bold"
           >
             {{ entry.title }}
-          </p>
+          </span>
         </NuxtLink>
       </div>
     </div>

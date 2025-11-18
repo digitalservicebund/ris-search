@@ -22,11 +22,12 @@ const title =
             personenbezogenen Daten bei Nutzung des Registrierungsformulars für
             Nutzungsstudien zu dem Projekt
             <i>„Testphase Rechtsinformationsportal“</i> auf
-            <a
+            <NuxtLink
               class="ris-link1-regular"
-              href="https://app.formbricks.com/s/cm1gatpbv0001zm7bryylwzyw"
-              >https://app.formbricks.com/s/cm1gatpbv0001zm7bryylwzyw</a
+              to="https://app.formbricks.com/s/cm1gatpbv0001zm7bryylwzyw"
             >
+              https://app.formbricks.com/s/cm1gatpbv0001zm7bryylwzyw
+            </NuxtLink>
             verarbeitet werden. Außerdem erhalten Sie Informationen zur
             Weitergabe Ihrer personenbezogenen Daten an Dritte, zur Dauer der
             Speicherung Ihrer personenbezogenen Daten, über Ihre Rechte in Bezug
@@ -218,8 +219,8 @@ const title =
             Auftragsverarbeiterin greift dann auf diese personenbezogenen Daten
             zu und nutzt sie, um Sie zu kontaktieren. Weitere Informationen
             hierzu finden Sie in der Datenschutzerklärung von Formbricks unter
-            <a href="https://formbricks.com/privacy-policy"
-              >https://formbricks.com/privacy-policy</a
+            <NuxtLink to="https://formbricks.com/privacy-policy">
+              https://formbricks.com/privacy-policy </NuxtLink
             >.
           </p>
           <p>

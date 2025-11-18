@@ -97,8 +97,8 @@ watch(
   () => submit(),
 );
 
-function submit() {
-  saveFilterStateToRoute();
+async function submit() {
+  await saveFilterStateToRoute();
   submitSearch();
 }
 </script>

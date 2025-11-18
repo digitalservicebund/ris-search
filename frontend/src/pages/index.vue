@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import Message from "primevue/message";
+import { NuxtLink } from "#components";
 import bmjvLogo from "~/assets/img/BMJV_de_v1__Web_farbig.svg";
-import ButtonLink from "~/components/ButtonLink.vue";
 import SimpleSearchInput from "~/components/Search/SimpleSearchInput.vue";
 import { usePrivateFeaturesFlag } from "~/composables/usePrivateFeaturesFlag";
 import { useRedirectToSearch } from "~/composables/useRedirectToSearch";
@@ -96,7 +96,9 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
       </div>
 
       <div>
-        <ButtonLink href="translations">Go to translations</ButtonLink>
+        <Button :as="NuxtLink" :to="{ name: 'translations' }"
+          >Go to translations</Button
+        >
       </div>
     </FeatureCard>
 
@@ -114,11 +116,13 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
       </div>
 
       <div>
-        <ButtonLink
-          href="https://docs.rechtsinformationen.bund.de"
+        <Button
+          :as="NuxtLink"
+          to="https://docs.rechtsinformationen.bund.de"
           target="_blank"
-          >Zur API-Dokumentation <IcBaselineLaunch
-        /></ButtonLink>
+        >
+          Zur API-Dokumentation <IcBaselineLaunch />
+        </Button>
       </div>
     </FeatureCard>
     <FeatureCard inner-class="gap-x-64 gap-y-32 sm:flex-row">
@@ -138,7 +142,7 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
           geben. Die Funktionen und der Umfang der Daten werden schrittweise
           erweitert.
         </p>
-        <NuxtLink class="ris-link2-regular" to="/ueber"
+        <NuxtLink class="ris-link2-regular" :to="{ name: 'about' }"
           >Weitere Informationen zur Testphase</NuxtLink
         >
       </div>
