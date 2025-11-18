@@ -5,6 +5,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.bund.digitalservice.ris.LoadXmlUtils;
+import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
 import de.bund.digitalservice.ris.search.integration.config.ContainersIntegrationBase;
 import de.bund.digitalservice.ris.search.models.opensearch.AdministrativeDirective;
@@ -38,7 +39,7 @@ class AdministrativeDirectiveIndexSyncJobTest extends ContainersIntegrationBase 
   }
 
   @Test
-  void itIndexesAdministrativeDirectivesOnFullReindex() {
+  void itIndexesAdministrativeDirectivesOnFullReindex() throws ObjectStoreServiceException {
     String content =
         LoadXmlUtils.loadXmlAsString(AdministrativeDirective.class, "KSNR0000.akn.xml");
     bucket.save("KSNR0000.akn.xml", content);
@@ -46,10 +47,13 @@ class AdministrativeDirectiveIndexSyncJobTest extends ContainersIntegrationBase 
 
     AdministrativeDirective expected = repository.findAll().iterator().next();
     assertThat(expected.documentNumber()).isEqualTo("KSNR0000");
+    assertThat(portalBucket.getFileAsString(AdministrativeDirectiveIndexSyncJob.STATUS_FILENAME))
+        .isNotEmpty();
   }
 
   @Test
-  void itIndexesAdministrativeDirectivesOnChangelog() throws JsonProcessingException {
+  void itIndexesAdministrativeDirectivesOnChangelog()
+      throws JsonProcessingException, ObjectStoreServiceException {
     // data
     String content =
         LoadXmlUtils.loadXmlAsString(AdministrativeDirective.class, "KSNR0000.akn.xml");
@@ -72,5 +76,7 @@ class AdministrativeDirectiveIndexSyncJobTest extends ContainersIntegrationBase 
 
     AdministrativeDirective expected = repository.findAll().iterator().next();
     assertThat(expected.documentNumber()).isEqualTo("KSNR0000");
+    assertThat(portalBucket.getFileAsString(AdministrativeDirectiveIndexSyncJob.STATUS_FILENAME))
+        .isNotEmpty();
   }
 }
