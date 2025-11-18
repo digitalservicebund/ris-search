@@ -100,4 +100,25 @@ public class SecurityConfig {
       }
     };
   }
+
+  /**
+   * Method to configure CORS for E2E tests.
+   *
+   * @return The web mvc configurer
+   */
+  @Bean
+  @Profile("e2e")
+  public WebMvcConfigurer e2eCorsConfigurer() {
+
+    return new WebMvcConfigurer() {
+      @Override
+      public void addCorsMappings(CorsRegistry registry) {
+        registry
+            .addMapping("/**")
+            .allowedMethods(CorsConfiguration.ALL)
+            .allowedHeaders(CorsConfiguration.ALL)
+            .allowedOrigins(CorsConfiguration.ALL);
+      }
+    };
+  }
 }
