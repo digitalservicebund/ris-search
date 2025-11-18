@@ -8,10 +8,8 @@ import PropertiesItem from "~/components/PropertiesItem.vue";
 import type { BreadcrumbItem } from "~/components/Ris/RisBreadcrumb.vue";
 import RisTabs from "~/components/Ris/RisTabs.vue";
 import { useDynamicSeo } from "~/composables/useDynamicSeo";
-import {
-  fetchTranslationAndHTML,
-  getGermanOriginal,
-} from "~/composables/useTranslationData";
+import { useLegislationSearchForAbbreviation } from "~/composables/useSearchData";
+import { fetchTranslationAndHTML } from "~/composables/useTranslationDetailData";
 import { DocumentKind } from "~/types";
 import { formatDocumentKind } from "~/utils/displayValues";
 import { tabPanelClass } from "~/utils/tabsStyles";
@@ -26,7 +24,16 @@ const route = useRoute();
 const id = route.params.id as string;
 
 const { data } = await fetchTranslationAndHTML(id);
-const { data: germanOriginal } = await getGermanOriginal(id);
+
+if (!data.value) {
+  throw createError({
+    statusCode: 404,
+    statusMessage: "Translation not found",
+  });
+}
+
+const { legislation: germanOriginal } =
+  await useLegislationSearchForAbbreviation(id);
 
 const currentTranslation = data.value?.content;
 const html = data.value?.html;

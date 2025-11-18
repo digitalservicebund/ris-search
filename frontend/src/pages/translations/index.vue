@@ -4,8 +4,8 @@ import ContentWrapper from "~/components/CustomLayouts/ContentWrapper.vue";
 import type { BreadcrumbItem } from "~/components/Ris/RisBreadcrumb.vue";
 import SimpleSearchInput from "~/components/Search/SimpleSearchInput.vue";
 import { useStaticPageSeo } from "~/composables/useStaticPageSeo";
-import { fetchTranslationList } from "~/composables/useTranslationData";
-import type { TranslationContent } from "~/composables/useTranslationData";
+import type { TranslationContent } from "~/composables/useTranslationDetailData";
+import { useTranslationListData } from "~/composables/useTranslationListData";
 import { DocumentKind } from "~/types";
 import { formatDocumentKind } from "~/utils/displayValues";
 
@@ -24,12 +24,13 @@ const breadcrumbItems: ComputedRef<BreadcrumbItem[]> = computed(() => {
   ];
 });
 
-const { data: translationsList } = fetchTranslationList();
+const { translations } = await useTranslationListData();
 
 const translationsMap = computed(() => {
   const map = new Map<string, TranslationContent>();
-  if (translationsList.value) {
-    for (const t of translationsList.value) {
+
+  if (translations.value) {
+    for (const t of translations.value) {
       map.set(t["@id"], t);
     }
   }
@@ -37,11 +38,14 @@ const translationsMap = computed(() => {
 });
 
 const sortedTranslations = computed<TranslationContent[] | null>(() => {
-  if (!translationsList.value) return null;
+  if (!translations.value) {
+    return null;
+  }
+
   let results: TranslationContent[] = [];
 
-  if (activeSearchTerm.value == "") {
-    results = [...translationsList.value];
+  if (activeSearchTerm.value === "") {
+    results = [...translations.value];
   } else {
     results = minisearch.value
       .search(activeSearchTerm.value, { prefix: true, fuzzy: 0.2 })
@@ -66,7 +70,7 @@ const minisearch = computed(() => {
     ],
     idField: "@id",
   });
-  miniSearch.addAll(translationsList.value ?? []);
+  miniSearch.addAll(translations.value ?? []);
   return miniSearch;
 });
 
@@ -116,7 +120,7 @@ useStaticPageSeo("translations-list");
         >
           <li v-for="t in sortedTranslations" :key="t['@id']">
             <a
-              :href="`translations/${t['@id']}`"
+              :href="`/translations/${t['@id']}`"
               class="group my-16 block border-4 border-transparent bg-white p-8 px-32 py-24 no-underline hover:text-blue-800 hover:no-underline focus:border-blue-800"
             >
               <div class="max-w-prose space-y-24">

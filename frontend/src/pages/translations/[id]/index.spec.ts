@@ -2,7 +2,7 @@ import { mountSuspended } from "@nuxt/test-utils/runtime";
 import type { DOMWrapper } from "@vue/test-utils";
 import { expect, it, describe, beforeEach, vi } from "vitest";
 import { ref } from "vue";
-import type { TranslationData } from "~/composables/useTranslationData";
+import type { TranslationData } from "~/composables/useTranslationDetailData";
 import TranslationDetailPage from "~/pages/translations/[id]/index.vue";
 
 const mockTranslationData: TranslationData = {
