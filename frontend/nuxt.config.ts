@@ -239,6 +239,15 @@ export default defineNuxtConfig({
       include: ["../e2e/**/*.ts"],
     },
   },
+  vue: {
+    compilerOptions: {
+      // Tell Vue to treat the native HTML search element as a custom element,
+      // i.e. not try to resolve it as a component. Workaround to be able to
+      // use this element while waiting for https://github.com/vuejs/core/pull/9249
+      // to be released.
+      isCustomElement: (tag) => ["search"].includes(tag),
+    },
+  },
   ignore: [
     "**/**/*.{spec,test}.{js,cts,mts,ts,jsx,tsx}",
     "**/**/*.{spec,test}.data.ts",
