@@ -137,14 +137,14 @@ export default defineNuxtConfig({
     },
   },
   security: {
-    strict: config.production,
+    strict: false,
     headers: {
       referrerPolicy: "same-origin",
       contentSecurityPolicy: {
         "style-src": ["'self'", "https:", "'unsafe-inline'"],
         "img-src": ["'self'", "data:", "'unsafe-inline'"],
         "script-src": ["'strict-dynamic'", "'nonce-{{nonce}}'"],
-        "connect-src": ["'self", "http:", "https:"],
+        "connect-src": ["'self'", "http:", "https:"],
       },
     },
     rateLimiter: {
