@@ -54,6 +54,23 @@
                         <ris:normReference abbreviation="GG" dateOfVersion="1949-05-23" singleNorm="Art 6 Abs 2 S 1"/>
                     </akn:implicitReference>
                 </akn:otherReferences>
+                <akn:otherReferences source="active">
+                    <akn:implicitReference showAs="Vergleiche aktiv Rechtsprechung">
+                        <ris:caselawReference>
+                        </ris:caselawReference>
+                    </akn:implicitReference>
+                    <akn:implicitReference showAs="Vergleiche aktiv Selbstständigeliterature">
+                        <ris:selbstaendigeLiteraturReference/>
+                    </akn:implicitReference>
+                </akn:otherReferences>
+                <akn:otherReferences source="passive">
+                    <akn:implicitReference showAs="Vergleiche passiv Verwaltungsvorschrift">
+                        <ris:verwaltungsvorschriftReference />
+                    </akn:implicitReference>
+                    <akn:implicitReference showAs="Vergleiche passiv Unselbstständigeliterature">
+                        <ris:unselbstaendigeLiteraturReference/>
+                    </akn:implicitReference>
+                </akn:otherReferences>
             </akn:analysis>
             <akn:references source="attributsemantik-noch-undefiniert">
                 <akn:TLCPerson eId="musterfrau-sabine-verfasser-1" href="akn/ontology/persons/de/musterfrau-sabine" ris:name="Musterfrau, Sabine" ris:titel="Prof" showAs="Musterfrau, Sabine, Prof"/>
