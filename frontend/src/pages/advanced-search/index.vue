@@ -119,7 +119,7 @@ function submit() {
         </p>
       </div>
 
-      <div class="row-start-3 lg:row-span-2 lg:row-start-auto">
+      <aside class="row-start-3 lg:row-span-2 lg:row-start-auto">
         <fieldset class="mb-40">
           <legend class="ris-label1-regular mb-8">Dokumentart</legend>
           <PanelMenu
@@ -129,7 +129,7 @@ function submit() {
         </fieldset>
 
         <DateFilter v-model="dateFilter" :document-kind />
-      </div>
+      </aside>
 
       <div class="row-start-2 lg:row-start-auto">
         <DataFieldPicker

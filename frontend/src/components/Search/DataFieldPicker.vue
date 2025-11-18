@@ -87,7 +87,7 @@ function submitUnlessLoading() {
 </script>
 
 <template>
-  <div class="flex flex-col gap-8">
+  <search class="flex flex-col gap-8">
     <span
       :id="queryDescriptionId"
       class="ris-label2-bold lg:ris-label1-regular"
@@ -143,7 +143,7 @@ function submitUnlessLoading() {
         />
       </RisSingleAccordion>
     </div>
+  </search>
 
-    <OperatorsHelp class="lg:mt-32" />
-  </div>
+  <OperatorsHelp class="lg:mt-32" />
 </template>
