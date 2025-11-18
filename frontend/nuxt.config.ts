@@ -9,6 +9,7 @@ import { getStringOrDefault, isStringEmpty } from "./src/utils/textFormatting";
 const config = {
   devMode: process.env.NODE_ENV == "development",
   production: process.env.NODE_ENV == "production",
+  e2eTest: process.env.CI === "true",
 };
 
 const sentryEnabled = !isStringEmpty(process.env.NUXT_PUBLIC_SENTRY_DSN);
@@ -143,7 +144,7 @@ export default defineNuxtConfig({
         "style-src": ["'self'", "https:", "'unsafe-inline'"],
         "img-src": ["'self'", "data:", "'unsafe-inline'"],
         "script-src": ["'strict-dynamic'", "'nonce-{{nonce}}'"],
-        "connect-src": config.devMode ? ["'self'", "http:"] : ["'self'"],
+        "connect-src": ["'self", "http://backend:8090", "https://backend:8090"],
       },
     },
     rateLimiter: {
