@@ -4,7 +4,7 @@
     <akn:meta>
         <akn:identification source="attributsemantik-noch-undefiniert">
             <akn:FRBRWork>
-                <akn:FRBRalias name="haupttitel" value="Aktive Zitierungen"/>
+                <akn:FRBRalias name="haupttitel" value="Zitierungen"/>
             </akn:FRBRWork>
         </akn:identification>
         <akn:analysis source="attributsemantik-noch-undefiniert">
@@ -13,25 +13,33 @@
                     <ris:normReference abbreviation="Foo" singleNorm="§ 87 Abs 1 Nr 3"/>
                 </akn:implicitReference>
             </akn:otherReferences>
+            <akn:otherReferences source="passive">
+                <akn:implicitReference showAs="Rechtsprechung passiv">
+                    <ris:caselawReference/>
+                </akn:implicitReference>
+                <akn:implicitReference showAs="Verwaltungsvorschrift passiv">
+                    <ris:verwaltungsvorschriftReference />
+                </akn:implicitReference>
+                <akn:implicitReference showAs="Unselbstständigeliterature passiv">
+                    <ris:unselbstaendigeLiteraturReference/>
+                </akn:implicitReference>
+                <akn:implicitReference showAs="Selbstständigeliterature passiv">
+                    <ris:selbstaendigeLiteraturReference/>
+                </akn:implicitReference>
+            </akn:otherReferences>
             <akn:otherReferences source="active">
-                <akn:implicitReference showAs="Rechtsprechung reference 1">
+                <akn:implicitReference showAs="Rechtsprechung aktiv">
                     <ris:caselawReference>
                     </ris:caselawReference>
                 </akn:implicitReference>
-                <akn:implicitReference showAs="Rechtsprechung reference 2">
-                    <ris:caselawReference/>
-                </akn:implicitReference>
-                <akn:implicitReference showAs="Verwaltungsvorschrift reference 1">
+                <akn:implicitReference showAs="Verwaltungsvorschrift aktiv">
                     <ris:verwaltungsvorschriftReference>
                     </ris:verwaltungsvorschriftReference>
                 </akn:implicitReference>
-                <akn:implicitReference showAs="Verwaltungsvorschrift reference 2">
-                    <ris:verwaltungsvorschriftReference />
-                </akn:implicitReference>
-                <akn:implicitReference showAs="Unselbstständigeliterature reference">
+                <akn:implicitReference showAs="Unselbstständigeliterature aktiv">
                     <ris:unselbstaendigeLiteraturReference/>
                 </akn:implicitReference>
-                <akn:implicitReference showAs="Selbstständigeliterature reference">
+                <akn:implicitReference showAs="Selbstständigeliterature aktiv">
                     <ris:selbstaendigeLiteraturReference/>
                 </akn:implicitReference>
             </akn:otherReferences>

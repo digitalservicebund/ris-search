@@ -4,7 +4,7 @@
     <akn:meta>
         <akn:identification source="attributsemantik-noch-undefiniert">
             <akn:FRBRWork>
-                <akn:FRBRalias name="haupttitel" value="Aktive Zitierungen"/>
+                <akn:FRBRalias name="haupttitel" value="Passive Zitierungen"/>
             </akn:FRBRWork>
         </akn:identification>
         <akn:analysis source="attributsemantik-noch-undefiniert">
@@ -13,7 +13,7 @@
                     <ris:normReference abbreviation="Foo" singleNorm="§ 87 Abs 1 Nr 3"/>
                 </akn:implicitReference>
             </akn:otherReferences>
-            <akn:otherReferences source="active">
+            <akn:otherReferences source="passive">
                 <akn:implicitReference showAs="Rechtsprechung reference 1">
                     <ris:caselawReference>
                     </ris:caselawReference>

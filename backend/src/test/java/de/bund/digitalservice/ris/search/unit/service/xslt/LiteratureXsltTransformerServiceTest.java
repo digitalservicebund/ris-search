@@ -22,14 +22,16 @@ class LiteratureXsltTransformerServiceTest {
   @ParameterizedTest(name = "{2}")
   @CsvSource(
       value = {
-        "uli/example1/literature.xml| uli/example1/literature.html| Transforms literature with mainTitle, alternativeHeadline, outline and mainBody",
-        "uli/example2/literature.xml| uli/example2/literature.html| Transforms literature with only alternativeHeadline and mainBody",
-        "uli/example3/literature.xml| uli/example3/literature.html| Transforms literature with only mainTitle and outline",
-        "uli/example4/literature.xml| uli/example4/literature.html| Transforms literature with mainTitle, alternativeHeadline and mainTitleAdditions",
-        "uli/example5/literature.xml| uli/example5/literature.html| Transforms literature with alternativeHeadline and mainTitleAdditions",
-        "uli/example6/literature.xml| uli/example6/literature.html| Transforms literature with mainTitleAdditions",
-        "uli/example7/literature.xml| uli/example7/literature.html| Transforms literature with mainTitle and mainTitleAdditions",
-        "uli/example8/literature.xml| uli/example8/literature.html| Transforms literature citations",
+        "uli/example1/literature.xml  | uli/example1/literature.html  | Transforms literature with mainTitle, alternativeHeadline, outline and mainBody",
+        "uli/example2/literature.xml  | uli/example2/literature.html  | Transforms literature with only alternativeHeadline and mainBody",
+        "uli/example3/literature.xml  | uli/example3/literature.html  | Transforms literature with only mainTitle and outline",
+        "uli/example4/literature.xml  | uli/example4/literature.html  | Transforms literature with mainTitle, alternativeHeadline and mainTitleAdditions",
+        "uli/example5/literature.xml  | uli/example5/literature.html  | Transforms literature with alternativeHeadline and mainTitleAdditions",
+        "uli/example6/literature.xml  | uli/example6/literature.html  | Transforms literature with mainTitleAdditions",
+        "uli/example7/literature.xml  | uli/example7/literature.html  | Transforms literature with mainTitle and mainTitleAdditions",
+        "uli/example8/literature.xml  | uli/example8/literature.html  | Transforms literature with active citations",
+        "uli/example9/literature.xml  | uli/example9/literature.html  | Transforms literature with passive citations",
+        "uli/example10/literature.xml | uli/example10/literature.html | Transforms literature with active and passive citations",
       },
       delimiter = '|')
   void testTransformLiteratureXmlDocuments(
