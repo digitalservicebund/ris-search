@@ -390,7 +390,7 @@ describe("useAdvancedSearchRouteParams", () => {
       sort.value = "relevance";
       itemsPerPage.value = "100";
 
-      saveFilterStateToRoute();
+      await saveFilterStateToRoute();
 
       expect(navigateToMock).toHaveBeenCalledWith({
         query: {
@@ -424,7 +424,7 @@ describe("useAdvancedSearchRouteParams", () => {
       const { query, saveFilterStateToRoute } = useAdvancedSearchRouteParams();
 
       query.value = "DATUM:>2021-01-01";
-      saveFilterStateToRoute();
+      await saveFilterStateToRoute();
 
       expect(navigateToMock).toHaveBeenCalledWith({
         query: expect.objectContaining({
@@ -456,7 +456,7 @@ describe("useAdvancedSearchRouteParams", () => {
         to: undefined,
       };
 
-      saveFilterStateToRoute();
+      await saveFilterStateToRoute();
 
       expect(navigateToMock).toHaveBeenCalledWith({
         query: expect.objectContaining({
