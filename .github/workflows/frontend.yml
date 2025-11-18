@@ -180,6 +180,7 @@ jobs:
           image-ref: ${{ inputs.container-image-tag}}
           format: "sarif"
           output: "trivy-results.sarif"
+          trivyignores: frontend/.trivyignore
       - name: Upload Trivy vulnerability image scanner results (as artifact)
         uses: actions/upload-artifact@v5
         with:

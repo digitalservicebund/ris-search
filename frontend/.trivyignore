@@ -1,0 +1,4 @@
+# Ignore CVE in the glob package. This has already been fixed by pinning the
+# version in our package.json. The remaining finding causing the errors
+# is caused by an unrelated but unused package in the image.
+CVE-2025-64756
