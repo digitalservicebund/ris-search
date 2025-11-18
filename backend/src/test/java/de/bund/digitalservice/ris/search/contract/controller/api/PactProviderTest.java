@@ -16,9 +16,6 @@ import de.bund.digitalservice.ris.search.models.opensearch.Article;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import de.bund.digitalservice.ris.search.models.opensearch.Literature;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
-import de.bund.digitalservice.ris.search.repository.opensearch.CaseLawRepository;
-import de.bund.digitalservice.ris.search.repository.opensearch.LiteratureRepository;
-import de.bund.digitalservice.ris.search.repository.opensearch.NormsRepository;
 import java.time.LocalDate;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -36,11 +33,8 @@ import org.springframework.test.web.servlet.MockMvc;
 @AutoConfigureMockMvc
 @Tag("integration")
 class PactProviderTest extends ContainersIntegrationBase {
-  @Autowired private CaseLawRepository caseLawRepository;
   @Autowired private CaseLawController caseLawController;
-  @Autowired private LiteratureRepository literatureRepository;
   @Autowired private LiteratureController literatureController;
-  @Autowired private NormsRepository normsRepository;
   @Autowired private NormsController normsController;
   @Autowired private MockMvc mockMvc;
 

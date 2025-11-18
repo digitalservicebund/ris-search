@@ -23,7 +23,6 @@ import de.bund.digitalservice.ris.search.integration.config.ContainersIntegratio
 import de.bund.digitalservice.ris.search.integration.controller.api.testData.NormsTestData;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.models.opensearch.TableOfContentsItem;
-import de.bund.digitalservice.ris.search.repository.opensearch.NormsRepository;
 import de.bund.digitalservice.ris.search.schema.TableOfContentsSchema;
 import de.bund.digitalservice.ris.search.service.IndexNormsService;
 import java.io.ByteArrayInputStream;
@@ -70,7 +69,6 @@ class NormsControllerApiTest extends ContainersIntegrationBase {
   static final String MANIFESTATION_PREFIX_URL_ZIP =
       ApiConfig.Paths.LEGISLATION_SINGLE + "/bund/bgbl-1/1991/s101/1991-01-01/1/deu/1991-01-01.zip";
 
-  @Autowired private NormsRepository normsRepository;
   @Autowired private IndexNormsService indexNormsService;
   @Autowired private MockMvc mockMvc;
 
@@ -177,11 +175,9 @@ class NormsControllerApiTest extends ContainersIntegrationBase {
     mockMvc.perform(get(path)).andExpect(status().is(status));
   }
 
-  @ParameterizedTest
-  @CsvSource({",/v1/legislation/"})
+  @Test
   @DisplayName("Html endpoint should adapt img src paths")
-  void shouldReturnHtmlWithAdaptedImgSrcAttributes(String header, String expectedPrefix)
-      throws Exception {
+  void shouldReturnHtmlWithAdaptedImgSrcAttributes() throws Exception {
     final MockHttpServletRequestBuilder requestBuilder =
         get(MANIFESTATION_URL_HTML).contentType(MediaType.TEXT_HTML);
 
@@ -198,7 +194,7 @@ class NormsControllerApiTest extends ContainersIntegrationBase {
             document.body().getElementById("art-z5_abs-z1_inhalt-n1_text-n1_bild-n1"));
 
     final String srcInLDML = "eli/bund/bgbl-1/1991/s101/1991-01-01/1/deu/1991-01-01/bild_1.jpg";
-    String expectedSrc = expectedPrefix + srcInLDML;
+    String expectedSrc = "/v1/legislation/" + srcInLDML;
     assertThat(image.attr("src")).isEqualTo(expectedSrc);
   }
 

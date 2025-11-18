@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class CaseLawLdmlTemplateUtils {
-  public static final String CASELAW_LDML_TEMPLATE = "templates/case-law/ldml-base.xml";
+  public static final String CASELAW_LDML_TEMPLATE = "templates/case-law/case-law-template.xml";
 
   public String getXmlFromTemplate(Map<String, Object> context) throws IOException {
     PebbleEngine engine = new PebbleEngine.Builder().build();

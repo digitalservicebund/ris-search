@@ -4,9 +4,7 @@ import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.integration.config.ContainersIntegrationBase;
 import de.bund.digitalservice.ris.search.repository.objectstorage.CaseLawBucket;
 import de.bund.digitalservice.ris.search.repository.objectstorage.PortalBucket;
-import de.bund.digitalservice.ris.search.repository.opensearch.CaseLawRepository;
 import de.bund.digitalservice.ris.search.service.CaseLawIndexSyncJob;
-import de.bund.digitalservice.ris.search.service.IndexCaselawService;
 import de.bund.digitalservice.ris.search.service.IndexStatusService;
 import de.bund.digitalservice.ris.search.service.IndexingState;
 import de.bund.digitalservice.ris.search.utils.CaseLawLdmlTemplateUtils;
@@ -23,11 +21,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 @Tag("integration")
 class CaseLawImportStatusTest extends ContainersIntegrationBase {
-  @Autowired CaseLawRepository caseLawRepository;
 
   @Autowired CaseLawBucket caseLawBucket;
   @Autowired PortalBucket portalBucket;
-  @Autowired IndexCaselawService indexCaselawService;
   @Autowired CaseLawIndexSyncJob caseLawIndexSyncJob;
 
   @Autowired IndexStatusService indexStatusService;

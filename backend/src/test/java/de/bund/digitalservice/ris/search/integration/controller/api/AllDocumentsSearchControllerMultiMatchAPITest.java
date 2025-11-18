@@ -7,8 +7,6 @@ import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.integration.config.ContainersIntegrationBase;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
-import de.bund.digitalservice.ris.search.repository.opensearch.CaseLawRepository;
-import de.bund.digitalservice.ris.search.repository.opensearch.NormsRepository;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -37,8 +35,6 @@ import org.springframework.test.web.servlet.ResultMatcher;
 @Tag("integration")
 class AllDocumentsSearchControllerMultiMatchAPITest extends ContainersIntegrationBase {
 
-  @Autowired private NormsRepository normsRepository;
-  @Autowired private CaseLawRepository caseLawRepository;
   @Autowired private MockMvc mockMvc;
 
   @BeforeEach

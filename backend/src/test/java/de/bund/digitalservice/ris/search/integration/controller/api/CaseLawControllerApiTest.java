@@ -15,8 +15,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.integration.config.ContainersIntegrationBase;
 import de.bund.digitalservice.ris.search.models.PublicationStatus;
-import de.bund.digitalservice.ris.search.repository.objectstorage.CaseLawBucket;
-import de.bund.digitalservice.ris.search.repository.opensearch.CaseLawRepository;
 import de.bund.digitalservice.ris.search.service.IndexCaselawService;
 import de.bund.digitalservice.ris.search.utils.CaseLawLdmlTemplateUtils;
 import java.io.ByteArrayInputStream;
@@ -53,9 +51,7 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 @Tag("integration")
 class CaseLawControllerApiTest extends ContainersIntegrationBase {
   @Autowired private IndexCaselawService indexCaselawService;
-  @Autowired private CaseLawRepository caseLawRepository;
   @Autowired private MockMvc mockMvc;
-  @Autowired private CaseLawBucket caseLawBucket;
   private final CaseLawLdmlTemplateUtils caseLawLdmlTemplateUtils = new CaseLawLdmlTemplateUtils();
   private final String documentNumber = "BFRE000107055";
 
@@ -111,8 +107,6 @@ class CaseLawControllerApiTest extends ContainersIntegrationBase {
   @DisplayName("Should return case law when using api endpoint with document number")
   void shouldReturnSingleCaselawJson() throws Exception {
     indexCaselawService.reindexAll(Instant.now().toString());
-
-    assert caseLawRepository.findById(this.documentNumber).isPresent();
 
     mockMvc
         .perform(

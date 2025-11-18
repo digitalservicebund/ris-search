@@ -73,6 +73,12 @@ public final class Norm implements AbstractSearchEntity {
   @Field(name = Fields.EXPIRY_DATE, type = FieldType.Date, format = DateFormat.date)
   private LocalDate expiryDate;
 
+  @Field(name = Fields.FULL_CITATION)
+  private String fullCitation;
+
+  @Field(name = Fields.OFFICIAL_TOC)
+  private String officialToc;
+
   @Field(name = Fields.TIME_RELEVANCE_START_DATE, type = FieldType.Date, format = DateFormat.date)
   private LocalDate timeRelevanceStartDate;
 
@@ -100,6 +106,9 @@ public final class Norm implements AbstractSearchEntity {
   @Field(name = Fields.PREAMBLE_FORMULA)
   private List<String> preambleFormula;
 
+  @Field(name = Fields.OFFICIAL_FOOT_NOTES)
+  private String officialFootNotes;
+
   public static class Fields {
     private Fields() {}
 
@@ -108,6 +117,8 @@ public final class Norm implements AbstractSearchEntity {
     public static final String ARTICLE_TEXTS = "article_texts";
     public static final String ENTRY_INTO_FORCE_DATE = "entry_into_force_date";
     public static final String EXPIRY_DATE = "expiry_date";
+    public static final String FULL_CITATION = "full_citation";
+    public static final String OFFICIAL_TOC = "official_toc";
     public static final String TIME_RELEVANCE_START_DATE = "time_relevance_start_date";
     public static final String TIME_RELEVANCE_END_DATE = "time_relevance_end_date";
     public static final String ID = "id";
@@ -129,5 +140,6 @@ public final class Norm implements AbstractSearchEntity {
     public static final String TABLE_OF_CONTENTS = "table_of_contents";
     public static final String CONCLUSIONS_FORMULA = "conclusions_formula";
     public static final String PREAMBLE_FORMULA = "preamble_formula";
+    public static final String OFFICIAL_FOOT_NOTES = "official_foot_notes";
   }
 }

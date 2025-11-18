@@ -2,9 +2,12 @@ package de.bund.digitalservice.ris.search.integration.controller.api.testData;
 
 import de.bund.digitalservice.ris.search.models.PublicationStatus;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import org.testcontainers.shaded.org.apache.commons.lang3.StringUtils;
 
@@ -21,6 +24,8 @@ public class CaseLawTestData {
 
   public static final int WITH_LEITSATZ_COUNT;
   public static final int PUBLISHED_COUNT;
+
+  public static final String CASE_LAW_LDML_TEMPLATE = "templates/case-law/case-law-template.xml";
 
   static {
     allDocuments.add(
@@ -162,5 +167,12 @@ public class CaseLawTestData {
 
   public static CaseLawDocumentationUnit simple(String documentNumber, String content) {
     return CaseLawDocumentationUnit.builder().id(documentNumber).caseFacts(content).build();
+  }
+
+  public static String simpleCaseLawXml(Map<String, Object> context) throws IOException {
+    if (context == null) {
+      context = new HashMap<>();
+    }
+    return SharedTestConstants.getXmlFromTemplate(context, CASE_LAW_LDML_TEMPLATE);
   }
 }

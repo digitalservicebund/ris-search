@@ -1,14 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?><?xml-model href="Grammatiken/legalDocML.de.sch" schematypens="http://purl.oclc.org/dsdl/schematron"?>
 <?xml-model href="Grammatiken/legalDocML.de.sch" schematypens="http://purl.oclc.org/dsdl/schematron"?>
-<akn:akomaNtoso xmlns:akn="http://Inhaltsdaten.LegalDocML.de/1.8.2/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://MetadatenRIS.LegalDocML.de/1.8.2/ ../ris-norms-ldml-schema-extensions/1.8.2/legalDocML.de-metadaten-ris.xsd http://MetadatenRegelungstext.LegalDocML.de/1.8.2/ Grammatiken/legalDocML.de-metadaten-regelungstext.xsd http://MetadatenRechtsetzungsdokument.LegalDocML.de/1.8.2/ Grammatiken/legalDocML.de-metadaten-rechtsetzungsdokument.xsd http://Inhaltsdaten.LegalDocML.de/1.8.2/ Grammatiken/legalDocML.de-regelungstextverkuendungsfassung.xsd">
+<!--suppress XmlUnusedNamespaceDeclaration -->
+<akn:akomaNtoso xmlns:akn="http://Inhaltsdaten.LegalDocML.de/1.8.2/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:schemaLocation="http://MetadatenRIS.LegalDocML.de/1.8.2/
+                ../../Grammatiken/Norms/legalDocML.de-metadaten-ris.xsd http://MetadatenRegelungstext.LegalDocML.de/1.8.2/
+                ../../Grammatiken/Norms/legalDocML.de-metadaten-regelungstext.xsd http://MetadatenRechtsetzungsdokument.LegalDocML.de/1.8.2/
+                ../../Grammatiken/Norms/legalDocML.de-metadaten-rechtsetzungsdokument.xsd http://Inhaltsdaten.LegalDocML.de/1.8.2/
+                ../../Grammatiken/Norms/legalDocML.de-regelungstextverkuendungsfassung.xsd">
     <akn:act name="/akn/ontology/de/concept/documenttype/bund/regelungstext-verkuendung">
         <akn:meta GUID="02757203-24f4-46be-9505-6588b1d87e68" eId="meta-n1">
             <akn:identification GUID="7b1c4b86-7f90-45b4-b1ad-82f211c5c857" eId="meta-n1_ident-n1" source="attributsemantik-noch-undefiniert">
                 <akn:FRBRWork GUID="faf9bd63-1bde-4915-b45a-bbaa99cca9ed" eId="meta-n1_ident-n1_frbrwork-n1">
                     <akn:FRBRthis GUID="0a32f494-0adb-4d85-87ce-6a05ab965d76" eId="meta-n1_ident-n1_frbrwork-n1_frbrthis-n1" value="{{work_eli}}/regelungstext-verkuendung-1"/>
                     <akn:FRBRuri GUID="6bf78e30-cffb-4b71-9aa7-221d3f02a81f" eId="meta-n1_ident-n1_frbrwork-n1_frbruri-n1" value="{{work_eli}}"/>
-                    <akn:FRBRalias GUID="70712f63-730a-4c51-8e0c-976d3b7c97c7" eId="meta-n1_ident-n1_frbrwork-n1_frbralias-n1" name="übergreifende-id" value="TEST_MOCK_NOT_IMPORTANT"/>
-                    <akn:FRBRdate GUID="4d1807d4-4412-4177-b27c-0bf52b0d22be" date="0001-01-01" eId="meta-n1_ident-n1_frbrwork-n1_frbrdate-n1" name="verkuendungsfassung-verkuendungsdatum"/>
+                    <akn:FRBRalias GUID="70712f63-730a-4c51-8e0c-976d3b7c97c7" eId="meta-n1_ident-n1_frbrwork-n1_frbralias-n1" name="übergreifende-id" value="11111f63-730a-4c51-8e0c-976d3b7c97c7"/>
+                    <akn:FRBRdate GUID="4d1807d4-4412-4177-b27c-0bf52b0d22be" date="1000-01-01" eId="meta-n1_ident-n1_frbrwork-n1_frbrdate-n1" name="verkuendungsfassung-verkuendungsdatum"/>
                     <akn:FRBRauthor GUID="00f79ede-1ebc-443b-8ff8-94678b0e5135" eId="meta-n1_ident-n1_frbrwork-n1_frbrauthor-n1" href="recht.bund.de/institution/bundesregierung"/>
                     <akn:FRBRcountry GUID="df4c8643-d4d9-4e22-8567-ec4e9fc4af22" eId="meta-n1_ident-n1_frbrwork-n1_frbrcountry-n1" value="de"/>
                     <akn:FRBRnumber GUID="38029d7d-2cc8-4583-afc0-e568515710a6" eId="meta-n1_ident-n1_frbrwork-n1_frbrnumber-n1" value="TEST_MOCK_NOT_IMPORTANT"/>
@@ -18,35 +24,42 @@
                 <akn:FRBRExpression GUID="6348cb2a-3437-4161-8acd-4dc84f8653c1" eId="meta-n1_ident-n1_frbrexpression-n1">
                     <akn:FRBRthis GUID="5ace1479-3838-4acc-897f-26ddb716a339" eId="meta-n1_ident-n1_frbrexpression-n1_frbrthis-n1" value="{{expression_eli}}/regelungstext-verkuendung-1"/>
                     <akn:FRBRuri GUID="f7bd8c3b-7ec3-43bb-b491-2341df84886f" eId="meta-n1_ident-n1_frbrexpression-n1_frbruri-n1" value="{{expression_eli}}"/>
-                    <akn:FRBRalias GUID="a284e9fa-e4ac-4bae-a576-636466f88694" eId="meta-n1_ident-n1_frbrexpression-n1_frbralias-n1" name="aktuelle-version-id" value="TEST_MOCK_NOT_IMPORTANT"/>
-                    <akn:FRBRalias GUID="24491e05-c646-4aba-b5b7-056589db0587" eId="meta-n1_ident-n1_frbrexpression-n1_frbralias-n2" name="nachfolgende-version-id" value="TEST_MOCK_NOT_IMPORTANT"/>
+                    <akn:FRBRalias GUID="a284e9fa-e4ac-4bae-a576-636466f88694" eId="meta-n1_ident-n1_frbrexpression-n1_frbralias-n1" name="aktuelle-version-id" value="a284e9fa-e4ac-4bae-a576-636466f88694"/>
+                    <akn:FRBRalias GUID="24491e05-c646-4aba-b5b7-056589db0587" eId="meta-n1_ident-n1_frbrexpression-n1_frbralias-n2" name="nachfolgende-version-id" value="a284e9fa-e4ac-4bae-a576-636466f88694"/>
                     <akn:FRBRauthor GUID="f35ea845-52b4-4ecb-be2c-abb549dbcf2a" eId="meta-n1_ident-n1_frbrexpression-n1_frbrauthor-n1" href="recht.bund.de/institution/bundesregierung"/>
                     <akn:FRBRdate GUID="8bb4281d-124d-4fd3-b673-d7d9adf0bfba" date="0001-01-01" eId="meta-n1_ident-n1_frbrexpression-n1_frbrdate-n1" name="verkuendung"/>
                     <akn:FRBRlanguage GUID="4d1c97e7-3eaf-4110-a387-7da8d998a04a" eId="meta-n1_ident-n1_frbrexpression-n1_frbrlanguage-n1" language="deu"/>
-                    <akn:FRBRversionNumber GUID="f5df7e12-2fd1-4deb-80de-90a389beb5db" eId="meta-n1_ident-n1_frbrexpression-n1_frbrversionnumber-n1" value="TEST_MOCK_NOT_IMPORTANT"/>
+                    <akn:FRBRversionNumber GUID="f5df7e12-2fd1-4deb-80de-90a389beb5db" eId="meta-n1_ident-n1_frbrexpression-n1_frbrversionnumber-n1" value="1"/>
                 </akn:FRBRExpression>
                 <akn:FRBRManifestation GUID="ab54ea39-9cab-4d71-b513-8b8819ad7786" eId="meta-n1_ident-n1_frbrmanifestation-n1">
                     <akn:FRBRthis GUID="d101f500-bcda-496e-9c0a-a07e8febf29b" eId="meta-n1_ident-n1_frbrmanifestation-n1_frbrthis-n1" value="{{manifestation_eli}}"/>
                     <akn:FRBRuri GUID="7b4e4718-468a-459a-9db1-b987965bb7d2" eId="meta-n1_ident-n1_frbrmanifestation-n1_frbruri-n1" value="{{manifestation_eli}}"/>
-                    <akn:FRBRdate GUID="9e2c6252-0e58-4899-8e36-cb38815c2922" date="0001-01-01" eId="meta-n1_ident-n1_frbrmanifestation-n1_frbrdate-n1" name="generierung"/>
+                    <akn:FRBRdate GUID="9e2c6252-0e58-4899-8e36-cb38815c2922" date="1000-01-01" eId="meta-n1_ident-n1_frbrmanifestation-n1_frbrdate-n1" name="generierung"/>
                     <akn:FRBRauthor GUID="5ddcd7cd-db9e-4379-a092-65aad590a958" eId="meta-n1_ident-n1_frbrmanifestation-n1_frbrauthor-n1" href="recht.bund.de"/>
                     <akn:FRBRformat GUID="a8de6eb6-fb50-4623-96ac-7af1b8f2cd9c" eId="meta-n1_ident-n1_frbrmanifestation-n1_frbrformat-n1" value="xml"/>
                 </akn:FRBRManifestation>
             </akn:identification>
             <akn:lifecycle source="attributsemantik-noch-undefiniert" GUID="f67462bc-7787-4ba9-9041-8e4fc8852ae3" eId="meta-n1_lebzykl-n1">
-                <akn:eventRef date="1991-01-01" source="attributsemantik-noch-undefiniert" refersTo="ausfertigung" type="generation" eId="meta-n1_lebzykl-n1_ereignis-n1" GUID="1b8c849d-ee5c-4568-a119-be9dbbc27e2e"></akn:eventRef>
+                <akn:eventRef date="1991-01-01" source="attributsemantik-noch-undefiniert" refersTo="ausfertigung"
+                              type="generation" eId="meta-n1_lebzykl-n1_ereignis-n1"
+                              GUID="1b8c849d-ee5c-4568-a119-be9dbbc27e2e"/>
             </akn:lifecycle>
             <akn:temporalData source="attributsemantik-noch-undefiniert" GUID="c3f9ce52-8e0c-428c-abdd-37e56ed66551" eId="meta-n1_geltzeiten-n1">
                 <akn:temporalGroup eId="meta-n1_geltzeiten-n1_geltungszeitgr-n1" GUID="5a8e0a7b-97ca-433b-9d26-0c1501d34e7b">
-                    <akn:timeInterval start="#meta-n1_lebzykl-n1_ereignis-n1" refersTo="geltungszeit" eId="meta-n1_geltzeiten-n1_geltungszeitgr-n1_gelzeitintervall-n1" GUID="90afcb18-ec43-468b-b914-d37d4c60bf76"></akn:timeInterval>
+                    <akn:timeInterval start="#meta-n1_lebzykl-n1_ereignis-n1" refersTo="geltungszeit"
+                                      eId="meta-n1_geltzeiten-n1_geltungszeitgr-n1_gelzeitintervall-n1"
+                                      GUID="90afcb18-ec43-468b-b914-d37d4c60bf76"/>
                 </akn:temporalGroup>
             </akn:temporalData>
             <akn:proprietary GUID="2983c8d3-2f94-41ba-907c-b9aee90a04eb" eId="meta-n1_proprietary-n1" source="attributsemantik-noch-undefiniert">
-                <regtxt:legalDocML.de_metadaten xmlns:regtxt="http://MetadatenRegelungstext.LegalDocML.de/1.8.2/" xsi:schemaLocation="http://MetadatenRegelungstext.LegalDocML.de/1.8.2/ Grammatiken/legalDocML.de-metadaten-regelungstext.xsd">
+                <regtxt:legalDocML.de_metadaten xmlns:regtxt="http://MetadatenRegelungstext.LegalDocML.de/1.8.2/"
+                            xsi:schemaLocation="http://MetadatenRegelungstext.LegalDocML.de/1.8.2/ ../../Grammatiken/Norms/legalDocML.de-metadaten-regelungstext.xsd">
                     <regtxt:typ>verordnung</regtxt:typ>
                     <regtxt:form>stammform</regtxt:form>
                 </regtxt:legalDocML.de_metadaten>
-                <ris:legalDocML.de_metadaten xmlns:ris="http://MetadatenRIS.LegalDocML.de/1.8.2/" xsi:schemaLocation="http://MetadatenRIS.LegalDocML.de/1.8.2/ ../ris-norms-ldml-schema-extensions/1.8.2/legalDocML.de-metadaten-ris.xsd">
+                <ris:legalDocML.de_metadaten xmlns:ris="http://MetadatenRIS.LegalDocML.de/1.8.2/"
+                         xsi:schemaLocation="http://MetadatenRIS.LegalDocML.de/1.8.2/
+                         ../../Grammatiken/Norms/legalDocML.de-metadaten-ris.xsd">
                     <ris:abkuerzung refersTo="interne-abkuerzung">TEST_MOCK_NOT_IMPORTANT</ris:abkuerzung>
                     <ris:inkraft date="{% if inkraft %}{{inkraft}}{% else %}2020-01-01{% endif %}"/>
                     {% if ausserkraft %}<ris:ausserkraft date="{{ausserkraft}}"/>{% endif %}
@@ -59,7 +72,14 @@
         <akn:preface eId="einleitung-n1" GUID="a3399d47-218a-46cf-939c-685f884ed724">
             <akn:longTitle eId="einleitung-n1_doktitel-n1" GUID="16586e8f-68e1-4191-a4a2-8473f6bdf4e5">
                 <akn:p eId="einleitung-n1_doktitel-n1_text-n1" GUID="f312be90-0938-4ab8-a18d-e5b97e9be686">
-                    <akn:docTitle GUID="f312be90-0938-4ab8-a18d-e5b97e9be123" eId="einleitung-n1_doktitel-n1_text-n1_doctitel-n1">Formatting Test Document</akn:docTitle>
+                    <akn:docTitle GUID="f312be90-0938-4ab8-a18d-e5b97e9be123" eId="einleitung-n1_doktitel-n1_text-n1_doctitel-n1">
+                        Formatting Test Document
+                        <akn:authorialNote eId="einleitung-n1_doktitel-n1_text-n1_doctitel-n1_amtlfnote-n1" GUID="519116f1-968a-4eaa-a89e-33338285844f" marker="1">
+                            <akn:p eId="einleitung-n1_doktitel-n1_text-n1_doctitel-n1_amtlfnote-n1_text-n1" GUID="519116f1-968a-4eaa-a89e-44448285844f">
+                                Authorial note in the norm title.
+                            </akn:p>
+                        </akn:authorialNote>
+                    </akn:docTitle>
                     <akn:shortTitle GUID="f312be90-0938-4ab8-a18d-e5b97e9be345" eId="einleitung-n1_doktitel-n1_text-n1_kurztitel-n1">(Formatting Test - <akn:inline GUID="f312be90-0938-4ab8-a18d-e5b97e9be456" refersTo="amtliche-abkuerzung" name="attributsemantik-noch-undefiniert" eId="einleitung-n1_doktitel-n1_text-n1_kurztitel-n1_inline-n1">MFT</akn:inline>)</akn:shortTitle>
                 </akn:p>
             </akn:longTitle>
@@ -92,7 +112,13 @@
             <!-- Basic HTML elements -->
             <akn:article eId="art-z1" GUID="87cd6b3a-d198-49c3-a02f-6adfd12940cb" period="#meta-n1_geltzeiten-n1_geltungszeitgr-n1">
                 <akn:num eId="art-z1_bezeichnung-n1" GUID="0a0885f1-5bf1-476e-b12b-ce8243a47ddb">§ 1</akn:num>
-                <akn:heading eId="art-z1_überschrift-n1" GUID="519116f1-968a-4eaa-a89e-71258285844f"> Basic HTML Elements </akn:heading>
+                <akn:heading eId="art-z1_überschrift-n1" GUID="519116f1-968a-4eaa-a89e-71258285844f"> Basic HTML Elements
+                    <akn:authorialNote eId="art-z1_überschrift-n1_amtlfnote-n1" GUID="519116f1-968a-4eaa-a89e-11118285844f" marker="2">
+                        <akn:p eId="art-z1_überschrift-n1_amtlfnote-n1_text-n1" GUID="519116f1-968a-4eaa-a89e-22228285844f">
+                            Authorial note in an article title.
+                        </akn:p>
+                    </akn:authorialNote>
+                </akn:heading>
 
                 <akn:paragraph eId="art-z1_abs-z1" GUID="5eb21b69-8e10-4b24-8d69-14e6688a7886">
                     <akn:num eId="art-z1_abs-z1_bezeichnung-n1" GUID="da0afc22-6f9b-4fe6-8e25-a1b97c8fc382">(1)</akn:num>
@@ -101,8 +127,12 @@
                             <akn:b eId="art-z1_abs-z1_inhalt-n1_text-n1_fettschrift-n1" GUID="c1c593df-c20b-4d11-9c4e-945c7041fd9b">Bold</akn:b> text. <akn:i eId="art-z1_abs-z1_inhalt-n1_text-n1_kursiv-n1" GUID="726c9ef9-9cad-40ae-8654-cc058366c400">Italic</akn:i> text. <akn:u
                                 eId="art-z1_abs-z1_inhalt-n1_text-n1_u-n1" GUID="c30774a1-23b9-453d-a01f-4d873e29fec5">Underlined</akn:u> text. This contains <akn:sub eId="art-z1_abs-z1_inhalt-n1_text-n1_sub-n1" GUID="ad66eeaf-0217-4e53-9c48-8bcb325c0d70">subscript</akn:sub> text. This contains <akn:sup
                                 eId="art-z1_abs-z1_inhalt-n1_text-n1_sup-n1" GUID="7a3eb2b3-9df7-4c21-a9d8-f2b6a1d81597">superscript</akn:sup> text. This text contains a <akn:a href="#" eId="art-z1_abs-z1_inhalt-n1_text-n1_a-n1" GUID="0d9de688-e6d0-446d-a164-503420ffbb76">link</akn:a>. <akn:span
-                                eId="art-z1_abs-z1_inhalt-n1_text-n1_span-n1" GUID="0ae5920a-34ed-4391-87ec-cafb2780e868">Inline container</akn:span>. <akn:br eId="art-z1_abs-z1_inhalt-n1_text-n1_br-n1" GUID="263f863c-99ac-4421-a99f-a430f879ef33"></akn:br><akn:br
-                                eId="art-z1_abs-z1_inhalt-n1_text-n1_br-n2" GUID="0a5685dd-08f2-41c2-aad9-8b20f85635c5"></akn:br>This text has two preceding line breaks.</akn:p>
+                                eId="art-z1_abs-z1_inhalt-n1_text-n1_span-n1" GUID="0ae5920a-34ed-4391-87ec-cafb2780e868">Inline container</akn:span>.
+                            <akn:br eId="art-z1_abs-z1_inhalt-n1_text-n1_br-n1"
+                                    GUID="263f863c-99ac-4421-a99f-a430f879ef33"/>
+                            <akn:br
+                                    eId="art-z1_abs-z1_inhalt-n1_text-n1_br-n2"
+                                    GUID="0a5685dd-08f2-41c2-aad9-8b20f85635c5"/>This text has two preceding line breaks.</akn:p>
                     </akn:content>
                 </akn:paragraph>
             </akn:article>
@@ -305,5 +335,13 @@
                 </akn:p>
             </akn:blockContainer>
         </akn:conclusions>
+        <!-- {% if attachment %} -->
+        <akn:attachments eId="anlagen-n1" GUID="11111111-e3d6-4794-be74-e1be0ea32d39">
+            <akn:attachment eId="anlagen-n1_anlage-n1" GUID="22222222-e3d6-4794-be74-e1be0ea32d39">
+                <akn:documentRef eId="anlagen-n1_anlage-n1_verweis-n1" GUID="33333333-e3d6-4794-be74-e1be0ea32d39" href="{{attachment}}" showAs="/akn/ontology/de/concept/documenttype/bund/anlage-regelungstext"/>
+            </akn:attachment>
+        </akn:attachments>
+        <!-- {% endif %} -->
+
     </akn:act>
 </akn:akomaNtoso>

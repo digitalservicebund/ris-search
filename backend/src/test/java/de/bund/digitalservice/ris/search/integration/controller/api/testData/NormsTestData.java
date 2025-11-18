@@ -8,11 +8,7 @@ import de.bund.digitalservice.ris.search.models.opensearch.Article;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.models.opensearch.TableOfContentsItem;
 import de.bund.digitalservice.ris.search.utils.eli.EliFile;
-import io.pebbletemplates.pebble.PebbleEngine;
-import io.pebbletemplates.pebble.template.PebbleTemplate;
 import java.io.IOException;
-import java.io.StringWriter;
-import java.io.Writer;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,7 +17,9 @@ import java.util.Map;
 
 public class NormsTestData {
 
-  public static final String NORM_LDML_TEMPLATE = "templates/norm/ldml-base.xml";
+  public static final String NORM_LDML_TEMPLATE = "templates/norm/norm-template.xml";
+  public static final String NORM_ATTACHMENT_LDML_TEMPLATE =
+      "templates/norm/norm-attachment-template.xml";
   public static final String S_102_WORK_ELI = "eli/bund/bgbl-1/1991/s102";
 
   public static Map<String, String> s102WorkExpressions = createS102Work();
@@ -33,11 +31,23 @@ public class NormsTestData {
     try {
       Map<String, String> result = new HashMap<>();
 
+      String work1expression1attachment1 =
+          S_102_WORK_ELI + "/1991-01-01/1/deu/1991-01-01/anlage-regelungstext-1.xml";
+      result.put(
+          work1expression1attachment1, simpleNormXmlAttachment(work1expression1attachment1, null));
+
       String work1expression1 = S_102_WORK_ELI + "/1991-01-01/1/deu/1991-01-01/regelungstext-1.xml";
       result.put(
           work1expression1,
           simpleNormXml(
-              work1expression1, Map.of("inkraft", "1991-01-01", "ausserkraft", "1995-01-01")));
+              work1expression1,
+              Map.of(
+                  "inkraft",
+                  "1991-01-01",
+                  "ausserkraft",
+                  "1995-01-01",
+                  "attachment",
+                  work1expression1attachment1)));
 
       String work1expression2 = S_102_WORK_ELI + "/2020-01-01/1/deu/2020-01-01/regelungstext-1.xml";
       result.put(
@@ -67,18 +77,22 @@ public class NormsTestData {
     context.put("work_eli", eliFile.getWorkEli().toString());
     context.put("expression_eli", eliFile.getExpressionEli().toString());
     context.put("manifestation_eli", eliFile.getManifestationEli().toString());
-    return getXmlFromTemplate(context);
+    return SharedTestConstants.getXmlFromTemplate(context, NORM_LDML_TEMPLATE);
   }
 
-  private static String getXmlFromTemplate(Map<String, Object> context) throws IOException {
-    PebbleEngine engine = new PebbleEngine.Builder().build();
-    PebbleTemplate compiledTemplate = engine.getTemplate(NORM_LDML_TEMPLATE);
+  public static String simpleNormXmlAttachment(String fileName, Map<String, Object> context)
+      throws IOException {
     if (context == null) {
       context = new HashMap<>();
     }
-    Writer writer = new StringWriter();
-    compiledTemplate.evaluate(writer, context);
-    return writer.toString();
+    context = new HashMap<>(context);
+    EliFile eliFile =
+        EliFile.fromString(fileName)
+            .orElseThrow(() -> new IllegalArgumentException("Invalid eli file"));
+    context.put("work_eli", eliFile.getWorkEli().toString());
+    context.put("expression_eli", eliFile.getExpressionEli().toString());
+    context.put("attachment_name", eliFile.fileName());
+    return SharedTestConstants.getXmlFromTemplate(context, NORM_ATTACHMENT_LDML_TEMPLATE);
   }
 
   private static TableOfContentsItem simpleToc(String number) {

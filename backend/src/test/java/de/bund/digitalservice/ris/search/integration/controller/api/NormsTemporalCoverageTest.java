@@ -9,7 +9,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.integration.config.ContainersIntegrationBase;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
-import de.bund.digitalservice.ris.search.repository.opensearch.NormsRepository;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
@@ -34,7 +33,6 @@ import org.springframework.test.web.servlet.ResultMatcher;
 @Tag("integration")
 class NormsTemporalCoverageTest extends ContainersIntegrationBase {
 
-  @Autowired private NormsRepository normsRepository;
   @Autowired private MockMvc mockMvc;
 
   final List<Norm> allNorms =
