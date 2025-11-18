@@ -1,10 +1,10 @@
 <script setup lang="ts">
+import { RisSingleAccordion } from "@digitalservicebund/ris-ui/components";
 import type { Dayjs } from "dayjs";
 import type { TreeNode } from "primevue/treenode";
 import { computed } from "vue";
 import type { ComputedRef } from "vue";
 import { useRoute } from "#app";
-import Accordion from "~/components/Accordion.vue";
 import NormActionsMenu from "~/components/ActionMenu/NormActionsMenu.vue";
 import ContentWrapper from "~/components/CustomLayouts/ContentWrapper.vue";
 import TableOfContentsLayout from "~/components/CustomLayouts/SidebarLayout.vue";
@@ -20,8 +20,6 @@ import NormTableOfContents from "~/components/Ris/NormTableOfContents.vue";
 import RisBreadcrumb from "~/components/Ris/RisBreadcrumb.vue";
 import type { BreadcrumbItem } from "~/components/Ris/RisBreadcrumb.vue";
 import RisTabs from "~/components/Ris/RisTabs.vue";
-import { tabPanelClass } from "~/components/Tabs.styles";
-import { useBackendURL } from "~/composables/useBackendURL";
 import { useDynamicSeo } from "~/composables/useDynamicSeo";
 import { useIntersectionObserver } from "~/composables/useIntersectionObserver";
 import { useFetchNormContent } from "~/composables/useNormData";
@@ -40,6 +38,7 @@ import {
 } from "~/utils/norm";
 import type { ValidityStatus } from "~/utils/norm";
 import { tocItemsToTreeNodes } from "~/utils/tableOfContents";
+import { tabPanelClass } from "~/utils/tabsStyles";
 import { truncateAtWord } from "~/utils/textFormatting";
 import IcBaselineSubject from "~icons/ic/baseline-subject";
 import IcOutlineInfo from "~icons/ic/outline-info";
@@ -79,10 +78,8 @@ const translationUrl = computed(() => {
 const html = computed(() => data.value?.html);
 const htmlParts = computed(() => data.value?.htmlParts);
 
-const backendURL = useBackendURL();
-
 const zipUrl = computed(() =>
-  getManifestationUrl(metadata.value, backendURL, "application/zip"),
+  getManifestationUrl(metadata.value, "application/zip"),
 );
 
 if (error.value) {
@@ -251,7 +248,7 @@ useDynamicSeo({ title, description });
           :valid-to="validityInterval?.to"
         />
       </div>
-      <RisTabs :tabs="tabs" aria-label="Ansichten des Gesetzes">
+      <RisTabs :tabs="tabs" label="Ansichten des Gesetzes">
         <template #default="{ activeTab, isClient }">
           <section
             id="text"
@@ -262,13 +259,15 @@ useDynamicSeo({ title, description });
               <template #content>
                 <h2 class="sr-only">Text</h2>
                 <IncompleteDataMessage />
-                <Accordion
+
+                <RisSingleAccordion
                   v-if="htmlParts.officialToc"
+                  class="mt-24"
                   header-expanded="Amtliches Inhaltsverzeichnis ausblenden"
                   header-collapsed="Amtliches Inhaltsverzeichnis einblenden"
                 >
                   <div v-html="htmlParts.officialToc" />
-                </Accordion>
+                </RisSingleAccordion>
                 <div v-observe-elements class="norm-view" v-html="html" />
               </template>
               <template #sidebar>

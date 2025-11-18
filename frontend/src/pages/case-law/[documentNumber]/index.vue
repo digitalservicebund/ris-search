@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import { computed } from "vue";
 import type { ComputedRef } from "vue";
-import { useFetch } from "#app";
+import { computed } from "vue";
 import CaseLawActionsMenu from "~/components/ActionMenu/CaseLawActionsMenu.vue";
 import TableOfContents, {
   type TableOfContentsEntry,
@@ -15,13 +14,12 @@ import PropertiesItem from "~/components/PropertiesItem.vue";
 import RisBreadcrumb from "~/components/Ris/RisBreadcrumb.vue";
 import RisDocumentTitle from "~/components/Ris/RisDocumentTitle.vue";
 import RisTabs from "~/components/Ris/RisTabs.vue";
-import { tabPanelClass } from "~/components/Tabs.styles";
-import { useBackendURL } from "~/composables/useBackendURL";
 import { type CaseLaw, DocumentKind } from "~/types";
 import { getEncodingURL } from "~/utils/caseLaw";
 import { dateFormattedDDMMYYYY } from "~/utils/dateFormatting";
 import { formatDocumentKind } from "~/utils/displayValues";
 import { getAllSectionsFromHtml, parseDocument } from "~/utils/htmlParser";
+import { tabPanelClass } from "~/utils/tabsStyles";
 import {
   formatArray,
   removeOuterParentheses,
@@ -34,17 +32,13 @@ import MaterialSymbolsDownload from "~icons/material-symbols/download";
 const route = useRoute();
 const documentNumber = route.params.documentNumber as string;
 const emptyTitlePlaceholder = "Titelzeile nicht vorhanden";
-const backendURL = useBackendURL();
 const {
   status,
   data: caseLaw,
   error: metadataError,
-} = await useFetch<CaseLaw>(`${backendURL}/v1/case-law/${documentNumber}`);
-const { data: html, error: contentError } = await useFetch<string>(
-  `${backendURL}/v1/case-law/${documentNumber}.html`,
-  {
-    headers: { Accept: "text/html" },
-  },
+} = await useRisBackend<CaseLaw>(`/v1/case-law/${documentNumber}`);
+const { data: html, error: contentError } = await useRisBackend<string>(
+  `/v1/case-law/${documentNumber}.html`,
 );
 
 const buildOgTitle = (caseLaw: CaseLaw) => {
@@ -119,9 +113,7 @@ const tocEntries: ComputedRef<TableOfContentsEntry[] | null> = computed(() => {
   return html.value ? getAllSectionsFromHtml(html.value, "section") : null;
 });
 
-const zipUrl = computed(() =>
-  getEncodingURL(caseLaw.value, backendURL, "application/zip"),
-);
+const zipUrl = computed(() => getEncodingURL(caseLaw.value, "application/zip"));
 
 const title = computed(() => {
   return caseLaw.value?.headline
@@ -196,7 +188,7 @@ const tabs = computed(() => [
       </div>
     </div>
 
-    <RisTabs :tabs="tabs" aria-label="Ansichten der Gerichtsentscheidung">
+    <RisTabs :tabs="tabs" label="Ansichten der Gerichtsentscheidung">
       <template #default="{ activeTab, isClient }">
         <section
           id="text"

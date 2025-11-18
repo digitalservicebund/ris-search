@@ -1,6 +1,4 @@
 import { toValue } from "vue";
-import { useBackendURL } from "./useBackendURL";
-import { useFetch } from "#app";
 import type { Page } from "~/components/Pagination/Pagination.vue";
 import { DocumentKind } from "~/types";
 import {
@@ -50,30 +48,31 @@ export async function useAdvancedSearch(
   });
 
   const combinedQuery = computed(() => {
-    let result = toValue(query);
+    const result = [toValue(query)];
 
     const filterVal = toValue(dateFilter);
     if (filterVal) {
       const dateQuery = dateFilterToQuery(filterVal, toValue(documentKind));
-      if (dateQuery) result = `(${result}) AND (${dateQuery})`;
+      if (dateQuery) result.push(dateQuery);
     }
 
+    const resultStr = result
+      .filter((i) => !!i.trim())
+      .map((i) => `(${i.trim()})`)
+      .join(" AND ");
+
     return {
-      query: encodeURIComponent(result),
+      query: encodeURIComponent(resultStr),
       size: toValue(itemsPerPage),
       sort: toValue(sort),
       pageIndex: toValue(pageIndex),
     };
   });
 
-  const backendUrl = useBackendURL();
-
-  const { data, error, status, pending, execute } = await useFetch<Page>(
+  const { data, error, status, pending, execute } = await useRisBackend<Page>(
     searchEndpointUrl,
     {
       query: combinedQuery,
-
-      baseURL: backendUrl,
 
       // immediate always executes even if the query is empty. Instead the
       // component should execute manually using `executeWhenValid` to make
@@ -88,7 +87,7 @@ export async function useAdvancedSearch(
   );
 
   async function executeWhenValid() {
-    if (toValue(query)) await execute();
+    if (combinedQuery.value.query) await execute();
   }
 
   return {

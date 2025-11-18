@@ -1,12 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
-import {
-  tabBaseClasses,
-  tabActiveClasses,
-  tabInactiveClasses,
-  tabListContentClass,
-  tabListClass,
-} from "~/components/Tabs.styles";
+import { onMounted, ref } from "vue";
 
 export interface LinkTab {
   id: string;
@@ -19,7 +12,7 @@ export interface LinkTab {
 
 const props = defineProps<{
   tabs: LinkTab[];
-  ariaLabel: string;
+  label: string;
   defaultTab?: string;
 }>();
 
@@ -37,13 +30,16 @@ function handleTabClick(tabId: string, event: Event) {
 
 const getTabClasses = (tabId: string) => {
   const isActive = activeTab.value === tabId;
-  return `${tabBaseClasses} ${isActive ? tabActiveClasses : tabInactiveClasses}`;
+  return `ris-body2-bold h-64 py-4 pl-20 pr-24 border-b-4 border-b-transparent outline-blue-800 outline-0 -outline-offset-4 focus-visible:outline-4 inline-flex items-center gap-8 no-underline ${isActive ? "border-gray-600 text-black shadow-active-tab bg-white z-10" : "text-blue-800 hover:border-b-blue-800 cursor-pointer"}`;
 };
 </script>
 
 <template>
-  <nav :class="tabListContentClass" :aria-label="ariaLabel">
-    <div :class="tabListClass">
+  <nav
+    class="relative before:absolute before:bottom-0 before:left-[50%] before:h-px before:w-full before:-translate-x-1/2 before:bg-gray-600 print:hidden"
+    :aria-label="label"
+  >
+    <div class="container flex">
       <a
         v-for="tab in tabs"
         :key="tab.id"

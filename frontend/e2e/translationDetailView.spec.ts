@@ -1,10 +1,10 @@
-import { expect, test, noJsTest } from "./utils/fixtures";
+import { expect, test, noJsTest, navigate } from "./utils/fixtures";
 
 test(
   "can navigate from list to single translation",
   { tag: ["@RISDEV-8950"] },
   async ({ page }) => {
-    await page.goto("/translations");
+    await navigate(page, "/translations");
     const translationListRegion = page.getByRole("region", {
       name: "Translations List",
     });
@@ -15,7 +15,7 @@ test(
 
     await page.getByRole("link", { name: title }).click();
 
-    await page.waitForURL("/translations/CDe");
+    await page.waitForURL("/translations/CDe", { waitUntil: "commit" });
 
     await expect(
       page.getByRole("heading", {
@@ -26,7 +26,7 @@ test(
 );
 
 test("opens the page via URL", { tag: ["@RISDEV-8950"] }, async ({ page }) => {
-  await page.goto("/translations/TestV");
+  await navigate(page, "/translations/TestV");
   await expect(
     page.getByRole("heading", {
       name: "Test Regulation for the Model Framework of the Public Service",
@@ -38,7 +38,7 @@ test("opens the page via URL", { tag: ["@RISDEV-8950"] }, async ({ page }) => {
 });
 
 test("has text and detail tab", { tag: ["@RISDEV-8950"] }, async ({ page }) => {
-  await page.goto("/translations/TestV");
+  await navigate(page, "/translations/TestV");
 
   const textTab = page.getByRole("link", { name: "Text der Übersetzung" });
   const detailsTab = page.getByRole("link", {
@@ -53,8 +53,7 @@ test(
   "detail tab shows details",
   { tag: ["@RISDEV-8950"] },
   async ({ page }) => {
-    await page.goto("/translations/TestV");
-    await page.waitForLoadState("networkidle");
+    await navigate(page, "/translations/TestV");
 
     const heading = page.getByRole("heading", { name: " Details " });
     const translator = page.getByText("someone and someone.");
@@ -77,8 +76,7 @@ test(
   "text tab shows text of translated norm",
   { tag: ["@RISDEV-8950"] },
   async ({ page }) => {
-    await page.goto("/translations/TestV");
-    await page.waitForLoadState("networkidle");
+    await navigate(page, "/translations/TestV");
 
     const section = page.getByText("Section 1Dummy data");
 
@@ -93,7 +91,7 @@ test(
   "german original and english version link to each other",
   { tag: ["@RISDEV-8950"] },
   async ({ page, isMobileTest }) => {
-    await page.goto("/translations/TestV");
+    await navigate(page, "/translations/TestV");
     await expect(
       page.getByRole("heading", {
         name: "Test Regulation for the Model Framework of the Public Service",
@@ -129,9 +127,7 @@ test(
   { tag: ["@RISDEV-8950"] },
   async ({ page, isMobileTest }) => {
     const url = "/translations/TestV";
-    await page.goto(url);
-
-    await page.waitForLoadState("networkidle");
+    await navigate(page, url);
 
     if (isMobileTest) {
       await page.getByLabel("Aktionen anzeigen").click();
@@ -161,9 +157,7 @@ noJsTest(
   "tabs work without JavaScript",
   { tag: ["@RISDEV-8979"] },
   async ({ page }) => {
-    await page.goto("/translations/TestV", {
-      waitUntil: "networkidle",
-    });
+    await navigate(page, "/translations/TestV");
 
     await page.getByRole("link", { name: "Details zur Übersetzung" }).click();
     await expect(page).toHaveURL(/#details$/);

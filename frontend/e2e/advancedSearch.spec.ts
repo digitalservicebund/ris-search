@@ -1,7 +1,7 @@
-import { expect, test } from "./utils/fixtures";
+import { expect, navigate, test } from "./utils/fixtures";
 
 test("opens the page via URL", async ({ page }) => {
-  await page.goto("/advanced-search");
+  await navigate(page, "/advanced-search");
 
   await expect(
     page.getByRole("heading", { name: "Erweiterte Suche" }),

@@ -1,8 +1,6 @@
 package de.bund.digitalservice.ris.search.integration.controller.api;
 
-import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.Matchers.containsInAnyOrder;
-import static org.hamcrest.Matchers.greaterThan;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -10,15 +8,16 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.c4_soft.springaddons.security.oauth2.test.annotations.WithJwt;
+import com.jayway.jsonpath.DocumentContext;
+import com.jayway.jsonpath.JsonPath;
 import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.integration.config.ContainersIntegrationBase;
 import de.bund.digitalservice.ris.search.integration.controller.api.testData.CaseLawTestData;
 import de.bund.digitalservice.ris.search.integration.controller.api.testData.LiteratureTestData;
 import de.bund.digitalservice.ris.search.integration.controller.api.testData.NormsTestData;
-import de.bund.digitalservice.ris.search.integration.controller.api.testData.SharedTestConstants;
 import de.bund.digitalservice.ris.search.integration.controller.api.values.SortingTestArguments;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
 import org.hamcrest.Matchers;
@@ -41,7 +40,6 @@ import org.springframework.test.web.servlet.ResultMatcher;
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 @Tag("integration")
-@WithJwt("jwtTokens/ValidAccessToken.json")
 class AdvancedSearchControllerApiTest extends ContainersIntegrationBase {
 
   @Autowired private MockMvc mockMvc;
@@ -189,22 +187,28 @@ class AdvancedSearchControllerApiTest extends ContainersIntegrationBase {
   }
 
   @ParameterizedTest
-  @ValueSource(strings = {"DATUM", "DAT"})
-  @WithJwt("jwtTokens/ValidAccessToken.json")
-  @DisplayName("Should return 200 when looking for decision date and aliases")
-  void shouldFindCorrectCountForAmbiguousFields(String queryParam) throws Exception {
-    String query = buildAdvancedQuery(queryParam, "[2024-01-01 TO 2024-12-31]");
-    String urlWithSpecificIndex = ApiConfig.Paths.CASELAW_ADVANCED_SEARCH + query;
-
+  @ValueSource(strings = {"decision_date", "DATUM", "DAT"})
+  @DisplayName("Case law date and alias field find 2 documents")
+  void caseLawDateAndAliasFieldsFind2Documents(String queryParam) throws Exception {
     mockMvc
-        .perform(get(urlWithSpecificIndex).contentType(MediaType.APPLICATION_JSON))
-        .andExpect(jsonPath("$.member", hasSize(3)))
+        .perform(
+            get(ApiConfig.Paths.CASELAW_ADVANCED_SEARCH
+                    + String.format("?query=%s:[2025-01-01 TO 2025-12-31]", queryParam))
+                .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(jsonPath("$.member", hasSize(2)))
         .andExpect(status().isOk());
+  }
 
-    String genericUrl = ApiConfig.Paths.DOCUMENT_ADVANCED_SEARCH + query;
+  @ParameterizedTest
+  @ValueSource(strings = {"entry_into_force_date", "DATUM", "DAT"})
+  @DisplayName("Legislation entry_into_force_date and aliases find 3 documents")
+  void legislationEntryIntoForceDateAndAliasesFind3Documents(String queryParam) throws Exception {
     mockMvc
-        .perform(get(genericUrl).contentType(MediaType.APPLICATION_JSON))
-        .andExpect(jsonPath("$.member", hasSize(greaterThan(3))))
+        .perform(
+            get(ApiConfig.Paths.LEGISLATION_ADVANCED_SEARCH
+                    + String.format("?query=%s:[2025-01-01 TO 2025-12-31]", queryParam))
+                .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(jsonPath("$.member", hasSize(3)))
         .andExpect(status().isOk());
   }
 
@@ -213,17 +217,23 @@ class AdvancedSearchControllerApiTest extends ContainersIntegrationBase {
       "Should return mixed result when looking for a specific date that match for both norms and case law")
   void shouldReturnOkDateQuery() throws Exception {
 
-    mockMvc
-        .perform(
-            get(ApiConfig.Paths.DOCUMENT_ADVANCED_SEARCH
-                    + "?query=DATUM:"
-                    + SharedTestConstants.DATE_2_1)
-                .contentType(MediaType.APPLICATION_JSON))
-        .andExpect(jsonPath("$.member", hasSize(2)))
-        .andExpect(
-            jsonPath("$.member[*].item[\"@type\"]", containsInAnyOrder("Decision", "Legislation")))
-        .andExpect(jsonPath("$.member[*].item.documentType", contains("Zweites Versäumnisurteil")))
-        .andExpect(status().isOk());
+    DocumentContext json =
+        JsonPath.parse(
+            mockMvc
+                .perform(
+                    get(ApiConfig.Paths.DOCUMENT_ADVANCED_SEARCH
+                            + "?query=DATUM:[2025-01-01 TO 2025-12-31]")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andReturn()
+                .getResponse()
+                .getContentAsString());
+
+    assertThat(json.read("$.member.length()", Integer.class)).isEqualTo(5);
+
+    List<String> types = json.read("$.member[*].item[\"@type\"]", List.class);
+    assertThat(types)
+        .containsExactlyInAnyOrder(
+            "Decision", "Decision", "Legislation", "Legislation", "Legislation");
   }
 
   @Test
@@ -377,22 +387,6 @@ class AdvancedSearchControllerApiTest extends ContainersIntegrationBase {
   }
 
   @ParameterizedTest
-  @ValueSource(strings = {"norms_date", "DATUM", "DAT"})
-  @WithJwt("jwtTokens/ValidAccessToken.json")
-  @DisplayName("Should return 200 when looking for decision date and aliases")
-  void shouldReturnOkDecisionDateQueryForLegislation(String queryParam) throws Exception {
-
-    mockMvc
-        .perform(
-            get(ApiConfig.Paths.LEGISLATION_ADVANCED_SEARCH
-                    + String.format("?query=%s:[2024-01-01 TO 2024-12-31]", queryParam))
-                .contentType(MediaType.APPLICATION_JSON))
-        .andDo(print())
-        .andExpect(jsonPath("$.member", hasSize(2)))
-        .andExpect(status().isOk());
-  }
-
-  @ParameterizedTest
   @ValueSource(
       strings = {
         ApiConfig.Paths.DOCUMENT_ADVANCED_SEARCH,
@@ -409,16 +403,16 @@ class AdvancedSearchControllerApiTest extends ContainersIntegrationBase {
             content()
                 .json(
                     """
-                                        {
-                                          "errors": [
-                                            {
-                                              "code": "information_missing",
-                                              "parameter": "query",
-                                              "message": "Required request parameter 'query' for method parameter type String is not present"
-                                            }
-                                          ]
-                                        }
-                                    """));
+                                                        {
+                                                          "errors": [
+                                                            {
+                                                              "code": "information_missing",
+                                                              "parameter": "query",
+                                                              "message": "Required request parameter 'query' for method parameter type String is not present"
+                                                            }
+                                                          ]
+                                                        }
+                                                    """));
   }
 
   @ParameterizedTest
@@ -439,16 +433,16 @@ class AdvancedSearchControllerApiTest extends ContainersIntegrationBase {
             content()
                 .json(
                     """
-                                        {
-                                          "errors": [
-                                            {
-                                              "code": "invalid_lucene_query",
-                                              "parameter": "query",
-                                              "message": "Invalid lucene query"
-                                            }
-                                          ]
-                                        }
-                                    """));
+                                                        {
+                                                          "errors": [
+                                                            {
+                                                              "code": "invalid_lucene_query",
+                                                              "parameter": "query",
+                                                              "message": "Invalid lucene query"
+                                                            }
+                                                          ]
+                                                        }
+                                                    """));
   }
 
   private static Stream<Arguments> provideSortTestData() {
@@ -477,16 +471,16 @@ class AdvancedSearchControllerApiTest extends ContainersIntegrationBase {
             content()
                 .json(
                     """
-                                {
-                                  "errors": [
-                                    {
-                                      "code": "invalid_parameter_value",
-                                      "message": "%s",
-                                      "parameter": "sort"
-                                    }
-                                  ]
-                                }
-                                """
+                                                {
+                                                  "errors": [
+                                                    {
+                                                      "code": "invalid_parameter_value",
+                                                      "message": "%s",
+                                                      "parameter": "sort"
+                                                    }
+                                                  ]
+                                                }
+                                                """
                         .formatted(expectedError)));
   }
 }

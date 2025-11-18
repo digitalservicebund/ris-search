@@ -7,7 +7,7 @@ import IcBaselineMenu from "~icons/ic/baseline-menu";
 </script>
 
 <template>
-  <Popover v-slot="{ open }" as="nav" class="flex-grow lg:hidden">
+  <Popover v-slot="{ open }" as="nav" class="grow lg:hidden">
     <PopoverButton
       class="text-neutral-secondary float-end flex w-full flex-row items-center justify-between gap-4 px-16 py-8 no-underline"
     >

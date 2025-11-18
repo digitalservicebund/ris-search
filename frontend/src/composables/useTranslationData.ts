@@ -1,6 +1,5 @@
 import type { AsyncData, NuxtError } from "#app";
-import { useBackendURL } from "~/composables/useBackendURL";
-import type { LegislationWork, JSONLDList, SearchResult } from "~/types";
+import type { JSONLDList, LegislationWork, SearchResult } from "~/types";
 import { getCurrentDateInGermanyFormatted } from "~/utils/dateFormatting";
 
 export interface TranslationContent {
@@ -22,47 +21,41 @@ function notFoundError(message: string) {
   return createError({ statusCode: 404, statusMessage: message });
 }
 
-function useApi() {
-  const apiFetch = useRequestFetch();
-  const backendURL = useBackendURL();
-  return { apiFetch, backendURL };
+function translationsListURL() {
+  return `/v1/translatedLegislation`;
 }
 
-function translationsListURL(backendURL: string) {
-  return `${backendURL}/v1/translatedLegislation`;
+function translationDetailURL(id: string) {
+  return `/v1/translatedLegislation?id=${id}`;
 }
 
-function translationDetailURL(backendURL: string, id: string) {
-  return `${backendURL}/v1/translatedLegislation?id=${id}`;
+function translationHtmlURL(filename: string) {
+  return `/v1/translatedLegislation/${filename}`;
 }
 
-function translationHtmlURL(backendURL: string, filename: string) {
-  return `${backendURL}/v1/translatedLegislation/${filename}`;
-}
-
-function legislationSearchURL(
-  backendURL: string,
-  id: string,
-  currentDate: string,
-) {
-  return `${backendURL}/v1/legislation?searchTerm=${id}&temporalCoverageFrom=${currentDate}&temporalCoverageTo=${currentDate}&size=100&pageIndex=0`;
+function legislationSearchURL(id: string, currentDate: string) {
+  return `/v1/legislation?searchTerm=${id}&temporalCoverageFrom=${currentDate}&temporalCoverageTo=${currentDate}&size=100&pageIndex=0`;
 }
 
 export function fetchTranslationList(): AsyncData<
   TranslationContent[],
   NuxtError<TranslationContent> | NuxtError<null> | undefined
 > {
-  const { apiFetch, backendURL } = useApi();
+  const { $risBackend } = useNuxtApp();
 
-  return useAsyncData("translations-list", async () => {
-    const response = await apiFetch<TranslationContent[]>(
-      translationsListURL(backendURL),
-    );
+  return useAsyncData(
+    "translations-list",
+    async () => {
+      const response = await $risBackend<TranslationContent[]>(
+        translationsListURL(),
+      );
 
-    if (!response || response.length === 0) throw notFoundError("Not Found");
+      if (!response || response.length === 0) throw notFoundError("Not Found");
 
-    return response;
-  });
+      return response;
+    },
+    { server: true, lazy: false },
+  );
 }
 
 export function fetchTranslationListWithIdFilter(
@@ -71,65 +64,84 @@ export function fetchTranslationListWithIdFilter(
   TranslationContent[],
   NuxtError<TranslationContent> | NuxtError<null> | undefined
 > {
-  const { apiFetch, backendURL } = useApi();
+  const { $risBackend } = useNuxtApp();
 
-  return useAsyncData("translations-list-with_id", async () => {
-    const response = await apiFetch<TranslationContent[]>(
-      translationDetailURL(backendURL, id),
-    );
+  return useAsyncData(
+    `translations-list-with_id-${id}`,
+    async () => {
+      const response = await $risBackend<TranslationContent[]>(
+        translationDetailURL(id),
+      );
 
-    if (!response || response.length === 0) throw notFoundError("Not Found");
+      if (!response || response.length === 0) throw notFoundError("Not Found");
 
-    return response;
-  });
+      return response;
+    },
+    { server: true, lazy: false },
+  );
 }
 
 export function fetchTranslationAndHTML(
   id: string,
 ): AsyncData<TranslationData, NuxtError | undefined> {
-  const { apiFetch, backendURL } = useApi();
+  const { $risBackend } = useNuxtApp();
 
-  return useAsyncData(`translation-and-html-${id}`, async () => {
-    const translationsList = await apiFetch<TranslationContent[]>(
-      translationDetailURL(backendURL, id),
-    );
+  return useAsyncData(
+    `translation-and-html-${id}`,
+    async () => {
+      const translationsList = await $risBackend<TranslationContent[]>(
+        translationDetailURL(id),
+      );
 
-    if (!translationsList || translationsList.length === 0) {
-      throw notFoundError("Translation not found");
-    }
+      if (!translationsList || translationsList.length === 0) {
+        throw notFoundError("Translation not found");
+      }
 
-    const firstTranslationsListElement = translationsList[0];
-    const htmlFilename = firstTranslationsListElement?.["ris:filename"];
-    if (htmlFilename === undefined) {
-      throw notFoundError("Translation filename not found");
-    }
+      const firstTranslationsListElement = translationsList[0];
+      const htmlFilename = firstTranslationsListElement?.["ris:filename"];
+      if (htmlFilename === undefined) {
+        throw notFoundError("Translation filename not found");
+      }
 
-    const htmlData = await apiFetch<string>(
-      translationHtmlURL(backendURL, htmlFilename),
-      {
-        headers: { Accept: "text/html" },
-      },
-    );
+      const htmlData = await $risBackend<string>(
+        translationHtmlURL(htmlFilename),
+        {
+          headers: {
+            Accept: "text/html",
+          },
+        },
+      );
 
-    return { content: firstTranslationsListElement, html: htmlData };
-  });
+      return { content: firstTranslationsListElement, html: htmlData };
+    },
+    { server: true, lazy: false },
+  );
 }
 
 export function getGermanOriginal(
   id: string,
 ): AsyncData<SearchResult<LegislationWork> | null, NuxtError | undefined> {
-  const { apiFetch, backendURL } = useApi();
+  const { $risBackend } = useNuxtApp();
 
-  return useAsyncData(`german-original-${id}`, async () => {
-    const currentDateInGermanyFormatted = getCurrentDateInGermanyFormatted();
-    const response = await apiFetch<JSONLDList<SearchResult<LegislationWork>>>(
-      legislationSearchURL(backendURL, id, currentDateInGermanyFormatted),
-    );
+  return useAsyncData(
+    `german-original-${id}`,
+    async () => {
+      const currentDateInGermanyFormatted = getCurrentDateInGermanyFormatted();
+      const response = await $risBackend<
+        JSONLDList<SearchResult<LegislationWork>>
+      >(legislationSearchURL(id, currentDateInGermanyFormatted));
 
-    if (!response || response.member.length === 0) {
-      throw notFoundError("Not Found");
-    }
+      if (!response || response.member.length === 0) {
+        throw notFoundError("Not Found");
+      }
 
-    return response.member[0];
-  });
+      const [firstResult] = response.member;
+
+      if (firstResult?.item?.abbreviation === id) {
+        return firstResult;
+      }
+      throw notFoundError(`Not Found: Abbreviation mismatch for ID: ${id}`);
+    },
+    { server: true, lazy: false },
+  );
 }

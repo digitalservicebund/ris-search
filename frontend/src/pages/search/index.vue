@@ -35,7 +35,7 @@ const {
   error: loadError, // must not be named error, refer to https://github.com/nuxt/test-utils/issues/684#issuecomment-1946138626
   status,
   execute,
-} = await useFetch<Page>(() => getUrl(values.category.value), {
+} = await useRisBackend<Page>(() => getUrl(values.category.value), {
   query: params,
   watch: [params],
 });

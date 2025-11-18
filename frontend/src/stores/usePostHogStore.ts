@@ -2,7 +2,6 @@ import Cookies from "js-cookie";
 import { defineStore } from "pinia";
 import type { PostHog } from "posthog-js";
 import posthog from "posthog-js";
-import { useBackendURL } from "~/composables/useBackendURL";
 import type { QueryParams } from "~/stores/searchParams";
 import {
   getStringOrUndefined,
@@ -67,17 +66,14 @@ export const usePostHogStore = defineStore("postHog", () => {
   }
 
   async function sendFeedbackToPostHog(text: string) {
-    const backendURL = useBackendURL();
     const params = new URLSearchParams({
       text: text,
       url: router.currentRoute.value.fullPath,
       user_id: getUserPostHogId(),
     });
-    const result = await useFetch(
-      `${backendURL}/v1/feedback?${params.toString()}`,
-    );
+    const { error } = await useRisBackend(`/v1/feedback?${params.toString()}`);
 
-    if (!result) {
+    if (error.value) {
       throw new Error(`Error sending feedback`);
     }
   }

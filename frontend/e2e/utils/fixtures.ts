@@ -1,9 +1,8 @@
 import os from "node:os";
 import path from "node:path";
-import type { BrowserContext, Locator } from "@playwright/test";
+import type { BrowserContext, Locator, Page } from "@playwright/test";
 import { chromium, expect as baseExpect, test as base } from "@playwright/test";
 import { environment } from "../../playwright.config";
-import { loginUser } from "./auth";
 
 type WorkerFixtures = {
   isMobileTest: boolean;
@@ -41,20 +40,20 @@ export const seoTest = base.extend<{}, SeoWorkerFixtures>({
   persistentContext: [
     // eslint-disable-next-line no-empty-pattern
     async ({}, use) => {
-      const userDataDir = path.join(os.tmpdir(), "playwright-seo-userdata");
+      const port = environment.remoteDebuggingPort;
+      const userDataDir = path.join(os.tmpdir(), `playwright-seo-${port}`);
 
       const context = await chromium.launchPersistentContext(userDataDir, {
         headless: true,
-        args: [`--remote-debugging-port=${environment.remoteDebuggingPort}`],
+        args: [
+          `--remote-debugging-port=${port}`,
+          "--no-sandbox",
+          "--disable-setuid-sandbox",
+        ],
       });
 
-      const bootstrapPage = await context.newPage();
-      await bootstrapPage.goto(environment.baseUrl);
-      await loginUser(bootstrapPage);
-      await bootstrapPage.close();
-
       await use(context);
-      await context.close();
+      await context.close().catch(() => {});
     },
     { scope: "worker" },
   ],
@@ -130,7 +129,6 @@ export const expect = baseExpect.extend({
   },
 });
 
-// Fixture for tests that need JavaScript disabled
 type NoJsFixtures = {
   noJsContext: BrowserContext;
   page: import("@playwright/test").Page;
@@ -149,3 +147,8 @@ export const noJsTest = base.extend<NoJsFixtures>({
     await page.close();
   },
 });
+
+export async function navigate(page: Page, url: string) {
+  await page.goto(url, { waitUntil: "networkidle" });
+  return await page.waitForLoadState("domcontentloaded");
+}

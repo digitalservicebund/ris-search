@@ -1,5 +1,4 @@
 import type { AsyncData, NuxtError } from "#app";
-import { useBackendURL } from "~/composables/useBackendURL";
 import type { LegislationWork } from "~/types";
 import { getTextFromElements, parseDocument } from "~/utils/htmlParser";
 
@@ -36,27 +35,32 @@ export function useFetchNormContent(
   NormContent,
   NuxtError<NormContent> | NuxtError<null> | undefined
 > {
-  const requestFetch = useRequestFetch(); // unlike $fetch, useRequestFetch forwards client cookies
-  return useAsyncData(`json+html for ${expressionEli}`, async () => {
-    const backendURL = useBackendURL();
-    const metadata = await requestFetch<LegislationWork>(
-      `${backendURL}/v1/legislation/eli/${expressionEli}`,
-    );
-    const contentUrl = backendURL + getContentUrl(metadata);
-    const html = await requestFetch<string>(contentUrl, {
-      headers: {
-        Accept: "text/html",
-      },
-    });
-    const document = parseDocument(html);
-    const htmlParts = extractHtmlParts(document);
+  const { $risBackend } = useNuxtApp();
 
-    return {
-      legislationWork: metadata,
-      html,
-      htmlParts,
-    };
-  });
+  return useAsyncData(
+    `json+html for ${expressionEli}`,
+    async () => {
+      const metadata = await $risBackend<LegislationWork>(
+        `/v1/legislation/eli/${expressionEli}`,
+      );
+      const contentUrl = getContentUrl(metadata);
+
+      const html = await $risBackend<string>(contentUrl, {
+        headers: {
+          Accept: "text/html",
+        },
+      });
+      const document = parseDocument(html);
+      const htmlParts = extractHtmlParts(document);
+
+      return {
+        legislationWork: metadata,
+        html,
+        htmlParts,
+      };
+    },
+    { server: true, lazy: false },
+  );
 }
 
 function extractHtmlParts(document: Document): NormContent["htmlParts"] {
@@ -124,19 +128,20 @@ export function useFetchNormArticleContent(
   NormArticleContent,
   NuxtError<NormContent> | NuxtError<null> | undefined
 > {
-  const requestFetch = useRequestFetch(); // unlike $fetch, useRequestFetch forwards client cookies
-  const backendURL = useBackendURL();
+  const { $risBackend } = useNuxtApp();
+
   return useAsyncData(
     `json+html for ${expressionEli}/${articleEId}`,
     async () => {
-      const metadata = await requestFetch<LegislationWork>(
-        `${backendURL}/v1/legislation/eli/${expressionEli}`,
+      const metadata = await $risBackend<LegislationWork>(
+        `/v1/legislation/eli/${expressionEli}`,
       );
       // build the article URL by appending the eId in front of the .html suffix
-      const adaptedContentUrl =
-        backendURL +
-        getContentUrl(metadata).replace(/\.html$/, `/${articleEId}.html`);
-      const html = await requestFetch<string>(adaptedContentUrl, {
+      const adaptedContentUrl = getContentUrl(metadata).replace(
+        /\.html$/,
+        `/${articleEId}.html`,
+      );
+      const html = await $risBackend<string>(adaptedContentUrl, {
         headers: {
           Accept: "text/html",
         },
@@ -152,7 +157,7 @@ export function useFetchNormArticleContent(
         articleHeading,
       };
     },
-    { immediate: !!articleEId },
+    { immediate: !!articleEId, server: true, lazy: false },
   );
 }
 

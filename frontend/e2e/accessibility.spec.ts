@@ -2,6 +2,7 @@ import path from "node:path";
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
 import { createHtmlReport } from "axe-html-reporter";
+import { navigate } from "./utils/fixtures";
 
 const testPages = [
   {
@@ -82,7 +83,7 @@ const testPages = [
   {
     name: "Translation View Page",
     url: "/translations/FG",
-    tabs: ["Text", "Details"],
+    tabs: ["Details"],
   },
   {
     name: "Introduction Page",
@@ -93,8 +94,7 @@ const testPages = [
 test.describe("General Pages Accessibility Tests", () => {
   testPages.forEach(({ name, url, tabs }) => {
     test(`${name} should not have accessibility issues`, async ({ page }) => {
-      await page.goto(url);
-      await page.waitForLoadState("networkidle");
+      await navigate(page, url);
       const tabsAnalysisResults = [];
       let currentTab = 0;
       tabsAnalysisResults[currentTab] = await new AxeBuilder({ page })
@@ -102,12 +102,14 @@ test.describe("General Pages Accessibility Tests", () => {
         .analyze();
       if (tabs) {
         for (const tab of tabs) {
-          currentTab++;
           await page.getByRole("link", { name: tab }).click();
-          await page.waitForLoadState("networkidle");
+          await page
+            .getByRole("heading", { name: tab, exact: true })
+            .isVisible();
           tabsAnalysisResults[currentTab] = await new AxeBuilder({ page })
             .exclude("nuxt-devtools-frame")
             .analyze();
+          currentTab++;
         }
       }
       tabsAnalysisResults.forEach((result, index) => {

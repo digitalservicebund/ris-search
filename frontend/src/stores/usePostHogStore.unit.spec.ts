@@ -3,7 +3,6 @@ import { createPinia, setActivePinia } from "pinia";
 import type { PostHog } from "posthog-js";
 import posthog from "posthog-js";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { useBackendURL } from "~/composables/useBackendURL";
 import type { QueryParams } from "~/stores/searchParams";
 import { addDefaults } from "~/stores/searchParams/getInitialState";
 import { usePostHogStore } from "~/stores/usePostHogStore";
@@ -48,19 +47,19 @@ vi.mock("js-cookie", () => ({
   default: cookiesMock,
 }));
 
-const { useFetchMock } = vi.hoisted(() => {
+const { useRisBackendMock } = vi.hoisted(() => {
   return {
-    useFetchMock: vi.fn(() => {
+    useRisBackendMock: vi.fn(() => {
       return { error: ref(null) };
     }),
   };
 });
 
-mockNuxtImport("useFetch", () => {
-  return useFetchMock;
+mockNuxtImport("useRisBackend", () => {
+  return useRisBackendMock;
 });
 
-const feedbackURL = `${useBackendURL()}/v1/feedback`;
+const feedbackURL = `/v1/feedback`;
 
 describe("usePostHogStore", () => {
   beforeEach(() => {
@@ -141,9 +140,8 @@ describe("usePostHogStore", () => {
     });
     store.setTracking(true);
     store.sendFeedbackToPostHog("good");
-    expect(useFetchMock).toHaveBeenCalledWith(
+    expect(useRisBackendMock).toHaveBeenCalledWith(
       feedbackURL + "?text=good&url=%2F&user_id=12345",
-      expect.anything(),
     );
     cookiesMock.get.mockRestore();
   });
@@ -152,9 +150,8 @@ describe("usePostHogStore", () => {
     const store = usePostHogStore();
     store.setTracking(false);
     store.sendFeedbackToPostHog("test");
-    expect(useFetchMock).toHaveBeenCalledWith(
+    expect(useRisBackendMock).toHaveBeenCalledWith(
       feedbackURL + "?text=test&url=%2F&user_id=anonymous_feedback_user",
-      expect.anything(),
     );
   });
 

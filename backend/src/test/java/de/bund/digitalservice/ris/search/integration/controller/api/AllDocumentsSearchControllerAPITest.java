@@ -5,7 +5,6 @@ import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.either;
 import static org.hamcrest.Matchers.everyItem;
 import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.matchesRegex;
 import static org.hamcrest.Matchers.oneOf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -13,43 +12,47 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.c4_soft.springaddons.security.oauth2.test.annotations.WithJwt;
+import com.jayway.jsonpath.DocumentContext;
+import com.jayway.jsonpath.JsonPath;
+import de.bund.digitalservice.ris.TestJsonUtils;
 import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.integration.config.ContainersIntegrationBase;
 import de.bund.digitalservice.ris.search.integration.controller.api.testData.CaseLawTestData;
 import de.bund.digitalservice.ris.search.integration.controller.api.testData.LiteratureTestData;
-import de.bund.digitalservice.ris.search.integration.controller.api.testData.NormsTestData;
-import de.bund.digitalservice.ris.search.integration.controller.api.testData.SharedTestConstants;
-import de.bund.digitalservice.ris.search.integration.controller.api.values.SortingTestArguments;
+import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
+import de.bund.digitalservice.ris.search.models.opensearch.Literature;
+import de.bund.digitalservice.ris.search.repository.opensearch.CaseLawRepository;
+import de.bund.digitalservice.ris.search.repository.opensearch.LiteratureRepository;
 import java.util.ArrayList;
-import java.util.Comparator;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
-import org.hamcrest.Matcher;
+import org.apache.commons.collections4.IteratorUtils;
 import org.hamcrest.Matchers;
-import org.json.JSONObject;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultMatcher;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 @Tag("integration")
-@WithJwt("jwtTokens/ValidAccessToken.json")
 class AllDocumentsSearchControllerAPITest extends ContainersIntegrationBase {
 
   @Autowired private MockMvc mockMvc;
+  @Autowired private CaseLawRepository caseLawRepository;
+  @Autowired private LiteratureRepository literatureRepository;
 
   @Test
   @DisplayName("Should return correct result for term search, with textMatches")
@@ -96,60 +99,25 @@ class AllDocumentsSearchControllerAPITest extends ContainersIntegrationBase {
   }
 
   @Test
-  @DisplayName("Should return correct result for search with single date filter")
-  void shouldReturnCorrectResultForSearchWithDateFilter() throws Exception {
-    String query =
-        "?dateFrom=%s&dateTo=%s"
-            .formatted(SharedTestConstants.DATE_2_1, SharedTestConstants.DATE_2_1);
-
+  @DisplayName("Should return correct result for search with date range filter")
+  void shouldReturnCorrectResultForSearchWithDateRangeFilter() throws Exception {
+    final String query = "?dateFrom=2025-02-02&dateTo=2025-11-01";
     mockMvc
         .perform(get(ApiConfig.Paths.DOCUMENT + query).contentType(MediaType.APPLICATION_JSON))
         .andExpect(jsonPath("$.member", hasSize(2)))
-        .andExpect(
-            jsonPath(
-                "$.member[0]['item'].decisionDate",
-                Matchers.is(SharedTestConstants.DATE_2_1.toString())))
-        .andExpect(
-            jsonPath(
-                "$.member[1]['item'].legislationDate",
-                Matchers.is(SharedTestConstants.DATE_2_1.toString())));
-  }
-
-  @Test
-  @DisplayName("Should return correct result for search with date range filter")
-  void shouldReturnCorrectResultForSearchWithDateRangeFilter() throws Exception {
-    final String query =
-        "?dateFrom=%s&dateTo=%s"
-            .formatted(SharedTestConstants.DATE_2_1, SharedTestConstants.DATE_2_2);
-
-    Matcher<Iterable<? extends String>> onlyContainsGivenDates =
-        everyItem(
-            either(is(SharedTestConstants.DATE_2_1.toString()))
-                .or(is(SharedTestConstants.DATE_2_2.toString())));
-    mockMvc
-        .perform(get(ApiConfig.Paths.DOCUMENT + query).contentType(MediaType.APPLICATION_JSON))
-        .andExpect(jsonPath("$.member", hasSize(4)))
-        .andExpect(jsonPath("$.member[*].decisionDate", onlyContainsGivenDates))
-        .andExpect(jsonPath("$.member[*].legislationDate", onlyContainsGivenDates));
+        .andExpect(jsonPath("$.member[0]['item'].abbreviation", Matchers.is("TeG")))
+        .andExpect(jsonPath("$.member[1]['item'].documentNumber", Matchers.is("BFRE000157359")));
   }
 
   @Test
   @DisplayName("Should return correct result for search with dateBefore filter")
   void shouldReturnCorrectResultForSearchWithDateLtFilter() throws Exception {
-    final String url =
-        ApiConfig.Paths.DOCUMENT
-            + "?searchTerm=Test&dateTo=%s".formatted(SharedTestConstants.DATE_2_1.minusDays(1));
+    final String url = ApiConfig.Paths.DOCUMENT + "?searchTerm=Test&dateTo=2025-11-01";
     mockMvc
         .perform(get(url).contentType(MediaType.APPLICATION_JSON))
-        .andExpect(jsonPath("$.member", hasSize(1)))
-        .andExpect(
-            jsonPath(
-                "$.member[0]['item'].legislationDate",
-                Matchers.is(SharedTestConstants.DATE_1_1.toString())))
-        .andExpect(
-            jsonPath(
-                "$.member[0].textMatches[?(@.name == 'name')].text",
-                Matchers.containsInAnyOrder(Matchers.is("<mark>Test</mark> Gesetz Nr. 2"))));
+        .andExpect(jsonPath("$.member", hasSize(2)))
+        .andExpect(jsonPath("$.member[0]['item'].documentNumber", Matchers.is("BFRE000087655")))
+        .andExpect(jsonPath("$.member[1]['item'].abbreviation", Matchers.is("TeG")));
   }
 
   static Stream<Arguments> testArgsSameResultsAsOtherControllers() {
@@ -189,53 +157,70 @@ class AllDocumentsSearchControllerAPITest extends ContainersIntegrationBase {
     Assertions.assertEquals(firstMap.get("member"), secondMap.get("member"));
   }
 
-  static Stream<Arguments> provideOrderingTestArgs() {
-    int caseLawSize = CaseLawTestData.allDocuments.size();
-    int literatureSize = LiteratureTestData.allDocuments.size();
-    int normsSize = NormsTestData.allDocuments.size();
-    int combinedSize = caseLawSize + literatureSize + normsSize;
-
-    var stream = SortingTestArguments.provideSortingTestArguments();
-    final ResultMatcher dateDescendingResultMatcher =
-        result -> {
-          JSONObject jsonObject = new JSONObject(result.getResponse().getContentAsString());
-          ArrayList<String> dates = new ArrayList<>();
-          for (Object member : jsonObject.getJSONArray("member")) {
-            var item = ((JSONObject) member).getJSONObject("item");
-            if (item.has("decisionDate")) {
-              dates.add(item.getString("decisionDate"));
-            } else if (item.has("legislationDate")) {
-              dates.add(item.getString("legislationDate"));
-            } else if (item.has("firstPublicationDate")) {
-              dates.add(item.getString("firstPublicationDate"));
-            }
-          }
-          assertThat(dates).isSortedAccordingTo(Comparator.reverseOrder());
-        };
-    stream.add(Arguments.of("", combinedSize, dateDescendingResultMatcher, null));
-
-    return stream.build();
-  }
-
   @ParameterizedTest
-  @MethodSource("provideOrderingTestArgs")
+  @CsvSource({
+    "documentNumber, 9, $.member[*].item.documentNumber",
+    "-documentNumber, 9, $.member[*].item.documentNumber",
+    "courtName, 6, $.member[*].item.courtName",
+    "-courtName, 6, $.member[*].item.courtName"
+  })
   @DisplayName("Should return correct ordering")
-  void shouldReturnCorrectOrdering(
-      String sortParam, int expectedCount, ResultMatcher matcher, ResultMatcher otherMatcher)
+  void shouldReturnCorrectOrdering(String sortParam, int expectedCount, String jsonPattern)
       throws Exception {
     String url = ApiConfig.Paths.DOCUMENT + String.format("?sort=%s", sortParam);
 
-    var perform =
-        mockMvc
-            .perform(get(url).contentType(MediaType.APPLICATION_JSON))
-            .andExpect(jsonPath("$.member", hasSize(expectedCount)));
+    DocumentContext json =
+        JsonPath.parse(
+            mockMvc
+                .perform(get(url).contentType(MediaType.APPLICATION_JSON))
+                .andReturn()
+                .getResponse()
+                .getContentAsString());
+    assertThat(json.read("$.member.length()", Integer.class)).isEqualTo(expectedCount);
+    String actual = String.join(";", json.read(jsonPattern, List.class));
 
-    if (matcher != null) {
-      perform.andExpect(matcher);
+    List<CaseLawDocumentationUnit> allCaseLaw =
+        IteratorUtils.toList(caseLawRepository.findAll().iterator());
+    List<Literature> allLiterature =
+        IteratorUtils.toList(literatureRepository.findAll().iterator());
+
+    List<String> expected = new ArrayList<>();
+    if (sortParam.endsWith("documentNumber")) {
+      expected.addAll(allCaseLaw.stream().map(CaseLawDocumentationUnit::documentNumber).toList());
+      expected.addAll(allLiterature.stream().map(Literature::documentNumber).toList());
+    } else if (sortParam.endsWith("courtName")) {
+      expected.addAll(allCaseLaw.stream().map(CaseLawDocumentationUnit::courtKeyword).toList());
     }
-    if (otherMatcher != null) {
-      perform.andExpect(otherMatcher);
+    Collections.sort(expected);
+    if (sortParam.startsWith("-")) {
+      expected = expected.reversed();
     }
+    assertThat(actual).isEqualTo(String.join(";", expected));
+  }
+
+  @ParameterizedTest
+  @CsvSource({"date, 12", "-date, 12", "'', 12"})
+  @DisplayName("Should return correct date ordering")
+  void shouldReturnCorrectDateOrdering(String sortParam, int expectedCount) throws Exception {
+    String url = ApiConfig.Paths.DOCUMENT + String.format("?sort=%s", sortParam);
+
+    var result =
+        TestJsonUtils.parseJsonResult(
+            mockMvc
+                .perform(get(url).contentType(MediaType.APPLICATION_JSON))
+                .andReturn()
+                .getResponse()
+                .getContentAsString());
+    List<String> actualDates = TestJsonUtils.getDates(result);
+    assertThat(result.totalItems()).isEqualTo(expectedCount);
+
+    List<String> expected = getAllRepositoryEntityDates();
+    Collections.sort(expected);
+    if (sortParam.startsWith("-")) {
+      expected = expected.reversed();
+    }
+
+    assertThat(actualDates).containsExactlyInAnyOrderElementsOf(expected);
   }
 
   @Test

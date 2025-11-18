@@ -87,7 +87,8 @@ public class CaseLawSearchSchemaMapper {
         PartialCollectionViewMapper.fromPage(collectionBasePath, page);
 
     String id =
-        String.format("%s?page=%d&size=%d", collectionBasePath, page.getNumber(), page.getSize());
+        String.format(
+            "%s?pageIndex=%d&size=%d", collectionBasePath, page.getNumber(), page.getSize());
 
     return CollectionSchema.<SearchMemberSchema<CaseLawSearchSchema>>builder()
         .id(id)

@@ -34,6 +34,7 @@ public class ApiConfig {
     public static final String SITEMAP = BASE + "/sitemaps";
     public static final String ECLICRAWLER = BASE + "/eclicrawler";
     public static final String GENERATE_ARCHIVE = "/internal/legislation/archive";
+    public static final String STATISTICS = BASE + "/statistics";
   }
 
   public static class Headers {

@@ -26,9 +26,29 @@
     {
       "name": "Legislation",
       "description": "Retrieve current and historical versions of laws and decrees.\nThe endpoints operate on the levels of \"work\", \"expression\", and \"manifestation\". See\n<a href=\"https://en.wikipedia.org/wiki/Functional_Requirements_for_Bibliographic_Records\">Functional\nRequirements for Bibliographic Records (FRBR)</a> for more information.\n"
+    },
+    {
+      "name": "Statistics",
+      "description": "Returns document count statistics for all document kinds exposed by the API."
     }
   ],
   "paths": {
+    "/v1/statistics": {
+      "get": {
+        "tags": ["Statistics"],
+        "operationId": "getStatisticsData",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/StatisticsApiSchema" }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/literature": {
       "get": {
         "tags": ["Literature"],
@@ -1663,6 +1683,20 @@
   },
   "components": {
     "schemas": {
+      "StatisticsApiSchema": {
+        "type": "object",
+        "properties": {
+          "legislation": {
+            "$ref": "#/components/schemas/StatisticsCountSchema"
+          },
+          "case-law": { "$ref": "#/components/schemas/StatisticsCountSchema" },
+          "literature": { "$ref": "#/components/schemas/StatisticsCountSchema" }
+        }
+      },
+      "StatisticsCountSchema": {
+        "type": "object",
+        "properties": { "count": { "type": "integer", "format": "int64" } }
+      },
       "CollectionSchemaSearchMemberSchemaLiteratureSearchSchema": {
         "type": "object",
         "properties": {
@@ -2180,7 +2214,11 @@
         }
       },
       "StreamingResponseBody": {},
-      "AbstractDocumentSchema": {},
+      "AbstractDocumentSchema": {
+        "discriminator": { "propertyName": "@type" },
+        "properties": { "@type": { "type": "string" } },
+        "required": ["@type"]
+      },
       "CaseLawSearchSchema": {
         "allOf": [
           { "$ref": "#/components/schemas/AbstractDocumentSchema" },

@@ -23,9 +23,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.oauth2.client.OAuth2AuthorizedClientManager;
 
 @SpringBootTest
 @Tag("data")
@@ -39,11 +37,6 @@ class NormsApiSearchDataTest extends BaseApiSearchDataTest {
   private final double threshold = 95.0;
 
   private final String apiUrl = "/v1/legislation";
-
-  @Autowired
-  public NormsApiSearchDataTest(OAuth2AuthorizedClientManager authorizedClientManager) {
-    super(authorizedClientManager);
-  }
 
   @BeforeAll
   static void setup() {

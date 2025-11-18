@@ -1,18 +1,12 @@
 import { describe, expect, it } from "vitest";
 import { convertParams, getUrl } from "./simpleSearch";
 
-vi.mock("~/composables/useBackendURL", () => {
-  return {
-    useBackendURL: () => "backend",
-  };
-});
-
 describe("SimpleSearch.logic", () => {
   it("returns the correct URL", async () => {
-    expect(getUrl("A")).toBe("backend/v1/document");
-    expect(getUrl("R")).toBe("backend/v1/case-law");
-    expect(getUrl("N")).toBe("backend/v1/legislation");
-    expect(getUrl("L")).toBe("backend/v1/literature");
+    expect(getUrl("A")).toBe("/v1/document");
+    expect(getUrl("R")).toBe("/v1/case-law");
+    expect(getUrl("N")).toBe("/v1/legislation");
+    expect(getUrl("L")).toBe("/v1/literature");
   });
 
   it("should convert the parameters correctly", async () => {

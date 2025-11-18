@@ -5,9 +5,21 @@ import { addDefaults } from "~/stores/searchParams/getInitialState";
 import { usePostHogStore } from "~/stores/usePostHogStore";
 import IconSearch from "~icons/ic/search";
 
+const {
+  inputLabel = "Suchbegriff",
+  inputPlaceholder = "Suchbegriff eingeben",
+  submitLabel = "Suchen",
+} = defineProps<{
+  fullWidth?: boolean;
+  inputLabel?: string;
+  inputPlaceholder?: string;
+  submitLabel?: string;
+}>();
+
 const model = defineModel<string>();
-const props = defineProps<{ fullWidth?: boolean }>();
+
 const postHogStore = usePostHogStore();
+
 const router = useRouter();
 
 // currentText is decoupled from the model, we want to update
@@ -18,7 +30,9 @@ const currentText = ref<string | undefined>(model.value);
 watch(model, (newValue) => {
   currentText.value = newValue;
 });
+
 const emit = defineEmits(["emptySearch"]);
+
 const performSearch = () => {
   // If the user is coming from another page, we want to track the search
   if (router.currentRoute.value.name !== "search") {
@@ -27,51 +41,49 @@ const performSearch = () => {
       addDefaults({ query: currentText.value ?? "" }),
     );
   }
+
   if (!currentText.value) {
     // if the user hasn't entered any text, updating the model will have no effect
     // since they might still want to trigger an empty search, use "emit"
     emit("emptySearch");
   }
+
   model.value = currentText.value;
 };
+
 const onKeyup = (event: KeyboardEvent) => {
   if (event.key === "Enter") {
     performSearch();
   }
 };
+
+const searchInputId = useId();
 </script>
 
 <template>
   <form
     role="search"
-    class="flex max-w-md flex-row gap-8 data-[full-width='true']:max-w-full"
-    :data-full-width="props.fullWidth"
+    :class="{ 'max-w-md': !fullWidth }"
     action="/search"
     @submit.prevent="performSearch"
   >
-    <InputField
-      id="searchInputField"
-      label="Suche nach Rechtsinformationen"
-      visually-hide-label
-    >
+    <InputGroup>
+      <label class="sr-only" :for="searchInputId">{{ inputLabel }}</label>
       <InputText
-        id="searchInput"
+        :id="searchInputId"
         v-model="currentText"
-        aria-label="Suchbegriff"
-        fluid
-        placeholder="Suchbegriff eingeben"
+        :placeholder="inputPlaceholder"
         autofocus
-        type="search"
+        fluid
         name="query"
+        type="search"
         @keyup="onKeyup"
       />
-    </InputField>
-    <Button
-      aria-label="Suchen"
-      class="h-48 w-48 shrink-0 justify-center"
-      type="submit"
-    >
-      <template #icon><IconSearch /></template>
-    </Button>
+      <InputGroupAddon>
+        <Button :aria-label="submitLabel" type="submit">
+          <template #icon><IconSearch /></template>
+        </Button>
+      </InputGroupAddon>
+    </InputGroup>
   </form>
 </template>

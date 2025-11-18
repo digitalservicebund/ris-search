@@ -1,17 +1,14 @@
 <script setup lang="ts">
 import MiniSearch from "minisearch";
-import Button from "primevue/button";
-import InputText from "primevue/inputtext";
 import ContentWrapper from "~/components/CustomLayouts/ContentWrapper.vue";
 import type { BreadcrumbItem } from "~/components/Ris/RisBreadcrumb.vue";
+import SimpleSearchInput from "~/components/Search/SimpleSearchInput.vue";
 import { useStaticPageSeo } from "~/composables/useStaticPageSeo";
 import { fetchTranslationList } from "~/composables/useTranslationData";
 import type { TranslationContent } from "~/composables/useTranslationData";
 import { DocumentKind } from "~/types";
 import { formatDocumentKind } from "~/utils/displayValues";
-import IconSearch from "~icons/ic/search";
 
-const searchTerm = ref("");
 const activeSearchTerm = ref("");
 
 const breadcrumbItems: ComputedRef<BreadcrumbItem[]> = computed(() => {
@@ -41,18 +38,18 @@ const translationsMap = computed(() => {
 
 const sortedTranslations = computed<TranslationContent[] | null>(() => {
   if (!translationsList.value) return null;
+  let results: TranslationContent[] = [];
 
   if (activeSearchTerm.value == "") {
-    return [...translationsList.value].sort((a, b) =>
-      a.name.localeCompare(b.name),
-    );
+    results = [...translationsList.value];
+  } else {
+    results = minisearch.value
+      .search(activeSearchTerm.value, { prefix: true, fuzzy: 0.2 })
+      .map((r) => translationsMap.value.get(r.id))
+      .filter((doc): doc is TranslationContent => !!doc);
   }
-  const results = minisearch.value
-    .search(activeSearchTerm.value, { prefix: true, fuzzy: 0.2 })
-    .map((r) => translationsMap.value.get(r.id))
-    .filter((doc): doc is TranslationContent => !!doc);
 
-  return results;
+  return results.sort((a, b) => a.name.localeCompare(b.name));
 });
 
 const minisearch = computed(() => {
@@ -72,10 +69,6 @@ const minisearch = computed(() => {
   miniSearch.addAll(translationsList.value ?? []);
   return miniSearch;
 });
-
-function handleSearch() {
-  activeSearchTerm.value = searchTerm.value;
-}
 
 useStaticPageSeo("translations-list");
 </script>
@@ -105,38 +98,13 @@ useStaticPageSeo("translations-list");
           fall within the relevant copyright exceptions requires the prior
           consent of the author or other rights holder.
         </p>
-        <form
-          :data-full-width="false"
-          role="search"
-          class="mt-48 flex max-w-md flex-row gap-8 data-[full-width='true']:max-w-full"
-          @submit.prevent="handleSearch"
-        >
-          <InputField
-            id="searchInputField"
-            label="Search for english translation of a german federal law or regulation"
-            visually-hide-label
-          >
-            <label for="searchInput" class="sr-only">Search term</label>
-            <InputText
-              id="searchInput"
-              v-model="searchTerm"
-              fluid
-              placeholder="Search by title or abbreviation"
-              autofocus
-              type="search"
-            />
-          </InputField>
-
-          <Button
-            aria-label="Suchen"
-            class="h-[3rem] w-[3rem] shrink-0 justify-center"
-            type="submit"
-          >
-            <template #icon>
-              <IconSearch />
-            </template>
-          </Button>
-        </form>
+        <SimpleSearchInput
+          v-model="activeSearchTerm"
+          class="mt-48"
+          input-label="Search term"
+          input-placeholder="Search by title or abbreviation"
+          submit-label="Search"
+        />
       </section>
 
       <section aria-labelledby="translations-list" class="mt-48">
@@ -149,7 +117,7 @@ useStaticPageSeo("translations-list");
           <li v-for="t in sortedTranslations" :key="t['@id']">
             <a
               :href="`translations/${t['@id']}`"
-              class="group my-16 block bg-white p-8 px-32 py-24 no-underline hover:no-underline"
+              class="group my-16 block border-4 border-transparent bg-white p-8 px-32 py-24 no-underline hover:text-blue-800 hover:no-underline focus:border-blue-800"
             >
               <div class="max-w-prose space-y-24">
                 <span class="mr-24 group-hover:underline">{{ t["@id"] }}</span>

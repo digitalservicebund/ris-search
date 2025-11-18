@@ -3,7 +3,6 @@ package de.bund.digitalservice.ris.search.integration.controller.api;
 import static de.bund.digitalservice.ris.ZipTestUtils.readZipStream;
 import static de.bund.digitalservice.ris.search.utils.JsonLdUtils.writeJsonLdString;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
@@ -17,7 +16,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.request;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.c4_soft.springaddons.security.oauth2.test.annotations.WithJwt;
+import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
 import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.integration.config.ContainersIntegrationBase;
@@ -26,14 +25,11 @@ import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.models.opensearch.TableOfContentsItem;
 import de.bund.digitalservice.ris.search.schema.TableOfContentsSchema;
 import de.bund.digitalservice.ris.search.service.IndexNormsService;
-import de.bund.digitalservice.ris.search.utils.DateUtils;
 import java.io.ByteArrayInputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Instant;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -56,13 +52,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 @Tag("integration")
-@WithJwt("jwtTokens/ValidAccessToken.json")
 class NormsControllerApiTest extends ContainersIntegrationBase {
 
   // there should be a corresponding XML file in resources/data/LDML/norm
@@ -325,7 +319,6 @@ class NormsControllerApiTest extends ContainersIntegrationBase {
         .perform(get(ApiConfig.Paths.LEGISLATION).contentType(MediaType.APPLICATION_JSON))
         .andDo(print())
         .andExpect(jsonPath("$.member", hasSize(expectedSize)))
-        .andExpect(jsonPath("$.member[0]['item'].abbreviation", is("TeG")))
         .andExpect(jsonPath("$.@type", is("hydra:Collection")))
         .andExpect(jsonPath("$.totalItems", is(expectedSize)))
         .andExpect(status().isOk());
@@ -347,31 +340,39 @@ class NormsControllerApiTest extends ContainersIntegrationBase {
   @Test
   @DisplayName("Should compute temporalCoverage and legislationLegalForce correctly")
   void shouldHaveCorrectTemporalCoverage() throws Exception {
-    var yesterday = LocalDate.now().minusDays(1);
-    var tomorrow = LocalDate.now().plusDays(1);
+    DocumentContext json =
+        JsonPath.parse(
+            mockMvc
+                .perform(
+                    get(ApiConfig.Paths.LEGISLATION + "?eli=eli/bund/bgbl-1/1000/test")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse()
+                .getContentAsString());
+    assertThat(json.read("$.member.length()", Integer.class)).isEqualTo(1);
+    assertThat(json.read("$.member[0].item.abbreviation", String.class)).isEqualTo("TeG");
+    assertThat(json.read("$.member[0].item.workExample.temporalCoverage", String.class))
+        .isEqualTo("2025-11-01/..");
+    assertThat(json.read("$.member[0].item.workExample.legislationLegalForce", String.class))
+        .isEqualTo("InForce");
 
-    mockMvc
-        .perform(get(ApiConfig.Paths.LEGISLATION).contentType(MediaType.APPLICATION_JSON))
-        .andExpect(status().isOk())
-        .andExpectAll(
-            jsonPath(
-                "$.member[?(@.item.abbreviation == \"TeG\")].item.workExample.temporalCoverage",
-                contains(DateUtils.toDateIntervalString(yesterday, null))),
-            jsonPath(
-                "$.member[?(@.item.abbreviation == \"TeG\")].item.workExample.legislationLegalForce",
-                contains("InForce")),
-            jsonPath(
-                "$.member[?(@.item.abbreviation == \"TeG2\")].item.workExample.temporalCoverage",
-                contains(DateUtils.toDateIntervalString(yesterday, tomorrow))),
-            jsonPath(
-                "$.member[?(@.item.abbreviation == \"TeG2\")].item.workExample.legislationLegalForce",
-                contains("InForce")),
-            jsonPath(
-                "$.member[?(@.item.abbreviation == \"TeG3\")].item.workExample.temporalCoverage",
-                contains(DateUtils.toDateIntervalString(null, yesterday))),
-            jsonPath(
-                "$.member[?(@.item.abbreviation == \"TeG3\")].item.workExample.legislationLegalForce",
-                contains("NotInForce")));
+    json =
+        JsonPath.parse(
+            mockMvc
+                .perform(
+                    get(ApiConfig.Paths.LEGISLATION + "?eli=eli/2024/teg/3")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse()
+                .getContentAsString());
+    assertThat(json.read("$.member.length()", Integer.class)).isEqualTo(1);
+    assertThat(json.read("$.member[0].item.abbreviation", String.class)).isEqualTo("TeG3");
+    assertThat(json.read("$.member[0].item.workExample.temporalCoverage", String.class))
+        .isEqualTo("2025-11-03/2025-11-03");
+    assertThat(json.read("$.member[0].item.workExample.legislationLegalForce", String.class))
+        .isEqualTo("NotInForce");
   }
 
   @Test
@@ -380,10 +381,13 @@ class NormsControllerApiTest extends ContainersIntegrationBase {
     mockMvc
         .perform(
             get(ApiConfig.Paths.LEGISLATION
-                    + "?searchTerm=Gesetz&dateFrom=2023-01-02&dateTo=2023-01-02")
+                    + "?searchTerm=Gesetz&dateFrom=2025-11-01&dateTo=2025-11-01")
                 .contentType(MediaType.APPLICATION_JSON))
         .andExpect(jsonPath("$.member", hasSize(1)))
-        .andExpect(jsonPath("$.member[0]['item'].@id", is("/v1/legislation/eli/2024/teg/2")))
+        .andExpect(
+            jsonPath(
+                "$.member[0].item.workExample.legislationIdentifier",
+                is("eli/bund/bgbl-1/1000/test/2000-10-06/2/deu")))
         .andExpect(status().isOk());
   }
 
@@ -401,25 +405,25 @@ class NormsControllerApiTest extends ContainersIntegrationBase {
   }
 
   @Test
-  @DisplayName("From is inclusive and null to means unbounded")
-  void fromIsInclusiveAndNullToMeansUnbounded() throws Exception {
+  @DisplayName("dateTo is inclusive and dateFrom being null means unbounded")
+  void dateToIsInclusiveAndDateFromBeingNullMeansUnbounded() throws Exception {
     mockMvc
         .perform(
-            get(ApiConfig.Paths.LEGISLATION + "?searchTerm=Gesetz&dateTo=2023-01-02")
+            get(ApiConfig.Paths.LEGISLATION + "?searchTerm=Gesetz&dateTo=2025-11-01")
                 .contentType(MediaType.APPLICATION_JSON))
         .andExpect(jsonPath("$.member", hasSize(1)))
         .andExpect(status().isOk());
   }
 
   @Test
-  @DisplayName("Null from means unbounded and to is inclusive")
-  void nullFromMeansUnboundedAndToIsInclusive() throws Exception {
+  @DisplayName("dateFrom is inclusive and dateTo being null means unbounded")
+  void dateFromIsInclusiveAndDateToBeingNullMeansUnbounded() throws Exception {
 
     mockMvc
         .perform(
-            get(ApiConfig.Paths.LEGISLATION + "?searchTerm=Gesetz&normsDateFrom=2023-01-02")
+            get(ApiConfig.Paths.LEGISLATION + "?searchTerm=Gesetz&dateFrom=2025-11-03")
                 .contentType(MediaType.APPLICATION_JSON))
-        .andExpect(jsonPath("$.member", hasSize(3)))
+        .andExpect(jsonPath("$.member", hasSize(1)))
         .andExpect(status().isOk());
   }
 
@@ -483,62 +487,63 @@ class NormsControllerApiTest extends ContainersIntegrationBase {
                     "<mark>example</mark> text 2")));
   }
 
-  public static Stream<Arguments> provideSortingTestArguments() {
-    Stream.Builder<Arguments> stream = Stream.builder();
+  @ParameterizedTest
+  @CsvSource(
+      value = {
+        // sorting by legislationIdentifier sorts by the expression eli
+        "legislationIdentifier, 3, eli/2024/teg/2;eli/2024/teg/3;eli/bund/bgbl-1/1000/test",
+        // reverse sort reverses the sort
+        "-legislationIdentifier, 3, eli/bund/bgbl-1/1000/test;eli/2024/teg/3;eli/2024/teg/2"
+      })
+  @DisplayName("norms sort by id correctly")
+  void normsSortByIdCorrectly(String sortParam, Integer expectedSize, String expectedIds)
+      throws Exception {
 
-    stream.add(Arguments.of("", null));
+    DocumentContext json =
+        JsonPath.parse(
+            mockMvc
+                .perform(
+                    get(ApiConfig.Paths.LEGISLATION
+                            + String.format("?searchTerm=%s&sort=%s", "test", sortParam))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andReturn()
+                .getResponse()
+                .getContentAsString());
 
-    List<String> sortedLegislationIdentifiers =
-        NormsTestData.allDocuments.stream().map(Norm::getWorkEli).sorted().toList();
-    stream.add(
-        Arguments.of(
-            "legislationIdentifier",
-            jsonPath("$.member[*].item.legislationIdentifier", is(sortedLegislationIdentifiers))));
-
-    List<String> inverseSortedLegislationIdentifiers =
-        new ArrayList<>(sortedLegislationIdentifiers);
-    Collections.reverse(inverseSortedLegislationIdentifiers);
-    stream.add(
-        Arguments.of(
-            "-legislationIdentifier",
-            jsonPath(
-                "$.member[*].item.legislationIdentifier",
-                is(inverseSortedLegislationIdentifiers))));
-
-    List<String> dates =
-        new ArrayList<>(
-            NormsTestData.allDocuments.stream()
-                .map(d -> d.getNormsDate().toString())
-                .sorted()
-                .toList());
-
-    stream.add(Arguments.of("date", jsonPath("$.member[*].item.legislationDate", is(dates))));
-
-    List<String> invertedDates = new ArrayList<>(dates);
-    Collections.reverse(invertedDates);
-
-    stream.add(
-        Arguments.of("-date", jsonPath("$.member[*].item.legislationDate", is(invertedDates))));
-
-    return stream.build();
+    assertThat(json.read("$.member.length()", Integer.class)).isEqualTo(expectedSize);
+    String ids = String.join(";", json.read("$.member[*].item.legislationIdentifier", List.class));
+    assertThat(ids).isEqualTo(expectedIds);
   }
 
   @ParameterizedTest
-  @MethodSource("provideSortingTestArguments")
-  @DisplayName("sorts results correctly")
-  void shouldReturnCorrectSort(String sortParam, ResultMatcher matcher) throws Exception {
+  @CsvSource(
+      value = {
+        // default sort is by relevance and therefore dates returned are not sorted
+        "'', 3, 2025-11-01/..;2025-11-03/2025-11-03;2025-11-02/2025-11-03",
+        // sorting by date sorts by in force (api uses temporalCoverage for in force date)
+        "DATUM, 3, 2025-11-01/..;2025-11-02/2025-11-03;2025-11-03/2025-11-03",
+        // reverse sort reverses the sort
+        "-DATUM, 3, 2025-11-03/2025-11-03;2025-11-02/2025-11-03;2025-11-01/.."
+      })
+  @DisplayName("norms sort by date correctly")
+  void normsSortByDateCorrectly(String sortParam, Integer expectedSize, String expectedDates)
+      throws Exception {
 
-    var perform =
-        mockMvc
-            .perform(
-                get(ApiConfig.Paths.LEGISLATION
-                        + String.format("?searchTerm=%s&sort=%s", "test", sortParam))
-                    .contentType(MediaType.APPLICATION_JSON))
-            .andExpect(jsonPath("$.member", hasSize(NormsTestData.allDocuments.size())));
+    DocumentContext json =
+        JsonPath.parse(
+            mockMvc
+                .perform(
+                    get(ApiConfig.Paths.LEGISLATION
+                            + String.format("?searchTerm=%s&sort=%s", "test", sortParam))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andReturn()
+                .getResponse()
+                .getContentAsString());
 
-    if (matcher != null) {
-      perform.andExpect(matcher);
-    }
+    assertThat(json.read("$.member.length()", Integer.class)).isEqualTo(expectedSize);
+    List<String> actualDates =
+        json.read("$.member[*].item.workExample.temporalCoverage", List.class);
+    assertThat(String.join(";", actualDates)).isEqualTo(expectedDates);
   }
 
   @Test
@@ -582,75 +587,71 @@ class NormsControllerApiTest extends ContainersIntegrationBase {
     indexNormsService.reindexAll(Instant.now().toString());
 
     // A very old date should return the oldest expression
-    Object result =
+    DocumentContext json =
         JsonPath.parse(
-                mockMvc
-                    .perform(
-                        get(ApiConfig.Paths.LEGISLATION
-                                + "?eli="
-                                + NormsTestData.S_102_WORK_ELI
-                                + "&mostRelevantOn=1900-01-01")
-                            .contentType(MediaType.APPLICATION_JSON))
-                    .andReturn()
-                    .getResponse()
-                    .getContentAsString())
-            .json();
-    assertThat((Integer) JsonPath.read(result, "$.member.length()")).isEqualTo(1);
-    assertThat((String) JsonPath.read(result, "$.member[0].item.workExample.legislationIdentifier"))
+            mockMvc
+                .perform(
+                    get(ApiConfig.Paths.LEGISLATION
+                            + "?eli="
+                            + NormsTestData.S_102_WORK_ELI
+                            + "&mostRelevantOn=1900-01-01")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andReturn()
+                .getResponse()
+                .getContentAsString());
+    assertThat(json.read("$.member.length()", Integer.class)).isEqualTo(1);
+    assertThat(json.read("$.member[0].item.workExample.legislationIdentifier", String.class))
         .isEqualTo("eli/bund/bgbl-1/1991/s102/1991-01-01/1/deu");
 
     // A date where 1 expression was in force return that expression
-    result =
+    json =
         JsonPath.parse(
-                mockMvc
-                    .perform(
-                        get(ApiConfig.Paths.LEGISLATION
-                                + "?eli="
-                                + NormsTestData.S_102_WORK_ELI
-                                + "&mostRelevantOn=1991-06-01")
-                            .contentType(MediaType.APPLICATION_JSON))
-                    .andReturn()
-                    .getResponse()
-                    .getContentAsString())
-            .json();
-    assertThat((Integer) JsonPath.read(result, "$.member.length()")).isEqualTo(1);
-    assertThat((String) JsonPath.read(result, "$.member[0].item.workExample.legislationIdentifier"))
+            mockMvc
+                .perform(
+                    get(ApiConfig.Paths.LEGISLATION
+                            + "?eli="
+                            + NormsTestData.S_102_WORK_ELI
+                            + "&mostRelevantOn=1991-06-01")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andReturn()
+                .getResponse()
+                .getContentAsString());
+    assertThat(json.read("$.member.length()", Integer.class)).isEqualTo(1);
+    assertThat(json.read("$.member[0].item.workExample.legislationIdentifier", String.class))
         .isEqualTo("eli/bund/bgbl-1/1991/s102/1991-01-01/1/deu");
 
     // A date where no expressions were in force should return the next to be in force
-    result =
+    json =
         JsonPath.parse(
-                mockMvc
-                    .perform(
-                        get(ApiConfig.Paths.LEGISLATION
-                                + "?eli="
-                                + NormsTestData.S_102_WORK_ELI
-                                + "&mostRelevantOn=1996-01-01")
-                            .contentType(MediaType.APPLICATION_JSON))
-                    .andReturn()
-                    .getResponse()
-                    .getContentAsString())
-            .json();
-    assertThat((Integer) JsonPath.read(result, "$.member.length()")).isEqualTo(1);
-    assertThat((String) JsonPath.read(result, "$.member[0].item.workExample.legislationIdentifier"))
+            mockMvc
+                .perform(
+                    get(ApiConfig.Paths.LEGISLATION
+                            + "?eli="
+                            + NormsTestData.S_102_WORK_ELI
+                            + "&mostRelevantOn=1996-01-01")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andReturn()
+                .getResponse()
+                .getContentAsString());
+    assertThat(json.read("$.member.length()", Integer.class)).isEqualTo(1);
+    assertThat(json.read("$.member[0].item.workExample.legislationIdentifier", String.class))
         .isEqualTo("eli/bund/bgbl-1/1991/s102/2020-01-01/1/deu");
 
     // A date far in the future will return the last expression (ausserkraft undefined)
-    result =
+    json =
         JsonPath.parse(
-                mockMvc
-                    .perform(
-                        get(ApiConfig.Paths.LEGISLATION
-                                + "?eli="
-                                + NormsTestData.S_102_WORK_ELI
-                                + "&mostRelevantOn=5000-01-01")
-                            .contentType(MediaType.APPLICATION_JSON))
-                    .andReturn()
-                    .getResponse()
-                    .getContentAsString())
-            .json();
-    assertThat((Integer) JsonPath.read(result, "$.member.length()")).isEqualTo(1);
-    assertThat((String) JsonPath.read(result, "$.member[0].item.workExample.legislationIdentifier"))
+            mockMvc
+                .perform(
+                    get(ApiConfig.Paths.LEGISLATION
+                            + "?eli="
+                            + NormsTestData.S_102_WORK_ELI
+                            + "&mostRelevantOn=5000-01-01")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andReturn()
+                .getResponse()
+                .getContentAsString());
+    assertThat(json.read("$.member.length()", Integer.class)).isEqualTo(1);
+    assertThat(json.read("$.member[0].item.workExample.legislationIdentifier", String.class))
         .isEqualTo("eli/bund/bgbl-1/1991/s102/2050-01-01/1/deu");
   }
 }
