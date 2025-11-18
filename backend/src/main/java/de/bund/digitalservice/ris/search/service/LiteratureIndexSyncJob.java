@@ -1,6 +1,6 @@
 package de.bund.digitalservice.ris.search.service;
 
-import de.bund.digitalservice.ris.search.repository.objectstorage.literature.LiteratureBucket;
+import de.bund.digitalservice.ris.search.repository.objectstorage.LiteratureBucket;
 import org.springframework.stereotype.Component;
 
 @Component

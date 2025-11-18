@@ -2,6 +2,7 @@ package de.bund.digitalservice.ris.search.config.obs;
 
 import de.bund.digitalservice.ris.search.repository.objectstorage.LocalFilesystemObjectStorageClient;
 import de.bund.digitalservice.ris.search.repository.objectstorage.ObjectStorageClient;
+import de.bund.digitalservice.ris.search.repository.objectstorage.ObjectStorageClientDummy;
 import de.bund.digitalservice.ris.search.repository.objectstorage.S3ObjectStorageClient;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -108,6 +109,12 @@ public class ObsConfig {
         bucket);
   }
 
+  @Bean(name = "literatureS3Client")
+  @Profile({"uat", "production", "prototype"})
+  public ObjectStorageClient literatureS3DummyClient() {
+    return new ObjectStorageClientDummy();
+  }
+
   @Bean(name = "administrativeDirectiveS3Client")
   @Profile({"staging"})
   public ObjectStorageClient administrativeDirectiveS3Client(
@@ -124,6 +131,12 @@ public class ObsConfig {
             .region(Region.of(REGION))
             .build(),
         bucket);
+  }
+
+  @Bean(name = "administrativeDirectiveS3Client")
+  @Profile({"uat", "production", "prototype"})
+  public ObjectStorageClient administrativeDirectiveS3DummyClient() {
+    return new ObjectStorageClientDummy();
   }
 
   @Bean(name = "portalS3Client")

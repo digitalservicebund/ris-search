@@ -1,20 +1,17 @@
-package de.bund.digitalservice.ris.search.integration.repository;
+package de.bund.digitalservice.ris.search.unit.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 import de.bund.digitalservice.ris.search.exception.NoSuchKeyException;
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
-import de.bund.digitalservice.ris.search.repository.objectstorage.literature.LiteratureBucketDummy;
-import org.junit.jupiter.api.Tag;
+import de.bund.digitalservice.ris.search.repository.objectstorage.LiteratureBucket;
+import de.bund.digitalservice.ris.search.repository.objectstorage.ObjectStorageClientDummy;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest(classes = LiteratureBucketDummy.class)
-@Tag("integration")
-class LiteratureBucketDummyIntegrationTest {
+class LiteratureBucketDummyTest {
 
-  LiteratureBucketDummy bucket = new LiteratureBucketDummy();
+  LiteratureBucket bucket = new LiteratureBucket(new ObjectStorageClientDummy());
 
   @Test
   void getAllKeysAlwaysReturnsEmptyList() {

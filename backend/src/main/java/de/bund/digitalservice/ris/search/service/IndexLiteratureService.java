@@ -3,7 +3,7 @@ package de.bund.digitalservice.ris.search.service;
 import de.bund.digitalservice.ris.search.exception.OpenSearchMapperException;
 import de.bund.digitalservice.ris.search.mapper.LiteratureLdmlToOpenSearchMapper;
 import de.bund.digitalservice.ris.search.models.opensearch.Literature;
-import de.bund.digitalservice.ris.search.repository.objectstorage.literature.LiteratureBucket;
+import de.bund.digitalservice.ris.search.repository.objectstorage.LiteratureBucket;
 import de.bund.digitalservice.ris.search.repository.opensearch.LiteratureRepository;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
