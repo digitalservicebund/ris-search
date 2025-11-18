@@ -60,9 +60,9 @@ export default defineConfig({
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */
     baseURL: environment.baseUrl,
-    screenshot: { mode: "on", fullPage: true },
+    screenshot: { mode: "only-on-failure", fullPage: true },
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
-    trace: "on",
+    trace: "retain-on-first-failure",
   },
 
   /* Configure projects for major browsers */
