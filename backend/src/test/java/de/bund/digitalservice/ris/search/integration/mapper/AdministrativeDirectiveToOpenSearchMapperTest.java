@@ -26,7 +26,7 @@ class AdministrativeDirectiveToOpenSearchMapperTest {
             .id("KSNR0000")
             .documentNumber("KSNR0000")
             .longTitle("long title")
-            .documentCategory("Verwaltungsregelung")
+            .documentCategory("VR")
             .documentType("Rundschreiben")
             .content("text content")
             .normgeber("NG Ministerium")

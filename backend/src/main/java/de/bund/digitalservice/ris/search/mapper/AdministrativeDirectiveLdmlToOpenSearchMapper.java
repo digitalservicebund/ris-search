@@ -7,7 +7,6 @@ import de.bund.digitalservice.ris.search.models.ldml.directive.Analysis;
 import de.bund.digitalservice.ris.search.models.ldml.directive.Block;
 import de.bund.digitalservice.ris.search.models.ldml.directive.Doc;
 import de.bund.digitalservice.ris.search.models.ldml.directive.DocumentType;
-import de.bund.digitalservice.ris.search.models.ldml.directive.DocumentTypeCategory;
 import de.bund.digitalservice.ris.search.models.ldml.directive.FieldOfLaw;
 import de.bund.digitalservice.ris.search.models.ldml.directive.FrbrExpression;
 import de.bund.digitalservice.ris.search.models.ldml.directive.FrbrNameValueElement;
@@ -120,7 +119,6 @@ public class AdministrativeDirectiveLdmlToOpenSearchMapper {
     return getRisMeta(ldml)
         .map(RisMeta::getDocumentType)
         .map(DocumentType::getCategory)
-        .map(DocumentTypeCategory::getLongName)
         .orElseThrow(() -> new ValidationException("missing documentCategory"));
   }
 

@@ -5,10 +5,10 @@ import static org.junit.Assert.assertThrows;
 
 import de.bund.digitalservice.ris.search.exception.OpenSearchMapperException;
 import de.bund.digitalservice.ris.search.mapper.AdministrativeDirectiveLdmlToOpenSearchMapper;
+import de.bund.digitalservice.ris.search.models.ldml.directive.ActiveReference;
 import de.bund.digitalservice.ris.search.models.ldml.directive.AdministrativeDirectiveLdml;
 import de.bund.digitalservice.ris.search.models.ldml.directive.Doc;
 import de.bund.digitalservice.ris.search.models.ldml.directive.DocumentType;
-import de.bund.digitalservice.ris.search.models.ldml.directive.DocumentTypeCategory;
 import de.bund.digitalservice.ris.search.models.ldml.directive.FieldOfLaw;
 import de.bund.digitalservice.ris.search.models.ldml.directive.FrbrNameValueElement;
 import de.bund.digitalservice.ris.search.models.ldml.directive.FrbrWork;
@@ -42,7 +42,7 @@ class AdministrativeDirectiveToOpenSearchMapperUnitTest {
     RisMeta risMeta = new RisMeta();
 
     DocumentType docType = new DocumentType();
-    docType.setCategory(DocumentTypeCategory.VV);
+    docType.setCategory("VV");
 
     risMeta.setDocumentType(docType);
     proprietary.setMeta(risMeta);
@@ -77,6 +77,34 @@ class AdministrativeDirectiveToOpenSearchMapperUnitTest {
     AdministrativeDirective entity =
         AdministrativeDirectiveLdmlToOpenSearchMapper.map(ldml, Instant.now());
     assertThat(entity.normgeber()).isEqualTo("BB");
+  }
+
+  @Test
+  void itExtractsActiveReferencesOnlyWithAvailableFields() {
+    AdministrativeDirectiveLdml ldml = getLdmlWithMandatoryFields();
+
+    ActiveReference ref = new ActiveReference();
+    ref.setReference("Ref");
+
+    ldml.getDoc().getMeta().getProprietary().getMeta().setActiveReferences(List.of(ref));
+    AdministrativeDirective entity =
+        AdministrativeDirectiveLdmlToOpenSearchMapper.map(ldml, Instant.now());
+    assertThat(entity.activeAdministrativeReferences().getFirst()).isEqualTo("Ref");
+  }
+
+  @Test
+  void itExtractsActiveReferencesWithAllFields() {
+    AdministrativeDirectiveLdml ldml = getLdmlWithMandatoryFields();
+
+    ActiveReference ref = new ActiveReference();
+    ref.setReference("Ref");
+    ref.setPosition("Pos");
+    ref.setParagraph("Par");
+
+    ldml.getDoc().getMeta().getProprietary().getMeta().setActiveReferences(List.of(ref));
+    AdministrativeDirective entity =
+        AdministrativeDirectiveLdmlToOpenSearchMapper.map(ldml, Instant.now());
+    assertThat(entity.activeNormReferences().getFirst()).isEqualTo("Ref Par Pos");
   }
 
   @Test

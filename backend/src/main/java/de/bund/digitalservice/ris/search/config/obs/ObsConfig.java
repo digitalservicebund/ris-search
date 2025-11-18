@@ -117,8 +117,10 @@ public class ObsConfig {
         S3Client.builder()
             .credentialsProvider(
                 StaticCredentialsProvider.create(
-                    AwsBasicCredentials.create(literatureAccessKeyId, literatureSecretAccessKey)))
-            .endpointOverride(new URI(literatureEndpoint))
+                    AwsBasicCredentials.create(
+                        administrativeDirectiveAccessKeyId,
+                        administrativeDirectiveSecretAccessKey)))
+            .endpointOverride(new URI(administrativeDirectiveEndpoint))
             .region(Region.of(REGION))
             .build(),
         bucket);

@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 public class DocumentType {
 
-  @XmlAttribute private DocumentTypeCategory category;
+  @XmlAttribute private String category;
 
   @XmlAttribute private String longTitle;
 
