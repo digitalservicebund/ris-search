@@ -137,7 +137,7 @@ export default defineNuxtConfig({
     },
   },
   security: {
-    strict: false,
+    strict: config.production,
     headers: {
       referrerPolicy: "same-origin",
       contentSecurityPolicy: {
