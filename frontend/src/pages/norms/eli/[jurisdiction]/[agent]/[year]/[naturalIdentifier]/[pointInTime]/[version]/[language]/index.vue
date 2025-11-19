@@ -156,28 +156,26 @@ const buildOgTitle = (
   if (privateFeaturesEnabled) {
     const formattedValidFrom = dateFormattedDDMMYYYY(validFrom);
     if (formattedValidFrom) {
-      parts.push(`${baseTitle}: Fassung vom ${formattedValidFrom}`);
+      parts.push(`Fassung vom ${formattedValidFrom}`);
     }
 
     const statusLabel = getValidityStatusLabel(status);
     if (statusLabel) {
-      parts.push(
-        parts.length === 0 ? `${baseTitle}: ${statusLabel}` : statusLabel,
-      );
+      parts.push(statusLabel);
     }
 
-    return truncateAtWord(parts.join(", "), 55) || undefined;
+    return truncateAtWord(`${baseTitle}: ${parts.join(", ")}`, 55) || undefined;
   }
 
   if (validFrom) {
-    parts.push(`${baseTitle}: Fassung vom [Inkrafttreten]`);
+    parts.push(`Fassung vom [Inkrafttreten]`);
   }
 
   if (status) {
-    parts.push(parts.length === 0 ? `${baseTitle}: [Status]` : "[Status]");
+    parts.push("[Status]");
   }
   const placeholder = parts.join(", ");
-  return truncateAtWord(placeholder, 55) || undefined;
+  return truncateAtWord(`${baseTitle}: ${placeholder}`, 55) || undefined;
 };
 
 const title = computed<string | undefined>(() =>
