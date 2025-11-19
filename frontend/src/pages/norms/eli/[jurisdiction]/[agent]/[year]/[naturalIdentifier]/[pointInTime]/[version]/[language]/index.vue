@@ -2,8 +2,8 @@
 import { RisSingleAccordion } from "@digitalservicebund/ris-ui/components";
 import type { Dayjs } from "dayjs";
 import type { TreeNode } from "primevue/treenode";
-import { computed } from "vue";
 import type { ComputedRef } from "vue";
+import { computed } from "vue";
 import { useRoute } from "#app";
 import NormActionsMenu from "~/components/ActionMenu/NormActionsMenu.vue";
 import ContentWrapper from "~/components/CustomLayouts/ContentWrapper.vue";
@@ -17,8 +17,8 @@ import NormHeadingGroup from "~/components/NormHeadingGroup.vue";
 import Properties from "~/components/Properties.vue";
 import PropertiesItem from "~/components/PropertiesItem.vue";
 import NormTableOfContents from "~/components/Ris/NormTableOfContents.vue";
-import RisBreadcrumb from "~/components/Ris/RisBreadcrumb.vue";
 import type { BreadcrumbItem } from "~/components/Ris/RisBreadcrumb.vue";
+import RisBreadcrumb from "~/components/Ris/RisBreadcrumb.vue";
 import RisTabs from "~/components/Ris/RisTabs.vue";
 import { useDynamicSeo } from "~/composables/useDynamicSeo";
 import { useIntersectionObserver } from "~/composables/useIntersectionObserver";
@@ -29,14 +29,14 @@ import { fetchTranslationListWithIdFilter } from "~/composables/useTranslationDa
 import { DocumentKind, type LegislationWork } from "~/types";
 import { dateFormattedDDMMYYYY } from "~/utils/dateFormatting";
 import { formatDocumentKind } from "~/utils/displayValues";
+import type { ValidityStatus } from "~/utils/norm";
 import {
+  getManifestationUrl,
   getNormBreadcrumbTitle,
   getValidityStatus,
-  getManifestationUrl,
-  temporalCoverageToValidityInterval,
   getValidityStatusLabel,
+  temporalCoverageToValidityInterval,
 } from "~/utils/norm";
-import type { ValidityStatus } from "~/utils/norm";
 import { tocItemsToTreeNodes } from "~/utils/tableOfContents";
 import { tabPanelClass } from "~/utils/tabsStyles";
 import { truncateAtWord } from "~/utils/textFormatting";
@@ -151,28 +151,30 @@ const buildOgTitle = (
   const baseTitle = abbreviation || shortTitle || "";
 
   if (!baseTitle) return undefined;
-  const parts: string[] = [baseTitle];
+  const parts: string[] = [];
 
   if (privateFeaturesEnabled) {
     const formattedValidFrom = dateFormattedDDMMYYYY(validFrom);
     if (formattedValidFrom) {
-      parts.push(`Fassung vom ${formattedValidFrom}`);
+      parts.push(`${baseTitle}: Fassung vom ${formattedValidFrom}`);
     }
 
     const statusLabel = getValidityStatusLabel(status);
     if (statusLabel) {
-      parts.push(statusLabel);
+      parts.push(
+        parts.length !== 0 ? statusLabel : `${baseTitle}: ${statusLabel}`,
+      );
     }
 
     return truncateAtWord(parts.join(", "), 55) || undefined;
   }
 
   if (validFrom) {
-    parts.push("Fassung vom [Inkrafttreten]");
+    parts.push(`${baseTitle}: Fassung vom [Inkrafttreten]`);
   }
 
   if (status) {
-    parts.push("[Status]");
+    parts.push(parts.length !== 0 ? "[Status]" : `${baseTitle}: [Status]`);
   }
   const placeholder = parts.join(", ");
   return truncateAtWord(placeholder, 55) || undefined;

@@ -279,7 +279,7 @@ describe("index.vue", () => {
     const callArgs = useHeadMock.mock.calls[0]?.[0];
 
     expect(callArgs.title.value).toBe(
-      "abbreviation, Fassung vom 01.01.2024, Außer Kraft",
+      "abbreviation: Fassung vom 01.01.2024, Außer Kraft",
     );
     expect(callArgs.link.value).toEqual([
       { rel: "canonical", href: expect.any(String) },

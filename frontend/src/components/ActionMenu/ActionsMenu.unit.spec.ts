@@ -146,12 +146,9 @@ describe("ActionsMenu.vue", () => {
     const navigationUrl = "https://navigation.com";
     await navigationCommand(navigationUrl);
 
-    expect(mockNavigateTo).toHaveBeenCalledExactlyOnceWith(
-      useBackendUrl(navigationUrl),
-      {
-        external: true,
-      },
-    );
+    expect(mockNavigateTo).toHaveBeenCalledExactlyOnceWith(navigationUrl, {
+      external: true,
+    });
   });
 
   it("shows small or large ActionMenu depending on screen size", () => {
