@@ -21,7 +21,6 @@ public record AdministrativeDirective(
     @Nullable @Field(name = Fields.LEGISLATOR) String normgeber,
     @Nullable @Field(name = Fields.ENTRY_INTO_EFFECT_DATE) String entryIntoEffectDate,
     @Nullable @Field(name = Fields.EXPIRY_DATE) String expiryDate,
-    @ElementCollection @Field(name = Fields.TOC_ITEMS) List<String> tocItems,
     @ElementCollection @Field(name = Fields.NORM_REFERENCES) List<String> normReferences,
     @ElementCollection @Field(name = Fields.CASELAW_REFERENCES) List<String> caselawReferences,
     @ElementCollection @Field(name = Fields.FUNDSTELLE_REFERENCES)

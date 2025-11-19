@@ -19,6 +19,9 @@
             }
           }
         },
+        "id": {
+          "type": "keyword"
+        },
         "keywords": {
           "type": "text",
           "analyzer": "custom_german_analyzer",
@@ -28,9 +31,6 @@
               "normalizer": "normalized_keyword"
             }
           }
-        },
-        "recording_date": {
-          "type": "date"
         },
         "caselaw_references": {
           "type": "text",
@@ -50,6 +50,17 @@
         },
         "entry_into_effect_date": {
           "type": "date"
+        },
+        "expiry_date": {
+          "type": "date"
+        },
+        "active_administrative_references": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
+        "active_norm_references": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
         },
         "fields_of_law": {
           "type": "text",

@@ -23,12 +23,6 @@ public class RisMeta {
   @XmlElement(namespace = AdministrativeDirectiveLdml.RIS_NS)
   private LocalDate expiryDate;
 
-  @XmlElementWrapper(
-      name = "tableOfContentsEntries",
-      namespace = AdministrativeDirectiveLdml.RIS_NS)
-  @XmlElement(name = "tableOfContentsEntry", namespace = AdministrativeDirectiveLdml.RIS_NS)
-  private List<String> tableOfContentsEntries;
-
   @XmlElementWrapper(name = "referenceNumbers", namespace = AdministrativeDirectiveLdml.RIS_NS)
   @XmlElement(name = "referenceNumber", namespace = AdministrativeDirectiveLdml.RIS_NS)
   private List<String> referenceNumbers;

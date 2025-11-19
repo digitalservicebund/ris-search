@@ -79,7 +79,7 @@ s3:
       secret-access-key:
     administrative-directive:
       endpoint: https://obs.eu-de.otc.t-systems.com
-      bucket-name: literature
+      bucket-name: administrative-directive
       access-key-id:
       secret-access-key:
     portal:

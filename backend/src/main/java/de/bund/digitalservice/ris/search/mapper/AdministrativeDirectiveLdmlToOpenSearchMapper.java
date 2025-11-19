@@ -55,7 +55,6 @@ public class AdministrativeDirectiveLdmlToOpenSearchMapper {
           .normgeber(getNormgeber(ldml))
           .entryIntoEffectDate(getEntryIntoEffect(ldml))
           .expiryDate(getExpiryDate(ldml))
-          .tocItems(getToc(ldml))
           .normReferences(getNormReferences(ldml))
           .fundstelleReferences(getFundstelleReferences(ldml))
           .zitierdatumItems(getZitierdatumItems(ldml))
@@ -100,10 +99,6 @@ public class AdministrativeDirectiveLdmlToOpenSearchMapper {
         .map(Block::getValue)
         .map(String::trim)
         .orElse(null);
-  }
-
-  private static List<String> getToc(AdministrativeDirectiveLdml ldml) {
-    return getRisMeta(ldml).map(RisMeta::getTableOfContentsEntries).orElse((List.of()));
   }
 
   private static Optional<RisMeta> getRisMeta(AdministrativeDirectiveLdml ldml) {

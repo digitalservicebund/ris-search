@@ -32,7 +32,6 @@ class AdministrativeDirectiveToOpenSearchMapperTest {
             .normgeber("NG Ministerium")
             .entryIntoEffectDate("1978-01-17")
             .expiryDate("2026-01-01")
-            .tocItems(List.of("item 1", "item 2"))
             .normReferences(List.of("PhanGB"))
             .caselawReferences(List.of("Aktivzitierung I"))
             .fundstelleReferences(List.of("Lorem Ipsum 19XX, 11"))
