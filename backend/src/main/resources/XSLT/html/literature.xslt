@@ -86,26 +86,32 @@
 	<xsl:template name="references" >
 		<!-- Rechtsprechung -->
 		<xsl:if test="akn:implicitReference/ris:caselawReference">
-			<p>Rechtsprechung</p>
+			<h3>Rechtsprechung</h3>
+			<ul>
 			<xsl:for-each select="akn:implicitReference[ris:caselawReference]">
-				<p><xsl:value-of select="@showAs" /></p>
+				<li><xsl:value-of select="@showAs" /></li>
 			</xsl:for-each>
+			</ul>
 		</xsl:if>
 
 		<!-- Verwaltungsvorschriften -->
 		<xsl:if test="akn:implicitReference/ris:verwaltungsvorschriftReference">
-			<p>Verwaltungsvorschriften</p>
+			<h3>Verwaltungsvorschriften</h3>
+			<ul>
 			<xsl:for-each select="akn:implicitReference[ris:verwaltungsvorschriftReference]">
-				<p><xsl:value-of select="@showAs" /></p>
+				<li><xsl:value-of select="@showAs" /></li>
 			</xsl:for-each>
+			</ul>
 		</xsl:if>
 
 		<!-- Literaturnachweise -->
 		<xsl:if test="akn:implicitReference[ris:unselbstaendigeLiteraturReference or ris:selbstaendigeLiteraturReference]">
-			<p>Literaturnachweise</p>
+			<h3>Literaturnachweise</h3>
+			<ul>
 			<xsl:for-each select="akn:implicitReference[ris:unselbstaendigeLiteraturReference or ris:selbstaendigeLiteraturReference]">
-				<p><xsl:value-of select="@showAs" /></p>
+				<li><xsl:value-of select="@showAs" /></li>
 			</xsl:for-each>
+			</ul>
 		</xsl:if>
 
 	</xsl:template>
