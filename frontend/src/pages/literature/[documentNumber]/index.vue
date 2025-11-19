@@ -11,7 +11,7 @@ import RisDocumentTitle from "~/components/Ris/RisDocumentTitle.vue";
 import RisTabs from "~/components/Ris/RisTabs.vue";
 import { DocumentKind, type Literature } from "~/types";
 import { formatDocumentKind } from "~/utils/displayValues";
-import { getTitle } from "~/utils/literature";
+import { getTitle, LITERATURE_TITLE_PLACEHOLDER } from "~/utils/literature";
 import { tabPanelClass } from "~/utils/tabsStyles";
 import IcBaselineSubject from "~icons/ic/baseline-subject";
 import IcOutlineInfo from "~icons/ic/outline-info";
@@ -35,7 +35,6 @@ const { data: html, error: contentError } = await useRisBackend<string>(
   },
 );
 
-const emptyTitlePlaceholder = "Titelzeile nicht vorhanden";
 const title = computed(() => getTitle(literature.value));
 const isEmptyDocument = computed(() => isDocumentEmpty(literature.value));
 const details = computed(() => {
@@ -54,7 +53,7 @@ const breadcrumbItems = computed(() => [
     route: `/search?category=${DocumentKind.Literature}`,
   },
   {
-    label: title.value ?? emptyTitlePlaceholder,
+    label: title.value ?? LITERATURE_TITLE_PLACEHOLDER,
   },
 ]);
 
@@ -93,7 +92,10 @@ if (contentError?.value) {
           ><LiteratureActionsMenu :literature="literature"
         /></client-only>
       </div>
-      <RisDocumentTitle :title="title" :placeholder="emptyTitlePlaceholder" />
+      <RisDocumentTitle
+        :title="title"
+        :placeholder="LITERATURE_TITLE_PLACEHOLDER"
+      />
       <LiteratureMetadata
         :document-types="literature.documentTypes"
         :references="literature.dependentReferences"
