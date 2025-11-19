@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<akn:akomaNtoso xmlns:akn="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" xmlns:ris="http://ldml.neuris.de/literature/unselbstaendig/meta/">
+<akn:doc name="offene-struktur">
+    <akn:meta>
+        <akn:identification source="attributsemantik-noch-undefiniert">
+            <akn:FRBRWork>
+                <akn:FRBRalias name="haupttitel" value="Aktive Zitierungen"/>
+            </akn:FRBRWork>
+        </akn:identification>
+        <akn:analysis source="attributsemantik-noch-undefiniert">
+            <akn:otherReferences source="attributsemantik-noch-undefiniert">
+                <akn:implicitReference showAs="Foo, § 87 Abs 1 Nr 3">
+                    <ris:normReference abbreviation="Foo" singleNorm="§ 87 Abs 1 Nr 3"/>
+                </akn:implicitReference>
+            </akn:otherReferences>
+            <akn:otherReferences source="active">
+                <akn:implicitReference showAs="Rechtsprechung reference 1">
+                    <ris:caselawReference>
+                    </ris:caselawReference>
+                </akn:implicitReference>
+                <akn:implicitReference showAs="Rechtsprechung reference 2">
+                    <ris:caselawReference/>
+                </akn:implicitReference>
+                <akn:implicitReference showAs="Verwaltungsvorschrift reference 1">
+                    <ris:verwaltungsvorschriftReference>
+                    </ris:verwaltungsvorschriftReference>
+                </akn:implicitReference>
+                <akn:implicitReference showAs="Verwaltungsvorschrift reference 2">
+                    <ris:verwaltungsvorschriftReference />
+                </akn:implicitReference>
+                <akn:implicitReference showAs="Unselbstständigeliterature reference">
+                    <ris:unselbstaendigeLiteraturReference/>
+                </akn:implicitReference>
+                <akn:implicitReference showAs="Selbstständigeliterature reference">
+                    <ris:selbstaendigeLiteraturReference/>
+                </akn:implicitReference>
+            </akn:otherReferences>
+        </akn:analysis>
+    </akn:meta>
+    <akn:mainBody>
+        <akn:div>
+            <akn:p>Foo bar</akn:p>
+        </akn:div>
+    </akn:mainBody>
+</akn:doc>
+</akn:akomaNtoso>
+

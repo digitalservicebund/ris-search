@@ -2,7 +2,8 @@
 <xsl:stylesheet version="1.0"
 				xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 				xmlns:akn="http://docs.oasis-open.org/legaldocml/ns/akn/3.0"
-				exclude-result-prefixes="akn">
+				xmlns:ris="http://ldml.neuris.de/literature/unselbstaendig/meta/"
+				exclude-result-prefixes="akn ris">
 
 	<xsl:output method="html" encoding="UTF-8" indent="yes"/>
 
@@ -20,7 +21,11 @@
 				</title>
 			</head>
 			<body>
-				<xsl:apply-templates/>
+				<xsl:apply-templates select="//akn:FRBRWork"/>
+				<xsl:apply-templates select="//*[local-name()='gliederung']"/>
+				<xsl:apply-templates select="//akn:mainBody"/>
+				<xsl:apply-templates select="//akn:otherReferences[@source='active']"/>
+				<xsl:apply-templates select="//akn:otherReferences[@source='passive']"/>
 			</body>
 		</html>
 	</xsl:template>
@@ -63,6 +68,52 @@
 			<h2>Kurzreferat</h2>
 			<xsl:apply-templates />
 		</xsl:if>
+	</xsl:template>
+
+	<!-- Active references -->
+	<xsl:template match="akn:otherReferences[@source='active']">
+		<h2>Dieser Beitrag zitiert</h2>
+		<xsl:call-template name="references"/>
+	</xsl:template>
+
+	<!-- Passive references -->
+	<xsl:template match="akn:otherReferences[@source='passive']">
+		<h2>Dieser Beitrag wird zitiert</h2>
+		<xsl:call-template name="references"/>
+	</xsl:template>
+
+	<!-- active and passive contents references -->
+	<xsl:template name="references" >
+		<!-- Rechtsprechung -->
+		<xsl:if test="akn:implicitReference/ris:caselawReference">
+			<h3>Rechtsprechung</h3>
+			<ul>
+			<xsl:for-each select="akn:implicitReference[ris:caselawReference]">
+				<li><xsl:value-of select="@showAs" /></li>
+			</xsl:for-each>
+			</ul>
+		</xsl:if>
+
+		<!-- Verwaltungsvorschriften -->
+		<xsl:if test="akn:implicitReference/ris:verwaltungsvorschriftReference">
+			<h3>Verwaltungsvorschriften</h3>
+			<ul>
+			<xsl:for-each select="akn:implicitReference[ris:verwaltungsvorschriftReference]">
+				<li><xsl:value-of select="@showAs" /></li>
+			</xsl:for-each>
+			</ul>
+		</xsl:if>
+
+		<!-- Literaturnachweise -->
+		<xsl:if test="akn:implicitReference[ris:unselbstaendigeLiteraturReference or ris:selbstaendigeLiteraturReference]">
+			<h3>Literaturnachweise</h3>
+			<ul>
+			<xsl:for-each select="akn:implicitReference[ris:unselbstaendigeLiteraturReference or ris:selbstaendigeLiteraturReference]">
+				<li><xsl:value-of select="@showAs" /></li>
+			</xsl:for-each>
+			</ul>
+		</xsl:if>
+
 	</xsl:template>
 
 	<!--***************************************************************************************-->

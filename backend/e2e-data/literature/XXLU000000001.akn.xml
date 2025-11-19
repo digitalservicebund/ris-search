@@ -54,6 +54,29 @@
                         <ris:normReference abbreviation="GG" dateOfVersion="1949-05-23" singleNorm="Art 6 Abs 2 S 1"/>
                     </akn:implicitReference>
                 </akn:otherReferences>
+                <akn:otherReferences source="active">
+                    <akn:implicitReference showAs="Vergleiche aktiv EuGH 2. Kammer, 3. April 2008, Az: C-346/06">
+                        <ris:caselawReference>
+                        </ris:caselawReference>
+                    </akn:implicitReference>
+                    <akn:implicitReference showAs="Vergleiche aktiv FooBar 1. Kammer, 3. April 2008">
+                        <ris:caselawReference />
+                    </akn:implicitReference>
+                    <akn:implicitReference showAs="Vergleiche aktiv Selbstständigeliterature 2025">
+                        <ris:selbstaendigeLiteraturReference/>
+                    </akn:implicitReference>
+                </akn:otherReferences>
+                <akn:otherReferences source="passive">
+                    <akn:implicitReference showAs="Vergleiche passiv NaNu 1. Kammer, 2009, Az: XY">
+                        <ris:verwaltungsvorschriftReference />
+                    </akn:implicitReference>
+                    <akn:implicitReference showAs="Vergleiche passiv Unselbstständigeliterature 2023">
+                        <ris:unselbstaendigeLiteraturReference/>
+                    </akn:implicitReference>
+                    <akn:implicitReference showAs="Vergleiche passiv Unselbstständigeliterature 1989">
+                        <ris:unselbstaendigeLiteraturReference/>
+                    </akn:implicitReference>
+                </akn:otherReferences>
             </akn:analysis>
             <akn:references source="attributsemantik-noch-undefiniert">
                 <akn:TLCPerson eId="musterfrau-sabine-verfasser-1" href="akn/ontology/persons/de/musterfrau-sabine" ris:name="Musterfrau, Sabine" ris:titel="Prof" showAs="Musterfrau, Sabine, Prof"/>
