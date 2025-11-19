@@ -2,6 +2,7 @@
 import OutlineBookIcon from "virtual:icons/ic/outline-book";
 import { usePostHogStore } from "~/stores/usePostHogStore";
 import type { Literature, SearchResult, TextMatch } from "~/types";
+import { LITERATURE_TITLE_PLACEHOLDER } from "~/utils/literature";
 import { sanitizeSearchResult } from "~/utils/sanitize";
 import { addEllipsis } from "~/utils/textFormatting";
 
@@ -71,7 +72,9 @@ function trackResultClick(url: string) {
 
 const sanitizedHeadline = computed(() =>
   sanitizeSearchResult(
-    metadata.value.headline || metadata.value.alternativeHeadline,
+    metadata.value.headline ||
+      metadata.value.alternativeHeadline ||
+      LITERATURE_TITLE_PLACEHOLDER,
   ),
 );
 

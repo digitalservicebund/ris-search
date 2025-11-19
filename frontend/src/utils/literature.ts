@@ -1,5 +1,7 @@
 import type { Literature } from "~/types";
 
+export const LITERATURE_TITLE_PLACEHOLDER = "Titelzeile nicht vorhanden";
+
 export function isDocumentEmpty(literature?: Literature) {
   const titles = getTitles(literature);
   const hasOneOrZeroTitles = !titles || titles.length < 2;

@@ -57,6 +57,19 @@ describe("LiteratureSearchResult.vue", () => {
     ).toBeInTheDocument();
   });
 
+  it("renders placeholder title if title is missing", async () => {
+    const searchResultWithoutTitle = {
+      item: {
+        ...searchResult.item,
+        headline: null,
+        alternativeHeadline: null,
+      },
+      textMatches: [],
+    };
+    renderComponent(searchResultWithoutTitle);
+    expect(screen.getByText("Titelzeile nicht vorhanden")).toBeInTheDocument();
+  });
+
   it("displays highlighted headline when mainTitle", async () => {
     const textMatch: TextMatch = {
       "@type": "SearchResultMatch",
