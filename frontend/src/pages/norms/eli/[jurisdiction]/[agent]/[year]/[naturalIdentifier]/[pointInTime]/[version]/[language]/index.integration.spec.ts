@@ -297,7 +297,7 @@ describe("index.vue", () => {
     });
     expect(metaTags).toContainEqual({
       property: "og:title",
-      content: "abbreviation, Fassung vom 01.01.2024, Außer Kraft",
+      content: "abbreviation: Fassung vom 01.01.2024, Außer Kraft",
     });
     expect(metaTags).toContainEqual({
       property: "og:description",
@@ -309,7 +309,7 @@ describe("index.vue", () => {
     });
     expect(metaTags).toContainEqual({
       name: "twitter:title",
-      content: "abbreviation, Fassung vom 01.01.2024, Außer Kraft",
+      content: "abbreviation: Fassung vom 01.01.2024, Außer Kraft",
     });
     expect(metaTags).toContainEqual({
       name: "twitter:description",
