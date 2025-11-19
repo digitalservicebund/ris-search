@@ -151,7 +151,7 @@ export default defineNuxtConfig({
         "img-src": ["'self'", "data:", "'unsafe-inline'"],
         "script-src": ["'strict-dynamic'", "'nonce-{{nonce}}'"],
         "connect-src":
-          config.devMode || process.env.NUXT_PUBLIC_CI == "true"
+          config.devMode || process.env.NUXT_PUBLIC_CI
             ? ["'self'", "http:"]
             : ["'self'"],
         "upgrade-insecure-requests": false,
