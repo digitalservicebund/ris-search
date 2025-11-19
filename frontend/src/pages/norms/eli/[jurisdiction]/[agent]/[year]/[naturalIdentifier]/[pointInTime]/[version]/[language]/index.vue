@@ -162,7 +162,7 @@ const buildOgTitle = (
     const statusLabel = getValidityStatusLabel(status);
     if (statusLabel) {
       parts.push(
-        parts.length !== 0 ? statusLabel : `${baseTitle}: ${statusLabel}`,
+        parts.length === 0 ? `${baseTitle}: ${statusLabel}` : statusLabel,
       );
     }
 
@@ -174,7 +174,7 @@ const buildOgTitle = (
   }
 
   if (status) {
-    parts.push(parts.length !== 0 ? "[Status]" : `${baseTitle}: [Status]`);
+    parts.push(parts.length === 0 ? `${baseTitle}: [Status]` : "[Status]");
   }
   const placeholder = parts.join(", ");
   return truncateAtWord(placeholder, 55) || undefined;
