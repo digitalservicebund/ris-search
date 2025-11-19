@@ -1,8 +1,6 @@
 import { expect, test, noJsTest, navigate } from "./utils/fixtures";
 
-// Skipped because of a client/SSR rendering mismatch, will be added again once
-// that is fixed (see daily discussion from Nov 4th 2025)
-test.skip("displays literature page with metadata and text tab by default", async ({
+test("displays literature page with metadata and text tab by default", async ({
   page,
 }) => {
   await navigate(page, "/literature/XXLU000000001");
@@ -160,11 +158,7 @@ noJsTest("tabs work without JavaScript", async ({ page }) => {
   ).toBeVisible();
 });
 
-// Skipped because of a client/SSR rendering mismatch, will be added again once
-// that is fixed (see daily discussion from Nov 4th 2025)
-test.skip("shows detailed information in the 'Details' tab", async ({
-  page,
-}) => {
+test("shows detailed information in the 'Details' tab", async ({ page }) => {
   await navigate(page, "/literature/XXLU000000001");
 
   const detailsLink = page.getByRole("link", {
