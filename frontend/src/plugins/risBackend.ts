@@ -1,7 +1,10 @@
 export default defineNuxtPlugin(() => {
   const config = useRuntimeConfig();
   const basicAuth = config.basicAuth;
-  const backendUrl = config.public.risBackendUrl;
+  let backendUrl = config.public.risBackendUrl;
+  if (import.meta.server && !isStringEmpty(config.public.risBackendUrlSsr)) {
+    backendUrl = config.public.risBackendUrlSsr;
+  }
 
   const risBackend = $fetch.create({
     baseURL: backendUrl,

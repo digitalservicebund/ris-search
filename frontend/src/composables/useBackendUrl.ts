@@ -7,7 +7,10 @@
  */
 function useBackendUrl(url?: string) {
   const config = useRuntimeConfig();
-  const backendUrl = config.public.risBackendUrl;
+  let backendUrl = config.public.risBackendUrl;
+  if (import.meta.server && !isStringEmpty(config.public.risBackendUrlSsr)) {
+    backendUrl = config.public.risBackendUrlSsr;
+  }
 
   return url ? `${backendUrl}${url}` : backendUrl;
 }
