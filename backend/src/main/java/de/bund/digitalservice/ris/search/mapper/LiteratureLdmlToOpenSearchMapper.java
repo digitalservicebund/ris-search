@@ -14,7 +14,6 @@ import de.bund.digitalservice.ris.search.models.ldml.literature.Keyword;
 import de.bund.digitalservice.ris.search.models.ldml.literature.LiteratureLdml;
 import de.bund.digitalservice.ris.search.models.ldml.literature.MainBody;
 import de.bund.digitalservice.ris.search.models.ldml.literature.Meta;
-import de.bund.digitalservice.ris.search.models.ldml.literature.OtherReferences;
 import de.bund.digitalservice.ris.search.models.ldml.literature.Proprietary;
 import de.bund.digitalservice.ris.search.models.ldml.literature.References;
 import de.bund.digitalservice.ris.search.models.ldml.literature.RisMeta;
@@ -34,6 +33,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Stream;
 import javax.xml.transform.stream.StreamSource;
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.persistence.exceptions.DescriptorException;
@@ -165,42 +165,21 @@ public class LiteratureLdmlToOpenSearchMapper {
   }
 
   private static List<String> extractDependentReferences(LiteratureLdml literatureLdml) {
-    return Optional.ofNullable(literatureLdml)
-        .map(LiteratureLdml::getDoc)
-        .map(Doc::getMeta)
-        .map(Meta::getAnalysis)
-        .map(Analysis::getOtherReferences)
-        .map(OtherReferences::getImplicitReferences)
-        .orElse(Collections.emptyList())
-        .stream()
+    return getImplicitReferences(literatureLdml)
         .filter(implicitReference -> implicitReference.getFundstelleUnselbstaendig() != null)
         .map(ImplicitReference::getShowAs)
         .toList();
   }
 
   private static List<String> extractIndependentReferences(LiteratureLdml literatureLdml) {
-    return Optional.ofNullable(literatureLdml)
-        .map(LiteratureLdml::getDoc)
-        .map(Doc::getMeta)
-        .map(Meta::getAnalysis)
-        .map(Analysis::getOtherReferences)
-        .map(OtherReferences::getImplicitReferences)
-        .orElse(Collections.emptyList())
-        .stream()
+    return getImplicitReferences(literatureLdml)
         .filter(implicitReference -> implicitReference.getFundstelleSelbstaendig() != null)
         .map(ImplicitReference::getShowAs)
         .toList();
   }
 
   private static List<String> extractNormReferences(LiteratureLdml literatureLdml) {
-    return Optional.ofNullable(literatureLdml)
-        .map(LiteratureLdml::getDoc)
-        .map(Doc::getMeta)
-        .map(Meta::getAnalysis)
-        .map(Analysis::getOtherReferences)
-        .map(OtherReferences::getImplicitReferences)
-        .orElse(Collections.emptyList())
-        .stream()
+    return getImplicitReferences(literatureLdml)
         .filter(implicitReference -> implicitReference.getNormReference() != null)
         .map(ImplicitReference::getShowAs)
         .toList();
@@ -292,6 +271,20 @@ public class LiteratureLdmlToOpenSearchMapper {
                 .orElse(Collections.emptyList()));
 
     return outline.isEmpty() ? null : outline;
+  }
+
+  private static Stream<ImplicitReference> getImplicitReferences(LiteratureLdml literatureLdml) {
+    return Optional.ofNullable(literatureLdml)
+        .map(LiteratureLdml::getDoc)
+        .map(Doc::getMeta)
+        .map(Meta::getAnalysis)
+        .map(Analysis::getOtherReferences)
+        .orElse(Collections.emptyList())
+        .stream()
+        .filter(
+            otherReferences ->
+                otherReferences.getSource().equals("attributsemantik-noch-undefiniert"))
+        .flatMap(otherReferences -> otherReferences.getImplicitReferences().stream());
   }
 
   private static List<String> getFrbrAuthorReferenceLinks(
