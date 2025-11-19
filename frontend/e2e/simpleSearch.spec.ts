@@ -401,6 +401,29 @@ test.describe("searching literature", () => {
     ).toBeVisible();
   });
 
+  test("shows placeholder title for search result items without title", async ({
+    page,
+  }) => {
+    await navigate(
+      page,
+      "/search?query=Dieses+Dokument+hat+keinen+Titel&category=L",
+    );
+
+    // Result detail link
+    await page
+      .getByRole("link", {
+        name: "Titelzeile nicht vorhanden",
+      })
+      .click();
+
+    await expect(
+      page.getByRole("heading", {
+        level: 1,
+        name: "Titelzeile nicht vorhanden",
+      }),
+    ).toBeVisible();
+  });
+
   test("navigates to the document detail page", async ({ page }) => {
     await navigate(page, "/search?query=FooBar,+1982,+123-123&category=L");
 
@@ -446,7 +469,7 @@ test.describe("searching literature", () => {
 
     await expect(page).toHaveURL(/dateAfter=2024-01-01/);
 
-    await expect(getSearchResults(page)).toHaveCount(1);
+    await expect(getSearchResults(page)).toHaveCount(2);
   });
 
   test("searches by publication year with dateBefore and dateAfter", async ({
@@ -479,7 +502,7 @@ test.describe("searching literature", () => {
 
     await expect(page).toHaveURL(/dateAfter=2015-01-01&dateBefore=2024-12-31/);
 
-    await expect(getSearchResults(page)).toHaveCount(4);
+    await expect(getSearchResults(page)).toHaveCount(5);
   });
 });
 
