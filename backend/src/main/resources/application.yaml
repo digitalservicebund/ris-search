@@ -93,3 +93,7 @@ local:
 
 sentry:
   release: "${SENTRY_RELEASE:default_release}"
+
+app:
+  security:
+    csp-header: "default-src 'none'; script-src 'none'; style-src 'unsafe-inline'; img-src data:; connect-src 'none'; font-src 'none'; frame-src 'none'; object-src 'none'; media-src 'none';"
