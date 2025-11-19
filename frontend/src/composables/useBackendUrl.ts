@@ -1,3 +1,5 @@
+import { isStringEmpty } from "~/utils/textFormatting";
+
 /**
  * A custom composable that receives a url and return it prepended with
  * the backend base URL. The function returns the backend url when no input
@@ -7,7 +9,10 @@
  */
 function useBackendUrl(url?: string) {
   const config = useRuntimeConfig();
-  const backendUrl = config.public.risBackendUrl;
+  let backendUrl = config.public.risBackendUrl;
+  if (import.meta.server && !isStringEmpty(config.public.risBackendUrlSsr)) {
+    backendUrl = config.public.risBackendUrlSsr;
+  }
 
   return url ? `${backendUrl}${url}` : backendUrl;
 }

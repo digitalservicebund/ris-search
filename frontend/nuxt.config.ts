@@ -9,6 +9,7 @@ import { getStringOrDefault, isStringEmpty } from "./src/utils/textFormatting";
 const config = {
   devMode: process.env.NODE_ENV == "development",
   production: process.env.NODE_ENV == "production",
+  e2eTest: process.env.CI === "true",
 };
 
 const sentryEnabled = !isStringEmpty(process.env.NUXT_PUBLIC_SENTRY_DSN);
@@ -122,6 +123,12 @@ export default defineNuxtConfig({
       password: "", // needs override in env
     },
     public: {
+      /*
+       * This Url should only be different if the application is connecting from inside a container
+       * and that the url is different from inside the container than from client side. Otherwise it should be
+       * left empty
+       */
+      risBackendUrlSsr: "",
       risBackendUrl: "",
       /*
        * A feature flag that controls whether the private annotated features should,
@@ -136,14 +143,15 @@ export default defineNuxtConfig({
     },
   },
   security: {
-    strict: config.production,
+    strict: false,
     headers: {
       referrerPolicy: "same-origin",
       contentSecurityPolicy: {
         "style-src": ["'self'", "https:", "'unsafe-inline'"],
         "img-src": ["'self'", "data:", "'unsafe-inline'"],
         "script-src": ["'strict-dynamic'", "'nonce-{{nonce}}'"],
-        "connect-src": config.devMode ? ["'self'", "http:"] : ["'self'"],
+        "connect-src": ["'self'", "http:", "https:"],
+        "upgrade-insecure-requests": false,
       },
     },
     rateLimiter: {
