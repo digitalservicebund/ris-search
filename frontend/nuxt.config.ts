@@ -151,8 +151,7 @@ export default defineNuxtConfig({
         "style-src": ["'self'", "https:", "'unsafe-inline'"],
         "img-src": ["'self'", "data:", "'unsafe-inline'"],
         "script-src": ["'strict-dynamic'", "'nonce-{{nonce}}'"],
-        "connect-src":
-          config.devMode || config.e2eTest ? ["'self'", "http:"] : ["'self'"],
+        "connect-src": ["'self'", "http:"],
         "upgrade-insecure-requests": false,
       },
     },
