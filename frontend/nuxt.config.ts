@@ -9,7 +9,7 @@ import { getStringOrDefault, isStringEmpty } from "./src/utils/textFormatting";
 const config = {
   devMode: process.env.NODE_ENV == "development",
   production: process.env.NODE_ENV == "production",
-  e2eTest: process.env.CI == "true",
+  e2eTest: process.env.NUXT_PUBLIC_CI == "true",
 };
 
 const sentryEnabled = !isStringEmpty(process.env.NUXT_PUBLIC_SENTRY_DSN);
