@@ -7,12 +7,17 @@ on:
         description: 'The full tag for the backend container image'
         required: true
         type: string
+      frontend-container-image-tag:
+        description: 'The full tag for the frontend container image'
+        required: true
+        type: string
 
 
 env:
   RUN_ID: ${{ github.run_id }}
   # Used by the docker-compose-ci.yml to load the correct images
   BACKEND_IMAGE: ${{ inputs.backend-container-image-tag }}
+  FRONTEND_IMAGE: ${{ inputs.frontend-container-image-tag}}
 
 jobs:
   e2e-tests:
