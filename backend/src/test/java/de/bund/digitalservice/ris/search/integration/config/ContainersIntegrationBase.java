@@ -8,9 +8,9 @@ import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationU
 import de.bund.digitalservice.ris.search.models.opensearch.Literature;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.repository.objectstorage.CaseLawBucket;
+import de.bund.digitalservice.ris.search.repository.objectstorage.LiteratureBucket;
 import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
 import de.bund.digitalservice.ris.search.repository.objectstorage.S3ObjectStorageClient;
-import de.bund.digitalservice.ris.search.repository.objectstorage.literature.LiteratureBucket;
 import de.bund.digitalservice.ris.search.repository.opensearch.AdministrativeDirectiveRepository;
 import de.bund.digitalservice.ris.search.repository.opensearch.CaseLawRepository;
 import de.bund.digitalservice.ris.search.repository.opensearch.LiteratureRepository;
