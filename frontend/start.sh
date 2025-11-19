@@ -13,6 +13,7 @@ export NUXT_BASIC_AUTH="${NUXT_BASIC_AUTH:-$(read_secret /etc/secrets/basic-auth
 export NUXT_SESSION_PASSWORD="${NUXT_SESSION_PASSWORD:-$(read_secret /etc/secrets/session-password/secret)}"
 export SENTRY_AUTH_TOKEN="${SENTRY_AUTH_TOKEN:-$(read_secret /etc/secrets/sentry-auth/token)}"
 export NUXT_PUBLIC_SENTRY_DSN="${NUXT_PUBLIC_SENTRY_DSN:-$(read_secret /etc/secrets/sentry-dsn/url)}"
+export NUXT_PUBLIC_CI="${NUXT_PUBLIC_CI:-$(read_secret /etc/secrets/ci/secret)}"
 
 if [ -f "/app/server/sentry.server.config.mjs" ] && [ -n "${NUXT_PUBLIC_SENTRY_DSN:-}" ]; then
   exec node --import /app/server/sentry.server.config.mjs /app/server/index.mjs
