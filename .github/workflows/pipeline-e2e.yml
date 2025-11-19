@@ -82,6 +82,7 @@ jobs:
         working-directory: ./frontend
         env:
           NUXT_PUBLIC_PRIVATE_FEATURES_ENABLED: ${{ matrix.private_features_enabled }}
+          NUXT_PUBLIC_CI: true
           TZ: Europe/Berlin
       - name: Upload test reports
         uses: actions/upload-artifact@v5
