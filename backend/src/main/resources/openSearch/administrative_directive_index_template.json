@@ -98,7 +98,7 @@
         },
         "DATUM": {
           "type": "alias",
-          "path": "zitierdatum_items"
+          "path": "entry_into_effect_date"
         },
         "articles": {
           "type": "nested",
