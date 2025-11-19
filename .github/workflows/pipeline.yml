@@ -36,7 +36,6 @@ jobs:
     secrets: inherit
     with:
       backend-container-image-tag: ghcr.io/${{ github.repository }}:${{ github.sha }}
-      frontend-container-image-tag:  ghcr.io/${{ github.repository }}/frontend:${{ github.sha }}
 
   deploy-backend-staging-and-uat:
     needs:
