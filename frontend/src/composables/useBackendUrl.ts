@@ -1,3 +1,5 @@
+import { isStringEmpty } from "~/utils/textFormatting";
+
 /**
  * A custom composable that receives a url and return it prepended with
  * the backend base URL. The function returns the backend url when no input

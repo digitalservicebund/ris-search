@@ -1,3 +1,5 @@
+import { isStringEmpty } from "~/utils/textFormatting";
+
 export default defineNuxtPlugin(() => {
   const config = useRuntimeConfig();
   const basicAuth = config.basicAuth;
