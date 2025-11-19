@@ -40,19 +40,83 @@ test.skip("displays literature page with metadata and text tab by default", asyn
   );
 
   await expect(
-    textSection.getByRole("heading", { name: "Gliederung" }),
+    textSection.getByRole("heading", { level: 2, name: "Gliederung" }),
   ).toBeVisible();
   await expect(textSection.getByText("I. Problemstellung.")).toBeVisible();
   await expect(textSection.getByText("II. Lösung.")).toBeVisible();
   await expect(textSection.getByText("III. Zusammenfassung.")).toBeVisible();
 
   await expect(
-    textSection.getByRole("heading", { name: "Kurzreferat" }),
+    textSection.getByRole("heading", { level: 2, name: "Kurzreferat" }),
   ).toBeVisible();
   await expect(
     textSection.getByText("Dies ist ein einfaches Test-Dokument."),
   ).toBeVisible();
   await expect(textSection.getByText("In sem neque")).toBeVisible();
+
+  await expect(
+    textSection.getByRole("heading", {
+      level: 2,
+      name: "Dieser Beitrag zitiert",
+    }),
+  ).toBeVisible();
+  await expect(
+    textSection.getByRole("heading", {
+      level: 3,
+      name: "Rechtsprechung",
+    }),
+  ).toBeVisible();
+  await expect(
+    textSection.getByText(
+      "Vergleiche aktiv EuGH 2. Kammer, 3. April 2008, Az: C-346/06",
+    ),
+  ).toBeVisible();
+  await expect(
+    textSection.getByText("Vergleiche aktiv FooBar 1. Kammer, 3. April 2008"),
+  ).toBeVisible();
+
+  await expect(
+    textSection
+      .getByRole("heading", {
+        level: 3,
+        name: "Literaturnachweise",
+      })
+      .first(),
+  ).toBeVisible();
+  await expect(
+    textSection.getByText("Vergleiche aktiv Selbstständigeliterature 2025"),
+  ).toBeVisible();
+
+  await expect(
+    textSection.getByRole("heading", {
+      level: 2,
+      name: "Dieser Beitrag zitiert",
+    }),
+  ).toBeVisible();
+  await expect(
+    textSection.getByRole("heading", {
+      level: 3,
+      name: "Verwaltungsvorschriften",
+    }),
+  ).toBeVisible();
+  await expect(
+    textSection.getByText("Vergleiche passiv NaNu 1. Kammer, 2009, Az: XY"),
+  ).toBeVisible();
+
+  await expect(
+    textSection
+      .getByRole("heading", {
+        level: 3,
+        name: "Literaturnachweise",
+      })
+      .nth(1),
+  ).toBeVisible();
+  await expect(
+    textSection.getByText("Vergleiche passiv Unselbstständigeliterature 2023"),
+  ).toBeVisible();
+  await expect(
+    textSection.getByText("Vergleiche passiv Unselbstständigeliterature 1989"),
+  ).toBeVisible();
 });
 
 test("displays all titles", async ({ page }) => {
