@@ -7,17 +7,12 @@ on:
         description: 'The full tag for the backend container image'
         required: true
         type: string
-      frontend-container-image-tag:
-        description: 'The full tag for the frontend container image'
-        required: true
-        type: string
 
 
 env:
   RUN_ID: ${{ github.run_id }}
   # Used by the docker-compose-ci.yml to load the correct images
-  BACKEND_IMAGE: ${{ inputs.backend-container-image-tag}}
-  FRONTEND_IMAGE: ${{ inputs.frontend-container-image-tag}}
+  BACKEND_IMAGE: ${{ inputs.backend-container-image-tag }}
 
 jobs:
   e2e-tests:
@@ -46,16 +41,36 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Adjust permissions to Docker
         run: sudo chmod 666 /var/run/docker.sock
-      - name: Run backend and frontend
-        run: docker compose -f docker-compose-ci.yml up -d
+      - name: Start backend + opensearch
+        run: docker compose -f docker-compose-ci.yml up -d opensearch backend
         env:
           ENV_FILE_NAME: ${{ matrix.env_file_name }}
       - uses: actions/setup-node@v6
         with:
           node-version: 24
+          cache: 'yarn'
+          cache-dependency-path: ./frontend/yarn.lock
+      - name: Restore yarn cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/yarn
+            frontend/node_modules
+          key: yarn-${{ runner.os }}-${{ hashFiles('frontend/yarn.lock') }}
+          restore-keys: |
+            yarn-${{ runner.os }}-
       - name: Install Node modules
         run: yarn install --immutable
         working-directory: ./frontend
+      - name: Load environment variables
+        run: |
+          echo "Loading environment file: ${{ matrix.env_file_name }}"
+          export $(grep -v '^#' "./frontend/${{ matrix.env_file_name }}" | xargs)
+        shell: bash
+      - name: Start frontend locally (background)
+        working-directory: ./frontend
+        run: |
+          nohup yarn dev --no-devtools --port 3000 > frontend-dev.log 2>&1 &
       - name: Get Playwright version
         run: echo "PLAYWRIGHT_VERSION=$(yarn list --pattern @playwright/test | awk -F "@" 'NR==2 {print $NF}')" >> $GITHUB_ENV
         working-directory: ./frontend
@@ -115,6 +130,9 @@ jobs:
         run: docker compose -f docker-compose-ci.yml down -v
         env:
           ENV_FILE_NAME: ${{ matrix.env_file_name }}
+      - name: Kill frontend dev process
+        if: ${{ always() }}
+        run: pkill -f "yarn dev" || true
       - name: Send status to Slack
         uses: digitalservicebund/notify-on-failure-gha@66c485757701f8d5dbee32f24df38d904ca693ba
         if: ${{ failure() && github.ref == 'refs/heads/main' }}
