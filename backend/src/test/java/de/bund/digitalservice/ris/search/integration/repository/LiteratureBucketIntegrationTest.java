@@ -6,18 +6,18 @@ import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import de.bund.digitalservice.ris.search.config.obs.ObsConfig;
 import de.bund.digitalservice.ris.search.exception.NoSuchKeyException;
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
-import de.bund.digitalservice.ris.search.repository.objectstorage.literature.LiteratureBucketImpl;
+import de.bund.digitalservice.ris.search.repository.objectstorage.LiteratureBucket;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest(classes = {LiteratureBucketImpl.class, ObsConfig.class})
+@SpringBootTest(classes = {LiteratureBucket.class, ObsConfig.class})
 @Tag("integration")
 class LiteratureBucketIntegrationTest {
 
-  @Autowired LiteratureBucketImpl bucket;
+  @Autowired LiteratureBucket bucket;
 
   @BeforeEach
   void setUp() {

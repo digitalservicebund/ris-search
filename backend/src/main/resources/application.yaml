@@ -49,6 +49,7 @@ opensearch:
   caselaws-index-name: caselaws
   literature-index-name: literature
   documents-alias-name: documents
+  administrative-directive-index-name: administrative_directive
 
 # The user and password to access postgres was created in the neuris-infra following the variable convention in that repo
 search:
@@ -74,6 +75,11 @@ s3:
     literature:
       endpoint: https://obs.eu-de.otc.t-systems.com
       bucket-name: literature
+      access-key-id:
+      secret-access-key:
+    administrative-directive:
+      endpoint: https://obs.eu-de.otc.t-systems.com
+      bucket-name: administrative-directive
       access-key-id:
       secret-access-key:
     portal:

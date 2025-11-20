@@ -27,6 +27,15 @@ public class ObsConfig {
         new TestMockS3Client(bucketName, relativeLocalStorageDirectory), bucketName);
   }
 
+  @Bean(name = "administrativeDirectiveS3Client")
+  @Profile({"test"})
+  public ObjectStorageClient mockAdministrativeDirectiveTestS3Client(
+      @Value("${local.file-storage}") String relativeLocalStorageDirectory) {
+    var bucketName = "administrative-directive";
+    return new S3ObjectStorageClient(
+        new TestMockS3Client(bucketName, relativeLocalStorageDirectory), bucketName);
+  }
+
   @Bean(name = "normS3Client")
   @Profile({"test"})
   public ObjectStorageClient mockNormTestS3Client(

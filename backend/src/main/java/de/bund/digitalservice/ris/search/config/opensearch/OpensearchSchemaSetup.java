@@ -43,6 +43,8 @@ public class OpensearchSchemaSetup {
           restHighLevelClient, indexResponse, configurations.getLiteratureIndexName());
       upsertOneIndexAndItsAliases(
           restHighLevelClient, indexResponse, configurations.getNormsIndexName());
+      upsertOneIndexAndItsAliases(
+          restHighLevelClient, indexResponse, configurations.getAdministrativeDirectiveIndexName());
 
     } catch (IOException e) {
       throw new IllegalStateException(
@@ -67,6 +69,10 @@ public class OpensearchSchemaSetup {
         restHighLevelClient,
         "/_index_template/norms_index_template",
         "/openSearch/norms_index_template.json");
+    putJsonToOpenSearch(
+        restHighLevelClient,
+        "/_index_template/administrative_directive_index_template",
+        "/openSearch/administrative_directive_index_template.json");
   }
 
   private void putJsonToOpenSearch(RestHighLevelClient client, String endpoint, String jsonPath)

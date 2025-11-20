@@ -8,9 +8,10 @@ import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationU
 import de.bund.digitalservice.ris.search.models.opensearch.Literature;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.repository.objectstorage.CaseLawBucket;
+import de.bund.digitalservice.ris.search.repository.objectstorage.LiteratureBucket;
 import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
 import de.bund.digitalservice.ris.search.repository.objectstorage.S3ObjectStorageClient;
-import de.bund.digitalservice.ris.search.repository.objectstorage.literature.LiteratureBucket;
+import de.bund.digitalservice.ris.search.repository.opensearch.AdministrativeDirectiveRepository;
 import de.bund.digitalservice.ris.search.repository.opensearch.CaseLawRepository;
 import de.bund.digitalservice.ris.search.repository.opensearch.LiteratureRepository;
 import de.bund.digitalservice.ris.search.repository.opensearch.NormsRepository;
@@ -37,6 +38,7 @@ public class ContainersIntegrationBase {
   @Autowired protected CaseLawBucket caseLawBucket;
   @Autowired protected LiteratureBucket literatureBucket;
   @Autowired protected NormsBucket normsBucket;
+  @Autowired private AdministrativeDirectiveRepository administrativeDirectiveRepository;
 
   @Autowired
   @Qualifier("caseLawS3Client")
@@ -45,6 +47,10 @@ public class ContainersIntegrationBase {
   @Autowired
   @Qualifier("literatureS3Client")
   private S3ObjectStorageClient literatureS3Client;
+
+  @Autowired
+  @Qualifier("administrativeDirectiveS3Client")
+  private S3ObjectStorageClient administrativeDirectiveS3Client;
 
   @Autowired
   @Qualifier("normS3Client")
@@ -101,6 +107,7 @@ public class ContainersIntegrationBase {
     caseLawRepository.deleteAll();
     literatureRepository.deleteAll();
     normsRepository.deleteAll();
+    administrativeDirectiveRepository.deleteAll();
   }
 
   public void addNormXmlFiles(Map<String, String> files) {

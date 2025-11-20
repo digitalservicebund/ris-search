@@ -1,8 +1,6 @@
 package de.bund.digitalservice.ris.search.repository.opensearch;
 
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
-import java.util.List;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 
 /**
@@ -10,14 +8,4 @@ import org.springframework.data.elasticsearch.repository.ElasticsearchRepository
  * CaseLawDocumentationUnit} entity. This interface extends {@link ElasticsearchRepository} and
  * focuses on operations related to {@link CaseLawDocumentationUnit}.
  */
-public interface CaseLawRepository
-    extends ElasticsearchRepository<CaseLawDocumentationUnit, String> {
-
-  List<CaseLawDocumentationUnit> findByDocumentNumber(String documentNumber);
-
-  void deleteByIndexedAtBefore(String indexedAt);
-
-  void deleteByIndexedAtIsNull();
-
-  void deleteAllById(@NotNull Iterable<? extends String> ids);
-}
+public interface CaseLawRepository extends DocumentRepository<CaseLawDocumentationUnit> {}

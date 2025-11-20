@@ -2,6 +2,7 @@ package de.bund.digitalservice.ris.search.config.obs;
 
 import de.bund.digitalservice.ris.search.repository.objectstorage.LocalFilesystemObjectStorageClient;
 import de.bund.digitalservice.ris.search.repository.objectstorage.ObjectStorageClient;
+import de.bund.digitalservice.ris.search.repository.objectstorage.ObjectStorageClientDummy;
 import de.bund.digitalservice.ris.search.repository.objectstorage.S3ObjectStorageClient;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -35,6 +36,15 @@ public class ObsConfig {
 
   @Value("${s3.file-storage.literature.secret-access-key}")
   private String literatureSecretAccessKey;
+
+  @Value("${s3.file-storage.administrative-directive.endpoint}")
+  private String administrativeDirectiveEndpoint;
+
+  @Value("${s3.file-storage.administrative-directive.access-key-id}")
+  private String administrativeDirectiveAccessKeyId;
+
+  @Value("${s3.file-storage.administrative-directive.secret-access-key}")
+  private String administrativeDirectiveSecretAccessKey;
 
   @Value("${s3.file-storage.norm.endpoint}")
   private String normEndpoint;
@@ -99,6 +109,36 @@ public class ObsConfig {
         bucket);
   }
 
+  @Bean(name = "literatureS3Client")
+  @Profile({"uat", "production", "prototype"})
+  public ObjectStorageClient literatureS3DummyClient() {
+    return new ObjectStorageClientDummy();
+  }
+
+  @Bean(name = "administrativeDirectiveS3Client")
+  @Profile({"staging"})
+  public ObjectStorageClient administrativeDirectiveS3Client(
+      @Value("${s3.file-storage.administrative-directive.bucket-name}") String bucket)
+      throws URISyntaxException {
+    return new S3ObjectStorageClient(
+        S3Client.builder()
+            .credentialsProvider(
+                StaticCredentialsProvider.create(
+                    AwsBasicCredentials.create(
+                        administrativeDirectiveAccessKeyId,
+                        administrativeDirectiveSecretAccessKey)))
+            .endpointOverride(new URI(administrativeDirectiveEndpoint))
+            .region(Region.of(REGION))
+            .build(),
+        bucket);
+  }
+
+  @Bean(name = "administrativeDirectiveS3Client")
+  @Profile({"uat", "production", "prototype"})
+  public ObjectStorageClient administrativeDirectiveS3DummyClient() {
+    return new ObjectStorageClientDummy();
+  }
+
   @Bean(name = "portalS3Client")
   @Profile({"production", "staging", "uat", "prototype"})
   public ObjectStorageClient portalS3Client(
@@ -133,6 +173,14 @@ public class ObsConfig {
   public ObjectStorageClient mockLiteratureS3Client(
       @Value("${local.file-storage}") String relativeLocalStorageDirectory) {
     return new LocalFilesystemObjectStorageClient("literature", relativeLocalStorageDirectory);
+  }
+
+  @Bean(name = "administrativeDirectiveS3Client")
+  @Profile({"default"})
+  public ObjectStorageClient mockAdministrativeDirectiveS3Client(
+      @Value("${local.file-storage}") String relativeLocalStorageDirectory) {
+    return new LocalFilesystemObjectStorageClient(
+        "administrative-directive", relativeLocalStorageDirectory);
   }
 
   @Bean(name = "portalS3Client")

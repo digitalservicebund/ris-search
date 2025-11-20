@@ -1,0 +1,132 @@
+{
+  "index_patterns": [
+    "administrative_directive_*"
+  ],
+  "composed_of": [
+    "german_analyzer_template"
+  ],
+  "priority": 500,
+  "template": {
+    "mappings": {
+      "properties": {
+        "document_number": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "normalizer": "normalized_keyword"
+            }
+          }
+        },
+        "id": {
+          "type": "keyword"
+        },
+        "keywords": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "normalizer": "normalized_keyword"
+            }
+          }
+        },
+        "caselaw_references": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
+        "content": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
+        "document_category": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
+        "document_type": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
+        "entry_into_effect_date": {
+          "type": "date"
+        },
+        "expiry_date": {
+          "type": "date"
+        },
+        "active_administrative_references": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
+        "active_norm_references": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
+        "fields_of_law": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
+        "fundstelle_references": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
+        "indexed_at": {
+          "type": "date"
+        },
+        "long_title": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
+        "norm_references": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
+        "normgeber": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
+        "reference_numbers": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
+        "zitierdatum_items": {
+          "type": "date"
+        },
+        "zuordnungen": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
+        "DATUM": {
+          "type": "alias",
+          "path": "entry_into_effect_date"
+        },
+        "articles": {
+          "type": "nested",
+          "properties": {
+            "eid": {
+              "type": "text"
+            },
+            "guid": {
+              "type": "text"
+            },
+            "name": {
+              "type": "text",
+              "analyzer": "custom_german_analyzer"
+            },
+            "text": {
+              "type": "text",
+              "analyzer": "custom_german_analyzer",
+              "index_options": "offsets"
+            },
+            "entry_into_force_date": {
+              "type": "date"
+            },
+            "expiry_date": {
+              "type": "date"
+            }
+          }
+        }
+      }
+    }
+  }
+}
