@@ -8,9 +8,6 @@
                 <akn:FRBRWork>
                     <akn:FRBRalias name="Dokumentnummer" value="KSNR0000"/>
                 </akn:FRBRWork>
-                <akn:FRBRExpression>
-                    <akn:FRBRdate date="2024-01-01" name="Zitierdatum" ris:domainTerm="Zitierdatum"/>
-                </akn:FRBRExpression>
             </akn:identification>
             <akn:analysis source="attributsemantik-noch-undefiniert">
                 <akn:otherReferences source="attributsemantik-noch-undefiniert">
@@ -50,6 +47,9 @@
                     <ris:zuordnungen>
                         <ris:zuordnung aspekt="aspekt" begriff="begriff"/>
                     </ris:zuordnungen>
+                    <ris:dateToQuoteList>
+                        <ris:dateToQuoteEntry>2024-01-01</ris:dateToQuoteEntry>
+                    </ris:dateToQuoteList>
                 </ris:meta>
             </akn:proprietary>
         </akn:meta>

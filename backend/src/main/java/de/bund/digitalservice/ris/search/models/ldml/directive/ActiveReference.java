@@ -22,5 +22,5 @@ public class ActiveReference {
 
   @XmlAttribute private String dateOfVersion;
 
-  @XmlValue() private String value;
+  @XmlValue private String value;
 }

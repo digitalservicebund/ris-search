@@ -23,7 +23,7 @@ public class IndexAdministrativeDirectiveService extends BaseIndexService<Admini
       return Optional.of(
           AdministrativeDirectiveLdmlToOpenSearchMapper.map(fileContent, Instant.now()));
     } catch (OpenSearchMapperException e) {
-      logger.error("unable to parse file {}", filename, e);
+      logger.warn("unable to parse file {}", filename, e);
       return Optional.empty();
     }
   }

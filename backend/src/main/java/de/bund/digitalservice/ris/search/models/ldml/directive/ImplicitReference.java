@@ -9,9 +9,9 @@ import lombok.Setter;
 @Setter
 public class ImplicitReference {
 
-  @XmlAttribute() private String showAs;
+  @XmlAttribute private String showAs;
 
-  @XmlAttribute() private String shortForm;
+  @XmlAttribute private String shortForm;
 
   @XmlElement(namespace = AdministrativeDirectiveLdml.RIS_NS)
   private NormReference normReference;

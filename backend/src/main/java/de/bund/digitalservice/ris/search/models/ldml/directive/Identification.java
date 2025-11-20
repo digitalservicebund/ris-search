@@ -10,7 +10,4 @@ public class Identification {
 
   @XmlElement(name = "FRBRWork", namespace = AdministrativeDirectiveLdml.AKN_NS)
   private FrbrWork frbrWork;
-
-  @XmlElement(name = "FRBRExpression", namespace = AdministrativeDirectiveLdml.AKN_NS)
-  private FrbrExpression frbrExpression;
 }
