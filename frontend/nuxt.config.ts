@@ -18,7 +18,7 @@ const secureCookie = !config.devMode;
 export default defineNuxtConfig({
   app: {
     head: {
-      title: undefined, // set dynamically in app.vue useHead
+      title: undefined, // set dynamically in app.vue using useHead
       meta: [
         {
           name: "description",
