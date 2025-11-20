@@ -44,6 +44,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
    * @return The web mvc configurer
    */
   @Bean
+  @Profile({"staging", "uat", "production"})
   public WebMvcConfigurer privateCorsConfigurer() {
 
     return new WebMvcConfigurer() {
@@ -64,7 +65,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
    * @return The web mvc configurer
    */
   @Bean
-  @Profile({"e2e", "prototype"})
+  @Profile({"e2e", "prototype", "default"})
   public WebMvcConfigurer publicCorsConfigurer() {
 
     return new WebMvcConfigurer() {
