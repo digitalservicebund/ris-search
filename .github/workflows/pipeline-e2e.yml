@@ -26,8 +26,24 @@ jobs:
           fetch-depth: 40
       - name: Adjust permissions to Docker
         run: sudo chmod 666 /var/run/docker.sock
+      - name: Cache OpenSearch image
+        id: opensearch-cache
+        uses: actions/cache@v4
+        with:
+          path: /home/runner/.docker-image-cache/opensearch.tar
+          key: opensearch-image-cache-2.11.0
+      - name: Load cached OpenSearch image if exists
+        if: steps.opensearch-cache.outputs.cache-hit == 'true'
+        run: |
+          docker load -i /home/runner/.docker-image-cache/opensearch.tar
+      - name: Pull and cache OpenSearch image
+        if: steps.opensearch-cache.outputs.cache-hit != 'true'
+        run: |
+          mkdir -p /home/runner/.docker-image-cache
+          docker pull opensearchproject/opensearch:2.11.0
+          docker save opensearchproject/opensearch:2.11.0 -o /home/runner/.docker-image-cache/opensearch.tar
       - name: Start opensearch container
-        run: docker compose -f docker-compose-ci.yml up -d
+        run: docker compose -f docker-compose-ci.yml up -d opensearch
       - uses: actions/checkout@v5
       - name: Set up JDK
         uses: actions/setup-java@v4
@@ -92,15 +108,15 @@ jobs:
             echo "Still waiting..."
             sleep 5
           done
-      - name: Wait for frontend to respond
+      - name: Wait for frontend to fully render
         timeout-minutes: 5
         run: |
-          echo "Waiting for frontend to respond at http://localhost:3000 ..."
-          set +e
-          until curl --silent --fail http://localhost:3000; do
-            echo "Still waiting for frontend..."
-            sleep 15
+          echo "Waiting for Nuxt frontend to render HTML..."
+          until curl -s http://localhost:3000 | grep -q 'id="__nuxt"'; do
+            echo "Still waiting for Nuxt..."
+            sleep 5
           done
+          echo "Nuxt is ready!"
       - name: Run Playwright tests
         run: yarn exec playwright test --project ${{ matrix.browser }}
         working-directory: ./frontend
