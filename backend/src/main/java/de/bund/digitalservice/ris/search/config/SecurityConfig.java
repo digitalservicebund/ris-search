@@ -30,15 +30,10 @@ public class SecurityConfig {
     http.headers(headers -> headers.contentSecurityPolicy(csp -> csp.policyDirectives(cspHeader)));
   }
 
-  private void applyCommonCsrf(HttpSecurity http) throws Exception {
-    http.csrf(csrf -> csrf.ignoringRequestMatchers(internalPaths));
-  }
-
   @Bean
   @Profile({"default", "test"})
   public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
     http.authorizeHttpRequests(requests -> requests.anyRequest().permitAll());
-    applyCommonCsrf(http);
     applyCommonHeaders(http);
     return http.build();
   }
@@ -55,7 +50,6 @@ public class SecurityConfig {
                 .permitAll()
                 .anyRequest()
                 .authenticated());
-    applyCommonCsrf(http);
     applyCommonHeaders(http);
     return http.build();
   }
