@@ -28,12 +28,8 @@ public class ApiConfig {
     public static final String LEGISLATION_ADVANCED_SEARCH =
         DOCUMENT + "/lucene-search/legislation";
 
-    public static final String SYNC_NORMS = "/internal/legislation/sync";
-    public static final String SYNC_CASELAW = "/internal/case-law/sync";
-    public static final String SYNC_LITERATURE = "/internal/literature/sync";
     public static final String SITEMAP = BASE + "/sitemaps";
     public static final String ECLICRAWLER = BASE + "/eclicrawler";
-    public static final String GENERATE_ARCHIVE = "/internal/legislation/archive";
     public static final String STATISTICS = BASE + "/statistics";
   }
 
