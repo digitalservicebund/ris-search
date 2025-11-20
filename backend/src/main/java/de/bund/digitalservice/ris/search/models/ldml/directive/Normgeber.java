@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Normgeber {
-  @XmlAttribute() private String staat;
+  @XmlAttribute private String staat;
 
-  @XmlAttribute() private String organ;
+  @XmlAttribute private String organ;
 }

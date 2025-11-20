@@ -8,7 +8,6 @@ import de.bund.digitalservice.ris.search.models.ldml.directive.Block;
 import de.bund.digitalservice.ris.search.models.ldml.directive.Doc;
 import de.bund.digitalservice.ris.search.models.ldml.directive.DocumentType;
 import de.bund.digitalservice.ris.search.models.ldml.directive.FieldOfLaw;
-import de.bund.digitalservice.ris.search.models.ldml.directive.FrbrExpression;
 import de.bund.digitalservice.ris.search.models.ldml.directive.FrbrNameValueElement;
 import de.bund.digitalservice.ris.search.models.ldml.directive.FrbrWork;
 import de.bund.digitalservice.ris.search.models.ldml.directive.Identification;
@@ -201,14 +200,10 @@ public class AdministrativeDirectiveLdmlToOpenSearchMapper {
   }
 
   private static List<String> getZitierdatumItems(AdministrativeDirectiveLdml ldml) {
-    return Optional.ofNullable(ldml)
-        .map(AdministrativeDirectiveLdml::getDoc)
-        .map(Doc::getMeta)
-        .map(Meta::getIdentification)
-        .map(Identification::getFrbrExpression)
-        .map(FrbrExpression::getFrbrDate)
-        .map(dates -> dates.stream().map(date -> date.getDate().toString()).toList())
-        .orElse(List.of());
+    return getRisMeta(ldml).map(RisMeta::getDateToQuoteList).orElse(List.of()).stream()
+        .filter(Objects::nonNull)
+        .map(LocalDate::toString)
+        .toList();
   }
 
   private static List<String> getReferenceNumbers(AdministrativeDirectiveLdml ldml) {
