@@ -28,19 +28,16 @@ jobs:
         run: sudo chmod 666 /var/run/docker.sock
       - name: Start opensearch container
         run: docker compose -f docker-compose-ci.yml up -d
-      - name: Install Java 17
+      - uses: actions/checkout@v5
+      - name: Set up JDK
         uses: actions/setup-java@v4
         with:
-          distribution: temurin
-          java-version: 17
-      - name: Cache Gradle
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: gradle-${{ runner.os }}-${{ hashFiles('backend/**/build.gradle*', 'backend/**/settings.gradle*') }}
-          restore-keys: gradle-${{ runner.os }}-
+          java-version: "21.0"
+          distribution: "temurin"
+          cache: gradle
+      - name: Grant execute permission for gradlew
+        working-directory: ./backend
+        run: chmod +x gradlew
       - name: Wait for OpenSearch health
         run: |
           echo "Waiting for OpenSearch on http://localhost:9200 ..."
