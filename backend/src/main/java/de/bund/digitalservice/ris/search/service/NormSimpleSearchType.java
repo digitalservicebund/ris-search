@@ -69,12 +69,21 @@ public class NormSimpleSearchType implements SimpleSearchType {
           matchQuery(Norm.Fields.WORK_ELI, normsSearchParams.getEli()).operator(Operator.AND));
     }
     if (normsSearchParams.getMostRelevantOn() != null) {
-      query.filter(
+      BoolQueryBuilder isNotNorm =
+          QueryBuilders.boolQuery().mustNot(QueryBuilders.existsQuery(Norm.Fields.EXPRESSION_ELI));
+
+      BoolQueryBuilder isMostRelevant = QueryBuilders.boolQuery();
+      isMostRelevant.filter(
           QueryBuilders.rangeQuery(Norm.Fields.TIME_RELEVANCE_START_DATE)
               .lte(normsSearchParams.getMostRelevantOn()));
-      query.filter(
+      isMostRelevant.filter(
           QueryBuilders.rangeQuery(Norm.Fields.TIME_RELEVANCE_END_DATE)
               .gte(normsSearchParams.getMostRelevantOn()));
+
+      BoolQueryBuilder either = QueryBuilders.boolQuery().minimumShouldMatch(1);
+      either.should(isMostRelevant);
+      either.should(isNotNorm);
+      query.must(either);
     }
     DateUtils.buildQueryForTemporalCoverage(
             normsSearchParams.getTemporalCoverageFrom(), normsSearchParams.getTemporalCoverageTo())

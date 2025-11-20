@@ -129,11 +129,6 @@ spotless {
         ktlint()
         targetExclude(pactPath, generatedPath)
     }
-
-    format("misc") {
-        target("**/*.json", "**/*.md", "**/*.properties", "**/*.sh", "**/*.yml")
-        targetExclude("frontend/**", "pacts/**/*.json", generatedPath)
-    }
 }
 
 tasks.named<Checkstyle>("checkstyleMain") {
