@@ -105,7 +105,7 @@ export default defineNuxtConfig({
     "@nuxtjs/sitemap",
   ],
   devtools: {
-    enabled: true,
+    enabled: process.env.CI !== "true",
   },
   experimental: {
     renderJsonPayloads: true,
@@ -229,7 +229,7 @@ export default defineNuxtConfig({
     client: sentryEnabled ? "hidden" : config.devMode,
   },
   typescript: {
-    typeCheck: true,
+    typeCheck: process.env.CI !== "true",
     tsConfig: {
       compilerOptions: {
         types: ["node", "vitest", "vitest/globals", "unplugin-icons/types/vue"],

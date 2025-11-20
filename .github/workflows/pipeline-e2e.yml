@@ -60,26 +60,17 @@ jobs:
           node-version: 24
           cache: 'yarn'
           cache-dependency-path: ./frontend/yarn.lock
-      - name: Restore yarn cache
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.cache/yarn
-            frontend/node_modules
-          key: yarn-${{ runner.os }}-${{ hashFiles('frontend/yarn.lock') }}
-          restore-keys: |
-            yarn-${{ runner.os }}-
       - name: Install Node modules
         run: yarn install --immutable
         working-directory: ./frontend
       - name: Start frontend locally (background)
         working-directory: ./frontend
         env:
-          NUXT_PUBLIC_RIS_BACKEND_URL: http://localhost:8090
           NUXT_PUBLIC_PRIVATE_FEATURES_ENABLED: ${{ matrix.private_features_enabled }}
+          NUXT_PUBLIC_RIS_BACKEND_URL: http://localhost:8090
           NUXT_PUBLIC_FRONTEND_URL: http://localhost:3000
           SENTRY_TELEMETRY: false
-          NUXT_DEVTOOLS: false
+          CI: true
         run: |
           nohup yarn dev --no-devtools --port 3000 > frontend.log 2>&1 &
       - name: Get Playwright version
