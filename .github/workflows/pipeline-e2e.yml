@@ -2,22 +2,10 @@ name: End-to-end tests
 
 on:
   workflow_call:
-    inputs:
-      backend-container-image-tag:
-        description: 'The full tag for the backend container image'
-        required: true
-        type: string
-      frontend-container-image-tag:
-        description: 'The full tag for the frontend container image'
-        required: true
-        type: string
-
+  workflow_dispatch:
 
 env:
   RUN_ID: ${{ github.run_id }}
-  # Used by the docker-compose-ci.yml to load the correct images
-  BACKEND_IMAGE: ${{ inputs.backend-container-image-tag }}
-  FRONTEND_IMAGE: ${{ inputs.frontend-container-image-tag}}
 
 jobs:
   e2e-tests:
@@ -29,27 +17,50 @@ jobs:
         browser: [chromium, firefox, mobile]
         include:
           - configuration_label: prototype
-            env_file_name: .env.ci.prototype
             private_features_enabled: false
           - configuration_label: private
-            env_file_name: .env.ci.private
             private_features_enabled: true
     steps:
       - uses: actions/checkout@v5
         with:
           fetch-depth: 40
-      - name: Log into container registry
-        uses: docker/login-action@28fdb31ff34708d19615a74d67103ddc2ea9725c
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
       - name: Adjust permissions to Docker
         run: sudo chmod 666 /var/run/docker.sock
-      - name: Start backend + opensearch
-        run: docker compose -f docker-compose-ci.yml up -d opensearch backend
+      - name: Start opensearch container
+        run: docker compose -f docker-compose-ci.yml up -d
+      - name: Install Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+      - name: Cache Gradle
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: gradle-${{ runner.os }}-${{ hashFiles('backend/**/build.gradle*', 'backend/**/settings.gradle*') }}
+          restore-keys: gradle-${{ runner.os }}-
+      - name: Wait for OpenSearch health
+        run: |
+          echo "Waiting for OpenSearch on http://localhost:9200 ..."
+          until curl --silent --fail http://localhost:9200/_cluster/health; do
+            echo "Still waiting for OpenSearch..."
+            sleep 5
+          done
+      - name: Build backend
+        working-directory: ./backend
+        run: ./gradlew build --no-daemon
+      - name: Start backend locally (background)
+        working-directory: ./backend
         env:
-          ENV_FILE_NAME: ${{ matrix.env_file_name }}
+          SPRING_PROFILES_ACTIVE: e2e,default
+          OPENSEARCH_HOST: localhost
+          THC_PORT: 8090
+          NODE_OPTIONS: "--max_old_space_size=4096"
+        run: |
+          nohup ./gradlew bootRun --no-daemon > backend.log 2>&1 &
+          sleep 8
       - uses: actions/setup-node@v6
         with:
           node-version: 24
@@ -67,15 +78,16 @@ jobs:
       - name: Install Node modules
         run: yarn install --immutable
         working-directory: ./frontend
-      - name: Load environment variables
-        run: |
-          echo "Loading environment file: ${{ matrix.env_file_name }}"
-          export $(grep -v '^#' "./frontend/${{ matrix.env_file_name }}" | xargs)
-        shell: bash
       - name: Start frontend locally (background)
         working-directory: ./frontend
+        env:
+          NUXT_PUBLIC_RIS_BACKEND_URL: http://localhost:8090
+          NUXT_PUBLIC_PRIVATE_FEATURES_ENABLED: ${{ matrix.private_features_enabled }}
+          NUXT_PUBLIC_FRONTEND_URL: http://localhost:3000
+          SENTRY_TELEMETRY: false
+          NUXT_DEVTOOLS: false
         run: |
-          nohup yarn dev --no-devtools --port 3000 > frontend-dev.log 2>&1 &
+          nohup yarn dev --no-devtools --port 3000 > frontend.log 2>&1 &
       - name: Get Playwright version
         run: echo "PLAYWRIGHT_VERSION=$(yarn list --pattern @playwright/test | awk -F "@" 'NR==2 {print $NF}')" >> $GITHUB_ENV
         working-directory: ./frontend
@@ -84,11 +96,18 @@ jobs:
         uses: actions/cache@v4
         with:
           path: /home/runner/.cache/ms-playwright
-          key: ${{ runner.os }}-playwright-${{ env.PLAYWRIGHT_VERSION }}-chromium
+          key: ${{ runner.os }}-playwright-${{ env.PLAYWRIGHT_VERSION }}
       - name: Install Playwright browsers
         run: yarn exec playwright install --with-deps chromium firefox webkit
         working-directory: ./frontend
-      - name: Wait for frontend to respond or dump logs if fail
+      - name: Wait for backend to respond
+        run: |
+          echo "Waiting for backend on http://localhost:8090/actuator/health ..."
+          until curl --silent --fail http://localhost:8090/actuator/health; do
+            echo "Still waiting..."
+            sleep 5
+          done
+      - name: Wait for frontend to respond
         timeout-minutes: 5
         run: |
           echo "Waiting for frontend to respond at http://localhost:3000 ..."
@@ -121,8 +140,16 @@ jobs:
       - name: Output logs on failure
         if: ${{ failure() }}
         run: docker compose -f docker-compose-ci.yml logs > docker-compose-logs-${{ matrix.configuration_label }}-${{ matrix.browser }}.log
-        env:
-          ENV_FILE_NAME: ${{ matrix.env_file_name }}
+      - name: Upload backend log
+        uses: actions/upload-artifact@v5
+        with:
+          name: backend-log-${{ matrix.configuration_label }}-${{ matrix.browser }}
+          path: backend/backend.log
+      - name: Upload frontend log
+        uses: actions/upload-artifact@v5
+        with:
+          name: frontend-log-${{ matrix.configuration_label }}-${{ matrix.browser }}
+          path: frontend/frontend.log
       - name: Upload Docker logs
         uses: actions/upload-artifact@v5
         if: ${{ failure() }}
@@ -133,11 +160,12 @@ jobs:
       - name: Tear down services
         if: ${{ always() }}
         run: docker compose -f docker-compose-ci.yml down -v
-        env:
-          ENV_FILE_NAME: ${{ matrix.env_file_name }}
       - name: Kill frontend dev process
         if: ${{ always() }}
         run: pkill -f "yarn dev" || true
+      - name: Kill backend process
+        if: ${{ always() }}
+        run: pkill -f "bootRun" || true
       - name: Send status to Slack
         uses: digitalservicebund/notify-on-failure-gha@66c485757701f8d5dbee32f24df38d904ca693ba
         if: ${{ failure() && github.ref == 'refs/heads/main' }}

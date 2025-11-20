@@ -578,15 +578,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@commander-js/extra-typings@npm:^13.1.0":
-  version: 13.1.0
-  resolution: "@commander-js/extra-typings@npm:13.1.0"
-  peerDependencies:
-    commander: ~13.1.0
-  checksum: 10c0/ff799f0641f68855aa73c976912a607c25d564df34fd8e262927a80b19f6cccd882fe7ce098a0e072a497fd0020cbd19fd1e4d5cc98a461cd6623abf8ed5f4e7
-  languageName: node
-  linkType: hard
-
 "@csstools/color-helpers@npm:^5.1.0":
   version: 5.1.0
   resolution: "@csstools/color-helpers@npm:5.1.0"
@@ -7497,13 +7488,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"commander@npm:^13.1.0":
-  version: 13.1.0
-  resolution: "commander@npm:13.1.0"
-  checksum: 10c0/7b8c5544bba704fbe84b7cab2e043df8586d5c114a4c5b607f83ae5060708940ed0b5bd5838cf8ce27539cde265c1cbd59ce3c8c6b017ed3eec8943e3a415164
-  languageName: node
-  linkType: hard
-
 "commander@npm:^2.20.0, commander@npm:^2.20.3":
   version: 2.20.3
   resolution: "commander@npm:2.20.3"
@@ -8475,19 +8459,6 @@ __metadata:
   version: 6.0.1
   resolution: "entities@npm:6.0.1"
   checksum: 10c0/ed836ddac5acb34341094eb495185d527bd70e8632b6c0d59548cbfa23defdbae70b96f9a405c82904efa421230b5b3fd2283752447d737beffd3f3e6ee74414
-  languageName: node
-  linkType: hard
-
-"env-cmd@npm:^11.0.0":
-  version: 11.0.0
-  resolution: "env-cmd@npm:11.0.0"
-  dependencies:
-    "@commander-js/extra-typings": "npm:^13.1.0"
-    commander: "npm:^13.1.0"
-    cross-spawn: "npm:^7.0.6"
-  bin:
-    env-cmd: bin/env-cmd.js
-  checksum: 10c0/c474573392fd37b8869dd0a2b01a571b8bddd460e7c3a0b8273a0c9831eeda9e363fe3d9bc4cd798ffc4f26762abc2982a3daace6fd8adcc56d1637c57173b76
   languageName: node
   linkType: hard
 
@@ -15284,7 +15255,6 @@ __metadata:
     axe-html-reporter: "npm:^2.2.11"
     axios: "npm:^1.12.0"
     dayjs: "npm:^1.11.13"
-    env-cmd: "npm:^11.0.0"
     eslint: "npm:^9.30.1"
     eslint-config-prettier: "npm:^10.1.5"
     eslint-plugin-unused-imports: "npm:^4.1.4"

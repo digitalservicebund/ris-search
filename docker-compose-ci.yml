@@ -24,54 +24,6 @@ services:
     volumes:
       - ./backend/src/main/resources/openSearch/mounted/:/usr/share/opensearch/config/mounted/
 
-  backend:
-    image: ${BACKEND_IMAGE}
-    container_name: backend-e2e
-    restart: unless-stopped
-    environment:
-      - OPENSEARCH_HOST=opensearch
-      - SPRING_PROFILES_ACTIVE=e2e,default
-      - THC_PATH=/actuator/health
-      - THC_PORT=8090
-      - LOCAL_FILE_STORAGE=/app/backend/e2e-data
-    depends_on:
-      opensearch:
-        condition: service_healthy
-    volumes:
-      - ./backend:/app/backend
-    healthcheck:
-      test: [ "CMD", "/workspace/health-check" ]
-      interval: 5s
-      retries: 400
-      start_period: 20s
-    ports:
-      - "8090:8090"
-    networks:
-      - ris-portal
-
-  frontend:
-    image: ${FRONTEND_IMAGE}
-    container_name: frontend-e2e
-    depends_on:
-      backend:
-        condition: service_healthy
-    env_file:
-      # these values are important to ensure start.sh runs correctly, without trying to read secrets from mounts
-      - ./frontend/${ENV_FILE_NAME:-.env.ci.private}
-    ports:
-      - "3000:3000"
-    networks:
-      - ris-portal
-    extra_hosts:
-      # the browser accessing keycloak doesn't know about the keycloak name, so we use localhost
-      # and redefine localhost to point to keycloak instead
-      - "localhost:172.18.0.3"
-    healthcheck:
-      test: [ "CMD", "wget", "-q", "-O", "-", "http://localhost:3000/" ]
-      interval: 5s
-      timeout: 3s
-      retries: 60
-
 networks:
   ris-portal:
     driver: bridge
