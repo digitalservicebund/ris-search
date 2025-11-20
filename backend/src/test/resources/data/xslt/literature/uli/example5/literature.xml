@@ -5,7 +5,7 @@
             <akn:identification source="attributsemantik-noch-undefiniert">
                 <akn:FRBRWork>
                     <akn:FRBRalias name="dokumentarischerTitel" value="Dokumentarischer Test-Titel"/>
-                    <akn:FRBRalias name="hauptsachtitelZusatz" value="Zusätze zum Haupttitel"/>
+                    <akn:FRBRalias name="haupttitelZusatz" value="Zusätze zum Haupttitel"/>
                 </akn:FRBRWork>
             </akn:identification>
             <akn:proprietary source="attributsemantik-noch-undefiniert">

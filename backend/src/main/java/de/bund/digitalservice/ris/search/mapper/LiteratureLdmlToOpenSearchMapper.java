@@ -190,7 +190,7 @@ public class LiteratureLdmlToOpenSearchMapper {
   }
 
   private static String extractMainTitleAdditions(LiteratureLdml literatureLdml) {
-    return extractFrbrAlias(literatureLdml, "hauptsachtitelZusatz");
+    return extractFrbrAlias(literatureLdml, "haupttitelZusatz");
   }
 
   private static String extractDocumentaryTitle(LiteratureLdml literatureLdml) {

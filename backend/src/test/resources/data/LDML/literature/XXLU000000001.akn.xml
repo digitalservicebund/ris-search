@@ -9,7 +9,7 @@
                     <akn:FRBRalias name="Dokumentnummer" value="XXLU000000001"/>
                     <akn:FRBRalias name="haupttitel" value="Literatur Test Dokument"/>
                     <akn:FRBRalias name="dokumentarischerTitel" value="Dokumentarischer Titel"/>
-                    <akn:FRBRalias name="hauptsachtitelZusatz" value="Titelzusatz"/>
+                    <akn:FRBRalias name="haupttitelZusatz" value="Titelzusatz"/>
                     <akn:FRBRdate date="2024-01-01" name="verkuendungsfassung"/>
                     <akn:FRBRauthor href="recht.bund.de/institution/bundesregierung"/>
                     <akn:FRBRauthor as="#verfasser" href="#mustermann-max-verfasser-1"/>
