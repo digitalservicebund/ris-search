@@ -4,7 +4,7 @@
         <akn:meta>
             <akn:identification source="attributsemantik-noch-undefiniert">
                 <akn:FRBRWork>
-                    <akn:FRBRalias name="hauptsachtitelZusatz" value="Zusätze zum Haupttitel"/>
+                    <akn:FRBRalias name="haupttitelZusatz" value="Zusätze zum Haupttitel"/>
                 </akn:FRBRWork>
             </akn:identification>
             <akn:proprietary source="attributsemantik-noch-undefiniert">

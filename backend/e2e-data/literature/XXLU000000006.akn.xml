@@ -8,7 +8,7 @@
                     <akn:FRBRuri value="TODO"/>
                     <akn:FRBRalias name="Dokumentnummer" value="XXLU000000006"/>
                     <akn:FRBRalias name="haupttitel" value="Haupttitel mit Zusätzen zum Haupttitel"/>
-                    <akn:FRBRalias name="hauptsachtitelZusatz" value="Zusätze zum Haupttitel"/>
+                    <akn:FRBRalias name="haupttitelZusatz" value="Zusätze zum Haupttitel"/>
                     <akn:FRBRdate date="2024-01-01" name="verkuendungsfassung"/>
                     <akn:FRBRauthor href="recht.bund.de/institution/foobar"/>
                     <akn:FRBRauthor as="#verfasser" href="#musterfrau-sabine-verfasser-1"/>

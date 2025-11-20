@@ -11,7 +11,7 @@
 
 	<xsl:variable name="titles" as="node()*" select="(//akn:FRBRWork/akn:FRBRalias[@name='haupttitel']/@value
 									| //akn:FRBRWork/akn:FRBRalias[@name='dokumentarischerTitel']/@value
-									| //akn:FRBRWork/akn:FRBRalias[@name='hauptsachtitelZusatz']/@value)"/>
+									| //akn:FRBRWork/akn:FRBRalias[@name='haupttitelZusatz']/@value)"/>
 
 	<xsl:template match="akn:doc">
 		<html>
