@@ -70,6 +70,13 @@ public class WebMvcConfig implements WebMvcConfigurer {
     return new WebMvcConfigurer() {
       @Override
       public void addCorsMappings(CorsRegistry registry) {
+
+        registry
+            .addMapping("/v1/feedback")
+            .allowedMethods("GET")
+            .allowedOriginPatterns(frontEndUrl, docsUrl)
+            .allowedHeaders(CorsConfiguration.ALL);
+
         registry
             .addMapping("/v1/**")
             .allowedMethods("GET", "HEAD", "OPTIONS")
