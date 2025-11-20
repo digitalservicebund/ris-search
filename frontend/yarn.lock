@@ -5811,12 +5811,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vitest/coverage-v8@npm:^4.0.8":
-  version: 4.0.8
-  resolution: "@vitest/coverage-v8@npm:4.0.8"
+"@vitest/coverage-v8@npm:^4.0.9":
+  version: 4.0.9
+  resolution: "@vitest/coverage-v8@npm:4.0.9"
   dependencies:
     "@bcoe/v8-coverage": "npm:^1.0.2"
-    "@vitest/utils": "npm:4.0.8"
+    "@vitest/utils": "npm:4.0.9"
     ast-v8-to-istanbul: "npm:^0.3.8"
     debug: "npm:^4.4.3"
     istanbul-lib-coverage: "npm:^3.2.2"
@@ -5827,12 +5827,12 @@ __metadata:
     std-env: "npm:^3.10.0"
     tinyrainbow: "npm:^3.0.3"
   peerDependencies:
-    "@vitest/browser": 4.0.8
-    vitest: 4.0.8
+    "@vitest/browser": 4.0.9
+    vitest: 4.0.9
   peerDependenciesMeta:
     "@vitest/browser":
       optional: true
-  checksum: 10c0/e1bd3f261a10042c2033bb07a4cffe8c3a059d367e9c32f092d7808dfab2736775bf105ff610d274cc7519d3c94f797ac8e2498f70c36391547f98a1715f8a08
+  checksum: 10c0/1af0f017400d3234867fa3937a6719724c59a340d3c471b2767abf1141de37a5686e7c0011c545fa597d7c0d15305f7fd139a3466064101443fae33af711fc65
   languageName: node
   linkType: hard
 
@@ -5878,6 +5878,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@vitest/pretty-format@npm:4.0.9":
+  version: 4.0.9
+  resolution: "@vitest/pretty-format@npm:4.0.9"
+  dependencies:
+    tinyrainbow: "npm:^3.0.3"
+  checksum: 10c0/1d169ac7166174087ac779ff892b929f0ab85d23cac5f440f486588a67e451e17f2346a42331646937fdf67c6f6293d627ac7a2b4c7ba3c4f6be47bb8842d7cb
+  languageName: node
+  linkType: hard
+
 "@vitest/runner@npm:4.0.8":
   version: 4.0.8
   resolution: "@vitest/runner@npm:4.0.8"
@@ -5913,6 +5922,16 @@ __metadata:
     "@vitest/pretty-format": "npm:4.0.8"
     tinyrainbow: "npm:^3.0.3"
   checksum: 10c0/384e5db47a89e63143c335bf644d9be6e0a7f7555ed368837b9497dda20e080fcaa0c5b1c9bd8a9b49478d2b8dcfeb31be2bfb9fe7a5590f1453cbf372906436
+  languageName: node
+  linkType: hard
+
+"@vitest/utils@npm:4.0.9":
+  version: 4.0.9
+  resolution: "@vitest/utils@npm:4.0.9"
+  dependencies:
+    "@vitest/pretty-format": "npm:4.0.9"
+    tinyrainbow: "npm:^3.0.3"
+  checksum: 10c0/a5557aec1a0d8835580ea93dd64f5507496d8f742da21c11eb4d4e5bd49e9d03bf951541f45eb2bd2c9288b4bcc623a5b132ec989253c9b3931f06b048a677ed
   languageName: node
   linkType: hard
 
@@ -15250,7 +15269,7 @@ __metadata:
     "@types/node": "npm:^24.10.0"
     "@types/sanitize-html": "npm:^2.16.0"
     "@unhead/vue": "npm:^2.0.19"
-    "@vitest/coverage-v8": "npm:^4.0.8"
+    "@vitest/coverage-v8": "npm:^4.0.9"
     "@vue/test-utils": "npm:^2.4.6"
     axe-html-reporter: "npm:^2.2.11"
     axios: "npm:^1.12.0"
