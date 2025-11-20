@@ -117,6 +117,21 @@ test("displays literature page with metadata and text tab by default", async ({
   ).toBeVisible();
 });
 
+test("displays selbständige funstelle as fallback", async ({ page }) => {
+  await navigate(page, "/literature/XXLU000000005");
+
+  await expect(
+    page
+      .getByRole("main")
+      .getByRole("heading", { level: 1, name: "Leeres Dokument" })
+      .first(),
+  ).toBeVisible();
+
+  await expect(page.getByLabel("Fundstelle")).toHaveText(
+    "Selbständige Fundstelle, 1954, 123-729 (Foo)",
+  );
+});
+
 test("displays all titles", async ({ page }) => {
   await navigate(page, "/literature/XXLU000000002");
 
