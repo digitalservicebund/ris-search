@@ -401,6 +401,24 @@ test.describe("searching literature", () => {
     ).toBeVisible();
   });
 
+  test("shows independent reference as fallback if dependent reference is missing", async ({
+    page,
+  }) => {
+    await navigate(
+      page,
+      "/search?query=Selbständige+Fundstelle,+1954,+123-729+(Foo)&category=L",
+    );
+
+    const searchResult = getSearchResults(page).first();
+
+    // Header
+    await expect(searchResult).toHaveText(/Auf/);
+    await expect(searchResult).toHaveText(
+      /Selbständige Fundstelle, 1954, 123-729 \(Foo\)/,
+    );
+    await expect(searchResult).toHaveText(/2013/);
+  });
+
   test("shows placeholder title for search result items without title", async ({
     page,
   }) => {
