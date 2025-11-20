@@ -50,8 +50,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
       @Override
       public void addCorsMappings(CorsRegistry registry) {
         registry
-            .addMapping("/**")
-            .allowedMethods(CorsConfiguration.ALL)
+            .addMapping("/v1/**")
+            .allowedMethods("GET", "HEAD", "OPTIONS")
             .allowedHeaders(CorsConfiguration.ALL)
             .allowedOrigins(frontEndUrl, docsUrl);
       }
@@ -71,10 +71,10 @@ public class WebMvcConfig implements WebMvcConfigurer {
       @Override
       public void addCorsMappings(CorsRegistry registry) {
         registry
-            .addMapping("/**")
-            .allowedMethods(CorsConfiguration.ALL)
-            .allowedHeaders(CorsConfiguration.ALL)
-            .allowedOrigins(CorsConfiguration.ALL);
+            .addMapping("/v1/**")
+            .allowedMethods("GET", "HEAD", "OPTIONS")
+            .allowedOrigins(CorsConfiguration.ALL)
+            .allowedHeaders(CorsConfiguration.ALL);
       }
     };
   }

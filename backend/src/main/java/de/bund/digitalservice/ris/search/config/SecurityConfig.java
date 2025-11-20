@@ -17,7 +17,7 @@ public class SecurityConfig {
 
   final AuthProperties authProperties;
 
-  final String[] internalPaths = new String[] {"/actuator/**", "/internal/**", "/nlex"};
+  final String[] internalPaths = new String[] {"/actuator/**", "/nlex"};
 
   @Value("${app.security.csp-header}")
   private String cspHeader;
