@@ -122,12 +122,6 @@ export default defineNuxtConfig({
       password: "", // needs override in env
     },
     public: {
-      /*
-       * This Url should only be different if the application is connecting from inside a container
-       * and that the url is different from inside the container than from client side. Otherwise it should be
-       * left empty
-       */
-      risBackendUrlSsr: "",
       risBackendUrl: "",
       /*
        * A feature flag that controls whether the private annotated features should,
