@@ -99,8 +99,9 @@ const itemsOnPage = computed(() => buildItemsOnPageString(props.page));
 <template>
   <slot v-if="props.navigationPosition == 'bottom'" />
 
-  <div
+  <nav
     v-if="page?.member && page?.member.length && !isLoading"
+    aria-label="Paginierung"
     class="my-32 mt-20 mb-10 flex flex-col items-center"
   >
     <div class="flex w-full items-center">
@@ -144,7 +145,7 @@ const itemsOnPage = computed(() => buildItemsOnPageString(props.page));
         </Button>
       </div>
     </div>
-  </div>
+  </nav>
 
   <slot v-if="props.navigationPosition == 'top'" />
 </template>
