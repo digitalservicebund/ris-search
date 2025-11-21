@@ -14,7 +14,7 @@ describe("LiteratureMetadata", () => {
 
     expect(screen.getByText("Dokumenttyp")).toBeInTheDocument();
     expect(screen.getByText("Fundstelle")).toBeInTheDocument();
-    expect(screen.getByText("Author")).toBeInTheDocument();
+    expect(screen.getByText("Autor")).toBeInTheDocument();
     expect(screen.getByText("Veröffentlichungsjahr")).toBeInTheDocument();
   });
 
@@ -30,7 +30,7 @@ describe("LiteratureMetadata", () => {
 
     expect(screen.getByLabelText("Dokumenttyp")).toHaveTextContent("—");
     expect(screen.getByLabelText("Fundstelle")).toHaveTextContent("—");
-    expect(screen.getByLabelText("Author")).toHaveTextContent("—");
+    expect(screen.getByLabelText("Autor")).toHaveTextContent("—");
     expect(screen.getByLabelText("Veröffentlichungsjahr")).toHaveTextContent(
       "—",
     );
@@ -48,7 +48,7 @@ describe("LiteratureMetadata", () => {
 
     expect(screen.getByLabelText("Dokumenttyp")).toHaveTextContent("Foo");
     expect(screen.getByLabelText("Fundstelle")).toHaveTextContent("Ref");
-    expect(screen.getByLabelText("Author")).toHaveTextContent("Max Mustermann");
+    expect(screen.getByLabelText("Autor")).toHaveTextContent("Max Mustermann");
     expect(screen.getByLabelText("Veröffentlichungsjahr")).toHaveTextContent(
       "2015",
     );
@@ -66,7 +66,7 @@ describe("LiteratureMetadata", () => {
 
     expect(screen.getByLabelText("Dokumenttyp")).toHaveTextContent("Foo, Bar");
     expect(screen.getByLabelText("Fundstelle")).toHaveTextContent("Ref1, Ref2");
-    expect(screen.getByLabelText("Author")).toHaveTextContent(
+    expect(screen.getByLabelText("Autor")).toHaveTextContent(
       "Max Mustermann, Sabine Musterfrau",
     );
     expect(screen.getByLabelText("Veröffentlichungsjahr")).toHaveTextContent(

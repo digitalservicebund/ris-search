@@ -21,7 +21,7 @@ const yearOfPublication = computed(() => formatArray(props.yearsOfPublication));
   <div class="mb-48 flex flex-row flex-wrap gap-24">
     <MetadataField label="Dokumenttyp" :value="documentType" />
     <MetadataField label="Fundstelle" :value="reference" />
-    <MetadataField label="Author" :value="author" />
+    <MetadataField label="Autor" :value="author" />
     <MetadataField label="Veröffentlichungsjahr" :value="yearOfPublication" />
   </div>
 </template>

@@ -29,7 +29,7 @@ test("displays literature page with metadata and text tab by default", async ({
   await expect(page.getByLabel("Fundstelle")).toHaveText(
     "FooBar, 1982, 123-123",
   );
-  await expect(page.getByLabel("Author")).toHaveText("Sabine Musterfrau");
+  await expect(page.getByLabel("Autor")).toHaveText("Sabine Musterfrau");
   await expect(page.getByLabel("Veröffentlichungsjahr")).toHaveText("2024");
 
   const textSection = page.getByRole("region", { name: "Text" });
