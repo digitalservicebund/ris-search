@@ -2,11 +2,14 @@ package de.bund.digitalservice.ris.search.models.opensearch;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.ElementCollection;
+import java.time.LocalDate;
 import java.util.List;
 import lombok.Builder;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.elasticsearch.annotations.DateFormat;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldType;
 import org.springframework.lang.Nullable;
 
 @Builder
@@ -19,13 +22,21 @@ public record AdministrativeDirective(
     @Nullable @Field(name = Fields.DOCUMENT_TYPE) String documentType,
     @Nullable @Field(name = Fields.CONTENT) String content,
     @Nullable @Field(name = Fields.LEGISLATOR) String normgeber,
-    @Nullable @Field(name = Fields.ENTRY_INTO_EFFECT_DATE) String entryIntoEffectDate,
-    @Nullable @Field(name = Fields.EXPIRY_DATE) String expiryDate,
+    @Nullable
+        @Field(
+            name = Fields.ENTRY_INTO_EFFECT_DATE,
+            type = FieldType.Date,
+            format = DateFormat.date)
+        LocalDate entryIntoEffectDate,
+    @Nullable @Field(name = Fields.EXPIRY_DATE, type = FieldType.Date, format = DateFormat.date)
+        LocalDate expiryDate,
     @ElementCollection @Field(name = Fields.NORM_REFERENCES) List<String> normReferences,
     @ElementCollection @Field(name = Fields.CASELAW_REFERENCES) List<String> caselawReferences,
     @ElementCollection @Field(name = Fields.FUNDSTELLE_REFERENCES)
         List<String> fundstelleReferences,
-    @ElementCollection @Field(name = Fields.ZITIERDATUM_ITEMS) List<String> zitierdatumItems,
+    @ElementCollection
+        @Field(name = Fields.DATES_TO_QUOTE, type = FieldType.Date, format = DateFormat.date)
+        List<LocalDate> datesToQuote,
     @ElementCollection @Field(name = Fields.REFERENCE_NUMBERS) List<String> referenceNumbers,
     @ElementCollection @Field(name = Fields.ACTIVE_ADMINISTRATIVE_REFERENCES)
         List<String> activeAdministrativeReferences,
@@ -34,7 +45,9 @@ public record AdministrativeDirective(
     @ElementCollection @Field(name = Fields.KEYWORDS) List<String> keywords,
     @ElementCollection @Field(name = Fields.FIELDS_OF_LAW) List<String> fieldsOfLaw,
     @ElementCollection @Field(name = Fields.ZUORDNUNGEN) List<String> zuordnungen,
-    @JsonIgnore @Field(name = Literature.Fields.INDEXED_AT) String indexedAt)
+    @ElementCollection @Field(name = Fields.TABLE_OF_CONTENTS_ENTRIES)
+        List<String> tableOfContentsEntries,
+    @JsonIgnore @Field(name = AdministrativeDirective.Fields.INDEXED_AT) String indexedAt)
     implements AbstractSearchEntity {
 
   public static class Fields {
@@ -58,15 +71,13 @@ public record AdministrativeDirective(
 
     public static final String EXPIRY_DATE = "expiry_date";
 
-    public static final String TOC_ITEMS = "tocItems";
-
     public static final String NORM_REFERENCES = "norm_references";
 
     public static final String CASELAW_REFERENCES = "caselaw_references";
 
     public static final String FUNDSTELLE_REFERENCES = "fundstelle_references";
 
-    public static final String ZITIERDATUM_ITEMS = "zitierdatum_items";
+    public static final String DATES_TO_QUOTE = "dates_to_quote";
 
     public static final String REFERENCE_NUMBERS = "reference_numbers";
 
@@ -80,5 +91,9 @@ public record AdministrativeDirective(
     public static final String FIELDS_OF_LAW = "fields_of_law";
 
     public static final String ZUORDNUNGEN = "zuordnungen";
+
+    public static final String TABLE_OF_CONTENTS_ENTRIES = "table_of_contents_entries";
+
+    public static final String INDEXED_AT = "indexed_at";
   }
 }

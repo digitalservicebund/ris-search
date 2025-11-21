@@ -56,7 +56,7 @@ public class AdministrativeDirectiveLdmlToOpenSearchMapper {
           .expiryDate(getExpiryDate(ldml))
           .normReferences(getNormReferences(ldml))
           .fundstelleReferences(getFundstelleReferences(ldml))
-          .zitierdatumItems(getZitierdatumItems(ldml))
+          .datesToQuote(getDatesToQuote(ldml))
           .referenceNumbers(getReferenceNumbers(ldml))
           .caselawReferences(getCaselawReferences(ldml))
           .activeAdministrativeReferences(getActiveAdministrativeReferences(ldml))
@@ -64,6 +64,7 @@ public class AdministrativeDirectiveLdmlToOpenSearchMapper {
           .keywords(getKeywords(ldml))
           .fieldsOfLaw(getFieldsOfLaw(ldml))
           .zuordnungen(getZuordnungen(ldml))
+          .tableOfContentsEntries(getTableOfContentsEntries(ldml))
           .indexedAt(now.toString())
           .build();
     } catch (ValidationException e) {
@@ -113,7 +114,7 @@ public class AdministrativeDirectiveLdmlToOpenSearchMapper {
     return getRisMeta(ldml)
         .map(RisMeta::getDocumentType)
         .map(DocumentType::getCategory)
-        .orElseThrow(() -> new ValidationException("missing documentCategory"));
+        .orElseThrow(() -> new ValidationException("missing documentTypeDetail"));
   }
 
   private static @Nullable String getDocumentType(AdministrativeDirectiveLdml ldml) {
@@ -141,17 +142,14 @@ public class AdministrativeDirectiveLdmlToOpenSearchMapper {
     return null;
   }
 
-  private static @Nullable String getEntryIntoEffect(AdministrativeDirectiveLdml ldml) {
+  private static @Nullable LocalDate getEntryIntoEffect(AdministrativeDirectiveLdml ldml) {
 
-    return getRisMeta(ldml)
-        .map(RisMeta::getEntryIntoEffectDate)
-        .map(LocalDate::toString)
-        .orElse(null);
+    return getRisMeta(ldml).map(RisMeta::getEntryIntoEffectDate).orElse(null);
   }
 
-  private static @Nullable String getExpiryDate(AdministrativeDirectiveLdml ldml) {
+  private static @Nullable LocalDate getExpiryDate(AdministrativeDirectiveLdml ldml) {
 
-    return getRisMeta(ldml).map(RisMeta::getExpiryDate).map(LocalDate::toString).orElse(null);
+    return getRisMeta(ldml).map(RisMeta::getExpiryDate).orElse(null);
   }
 
   private static List<String> getNormReferences(AdministrativeDirectiveLdml ldml) {
@@ -199,14 +197,12 @@ public class AdministrativeDirectiveLdmlToOpenSearchMapper {
         .toList();
   }
 
-  private static List<String> getZitierdatumItems(AdministrativeDirectiveLdml ldml) {
-    return getRisMeta(ldml).map(RisMeta::getDateToQuoteList).orElse(List.of()).stream()
-        .filter(Objects::nonNull)
-        .map(LocalDate::toString)
-        .toList();
+  private static List<LocalDate> getDatesToQuote(AdministrativeDirectiveLdml ldml) {
+    return getRisMeta(ldml).map(RisMeta::getDateToQuoteList).orElse(List.of()).stream().toList();
   }
 
   private static List<String> getReferenceNumbers(AdministrativeDirectiveLdml ldml) {
+    // XX is used a placeholder for a missing referenceNumber
     return getRisMeta(ldml).map(RisMeta::getReferenceNumbers).orElse(List.of());
   }
 
@@ -286,5 +282,9 @@ public class AdministrativeDirectiveLdmlToOpenSearchMapper {
     return zuordnungen.stream()
         .map(z -> String.format("%s %s", z.getAspekt(), z.getBegriff()))
         .toList();
+  }
+
+  private static List<String> getTableOfContentsEntries(AdministrativeDirectiveLdml ldml) {
+    return getRisMeta(ldml).map(RisMeta::getTableOfContentsEntries).orElse(List.of());
   }
 }

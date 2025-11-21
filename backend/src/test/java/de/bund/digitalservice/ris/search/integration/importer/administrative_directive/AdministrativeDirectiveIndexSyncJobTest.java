@@ -1,6 +1,7 @@
 package de.bund.digitalservice.ris.search.integration.importer.administrative_directive;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.testcontainers.shaded.org.awaitility.Awaitility.await;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -17,6 +18,7 @@ import de.bund.digitalservice.ris.search.service.IndexStatusService;
 import de.bund.digitalservice.ris.search.service.IndexingState;
 import java.util.HashSet;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -34,8 +36,14 @@ class AdministrativeDirectiveIndexSyncJobTest extends ContainersIntegrationBase 
 
   @BeforeEach()
   void setup() {
-    clearRepositoryData();
-    resetBuckets();
+    await()
+        .atMost(500, TimeUnit.MILLISECONDS)
+        .until(
+            () -> {
+              clearRepositoryData();
+              resetBuckets();
+              return true;
+            });
   }
 
   @Test

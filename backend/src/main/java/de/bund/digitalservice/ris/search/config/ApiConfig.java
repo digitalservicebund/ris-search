@@ -16,6 +16,8 @@ public class ApiConfig {
 
     public static final String LITERATURE = BASE + "/literature";
 
+    public static final String ADMINISTRATIVE_DIRECTIVE = BASE + "/administrative-directive";
+
     public static final String FEEDBACK = BASE + "/feedback";
 
     public static final String LEGISLATION = BASE + "/legislation";

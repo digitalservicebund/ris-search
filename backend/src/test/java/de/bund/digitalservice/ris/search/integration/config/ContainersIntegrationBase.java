@@ -1,6 +1,7 @@
 package de.bund.digitalservice.ris.search.integration.config;
 
 import de.bund.digitalservice.ris.search.config.obs.TestMockS3Client;
+import de.bund.digitalservice.ris.search.integration.controller.api.testData.AdministrativeDirectiveTestData;
 import de.bund.digitalservice.ris.search.integration.controller.api.testData.CaseLawTestData;
 import de.bund.digitalservice.ris.search.integration.controller.api.testData.LiteratureTestData;
 import de.bund.digitalservice.ris.search.integration.controller.api.testData.NormsTestData;
@@ -38,7 +39,7 @@ public class ContainersIntegrationBase {
   @Autowired protected CaseLawBucket caseLawBucket;
   @Autowired protected LiteratureBucket literatureBucket;
   @Autowired protected NormsBucket normsBucket;
-  @Autowired private AdministrativeDirectiveRepository administrativeDirectiveRepository;
+  @Autowired protected AdministrativeDirectiveRepository administrativeDirectiveRepository;
 
   @Autowired
   @Qualifier("caseLawS3Client")
@@ -86,6 +87,7 @@ public class ContainersIntegrationBase {
       ((TestMockS3Client) caseLawS3Client.getS3Client()).loadDefaultFiles();
       ((TestMockS3Client) literatureS3Client.getS3Client()).loadDefaultFiles();
       ((TestMockS3Client) normS3Client.getS3Client()).loadDefaultFiles();
+      ((TestMockS3Client) administrativeDirectiveS3Client.getS3Client()).loadDefaultFiles();
       for (var normFile : NormsTestData.allNormXml.entrySet()) {
         ((TestMockS3Client) normS3Client.getS3Client())
             .putFile(normFile.getKey(), normFile.getValue());
@@ -101,6 +103,7 @@ public class ContainersIntegrationBase {
     caseLawRepository.saveAll(CaseLawTestData.allDocuments);
     literatureRepository.saveAll(LiteratureTestData.allDocuments);
     normsRepository.saveAll(NormsTestData.allDocuments);
+    administrativeDirectiveRepository.saveAll(AdministrativeDirectiveTestData.allDocuments);
   }
 
   public void clearRepositoryData() {

@@ -1,5 +1,6 @@
 package de.bund.digitalservice.ris.search.mapper;
 
+import de.bund.digitalservice.ris.search.schema.AdministrativeDirectiveEncodingSchema;
 import de.bund.digitalservice.ris.search.schema.CaseLawEncodingSchema;
 import de.bund.digitalservice.ris.search.schema.LegislationObjectSchema;
 import de.bund.digitalservice.ris.search.schema.LiteratureEncodingSchema;
@@ -69,6 +70,16 @@ public class EncodingSchemaFactory {
         .build();
   }
 
+  private static AdministrativeDirectiveEncodingSchema administrativeDirectiveEncodingSchema(
+      SchemaType type, String baseUrl) {
+    return AdministrativeDirectiveEncodingSchema.builder()
+        .id(id(type, baseUrl))
+        .contentUrl(contentUrl(type, baseUrl))
+        .encodingFormat(encodingFormat(type))
+        .inLanguage(LANGUAGE)
+        .build();
+  }
+
   public static List<LegislationObjectSchema> legislationEncodingSchemas(
       String baseUrl, String zipBaseUrl) {
     return List.of(
@@ -86,6 +97,13 @@ public class EncodingSchemaFactory {
   public static List<LiteratureEncodingSchema> literatureEncodingSchemas(String baseUrl) {
     return Arrays.stream(SchemaType.values())
         .map(type -> literatureEncodingSchema(type, baseUrl))
+        .toList();
+  }
+
+  public static List<AdministrativeDirectiveEncodingSchema> administrativeDirectiveEncodingSchemas(
+      String baseUrl) {
+    return Arrays.stream(SchemaType.values())
+        .map(type -> administrativeDirectiveEncodingSchema(type, baseUrl))
         .toList();
   }
 }

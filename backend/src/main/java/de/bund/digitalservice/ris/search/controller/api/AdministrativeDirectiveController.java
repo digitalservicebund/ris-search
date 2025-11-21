@@ -1,0 +1,133 @@
+package de.bund.digitalservice.ris.search.controller.api;
+
+import de.bund.digitalservice.ris.search.config.ApiConfig;
+import de.bund.digitalservice.ris.search.exception.CustomValidationException;
+import de.bund.digitalservice.ris.search.mapper.AdministrativeDirectiveSchemaMapper;
+import de.bund.digitalservice.ris.search.mapper.AdministrativeDirectiveSearchSchemaMapper;
+import de.bund.digitalservice.ris.search.mapper.SortParamsConverter;
+import de.bund.digitalservice.ris.search.models.api.parameters.AdministrativeDirectiveSearchParams;
+import de.bund.digitalservice.ris.search.models.api.parameters.AdministrativeDirectiveSortParam;
+import de.bund.digitalservice.ris.search.models.api.parameters.PaginationParams;
+import de.bund.digitalservice.ris.search.models.api.parameters.UniversalSearchParams;
+import de.bund.digitalservice.ris.search.models.opensearch.AdministrativeDirective;
+import de.bund.digitalservice.ris.search.schema.AdministrativeDirectiveSchema;
+import de.bund.digitalservice.ris.search.schema.AdministrativeDirectiveSearchSchema;
+import de.bund.digitalservice.ris.search.schema.CollectionSchema;
+import de.bund.digitalservice.ris.search.schema.SearchMemberSchema;
+import de.bund.digitalservice.ris.search.service.AdministrativeDirectiveService;
+import de.bund.digitalservice.ris.search.utils.LuceneQueryTools;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import java.util.List;
+import java.util.Optional;
+import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.elasticsearch.UncategorizedElasticsearchException;
+import org.springframework.data.elasticsearch.core.SearchPage;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RestController;
+
+@Tag(name = "AdministrativeDirective")
+@RestController
+@Profile({"default", "staging", "uat", "test", "prototype"})
+public class AdministrativeDirectiveController {
+
+  AdministrativeDirectiveService service;
+
+  @Autowired
+  public AdministrativeDirectiveController(AdministrativeDirectiveService service) {
+    this.service = service;
+  }
+
+  @GetMapping(
+      path = ApiConfig.Paths.ADMINISTRATIVE_DIRECTIVE + "/{documentNumber}",
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @Operation(
+      summary = "Administrative directive metadata",
+      description =
+          "The endpoint returns the metadata of a single administrative directive from our database.")
+  @ApiResponse(responseCode = "200")
+  @ApiResponse(responseCode = "404", content = @Content)
+  public ResponseEntity<AdministrativeDirectiveSchema> getAdministrativeDirectiveMetadata(
+      @Parameter(example = "KSNR00000") @PathVariable String documentNumber) {
+    List<AdministrativeDirective> result = service.getByDocumentNumber(documentNumber);
+    if (result.isEmpty()) {
+      return ResponseEntity.notFound().build();
+    }
+    AdministrativeDirective unit = result.getFirst();
+    return ResponseEntity.ok()
+        .contentType(MediaType.APPLICATION_JSON)
+        .body(AdministrativeDirectiveSchemaMapper.fromDomain(unit));
+  }
+
+  /**
+   * Search for administrative directives in the OpenSearch index with filters. For more information
+   * on the parameters, refer to the OpenAPI documentation.
+   *
+   * @param searchParams Parameters to search with for administrative directives.
+   * @param universalSearchParams Parameters to search with for all document types.
+   * @param paginationParams The number of entities and page index to request.
+   * @param sortParams The sorting parameters
+   * @return The search results
+   */
+  @GetMapping(
+      path = ApiConfig.Paths.ADMINISTRATIVE_DIRECTIVE,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @Operation(
+      summary = "List and search administrative directives",
+      description =
+          "The endpoint returns a list of administrative directives from our database. The list is paginated and can be filtered and sorted.")
+  @ApiResponse(responseCode = "200", description = "Success")
+  @ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content)
+  public ResponseEntity<CollectionSchema<SearchMemberSchema<AdministrativeDirectiveSearchSchema>>>
+      searchAndFilter(
+          @ParameterObject() AdministrativeDirectiveSearchParams searchParams,
+          @ParameterObject UniversalSearchParams universalSearchParams,
+          @ParameterObject() @Valid PaginationParams paginationParams,
+          @ParameterObject @Valid AdministrativeDirectiveSortParam sortParams)
+          throws CustomValidationException {
+
+    var pageRequest = PageRequest.of(paginationParams.getPageIndex(), paginationParams.getSize());
+
+    var sortedPageRequest =
+        pageRequest.withSort(
+            SortParamsConverter.buildSortWithNullHandlingLast(sortParams.getSort()));
+
+    try {
+      SearchPage<AdministrativeDirective> page =
+          service.simpleSearch(universalSearchParams, searchParams, sortedPageRequest);
+      return ResponseEntity.ok()
+          .contentType(MediaType.APPLICATION_JSON)
+          .body(AdministrativeDirectiveSearchSchemaMapper.fromSearchPage(page));
+    } catch (UncategorizedElasticsearchException e) {
+      LuceneQueryTools.checkForInvalidQuery(e);
+      throw e;
+    }
+  }
+
+  @GetMapping(
+      path = ApiConfig.Paths.ADMINISTRATIVE_DIRECTIVE + "/{documentNumber}.xml",
+      produces = MediaType.APPLICATION_XML_VALUE)
+  @Operation(
+      summary = "Administrative directive XML",
+      description =
+          "Returns an administrative directive item as XML. This content is used as a source for the HTML endpoint.")
+  @ApiResponse(responseCode = "200")
+  @ApiResponse(responseCode = "404", content = @Content(schema = @Schema()))
+  public ResponseEntity<byte[]> getAdministrativeDirectiveAsXml(
+      @Parameter(example = "KSNR00000") @PathVariable String documentNumber) {
+
+    Optional<byte[]> bytes = service.getFileByDocumentNumber(documentNumber);
+    return bytes.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+  }
+}

@@ -42,4 +42,10 @@ public class RisMeta {
   @XmlElementWrapper(name = "dateToQuoteList", namespace = AdministrativeDirectiveLdml.RIS_NS)
   @XmlElement(name = "dateToQuoteEntry", namespace = AdministrativeDirectiveLdml.RIS_NS)
   private List<LocalDate> dateToQuoteList;
+
+  @XmlElementWrapper(
+      name = "tableOfContentsEntries",
+      namespace = AdministrativeDirectiveLdml.RIS_NS)
+  @XmlElement(name = "tableOfContentsEntry", namespace = AdministrativeDirectiveLdml.RIS_NS)
+  private List<String> tableOfContentsEntries;
 }
