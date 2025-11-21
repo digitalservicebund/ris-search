@@ -1,6 +1,6 @@
-import { mockNuxtImport, mountSuspended } from "@nuxt/test-utils/runtime";
+import { mockNuxtImport, renderSuspended } from "@nuxt/test-utils/runtime";
+import { fireEvent, screen } from "@testing-library/vue";
 import { describe, expect, it, vi } from "vitest";
-import { nextTick } from "vue";
 import Pagination from "./Pagination.vue";
 import type { Page } from "~/components/Pagination/Pagination.vue";
 
@@ -23,14 +23,23 @@ const basePage = {
   view: {},
 } as Page;
 
-async function mountWithPage(page: Page = basePage) {
-  return await mountSuspended(Pagination, {
-    props: { page },
-    stubs: {
-      Button: {
-        name: "Button",
-        props: ["to"],
-        template: '<a :href="to?.path" data-test="nuxt-link"><slot /></a>',
+interface Props {
+  page?: Page | null;
+  navigationPosition?: "top" | "bottom";
+  isLoading?: boolean;
+}
+
+function renderComponent(props = { page: basePage } as Props, slots = {}) {
+  return renderSuspended(Pagination, {
+    props,
+    slots,
+    global: {
+      stubs: {
+        NuxtLink: {
+          name: "NuxtLink",
+          props: ["to"],
+          template: `<a :href="to?.path + (to?.query?.pageNumber ? '?pageNumber=' + to?.query?.pageNumber : '')"><slot /></a>`,
+        },
       },
     },
   });
@@ -38,103 +47,124 @@ async function mountWithPage(page: Page = basePage) {
 
 describe("Pagination.vue", () => {
   it("renders nothing if no members", async () => {
-    const wrapper = await mountWithPage({ ...basePage, member: [] });
-    expect(wrapper.html()).not.toContain("Zurück");
-    expect(wrapper.html()).not.toContain("Weiter");
+    await renderComponent({ page: { ...basePage, member: [] } });
+    expect(screen.queryByText("Zurück")).not.toBeInTheDocument();
+    expect(screen.queryByText("Weiter")).not.toBeInTheDocument();
   });
 
   it("renders disabled span buttons when only one page", async () => {
     useRouteMock.mockReturnValue({
-      path: "test-path",
+      path: "/test-path",
       query: { pageNumber: 1 },
     });
-    const wrapper = await mountWithPage();
-    const disabledSpans = wrapper.findAll('span[aria-disabled="true"]');
-    expect(disabledSpans.length).toBe(0);
+    await renderComponent({ page: basePage });
+    const disabled = screen.queryAllByRole("button", { hidden: false });
+    expect(disabled.length).toBe(0);
   });
 
   it("renders NuxtLink buttons for both directions when multiple pages exist", async () => {
-    const wrapper = await mountWithPage({
-      ...basePage,
-      view: {
-        previous: "/api/results?pageIndex=0",
-        next: "/api/results?pageIndex=2",
+    await renderComponent({
+      page: {
+        ...basePage,
+        view: {
+          previous: "/api/results?pageIndex=0",
+          next: "/api/results?pageIndex=2",
+        },
       },
     });
 
-    const links = wrapper.findAllComponents({ name: "Button" });
+    const links = screen.getAllByRole("link");
     expect(links.length).toBe(2);
-    expect(links[0]?.attributes("href")).toBe("/test-path");
-    expect(links[1]?.attributes("href")).toBe("/test-path?pageNumber=2");
+    expect(links[0]?.getAttribute("href")).toBe("/test-path");
+    expect(links[1]?.getAttribute("href")).toBe("/test-path?pageNumber=2");
   });
 
   it("renders only next link if previous missing", async () => {
-    const wrapper = await mountWithPage({
-      ...basePage,
-      view: { next: "/api/results?page=2" },
+    await renderComponent({
+      page: {
+        ...basePage,
+        view: { next: "/api/results?page=2" },
+      },
     });
-    const nextLink = wrapper.find('[aria-label="nächste Ergebnisse"]');
-    expect(nextLink.exists()).toBe(true);
-    expect(nextLink.text()).toContain("Weiter");
-    expect(wrapper.text()).toContain("Seite");
+
+    expect(screen.getByLabelText("nächste Ergebnisse")).toBeInTheDocument();
+
+    expect(screen.getByText("Weiter")).toBeInTheDocument();
+    expect(screen.getByText(/Seite/)).toBeInTheDocument();
   });
 
   it("renders only previous link if next missing", async () => {
-    const wrapper = await mountWithPage({
-      ...basePage,
-      view: { previous: "/api/results?pageIndex=0" },
+    await renderComponent({
+      page: {
+        ...basePage,
+        view: { previous: "/api/results?pageIndex=0" },
+      },
     });
-    const prevLink = wrapper.find('[aria-label="vorherige Ergebnisse"]');
-    expect(prevLink.exists()).toBe(true);
-    expect(prevLink.text()).toContain("Zurück");
+
+    expect(screen.getByLabelText("vorherige Ergebnisse")).toBeInTheDocument();
+
+    expect(screen.getByText("Zurück")).toBeInTheDocument();
   });
 
   it("emits updatePage with correct number when clicking next", async () => {
-    const wrapper = await mountWithPage({
-      ...basePage,
-      view: { next: "/api/results?pageIndex=2" },
+    const { emitted } = await renderComponent({
+      page: {
+        ...basePage,
+        view: { next: "/api/results?pageIndex=2" },
+      },
     });
-    await nextTick();
-    await wrapper.find('[aria-label="nächste Ergebnisse"]').trigger("click");
-    expect(wrapper.emitted("updatePage")).toBeTruthy();
-    expect(wrapper.emitted("updatePage")![0]![0]).toBe(2);
+
+    const nextBtn = screen.getByLabelText("nächste Ergebnisse");
+    await fireEvent.click(nextBtn);
+
+    expect(emitted().updatePage).toBeTruthy();
+    const updatePageIndex = emitted().updatePage?.[0] as Array<number>;
+    expect(updatePageIndex[0]).toBe(2);
   });
 
   it("emits updatePage with correct number when clicking previous", async () => {
-    const wrapper = await mountWithPage({
-      ...basePage,
-      view: { previous: "/api/results?pageIndex=0" },
+    const { emitted } = await renderComponent({
+      page: {
+        ...basePage,
+        view: { previous: "/api/results?pageIndex=0" },
+      },
     });
-    await wrapper.find('[aria-label="vorherige Ergebnisse"]').trigger("click");
-    expect(wrapper.emitted("updatePage")).toBeTruthy();
-    expect(wrapper.emitted("updatePage")![0]![0]).toBe(0);
+
+    const prevBtn = screen.getByLabelText("vorherige Ergebnisse");
+    await fireEvent.click(prevBtn);
+
+    expect(emitted().updatePage).toBeTruthy();
+    const updatePageIndex = emitted().updatePage?.[0] as Array<number>;
+    expect(updatePageIndex[0]).toBe(0);
   });
 
   it("renders nothing if isLoading is true", async () => {
-    const page = {
-      ...basePage,
-      view: {
-        previous: "/api/results?pageIndex=0",
-        next: "/api/results?pageIndex=2",
+    await renderComponent({
+      page: {
+        ...basePage,
+        view: {
+          previous: "/api/results?pageIndex=0",
+          next: "/api/results?pageIndex=2",
+        },
       },
-    };
-    const wrapper = await mountSuspended(Pagination, {
-      props: { page, isLoading: true },
+      isLoading: true,
     });
-    expect(wrapper.html()).not.toContain("Zurück");
-    expect(wrapper.html()).not.toContain("Weiter");
+
+    expect(screen.queryByText("Zurück")).not.toBeInTheDocument();
+    expect(screen.queryByText("Weiter")).not.toBeInTheDocument();
   });
 
   it("displays navigation position correctly (top/bottom slots)", async () => {
-    const wrapperTop = await mountSuspended(Pagination, {
-      props: { page: basePage, navigationPosition: "top" },
-      slots: { default: '<div data-test="slot">SlotContent</div>' },
-    });
-    const wrapperBottom = await mountSuspended(Pagination, {
-      props: { page: basePage, navigationPosition: "bottom" },
-      slots: { default: '<div data-test="slot">SlotContent</div>' },
-    });
-    expect(wrapperTop.find('[data-test="slot"]').exists()).toBe(true);
-    expect(wrapperBottom.find('[data-test="slot"]').exists()).toBe(true);
+    await renderComponent(
+      { page: basePage, navigationPosition: "top" },
+      { default: '<div data-test="slot">SlotContent</div>' },
+    );
+    expect(screen.getAllByText("SlotContent").length).toBeGreaterThan(0);
+
+    await renderComponent(
+      { page: basePage, navigationPosition: "bottom" },
+      { default: '<div data-test="slot">SlotContent</div>' },
+    );
+    expect(screen.getAllByText("SlotContent").length).toBeGreaterThan(0);
   });
 });
