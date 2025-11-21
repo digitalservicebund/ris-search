@@ -22,7 +22,7 @@ const factory = (userConsent: boolean | undefined) =>
     global: {
       plugins: [
         createTestingPinia({
-          stubActions: ["setTracking"],
+          stubActions: true,
           initialState: {
             postHog: {
               userConsent: userConsent,
