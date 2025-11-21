@@ -105,6 +105,35 @@ test.describe("general search page features", () => {
   });
 });
 
+test.describe("searching all documents", () => {
+  test("shows search results for all document kinds", async ({ page }) => {
+    await navigate(page, "/search");
+
+    await page.getByRole("combobox", { name: "10" }).click();
+    await page.getByRole("option", { name: "50" }).click();
+
+    // Norm
+    await expect(
+      page.getByText(
+        "Fiktives Gesetz zur Musterfinanzierung politischer Einrichtungen",
+      ),
+    ).toBeVisible();
+
+    // Caselaw Urteil
+    await expect(page.getByText("Testheader für Urteil 7.")).toBeVisible();
+
+    // Caselaw Beschluss
+    await expect(
+      page.getByText(
+        "Beispielentscheid — Beispielheader für den Beschlusstext.",
+      ),
+    ).toBeVisible();
+
+    // Literature
+    await expect(page.getByText("Erstes Test-Dokument ULI")).toBeVisible();
+  });
+});
+
 test.describe("searching legislation", () => {
   test("narrows search", async ({ page }) => {
     await navigate(page, "/search?query=fiktiv");
@@ -143,6 +172,8 @@ test.describe("searching legislation", () => {
     } else {
       await expect(searchResult).not.toHaveText(/29.04.2023/);
     }
+
+    await expect(searchResult).toHaveText(/Aktuell gültig/);
 
     // Result detail link
     await expect(
@@ -196,6 +227,61 @@ test.describe("searching legislation", () => {
       page.getByRole("heading", {
         level: 1,
         name: "Fiktive Fruchtsaft- und Erfrischungsgetränkeverordnung zu Testzwecken",
+      }),
+    ).toBeVisible();
+  });
+
+  test("displays validity status batches", async ({ page }) => {
+    // Set time to before the norm is in force
+    await page.clock.setFixedTime(new Date("2012-10-16T12:00:00"));
+    await navigate(page, "/search?query=Gerätebauart&category=N");
+
+    await expect(getSearchResults(page).first()).toHaveText(
+      /Zukünftig in Kraft/,
+    );
+
+    // Set time to when the norm is in force
+    await page.clock.setFixedTime(new Date("2012-10-17T12:00:00"));
+    await navigate(page, "/search?query=Gerätebauart&category=N");
+
+    await expect(getSearchResults(page).first()).toHaveText(/Aktuell gültig/);
+
+    // Set time to after the norm is in force
+    await page.clock.setFixedTime(new Date("2023-10-19T12:00:00"));
+    await navigate(page, "/search?query=Gerätebauart&category=N");
+
+    await expect(getSearchResults(page).first()).toHaveText(/Außer Kraft/);
+  });
+
+  test("shows only most relevant Fassung", async ({
+    page,
+    privateFeaturesEnabled,
+  }) => {
+    // Changing the time and expect the older fassung to be the most relevant now
+    await page.clock.setFixedTime(new Date("2022-08-03T12:00:00"));
+    await navigate(
+      page,
+      "/search?query=zum+Testen+von+Fassungen+des+Gesetzes.&category=N",
+    );
+
+    const searchResults = getSearchResults(page);
+    await expect(searchResults).toHaveCount(1);
+
+    const searchResult = searchResults.first();
+
+    await expect(searchResult).toHaveText(/Norm/);
+    if (privateFeaturesEnabled) {
+      await expect(searchResult).toHaveText(/04.08.2020/);
+    } else {
+      await expect(searchResult).not.toHaveText(/04.08.2020/);
+    }
+
+    await expect(searchResult).toHaveText(/Aktuell gültig/);
+
+    // Result detail link
+    await expect(
+      searchResult.getByRole("link", {
+        name: "Zum Testen von Fassungen - Alte Fassung",
       }),
     ).toBeVisible();
   });
