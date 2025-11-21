@@ -27,6 +27,7 @@ public class PageUtils {
   private final String caseLawsIndexName;
   private final String literatureIndexName;
   private final String normsIndexName;
+  private final String administrativeDirectiveIndexName;
 
   private static final Logger logger = LogManager.getLogger(PageUtils.class);
 
@@ -35,6 +36,7 @@ public class PageUtils {
     caseLawsIndexName = configurations.getCaseLawsIndexName();
     literatureIndexName = configurations.getLiteratureIndexName();
     normsIndexName = configurations.getNormsIndexName();
+    administrativeDirectiveIndexName = configurations.getAdministrativeDirectiveIndexName();
   }
 
   @SuppressWarnings("unchecked")
@@ -79,9 +81,10 @@ public class PageUtils {
       entity = converter.read(Literature.class, searchHit.getContent());
     } else if (indexName != null && indexName.startsWith(normsIndexName)) {
       entity = converter.read(Norm.class, searchHit.getContent());
+    } else if (indexName != null && indexName.startsWith(administrativeDirectiveIndexName)) {
+      return Optional.empty();
     } else {
-      logger.warn("Unexpected index on document search {}", searchHit.getIndex());
-
+      logger.error("Unexpected index on document search {}", searchHit.getIndex());
       return Optional.empty();
     }
 

@@ -35,6 +35,8 @@ class PageUtilsTest {
     Mockito.when(mockConfigurations.getCaseLawsIndexName()).thenReturn("caselaws");
     Mockito.when(mockConfigurations.getLiteratureIndexName()).thenReturn("literature");
     Mockito.when(mockConfigurations.getNormsIndexName()).thenReturn("norms");
+    Mockito.when(mockConfigurations.getAdministrativeDirectiveIndexName())
+        .thenReturn("administrative_directive");
     Mockito.when(mockSearchHit.getIndex()).thenReturn("unexpectedIndex");
 
     PageUtils instance = new PageUtils(mockConfigurations);
