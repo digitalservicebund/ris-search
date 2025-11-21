@@ -1,6 +1,8 @@
 import com.adarshr.gradle.testlogger.theme.ThemeType
+import com.diffplug.spotless.FormatterFunc
 import com.github.jk1.license.filter.DependencyFilter
 import com.github.jk1.license.filter.LicenseBundleNormalizer
+import java.io.Serializable
 
 buildscript { repositories { mavenCentral() } }
 
@@ -111,14 +113,19 @@ spotless {
         targetExclude(generatedPath)
         removeUnusedImports()
         googleJavaFormat()
-        custom("Refuse wildcard imports") {
-            // Wildcard imports can't be resolved by spotless itself.
-            // This will require the developer themselves to adhere to best practices.
-            if (it.contains("\nimport .*\\*;".toRegex())) {
-                throw AssertionError("Do not use wildcard imports. 'spotlessApply' cannot resolve this issue.")
-            }
-            it
-        }
+        // Wildcard imports can't be resolved by spotless itself.
+        // This will require the developer themselves to adhere to best practices.
+        custom(
+            "Refuse wildcard imports",
+            object : Serializable, FormatterFunc {
+                override fun apply(input: String): String {
+                    if (input.contains("*;\n")) {
+                        throw GradleException("No wildcard imports allowed.")
+                    }
+                    return input
+                }
+            },
+        )
         targetExclude(pactPath, generatedPath)
     }
     kotlin {
@@ -126,7 +133,7 @@ spotless {
         targetExclude(pactPath, generatedPath)
     }
     kotlinGradle {
-        ktlint()
+        ktlint("1.2.1")
         targetExclude(pactPath, generatedPath)
     }
 }
