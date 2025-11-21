@@ -6,7 +6,10 @@ import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationU
 import de.bund.digitalservice.ris.search.models.opensearch.Literature;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import java.util.List;
+import java.util.Optional;
 import java.util.regex.Pattern;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.core.SearchHit;
@@ -25,6 +28,8 @@ public class PageUtils {
   private final String literatureIndexName;
   private final String normsIndexName;
 
+  private static final Logger logger = LogManager.getLogger(PageUtils.class);
+
   @Autowired
   public PageUtils(Configurations configurations) {
     caseLawsIndexName = configurations.getCaseLawsIndexName();
@@ -41,7 +46,11 @@ public class PageUtils {
       SearchHits<Document> searchHits, Pageable pageable, ElasticsearchConverter converter) {
 
     List<SearchHit<AbstractSearchEntity>> convertedSearchHits =
-        searchHits.stream().map(searchHit -> convertSearchHit(searchHit, converter)).toList();
+        searchHits.stream()
+            .map(searchHit -> convertSearchHit(searchHit, converter))
+            .filter(Optional::isPresent)
+            .map(Optional::get)
+            .toList();
 
     SearchHits<AbstractSearchEntity> finalSearchHits =
         new SearchHitsImpl<>(
@@ -59,7 +68,7 @@ public class PageUtils {
     return SearchHitSupport.searchPageFor(finalSearchHits, pageable);
   }
 
-  public SearchHit<AbstractSearchEntity> convertSearchHit(
+  public Optional<SearchHit<AbstractSearchEntity>> convertSearchHit(
       SearchHit<Document> searchHit, ElasticsearchConverter converter) {
     AbstractSearchEntity entity;
     String indexName = searchHit.getIndex();
@@ -71,24 +80,28 @@ public class PageUtils {
     } else if (indexName != null && indexName.startsWith(normsIndexName)) {
       entity = converter.read(Norm.class, searchHit.getContent());
     } else {
-      throw new IllegalStateException("Unexpected value: " + searchHit.getIndex());
+      logger.warn("Unexpected index on document search {}", searchHit.getIndex());
+
+      return Optional.empty();
     }
 
-    return new SearchHit<>(
-        searchHit.getIndex(),
-        searchHit.getId(),
-        searchHit.getRouting(),
-        searchHit.getScore(),
-        searchHit.getSortValues().toArray(),
-        // For mixed search hits, the keys of the highlightFields Map must be converted manually.
-        // If a single index is queried, the names are converted automatically by {@link
-        // ElasticsearchOperations}.
-        searchHit.getHighlightFields(),
-        searchHit.getInnerHits(),
-        searchHit.getNestedMetaData(),
-        searchHit.getExplanation(),
-        searchHit.getMatchedQueries(),
-        entity);
+    return Optional.of(
+        new SearchHit<>(
+            searchHit.getIndex(),
+            searchHit.getId(),
+            searchHit.getRouting(),
+            searchHit.getScore(),
+            searchHit.getSortValues().toArray(),
+            // For mixed search hits, the keys of the highlightFields Map must be converted
+            // manually.
+            // If a single index is queried, the names are converted automatically by {@link
+            // ElasticsearchOperations}.
+            searchHit.getHighlightFields(),
+            searchHit.getInnerHits(),
+            searchHit.getNestedMetaData(),
+            searchHit.getExplanation(),
+            searchHit.getMatchedQueries(),
+            entity));
   }
 
   public static final Pattern SNAKE_CASE_PATTERN = Pattern.compile("_([a-z])");

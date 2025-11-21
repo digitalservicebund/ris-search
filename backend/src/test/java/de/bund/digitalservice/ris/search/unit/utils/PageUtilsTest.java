@@ -1,17 +1,18 @@
 package de.bund.digitalservice.ris.search.unit.utils;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import de.bund.digitalservice.ris.search.config.opensearch.Configurations;
+import de.bund.digitalservice.ris.search.models.opensearch.AbstractSearchEntity;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.utils.PageUtils;
 import java.util.Map;
+import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.data.elasticsearch.core.SearchHit;
 import org.springframework.data.elasticsearch.core.convert.ElasticsearchConverter;
+import org.springframework.data.elasticsearch.core.document.Document;
 
 class PageUtilsTest {
 
@@ -26,8 +27,9 @@ class PageUtilsTest {
   }
 
   @Test
-  void testConvertSearchHit_ThrowsIllegalStateException() {
-    var mockSearchHit = Mockito.mock(SearchHit.class);
+  void testConvertSearchHit_IngoresUnexpectedIndex() {
+    @SuppressWarnings("unchecked")
+    var mockSearchHit = (SearchHit<Document>) Mockito.mock(SearchHit.class);
     ElasticsearchConverter mockConverter = Mockito.mock(ElasticsearchConverter.class);
     Configurations mockConfigurations = Mockito.mock(Configurations.class);
     Mockito.when(mockConfigurations.getCaseLawsIndexName()).thenReturn("caselaws");
@@ -37,12 +39,10 @@ class PageUtilsTest {
 
     PageUtils instance = new PageUtils(mockConfigurations);
 
-    IllegalStateException exception =
-        assertThrows(
-            IllegalStateException.class,
-            () -> instance.convertSearchHit(mockSearchHit, mockConverter));
+    Optional<SearchHit<AbstractSearchEntity>> searchHit =
+        instance.convertSearchHit(mockSearchHit, mockConverter);
 
-    assertEquals("Unexpected value: unexpectedIndex", exception.getMessage());
+    assertThat(searchHit).isEmpty();
   }
 
   @Test
