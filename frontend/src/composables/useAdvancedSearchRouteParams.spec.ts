@@ -1,3 +1,4 @@
+import { reactive, nextTick } from "vue";
 import { DocumentKind } from "~/types";
 
 describe("useAdvancedSearchRouteParams", () => {
@@ -465,5 +466,26 @@ describe("useAdvancedSearchRouteParams", () => {
         }),
       });
     });
+  });
+
+  it("reacts to route changes", async () => {
+    const routeQuery = reactive({ query: { q: "test before" } });
+
+    vi.doMock("#app", () => ({
+      useRoute: vi.fn().mockReturnValue(routeQuery),
+    }));
+
+    const { useAdvancedSearchRouteParams } = await import(
+      "./useAdvancedSearchRouteParams"
+    );
+
+    const { query } = useAdvancedSearchRouteParams();
+
+    expect(query.value).toEqual("test before");
+
+    routeQuery.query = { q: "test after" };
+    await nextTick();
+
+    expect(query.value).toEqual("test after");
   });
 });

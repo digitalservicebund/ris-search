@@ -22,14 +22,9 @@ export function useAdvancedSearchRouteParams() {
 
   // General parameters -------------------------------------
 
-  const documentKind = ref<DocumentKind>(
-    typeof route.query.documentKind === "string" &&
-      isDocumentKind(route.query.documentKind)
-      ? route.query.documentKind
-      : DocumentKind.Norm,
-  );
+  const documentKind = ref<DocumentKind>(DocumentKind.Norm);
 
-  const query = ref(decodeURIComponent(route.query.q?.toString() ?? ""));
+  const query = ref<string>("");
 
   // Date filter --------------------------------------------
 
@@ -54,21 +49,39 @@ export function useAdvancedSearchRouteParams() {
     else return init;
   }
 
-  const dateFilter = ref<DateFilterValue>({
-    type: getInitialFilterTypeFromQuery(route.query.dateFilterType),
-    from: route.query.dateFilterFrom?.toString(),
-    to: route.query.dateFilterTo?.toString(),
-  });
+  const dateFilter = ref<DateFilterValue>({ type: "allTime" });
 
   // Sort & pagination --------------------------------------
 
-  const sort = ref(route.query.sort?.toString() ?? "default");
+  const sort = ref<string>("default");
 
-  const itemsPerPage = ref(route.query.itemsPerPage?.toString() ?? "50");
+  const itemsPerPage = ref<string>("50");
 
-  const pageIndex = ref(tryGetPageIndexFromQuery(route.query.pageIndex));
+  const pageIndex = ref<number>(0);
 
-  // Saving -------------------------------------------------
+  // Saving and restoring -----------------------------------
+
+  function loadFilterStateFromRoute(routeQuery = route.query) {
+    documentKind.value =
+      typeof routeQuery.documentKind === "string" &&
+      isDocumentKind(routeQuery.documentKind)
+        ? routeQuery.documentKind
+        : DocumentKind.Norm;
+
+    query.value = decodeURIComponent(routeQuery.q?.toString() ?? "");
+
+    dateFilter.value = {
+      type: getInitialFilterTypeFromQuery(routeQuery.dateFilterType),
+      from: routeQuery.dateFilterFrom?.toString(),
+      to: routeQuery.dateFilterTo?.toString(),
+    };
+
+    sort.value = routeQuery.sort?.toString() ?? "default";
+
+    itemsPerPage.value = routeQuery.itemsPerPage?.toString() ?? "50";
+
+    pageIndex.value = tryGetPageIndexFromQuery(routeQuery.pageIndex);
+  }
 
   function saveFilterStateToRoute() {
     return navigateTo({
@@ -85,6 +98,12 @@ export function useAdvancedSearchRouteParams() {
       },
     });
   }
+
+  watch(
+    () => route.query,
+    (val) => loadFilterStateFromRoute(val),
+    { immediate: true },
+  );
 
   return {
     dateFilter,
