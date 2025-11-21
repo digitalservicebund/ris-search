@@ -175,14 +175,14 @@ async function submit() {
             {{ searchError.message }}
           </Message>
 
-          <output v-if="searchResults">
-            <SearchResult
+          <ul v-if="searchResults" aria-label="Suchergebnisse">
+            <li
               v-for="searchResult in searchResults.member"
               :key="getIdentifier(searchResult.item)"
-              :search-result
-              :order="1"
-            />
-          </output>
+            >
+              <SearchResult :search-result :order="1" />
+            </li>
+          </ul>
         </Pagination>
       </div>
     </div>
