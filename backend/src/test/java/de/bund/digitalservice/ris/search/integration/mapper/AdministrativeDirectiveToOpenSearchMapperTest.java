@@ -6,6 +6,7 @@ import de.bund.digitalservice.ris.LoadXmlUtils;
 import de.bund.digitalservice.ris.search.mapper.AdministrativeDirectiveLdmlToOpenSearchMapper;
 import de.bund.digitalservice.ris.search.models.opensearch.AdministrativeDirective;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 
@@ -30,8 +31,8 @@ class AdministrativeDirectiveToOpenSearchMapperTest {
             .documentType("Rundschreiben")
             .content("text content")
             .normgeber("NG Ministerium")
-            .entryIntoEffectDate("1978-01-17")
-            .expiryDate("2026-01-01")
+            .entryIntoEffectDate(LocalDate.of(1978, 1, 17))
+            .expiryDate(LocalDate.of(2026, 1, 1))
             .normReferences(List.of("PhanGB"))
             .caselawReferences(List.of("Aktivzitierung I"))
             .fundstelleReferences(List.of("Lorem Ipsum 19XX, 11"))
