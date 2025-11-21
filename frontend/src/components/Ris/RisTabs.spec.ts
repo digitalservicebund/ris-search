@@ -1,5 +1,6 @@
+import { renderSuspended } from "@nuxt/test-utils/runtime";
 import userEvent from "@testing-library/user-event";
-import { render, screen } from "@testing-library/vue";
+import { screen } from "@testing-library/vue";
 import { nextTick } from "vue";
 import RisTabs from "./RisTabs.vue";
 import IcBaselineSubject from "~icons/ic/baseline-subject";
@@ -25,8 +26,8 @@ describe("RisTabs.vue", () => {
     },
   ];
 
-  it("renders all tabs with correct labels, hrefs, and aria-labels", () => {
-    render(RisTabs, {
+  it("renders all tabs with correct labels, hrefs, and aria-labels", async () => {
+    await renderSuspended(RisTabs, {
       props: {
         tabs: mockTabs,
         label: "Test tabs",
@@ -45,8 +46,8 @@ describe("RisTabs.vue", () => {
     expect(links[1]).toHaveAttribute("aria-label", "Details zur Übersetzung");
   });
 
-  it("renders nav with correct aria-label", () => {
-    render(RisTabs, {
+  it("renders nav with correct aria-label", async () => {
+    await renderSuspended(RisTabs, {
       props: {
         tabs: mockTabs,
         label: "Test tabs",
@@ -57,8 +58,8 @@ describe("RisTabs.vue", () => {
     expect(nav).toBeVisible();
   });
 
-  it("sets first tab as active by default", () => {
-    render(RisTabs, {
+  it("sets first tab as active by default", async () => {
+    await renderSuspended(RisTabs, {
       props: {
         tabs: mockTabs,
         label: "Test tabs",
@@ -70,8 +71,8 @@ describe("RisTabs.vue", () => {
     expect(links[1]).not.toHaveAttribute("aria-current");
   });
 
-  it("uses defaultTab prop when provided", () => {
-    render(RisTabs, {
+  it("uses defaultTab prop when provided", async () => {
+    await renderSuspended(RisTabs, {
       props: {
         tabs: mockTabs,
         label: "Test tabs",
@@ -85,7 +86,7 @@ describe("RisTabs.vue", () => {
   });
 
   it("switches active tab on click when JS is enabled", async () => {
-    render(RisTabs, {
+    await renderSuspended(RisTabs, {
       props: {
         tabs: mockTabs,
         label: "Test tabs",
@@ -105,7 +106,7 @@ describe("RisTabs.vue", () => {
     expect(updatedLinks[1]!).toHaveAttribute("aria-current", "page");
   });
 
-  it("renders tabs without icons when icon is not provided", () => {
+  it("renders tabs without icons when icon is not provided", async () => {
     const tabsWithoutIcons = [
       {
         id: "tab1",
@@ -121,7 +122,7 @@ describe("RisTabs.vue", () => {
       },
     ];
 
-    render(RisTabs, {
+    await renderSuspended(RisTabs, {
       props: {
         tabs: tabsWithoutIcons,
         label: "Test tabs",
