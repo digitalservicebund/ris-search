@@ -50,7 +50,7 @@ class AdvancedSearchControllerApiTest extends ContainersIntegrationBase {
 
   private static Stream<Arguments> caseLawAdvancedSearchParams() {
     var arguments = new ArrayList<Arguments>();
-    for (var alias : new String[] {"document_type", "DOKUMENTTYP", "TYP"}) {
+    for (var alias : new String[] {"document_type", "DOKUMENTTYP", "TYP", "DT"}) {
       arguments.add(Arguments.of(alias, "Urteil", CaseLawTestData.URTEIL_COUNT));
     }
     arguments.add(Arguments.of("location", "Berlin", 2));
@@ -81,7 +81,7 @@ class AdvancedSearchControllerApiTest extends ContainersIntegrationBase {
       arguments.add(Arguments.of(alias, "Leitsatz", CaseLawTestData.WITH_LEITSATZ_COUNT));
     }
 
-    for (var alias : new String[] {"headnote", "ORIENTIERUNGSSATZ", "OSATZ"}) {
+    for (var alias : new String[] {"headnote", "ORIENTIERUNGSSATZ", "OSATZ", "OS"}) {
       arguments.add(Arguments.of(alias, "Orientierungssatz", 1));
     }
 
@@ -103,7 +103,7 @@ class AdvancedSearchControllerApiTest extends ContainersIntegrationBase {
                 .filter(d -> Objects.equals(d.tenor(), "Tenor"))
                 .count();
     Assertions.assertTrue(documentsWithTenorCount > 0);
-    for (var alias : new String[] {"tenor", "TENOR"}) {
+    for (var alias : new String[] {"tenor", "TENOR", "TN"}) {
       arguments.add(Arguments.of(alias, "Tenor", documentsWithTenorCount));
     }
 
@@ -119,7 +119,7 @@ class AdvancedSearchControllerApiTest extends ContainersIntegrationBase {
       arguments.add(Arguments.of(alias, "judicialbodyTest", 1));
     }
 
-    for (var alias : new String[] {"court_keyword", "GER", "GERICHT"}) {
+    for (var alias : new String[] {"court_keyword", "GER", "GERICHT", "G"}) {
       arguments.add(Arguments.of(alias, "LG Saarbrücken", 1));
     }
 
@@ -342,6 +342,38 @@ class AdvancedSearchControllerApiTest extends ContainersIntegrationBase {
         .andDo(print())
         .andExpect(jsonPath("$.member", hasSize(1)))
         .andExpect(jsonPath("$.member[0].item.abbreviation", Matchers.is("TeG3")))
+        .andExpect(status().isOk());
+  }
+
+  @ParameterizedTest
+  @ValueSource(strings = {"article_names", "UP"})
+  @DisplayName("Should return 200 when looking for article names and aliases")
+  void shouldReturnOkArticleNamesQuery(String queryParam) throws Exception {
+
+    mockMvc
+        .perform(
+            get(ApiConfig.Paths.LEGISLATION_ADVANCED_SEARCH
+                    + String.format("?query=%s:§ 1 Example article", queryParam))
+                .contentType(MediaType.APPLICATION_JSON))
+        .andDo(print())
+        .andExpect(jsonPath("$.member", hasSize(1)))
+        .andExpect(jsonPath("$.member[0].item.abbreviation", Matchers.is("TeG")))
+        .andExpect(status().isOk());
+  }
+
+  @ParameterizedTest
+  @ValueSource(strings = {"article_texts", "TP"})
+  @DisplayName("Should return 200 when looking for article text and aliases")
+  void shouldReturnOkArticleTextsQuery(String queryParam) throws Exception {
+
+    mockMvc
+        .perform(
+            get(ApiConfig.Paths.LEGISLATION_ADVANCED_SEARCH
+                    + String.format("?query=%s:example text 1", queryParam))
+                .contentType(MediaType.APPLICATION_JSON))
+        .andDo(print())
+        .andExpect(jsonPath("$.member", hasSize(1)))
+        .andExpect(jsonPath("$.member[0].item.abbreviation", Matchers.is("TeG")))
         .andExpect(status().isOk());
   }
 
