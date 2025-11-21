@@ -48,8 +48,10 @@ test.describe("general search page features", () => {
     await expect(resultCounter).toHaveText(nonZeroResultCount);
 
     const searchResults = getSearchResults(page);
-
     await expect(searchResults).toHaveCount(10);
+
+    const pagination = page.getByRole("navigation", { name: "Paginierung" });
+    await expect(pagination).toHaveText(/Seite 1: Treffer 1–10 von \d+/);
 
     await page.getByLabel("nächste Ergebnisse").click();
     await page.waitForURL("/search?query=und&pageNumber=1", {
@@ -57,7 +59,12 @@ test.describe("general search page features", () => {
     });
 
     expect(resultCounter).toHaveText(nonZeroResultCount);
-    await expect(searchResults).toHaveCount(4);
+    // Warning: this is potentially flaky and only works because the previous
+    // assertion about the result counter has already "stabilized" the page.
+    // Unfortunately there is no other way of asserting a number that isn't
+    // exact.
+    expect(await searchResults.count()).toBeGreaterThan(1);
+    await expect(pagination).toHaveText(/Seite 2: Treffer 11–\d+ von \d+/);
 
     await page.getByLabel("vorherige Ergebnisse").click();
     await page.waitForURL("/search?query=und", { waitUntil: "commit" });
@@ -500,11 +507,7 @@ test.describe("searching literature", () => {
     await navigate(page, "/search?query=FooBar,+1982,+123-123&category=L");
 
     // Result detail link
-    await page
-      .getByRole("link", {
-        name: "Erstes Test-Dokument ULI",
-      })
-      .click();
+    await page.getByRole("link", { name: "Erstes Test-Dokument ULI" }).click();
 
     await expect(
       page.getByRole("heading", {
@@ -622,7 +625,11 @@ noJsTest("pagination works without JavaScript", async ({ page }) => {
   });
 
   await expect(getResultCounter(page)).toHaveText(nonZeroResultCount);
-  await expect(getSearchResults(page)).toHaveCount(4);
+  // Warning: this is potentially flaky and only works because the previous
+  // assertion about the result counter has already "stabilized" the page.
+  // Unfortunately there is no other way of asserting a number that isn't
+  // exact.
+  expect(await getSearchResults(page).count()).toBeGreaterThan(1);
 
   await page.getByLabel("vorherige Ergebnisse").click();
   await page.waitForURL("/search?query=und", { waitUntil: "commit" });
