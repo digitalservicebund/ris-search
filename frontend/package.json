@@ -89,6 +89,7 @@
   },
   "resolutions": {
     "nwsapi": "2.2.20",
-    "glob": "11.1.0"
+    "glob": "11.1.0",
+    "brace-expansion": "2.0.2"
   }
 }
