@@ -89,7 +89,7 @@ test.describe("general search page features", () => {
     await expect(page).toHaveURL(/sort=-date/);
   });
 
-  test("sort by relevance", async ({ page }) => {
+  test("sort by relevance (default)", async ({ page }) => {
     await navigate(page, "/search?query=fiktiv&sort=date");
 
     await page.getByRole("combobox", { name: "Datum: Älteste zuerst" }).click();
