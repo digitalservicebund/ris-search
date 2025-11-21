@@ -130,7 +130,7 @@ const itemsOnPage = computed(() => buildItemsOnPageString(props.page));
         <Button
           v-if="!isOnlyPage"
           :to="nextPageRoute"
-          :as="NuxtLink"
+          :as="nextPageRoute ? NuxtLink : undefined"
           aria-label="nächste Ergebnisse"
           severity="secondary"
           icon-pos="right"
