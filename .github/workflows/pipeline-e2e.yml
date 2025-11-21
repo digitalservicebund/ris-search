@@ -2,22 +2,10 @@ name: End-to-end tests
 
 on:
   workflow_call:
-    inputs:
-      backend-container-image-tag:
-        description: 'The full tag for the backend container image'
-        required: true
-        type: string
-      frontend-container-image-tag:
-        description: 'The full tag for the frontend container image'
-        required: true
-        type: string
-
+  workflow_dispatch:
 
 env:
   RUN_ID: ${{ github.run_id }}
-  # Used by the docker-compose-ci.yml to load the correct images
-  BACKEND_IMAGE: ${{ inputs.backend-container-image-tag}}
-  FRONTEND_IMAGE: ${{ inputs.frontend-container-image-tag}}
 
 jobs:
   e2e-tests:
@@ -29,33 +17,77 @@ jobs:
         browser: [chromium, firefox, mobile]
         include:
           - configuration_label: prototype
-            env_file_name: .env.ci.prototype
             private_features_enabled: false
           - configuration_label: private
-            env_file_name: .env.ci.private
             private_features_enabled: true
     steps:
       - uses: actions/checkout@v5
         with:
           fetch-depth: 40
-      - name: Log into container registry
-        uses: docker/login-action@28fdb31ff34708d19615a74d67103ddc2ea9725c
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
       - name: Adjust permissions to Docker
         run: sudo chmod 666 /var/run/docker.sock
-      - name: Run backend and frontend
-        run: docker compose -f docker-compose-ci.yml up -d
+      - name: Cache OpenSearch image
+        id: opensearch-cache
+        uses: actions/cache@v4
+        with:
+          path: /home/runner/.docker-image-cache/opensearch.tar
+          key: opensearch-image-cache-2.11.0
+      - name: Load cached OpenSearch image if exists
+        if: steps.opensearch-cache.outputs.cache-hit == 'true'
+        run: |
+          docker load -i /home/runner/.docker-image-cache/opensearch.tar
+      - name: Pull and cache OpenSearch image
+        if: steps.opensearch-cache.outputs.cache-hit != 'true'
+        run: |
+          mkdir -p /home/runner/.docker-image-cache
+          docker pull opensearchproject/opensearch:2.11.0
+          docker save opensearchproject/opensearch:2.11.0 -o /home/runner/.docker-image-cache/opensearch.tar
+      - name: Start opensearch container
+        run: docker compose -f docker-compose.yml up -d opensearch
+      - uses: actions/checkout@v5
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: "21.0"
+          distribution: "temurin"
+          cache: gradle
+      - name: Grant execute permission for gradlew
+        working-directory: ./backend
+        run: chmod +x gradlew
+      - name: Wait for OpenSearch health
+        run: |
+          echo "Waiting for OpenSearch on http://localhost:9200 ..."
+          until curl --silent --fail http://localhost:9200/_cluster/health; do
+            echo "Still waiting for OpenSearch..."
+            sleep 5
+          done
+      - name: Start backend locally (background)
+        working-directory: ./backend
         env:
-          ENV_FILE_NAME: ${{ matrix.env_file_name }}
+          SPRING_PROFILES_ACTIVE: e2e,default
+          OPENSEARCH_HOST: localhost
+          THC_PORT: 8090
+          NODE_OPTIONS: "--max_old_space_size=4096"
+        run: |
+          nohup ./gradlew bootRun --no-daemon > backend.log 2>&1 &
+          sleep 8
       - uses: actions/setup-node@v6
         with:
           node-version: 24
+          cache: 'yarn'
+          cache-dependency-path: ./frontend/yarn.lock
       - name: Install Node modules
         run: yarn install --immutable
         working-directory: ./frontend
+      - name: Start frontend locally (background)
+        working-directory: ./frontend
+        env:
+          NUXT_PUBLIC_PRIVATE_FEATURES_ENABLED: ${{ matrix.private_features_enabled }}
+          NUXT_PUBLIC_RIS_BACKEND_URL: http://localhost:8090
+          SENTRY_TELEMETRY: false
+          CI: true
+        run: |
+          nohup yarn dev --no-devtools --port 3000 > frontend.log 2>&1 &
       - name: Get Playwright version
         run: echo "PLAYWRIGHT_VERSION=$(yarn list --pattern @playwright/test | awk -F "@" 'NR==2 {print $NF}')" >> $GITHUB_ENV
         working-directory: ./frontend
@@ -64,28 +96,31 @@ jobs:
         uses: actions/cache@v4
         with:
           path: /home/runner/.cache/ms-playwright
-          key: ${{ runner.os }}-playwright-${{ env.PLAYWRIGHT_VERSION }}-chromium
+          key: ${{ runner.os }}-playwright-${{ env.PLAYWRIGHT_VERSION }}
       - name: Install Playwright browsers
         run: yarn exec playwright install --with-deps chromium firefox webkit
         working-directory: ./frontend
-      - name: Wait for frontend to respond or dump logs if fail
+      - name: Wait for backend to respond
+        run: |
+          echo "Waiting for backend on http://localhost:8090/actuator/health ..."
+          until curl --silent --fail http://localhost:8090/actuator/health; do
+            echo "Still waiting..."
+            sleep 5
+          done
+      - name: Wait for frontend to fully render
         timeout-minutes: 5
         run: |
-          echo "Waiting for frontend to respond at http://localhost:3000 ..."
-          set +e
-          until curl --silent --fail http://localhost:3000; do
-            echo "Still waiting for frontend..."
-            sleep 15
+          echo "Waiting for Nuxt frontend to render HTML..."
+          until curl -s http://localhost:3000 | grep -q 'id="__nuxt"'; do
+            echo "Still waiting for Nuxt..."
+            sleep 5
           done
+          echo "Nuxt is ready!"
       - name: Run Playwright tests
         run: yarn exec playwright test --project ${{ matrix.browser }}
         working-directory: ./frontend
         env:
           NUXT_PUBLIC_PRIVATE_FEATURES_ENABLED: ${{ matrix.private_features_enabled }}
-          NUXT_PUBLIC_RIS_BACKEND_URL: http://localhost:8090
-          NUXT_PUBLIC_RIS_BACKEND_URL_SSR: http://backend:8090
-          NUXT_PUBLIC_FRONTEND_URL: http://localhost:3000
-          CI: true
           TZ: Europe/Berlin
       - name: Upload test reports
         uses: actions/upload-artifact@v5
@@ -103,9 +138,19 @@ jobs:
           retention-days: 5
       - name: Output logs on failure
         if: ${{ failure() }}
-        run: docker compose -f docker-compose-ci.yml logs > docker-compose-logs-${{ matrix.configuration_label }}-${{ matrix.browser }}.log
-        env:
-          ENV_FILE_NAME: ${{ matrix.env_file_name }}
+        run: docker compose -f docker-compose.yml logs > docker-compose-logs-${{ matrix.configuration_label }}-${{ matrix.browser }}.log
+      - name: Upload backend log
+        uses: actions/upload-artifact@v5
+        if: ${{ failure() }}
+        with:
+          name: backend-log-${{ matrix.configuration_label }}-${{ matrix.browser }}
+          path: backend/backend.log
+      - name: Upload frontend log
+        uses: actions/upload-artifact@v5
+        if: ${{ failure() }}
+        with:
+          name: frontend-log-${{ matrix.configuration_label }}-${{ matrix.browser }}
+          path: frontend/frontend.log
       - name: Upload Docker logs
         uses: actions/upload-artifact@v5
         if: ${{ failure() }}
@@ -115,9 +160,13 @@ jobs:
           retention-days: 5
       - name: Tear down services
         if: ${{ always() }}
-        run: docker compose -f docker-compose-ci.yml down -v
-        env:
-          ENV_FILE_NAME: ${{ matrix.env_file_name }}
+        run: docker compose -f docker-compose.yml down -v
+      - name: Kill frontend dev process
+        if: ${{ always() }}
+        run: pkill -f "yarn dev" || true
+      - name: Kill backend process
+        if: ${{ always() }}
+        run: pkill -f "bootRun" || true
       - name: Send status to Slack
         uses: digitalservicebund/notify-on-failure-gha@66c485757701f8d5dbee32f24df38d904ca693ba
         if: ${{ failure() && github.ref == 'refs/heads/main' }}
