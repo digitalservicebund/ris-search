@@ -6,6 +6,7 @@ import de.bund.digitalservice.ris.search.mapper.NormLdmlToOpenSearchMapper;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
 import de.bund.digitalservice.ris.search.repository.opensearch.NormsRepository;
+import de.bund.digitalservice.ris.search.utils.DateUtils;
 import de.bund.digitalservice.ris.search.utils.eli.EliFile;
 import de.bund.digitalservice.ris.search.utils.eli.ExpressionEli;
 import de.bund.digitalservice.ris.search.utils.eli.ManifestationEli;
@@ -49,6 +50,7 @@ public class IndexNormsService implements IndexService {
   }
 
   public void reindexAll(String startingTimestamp) {
+    DateUtils.avoidOpenSearchSubMillisecondDateBug();
     Set<WorkEli> workElis = getWorks(normsBucket.getAllKeysByPrefix("eli/").stream());
     processWorkEliUpdates(workElis, startingTimestamp);
     clearOldNorms(startingTimestamp);
