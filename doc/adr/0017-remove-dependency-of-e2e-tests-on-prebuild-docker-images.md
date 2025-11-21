@@ -23,14 +23,13 @@ During the Developer Exchange in the Portal Team, we discussed ways to simplify 
 
 We will **build the backend and frontend images directly inside the pipeline** before running E2E tests.
 
-This makes E2E tests run against freshly built images that reflect the current branch and bring the pipeline closer to the local development setup.
+This makes E2E tests run against a freshly compiled code (in dev mode) that reflect the current branch and bring the pipeline closer to the local development setup.
 
 ### Key Points
 
-* The backend and frontend Docker images are now **built inside the pipeline**, not pulled from the registry.
+* The backend and frontend applications are now **compiled and run in dev mode inside the pipeline**, not as images pulled from the registry.
 * E2E tests run **immediately after the push**, without waiting for upstream image builds.
 * Local and CI environments are now aligned:
-
     * Locally, developers run backend and frontend directly.
     * In CI, we simulate these environments with minimal container setup, without extra proxy layers or special environment variable mappings.
 

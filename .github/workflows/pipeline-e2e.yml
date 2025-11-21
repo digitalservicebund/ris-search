@@ -42,8 +42,16 @@ jobs:
           mkdir -p /home/runner/.docker-image-cache
           docker pull opensearchproject/opensearch:2.11.0
           docker save opensearchproject/opensearch:2.11.0 -o /home/runner/.docker-image-cache/opensearch.tar
-      - name: Start opensearch container
-        run: docker compose -f docker-compose-ci.yml up -d opensearch
+      - name: Start OpenSearch container
+        run: |
+          docker pull opensearchproject/opensearch:2.11.0
+          docker run -d --name opensearch \
+            -p 9200:9200 -p 9600:9600 \
+            -e "node.name=opensearch-node1" \
+            -e "discovery.type=single-node" \
+            -e "DISABLE_SECURITY_PLUGIN=true" \
+            -e "OPENSEARCH_JAVA_OPTS=-Xms4096m -Xmx4096m" \
+            opensearchproject/opensearch:2.11.0
       - uses: actions/checkout@v5
       - name: Set up JDK
         uses: actions/setup-java@v4
@@ -122,7 +130,6 @@ jobs:
         working-directory: ./frontend
         env:
           NUXT_PUBLIC_PRIVATE_FEATURES_ENABLED: ${{ matrix.private_features_enabled }}
-          NUXT_PUBLIC_CI: true
           TZ: Europe/Berlin
       - name: Upload test reports
         uses: actions/upload-artifact@v5
@@ -143,11 +150,13 @@ jobs:
         run: docker compose -f docker-compose-ci.yml logs > docker-compose-logs-${{ matrix.configuration_label }}-${{ matrix.browser }}.log
       - name: Upload backend log
         uses: actions/upload-artifact@v5
+        if: ${{ failure() }}
         with:
           name: backend-log-${{ matrix.configuration_label }}-${{ matrix.browser }}
           path: backend/backend.log
       - name: Upload frontend log
         uses: actions/upload-artifact@v5
+        if: ${{ failure() }}
         with:
           name: frontend-log-${{ matrix.configuration_label }}-${{ matrix.browser }}
           path: frontend/frontend.log
