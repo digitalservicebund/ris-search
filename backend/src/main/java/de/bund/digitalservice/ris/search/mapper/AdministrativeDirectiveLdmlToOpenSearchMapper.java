@@ -207,7 +207,10 @@ public class AdministrativeDirectiveLdmlToOpenSearchMapper {
   }
 
   private static List<String> getReferenceNumbers(AdministrativeDirectiveLdml ldml) {
-    return getRisMeta(ldml).map(RisMeta::getReferenceNumbers).orElse(List.of());
+    // XX is used a placeholder for a missing referenceNumber
+    return getRisMeta(ldml).map(RisMeta::getReferenceNumbers).orElse(List.of()).stream()
+        .filter(refNumber -> !refNumber.equals("XX"))
+        .toList();
   }
 
   private static List<String> getActiveAdministrativeReferences(AdministrativeDirectiveLdml ldml) {

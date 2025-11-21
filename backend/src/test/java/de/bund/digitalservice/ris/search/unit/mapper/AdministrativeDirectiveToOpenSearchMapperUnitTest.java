@@ -156,4 +156,15 @@ class AdministrativeDirectiveToOpenSearchMapperUnitTest {
 
     assertThat(e.getMessage()).isEqualTo("invalid zuordnung");
   }
+
+  @Test
+  void itHandlesReferenceNumbersPlaceholder() {
+    AdministrativeDirectiveLdml ldml = getLdmlWithMandatoryFields();
+    ldml.getDoc().getMeta().getProprietary().getMeta().setReferenceNumbers(List.of("XX"));
+
+    var now = Instant.now();
+    AdministrativeDirective entity = AdministrativeDirectiveLdmlToOpenSearchMapper.map(ldml, now);
+
+    assertThat(entity.referenceNumbers()).isEmpty();
+  }
 }
