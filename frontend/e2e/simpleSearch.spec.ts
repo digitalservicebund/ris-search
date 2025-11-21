@@ -57,7 +57,7 @@ test.describe("general search page features", () => {
     });
 
     expect(resultCounter).toHaveText(nonZeroResultCount);
-    await expect(searchResults).toHaveCount(3);
+    await expect(searchResults).toHaveCount(4);
 
     await page.getByLabel("vorherige Ergebnisse").click();
     await page.waitForURL("/search?query=und", { waitUntil: "commit" });
@@ -550,7 +550,7 @@ noJsTest("pagination works without JavaScript", async ({ page }) => {
   });
 
   await expect(getResultCounter(page)).toHaveText(nonZeroResultCount);
-  await expect(getSearchResults(page)).toHaveCount(3);
+  await expect(getSearchResults(page)).toHaveCount(4);
 
   await page.getByLabel("vorherige Ergebnisse").click();
   await page.waitForURL("/search?query=und", { waitUntil: "commit" });
