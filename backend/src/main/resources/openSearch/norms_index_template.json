@@ -39,6 +39,14 @@
           "type": "alias",
           "path": "article_texts"
         },
+        "TP": {
+          "type": "alias",
+          "path": "article_texts"
+        },
+        "UP": {
+          "type": "alias",
+          "path": "article_names"
+        },
         "TITEL": {
           "type": "alias",
           "path": "official_title"
