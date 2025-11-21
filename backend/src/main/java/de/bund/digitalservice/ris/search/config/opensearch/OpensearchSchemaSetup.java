@@ -38,13 +38,16 @@ public class OpensearchSchemaSetup {
       GetIndexResponse indexResponse =
           restHighLevelClient.indices().get(new GetIndexRequest("*"), RequestOptions.DEFAULT);
       upsertOneIndexAndItsAliases(
-          restHighLevelClient, indexResponse, configurations.getCaseLawsIndexName());
+          restHighLevelClient, indexResponse, configurations.getCaseLawsIndexName(), true);
       upsertOneIndexAndItsAliases(
-          restHighLevelClient, indexResponse, configurations.getLiteratureIndexName());
+          restHighLevelClient, indexResponse, configurations.getLiteratureIndexName(), true);
       upsertOneIndexAndItsAliases(
-          restHighLevelClient, indexResponse, configurations.getNormsIndexName());
+          restHighLevelClient, indexResponse, configurations.getNormsIndexName(), true);
       upsertOneIndexAndItsAliases(
-          restHighLevelClient, indexResponse, configurations.getAdministrativeDirectiveIndexName());
+          restHighLevelClient,
+          indexResponse,
+          configurations.getAdministrativeDirectiveIndexName(),
+          false);
 
     } catch (IOException e) {
       throw new IllegalStateException(
@@ -90,7 +93,10 @@ public class OpensearchSchemaSetup {
   }
 
   private void upsertOneIndexAndItsAliases(
-      RestHighLevelClient restHighLevelClient, GetIndexResponse indexState, String aliasName)
+      RestHighLevelClient restHighLevelClient,
+      GetIndexResponse indexState,
+      String aliasName,
+      boolean addToAllDocumentsAlias)
       throws IOException {
 
     String latestIndex =
@@ -124,7 +130,7 @@ public class OpensearchSchemaSetup {
       createAlias(restHighLevelClient, latestIndex, aliasName);
     }
     String documentsAliasName = configurations.getDocumentsAliasName();
-    if (!lastIndexAliases.contains(documentsAliasName)) {
+    if (addToAllDocumentsAlias && !lastIndexAliases.contains(documentsAliasName)) {
       createAlias(restHighLevelClient, latestIndex, documentsAliasName);
     }
   }
