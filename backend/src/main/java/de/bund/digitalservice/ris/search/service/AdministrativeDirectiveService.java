@@ -1,5 +1,6 @@
 package de.bund.digitalservice.ris.search.service;
 
+import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.models.api.parameters.AdministrativeDirectiveSearchParams;
 import de.bund.digitalservice.ris.search.models.api.parameters.UniversalSearchParams;
 import de.bund.digitalservice.ris.search.models.opensearch.AdministrativeDirective;
@@ -7,6 +8,7 @@ import de.bund.digitalservice.ris.search.repository.objectstorage.Administrative
 import de.bund.digitalservice.ris.search.repository.opensearch.AdministrativeDirectiveRepository;
 import de.bund.digitalservice.ris.search.utils.PageUtils;
 import java.util.List;
+import java.util.Optional;
 import lombok.SneakyThrows;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -64,5 +66,19 @@ public class AdministrativeDirectiveService {
         operations.search(query, AdministrativeDirective.class);
 
     return PageUtils.unwrapSearchHits(searchHits, pageable);
+  }
+
+  /**
+   * return an xml file by document number
+   *
+   * @param documentNumber document number to corresponding xml
+   * @return Optional byte array of xml file
+   */
+  public Optional<byte[]> getFileByDocumentNumber(String documentNumber) {
+    try {
+      return bucket.get(String.format("%s.akn.xml", documentNumber));
+    } catch (ObjectStoreServiceException e) {
+      return Optional.empty();
+    }
   }
 }

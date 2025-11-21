@@ -15,10 +15,13 @@ import de.bund.digitalservice.ris.search.schema.SearchMemberSchema;
 import de.bund.digitalservice.ris.search.service.AdministrativeDirectiveService;
 import de.bund.digitalservice.ris.search.utils.LuceneQueryTools;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import java.util.Optional;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
@@ -28,6 +31,7 @@ import org.springframework.data.elasticsearch.core.SearchPage;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 @Tag(name = "AdministrativeDirective")
@@ -85,5 +89,21 @@ public class AdministrativeDirectiveController {
       LuceneQueryTools.checkForInvalidQuery(e);
       throw e;
     }
+  }
+
+  @GetMapping(
+      path = ApiConfig.Paths.ADMINISTRATIVE_DIRECTIVE + "/{documentNumber}.xml",
+      produces = MediaType.APPLICATION_XML_VALUE)
+  @Operation(
+      summary = "Administrative directive XML",
+      description =
+          "Returns an administrative directive item as XML. This content is used as a source for the HTML endpoint.")
+  @ApiResponse(responseCode = "200")
+  @ApiResponse(responseCode = "404", content = @Content(schema = @Schema()))
+  public ResponseEntity<byte[]> getAdministrativeDirectiveAsXml(
+      @Parameter(example = "KSNR00000") @PathVariable String documentNumber) {
+
+    Optional<byte[]> bytes = service.getFileByDocumentNumber(documentNumber);
+    return bytes.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
   }
 }
