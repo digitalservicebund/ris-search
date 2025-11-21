@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import de.bund.digitalservice.ris.search.schema.AbstractDocumentSchema;
+import de.bund.digitalservice.ris.search.schema.AdministrativeDirectiveSearchSchema;
 import de.bund.digitalservice.ris.search.schema.CaseLawSearchSchema;
 import de.bund.digitalservice.ris.search.schema.CollectionSchema;
 import de.bund.digitalservice.ris.search.schema.LegislationWorkSearchSchema;
@@ -47,6 +48,8 @@ public class TestJsonUtils {
       case LiteratureSearchSchema l -> l.firstPublicationDate().toString();
       case LegislationWorkSearchSchema n ->
           Objects.requireNonNull(n.workExample()).temporalCoverage().substring(0, 10);
+      case AdministrativeDirectiveSearchSchema n ->
+          Objects.requireNonNull(n.entryIntoForceDate()).toString();
     };
   }
 }

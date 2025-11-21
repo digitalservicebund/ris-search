@@ -141,17 +141,14 @@ public class AdministrativeDirectiveLdmlToOpenSearchMapper {
     return null;
   }
 
-  private static @Nullable String getEntryIntoEffect(AdministrativeDirectiveLdml ldml) {
+  private static @Nullable LocalDate getEntryIntoEffect(AdministrativeDirectiveLdml ldml) {
 
-    return getRisMeta(ldml)
-        .map(RisMeta::getEntryIntoEffectDate)
-        .map(LocalDate::toString)
-        .orElse(null);
+    return getRisMeta(ldml).map(RisMeta::getEntryIntoEffectDate).orElse(null);
   }
 
-  private static @Nullable String getExpiryDate(AdministrativeDirectiveLdml ldml) {
+  private static @Nullable LocalDate getExpiryDate(AdministrativeDirectiveLdml ldml) {
 
-    return getRisMeta(ldml).map(RisMeta::getExpiryDate).map(LocalDate::toString).orElse(null);
+    return getRisMeta(ldml).map(RisMeta::getExpiryDate).orElse(null);
   }
 
   private static List<String> getNormReferences(AdministrativeDirectiveLdml ldml) {

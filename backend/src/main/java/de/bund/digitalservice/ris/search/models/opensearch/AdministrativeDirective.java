@@ -2,11 +2,14 @@ package de.bund.digitalservice.ris.search.models.opensearch;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.ElementCollection;
+import java.time.LocalDate;
 import java.util.List;
 import lombok.Builder;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.elasticsearch.annotations.DateFormat;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldType;
 import org.springframework.lang.Nullable;
 
 @Builder
@@ -19,8 +22,14 @@ public record AdministrativeDirective(
     @Nullable @Field(name = Fields.DOCUMENT_TYPE) String documentType,
     @Nullable @Field(name = Fields.CONTENT) String content,
     @Nullable @Field(name = Fields.LEGISLATOR) String normgeber,
-    @Nullable @Field(name = Fields.ENTRY_INTO_EFFECT_DATE) String entryIntoEffectDate,
-    @Nullable @Field(name = Fields.EXPIRY_DATE) String expiryDate,
+    @Nullable
+        @Field(
+            name = Fields.ENTRY_INTO_EFFECT_DATE,
+            type = FieldType.Date,
+            format = DateFormat.date)
+        LocalDate entryIntoEffectDate,
+    @Nullable @Field(name = Fields.EXPIRY_DATE, type = FieldType.Date, format = DateFormat.date)
+        LocalDate expiryDate,
     @ElementCollection @Field(name = Fields.NORM_REFERENCES) List<String> normReferences,
     @ElementCollection @Field(name = Fields.CASELAW_REFERENCES) List<String> caselawReferences,
     @ElementCollection @Field(name = Fields.FUNDSTELLE_REFERENCES)
