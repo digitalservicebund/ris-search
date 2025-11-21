@@ -1,7 +1,9 @@
 package de.bund.digitalservice.ris.search.service.xslt;
 
 import java.util.Collections;
+import org.springframework.stereotype.Service;
 
+@Service
 public class AdministrativeDirectiveXsltTransformerService extends XsltTransformer {
   @Override
   String getXsltBasePath() {

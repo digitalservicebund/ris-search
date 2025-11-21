@@ -15,6 +15,7 @@ import de.bund.digitalservice.ris.search.schema.AdministrativeDirectiveSearchSch
 import de.bund.digitalservice.ris.search.schema.CollectionSchema;
 import de.bund.digitalservice.ris.search.schema.SearchMemberSchema;
 import de.bund.digitalservice.ris.search.service.AdministrativeDirectiveService;
+import de.bund.digitalservice.ris.search.service.xslt.AdministrativeDirectiveXsltTransformerService;
 import de.bund.digitalservice.ris.search.utils.LuceneQueryTools;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -42,11 +43,15 @@ import org.springframework.web.bind.annotation.RestController;
 @Profile({"default", "staging", "uat", "test", "prototype"})
 public class AdministrativeDirectiveController {
 
-  AdministrativeDirectiveService service;
+  private final AdministrativeDirectiveService service;
+  private final AdministrativeDirectiveXsltTransformerService transformerService;
 
   @Autowired
-  public AdministrativeDirectiveController(AdministrativeDirectiveService service) {
+  public AdministrativeDirectiveController(
+      AdministrativeDirectiveService service,
+      AdministrativeDirectiveXsltTransformerService transformerService) {
     this.service = service;
+    this.transformerService = transformerService;
   }
 
   @GetMapping(
@@ -129,5 +134,22 @@ public class AdministrativeDirectiveController {
 
     Optional<byte[]> bytes = service.getFileByDocumentNumber(documentNumber);
     return bytes.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+  }
+
+  @GetMapping(
+      path = ApiConfig.Paths.ADMINISTRATIVE_DIRECTIVE + "/{documentNumber}.html",
+      produces = MediaType.TEXT_HTML_VALUE)
+  @Operation(
+      summary = "Administrative directive HTML",
+      description = "Renders and returns an administrative directive as HTML.")
+  @ApiResponse(responseCode = "200")
+  @ApiResponse(responseCode = "404", content = @Content)
+  public ResponseEntity<String> getAdministrativeDirectiveAsHtml(
+      @Parameter(example = "KSNR00000") @PathVariable String documentNumber) {
+    return service
+        .getFileByDocumentNumber(documentNumber)
+        .map(transformerService::transform)
+        .map(ResponseEntity::ok)
+        .orElseGet(() -> ResponseEntity.notFound().build());
   }
 }
