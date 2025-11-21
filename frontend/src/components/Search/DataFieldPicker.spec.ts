@@ -54,11 +54,11 @@ describe("DataFieldPicker", () => {
     });
 
     expect(
-      screen.getByRole("button", { name: "Caselaw 1 suchen" }),
+      screen.getByRole("button", { name: "Caselaw 1 filtern" }),
     ).toBeInTheDocument();
 
     expect(
-      screen.getByRole("button", { name: "Caselaw 2 suchen" }),
+      screen.getByRole("button", { name: "Caselaw 2 filtern" }),
     ).toBeInTheDocument();
 
     expect(
@@ -72,11 +72,11 @@ describe("DataFieldPicker", () => {
     await rerender({ documentKind: DocumentKind.Norm });
 
     expect(
-      screen.getByRole("button", { name: "Norm 1 suchen" }),
+      screen.getByRole("button", { name: "Norm 1 filtern" }),
     ).toBeInTheDocument();
 
     expect(
-      screen.getByRole("button", { name: "Norm 2 suchen" }),
+      screen.getByRole("button", { name: "Norm 2 filtern" }),
     ).toBeInTheDocument();
 
     expect(
@@ -90,11 +90,11 @@ describe("DataFieldPicker", () => {
     await rerender({ documentKind: DocumentKind.Literature });
 
     expect(
-      screen.getByRole("button", { name: "Literature 1 suchen" }),
+      screen.getByRole("button", { name: "Literature 1 filtern" }),
     ).toBeInTheDocument();
 
     expect(
-      screen.getByRole("button", { name: "Literature 2 suchen" }),
+      screen.getByRole("button", { name: "Literature 2 filtern" }),
     ).toBeInTheDocument();
 
     expect(
@@ -152,7 +152,7 @@ describe("DataFieldPicker", () => {
       },
     });
 
-    await user.click(screen.getByRole("button", { name: "Caselaw 1 suchen" }));
+    await user.click(screen.getByRole("button", { name: "Caselaw 1 filtern" }));
 
     expect(emitted("update:modelValue")).toEqual([["test query CS:"]]);
   });
@@ -173,7 +173,7 @@ describe("DataFieldPicker", () => {
       },
     });
 
-    await user.click(screen.getByRole("button", { name: "Caselaw 1 suchen" }));
+    await user.click(screen.getByRole("button", { name: "Caselaw 1 filtern" }));
 
     expect(emitted("update:modelValue")).toEqual([["test query CS:"]]);
   });
@@ -204,7 +204,7 @@ describe("DataFieldPicker", () => {
       },
     });
 
-    await user.click(screen.getByRole("button", { name: "Caselaw 1 suchen" }));
+    await user.click(screen.getByRole("button", { name: "Caselaw 1 filtern" }));
 
     await rerender({ modelValue });
 
@@ -242,7 +242,7 @@ describe("DataFieldPicker", () => {
       },
     });
 
-    await user.click(screen.getByRole("button", { name: "Caselaw 1 suchen" }));
+    await user.click(screen.getByRole("button", { name: "Caselaw 1 filtern" }));
 
     await rerender({ modelValue });
 
@@ -270,7 +270,7 @@ describe("DataFieldPicker", () => {
       },
     });
 
-    await user.click(screen.getByRole("button", { name: "Caselaw 1 suchen" }));
+    await user.click(screen.getByRole("button", { name: "Caselaw 1 filtern" }));
 
     expect(emitted("update:modelValue")).toEqual([["CS:"]]);
   });
@@ -291,7 +291,7 @@ describe("DataFieldPicker", () => {
       },
     });
 
-    await user.click(screen.getByRole("button", { name: "Caselaw 1 suchen" }));
+    await user.click(screen.getByRole("button", { name: "Caselaw 1 filtern" }));
 
     expect(emitted("update:modelValue")).toEqual([["test query CS:"]]);
   });
