@@ -4,6 +4,7 @@
 import { defineVitestConfig } from "@nuxt/test-utils/config";
 import IconsResolver from "unplugin-icons/resolver";
 import Icons from "unplugin-icons/vite";
+import { PrimeVueResolver } from "unplugin-vue-components/resolvers";
 import Components from "unplugin-vue-components/vite";
 import { configDefaults } from "vitest/config";
 
@@ -11,7 +12,7 @@ export default defineVitestConfig({
   plugins: [
     Icons(),
     Components({
-      resolvers: [IconsResolver()],
+      resolvers: [IconsResolver(), PrimeVueResolver()],
     }),
   ],
   test: {
