@@ -21,7 +21,7 @@ jobs:
           - configuration_label: private
             private_features_enabled: true
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 40
       - name: Adjust permissions to Docker
@@ -44,7 +44,7 @@ jobs:
           docker save opensearchproject/opensearch:2.11.0 -o /home/runner/.docker-image-cache/opensearch.tar
       - name: Start opensearch container
         run: docker compose -f docker-compose.yml up -d opensearch
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - name: Set up JDK
         uses: actions/setup-java@v5
         with:
@@ -181,7 +181,7 @@ jobs:
       - e2e-tests
     if: ${{ github.ref == 'refs/heads/main' }}
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
         with:
           repository: ${{ env.reports-repo }}
           ssh-key: ${{ secrets.REPORTS_DEPLOY_KEY }}
