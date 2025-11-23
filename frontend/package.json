@@ -29,7 +29,7 @@
   "packageManager": "yarn@4.9.2",
   "dependencies": {
     "@digitalservicebund/ris-ui": "^3.17.1",
-    "@nuxt/image": "^1.10.0",
+    "@nuxt/image": "^2.0.0",
     "@nuxtjs/sitemap": "^7.4.3",
     "@pinia/nuxt": "^0.11.2",
     "@scalar/api-reference": "^1.34.2",
