@@ -33,7 +33,7 @@
     "@nuxtjs/sitemap": "^7.4.3",
     "@pinia/nuxt": "^0.11.2",
     "@scalar/api-reference": "^1.34.2",
-    "@sentry/nuxt": "^10.25.0",
+    "@sentry/nuxt": "^10.26.0",
     "@unhead/vue": "^2.0.19",
     "axios": "^1.12.0",
     "dayjs": "^1.11.13",
