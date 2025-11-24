@@ -49,7 +49,11 @@ async function searchFor(
     await page.getByRole("textbox", { name: "bis" }).fill(search.dateFilterTo);
   }
 
+  const results = page.waitForResponse(/v1\/document\/lucene-search/);
+
   await page.getByRole("button", { name: "Suchen" }).click();
+
+  await results;
 }
 
 test.describe("general advanced search page features", () => {
@@ -467,10 +471,12 @@ test.describe("searching caselaw", () => {
       dateFilterTo: "31.12.2024",
     });
 
+    const load = page.waitForResponse(/v1\/document\/lucene-search/);
     await page.getByRole("combobox", { name: "Relevanz" }).click();
     await page
       .getByRole("option", { name: "Entscheidungsdatum: Älteste zuerst" })
       .click();
+    await load;
 
     const results = getSearchResults(page);
 
@@ -485,8 +491,10 @@ test.describe("searching caselaw", () => {
       q: 'GERICHT:"ArbG Köln" OR GERICHT:"BDiG Frankfurt"',
     });
 
+    const load = page.waitForResponse(/v1\/document\/lucene-search/);
     await page.getByRole("combobox", { name: "Relevanz" }).click();
     await page.getByRole("option", { name: "Gericht: Von A nach Z" }).click();
+    await load;
 
     const results = getSearchResults(page);
 
@@ -501,8 +509,10 @@ test.describe("searching caselaw", () => {
       q: 'GERICHT:"ArbG Köln" OR GERICHT:"BDiG Frankfurt"',
     });
 
+    const load = page.waitForResponse(/v1\/document\/lucene-search/);
     await page.getByRole("combobox", { name: "Relevanz" }).click();
     await page.getByRole("option", { name: "Gericht: Von Z nach A" }).click();
+    await load;
 
     const results = getSearchResults(page);
 
