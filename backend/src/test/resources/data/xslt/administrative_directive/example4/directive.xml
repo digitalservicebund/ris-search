@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<akn:akomaNtoso
+        xmlns:akn="http://docs.oasis-open.org/legaldocml/ns/akn/3.0"
+        xmlns:ris="http://ldml.neuris.de/meta/">
+    <akn:doc name="offene-struktur">
+        <akn:preface>
+            <akn:longTitle>
+                <akn:block name="longTitle">Vorschrift ohne Inhalt</akn:block>
+            </akn:longTitle>
+        </akn:preface>
+        <akn:mainBody>
+            <akn:div>
+                <akn:p>Diese Vorschrift hat keinen Inhalt.</akn:p>
+            </akn:div>
+        </akn:mainBody>
+    </akn:doc>
+</akn:akomaNtoso>
