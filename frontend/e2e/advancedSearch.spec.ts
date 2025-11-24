@@ -567,17 +567,15 @@ test.describe("search by AND + OR operators", { tag: ["@RISDEV-8385"] }, () => {
       await navigate(page, "/advanced-search");
 
       await searchFor(page, {
-        q: 'LU:"Fruchtsaft" OR LU:"Bundesrat"',
+        q: "LU:Fruchtsaft OR LU:Fruchtsirup",
         documentKind: "Gesetze & Verordnungen",
+        dateFilter: "Keine zeitliche Begrenzung",
       });
 
       const results = getSearchResults(page);
 
       await expect(results).toHaveCount(2);
-      await expect(results).toHaveText([
-        /Geschäftsordnung des Bundesrates/,
-        /Fiktive Fruchtsaft- und Erfrischungsgetränkeverordnung zu Testzwecken/,
-      ]);
+      await expect(results).toHaveText([/Fruchtsaft/, /Fruchtsirup/]);
     });
   });
 
