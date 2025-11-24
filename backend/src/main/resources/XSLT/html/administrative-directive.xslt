@@ -2,38 +2,37 @@
 <xsl:stylesheet version="1.0"
 				xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 				xmlns:akn="http://docs.oasis-open.org/legaldocml/ns/akn/3.0"
-				exclude-result-prefixes="akn">
+				xmlns:ris="http://ldml.neuris.de/meta/"
+				exclude-result-prefixes="akn ris">
 
 	<xsl:output method="html" encoding="UTF-8" indent="yes"/>
 
 	<xsl:strip-space elements="*"/>
 
+	<xsl:variable name="title" select="//akn:longTitle/akn:block[@name='longTitle']"/>
+
 	<xsl:template match="akn:doc">
 		<html>
 			<head>
+				<title>
+					<xsl:value-of select="$title" />
+				</title>
 			</head>
 			<body>
-				<xsl:apply-templates/>
+				<xsl:apply-templates select="//akn:longTitle"/>
+				<xsl:apply-templates select="//akn:mainBody"/>
+				<xsl:apply-templates select="//*[local-name()='tableOfContentsEntries']"/>
 			</body>
 		</html>
 	</xsl:template>
 
 
 	<!-- render titles -->
-	<xsl:template match="*[local-name()='longTitle']">
-		<h1><xsl:value-of select="."/></h1>
-	</xsl:template>
-
-	<!-- Outline -->
-	<xsl:template match="*[local-name()='tableOfContentsEntries']">
-		<h2>Gliederung</h2>
-		<ul>
-			<xsl:apply-templates/>
-		</ul>
-	</xsl:template>
-
-	<xsl:template match="*[local-name()='tableOfContentsEntry']">
-		<li><xsl:value-of select="."/></li>
+	<xsl:template match="akn:longTitle">
+		<!--	only show headline if it has content	-->
+		<xsl:if test="akn:block">
+			<h1><xsl:value-of select="$title"/></h1>
+		</xsl:if>
 	</xsl:template>
 
 	<!-- Short Report -->
@@ -43,6 +42,18 @@
 			<h2>Kurzreferat</h2>
 			<xsl:apply-templates />
 		</xsl:if>
+	</xsl:template>
+
+	<!-- Content -->
+	<xsl:template match="*[local-name()='tableOfContentsEntries']">
+		<h2>Inhalt</h2>
+		<ul>
+			<xsl:apply-templates/>
+		</ul>
+	</xsl:template>
+
+	<xsl:template match="*[local-name()='tableOfContentsEntry']">
+		<li><xsl:value-of select="."/></li>
 	</xsl:template>
 
 	<!--***************************************************************************************-->

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<akn:akomaNtoso
+        xmlns:akn="http://docs.oasis-open.org/legaldocml/ns/akn/3.0"
+        xmlns:ris="http://ldml.neuris.de/meta/">
+    <akn:doc name="offene-struktur">
+        <akn:meta>
+            <akn:proprietary source="attributsemantik-noch-undefiniert">
+                <ris:meta>
+                    <ris:tableOfContentsEntries>
+                        <ris:tableOfContentsEntry>1. Foo</ris:tableOfContentsEntry>
+                        <ris:tableOfContentsEntry>2. Bar</ris:tableOfContentsEntry>
+                        <ris:tableOfContentsEntry>3. Baz</ris:tableOfContentsEntry>
+                    </ris:tableOfContentsEntries>
+                </ris:meta>
+            </akn:proprietary>
+        </akn:meta>
+        <akn:mainBody>
+            <akn:div>
+                <akn:p>Vorschrift ohne Titel</akn:p>
+            </akn:div>
+        </akn:mainBody>
+    </akn:doc>
+</akn:akomaNtoso>

@@ -6,6 +6,7 @@ import de.bund.digitalservice.ris.search.service.xslt.AdministrativeDirectiveXsl
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Objects;
 import org.jsoup.Jsoup;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -21,19 +22,26 @@ class AdministrativeDirectiveXsltTransformerServiceTest {
 
   AdministrativeDirectiveXsltTransformerServiceTest() throws IOException {}
 
-  @ParameterizedTest(name = "{2}")
+  @ParameterizedTest(name = "{1}")
   @CsvSource(
       value = {
-        "KSNR0000.akn.xml| placeholder.html| transform",
+        "example1 | transforms title, shortReport and content",
+        "example2 | transforms directive without title",
+        "example3 | transforms directive without shortReport",
+        "example4 | transforms directive without content",
       },
       delimiter = '|')
-  void testTransformLiteratureXmlDocuments(
-      String inputFileName, String expectedFileName, String testName) throws IOException {
-    byte[] bytes = Files.readAllBytes(Path.of(resourcesBasePath, inputFileName));
+  void testTransformLiteratureXmlDocuments(String testfilesDir, String testName)
+      throws IOException {
+    Path inputFilePath = Paths.get(resourcesBasePath, testfilesDir, "directive.xml");
+    Path expectedFilePath = Paths.get(resourcesBasePath, testfilesDir, "directive.html");
 
+    byte[] bytes = Files.readAllBytes(inputFilePath);
     var result = service.transform(bytes);
 
+    var expectedHtml = Files.readString(expectedFilePath);
+    var expectedDocument = Jsoup.parse(expectedHtml);
     var actualDocument = Jsoup.parse(result);
-    assertThat(actualDocument).isNotNull();
+    assertThat(actualDocument.html()).isEqualTo(expectedDocument.html());
   }
 }
