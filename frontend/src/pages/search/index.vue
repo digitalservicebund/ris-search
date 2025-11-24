@@ -14,21 +14,19 @@ import YearRangeFilter from "~/components/Search/YearRangeFilter.vue";
 import { useStaticPageSeo } from "~/composables/useStaticPageSeo";
 import { useSimpleSearchParamsStore } from "~/stores/searchParams";
 import { DocumentKind } from "~/types";
-import { getCurrentDateInGermanyFormatted } from "~/utils/dateFormatting";
 import { buildResultCountString } from "~/utils/pagination";
-import { convertParams, getUrl } from "~/utils/search/simpleSearch";
+import {
+  categoryToDocumentKind,
+  convertParams,
+  getUrl,
+} from "~/utils/search/simpleSearch";
 
 useStaticPageSeo("suche");
 
 const store = useSimpleSearchParamsStore();
 const values = storeToRefs(store);
 
-const params = computed(() =>
-  convertParams({
-    ...values.params.value,
-    temporalCoverage: getCurrentDateInGermanyFormatted(),
-  }),
-);
+const params = computed(() => convertParams(values.params.value));
 
 const {
   data,
@@ -63,12 +61,9 @@ async function updatePage(page: number) {
   store.setPageNumber(page);
 }
 
-const documentKind = computed(() => {
-  if (values.category.value.length > 0) {
-    return values.category.value[0] as DocumentKind;
-  }
-  return DocumentKind.All;
-});
+const documentKind = computed(() =>
+  categoryToDocumentKind(values.category.value),
+);
 
 const title = computed(() => {
   if (store.query) {

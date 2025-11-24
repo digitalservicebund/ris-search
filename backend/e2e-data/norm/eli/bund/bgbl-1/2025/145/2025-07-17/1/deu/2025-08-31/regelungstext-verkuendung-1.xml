@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="Grammatiken/legalDocML.de.sch" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<akn:akomaNtoso xmlns:akn="http://Inhaltsdaten.LegalDocML.de/1.8.2/"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:schemaLocation="http://MetadatenRIS.LegalDocML.de/1.8.2/ ../ris-norms-ldml-schema-extensions/1.8.2/legalDocML.de-metadaten-ris.xsd http://MetadatenRegelungstext.LegalDocML.de/1.8.2/ Grammatiken/legalDocML.de-metadaten-regelungstext.xsd   http://Inhaltsdaten.LegalDocML.de/1.8.2/ Grammatiken/legalDocML.de-regelungstextverkuendungsfassung.xsd">
+    <akn:act name="/akn/ontology/de/concept/documenttype/bund/regelungstext-verkuendung">
+        <akn:meta GUID="28a80ca8-46ed-4fcc-8f5e-897dab065cb6" eId="meta-n1">
+            <akn:identification GUID="8180b7ec-096a-4670-9e5f-d4ac98cb4100" eId="meta-n1_ident-n1"
+                                source="attributsemantik-noch-undefiniert">
+                <akn:FRBRWork GUID="1428a5d6-2767-426c-b974-72ff3c3cd55c" eId="meta-n1_ident-n1_frbrwork-n1">
+                    <akn:FRBRthis GUID="d45090dc-59ab-400c-9804-55741c306b5c"
+                                  eId="meta-n1_ident-n1_frbrwork-n1_frbrthis-n1"
+                                  value="eli/bund/bgbl-1/2025/145/regelungstext-verkuendung-1"/>
+                    <akn:FRBRuri GUID="4d0ab21c-105e-4d5d-9692-4d5be7cefc79"
+                                 eId="meta-n1_ident-n1_frbrwork-n1_frbruri-n1" value="eli/bund/bgbl-1/2025/145"/>
+                    <akn:FRBRalias GUID="9e3abab6-e5bf-4806-9f58-dfe5b6523147"
+                                   eId="meta-n1_ident-n1_frbrwork-n1_frbralias-n1" name="übergreifende-id"
+                                   value="075403ff-be09-45a5-82a0-bf50eba7daed"/>
+                    <akn:FRBRdate GUID="d77cb9e1-601e-4469-80dc-0f0038c9e206" date="2025-06-20"
+                                  eId="meta-n1_ident-n1_frbrwork-n1_frbrdate-n1"
+                                  name="verkuendungsfassung-verkuendungsdatum"/>
+                    <akn:FRBRauthor GUID="941bc7f0-dc20-40a0-a0b2-b8c9bf200280"
+                                    eId="meta-n1_ident-n1_frbrwork-n1_frbrauthor-n1"
+                                    href="recht.bund.de/institution/bundesregierung"/>
+                    <akn:FRBRcountry GUID="c5775322-00cc-41c0-bd41-83decec08a10"
+                                     eId="meta-n1_ident-n1_frbrwork-n1_frbrcountry-n1" value="de"/>
+                    <akn:FRBRnumber GUID="63ae7c2d-24c4-483c-8616-28bbcacc38eb"
+                                    eId="meta-n1_ident-n1_frbrwork-n1_frbrnumber-n1" value="145"/>
+                    <akn:FRBRname GUID="a1e35c91-7dfd-4e46-be7d-0756fef9d937"
+                                  eId="meta-n1_ident-n1_frbrwork-n1_frbrname-n1" value="bgbl-1"/>
+                    <akn:FRBRsubtype GUID="1c67ed8b-b156-4f3f-8b70-cbdff7d408a1"
+                                     eId="meta-n1_ident-n1_frbrwork-n1_frbrsubtype-n1"
+                                     value="regelungstext-verkuendung-1"/>
+                </akn:FRBRWork>
+                <akn:FRBRExpression GUID="a2e3641e-10a2-4012-bdab-e497772ff098"
+                                    eId="meta-n1_ident-n1_frbrexpression-n1">
+                    <akn:FRBRthis GUID="607a1317-2a89-4e9f-a7ca-030b06074525"
+                                  eId="meta-n1_ident-n1_frbrexpression-n1_frbrthis-n1"
+                                  value="eli/bund/bgbl-1/2025/145/2025-07-17/1/deu/regelungstext-verkuendung-1"/>
+                    <akn:FRBRuri GUID="ecd5a230-9106-4209-aa45-925784d4bbab"
+                                 eId="meta-n1_ident-n1_frbrexpression-n1_frbruri-n1"
+                                 value="eli/bund/bgbl-1/2025/145/2025-07-17/1/deu"/>
+                    <akn:FRBRalias GUID="451c219d-bab6-4be7-9c48-1c6c9158d682"
+                                   eId="meta-n1_ident-n1_frbrexpression-n1_frbralias-n1" name="aktuelle-version-id"
+                                   value="cb611e3b-0410-4397-9278-bac01cef47b5"/>
+                    <akn:FRBRalias GUID="74bd9489-2789-4484-a11e-a4416f2faa4a"
+                                   eId="meta-n1_ident-n1_frbrexpression-n1_frbralias-n2" name="nachfolgende-version-id"
+                                   value="81acf82c-250d-47b1-b3f3-bd4d1bf24c98"/>
+                    <akn:FRBRauthor GUID="87dfc40f-d5f0-4fae-accf-4250839ffaf1"
+                                    eId="meta-n1_ident-n1_frbrexpression-n1_frbrauthor-n1"
+                                    href="recht.bund.de/institution/bundesregierung"/>
+                    <akn:FRBRdate GUID="bce61bb4-668c-46fd-b38a-6aa9c202828d" date="2025-07-17"
+                                  eId="meta-n1_ident-n1_frbrexpression-n1_frbrdate-n1" name="verkuendung"/>
+                    <akn:FRBRlanguage GUID="4b8abc76-26ce-4cc8-987b-14e2f4d350b3"
+                                      eId="meta-n1_ident-n1_frbrexpression-n1_frbrlanguage-n1" language="deu"/>
+                    <akn:FRBRversionNumber GUID="d13ffdd8-06dc-406a-ad5a-6af81006e502"
+                                           eId="meta-n1_ident-n1_frbrexpression-n1_frbrversionnumber-n1" value="1"/>
+                </akn:FRBRExpression>
+                <akn:FRBRManifestation GUID="c956492e-6ef5-4898-b419-e4da26aa7b41"
+                                       eId="meta-n1_ident-n1_frbrmanifestation-n1">
+                    <akn:FRBRthis GUID="d7f2133a-e98e-4a05-9ce1-b40cec51dfc5"
+                                  eId="meta-n1_ident-n1_frbrmanifestation-n1_frbrthis-n1"
+                                  value="eli/bund/bgbl-1/2025/145/2025-07-17/1/deu/2025-08-31/regelungstext-verkuendung-1.xml"/>
+                    <akn:FRBRuri GUID="1291d5a1-de14-49ef-a4e7-e6694deb57dd"
+                                 eId="meta-n1_ident-n1_frbrmanifestation-n1_frbruri-n1"
+                                 value="eli/bund/bgbl-1/2025/145/2025-07-17/1/deu/2025-08-31/regelungstext-verkuendung-1.xml"/>
+                    <akn:FRBRdate GUID="981721a6-5aef-44a7-90af-98af6a2a7486" date="2025-08-31"
+                                  eId="meta-n1_ident-n1_frbrmanifestation-n1_frbrdate-n1" name="generierung"/>
+                    <akn:FRBRauthor GUID="3c0b863a-8c0f-44ed-bca0-fb663a14fa59"
+                                    eId="meta-n1_ident-n1_frbrmanifestation-n1_frbrauthor-n1" href="recht.bund.de"/>
+                    <akn:FRBRformat GUID="df0c8b69-0d8f-4818-8ecc-b52601604364"
+                                    eId="meta-n1_ident-n1_frbrmanifestation-n1_frbrformat-n1" value="xml"/>
+                </akn:FRBRManifestation>
+            </akn:identification>
+            <akn:lifecycle GUID="643790ff-d505-4978-b8e1-58f0e0ebbb89" eId="meta-n1_lebzykl-n1"
+                           source="attributsemantik-noch-undefiniert">
+                <akn:eventRef GUID="25f4fe78-c252-4bfd-9f1c-7819561f6795" date="2025-07-17"
+                              eId="meta-n1_lebzykl-n1_ereignis-n1" refersTo="ausfertigung"
+                              source="attributsemantik-noch-undefiniert" type="generation"/>
+                <akn:eventRef GUID="766d1d26-fb31-48a5-9b72-3f4add6633e3" date="2035-07-01"
+                              eId="meta-n1_lebzykl-n1_ereignis-n2" refersTo="inkrafttreten"
+                              source="attributsemantik-noch-undefiniert" type="generation"/>
+            </akn:lifecycle>
+            <akn:temporalData GUID="49da81f3-866d-4072-80b3-a5e712d54aa6" eId="meta-n1_geltzeiten-n1"
+                              source="attributsemantik-noch-undefiniert">
+                <akn:temporalGroup GUID="4c3c984e-07dc-441c-b465-e55dc5a842a7"
+                                   eId="meta-n1_geltzeiten-n1_geltungszeitgr-n1">
+                    <akn:timeInterval GUID="5f8e43cc-0dbc-4fd8-8062-43d5f2eb691b"
+                                      eId="meta-n1_geltzeiten-n1_geltungszeitgr-n1_gelzeitintervall-n1"
+                                      refersTo="geltungszeit" start="#meta-n1_lebzykl-n1_ereignis-n2"/>
+                </akn:temporalGroup>
+            </akn:temporalData>
+            <akn:proprietary GUID="2afa16f8-61f0-4b78-bde3-03b7ec378f0d" eId="meta-n1_proprietary-n1"
+                             source="attributsemantik-noch-undefiniert">
+                <regtxt:legalDocML.de_metadaten xmlns:regtxt="http://MetadatenRegelungstext.LegalDocML.de/1.8.2/"
+                                                xsi:schemaLocation="http://MetadatenRegelungstext.LegalDocML.de/1.8.2/ Grammatiken/legalDocML.de-metadaten-regelungstext.xsd">
+                    <regtxt:typ>verordnung</regtxt:typ>
+                    <regtxt:form>stammform</regtxt:form>
+                </regtxt:legalDocML.de_metadaten>
+                <ris:legalDocML.de_metadaten xmlns:ris="http://MetadatenRIS.LegalDocML.de/1.8.2/"
+                                             xsi:schemaLocation="http://MetadatenRIS.LegalDocML.de/1.8.2/ ../ris-norms-ldml-schema-extensions/1.8.2/legalDocML.de-metadaten-ris.xsd">
+                    <ris:abkuerzung refersTo="interne-abkuerzung">ZuKuGe 2025</ris:abkuerzung>
+                    <ris:inkraft date="2035-07-01"/>
+                </ris:legalDocML.de_metadaten>
+            </akn:proprietary>
+        </akn:meta>
+        <akn:preface GUID="f92d1050-9899-489c-b872-c1d7632da58e" eId="einleitung-n1">
+            <akn:longTitle GUID="ae1e8593-691c-4528-9c28-bfe808e39ccc" eId="einleitung-n1_doktitel-n1">
+                <akn:p GUID="8819ed6c-a8ae-440a-9ad4-210038e502c1" eId="einleitung-n1_doktitel-n1_text-n1">
+                    <akn:docStage GUID="b112bfab-1938-49fa-a763-9b10ba298dff"
+                                  eId="einleitung-n1_doktitel-n1_text-n1_docstadium-n1"/>
+                    <akn:docTitle GUID="b2816cb8-1de9-43cf-8660-1526964a1be8"
+                                  eId="einleitung-n1_doktitel-n1_text-n1_doctitel-n1">Zukunftsgesetz
+                    </akn:docTitle>
+                    <akn:shortTitle GUID="29325428-ba7f-4eb8-9fb3-172abf44a0d1"
+                                    eId="einleitung-n1_doktitel-n1_text-n1_kurztitel-n1">(Gesetz der Zukunft
+                        - <akn:inline
+                                GUID="5a7571af-5f64-46df-a5b5-45184966606c"
+                                eId="einleitung-n1_doktitel-n1_text-n1_kurztitel-n1_inline-n1"
+                                name="attributsemantik-noch-undefiniert" refersTo="amtliche-abkuerzung">
+                            ZuKuGe</akn:inline>)
+                    </akn:shortTitle>
+                </akn:p>
+            </akn:longTitle>
+            <akn:block GUID="4518394b-5a2e-47b9-a0e8-ebf70d40fa59" eId="einleitung-n1_block-n1"
+                       name="attributsemantik-noch-undefiniert">
+                <akn:date GUID="eb3bb85f-702f-467b-b55f-d0e5efbb61b7" date="2025-07-17"
+                          eId="einleitung-n1_block-n1_datum-n1" refersTo="ausfertigung-datum"/>
+            </akn:block>
+        </akn:preface>
+        <akn:preamble GUID="81a8b4ca-8a75-4fb1-b530-f402e54a52e9" eId="präambel-n1"/>
+        <akn:body GUID="e99d225e-2218-4f02-a1ef-8d5f99202df9" eId="hauptteil-n1">
+            <akn:article GUID="24893a6d-eaf4-4b06-9100-7ac624fd1fc1" eId="art-z1"
+                         period="#meta-n1_geltzeiten-n1_geltungszeitgr-n1">
+                <akn:num GUID="8f7378b5-9bfb-4c2d-a3b5-944c79df05f8" eId="art-z1_bezeichnung-n1">§ 1</akn:num>
+                <akn:heading GUID="0cef45af-3142-48a7-919d-72e372545578" eId="art-z1_überschrift-n1">Regeln der Zunkunft
+                </akn:heading>
+                <akn:paragraph GUID="9d40597b-651e-42a0-8fbd-62b79c6ebaf1" eId="art-z1_abs-z1">
+                    <akn:num GUID="d2428e4a-918e-49d4-a71d-35f0b919a6a5" eId="art-z1_abs-z1_bezeichnung-n1">(1)
+                    </akn:num>
+                    <akn:content GUID="6edafa7e-00ac-4b2a-889d-000684fa4277" eId="art-z1_abs-z1_inhalt-n1">
+                        <akn:p GUID="fe54dc01-1c67-442c-b61a-9b2abaa69e24" eId="art-z1_abs-z1_inhalt-n1_text-n1">
+                            Es ist ungewiss, ob dieses Gesetz jemals inkfraftreten wird.
+                        </akn:p>
+                    </akn:content>
+                </akn:paragraph>
+                <akn:paragraph GUID="32eb2175-f2ca-4d42-805d-7a3df9369d4a" eId="art-z1_abs-z2">
+                    <akn:num GUID="e420e79d-86d8-4f8e-87cb-5ca050044a8f" eId="art-z1_abs-z2_bezeichnung-n1">(2)
+                    </akn:num>
+                    <akn:content GUID="4be80318-c014-4e03-927e-3a7a568b3198" eId="art-z1_abs-z2_inhalt-n1">
+                        <akn:p GUID="9bf8c2f6-aa7d-42b7-be75-53355f44ed8a" eId="art-z1_abs-z2_inhalt-n1_text-n1">Dieses
+                            Gesetz dient dem Testen von Zukunftsgesetzen.
+                        </akn:p>
+                    </akn:content>
+                </akn:paragraph>
+            </akn:article>
+        </akn:body>
+    </akn:act>
+</akn:akomaNtoso>

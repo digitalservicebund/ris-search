@@ -57,7 +57,7 @@ test.describe("general search page features", () => {
     });
 
     expect(resultCounter).toHaveText(nonZeroResultCount);
-    await expect(searchResults).toHaveCount(3);
+    await expect(searchResults).toHaveCount(4);
 
     await page.getByLabel("vorherige Ergebnisse").click();
     await page.waitForURL("/search?query=und", { waitUntil: "commit" });
@@ -105,6 +105,35 @@ test.describe("general search page features", () => {
   });
 });
 
+test.describe("searching all documents", () => {
+  test("shows search results for all document kinds", async ({ page }) => {
+    await navigate(page, "/search");
+
+    await page.getByRole("combobox", { name: "10" }).click();
+    await page.getByRole("option", { name: "50" }).click();
+
+    // Norm
+    await expect(
+      page.getByText(
+        "Fiktives Gesetz zur Musterfinanzierung politischer Einrichtungen",
+      ),
+    ).toBeVisible();
+
+    // Caselaw Urteil
+    await expect(page.getByText("Testheader für Urteil 7.")).toBeVisible();
+
+    // Caselaw Beschluss
+    await expect(
+      page.getByText(
+        "Beispielentscheid — Beispielheader für den Beschlusstext.",
+      ),
+    ).toBeVisible();
+
+    // Literature
+    await expect(page.getByText("Erstes Test-Dokument ULI")).toBeVisible();
+  });
+});
+
 test.describe("searching legislation", () => {
   test("narrows search", async ({ page }) => {
     await navigate(page, "/search?query=fiktiv");
@@ -143,6 +172,8 @@ test.describe("searching legislation", () => {
     } else {
       await expect(searchResult).not.toHaveText(/29.04.2023/);
     }
+
+    await expect(searchResult).toHaveText(/Aktuell gültig/);
 
     // Result detail link
     await expect(
@@ -196,6 +227,47 @@ test.describe("searching legislation", () => {
       page.getByRole("heading", {
         level: 1,
         name: "Fiktive Fruchtsaft- und Erfrischungsgetränkeverordnung zu Testzwecken",
+      }),
+    ).toBeVisible();
+  });
+
+  test("displays validity status batches", async ({ page }) => {
+    await navigate(page, "/search?query=Zukunftsgesetz&category=N");
+    await expect(getSearchResults(page).first()).toHaveText(
+      /Zukünftig in Kraft/,
+    );
+
+    await navigate(page, "/search?query=Fruchtsaftkonzentrat&category=N");
+    await expect(getSearchResults(page).first()).toHaveText(/Aktuell gültig/);
+
+    await navigate(page, "/search?query=Heimaturlaubsberechtigung&category=N");
+    await expect(getSearchResults(page).first()).toHaveText(/Außer Kraft/);
+  });
+
+  test("shows only most relevant Fassung", async ({
+    page,
+    privateFeaturesEnabled,
+  }) => {
+    await navigate(page, '/search?query="Zum+Testen+von+Fassungen"&category=N');
+
+    const searchResults = getSearchResults(page);
+    await expect(searchResults).toHaveCount(1);
+
+    const searchResult = searchResults.first();
+
+    await expect(searchResult).toHaveText(/Norm/);
+    if (privateFeaturesEnabled) {
+      await expect(searchResult).toHaveText(/04.08.2022/);
+    } else {
+      await expect(searchResult).not.toHaveText(/04.08.2022/);
+    }
+
+    await expect(searchResult).toHaveText(/Aktuell gültig/);
+
+    // Result detail link
+    await expect(
+      searchResult.getByRole("link", {
+        name: "Zum Testen von Fassungen - Aktuelle Fassung",
       }),
     ).toBeVisible();
   });
@@ -550,7 +622,7 @@ noJsTest("pagination works without JavaScript", async ({ page }) => {
   });
 
   await expect(getResultCounter(page)).toHaveText(nonZeroResultCount);
-  await expect(getSearchResults(page)).toHaveCount(3);
+  await expect(getSearchResults(page)).toHaveCount(4);
 
   await page.getByLabel("vorherige Ergebnisse").click();
   await page.waitForURL("/search?query=und", { waitUntil: "commit" });
