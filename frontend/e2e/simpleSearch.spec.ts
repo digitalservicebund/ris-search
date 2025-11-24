@@ -232,24 +232,15 @@ test.describe("searching legislation", () => {
   });
 
   test("displays validity status batches", async ({ page }) => {
-    // Set time to before the norm is in force
-    await page.clock.setFixedTime(new Date("2012-10-16T12:00:00"));
-    await navigate(page, "/search?query=Gerätebauart&category=N");
-
+    await navigate(page, "/search?query=Zukunftsgesetz&category=N");
     await expect(getSearchResults(page).first()).toHaveText(
       /Zukünftig in Kraft/,
     );
 
-    // Set time to when the norm is in force
-    await page.clock.setFixedTime(new Date("2012-10-17T12:00:00"));
-    await navigate(page, "/search?query=Gerätebauart&category=N");
-
+    await navigate(page, "/search?query=Fruchtsaftkonzentrat&category=N");
     await expect(getSearchResults(page).first()).toHaveText(/Aktuell gültig/);
 
-    // Set time to after the norm is in force
-    await page.clock.setFixedTime(new Date("2023-10-19T12:00:00"));
-    await navigate(page, "/search?query=Gerätebauart&category=N");
-
+    await navigate(page, "/search?query=Heimaturlaubsberechtigung&category=N");
     await expect(getSearchResults(page).first()).toHaveText(/Außer Kraft/);
   });
 
@@ -257,12 +248,7 @@ test.describe("searching legislation", () => {
     page,
     privateFeaturesEnabled,
   }) => {
-    // Changing the time and expect the older fassung to be the most relevant now
-    await page.clock.setFixedTime(new Date("2022-08-03T12:00:00"));
-    await navigate(
-      page,
-      "/search?query=zum+Testen+von+Fassungen+des+Gesetzes.&category=N",
-    );
+    await navigate(page, '/search?query="Zum+Testen+von+Fassungen"&category=N');
 
     const searchResults = getSearchResults(page);
     await expect(searchResults).toHaveCount(1);
@@ -271,9 +257,9 @@ test.describe("searching legislation", () => {
 
     await expect(searchResult).toHaveText(/Norm/);
     if (privateFeaturesEnabled) {
-      await expect(searchResult).toHaveText(/04.08.2020/);
+      await expect(searchResult).toHaveText(/04.08.2022/);
     } else {
-      await expect(searchResult).not.toHaveText(/04.08.2020/);
+      await expect(searchResult).not.toHaveText(/04.08.2022/);
     }
 
     await expect(searchResult).toHaveText(/Aktuell gültig/);
@@ -281,7 +267,7 @@ test.describe("searching legislation", () => {
     // Result detail link
     await expect(
       searchResult.getByRole("link", {
-        name: "Zum Testen von Fassungen - Alte Fassung",
+        name: "Zum Testen von Fassungen - Aktuelle Fassung",
       }),
     ).toBeVisible();
   });
