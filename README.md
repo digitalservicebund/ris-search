@@ -3,7 +3,7 @@
 [![Frontend](https://github.com/digitalservicebund/ris-search/actions/workflows/frontend.yml/badge.svg)](https://github.com/digitalservicebund/ris-search/actions/workflows/frontend.yml)
 [![Backend](https://github.com/digitalservicebund/ris-search/actions/workflows/backend.yml/badge.svg)](https://github.com/digitalservicebund/ris-search/actions/workflows/backend.yml)
 [![End-to-end tests](https://github.com/digitalservicebund/ris-search/actions/workflows/pipeline-e2e.yml/badge.svg)](https://github.com/digitalservicebund/ris-search/actions/workflows/pipeline-e2e.yml)
-[![Secrets Check](https://github.com/digitalservicebund/ris-search/actions/workflows/secrets-check.yml/badge.svg)](https://github.com/digitalservicebund/ris-search/actions/workflows/secrets-check.yml)
+[![Deployment](https://github.com/digitalservicebund/ris-search/actions/workflows/deploy.yml/badge.svg)](https://github.com/digitalservicebund/ris-search/actions/workflows/deploy.yml)
 
 These instructions are written assuming development takes place on macOS.
 
@@ -142,43 +142,68 @@ for ensuring certain architectural characteristics, for instance making sure tha
 
 ## Frontend
 
-To run the frontend, see [./frontend/README.md](./frontend/README.md) 
+See [./frontend/README.md](./frontend/README.md) for instructions to run the frontend.
 
 ## End-to-end tests
 
-The end-to-end tests use Playwright. The test cases are located in the [frontend/e2e](./frontend/e2e) directory.
+The end-to-end tests use Playwright and the test cases are located in the `./frontend/e2e` directory.
 
 ### Setup
-Install the required browser dependencies by running
+
+1. Install the required browser dependencies:
+
+   ```bash
+   npx playwright install --with-deps chromium firefox webkit
+   ```
+2. Run the OpenSearch container (required for indexed data):
+
+   ```bash
+   docker compose -f docker-compose.yml up -d opensearch
+   ```
+3. Run the backend from the `backend` folder:
+
+   ```bash
+   ./gradlew bootRun
+   ```
+
+   **Note:** First export the following environment variables:
+
+  * `SPRING_PROFILES_ACTIVE=e2e,default`
+  * `OPENSEARCH_HOST=localhost`
+  * `THC_PORT=8090`
+4. Run the frontend from the `frontend` folder:
+
+   ```bash
+   yarn dev
+   ```
+
+   **Note:** Copy the variables from `.env.example` into a `.env` file and configure them correctly.
+
+### Running Playwright Tests
+
+Once setup is complete, you may run the end-to-end tests:
+
 ```bash
-npx playwright install --with-deps chromium
+yarn run e2e
 ```
 
-### Running using Docker
-To run the end-to-end tests, run e.g.
+or to open the UI:
+
 ```bash
-docker compose -f docker-compose-ci.yml up -d
-npx playwright test --project chromium
-docker compose down
+yarn run e2e -- --ui
 ```
 
-### Running locally
-To run the end-to-end tests against the local environment, start just the required dependencies:
+Alternatively, you can run directly with Playwright:
+
 ```bash
-docker compose -f docker-compose-ci.yml up -d opensearch keycloak
+npx playwright test
 ```
 
-The backend should be started with profiles `e2e` and `default`, e.g., by setting `SPRING_PROFILES_ACTIVE=e2e,default`.
-This will ensure that the end-to-end data sample and OpenSearch indices will be used, ignoring any other data in
-OpenSearch.
+If using the VS Code Playwright extension, select the “setup” project. Otherwise, the authentication flow may not be executed before the tests run.
 
-The frontend can be started normally.
+---
 
-### Running Playwright
-
-You may execute the end-to-end tests by running `yarn run e2e`, or `yarn run e2e -- --ui` to view them in a browser.
-
-If using the VS Code extension for Playwright, make sure to select the "setup" project. Otherwise, the authentication flow will not be run prior to executing the tests.
+If you like, I can check the rest of the README.md file for consistency and format it all according to your project style.
 
 ## Content
 

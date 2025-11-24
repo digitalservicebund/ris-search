@@ -10,33 +10,31 @@ import org.springframework.security.authentication.AuthenticationManagerResolver
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-  @Value("${server.front-end-url}")
-  String frontEndUrl;
-
-  @Value("${server.docs-url}")
-  String docsUrl;
 
   final AuthProperties authProperties;
 
-  final String[] internalPaths = new String[] {"/actuator/**", "/internal/**", "/nlex"};
+  final String[] internalPaths = new String[] {"/actuator/**", "/nlex"};
+
+  @Value("${app.security.csp-header}")
+  private String cspHeader;
 
   public SecurityConfig(AuthProperties authProperties) {
     this.authProperties = authProperties;
   }
 
+  private void applyCommonHeaders(HttpSecurity http) throws Exception {
+    http.headers(headers -> headers.contentSecurityPolicy(csp -> csp.policyDirectives(cspHeader)));
+  }
+
   @Bean
-  // For local development profile (default) allow usage of API without credentials
   @Profile({"default", "test"})
   public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
     http.authorizeHttpRequests(requests -> requests.anyRequest().permitAll());
-    http.csrf(customizer -> customizer.ignoringRequestMatchers(internalPaths));
+    applyCommonHeaders(http);
     return http.build();
   }
 
@@ -52,7 +50,7 @@ public class SecurityConfig {
                 .permitAll()
                 .anyRequest()
                 .authenticated());
-    http.csrf(customizer -> customizer.ignoringRequestMatchers(internalPaths));
+    applyCommonHeaders(http);
     return http.build();
   }
 
@@ -79,46 +77,5 @@ public class SecurityConfig {
                 .anyRequest()
                 .authenticated());
     return http.build();
-  }
-
-  /**
-   * Method to configure CORS
-   *
-   * @return The web mvc configurer
-   */
-  @Bean
-  public WebMvcConfigurer corsConfigurer() {
-
-    return new WebMvcConfigurer() {
-      @Override
-      public void addCorsMappings(CorsRegistry registry) {
-        registry
-            .addMapping("/**")
-            .allowedMethods(CorsConfiguration.ALL)
-            .allowedHeaders(CorsConfiguration.ALL)
-            .allowedOrigins(frontEndUrl, docsUrl);
-      }
-    };
-  }
-
-  /**
-   * Method to configure CORS for E2E tests.
-   *
-   * @return The web mvc configurer
-   */
-  @Bean
-  @Profile("e2e")
-  public WebMvcConfigurer e2eCorsConfigurer() {
-
-    return new WebMvcConfigurer() {
-      @Override
-      public void addCorsMappings(CorsRegistry registry) {
-        registry
-            .addMapping("/**")
-            .allowedMethods(CorsConfiguration.ALL)
-            .allowedHeaders(CorsConfiguration.ALL)
-            .allowedOrigins(CorsConfiguration.ALL);
-      }
-    };
   }
 }

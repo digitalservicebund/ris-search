@@ -98,10 +98,10 @@ public class IndexNormsService implements IndexService {
             .collect(Collectors.toSet());
 
     // parse the norms
-    List<Norm> normsToIndex = new ArrayList<>();
+    List<Norm> normExpressions = new ArrayList<>();
     for (ExpressionEli expressionEli : expressionElis) {
       try {
-        getNormFromS3(expressionEli).ifPresent(normsToIndex::add);
+        getNormFromS3(expressionEli).ifPresent(normExpressions::add);
       } catch (ObjectStoreServiceException e) {
         // If we can't get the content of an expression we log an error and move on
         // That means on failure of a work "changed" it will end up deleted
@@ -109,8 +109,13 @@ public class IndexNormsService implements IndexService {
       }
     }
 
-    addTimeRelevanceWindows(workEli.toString(), normsToIndex);
-    normsRepository.saveAll(normsToIndex);
+    addTimeRelevanceWindows(workEli.toString(), normExpressions);
+
+    for (Norm norm : normExpressions) {
+      // saving norms in a batch caused an error due to opensearch request being too large
+      //noinspection UseBulkOperation
+      normsRepository.save(norm);
+    }
 
     // delete the expressions from this work that were indexed before the start time
     normsRepository.deleteByWorkEliAndIndexedAtBefore(workEli.toString(), startingTimestamp);

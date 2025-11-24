@@ -1,12 +1,7 @@
-import { isStringEmpty } from "~/utils/textFormatting";
-
 export default defineNuxtPlugin(() => {
   const config = useRuntimeConfig();
   const basicAuth = config.basicAuth;
-  let backendUrl = config.public.risBackendUrl;
-  if (import.meta.server && !isStringEmpty(config.public.risBackendUrlSsr)) {
-    backendUrl = config.public.risBackendUrlSsr;
-  }
+  const backendUrl = config.public.risBackendUrl;
 
   const risBackend = $fetch.create({
     baseURL: backendUrl,

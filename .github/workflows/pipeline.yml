@@ -12,6 +12,10 @@ env:
   RUN_ID: ${{ github.run_id }}
 
 jobs:
+  e2e-tests:
+    uses: ./.github/workflows/pipeline-e2e.yml
+    secrets: inherit
+
   backend-jobs:
     uses: ./.github/workflows/backend.yml
     secrets: inherit
@@ -28,19 +32,10 @@ jobs:
       container-image-tag: ghcr.io/${{ github.repository }}/frontend:${{ github.sha }}
       container-image-version: ${{ github.sha }}
 
-  e2e-tests:
-    needs:
-      - backend-jobs
-      - frontend-jobs
-    uses: ./.github/workflows/pipeline-e2e.yml
-    secrets: inherit
-    with:
-      backend-container-image-tag: ghcr.io/${{ github.repository }}:${{ github.sha }}
-      frontend-container-image-tag:  ghcr.io/${{ github.repository }}/frontend:${{ github.sha }}
-
   deploy-backend-staging-and-uat:
     needs:
       - backend-jobs
+      - e2e-tests
     uses: ./.github/workflows/deploy.yml
     secrets: inherit
     with:
@@ -50,6 +45,7 @@ jobs:
   deploy-frontend-staging-and-uat:
     needs:
       - frontend-jobs
+      - e2e-tests
     uses: ./.github/workflows/deploy.yml
     secrets: inherit
     with:
