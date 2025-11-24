@@ -545,3 +545,68 @@ test.describe("responsive", () => {
     await expect(dataFieldsList).toBeVisible();
   });
 });
+
+test.describe("search by AND + OR operators", { tag: ["@RISDEV-8385"] }, () => {
+  test.describe("legislation", () => {
+    test("searches with AND operator", async ({ page }) => {
+      await navigate(page, "/advanced-search");
+
+      await searchFor(page, {
+        q: 'LU:"Verordnung" AND LU:"Kontrolle"',
+        documentKind: "Gesetze & Verordnungen",
+      });
+
+      const results = getSearchResults(page);
+
+      await expect(results).toHaveCount(1);
+      await expect(results).toHaveText(/Verordnung/);
+      await expect(results).toHaveText(/Kontrolle/);
+    });
+
+    test("searches with OR operator", async ({ page }) => {
+      await navigate(page, "/advanced-search");
+
+      await searchFor(page, {
+        q: "LU:Fruchtsaft OR LU:Fruchtsirup",
+        documentKind: "Gesetze & Verordnungen",
+        dateFilter: "Keine zeitliche Begrenzung",
+      });
+
+      const results = getSearchResults(page);
+
+      await expect(results).toHaveCount(2);
+      await expect(results).toHaveText([/Fruchtsaft/, /Fruchtsirup/]);
+    });
+  });
+
+  test.describe("caselaw", () => {
+    test("searches with AND operator", async ({ page }) => {
+      await navigate(page, "/advanced-search");
+
+      await searchFor(page, {
+        q: 'GERICHT:"LG Hamburg" AND "Urteil 4"',
+        documentKind: "Gerichtsentscheidungen",
+      });
+
+      const results = getSearchResults(page);
+
+      await expect(results).toHaveCount(1);
+      await expect(results).toHaveText(/LG Hamburg/);
+      await expect(results).toHaveText(/Urteil 4/);
+    });
+
+    test("searches with OR operator", async ({ page }) => {
+      await navigate(page, "/advanced-search");
+
+      await searchFor(page, {
+        q: 'GERICHT:"ArbG Köln" OR GERICHT:"BDiG Frankfurt"',
+        documentKind: "Gerichtsentscheidungen",
+      });
+
+      const results = getSearchResults(page);
+
+      await expect(results).toHaveCount(2);
+      await expect(results).toHaveText([/ArbG Köln/, /BDiG Frankfurt/]);
+    });
+  });
+});
