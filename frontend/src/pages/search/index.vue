@@ -83,6 +83,8 @@ const title = computed(() => {
 });
 
 useHead({ title });
+
+const privateFeaturesEnabled = usePrivateFeaturesFlag();
 </script>
 
 <template>
@@ -94,6 +96,13 @@ useHead({ title });
       :model-value="values.query.value"
       @update:model-value="handleSearchSubmit"
     />
+    <p v-if="privateFeaturesEnabled" class="ris-label2-regular mt-8">
+      Mehr Suchoptionen finden sie unter
+      <NuxtLink :to="{ name: 'advanced-search' }" class="ris-link2-bold">
+        Erweiterte Suche
+      </NuxtLink>
+    </p>
+
     <NuxtLink :to="{ hash: '#main' }" class="sr-only focus:not-sr-only">
       Zu den Hauptinhalten springen
     </NuxtLink>
