@@ -1,21 +1,19 @@
 package de.bund.digitalservice.ris.search.unit.service;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
-import de.bund.digitalservice.ris.search.mapper.NormLdmlToOpenSearchMapper;
-import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
 import de.bund.digitalservice.ris.search.repository.opensearch.NormsRepository;
 import de.bund.digitalservice.ris.search.service.IndexNormsService;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
@@ -149,16 +147,9 @@ class IndexNormsServiceTest {
         ZonedDateTime.now(ZoneOffset.UTC).format(DateTimeFormatter.ISO_INSTANT);
     this.service.reindexAll(startingTimestamp);
 
-    Norm exptectedNorm =
-        NormLdmlToOpenSearchMapper.parseNorm(testContent, Collections.emptyMap()).orElseThrow();
-
+    verify(repo, times(1)).save(any());
     verify(repo, times(1))
-        .saveAll(
-            argThat(
-                arg -> {
-                  assertThat(arg.iterator().next().getId()).isEqualTo(exptectedNorm.getId());
-                  return true;
-                }));
+        .save(argThat(arg -> "eli/bund/bgbl-1/1992/s101/1992-01-01/1/deu".equals(arg.getId())));
     verify(repo, times(1)).deleteByIndexedAtBefore(startingTimestamp);
   }
 
