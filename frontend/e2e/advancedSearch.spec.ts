@@ -1,6 +1,13 @@
 import type { Page } from "@playwright/test";
 import { expect, navigate, test } from "./utils/fixtures";
 
+test.beforeAll(({ privateFeaturesEnabled }) => {
+  test.skip(
+    !privateFeaturesEnabled,
+    "advanced search is not publicly available",
+  );
+});
+
 function getSearchResults(page: Page) {
   return page
     .getByRole("list", { name: "Suchergebnisse" })
@@ -96,12 +103,7 @@ test.describe("general advanced search page features", () => {
     await expect(searchResults).toHaveCount(10);
   });
 
-  test("sort by date in ascending order", async ({
-    page,
-    privateFeaturesEnabled,
-  }) => {
-    test.skip(!privateFeaturesEnabled, "dates are not publicly available");
-
+  test("sort by date in ascending order", async ({ page }) => {
     await navigate(page, "/advanced-search");
 
     await searchFor(page, {
@@ -122,12 +124,7 @@ test.describe("general advanced search page features", () => {
     ]);
   });
 
-  test("sort by date in descending order", async ({
-    page,
-    privateFeaturesEnabled,
-  }) => {
-    test.skip(!privateFeaturesEnabled, "dates are not publicly available");
-
+  test("sort by date in descending order", async ({ page }) => {
     await navigate(page, "/advanced-search");
 
     await searchFor(page, {
@@ -225,10 +222,7 @@ test.describe("searching legislation", () => {
     await expect(searchResults).toHaveText(Array(5).fill(/^Norm/));
   });
 
-  test("shows the search result contents", async ({
-    page,
-    privateFeaturesEnabled,
-  }) => {
+  test("shows the search result contents", async ({ page }) => {
     await navigate(page, "/advanced-search");
 
     await searchFor(page, {
@@ -241,12 +235,6 @@ test.describe("searching legislation", () => {
     // Header
     await expect(searchResult).toHaveText(/Norm/);
     await expect(searchResult).toHaveText(/FrSaftErfrischV/);
-
-    if (privateFeaturesEnabled) {
-      await expect(searchResult).toHaveText(/29.04.2023/);
-    } else {
-      await expect(searchResult).not.toHaveText(/29.04.2023/);
-    }
 
     // Result detail link
     await expect(

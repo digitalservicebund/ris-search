@@ -16,7 +16,16 @@ import { queryableDataFields } from "~/utils/search/dataFields";
 import { isStrictDateFilterValue } from "~/utils/search/filterType";
 
 useHead({ title: "Erweiterte Suche" });
-definePageMeta({ alias: "/erweiterte-suche" });
+
+definePageMeta({
+  alias: "/erweiterte-suche",
+  middleware: () => {
+    // For some reason our private feature flag composable doesn't work in this
+    // context, falling back to the runtime config directly instead
+    const config = useRuntimeConfig();
+    if (!config.public.privateFeaturesEnabled) return abortNavigation();
+  },
+});
 
 const {
   dateFilter,

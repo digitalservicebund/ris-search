@@ -40,6 +40,33 @@ test.describe("reach search from start page", () => {
   });
 });
 
+test.describe("links to advanced search", () => {
+  test("reachable from the simple search page", async ({
+    page,
+    privateFeaturesEnabled,
+  }) => {
+    test.skip(!privateFeaturesEnabled);
+
+    await navigate(page, "/search");
+
+    await page.getByRole("link", { name: "Erweiterte Suche" }).click();
+
+    await expect(
+      page.getByRole("heading", { level: 1, name: "Erweiterte Suche" }),
+    ).toBeVisible();
+  });
+
+  test("not publicly reachable", async ({ page, privateFeaturesEnabled }) => {
+    test.skip(privateFeaturesEnabled);
+
+    await navigate(page, "/search");
+
+    await expect(
+      page.getByRole("link", { name: "Erweiterte Suche" }),
+    ).not.toBeVisible();
+  });
+});
+
 test.describe("general search page features", () => {
   test("pagination switches pages", async ({ page }) => {
     await navigate(page, "/search?query=und");
