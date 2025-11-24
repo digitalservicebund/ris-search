@@ -97,7 +97,7 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
       @update:model-value="handleSearchSubmit"
     />
     <p v-if="privateFeaturesEnabled" class="ris-label2-regular mt-8">
-      Mehr Suchoptionen finden sie unter
+      Mehr Suchoptionen finden Sie unter
       <NuxtLink :to="{ name: 'advanced-search' }" class="ris-link2-bold">
         Erweiterte Suche
       </NuxtLink>
