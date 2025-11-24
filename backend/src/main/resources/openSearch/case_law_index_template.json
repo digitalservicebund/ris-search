@@ -73,6 +73,10 @@
           "type": "alias",
           "path": "headnote"
         },
+        "OS": {
+          "type": "alias",
+          "path": "headnote"
+        },
         "OSATZ": {
           "type": "alias",
           "path": "headnote"
@@ -105,6 +109,10 @@
           "type": "alias",
           "path": "tenor"
         },
+        "TN": {
+          "type": "alias",
+          "path": "tenor"
+        },
         "TITELZEILE": {
           "type": "alias",
           "path": "headline"
@@ -117,6 +125,10 @@
           "type": "alias",
           "path": "headline"
         },
+        "DT": {
+          "type": "alias",
+          "path": "document_type"
+        },
         "TYP": {
           "type": "alias",
           "path": "document_type"
@@ -126,6 +138,10 @@
           "path": "court_keyword"
         },
         "GER": {
+          "type": "alias",
+          "path": "court_keyword"
+        },
+        "G": {
           "type": "alias",
           "path": "court_keyword"
         },
