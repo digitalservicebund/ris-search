@@ -92,7 +92,12 @@ test.describe("general advanced search page features", () => {
     await expect(searchResults).toHaveCount(10);
   });
 
-  test("sort by date in ascending order", async ({ page }) => {
+  test("sort by date in ascending order", async ({
+    page,
+    privateFeaturesEnabled,
+  }) => {
+    test.skip(!privateFeaturesEnabled, "dates are not publicly available");
+
     await navigate(page, "/advanced-search");
 
     await searchFor(page, {
@@ -113,7 +118,12 @@ test.describe("general advanced search page features", () => {
     ]);
   });
 
-  test("sort by date in descending order", async ({ page }) => {
+  test("sort by date in descending order", async ({
+    page,
+    privateFeaturesEnabled,
+  }) => {
+    test.skip(!privateFeaturesEnabled, "dates are not publicly available");
+
     await navigate(page, "/advanced-search");
 
     await searchFor(page, {
@@ -211,7 +221,10 @@ test.describe("searching legislation", () => {
     await expect(searchResults).toHaveText(Array(5).fill(/^Norm/));
   });
 
-  test("shows the search result contents", async ({ page }) => {
+  test("shows the search result contents", async ({
+    page,
+    privateFeaturesEnabled,
+  }) => {
     await navigate(page, "/advanced-search");
 
     await searchFor(page, {
@@ -224,7 +237,12 @@ test.describe("searching legislation", () => {
     // Header
     await expect(searchResult).toHaveText(/Norm/);
     await expect(searchResult).toHaveText(/FrSaftErfrischV/);
-    await expect(searchResult).toHaveText(/29.04.2023/);
+
+    if (privateFeaturesEnabled) {
+      await expect(searchResult).toHaveText(/29.04.2023/);
+    } else {
+      await expect(searchResult).not.toHaveText(/29.04.2023/);
+    }
 
     // Result detail link
     await expect(
