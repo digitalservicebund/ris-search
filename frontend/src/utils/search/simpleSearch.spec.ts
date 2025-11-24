@@ -67,12 +67,16 @@ describe("convertParams", () => {
     };
 
     const result = convertParams(params);
-    expect(result.searchTerm).toBe("test");
-    expect(result.size).toBe("10");
-    expect(result.pageIndex).toBe("1");
-    expect(result.sort).toBe("date");
-    expect(result.dateFrom).toBe("2023-01-01");
-    expect(result.dateTo).toBe("2023-01-01");
+    expect(result).toEqual(
+      expect.objectContaining({
+        searchTerm: "test",
+        size: "10",
+        pageIndex: "1",
+        sort: "date",
+        dateFrom: "2023-01-01",
+        dateTo: "2023-01-01",
+      }),
+    );
   });
 
   it.each(["N", "L"])(

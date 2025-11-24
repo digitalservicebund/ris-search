@@ -47,12 +47,12 @@ export function convertParams(
 
   // Params valid for all document kinds
   if (params.date) {
-    result["dateFrom"] = params.date;
-    result["dateTo"] = params.date;
+    result.dateFrom = params.date;
+    result.dateTo = params.date;
   }
 
-  if (params.dateAfter) result["dateFrom"] = params.dateAfter;
-  if (params.dateBefore) result["dateTo"] = params.dateBefore;
+  if (params.dateAfter) result.dateFrom = params.dateAfter;
+  if (params.dateBefore) result.dateTo = params.dateBefore;
 
   // Params that are only case-law specific
   if (
@@ -60,14 +60,14 @@ export function convertParams(
     documentKind == DocumentKind.CaseLaw
   ) {
     if (params.category && params.category.length > 2) {
-      result["typeGroup"] = params.category.substring(2); // remove "R." prefix
+      result.typeGroup = params.category.substring(2); // remove "R." prefix
     }
     if (params.court) result.court = params.court;
   }
 
   // Params that are only norm specific
   if (documentKind == DocumentKind.All || documentKind == DocumentKind.Norm) {
-    result["mostRelevantOn"] = getCurrentDateInGermanyFormatted();
+    result.mostRelevantOn = getCurrentDateInGermanyFormatted();
   }
 
   return result;
