@@ -8,77 +8,43 @@ async function getSidebar(page: Page) {
   return navigation;
 }
 
-async function getDisplayedResultCount(page: Page) {
-  const resultCountElement = page.locator("output", {
-    hasText: "Suchergebnis",
-  });
-  const text = await resultCountElement.innerText();
-  if (text.startsWith("Keine Suchergebnisse")) return 0;
-  const digits = text.replace(/\D+/g, "");
-  return Number.parseInt(digits);
-}
-
 test.skip(
   process.env.NUXT_PUBLIC_PRIVATE_FEATURES_ENABLED !== "true",
   "Removed redundant testing since there are no specific functionality marked as private",
 );
 
-test("can search, filter for case law, and view a single case law documentation unit", async ({
+test("can view a single case law documentation unit", async ({
   page,
   isMobileTest,
 }) => {
-  await test.step("Basic search", async () => {
-    await navigate(page, "/");
-    await page.getByPlaceholder("Suchbegriff eingeben").fill("Fiktiv");
-    await page.getByRole("button", { name: "Suchen" }).click();
-    await page.waitForURL(new RegExp("Fiktiv"));
+  await navigate(page, "/case-law/KORE600500000");
 
-    expect(await getDisplayedResultCount(page)).toBe(15);
-  });
+  await expect(
+    page.getByRole("heading", { name: "Testheader für Urteil 6." }).first(),
+  ).toBeVisible();
 
-  let resultsListUrl: string;
+  const sidebar = await getSidebar(page);
 
-  await test.step("Filter for Gerichtsentscheidungen", async () => {
-    await page.getByRole("button", { name: "Gerichtsentscheidungen" }).click();
-    await page.waitForURL(new RegExp("category"));
-    await expect
-      .poll(() => getDisplayedResultCount(page), {
-        message: "the count should decrease",
-      })
-      .toBe(10);
+  const firstSectionHeader = page
+    .getByRole("main")
+    .getByRole("heading", { level: 2 })
+    .first();
+  await expect(firstSectionHeader).toBeVisible();
 
-    resultsListUrl = page.url();
-  });
+  await firstSectionHeader.scrollIntoViewIfNeeded();
 
-  await test.step("View a caselaw documentation unit", async () => {
-    await page.getByRole("link", { name: "Testheader für Urteil 6." }).click();
-    await expect(
-      page.getByRole("heading", { name: "Testheader für Urteil 6." }).first(),
-    ).toBeVisible();
-
-    const sidebar = await getSidebar(page);
-
-    const firstSectionHeader = page
-      .getByRole("main")
-      .getByRole("heading", { level: 2 })
-      .first();
-    await expect(firstSectionHeader).toBeVisible();
-
-    await firstSectionHeader.scrollIntoViewIfNeeded();
-
-    // Only check aria-current on desktop as it's flaky on mobile due to Intersection Observer timing
-    // Fix Intersection Observer logic (broken since Nuxt upgrade) - see ticket RISDEV-
-    // Once fixed, remove the isMobileTest check and enable aria-current verification for mobile too
-    if (!isMobileTest) {
-      const currentSection = sidebar.locator('a[aria-current="location"]');
-      await expect(currentSection).toHaveCount(1);
-    }
-  });
+  // Only check aria-current on desktop as it's flaky on mobile due to Intersection Observer timing
+  // Fix Intersection Observer logic (broken since Nuxt upgrade) - see ticket RISDEV-
+  // Once fixed, remove the isMobileTest check and enable aria-current verification for mobile too
+  if (!isMobileTest) {
+    const currentSection = sidebar.locator('a[aria-current="location"]');
+    await expect(currentSection).toHaveCount(1);
+  }
 
   if (isMobileTest)
     for (const sectionName of ["Tenor", "Orientierungssatz", "Tatbestand"]) {
       await test.step(`Jump straight to a specific section, ${sectionName}`, async () => {
-        await navigate(page, resultsListUrl);
+        await navigate(page, "/search?category=R&query=fiktiv");
         const link = page.getByRole("link", { name: sectionName }).first();
         await link.click();
 

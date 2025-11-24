@@ -131,7 +131,7 @@ function submitUnlessLoading() {
       />
     </div>
 
-    <div class="mt-8 lg:hidden">
+    <div class="mt-8 mb-16 lg:hidden">
       <RisSingleAccordion
         header-collapsed="Auswahl für gezielte Suche"
         header-expanded="Auswahl für gezielte Suche"

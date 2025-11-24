@@ -14,10 +14,10 @@ describe("DataFieldList", () => {
     });
 
     expect(
-      screen.getByRole("button", { name: "Field 1 suchen" }),
+      screen.getByRole("button", { name: "Field 1 filtern" }),
     ).toBeVisible();
     expect(
-      screen.getByRole("button", { name: "Field 2 suchen" }),
+      screen.getByRole("button", { name: "Field 2 filtern" }),
     ).toBeVisible();
   });
 
@@ -33,7 +33,7 @@ describe("DataFieldList", () => {
       },
     });
 
-    await user.click(screen.getByRole("button", { name: "Field 1 suchen" }));
+    await user.click(screen.getByRole("button", { name: "Field 1 filtern" }));
     expect(emitted("clickDataField")).toEqual([
       [{ label: "Field 1", pattern: "field1" }],
     ]);
