@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<akn:akomaNtoso xmlns:akn="http://docs.oasis-open.org/legaldocml/ns/akn/3.0/WD17"
+                xmlns:ris="http://example.com/0.1/"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:schemaLocation="http://docs.oasis-open.org/legaldocml/ns/akn/3.0/WD17
+                     https://docs.oasis-open.org/legaldocml/akn-core/v1.0/csprd02/part2-specs/schemas/akomantoso30.xsd">
+   <akn:judgment name="Beispielurteil8">
+      <akn:meta>
+         <akn:identification source="Testquelle8">
+            <akn:FRBRWork>
+               <akn:FRBRthis value="KORE600500002"/>
+               <akn:FRBRuri value="KORE600500002"/>
+               <akn:FRBRalias name="uebergreifende-id" value="fake-uuid-00012"/>
+               <akn:FRBRdate date="2023-11-22" name="entscheidungsdatum"/>
+               <akn:FRBRauthor href="Testautor12"/>
+               <akn:FRBRcountry value="de"/>
+            </akn:FRBRWork>
+            <akn:FRBRExpression>
+               <akn:FRBRthis value="KORE600500002/dokument"/>
+               <akn:FRBRuri value="KORE600500002/dokument"/>
+               <akn:FRBRdate date="2023-11-22" name="entscheidungsdatum"/>
+               <akn:FRBRauthor href="Testautor12"/>
+               <akn:FRBRlanguage language="deu"/>
+            </akn:FRBRExpression>
+            <akn:FRBRManifestation>
+               <akn:FRBRthis value="KORE600500002/dokument.xml"/>
+               <akn:FRBRuri value="KORE600500002/dokument.xml"/>
+               <akn:FRBRdate date="2023-11-22" name="entscheidungsdatum"/>
+               <akn:FRBRauthor href="Testautor12"/>
+            </akn:FRBRManifestation>
+         </akn:identification>
+         <akn:classification source="Testquelle12">
+            <akn:keyword dictionary="TestDict12" showAs="Beispiel" value="ZuteilungTest"/>
+            <akn:keyword dictionary="TestDict12" showAs="Beispiel" value="BeschlusssTest"/>
+            <akn:keyword dictionary="TestDict12" showAs="Beispiel" value="Verschiebung"/>
+            <akn:keyword dictionary="TestDict12" showAs="Beispiel" value="BerechnungZ"/>
+         </akn:classification>
+         <akn:proprietary source="Testquelle12">
+            <ris:meta>
+               <ris:fileNumbers>
+                  <ris:fileNumber>TS 345678</ris:fileNumber>
+               </ris:fileNumbers>
+               <ris:documentType>Urteil</ris:documentType>
+               <ris:courtLocation>Testort12</ris:courtLocation>
+               <ris:courtType>LG</ris:courtType>
+               <ris:legalEffect>KEINE_ANGABE</ris:legalEffect>
+               <ris:fieldOfLaws>
+                  <ris:fieldOfLaw>Testzuteilung</ris:fieldOfLaw>
+                  <ris:fieldOfLaw>Testbeschluss</ris:fieldOfLaw>
+                  <ris:fieldOfLaw>Testverschiebung</ris:fieldOfLaw>
+                  <ris:fieldOfLaw>BerechnungZ</ris:fieldOfLaw>
+               </ris:fieldOfLaws>
+               <ris:judicialBody>3. Kammer</ris:judicialBody>
+               <ris:publicationStatus>PUBLISHED</ris:publicationStatus>
+               <ris:error>false</ris:error>
+               <ris:documentationOffice>LG Test12</ris:documentationOffice>
+               <ris:procedures>
+                  <ris:procedure>TS876543</ris:procedure>
+               </ris:procedures>
+            </ris:meta>
+         </akn:proprietary>
+      </akn:meta>
+      <akn:header>
+         <akn:p>Testheader für Urteil 12.</akn:p>
+      </akn:header>
+      <akn:judgmentBody>
+         <akn:introduction>
+            <akn:block name="Orientierungssatz">
+               <akn:embeddedStructure>
+                  <akn:p>1. Fiktiver Satz für den Fall der Zuteilung und entsprechenden Berechnung.</akn:p>
+                  <akn:p>2. Zusätzliche Testangaben werden in diesem Kontext beispielhaft präsentiert.</akn:p>
+               </akn:embeddedStructure>
+            </akn:block>
+            <akn:block name="Tenor">
+               <akn:embeddedStructure>
+                  <akn:p>Der Beklagte wird zur Zahlung eines Betrages verurteilt.</akn:p>
+                  <akn:p>Die Kosten des Verfahrens werden vom Beklagten getragen.</akn:p>
+               </akn:embeddedStructure>
+            </akn:block>
+         </akn:introduction>
+         <akn:background>
+            <akn:hcontainer name="randnummer">
+               <akn:num>1</akn:num>
+               <akn:content>
+                  <akn:p>Testbeschreibung des fiktiven Sachverhalts mit abweichenden Einzelheiten.</akn:p>
+               </akn:content>
+            </akn:hcontainer>
+         </akn:background>
+      </akn:judgmentBody>
+   </akn:judgment>
+</akn:akomaNtoso>

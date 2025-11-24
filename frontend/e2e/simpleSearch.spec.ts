@@ -108,7 +108,7 @@ test.describe("general search page features", () => {
     await page.getByRole("combobox", { name: "10" }).click();
     await page.getByRole("option", { name: "50" }).click();
 
-    await expect(searchResults).toHaveCount(15);
+    await expect(searchResults).toHaveCount(17);
   });
 });
 
@@ -361,7 +361,7 @@ test.describe("searching caselaw", () => {
       await expect(page).toHaveURL(/category=R\.urteil/);
 
       await expect(getSearchResults(page)).toHaveText(
-        new Array(8).fill(/^Urteil/),
+        new Array(10).fill(/^Urteil/),
       );
     });
 
