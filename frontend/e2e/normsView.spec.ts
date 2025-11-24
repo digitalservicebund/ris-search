@@ -4,7 +4,7 @@ const expectedNorms = [
   "Fiktive Fruchtsaft- und Erfrischungsgetränkeverordnung zu Testzwecken",
 ];
 
-test.describe("regularly view norm page", async () => {
+test.describe("view norm page", async () => {
   test.setTimeout(60000);
   test("can navigate to a single norm article and between articles", async ({
     page,
