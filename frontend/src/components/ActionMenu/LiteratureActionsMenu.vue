@@ -2,7 +2,7 @@
 import ActionsMenu from "~/components/ActionMenu/ActionsMenu.vue";
 import type { Literature } from "~/types";
 
-const { literature } = defineProps<{ literature: Literature | null }>();
+const { literature } = defineProps<{ literature: Literature | undefined }>();
 
 const xmlUrl = computed(() => {
   const encoding = literature?.encoding?.find(
