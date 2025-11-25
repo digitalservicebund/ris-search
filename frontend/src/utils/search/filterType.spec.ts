@@ -224,5 +224,52 @@ describe("filterType", () => {
         ).toThrow("Missing 'from' or 'to' date in filter type period");
       });
     });
+
+    describe("for Literature document kind", () => {
+      it("returns undefined for 'allTime' filter", () => {
+        expect(
+          dateFilterToQuery(
+            { type: "allTime", from: undefined, to: undefined },
+            DocumentKind.Literature,
+          ),
+        ).toBeUndefined();
+      });
+
+      it("returns undefined for 'currentlyInForce' filter", () => {
+        expect(
+          dateFilterToQuery(
+            { type: "currentlyInForce", from: undefined, to: undefined },
+            DocumentKind.Literature,
+          ),
+        ).toBeUndefined();
+      });
+
+      it("returns undefined for 'specificDate' filter", () => {
+        expect(
+          dateFilterToQuery(
+            { type: "specificDate", from: "2024", to: undefined },
+            DocumentKind.Literature,
+          ),
+        ).toBeUndefined();
+      });
+
+      it("returns correct query for 'period' filter", () => {
+        expect(
+          dateFilterToQuery(
+            { type: "period", from: "2020", to: "2024" },
+            DocumentKind.Literature,
+          ),
+        ).toBe("years_of_publication:[2020 TO 2024]");
+      });
+
+      it("throws error for 'period' without from date", () => {
+        expect(() =>
+          dateFilterToQuery(
+            { type: "period", from: undefined, to: "2024" },
+            DocumentKind.Literature,
+          ),
+        ).toThrow("Missing 'from' or 'to' date in filter type period");
+      });
+    });
   });
 });
