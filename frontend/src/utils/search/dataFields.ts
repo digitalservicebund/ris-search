@@ -48,4 +48,4 @@ export const queryableDataFields: Record<DocumentKind, DataField[]> = {
     { label: "Norm", pattern: "N:" },
   ],
   [DocumentKind.AdministrativeDirective]: [],
-};
+} as const;
