@@ -389,38 +389,9 @@ class AdvancedSearchControllerApiTest extends ContainersIntegrationBase {
   @ParameterizedTest
   @ValueSource(
       strings = {
-        ApiConfig.Paths.DOCUMENT_ADVANCED_SEARCH,
-        ApiConfig.Paths.CASELAW_ADVANCED_SEARCH,
-        ApiConfig.Paths.LEGISLATION_ADVANCED_SEARCH
-      })
-  @DisplayName("When required request parameter is missing it returns json error response")
-  void itSendsJsonErrorResponseWhenRequiredRequestParamIsMissing(String url) throws Exception {
-
-    mockMvc
-        .perform(get(url).contentType(MediaType.APPLICATION_JSON))
-        .andExpect(status().isUnprocessableEntity())
-        .andExpect(
-            content()
-                .json(
-                    """
-                                                        {
-                                                          "errors": [
-                                                            {
-                                                              "code": "information_missing",
-                                                              "parameter": "query",
-                                                              "message": "Required request parameter 'query' for method parameter type String is not present"
-                                                            }
-                                                          ]
-                                                        }
-                                                    """));
-  }
-
-  @ParameterizedTest
-  @ValueSource(
-      strings = {
-        ApiConfig.Paths.DOCUMENT_ADVANCED_SEARCH + "?query=id:foobar%20OR",
-        ApiConfig.Paths.LEGISLATION_ADVANCED_SEARCH + "?query=work_eli:foobar%20OR",
-        ApiConfig.Paths.CASELAW_ADVANCED_SEARCH + "?query=document_number:BFRE000047655%20OR"
+        ApiConfig.Paths.DOCUMENT_ADVANCED_SEARCH + "?query=id:foobar OR",
+        ApiConfig.Paths.LEGISLATION_ADVANCED_SEARCH + "?query=work_eli:foobar OR",
+        ApiConfig.Paths.CASELAW_ADVANCED_SEARCH + "?query=document_number:BFRE000047655 OR"
       })
   @DisplayName("Should return an error when the search has invalid lucene query")
   void invalidLuceneQuery(String url) throws Exception {

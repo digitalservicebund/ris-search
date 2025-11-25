@@ -27,16 +27,11 @@ public class ApiConfig {
     public static final String CASELAW_ADVANCED_SEARCH = DOCUMENT + "/lucene-search/case-law";
     public static final String LEGISLATION_ADVANCED_SEARCH =
         DOCUMENT + "/lucene-search/legislation";
+    public static final String LITERATURE_ADVANCED_SEARCH = DOCUMENT + "/lucene-search/literature";
 
     public static final String SITEMAP = BASE + "/sitemaps";
     public static final String ECLICRAWLER = BASE + "/eclicrawler";
     public static final String STATISTICS = BASE + "/statistics";
-  }
-
-  public static class Headers {
-    private Headers() {}
-
-    public static final String GET_RESOURCES_VIA = "get-resources-via";
   }
 
   public static final String VERSION = "1";

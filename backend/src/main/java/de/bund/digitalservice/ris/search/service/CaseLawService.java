@@ -1,7 +1,5 @@
 package de.bund.digitalservice.ris.search.service;
 
-import static org.opensearch.index.query.QueryBuilders.queryStringQuery;
-
 import de.bund.digitalservice.ris.search.config.opensearch.Configurations;
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.exception.OpenSearchMapperException;
@@ -15,7 +13,6 @@ import de.bund.digitalservice.ris.search.repository.opensearch.CaseLawRepository
 import de.bund.digitalservice.ris.search.service.helper.CourtNameAbbreviationExpander;
 import de.bund.digitalservice.ris.search.service.helper.ZipManager;
 import de.bund.digitalservice.ris.search.utils.PageUtils;
-import de.bund.digitalservice.ris.search.utils.RisHighlightBuilder;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
@@ -23,7 +20,6 @@ import java.util.Optional;
 import lombok.SneakyThrows;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.opensearch.action.search.SearchType;
 import org.opensearch.data.client.orhlc.NativeSearchQuery;
 import org.opensearch.data.client.orhlc.NativeSearchQueryBuilder;
 import org.opensearch.data.client.orhlc.OpenSearchAggregations;
@@ -32,7 +28,6 @@ import org.opensearch.search.aggregations.Aggregations;
 import org.opensearch.search.aggregations.bucket.terms.ParsedStringTerms;
 import org.opensearch.search.aggregations.bucket.terms.Terms;
 import org.opensearch.search.aggregations.bucket.terms.TermsAggregationBuilder;
-import org.opensearch.search.fetch.subphase.highlight.HighlightBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
@@ -94,31 +89,6 @@ public class CaseLawService {
     SearchHits<CaseLawDocumentationUnit> searchHits =
         operations.search(query, CaseLawDocumentationUnit.class);
 
-    return PageUtils.unwrapSearchHits(searchHits, pageable);
-  }
-
-  /**
-   * Search and retrieve items.
-   *
-   * @param search The input {@link String} of lucene query values.
-   * @param pageable Pagination parameters
-   * @return A new {@link SearchPage} of the containing {@link CaseLawDocumentationUnit}.
-   */
-  public SearchPage<CaseLawDocumentationUnit> advancedSearchCaseLaw(
-      final String search, Pageable pageable) {
-    HighlightBuilder highlightBuilder = RisHighlightBuilder.baseHighlighter();
-    CaseLawSimpleSearchType.addHighlightedFieldsStatic(highlightBuilder);
-
-    var searchQuery =
-        new NativeSearchQueryBuilder()
-            .withSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-            .withPageable(pageable)
-            .withQuery(queryStringQuery(search))
-            .withHighlightBuilder(highlightBuilder)
-            .build();
-
-    SearchHits<CaseLawDocumentationUnit> searchHits =
-        operations.search(searchQuery, CaseLawDocumentationUnit.class);
     return PageUtils.unwrapSearchHits(searchHits, pageable);
   }
 

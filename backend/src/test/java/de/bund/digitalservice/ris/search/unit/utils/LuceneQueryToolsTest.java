@@ -1,11 +1,11 @@
 package de.bund.digitalservice.ris.search.unit.utils;
 
 import static de.bund.digitalservice.ris.search.utils.LuceneQueryTools.checkForInvalidQuery;
-import static de.bund.digitalservice.ris.search.utils.LuceneQueryTools.isValidLuceneQuery;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import de.bund.digitalservice.ris.search.exception.CustomValidationException;
+import de.bund.digitalservice.ris.search.utils.LuceneQueryTools;
 import java.io.IOException;
 import org.apache.hc.core5.http.ProtocolVersion;
 import org.apache.hc.core5.http.message.RequestLine;
@@ -20,9 +20,11 @@ class LuceneQueryToolsTest {
 
   @Test
   void testIsValidLuceneQuery() {
-    Assertions.assertTrue(isValidLuceneQuery("test"));
-    Assertions.assertTrue(isValidLuceneQuery("decision_date:2024-02-01"));
-    Assertions.assertFalse(isValidLuceneQuery("(test"));
+    Assertions.assertDoesNotThrow(() -> LuceneQueryTools.validateLuceneQuery("test"));
+    Assertions.assertDoesNotThrow(
+        () -> LuceneQueryTools.validateLuceneQuery("decision_date:2024-02-01"));
+    Assertions.assertThrows(
+        CustomValidationException.class, () -> LuceneQueryTools.validateLuceneQuery("(test"));
   }
 
   @Test
@@ -46,8 +48,9 @@ class LuceneQueryToolsTest {
     CustomValidationException thrownException =
         Assertions.assertThrowsExactly(
             CustomValidationException.class, () -> checkForInvalidQuery(outerException));
-    Assertions.assertEquals("sort", thrownException.getErrors().get(0).parameter());
+    Assertions.assertEquals("sort", thrownException.getErrors().getFirst().parameter());
     Assertions.assertEquals(
-        "Sorting is not supported for param_field", thrownException.getErrors().get(0).message());
+        "Sorting is not supported for param_field",
+        thrownException.getErrors().getFirst().message());
   }
 }
