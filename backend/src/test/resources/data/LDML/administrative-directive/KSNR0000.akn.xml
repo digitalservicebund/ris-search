@@ -55,13 +55,13 @@
         </akn:meta>
         <akn:preface>
             <akn:longTitle>
-                <akn:block name="headline">long title
+                <akn:block name="headline">administrative directive headline
                 </akn:block>
             </akn:longTitle>
         </akn:preface>
         <akn:mainBody>
             <akn:div>
-                <akn:p>text content
+                <akn:p>administrative directive test short report
                 </akn:p>
             </akn:div>
         </akn:mainBody>

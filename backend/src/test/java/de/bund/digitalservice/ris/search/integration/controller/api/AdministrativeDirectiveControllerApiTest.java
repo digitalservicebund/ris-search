@@ -1,5 +1,6 @@
 package de.bund.digitalservice.ris.search.integration.controller.api;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.startsWithIgnoringCase;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -84,16 +85,34 @@ class AdministrativeDirectiveControllerApiTest extends ContainersIntegrationBase
   @Test
   @DisplayName("Search by document number")
   void shouldReturnItemWhenSearchingByDocumentNumber() throws Exception {
+    final String documentNumber = "KSNR0000";
+
     mockMvc
         .perform(
-            get(ApiConfig.Paths.ADMINISTRATIVE_DIRECTIVE
-                    + "?documentNumber="
-                    + documentNumberPresentInBucket)
+            get(ApiConfig.Paths.ADMINISTRATIVE_DIRECTIVE + "?documentNumber=" + documentNumber)
                 .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.member", hasSize(1)))
-        .andExpect(
-            jsonPath(
-                "$.member[0].item.documentNumber", Matchers.is(documentNumberPresentInBucket)));
+        .andExpect(jsonPath("$.member[0].item.documentNumber", Matchers.is(documentNumber)));
+  }
+
+  @Test
+  @DisplayName("Should return HTML version of administrative directive item")
+  void shouldReturnAdministrativeDirectiveHtml() throws Exception {
+
+    String responseContent =
+        mockMvc
+            .perform(
+                get(ApiConfig.Paths.ADMINISTRATIVE_DIRECTIVE
+                        + "/"
+                        + documentNumberPresentInBucket
+                        + ".html")
+                    .contentType(MediaType.TEXT_HTML))
+            .andExpectAll(status().isOk(), content().contentType("text/html;charset=UTF-8"))
+            .andReturn()
+            .getResponse()
+            .getContentAsString();
+
+    assertThat(responseContent).contains("administrative directive test short report");
   }
 }
