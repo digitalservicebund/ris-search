@@ -445,7 +445,7 @@ test.describe("searching caselaw", () => {
 
     const results = getSearchResults(page);
 
-    expect(results).toHaveText([/15.06.2024/]);
+    await expect(results).toHaveText([/15.06.2024/]);
   });
 
   test("filters to show date range", async ({ page }) => {
@@ -468,7 +468,7 @@ test.describe("searching caselaw", () => {
 
     const results = getSearchResults(page);
 
-    expect(results).toHaveText([/22.11.2023/, /15.06.2024/]);
+    await expect(results).toHaveText([/22.11.2023/, /15.06.2024/]);
   });
 
   test("sorts by court in ascending order", async ({ page }) => {
@@ -486,7 +486,7 @@ test.describe("searching caselaw", () => {
 
     const results = getSearchResults(page);
 
-    expect(results).toHaveText([/ArbG Köln/, /BDiG Frankfurt/]);
+    await expect(results).toHaveText([/ArbG Köln/, /BDiG Frankfurt/]);
   });
 
   test("sorts by court in descending order", async ({ page }) => {
@@ -504,7 +504,7 @@ test.describe("searching caselaw", () => {
 
     const results = getSearchResults(page);
 
-    expect(results).toHaveText([/BDiG Frankfurt/, /ArbG Köln/]);
+    await expect(results).toHaveText([/BDiG Frankfurt/, /ArbG Köln/]);
   });
 });
 
