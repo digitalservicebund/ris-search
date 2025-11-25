@@ -138,16 +138,6 @@ const formattedFileNumbers = computed(() =>
 const formattedDescisionNames = computed(() =>
   formatArray(caseLaw.value?.decisionName ?? []),
 );
-
-const tabsProps = computed(() => {
-  return {
-    tabsLabel: "Ansichten des Gerichtsentscheidung",
-    textTabAriaLabel: "Text der Gerichtsentscheidung",
-    detailsTabAriaLabel: "Details zur Gerichtsentscheidung",
-    documentHtmlClass: "case-law",
-    html: html.value,
-  };
-});
 </script>
 
 <template>
@@ -155,7 +145,8 @@ const tabsProps = computed(() => {
     :title="title"
     title-placeholder="Titelzeile nicht vorhanden"
     :breadcrumb-items="breadcrumbItems"
-    :tabs-props="tabsProps"
+    document-html-class="case-law"
+    :html="html"
   >
     <template #actionsMenu>
       <CaseLawActionsMenu :case-law="caseLaw" />

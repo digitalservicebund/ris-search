@@ -1,17 +1,21 @@
 <script setup lang="ts">
+import { computed } from "vue";
 import ContentWrapper from "~/components/CustomLayouts/ContentWrapper.vue";
+import SidebarLayout from "~/components/CustomLayouts/SidebarLayout.vue";
 import RisBreadcrumb, {
   type BreadcrumbItem,
 } from "~/components/Ris/RisBreadcrumb.vue";
 import RisDocumentTitle from "~/components/Ris/RisDocumentTitle.vue";
-import type { RisTextAndDetailsTabsProps } from "~/components/Ris/RisTextAndDetailsTabs.vue";
+import IcBaselineSubject from "~icons/ic/baseline-subject";
+import IcOutlineInfo from "~icons/ic/outline-info";
 
 export interface RisDocumentProps {
   title?: string;
   titlePlaceholder: string;
   isEmptyDocument?: boolean;
   breadcrumbItems: BreadcrumbItem[];
-  tabsProps: RisTextAndDetailsTabsProps;
+  documentHtmlClass: string;
+  html?: string;
 }
 
 const {
@@ -19,8 +23,24 @@ const {
   titlePlaceholder,
   isEmptyDocument = false,
   breadcrumbItems,
-  tabsProps,
+  documentHtmlClass,
+  html,
 } = defineProps<RisDocumentProps>();
+
+const tabs = computed(() => [
+  {
+    id: "text",
+    href: "#text",
+    label: "Text",
+    icon: IcBaselineSubject,
+  },
+  {
+    id: "details",
+    href: "#details",
+    label: "Details",
+    icon: IcOutlineInfo,
+  },
+]);
 </script>
 
 <template>
@@ -42,20 +62,37 @@ const {
       </div>
     </div>
     <div v-else>
-      <RisTextAndDetailsTabs
-        :tabs-label="tabsProps.tabsLabel"
-        :text-tab-aria-label="tabsProps.textTabAriaLabel"
-        :details-tab-aria-label="tabsProps.detailsTabAriaLabel"
-        :document-html-class="tabsProps.documentHtmlClass"
-        :html="tabsProps.html"
-      >
-        <template #sidebar>
-          <slot name="sidebar" />
+      <RisTabs :tabs="tabs">
+        <template #default="{ activeTab, isClient }">
+          <section
+            id="text"
+            :class="tabPanelClass"
+            :hidden="isClient && activeTab !== 'text'"
+            aria-labelledby="textSectionHeading"
+          >
+            <SidebarLayout class="container">
+              <template #content>
+                <h2 id="textSectionHeading" class="sr-only">Text</h2>
+                <IncompleteDataMessage class="mb-16" />
+                <div :class="documentHtmlClass" v-html="html"></div>
+              </template>
+              <template #sidebar>
+                <slot name="sidebar" />
+              </template>
+            </SidebarLayout>
+          </section>
+          <section
+            id="details"
+            :class="tabPanelClass"
+            :hidden="isClient && activeTab !== 'details'"
+            aria-labelledby="detailsTabPanelTitle"
+          >
+            <div class="container pb-56">
+              <slot name="details" />
+            </div>
+          </section>
         </template>
-        <template #details>
-          <slot name="details" />
-        </template>
-      </RisTextAndDetailsTabs>
+      </RisTabs>
     </div>
   </ContentWrapper>
 </template>

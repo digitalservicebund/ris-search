@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from "vue";
+import RisDocument from "~/components/Ris/RisDocument.vue";
 
 definePageMeta({ layout: "base" }); // use "base" layout to allow for full-width tab backgrounds
 
@@ -14,16 +15,6 @@ const breadcrumbItems = computed(() => [
     label: "Verwaltungsvorschrift",
   },
 ]);
-
-const tabsProps = computed(() => {
-  return {
-    tabsLabel: "Ansichten der Verwaltungsvorschrift",
-    textTabAriaLabel: "Text der Verwaltungsvorschrift",
-    detailsTabAriaLabel: "Details zur Verwaltungsvorschrift",
-    documentHtmlClass: "",
-    html: "<h2>Coming soon</h2>",
-  };
-});
 </script>
 
 <template>
@@ -32,7 +23,8 @@ const tabsProps = computed(() => {
     title-placeholder="Titelzeile nicht vorhanden"
     :is-empty-document="isEmptyDocument"
     :breadcrumb-items="breadcrumbItems"
-    :tabs-props="tabsProps"
+    document-html-class=""
+    html="<h2>Coming soon</h2>"
   >
     <template #metadata>
       <div class="mb-48 flex flex-row flex-wrap gap-24">

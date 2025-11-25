@@ -46,16 +46,6 @@ const breadcrumbItems = computed(() => [
   },
 ]);
 
-const tabsProps = computed(() => {
-  return {
-    tabsLabel: "Ansichten des Literaturnachweises",
-    textTabAriaLabel: "Text des Literaturnachweises",
-    detailsTabAriaLabel: "Details zum Literaturnachweis",
-    documentHtmlClass: "literature",
-    html: html.value,
-  };
-});
-
 if (metadataError?.value) {
   showError(metadataError.value);
 }
@@ -70,7 +60,8 @@ if (contentError?.value) {
     :title-placeholder="LITERATURE_TITLE_PLACEHOLDER"
     :is-empty-document="isEmptyDocument"
     :breadcrumb-items="breadcrumbItems"
-    :tabs-props="tabsProps"
+    document-html-class="literature"
+    :html="html"
   >
     <template #actionsMenu>
       <client-only
