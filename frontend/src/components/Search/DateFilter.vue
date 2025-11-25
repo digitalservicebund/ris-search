@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { RadioButton } from "primevue";
-import RisDateInput from "~/components/Ris/RisDateInput.vue";
-import RisYearInput from "~/components/Ris/RisYearInput.vue";
+import DateInput from "~/components/DateInput.vue";
+import YearInput from "~/components/YearInput.vue";
 import { DocumentKind } from "~/types";
 import type { DateFilterValue, FilterType } from "~/utils/search/filterType";
 
@@ -180,7 +180,7 @@ function setPeriodTo(value: string | undefined) {
           class="flex flex-col pt-8 pl-40"
         >
           <label :for="specificDateInputId" class="sr-only">Datum</label>
-          <RisDateInput
+          <DateInput
             :id="specificDateInputId"
             :model-value="filter.from"
             @update:model-value="setSpecificDate($event)"
@@ -212,7 +212,7 @@ function setPeriodTo(value: string | undefined) {
             <label :for="periodFromYearInputId" class="ris-body2-regular">
               von
             </label>
-            <RisYearInput
+            <YearInput
               :id="periodFromYearInputId"
               :model-value="filter.from"
               @update:model-value="setPeriodFrom($event)"
@@ -221,7 +221,7 @@ function setPeriodTo(value: string | undefined) {
             <label :for="periodToYearInputId" class="ris-body2-regular mt-8">
               bis
             </label>
-            <RisYearInput
+            <YearInput
               :id="periodToYearInputId"
               :model-value="filter.to"
               @update:model-value="setPeriodTo($event)"
@@ -232,7 +232,7 @@ function setPeriodTo(value: string | undefined) {
             <label :for="periodFromDateInputId" class="ris-body2-regular">
               von
             </label>
-            <RisDateInput
+            <DateInput
               :id="periodFromDateInputId"
               :model-value="filter.from"
               @update:model-value="setPeriodFrom($event)"
@@ -241,7 +241,7 @@ function setPeriodTo(value: string | undefined) {
             <label :for="periodToDateInputId" class="ris-body2-regular mt-8">
               bis
             </label>
-            <RisDateInput
+            <DateInput
               :id="periodToDateInputId"
               :model-value="filter.to"
               @update:model-value="setPeriodTo($event)"

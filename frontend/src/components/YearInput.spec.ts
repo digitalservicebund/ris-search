@@ -3,7 +3,7 @@ import { render, screen } from "@testing-library/vue";
 import InputText from "primevue/inputtext";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { nextTick } from "vue";
-import RisYearInput from "./RisYearInput.vue";
+import YearInput from "./YearInput.vue";
 
 beforeEach(() => {
   vi.spyOn(HTMLElement.prototype, "offsetParent", "get").mockImplementation(
@@ -28,7 +28,7 @@ function renderComponent(options?: {
     modelValue: options?.modelValue,
     isReadOnly: options?.isReadOnly,
   };
-  const utils = render(RisYearInput, {
+  const utils = render(YearInput, {
     props,
     global: {
       stubs: options?.stubs,
@@ -37,7 +37,7 @@ function renderComponent(options?: {
   return { user, props, ...utils };
 }
 
-describe("RisYearInput", () => {
+describe("YearInput", () => {
   it("shows a year input element", () => {
     renderComponent();
     const input = screen.getByRole<HTMLInputElement>("textbox");

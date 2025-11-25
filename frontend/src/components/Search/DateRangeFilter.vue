@@ -52,14 +52,14 @@ const hasMultipleInputs = computed(
       />
     </span>
     <InputField v-if="showDateField" id="date" v-slot="slotProps" label="Datum">
-      <RisDateInput
+      <DateInput
         :id="slotProps.id"
         :key="slotProps.id"
         v-model="store.date"
         aria-label="Datum"
         :has-error="slotProps.hasError"
         @update:validation-error="slotProps.updateValidationError"
-      ></RisDateInput>
+      ></DateInput>
     </InputField>
     <InputField
       v-if="showDateAfterField"
@@ -67,14 +67,14 @@ const hasMultipleInputs = computed(
       v-slot="slotProps"
       :label="hasMultipleInputs ? 'Ab dem Datum' : 'Datum'"
     >
-      <RisDateInput
+      <DateInput
         :id="slotProps.id"
         :key="slotProps.id"
         v-model="store.dateAfter"
         aria-label="Ab dem Datum"
         :has-error="slotProps.hasError"
         @update:validation-error="slotProps.updateValidationError"
-      ></RisDateInput>
+      ></DateInput>
     </InputField>
     <InputField
       v-if="showDateBeforeField"
@@ -82,14 +82,14 @@ const hasMultipleInputs = computed(
       v-slot="slotProps"
       :label="hasMultipleInputs ? 'Bis zum Datum' : 'Datum'"
     >
-      <RisDateInput
+      <DateInput
         :id="slotProps.id"
         :key="slotProps.id"
         v-model="store.dateBefore"
         aria-label="Bis zum Datum"
         :has-error="slotProps.hasError"
         @update:validation-error="slotProps.updateValidationError"
-      ></RisDateInput>
+      ></DateInput>
     </InputField>
   </div>
 </template>

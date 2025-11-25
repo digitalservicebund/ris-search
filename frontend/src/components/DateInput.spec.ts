@@ -3,8 +3,8 @@ import { render, screen } from "@testing-library/vue";
 import InputText from "primevue/inputtext";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { nextTick } from "vue";
-import type { ValidationError } from "./RisDateInput.vue";
-import RisDateInput from "./RisDateInput.vue";
+import type { ValidationError } from "./DateInput.vue";
+import DateInput from "./DateInput.vue";
 
 beforeEach(() => {
   vi.spyOn(HTMLElement.prototype, "offsetParent", "get").mockImplementation(
@@ -31,7 +31,7 @@ function renderComponent(options?: {
     validationError: options?.validationError,
     isReadOnly: options?.isReadOnly,
   };
-  const utils = render(RisDateInput, {
+  const utils = render(DateInput, {
     props,
     global: {
       stubs: options?.stubs,
