@@ -36,6 +36,9 @@ export default defineVitestConfig({
       ],
       reportsDirectory: "./coverage",
       include: ["*/**/*.ts", "*/**/*.vue"],
+
+      // This needs to be kept in sync with exclusions in sonar-project.properties
+      // to ensure coverage is reported accurately in SonarCloud
       exclude: [
         "e2e/**/*",
         "src/**/*.spec.ts",
