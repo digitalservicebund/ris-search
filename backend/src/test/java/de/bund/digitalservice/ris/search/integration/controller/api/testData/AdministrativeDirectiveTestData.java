@@ -1,37 +1,25 @@
-package de.bund.digitalservice.ris.search.integration.mapper;
+package de.bund.digitalservice.ris.search.integration.controller.api.testData;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-import de.bund.digitalservice.ris.LoadXmlUtils;
-import de.bund.digitalservice.ris.search.mapper.AdministrativeDirectiveLdmlToOpenSearchMapper;
 import de.bund.digitalservice.ris.search.models.opensearch.AdministrativeDirective;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
-import org.junit.jupiter.api.Test;
 
-class AdministrativeDirectiveToOpenSearchMapperTest {
+public class AdministrativeDirectiveTestData {
 
-  @Test
-  void itMapsLdmlToAnOpenSearchEntity() {
+  public static final List<AdministrativeDirective> allDocuments = new ArrayList<>();
 
-    String ldmlString =
-        LoadXmlUtils.loadXmlAsString(AdministrativeDirective.class, "KSNR0000.akn.xml");
-
-    Instant now = Instant.now();
-    AdministrativeDirective entity =
-        AdministrativeDirectiveLdmlToOpenSearchMapper.map(ldmlString, now);
-
-    AdministrativeDirective expected =
+  static {
+    allDocuments.add(
         AdministrativeDirective.builder()
-            .id("KSNR0000")
+            .id("/v1/administrative_directive/KN0000")
             .documentNumber("KSNR0000")
             .headline("long title")
             .documentType("VR")
             .documentTypeDetail("Rundschreiben")
             .shortReport("text content")
             .legislationAuthority("NG Ministerium")
-            .tableOfContentsEntries(List.of("item 1", "item 2"))
             .entryIntoEffectDate(LocalDate.of(1978, 1, 17))
             .expiryDate(LocalDate.of(2026, 1, 1))
             .normReferences(List.of("PhanGB"))
@@ -43,9 +31,7 @@ class AdministrativeDirectiveToOpenSearchMapperTest {
             .activeNormReferences(List.of("ArbGG § 1 Abs 1"))
             .keywords(List.of("Schlagwort1", "Schlagwort2"))
             .fieldsOfLaw(List.of("01-01-01-01"))
-            .indexedAt(now.toString())
-            .build();
-
-    assertThat(entity).isEqualTo(expected);
+            .indexedAt(Instant.now().toString())
+            .build());
   }
 }

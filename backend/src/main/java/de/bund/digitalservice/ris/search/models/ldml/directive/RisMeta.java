@@ -35,11 +35,13 @@ public class RisMeta {
   @XmlElement(name = "fieldOfLaw", namespace = AdministrativeDirectiveLdml.RIS_NS)
   private List<FieldOfLaw> fieldsOfLaw;
 
-  @XmlElementWrapper(name = "zuordnungen", namespace = AdministrativeDirectiveLdml.RIS_NS)
-  @XmlElement(name = "zuordnung", namespace = AdministrativeDirectiveLdml.RIS_NS)
-  private List<Zuordnung> zuordnungen;
-
   @XmlElementWrapper(name = "dateToQuoteList", namespace = AdministrativeDirectiveLdml.RIS_NS)
   @XmlElement(name = "dateToQuoteEntry", namespace = AdministrativeDirectiveLdml.RIS_NS)
   private List<LocalDate> dateToQuoteList;
+
+  @XmlElementWrapper(
+      name = "tableOfContentsEntries",
+      namespace = AdministrativeDirectiveLdml.RIS_NS)
+  @XmlElement(name = "tableOfContentsEntry", namespace = AdministrativeDirectiveLdml.RIS_NS)
+  private List<String> tableOfContentsEntries;
 }

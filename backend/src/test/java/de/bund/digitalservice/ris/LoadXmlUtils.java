@@ -29,7 +29,7 @@ public class LoadXmlUtils {
   private static final String NORM_FOLDER = TEST_DATA_FOLDER + "/norm/";
   private static final String LITERATURE_FOLDER = TEST_DATA_FOLDER + "/literature/";
   private static final String ADMINISTRATIVE_REGULATION_FOLDER =
-      TEST_DATA_FOLDER + "/administrative_directive/";
+      TEST_DATA_FOLDER + "/administrative-directive/";
 
   /**
    * Loads an XML test file from the appropriate folder under {@code src/test/resources/data/LDML/}
