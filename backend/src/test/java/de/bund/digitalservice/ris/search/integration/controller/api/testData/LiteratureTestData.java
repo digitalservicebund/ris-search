@@ -69,7 +69,11 @@ public class LiteratureTestData {
             .build());
   }
 
-  public static Literature simple(String id, String content) {
-    return Literature.builder().id(id).outline(content).build();
+  public static Literature simple(String documentNumber, String content) {
+    return Literature.builder()
+        .id(documentNumber)
+        .documentNumber(documentNumber)
+        .outline(content)
+        .build();
   }
 }

@@ -100,7 +100,7 @@ public class NormSearchResponseMapper {
     return converted;
   }
 
-  private static LegislationWorkSearchSchema fromDomain(Norm norm) {
+  public static LegislationWorkSearchSchema fromDomain(Norm norm) {
     String contentBaseUrl = ApiConfig.Paths.LEGISLATION + "/";
     String expressionEli = norm.getExpressionEli();
     LegalForceStatus legislationLegalForce =

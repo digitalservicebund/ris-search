@@ -28,28 +28,29 @@ public class PageUtils {
   private final String literatureIndexName;
   private final String normsIndexName;
   private final String administrativeDirectiveIndexName;
+  private final ElasticsearchConverter elasticsearchConverter;
 
   private static final Logger logger = LogManager.getLogger(PageUtils.class);
 
   @Autowired
-  public PageUtils(Configurations configurations) {
-    caseLawsIndexName = configurations.getCaseLawsIndexName();
-    literatureIndexName = configurations.getLiteratureIndexName();
-    normsIndexName = configurations.getNormsIndexName();
-    administrativeDirectiveIndexName = configurations.getAdministrativeDirectiveIndexName();
+  public PageUtils(Configurations configurations, ElasticsearchConverter elasticsearchConverter) {
+    this.caseLawsIndexName = configurations.getCaseLawsIndexName();
+    this.literatureIndexName = configurations.getLiteratureIndexName();
+    this.normsIndexName = configurations.getNormsIndexName();
+    this.administrativeDirectiveIndexName = configurations.getAdministrativeDirectiveIndexName();
+    this.elasticsearchConverter = elasticsearchConverter;
   }
 
-  @SuppressWarnings("unchecked")
   public static <T> SearchPage<T> unwrapSearchHits(SearchHits<T> searchResult, Pageable pageable) {
     return SearchHitSupport.searchPageFor(searchResult, pageable);
   }
 
   public SearchPage<AbstractSearchEntity> unwrapMixedSearchHits(
-      SearchHits<Document> searchHits, Pageable pageable, ElasticsearchConverter converter) {
+      SearchHits<Document> searchHits, Pageable pageable) {
 
     List<SearchHit<AbstractSearchEntity>> convertedSearchHits =
         searchHits.stream()
-            .map(searchHit -> convertSearchHit(searchHit, converter))
+            .map(this::convertSearchHit)
             .filter(Optional::isPresent)
             .map(Optional::get)
             .toList();
@@ -70,17 +71,16 @@ public class PageUtils {
     return SearchHitSupport.searchPageFor(finalSearchHits, pageable);
   }
 
-  public Optional<SearchHit<AbstractSearchEntity>> convertSearchHit(
-      SearchHit<Document> searchHit, ElasticsearchConverter converter) {
+  public Optional<SearchHit<AbstractSearchEntity>> convertSearchHit(SearchHit<Document> searchHit) {
     AbstractSearchEntity entity;
     String indexName = searchHit.getIndex();
 
     if (indexName != null && indexName.startsWith(caseLawsIndexName)) {
-      entity = converter.read(CaseLawDocumentationUnit.class, searchHit.getContent());
+      entity = elasticsearchConverter.read(CaseLawDocumentationUnit.class, searchHit.getContent());
     } else if (indexName != null && indexName.startsWith(literatureIndexName)) {
-      entity = converter.read(Literature.class, searchHit.getContent());
+      entity = elasticsearchConverter.read(Literature.class, searchHit.getContent());
     } else if (indexName != null && indexName.startsWith(normsIndexName)) {
-      entity = converter.read(Norm.class, searchHit.getContent());
+      entity = elasticsearchConverter.read(Norm.class, searchHit.getContent());
     } else if (indexName != null && indexName.startsWith(administrativeDirectiveIndexName)) {
       return Optional.empty();
     } else {

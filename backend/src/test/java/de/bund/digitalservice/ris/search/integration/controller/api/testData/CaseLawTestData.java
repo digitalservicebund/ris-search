@@ -166,7 +166,11 @@ public class CaseLawTestData {
   }
 
   public static CaseLawDocumentationUnit simple(String documentNumber, String content) {
-    return CaseLawDocumentationUnit.builder().id(documentNumber).caseFacts(content).build();
+    return CaseLawDocumentationUnit.builder()
+        .id(documentNumber)
+        .documentNumber(documentNumber)
+        .caseFacts(content)
+        .build();
   }
 
   public static String simpleCaseLawXml(Map<String, Object> context) throws IOException {

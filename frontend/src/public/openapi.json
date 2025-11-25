@@ -1147,7 +1147,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/CollectionSchemaSearchMemberSchema"
+                  "$ref": "#/components/schemas/CollectionSchemaSearchMemberSchemaAbstractDocumentSchema"
                 }
               }
             }
@@ -1208,7 +1208,7 @@
             "content": {
               "*/*": {
                 "schema": {
-                  "$ref": "#/components/schemas/CollectionSchemaSearchMemberSchema"
+                  "$ref": "#/components/schemas/CollectionSchemaSearchMemberSchemaAbstractDocumentSchema"
                 }
               }
             }
@@ -2276,7 +2276,7 @@
         ],
         "properties": { "@type": { "type": "string", "example": "Decision" } }
       },
-      "CollectionSchemaSearchMemberSchema": {
+      "CollectionSchemaSearchMemberSchemaAbstractDocumentSchema": {
         "type": "object",
         "properties": {
           "@id": {
@@ -2286,7 +2286,9 @@
           "totalItems": { "type": "integer", "format": "int64", "example": 1 },
           "member": {
             "type": "array",
-            "items": { "$ref": "#/components/schemas/SearchMemberSchema" }
+            "items": {
+              "$ref": "#/components/schemas/SearchMemberSchemaAbstractDocumentSchema"
+            }
           },
           "view": {
             "$ref": "#/components/schemas/PartialCollectionViewSchema"
@@ -2294,7 +2296,7 @@
           "@type": { "type": "string", "example": "hydra:Collection" }
         }
       },
-      "SearchMemberSchema": {
+      "SearchMemberSchemaAbstractDocumentSchema": {
         "type": "object",
         "properties": {
           "item": {

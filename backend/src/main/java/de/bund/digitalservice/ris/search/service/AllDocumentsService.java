@@ -72,8 +72,7 @@ public class AllDocumentsService {
 
     SearchHits<Document> searchHits =
         operations.search(searchQuery, Document.class, allDocumentsIndex);
-    return pageUtils.unwrapMixedSearchHits(
-        searchHits, pageable, operations.getElasticsearchConverter());
+    return pageUtils.unwrapMixedSearchHits(searchHits, pageable);
   }
 
   /**
@@ -112,29 +111,20 @@ public class AllDocumentsService {
     NativeSearchQuery query = simpleSearchQueryBuilder.buildQuery(searchTypes, params, pageable);
 
     if (documentKind == null) {
-      return searchAllIndices(query, pageable);
+      SearchHits<Document> search = operations.search(query, Document.class, allDocumentsIndex);
+      return pageUtils.unwrapMixedSearchHits(search, pageable);
     } else {
-      return searchSpecificIndex(query, pageable, documentKind);
+
+      var searchHits =
+          switch (documentKind) {
+            case LEGISLATION -> operations.search(query, Norm.class);
+            case CASELAW -> operations.search(query, CaseLawDocumentationUnit.class);
+            case LITERATURE -> operations.search(query, Literature.class);
+          };
+      @SuppressWarnings("unchecked")
+      SearchHits<AbstractSearchEntity> castSearchHits =
+          (SearchHits<AbstractSearchEntity>) searchHits;
+      return PageUtils.unwrapSearchHits(castSearchHits, pageable);
     }
-  }
-
-  private SearchPage<AbstractSearchEntity> searchAllIndices(
-      NativeSearchQuery nativeQuery, Pageable pageable) {
-    var searchHits = operations.search(nativeQuery, Document.class, allDocumentsIndex);
-    return pageUtils.unwrapMixedSearchHits(
-        searchHits, pageable, operations.getElasticsearchConverter());
-  }
-
-  private SearchPage<AbstractSearchEntity> searchSpecificIndex(
-      NativeSearchQuery nativeQuery, Pageable pageable, @NotNull DocumentKind documentKind) {
-    var searchHits =
-        switch (documentKind) {
-          case LEGISLATION -> operations.search(nativeQuery, Norm.class);
-          case CASELAW -> operations.search(nativeQuery, CaseLawDocumentationUnit.class);
-          case LITERATURE -> operations.search(nativeQuery, Literature.class);
-        };
-    @SuppressWarnings("unchecked")
-    SearchHits<AbstractSearchEntity> castSearchHits = (SearchHits<AbstractSearchEntity>) searchHits;
-    return PageUtils.unwrapSearchHits(castSearchHits, pageable);
   }
 }
