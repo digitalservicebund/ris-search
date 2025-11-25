@@ -5,11 +5,11 @@ import CaseLawActionsMenu from "~/components/ActionMenu/CaseLawActionsMenu.vue";
 import TableOfContents, {
   type TableOfContentsEntry,
 } from "~/components/Caselaw/TableOfContents.vue";
+import DocumentDetailPage from "~/components/DocumentDetailPage.vue";
 import IncompleteDataMessage from "~/components/IncompleteDataMessage.vue";
 import MetadataField from "~/components/MetadataField.vue";
 import Properties from "~/components/Properties.vue";
 import PropertiesItem from "~/components/PropertiesItem.vue";
-import DocumentDetailPage from "~/components/Ris/DocumentDetailPage.vue";
 import { type CaseLaw, DocumentKind } from "~/types";
 import { getEncodingURL } from "~/utils/caseLaw";
 import { dateFormattedDDMMYYYY } from "~/utils/dateFormatting";

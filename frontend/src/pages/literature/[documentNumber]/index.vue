@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import LiteratureActionsMenu from "~/components/ActionMenu/LiteratureActionsMenu.vue";
+import DocumentDetailPage from "~/components/DocumentDetailPage.vue";
 import LiteratureDetails from "~/components/Literature/LiteratureDetails.vue";
 import LiteratureMetadata from "~/components/Literature/LiteratureMetadata.vue";
-import DocumentDetailPage from "~/components/Ris/DocumentDetailPage.vue";
 import { DocumentKind, type Literature } from "~/types";
 import { formatDocumentKind } from "~/utils/displayValues";
 import { getTitle, LITERATURE_TITLE_PLACEHOLDER } from "~/utils/literature";

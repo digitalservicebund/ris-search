@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import DocumentDetailPage from "~/components/Ris/DocumentDetailPage.vue";
+import DocumentDetailPage from "~/components/DocumentDetailPage.vue";
 
 definePageMeta({ layout: "base" }); // use "base" layout to allow for full-width tab backgrounds
 
