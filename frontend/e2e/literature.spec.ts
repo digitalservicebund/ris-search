@@ -141,14 +141,9 @@ test("displays all titles", async ({ page }) => {
 
 noJsTest("tabs work without JavaScript", async ({ page }) => {
   await navigate(page, "/literature/XXLU000000001");
-  await expect(
-    page.getByRole("link", { name: "Details zum Literaturnachweis" }),
-  ).toBeVisible();
+  await expect(page.getByRole("link", { name: "Details" })).toBeVisible();
 
-  await page
-    .getByRole("link", { name: "Details zum Literaturnachweis" })
-    .first()
-    .click();
+  await page.getByRole("link", { name: "Details" }).first().click();
 
   await expect(page).toHaveURL(/#details$/);
 
@@ -162,7 +157,7 @@ test("shows detailed information in the 'Details' tab", async ({ page }) => {
   await navigate(page, "/literature/XXLU000000001");
 
   const detailsLink = page.getByRole("link", {
-    name: "Details zum Literaturnachweis",
+    name: "Details",
   });
   await detailsLink.click();
 

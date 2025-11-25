@@ -28,7 +28,7 @@ test.beforeAll(async ({ privateFeaturesEnabled }) => {
 test("can browse different Fassungen of a norm", async ({ page }) => {
   await navigate(page, "/norms/eli/bund/bgbl-1/2020/s1126/2020-08-04/1/deu");
 
-  await page.getByRole("link", { name: "Fassungen des Gesetzes" }).click();
+  await page.getByRole("link", { name: "Fassungen", exact: true }).click();
 
   const tableBodyLocator = page.getByRole("table").getByRole("rowgroup").nth(1);
 
@@ -54,7 +54,7 @@ test("can navigate to a Fassung by clicking the table row", async ({
     }),
   ).toBeVisible();
 
-  await page.getByRole("link", { name: "Fassungen des Gesetzes" }).click();
+  await page.getByRole("link", { name: "Fassungen" }).click();
 
   await test.step("Navigate to future fassung", async () => {
     const tableBodyLocator = page

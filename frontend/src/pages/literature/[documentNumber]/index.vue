@@ -62,14 +62,12 @@ const tabs = computed(() => [
     id: "text",
     href: "#text",
     label: "Text",
-    ariaLabel: "Text des Literaturnachweises",
     icon: IcBaselineSubject,
   },
   {
     id: "details",
     href: "#details",
     label: "Details",
-    ariaLabel: "Details zum Literaturnachweis",
     icon: IcOutlineInfo,
   },
 ]);
@@ -112,7 +110,7 @@ if (contentError?.value) {
       </div>
     </div>
     <div v-else>
-      <RisTabs :tabs="tabs" label="Ansichten des Literaturnachweises">
+      <RisTabs :tabs="tabs">
         <template #default="{ activeTab, isClient }">
           <section
             id="text"

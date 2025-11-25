@@ -12,7 +12,6 @@ describe("RisTabs.vue", () => {
       id: "text",
       href: "#text",
       label: "Text",
-      ariaLabel: "Text der Übersetzung",
       icon: IcBaselineSubject,
       iconClass: "mr-8",
     },
@@ -20,7 +19,6 @@ describe("RisTabs.vue", () => {
       id: "details",
       href: "#details",
       label: "Details",
-      ariaLabel: "Details zur Übersetzung",
       icon: IcOutlineInfo,
       iconClass: "mr-8",
     },
@@ -30,7 +28,6 @@ describe("RisTabs.vue", () => {
     await renderSuspended(RisTabs, {
       props: {
         tabs: mockTabs,
-        label: "Test tabs",
       },
     });
 
@@ -39,22 +36,19 @@ describe("RisTabs.vue", () => {
 
     expect(links[0]).toHaveTextContent("Text");
     expect(links[0]).toHaveAttribute("href", "#text");
-    expect(links[0]).toHaveAttribute("aria-label", "Text der Übersetzung");
 
     expect(links[1]).toHaveTextContent("Details");
     expect(links[1]).toHaveAttribute("href", "#details");
-    expect(links[1]).toHaveAttribute("aria-label", "Details zur Übersetzung");
   });
 
   it("renders nav with correct aria-label", async () => {
     await renderSuspended(RisTabs, {
       props: {
         tabs: mockTabs,
-        label: "Test tabs",
       },
     });
 
-    const nav = screen.getByRole("navigation", { name: "Test tabs" });
+    const nav = screen.getByRole("navigation", { name: "Tab-Liste" });
     expect(nav).toBeVisible();
   });
 
@@ -62,7 +56,6 @@ describe("RisTabs.vue", () => {
     await renderSuspended(RisTabs, {
       props: {
         tabs: mockTabs,
-        label: "Test tabs",
       },
     });
 
@@ -75,7 +68,6 @@ describe("RisTabs.vue", () => {
     await renderSuspended(RisTabs, {
       props: {
         tabs: mockTabs,
-        label: "Test tabs",
         defaultTab: "details",
       },
     });
@@ -89,7 +81,6 @@ describe("RisTabs.vue", () => {
     await renderSuspended(RisTabs, {
       props: {
         tabs: mockTabs,
-        label: "Test tabs",
       },
     });
 
@@ -112,20 +103,17 @@ describe("RisTabs.vue", () => {
         id: "tab1",
         href: "#tab1",
         label: "Tab 1",
-        ariaLabel: "Tab 1",
       },
       {
         id: "tab2",
         href: "#tab2",
         label: "Tab 2",
-        ariaLabel: "Tab 2",
       },
     ];
 
     await renderSuspended(RisTabs, {
       props: {
         tabs: tabsWithoutIcons,
-        label: "Test tabs",
       },
     });
 

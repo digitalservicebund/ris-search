@@ -6,14 +6,12 @@ export interface LinkTab {
   id: string;
   href: RouteLocationRaw;
   label: string;
-  ariaLabel: string;
   icon?: Component;
   iconClass?: string;
 }
 
 const props = defineProps<{
   tabs: LinkTab[];
-  label: string;
   defaultTab?: string;
 }>();
 
@@ -38,7 +36,7 @@ const getTabClasses = (tabId: string) => {
 <template>
   <nav
     class="relative before:absolute before:bottom-0 before:left-[50%] before:h-px before:w-full before:-translate-x-1/2 before:bg-gray-600 print:hidden"
-    :aria-label="label"
+    aria-label="Tab-Liste"
   >
     <div class="container flex">
       <NuxtLink
@@ -46,7 +44,6 @@ const getTabClasses = (tabId: string) => {
         :key="tab.id"
         :to="tab.href"
         :aria-current="activeTab === tab.id ? 'page' : undefined"
-        :aria-label="tab.ariaLabel"
         :class="getTabClasses(tab.id)"
         @click="handleTabClick(tab.id, $event)"
       >

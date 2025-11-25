@@ -40,9 +40,9 @@ test("opens the page via URL", { tag: ["@RISDEV-8950"] }, async ({ page }) => {
 test("has text and detail tab", { tag: ["@RISDEV-8950"] }, async ({ page }) => {
   await navigate(page, "/translations/TestV");
 
-  const textTab = page.getByRole("link", { name: "Text der Übersetzung" });
+  const textTab = page.getByRole("link", { name: "Text" });
   const detailsTab = page.getByRole("link", {
-    name: "Details zur Übersetzung",
+    name: "Details",
   });
 
   await expect(textTab).toBeVisible();
@@ -64,7 +64,7 @@ test(
     await expect(translator).not.toBeVisible();
     await expect(version).not.toBeVisible();
 
-    await page.getByRole("link", { name: "Details zur Übersetzung" }).click();
+    await page.getByRole("link", { name: "Details" }).click();
 
     await expect(heading).toBeVisible();
     await expect(translator).toBeVisible();
@@ -82,7 +82,7 @@ test(
 
     await expect(section).toBeVisible();
 
-    await page.getByRole("link", { name: "Details zur Übersetzung" }).click();
+    await page.getByRole("link", { name: "Details" }).click();
     await expect(section).not.toBeVisible();
   },
 );
@@ -159,10 +159,10 @@ noJsTest(
   async ({ page }) => {
     await navigate(page, "/translations/TestV");
 
-    await page.getByRole("link", { name: "Details zur Übersetzung" }).click();
+    await page.getByRole("link", { name: "Details" }).click();
     await expect(page).toHaveURL(/#details$/);
 
-    await page.getByRole("link", { name: "Text der Übersetzung" }).click();
+    await page.getByRole("link", { name: "Text" }).click();
     await expect(page).toHaveURL(/#text$/);
   },
 );
