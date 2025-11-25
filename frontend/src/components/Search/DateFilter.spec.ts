@@ -346,7 +346,120 @@ describe("DateFilter", () => {
 
   describe.todo("administrative regulations", () => {});
 
-  describe.todo("literature", () => {});
+  describe("literature", () => {
+    it("shows the filters for literature", () => {
+      render(DateFilter, {
+        props: {
+          documentKind: DocumentKind.Literature,
+        },
+        global: { stubs: { InputMask: InputText } },
+      });
+
+      expect(
+        screen.getByRole("form", { name: "Filter nach Veröffentlichungsjahr" }),
+      ).toBeInTheDocument();
+
+      expect(
+        screen.queryByRole("radio", { name: "Aktuell gültig" }),
+      ).not.toBeInTheDocument();
+
+      expect(
+        screen.getByRole("radio", { name: "Keine zeitliche Begrenzung" }),
+      ).toBeInTheDocument();
+
+      expect(
+        screen.queryByRole("radio", { name: "Bestimmtes Datum" }),
+      ).not.toBeInTheDocument();
+
+      expect(
+        screen.getByRole("radio", { name: "Innerhalb einer Zeitspanne" }),
+      ).toBeInTheDocument();
+    });
+
+    it("filters by 'Keine zeitliche Begrenzung'", async () => {
+      const user = userEvent.setup();
+
+      const { emitted } = render(DateFilter, {
+        props: {
+          documentKind: DocumentKind.Literature,
+          modelValue: { type: "period", from: "2020", to: "2024" },
+        },
+        global: { stubs: { InputMask: InputText } },
+      });
+
+      await user.click(
+        screen.getByRole("radio", { name: "Keine zeitliche Begrenzung" }),
+      );
+
+      expect(emitted("update:modelValue")).toContainEqual([
+        { type: "allTime", form: undefined, to: undefined },
+      ]);
+    });
+
+    it("filters by 'Innerhalb einer Zeitspanne'", async () => {
+      const user = userEvent.setup();
+
+      const { emitted } = render(DateFilter, {
+        props: {
+          documentKind: DocumentKind.Literature,
+          modelValue: { type: "allTime" },
+        },
+        global: { stubs: { InputMask: InputText } },
+      });
+
+      await user.click(
+        screen.getByRole("radio", { name: "Innerhalb einer Zeitspanne" }),
+      );
+
+      expect(emitted("update:modelValue")).toContainEqual([
+        { type: "period", form: undefined, to: undefined },
+      ]);
+    });
+
+    it("sets 'from' year of a period", async () => {
+      const user = userEvent.setup();
+      let modelValue: DateFilterValue = { type: "period", to: "2024" };
+
+      render(DateFilter, {
+        props: {
+          documentKind: DocumentKind.Literature,
+          modelValue,
+          "onUpdate:modelValue": (val) => (modelValue = val),
+        },
+        global: { stubs: { InputMask: InputText } },
+      });
+
+      await user.type(screen.getByRole("textbox", { name: "von" }), "2020");
+
+      expect(modelValue).toEqual({
+        type: "period",
+        from: "2020",
+        to: "2024",
+      });
+    });
+
+    it("sets 'to' year of a period", async () => {
+      const user = userEvent.setup();
+      let modelValue: DateFilterValue = { type: "period", from: "2020" };
+
+      render(DateFilter, {
+        props: {
+          documentKind: DocumentKind.Literature,
+          modelValue,
+          "onUpdate:modelValue": (val) => (modelValue = val),
+        },
+        global: { stubs: { InputMask: InputText } },
+      });
+
+      await user.type(screen.getByRole("textbox", { name: "bis" }), "2024");
+
+      expect(modelValue).toEqual({
+        type: "period",
+        from: "2020",
+        to: "2024",
+      });
+    });
+  });
 
   it("sets the default filter when switching document kind", async () => {
     const { rerender } = render(DateFilter, {
@@ -368,5 +481,104 @@ describe("DateFilter", () => {
     expect(
       screen.getByRole("radio", { name: "Keine zeitliche Begrenzung" }),
     ).toBeChecked();
+
+    await rerender({ documentKind: DocumentKind.Literature });
+    expect(
+      screen.getByRole("radio", { name: "Keine zeitliche Begrenzung" }),
+    ).toBeChecked();
+  });
+
+  describe("date conversion when switching document kind", () => {
+    it("converts full dates to years when switching to Literature", async () => {
+      let modelValue: DateFilterValue = {
+        type: "period",
+        from: "2020-03-15",
+        to: "2024-09-20",
+      };
+
+      const { rerender } = render(DateFilter, {
+        props: {
+          documentKind: DocumentKind.CaseLaw,
+          modelValue,
+          "onUpdate:modelValue": (val) => (modelValue = val),
+        },
+        global: { stubs: { InputMask: InputText } },
+      });
+
+      await rerender({ documentKind: DocumentKind.Literature });
+
+      expect(modelValue).toEqual({
+        type: "period",
+        from: "2020",
+        to: "2024",
+      });
+    });
+
+    it("converts years to full dates when switching from Literature", async () => {
+      let modelValue: DateFilterValue = {
+        type: "period",
+        from: "2020",
+        to: "2024",
+      };
+
+      const { rerender } = render(DateFilter, {
+        props: {
+          documentKind: DocumentKind.Literature,
+          modelValue,
+          "onUpdate:modelValue": (val) => (modelValue = val),
+        },
+        global: { stubs: { InputMask: InputText } },
+      });
+
+      await rerender({ documentKind: DocumentKind.CaseLaw });
+
+      expect(modelValue).toEqual({
+        type: "period",
+        from: "2020-01-01",
+        to: "2024-12-31",
+      });
+    });
+
+    it("does not convert when filter type is not period", async () => {
+      let modelValue: DateFilterValue = { type: "allTime" };
+
+      const { rerender } = render(DateFilter, {
+        props: {
+          documentKind: DocumentKind.CaseLaw,
+          modelValue,
+          "onUpdate:modelValue": (val) => (modelValue = val),
+        },
+        global: { stubs: { InputMask: InputText } },
+      });
+
+      await rerender({ documentKind: DocumentKind.Literature });
+
+      expect(modelValue).toEqual({ type: "allTime" });
+    });
+
+    it("handles undefined values", async () => {
+      let modelValue: DateFilterValue = {
+        type: "period",
+        from: "2020-03-15",
+        to: undefined,
+      };
+
+      const { rerender } = render(DateFilter, {
+        props: {
+          documentKind: DocumentKind.CaseLaw,
+          modelValue,
+          "onUpdate:modelValue": (val) => (modelValue = val),
+        },
+        global: { stubs: { InputMask: InputText } },
+      });
+
+      await rerender({ documentKind: DocumentKind.Literature });
+
+      expect(modelValue).toEqual({
+        type: "period",
+        from: "2020",
+        to: undefined,
+      });
+    });
   });
 });
