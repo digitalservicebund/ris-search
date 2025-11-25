@@ -1,5 +1,6 @@
 package de.bund.digitalservice.ris.search.mapper;
 
+import de.bund.digitalservice.ris.search.models.opensearch.AdministrativeDirective;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import de.bund.digitalservice.ris.search.models.opensearch.Literature;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;

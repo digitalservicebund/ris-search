@@ -2,11 +2,14 @@ package de.bund.digitalservice.ris.search.service;
 
 import de.bund.digitalservice.ris.search.config.opensearch.Configurations;
 import de.bund.digitalservice.ris.search.models.DocumentKind;
+import de.bund.digitalservice.ris.search.models.api.parameters.AdministrativeDirectiveSearchParams;
 import de.bund.digitalservice.ris.search.models.api.parameters.CaseLawSearchParams;
 import de.bund.digitalservice.ris.search.models.api.parameters.LiteratureSearchParams;
 import de.bund.digitalservice.ris.search.models.api.parameters.NormsSearchParams;
 import de.bund.digitalservice.ris.search.models.api.parameters.UniversalSearchParams;
 import de.bund.digitalservice.ris.search.models.opensearch.AbstractSearchEntity;
+import de.bund.digitalservice.ris.search.models.opensearch.AdministrativeDirective;
+import de.bund.digitalservice.ris.search.models.opensearch.AdministrativeDirective;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import de.bund.digitalservice.ris.search.models.opensearch.Literature;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
@@ -61,6 +64,7 @@ public class AllDocumentsService {
       @Nullable NormsSearchParams normsParams,
       @Nullable CaseLawSearchParams caseLawParams,
       @Nullable LiteratureSearchParams literatureSearchParams,
+      @Nullable AdministrativeDirectiveSearchParams administrativeDirectiveSearchParams,
       @Nullable DocumentKind documentKind,
       Pageable pageable) {
 
@@ -69,11 +73,15 @@ public class AllDocumentsService {
           case LEGISLATION -> List.of(new NormSimpleSearchType(normsParams));
           case CASELAW -> List.of(new CaseLawSimpleSearchType(caseLawParams));
           case LITERATURE -> List.of(new LiteratureSimpleSearchType(literatureSearchParams));
+          case ADMINISTRATIVE_DIRECTIVE ->
+              List.of(
+                  new AdministrativeDirectiveSimpleSearchType(administrativeDirectiveSearchParams));
           case null ->
               List.of(
                   new NormSimpleSearchType(normsParams),
                   new CaseLawSimpleSearchType(caseLawParams),
-                  new LiteratureSimpleSearchType(literatureSearchParams));
+                  new LiteratureSimpleSearchType(literatureSearchParams),
+                  new AdministrativeDirectiveSimpleSearchType(administrativeDirectiveSearchParams));
         };
 
     NativeSearchQuery query = simpleSearchQueryBuilder.buildQuery(searchTypes, params, pageable);
@@ -88,6 +96,8 @@ public class AllDocumentsService {
             case LEGISLATION -> operations.search(query, Norm.class);
             case CASELAW -> operations.search(query, CaseLawDocumentationUnit.class);
             case LITERATURE -> operations.search(query, Literature.class);
+              case ADMINISTRATIVE_DIRECTIVE ->
+                      operations.search(query, AdministrativeDirective.class);
           };
       @SuppressWarnings("unchecked")
       SearchHits<AbstractSearchEntity> castSearchHits =

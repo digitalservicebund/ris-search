@@ -11,7 +11,8 @@ import org.springframework.stereotype.Component;
 public enum DocumentKind {
   CASELAW("R"),
   LEGISLATION("N"),
-  LITERATURE("L");
+  LITERATURE("L"),
+  ADMINISTRATIVE_DIRECTIVE("V");
 
   private final String value;
 
@@ -29,6 +30,7 @@ public enum DocumentKind {
       case "R" -> DocumentKind.CASELAW;
       case "N" -> DocumentKind.LEGISLATION;
       case "L" -> DocumentKind.LITERATURE;
+      case "V" -> DocumentKind.ADMINISTRATIVE_DIRECTIVE;
       default -> DocumentKind.valueOf(value.toUpperCase());
     };
   }

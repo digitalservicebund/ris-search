@@ -22,7 +22,15 @@ public class AdministrativeDirectiveSimpleSearchType implements SimpleSearchType
 
   @Override
   public void addHighlightedFields(HighlightBuilder builder) {
-    HIGHLIGHT_CONTENT_FIELDS.forEach(builder::field);
+    // avoid collisions with highlighted fields of other Documenttypes
+    List<String> highlightedFields =
+        builder.fields().stream().map(HighlightBuilder.Field::name).toList();
+    HIGHLIGHT_CONTENT_FIELDS.forEach(
+        field -> {
+          if (!highlightedFields.contains(field)) {
+            builder.field(field);
+          }
+        });
   }
 
   @Override

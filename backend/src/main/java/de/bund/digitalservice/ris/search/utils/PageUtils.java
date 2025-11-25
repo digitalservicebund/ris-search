@@ -2,6 +2,7 @@ package de.bund.digitalservice.ris.search.utils;
 
 import de.bund.digitalservice.ris.search.config.opensearch.Configurations;
 import de.bund.digitalservice.ris.search.models.opensearch.AbstractSearchEntity;
+import de.bund.digitalservice.ris.search.models.opensearch.AdministrativeDirective;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import de.bund.digitalservice.ris.search.models.opensearch.Literature;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
@@ -82,7 +83,7 @@ public class PageUtils {
     } else if (indexName != null && indexName.startsWith(normsIndexName)) {
       entity = elasticsearchConverter.read(Norm.class, searchHit.getContent());
     } else if (indexName != null && indexName.startsWith(administrativeDirectiveIndexName)) {
-      return Optional.empty();
+      entity = converter.read(AdministrativeDirective.class, searchHit.getContent());
     } else {
       logger.error("Unexpected index on document search {}", searchHit.getIndex());
       return Optional.empty();
