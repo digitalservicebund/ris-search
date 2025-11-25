@@ -508,6 +508,109 @@ test.describe("searching caselaw", () => {
   });
 });
 
+test.describe("searching literature", () => {
+  test("only shows literature results", async ({ page }) => {
+    await navigate(page, "/advanced-search");
+
+    await searchFor(page, {
+      q: "und",
+      documentKind: "Literaturnachweise",
+    });
+
+    const searchResults = getSearchResults(page);
+    const resultCounter = getResultCounter(page);
+
+    await expect(resultCounter).toHaveText(nonZeroResultCount);
+
+    // Ensure all visible entries are of type literature
+    await expect(searchResults).toHaveText([/^Auf/]);
+  });
+
+  test("shows the search result contents", async ({ page }) => {
+    await navigate(page, "/advanced-search");
+
+    await searchFor(page, {
+      q: 'main_title:"Erstes Test-Dokument ULI"',
+      documentKind: "Literaturnachweise",
+    });
+
+    const searchResult = getSearchResults(page).first();
+
+    // Header
+    await expect(searchResult).toHaveText(/FooBar, 1982, 123-123/);
+    await expect(searchResult).toHaveText(/2024/);
+    await expect(searchResult).toHaveText(/Erstes Test-Dokument ULI/);
+    await expect(searchResult).toHaveText(
+      /Dies ist ein einfaches Test-Dokument./,
+    );
+
+    // Result detail link
+    await expect(
+      searchResult.getByRole("link", { name: "Erstes Test-Dokument ULI" }),
+    ).toBeVisible();
+
+    // Highlights
+    // TODO: Highlights?
+  });
+
+  test("navigates to the document detail page", async ({ page }) => {
+    await navigate(page, "/advanced-search");
+
+    await searchFor(page, {
+      q: 'main_title:"Erstes Test-Dokument ULI"',
+      documentKind: "Literaturnachweise",
+    });
+
+    // Result detail link
+    await page.getByRole("link", { name: "Erstes Test-Dokument ULI" }).click();
+
+    await expect(
+      page.getByRole("heading", {
+        level: 1,
+        name: "Erstes Test-Dokument ULI",
+      }),
+    ).toBeVisible();
+  });
+
+  test("searches without date restrictions", async ({ page }) => {
+    await navigate(page, "/advanced-search");
+
+    await searchFor(page, {
+      documentKind: "Literaturnachweise",
+      q: "und",
+      dateFilter: "Keine zeitliche Begrenzung",
+    });
+
+    // Don't have a great way of asserting this filter, so just making sure the
+    // parameter is handled correctly
+    await expect(page).toHaveURL(/dateFilterType=allTime/);
+
+    const resultCounter = getResultCounter(page);
+    await expect(resultCounter).toHaveText(nonZeroResultCount);
+  });
+
+  test("filter to show date range", async ({ page }) => {
+    await navigate(page, "/advanced-search");
+
+    await searchFor(page, {
+      documentKind: "Literaturnachweise",
+      q: "",
+      dateFilter: "Innerhalb einer Zeitspanne",
+      dateFilterFrom: "2021",
+      dateFilterTo: "2022",
+    });
+
+    const load = page.waitForResponse(/v1\/document\/lucene-search/);
+    await page.getByRole("combobox", { name: "Relevanz" }).click();
+    await page.getByRole("option", { name: "Datum: Älteste zuerst" }).click();
+    await load;
+
+    const results = getSearchResults(page);
+
+    await expect(results).toHaveText([/2021/, /2022/]);
+  });
+});
+
 test.describe("responsive", () => {
   test.beforeEach(({ isMobileTest }) => {
     test.skip(!isMobileTest);
