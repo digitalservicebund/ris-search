@@ -20,8 +20,8 @@ public record AdministrativeDirective(
     @Nullable @Field(name = Fields.HEADLINE) String headline,
     @Nullable @Field(name = Fields.DOCUMENT_TYPE) String documentType,
     @Field(name = Fields.DOCUMENT_TYPE_DETAIL) String documentTypeDetail,
-    @Nullable @Field(name = Fields.CONTENT) String shortReport,
-    @Nullable @Field(name = Fields.LEGISLATOR) String legislationAuthority,
+    @Nullable @Field(name = Fields.SHORT_REPORT) String shortReport,
+    @Nullable @Field(name = Fields.LEGISLATION_AUTHORITY) String legislationAuthority,
     @Nullable
         @Field(
             name = Fields.ENTRY_INTO_EFFECT_DATE,
@@ -32,9 +32,9 @@ public record AdministrativeDirective(
         LocalDate expiryDate,
     @ElementCollection @Field(name = Fields.NORM_REFERENCES) List<String> normReferences,
     @ElementCollection @Field(name = Fields.CASELAW_REFERENCES) List<String> caselawReferences,
-    @ElementCollection @Field(name = Fields.FUNDSTELLE_REFERENCES) List<String> references,
+    @ElementCollection @Field(name = Fields.REFERENCES) List<String> references,
     @ElementCollection
-        @Field(name = Fields.DATES_TO_QUOTE, type = FieldType.Date, format = DateFormat.date)
+        @Field(name = Fields.CITATION_DATES, type = FieldType.Date, format = DateFormat.date)
         List<LocalDate> citationDates,
     @ElementCollection @Field(name = Fields.REFERENCE_NUMBERS) List<String> referenceNumbers,
     @ElementCollection @Field(name = Fields.ACTIVE_ADMINISTRATIVE_REFERENCES)
@@ -43,8 +43,7 @@ public record AdministrativeDirective(
         List<String> activeNormReferences,
     @ElementCollection @Field(name = Fields.KEYWORDS) List<String> keywords,
     @ElementCollection @Field(name = Fields.FIELDS_OF_LAW) List<String> fieldsOfLaw,
-    @ElementCollection @Field(name = Fields.TABLE_OF_CONTENTS_ENTRIES)
-        List<String> tableOfContentsEntries,
+    @ElementCollection @Field(name = Fields.OUTLINE) List<String> tableOfContentsEntries,
     @JsonIgnore @Field(name = AdministrativeDirective.Fields.INDEXED_AT) String indexedAt)
     implements AbstractSearchEntity {
 
@@ -61,9 +60,9 @@ public record AdministrativeDirective(
 
     public static final String DOCUMENT_TYPE = "document_type";
 
-    public static final String CONTENT = "content";
+    public static final String SHORT_REPORT = "short_report";
 
-    public static final String LEGISLATOR = "normgeber";
+    public static final String LEGISLATION_AUTHORITY = "legislation_authority";
 
     public static final String ENTRY_INTO_EFFECT_DATE = "entry_into_effect_date";
 
@@ -73,9 +72,9 @@ public record AdministrativeDirective(
 
     public static final String CASELAW_REFERENCES = "caselaw_references";
 
-    public static final String FUNDSTELLE_REFERENCES = "fundstelle_references";
+    public static final String REFERENCES = "references";
 
-    public static final String DATES_TO_QUOTE = "dates_to_quote";
+    public static final String CITATION_DATES = "citation_dates";
 
     public static final String REFERENCE_NUMBERS = "reference_numbers";
 
@@ -88,7 +87,7 @@ public record AdministrativeDirective(
 
     public static final String FIELDS_OF_LAW = "fields_of_law";
 
-    public static final String TABLE_OF_CONTENTS_ENTRIES = "table_of_contents_entries";
+    public static final String OUTLINE = "outline";
 
     public static final String INDEXED_AT = "indexed_at";
   }

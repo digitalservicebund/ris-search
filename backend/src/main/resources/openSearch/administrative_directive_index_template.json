@@ -36,11 +36,11 @@
           "type": "text",
           "analyzer": "custom_german_analyzer"
         },
-        "content": {
+        "short_report": {
           "type": "text",
           "analyzer": "custom_german_analyzer"
         },
-        "document_category": {
+        "document_type_detail": {
           "type": "text",
           "analyzer": "custom_german_analyzer"
         },
@@ -66,14 +66,14 @@
           "type": "text",
           "analyzer": "custom_german_analyzer"
         },
-        "fundstelle_references": {
+        "references": {
           "type": "text",
           "analyzer": "custom_german_analyzer"
         },
         "indexed_at": {
           "type": "date"
         },
-        "long_title": {
+        "headline": {
           "type": "text",
           "analyzer": "custom_german_analyzer"
         },
@@ -81,7 +81,7 @@
           "type": "text",
           "analyzer": "custom_german_analyzer"
         },
-        "normgeber": {
+        "legislation_authority": {
           "type": "text",
           "analyzer": "custom_german_analyzer"
         },
@@ -89,10 +89,14 @@
           "type": "text",
           "analyzer": "custom_german_analyzer"
         },
-        "zitierdatum_items": {
+        "citation_dates": {
           "type": "date"
         },
         "zuordnungen": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
+        "outline": {
           "type": "text",
           "analyzer": "custom_german_analyzer"
         },
