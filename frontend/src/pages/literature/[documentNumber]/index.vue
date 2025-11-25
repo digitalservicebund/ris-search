@@ -3,7 +3,7 @@ import { computed } from "vue";
 import LiteratureActionsMenu from "~/components/ActionMenu/LiteratureActionsMenu.vue";
 import LiteratureDetails from "~/components/Literature/LiteratureDetails.vue";
 import LiteratureMetadata from "~/components/Literature/LiteratureMetadata.vue";
-import RisDocument from "~/components/Ris/RisDocument.vue";
+import DocumentDetailPage from "~/components/Ris/DocumentDetailPage.vue";
 import { DocumentKind, type Literature } from "~/types";
 import { formatDocumentKind } from "~/utils/displayValues";
 import { getTitle, LITERATURE_TITLE_PLACEHOLDER } from "~/utils/literature";
@@ -55,7 +55,7 @@ if (contentError?.value) {
 </script>
 
 <template>
-  <RisDocument
+  <DocumentDetailPage
     :title="title"
     :title-placeholder="LITERATURE_TITLE_PLACEHOLDER"
     :is-empty-document="isEmptyDocument"
@@ -80,5 +80,5 @@ if (contentError?.value) {
     <template #details>
       <LiteratureDetails :details="details" />
     </template>
-  </RisDocument>
+  </DocumentDetailPage>
 </template>

@@ -9,6 +9,7 @@ import IncompleteDataMessage from "~/components/IncompleteDataMessage.vue";
 import MetadataField from "~/components/MetadataField.vue";
 import Properties from "~/components/Properties.vue";
 import PropertiesItem from "~/components/PropertiesItem.vue";
+import DocumentDetailPage from "~/components/Ris/DocumentDetailPage.vue";
 import { type CaseLaw, DocumentKind } from "~/types";
 import { getEncodingURL } from "~/utils/caseLaw";
 import { dateFormattedDDMMYYYY } from "~/utils/dateFormatting";
@@ -141,7 +142,7 @@ const formattedDescisionNames = computed(() =>
 </script>
 
 <template>
-  <RisDocument
+  <DocumentDetailPage
     :title="title"
     title-placeholder="Titelzeile nicht vorhanden"
     :breadcrumb-items="breadcrumbItems"
@@ -192,5 +193,5 @@ const formattedDescisionNames = computed(() =>
         </PropertiesItem>
       </Properties>
     </template>
-  </RisDocument>
+  </DocumentDetailPage>
 </template>

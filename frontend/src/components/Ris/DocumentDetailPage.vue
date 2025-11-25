@@ -9,7 +9,7 @@ import RisDocumentTitle from "~/components/Ris/RisDocumentTitle.vue";
 import IcBaselineSubject from "~icons/ic/baseline-subject";
 import IcOutlineInfo from "~icons/ic/outline-info";
 
-export interface RisDocumentProps {
+export interface DocumentDetailPageProps {
   title?: string;
   titlePlaceholder: string;
   isEmptyDocument?: boolean;
@@ -25,7 +25,7 @@ const {
   breadcrumbItems,
   documentHtmlClass,
   html,
-} = defineProps<RisDocumentProps>();
+} = defineProps<DocumentDetailPageProps>();
 
 const tabs = computed(() => [
   {

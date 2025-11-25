@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import RisDocument from "~/components/Ris/RisDocument.vue";
+import DocumentDetailPage from "~/components/Ris/DocumentDetailPage.vue";
 
 definePageMeta({ layout: "base" }); // use "base" layout to allow for full-width tab backgrounds
 
@@ -18,7 +18,7 @@ const breadcrumbItems = computed(() => [
 </script>
 
 <template>
-  <RisDocument
+  <DocumentDetailPage
     :title="title"
     title-placeholder="Titelzeile nicht vorhanden"
     :is-empty-document="isEmptyDocument"
@@ -38,5 +38,5 @@ const breadcrumbItems = computed(() => [
         <PropertiesItem label="Detail" value="Coming soon" />
       </Properties>
     </template>
-  </RisDocument>
+  </DocumentDetailPage>
 </template>
