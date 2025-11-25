@@ -15,6 +15,8 @@ import org.jetbrains.annotations.Nullable;
 public record AdministrativeDirectiveSchema(
     @Schema(example = "KALU000000000") @JsonldId String id,
     @Schema(description = "Dokumentnummer", example = "KALU000000000") String documentNumber,
+    @Schema(description = "Haupttitel") String headline,
+    @Schema(description = "Kurzreferat") String shortReport,
     @Schema(description = "Dokumenttyp", example = "VV") String documentType,
     @Schema(description = "Art der Verwaltungsvorschrift", example = "Bekanntmachung")
         String documentTypeDetail,

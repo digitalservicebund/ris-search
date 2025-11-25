@@ -17,11 +17,11 @@ import org.springframework.lang.Nullable;
 public record AdministrativeDirective(
     @Id @Field(name = Fields.ID) String id,
     @Field(name = Fields.DOCUMENT_NUMBER) String documentNumber,
-    @Nullable @Field(name = Fields.LONG_TITLE) String longTitle,
-    @Field(name = Fields.DOCUMENT_CATEGORY) String documentCategory,
+    @Nullable @Field(name = Fields.HEADLINE) String headline,
     @Nullable @Field(name = Fields.DOCUMENT_TYPE) String documentType,
-    @Nullable @Field(name = Fields.CONTENT) String content,
-    @Nullable @Field(name = Fields.LEGISLATOR) String normgeber,
+    @Field(name = Fields.DOCUMENT_TYPE_DETAIL) String documentTypeDetail,
+    @Nullable @Field(name = Fields.CONTENT) String shortReport,
+    @Nullable @Field(name = Fields.LEGISLATOR) String legislationAuthority,
     @Nullable
         @Field(
             name = Fields.ENTRY_INTO_EFFECT_DATE,
@@ -32,11 +32,10 @@ public record AdministrativeDirective(
         LocalDate expiryDate,
     @ElementCollection @Field(name = Fields.NORM_REFERENCES) List<String> normReferences,
     @ElementCollection @Field(name = Fields.CASELAW_REFERENCES) List<String> caselawReferences,
-    @ElementCollection @Field(name = Fields.FUNDSTELLE_REFERENCES)
-        List<String> fundstelleReferences,
+    @ElementCollection @Field(name = Fields.FUNDSTELLE_REFERENCES) List<String> references,
     @ElementCollection
         @Field(name = Fields.DATES_TO_QUOTE, type = FieldType.Date, format = DateFormat.date)
-        List<LocalDate> datesToQuote,
+        List<LocalDate> citationDates,
     @ElementCollection @Field(name = Fields.REFERENCE_NUMBERS) List<String> referenceNumbers,
     @ElementCollection @Field(name = Fields.ACTIVE_ADMINISTRATIVE_REFERENCES)
         List<String> activeAdministrativeReferences,
@@ -44,7 +43,6 @@ public record AdministrativeDirective(
         List<String> activeNormReferences,
     @ElementCollection @Field(name = Fields.KEYWORDS) List<String> keywords,
     @ElementCollection @Field(name = Fields.FIELDS_OF_LAW) List<String> fieldsOfLaw,
-    @ElementCollection @Field(name = Fields.ZUORDNUNGEN) List<String> zuordnungen,
     @ElementCollection @Field(name = Fields.TABLE_OF_CONTENTS_ENTRIES)
         List<String> tableOfContentsEntries,
     @JsonIgnore @Field(name = AdministrativeDirective.Fields.INDEXED_AT) String indexedAt)
@@ -57,9 +55,9 @@ public record AdministrativeDirective(
 
     public static final String DOCUMENT_NUMBER = "document_number";
 
-    public static final String LONG_TITLE = "long_title";
+    public static final String HEADLINE = "headline";
 
-    public static final String DOCUMENT_CATEGORY = "document_category";
+    public static final String DOCUMENT_TYPE_DETAIL = "document_type_detail";
 
     public static final String DOCUMENT_TYPE = "document_type";
 
@@ -89,8 +87,6 @@ public record AdministrativeDirective(
     public static final String KEYWORDS = "keywords";
 
     public static final String FIELDS_OF_LAW = "fields_of_law";
-
-    public static final String ZUORDNUNGEN = "zuordnungen";
 
     public static final String TABLE_OF_CONTENTS_ENTRIES = "table_of_contents_entries";
 

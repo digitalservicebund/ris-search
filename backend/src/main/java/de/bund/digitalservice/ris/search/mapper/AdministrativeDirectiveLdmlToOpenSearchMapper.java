@@ -20,7 +20,6 @@ import de.bund.digitalservice.ris.search.models.ldml.directive.OtherReferences;
 import de.bund.digitalservice.ris.search.models.ldml.directive.Preface;
 import de.bund.digitalservice.ris.search.models.ldml.directive.Proprietary;
 import de.bund.digitalservice.ris.search.models.ldml.directive.RisMeta;
-import de.bund.digitalservice.ris.search.models.ldml.directive.Zuordnung;
 import de.bund.digitalservice.ris.search.models.opensearch.AdministrativeDirective;
 import jakarta.xml.bind.DataBindingException;
 import jakarta.xml.bind.JAXB;
@@ -47,23 +46,22 @@ public class AdministrativeDirectiveLdmlToOpenSearchMapper {
       return AdministrativeDirective.builder()
           .id(documentNumber)
           .documentNumber(documentNumber)
-          .longTitle(getLongTitle(ldml))
-          .documentCategory(getDocumentCategory(ldml))
+          .headline(getHeadline(ldml))
           .documentType(getDocumentType(ldml))
-          .content(getTextContent(ldml))
-          .normgeber(getNormgeber(ldml))
+          .documentTypeDetail(getDocumentTypeDetail(ldml))
+          .shortReport(getShortReport(ldml))
+          .legislationAuthority(getLegislationAuthority(ldml))
           .entryIntoEffectDate(getEntryIntoEffect(ldml))
           .expiryDate(getExpiryDate(ldml))
           .normReferences(getNormReferences(ldml))
-          .fundstelleReferences(getFundstelleReferences(ldml))
-          .datesToQuote(getDatesToQuote(ldml))
+          .references(getFundstelleReferences(ldml))
+          .citationDates(getCitationDates(ldml))
           .referenceNumbers(getReferenceNumbers(ldml))
           .caselawReferences(getCaselawReferences(ldml))
           .activeAdministrativeReferences(getActiveAdministrativeReferences(ldml))
           .activeNormReferences(getActiveNormReferences(ldml))
           .keywords(getKeywords(ldml))
           .fieldsOfLaw(getFieldsOfLaw(ldml))
-          .zuordnungen(getZuordnungen(ldml))
           .tableOfContentsEntries(getTableOfContentsEntries(ldml))
           .indexedAt(now.toString())
           .build();
@@ -82,7 +80,7 @@ public class AdministrativeDirectiveLdmlToOpenSearchMapper {
     }
   }
 
-  private static @Nullable String getTextContent(AdministrativeDirectiveLdml ldml) {
+  private static @Nullable String getShortReport(AdministrativeDirectiveLdml ldml) {
     return Optional.ofNullable(ldml)
         .map(AdministrativeDirectiveLdml::getDoc)
         .map(Doc::getMainBody)
@@ -90,7 +88,7 @@ public class AdministrativeDirectiveLdmlToOpenSearchMapper {
         .orElse(null);
   }
 
-  private static @Nullable String getLongTitle(AdministrativeDirectiveLdml ldml) {
+  private static @Nullable String getHeadline(AdministrativeDirectiveLdml ldml) {
     return Optional.ofNullable(ldml)
         .map(AdministrativeDirectiveLdml::getDoc)
         .map(Doc::getPreface)
@@ -109,15 +107,15 @@ public class AdministrativeDirectiveLdmlToOpenSearchMapper {
         .map(Proprietary::getMeta);
   }
 
-  private static String getDocumentCategory(AdministrativeDirectiveLdml ldml)
+  private static String getDocumentType(AdministrativeDirectiveLdml ldml)
       throws ValidationException {
     return getRisMeta(ldml)
         .map(RisMeta::getDocumentType)
         .map(DocumentType::getCategory)
-        .orElseThrow(() -> new ValidationException("missing documentTypeDetail"));
+        .orElseThrow(() -> new ValidationException("missing documentCategory"));
   }
 
-  private static @Nullable String getDocumentType(AdministrativeDirectiveLdml ldml) {
+  private static @Nullable String getDocumentTypeDetail(AdministrativeDirectiveLdml ldml) {
 
     return getRisMeta(ldml)
         .map(RisMeta::getDocumentType)
@@ -125,7 +123,7 @@ public class AdministrativeDirectiveLdmlToOpenSearchMapper {
         .orElse(null);
   }
 
-  private static @Nullable String getNormgeber(AdministrativeDirectiveLdml ldml)
+  private static @Nullable String getLegislationAuthority(AdministrativeDirectiveLdml ldml)
       throws ValidationException {
 
     var normgeberOption = getRisMeta(ldml).map(RisMeta::getNormgeber);
@@ -197,7 +195,7 @@ public class AdministrativeDirectiveLdmlToOpenSearchMapper {
         .toList();
   }
 
-  private static List<LocalDate> getDatesToQuote(AdministrativeDirectiveLdml ldml) {
+  private static List<LocalDate> getCitationDates(AdministrativeDirectiveLdml ldml) {
     return getRisMeta(ldml).map(RisMeta::getDateToQuoteList).orElse(List.of()).stream().toList();
   }
 
@@ -268,20 +266,6 @@ public class AdministrativeDirectiveLdmlToOpenSearchMapper {
       }
     }
     return fieldsOfLaw.stream().map(FieldOfLaw::getValue).toList();
-  }
-
-  private static List<String> getZuordnungen(AdministrativeDirectiveLdml ldml)
-      throws ValidationException {
-    List<Zuordnung> zuordnungen = getRisMeta(ldml).map(RisMeta::getZuordnungen).orElse(List.of());
-
-    for (Zuordnung zuordnung : zuordnungen) {
-      if (Objects.isNull(zuordnung.getAspekt()) || Objects.isNull(zuordnung.getBegriff())) {
-        throw new ValidationException("invalid zuordnung");
-      }
-    }
-    return zuordnungen.stream()
-        .map(z -> String.format("%s %s", z.getAspekt(), z.getBegriff()))
-        .toList();
   }
 
   private static List<String> getTableOfContentsEntries(AdministrativeDirectiveLdml ldml) {

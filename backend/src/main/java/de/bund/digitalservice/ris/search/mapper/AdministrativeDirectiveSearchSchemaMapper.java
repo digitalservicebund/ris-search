@@ -58,9 +58,10 @@ public class AdministrativeDirectiveSearchSchemaMapper {
     return AdministrativeDirectiveSearchSchema.builder()
         .id(entityURI)
         .documentNumber(doc.documentNumber())
+        .headline(doc.headline())
         .entryIntoForceDate(doc.entryIntoEffectDate())
         .referenceNumbers(doc.referenceNumbers())
-        .documentType(doc.documentCategory())
+        .documentType(doc.documentType())
         .build();
   }
 

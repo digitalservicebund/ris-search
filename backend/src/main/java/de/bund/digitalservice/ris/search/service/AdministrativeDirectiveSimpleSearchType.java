@@ -12,7 +12,7 @@ import org.opensearch.search.fetch.subphase.highlight.HighlightBuilder;
 public class AdministrativeDirectiveSimpleSearchType implements SimpleSearchType {
 
   private static final List<String> HIGHLIGHT_CONTENT_FIELDS =
-      List.of(AdministrativeDirective.Fields.CONTENT, AdministrativeDirective.Fields.LONG_TITLE);
+      List.of(AdministrativeDirective.Fields.CONTENT, AdministrativeDirective.Fields.HEADLINE);
 
   private final AdministrativeDirectiveSearchParams searchParams;
 

@@ -14,6 +14,7 @@ import lombok.Builder;
 public record AdministrativeDirectiveSearchSchema(
     @Schema(example = "KALU000000000") @JsonldId String id,
     @Schema(description = "Dokumentnummer", example = "KALU000000000") String documentNumber,
+    @Schema(description = "Haupttitel") String headline,
     @Schema(description = "Dokumenttyp", example = "VV") String documentType,
     @Schema(description = "Aktenzeichen", example = "['ZZ', 'YY']") List<String> referenceNumbers,
     @Schema(description = "Gültig ab Datum", example = "2003-12-15") LocalDate entryIntoForceDate)

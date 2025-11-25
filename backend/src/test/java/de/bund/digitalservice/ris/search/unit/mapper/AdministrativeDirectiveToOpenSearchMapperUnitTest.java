@@ -64,7 +64,7 @@ class AdministrativeDirectiveToOpenSearchMapperUnitTest {
     ldml.getDoc().getMeta().getProprietary().getMeta().setNormgeber(normgeber);
     AdministrativeDirective entity =
         AdministrativeDirectiveLdmlToOpenSearchMapper.map(ldml, Instant.now());
-    assertThat(entity.normgeber()).isEqualTo("BB Ministerium");
+    assertThat(entity.legislationAuthority()).isEqualTo("BB Ministerium");
   }
 
   @Test
@@ -76,7 +76,7 @@ class AdministrativeDirectiveToOpenSearchMapperUnitTest {
     ldml.getDoc().getMeta().getProprietary().getMeta().setNormgeber(normgeber);
     AdministrativeDirective entity =
         AdministrativeDirectiveLdmlToOpenSearchMapper.map(ldml, Instant.now());
-    assertThat(entity.normgeber()).isEqualTo("BB");
+    assertThat(entity.legislationAuthority()).isEqualTo("BB");
   }
 
   @Test

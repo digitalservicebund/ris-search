@@ -55,7 +55,7 @@
         </akn:meta>
         <akn:preface>
             <akn:longTitle>
-                <akn:block name="longTitle">long title
+                <akn:block name="headline">long title
                 </akn:block>
             </akn:longTitle>
         </akn:preface>

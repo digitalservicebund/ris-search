@@ -12,13 +12,14 @@ import org.junit.jupiter.api.Test;
 class AdministrativeDirectiveSearchSchemaMapperTest {
 
   @Test
-  void itMapsFromEntityToApiSchema() {
+  void itMapsFromEntityToSearchSchemaSchema() {
 
     AdministrativeDirective entity =
         AdministrativeDirective.builder()
             .id("KN0000")
             .documentNumber("KN0000")
-            .documentCategory("VV")
+            .headline("headline")
+            .documentType("VV")
             .referenceNumbers(List.of("RNR"))
             .entryIntoEffectDate(LocalDate.of(2024, 1, 1))
             .build();
@@ -27,6 +28,7 @@ class AdministrativeDirectiveSearchSchemaMapperTest {
         AdministrativeDirectiveSearchSchema.builder()
             .id("/v1/administrative-directive/KN0000")
             .documentNumber("KN0000")
+            .headline("headline")
             .documentType("VV")
             .referenceNumbers(List.of("RNR"))
             .entryIntoForceDate(LocalDate.of(2024, 1, 1))
