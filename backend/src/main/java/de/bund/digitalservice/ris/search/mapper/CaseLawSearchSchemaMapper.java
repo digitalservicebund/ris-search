@@ -19,23 +19,26 @@ public class CaseLawSearchSchemaMapper {
 
   public static <T> SearchMemberSchema<CaseLawSearchSchema> fromSearchHit(SearchHit<T> searchHit) {
     CaseLawDocumentationUnit document = (CaseLawDocumentationUnit) searchHit.getContent();
-    List<TextMatchSchema> textMatches =
-        searchHit.getHighlightFields().entrySet().stream()
-            .flatMap(
-                textMatch ->
-                    textMatch.getValue().stream()
-                        .map(
-                            valueMatch ->
-                                TextMatchSchema.builder()
-                                    .name(getTextMatchKey(textMatch))
-                                    .text(valueMatch)
-                                    .build()))
-            .toList();
+    List<TextMatchSchema> textMatches = getTextMatches(searchHit);
 
     return SearchMemberSchema.<CaseLawSearchSchema>builder()
         .item(fromDomain(document))
         .textMatches(textMatches)
         .build();
+  }
+
+  public static <T> List<TextMatchSchema> getTextMatches(SearchHit<T> searchHit) {
+    return searchHit.getHighlightFields().entrySet().stream()
+        .flatMap(
+            textMatch ->
+                textMatch.getValue().stream()
+                    .map(
+                        valueMatch ->
+                            TextMatchSchema.builder()
+                                .name(getTextMatchKey(textMatch))
+                                .text(valueMatch)
+                                .build()))
+        .toList();
   }
 
   /**

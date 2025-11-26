@@ -9,12 +9,18 @@ import de.bund.digitalservice.ris.search.utils.PageUtils;
 import java.util.Map;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.elasticsearch.core.SearchHit;
 import org.springframework.data.elasticsearch.core.convert.ElasticsearchConverter;
 import org.springframework.data.elasticsearch.core.document.Document;
 
+@ExtendWith(MockitoExtension.class)
 class PageUtilsTest {
+
+  @Mock private SearchHit<Document> mockSearchHit;
 
   @Test
   void testConvertSnakeCaseKeysToCamelCase() {
@@ -28,8 +34,6 @@ class PageUtilsTest {
 
   @Test
   void testConvertSearchHit_IngoresUnexpectedIndex() {
-    @SuppressWarnings("unchecked")
-    var mockSearchHit = (SearchHit<Document>) Mockito.mock(SearchHit.class);
     ElasticsearchConverter mockConverter = Mockito.mock(ElasticsearchConverter.class);
     Configurations mockConfigurations = Mockito.mock(Configurations.class);
     Mockito.when(mockConfigurations.getCaseLawsIndexName()).thenReturn("caselaws");
@@ -39,17 +43,15 @@ class PageUtilsTest {
         .thenReturn("administrative_directive");
     Mockito.when(mockSearchHit.getIndex()).thenReturn("unexpectedIndex");
 
-    PageUtils instance = new PageUtils(mockConfigurations);
+    PageUtils instance = new PageUtils(mockConfigurations, mockConverter);
 
-    Optional<SearchHit<AbstractSearchEntity>> searchHit =
-        instance.convertSearchHit(mockSearchHit, mockConverter);
+    Optional<SearchHit<AbstractSearchEntity>> searchHit = instance.convertSearchHit(mockSearchHit);
 
     assertThat(searchHit).isEmpty();
   }
 
   @Test
   void testConvertSearchHit_ConvertsDocumentsFromSubIndices() {
-    var mockSearchHit = Mockito.mock(SearchHit.class);
     Mockito.when(mockSearchHit.getIndex()).thenReturn("norms_2025");
 
     ElasticsearchConverter mockConverter = Mockito.mock(ElasticsearchConverter.class);
@@ -58,8 +60,8 @@ class PageUtilsTest {
     Mockito.when(mockConfigurations.getLiteratureIndexName()).thenReturn("literature");
     Mockito.when(mockConfigurations.getNormsIndexName()).thenReturn("norms");
 
-    PageUtils instance = new PageUtils(mockConfigurations);
-    instance.convertSearchHit(mockSearchHit, mockConverter);
+    PageUtils instance = new PageUtils(mockConfigurations, mockConverter);
+    instance.convertSearchHit(mockSearchHit);
     Mockito.verify(mockConverter).read(Mockito.eq(Norm.class), Mockito.any());
   }
 }

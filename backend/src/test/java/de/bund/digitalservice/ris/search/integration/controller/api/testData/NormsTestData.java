@@ -198,6 +198,8 @@ public class NormsTestData {
   public static Norm simple(String id, String content) {
     return Norm.builder()
         .id(id)
+        .workEli("WorkEli" + id)
+        .expressionEli("ExpressionEli" + id)
         .articleTexts(List.of(content))
         .articles(List.of(Article.builder().name("Article 1").text(content).build()))
         .build();

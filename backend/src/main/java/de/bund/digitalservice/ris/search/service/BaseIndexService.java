@@ -4,6 +4,7 @@ import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.importer.changelog.Changelog;
 import de.bund.digitalservice.ris.search.repository.objectstorage.ObjectStorage;
 import de.bund.digitalservice.ris.search.repository.opensearch.DocumentRepository;
+import de.bund.digitalservice.ris.search.utils.DateUtils;
 import java.time.Instant;
 import java.util.Arrays;
 import java.util.List;
@@ -30,6 +31,7 @@ public abstract class BaseIndexService<T> implements IndexService {
   }
 
   public void reindexAll(String startingTimestamp) throws ObjectStoreServiceException {
+    DateUtils.avoidOpenSearchSubMillisecondDateBug();
     List<String> indexableFilenames = getAllIndexableFilenames();
     indexFiles(indexableFilenames);
     deleteAllOldAndNullEntities(startingTimestamp);

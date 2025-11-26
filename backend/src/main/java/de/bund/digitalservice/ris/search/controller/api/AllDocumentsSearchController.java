@@ -12,6 +12,7 @@ import de.bund.digitalservice.ris.search.models.api.parameters.PaginationParams;
 import de.bund.digitalservice.ris.search.models.api.parameters.UniversalSearchParams;
 import de.bund.digitalservice.ris.search.models.api.parameters.UniversalSortParam;
 import de.bund.digitalservice.ris.search.models.opensearch.AbstractSearchEntity;
+import de.bund.digitalservice.ris.search.schema.AbstractDocumentSchema;
 import de.bund.digitalservice.ris.search.schema.CollectionSchema;
 import de.bund.digitalservice.ris.search.schema.SearchMemberSchema;
 import de.bund.digitalservice.ris.search.service.AllDocumentsService;
@@ -62,19 +63,20 @@ public class AllDocumentsSearchController {
           """)
   @ApiResponse(responseCode = "200", description = "Success")
   @ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content)
-  public ResponseEntity<CollectionSchema<SearchMemberSchema>> searchAndFilter(
-      @ParameterObject UniversalSearchParams request,
-      @ParameterObject NormsSearchParams normsSearchParams,
-      @ParameterObject CaseLawSearchParams caseLawSearchParams,
-      @ParameterObject LiteratureSearchParams literatureSearchParams,
-      @ParameterObject @Valid UniversalSortParam sortParams,
-      @RequestParam("documentKind")
-          @Schema(
-              description =
-                  "Filter by document kind. Specify R for case law (<u>R</u>echtsprechung), N for legislation (<u>N</u>ormen) or L for literature (<u>L</u>iteratur).")
-          Optional<DocumentKind> documentKind,
-      @ParameterObject @Valid PaginationParams paginationParams)
-      throws CustomValidationException {
+  public ResponseEntity<CollectionSchema<SearchMemberSchema<AbstractDocumentSchema>>>
+      searchAndFilter(
+          @ParameterObject UniversalSearchParams request,
+          @ParameterObject NormsSearchParams normsSearchParams,
+          @ParameterObject CaseLawSearchParams caseLawSearchParams,
+          @ParameterObject LiteratureSearchParams literatureSearchParams,
+          @ParameterObject @Valid UniversalSortParam sortParams,
+          @RequestParam("documentKind")
+              @Schema(
+                  description =
+                      "Filter by document kind. Specify R for case law (<u>R</u>echtsprechung), N for legislation (<u>N</u>ormen) or L for literature (<u>L</u>iteratur).")
+              Optional<DocumentKind> documentKind,
+          @ParameterObject @Valid PaginationParams paginationParams)
+          throws CustomValidationException {
     normsSearchParams.validate();
 
     var pageRequest = PageRequest.of(paginationParams.getPageIndex(), paginationParams.getSize());
@@ -83,7 +85,7 @@ public class AllDocumentsSearchController {
         pageRequest.withSort(SortParamsConverter.buildSort(sortParams.getSort()));
 
     try {
-      SearchPage<AbstractSearchEntity> entitiesPage =
+      SearchPage<AbstractSearchEntity> searchResult =
           allDocumentsService.simpleSearchAllDocuments(
               request,
               normsSearchParams,
@@ -94,7 +96,7 @@ public class AllDocumentsSearchController {
 
       return ResponseEntity.ok()
           .contentType(MediaType.APPLICATION_JSON)
-          .body((DocumentResponseMapper.fromDomain(entitiesPage, ApiConfig.Paths.DOCUMENT)));
+          .body((DocumentResponseMapper.fromDomain(searchResult, ApiConfig.Paths.DOCUMENT)));
     } catch (UncategorizedElasticsearchException e) {
       LuceneQueryTools.checkForInvalidQuery(e);
       throw e;

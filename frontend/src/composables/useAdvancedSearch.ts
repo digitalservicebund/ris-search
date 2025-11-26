@@ -62,7 +62,7 @@ export async function useAdvancedSearch(
       .join(" AND ");
 
     return {
-      query: encodeURIComponent(resultStr),
+      query: resultStr,
       size: toValue(itemsPerPage),
       sort: toValue(sort),
       pageIndex: toValue(pageIndex),

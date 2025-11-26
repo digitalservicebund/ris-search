@@ -1,7 +1,5 @@
 package de.bund.digitalservice.ris.search.service;
 
-import static org.opensearch.index.query.QueryBuilders.queryStringQuery;
-
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.models.api.parameters.NormsSearchParams;
 import de.bund.digitalservice.ris.search.models.api.parameters.UniversalSearchParams;
@@ -10,7 +8,6 @@ import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
 import de.bund.digitalservice.ris.search.repository.opensearch.NormsRepository;
 import de.bund.digitalservice.ris.search.service.helper.ZipManager;
 import de.bund.digitalservice.ris.search.utils.PageUtils;
-import de.bund.digitalservice.ris.search.utils.RisHighlightBuilder;
 import de.bund.digitalservice.ris.search.utils.eli.ExpressionEli;
 import de.bund.digitalservice.ris.search.utils.eli.ManifestationEli;
 import java.io.IOException;
@@ -19,16 +16,12 @@ import java.util.List;
 import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.opensearch.action.search.SearchType;
 import org.opensearch.data.client.orhlc.NativeSearchQuery;
-import org.opensearch.data.client.orhlc.NativeSearchQueryBuilder;
-import org.opensearch.search.fetch.subphase.highlight.HighlightBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.data.elasticsearch.core.SearchPage;
-import org.springframework.data.elasticsearch.core.query.FetchSourceFilter;
 import org.springframework.stereotype.Service;
 
 /**
@@ -75,33 +68,6 @@ public class NormsService {
             List.of(new NormSimpleSearchType(normsSearchParams)), params, pageable);
     SearchHits<Norm> searchHits = operations.search(query, Norm.class);
 
-    return PageUtils.unwrapSearchHits(searchHits, pageable);
-  }
-
-  /**
-   * Search and retrieve norms with highlights.
-   *
-   * @param search The input {@link String} of Lucene query values.
-   */
-  public SearchPage<Norm> advancedSearchNorms(final String search, final Pageable pageable) {
-    HighlightBuilder highlightBuilder = RisHighlightBuilder.baseHighlighter();
-    NormSimpleSearchType.addHighlightedFieldsStatic(highlightBuilder);
-    var searchQuery =
-        new NativeSearchQueryBuilder()
-            .withSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-            .withPageable(pageable)
-            .withQuery(queryStringQuery(search))
-            .withHighlightBuilder(highlightBuilder)
-            // despite setting fetchSource false we still need to supply the excludedFields to not
-            // be part of the response
-            .withSourceFilter(
-                new FetchSourceFilter(
-                    false,
-                    null,
-                    NormSimpleSearchType.NORMS_FETCH_EXCLUDED_FIELDS.toArray(String[]::new)))
-            .build();
-
-    SearchHits<Norm> searchHits = operations.search(searchQuery, Norm.class);
     return PageUtils.unwrapSearchHits(searchHits, pageable);
   }
 

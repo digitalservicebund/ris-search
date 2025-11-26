@@ -9,6 +9,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.TimeZone;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.Nullable;
 import org.opensearch.index.query.BoolQueryBuilder;
 import org.opensearch.index.query.ExistsQueryBuilder;
@@ -18,6 +20,7 @@ import org.opensearch.index.query.RangeQueryBuilder;
 
 public class DateUtils {
 
+  private static final Logger logger = LogManager.getLogger(DateUtils.class);
   public static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
   private DateUtils() {}
@@ -127,5 +130,18 @@ public class DateUtils {
     String startString = start == null ? ".." : start.format(DATE_FORMATTER);
     String endString = end == null ? ".." : end.format(DATE_FORMATTER);
     return startString + "/" + endString;
+  }
+
+  public static void avoidOpenSearchSubMillisecondDateBug() {
+    // If two timestamps are too close (less than 1 millisecond different) than opensearch might
+    // consider them equal. This can sometimes result in a bug (for example with reindexing) so
+    // sometimes we need a very small delay to avoid side effects of an eventually consistent system
+    try {
+      // wait 10 milliseconds
+      Thread.sleep(10);
+    } catch (InterruptedException e) {
+      logger.warn("Unexpected interruption during DateUtils Thread sleep", e);
+      Thread.currentThread().interrupt();
+    }
   }
 }
