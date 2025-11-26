@@ -1,11 +1,11 @@
 package de.bund.digitalservice.ris.search.integration.config;
 
-import org.opensearch.testcontainers.OpensearchContainer;
+import org.opensearch.testcontainers.OpenSearchContainer;
 import org.testcontainers.containers.BindMode;
 import org.testcontainers.containers.SelinuxContext;
 
 @SuppressWarnings("rawtypes")
-public class CustomOpensearchContainer extends OpensearchContainer {
+public class CustomOpensearchContainer extends OpenSearchContainer {
 
   private static final String DOCKER_IMAGE_OPEN_SEARCH = "opensearchproject/opensearch:2.11.0";
   private static final String CLUSTER_NAME = "cluster.name";
