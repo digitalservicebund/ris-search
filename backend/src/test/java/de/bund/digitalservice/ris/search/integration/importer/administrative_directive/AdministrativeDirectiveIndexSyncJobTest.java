@@ -50,13 +50,10 @@ class AdministrativeDirectiveIndexSyncJobTest extends ContainersIntegrationBase 
         LoadXmlUtils.loadXmlAsString(AdministrativeDirective.class, "KSNR0000.akn.xml");
 
     bucket.save("KSNR0000.akn.xml", content);
+    syncJob.runJob();
     await()
         .atMost(500, TimeUnit.MILLISECONDS)
-        .until(
-            () -> {
-              syncJob.runJob();
-              return administrativeDirectiveRepository.findAll().iterator().hasNext();
-            });
+        .until(() -> administrativeDirectiveRepository.findAll().iterator().hasNext());
     AdministrativeDirective expected = repository.findAll().iterator().next();
     assertThat(expected.documentNumber()).isEqualTo("KSNR0000");
     assertThat(portalBucket.getFileAsString(AdministrativeDirectiveIndexSyncJob.STATUS_FILENAME))
@@ -84,13 +81,10 @@ class AdministrativeDirectiveIndexSyncJobTest extends ContainersIntegrationBase 
 
     assertThat(repository.findAll().iterator().hasNext()).isFalse();
 
+    syncJob.runJob();
     await()
         .atMost(500, TimeUnit.MILLISECONDS)
-        .until(
-            () -> {
-              syncJob.runJob();
-              return administrativeDirectiveRepository.findAll().iterator().hasNext();
-            });
+        .until(() -> administrativeDirectiveRepository.findAll().iterator().hasNext());
 
     AdministrativeDirective expected = repository.findAll().iterator().next();
     assertThat(expected.documentNumber()).isEqualTo("KSNR0000");
