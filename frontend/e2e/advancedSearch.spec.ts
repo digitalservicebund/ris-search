@@ -297,7 +297,7 @@ test.describe("searching legislation", () => {
 
     const results = getSearchResults(page);
 
-    expect(results).toHaveText([/Aktuell gültig/]);
+    expect(results).toHaveText(/Aktuell gültig/);
   });
 
   test("filters to show specific date", async ({ page }) => {
@@ -445,7 +445,7 @@ test.describe("searching caselaw", () => {
 
     const results = getSearchResults(page);
 
-    await expect(results).toHaveText([/15.06.2024/]);
+    await expect(results).toHaveText(/15.06.2024/);
   });
 
   test("filters to show date range", async ({ page }) => {
