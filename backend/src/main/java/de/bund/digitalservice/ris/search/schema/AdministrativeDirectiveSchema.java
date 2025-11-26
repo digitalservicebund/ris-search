@@ -15,15 +15,17 @@ import org.jetbrains.annotations.Nullable;
 public record AdministrativeDirectiveSchema(
     @Schema(example = "KALU000000000") @JsonldId String id,
     @Schema(description = "Dokumentnummer", example = "KALU000000000") String documentNumber,
-    @Schema(description = "Haupttitel") String headline,
-    @Schema(description = "Kurzreferat") String shortReport,
+    @Nullable @Schema(description = "Haupttitel") String headline,
+    @Nullable @Schema(description = "Kurzreferat") String shortReport,
     @Schema(description = "Dokumenttyp", example = "VV") String documentType,
-    @Schema(description = "Art der Verwaltungsvorschrift", example = "Bekanntmachung")
+    @Nullable @Schema(description = "Art der Verwaltungsvorschrift", example = "Bekanntmachung")
         String documentTypeDetail,
     @Schema(description = "Aktenzeichen", example = "['ZZ', 'YY']") List<String> referenceNumbers,
-    @Schema(description = "Gültig ab Datum", example = "2003-12-15") LocalDate entryIntoForceDate,
-    @Schema(description = "Gültig bis Datum", example = "2005-12-01") LocalDate expiryDate,
-    @Schema(description = "Normgeber") String legislationAuthority,
+    @Nullable @Schema(description = "Gültig ab Datum", example = "2003-12-15")
+        LocalDate entryIntoForceDate,
+    @Nullable @Schema(description = "Gültig bis Datum", example = "2005-12-01")
+        LocalDate expiryDate,
+    @Nullable @Schema(description = "Normgeber") String legislationAuthority,
     @Schema(description = "Fundstelle") List<String> references,
     @Schema(description = "Zitierdaten", example = "") List<LocalDate> citationDates,
     @Schema(description = "Normkette", example = "['§ 1 Abs1 SGB']") List<String> normReferences,
