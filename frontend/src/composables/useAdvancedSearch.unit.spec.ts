@@ -81,7 +81,7 @@ describe("useAdvancedSearch", () => {
 
     expect(useRisBackendMock).toHaveBeenCalled();
     const urlQuery = useRisBackendMock.mock.calls[0]![1].query;
-    expect(urlQuery?.value).toMatchObject({ query: "(test%20query)" });
+    expect(urlQuery?.value).toMatchObject({ query: "(test query)" });
   });
 
   it("submits pagination parameters correctly", async () => {
