@@ -9,7 +9,6 @@ import de.bund.digitalservice.ris.search.models.api.parameters.NormsSearchParams
 import de.bund.digitalservice.ris.search.models.api.parameters.UniversalSearchParams;
 import de.bund.digitalservice.ris.search.models.opensearch.AbstractSearchEntity;
 import de.bund.digitalservice.ris.search.models.opensearch.AdministrativeDirective;
-import de.bund.digitalservice.ris.search.models.opensearch.AdministrativeDirective;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import de.bund.digitalservice.ris.search.models.opensearch.Literature;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
@@ -96,8 +95,8 @@ public class AllDocumentsService {
             case LEGISLATION -> operations.search(query, Norm.class);
             case CASELAW -> operations.search(query, CaseLawDocumentationUnit.class);
             case LITERATURE -> operations.search(query, Literature.class);
-              case ADMINISTRATIVE_DIRECTIVE ->
-                      operations.search(query, AdministrativeDirective.class);
+            case ADMINISTRATIVE_DIRECTIVE ->
+                operations.search(query, AdministrativeDirective.class);
           };
       @SuppressWarnings("unchecked")
       SearchHits<AbstractSearchEntity> castSearchHits =
