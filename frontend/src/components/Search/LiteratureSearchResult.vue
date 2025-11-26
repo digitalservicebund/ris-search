@@ -85,10 +85,15 @@ const shortReportIncludesHighlight = computed(
 const sanitizedShortReport = computed(() =>
   sanitizeSearchResult(metadata.value.shortReport),
 );
+
+const headingId = useId();
 </script>
 
 <template>
-  <article class="my-36 flex flex-col gap-8 hyphens-auto">
+  <article
+    class="my-36 flex flex-col gap-8 hyphens-auto"
+    :aria-labelledby="headingId"
+  >
     <p class="ris-label2-regular flex flex-row flex-wrap items-center gap-8">
       <span class="flex items-center">
         <OutlineBookIcon class="mr-4 h-16 text-gray-900" />
@@ -101,6 +106,7 @@ const sanitizedShortReport = computed(() =>
     </p>
 
     <NuxtLink
+      :id="headingId"
       :to="metadata.url"
       class="ris-heading3-bold max-w-title link-hover block text-blue-800"
       @click="trackResultClick(metadata.url)"
