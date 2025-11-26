@@ -21,6 +21,14 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Local filesystem-backed implementation of ObjectStorageClient used for tests or local
+ * development.
+ *
+ * <p>This implementation maps object keys to files under a configurable local directory and bucket.
+ * It provides listing, streaming, save, delete and upload operations mirroring a cloud object
+ * store.
+ */
 public class LocalFilesystemObjectStorageClient implements ObjectStorageClient {
 
   private static final List<String> possibleProjectRoots = Arrays.asList("ris-search", "workspace");
@@ -32,6 +40,13 @@ public class LocalFilesystemObjectStorageClient implements ObjectStorageClient {
 
   private final String bucket;
 
+  /**
+   * Create a new LocalFilesystemObjectStorageClient.
+   *
+   * @param bucket the logical bucket name under the local storage directory
+   * @param relativeLocalStorageDirectory the relative path (from project root) to the local storage
+   *     directory
+   */
   public LocalFilesystemObjectStorageClient(String bucket, String relativeLocalStorageDirectory) {
     this.bucket = bucket;
 

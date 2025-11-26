@@ -16,9 +16,27 @@ import org.springframework.data.elasticsearch.repository.config.EnableElasticsea
     basePackages = "de.bund.digitalservice.ris.search.repository.opensearch")
 public class RestClientConfigDev extends AbstractOpenSearchConfiguration {
 
+  /**
+   * No-argument constructor provided for frameworks/proxies.
+   *
+   * <p>Delegates to the main constructor with null parameters to avoid duplicate final-field
+   * assignment.
+   */
+  public RestClientConfigDev() {
+    this(null, null);
+  }
+
   private final Configurations configurations;
   private final OpensearchSchemaSetup schemaSetup;
 
+  /**
+   * Initializes the RestClientConfigDev configuration to set up the REST client connection with
+   * OpenSearch and perform schema setup.
+   *
+   * @param configurationsOpensearch the configuration settings for OpenSearch, including host,
+   *     port, and other connection details
+   * @param schemaSetup the service for setting up and updating the OpenSearch schema
+   */
   @Autowired
   public RestClientConfigDev(
       Configurations configurationsOpensearch, OpensearchSchemaSetup schemaSetup) {

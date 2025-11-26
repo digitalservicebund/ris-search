@@ -14,6 +14,10 @@ import org.opensearch.data.client.orhlc.AbstractOpenSearchConfiguration;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+/**
+ * Service for parsing search terms into quoted phrases and unquoted terms, and tokenizing them
+ * using OpenSearch analyzers.
+ */
 @Service
 public class SearchTermParser {
   private final RestHighLevelClient client;
@@ -25,9 +29,15 @@ public class SearchTermParser {
     this.client = abstractOpenSearchConfiguration.opensearchClient();
   }
 
-  // This method turns searchTerm into two lists of strings. Sections inside double quotes
-  // (quotedSearchPhrases) and sections outside double quotes (unquotedSearchTerms).
-  // See SearchTermParserTest for examples
+  /**
+   * This method turns searchTerm into two lists of strings. Sections inside double quotes
+   * (quotedSearchPhrases) and sections outside double quotes (unquotedSearchTerms). See
+   * SearchTermParserTest for examples
+   *
+   * @param searchTerm the raw search term input
+   * @return a ParsedSearchTerm object containing the original search term, a list of unquoted
+   *     search terms, and a list of quoted search phrases
+   */
   public ParsedSearchTerm parse(String searchTerm) {
     List<String> unquotedSearchTerms = new ArrayList<>();
     List<String> quotedSearchPhrases = new ArrayList<>();

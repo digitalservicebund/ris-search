@@ -8,6 +8,11 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+/**
+ * Represents the RIS metadata for a legal case document. This class contains various fields that
+ * describe the metadata attributes associated with a legal case, such as decision names, previous
+ * and ensuing decisions, file numbers, document type, court information, legal forces, and more.
+ */
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -88,6 +93,12 @@ public class RisMeta {
   @XmlElement(name = "procedure", namespace = CaseLawLdmlNamespaces.RIS_NS)
   private List<String> procedure;
 
+  /**
+   * Returns a combined court keyword consisting of court type and court location. If court location
+   * is not available, it returns only the court type.
+   *
+   * @return the combined court keyword
+   */
   public String getCourtKeyword() {
     if (courtLocation == null) {
       return courtType;

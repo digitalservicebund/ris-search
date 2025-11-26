@@ -109,6 +109,14 @@ public final class Norm implements AbstractSearchEntity {
   @Field(name = Fields.OFFICIAL_FOOT_NOTES)
   private String officialFootNotes;
 
+  /**
+   * The Fields class provides a centralized collection of constant field names that are used as
+   * keys, primarily within the context of the Norm entity in OpenSearch models. These constants
+   * help ensure consistency and reduce errors when accessing or referencing specific fields
+   * associated with norms and their elements (e.g., articles, metadata, identifiers).
+   *
+   * <p>The class is utility-oriented and cannot be instantiated.
+   */
   public static class Fields {
     private Fields() {}
 

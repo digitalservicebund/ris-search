@@ -4,6 +4,19 @@ import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlElement;
 import lombok.Getter;
 
+/**
+ * Represents an implicit reference within a larger document structure. This class provides
+ * references to different elements such as unselbstaendig or selbstaendig literals and norm
+ * references, with the ability to include metadata about how the reference should be displayed.
+ *
+ * <p>Fields in this class are annotated to support XML serialization, enabling integration with
+ * XML-based document or metadata standards.
+ *
+ * <p>The following elements are captured: - Display attributes for the implicit reference. - A
+ * reference to unselbstaendig literature (`fundstelleUnselbstaendig`). - A reference to
+ * selbstaendig literature (`fundstelleSelbstaendig`). - A reference to normative elements
+ * (`normReference`), including potential legal or regulatory norms.
+ */
 @Getter
 public class ImplicitReference {
 

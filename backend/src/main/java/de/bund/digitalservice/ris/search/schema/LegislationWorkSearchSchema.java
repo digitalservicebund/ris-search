@@ -9,6 +9,31 @@ import java.time.LocalDate;
 import lombok.Builder;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * Represents a legislation item in various expressions and manifestations. Commonly used to provide
+ * context to instances of `LegislationExpression`, typically associated under the key
+ * `workExample`.
+ *
+ * <ul>
+ *   <li><b>id</b>: The unique identifier for the legislation item.
+ *   <li><b>name</b>: The full official name of the legislation.
+ *   <li><b>legislationIdentifier</b>: Identifier for the legislation, typically part of its
+ *       citation or URI structure.
+ *   <li><b>alternateName</b>: An alternative name or shorthand for the legislation item.
+ *   <li><b>abbreviation</b>: Abbreviated name of the legislation, if available.
+ *   <li><b>legislationDate</b>: The date on which the legislation was formally adopted or signed.
+ *       Even if not immediately effective, this date represents when it attained its legal status.
+ *   <li><b>datePublished</b>: The date the legislation was first published, typically in the form
+ *       of its release in official gazettes. This may differ from the legislation adoption date.
+ *   <li><b>isPartOf</b>: Reference to the publication issue schema where this legislation is part
+ *       of. Useful for linking to official publications.
+ *   <li><b>workExample</b>: An optional detail providing further context or specific expressions of
+ *       this legislation item, particularly in different manifestations or localized versions.
+ * </ul>
+ *
+ * This class provides structured metadata that enables usage in APIs or metadata-driven systems. It
+ * adheres to JSON-LD representation under the type `Legislation`.
+ */
 @Builder
 @JsonldResource
 @JsonldType("Legislation")

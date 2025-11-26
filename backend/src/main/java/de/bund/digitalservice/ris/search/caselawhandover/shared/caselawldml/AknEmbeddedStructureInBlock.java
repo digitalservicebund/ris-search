@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.eclipse.persistence.oxm.annotations.XmlDiscriminatorValue;
 
+/** Represents an embedded structure within a block in a case law LDML document. */
 @NoArgsConstructor
 @Getter
 public abstract class AknEmbeddedStructureInBlock extends AknBlock {
@@ -14,6 +15,7 @@ public abstract class AknEmbeddedStructureInBlock extends AknBlock {
 
   public abstract String getName();
 
+  /** Orientierungssatz */
   @NoArgsConstructor
   @XmlDiscriminatorValue(HeadNote.NAME)
   public static class HeadNote extends AknEmbeddedStructureInBlock {
@@ -32,6 +34,7 @@ public abstract class AknEmbeddedStructureInBlock extends AknBlock {
     }
   }
 
+  /** Sonstiger Orientierungssatz */
   @NoArgsConstructor
   @XmlDiscriminatorValue(OtherHeadNote.NAME)
   public static class OtherHeadNote extends AknEmbeddedStructureInBlock {
@@ -50,6 +53,7 @@ public abstract class AknEmbeddedStructureInBlock extends AknBlock {
     }
   }
 
+  /** Gliederung */
   @NoArgsConstructor
   @XmlDiscriminatorValue(Outline.NAME)
   public static class Outline extends AknEmbeddedStructureInBlock {
@@ -68,6 +72,7 @@ public abstract class AknEmbeddedStructureInBlock extends AknBlock {
     }
   }
 
+  /** Tenor */
   @NoArgsConstructor
   @XmlDiscriminatorValue(Tenor.NAME)
   public static class Tenor extends AknEmbeddedStructureInBlock {
@@ -86,6 +91,7 @@ public abstract class AknEmbeddedStructureInBlock extends AknBlock {
     }
   }
 
+  /** Entscheidungsgründe */
   @NoArgsConstructor
   @XmlDiscriminatorValue(DecisionReasons.NAME)
   public static class DecisionReasons extends AknEmbeddedStructureInBlock {
@@ -104,6 +110,7 @@ public abstract class AknEmbeddedStructureInBlock extends AknBlock {
     }
   }
 
+  /** Gründe */
   @NoArgsConstructor
   @XmlDiscriminatorValue(Reasons.NAME)
   public static class Reasons extends AknEmbeddedStructureInBlock {
@@ -122,6 +129,7 @@ public abstract class AknEmbeddedStructureInBlock extends AknBlock {
     }
   }
 
+  /** Sonstiger Langtext */
   @NoArgsConstructor
   @XmlDiscriminatorValue(OtherLongText.NAME)
   public static class OtherLongText extends AknEmbeddedStructureInBlock {

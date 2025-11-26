@@ -21,6 +21,7 @@ import org.opensearch.index.search.MatchQuery;
 import org.opensearch.search.fetch.subphase.FetchSourceContext;
 import org.opensearch.search.fetch.subphase.highlight.HighlightBuilder;
 
+/** Service class for interacting with the database and return the search results. */
 public class NormSimpleSearchType implements SimpleSearchType {
 
   private static final int ARTICLE_INNER_HITS_SIZE = 3;
@@ -90,6 +91,16 @@ public class NormSimpleSearchType implements SimpleSearchType {
         .ifPresent(query::filter);
   }
 
+  /**
+   * Adds a search term to the provided query for searching within nested documents of articles.
+   * This method sets up a BoolQueryBuilder that includes multi-match queries, match phrase queries,
+   * match-all queries with a focus on ensuring relevant articles are matched and displayed.
+   *
+   * @param searchTerm the search term to be added to the query, used for searching across fields
+   *     and constructing nested article queries
+   * @param query the BoolQueryBuilder instance to which the constructed search logic will be
+   *     appended
+   */
   public static void addSearchTerm(String searchTerm, BoolQueryBuilder query) {
     // --- Article Search within Nested Documents ---
     // Norm articles are stored as nested documents and require a dedicated nested query.

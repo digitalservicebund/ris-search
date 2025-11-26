@@ -5,6 +5,10 @@ import java.util.List;
 import java.util.Objects;
 import org.mockito.ArgumentMatcher;
 
+/**
+ * Custom ArgumentMatcher to compare two lists of Url objects. This matcher checks for equality of
+ * the lists by comparing specific fields within each Url object in order.
+ */
 public class UrlListMatcher implements ArgumentMatcher<List<Url>> {
   private final List<Url> left;
 

@@ -4,6 +4,7 @@ import org.opensearch.testcontainers.OpenSearchContainer;
 import org.testcontainers.containers.BindMode;
 import org.testcontainers.containers.SelinuxContext;
 
+/** Custom OpenSearch container for integration testing. */
 @SuppressWarnings("rawtypes")
 public class CustomOpensearchContainer extends OpenSearchContainer {
 
@@ -16,6 +17,10 @@ public class CustomOpensearchContainer extends OpenSearchContainer {
   private static final int HOST_PORT = 9300;
   private static final int CONTAINER_PORT = 9200;
 
+  /**
+   * Constructor for CustomOpensearchContainer. Sets up the OpenSearch container with specific
+   * environment variables and port mappings.
+   */
   public CustomOpensearchContainer() {
     super(DOCKER_IMAGE_OPEN_SEARCH);
     addFixedExposedPort(HOST_PORT, CONTAINER_PORT);

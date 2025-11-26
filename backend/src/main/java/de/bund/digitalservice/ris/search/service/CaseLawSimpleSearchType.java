@@ -14,6 +14,7 @@ import org.opensearch.index.query.Operator;
 import org.opensearch.index.query.QueryBuilders;
 import org.opensearch.search.fetch.subphase.highlight.HighlightBuilder;
 
+/** Simple search type for case law. */
 public class CaseLawSimpleSearchType implements SimpleSearchType {
 
   private static final List<String> CASE_LAW_HIGHLIGHT_CONTENT_FIELDS =
@@ -53,6 +54,13 @@ public class CaseLawSimpleSearchType implements SimpleSearchType {
     addHighlightedFieldsStatic(builder);
   }
 
+  /**
+   * Adds fields to the HighlightBuilder for highlighting in search results. This method adds fields
+   * from a predefined list and also includes specific fields with additional configuration, such as
+   * setting the noMatchSize to 0 for certain fields.
+   *
+   * @param builder the HighlightBuilder instance to which the highlighted fields will be added
+   */
   public static void addHighlightedFieldsStatic(HighlightBuilder builder) {
     CASE_LAW_HIGHLIGHT_CONTENT_FIELDS.forEach(builder::field);
     // ECLI and FILE_NUMBERS are returned in _source and therefore not needed when not matched

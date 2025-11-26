@@ -14,7 +14,20 @@ import java.util.stream.Stream;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.params.provider.Arguments;
 
+/**
+ * Provides test arguments for sorting tests in the search API.
+ *
+ * <p>This class contains a method that generates a stream of arguments for parameterized tests
+ * related to sorting functionality in the search API. The arguments include different sorting
+ * criteria and their expected outcomes based on predefined test data.
+ */
 public class SortingTestArguments {
+
+  /**
+   * Provides test arguments for sorting tests.
+   *
+   * @return A stream of arguments for sorting tests.
+   */
   public static Stream.Builder<Arguments> provideSortingTestArguments() {
     Stream.Builder<Arguments> stream = Stream.builder();
 

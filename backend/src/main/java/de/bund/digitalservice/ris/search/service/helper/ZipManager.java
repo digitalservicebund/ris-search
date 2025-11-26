@@ -9,9 +9,19 @@ import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+/** Utility class for creating zip archives from S3 objects. */
 public class ZipManager {
   private ZipManager() {}
 
+  /**
+   * Writes a zip archive containing the objects from the given S3 keys to the provided output
+   * stream.
+   *
+   * @param s3Bucket The S3 bucket from which to retrieve the objects.
+   * @param keys A list of S3 keys representing the objects to be included in the zip archive.
+   * @param outputStream The output stream where the zip archive will be written.
+   * @throws IOException If an I/O error occurs during the process.
+   */
   public static void writeZipArchive(
       ObjectStorage s3Bucket, List<String> keys, OutputStream outputStream) throws IOException {
     try (ZipOutputStream zipOut = new ZipOutputStream(outputStream)) {

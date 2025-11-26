@@ -22,6 +22,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.core.io.ClassPathResource;
 
+/** Abstract base class for XSLT transformers for LegalDocML documents. */
 public abstract class XsltTransformer {
   static final String RESOURCE_PATH_KEY = "ressourcenpfad";
 

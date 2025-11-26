@@ -9,6 +9,7 @@ import java.time.Instant;
 import java.util.Optional;
 import org.springframework.stereotype.Service;
 
+/** Service for indexing administrative directives into OpenSearch. */
 @Service
 public class IndexAdministrativeDirectiveService extends BaseIndexService<AdministrativeDirective> {
 

@@ -6,6 +6,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * This controller is only used in integration tests to mock endpoints that return specific error
+ * responses.
+ */
 @TestConfiguration
 @RestController
 public class TestMockEndpointsController {

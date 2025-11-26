@@ -16,6 +16,17 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+/**
+ * The NormAttachmentMapper class provides functionality for extracting and mapping attachments from
+ * a main XML document and their corresponding textual content. This utility aids in parsing and
+ * processing structured data associated with legislative documents.
+ *
+ * <p>It extracts specific metadata, including the electronic identifier (eId), document title, and
+ * content text of attachments, and maps them into {@link Attachment} objects. The class operates on
+ * XML data with predefined XPath referencing and follows error-handling for parsing issues.
+ *
+ * <p>The class is designed as a utility and cannot be instantiated.
+ */
 public class NormAttachmentMapper {
   private NormAttachmentMapper() {}
 

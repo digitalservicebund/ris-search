@@ -26,12 +26,24 @@ import software.amazon.awssdk.services.s3.model.S3Object;
 import software.amazon.awssdk.services.s3.model.UploadPartRequest;
 import software.amazon.awssdk.services.s3.model.UploadPartResponse;
 
+/**
+ * S3-backed implementation of ObjectStorageClient.
+ *
+ * <p>This class interacts with AWS S3 via the AWS SDK to list objects, read objects as streams,
+ * save text objects, delete objects and upload streams using multipart upload.
+ */
 public class S3ObjectStorageClient implements ObjectStorageClient {
 
   @Getter private final S3Client s3Client;
   private final String bucketName;
   private final Logger logger = LogManager.getLogger(S3ObjectStorageClient.class);
 
+  /**
+   * Create a new S3ObjectStorageClient.
+   *
+   * @param s3Client the AWS S3 client to use for requests
+   * @param bucketName the S3 bucket name this client operates on
+   */
   public S3ObjectStorageClient(S3Client s3Client, String bucketName) {
     this.s3Client = s3Client;
     this.bucketName = bucketName;

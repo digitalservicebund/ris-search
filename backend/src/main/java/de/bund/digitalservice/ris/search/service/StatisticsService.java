@@ -17,6 +17,7 @@ import org.opensearch.client.RestHighLevelClient;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+/** Service for fetching statistics from OpenSearch. */
 @Service
 public class StatisticsService {
 
@@ -26,6 +27,14 @@ public class StatisticsService {
   private final RestHighLevelClient client;
   private final ObjectMapper objectMapper = new ObjectMapper();
 
+  /**
+   * Constructor for StatisticsService.
+   *
+   * @param client OpenSearch client.
+   * @param normsIndexName Name of the norms index.
+   * @param literatureIndexName Name of the literature index.
+   * @param caselawsIndexName Name of the caselaws index.
+   */
   public StatisticsService(
       RestHighLevelClient client,
       @Value("${opensearch.norms-index-name}") String normsIndexName,
@@ -35,6 +44,12 @@ public class StatisticsService {
     this.indexNames = Arrays.asList(normsIndexName, literatureIndexName, caselawsIndexName);
   }
 
+  /**
+   * Returns a map of index names to their respective count.
+   *
+   * @return Map of index names to their respective count.
+   * @throws OpenSearchFetchException
+   */
   public Map<String, Long> getAllCounts() throws OpenSearchFetchException {
 
     try {

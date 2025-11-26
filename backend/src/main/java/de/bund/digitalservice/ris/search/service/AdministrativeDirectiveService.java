@@ -32,6 +32,14 @@ public class AdministrativeDirectiveService {
   private final ElasticsearchOperations operations;
   private final SimpleSearchQueryBuilder simpleSearchQueryBuilder;
 
+  /**
+   * Constructor for AdministrativeDirectiveService.
+   *
+   * @param repository Repository for AdministrativeDirective entities.
+   * @param bucket Object storage bucket for AdministrativeDirective files.
+   * @param operations Elasticsearch operations for querying the database.
+   * @param simpleSearchQueryBuilder Builder for constructing simple search queries.
+   */
   @SneakyThrows
   @Autowired
   public AdministrativeDirectiveService(

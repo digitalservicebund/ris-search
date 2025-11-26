@@ -9,6 +9,13 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import ioinformarics.oss.jackson.module.jsonld.JsonldModule;
 import java.time.LocalDate;
 
+/**
+ * A utility class for working with JSON-LD (JSON for Linked Data). This class provides methods for
+ * serializing objects into JSON-LD format using a customized instance of the Jackson {@link
+ * ObjectMapper}.
+ *
+ * <p>This class is not instantiable and cannot be extended.
+ */
 public class JsonLdUtils {
 
   private JsonLdUtils() {}

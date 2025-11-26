@@ -9,6 +9,14 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+/**
+ * Service class for indexing "dependent literature" files into the system. This class provides
+ * functionality for mapping and processing literature files that specifically belong to the
+ * category of "dependent literature documents."
+ *
+ * <p>Extends the abstract {@code BaseIndexService} to inherit common indexing operations and
+ * overrides specific methods to handle literature-related data mapping.
+ */
 @Service
 public class IndexLiteratureService extends BaseIndexService<Literature> {
 

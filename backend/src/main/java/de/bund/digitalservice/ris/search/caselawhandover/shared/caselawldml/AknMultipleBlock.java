@@ -9,6 +9,7 @@ import java.util.Map;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
+/** Represents a block that can contain multiple AknBlock elements identified by their names. */
 @AllArgsConstructor
 @NoArgsConstructor
 public class AknMultipleBlock {
@@ -20,6 +21,11 @@ public class AknMultipleBlock {
   // This enables deterministic element order when using the withBlock method
   @XmlTransient private Map<String, AknBlock> blocks = new LinkedHashMap<>();
 
+  /**
+   * Sets the blocks from a list of AknBlock.
+   *
+   * @param blocks the list of AknBlock to set
+   */
   @XmlElement(name = "block", namespace = CaseLawLdmlNamespaces.AKN_NS)
   public void setJaxbBlocks(List<AknBlock> blocks) {
     for (AknBlock block : blocks) {
@@ -32,6 +38,13 @@ public class AknMultipleBlock {
     return new ArrayList<>(blocks.values());
   }
 
+  /**
+   * Adds a block to the AknMultipleBlock.
+   *
+   * @param name the name of the block
+   * @param block the AknBlock to add
+   * @return the updated AknMultipleBlock
+   */
   public AknMultipleBlock withBlock(String name, AknBlock block) {
     if (block != null) {
       blocks.put(name, block);

@@ -20,6 +20,7 @@ import lombok.Setter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+/** Service for generating sitemaps. */
 @Service
 @RequiredArgsConstructor
 public class SitemapService {
@@ -31,33 +32,67 @@ public class SitemapService {
   private static final String SITEMAP_PREFIX = "sitemaps/";
   public final PortalBucket portalBucket;
 
+  /**
+   * Returns the path of a sitemap file for a given batch number
+   *
+   * @param batchNumber batch number
+   * @return sitemap file path
+   */
   public String getBatchSitemapPath(int batchNumber) {
     return SITEMAP_PREFIX
         + String.format("%s/%d.xml", this.sitemapType.name().toLowerCase(), batchNumber);
   }
 
+  /**
+   * Returns the path of the sitemap index file
+   *
+   * @return sitemap index file path
+   */
   public String getIndexSitemapPath() {
     return SITEMAP_PREFIX + String.format("%s/index.xml", this.sitemapType.name().toLowerCase());
   }
 
+  /**
+   * Creates a sitemap index file and saves it to the portal bucket
+   *
+   * @param size number of sitemap files
+   * @param type sitemap type
+   */
   public void createIndexSitemap(int size, SitemapType type) {
     this.setSitemapType(type);
     String path = this.getIndexSitemapPath();
     this.portalBucket.save(path, this.generateIndexXml(size));
   }
 
+  /**
+   * Creates a norms batch sitemap and saves it to the portal bucket
+   *
+   * @param batchNumber the batch number
+   * @param norms the list of norms
+   */
   public void createNormsBatchSitemap(int batchNumber, List<ExpressionEli> norms) {
     this.setSitemapType(SitemapType.NORMS);
     String path = this.getBatchSitemapPath(batchNumber);
     this.portalBucket.save(path, this.generateNormsSitemap(norms));
   }
 
+  /**
+   * Creates a caselaw batch sitemap and saves it to the portal bucket
+   *
+   * @param batchNumber the batch number
+   * @param paths the list of caselaw document paths
+   */
   public void createCaselawBatchSitemap(int batchNumber, List<String> paths) {
     this.setSitemapType(SitemapType.CASELAW);
     String path = this.getBatchSitemapPath(batchNumber);
     this.portalBucket.save(path, this.generateCaselawSitemap(paths));
   }
 
+  /**
+   * Deletes sitemap files older than the given date
+   *
+   * @param beforeDateTime date before which sitemap files should be deleted
+   */
   public void deleteSitemapFiles(Instant beforeDateTime) {
     this.portalBucket.getAllKeyInfosByPrefix(SITEMAP_PREFIX).stream()
         .filter(info -> info.lastModified().isBefore(beforeDateTime))
@@ -74,6 +109,12 @@ public class SitemapService {
     return marshal(sitemapFile);
   }
 
+  /**
+   * Generates sitemap xml content for norms
+   *
+   * @param norms list of norms
+   * @return sitemap xml content
+   */
   public String generateNormsSitemap(List<ExpressionEli> norms) {
     return generateSitemap(
         norms,
@@ -85,6 +126,12 @@ public class SitemapService {
         });
   }
 
+  /**
+   * Generates sitemap xml content for caselaw documents
+   *
+   * @param paths list of caselaw document paths
+   * @return sitemap xml content
+   */
   public String generateCaselawSitemap(List<String> paths) {
     List<String> documentNumbers =
         paths.stream()
@@ -100,6 +147,12 @@ public class SitemapService {
         });
   }
 
+  /**
+   * Generates sitemap index xml content
+   *
+   * @param size number of sitemap files
+   * @return sitemap index xml content
+   */
   public String generateIndexXml(int size) {
     List<Url> urls = new ArrayList<>();
     for (int i = 1; i <= size; i++) {

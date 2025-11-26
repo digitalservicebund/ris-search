@@ -9,6 +9,31 @@ import java.util.List;
 import lombok.Builder;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * Representation of a legislative expression schema, designed to encapsulate metadata about a
+ * specific expression or version of a legislative document. This is aligned with schema.org
+ * definitions and the ELI ontology, allowing for structured representation of legislative data.
+ *
+ * <p>The class includes identifiers, temporal coverage, legal force status, table of contents,
+ * parts, and encodings related to a legislative expression. It provides a foundation for working
+ * with legislative data across various contexts.
+ *
+ * <p>Annotations such as `@JsonldType` and `@Schema` are used to accord semantic and documentation
+ * support. Components like `workExample` in other legislative schemas may use this schema for
+ * contextual linking.
+ *
+ * <p>Fields:
+ *
+ * <p>- `id`: Unique identifier for the legislative expression, typically an ELI-compliant URI. -
+ * `legislationIdentifier`: Identifier for the legislative expression, usually derived from its
+ * underlying ELI. - `temporalCoverage`: Defines the relevant time period using ISO 8601 time
+ * interval format. - `legislationLegalForce`: Indicates whether the expression is currently in
+ * force. Values may include "in force", "not in force", or "partially in force". -
+ * `tableOfContents`: Optional list of entries defining the hierarchical structure of the
+ * legislative document. - `hasPart`: Optional list of legislative expression parts representing
+ * components like articles or attachments that form a part of this document. - `encoding`: Optional
+ * representations of this expression in multiple formats (e.g., HTML, XML).
+ */
 @Builder
 @JsonldResource
 @JsonldType("Legislation")

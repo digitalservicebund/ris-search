@@ -11,8 +11,17 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.core.SearchHit;
 import org.springframework.data.elasticsearch.core.SearchPage;
 
+/** Utility class for generating and retrieving test data in search integration tests. */
 public class TestDataGenerator {
 
+  /**
+   * Searches all documents using the given AllDocumentsService and search term, returning a list of
+   * AbstractSearchEntity results.
+   *
+   * @param allDocumentsService The AllDocumentsService to use for the search.
+   * @param searchTerm The search term to use for the search.
+   * @return List of AbstractSearchEntity results matching the search term.
+   */
   public static List<AbstractSearchEntity> searchAll(
       AllDocumentsService allDocumentsService, String searchTerm) {
     UniversalSearchParams universalSearchParams = new UniversalSearchParams();
@@ -24,6 +33,13 @@ public class TestDataGenerator {
     return result.get().map(SearchHit::getContent).toList();
   }
 
+  /**
+   * Returns the IDs of all CaseLawDocumentationUnit entities in the given list.
+   *
+   * @param searchEntities List of AbstractSearchEntity objects to extract CaseLawDocumentationUnit
+   *     IDs from.
+   * @return List of IDs of CaseLawDocumentationUnit entities.
+   */
   public static List<String> getCaseLawIds(List<AbstractSearchEntity> searchEntities) {
     return get(searchEntities, CaseLawDocumentationUnit.class).stream()
         .map(CaseLawDocumentationUnit::id)

@@ -9,6 +9,7 @@ import org.opensearch.index.query.BoolQueryBuilder;
 import org.opensearch.index.query.Operator;
 import org.opensearch.search.fetch.subphase.highlight.HighlightBuilder;
 
+/** Simple search type for administrative directives. */
 public class AdministrativeDirectiveSimpleSearchType implements SimpleSearchType {
 
   private static final List<String> HIGHLIGHT_CONTENT_FIELDS =

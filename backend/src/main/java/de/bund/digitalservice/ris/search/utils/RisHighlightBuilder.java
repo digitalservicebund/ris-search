@@ -4,7 +4,9 @@ import static org.opensearch.search.fetch.subphase.highlight.HighlightBuilder.Bo
 
 import org.opensearch.search.fetch.subphase.highlight.HighlightBuilder;
 
-/** Utility class for returningHighlightBuilder for certain fields using configuration parameters */
+/**
+ * Utility class for returning HighlightBuilder for certain fields using configuration parameters
+ */
 public final class RisHighlightBuilder {
 
   public static final int HIGHLIGHT_FRAGMENT_SIZE = 320;
@@ -14,6 +16,14 @@ public final class RisHighlightBuilder {
 
   private RisHighlightBuilder() {}
 
+  /**
+   * Builds and returns a pre-configured instance of HighlightBuilder with specified configuration
+   * parameters. The HighlightBuilder is configured to use a fragment size, boundary scanner type,
+   * number of fragments, pre-tags, post-tags, and no-match size that are predefined.
+   *
+   * @return a HighlightBuilder instance configured with specific highlighter settings for text
+   *     highlighting
+   */
   public static HighlightBuilder baseHighlighter() {
     return new HighlightBuilder()
         .fragmentSize(HIGHLIGHT_FRAGMENT_SIZE)

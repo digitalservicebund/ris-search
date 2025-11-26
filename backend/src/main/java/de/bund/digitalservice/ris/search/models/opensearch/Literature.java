@@ -38,6 +38,12 @@ public record Literature(
     @Nullable @Field(name = Fields.OUTLINE) String outline,
     @JsonIgnore @Field(name = Fields.INDEXED_AT) String indexedAt)
     implements AbstractSearchEntity {
+
+  /**
+   * Class containing constant field names used for mapping properties within the associated
+   * Literature class. These constants represent the keys for data retrieval and mapping from a data
+   * source. This class is not meant to be instantiated.
+   */
   public static class Fields {
     private Fields() {}
 

@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Objects;
 import org.testcontainers.shaded.org.apache.commons.lang3.StringUtils;
 
+/** Test data for Case Law Documentation Units. */
 public class CaseLawTestData {
   static List<String> keywords = List.of("keywordsTest");
 
@@ -165,6 +166,15 @@ public class CaseLawTestData {
                 .count();
   }
 
+  /**
+   * Creates a simple instance of {@code CaseLawDocumentationUnit} with specified document number
+   * and content, using the builder pattern.
+   *
+   * @param documentNumber The unique identifier for the document.
+   * @param content The case facts or content to be included in the document.
+   * @return A {@code CaseLawDocumentationUnit} object populated with the given document number and
+   *     content.
+   */
   public static CaseLawDocumentationUnit simple(String documentNumber, String content) {
     return CaseLawDocumentationUnit.builder()
         .id(documentNumber)
@@ -173,6 +183,13 @@ public class CaseLawTestData {
         .build();
   }
 
+  /**
+   * Generates a simple Case Law XML based on the provided context.
+   *
+   * @param context A map containing key-value pairs to replace in the XML template.
+   * @return A string representing the generated Case Law XML.
+   * @throws IOException If there is an error reading the template file.
+   */
   public static String simpleCaseLawXml(Map<String, Object> context) throws IOException {
     if (context == null) {
       context = new HashMap<>();

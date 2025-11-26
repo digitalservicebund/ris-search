@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+/** Represents the FRBR element in the case law LDML format. */
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -42,6 +43,12 @@ public class FrbrElement {
         .orElse(null);
   }
 
+  /**
+   * Convenience method to set both FRBRthis and FRBRuri to the same value
+   *
+   * @param value the value to set for both FRBRthis and FRBRuri
+   * @return the updated FrbrElement instance
+   */
   public FrbrElement withFrbrThisAndUri(String value) {
     this.frbrThis = new FrbrThis(value);
     this.frbrUri = new FrbrUri(value);

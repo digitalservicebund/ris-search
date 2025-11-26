@@ -10,6 +10,15 @@ import org.springframework.context.annotation.Configuration;
 @ConfigurationProperties(prefix = "opensearch")
 public class Configurations {
 
+  /**
+   * No-argument constructor used by Spring for properties binding.
+   *
+   * <p>Creates an empty Configurations instance which will be populated by the framework.
+   */
+  public Configurations() {
+    // default constructor for @ConfigurationProperties binding
+  }
+
   private String host;
 
   private String port;

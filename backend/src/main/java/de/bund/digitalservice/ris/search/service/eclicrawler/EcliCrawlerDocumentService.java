@@ -26,6 +26,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+/** Service for managing ECLI documents. */
 @Service
 public class EcliCrawlerDocumentService {
 
@@ -42,6 +43,15 @@ public class EcliCrawlerDocumentService {
   Pattern ecliPattern =
       Pattern.compile("ECLI:[a-zA-Z]{1,5}:[a-zA-Z][a-zA-Z0-9]{0,6}:[12]\\d{3}:[a-zA-Z0-9.]{1,25}");
 
+  /**
+   * Constructor for EcliCrawlerDocumentService.
+   *
+   * @param caseLawBucket The bucket for storing case law documents.
+   * @param repository The repository for accessing ECLI documents.
+   * @param caselawService The service for managing case law documents.
+   * @param sitemapWriter The writer for generating sitemap files.
+   * @param frontEndUrl The base URL for the front-end application.
+   */
   public EcliCrawlerDocumentService(
       CaseLawBucket caseLawBucket,
       EcliCrawlerDocumentRepository repository,
@@ -79,6 +89,18 @@ public class EcliCrawlerDocumentService {
         false);
   }
 
+  /**
+   * Writes a set of ECLI (European Case Law Identifier) document changes, based on a given
+   * changelog, to sitemap files and updates related indices and the robots.txt file. This method
+   * processes both newly published and to-be-deleted documents in the changelog for the specified
+   * date.
+   *
+   * @param apiUrl The base URL where the generated sitemap and index files are published.
+   * @param day The date associated with the sitemap generation, generally used for naming or
+   *     indexing purposes.
+   * @param changelog The changelog containing lists of changed and deleted ECLI document
+   *     references.
+   */
   public void writeFromChangelog(String apiUrl, LocalDate day, Changelog changelog) {
 
     ChangedEcliCrawlerDocumentsIterator iterator =
@@ -92,6 +114,16 @@ public class EcliCrawlerDocumentService {
     writeFilesFromIterator(apiUrl, day, iterator);
   }
 
+  /**
+   * Generates and writes a full differential representation of published and unpublished ECLI
+   * (European Case Law Identifier) documents between the existing repository and the storage bucket
+   * as sitemap files, and updates related indices and the robots.txt file.
+   *
+   * @param apiUrl The base URL for the sitemap API where sitemap and index files are published and
+   *     accessible.
+   * @param day The date associated with the sitemap generation, typically used in naming or
+   *     indexing.
+   */
   public void writeFullDiff(String apiUrl, LocalDate day) {
     List<String> allFiles =
         caselawBucket.getAllKeys().stream()

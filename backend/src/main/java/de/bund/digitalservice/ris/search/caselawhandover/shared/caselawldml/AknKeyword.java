@@ -4,6 +4,7 @@ import jakarta.xml.bind.annotation.XmlAttribute;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+/** Represents a keyword element in a case law LDML document. */
 @NoArgsConstructor
 @Getter
 public class AknKeyword {

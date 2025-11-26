@@ -8,6 +8,15 @@ import java.util.List;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
+/**
+ * Represents the result of a request in the application's search schema.
+ *
+ * <p>The {@code RequestResult} class serves as a container for the status of a request, site,
+ * connector information, a list of search results, and any errors that may have occurred during
+ * processing. This class is serialized using JAXB annotations for structured XML representation.
+ *
+ * <p>Fields: - {@code status}:
+ */
 @XmlRootElement(name = "result")
 @Data
 @Accessors(chain = true)

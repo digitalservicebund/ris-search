@@ -18,6 +18,11 @@ import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
+/**
+ * Component that triggers end-to-end import jobs when the application starts in the e2e profile.
+ *
+ * <p>It invokes caselaw, literature and norms reindex operations using the corresponding services.
+ */
 @Profile("e2e")
 @Component
 public class EndToEndImporter {
@@ -29,6 +34,13 @@ public class EndToEndImporter {
   private final IndexAdministrativeDirectiveService indexAdministrativeDirectiveService;
   private final IndexNormsService indexNormsService;
 
+  /**
+   * Construct an EndToEndImporter with required index services.
+   *
+   * @param indexCaselawService service used to reindex caselaw documents
+   * @param indexLiteratureService service used to reindex literature documents
+   * @param indexNormsService service used to reindex norms documents
+   */
   @Autowired
   public EndToEndImporter(
       IndexCaselawService indexCaselawService,
@@ -41,6 +53,20 @@ public class EndToEndImporter {
     this.indexNormsService = indexNormsService;
   }
 
+  /**
+   * Triggers the end-to-end data import and reindexing process when the application is ready.
+   *
+   * <p>This method is automatically executed when the Spring application fires the {@code
+   * ApplicationReadyEvent}, ensuring the initiation of reindexing operations for caselaw,
+   * literature, and norms. It invokes corresponding services to reindex all documents and logs the
+   * progress and completion of each step.
+   *
+   * <p>The method performs the following tasks sequentially: 1. Reindexes all caselaw data using
+   * the {@code IndexCaselawService}. 2. Reindexes all literature data using the {@code
+   * IndexLiteratureService}. 3. Reindexes all norms data using the {@code IndexNormsService}.
+   *
+   * @throws ObjectStoreServiceException if an error occurs during the reindexing process.
+   */
   @Async
   @EventListener(value = ApplicationReadyEvent.class)
   public void endToEndTrigger() throws ObjectStoreServiceException {

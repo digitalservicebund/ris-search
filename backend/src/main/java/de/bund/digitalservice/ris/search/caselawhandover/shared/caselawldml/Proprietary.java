@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+/** Represents the classification element in a case law LDML document. */
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter

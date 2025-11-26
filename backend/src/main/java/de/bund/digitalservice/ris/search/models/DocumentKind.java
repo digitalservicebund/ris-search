@@ -24,6 +24,22 @@ public enum DocumentKind {
     return value;
   }
 
+  /**
+   * Resolves a string value to the corresponding {@code DocumentKind} enum constant. This method
+   * extends the default {@code valueOf} behavior by mapping specific character codes ('R', 'N',
+   * 'L') to predefined constants, while still allowing standard enum lookup for other valid names.
+   *
+   * @param value the string representation of the desired {@code DocumentKind}. It is
+   *     case-insensitive and can be one of the special codes ('R', 'N', 'L') or a name of the enum
+   *     constant.
+   * @return the {@code DocumentKind} constant corresponding to the input value. If the value
+   *     matches 'R', 'N', or 'L', the method returns the respective predefined constant (e.g.,
+   *     {@code DocumentKind.CASELAW} for 'R'). For other input values, it defaults to {@code
+   *     DocumentKind.valueOf}.
+   * @throws IllegalArgumentException if the input value does not correspond to any defined {@code
+   *     DocumentKind} constant.
+   * @throws NullPointerException if the input value is null.
+   */
   public static DocumentKind extendedValueOf(String value) {
     return switch (value.toUpperCase()) {
       case "R" -> DocumentKind.CASELAW;

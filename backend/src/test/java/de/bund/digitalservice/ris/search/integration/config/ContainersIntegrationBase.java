@@ -29,6 +29,11 @@ import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.utility.TestcontainersConfiguration;
 
+/**
+ * Base class for integration tests that require OpenSearch and S3 buckets. It sets up the necessary
+ * containers and provides methods to reset the state of the repositories and buckets before each
+ * test run.
+ */
 @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class ContainersIntegrationBase {
@@ -82,6 +87,7 @@ public class ContainersIntegrationBase {
     resetRepositories();
   }
 
+  /** Resets all S3 buckets with the test data. */
   public void resetBuckets() {
     try {
       ((TestMockS3Client) caseLawS3Client.getS3Client()).loadDefaultFiles();
@@ -98,6 +104,7 @@ public class ContainersIntegrationBase {
     }
   }
 
+  /** Resets all repositories with the test data. */
   public void resetRepositories() {
     clearRepositoryData();
     caseLawRepository.saveAll(CaseLawTestData.allDocuments);
@@ -106,6 +113,7 @@ public class ContainersIntegrationBase {
     administrativeDirectiveRepository.saveAll(AdministrativeDirectiveTestData.allDocuments);
   }
 
+  /** Clears all data from the repositories. */
   public void clearRepositoryData() {
     caseLawRepository.deleteAll();
     literatureRepository.deleteAll();
@@ -113,6 +121,11 @@ public class ContainersIntegrationBase {
     administrativeDirectiveRepository.deleteAll();
   }
 
+  /**
+   * Adds the given norm XML files to the norms bucket.
+   *
+   * @param files A map where the key is the file name and the value is the file content.
+   */
   public void addNormXmlFiles(Map<String, String> files) {
     for (var normFile : files.entrySet()) {
       normsBucket.save(normFile.getKey(), normFile.getValue());

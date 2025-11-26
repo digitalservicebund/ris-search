@@ -5,6 +5,7 @@ import ioinformarics.oss.jackson.module.jsonld.annotation.JsonldType;
 import lombok.Builder;
 import org.jetbrains.annotations.Nullable;
 
+/** A DTO for partial collection views, following schema.org naming guidelines. */
 @Builder
 @JsonldResource
 @JsonldType("hydra:PartialCollectionView")

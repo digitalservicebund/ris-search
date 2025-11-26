@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+/** Test data for Literature documents. */
 public class LiteratureTestData {
 
   public static String matchAllTerm = "Literatur. ";
@@ -69,6 +70,14 @@ public class LiteratureTestData {
             .build());
   }
 
+  /**
+   * Creates a simple instance of the Literature class based on the provided document number and
+   * content.
+   *
+   * @param documentNumber the unique identifier for the document
+   * @param content the content to be set as the outline of the Literature instance
+   * @return a new instance of Literature with the specified document number and outline
+   */
   public static Literature simple(String documentNumber, String content) {
     return Literature.builder()
         .id(documentNumber)

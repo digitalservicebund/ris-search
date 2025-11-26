@@ -41,6 +41,18 @@ public class EcliSitemapController {
         .orElseGet(() -> ResponseEntity.notFound().build());
   }
 
+  /**
+   * Retrieves a sitemap file for a specific date and filename.
+   *
+   * @param year The year of the sitemap file, must be a four-digit string (e.g., "2023").
+   * @param month The month of the sitemap file, must be a two-digit string (e.g., "01" for
+   *     January).
+   * @param day The day of the sitemap file, must be a two-digit string (e.g., "01").
+   * @param filename The name of the sitemap file.
+   * @return A {@link ResponseEntity} containing the sitemap file as a byte array if found, with a
+   *     status code of 200. If the file is not found, returns a {@link ResponseEntity} with a
+   *     status code of 404.
+   */
   @GetMapping(
       path = ApiConfig.Paths.ECLICRAWLER + "/{year}/{month}/{day}/{filename}",
       produces = MediaType.APPLICATION_XML_VALUE)

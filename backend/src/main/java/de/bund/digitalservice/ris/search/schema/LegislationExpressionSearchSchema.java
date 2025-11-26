@@ -7,6 +7,13 @@ import ioinformarics.oss.jackson.module.jsonld.annotation.JsonldResource;
 import ioinformarics.oss.jackson.module.jsonld.annotation.JsonldType;
 import lombok.Builder;
 
+/**
+ * Represents the schema for a legislation expression search result, providing details about a
+ * specific legislative expression within the broader context of a legislation item.
+ *
+ * <p>This schema is designed to link legislation expressions to their respective works
+ * (`workExample` key) and provides information about the
+ */
 @Builder
 @JsonldResource
 @JsonldType("Legislation")

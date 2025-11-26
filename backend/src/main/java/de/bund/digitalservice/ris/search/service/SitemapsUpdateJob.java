@@ -17,6 +17,15 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+/**
+ * The SitemapsUpdateJob class is responsible for generating and managing sitemaps for legal norms
+ * and case law. This job fetches the keys from the respective storage buckets, divides them into
+ * manageable batches, and creates sitemaps for these batches. Additionally, it ensures that old
+ * sitemap files are removed from storage to maintain consistency.
+ *
+ * <p>This class implements the `Job` interface, and its primary execution logic is encapsulated in
+ * the `runJob` method.
+ */
 @Component
 @RequiredArgsConstructor
 public class SitemapsUpdateJob implements Job {
@@ -30,6 +39,11 @@ public class SitemapsUpdateJob implements Job {
   private final NormsBucket normsBucket;
   private final SitemapService sitemapService;
 
+  /**
+   * Executes the sitemap generation logic for legal norms and case law.
+   *
+   * @return ReturnCode indicating the success of the job execution.
+   */
   public Job.ReturnCode runJob() {
     Instant jobStarted = Instant.now();
     logger.info("Starting sitemaps update job for norms");
@@ -41,6 +55,7 @@ public class SitemapsUpdateJob implements Job {
     return ReturnCode.SUCCESS;
   }
 
+  /** Generates sitemaps for legal norms and organizes them into batches. */
   public void createSitemapsForNorms() {
     Set<ExpressionEli> expressions =
         normsBucket.getAllKeysByPrefix("eli/").stream()
@@ -58,6 +73,21 @@ public class SitemapsUpdateJob implements Job {
     sitemapService.createIndexSitemap(batches.size(), SitemapType.NORMS);
   }
 
+  /**
+   * Generates sitemaps for case law data and organizes them into batches.
+   *
+   * <p>This method retrieves a list of keys representing case law entries from the `caseLawBucket`.
+   * It filters the keys to include only those ending with ".xml" and excludes those containing the
+   * `IndexSyncJob.CHANGELOGS_PREFIX`. The filtered keys are then partitioned into smaller batches,
+   * each containing a specified number of URLs per page, defined by the `urlsPerPage` property.
+   *
+   * <p>For each batch, a distinct sitemap is created using the `sitemapService`. After all
+   * batch-level sitemaps are generated, an index sitemap summarizing the entire set of case law
+   * sitemaps is created.
+   *
+   * <p>Log messages are generated at each step to indicate progress in the sitemap creation
+   * process.
+   */
   public void createSitemapsForCaselaw() {
     List<String> paths =
         caseLawBucket.getAllKeys().stream()

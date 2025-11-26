@@ -35,9 +35,29 @@ import javax.xml.transform.stream.StreamSource;
 import org.eclipse.persistence.exceptions.DescriptorException;
 import org.springframework.lang.Nullable;
 
+/**
+ * The AdministrativeDirectiveLdmlToOpenSearchMapper class is responsible for mapping an {@code
+ * AdministrativeDirectiveLdml} object or LDML string representation into an {@code
+ * AdministrativeDirective} object. This transformation process extracts relevant information and
+ * creates a mapped object that adheres to the required OpenSearch format. It also provides detailed
+ * helper methods for extracting specific fields from {@code AdministrativeDirectiveLdml}.
+ *
+ * <p>This class is designed as a utility and cannot be instantiated.
+ */
 public class AdministrativeDirectiveLdmlToOpenSearchMapper {
   private AdministrativeDirectiveLdmlToOpenSearchMapper() {}
 
+  /**
+   * Maps an {@code AdministrativeDirectiveLdml} object to an {@code AdministrativeDirective}
+   * object. The provided {@code AdministrativeDirectiveLdml} is transformed into the corresponding
+   * {@code AdministrativeDirective} object with all relevant fields set, and includes the specified
+   * timestamp.
+   *
+   * @param ldml the {@code AdministrativeDirectiveLdml} object to be mapped
+   * @param now the timestamp to be associated with the mapping process
+   * @return the mapped {@code AdministrativeDirective} object
+   * @throws OpenSearchMapperException if a validation exception occurs during the mapping process
+   */
   public static AdministrativeDirective map(AdministrativeDirectiveLdml ldml, Instant now) {
     try {
 
@@ -70,6 +90,16 @@ public class AdministrativeDirectiveLdmlToOpenSearchMapper {
     }
   }
 
+  /**
+   * Maps a given LDML string representation to an {@code AdministrativeDirective} object. The
+   * provided LDML string is unmarshalled into an {@code AdministrativeDirectiveLdml} object, and
+   * then mapped to an {@code AdministrativeDirective} using the specified timestamp.
+   *
+   * @param ldmlString the LDML string to be parsed and mapped to an administrative directive
+   * @param now the timestamp to be associated with the mapping process
+   * @return the mapped {@code AdministrativeDirective} object
+   * @throws OpenSearchMapperException if the LDML string cannot be parsed or mapped
+   */
   public static AdministrativeDirective map(String ldmlString, Instant now) {
     try {
       StreamSource ldmlStreamSource = new StreamSource(new StringReader(ldmlString));

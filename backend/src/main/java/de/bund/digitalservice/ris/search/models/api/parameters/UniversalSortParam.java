@@ -5,6 +5,20 @@ import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * This class represents the sorting parameters for universal search queries.
+ *
+ * <p>The `sort` field specifies the attribute by which the results should be sorted. By default,
+ * results are sorted based on the relevance score calculated by OpenSearch.
+ *
+ * <p>Valid values for the `sort` field include the following: - "date": Sort by date. -
+ * "temporalCoverageFrom": Sort by the start of the temporal coverage. - "legislationIdentifier":
+ * Sort by legislation identifier. - "courtName": Sort by court name. - "documentNumber": Sort by
+ * the document number. - Not setting the `sort` field or using "default": Sort by descending
+ * relevance.
+ *
+ * <p>To sort in descending order for any field, prefix the field with a `-` (e.g., `-date`).
+ */
 @Data
 public class UniversalSortParam {
   @Schema(

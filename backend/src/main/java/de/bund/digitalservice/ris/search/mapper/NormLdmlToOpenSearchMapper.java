@@ -30,6 +30,30 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+/**
+ * The `NormLdmlToOpenSearchMapper` class is responsible for mapping and extracting data from a
+ * given XML representation of legal norms, including associated metadata, content, and attachments.
+ * It provides methods to parse and transform XML data into structured objects, such as {@link
+ * Norm}, that can be used in OpenSearch or other systems handling legal documents.
+ *
+ * <p>This class works with XML documents and performs XPath-based extraction to retrieve specific
+ * fields like titles, articles, dates, citations, and structured components of the document.
+ *
+ * <p>Fields in this class define the XPath expressions and constants necessary for extracting the
+ * targeted information from XML documents. These fields enable precise navigation and
+ * identification of legal document components, such as article content, short titles, or
+ * publication metadata.
+ *
+ * <p>Methods in this class facilitate the following: - Parsing and transforming XML data into
+ * domain-specific objects. - Handling metadata extraction for titles, abbreviations, and dates
+ * based on XPath. - Building search-optimized values such as article search markers and structured
+ * table of contents. - Extracting normalized objects such as articles and attachments while
+ * maintaining the structure required for legal data processing.
+ *
+ * <p>This utility implements private constructors to avoid unintended instantiation, as the class
+ * exposes only static methods for functional purposes. It focuses on ensuring consistent data
+ * extraction and mapping while adhering to the structure and metadata provided within XML files.
+ */
 public class NormLdmlToOpenSearchMapper {
   private static final Logger logger = LogManager.getLogger(NormLdmlToOpenSearchMapper.class);
 
@@ -81,6 +105,18 @@ public class NormLdmlToOpenSearchMapper {
 
   private NormLdmlToOpenSearchMapper() {}
 
+  /**
+   * Parses a given XML file and its associated attachment files to generate a {@link Norm} object.
+   * The method extracts and maps metadata, content, and attachments from the XML to populate the
+   * properties of the {@link Norm}.
+   *
+   * @param xmlFile A string representation of the XML file content.
+   * @param attachmentFileContents A map where the keys represent the attachment names and the
+   *     values contain their respective content.
+   * @return An {@link Optional} containing the constructed {@link Norm} instance if parsing
+   *     succeeds, or {@link Optional#empty()} in case of parsing failure or unprocessable
+   *     conditions.
+   */
   public static Optional<Norm> parseNorm(
       String xmlFile, Map<String, String> attachmentFileContents) {
     try {

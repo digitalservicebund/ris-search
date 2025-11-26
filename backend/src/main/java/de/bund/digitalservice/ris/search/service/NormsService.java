@@ -36,6 +36,14 @@ public class NormsService {
   private final SimpleSearchQueryBuilder simpleSearchQueryBuilder;
   private final NormsBucket normsBucket;
 
+  /**
+   * Constructs a new instance of {@code NormsService}.
+   *
+   * @param normsRepository The repository for interacting with the OpenSearch norms.
+   * @param normsBucket The object storage bucket for norms files.
+   * @param operations The Elasticsearch operations for executing queries.
+   * @param simpleSearchQueryBuilder The query builder for constructing search queries.
+   */
   @Autowired
   public NormsService(
       NormsRepository normsRepository,
@@ -75,6 +83,7 @@ public class NormsService {
    * Returns a {@link Norm} by its expression-level ELI.
    *
    * @param expressionEli the expression-level ELI of the Norm to return
+   * @return an {@link Optional} containing the Norm if found, or empty if not found
    */
   public Optional<Norm> getByExpressionEli(final ExpressionEli expressionEli) {
     Norm result = normsRepository.getByExpressionEli(expressionEli.toString());

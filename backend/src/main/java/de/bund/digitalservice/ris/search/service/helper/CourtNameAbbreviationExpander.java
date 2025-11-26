@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
+/** Utility class for expanding court name abbreviations using a predefined set of synonyms. */
 public class CourtNameAbbreviationExpander {
   private final Map<String, String> synonyms;
 
@@ -19,6 +20,12 @@ public class CourtNameAbbreviationExpander {
     this.synonyms = loadCourtSynonyms();
   }
 
+  /**
+   * Extracts the first token from the given prefix string and converts it to uppercase.
+   *
+   * @param prefix The input string from which to extract the first token.
+   * @return The first token in uppercase, or null if the input is null or empty.
+   */
   public static String extractFirstToken(String prefix) {
     if (prefix == null) {
       return null;
@@ -31,6 +38,13 @@ public class CourtNameAbbreviationExpander {
     }
   }
 
+  /**
+   * Expands court name abbreviations in the given key using the loaded synonyms.
+   *
+   * @param key The input string containing court name abbreviations.
+   * @param keepToken A token prefix to keep unchanged (can be null).
+   * @return The input string with court name abbreviations expanded.
+   */
   public @NotNull String getLabelExpandingSynonyms(String key, String keepToken) {
     return Arrays.stream(key.split(" "))
         .map(

@@ -1166,7 +1166,7 @@
             "name": "query",
             "in": "query",
             "description": "The query filter based on Lucene query",
-            "required": true,
+            "required": false,
             "schema": { "type": "string" }
           },
           {
@@ -1217,6 +1217,67 @@
         }
       }
     },
+    "/v1/document/lucene-search/literature": {
+      "get": {
+        "tags": ["Literature"],
+        "summary": "Advanced search using Lucene query syntax",
+        "operationId": "literatureSearch",
+        "parameters": [
+          {
+            "name": "query",
+            "in": "query",
+            "description": "The query filter based on Lucene query syntax",
+            "required": false,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "description": "The number of entities per page",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "maximum": 100,
+              "minimum": 1
+            },
+            "example": 100
+          },
+          {
+            "name": "pageIndex",
+            "in": "query",
+            "description": "The number of the page to request. The page starts with the value 0",
+            "required": false,
+            "schema": { "type": "integer", "format": "int32", "minimum": 0 },
+            "example": 0
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "description": "The field to sort the results by. Default is the relevance score calculated by OpenSearch. Valid usage of the sort field are : date and documentNumber and not setting the sort field (sort by relevance descending).Add a leading - to set the order to descending (-date)",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "The field to sort the results by. Default is the relevance score calculated by OpenSearch. Valid usage of the sort field are : date and documentNumber and not setting the sort field (sort by relevance descending).Add a leading - to set the order to descending (-date)",
+              "pattern": "^-?(|default|date|DATUM|documentNumber)$"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/CollectionSchemaSearchMemberSchemaLiteratureSearchSchema"
+                }
+              }
+            }
+          },
+          "500": { "description": "Internal Server Error" }
+        }
+      }
+    },
     "/v1/document/lucene-search/legislation": {
       "get": {
         "tags": ["Legislation"],
@@ -1227,7 +1288,7 @@
             "name": "query",
             "in": "query",
             "description": "The query filter based on Lucene query",
-            "required": true,
+            "required": false,
             "schema": { "type": "string" }
           },
           {
@@ -1288,7 +1349,7 @@
             "name": "query",
             "in": "query",
             "description": "The query filter based on Lucene query syntax",
-            "required": true,
+            "required": false,
             "schema": { "type": "string" }
           },
           {
@@ -1677,6 +1738,181 @@
               }
             }
           }
+        }
+      }
+    },
+    "/v1/administrative-directive": {
+      "get": {
+        "tags": ["AdministrativeDirective"],
+        "summary": "List and search administrative directives",
+        "description": "The endpoint returns a list of administrative directives from our database. The list is paginated and can be filtered and sorted.",
+        "operationId": "searchAndFilter_4",
+        "parameters": [
+          {
+            "name": "documentNumber",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "searchTerm",
+            "in": "query",
+            "description": "Searches for the given tokens in searchTerm. If searchTerm contains more than one token, all tokens must be in the document for the document to match.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Searches for the given tokens in searchTerm. If searchTerm contains more than one token, all tokens must be in the document for the document to match."
+            }
+          },
+          {
+            "name": "dateFrom",
+            "in": "query",
+            "description": "The from (greater than or equal) parameter returns all entities where date is later than, or equal to, the given date.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "description": "The from (greater than or equal) parameter returns all entities where date is later than, or equal to, the given date."
+            }
+          },
+          {
+            "name": "dateTo",
+            "in": "query",
+            "description": "The to (less than or equal) parameter returns all entities where date is earlier than, or equal to, the given date.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "description": "The to (less than or equal) parameter returns all entities where date is earlier than, or equal to, the given date."
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "description": "The number of entities per page",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "maximum": 100,
+              "minimum": 1
+            },
+            "example": 100
+          },
+          {
+            "name": "pageIndex",
+            "in": "query",
+            "description": "The number of the page to request. The page starts with the value 0",
+            "required": false,
+            "schema": { "type": "integer", "format": "int32", "minimum": 0 },
+            "example": 0
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "description": "The field to sort the results by. Default is the relevance score calculated by OpenSearch. Valid usage of the sort field are : date and documentNumber and not setting the sort field (sort by relevance descending).Add a leading - to set the order to descending (-date)",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "The field to sort the results by. Default is the relevance score calculated by OpenSearch. Valid usage of the sort field are : date and documentNumber and not setting the sort field (sort by relevance descending).Add a leading - to set the order to descending (-date)",
+              "pattern": "^-?(|default|DATUM|documentNumber)$"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CollectionSchemaSearchMemberSchemaAdministrativeDirectiveSearchSchema"
+                }
+              }
+            }
+          },
+          "500": { "description": "Internal Server Error" }
+        }
+      }
+    },
+    "/v1/administrative-directive/{documentNumber}": {
+      "get": {
+        "tags": ["AdministrativeDirective"],
+        "summary": "Administrative directive metadata",
+        "description": "The endpoint returns the metadata of a single administrative directive from our database.",
+        "operationId": "getAdministrativeDirectiveMetadata",
+        "parameters": [
+          {
+            "name": "documentNumber",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" },
+            "example": "KSNR00000"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdministrativeDirectiveSchema"
+                }
+              }
+            }
+          },
+          "404": { "description": "Not Found" }
+        }
+      }
+    },
+    "/v1/administrative-directive/{documentNumber}.xml": {
+      "get": {
+        "tags": ["AdministrativeDirective"],
+        "summary": "Administrative directive XML",
+        "description": "Returns an administrative directive item as XML. This content is used as a source for the HTML endpoint.",
+        "operationId": "getAdministrativeDirectiveAsXml",
+        "parameters": [
+          {
+            "name": "documentNumber",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" },
+            "example": "KSNR00000"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/xml": {
+                "schema": { "type": "string", "format": "byte" }
+              }
+            }
+          },
+          "404": { "description": "Not Found" }
+        }
+      }
+    },
+    "/v1/administrative-directive/{documentNumber}.html": {
+      "get": {
+        "tags": ["AdministrativeDirective"],
+        "summary": "Administrative directive HTML",
+        "description": "Renders and returns an administrative directive as HTML.",
+        "operationId": "getAdministrativeDirectiveAsHtml",
+        "parameters": [
+          {
+            "name": "documentNumber",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" },
+            "example": "KSNR00000"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": { "text/html": { "schema": { "type": "string" } } }
+          },
+          "404": { "description": "Not Found" }
         }
       }
     }
@@ -2219,6 +2455,43 @@
         "properties": { "@type": { "type": "string" } },
         "required": ["@type"]
       },
+      "AdministrativeDirectiveSearchSchema": {
+        "allOf": [
+          { "$ref": "#/components/schemas/AbstractDocumentSchema" },
+          {
+            "type": "object",
+            "properties": {
+              "@id": { "type": "string", "example": "KALU000000000" },
+              "documentNumber": {
+                "type": "string",
+                "description": "Dokumentnummer",
+                "example": "KALU000000000"
+              },
+              "headline": { "type": "string", "description": "Haupttitel" },
+              "documentType": {
+                "type": "string",
+                "description": "Dokumenttyp",
+                "example": "VV"
+              },
+              "referenceNumbers": {
+                "type": "array",
+                "description": "Aktenzeichen",
+                "example": "['ZZ', 'YY']",
+                "items": { "type": "string" }
+              },
+              "entryIntoForceDate": {
+                "type": "string",
+                "format": "date",
+                "description": "Gültig ab Datum",
+                "example": "2003-12-15"
+              }
+            }
+          }
+        ],
+        "properties": {
+          "@type": { "type": "string", "example": "AdministrativeDirective" }
+        }
+      },
       "CaseLawSearchSchema": {
         "allOf": [
           { "$ref": "#/components/schemas/AbstractDocumentSchema" },
@@ -2301,6 +2574,9 @@
         "properties": {
           "item": {
             "oneOf": [
+              {
+                "$ref": "#/components/schemas/AdministrativeDirectiveSearchSchema"
+              },
               { "$ref": "#/components/schemas/CaseLawSearchSchema" },
               { "$ref": "#/components/schemas/LegislationWorkSearchSchema" },
               { "$ref": "#/components/schemas/LiteratureSearchSchema" }
@@ -2460,6 +2736,122 @@
             "type": "string",
             "example": "Bundesgerichtshof Karlsruhe"
           }
+        }
+      },
+      "CollectionSchemaSearchMemberSchemaAdministrativeDirectiveSearchSchema": {
+        "type": "object",
+        "properties": {
+          "@id": {
+            "type": "string",
+            "example": "/v1/document?pageIndex=0&size=5"
+          },
+          "totalItems": { "type": "integer", "format": "int64", "example": 1 },
+          "member": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SearchMemberSchemaAdministrativeDirectiveSearchSchema"
+            }
+          },
+          "view": {
+            "$ref": "#/components/schemas/PartialCollectionViewSchema"
+          },
+          "@type": { "type": "string", "example": "hydra:Collection" }
+        }
+      },
+      "SearchMemberSchemaAdministrativeDirectiveSearchSchema": {
+        "type": "object",
+        "properties": {
+          "item": {
+            "$ref": "#/components/schemas/AdministrativeDirectiveSearchSchema"
+          },
+          "textMatches": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/TextMatchSchema" }
+          },
+          "@type": { "type": "string", "example": "SearchResult" }
+        }
+      },
+      "AdministrativeDirectiveEncodingSchema": {
+        "type": "object",
+        "properties": {
+          "@id": { "type": "string" },
+          "contentUrl": { "type": "string" },
+          "encodingFormat": { "type": "string", "example": "text/html" },
+          "inLanguage": { "type": "string", "example": "de" },
+          "@type": { "type": "string", "example": "MediaObject" }
+        }
+      },
+      "AdministrativeDirectiveSchema": {
+        "type": "object",
+        "properties": {
+          "@id": { "type": "string", "example": "KALU000000000" },
+          "documentNumber": {
+            "type": "string",
+            "description": "Dokumentnummer",
+            "example": "KALU000000000"
+          },
+          "headline": { "type": "string", "description": "Haupttitel" },
+          "shortReport": { "type": "string", "description": "Kurzreferat" },
+          "documentType": {
+            "type": "string",
+            "description": "Dokumenttyp",
+            "example": "VV"
+          },
+          "documentTypeDetail": {
+            "type": "string",
+            "description": "Art der Verwaltungsvorschrift",
+            "example": "Bekanntmachung"
+          },
+          "referenceNumbers": {
+            "type": "array",
+            "description": "Aktenzeichen",
+            "example": "['ZZ', 'YY']",
+            "items": { "type": "string" }
+          },
+          "entryIntoForceDate": {
+            "type": "string",
+            "format": "date",
+            "description": "Gültig ab Datum",
+            "example": "2003-12-15"
+          },
+          "expiryDate": {
+            "type": "string",
+            "format": "date",
+            "description": "Gültig bis Datum",
+            "example": "2005-12-01"
+          },
+          "legislationAuthority": {
+            "type": "string",
+            "description": "Normgeber"
+          },
+          "references": {
+            "type": "array",
+            "description": "Fundstelle",
+            "items": { "type": "string" }
+          },
+          "citationDates": {
+            "type": "array",
+            "description": "Zitierdaten",
+            "items": { "type": "string", "format": "date" }
+          },
+          "normReferences": {
+            "type": "array",
+            "description": "Normkette",
+            "example": "['§ 1 Abs1 SGB']",
+            "items": { "type": "string" }
+          },
+          "outline": {
+            "type": "array",
+            "description": "Gliederung",
+            "items": { "type": "string" }
+          },
+          "encoding": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AdministrativeDirectiveEncodingSchema"
+            }
+          },
+          "@type": { "type": "string", "example": "AdministrativeDirective" }
         }
       }
     }

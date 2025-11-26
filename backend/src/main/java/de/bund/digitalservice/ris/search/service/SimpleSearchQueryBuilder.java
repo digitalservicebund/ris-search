@@ -24,6 +24,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.core.query.FetchSourceFilter;
 import org.springframework.stereotype.Service;
 
+/**
+ * Service for building OpenSearch queries for simple search across multiple documentation unit
+ * types.
+ */
 @Service
 public class SimpleSearchQueryBuilder {
 
@@ -33,6 +37,14 @@ public class SimpleSearchQueryBuilder {
     this.searchTermParser = searchTermParser;
   }
 
+  /**
+   * Builds an OpenSearch query for simple search across multiple documentation unit types.
+   *
+   * @param searchTypes List of SimpleSearchType defining the documentation unit types to search
+   * @param params UniversalSearchParams containing search parameters
+   * @param pageable Pageable object for pagination
+   * @return NativeSearchQuery representing the constructed OpenSearch query
+   */
   public NativeSearchQuery buildQuery(
       List<SimpleSearchType> searchTypes,
       @NotNull UniversalSearchParams params,

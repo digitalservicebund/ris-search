@@ -22,13 +22,26 @@ import org.springframework.data.elasticsearch.core.SearchHit;
 import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.data.elasticsearch.core.SearchPage;
 
+/**
+ * A utility class responsible for mapping search results of type {@link Norm} to specific response
+ * schemas used in the application. This mapper facilitates the transformation of search results and
+ * related metadata into structures compatible with API response formats.
+ *
+ * <p>The mappings include: - Conversion of {@link SearchHit} instances containing {@link Norm} into
+ * {@link SearchMemberSchema}. - Extraction and conversion of text matches from search results into
+ * {@link TextMatchSchema}. - Transformation of search pages into {@link CollectionSchema}
+ * containing structured response items.
+ *
+ * <p>This class is not intended to be instantiated; all utility methods are static.
+ */
 public class NormSearchResponseMapper {
   private NormSearchResponseMapper() {}
 
   /**
-   * Creates a {@link SearchMemberSchema} instance from a {@link SearchHit<Norm>} entity.
+   * Creates a {@link SearchMemberSchema} instance from a {@link SearchPage} of {@code Norm} entity.
    *
-   * @param searchHit The input {@link SearchHit<Norm>} entity to be converted.
+   * @param <T> The type of the entity contained within the {@link SearchHit}.
+   * @param searchHit The input {@link SearchHit} of {@code Norm} entity to be converted.
    * @return A new {@link SearchMemberSchema} instance mapped from the input {@link Norm}.
    */
   public static <T> SearchMemberSchema<LegislationWorkSearchSchema> fromSearchHit(
@@ -66,6 +79,17 @@ public class NormSearchResponseMapper {
     return null;
   }
 
+  /**
+   * Extracts text matches from a given {@link SearchHit} object. This includes matches found in
+   * inner hits (e.g., articles) and highlight fields. The method combines results from both sources
+   * into a unified list of {@link TextMatchSchema}.
+   *
+   * @param searchHit The {@link SearchHit} object from which text matches are to be retrieved. This
+   *     may include inner hits such as "articles" and highlight fields.
+   * @param <T> The type of the entity contained within the {@link SearchHit}.
+   * @return A list of {@link TextMatchSchema} objects representing the text matches found in the
+   *     {@link SearchHit}, including matches from inner hits and highlighted fields.
+   */
   public static <T> List<TextMatchSchema> getTextMatches(SearchHit<T> searchHit) {
     Optional<SearchHits<?>> matchingArticles =
         Optional.ofNullable(searchHit.getInnerHits().getOrDefault("articles", null));
@@ -100,6 +124,13 @@ public class NormSearchResponseMapper {
     return converted;
   }
 
+  /**
+   * Maps the given {@link Norm} entity to a {@link LegislationWorkSearchSchema} instance.
+   *
+   * @param norm The {@link Norm} entity containing legislative data to be converted.
+   * @return A {@link LegislationWorkSearchSchema} instance constructed from the provided {@link
+   *     Norm}.
+   */
   public static LegislationWorkSearchSchema fromDomain(Norm norm) {
     String contentBaseUrl = ApiConfig.Paths.LEGISLATION + "/";
     String expressionEli = norm.getExpressionEli();
@@ -135,6 +166,15 @@ public class NormSearchResponseMapper {
         .build();
   }
 
+  /**
+   * Converts the given {@link SearchPage} of {@code Norm} into a {@link CollectionSchema} of {@link
+   * SearchMemberSchema} containing {@link LegislationWorkSearchSchema}.
+   *
+   * @param page The {@link SearchPage} containing {@link Norm} elements to be transformed.
+   * @param path The base path used for constructing the collection's ID and view metadata.
+   * @return A {@link CollectionSchema} initialized with members mapped from the input page, the
+   *     total number of items, and the corresponding view metadata.
+   */
   public static CollectionSchema<SearchMemberSchema<LegislationWorkSearchSchema>> fromDomain(
       final SearchPage<Norm> page, String path) {
     String id = String.format("%s?pageIndex=%d&size=%d", path, page.getNumber(), page.getSize());

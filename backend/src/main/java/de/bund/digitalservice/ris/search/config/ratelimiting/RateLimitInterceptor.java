@@ -11,6 +11,25 @@ import java.util.concurrent.TimeUnit;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.web.servlet.HandlerInterceptor;
 
+/**
+ * The RateLimitInterceptor is an abstract class that provides a base implementation for
+ * intercepting and rate-limiting incoming HTTP requests based on the client IP address.
+ *
+ * <p>It leverages a caching mechanism to count and manage the number of requests from each client
+ * IP within a specified time window. If the number of requests from a client exceeds the configured
+ * maximum, the interceptor denies the request and responds with an HTTP 429 (Too Many Requests)
+ * status code.
+ *
+ * <p>Subclasses must provide implementation by specifying the maximum number of allowed requests
+ * and the duration of the time window via the constructor.
+ *
+ * <p>Core functionalities include: - Tracking the number of requests made by each client IP. -
+ * Enforcing expiration and cleanup of request records after a specified time window. - Returning a
+ * 429 status code for clients exceeding the allowed request limit.
+ *
+ * <p>Designed to be extended for cases where specific rate-limiting configurations are required for
+ * different endpoints or use cases.
+ */
 public abstract class RateLimitInterceptor implements HandlerInterceptor {
   private final Cache<String, Integer> requestCountPerIpAddress;
 

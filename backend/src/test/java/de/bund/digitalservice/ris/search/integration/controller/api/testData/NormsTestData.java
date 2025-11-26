@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/** Test data for norms used in integration tests. */
 public class NormsTestData {
 
   public static final String NORM_LDML_TEMPLATE = "templates/norm/norm-template.xml";
@@ -27,6 +28,11 @@ public class NormsTestData {
   public static List<TableOfContentsItem> nestedToC = setupNestedToC();
   public static List<Norm> allDocuments = setupCommonNormEntities();
 
+  /**
+   * Creates the S102 work with its expressions and attachments for testing purposes.
+   *
+   * @return map of eli file names to their XML content
+   */
   public static Map<String, String> createS102Work() {
     try {
       Map<String, String> result = new HashMap<>();
@@ -65,6 +71,14 @@ public class NormsTestData {
     }
   }
 
+  /**
+   * Creates a simple Norm XML from a template for testing purposes.
+   *
+   * @param fileName the eli file name
+   * @param context additional context variables for the template
+   * @return the generated XML as string
+   * @throws IOException if template reading fails
+   */
   public static String simpleNormXml(String fileName, Map<String, Object> context)
       throws IOException {
     if (context == null) {
@@ -80,6 +94,14 @@ public class NormsTestData {
     return SharedTestConstants.getXmlFromTemplate(context, NORM_LDML_TEMPLATE);
   }
 
+  /**
+   * Creates a simple Norm XML attachment from a template for testing purposes.
+   *
+   * @param fileName the eli file name
+   * @param context additional context variables for the template
+   * @return the generated XML as string
+   * @throws IOException if template reading fails
+   */
   public static String simpleNormXmlAttachment(String fileName, Map<String, Object> context)
       throws IOException {
     if (context == null) {
@@ -122,6 +144,11 @@ public class NormsTestData {
                             List.of(simpleToc("5"), simpleToc("6"))))))));
   }
 
+  /**
+   * Sets up some common Norm entities for testing purposes.
+   *
+   * @return list of common Norm entities
+   */
   public static List<Norm> setupCommonNormEntities() {
 
     var normTestOne =
@@ -195,6 +222,13 @@ public class NormsTestData {
     return new ArrayList<>(List.of(normTestOne, normTestTwo, normTestThree));
   }
 
+  /**
+   * Creates a simple Norm with one article for testing purposes.
+   *
+   * @param id the id of the norm
+   * @param content the content of the single article
+   * @return the created Norm
+   */
   public static Norm simple(String id, String content) {
     return Norm.builder()
         .id(id)

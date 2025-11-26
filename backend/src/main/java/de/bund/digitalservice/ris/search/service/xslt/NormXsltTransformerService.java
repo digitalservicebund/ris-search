@@ -12,6 +12,7 @@ import javax.xml.transform.stream.StreamSource;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 
+/** Service for transforming LegalDocML norm and article documents to HTML using XSLT. */
 @Service
 public class NormXsltTransformerService extends XsltTransformer {
 
@@ -27,6 +28,7 @@ public class NormXsltTransformerService extends XsltTransformer {
     return "ris-portal.xsl";
   }
 
+  /** Key for the resource path parameter passed to the XSLT transformer. */
   public NormXsltTransformerService(NormsBucket normsBucket) {
     this.normsBucket = normsBucket;
     setCustomUriResolver();
@@ -74,6 +76,14 @@ public class NormXsltTransformerService extends XsltTransformer {
     }
   }
 
+  /**
+   * Transforms a LegalDocML norm document.
+   *
+   * @param source
+   * @param basePath
+   * @param resourcesBasePath
+   * @return the transformed norm as HTML string
+   */
   public String transformNorm(byte[] source, String basePath, String resourcesBasePath) {
     Map<String, String> parameters =
         Map.of(
@@ -81,6 +91,14 @@ public class NormXsltTransformerService extends XsltTransformer {
     return transformLegalDocMlFromBytes(source, parameters);
   }
 
+  /**
+   * Transforms a LegalDocML article document.
+   *
+   * @param source
+   * @param eId
+   * @param resourcesBasePath
+   * @return the transformed article as HTML string
+   */
   public String transformArticle(byte[] source, String eId, String resourcesBasePath) {
     Map<String, String> parameters =
         Map.of("article-eid", eId, "debugging", "false", RESOURCE_PATH_KEY, resourcesBasePath);

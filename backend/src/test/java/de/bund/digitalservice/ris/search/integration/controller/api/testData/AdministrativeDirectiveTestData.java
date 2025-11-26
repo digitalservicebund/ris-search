@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+/** Test data for AdministrativeDirective documents. */
 public class AdministrativeDirectiveTestData {
 
   public static final List<AdministrativeDirective> allDocuments = new ArrayList<>();

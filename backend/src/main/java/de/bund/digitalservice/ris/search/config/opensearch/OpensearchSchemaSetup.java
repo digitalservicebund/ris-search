@@ -21,8 +21,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 
+/**
+ * Ensures OpenSearch templates, indices and aliases are present and up to date at startup.
+ *
+ * <p>This component applies index templates and creates indices/aliases when necessary.
+ */
 @Configuration
 public class OpensearchSchemaSetup {
+
+  /**
+   * No-argument constructor used by some frameworks and proxies.
+   *
+   * <p>It delegates to the primary constructor with null to avoid duplicate final-field assignment.
+   * Not intended for regular manual use.
+   */
+  public OpensearchSchemaSetup() {
+    this(null);
+  }
 
   private static final Logger logger = LogManager.getLogger(OpensearchSchemaSetup.class);
   private final Configurations configurations;
@@ -32,6 +47,19 @@ public class OpensearchSchemaSetup {
     this.configurations = configurations;
   }
 
+  /**
+   * Updates the OpenSearch schema by applying necessary templates, ensuring index existence, and
+   * alias configurations.
+   *
+   * <p>This method performs the following tasks: - Upserts component and index templates into
+   * OpenSearch. - Ensures necessary indices exist and creates them if missing. - Configures aliases
+   * for the indices, including specific per-index aliases and a shared "all documents" alias if
+   * applicable.
+   *
+   * @param restHighLevelClient the instance of {@code RestHighLevelClient} used to communicate with
+   *     the OpenSearch instance
+   * @throws IllegalStateException if an {@link IOException} occurs during schema update
+   */
   public void updateOpensearchSchema(RestHighLevelClient restHighLevelClient) {
     try {
       upsertTemplates(restHighLevelClient);

@@ -50,6 +50,16 @@ public class CaseLawService {
   private final CaseLawLdmlToOpenSearchMapper marshaller;
   private final SimpleSearchQueryBuilder simpleSearchQueryBuilder;
 
+  /**
+   * Constructs a new instance of the CaseLawService class, initializing its dependencies.
+   *
+   * @param caseLawRepository the repository responsible for managing CaseLaw entities
+   * @param caseLawBucket the bucket for storing and managing case law data in bulk operations
+   * @param operations the ElasticsearchOperations instance to interact with Elasticsearch
+   * @param configurations the configurations required for the service
+   * @param marshaller the mapper for converting CaseLaw entities to OpenSearch format
+   * @param simpleSearchQueryBuilder the builder used for constructing simple search queries
+   */
   @SneakyThrows
   @Autowired
   public CaseLawService(
@@ -92,6 +102,14 @@ public class CaseLawService {
     return PageUtils.unwrapSearchHits(searchHits, pageable);
   }
 
+  /**
+   * Retrieves a list of court search results based on the specified search prefix.
+   *
+   * @param searchPrefix the prefix used to filter and search for court names; can be null for no
+   *     filtering
+   * @return a list of {@code CourtSearchResult} objects containing court-related key, document
+   *     count, and expanded label
+   */
   public List<CourtSearchResult> getCourts(String searchPrefix) {
 
     var filterQuery =
@@ -161,6 +179,17 @@ public class CaseLawService {
     return caseLawBucket.getAllKeysByPrefix(documentNumber);
   }
 
+  /**
+   * Retrieves a `CaseLawDocumentationUnit` object from the bucket using the provided filename. If
+   * the file content is not found or an error occurs during processing, an empty Optional is
+   * returned.
+   *
+   * @param filename the name of the file to retrieve from the bucket
+   * @return an Optional containing the `CaseLawDocumentationUnit` if successfully retrieved and
+   *     parsed, or an empty Optional if not found or an error occurs
+   * @throws ObjectStoreServiceException if an error occurs while accessing the object storage
+   *     service
+   */
   public Optional<CaseLawDocumentationUnit> getFromBucket(String filename)
       throws ObjectStoreServiceException {
     Optional<String> contentOption = caseLawBucket.getFileAsString(filename);

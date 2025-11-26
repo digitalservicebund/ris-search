@@ -32,6 +32,7 @@ public class AllDocumentsService {
   private final IndexCoordinates allDocumentsIndex;
   private final PageUtils pageUtils;
 
+  /** Constructor for AllDocumentsService. */
   public AllDocumentsService(
       ElasticsearchOperations operations,
       Configurations configurations,

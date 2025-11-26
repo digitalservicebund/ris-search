@@ -9,6 +9,19 @@ import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import lombok.Data;
 
+/**
+ * Represents the parameters used for pagination in API requests.
+ *
+ * <p>The class includes settings to control the number of entities returned per page and the
+ * requested page index. Additionally, it enforces limits to ensure that the result window does not
+ * exceed the maximum permissible value.
+ *
+ * <p>Attributes: - size: The number of entities per page, with constraints ensuring it falls within
+ * a defined range (1 to 100). - pageIndex: The index of the page to retrieve, starting at 0.
+ *
+ * <p>An internal validation is present to ensure the calculated result window (size * pageIndex +
+ * size) does not exceed 10,000.
+ */
 @Data
 public class PaginationParams {
   @Parameter(

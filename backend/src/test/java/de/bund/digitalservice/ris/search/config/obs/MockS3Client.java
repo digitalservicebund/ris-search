@@ -16,6 +16,10 @@ import software.amazon.awssdk.services.s3.model.ListObjectsV2Request;
 import software.amazon.awssdk.services.s3.model.ListObjectsV2Response;
 import software.amazon.awssdk.services.s3.model.S3Object;
 
+/**
+ * Abstract mock implementation of the S3Client interface for testing purposes. Provides methods to
+ * simulate S3 operations without actual AWS interactions.
+ */
 public abstract class MockS3Client implements S3Client {
 
   protected abstract void logObjectRetrievalError(String string);
@@ -46,6 +50,13 @@ public abstract class MockS3Client implements S3Client {
     }
   }
 
+  /**
+   * Mocks the S3 ListObjectsV2Response based on the provided request and list of file names.
+   *
+   * @param request The ListObjectsV2Request containing parameters for the listing operation.
+   * @param fileNames The list of file names to be included in the response.
+   * @return A ListObjectsV2Response containing the requested objects and pagination information.
+   */
   public ListObjectsV2Response buildResponse(ListObjectsV2Request request, List<String> fileNames) {
     final long KEYS_COUNT_HARD_LIMIT = 1000;
     final String TOKEN_PREFIX = "token-";
