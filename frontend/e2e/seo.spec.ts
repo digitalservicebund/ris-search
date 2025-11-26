@@ -63,6 +63,14 @@ export const testPages = [
     name: "Caselaw View Page",
     url: "/case-law/STRE300770800",
   },
+  {
+    name: "Literature View Page",
+    url: "/literature/XXLU000000001",
+  },
+  {
+    name: "Administrative Directive View Page",
+    url: "/administrative-directive/KSNR000000001",
+  },
 ];
 
 test.beforeAll(async ({ privateFeaturesEnabled, browserName }) => {

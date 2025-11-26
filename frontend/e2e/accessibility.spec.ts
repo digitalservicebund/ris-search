@@ -89,6 +89,10 @@ const testPages = [
     name: "Introduction Page",
     url: "/einfuehrung",
   },
+  {
+    name: "Administrative Directive View Page",
+    url: "/administrative-directive/KSNR000000001",
+  },
 ];
 
 test.describe("General Pages Accessibility Tests", () => {

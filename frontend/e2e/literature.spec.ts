@@ -139,6 +139,17 @@ test("displays all titles", async ({ page }) => {
   await expect(textSection).toContainText("Zusatz zum Haupttitel");
 });
 
+test("can navigate to search via breadcrumb", async ({ page }) => {
+  await navigate(page, "/literature/XXLU000000001");
+
+  await page.getByRole("link", { name: "Literaturnachweise" }).click();
+  await page.waitForURL("**/search?category=L");
+
+  await expect(
+    page.getByRole("heading", { level: 1, name: "Suche" }),
+  ).toBeVisible();
+});
+
 noJsTest("tabs work without JavaScript", async ({ page }) => {
   await navigate(page, "/literature/XXLU000000001");
   await expect(page.getByRole("link", { name: "Details" })).toBeVisible();
@@ -313,11 +324,7 @@ test.describe("actions menu", () => {
   });
 });
 
-// Skipped because of a client/SSR rendering mismatch, will be added again once
-// that is fixed (see daily discussion from Nov 4th 2025)
-test.skip("hides tabs and shows details if document is empty", async ({
-  page,
-}) => {
+test("hides tabs and shows details if document is empty", async ({ page }) => {
   await navigate(page, "/literature/XXLU000000005");
 
   await expect(
