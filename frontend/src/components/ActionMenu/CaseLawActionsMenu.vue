@@ -3,7 +3,7 @@ import ActionsMenu from "~/components/ActionMenu/ActionsMenu.vue";
 import type { CaseLaw } from "~/types";
 import { getEncodingURL } from "~/utils/caseLaw";
 
-const { caseLaw } = defineProps<{ caseLaw: CaseLaw | null }>();
+const { caseLaw } = defineProps<{ caseLaw: CaseLaw | undefined }>();
 
 const xmlUrl = computed(() => getEncodingURL(caseLaw, "application/xml"));
 

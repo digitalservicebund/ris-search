@@ -148,6 +148,33 @@ export interface LiteratureEncoding {
   inLanguage: string | null;
 }
 
+export interface AdministrativeDirective {
+  "@type": "AdministrativeDirective";
+  "@id": string;
+  documentNumber: string;
+  headline?: string;
+  shortReport?: string;
+  documentType?: string;
+  documentTypeDetail?: string;
+  referenceNumbers: string[];
+  entryIntoForceDate: string;
+  expiryDate?: string;
+  legislationAuthority?: string;
+  references: string[];
+  citationDates: string[];
+  normReferences: string[];
+  outline: string[];
+  encoding: AdministrativeDirectiveEncoding[] | null;
+}
+
+export interface AdministrativeDirectiveEncoding {
+  "@type": "MediaObject";
+  "@id": string;
+  contentUrl: string | null;
+  encodingFormat: string | null;
+  inLanguage: string | null;
+}
+
 export type AnyDocument = CaseLaw | LegislationWork | Literature;
 
 export enum DocumentKind {
@@ -163,6 +190,10 @@ export enum DocumentKind {
    * Literatur
    */
   Literature = "L",
+  /**
+   * Verwaltungsvorschriften
+   */
+  AdministrativeDirective = "V",
 
   All = "A",
 }

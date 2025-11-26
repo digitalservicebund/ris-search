@@ -41,10 +41,11 @@ export const queryableDataFields: Record<DocumentKind, DataField[]> = {
     { label: "Entscheidungsgründe", pattern: "EGR:" },
     { label: "ECLI", pattern: "ECLI:" },
   ],
-  L: [
+  [DocumentKind.Literature]: [
     { label: "Titel", pattern: "T:" },
     { label: "Verfasser", pattern: "V:" },
     { label: "Fundstelle", pattern: "FU:" },
     { label: "Norm", pattern: "N:" },
   ],
+  [DocumentKind.AdministrativeDirective]: [],
 };

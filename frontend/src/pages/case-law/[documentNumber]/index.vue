@@ -5,38 +5,29 @@ import CaseLawActionsMenu from "~/components/ActionMenu/CaseLawActionsMenu.vue";
 import TableOfContents, {
   type TableOfContentsEntry,
 } from "~/components/Caselaw/TableOfContents.vue";
-import ContentWrapper from "~/components/CustomLayouts/ContentWrapper.vue";
-import SidebarLayout from "~/components/CustomLayouts/SidebarLayout.vue";
+import DocumentDetailPage from "~/components/DocumentDetailPage.vue";
 import IncompleteDataMessage from "~/components/IncompleteDataMessage.vue";
 import MetadataField from "~/components/MetadataField.vue";
 import Properties from "~/components/Properties.vue";
 import PropertiesItem from "~/components/PropertiesItem.vue";
-import RisBreadcrumb from "~/components/Ris/RisBreadcrumb.vue";
-import RisDocumentTitle from "~/components/Ris/RisDocumentTitle.vue";
-import RisTabs from "~/components/Ris/RisTabs.vue";
 import { type CaseLaw, DocumentKind } from "~/types";
 import { getEncodingURL } from "~/utils/caseLaw";
 import { dateFormattedDDMMYYYY } from "~/utils/dateFormatting";
 import { formatDocumentKind } from "~/utils/displayValues";
 import { getAllSectionsFromHtml, parseDocument } from "~/utils/htmlParser";
-import { tabPanelClass } from "~/utils/tabsStyles";
 import {
   formatArray,
   removeOuterParentheses,
   truncateAtWord,
 } from "~/utils/textFormatting";
-import IcBaselineSubject from "~icons/ic/baseline-subject";
-import IcOutlineInfo from "~icons/ic/outline-info";
 import MaterialSymbolsDownload from "~icons/material-symbols/download";
 
 const route = useRoute();
 const documentNumber = route.params.documentNumber as string;
 const emptyTitlePlaceholder = "Titelzeile nicht vorhanden";
-const {
-  status,
-  data: caseLaw,
-  error: metadataError,
-} = await useRisBackend<CaseLaw>(`/v1/case-law/${documentNumber}`);
+const { data: caseLaw, error: metadataError } = await useRisBackend<CaseLaw>(
+  `/v1/case-law/${documentNumber}`,
+);
 const { data: html, error: contentError } = await useRisBackend<string>(
   `/v1/case-law/${documentNumber}.html`,
 );
@@ -148,103 +139,59 @@ const formattedFileNumbers = computed(() =>
 const formattedDescisionNames = computed(() =>
   formatArray(caseLaw.value?.decisionName ?? []),
 );
-
-const tabs = computed(() => [
-  {
-    id: "text",
-    href: "#text",
-    label: "Text",
-    icon: IcBaselineSubject,
-  },
-  {
-    id: "details",
-    href: "#details",
-    label: "Details",
-    icon: IcOutlineInfo,
-  },
-]);
 </script>
 
 <template>
-  <ContentWrapper border>
-    <div v-if="status == 'pending'" class="container">Lade ...</div>
-    <div v-if="!!caseLaw" class="container text-left">
-      <div class="flex items-center gap-8 print:hidden">
-        <RisBreadcrumb :items="breadcrumbItems" class="grow" />
-        <CaseLawActionsMenu :case-law="caseLaw" />
-      </div>
-      <RisDocumentTitle :title="title" :placeholder="emptyTitlePlaceholder" />
-      <!-- Metadata -->
+  <DocumentDetailPage
+    :title="title"
+    title-placeholder="Titelzeile nicht vorhanden"
+    :breadcrumb-items="breadcrumbItems"
+    document-html-class="case-law"
+    :html="html"
+  >
+    <template #actionsMenu>
+      <CaseLawActionsMenu :case-law="caseLaw" />
+    </template>
+    <template #metadata>
       <div class="mb-48 flex flex-row flex-wrap gap-24">
-        <MetadataField label="Gericht" :value="caseLaw.courtName" />
-        <MetadataField label="Dokumenttyp" :value="caseLaw.documentType" />
+        <MetadataField label="Gericht" :value="caseLaw?.courtName" />
+        <MetadataField label="Dokumenttyp" :value="caseLaw?.documentType" />
         <MetadataField
           label="Entscheidungsdatum"
           :value="formattedDecisionDate"
         />
         <MetadataField label="Aktenzeichen" :value="formattedFileNumbers" />
       </div>
-    </div>
-
-    <RisTabs :tabs="tabs">
-      <template #default="{ activeTab, isClient }">
-        <section
-          id="text"
-          :class="tabPanelClass"
-          :hidden="isClient && activeTab !== 'text'"
-        >
-          <SidebarLayout class="container">
-            <template #content>
-              <h2 class="sr-only">Text</h2>
-              <IncompleteDataMessage class="mb-16" />
-              <div class="case-law" v-html="html"></div>
-            </template>
-            <template #sidebar>
-              <client-only>
-                <TableOfContents :table-of-content-entries="tocEntries || []" />
-              </client-only>
-            </template>
-          </SidebarLayout>
-        </section>
-
-        <section
-          id="details"
-          :class="tabPanelClass"
-          :hidden="isClient && activeTab !== 'details'"
-          aria-labelledby="detailsTabPanelTitle"
-        >
-          <div class="container">
-            <h2 id="detailsTabPanelTitle" class="ris-heading3-bold my-24">
-              Details
-            </h2>
-            <IncompleteDataMessage class="my-24" />
-            <Properties>
-              <PropertiesItem
-                label="Spruchkörper:"
-                :value="caseLaw?.judicialBody"
-              />
-              <PropertiesItem label="ECLI:" :value="caseLaw?.ecli" />
-              <PropertiesItem label="Normen:" value="" />
-              <PropertiesItem
-                label="Entscheidungsname:"
-                :value="formattedDescisionNames"
-              />
-              <PropertiesItem label="Vorinstanz:" value="" />
-              <PropertiesItem label="Download:">
-                <NuxtLink
-                  data-attr="xml-zip-view"
-                  class="ris-link1-regular"
-                  external
-                  :to="zipUrl"
-                >
-                  <MaterialSymbolsDownload class="mr-2 inline" />
-                  {{ caseLaw?.documentNumber }} als ZIP herunterladen
-                </NuxtLink>
-              </PropertiesItem>
-            </Properties>
-          </div>
-        </section>
-      </template>
-    </RisTabs>
-  </ContentWrapper>
+    </template>
+    <template #sidebar>
+      <client-only>
+        <TableOfContents :table-of-content-entries="tocEntries || []" />
+      </client-only>
+    </template>
+    <template #details>
+      <h2 id="detailsTabPanelTitle" class="ris-heading3-bold my-24">Details</h2>
+      <IncompleteDataMessage class="my-24" />
+      <Properties>
+        <PropertiesItem label="Spruchkörper:" :value="caseLaw?.judicialBody" />
+        <PropertiesItem label="ECLI:" :value="caseLaw?.ecli" />
+        <PropertiesItem label="Normen:" value="" />
+        <PropertiesItem
+          label="Entscheidungsname:"
+          :value="formattedDescisionNames"
+        />
+        <PropertiesItem label="Vorinstanz:" value="" />
+        <PropertiesItem label="Download:">
+          <NuxtLink
+            data-attr="xml-zip-view"
+            class="ris-link1-regular"
+            external
+            :to="zipUrl"
+          >
+            <MaterialSymbolsDownload class="mr-2 inline" />
+            {{ caseLaw?.documentNumber }} als ZIP herunterladen
+          </NuxtLink>
+        </PropertiesItem>
+      </Properties>
+    </template>
+  </DocumentDetailPage>
 </template>

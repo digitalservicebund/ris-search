@@ -10,6 +10,7 @@ const documentKindDisplayValues: Record<DocumentKind, string> = {
   [DocumentKind.CaseLaw]: "Gerichtsentscheidungen",
   [DocumentKind.Norm]: "Gesetze & Verordnungen",
   [DocumentKind.Literature]: "Literaturnachweise",
+  [DocumentKind.AdministrativeDirective]: "Verwaltungsvorschriften",
   [DocumentKind.All]: "Datensätze",
 };
 

@@ -1,6 +1,7 @@
 package de.bund.digitalservice.ris.search.importer.e2e;
 
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
+import de.bund.digitalservice.ris.search.service.IndexAdministrativeDirectiveService;
 import de.bund.digitalservice.ris.search.service.IndexCaselawService;
 import de.bund.digitalservice.ris.search.service.IndexLiteratureService;
 import de.bund.digitalservice.ris.search.service.IndexNormsService;
@@ -25,15 +26,18 @@ public class EndToEndImporter {
 
   private final IndexCaselawService indexCaselawService;
   private final IndexLiteratureService indexLiteratureService;
+  private final IndexAdministrativeDirectiveService indexAdministrativeDirectiveService;
   private final IndexNormsService indexNormsService;
 
   @Autowired
   public EndToEndImporter(
       IndexCaselawService indexCaselawService,
       IndexLiteratureService indexLiteratureService,
+      IndexAdministrativeDirectiveService indexAdministrativeDirectiveService,
       IndexNormsService indexNormsService) {
     this.indexCaselawService = indexCaselawService;
     this.indexLiteratureService = indexLiteratureService;
+    this.indexAdministrativeDirectiveService = indexAdministrativeDirectiveService;
     this.indexNormsService = indexNormsService;
   }
 
@@ -47,6 +51,10 @@ public class EndToEndImporter {
     logger.info("Import E2E literature data: started");
     indexLiteratureService.reindexAll(Instant.now().toString());
     logger.info("Import E2E literature data: done");
+
+    logger.info("Import E2E administrative directive data: started");
+    indexAdministrativeDirectiveService.reindexAll(Instant.now().toString());
+    logger.info("Import E2E administrative directive data: done");
 
     logger.info("Import E2E norms data: started");
     indexNormsService.reindexAll(

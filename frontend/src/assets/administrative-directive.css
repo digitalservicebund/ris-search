@@ -1,0 +1,15 @@
+.administrative-directive {
+  @apply max-w-prose print:max-w-none;
+
+  h1 {
+    @apply hidden;
+  }
+
+  h2 {
+    @apply ris-heading3-bold my-16 inline-block;
+  }
+
+  p {
+    @apply mb-16 overflow-x-auto;
+  }
+}
