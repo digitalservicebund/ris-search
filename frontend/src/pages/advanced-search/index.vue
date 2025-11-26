@@ -67,6 +67,11 @@ const documentKindMenuItems: MenuItem[] = [
     label: formatDocumentKind(DocumentKind.CaseLaw),
     command: setDocumentKind,
   },
+  {
+    key: DocumentKind.Literature,
+    label: formatDocumentKind(DocumentKind.Literature),
+    command: setDocumentKind,
+  },
 ];
 
 // Search results -----------------------------------------

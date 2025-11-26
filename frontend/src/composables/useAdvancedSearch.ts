@@ -44,6 +44,8 @@ export async function useAdvancedSearch(
       return baseUrl + "/case-law";
     } else if (documentKindVal === DocumentKind.Norm) {
       return baseUrl + "/legislation";
+    } else if (documentKindVal === DocumentKind.Literature) {
+      return baseUrl + "/literature";
     } else return baseUrl;
   });
 

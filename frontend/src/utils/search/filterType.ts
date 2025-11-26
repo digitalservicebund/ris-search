@@ -140,5 +140,12 @@ export function dateFilterToQuery(
     }
   }
 
+  // Literature
+  else if (documentKind === DocumentKind.Literature) {
+    if (strictFilter.type === "period") {
+      filterStr = `years_of_publication:[${strictFilter.from} TO ${strictFilter.to}]`;
+    }
+  }
+
   return filterStr;
 }

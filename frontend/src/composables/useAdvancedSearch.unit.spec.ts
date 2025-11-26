@@ -58,6 +58,19 @@ describe("useAdvancedSearch", () => {
     expect(url.value).toBe("/v1/document/lucene-search/legislation");
   });
 
+  it("calls the endpoint for literature with correct URL", async () => {
+    await useAdvancedSearch(
+      "example",
+      DocumentKind.Literature,
+      { type: "allTime", from: undefined, to: undefined },
+      {},
+    );
+
+    expect(useRisBackendMock).toHaveBeenCalled();
+    const url = useRisBackendMock.mock.calls[0]![0];
+    expect(url.value).toBe("/v1/document/lucene-search/literature");
+  });
+
   it("defaults to document search for other document kinds", async () => {
     await useAdvancedSearch(
       "example",
