@@ -690,4 +690,37 @@ test.describe("search by AND + OR operators", { tag: ["@RISDEV-8385"] }, () => {
       await expect(results).toHaveText([/ArbG Köln/, /BDiG Frankfurt/]);
     });
   });
+
+  test.describe("literature", () => {
+    test("searches with AND operator", async ({ page }) => {
+      await navigate(page, "/advanced-search");
+
+      await searchFor(page, {
+        q: "Erstes AND Dokument",
+        documentKind: "Literaturnachweise",
+      });
+
+      const results = getSearchResults(page);
+
+      await expect(results).toHaveCount(1);
+      await expect(results).toHaveText(/Erstes/);
+      await expect(results).toHaveText(/Dokument/);
+    });
+
+    test("searches with OR operator", async ({ page }) => {
+      await navigate(page, "/advanced-search");
+
+      await searchFor(page, {
+        q: "Erstes OR Zweites",
+        documentKind: "Literaturnachweise",
+      });
+
+      await sortBy(page, "Datum: Älteste zuerst");
+
+      const results = getSearchResults(page);
+
+      await expect(results).toHaveCount(2);
+      await expect(results).toHaveText([/Zweites/, /Erstes/]);
+    });
+  });
 });
