@@ -18,8 +18,8 @@ public record AdministrativeDirective(
     @Id @Field(name = Fields.ID) String id,
     @Field(name = Fields.DOCUMENT_NUMBER) String documentNumber,
     @Nullable @Field(name = Fields.HEADLINE) String headline,
-    @Nullable @Field(name = Fields.DOCUMENT_TYPE) String documentType,
-    @Field(name = Fields.DOCUMENT_TYPE_DETAIL) String documentTypeDetail,
+    @Field(name = Fields.DOCUMENT_TYPE) String documentType,
+    @Nullable @Field(name = Fields.DOCUMENT_TYPE_DETAIL) String documentTypeDetail,
     @Nullable @Field(name = Fields.SHORT_REPORT) String shortReport,
     @Nullable @Field(name = Fields.LEGISLATION_AUTHORITY) String legislationAuthority,
     @Nullable
