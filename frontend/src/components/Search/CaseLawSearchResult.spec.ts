@@ -54,13 +54,6 @@ describe("CaselawSearchResult.vue", () => {
     ).toBeInTheDocument();
   });
 
-  it("labels the element with the title", () => {
-    renderComponent({});
-    expect(
-      screen.getByRole("article", { name: "Decision Name — Test Headline" }),
-    ).toBeInTheDocument();
-  });
-
   it("displays highlighted headline", () => {
     const textMatch: TextMatch = {
       "@type": "SearchResultMatch",

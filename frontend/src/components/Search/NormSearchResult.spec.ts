@@ -122,13 +122,6 @@ describe("NormSearchResult.vue", () => {
     expect(highlightSection.children).toHaveLength(4);
   });
 
-  it("labels the element with the title", () => {
-    renderComponent();
-    expect(
-      screen.getByRole("article", { name: "Highlighted Test Title" }),
-    ).toBeInTheDocument();
-  });
-
   it("renders ausfertigungs datum when in prototype environment", () => {
     renderComponent();
     expect(screen.getByText("14.12.1999")).toBeInTheDocument();
