@@ -5,6 +5,7 @@ import de.bund.digitalservice.ris.search.exception.CustomValidationException;
 import de.bund.digitalservice.ris.search.mapper.DocumentResponseMapper;
 import de.bund.digitalservice.ris.search.mapper.SortParamsConverter;
 import de.bund.digitalservice.ris.search.models.DocumentKind;
+import de.bund.digitalservice.ris.search.models.api.parameters.AdministrativeDirectiveSearchParams;
 import de.bund.digitalservice.ris.search.models.api.parameters.CaseLawSearchParams;
 import de.bund.digitalservice.ris.search.models.api.parameters.LiteratureSearchParams;
 import de.bund.digitalservice.ris.search.models.api.parameters.NormsSearchParams;
@@ -63,20 +64,21 @@ public class AllDocumentsSearchController {
           """)
   @ApiResponse(responseCode = "200", description = "Success")
   @ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content)
-  public ResponseEntity<CollectionSchema<AbstractDocumentSchema>> searchAndFilter(
-      @ParameterObject UniversalSearchParams request,
-      @ParameterObject NormsSearchParams normsSearchParams,
-      @ParameterObject CaseLawSearchParams caseLawSearchParams,
-      @ParameterObject LiteratureSearchParams literatureSearchParams,
-      @ParameterObject AdministrativeDirectiveSearchParams administrativeDirectiveSearchParams,
-      @ParameterObject @Valid UniversalSortParam sortParams,
-      @RequestParam("documentKind")
-          @Schema(
-              description =
-                  "Filter by document kind. Specify R for case law (<u>R</u>echtsprechung), N for legislation (<u>N</u>ormen) or L for literature (<u>L</u>iteratur).")
-          Optional<DocumentKind> documentKind,
-      @ParameterObject @Valid PaginationParams paginationParams)
-      throws CustomValidationException {
+  public ResponseEntity<CollectionSchema<SearchMemberSchema<AbstractDocumentSchema>>>
+      searchAndFilter(
+          @ParameterObject UniversalSearchParams request,
+          @ParameterObject NormsSearchParams normsSearchParams,
+          @ParameterObject CaseLawSearchParams caseLawSearchParams,
+          @ParameterObject LiteratureSearchParams literatureSearchParams,
+          @ParameterObject AdministrativeDirectiveSearchParams administrativeDirectiveSearchParams,
+          @ParameterObject @Valid UniversalSortParam sortParams,
+          @RequestParam("documentKind")
+              @Schema(
+                  description =
+                      "Filter by document kind. Specify R for case law (<u>R</u>echtsprechung), N for legislation (<u>N</u>ormen) or L for literature (<u>L</u>iteratur).")
+              Optional<DocumentKind> documentKind,
+          @ParameterObject @Valid PaginationParams paginationParams)
+          throws CustomValidationException {
     normsSearchParams.validate();
 
     var pageRequest = PageRequest.of(paginationParams.getPageIndex(), paginationParams.getSize());

@@ -29,6 +29,9 @@ public class DocumentResponseMapper {
     } else if (searchHit.getContent() instanceof Norm norm) {
       textMatches = NormSearchResponseMapper.getTextMatches(searchHit);
       document = NormSearchResponseMapper.fromDomain(norm);
+    } else if (searchHit.getContent() instanceof AdministrativeDirective directive) {
+      textMatches = AdministrativeDirectiveSearchSchemaMapper.getTextMatches(searchHit);
+      document = AdministrativeDirectiveSearchSchemaMapper.fromDomain(directive);
     } else {
       throw new IllegalArgumentException(
           "Unknown entity type: " + searchHit.getContent().getClass().getSimpleName());

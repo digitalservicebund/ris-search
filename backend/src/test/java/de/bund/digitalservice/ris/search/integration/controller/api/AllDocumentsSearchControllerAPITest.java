@@ -19,8 +19,10 @@ import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.integration.config.ContainersIntegrationBase;
 import de.bund.digitalservice.ris.search.integration.controller.api.testData.CaseLawTestData;
 import de.bund.digitalservice.ris.search.integration.controller.api.testData.LiteratureTestData;
+import de.bund.digitalservice.ris.search.models.opensearch.AdministrativeDirective;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import de.bund.digitalservice.ris.search.models.opensearch.Literature;
+import de.bund.digitalservice.ris.search.repository.opensearch.AdministrativeDirectiveRepository;
 import de.bund.digitalservice.ris.search.repository.opensearch.CaseLawRepository;
 import de.bund.digitalservice.ris.search.repository.opensearch.LiteratureRepository;
 import java.util.ArrayList;
@@ -53,6 +55,7 @@ class AllDocumentsSearchControllerAPITest extends ContainersIntegrationBase {
   @Autowired private MockMvc mockMvc;
   @Autowired private CaseLawRepository caseLawRepository;
   @Autowired private LiteratureRepository literatureRepository;
+  @Autowired private AdministrativeDirectiveRepository administrativeDirectiveRepository;
 
   @Test
   @DisplayName("Should return correct result for term search, with textMatches")
@@ -159,8 +162,8 @@ class AllDocumentsSearchControllerAPITest extends ContainersIntegrationBase {
 
   @ParameterizedTest
   @CsvSource({
-    "documentNumber, 9, $.member[*].item.documentNumber",
-    "-documentNumber, 9, $.member[*].item.documentNumber",
+    "documentNumber, 10, $.member[*].item.documentNumber",
+    "-documentNumber, 10, $.member[*].item.documentNumber",
     "courtName, 6, $.member[*].item.courtName",
     "-courtName, 6, $.member[*].item.courtName"
   })
@@ -183,11 +186,14 @@ class AllDocumentsSearchControllerAPITest extends ContainersIntegrationBase {
         IteratorUtils.toList(caseLawRepository.findAll().iterator());
     List<Literature> allLiterature =
         IteratorUtils.toList(literatureRepository.findAll().iterator());
+    List<AdministrativeDirective> allDirectives =
+        IteratorUtils.toList(administrativeDirectiveRepository.findAll().iterator());
 
     List<String> expected = new ArrayList<>();
     if (sortParam.endsWith("documentNumber")) {
       expected.addAll(allCaseLaw.stream().map(CaseLawDocumentationUnit::documentNumber).toList());
       expected.addAll(allLiterature.stream().map(Literature::documentNumber).toList());
+      expected.addAll(allDirectives.stream().map(AdministrativeDirective::documentNumber).toList());
     } else if (sortParam.endsWith("courtName")) {
       expected.addAll(allCaseLaw.stream().map(CaseLawDocumentationUnit::courtKeyword).toList());
     }
@@ -199,7 +205,7 @@ class AllDocumentsSearchControllerAPITest extends ContainersIntegrationBase {
   }
 
   @ParameterizedTest
-  @CsvSource({"date, 12", "-date, 12", "'', 12"})
+  @CsvSource({"date, 13", "-date, 13", "'', 13"})
   @DisplayName("Should return correct date ordering")
   void shouldReturnCorrectDateOrdering(String sortParam, int expectedCount) throws Exception {
     String url = ApiConfig.Paths.DOCUMENT + String.format("?sort=%s", sortParam);

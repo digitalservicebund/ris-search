@@ -83,7 +83,7 @@ public class PageUtils {
     } else if (indexName != null && indexName.startsWith(normsIndexName)) {
       entity = elasticsearchConverter.read(Norm.class, searchHit.getContent());
     } else if (indexName != null && indexName.startsWith(administrativeDirectiveIndexName)) {
-      entity = converter.read(AdministrativeDirective.class, searchHit.getContent());
+      entity = elasticsearchConverter.read(AdministrativeDirective.class, searchHit.getContent());
     } else {
       logger.error("Unexpected index on document search {}", searchHit.getIndex());
       return Optional.empty();
