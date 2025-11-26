@@ -367,7 +367,9 @@ describe("DataFieldPicker", () => {
       },
     });
 
-    expect(screen.getByRole("form")).toHaveAttribute("id", "example");
+    // An unlabeled form doesn't have the form role, using a test ID instead.
+    // The label was removed because it would be redundant with the search element.
+    expect(screen.getByTestId("form")).toHaveAttribute("id", "example");
   });
 
   it("shows the operators help", () => {

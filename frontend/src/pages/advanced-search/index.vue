@@ -128,7 +128,10 @@ async function submit() {
         </p>
       </div>
 
-      <aside class="row-start-3 lg:row-span-2 lg:row-start-auto">
+      <aside
+        class="row-start-3 lg:row-span-2 lg:row-start-auto"
+        aria-label="Filter"
+      >
         <fieldset class="mb-40">
           <legend class="ris-label1-regular mb-8">Dokumentart</legend>
           <PanelMenu

@@ -87,17 +87,18 @@ function submitUnlessLoading() {
 </script>
 
 <template>
-  <search class="flex flex-col gap-8">
-    <span
+  <search class="flex flex-col gap-8" :aria-labelledby="queryDescriptionId">
+    <p
       :id="queryDescriptionId"
       class="ris-label2-bold lg:ris-label1-regular"
+      aria-hidden="true"
     >
       In {{ formattedCount }} {{ formattedDocumentKind }} suchen
-    </span>
+    </p>
 
     <form
       :id="formId"
-      :aria-labelledby="queryDescriptionId"
+      data-testid="form"
       @submit.prevent="submitUnlessLoading()"
     >
       <InputGroup>
