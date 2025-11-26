@@ -235,8 +235,8 @@ describe("index.vue", () => {
     mockMetadata();
     const wrapper = await mountComponent();
 
-    const tabButton = wrapper.get("a[aria-label='Details des Gesetzes']");
-    await tabButton.trigger("click");
+    const tabButton = wrapper.findAll("a").find((a) => a.text() === "Details");
+    await tabButton?.trigger("click");
 
     const ausfertigungsDatum = getDDElement(wrapper, "Ausfertigungsdatum:");
     expect(ausfertigungsDatum?.textContent).toBe("05.10.2024");

@@ -161,9 +161,7 @@ describe("case law single view page", async () => {
     const user = userEvent.setup();
     await renderSuspended(CaseLawPage);
 
-    await user.click(
-      screen.getByRole("link", { name: "Details zur Gerichtsentscheidung" }),
-    );
+    await user.click(screen.getByRole("link", { name: "Details" }));
 
     expect(screen.getByText("Spruchkörper:")).toBeInTheDocument();
     expect(screen.getByLabelText("Spruchkörper:")).toHaveTextContent(
@@ -269,9 +267,7 @@ describe("case law single view page", async () => {
       screen.queryByRole("heading", { name: "Gründe" }),
     ).not.toBeInTheDocument();
 
-    await user.click(
-      screen.getByRole("link", { name: "Details zur Gerichtsentscheidung" }),
-    );
+    await user.click(screen.getByRole("link", { name: "Details" }));
 
     // Details tab
     expect(screen.getByLabelText("Spruchkörper:")).toHaveTextContent(

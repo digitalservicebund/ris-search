@@ -200,21 +200,18 @@ const tabs = computed(() => [
     id: "text",
     href: "#text",
     label: "Text",
-    ariaLabel: "Text des Gesetzes",
     icon: IcBaselineSubject,
   },
   {
     id: "details",
     href: "#details",
     label: "Details",
-    ariaLabel: "Details des Gesetzes",
     icon: IcOutlineInfo,
   },
   {
     id: "versions",
     href: "#versions",
     label: "Fassungen",
-    ariaLabel: "Fassungen des Gesetzes",
     icon: IcOutlineRestore,
   },
 ]);
@@ -248,7 +245,7 @@ useDynamicSeo({ title, description });
           :valid-to="validityInterval?.to"
         />
       </div>
-      <RisTabs :tabs="tabs" label="Ansichten des Gesetzes">
+      <RisTabs :tabs="tabs">
         <template #default="{ activeTab, isClient }">
           <section
             id="text"

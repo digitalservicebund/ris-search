@@ -154,14 +154,12 @@ const tabs = computed(() => [
     id: "text",
     href: "#text",
     label: "Text",
-    ariaLabel: "Text der Gerichtsentscheidung",
     icon: IcBaselineSubject,
   },
   {
     id: "details",
     href: "#details",
     label: "Details",
-    ariaLabel: "Details zur Gerichtsentscheidung",
     icon: IcOutlineInfo,
   },
 ]);
@@ -188,7 +186,7 @@ const tabs = computed(() => [
       </div>
     </div>
 
-    <RisTabs :tabs="tabs" label="Ansichten der Gerichtsentscheidung">
+    <RisTabs :tabs="tabs">
       <template #default="{ activeTab, isClient }">
         <section
           id="text"

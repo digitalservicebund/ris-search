@@ -179,8 +179,6 @@ test.describe("actions menu", () => {
 noJsTest("tabs work without JavaScript", async ({ page }) => {
   await navigate(page, "/case-law/JURE200030030");
   await expect(page.getByRole("heading", { name: "Details" })).toBeVisible();
-  await page
-    .getByRole("link", { name: "Details zur Gerichtsentscheidung" })
-    .click();
+  await page.getByRole("link", { name: "Details" }).click();
   await expect(page).toHaveURL(/#details$/);
 });

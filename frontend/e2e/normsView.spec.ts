@@ -142,17 +142,17 @@ test.describe("view norm page", async () => {
     ).toBeVisible();
 
     await test.step("Navigate to Details tab", async () => {
-      await page.getByRole("link", { name: "Details des Gesetzes" }).click();
+      await page.getByRole("link", { name: "Details" }).click();
       await expect(page).toHaveURL(/#details$/);
     });
 
     await test.step("Navigate to Fassungen tab", async () => {
-      await page.getByRole("link", { name: "Fassungen des Gesetzes" }).click();
+      await page.getByRole("link", { name: "Fassungen" }).click();
       await expect(page).toHaveURL(/#versions$/);
     });
 
     await test.step("Navigate back to Text tab", async () => {
-      await page.getByRole("link", { name: "Text des Gesetzes" }).click();
+      await page.getByRole("link", { name: "Text" }).click();
       await expect(page).toHaveURL(/#text$/);
     });
   });
