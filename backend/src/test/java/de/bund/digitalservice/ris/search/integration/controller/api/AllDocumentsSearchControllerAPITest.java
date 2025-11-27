@@ -66,7 +66,7 @@ class AllDocumentsSearchControllerAPITest extends ContainersIntegrationBase {
         .perform(get(ApiConfig.Paths.DOCUMENT + query).contentType(MediaType.APPLICATION_JSON))
         .andExpectAll(
             status().isOk(),
-            jsonPath("$.member", hasSize(4)),
+            jsonPath("$.member", hasSize(5)),
             jsonPath(
                 "$.member[*].textMatches[*].name",
                 everyItem(
@@ -82,7 +82,8 @@ class AllDocumentsSearchControllerAPITest extends ContainersIntegrationBase {
                                 "otherLongText",
                                 "dissentingOpinion",
                                 "decisionGrounds",
-                                "fileNumbers"))
+                                "fileNumbers",
+                                "shortReport"))
                         .or(matchesRegex("§ \\d .+")))));
   }
 
@@ -118,9 +119,10 @@ class AllDocumentsSearchControllerAPITest extends ContainersIntegrationBase {
     final String url = ApiConfig.Paths.DOCUMENT + "?searchTerm=Test&dateTo=2025-11-01";
     mockMvc
         .perform(get(url).contentType(MediaType.APPLICATION_JSON))
-        .andExpect(jsonPath("$.member", hasSize(2)))
-        .andExpect(jsonPath("$.member[0]['item'].documentNumber", Matchers.is("BFRE000087655")))
-        .andExpect(jsonPath("$.member[1]['item'].abbreviation", Matchers.is("TeG")));
+        .andExpect(jsonPath("$.member", hasSize(3)))
+        .andExpect(jsonPath("$.member[0]['item'].documentNumber", Matchers.is("KSNR0000")))
+        .andExpect(jsonPath("$.member[1]['item'].documentNumber", Matchers.is("BFRE000087655")))
+        .andExpect(jsonPath("$.member[2]['item'].abbreviation", Matchers.is("TeG")));
   }
 
   static Stream<Arguments> testArgsSameResultsAsOtherControllers() {
