@@ -96,6 +96,10 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
       :model-value="values.query.value"
       @update:model-value="handleSearchSubmit"
     />
+    <NuxtLink :to="{ hash: '#main' }" class="sr-only focus:not-sr-only">
+      Zu den Hauptinhalten springen
+    </NuxtLink>
+
     <p v-if="privateFeaturesEnabled" class="ris-label2-regular mt-8">
       Mehr Suchoptionen finden Sie unter
       <NuxtLink :to="{ name: 'advanced-search' }" class="ris-link2-bold">
@@ -103,9 +107,6 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
       </NuxtLink>
     </p>
 
-    <NuxtLink :to="{ hash: '#main' }" class="sr-only focus:not-sr-only">
-      Zu den Hauptinhalten springen
-    </NuxtLink>
     <div class="mt-24 flex flex-col gap-48 pb-24 lg:flex-row">
       <fieldset
         class="top-8 flex w-full flex-col gap-24 pb-10 lg:sticky lg:max-h-screen lg:w-3/12 lg:overflow-y-auto"
