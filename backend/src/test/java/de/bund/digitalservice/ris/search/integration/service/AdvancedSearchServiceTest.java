@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import de.bund.digitalservice.ris.search.integration.config.ContainersIntegrationBase;
 import de.bund.digitalservice.ris.search.models.opensearch.AbstractSearchEntity;
+import de.bund.digitalservice.ris.search.models.opensearch.AdministrativeDirective;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import de.bund.digitalservice.ris.search.models.opensearch.Literature;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
@@ -66,8 +67,21 @@ class AdvancedSearchServiceTest extends ContainersIntegrationBase {
     var searchHits =
         advancedSearchService.searchLiterature("KALU000000001", Pageable.unpaged()).getSearchHits();
     assertThat(searchHits).hasSize(1);
-    Literature caseLaw = searchHits.getSearchHit(0).getContent();
-    assertThat(caseLaw.documentNumber()).isEqualTo("KALU000000001");
+    Literature literature = searchHits.getSearchHit(0).getContent();
+    assertThat(literature.documentNumber()).isEqualTo("KALU000000001");
+  }
+
+  @Test
+  @DisplayName("Advanced search for administrative directive works")
+  void advancedSearchForAdministrativeDirectiveWorks() {
+
+    var searchHits =
+        advancedSearchService
+            .searchAdministrativeDirective("KSNR0000", Pageable.unpaged())
+            .getSearchHits();
+    assertThat(searchHits).hasSize(1);
+    AdministrativeDirective directive = searchHits.getSearchHit(0).getContent();
+    assertThat(directive.documentNumber()).isEqualTo("KSNR0000");
   }
 
   @Test

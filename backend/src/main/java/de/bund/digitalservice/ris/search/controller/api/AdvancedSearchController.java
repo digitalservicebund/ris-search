@@ -2,21 +2,25 @@ package de.bund.digitalservice.ris.search.controller.api;
 
 import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.exception.CustomValidationException;
+import de.bund.digitalservice.ris.search.mapper.AdministrativeDirectiveSearchSchemaMapper;
 import de.bund.digitalservice.ris.search.mapper.CaseLawSearchSchemaMapper;
 import de.bund.digitalservice.ris.search.mapper.DocumentResponseMapper;
 import de.bund.digitalservice.ris.search.mapper.LiteratureSearchSchemaMapper;
 import de.bund.digitalservice.ris.search.mapper.NormSearchResponseMapper;
 import de.bund.digitalservice.ris.search.mapper.SortParamsConverter;
+import de.bund.digitalservice.ris.search.models.api.parameters.AdministrativeDirectiveSortParam;
 import de.bund.digitalservice.ris.search.models.api.parameters.CaseLawSortParam;
 import de.bund.digitalservice.ris.search.models.api.parameters.LiteratureSortParam;
 import de.bund.digitalservice.ris.search.models.api.parameters.NormsSortParam;
 import de.bund.digitalservice.ris.search.models.api.parameters.PaginationParams;
 import de.bund.digitalservice.ris.search.models.api.parameters.UniversalSortParam;
 import de.bund.digitalservice.ris.search.models.opensearch.AbstractSearchEntity;
+import de.bund.digitalservice.ris.search.models.opensearch.AdministrativeDirective;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import de.bund.digitalservice.ris.search.models.opensearch.Literature;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.schema.AbstractDocumentSchema;
+import de.bund.digitalservice.ris.search.schema.AdministrativeDirectiveSearchSchema;
 import de.bund.digitalservice.ris.search.schema.CaseLawSearchSchema;
 import de.bund.digitalservice.ris.search.schema.CollectionSchema;
 import de.bund.digitalservice.ris.search.schema.LegislationWorkSearchSchema;
@@ -221,6 +225,49 @@ public class AdvancedSearchController {
       return ResponseEntity.ok()
           .contentType(MediaType.APPLICATION_JSON)
           .body(LiteratureSearchSchemaMapper.fromSearchPage(page));
+    } catch (UncategorizedElasticsearchException e) {
+      LuceneQueryTools.checkForInvalidQuery(e);
+      throw e;
+    }
+  }
+
+  /**
+   * Administrative Directive Search Endpoint retrieves the JSON representation of a search query.
+   * The search query as Lucene query parameter.
+   *
+   * @param query The query filter based on Lucene query
+   * @param pagination Pagination parameters
+   * @return A JsonLd String of {@link CollectionSchema<SearchMemberSchema>} containing the
+   *     retrieved search results. Returns HTTP 200 (OK) and the search results data if found.
+   *     Returns HTTP 422 (Unprocessable Entity) if any request data information is wrong.
+   */
+  @GetMapping(ApiConfig.Paths.ADMINISTRATIVE_DIRECTIVE_ADVANCED_SEARCH)
+  @Operation(
+      summary = "Advanced search using Lucene query syntax",
+      tags = "AdministrativeDirective")
+  @ApiResponse(responseCode = "200", description = "Success")
+  @ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content)
+  public ResponseEntity<CollectionSchema<SearchMemberSchema<AdministrativeDirectiveSearchSchema>>>
+      literatureSearch(
+          @Parameter(name = "query", description = "The query filter based on Lucene query syntax")
+              @RequestParam
+              @Nullable
+              String query,
+          @ParameterObject @Valid PaginationParams pagination,
+          @ParameterObject @Valid AdministrativeDirectiveSortParam sortParams)
+          throws CustomValidationException {
+
+    LuceneQueryTools.validateLuceneQuery(query);
+    PageRequest pageable = PageRequest.of(pagination.getPageIndex(), pagination.getSize());
+    PageRequest sortedPageable =
+        pageable.withSort(SortParamsConverter.buildSort(sortParams.getSort()));
+
+    try {
+      SearchPage<AdministrativeDirective> page =
+          advancedSearchService.searchAdministrativeDirective(query, sortedPageable);
+      return ResponseEntity.ok()
+          .contentType(MediaType.APPLICATION_JSON)
+          .body(AdministrativeDirectiveSearchSchemaMapper.fromSearchPage(page));
     } catch (UncategorizedElasticsearchException e) {
       LuceneQueryTools.checkForInvalidQuery(e);
       throw e;
