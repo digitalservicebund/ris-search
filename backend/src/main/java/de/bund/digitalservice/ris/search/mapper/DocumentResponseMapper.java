@@ -1,5 +1,6 @@
 package de.bund.digitalservice.ris.search.mapper;
 
+import de.bund.digitalservice.ris.search.models.opensearch.AdministrativeDirective;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import de.bund.digitalservice.ris.search.models.opensearch.Literature;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
@@ -28,6 +29,9 @@ public class DocumentResponseMapper {
     } else if (searchHit.getContent() instanceof Norm norm) {
       textMatches = NormSearchResponseMapper.getTextMatches(searchHit);
       document = NormSearchResponseMapper.fromDomain(norm);
+    } else if (searchHit.getContent() instanceof AdministrativeDirective directive) {
+      textMatches = AdministrativeDirectiveSearchSchemaMapper.getTextMatches(searchHit);
+      document = AdministrativeDirectiveSearchSchemaMapper.fromDomain(directive);
     } else {
       throw new IllegalArgumentException(
           "Unknown entity type: " + searchHit.getContent().getClass().getSimpleName());

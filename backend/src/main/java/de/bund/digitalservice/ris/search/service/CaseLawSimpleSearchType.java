@@ -8,6 +8,7 @@ import de.bund.digitalservice.ris.search.models.api.parameters.CaseLawSearchPara
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Stream;
 import org.jetbrains.annotations.NotNull;
 import org.opensearch.index.query.BoolQueryBuilder;
 import org.opensearch.index.query.Operator;
@@ -49,16 +50,20 @@ public class CaseLawSimpleSearchType implements SimpleSearchType {
   }
 
   @Override
-  public void addHighlightedFields(HighlightBuilder builder) {
-    addHighlightedFieldsStatic(builder);
+  public List<HighlightBuilder.Field> getHighlightedFields() {
+    return getHighlightedFieldsStatic();
   }
 
-  public static void addHighlightedFieldsStatic(HighlightBuilder builder) {
-    CASE_LAW_HIGHLIGHT_CONTENT_FIELDS.forEach(builder::field);
-    // ECLI and FILE_NUMBERS are returned in _source and therefore not needed when not matched
-    builder.field(new HighlightBuilder.Field(CaseLawDocumentationUnit.Fields.ECLI).noMatchSize(0));
-    builder.field(
-        new HighlightBuilder.Field(CaseLawDocumentationUnit.Fields.FILE_NUMBERS).noMatchSize(0));
+  public static List<HighlightBuilder.Field> getHighlightedFieldsStatic() {
+    Stream<HighlightBuilder.Field> contentFields =
+        CASE_LAW_HIGHLIGHT_CONTENT_FIELDS.stream().map(HighlightBuilder.Field::new);
+
+    Stream<HighlightBuilder.Field> noMatchFields =
+        Stream.of(
+            new HighlightBuilder.Field(CaseLawDocumentationUnit.Fields.ECLI).noMatchSize(0),
+            new HighlightBuilder.Field(CaseLawDocumentationUnit.Fields.FILE_NUMBERS)
+                .noMatchSize(0));
+    return Stream.concat(contentFields, noMatchFields).toList();
   }
 
   @Override

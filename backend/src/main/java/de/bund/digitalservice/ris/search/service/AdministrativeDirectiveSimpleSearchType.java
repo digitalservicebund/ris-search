@@ -21,13 +21,17 @@ public class AdministrativeDirectiveSimpleSearchType implements SimpleSearchType
   }
 
   @Override
-  public void addHighlightedFields(HighlightBuilder builder) {
-    HIGHLIGHT_CONTENT_FIELDS.forEach(builder::field);
+  public List<String> getExcludedFields() {
+    return List.of();
   }
 
   @Override
-  public List<String> getExcludedFields() {
-    return List.of();
+  public List<HighlightBuilder.Field> getHighlightedFields() {
+    return getHighlightedFieldsStatic();
+  }
+
+  public static List<HighlightBuilder.Field> getHighlightedFieldsStatic() {
+    return HIGHLIGHT_CONTENT_FIELDS.stream().map(HighlightBuilder.Field::new).toList();
   }
 
   /**

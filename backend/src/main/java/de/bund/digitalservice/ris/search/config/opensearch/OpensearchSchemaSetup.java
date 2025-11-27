@@ -47,7 +47,7 @@ public class OpensearchSchemaSetup {
           restHighLevelClient,
           indexResponse,
           configurations.getAdministrativeDirectiveIndexName(),
-          false);
+          true);
 
     } catch (IOException e) {
       throw new IllegalStateException(

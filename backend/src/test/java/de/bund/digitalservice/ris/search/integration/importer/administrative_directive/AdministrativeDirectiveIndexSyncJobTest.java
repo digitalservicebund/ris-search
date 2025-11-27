@@ -34,25 +34,23 @@ class AdministrativeDirectiveIndexSyncJobTest extends ContainersIntegrationBase 
   @Autowired IndexStatusService indexStatusService;
   @Autowired AdministrativeDirectiveRepository repository;
 
-  @BeforeEach()
-  void setup() {
-    await()
-        .atMost(500, TimeUnit.MILLISECONDS)
-        .until(
-            () -> {
-              clearRepositoryData();
-              resetBuckets();
-              return true;
-            });
+  @BeforeEach
+  void reset() {
+    bucket.getAllKeys().forEach(bucket::delete);
+    portalBucket.getAllKeys().forEach(portalBucket::delete);
+    administrativeDirectiveRepository.deleteAll();
   }
 
   @Test
   void itIndexesAdministrativeDirectivesOnFullReindex() throws ObjectStoreServiceException {
     String content =
         LoadXmlUtils.loadXmlAsString(AdministrativeDirective.class, "KSNR0000.akn.xml");
+
     bucket.save("KSNR0000.akn.xml", content);
     syncJob.runJob();
-
+    await()
+        .atMost(500, TimeUnit.MILLISECONDS)
+        .until(() -> administrativeDirectiveRepository.findAll().iterator().hasNext());
     AdministrativeDirective expected = repository.findAll().iterator().next();
     assertThat(expected.documentNumber()).isEqualTo("KSNR0000");
     assertThat(portalBucket.getFileAsString(AdministrativeDirectiveIndexSyncJob.STATUS_FILENAME))
@@ -81,6 +79,9 @@ class AdministrativeDirectiveIndexSyncJobTest extends ContainersIntegrationBase 
     assertThat(repository.findAll().iterator().hasNext()).isFalse();
 
     syncJob.runJob();
+    await()
+        .atMost(500, TimeUnit.MILLISECONDS)
+        .until(() -> administrativeDirectiveRepository.findAll().iterator().hasNext());
 
     AdministrativeDirective expected = repository.findAll().iterator().next();
     assertThat(expected.documentNumber()).isEqualTo("KSNR0000");

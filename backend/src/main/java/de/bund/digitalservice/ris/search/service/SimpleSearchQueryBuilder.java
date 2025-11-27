@@ -7,8 +7,10 @@ import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.utils.DateUtils;
 import de.bund.digitalservice.ris.search.utils.RisHighlightBuilder;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.opensearch.action.search.SearchType;
@@ -52,8 +54,14 @@ public class SimpleSearchQueryBuilder {
 
     HighlightBuilder highlightBuilder = RisHighlightBuilder.baseHighlighter();
     List<String> excludedFields = new ArrayList<>();
+
+    // convert highlighted fields to Set, to avoid name collisions
+    Set<HighlightBuilder.Field> highlightedFields =
+        new HashSet<>(
+            searchTypes.stream().flatMap(st -> st.getHighlightedFields().stream()).toList());
+    highlightedFields.forEach(highlightBuilder::field);
+
     for (SimpleSearchType searchType : searchTypes) {
-      searchType.addHighlightedFields(highlightBuilder);
       excludedFields.addAll(searchType.getExcludedFields());
       searchType.addExtraLogic(params.getSearchTerm(), boolQuery);
     }
