@@ -63,15 +63,10 @@ function openResult(url: string) {
 const validityStatus = computed(() => {
   return formatNormValidity(item.value.workExample.temporalCoverage);
 });
-
-const headingId = useId();
 </script>
 
 <template>
-  <article
-    class="my-36 flex flex-col gap-8 hyphens-auto"
-    :aria-labelledby="headingId"
-  >
+  <div class="my-36 flex flex-col gap-8 hyphens-auto">
     <p class="ris-label2-regular flex flex-row flex-wrap items-center gap-8">
       <span class="flex items-center">
         <LegalIcon class="mr-4 h-16 text-gray-900" />
@@ -89,7 +84,6 @@ const headingId = useId();
       @click="openResult(link)"
     >
       <h2
-        :id="headingId"
         v-html="
           headline
             ? sanitizeSearchResult(headline)
@@ -124,5 +118,5 @@ const headingId = useId();
         />
       </div>
     </div>
-  </article>
+  </div>
 </template>

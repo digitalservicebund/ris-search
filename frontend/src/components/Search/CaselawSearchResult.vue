@@ -150,15 +150,10 @@ const previewSections = computed<ExtendedTextMatch[]>(() => {
 function trackResultClick(url: string) {
   postHogStore.searchResultClicked(url, props.order);
 }
-
-const headingId = useId();
 </script>
 
 <template>
-  <article
-    class="my-36 flex flex-col gap-8 hyphens-auto"
-    :aria-labelledby="headingId"
-  >
+  <div class="my-36 flex flex-col gap-8 hyphens-auto">
     <p class="ris-label2-regular flex flex-row flex-wrap items-center gap-8">
       <span class="flex items-center">
         <GavelIcon class="mr-4 h-16 text-gray-900" />
@@ -174,7 +169,7 @@ const headingId = useId();
       class="ris-heading3-bold max-w-title link-hover block text-blue-800"
       @click="trackResultClick(metadata.url)"
     >
-      <h2 :id="headingId">
+      <h2>
         <span v-if="!!metadata.decisionName">
           {{ metadata.decisionName }} —
         </span>
@@ -203,5 +198,5 @@ const headingId = useId();
         />
       </div>
     </div>
-  </article>
+  </div>
 </template>

@@ -63,6 +63,13 @@ async function searchFor(
   await results;
 }
 
+async function sortBy(page: Page, prop: string, current = "Relevanz") {
+  const load = page.waitForResponse(/v1\/document\/lucene-search/);
+  await page.getByRole("combobox", { name: current }).click();
+  await page.getByRole("option", { name: prop }).click();
+  await load;
+}
+
 test.describe("general advanced search page features", () => {
   test("reachable through the erweiterte-suche alias", async ({ page }) => {
     await navigate(page, "/erweiterte-suche");
@@ -111,10 +118,7 @@ test.describe("general advanced search page features", () => {
       documentKind: "Gesetze & Verordnungen",
     });
 
-    await page.getByRole("combobox", { name: "Relevanz" }).click();
-    await page
-      .getByRole("option", { name: "Ausfertigungsdatum: Älteste zuerst" })
-      .click();
+    await sortBy(page, "Ausfertigungsdatum: Älteste zuerst");
 
     await expect(page).toHaveURL(/sort=date/);
 
@@ -132,10 +136,7 @@ test.describe("general advanced search page features", () => {
       documentKind: "Gesetze & Verordnungen",
     });
 
-    await page.getByRole("combobox", { name: "Relevanz" }).click();
-    await page
-      .getByRole("option", { name: "Ausfertigungsdatum: Neueste zuerst" })
-      .click();
+    await sortBy(page, "Ausfertigungsdatum: Neueste zuerst");
 
     await expect(page).toHaveURL(/sort=-date/);
 
@@ -148,8 +149,7 @@ test.describe("general advanced search page features", () => {
   test("sort by relevance (default)", async ({ page }) => {
     await navigate(page, "/advanced-search?q=und&documentKind=N&sort=date");
 
-    await page.getByRole("combobox", { name: "Datum: Älteste zuerst" }).click();
-    await page.getByRole("option", { name: "Relevanz" }).click();
+    await sortBy(page, "Relevanz", "Datum: Älteste zuerst");
 
     // Don't have a great way of asserting relevance, so just making sure the
     // parameter is handled correctly
@@ -297,7 +297,7 @@ test.describe("searching legislation", () => {
 
     const results = getSearchResults(page);
 
-    expect(results).toHaveText([/Aktuell gültig/]);
+    expect(results).toHaveText(/Aktuell gültig/);
   });
 
   test("filters to show specific date", async ({ page }) => {
@@ -445,7 +445,7 @@ test.describe("searching caselaw", () => {
 
     const results = getSearchResults(page);
 
-    await expect(results).toHaveText([/15.06.2024/]);
+    await expect(results).toHaveText(/15.06.2024/);
   });
 
   test("filters to show date range", async ({ page }) => {
@@ -459,12 +459,7 @@ test.describe("searching caselaw", () => {
       dateFilterTo: "31.12.2024",
     });
 
-    const load = page.waitForResponse(/v1\/document\/lucene-search/);
-    await page.getByRole("combobox", { name: "Relevanz" }).click();
-    await page
-      .getByRole("option", { name: "Entscheidungsdatum: Älteste zuerst" })
-      .click();
-    await load;
+    await sortBy(page, "Entscheidungsdatum: Älteste zuerst");
 
     const results = getSearchResults(page);
 
@@ -479,10 +474,7 @@ test.describe("searching caselaw", () => {
       q: 'GERICHT:"ArbG Köln" OR GERICHT:"BDiG Frankfurt"',
     });
 
-    const load = page.waitForResponse(/v1\/document\/lucene-search/);
-    await page.getByRole("combobox", { name: "Relevanz" }).click();
-    await page.getByRole("option", { name: "Gericht: Von A nach Z" }).click();
-    await load;
+    await sortBy(page, "Gericht: Von A nach Z");
 
     const results = getSearchResults(page);
 
@@ -497,10 +489,7 @@ test.describe("searching caselaw", () => {
       q: 'GERICHT:"ArbG Köln" OR GERICHT:"BDiG Frankfurt"',
     });
 
-    const load = page.waitForResponse(/v1\/document\/lucene-search/);
-    await page.getByRole("combobox", { name: "Relevanz" }).click();
-    await page.getByRole("option", { name: "Gericht: Von Z nach A" }).click();
-    await load;
+    await sortBy(page, "Gericht: Von Z nach A");
 
     const results = getSearchResults(page);
 
@@ -600,10 +589,7 @@ test.describe("searching literature", () => {
       dateFilterTo: "2022",
     });
 
-    const load = page.waitForResponse(/v1\/document\/lucene-search/);
-    await page.getByRole("combobox", { name: "Relevanz" }).click();
-    await page.getByRole("option", { name: "Datum: Älteste zuerst" }).click();
-    await load;
+    await sortBy(page, "Datum: Älteste zuerst");
 
     const results = getSearchResults(page);
 
@@ -663,10 +649,12 @@ test.describe("search by AND + OR operators", { tag: ["@RISDEV-8385"] }, () => {
         dateFilter: "Keine zeitliche Begrenzung",
       });
 
+      await sortBy(page, "Datum: Älteste zuerst");
+
       const results = getSearchResults(page);
 
       await expect(results).toHaveCount(2);
-      await expect(results).toHaveText([/Fruchtsaft/, /Fruchtsirup/]);
+      await expect(results).toHaveText([/Fruchtsirup/, /Fruchtsaft/]);
     });
   });
 
@@ -694,10 +682,45 @@ test.describe("search by AND + OR operators", { tag: ["@RISDEV-8385"] }, () => {
         documentKind: "Gerichtsentscheidungen",
       });
 
+      await sortBy(page, "Datum: Älteste zuerst");
+
       const results = getSearchResults(page);
 
       await expect(results).toHaveCount(2);
       await expect(results).toHaveText([/ArbG Köln/, /BDiG Frankfurt/]);
+    });
+  });
+
+  test.describe("literature", () => {
+    test("searches with AND operator", async ({ page }) => {
+      await navigate(page, "/advanced-search");
+
+      await searchFor(page, {
+        q: "Erstes AND Dokument",
+        documentKind: "Literaturnachweise",
+      });
+
+      const results = getSearchResults(page);
+
+      await expect(results).toHaveCount(1);
+      await expect(results).toHaveText(/Erstes/);
+      await expect(results).toHaveText(/Dokument/);
+    });
+
+    test("searches with OR operator", async ({ page }) => {
+      await navigate(page, "/advanced-search");
+
+      await searchFor(page, {
+        q: "Erstes OR Zweites",
+        documentKind: "Literaturnachweise",
+      });
+
+      await sortBy(page, "Datum: Älteste zuerst");
+
+      const results = getSearchResults(page);
+
+      await expect(results).toHaveCount(2);
+      await expect(results).toHaveText([/Zweites/, /Erstes/]);
     });
   });
 });
