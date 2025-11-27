@@ -312,4 +312,15 @@ class AllDocumentsSearchControllerAPITest extends ContainersIntegrationBase {
             jsonPath("$.errors[0].parameter", Matchers.is("size")),
             jsonPath("$.errors[0].message", Matchers.is("size must be at least 1")));
   }
+
+  @Test
+  void testAdministrativeDirectiveLuceneEndpoint() throws Exception {
+    mockMvc
+        .perform(
+            get(ApiConfig.Paths.ADMINISTRATIVE_DIRECTIVE_ADVANCED_SEARCH
+                    + "?query=(VT:text content)&size=50&sort=default&pageIndex=0")
+                .contentType(MediaType.APPLICATION_JSON))
+        .andExpectAll(
+            status().is(200), jsonPath("$.member[0].item.documentNumber", Matchers.is("KSNR0000")));
+  }
 }
