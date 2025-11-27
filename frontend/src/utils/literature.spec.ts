@@ -1,5 +1,5 @@
 import { describe, expect } from "vitest";
-import type { Literature } from "~/types";
+import { getLiteratureMetadataItems } from "./literature";
 
 describe("isDocumentEmpty", () => {
   it("returns true if document is undefined", () => {
@@ -11,7 +11,7 @@ describe("isDocumentEmpty", () => {
     const result = isDocumentEmpty({
       outline: null,
       shortReport: null,
-    } as Literature);
+    });
     expect(result).toBeTruthy();
   });
 
@@ -20,7 +20,7 @@ describe("isDocumentEmpty", () => {
       outline: null,
       shortReport: null,
       headline: "headline",
-    } as Literature);
+    });
     expect(result).toBeTruthy();
   });
 
@@ -29,7 +29,7 @@ describe("isDocumentEmpty", () => {
       outline: null,
       shortReport: null,
       alternativeHeadline: "alternativeHeadline",
-    } as Literature);
+    });
     expect(result).toBeTruthy();
   });
 
@@ -38,21 +38,21 @@ describe("isDocumentEmpty", () => {
       outline: null,
       shortReport: null,
       headlineAdditions: "headlineAdditions",
-    } as Literature);
+    });
     expect(result).toBeTruthy();
   });
 
   it("returns false if document has outline", () => {
     const result = isDocumentEmpty({
       outline: "outline",
-    } as Literature);
+    });
     expect(result).toBeFalsy();
   });
 
   it("returns false if document has shortReport", () => {
     const result = isDocumentEmpty({
       shortReport: "shortReport",
-    } as Literature);
+    });
     expect(result).toBeFalsy();
   });
 
@@ -60,7 +60,7 @@ describe("isDocumentEmpty", () => {
     const result = isDocumentEmpty({
       headline: "headline",
       alternativeHeadline: "alternativeHeadline",
-    } as Literature);
+    });
     expect(result).toBeFalsy();
   });
 
@@ -68,7 +68,7 @@ describe("isDocumentEmpty", () => {
     const result = isDocumentEmpty({
       headline: "headline",
       headlineAdditions: "headlineAdditions",
-    } as Literature);
+    });
     expect(result).toBeFalsy();
   });
 
@@ -76,7 +76,7 @@ describe("isDocumentEmpty", () => {
     const result = isDocumentEmpty({
       alternativeHeadline: "alternativeHeadline",
       headlineAdditions: "headlineAdditions",
-    } as Literature);
+    });
     expect(result).toBeFalsy();
   });
 });
@@ -104,9 +104,77 @@ describe("getTitle", () => {
         headline,
         alternativeHeadline,
         headlineAdditions,
-      } as Literature);
+      });
 
       expect(result).toEqual(expectedTitle);
     },
   );
+});
+
+describe("getLiteratureMetadataItems", () => {
+  it("creates correct labels", () => {
+    const result = getLiteratureMetadataItems();
+
+    expect(result.map((item) => item.label)).toEqual([
+      "Dokumenttyp",
+      "Fundstelle",
+      "Autor",
+      "Veröffentlichungsjahr",
+    ]);
+
+    expect(result.map((item) => item.value)).toEqual([
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+    ]);
+  });
+
+  it("converts empty properties to undefined values", () => {
+    const result = getLiteratureMetadataItems({
+      documentTypes: [],
+      dependentReferences: [],
+      authors: [],
+      yearsOfPublication: [],
+    });
+
+    expect(result.map((item) => item.value)).toEqual([
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+    ]);
+  });
+
+  it("converts properties with one value", () => {
+    const result = getLiteratureMetadataItems({
+      documentTypes: ["Foo"],
+      dependentReferences: ["Ref"],
+      authors: ["Mustermann, Max"],
+      yearsOfPublication: ["2015"],
+    });
+
+    expect(result.map((item) => item.value)).toEqual([
+      "Foo",
+      "Ref",
+      "Max Mustermann",
+      "2015",
+    ]);
+  });
+
+  it("converts properties with multiple values", () => {
+    const result = getLiteratureMetadataItems({
+      documentTypes: ["Foo", "Bar"],
+      dependentReferences: ["Ref1", "Ref2"],
+      authors: ["Mustermann, Max", "Musterfrau, Sabine"],
+      yearsOfPublication: ["2015", "2016"],
+    });
+
+    expect(result.map((item) => item.value)).toEqual([
+      "Foo, Bar",
+      "Ref1, Ref2",
+      "Max Mustermann, Sabine Musterfrau",
+      "2015, 2016",
+    ]);
+  });
 });

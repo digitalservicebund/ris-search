@@ -25,13 +25,20 @@ test("displays literature page with metadata and text tab by default", async ({
   ).toBeVisible();
 
   // Metadata section
-  await expect(page.getByLabel("Dokumenttyp")).toHaveText("Auf");
-  await expect(page.getByLabel("Fundstelle")).toHaveText(
+  await expect(
+    page.getByRole("term").or(page.getByRole("definition")),
+  ).toHaveText([
+    "Dokumenttyp",
+    "Auf",
+    "Fundstelle",
     "FooBar, 1982, 123-123",
-  );
-  await expect(page.getByLabel("Autor")).toHaveText("Sabine Musterfrau");
-  await expect(page.getByLabel("Veröffentlichungsjahr")).toHaveText("2024");
+    "Autor",
+    "Sabine Musterfrau",
+    "Veröffentlichungsjahr",
+    "2024",
+  ]);
 
+  // Text section
   const textSection = page.getByRole("region", { name: "Text" });
   await expect(textSection.getByRole("alert")).toContainText(
     "Dieser Service befindet sich in der Testphase",

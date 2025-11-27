@@ -154,17 +154,17 @@ export interface AdministrativeDirective {
   documentNumber: string;
   headline?: string;
   shortReport?: string;
-  documentType?: string;
+  documentType: string;
   documentTypeDetail?: string;
   referenceNumbers: string[];
-  entryIntoForceDate: string;
+  entryIntoForceDate?: string;
   expiryDate?: string;
   legislationAuthority?: string;
   references: string[];
   citationDates: string[];
   normReferences: string[];
   outline: string[];
-  encoding: AdministrativeDirectiveEncoding[] | null;
+  encoding?: AdministrativeDirectiveEncoding[];
 }
 
 export interface AdministrativeDirectiveEncoding {

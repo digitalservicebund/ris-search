@@ -2,7 +2,10 @@
 import { computed } from "vue";
 import DocumentDetailPage from "~/components/DocumentDetailPage.vue";
 import { type AdministrativeDirective, DocumentKind } from "~/types";
-import { ADMINISTRATIVE_DIRECTIVE_TITLE_PLACEHOLDER } from "~/utils/administrativeDirective";
+import {
+  ADMINISTRATIVE_DIRECTIVE_TITLE_PLACEHOLDER,
+  getAdministrativeDirectiveMetadataItems,
+} from "~/utils/administrativeDirective";
 import { formatDocumentKind } from "~/utils/displayValues";
 
 definePageMeta({ layout: "base" }); // use "base" layout to allow for full-width tab backgrounds
@@ -33,6 +36,10 @@ const breadcrumbItems = computed(() => [
   },
 ]);
 
+const metadataItems = computed(() =>
+  getAdministrativeDirectiveMetadataItems(data.value),
+);
+
 if (metadataError?.value) {
   showError(metadataError.value);
 }
@@ -47,14 +54,10 @@ if (contentError?.value) {
     :title-placeholder="ADMINISTRATIVE_DIRECTIVE_TITLE_PLACEHOLDER"
     :is-empty-document="isEmptyDocument"
     :breadcrumb-items="breadcrumbItems"
+    :metadata-items="metadataItems"
     document-html-class="administrative-directive"
     :html="html"
   >
-    <template #metadata>
-      <div class="mb-48 flex flex-row flex-wrap gap-24">
-        <MetadataField label="Metadaten" value="coming soon" />
-      </div>
-    </template>
     <template #details>
       <h2 id="detailsTabPanelTitle" class="ris-heading3-bold my-24">Details</h2>
       <IncompleteDataMessage class="my-24" />

@@ -123,21 +123,18 @@ describe("case law single view page", async () => {
     ).toBeInTheDocument();
 
     // Metadata
-    expect(screen.getByText("Gericht")).toBeInTheDocument();
-    expect(screen.getByLabelText("Gericht")).toHaveTextContent("Sample court");
+    const terms = screen.getAllByRole("term");
+    expect(terms[0]).toHaveTextContent("Gericht");
+    expect(terms[0]?.nextElementSibling).toHaveTextContent("Sample court");
 
-    expect(screen.getByText("Dokumenttyp")).toBeInTheDocument();
-    expect(screen.getByLabelText("Dokumenttyp")).toHaveTextContent(
-      "Sample type",
-    );
+    expect(terms[1]).toHaveTextContent("Dokumenttyp");
+    expect(terms[1]?.nextElementSibling).toHaveTextContent("Sample type");
 
-    expect(screen.getByText("Entscheidungsdatum")).toBeInTheDocument();
-    expect(screen.getByLabelText("Entscheidungsdatum")).toHaveTextContent(
-      "01.01.2023",
-    );
+    expect(terms[2]).toHaveTextContent("Entscheidungsdatum");
+    expect(terms[2]?.nextElementSibling).toHaveTextContent("01.01.2023");
 
-    expect(screen.getByText("Aktenzeichen")).toBeInTheDocument();
-    expect(screen.getByLabelText("Aktenzeichen")).toHaveTextContent("123, 456");
+    expect(terms[3]).toHaveTextContent("Aktenzeichen");
+    expect(terms[3]?.nextElementSibling).toHaveTextContent("123, 456");
 
     // Text content
     expect(
@@ -242,10 +239,18 @@ describe("case law single view page", async () => {
     expect(pageHeader).toHaveClass("text-gray-900");
 
     // Metadata
-    expect(screen.getByLabelText("Gericht")).toHaveTextContent("—");
-    expect(screen.getByLabelText("Dokumenttyp")).toHaveTextContent("—");
-    expect(screen.getByLabelText("Entscheidungsdatum")).toHaveTextContent("—");
-    expect(screen.getByLabelText("Aktenzeichen")).toHaveTextContent("—");
+    const terms = screen.getAllByRole("term");
+    expect(terms[0]).toHaveTextContent("Gericht");
+    expect(terms[0]?.nextElementSibling).toHaveTextContent("—");
+
+    expect(terms[1]).toHaveTextContent("Dokumenttyp");
+    expect(terms[1]?.nextElementSibling).toHaveTextContent("—");
+
+    expect(terms[2]).toHaveTextContent("Entscheidungsdatum");
+    expect(terms[2]?.nextElementSibling).toHaveTextContent("—");
+
+    expect(terms[3]).toHaveTextContent("Aktenzeichen");
+    expect(terms[3]?.nextElementSibling).toHaveTextContent("—");
 
     // Text content
     expect(

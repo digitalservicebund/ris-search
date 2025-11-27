@@ -9,6 +9,7 @@ describe("DocumentDetailPage.vue", () => {
         title: "Title",
         titlePlaceholder: "Title Placeholder",
         breadcrumbItems: [],
+        metadataItems: [],
         documentHtmlClass: "",
         html: "",
       },
@@ -24,6 +25,7 @@ describe("DocumentDetailPage.vue", () => {
       props: {
         titlePlaceholder: "Title Placeholder",
         breadcrumbItems: [],
+        metadataItems: [],
         documentHtmlClass: "",
         html: "",
       },
@@ -47,6 +49,7 @@ describe("DocumentDetailPage.vue", () => {
             label: "Breadcrumb 2",
           },
         ],
+        metadataItems: [],
         documentHtmlClass: "",
         html: "",
       },
@@ -64,11 +67,39 @@ describe("DocumentDetailPage.vue", () => {
     expect(screen.getByText("Breadcrumb 2")).toBeVisible();
   });
 
+  it("renders metadata items", async () => {
+    render(DocumentDetailPage, {
+      props: {
+        titlePlaceholder: "Title Placeholder",
+        breadcrumbItems: [],
+        metadataItems: [
+          {
+            label: "Label 1",
+            value: "Value 1",
+          },
+          {
+            label: "Label 2",
+          },
+        ],
+        documentHtmlClass: "fooClass",
+        html: "Html Content",
+      },
+    });
+
+    const terms = screen.getAllByRole("term");
+    expect(terms[0]).toHaveTextContent("Label 1");
+    expect(terms[0]?.nextElementSibling).toHaveTextContent("Value 1");
+
+    expect(terms[1]).toHaveTextContent("Label 2");
+    expect(terms[1]?.nextElementSibling).toHaveTextContent("—");
+  });
+
   it("renders html content", async () => {
     render(DocumentDetailPage, {
       props: {
         titlePlaceholder: "Title Placeholder",
         breadcrumbItems: [],
+        metadataItems: [],
         documentHtmlClass: "fooClass",
         html: "Html Content",
       },
@@ -87,19 +118,18 @@ describe("DocumentDetailPage.vue", () => {
         title: "Title",
         titlePlaceholder: "Title Placeholder",
         breadcrumbItems: [],
+        metadataItems: [],
         documentHtmlClass: "",
         html: "",
       },
       slots: {
         actionsMenu: "ActionsMenu",
-        metadata: "Metadata",
         sidebar: "Sidebar",
         details: "Detailed Information",
       },
     });
 
     expect(screen.getByText("ActionsMenu")).toBeVisible();
-    expect(screen.getByText("Metadata")).toBeVisible();
     expect(screen.getByText("Sidebar")).toBeVisible();
 
     expect(await screen.findByText("Detailed Information")).not.toBeVisible();
