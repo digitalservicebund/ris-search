@@ -1240,13 +1240,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@iconify/json@npm:^2.2.407":
-  version: 2.2.407
-  resolution: "@iconify/json@npm:2.2.407"
+"@iconify/json@npm:^2.2.410":
+  version: 2.2.410
+  resolution: "@iconify/json@npm:2.2.410"
   dependencies:
     "@iconify/types": "npm:*"
     pathe: "npm:^2.0.3"
-  checksum: 10c0/a92f15564a5b9afc44c6077aeb8240a02d563c9c3293623d1f8ad2a83ff4d7f080b036729e9db0872542088bcd007be154feb7ef75b6e91d514ac6a2efead1da
+  checksum: 10c0/b3bc4597ef3edfd90a7d19f8b9e8dc67e0f6da1eaba76ae02da1f9cd74c2c513f4934d1df39859dcf4ecc0f2460ed4fa09aaab31932abe5a639e69f2d54ece0d
   languageName: node
   linkType: hard
 
@@ -15194,7 +15194,7 @@ __metadata:
     "@digitalservicebund/ris-ui": "npm:^3.17.1"
     "@iconify-json/ic": "npm:^1.2.2"
     "@iconify-json/material-symbols": "npm:^1.2.33"
-    "@iconify/json": "npm:^2.2.407"
+    "@iconify/json": "npm:^2.2.410"
     "@nuxt/eslint": "npm:^1.4.1"
     "@nuxt/image": "npm:^1.10.0"
     "@nuxt/scripts": "npm:0.13.0"
