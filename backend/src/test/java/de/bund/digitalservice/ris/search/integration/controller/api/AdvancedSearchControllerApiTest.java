@@ -12,6 +12,7 @@ import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
 import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.integration.config.ContainersIntegrationBase;
+import de.bund.digitalservice.ris.search.integration.controller.api.testData.AdministrativeDirectiveTestData;
 import de.bund.digitalservice.ris.search.integration.controller.api.testData.CaseLawTestData;
 import de.bund.digitalservice.ris.search.integration.controller.api.testData.LiteratureTestData;
 import de.bund.digitalservice.ris.search.integration.controller.api.testData.NormsTestData;
@@ -22,7 +23,6 @@ import java.util.Objects;
 import java.util.stream.Stream;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -44,12 +44,6 @@ import org.springframework.test.web.servlet.ResultMatcher;
 class AdvancedSearchControllerApiTest extends ContainersIntegrationBase {
 
   @Autowired private MockMvc mockMvc;
-
-  @BeforeAll()
-  void setup() {
-    // administrative directives are not part of the advanced search yet
-    administrativeDirectiveRepository.deleteAll();
-  }
 
   static String buildAdvancedQuery(String key, String value) {
     return "?query=%s:%s".formatted(key, value);
@@ -290,7 +284,8 @@ class AdvancedSearchControllerApiTest extends ContainersIntegrationBase {
     int caseLawSize = CaseLawTestData.allDocuments.size();
     int literatureSize = LiteratureTestData.allDocuments.size();
     int normsSize = NormsTestData.allDocuments.size();
-    int combinedSize = caseLawSize + literatureSize + normsSize;
+    int administrativeDirectiveSize = AdministrativeDirectiveTestData.allDocuments.size();
+    int combinedSize = caseLawSize + literatureSize + normsSize + administrativeDirectiveSize;
     stream.add(Arguments.of("", combinedSize, null, null));
 
     return stream.build();
@@ -492,5 +487,19 @@ class AdvancedSearchControllerApiTest extends ContainersIntegrationBase {
                                                 }
                                                 """
                         .formatted(expectedError)));
+  }
+
+  @ParameterizedTest
+  @ValueSource(strings = {"(VT:text content)", "(NG:Ministerium)", "(FU:Ipsum)", "(U:title)"})
+  void testAdministrativeDirectiveLuceneEndpoint(String query) throws Exception {
+    String url =
+        String.format(
+            "%s?query=%s&size=50&sort=default&pageIndex=0",
+            ApiConfig.Paths.ADMINISTRATIVE_DIRECTIVE_ADVANCED_SEARCH, query);
+
+    mockMvc
+        .perform(get(url).contentType(MediaType.APPLICATION_JSON))
+        .andExpectAll(
+            status().is(200), jsonPath("$.member[0].item.documentNumber", Matchers.is("KSNR0000")));
   }
 }
