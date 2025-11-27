@@ -48,66 +48,13 @@ const visibleFilters = computed(() => {
   };
 });
 
-/** Whether the document kind uses year-only date values (as opposed to full dates). */
-function usesYearOnly(kind: DocumentKind): boolean {
-  return kind === DocumentKind.Literature;
-}
-
-/** Extracts the year from a full date string (YYYY-MM-DD). */
-function dateToYear(date: string | undefined): string | undefined {
-  if (!date) return undefined;
-  const match = date.match(/^(\d{4})-\d{2}-\d{2}$/);
-  return match ? match[1] : undefined;
-}
-
-/** Converts a year to a full date string for 'from' values (Jan 1st). */
-function yearToDateFrom(year: string | undefined): string | undefined {
-  if (!year) return undefined;
-  const match = year.match(/^\d{4}$/);
-  return match ? `${year}-01-01` : undefined;
-}
-
-/** Converts a year to a full date string for 'to' values (Dec 31st). */
-function yearToDateTo(year: string | undefined): string | undefined {
-  if (!year) return undefined;
-  const match = year.match(/^\d{4}$/);
-  return match ? `${year}-12-31` : undefined;
-}
-
 watch(
   () => documentKind,
   (is, was) => {
     if (is === was) return;
-
-    if (was === DocumentKind.Norm && filter.value.type === "currentlyInForce") {
-      setFilterType("allTime");
-    }
-
-    // When switching between filters that use a full date and filters that only
-    // use the year, convert the values of the `from` and `to` fields of the
-    // filter. If the value is a year, set it to the beginning (for the `from`
-    // value) or the end (for the `to` value) of that year to ˚keep the meaning
-    // of the filter intact. If the value is a full date, simply extract the year.
-    const wasYearOnly = usesYearOnly(was);
-    const isYearOnly = usesYearOnly(is);
-
-    if (wasYearOnly !== isYearOnly && filter.value.type === "period") {
-      if (isYearOnly) {
-        // Full date → Year
-        filter.value = {
-          type: "period",
-          from: dateToYear(filter.value.from),
-          to: dateToYear(filter.value.to),
-        };
-      } else {
-        // Year → Full date
-        filter.value = {
-          type: "period",
-          from: yearToDateFrom(filter.value.from),
-          to: yearToDateTo(filter.value.to),
-        };
-      }
-    }
+    filter.value = {
+      type: is === DocumentKind.Norm ? "currentlyInForce" : "allTime",
+    };
   },
 );
 

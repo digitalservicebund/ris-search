@@ -175,6 +175,22 @@ test.describe("general advanced search page features", () => {
     await expect(searchResults).toHaveCount(12);
   });
 
+  test("clears query when switching document kind", async ({ page }) => {
+    await navigate(page, "/advanced-search");
+
+    await searchFor(page, {
+      q: "AB:FrSaftErfrischV",
+      documentKind: "Gesetze & Verordnungen",
+    });
+
+    const queryInput = page.getByRole("textbox", { name: "Suchanfrage" });
+    await expect(queryInput).toHaveValue("AB:FrSaftErfrischV");
+
+    await page.getByRole("button", { name: "Gerichtsentscheidungen" }).click();
+
+    await expect(queryInput).toHaveValue("");
+  });
+
   test("reacts to browser back/forward navigation", async ({ page }) => {
     await navigate(page, "/advanced-search");
 

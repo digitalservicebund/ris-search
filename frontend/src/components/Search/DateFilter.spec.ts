@@ -461,35 +461,25 @@ describe("DateFilter", () => {
     });
   });
 
-  it("sets the default filter when switching document kind", async () => {
-    const { rerender } = render(DateFilter, {
-      props: {
-        documentKind: DocumentKind.Norm,
-        modelValue: { type: "currentlyInForce" },
-      },
-      global: { stubs: { InputMask: InputText } },
+  describe("resetting filter when switching document kind", () => {
+    it("defaults to 'all time' when switching to caselaw", async () => {
+      let modelValue: DateFilterValue = { type: "currentlyInForce" };
+
+      const { rerender } = render(DateFilter, {
+        props: {
+          documentKind: DocumentKind.Norm,
+          modelValue,
+          "onUpdate:modelValue": (val) => (modelValue = val),
+        },
+        global: { stubs: { InputMask: InputText } },
+      });
+
+      await rerender({ documentKind: DocumentKind.CaseLaw });
+
+      expect(modelValue).toEqual({ type: "allTime" });
     });
 
-    expect(screen.getByRole("radio", { name: "Aktuell gültig" })).toBeChecked();
-
-    await rerender({ documentKind: DocumentKind.CaseLaw });
-    expect(
-      screen.getByRole("radio", { name: "Keine zeitliche Begrenzung" }),
-    ).toBeChecked();
-
-    await rerender({ documentKind: DocumentKind.Norm });
-    expect(
-      screen.getByRole("radio", { name: "Keine zeitliche Begrenzung" }),
-    ).toBeChecked();
-
-    await rerender({ documentKind: DocumentKind.Literature });
-    expect(
-      screen.getByRole("radio", { name: "Keine zeitliche Begrenzung" }),
-    ).toBeChecked();
-  });
-
-  describe("date conversion when switching document kind", () => {
-    it("converts full dates to years when switching to Literature", async () => {
+    it("defaults to 'currently in force' when switching to legislation", async () => {
       let modelValue: DateFilterValue = {
         type: "period",
         from: "2020-03-15",
@@ -505,46 +495,20 @@ describe("DateFilter", () => {
         global: { stubs: { InputMask: InputText } },
       });
 
-      await rerender({ documentKind: DocumentKind.Literature });
+      await rerender({ documentKind: DocumentKind.Norm });
 
-      expect(modelValue).toEqual({
-        type: "period",
-        from: "2020",
-        to: "2024",
-      });
+      expect(modelValue).toEqual({ type: "currentlyInForce" });
     });
 
-    it("converts years to full dates when switching from Literature", async () => {
+    it("defaults to 'all time' when switching to literature", async () => {
       let modelValue: DateFilterValue = {
-        type: "period",
-        from: "2020",
-        to: "2024",
+        type: "specificDate",
+        from: "2024-01-01",
       };
 
       const { rerender } = render(DateFilter, {
         props: {
-          documentKind: DocumentKind.Literature,
-          modelValue,
-          "onUpdate:modelValue": (val) => (modelValue = val),
-        },
-        global: { stubs: { InputMask: InputText } },
-      });
-
-      await rerender({ documentKind: DocumentKind.CaseLaw });
-
-      expect(modelValue).toEqual({
-        type: "period",
-        from: "2020-01-01",
-        to: "2024-12-31",
-      });
-    });
-
-    it("does not convert when filter type is not period", async () => {
-      let modelValue: DateFilterValue = { type: "allTime" };
-
-      const { rerender } = render(DateFilter, {
-        props: {
-          documentKind: DocumentKind.CaseLaw,
+          documentKind: DocumentKind.Norm,
           modelValue,
           "onUpdate:modelValue": (val) => (modelValue = val),
         },
@@ -554,31 +518,6 @@ describe("DateFilter", () => {
       await rerender({ documentKind: DocumentKind.Literature });
 
       expect(modelValue).toEqual({ type: "allTime" });
-    });
-
-    it("handles undefined values", async () => {
-      let modelValue: DateFilterValue = {
-        type: "period",
-        from: "2020-03-15",
-        to: undefined,
-      };
-
-      const { rerender } = render(DateFilter, {
-        props: {
-          documentKind: DocumentKind.CaseLaw,
-          modelValue,
-          "onUpdate:modelValue": (val) => (modelValue = val),
-        },
-        global: { stubs: { InputMask: InputText } },
-      });
-
-      await rerender({ documentKind: DocumentKind.Literature });
-
-      expect(modelValue).toEqual({
-        type: "period",
-        from: "2020",
-        to: undefined,
-      });
     });
   });
 });
