@@ -42,17 +42,17 @@ public class NormSimpleSearchType implements SimpleSearchType {
   }
 
   @Override
-  public void addHighlightedFields(HighlightBuilder builder) {
-    addHighlightedFieldsStatic(builder);
-  }
-
-  public static void addHighlightedFieldsStatic(HighlightBuilder builder) {
-    NORMS_HIGHLIGHT_CONTENT_FIELDS.forEach(builder::field);
+  public List<String> getExcludedFields() {
+    return NORMS_FETCH_EXCLUDED_FIELDS;
   }
 
   @Override
-  public List<String> getExcludedFields() {
-    return NORMS_FETCH_EXCLUDED_FIELDS;
+  public List<HighlightBuilder.Field> getHighlightedFields() {
+    return getHighlightedFieldsStatic();
+  }
+
+  public static List<HighlightBuilder.Field> getHighlightedFieldsStatic() {
+    return NORMS_HIGHLIGHT_CONTENT_FIELDS.stream().map(HighlightBuilder.Field::new).toList();
   }
 
   @Override

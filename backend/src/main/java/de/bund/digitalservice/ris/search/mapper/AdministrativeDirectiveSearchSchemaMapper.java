@@ -20,23 +20,26 @@ public class AdministrativeDirectiveSearchSchemaMapper {
   public static <T> SearchMemberSchema<AdministrativeDirectiveSearchSchema> fromSearchHit(
       SearchHit<T> searchHit) {
     AdministrativeDirective document = (AdministrativeDirective) searchHit.getContent();
-    List<TextMatchSchema> textMatches =
-        searchHit.getHighlightFields().entrySet().stream()
-            .flatMap(
-                textMatch ->
-                    textMatch.getValue().stream()
-                        .map(
-                            valueMatch ->
-                                TextMatchSchema.builder()
-                                    .name(getTextMatchKey(textMatch))
-                                    .text(valueMatch)
-                                    .build()))
-            .toList();
+    List<TextMatchSchema> textMatches = getTextMatches(searchHit);
 
     return SearchMemberSchema.<AdministrativeDirectiveSearchSchema>builder()
         .item(fromDomain(document))
         .textMatches(textMatches)
         .build();
+  }
+
+  public static <T> List<TextMatchSchema> getTextMatches(SearchHit<T> searchHit) {
+    return searchHit.getHighlightFields().entrySet().stream()
+        .flatMap(
+            textMatch ->
+                textMatch.getValue().stream()
+                    .map(
+                        valueMatch ->
+                            TextMatchSchema.builder()
+                                .name(getTextMatchKey(textMatch))
+                                .text(valueMatch)
+                                .build()))
+        .toList();
   }
 
   /**

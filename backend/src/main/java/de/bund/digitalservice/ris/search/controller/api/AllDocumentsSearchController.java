@@ -5,6 +5,7 @@ import de.bund.digitalservice.ris.search.exception.CustomValidationException;
 import de.bund.digitalservice.ris.search.mapper.DocumentResponseMapper;
 import de.bund.digitalservice.ris.search.mapper.SortParamsConverter;
 import de.bund.digitalservice.ris.search.models.DocumentKind;
+import de.bund.digitalservice.ris.search.models.api.parameters.AdministrativeDirectiveSearchParams;
 import de.bund.digitalservice.ris.search.models.api.parameters.CaseLawSearchParams;
 import de.bund.digitalservice.ris.search.models.api.parameters.LiteratureSearchParams;
 import de.bund.digitalservice.ris.search.models.api.parameters.NormsSearchParams;
@@ -69,6 +70,7 @@ public class AllDocumentsSearchController {
           @ParameterObject NormsSearchParams normsSearchParams,
           @ParameterObject CaseLawSearchParams caseLawSearchParams,
           @ParameterObject LiteratureSearchParams literatureSearchParams,
+          @ParameterObject AdministrativeDirectiveSearchParams administrativeDirectiveSearchParams,
           @ParameterObject @Valid UniversalSortParam sortParams,
           @RequestParam("documentKind")
               @Schema(
@@ -91,6 +93,7 @@ public class AllDocumentsSearchController {
               normsSearchParams,
               caseLawSearchParams,
               literatureSearchParams,
+              administrativeDirectiveSearchParams,
               documentKind.orElse(null),
               sortedPageRequest);
 

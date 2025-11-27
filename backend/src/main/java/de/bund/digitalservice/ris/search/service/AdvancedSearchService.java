@@ -5,12 +5,17 @@ import static org.opensearch.index.query.QueryBuilders.queryStringQuery;
 
 import de.bund.digitalservice.ris.search.config.opensearch.Configurations;
 import de.bund.digitalservice.ris.search.models.opensearch.AbstractSearchEntity;
+import de.bund.digitalservice.ris.search.models.opensearch.AdministrativeDirective;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import de.bund.digitalservice.ris.search.models.opensearch.Literature;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.utils.PageUtils;
 import de.bund.digitalservice.ris.search.utils.RisHighlightBuilder;
+import java.util.Collection;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -46,9 +51,16 @@ public class AdvancedSearchService {
   public SearchPage<AbstractSearchEntity> searchAll(String search, Pageable pageable) {
 
     HighlightBuilder highlightBuilder = RisHighlightBuilder.baseHighlighter();
-    CaseLawSimpleSearchType.addHighlightedFieldsStatic(highlightBuilder);
-    LiteratureSimpleSearchType.addHighlightedFieldsStatic(highlightBuilder);
-    NormSimpleSearchType.addHighlightedFieldsStatic(highlightBuilder);
+
+    Set<HighlightBuilder.Field> highlightfields =
+        Stream.of(
+                CaseLawSimpleSearchType.getHighlightedFieldsStatic(),
+                LiteratureSimpleSearchType.getHighlightedFieldsStatic(),
+                NormSimpleSearchType.getHighlightedFieldsStatic())
+            .flatMap(Collection::stream)
+            .collect(Collectors.toSet());
+
+    highlightfields.forEach(highlightBuilder::field);
     var searchResults = callOpenSearch(search, highlightBuilder, null, pageable, Document.class);
     return pageUtils.unwrapMixedSearchHits(searchResults, pageable);
   }
@@ -56,7 +68,8 @@ public class AdvancedSearchService {
   public SearchPage<CaseLawDocumentationUnit> searchCaseLaw(String search, Pageable pageable) {
 
     HighlightBuilder highlightBuilder = RisHighlightBuilder.baseHighlighter();
-    CaseLawSimpleSearchType.addHighlightedFieldsStatic(highlightBuilder);
+
+    CaseLawSimpleSearchType.getHighlightedFieldsStatic().forEach(highlightBuilder::field);
     return SearchHitSupport.searchPageFor(
         callOpenSearch(search, highlightBuilder, null, pageable, CaseLawDocumentationUnit.class),
         pageable);
@@ -65,15 +78,26 @@ public class AdvancedSearchService {
   public SearchPage<Literature> searchLiterature(String search, Pageable pageable) {
 
     HighlightBuilder highlightBuilder = RisHighlightBuilder.baseHighlighter();
-    LiteratureSimpleSearchType.addHighlightedFieldsStatic(highlightBuilder);
+    LiteratureSimpleSearchType.getHighlightedFieldsStatic().forEach(highlightBuilder::field);
     return SearchHitSupport.searchPageFor(
         callOpenSearch(search, highlightBuilder, null, pageable, Literature.class), pageable);
+  }
+
+  public SearchPage<AdministrativeDirective> searchAdministrativeDirective(
+      String search, Pageable pageable) {
+
+    HighlightBuilder highlightBuilder = RisHighlightBuilder.baseHighlighter();
+    AdministrativeDirectiveSimpleSearchType.getHighlightedFieldsStatic()
+        .forEach(highlightBuilder::field);
+    return SearchHitSupport.searchPageFor(
+        callOpenSearch(search, highlightBuilder, null, pageable, AdministrativeDirective.class),
+        pageable);
   }
 
   public SearchPage<Norm> searchNorm(String search, Pageable pageable) {
 
     HighlightBuilder highlightBuilder = RisHighlightBuilder.baseHighlighter();
-    NormSimpleSearchType.addHighlightedFieldsStatic(highlightBuilder);
+    NormSimpleSearchType.getHighlightedFieldsStatic().forEach(highlightBuilder::field);
     return SearchHitSupport.searchPageFor(
         callOpenSearch(
             search,

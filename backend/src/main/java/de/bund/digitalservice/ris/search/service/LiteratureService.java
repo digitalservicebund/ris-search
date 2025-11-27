@@ -81,7 +81,7 @@ public class LiteratureService {
   public SearchPage<Literature> searchLiterature(final String search, Pageable pageable) {
 
     HighlightBuilder highlightBuilder = RisHighlightBuilder.baseHighlighter();
-    new LiteratureSimpleSearchType(null).addHighlightedFields(highlightBuilder);
+    LiteratureSimpleSearchType.getHighlightedFieldsStatic().forEach(highlightBuilder::field);
 
     var searchQuery =
         new NativeSearchQueryBuilder()

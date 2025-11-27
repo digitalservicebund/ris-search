@@ -32,6 +32,26 @@
             }
           }
         },
+        "DATUM": {
+          "type": "alias",
+          "path": "entry_into_effect_date"
+        },
+        "NG": {
+          "type": "alias",
+          "path": "legislation_authority"
+        },
+        "FU": {
+          "type": "alias",
+          "path": "references"
+        },
+        "U": {
+          "type": "alias",
+          "path": "headline"
+        },
+        "VT": {
+          "type": "alias",
+          "path": "short_report"
+        },
         "caselaw_references": {
           "type": "text",
           "analyzer": "custom_german_analyzer"
@@ -99,10 +119,6 @@
         "outline": {
           "type": "text",
           "analyzer": "custom_german_analyzer"
-        },
-        "DATUM": {
-          "type": "alias",
-          "path": "entry_into_effect_date"
         },
         "articles": {
           "type": "nested",

@@ -30,6 +30,8 @@ public class ApiConfig {
     public static final String LEGISLATION_ADVANCED_SEARCH =
         DOCUMENT + "/lucene-search/legislation";
     public static final String LITERATURE_ADVANCED_SEARCH = DOCUMENT + "/lucene-search/literature";
+    public static final String ADMINISTRATIVE_DIRECTIVE_ADVANCED_SEARCH =
+        DOCUMENT + "/lucene-search/administrative-directive";
 
     public static final String SITEMAP = BASE + "/sitemaps";
     public static final String ECLICRAWLER = BASE + "/eclicrawler";
