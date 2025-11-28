@@ -233,15 +233,12 @@ test.describe("general advanced search page features", () => {
 
     await expect(searchResults).toHaveText(/KL 1234\/56/);
 
-    await page
-      .getByRole("banner")
-      .getByRole("link", { name: "Feedback geben" })
-      .click();
+    await page.getByRole("link", { name: "Datenschutzerklärung" }).click();
 
     await expect(
       page.getByRole("heading", {
         level: 1,
-        name: "Geben Sie uns Feedback",
+        name: "Datenschutzerklärung",
       }),
     ).toBeVisible();
 
