@@ -4,7 +4,7 @@ import {
   dateSearchFromQuery,
   useDateParams,
 } from "./dateParams";
-import type { QueryParams } from "./index";
+import type { QueryParams } from "./useSimpleSearchParams";
 
 describe("dateSearchFromQuery", () => {
   it("should return Equal mode when only date is provided", () => {

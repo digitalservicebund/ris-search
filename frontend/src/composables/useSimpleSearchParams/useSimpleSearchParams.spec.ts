@@ -1,13 +1,13 @@
 import { mockNuxtImport } from "@nuxt/test-utils/runtime";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { nextTick } from "vue";
-import type { RouteLocationNormalized } from "#vue-router";
-import { sortMode } from "~/components/types";
-import { defaultParams } from "~/stores/searchParams/getInitialState";
+import { defaultParams } from "./getInitialState";
 import {
   type QueryParams,
   useSimpleSearchParams,
-} from "~/stores/searchParams/index";
+} from "./useSimpleSearchParams";
+import type { RouteLocationNormalized } from "#vue-router";
+import { sortMode } from "~/components/types";
 import { DocumentKind } from "~/types";
 
 type MockRoute = Pick<RouteLocationNormalized, "path" | "query">;

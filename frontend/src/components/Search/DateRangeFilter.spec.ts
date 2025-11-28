@@ -4,7 +4,7 @@ import { screen } from "@testing-library/vue";
 import { InputText } from "primevue";
 import { describe, expect, it } from "vitest";
 import DateRangeFilter from "./DateRangeFilter.vue";
-import { DateSearchMode } from "~/stores/searchParams";
+import { DateSearchMode } from "~/composables/useSimpleSearchParams/useSimpleSearchParams";
 
 describe("DateRangeFilter", () => {
   const testDates = {

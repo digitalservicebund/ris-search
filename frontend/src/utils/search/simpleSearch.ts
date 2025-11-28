@@ -1,4 +1,4 @@
-import type { QueryParams } from "~/stores/searchParams";
+import type { QueryParams } from "~/composables/useSimpleSearchParams/useSimpleSearchParams";
 import { DocumentKind } from "~/types";
 
 export function getUrl(category?: string): string {

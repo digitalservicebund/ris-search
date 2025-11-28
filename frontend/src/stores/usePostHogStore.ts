@@ -2,7 +2,7 @@ import Cookies from "js-cookie";
 import { defineStore } from "pinia";
 import type { PostHog } from "posthog-js";
 import posthog from "posthog-js";
-import type { QueryParams } from "~/stores/searchParams";
+import type { QueryParams } from "~/composables/useSimpleSearchParams/useSimpleSearchParams";
 import {
   getStringOrUndefined,
   isStringEmpty,

@@ -4,7 +4,7 @@ import { screen } from "@testing-library/vue";
 import { InputText } from "primevue";
 import { describe, expect, it } from "vitest";
 import YearRangeFilter from "./YearRangeFilter.vue";
-import { DateSearchMode } from "~/stores/searchParams";
+import { DateSearchMode } from "~/composables/useSimpleSearchParams/useSimpleSearchParams";
 
 describe("YearRangeFilter", () => {
   const setup: [

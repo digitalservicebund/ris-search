@@ -1,6 +1,8 @@
 import _ from "lodash";
 import { computed, ref, watch } from "vue";
 import type { LocationQueryRaw, Router } from "vue-router";
+import type { DateSearchMode } from "./dateParams";
+import { useDateParams } from "./dateParams";
 import {
   addDefaults,
   defaultParams,
@@ -9,12 +11,10 @@ import {
 } from "./getInitialState";
 import type { LocationQuery } from "#vue-router";
 import { sortMode } from "~/components/types";
-import type { DateSearchMode } from "~/stores/searchParams/dateParams";
-import { useDateParams } from "~/stores/searchParams/dateParams";
 import { usePostHogStore } from "~/stores/usePostHogStore";
 import { DocumentKind } from "~/types";
 
-export { DateSearchMode } from "~/stores/searchParams/dateParams";
+export { DateSearchMode } from "./dateParams";
 
 export type DocumentKindSelectable = Omit<DocumentKind, DocumentKind.All>;
 

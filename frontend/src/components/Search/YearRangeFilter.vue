@@ -2,7 +2,7 @@
 import PrimevueSelect from "primevue/select";
 import type { DropdownItem } from "~/components/types";
 import YearInput from "~/components/YearInput.vue";
-import { DateSearchMode } from "~/stores/searchParams";
+import { DateSearchMode } from "~/composables/useSimpleSearchParams/useSimpleSearchParams";
 
 const dateAfter = defineModel<string | undefined>("dateAfter");
 const dateBefore = defineModel<string | undefined>("dateBefore");

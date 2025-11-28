@@ -10,8 +10,8 @@ import SearchResult from "~/components/Search/SearchResult.vue";
 import SimpleSearchInput from "~/components/Search/SimpleSearchInput.vue";
 import SortSelect from "~/components/Search/SortSelect.vue";
 import YearRangeFilter from "~/components/Search/YearRangeFilter.vue";
+import { useSimpleSearchParams } from "~/composables/useSimpleSearchParams/useSimpleSearchParams";
 import { useStaticPageSeo } from "~/composables/useStaticPageSeo";
-import { useSimpleSearchParams } from "~/stores/searchParams";
 import { DocumentKind } from "~/types";
 import { buildResultCountString } from "~/utils/pagination";
 import {

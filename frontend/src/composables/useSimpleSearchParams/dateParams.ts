@@ -1,6 +1,6 @@
 import { ref, computed } from "vue";
+import type { QueryParams } from "./useSimpleSearchParams";
 import type { LocationQuery } from "#vue-router";
-import type { QueryParams } from "~/stores/searchParams/index";
 
 export enum DateSearchMode {
   None = "",

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import PrimevueSelect from "primevue/select";
 import type { DropdownItem } from "~/components/types";
-import { DateSearchMode } from "~/stores/searchParams";
+import { DateSearchMode } from "~/composables/useSimpleSearchParams/useSimpleSearchParams";
 
 const date = defineModel<string | undefined>("date");
 const dateAfter = defineModel<string | undefined>("dateAfter");
