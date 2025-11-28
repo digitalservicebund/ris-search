@@ -5,7 +5,7 @@ import NormTableOfContents from "./NormTableOfContents.vue";
 import type { TableOfContentsItem } from "~/types";
 import { tocItemsToTreeNodes } from "~/utils/tableOfContents";
 
-describe("TableOfContents Component", () => {
+describe("NormTableOfContents", () => {
   /* eslint-disable-next-line @typescript-eslint/no-explicit-any -- No proper way of typing this */
   let wrapper: any;
 

@@ -2,7 +2,7 @@ import { mount } from "@vue/test-utils";
 import { describe, it, expect } from "vitest";
 import NormHeadingFootnotes from "./NormHeadingFootnotes.vue";
 
-describe("NormHeadingFootnotes.vue", () => {
+describe("NormHeadingFootnotes", () => {
   it("shows nothing if no footnote is passed", () => {
     const wrapper = mount(NormHeadingFootnotes);
     expect(wrapper.html()).toBe("<!--v-if-->");

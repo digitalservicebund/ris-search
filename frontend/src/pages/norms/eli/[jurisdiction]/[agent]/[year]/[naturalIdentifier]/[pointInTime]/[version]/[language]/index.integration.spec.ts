@@ -145,7 +145,7 @@ function getDDElement(wrapper: VueWrapper, label: string): HTMLElement | null {
   return null;
 }
 
-describe("index.vue", () => {
+describe("index", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     vi.restoreAllMocks();

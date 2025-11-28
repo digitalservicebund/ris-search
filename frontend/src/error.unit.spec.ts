@@ -26,7 +26,7 @@ const mountComponent = (statusCode: number) =>
     },
   });
 
-describe("error page", () => {
+describe("Error", () => {
   beforeAll(() => {
     config.global.renderStubDefaultSlot = true;
   });

@@ -31,7 +31,7 @@ function getWrapper(customProps: VersionWarningMessageProps) {
   });
 }
 
-describe("VersionWarningMessage.vue", () => {
+describe("VersionWarningMessage", () => {
   it("shows info message for inForce with futureVersion", () => {
     const wrapper = getWrapper({
       ...baseProps,

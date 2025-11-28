@@ -99,7 +99,7 @@ vi.mock("~/composables/usePrivateFeaturesFlag", () => {
   return { usePrivateFeaturesFlag: mocks.usePrivateFeaturesFlag };
 });
 
-describe("NormSearchResult.vue", () => {
+describe("NormSearchResult", () => {
   beforeEach(() => {
     vi.resetAllMocks();
   });

@@ -37,7 +37,7 @@ const articleTestData = [
   },
 ] as unknown as Article[];
 
-describe("ArticleVersionWarning.vue", () => {
+describe("ArticleVersionWarning", () => {
   const inForceVersionLink =
     "/norms/eli/bund/bgbl-1/2000/s100/2000-01-01/1/deu";
   for (const currentArticle of articleTestData) {

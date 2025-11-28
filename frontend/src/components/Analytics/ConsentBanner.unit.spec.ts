@@ -36,7 +36,7 @@ const factory = (userConsent: boolean | undefined) =>
     },
   });
 
-describe("ConsentBanner.vue", () => {
+describe("ConsentBanner", () => {
   const cookieBanner = '[data-testid="cookie-banner"]';
   const declineButton = '[data-testid="decline-cookie"]';
 

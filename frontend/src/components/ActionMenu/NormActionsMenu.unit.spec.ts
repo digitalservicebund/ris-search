@@ -9,7 +9,7 @@ vi.mock("~/utils/norm", () => ({
   getManifestationUrl: vi.fn(),
 }));
 
-describe("NormActionsMenu.vue", () => {
+describe("NormActionsMenu", () => {
   const mockLegislationWork = {
     legislationIdentifier: "eli/bgbl-test/etc",
   } as LegislationWork;

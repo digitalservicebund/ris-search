@@ -3,7 +3,7 @@ import ExpandButton from "~/components/ExpandButton.vue";
 import GravityUiCircleChevronDown from "~icons/gravity-ui/circle-chevron-down";
 import GravityUiCircleChevronDownFill from "~icons/gravity-ui/circle-chevron-down-fill";
 
-describe("ExpandButton.vue", () => {
+describe("ExpandButton", () => {
   it("changes icon from normal to filled on hover", async () => {
     const wrapper = mount(ExpandButton, {
       slots: {

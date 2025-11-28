@@ -14,7 +14,7 @@ const factory = (
       status: status,
     },
   });
-describe("StatusCard.vue", () => {
+describe("StatusCard", () => {
   it("renders correctly with given props", () => {
     const wrapper = factory(StatusCardType.IMPLEMENTED);
     expect(wrapper.text()).contains("Test Header");

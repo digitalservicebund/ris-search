@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/vue";
 import MetadataField from "~/components/MetadataField.vue";
 
-describe("MetadataField.vue", () => {
+describe("MetadataField", () => {
   it("displays label and '—' as placeholder if no value given", () => {
     render(MetadataField, {
       props: {

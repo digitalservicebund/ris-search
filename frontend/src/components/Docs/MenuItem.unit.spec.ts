@@ -71,7 +71,7 @@ function mountWithRoute({
   });
 }
 
-describe("MenuItem.vue", () => {
+describe("MenuItem", () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });

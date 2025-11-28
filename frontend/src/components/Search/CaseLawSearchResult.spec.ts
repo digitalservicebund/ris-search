@@ -46,7 +46,7 @@ function renderComponent({
   });
 }
 
-describe("CaselawSearchResult.vue", () => {
+describe("CaselawSearchResult", () => {
   it("renders the expected title", () => {
     renderComponent({});
     expect(

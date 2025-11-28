@@ -4,7 +4,7 @@ import ActionsMenu from "~/components/ActionMenu/ActionsMenu.vue";
 import LiteratureActionsMenu from "~/components/ActionMenu/LiteratureActionsMenu.vue";
 import type { Literature } from "~/types";
 
-describe("LiteratureActionsMenu.vue", () => {
+describe("LiteratureActionsMenu", () => {
   it("passes correct props to ActionMenu", () => {
     vi.stubGlobal("location", {
       href: "https://test.com",

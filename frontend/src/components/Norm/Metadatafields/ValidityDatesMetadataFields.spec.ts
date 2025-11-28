@@ -3,7 +3,7 @@ import { describe, it, expect } from "vitest";
 import ValidityDatesMetadataFields from "./ValidityDatesMetadataFields.vue";
 import { parseDateGermanLocalTime } from "~/utils/dateFormatting";
 
-describe("ValidityDatesMetadataFields.vue", () => {
+describe("ValidityDatesMetadataFields", () => {
   it("displays formatted 'valid from' date if present", () => {
     render(ValidityDatesMetadataFields, {
       props: {

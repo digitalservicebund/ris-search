@@ -29,7 +29,7 @@ vi.mock("./titles", () => ({
   getNormTitle: vi.fn(() => `getNormTitle title`),
 }));
 
-describe("HeadingGroup.vue", () => {
+describe("HeadingGroup", () => {
   it("renders correctly with all props provided", async () => {
     const wrapper = mount(NormHeadingGroup, {
       props: createDefaultProps(),

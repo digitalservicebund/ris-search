@@ -47,7 +47,7 @@ function renderComponent({
   });
 }
 
-describe("LiteratureSearchResult.vue", () => {
+describe("LiteratureSearchResult", () => {
   it("renders the expected title", async () => {
     renderComponent({});
     expect(

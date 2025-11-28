@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/vue";
 import PropertiesItem from "./PropertiesItem.vue";
 
-describe("PropertiesItem.vue", () => {
+describe("PropertiesItem", () => {
   it('displays "nicht vorhanden" when no values provided', () => {
     render(PropertiesItem, {
       props: {

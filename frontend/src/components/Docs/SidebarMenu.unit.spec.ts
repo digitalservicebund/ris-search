@@ -13,7 +13,7 @@ const MenuItemStub = {
   template: `<div data-testid="menu-item" @click="$emit('click')"></div>`,
 };
 
-describe("NavigationMenu.vue", () => {
+describe("NavigationMenu", () => {
   it("renders one MenuItem per data entry and passes correct props", async () => {
     const wrapper = mount(SidebarMenu, {
       props: { model: data },
