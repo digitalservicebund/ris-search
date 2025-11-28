@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import InputMask from "primevue/inputmask";
 import PrimevueSelect from "primevue/select";
 import type { DropdownItem } from "~/components/types";
+import YearInput from "~/components/YearInput.vue";
 import { DateSearchMode } from "~/stores/searchParams";
 
 const dateAfter = defineModel<string | undefined>("dateAfter");
@@ -19,26 +19,23 @@ const items: DropdownItem[] = [
 ];
 
 // Helpers
-function parseYearFromDate(date?: string): string | null {
-  return date?.split("-")[0] ?? null;
+function parseYearFromDate(date?: string): string | undefined {
+  return date?.split("-")[0];
 }
-function isYearValid(year: string | null) {
-  return !!year && /^\d{4}$/.test(year);
-}
-function formatYearStart(year: string | null) {
+function formatYearStart(year: string) {
   return `${year}-01-01`;
 }
-function formatYearEnd(year: string | null) {
+function formatYearEnd(year: string) {
   return `${year}-12-31`;
 }
 
 //  Years Computed(s)
-const yearAfter = computed<string | null>({
+const yearAfter = computed<string | undefined>({
   get() {
     return parseYearFromDate(dateAfter.value);
   },
   set(value) {
-    if (!isYearValid(value)) {
+    if (!value) {
       dateAfter.value = undefined;
       return;
     }
@@ -49,21 +46,17 @@ const yearAfter = computed<string | null>({
         break;
       case DateSearchMode.Range:
         dateAfter.value = formatYearStart(value);
-        // keep dateBefore only if valid
-        if (!isYearValid(parseYearFromDate(dateBefore.value))) {
-          dateBefore.value = undefined;
-        }
         break;
     }
   },
 });
 
-const yearBefore = computed<string | null>({
+const yearBefore = computed<string | undefined>({
   get() {
     return parseYearFromDate(dateBefore.value);
   },
   set(value) {
-    if (!isYearValid(value)) {
+    if (!value) {
       dateBefore.value = undefined;
       return;
     }
@@ -74,24 +67,21 @@ const yearBefore = computed<string | null>({
         break;
       case DateSearchMode.Range:
         dateBefore.value = formatYearEnd(value);
-        if (!isYearValid(parseYearFromDate(dateAfter.value))) {
-          dateAfter.value = undefined;
-        }
         break;
     }
   },
 });
 
-const yearEqual = computed<string | null>({
+const yearEqual = computed<string | undefined>({
   get() {
     const yAfter = parseYearFromDate(dateAfter.value);
     const yBefore = parseYearFromDate(dateBefore.value);
     // Only show value if both exist and equal
     if (yAfter && yBefore && yAfter === yBefore) return yAfter;
-    return null;
+    return undefined;
   },
   set(value) {
-    if (!isYearValid(value)) {
+    if (!value) {
       dateAfter.value = undefined;
       dateBefore.value = undefined;
       return;
@@ -147,14 +137,7 @@ watch(
       v-slot="slotProps"
       label="Jahr"
     >
-      <InputMask
-        :id="slotProps.id"
-        v-model="yearEqual"
-        mask="9999"
-        placeholder="JJJJ"
-        :has-error="slotProps.hasError"
-        @update:validation-error="slotProps.updateValidationError"
-      />
+      <YearInput :id="slotProps.id" v-model="yearEqual" />
     </InputField>
 
     <InputField
@@ -163,14 +146,7 @@ watch(
       v-slot="slotProps"
       :label="hasMultipleInputs ? 'Ab dem Jahr' : 'Jahr'"
     >
-      <InputMask
-        :id="slotProps.id"
-        v-model="yearAfter"
-        mask="9999"
-        placeholder="JJJJ"
-        :has-error="slotProps.hasError"
-        @update:validation-error="slotProps.updateValidationError"
-      />
+      <YearInput :id="slotProps.id" v-model="yearAfter" />
     </InputField>
 
     <InputField
@@ -179,14 +155,7 @@ watch(
       v-slot="slotProps"
       :label="hasMultipleInputs ? 'Bis zum Jahr' : 'Jahr'"
     >
-      <InputMask
-        :id="slotProps.id"
-        v-model="yearBefore"
-        mask="9999"
-        placeholder="JJJJ"
-        :has-error="slotProps.hasError"
-        @update:validation-error="slotProps.updateValidationError"
-      />
+      <YearInput :id="slotProps.id" v-model="yearBefore" />
     </InputField>
   </div>
 </template>
