@@ -5,6 +5,7 @@ import static org.opensearch.index.query.QueryBuilders.queryStringQuery;
 
 import de.bund.digitalservice.ris.search.config.opensearch.Configurations;
 import de.bund.digitalservice.ris.search.models.opensearch.AbstractSearchEntity;
+import de.bund.digitalservice.ris.search.models.opensearch.AdministrativeDirective;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import de.bund.digitalservice.ris.search.models.opensearch.Literature;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
@@ -126,6 +127,26 @@ public class AdvancedSearchService {
     LiteratureSimpleSearchType.getHighlightedFieldsStatic().forEach(highlightBuilder::field);
     return SearchHitSupport.searchPageFor(
         callOpenSearch(search, highlightBuilder, null, pageable, Literature.class), pageable);
+  }
+
+  /**
+   * Executes a search query for administrative directive objects in an OpenSearch index. The search
+   * results are paginated based on the provided Pageable object, and fields in the results may be
+   * highlighted based on the configuration.
+   *
+   * @param search lucene query string
+   * @param pageable {@link Pageable} pageable to sort and paginate request
+   * @return {@link SearchPage<AdministrativeDirective>} searchpage of administrative directives
+   */
+  public SearchPage<AdministrativeDirective> searchAdministrativeDirective(
+      String search, Pageable pageable) {
+
+    HighlightBuilder highlightBuilder = RisHighlightBuilder.baseHighlighter();
+    AdministrativeDirectiveSimpleSearchType.getHighlightedFieldsStatic()
+        .forEach(highlightBuilder::field);
+    return SearchHitSupport.searchPageFor(
+        callOpenSearch(search, highlightBuilder, null, pageable, AdministrativeDirective.class),
+        pageable);
   }
 
   /**

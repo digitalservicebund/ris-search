@@ -2,9 +2,11 @@ package de.bund.digitalservice.ris.search.integration.controller.api.values;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
+import de.bund.digitalservice.ris.search.integration.controller.api.testData.AdministrativeDirectiveTestData;
 import de.bund.digitalservice.ris.search.integration.controller.api.testData.CaseLawTestData;
 import de.bund.digitalservice.ris.search.integration.controller.api.testData.LiteratureTestData;
 import de.bund.digitalservice.ris.search.integration.controller.api.testData.NormsTestData;
+import de.bund.digitalservice.ris.search.models.opensearch.AdministrativeDirective;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import de.bund.digitalservice.ris.search.models.opensearch.Literature;
 import java.util.ArrayList;
@@ -34,18 +36,25 @@ public class SortingTestArguments {
     int caseLawSize = CaseLawTestData.allDocuments.size();
     int literatureSize = LiteratureTestData.allDocuments.size();
     int normsSize = NormsTestData.allDocuments.size();
-    int combinedSize = caseLawSize + literatureSize + normsSize;
+    int administrativeDirectiveSize = AdministrativeDirectiveTestData.allDocuments.size();
+    int combinedSize = caseLawSize + literatureSize + normsSize + administrativeDirectiveSize;
 
+    Stream<String> withoutAdministrativeDirectives =
+        Stream.concat(
+            CaseLawTestData.allDocuments.stream().map(CaseLawDocumentationUnit::documentNumber),
+            LiteratureTestData.allDocuments.stream().map(Literature::documentNumber));
     List<String> sortedDocumentNumbers =
         Stream.concat(
-                CaseLawTestData.allDocuments.stream().map(CaseLawDocumentationUnit::documentNumber),
-                LiteratureTestData.allDocuments.stream().map(Literature::documentNumber))
+                withoutAdministrativeDirectives,
+                AdministrativeDirectiveTestData.allDocuments.stream()
+                    .map(AdministrativeDirective::documentNumber))
             .sorted()
             .toList();
+
     stream.add(
         Arguments.of(
             "documentNumber",
-            caseLawSize + literatureSize,
+            caseLawSize + literatureSize + administrativeDirectiveSize,
             jsonPath("$.member[*].item.documentNumber", Matchers.is(sortedDocumentNumbers)),
             null));
 
@@ -54,7 +63,7 @@ public class SortingTestArguments {
     stream.add(
         Arguments.of(
             "-documentNumber",
-            caseLawSize + literatureSize,
+            caseLawSize + literatureSize + administrativeDirectiveSize,
             jsonPath("$.member[*].item.documentNumber", Matchers.is(inverseSortedDocumentNumbers)),
             null));
 
@@ -70,6 +79,12 @@ public class SortingTestArguments {
                 .map(d -> d.firstPublicationDate().toString())
                 .sorted()
                 .toList());
+    List<String> administrativeDirectivesDates =
+        new ArrayList<>(
+            AdministrativeDirectiveTestData.allDocuments.stream()
+                .map(d -> d.citationDates().toString())
+                .sorted()
+                .toList());
     List<String> normsDates =
         new ArrayList<>(
             NormsTestData.allDocuments.stream()
@@ -82,6 +97,7 @@ public class SortingTestArguments {
             combinedSize,
             jsonPath("$.member[*].item.decisionDate", Matchers.is(caseLawDates)),
             jsonPath("$.member[*].item.firstPublicationDate", Matchers.is(literatureDates)),
+            jsonPath("$.member[*].item.citationDates", Matchers.is(administrativeDirectivesDates)),
             jsonPath("$.member[*].item.legislationDate", Matchers.is(normsDates))));
 
     List<String> invertedCaseLawDates = new ArrayList<>(caseLawDates);
@@ -90,12 +106,15 @@ public class SortingTestArguments {
     Collections.reverse(invertedLiteratureDates);
     List<String> invertedNormsDates = new ArrayList<>(normsDates);
     Collections.reverse(invertedNormsDates);
+    List<String> invertedAdminsitrativeDates = new ArrayList<>(administrativeDirectivesDates);
+    Collections.reverse(invertedAdminsitrativeDates);
     stream.add(
         Arguments.of(
             "-date",
             combinedSize,
             jsonPath("$.member[*].item.decisionDate", Matchers.is(invertedCaseLawDates)),
             jsonPath("$.member[*].item.firstPublicationDate", Matchers.is(invertedLiteratureDates)),
+            jsonPath("$.member[*].item.citationDates", Matchers.is(invertedAdminsitrativeDates)),
             jsonPath("$.member[*].item.legislationDate", Matchers.is(invertedNormsDates))));
 
     List<String> courtNames =
