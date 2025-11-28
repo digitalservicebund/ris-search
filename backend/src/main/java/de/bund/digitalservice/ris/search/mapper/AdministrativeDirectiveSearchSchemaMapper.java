@@ -99,6 +99,7 @@ public class AdministrativeDirectiveSearchSchemaMapper {
         .id(entityURI)
         .documentNumber(doc.documentNumber())
         .headline(doc.headline())
+        .shortReport(doc.shortReport())
         .entryIntoForceDate(doc.entryIntoEffectDate())
         .referenceNumbers(doc.referenceNumbers())
         .documentType(doc.documentType())
