@@ -32,6 +32,15 @@ import org.springframework.data.elasticsearch.core.mapping.IndexCoordinates;
 import org.springframework.data.elasticsearch.core.query.FetchSourceFilter;
 import org.springframework.stereotype.Service;
 
+/**
+ * Service class providing advanced search functionalities for multiple entity types using
+ * OpenSearch. This service facilitates performing search operations with pagination and
+ * highlighting support.
+ *
+ * <p>The service allows search across various indices, handling different types of entities like
+ * documents, case law, literature, and norms, leveraging the ElasticsearchOperations and custom
+ * utility classes for configurable and efficient operations.
+ */
 @Service
 public class AdvancedSearchService {
 
@@ -39,6 +48,16 @@ public class AdvancedSearchService {
   private final PageUtils pageUtils;
   private final IndexCoordinates allDocumentsIndex;
 
+  /**
+   * Constructs an instance of AdvancedSearchService which provides search capabilities for multiple
+   * entity types using OpenSearch. This service delegates operations to ElasticsearchOperations and
+   * utilizes configurations for determining index settings.
+   *
+   * @param operations the ElasticsearchOperations instance used for search operations.
+   * @param pageUtils utility class for handling pagination and search result mapping.
+   * @param configurations configuration provider for OpenSearch settings, including indices and
+   *     alias names.
+   */
   @Autowired
   public AdvancedSearchService(
       ElasticsearchOperations operations, PageUtils pageUtils, Configurations configurations) {
@@ -47,6 +66,15 @@ public class AdvancedSearchService {
     this.allDocumentsIndex = IndexCoordinates.of(configurations.getDocumentsAliasName());
   }
 
+  /**
+   * Executes a search query across multiple entity types in an OpenSearch index. The search results
+   * are paginated based on the provided Pageable object, and fields in the results may be
+   * highlighted based on the configuration.
+   *
+   * @param search the search query string. If null or empty, a match-all query is executed.
+   * @param pageable the pagination information defining the page size and index.
+   * @return a paginated list of search results containing a mix of different entity types.
+   */
   public SearchPage<AbstractSearchEntity> searchAll(String search, Pageable pageable) {
 
     HighlightBuilder highlightBuilder = RisHighlightBuilder.baseHighlighter();
@@ -64,6 +92,15 @@ public class AdvancedSearchService {
     return pageUtils.unwrapMixedSearchHits(searchResults, pageable);
   }
 
+  /**
+   * Executes a search query for CaseLawDocumentationUnit objects in an OpenSearch index. The search
+   * results are paginated based on the provided Pageable object, and fields in the results may be
+   * highlighted based on the configuration.
+   *
+   * @param search the search query string. If null or empty, a match-all query is executed.
+   * @param pageable the pagination information defining the page size and index.
+   * @return a paginated list of search results containing CaseLawDocumentationUnit objects.
+   */
   public SearchPage<CaseLawDocumentationUnit> searchCaseLaw(String search, Pageable pageable) {
 
     HighlightBuilder highlightBuilder = RisHighlightBuilder.baseHighlighter();
@@ -74,6 +111,15 @@ public class AdvancedSearchService {
         pageable);
   }
 
+  /**
+   * Executes a search query for Literature objects in an OpenSearch index. The search results are
+   * paginated based on the provided Pageable object, and fields in the results may be highlighted
+   * based on the configuration.
+   *
+   * @param search the search query string. If null or empty, a match-all query is executed.
+   * @param pageable the pagination information defining the page size and index.
+   * @return a paginated list of search results containing Literature objects.
+   */
   public SearchPage<Literature> searchLiterature(String search, Pageable pageable) {
 
     HighlightBuilder highlightBuilder = RisHighlightBuilder.baseHighlighter();
@@ -82,6 +128,15 @@ public class AdvancedSearchService {
         callOpenSearch(search, highlightBuilder, null, pageable, Literature.class), pageable);
   }
 
+  /**
+   * Executes a search query for Norm objects in an OpenSearch index. The search results are
+   * paginated based on the provided Pageable object, and fields in the results may be highlighted
+   * based on the configuration.
+   *
+   * @param search the search query string. If null or empty, a match-all query is executed.
+   * @param pageable the pagination information defining the page size and index.
+   * @return a paginated list of search results containing Norm objects.
+   */
   public SearchPage<Norm> searchNorm(String search, Pageable pageable) {
 
     HighlightBuilder highlightBuilder = RisHighlightBuilder.baseHighlighter();

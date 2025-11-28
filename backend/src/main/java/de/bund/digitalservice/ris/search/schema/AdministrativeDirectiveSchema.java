@@ -9,6 +9,17 @@ import java.util.List;
 import lombok.Builder;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * A data transfer object representing an administrative directive, designed according to schema.org
+ * conventions and annotated for JSON-LD compatibility.
+ *
+ * <p>This class encapsulates metadata and attributes describing an administrative directive. It
+ * includes fields such as document number, headline, document type, and references to related
+ * legislation or norms. Additional information about the directive's applicability, such as valid
+ * dates or issuing authorities, is also contained here.
+ *
+ * <p>The use of JSON-LD annotations ensures compatibility with linked data structures.
+ */
 @Builder
 @JsonldResource
 @JsonldType("AdministrativeDirective")

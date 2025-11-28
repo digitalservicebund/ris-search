@@ -6,6 +6,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
+/**
+ * Abstraction for an object storage backend.
+ *
+ * <p>Provides operations to list keys, read objects as streams, save and delete objects, upload
+ * streams and manage the client's lifecycle.
+ */
 public interface ObjectStorageClient {
   public List<String> listKeysByPrefix(String path);
 

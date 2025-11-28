@@ -8,6 +8,9 @@ import jakarta.xml.bind.Marshaller;
 import java.io.StringWriter;
 import org.springframework.stereotype.Service;
 
+/**
+ * Service for marshalling Sitemapindex and Sitemap objects into their XML string representations.
+ */
 @Service
 public class EcliMarshaller {
 
@@ -17,6 +20,13 @@ public class EcliMarshaller {
     jaxbCtx = JAXBContext.newInstance(Sitemapindex.class, Sitemap.class);
   }
 
+  /**
+   * Marshalls a Sitemapindex object into its XML representation as a string.
+   *
+   * @param index Sitemapindex object to be marshalled
+   * @return XML string representation of the Sitemapindex
+   * @throws JAXBException if an error occurs during marshalling
+   */
   public String marshallSitemapIndex(Sitemapindex index) throws JAXBException {
     StringWriter sw = new StringWriter();
     Marshaller m = jaxbCtx.createMarshaller();
@@ -29,6 +39,15 @@ public class EcliMarshaller {
     return sw.toString();
   }
 
+  /**
+   * Converts a Sitemap object into its XML representation as a string. This process involves
+   * marshalling using the JAXBContext and applies specific schema location and formatting
+   * properties.
+   *
+   * @param sitemap the Sitemap object to be converted into an XML string
+   * @return a string containing the XML representation of the provided Sitemap
+   * @throws JAXBException if an error occurs during the marshalling process
+   */
   public String marshallSitemap(Sitemap sitemap) throws JAXBException {
     StringWriter sw = new StringWriter();
     Marshaller m = jaxbCtx.createMarshaller();

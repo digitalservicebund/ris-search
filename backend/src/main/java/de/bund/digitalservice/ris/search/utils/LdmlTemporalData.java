@@ -24,20 +24,20 @@ import org.w3c.dom.Node;
  *
  * <pre>
  * Structure Overview:
- * - <akn:akomaNtoso>
- *   └── <akn:act>
- *       ├── <akn:meta>
- *       │   ├── <akn:lifecycle>
- *       │   │   └── <akn:eventRef>: Defines key legal events with associated dates.
- *       │   └── <akn:temporalData>
- *       │       └── <akn:temporalGroup>: Groups time intervals for legal validity.
- *       │           └── <akn:timeInterval>: References <akn:eventRef> elements via @start/@end attributes.
- *       └── <akn:body>
- *           └── <akn:article>: References a <akn:temporalGroup> using the @period attribute to define its validity.
+ * - akn:akomaNtoso
+ *   └── akn:act
+ *       ├── akn:meta
+ *       │   ├── akn:lifecycle
+ *       │   │   └── akn:eventRef: Defines key legal events with associated dates.
+ *       │   └── akn:temporalData
+ *       │       └── akn:temporalGroup: Groups time intervals for legal validity.
+ *       │           └── akn:timeInterval: References akn:eventRef elements via @start/@end attributes.
+ *       └── akn:body
+ *           └── akn:article: References a akn:temporalGroup using the @period attribute to define its validity.
  * </pre>
  *
  * Functionality: This class provides methods to map temporal group identifiers to their
- * corresponding dates as defined in the <akn:lifecycle> section.
+ * corresponding dates as defined in the akn:lifecycle section.
  */
 public class LdmlTemporalData {
 
@@ -53,6 +53,17 @@ public class LdmlTemporalData {
     throw new IllegalStateException("Utility class");
   }
 
+  /**
+   * Extracts and maps temporal group identifiers to their corresponding time intervals from the
+   * given XML document. The extracted data is structured into a map where each key represents a
+   * temporal group's identifier and the value is the associated {@code TimeInterval}.
+   *
+   * @param xmlDocument the XML document containing temporal group data and corresponding time
+   *     interval information
+   * @return a map where each key is a temporal group's identifier (as a string) and the value is a
+   *     {@code TimeInterval} object representing the start and end times for that group. Returns an
+   *     empty map if no valid temporal group data is found or in case of an error
+   */
   public static Map<String, TimeInterval> getTemporalDataWithDatesMapping(XmlDocument xmlDocument) {
     Map<String, TimeInterval> temporalGroupToIntervalMap = new HashMap<>();
     Map<String, String> eventRefMap = getEventRefMap(xmlDocument);

@@ -17,9 +17,35 @@ import de.bund.digitalservice.ris.search.schema.TextMatchSchema;
 import java.util.List;
 import org.springframework.data.elasticsearch.core.SearchPage;
 
+/**
+ * The {@code RisToNlexMapper} class provides a utility method to map search results related to
+ * legal norms into a structured request result format compliant with application-specific schemas.
+ *
+ * <p>This class operates on search results of type {@link SearchPage} containing instances of
+ * {@link Norm} and produces a {@link RequestResult} containing formatted document information,
+ * navigation details, and metadata based on provided inputs.
+ *
+ * <p>Functionality: - It processes the search results, extracting hit data to create documents. -
+ * The documents include references, content with titles, zoom paragraphs with roles, and external
+ * URLs mapped to the provided frontend URL. - It formulates a navigation object with request ID,
+ * total hit count, and pagination details, which are included in the resulting {@link
+ * RequestResult}.
+ *
+ * <p>Key Components: - {@link RequestResult}: Class representing the result of the mapping,
+ * encapsulating documents, navigation, and status information. - {@link SearchPage}
+ */
 public abstract class RisToNlexMapper {
   private RisToNlexMapper() {}
 
+  /**
+   * Transforms the given search results for norms into a {@link RequestResult} object, mapped
+   * according to the application's search schema.
+   *
+   * @param requestId the unique identifier for the request, used for navigation purposes
+   * @param frontendUrl the base URL for constructing external links to norms
+   * @param searchPage the paginated search results containing norms and associated metadata
+   * @return a {@link RequestResult} containing the mapped documents and navigation data
+   */
   public static RequestResult normsToNlexRequestResult(
       String requestId, String frontendUrl, SearchPage<Norm> searchPage) {
 

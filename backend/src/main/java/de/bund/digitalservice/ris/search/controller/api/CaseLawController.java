@@ -31,6 +31,21 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
+/**
+ * CaseLawController provides endpoints for managing and retrieving case law documentation in
+ * various formats such as JSON, HTML, XML, and ZIP, as well as specific file resources.
+ *
+ * <p>This controller is accessible in the "default", "staging", "uat", "test", and "prototype"
+ * profiles.
+ *
+ * <p>Endpoints include functionalities for: - Retrieving case law metadata - Rendering case law
+ * decisions as HTML or XML - Generating ZIP archives containing case law and related attachments -
+ * Fetching specific resources such as images or other attachments
+ *
+ * <p>Dependencies and services injected into this controller: - CaseLawService: Handles core
+ * operations for retrieving and managing case law data. - CaselawXsltTransformerService:
+ * Responsible for transforming case law content into HTML format using XSLT.
+ */
 @Tag(name = "Case Law")
 @RestController
 @Profile({"default", "staging", "uat", "test", "prototype"})
@@ -39,6 +54,12 @@ public class CaseLawController {
   private final CaseLawService caseLawService;
   private final CaselawXsltTransformerService xsltTransformerService;
 
+  /**
+   * Constructor for the CaseLawController class.
+   *
+   * @param caseLawService the service layer responsible for case law operations
+   * @param xsltTransformerService the service used for XSLT transformations related to case law
+   */
   @Autowired
   public CaseLawController(
       CaseLawService caseLawService, CaselawXsltTransformerService xsltTransformerService) {
@@ -46,6 +67,15 @@ public class CaseLawController {
     this.xsltTransformerService = xsltTransformerService;
   }
 
+  /**
+   * Retrieves decision metadata for a specific document number from the database.
+   *
+   * @param documentNumber The unique identifier of the decision for which metadata is requested.
+   *     Example: "STRE201770751".
+   * @return ResponseEntity containing the metadata of the decision wrapped in a {@link
+   *     CaseLawSchema} object if the document is found. Returns a 404 response if no decision is
+   *     found.
+   */
   @GetMapping(
       path = ApiConfig.Paths.CASELAW + "/{documentNumber}",
       produces = MediaType.APPLICATION_JSON_VALUE)
@@ -66,6 +96,15 @@ public class CaseLawController {
         .body(CaseLawSchemaMapper.fromDomain(unit));
   }
 
+  /**
+   * Renders and returns a case law decision as an HTML document.
+   *
+   * @param documentNumber the unique identifier for the case law document to be retrieved and
+   *     rendered as HTML
+   * @return a ResponseEntity containing the rendered HTML content if the document is found, or a
+   *     404 status if not found
+   * @throws ObjectStoreServiceException if an error occurs while accessing the object store
+   */
   @GetMapping(
       path = ApiConfig.Paths.CASELAW + "/{documentNumber}.html",
       produces = MediaType.TEXT_HTML_VALUE)
@@ -88,6 +127,16 @@ public class CaseLawController {
     }
   }
 
+  /**
+   * Retrieves a case law decision as an XML document using the provided document number.
+   *
+   * @param documentNumber The unique identifier for the case law decision, used to locate and
+   *     retrieve the corresponding XML content. For example, "STRE201770751".
+   * @return A ResponseEntity containing the XML content as a byte array if the document is found,
+   *     or a 404 Not Found response if the document does not exist.
+   * @throws ObjectStoreServiceException If an error occurs during the retrieval process from the
+   *     underlying storage service.
+   */
   @GetMapping(
       path = ApiConfig.Paths.CASELAW + "/{documentNumber}.xml",
       produces = MediaType.APPLICATION_XML_VALUE)
@@ -105,6 +154,14 @@ public class CaseLawController {
     return bytes.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
   }
 
+  /**
+   * Retrieves a case law decision and its associated attachments as a ZIP archive.
+   *
+   * @param documentNumber the unique identifier of the case law document to retrieve, e.g., a
+   *     document number like "STRE201770751"
+   * @return a ResponseEntity containing the ZIP file as a streaming response body if the document
+   *     is found, or a 404 Not Found response if no document matches the provided identifier
+   */
   @GetMapping(
       path = ApiConfig.Paths.CASELAW + "/{documentNumber}.zip",
       produces = "application/zip")
@@ -128,6 +185,22 @@ public class CaseLawController {
         .body(outputStream -> caseLawService.writeZipArchive(keys, outputStream));
   }
 
+  /**
+   * Retrieves a specific image resource for a particular caselaw based on the provided parameters.
+   *
+   * @param documentNumber the unique document number identifying the caselaw resource (e.g.,
+   *     "BDRE000800001")
+   * @param name the name of the image file (e.g., "image")
+   * @param extension the file extension of the image (e.g., "png", "jpg", "jpeg", "gif", "wmf",
+   *     "emf", or "bitmap")
+   * @return a {@code ResponseEntity} containing the requested image resource as a byte array and a
+   *     "Content-Type" header specifying the MIME type of the file; if the file is not found or the
+   *     extension is invalid, a {@code ResponseEntity} with a 404 status is returned
+   * @throws ObjectStoreServiceException if an error occurs while accessing the object storage
+   *     service
+   * @throws FileNotFoundException if the requested file is not found and the placeholder image
+   *     cannot be loaded
+   */
   @GetMapping(path = ApiConfig.Paths.CASELAW + "/{documentNumber}/{name}.{extension}")
   @Operation(
       summary = "Caselaw resource",

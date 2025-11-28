@@ -50,7 +50,29 @@ public class AllDocumentsSearchController {
     this.allDocumentsService = allDocumentsService;
   }
 
-  /** Search for documents in the OpenSearch index with filters */
+  /**
+   * Performs a global search and filtering operation on documents of various kinds (case law,
+   * legislation, and literature). This endpoint supports paginated, filtered, and sorted search
+   * results, allowing clients to query specific document types and apply sorting and pagination
+   * parameters.
+   *
+   * <p>Default sorting is by relevance, but it can be customized to sort by date. The endpoint
+   * supports multiple search parameters depending on the document kind.
+   *
+   * @param request Universal search parameters that apply to all document kinds.
+   * @param normsSearchParams Specific search parameters related to legislation documents.
+   * @param caseLawSearchParams Specific search parameters related to case law documents.
+   * @param literatureSearchParams Specific search parameters related to literature documents.
+   * @param administrativeDirectiveSearchParams Specific search parameters related to administrative
+   *     documents.
+   * @param sortParams Sorting parameters for ordering the search results.
+   * @param documentKind Optional filter indicating the kind of document to search for. Supported
+   *     values: R (case law), N (legislation), L (literature).
+   * @param paginationParams Pagination parameters such as page index and size.
+   * @return A ResponseEntity containing a paginated collection of search results.
+   * @throws CustomValidationException if there are validation errors with the provided input
+   *     parameters.
+   */
   @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   @Operation(
       summary = "Global search / list",

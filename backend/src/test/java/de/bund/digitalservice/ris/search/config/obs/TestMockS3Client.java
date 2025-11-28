@@ -32,6 +32,10 @@ import software.amazon.awssdk.services.s3.model.NoSuchKeyException;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import software.amazon.awssdk.services.s3.model.PutObjectResponse;
 
+/**
+ * TestMockS3Client is a mock implementation of the S3Client interface for testing purposes. It
+ * simulates S3 operations using a local file storage directory.
+ */
 public class TestMockS3Client extends MockS3Client implements S3Client {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(TestMockS3Client.class);
@@ -40,6 +44,12 @@ public class TestMockS3Client extends MockS3Client implements S3Client {
 
   private Map<String, byte[]> fileMap;
 
+  /**
+   * Constructs a TestMockS3Client with the specified bucket name and local storage directory.
+   *
+   * @param bucketname The name of the S3 bucket.
+   * @param relativeLocalStorageDirectory The relative path to the local storage directory.
+   */
   public TestMockS3Client(
       String bucketname, @Value("${local.file-storage}") String relativeLocalStorageDirectory) {
     super(bucketname);
@@ -64,6 +74,11 @@ public class TestMockS3Client extends MockS3Client implements S3Client {
     fileMap = null;
   }
 
+  /**
+   * Loads default files from the local storage directory into the file map.
+   *
+   * @throws IOException if an I/O error occurs reading the files
+   */
   public void loadDefaultFiles() throws IOException {
     fileMap = new HashMap<>();
     File bucket = localStorageDirectory.resolve(bucketname).toFile();

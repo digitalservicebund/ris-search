@@ -4,6 +4,18 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import ioinformarics.oss.jackson.module.jsonld.annotation.JsonldType;
 import java.util.List;
 
+/**
+ * Represents the structure of a table of contents entry, following the "TocEntry" JSON-LD type.
+ *
+ * <p>This schema is designed to allow hierarchical representation of document sections and their
+ * sub-sections. Each entry contains an identifier, a marker (e.g., numbering or bullet), a heading
+ * text, and optionally, a list of child entries representing nested structure.
+ *
+ * <p>Fields: - id: Unique identifier for the table of contents entry. - marker: A marker or
+ * numbering associated with this entry. - heading: The title or heading of the content associated
+ * with this entry. - children: A list of child entries forming a hierarchical structure under this
+ * entry.
+ */
 @JsonldType("TocEntry")
 public record TableOfContentsSchema(
     @Schema(example = "hauptteil-1_para-1") String id,

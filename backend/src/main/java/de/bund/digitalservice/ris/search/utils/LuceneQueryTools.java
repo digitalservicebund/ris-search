@@ -51,6 +51,20 @@ public class LuceneQueryTools {
   static final Pattern NO_MAPPING_FOUND_PATTERN =
       Pattern.compile("No mapping found for \\[([^]]+)] in order to sort on");
 
+  /**
+   * Checks for invalid sort queries in an Elasticsearch exception and throws a custom validation
+   * exception if necessary.
+   *
+   * <p>The method identifies if the exception contains a suppressed cause with an error message
+   * indicating that a sort parameter is unsupported due to missing mapping. If such a condition is
+   * met, a {@code CustomValidationException} is constructed and thrown with detailed error
+   * information.
+   *
+   * @param e An instance of {@code UncategorizedElasticsearchException} containing details of the
+   *     error encountered in Elasticsearch operation.
+   * @throws CustomValidationException If the exception indicates that sorting is not supported for
+   *     a given parameter due to missing mappings.
+   */
   public static void checkForInvalidQuery(UncategorizedElasticsearchException e)
       throws CustomValidationException {
     if (e.getCause() == null || e.getCause().getSuppressed().length == 0) {

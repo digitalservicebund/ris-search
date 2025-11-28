@@ -39,6 +39,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
+/** Controller responsible for handling literature-related endpoints. */
 @Tag(name = "Literature")
 @RestController
 @Profile({"default", "staging", "uat", "test", "prototype"})
@@ -47,6 +48,13 @@ public class LiteratureController {
   private final LiteratureService literatureService;
   private final LiteratureXsltTransformerService xsltTransformerService;
 
+  /**
+   * Constructor for LiteratureController.
+   *
+   * @param literatureService the service responsible for handling literature-related operations
+   * @param literatureXsltTransformerService the service responsible for performing XSLT
+   *     transformations for literature
+   */
   @Autowired
   public LiteratureController(
       LiteratureService literatureService,
@@ -55,6 +63,13 @@ public class LiteratureController {
     this.xsltTransformerService = literatureXsltTransformerService;
   }
 
+  /**
+   * Retrieves the metadata of a single literature by its document number.
+   *
+   * @param documentNumber the unique document number of the literature to fetch metadata for
+   * @return a ResponseEntity containing a LiteratureSchema object with the metadata if found, or a
+   *     404 Not Found response if the document number does not exist in the database
+   */
   @GetMapping(
       path = ApiConfig.Paths.LITERATURE + "/{documentNumber}",
       produces = MediaType.APPLICATION_JSON_VALUE)
@@ -75,6 +90,14 @@ public class LiteratureController {
         .body(LiteratureSchemaMapper.fromDomain(unit));
   }
 
+  /**
+   * Renders and returns a literature item as HTML.
+   *
+   * @param documentNumber the unique document number identifying the literature item
+   * @return a ResponseEntity containing the HTML content of the requested literature item if found,
+   *     or a 404 status if the item is not available
+   * @throws ObjectStoreServiceException if an error occurs while retrieving the literature item
+   */
   @GetMapping(
       path = ApiConfig.Paths.LITERATURE + "/{documentNumber}.html",
       produces = MediaType.TEXT_HTML_VALUE)
@@ -93,6 +116,15 @@ public class LiteratureController {
         .orElseGet(() -> ResponseEntity.notFound().build());
   }
 
+  /**
+   * Retrieves literature content in XML format based on the provided document number. The XML
+   * content can be used as a source for generating HTML output.
+   *
+   * @param documentNumber the unique identifier of the literature item to fetch in XML format
+   * @return a ResponseEntity containing the XML content as a byte array if found, or a
+   *     ResponseEntity with a 404 status if not found
+   * @throws ObjectStoreServiceException if an error occurs while retrieving the data
+   */
   @GetMapping(
       path = ApiConfig.Paths.LITERATURE + "/{documentNumber}.xml",
       produces = MediaType.APPLICATION_XML_VALUE)

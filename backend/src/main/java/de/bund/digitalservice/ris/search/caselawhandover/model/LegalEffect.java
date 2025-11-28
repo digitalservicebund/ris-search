@@ -14,6 +14,13 @@ public enum LegalEffect {
   KEINE_ANGABE,
   FALSCHE_ANGABE;
 
+  /**
+   * Converts extended values "true" and "false" to the corresponding enum values.
+   *
+   * @param value the string representation of the legal effect
+   * @return the corresponding LegalEffect enum value
+   * @throws IllegalArgumentException if the value does not match any enum constant
+   */
   public static LegalEffect extendedValueOf(String value) throws IllegalArgumentException {
     return switch (value) {
       case "true" -> LegalEffect.JA;

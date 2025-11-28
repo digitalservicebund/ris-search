@@ -8,6 +8,7 @@ import ioinformarics.oss.jackson.module.jsonld.annotation.JsonldType;
 import java.util.List;
 import lombok.Builder;
 
+/** A DTO for collections of resources, following schema.org naming guidelines. */
 @Builder
 @JsonldResource
 @JsonldType("hydra:Collection")

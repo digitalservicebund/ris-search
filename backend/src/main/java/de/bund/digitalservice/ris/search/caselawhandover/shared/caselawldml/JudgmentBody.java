@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+/** Represents the JudgmentBody element in the case law LDML format. */
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter

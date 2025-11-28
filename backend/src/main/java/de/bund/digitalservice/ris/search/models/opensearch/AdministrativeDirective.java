@@ -12,6 +12,23 @@ import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 import org.springframework.lang.Nullable;
 
+/**
+ * Represents an administrative directive within the system. This record is modeled to handle
+ * various metadata and details associated with administrative directives. It implements the {@code
+ * AbstractSearchEntity} interface to ensure compatibility with the search infrastructure.
+ *
+ * <p>Each administrative directive may consist of information such as document numbers, type,
+ * content, legislation authority, effective dates, referenced norms and caselaws, keywords, and
+ * associated legal fields.
+ *
+ * <p>Annotated with Elasticsearch indexing metadata, this record is designed for persistence and
+ * efficient querying in a search index.
+ *
+ * <p>Fields include: - Identification (ID and document number). - Metadata for classification and
+ * type details. - Content summaries and headline. - References to norms, caselaws, and related
+ * documents. - Effective and expiry dates for the directive. - Keywords and legal classifications
+ * associated with the directive. - Additional utility fields for indexing.
+ */
 @Builder
 @Document(indexName = "#{@configurations.getAdministrativeDirectiveIndexName()}")
 public record AdministrativeDirective(
@@ -47,6 +64,10 @@ public record AdministrativeDirective(
     @JsonIgnore @Field(name = AdministrativeDirective.Fields.INDEXED_AT) String indexedAt)
     implements AbstractSearchEntity {
 
+  /**
+   * Defines a collection of static constant field names used as keys for referencing and mapping
+   * specific properties of an administrative directive entity in a structured manner.
+   */
   public static class Fields {
     private Fields() {}
 

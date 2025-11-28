@@ -10,6 +10,15 @@ import java.util.List;
 import lombok.Builder;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * A schema definition for representing a part of a legislative expression, adhering to schema.org
+ * guidelines. This record encapsulates details about specific components of a legislative
+ * expression, including metadata such as unique identifiers, names, validity dates, and optional
+ * encoding information.
+ *
+ * <p>The legislation expression part schema helps to uniquely identify and describe specific
+ * elements within a broader legislative context.
+ */
 @Builder
 @JsonldResource
 @JsonldType("Legislation")

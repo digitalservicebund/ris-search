@@ -15,6 +15,7 @@ import lombok.Setter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+/** Represents an HTML element in JAXB format. */
 @Getter
 @Setter
 @NoArgsConstructor
@@ -32,6 +33,12 @@ public class JaxbHtml {
 
   @XmlAnyElement @XmlMixed private List<Object> html;
 
+  /**
+   * Builds a JaxbHtml object from a list of HTML content.
+   *
+   * @param html the list of HTML content
+   * @return a JaxbHtml object or null if the input is null, empty, or contains only null elements
+   */
   public static JaxbHtml build(List<Object> html) {
     if (html == null || html.isEmpty() || html.stream().allMatch(Objects::isNull)) {
       return null;

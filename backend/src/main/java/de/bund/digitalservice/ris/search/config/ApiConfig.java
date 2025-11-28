@@ -5,6 +5,16 @@ public class ApiConfig {
 
   private ApiConfig() {}
 
+  /**
+   * Class containing constants for various API endpoint paths.
+   *
+   * <p>The `Paths` class provides static string constants representing different API endpoints.
+   * These endpoints are organized under a base path (`/v1`) and include specific paths for
+   * accessing resources such as documents, case-laws, literature, feedback, legislation, advanced
+   * search functionalities, and other related services.
+   *
+   * <p>This class is a utility class and cannot be instantiated.
+   */
   public static class Paths {
     private Paths() {}
 

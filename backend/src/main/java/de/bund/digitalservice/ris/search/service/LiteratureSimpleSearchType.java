@@ -11,6 +11,7 @@ import org.opensearch.index.query.Operator;
 import org.opensearch.index.query.QueryBuilders;
 import org.opensearch.search.fetch.subphase.highlight.HighlightBuilder;
 
+/** Service class for interacting with the database and return the search results. */
 public class LiteratureSimpleSearchType implements SimpleSearchType {
 
   private static final List<String> LITERATURE_HIGHLIGHT_CONTENT_FIELDS =

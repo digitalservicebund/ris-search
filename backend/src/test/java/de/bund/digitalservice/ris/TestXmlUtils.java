@@ -26,10 +26,33 @@ import org.springframework.xml.transform.StringSource;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
+/**
+ * Test utility class providing XML helper functions.
+ *
+ * <p>Includes converting a DOM Document to a string, validating XML content against a
+ * JAXB-generated schema and trimming whitespace from XML strings. This class only exposes static
+ * methods and is not intended to be instantiated.
+ */
 public class TestXmlUtils {
   private static final TransformerFactory transformerFactory =
       new net.sf.saxon.TransformerFactoryImpl();
 
+  /**
+   * Private constructor to prevent instantiation of this utility class.
+   *
+   * <p>The class only provides static helper methods.
+   */
+  private TestXmlUtils() {
+    // prevent instantiation
+  }
+
+  /**
+   * Converts a DOM Document to its string representation.
+   *
+   * @param doc the DOM Document to convert
+   * @return the string representation of the XML document
+   * @throws FileTransformationException if an error occurs during transformation
+   */
   public static String toString(Document doc) {
     try {
       StringWriter writer = new StringWriter();
@@ -44,6 +67,7 @@ public class TestXmlUtils {
   /**
    * Validates the schema of an xml string to a given JAXBContext
    *
+   * @param content xml string
    * @param ctx JAXBContet
    */
   public static void validate(String content, JAXBContext ctx) {

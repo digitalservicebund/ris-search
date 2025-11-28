@@ -4,6 +4,10 @@ import jakarta.xml.bind.annotation.XmlSeeAlso;
 import lombok.NoArgsConstructor;
 import org.eclipse.persistence.oxm.annotations.XmlDiscriminatorNode;
 
+/**
+ * Abstract base class representing a block element in the AKN (Akoma Ntoso) format. This class
+ * serves as a parent for various specific block types such as Opinions, HeadNotes, Outlines, etc.
+ */
 @NoArgsConstructor
 @XmlDiscriminatorNode("@name")
 @XmlSeeAlso({

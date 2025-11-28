@@ -5,6 +5,10 @@ import jakarta.xml.bind.annotation.XmlElement;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * Represents an implicit reference within the context of administrative directives, providing
+ * details of how the reference is displayed and linked to norm and caselaw data.
+ */
 @Getter
 @Setter
 public class ImplicitReference {

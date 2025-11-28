@@ -31,6 +31,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+/** Utility class for XML processing, including XSLT transformations and NodeList manipulations. */
 public class XmlUtils {
   private XmlUtils() {}
 
@@ -40,6 +41,13 @@ public class XmlUtils {
   private static final DocumentBuilderFactory documentBuilderFactory = getDocumentBuilderFactory();
   private static final String HTML_TRANSFORMATION_ERROR = "Xml transformation error.";
 
+  /**
+   * Loads XSLT templates from a file in the classpath.
+   *
+   * @param filePath The path to the XSLT file in the classpath.
+   * @return The compiled XSLT templates.
+   * @throws FileTransformationException if an error occurs during loading or compilation.
+   */
   public static Templates getTemplates(String filePath) {
     try {
       ClassPathResource xsltResource = new ClassPathResource(filePath);
@@ -70,6 +78,13 @@ public class XmlUtils {
     }
   }
 
+  /**
+   * Converts a list of mixed Nodes and Strings to a NodeList.
+   *
+   * @param inputs The list containing Nodes and Strings.
+   * @return A NodeList representing the combined content.
+   * @throws MappingException if an unexpected type is encountered.
+   */
   public static NodeList jaxbParseToNodeList(List<Object> inputs) {
     try {
       Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
@@ -95,6 +110,13 @@ public class XmlUtils {
     }
   }
 
+  /**
+   * Converts an HTML string to a NodeList.
+   *
+   * @param html The HTML string to convert.
+   * @return A NodeList representing the HTML content.
+   * @throws MappingException if an error occurs during parsing.
+   */
   public static NodeList htmlStringToNodeList(String html) {
     try {
       String wrapped = "<wrapper>" + html + "</wrapper>";
@@ -107,6 +129,12 @@ public class XmlUtils {
     }
   }
 
+  /**
+   * Converts a NodeList to a List of Nodes.
+   *
+   * @param nodeList The NodeList to convert.
+   * @return A List containing the Nodes from the NodeList.
+   */
   public static List<Node> toList(NodeList nodeList) {
     // Needed because NodeList doesn't implement Iterable
     List<Node> nodes = new ArrayList<>();
@@ -116,6 +144,14 @@ public class XmlUtils {
     return nodes;
   }
 
+  /**
+   * Applies the given XSLT templates to the provided XML content string.
+   *
+   * @param templates The XSLT templates to apply.
+   * @param content The XML content as a string.
+   * @return The transformed XML content as a string.
+   * @throws MappingException if an error occurs during transformation.
+   */
   public static String xsltTransform(Templates templates, String content) {
     try {
       StringWriter xsltOutput = new StringWriter();

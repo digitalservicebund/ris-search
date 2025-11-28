@@ -10,6 +10,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+/** Represents the root element of a Case Law LDML document. */
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter

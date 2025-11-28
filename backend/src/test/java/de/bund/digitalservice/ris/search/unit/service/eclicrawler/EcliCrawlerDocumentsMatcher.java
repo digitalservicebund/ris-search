@@ -4,6 +4,10 @@ import de.bund.digitalservice.ris.search.models.opensearch.EcliCrawlerDocument;
 import java.util.List;
 import org.mockito.ArgumentMatcher;
 
+/**
+ * Custom ArgumentMatcher to compare two lists of EcliCrawlerDocument objects. This matcher checks
+ * for equality of the lists by comparing each EcliCrawlerDocument in order.
+ */
 public class EcliCrawlerDocumentsMatcher implements ArgumentMatcher<List<EcliCrawlerDocument>> {
   private final List<EcliCrawlerDocument> left;
 

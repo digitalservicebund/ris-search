@@ -31,6 +31,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+/** Service for indexing norms from an object storage bucket into an OpenSearch repository. */
 @Service
 public class IndexNormsService implements IndexService {
 
@@ -43,12 +44,23 @@ public class IndexNormsService implements IndexService {
   public static final LocalDate TIME_RELEVANCE_MIN = LocalDate.of(1, 1, 1);
   public static final LocalDate TIME_RELEVANCE_MAX = LocalDate.of(9999, 1, 1);
 
+  /**
+   * Constructor for IndexNormsService.
+   *
+   * @param normsBucket The NormsBucket instance for accessing norm files.
+   * @param normsRepository The NormsRepository instance for storing norms.
+   */
   @Autowired
   public IndexNormsService(NormsBucket normsBucket, NormsRepository normsRepository) {
     this.normsBucket = normsBucket;
     this.normsRepository = normsRepository;
   }
 
+  /**
+   * Reindexes all norms found in the norms bucket.
+   *
+   * @param startingTimestamp The timestamp to use for clearing old norms.
+   */
   public void reindexAll(String startingTimestamp) {
     DateUtils.avoidOpenSearchSubMillisecondDateBug();
     Set<WorkEli> workElis = getWorks(normsBucket.getAllKeysByPrefix("eli/").stream());
@@ -250,6 +262,11 @@ public class IndexNormsService implements IndexService {
     return (int) normsRepository.count();
   }
 
+  /**
+   * Counts the number of indexable documents (i.e., regulation texts) present in the norms bucket.
+   *
+   * @return The number of indexable documents in the norms bucket.
+   */
   public int getNumberOfIndexableDocumentsInBucket() {
     Set<ExpressionEli> norms =
         normsBucket.getAllKeysByPrefix("eli/").stream()

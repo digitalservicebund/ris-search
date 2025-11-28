@@ -13,6 +13,12 @@ public class PostHogService {
   private final PostHogClient postHogClient;
   private final PosthogProperties posthogProperties;
 
+  /**
+   * Constructs a PostHogService with the specified PostHog client and properties.
+   *
+   * @param postHogClient The PostHog client used to send feedback.
+   * @param posthogProperties The PostHog configuration properties.
+   */
   public PostHogService(PostHogClient postHogClient, PosthogProperties posthogProperties) {
     this.postHogClient = postHogClient;
     this.posthogProperties = posthogProperties;

@@ -19,6 +19,14 @@ public class RestClientConfigDev extends AbstractOpenSearchConfiguration {
   private final Configurations configurations;
   private final OpensearchSchemaSetup schemaSetup;
 
+  /**
+   * Initializes the RestClientConfigDev configuration to set up the REST client connection with
+   * OpenSearch and perform schema setup.
+   *
+   * @param configurationsOpensearch the configuration settings for OpenSearch, including host,
+   *     port, and other connection details
+   * @param schemaSetup the service for setting up and updating the OpenSearch schema
+   */
   @Autowired
   public RestClientConfigDev(
       Configurations configurationsOpensearch, OpensearchSchemaSetup schemaSetup) {

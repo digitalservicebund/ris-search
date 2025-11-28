@@ -4,6 +4,11 @@ import lombok.NonNull;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.data.domain.Sort;
 
+/**
+ * A utility class for converting sort strings into Spring Data's {@link Sort} objects. This class
+ * supports sorting by relevance and an alias for date fields, and also provides various handling
+ * for null values during sorting.
+ */
 public class SortParamsConverter {
 
   private SortParamsConverter() {}

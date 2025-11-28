@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+/** Represents the Meta element in a Case Law LDML document. */
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter

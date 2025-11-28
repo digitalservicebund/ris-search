@@ -90,11 +90,7 @@ class AllDocumentsSearchControllerMultiMatchAPITest extends ContainersIntegratio
     return jsonPath(jsonPath, Matchers.everyItem(Matchers.anyOf(matchers)));
   }
 
-  /**
-   * Asserts that there is a 1:1 match between the member IDs and values specified. Every value
-   * should be contained in the JSON exactly once (expressed by {@link
-   * Matchers::containsInAnyOrder}).
-   */
+  /** Asserts that all specified IDs are present in the result set. */
   static ResultMatcher idsContainAll(String... ids) {
     String jsonPath = "$.member[*].item['@id']";
     // the above expression produces a Map, with the ID in one of the values. Hence, the hasValue

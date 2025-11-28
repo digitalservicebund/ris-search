@@ -9,6 +9,11 @@ import java.time.LocalDate;
 import lombok.Builder;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * A record representing a legislation item that spans across different expressions and
+ * manifestations. This schema can provide context to a `LegislationExpression` through the
+ * `workExample` property.
+ */
 @Builder
 @JsonldResource
 @JsonldType("Legislation")

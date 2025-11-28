@@ -41,10 +41,22 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * Controller providing advanced search functionalities for multiple document types.
+ *
+ * <p>It includes endpoints for searching all documents, legislation, and case law using Lucene
+ * query syntax. The controller utilizes services to execute the searches and handle pagination and
+ * sorting.
+ */
 @RestController
 public class AdvancedSearchController {
   private final AdvancedSearchService advancedSearchService;
 
+  /**
+   * Constructs an instance of AdvancedSearchController with the provided services.
+   *
+   * @param advancedSearchService a service to advanced search
+   */
   @Autowired
   public AdvancedSearchController(AdvancedSearchService advancedSearchService) {
     this.advancedSearchService = advancedSearchService;
@@ -55,6 +67,7 @@ public class AdvancedSearchController {
    *
    * @param query The query filter based on Lucene query syntax
    * @param pagination Pagination parameters
+   * @param sortParams Sorting parameters
    * @return The search results
    * @throws CustomValidationException If the query is invalid
    */
@@ -95,9 +108,10 @@ public class AdvancedSearchController {
    *
    * @param query The query filter based on Lucene query
    * @param pagination Pagination parameters
-   * @return A JsonLd string of {@link CollectionSchema<SearchMemberSchema>} containing the
-   *     retrieved search results. Returns HTTP 200 (OK) and the search results data if found.
-   *     Returns HTTP 422 (Unprocessable Entity) if any request data information is wrong.
+   * @param sortParams Sorting parameters
+   * @return A JsonLd string containing the retrieved search results. Returns HTTP 200 (OK) and the
+   *     search results data if found. Returns HTTP 422 (Unprocessable Entity) if any request data
+   *     information is wrong.
    */
   @GetMapping(ApiConfig.Paths.LEGISLATION_ADVANCED_SEARCH)
   @Operation(summary = "Advanced search using Lucene query syntax", tags = "Legislation")
@@ -137,9 +151,10 @@ public class AdvancedSearchController {
    *
    * @param query The query filter based on Lucene query
    * @param pagination Pagination parameters
-   * @return A JsonLd String of {@link CollectionSchema<SearchMemberSchema>} containing the
-   *     retrieved search results. Returns HTTP 200 (OK) and the search results data if found.
-   *     Returns HTTP 422 (Unprocessable Entity) if any request data information is wrong.
+   * @param sortParams Sorting parameters
+   * @return A JsonLd String containing the retrieved search results. Returns HTTP 200 (OK) and the
+   *     search results data if found. Returns HTTP 422 (Unprocessable Entity) if any request data
+   *     information is wrong.
    */
   @GetMapping(ApiConfig.Paths.CASELAW_ADVANCED_SEARCH)
   @Operation(summary = "Advanced search using Lucene query syntax", tags = "Case Law")
@@ -177,8 +192,9 @@ public class AdvancedSearchController {
    *
    * @param query The query filter based on Lucene query
    * @param pagination Pagination parameters
-   * @return A JsonLd String of {@link CollectionSchema<SearchMemberSchema>} containing the
-   *     retrieved search results. Returns HTTP 200 (OK) and the search results data if found.
+   * @param sortParams Sorting parameters
+   * @return A JsonLd String of {@link CollectionSchema} of {@code SearchMemberSchema} containing
+   *     the retrieved search results. Returns HTTP 200 (OK) and the search results data if found.
    *     Returns HTTP 422 (Unprocessable Entity) if any request data information is wrong.
    */
   @GetMapping(ApiConfig.Paths.LITERATURE_ADVANCED_SEARCH)

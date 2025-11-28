@@ -8,6 +8,10 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.concurrent.ArrayBlockingQueue;
 
+/**
+ * Iterator implementation for retrieving lists of EcliCrawlerDocument objects that represent
+ * changed or deleted case law documents, based on provided identifiers and suppliers. *
+ */
 public class ChangedEcliCrawlerDocumentsIterator implements Iterator<List<EcliCrawlerDocument>> {
 
   ArrayBlockingQueue<EcliCrawlerDocument> ecliDocumentsBuffer;
@@ -17,11 +21,17 @@ public class ChangedEcliCrawlerDocumentsIterator implements Iterator<List<EcliCr
   List<String> deleted;
   final int resultSize;
 
+  /** Functional interface for supplying EcliCrawlerDocuments based on their identifier */
   @FunctionalInterface
   public interface Supplier {
     Optional<EcliCrawlerDocument> get(String id);
   }
 
+  /**
+   * Constructor
+   *
+   * @param changedSupplier Supplier for changed EcliCrawlerDocuments
+   */
   public ChangedEcliCrawlerDocumentsIterator(
       Supplier changedSupplier,
       Supplier deleteSupplier,

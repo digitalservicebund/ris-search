@@ -15,6 +15,7 @@ import de.bund.digitalservice.ris.search.schema.SearchMemberSchema;
 import java.util.List;
 import java.util.Objects;
 
+/** Utility class for JSON parsing and data extraction in tests. */
 public class TestJsonUtils {
 
   private static final TypeReference<CollectionSchema<SearchMemberSchema<AbstractDocumentSchema>>>
@@ -28,6 +29,13 @@ public class TestJsonUtils {
     return result;
   }
 
+  /**
+   * Parses a JSON string into a CollectionSchema containing SearchMemberSchema of
+   * AbstractDocumentSchema.
+   *
+   * @param jsonString the JSON string to parse
+   * @return the parsed CollectionSchema
+   */
   public static CollectionSchema<SearchMemberSchema<AbstractDocumentSchema>> parseJsonResult(
       String jsonString) {
     try {

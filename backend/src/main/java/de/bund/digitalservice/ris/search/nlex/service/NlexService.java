@@ -22,6 +22,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.core.SearchPage;
 import org.springframework.stereotype.Service;
 
+/**
+ * Service class responsible for processing and executing queries related to norms. This class
+ * provides functionalities to parse search terms, handle pagination, and return results based on
+ * search criteria.
+ */
 @Service
 public class NlexService {
 
@@ -29,6 +34,13 @@ public class NlexService {
 
   private final String frontendUrl;
 
+  /**
+   * Constructs an instance of the NlexService class, initializing it with the necessary
+   * dependencies.
+   *
+   * @param normsService the service used to perform operations related to norms
+   * @param frontendUrl the base URL for the frontend, which is concatenated with the "norms/" path
+   */
   public NlexService(
       NormsService normsService, @Value("${server.front-end-url}") String frontendUrl) {
     this.normsService = normsService;

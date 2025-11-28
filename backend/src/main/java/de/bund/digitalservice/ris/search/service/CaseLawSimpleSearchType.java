@@ -15,6 +15,7 @@ import org.opensearch.index.query.Operator;
 import org.opensearch.index.query.QueryBuilders;
 import org.opensearch.search.fetch.subphase.highlight.HighlightBuilder;
 
+/** Simple search type for case law. */
 public class CaseLawSimpleSearchType implements SimpleSearchType {
 
   private static final List<String> CASE_LAW_HIGHLIGHT_CONTENT_FIELDS =
@@ -54,6 +55,11 @@ public class CaseLawSimpleSearchType implements SimpleSearchType {
     return getHighlightedFieldsStatic();
   }
 
+  /**
+   * Gets the case law specific fields to highlight
+   *
+   * @return a list of the case law specific fields to highlight
+   */
   public static List<HighlightBuilder.Field> getHighlightedFieldsStatic() {
     Stream<HighlightBuilder.Field> contentFields =
         CASE_LAW_HIGHLIGHT_CONTENT_FIELDS.stream().map(HighlightBuilder.Field::new);

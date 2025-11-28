@@ -33,9 +33,25 @@ import javax.xml.transform.stream.StreamSource;
 import org.eclipse.persistence.exceptions.DescriptorException;
 import org.springframework.stereotype.Service;
 
+/**
+ * This service class is responsible for mapping `CaseLawLdml` instances to
+ * `CaseLawDocumentationUnit` entities, ensuring that data from the LDML format is accurately
+ * converted into the OpenSearch domain model.
+ *
+ * <p>The class contains methods for performing validation, data transformation, and consistent
+ * object creation necessary for indexing legal case data.
+ */
 @Service
 public class CaseLawLdmlToOpenSearchMapper {
 
+  /**
+   * Maps a {@link CaseLawLdml} object to a {@link CaseLawDocumentationUnit} entity. The method
+   * performs validation checks on mandatory fields and ensures all necessary data is present.
+   *
+   * @param caseLawLdml the input object containing case law data in LDML format
+   * @return an entity of type {@link CaseLawDocumentationUnit} containing the mapped information
+   * @throws ValidationException if any required fields in the input object are missing or invalid
+   */
   public CaseLawDocumentationUnit mapToEntity(CaseLawLdml caseLawLdml) throws ValidationException {
     validateNotNull(caseLawLdml.getJudgment(), "Judgment missing");
     Judgment judgment = caseLawLdml.getJudgment();
@@ -155,6 +171,15 @@ public class CaseLawLdmlToOpenSearchMapper {
     return MappingUtils.sanitizeHtmlFromString(html.toHtmlString());
   }
 
+  /**
+   * Converts a given LDML file content represented as a string into a {@link
+   * CaseLawDocumentationUnit}.
+   *
+   * @param ldmlFile the string representation of the LDML file to be converted
+   * @return a {@link CaseLawDocumentationUnit} instance created from the provided LDML file string
+   * @throws OpenSearchMapperException if the LDML file cannot be parsed into a {@link
+   *     CaseLawDocumentationUnit}
+   */
   public CaseLawDocumentationUnit fromString(String ldmlFile) {
     try {
       StreamSource ldmlStreamSource = new StreamSource(new StringReader(ldmlFile));

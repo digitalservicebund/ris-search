@@ -37,6 +37,14 @@ public class LiteratureService {
   private final ElasticsearchOperations operations;
   private final SimpleSearchQueryBuilder simpleSearchQueryBuilder;
 
+  /**
+   * Constructor for LiteratureService.
+   *
+   * @param literatureRepository Repository for literature data
+   * @param literatureBucket Bucket for literature files
+   * @param operations Elasticsearch operations for querying
+   * @param simpleSearchQueryBuilder Builder for simple search queries
+   */
   @SneakyThrows
   @Autowired
   public LiteratureService(

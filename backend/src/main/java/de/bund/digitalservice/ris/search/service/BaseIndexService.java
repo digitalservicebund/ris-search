@@ -15,6 +15,7 @@ import org.apache.commons.collections4.ListUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+/** Base class for index services. */
 public abstract class BaseIndexService<T> implements IndexService {
 
   private static final Integer IMPORT_BATCH_SIZE = 1000;
@@ -30,6 +31,16 @@ public abstract class BaseIndexService<T> implements IndexService {
     this.documentRepository = repository;
   }
 
+  /**
+   * Re-indexes all the indexable files and deletes old or null entities based on the provided
+   * starting timestamp. This method retrieves all files eligible for indexing, processes them, and
+   * performs cleanup operations by removing entities indexed before the given timestamp or with a
+   * null indexed value.
+   *
+   * @param startingTimestamp the timestamp used as a threshold for deleting entities. Entities
+   *     indexed before this timestamp or with a null indexed value will be removed.
+   * @throws ObjectStoreServiceException if an error occurs during the indexing or cleanup process.
+   */
   public void reindexAll(String startingTimestamp) throws ObjectStoreServiceException {
     DateUtils.avoidOpenSearchSubMillisecondDateBug();
     List<String> indexableFilenames = getAllIndexableFilenames();
@@ -37,6 +48,16 @@ public abstract class BaseIndexService<T> implements IndexService {
     deleteAllOldAndNullEntities(startingTimestamp);
   }
 
+  /**
+   * Processes a changelog to index or delete entities in the system. If the provided changelog
+   * indicates all items have changed, all entities are re-indexed. Otherwise, only the changed
+   * files are indexed, and the deleted files are removed from the index.
+   *
+   * @param changelog the changelog containing the sets of changed and deleted identifiers, as well
+   *     as the flag indicating whether all items have changed.
+   * @throws ObjectStoreServiceException if an issue occurs during the indexing or deletion
+   *     operations.
+   */
   public void indexChangelog(Changelog changelog) throws ObjectStoreServiceException {
     if (changelog.isChangeAll()) {
       reindexAll(Instant.now().toString());

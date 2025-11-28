@@ -15,6 +15,12 @@ import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
 
+/**
+ * Configuration for object storage clients used by the application.
+ *
+ * <p>Provides beans for S3-backed and local filesystem-backed ObjectStorageClient instances for
+ * different application profiles (production, staging, default, ...).
+ */
 @Configuration
 public class ObsConfig {
   public static final String REGION = "eu-de";
@@ -64,6 +70,15 @@ public class ObsConfig {
   @Value("${s3.file-storage.portal.secret-access-key}")
   private String portalSecretAccessKey;
 
+  /**
+   * Creates an {@code ObjectStorageClient} for the "norm" context, which interacts with an
+   * S3-compatible object storage service. This client is configured using specific credentials,
+   * endpoint details, region, and the associated bucket name.
+   *
+   * @param bucket the name of the S3 bucket to be used by this client
+   * @return an {@code ObjectStorageClient} configured for the "norm" context
+   * @throws URISyntaxException if the endpoint URI is invalid
+   */
   @Bean(name = "normS3Client")
   @Profile({"production", "staging", "uat", "prototype"})
   public ObjectStorageClient normS3Client(
@@ -79,6 +94,15 @@ public class ObsConfig {
         bucket);
   }
 
+  /**
+   * Creates an {@code ObjectStorageClient} for the "case law" context, which interacts with an
+   * S3-compatible object storage service. This client is configured using specific credentials,
+   * endpoint details, region, and the associated bucket name.
+   *
+   * @param bucket the name of the S3 bucket to be used by this client
+   * @return an {@code ObjectStorageClient} configured for the "case law" context
+   * @throws URISyntaxException if the endpoint URI is invalid
+   */
   @Bean(name = "caseLawS3Client")
   @Profile({"staging", "uat", "prototype"})
   public ObjectStorageClient caseLawS3Client(
@@ -94,6 +118,15 @@ public class ObsConfig {
         bucket);
   }
 
+  /**
+   * Creates an {@code ObjectStorageClient} for the "literature" context, which interacts with an
+   * S3-compatible object storage service. This client is configured using specific credentials,
+   * endpoint details, and the associated bucket name.
+   *
+   * @param bucket the name of the S3 bucket to be used by this client
+   * @return an {@code ObjectStorageClient} configured for the "literature" context
+   * @throws URISyntaxException if the endpoint URI is invalid
+   */
   @Bean(name = "literatureS3Client")
   @Profile({"staging"})
   public ObjectStorageClient literatureS3Client(
@@ -115,6 +148,15 @@ public class ObsConfig {
     return new ObjectStorageClientDummy();
   }
 
+  /**
+   * Creates an {@code ObjectStorageClient} for the "administrative-directive" context, which
+   * interacts with an S3-compatible object storage service. This client is configured using
+   * specific credentials, endpoint details, and the associated bucket name.
+   *
+   * @param bucket the name of the S3 bucket to be used by this client
+   * @return an {@code ObjectStorageClient} configured for the "administrative-directive" context
+   * @throws URISyntaxException if the endpoint URI is invalid
+   */
   @Bean(name = "administrativeDirectiveS3Client")
   @Profile({"staging"})
   public ObjectStorageClient administrativeDirectiveS3Client(
@@ -139,6 +181,15 @@ public class ObsConfig {
     return new ObjectStorageClientDummy();
   }
 
+  /**
+   * Creates an {@code ObjectStorageClient} for the "portal" context, which interacts with an
+   * S3-compatible object storage service. This client is configured using specific credentials,
+   * endpoint details, and the associated bucket name.
+   *
+   * @param bucket the name of the S3 bucket to be used by this client
+   * @return an {@code ObjectStorageClient} configured for the "portal" context
+   * @throws URISyntaxException if the endpoint URI is invalid
+   */
   @Bean(name = "portalS3Client")
   @Profile({"production", "staging", "uat", "prototype"})
   public ObjectStorageClient portalS3Client(
@@ -175,6 +226,15 @@ public class ObsConfig {
     return new LocalFilesystemObjectStorageClient("literature", relativeLocalStorageDirectory);
   }
 
+  /**
+   * Creates a mock implementation of the {@code ObjectStorageClient} for the
+   * "administrative-directive" context in a local environment. This mock client uses the local file
+   * system for object storage operations.
+   *
+   * @param relativeLocalStorageDirectory the relative path for the local storage directory
+   * @return a {@code LocalFilesystemObjectStorageClient} configured for the
+   *     "administrative-directive" context
+   */
   @Bean(name = "administrativeDirectiveS3Client")
   @Profile({"default"})
   public ObjectStorageClient mockAdministrativeDirectiveS3Client(

@@ -37,6 +37,7 @@ public class Application {
    * invoked with arguments defined in {@link ImportTaskProcessor} to run specific tasks instead.
    * Upon completion, the application will exit.
    *
+   * @param context the Spring ApplicationContext used to obtain the ImportTaskProcessor bean
    * @return A CommandLineRunner to be invoked with the given arguments.
    */
   @Bean

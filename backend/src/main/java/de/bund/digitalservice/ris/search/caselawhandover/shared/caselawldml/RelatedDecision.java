@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+/** Represents a related decision in the case law LDML format. */
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter

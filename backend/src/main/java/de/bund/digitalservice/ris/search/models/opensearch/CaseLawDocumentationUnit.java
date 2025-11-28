@@ -60,6 +60,15 @@ public record CaseLawDocumentationUnit(
     @JsonIgnore @Field(name = Fields.INDEXED_AT) String indexedAt,
     @Nullable @Field(name = Fields.ARTICLES) List<Article> articles)
     implements AbstractSearchEntity {
+
+  /**
+   * Utility class containing constant field names used for accessing and mapping the properties of
+   * the CaseLawDocumentationUnit class in a record or search entity. Each constant represents the
+   * name of a field within the CaseLawDocumentationUnit, which can be used for querying or
+   * persisting data.
+   *
+   * <p>This class is not meant to be instantiated.
+   */
   public static class Fields {
     private Fields() {}
 

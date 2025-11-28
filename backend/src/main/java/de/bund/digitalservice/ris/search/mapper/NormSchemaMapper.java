@@ -17,9 +17,24 @@ import java.util.List;
 import javax.annotation.Nullable;
 import org.springframework.http.MediaType;
 
+/**
+ * Utility class for mapping {@link Norm} domain objects to a {@link LegislationWorkSchema}. This
+ * class provides methods to transform legislative data into the corresponding schema structure used
+ * for legal work representations.
+ *
+ * <p>This class is non-instantiable, as it contains only static utility methods.
+ */
 public class NormSchemaMapper {
   private NormSchemaMapper() {}
 
+  /**
+   * Maps a {@link Norm} object to a {@link LegislationWorkSchema} object.
+   *
+   * @param norm the {@link Norm} instance to be converted; it contains all necessary fields such as
+   *     ELI references, metadata, and publication information.
+   * @return a {@link LegislationWorkSchema} object representing the input {@link Norm} with its
+   *     associated legal force, temporal coverage, and publication details.
+   */
   public static LegislationWorkSchema fromDomain(Norm norm) {
     String contentBaseUrl = ApiConfig.Paths.LEGISLATION + "/";
     String expressionEli = norm.getExpressionEli();

@@ -16,6 +16,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+/** Job for generating ECLI sitemaps. */
 @Service
 public class EcliSitemapJob implements Job {
 
@@ -34,6 +35,17 @@ public class EcliSitemapJob implements Job {
   public static final String LAST_PROCESSED_CHANGELOG = "eclicrawler/last_processed_changelog";
   private final String apiUrl;
 
+  /**
+   * Constructor for EcliSitemapJob.
+   *
+   * @param service EcliSitemapWriter service for writing sitemaps.
+   * @param portalBucket PortalBucket for storing portal-related files.
+   * @param caselawbucket CaseLawBucket for accessing case law data.
+   * @param indexJob CaseLawIndexSyncJob for synchronizing case law index.
+   * @param ecliCrawlerDocumentService EcliCrawlerDocumentService for handling ECLI crawler
+   *     documents.
+   * @param frontEndUrl Front-end URL from application properties.
+   */
   public EcliSitemapJob(
       EcliSitemapWriter service,
       PortalBucket portalBucket,
@@ -49,6 +61,11 @@ public class EcliSitemapJob implements Job {
     this.apiUrl = frontEndUrl + "v1/eclicrawler/";
   }
 
+  /**
+   * Runs the ECLI sitemap job.
+   *
+   * @return ReturnCode indicating the result of the job execution.
+   */
   public ReturnCode runJob() {
     if (!sitemapWriter.getSitemapFilesPathsForDay(today).isEmpty()) {
       logger.warn("day partition for ecli sitemap run already created");

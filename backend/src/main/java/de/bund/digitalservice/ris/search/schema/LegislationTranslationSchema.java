@@ -8,6 +8,7 @@ import ioinformarics.oss.jackson.module.jsonld.annotation.JsonldResource;
 import ioinformarics.oss.jackson.module.jsonld.annotation.JsonldType;
 import lombok.Builder;
 
+/** A DTO for legislation translations, following schema.org naming guidelines. */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Builder
 @JsonldResource

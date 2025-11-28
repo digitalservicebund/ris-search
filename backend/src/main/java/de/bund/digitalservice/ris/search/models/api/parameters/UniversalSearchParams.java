@@ -5,6 +5,14 @@ import java.time.LocalDate;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * Represents the parameters for performing a universal search across different entities.
+ *
+ * <p>This class allows specifying a search term and a date range to filter entities based on their
+ * relevance to the search term and/or their associated dates.
+ *
+ * <p>Fields: - `searchTerm`:
+ */
 @Setter
 @Getter
 public class UniversalSearchParams {

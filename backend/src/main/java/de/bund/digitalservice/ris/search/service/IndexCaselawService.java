@@ -9,11 +9,13 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+/** Service for indexing caselaw into OpenSearch. */
 @Service
 public class IndexCaselawService extends BaseIndexService<CaseLawDocumentationUnit> {
 
   private final CaseLawLdmlToOpenSearchMapper marshaller;
 
+  /** Constructor for IndexCaselawService. */
   @Autowired
   public IndexCaselawService(
       CaseLawBucket bucket,

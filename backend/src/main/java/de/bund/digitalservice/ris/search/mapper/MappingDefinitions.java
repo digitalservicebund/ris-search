@@ -6,6 +6,26 @@ import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * The MappingDefinitions class provides static mappings between schema-specific fields and their
+ * corresponding OpenSearch representation for different domains. Domains include case law, norms,
+ * and literature, with the possibility of using all mappings collectively.
+ *
+ * <p>This class is meant to be non-instantiable and is primarily used for utility purposes. It
+ * defines mappings in both directions (schema-to-OpenSearch and OpenSearch-to-schema) for various
+ * fields, aiding in data conversion and resolution tasks.
+ *
+ * <p>Key functionalities: - Static association of schema names and OpenSearch field names across
+ * multiple domains. - Utility methods to retrieve OpenSearch field names based on schema fields and
+ * a specified resolution mode.
+ *
+ * <p>Mappings for each domain and the combined mappings are statically initialized at the class
+ * level.
+ *
+ * <p>The class is organized around static variables categorized by domain, and these mappings are
+ * populated once during initialization. This ensures the mappings remain immutable through the
+ * lifetime of the application.
+ */
 public class MappingDefinitions {
   private MappingDefinitions() {}
 
@@ -103,6 +123,17 @@ public class MappingDefinitions {
     schemaToOpenSearchMap.putAll(literatureSchemaToOpenSearchMap);
   }
 
+  /**
+   * Maps a schema-specific name to its corresponding OpenSearch name based on the provided
+   * resolution mode.
+   *
+   * @param nameInSchema The name in the schema to be resolved to an OpenSearch name. Must not be
+   *     null.
+   * @param mode The resolution mode indicating the specific schema mapping to use. Must not be
+   *     null.
+   * @return The corresponding OpenSearch name for the given schema-specific name, or null if no
+   *     mapping exists.
+   */
   public static String getOpenSearchName(String nameInSchema, ResolutionMode mode) {
     return switch (mode) {
       case ALL -> schemaToOpenSearchMap.get(nameInSchema);
@@ -112,6 +143,20 @@ public class MappingDefinitions {
     };
   }
 
+  /**
+   * Enumeration representing different resolution modes for mapping definitions.
+   *
+   * <p>The ResolutionMode determines which specific mapping schema is used when retrieving or
+   * converting data between schemas and OpenSearch indices. Each enum constant corresponds to a
+   * distinct domain within the mapping definitions.
+   *
+   * <p>- ALL: Indicates that all mapping schemas are considered. - NORMS: Specific to norms-related
+   * schema mapping. - CASE_LAW: Specific to case law-related schema mapping. - LITERATURE: Specific
+   * to literature-related schema mapping.
+   *
+   * <p>The ResolutionMode is typically used in conjunction with mapping methods to specify the
+   * context or domain of the mapping operation.
+   */
   public enum ResolutionMode {
     ALL,
     NORMS,

@@ -16,6 +16,11 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+/**
+ * Processes import-related command-line tasks and dispatches them to the appropriate jobs.
+ *
+ * <p>Parses task targets from args and executes corresponding sync or update jobs.
+ */
 @Component
 public class ImportTaskProcessor {
 
@@ -33,6 +38,16 @@ public class ImportTaskProcessor {
 
   private static final String TASK_ARGUMENT = "--task";
 
+  /**
+   * Create an ImportTaskProcessor wired with the available job implementations.
+   *
+   * @param normIndexSyncJob job that syncs norms index
+   * @param caseLawIndexSyncJob job that syncs case law index
+   * @param sitemapsUpdateJob job that updates sitemaps
+   * @param literatureIndexSyncJob job that syncs literature index
+   * @param ecliSitemapJob job that generates ECLI sitemaps
+   * @param administrativeDirectiveUpdateJob job that syncs administrative directives
+   */
   @Autowired
   public ImportTaskProcessor(
       NormIndexSyncJob normIndexSyncJob,
@@ -53,6 +68,16 @@ public class ImportTaskProcessor {
     return Arrays.asList(args).contains(TASK_ARGUMENT);
   }
 
+  /**
+   * Executes a series of tasks based on the provided arguments, ensuring each task completes
+   * successfully before moving to the next. If any task returns an error code, the process halts,
+   * and the error code is returned.
+   *
+   * @param args the array of input arguments specifying the tasks to run and their targets
+   * @return the return code indicating the result of execution. Possible values include: - a
+   *     success code if all tasks complete successfully - an error code if an exception is thrown
+   *     or a task fails
+   */
   public int run(String[] args) {
     try {
       for (String target : parseTargets(args)) {
@@ -68,6 +93,16 @@ public class ImportTaskProcessor {
     }
   }
 
+  /**
+   * Parses target arguments from the provided list of input arguments. This method identifies all
+   * targets that follow instances of a specific task argument flag and returns them as a list. If a
+   * target is missing after a task argument, an exception is thrown.
+   *
+   * @param args the array of input arguments that may contain task argument flags followed by
+   *     target identifiers
+   * @return a list of target identifiers extracted from the input arguments
+   * @throws IllegalArgumentException if a task argument is not followed by a target
+   */
   @NotNull
   public static List<String> parseTargets(String[] args) {
     List<String> targets = new ArrayList<>();
@@ -89,6 +124,18 @@ public class ImportTaskProcessor {
     return job.runJob().getValue();
   }
 
+  /**
+   * Executes a specific task based on the provided target identifier. The target corresponds to
+   * predefined job types such as importing norms, case law, literature, administrative directives,
+   * or updating sitemaps.
+   *
+   * @param target the identifier of the task to execute. Expected values include: "import_norms",
+   *     "import_caselaw", "import_literature", "import_administrative_directive",
+   *     "update_sitemaps", and "generate_ecli_sitemaps".
+   * @return the return code of the executed job. Typically indicates the success or failure of a
+   *     task, with success represented by a specific constant.
+   * @throws IllegalArgumentException if the provided target is not recognized.
+   */
   public int runTask(String target) {
     return switch (target) {
       case "import_norms" -> runTask(normIndexSyncJob);

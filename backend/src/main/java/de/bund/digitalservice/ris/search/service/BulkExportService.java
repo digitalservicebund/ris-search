@@ -21,11 +21,21 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+/** Service for creating and managing bulk exports of objects from ObjectStorage. */
 @Service
 public class BulkExportService {
 
   private final Logger logger = LogManager.getLogger(BulkExportService.class);
 
+  /**
+   * Asynchronously creates a ZIP archive of all objects in the sourceBucket with the given prefix,
+   * uploads it to the destinationBucket, and deletes obsolete archives.
+   *
+   * @param sourceBucket the ObjectStorage bucket to read files from
+   * @param destinationBucket the ObjectStorage bucket to upload the ZIP archive to
+   * @param outputName the base name for the output ZIP file
+   * @param prefix the prefix to filter objects in the sourceBucket
+   */
   @Async
   public void updateExportAsync(
       ObjectStorage sourceBucket,
@@ -42,6 +52,19 @@ public class BulkExportService {
     }
   }
 
+  /**
+   * Creates a ZIP archive of all objects in the sourceBucket with the given prefix, uploads it to
+   * the destinationBucket, and deletes obsolete archives.
+   *
+   * @param sourceBucket the ObjectStorage bucket to read files from
+   * @param destinationBucket the ObjectStorage bucket to upload the ZIP archive to
+   * @param outputName the base name for the output ZIP file
+   * @param prefix the prefix to filter objects in the sourceBucket
+   * @throws IOException if an I/O error occurs during processing
+   * @throws ExecutionException if an error occurs during the upload process
+   * @throws InterruptedException if the thread is interrupted while waiting for upload completion
+   * @throws NoSuchKeyException if a specified key does not exist in the sourceBucket
+   */
   public void updateExport(
       ObjectStorage sourceBucket, ObjectStorage destinationBucket, String outputName, String prefix)
       throws IOException, ExecutionException, InterruptedException, NoSuchKeyException {

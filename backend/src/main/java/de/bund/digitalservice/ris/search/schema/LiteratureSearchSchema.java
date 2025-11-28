@@ -9,6 +9,21 @@ import java.util.List;
 import lombok.Builder;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * A record representing the schema for literature documents, used in document search contexts. The
+ * schema contains metadata and detailed information about literary works, including identifiers,
+ * publication details, authorship, language attributes, and document references.
+ *
+ * <p>The record implements the AbstractDocumentSchema interface, allowing for consistent handling
+ * within a polymorphic document search system.
+ *
+ * <p>Key properties include: - A unique identifier and document number. - Metadata about
+ * publication, including years, dates, and language attributes. - Lists of document types and
+ * references, distinguishing between dependent and independent ones. - Titles and alternative
+ * titles, with support for additions to the headline. - Authorship details, including authors,
+ * collaborators, and originators. - Information about conferences and notes related to the
+ * literature. - Encoding information for representations of the document in various formats.
+ */
 @Builder
 @JsonldResource
 @JsonldType("Literature")

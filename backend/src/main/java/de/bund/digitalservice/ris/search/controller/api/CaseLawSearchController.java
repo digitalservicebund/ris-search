@@ -57,6 +57,7 @@ public class CaseLawSearchController {
    * @param caseLawSearchParams Parameters to search with for case law.
    * @param universalSearchParams Parameters to search with for all document types.
    * @param paginationParams The number of entities and page index to request.
+   * @param sortParams Parameters to sort the results.
    * @return The search results
    */
   @GetMapping(path = ApiConfig.Paths.CASELAW, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -91,6 +92,14 @@ public class CaseLawSearchController {
     }
   }
 
+  /**
+   * Retrieves a list of courts with their long and short names and the number of associated
+   * decisions. The list can be filtered using an optional prefix parameter. Only includes courts
+   * whose decisions have been published in the database.
+   *
+   * @param prefix an optional parameter to filter courts by their name prefix; can be null
+   * @return a ResponseEntity containing a list of CourtSearchResult objects
+   */
   @GetMapping(
       path = ApiConfig.Paths.CASELAW + "/courts",
       produces = MediaType.APPLICATION_JSON_VALUE)

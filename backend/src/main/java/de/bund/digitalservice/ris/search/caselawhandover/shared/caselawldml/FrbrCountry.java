@@ -4,6 +4,7 @@ import jakarta.xml.bind.annotation.XmlAttribute;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+/** Represents the FRBRcountry element in the case law LDML format. */
 @NoArgsConstructor
 @Getter
 public class FrbrCountry {

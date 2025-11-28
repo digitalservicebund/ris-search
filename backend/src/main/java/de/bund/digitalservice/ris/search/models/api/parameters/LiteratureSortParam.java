@@ -5,6 +5,18 @@ import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * This class represents the sorting parameters for literature search queries.
+ *
+ * <p>The `sort` field determines the attribute by which the results should be sorted. By default,
+ * results are sorted based on the relevance score calculated by OpenSearch.
+ *
+ * <p>Valid options for the `sort` field include: - "date": Sort results by the date. -
+ * "documentNumber": Sort results by the document number. - "default" or leaving it unset: Sort
+ * results in descending order of relevance.
+ *
+ * <p>To sort in descending order, prepend a `-` to the field name (e.g., `-date`).
+ */
 @Data
 public class LiteratureSortParam {
   @Schema(

@@ -11,6 +11,12 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 
+/**
+ * Configures HTTP security for the application across different profiles.
+ *
+ * <p>Provides SecurityFilterChain beans for default/test, prototype/staging/uat and production
+ * environments. Common security headers and request authorization rules are applied here.
+ */
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
@@ -30,6 +36,14 @@ public class SecurityConfig {
     http.headers(headers -> headers.contentSecurityPolicy(csp -> csp.policyDirectives(cspHeader)));
   }
 
+  /**
+   * Configures and builds a security filter chain for the "default" and "test" profiles. This
+   * filter chain allows unrestricted access to all requests and applies common security headers.
+   *
+   * @param http the {@link HttpSecurity} object used to define security configurations
+   * @return a {@link SecurityFilterChain} instance representing the configured HTTP security filter
+   * @throws Exception if any error occurs during the configuration of the security filter chain
+   */
   @Bean
   @Profile({"default", "test"})
   public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
@@ -38,6 +52,16 @@ public class SecurityConfig {
     return http.build();
   }
 
+  /**
+   * Configures and builds a security filter chain for "prototype", "staging", and "uat" profiles.
+   * This filter chain applies authentication rules that permit access to certain internal paths and
+   * versioned API endpoints, while requiring authentication for all other requests. Additionally,
+   * common security headers are applied.
+   *
+   * @param http the {@link HttpSecurity} object used to define security configurations
+   * @return a {@link SecurityFilterChain} instance representing the configured HTTP security filter
+   * @throws Exception if any error occurs during the configuration of the security filter chain
+   */
   @Bean
   @Profile({"prototype", "staging", "uat"})
   public SecurityFilterChain prototypeSecurityFilterChain(HttpSecurity http) throws Exception {
@@ -59,6 +83,7 @@ public class SecurityConfig {
    * AuthenticationManagerResolver} to allow for usage of bearer tokens for certain requests.
    *
    * @param http The http security object
+   * @param apiKeyRequestMatcher The request matcher for API key authentication
    * @return The security filter chain
    * @throws Exception If an error occurs
    */

@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.eclipse.persistence.oxm.annotations.XmlDiscriminatorValue;
 
+/** Represents the Opinions element in the case law LDML format. */
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -18,6 +19,12 @@ public class Opinions extends AknBlock {
   @XmlElement(name = "opinion", namespace = CaseLawLdmlNamespaces.AKN_NS)
   private Opinion opinion;
 
+  /**
+   * Builds an Opinions object.
+   *
+   * @param content the list of content objects for the opinion
+   * @return an Opinions object or null if the content is null, empty, or all nulls
+   */
   public static Opinions build(List<Object> content) {
     if (content == null || content.isEmpty() || content.stream().allMatch(Objects::isNull)) {
       return null;

@@ -74,6 +74,12 @@ public class NormsController {
   private final NormsService normsService;
   private final NormXsltTransformerService xsltTransformerService;
 
+  /**
+   * Constructor for the NormsController class.
+   *
+   * @param normsService the service responsible for handling norms-related operations
+   * @param xsltTransformerService the service responsible for transforming norms using XSLT
+   */
   @Autowired
   public NormsController(
       NormsService normsService, NormXsltTransformerService xsltTransformerService) {
@@ -81,6 +87,19 @@ public class NormsController {
     this.xsltTransformerService = xsltTransformerService;
   }
 
+  /**
+   * Searches and filters legislation records based on provided parameters, such as search terms,
+   * temporal coverage, and sorting and pagination options. It returns the filtered and paginated
+   * collection of legislation records.
+   *
+   * @param normsSearchParams the search parameters specific to norms
+   * @param universalSearchParams general search parameters applicable to all document kinds
+   * @param pagination the pagination parameters defining page size and index
+   * @param sortParams the sorting parameters for ordering the results
+   * @return a filtered and paginated collection of legislation records encapsulated as {@code
+   *     CollectionSchema<SearchMemberSchema<LegislationWorkSearchSchema>>}
+   * @throws CustomValidationException if the provided search parameters fail validation
+   */
   @GetMapping(value = ApiConfig.Paths.LEGISLATION, produces = MediaType.APPLICATION_JSON_VALUE)
   @Operation(
       summary = "List and search legislation",
@@ -138,6 +157,19 @@ public class NormsController {
     }
   }
 
+  /**
+   * Retrieves the work and expression-level metadata of a legislation item.
+   *
+   * @param jurisdiction the jurisdiction to which the legal document belongs
+   * @param agent the agent responsible for the legal document
+   * @param year the year of issuance for the legal document
+   * @param naturalIdentifier an identifier for the legal document
+   * @param pointInTime the point in time representing the start of the validity of the document
+   * @param version the version of the document
+   * @param language the language of the document
+   * @return A {@code ResponseEntity} containing the {@code LegislationWorkSchema} with metadata if
+   *     found, or a {@code ResponseEntity} with a 404 status if no matching legislation is found.
+   */
   @GetMapping(
       path =
           ApiConfig.Paths.LEGISLATION_SINGLE
@@ -173,6 +205,26 @@ public class NormsController {
         .orElse(ResponseEntity.notFound().build());
   }
 
+  /**
+   * Retrieves a specific manifestation of a piece of legislation as HTML.
+   *
+   * <p>This method fetches and converts the requested legislation data into an HTML representation
+   * based on the specified parameters.
+   *
+   * @param jurisdiction the jurisdiction to which the legal document belongs
+   * @param agent the agent responsible for the legal document
+   * @param year the year of issuance for the legal document
+   * @param naturalIdentifier an identifier for the legal document
+   * @param pointInTime the point in time representing the start of the validity of the document
+   * @param version the version of the document
+   * @param language the language of the document
+   * @param pointInTimeManifestation the point in time the manifestation was generated
+   * @param subtype the subtype of the document
+   * @return A {@link ResponseEntity} containing the HTML representation of the requested
+   *     legislation if found, or a 404 error if not found.
+   * @throws ObjectStoreServiceException If an error occurs during the process of retrieving or
+   *     transforming the legislation.
+   */
   @GetMapping(
       path =
           ApiConfig.Paths.LEGISLATION_SINGLE
@@ -233,6 +285,23 @@ public class NormsController {
     }
   }
 
+  /**
+   * Retrieves a specific manifestation of legislation in XML format based on the provided
+   * parameters.
+   *
+   * @param jurisdiction the jurisdiction to which the legal document belongs
+   * @param agent the agent responsible for the legal document
+   * @param year the year of issuance for the legal document
+   * @param naturalIdentifier an identifier for the legal document
+   * @param pointInTime the point in time representing the start of the validity of the document
+   * @param version the version of the document
+   * @param language the language of the document
+   * @param pointInTimeManifestation the point in time the manifestation was generated
+   * @param subtype the subtype of the document
+   * @return a ResponseEntity containing the XML representation of the requested legal document, or
+   *     a 404 response if not found
+   * @throws ObjectStoreServiceException if there is an issue retrieving the document from storage
+   */
   @GetMapping(
       path =
           ApiConfig.Paths.LEGISLATION_SINGLE
@@ -292,6 +361,21 @@ public class NormsController {
         .orElseGet(() -> ResponseEntity.notFound().build());
   }
 
+  /**
+   * Returns a particular manifestation of a piece of legislation, including attachments, as a ZIP
+   * archive.
+   *
+   * @param jurisdiction the jurisdiction to which the legal document belongs
+   * @param agent the agent responsible for the legal document
+   * @param year the year of issuance for the legal document
+   * @param naturalIdentifier an identifier for the legal document
+   * @param pointInTime the point in time representing the start of the validity of the document
+   * @param version the version of the document
+   * @param language the language of the document
+   * @param pointInTimeManifestation the point in time the manifestation was generated
+   * @return a {@link ResponseEntity} containing a {@link StreamingResponseBody} with the ZIP file
+   *     if the relevant data exists; otherwise, a 404 NOT FOUND response is returned
+   */
   @GetMapping(
       path =
           ApiConfig.Paths.LEGISLATION_SINGLE
@@ -349,6 +433,25 @@ public class NormsController {
         .body(outputStream -> normsService.writeZipArchive(keys, outputStream));
   }
 
+  /**
+   * Retrieves a specific article (§) of a particular manifestation of a piece of legislation and
+   * returns it as an HTML representation.
+   *
+   * @param jurisdiction the jurisdiction to which the legal document belongs
+   * @param agent the agent responsible for the legal document
+   * @param year the year of issuance for the legal document
+   * @param naturalIdentifier an identifier for the legal document
+   * @param pointInTime the point in time representing the start of the validity of the document
+   * @param version the version of the document
+   * @param language the language of the document
+   * @param pointInTimeManifestation the point in time the manifestation was generated
+   * @param subtype the subtype of the document
+   * @param articleEid The identifier that denotes the specific article (§) within the legislation.
+   * @return A {@link ResponseEntity} containing the HTML representation of the requested article
+   *     (§), or a "404 Not Found" response if the article cannot be found.
+   * @throws ObjectStoreServiceException If an error occurs while accessing the legislation data or
+   *     transforming it.
+   */
   @GetMapping(
       path =
           ApiConfig.Paths.LEGISLATION_SINGLE
@@ -409,6 +512,26 @@ public class NormsController {
         .orElseGet(() -> ResponseEntity.notFound().build());
   }
 
+  /**
+   * Retrieves a specific resource related to a particular manifestation of a piece of legislation.
+   * This resource is identified by several path parameters, including jurisdiction, agent, year,
+   * natural identifier, point in time, version, language, and extension, among others.
+   *
+   * @param jurisdiction the jurisdiction to which the legal document belongs
+   * @param agent the agent responsible for the legal document
+   * @param year the year of issuance for the legal document
+   * @param naturalIdentifier an identifier for the legal document
+   * @param pointInTime the point in time representing the start of the validity of the document
+   * @param version the version of the document
+   * @param language the language of the document
+   * @param pointInTimeManifestation the point in time the manifestation was generated
+   * @param name the name of the target resource
+   * @param extension the file extension of the resource (e.g., pdf, xml, jpg, gif)
+   * @return a ResponseEntity containing the file as a byte array if found, with the appropriate
+   *     content type set in the headers. If the resource is not found or the extension is invalid,
+   *     returns a 404 (not found) response.
+   * @throws ObjectStoreServiceException if an error occurs while accessing the object store service
+   */
   @GetMapping(
       path =
           ApiConfig.Paths.LEGISLATION_SINGLE

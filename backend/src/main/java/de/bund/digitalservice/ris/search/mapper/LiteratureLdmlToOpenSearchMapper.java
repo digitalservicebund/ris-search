@@ -38,10 +38,37 @@ import javax.xml.transform.stream.StreamSource;
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.persistence.exceptions.DescriptorException;
 
+/**
+ * Utility class responsible for mapping LDML (Legal Document Markup Language) string
+ * representations into {@link Literature} entities for indexing and retrieval purposes. The mapping
+ * process includes parsing, validation, and transformations to ensure compatibility with the
+ * structure used in OpenSearch. This class primarily focuses on extracting various attributes from
+ * an LDML input and translating these into the appropriate {@link Literature} object format.
+ *
+ * <p>The class contains a set of private static helper methods to extract, parse, and validate
+ * specific fields, such as document number, years of publication, references, titles, authors,
+ * collaborators, languages, and more, from the LDML input. These methods support the primary
+ * mapping method {@code mapLdml(String ldmlString)}.
+ *
+ * <p>Note: The class is designed with a private constructor to prevent instantiation, as all
+ * functionality is provided through static methods.
+ */
 public class LiteratureLdmlToOpenSearchMapper {
 
   private LiteratureLdmlToOpenSearchMapper() {}
 
+  /**
+   * Maps a given LDML (Legal Document Markup Language) string representation to a {@link
+   * Literature} entity. The method unmarshals the input string into a {@code LiteratureLdml} object
+   * and converts it into a {@code Literature} record. In case of errors during parsing or
+   * validation, a custom exception is thrown.
+   *
+   * @param ldmlString the LDML string representation of a literature document, expected to conform
+   *     to the predefined schema
+   * @return an instance of {@link Literature} containing the mapped data from the input LDML string
+   * @throws OpenSearchMapperException if the LDML string cannot be parsed or mapped to a {@code
+   *     Literature} entity
+   */
   public static Literature mapLdml(String ldmlString) {
     try {
       StreamSource ldmlStreamSource = new StreamSource(new StringReader(ldmlString));

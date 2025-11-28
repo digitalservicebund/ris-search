@@ -35,12 +35,31 @@ public class SitemapController {
   public final PortalBucket portalBucket;
   public final SitemapService sitemapService;
 
+  /**
+   * Constructs a SitemapController instance and initializes the required dependencies.
+   *
+   * @param sitemapService The service responsible for handling sitemap-related operations.
+   * @param portalBucket The portal bucket interface used for retrieving sitemap files from the
+   *     storage.
+   */
   @Autowired
   public SitemapController(SitemapService sitemapService, PortalBucket portalBucket) {
     this.portalBucket = portalBucket;
     this.sitemapService = sitemapService;
   }
 
+  /**
+   * Retrieves a specific sitemap file for norms or caselaw based on the provided type and filename.
+   *
+   * @param type The type of the sitemap (e.g., "norms", "caselaw"). Determines the category of the
+   *     sitemap.
+   * @param filename The name of the sitemap file (e.g., "index" for the index sitemap or a batch
+   *     number filename).
+   * @return A ResponseEntity containing the sitemap file as a byte array if found. Returns HTTP 200
+   *     (OK) if the file is available, or HTTP 404 (Not Found) if the file does not exist.
+   * @throws ObjectStoreServiceException If an error occurs while retrieving the sitemap file from
+   *     the object store.
+   */
   @GetMapping(
       path = ApiConfig.Paths.SITEMAP + "/{type}/{filename}.xml",
       produces = MediaType.APPLICATION_XML_VALUE)
