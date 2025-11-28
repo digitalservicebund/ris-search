@@ -201,3 +201,7 @@ export enum DocumentKind {
 
   All = "A",
 }
+
+export type Statistics = {
+  [K in "case-law" | "legislation" | "literature"]: { count: number };
+};
