@@ -3,14 +3,18 @@ import { RisAutoComplete } from "@digitalservicebund/ris-ui/components";
 import _ from "lodash";
 import type { AutoCompleteDropdownClickEvent } from "primevue/autocomplete";
 import useBackendUrl from "~/composables/useBackendUrl";
-import { useSimpleSearchParamsStore } from "~/stores/searchParams";
 import { DocumentKind } from "~/types";
 import { courtFilterDefaultSuggestions } from "~/utils/search/courtFilter";
 
-const store = useSimpleSearchParamsStore();
+const props = defineProps<{
+  /** Current category filter value */
+  category?: string;
+}>();
+
+const model = defineModel<string | undefined>();
 
 const isCaseLaw = computed(() =>
-  store.category?.startsWith(DocumentKind.CaseLaw),
+  props.category?.startsWith(DocumentKind.CaseLaw),
 );
 
 type CourtSearchResult = { id: string; label: string; count?: number };
@@ -44,9 +48,9 @@ const onComplete = (
   if (event.query) {
     // normal search for entered prefix
     searchDebounced(event.query);
-  } else if (store.court) {
+  } else if (model.value) {
     // user has already made a selection, use that as the prefix
-    searchDebounced(store.court);
+    searchDebounced(model.value);
   } else {
     // dropdown was opened without any text entered or value pre-selected
     // a copy of the default suggestions is required since the loading
@@ -78,7 +82,7 @@ const autoComplete = ref<typeof RisAutoComplete | null>(null);
   <InputField v-if="isCaseLaw" id="courtFilter" v-slot="{ id }" label="Gericht">
     <RisAutoComplete
       ref="autoComplete"
-      v-model="store.court"
+      v-model="model"
       typeahead
       dropdown
       dropdown-mode="blank"

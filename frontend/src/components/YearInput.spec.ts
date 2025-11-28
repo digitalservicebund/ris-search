@@ -78,7 +78,7 @@ describe("YearInput", () => {
     await nextTick();
 
     expect(input).toHaveValue("2024");
-    expect(emitted()["update:modelValue"]).toEqual([["2024"]]);
+    expect(emitted("update:modelValue")).toEqual([["2024"]]);
   });
 
   it("does not emit model update for incomplete input", async () => {
@@ -93,7 +93,7 @@ describe("YearInput", () => {
     await nextTick();
 
     expect(input).toHaveValue("202");
-    expect(emitted()["update:modelValue"]).toBeFalsy();
+    expect(emitted("update:modelValue")).toBeFalsy();
   });
 
   it("emits undefined when input is cleared", async () => {
@@ -109,7 +109,7 @@ describe("YearInput", () => {
     await userEvent.clear(input);
     await nextTick();
 
-    expect(emitted()["update:modelValue"]).toEqual([[undefined]]);
+    expect(emitted("update:modelValue")).toEqual([[undefined]]);
   });
 
   it("updates when the model is changed to empty string", async () => {

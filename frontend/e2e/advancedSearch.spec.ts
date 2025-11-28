@@ -218,6 +218,38 @@ test.describe("general advanced search page features", () => {
 
     await expect(searchResults).toHaveText([/FrSaftErfrischV/]);
   });
+
+  test("restores search state when navigating back from a different route", async ({
+    page,
+  }) => {
+    await navigate(page, "/advanced-search");
+
+    await searchFor(page, {
+      q: 'AZ:"KL 1234/56"',
+      documentKind: "Gerichtsentscheidungen",
+    });
+
+    const searchResults = getSearchResults(page);
+
+    await expect(searchResults).toHaveText(/KL 1234\/56/);
+
+    await page.getByRole("link", { name: "Datenschutzerklärung" }).click();
+
+    await expect(
+      page.getByRole("heading", {
+        level: 1,
+        name: "Datenschutzerklärung",
+      }),
+    ).toBeVisible();
+
+    await page.goBack();
+
+    await expect(
+      page.getByRole("textbox", { name: "Suchanfrage" }),
+    ).toHaveValue('AZ:"KL 1234/56"');
+
+    await expect(searchResults).toHaveText(/KL 1234\/56/);
+  });
 });
 
 test.describe("searching legislation", () => {

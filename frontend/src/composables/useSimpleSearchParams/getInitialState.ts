@@ -1,11 +1,11 @@
 import _ from "lodash";
 import { dateSearchFromQuery, DateSearchMode } from "./dateParams";
+import type { QueryParams } from "./useSimpleSearchParams";
 import type {
   LocationQuery,
   LocationQueryRaw,
   LocationQueryValue,
 } from "#vue-router";
-import type { QueryParams } from "~/stores/searchParams/index";
 import { DocumentKind } from "~/types";
 
 export const defaultParams: QueryParams = {
@@ -47,6 +47,7 @@ function getFirstValue(
 ): string | undefined {
   return (Array.isArray(value) ? value[0] : value) ?? undefined;
 }
+
 export const getInitialState = (routerQuery: LocationQuery): QueryParams => {
   return {
     query: getFirstValue(routerQuery.query) ?? defaultParams.query,

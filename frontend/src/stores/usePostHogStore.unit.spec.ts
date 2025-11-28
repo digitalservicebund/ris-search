@@ -3,8 +3,8 @@ import { createPinia, setActivePinia } from "pinia";
 import type { PostHog } from "posthog-js";
 import posthog from "posthog-js";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { QueryParams } from "~/stores/searchParams";
-import { addDefaults } from "~/stores/searchParams/getInitialState";
+import { addDefaults } from "~/composables/useSimpleSearchParams/getInitialState";
+import type { QueryParams } from "~/composables/useSimpleSearchParams/useSimpleSearchParams";
 import { usePostHogStore } from "~/stores/usePostHogStore";
 import { getPostHogConfig } from "~/tests/postHogUtils";
 

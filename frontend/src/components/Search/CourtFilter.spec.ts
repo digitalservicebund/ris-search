@@ -1,137 +1,142 @@
-import { mountSuspended } from "@nuxt/test-utils/runtime";
-import { flushPromises } from "@vue/test-utils";
-import type { VueWrapper } from "@vue/test-utils";
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { renderSuspended } from "@nuxt/test-utils/runtime";
+import userEvent from "@testing-library/user-event";
+import { screen, waitFor } from "@testing-library/vue";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import CourtFilter from "~/components/Search/CourtFilter.vue";
-import { useSimpleSearchParamsStore } from "~/stores/searchParams";
-import { setStoreValues } from "~/tests/piniaUtils";
 import { DocumentKind } from "~/types";
 import { courtFilterDefaultSuggestions } from "~/utils/search/courtFilter";
 
 const mockData = [{ id: "TG Berlin", label: "Tagesgericht Berlin", count: 1 }];
+
 const mockFetch = vi.fn().mockResolvedValue(mockData);
+
 vi.stubGlobal("$fetch", mockFetch);
 
-interface AutoCompleteStub {
-  suggestions: typeof mockData;
-  modelValue: (typeof mockData)[0];
-}
-
-async function getWrapper() {
-  return await mountSuspended(CourtFilter, {
-    global: {
-      stubs: {
-        AutoComplete: true,
-      },
-    },
-  });
-}
-
-async function flushSearchDebounced(wrapper: VueWrapper) {
-  await (
-    wrapper as VueWrapper<{
-      searchDebounced: { flush: () => Promise<void> };
-    }>
-  ).vm.searchDebounced.flush(); // run immediately
-}
-
 describe("court autocomplete", () => {
+  afterEach(() => mockFetch.mockClear());
+
   it("is not visible by default", async () => {
-    const wrapper = await getWrapper();
-    expect(wrapper.findComponent("auto-complete-stub").exists()).toBe(false);
+    await renderSuspended(CourtFilter, {
+      props: { category: undefined },
+    });
+
+    expect(screen.queryByLabelText("Gericht")).not.toBeInTheDocument();
   });
 
-  describe("when documentKind is set to CaseLaw", async () => {
-    beforeEach(async () => {
-      await setStoreValues({
-        category: DocumentKind.CaseLaw,
+  it("is not visible for non-CaseLaw categories", async () => {
+    await renderSuspended(CourtFilter, {
+      props: { category: DocumentKind.Norm },
+    });
+
+    expect(screen.queryByLabelText("Gericht")).not.toBeInTheDocument();
+  });
+
+  describe("when category is set to CaseLaw", () => {
+    it("renders an empty input field", async () => {
+      await renderSuspended(CourtFilter, {
+        props: { category: DocumentKind.CaseLaw },
       });
-    });
-    afterEach(() => mockFetch.mockClear());
 
-    it("renders an empty field if nothing is set", async () => {
-      const wrapper = await getWrapper();
-      expect(wrapper.find("auto-complete-stub").exists()).toBe(true);
+      const input = screen.getByRole("combobox");
+      expect(input).toBeInTheDocument();
+      expect(input).toHaveValue("");
     });
 
-    it("calls the API with the typed prefix and sets the results", async () => {
-      const wrapper = await getWrapper();
-      const autoComplete = wrapper.findComponent(
-        "auto-complete-stub",
-      ) as VueWrapper<AutoCompleteStub>;
-      autoComplete.vm.$emit("complete", { query: "a" });
-      expect(mockFetch).not.toHaveBeenCalled();
-      await flushSearchDebounced(wrapper);
-      expect(mockFetch).toHaveBeenCalledWith(
-        expect.anything(),
-        expect.objectContaining({ params: { prefix: "a" } }),
-      );
+    it("displays the passed model value", async () => {
+      const courtId = mockData[0]?.id;
+      await renderSuspended(CourtFilter, {
+        props: {
+          category: DocumentKind.CaseLaw,
+          modelValue: courtId,
+        },
+      });
 
-      expect(autoComplete.vm.suggestions).toStrictEqual(mockData);
+      const input = screen.getByRole("combobox");
+      expect(input).toHaveValue(courtId);
     });
 
-    describe("when the dropdown is invoked", async () => {
-      it("fetches results with the current value, if one is set", async () => {
-        await setStoreValues({ court: "some court" });
-        const wrapper = await getWrapper();
-        const autoComplete = wrapper.findComponent(
-          "auto-complete-stub",
-        ) as VueWrapper<AutoCompleteStub>;
-        autoComplete.vm.$emit("complete", {});
-        await flushSearchDebounced(wrapper);
+    it("calls the API when typing and shows suggestions", async () => {
+      const user = userEvent.setup();
+
+      await renderSuspended(CourtFilter, {
+        props: { category: DocumentKind.CaseLaw },
+      });
+
+      const input = screen.getByRole("combobox");
+      await user.type(input, "Ber");
+
+      await waitFor(() => {
         expect(mockFetch).toHaveBeenCalledWith(
           expect.anything(),
-          expect.objectContaining({
-            params: {
-              prefix: "some court",
-            },
-          }),
+          expect.objectContaining({ params: { prefix: "Ber" } }),
         );
-        await flushPromises();
-
-        expect(autoComplete.vm.suggestions).toStrictEqual(mockData);
       });
 
-      it("uses default suggestions, if no court is set", async () => {
-        const store = useSimpleSearchParamsStore();
-        store.$reset();
-        store.category = DocumentKind.CaseLaw;
-        await nextTick();
-        const wrapper = await getWrapper();
-        const autoComplete = wrapper.findComponent(
-          "auto-complete-stub",
-        ) as VueWrapper<AutoCompleteStub>;
-        autoComplete.vm.$emit("complete", {});
-        await flushPromises();
+      expect(screen.getByText("Tagesgericht Berlin")).toBeInTheDocument();
+    });
+
+    it("shows default suggestions when dropdown is opened without input", async () => {
+      const user = userEvent.setup();
+
+      await renderSuspended(CourtFilter, {
+        props: { category: DocumentKind.CaseLaw },
+      });
+
+      await user.click(
+        screen.getByRole("button", {
+          name: "Vorschläge anzeigen",
+        }),
+      );
+
+      // Default suggestions should appear without API call
+      await waitFor(() => {
         expect(mockFetch).not.toHaveBeenCalled();
+      });
 
-        expect(autoComplete.vm.suggestions).toStrictEqual(
-          courtFilterDefaultSuggestions,
+      // Check that default suggestions are shown
+      for (const suggestion of courtFilterDefaultSuggestions) {
+        expect(screen.getByText(suggestion.label)).toBeInTheDocument();
+      }
+    });
+
+    it("emits update when selecting a suggestion", async () => {
+      const user = userEvent.setup();
+
+      const { emitted } = await renderSuspended(CourtFilter, {
+        props: { category: DocumentKind.CaseLaw },
+      });
+
+      const dropdownButton = screen.getByRole("button");
+      await user.click(dropdownButton);
+
+      const firstSuggestion = courtFilterDefaultSuggestions[0]!;
+      await user.click(screen.getByText(firstSuggestion.label));
+
+      expect(emitted("update:modelValue")).toContainEqual([firstSuggestion.id]);
+    });
+
+    it("uses current value as search prefix when dropdown is opened", async () => {
+      const user = userEvent.setup();
+
+      await renderSuspended(CourtFilter, {
+        props: {
+          category: DocumentKind.CaseLaw,
+          modelValue: "existing court",
+        },
+      });
+
+      await user.click(
+        screen.getByRole("button", {
+          name: "Vorschläge anzeigen",
+        }),
+      );
+
+      await waitFor(() => {
+        expect(mockFetch).toHaveBeenCalledWith(
+          expect.anything(),
+          expect.objectContaining({ params: { prefix: "existing court" } }),
         );
       });
-    });
-
-    it("it displays the store value", async () => {
-      const wrapper = await getWrapper();
-      const courtId = mockData[0]?.id;
-      await setStoreValues({ court: courtId });
-      const autoComplete = wrapper.findComponent(
-        "auto-complete-stub",
-      ) as VueWrapper<AutoCompleteStub>;
-      expect(autoComplete.vm.modelValue).toStrictEqual(courtId);
-    });
-
-    it("updates the store", async () => {
-      const wrapper = await getWrapper();
-      const autoComplete = wrapper.findComponent(
-        "auto-complete-stub",
-      ) as VueWrapper<AutoCompleteStub>;
-      const courtId = "THIS SHOULD BE UPDATED";
-      autoComplete.vm.$emit("update:modelValue", courtId);
-      await nextTick();
-
-      const store = useSimpleSearchParamsStore();
-      expect(store.court).toBe(courtId);
     });
   });
 });

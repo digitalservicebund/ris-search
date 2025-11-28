@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { storeToRefs } from "pinia";
 import Message from "primevue/message";
 import ContentWrapper from "~/components/CustomLayouts/ContentWrapper.vue";
 import type { Page } from "~/components/Pagination/Pagination.vue";
@@ -11,8 +10,8 @@ import SearchResult from "~/components/Search/SearchResult.vue";
 import SimpleSearchInput from "~/components/Search/SimpleSearchInput.vue";
 import SortSelect from "~/components/Search/SortSelect.vue";
 import YearRangeFilter from "~/components/Search/YearRangeFilter.vue";
+import { useSimpleSearchParams } from "~/composables/useSimpleSearchParams/useSimpleSearchParams";
 import { useStaticPageSeo } from "~/composables/useStaticPageSeo";
-import { useSimpleSearchParamsStore } from "~/stores/searchParams";
 import { DocumentKind } from "~/types";
 import { buildResultCountString } from "~/utils/pagination";
 import {
@@ -23,17 +22,16 @@ import {
 
 useStaticPageSeo("suche");
 
-const store = useSimpleSearchParamsStore();
-const values = storeToRefs(store);
+const searchParams = useSimpleSearchParams();
 
-const params = computed(() => convertParams(values.params.value));
+const params = computed(() => convertParams(searchParams.params.value));
 
 const {
   data,
   error: loadError, // must not be named error, refer to https://github.com/nuxt/test-utils/issues/684#issuecomment-1946138626
   status,
   execute,
-} = await useRisBackend<Page>(() => getUrl(values.category.value), {
+} = await useRisBackend<Page>(() => getUrl(searchParams.category.value), {
   query: params,
   watch: [params],
 });
@@ -52,22 +50,22 @@ const isLoading = computed(() => status.value === "pending");
 const currentPage = computed(() => data.value);
 
 async function handleSearchSubmit(value?: string) {
-  store.setQuery(value ?? "");
-  store.setPageNumber(0);
+  searchParams.setQuery(value ?? "");
+  searchParams.setPageNumber(0);
   await execute();
 }
 
 async function updatePage(page: number) {
-  store.setPageNumber(page);
+  searchParams.setPageNumber(page);
 }
 
 const documentKind = computed(() =>
-  categoryToDocumentKind(values.category.value),
+  categoryToDocumentKind(searchParams.category.value),
 );
 
 const title = computed(() => {
-  if (store.query) {
-    return `${store.query} — Suche`;
+  if (searchParams.query.value) {
+    return `${searchParams.query.value} — Suche`;
   } else {
     switch (documentKind.value) {
       case DocumentKind.Norm:
@@ -93,7 +91,7 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
       <h1 class="ris-heading2-regular inline-block font-semibold">Suche</h1>
     </div>
     <SimpleSearchInput
-      :model-value="values.query.value"
+      :model-value="searchParams.query.value"
       @update:model-value="handleSearchSubmit"
     />
     <NuxtLink :to="{ hash: '#main' }" class="sr-only focus:not-sr-only">
@@ -114,10 +112,24 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
         <legend class="ris-label1-regular flex h-48 items-center">
           Filter
         </legend>
-        <CategoryFilter />
-        <CourtFilter />
-        <DateRangeFilter v-if="documentKind === DocumentKind.CaseLaw" />
-        <YearRangeFilter v-else-if="documentKind === DocumentKind.Literature" />
+        <CategoryFilter v-model="searchParams.category.value" />
+        <CourtFilter
+          v-model="searchParams.court.value"
+          :category="searchParams.category.value"
+        />
+        <DateRangeFilter
+          v-if="documentKind === DocumentKind.CaseLaw"
+          v-model:date="searchParams.date.value"
+          v-model:date-after="searchParams.dateAfter.value"
+          v-model:date-before="searchParams.dateBefore.value"
+          v-model:date-search-mode="searchParams.dateSearchMode.value"
+        />
+        <YearRangeFilter
+          v-else-if="documentKind === DocumentKind.Literature"
+          v-model:date-after="searchParams.dateAfter.value"
+          v-model:date-before="searchParams.dateBefore.value"
+          v-model:date-search-mode="searchParams.dateSearchMode.value"
+        />
       </fieldset>
       <div id="main" class="w-full flex-col justify-end gap-8 lg:w-9/12">
         <Pagination
@@ -143,8 +155,11 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
               }}
             </output>
             <div class="flex flex-wrap gap-x-32 gap-y-16">
-              <ItemsPerPageDropdown />
-              <SortSelect v-model="store.sort" :document-kind="documentKind" />
+              <ItemsPerPageDropdown v-model="searchParams.itemsPerPage.value" />
+              <SortSelect
+                v-model="searchParams.sort.value"
+                :document-kind="documentKind"
+              />
             </div>
           </div>
           <p

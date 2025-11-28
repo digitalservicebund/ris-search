@@ -84,10 +84,7 @@ describe("dateInput", () => {
 
     expect(input).toHaveValue("14.05.2022");
 
-    expect(emitted()["update:modelValue"]).toEqual([
-      [undefined],
-      ["2022-05-14"],
-    ]);
+    expect(emitted("update:modelValue")).toEqual([[undefined], ["2022-05-14"]]);
   });
 
   it("updates when the model is changed to empty string", async () => {
@@ -124,7 +121,7 @@ describe("dateInput", () => {
     expect(input).toHaveValue("40.05.2022");
     await userEvent.type(input, "{backspace}");
 
-    expect(emitted()["update:validationError"]).toBeTruthy();
+    expect(emitted("update:validationError")).toBeTruthy();
   });
 
   it("does not allow invalid dates", async () => {
@@ -139,11 +136,11 @@ describe("dateInput", () => {
 
     expect(input).toHaveValue("29.02.2001");
 
-    expect(emitted()["update:modelValue"]).not.toBeTruthy();
+    expect(emitted("update:modelValue")).not.toBeTruthy();
 
-    expect(emitted()["update:validationError"]).toBeTruthy();
+    expect(emitted("update:validationError")).toBeTruthy();
 
-    const array = emitted()["update:validationError"] as ValidationError[][];
+    const array: ValidationError[][] = emitted("update:validationError");
 
     expect(
       array.find((element) => element[0] !== undefined)?.[0]?.message,
@@ -168,7 +165,7 @@ describe("dateInput", () => {
     await userEvent.type(input, "{tab}");
     await nextTick();
 
-    expect(emitted()["update:modelValue"]).not.toBeTruthy();
+    expect(emitted("update:modelValue")).not.toBeTruthy();
     const validationErrors = emitted()[
       "update:validationError"
     ] as ValidationError[][];

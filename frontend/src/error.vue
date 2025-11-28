@@ -2,8 +2,10 @@
 import { HttpStatusCode } from "axios";
 import type { NuxtError } from "#app";
 import SimpleSearchInput from "~/components/Search/SimpleSearchInput.vue";
-import { useRedirectToSearch } from "~/composables/useRedirectToSearch";
-const onSearchInputChange = useRedirectToSearch();
+
+function redirectToSearch(searchStr?: string) {
+  navigateTo({ name: "search", query: searchStr ? { query: searchStr } : {} });
+}
 
 const props = defineProps({
   error: {
@@ -42,10 +44,8 @@ useHead({ title: pageTitle.value });
         <SimpleSearchInput
           class="mt-48"
           model-value=""
-          @update:model-value="
-            (query?: string) => onSearchInputChange({ query })
-          "
-          @empty-search="() => onSearchInputChange()"
+          @update:model-value="(query) => redirectToSearch(query)"
+          @empty-search="redirectToSearch()"
         />
       </template>
       <template v-else>

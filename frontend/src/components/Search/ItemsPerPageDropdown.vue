@@ -1,12 +1,11 @@
 <script setup lang="ts">
 import PrimevueSelect from "primevue/select";
-import { useSimpleSearchParamsStore } from "~/stores/searchParams";
 
-const store = useSimpleSearchParamsStore();
+const model = defineModel<number>({ required: true });
 
 const pageSizeOptions = computed(() => {
   const steps = [10, 50, 100];
-  const currentOption = store.itemsPerPage;
+  const currentOption = model.value;
   if (!steps.includes(currentOption)) {
     steps.push(currentOption);
   }
@@ -14,9 +13,9 @@ const pageSizeOptions = computed(() => {
 });
 
 const itemsPerPage = computed({
-  get: () => store.itemsPerPage.toString(),
+  get: () => model.value.toString(),
   set: (value) => {
-    store.itemsPerPage = Number.parseInt(value);
+    model.value = Number.parseInt(value);
   },
 });
 </script>

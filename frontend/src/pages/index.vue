@@ -4,11 +4,12 @@ import { NuxtLink } from "#components";
 import bmjvLogo from "~/assets/img/BMJV_de_v1__Web_farbig.svg";
 import SimpleSearchInput from "~/components/Search/SimpleSearchInput.vue";
 import { usePrivateFeaturesFlag } from "~/composables/usePrivateFeaturesFlag";
-import { useRedirectToSearch } from "~/composables/useRedirectToSearch";
 import { useStaticPageSeo } from "~/composables/useStaticPageSeo";
 import IcBaselineLaunch from "~icons/ic/baseline-launch";
 
-const redirectToSearch = useRedirectToSearch();
+function redirectToSearch(searchStr?: string) {
+  navigateTo({ name: "search", query: searchStr ? { query: searchStr } : {} });
+}
 
 definePageMeta({ layout: "base" });
 
@@ -48,7 +49,7 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
       <SimpleSearchInput
         full-width
         model-value=""
-        @update:model-value="(query?: string) => redirectToSearch({ query })"
+        @update:model-value="(query) => redirectToSearch(query)"
         @empty-search="() => redirectToSearch()"
       />
       <Message severity="warn" class="ris-body2-regular">
