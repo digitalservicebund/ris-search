@@ -1,5 +1,7 @@
 package de.bund.digitalservice.ris.search.integration.controller.api.testData;
 
+import static de.bund.digitalservice.ris.search.integration.controller.api.testData.SharedTestConstants.DATE_2_1;
+
 import de.bund.digitalservice.ris.search.models.opensearch.AdministrativeDirective;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -16,7 +18,7 @@ public class AdministrativeDirectiveTestData {
         AdministrativeDirective.builder()
             .id("/v1/administrative_directive/KN0000")
             .documentNumber("KSNR0000")
-            .headline("long title")
+            .headline("Test long title")
             .documentType("VR")
             .documentTypeDetail("Rundschreiben")
             .shortReport("text content")
@@ -27,7 +29,7 @@ public class AdministrativeDirectiveTestData {
             .caselawReferences(List.of("Aktivzitierung I"))
             .references(List.of("Lorem Ipsum 19XX, 11"))
             .referenceNumbers(List.of("RFR I"))
-            .citationDates(List.of(LocalDate.of(2024, 1, 1)))
+            .citationDates(List.of(DATE_2_1))
             .activeAdministrativeReferences(List.of("VR Full Reference 2024-01-01 00001"))
             .activeNormReferences(List.of("ArbGG § 1 Abs 1"))
             .keywords(List.of("Schlagwort1", "Schlagwort2"))

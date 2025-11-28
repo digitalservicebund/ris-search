@@ -84,7 +84,8 @@ public class AdvancedSearchService {
         Stream.of(
                 CaseLawSimpleSearchType.getHighlightedFieldsStatic(),
                 LiteratureSimpleSearchType.getHighlightedFieldsStatic(),
-                NormSimpleSearchType.getHighlightedFieldsStatic())
+                NormSimpleSearchType.getHighlightedFieldsStatic(),
+                AdministrativeDirectiveSimpleSearchType.getHighlightedFieldsStatic())
             .flatMap(Collection::stream)
             .collect(Collectors.toSet());
 

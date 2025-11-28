@@ -47,6 +47,12 @@ class AdvancedSearchServiceTest extends ContainersIntegrationBase {
     assertThat(searchHits).hasSize(1);
     Norm norm = (Norm) searchHits.getSearchHit(0).getContent();
     assertThat(norm.getId()).isEqualTo("n1");
+
+    searchHits = advancedSearchService.searchAll("KSNR0000", Pageable.unpaged()).getSearchHits();
+    assertThat(searchHits).hasSize(1);
+    AdministrativeDirective administrativeDirective =
+        (AdministrativeDirective) searchHits.getSearchHit(0).getContent();
+    assertThat(administrativeDirective.documentNumber()).isEqualTo("KSNR0000");
   }
 
   @Test
