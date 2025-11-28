@@ -48,6 +48,13 @@ public class AdministrativeDirectiveSearchSchemaMapper {
         .build();
   }
 
+  /**
+   * A static method to build a list of text matched from a searchHit
+   *
+   * @param searchHit the search hit to extract the text matches from
+   * @param <T> the type of content inside the searchHit
+   * @return a list of the text matches
+   */
   public static <T> List<TextMatchSchema> getTextMatches(SearchHit<T> searchHit) {
     return searchHit.getHighlightFields().entrySet().stream()
         .flatMap(

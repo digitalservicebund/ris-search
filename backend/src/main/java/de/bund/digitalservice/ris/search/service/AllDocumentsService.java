@@ -55,6 +55,7 @@ public class AllDocumentsService {
    * @param normsParams Norms search parameters
    * @param caseLawParams Case law search parameters
    * @param literatureSearchParams Literature search parameters
+   * @param administrativeDirectiveSearchParams Administrative directive search parameters
    * @param documentKind The kind of document to search for.
    * @param pageable Page (offset) and size parameters.
    * @return A new {@link SearchPage} of the containing {@link AbstractSearchEntity}.

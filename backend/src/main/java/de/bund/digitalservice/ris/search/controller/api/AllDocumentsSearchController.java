@@ -63,6 +63,8 @@ public class AllDocumentsSearchController {
    * @param normsSearchParams Specific search parameters related to legislation documents.
    * @param caseLawSearchParams Specific search parameters related to case law documents.
    * @param literatureSearchParams Specific search parameters related to literature documents.
+   * @param administrativeDirectiveSearchParams Specific search parameters related to administrative
+   *     documents.
    * @param sortParams Sorting parameters for ordering the search results.
    * @param documentKind Optional filter indicating the kind of document to search for. Supported
    *     values: R (case law), N (legislation), L (literature).

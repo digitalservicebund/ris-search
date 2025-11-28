@@ -56,9 +56,9 @@ public class CaseLawSimpleSearchType implements SimpleSearchType {
   }
 
   /**
-   * Gets fields to the HighlightBuilder for highlighting in search results. This method adds fields
-   * from a predefined list and also includes specific fields with additional configuration, such as
-   * setting the noMatchSize to 0 for certain fields.
+   * Gets the case law specific fields to highlight
+   *
+   * @return a list of the case law specific fields to highlight
    */
   public static List<HighlightBuilder.Field> getHighlightedFieldsStatic() {
     Stream<HighlightBuilder.Field> contentFields =
