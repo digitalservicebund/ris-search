@@ -35,6 +35,7 @@ public record AdministrativeDirectiveSearchSchema(
     @Schema(example = "KALU000000000") @JsonldId String id,
     @Schema(description = "Dokumentnummer", example = "KALU000000000") String documentNumber,
     @Nullable @Schema(description = "Haupttitel") String headline,
+    @Nullable @Schema(description = "Kurzreferat") String shortReport,
     @Schema(description = "Dokumenttyp", example = "VV") String documentType,
     @Schema(description = "Aktenzeichen", example = "['ZZ', 'YY']") List<String> referenceNumbers,
     @Nullable @Schema(description = "Gültig ab Datum", example = "2003-12-15")
