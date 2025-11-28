@@ -1,4 +1,5 @@
 import { getHeader, setHeader, defineEventHandler } from "h3";
+import { useStorage } from "#imports";
 import useBackendUrl from "~/composables/useBackendUrl";
 import { usePrivateFeaturesFlag } from "~/composables/usePrivateFeaturesFlag";
 
