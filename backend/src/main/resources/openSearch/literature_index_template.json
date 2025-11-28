@@ -23,7 +23,7 @@
         },
         "FU": {
           "type": "alias",
-          "path": "originator"
+          "path": "dependent_references"
         },
         "N": {
           "type": "alias",
