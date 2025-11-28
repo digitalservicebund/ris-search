@@ -2,12 +2,13 @@
 import InputMask from "primevue/inputmask";
 import PrimevueSelect from "primevue/select";
 import type { DropdownItem } from "~/components/types";
-import {
-  useSimpleSearchParamsStore,
-  DateSearchMode,
-} from "~/stores/searchParams";
+import { DateSearchMode } from "~/stores/searchParams";
 
-const store = useSimpleSearchParamsStore();
+const dateAfter = defineModel<string | undefined>("dateAfter");
+const dateBefore = defineModel<string | undefined>("dateBefore");
+const dateSearchMode = defineModel<DateSearchMode>("dateSearchMode", {
+  required: true,
+});
 
 const items: DropdownItem[] = [
   { label: "Keine zeitliche Begrenzung", value: DateSearchMode.None },
@@ -34,23 +35,23 @@ function formatYearEnd(year: string | null) {
 //  Years Computed(s)
 const yearAfter = computed<string | null>({
   get() {
-    return parseYearFromDate(store.dateAfter);
+    return parseYearFromDate(dateAfter.value);
   },
   set(value) {
     if (!isYearValid(value)) {
-      store.dateAfter = undefined;
+      dateAfter.value = undefined;
       return;
     }
-    switch (store.dateSearchMode) {
+    switch (dateSearchMode.value) {
       case DateSearchMode.After:
-        store.dateAfter = formatYearStart(value);
-        store.dateBefore = undefined;
+        dateAfter.value = formatYearStart(value);
+        dateBefore.value = undefined;
         break;
       case DateSearchMode.Range:
-        store.dateAfter = formatYearStart(value);
+        dateAfter.value = formatYearStart(value);
         // keep dateBefore only if valid
-        if (!isYearValid(parseYearFromDate(store.dateBefore))) {
-          store.dateBefore = undefined;
+        if (!isYearValid(parseYearFromDate(dateBefore.value))) {
+          dateBefore.value = undefined;
         }
         break;
     }
@@ -59,22 +60,22 @@ const yearAfter = computed<string | null>({
 
 const yearBefore = computed<string | null>({
   get() {
-    return parseYearFromDate(store.dateBefore);
+    return parseYearFromDate(dateBefore.value);
   },
   set(value) {
     if (!isYearValid(value)) {
-      store.dateBefore = undefined;
+      dateBefore.value = undefined;
       return;
     }
-    switch (store.dateSearchMode) {
+    switch (dateSearchMode.value) {
       case DateSearchMode.Before:
-        store.dateBefore = formatYearEnd(value);
-        store.dateAfter = undefined;
+        dateBefore.value = formatYearEnd(value);
+        dateAfter.value = undefined;
         break;
       case DateSearchMode.Range:
-        store.dateBefore = formatYearEnd(value);
-        if (!isYearValid(parseYearFromDate(store.dateAfter))) {
-          store.dateAfter = undefined;
+        dateBefore.value = formatYearEnd(value);
+        if (!isYearValid(parseYearFromDate(dateAfter.value))) {
+          dateAfter.value = undefined;
         }
         break;
     }
@@ -83,41 +84,41 @@ const yearBefore = computed<string | null>({
 
 const yearEqual = computed<string | null>({
   get() {
-    const yAfter = parseYearFromDate(store.dateAfter);
-    const yBefore = parseYearFromDate(store.dateBefore);
+    const yAfter = parseYearFromDate(dateAfter.value);
+    const yBefore = parseYearFromDate(dateBefore.value);
     // Only show value if both exist and equal
     if (yAfter && yBefore && yAfter === yBefore) return yAfter;
     return null;
   },
   set(value) {
     if (!isYearValid(value)) {
-      store.dateAfter = undefined;
-      store.dateBefore = undefined;
+      dateAfter.value = undefined;
+      dateBefore.value = undefined;
       return;
     }
-    store.dateAfter = formatYearStart(value);
-    store.dateBefore = formatYearEnd(value);
+    dateAfter.value = formatYearStart(value);
+    dateBefore.value = formatYearEnd(value);
   },
 });
 
 // UI logic
 const show = computed(() => ({
-  equal: store.dateSearchMode === DateSearchMode.Equal,
+  equal: dateSearchMode.value === DateSearchMode.Equal,
   after: [DateSearchMode.After, DateSearchMode.Range].includes(
-    store.dateSearchMode,
+    dateSearchMode.value,
   ),
   before: [DateSearchMode.Before, DateSearchMode.Range].includes(
-    store.dateSearchMode,
+    dateSearchMode.value,
   ),
 }));
 const hasMultipleInputs = computed(() => show.value.after && show.value.before);
 
 // Reset on mode change
 watch(
-  () => store.dateSearchMode,
+  () => dateSearchMode.value,
   () => {
-    store.dateAfter = undefined;
-    store.dateBefore = undefined;
+    dateAfter.value = undefined;
+    dateBefore.value = undefined;
   },
   { immediate: false },
 );
@@ -129,7 +130,7 @@ watch(
       <label for="year-mode-select" class="ris-label2-regular">Zeitraum</label>
       <PrimevueSelect
         id="year-mode-select"
-        v-model="store.dateSearchMode"
+        v-model="dateSearchMode"
         :options="items"
         option-label="label"
         option-value="value"

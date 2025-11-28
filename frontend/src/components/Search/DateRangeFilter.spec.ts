@@ -1,124 +1,130 @@
-import { createTestingPinia } from "@pinia/testing";
-import { mount } from "@vue/test-utils";
-import type { VueWrapper } from "@vue/test-utils";
-import { beforeEach, describe, expect, it } from "vitest";
+import { renderSuspended } from "@nuxt/test-utils/runtime";
+import userEvent from "@testing-library/user-event";
+import { screen } from "@testing-library/vue";
+import { InputText } from "primevue";
+import { describe, expect, it } from "vitest";
 import DateRangeFilter from "./DateRangeFilter.vue";
 import { DateSearchMode } from "~/stores/searchParams";
-import { setStoreValues } from "~/tests/piniaUtils";
 
-const testDates = {
-  date: "1999-12-31",
-  dateAfter: "2000-01-01",
-  dateBefore: "2025-12-31",
-};
+describe("DateRangeFilter", () => {
+  const testDates = {
+    date: "1999-12-31",
+    dateAfter: "2000-01-01",
+    dateBefore: "2025-12-31",
+  };
 
-describe("date/date range filter", () => {
-  let wrapper: VueWrapper;
-
-  beforeEach(() => {
-    wrapper = mount(DateRangeFilter, {
-      global: {
-        plugins: [createTestingPinia({ stubActions: false })],
-      },
-    });
-  });
-
-  const scenarios = [
-    { mode: DateSearchMode.None, fields: [] },
-    { mode: DateSearchMode.Equal, fields: ["date"] },
-    { mode: DateSearchMode.After, fields: ["dateAfter"] },
-    { mode: DateSearchMode.Before, fields: ["dateBefore"] },
-    { mode: DateSearchMode.Range, fields: ["dateAfter", "dateBefore"] },
+  const setup: [DateSearchMode, string[]][] = [
+    [DateSearchMode.None, []],
+    [DateSearchMode.Equal, ["date"]],
+    [DateSearchMode.After, ["dateAfter"]],
+    [DateSearchMode.Before, ["dateBefore"]],
+    [DateSearchMode.Range, ["dateAfter", "dateBefore"]],
   ];
 
-  for (const { fields, mode } of scenarios) {
-    it(`renders ${fields.length ? fields : "nothing"} for mode "${mode}"`, async () => {
-      await setStoreValues({ dateSearchMode: mode });
-      expect(wrapper.findAll("input").map((e) => e.element.id)).toEqual(fields);
+  test.each(setup)('mode "%s" renders "%s" fields', async (mode, fields) => {
+    await renderSuspended(DateRangeFilter, {
+      props: {
+        dateSearchMode: mode,
+        date: undefined,
+        dateAfter: undefined,
+        dateBefore: undefined,
+      },
+      global: { stubs: { InputMask: InputText } },
     });
 
-    it(`correctly stores the input date(s) for mode "${mode}"`, async () => {
-      const store = await setStoreValues({ dateSearchMode: mode });
-
-      for (const input of wrapper.findAll("input")) {
-        input.setValue("02.01.2000");
-      }
-
-      await nextTick();
-
-      for (const field of fields) {
-        expect((store as unknown as Record<string, string>)[field]).toEqual(
-          "2000-01-02",
-        );
-      }
-    });
-  }
-
-  it("renders just the dropdown if no mode is set", async () => {
-    await setStoreValues({ dateSearchMode: DateSearchMode.None });
-    expect(wrapper.findComponent({ name: "Select" }).vm.modelValue).toBe("");
-
-    expect(wrapper.findAll("input")).toHaveLength(0);
+    expect(screen.queryAllByRole("textbox")).toHaveLength(fields.length);
   });
 
-  it("ignores other parameters in the store", async () => {
-    await setStoreValues({
-      dateSearchMode: DateSearchMode.Equal,
-      ...testDates,
+  test.each(setup)(
+    'correctly updates the input date(s) for mode "%s"',
+    async (mode, fields) => {
+      const user = userEvent.setup();
+
+      const { emitted } = await renderSuspended(DateRangeFilter, {
+        props: {
+          dateSearchMode: mode,
+          date: undefined,
+          dateAfter: undefined,
+          dateBefore: undefined,
+        },
+        global: { stubs: { InputMask: InputText } },
+      });
+
+      const inputs = screen.queryAllByRole("textbox");
+
+      for (const input of inputs) {
+        await user.clear(input);
+        await user.type(input, "02.01.2000");
+      }
+
+      for (const field of fields) {
+        expect(emitted(`update:${field}`)).toContainEqual(["2000-01-02"]);
+      }
+    },
+  );
+
+  it("renders just the dropdown if no mode is set", async () => {
+    await renderSuspended(DateRangeFilter, {
+      props: {
+        dateSearchMode: DateSearchMode.None,
+        date: undefined,
+        dateAfter: undefined,
+        dateBefore: undefined,
+      },
+      global: { stubs: { InputMask: InputText } },
     });
 
-    expect(wrapper.findAll("input").map((e) => e.element.id)).toEqual(["date"]);
-    expect((wrapper.find("#date").element as HTMLInputElement).value).toBe(
-      "31.12.1999",
-    );
+    expect(screen.queryAllByRole("textbox")).toHaveLength(0);
+  });
+
+  it("ignores other parameters when showing single date input", async () => {
+    await renderSuspended(DateRangeFilter, {
+      props: { dateSearchMode: DateSearchMode.Equal, ...testDates },
+      global: { stubs: { InputMask: InputText } },
+    });
+
+    const inputs = screen.getAllByRole("textbox");
+    expect(inputs).toHaveLength(1);
+    expect((inputs[0] as HTMLInputElement).value).toBe("31.12.1999");
   });
 
   it("renders a correct date range", async () => {
-    await setStoreValues({
-      dateSearchMode: DateSearchMode.Range,
-      ...testDates,
+    await renderSuspended(DateRangeFilter, {
+      props: {
+        dateSearchMode: DateSearchMode.Range,
+        date: undefined,
+        dateAfter: testDates.dateAfter,
+        dateBefore: testDates.dateBefore,
+      },
+      global: { stubs: { InputMask: InputText } },
     });
 
-    expect(wrapper.findComponent({ name: "Select" }).vm.modelValue).toBe(
-      DateSearchMode.Range,
-    );
-
-    expect(wrapper.findAll("input").map((e) => e.element.id)).toEqual([
-      "dateAfter",
-      "dateBefore",
-    ]);
-    const inputAfter = wrapper.find("#dateAfter").element as HTMLInputElement;
-    expect(inputAfter.value).toBe("01.01.2000");
-    expect(inputAfter?.labels?.[0]?.textContent?.trim()).toBe("Ab dem Datum");
-    const inputBefore = wrapper.find("#dateBefore").element as HTMLInputElement;
-    expect(inputBefore.value).toBe("31.12.2025");
-    expect(inputBefore?.labels?.[0]?.textContent?.trim()).toBe("Bis zum Datum");
+    const inputs = screen.getAllByRole("textbox");
+    expect(inputs).toHaveLength(2);
+    expect(inputs[0]).toHaveValue("01.01.2000");
+    expect(inputs[1]).toHaveValue("31.12.2025");
   });
 
-  it("correctly switches from a single date input to range", async () => {
-    const store = await setStoreValues({
-      dateSearchMode: DateSearchMode.After,
-      dateAfter: "1949-05-23",
+  it("emits dateBefore when entering value in range mode", async () => {
+    const user = userEvent.setup();
+
+    const { emitted } = await renderSuspended(DateRangeFilter, {
+      props: {
+        dateSearchMode: DateSearchMode.Range,
+        date: undefined,
+        dateAfter: "1949-05-23",
+        dateBefore: undefined,
+      },
+      global: { stubs: { InputMask: InputText } },
     });
 
-    await wrapper
-      .findComponent({ name: "Select" })
-      .setValue(DateSearchMode.Range);
-    await nextTick();
+    const inputs = screen.getAllByRole("textbox");
+    expect(inputs).toHaveLength(2);
+    expect(inputs[0]).toHaveValue("23.05.1949");
+    expect(inputs[1]).toHaveValue("");
 
-    expect((wrapper.get("#dateAfter").element as HTMLInputElement).value).toBe(
-      "23.05.1949",
-    );
-    expect((wrapper.get("#dateBefore").element as HTMLInputElement).value).toBe(
-      "",
-    );
+    await user.type(inputs[1]!, "03.10.1990");
 
-    expect(store.dateSearchMode).toBe(DateSearchMode.Range);
-    expect(store.dateAfter).toBe("1949-05-23");
-
-    await wrapper.get("#dateBefore").setValue("03.10.1990");
-
-    await nextTick();
-    expect(store.dateBefore).toBe("1990-10-03");
+    expect(emitted("update:dateBefore")).toContainEqual(["1990-10-03"]);
   });
 });

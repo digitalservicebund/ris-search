@@ -1,49 +1,45 @@
-import { createTestingPinia } from "@pinia/testing";
-import { mount, RouterLinkStub } from "@vue/test-utils";
-import type { VueWrapper } from "@vue/test-utils";
-import { beforeEach, describe, expect, it } from "vitest";
+import { renderSuspended } from "@nuxt/test-utils/runtime";
+import userEvent from "@testing-library/user-event";
+import { screen } from "@testing-library/vue";
+import { describe, expect, it } from "vitest";
 import ItemsPerPageDropdown from "./ItemsPerPageDropdown.vue";
-import { useSimpleSearchParamsStore } from "~/stores/searchParams";
 
 describe("items per page dropdown", () => {
-  let wrapper: VueWrapper;
+  it("emits update when items per page changes", async () => {
+    const user = userEvent.setup();
 
-  beforeEach(() => {
-    wrapper = mount(ItemsPerPageDropdown, {
-      stubs: {
-        RouterLink: RouterLinkStub,
-      },
-      global: {
-        plugins: [createTestingPinia({ stubActions: false })],
-      },
+    const { emitted } = await renderSuspended(ItemsPerPageDropdown, {
+      props: { modelValue: 10 },
     });
+
+    await user.click(screen.getByRole("combobox"));
+    await user.click(screen.getByText("50"));
+
+    expect(emitted("update:modelValue")).toContainEqual([50]);
   });
 
-  it("updates the items per page", async () => {
-    const store = useSimpleSearchParamsStore(); // uses testing pinia
-    expect(store.itemsPerPage).toBe(10);
-    wrapper.findComponent({ name: "Select" }).setValue("50");
-    await nextTick();
-    expect(store.itemsPerPage).toBe(50);
+  it("displays the passed value", async () => {
+    await renderSuspended(ItemsPerPageDropdown, {
+      props: { modelValue: 50 },
+    });
+
+    expect(screen.getByRole("combobox")).toHaveTextContent("50");
   });
 
-  it("displays the store value", async () => {
-    const store = useSimpleSearchParamsStore();
-    store.itemsPerPage = 50;
-    await nextTick();
-    expect(wrapper.find('span[role="combobox"]').element.innerHTML).toBe("50");
-    expect(
-      wrapper.findComponent({ name: "Select" }).props("options"),
-    ).toHaveLength(3);
-  });
+  it("displays custom values in options", async () => {
+    const user = userEvent.setup();
 
-  it("displays custom values", async () => {
-    const store = useSimpleSearchParamsStore();
-    store.itemsPerPage = 42;
-    await nextTick();
-    expect(wrapper.find('span[role="combobox"]').element.innerHTML).toBe("42");
-    expect(
-      wrapper.findComponent({ name: "Select" }).props("options"),
-    ).toHaveLength(4);
+    await renderSuspended(ItemsPerPageDropdown, {
+      props: { modelValue: 42 },
+    });
+
+    expect(screen.getByRole("combobox")).toHaveTextContent("42");
+
+    await user.click(screen.getByRole("combobox"));
+
+    expect(screen.getAllByText("42").length).toBeGreaterThanOrEqual(1);
+    expect(screen.getByText("10")).toBeInTheDocument();
+    expect(screen.getByText("50")).toBeInTheDocument();
+    expect(screen.getByText("100")).toBeInTheDocument();
   });
 });

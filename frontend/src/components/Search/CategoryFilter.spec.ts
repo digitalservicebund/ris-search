@@ -1,18 +1,14 @@
 import { renderSuspended } from "@nuxt/test-utils/runtime";
 import userEvent from "@testing-library/user-event";
 import { screen } from "@testing-library/vue";
-import { describe, it, expect, beforeEach } from "vitest";
+import { describe, it, expect } from "vitest";
 import CategoryFilter from "./CategoryFilter.vue";
-import { useSimpleSearchParamsStore } from "~/stores/searchParams";
 
 describe("CategoryFilter", () => {
-  beforeEach(() => {
-    const store = useSimpleSearchParamsStore();
-    store.$reset();
-  });
-
   it("renders filter menu with all categories", async () => {
-    await renderSuspended(CategoryFilter);
+    await renderSuspended(CategoryFilter, {
+      props: { modelValue: "A" },
+    });
 
     expect(screen.getByText("Dokumentarten")).toBeInTheDocument();
     expect(screen.getByText("Alle Dokumentarten")).toBeInTheDocument();
@@ -21,35 +17,41 @@ describe("CategoryFilter", () => {
     expect(screen.getByText("Literaturnachweise")).toBeInTheDocument();
   });
 
-  it("updates store when category is selected", async () => {
+  it("emits update when category is selected", async () => {
     const user = userEvent.setup();
-    await renderSuspended(CategoryFilter);
-    const store = useSimpleSearchParamsStore();
+
+    const { emitted } = await renderSuspended(CategoryFilter, {
+      props: { modelValue: "A" },
+    });
 
     await user.click(screen.getByText("Gesetze & Verordnungen"));
 
-    expect(store.category).toBe("N");
+    expect(emitted()["update:modelValue"]).toContainEqual(["N"]);
   });
 
   it("strips .all suffix when selecting 'all' subcategory", async () => {
     const user = userEvent.setup();
-    await renderSuspended(CategoryFilter);
-    const store = useSimpleSearchParamsStore();
+
+    const { emitted } = await renderSuspended(CategoryFilter, {
+      props: { modelValue: "A" },
+    });
 
     await user.click(screen.getByText("Gerichtsentscheidungen"));
     await user.click(screen.getByText("Alle Gerichtsentscheidungen"));
 
-    expect(store.category).toBe("R");
+    expect(emitted()["update:modelValue"]).toContainEqual(["R"]);
   });
 
   it("sets specific subcategory when selected", async () => {
     const user = userEvent.setup();
-    await renderSuspended(CategoryFilter);
-    const store = useSimpleSearchParamsStore();
+
+    const { emitted } = await renderSuspended(CategoryFilter, {
+      props: { modelValue: "A" },
+    });
 
     await user.click(screen.getByText("Gerichtsentscheidungen"));
     await user.click(screen.getByText("Urteil"));
 
-    expect(store.category).toBe("R.urteil");
+    expect(emitted()["update:modelValue"]).toContainEqual(["R.urteil"]);
   });
 });

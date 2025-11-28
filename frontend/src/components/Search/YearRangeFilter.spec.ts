@@ -1,132 +1,141 @@
-import { mountSuspended } from "@nuxt/test-utils/runtime";
-import { createTestingPinia } from "@pinia/testing";
+import { renderSuspended } from "@nuxt/test-utils/runtime";
+import userEvent from "@testing-library/user-event";
+import { screen } from "@testing-library/vue";
+import { InputText } from "primevue";
 import { describe, expect, it } from "vitest";
-import { nextTick } from "vue";
 import YearRangeFilter from "./YearRangeFilter.vue";
 import { DateSearchMode } from "~/stores/searchParams";
-import { setStoreValues } from "~/tests/piniaUtils";
 
-describe("year/year range filter", () => {
-  const scenarios = [
-    {
-      mode: DateSearchMode.None,
-      fields: [],
-      expectations: {},
-    },
-    {
-      mode: DateSearchMode.Equal,
-      fields: ["yearEqual"],
-      expectations: { dateAfter: "2000-01-01", dateBefore: "2000-12-31" },
-    },
-    {
-      mode: DateSearchMode.After,
-      fields: ["yearAfter"],
-      expectations: { dateAfter: "2000-01-01" },
-    },
-    {
-      mode: DateSearchMode.Before,
-      fields: ["yearBefore"],
-      expectations: { dateBefore: "2000-12-31" },
-    },
-    {
-      mode: DateSearchMode.Range,
-      fields: ["yearAfter", "yearBefore"],
-      expectations: { dateAfter: "2000-01-01", dateBefore: "2000-12-31" },
-    },
+describe("YearRangeFilter", () => {
+  const setup: [
+    mode: DateSearchMode,
+    fields: string[],
+    expectations: Record<string, string>,
+  ][] = [
+    [DateSearchMode.None, [], {}],
+    [
+      DateSearchMode.Equal,
+      ["yearEqual"],
+      { dateAfter: "2000-01-01", dateBefore: "2000-12-31" },
+    ],
+    [DateSearchMode.After, ["yearAfter"], { dateAfter: "2000-01-01" }],
+    [DateSearchMode.Before, ["yearBefore"], { dateBefore: "2000-12-31" }],
+    [
+      DateSearchMode.Range,
+      ["yearAfter", "yearBefore"],
+      { dateAfter: "2000-01-01", dateBefore: "2000-12-31" },
+    ],
   ];
 
-  scenarios.forEach(({ mode, fields, expectations }) => {
-    it(`renders inputs ${fields.length ? fields.join(", ") : "none"} and stores correct values for mode "${mode}"`, async () => {
-      const wrapper = await mountSuspended(YearRangeFilter, {
-        global: { plugins: [createTestingPinia({ stubActions: false })] },
+  test.each(setup)(
+    'mode "%s" renders "%s" and emits correct values',
+    async (mode, fields, expectations) => {
+      const user = userEvent.setup();
+
+      const { emitted } = await renderSuspended(YearRangeFilter, {
+        props: {
+          dateSearchMode: mode,
+          dateAfter: undefined,
+          dateBefore: undefined,
+        },
+        global: { stubs: { InputMask: InputText } },
       });
 
-      const store = await setStoreValues({ dateSearchMode: mode });
-
-      // check rendered inputs
-      const inputIds = wrapper.findAll("input").map((e) => e.element.id);
-      expect(inputIds).toEqual(fields);
+      // check rendered inputs match expected count
+      const inputs = screen.queryAllByRole("textbox");
+      expect(inputs).toHaveLength(fields.length);
 
       // set values if any
-      for (const id of fields) {
-        await wrapper.find(`input[id="${id}"]`).setValue("2000");
+      for (const input of inputs) {
+        await user.clear(input);
+        await user.type(input, "2000");
       }
 
-      await nextTick();
+      // verify emitted values
+      if ("dateAfter" in expectations) {
+        expect(emitted("update:dateAfter")).toContainEqual([
+          expectations.dateAfter,
+        ]);
+      }
 
-      // verify store state
-      expect(store.dateAfter).toBe(
-        "dateAfter" in expectations ? expectations.dateAfter : undefined,
-      );
-      expect(store.dateBefore).toBe(
-        "dateBefore" in expectations ? expectations.dateBefore : undefined,
-      );
+      if ("dateBefore" in expectations) {
+        expect(emitted("update:dateBefore")).toContainEqual([
+          expectations.dateBefore,
+        ]);
+      }
+    },
+  );
+
+  it("renders no input fields if no date search mode selected", async () => {
+    await renderSuspended(YearRangeFilter, {
+      props: {
+        dateSearchMode: DateSearchMode.None,
+        dateAfter: undefined,
+        dateBefore: undefined,
+      },
     });
+
+    expect(screen.queryByRole("textbox")).toBeNull();
   });
 
-  it("renders no input fields if non data search mode selected", async () => {
-    const wrapper = await mountSuspended(YearRangeFilter, {
-      global: { plugins: [createTestingPinia({ stubActions: false })] },
+  it("emits values when entering years in Range mode", async () => {
+    const user = userEvent.setup();
+
+    const { emitted } = await renderSuspended(YearRangeFilter, {
+      props: {
+        dateSearchMode: DateSearchMode.Range,
+        dateAfter: undefined,
+        dateBefore: undefined,
+      },
+      global: { stubs: { InputMask: InputText } },
     });
 
-    await setStoreValues({ dateSearchMode: DateSearchMode.None });
+    const inputs = screen.getAllByRole("textbox");
+    expect(inputs).toHaveLength(2);
 
-    expect(wrapper.findComponent({ name: "Select" }).vm.modelValue).toBe("");
-    expect(wrapper.findAll("input")).toHaveLength(0);
-  });
+    await user.type(inputs[0]!, "2000");
+    await user.type(inputs[1]!, "2020");
 
-  it("resets date values when mode changes", async () => {
-    const wrapper = await mountSuspended(YearRangeFilter, {
-      global: { plugins: [createTestingPinia({ stubActions: false })] },
-    });
-
-    const store = await setStoreValues({
-      dateSearchMode: DateSearchMode.Range,
-    });
-    await nextTick();
-
-    expect((wrapper.get("#yearBefore").element as HTMLInputElement).value).toBe(
-      "",
-    );
-    expect((wrapper.get("#yearAfter").element as HTMLInputElement).value).toBe(
-      "",
-    );
-
-    expect(store.dateAfter).toBeUndefined();
-    expect(store.dateBefore).toBeUndefined();
+    expect(emitted("update:dateAfter")).toContainEqual(["2000-01-01"]);
+    expect(emitted("update:dateBefore")).toContainEqual(["2020-12-31"]);
   });
 
   it('keeps "Equal" mode start and end synchronized', async () => {
-    const wrapper = await mountSuspended(YearRangeFilter, {
-      global: { plugins: [createTestingPinia({ stubActions: false })] },
+    const user = userEvent.setup();
+
+    const { emitted } = await renderSuspended(YearRangeFilter, {
+      props: {
+        dateSearchMode: DateSearchMode.Equal,
+        dateAfter: undefined,
+        dateBefore: undefined,
+      },
+      global: { stubs: { InputMask: InputText } },
     });
 
-    const store = await setStoreValues({
-      dateSearchMode: DateSearchMode.Equal,
-    });
+    const input = screen.getByRole("textbox");
+    await user.clear(input);
+    await user.type(input, "2022");
 
-    const input = wrapper.get("#yearEqual");
-    await input.setValue("2022");
-    await nextTick();
-
-    expect(store.dateAfter).toBe("2022-01-01");
-    expect(store.dateBefore).toBe("2022-12-31");
+    expect(emitted("update:dateAfter")).toContainEqual(["2022-01-01"]);
+    expect(emitted("update:dateBefore")).toContainEqual(["2022-12-31"]);
   });
 
-  it("clears store values for invalid year input", async () => {
-    const wrapper = await mountSuspended(YearRangeFilter, {
-      global: { plugins: [createTestingPinia({ stubActions: false })] },
+  it("emits undefined for invalid year input", async () => {
+    const user = userEvent.setup();
+
+    const { emitted } = await renderSuspended(YearRangeFilter, {
+      props: {
+        dateSearchMode: DateSearchMode.After,
+        dateAfter: "2000-01-01",
+        dateBefore: undefined,
+      },
+      global: { stubs: { InputMask: InputText } },
     });
 
-    const store = await setStoreValues({
-      dateSearchMode: DateSearchMode.After,
-    });
-    await nextTick();
+    const input = screen.getByRole("textbox");
+    await user.clear(input);
+    await user.type(input, "abcd");
 
-    const input = wrapper.get("#yearAfter");
-    await input.setValue("abcd");
-    await nextTick();
-
-    expect(store.dateAfter).toBeUndefined();
+    expect(emitted("update:dateAfter")).toContainEqual([undefined]);
   });
 });
