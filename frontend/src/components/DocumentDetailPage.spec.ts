@@ -2,7 +2,7 @@ import userEvent from "@testing-library/user-event";
 import { render, screen } from "@testing-library/vue";
 import DocumentDetailPage from "./DocumentDetailPage.vue";
 
-describe("DocumentDetailPage.vue", () => {
+describe("DocumentDetailPage", () => {
   it("renders title", async () => {
     render(DocumentDetailPage, {
       props: {

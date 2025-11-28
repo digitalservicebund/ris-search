@@ -58,7 +58,7 @@ async function toggleMenu(wrapper: VueWrapper) {
   await nextTick();
 }
 
-describe("ActionsMenu.vue", () => {
+describe("ActionsMenu", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     vi.stubGlobal("navigator", {

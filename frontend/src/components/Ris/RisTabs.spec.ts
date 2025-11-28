@@ -6,7 +6,7 @@ import RisTabs from "./RisTabs.vue";
 import IcBaselineSubject from "~icons/ic/baseline-subject";
 import IcOutlineInfo from "~icons/ic/outline-info";
 
-describe("RisTabs.vue", () => {
+describe("RisTabs", () => {
   const mockTabs = [
     {
       id: "text",

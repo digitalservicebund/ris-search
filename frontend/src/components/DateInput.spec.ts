@@ -40,7 +40,7 @@ function renderComponent(options?: {
   return { user, props, ...utils };
 }
 
-describe("dateInput", () => {
+describe("DateInput", () => {
   it("shows an date input element", () => {
     renderComponent();
     const input = screen.getByRole<HTMLInputElement>("textbox");

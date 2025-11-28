@@ -14,7 +14,7 @@ vi.mock("~/composables/usePrivateFeaturesFlag", () => {
   return { usePrivateFeaturesFlag: mocks.usePrivateFeaturesFlag };
 });
 
-describe("NormMetadataFields.vue", () => {
+describe("NormMetadataFields", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     vi.restoreAllMocks();

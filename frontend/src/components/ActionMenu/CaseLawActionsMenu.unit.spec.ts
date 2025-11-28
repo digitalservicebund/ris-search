@@ -9,7 +9,7 @@ vi.mock("~/utils/caseLaw", () => ({
   getEncodingURL: vi.fn(),
 }));
 
-describe("CaseLawActionsMenu.vue", () => {
+describe("CaseLawActionsMenu", () => {
   it("passes correct props to ActionMenu", () => {
     const expectedXmlUrl = "/foo/foo.xml";
     vi.mocked(getEncodingURL).mockReturnValue(expectedXmlUrl);
