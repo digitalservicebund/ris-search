@@ -174,8 +174,8 @@ export default defineNuxtConfig({
       },
     },
     appendSitemaps: [
-      "/sitemaps/norms/index.xml",
-      "/sitemaps/caselaw/index.xml",
+      "/v1/sitemaps/norms/index.xml",
+      "/v1/sitemaps/caselaw/index.xml",
     ],
   },
   nitro: {
