@@ -175,7 +175,11 @@ export interface AdministrativeDirectiveEncoding {
   inLanguage: string | null;
 }
 
-export type AnyDocument = CaseLaw | LegislationWork | Literature;
+export type AnyDocument =
+  | CaseLaw
+  | LegislationWork
+  | Literature
+  | AdministrativeDirective;
 
 export enum DocumentKind {
   /**

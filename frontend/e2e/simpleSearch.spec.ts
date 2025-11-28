@@ -165,6 +165,13 @@ test.describe("searching all documents", () => {
 
     // Literature
     await expect(page.getByText("Erstes Test-Dokument ULI")).toBeVisible();
+
+    // Administrative directive
+    await expect(
+      page.getByText(
+        "Verwaltungsvorschrift für das Testen des Portals zur Darstellung von Verwaltungsvorschriften",
+      ),
+    ).toBeVisible();
   });
 });
 

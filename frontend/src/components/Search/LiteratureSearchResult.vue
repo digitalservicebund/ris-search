@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import OutlineBookIcon from "virtual:icons/ic/outline-book";
+import type { SearchResultHeaderItem } from "~/components/Search/SearchResultHeader.vue";
 import { usePostHogStore } from "~/stores/usePostHogStore";
 import type { Literature, SearchResult, TextMatch } from "~/types";
 import { LITERATURE_TITLE_PLACEHOLDER } from "~/utils/literature";
@@ -17,9 +18,6 @@ type LiteratureMetadata = {
   headline: string;
   alternativeHeadline: string;
   url: string;
-  documentType: string;
-  dependentReference: string;
-  yearOfPublication: string;
   shortReport: string;
 };
 
@@ -56,14 +54,20 @@ const metadata = computed(() => {
       getMatch("documentaryTitle", props.searchResult.textMatches) ||
       item.alternativeHeadline,
     url: `/literature/${props.searchResult.item.documentNumber}`,
-    documentType: item.documentTypes?.at(0),
-    dependentReference: item.dependentReferences?.at(0),
-    yearOfPublication: item.yearsOfPublication?.at(0),
     shortReport: getShortReportSnippet(
       item.shortReport,
       props.searchResult.textMatches,
     ),
   } as LiteratureMetadata;
+});
+
+const headerItems = computed(() => {
+  const item = props.searchResult.item;
+  return [
+    { value: item.documentTypes?.at(0) },
+    { value: item.dependentReferences?.at(0) },
+    { value: item.yearsOfPublication?.at(0) },
+  ].filter((value) => value !== undefined) as SearchResultHeaderItem[];
 });
 
 function trackResultClick(url: string) {
@@ -89,17 +93,7 @@ const sanitizedShortReport = computed(() =>
 
 <template>
   <div class="my-36 flex flex-col gap-8 hyphens-auto">
-    <p class="ris-label2-regular flex flex-row flex-wrap items-center gap-8">
-      <span class="flex items-center">
-        <OutlineBookIcon class="mr-4 h-16 text-gray-900" />
-        <span>
-          {{ metadata.documentType }}
-        </span>
-      </span>
-      <span>{{ metadata.dependentReference }}</span>
-      <span>{{ metadata.yearOfPublication }}</span>
-    </p>
-
+    <SearchResultHeader :icon="OutlineBookIcon" :items="headerItems" />
     <NuxtLink
       :to="metadata.url"
       class="ris-heading3-bold max-w-title link-hover block text-blue-800"

@@ -1,12 +1,21 @@
 <script setup lang="ts">
+import AdministrativeDirectiveSearchResult from "~/components/Search/AdministrativeDirectiveSearchResult.vue";
 import CaselawSearchResult from "~/components/Search/CaselawSearchResult.vue";
 import LiteratureSearchResult from "~/components/Search/LiteratureSearchResult.vue";
 import NormSearchResult from "~/components/Search/NormSearchResult.vue";
-import type { AnyDocument, SearchResult } from "~/types";
+import type {
+  AdministrativeDirective,
+  AnyDocument,
+  CaseLaw,
+  LegislationWork,
+  Literature,
+  SearchResult,
+} from "~/types";
 import {
   isCaselaw,
   isLegislationWork,
   isLiterature,
+  isAdministrativeDirective,
 } from "~/utils/anyDocument";
 
 const props = defineProps<{
@@ -16,22 +25,27 @@ const props = defineProps<{
 </script>
 
 <template>
-  <!-- @vue-expect-error -->
   <CaselawSearchResult
     v-if="isCaselaw(props.searchResult.item)"
-    :search-result="props.searchResult"
+    :search-result="props.searchResult as SearchResult<CaseLaw>"
     :order="props.order"
   />
 
   <NormSearchResult
     v-else-if="isLegislationWork(props.searchResult.item)"
-    :search-result="props.searchResult"
+    :search-result="props.searchResult as SearchResult<LegislationWork>"
     :order="props.order"
   />
 
   <LiteratureSearchResult
     v-else-if="isLiterature(props.searchResult.item)"
-    :search-result="props.searchResult"
+    :search-result="props.searchResult as SearchResult<Literature>"
+    :order="props.order"
+  />
+
+  <AdministrativeDirectiveSearchResult
+    v-else-if="isAdministrativeDirective(props.searchResult.item)"
+    :search-result="props.searchResult as SearchResult<AdministrativeDirective>"
     :order="props.order"
   />
 </template>

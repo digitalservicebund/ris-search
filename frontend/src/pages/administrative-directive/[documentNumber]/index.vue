@@ -2,6 +2,7 @@
 import { computed } from "vue";
 import DocumentDetailPage from "~/components/DocumentDetailPage.vue";
 import { type AdministrativeDirective, DocumentKind } from "~/types";
+import { ADMINISTRATIVE_DIRECTIVE_TITLE_PLACEHOLDER } from "~/utils/administrativeDirective";
 import { formatDocumentKind } from "~/utils/displayValues";
 
 definePageMeta({ layout: "base" }); // use "base" layout to allow for full-width tab backgrounds
@@ -21,7 +22,6 @@ const { data: html, error: contentError } = await useRisBackend<string>(
 );
 
 const title = computed(() => data.value?.headline);
-const titlePlaceholder = "Titelzeile nicht vorhanden";
 const isEmptyDocument = false;
 const breadcrumbItems = computed(() => [
   {
@@ -29,7 +29,7 @@ const breadcrumbItems = computed(() => [
     route: `/search?category=${DocumentKind.AdministrativeDirective}`,
   },
   {
-    label: title.value ?? titlePlaceholder,
+    label: title.value ?? ADMINISTRATIVE_DIRECTIVE_TITLE_PLACEHOLDER,
   },
 ]);
 
@@ -44,7 +44,7 @@ if (contentError?.value) {
 <template>
   <DocumentDetailPage
     :title="title"
-    :title-placeholder="titlePlaceholder"
+    :title-placeholder="ADMINISTRATIVE_DIRECTIVE_TITLE_PLACEHOLDER"
     :is-empty-document="isEmptyDocument"
     :breadcrumb-items="breadcrumbItems"
     document-html-class="administrative-directive"
