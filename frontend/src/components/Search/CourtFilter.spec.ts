@@ -109,7 +109,6 @@ describe("court autocomplete", () => {
       const dropdownButton = screen.getByRole("button");
       await user.click(dropdownButton);
 
-      // Click the first default suggestion
       const firstSuggestion = courtFilterDefaultSuggestions[0]!;
       await user.click(screen.getByText(firstSuggestion.label));
 

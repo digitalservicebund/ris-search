@@ -140,7 +140,7 @@ describe("dateInput", () => {
 
     expect(emitted("update:validationError")).toBeTruthy();
 
-    const array = emitted("update:validationError") as ValidationError[][];
+    const array: ValidationError[][] = emitted("update:validationError");
 
     expect(
       array.find((element) => element[0] !== undefined)?.[0]?.message,
