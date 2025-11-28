@@ -2,6 +2,7 @@
 import _ from "lodash";
 import GavelIcon from "virtual:icons/material-symbols/gavel";
 import type { RouteLocationRaw } from "#vue-router";
+import type { SearchResultHeaderItem } from "~/components/Search/SearchResultHeader.vue";
 import { usePostHogStore } from "~/stores/usePostHogStore";
 import type { CaseLaw, SearchResult, TextMatch } from "~/types";
 import { dateFormattedDDMMYYYY } from "~/utils/dateFormatting";
@@ -19,11 +20,7 @@ type CaseLawMetadata = {
   headline: string;
   route: RouteLocationRaw;
   url: string;
-  courtName: string;
-  decisionDate: string;
-  fileNumbers: string;
   decisionName: string;
-  documentType: string;
 };
 
 function getMatch(match: string, matches: TextMatch[]) {
@@ -102,11 +99,7 @@ const metadata = computed(() => {
     // The URL is currently needed for PostHog tracking but should not be used
     // for navigation. Use `route` for navigation instead.
     url: `/case-law/${props.searchResult.item.documentNumber}`,
-    courtName: item.courtName,
-    decisionDate: dateFormattedDDMMYYYY(item.decisionDate),
-    fileNumbers: getFileNumbers(item),
     decisionName: item.decisionName?.at(0),
-    documentType: item.documentType || "Entscheidung",
   } as CaseLawMetadata;
 });
 
@@ -147,6 +140,16 @@ const previewSections = computed<ExtendedTextMatch[]>(() => {
   return slice;
 });
 
+const headerItems = computed(() => {
+  const item = props.searchResult.item;
+  return [
+    { value: item.documentType || "Entscheidung" },
+    { value: item.courtName },
+    { value: dateFormattedDDMMYYYY(item.decisionDate) },
+    { value: getFileNumbers(item), isMarkup: true },
+  ].filter((item) => item.value !== undefined) as SearchResultHeaderItem[];
+});
+
 function trackResultClick(url: string) {
   postHogStore.searchResultClicked(url, props.order);
 }
@@ -154,16 +157,7 @@ function trackResultClick(url: string) {
 
 <template>
   <div class="my-36 flex flex-col gap-8 hyphens-auto">
-    <p class="ris-label2-regular flex flex-row flex-wrap items-center gap-8">
-      <span class="flex items-center">
-        <GavelIcon class="mr-4 h-16 text-gray-900" />
-        <span>{{ metadata.documentType }}</span>
-      </span>
-      <span>{{ metadata.courtName }}</span>
-      <span>{{ metadata.decisionDate }}</span>
-      <span v-html="metadata.fileNumbers" />
-    </p>
-
+    <SearchResultHeader :icon="GavelIcon" :items="headerItems" />
     <NuxtLink
       :to="metadata.url"
       class="ris-heading3-bold max-w-title link-hover block text-blue-800"

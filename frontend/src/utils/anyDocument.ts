@@ -1,4 +1,5 @@
 import type {
+  AdministrativeDirective,
   AnyDocument,
   CaseLaw,
   LegislationWork,
@@ -35,6 +36,18 @@ export function isLegislationWork(
  */
 export function isLiterature(candidate: AnyDocument): candidate is Literature {
   return candidate["@type"] === "Literature";
+}
+
+/**
+ * Type guard asserting that the candidate is an administrative directive document.
+ *
+ * @param candidate Document to check
+ * @returns true if the document is an administrative directive document.
+ */
+export function isAdministrativeDirective(
+  candidate: AnyDocument,
+): candidate is AdministrativeDirective {
+  return candidate["@type"] === "AdministrativeDirective";
 }
 
 /**

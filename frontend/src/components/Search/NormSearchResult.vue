@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import LegalIcon from "virtual:icons/mdi/legal";
 import Badge from "~/components/Badge.vue";
+import type { SearchResultHeaderItem } from "~/components/Search/SearchResultHeader.vue";
 import { usePrivateFeaturesFlag } from "~/composables/usePrivateFeaturesFlag";
 import { usePostHogStore } from "~/stores/usePostHogStore";
 import type { LegislationWork, SearchResult, TextMatch } from "~/types";
@@ -63,20 +64,27 @@ function openResult(url: string) {
 const validityStatus = computed(() => {
   return formatNormValidity(item.value.workExample.temporalCoverage);
 });
+
+const headerItems = computed(() => {
+  return [
+    { value: "Norm" },
+    { value: item.value.abbreviation },
+    { value: formattedDate.value },
+  ].filter((item) => item.value !== undefined) as SearchResultHeaderItem[];
+});
 </script>
 
 <template>
   <div class="my-36 flex flex-col gap-8 hyphens-auto">
-    <p class="ris-label2-regular flex flex-row flex-wrap items-center gap-8">
-      <span class="flex items-center">
-        <LegalIcon class="mr-4 h-16 text-gray-900" />
-        <span>Norm</span>
-      </span>
-      <span v-if="item.abbreviation">{{ item.abbreviation }}</span>
-      <span v-if="formattedDate">{{ formattedDate }}</span>
-      <Badge v-if="validityStatus" class="md:ml-auto" v-bind="validityStatus" />
-    </p>
-
+    <SearchResultHeader :icon="LegalIcon" :items="headerItems">
+      <template #trailing>
+        <Badge
+          v-if="validityStatus"
+          class="md:ml-auto"
+          v-bind="validityStatus"
+        />
+      </template>
+    </SearchResultHeader>
     <NuxtLink
       v-if="!!link"
       :to="link"
