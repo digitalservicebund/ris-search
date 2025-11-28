@@ -26,7 +26,7 @@ defineEmits<{
         severity="info"
         size="small"
         rounded
-        :aria-label="`${field.label} filtern`"
+        :aria-label="`${field.label} einfügen`"
         :label="field.label"
         class="gap-4! pl-12! text-nowrap focus-visible:z-10"
         @click="$emit('clickDataField', field)"

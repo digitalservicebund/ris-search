@@ -29,18 +29,18 @@ public class LiteratureSimpleSearchType implements SimpleSearchType {
     this.searchParams = searchParams;
   }
 
-  @Override
-  public void addHighlightedFields(HighlightBuilder builder) {
-    addHighlightedFieldsStatic(builder);
-  }
-
-  public static void addHighlightedFieldsStatic(HighlightBuilder builder) {
-    LITERATURE_HIGHLIGHT_CONTENT_FIELDS.forEach(builder::field);
+  public static List<HighlightBuilder.Field> getHighlightedFieldsStatic() {
+    return LITERATURE_HIGHLIGHT_CONTENT_FIELDS.stream().map(HighlightBuilder.Field::new).toList();
   }
 
   @Override
   public List<String> getExcludedFields() {
     return LITERATURE_FETCH_EXCLUDED_FIELDS;
+  }
+
+  @Override
+  public List<HighlightBuilder.Field> getHighlightedFields() {
+    return getHighlightedFieldsStatic();
   }
 
   /**

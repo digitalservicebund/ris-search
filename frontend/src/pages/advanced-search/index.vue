@@ -39,6 +39,10 @@ const {
 
 const searchFormId = useId();
 
+watch(documentKind, () => {
+  query.value = "";
+});
+
 // Date filter ---------------------------------------------
 
 const strictDateFilter = ref(

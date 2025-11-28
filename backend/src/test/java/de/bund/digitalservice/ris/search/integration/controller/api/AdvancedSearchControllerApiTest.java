@@ -22,6 +22,7 @@ import java.util.Objects;
 import java.util.stream.Stream;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -43,6 +44,12 @@ import org.springframework.test.web.servlet.ResultMatcher;
 class AdvancedSearchControllerApiTest extends ContainersIntegrationBase {
 
   @Autowired private MockMvc mockMvc;
+
+  @BeforeAll()
+  void setup() {
+    // administrative directives are not part of the advanced search yet
+    administrativeDirectiveRepository.deleteAll();
+  }
 
   static String buildAdvancedQuery(String key, String value) {
     return "?query=%s:%s".formatted(key, value);

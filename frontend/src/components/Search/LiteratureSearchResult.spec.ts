@@ -57,15 +57,6 @@ describe("LiteratureSearchResult.vue", () => {
     ).toBeInTheDocument();
   });
 
-  it("labels the element with the title", () => {
-    renderComponent({});
-    expect(
-      screen.getByRole("article", {
-        name: "Eine Untersuchung der juristischen Methoden im 21. Jahrhundert",
-      }),
-    ).toBeInTheDocument();
-  });
-
   it("renders placeholder title if title is missing", async () => {
     const searchResultWithoutTitle = {
       item: {

@@ -5,6 +5,7 @@ import de.bund.digitalservice.ris.search.integration.controller.api.testData.Adm
 import de.bund.digitalservice.ris.search.integration.controller.api.testData.CaseLawTestData;
 import de.bund.digitalservice.ris.search.integration.controller.api.testData.LiteratureTestData;
 import de.bund.digitalservice.ris.search.integration.controller.api.testData.NormsTestData;
+import de.bund.digitalservice.ris.search.models.opensearch.AdministrativeDirective;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import de.bund.digitalservice.ris.search.models.opensearch.Literature;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
@@ -56,7 +57,7 @@ public class ContainersIntegrationBase {
 
   @Autowired
   @Qualifier("administrativeDirectiveS3Client")
-  private S3ObjectStorageClient administrativeDirectiveS3Client;
+  protected S3ObjectStorageClient administrativeDirectiveS3Client;
 
   @Autowired
   @Qualifier("normS3Client")
@@ -138,11 +139,21 @@ public class ContainersIntegrationBase {
     List<Literature> allLiterature =
         IteratorUtils.toList(literatureRepository.findAll().iterator());
     List<Norm> allNorms = IteratorUtils.toList(normsRepository.findAll().iterator());
+    List<AdministrativeDirective> directives =
+        IteratorUtils.toList(administrativeDirectiveRepository.findAll().iterator());
 
     List<String> result = new ArrayList<>();
     result.addAll(allCaseLaw.stream().map(e -> e.decisionDate().toString()).toList());
     result.addAll(allLiterature.stream().map(e -> e.firstPublicationDate().toString()).toList());
     result.addAll(allNorms.stream().map(e -> e.getEntryIntoForceDate().toString()).toList());
+    result.addAll(
+        directives.stream()
+            .map(
+                e -> {
+                  assert e.entryIntoEffectDate() != null;
+                  return e.entryIntoEffectDate().toString();
+                })
+            .toList());
     return result;
   }
 }

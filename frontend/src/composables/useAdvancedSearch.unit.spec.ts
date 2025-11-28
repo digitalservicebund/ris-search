@@ -149,33 +149,7 @@ describe("useAdvancedSearch", () => {
     expect(watch).toBe(false);
   });
 
-  it("does not submit with an empty query string", async () => {
-    const { submitSearch } = await useAdvancedSearch(
-      "",
-      DocumentKind.CaseLaw,
-      { type: "allTime", from: undefined, to: undefined },
-      {},
-    );
-
-    await submitSearch();
-
-    expect(executeMock).not.toHaveBeenCalled();
-  });
-
-  it("submits with a date filter but empty query string", async () => {
-    const { submitSearch } = await useAdvancedSearch(
-      "",
-      DocumentKind.Norm,
-      { type: "currentlyInForce", from: undefined, to: undefined },
-      {},
-    );
-
-    await submitSearch();
-
-    expect(executeMock).toHaveBeenCalled();
-  });
-
-  it("submits with a valid query string", async () => {
+  it("submits the query", async () => {
     const { submitSearch } = await useAdvancedSearch(
       "test query",
       DocumentKind.CaseLaw,

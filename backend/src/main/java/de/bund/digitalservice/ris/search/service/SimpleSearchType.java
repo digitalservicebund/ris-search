@@ -7,9 +7,9 @@ import org.opensearch.search.fetch.subphase.highlight.HighlightBuilder;
 /** Interface defining methods for different simple search types. */
 public interface SimpleSearchType {
 
-  void addHighlightedFields(HighlightBuilder builder);
-
   List<String> getExcludedFields();
+
+  List<HighlightBuilder.Field> getHighlightedFields();
 
   void addExtraLogic(String searchTerm, BoolQueryBuilder query);
 }

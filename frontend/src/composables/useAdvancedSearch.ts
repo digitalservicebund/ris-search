@@ -90,16 +90,12 @@ export async function useAdvancedSearch(
     },
   );
 
-  async function executeWhenValid() {
-    if (combinedQuery.value.query) await execute();
-  }
-
   return {
     searchError: error,
     searchIsPending: pending,
     searchResults: data,
     searchStatus: status,
-    submitSearch: executeWhenValid,
+    submitSearch: execute,
     totalItemCount: computed(() => data.value?.totalItems ?? 0),
   };
 }
