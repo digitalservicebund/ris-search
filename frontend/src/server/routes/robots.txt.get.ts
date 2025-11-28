@@ -1,5 +1,4 @@
 import { getHeader, setHeader, defineEventHandler } from "h3";
-import { useStorage } from "#imports";
 import useBackendUrl from "~/composables/useBackendUrl";
 import { usePrivateFeaturesFlag } from "~/composables/usePrivateFeaturesFlag";
 
@@ -16,10 +15,13 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  const storage = useStorage("assets:server");
   if (privateFeaturesEnabled) {
-    return storage.getItem("robots.staging.txt");
+    return (
+      "User-agent: *\n" +
+      "Allow: /\n\n" +
+      "Sitemap: https://ris-portal.dev.ds4g.net/sitemap_index.xml"
+    );
   } else {
-    return storage.getItem("robots.public.txt");
+    return "User-agent: *\n" + "Disallow: /";
   }
 });

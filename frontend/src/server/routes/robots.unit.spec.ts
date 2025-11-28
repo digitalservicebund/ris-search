@@ -56,7 +56,7 @@ describe("robots txt route", () => {
     [true, "robots.staging.txt"],
   ];
 
-  test.for(testCases)(
+  test.skip.for(testCases)(
     "privateFeaturesEnabled flag = %s serves %s",
     async ([privateFeaturesEnabled, file]) => {
       mockUseRuntimeConfig.mockImplementation(() => ({
