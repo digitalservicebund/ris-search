@@ -6,6 +6,7 @@ export function getUrl(category?: string): string {
     [DocumentKind.CaseLaw, "case-law"],
     [DocumentKind.Norm, "legislation"],
     [DocumentKind.Literature, "literature"],
+    [DocumentKind.AdministrativeDirective, "administrative-directive"],
   ];
 
   const match = routes.find(([kind]) => category?.startsWith(kind));

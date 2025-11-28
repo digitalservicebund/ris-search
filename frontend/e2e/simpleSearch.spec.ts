@@ -68,6 +68,61 @@ test.describe("links to advanced search", () => {
 });
 
 test.describe("general search page features", () => {
+  test("sets the pages title", async ({ page }) => {
+    await navigate(page, "/search");
+
+    await expect(page).toHaveTitle("Suche | Rechtsinformationen des Bundes");
+
+    await page
+      .getByRole("group", { name: "Filter" })
+      .getByRole("button", { name: "Gesetze & Verordnungen" })
+      .click();
+    await expect(page).toHaveTitle(
+      "Gesetze & Verordnungen — Suche | Rechtsinformationen des Bundes",
+    );
+
+    await page
+      .getByRole("group", { name: "Filter" })
+      .getByRole("button", { name: "Gerichtsentscheidungen" })
+      .click();
+    await expect(page).toHaveTitle(
+      "Rechtsprechung — Suche | Rechtsinformationen des Bundes",
+    );
+
+    await page
+      .getByRole("group", { name: "Filter" })
+      .getByRole("button", { name: "Verwaltungsvorschriften" })
+      .click();
+    await expect(page).toHaveTitle(
+      "Verwaltungsvorschriften — Suche | Rechtsinformationen des Bundes",
+    );
+
+    await page
+      .getByRole("group", { name: "Filter" })
+      .getByRole("button", { name: "Literaturnachweise" })
+      .click();
+    await expect(page).toHaveTitle(
+      "Literaturnachweise — Suche | Rechtsinformationen des Bundes",
+    );
+
+    await page
+      .getByRole("group", { name: "Filter" })
+      .getByRole("button", { name: "Alle Dokumentarten" })
+      .click();
+
+    await expect(page).toHaveTitle("Suche | Rechtsinformationen des Bundes");
+
+    await page
+      .getByRole("searchbox", { name: "Suchbegriff" })
+      .fill("frühstück brötchen");
+
+    await page.getByRole("button", { name: "Suchen" }).click();
+
+    await expect(page).toHaveTitle(
+      "frühstück brötchen — Suche | Rechtsinformationen des Bundes",
+    );
+  });
+
   test("pagination switches pages", async ({ page }) => {
     await navigate(page, "/search?query=und");
 

@@ -73,7 +73,9 @@ const title = computed(() => {
       case DocumentKind.CaseLaw:
         return "Rechtsprechung — Suche";
       case DocumentKind.Literature:
-        return "Literatur — Suche";
+        return "Literaturnachweise — Suche";
+      case DocumentKind.AdministrativeDirective:
+        return "Verwaltungsvorschriften — Suche";
       default:
         return "Suche";
     }
