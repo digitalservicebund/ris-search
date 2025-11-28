@@ -22,6 +22,16 @@ function getResultCounter(page: Page) {
 
 const nonZeroResultCount = /[1-9][\d.]* Suchergebnis(se)?/;
 
+function getTotalDocumentCounter(page: Page) {
+  return page.getByText(
+    /In [\d.]+ (Gesetze & Verordnungen|Gerichtsentscheidungen|Literaturnachweise) suchen/,
+    { exact: true },
+  );
+}
+
+const nonZeroTotalDocumentCount = (documentKind: string) =>
+  new RegExp(`[1-9][\\d.]* ${documentKind}`);
+
 async function searchFor(
   page: Page,
   search: {
@@ -270,6 +280,16 @@ test.describe("searching legislation", () => {
     await expect(searchResults).toHaveText(Array(5).fill(/^Norm/));
   });
 
+  test("shows total document count", async ({ page }) => {
+    await navigate(page, "/advanced-search?documentKind=N");
+
+    const count = getTotalDocumentCounter(page);
+
+    await expect(count).toHaveText(
+      nonZeroTotalDocumentCount("Gesetze & Verordnungen"),
+    );
+  });
+
   test("shows the search result contents", async ({ page }) => {
     await navigate(page, "/advanced-search");
 
@@ -406,6 +426,16 @@ test.describe("searching caselaw", () => {
     // Ensure all visible entries are of type caselaw
     await expect(searchResults).toHaveText(
       Array(10).fill(/^(Beschluss|Urteil)/),
+    );
+  });
+
+  test("shows total document count", async ({ page }) => {
+    await navigate(page, "/advanced-search?documentKind=R");
+
+    const count = getTotalDocumentCounter(page);
+
+    await expect(count).toHaveText(
+      nonZeroTotalDocumentCount("Gerichtsentscheidungen"),
     );
   });
 
@@ -561,6 +591,16 @@ test.describe("searching literature", () => {
 
     // Ensure all visible entries are of type literature
     await expect(searchResults).toHaveText([/^Auf/]);
+  });
+
+  test("shows total document count", async ({ page }) => {
+    await navigate(page, "/advanced-search?documentKind=L");
+
+    const count = getTotalDocumentCounter(page);
+
+    await expect(count).toHaveText(
+      nonZeroTotalDocumentCount("Literaturnachweise"),
+    );
   });
 
   test("shows the search result contents", async ({ page }) => {

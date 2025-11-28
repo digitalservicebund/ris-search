@@ -17,19 +17,22 @@ describe("DataFieldPicker", () => {
     ).toBeInTheDocument();
   });
 
-  it("displays the document kind name and count", () => {
-    render(DataFieldPicker, {
-      props: {
-        dataFields: undefined,
-        count: 1000,
-        documentKind: DocumentKind.CaseLaw,
-      },
-    });
+  it.each([DocumentKind.Norm, DocumentKind.Literature, DocumentKind.CaseLaw])(
+    'displays the document kind name and count for "%s"',
+    async (documentKind) => {
+      render(DataFieldPicker, {
+        props: {
+          dataFields: undefined,
+          count: { [documentKind]: 1000 },
+          documentKind,
+        },
+      });
 
-    expect(
-      screen.getByText("In 1.000 Gerichtsentscheidungen suchen"),
-    ).toBeInTheDocument();
-  });
+      expect(
+        screen.getByText(`In 1.000 ${formatDocumentKind(documentKind)} suchen`),
+      ).toBeInTheDocument();
+    },
+  );
 
   it("displays the data fields for the document kind", async () => {
     const { rerender } = render(DataFieldPicker, {
