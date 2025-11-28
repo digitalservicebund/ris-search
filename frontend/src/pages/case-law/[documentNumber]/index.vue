@@ -7,7 +7,6 @@ import TableOfContents, {
 } from "~/components/Caselaw/TableOfContents.vue";
 import DocumentDetailPage from "~/components/DocumentDetailPage.vue";
 import IncompleteDataMessage from "~/components/IncompleteDataMessage.vue";
-import MetadataField from "~/components/MetadataField.vue";
 import Properties from "~/components/Properties.vue";
 import PropertiesItem from "~/components/PropertiesItem.vue";
 import { type CaseLaw, DocumentKind } from "~/types";
@@ -139,6 +138,26 @@ const formattedFileNumbers = computed(() =>
 const formattedDescisionNames = computed(() =>
   formatArray(caseLaw.value?.decisionName ?? []),
 );
+
+const metadataItems = computed(() => [
+  {
+    label: "Gericht",
+    value: caseLaw.value?.courtName,
+  },
+  {
+    label: "Dokumenttyp",
+    value: caseLaw.value?.documentType,
+  },
+
+  {
+    label: "Entscheidungsdatum",
+    value: formattedDecisionDate.value,
+  },
+  {
+    label: "Aktenzeichen",
+    value: formattedFileNumbers.value,
+  },
+]);
 </script>
 
 <template>
@@ -146,22 +165,12 @@ const formattedDescisionNames = computed(() =>
     :title="title"
     title-placeholder="Titelzeile nicht vorhanden"
     :breadcrumb-items="breadcrumbItems"
+    :metadata-items="metadataItems"
     document-html-class="case-law"
     :html="html"
   >
     <template #actionsMenu>
       <CaseLawActionsMenu :case-law="caseLaw" />
-    </template>
-    <template #metadata>
-      <div class="mb-48 flex flex-row flex-wrap gap-24">
-        <MetadataField label="Gericht" :value="caseLaw?.courtName" />
-        <MetadataField label="Dokumenttyp" :value="caseLaw?.documentType" />
-        <MetadataField
-          label="Entscheidungsdatum"
-          :value="formattedDecisionDate"
-        />
-        <MetadataField label="Aktenzeichen" :value="formattedFileNumbers" />
-      </div>
     </template>
     <template #sidebar>
       <client-only>

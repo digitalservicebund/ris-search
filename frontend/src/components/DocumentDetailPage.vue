@@ -2,6 +2,7 @@
 import { computed } from "vue";
 import ContentWrapper from "~/components/CustomLayouts/ContentWrapper.vue";
 import SidebarLayout from "~/components/CustomLayouts/SidebarLayout.vue";
+import type { MetadataItem } from "~/components/Metadata.vue";
 import RisBreadcrumb, {
   type BreadcrumbItem,
 } from "~/components/Ris/RisBreadcrumb.vue";
@@ -14,6 +15,7 @@ export interface DocumentDetailPageProps {
   titlePlaceholder: string;
   isEmptyDocument?: boolean;
   breadcrumbItems: BreadcrumbItem[];
+  metadataItems: MetadataItem[];
   documentHtmlClass: string;
   html?: string;
 }
@@ -23,6 +25,7 @@ const {
   titlePlaceholder,
   isEmptyDocument = false,
   breadcrumbItems,
+  metadataItems,
   documentHtmlClass,
   html,
 } = defineProps<DocumentDetailPageProps>();
@@ -51,7 +54,7 @@ const tabs = computed(() => [
         <slot name="actionsMenu" />
       </div>
       <RisDocumentTitle :title="title" :placeholder="titlePlaceholder" />
-      <slot name="metadata" />
+      <Metadata :items="metadataItems" class="mb-48" />
     </div>
     <div
       v-if="isEmptyDocument"

@@ -3,10 +3,13 @@ import { computed } from "vue";
 import LiteratureActionsMenu from "~/components/ActionMenu/LiteratureActionsMenu.vue";
 import DocumentDetailPage from "~/components/DocumentDetailPage.vue";
 import LiteratureDetails from "~/components/Literature/LiteratureDetails.vue";
-import LiteratureMetadata from "~/components/Literature/LiteratureMetadata.vue";
 import { DocumentKind, type Literature } from "~/types";
 import { formatDocumentKind } from "~/utils/displayValues";
-import { getTitle, LITERATURE_TITLE_PLACEHOLDER } from "~/utils/literature";
+import {
+  getLiteratureMetadataItems,
+  getTitle,
+  LITERATURE_TITLE_PLACEHOLDER,
+} from "~/utils/literature";
 
 definePageMeta({ layout: "base" }); // use "base" layout to allow for full-width tab backgrounds
 
@@ -46,6 +49,10 @@ const breadcrumbItems = computed(() => [
   },
 ]);
 
+const metadataItems = computed(() =>
+  getLiteratureMetadataItems(literature.value),
+);
+
 if (metadataError?.value) {
   showError(metadataError.value);
 }
@@ -60,6 +67,7 @@ if (contentError?.value) {
     :title-placeholder="LITERATURE_TITLE_PLACEHOLDER"
     :is-empty-document="isEmptyDocument"
     :breadcrumb-items="breadcrumbItems"
+    :metadata-items="metadataItems"
     document-html-class="literature"
     :html="html"
   >
@@ -67,15 +75,6 @@ if (contentError?.value) {
       <client-only
         ><LiteratureActionsMenu :literature="literature"
       /></client-only>
-    </template>
-    <template #metadata>
-      <LiteratureMetadata
-        v-if="literature"
-        :document-types="literature.documentTypes"
-        :references="literature.dependentReferences"
-        :authors="literature.authors"
-        :years-of-publication="literature.yearsOfPublication"
-      />
     </template>
     <template #details>
       <LiteratureDetails :details="details" />
