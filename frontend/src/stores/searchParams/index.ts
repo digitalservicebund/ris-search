@@ -113,10 +113,6 @@ export function useSimpleSearchParams() {
   const setItemsPerPage = (value: number) => (itemsPerPage.value = value);
   const setSort = (value: string) => (sort.value = value);
 
-  function reset() {
-    reinitializeFromQuery(route.query);
-  }
-
   function reinitializeFromQuery(routerQuery: LocationQuery) {
     const initialState = getInitialState(routerQuery);
 
@@ -187,6 +183,5 @@ export function useSimpleSearchParams() {
     dateAfter,
     dateBefore,
     dateSearchMode,
-    reset,
   };
 }
