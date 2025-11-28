@@ -26,7 +26,7 @@ describe("CategoryFilter", () => {
 
     await user.click(screen.getByText("Gesetze & Verordnungen"));
 
-    expect(emitted()["update:modelValue"]).toContainEqual(["N"]);
+    expect(emitted("update:modelValue")).toContainEqual(["N"]);
   });
 
   it("strips .all suffix when selecting 'all' subcategory", async () => {
@@ -39,7 +39,7 @@ describe("CategoryFilter", () => {
     await user.click(screen.getByText("Gerichtsentscheidungen"));
     await user.click(screen.getByText("Alle Gerichtsentscheidungen"));
 
-    expect(emitted()["update:modelValue"]).toContainEqual(["R"]);
+    expect(emitted("update:modelValue")).toContainEqual(["R"]);
   });
 
   it("sets specific subcategory when selected", async () => {
@@ -52,6 +52,6 @@ describe("CategoryFilter", () => {
     await user.click(screen.getByText("Gerichtsentscheidungen"));
     await user.click(screen.getByText("Urteil"));
 
-    expect(emitted()["update:modelValue"]).toContainEqual(["R.urteil"]);
+    expect(emitted("update:modelValue")).toContainEqual(["R.urteil"]);
   });
 });
