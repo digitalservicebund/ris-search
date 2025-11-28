@@ -9,6 +9,26 @@
   "template": {
     "mappings": {
       "properties": {
+        "DATUM": {
+          "type": "alias",
+          "path": "first_publication_date"
+        },
+        "T": {
+          "type": "alias",
+          "path": "main_title"
+        },
+        "V": {
+          "type": "alias",
+          "path": "authors"
+        },
+        "FU": {
+          "type": "alias",
+          "path": "originator"
+        },
+        "N": {
+          "type": "alias",
+          "path": "norm_references"
+        },
         "document_number": {
           "type": "text",
           "analyzer": "custom_german_analyzer",
@@ -25,10 +45,6 @@
         "years_of_publication": {
           "type": "text",
           "analyzer": "custom_german_analyzer"
-        },
-        "DATUM": {
-          "type": "alias",
-          "path": "first_publication_date"
         },
         "first_publication_date": {
           "type": "date"
