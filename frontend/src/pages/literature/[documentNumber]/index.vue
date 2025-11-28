@@ -26,6 +26,11 @@ const { data: html, error: contentError } = await useRisBackend<string>(
 
 const title = computed(() => getTitle(literature.value));
 const isEmptyDocument = computed(() => isDocumentEmpty(literature.value));
+const references = computed(() => {
+  return literature.value?.dependentReferences?.length
+    ? literature.value?.dependentReferences
+    : (literature.value?.independentReferences ?? []);
+});
 const details = computed(() => {
   return {
     normReferences: literature.value?.normReferences ?? [],
@@ -72,7 +77,7 @@ if (contentError?.value) {
       <LiteratureMetadata
         v-if="literature"
         :document-types="literature.documentTypes"
-        :references="literature.dependentReferences"
+        :references="references"
         :authors="literature.authors"
         :years-of-publication="literature.yearsOfPublication"
       />

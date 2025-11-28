@@ -43,11 +43,8 @@
             </akn:classification>
             <akn:analysis source="attributsemantik-noch-undefiniert">
                 <akn:otherReferences source="attributsemantik-noch-undefiniert">
-                    <akn:implicitReference showAs="FooBar, 1982, 123-123">
-                        <ris:fundstelleUnselbstaendig periodikum="FooBar" zitatstelle="1982, 123-123"/>
-                    </akn:implicitReference>
-                    <akn:implicitReference showAs="Baz, 1999, 123-123">
-                        <ris:fundstelleUnselbstaendig periodikum="Baz" zitatstelle="1999, 123-123"/>
+                    <akn:implicitReference showAs="Selbständige Fundstelle, 1954, 123-729 (Foo)">
+                        <ris:fundstelleSelbstaendig titel="Selbständige Fundstelle" zitatstelle="1954, 123-729 (Foo)"/>
                     </akn:implicitReference>
                 </akn:otherReferences>
             </akn:analysis>

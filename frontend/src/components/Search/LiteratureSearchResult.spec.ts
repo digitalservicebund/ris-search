@@ -109,6 +109,34 @@ describe("LiteratureSearchResult.vue", () => {
     ).toBeInTheDocument();
   });
 
+  it("renders first document type, dependent reference and year of publication", async () => {
+    renderComponent({});
+    expect(screen.getByText("Book")).toBeInTheDocument();
+    expect(screen.queryByText("Article")).not.toBeInTheDocument();
+
+    expect(screen.getByText("LIT-122")).toBeInTheDocument();
+    expect(screen.queryByText("LIT-121")).not.toBeInTheDocument();
+
+    expect(screen.getByText("2021")).toBeInTheDocument();
+    expect(screen.queryByText("2022")).not.toBeInTheDocument();
+  });
+
+  it("renders first independent reference if no dependent references exist", async () => {
+    const searchResultWithoutDependentReference = {
+      item: {
+        ...searchResult.item,
+        dependentReferences: [],
+        independentReferences: ["Fundstelle unselbständig, 1234", "Foo Bar"],
+      },
+      textMatches: [],
+    };
+    renderComponent(searchResultWithoutDependentReference);
+    expect(
+      screen.getByText("Fundstelle unselbständig, 1234"),
+    ).toBeInTheDocument();
+    expect(screen.queryByText("Foo Bar")).not.toBeInTheDocument();
+  });
+
   it("displays highlighted text with correct class", async () => {
     const textMatch: TextMatch = {
       "@type": "SearchResultMatch",

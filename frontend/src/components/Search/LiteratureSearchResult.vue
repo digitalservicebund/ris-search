@@ -57,7 +57,8 @@ const metadata = computed(() => {
       item.alternativeHeadline,
     url: `/literature/${props.searchResult.item.documentNumber}`,
     documentType: item.documentTypes?.at(0),
-    dependentReference: item.dependentReferences?.at(0),
+    dependentReference:
+      item.dependentReferences?.at(0) || item.independentReferences?.at(0),
     yearOfPublication: item.yearsOfPublication?.at(0),
     shortReport: getShortReportSnippet(
       item.shortReport,
