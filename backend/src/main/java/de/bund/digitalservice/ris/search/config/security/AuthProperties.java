@@ -18,15 +18,6 @@ public class AuthProperties {
   private List<ApiKey> apiKeys;
 
   /**
-   * No-argument constructor used by Spring for properties binding.
-   *
-   * <p>Creates an empty AuthProperties instance which will be populated by the framework.
-   */
-  public AuthProperties() {
-    // default constructor for Spring's @ConfigurationProperties binding
-  }
-
-  /**
    * Represents an API key used for authenticating requests.
    *
    * <p>Each API key consists of a hashed key value and an optional prefix. The prefix is used to

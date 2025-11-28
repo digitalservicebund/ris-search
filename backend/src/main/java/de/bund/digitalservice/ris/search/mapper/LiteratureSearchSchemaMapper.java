@@ -14,7 +14,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.elasticsearch.core.SearchHit;
 import org.springframework.data.elasticsearch.core.SearchPage;
 
-/** The LiteratureSearchSchemaMapper class provides */
+/**
+ * The LiteratureSearchSchemaMapper class provides static methods to map opensearch results to the
+ * literature objects returned by the api
+ */
 public class LiteratureSearchSchemaMapper {
   private LiteratureSearchSchemaMapper() {}
 

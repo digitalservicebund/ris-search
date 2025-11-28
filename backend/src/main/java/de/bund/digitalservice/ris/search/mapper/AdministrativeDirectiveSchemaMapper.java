@@ -14,9 +14,6 @@ import de.bund.digitalservice.ris.search.schema.AdministrativeDirectiveSchema;
  *
  * <p>The resulting DTO includes the administrative directive's metadata, such as document number,
  * type, headline, references, effective dates, and encodings, adhering to the schema.org structure.
- *
- * <p>The class is structured to ensure immutability by including a private constructor and exposing
- * only static utility methods.
  */
 public class AdministrativeDirectiveSchemaMapper {
   private AdministrativeDirectiveSchemaMapper() {}

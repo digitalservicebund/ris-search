@@ -25,7 +25,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
    * @param interceptor interceptor handling feedback-related rate limits
    * @param defaultRateLimitInterceptor interceptor applying default rate limits to requests
    */
-  WebMvcConfig(
+  public WebMvcConfig(
       FeedbackRateLimitInterceptor interceptor,
       DefaultRateLimitInterceptor defaultRateLimitInterceptor) {
 

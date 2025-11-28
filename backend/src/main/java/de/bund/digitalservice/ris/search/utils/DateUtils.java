@@ -195,11 +195,7 @@ public class DateUtils {
    * sleep period, it logs a warning and restores the interrupt status of the thread.
    */
   public static void avoidOpenSearchSubMillisecondDateBug() {
-    // If two timestamps are too close (less than 1 millisecond different) than opensearch might
-    // consider them equal. This can sometimes result in a bug (for example with reindexing) so
-    // sometimes we need a very small delay to avoid side effects of an eventually consistent system
     try {
-      // wait 10 milliseconds
       Thread.sleep(10);
     } catch (InterruptedException e) {
       logger.warn("Unexpected interruption during DateUtils Thread sleep", e);

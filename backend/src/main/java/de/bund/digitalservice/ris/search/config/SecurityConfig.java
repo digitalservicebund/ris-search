@@ -28,11 +28,6 @@ public class SecurityConfig {
   @Value("${app.security.csp-header}")
   private String cspHeader;
 
-  /**
-   * Create a SecurityConfig instance.
-   *
-   * @param authProperties configuration properties related to authentication and authorization
-   */
   public SecurityConfig(AuthProperties authProperties) {
     this.authProperties = authProperties;
   }

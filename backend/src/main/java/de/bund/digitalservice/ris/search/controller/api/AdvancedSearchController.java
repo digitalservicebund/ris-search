@@ -55,9 +55,7 @@ public class AdvancedSearchController {
   /**
    * Constructs an instance of AdvancedSearchController with the provided services.
    *
-   * @param allDocumentsService a service to handle operations related to all documents
-   * @param normsService a service to handle operations related to norms
-   * @param caseLawService a service to handle operations related to case law
+   * @param advancedSearchService a service to advanced search
    */
   @Autowired
   public AdvancedSearchController(AdvancedSearchService advancedSearchService) {

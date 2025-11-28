@@ -13,11 +13,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class LiteratureBucket extends ObjectStorage {
 
-  /**
-   * Create a LiteratureBucket wrapper using the provided ObjectStorageClient.
-   *
-   * @param s3Client the client instance bound to the literature bucket
-   */
   public LiteratureBucket(@Qualifier("literatureS3Client") ObjectStorageClient s3Client) {
     super(s3Client, LogManager.getLogger(LiteratureBucket.class));
   }

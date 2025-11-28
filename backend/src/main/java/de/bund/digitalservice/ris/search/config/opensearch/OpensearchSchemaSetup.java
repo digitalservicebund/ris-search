@@ -29,16 +29,6 @@ import org.springframework.core.io.ClassPathResource;
 @Configuration
 public class OpensearchSchemaSetup {
 
-  /**
-   * No-argument constructor used by some frameworks and proxies.
-   *
-   * <p>It delegates to the primary constructor with null to avoid duplicate final-field assignment.
-   * Not intended for regular manual use.
-   */
-  public OpensearchSchemaSetup() {
-    this(null);
-  }
-
   private static final Logger logger = LogManager.getLogger(OpensearchSchemaSetup.class);
   private final Configurations configurations;
 

@@ -23,13 +23,4 @@ public class Changelog {
 
   @JsonProperty("change_all")
   boolean changeAll;
-
-  /**
-   * Create an empty Changelog.
-   *
-   * <p>Initializes internal collections to empty sets.
-   */
-  public Changelog() {
-    // default constructor initializes fields via their declarations
-  }
 }

@@ -92,8 +92,8 @@ public class NormsController {
    * temporal coverage, and sorting and pagination options. It returns the filtered and paginated
    * collection of legislation records.
    *
-   * @param normsSearchParams the search parameters specific to normative aspects of legislation
-   * @param universalSearchParams general search parameters applicable across legislation data
+   * @param normsSearchParams the search parameters specific to norms
+   * @param universalSearchParams general search parameters applicable to all document kinds
    * @param pagination the pagination parameters defining page size and index
    * @param sortParams the sorting parameters for ordering the results
    * @return a filtered and paginated collection of legislation records encapsulated as {@code
@@ -160,16 +160,13 @@ public class NormsController {
   /**
    * Retrieves the work and expression-level metadata of a legislation item.
    *
-   * @param jurisdiction The jurisdiction in which the legislation applies. Example: "bund".
-   * @param agent The agent responsible for the legislation, such as a governmental body. Example:
-   *     "bgbl".
-   * @param year The year of the legislation. Example: "2021".
-   * @param naturalIdentifier A unique natural identifier for the legislation. Example: "12345".
-   * @param pointInTime The specific point in time that determines the validity of the legislation.
-   *     Example: "2020-06-19".
-   * @param version The version number of the legislation. Example: 2.
-   * @param language The language in which the legislation text or metadata is represented. Example:
-   *     "deu".
+   * @param jurisdiction the jurisdiction to which the legal document belongs
+   * @param agent the agent responsible for the legal document
+   * @param year the year of issuance for the legal document
+   * @param naturalIdentifier an identifier for the legal document
+   * @param pointInTime the point in time representing the start of the validity of the document
+   * @param version the version of the document
+   * @param language the language of the document
    * @return A {@code ResponseEntity} containing the {@code LegislationWorkSchema} with metadata if
    *     found, or a {@code ResponseEntity} with a 404 status if no matching legislation is found.
    */
@@ -214,16 +211,15 @@ public class NormsController {
    * <p>This method fetches and converts the requested legislation data into an HTML representation
    * based on the specified parameters.
    *
-   * @param jurisdiction The jurisdiction identifier, specifying the legal authority, e.g., country
-   *     or region.
-   * @param agent The agent identifier representing the issuing or publishing entity.
-   * @param year The year of publication or issuance of the legislation.
-   * @param naturalIdentifier A unique natural identifier for the legislation.
-   * @param pointInTime The specific date for which the legislation state is requested.
-   * @param version The version of the legislation, as per the specified point in time.
-   * @param language The language in which the legislation is requested.
-   * @param pointInTimeManifestation The specific date for the manifestation of the legislation.
-   * @param subtype The subtype of the legislation for which the HTML transformation is required.
+   * @param jurisdiction the jurisdiction to which the legal document belongs
+   * @param agent the agent responsible for the legal document
+   * @param year the year of issuance for the legal document
+   * @param naturalIdentifier an identifier for the legal document
+   * @param pointInTime the point in time representing the start of the validity of the document
+   * @param version the version of the document
+   * @param language the language of the document
+   * @param pointInTimeManifestation the point in time the manifestation was generated
+   * @param subtype the subtype of the document
    * @return A {@link ResponseEntity} containing the HTML representation of the requested
    *     legislation if found, or a 404 error if not found.
    * @throws ObjectStoreServiceException If an error occurs during the process of retrieving or
@@ -296,12 +292,11 @@ public class NormsController {
    * @param jurisdiction the jurisdiction to which the legal document belongs
    * @param agent the agent responsible for the legal document
    * @param year the year of issuance for the legal document
-   * @param naturalIdentifier a unique identifier for the legal document
-   * @param pointInTime the point in time representing the validity of the document
+   * @param naturalIdentifier an identifier for the legal document
+   * @param pointInTime the point in time representing the start of the validity of the document
    * @param version the version of the document
    * @param language the language of the document
-   * @param pointInTimeManifestation the point in time representing the manifestation of the
-   *     document
+   * @param pointInTimeManifestation the point in time the manifestation was generated
    * @param subtype the subtype of the document
    * @return a ResponseEntity containing the XML representation of the requested legal document, or
    *     a 404 response if not found
@@ -370,15 +365,14 @@ public class NormsController {
    * Returns a particular manifestation of a piece of legislation, including attachments, as a ZIP
    * archive.
    *
-   * @param jurisdiction the jurisdiction under which the legislation is classified
-   * @param agent the agent responsible for the legislation
-   * @param year the year of enactment or reference for the legislation
-   * @param naturalIdentifier the natural identifier assigned to the legislation
-   * @param pointInTime the specific point in time for the legislation
-   * @param version the version of the legislation
-   * @param language the language code of the requested legislation
-   * @param pointInTimeManifestation the manifestation's point in time for the legislation as a ZIP
-   *     file
+   * @param jurisdiction the jurisdiction to which the legal document belongs
+   * @param agent the agent responsible for the legal document
+   * @param year the year of issuance for the legal document
+   * @param naturalIdentifier an identifier for the legal document
+   * @param pointInTime the point in time representing the start of the validity of the document
+   * @param version the version of the document
+   * @param language the language of the document
+   * @param pointInTimeManifestation the point in time the manifestation was generated
    * @return a {@link ResponseEntity} containing a {@link StreamingResponseBody} with the ZIP file
    *     if the relevant data exists; otherwise, a 404 NOT FOUND response is returned
    */
@@ -443,18 +437,16 @@ public class NormsController {
    * Retrieves a specific article (§) of a particular manifestation of a piece of legislation and
    * returns it as an HTML representation.
    *
-   * @param jurisdiction The jurisdiction identifier for the legislation (e.g., "bund").
-   * @param agent The agent identifier specifying the entity responsible for the legislation.
-   * @param year The year the legislation was published.
-   * @param naturalIdentifier The natural identifier for the legislation's version.
-   * @param pointInTime The point in time (date) at which the legislation is applicable.
-   * @param version The version number of the legislation.
-   * @param language The language code of the legislation (e.g., "deu").
-   * @param pointInTimeManifestation The point in time (date) representation of the specific
-   *     manifestation of the legislation.
-   * @param subtype The subtype identifier denoting the manifestation, such as the type of document.
-   * @param articleEid The expression identifier that denotes the specific article (§) within the
-   *     legislation.
+   * @param jurisdiction the jurisdiction to which the legal document belongs
+   * @param agent the agent responsible for the legal document
+   * @param year the year of issuance for the legal document
+   * @param naturalIdentifier an identifier for the legal document
+   * @param pointInTime the point in time representing the start of the validity of the document
+   * @param version the version of the document
+   * @param language the language of the document
+   * @param pointInTimeManifestation the point in time the manifestation was generated
+   * @param subtype the subtype of the document
+   * @param articleEid The identifier that denotes the specific article (§) within the legislation.
    * @return A {@link ResponseEntity} containing the HTML representation of the requested article
    *     (§), or a "404 Not Found" response if the article cannot be found.
    * @throws ObjectStoreServiceException If an error occurs while accessing the legislation data or
@@ -525,14 +517,14 @@ public class NormsController {
    * This resource is identified by several path parameters, including jurisdiction, agent, year,
    * natural identifier, point in time, version, language, and extension, among others.
    *
-   * @param jurisdiction the jurisdiction of the legislation (e.g., country code or region)
-   * @param agent the agent related to the legislation (e.g., publisher or authoring body)
-   * @param year the year of the legislation
-   * @param naturalIdentifier a natural identifier for the legislation
-   * @param pointInTime the temporal context (or date) of the legislation
-   * @param version the version of the legislation
-   * @param language the language code of the legislation (e.g., deu for German)
-   * @param pointInTimeManifestation the specific manifestation's temporal context
+   * @param jurisdiction the jurisdiction to which the legal document belongs
+   * @param agent the agent responsible for the legal document
+   * @param year the year of issuance for the legal document
+   * @param naturalIdentifier an identifier for the legal document
+   * @param pointInTime the point in time representing the start of the validity of the document
+   * @param version the version of the document
+   * @param language the language of the document
+   * @param pointInTimeManifestation the point in time the manifestation was generated
    * @param name the name of the target resource
    * @param extension the file extension of the resource (e.g., pdf, xml, jpg, gif)
    * @return a ResponseEntity containing the file as a byte array if found, with the appropriate

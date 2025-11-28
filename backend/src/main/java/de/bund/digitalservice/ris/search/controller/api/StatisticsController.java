@@ -15,8 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * This controller provides endpoints for retrieving statistical data about the document records
- * stored in the system. It collects document counts for various categories such as norms, case
- * laws, and literature from the underlying OpenSearch system and exposes the data via a REST API.
+ * stored in the system. It collects document counts for each document kind.
  */
 @Tag(
     name = "Statistics",
@@ -52,9 +51,8 @@ public class StatisticsController {
   }
 
   /**
-   * Retrieves statistical data for different types of documents, including norms, case laws, and
-   * literature. The method fetches the count of documents available in each category and organizes
-   * the data into {@link StatisticsApiSchema} for API responses.
+   * Retrieves the count of documents, including norms, case laws, and literature. The method
+   * organizes the data into {@link StatisticsApiSchema} for API responses.
    *
    * @return an instance of {@link StatisticsApiSchema} containing the counts of norms, case laws,
    *     and literature documents.

@@ -71,16 +71,6 @@ public class ObsConfig {
   private String portalSecretAccessKey;
 
   /**
-   * No-argument constructor used by framework tools and for documentation.
-   *
-   * <p>Present to make instantiation explicit and to document the purpose of this configuration
-   * class. This constructor performs no logic.
-   */
-  public ObsConfig() {
-    // no-op constructor for clarity and framework compatibility
-  }
-
-  /**
    * Creates an {@code ObjectStorageClient} for the "norm" context, which interacts with an
    * S3-compatible object storage service. This client is configured using specific credentials,
    * endpoint details, region, and the associated bucket name.

@@ -20,10 +20,10 @@ public class Opinions extends AknBlock {
   private Opinion opinion;
 
   /**
-   * Builds an Opinions object if the content list is not null or empty or all nulls.
+   * Builds an Opinions object.
    *
    * @param content the list of content objects for the opinion
-   * @return an Opinions object or null if the content is null, empty, or all
+   * @return an Opinions object or null if the content is null, empty, or all nulls
    */
   public static Opinions build(List<Object> content) {
     if (content == null || content.isEmpty() || content.stream().allMatch(Objects::isNull)) {
