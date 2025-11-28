@@ -36,7 +36,6 @@ const hasMultipleInputs = computed(
 );
 </script>
 
-// the inner div is required, integration tests fail without it
 <template>
   <div class="flex flex-col gap-16">
     <span class="flex flex-col gap-8">
