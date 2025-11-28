@@ -1,5 +1,4 @@
 import { mockNuxtImport } from "@nuxt/test-utils/runtime";
-import { createPinia, setActivePinia } from "pinia";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { nextTick } from "vue";
 import type { RouteLocationNormalized } from "#vue-router";
@@ -7,7 +6,7 @@ import { sortMode } from "~/components/types";
 import { defaultParams } from "~/stores/searchParams/getInitialState";
 import {
   type QueryParams,
-  useSimpleSearchParamsStore,
+  useSimpleSearchParams,
 } from "~/stores/searchParams/index";
 import { DocumentKind } from "~/types";
 
@@ -49,33 +48,32 @@ vi.mock("~/stores/usePostHogStore", () => {
   };
 });
 
-describe("useSimpleSearchParamsStore", () => {
+describe("useSimpleSearchParams", () => {
   beforeEach(async () => {
-    setActivePinia(createPinia());
     mockRoute.value = mockRouteInitialState;
     mockPostHog.searchPerformed.mockRestore();
   });
 
   it("returns default parameters if the URL is empty", async () => {
-    const store = useSimpleSearchParamsStore();
+    const params = useSimpleSearchParams();
 
-    expect(store.query).toBeFalsy();
-    expect(store.pageNumber).toBe(0);
-    expect(store.category).toBe(defaultParams.category);
-    expect(store.sort).toBe(defaultParams.sort);
+    expect(params.query.value).toBeFalsy();
+    expect(params.pageNumber.value).toBe(0);
+    expect(params.category.value).toBe(defaultParams.category);
+    expect(params.sort.value).toBe(defaultParams.sort);
 
-    expect(store.date).toBeUndefined();
-    expect(store.dateAfter).toBeUndefined();
-    expect(store.dateBefore).toBeUndefined();
-    expect(store.dateSearchMode).toBeFalsy();
+    expect(params.date.value).toBeUndefined();
+    expect(params.dateAfter.value).toBeUndefined();
+    expect(params.dateBefore.value).toBeUndefined();
+    expect(params.dateSearchMode.value).toBeFalsy();
   });
 
   it("returns the correct category if one is set", async () => {
     useRouteMock.mockReturnValueOnce({ query: { category: "R" } });
 
-    const store = useSimpleSearchParamsStore();
+    const params = useSimpleSearchParams();
 
-    expect(store.category).toEqual("R");
+    expect(params.category.value).toEqual("R");
   });
 
   for (const category of ["A", "R", "N", "R.urteil"])
@@ -84,9 +82,9 @@ describe("useSimpleSearchParamsStore", () => {
         query: { category },
       });
 
-      const store = useSimpleSearchParamsStore();
+      const params = useSimpleSearchParams();
 
-      expect(store.category).toEqual(category);
+      expect(params.category.value).toEqual(category);
     });
 
   it("discards caseLaw-specific options if the DocumentKind is updated", async () => {
@@ -103,16 +101,16 @@ describe("useSimpleSearchParamsStore", () => {
       push: mockPush,
     });
 
-    const store = useSimpleSearchParamsStore();
-    expect(store.category).toEqual("R");
-    expect(store.sort).toEqual(sortMode.courtName);
-    expect(store.court).toEqual("Example court");
+    const params = useSimpleSearchParams();
+    expect(params.category.value).toEqual("R");
+    expect(params.sort.value).toEqual(sortMode.courtName);
+    expect(params.court.value).toEqual("Example court");
 
-    store.category = DocumentKind.Norm;
+    params.category.value = DocumentKind.Norm;
     await nextTick();
 
-    expect(store.sort).toEqual(sortMode.default);
-    expect(store.court).toBeUndefined();
+    expect(params.sort.value).toEqual(sortMode.default);
+    expect(params.court.value).toBeUndefined();
   });
 
   it("resets the page index if the category is updated", async () => {
@@ -127,13 +125,13 @@ describe("useSimpleSearchParamsStore", () => {
       },
     });
 
-    const store = useSimpleSearchParamsStore();
-    expect(store.pageNumber).toEqual(1);
+    const params = useSimpleSearchParams();
+    expect(params.pageNumber.value).toEqual(1);
 
-    store.category = DocumentKind.Norm;
+    params.category.value = DocumentKind.Norm;
     await nextTick();
 
-    expect(store.pageNumber).toEqual(0);
+    expect(params.pageNumber.value).toEqual(0);
   });
 
   it("updates the URL", async () => {
@@ -145,17 +143,17 @@ describe("useSimpleSearchParamsStore", () => {
       push: mockPush,
     });
 
-    const store = useSimpleSearchParamsStore();
+    const params = useSimpleSearchParams();
 
-    store.category = DocumentKind.CaseLaw;
-    store.pageNumber = 1;
+    params.category.value = DocumentKind.CaseLaw;
+    params.pageNumber.value = 1;
     await nextTick();
     expect(mockPush).toHaveBeenLastCalledWith({
       path: "/search",
       query: { category: DocumentKind.CaseLaw, pageNumber: "1" },
     });
 
-    store.category = DocumentKind.All;
+    params.category.value = DocumentKind.All;
     await nextTick();
     expect(mockPush).toHaveBeenLastCalledWith({
       path: "/search",
@@ -168,13 +166,13 @@ describe("useSimpleSearchParamsStore", () => {
       query: { query: "first" },
     });
     useRouteMock.mockReturnValue(mockRoute);
-    const store = useSimpleSearchParamsStore();
-    expect(store.query).toBe("first");
+    const params = useSimpleSearchParams();
+    expect(params.query.value).toBe("first");
 
     mockRoute.query = { query: "second" };
     await nextTick();
 
-    expect(store.query).toBe("second");
+    expect(params.query.value).toBe("second");
 
     expect(mockPostHog.searchPerformed).toHaveBeenCalledExactlyOnceWith(
       "simple",
@@ -209,8 +207,8 @@ describe("useSimpleSearchParamsStore", () => {
       push: mockPush,
     });
 
-    const store = useSimpleSearchParamsStore();
-    store.sort = "newSort";
+    const params = useSimpleSearchParams();
+    params.sort.value = "newSort";
     await nextTick();
     expect(mockPush).toHaveBeenCalledExactlyOnceWith({
       query: { query: "testQuery", sort: "newSort" },
