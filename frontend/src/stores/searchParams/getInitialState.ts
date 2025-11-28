@@ -47,6 +47,7 @@ function getFirstValue(
 ): string | undefined {
   return (Array.isArray(value) ? value[0] : value) ?? undefined;
 }
+
 export const getInitialState = (routerQuery: LocationQuery): QueryParams => {
   return {
     query: getFirstValue(routerQuery.query) ?? defaultParams.query,

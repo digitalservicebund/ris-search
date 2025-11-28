@@ -1,4 +1,3 @@
-import _ from "lodash";
 import { ref, computed } from "vue";
 import type { LocationQuery } from "#vue-router";
 import type { QueryParams } from "~/stores/searchParams/index";
@@ -35,10 +34,6 @@ export function dateSearchFromQuery(
   } else {
     return { dateSearchMode: DateSearchMode.None };
   }
-}
-
-export function dateSearchToQuery(params: QueryParams) {
-  return _.pick(params, ["date", "dateAfter", "dateBefore"]);
 }
 
 export function useDateParams(initialState: QueryParams) {
@@ -78,5 +73,6 @@ export function useDateParams(initialState: QueryParams) {
     dateBefore.value = state.dateBefore;
     dateSearchMode.value = state.dateSearchMode;
   }
+
   return { date, dateAfter, dateBefore, dateSearchMode, reset };
 }

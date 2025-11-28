@@ -2,7 +2,6 @@ import { describe } from "vitest";
 import {
   DateSearchMode,
   dateSearchFromQuery,
-  dateSearchToQuery,
   useDateParams,
 } from "./dateParams";
 import type { QueryParams } from "./index";
@@ -53,21 +52,6 @@ const sampleDates = Object.freeze({
   date: "2023-01-01",
   dateAfter: "2023-02-01",
   dateBefore: "2023-03-01",
-});
-
-describe("dateSearchToQuery", () => {
-  it("should pick date, dateAfter, and dateBefore from params", () => {
-    const params = {
-      ...sampleDates,
-      someOtherParam: "value",
-    } as unknown as QueryParams;
-    expect(dateSearchToQuery(params)).toEqual(sampleDates);
-  });
-
-  it("should return an empty object if no date params are present", () => {
-    const params = { someOtherParam: "value" } as unknown as QueryParams;
-    expect(dateSearchToQuery(params)).toEqual({});
-  });
 });
 
 describe("useDateParams", () => {
