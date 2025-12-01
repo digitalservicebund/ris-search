@@ -6782,7 +6782,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"axios@npm:^1.12.0, axios@npm:^1.12.2":
+"axios@npm:^1.12.2":
   version: 1.13.2
   resolution: "axios@npm:1.13.2"
   dependencies:
@@ -15220,7 +15220,6 @@ __metadata:
     "@vitest/coverage-v8": "npm:^4.0.9"
     "@vue/test-utils": "npm:^2.4.6"
     axe-html-reporter: "npm:^2.2.11"
-    axios: "npm:^1.12.0"
     dayjs: "npm:^1.11.13"
     eslint: "npm:^9.30.1"
     eslint-config-prettier: "npm:^10.1.5"

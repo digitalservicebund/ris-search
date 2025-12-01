@@ -2,20 +2,20 @@ import fs from "node:fs";
 import * as path from "node:path";
 import { PactV4, SpecificationVersion } from "@pact-foundation/pact";
 import type { MatchersV3 } from "@pact-foundation/pact";
-import axios, { type AxiosResponse } from "axios";
 import { describe, expect, it } from "vitest";
 import type { CaseLaw, LegislationWork, Literature } from "~/types";
 
-function runGetRequest(
+async function runGetRequest(
   server: MatchersV3.V3MockServer,
   url: string,
-): Promise<AxiosResponse> {
-  return axios.request({
-    baseURL: server.url,
+): Promise<unknown> {
+  const fetchFrom = new URL(url, server.url);
+
+  const response = await fetch(fetchFrom, {
     headers: { Accept: "application/json" },
-    method: "GET",
-    url: url,
   });
+
+  return await response.json();
 }
 
 describe("get a document", () => {
@@ -316,7 +316,7 @@ describe("get a document", () => {
         // Note we configure the GetCaseLawDocument API client dynamically to
         // point to the mock service Pact created for us, instead of the real one
         return await runGetRequest(mockserver, requestUrl).then((response) => {
-          expect(response.data).to.deep.eq(caseLawDocumentExample);
+          expect(response).to.deep.eq(caseLawDocumentExample);
         });
       });
   });
@@ -338,7 +338,7 @@ describe("get a document", () => {
       .executeTest(async (mockserver) => {
         return await runGetRequest(mockserver, buildPath(expressionEli)).then(
           (response) => {
-            expect(response.data).to.deep.eq(normDocumentExample);
+            expect(response).to.deep.eq(normDocumentExample);
           },
         );
       });
@@ -363,7 +363,7 @@ describe("get a document", () => {
       })
       .executeTest(async (mockserver) => {
         return await runGetRequest(mockserver, requestUrl).then((response) => {
-          expect(response.data).to.deep.eq(literatureDocumentExample);
+          expect(response).to.deep.eq(literatureDocumentExample);
         });
       });
   });
