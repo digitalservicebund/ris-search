@@ -7,24 +7,28 @@ import { ADMINISTRATIVE_DIRECTIVE_TITLE_PLACEHOLDER } from "~/utils/administrati
 import { sanitizeSearchResult } from "~/utils/sanitize";
 
 const postHogStore = usePostHogStore();
+const router = useRouter();
 
 const { searchResult, order } = defineProps<{
   searchResult: SearchResult<AdministrativeDirective>;
   order: number;
 }>();
 
-const detailPageUrl = computed(
-  () => `/administrative-directive/${searchResult.item.documentNumber}`,
-);
+const detailPageRoute = computed(() => ({
+  name: "administrative-directives-documentNumber",
+  params: {
+    documentNumber: searchResult.item.documentNumber,
+  },
+}));
 
-const headerItems = computed(() => {
+const headerItems = computed<SearchResultHeaderItem[]>(() => {
   const item = searchResult.item;
   return [
     { value: item.documentType },
     { value: item.legislationAuthority },
     { value: item.referenceNumbers?.[0] },
     { value: dateFormattedDDMMYYYY(item.entryIntoForceDate) },
-  ].filter((item) => item.value !== undefined) as SearchResultHeaderItem[];
+  ].filter((item): item is SearchResultHeaderItem => item.value !== undefined);
 });
 
 const headline = computed(() =>
@@ -54,7 +58,8 @@ function getMatch(name: string) {
 }
 
 function trackResultClick() {
-  postHogStore.searchResultClicked(detailPageUrl.value, order);
+  const url = router.resolve(detailPageRoute.value).href;
+  postHogStore.searchResultClicked(url, order);
 }
 </script>
 
@@ -62,7 +67,7 @@ function trackResultClick() {
   <div class="my-36 flex flex-col gap-8 hyphens-auto">
     <SearchResultHeader :icon="RuleIcon" :items="headerItems" />
     <NuxtLink
-      :to="detailPageUrl"
+      :to="detailPageRoute"
       class="ris-heading3-bold max-w-title link-hover block text-blue-800"
       @click="trackResultClick()"
     >

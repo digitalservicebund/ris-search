@@ -29,7 +29,10 @@ const isEmptyDocument = false;
 const breadcrumbItems = computed(() => [
   {
     label: formatDocumentKind(DocumentKind.AdministrativeDirective),
-    route: `/search?category=${DocumentKind.AdministrativeDirective}`,
+    route: {
+      name: "search",
+      query: { category: DocumentKind.AdministrativeDirective },
+    },
   },
   {
     label: title.value ?? ADMINISTRATIVE_DIRECTIVE_TITLE_PLACEHOLDER,

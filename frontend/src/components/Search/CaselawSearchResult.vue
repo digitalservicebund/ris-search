@@ -140,14 +140,14 @@ const previewSections = computed<ExtendedTextMatch[]>(() => {
   return slice;
 });
 
-const headerItems = computed(() => {
+const headerItems = computed<SearchResultHeaderItem[]>(() => {
   const item = props.searchResult.item;
   return [
     { value: item.documentType || "Entscheidung" },
     { value: item.courtName },
     { value: dateFormattedDDMMYYYY(item.decisionDate) },
     { value: getFileNumbers(item), isMarkup: true },
-  ].filter((item) => item.value !== undefined) as SearchResultHeaderItem[];
+  ].filter((item): item is SearchResultHeaderItem => item.value !== undefined);
 });
 
 function trackResultClick(url: string) {
@@ -159,7 +159,7 @@ function trackResultClick(url: string) {
   <div class="my-36 flex flex-col gap-8 hyphens-auto">
     <SearchResultHeader :icon="GavelIcon" :items="headerItems" />
     <NuxtLink
-      :to="metadata.url"
+      :to="metadata.route"
       class="ris-heading3-bold max-w-title link-hover block text-blue-800"
       @click="trackResultClick(metadata.url)"
     >

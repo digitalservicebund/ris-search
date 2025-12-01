@@ -65,12 +65,12 @@ const validityStatus = computed(() => {
   return formatNormValidity(item.value.workExample.temporalCoverage);
 });
 
-const headerItems = computed(() => {
+const headerItems = computed<SearchResultHeaderItem[]>(() => {
   return [
     { value: "Norm" },
     { value: item.value.abbreviation },
     { value: formattedDate.value },
-  ].filter((item) => item.value !== undefined) as SearchResultHeaderItem[];
+  ].filter((item): item is SearchResultHeaderItem => item.value !== undefined);
 });
 </script>
 
