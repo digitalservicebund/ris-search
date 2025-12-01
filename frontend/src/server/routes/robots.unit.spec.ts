@@ -86,7 +86,7 @@ describe("robots txt route", () => {
       expect(mockFetch).toHaveBeenCalledWith(`http://origin/${file}`, {
         method: "GET",
         headers: {
-          Authorization: "auth",
+          Authorization: "Basic auth",
         },
       });
     },

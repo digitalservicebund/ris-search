@@ -24,6 +24,6 @@ export default defineEventHandler(async (event) => {
 
   return await $fetch<string>(url, {
     method: "GET",
-    headers: { Authorization: config.basicAuth },
+    headers: { Authorization: `Basic ${config.basicAuth}` },
   });
 });
