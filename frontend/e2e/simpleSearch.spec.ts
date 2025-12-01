@@ -123,6 +123,14 @@ test.describe("general search page features", () => {
     );
   });
 
+  test("does not show date search filter", async ({ page }) => {
+    await navigate(page, "/search?category=N");
+
+    await expect(
+      page.getByRole("combobox", { name: "Keine zeitliche Begrenzung" }),
+    ).not.toBeVisible();
+  });
+
   test("pagination switches pages", async ({ page }) => {
     await navigate(page, "/search?query=und");
 
@@ -366,6 +374,14 @@ test.describe("searching legislation", () => {
         name: "Zum Testen von Fassungen - Aktuelle Fassung",
       }),
     ).toBeVisible();
+  });
+
+  test("does not show date search filter", async ({ page }) => {
+    await navigate(page, "/search?category=N");
+
+    await expect(
+      page.getByRole("combobox", { name: "Keine zeitliche Begrenzung" }),
+    ).not.toBeVisible();
   });
 });
 
@@ -752,9 +768,11 @@ test.describe("searching administrative directives", () => {
       }),
     ).toBeVisible();
 
-    await expect(page.getByRole("paragraph")).toHaveText(
-      "Dies ist ein Testdokument. Beschlossen wurde, das Beschlüsse beschlossen werden müssen.",
-    );
+    await expect(
+      page.getByText(
+        /Dies ist ein Testdokument. Beschlossen wurde, das Beschlüsse beschlossen werden müssen./,
+      ),
+    ).toBeVisible();
   });
 
   test("searches by entryIntoForce date with dateBefore", async ({ page }) => {
@@ -763,11 +781,11 @@ test.describe("searching administrative directives", () => {
     await page
       .getByRole("combobox", { name: "Keine zeitliche Begrenzung" })
       .click();
-    await page.getByRole("option", { name: "Bis zu einem Jahr" }).click();
+    await page.getByRole("option", { name: "Bis zu einem Datum" }).click();
 
-    await page.getByRole("textbox", { name: "Jahr" }).fill("2021");
+    await page.getByRole("textbox", { name: "Datum" }).fill("15.03.2019");
 
-    await expect(page).toHaveURL(/dateBefore=2021-12-31/);
+    await expect(page).toHaveURL(/dateBefore=2019-03-15/);
 
     const searchResults = getSearchResults(page);
     await expect(searchResults).toHaveCount(1);
@@ -780,32 +798,35 @@ test.describe("searching administrative directives", () => {
     await page
       .getByRole("combobox", { name: "Keine zeitliche Begrenzung" })
       .click();
-    await page.getByRole("option", { name: "Ab einem Jahr" }).click();
+    await page.getByRole("option", { name: "Ab einem Datum" }).click();
 
-    await page.getByRole("textbox", { name: "Jahr" }).fill("2023");
+    await page.getByRole("textbox", { name: "Datum" }).fill("01.07.2025");
 
-    await expect(page).toHaveURL(/dateAfter=2023-01-01/);
+    await expect(page).toHaveURL(/dateAfter=2025-07-01/);
 
     const searchResults = getSearchResults(page);
     await expect(searchResults).toHaveCount(1);
     await expect(searchResults).toHaveText(/01.07.2025/);
   });
 
-  test("searches by entryIntoForce date with dateBefore and dateAfter", async ({
-    page,
-  }) => {
+  test("searches by specific date", async ({ page }) => {
     await navigate(page, "/search?category=V");
 
     await page
       .getByRole("combobox", { name: "Keine zeitliche Begrenzung" })
       .click();
-    await page.getByRole("option", { name: "In einem Jahr" }).click();
+    await page.getByRole("option", { name: "An einem Datum" }).click();
 
-    await page.getByRole("textbox", { name: "Jahr" }).fill("2022");
+    await page.getByRole("textbox", { name: "Datum" }).fill("23.12.2022");
 
-    await expect(page).toHaveURL(/dateAfter=2022-01-01&dateBefore=2022-12-31/);
+    await expect(page).toHaveURL(/date=2022-12-23/);
 
     const searchResults = getSearchResults(page);
+    await expect(searchResults).toHaveCount(0);
+
+    await page.getByRole("textbox", { name: "Datum" }).fill("24.12.2022");
+    await expect(page).toHaveURL(/date=2022-12-24/);
+
     await expect(searchResults).toHaveCount(1);
     await expect(searchResults).toHaveText(/24.12.2022/);
   });
@@ -818,10 +839,14 @@ test.describe("searching administrative directives", () => {
       .click();
     await page.getByRole("option", { name: "In einem Zeitraum" }).click();
 
-    await page.getByRole("textbox", { name: "Ab dem Jahr" }).fill("2016");
-    await page.getByRole("textbox", { name: "Bis zum Jahr" }).fill("2023");
+    await page
+      .getByRole("textbox", { name: "Ab dem Datum" })
+      .fill("14.03.2019");
+    await page
+      .getByRole("textbox", { name: "Bis zum Datum" })
+      .fill("24.12.2022");
 
-    await expect(page).toHaveURL(/dateAfter=2016-01-01&dateBefore=2023-12-31/);
+    await expect(page).toHaveURL(/dateAfter=2019-03-14&dateBefore=2022-12-24/);
 
     await expect(getSearchResults(page)).toHaveCount(2);
   });
