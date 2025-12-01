@@ -158,7 +158,7 @@ public class SitemapService {
     for (int i = 1; i <= size; i++) {
       Url url = new Url();
       url.setLastmod(LocalDate.now());
-      url.setLoc(String.format("%s%s", baseUrl, this.getBatchSitemapPath(i)));
+      url.setLoc(String.format("%sv1/%s", baseUrl, this.getBatchSitemapPath(i)));
       urls.add(url);
     }
     SitemapIndex sitemapIndexFile = new SitemapIndex();

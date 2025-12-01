@@ -64,12 +64,12 @@ class SitemapServiceTest {
   @Test
   void testGenerateIndexXml() {
     String indexXml = sitemapService.generateIndexXml(2);
-    assertTrue(indexXml.contains("<loc>https://test.local/sitemaps/norms/1.xml</loc>"));
-    assertTrue(indexXml.contains("<loc>https://test.local/sitemaps/norms/2.xml</loc>"));
+    assertTrue(indexXml.contains("<loc>https://test.local/v1/sitemaps/norms/1.xml</loc>"));
+    assertTrue(indexXml.contains("<loc>https://test.local/v1/sitemaps/norms/2.xml</loc>"));
     assertTrue(indexXml.contains("<sitemapindex"));
     sitemapService.setSitemapType(SitemapType.CASELAW);
     indexXml = sitemapService.generateIndexXml(1);
-    assertTrue(indexXml.contains("<loc>https://test.local/sitemaps/caselaw/1.xml</loc>"));
+    assertTrue(indexXml.contains("<loc>https://test.local/v1/sitemaps/caselaw/1.xml</loc>"));
   }
 
   @Test
