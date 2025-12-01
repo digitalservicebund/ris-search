@@ -3,6 +3,7 @@ import useBackendUrl from "~/composables/useBackendUrl";
 import { usePrivateFeaturesFlag } from "~/composables/usePrivateFeaturesFlag";
 
 export default defineEventHandler(async (event) => {
+  const config = useRuntimeConfig();
   const userAgent = (getHeader(event, "User-Agent") ?? "").toUpperCase();
   const privateFeaturesEnabled = usePrivateFeaturesFlag();
   const file = privateFeaturesEnabled
@@ -19,10 +20,10 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  const auth = getHeader(event, "Authorization") ?? "";
   const url = `${origin}/${file}`;
+
   return await $fetch<string>(url, {
     method: "GET",
-    headers: { Authorization: auth },
+    headers: { Authorization: config.basicAuth },
   });
 });
