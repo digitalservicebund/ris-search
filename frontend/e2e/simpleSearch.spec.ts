@@ -670,6 +670,163 @@ test.describe("searching literature", () => {
   });
 });
 
+test.describe("searching administrative directives", () => {
+  test("narrows search", async ({ page }) => {
+    await navigate(page, "/search?query=wurde");
+
+    const searchResults = getSearchResults(page);
+    const resultCounter = getResultCounter(page);
+
+    await expect(resultCounter).toHaveText(nonZeroResultCount);
+
+    await page
+      .getByRole("group", { name: "Filter" })
+      .getByRole("button", { name: "Verwaltungsvorschriften" })
+      .click();
+
+    await expect(page).toHaveURL(/category=V/);
+
+    await expect(resultCounter).toHaveText("1 Suchergebnis");
+
+    // Ensure all visible entries are of type administrative directive
+    await expect(searchResults).toHaveText(/^VB/);
+  });
+
+  test("shows the search result contents", async ({ page }) => {
+    await navigate(page, "/search?query=wurde&category=V");
+
+    const searchResult = getSearchResults(page).first();
+
+    // Header
+    await expect(searchResult).toHaveText(/VB/);
+    await expect(searchResult).toHaveText(/Baz - 121 - 1/);
+    await expect(searchResult).toHaveText(/24.12.2022/);
+
+    // Result detail link
+    await expect(
+      searchResult.getByRole("link", {
+        name: "Beschluss über den Beschluss",
+      }),
+    ).toBeVisible();
+
+    // Highlights
+    await expect(
+      searchResult.getByText(
+        /… Beschlossen wurde, das Beschlüsse beschlossen werden müssen./,
+      ),
+    ).toBeVisible();
+  });
+
+  test("shows placeholder title for search result items without title", async ({
+    page,
+  }) => {
+    await navigate(page, "/search?query=keinen+Titel&category=V");
+
+    // Result detail link
+    await page
+      .getByRole("link", {
+        name: "Titelzeile nicht vorhanden",
+      })
+      .click();
+
+    await expect(
+      page.getByRole("heading", {
+        level: 1,
+        name: "Titelzeile nicht vorhanden",
+      }),
+    ).toBeVisible();
+  });
+
+  test("navigates to the document detail page", async ({ page }) => {
+    await navigate(page, "/search?query=Beschluss&category=V");
+
+    // Result detail link
+    await page
+      .getByRole("link", { name: "Beschluss über den Beschluss" })
+      .click();
+
+    await expect(
+      page.getByRole("heading", {
+        level: 1,
+        name: "Beschluss über den Beschluss",
+      }),
+    ).toBeVisible();
+
+    await expect(page.getByRole("paragraph")).toHaveText(
+      "Dies ist ein Testdokument. Beschlossen wurde, das Beschlüsse beschlossen werden müssen.",
+    );
+  });
+
+  test("searches by entryIntoForce date with dateBefore", async ({ page }) => {
+    await navigate(page, "/search?category=V");
+
+    await page
+      .getByRole("combobox", { name: "Keine zeitliche Begrenzung" })
+      .click();
+    await page.getByRole("option", { name: "Bis zu einem Jahr" }).click();
+
+    await page.getByRole("textbox", { name: "Jahr" }).fill("2021");
+
+    await expect(page).toHaveURL(/dateBefore=2021-12-31/);
+
+    const searchResults = getSearchResults(page);
+    await expect(searchResults).toHaveCount(1);
+    await expect(searchResults).toHaveText(/14.03.2019/);
+  });
+
+  test("searches by entryIntoForce date with dateAfter", async ({ page }) => {
+    await navigate(page, "/search?category=V");
+
+    await page
+      .getByRole("combobox", { name: "Keine zeitliche Begrenzung" })
+      .click();
+    await page.getByRole("option", { name: "Ab einem Jahr" }).click();
+
+    await page.getByRole("textbox", { name: "Jahr" }).fill("2023");
+
+    await expect(page).toHaveURL(/dateAfter=2023-01-01/);
+
+    const searchResults = getSearchResults(page);
+    await expect(searchResults).toHaveCount(1);
+    await expect(searchResults).toHaveText(/01.07.2025/);
+  });
+
+  test("searches by entryIntoForce date with dateBefore and dateAfter", async ({
+    page,
+  }) => {
+    await navigate(page, "/search?category=V");
+
+    await page
+      .getByRole("combobox", { name: "Keine zeitliche Begrenzung" })
+      .click();
+    await page.getByRole("option", { name: "In einem Jahr" }).click();
+
+    await page.getByRole("textbox", { name: "Jahr" }).fill("2022");
+
+    await expect(page).toHaveURL(/dateAfter=2022-01-01&dateBefore=2022-12-31/);
+
+    const searchResults = getSearchResults(page);
+    await expect(searchResults).toHaveCount(1);
+    await expect(searchResults).toHaveText(/24.12.2022/);
+  });
+
+  test("searches by entryIntoForce date with range", async ({ page }) => {
+    await navigate(page, "/search?category=V");
+
+    await page
+      .getByRole("combobox", { name: "Keine zeitliche Begrenzung" })
+      .click();
+    await page.getByRole("option", { name: "In einem Zeitraum" }).click();
+
+    await page.getByRole("textbox", { name: "Ab dem Jahr" }).fill("2016");
+    await page.getByRole("textbox", { name: "Bis zum Jahr" }).fill("2023");
+
+    await expect(page).toHaveURL(/dateAfter=2016-01-01&dateBefore=2023-12-31/);
+
+    await expect(getSearchResults(page)).toHaveCount(2);
+  });
+});
+
 noJsTest("search works without JavaScript", async ({ page }) => {
   const searchTerm = "Fiktiv";
 
