@@ -176,6 +176,22 @@ test.describe("actions menu", () => {
   });
 });
 
+test("can view metadata", async ({ page }) => {
+  await navigate(page, "/case-law/KORE600500000");
+
+  await page.getByRole("term", { name: "Gericht" }).isVisible();
+  await page.getByRole("definition", { name: "LG Testort6" }).isVisible();
+
+  await page.getByRole("term", { name: "Dokumenttyp" }).isVisible();
+  await page.getByRole("definition", { name: "Urteil" }).isVisible();
+
+  await page.getByRole("term", { name: "Entscheidungsdatum" }).isVisible();
+  await page.getByRole("definition", { name: "09.04.2025" }).isVisible();
+
+  await page.getByRole("term", { name: "Aktenzeichen" }).isVisible();
+  await page.getByRole("definition", { name: "TS 123456" }).isVisible();
+});
+
 noJsTest("tabs work without JavaScript", async ({ page }) => {
   await navigate(page, "/case-law/JURE200030030");
   await expect(page.getByRole("heading", { name: "Details" })).toBeVisible();
