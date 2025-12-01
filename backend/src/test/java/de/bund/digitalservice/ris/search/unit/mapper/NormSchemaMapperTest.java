@@ -1,5 +1,6 @@
 package de.bund.digitalservice.ris.search.unit.mapper;
 
+import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.mapper.NormSchemaMapper;
 import de.bund.digitalservice.ris.search.models.opensearch.Article;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
@@ -67,7 +68,7 @@ class NormSchemaMapperTest {
                 List.of(
                     Article.builder()
                         .eId("eId")
-                        .text("articleText")
+                        .text("attachmentText")
                         .manifestationEli("eli")
                         .build()))
             .manifestationEliExample("manifestationEli/regelungstext-1.xml")
@@ -113,7 +114,7 @@ class NormSchemaMapperTest {
                                 .encoding(
                                     List.of(
                                         LegislationObjectSchema.builder()
-                                            .contentUrl("eli")
+                                            .contentUrl(ApiConfig.Paths.LEGISLATION + "/eli")
                                             .encodingFormat("application/xml")
                                             .build()))
                                 .build()))
