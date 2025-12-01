@@ -31,4 +31,8 @@ public class Url {
   @XmlElement(name = "lastmod")
   @XmlJavaTypeAdapter(LocalDateXmlAdapter.class)
   private LocalDate lastmod;
+
+  public Url(String loc) {
+    this.loc = loc;
+  }
 }

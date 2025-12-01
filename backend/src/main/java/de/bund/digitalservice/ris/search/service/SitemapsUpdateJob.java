@@ -3,13 +3,12 @@ package de.bund.digitalservice.ris.search.service;
 import de.bund.digitalservice.ris.search.models.sitemap.SitemapType;
 import de.bund.digitalservice.ris.search.repository.objectstorage.CaseLawBucket;
 import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
+import de.bund.digitalservice.ris.search.repository.objectstorage.ObjectStorage;
 import de.bund.digitalservice.ris.search.utils.eli.EliFile;
 import de.bund.digitalservice.ris.search.utils.eli.ExpressionEli;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.collections4.ListUtils;
 import org.apache.logging.log4j.LogManager;
@@ -47,57 +46,44 @@ public class SitemapsUpdateJob implements Job {
   public Job.ReturnCode runJob() {
     Instant jobStarted = Instant.now();
     logger.info("Starting sitemaps update job for norms");
-    createSitemapsForNorms();
-    logger.info("Starting sitemaps update job for caselaw");
-    createSitemapsForCaselaw();
+    createSitemaps(normsBucket, SitemapType.NORMS, "norms");
+    logger.info("Starting sitemaps update job for case law");
+    createSitemaps(caseLawBucket, SitemapType.CASELAW, "case-law");
     logger.info("Clear old sitemap files");
     sitemapService.deleteSitemapFiles(jobStarted);
     return ReturnCode.SUCCESS;
   }
 
-  /** Generates sitemaps for legal norms and organizes them into batches. */
-  public void createSitemapsForNorms() {
-    Set<ExpressionEli> expressions =
-        normsBucket.getAllKeysByPrefix("eli/").stream()
-            .map(EliFile::fromString)
-            .flatMap(Optional::stream)
-            .map(EliFile::getExpressionEli)
-            .collect(Collectors.toSet());
-
-    List<List<ExpressionEli>> batches =
-        ListUtils.partition(expressions.stream().toList(), urlsPerPage);
+  /**
+   * Executes sitemap generation for one sitemap type
+   *
+   * @param currentBucket the bucket for the current sitemap type
+   * @param type the current sitemap type
+   * @param prefix the prefix for the current sitemap type
+   */
+  public void createSitemaps(ObjectStorage currentBucket, SitemapType type, String prefix) {
+    List<String> ids = extractIds(currentBucket.getAllKeys(), type);
+    List<List<String>> batches = ListUtils.partition(ids, urlsPerPage);
     for (int i = 0; i < batches.size(); i++) {
-      logger.info("Creating Sitemap for norms of batch {} of {}.", (i + 1), batches.size());
-      sitemapService.createNormsBatchSitemap(i + 1, batches.get(i));
+      logger.info("Creating Sitemap for {} of batch {} of {}.", prefix, (i + 1), batches.size());
+      sitemapService.createBatchSitemap(i + 1, batches.get(i), type, prefix);
     }
-    sitemapService.createIndexSitemap(batches.size(), SitemapType.NORMS);
+    sitemapService.createIndexSitemap(batches.size(), type);
   }
 
-  /**
-   * Generates sitemaps for case law data and organizes them into batches.
-   *
-   * <p>This method retrieves a list of keys representing case law entries from the `caseLawBucket`.
-   * It filters the keys to include only those ending with ".xml" and excludes those containing the
-   * `IndexSyncJob.CHANGELOGS_PREFIX`. The filtered keys are then partitioned into smaller batches,
-   * each containing a specified number of URLs per page, defined by the `urlsPerPage` property.
-   *
-   * <p>For each batch, a distinct sitemap is created using the `sitemapService`. After all
-   * batch-level sitemaps are generated, an index sitemap summarizing the entire set of case law
-   * sitemaps is created.
-   *
-   * <p>Log messages are generated at each step to indicate progress in the sitemap creation
-   * process.
-   */
-  public void createSitemapsForCaselaw() {
-    List<String> paths =
-        caseLawBucket.getAllKeys().stream()
-            .filter(s -> s.endsWith(".xml") && !s.contains(IndexSyncJob.CHANGELOGS_PREFIX))
-            .toList();
-    List<List<String>> batches = ListUtils.partition(paths.stream().toList(), urlsPerPage);
-    for (int i = 0; i < batches.size(); i++) {
-      logger.info("Creating Sitemap for caselaw of batch {} of {}.", (i + 1), batches.size());
-      sitemapService.createCaselawBatchSitemap(i + 1, batches.get(i));
+  private List<String> extractIds(List<String> paths, SitemapType type) {
+    if (type == SitemapType.NORMS) {
+      return paths.stream()
+          .map(EliFile::fromString)
+          .flatMap(Optional::stream)
+          .map(EliFile::getExpressionEli)
+          .map(ExpressionEli::toString)
+          .distinct()
+          .toList();
+    } else {
+      return paths.stream()
+          .map(path -> path.substring(path.lastIndexOf("/") + 1, path.length() - 4))
+          .toList();
     }
-    sitemapService.createIndexSitemap(batches.size(), SitemapType.CASELAW);
   }
 }

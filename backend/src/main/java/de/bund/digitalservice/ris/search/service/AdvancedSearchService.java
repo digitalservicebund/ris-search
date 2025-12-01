@@ -137,7 +137,7 @@ public class AdvancedSearchService {
    *
    * @param search lucene query string
    * @param pageable {@link Pageable} pageable to sort and paginate request
-   * @return {@link SearchPage<AdministrativeDirective>} searchpage of administrative directives
+   * @return {@link SearchPage} searchpage of administrative directives
    */
   public SearchPage<AdministrativeDirective> searchAdministrativeDirective(
       String search, Pageable pageable) {

@@ -104,12 +104,11 @@ public class SitemapController {
 
     try {
       SitemapType sitemapType = SitemapType.valueOf(type.toUpperCase());
-      sitemapService.setSitemapType(sitemapType);
       if (filename.equals("index")) {
-        file = portalBucket.get(sitemapService.getIndexSitemapPath());
+        file = portalBucket.get(sitemapService.getIndexSitemapPath(sitemapType));
       } else {
         int batchNumber = Integer.parseInt(filename);
-        file = portalBucket.get(sitemapService.getBatchSitemapPath(batchNumber));
+        file = portalBucket.get(sitemapService.getBatchSitemapPath(batchNumber, sitemapType));
       }
     } catch (IllegalArgumentException exception) {
       return ResponseEntity.notFound().build();
