@@ -63,6 +63,7 @@ describe("robots txt route", () => {
         public: {
           privateFeaturesEnabled,
         },
+        basicAuth: "auth",
       }));
 
       const mockEvent: H3Event<EventHandlerRequest> = {
