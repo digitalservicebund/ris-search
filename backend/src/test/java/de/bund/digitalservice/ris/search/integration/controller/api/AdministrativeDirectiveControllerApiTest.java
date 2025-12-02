@@ -14,6 +14,8 @@ import org.hamcrest.Matchers;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -94,6 +96,39 @@ class AdministrativeDirectiveControllerApiTest extends ContainersIntegrationBase
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.member", hasSize(1)))
         .andExpect(jsonPath("$.member[0].item.documentNumber", Matchers.is(documentNumber)));
+  }
+
+  @ParameterizedTest(name = "Sorting by ''{0}'' returns data")
+  @ValueSource(
+      strings = {
+        "default",
+        "date",
+        "-date",
+        "DATUM",
+        "-DATUM",
+        "documentNumber",
+        "-documentNumber"
+      })
+  void shouldReturnItemWhenSortingByValidParameter(String sortParameter) throws Exception {
+    final String documentNumber = "KSNR0000";
+
+    mockMvc
+        .perform(
+            get(ApiConfig.Paths.ADMINISTRATIVE_DIRECTIVE + "?sort=" + sortParameter)
+                .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.member", hasSize(1)))
+        .andExpect(jsonPath("$.member[0].item.documentNumber", Matchers.is(documentNumber)));
+  }
+
+  @Test
+  @DisplayName("Should return error when sorting by unknown parameter")
+  void shouldReturnErrorWhenSortingByUnknownParameter() throws Exception {
+    mockMvc
+        .perform(
+            get(ApiConfig.Paths.ADMINISTRATIVE_DIRECTIVE + "?sort=foo")
+                .contentType(MediaType.APPLICATION_XML))
+        .andExpect(status().isUnprocessableEntity());
   }
 
   @Test
