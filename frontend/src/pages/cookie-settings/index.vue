@@ -211,11 +211,11 @@ useStaticPageSeo("cookies");
             verbessern. Durch die Einwilligung zur Verwendung des
             Analyse-Cookies helfen Sie uns, die Webseite für Sie und andere
             Nutzende noch benutzerfreundlicher zu gestalten. Für die Erhebung
-            der Sitzungsdaten wird die Webanalysedienst-Software von Posthog,
+            der Sitzungsdaten wird die Webanalysedienst-Software von PostHog,
             Market Street, San Francisco, CA 94114, USA, verwendet. Weitere
-            Informationen zum Datenschutz dieses Dienstleisters finden Sie unter
+            Informationen zum Datenschutz finden Sie in der
             <NuxtLink to="https://posthog.com/privacy" class="ris-link1-regular"
-              >https://posthog.com/privacy</NuxtLink
+              >Datenschutzerklärung des Dienstleisters PostHog</NuxtLink
             >. Ihre Daten werden wie folgt verarbeitet:
           </p>
           <div>
