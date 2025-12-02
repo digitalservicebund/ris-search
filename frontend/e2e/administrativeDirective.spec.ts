@@ -3,7 +3,7 @@ import { expect, test, navigate } from "./utils/fixtures";
 test("displays administrative directive page with metadata and text tab by default", async ({
   page,
 }) => {
-  await navigate(page, "/administrative-directive/KSNR000000001");
+  await navigate(page, "/administrative-directives/KSNR000000001");
 
   // Breadcrumb navigation
   const breadcrumb = page.getByRole("navigation", { name: "Pfadnavigation" });
@@ -67,7 +67,7 @@ test("displays administrative directive page with metadata and text tab by defau
 });
 
 test("can navigate to search via breadcrumb", async ({ page }) => {
-  await navigate(page, "/administrative-directive/KSNR000000001");
+  await navigate(page, "/administrative-directives/KSNR000000001");
 
   await page.getByRole("link", { name: "Verwaltungsvorschriften" }).click();
   await page.waitForURL("**/search?category=V");

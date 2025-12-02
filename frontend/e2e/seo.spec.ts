@@ -69,7 +69,7 @@ export const testPages = [
   },
   {
     name: "Administrative Directive View Page",
-    url: "/administrative-directive/KSNR000000001",
+    url: "/administrative-directives/KSNR000000001",
   },
 ];
 

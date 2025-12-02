@@ -8,6 +8,7 @@ import { sanitizeSearchResult } from "~/utils/sanitize";
 import { addEllipsis } from "~/utils/textFormatting";
 
 const postHogStore = usePostHogStore();
+const router = useRouter();
 
 const props = defineProps<{
   searchResult: SearchResult<Literature>;
@@ -17,7 +18,6 @@ const props = defineProps<{
 type LiteratureMetadata = {
   headline: string;
   alternativeHeadline: string;
-  url: string;
   shortReport: string;
 };
 
@@ -45,6 +45,11 @@ function getShortReportSnippet(
   return addEllipsis(match.text);
 }
 
+const detailPageRoute = computed(() => ({
+  name: "literature-documentNumber",
+  params: { documentNumber: props.searchResult.item.documentNumber },
+}));
+
 const metadata = computed(() => {
   const item = props.searchResult.item;
   return {
@@ -53,7 +58,6 @@ const metadata = computed(() => {
     alternativeHeadline:
       getMatch("documentaryTitle", props.searchResult.textMatches) ||
       item.alternativeHeadline,
-    url: `/literature/${props.searchResult.item.documentNumber}`,
     shortReport: getShortReportSnippet(
       item.shortReport,
       props.searchResult.textMatches,
@@ -61,18 +65,14 @@ const metadata = computed(() => {
   } as LiteratureMetadata;
 });
 
-const headerItems = computed(() => {
+const headerItems = computed<SearchResultHeaderItem[]>(() => {
   const item = props.searchResult.item;
   return [
     { value: item.documentTypes?.at(0) },
     { value: item.dependentReferences?.at(0) },
     { value: item.yearsOfPublication?.at(0) },
-  ].filter((value) => value !== undefined) as SearchResultHeaderItem[];
+  ].filter((item): item is SearchResultHeaderItem => item.value !== undefined);
 });
-
-function trackResultClick(url: string) {
-  postHogStore.searchResultClicked(url, props.order);
-}
 
 const sanitizedHeadline = computed(() =>
   sanitizeSearchResult(
@@ -89,15 +89,20 @@ const shortReportIncludesHighlight = computed(
 const sanitizedShortReport = computed(() =>
   sanitizeSearchResult(metadata.value.shortReport),
 );
+
+function trackResultClick() {
+  const url = router.resolve(detailPageRoute.value).href;
+  postHogStore.searchResultClicked(url, props.order);
+}
 </script>
 
 <template>
   <div class="my-36 flex flex-col gap-8 hyphens-auto">
     <SearchResultHeader :icon="OutlineBookIcon" :items="headerItems" />
     <NuxtLink
-      :to="metadata.url"
+      :to="detailPageRoute"
       class="ris-heading3-bold max-w-title link-hover block text-blue-800"
-      @click="trackResultClick(metadata.url)"
+      @click="trackResultClick()"
     >
       <h2>
         <span v-html="sanitizedHeadline" />
