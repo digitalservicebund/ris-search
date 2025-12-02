@@ -35,7 +35,7 @@ public class SitemapService {
    * @return sitemap file path
    */
   public String getBatchSitemapPath(int batchNumber, SitemapType type) {
-    return SITEMAP_PREFIX + String.format("%s/%d.xml", type.name().toLowerCase(), batchNumber);
+    return SITEMAP_PREFIX + String.format("%s/%d.xml", type.getPath(), batchNumber);
   }
 
   /**
@@ -59,7 +59,7 @@ public class SitemapService {
    * @return sitemap index file path
    */
   public String getIndexSitemapPath(SitemapType type) {
-    return SITEMAP_PREFIX + String.format("%s/index.xml", type.name().toLowerCase());
+    return SITEMAP_PREFIX + String.format("%s/index.xml", type.getPath());
   }
 
   /**
