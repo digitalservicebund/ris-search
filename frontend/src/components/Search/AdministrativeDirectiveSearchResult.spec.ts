@@ -82,6 +82,16 @@ describe("AdministrativeDirectiveSearchResult", () => {
       ).toBeVisible();
     });
 
+    it("has accessible description linking to result type", async () => {
+      await renderComponent();
+      expect(
+        screen.getByRole("link", {
+          name: "Verwaltungsvorschrift Überschrift",
+          description: "VR",
+        }),
+      ).toBeInTheDocument();
+    });
+
     it("renders markup headline with correct link", async () => {
       await renderComponent({
         textMatches: [

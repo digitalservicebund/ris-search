@@ -54,6 +54,16 @@ describe("CaselawSearchResult", () => {
     ).toBeInTheDocument();
   });
 
+  it("has accessible description linking to result type", () => {
+    renderComponent({});
+    expect(
+      screen.getByRole("link", {
+        name: "Decision Name — Test Headline",
+        description: "Document Type",
+      }),
+    ).toBeInTheDocument();
+  });
+
   it("displays highlighted headline", () => {
     const textMatch: TextMatch = {
       "@type": "SearchResultMatch",
