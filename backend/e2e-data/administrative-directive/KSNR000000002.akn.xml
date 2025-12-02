@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<akn:akomaNtoso
+    xmlns:akn="http://docs.oasis-open.org/legaldocml/ns/akn/3.0"
+    xmlns:ris="http://ldml.neuris.de/meta/">
+    <akn:doc name="offene-struktur">
+        <akn:meta>
+            <akn:identification source="attributsemantik-noch-undefiniert">
+                <akn:FRBRWork>
+                    <akn:FRBRthis
+                        value="/eli/bund/verwaltungsvorschriften/vv/deu-bma/2019/bar-123-4" />
+                    <akn:FRBRuri
+                        value="/eli/bund/verwaltungsvorschriften/vv/deu-bma/2019/bar-123-4" />
+                    <akn:FRBRalias name="Dokumentnummer" value="KSNR000000002" />
+                    <akn:FRBRdate date="1992-11-05" name="Erfassungsdatum"
+                        ris:domainTerm="Erfassungsdatum" />
+                    <akn:FRBRauthor href="recht.bund.de/institution/bundessozialgericht" />
+                    <akn:FRBRcountry value="de" />
+                    <akn:FRBRsubtype value="VV" />
+                    <akn:FRBRnumber value="Boo - 123 - 4" />
+                    <akn:FRBRname value="DEU Neuris" />
+                </akn:FRBRWork>
+                <akn:FRBRExpression>
+                    <akn:FRBRthis
+                        value="/eli/bund/verwaltungsvorschriften/vv/deu-bma/2019/bar-123-4/2019-03-17/deu" />
+                    <akn:FRBRuri
+                        value="/eli/bund/verwaltungsvorschriften/vv/deu-bma/2019/bar-123-4/2019-03-17/deu" />
+                    <akn:FRBRdate date="2019-03-17" name="Zitierdatum" ris:domainTerm="Zitierdatum" />
+                    <akn:FRBRauthor href="recht.bund.de/institution/bundessozialgericht" />
+                    <akn:FRBRlanguage language="deu" />
+                </akn:FRBRExpression>
+                <akn:FRBRManifestation>
+                    <akn:FRBRthis
+                        value="/eli/bund/verwaltungsvorschriften/vv/deu-bma/2019/bar-123-4/2019-03-17/deu.akn.xml" />
+                    <akn:FRBRuri
+                        value="/eli/bund/verwaltungsvorschriften/vv/deu-bma/2019/bar-123-4/2019-03-17/deu.akn.xml" />
+                    <akn:FRBRdate date="2019-11-26" name="Generierung" ris:domainTerm="Generierung" />
+                    <akn:FRBRauthor href="recht.bund.de/institution/bundessozialgericht" />
+                    <akn:FRBRformat value="xml" />
+                </akn:FRBRManifestation>
+            </akn:identification>
+            <akn:classification source="attributsemantik-noch-undefiniert">
+                <akn:keyword showAs="2019" dictionary="attributsemantik-noch-undefiniert"
+                    value="2019" />
+            </akn:classification>
+            <akn:analysis source="attributsemantik-noch-undefiniert">
+                <akn:otherReferences source="attributsemantik-noch-undefiniert">
+                    <akn:implicitReference shortForm="FooBar" showAs="FooBar 2019, Nr 1, 123" />
+                    <akn:implicitReference shortForm="Baz" showAs="Baz § 16c Abs 2">
+                        <ris:normReference singleNorm="§ 16c Abs 2" />
+                    </akn:implicitReference>
+                    <akn:implicitReference shortForm="Lol" showAs="Lol § 15 Abs 2">
+                        <ris:normReference singleNorm="§ 15 Abs 2" />
+                    </akn:implicitReference>
+                </akn:otherReferences>
+            </akn:analysis>
+            <akn:proprietary source="attributsemantik-noch-undefiniert">
+                <ris:meta>
+                    <ris:normgeber staat="DEU" organ="Neuris" />
+                    <ris:entryIntoEffectDate>2019-03-14</ris:entryIntoEffectDate>
+                    <ris:documentType category="VV" longTitle="Verwaltungsvorschrift">VV Verwaltungsvorschrift</ris:documentType>
+                    <ris:dateToQuoteList>
+                        <ris:dateToQuoteEntry>2019-03-17</ris:dateToQuoteEntry>
+                    </ris:dateToQuoteList>
+                    <ris:referenceNumbers>
+                        <ris:referenceNumber>Boo - 123 - 4</ris:referenceNumber>
+                    </ris:referenceNumbers>
+                    <ris:regionen domainTerm="Regionen">
+                        <ris:region domainTerm="Region">DEU</ris:region>
+                    </ris:regionen>
+                    <ris:historicAbbreviation>VV DEU Neuris 2019-03-17 Boo - 123 - 4</ris:historicAbbreviation>
+                    <ris:activeReferences>
+                        <ris:activeReference typeNumber="82" reference="ABC" paragraph="§ 1"
+                            position="Abs 5" dateOfVersion="2017-01-17" />
+                        <ris:activeReference typeNumber="82" reference="TraLa" paragraph="§ 15c"
+                            position="Abs 19" dateOfVersion="2017-08-07" />
+                    </ris:activeReferences>
+                </ris:meta>
+            </akn:proprietary>
+        </akn:meta>
+        <akn:mainBody>
+            <akn:div>
+                <akn:p>Dies ist ein Testdokument. Es hat keinen Titel. </akn:p>
+                <akn:p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec eleifend ut magna ut hendrerit. Nunc convallis malesuada orci, eget fringilla risus accumsan vel.</akn:p>
+            </akn:div>
+        </akn:mainBody>
+    </akn:doc>
+</akn:akomaNtoso>

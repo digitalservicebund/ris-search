@@ -112,7 +112,7 @@ public class SitemapService {
             .mapToObj(
                 e ->
                     new Url(
-                        String.format("%s%s", baseUrl, getBatchSitemapPath(e, type)),
+                        String.format("%sv1/%s", baseUrl, getBatchSitemapPath(e, type)),
                         LocalDate.now()))
             .toList();
     return marshal(new SitemapIndex(urls));

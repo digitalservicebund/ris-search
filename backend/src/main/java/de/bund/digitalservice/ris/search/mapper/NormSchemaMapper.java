@@ -27,6 +27,8 @@ import org.springframework.http.MediaType;
 public class NormSchemaMapper {
   private NormSchemaMapper() {}
 
+  private static final String CONTENT_BASE_URL = ApiConfig.Paths.LEGISLATION + "/";
+
   /**
    * Maps a {@link Norm} object to a {@link LegislationWorkSchema} object.
    *
@@ -36,11 +38,10 @@ public class NormSchemaMapper {
    *     associated legal force, temporal coverage, and publication details.
    */
   public static LegislationWorkSchema fromDomain(Norm norm) {
-    String contentBaseUrl = ApiConfig.Paths.LEGISLATION + "/";
     String expressionEli = norm.getExpressionEli();
     String manifestationEliXml = norm.getManifestationEliExample();
 
-    var encodings = getEncodings(contentBaseUrl, manifestationEliXml);
+    var encodings = getEncodings(CONTENT_BASE_URL, manifestationEliXml);
 
     LegalForceStatus legislationLegalForce =
         DateUtils.isActive(norm.getEntryIntoForceDate(), norm.getExpiryDate())
@@ -50,7 +51,7 @@ public class NormSchemaMapper {
     String temporalCoverage =
         DateUtils.toDateIntervalString(norm.getEntryIntoForceDate(), norm.getExpiryDate());
 
-    String expressionId = contentBaseUrl + expressionEli;
+    String expressionId = CONTENT_BASE_URL + expressionEli;
     LegislationExpressionSchema expression =
         LegislationExpressionSchema.builder()
             .id(expressionId)
@@ -66,7 +67,7 @@ public class NormSchemaMapper {
         norm.getPublishedIn() != null ? new PublicationIssueSchema(norm.getPublishedIn()) : null;
 
     return LegislationWorkSchema.builder()
-        .id(contentBaseUrl + norm.getWorkEli())
+        .id(CONTENT_BASE_URL + norm.getWorkEli())
         .abbreviation(norm.getOfficialAbbreviation())
         .alternateName(norm.getOfficialShortTitle())
         .legislationIdentifier(norm.getWorkEli())
@@ -112,13 +113,21 @@ public class NormSchemaMapper {
     return norm.getArticles().stream().map(article -> buildPart(article, idPrefix)).toList();
   }
 
+  /**
+   * This maps articles and attachments of a norm. Both are currently part of the articles array.
+   *
+   * @param article Article or Attachment of a norm
+   * @param idPrefix idPrefix referencing the corresponding norm
+   * @return LegislationExpressionPartSchema object
+   */
   private static LegislationExpressionPartSchema buildPart(Article article, String idPrefix) {
     List<LegislationObjectSchema> encoding;
+    // Only attachments have their own manifestationELi and receive an encoding object.
     if (article.manifestationEli() != null) {
       final LegislationObjectSchema encodingItem =
           LegislationObjectSchema.builder()
               .encodingFormat(MediaType.APPLICATION_XML_VALUE)
-              .contentUrl(article.manifestationEli())
+              .contentUrl(CONTENT_BASE_URL + article.manifestationEli())
               .build();
       encoding = List.of(encodingItem);
     } else {

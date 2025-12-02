@@ -3,12 +3,12 @@ import useBackendUrl from "~/composables/useBackendUrl";
 import { usePrivateFeaturesFlag } from "~/composables/usePrivateFeaturesFlag";
 
 export default defineEventHandler(async (event) => {
+  const config = useRuntimeConfig();
   const userAgent = (getHeader(event, "User-Agent") ?? "").toUpperCase();
   const privateFeaturesEnabled = usePrivateFeaturesFlag();
-  let file = privateFeaturesEnabled
+  const file = privateFeaturesEnabled
     ? "robots.staging.txt"
     : "robots.public.txt";
-  if (userAgent === "DG_JUSTICE_CRAWLER") file = "robots.dg.txt";
 
   setHeader(event, "Content-Type", "text/plain; charset=utf-8");
   setHeader(event, "Vary", "User-Agent");
@@ -21,5 +21,9 @@ export default defineEventHandler(async (event) => {
   }
 
   const url = `${origin}/${file}`;
-  return await $fetch<string>(url, { method: "GET" });
+
+  return await $fetch<string>(url, {
+    method: "GET",
+    headers: { Authorization: `Basic ${config.basicAuth}` },
+  });
 });

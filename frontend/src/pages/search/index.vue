@@ -73,7 +73,9 @@ const title = computed(() => {
       case DocumentKind.CaseLaw:
         return "Rechtsprechung — Suche";
       case DocumentKind.Literature:
-        return "Literatur — Suche";
+        return "Literaturnachweise — Suche";
+      case DocumentKind.AdministrativeDirective:
+        return "Verwaltungsvorschriften — Suche";
       default:
         return "Suche";
     }
@@ -118,7 +120,10 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
           :category="searchParams.category.value"
         />
         <DateRangeFilter
-          v-if="documentKind === DocumentKind.CaseLaw"
+          v-if="
+            documentKind === DocumentKind.CaseLaw ||
+            documentKind === DocumentKind.AdministrativeDirective
+          "
           v-model:date="searchParams.date.value"
           v-model:date-after="searchParams.dateAfter.value"
           v-model:date-before="searchParams.dateBefore.value"

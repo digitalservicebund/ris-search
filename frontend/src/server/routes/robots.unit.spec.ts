@@ -63,6 +63,7 @@ describe("robots txt route", () => {
         public: {
           privateFeaturesEnabled,
         },
+        basicAuth: "auth",
       }));
 
       const mockEvent: H3Event<EventHandlerRequest> = {
@@ -72,6 +73,7 @@ describe("robots txt route", () => {
             headers: {
               host: "origin",
               "user-agent": "default",
+              authorization: "auth",
             },
           },
           res: {
@@ -83,6 +85,9 @@ describe("robots txt route", () => {
       await middleware(mockEvent);
       expect(mockFetch).toHaveBeenCalledWith(`http://origin/${file}`, {
         method: "GET",
+        headers: {
+          Authorization: "Basic auth",
+        },
       });
     },
   );

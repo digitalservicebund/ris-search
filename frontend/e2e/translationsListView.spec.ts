@@ -13,6 +13,63 @@ test("opens the page via URL", { tag: ["@RISDEV-8949"] }, async ({ page }) => {
 });
 
 test(
+  "is linked on the landing page",
+  { tag: ["@RISDEV-8954"] },
+  async ({ page, privateFeaturesEnabled }) => {
+    test.skip(!privateFeaturesEnabled);
+    await navigate(page, "/");
+    const translationsLink = page.getByRole("link", {
+      name: "Go to translations",
+    });
+    await expect(translationsLink).toBeVisible();
+    await translationsLink.click();
+    await expect(page).toHaveTitle(
+      "English Translations of German Federal Laws and Regulations | Rechtsinformationen des Bundes",
+    );
+  },
+);
+
+test(
+  "should be linked in footer",
+  { tag: ["@RISDEV-8954"] },
+  async ({ page, privateFeaturesEnabled }) => {
+    test.skip(!privateFeaturesEnabled);
+    await navigate(page, "/");
+
+    const footer = page.locator("footer");
+    const translationsLink = footer.getByRole("link", {
+      name: "English translations",
+    });
+
+    await expect(translationsLink).toBeVisible();
+    await translationsLink.click();
+    await expect(page).toHaveTitle(
+      "English Translations of German Federal Laws and Regulations | Rechtsinformationen des Bundes",
+    );
+  },
+);
+
+test(
+  "should not be linked when publicly reachable",
+  { tag: ["@RISDEV-8954"] },
+  async ({ page, privateFeaturesEnabled }) => {
+    test.skip(privateFeaturesEnabled);
+    await navigate(page, "/");
+
+    const footer = page.locator("footer");
+    const footerTranslationsLink = footer.getByRole("link", {
+      name: "English translations",
+    });
+    await expect(footerTranslationsLink).not.toBeVisible();
+
+    const translationsLink = page.getByRole("link", {
+      name: "Go to translations",
+    });
+    await expect(translationsLink).not.toBeVisible();
+  },
+);
+
+test(
   "displays search bar and list",
   { tag: ["@RISDEV-8949"] },
   async ({ page }) => {
