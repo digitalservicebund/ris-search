@@ -850,6 +850,29 @@ test.describe("searching administrative directives", () => {
 
     await expect(getSearchResults(page)).toHaveCount(2);
   });
+
+  test("sort by date", async ({ page }) => {
+    await navigate(page, "/search?category=V");
+
+    await page.getByRole("combobox", { name: "Relevanz" }).click();
+    await page.getByRole("option", { name: "Datum: Älteste zuerst" }).click();
+
+    await expect(page).toHaveURL(/sort=date/);
+
+    const searchResults = getSearchResults(page);
+    await expect(searchResults).toHaveCount(3);
+
+    await expect(searchResults.nth(0)).toHaveText(/14.03.2019/);
+
+    await page.getByRole("combobox", { name: "Datum: Älteste zuerst" }).click();
+    await page.getByRole("option", { name: "Datum: Neueste zuerst" }).click();
+
+    await expect(page).toHaveURL(/sort=-date/);
+
+    await expect(searchResults).toHaveCount(3);
+
+    await expect(searchResults.nth(0)).toHaveText(/01.07.2025/);
+  });
 });
 
 noJsTest("search works without JavaScript", async ({ page }) => {
