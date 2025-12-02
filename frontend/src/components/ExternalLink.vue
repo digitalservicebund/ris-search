@@ -1,13 +1,15 @@
 <script setup lang="ts">
 import IcBaselineArrowOutward from "~icons/ic/baseline-arrow-outward";
+
 const props = defineProps<{ url: string }>();
 </script>
 
 <template>
   <NuxtLink :to="props.url" target="_blank">
     <slot />
+    <span class="sr-only">(öffnet in einem neuen Tab)</span>
     <IcBaselineArrowOutward
-      class="ml-[0.5ch] inline h-[1em] w-[1em] align-baseline"
+      class="mb-[0.5ch] ml-4 inline h-[1.2em] w-[1.2em]"
     />
   </NuxtLink>
 </template>
