@@ -46,6 +46,8 @@ export async function useAdvancedSearch(
       return baseUrl + "/legislation";
     } else if (documentKindVal === DocumentKind.Literature) {
       return baseUrl + "/literature";
+    } else if (documentKindVal === DocumentKind.AdministrativeDirective) {
+      return baseUrl + "/administrative-directive";
     } else return baseUrl;
   });
 
