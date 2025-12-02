@@ -11,8 +11,8 @@ import jakarta.xml.bind.Marshaller;
 import java.io.StringWriter;
 import java.time.Instant;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.IntStream;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -107,16 +107,15 @@ public class SitemapService {
    * @return sitemap index xml content
    */
   public String generateIndexXml(int size, SitemapType type) {
-    List<Url> urls = new ArrayList<>();
-    for (int i = 1; i <= size; i++) {
-      Url url = new Url();
-      url.setLastmod(LocalDate.now());
-      url.setLoc(String.format("%s%s", baseUrl, getBatchSitemapPath(i, type)));
-      urls.add(url);
-    }
-    SitemapIndex sitemapIndexFile = new SitemapIndex();
-    sitemapIndexFile.setUrls(urls);
-    return marshal(sitemapIndexFile);
+    List<Url> urls =
+        IntStream.rangeClosed(1, size)
+            .mapToObj(
+                e ->
+                    new Url(
+                        String.format("%s%s", baseUrl, getBatchSitemapPath(e, type)),
+                        LocalDate.now()))
+            .toList();
+    return marshal(new SitemapIndex(urls));
   }
 
   private String marshal(Object sitemapFile) {
