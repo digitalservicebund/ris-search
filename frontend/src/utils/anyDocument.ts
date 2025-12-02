@@ -61,7 +61,11 @@ export function isAdministrativeDirective(
 export function getIdentifier(document: AnyDocument): string {
   let id = null;
 
-  if (isCaselaw(document) || isLiterature(document)) {
+  if (
+    isCaselaw(document) ||
+    isLiterature(document) ||
+    isAdministrativeDirective(document)
+  ) {
     id = document.documentNumber;
   } else if (isLegislationWork(document)) {
     id = document.workExample.legislationIdentifier;
