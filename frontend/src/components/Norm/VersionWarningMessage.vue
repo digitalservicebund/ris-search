@@ -42,7 +42,7 @@ const versionText = computed(() => {
         futureVersion.workExample.temporalCoverage,
       )?.from,
     );
-    return `Neue Fassung ab ${formattedFutureDate}.`;
+    return `Ab ${formattedFutureDate} gilt eine neue Fassung.`;
   } else {
     return currentVersionValidityStatus === "Expired"
       ? historicalWarningMessage
@@ -67,11 +67,7 @@ const versionLink = computed<
 </script>
 
 <template>
-  <div
-    v-if="showWarningMessage"
-    class="mb-40 w-fit"
-    data-testid="norm-warning-message"
-  >
+  <div v-if="showWarningMessage" class="mb-40 w-fit">
     <Message :severity="warningMessageType" class="ris-body2-regular">
       <template #icon>
         <IcBaselineUpdate

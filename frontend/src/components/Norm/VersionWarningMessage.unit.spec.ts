@@ -1,4 +1,5 @@
-import { mount } from "@vue/test-utils";
+import { renderSuspended } from "@nuxt/test-utils/runtime";
+import { screen } from "@testing-library/vue";
 import VersionWarningMessage from "./VersionWarningMessage.vue";
 import type { LegislationWork, SearchResult } from "~/types";
 
@@ -18,65 +19,85 @@ const futureVersion = {
   versionDates: ["2100-01-01"],
 } as unknown as SearchResult<LegislationWork>;
 
-function getWrapper(
-  customProps: InstanceType<typeof VersionWarningMessage>["$props"],
-) {
-  return mount(VersionWarningMessage, {
-    props: customProps,
-    global: {
-      stubs: {
-        NuxtLink: { template: "<a><slot></slot></a>" },
-        IcBaselineHistory: true,
-      },
-    },
-  });
-}
-
 describe("VersionWarningMessage", () => {
-  it("shows info message for inForce with futureVersion", () => {
-    const wrapper = getWrapper({
-      ...baseProps,
-      currentVersionValidityStatus: "InForce",
-      futureVersion: futureVersion.item,
+  it("shows info message for inForce with futureVersion", async () => {
+    await renderSuspended(VersionWarningMessage, {
+      props: {
+        ...baseProps,
+        currentVersionValidityStatus: "InForce",
+        futureVersion: futureVersion.item,
+      },
     });
-    expect(wrapper.find("[data-testid='norm-warning-message']").exists()).toBe(
-      true,
-    );
-    expect(wrapper.text()).toContain("Neue Fassung ab 01.01.2100");
-    expect(wrapper.text()).toContain("Zur zukünftigen Fassung");
+
+    expect(
+      screen.getByText("Ab 01.01.2100 gilt eine neue Fassung."),
+    ).toBeInTheDocument();
+
+    expect(
+      screen.getByRole("link", {
+        name: "Zur zukünftigen Fassung",
+        description: "Ab 01.01.2100 gilt eine neue Fassung.",
+      }),
+    ).toBeInTheDocument();
   });
 
-  it("shows no message for inForce without futureVersion", () => {
-    const wrapper = getWrapper({
-      ...baseProps,
-      currentVersionValidityStatus: "InForce",
+  it("shows no message for inForce without futureVersion", async () => {
+    await renderSuspended(VersionWarningMessage, {
+      props: {
+        ...baseProps,
+        currentVersionValidityStatus: "InForce",
+      },
     });
-    expect(wrapper.find("[data-testid='norm-warning-message']").exists()).toBe(
-      false,
-    );
+
+    expect(
+      screen.queryByText("Ab 01.01.2100 gilt eine neue Fassung."),
+    ).not.toBeInTheDocument();
+
+    expect(
+      screen.queryByRole("link", {
+        name: "Zur aktuell gültigen Fassung",
+        description: "Ab 01.01.2100 gilt eine neue Fassung.",
+      }),
+    ).not.toBeInTheDocument();
   });
 
-  it("shows warning for historical version", () => {
-    const wrapper = getWrapper({
-      ...baseProps,
-      currentVersionValidityStatus: "Expired",
+  it("shows warning for historical version", async () => {
+    await renderSuspended(VersionWarningMessage, {
+      props: {
+        ...baseProps,
+        currentVersionValidityStatus: "Expired",
+      },
     });
-    expect(wrapper.find("[data-testid='norm-warning-message']").exists()).toBe(
-      true,
-    );
-    expect(wrapper.text()).toContain("Paragraf einer historischen Fassung.");
-    expect(wrapper.text()).toContain("Zur aktuell gültigen Fassung");
+
+    expect(
+      screen.getByText("Paragraf einer historischen Fassung."),
+    ).toBeInTheDocument();
+
+    expect(
+      screen.getByRole("link", {
+        name: "Zur aktuell gültigen Fassung",
+        description: "Paragraf einer historischen Fassung.",
+      }),
+    ).toBeInTheDocument();
   });
 
-  it("shows warning for future version", () => {
-    const wrapper = getWrapper({
-      ...baseProps,
-      currentVersionValidityStatus: "FutureInForce",
+  it("shows warning for future version", async () => {
+    await renderSuspended(VersionWarningMessage, {
+      props: {
+        ...baseProps,
+        currentVersionValidityStatus: "FutureInForce",
+      },
     });
-    expect(wrapper.find("[data-testid='norm-warning-message']").exists()).toBe(
-      true,
-    );
-    expect(wrapper.text()).toContain("Paragraf einer zukünftigen Fassung.");
-    expect(wrapper.text()).toContain("Zur aktuell gültigen Fassung");
+
+    expect(
+      screen.getByText("Paragraf einer zukünftigen Fassung."),
+    ).toBeInTheDocument();
+
+    expect(
+      screen.getByRole("link", {
+        name: "Zur aktuell gültigen Fassung",
+        description: "Paragraf einer zukünftigen Fassung.",
+      }),
+    ).toBeInTheDocument();
   });
 });
