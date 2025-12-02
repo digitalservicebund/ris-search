@@ -4,10 +4,11 @@ import { categoryToDocumentKind, convertParams, getUrl } from "./simpleSearch";
 import { DocumentKind } from "~/types";
 
 describe("getUrl", () => {
-  it("returns the correct URL for known catrgories", async () => {
+  it("returns the correct URL for known categories", async () => {
     expect(getUrl("R")).toBe("/v1/case-law");
     expect(getUrl("N")).toBe("/v1/legislation");
     expect(getUrl("L")).toBe("/v1/literature");
+    expect(getUrl("V")).toBe("/v1/administrative-directive");
   });
 
   it("returns /v1/document for unknown categories", async () => {
@@ -26,6 +27,7 @@ describe("categoryToDocumentKind", () => {
     ["R.other", DocumentKind.CaseLaw],
     ["R", DocumentKind.CaseLaw],
     ["L", DocumentKind.Literature],
+    ["V", DocumentKind.AdministrativeDirective],
   ])(
     "category '%s' is converted to documenttype '%s'",
     (category, documentKind) => {
@@ -60,6 +62,7 @@ describe("convertParams", () => {
     "R.other",
     "R",
     "L",
+    "V",
   ])("adds all common parameters when category is '%s'", (category) => {
     const params = {
       ...testParams,
@@ -79,7 +82,7 @@ describe("convertParams", () => {
     );
   });
 
-  it.each(["N", "L"])(
+  it.each(["N", "L", "V"])(
     "does not add case-law specific params to searches with category '%s'",
     (category) => {
       const params = {
@@ -134,8 +137,8 @@ describe("convertParams", () => {
     },
   );
 
-  it.each(["R", "R.all", "R.urteil", "R.beschluss", "R.other", "R", "L"])(
-    "does not add norms sepcific params to searches with category '%s'",
+  it.each(["R", "R.all", "R.urteil", "R.beschluss", "R.other", "R", "L", "V"])(
+    "does not add norm specific params to searches with category '%s'",
     (category) => {
       const params = {
         ...testParams,

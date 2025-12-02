@@ -33,6 +33,10 @@ export const categoryFilterItems: MenuItem[] = [
     ],
   },
   {
+    label: "Verwaltungsvorschriften",
+    key: DocumentKind.AdministrativeDirective,
+  },
+  {
     label: "Literaturnachweise",
     key: DocumentKind.Literature,
   },

@@ -68,6 +68,69 @@ test.describe("links to advanced search", () => {
 });
 
 test.describe("general search page features", () => {
+  test("sets the pages title", async ({ page }) => {
+    await navigate(page, "/search");
+
+    await expect(page).toHaveTitle("Suche | Rechtsinformationen des Bundes");
+
+    await page
+      .getByRole("group", { name: "Filter" })
+      .getByRole("button", { name: "Gesetze & Verordnungen" })
+      .click();
+    await expect(page).toHaveTitle(
+      "Gesetze & Verordnungen — Suche | Rechtsinformationen des Bundes",
+    );
+
+    await page
+      .getByRole("group", { name: "Filter" })
+      .getByRole("button", { name: "Gerichtsentscheidungen" })
+      .click();
+    await expect(page).toHaveTitle(
+      "Rechtsprechung — Suche | Rechtsinformationen des Bundes",
+    );
+
+    await page
+      .getByRole("group", { name: "Filter" })
+      .getByRole("button", { name: "Verwaltungsvorschriften" })
+      .click();
+    await expect(page).toHaveTitle(
+      "Verwaltungsvorschriften — Suche | Rechtsinformationen des Bundes",
+    );
+
+    await page
+      .getByRole("group", { name: "Filter" })
+      .getByRole("button", { name: "Literaturnachweise" })
+      .click();
+    await expect(page).toHaveTitle(
+      "Literaturnachweise — Suche | Rechtsinformationen des Bundes",
+    );
+
+    await page
+      .getByRole("group", { name: "Filter" })
+      .getByRole("button", { name: "Alle Dokumentarten" })
+      .click();
+
+    await expect(page).toHaveTitle("Suche | Rechtsinformationen des Bundes");
+
+    await page
+      .getByRole("searchbox", { name: "Suchbegriff" })
+      .fill("frühstück brötchen");
+
+    await page.getByRole("button", { name: "Suchen" }).click();
+
+    await expect(page).toHaveTitle(
+      "frühstück brötchen — Suche | Rechtsinformationen des Bundes",
+    );
+  });
+
+  test("does not show date search filter", async ({ page }) => {
+    await navigate(page, "/search?category=N");
+
+    await expect(
+      page.getByRole("combobox", { name: "Keine zeitliche Begrenzung" }),
+    ).not.toBeVisible();
+  });
+
   test("pagination switches pages", async ({ page }) => {
     await navigate(page, "/search?query=und");
 
@@ -311,6 +374,14 @@ test.describe("searching legislation", () => {
         name: "Zum Testen von Fassungen - Aktuelle Fassung",
       }),
     ).toBeVisible();
+  });
+
+  test("does not show date search filter", async ({ page }) => {
+    await navigate(page, "/search?category=N");
+
+    await expect(
+      page.getByRole("combobox", { name: "Keine zeitliche Begrenzung" }),
+    ).not.toBeVisible();
   });
 });
 
@@ -612,6 +683,172 @@ test.describe("searching literature", () => {
     await expect(page).toHaveURL(/dateAfter=2015-01-01&dateBefore=2024-12-31/);
 
     await expect(getSearchResults(page)).toHaveCount(5);
+  });
+});
+
+test.describe("searching administrative directives", () => {
+  test("narrows search", async ({ page }) => {
+    await navigate(page, "/search?query=wurde");
+
+    const searchResults = getSearchResults(page);
+    const resultCounter = getResultCounter(page);
+
+    await expect(resultCounter).toHaveText(nonZeroResultCount);
+
+    await page
+      .getByRole("group", { name: "Filter" })
+      .getByRole("button", { name: "Verwaltungsvorschriften" })
+      .click();
+
+    await expect(page).toHaveURL(/category=V/);
+
+    await expect(resultCounter).toHaveText("1 Suchergebnis");
+
+    // Ensure all visible entries are of type administrative directive
+    await expect(searchResults).toHaveText(/^VB/);
+  });
+
+  test("shows the search result contents", async ({ page }) => {
+    await navigate(page, "/search?query=wurde&category=V");
+
+    const searchResult = getSearchResults(page).first();
+
+    // Header
+    await expect(searchResult).toHaveText(/VB/);
+    await expect(searchResult).toHaveText(/Baz - 121 - 1/);
+    await expect(searchResult).toHaveText(/24.12.2022/);
+
+    // Result detail link
+    await expect(
+      searchResult.getByRole("link", {
+        name: "Beschluss über den Beschluss",
+      }),
+    ).toBeVisible();
+
+    // Highlights
+    await expect(
+      searchResult.getByText(
+        /… Beschlossen wurde, das Beschlüsse beschlossen werden müssen./,
+      ),
+    ).toBeVisible();
+  });
+
+  test("shows placeholder title for search result items without title", async ({
+    page,
+  }) => {
+    await navigate(page, "/search?query=keinen+Titel&category=V");
+
+    // Result detail link
+    await page
+      .getByRole("link", {
+        name: "Titelzeile nicht vorhanden",
+      })
+      .click();
+
+    await expect(
+      page.getByRole("heading", {
+        level: 1,
+        name: "Titelzeile nicht vorhanden",
+      }),
+    ).toBeVisible();
+  });
+
+  test("navigates to the document detail page", async ({ page }) => {
+    await navigate(page, "/search?query=Beschluss&category=V");
+
+    // Result detail link
+    await page
+      .getByRole("link", { name: "Beschluss über den Beschluss" })
+      .click();
+
+    await expect(
+      page.getByRole("heading", {
+        level: 1,
+        name: "Beschluss über den Beschluss",
+      }),
+    ).toBeVisible();
+
+    await expect(
+      page.getByText(
+        /Dies ist ein Testdokument. Beschlossen wurde, das Beschlüsse beschlossen werden müssen./,
+      ),
+    ).toBeVisible();
+  });
+
+  test("searches by entryIntoForce date with dateBefore", async ({ page }) => {
+    await navigate(page, "/search?category=V");
+
+    await page
+      .getByRole("combobox", { name: "Keine zeitliche Begrenzung" })
+      .click();
+    await page.getByRole("option", { name: "Bis zu einem Datum" }).click();
+
+    await page.getByRole("textbox", { name: "Datum" }).fill("15.03.2019");
+
+    await expect(page).toHaveURL(/dateBefore=2019-03-15/);
+
+    const searchResults = getSearchResults(page);
+    await expect(searchResults).toHaveCount(1);
+    await expect(searchResults).toHaveText(/14.03.2019/);
+  });
+
+  test("searches by entryIntoForce date with dateAfter", async ({ page }) => {
+    await navigate(page, "/search?category=V");
+
+    await page
+      .getByRole("combobox", { name: "Keine zeitliche Begrenzung" })
+      .click();
+    await page.getByRole("option", { name: "Ab einem Datum" }).click();
+
+    await page.getByRole("textbox", { name: "Datum" }).fill("01.07.2025");
+
+    await expect(page).toHaveURL(/dateAfter=2025-07-01/);
+
+    const searchResults = getSearchResults(page);
+    await expect(searchResults).toHaveCount(1);
+    await expect(searchResults).toHaveText(/01.07.2025/);
+  });
+
+  test("searches by specific date", async ({ page }) => {
+    await navigate(page, "/search?category=V");
+
+    await page
+      .getByRole("combobox", { name: "Keine zeitliche Begrenzung" })
+      .click();
+    await page.getByRole("option", { name: "An einem Datum" }).click();
+
+    await page.getByRole("textbox", { name: "Datum" }).fill("23.12.2022");
+
+    await expect(page).toHaveURL(/date=2022-12-23/);
+
+    const searchResults = getSearchResults(page);
+    await expect(searchResults).toHaveCount(0);
+
+    await page.getByRole("textbox", { name: "Datum" }).fill("24.12.2022");
+    await expect(page).toHaveURL(/date=2022-12-24/);
+
+    await expect(searchResults).toHaveCount(1);
+    await expect(searchResults).toHaveText(/24.12.2022/);
+  });
+
+  test("searches by entryIntoForce date with range", async ({ page }) => {
+    await navigate(page, "/search?category=V");
+
+    await page
+      .getByRole("combobox", { name: "Keine zeitliche Begrenzung" })
+      .click();
+    await page.getByRole("option", { name: "In einem Zeitraum" }).click();
+
+    await page
+      .getByRole("textbox", { name: "Ab dem Datum" })
+      .fill("14.03.2019");
+    await page
+      .getByRole("textbox", { name: "Bis zum Datum" })
+      .fill("24.12.2022");
+
+    await expect(page).toHaveURL(/dateAfter=2019-03-14&dateBefore=2022-12-24/);
+
+    await expect(getSearchResults(page)).toHaveCount(2);
   });
 });
 
