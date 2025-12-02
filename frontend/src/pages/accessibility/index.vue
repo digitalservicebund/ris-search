@@ -30,20 +30,18 @@ useStaticPageSeo("barrierefreiheit");
         <p>
           Als öffentliche Stelle im Sinne der Richtlinie (EU) 2016/2102 sind wir
           bemüht, unsere Website und unsere mobilen Anwendungen im Einklang mit
-          den Bestimmungen des Behindertengleichstellungsgesetzes
+          den Bestimmungen des
           <NuxtLink
             to="https://www.gesetze-im-internet.de/bgg/BJNR146800002.html"
             class="ris-link1-regular"
+            >Behindertengleichstellungsgesetzes (BGG)</NuxtLink
           >
-            (BGG)
-          </NuxtLink>
-          und der Barrierefreie-Informationstechnik-Verordnung
+          und der
           <NuxtLink
             to="https://www.gesetze-im-internet.de/bitv_2_0/"
             class="ris-link1-regular"
+            >Barrierefreie-Informationstechnik-Verordnung (BITV 2.0)</NuxtLink
           >
-            (BITV 2.0)
-          </NuxtLink>
           zur Umsetzung der Richtlinie (EU) 2016/2102 barrierefrei zu machen.
         </p>
         <p>
