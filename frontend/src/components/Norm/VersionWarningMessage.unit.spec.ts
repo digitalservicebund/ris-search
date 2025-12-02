@@ -1,6 +1,5 @@
 import { mount } from "@vue/test-utils";
 import VersionWarningMessage from "./VersionWarningMessage.vue";
-import type { VersionWarningMessageProps } from "~/components/Norm/VersionWarningMessage.vue";
 import type { LegislationWork, SearchResult } from "~/types";
 
 const baseProps = {
@@ -19,7 +18,9 @@ const futureVersion = {
   versionDates: ["2100-01-01"],
 } as unknown as SearchResult<LegislationWork>;
 
-function getWrapper(customProps: VersionWarningMessageProps) {
+function getWrapper(
+  customProps: InstanceType<typeof VersionWarningMessage>["$props"],
+) {
   return mount(VersionWarningMessage, {
     props: customProps,
     global: {
