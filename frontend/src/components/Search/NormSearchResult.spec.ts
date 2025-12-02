@@ -171,6 +171,16 @@ describe("NormSearchResult", () => {
     );
   });
 
+  it("has accessible description linking to result type", () => {
+    renderComponent();
+
+    const link = screen.getByRole("link", {
+      name: "Highlighted Test Title",
+      description: "Norm",
+    });
+    expect(link).toBeInTheDocument();
+  });
+
   it("displays highlighted text with correct class", () => {
     const textMatch: TextMatch = {
       "@type": "SearchResultMatch",

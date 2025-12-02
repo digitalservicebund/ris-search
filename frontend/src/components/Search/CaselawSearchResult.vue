@@ -140,14 +140,24 @@ const previewSections = computed<ExtendedTextMatch[]>(() => {
   return slice;
 });
 
-const headerItems = computed<SearchResultHeaderItem[]>(() => {
+const resultTypeId = useId();
+
+const headerItems = computed(() => {
   const item = props.searchResult.item;
-  return [
-    { value: item.documentType || "Entscheidung" },
-    { value: item.courtName },
-    { value: dateFormattedDDMMYYYY(item.decisionDate) },
-    { value: getFileNumbers(item), isMarkup: true },
-  ].filter((item): item is SearchResultHeaderItem => item.value !== undefined);
+
+  const items: SearchResultHeaderItem[] = [
+    { value: item.documentType || "Entscheidung", id: resultTypeId },
+  ];
+
+  if (item.courtName) items.push({ value: item.courtName });
+
+  const formattedDate = dateFormattedDDMMYYYY(item.decisionDate);
+  if (formattedDate) items.push({ value: formattedDate });
+
+  const fileNumbers = getFileNumbers(item);
+  if (fileNumbers) items.push({ value: fileNumbers, isMarkup: true });
+
+  return items;
 });
 
 function trackResultClick(url: string) {
@@ -160,6 +170,7 @@ function trackResultClick(url: string) {
     <SearchResultHeader :icon="GavelIcon" :items="headerItems" />
     <NuxtLink
       :to="metadata.route"
+      :aria-describedby="resultTypeId"
       class="ris-heading3-bold max-w-title link-hover block text-blue-800"
       @click="trackResultClick(metadata.url)"
     >
