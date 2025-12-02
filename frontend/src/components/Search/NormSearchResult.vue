@@ -65,9 +65,11 @@ const validityStatus = computed(() => {
   return formatNormValidity(item.value.workExample.temporalCoverage);
 });
 
+const resultTypeId = useId();
+
 const headerItems = computed<SearchResultHeaderItem[]>(() => {
   return [
-    { value: "Norm" },
+    { value: "Norm", id: resultTypeId },
     { value: item.value.abbreviation },
     { value: formattedDate.value },
   ].filter((item): item is SearchResultHeaderItem => item.value !== undefined);
@@ -88,6 +90,7 @@ const headerItems = computed<SearchResultHeaderItem[]>(() => {
     <NuxtLink
       v-if="!!link"
       :to="link"
+      :aria-describedby="resultTypeId"
       class="ris-heading3-bold max-w-title link-hover block text-blue-800"
       @click="openResult(link)"
     >
