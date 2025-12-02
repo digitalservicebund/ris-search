@@ -237,9 +237,10 @@ public class AdvancedSearchController {
    *
    * @param query The query filter based on Lucene query
    * @param pagination Pagination parameters
-   * @return A JsonLd String of {@link CollectionSchema<SearchMemberSchema>} containing the
-   *     retrieved search results. Returns HTTP 200 (OK) and the search results data if found.
-   *     Returns HTTP 422 (Unprocessable Entity) if any request data information is wrong.
+   * @param sortParams Sorting parameters
+   * @return A JsonLd String of {@link CollectionSchema} containing the retrieved search results.
+   *     Returns HTTP 200 (OK) and the search results data if found. Returns HTTP 422 (Unprocessable
+   *     Entity) if any request data information is wrong.
    */
   @GetMapping(ApiConfig.Paths.ADMINISTRATIVE_DIRECTIVE_ADVANCED_SEARCH)
   @Operation(

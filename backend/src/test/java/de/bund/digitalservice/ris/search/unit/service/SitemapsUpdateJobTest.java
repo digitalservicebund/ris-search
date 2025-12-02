@@ -53,15 +53,18 @@ class SitemapsUpdateJobTest {
       caselawKeys.add("case-law/KORE12354" + i + ".xml");
     }
 
-    when(this.normsBucket.getAllKeysByPrefix(anyString())).thenReturn(normsKeys);
-    when(this.caseLawBucket.getAllKeys()).thenReturn(caselawKeys);
+    when(normsBucket.getAllKeys()).thenReturn(normsKeys);
+    when(caseLawBucket.getAllKeys()).thenReturn(caselawKeys);
 
-    this.sitemapsUpdateJob.runJob();
-    verify(this.sitemapService, times(2)).createNormsBatchSitemap(anyInt(), anyList());
-    verify(this.sitemapService, times(2)).createCaselawBatchSitemap(anyInt(), anyList());
-    verify(this.sitemapService, times(1)).createIndexSitemap(anyInt(), eq(SitemapType.NORMS));
-    verify(this.sitemapService, times(1)).createIndexSitemap(anyInt(), eq(SitemapType.CASELAW));
-    verify(this.sitemapService, times(1)).deleteSitemapFiles(any(Instant.class));
+    sitemapsUpdateJob.runJob();
+    verify(sitemapService, times(4)).createBatchSitemap(anyInt(), anyList(), any(), anyString());
+    verify(sitemapService, times(2))
+        .createBatchSitemap(anyInt(), anyList(), eq(SitemapType.NORMS), anyString());
+    verify(sitemapService, times(2))
+        .createBatchSitemap(anyInt(), anyList(), eq(SitemapType.CASELAW), anyString());
+    verify(sitemapService, times(1)).createIndexSitemap(anyInt(), eq(SitemapType.NORMS));
+    verify(sitemapService, times(1)).createIndexSitemap(anyInt(), eq(SitemapType.CASELAW));
+    verify(sitemapService, times(1)).deleteSitemapFiles(any(Instant.class));
   }
 
   @Test
@@ -72,12 +75,14 @@ class SitemapsUpdateJobTest {
             "eli/bund/bgbl-1/1992/s101/1992-01-01/1/deu/1992-01-02/regelungstext-2.xml",
             "eli/bund/bgbl-1/1992/s101/1992-01-01/1/deu/1992-01-02/anlage-regelungstext-1.xml");
 
-    when(this.normsBucket.getAllKeysByPrefix(anyString())).thenReturn(normsKeys);
+    when(normsBucket.getAllKeys()).thenReturn(normsKeys);
 
-    this.sitemapsUpdateJob.createSitemapsForNorms();
+    sitemapsUpdateJob.createSitemaps(normsBucket, SitemapType.NORMS, "norms");
 
-    verify(this.sitemapService, times(1)).createNormsBatchSitemap(anyInt(), anyList());
-    verify(this.sitemapService, times(1)).createIndexSitemap(1, SitemapType.NORMS);
+    verify(sitemapService, times(1)).createBatchSitemap(anyInt(), anyList(), any(), anyString());
+    verify(sitemapService, times(1))
+        .createBatchSitemap(anyInt(), anyList(), eq(SitemapType.NORMS), anyString());
+    verify(sitemapService, times(1)).createIndexSitemap(1, SitemapType.NORMS);
   }
 
   @Test
@@ -91,12 +96,12 @@ class SitemapsUpdateJobTest {
             "eli/bund/bgbl-1/1992/s101/1992-01-01/1/deu/1992-01-02/NOT_VALID/regelungstext-1.xml",
             "eli/bund/bgbl-1/1992/s101/1992-01-01/1/deu/1992-01-02/NOT_VALID/something-else.xml");
 
-    when(this.normsBucket.getAllKeysByPrefix(anyString())).thenReturn(normsKeys);
+    when(normsBucket.getAllKeys()).thenReturn(normsKeys);
 
-    this.sitemapsUpdateJob.createSitemapsForNorms();
+    sitemapsUpdateJob.createSitemaps(normsBucket, SitemapType.NORMS, "norms");
 
-    verify(this.sitemapService, times(0)).createNormsBatchSitemap(anyInt(), anyList());
-    verify(this.sitemapService, times(1)).createIndexSitemap(0, SitemapType.NORMS);
+    verify(sitemapService, times(0)).createBatchSitemap(anyInt(), anyList(), any(), anyString());
+    verify(sitemapService, times(1)).createIndexSitemap(0, SitemapType.NORMS);
   }
 
   @Test
@@ -106,11 +111,14 @@ class SitemapsUpdateJobTest {
             "eli/bund/bgbl-1/1992/s101/1992-01-01/1/deu/1992-01-02/regelungstext-verkuendung-1.xml",
             "eli/bund/bgbl-1/1992/s101/1992-01-01/1/deu/1992-03-10/regelungstext-verkuendung-1.xml");
 
-    when(this.normsBucket.getAllKeysByPrefix(anyString())).thenReturn(normsKeys);
+    when(normsBucket.getAllKeys()).thenReturn(normsKeys);
 
-    this.sitemapsUpdateJob.createSitemapsForNorms();
+    sitemapsUpdateJob.createSitemaps(normsBucket, SitemapType.NORMS, "norms");
 
-    verify(this.sitemapService, times(1)).createNormsBatchSitemap(anyInt(), anyList());
-    verify(this.sitemapService, times(1)).createIndexSitemap(1, SitemapType.NORMS);
+    verify(sitemapService, times(1)).createBatchSitemap(anyInt(), anyList(), any(), anyString());
+    verify(sitemapService, times(1))
+        .createBatchSitemap(anyInt(), anyList(), eq(SitemapType.NORMS), anyString());
+    verify(sitemapService, times(1)).createIndexSitemap(anyInt(), any());
+    verify(sitemapService, times(1)).createIndexSitemap(1, SitemapType.NORMS);
   }
 }

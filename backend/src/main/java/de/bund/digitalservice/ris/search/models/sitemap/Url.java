@@ -5,6 +5,7 @@ import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.time.LocalDate;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -23,6 +24,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Url {
   @XmlElement(name = "loc", required = true)
@@ -31,4 +33,8 @@ public class Url {
   @XmlElement(name = "lastmod")
   @XmlJavaTypeAdapter(LocalDateXmlAdapter.class)
   private LocalDate lastmod;
+
+  public Url(String loc) {
+    this.loc = loc;
+  }
 }

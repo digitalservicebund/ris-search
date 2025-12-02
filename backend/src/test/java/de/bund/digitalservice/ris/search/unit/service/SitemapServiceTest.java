@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.anyString;
 import static org.mockito.Mockito.eq;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -14,9 +13,9 @@ import de.bund.digitalservice.ris.search.repository.objectstorage.ObjectKeyInfo;
 import de.bund.digitalservice.ris.search.repository.objectstorage.PortalBucket;
 import de.bund.digitalservice.ris.search.service.SitemapService;
 import de.bund.digitalservice.ris.search.utils.eli.EliFile;
-import de.bund.digitalservice.ris.search.utils.eli.ExpressionEli;
 import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -39,43 +38,42 @@ class SitemapServiceTest {
 
   @Test
   void testGetNormsBatchSitemapPath() {
-    assertEquals("sitemaps/norms/1.xml", sitemapService.getBatchSitemapPath(1));
+    assertEquals("sitemaps/norms/1.xml", sitemapService.getBatchSitemapPath(1, SitemapType.NORMS));
   }
 
   @Test
   void testGetNormsIndexSitemapPath() {
-    assertEquals("sitemaps/norms/index.xml", sitemapService.getIndexSitemapPath());
+    assertEquals("sitemaps/norms/index.xml", sitemapService.getIndexSitemapPath(SitemapType.NORMS));
   }
 
   @Test
   void testGenerateNormsSitemap() {
-    ExpressionEli norm = EliFile.fromString(TEST_ELI_FILE).get().getExpressionEli();
-    String normSitemap = sitemapService.generateNormsSitemap(List.of(norm));
-    assertTrue(normSitemap.contains("<loc>https://test.local/norms/" + norm + "</loc>"));
+    Optional<EliFile> file = EliFile.fromString(TEST_ELI_FILE);
+    assertTrue(file.isPresent());
+    String id = file.get().getExpressionEli().toString();
+    String normSitemap = sitemapService.generateSitemap(List.of(id), "norms");
+    assertTrue(normSitemap.contains("<loc>https://test.local/norms/" + id + "</loc>"));
   }
 
   @Test
   void testGenerateCaselawSitemap() {
-    String path = "some/path/to/file/caselaw/KORE1.xml";
-    String caselawSitemap = sitemapService.generateCaselawSitemap(List.of(path));
+    String caselawSitemap = sitemapService.generateSitemap(List.of("KORE1"), "case-law");
     assertTrue(caselawSitemap.contains("<loc>https://test.local/case-law/KORE1</loc>"));
   }
 
   @Test
   void testGenerateIndexXml() {
-    String indexXml = sitemapService.generateIndexXml(2);
+    String indexXml = sitemapService.generateIndexXml(2, SitemapType.NORMS);
     assertTrue(indexXml.contains("<loc>https://test.local/v1/sitemaps/norms/1.xml</loc>"));
     assertTrue(indexXml.contains("<loc>https://test.local/v1/sitemaps/norms/2.xml</loc>"));
     assertTrue(indexXml.contains("<sitemapindex"));
-    sitemapService.setSitemapType(SitemapType.CASELAW);
-    indexXml = sitemapService.generateIndexXml(1);
+    indexXml = sitemapService.generateIndexXml(1, SitemapType.CASELAW);
     assertTrue(indexXml.contains("<loc>https://test.local/v1/sitemaps/caselaw/1.xml</loc>"));
   }
 
   @Test
   void testCreateNormsBatchSitemap() {
-    ExpressionEli norm = mock(ExpressionEli.class);
-    sitemapService.createNormsBatchSitemap(1, List.of(norm));
+    sitemapService.createBatchSitemap(1, List.of(""), SitemapType.NORMS, "norms");
     verify(portalBucket).save(eq("sitemaps/norms/1.xml"), anyString());
   }
 
@@ -87,7 +85,8 @@ class SitemapServiceTest {
 
   @Test
   void testCreateCaselawBatchSitemap() {
-    sitemapService.createCaselawBatchSitemap(1, List.of("caselaw/KORE12315.xml"));
+    sitemapService.createBatchSitemap(
+        1, List.of("caselaw/KORE12315.xml"), SitemapType.CASELAW, "case-law");
     verify(portalBucket).save(eq("sitemaps/caselaw/1.xml"), anyString());
   }
 
