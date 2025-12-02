@@ -61,7 +61,7 @@ const firstFutureVersion = computed(() => {
     :current-version-validity-status="currentVersionValidityStatus"
     :in-force-version-link="inForceVersionLink"
     :future-version="firstFutureVersion"
-    historical-warning-message="Historische Fassung."
-    future-warning-message="Zukünftige Fassung."
+    historical-warning-message="Sie lesen eine historische Fassung."
+    future-warning-message="Sie lesen eine zukünftige Fassung."
   />
 </template>
