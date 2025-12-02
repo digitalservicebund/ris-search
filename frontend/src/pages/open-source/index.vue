@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import { NuxtLink } from "#components";
+import { ExternalLink } from "#components";
 import StaticPageWrapper from "~/components/CustomLayouts/StaticPageWrapper.vue";
 import { useStaticPageSeo } from "~/composables/useStaticPageSeo";
-import IcBaselineLaunch from "~icons/ic/baseline-launch";
 
 useStaticPageSeo("open-source");
 </script>
@@ -21,13 +20,14 @@ useStaticPageSeo("open-source");
           und Flexibilität. Aus diesem Grund ist unsere Arbeit in unserem
           Github-Repository frei zugänglich und offen für Mitarbeit.
         </p>
+
         <Button
-          :as="NuxtLink"
+          :as="ExternalLink"
           to="https://github.com/digitalservicebund/ris-search"
-          target="_blank"
         >
-          Zum Github Repository <IcBaselineLaunch />
+          Zum Github Repository
         </Button>
-      </div></div
-  ></StaticPageWrapper>
+      </div>
+    </div>
+  </StaticPageWrapper>
 </template>
