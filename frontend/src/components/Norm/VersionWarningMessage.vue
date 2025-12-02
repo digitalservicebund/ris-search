@@ -66,6 +66,7 @@ const toCurrentVersionText = "Zur aktuell gültigen Fassung";
             }}.
           </span>
           <NuxtLink
+            class="ris-link2-regular"
             :to="`/norms/${props.futureVersion.workExample.legislationIdentifier}`"
           >
             Zur zukünftigen Fassung
@@ -79,7 +80,11 @@ const toCurrentVersionText = "Zur aktuell gültigen Fassung";
                 : futureWarningMessage
             }}&nbsp;
           </span>
-          <NuxtLink v-if="props.inForceVersionLink" :to="inForceVersionLink">
+          <NuxtLink
+            v-if="props.inForceVersionLink"
+            :to="inForceVersionLink"
+            class="ris-link2-regular"
+          >
             {{ toCurrentVersionText }}
           </NuxtLink>
         </span>
