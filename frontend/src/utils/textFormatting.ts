@@ -126,15 +126,14 @@ export function formatNames(names: string[]): string[] {
 export function encodeForUri(text?: string): string {
   if (!text) return "";
 
-  let result = text;
+  const map: Record<string, string> = {
+    ä: "ae",
+    ö: "oe",
+    ü: "ue",
+    Ä: "Ae",
+    Ö: "Oe",
+    Ü: "Ue",
+  };
 
-  result = result.replace(/ä/g, "ae");
-  result = result.replace(/ö/g, "oe");
-  result = result.replace(/ü/g, "ue");
-
-  result = result.replace(/Ä/g, "Ae");
-  result = result.replace(/Ö/g, "Oe");
-  result = result.replace(/Ü/g, "Ue");
-
-  return result;
+  return text.replace(/[äöüÄÖÜ]/g, (char: string) => map[char] ?? char);
 }
