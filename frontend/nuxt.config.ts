@@ -169,13 +169,14 @@ export default defineNuxtConfig({
     sitemaps: {
       static: {
         includeAppSources: true,
-        exclude: ["/case‑law/**", "/norms/eli/**"],
+        exclude: ["/case‑law/**", "/literature/**", "/norms/eli/**"],
         defaults: { priority: 0.7 },
       },
     },
     appendSitemaps: [
+      "/v1/sitemaps/case-law/index.xml",
+      "/v1/sitemaps/literature/index.xml",
       "/v1/sitemaps/norms/index.xml",
-      "/v1/sitemaps/caselaw/index.xml",
     ],
   },
   nitro: {
@@ -190,17 +191,25 @@ export default defineNuxtConfig({
     "/nutzungstests": {
       redirect: "/",
     },
-    "/sitemaps/norms/**": {
+    "/sitemaps/case-law/**": {
       proxy: {
-        to: `${process.env.NUXT_PUBLIC_RIS_BACKEND_URL}/v1/sitemaps/norms/**`,
+        to: `${process.env.NUXT_PUBLIC_RIS_BACKEND_URL}/v1/sitemaps/case-law/**`,
         headers: {
           Accept: "application/xml",
         },
       },
     },
-    "/sitemaps/caselaw/**": {
+    "/sitemaps/literature/**": {
       proxy: {
-        to: `${process.env.NUXT_PUBLIC_RIS_BACKEND_URL}/v1/sitemaps/caselaw/**`,
+        to: `${process.env.NUXT_PUBLIC_RIS_BACKEND_URL}/v1/sitemaps/literature/**`,
+        headers: {
+          Accept: "application/xml",
+        },
+      },
+    },
+    "/sitemaps/norms/**": {
+      proxy: {
+        to: `${process.env.NUXT_PUBLIC_RIS_BACKEND_URL}/v1/sitemaps/norms/**`,
         headers: {
           Accept: "application/xml",
         },
