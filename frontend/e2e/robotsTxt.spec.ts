@@ -24,4 +24,22 @@ test.describe("robots.public.txt dynamic handler", () => {
     });
     expect(await response.text()).toBe(expected);
   });
+
+  test(`public: serves ecli robots.txt for DG_JUSTICE_CRAWLER user agent`, async ({
+    page,
+    privateFeaturesEnabled,
+  }) => {
+    //currently only exists in prototype
+    if (!privateFeaturesEnabled) {
+      const response = await page.request.get("/robots.txt", {
+        headers: { "User-Agent": "DG_JUSTICE_CRAWLER" },
+      });
+
+      const expected =
+        "User-agent: *\n" +
+        "Disallow: /\n" +
+        "User-agent: DG_JUSTICE_CRAWLER\n";
+      expect(await response.text()).toBe(expected);
+    }
+  });
 });

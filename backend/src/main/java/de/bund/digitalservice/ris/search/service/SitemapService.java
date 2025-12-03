@@ -39,7 +39,7 @@ public class SitemapService {
   }
 
   /**
-   * Creates a norms batch sitemap and saves it to the portal bucket
+   * Creates a batch sitemap and saves it to the portal bucket
    *
    * @param batchNumber the batch number
    * @param ids the list of ids for this batch

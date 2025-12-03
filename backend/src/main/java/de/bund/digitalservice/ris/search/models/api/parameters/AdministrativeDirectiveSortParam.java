@@ -25,7 +25,7 @@ public class AdministrativeDirectiveSortParam {
       description =
           "The field to sort the results by. Default is the relevance score calculated by OpenSearch. Valid usage of the sort field are : date and documentNumber and not setting the sort field (sort by relevance descending)."
               + "Add a leading - to set the order to descending (-date)")
-  @Pattern(regexp = "^-?(|default|DATUM|documentNumber)$")
+  @Pattern(regexp = "^-?(|default|date|DATUM|documentNumber)$")
   @Nullable
   String sort = null;
 }

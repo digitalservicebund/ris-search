@@ -206,6 +206,12 @@ export default defineNuxtConfig({
         },
       },
     },
+    // Temporarily redirect due to broken endpoint references
+    "/docs": {
+      redirect: {
+        to: "https://docs.rechtsinformationen.bund.de",
+      },
+    },
   },
   vite: {
     optimizeDeps: {
