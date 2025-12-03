@@ -110,7 +110,7 @@ describe("tableOfContents", () => {
       const result = tocItemsToTreeNodes(items, "/heading/", "/leaf/");
 
       expect(result).toHaveLength(1);
-      expect(result[0]?.route).toBe(`/leaf/Praeoeue AeOeUe §1`);
+      expect(result[0]?.route).toBe("/leaf/Praeoeue AeOeUe §1");
     });
   });
 });
