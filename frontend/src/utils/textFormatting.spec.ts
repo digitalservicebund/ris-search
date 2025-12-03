@@ -165,3 +165,24 @@ describe("formatNames", () => {
     ]);
   });
 });
+
+describe("encodeForUri", () => {
+  it("returns the same string when no umlauts are present", () => {
+    expect(encodeForUri("RIS informationen 123")).toBe("RIS informationen 123");
+  });
+
+  it("handles umlauts in different cases and multiple occurrences", () => {
+    expect(encodeForUri()).toBe("");
+    expect(encodeForUri("müller")).toBe("mueller");
+    expect(encodeForUri("für")).toBe("fuer");
+    expect(encodeForUri("käsebrötchen")).toBe("kaesebroetchen");
+    expect(encodeForUri("Äpfel und Früchte")).toBe("Aepfel und Fruechte");
+    expect(encodeForUri("Übergröße & müde Schüler")).toBe(
+      "Uebergroeße & muede Schueler",
+    );
+    expect(encodeForUri("🏡 süße Träume")).toBe("🏡 sueße Traeume");
+    expect(encodeForUri("🌧 Ärger über Ölpreise")).toBe(
+      "🌧 Aerger ueber Oelpreise",
+    );
+  });
+});

@@ -7,10 +7,11 @@ export function tocItemsToTreeNodes(
   leafBasePath: string,
 ): TreeNode[] {
   return items.map((child: TableOfContentsItem) => {
+    const encodedChildId = encodeForUri(child.id);
     const childTreeNode = {
-      key: child.id,
+      key: encodedChildId,
       label: [child.marker, child.heading].join(" "),
-      route: leafBasePath + child.id,
+      route: leafBasePath + encodedChildId,
     } as TreeNode;
     return !child.children || child.children.length === 0
       ? childTreeNode
@@ -18,7 +19,7 @@ export function tocItemsToTreeNodes(
           ...childTreeNode,
           label: child.marker,
           secondaryLabel: child.heading,
-          route: headingBasePath + child.id,
+          route: headingBasePath + encodedChildId,
           children: tocItemsToTreeNodes(
             child.children,
             headingBasePath,

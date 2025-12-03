@@ -114,7 +114,9 @@ const headerItems = computed<SearchResultHeaderItem[]>(() => {
             class="link-hover text-blue-800"
             :to="{
               path: `${link}`,
-              hash: highlight.location ? `#${highlight.location}` : undefined,
+              hash: highlight.location
+                ? `#${encodeForUri(highlight.location)}`
+                : undefined,
             }"
             @click="openResult(`${link}#${highlight.location || ''}`)"
           >

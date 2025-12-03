@@ -95,5 +95,22 @@ describe("tableOfContents", () => {
       const path = findNodePath(treeNodes, undefined);
       expect(path).toBeUndefined();
     });
+
+    it("encodes IDs correctly in generated URLs", () => {
+      const items: TableOfContentsItem[] = [
+        {
+          "@type": "TocEntry",
+          id: "Präöü ÄÖÜ §1",
+          marker: "§ 1",
+          heading: "Encoded Title",
+          children: [],
+        },
+      ];
+
+      const result = tocItemsToTreeNodes(items, "/heading/", "/leaf/");
+
+      expect(result).toHaveLength(1);
+      expect(result[0]?.route).toBe("/leaf/Praeoeue AeOeUe §1");
+    });
   });
 });
