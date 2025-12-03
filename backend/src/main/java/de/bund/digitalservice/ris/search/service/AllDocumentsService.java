@@ -72,7 +72,7 @@ public class AllDocumentsService {
     List<SimpleSearchType> searchTypes =
         switch (documentKind) {
           case LEGISLATION -> List.of(new NormSimpleSearchType(normsParams));
-          case CASELAW -> List.of(new CaseLawSimpleSearchType(caseLawParams));
+          case CASE_LAW -> List.of(new CaseLawSimpleSearchType(caseLawParams));
           case LITERATURE -> List.of(new LiteratureSimpleSearchType(literatureSearchParams));
           case ADMINISTRATIVE_DIRECTIVE ->
               List.of(
@@ -95,7 +95,7 @@ public class AllDocumentsService {
       var searchHits =
           switch (documentKind) {
             case LEGISLATION -> operations.search(query, Norm.class);
-            case CASELAW -> operations.search(query, CaseLawDocumentationUnit.class);
+            case CASE_LAW -> operations.search(query, CaseLawDocumentationUnit.class);
             case LITERATURE -> operations.search(query, Literature.class);
             case ADMINISTRATIVE_DIRECTIVE ->
                 operations.search(query, AdministrativeDirective.class);

@@ -1,8 +1,8 @@
 package de.bund.digitalservice.ris.search.service;
 
+import de.bund.digitalservice.ris.search.models.DocumentKind;
 import de.bund.digitalservice.ris.search.models.sitemap.SitemapFile;
 import de.bund.digitalservice.ris.search.models.sitemap.SitemapIndex;
-import de.bund.digitalservice.ris.search.models.sitemap.SitemapType;
 import de.bund.digitalservice.ris.search.models.sitemap.Url;
 import de.bund.digitalservice.ris.search.repository.objectstorage.PortalBucket;
 import jakarta.xml.bind.JAXBContext;
@@ -34,8 +34,8 @@ public class SitemapService {
    * @param type the type of sitemap currently being generated
    * @return sitemap file path
    */
-  public String getBatchSitemapPath(int batchNumber, SitemapType type) {
-    return SITEMAP_PREFIX + String.format("%s/%d.xml", type.name().toLowerCase(), batchNumber);
+  public String getBatchSitemapPath(int batchNumber, DocumentKind type) {
+    return SITEMAP_PREFIX + String.format("%s/%d.xml", type.getSiteMapPath(), batchNumber);
   }
 
   /**
@@ -43,12 +43,12 @@ public class SitemapService {
    *
    * @param batchNumber the batch number
    * @param ids the list of ids for this batch
-   * @param type the type of sitemap currently being generated
+   * @param docKind the docKind of sitemap currently being generated
    * @param prefix the sitemap prefix
    */
   public void createBatchSitemap(
-      int batchNumber, List<String> ids, SitemapType type, String prefix) {
-    String path = getBatchSitemapPath(batchNumber, type);
+      int batchNumber, List<String> ids, DocumentKind docKind, String prefix) {
+    String path = getBatchSitemapPath(batchNumber, docKind);
     portalBucket.save(path, generateSitemap(ids, prefix));
   }
 
@@ -58,8 +58,8 @@ public class SitemapService {
    * @param type the type of sitemap currently being generated
    * @return sitemap index file path
    */
-  public String getIndexSitemapPath(SitemapType type) {
-    return SITEMAP_PREFIX + String.format("%s/index.xml", type.name().toLowerCase());
+  public String getIndexSitemapPath(DocumentKind type) {
+    return SITEMAP_PREFIX + String.format("%s/index.xml", type.getSiteMapPath());
   }
 
   /**
@@ -68,7 +68,7 @@ public class SitemapService {
    * @param size number of sitemap files
    * @param type the type of sitemap currently being generated
    */
-  public void createIndexSitemap(int size, SitemapType type) {
+  public void createIndexSitemap(int size, DocumentKind type) {
     String path = getIndexSitemapPath(type);
     portalBucket.save(path, generateIndexXml(size, type));
   }
@@ -106,7 +106,7 @@ public class SitemapService {
    * @param type the type of sitemap currently being generated
    * @return sitemap index xml content
    */
-  public String generateIndexXml(int size, SitemapType type) {
+  public String generateIndexXml(int size, DocumentKind type) {
     List<Url> urls =
         IntStream.rangeClosed(1, size)
             .mapToObj(

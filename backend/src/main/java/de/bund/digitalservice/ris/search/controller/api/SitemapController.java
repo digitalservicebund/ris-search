@@ -2,7 +2,7 @@ package de.bund.digitalservice.ris.search.controller.api;
 
 import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
-import de.bund.digitalservice.ris.search.models.sitemap.SitemapType;
+import de.bund.digitalservice.ris.search.models.DocumentKind;
 import de.bund.digitalservice.ris.search.repository.objectstorage.PortalBucket;
 import de.bund.digitalservice.ris.search.service.SitemapService;
 import io.swagger.v3.oas.annotations.Hidden;
@@ -51,8 +51,8 @@ public class SitemapController {
   /**
    * Retrieves a specific sitemap file for norms or caselaw based on the provided type and filename.
    *
-   * @param type The type of the sitemap (e.g., "norms", "caselaw"). Determines the category of the
-   *     sitemap.
+   * @param docKind The type of the sitemap (e.g., "norms", "caselaw"). Determines the category of
+   *     the sitemap.
    * @param filename The name of the sitemap file (e.g., "index" for the index sitemap or a batch
    *     number filename).
    * @return A ResponseEntity containing the sitemap file as a byte array if found. Returns HTTP 200
@@ -61,7 +61,7 @@ public class SitemapController {
    *     the object store.
    */
   @GetMapping(
-      path = ApiConfig.Paths.SITEMAP + "/{type}/{filename}.xml",
+      path = ApiConfig.Paths.SITEMAP + "/{docKind}/{filename}.xml",
       produces = MediaType.APPLICATION_XML_VALUE)
   @Operation(
       summary = "Get Norms and Caselaw Sitemap files",
@@ -93,25 +93,28 @@ public class SitemapController {
       @Parameter(
               description = "Type of sitemap files",
               example = "norms",
-              schema = @Schema(allowableValues = {"norms", "caselaw"}))
+              schema = @Schema(allowableValues = {"case_law", "literature", "norms"}))
           @PathVariable
-          String type,
+          String docKind,
       @Parameter(description = "SitemapFile Filename", example = "index") @PathVariable
           String filename)
       throws ObjectStoreServiceException {
 
     Optional<byte[]> file;
 
-    try {
-      SitemapType sitemapType = SitemapType.valueOf(type.toUpperCase());
-      if (filename.equals("index")) {
-        file = portalBucket.get(sitemapService.getIndexSitemapPath(sitemapType));
-      } else {
+    DocumentKind sitemapType = DocumentKind.SITE_MAP_TO_DOC_KIND_MAP.get(docKind.toLowerCase());
+    if (sitemapType == null) {
+      return ResponseEntity.notFound().build();
+    }
+    if ("index".equals(filename)) {
+      file = portalBucket.get(sitemapService.getIndexSitemapPath(sitemapType));
+    } else {
+      try {
         int batchNumber = Integer.parseInt(filename);
         file = portalBucket.get(sitemapService.getBatchSitemapPath(batchNumber, sitemapType));
+      } catch (NumberFormatException exception) {
+        return ResponseEntity.notFound().build();
       }
-    } catch (IllegalArgumentException exception) {
-      return ResponseEntity.notFound().build();
     }
 
     return file.map(
