@@ -31,16 +31,17 @@ useStaticPageSeo("barrierefreiheit");
           Als öffentliche Stelle im Sinne der Richtlinie (EU) 2016/2102 sind wir
           bemüht, unsere Website und unsere mobilen Anwendungen im Einklang mit
           den Bestimmungen des
-          <NuxtLink
-            to="https://www.gesetze-im-internet.de/bgg/BJNR146800002.html"
+          <ExternalLink
+            url="https://www.gesetze-im-internet.de/bgg/BJNR146800002.html"
             class="ris-link1-regular"
-            >Behindertengleichstellungsgesetzes (BGG)</NuxtLink
+            >Behindertengleichstellungsgesetzes (BGG)</ExternalLink
           >
           und der
-          <NuxtLink
-            to="https://www.gesetze-im-internet.de/bitv_2_0/"
+          <ExternalLink
+            url="https://www.gesetze-im-internet.de/bitv_2_0/"
             class="ris-link1-regular"
-            >Barrierefreie-Informationstechnik-Verordnung (BITV 2.0)</NuxtLink
+            >Barrierefreie-Informationstechnik-Verordnung (BITV
+            2.0)</ExternalLink
           >
           zur Umsetzung der Richtlinie (EU) 2016/2102 barrierefrei zu machen.
         </p>
@@ -100,12 +101,12 @@ useStaticPageSeo("barrierefreiheit");
           Schlichtungsverfahren ist kostenlos. Es muss kein Rechtsbeistand
           eingeschaltet werden. Weitere Informationen zum Schlichtungsverfahren
           und den Möglichkeiten der Antragstellung erhalten Sie unter:
-          <NuxtLink
-            to="https://www.schlichtungsstelle-bgg.de"
+          <ExternalLink
+            url="https://www.schlichtungsstelle-bgg.de"
             class="ris-link1-regular"
           >
             www.schlichtungsstelle-bgg.de
-          </NuxtLink>
+          </ExternalLink>
         </p>
         <p>
           Direkt kontaktieren können Sie die Schlichtungsstelle BGG unter:<br />

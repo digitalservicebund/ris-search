@@ -118,7 +118,7 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
       <div>
         <Button
           :as="ExternalLink"
-          to="https://docs.rechtsinformationen.bund.de"
+          url="https://docs.rechtsinformationen.bund.de"
         >
           Zur API-Dokumentation
         </Button>
