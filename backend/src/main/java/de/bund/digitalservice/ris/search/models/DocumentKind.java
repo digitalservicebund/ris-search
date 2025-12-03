@@ -3,10 +3,7 @@ package de.bund.digitalservice.ris.search.models;
 import com.fasterxml.jackson.annotation.JsonValue;
 import de.bund.digitalservice.ris.search.utils.eli.EliFile;
 import de.bund.digitalservice.ris.search.utils.eli.ExpressionEli;
-import java.util.Arrays;
-import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.core.convert.converter.Converter;
@@ -33,10 +30,6 @@ public enum DocumentKind {
   public String getSingleLetterAlias() {
     return singleLetterAlias;
   }
-
-  public static final Map<String, DocumentKind> SITE_MAP_TO_DOC_KIND_MAP =
-      Arrays.stream(values())
-          .collect(Collectors.toMap(DocumentKind::getSiteMapPath, documentKind -> documentKind));
 
   /**
    * Resolves a string documentKindString to the corresponding {@code DocumentKind} enum constant.

@@ -8,7 +8,6 @@ import de.bund.digitalservice.ris.search.service.SitemapService;
 import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.Optional;
@@ -49,10 +48,8 @@ public class SitemapController {
   }
 
   /**
-   * Retrieves a specific sitemap file for norms or caselaw based on the provided type and filename.
+   * Retrieves a specific sitemap file for case law based on the provided type and filename.
    *
-   * @param docKind The type of the sitemap (e.g., "norms", "caselaw"). Determines the category of
-   *     the sitemap.
    * @param filename The name of the sitemap file (e.g., "index" for the index sitemap or a batch
    *     number filename).
    * @return A ResponseEntity containing the sitemap file as a byte array if found. Returns HTTP 200
@@ -61,57 +58,123 @@ public class SitemapController {
    *     the object store.
    */
   @GetMapping(
-      path = ApiConfig.Paths.SITEMAP + "/{docKind}/{filename}.xml",
+      path = ApiConfig.Paths.SITEMAP + "/case-law/{filename}.xml",
       produces = MediaType.APPLICATION_XML_VALUE)
   @Operation(
-      summary = "Get Norms and Caselaw Sitemap files",
+      summary = "Get case law sitemap files",
       description =
           """
-                              Return specific sitemap file for norms.
+                                          Get the index sitemap for case law.
+                                          ## Example 1
+                                          Get the sitemap file listing all the case law sitemap files:
+                                          ```http request
+                                          GET /v1/sitemaps/case-law/index.xml```
 
-                              ## Example 1
-
-                              Get the index sitemap for norms.
-                              ```http request
-                              GET /v1/sitemaps/norms/index.xml
-                              ```
-                              The API will return the index sitemap file for norms, which contains links to all
-                              individual sitemap files for norms batched in 100 norms per file.
-
-                              ## Example 2
-
-                              Get a particular caselaw's batch sitemap file.
-                              ```http request
-                              GET /v1/sitemaps/caselaw/1.xml
-                              ```
-                              This call will return the first batch of caselaw, which contains the first 100 caselaw results
-                              ```
-                              """)
+                                          ## Example 2
+                                          Get the content of one sitemap file
+                                          ```http request
+                                          GET /v1/sitemaps/case-law/1.xml
+                                          ```
+                                          """)
   @ApiResponse(responseCode = "200")
   @ApiResponse(responseCode = "404")
-  public ResponseEntity<byte[]> getNormSitemapXml(
-      @Parameter(
-              description = "Type of sitemap files",
-              example = "norms",
-              schema = @Schema(allowableValues = {"case_law", "literature", "norms"}))
-          @PathVariable
-          String docKind,
+  public ResponseEntity<byte[]> getCaseLawSitemapXml(
       @Parameter(description = "SitemapFile Filename", example = "index") @PathVariable
           String filename)
       throws ObjectStoreServiceException {
 
+    return getSitemapXml(filename, DocumentKind.CASE_LAW);
+  }
+
+  /**
+   * Retrieves a specific sitemap file for literature based on the provided type and filename.
+   *
+   * @param filename The name of the sitemap file (e.g., "index" for the index sitemap or a batch
+   *     number filename).
+   * @return A ResponseEntity containing the sitemap file as a byte array if found. Returns HTTP 200
+   *     (OK) if the file is available, or HTTP 404 (Not Found) if the file does not exist.
+   * @throws ObjectStoreServiceException If an error occurs while retrieving the sitemap file from
+   *     the object store.
+   */
+  @GetMapping(
+      path = ApiConfig.Paths.SITEMAP + "/literature/{filename}.xml",
+      produces = MediaType.APPLICATION_XML_VALUE)
+  @Operation(
+      summary = "Get literature sitemap files",
+      description =
+          """
+                                          Get the index sitemap for literature.
+                                          ## Example 1
+                                          Get the sitemap file listing all the literature sitemap files:
+                                          ```http request
+                                          GET /v1/sitemaps/literature/index.xml```
+
+                                          ## Example 2
+                                          Get the content of one sitemap file
+                                          ```http request
+                                          GET /v1/sitemaps/literature/1.xml
+                                          ```
+                                          """)
+  @ApiResponse(responseCode = "200")
+  @ApiResponse(responseCode = "404")
+  public ResponseEntity<byte[]> getLiteratureSitemapXml(
+      @Parameter(description = "SitemapFile Filename", example = "index") @PathVariable
+          String filename)
+      throws ObjectStoreServiceException {
+
+    return getSitemapXml(filename, DocumentKind.LITERATURE);
+  }
+
+  /**
+   * Retrieves a specific sitemap file for norms based on the provided type and filename.
+   *
+   * @param filename The name of the sitemap file (e.g., "index" for the index sitemap or a batch
+   *     number filename).
+   * @return A ResponseEntity containing the sitemap file as a byte array if found. Returns HTTP 200
+   *     (OK) if the file is available, or HTTP 404 (Not Found) if the file does not exist.
+   * @throws ObjectStoreServiceException If an error occurs while retrieving the sitemap file from
+   *     the object store.
+   */
+  @GetMapping(
+      path = ApiConfig.Paths.SITEMAP + "/norms/{filename}.xml",
+      produces = MediaType.APPLICATION_XML_VALUE)
+  @Operation(
+      summary = "Get norm sitemap files",
+      description =
+          """
+                                      Get the index sitemap for norms.
+                                      ## Example 1
+                                      Get the sitemap file listing all the norms sitemap files:
+                                      ```http request
+                                      GET /v1/sitemaps/norms/index.xml```
+
+                                      ## Example 2
+                                      Get the content of one sitemap file
+                                      ```http request
+                                      GET /v1/sitemaps/norms/1.xml
+                                      ```
+                                      """)
+  @ApiResponse(responseCode = "200")
+  @ApiResponse(responseCode = "404")
+  public ResponseEntity<byte[]> getNormSitemapXml(
+      @Parameter(description = "SitemapFile Filename", example = "index") @PathVariable
+          String filename)
+      throws ObjectStoreServiceException {
+
+    return getSitemapXml(filename, DocumentKind.LEGISLATION);
+  }
+
+  private ResponseEntity<byte[]> getSitemapXml(String filename, DocumentKind documentKind)
+      throws ObjectStoreServiceException {
+
     Optional<byte[]> file;
 
-    DocumentKind sitemapType = DocumentKind.SITE_MAP_TO_DOC_KIND_MAP.get(docKind.toLowerCase());
-    if (sitemapType == null) {
-      return ResponseEntity.notFound().build();
-    }
     if ("index".equals(filename)) {
-      file = portalBucket.get(sitemapService.getIndexSitemapPath(sitemapType));
+      file = portalBucket.get(sitemapService.getIndexSitemapPath(documentKind));
     } else {
       try {
         int batchNumber = Integer.parseInt(filename);
-        file = portalBucket.get(sitemapService.getBatchSitemapPath(batchNumber, sitemapType));
+        file = portalBucket.get(sitemapService.getBatchSitemapPath(batchNumber, documentKind));
       } catch (NumberFormatException exception) {
         return ResponseEntity.notFound().build();
       }
