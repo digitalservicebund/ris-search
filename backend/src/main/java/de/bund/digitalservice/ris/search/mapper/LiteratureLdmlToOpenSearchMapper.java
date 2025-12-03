@@ -99,6 +99,7 @@ public class LiteratureLdmlToOpenSearchMapper {
         .collaborators(extractCollaborators(literatureLdml))
         .originators(extractOriginators(literatureLdml))
         .conferenceNotes(extractConferenceNotes(literatureLdml))
+        .universityNotes(extractUniversityNotes(literatureLdml))
         .languages(extractLanguages(literatureLdml))
         .shortReport(extractShortReport(literatureLdml))
         .outline((extractOutline(literatureLdml)))
@@ -258,6 +259,21 @@ public class LiteratureLdmlToOpenSearchMapper {
         .orElse(Collections.emptyList())
         .stream()
         .filter(event -> conferenceEids.contains(event.getEId()))
+        .map(TlcEvent::getShowAs)
+        .toList();
+  }
+
+  private static List<String> extractUniversityNotes(LiteratureLdml literatureLdml) {
+    var eIds = getFrbrAuthorReferenceLinks(literatureLdml, "#hochschule");
+
+    return Optional.ofNullable(literatureLdml)
+        .map(LiteratureLdml::getDoc)
+        .map(Doc::getMeta)
+        .map(Meta::getReferences)
+        .map(References::getTlcEvents)
+        .orElse(Collections.emptyList())
+        .stream()
+        .filter(event -> eIds.contains(event.getEId()))
         .map(TlcEvent::getShowAs)
         .toList();
   }
