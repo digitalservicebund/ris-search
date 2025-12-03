@@ -13,20 +13,18 @@ const emptyProp = computed(() =>
 );
 
 const emptyValuePlaceholder = "nicht vorhanden";
-const descriptionTermId = useId();
 </script>
 
 <template>
   <div
     class="flex flex-col gap-8 md:grid md:grid-cols-4 md:gap-8 md:px-0 lg:grid-cols-5 xl:grid-cols-6"
   >
-    <dt :id="descriptionTermId" class="ris-label1-bold hyphens-auto">
+    <dt class="ris-label1-bold hyphens-auto">
       {{ label }}
     </dt>
     <dd
       v-if="$slots.default"
       class="ris-label1-regular max-w-prose md:col-span-3"
-      :aria-labelledby="descriptionTermId"
     >
       <div>
         <slot />
@@ -37,7 +35,6 @@ const descriptionTermId = useId();
       v-else-if="valueList?.length"
       :key="listItem"
       class="ris-label1-regular max-w-prose md:col-span-3 md:col-start-2"
-      :aria-labelledby="descriptionTermId"
     >
       {{ listItem }}
     </dd>
@@ -45,7 +42,6 @@ const descriptionTermId = useId();
       v-else
       class="ris-label1-regular max-w-prose data-empty:text-gray-900 md:col-span-3"
       :data-empty="emptyProp"
-      :aria-labelledby="descriptionTermId"
     >
       {{ value || placeholder || emptyValuePlaceholder }}
     </dd>

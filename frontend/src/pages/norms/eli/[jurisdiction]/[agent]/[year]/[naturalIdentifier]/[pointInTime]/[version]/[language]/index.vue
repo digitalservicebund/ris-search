@@ -8,14 +8,14 @@ import { useRoute } from "#app";
 import NormActionsMenu from "~/components/ActionMenu/NormActionsMenu.vue";
 import ContentWrapper from "~/components/CustomLayouts/ContentWrapper.vue";
 import TableOfContentsLayout from "~/components/CustomLayouts/SidebarLayout.vue";
+import DetailsList from "~/components/DetailsList.vue";
+import DetailsListEntry from "~/components/DetailsListEntry.vue";
 import IncompleteDataMessage from "~/components/IncompleteDataMessage.vue";
 import NormMetadataFields from "~/components/Norm/Metadatafields/NormMetadataFields.vue";
 import NormVersionList from "~/components/Norm/NormVersionList.vue";
 import NormVersionWarning from "~/components/Norm/NormVersionWarning.vue";
 import VersionsTeaser from "~/components/Norm/VersionsTeaser.vue";
 import NormHeadingGroup from "~/components/NormHeadingGroup.vue";
-import Properties from "~/components/Properties.vue";
-import PropertiesItem from "~/components/PropertiesItem.vue";
 import NormTableOfContents from "~/components/Ris/NormTableOfContents.vue";
 import type { BreadcrumbItem } from "~/components/Ris/RisBreadcrumb.vue";
 import RisBreadcrumb from "~/components/Ris/RisBreadcrumb.vue";
@@ -290,35 +290,35 @@ useDynamicSeo({ title, description });
                 Details
               </h2>
               <IncompleteDataMessage class="my-24" />
-              <Properties>
-                <PropertiesItem
+              <DetailsList>
+                <DetailsListEntry
                   label="Ausfertigungsdatum:"
                   :value="dateFormattedDDMMYYYY(metadata.legislationDate)"
                 />
-                <PropertiesItem
+                <DetailsListEntry
                   label="Vollzitat:"
                   :value="htmlParts.vollzitat"
                 />
-                <PropertiesItem
+                <DetailsListEntry
                   label="Stand:"
                   :value-list="htmlParts.standangaben"
                 />
-                <PropertiesItem
+                <DetailsListEntry
                   label="Hinweis zum Stand:"
                   :value-list="htmlParts.standangabenHinweis"
                 />
-                <PropertiesItem
+                <DetailsListEntry
                   v-if="htmlParts.prefaceContainer"
                   label="Besonderer Hinweis:"
                 >
                   <div v-html="htmlParts.prefaceContainer" />
-                </PropertiesItem>
-                <PropertiesItem label="Fußnoten:">
+                </DetailsListEntry>
+                <DetailsListEntry label="Fußnoten:">
                   <template v-if="htmlParts.headingNotes" #default>
                     <div v-html="htmlParts.headingNotes" />
                   </template>
-                </PropertiesItem>
-                <PropertiesItem label="Download:">
+                </DetailsListEntry>
+                <DetailsListEntry label="Download:">
                   <NuxtLink
                     data-attr="xml-zip-view"
                     class="ris-link1-regular"
@@ -329,8 +329,8 @@ useDynamicSeo({ title, description });
                     {{ metadata.abbreviation ?? "Inhalte" }} als ZIP
                     herunterladen
                   </NuxtLink>
-                </PropertiesItem>
-              </Properties>
+                </DetailsListEntry>
+              </DetailsList>
             </div>
           </section>
 

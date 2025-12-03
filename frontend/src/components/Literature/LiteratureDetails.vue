@@ -40,9 +40,9 @@ const properties = computed(() => {
 <template>
   <h2 id="detailsTabPanelTitle" class="ris-heading3-bold my-24">Details</h2>
   <IncompleteDataMessage class="my-24" />
-  <Properties aria-labelledby="detailsTabPanelTitle">
+  <DetailsList aria-labelledby="detailsTabPanelTitle">
     <template v-for="property in properties" :key="property.label">
-      <PropertiesItem :label="property.label" :value="property.value" />
+      <DetailsListEntry :label="property.label" :value="property.value" />
     </template>
-  </Properties>
+  </DetailsList>
 </template>

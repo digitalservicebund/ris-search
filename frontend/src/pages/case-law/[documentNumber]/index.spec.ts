@@ -4,7 +4,7 @@ import {
   renderSuspended,
 } from "@nuxt/test-utils/runtime";
 import userEvent from "@testing-library/user-event";
-import { screen } from "@testing-library/vue";
+import { screen, within } from "@testing-library/vue";
 import { mount } from "@vue/test-utils";
 import dayjs from "dayjs";
 import { expect, it, vi } from "vitest";
@@ -154,37 +154,34 @@ describe("case law single view page", async () => {
     expect(screen.getByRole("heading", { name: "Gründe" })).toBeInTheDocument();
   });
 
-  it("displayes detailed information in the details tab", async () => {
+  it("displays detailed information in the details tab", async () => {
     const user = userEvent.setup();
     await renderSuspended(CaseLawPage);
 
     await user.click(screen.getByRole("link", { name: "Details" }));
 
-    expect(screen.getByText("Spruchkörper:")).toBeInTheDocument();
-    expect(screen.getByLabelText("Spruchkörper:")).toHaveTextContent(
+    const detailsList = screen.getByTestId("details-list");
+    const terms = within(detailsList).getAllByRole("term");
+
+    expect(terms[0]).toHaveTextContent("Spruchkörper:");
+    expect(terms[0]?.nextElementSibling).toHaveTextContent(
       "Sample judicial body",
     );
 
-    expect(screen.getByText("ECLI:")).toBeInTheDocument();
-    expect(screen.getByLabelText("ECLI:")).toHaveTextContent("Sample ecli");
+    expect(terms[1]).toHaveTextContent("ECLI:");
+    expect(terms[1]?.nextElementSibling).toHaveTextContent("Sample ecli");
 
-    expect(screen.getByText("Normen:")).toBeInTheDocument();
-    expect(screen.getByLabelText("Normen:")).toHaveTextContent(
-      "nicht vorhanden",
-    );
+    expect(terms[2]).toHaveTextContent("Normen:");
+    expect(terms[2]?.nextElementSibling).toHaveTextContent("nicht vorhanden");
 
-    expect(screen.getByText("Entscheidungsname:")).toBeInTheDocument();
-    expect(screen.getByLabelText("Entscheidungsname:")).toHaveTextContent(
-      "Sample decision",
-    );
+    expect(terms[3]).toHaveTextContent("Entscheidungsname:");
+    expect(terms[3]?.nextElementSibling).toHaveTextContent("Sample decision");
 
-    expect(screen.getByText("Vorinstanz:")).toBeInTheDocument();
-    expect(screen.getByLabelText("Vorinstanz:")).toHaveTextContent(
-      "nicht vorhanden",
-    );
+    expect(terms[4]).toHaveTextContent("Vorinstanz:");
+    expect(terms[4]?.nextElementSibling).toHaveTextContent("nicht vorhanden");
 
-    expect(screen.getByText("Download:")).toBeInTheDocument();
-    expect(screen.getByLabelText("Download:")).toHaveTextContent(
+    expect(terms[5]).toHaveTextContent("Download:");
+    expect(terms[5]?.nextElementSibling).toHaveTextContent(
       "12345 als ZIP herunterladen",
     );
   });
@@ -275,25 +272,36 @@ describe("case law single view page", async () => {
     await user.click(screen.getByRole("link", { name: "Details" }));
 
     // Details tab
-    expect(screen.getByLabelText("Spruchkörper:")).toHaveTextContent(
+    const detailsList = screen.getByTestId("details-list");
+    const detailsTerms = within(detailsList).getAllByRole("term");
+
+    expect(detailsTerms[0]).toHaveTextContent("Spruchkörper:");
+    expect(detailsTerms[0]?.nextElementSibling).toHaveTextContent(
       "nicht vorhanden",
     );
 
-    expect(screen.getByLabelText("ECLI:")).toHaveTextContent("nicht vorhanden");
-
-    expect(screen.getByLabelText("Normen:")).toHaveTextContent(
+    expect(detailsTerms[1]).toHaveTextContent("ECLI:");
+    expect(detailsTerms[1]?.nextElementSibling).toHaveTextContent(
       "nicht vorhanden",
     );
 
-    expect(screen.getByLabelText("Entscheidungsname:")).toHaveTextContent(
+    expect(detailsTerms[2]).toHaveTextContent("Normen:");
+    expect(detailsTerms[2]?.nextElementSibling).toHaveTextContent(
       "nicht vorhanden",
     );
 
-    expect(screen.getByLabelText("Vorinstanz:")).toHaveTextContent(
+    expect(detailsTerms[3]).toHaveTextContent("Entscheidungsname:");
+    expect(detailsTerms[3]?.nextElementSibling).toHaveTextContent(
       "nicht vorhanden",
     );
 
-    expect(screen.getByLabelText("Download:")).toHaveTextContent(
+    expect(detailsTerms[4]).toHaveTextContent("Vorinstanz:");
+    expect(detailsTerms[4]?.nextElementSibling).toHaveTextContent(
+      "nicht vorhanden",
+    );
+
+    expect(detailsTerms[5]).toHaveTextContent("Download:");
+    expect(detailsTerms[5]?.nextElementSibling).toHaveTextContent(
       "als ZIP herunterladen",
     );
   });
