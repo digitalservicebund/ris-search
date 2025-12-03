@@ -2,7 +2,6 @@
 import { computed } from "vue";
 import LiteratureActionsMenu from "~/components/ActionMenu/LiteratureActionsMenu.vue";
 import DocumentDetailPage from "~/components/DocumentDetailPage.vue";
-import LiteratureDetails from "~/components/Literature/LiteratureDetails.vue";
 import { DocumentKind, type Literature } from "~/types";
 import { formatDocumentKind } from "~/utils/displayValues";
 import {
@@ -28,16 +27,7 @@ const { data: html, error: contentError } = await useRisBackend<string>(
 );
 
 const title = computed(() => getTitle(literature.value));
-const isEmptyDocument = computed(() => isDocumentEmpty(literature.value));
-const details = computed(() => {
-  return {
-    normReferences: literature.value?.normReferences ?? [],
-    collaborators: literature.value?.collaborators ?? [],
-    originators: literature.value?.originators ?? [],
-    languages: literature.value?.languages ?? [],
-    conferenceNotes: literature.value?.conferenceNotes ?? [],
-  };
-});
+const isEmptyDocument = computed(() => isLiteratureEmpty(literature.value));
 
 const breadcrumbItems = computed(() => [
   {
@@ -52,6 +42,8 @@ const breadcrumbItems = computed(() => [
 const metadataItems = computed(() =>
   getLiteratureMetadataItems(literature.value),
 );
+
+const detailItems = computed(() => getLiteratureDetailItems(literature.value));
 
 if (metadataError?.value) {
   showError(metadataError.value);
@@ -76,8 +68,14 @@ if (contentError?.value) {
         ><LiteratureActionsMenu :literature="literature"
       /></client-only>
     </template>
-    <template #details>
-      <LiteratureDetails :details="details" />
+    <template #details="{ detailsTabPanelId }">
+      <h2 :id="detailsTabPanelId" class="ris-heading3-bold my-24">Details</h2>
+      <IncompleteDataMessage class="my-24" />
+      <DetailsList :aria-labelledby="detailsTabPanelId">
+        <template v-for="item in detailItems" :key="item.label">
+          <DetailsListEntry :label="item.label" :value="item.value" />
+        </template>
+      </DetailsList>
     </template>
   </DocumentDetailPage>
 </template>

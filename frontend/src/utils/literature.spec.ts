@@ -1,14 +1,18 @@
 import { describe, expect } from "vitest";
-import { getLiteratureMetadataItems } from "./literature";
+import {
+  getLiteratureDetailItems,
+  getLiteratureMetadataItems,
+  isLiteratureEmpty,
+} from "./literature";
 
-describe("isDocumentEmpty", () => {
+describe("isLiteratureEmpty", () => {
   it("returns true if document is undefined", () => {
-    const result = isDocumentEmpty();
+    const result = isLiteratureEmpty();
     expect(result).toBeTruthy();
   });
 
   it("returns true if document has no title, outline or short report", () => {
-    const result = isDocumentEmpty({
+    const result = isLiteratureEmpty({
       outline: null,
       shortReport: null,
     });
@@ -16,7 +20,7 @@ describe("isDocumentEmpty", () => {
   });
 
   it("returns true if document has only headline and no outline or short report", () => {
-    const result = isDocumentEmpty({
+    const result = isLiteratureEmpty({
       outline: null,
       shortReport: null,
       headline: "headline",
@@ -25,7 +29,7 @@ describe("isDocumentEmpty", () => {
   });
 
   it("returns true if document has only alternativeHeadline and no outline or short report", () => {
-    const result = isDocumentEmpty({
+    const result = isLiteratureEmpty({
       outline: null,
       shortReport: null,
       alternativeHeadline: "alternativeHeadline",
@@ -34,7 +38,7 @@ describe("isDocumentEmpty", () => {
   });
 
   it("returns true if document has only headlineAdditions and no outline or short report", () => {
-    const result = isDocumentEmpty({
+    const result = isLiteratureEmpty({
       outline: null,
       shortReport: null,
       headlineAdditions: "headlineAdditions",
@@ -43,21 +47,21 @@ describe("isDocumentEmpty", () => {
   });
 
   it("returns false if document has outline", () => {
-    const result = isDocumentEmpty({
+    const result = isLiteratureEmpty({
       outline: "outline",
     });
     expect(result).toBeFalsy();
   });
 
   it("returns false if document has shortReport", () => {
-    const result = isDocumentEmpty({
+    const result = isLiteratureEmpty({
       shortReport: "shortReport",
     });
     expect(result).toBeFalsy();
   });
 
   it("returns false if document has headline and alternativeHeadline", () => {
-    const result = isDocumentEmpty({
+    const result = isLiteratureEmpty({
       headline: "headline",
       alternativeHeadline: "alternativeHeadline",
     });
@@ -65,7 +69,7 @@ describe("isDocumentEmpty", () => {
   });
 
   it("returns false if document has headline and headlineAdditions", () => {
-    const result = isDocumentEmpty({
+    const result = isLiteratureEmpty({
       headline: "headline",
       headlineAdditions: "headlineAdditions",
     });
@@ -73,7 +77,7 @@ describe("isDocumentEmpty", () => {
   });
 
   it("returns false if document has alternativeHeadline and headlineAdditions", () => {
-    const result = isDocumentEmpty({
+    const result = isLiteratureEmpty({
       alternativeHeadline: "alternativeHeadline",
       headlineAdditions: "headlineAdditions",
     });
@@ -177,4 +181,93 @@ describe("getLiteratureMetadataItems", () => {
       "2015, 2016",
     ]);
   });
+});
+
+describe("getLiteratureDetailsItems", () => {
+  test.each([
+    [undefined, undefined, "Norm:"],
+    [[], undefined, "Norm:"],
+    [["Ref 1"], "Ref 1", "Norm:"],
+    [["Ref 1", "Ref 2"], "Ref 1, Ref 2", "Normen:"],
+  ])(
+    "given normReferences '%o' creates item with value '%s' labeled '%s'",
+    (normReferences, expectedValue, expectedLabel) => {
+      const result = getLiteratureDetailItems({
+        normReferences: normReferences,
+      });
+      expect(result[0]).toEqual({ label: expectedLabel, value: expectedValue });
+    },
+  );
+
+  test.each([
+    [undefined, undefined],
+    [[], undefined],
+    [["Mustermann, Max"], "Max Mustermann"],
+    [
+      ["Mustermann, Max", "Musterfrau, Sabine"],
+      "Max Mustermann, Sabine Musterfrau",
+    ],
+  ])(
+    "given collaborators '%o' creates \"Mitarbeiter\" item with value '%s'",
+    (collaborators, expectedValue) => {
+      const result = getLiteratureDetailItems({
+        collaborators: collaborators,
+      });
+      expect(result[1]).toEqual({
+        label: "Mitarbeiter:",
+        value: expectedValue,
+      });
+    },
+  );
+
+  test.each([
+    [undefined, undefined],
+    [[], undefined],
+    [["Mustermann, Max"], "Max Mustermann"],
+    [
+      ["Mustermann, Max", "Musterfrau, Sabine"],
+      "Max Mustermann, Sabine Musterfrau",
+    ],
+  ])(
+    "given originators '%o' creates \"Urheber\" item with value '%s'",
+    (originators, expectedValue) => {
+      const result = getLiteratureDetailItems({
+        originators: originators,
+      });
+      expect(result[2]).toEqual({ label: "Urheber:", value: expectedValue });
+    },
+  );
+
+  test.each([
+    [undefined, undefined, "Sprache:"],
+    [[], undefined, "Sprache:"],
+    [["deu"], "deu", "Sprache:"],
+    [["deu", "eng"], "deu, eng", "Sprachen:"],
+  ])(
+    "given languages '%s' creates item with value '%s' labeled '%s'",
+    (languages, expectedValue, expectedLabel) => {
+      const result = getLiteratureDetailItems({
+        languages: languages,
+      });
+      expect(result[3]).toEqual({
+        label: expectedLabel,
+        value: expectedValue,
+      });
+    },
+  );
+
+  test.each([
+    [undefined, undefined, "Kongress:"],
+    [[], undefined, "Kongress:"],
+    [["Note 1"], "Note 1", "Kongress:"],
+    [["Note 1", "Note 2"], "Note 1, Note 2", "Kongresse:"],
+  ])(
+    "given conferenceNotes '%o' creates item with value '%s' labeled '%s'",
+    (conferenceNotes, expectedValue, expectedLabel) => {
+      const result = getLiteratureDetailItems({
+        conferenceNotes: conferenceNotes,
+      });
+      expect(result[4]).toEqual({ label: expectedLabel, value: expectedValue });
+    },
+  );
 });

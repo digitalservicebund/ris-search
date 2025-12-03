@@ -43,7 +43,7 @@ const metadataItems = computed(() =>
   getAdministrativeDirectiveMetadataItems(data.value),
 );
 
-const detailProperties = computed(() =>
+const detailItems = computed(() =>
   getAdministrativeDirectiveDetailItems(data.value),
 );
 
@@ -53,8 +53,6 @@ if (metadataError?.value) {
 if (contentError?.value) {
   showError(contentError.value);
 }
-
-const detailsTitleId = useId();
 </script>
 
 <template>
@@ -67,14 +65,14 @@ const detailsTitleId = useId();
     document-html-class="administrative-directive"
     :html="html"
   >
-    <template #details>
-      <h2 :id="detailsTitleId" class="ris-heading3-bold my-24">Details</h2>
+    <template #details="{ detailsTabPanelId }">
+      <h2 :id="detailsTabPanelId" class="ris-heading3-bold my-24">Details</h2>
       <IncompleteDataMessage class="my-24" />
-      <Properties :aria-labelledby="detailsTitleId">
-        <template v-for="property in detailProperties" :key="property.label">
-          <PropertiesItem :label="property.label" :value="property.value" />
+      <DetailsList :aria-labelledby="detailsTabPanelId">
+        <template v-for="item in detailItems" :key="item.label">
+          <DetailsListEntry :label="item.label" :value="item.value" />
         </template>
-      </Properties>
+      </DetailsList>
     </template>
   </DocumentDetailPage>
 </template>

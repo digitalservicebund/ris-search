@@ -57,6 +57,7 @@
                 <ris:meta>
                     <ris:normgeber staat="DEU" organ="Neuris" />
                     <ris:entryIntoEffectDate>2025-07-01</ris:entryIntoEffectDate>
+                    <ris:expiryDate>2030-07-01</ris:expiryDate>
                     <ris:documentType category="VR" longTitle="Bekanntmachung">VR Bekanntmachung</ris:documentType>
                     <ris:dateToQuoteList>
                         <ris:dateToQuoteEntry>2025-06-01</ris:dateToQuoteEntry>
