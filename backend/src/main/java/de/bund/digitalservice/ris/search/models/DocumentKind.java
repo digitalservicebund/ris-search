@@ -1,53 +1,61 @@
 package de.bund.digitalservice.ris.search.models;
 
 import com.fasterxml.jackson.annotation.JsonValue;
+import de.bund.digitalservice.ris.search.utils.eli.EliFile;
+import de.bund.digitalservice.ris.search.utils.eli.ExpressionEli;
+import java.util.Arrays;
+import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
-/** Enum for the different types of documents that can be searched for. */
+/** Enum for the different kinds of documents that can be searched for. */
 @Getter
 public enum DocumentKind {
-  CASELAW("R"),
-  LEGISLATION("N"),
-  LITERATURE("L"),
-  ADMINISTRATIVE_DIRECTIVE("V");
+  CASE_LAW("R", "case-law"),
+  LEGISLATION("N", "norms"),
+  LITERATURE("L", "literature"),
+  ADMINISTRATIVE_DIRECTIVE("V", null),
+  ;
 
-  private final String value;
+  private final String singleLetterAlias;
+  private final String siteMapPath;
 
-  DocumentKind(String value) {
-    this.value = value;
+  DocumentKind(String singleLetterAlias, String siteMapPath) {
+    this.singleLetterAlias = singleLetterAlias;
+    this.siteMapPath = siteMapPath;
   }
 
   @JsonValue
-  public String getValue() {
-    return value;
+  public String getSingleLetterAlias() {
+    return singleLetterAlias;
   }
 
+  public static final Map<String, DocumentKind> SITE_MAP_TO_DOC_KIND_MAP =
+      Arrays.stream(values())
+          .collect(Collectors.toMap(DocumentKind::getSiteMapPath, documentKind -> documentKind));
+
   /**
-   * Resolves a string value to the corresponding {@code DocumentKind} enum constant. This method
-   * extends the default {@code valueOf} behavior by mapping specific character codes ('R', 'N',
-   * 'L') to predefined constants, while still allowing standard enum lookup for other valid names.
+   * Resolves a string documentKindString to the corresponding {@code DocumentKind} enum constant.
+   * This method extends the default {@code valueOf} behavior by first checking for a match on the
+   * single letter alias and then the standard enum lookup for other valid names.
    *
-   * @param value the string representation of the desired {@code DocumentKind}. It is
-   *     case-insensitive and can be one of the special codes ('R', 'N', 'L') or a name of the enum
-   *     constant.
-   * @return the {@code DocumentKind} constant corresponding to the input value. If the value
-   *     matches 'R', 'N', or 'L', the method returns the respective predefined constant (e.g.,
-   *     {@code DocumentKind.CASELAW} for 'R'). For other input values, it defaults to {@code
-   *     DocumentKind.valueOf}.
-   * @throws IllegalArgumentException if the input value does not correspond to any defined {@code
-   *     DocumentKind} constant.
-   * @throws NullPointerException if the input value is null.
+   * @param documentKindString the string to find the value for.
+   * @return the {@code DocumentKind} corresponding to documentKindString.
+   * @throws IllegalArgumentException if the input documentKindString does not correspond to any
+   *     defined {@code DocumentKind} constant.
+   * @throws NullPointerException if the input documentKindString is null.
    */
-  public static DocumentKind extendedValueOf(String value) {
-    return switch (value.toUpperCase()) {
-      case "R" -> DocumentKind.CASELAW;
+  public static DocumentKind valueFromString(String documentKindString) {
+    return switch (documentKindString.toUpperCase()) {
+      case "R" -> DocumentKind.CASE_LAW;
       case "N" -> DocumentKind.LEGISLATION;
       case "L" -> DocumentKind.LITERATURE;
       case "V" -> DocumentKind.ADMINISTRATIVE_DIRECTIVE;
-      default -> DocumentKind.valueOf(value.toUpperCase());
+      default -> DocumentKind.valueOf(documentKindString.toUpperCase());
     };
   }
 
@@ -60,7 +68,30 @@ public enum DocumentKind {
 
     @Override
     public DocumentKind convert(@NotNull String source) {
-      return DocumentKind.extendedValueOf(source);
+      return DocumentKind.valueFromString(source);
     }
+  }
+
+  /**
+   * Returns the id corresponding to the file name and document kinds provided.
+   *
+   * @param fileName the name of the file to extract the document id from
+   * @param docKind the kind of document the file corresponds to
+   * @return the id corresponding to the file name.
+   */
+  public static Optional<String> extractIdFromFileName(String fileName, DocumentKind docKind) {
+    return switch (docKind) {
+      case DocumentKind.LEGISLATION ->
+          EliFile.fromString(fileName).map(EliFile::getExpressionEli).map(ExpressionEli::toString);
+      case DocumentKind.CASE_LAW ->
+          Optional.ofNullable(fileName)
+              .filter(e -> e.endsWith(".xml"))
+              .map(path -> path.substring(path.lastIndexOf("/") + 1, path.length() - 4));
+      case DocumentKind.LITERATURE ->
+          Optional.ofNullable(fileName)
+              .filter(e -> e.endsWith(".akn.xml"))
+              .map(path -> path.substring(path.lastIndexOf("/") + 1, path.length() - 8));
+      case null, default -> Optional.empty();
+    };
   }
 }

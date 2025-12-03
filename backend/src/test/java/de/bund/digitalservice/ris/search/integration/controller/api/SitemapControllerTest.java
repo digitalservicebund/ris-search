@@ -39,10 +39,12 @@ class SitemapControllerTest extends ContainersIntegrationBase {
 
   static Stream<Arguments> sitemapTestCases() {
     return Stream.of(
+        Arguments.of(Paths.SITEMAP + "/case-law/index.xml", "<sitemapindex></sitemapindex>"),
+        Arguments.of(Paths.SITEMAP + "/case-law/1.xml", "<urlset></urlset>"),
+        Arguments.of(Paths.SITEMAP + "/literature/index.xml", "<sitemapindex></sitemapindex>"),
+        Arguments.of(Paths.SITEMAP + "/literature/1.xml", "<urlset></urlset>"),
         Arguments.of(Paths.SITEMAP + "/norms/index.xml", "<sitemapindex></sitemapindex>"),
-        Arguments.of(Paths.SITEMAP + "/norms/1.xml", "<urlset></urlset>"),
-        Arguments.of(Paths.SITEMAP + "/caselaw/index.xml", "<sitemapindex></sitemapindex>"),
-        Arguments.of(Paths.SITEMAP + "/caselaw/1.xml", "<urlset></urlset>"));
+        Arguments.of(Paths.SITEMAP + "/norms/1.xml", "<urlset></urlset>"));
   }
 
   @ParameterizedTest

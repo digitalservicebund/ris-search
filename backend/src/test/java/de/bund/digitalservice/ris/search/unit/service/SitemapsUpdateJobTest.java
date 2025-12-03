@@ -9,8 +9,9 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import de.bund.digitalservice.ris.search.models.sitemap.SitemapType;
+import de.bund.digitalservice.ris.search.models.DocumentKind;
 import de.bund.digitalservice.ris.search.repository.objectstorage.CaseLawBucket;
+import de.bund.digitalservice.ris.search.repository.objectstorage.LiteratureBucket;
 import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
 import de.bund.digitalservice.ris.search.service.SitemapService;
 import de.bund.digitalservice.ris.search.service.SitemapsUpdateJob;
@@ -30,6 +31,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 class SitemapsUpdateJobTest {
 
   @Mock CaseLawBucket caseLawBucket;
+  @Mock LiteratureBucket literatureBucket;
   @Mock NormsBucket normsBucket;
   @Mock SitemapService sitemapService;
 
@@ -37,34 +39,70 @@ class SitemapsUpdateJobTest {
 
   @BeforeEach
   void setup() {
-    sitemapsUpdateJob = new SitemapsUpdateJob(caseLawBucket, normsBucket, sitemapService);
+    sitemapsUpdateJob =
+        new SitemapsUpdateJob(caseLawBucket, literatureBucket, normsBucket, sitemapService);
     ReflectionTestUtils.setField(sitemapsUpdateJob, "urlsPerPage", 1);
   }
 
   @Test
-  void SitemapsUpdateJobCallsSitemapServiceForBatchesAndIndex() {
+  void sitemapsUpdateJobCallsSitemapServiceForBatchesAndIndex() {
+    List<String> caseLawKeys = new ArrayList<>();
+    List<String> literatureKeys = new ArrayList<>();
     List<String> normsKeys = new ArrayList<>();
-    List<String> caselawKeys = new ArrayList<>();
     for (int i = 1; i < 3; i++) {
+      caseLawKeys.add("case-law/KORE12354" + i + ".xml");
+      literatureKeys.add("literature/XXLU00000" + i + ".akn.xml");
       normsKeys.add(
           "eli/bund/bgbl-1/1992/s101-"
               + i
               + "/1992-01-01/1/deu/1992-01-02/regelungstext-verkuendung-1.xml");
-      caselawKeys.add("case-law/KORE12354" + i + ".xml");
     }
 
+    when(caseLawBucket.getAllKeys()).thenReturn(caseLawKeys);
+    when(literatureBucket.getAllKeys()).thenReturn(literatureKeys);
     when(normsBucket.getAllKeys()).thenReturn(normsKeys);
-    when(caseLawBucket.getAllKeys()).thenReturn(caselawKeys);
 
     sitemapsUpdateJob.runJob();
-    verify(sitemapService, times(4)).createBatchSitemap(anyInt(), anyList(), any(), anyString());
+
+    verify(sitemapService, times(6)).createBatchSitemap(anyInt(), anyList(), any(), anyString());
+
     verify(sitemapService, times(2))
-        .createBatchSitemap(anyInt(), anyList(), eq(SitemapType.NORMS), anyString());
+        .createBatchSitemap(anyInt(), anyList(), eq(DocumentKind.CASE_LAW), anyString());
+    verify(sitemapService, times(1)).createIndexSitemap(anyInt(), eq(DocumentKind.CASE_LAW));
+
     verify(sitemapService, times(2))
-        .createBatchSitemap(anyInt(), anyList(), eq(SitemapType.CASELAW), anyString());
-    verify(sitemapService, times(1)).createIndexSitemap(anyInt(), eq(SitemapType.NORMS));
-    verify(sitemapService, times(1)).createIndexSitemap(anyInt(), eq(SitemapType.CASELAW));
+        .createBatchSitemap(anyInt(), anyList(), eq(DocumentKind.LITERATURE), anyString());
+    verify(sitemapService, times(1)).createIndexSitemap(anyInt(), eq(DocumentKind.LITERATURE));
+
+    verify(sitemapService, times(2))
+        .createBatchSitemap(anyInt(), anyList(), eq(DocumentKind.LEGISLATION), anyString());
+    verify(sitemapService, times(1)).createIndexSitemap(anyInt(), eq(DocumentKind.LEGISLATION));
+
     verify(sitemapService, times(1)).deleteSitemapFiles(any(Instant.class));
+  }
+
+  @Test
+  void invalidFilesDoNotProduceSitemapFiles() {
+    // simulate an image with no parent xml
+    List<String> caselawKeys = List.of("case-law/KORE12354.png");
+
+    // simulate an image with no parent xml
+    List<String> literatureKeys = List.of("literature/XXLU000001.png");
+
+    // these files don't follow a valid eli structure
+    List<String> normsKeys =
+        List.of(
+            "eli/bund/bgbl-1/1992/s101/1992-01-01/1/deu/1992-01-02/NOT_VALID/regelungstext-1.xml",
+            "eli/bund/bgbl-1/1992/s101/1992-01-01/1/deu/1992-01-02/NOT_VALID/something-else.xml");
+
+    when(caseLawBucket.getAllKeys()).thenReturn(caselawKeys);
+    when(literatureBucket.getAllKeys()).thenReturn(literatureKeys);
+    when(normsBucket.getAllKeys()).thenReturn(normsKeys);
+
+    sitemapsUpdateJob.runJob();
+
+    verify(sitemapService, times(0)).createBatchSitemap(anyInt(), anyList(), any(), anyString());
+    verify(sitemapService, times(3)).createIndexSitemap(anyInt(), any());
   }
 
   @Test
@@ -77,31 +115,12 @@ class SitemapsUpdateJobTest {
 
     when(normsBucket.getAllKeys()).thenReturn(normsKeys);
 
-    sitemapsUpdateJob.createSitemaps(normsBucket, SitemapType.NORMS, "norms");
+    sitemapsUpdateJob.createSitemaps(normsBucket, DocumentKind.LEGISLATION, "norms");
 
     verify(sitemapService, times(1)).createBatchSitemap(anyInt(), anyList(), any(), anyString());
     verify(sitemapService, times(1))
-        .createBatchSitemap(anyInt(), anyList(), eq(SitemapType.NORMS), anyString());
-    verify(sitemapService, times(1)).createIndexSitemap(1, SitemapType.NORMS);
-  }
-
-  @Test
-  void createSitemapsForNorms_noMatchingKeys_producesEmptyIndexOnly() {
-    // files associated with a work will cause a change on all expressions for that work
-    // for example an image changing should cause a change
-    // files not associated with any work should not cause a change
-    // these files don't follow a valid eli structure
-    List<String> normsKeys =
-        List.of(
-            "eli/bund/bgbl-1/1992/s101/1992-01-01/1/deu/1992-01-02/NOT_VALID/regelungstext-1.xml",
-            "eli/bund/bgbl-1/1992/s101/1992-01-01/1/deu/1992-01-02/NOT_VALID/something-else.xml");
-
-    when(normsBucket.getAllKeys()).thenReturn(normsKeys);
-
-    sitemapsUpdateJob.createSitemaps(normsBucket, SitemapType.NORMS, "norms");
-
-    verify(sitemapService, times(0)).createBatchSitemap(anyInt(), anyList(), any(), anyString());
-    verify(sitemapService, times(1)).createIndexSitemap(0, SitemapType.NORMS);
+        .createBatchSitemap(anyInt(), anyList(), eq(DocumentKind.LEGISLATION), anyString());
+    verify(sitemapService, times(1)).createIndexSitemap(1, DocumentKind.LEGISLATION);
   }
 
   @Test
@@ -113,12 +132,12 @@ class SitemapsUpdateJobTest {
 
     when(normsBucket.getAllKeys()).thenReturn(normsKeys);
 
-    sitemapsUpdateJob.createSitemaps(normsBucket, SitemapType.NORMS, "norms");
+    sitemapsUpdateJob.createSitemaps(normsBucket, DocumentKind.LEGISLATION, "norms");
 
     verify(sitemapService, times(1)).createBatchSitemap(anyInt(), anyList(), any(), anyString());
     verify(sitemapService, times(1))
-        .createBatchSitemap(anyInt(), anyList(), eq(SitemapType.NORMS), anyString());
+        .createBatchSitemap(anyInt(), anyList(), eq(DocumentKind.LEGISLATION), anyString());
     verify(sitemapService, times(1)).createIndexSitemap(anyInt(), any());
-    verify(sitemapService, times(1)).createIndexSitemap(1, SitemapType.NORMS);
+    verify(sitemapService, times(1)).createIndexSitemap(1, DocumentKind.LEGISLATION);
   }
 }
