@@ -135,5 +135,5 @@ export function encodeForUri(text?: string): string {
     Ü: "Ue",
   };
 
-  return text.replace(/[äöüÄÖÜ]/g, (char: string) => map[char] ?? char);
+  return text.replaceAll(/[äöüÄÖÜ]/g, (char: string) => map[char] ?? char);
 }

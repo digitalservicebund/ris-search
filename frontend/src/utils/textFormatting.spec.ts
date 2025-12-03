@@ -172,7 +172,7 @@ describe("encodeForUri", () => {
   });
 
   it("handles umlauts in different cases and multiple occurrences", () => {
-    expect(encodeForUri(undefined)).toBe("");
+    expect(encodeForUri()).toBe("");
     expect(encodeForUri("müller")).toBe("mueller");
     expect(encodeForUri("für")).toBe("fuer");
     expect(encodeForUri("käsebrötchen")).toBe("kaesebroetchen");
