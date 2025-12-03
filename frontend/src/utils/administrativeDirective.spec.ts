@@ -1,5 +1,8 @@
 import { describe, expect } from "vitest";
-import { getAdministrativeDirectiveMetadataItems } from "./administrativeDirective";
+import {
+  getAdministrativeDirectiveMetadataItems,
+  isAdministrativeDirectiveEmpty,
+} from "./administrativeDirective";
 
 describe("getAdministrativeDirectiveMetadataItems", () => {
   it("creates correct labels", () => {
@@ -72,4 +75,115 @@ describe("getAdministrativeDirectiveMetadataItems", () => {
 
     expect(result[3]?.value).toBeUndefined();
   });
+});
+
+describe("isAdministrativeDirectiveEmpty", () => {
+  test.each([
+    [undefined, undefined, true],
+    [undefined, [], true],
+    ["", [], true],
+    ["", [], true],
+    ["foo", undefined, false],
+    ["foo", [], false],
+    [undefined, ["bar"], false],
+    ["", ["bar"], false],
+    ["foo", ["bar"], false],
+  ])(
+    "given shortReport: '%s' and outline: '%o' returns '%s'",
+    (shortReport, outline, expected) => {
+      expect(
+        isAdministrativeDirectiveEmpty({
+          shortReport: shortReport,
+          outline: outline,
+        }),
+      ).toBe(expected);
+    },
+  );
+});
+
+describe("getAdministrativeDirectiveDetailItems", () => {
+  test.each([
+    [undefined, undefined, "Fundstelle:"],
+    [[], undefined, "Fundstelle:"],
+    [["Foo 1"], "Foo 1", "Fundstelle:"],
+    [["Foo 1", "Foo 2"], "Foo 1, Foo 2", "Fundstellen:"],
+  ])(
+    "given references '%o' creates item with value '%s' labeled '%s'",
+    (references, expectedValue, expectedLabel) => {
+      const result = getAdministrativeDirectiveDetailItems({
+        references: references,
+      });
+      expect(result[0]).toEqual({ label: expectedLabel, value: expectedValue });
+    },
+  );
+
+  test.each([
+    [undefined, undefined, "Zitierdatum:"],
+    [[], undefined, "Zitierdatum:"],
+    [["invalid"], undefined, "Zitierdatum:"],
+    [["2025-01-01"], "01.01.2025", "Zitierdatum:"],
+    [["2025-01-01", "invalid"], "01.01.2025", "Zitierdatum:"],
+    [["2019-07-01", "2025-01-20"], "01.07.2019, 20.01.2025", "Zitierdaten:"],
+    [
+      ["2019-07-01", "invalid", "2025-01-20"],
+      "01.07.2019, 20.01.2025",
+      "Zitierdaten:",
+    ],
+  ])(
+    "given citationDates '%o' creates item with value '%s' labeled '%s'",
+    (citationDates, expectedValue, expectedLabel) => {
+      const result = getAdministrativeDirectiveDetailItems({
+        citationDates: citationDates,
+      });
+      expect(result[1]).toEqual({
+        label: expectedLabel,
+        value: expectedValue,
+      });
+    },
+  );
+
+  test.each([
+    [undefined, undefined],
+    ["invalid", undefined],
+    ["2025-01-01", "01.01.2025"],
+  ])(
+    "given expiryDate '%s' creates \"Gülti bis\" item with value '%s'",
+    (expiryDate, expectedValue) => {
+      const result = getAdministrativeDirectiveDetailItems({
+        expiryDate: expiryDate,
+      });
+      expect(result[2]).toEqual({ label: "Gültig bis:", value: expectedValue });
+    },
+  );
+
+  test.each([
+    [undefined, undefined],
+    ["FooType", "FooType"],
+  ])(
+    "given documentTypeDetail '%s' creates \"Dokuemnttyp Zusatz\" item with value '%s'",
+    (documentTypeDetail, expectedValue) => {
+      const result = getAdministrativeDirectiveDetailItems({
+        documentTypeDetail: documentTypeDetail,
+      });
+      expect(result[3]).toEqual({
+        label: "Dokumenttyp Zusatz:",
+        value: expectedValue,
+      });
+    },
+  );
+
+  test.each([
+    [undefined, undefined, "Norm:"],
+    [[], undefined, "Norm:"],
+    [["Ref 1"], "Ref 1", "Norm:"],
+    [["Ref 1", "Ref 2"], "Ref 1, Ref 2", "Normen:"],
+  ])(
+    "given normReferences '%o' creates item with value '%s' labeled '%s'",
+    (normReferenecs, expectedValue, expectedLabel) => {
+      const result = getAdministrativeDirectiveDetailItems({
+        normReferences: normReferenecs,
+      });
+      expect(result[4]).toEqual({ label: expectedLabel, value: expectedValue });
+    },
+  );
 });
