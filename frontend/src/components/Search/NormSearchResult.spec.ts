@@ -39,7 +39,7 @@ const mockSearchResult: SearchResult<LegislationWork> = {
       name: "Article 1",
       text: "Example Text 1",
       "@type": "SearchResultMatch",
-      location: null,
+      location: "PräöüÄÖÜambel",
     },
     {
       name: "Article 2",
@@ -70,7 +70,11 @@ function renderComponent(
     props: { searchResult, order },
     global: {
       stubs: {
-        NuxtLink: { template: '<a :href="to"><slot /></a>', props: ["to"] },
+        NuxtLink: {
+          template:
+            '<a :href="to?.path ? (to?.path + to?.hash) : to"><slot /></a>',
+          props: ["to"],
+        },
       },
     },
   });
@@ -214,6 +218,14 @@ describe("NormSearchResult", () => {
 
     const contentHeading = screen.getAllByRole("heading")[1];
     expect(contentHeading?.innerHTML).toBe(expectedSanitized);
+  });
+
+  it("includes the location in the generated highlight URL for Article 1 properly encoded", () => {
+    renderComponent();
+    const articleHeading = screen.getByText("Article 1");
+    expect(articleHeading).toBeInTheDocument();
+    const link = articleHeading.closest("a");
+    expect(link?.getAttribute("href")).contains("#PraeoeueAeOeUeambel");
   });
 
   describe("validity status badge", () => {
