@@ -23,7 +23,7 @@ useStaticPageSeo("open-source");
 
         <Button
           :as="ExternalLink"
-          to="https://github.com/digitalservicebund/ris-search"
+          url="https://github.com/digitalservicebund/ris-search"
         >
           Zum Github Repository
         </Button>
