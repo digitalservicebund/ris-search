@@ -57,25 +57,21 @@ describe("LiteratureDetails", () => {
       },
     });
 
-    expect(screen.getByRole("definition", { name: "Norm:" })).toHaveTextContent(
-      "nicht vorhanden",
-    );
+    const terms = screen.getAllByRole("term");
+    expect(terms[0]).toHaveTextContent("Norm:");
+    expect(terms[0]?.nextElementSibling).toHaveTextContent("nicht vorhanden");
 
-    expect(
-      screen.getByRole("definition", { name: "Mitarbeiter:" }),
-    ).toHaveTextContent("nicht vorhanden");
+    expect(terms[1]).toHaveTextContent("Mitarbeiter:");
+    expect(terms[1]?.nextElementSibling).toHaveTextContent("nicht vorhanden");
 
-    expect(
-      screen.getByRole("definition", { name: "Urheber:" }),
-    ).toHaveTextContent("nicht vorhanden");
+    expect(terms[2]).toHaveTextContent("Urheber:");
+    expect(terms[2]?.nextElementSibling).toHaveTextContent("nicht vorhanden");
 
-    expect(
-      screen.getByRole("definition", { name: "Sprache:" }),
-    ).toHaveTextContent("nicht vorhanden");
+    expect(terms[3]).toHaveTextContent("Sprache:");
+    expect(terms[3]?.nextElementSibling).toHaveTextContent("nicht vorhanden");
 
-    expect(
-      screen.getByRole("definition", { name: "Kongress:" }),
-    ).toHaveTextContent("nicht vorhanden");
+    expect(terms[4]).toHaveTextContent("Kongress:");
+    expect(terms[4]?.nextElementSibling).toHaveTextContent("nicht vorhanden");
   });
 
   it("renders single values", () => {
@@ -91,25 +87,25 @@ describe("LiteratureDetails", () => {
       },
     });
 
-    expect(screen.getByRole("definition", { name: "Norm:" })).toHaveTextContent(
+    const terms = screen.getAllByRole("term");
+    expect(terms[0]).toHaveTextContent("Norm:");
+    expect(terms[0]?.nextElementSibling).toHaveTextContent(
       "Some Norm Reference",
     );
 
-    expect(
-      screen.getByRole("definition", { name: "Mitarbeiter:" }),
-    ).toHaveTextContent("Max Mustermann");
+    expect(terms[1]).toHaveTextContent("Mitarbeiter:");
+    expect(terms[1]?.nextElementSibling).toHaveTextContent("Max Mustermann");
 
-    expect(
-      screen.getByRole("definition", { name: "Urheber:" }),
-    ).toHaveTextContent("Foo");
+    expect(terms[2]).toHaveTextContent("Urheber:");
+    expect(terms[2]?.nextElementSibling).toHaveTextContent("Foo");
 
-    expect(
-      screen.getByRole("definition", { name: "Sprache:" }),
-    ).toHaveTextContent("deu");
+    expect(terms[3]).toHaveTextContent("Sprache:");
+    expect(terms[3]?.nextElementSibling).toHaveTextContent("deu");
 
-    expect(
-      screen.getByRole("definition", { name: "Kongress:" }),
-    ).toHaveTextContent("Some Conference Note");
+    expect(terms[4]).toHaveTextContent("Kongress:");
+    expect(terms[4]?.nextElementSibling).toHaveTextContent(
+      "Some Conference Note",
+    );
   });
 
   it("renders multiple values", () => {
@@ -125,24 +121,26 @@ describe("LiteratureDetails", () => {
       },
     });
 
-    expect(screen.getByRole("definition", { name: "Norm:" })).toHaveTextContent(
+    const terms = screen.getAllByRole("term");
+    expect(terms[0]).toHaveTextContent("Norm:");
+    expect(terms[0]?.nextElementSibling).toHaveTextContent(
       "Some Norm Reference, Another Reference",
     );
 
-    expect(
-      screen.getByRole("definition", { name: "Mitarbeiter:" }),
-    ).toHaveTextContent("Max Mustermann, Foo Bar, Baz");
+    expect(terms[1]).toHaveTextContent("Mitarbeiter:");
+    expect(terms[1]?.nextElementSibling).toHaveTextContent(
+      "Max Mustermann, Foo Bar, Baz",
+    );
 
-    expect(
-      screen.getByRole("definition", { name: "Urheber:" }),
-    ).toHaveTextContent("Foo, Bar");
+    expect(terms[2]).toHaveTextContent("Urheber:");
+    expect(terms[2]?.nextElementSibling).toHaveTextContent("Foo, Bar");
 
-    expect(
-      screen.getByRole("definition", { name: "Sprache:" }),
-    ).toHaveTextContent("deu, eng");
+    expect(terms[3]).toHaveTextContent("Sprache:");
+    expect(terms[3]?.nextElementSibling).toHaveTextContent("deu, eng");
 
-    expect(
-      screen.getByRole("definition", { name: "Kongress:" }),
-    ).toHaveTextContent("Some Conference Note, Another Note");
+    expect(terms[4]).toHaveTextContent("Kongress:");
+    expect(terms[4]?.nextElementSibling).toHaveTextContent(
+      "Some Conference Note, Another Note",
+    );
   });
 });

@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import Properties from "~/components/Properties.vue";
-import PropertiesItem from "~/components/PropertiesItem.vue";
+import DetailsList from "~/components/DetailsList.vue";
+import DetailsListEntry from "~/components/DetailsListEntry.vue";
 
 definePageMeta({ alias: "/ecli/:ecli" });
 
@@ -14,9 +14,9 @@ const ecli = computed(() => {
 
 <template>
   <PageHeader title="Platzhalter">
-    <Properties>
-      <PropertiesItem label="ECLI" :value="ecli" />
-    </Properties>
+    <DetailsList>
+      <DetailsListEntry label="ECLI" :value="ecli" />
+    </DetailsList>
   </PageHeader>
   <div>
     <main class="border border-yellow-300 bg-yellow-100 px-16 py-12">

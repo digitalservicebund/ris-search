@@ -5,10 +5,10 @@ import CaseLawActionsMenu from "~/components/ActionMenu/CaseLawActionsMenu.vue";
 import TableOfContents, {
   type TableOfContentsEntry,
 } from "~/components/Caselaw/TableOfContents.vue";
+import DetailsList from "~/components/DetailsList.vue";
+import DetailsListEntry from "~/components/DetailsListEntry.vue";
 import DocumentDetailPage from "~/components/DocumentDetailPage.vue";
 import IncompleteDataMessage from "~/components/IncompleteDataMessage.vue";
-import Properties from "~/components/Properties.vue";
-import PropertiesItem from "~/components/PropertiesItem.vue";
 import { type CaseLaw, DocumentKind } from "~/types";
 import { getEncodingURL } from "~/utils/caseLaw";
 import { dateFormattedDDMMYYYY } from "~/utils/dateFormatting";
@@ -180,16 +180,19 @@ const metadataItems = computed(() => [
     <template #details>
       <h2 id="detailsTabPanelTitle" class="ris-heading3-bold my-24">Details</h2>
       <IncompleteDataMessage class="my-24" />
-      <Properties>
-        <PropertiesItem label="Spruchkörper:" :value="caseLaw?.judicialBody" />
-        <PropertiesItem label="ECLI:" :value="caseLaw?.ecli" />
-        <PropertiesItem label="Normen:" value="" />
-        <PropertiesItem
+      <DetailsList>
+        <DetailsListEntry
+          label="Spruchkörper:"
+          :value="caseLaw?.judicialBody"
+        />
+        <DetailsListEntry label="ECLI:" :value="caseLaw?.ecli" />
+        <DetailsListEntry label="Normen:" value="" />
+        <DetailsListEntry
           label="Entscheidungsname:"
           :value="formattedDescisionNames"
         />
-        <PropertiesItem label="Vorinstanz:" value="" />
-        <PropertiesItem label="Download:">
+        <DetailsListEntry label="Vorinstanz:" value="" />
+        <DetailsListEntry label="Download:">
           <NuxtLink
             data-attr="xml-zip-view"
             class="ris-link1-regular"
@@ -199,8 +202,8 @@ const metadataItems = computed(() => [
             <MaterialSymbolsDownload class="mr-2 inline" />
             {{ caseLaw?.documentNumber }} als ZIP herunterladen
           </NuxtLink>
-        </PropertiesItem>
-      </Properties>
+        </DetailsListEntry>
+      </DetailsList>
     </template>
   </DocumentDetailPage>
 </template>

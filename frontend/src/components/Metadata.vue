@@ -9,7 +9,7 @@ const emptyValuePlaceholder = "—"; // Note: this is an 'em dash'
 </script>
 
 <template>
-  <dl class="flex flex-row flex-wrap gap-24">
+  <dl data-testid="metadata-list" class="flex flex-row flex-wrap gap-24">
     <div v-for="item in items" :key="item.label" class="flex flex-col gap-4">
       <dt class="ris-label2-regular text-gray-900">
         {{ item.label }}

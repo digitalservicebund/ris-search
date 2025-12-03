@@ -3,8 +3,8 @@ import Message from "primevue/message";
 import { computed } from "vue";
 import ActionsMenu from "~/components/ActionMenu/ActionsMenu.vue";
 import ContentWrapper from "~/components/CustomLayouts/ContentWrapper.vue";
-import Properties from "~/components/Properties.vue";
-import PropertiesItem from "~/components/PropertiesItem.vue";
+import DetailsList from "~/components/DetailsList.vue";
+import DetailsListEntry from "~/components/DetailsListEntry.vue";
 import type { BreadcrumbItem } from "~/components/Ris/RisBreadcrumb.vue";
 import RisTabs from "~/components/Ris/RisTabs.vue";
 import { useDynamicSeo } from "~/composables/useDynamicSeo";
@@ -195,16 +195,16 @@ const tabs = computed(() => [
             <h2 id="detailsTabPanelTitle" class="ris-heading3-bold my-24">
               Details
             </h2>
-            <Properties>
-              <PropertiesItem
+            <DetailsList>
+              <DetailsListEntry
                 label="Translation provided by:"
                 :value="translatedBy"
               />
-              <PropertiesItem
+              <DetailsListEntry
                 label="Version information:"
                 :value="versionInformation"
               />
-            </Properties>
+            </DetailsList>
           </div>
         </section>
       </template>

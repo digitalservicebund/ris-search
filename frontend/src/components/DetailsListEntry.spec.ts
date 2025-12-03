@@ -1,22 +1,22 @@
 import { render, screen } from "@testing-library/vue";
-import PropertiesItem from "./PropertiesItem.vue";
+import DetailsListEntry from "./DetailsListEntry.vue";
 
-describe("PropertiesItem", () => {
+describe("DetailsListEntry", () => {
   it('displays "nicht vorhanden" when no values provided', () => {
-    render(PropertiesItem, {
+    render(DetailsListEntry, {
       props: {
         label: "Test Label",
       },
     });
 
     expect(screen.getByRole("term")).toHaveTextContent("Test Label");
-    const definition = screen.getByRole("definition", { name: "Test Label" });
+    const definition = screen.getByRole("definition");
     expect(definition).toHaveTextContent("nicht vorhanden");
     expect(definition).toHaveAttribute("data-empty", "empty");
   });
 
   it("displays provided placeholder when no values provided", () => {
-    render(PropertiesItem, {
+    render(DetailsListEntry, {
       props: {
         label: "Test Label",
         placeholder: "placeholder",
@@ -24,13 +24,13 @@ describe("PropertiesItem", () => {
     });
 
     expect(screen.getByRole("term")).toHaveTextContent("Test Label");
-    const definition = screen.getByRole("definition", { name: "Test Label" });
+    const definition = screen.getByRole("definition");
     expect(definition).toHaveTextContent("placeholder");
     expect(definition).toHaveAttribute("data-empty", "empty");
   });
 
   it("prefers slot over value and valueList", () => {
-    render(PropertiesItem, {
+    render(DetailsListEntry, {
       slots: {
         default: "Default Slot",
       },
@@ -42,13 +42,13 @@ describe("PropertiesItem", () => {
     });
 
     expect(screen.getByRole("term")).toHaveTextContent("Test Label");
-    const definition = screen.getByRole("definition", { name: "Test Label" });
+    const definition = screen.getByRole("definition");
     expect(definition).toHaveTextContent("Default Slot");
     expect(definition).toHaveClass("ris-label1-regular");
   });
 
   it("prefers valueList over value if no slot given", () => {
-    render(PropertiesItem, {
+    render(DetailsListEntry, {
       props: {
         label: "Test Label",
         valueList: ["value 1", "value 2"],
@@ -57,9 +57,7 @@ describe("PropertiesItem", () => {
     });
 
     expect(screen.getByRole("term")).toHaveTextContent("Test Label");
-    const definitions = screen.getAllByRole("definition", {
-      name: "Test Label",
-    });
+    const definitions = screen.getAllByRole("definition");
     expect(definitions[0]).toHaveTextContent("value 1");
     expect(definitions[0]).toHaveClass("ris-label1-regular");
 
@@ -68,7 +66,7 @@ describe("PropertiesItem", () => {
   });
 
   it("renders provided value if no slot and valueList given", () => {
-    render(PropertiesItem, {
+    render(DetailsListEntry, {
       props: {
         label: "Test Label",
         value: "Some value",
@@ -76,7 +74,7 @@ describe("PropertiesItem", () => {
     });
 
     expect(screen.getByRole("term")).toHaveTextContent("Test Label");
-    const definition = screen.getByRole("definition", { name: "Test Label" });
+    const definition = screen.getByRole("definition");
     expect(definition).toHaveTextContent("Some value");
     expect(definition).toHaveClass("ris-label1-regular");
   });

@@ -187,17 +187,22 @@ test("shows detailed information in the 'Details' tab", async ({ page }) => {
   await expect(detailsRegion.getByRole("alert")).toContainText(
     "Dieser Service befindet sich in der Testphase",
   );
-  await expect(detailsRegion.getByLabel("Norm:")).toContainText(
+
+  const detailsList = page.getByTestId("details-list");
+  await expect(
+    detailsList.getByRole("term").or(detailsList.getByRole("definition")),
+  ).toHaveText([
+    "Norm:",
     "BMV-Ä, GG, Art 6 Abs 2 S 1, 1949-05-23",
-  );
-  await expect(detailsRegion.getByLabel("Mitarbeiter:")).toContainText(
+    "Mitarbeiter:",
     "Peter Foo",
-  );
-  await expect(detailsRegion.getByLabel("Urheber:")).toContainText("DGB");
-  await expect(detailsRegion.getByLabel("Sprache:")).toContainText("deu");
-  await expect(detailsRegion.getByLabel("Kongress:")).toContainText(
+    "Urheber:",
+    "DGB",
+    "Sprache:",
+    "deu",
+    "Kongress:",
     "Internationaler Kongreß für das Recht, 1991, Athen, GRC",
-  );
+  ]);
 });
 
 test.describe("actions menu", () => {
@@ -336,7 +341,7 @@ test("hides tabs and shows details if document is empty", async ({ page }) => {
 
   await expect(
     page.getByRole("navigation", {
-      name: "Ansichten des Literaturnachweises",
+      name: "Details",
     }),
   ).not.toBeVisible();
 
@@ -348,11 +353,19 @@ test("hides tabs and shows details if document is empty", async ({ page }) => {
     "Dieser Service befindet sich in der Testphase",
   );
 
-  await expect(page.getByLabel("Norm:")).toContainText("nicht vorhanden");
-  await expect(page.getByLabel("Mitarbeiter:")).toContainText(
+  const detailsList = page.getByTestId("details-list");
+  await expect(
+    detailsList.getByRole("term").or(detailsList.getByRole("definition")),
+  ).toHaveText([
+    "Norm:",
     "nicht vorhanden",
-  );
-  await expect(page.getByLabel("Urheber:")).toContainText("nicht vorhanden");
-  await expect(page.getByLabel("Sprache:")).toContainText("deu");
-  await expect(page.getByLabel("Kongress:")).toContainText("nicht vorhanden");
+    "Mitarbeiter:",
+    "nicht vorhanden",
+    "Urheber:",
+    "nicht vorhanden",
+    "Sprache:",
+    "deu",
+    "Kongress:",
+    "nicht vorhanden",
+  ]);
 });
