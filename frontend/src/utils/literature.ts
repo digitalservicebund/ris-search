@@ -47,7 +47,7 @@ export function getLiteratureDetailItems(
   const conferenceNotes = literature?.conferenceNotes ?? [];
   return [
     {
-      label: normReferences.length > 1 ? "Normen:" : "Norm:",
+      label: getSingularOrPlural("Norm:", "Normen:", normReferences.length),
       value: formatArray(normReferences),
     },
     {
@@ -59,11 +59,15 @@ export function getLiteratureDetailItems(
       value: formatArray(formatNames(literature?.originators ?? [])),
     },
     {
-      label: languages.length > 1 ? "Sprachen:" : "Sprache:",
+      label: getSingularOrPlural("Sprache:", "Sprachen:", languages.length),
       value: formatArray(languages),
     },
     {
-      label: conferenceNotes.length > 1 ? "Kongresse:" : "Kongress:",
+      label: getSingularOrPlural(
+        "Kongress:",
+        "Kongresse:",
+        conferenceNotes.length,
+      ),
       value: formatArray(conferenceNotes),
     },
   ];

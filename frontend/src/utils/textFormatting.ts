@@ -137,3 +137,18 @@ export function encodeForUri(text?: string): string {
 
   return text.replaceAll(/[äöüÄÖÜ]/g, (char: string) => map[char] ?? char);
 }
+
+/**
+ * Given a noun in singular and plural form, choses the correct one based on the provided count.
+ * @param singular
+ * @param plural
+ * @param count
+ */
+export function getSingularOrPlural(
+  singular: string,
+  plural: string,
+  count?: number,
+) {
+  if ((count ?? 0) > 1) return plural;
+  return singular;
+}

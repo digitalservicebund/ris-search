@@ -50,12 +50,19 @@ export function getAdministrativeDirectiveDetailItems(
 
   return [
     {
-      label: references.length > 1 ? "Fundstellen:" : "Fundstelle:",
+      label: getSingularOrPlural(
+        "Fundstelle:",
+        "Fundstellen:",
+        references.length,
+      ),
       value: formatArray(references),
     },
     {
-      label:
-        formattedCitationDates.length > 1 ? "Zitierdaten:" : "Zitierdatum:",
+      label: getSingularOrPlural(
+        "Zitierdatum:",
+        "Zitierdaten:",
+        formattedCitationDates.length,
+      ),
       value: formatArray(formattedCitationDates),
     },
     {
@@ -67,7 +74,7 @@ export function getAdministrativeDirectiveDetailItems(
       value: administrativeDirective?.documentTypeDetail,
     },
     {
-      label: norms.length > 1 ? "Normen:" : "Norm:",
+      label: getSingularOrPlural("Norm:", "Normen:", norms.length),
       value: formatArray(norms),
     },
   ];

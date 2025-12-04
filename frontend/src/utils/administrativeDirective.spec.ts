@@ -1,5 +1,6 @@
 import { describe, expect } from "vitest";
 import {
+  getAdministrativeDirectiveDetailItems,
   getAdministrativeDirectiveMetadataItems,
   isAdministrativeDirectiveEmpty,
 } from "./administrativeDirective";
@@ -78,7 +79,7 @@ describe("getAdministrativeDirectiveMetadataItems", () => {
 });
 
 describe("isAdministrativeDirectiveEmpty", () => {
-  test.each([
+  it.each([
     [undefined, undefined, true],
     [undefined, [], true],
     ["", [], true],
@@ -102,7 +103,7 @@ describe("isAdministrativeDirectiveEmpty", () => {
 });
 
 describe("getAdministrativeDirectiveDetailItems", () => {
-  test.each([
+  it.each([
     [undefined, undefined, "Fundstelle:"],
     [[], undefined, "Fundstelle:"],
     [["Foo 1"], "Foo 1", "Fundstelle:"],
@@ -117,7 +118,7 @@ describe("getAdministrativeDirectiveDetailItems", () => {
     },
   );
 
-  test.each([
+  it.each([
     [undefined, undefined, "Zitierdatum:"],
     [[], undefined, "Zitierdatum:"],
     [["invalid"], undefined, "Zitierdatum:"],
@@ -142,7 +143,7 @@ describe("getAdministrativeDirectiveDetailItems", () => {
     },
   );
 
-  test.each([
+  it.each([
     [undefined, undefined],
     ["invalid", undefined],
     ["2025-01-01", "01.01.2025"],
@@ -156,7 +157,7 @@ describe("getAdministrativeDirectiveDetailItems", () => {
     },
   );
 
-  test.each([
+  it.each([
     [undefined, undefined],
     ["FooType", "FooType"],
   ])(
@@ -172,7 +173,7 @@ describe("getAdministrativeDirectiveDetailItems", () => {
     },
   );
 
-  test.each([
+  it.each([
     [undefined, undefined, "Norm:"],
     [[], undefined, "Norm:"],
     [["Ref 1"], "Ref 1", "Norm:"],

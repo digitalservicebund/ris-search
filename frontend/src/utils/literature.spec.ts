@@ -184,7 +184,7 @@ describe("getLiteratureMetadataItems", () => {
 });
 
 describe("getLiteratureDetailsItems", () => {
-  test.each([
+  it.each([
     [undefined, undefined, "Norm:"],
     [[], undefined, "Norm:"],
     [["Ref 1"], "Ref 1", "Norm:"],
@@ -199,7 +199,7 @@ describe("getLiteratureDetailsItems", () => {
     },
   );
 
-  test.each([
+  it.each([
     [undefined, undefined],
     [[], undefined],
     [["Mustermann, Max"], "Max Mustermann"],
@@ -220,7 +220,7 @@ describe("getLiteratureDetailsItems", () => {
     },
   );
 
-  test.each([
+  it.each([
     [undefined, undefined],
     [[], undefined],
     [["Mustermann, Max"], "Max Mustermann"],
@@ -238,7 +238,7 @@ describe("getLiteratureDetailsItems", () => {
     },
   );
 
-  test.each([
+  it.each([
     [undefined, undefined, "Sprache:"],
     [[], undefined, "Sprache:"],
     [["deu"], "deu", "Sprache:"],
@@ -256,7 +256,7 @@ describe("getLiteratureDetailsItems", () => {
     },
   );
 
-  test.each([
+  it.each([
     [undefined, undefined, "Kongress:"],
     [[], undefined, "Kongress:"],
     [["Note 1"], "Note 1", "Kongress:"],
