@@ -1,4 +1,4 @@
-import { expect, test, navigate } from "./utils/fixtures";
+import { expect, test, navigate, noJsTest } from "./utils/fixtures";
 
 test("displays administrative directive page with metadata and text tab by default", async ({
   page,
@@ -75,4 +75,86 @@ test("can navigate to search via breadcrumb", async ({ page }) => {
   await expect(
     page.getByRole("heading", { level: 1, name: "Suche" }),
   ).toBeVisible();
+});
+
+noJsTest("tabs work without JavaScript", async ({ page }) => {
+  await navigate(page, "/administrative-directives/KSNR000000001");
+  await expect(page.getByRole("link", { name: "Details" })).toBeVisible();
+
+  await page.getByRole("link", { name: "Details" }).first().click();
+
+  await expect(page).toHaveURL(/#details$/);
+
+  const detailsRegion = page.getByRole("region", { name: "Details" });
+  await expect(
+    detailsRegion.getByRole("heading", { name: "Details" }),
+  ).toBeVisible();
+});
+
+test("shows detailed information in the 'Details' tab", async ({ page }) => {
+  await navigate(page, "/administrative-directives/KSNR000000001");
+
+  const detailsLink = page.getByRole("link", {
+    name: "Details",
+  });
+  await detailsLink.click();
+
+  const detailsRegion = page.getByRole("region", { name: "Details" });
+
+  await expect(
+    detailsRegion.getByRole("heading", { name: "Details" }),
+  ).toBeVisible();
+  await expect(detailsRegion.getByRole("alert")).toContainText(
+    "Dieser Service befindet sich in der Testphase",
+  );
+
+  const detailsList = page.getByTestId("details-list");
+  await expect(
+    detailsList.getByRole("term").or(detailsList.getByRole("definition")),
+  ).toHaveText([
+    "Fundstelle:",
+    "FooBar 2025, Nr 1, 123",
+    "Zitierdatum:",
+    "01.06.2025",
+    "Gültig bis:",
+    "01.07.2030",
+    "Dokumenttyp Zusatz:",
+    "Bekanntmachung",
+    "Normen:",
+    "Baz § 16c Abs 2, Lol § 15 Abs 2",
+  ]);
+});
+
+test("hides tabs and shows details if document is empty", async ({ page }) => {
+  await navigate(page, "/administrative-directives/KSNR000000004");
+
+  await expect(
+    page.getByRole("navigation", {
+      name: "Details",
+    }),
+  ).not.toBeVisible();
+
+  await expect(
+    page.getByRole("heading", { level: 2, name: "Details" }),
+  ).toBeVisible();
+
+  await expect(page.getByRole("main").getByRole("alert")).toContainText(
+    "Dieser Service befindet sich in der Testphase",
+  );
+
+  const detailsList = page.getByTestId("details-list");
+  await expect(
+    detailsList.getByRole("term").or(detailsList.getByRole("definition")),
+  ).toHaveText([
+    "Fundstelle:",
+    "BazAbCd 2002, Nr 1",
+    "Zitierdaten:",
+    "24.12.2012, 28.06.2013",
+    "Gültig bis:",
+    "nicht vorhanden",
+    "Dokumenttyp Zusatz:",
+    "nicht vorhanden",
+    "Norm:",
+    "nicht vorhanden",
+  ]);
 });

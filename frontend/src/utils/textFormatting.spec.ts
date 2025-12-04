@@ -186,3 +186,17 @@ describe("encodeForUri", () => {
     );
   });
 });
+
+describe("getSingularOrPlural", () => {
+  it("returns singular if count is undefined", () => {
+    expect(getSingularOrPlural("singular", "plural")).toBe("singular");
+  });
+
+  it.each([-1, 0, 1])("returns singular for count '%n' smaller 2", (count) => {
+    expect(getSingularOrPlural("singular", "plural", count)).toBe("singular");
+  });
+
+  it.each([2, 10])("returns plural for count '%n' larger 1", (count) => {
+    expect(getSingularOrPlural("singular", "plural", count)).toBe("plural");
+  });
+});

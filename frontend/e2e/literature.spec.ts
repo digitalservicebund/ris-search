@@ -192,7 +192,7 @@ test("shows detailed information in the 'Details' tab", async ({ page }) => {
   await expect(
     detailsList.getByRole("term").or(detailsList.getByRole("definition")),
   ).toHaveText([
-    "Norm:",
+    "Normen:",
     "BMV-Ä, GG, Art 6 Abs 2 S 1, 1949-05-23",
     "Mitarbeiter:",
     "Peter Foo",

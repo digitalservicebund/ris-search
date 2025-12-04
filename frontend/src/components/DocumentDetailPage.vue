@@ -44,6 +44,8 @@ const tabs = computed(() => [
     icon: IcOutlineInfo,
   },
 ]);
+
+const detailsTabPanelId = useId();
 </script>
 
 <template>
@@ -88,10 +90,10 @@ const tabs = computed(() => [
             id="details"
             :class="tabPanelClass"
             :hidden="isClient && activeTab !== 'details'"
-            aria-labelledby="detailsTabPanelTitle"
+            :aria-labelledby="detailsTabPanelId"
           >
             <div class="container pb-56">
-              <slot name="details" />
+              <slot name="details" :details-tab-panel-id="detailsTabPanelId" />
             </div>
           </section>
         </template>

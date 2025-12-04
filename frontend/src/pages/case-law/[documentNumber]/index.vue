@@ -177,8 +177,8 @@ const metadataItems = computed(() => [
         <TableOfContents :table-of-content-entries="tocEntries || []" />
       </client-only>
     </template>
-    <template #details>
-      <h2 id="detailsTabPanelTitle" class="ris-heading3-bold my-24">Details</h2>
+    <template #details="{ detailsTabPanelId }">
+      <h2 :id="detailsTabPanelId" class="ris-heading3-bold my-24">Details</h2>
       <IncompleteDataMessage class="my-24" />
       <DetailsList>
         <DetailsListEntry

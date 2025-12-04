@@ -25,7 +25,7 @@ const { data: html, error: contentError } = await useRisBackend<string>(
 );
 
 const title = computed(() => data.value?.headline);
-const isEmptyDocument = false;
+const isEmptyDocument = isAdministrativeDirectiveEmpty(data.value);
 const breadcrumbItems = computed(() => [
   {
     label: formatDocumentKind(DocumentKind.AdministrativeDirective),
@@ -41,6 +41,10 @@ const breadcrumbItems = computed(() => [
 
 const metadataItems = computed(() =>
   getAdministrativeDirectiveMetadataItems(data.value),
+);
+
+const detailItems = computed(() =>
+  getAdministrativeDirectiveDetailItems(data.value),
 );
 
 if (metadataError?.value) {
@@ -61,12 +65,14 @@ if (contentError?.value) {
     document-html-class="administrative-directive"
     :html="html"
   >
-    <template #details>
-      <h2 id="detailsTabPanelTitle" class="ris-heading3-bold my-24">Details</h2>
+    <template #details="{ detailsTabPanelId }">
+      <h2 :id="detailsTabPanelId" class="ris-heading3-bold my-24">Details</h2>
       <IncompleteDataMessage class="my-24" />
-      <Properties aria-labelledby="detailsTabPanelTitle">
-        <PropertiesItem label="Detail" value="Coming soon" />
-      </Properties>
+      <DetailsList :aria-labelledby="detailsTabPanelId">
+        <template v-for="item in detailItems" :key="item.label">
+          <DetailsListEntry :label="item.label" :value="item.value" />
+        </template>
+      </DetailsList>
     </template>
   </DocumentDetailPage>
 </template>

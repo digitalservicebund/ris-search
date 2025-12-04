@@ -788,8 +788,8 @@ test.describe("searching administrative directives", () => {
     await expect(page).toHaveURL(/dateBefore=2019-03-15/);
 
     const searchResults = getSearchResults(page);
-    await expect(searchResults).toHaveCount(1);
-    await expect(searchResults).toHaveText(/14.03.2019/);
+    await expect(searchResults).toHaveCount(2);
+    await expect(searchResults.nth(0)).toHaveText(/14.03.2019/);
   });
 
   test("searches by entryIntoForce date with dateAfter", async ({ page }) => {
@@ -860,16 +860,16 @@ test.describe("searching administrative directives", () => {
     await expect(page).toHaveURL(/sort=date/);
 
     const searchResults = getSearchResults(page);
-    await expect(searchResults).toHaveCount(3);
+    await expect(searchResults).toHaveCount(4);
 
-    await expect(searchResults.nth(0)).toHaveText(/14.03.2019/);
+    await expect(searchResults.nth(0)).toHaveText(/01.11.2012/);
 
     await page.getByRole("combobox", { name: "Datum: Älteste zuerst" }).click();
     await page.getByRole("option", { name: "Datum: Neueste zuerst" }).click();
 
     await expect(page).toHaveURL(/sort=-date/);
 
-    await expect(searchResults).toHaveCount(3);
+    await expect(searchResults).toHaveCount(4);
 
     await expect(searchResults.nth(0)).toHaveText(/01.07.2025/);
   });
