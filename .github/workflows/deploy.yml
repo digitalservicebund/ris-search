@@ -23,13 +23,14 @@ jobs:
     steps:
       - uses: chainguard-dev/actions/setup-gitsign@b479012116eacde7f895586c17b598f7ba0ee700
       - name: Deploy new images
-        uses: digitalservicebund/argocd-deploy@4fac1bb67c92ed168f6d9b22f8779ce241a9e412 # v1.0.0
+        uses: digitalservicebund/argocd-deploy@faa88406a1d6afa918aad127b19735c6e54d7fb1
         with:
           environment: staging
           version: ${{ inputs.container-image-version }}
           deploying_repo: ${{ inputs.deploying-repo }}
           infra_repo: neuris-portal-infra
-          deploy_key: ${{ secrets.PORTAL_INFRA_DEPLOY_KEY }}
+          github_app_id: ${{ secrets.GITOPS_NEURIS_APP_ID }}
+          github_app_private_key: ${{ secrets.GITOPS_NEURIS_APP_PRIVATE_KEY }}
           app: ris-portal-staging
           argocd_pipeline_password: ${{ secrets.ARGOCD_PIPELINE_PASSWORD }}
           argocd_server: ${{ secrets.ARGOCD_SERVER }}
@@ -47,13 +48,14 @@ jobs:
     steps:
       - uses: chainguard-dev/actions/setup-gitsign@b479012116eacde7f895586c17b598f7ba0ee700
       - name: Deploy new images
-        uses: digitalservicebund/argocd-deploy@4fac1bb67c92ed168f6d9b22f8779ce241a9e412 # v1.0.0
+        uses: digitalservicebund/argocd-deploy@faa88406a1d6afa918aad127b19735c6e54d7fb1
         with:
           environment: uat
           version: ${{ inputs.container-image-version }}
           deploying_repo: ${{ inputs.deploying-repo }}
           infra_repo: neuris-portal-infra
-          deploy_key: ${{ secrets.PORTAL_INFRA_DEPLOY_KEY }}
+          github_app_id: ${{ secrets.GITOPS_NEURIS_APP_ID }}
+          github_app_private_key: ${{ secrets.GITOPS_NEURIS_APP_PRIVATE_KEY }}
           app: ris-portal-uat
           argocd_pipeline_password: ${{ secrets.ARGOCD_PIPELINE_PASSWORD }}
           argocd_server: ${{ secrets.ARGOCD_SERVER }}
