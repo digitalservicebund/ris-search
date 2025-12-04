@@ -39,7 +39,7 @@ jackson-datatype-jsr310 = "2.20.0"
 jaxb-moxy = "4.0.8"
 pact = "4.6.17"
 posthog = "1.2.0"
-pebble = "3.2.4"
+pebble = "4.0.0"
 rest-assured = "5.5.5"
 
 [libraries]
