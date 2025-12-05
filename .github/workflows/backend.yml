@@ -91,7 +91,7 @@ jobs:
         run: |
           docker build \
             --file ./backend/Dockerfile.prod \
-            --tag ${{env.CONTAINER_REGISTRY}}/${{ env.CONTAINER_IMAGE_TAG }}:${{ env.CONTAINER_IMAGE_VERSION }} \
+            --tag ${{ env.CONTAINER_IMAGE_TAG }}:${{ env.CONTAINER_IMAGE_VERSION }} \
             --secret id=GH_PACKAGES_REPOSITORY_USER,env=GH_PACKAGES_REPOSITORY_USER \
             --secret id=GH_PACKAGES_REPOSITORY_TOKEN,env=GH_PACKAGES_REPOSITORY_TOKEN \
             --secret id=SENTRY_DSN,env=SENTRY_DSN \
@@ -105,7 +105,6 @@ jobs:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
           CONTAINER_IMAGE_TAG: ${{ inputs.container-image-tag }}
           CONTAINER_IMAGE_VERSION: ${{ inputs.container-image-version }}
-          CONTAINER_REGISTRY: ${{ inputs.container-registry }}
       - name: Run Trivy vulnerability scanner
         # Third-party action, pin to commit SHA!
         # See https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions
@@ -261,7 +260,7 @@ jobs:
         run: |
           docker build \
             --file ./backend/Dockerfile.prod \
-            --tag ${{env.CONTAINER_REGISTRY}}/${{ env.CONTAINER_IMAGE_TAG }}:${{ env.CONTAINER_IMAGE_VERSION }} \
+            --tag ${{ env.CONTAINER_IMAGE_TAG }}:${{ env.CONTAINER_IMAGE_VERSION }} \
             --secret id=GH_PACKAGES_REPOSITORY_USER,env=GH_PACKAGES_REPOSITORY_USER \
             --secret id=GH_PACKAGES_REPOSITORY_TOKEN,env=GH_PACKAGES_REPOSITORY_TOKEN \
             --secret id=SENTRY_DSN,env=SENTRY_DSN \
@@ -275,7 +274,6 @@ jobs:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
           CONTAINER_IMAGE_TAG: ${{ inputs.container-image-tag }}
           CONTAINER_IMAGE_VERSION: ${{ inputs.container-image-version }}
-          CONTAINER_REGISTRY: ${{ inputs.container-registry }}
       - name: Install cosign
         # Third-party action, pin to commit SHA!
         # See https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions
