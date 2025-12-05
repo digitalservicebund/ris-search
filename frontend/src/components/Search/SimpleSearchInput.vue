@@ -6,7 +6,7 @@ import { usePostHogStore } from "~/stores/usePostHogStore";
 import IconSearch from "~icons/ic/search";
 
 const {
-  inputLabel = "Suchbegriff",
+  inputLabel = "Suchfeld",
   inputPlaceholder = "Suchbegriff eingeben",
   submitLabel = "Suchen",
 } = defineProps<{

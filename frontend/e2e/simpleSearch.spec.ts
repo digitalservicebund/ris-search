@@ -18,7 +18,7 @@ const nonZeroResultCount = /[1-9][\d.]* Suchergebnis(se)?/;
 test.describe("reach search from start page", () => {
   test("searches for a query from the start page", async ({ page }) => {
     await navigate(page, "/");
-    const searchInput = page.getByRole("searchbox", { name: "Suchbegriff" });
+    const searchInput = page.getByRole("searchbox", { name: "Suchfeld" });
     await searchInput.fill("Fiktiv");
 
     const searchButton = page.getByRole("button", { name: "Suchen" });
@@ -34,7 +34,7 @@ test.describe("reach search from start page", () => {
     await page.getByRole("link", { name: "Zur Startseite" }).click();
 
     await expect(
-      page.getByRole("searchbox", { name: "Suchbegriff" }),
+      page.getByRole("searchbox", { name: "Suchfeld" }),
       "should be reset",
     ).toBeEmpty();
   });
@@ -113,7 +113,7 @@ test.describe("general search page features", () => {
     await expect(page).toHaveTitle("Suche | Rechtsinformationen des Bundes");
 
     await page
-      .getByRole("searchbox", { name: "Suchbegriff" })
+      .getByRole("searchbox", { name: "Suchfeld" })
       .fill("frühstück brötchen");
 
     await page.getByRole("button", { name: "Suchen" }).click();
