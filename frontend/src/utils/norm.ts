@@ -1,7 +1,9 @@
 import dayjs, { type Dayjs } from "dayjs";
 import _ from "lodash";
+import type { MetadataItem } from "~/components/Metadata.vue";
 import type { LegislationWork, SearchResult } from "~/types";
 import {
+  dateFormattedDDMMYYYY,
   getCurrentDateInGermany,
   getCurrentDateInGermanyFormatted,
   parseDateGermanLocalTime,
@@ -119,4 +121,33 @@ export function getMostRelevantExpression(
     );
   }
   throw new Error("Could not identify the most relevant expression");
+}
+
+export function getNormMetadataItems(
+  norm?: Partial<LegislationWork>,
+): MetadataItem[] {
+  const validityInterval = temporalCoverageToValidityInterval(
+    norm?.workExample?.temporalCoverage,
+  );
+  const formattedStatus = getValidityStatusLabel(
+    getValidityStatus(validityInterval),
+  );
+  return [
+    {
+      label: "Abkürzung",
+      value: norm?.abbreviation ?? "",
+    },
+    {
+      label: "Status",
+      value: formattedStatus ?? "",
+    },
+    {
+      label: "Gültig ab",
+      value: dateFormattedDDMMYYYY(validityInterval?.from) ?? "",
+    },
+    {
+      label: "Gültig bis",
+      value: dateFormattedDDMMYYYY(validityInterval?.to) ?? "",
+    },
+  ];
 }

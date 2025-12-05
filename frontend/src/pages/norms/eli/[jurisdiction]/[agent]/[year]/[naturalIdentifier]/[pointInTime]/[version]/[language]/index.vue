@@ -11,7 +11,6 @@ import TableOfContentsLayout from "~/components/CustomLayouts/SidebarLayout.vue"
 import DetailsList from "~/components/DetailsList.vue";
 import DetailsListEntry from "~/components/DetailsListEntry.vue";
 import IncompleteDataMessage from "~/components/IncompleteDataMessage.vue";
-import NormMetadataFields from "~/components/Norm/Metadatafields/NormMetadataFields.vue";
 import NormVersionList from "~/components/Norm/NormVersionList.vue";
 import NormVersionWarning from "~/components/Norm/NormVersionWarning.vue";
 import VersionsTeaser from "~/components/Norm/VersionsTeaser.vue";
@@ -187,6 +186,21 @@ const title = computed<string | undefined>(() =>
       )
     : undefined,
 );
+const metadataItems = computed(() => {
+  if (privateFeaturesEnabled) {
+    return getNormMetadataItems(metadata.value);
+  }
+  return [
+    {
+      label: "Abkürzung",
+      value: abbreviation ?? "",
+    },
+    {
+      label: "Status",
+      value: "—",
+    },
+  ];
+});
 
 const description = computed<string | undefined>(() => {
   const shortTitle = metadata.value?.alternateName?.trim();
@@ -238,12 +252,7 @@ useDynamicSeo({ title, description });
           :versions="normVersions"
           :current-version="metadata"
         />
-        <NormMetadataFields
-          :abbreviation="metadata.abbreviation"
-          :status="validityStatus"
-          :valid-from="validityInterval?.from"
-          :valid-to="validityInterval?.to"
-        />
+        <Metadata :items="metadataItems" class="mb-48" />
       </div>
       <RisTabs :tabs="tabs">
         <template #default="{ activeTab, isClient }">
