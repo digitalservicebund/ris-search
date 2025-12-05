@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import Message from "primevue/message";
+import type { RouteLocationRaw } from "#vue-router";
 import type { LegislationWork } from "~/types";
 import { dateFormattedDDMMYYYY } from "~/utils/dateFormatting";
 import type { ValidityStatus } from "~/utils/norm";
@@ -7,37 +8,66 @@ import { temporalCoverageToValidityInterval } from "~/utils/norm";
 import IcBaselineHistory from "~icons/ic/baseline-history";
 import IcBaselineUpdate from "~icons/ic/baseline-update";
 
-export interface VersionWarningMessageProps {
+const {
+  currentVersionValidityStatus,
+  futureVersion,
+  futureWarningMessage,
+  historicalWarningMessage,
+  inForceVersionLink,
+} = defineProps<{
   currentVersionValidityStatus?: ValidityStatus;
-  inForceVersionLink?: string;
   futureVersion?: LegislationWork;
-  historicalWarningMessage: string;
   futureWarningMessage: string;
-}
-
-const props = defineProps<VersionWarningMessageProps>();
+  historicalWarningMessage: string;
+  inForceVersionLink?: string;
+}>();
 
 const warningMessageType = computed(() =>
-  props.currentVersionValidityStatus === "InForce" ? "info" : "warn",
+  currentVersionValidityStatus === "InForce" ? "info" : "warn",
 );
 
-const showWarningMessage = computed(() => {
-  return (
-    (props.currentVersionValidityStatus === "InForce" && props.futureVersion) ||
-    props.currentVersionValidityStatus === "Expired" ||
-    props.currentVersionValidityStatus === "FutureInForce"
-  );
+const showWarningMessage = computed(
+  () =>
+    (currentVersionValidityStatus === "InForce" && futureVersion) ||
+    currentVersionValidityStatus === "Expired" ||
+    currentVersionValidityStatus === "FutureInForce",
+);
+
+const versionTextId = useId();
+
+const versionText = computed(() => {
+  if (currentVersionValidityStatus === "InForce" && futureVersion) {
+    const formattedFutureDate = dateFormattedDDMMYYYY(
+      temporalCoverageToValidityInterval(
+        futureVersion.workExample.temporalCoverage,
+      )?.from,
+    );
+    return `Ab ${formattedFutureDate} gilt eine neue Fassung.`;
+  } else {
+    return currentVersionValidityStatus === "Expired"
+      ? historicalWarningMessage
+      : futureWarningMessage;
+  }
 });
 
-const toCurrentVersionText = "Zur aktuell gültigen Fassung";
+const versionLink = computed<
+  { to: RouteLocationRaw; label: string } | undefined
+>(() => {
+  if (currentVersionValidityStatus === "InForce" && futureVersion) {
+    return {
+      to: `/norms/${futureVersion.workExample.legislationIdentifier}`,
+      label: "Zur zukünftigen Fassung",
+    };
+  } else if (inForceVersionLink) {
+    return { to: inForceVersionLink, label: "Zur aktuell gültigen Fassung" };
+  } else {
+    return undefined;
+  }
+});
 </script>
 
 <template>
-  <div
-    v-if="showWarningMessage"
-    class="mb-40 w-fit"
-    data-testid="norm-warning-message"
-  >
+  <div v-if="showWarningMessage" class="mb-40 w-fit">
     <Message :severity="warningMessageType" class="ris-body2-regular">
       <template #icon>
         <IcBaselineUpdate
@@ -49,40 +79,21 @@ const toCurrentVersionText = "Zur aktuell gültigen Fassung";
         />
         <IcBaselineUpdate v-else />
       </template>
+
       <p>
-        <span
-          v-if="
-            currentVersionValidityStatus === 'InForce' && props.futureVersion
-          "
+        <span :id="versionTextId" class="ris-label2-bold">{{
+          versionText
+        }}</span
+        >{{ " " }}
+
+        <NuxtLink
+          v-if="versionLink"
+          :to="versionLink.to"
+          class="ris-link2-regular"
+          :aria-describedby="versionTextId"
         >
-          <span class="ris-body2-bold">
-            Neue Fassung ab
-            {{
-              dateFormattedDDMMYYYY(
-                temporalCoverageToValidityInterval(
-                  props.futureVersion.workExample.temporalCoverage,
-                )?.from,
-              )
-            }}.
-          </span>
-          <NuxtLink
-            :to="`/norms/${props.futureVersion.workExample.legislationIdentifier}`"
-          >
-            Zur zukünftigen Fassung
-          </NuxtLink>
-        </span>
-        <span v-else>
-          <span class="ris-body2-bold">
-            {{
-              currentVersionValidityStatus === "Expired"
-                ? historicalWarningMessage
-                : futureWarningMessage
-            }}&nbsp;
-          </span>
-          <NuxtLink v-if="props.inForceVersionLink" :to="inForceVersionLink">
-            {{ toCurrentVersionText }}
-          </NuxtLink>
-        </span>
+          {{ versionLink.label }}
+        </NuxtLink>
       </p>
     </Message>
   </div>

@@ -65,10 +65,12 @@ const metadata = computed(() => {
   } as LiteratureMetadata;
 });
 
+const resultTypeId = useId();
+
 const headerItems = computed<SearchResultHeaderItem[]>(() => {
   const item = props.searchResult.item;
   return [
-    { value: item.documentTypes?.at(0) },
+    { value: item.documentTypes?.at(0), id: resultTypeId },
     { value: item.dependentReferences?.at(0) },
     { value: item.yearsOfPublication?.at(0) },
   ].filter((item): item is SearchResultHeaderItem => item.value !== undefined);
@@ -101,7 +103,8 @@ function trackResultClick() {
     <SearchResultHeader :icon="OutlineBookIcon" :items="headerItems" />
     <NuxtLink
       :to="detailPageRoute"
-      class="ris-heading3-bold max-w-title link-hover block text-blue-800"
+      :aria-describedby="resultTypeId"
+      class="ris-heading3-bold! ris-link1-regular max-w-title link-hover block"
       @click="trackResultClick()"
     >
       <h2>

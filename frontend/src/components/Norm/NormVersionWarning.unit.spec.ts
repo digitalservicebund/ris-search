@@ -54,21 +54,21 @@ describe("NormVersionWarning", () => {
     {
       label: "inForce points to next neue Fassung",
       currentlyRendered: testVersions[1]!.item,
-      messageText: "Neue Fassung ab 01.01.2824",
+      messageText: "Ab 01.01.2824 gilt eine neue Fassung.",
       link: `/norms/${testVersions[2]!.item.workExample.legislationIdentifier}`,
       linkText: "Zur zukünftigen Fassung",
     },
     {
       label: "historic version points to inForce Fassung",
       currentlyRendered: testVersions[0]!.item,
-      messageText: "Historische Fassung.",
+      messageText: "Sie lesen eine historische Fassung.",
       link: `/norms/${testVersions[1]!.item.workExample.legislationIdentifier}`,
       linkText: "Zur aktuell gültigen Fassung",
     },
     {
       label: "futureInForce points to inForce Fassung",
       currentlyRendered: testVersions[2]!.item,
-      messageText: "Zukünftige Fassung",
+      messageText: "Sie lesen eine zukünftige Fassung.",
       link: `/norms/${testVersions[1]!.item.workExample.legislationIdentifier}`,
       linkText: "Zur aktuell gültigen Fassung",
     },
@@ -93,11 +93,16 @@ describe("NormVersionWarning", () => {
     const fassungText = await screen.findByText((content) =>
       content.includes(testData.messageText),
     );
-    const link = screen.getByRole("link");
 
     expect(fassungText).toBeInTheDocument();
+
+    const link = screen.getByRole("link", {
+      name: testData.linkText,
+      description: testData.messageText,
+    });
+
+    expect(link).toBeInTheDocument();
     expect(link).toHaveAttribute("href", testData.link);
-    expect(link).toHaveTextContent(testData.linkText);
   });
 
   it("does not render a message if there are no future versions existing for the current in force version", () => {
@@ -136,7 +141,9 @@ describe("NormVersionWarning", () => {
       },
     });
 
-    expect(screen.getByText("Historische Fassung.")).toBeInTheDocument();
+    expect(
+      screen.getByText("Sie lesen eine historische Fassung."),
+    ).toBeInTheDocument();
     expect(screen.queryByRole("link")).toBeNull();
     expect(container).not.toBeEmptyDOMElement();
   });

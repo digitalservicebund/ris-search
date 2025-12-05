@@ -140,15 +140,29 @@ const previewSections = computed<ExtendedTextMatch[]>(() => {
   return slice;
 });
 
-const headerItems = computed<SearchResultHeaderItem[]>(() => {
+const resultTypeId = useId();
+
+const headerItems = computed(() => {
   const item = props.searchResult.item;
-  return [
-    { value: item.documentType || "Entscheidung" },
-    { value: item.courtName },
-    { value: dateFormattedDDMMYYYY(item.decisionDate) },
-    { value: getFileNumbers(item), isMarkup: true },
-  ].filter((item): item is SearchResultHeaderItem => item.value !== undefined);
+
+  const items: SearchResultHeaderItem[] = [
+    { value: item.documentType || "Entscheidung", id: resultTypeId },
+  ];
+
+  if (item.courtName) items.push({ value: item.courtName });
+
+  const formattedDate = dateFormattedDDMMYYYY(item.decisionDate);
+  if (formattedDate) items.push({ value: formattedDate });
+
+  const fileNumbers = getFileNumbers(item);
+  if (fileNumbers) items.push({ value: fileNumbers, isMarkup: true });
+
+  return items;
 });
+
+const headline = computed(() =>
+  sanitizeSearchResult(removeOuterParentheses(metadata.value.headline)),
+);
 
 function trackResultClick(url: string) {
   postHogStore.searchResultClicked(url, props.order);
@@ -160,18 +174,15 @@ function trackResultClick(url: string) {
     <SearchResultHeader :icon="GavelIcon" :items="headerItems" />
     <NuxtLink
       :to="metadata.route"
-      class="ris-heading3-bold max-w-title link-hover block text-blue-800"
+      :aria-describedby="resultTypeId"
+      class="ris-heading3-bold! ris-link1-regular max-w-title link-hover block"
       @click="trackResultClick(metadata.url)"
     >
       <h2>
         <span v-if="!!metadata.decisionName">
           {{ metadata.decisionName }} —
         </span>
-        <span
-          v-html="
-            sanitizeSearchResult(removeOuterParentheses(metadata.headline))
-          "
-        />
+        <span v-html="headline" />
       </h2>
     </NuxtLink>
 
@@ -179,7 +190,7 @@ function trackResultClick(url: string) {
       <div v-for="section in previewSections" :key="section?.id">
         <NuxtLink
           :to="{ path: `${metadata.url}`, hash: `#${section?.id}` }"
-          class="ris-label1-bold link-hover text-blue-800"
+          class="ris-link1-bold link-hover"
           external
           @click="trackResultClick(`${metadata.url}#${section?.id}`)"
           >{{ section?.title }}:</NuxtLink
