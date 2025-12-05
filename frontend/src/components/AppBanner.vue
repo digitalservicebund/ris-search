@@ -16,7 +16,7 @@ import MaterialSymbolsWarningOutline from "~icons/material-symbols/warning-outli
           Testen Sie erste Funktionen und geben Sie Feedback für die
           Weiterentwicklung.
         </p>
-        <NuxtLink class="ris-link2-regular text-black" :to="{ name: 'about' }">
+        <NuxtLink class="ris-link2-regular" :to="{ name: 'about' }">
           Erfahren Sie mehr über die Testphase
         </NuxtLink>
       </div>
