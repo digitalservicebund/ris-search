@@ -91,7 +91,7 @@ jobs:
         run: |
           docker build \
             --file ./backend/Dockerfile.prod \
-            --tag ${{ env.CONTAINER_IMAGE_TAG }}:${{ env.CONTAINER_IMAGE_VERSION }} \
+            --tag ${{ env.CONTAINER_REGISTRY }}/${{ env.CONTAINER_IMAGE_NAME }}:${{ env.CONTAINER_IMAGE_VERSION }} \
             --secret id=GH_PACKAGES_REPOSITORY_USER,env=GH_PACKAGES_REPOSITORY_USER \
             --secret id=GH_PACKAGES_REPOSITORY_TOKEN,env=GH_PACKAGES_REPOSITORY_TOKEN \
             --secret id=SENTRY_DSN,env=SENTRY_DSN \
@@ -103,8 +103,6 @@ jobs:
           GH_PACKAGES_REPOSITORY_TOKEN: ${{ secrets.GH_PACKAGES_REPOSITORY_TOKEN }}
           SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-          CONTAINER_IMAGE_TAG: ${{ inputs.container-image-tag }}
-          CONTAINER_IMAGE_VERSION: ${{ inputs.container-image-version }}
       - name: Run Trivy vulnerability scanner
         # Third-party action, pin to commit SHA!
         # See https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions
@@ -260,7 +258,7 @@ jobs:
         run: |
           docker build \
             --file ./backend/Dockerfile.prod \
-            --tag ${{ env.CONTAINER_IMAGE_TAG }}:${{ env.CONTAINER_IMAGE_VERSION }} \
+            --tag ${{ env.CONTAINER_REGISTRY }}/${{ env.CONTAINER_IMAGE_NAME }}:${{ env.CONTAINER_IMAGE_VERSION }} \
             --secret id=GH_PACKAGES_REPOSITORY_USER,env=GH_PACKAGES_REPOSITORY_USER \
             --secret id=GH_PACKAGES_REPOSITORY_TOKEN,env=GH_PACKAGES_REPOSITORY_TOKEN \
             --secret id=SENTRY_DSN,env=SENTRY_DSN \
@@ -272,8 +270,6 @@ jobs:
           GH_PACKAGES_REPOSITORY_TOKEN: ${{ secrets.GH_PACKAGES_REPOSITORY_TOKEN }}
           SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-          CONTAINER_IMAGE_TAG: ${{ inputs.container-image-tag }}
-          CONTAINER_IMAGE_VERSION: ${{ inputs.container-image-version }}
       - name: Install cosign
         # Third-party action, pin to commit SHA!
         # See https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions
