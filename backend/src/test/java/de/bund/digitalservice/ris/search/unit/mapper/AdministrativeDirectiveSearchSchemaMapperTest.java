@@ -22,6 +22,7 @@ class AdministrativeDirectiveSearchSchemaMapperTest {
             .documentType("VV")
             .shortReport("shortReport")
             .referenceNumbers(List.of("RNR"))
+            .legislationAuthority("legislationAuthority")
             .entryIntoEffectDate(LocalDate.of(2024, 1, 1))
             .build();
 
@@ -33,6 +34,7 @@ class AdministrativeDirectiveSearchSchemaMapperTest {
             .shortReport("shortReport")
             .documentType("VV")
             .referenceNumbers(List.of("RNR"))
+            .legislationAuthority("legislationAuthority")
             .entryIntoForceDate(LocalDate.of(2024, 1, 1))
             .build();
 

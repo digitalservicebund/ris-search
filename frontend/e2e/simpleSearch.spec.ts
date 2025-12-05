@@ -715,6 +715,7 @@ test.describe("searching administrative directives", () => {
 
     // Header
     await expect(searchResult).toHaveText(/VB/);
+    await expect(searchResult).toHaveText(/DEU Neuris/);
     await expect(searchResult).toHaveText(/Baz - 121 - 1/);
     await expect(searchResult).toHaveText(/24.12.2022/);
 
