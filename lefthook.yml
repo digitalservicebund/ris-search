@@ -21,16 +21,6 @@ pre-commit:
       tags: check javadocs
       root: backend
       run: ./gradlew checkstyleMain -Dinclude=$(echo {staged_files} | sed 's/ /,/g') && git add {staged_files}
-    run-pact-tests:
-      root: frontend
-      glob: "*.pact.*.{js,ts}"
-      run: >-
-        yarn run test pact &&
-        git add ../backend/pacts &&
-        if ! git diff-index --quiet HEAD -- ../backend/pacts; then
-          echo -e "\e[31mPact files have changed, please make sure to run the backend tests again before you push.\e[0m"
-        fi
-      stage_fixed: true
 pre-push:
   parallel: true
   commands:

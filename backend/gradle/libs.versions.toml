@@ -37,7 +37,6 @@ streamex = "0.8.4"
 jackson-json-ld = "0.1.1"
 jackson-datatype-jsr310 = "2.20.0"
 jaxb-moxy = "4.0.8"
-pact = "4.6.17"
 posthog = "1.2.0"
 pebble = "4.0.0"
 rest-assured = "5.5.5"
@@ -52,7 +51,6 @@ spring-kubernetes-client = { module = "org.springframework.cloud:spring-cloud-st
 spring-data-opensearch = { module = "org.opensearch.client:spring-data-opensearch-starter", version.ref = "spring-data-opensearch-starter" }
 opensearch-test-autoconfigure = { module = "org.opensearch.client:spring-data-opensearch-test-autoconfigure", version.ref = "opensearch-test-autoconfigure"}
 springdoc-openapi-starter-webmvc-ui = { module = "org.springdoc:springdoc-openapi-starter-webmvc-ui", version.ref = "springdoc-openapi" }
-pact = { module = "au.com.dius.pact.provider:junit5spring", version.ref = "pact" }
 jsoup = { module = "org.jsoup:jsoup", version.ref = "jsoup" }
 jts-core = { group = "org.locationtech.jts", name = "jts-core", version.ref = "jts" }
 amazon-aws-sdk-s3 = { module = "software.amazon.awssdk:s3", version.ref = "amazon-aws-sdk-s3" }
