@@ -1,4 +1,4 @@
-package de.bund.digitalservice.ris.search.models.ldml.literature.sli;
+package de.bund.digitalservice.ris.search.models.ldml.literature;
 
 /**
  * A utility class that provides namespace constants used in the context of literature metadata and
@@ -19,6 +19,8 @@ package de.bund.digitalservice.ris.search.models.ldml.literature.sli;
 public class LiteratureNamespaces {
 
   public static final String AKN_NS = "http://docs.oasis-open.org/legaldocml/ns/akn/3.0";
+  public static final String RIS_UNSELBSTSTAENDIG_NS =
+      "http://ldml.neuris.de/literature/unselbstaendig/meta/";
   public static final String RIS_SELBSTSTAENDIG_NS =
       "http://ldml.neuris.de/literature/selbstaendig/meta/";
 

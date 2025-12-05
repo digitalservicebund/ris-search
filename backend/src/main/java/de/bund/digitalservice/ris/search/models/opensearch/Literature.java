@@ -36,20 +36,20 @@ public record Literature(
     @ElementCollection @Field(name = Fields.ORIGINATOR) List<String> originators,
     @ElementCollection @Field(name = Fields.CONFERENCE_NOTE) List<String> conferenceNotes,
     @ElementCollection @Field(name = Fields.UNIVERSITY_NOTES) List<String> universityNotes,
-    @ElementCollection @Field(name = Fields.HANDLER) List<String> handler,
+    @ElementCollection @Field(name = Fields.EDITOR) List<String> editors,
     @ElementCollection @Field(name = Fields.FOUNDER) List<String> founder,
     @ElementCollection @Field(name = Fields.PUBLISHER_ORGANIZATIONS)
         List<String> publisherOrganizations,
     @ElementCollection @Field(name = Fields.PUBLISHER_PERSONS) List<String> publisherPersons,
-    @ElementCollection @Field(name = Fields.TITELKURZFORMEN) List<String> titelKurzformen,
-    @ElementCollection @Field(name = Fields.SONSTIGE_SACHTITEL) List<String> sonstigeSachtitel,
-    @ElementCollection @Field(name = Fields.GESAMTTITEL_ANGABEN) List<String> gesamttitel_angaben,
+    @ElementCollection @Field(name = Fields.SHORT_TITLES) List<String> shortTitles,
+    @ElementCollection @Field(name = Fields.ADDITIONAL_TITLES) List<String> additionalTitles,
+    @ElementCollection @Field(name = Fields.FULL_TITLE_ADDITIONS) List<String> fullTitleAdditions,
     @ElementCollection @Field(name = Fields.FOOTNOTES) List<String> footnotes,
     @ElementCollection @Field(name = Fields.PUBLISHER_INFORMATION)
         List<String> publicherInformation,
     @ElementCollection @Field(name = Fields.INTERNATIONAL_IDENTIFIERS)
         List<String> internationalIdentifiers,
-    @ElementCollection @Field(name = Fields.TEILBAENDE) List<String> teilbaende,
+    @ElementCollection @Field(name = Fields.Volumes) List<String> volumes,
     @Nullable @Field(name = Fields.SHORT_REPORT) String shortReport,
     @Nullable @Field(name = Fields.OUTLINE) String outline,
     @JsonIgnore @Field(name = Fields.INDEXED_AT) String indexedAt)
@@ -116,7 +116,7 @@ public record Literature(
     public static final String FOUNDER = "founder";
 
     /** Bearbeiter */
-    public static final String HANDLER = "handler";
+    public static final String EDITOR = "editor";
 
     /** Herausgeber (Institution) */
     public static final String PUBLISHER_ORGANIZATIONS = "publisher_organizations";
@@ -124,14 +124,17 @@ public record Literature(
     /** Herausgeber (natürliche Person) */
     public static final String PUBLISHER_PERSONS = "publisher_persons";
 
-    public static final String TITELKURZFORMEN = "titelkurzform";
+    /** titelkurzformen */
+    public static final String SHORT_TITLES = "short_titles";
 
-    public static final String SONSTIGE_SACHTITEL = "sonstige_sachtitel";
+    /** sonstige sachtitle */
+    public static final String ADDITIONAL_TITLES = "additional_titles";
 
     /** Verlagsangaben */
     public static final String PUBLISHER_INFORMATION = "publisher_information";
 
-    public static final String TEILBAENDE = "teilbaende";
+    /** Teilbaende */
+    public static final String Volumes = "volumes";
 
     /** Fußnoten */
     public static final String FOOTNOTES = "footnotes";
@@ -142,7 +145,8 @@ public record Literature(
     /** Internationale Standardnummern */
     public static final String INTERNATIONAL_IDENTIFIERS = "international_identifiers";
 
-    public static final String GESAMTTITEL_ANGABEN = "gesamttitel_angaben";
+    /** gesamttitel angaben */
+    public static final String FULL_TITLE_ADDITIONS = "full_title_additions";
 
     /** Used internally to store at what time the document was indexed * */
     public static final String INDEXED_AT = "indexed_at";

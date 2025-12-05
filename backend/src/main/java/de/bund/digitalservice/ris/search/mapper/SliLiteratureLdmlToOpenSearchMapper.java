@@ -2,19 +2,19 @@ package de.bund.digitalservice.ris.search.mapper;
 
 import de.bund.digitalservice.ris.search.caselawhandover.shared.caselawldml.FrbrLanguage;
 import de.bund.digitalservice.ris.search.exception.OpenSearchMapperException;
+import de.bund.digitalservice.ris.search.models.ldml.FRBRNumber;
+import de.bund.digitalservice.ris.search.models.ldml.FrbrExpression;
+import de.bund.digitalservice.ris.search.models.ldml.FrbrNameValueElement;
+import de.bund.digitalservice.ris.search.models.ldml.FrbrWork;
+import de.bund.digitalservice.ris.search.models.ldml.MainBody;
 import de.bund.digitalservice.ris.search.models.ldml.literature.sli.Analysis;
 import de.bund.digitalservice.ris.search.models.ldml.literature.sli.Block;
 import de.bund.digitalservice.ris.search.models.ldml.literature.sli.Doc;
-import de.bund.digitalservice.ris.search.models.ldml.literature.sli.FRBRNumber;
-import de.bund.digitalservice.ris.search.models.ldml.literature.sli.FrbrExpression;
-import de.bund.digitalservice.ris.search.models.ldml.literature.sli.FrbrNameValueElement;
-import de.bund.digitalservice.ris.search.models.ldml.literature.sli.FrbrWork;
 import de.bund.digitalservice.ris.search.models.ldml.literature.sli.Gliederung;
 import de.bund.digitalservice.ris.search.models.ldml.literature.sli.Identification;
 import de.bund.digitalservice.ris.search.models.ldml.literature.sli.ImplicitReference;
 import de.bund.digitalservice.ris.search.models.ldml.literature.sli.Keyword;
 import de.bund.digitalservice.ris.search.models.ldml.literature.sli.LiteratureLdml;
-import de.bund.digitalservice.ris.search.models.ldml.literature.sli.MainBody;
 import de.bund.digitalservice.ris.search.models.ldml.literature.sli.Meta;
 import de.bund.digitalservice.ris.search.models.ldml.literature.sli.Note;
 import de.bund.digitalservice.ris.search.models.ldml.literature.sli.Proprietary;
@@ -71,6 +71,7 @@ public class SliLiteratureLdmlToOpenSearchMapper {
    *
    * @param ldmlString the LDML string representation of a literature document, expected to conform
    *     to the predefined schema
+   * @param time Instant of when the file was mapped to infer the index time
    * @return an instance of {@link de.bund.digitalservice.ris.search.models.opensearch.Literature}
    *     containing the mapped data from the input LDML string
    * @throws de.bund.digitalservice.ris.search.exception.OpenSearchMapperException if the LDML
@@ -106,7 +107,7 @@ public class SliLiteratureLdmlToOpenSearchMapper {
         .originators(extractOriginators(literatureLdml))
         .conferenceNotes(extractConferenceNotes(literatureLdml))
         .universityNotes(extractUniversityNotes(literatureLdml))
-        .handler(extractHandler(literatureLdml))
+        .editors(extractEditor(literatureLdml))
         .founder(extractFounder(literatureLdml))
         .languages(extractLanguages(literatureLdml))
         .dependentReferences(extractDependentReferences(literatureLdml))
@@ -116,14 +117,14 @@ public class SliLiteratureLdmlToOpenSearchMapper {
         .outline((extractOutline(literatureLdml)))
         .publisherOrganizations(extractPublisherOrganization(literatureLdml))
         .publisherPersons(extractPublisherPersons(literatureLdml))
-        .titelKurzformen(extractTitelKurzformen(literatureLdml))
-        .sonstigeSachtitel(extractSonstigeSachtitel(literatureLdml))
-        .gesamttitel_angaben(extractGesamttitelAngaben(literatureLdml))
+        .shortTitles(extractShortTitles(literatureLdml))
+        .additionalTitles(extractSonstigeSachtitel(literatureLdml))
+        .fullTitleAdditions(extractFullTitleAdditions(literatureLdml))
         .footnotes(extractFootnotes(literatureLdml))
         .publicherInformation(extractPublisherinformation(literatureLdml))
         .edition(extractEdition(literatureLdml))
         .internationalIdentifiers(extractInternationalIdentifiers(literatureLdml))
-        .teilbaende(extractTeilbaende(literatureLdml))
+        .volumes(extractVolumes(literatureLdml))
         .indexedAt(time.toString())
         .build();
   }
@@ -150,7 +151,7 @@ public class SliLiteratureLdmlToOpenSearchMapper {
         .map(Proprietary::getMeta);
   }
 
-  private static List<String> extractTitelKurzformen(LiteratureLdml literatureLdml) {
+  private static List<String> extractShortTitles(LiteratureLdml literatureLdml) {
     return extractRisMeta(literatureLdml)
         .map(RisMeta::getTitelKurzformen)
         .orElse(Collections.emptyList());
@@ -298,7 +299,7 @@ public class SliLiteratureLdmlToOpenSearchMapper {
     return extractPersonName(literatureLdml, "#begruender");
   }
 
-  private static List<String> extractHandler(LiteratureLdml literatureLdml) {
+  private static List<String> extractEditor(LiteratureLdml literatureLdml) {
     return extractPersonName(literatureLdml, "#bearbeiter");
   }
 
@@ -336,21 +337,6 @@ public class SliLiteratureLdmlToOpenSearchMapper {
         .stream()
         .filter(event -> eIds.contains(event.getEId()))
         .map(TlcOrganization::getName)
-        .toList();
-  }
-
-  private static List<String> extractTlcEvent(LiteratureLdml ldml, String type) {
-    var eIds = getFrbrAuthorReferenceLinks(ldml, type);
-
-    return Optional.ofNullable(ldml)
-        .map(LiteratureLdml::getDoc)
-        .map(Doc::getMeta)
-        .map(Meta::getReferences)
-        .map(References::getTlcEvents)
-        .orElse(Collections.emptyList())
-        .stream()
-        .filter(event -> eIds.contains(event.getEId()))
-        .map(TlcEvent::getShowAs)
         .toList();
   }
 
@@ -457,7 +443,7 @@ public class SliLiteratureLdmlToOpenSearchMapper {
     return extractRisMeta(ldml).map(RisMeta::getSonstigeSachtitel).orElse(List.of());
   }
 
-  private static List<String> extractGesamttitelAngaben(LiteratureLdml ldml) {
+  private static List<String> extractFullTitleAdditions(LiteratureLdml ldml) {
     return extractRisMeta(ldml).map(RisMeta::getGesamttitelangaben).orElse(List.of()).stream()
         .map(
             titel ->
@@ -499,7 +485,7 @@ public class SliLiteratureLdmlToOpenSearchMapper {
     return extractRisMeta(ldml).map(RisMeta::getAusgabe).orElse(null);
   }
 
-  private static List<String> extractTeilbaende(LiteratureLdml ldml) {
+  private static List<String> extractVolumes(LiteratureLdml ldml) {
     return extractRisMeta(ldml).map(RisMeta::getTeilbaende).orElse(List.of());
   }
 

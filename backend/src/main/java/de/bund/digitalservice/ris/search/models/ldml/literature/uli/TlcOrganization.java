@@ -1,5 +1,6 @@
 package de.bund.digitalservice.ris.search.models.ldml.literature.uli;
 
+import de.bund.digitalservice.ris.search.models.ldml.literature.LiteratureNamespaces;
 import jakarta.xml.bind.annotation.XmlAttribute;
 import lombok.Getter;
 

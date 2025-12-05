@@ -6,7 +6,7 @@
                 <akn:FRBRWork>
                     <akn:FRBRthis value="regelungstext-1"/>
                     <akn:FRBRuri value="TODO"/>
-                    <akn:FRBRalias name="Dokumentnummer" value="SILU000000001"/>
+                    <akn:FRBRalias name="Dokumentnummer" value="XXLS000000001"/>
                     <akn:FRBRalias name="haupttitel" value="Literatur Test Dokument"/>
                     <akn:FRBRalias name="dokumentarischerTitel" value="Dokumentarischer Titel"/>
                     <akn:FRBRalias name="haupttitelZusatz" value="Titelzusatz"/>

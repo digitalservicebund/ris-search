@@ -1,5 +1,9 @@
 package de.bund.digitalservice.ris.search.models.ldml.literature.uli;
 
+import de.bund.digitalservice.ris.search.models.ldml.literature.FundstelleSelbstaendig;
+import de.bund.digitalservice.ris.search.models.ldml.literature.FundstelleUnselbstaendig;
+import de.bund.digitalservice.ris.search.models.ldml.literature.LiteratureNamespaces;
+import de.bund.digitalservice.ris.search.models.ldml.literature.NormReference;
 import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlElement;
 import lombok.Getter;
