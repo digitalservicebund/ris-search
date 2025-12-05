@@ -11,7 +11,7 @@ import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-class SilLiteratureLdmlToOpenSearchMapperTest {
+class SliLiteratureLdmlToOpenSearchMapperTest {
 
   private static final String VALID_XML =
       LoadXmlUtils.loadXmlAsString(Literature.class, "SILU000000001.akn.xml");

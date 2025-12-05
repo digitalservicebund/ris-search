@@ -2,19 +2,19 @@ package de.bund.digitalservice.ris.search.mapper;
 
 import de.bund.digitalservice.ris.search.caselawhandover.shared.caselawldml.FrbrLanguage;
 import de.bund.digitalservice.ris.search.exception.OpenSearchMapperException;
+import de.bund.digitalservice.ris.search.models.ldml.FRBRNumber;
+import de.bund.digitalservice.ris.search.models.ldml.FrbrExpression;
+import de.bund.digitalservice.ris.search.models.ldml.FrbrNameValueElement;
+import de.bund.digitalservice.ris.search.models.ldml.FrbrWork;
+import de.bund.digitalservice.ris.search.models.ldml.MainBody;
 import de.bund.digitalservice.ris.search.models.ldml.literature.sli.Analysis;
 import de.bund.digitalservice.ris.search.models.ldml.literature.sli.Block;
 import de.bund.digitalservice.ris.search.models.ldml.literature.sli.Doc;
-import de.bund.digitalservice.ris.search.models.ldml.literature.sli.FRBRNumber;
-import de.bund.digitalservice.ris.search.models.ldml.literature.sli.FrbrExpression;
-import de.bund.digitalservice.ris.search.models.ldml.literature.sli.FrbrNameValueElement;
-import de.bund.digitalservice.ris.search.models.ldml.literature.sli.FrbrWork;
 import de.bund.digitalservice.ris.search.models.ldml.literature.sli.Gliederung;
 import de.bund.digitalservice.ris.search.models.ldml.literature.sli.Identification;
 import de.bund.digitalservice.ris.search.models.ldml.literature.sli.ImplicitReference;
 import de.bund.digitalservice.ris.search.models.ldml.literature.sli.Keyword;
 import de.bund.digitalservice.ris.search.models.ldml.literature.sli.LiteratureLdml;
-import de.bund.digitalservice.ris.search.models.ldml.literature.sli.MainBody;
 import de.bund.digitalservice.ris.search.models.ldml.literature.sli.Meta;
 import de.bund.digitalservice.ris.search.models.ldml.literature.sli.Note;
 import de.bund.digitalservice.ris.search.models.ldml.literature.sli.Proprietary;
@@ -336,21 +336,6 @@ public class SliLiteratureLdmlToOpenSearchMapper {
         .stream()
         .filter(event -> eIds.contains(event.getEId()))
         .map(TlcOrganization::getName)
-        .toList();
-  }
-
-  private static List<String> extractTlcEvent(LiteratureLdml ldml, String type) {
-    var eIds = getFrbrAuthorReferenceLinks(ldml, type);
-
-    return Optional.ofNullable(ldml)
-        .map(LiteratureLdml::getDoc)
-        .map(Doc::getMeta)
-        .map(Meta::getReferences)
-        .map(References::getTlcEvents)
-        .orElse(Collections.emptyList())
-        .stream()
-        .filter(event -> eIds.contains(event.getEId()))
-        .map(TlcEvent::getShowAs)
         .toList();
   }
 

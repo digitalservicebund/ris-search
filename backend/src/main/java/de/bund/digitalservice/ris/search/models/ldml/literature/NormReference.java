@@ -1,4 +1,4 @@
-package de.bund.digitalservice.ris.search.models.ldml.literature.uli;
+package de.bund.digitalservice.ris.search.models.ldml.literature;
 
 import jakarta.xml.bind.annotation.XmlAttribute;
 import java.util.Date;

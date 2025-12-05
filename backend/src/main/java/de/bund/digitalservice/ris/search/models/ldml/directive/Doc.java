@@ -1,5 +1,6 @@
 package de.bund.digitalservice.ris.search.models.ldml.directive;
 
+import de.bund.digitalservice.ris.search.models.ldml.MainBody;
 import jakarta.xml.bind.annotation.XmlElement;
 import lombok.Getter;
 import lombok.Setter;
