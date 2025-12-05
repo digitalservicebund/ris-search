@@ -74,7 +74,7 @@ useStaticPageSeo("translations-list");
 </script>
 
 <template>
-  <ContentWrapper>
+  <ContentWrapper class="pb-32 lg:pb-64">
     <div class="container">
       <div class="flex items-center gap-8 print:hidden">
         <RisBreadcrumb :items="breadcrumbItems" />
@@ -114,28 +114,29 @@ useStaticPageSeo("translations-list");
           v-if="sortedTranslations !== null && sortedTranslations.length > 0"
           class="mt-48"
         >
-          <li v-for="t in sortedTranslations" :key="t['@id']">
+          <li
+            v-for="t in sortedTranslations"
+            :key="t['@id']"
+            class="my-16 flex flex-col gap-8 bg-white px-32 py-24"
+          >
+            <SearchResultHeader
+              :items="[
+                { value: t['@id'] },
+                { value: t.translationOfWork ?? '' },
+              ]"
+            />
+
             <NuxtLink
               :to="{ name: 'translations-id', params: { id: t['@id'] } }"
-              class="group my-16 block border-4 border-transparent bg-white p-8 px-32 py-24 no-underline hover:text-blue-800 hover:no-underline focus:border-blue-800"
+              class="ris-heading3-bold! ris-link1-regular max-w-title link-hover block"
             >
-              <div class="max-w-prose space-y-24">
-                <span class="mr-24 group-hover:underline">{{ t["@id"] }}</span>
-                <span class="group-hover:underline">{{
-                  t.translationOfWork
-                }}</span>
-
-                <h3
-                  class="ris-heading3-bold max-w-title mt-8 block text-balance text-blue-800 group-hover:underline"
-                >
-                  {{ t.name }}
-                </h3>
-
-                <p class="text-gray-900">{{ t.translator }}</p>
-              </div>
+              <h2>{{ t.name }}</h2>
             </NuxtLink>
+
+            <p class="text-gray-900">{{ t.translator }}</p>
           </li>
         </ul>
+
         <div v-else class="mt-8">
           <p class="font-bold">We didn’t find anything.</p>
           <p class="mb-16">
