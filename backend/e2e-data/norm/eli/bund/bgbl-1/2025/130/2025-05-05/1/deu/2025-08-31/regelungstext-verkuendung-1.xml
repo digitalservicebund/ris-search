@@ -1,0 +1,161 @@
+<?xml-model href="Grammatiken/legalDocML.de.sch" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<akn:akomaNtoso xmlns:akn="http://Inhaltsdaten.LegalDocML.de/1.8.2/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://MetadatenRIS.LegalDocML.de/1.8.2/ ../ris-norms-ldml-schema-extensions/1.8.2/legalDocML.de-metadaten-ris.xsd http://MetadatenRegelungstext.LegalDocML.de/1.8.2/ Grammatiken/legalDocML.de-metadaten-regelungstext.xsd http://MetadatenRechtsetzungsdokument.LegalDocML.de/1.8.2/ Grammatiken/legalDocML.de-metadaten-rechtsetzungsdokument.xsd http://Inhaltsdaten.LegalDocML.de/1.8.2/ Grammatiken/legalDocML.de-regelungstextverkuendungsfassung.xsd">
+    <akn:act name="/akn/ontology/de/concept/documenttype/bund/regelungstext-verkuendung">
+        <akn:meta GUID="8d7113d1-e517-4fa7-8b1f-28a1f8b506a4" eId="meta-n1">
+            <akn:identification GUID="1173c7e4-2d7e-435a-888f-1e70d59cd090" eId="meta-n1_ident-n1" source="attributsemantik-noch-undefiniert">
+                <akn:FRBRWork GUID="fccb94b5-9001-457e-8d83-e5903e7c2194" eId="meta-n1_ident-n1_frbrwork-n1">
+                    <akn:FRBRthis GUID="a14d714f-0823-4377-8ff9-851bcea551b3" eId="meta-n1_ident-n1_frbrwork-n1_frbrthis-n1" value="eli/bund/bgbl-1/2025/130/regelungstext-verkuendung-1"/>
+                    <akn:FRBRuri GUID="5cfabd40-a843-4a84-9f30-ba1af2e4b927" eId="meta-n1_ident-n1_frbrwork-n1_frbruri-n1" value="eli/bund/bgbl-1/2025/130"/>
+                    <akn:FRBRalias GUID="170bc651-ab53-4b25-8aa5-e9ef923fd7e6" eId="meta-n1_ident-n1_frbrwork-n1_frbralias-n1" name="übergreifende-id" value="73f9b3cc-2843-4887-a31a-5d8483567f68"/>
+                    <akn:FRBRdate GUID="b93b61fc-02a7-4327-b0e9-9d2f0bee489a" date="2025-05-05" eId="meta-n1_ident-n1_frbrwork-n1_frbrdate-n1" name="verkuendungsfassung-verkuendungsdatum"/>
+                    <akn:FRBRauthor GUID="bf6d77c7-4afb-4dd2-880b-ed187be66646" eId="meta-n1_ident-n1_frbrwork-n1_frbrauthor-n1" href="recht.bund.de/institution/bundesregierung"/>
+                    <akn:FRBRcountry GUID="1eb3231a-6c5f-4eb1-b654-2213f4ce77d2" eId="meta-n1_ident-n1_frbrwork-n1_frbrcountry-n1" value="de"/>
+                    <akn:FRBRnumber GUID="acb9b18e-b0db-4277-b888-1ea06caf2c3d" eId="meta-n1_ident-n1_frbrwork-n1_frbrnumber-n1" value="130"/>
+                    <akn:FRBRname GUID="26854d3a-8b21-4d2a-b622-85afc5a1f5b6" eId="meta-n1_ident-n1_frbrwork-n1_frbrname-n1" value="bgbl-1"/>
+                    <akn:FRBRsubtype GUID="b166a4af-0243-49b0-89ed-1120b330a7fc" eId="meta-n1_ident-n1_frbrwork-n1_frbrsubtype-n1" value="regelungstext-verkuendung-1"/>
+                </akn:FRBRWork>
+                <akn:FRBRExpression GUID="7dbb55a5-6b25-4f54-bb63-a4bfa67b83c5" eId="meta-n1_ident-n1_frbrexpression-n1">
+                    <akn:FRBRthis GUID="adc9dc51-fcaf-4178-9fea-b4ba0e40ece6" eId="meta-n1_ident-n1_frbrexpression-n1_frbrthis-n1" value="eli/bund/bgbl-1/2025/130/2025-05-05/1/deu/regelungstext-verkuendung-1"/>
+                    <akn:FRBRuri GUID="64982da9-7e3c-450f-8040-9cafd4fc9b88" eId="meta-n1_ident-n1_frbrexpression-n1_frbruri-n1" value="eli/bund/bgbl-1/2025/130/2025-05-05/1/deu"/>
+                    <akn:FRBRalias GUID="37a474a3-015a-4ae7-aba5-d057e3772dbe" eId="meta-n1_ident-n1_frbrexpression-n1_frbralias-n1" name="aktuelle-version-id" value="93bb10b5-ace1-4cbb-b4b6-61dcb3d0104a"/>
+                    <akn:FRBRalias GUID="c4524191-4068-4f5f-babd-864eedc312c5" eId="meta-n1_ident-n1_frbrexpression-n1_frbralias-n2" name="nachfolgende-version-id" value="1b72a07d-db77-43aa-9eae-7aa8ea95801c"/>
+                    <akn:FRBRauthor GUID="0c7d222b-713e-45f6-90eb-65f09de83361" eId="meta-n1_ident-n1_frbrexpression-n1_frbrauthor-n1" href="recht.bund.de/institution/bundesregierung"/>
+                    <akn:FRBRdate GUID="52212c57-f0e5-4e34-a877-6a9a5ae91a25" date="2025-05-05" eId="meta-n1_ident-n1_frbrexpression-n1_frbrdate-n1" name="verkuendung"/>
+                    <akn:FRBRlanguage GUID="8e443162-322e-46c7-8299-93a3b1eed3d6" eId="meta-n1_ident-n1_frbrexpression-n1_frbrlanguage-n1" language="deu"/>
+                    <akn:FRBRversionNumber GUID="095d57f1-1ac8-40e1-b058-0742293d565a" eId="meta-n1_ident-n1_frbrexpression-n1_frbrversionnumber-n1" value="1"/>
+                </akn:FRBRExpression>
+                <akn:FRBRManifestation GUID="14c71d63-a3a5-429f-a02a-515c6d8f9856" eId="meta-n1_ident-n1_frbrmanifestation-n1">
+                    <akn:FRBRthis GUID="837abda6-834c-4a0d-90cc-e796c097883a" eId="meta-n1_ident-n1_frbrmanifestation-n1_frbrthis-n1" value="eli/bund/bgbl-1/2025/130/2025-05-05/1/deu/2025-08-31/regelungstext-verkuendung-1.xml"/>
+                    <akn:FRBRuri GUID="e7407a76-10c0-42e0-b670-191cdb06c0df" eId="meta-n1_ident-n1_frbrmanifestation-n1_frbruri-n1" value="eli/bund/bgbl-1/2025/130/2025-05-05/1/deu/2025-08-31/regelungstext-verkuendung-1.xml"/>
+                    <akn:FRBRdate GUID="bca88a80-1ef5-4b51-b12c-6e769fe7ccac" date="2025-08-31" eId="meta-n1_ident-n1_frbrmanifestation-n1_frbrdate-n1" name="generierung"/>
+                    <akn:FRBRauthor GUID="326957aa-d576-4196-8115-73c5f9970c28" eId="meta-n1_ident-n1_frbrmanifestation-n1_frbrauthor-n1" href="recht.bund.de"/>
+                    <akn:FRBRformat GUID="07eec8c4-c0b5-4ab6-9bbe-d7c0c5bfae4a" eId="meta-n1_ident-n1_frbrmanifestation-n1_frbrformat-n1" value="xml"/>
+                </akn:FRBRManifestation>
+            </akn:identification>
+            <akn:lifecycle GUID="9f28870f-3f2f-479d-9c55-46fc321bc5ce" eId="meta-n1_lebzykl-n1" source="attributsemantik-noch-undefiniert">
+                <akn:eventRef GUID="a4e96ea8-8242-4611-8dee-be863daac74b" date="2037-03-31" eId="meta-n1_lebzykl-n1_ereignis-n1" refersTo="ausserkrafttreten" source="attributsemantik-noch-undefiniert" type="repeal"/>
+                <akn:eventRef GUID="68cfab65-c077-407b-84bc-0b05af24818e" date="2025-05-05" eId="meta-n1_lebzykl-n1_ereignis-n2" refersTo="ausfertigung" source="attributsemantik-noch-undefiniert" type="generation"/>
+                <akn:eventRef GUID="6a2005d3-b9f2-4d7f-a123-a4291763a796" date="2025-05-06" eId="meta-n1_lebzykl-n1_ereignis-n3" refersTo="inkrafttreten" source="attributsemantik-noch-undefiniert" type="generation"/>
+                <akn:eventRef GUID="67302364-bbe1-4236-af01-945111e8bab7" date="2037-03-31" eId="meta-n1_lebzykl-n1_ereignis-n4" refersTo="ausserkrafttreten" source="attributsemantik-noch-undefiniert" type="generation"/>
+            </akn:lifecycle>
+            <akn:temporalData GUID="0f0aa047-a463-42d9-a2c3-0bfd9ae65d1d" eId="meta-n1_geltzeiten-n1" source="attributsemantik-noch-undefiniert">
+                <akn:temporalGroup GUID="2ed10fc1-c82b-48df-a28f-0d496b07cd79" eId="meta-n1_geltzeiten-n1_geltungszeitgr-n1">
+                    <akn:timeInterval GUID="0c955c52-0808-4eef-b448-0561c19b2450" eId="meta-n1_geltzeiten-n1_geltungszeitgr-n1_gelzeitintervall-n1" end="#meta-n1_lebzykl-n1_ereignis-n4" refersTo="geltungszeit" start="#meta-n1_lebzykl-n1_ereignis-n3"/>
+                </akn:temporalGroup>
+            </akn:temporalData>
+            <akn:notes source="attributsemantik-noch-undefiniert">
+                <akn:note GUID="68b09fd3-6e73-475e-a5d4-d92f4e6ee95d" eId="meta-n1_editfnote-n1" marker="#" placementBase="#einleitung-n1" refersTo="kommentierende-fussnote">
+                    <akn:p GUID="53e989aa-48f5-46b5-abc4-ae84b87276a4" eId="meta-n1_editfnote-n1_text-n1">*T (+++ Textnachweis ab: 6.5.2025 +++)</akn:p>
+                </akn:note>
+                <akn:note GUID="daaf9219-9b47-4683-b7a5-9a0862007f94" eId="meta-n1_editfnote-n2" marker="#" placementBase="#einleitung-n1" refersTo="aenderungsfussnote">
+                    <akn:p GUID="0394af99-a922-4349-aa71-ae7170dac850" eId="meta-n1_editfnote-n2_text-n1">*/</akn:p>
+                </akn:note>
+            </akn:notes>
+            <akn:proprietary GUID="a2bbae34-974e-48cc-9731-f99f56d4a346" eId="meta-n1_proprietary-n1" source="attributsemantik-noch-undefiniert">
+                <regtxt:legalDocML.de_metadaten xmlns:regtxt="http://MetadatenRegelungstext.LegalDocML.de/1.8.2/" xsi:schemaLocation="http://MetadatenRegelungstext.LegalDocML.de/1.8.2/ Grammatiken/legalDocML.de-metadaten-regelungstext.xsd">
+                    <regtxt:typ>verordnung</regtxt:typ>
+                    <regtxt:form>stammform</regtxt:form>
+                </regtxt:legalDocML.de_metadaten>
+                <ris:legalDocML.de_metadaten xmlns:ris="http://MetadatenRIS.LegalDocML.de/1.8.2/" xsi:schemaLocation="http://MetadatenRIS.LegalDocML.de/1.8.2/ ../ris-norms-ldml-schema-extensions/1.8.2/legalDocML.de-metadaten-ris.xsd">
+                    <ris:abkuerzung refersTo="interne-abkuerzung">GeGuGe 2025</ris:abkuerzung>
+                    <ris:inkraft date="2025-05-06"/>
+                    <ris:ausserkraft date="2037-03-31"/>
+                    <ris:vollzitat>Gerade Gültig Gesetz vom 3. April 2025 (BGBl. 2025 I Nr. 240)</ris:vollzitat>
+                    <ris:standangabe type="aufh">V aufgeh. durch § 2 dieser V mit Ablauf d. 31.3.2027</ris:standangabe>
+                </ris:legalDocML.de_metadaten>
+            </akn:proprietary>
+        </akn:meta>
+        <akn:preface GUID="bff66c49-6cf8-4ae5-a1a3-a589e1ef4ef9" eId="einleitung-n1">
+            <akn:longTitle GUID="8e6cb547-e797-4411-812b-3c9a3f086ecd" eId="einleitung-n1_doktitel-n1">
+                <akn:p GUID="7b44727a-aeda-4b1e-95df-2ded3f6ccde7" eId="einleitung-n1_doktitel-n1_text-n1">
+                    <akn:docStage GUID="b750346b-d871-4730-8494-1b3b5f210647" eId="einleitung-n1_doktitel-n1_text-n1_docstadium-n1"/>
+                    <akn:docTitle GUID="9238d9ad-d86a-48d4-94fd-ee2c7987ea42" eId="einleitung-n1_doktitel-n1_text-n1_doctitel-n1">Gerade gültiges Gesetz</akn:docTitle>
+                    <akn:shortTitle GUID="249cb043-7fb5-4730-8952-ae6f90290b58" eId="einleitung-n1_doktitel-n1_text-n1_kurztitel-n1">
+                        (Geradegültiggesetz -
+                        <akn:inline GUID="b55ca73c-329a-48ad-b91e-e1643d283af6" eId="einleitung-n1_doktitel-n1_text-n1_kurztitel-n1_inline-n1" name="attributsemantik-noch-undefiniert" refersTo="amtliche-abkuerzung">GeGuGe 2025</akn:inline>
+                        )
+                    </akn:shortTitle>
+                </akn:p>
+            </akn:longTitle>
+            <akn:block GUID="27e218f4-be91-4fc9-bbfb-503c624de8d0" eId="einleitung-n1_block-n1" name="attributsemantik-noch-undefiniert">
+                <akn:date GUID="b77a6580-9501-42e1-b0d0-3acdb823541d" date="2025-05-05" eId="einleitung-n1_block-n1_datum-n1" refersTo="ausfertigung-datum"/>
+            </akn:block>
+        </akn:preface>
+        <akn:preamble GUID="dca6fbcc-6a7c-4dba-8c3d-e0e026969479" eId="präambel-n1">
+            <akn:formula GUID="7de4b557-612b-4e98-bf23-497ceddc9d52" eId="präambel-n1_formel-n1" name="attributsemantik-noch-undefiniert" refersTo="eingangsformel">
+                <akn:p GUID="46d59b62-02ec-4bd1-ac0f-5ca7348ee22b" eId="präambel-n1_formel-n1_text-n1">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat:</akn:p>
+            </akn:formula>
+        </akn:preamble>
+        <akn:body GUID="d32baca2-acf3-48f0-904f-d3c0b7457538" eId="hauptteil-n1">
+            <akn:article GUID="7875f695-e238-4671-88dd-7eed28fe9ca7" eId="art-z1" period="#meta-n1_geltzeiten-n1_geltungszeitgr-n1">
+                <akn:num GUID="507d362a-a4d4-4a55-a683-f5c4a5376a27" eId="art-z1_bezeichnung-n1">§ 1</akn:num>
+                <akn:heading GUID="26bdf2f5-5bf1-472a-959e-713735137b22" eId="art-z1_überschrift-n1">Gültiger Paragraph</akn:heading>
+                <akn:paragraph GUID="07fa0ebc-62b6-4415-856c-4d1bfba93c63" eId="art-z1_abs-z">
+                    <akn:num GUID="dbf0b2ff-a9c2-4115-bb49-5c2e9d89ea28" eId="art-z1_abs-z_bezeichnung-n1"/>
+                    <akn:content GUID="3915e06c-865b-4a47-a085-9ab5e8c3597f" eId="art-z1_abs-z_inhalt-n1">
+                        <akn:p GUID="883f1e59-e547-4254-920f-1ac275d63690" eId="art-z1_abs-z_inhalt-n1_text-n1">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat: </akn:p>
+                        <akn:blockList GUID="4aaa624c-1d1f-40cc-8ba1-dd8de53249e0" eId="art-z1_abs-z_inhalt-n1_liste-n1">
+                            <akn:item GUID="af44a058-23f9-4b6b-aa1c-55f1f173583b" eId="art-z1_abs-z_inhalt-n1_liste-n1_listenelem-n1">
+                                <akn:num GUID="b2870dab-92b9-4aa9-b049-10a98b698e03" eId="art-z1_abs-z_inhalt-n1_liste-n1_listenelem-n1_bezeichnung-n1">1.</akn:num>
+                                <akn:p GUID="525494f9-4469-435e-94f3-10e34544eab5" eId="art-z1_abs-z_inhalt-n1_liste-n1_listenelem-n1_text-n1">At vero eos et accusam et justo</akn:p>
+                                <akn:blockList GUID="f0bdf56a-1dfa-4bee-85f9-0f11cb649245" eId="art-z1_abs-z_inhalt-n1_liste-n1_listenelem-n1_liste-n1">
+                                    <akn:item GUID="753765d0-1705-4e7d-8de9-6bfc21d17dab" eId="art-z1_abs-z_inhalt-n1_liste-n1_listenelem-n1_liste-n1_listenelem-n1">
+                                        <akn:num GUID="91741975-5e5b-4b05-9486-05ee34a84a48" eId="art-z1_abs-z_inhalt-n1_liste-n1_listenelem-n1_liste-n1_listenelem-n1_bezeichnung-n1">a)</akn:num>
+                                        <akn:p GUID="745e04c7-f4e0-4d1a-9b7b-768a84ad61b6" eId="art-z1_abs-z_inhalt-n1_liste-n1_listenelem-n1_liste-n1_listenelem-n1_text-n1">At vero eos et accusam et justo,</akn:p>
+                                    </akn:item>
+                                    <akn:item GUID="bd0fba26-2062-49ba-b8cd-5155252e9246" eId="art-z1_abs-z_inhalt-n1_liste-n1_listenelem-n1_liste-n1_listenelem-n2">
+                                        <akn:num GUID="8d14d2fd-0d5d-4bd4-a6e7-9efe844313f3" eId="art-z1_abs-z_inhalt-n1_liste-n1_listenelem-n1_liste-n1_listenelem-n2_bezeichnung-n1">b)</akn:num>
+                                        <akn:p GUID="d8ce93e4-ad94-4e8c-8e73-30fbb10c7b40" eId="art-z1_abs-z_inhalt-n1_liste-n1_listenelem-n1_liste-n1_listenelem-n2_text-n1">Stet clita kasd gubergren, no sea takimata sanctus,</akn:p>
+                                    </akn:item>
+                                </akn:blockList>
+                            </akn:item>
+                            <akn:item GUID="2f153bcd-9926-4a28-9312-48862d396644" eId="art-z1_abs-z_inhalt-n1_liste-n1_listenelem-n2">
+                                <akn:num GUID="381fb6d5-6650-48f0-949a-8bb4e127eb8c" eId="art-z1_abs-z_inhalt-n1_liste-n1_listenelem-n2_bezeichnung-n1">2.</akn:num>
+                                <akn:p GUID="87bdf625-e4b0-48bd-901f-34a422b575df" eId="art-z1_abs-z_inhalt-n1_liste-n1_listenelem-n2_text-n1">At vero eos et accusam et justo, </akn:p>
+                                <akn:blockList GUID="1d7fd5c2-2e4e-4705-a203-c898d301e7cf" eId="art-z1_abs-z_inhalt-n1_liste-n1_listenelem-n2_liste-n1">
+                                    <akn:item GUID="ffd92a67-8377-4f79-880c-28b7e6e75518" eId="art-z1_abs-z_inhalt-n1_liste-n1_listenelem-n2_liste-n1_listenelem-n1">
+                                        <akn:num GUID="06584cf0-2b89-4b7a-a352-8270dcaab939" eId="art-z1_abs-z_inhalt-n1_liste-n1_listenelem-n2_liste-n1_listenelem-n1_bezeichnung-n1">a)</akn:num>
+                                        <akn:p GUID="0d2451d0-a4ef-4049-a1b9-397fe5a3cecd" eId="art-z1_abs-z_inhalt-n1_liste-n1_listenelem-n2_liste-n1_listenelem-n1_text-n1">Stet clita kasd gubergren, no sea takimata sanctus,,</akn:p>
+                                    </akn:item>
+                                    <akn:item GUID="3070bfd4-a091-42e2-a768-486a83329974" eId="art-z1_abs-z_inhalt-n1_liste-n1_listenelem-n2_liste-n1_listenelem-n2">
+                                        <akn:num GUID="2d74790f-a410-4fff-a292-ef21bbc91d88" eId="art-z1_abs-z_inhalt-n1_liste-n1_listenelem-n2_liste-n1_listenelem-n2_bezeichnung-n1">b)</akn:num>
+                                        <akn:p GUID="98216326-8918-4811-ad23-1eab13e3396e" eId="art-z1_abs-z_inhalt-n1_liste-n1_listenelem-n2_liste-n1_listenelem-n2_text-n1">
+                                            40 Prozent in jeder der Gasspeicheranlagen Bierwang, Breitbrunn, Inzenham-West und Wolfersberg.
+                                            <akn:marker GUID="43435708-cffa-4191-ba46-f1c199ed2639" eId="art-z1_abs-z_inhalt-n1_liste-n1_listenelem-n2_liste-n1_listenelem-n2_text-n1_marker-n1" refersTo="satzende"/>
+                                        </akn:p>
+                                    </akn:item>
+                                </akn:blockList>
+                            </akn:item>
+                        </akn:blockList>
+                    </akn:content>
+                </akn:paragraph>
+            </akn:article>
+            <akn:article GUID="2c6741e9-dce7-43e9-8ca3-b6a5190034c0" eId="art-z2" period="#meta-n1_geltzeiten-n1_geltungszeitgr-n1" refersTo="geltungszeitregel-ausserkrafttreten">
+                <akn:num GUID="9a79bf4c-d4c4-4204-b8df-e807365377f0" eId="art-z2_bezeichnung-n1">§ 2</akn:num>
+                <akn:heading GUID="a5758b49-889d-487a-a76d-8e4064ce12ec" eId="art-z2_überschrift-n1">Außerkrafttreten</akn:heading>
+                <akn:paragraph GUID="31696588-1949-4a9f-bd96-58e5ae7d5e25" eId="art-z2_abs-z">
+                    <akn:num GUID="ede2a36d-628a-46ea-b18e-768029d26a6c" eId="art-z2_abs-z_bezeichnung-n1"/>
+                    <akn:content GUID="8514cb4e-0763-4b2a-bf83-0a9fb5047d7a" eId="art-z2_abs-z_inhalt-n1">
+                        <akn:p GUID="114e0b95-48da-4f99-9829-8dd6a00e8bb9" eId="art-z2_abs-z_inhalt-n1_text-n1">
+                            Diese Verordnung tritt mit Ablauf des 31. März 2037 außer Kraft.
+                            <akn:marker GUID="564673d2-321e-448b-8be9-fdb345acfa3e" eId="art-z2_abs-z_inhalt-n1_text-n1_marker-n1" refersTo="satzende"/>
+                        </akn:p>
+                    </akn:content>
+                </akn:paragraph>
+            </akn:article>
+            <akn:article GUID="d7514fb0-ed59-4819-ad6a-0e7e2229b758" eId="art-z3" period="#meta-n1_geltzeiten-n1_geltungszeitgr-n1" refersTo="geltungszeitregel-inkrafttreten">
+                <akn:num GUID="bf2b3742-45c3-4692-9ade-caf17f6b608f" eId="art-z3_bezeichnung-n1">§ 3</akn:num>
+                <akn:heading GUID="9a4ce542-76d5-4252-b03a-1459b7d0b836" eId="art-z3_überschrift-n1">Inkrafttreten</akn:heading>
+                <akn:paragraph GUID="f71eaaba-36be-4c4e-8671-dbfd07378133" eId="art-z3_abs-z">
+                    <akn:num GUID="ed31d243-2de8-4ed5-9788-92a7c6cc3701" eId="art-z3_abs-z_bezeichnung-n1"/>
+                    <akn:content GUID="7c14918c-db0c-47de-a5c8-54697be9ee88" eId="art-z3_abs-z_inhalt-n1">
+                        <akn:p GUID="36a51c9e-c733-4de9-a088-1314b04a224e" eId="art-z3_abs-z_inhalt-n1_text-n1">
+                            Diese Verordnung tritt am Tag nach der Verkündung in Kraft.
+                            <akn:marker GUID="c37f2383-fd2d-4c8d-9d37-529de0001074" eId="art-z3_abs-z_inhalt-n1_text-n1_marker-n1" refersTo="satzende"/>
+                        </akn:p>
+                    </akn:content>
+                </akn:paragraph>
+            </akn:article>
+        </akn:body>
+    </akn:act>
+</akn:akomaNtoso>

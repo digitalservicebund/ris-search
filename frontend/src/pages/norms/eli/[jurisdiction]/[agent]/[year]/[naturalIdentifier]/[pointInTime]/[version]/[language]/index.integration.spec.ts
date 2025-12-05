@@ -3,7 +3,7 @@ import type { VueWrapper } from "@vue/test-utils";
 import { describe, it, expect, vi } from "vitest";
 import Index from "./index.vue";
 import NormActionsMenu from "~/components/ActionMenu/NormActionsMenu.vue";
-import NormMetadataFields from "~/components/Norm/Metadatafields/NormMetadataFields.vue";
+import Metadata from "~/components/Metadata.vue";
 import type { NormContent } from "~/composables/useNormData";
 import type { LegislationWork } from "~/types";
 
@@ -320,6 +320,6 @@ describe("index", () => {
   it("renders metadata fields", async () => {
     mockMetadata();
     const wrapper = await mountComponent();
-    expect(wrapper.findComponent(NormMetadataFields).exists()).toBeTruthy();
+    expect(wrapper.findComponent(Metadata).exists()).toBeTruthy();
   });
 });
