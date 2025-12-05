@@ -71,7 +71,7 @@ function trackResultClick() {
     <NuxtLink
       :to="detailPageRoute"
       :aria-describedby="resultTypeId"
-      class="ris-heading3-bold max-w-title link-hover block text-blue-800"
+      class="ris-heading3-bold! ris-link1-regular max-w-title link-hover block"
       @click="trackResultClick()"
     >
       <h2>
