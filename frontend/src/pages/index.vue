@@ -1,11 +1,10 @@
 <script setup lang="ts">
 import Message from "primevue/message";
-import { NuxtLink } from "#components";
+import { ExternalLink, NuxtLink } from "#components";
 import bmjvLogo from "~/assets/img/BMJV_de_v1__Web_farbig.svg";
 import SimpleSearchInput from "~/components/Search/SimpleSearchInput.vue";
 import { usePrivateFeaturesFlag } from "~/composables/usePrivateFeaturesFlag";
 import { useStaticPageSeo } from "~/composables/useStaticPageSeo";
-import IcBaselineLaunch from "~icons/ic/baseline-launch";
 
 function redirectToSearch(searchStr?: string) {
   navigateTo({ name: "search", query: searchStr ? { query: searchStr } : {} });
@@ -118,11 +117,10 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
 
       <div>
         <Button
-          :as="NuxtLink"
-          to="https://docs.rechtsinformationen.bund.de"
-          target="_blank"
+          :as="ExternalLink"
+          url="https://docs.rechtsinformationen.bund.de"
         >
-          Zur API-Dokumentation <IcBaselineLaunch />
+          Zur API-Dokumentation
         </Button>
       </div>
     </FeatureCard>

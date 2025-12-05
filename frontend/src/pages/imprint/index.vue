@@ -25,9 +25,9 @@ useStaticPageSeo("impressum");
             <a href="mailto:poststelle@bmj.bund.de" class="ris-link1-regular"
               >poststelle@bmj.bund.de</a
             ><br />Internet:
-            <NuxtLink to="https://www.bmj.de" class="ris-link1-regular">
+            <ExternalLink url="https://www.bmj.de" class="ris-link1-regular">
               www.bmj.de
-            </NuxtLink>
+            </ExternalLink>
           </p>
         </section>
         <section>
