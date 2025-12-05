@@ -38,6 +38,7 @@ public record AdministrativeDirectiveSearchSchema(
     @Nullable @Schema(description = "Kurzreferat") String shortReport,
     @Schema(description = "Dokumenttyp", example = "VV") String documentType,
     @Schema(description = "Aktenzeichen", example = "['ZZ', 'YY']") List<String> referenceNumbers,
+    @Nullable @Schema(description = "Normgeber") String legislationAuthority,
     @Nullable @Schema(description = "Gültig ab Datum", example = "2003-12-15")
         LocalDate entryIntoForceDate)
     implements AbstractDocumentSchema {}

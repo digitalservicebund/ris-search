@@ -102,6 +102,7 @@ public class AdministrativeDirectiveSearchSchemaMapper {
         .shortReport(doc.shortReport())
         .entryIntoForceDate(doc.entryIntoEffectDate())
         .referenceNumbers(doc.referenceNumbers())
+        .legislationAuthority(doc.legislationAuthority())
         .documentType(doc.documentType())
         .build();
   }
