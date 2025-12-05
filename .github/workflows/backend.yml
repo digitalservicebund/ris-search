@@ -89,13 +89,14 @@ jobs:
         uses: gradle/actions/setup-gradle@v5.0.0
       - name: Build container image
         working-directory: ./backend
-        run: docker build \
+        run: docker buildx build \
           --file ./backend/Dockerfile.prod \
           --tag ${{ inputs.container-image-tag }}:${{ inputs.container-image-version }} \
           --secret id=GH_PACKAGES_REPOSITORY_USER,env=GH_PACKAGES_REPOSITORY_USER \
           --secret id=GH_PACKAGES_REPOSITORY_TOKEN,env=GH_PACKAGES_REPOSITORY_TOKEN \
           --secret id=SENTRY_DSN,env=SENTRY_DSN \
           --secret id=SENTRY_AUTH_TOKEN,env=SENTRY_AUTH_TOKEN \
+          --load \
           ./backend
         env:
           GH_PACKAGES_REPOSITORY_USER: ${{ secrets.GH_PACKAGES_REPOSITORY_USER }} # Secrets must not start with "GITHUB_".
@@ -253,15 +254,16 @@ jobs:
           registry: ${{ inputs.container-registry }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Build and publish container image
+      - name: Build container image
         working-directory: ./backend
-        run:  docker build \
+        run: docker buildx build \
           --file ./backend/Dockerfile.prod \
           --tag ${{ inputs.container-image-tag }}:${{ inputs.container-image-version }} \
           --secret id=GH_PACKAGES_REPOSITORY_USER,env=GH_PACKAGES_REPOSITORY_USER \
           --secret id=GH_PACKAGES_REPOSITORY_TOKEN,env=GH_PACKAGES_REPOSITORY_TOKEN \
           --secret id=SENTRY_DSN,env=SENTRY_DSN \
           --secret id=SENTRY_AUTH_TOKEN,env=SENTRY_AUTH_TOKEN \
+          --load \
           ./backend
         env:
           GH_PACKAGES_REPOSITORY_USER: ${{ secrets.GH_PACKAGES_REPOSITORY_USER }}
