@@ -428,7 +428,7 @@ test.describe("can view metadata of norma and articles", () => {
     ).toHaveText(["Abkürzung", "GeGuGe 2025", "Status", "—"]);
   });
 
-  test("can view metadata in a single article when private Features disabled", async ({
+  test("can view full set of metadata in a single article when private Features enabled", async ({
     page,
     privateFeaturesEnabled,
   }) => {
