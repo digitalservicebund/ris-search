@@ -88,20 +88,23 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v5.0.0
       - name: Build container image
-        run: docker build backend \
-          --file ./backend/Dockerfile.prod \
-          --tag ${{ inputs.container-image-tag }}:${{ inputs.container-image-version }} \
-          --secret id=GH_PACKAGES_REPOSITORY_USER,env=GH_PACKAGES_REPOSITORY_USER \
-          --secret id=GH_PACKAGES_REPOSITORY_TOKEN,env=GH_PACKAGES_REPOSITORY_TOKEN \
-          --secret id=SENTRY_DSN,env=SENTRY_DSN \
-          --secret id=SENTRY_AUTH_TOKEN,env=SENTRY_AUTH_TOKEN \
-          --load \
-          ./backend
+        run: |
+          docker build \
+            --file ./backend/Dockerfile.prod \
+            --tag ${{ env.CONTAINER_IMAGE_TAG }}:${{ env.CONTAINER_IMAGE_VERSION }} \
+            --secret id=GH_PACKAGES_REPOSITORY_USER,env=GH_PACKAGES_REPOSITORY_USER \
+            --secret id=GH_PACKAGES_REPOSITORY_TOKEN,env=GH_PACKAGES_REPOSITORY_TOKEN \
+            --secret id=SENTRY_DSN,env=SENTRY_DSN \
+            --secret id=SENTRY_AUTH_TOKEN,env=SENTRY_AUTH_TOKEN \
+            --load \
+            ./backend
         env:
           GH_PACKAGES_REPOSITORY_USER: ${{ secrets.GH_PACKAGES_REPOSITORY_USER }} # Secrets must not start with "GITHUB_".
           GH_PACKAGES_REPOSITORY_TOKEN: ${{ secrets.GH_PACKAGES_REPOSITORY_TOKEN }}
           SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          CONTAINER_IMAGE_TAG: ${{ inputs.container-image-tag }}
+          CONTAINER_IMAGE_VERSION: ${{ inputs.container-image-version }}
       - name: Run Trivy vulnerability scanner
         # Third-party action, pin to commit SHA!
         # See https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions
@@ -254,20 +257,23 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Build container image
-        run: docker build backend \
-          --file ./backend/Dockerfile.prod \
-          --tag ${{ inputs.container-image-tag }}:${{ inputs.container-image-version }} \
-          --secret id=GH_PACKAGES_REPOSITORY_USER,env=GH_PACKAGES_REPOSITORY_USER \
-          --secret id=GH_PACKAGES_REPOSITORY_TOKEN,env=GH_PACKAGES_REPOSITORY_TOKEN \
-          --secret id=SENTRY_DSN,env=SENTRY_DSN \
-          --secret id=SENTRY_AUTH_TOKEN,env=SENTRY_AUTH_TOKEN \
-          --load \
-          ./backend
+        run: |
+          docker build \
+            --file ./backend/Dockerfile.prod \
+            --tag ${{ env.CONTAINER_IMAGE_TAG }}:${{ env.CONTAINER_IMAGE_VERSION }} \
+            --secret id=GH_PACKAGES_REPOSITORY_USER,env=GH_PACKAGES_REPOSITORY_USER \
+            --secret id=GH_PACKAGES_REPOSITORY_TOKEN,env=GH_PACKAGES_REPOSITORY_TOKEN \
+            --secret id=SENTRY_DSN,env=SENTRY_DSN \
+            --secret id=SENTRY_AUTH_TOKEN,env=SENTRY_AUTH_TOKEN \
+            --load \
+            ./backend
         env:
-          GH_PACKAGES_REPOSITORY_USER: ${{ secrets.GH_PACKAGES_REPOSITORY_USER }}
+          GH_PACKAGES_REPOSITORY_USER: ${{ secrets.GH_PACKAGES_REPOSITORY_USER }} # Secrets must not start with "GITHUB_".
           GH_PACKAGES_REPOSITORY_TOKEN: ${{ secrets.GH_PACKAGES_REPOSITORY_TOKEN }}
           SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          CONTAINER_IMAGE_TAG: ${{ inputs.container-image-tag }}
+          CONTAINER_IMAGE_VERSION: ${{ inputs.container-image-version }}
       - name: Install cosign
         # Third-party action, pin to commit SHA!
         # See https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions
