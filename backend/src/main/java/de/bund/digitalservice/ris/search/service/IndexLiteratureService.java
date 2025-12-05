@@ -2,7 +2,7 @@ package de.bund.digitalservice.ris.search.service;
 
 import de.bund.digitalservice.ris.search.exception.OpenSearchMapperException;
 import de.bund.digitalservice.ris.search.mapper.LiteratureLdmlToOpenSearchMapper;
-import de.bund.digitalservice.ris.search.mapper.SilLiteratureLdmlToOpenSearchMapper;
+import de.bund.digitalservice.ris.search.mapper.SliLiteratureLdmlToOpenSearchMapper;
 import de.bund.digitalservice.ris.search.models.opensearch.Literature;
 import de.bund.digitalservice.ris.search.repository.objectstorage.LiteratureBucket;
 import de.bund.digitalservice.ris.search.repository.opensearch.LiteratureRepository;
@@ -37,7 +37,7 @@ public class IndexLiteratureService extends BaseIndexService<Literature> {
         }
         case "LS" -> {
           return Optional.of(
-              SilLiteratureLdmlToOpenSearchMapper.mapLdml(fileContent, Instant.now()));
+              SliLiteratureLdmlToOpenSearchMapper.mapLdml(fileContent, Instant.now()));
         }
         default -> {
           String msg = "unknown literaturetype " + filename;
