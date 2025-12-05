@@ -6,6 +6,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.integration.config.ContainersIntegrationBase;
+import de.bund.digitalservice.ris.search.repository.opensearch.AdministrativeDirectiveRepository;
 import de.bund.digitalservice.ris.search.repository.opensearch.CaseLawRepository;
 import de.bund.digitalservice.ris.search.repository.opensearch.LiteratureRepository;
 import de.bund.digitalservice.ris.search.repository.opensearch.NormsRepository;
@@ -28,6 +29,7 @@ class StatisticsControllerTest extends ContainersIntegrationBase {
   @Autowired private CaseLawRepository caseLawRepository;
   @Autowired private LiteratureRepository literatureRepository;
   @Autowired private NormsRepository normsRepository;
+  @Autowired private AdministrativeDirectiveRepository administrativeDirectiveRepository;
 
   @BeforeEach
   void setUpSearchControllerApiTest() {
@@ -40,12 +42,15 @@ class StatisticsControllerTest extends ContainersIntegrationBase {
     long caseLawCount = caseLawRepository.count();
     long literatureCount = literatureRepository.count();
     long normsCount = normsRepository.count();
+    long administrativeDirectiveCount = administrativeDirectiveRepository.count();
 
     mockMvc
         .perform(get(ApiConfig.Paths.STATISTICS).contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.legislation.count").value(normsCount))
         .andExpect(jsonPath("$.case-law.count").value(caseLawCount))
-        .andExpect(jsonPath("$.literature.count").value(literatureCount));
+        .andExpect(jsonPath("$.literature.count").value(literatureCount))
+        .andExpect(
+            jsonPath("$.administrative-directive.count").value(administrativeDirectiveCount));
   }
 }

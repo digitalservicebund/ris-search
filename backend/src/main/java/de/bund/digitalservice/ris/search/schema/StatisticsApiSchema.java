@@ -18,4 +18,5 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public record StatisticsApiSchema(
     @JsonProperty("legislation") StatisticsCountSchema legislation,
     @JsonProperty("case-law") StatisticsCountSchema caseLaw,
-    @JsonProperty("literature") StatisticsCountSchema literature) {}
+    @JsonProperty("literature") StatisticsCountSchema literature,
+    @JsonProperty("administrative-directive") StatisticsCountSchema administrativeDirective) {}

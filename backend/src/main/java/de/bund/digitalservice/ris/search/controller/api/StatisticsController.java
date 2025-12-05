@@ -24,9 +24,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(ApiConfig.Paths.STATISTICS)
 public class StatisticsController {
 
-  private final Map<String, String> indexNames;
-
   private final StatisticsService statisticsService;
+
+  private final String normsIndexName;
+
+  private final String literatureIndexName;
+
+  private final String caselawsIndexName;
+
+  private final String administrativeDirectiveIndexName;
 
   /**
    * Constructs a new instance of {@code StatisticsController} with the specified dependencies and
@@ -41,13 +47,14 @@ public class StatisticsController {
       StatisticsService statisticsService,
       @Value("${opensearch.norms-index-name}") String normsIndexName,
       @Value("${opensearch.literature-index-name}") String literatureIndexName,
-      @Value("${opensearch.caselaws-index-name}") String caselawsIndexName) {
+      @Value("${opensearch.caselaws-index-name}") String caselawsIndexName,
+      @Value("${opensearch.administrative-directive-index-name}")
+          String administrativeDirectiveIndexName) {
     this.statisticsService = statisticsService;
-    this.indexNames =
-        Map.of(
-            "norms", normsIndexName,
-            "literature", literatureIndexName,
-            "caselaws", caselawsIndexName);
+    this.normsIndexName = normsIndexName;
+    this.literatureIndexName = literatureIndexName;
+    this.caselawsIndexName = caselawsIndexName;
+    this.administrativeDirectiveIndexName = administrativeDirectiveIndexName;
   }
 
   /**
@@ -64,8 +71,9 @@ public class StatisticsController {
     Map<String, Long> indexCount = statisticsService.getAllCounts();
 
     return new StatisticsApiSchema(
-        new StatisticsCountSchema(indexCount.get(this.indexNames.get("norms"))),
-        new StatisticsCountSchema(indexCount.get(this.indexNames.get("caselaws"))),
-        new StatisticsCountSchema(indexCount.get(this.indexNames.get("literature"))));
+        new StatisticsCountSchema(indexCount.get(normsIndexName)),
+        new StatisticsCountSchema(indexCount.get(caselawsIndexName)),
+        new StatisticsCountSchema(indexCount.get(literatureIndexName)),
+        new StatisticsCountSchema(indexCount.get(administrativeDirectiveIndexName)));
   }
 }
