@@ -30,8 +30,10 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.net.URLConnection;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +47,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
+import org.springframework.web.util.UriUtils;
 
 /** Controller class for handling REST API requests for legislation. */
 @RestController
@@ -504,11 +507,15 @@ public class NormsController {
             subtype,
             "xml");
     final Optional<byte[]> normFileByEli = normsService.getNormFileByEli(eli);
+    final String uriEncodedEid =
+        UriUtils.encode(articleEid, StandardCharsets.UTF_8).toLowerCase(Locale.ROOT);
+
     return normFileByEli
         .map(
             bytes ->
                 ResponseEntity.ok(
-                    xsltTransformerService.transformArticle(bytes, articleEid, resourceBasePath)))
+                    xsltTransformerService.transformArticle(
+                        bytes, uriEncodedEid, resourceBasePath)))
         .orElseGet(() -> ResponseEntity.notFound().build());
   }
 

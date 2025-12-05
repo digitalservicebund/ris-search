@@ -26,6 +26,7 @@ import de.bund.digitalservice.ris.search.models.opensearch.TableOfContentsItem;
 import de.bund.digitalservice.ris.search.schema.TableOfContentsSchema;
 import de.bund.digitalservice.ris.search.service.IndexNormsService;
 import java.io.ByteArrayInputStream;
+import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Instant;
@@ -654,5 +655,42 @@ class NormsControllerApiTest extends ContainersIntegrationBase {
     assertThat(json.read("$.member.length()", Integer.class)).isEqualTo(1);
     assertThat(json.read("$.member[0].item.workExample.legislationIdentifier", String.class))
         .isEqualTo("eli/bund/bgbl-1/1991/s102/2050-01-01/1/deu");
+  }
+
+  @ParameterizedTest(name = "HTML Endpoint should resolve article with eId={0}")
+  @MethodSource("articleEidProvider")
+  @DisplayName(
+      "Html Endpoint should resolve article html with different encodings and UTF-8 variants of eId")
+  void shouldResolveArticleWithVariousEidFormats(String articleEid, boolean isEncoded)
+      throws Exception {
+
+    String url = MANIFESTATION_URL_HTML.replace(".html", "/" + articleEid + ".html");
+    var request = isEncoded ? get(URI.create(url)) : get(url);
+    var response =
+        mockMvc
+            .perform(request.contentType(MediaType.TEXT_HTML))
+            .andExpect(status().isOk())
+            .andReturn();
+
+    Document parsed = Jsoup.parse(response.getResponse().getContentAsString());
+    Elements articles = parsed.body().selectXpath("//article");
+
+    assertThat(articles).hasSize(1);
+    assertThat(articles.getFirst().attr("id")).isEqualTo("art-z%c2%a7%c2%a7%204%20bis%2014");
+  }
+
+  static Stream<Arguments> articleEidProvider() {
+    return Stream.of(
+        Arguments.of("art-z§§ 4 bis 14", false),
+        Arguments.of("art-z%C2%A7%C2%A7%204%20bis%2014", true),
+        Arguments.of("art-z%c2%a7%c2%a7%204%20bis%2014", true));
+  }
+
+  @Test
+  @DisplayName("Html Endpoint Should return 404 for encoded article eId not present in XML")
+  void shouldReturn404ForNonexistingEncodedArticleEid() throws Exception {
+    String encodedMissing = "art-z%c2%a7%c2%a7%20999%20bis%201234";
+    URI uri = URI.create(MANIFESTATION_URL_HTML.replace(".html", "/" + encodedMissing + ".html"));
+    mockMvc.perform(get(uri).contentType(MediaType.TEXT_HTML)).andExpect(status().isNotFound());
   }
 }

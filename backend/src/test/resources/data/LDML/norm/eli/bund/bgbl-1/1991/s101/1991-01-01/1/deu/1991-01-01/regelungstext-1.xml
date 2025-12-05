@@ -280,6 +280,23 @@
           </akn:content>
         </akn:paragraph>
       </akn:article>
+      <akn:article eId="art-z%c2%a7%c2%a7%204%20bis%2014" GUID="a59598fa-b139-41cc-ae08-12fc4aebf11b" period="#meta-n1_geltzeiten-n1_geltungszeitgr-n1">
+        <akn:num eId="art-z%c2%a7%c2%a7%204%20bis%2014_bezeichnung-n1" GUID="5af34ff6-0a79-4665-a227-e765c04028f0">§ 5</akn:num>
+        <akn:heading eId="art-z4_überschrift-n1" GUID="d065ecca-2eab-4e12-92e4-64e7050e7912">Images
+        </akn:heading>
+
+        <akn:paragraph eId="art-z%c2%a7%c2%a7%204%20bis%2014_abs-z1" GUID="4de4dacd-eb20-4a38-927a-ab71fd9ee85f">
+            <akn:num eId="art-z%c2%a7%c2%a7%204%20bis%2014_abs-z1_bezeichnung-n1" GUID="e29022c3-79f8-4cd7-b6d6-93d1cc8ea570">(1)</akn:num>
+          <akn:content eId="art-z%c2%a7%c2%a7%204%20bis%2014_abs-z1_inhalt-n1" GUID="0db68311-33d5-43d0-92ba-ed5dcf167eb5">
+              <akn:p eId="art-z%c2%a7%c2%a7%204%20bis%2014_abs-z1_inhalt-n1_text-n1" GUID="d9e5c9f7-3db0-4f6f-adb2-1008105aa0bf">
+                  An article that contains special characters in its eId
+              </akn:p>
+              <akn:p eId="art-z%c2%a7%c2%a7%204%20bis%2014_abs-z1_inhalt-n1_text-n2" GUID="b0c5d6f7-8e9a-4c0f-bb2d-8e3d5f6c7a1b">
+                  <akn:a eId="art-z%c2%a7%c2%a7%204%20bis%2014_abs-z1_inhalt-n1_text-n2_a-n1" href="eli/bund/bgbl-1/1991/s101/1991-01-01/1/deu/1991-01-01/dokument.pdf" GUID="c5b6f8d9-0a2b-4c3d-bf4e-5f6a7b8c9d0e" />
+              </akn:p>
+          </akn:content>
+        </akn:paragraph>
+      </akn:article>
     </akn:body>
 
     <akn:conclusions eId="schluss-n1" GUID="5e5944ae-e47a-4d25-8c79-34f7d70f3a4e">
