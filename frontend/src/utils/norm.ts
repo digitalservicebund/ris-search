@@ -139,7 +139,7 @@ export function getNormMetadataItems(
     },
     {
       label: "Status",
-      value: formattedStatus ? formattedStatus : undefined,
+      value: formattedStatus ?? undefined,
     },
     {
       label: "Gültig ab",
