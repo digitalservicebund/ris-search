@@ -96,7 +96,7 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
       :model-value="searchParams.query.value"
       @update:model-value="handleSearchSubmit"
     />
-    <NuxtLink :to="{ hash: '#main' }" class="sr-only focus:not-sr-only">
+    <NuxtLink :to="{ hash: '#main' }" class="ris-link2-bold not-focus:sr-only">
       Zu den Hauptinhalten springen
     </NuxtLink>
 
