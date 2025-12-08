@@ -70,3 +70,65 @@ test("can navigate to a Fassung by clicking the table row", async ({
     ).toBeVisible();
   });
 });
+
+test.describe("displays metadata correctly", async () => {
+  test("currently valid norm", async ({ page }) => {
+    await navigate(page, "/norms/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu");
+
+    await expect(
+      page
+        .getByTestId("metadata-list")
+        .getByRole("term")
+        .or(page.getByTestId("metadata-list").getByRole("definition")),
+    ).toHaveText([
+      "Abkürzung",
+      "—",
+      "Status",
+      "Aktuell gültig",
+      "Gültig ab",
+      "04.08.2022",
+      "Gültig bis",
+      "01.01.2030",
+    ]);
+  });
+
+  test("on historic norm", async ({ page }) => {
+    await navigate(page, "norms/eli/bund/bgbl-1/2020/s1126/2020-08-04/1/deu");
+
+    await expect(
+      page
+        .getByTestId("metadata-list")
+        .getByRole("term")
+        .or(page.getByTestId("metadata-list").getByRole("definition")),
+    ).toHaveText([
+      "Abkürzung",
+      "—",
+      "Status",
+      "Außer Kraft",
+      "Gültig ab",
+      "04.08.2020",
+      "Gültig bis",
+      "03.08.2022",
+    ]);
+  });
+
+  test("on future norm", async ({ page }) => {
+    await navigate(page, "norms/eli/bund/bgbl-1/2020/s1126/2920-08-04/1/deu");
+
+    await expect(
+      page
+        .getByTestId("metadata-list")
+        .getByRole("term")
+        .or(page.getByTestId("metadata-list").getByRole("definition")),
+    ).toHaveText([
+      "Abkürzung",
+      "—",
+      "Status",
+      "Zukünftig in Kraft",
+      "Gültig ab",
+      "04.08.2919",
+      "Gültig bis",
+      "—",
+    ]);
+  });
+});
