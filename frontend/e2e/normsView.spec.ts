@@ -104,7 +104,7 @@ test.describe("view norm page", async () => {
       expect(marker).toBe("❃");
 
       const footnotes = page.locator(".dokumentenkopf-fussnoten");
-      const footnotesContent = footnotes.locator("ol");
+      const footnotesContent = footnotes.getByRole("list");
       await expect(footnotesContent).not.toBeVisible();
 
       const expandButton = page.getByRole("button", {

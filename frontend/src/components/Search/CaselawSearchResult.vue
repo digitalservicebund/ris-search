@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import _ from "lodash";
+import { partition } from "lodash";
 import GavelIcon from "virtual:icons/material-symbols/gavel";
 import type { RouteLocationRaw } from "#vue-router";
 import type { SearchResultHeaderItem } from "~/components/Search/SearchResultHeader.vue";
@@ -119,7 +119,7 @@ const previewSections = computed<ExtendedTextMatch[]>(() => {
 
   // always show the most relevant field, regardless of highlight status
   const firstFieldName = [...fields.keys()].find((key) => foundFields.has(key));
-  const [firstFields, otherFields] = _.partition(
+  const [firstFields, otherFields] = partition(
     relevantMatches,
     (match) => match.name === firstFieldName,
   );
@@ -140,14 +140,24 @@ const previewSections = computed<ExtendedTextMatch[]>(() => {
   return slice;
 });
 
-const headerItems = computed<SearchResultHeaderItem[]>(() => {
+const resultTypeId = useId();
+
+const headerItems = computed(() => {
   const item = props.searchResult.item;
-  return [
-    { value: item.documentType || "Entscheidung" },
-    { value: item.courtName },
-    { value: dateFormattedDDMMYYYY(item.decisionDate) },
-    { value: getFileNumbers(item), isMarkup: true },
-  ].filter((item): item is SearchResultHeaderItem => item.value !== undefined);
+
+  const items: SearchResultHeaderItem[] = [
+    { value: item.documentType || "Entscheidung", id: resultTypeId },
+  ];
+
+  if (item.courtName) items.push({ value: item.courtName });
+
+  const formattedDate = dateFormattedDDMMYYYY(item.decisionDate);
+  if (formattedDate) items.push({ value: formattedDate });
+
+  const fileNumbers = getFileNumbers(item);
+  if (fileNumbers) items.push({ value: fileNumbers, isMarkup: true });
+
+  return items;
 });
 
 function trackResultClick(url: string) {
@@ -160,6 +170,7 @@ function trackResultClick(url: string) {
     <SearchResultHeader :icon="GavelIcon" :items="headerItems" />
     <NuxtLink
       :to="metadata.route"
+      :aria-describedby="resultTypeId"
       class="ris-heading3-bold max-w-title link-hover block text-blue-800"
       @click="trackResultClick(metadata.url)"
     >
