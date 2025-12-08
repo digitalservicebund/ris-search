@@ -87,11 +87,13 @@ jobs:
           distribution: "temurin"
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v5.0.0
-      - name: Build container image
-        working-directory: ./backend
-        run: ./gradlew bootBuildImage
-        env:
-          CONTAINER_IMAGE_TAG: ${{ inputs.container-image-tag }}
+      - name: Build backend image
+        uses: docker/build-push-action@v6
+        with:
+          file: backend/Dockerfile.prod
+          context: backend
+          tags: ${{ inputs.container-image-tag}}
+          push: false
       - name: Run Trivy vulnerability scanner
         # Third-party action, pin to commit SHA!
         # See https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions
@@ -243,12 +245,13 @@ jobs:
           registry: ${{ inputs.container-registry }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Build and publish container image
-        working-directory: ./backend
-        run: CONTAINER_REGISTRY_USER=${{ github.actor }} CONTAINER_REGISTRY_PASSWORD=${{ secrets.GITHUB_TOKEN }} ./gradlew bootBuildImage --publishImage
-        env:
-          CONTAINER_REGISTRY: ${{ inputs.container-registry }}
-          CONTAINER_IMAGE_TAG: ${{ inputs.container-image-tag}}
+      - name: Build backend image
+        uses: docker/build-push-action@v6
+        with:
+          file: backend/Dockerfile.prod
+          context: backend
+          tags: ${{ inputs.container-image-tag}}
+          push: true
       - name: Install cosign
         # Third-party action, pin to commit SHA!
         # See https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions
