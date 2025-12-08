@@ -52,7 +52,7 @@ public class SitemapController {
    *     the object store.
    */
   @GetMapping(
-      path = ApiConfig.Paths.SITEMAP + "/administrative-directive/{filename}.xml",
+      path = ApiConfig.Paths.SITEMAP + "/administrative-directives/{filename}.xml",
       produces = MediaType.APPLICATION_XML_VALUE)
   @Operation(
       summary = "Get administrative directive sitemap files",
@@ -60,14 +60,14 @@ public class SitemapController {
           """
                                               Get the index sitemap for administrative directives.
                                               ## Example 1
-                                              Get the sitemap file listing all the administrative directive sitemap files:
+                                              Get the sitemap file listing all the administrative directives sitemap files:
                                               ```http request
-                                              GET /v1/sitemaps/administrative-directive/index.xml```
+                                              GET /v1/sitemaps/administrative-directives/index.xml```
 
                                               ## Example 2
                                               Get the content of one sitemap file
                                               ```http request
-                                              GET /v1/sitemaps/administrative-directive/1.xml
+                                              GET /v1/sitemaps/administrative-directives/1.xml
                                               ```
                                               """)
   @ApiResponse(responseCode = "200")

@@ -15,7 +15,7 @@ public enum DocumentKind {
   CASE_LAW("R", "case-law"),
   LEGISLATION("N", "norms"),
   LITERATURE("L", "literature"),
-  ADMINISTRATIVE_DIRECTIVE("V", "administrative-directive"),
+  ADMINISTRATIVE_DIRECTIVE("V", "administrative-directives"),
   ;
 
   private final String singleLetterAlias;
