@@ -28,9 +28,10 @@ const normTitle = computed(() => getNormTitle(props.metadata));
       >
         {{ metadata.alternateName }}
       </p>
+
       <client-only>
-        <RisExpandableText :length="6"
-          ><div
+        <RisExpandableText :length="6">
+          <div
             v-if="hasHeading"
             :data-longTitle="isLongTitle || null"
             class="wrap-break-word hyphens-auto max-sm:text-[26px]"
@@ -40,6 +41,7 @@ const normTitle = computed(() => getNormTitle(props.metadata));
             {{ normTitle }}
           </div>
         </RisExpandableText>
+
         <template #fallback>
           <div
             v-if="props.htmlParts?.heading"
@@ -53,8 +55,11 @@ const normTitle = computed(() => getNormTitle(props.metadata));
         </template>
       </client-only>
     </hgroup>
+
     <NormHeadingFootnotes
-      :html="props.htmlParts?.headingAuthorialNotes"
+      v-if="props.htmlParts?.headingAuthorialNotes"
+      class="my-48"
+      :html="props.htmlParts.headingAuthorialNotes"
       :text-length="props.htmlParts?.headingAuthorialNotesLength"
     />
   </div>
