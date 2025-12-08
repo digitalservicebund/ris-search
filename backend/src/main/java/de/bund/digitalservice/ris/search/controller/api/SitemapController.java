@@ -22,14 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 /** Controller class for handling REST API requests for sitemaps. */
 @RestController
 @Hidden
-@Tag(
-    name = "Sitemap",
-    description =
-        """
-        Retrieve sitemap files for norms and caselaw.
-        The endpoints operates as a proxy for retrieving the sitemap files from the bucket, which were saved
-        during the indexing time of norms and caselaw.
-        """)
+@Tag(name = "Sitemap")
 public class SitemapController {
   public final PortalBucket portalBucket;
   public final SitemapService sitemapService;
@@ -45,6 +38,46 @@ public class SitemapController {
   public SitemapController(SitemapService sitemapService, PortalBucket portalBucket) {
     this.portalBucket = portalBucket;
     this.sitemapService = sitemapService;
+  }
+
+  /**
+   * Retrieves a specific sitemap file for administrative directives based on the provided type and
+   * filename.
+   *
+   * @param filename The name of the sitemap file (e.g., "index" for the index sitemap or a batch
+   *     number filename).
+   * @return A ResponseEntity containing the sitemap file as a byte array if found. Returns HTTP 200
+   *     (OK) if the file is available, or HTTP 404 (Not Found) if the file does not exist.
+   * @throws ObjectStoreServiceException If an error occurs while retrieving the sitemap file from
+   *     the object store.
+   */
+  @GetMapping(
+      path = ApiConfig.Paths.SITEMAP + "/administrative-directive/{filename}.xml",
+      produces = MediaType.APPLICATION_XML_VALUE)
+  @Operation(
+      summary = "Get administrative directive sitemap files",
+      description =
+          """
+                                              Get the index sitemap for administrative directives.
+                                              ## Example 1
+                                              Get the sitemap file listing all the administrative directive sitemap files:
+                                              ```http request
+                                              GET /v1/sitemaps/administrative-directive/index.xml```
+
+                                              ## Example 2
+                                              Get the content of one sitemap file
+                                              ```http request
+                                              GET /v1/sitemaps/administrative-directive/1.xml
+                                              ```
+                                              """)
+  @ApiResponse(responseCode = "200")
+  @ApiResponse(responseCode = "404")
+  public ResponseEntity<byte[]> getAdministrativeDirectiveSitemapXml(
+      @Parameter(description = "SitemapFile Filename", example = "index") @PathVariable
+          String filename)
+      throws ObjectStoreServiceException {
+
+    return getSitemapXml(filename, DocumentKind.ADMINISTRATIVE_DIRECTIVE);
   }
 
   /**
@@ -142,18 +175,18 @@ public class SitemapController {
       summary = "Get norm sitemap files",
       description =
           """
-                                      Get the index sitemap for norms.
-                                      ## Example 1
-                                      Get the sitemap file listing all the norms sitemap files:
-                                      ```http request
-                                      GET /v1/sitemaps/norms/index.xml```
+                                              Get the index sitemap for norms.
+                                              ## Example 1
+                                              Get the sitemap file listing all the norms sitemap files:
+                                              ```http request
+                                              GET /v1/sitemaps/norms/index.xml```
 
-                                      ## Example 2
-                                      Get the content of one sitemap file
-                                      ```http request
-                                      GET /v1/sitemaps/norms/1.xml
-                                      ```
-                                      """)
+                                              ## Example 2
+                                              Get the content of one sitemap file
+                                              ```http request
+                                              GET /v1/sitemaps/norms/1.xml
+                                              ```
+                                              """)
   @ApiResponse(responseCode = "200")
   @ApiResponse(responseCode = "404")
   public ResponseEntity<byte[]> getNormSitemapXml(

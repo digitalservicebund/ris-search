@@ -15,7 +15,7 @@ public enum DocumentKind {
   CASE_LAW("R", "case-law"),
   LEGISLATION("N", "norms"),
   LITERATURE("L", "literature"),
-  ADMINISTRATIVE_DIRECTIVE("V", null),
+  ADMINISTRATIVE_DIRECTIVE("V", "administrative-directive"),
   ;
 
   private final String singleLetterAlias;
@@ -74,17 +74,17 @@ public enum DocumentKind {
    */
   public static Optional<String> extractIdFromFileName(String fileName, DocumentKind docKind) {
     return switch (docKind) {
-      case DocumentKind.LEGISLATION ->
-          EliFile.fromString(fileName).map(EliFile::getExpressionEli).map(ExpressionEli::toString);
+      case DocumentKind.ADMINISTRATIVE_DIRECTIVE, DocumentKind.LITERATURE ->
+          Optional.ofNullable(fileName)
+              .filter(e -> e.endsWith(".akn.xml"))
+              .map(path -> path.substring(path.lastIndexOf("/") + 1, path.length() - 8));
       case DocumentKind.CASE_LAW ->
           Optional.ofNullable(fileName)
               .filter(e -> e.endsWith(".xml"))
               .map(path -> path.substring(path.lastIndexOf("/") + 1, path.length() - 4));
-      case DocumentKind.LITERATURE ->
-          Optional.ofNullable(fileName)
-              .filter(e -> e.endsWith(".akn.xml"))
-              .map(path -> path.substring(path.lastIndexOf("/") + 1, path.length() - 8));
-      case null, default -> Optional.empty();
+      case DocumentKind.LEGISLATION ->
+          EliFile.fromString(fileName).map(EliFile::getExpressionEli).map(ExpressionEli::toString);
+      case null -> Optional.empty();
     };
   }
 }
