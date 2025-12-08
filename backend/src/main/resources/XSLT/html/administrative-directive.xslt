@@ -21,7 +21,9 @@
 			<body>
 				<xsl:apply-templates select="//akn:longTitle"/>
 				<xsl:apply-templates select="//akn:mainBody"/>
-				<xsl:apply-templates select="//*[local-name()='tableOfContentsEntries']"/>
+				<xsl:apply-templates select="//ris:tableOfContentsEntries"/>
+				<xsl:apply-templates select="//ris:activeReferences"/>
+				<xsl:apply-templates select="//akn:otherReferences[@source='attributsemantik-noch-undefiniert']"/>
 			</body>
 		</html>
 	</xsl:template>
@@ -45,15 +47,36 @@
 	</xsl:template>
 
 	<!-- Content -->
-	<xsl:template match="*[local-name()='tableOfContentsEntries']">
+	<xsl:template match="ris:tableOfContentsEntries">
 		<h2>Inhalt</h2>
 		<ul>
 			<xsl:apply-templates/>
 		</ul>
 	</xsl:template>
 
-	<xsl:template match="*[local-name()='tableOfContentsEntry']">
+	<xsl:template match="ris:tableOfContentsEntry">
 		<li><xsl:value-of select="."/></li>
+	</xsl:template>
+
+	<xsl:template match="ris:activeReferences">
+		<h2>Verweise</h2>
+		<ul>
+			<xsl:for-each select="ris:activeReference">
+				<li><xsl:value-of select="@reference" /></li>
+			</xsl:for-each>
+		</ul>
+	</xsl:template>
+
+	<xsl:template match="akn:otherReferences[@source='attributsemantik-noch-undefiniert']">
+		<xsl:if test="akn:implicitReference/ris:caselawReference">
+			<h2>Dieser Beitrag zitiert</h2>
+			<h3>Rechtsprechung</h3>
+			<ul>
+				<xsl:for-each select="akn:implicitReference[ris:caselawReference]">
+					<li><xsl:value-of select="@showAs" /></li>
+				</xsl:for-each>
+			</ul>
+		</xsl:if>
 	</xsl:template>
 
 	<!--***************************************************************************************-->
