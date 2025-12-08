@@ -170,7 +170,7 @@ export default defineNuxtConfig({
       static: {
         includeAppSources: true,
         exclude: [
-          "/administrative-directive/**",
+          "/administrative-directives/**",
           "/case‑law/**",
           "/literature/**",
           "/norms/eli/**",
@@ -179,7 +179,7 @@ export default defineNuxtConfig({
       },
     },
     appendSitemaps: [
-      "/v1/sitemaps/administrative-directive/index.xml",
+      "/v1/sitemaps/administrative-directives/index.xml",
       "/v1/sitemaps/case-law/index.xml",
       "/v1/sitemaps/literature/index.xml",
       "/v1/sitemaps/norms/index.xml",
@@ -197,9 +197,9 @@ export default defineNuxtConfig({
     "/nutzungstests": {
       redirect: "/",
     },
-    "/sitemaps/administrative-directive/**": {
+    "/sitemaps/administrative-directives/**": {
       proxy: {
-        to: `${process.env.NUXT_PUBLIC_RIS_BACKEND_URL}/v1/sitemaps/administrative-directive/**`,
+        to: `${process.env.NUXT_PUBLIC_RIS_BACKEND_URL}/v1/sitemaps/administrative-directives/**`,
         headers: {
           Accept: "application/xml",
         },
