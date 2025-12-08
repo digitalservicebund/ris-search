@@ -49,7 +49,7 @@ public record Literature(
         List<String> publicherInformation,
     @ElementCollection @Field(name = Fields.INTERNATIONAL_IDENTIFIERS)
         List<String> internationalIdentifiers,
-    @ElementCollection @Field(name = Fields.Volumes) List<String> volumes,
+    @ElementCollection @Field(name = Fields.VOLUMES) List<String> volumes,
     @Nullable @Field(name = Fields.SHORT_REPORT) String shortReport,
     @Nullable @Field(name = Fields.OUTLINE) String outline,
     @JsonIgnore @Field(name = Fields.INDEXED_AT) String indexedAt)
@@ -134,7 +134,7 @@ public record Literature(
     public static final String PUBLISHER_INFORMATION = "publisher_information";
 
     /** Teilbaende */
-    public static final String Volumes = "volumes";
+    public static final String VOLUMES = "volumes";
 
     /** Fußnoten */
     public static final String FOOTNOTES = "footnotes";
