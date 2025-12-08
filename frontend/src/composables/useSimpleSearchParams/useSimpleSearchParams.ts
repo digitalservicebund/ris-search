@@ -1,4 +1,4 @@
-import _ from "lodash";
+import { isEqual } from "lodash";
 import { computed, ref, watch } from "vue";
 import type { LocationQueryRaw, Router } from "vue-router";
 import type { DateSearchMode } from "./dateParams";
@@ -160,7 +160,7 @@ export function useSimpleSearchParams() {
     () => route.query,
     async (newQuery) => {
       // prevent infinite loops
-      const needsUpdate = !_.isEqual(toRaw(storeQuery.value), newQuery);
+      const needsUpdate = !isEqual(toRaw(storeQuery.value), newQuery);
       if (needsUpdate) {
         reinitializeFromQuery(newQuery);
       }

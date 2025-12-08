@@ -1,4 +1,4 @@
-import _ from "lodash";
+import { pickBy } from "lodash";
 import { dateSearchFromQuery, DateSearchMode } from "./dateParams";
 import type { QueryParams } from "./useSimpleSearchParams";
 import type {
@@ -18,7 +18,7 @@ export const defaultParams: QueryParams = {
 };
 
 export const omitDefaults = (newValue: LocationQueryRaw): LocationQueryRaw => {
-  return _.pickBy(newValue, (value, key) => {
+  return pickBy(newValue, (value, key) => {
     return (defaultParams as unknown as Record<string, string>)[key] !== value;
   });
 };
