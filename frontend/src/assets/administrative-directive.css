@@ -9,6 +9,10 @@
     @apply ris-heading3-bold my-16 inline-block;
   }
 
+  h3 {
+    @apply ris-body1-bold my-8;
+  }
+
   p {
     @apply mb-16 overflow-x-auto;
   }
