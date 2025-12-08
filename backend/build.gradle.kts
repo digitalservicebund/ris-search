@@ -178,7 +178,7 @@ tasks {
         val containerImageTag = System.getenv("CONTAINER_IMAGE_TAG")
 
         imageName.set(containerImageTag)
-        builder.set("paketobuildpacks/builder-jammy-tiny:latest")
+        builder.set("paketobuildpacks/builder-jammy-tiny")
         publish.set(false)
         docker {
             publishRegistry {
