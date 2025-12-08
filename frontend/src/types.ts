@@ -205,3 +205,9 @@ export enum DocumentKind {
 export type Statistics = {
   [K in "case-law" | "legislation" | "literature"]: { count: number };
 };
+
+export type CourtSearchResult = {
+  id: string;
+  label: string;
+  count?: number;
+};
