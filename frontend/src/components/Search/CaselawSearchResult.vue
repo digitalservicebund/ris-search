@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { partition } from "lodash";
+import _ from "lodash";
 import GavelIcon from "virtual:icons/material-symbols/gavel";
 import type { RouteLocationRaw } from "#vue-router";
 import type { SearchResultHeaderItem } from "~/components/Search/SearchResultHeader.vue";
@@ -119,7 +119,7 @@ const previewSections = computed<ExtendedTextMatch[]>(() => {
 
   // always show the most relevant field, regardless of highlight status
   const firstFieldName = [...fields.keys()].find((key) => foundFields.has(key));
-  const [firstFields, otherFields] = partition(
+  const [firstFields, otherFields] = _.partition(
     relevantMatches,
     (match) => match.name === firstFieldName,
   );

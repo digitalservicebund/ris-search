@@ -1,5 +1,5 @@
 import dayjs, { type Dayjs } from "dayjs";
-import { partition, sortBy } from "lodash";
+import _ from "lodash";
 import type { LegislationWork, SearchResult } from "~/types";
 import {
   getCurrentDateInGermany,
@@ -105,16 +105,16 @@ export function getMostRelevantExpression(
     return activeExpressions[0]?.legislationIdentifier;
   }
   const referenceDate = getCurrentDateInGermanyFormatted();
-  const [future, past] = partition(
+  const [future, past] = _.partition(
     expressions,
     (item) => item.temporalCoverage >= referenceDate,
   );
   if (future.length > 0) {
-    return sortBy(future, "legislationLegalForce")[0]?.legislationIdentifier;
+    return _.sortBy(future, "legislationLegalForce")[0]?.legislationIdentifier;
   }
   if (past.length > 0) {
     return (
-      sortBy(past, "legislationLegalForce").at(-1)?.legislationIdentifier ??
+      _.sortBy(past, "legislationLegalForce").at(-1)?.legislationIdentifier ??
       null
     );
   }

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { RisAutoComplete } from "@digitalservicebund/ris-ui/components";
-import { debounce } from "lodash";
+import _ from "lodash";
 import type { AutoCompleteDropdownClickEvent } from "primevue/autocomplete";
 import useBackendUrl from "~/composables/useBackendUrl";
 import { DocumentKind, type CourtSearchResult } from "~/types";
@@ -29,7 +29,7 @@ const search = async (prefix?: string) => {
   );
 };
 
-const searchDebounced = debounce(search, 250);
+const searchDebounced = _.debounce(search, 250);
 
 /*
 Workaround for loading prop being ignored in PrimeVue AutoComplete:

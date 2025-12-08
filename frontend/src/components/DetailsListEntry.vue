@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { isEmpty } from "lodash";
+import _ from "lodash";
 import { isStringEmpty } from "~/utils/textFormatting";
 const props = defineProps<{
   label: string;
@@ -9,7 +9,7 @@ const props = defineProps<{
 }>();
 
 const emptyProp = computed(() =>
-  isStringEmpty(props.value) && isEmpty(props.valueList) ? "empty" : null,
+  isStringEmpty(props.value) && _.isEmpty(props.valueList) ? "empty" : null,
 );
 
 const emptyValuePlaceholder = "nicht vorhanden";

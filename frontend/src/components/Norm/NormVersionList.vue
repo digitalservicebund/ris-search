@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { orderBy } from "lodash";
+import _ from "lodash";
 import Column from "primevue/column";
 import DataTable from "primevue/datatable";
 import Badge from "~/components/Badge.vue";
@@ -28,7 +28,7 @@ interface TableRowData {
 const selectedVersion = ref<TableRowData>();
 
 const tableRowData = computed<TableRowData[]>(() => {
-  const versionsSorted = orderBy(
+  const versionsSorted = _.orderBy(
     props.versions,
     [(version) => version.item.workExample.temporalCoverage],
     ["desc"],
