@@ -264,7 +264,7 @@ describe("NormSearchResult", () => {
       );
 
       expect(screen.getByText("Zukünftig in Kraft")).toBeInTheDocument();
-      const badge = container.querySelector(".border-yellow-300");
+      const badge = container.querySelector(".border-yellow-400");
       expect(badge).toBeInTheDocument();
     });
 
