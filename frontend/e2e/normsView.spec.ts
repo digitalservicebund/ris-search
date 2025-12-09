@@ -387,3 +387,72 @@ test.describe("actions menu", () => {
     );
   });
 });
+
+test.describe("can view metadata of norms and articles", () => {
+  test("can view full set of metadata when private Features enabled", async ({
+    page,
+    privateFeaturesEnabled,
+  }) => {
+    test.skip(!privateFeaturesEnabled);
+    await navigate(page, "/norms/eli/bund/bgbl-1/2025/130/2025-05-05/1/deu");
+
+    const metadataList = page.getByTestId("metadata-list");
+
+    await expect(
+      metadataList.getByRole("term").or(metadataList.getByRole("definition")),
+    ).toHaveText([
+      "Abkürzung",
+      "GeGuGe 2025",
+      "Status",
+      "Aktuell gültig",
+      "Gültig ab",
+      "06.05.2025",
+      "Gültig bis",
+      "31.03.2037",
+    ]);
+  });
+
+  test("can view reduced set of metadata when private Features are disabled", async ({
+    page,
+    privateFeaturesEnabled,
+  }) => {
+    test.skip(privateFeaturesEnabled);
+    await navigate(page, "/norms/eli/bund/bgbl-1/2025/130/2025-05-05/1/deu");
+
+    const metadataList = page.getByTestId("metadata-list");
+
+    await expect(
+      metadataList.getByRole("term").or(metadataList.getByRole("definition")),
+    ).toHaveText(["Abkürzung", "GeGuGe 2025", "Status", "—"]);
+  });
+
+  test("can view full set of metadata in a single article when private Features enabled", async ({
+    page,
+    privateFeaturesEnabled,
+  }) => {
+    test.skip(!privateFeaturesEnabled);
+    await navigate(
+      page,
+      "/norms/eli/bund/bgbl-1/2025/130/2025-05-05/1/deu/art-z1",
+    );
+    const metadataList = page.getByTestId("metadata-list");
+
+    await expect(
+      metadataList.getByRole("term").or(metadataList.getByRole("definition")),
+    ).toHaveText(["Gültig ab", "06.05.2025", "Gültig bis", "31.03.2037"]);
+  });
+
+  test("shows no metadata on a single article when private Features disabled", async ({
+    page,
+    privateFeaturesEnabled,
+  }) => {
+    test.skip(privateFeaturesEnabled);
+
+    await navigate(
+      page,
+      "/norms/eli/bund/bgbl-1/2025/130/2025-05-05/1/deu/art-z1",
+    );
+
+    await expect(page.getByTestId("metadata-list")).not.toBeVisible();
+  });
+});

@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import type { TreeNode } from "primevue/treenode";
+import { computed } from "vue";
 import ContentWrapper from "~/components/CustomLayouts/ContentWrapper.vue";
 import TableOfContentsLayout from "~/components/CustomLayouts/SidebarLayout.vue";
 import IncompleteDataMessage from "~/components/IncompleteDataMessage.vue";
 import ArticleVersionWarning from "~/components/Norm/ArticleVersionWarning.vue";
-import ValidityDatesMetadataFields from "~/components/Norm/Metadatafields/ValidityDatesMetadataFields.vue";
 import NormTableOfContents from "~/components/Ris/NormTableOfContents.vue";
 import type { BreadcrumbItem } from "~/components/Ris/RisBreadcrumb.vue";
 import RisBreadcrumb from "~/components/Ris/RisBreadcrumb.vue";
@@ -13,7 +13,10 @@ import { useFetchNormArticleContent } from "~/composables/useNormData";
 import { useValidNormVersions } from "~/composables/useNormVersions";
 import { usePrivateFeaturesFlag } from "~/composables/usePrivateFeaturesFlag";
 import { type Article, DocumentKind, type LegislationWork } from "~/types";
-import { parseDateGermanLocalTime } from "~/utils/dateFormatting";
+import {
+  dateFormattedDDMMYYYY,
+  parseDateGermanLocalTime,
+} from "~/utils/dateFormatting";
 import { formatDocumentKind } from "~/utils/displayValues";
 import { parseDocument } from "~/utils/htmlParser";
 import {
@@ -187,6 +190,23 @@ const title = computed(() =>
   norm.value ? buildOgTitleForArticle(norm.value, htmlTitle.value) : "",
 );
 
+const metadataItems = computed(() => {
+  return [
+    {
+      label: "Gültig ab",
+      value: dateFormattedDDMMYYYY(
+        parseDateGermanLocalTime(article.value?.entryIntoForceDate),
+      ),
+    },
+    {
+      label: "Gültig bis",
+      value: dateFormattedDDMMYYYY(
+        parseDateGermanLocalTime(article.value?.expiryDate),
+      ),
+    },
+  ];
+});
+
 const description = computed<string | undefined>(() => {
   if (!articleHtml.value) return undefined;
   const doc = parseDocument(articleHtml.value);
@@ -231,10 +251,7 @@ useDynamicSeo({ title, description });
         class="container mb-24 flex flex-col space-y-16 space-x-0 md:space-y-0 lg:flex-row lg:space-x-24"
         data-testid="metadata"
       >
-        <ValidityDatesMetadataFields
-          :valid-from="parseDateGermanLocalTime(article?.entryIntoForceDate)"
-          :valid-to="parseDateGermanLocalTime(article?.expiryDate)"
-        />
+        <Metadata :items="metadataItems" />
       </div>
       <div class="bg-white">
         <TableOfContentsLayout class="container py-24">
