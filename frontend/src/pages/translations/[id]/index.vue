@@ -22,6 +22,10 @@ import IcOutlineWarning from "~icons/material-symbols/warning-outline";
 
 definePageMeta({ layout: "base" });
 
+useHead({
+  htmlAttrs: { lang: "en" },
+});
+
 const route = useRoute();
 const id = route.params.id as string;
 
@@ -101,12 +105,6 @@ const translationSeo = computed(() => {
 const title = computed(() => translationSeo.value.title);
 const description = computed(() => translationSeo.value.description);
 useDynamicSeo({ title, description });
-
-useHead({
-  htmlAttrs: {
-    lang: "en",
-  },
-});
 
 const tabs = computed(() => [
   {

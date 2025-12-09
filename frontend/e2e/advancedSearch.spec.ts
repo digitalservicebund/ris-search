@@ -44,7 +44,7 @@ async function searchFor(
   },
 ) {
   await page.getByRole("button", { name: search.documentKind }).click();
-  await page.getByRole("textbox", { name: "Suchfeld" }).fill(search.q);
+  await page.getByRole("searchbox", { name: "Suchfeld" }).fill(search.q);
 
   if (search.dateFilter) {
     await page.getByRole("radio", { name: search.dateFilter }).click();
@@ -182,7 +182,7 @@ test.describe("general advanced search page features", () => {
     await page.getByRole("combobox", { name: "10" }).click();
     await page.getByRole("option", { name: "50" }).click();
 
-    await expect(searchResults).toHaveCount(12);
+    await expect(searchResults).toHaveCount(13);
   });
 
   test("clears query when switching document kind", async ({ page }) => {
@@ -193,7 +193,7 @@ test.describe("general advanced search page features", () => {
       documentKind: "Gesetze & Verordnungen",
     });
 
-    const queryInput = page.getByRole("textbox", { name: "Suchfeld" });
+    const queryInput = page.getByRole("searchbox", { name: "Suchfeld" });
     await expect(queryInput).toHaveValue("AB:FrSaftErfrischV");
 
     await page.getByRole("button", { name: "Gerichtsentscheidungen" }).click();
@@ -222,7 +222,7 @@ test.describe("general advanced search page features", () => {
 
     await page.goBack();
 
-    await expect(page.getByRole("textbox", { name: "Suchfeld" })).toHaveValue(
+    await expect(page.getByRole("searchbox", { name: "Suchfeld" })).toHaveValue(
       "AB:FrSaftErfrischV",
     );
 
@@ -254,7 +254,7 @@ test.describe("general advanced search page features", () => {
 
     await page.goBack();
 
-    await expect(page.getByRole("textbox", { name: "Suchfeld" })).toHaveValue(
+    await expect(page.getByRole("searchbox", { name: "Suchfeld" })).toHaveValue(
       'AZ:"KL 1234/56"',
     );
 
@@ -425,7 +425,7 @@ test.describe("searching caselaw", () => {
 
     // Ensure all visible entries are of type caselaw
     await expect(searchResults).toHaveText(
-      Array(10).fill(/^(Beschluss|Urteil)/),
+      Array(11).fill(/^(Beschluss|Urteil)/),
     );
   });
 

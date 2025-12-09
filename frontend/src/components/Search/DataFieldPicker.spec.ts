@@ -119,7 +119,7 @@ describe("DataFieldPicker", () => {
       },
     });
 
-    expect(screen.getByRole("textbox", { name: "Suchfeld" })).toHaveValue(
+    expect(screen.getByRole("searchbox", { name: "Suchfeld" })).toHaveValue(
       "test query",
     );
   });
@@ -135,7 +135,7 @@ describe("DataFieldPicker", () => {
       },
     });
 
-    await user.type(screen.getByRole("textbox", { name: "Suchfeld" }), "x");
+    await user.type(screen.getByRole("searchbox", { name: "Suchfeld" }), "x");
 
     expect(emitted("update:modelValue")).toEqual([["test queryx"]]);
   });
@@ -221,7 +221,7 @@ describe("DataFieldPicker", () => {
 
     await rerender({ modelValue });
 
-    const textbox = screen.getByRole<HTMLInputElement>("textbox");
+    const textbox = screen.getByRole<HTMLInputElement>("searchbox");
 
     expect(textbox).toHaveValue("test query CS:");
     expect(textbox).toHaveFocus();
@@ -262,7 +262,7 @@ describe("DataFieldPicker", () => {
 
     await rerender({ modelValue });
 
-    const textbox = screen.getByRole<HTMLInputElement>("textbox");
+    const textbox = screen.getByRole<HTMLInputElement>("searchbox");
 
     expect(textbox).toHaveValue("test query CS:()");
     expect(textbox).toHaveFocus();
@@ -346,7 +346,7 @@ describe("DataFieldPicker", () => {
     });
 
     await user.type(
-      screen.getByRole("textbox", { name: "Suchfeld" }),
+      screen.getByRole("searchbox", { name: "Suchfeld" }),
       "{enter}",
     );
 
@@ -367,7 +367,7 @@ describe("DataFieldPicker", () => {
     await user.click(screen.getByRole("button", { name: "Suchen" }));
 
     await user.type(
-      screen.getByRole("textbox", { name: "Suchfeld" }),
+      screen.getByRole("searchbox", { name: "Suchfeld" }),
       "{enter}",
     );
 

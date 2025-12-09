@@ -212,6 +212,9 @@
 			<xsl:attribute name="href">
 				<xsl:value-of select="concat('#', local:encode-for-uri(.))" />
 			</xsl:attribute>
+			<xsl:attribute name="aria-label">
+				<xsl:value-of select="concat('Springe zu Randnummer: ', .)" />
+			</xsl:attribute>
 			<xsl:apply-templates select="@*|node()"/>
 		</a>
 	</xsl:template>

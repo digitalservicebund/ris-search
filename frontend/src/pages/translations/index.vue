@@ -9,6 +9,10 @@ import type { TranslationContent } from "~/composables/useTranslationData";
 import { DocumentKind } from "~/types";
 import { formatDocumentKind } from "~/utils/displayValues";
 
+useHead({
+  htmlAttrs: { lang: "en" },
+});
+
 const activeSearchTerm = ref("");
 
 const breadcrumbItems: ComputedRef<BreadcrumbItem[]> = computed(() => {
