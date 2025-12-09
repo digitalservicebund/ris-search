@@ -182,7 +182,7 @@ test.describe("general advanced search page features", () => {
     await page.getByRole("combobox", { name: "10" }).click();
     await page.getByRole("option", { name: "50" }).click();
 
-    await expect(searchResults).toHaveCount(12);
+    await expect(searchResults).toHaveCount(13);
   });
 
   test("clears query when switching document kind", async ({ page }) => {
@@ -425,7 +425,7 @@ test.describe("searching caselaw", () => {
 
     // Ensure all visible entries are of type caselaw
     await expect(searchResults).toHaveText(
-      Array(10).fill(/^(Beschluss|Urteil)/),
+      Array(11).fill(/^(Beschluss|Urteil)/),
     );
   });
 

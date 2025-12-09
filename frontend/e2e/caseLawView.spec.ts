@@ -67,6 +67,24 @@ test("can view a single case law documentation unit", async ({
     }
 });
 
+test("jumps to Randnummern", async ({ page }) => {
+  await navigate(page, "/case-law/BORE040077911");
+
+  const link = page.getByRole("link", { name: "Springe zu Randnummer: 1" });
+
+  expect(link).toBeVisible();
+
+  await link.click();
+
+  expect(page).toHaveURL(/#border-number-link-1$/);
+
+  expect(
+    page.getByText(
+      "Fiktiver Hintergrundtext für den Testfall zur Randnummernverlinkung.",
+    ),
+  ).toBeInViewport();
+});
+
 test.describe("actions menu", () => {
   test("can't use link action button as its disabled", async ({
     page,

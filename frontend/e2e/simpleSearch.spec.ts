@@ -198,7 +198,7 @@ test.describe("general search page features", () => {
     await page.getByRole("combobox", { name: "10" }).click();
     await page.getByRole("option", { name: "50" }).click();
 
-    await expect(searchResults).toHaveCount(17);
+    await expect(searchResults).toHaveCount(18);
   });
 });
 
