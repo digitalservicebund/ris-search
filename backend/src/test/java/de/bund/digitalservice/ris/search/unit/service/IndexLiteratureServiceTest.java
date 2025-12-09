@@ -112,13 +112,13 @@ class IndexLiteratureServiceTest {
   }
 
   @Test
-  void ignoredNoneDependentLiteratureFilesInChangelog() throws ObjectStoreServiceException {
+  void ignoresReferencesThatAreNotInBucketFilesInChangelog() throws ObjectStoreServiceException {
     final String xmlFileName = "XXLU000000001.akn.xml";
     final String xml = LoadXmlUtils.loadXmlAsString(Literature.class, xmlFileName);
     when(this.bucket.getFileAsString(xmlFileName)).thenReturn(Optional.of(xml));
 
     Changelog changelog = new Changelog();
-    changelog.setChanged(Sets.newHashSet(List.of(xmlFileName, "TESL000000001.akn.xml")));
+    changelog.setChanged(Sets.newHashSet(List.of(xmlFileName, "XXLU000000002.akn.xml")));
     service.indexChangelog(changelog);
 
     verify(repo, times(1))
