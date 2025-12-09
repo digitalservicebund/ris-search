@@ -51,6 +51,16 @@
                     <akn:implicitReference shortForm="Lol" showAs="Lol § 15 Abs 2">
                         <ris:normReference singleNorm="§ 15 Abs 2" />
                     </akn:implicitReference>
+                    <akn:implicitReference shortForm="FOO BAR RefNr 123"
+                                           showAs="FOO BAR RefNr 123 2025-07-01">
+                        <ris:caselawReference abbreviation="FOO" court="BAR" date="2025-07-01"
+                                              referenceNumber="RefNr 123" documentNumber="KSRN1" />
+                    </akn:implicitReference>
+                    <akn:implicitReference shortForm="ABC BAZ RefNr 456"
+                                           showAs="ABC BAZ RefNr 456 2023-01-01">
+                        <ris:caselawReference abbreviation="ABC" court="BAZ" date="2023-01-01"
+                                              referenceNumber="RefNr 456" documentNumber="KSRN2" />
+                    </akn:implicitReference>
                 </akn:otherReferences>
             </akn:analysis>
             <akn:proprietary source="attributsemantik-noch-undefiniert">

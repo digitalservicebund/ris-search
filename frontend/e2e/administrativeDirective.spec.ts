@@ -64,6 +64,30 @@ test("displays administrative directive page with metadata and text tab by defau
   await expect(textSection.getByText("2. Genaues")).toBeVisible();
   await expect(textSection.getByText("3. Unwichtiges")).toBeVisible();
   await expect(textSection.getByText("4. Sonstiges")).toBeVisible();
+
+  // References
+  await expect(
+    textSection.getByRole("heading", { level: 2, name: "Verweise" }),
+  ).toBeVisible();
+  await expect(textSection.getByText("BVG")).toBeVisible();
+  await expect(textSection.getByText("RehaAnglG")).toBeVisible();
+
+  // Citations
+  await expect(
+    textSection.getByRole("heading", {
+      level: 2,
+      name: "Dieser Beitrag zitiert",
+    }),
+  ).toBeVisible();
+  await expect(
+    textSection.getByRole("heading", { level: 3, name: "Rechtsprechung" }),
+  ).toBeVisible();
+  await expect(
+    textSection.getByText("FOO BAR RefNr 123 2025-07-01"),
+  ).toBeVisible();
+  await expect(
+    textSection.getByText("ABC BAZ RefNr 456 2023-01-01"),
+  ).toBeVisible();
 });
 
 test("can navigate to search via breadcrumb", async ({ page }) => {

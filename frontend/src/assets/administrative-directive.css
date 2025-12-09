@@ -6,10 +6,18 @@
   }
 
   h2 {
-    @apply ris-heading3-bold my-16 inline-block;
+    @apply ris-heading3-bold my-24 inline-block;
+  }
+
+  h3 {
+    @apply ris-body1-bold my-8;
   }
 
   p {
     @apply mb-16 overflow-x-auto;
+  }
+
+  ul {
+    @apply mb-16;
   }
 }
