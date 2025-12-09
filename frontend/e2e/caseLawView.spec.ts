@@ -178,12 +178,10 @@ test.describe("actions menu", () => {
 
 test("can view metadata", async ({ page }) => {
   await navigate(page, "/case-law/KORE600500000");
+  const metadataList = page.getByTestId("metadata-list");
 
   await expect(
-    page
-      .getByTestId("metadata-list")
-      .getByRole("term")
-      .or(page.getByTestId("metadata-list").getByRole("definition")),
+    metadataList.getByRole("term").or(metadataList.getByRole("definition")),
   ).toHaveText([
     "Gericht",
     "LG Testort6",

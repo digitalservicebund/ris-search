@@ -388,7 +388,7 @@ test.describe("actions menu", () => {
   });
 });
 
-test.describe("can view metadata of norma and articles", () => {
+test.describe("can view metadata of norms and articles", () => {
   test("can view full set of metadata when private Features enabled", async ({
     page,
     privateFeaturesEnabled,
@@ -396,11 +396,10 @@ test.describe("can view metadata of norma and articles", () => {
     test.skip(!privateFeaturesEnabled);
     await navigate(page, "/norms/eli/bund/bgbl-1/2025/130/2025-05-05/1/deu");
 
+    const metadataList = page.getByTestId("metadata-list");
+
     await expect(
-      page
-        .getByTestId("metadata-list")
-        .getByRole("term")
-        .or(page.getByTestId("metadata-list").getByRole("definition")),
+      metadataList.getByRole("term").or(metadataList.getByRole("definition")),
     ).toHaveText([
       "Abkürzung",
       "GeGuGe 2025",
@@ -413,18 +412,17 @@ test.describe("can view metadata of norma and articles", () => {
     ]);
   });
 
-  test("can view reduced set of metadata when private Features enabled", async ({
+  test("can view reduced set of metadata when private Features are disabled", async ({
     page,
     privateFeaturesEnabled,
   }) => {
     test.skip(privateFeaturesEnabled);
     await navigate(page, "/norms/eli/bund/bgbl-1/2025/130/2025-05-05/1/deu");
 
+    const metadataList = page.getByTestId("metadata-list");
+
     await expect(
-      page
-        .getByTestId("metadata-list")
-        .getByRole("term")
-        .or(page.getByTestId("metadata-list").getByRole("definition")),
+      metadataList.getByRole("term").or(metadataList.getByRole("definition")),
     ).toHaveText(["Abkürzung", "GeGuGe 2025", "Status", "—"]);
   });
 
@@ -437,11 +435,10 @@ test.describe("can view metadata of norma and articles", () => {
       page,
       "/norms/eli/bund/bgbl-1/2025/130/2025-05-05/1/deu/art-z1",
     );
+    const metadataList = page.getByTestId("metadata-list");
+
     await expect(
-      page
-        .getByTestId("metadata-list")
-        .getByRole("term")
-        .or(page.getByTestId("metadata-list").getByRole("definition")),
+      metadataList.getByRole("term").or(metadataList.getByRole("definition")),
     ).toHaveText(["Gültig ab", "06.05.2025", "Gültig bis", "31.03.2037"]);
   });
 

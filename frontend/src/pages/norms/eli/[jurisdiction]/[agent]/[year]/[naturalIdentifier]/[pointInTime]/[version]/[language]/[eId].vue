@@ -194,17 +194,15 @@ const metadataItems = computed(() => {
   return [
     {
       label: "Gültig ab",
-      value:
-        dateFormattedDDMMYYYY(
-          parseDateGermanLocalTime(article.value?.entryIntoForceDate),
-        ) ?? "",
+      value: dateFormattedDDMMYYYY(
+        parseDateGermanLocalTime(article.value?.entryIntoForceDate),
+      ),
     },
     {
       label: "Gültig bis",
-      value:
-        dateFormattedDDMMYYYY(
-          parseDateGermanLocalTime(article.value?.expiryDate),
-        ) ?? "",
+      value: dateFormattedDDMMYYYY(
+        parseDateGermanLocalTime(article.value?.expiryDate),
+      ),
     },
   ];
 });

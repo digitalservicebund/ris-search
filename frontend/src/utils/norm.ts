@@ -135,19 +135,19 @@ export function getNormMetadataItems(
   return [
     {
       label: "Abkürzung",
-      value: norm?.abbreviation ? norm.abbreviation : undefined,
+      value: norm?.abbreviation,
     },
     {
       label: "Status",
-      value: formattedStatus ?? undefined,
+      value: formattedStatus,
     },
     {
       label: "Gültig ab",
-      value: dateFormattedDDMMYYYY(validityInterval?.from) ?? undefined,
+      value: dateFormattedDDMMYYYY(validityInterval?.from),
     },
     {
       label: "Gültig bis",
-      value: dateFormattedDDMMYYYY(validityInterval?.to) ?? undefined,
+      value: dateFormattedDDMMYYYY(validityInterval?.to),
     },
   ];
 }

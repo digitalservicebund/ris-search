@@ -197,7 +197,6 @@ const metadataItems = computed(() => {
     },
     {
       label: "Status",
-      value: "—",
     },
   ];
 });

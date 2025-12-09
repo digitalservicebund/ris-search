@@ -75,11 +75,10 @@ test.describe("displays metadata correctly", async () => {
   test("currently valid norm", async ({ page }) => {
     await navigate(page, "/norms/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu");
 
+    const metadataList = page.getByTestId("metadata-list");
+
     await expect(
-      page
-        .getByTestId("metadata-list")
-        .getByRole("term")
-        .or(page.getByTestId("metadata-list").getByRole("definition")),
+      metadataList.getByRole("term").or(metadataList.getByRole("definition")),
     ).toHaveText([
       "Abkürzung",
       "—",
@@ -95,11 +94,10 @@ test.describe("displays metadata correctly", async () => {
   test("on historic norm", async ({ page }) => {
     await navigate(page, "norms/eli/bund/bgbl-1/2020/s1126/2020-08-04/1/deu");
 
+    const metadataList = page.getByTestId("metadata-list");
+
     await expect(
-      page
-        .getByTestId("metadata-list")
-        .getByRole("term")
-        .or(page.getByTestId("metadata-list").getByRole("definition")),
+      metadataList.getByRole("term").or(metadataList.getByRole("definition")),
     ).toHaveText([
       "Abkürzung",
       "—",
@@ -115,11 +113,10 @@ test.describe("displays metadata correctly", async () => {
   test("on future norm", async ({ page }) => {
     await navigate(page, "norms/eli/bund/bgbl-1/2020/s1126/2920-08-04/1/deu");
 
+    const metadataList = page.getByTestId("metadata-list");
+
     await expect(
-      page
-        .getByTestId("metadata-list")
-        .getByRole("term")
-        .or(page.getByTestId("metadata-list").getByRole("definition")),
+      metadataList.getByRole("term").or(metadataList.getByRole("definition")),
     ).toHaveText([
       "Abkürzung",
       "—",
