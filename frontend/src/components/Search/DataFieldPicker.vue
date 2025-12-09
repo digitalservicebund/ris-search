@@ -112,6 +112,7 @@ function submitUnlessLoading() {
           size="large"
           class="grow"
           placeholder="Suchbegriff eingeben"
+          type="search"
         />
         <InputGroupAddon>
           <Button aria-label="Suchen" size="large" type="submit" :loading>
