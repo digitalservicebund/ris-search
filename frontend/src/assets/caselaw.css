@@ -1,7 +1,7 @@
 .case-law {
-  --border-number-min-width: 46px;
+  --border-number-min-width: 3rem;
 
-  @apply max-w-prose print:max-w-none;
+  @apply ris-body1-regular max-w-prose print:max-w-none;
 
   table[border="1"] :is(th, td) {
     @apply border border-solid border-black px-4;
@@ -21,8 +21,8 @@
   }
 
   .border-number .number {
-    margin-right: 10px;
-    min-width: calc(var(--border-number-min-width) - 10px);
+    margin-right: 0.5rem;
+    min-width: calc(var(--border-number-min-width) - 0.5rem);
     @apply text-gray-900;
   }
 

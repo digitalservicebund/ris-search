@@ -15,8 +15,8 @@ const handleClick = () => {
   >
     <svg
       viewBox="0 0 42 42"
-      width="42"
-      height="42"
+      width="2.5rem"
+      height="2.5rem"
       version="1.1"
       focusable="false"
       aria-hidden="true"

@@ -213,7 +213,7 @@ useDynamicSeo({ title, description });
     <template v-if="!!norm">
       <div class="container">
         <RisBreadcrumb :items="breadcrumbItems" />
-        <div class="max-w-prose">
+        <div>
           <h1
             class="ris-heading3-bold link-hover mt-24 line-clamp-2 items-center text-blue-800"
           >
@@ -246,7 +246,10 @@ useDynamicSeo({ title, description });
         <TableOfContentsLayout class="container py-24">
           <template v-if="!!articleHtml" #content>
             <IncompleteDataMessage />
-            <article class="single-article akn-act" v-html="articleHtml" />
+            <article
+              class="legislation single-article akn-act"
+              v-html="articleHtml"
+            />
             <div class="flex flex-row justify-between">
               <div class="flex flex-col">
                 <NuxtLink

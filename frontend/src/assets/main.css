@@ -4,7 +4,7 @@
 @source "../../node_modules/@digitalservicebund/ris-ui/dist/**/*.{js,vue,ts}";
 
 @theme {
-  --spacing-prose: 720px;
+  --spacing-prose: 45rem;
   --max-width-title: 60ch;
   --shadow-active-tab:
     -1px -1px 0 0 var(--color-gray-600), 1px -1px 0 0 var(--color-gray-600);
@@ -19,13 +19,13 @@
 
 @layer base {
   body {
-    @apply text-[18px] font-normal text-black antialiased;
+    @apply text-lg font-normal text-black antialiased;
   }
 }
 
 @utility container {
   margin-inline: auto;
-  padding-inline: 16px;
+  padding-inline: 1rem;
 }
 
 @utility link-hover {
@@ -65,7 +65,7 @@ mark {
 input[type="search"] {
   &[data-size="large"] {
     &::-webkit-search-cancel-button {
-      @apply -mr-[18px] h-48 w-48;
+      @apply -mr-[1.125rem] h-48 w-48;
     }
   }
 

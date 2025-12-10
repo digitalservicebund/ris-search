@@ -112,7 +112,7 @@ onMounted(() => {
           <component :is="getIcon(entry.title)"></component>
           <span
             :data-selected="selectedEntry === entry.id"
-            class="ris-subhead-regular lg:data-[selected=true]:font-bold"
+            class="ris-subhead-regular lg:data-[selected=true]:ris-subhead-bold"
           >
             {{ entry.title }}
           </span>

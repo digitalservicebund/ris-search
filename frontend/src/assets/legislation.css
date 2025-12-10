@@ -1,3 +1,7 @@
+.legislation {
+  @apply ris-body1-regular max-w-prose print:max-w-none;
+}
+
 /* AKN */
 .akn-act {
   @apply flex flex-col gap-32 pt-24;
@@ -131,17 +135,11 @@ Attributes from the Juris CALS format without a corresponding HTML attribute mig
 
 .dokumentenkopf {
   .titel {
-    @apply ris-heading2-bold hyphens-auto;
+    @apply ris-heading2-bold hyphens-auto max-md:text-2xl;
   }
 
   *[data-longTitle] .titel {
     @apply ris-heading3-bold;
-  }
-
-  @media (max-width: 640px) {
-    .titel {
-      font-size: 26px;
-    }
   }
 }
 
@@ -297,8 +295,7 @@ hr.trennlinie {
   display: block;
   width: 10ch;
   height: 1px;
-  @apply bg-gray-900;
-  margin-bottom: 10px;
+  @apply mb-10 bg-gray-900;
 }
 /* Do not show separator line if the non-authorial notes are preceded by authorial notes */
 .fussnoten + .nichtamtliche-fussnoten:before {
@@ -312,7 +309,7 @@ hr.trennlinie {
 
 /* Mindestbreite für Aufzählungszeichen */
 .fussnote .marker {
-  @apply min-w-32 align-super text-[small];
+  @apply min-w-32 align-super text-sm;
 }
 
 /* Stelle sicher, dass Aufzählungszeichen und p auf der gleichen Zeile stehen */
@@ -339,6 +336,7 @@ hr.trennlinie {
   .akn-item {
     @apply flex items-start;
   }
+
   /* Ensure the num has a min-width of 60px (with margin), taking more space if needed */
   .akn-item > .akn-num {
     @apply float-none mr-4 shrink grow-0 basis-56;

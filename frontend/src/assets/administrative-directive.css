@@ -1,5 +1,5 @@
 .administrative-directive {
-  @apply max-w-prose print:max-w-none;
+  @apply ris-body1-regular max-w-prose print:max-w-none;
 
   h1 {
     @apply hidden;

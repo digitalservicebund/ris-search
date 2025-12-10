@@ -8,7 +8,7 @@ describe("getAccessibilityRelatedMetrics", () => {
       configurable: true,
     });
     vi.spyOn(globalThis, "getComputedStyle").mockImplementation(() => {
-      return { fontSize: "16px" } as CSSStyleDeclaration;
+      return { fontSize: "1rem" } as CSSStyleDeclaration;
     });
   });
 
@@ -31,7 +31,7 @@ describe("getAccessibilityRelatedMetrics", () => {
     const info = getAccessibilityRelatedMetrics();
 
     expect(info.zoomLevel).toBe(125);
-    expect(info.defaultTextSize).toBe("16px");
+    expect(info.defaultTextSize).toBe("1rem");
     expect(info.themePreference).toBe("dark");
   });
 

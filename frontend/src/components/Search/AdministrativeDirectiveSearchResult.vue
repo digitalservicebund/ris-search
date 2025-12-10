@@ -66,7 +66,7 @@ function trackResultClick() {
 </script>
 
 <template>
-  <div class="my-36 flex flex-col gap-8 hyphens-auto">
+  <div class="ris-body1-regular my-36 flex flex-col gap-8 hyphens-auto">
     <SearchResultHeader :icon="RuleIcon" :items="headerItems" />
     <NuxtLink
       :to="detailPageRoute"

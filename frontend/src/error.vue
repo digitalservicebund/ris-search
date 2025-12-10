@@ -33,7 +33,7 @@ useHead({ title: pageTitle.value });
   <NuxtLayout>
     <div class="container pt-48 pb-24">
       <template v-if="isNotFoundError">
-        <h1 class="ris-heading2-regular inline-block font-semibold">
+        <h1 class="ris-heading2-bold inline-block">
           Diese Seite existiert nicht
         </h1>
         <p class="ris-body1-regular mt-8">
@@ -49,7 +49,7 @@ useHead({ title: pageTitle.value });
         />
       </template>
       <template v-else>
-        <h1 class="ris-heading2-regular inline-block font-semibold">
+        <h1 class="ris-heading2-bold inline-block">
           Es gab leider einen Fehler
         </h1>
         <p v-if="isInternalServerError" class="ris-body1-regular mt-24">

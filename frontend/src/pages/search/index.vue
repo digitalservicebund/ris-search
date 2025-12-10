@@ -90,7 +90,7 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
 <template>
   <ContentWrapper>
     <div class="pb-24">
-      <h1 class="ris-heading2-regular inline-block font-semibold">Suche</h1>
+      <h1 class="ris-heading2-bold inline-block">Suche</h1>
     </div>
     <SimpleSearchInput
       :model-value="searchParams.query.value"

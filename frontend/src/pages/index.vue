@@ -20,7 +20,7 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
   <div class="flex gap-16 bg-blue-800 pt-64 pb-96 text-white">
     <div class="container md:max-w-(--spacing-prose)">
       <div
-        class="mb-8 inline-block rounded-[3px] border border-[#FFFFFF1A] bg-blue-700 px-8 py-4 text-sm font-bold uppercase"
+        class="ris-label3-bold mb-8 inline-block rounded-sm border border-white/10 bg-blue-700 px-8 py-4 uppercase"
       >
         Testphase
       </div>
@@ -53,7 +53,7 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
       />
       <Message severity="warn" class="ris-body2-regular">
         <p class="ris-body2-bold mt-2">
-          Dieser Service befindet sich in der Testphase:
+          Dieser Service befindet sich in der Testphase.
         </p>
         <p>
           Der Datenbestand ist noch nicht vollständig und der Service in
