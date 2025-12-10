@@ -169,11 +169,17 @@ export default defineNuxtConfig({
     sitemaps: {
       static: {
         includeAppSources: true,
-        exclude: ["/case‑law/**", "/literature/**", "/norms/eli/**"],
+        exclude: [
+          "/administrative-directives/**",
+          "/case‑law/**",
+          "/literature/**",
+          "/norms/eli/**",
+        ],
         defaults: { priority: 0.7 },
       },
     },
     appendSitemaps: [
+      "/v1/sitemaps/administrative-directives/index.xml",
       "/v1/sitemaps/case-law/index.xml",
       "/v1/sitemaps/literature/index.xml",
       "/v1/sitemaps/norms/index.xml",
@@ -190,6 +196,14 @@ export default defineNuxtConfig({
     // Temporarily disabled due to data issue with Form bricks
     "/nutzungstests": {
       redirect: "/",
+    },
+    "/sitemaps/administrative-directives/**": {
+      proxy: {
+        to: `${process.env.NUXT_PUBLIC_RIS_BACKEND_URL}/v1/sitemaps/administrative-directives/**`,
+        headers: {
+          Accept: "application/xml",
+        },
+      },
     },
     "/sitemaps/case-law/**": {
       proxy: {

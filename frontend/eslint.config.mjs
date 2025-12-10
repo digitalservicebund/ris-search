@@ -51,6 +51,15 @@ export default createConfigForNuxt(undefined, [
                 'Please use "~/..." alias instead of "@/..." for project-specific imports.',
             },
           ],
+          paths: [
+            // Importing individual utilities from lodash fails in the production build,
+            // see https://github.com/nuxt/nuxt/issues/21034. This requires some additional
+            // setup to fix; in the meantime enforce the default import to prevent accidents.
+            {
+              name: "lodash",
+              allowImportNames: ["default"],
+            },
+          ],
         },
       ],
     },

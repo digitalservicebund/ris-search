@@ -18,7 +18,7 @@ const nonZeroResultCount = /[1-9][\d.]* Suchergebnis(se)?/;
 test.describe("reach search from start page", () => {
   test("searches for a query from the start page", async ({ page }) => {
     await navigate(page, "/");
-    const searchInput = page.getByRole("searchbox", { name: "Suchbegriff" });
+    const searchInput = page.getByRole("searchbox", { name: "Suchfeld" });
     await searchInput.fill("Fiktiv");
 
     const searchButton = page.getByRole("button", { name: "Suchen" });
@@ -34,7 +34,7 @@ test.describe("reach search from start page", () => {
     await page.getByRole("link", { name: "Zur Startseite" }).click();
 
     await expect(
-      page.getByRole("searchbox", { name: "Suchbegriff" }),
+      page.getByRole("searchbox", { name: "Suchfeld" }),
       "should be reset",
     ).toBeEmpty();
   });
@@ -113,7 +113,7 @@ test.describe("general search page features", () => {
     await expect(page).toHaveTitle("Suche | Rechtsinformationen des Bundes");
 
     await page
-      .getByRole("searchbox", { name: "Suchbegriff" })
+      .getByRole("searchbox", { name: "Suchfeld" })
       .fill("frühstück brötchen");
 
     await page.getByRole("button", { name: "Suchen" }).click();
@@ -198,7 +198,7 @@ test.describe("general search page features", () => {
     await page.getByRole("combobox", { name: "10" }).click();
     await page.getByRole("option", { name: "50" }).click();
 
-    await expect(searchResults).toHaveCount(17);
+    await expect(searchResults).toHaveCount(18);
   });
 });
 
@@ -715,6 +715,7 @@ test.describe("searching administrative directives", () => {
 
     // Header
     await expect(searchResult).toHaveText(/VB/);
+    await expect(searchResult).toHaveText(/DEU Neuris/);
     await expect(searchResult).toHaveText(/Baz - 121 - 1/);
     await expect(searchResult).toHaveText(/24.12.2022/);
 

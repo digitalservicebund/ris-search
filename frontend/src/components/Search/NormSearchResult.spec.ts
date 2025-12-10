@@ -171,6 +171,16 @@ describe("NormSearchResult", () => {
     );
   });
 
+  it("has accessible description linking to result type", () => {
+    renderComponent();
+
+    const link = screen.getByRole("link", {
+      name: "Highlighted Test Title",
+      description: "Norm",
+    });
+    expect(link).toBeInTheDocument();
+  });
+
   it("displays highlighted text with correct class", () => {
     const textMatch: TextMatch = {
       "@type": "SearchResultMatch",
@@ -254,7 +264,7 @@ describe("NormSearchResult", () => {
       );
 
       expect(screen.getByText("Zukünftig in Kraft")).toBeInTheDocument();
-      const badge = container.querySelector(".border-yellow-300");
+      const badge = container.querySelector(".border-yellow-400");
       expect(badge).toBeInTheDocument();
     });
 

@@ -8,7 +8,9 @@ describe("AppBanner", () => {
     await renderSuspended(AppBanner);
     expect(screen.getByRole("alert")).toBeInTheDocument();
     expect(
-      screen.getByRole("link", { name: /Finden Sie heraus, was das bedeutet/ }),
+      screen.getByRole("link", {
+        name: /Erfahren Sie mehr über die Testphase/,
+      }),
     ).toBeInTheDocument();
   });
 });

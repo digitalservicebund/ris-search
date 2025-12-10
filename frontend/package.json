@@ -28,7 +28,7 @@
   },
   "packageManager": "yarn@4.9.2",
   "dependencies": {
-    "@digitalservicebund/ris-ui": "^3.17.1",
+    "@digitalservicebund/ris-ui": "^3.18.1",
     "@nuxt/image": "^1.10.0",
     "@nuxtjs/sitemap": "^7.4.3",
     "@pinia/nuxt": "^0.11.2",

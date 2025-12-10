@@ -20,7 +20,7 @@ export enum BadgeColor {
     :class="{
       'border border-green-200 bg-green-100 text-green-800':
         color === BadgeColor.GREEN,
-      'border border-yellow-300 bg-yellow-200 text-[#634B18]':
+      'border border-yellow-400 bg-yellow-200 text-orange-800':
         color === BadgeColor.YELLOW,
       'border border-blue-500 bg-blue-200 text-blue-800':
         color === BadgeColor.BLUE,

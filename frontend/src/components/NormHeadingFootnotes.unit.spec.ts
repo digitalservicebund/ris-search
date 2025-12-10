@@ -1,44 +1,40 @@
-import { mount } from "@vue/test-utils";
-import { describe, it, expect } from "vitest";
+import { renderSuspended } from "@nuxt/test-utils/runtime";
+import userEvent from "@testing-library/user-event";
+import { screen } from "@testing-library/vue";
+import { describe, expect, it } from "vitest";
 import NormHeadingFootnotes from "./NormHeadingFootnotes.vue";
 
 describe("NormHeadingFootnotes", () => {
-  it("shows nothing if no footnote is passed", () => {
-    const wrapper = mount(NormHeadingFootnotes);
-    expect(wrapper.html()).toBe("<!--v-if-->");
-  });
-
-  it("shows short footnotes in full", () => {
-    const wrapper = mount(NormHeadingFootnotes, {
+  it("shows short footnotes in full", async () => {
+    await renderSuspended(NormHeadingFootnotes, {
       props: {
         html: "content",
         textLength: 100,
       },
     });
-    expect(wrapper.text()).toBe("content");
-    expect(wrapper.find("button").exists()).toBe(false);
+
+    expect(screen.getByText("content")).toBeInTheDocument();
+    expect(screen.queryByRole("button")).not.toBeInTheDocument();
   });
 
   it("shows a button to display longer footnotes", async () => {
-    const wrapper = mount(NormHeadingFootnotes, {
+    const user = userEvent.setup();
+
+    await renderSuspended(NormHeadingFootnotes, {
       props: {
         html: "longer content",
         textLength: 500,
       },
     });
-    expect(wrapper.get("button").text()).toBe("Fußnote anzeigen");
-    expect(wrapper.get("div.hidden").attributes("data-show")).toBe("false");
 
-    await wrapper.get("button").trigger("click");
-    await nextTick();
+    await user.click(screen.getByRole("button", { name: "Fußnote anzeigen" }));
 
-    expect(wrapper.get("button").text()).toBe("Fußnote ausblenden");
-    expect(wrapper.get("div.hidden").attributes("data-show")).toBe("true");
+    expect(screen.getAllByText("longer content")[0]).toBeVisible();
 
-    await wrapper.get("button").trigger("click");
-    await nextTick();
+    await user.click(
+      screen.getByRole("button", { name: "Fußnote ausblenden" }),
+    );
 
-    expect(wrapper.get("button").text()).toBe("Fußnote anzeigen");
-    expect(wrapper.get("div.hidden").attributes("data-show")).toBe("false");
+    expect(screen.queryAllByText("longer content")[0]).not.toBeVisible();
   });
 });

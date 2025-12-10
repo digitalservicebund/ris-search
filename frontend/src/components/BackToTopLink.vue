@@ -10,6 +10,7 @@ const handleClick = () => {
   <NuxtLink
     :to="{ hash: '#top' }"
     aria-label="zum Seitenanfang"
+    class="outline-offset-4 outline-blue-800 focus-visible:outline-4"
     @click.prevent="handleClick"
   >
     <svg

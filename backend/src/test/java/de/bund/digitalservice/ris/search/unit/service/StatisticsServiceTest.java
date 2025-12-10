@@ -34,28 +34,36 @@ class StatisticsServiceTest {
     String normsIndex = "norms";
     String literatureIndex = "literature";
     String caselawsIndex = "caselaws";
+    String administrativeDirectiveIndex = "administrative_directive";
 
-    statisticsService = new StatisticsService(client, normsIndex, literatureIndex, caselawsIndex);
+    statisticsService =
+        new StatisticsService(
+            client, normsIndex, literatureIndex, caselawsIndex, administrativeDirectiveIndex);
   }
 
   @Test
   void testGetAllCountsSuccess() throws Exception {
     Response aliasResponse =
         mockResponse(
-            "[{\"alias\":\"norms\"},{\"alias\":\"literature\"},{\"alias\":\"caselaws\"},{\"alias\":\"test\"}]");
+            "[{\"alias\":\"norms\"},{\"alias\":\"literature\"},{\"alias\":\"caselaws\"},{\"alias\":\"administrative_directive\"},{\"alias\":\"test\"}]");
     Response normsResponse = mockResponse("{\"count\":123}");
     Response literatureResponse = mockResponse("{\"count\":456}");
     Response caseLawResponse = mockResponse("{\"count\":500}");
+    Response administrativeDirectiveResponse = mockResponse("{\"count\":10}");
 
     when(lowLevelClient.performRequest(any(Request.class)))
         .thenReturn(aliasResponse)
         .thenReturn(normsResponse)
         .thenReturn(literatureResponse)
-        .thenReturn(caseLawResponse);
+        .thenReturn(caseLawResponse)
+        .thenReturn(administrativeDirectiveResponse);
 
     Map<String, Long> counts = statisticsService.getAllCounts();
 
-    assertEquals(Map.of("norms", 123L, "literature", 456L, "caselaws", 500L), counts);
+    assertEquals(
+        Map.of(
+            "literature", 456L, "norms", 123L, "caselaws", 500L, "administrative_directive", 10L),
+        counts);
   }
 
   @Test

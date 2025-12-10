@@ -39,9 +39,16 @@ public class StatisticsService {
       RestHighLevelClient client,
       @Value("${opensearch.norms-index-name}") String normsIndexName,
       @Value("${opensearch.literature-index-name}") String literatureIndexName,
-      @Value("${opensearch.caselaws-index-name}") String caselawsIndexName) {
+      @Value("${opensearch.caselaws-index-name}") String caselawsIndexName,
+      @Value("${opensearch.administrative-directive-index-name}")
+          String administrativeDirectiveIndexName) {
     this.client = client;
-    this.indexNames = Arrays.asList(normsIndexName, literatureIndexName, caselawsIndexName);
+    this.indexNames =
+        Arrays.asList(
+            normsIndexName,
+            literatureIndexName,
+            caselawsIndexName,
+            administrativeDirectiveIndexName);
   }
 
   /**

@@ -31,6 +31,10 @@
     min-width: 0;
   }
 
+  .border-number-link {
+    @apply ris-link1-regular pl-[0.25ch] outline-offset-4 outline-blue-800 hover:decoration-[3px] focus-visible:outline-4;
+  }
+
   /* Give paragraphs that are direct children of sections (no border number) the same left margin that they would have
    with a border number, visually. */
   section > p {
@@ -59,7 +63,7 @@
   }
 
   p {
-    @apply mb-16 overflow-x-auto;
+    @apply mb-16 wrap-break-word;
     unicode-bidi: isolate;
   }
 }

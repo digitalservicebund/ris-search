@@ -8,7 +8,7 @@ describe("SimpleSearchInput", () => {
     render(SimpleSearchInput);
 
     expect(
-      screen.getByRole("searchbox", { name: "Suchbegriff" }),
+      screen.getByRole("searchbox", { name: "Suchfeld" }),
     ).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Suchen" })).toBeInTheDocument();
   });
@@ -17,7 +17,7 @@ describe("SimpleSearchInput", () => {
     render(SimpleSearchInput);
 
     expect(
-      screen.getByRole("searchbox", { name: "Suchbegriff" }),
+      screen.getByRole("searchbox", { name: "Suchfeld" }),
     ).not.toBeDisabled();
   });
 
@@ -27,11 +27,11 @@ describe("SimpleSearchInput", () => {
     const { emitted } = render(SimpleSearchInput);
 
     await user.type(
-      screen.getByRole("searchbox", { name: "Suchbegriff" }),
+      screen.getByRole("searchbox", { name: "Suchfeld" }),
       "test query",
     );
 
-    expect(screen.getByRole("searchbox", { name: "Suchbegriff" })).toHaveValue(
+    expect(screen.getByRole("searchbox", { name: "Suchfeld" })).toHaveValue(
       "test query",
     );
     expect(emitted("update:modelValue")).toBeFalsy();
@@ -42,7 +42,7 @@ describe("SimpleSearchInput", () => {
       props: { modelValue: "updated model" },
     });
 
-    expect(screen.getByRole("searchbox", { name: "Suchbegriff" })).toHaveValue(
+    expect(screen.getByRole("searchbox", { name: "Suchfeld" })).toHaveValue(
       "updated model",
     );
   });
@@ -52,7 +52,7 @@ describe("SimpleSearchInput", () => {
 
     const { emitted } = render(SimpleSearchInput);
 
-    const input = screen.getByRole("searchbox", { name: "Suchbegriff" });
+    const input = screen.getByRole("searchbox", { name: "Suchfeld" });
     await user.type(input, "test query");
     await user.type(input, "{enter}");
 
@@ -65,7 +65,7 @@ describe("SimpleSearchInput", () => {
     const { emitted } = render(SimpleSearchInput);
 
     await user.type(
-      screen.getByRole("searchbox", { name: "Suchbegriff" }),
+      screen.getByRole("searchbox", { name: "Suchfeld" }),
       "test query",
     );
     await user.click(screen.getByRole("button", { name: "Suchen" }));

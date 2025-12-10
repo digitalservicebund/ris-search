@@ -26,11 +26,12 @@ useStaticPageSeo("ueber");
         </p>
         <p>
           Der Service befindet sich in der Testphase. Sie haben die Möglichkeit,
-          frühzeitig erste Funktionen zu testen und uns
+          frühzeitig erste Funktionen zu testen und uns über das
           <NuxtLink class="ris-link1-regular" :to="{ name: 'feedback' }"
-            >Feedback zu geben</NuxtLink
-          >. Die Funktionen und der Umfang der Daten werden schrittweise
-          erweitert.
+            >Feedback-Formular</NuxtLink
+          >
+          Feedback zu geben. Die Funktionen und der Umfang der Daten werden
+          schrittweise erweitert.
         </p>
         <p>
           Der Service wird gemeinsam vom Bundesministerium der Justiz und für
