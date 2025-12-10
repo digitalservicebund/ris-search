@@ -102,11 +102,9 @@ dependencies {
     testImplementation(libs.opensearch.testcontainers)
     testImplementation(libs.opensearch.test.autoconfigure)
     testImplementation(libs.testcontainers.postgresql)
-    testImplementation(libs.pact)
     testImplementation(libs.restassured)
 }
 
-val pactPath = "pacts/**/*.json"
 val generatedPath = "build/generated/**"
 spotless {
     java {
@@ -126,15 +124,12 @@ spotless {
                 }
             },
         )
-        targetExclude(pactPath, generatedPath)
     }
     kotlin {
         ktfmt()
-        targetExclude(pactPath, generatedPath)
     }
     kotlinGradle {
         ktlint("1.2.1")
-        targetExclude(pactPath, generatedPath)
     }
 }
 
