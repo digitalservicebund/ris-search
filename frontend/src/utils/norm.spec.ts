@@ -184,3 +184,87 @@ describe("getMostRelevantExpression", () => {
     expect(getMostRelevantExpression(testCase)).toBe("oldExpression");
   });
 });
+
+describe("getNormMetadataItems", () => {
+  it("creates correct labels", () => {
+    const result = getNormMetadataItems();
+
+    expect(result.map((item) => item.label)).toEqual([
+      "Abkürzung",
+      "Status",
+      "Gültig ab",
+      "Gültig bis",
+    ]);
+
+    expect(result.map((item) => item.value)).toEqual([
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+    ]);
+  });
+
+  it("converts empty properties to undefined values", () => {
+    const result = getNormMetadataItems({
+      abbreviation: "",
+      legislationIdentifier: "",
+      workExample: {
+        "@type": "Legislation",
+        legislationIdentifier: "",
+        "@id": "",
+        temporalCoverage: "",
+        legislationLegalForce: "NotInForce",
+        encoding: [
+          {
+            "@type": "LegislationObject",
+            "@id": "",
+            contentUrl: "",
+            encodingFormat: "",
+            inLanguage: "",
+          },
+        ],
+        tableOfContents: [],
+        hasPart: [],
+      },
+    });
+
+    expect(result.map((item) => item.value)).toEqual([
+      "",
+      undefined,
+      undefined,
+      undefined,
+    ]);
+  });
+
+  it("converts properties to correct values", () => {
+    const result = getNormMetadataItems({
+      abbreviation: "ABC",
+      legislationIdentifier: "",
+      workExample: {
+        "@type": "Legislation",
+        legislationIdentifier: "",
+        "@id": "",
+        temporalCoverage: "2025-05-06/2037-03-31",
+        legislationLegalForce: "NotInForce",
+        encoding: [
+          {
+            "@type": "LegislationObject",
+            "@id": "",
+            contentUrl: "",
+            encodingFormat: "",
+            inLanguage: "",
+          },
+        ],
+        tableOfContents: [],
+        hasPart: [],
+      },
+    });
+
+    expect(result.map((item) => item.value)).toEqual([
+      "ABC",
+      "Aktuell gültig",
+      "06.05.2025",
+      "31.03.2037",
+    ]);
+  });
+});

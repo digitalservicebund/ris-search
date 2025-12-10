@@ -43,7 +43,15 @@ function renderComponent({
 
   return render(LiteratureSearchResult, {
     props: { searchResult, order: 0 },
-    global: { stubs: { RouterLink: true }, renderStubDefaultSlot: true },
+    global: {
+      stubs: {
+        NuxtLink: {
+          template:
+            '<a :href="to" :aria-describedby="ariaDescribedby"><slot /></a>',
+          props: ["to", "ariaDescribedby"],
+        },
+      },
+    },
   });
 }
 
@@ -54,6 +62,16 @@ describe("LiteratureSearchResult", () => {
       screen.getByText(
         "Eine Untersuchung der juristischen Methoden im 21. Jahrhundert",
       ),
+    ).toBeInTheDocument();
+  });
+
+  it("has accessible description linking to result type", async () => {
+    renderComponent({});
+    expect(
+      screen.getByRole("link", {
+        name: "Eine Untersuchung der juristischen Methoden im 21. Jahrhundert",
+        description: "Book",
+      }),
     ).toBeInTheDocument();
   });
 

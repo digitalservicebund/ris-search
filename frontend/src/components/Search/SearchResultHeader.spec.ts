@@ -5,7 +5,7 @@ import SearchResultHeader, {
 } from "~/components/Search/SearchResultHeader.vue";
 
 function renderComponent(items: SearchResultHeaderItem[] = []) {
-  render(SearchResultHeader, {
+  return render(SearchResultHeader, {
     props: {
       icon: markRaw({
         template: "<span>icon-stub</span>",
@@ -75,5 +75,16 @@ describe("SearchResultHeader", () => {
     expect(screen.getByText("icon-stub").nextElementSibling).toHaveTextContent(
       "trailing-component",
     );
+  });
+
+  it("renders IDs", async () => {
+    renderComponent([
+      {
+        value: "Item 1",
+        id: "foo",
+      },
+    ]);
+
+    expect(screen.getByText("Item 1")).toHaveAttribute("id", "foo");
   });
 });

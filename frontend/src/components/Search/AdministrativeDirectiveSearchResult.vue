@@ -21,10 +21,12 @@ const detailPageRoute = computed(() => ({
   },
 }));
 
+const resultTypeId = useId();
+
 const headerItems = computed<SearchResultHeaderItem[]>(() => {
   const item = searchResult.item;
   return [
-    { value: item.documentType },
+    { value: item.documentType, id: resultTypeId },
     { value: item.legislationAuthority },
     { value: item.referenceNumbers?.[0] },
     { value: dateFormattedDDMMYYYY(item.entryIntoForceDate) },
@@ -68,7 +70,8 @@ function trackResultClick() {
     <SearchResultHeader :icon="RuleIcon" :items="headerItems" />
     <NuxtLink
       :to="detailPageRoute"
-      class="ris-heading3-bold max-w-title link-hover block text-blue-800"
+      :aria-describedby="resultTypeId"
+      class="ris-heading3-bold! ris-link1-regular max-w-title link-hover block"
       @click="trackResultClick()"
     >
       <h2>

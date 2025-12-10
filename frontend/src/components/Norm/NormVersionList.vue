@@ -67,7 +67,7 @@ const tableRowData = computed<TableRowData[]>(() => {
 const rowClass = (row: TableRowData) => {
   return row.selectable
     ? "group cursor-pointer"
-    : "cursor-not-allowed pointer-event-none bg-blue-100 text-gray-900";
+    : "cursor-not-allowed pointer-event-none bg-blue-100 text-gray-1000";
 };
 
 async function onRowSelect() {

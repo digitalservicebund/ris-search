@@ -29,11 +29,27 @@ public record Literature(
     @Nullable @Field(name = Fields.MAIN_TITLE) String mainTitle,
     @Nullable @Field(name = Fields.DOCUMENTARY_TITLE) String documentaryTitle,
     @Nullable @Field(name = Fields.MAIN_TITLE_ADDITIONS) String mainTitleAdditions,
+    @Nullable @Field(name = Fields.EDITION) String edition,
     @ElementCollection @Field(name = Fields.AUTHORS) List<String> authors,
     @ElementCollection @Field(name = Fields.COLLABORATORS) List<String> collaborators,
     @ElementCollection @Field(name = Fields.LANGUAGE) List<String> languages,
     @ElementCollection @Field(name = Fields.ORIGINATOR) List<String> originators,
     @ElementCollection @Field(name = Fields.CONFERENCE_NOTE) List<String> conferenceNotes,
+    @ElementCollection @Field(name = Fields.UNIVERSITY_NOTES) List<String> universityNotes,
+    @ElementCollection @Field(name = Fields.EDITOR) List<String> editors,
+    @ElementCollection @Field(name = Fields.FOUNDER) List<String> founder,
+    @ElementCollection @Field(name = Fields.PUBLISHER_ORGANIZATIONS)
+        List<String> publisherOrganizations,
+    @ElementCollection @Field(name = Fields.PUBLISHER_PERSONS) List<String> publisherPersons,
+    @ElementCollection @Field(name = Fields.SHORT_TITLES) List<String> shortTitles,
+    @ElementCollection @Field(name = Fields.ADDITIONAL_TITLES) List<String> additionalTitles,
+    @ElementCollection @Field(name = Fields.FULL_TITLE_ADDITIONS) List<String> fullTitleAdditions,
+    @ElementCollection @Field(name = Fields.FOOTNOTES) List<String> footnotes,
+    @ElementCollection @Field(name = Fields.PUBLISHER_INFORMATION)
+        List<String> publicherInformation,
+    @ElementCollection @Field(name = Fields.INTERNATIONAL_IDENTIFIERS)
+        List<String> internationalIdentifiers,
+    @ElementCollection @Field(name = Fields.VOLUMES) List<String> volumes,
     @Nullable @Field(name = Fields.SHORT_REPORT) String shortReport,
     @Nullable @Field(name = Fields.OUTLINE) String outline,
     @JsonIgnore @Field(name = Fields.INDEXED_AT) String indexedAt)
@@ -92,6 +108,45 @@ public record Literature(
 
     /** Kongressvermerk * */
     public static final String CONFERENCE_NOTE = "conference_note";
+
+    /** Hochschulvermerk */
+    public static final String UNIVERSITY_NOTES = "university_note";
+
+    /** Begruender */
+    public static final String FOUNDER = "founder";
+
+    /** Bearbeiter */
+    public static final String EDITOR = "editor";
+
+    /** Herausgeber (Institution) */
+    public static final String PUBLISHER_ORGANIZATIONS = "publisher_organizations";
+
+    /** Herausgeber (natürliche Person) */
+    public static final String PUBLISHER_PERSONS = "publisher_persons";
+
+    /** titelkurzformen */
+    public static final String SHORT_TITLES = "short_titles";
+
+    /** sonstige sachtitle */
+    public static final String ADDITIONAL_TITLES = "additional_titles";
+
+    /** Verlagsangaben */
+    public static final String PUBLISHER_INFORMATION = "publisher_information";
+
+    /** Teilbaende */
+    public static final String VOLUMES = "volumes";
+
+    /** Fußnoten */
+    public static final String FOOTNOTES = "footnotes";
+
+    /** Ausgabe */
+    public static final String EDITION = "edition";
+
+    /** Internationale Standardnummern */
+    public static final String INTERNATIONAL_IDENTIFIERS = "international_identifiers";
+
+    /** gesamttitel angaben */
+    public static final String FULL_TITLE_ADDITIONS = "full_title_additions";
 
     /** Used internally to store at what time the document was indexed * */
     public static final String INDEXED_AT = "indexed_at";

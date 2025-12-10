@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<akn:akomaNtoso
+        xmlns:akn="http://docs.oasis-open.org/legaldocml/ns/akn/3.0"
+        xmlns:ris="http://ldml.neuris.de/meta/">
+    <akn:doc name="offene-struktur">
+        <akn:meta>
+            <akn:proprietary source="attributsemantik-noch-undefiniert">
+                <ris:meta>
+                    <ris:tableOfContentsEntries>
+                        <ris:tableOfContentsEntry>1. Foo</ris:tableOfContentsEntry>
+                    </ris:tableOfContentsEntries>
+                    <ris:activeReferences>
+                        <ris:activeReference typeNumber="23"
+                                             reference="Verweis 123A"
+                                             dateOfVersion="2025-07-17" />
+                        <ris:activeReference typeNumber="82"
+                                             reference="Verweis 567B"
+                                             dateOfVersion="2025-01-01" />
+                    </ris:activeReferences>
+                </ris:meta>
+            </akn:proprietary>
+        </akn:meta>
+        <akn:preface>
+            <akn:longTitle>
+                <akn:block name="longTitle">Titel einer Verwaltungsvorschrift</akn:block>
+            </akn:longTitle>
+        </akn:preface>
+        <akn:mainBody>
+            <akn:div>
+                <akn:p>Vorschrift Text</akn:p>
+            </akn:div>
+        </akn:mainBody>
+    </akn:doc>
+</akn:akomaNtoso>

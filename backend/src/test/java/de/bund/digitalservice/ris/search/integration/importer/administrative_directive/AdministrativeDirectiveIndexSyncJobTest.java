@@ -14,7 +14,6 @@ import de.bund.digitalservice.ris.search.repository.objectstorage.Administrative
 import de.bund.digitalservice.ris.search.repository.objectstorage.PortalBucket;
 import de.bund.digitalservice.ris.search.repository.opensearch.AdministrativeDirectiveRepository;
 import de.bund.digitalservice.ris.search.service.AdministrativeDirectiveIndexSyncJob;
-import de.bund.digitalservice.ris.search.service.IndexStatusService;
 import de.bund.digitalservice.ris.search.service.IndexingState;
 import java.util.HashSet;
 import java.util.List;
@@ -31,7 +30,6 @@ class AdministrativeDirectiveIndexSyncJobTest extends ContainersIntegrationBase 
   @Autowired AdministrativeDirectiveBucket bucket;
   @Autowired PortalBucket portalBucket;
   @Autowired AdministrativeDirectiveIndexSyncJob syncJob;
-  @Autowired IndexStatusService indexStatusService;
   @Autowired AdministrativeDirectiveRepository repository;
 
   @BeforeEach

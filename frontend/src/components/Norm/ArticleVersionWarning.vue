@@ -21,7 +21,7 @@ const currentArticleStatus = computed(() =>
   <VersionWarningMessage
     :current-version-validity-status="currentArticleStatus"
     :in-force-version-link="inForceVersionLink"
-    historical-warning-message="Paragraf einer historischen Fassung."
-    future-warning-message="Paragraf einer zukünftigen Fassung."
+    historical-warning-message="Sie lesen einen Paragrafen einer historischen Fassung."
+    future-warning-message="Sie lesen einen Paragrafen einer zukünftigen Fassung."
   />
 </template>

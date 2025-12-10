@@ -64,6 +64,30 @@ test("displays administrative directive page with metadata and text tab by defau
   await expect(textSection.getByText("2. Genaues")).toBeVisible();
   await expect(textSection.getByText("3. Unwichtiges")).toBeVisible();
   await expect(textSection.getByText("4. Sonstiges")).toBeVisible();
+
+  // References
+  await expect(
+    textSection.getByRole("heading", { level: 2, name: "Verweise" }),
+  ).toBeVisible();
+  await expect(textSection.getByText("BVG")).toBeVisible();
+  await expect(textSection.getByText("RehaAnglG")).toBeVisible();
+
+  // Citations
+  await expect(
+    textSection.getByRole("heading", {
+      level: 2,
+      name: "Dieser Beitrag zitiert",
+    }),
+  ).toBeVisible();
+  await expect(
+    textSection.getByRole("heading", { level: 3, name: "Rechtsprechung" }),
+  ).toBeVisible();
+  await expect(
+    textSection.getByText("FOO BAR RefNr 123 2025-07-01"),
+  ).toBeVisible();
+  await expect(
+    textSection.getByText("ABC BAZ RefNr 456 2023-01-01"),
+  ).toBeVisible();
 });
 
 test("can navigate to search via breadcrumb", async ({ page }) => {
@@ -157,4 +181,135 @@ test("hides tabs and shows details if document is empty", async ({ page }) => {
     "Norm:",
     "nicht vorhanden",
   ]);
+});
+
+test.describe("actions menu", () => {
+  test("can use 'copy link' button to copy url to clipboard", async ({
+    page,
+    browserName,
+    context,
+    isMobileTest,
+  }) => {
+    await navigate(page, "/administrative-directives/KSNR000000001");
+
+    if (browserName === "chromium") {
+      await context.grantPermissions(["clipboard-read", "clipboard-write"]);
+    }
+
+    if (isMobileTest) {
+      await page.getByLabel("Aktionen anzeigen").click();
+    }
+
+    const button = page.getByRole("link", {
+      name: "Link kopieren",
+    });
+
+    await button.isVisible();
+
+    if (!isMobileTest) {
+      await button.hover();
+
+      await expect(
+        page.getByRole("tooltip", {
+          name: "Link kopieren",
+        }),
+      ).toBeVisible({
+        timeout: 15000,
+      });
+    }
+
+    await button.click();
+    if (!isMobileTest) await expect(page.getByText("Kopiert!")).toBeVisible();
+    if (browserName === "chromium") {
+      const clipboardContents = await page.evaluate(() => {
+        return navigator.clipboard.readText();
+      });
+      expect(
+        clipboardContents.endsWith("/administrative-directives/KSNR000000001"),
+      ).toBe(true);
+    }
+  });
+
+  test("can use 'print button' to open print menu", async ({
+    page,
+    isMobileTest,
+  }) => {
+    await navigate(page, "/administrative-directives/KSNR000000001");
+    if (isMobileTest) await page.getByLabel("Aktionen anzeigen").click();
+
+    const button = isMobileTest
+      ? page.getByRole("menuitem", { name: "Drucken" })
+      : page.getByRole("button", {
+          name: "Drucken",
+        });
+
+    if (!isMobileTest) {
+      await button.hover();
+
+      await expect(page.getByRole("tooltip", { name: "Drucken" })).toBeVisible({
+        timeout: 15000,
+      });
+    }
+
+    await test.step("can open print menu", async () => {
+      await page.evaluate(
+        "(() => {window.waitForPrintDialog = new Promise(f => window.print = f);})()",
+      );
+      await button.click();
+
+      await page.waitForFunction("window.waitForPrintDialog");
+    });
+  });
+
+  test("can't use PDF action as it is disabled", async ({
+    page,
+    isMobileTest,
+  }) => {
+    await navigate(page, "/administrative-directives/KSNR000000001");
+    if (isMobileTest) await page.getByLabel("Aktionen anzeigen").click();
+    const button = isMobileTest
+      ? page.getByText("Als PDF speichern")
+      : page.getByRole("button", {
+          name: "Als PDF speichern",
+        });
+
+    if (!isMobileTest) {
+      await button.hover();
+
+      await expect(
+        page.getByRole("tooltip", { name: "Als PDF speichern" }),
+      ).toBeVisible({
+        timeout: 15000,
+      });
+    }
+
+    if (!isMobileTest) await expect(button).toBeDisabled();
+  });
+
+  test("can use XML action to view administrative directive xml file", async ({
+    page,
+    isMobileTest,
+  }) => {
+    await navigate(page, "/administrative-directives/KSNR000000001");
+
+    if (isMobileTest) await page.getByLabel("Aktionen anzeigen").click();
+    const button = page.getByRole("link", {
+      name: "XML anzeigen",
+    });
+
+    if (!isMobileTest) {
+      await button.hover();
+
+      await expect(
+        page.getByRole("tooltip", { name: "XML anzeigen" }),
+      ).toBeVisible({
+        timeout: 15000,
+      });
+    }
+
+    await button.click();
+    await page.waitForURL(`v1/administrative-directive/KSNR000000001.xml`, {
+      waitUntil: "commit",
+    });
+  });
 });

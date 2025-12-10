@@ -3,7 +3,7 @@ import { RisAutoComplete } from "@digitalservicebund/ris-ui/components";
 import _ from "lodash";
 import type { AutoCompleteDropdownClickEvent } from "primevue/autocomplete";
 import useBackendUrl from "~/composables/useBackendUrl";
-import { DocumentKind } from "~/types";
+import { DocumentKind, type CourtSearchResult } from "~/types";
 import { courtFilterDefaultSuggestions } from "~/utils/search/courtFilter";
 
 const props = defineProps<{
@@ -17,19 +17,18 @@ const isCaseLaw = computed(() =>
   props.category?.startsWith(DocumentKind.CaseLaw),
 );
 
-type CourtSearchResult = { id: string; label: string; count?: number };
-
-const suggestions = ref<CourtSearchResult[]>([]);
+const searchResults = ref<CourtSearchResult[]>([]);
 
 const search = async (prefix?: string) => {
   const params = prefix ? { prefix } : {};
-  suggestions.value = await $fetch<CourtSearchResult[]>(
+  searchResults.value = await $fetch<CourtSearchResult[]>(
     useBackendUrl("/v1/case-law/courts"),
     {
       params: params,
     },
   );
 };
+
 const searchDebounced = _.debounce(search, 250);
 
 /*
@@ -54,7 +53,7 @@ const onComplete = (
   } else {
     // dropdown was opened without any text entered or value pre-selected
     // a copy of the default suggestions is required since the loading
-    suggestions.value = [...courtFilterDefaultSuggestions];
+    searchResults.value = [...courtFilterDefaultSuggestions];
   }
 };
 
@@ -63,7 +62,7 @@ const onDropdownClick = (
 ) => {
   if (event.query === undefined) {
     // dropdown has been closed
-    suggestions.value = [];
+    searchResults.value = [];
   } else {
     // onComplete will also fire, but with an empty query
     // therefore, call it again
@@ -72,23 +71,38 @@ const onDropdownClick = (
 };
 
 const onItemSelect = () => {
-  suggestions.value = [];
+  searchResults.value = [];
 };
 
-const autoComplete = ref<typeof RisAutoComplete | null>(null);
+// TODO: Replace with type from RIS UI once https://github.com/digitalservicebund/ris-ui/pull/404
+// is released
+const suggestions = computed<
+  { id: string; label: string; secondaryLabel?: string }[]
+>(() =>
+  searchResults.value.map((i) => ({
+    id: i.id,
+    label: i.label,
+    secondaryLabel: i.id,
+  })),
+);
 </script>
 
 <template>
-  <InputField v-if="isCaseLaw" id="courtFilter" v-slot="{ id }" label="Gericht">
+  <InputField
+    v-if="isCaseLaw"
+    id="courtFilter"
+    v-slot="{ id }"
+    label="Bundesgericht"
+  >
     <RisAutoComplete
-      ref="autoComplete"
       v-model="model"
-      typeahead
+      :input-id="id"
+      :suggestions
+      append-to="self"
       dropdown
       dropdown-mode="blank"
-      :suggestions="suggestions"
-      :input-id="id"
-      append-to="self"
+      placeholder="Auswählen oder suchen"
+      typeahead
       @complete="onComplete"
       @dropdown-click="onDropdownClick"
       @item-select="onItemSelect"

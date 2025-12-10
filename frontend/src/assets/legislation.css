@@ -146,8 +146,6 @@ Attributes from the Juris CALS format without a corresponding HTML attribute mig
 }
 
 .dokumentenkopf-fussnoten {
-  @apply mt-20 mb-0 max-w-(--spacing-prose);
-
   .fussnoten {
     @apply my-0 space-y-12;
   }

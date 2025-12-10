@@ -10,6 +10,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import de.bund.digitalservice.ris.search.models.DocumentKind;
+import de.bund.digitalservice.ris.search.repository.objectstorage.AdministrativeDirectiveBucket;
 import de.bund.digitalservice.ris.search.repository.objectstorage.CaseLawBucket;
 import de.bund.digitalservice.ris.search.repository.objectstorage.LiteratureBucket;
 import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
@@ -30,6 +31,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 @ExtendWith(OutputCaptureExtension.class)
 class SitemapsUpdateJobTest {
 
+  @Mock AdministrativeDirectiveBucket administrativeDirectiveBucket;
   @Mock CaseLawBucket caseLawBucket;
   @Mock LiteratureBucket literatureBucket;
   @Mock NormsBucket normsBucket;
@@ -40,16 +42,24 @@ class SitemapsUpdateJobTest {
   @BeforeEach
   void setup() {
     sitemapsUpdateJob =
-        new SitemapsUpdateJob(caseLawBucket, literatureBucket, normsBucket, sitemapService);
+        new SitemapsUpdateJob(
+            administrativeDirectiveBucket,
+            caseLawBucket,
+            literatureBucket,
+            normsBucket,
+            sitemapService);
     ReflectionTestUtils.setField(sitemapsUpdateJob, "urlsPerPage", 1);
   }
 
   @Test
   void sitemapsUpdateJobCallsSitemapServiceForBatchesAndIndex() {
+    List<String> administrativeDirective = new ArrayList<>();
     List<String> caseLawKeys = new ArrayList<>();
     List<String> literatureKeys = new ArrayList<>();
     List<String> normsKeys = new ArrayList<>();
+
     for (int i = 1; i < 3; i++) {
+      administrativeDirective.add("administrative-directive/KSNR000" + i + ".akn.xml");
       caseLawKeys.add("case-law/KORE12354" + i + ".xml");
       literatureKeys.add("literature/XXLU00000" + i + ".akn.xml");
       normsKeys.add(
@@ -58,13 +68,20 @@ class SitemapsUpdateJobTest {
               + "/1992-01-01/1/deu/1992-01-02/regelungstext-verkuendung-1.xml");
     }
 
+    when(administrativeDirectiveBucket.getAllKeys()).thenReturn(administrativeDirective);
     when(caseLawBucket.getAllKeys()).thenReturn(caseLawKeys);
     when(literatureBucket.getAllKeys()).thenReturn(literatureKeys);
     when(normsBucket.getAllKeys()).thenReturn(normsKeys);
 
     sitemapsUpdateJob.runJob();
 
-    verify(sitemapService, times(6)).createBatchSitemap(anyInt(), anyList(), any(), anyString());
+    verify(sitemapService, times(8)).createBatchSitemap(anyInt(), anyList(), any(), anyString());
+
+    verify(sitemapService, times(2))
+        .createBatchSitemap(
+            anyInt(), anyList(), eq(DocumentKind.ADMINISTRATIVE_DIRECTIVE), anyString());
+    verify(sitemapService, times(1))
+        .createIndexSitemap(anyInt(), eq(DocumentKind.ADMINISTRATIVE_DIRECTIVE));
 
     verify(sitemapService, times(2))
         .createBatchSitemap(anyInt(), anyList(), eq(DocumentKind.CASE_LAW), anyString());
@@ -84,6 +101,9 @@ class SitemapsUpdateJobTest {
   @Test
   void invalidFilesDoNotProduceSitemapFiles() {
     // simulate an image with no parent xml
+    List<String> vvKeys = List.of("administrative-directive/KSNR0001.png");
+
+    // simulate an image with no parent xml
     List<String> caselawKeys = List.of("case-law/KORE12354.png");
 
     // simulate an image with no parent xml
@@ -95,6 +115,7 @@ class SitemapsUpdateJobTest {
             "eli/bund/bgbl-1/1992/s101/1992-01-01/1/deu/1992-01-02/NOT_VALID/regelungstext-1.xml",
             "eli/bund/bgbl-1/1992/s101/1992-01-01/1/deu/1992-01-02/NOT_VALID/something-else.xml");
 
+    when(administrativeDirectiveBucket.getAllKeys()).thenReturn(vvKeys);
     when(caseLawBucket.getAllKeys()).thenReturn(caselawKeys);
     when(literatureBucket.getAllKeys()).thenReturn(literatureKeys);
     when(normsBucket.getAllKeys()).thenReturn(normsKeys);
@@ -102,7 +123,7 @@ class SitemapsUpdateJobTest {
     sitemapsUpdateJob.runJob();
 
     verify(sitemapService, times(0)).createBatchSitemap(anyInt(), anyList(), any(), anyString());
-    verify(sitemapService, times(3)).createIndexSitemap(anyInt(), any());
+    verify(sitemapService, times(4)).createIndexSitemap(anyInt(), any());
   }
 
   @Test
@@ -115,7 +136,7 @@ class SitemapsUpdateJobTest {
 
     when(normsBucket.getAllKeys()).thenReturn(normsKeys);
 
-    sitemapsUpdateJob.createSitemaps(normsBucket, DocumentKind.LEGISLATION, "norms");
+    sitemapsUpdateJob.createSitemaps(normsBucket, DocumentKind.LEGISLATION);
 
     verify(sitemapService, times(1)).createBatchSitemap(anyInt(), anyList(), any(), anyString());
     verify(sitemapService, times(1))
@@ -132,7 +153,7 @@ class SitemapsUpdateJobTest {
 
     when(normsBucket.getAllKeys()).thenReturn(normsKeys);
 
-    sitemapsUpdateJob.createSitemaps(normsBucket, DocumentKind.LEGISLATION, "norms");
+    sitemapsUpdateJob.createSitemaps(normsBucket, DocumentKind.LEGISLATION);
 
     verify(sitemapService, times(1)).createBatchSitemap(anyInt(), anyList(), any(), anyString());
     verify(sitemapService, times(1))

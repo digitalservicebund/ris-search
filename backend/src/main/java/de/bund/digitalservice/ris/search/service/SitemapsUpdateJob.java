@@ -1,6 +1,7 @@
 package de.bund.digitalservice.ris.search.service;
 
 import de.bund.digitalservice.ris.search.models.DocumentKind;
+import de.bund.digitalservice.ris.search.repository.objectstorage.AdministrativeDirectiveBucket;
 import de.bund.digitalservice.ris.search.repository.objectstorage.CaseLawBucket;
 import de.bund.digitalservice.ris.search.repository.objectstorage.LiteratureBucket;
 import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
@@ -33,6 +34,7 @@ public class SitemapsUpdateJob implements Job {
   @Value("${sitemaps.urls-per-page:40000}")
   private Integer urlsPerPage;
 
+  private final AdministrativeDirectiveBucket administrativeDirectiveBucket;
   private final CaseLawBucket caseLawBucket;
   private final LiteratureBucket literatureBucket;
   private final NormsBucket normsBucket;
@@ -45,12 +47,14 @@ public class SitemapsUpdateJob implements Job {
    */
   public Job.ReturnCode runJob() {
     Instant jobStarted = Instant.now();
+    logger.info("Starting sitemaps update job for administrative directives");
+    createSitemaps(administrativeDirectiveBucket, DocumentKind.ADMINISTRATIVE_DIRECTIVE);
     logger.info("Starting sitemaps update job for case law");
-    createSitemaps(caseLawBucket, DocumentKind.CASE_LAW, "case-law");
+    createSitemaps(caseLawBucket, DocumentKind.CASE_LAW);
     logger.info("Starting sitemaps update job for literature");
-    createSitemaps(literatureBucket, DocumentKind.LITERATURE, "literature");
+    createSitemaps(literatureBucket, DocumentKind.LITERATURE);
     logger.info("Starting sitemaps update job for norms");
-    createSitemaps(normsBucket, DocumentKind.LEGISLATION, "norms");
+    createSitemaps(normsBucket, DocumentKind.LEGISLATION);
     logger.info("Clear old sitemap files");
     sitemapService.deleteSitemapFiles(jobStarted);
     return ReturnCode.SUCCESS;
@@ -61,9 +65,9 @@ public class SitemapsUpdateJob implements Job {
    *
    * @param currentBucket the bucket for the current sitemap docKind
    * @param docKind the current sitemap docKind
-   * @param prefix the prefix for the current sitemap docKind
    */
-  public void createSitemaps(ObjectStorage currentBucket, DocumentKind docKind, String prefix) {
+  public void createSitemaps(ObjectStorage currentBucket, DocumentKind docKind) {
+    String prefix = docKind.getSiteMapPath();
     List<String> ids =
         currentBucket.getAllKeys().stream()
             .map(e -> DocumentKind.extractIdFromFileName(e, docKind))

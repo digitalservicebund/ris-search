@@ -24,9 +24,14 @@ const highlights: ComputedRef<TextMatch[]> = computed(
   () => props.searchResult.textMatches,
 );
 
-const headline = computed(
-  () => getMatch("name", highlights.value) || item.value.name,
-);
+const headline = computed(() => {
+  const match =
+    getMatch("name", highlights.value) ||
+    item.value.name ||
+    "Titelzeile nicht vorhanden";
+
+  return sanitizeSearchResult(match);
+});
 
 function getMatch(match: string, highlights: TextMatch[]) {
   return highlights.find((highlight) => highlight.name === match)?.text;
@@ -65,9 +70,11 @@ const validityStatus = computed(() => {
   return formatNormValidity(item.value.workExample.temporalCoverage);
 });
 
+const resultTypeId = useId();
+
 const headerItems = computed<SearchResultHeaderItem[]>(() => {
   return [
-    { value: "Norm" },
+    { value: "Norm", id: resultTypeId },
     { value: item.value.abbreviation },
     { value: formattedDate.value },
   ].filter((item): item is SearchResultHeaderItem => item.value !== undefined);
@@ -88,16 +95,11 @@ const headerItems = computed<SearchResultHeaderItem[]>(() => {
     <NuxtLink
       v-if="!!link"
       :to="link"
-      class="ris-heading3-bold max-w-title link-hover block text-blue-800"
+      :aria-describedby="resultTypeId"
+      class="ris-heading3-bold! ris-link1-regular max-w-title link-hover block"
       @click="openResult(link)"
     >
-      <h2
-        v-html="
-          headline
-            ? sanitizeSearchResult(headline)
-            : 'Titelzeile nicht vorhanden'
-        "
-      />
+      <h2 v-html="headline" />
     </NuxtLink>
 
     <div

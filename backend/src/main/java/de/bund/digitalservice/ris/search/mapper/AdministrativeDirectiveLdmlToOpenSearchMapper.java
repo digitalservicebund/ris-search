@@ -1,6 +1,7 @@
 package de.bund.digitalservice.ris.search.mapper;
 
 import de.bund.digitalservice.ris.search.exception.OpenSearchMapperException;
+import de.bund.digitalservice.ris.search.models.ldml.MainBody;
 import de.bund.digitalservice.ris.search.models.ldml.directive.ActiveReference;
 import de.bund.digitalservice.ris.search.models.ldml.directive.AdministrativeDirectiveLdml;
 import de.bund.digitalservice.ris.search.models.ldml.directive.Analysis;
@@ -14,7 +15,6 @@ import de.bund.digitalservice.ris.search.models.ldml.directive.Identification;
 import de.bund.digitalservice.ris.search.models.ldml.directive.ImplicitReference;
 import de.bund.digitalservice.ris.search.models.ldml.directive.Keyword;
 import de.bund.digitalservice.ris.search.models.ldml.directive.LongTitle;
-import de.bund.digitalservice.ris.search.models.ldml.directive.MainBody;
 import de.bund.digitalservice.ris.search.models.ldml.directive.Meta;
 import de.bund.digitalservice.ris.search.models.ldml.directive.OtherReferences;
 import de.bund.digitalservice.ris.search.models.ldml.directive.Preface;
