@@ -69,8 +69,10 @@ test("displays administrative directive page with metadata and text tab by defau
   await expect(
     textSection.getByRole("heading", { level: 2, name: "Verweise" }),
   ).toBeVisible();
-  await expect(textSection.getByText("BVG")).toBeVisible();
-  await expect(textSection.getByText("RehaAnglG")).toBeVisible();
+  await expect(textSection.getByText("BVG § 16c Abs 2")).toBeVisible();
+  await expect(
+    textSection.getByText("Verweis 890C Section B § 4 Abs. 1 8"),
+  ).toBeVisible();
 
   // Citations
   await expect(
