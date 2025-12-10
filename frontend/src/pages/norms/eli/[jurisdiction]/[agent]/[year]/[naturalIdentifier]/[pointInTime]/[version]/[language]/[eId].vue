@@ -19,11 +19,7 @@ import {
 } from "~/utils/dateFormatting";
 import { formatDocumentKind } from "~/utils/displayValues";
 import { parseDocument } from "~/utils/htmlParser";
-import {
-  getNormBreadcrumbTitle,
-  getNormTitle,
-  temporalCoverageToValidityInterval,
-} from "~/utils/norm";
+import { getNormBreadcrumbTitle, getNormTitle } from "~/utils/norm";
 import { findNodePath, tocItemsToTreeNodes } from "~/utils/tableOfContents";
 import { truncateAtWord } from "~/utils/textFormatting";
 import IcBaselineArrowBack from "~icons/ic/baseline-arrow-back";
@@ -135,15 +131,8 @@ const breadcrumbItems: Ref<BreadcrumbItem[]> = computed(() => {
 
 const htmlTitle = computed(() => data.value?.articleHeading);
 const topNormLinkText = computed(() => {
-  if (!norm.value) return "";
-  const baseText = norm.value.name || norm.value.alternateName;
-  const validityInterval = temporalCoverageToValidityInterval(
-    norm.value.workExample.temporalCoverage,
-  );
-  if (!article.value?.isActive && validityInterval?.from) {
-    return `${baseText} vom ${validityInterval.from}`;
-  }
-  return baseText;
+  if (norm.value) return norm.value.name || norm.value.alternateName;
+  else return "";
 });
 
 const validVersions =
