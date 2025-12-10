@@ -9,7 +9,7 @@ defineProps<{ title?: string }>();
     >
       {{ title }}<slot name="inline"></slot>
     </h1>
-    <div class="mt-16">
+    <div v-if="$slots.default" class="mt-16">
       <slot />
     </div>
   </div>
