@@ -82,8 +82,13 @@
                     <ris:activeReferences>
                         <ris:activeReference typeNumber="82" reference="BVG" paragraph="§ 16c"
                             position="Abs 2" dateOfVersion="2018-01-22" />
-                        <ris:activeReference typeNumber="82" reference="RehaAnglG" paragraph="§ 15"
-                            position="Abs 2" dateOfVersion="2014-08-07" />
+                        <ris:activeReference typeNumber="82"
+                                             reference="Verweis 890C"
+                                             section="Section B"
+                                             paragraph="§ 4"
+                                             subParagraph="Abs. 1"
+                                             position="8"
+                                             dateOfVersion="2025-01-01" />
                     </ris:activeReferences>
                     <ris:tableOfContentsEntries>
                         <ris:tableOfContentsEntry>1. Allgemeines</ris:tableOfContentsEntry>

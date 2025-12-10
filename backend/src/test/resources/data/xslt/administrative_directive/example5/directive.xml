@@ -15,6 +15,15 @@
                                              dateOfVersion="2025-07-17" />
                         <ris:activeReference typeNumber="82"
                                              reference="Verweis 567B"
+                                             section="Section 1"
+                                             paragraph="§ 9"
+                                             dateOfVersion="2025-01-01" />
+                        <ris:activeReference typeNumber="82"
+                                             reference="Verweis 890C"
+                                             section="Section B"
+                                            paragraph="§ 4"
+                                            subParagraph="Abs. 1"
+                                            position="8"
                                              dateOfVersion="2025-01-01" />
                     </ris:activeReferences>
                 </ris:meta>

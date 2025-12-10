@@ -62,7 +62,25 @@
 		<h2>Verweise</h2>
 		<ul>
 			<xsl:for-each select="ris:activeReference">
-				<li><xsl:value-of select="@reference" /></li>
+				<li>
+					<xsl:value-of select="@reference" />
+					<xsl:if test="@section">
+						<xsl:text> </xsl:text>
+						<xsl:value-of select="@section" />
+					</xsl:if>
+					<xsl:if test="@paragraph">
+						<xsl:text> </xsl:text>
+						<xsl:value-of select="@paragraph" />
+					</xsl:if>
+					<xsl:if test="@subParagraph">
+						<xsl:text> </xsl:text>
+						<xsl:value-of select="@subParagraph" />
+					</xsl:if>
+					<xsl:if test="@position">
+						<xsl:text> </xsl:text>
+						<xsl:value-of select="@position" />
+					</xsl:if>
+				</li>
 			</xsl:for-each>
 		</ul>
 	</xsl:template>
