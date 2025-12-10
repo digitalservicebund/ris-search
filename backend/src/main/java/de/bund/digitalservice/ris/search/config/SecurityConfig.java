@@ -32,7 +32,8 @@ public class SecurityConfig {
     this.authProperties = authProperties;
   }
 
-  private void applyCommonHeaders(HttpSecurity http) throws Exception {
+  private void applyCommonConfiguration(HttpSecurity http) throws Exception {
+    http.csrf(customizer -> customizer.ignoringRequestMatchers(internalPaths));
     http.headers(headers -> headers.contentSecurityPolicy(csp -> csp.policyDirectives(cspHeader)));
   }
 
@@ -48,7 +49,7 @@ public class SecurityConfig {
   @Profile({"default", "test"})
   public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
     http.authorizeHttpRequests(requests -> requests.anyRequest().permitAll());
-    applyCommonHeaders(http);
+    applyCommonConfiguration(http);
     return http.build();
   }
 
@@ -74,7 +75,7 @@ public class SecurityConfig {
                 .permitAll()
                 .anyRequest()
                 .authenticated());
-    applyCommonHeaders(http);
+    applyCommonConfiguration(http);
     return http.build();
   }
 
