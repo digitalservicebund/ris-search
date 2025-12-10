@@ -68,4 +68,13 @@ class LiteratureControllerTest {
     Mockito.verify(uliTransformer, never()).transformLiterature(any());
     assertThat(actual.getBody()).isEqualTo("sliHtml");
   }
+
+  @Test
+  void itReturns404OnUnknownLiteratureType() throws ObjectStoreServiceException {
+
+    String documentNumber = "XXAB00000";
+    var actual = controller.getLiteratureAsHtml(documentNumber);
+
+    assertThat(actual.getStatusCode().value()).isEqualTo(404);
+  }
 }
