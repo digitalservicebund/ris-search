@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import RuleIcon from "virtual:icons/ic/outline-rule";
 import type { SearchResultHeaderItem } from "~/components/Search/SearchResultHeader.vue";
 import { usePostHogStore } from "~/stores/usePostHogStore";
 import type { AdministrativeDirective, SearchResult } from "~/types";
 import { ADMINISTRATIVE_DIRECTIVE_TITLE_PLACEHOLDER } from "~/utils/administrativeDirective";
 import { sanitizeSearchResult } from "~/utils/sanitize";
+import RuleIcon from "~icons/ic/outline-rule";
 
 const postHogStore = usePostHogStore();
 const router = useRouter();

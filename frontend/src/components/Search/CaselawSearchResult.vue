@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import _ from "lodash";
-import GavelIcon from "virtual:icons/material-symbols/gavel";
 import type { RouteLocationRaw } from "#vue-router";
 import type { SearchResultHeaderItem } from "~/components/Search/SearchResultHeader.vue";
 import { usePostHogStore } from "~/stores/usePostHogStore";
@@ -8,6 +7,7 @@ import type { CaseLaw, SearchResult, TextMatch } from "~/types";
 import { dateFormattedDDMMYYYY } from "~/utils/dateFormatting";
 import { sanitizeSearchResult } from "~/utils/sanitize";
 import { addEllipsis, removeOuterParentheses } from "~/utils/textFormatting";
+import GavelIcon from "~icons/material-symbols/gavel";
 
 const postHogStore = usePostHogStore();
 
