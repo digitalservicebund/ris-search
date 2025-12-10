@@ -10,6 +10,7 @@ import de.bund.digitalservice.ris.search.models.api.parameters.LiteratureSearchP
 import de.bund.digitalservice.ris.search.models.api.parameters.LiteratureSortParam;
 import de.bund.digitalservice.ris.search.models.api.parameters.PaginationParams;
 import de.bund.digitalservice.ris.search.models.api.parameters.UniversalSearchParams;
+import de.bund.digitalservice.ris.search.models.ldml.literature.LiteratureType;
 import de.bund.digitalservice.ris.search.models.opensearch.Literature;
 import de.bund.digitalservice.ris.search.schema.CollectionSchema;
 import de.bund.digitalservice.ris.search.schema.LiteratureSchema;
@@ -118,7 +119,7 @@ public class LiteratureController {
         .getFileByDocumentNumber(documentNumber)
         .map(
             file -> {
-              switch (LiteratureService.getLiteratureType(documentNumber)) {
+              switch (LiteratureType.getByDocumentNumber(documentNumber)) {
                 case SLI -> {
                   return sliXsltTransformerService.transformLiterature(file);
                 }
