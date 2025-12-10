@@ -131,8 +131,8 @@ const breadcrumbItems: Ref<BreadcrumbItem[]> = computed(() => {
 
 const htmlTitle = computed(() => data.value?.articleHeading);
 const topNormLinkText = computed(() => {
-  if (!norm.value) return "";
-  else return norm.value.name || norm.value.alternateName;
+  if (norm.value) return norm.value.name || norm.value.alternateName;
+  else return "";
 });
 
 const validVersions =
