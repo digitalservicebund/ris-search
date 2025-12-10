@@ -1,4 +1,5 @@
 import { render, screen } from "@testing-library/vue";
+import { describe } from "vitest";
 import LiteratureSearchResult from "~/components/Search/LiteratureSearchResult.vue";
 import type { Literature, SearchResult, TextMatch } from "~/types";
 
@@ -10,8 +11,8 @@ const searchResult: SearchResult<Literature> = {
     documentNumber: "LIT-123",
     yearsOfPublication: ["2021", "2022", "2023"],
     documentTypes: ["Book", "Article"],
-    dependentReferences: ["LIT-122", "LIT-121"],
-    independentReferences: ["LIT-124", "LIT-125"],
+    dependentReferences: ["DEP-122", "DEP-121"],
+    independentReferences: ["INDEP-124", "INDEP-125"],
     normReferences: ["GG, Art 6 Abs 2 S 1, 1949-05-23"],
     headline: "Eine Untersuchung der juristischen Methoden im 21. Jahrhundert",
     alternativeHeadline: "Study of Legal Methodologies in the 21st Century",
@@ -102,7 +103,7 @@ describe("LiteratureSearchResult", () => {
     expect(mark.tagName).toBe("MARK");
   });
 
-  it("displays highlighted headline when documentary title", async () => {
+  it("displays highlighted headline when documentary title has markup", async () => {
     const textMatch: TextMatch = {
       "@type": "SearchResultMatch",
       name: "documentaryTitle",
@@ -232,5 +233,32 @@ describe("LiteratureSearchResult", () => {
     });
     span = screen.getByTestId("highlighted-field");
     expect(span).not.toHaveClass("line-clamp-3");
+  });
+
+  describe("metadata", () => {
+    it("renders first documentType", async () => {
+      renderComponent();
+      expect(screen.getByText("Book")).toBeVisible();
+    });
+
+    it("renders first dependentReference", async () => {
+      renderComponent();
+      expect(screen.getByText("DEP-122")).toBeVisible();
+    });
+
+    it("renders first independentReference if no dependentReference exists", async () => {
+      renderComponent({
+        item: {
+          ...searchResult.item,
+          dependentReferences: [],
+        },
+      });
+      expect(screen.getByText("INDEP-124")).toBeVisible();
+    });
+
+    it("renders first year of publication", async () => {
+      renderComponent();
+      expect(screen.getByText("2021")).toBeVisible();
+    });
   });
 });

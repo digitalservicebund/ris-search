@@ -31,7 +31,7 @@ test("displays literature page with metadata and text tab by default", async ({
     "Dokumenttyp",
     "Auf",
     "Fundstelle",
-    "FooBar, 1982, 123-123",
+    "FooBar, 1982, 123-123, SelbstFund, 1982, 123-123",
     "Autor",
     "Sabine Musterfrau",
     "Veröffentlichungsjahr",
