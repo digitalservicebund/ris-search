@@ -30,21 +30,20 @@ public class IndexLiteratureService extends BaseIndexService<Literature> {
   @Override
   protected Optional<Literature> mapFileToEntity(String filename, String fileContent) {
     try {
-      // determine type of literature document based on prefix
-      switch (filename.substring(2, 4)) {
-        case "LU" -> {
-          return Optional.of(LiteratureLdmlToOpenSearchMapper.mapLdml(fileContent));
-        }
-        case "LS" -> {
+      switch (LiteratureService.getLiteratureType(filename)) {
+        case SLI -> {
           return Optional.of(
               SliLiteratureLdmlToOpenSearchMapper.mapLdml(fileContent, Instant.now()));
+        }
+        case ULI -> {
+          return Optional.of(LiteratureLdmlToOpenSearchMapper.mapLdml(fileContent));
         }
         default -> {
           String msg = "unknown literaturetype " + filename;
           logger.error(msg);
+          return Optional.empty();
         }
       }
-      return Optional.empty();
     } catch (OpenSearchMapperException e) {
       logger.error("unable to parse file {}", filename, e);
       return Optional.empty();

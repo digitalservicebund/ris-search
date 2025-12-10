@@ -124,4 +124,31 @@ public class LiteratureService {
       throws ObjectStoreServiceException {
     return literatureBucket.get(String.format("%s.akn.xml", documentNumber));
   }
+
+  /**
+   * Determines the literaturetype of a literature ldml based on its documentNumber
+   *
+   * @param documentNumber documentNumber of a literature document
+   * @return {@link de.bund.digitalservice.ris.search.service.LiteratureService.LiteratureType}
+   */
+  public static LiteratureType getLiteratureType(String documentNumber) {
+    switch (documentNumber.substring(2, 4)) {
+      case "LU" -> {
+        return LiteratureType.ULI;
+      }
+      case "LS" -> {
+        return LiteratureType.SLI;
+      }
+      default -> {
+        return LiteratureType.UNKNOWN;
+      }
+    }
+  }
+
+  /** possible LiteratureTypes */
+  public enum LiteratureType {
+    SLI,
+    ULI,
+    UNKNOWN
+  }
 }

@@ -17,6 +17,7 @@ import de.bund.digitalservice.ris.search.schema.LiteratureSearchSchema;
 import de.bund.digitalservice.ris.search.schema.SearchMemberSchema;
 import de.bund.digitalservice.ris.search.service.LiteratureService;
 import de.bund.digitalservice.ris.search.service.xslt.LiteratureXsltTransformerService;
+import de.bund.digitalservice.ris.search.service.xslt.SliLiteratureXsltTransformerService;
 import de.bund.digitalservice.ris.search.utils.LuceneQueryTools;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -47,6 +48,7 @@ public class LiteratureController {
 
   private final LiteratureService literatureService;
   private final LiteratureXsltTransformerService xsltTransformerService;
+  private final SliLiteratureXsltTransformerService sliXsltTransformerService;
 
   /**
    * Constructor for LiteratureController.
@@ -58,9 +60,11 @@ public class LiteratureController {
   @Autowired
   public LiteratureController(
       LiteratureService literatureService,
-      LiteratureXsltTransformerService literatureXsltTransformerService) {
+      LiteratureXsltTransformerService literatureXsltTransformerService,
+      SliLiteratureXsltTransformerService sliLiteratureXsltTransformerService) {
     this.literatureService = literatureService;
     this.xsltTransformerService = literatureXsltTransformerService;
+    this.sliXsltTransformerService = sliLiteratureXsltTransformerService;
   }
 
   /**
@@ -109,9 +113,23 @@ public class LiteratureController {
   public ResponseEntity<String> getLiteratureAsHtml(
       @Parameter(example = "BJLU075748788") @PathVariable String documentNumber)
       throws ObjectStoreServiceException {
+
     return literatureService
         .getFileByDocumentNumber(documentNumber)
-        .map(xsltTransformerService::transformLiterature)
+        .map(
+            file -> {
+              switch (LiteratureService.getLiteratureType(documentNumber)) {
+                case SLI -> {
+                  return sliXsltTransformerService.transformLiterature(file);
+                }
+                case ULI -> {
+                  return xsltTransformerService.transformLiterature(file);
+                }
+                default -> {
+                  return null;
+                }
+              }
+            })
         .map(ResponseEntity::ok)
         .orElseGet(() -> ResponseEntity.notFound().build());
   }
