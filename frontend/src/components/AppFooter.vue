@@ -38,7 +38,9 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
         </div>
       </div>
       <div class="space-y-16">
-        <ul class="grid grid-flow-col grid-cols-2 grid-rows-5 gap-8">
+        <ul
+          class="grid gap-8 wrap-break-word sm:grid-flow-col sm:grid-cols-2 sm:grid-rows-5"
+        >
           <li>
             <NuxtLink
               class="ris-link2-regular link-hover"
