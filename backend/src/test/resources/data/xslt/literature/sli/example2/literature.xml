@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<akn:akomaNtoso xmlns:akn="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" xmlns:ris="http://ldml.neuris.de/literature/selbstaendig/meta/">
+    <akn:doc name="offene-struktur">
+        <akn:meta>
+            <akn:identification source="attributsemantik-noch-undefiniert">
+                <akn:FRBRWork>
+                    <akn:FRBRalias name="dokumentarischerTitel" value="Dokumentarischer Test-Titel"/>
+                </akn:FRBRWork>
+            </akn:identification>
+        </akn:meta>
+        <akn:mainBody>
+            <akn:div>
+                <akn:p>
+                   Some content
+                </akn:p>
+            </akn:div>
+        </akn:mainBody>
+    </akn:doc>
+</akn:akomaNtoso>

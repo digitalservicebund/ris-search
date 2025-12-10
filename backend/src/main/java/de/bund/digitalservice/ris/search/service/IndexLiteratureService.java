@@ -3,6 +3,7 @@ package de.bund.digitalservice.ris.search.service;
 import de.bund.digitalservice.ris.search.exception.OpenSearchMapperException;
 import de.bund.digitalservice.ris.search.mapper.LiteratureLdmlToOpenSearchMapper;
 import de.bund.digitalservice.ris.search.mapper.SliLiteratureLdmlToOpenSearchMapper;
+import de.bund.digitalservice.ris.search.models.ldml.literature.LiteratureType;
 import de.bund.digitalservice.ris.search.models.opensearch.Literature;
 import de.bund.digitalservice.ris.search.repository.objectstorage.LiteratureBucket;
 import de.bund.digitalservice.ris.search.repository.opensearch.LiteratureRepository;
@@ -30,21 +31,20 @@ public class IndexLiteratureService extends BaseIndexService<Literature> {
   @Override
   protected Optional<Literature> mapFileToEntity(String filename, String fileContent) {
     try {
-      // determine type of literature document based on prefix
-      switch (filename.substring(2, 4)) {
-        case "LU" -> {
-          return Optional.of(LiteratureLdmlToOpenSearchMapper.mapLdml(fileContent));
-        }
-        case "LS" -> {
+      switch (LiteratureType.getByDocumentNumber(filename)) {
+        case SLI -> {
           return Optional.of(
               SliLiteratureLdmlToOpenSearchMapper.mapLdml(fileContent, Instant.now()));
+        }
+        case ULI -> {
+          return Optional.of(LiteratureLdmlToOpenSearchMapper.mapLdml(fileContent));
         }
         default -> {
           String msg = "unknown literaturetype " + filename;
           logger.error(msg);
+          return Optional.empty();
         }
       }
-      return Optional.empty();
     } catch (OpenSearchMapperException e) {
       logger.error("unable to parse file {}", filename, e);
       return Optional.empty();
