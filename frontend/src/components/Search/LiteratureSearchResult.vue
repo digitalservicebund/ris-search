@@ -69,10 +69,12 @@ const resultTypeId = useId();
 
 const headerItems = computed<SearchResultHeaderItem[]>(() => {
   const item = props.searchResult.item;
+  const reference =
+    item.dependentReferences?.[0] ?? item.independentReferences?.[0];
   return [
-    { value: item.documentTypes?.at(0), id: resultTypeId },
-    { value: item.dependentReferences?.at(0) },
-    { value: item.yearsOfPublication?.at(0) },
+    { value: item.documentTypes?.[0], id: resultTypeId },
+    { value: reference },
+    { value: item.yearsOfPublication?.[0] },
   ].filter((item): item is SearchResultHeaderItem => item.value !== undefined);
 });
 
