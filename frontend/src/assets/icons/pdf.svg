@@ -1,11 +1,8 @@
-<template>
-  <svg
-    width="22"
-    height="10"
-    viewBox="0 0 22 10"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-  >
+<svg
+  viewBox="0 0 22 10"
+  fill="none"
+  xmlns="http://www.w3.org/2000/svg"
+>
     <path
       d="M21.8453 0.787994V2.43199H18.4133V4.20799H20.9813V5.80399H18.4133V9.21199H16.3613V0.787994H21.8453Z"
       fill="currentColor"
@@ -19,4 +16,3 @@
       fill="currentColor"
     />
   </svg>
-</template>

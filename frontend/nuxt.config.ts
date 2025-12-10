@@ -1,6 +1,6 @@
 import tailwindcss from "@tailwindcss/vite";
 import { defineNuxtConfig } from "nuxt/config";
-import IconsResolver from "unplugin-icons/resolver";
+import { FileSystemIconLoader } from "unplugin-icons/loaders";
 import Icons from "unplugin-icons/vite";
 import { PrimeVueResolver } from "unplugin-vue-components/resolvers";
 import Components from "unplugin-vue-components/vite";
@@ -246,10 +246,13 @@ export default defineNuxtConfig({
     plugins: [
       tailwindcss(),
       Components({
-        resolvers: [IconsResolver(), PrimeVueResolver()],
+        resolvers: [PrimeVueResolver()],
       }),
       Icons({
         scale: 1.3333, // ~24px at the current default font size of 18px
+        customCollections: {
+          custom: FileSystemIconLoader("./src/assets/icons"),
+        },
       }),
     ],
   },
