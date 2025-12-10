@@ -181,6 +181,20 @@ describe("getLiteratureMetadataItems", () => {
       "2015, 2016",
     ]);
   });
+
+  it("concatenates dependent and independent references if they exist", () => {
+    const result = getLiteratureMetadataItems({
+      dependentReferences: ["Dep Ref"],
+      independentReferences: ["Indep Ref"],
+    });
+
+    expect(result.map((item) => item.value)).toEqual([
+      undefined,
+      "Dep Ref, Indep Ref",
+      undefined,
+      undefined,
+    ]);
+  });
 });
 
 describe("getLiteratureDetailsItems", () => {

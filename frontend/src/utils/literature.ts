@@ -18,6 +18,10 @@ export function getTitle(literature?: Partial<Literature>) {
 export function getLiteratureMetadataItems(
   literature?: Partial<Literature>,
 ): MetadataItem[] {
+  const references = [
+    ...(literature?.dependentReferences ?? []),
+    ...(literature?.independentReferences ?? []),
+  ];
   return [
     {
       label: "Dokumenttyp",
@@ -25,7 +29,7 @@ export function getLiteratureMetadataItems(
     },
     {
       label: "Fundstelle",
-      value: formatArray(literature?.dependentReferences ?? []),
+      value: formatArray(references),
     },
 
     {
