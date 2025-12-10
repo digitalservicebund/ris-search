@@ -7,8 +7,11 @@ import de.bund.digitalservice.ris.search.models.opensearch.Literature;
 import de.bund.digitalservice.ris.search.schema.LiteratureEncodingSchema;
 import de.bund.digitalservice.ris.search.schema.LiteratureSchema;
 import java.util.List;
+import org.assertj.core.api.AssertionsForClassTypes;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 class LiteratureSchemaMapperTest {
 
@@ -89,5 +92,15 @@ class LiteratureSchemaMapperTest {
                 .encodingFormat("application/zip")
                 .inLanguage("de")
                 .build());
+  }
+
+  @ParameterizedTest
+  @CsvSource({"XXLU00001,uli", "XXLS000001,sli"})
+  void itDeterminesTheDocumentTypeBasedOnDocumentNumber(String docNumber, String expected) {
+    Literature literature = Literature.builder().id(docNumber).documentNumber(docNumber).build();
+    AssertionsForClassTypes.assertThat(
+            LiteratureSchemaMapper.fromDomain(literature).literatureType())
+        .isEqualTo(expected);
+    ;
   }
 }

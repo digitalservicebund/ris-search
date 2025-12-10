@@ -1,5 +1,6 @@
 package de.bund.digitalservice.ris.search.unit.mapper;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -17,6 +18,8 @@ import java.util.function.IntFunction;
 import java.util.stream.IntStream;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.elasticsearch.core.SearchHit;
 import org.springframework.data.elasticsearch.core.SearchHitSupport;
@@ -78,7 +81,8 @@ class LiteratureSearchSchemaMapperTest {
                 null,
                 null,
                 null,
-                (AbstractSearchEntity) Literature.builder().documentNumber("doc-" + index).build());
+                (AbstractSearchEntity)
+                    Literature.builder().documentNumber("XXLU-" + index).build());
 
     var firstPageContents = IntStream.range(0, pageSize).mapToObj(buildItem).toList();
     var middlePageContents = IntStream.range(pageSize, pageSize * 2).mapToObj(buildItem).toList();
@@ -99,7 +103,7 @@ class LiteratureSearchSchemaMapperTest {
     CollectionSchema<SearchMemberSchema<LiteratureSearchSchema>> lastPage =
         LiteratureSearchSchemaMapper.fromSearchPage(lastPageImpl);
 
-    String prefix = ApiConfig.Paths.LITERATURE + "/doc-";
+    String prefix = ApiConfig.Paths.LITERATURE + "/XXLU-";
 
     assertEquals(prefix + "0", getItemId(firstPage, 0));
     assertEquals(prefix + "4", getItemId(firstPage, firstPage.member().size() - 1));
@@ -122,6 +126,15 @@ class LiteratureSearchSchemaMapperTest {
     assertTrue(firstPage.id().startsWith(ApiConfig.Paths.LITERATURE));
     assertTrue(middlePage.id().startsWith(ApiConfig.Paths.LITERATURE));
     assertTrue(lastPage.id().startsWith(ApiConfig.Paths.LITERATURE));
+  }
+
+  @ParameterizedTest
+  @CsvSource({"XXLU00001,uli", "XXLS000001,sli"})
+  void itDeterminesTheDocumentTypeBasedOnDocumentNumber(String docNumber, String expected) {
+    Literature literature = Literature.builder().id(docNumber).documentNumber(docNumber).build();
+    assertThat(LiteratureSearchSchemaMapper.fromDomain(literature).literatureType())
+        .isEqualTo(expected);
+    ;
   }
 
   private SearchPage<AbstractSearchEntity> createSearchPage(
