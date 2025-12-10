@@ -88,7 +88,7 @@ useStaticPageSeo("translations-list");
       >
         English Translations of German Federal Laws and Regulations
       </h1>
-      <section class="ris-body1-regular max-w-prose space-y-24">
+      <section class="max-w-prose space-y-24">
         <p>
           We provide translations of our German content to help you. Please note
           that the original German versions are the only authoritative source.
@@ -141,7 +141,7 @@ useStaticPageSeo("translations-list");
           </li>
         </ul>
 
-        <div v-else class="ris-body1-regular mt-8">
+        <div v-else class="mt-8">
           <p class="ris-body1-bold">We didn’t find anything.</p>
           <p class="mb-16">
             Try checking the spelling or using a different title.

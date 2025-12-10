@@ -170,7 +170,7 @@ function trackResultClick(url: string) {
 </script>
 
 <template>
-  <div class="ris-body1-regular my-36 flex flex-col gap-8 hyphens-auto">
+  <div class="my-36 flex flex-col gap-8 hyphens-auto">
     <SearchResultHeader :icon="GavelIcon" :items="headerItems" />
     <NuxtLink
       :to="metadata.route"

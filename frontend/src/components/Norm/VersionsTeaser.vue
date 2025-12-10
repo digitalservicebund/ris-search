@@ -7,7 +7,7 @@ import { NuxtLink } from "#components";
       <h2 class="ris-heading3-bold my-24">
         Fassungen sind noch nicht verfügbar
       </h2>
-      <p class="ris-body1-regular">
+      <p>
         Mit dem Livegang des neuen Rechtsinformationsportals werden auch außer
         Kraft getretene und zukünftig in Kraft tretende Fassungen der Gesetze
         und Verordnungen zur Verfügung gestellt.
@@ -17,7 +17,7 @@ import { NuxtLink } from "#components";
         Unterstützen Sie uns bei der Entwicklung dieser Funktion
       </h3>
       <!-- Temporarily disabled due to data issue with Form bricks -->
-      <p v-if="false" class="ris-body1-regular">
+      <p v-if="false">
         Unser Ziel ist es, Rechtsinformationen für Bürgerinnen und Bürger
         leichter zugänglich zu machen. Deshalb suchen wir Menschen, die ihre
         Erfahrungen mit uns teilen und unseren Service testen.

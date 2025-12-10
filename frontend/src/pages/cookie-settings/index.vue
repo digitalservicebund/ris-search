@@ -41,7 +41,7 @@ useStaticPageSeo("cookies");
     <template #breadcrumb>
       <RisBreadcrumb :items="[{ label: 'Cookie-Einstellungen' }]" />
     </template>
-    <div class="ris-body1-regular my-24 flex max-w-prose flex-col space-y-48">
+    <div class="my-24 flex max-w-prose flex-col space-y-48">
       <h1 id="page-title" class="ris-heading1-regular mb-64">
         Cookie-Einstellungen
       </h1>

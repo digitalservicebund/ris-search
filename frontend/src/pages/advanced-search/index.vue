@@ -144,7 +144,7 @@ async function submit() {
     >
       <div class="lg:col-span-2">
         <h1 class="ris-heading2-bold mb-16">Erweiterte Suche</h1>
-        <p class="ris-body1-regular text-balance">
+        <p class="text-balance">
           Nutzen Sie die erweiterte Suche, um genau das zu finden, was Sie
           brauchen – ob im Leitsatz, Titel oder direkt im Volltext. Mit
           Suchoperatoren wie AND, OR und NOT bekommen Sie noch präzisere

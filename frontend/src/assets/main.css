@@ -19,7 +19,7 @@
 
 @layer base {
   body {
-    @apply text-lg font-normal text-black antialiased;
+    @apply ris-body1-regular antialiased;
   }
 }
 

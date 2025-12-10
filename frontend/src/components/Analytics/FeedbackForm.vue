@@ -58,7 +58,7 @@ watch(
         <div class="ris-heading3-bold">
           Möchten Sie an Nutzungsstudien teilnehmen?
         </div>
-        <p class="ris-body1-regular">
+        <p class="">
           Nutzungsstudien helfen uns zu verstehen, wie Sie diesen Service nutzen
           und wie wir sie verbessern können. Wir suchen Menschen, die sich
           unentgeltlich an der Nutzungsstudien beteiligen möchten. Dafür ist nur
@@ -93,7 +93,7 @@ watch(
     >
       <div v-if="!hideIntro" class="flex flex-col space-y-8">
         <h2 class="ris-heading2-bold">Geben Sie uns Feedback</h2>
-        <p class="ris-body1-regular">
+        <p class="">
           Ihr Feedback hilft uns, den Service an den Bedürfnissen der
           Nutzerinnen und Nutzer auszurichten. Beschreiben Sie Ihr Anliegen so
           detailliert wie möglich. Geben Sie keine persönlichen Daten ein.

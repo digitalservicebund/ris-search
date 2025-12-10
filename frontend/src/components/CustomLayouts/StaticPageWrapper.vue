@@ -6,11 +6,7 @@
       <h2 id="breadcrumb-heading" class="sr-only">Brotkrumen</h2>
       <slot name="breadcrumb" />
     </nav>
-    <div
-      id="main-content"
-      aria-labelledby="page-title"
-      class="ris-body1-regular"
-    >
+    <div id="main-content" aria-labelledby="page-title">
       <slot />
     </div>
   </div>
