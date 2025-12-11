@@ -36,7 +36,6 @@
 	<!-- render titles -->
 	<xsl:template match="akn:FRBRWork">
 		<xsl:for-each select="$titles">
-			<xsl:message><xsl:value-of select="."/></xsl:message>
 			<xsl:choose>
 				<xsl:when test="position() = 1">
 					<h1><xsl:call-template name="render-title">
