@@ -123,9 +123,6 @@
                     <ris:titelkurzformen>
                         <ris:titelkurzform>titel kurzform</ris:titelkurzform>
                     </ris:titelkurzformen>
-                    <ris:titelkurzformen>
-                        <ris:titelkurzform>titel kurzform 2</ris:titelkurzform>
-                    </ris:titelkurzformen>
                     <ris:sonstigerSachtitelListe>
                         <ris:sonstigerSachtitel>sonstiger titel</ris:sonstigerSachtitel>
                     </ris:sonstigerSachtitelListe>

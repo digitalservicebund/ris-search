@@ -45,7 +45,7 @@ public class RisMeta {
   private List<String> sonstigeSachtitel;
 
   @XmlElementWrapper(
-      name = "gesamttitelangaben",
+      name = "gesamttitelAngaben",
       namespace = LiteratureNamespaces.RIS_SELBSTSTAENDIG_NS)
   @XmlElement(name = "gesamttitel", namespace = LiteratureNamespaces.RIS_SELBSTSTAENDIG_NS)
   private List<Gesamttitel> gesamttitelangaben;
