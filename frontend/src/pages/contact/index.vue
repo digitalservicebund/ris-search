@@ -1,20 +1,22 @@
 <script setup lang="ts">
 import ContactDetails from "~/components/ContactDetails.vue";
-import StaticPageWrapper from "~/components/CustomLayouts/StaticPageWrapper.vue";
 import { useStaticPageSeo } from "~/composables/useStaticPageSeo";
-definePageMeta({ alias: ["/kontakt"] });
+
+definePageMeta({ alias: ["/kontakt"], layout: false });
 
 useStaticPageSeo("kontakt");
 </script>
 
 <template>
-  <StaticPageWrapper>
-    <template #breadcrumb>
-      <RisBreadcrumb :items="[{ label: 'Kontakt' }]" />
-    </template>
-    <PageHeader title="Kontakt" />
-    <div class="mb-80">
+  <div>
+    <NuxtLayout name="static-page">
+      <template #breadcrumb>
+        <RisBreadcrumb :items="[{ label: 'Kontakt' }]" />
+      </template>
+
+      <template #pageTitle>Kontakt</template>
+
       <ContactDetails />
-    </div>
-  </StaticPageWrapper>
+    </NuxtLayout>
+  </div>
 </template>

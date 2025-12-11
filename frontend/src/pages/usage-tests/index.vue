@@ -1,23 +1,23 @@
 <script setup lang="ts">
-import StaticPageWrapper from "~/components/CustomLayouts/StaticPageWrapper.vue";
 import { useStaticPageSeo } from "~/composables/useStaticPageSeo";
 
-definePageMeta({ alias: ["/nutzungstests"] });
+definePageMeta({ alias: ["/nutzungstests"], layout: false });
 
 useStaticPageSeo("nutzungstests");
 </script>
 
 <template>
-  <StaticPageWrapper>
-    <template #breadcrumb>
-      <RisBreadcrumb :items="[{ label: 'Für Nutzungstests registrieren' }]" />
-    </template>
-    <PageHeader
-      class="max-w-prose"
-      title="Helfen Sie uns, Rechtsinformationen leichter zugänglich zu machen"
-    />
-    <div class="flex flex-col gap-32">
-      <div class="max-w-prose space-y-64">
+  <div>
+    <NuxtLayout name="static-page">
+      <template #breadcrumb>
+        <RisBreadcrumb :items="[{ label: 'Für Nutzungstests registrieren' }]" />
+      </template>
+
+      <template #pageTitle>
+        Helfen Sie uns, Rechtsinformationen leichter zugänglich zu machen
+      </template>
+
+      <div class="space-y-64">
         <section>
           <h2 class="ris-heading2-regular mb-16">Darum brauchen wir Sie</h2>
           <p>
@@ -88,6 +88,6 @@ useStaticPageSeo("nutzungstests");
           </div>
         </section>
       </div>
-    </div>
-  </StaticPageWrapper>
+    </NuxtLayout>
+  </div>
 </template>

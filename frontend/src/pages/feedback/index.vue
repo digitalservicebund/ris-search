@@ -1,16 +1,21 @@
 <script setup lang="ts">
 import FeedbackForm from "~/components/Analytics/FeedbackForm.vue";
-import StaticPageWrapper from "~/components/CustomLayouts/StaticPageWrapper.vue";
 import { useStaticPageSeo } from "~/composables/useStaticPageSeo";
+
+definePageMeta({ layout: false });
 
 useStaticPageSeo("feedback");
 </script>
 
 <template>
-  <StaticPageWrapper>
-    <RisBreadcrumb :items="[{ label: 'Feedback' }]" />
-    <PageHeader title="Geben Sie uns Feedback" />
-    <main class="max-w-prose">
+  <div>
+    <NuxtLayout name="static-page">
+      <template #breadcrumb>
+        <RisBreadcrumb :items="[{ label: 'Feedback' }]" />
+      </template>
+
+      <template #pageTitle>Geben Sie uns Feedback</template>
+
       <p>
         Das Rechtsinformationsportal befindet sich in der Testphase und wird auf
         der Grundlage der Rückmeldungen der Nutzerinnen und Nutzer
@@ -27,6 +32,8 @@ useStaticPageSeo("feedback");
         </li>
         <li>Bitte geben Sie keine persönlichen Daten an.</li>
       </ul>
-      <FeedbackForm hide-intro class="mt-24" /></main
-  ></StaticPageWrapper>
+
+      <FeedbackForm hide-intro class="mt-24" />
+    </NuxtLayout>
+  </div>
 </template>

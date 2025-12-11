@@ -1,6 +1,6 @@
-import { mockNuxtImport } from "@nuxt/test-utils/runtime";
+import { mockNuxtImport, mountSuspended } from "@nuxt/test-utils/runtime";
 import { createTestingPinia } from "@pinia/testing";
-import { mount, RouterLinkStub } from "@vue/test-utils";
+import { RouterLinkStub } from "@vue/test-utils";
 import type { VueWrapper } from "@vue/test-utils";
 import { describe, it, expect, vi } from "vitest";
 import CookieSettings from "~/pages/cookie-settings/index.vue";
@@ -30,8 +30,8 @@ vi.mock("js-cookie", () => ({
   default: cookiesMock,
 }));
 
-const factory = (userConsent: boolean | undefined) =>
-  mount(CookieSettings, {
+const factory = async (userConsent: boolean | undefined) =>
+  await mountSuspended(CookieSettings, {
     global: {
       plugins: [
         createTestingPinia({
@@ -80,21 +80,21 @@ describe("CookieSettings Page", () => {
   });
 
   it("shows that tracking not accepted if userConsent is undefined or false", async () => {
-    const wrapper = factory(false);
+    const wrapper = await factory(false);
     await wrapper.vm.$nextTick();
     assertConsentRejected(wrapper);
   });
 
   it("shows that tracking is accepted if userConsent is true", async () => {
     cookiesMock.get.mockReturnValue("true");
-    const wrapper = factory(true);
+    const wrapper = await factory(true);
     await wrapper.vm.$nextTick();
     assertConsentGiven(wrapper);
   });
 
   it("clicking the Accept button sets the tracking to active and changes the UI", async () => {
     cookiesMock.get.mockReturnValue("false");
-    const wrapper = factory(false);
+    const wrapper = await factory(false);
     await wrapper.vm.$nextTick();
     const forms = wrapper.findAll("form");
     const acceptForm = forms.find((form) =>
@@ -107,7 +107,7 @@ describe("CookieSettings Page", () => {
 
   it("clicking the Decline button sets the tracking to inactive and changes the UI", async () => {
     cookiesMock.get.mockReturnValue("true");
-    const wrapper = factory(true);
+    const wrapper = await factory(true);
     await wrapper.vm.$nextTick();
     const forms = wrapper.findAll("form");
     const declineForm = forms.find((form) =>

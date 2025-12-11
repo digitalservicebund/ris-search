@@ -1,13 +1,15 @@
 <script setup lang="ts">
-import StaticPageWrapper from "~/components/CustomLayouts/StaticPageWrapper.vue";
-definePageMeta({ alias: ["/einfuehrung"] });
+definePageMeta({ alias: ["/einfuehrung"], layout: false });
 </script>
 
 <template>
-  <StaticPageWrapper>
-    <template #breadcrumb>
-      <RisBreadcrumb :items="[{ label: 'Einführende Informationen' }]" />
-    </template>
-    <PageHeader title="Einführende Informationen" />
-  </StaticPageWrapper>
+  <div>
+    <NuxtLayout name="static-page">
+      <template #breadcrumb>
+        <RisBreadcrumb :items="[{ label: 'Einführende Informationen' }]" />
+      </template>
+
+      <template #pageTitle>Einführende Informationen</template>
+    </NuxtLayout>
+  </div>
 </template>
