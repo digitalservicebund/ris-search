@@ -7,7 +7,7 @@
                     <akn:FRBRthis value="regelungstext-1"/>
                     <akn:FRBRuri value="TODO"/>
                     <akn:FRBRalias name="Dokumentnummer" value="XXLS000000001"/>
-                    <akn:FRBRalias name="haupttitel" value="Zweites Test-Dokument ULI"/>
+                    <akn:FRBRalias name="haupttitel" value="Test-Dokument SLI"/>
                     <akn:FRBRalias name="dokumentarischerTitel" value="Dokumentarischer Titel"/>
                     <akn:FRBRalias name="haupttitelZusatz" value="Zusatz zum Haupttitel"/>
                     <akn:FRBRdate date="2024-01-01" name="verkuendungsfassung"/>

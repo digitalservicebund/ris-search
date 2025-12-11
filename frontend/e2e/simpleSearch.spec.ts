@@ -649,7 +649,7 @@ test.describe("searching literature", () => {
 
     await expect(page).toHaveURL(/dateAfter=2024-01-01/);
 
-    await expect(getSearchResults(page)).toHaveCount(2);
+    await expect(getSearchResults(page)).toHaveCount(3);
   });
 
   test("searches by publication year with dateBefore and dateAfter", async ({
@@ -682,7 +682,7 @@ test.describe("searching literature", () => {
 
     await expect(page).toHaveURL(/dateAfter=2015-01-01&dateBefore=2024-12-31/);
 
-    await expect(getSearchResults(page)).toHaveCount(5);
+    await expect(getSearchResults(page)).toHaveCount(6);
   });
 });
 
