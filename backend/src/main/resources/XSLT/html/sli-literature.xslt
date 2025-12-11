@@ -11,7 +11,10 @@
 
 	<xsl:variable name="titles" as="node()*" select="(//akn:FRBRWork/akn:FRBRalias[@name='haupttitel']/@value
 									| //akn:FRBRWork/akn:FRBRalias[@name='dokumentarischerTitel']/@value
-									| //akn:FRBRWork/akn:FRBRalias[@name='haupttitelZusatz']/@value)"/>
+									| //akn:FRBRWork/akn:FRBRalias[@name='haupttitelZusatz']/@value
+									| //ris:titelkurzformen
+									| //ris:gesamttitelAngaben/ris:gesamttitel
+									| //ris:sonstigerSachtitelListe)"/>
 
 	<xsl:template match="akn:doc">
 		<html>
@@ -22,9 +25,6 @@
 			</head>
 			<body>
 				<xsl:apply-templates select="//akn:FRBRWork"/>
-				<xsl:apply-templates select="//ris:titelkurzformen"/>
-				<xsl:apply-templates select="//ris:sonstigerSachtitelListe"/>
-				<xsl:apply-templates select="//ris:gesamttitelAngaben"/>
 				<xsl:apply-templates select="//*[local-name()='gliederung']"/>
 				<xsl:apply-templates select="//akn:mainBody"/>
 				<xsl:apply-templates select="//akn:otherReferences[@source='active']"/>
@@ -33,10 +33,10 @@
 		</html>
 	</xsl:template>
 
-
 	<!-- render titles -->
 	<xsl:template match="akn:FRBRWork">
 		<xsl:for-each select="$titles">
+			<xsl:message><xsl:value-of select="."/></xsl:message>
 			<xsl:choose>
 				<xsl:when test="position() = 1">
 					<h1><xsl:value-of select="."/></h1>
@@ -45,28 +45,13 @@
 					<h2>Zusätzliche Titel</h2>
 					<p><xsl:value-of select="."/></p>
 				</xsl:when>
-				<xsl:when test="position() = 3">
+				<xsl:when test="self::ris:gesamttitel and position() >= 2">
+					<p><xsl:value-of select="concat(@titel, ' ', @bandbezeichnung)"/></p>
+				</xsl:when>
+				<xsl:when test="not(self::ris:gesamttitel) and position() >= 2">
 					<p><xsl:value-of select="."/></p>
 				</xsl:when>
 			</xsl:choose>
-		</xsl:for-each>
-	</xsl:template>
-
-	<xsl:template match="ris:titelkurzformen">
-		<xsl:for-each select="ris:titelkurzform">
-			<p><xsl:value-of select="."/></p>
-		</xsl:for-each>
-	</xsl:template>
-
-	<xsl:template match="ris:sonstigerSachtitelListe">
-		<xsl:for-each select="ris:sonstigerSachtitel">
-			<p><xsl:value-of select="."/></p>
-		</xsl:for-each>
-	</xsl:template>
-
-	<xsl:template match="ris:gesamttitelAngaben">
-		<xsl:for-each select="ris:gesamttitel">
-			<p><xsl:value-of select="./@titel"/><xsl:text> </xsl:text><xsl:value-of select="./@bandbezeichnung"/></p>
 		</xsl:for-each>
 	</xsl:template>
 
