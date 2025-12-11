@@ -13,12 +13,13 @@ function redirectToSearch(searchStr?: string) {
 definePageMeta({ layout: "base" });
 
 useStaticPageSeo("startseite");
+
 const privateFeaturesEnabled = usePrivateFeaturesFlag();
 </script>
 
 <template>
   <div class="flex gap-16 bg-blue-800 pt-64 pb-96 text-white">
-    <div class="container md:max-w-(--spacing-prose)">
+    <div class="container md:max-w-prose">
       <div
         class="ris-label3-bold mb-8 inline-block rounded-sm border border-white/10 bg-blue-700 px-8 py-4 uppercase"
       >
@@ -34,7 +35,8 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
       </p>
     </div>
   </div>
-  <div class="my-56 flex flex-col gap-24 pb-48">
+
+  <div class="mx-auto flex max-w-prose flex-col gap-24 py-56">
     <FeatureCard>
       <div>
         <h2 class="ris-heading3-bold wrap-break-word hyphens-auto">
@@ -63,6 +65,7 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
         </p>
       </Message>
     </FeatureCard>
+
     <FeatureCard>
       <div>
         <h2 class="ris-heading3-bold wrap-break-word hyphens-auto">
@@ -96,9 +99,9 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
       </div>
 
       <div>
-        <Button :as="NuxtLink" :to="{ name: 'translations' }"
-          >Go to translations</Button
-        >
+        <Button :as="NuxtLink" :to="{ name: 'translations' }">
+          Go to translations
+        </Button>
       </div>
     </FeatureCard>
 
@@ -124,6 +127,7 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
         </Button>
       </div>
     </FeatureCard>
+
     <FeatureCard inner-class="gap-x-64 gap-y-32 sm:flex-row">
       <img
         class="mt-20 ml-20 self-start sm:mt-4 md:ml-0"

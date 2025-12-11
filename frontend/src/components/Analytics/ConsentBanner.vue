@@ -30,7 +30,7 @@ const consentAction = "/api/cookie-consent";
     aria-label="Cookie-Einstellungen akzeptieren oder ablehnen"
     data-testid="cookie-banner"
   >
-    <div class="container mx-auto">
+    <div class="container">
       <h2 class="ris-heading3-bold text-xl lg:text-2xl">
         Cookie-Einstellungen akzeptieren oder ablehnen
       </h2>

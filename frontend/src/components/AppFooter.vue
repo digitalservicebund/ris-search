@@ -10,12 +10,12 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
 </script>
 
 <template>
-  <footer class="container flex flex-col gap-32 px-16 py-32 print:hidden">
-    <FeedbackForm v-if="!hideFeedbackForm" class="mb-80" />
+  <footer class="relative container flex flex-col gap-80 py-80 print:hidden">
+    <FeedbackForm v-if="!hideFeedbackForm" />
+
     <div class="grid grid-cols-1 gap-48 md:grid-cols-2">
       <div class="space-y-16">
         <img
-          class="mt-4 self-start"
           :src="bmjvLogo"
           alt="Bundesministerium der Justiz und für Verbraucherschutz"
         />
@@ -37,7 +37,8 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
           </p>
         </div>
       </div>
-      <div class="space-y-16">
+
+      <div>
         <ul
           class="grid gap-8 wrap-break-word sm:grid-flow-col sm:grid-cols-2 sm:grid-rows-5"
         >
@@ -108,8 +109,7 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
         </ul>
       </div>
     </div>
-    <div class="mt-24 flex justify-end">
-      <BackToTopLink />
-    </div>
+
+    <BackToTopLink class="absolute right-16 bottom-32" />
   </footer>
 </template>
