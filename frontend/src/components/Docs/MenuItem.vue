@@ -43,7 +43,7 @@ const isActive = computed(() => {
 
 const linkClass = computed(() => [
   "flex cursor-pointer items-center px-4 pr-2 pl-8 no-underline focus:underline focus-visible:outline focus-visible:outline-offset-4 focus-visible:outline-blue-800 dark:text-blue-200",
-  props.root ? "py-4 text-base font-medium" : "ris-body2-bold py-2 font-bold",
+  props.root ? "py-4 text-base font-medium" : "ris-body2-bold py-2",
   isActive.value && "border-l-4 border-blue-800 pl-4 text-blue-800",
 ]);
 

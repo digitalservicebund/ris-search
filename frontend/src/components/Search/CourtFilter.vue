@@ -1,5 +1,8 @@
 <script setup lang="ts">
-import { RisAutoComplete } from "@digitalservicebund/ris-ui/components";
+import {
+  RisAutoComplete,
+  type AutoCompleteSuggestion,
+} from "@digitalservicebund/ris-ui/components";
 import _ from "lodash";
 import type { AutoCompleteDropdownClickEvent } from "primevue/autocomplete";
 import useBackendUrl from "~/composables/useBackendUrl";
@@ -70,11 +73,7 @@ const onItemSelect = () => {
   searchResults.value = [];
 };
 
-// TODO: Replace with type from RIS UI once https://github.com/digitalservicebund/ris-ui/pull/404
-// is released
-const suggestions = computed<
-  { id: string; label: string; secondaryLabel?: string }[]
->(() =>
+const suggestions = computed<AutoCompleteSuggestion[]>(() =>
   searchResults.value.map((i) => ({
     id: i.id,
     label: i.label,

@@ -273,7 +273,7 @@ useDynamicSeo({ title, description });
                 >
                   <div v-html="htmlParts.officialToc" />
                 </RisSingleAccordion>
-                <div v-observe-elements class="norm-view" v-html="html" />
+                <div v-observe-elements class="legislation" v-html="html" />
               </template>
               <template #sidebar>
                 <client-only>

@@ -33,10 +33,10 @@ useHead({ title: pageTitle.value });
   <NuxtLayout>
     <div class="container pt-48 pb-24">
       <template v-if="isNotFoundError">
-        <h1 class="ris-heading2-regular inline-block font-semibold">
+        <h1 class="ris-heading2-bold inline-block">
           Diese Seite existiert nicht
         </h1>
-        <p class="ris-body1-regular mt-8">
+        <p class="mt-8">
           Überprüfen Sie den eingegebenen Link<ClientOnly
             >: {{ locationClientOnly }}</ClientOnly
           >
@@ -49,14 +49,14 @@ useHead({ title: pageTitle.value });
         />
       </template>
       <template v-else>
-        <h1 class="ris-heading2-regular inline-block font-semibold">
+        <h1 class="ris-heading2-bold inline-block">
           Es gab leider einen Fehler
         </h1>
-        <p v-if="isInternalServerError" class="ris-body1-regular mt-24">
+        <p v-if="isInternalServerError" class="mt-24">
           Probieren Sie es zu einem späteren Moment noch einmal.<br />Wir haben
           den Fehler dokumentiert und an unsere Entwickler:innen weitergeleitet.
         </p>
-        <p v-else class="ris-body1-regular mt-24">
+        <p v-else class="mt-24">
           Ein unbekannter Fehler ist aufgetreten: {{ error?.statusCode }}
           {{ error?.statusMessage }}
         </p>

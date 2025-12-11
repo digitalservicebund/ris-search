@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import LegalIcon from "virtual:icons/mdi/legal";
 import Badge from "~/components/Badge.vue";
 import type { SearchResultHeaderItem } from "~/components/Search/SearchResultHeader.vue";
 import { usePrivateFeaturesFlag } from "~/composables/usePrivateFeaturesFlag";
@@ -10,6 +9,7 @@ import { formatNormValidity } from "~/utils/displayValues";
 import { temporalCoverageToValidityInterval } from "~/utils/norm";
 import { sanitizeSearchResult } from "~/utils/sanitize";
 import { addEllipsis } from "~/utils/textFormatting";
+import LegalIcon from "~icons/mdi/legal";
 
 const props = defineProps<{
   searchResult: SearchResult<LegislationWork>;

@@ -1,9 +1,9 @@
 import { vi } from "vitest";
 import type { ActionMenuItem } from "~/components/ActionMenu/ActionsMenu.vue";
-import PDFIcon from "~/components/icons/PDFIcon.vue";
-import UpdatingLinkIcon from "~/components/icons/UpdatingLinkIcon.vue";
-import XMLIcon from "~/components/icons/XMLIcon.vue";
 import { createActionMenuItems } from "~/utils/actionMenu";
+import PdfIcon from "~icons/custom/pdf";
+import UpdatingLinkIcon from "~icons/custom/updatingLink";
+import XmlIcon from "~icons/custom/xml";
 import MaterialSymbolsLink from "~icons/material-symbols/link";
 import MaterialSymbolsPrint from "~icons/material-symbols/print";
 
@@ -27,7 +27,7 @@ const minimalExpectedActions = [
   {
     key: "pdf",
     label: "Als PDF speichern",
-    iconComponent: PDFIcon,
+    iconComponent: PdfIcon,
     disabled: true,
   },
 ];
@@ -101,7 +101,7 @@ describe("actionMenuUtils.ts", () => {
       {
         key: "xml",
         label: "XML anzeigen",
-        iconComponent: XMLIcon,
+        iconComponent: XmlIcon,
         url: "https://xml.xml",
         dataAttribute: "xml-view",
       },

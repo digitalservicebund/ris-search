@@ -41,7 +41,7 @@ useStaticPageSeo("cookies");
     <template #breadcrumb>
       <RisBreadcrumb :items="[{ label: 'Cookie-Einstellungen' }]" />
     </template>
-    <div class="ris-body1-regular my-24 flex max-w-prose flex-col space-y-48">
+    <div class="my-24 flex max-w-prose flex-col space-y-48">
       <h1 id="page-title" class="ris-heading1-regular mb-64">
         Cookie-Einstellungen
       </h1>
@@ -49,8 +49,8 @@ useStaticPageSeo("cookies");
         <h2 class="ris-heading2-regular mb-40 hidden md:block">
           Sind Sie mit der Nutzung von Analyse-Cookies einverstanden?
         </h2>
-        <div class="mb-40 w-fit" data-testid="consent-status-wrapper">
-          <Message severity="info" class="ris-body2-regular mb-40 bg-white">
+        <div class="w-fit" data-testid="consent-status-wrapper">
+          <Message severity="info" class="ris-body2-regular mb-20 bg-white">
             <template #icon>
               <IconCheck v-if="userConsent" class="text-blue-800" />
               <IconClose v-else class="text-blue-800" />

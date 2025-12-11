@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import IconSearch from "~icons/ic/search?width=20&height=20";
+import IconSearch from "~icons/ic/search";
 
 defineProps<{ listClass: string }>();
 
@@ -16,22 +16,25 @@ defineEmits(["selectItem"]);
         <NuxtLink
           class="ris-link1-regular link-hover flex items-center gap-4 decoration-3 aria-[current=page]:underline"
           :to="{ name: 'search' }"
-          ><IconSearch />Suche</NuxtLink
         >
+          <IconSearch />Suche
+        </NuxtLink>
       </li>
       <li @click="$emit('selectItem')">
         <NuxtLink
-          class="ris-link1-regular link-hover decoration-3 aria-[current=page]:underline"
+          class="ris-link1-regular link-hover flex items-center gap-4 decoration-3 aria-[current=page]:underline"
           :to="{ name: 'feedback' }"
-          >Feedback geben</NuxtLink
         >
+          Feedback geben
+        </NuxtLink>
       </li>
       <li @click="$emit('selectItem')">
         <NuxtLink
-          class="ris-link1-regular link-hover decoration-3 aria-[current=page]:underline"
+          class="ris-link1-regular link-hover flex items-center gap-4 decoration-3 aria-[current=page]:underline"
           :to="{ name: 'about' }"
-          >Über den Service</NuxtLink
         >
+          Über den Service
+        </NuxtLink>
       </li>
     </ul>
   </nav>

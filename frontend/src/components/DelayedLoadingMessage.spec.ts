@@ -9,7 +9,7 @@ describe("DelayedLoadingMessage", () => {
       slots: { default: "Bitte warten" },
     });
 
-    expect(screen.getByLabelText("Ladestatus")).toBeInTheDocument();
+    expect(screen.getByRole("progressbar")).toBeInTheDocument();
     expect(screen.getByText("Bitte warten")).toBeInTheDocument();
   });
 });

@@ -2,10 +2,10 @@ import type {
   ActionMenuItem,
   ActionsMenuProps,
 } from "~/components/ActionMenu/ActionsMenu.vue";
-import ENGIcon from "~/components/icons/ENGIcon.vue";
-import PDFIcon from "~/components/icons/PDFIcon.vue";
-import UpdatingLinkIcon from "~/components/icons/UpdatingLinkIcon.vue";
-import XMLIcon from "~/components/icons/XMLIcon.vue";
+import EngIcon from "~icons/custom/eng";
+import PdfIcon from "~icons/custom/pdf";
+import UpdatingLinkIcon from "~icons/custom/updatingLink";
+import XmlIcon from "~icons/custom/xml";
 import MaterialSymbolsLink from "~icons/material-symbols/link";
 import MaterialSymbolsPrint from "~icons/material-symbols/print";
 
@@ -49,7 +49,7 @@ export function createActionMenuItems(
     {
       key: "pdf",
       label: "Als PDF speichern",
-      iconComponent: PDFIcon,
+      iconComponent: PdfIcon,
       disabled: true,
     },
   );
@@ -58,7 +58,7 @@ export function createActionMenuItems(
     items.push({
       key: "xml",
       label: "XML anzeigen",
-      iconComponent: XMLIcon,
+      iconComponent: XmlIcon,
       command: async () => await navigationCommand(xmlUrl),
       url: records.xmlUrl,
       dataAttribute: "xml-view",
@@ -69,7 +69,7 @@ export function createActionMenuItems(
     items.push({
       key: "translation",
       label: "Zur englischen Übersetzung",
-      iconComponent: ENGIcon,
+      iconComponent: EngIcon,
       command: async () => await navigationCommand(translationUrl),
       url: translationUrl,
     });

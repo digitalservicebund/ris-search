@@ -2,6 +2,7 @@
 /// <reference types="vite" />
 
 import { defineVitestConfig } from "@nuxt/test-utils/config";
+import { FileSystemIconLoader } from "unplugin-icons/loaders";
 import IconsResolver from "unplugin-icons/resolver";
 import Icons from "unplugin-icons/vite";
 import { PrimeVueResolver } from "unplugin-vue-components/resolvers";
@@ -10,7 +11,12 @@ import { configDefaults } from "vitest/config";
 
 export default defineVitestConfig({
   plugins: [
-    Icons(),
+    Icons({
+      scale: 1.3333, // ~24px at the current default font size of 18px
+      customCollections: {
+        custom: FileSystemIconLoader("./src/assets/icons"),
+      },
+    }),
     Components({
       resolvers: [IconsResolver(), PrimeVueResolver()],
     }),

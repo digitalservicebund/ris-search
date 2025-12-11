@@ -137,12 +137,12 @@ useStaticPageSeo("translations-list");
               <h2>{{ t.name }}</h2>
             </NuxtLink>
 
-            <p class="text-gray-900">{{ t.translator }}</p>
+            <p class="ris-label2-regular text-gray-900">{{ t.translator }}</p>
           </li>
         </ul>
 
         <div v-else class="mt-8">
-          <p class="font-bold">We didn’t find anything.</p>
+          <p class="ris-body1-bold">We didn’t find anything.</p>
           <p class="mb-16">
             Try checking the spelling or using a different title.
           </p>

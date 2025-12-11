@@ -117,7 +117,7 @@ useStaticPageSeo("datenschutz");
           testphase.rechtsinformationen.bund.de bzw.
           docs.rechtsinformationen.bund.de
         </h3>
-        <h4>I.1. Zweck der Datenverarbeitung</h4>
+        <h4 class="ris-subhead-bold">I.1. Zweck der Datenverarbeitung</h4>
         <p>
           Wenn Sie diese Webseiten aufrufen, speichern wir automatisch Ihre
           Internet-Protokoll-Adresse (IP-Adresse). Dieses Datum wird aus
@@ -126,11 +126,15 @@ useStaticPageSeo("datenschutz");
           Webseite sowie der Inhalte und Leistungen) und um eventuell
           auftretende technische Probleme zu erkennen.
         </p>
-        <h4>I.2. Kategorien personenbezogener Daten (Nutzungsdaten)</h4>
+        <h4 class="ris-subhead-bold">
+          I.2. Kategorien personenbezogener Daten (Nutzungsdaten)
+        </h4>
         <ul class="list-bullet">
           <li>Ihre Internet-Protokoll-Adresse (IP-Adresse)</li>
         </ul>
-        <h4>I.3. Rechtsgrundlage für den Betrieb der Webseiten:</h4>
+        <h4 class="ris-subhead-bold">
+          I.3. Rechtsgrundlage für den Betrieb der Webseiten:
+        </h4>
         <p>
           Die Datenverarbeitung erfolgt auf Grundlage des Artikel 6 Abs. 1 UAbs.
           1 lit. e) und Abs. 3 lit. b) DS-GVO in Verbindung mit § 3
@@ -144,7 +148,7 @@ useStaticPageSeo("datenschutz");
         <h3 class="ris-heading3-regular">
           II. Datenschutzinformationen bei Nutzung der Kontakt-E-Mail-Adresse
         </h3>
-        <h4>II.1. Zweck der Datenverarbeitung</h4>
+        <h4 class="ris-subhead-bold">II.1. Zweck der Datenverarbeitung</h4>
         <p>
           Auf den Webseiten besteht für die Nutzenden die Möglichkeit, mit uns
           über die E-Mail-Adresse
@@ -156,13 +160,15 @@ useStaticPageSeo("datenschutz");
           in Kontakt zu treten. Die dabei erhobenen personenbezogenen Daten
           werden ausschließlich dafür verwendet, um mit Ihnen zu kommunizieren.
         </p>
-        <h4>II.2. Kategorien personenbezogener Daten</h4>
+        <h4 class="ris-subhead-bold">
+          II.2. Kategorien personenbezogener Daten
+        </h4>
         <ul class="list-bullet">
           <li>Name/Vorname</li>
           <li>E-Mail-Adresse</li>
           <li>Anschrift (optional)</li>
         </ul>
-        <h4>
+        <h4 class="ris-subhead-bold">
           II.3. Rechtsgrundlage für die Verarbeitung Ihrer personenbezogenen
           Daten bei Nutzung der Kontakt-E-Mail-Adresse
         </h4>
@@ -177,18 +183,20 @@ useStaticPageSeo("datenschutz");
         <h3 class="ris-heading3-regular">
           III. Datenschutzinformationen bei Nutzung der Feedback Box
         </h3>
-        <h4>III. 1. Zweck der Datenverarbeitung</h4>
+        <h4 class="ris-subhead-bold">III. 1. Zweck der Datenverarbeitung</h4>
         <p>
           Es besteht für Sie die Möglichkeit, uns Feedback über unsere Feedback
           Box einzureichen. Ihr Feedback hilft uns, die Inhalte unseres Service
           kontinuierlich zu verbessern. Sie werden ausdrücklich gebeten, keine
           personenbezogenen Daten in die Feedback Box einzutragen.
         </p>
-        <h4>III.2. Kategorien personenbezogener Daten</h4>
+        <h4 class="ris-subhead-bold">
+          III.2. Kategorien personenbezogener Daten
+        </h4>
         <ul class="list-bullet">
           <li>Ihre Internet-Protokoll-Adresse (IP-Adresse)</li>
         </ul>
-        <h4>
+        <h4 class="ris-subhead-bold">
           III.3. Rechtsgrundlage für die Verarbeitung Ihrer personenbezogenen
           Daten bei Nutzung der Feedback Box
         </h4>
@@ -230,7 +238,9 @@ useStaticPageSeo("datenschutz");
           Organisation (gemäß Ziffer 1 (s.o.) das BMJV) die nachfolgend
           benannten Rechte geltend machen.
         </p>
-        <h4>VI.1. Recht auf Auskunft (Art. 15 DS-GVO)</h4>
+        <h4 class="ris-subhead-bold">
+          VI.1. Recht auf Auskunft (Art. 15 DS-GVO)
+        </h4>
         <p>
           Mit dem Recht auf Auskunft erhält der oder die Betroffene eine
           umfassende Einsicht in die ihn angehenden personenbezogenen Daten und
@@ -238,13 +248,17 @@ useStaticPageSeo("datenschutz");
           Verarbeitungszwecke oder die Dauer der Speicherung. Es gelten die in §
           34 BDSG geregelten Ausnahmen von diesem Recht.
         </p>
-        <h4>VI.2. Recht auf Berichtigung (Art. 16 DS-GVO)</h4>
+        <h4 class="ris-subhead-bold">
+          VI.2. Recht auf Berichtigung (Art. 16 DS-GVO)
+        </h4>
         <p>
           Das Recht auf Berichtigung beinhaltet die Möglichkeit für den
           Betroffenen oder die Betroffene, unrichtige ihn oder sie angehende
           personenbezogene Daten korrigieren zu lassen.
         </p>
-        <h4>VI.3. Recht auf Löschung (Art. 17 DS-GVO)</h4>
+        <h4 class="ris-subhead-bold">
+          VI.3. Recht auf Löschung (Art. 17 DS-GVO)
+        </h4>
         <p>
           Das Recht auf Löschung beinhaltet die Möglichkeit für den Betroffenen
           oder die Betroffene, Daten bei der verantwortlichen Organisation
@@ -254,7 +268,9 @@ useStaticPageSeo("datenschutz");
           widerrufen wurde. Es gelten die in § 35 BDSG geregelten Ausnahmen von
           diesem Recht.
         </p>
-        <h4>VI.4. Recht auf Einschränkung der Verarbeitung (Art. 18 DS-GVO)</h4>
+        <h4 class="ris-subhead-bold">
+          VI.4. Recht auf Einschränkung der Verarbeitung (Art. 18 DS-GVO)
+        </h4>
         <p>
           Das Recht auf Einschränkung der Verarbeitung beinhaltet die
           Möglichkeit für den Betroffenen oder die Betroffene, eine weitere
@@ -263,7 +279,9 @@ useStaticPageSeo("datenschutz");
           Prüfungsphase anderer Rechtewahrnehmungen durch den Betroffenen oder
           die Betroffene ein.
         </p>
-        <h4>VI.5. Recht auf Datenübertragbarkeit (Art. 20 DS-GVO)</h4>
+        <h4 class="ris-subhead-bold">
+          VI.5. Recht auf Datenübertragbarkeit (Art. 20 DS-GVO)
+        </h4>
         <p>
           Das Recht auf Datenübertragbarkeit beinhaltet die Möglichkeit für den
           Betroffenen oder die Betroffene, die ihn oder sie angehenden
@@ -275,7 +293,9 @@ useStaticPageSeo("datenschutz");
           Aufgaben dient. Dies ist beim BMJV nur dann nicht der Fall, wenn die
           Verarbeitung personenbezogener Daten zu fiskalischen Zwecken erfolgt.
         </p>
-        <h4>VI.6. Recht auf Widerspruch (Art. 21 DS-GVO)</h4>
+        <h4 class="ris-subhead-bold">
+          VI.6. Recht auf Widerspruch (Art. 21 DS-GVO)
+        </h4>
         <p>
           Das Recht auf Widerspruch beinhaltet die Möglichkeit für den
           Betroffenen oder die Betroffene, in einer besonderen Situation der
@@ -285,7 +305,9 @@ useStaticPageSeo("datenschutz");
           ist. Das Recht gilt gemäß § 36 BDSG nicht, wenn eine öffentliche
           Stelle durch Rechtsvorschrift zur Verarbeitung verpflichtet ist.
         </p>
-        <h4>VI.7. Recht auf Beschwerde (Art. 77 DS-GVO)</h4>
+        <h4 class="ris-subhead-bold">
+          VI.7. Recht auf Beschwerde (Art. 77 DS-GVO)
+        </h4>
         <p>
           Der oder die Betroffene hat die Möglichkeit, sich mit einer Beschwerde
           gegen die Datenverarbeitung des BMJV an die Bundesbeauftragte für den
@@ -306,14 +328,11 @@ useStaticPageSeo("datenschutz");
   >
 </template>
 <style scoped>
+@reference "~/assets/main.css";
+
 h2,
 h3,
 h4 {
-  margin-top: 32px;
-  margin-bottom: 8px;
-}
-h4 {
-  font-size: 20px;
-  font-weight: bold;
+  @apply mt-32 mb-8;
 }
 </style>

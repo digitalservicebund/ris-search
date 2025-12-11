@@ -46,9 +46,14 @@ export default createConfigForNuxt(undefined, [
         {
           patterns: [
             {
+              // Enforce consistent usage of ~ alias
               group: ["@/**"],
-              message:
-                'Please use "~/..." alias instead of "@/..." for project-specific imports.',
+              message: "Import project specific modules from ~/...",
+            },
+            {
+              // Enforce consistent import path for icons
+              group: ["virtual:icons/**"],
+              message: "Import icons from ~icons/...",
             },
           ],
           paths: [
