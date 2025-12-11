@@ -123,9 +123,9 @@
                     <ris:sonstigerSachtitelListe>
                         <ris:sonstigerSachtitel>sonstiger titel</ris:sonstigerSachtitel>
                     </ris:sonstigerSachtitelListe>
-                    <ris:gesamttitelangaben>
+                    <ris:gesamttitelAngaben>
                         <ris:gesamttitel titel="gesamttitel" bandbezeichnung="bandbezeichnung"/>
-                    </ris:gesamttitelangaben>
+                    </ris:gesamttitelAngaben>
                     <ris:teilbaende>
                         <ris:teilband>Teilband</ris:teilband>
                     </ris:teilbaende>

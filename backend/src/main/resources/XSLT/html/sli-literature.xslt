@@ -22,6 +22,9 @@
 			</head>
 			<body>
 				<xsl:apply-templates select="//akn:FRBRWork"/>
+				<xsl:apply-templates select="//ris:titelkurzformen"/>
+				<xsl:apply-templates select="//ris:sonstigerSachtitelListe"/>
+				<xsl:apply-templates select="//ris:gesamttitelAngaben"/>
 				<xsl:apply-templates select="//*[local-name()='gliederung']"/>
 				<xsl:apply-templates select="//akn:mainBody"/>
 				<xsl:apply-templates select="//akn:otherReferences[@source='active']"/>
@@ -46,6 +49,24 @@
 					<p><xsl:value-of select="."/></p>
 				</xsl:when>
 			</xsl:choose>
+		</xsl:for-each>
+	</xsl:template>
+
+	<xsl:template match="ris:titelkurzformen">
+		<xsl:for-each select="ris:titelkurzform">
+			<p><xsl:value-of select="."/></p>
+		</xsl:for-each>
+	</xsl:template>
+
+	<xsl:template match="ris:sonstigerSachtitelListe">
+		<xsl:for-each select="ris:sonstigerSachtitel">
+			<p><xsl:value-of select="."/></p>
+		</xsl:for-each>
+	</xsl:template>
+
+	<xsl:template match="ris:gesamttitelAngaben">
+		<xsl:for-each select="ris:gesamttitel">
+			<p><xsl:value-of select="./@titel"/><xsl:text> </xsl:text><xsl:value-of select="./@bandbezeichnung"/></p>
 		</xsl:for-each>
 	</xsl:template>
 
