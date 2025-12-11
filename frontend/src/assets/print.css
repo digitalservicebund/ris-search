@@ -26,7 +26,7 @@ article {
     @apply max-w-[initial];
   }
   :root {
-    --spacing-prose: 100%;
+    --max-width-prose: 100%;
   }
 }
 

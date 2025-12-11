@@ -198,7 +198,7 @@ h2.einzelvorschrift {
   h2,
   p,
   table {
-    @apply max-w-(--spacing-prose);
+    @apply max-w-prose;
   }
 
   table.pgwide {
