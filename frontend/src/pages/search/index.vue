@@ -46,6 +46,26 @@ watch(
   { immediate: true },
 );
 
+watch(
+  () => data.value,
+  async (page) => {
+    if (!page || isLoading.value) return;
+
+    const totalItems = page.totalItems ?? 0;
+    const itemsPerPage = searchParams.itemsPerPage.value;
+    const requestedPage = searchParams.pageNumber.value;
+
+    if (page.member.length === 0 && totalItems > 0) {
+      const lastPage = Math.floor((totalItems - 1) / itemsPerPage);
+
+      if (requestedPage !== lastPage) {
+        searchParams.setPageNumber(lastPage);
+        await execute();
+      }
+    }
+  },
+);
+
 const isLoading = computed(() => status.value === "pending");
 const currentPage = computed(() => data.value);
 
