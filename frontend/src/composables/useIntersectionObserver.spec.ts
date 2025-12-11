@@ -27,10 +27,10 @@ describe("useIntersectionObserver", () => {
 
   beforeEach(() => {
     // Store original window to restore after each test
-    originalWindow = window;
+    originalWindow = globalThis.window;
 
     // Create a mock window with necessary properties
-    global.window = {
+    globalThis.window = {
       ...originalWindow,
       scrollY: 0,
       addEventListener: vi.fn(),
@@ -45,7 +45,7 @@ describe("useIntersectionObserver", () => {
 
   afterEach(() => {
     // Restore original window
-    global.window = originalWindow;
+    globalThis.window = originalWindow;
   });
 
   it("initializes with hash from route", async () => {
@@ -63,7 +63,7 @@ describe("useIntersectionObserver", () => {
     };
 
     // Mock IntersectionObserver constructor
-    global.IntersectionObserver = vi.fn().mockImplementation(function () {
+    globalThis.IntersectionObserver = vi.fn().mockImplementation(function () {
       return mockObserver;
     });
 
@@ -90,7 +90,7 @@ describe("useIntersectionObserver", () => {
       disconnect: vi.fn(),
     };
 
-    global.IntersectionObserver = vi.fn().mockImplementation(function () {
+    globalThis.IntersectionObserver = vi.fn().mockImplementation(function () {
       return mockObserver;
     });
 

@@ -116,6 +116,7 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
         </legend>
         <CategoryFilter v-model="searchParams.category.value" />
         <CourtFilter
+          v-if="searchParams.category.value.startsWith(DocumentKind.CaseLaw)"
           v-model="searchParams.court.value"
           :category="searchParams.category.value"
         />

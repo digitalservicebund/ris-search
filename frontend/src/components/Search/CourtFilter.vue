@@ -3,19 +3,15 @@ import { RisAutoComplete } from "@digitalservicebund/ris-ui/components";
 import _ from "lodash";
 import type { AutoCompleteDropdownClickEvent } from "primevue/autocomplete";
 import useBackendUrl from "~/composables/useBackendUrl";
-import { DocumentKind, type CourtSearchResult } from "~/types";
+import type { CourtSearchResult } from "~/types";
 import { courtFilterDefaultSuggestions } from "~/utils/search/courtFilter";
 
-const props = defineProps<{
+defineProps<{
   /** Current category filter value */
   category?: string;
 }>();
 
 const model = defineModel<string | undefined>();
-
-const isCaseLaw = computed(() =>
-  props.category?.startsWith(DocumentKind.CaseLaw),
-);
 
 const searchResults = ref<CourtSearchResult[]>([]);
 
@@ -88,12 +84,7 @@ const suggestions = computed<
 </script>
 
 <template>
-  <InputField
-    v-if="isCaseLaw"
-    id="courtFilter"
-    v-slot="{ id }"
-    label="Bundesgericht"
-  >
+  <InputField id="courtFilter" v-slot="{ id }" label="Bundesgericht">
     <RisAutoComplete
       v-model="model"
       :input-id="id"
