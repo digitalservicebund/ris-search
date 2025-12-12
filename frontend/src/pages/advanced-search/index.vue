@@ -114,6 +114,31 @@ const {
 // Perform initial search with any existing filter + query params
 await submitSearch();
 
+// Watch for changes in page size, so that the page number is adjusted accordingly
+watch(
+  () => searchResults.value,
+  async (page) => {
+    if (!page) return;
+
+    const totalItems = page.totalItems ?? 0;
+    const requestedPage = pageIndex.value;
+    const perPage = Number(itemsPerPage.value);
+
+    if (page.member.length === 0 && totalItems > 0) {
+      const lastPage = Math.floor((totalItems - 1) / perPage);
+
+      if (requestedPage !== lastPage) {
+        pageIndex.value = lastPage;
+
+        await saveFilterStateToRoute();
+
+        await submitSearch();
+      }
+    }
+  },
+  { immediate: true },
+);
+
 const formattedResultCount = computed(() =>
   formatNumberWithSeparators(totalItemCount.value),
 );
