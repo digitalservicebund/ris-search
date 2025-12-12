@@ -6,7 +6,6 @@ import de.bund.digitalservice.ris.search.repository.objectstorage.ObjectStorage;
 import de.bund.digitalservice.ris.search.repository.opensearch.DocumentRepository;
 import de.bund.digitalservice.ris.search.utils.DateUtils;
 import java.time.Instant;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -30,6 +29,8 @@ public abstract class BaseIndexService<T> implements IndexService {
     this.objectStorage = objectStorage;
     this.documentRepository = repository;
   }
+
+  protected abstract Optional<String> getIdFromFilename(String filename);
 
   /**
    * Re-indexes all the indexable files and deletes old or null entities based on the provided
@@ -63,9 +64,12 @@ public abstract class BaseIndexService<T> implements IndexService {
       reindexAll(Instant.now().toString());
     } else {
       indexFiles(changelog.getChanged().stream().filter(s -> s.endsWith(".xml")).toList());
+
       Set<String> deletedIds =
           changelog.getDeleted().stream()
-              .map(this::extractIdFromFilename)
+              .map(this::getIdFromFilename)
+              .filter(Optional::isPresent)
+              .map(Optional::get)
               .collect(Collectors.toSet());
 
       deleteAllEntitiesById(deletedIds);
@@ -94,10 +98,6 @@ public abstract class BaseIndexService<T> implements IndexService {
         logger.warn("Tried to index file {}, but it doesn't exist.", filename);
       }
     }
-  }
-
-  protected String extractIdFromFilename(String filename) {
-    return Arrays.stream(filename.split("\\.")).findFirst().orElse(null);
   }
 
   protected abstract Optional<T> mapFileToEntity(String filename, String fileContent);

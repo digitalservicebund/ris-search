@@ -3,6 +3,7 @@ package de.bund.digitalservice.ris.search.service;
 import de.bund.digitalservice.ris.search.exception.OpenSearchMapperException;
 import de.bund.digitalservice.ris.search.mapper.LiteratureLdmlToOpenSearchMapper;
 import de.bund.digitalservice.ris.search.mapper.SliLiteratureLdmlToOpenSearchMapper;
+import de.bund.digitalservice.ris.search.models.DocumentKind;
 import de.bund.digitalservice.ris.search.models.ldml.literature.LiteratureType;
 import de.bund.digitalservice.ris.search.models.opensearch.Literature;
 import de.bund.digitalservice.ris.search.repository.objectstorage.LiteratureBucket;
@@ -26,6 +27,11 @@ public class IndexLiteratureService extends BaseIndexService<Literature> {
   @Autowired
   public IndexLiteratureService(LiteratureBucket bucket, LiteratureRepository repository) {
     super(bucket, repository);
+  }
+
+  @Override
+  protected Optional<String> getIdFromFilename(String filename) {
+    return DocumentKind.extractIdFromFileName(filename, DocumentKind.LITERATURE);
   }
 
   @Override
