@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { TreeNode } from "primevue/treenode";
 import { computed } from "vue";
-import TableOfContentsLayout from "~/components/CustomLayouts/SidebarLayout.vue";
+import SidebarLayout from "~/components/CustomLayouts/SidebarLayout.vue";
 import IncompleteDataMessage from "~/components/IncompleteDataMessage.vue";
 import ArticleVersionWarning from "~/components/Norm/ArticleVersionWarning.vue";
 import NormTableOfContents from "~/components/Ris/NormTableOfContents.vue";
@@ -241,7 +241,7 @@ useDynamicSeo({ title, description });
       <Metadata :items="metadataItems" />
     </div>
     <div class="bg-white">
-      <TableOfContentsLayout class="container py-24">
+      <SidebarLayout class="container py-24">
         <template v-if="!!articleHtml" #content>
           <IncompleteDataMessage />
           <article
@@ -292,7 +292,7 @@ useDynamicSeo({ title, description });
             </template>
           </NormTableOfContents>
         </template>
-      </TableOfContentsLayout>
+      </SidebarLayout>
     </div>
   </template>
 </template>

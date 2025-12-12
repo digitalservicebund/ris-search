@@ -6,7 +6,7 @@ import type { ComputedRef } from "vue";
 import { computed } from "vue";
 import { useRoute } from "#app";
 import NormActionsMenu from "~/components/ActionMenu/NormActionsMenu.vue";
-import TableOfContentsLayout from "~/components/CustomLayouts/SidebarLayout.vue";
+import SidebarLayout from "~/components/CustomLayouts/SidebarLayout.vue";
 import DetailsList from "~/components/DetailsList.vue";
 import DetailsListEntry from "~/components/DetailsListEntry.vue";
 import IncompleteDataMessage from "~/components/IncompleteDataMessage.vue";
@@ -258,7 +258,7 @@ useDynamicSeo({ title, description });
           :class="tabPanelClass"
           :hidden="isClient && activeTab !== 'text'"
         >
-          <TableOfContentsLayout class="container">
+          <SidebarLayout class="container">
             <template #content>
               <h2 class="sr-only">Text</h2>
               <IncompleteDataMessage />
@@ -282,7 +282,7 @@ useDynamicSeo({ title, description });
                 />
               </client-only>
             </template>
-          </TableOfContentsLayout>
+          </SidebarLayout>
         </section>
 
         <section
