@@ -35,7 +35,7 @@ class PaginationParamsValidatorTest {
     invalidPageIndex.setPageIndex(-1);
 
     PaginationParams sizeTooBig = new PaginationParams();
-    sizeTooBig.setSize(101);
+    sizeTooBig.setSize(301);
     sizeTooBig.setPageIndex(1);
 
     PaginationParams sizeTooSmall = new PaginationParams();
@@ -46,7 +46,7 @@ class PaginationParamsValidatorTest {
         Arguments.of(
             invalidResultWindow, "PageIndex out of Bounds. Result window must not exceed 10000"),
         Arguments.of(invalidPageIndex, "pageIndex must be at least 0"),
-        Arguments.of(sizeTooBig, "size must not exceed 100"),
+        Arguments.of(sizeTooBig, "size must not exceed 300"),
         Arguments.of(sizeTooSmall, "size must be at least 1"));
   }
 

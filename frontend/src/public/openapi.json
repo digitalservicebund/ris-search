@@ -150,7 +150,7 @@
             "schema": {
               "type": "integer",
               "format": "int32",
-              "maximum": 100,
+              "maximum": 300,
               "minimum": 1
             },
             "example": 100
@@ -389,7 +389,7 @@
             "schema": {
               "type": "integer",
               "format": "int32",
-              "maximum": 100,
+              "maximum": 300,
               "minimum": 1
             },
             "example": 100
@@ -1367,7 +1367,7 @@
             "schema": {
               "type": "integer",
               "format": "int32",
-              "maximum": 100,
+              "maximum": 300,
               "minimum": 1
             },
             "example": 100
@@ -1425,7 +1425,7 @@
             "schema": {
               "type": "integer",
               "format": "int32",
-              "maximum": 100,
+              "maximum": 300,
               "minimum": 1
             },
             "example": 100
@@ -1494,7 +1494,7 @@
             "schema": {
               "type": "integer",
               "format": "int32",
-              "maximum": 100,
+              "maximum": 300,
               "minimum": 1
             },
             "example": 100
@@ -1563,7 +1563,7 @@
             "schema": {
               "type": "integer",
               "format": "int32",
-              "maximum": 100,
+              "maximum": 300,
               "minimum": 1
             },
             "example": 100
@@ -1632,7 +1632,7 @@
             "schema": {
               "type": "integer",
               "format": "int32",
-              "maximum": 100,
+              "maximum": 300,
               "minimum": 1
             },
             "example": 100
@@ -1701,7 +1701,7 @@
             "schema": {
               "type": "integer",
               "format": "int32",
-              "maximum": 100,
+              "maximum": 300,
               "minimum": 1
             },
             "example": 100
@@ -1744,67 +1744,6 @@
           "500": {
             "description": "Internal Server Error"
           }
-        }
-      }
-    },
-    "/v1/document/lucene-search/administrative-directive": {
-      "get": {
-        "tags": ["AdministrativeDirective"],
-        "summary": "Advanced search using Lucene query syntax",
-        "operationId": "literatureSearch_1",
-        "parameters": [
-          {
-            "name": "query",
-            "in": "query",
-            "description": "The query filter based on Lucene query syntax",
-            "required": false,
-            "schema": { "type": "string" }
-          },
-          {
-            "name": "size",
-            "in": "query",
-            "description": "The number of entities per page",
-            "required": false,
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "maximum": 100,
-              "minimum": 1
-            },
-            "example": 100
-          },
-          {
-            "name": "pageIndex",
-            "in": "query",
-            "description": "The number of the page to request. The page starts with the value 0",
-            "required": false,
-            "schema": { "type": "integer", "format": "int32", "minimum": 0 },
-            "example": 0
-          },
-          {
-            "name": "sort",
-            "in": "query",
-            "description": "The field to sort the results by. Default is the relevance score calculated by OpenSearch. Valid usage of the sort field are : date and documentNumber and not setting the sort field (sort by relevance descending).Add a leading - to set the order to descending (-date)",
-            "required": false,
-            "schema": {
-              "type": "string",
-              "description": "The field to sort the results by. Default is the relevance score calculated by OpenSearch. Valid usage of the sort field are : date and documentNumber and not setting the sort field (sort by relevance descending).Add a leading - to set the order to descending (-date)",
-              "pattern": "^-?(|default|date|DATUM|documentNumber)$"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/CollectionSchemaSearchMemberSchemaAdministrativeDirectiveSearchSchema"
-                }
-              }
-            }
-          },
-          "500": { "description": "Internal Server Error" }
         }
       }
     },
@@ -1931,7 +1870,7 @@
             "schema": {
               "type": "integer",
               "format": "int32",
-              "maximum": 100,
+              "maximum": 300,
               "minimum": 1
             },
             "example": 100
@@ -2256,7 +2195,7 @@
             "schema": {
               "type": "integer",
               "format": "int32",
-              "maximum": 100,
+              "maximum": 300,
               "minimum": 1
             },
             "example": 100
@@ -2418,6 +2357,9 @@
             "$ref": "#/components/schemas/StatisticsCountSchema"
           },
           "literature": {
+            "$ref": "#/components/schemas/StatisticsCountSchema"
+          },
+          "administrative-directive": {
             "$ref": "#/components/schemas/StatisticsCountSchema"
           }
         }
@@ -3461,39 +3403,6 @@
             "type": "string",
             "example": "SearchResult"
           }
-        }
-      },
-      "CollectionSchemaSearchMemberSchemaAdministrativeDirectiveSearchSchema": {
-        "type": "object",
-        "properties": {
-          "@id": {
-            "type": "string",
-            "example": "/v1/document?pageIndex=0&size=5"
-          },
-          "totalItems": { "type": "integer", "format": "int64", "example": 1 },
-          "member": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/SearchMemberSchemaAdministrativeDirectiveSearchSchema"
-            }
-          },
-          "view": {
-            "$ref": "#/components/schemas/PartialCollectionViewSchema"
-          },
-          "@type": { "type": "string", "example": "hydra:Collection" }
-        }
-      },
-      "SearchMemberSchemaAdministrativeDirectiveSearchSchema": {
-        "type": "object",
-        "properties": {
-          "item": {
-            "$ref": "#/components/schemas/AdministrativeDirectiveSearchSchema"
-          },
-          "textMatches": {
-            "type": "array",
-            "items": { "$ref": "#/components/schemas/TextMatchSchema" }
-          },
-          "@type": { "type": "string", "example": "SearchResult" }
         }
       },
       "CaseLawEncodingSchema": {
