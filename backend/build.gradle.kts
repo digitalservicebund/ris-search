@@ -97,10 +97,10 @@ dependencies {
     testImplementation(libs.spring.security.test)
     testImplementation(libs.archunit.junit5)
     testImplementation(libs.mockito.junit.jupiter)
+    testImplementation(libs.spring.boot.starter.webmvc.test)
 
     testImplementation(libs.testcontainers.junit.jupiter)
     testImplementation(libs.opensearch.testcontainers)
-    testImplementation(libs.opensearch.test.autoconfigure)
     testImplementation(libs.testcontainers.postgresql)
     testImplementation(libs.restassured)
 }
@@ -129,7 +129,7 @@ spotless {
         ktfmt()
     }
     kotlinGradle {
-        ktlint("1.2.1")
+        ktlint("1.4.1")
     }
 }
 
@@ -222,7 +222,11 @@ tasks {
         // coverage of our unit and integration tests as a single report!
         executionData.setFrom(
             files(
-                fileTree(project.layout.buildDirectory.asFile.get().absolutePath) {
+                fileTree(
+                    project.layout.buildDirectory.asFile
+                        .get()
+                        .absolutePath,
+                ) {
                     include("jacoco/*.exec")
                 },
             ),

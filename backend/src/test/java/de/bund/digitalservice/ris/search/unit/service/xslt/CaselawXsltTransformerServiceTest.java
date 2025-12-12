@@ -1,8 +1,8 @@
 package de.bund.digitalservice.ris.search.unit.service.xslt;
 
+import static org.apache.commons.lang3.StringUtils.deleteWhitespace;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.testcontainers.shaded.org.apache.commons.lang3.StringUtils.deleteWhitespace;
 
 import de.bund.digitalservice.ris.search.service.xslt.CaselawXsltTransformerService;
 import de.bund.digitalservice.ris.search.utils.CaseLawLdmlTemplateUtils;
@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
-import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -31,7 +30,7 @@ class CaselawXsltTransformerServiceTest {
           <p>Title</p>
         </h1>
         """;
-    assertTrue(StringUtils.deleteWhitespace(actualHtml).contains(deleteWhitespace(expectedHeader)));
+    assertTrue(deleteWhitespace(actualHtml).contains(deleteWhitespace(expectedHeader)));
   }
 
   @Test
@@ -46,7 +45,7 @@ class CaselawXsltTransformerServiceTest {
               <dd class="content"><p>Example Tatbestand/CaseFacts. More background</p></dd>
             </dl>
             """;
-    String actual = StringUtils.deleteWhitespace(actualHtml);
+    String actual = deleteWhitespace(actualHtml);
     assertThat(actual).contains(deleteWhitespace(expectedBorderNumber));
 
     var otherBorderNumber =
@@ -100,7 +99,7 @@ class CaselawXsltTransformerServiceTest {
                 </tbody>
               </table>
             """;
-    assertThat(StringUtils.deleteWhitespace(actualHtml)).contains(deleteWhitespace(expectedTable));
+    assertThat(deleteWhitespace(actualHtml)).contains(deleteWhitespace(expectedTable));
   }
 
   @ParameterizedTest
@@ -133,6 +132,6 @@ class CaselawXsltTransformerServiceTest {
         """
             <img src="api/v1/bild1.jpg" alt="Abbildung" title="bild1.jpg">
             """;
-    assertTrue(StringUtils.deleteWhitespace(actualHtml).contains(deleteWhitespace(expectedImage)));
+    assertTrue(deleteWhitespace(actualHtml).contains(deleteWhitespace(expectedImage)));
   }
 }
