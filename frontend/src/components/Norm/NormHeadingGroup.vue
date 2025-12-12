@@ -20,7 +20,7 @@ const hasHeading = computed(() => !!props.htmlParts?.heading);
 const normTitle = computed(() => getNormTitle(props.metadata));
 </script>
 <template>
-  <div class="dokumentenkopf mt-24 mb-48 max-w-prose">
+  <div class="dokumentenkopf mt-24 mb-48">
     <hgroup>
       <p
         v-if="hasHeading"
@@ -58,7 +58,7 @@ const normTitle = computed(() => getNormTitle(props.metadata));
 
     <NormHeadingFootnotes
       v-if="props.htmlParts?.headingAuthorialNotes"
-      class="my-48"
+      class="my-48 max-w-prose"
       :html="props.htmlParts.headingAuthorialNotes"
       :text-length="props.htmlParts?.headingAuthorialNotesLength"
     />

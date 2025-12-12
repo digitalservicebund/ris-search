@@ -6,19 +6,18 @@ import type { ComputedRef } from "vue";
 import { computed } from "vue";
 import { useRoute } from "#app";
 import NormActionsMenu from "~/components/ActionMenu/NormActionsMenu.vue";
-import ContentWrapper from "~/components/CustomLayouts/ContentWrapper.vue";
-import TableOfContentsLayout from "~/components/CustomLayouts/SidebarLayout.vue";
 import DetailsList from "~/components/DetailsList.vue";
 import DetailsListEntry from "~/components/DetailsListEntry.vue";
 import IncompleteDataMessage from "~/components/IncompleteDataMessage.vue";
+import NormHeadingGroup from "~/components/Norm/NormHeadingGroup.vue";
+import NormTableOfContents from "~/components/Norm/NormTableOfContents.vue";
 import NormVersionList from "~/components/Norm/NormVersionList.vue";
 import NormVersionWarning from "~/components/Norm/NormVersionWarning.vue";
 import VersionsTeaser from "~/components/Norm/VersionsTeaser.vue";
-import NormHeadingGroup from "~/components/NormHeadingGroup.vue";
-import NormTableOfContents from "~/components/Ris/NormTableOfContents.vue";
 import type { BreadcrumbItem } from "~/components/Ris/RisBreadcrumb.vue";
 import RisBreadcrumb from "~/components/Ris/RisBreadcrumb.vue";
 import RisTabs from "~/components/Ris/RisTabs.vue";
+import SidebarLayout from "~/components/SidebarLayout.vue";
 import { useDynamicSeo } from "~/composables/useDynamicSeo";
 import { useIntersectionObserver } from "~/composables/useIntersectionObserver";
 import { useFetchNormContent } from "~/composables/useNormData";
@@ -48,7 +47,7 @@ definePageMeta({
   // note: this is an expression ELI
   alias:
     "/eli/:jurisdiction/:agent/:year/:naturalIdentifier/:pointInTime/:version/:language",
-  layout: "base", // use "base" layout to allow for full-width tab backgrounds
+  layout: "document",
 });
 
 const route = useRoute();
@@ -233,134 +232,131 @@ useDynamicSeo({ title, description });
 </script>
 
 <template>
-  <ContentWrapper border>
-    <div v-if="status == 'pending'">Lade ...</div>
-    <div v-if="!!metadata">
-      <div class="container">
-        <div class="flex items-center gap-8 print:hidden">
-          <RisBreadcrumb :items="breadcrumbItems" class="grow" />
-          <client-only>
-            <NormActionsMenu
-              :metadata="metadata"
-              :translation-url="translationUrl"
-          /></client-only>
-        </div>
-        <NormHeadingGroup :metadata="metadata" :html-parts="htmlParts" />
-        <NormVersionWarning
-          v-if="normVersionsStatus === 'success'"
-          :versions="normVersions"
-          :current-version="metadata"
-        />
-        <Metadata :items="metadataItems" class="mb-48" />
+  <div v-if="status == 'pending'">Lade ...</div>
+  <div v-if="!!metadata">
+    <div class="container">
+      <div class="flex items-center gap-8 print:hidden">
+        <RisBreadcrumb :items="breadcrumbItems" class="grow" />
+        <client-only>
+          <NormActionsMenu
+            :metadata="metadata"
+            :translation-url="translationUrl"
+        /></client-only>
       </div>
-      <RisTabs :tabs="tabs">
-        <template #default="{ activeTab, isClient }">
-          <section
-            id="text"
-            :class="tabPanelClass"
-            :hidden="isClient && activeTab !== 'text'"
-          >
-            <TableOfContentsLayout class="container">
-              <template #content>
-                <h2 class="sr-only">Text</h2>
-                <IncompleteDataMessage />
-
-                <RisSingleAccordion
-                  v-if="htmlParts.officialToc"
-                  class="mt-24"
-                  header-expanded="Amtliches Inhaltsverzeichnis ausblenden"
-                  header-collapsed="Amtliches Inhaltsverzeichnis einblenden"
-                >
-                  <div v-html="htmlParts.officialToc" />
-                </RisSingleAccordion>
-                <div v-observe-elements class="legislation" v-html="html" />
-              </template>
-              <template #sidebar>
-                <client-only>
-                  <NormTableOfContents
-                    v-if="metadata.workExample.tableOfContents.length > 0"
-                    :table-of-contents="tableOfContents"
-                    :selected-key="selectedEntry"
-                  />
-                </client-only>
-              </template>
-            </TableOfContentsLayout>
-          </section>
-
-          <section
-            id="details"
-            :class="tabPanelClass"
-            :hidden="isClient && activeTab !== 'details'"
-            aria-labelledby="detailsTabPanelTitle"
-          >
-            <div class="container">
-              <h2 id="detailsTabPanelTitle" class="ris-heading3-bold my-24">
-                Details
-              </h2>
-              <IncompleteDataMessage class="my-24" />
-              <DetailsList>
-                <DetailsListEntry
-                  label="Ausfertigungsdatum:"
-                  :value="dateFormattedDDMMYYYY(metadata.legislationDate)"
-                />
-                <DetailsListEntry
-                  label="Vollzitat:"
-                  :value="htmlParts.vollzitat"
-                />
-                <DetailsListEntry
-                  label="Stand:"
-                  :value-list="htmlParts.standangaben"
-                />
-                <DetailsListEntry
-                  label="Hinweis zum Stand:"
-                  :value-list="htmlParts.standangabenHinweis"
-                />
-                <DetailsListEntry
-                  v-if="htmlParts.prefaceContainer"
-                  label="Besonderer Hinweis:"
-                >
-                  <div v-html="htmlParts.prefaceContainer" />
-                </DetailsListEntry>
-                <DetailsListEntry label="Fußnoten:">
-                  <template v-if="htmlParts.headingNotes" #default>
-                    <div v-html="htmlParts.headingNotes" />
-                  </template>
-                </DetailsListEntry>
-                <DetailsListEntry label="Download:">
-                  <NuxtLink
-                    data-attr="xml-zip-view"
-                    class="ris-link1-regular"
-                    external
-                    :to="zipUrl"
-                  >
-                    <MaterialSymbolsDownload class="mr-2 inline" />
-                    {{ metadata.abbreviation ?? "Inhalte" }} als ZIP
-                    herunterladen
-                  </NuxtLink>
-                </DetailsListEntry>
-              </DetailsList>
-            </div>
-          </section>
-
-          <section
-            id="versions"
-            :class="tabPanelClass"
-            :hidden="isClient && activeTab !== 'versions'"
-          >
-            <div class="container">
-              <NormVersionList
-                v-if="privateFeaturesEnabled"
-                :status="normVersionsStatus"
-                :current-legislation-identifier="
-                  metadata.workExample.legislationIdentifier
-                "
-                :versions="normVersions"
-              />
-              <VersionsTeaser v-else />
-            </div>
-          </section>
-        </template>
-      </RisTabs>
+      <NormHeadingGroup :metadata="metadata" :html-parts="htmlParts" />
+      <NormVersionWarning
+        v-if="normVersionsStatus === 'success'"
+        :versions="normVersions"
+        :current-version="metadata"
+      />
+      <Metadata :items="metadataItems" class="mb-48" />
     </div>
-  </ContentWrapper>
+    <RisTabs :tabs="tabs">
+      <template #default="{ activeTab, isClient }">
+        <section
+          id="text"
+          :class="tabPanelClass"
+          :hidden="isClient && activeTab !== 'text'"
+        >
+          <SidebarLayout class="container">
+            <template #content>
+              <h2 class="sr-only">Text</h2>
+              <IncompleteDataMessage />
+
+              <RisSingleAccordion
+                v-if="htmlParts.officialToc"
+                class="mt-24"
+                header-expanded="Amtliches Inhaltsverzeichnis ausblenden"
+                header-collapsed="Amtliches Inhaltsverzeichnis einblenden"
+              >
+                <div v-html="htmlParts.officialToc" />
+              </RisSingleAccordion>
+              <div v-observe-elements class="legislation" v-html="html" />
+            </template>
+            <template #sidebar>
+              <client-only>
+                <NormTableOfContents
+                  v-if="metadata.workExample.tableOfContents.length > 0"
+                  :table-of-contents="tableOfContents"
+                  :selected-key="selectedEntry"
+                />
+              </client-only>
+            </template>
+          </SidebarLayout>
+        </section>
+
+        <section
+          id="details"
+          :class="tabPanelClass"
+          :hidden="isClient && activeTab !== 'details'"
+          aria-labelledby="detailsTabPanelTitle"
+        >
+          <div class="container">
+            <h2 id="detailsTabPanelTitle" class="ris-heading3-bold my-24">
+              Details
+            </h2>
+            <IncompleteDataMessage class="my-24" />
+            <DetailsList>
+              <DetailsListEntry
+                label="Ausfertigungsdatum:"
+                :value="dateFormattedDDMMYYYY(metadata.legislationDate)"
+              />
+              <DetailsListEntry
+                label="Vollzitat:"
+                :value="htmlParts.vollzitat"
+              />
+              <DetailsListEntry
+                label="Stand:"
+                :value-list="htmlParts.standangaben"
+              />
+              <DetailsListEntry
+                label="Hinweis zum Stand:"
+                :value-list="htmlParts.standangabenHinweis"
+              />
+              <DetailsListEntry
+                v-if="htmlParts.prefaceContainer"
+                label="Besonderer Hinweis:"
+              >
+                <div v-html="htmlParts.prefaceContainer" />
+              </DetailsListEntry>
+              <DetailsListEntry label="Fußnoten:">
+                <template v-if="htmlParts.headingNotes" #default>
+                  <div v-html="htmlParts.headingNotes" />
+                </template>
+              </DetailsListEntry>
+              <DetailsListEntry label="Download:">
+                <NuxtLink
+                  data-attr="xml-zip-view"
+                  class="ris-link1-regular"
+                  external
+                  :to="zipUrl"
+                >
+                  <MaterialSymbolsDownload class="mr-2 inline" />
+                  {{ metadata.abbreviation ?? "Inhalte" }} als ZIP herunterladen
+                </NuxtLink>
+              </DetailsListEntry>
+            </DetailsList>
+          </div>
+        </section>
+
+        <section
+          id="versions"
+          :class="tabPanelClass"
+          :hidden="isClient && activeTab !== 'versions'"
+        >
+          <div class="container">
+            <NormVersionList
+              v-if="privateFeaturesEnabled"
+              :status="normVersionsStatus"
+              :current-legislation-identifier="
+                metadata.workExample.legislationIdentifier
+              "
+              :versions="normVersions"
+            />
+            <VersionsTeaser v-else />
+          </div>
+        </section>
+      </template>
+    </RisTabs>
+  </div>
 </template>

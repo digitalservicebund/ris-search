@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import Message from "primevue/message";
-import ContentWrapper from "~/components/CustomLayouts/ContentWrapper.vue";
 import type { Page } from "~/components/Pagination/Pagination.vue";
 import CategoryFilter from "~/components/Search/CategoryFilter.vue";
 import CourtFilter from "~/components/Search/CourtFilter.vue";
@@ -108,122 +107,119 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
 </script>
 
 <template>
-  <ContentWrapper>
-    <div class="pb-24">
-      <h1 class="ris-heading2-bold inline-block">Suche</h1>
-    </div>
-    <SimpleSearchInput
-      :model-value="searchParams.query.value"
-      @update:model-value="handleSearchSubmit"
-    />
-    <NuxtLink :to="{ hash: '#main' }" class="ris-link2-bold not-focus:sr-only">
-      Zu den Hauptinhalten springen
+  <div class="pb-24">
+    <h1 class="ris-heading2-bold inline-block">Suche</h1>
+  </div>
+
+  <SimpleSearchInput
+    :model-value="searchParams.query.value"
+    @update:model-value="handleSearchSubmit"
+  />
+  <NuxtLink :to="{ hash: '#main' }" class="ris-link2-bold not-focus:sr-only">
+    Zu den Hauptinhalten springen
+  </NuxtLink>
+
+  <p v-if="privateFeaturesEnabled" class="ris-label2-regular mt-8">
+    Mehr Suchoptionen finden Sie unter
+    <NuxtLink :to="{ name: 'advanced-search' }" class="ris-link2-bold">
+      Erweiterte Suche
     </NuxtLink>
+  </p>
 
-    <p v-if="privateFeaturesEnabled" class="ris-label2-regular mt-8">
-      Mehr Suchoptionen finden Sie unter
-      <NuxtLink :to="{ name: 'advanced-search' }" class="ris-link2-bold">
-        Erweiterte Suche
-      </NuxtLink>
-    </p>
+  <div class="mt-24 flex flex-col gap-48 lg:flex-row">
+    <fieldset
+      class="top-8 flex w-full flex-col gap-24 pb-10 lg:sticky lg:max-h-screen lg:w-3/12 lg:overflow-y-auto"
+    >
+      <legend class="ris-label1-regular flex h-48 items-center">Filter</legend>
+      <CategoryFilter v-model="searchParams.category.value" />
+      <CourtFilter
+        v-if="searchParams.category.value.startsWith(DocumentKind.CaseLaw)"
+        v-model="searchParams.court.value"
+        :category="searchParams.category.value"
+      />
+      <DateRangeFilter
+        v-if="
+          documentKind === DocumentKind.CaseLaw ||
+          documentKind === DocumentKind.AdministrativeDirective
+        "
+        v-model:date="searchParams.date.value"
+        v-model:date-after="searchParams.dateAfter.value"
+        v-model:date-before="searchParams.dateBefore.value"
+        v-model:date-search-mode="searchParams.dateSearchMode.value"
+      />
+      <YearRangeFilter
+        v-else-if="documentKind === DocumentKind.Literature"
+        v-model:date-after="searchParams.dateAfter.value"
+        v-model:date-before="searchParams.dateBefore.value"
+        v-model:date-search-mode="searchParams.dateSearchMode.value"
+      />
+    </fieldset>
 
-    <div class="mt-24 flex flex-col gap-48 pb-24 lg:flex-row">
-      <fieldset
-        class="top-8 flex w-full flex-col gap-24 pb-10 lg:sticky lg:max-h-screen lg:w-3/12 lg:overflow-y-auto"
+    <div id="main" class="w-full flex-col justify-end gap-8 lg:w-9/12">
+      <Pagination
+        :is-loading="isLoading"
+        navigation-position="bottom"
+        :page="currentPage"
+        @update-page="updatePage"
       >
-        <legend class="ris-label1-regular flex h-48 items-center">
-          Filter
-        </legend>
-        <CategoryFilter v-model="searchParams.category.value" />
-        <CourtFilter
-          v-if="searchParams.category.value.startsWith(DocumentKind.CaseLaw)"
-          v-model="searchParams.court.value"
-          :category="searchParams.category.value"
-        />
-        <DateRangeFilter
-          v-if="
-            documentKind === DocumentKind.CaseLaw ||
-            documentKind === DocumentKind.AdministrativeDirective
-          "
-          v-model:date="searchParams.date.value"
-          v-model:date-after="searchParams.dateAfter.value"
-          v-model:date-before="searchParams.dateBefore.value"
-          v-model:date-search-mode="searchParams.dateSearchMode.value"
-        />
-        <YearRangeFilter
-          v-else-if="documentKind === DocumentKind.Literature"
-          v-model:date-after="searchParams.dateAfter.value"
-          v-model:date-before="searchParams.dateBefore.value"
-          v-model:date-search-mode="searchParams.dateSearchMode.value"
-        />
-      </fieldset>
-      <div id="main" class="w-full flex-col justify-end gap-8 lg:w-9/12">
-        <Pagination
-          :is-loading="isLoading"
-          navigation-position="bottom"
-          :page="currentPage"
-          @update-page="updatePage"
+        <div
+          class="mb-12 flex w-full flex-wrap items-center justify-between gap-x-32 gap-y-16"
         >
-          <div
-            class="mb-12 flex w-full flex-wrap items-center justify-between gap-x-32 gap-y-16"
+          <output
+            id="result-count"
+            aria-live="polite"
+            aria-atomic="true"
+            class="ris-label2-regular"
           >
-            <output
-              id="result-count"
-              aria-live="polite"
-              aria-atomic="true"
-              class="ris-label2-regular"
-            >
-              {{ isLoading ? "Lade ..." : null }}
-              {{
-                currentPage && !isLoading
-                  ? buildResultCountString(currentPage)
-                  : ""
-              }}
-            </output>
-            <div class="flex flex-wrap gap-x-32 gap-y-16">
-              <ItemsPerPageDropdown v-model="searchParams.itemsPerPage.value" />
-              <SortSelect
-                v-model="searchParams.sort.value"
-                :document-kind="documentKind"
-              />
-            </div>
+            {{ isLoading ? "Lade ..." : null }}
+            {{
+              currentPage && !isLoading
+                ? buildResultCountString(currentPage)
+                : ""
+            }}
+          </output>
+          <div class="flex flex-wrap gap-x-32 gap-y-16">
+            <ItemsPerPageDropdown v-model="searchParams.itemsPerPage.value" />
+            <SortSelect
+              v-model="searchParams.sort.value"
+              :document-kind="documentKind"
+            />
           </div>
-          <p
-            v-if="!!loadError"
-            class="my-8 text-red-700"
-            role="alert"
-            aria-relevant="all"
-          >
-            {{ loadError.message }}
+        </div>
+        <p
+          v-if="!!loadError"
+          class="my-8 text-red-700"
+          role="alert"
+          aria-relevant="all"
+        >
+          {{ loadError.message }}
+        </p>
+        <Message severity="warn" class="ris-body2-regular mt-16 max-w-prose">
+          <p class="ris-body2-bold mt-2">
+            Dieser Service befindet sich in der Testphase.
           </p>
-          <Message severity="warn" class="ris-body2-regular mt-16 max-w-prose">
-            <p class="ris-body2-bold mt-2">
-              Dieser Service befindet sich in der Testphase.
-            </p>
-            <p>
-              Der Datenbestand ist noch nicht vollständig und die
-              Suchpriorisierung noch nicht final. Der Service ist in
-              Entwicklung. Wir arbeiten an der Ergänzung und Darstellung aller
-              Inhalte.
-            </p>
-          </Message>
-          <ul
-            v-if="currentPage && currentPage?.member?.length > 0"
-            aria-label="Suchergebnisse"
-            class="w-full"
-          >
-            <li v-for="(element, index) in currentPage.member" :key="index">
-              <SearchResult :search-result="element" :order="index" />
-            </li>
-          </ul>
-          <div
-            v-if="isLoading"
-            class="flex h-full min-h-48 w-full items-center justify-center"
-          >
-            <DelayedLoadingMessage />
-          </div>
-        </Pagination>
-      </div>
+          <p>
+            Der Datenbestand ist noch nicht vollständig und die
+            Suchpriorisierung noch nicht final. Der Service ist in Entwicklung.
+            Wir arbeiten an der Ergänzung und Darstellung aller Inhalte.
+          </p>
+        </Message>
+        <ul
+          v-if="currentPage && currentPage?.member?.length > 0"
+          aria-label="Suchergebnisse"
+          class="w-full max-w-prose"
+        >
+          <li v-for="(element, index) in currentPage.member" :key="index">
+            <SearchResult :search-result="element" :order="index" />
+          </li>
+        </ul>
+        <div
+          v-if="isLoading"
+          class="flex h-full min-h-48 w-full items-center justify-center"
+        >
+          <DelayedLoadingMessage />
+        </div>
+      </Pagination>
     </div>
-  </ContentWrapper>
+  </div>
 </template>

@@ -68,6 +68,10 @@ function extractHtmlParts(document: Document): NormContent["htmlParts"] {
   const headingAuthorialNotes = document.querySelector(
     ".dokumentenkopf .fussnoten",
   );
+  // Normalize consecutive whitespace to match what users actually see
+  const headingAuthorialNotesLength = headingAuthorialNotes?.textContent
+    .trim()
+    .replaceAll(/\s+/g, " ").length;
 
   const headingNotes = document.querySelector(".dokumentenkopf .akn-notes");
   const prefaceContainer = document.querySelector(
@@ -92,7 +96,7 @@ function extractHtmlParts(document: Document): NormContent["htmlParts"] {
     heading: heading?.outerHTML,
     headingAuthorialNotes: headingAuthorialNotes?.outerHTML,
     headingNotes: headingNotes?.outerHTML,
-    headingAuthorialNotesLength: headingAuthorialNotes?.textContent?.length,
+    headingAuthorialNotesLength,
     prefaceContainer: prefaceContainer?.outerHTML,
     standangaben,
     standangabenHinweis,

@@ -153,4 +153,23 @@ describe("useNormData", () => {
     expect(mockFetch).toHaveBeenCalledTimes(1);
     expect(mockFetch).toHaveBeenCalledWith("/v1/legislation/eli/test-eli");
   });
+
+  it.each([
+    ["simple footnote", 15],
+    ["<span>with html</span>", 9],
+    ["\n   <span>With\n  whitespace  \n</span>   \n", 15],
+  ])(
+    "returns the text length for authorial note '%s'",
+    async (footnote, expectedLength) => {
+      mockFetch.mockReturnValueOnce(mockMetadata);
+      mockFetch.mockReturnValueOnce(
+        `<section class="dokumentenkopf"><div class="fussnoten">${footnote}</div></section>`,
+      );
+
+      const { data } = await useFetchNormContent(expressionEli);
+      expect(data.value.htmlParts.headingAuthorialNotesLength).toBe(
+        expectedLength,
+      );
+    },
+  );
 });

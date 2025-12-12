@@ -1,5 +1,5 @@
 <template>
-  <div class="max-w-prose space-y-16">
+  <div class="space-y-16">
     <p>
       Per E-Mail:
       <a

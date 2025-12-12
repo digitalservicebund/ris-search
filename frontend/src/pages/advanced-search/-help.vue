@@ -162,13 +162,11 @@ const availableFeatures: Feature[] = privateFeaturesEnabled
     </div>
   </div>
   <div v-if="!privateFeaturesEnabled">
-    <PageHeader title="Hilfe zur Suche">
-      <p>
-        Hier finden Sie eine Übersicht über die aktuell verfügbaren Funktionen
-        und Rubriken der Suche. Wir arbeiten daran weitere Daten hinzuzufügen
-        und die Funktionalität nutzerfreundlicher zu machen.
-      </p>
-    </PageHeader>
+    <h1
+      class="ris-heading1-regular inline-block hyphens-auto max-sm:leading-48"
+    >
+      Hilfe zur Suche
+    </h1>
     <div class="flex flex-col gap-48">
       <div>
         <h2 class="ris-heading3-regular mb-20">Verfügbare Funktionen</h2>

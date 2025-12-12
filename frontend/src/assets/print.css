@@ -22,9 +22,6 @@ article {
   body {
     @apply text-sm;
   }
-  .max-w-prose {
-    @apply max-w-[initial];
-  }
   :root {
     --max-width-prose: 100%;
   }

@@ -71,7 +71,7 @@ function trackResultClick() {
     <NuxtLink
       :to="detailPageRoute"
       :aria-describedby="resultTypeId"
-      class="ris-heading3-bold! ris-link1-regular max-w-title link-hover block"
+      class="ris-heading3-bold! ris-link1-regular link-hover block"
       @click="trackResultClick()"
     >
       <h2>
@@ -79,7 +79,7 @@ function trackResultClick() {
       </h2>
     </NuxtLink>
 
-    <div v-if="text" class="flex w-full max-w-prose flex-col gap-6">
+    <div v-if="text" class="flex w-full flex-col gap-6">
       <span data-testid="highlighted-field" v-html="text"> </span>
     </div>
   </div>

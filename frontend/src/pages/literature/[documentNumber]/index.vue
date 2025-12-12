@@ -10,7 +10,7 @@ import {
   LITERATURE_TITLE_PLACEHOLDER,
 } from "~/utils/literature";
 
-definePageMeta({ layout: "base" }); // use "base" layout to allow for full-width tab backgrounds
+definePageMeta({ layout: "document" });
 
 const route = useRoute();
 const documentNumber = route.params.documentNumber as string;

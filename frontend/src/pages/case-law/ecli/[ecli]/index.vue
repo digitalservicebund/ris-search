@@ -13,14 +13,19 @@ const ecli = computed(() => {
 </script>
 
 <template>
-  <PageHeader title="Platzhalter">
-    <DetailsList>
-      <DetailsListEntry label="ECLI" :value="ecli" />
-    </DetailsList>
-  </PageHeader>
+  <h1
+    class="ris-heading1-regular mb-16 inline-block hyphens-auto max-sm:leading-48"
+  >
+    Platzhalter
+  </h1>
+
+  <DetailsList>
+    <DetailsListEntry label="ECLI" :value="ecli" />
+  </DetailsList>
+
   <div>
-    <main class="border border-yellow-300 bg-yellow-100 px-16 py-12">
+    <div class="border border-yellow-300 bg-yellow-100 px-16 py-12">
       <p class="leading-6">Platzhalter für die Anzeige einer Rechtsprechung.</p>
-    </main>
+    </div>
   </div>
 </template>
