@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import org.testcontainers.shaded.org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 /** Test data for Case Law Documentation Units. */
 public class CaseLawTestData {
