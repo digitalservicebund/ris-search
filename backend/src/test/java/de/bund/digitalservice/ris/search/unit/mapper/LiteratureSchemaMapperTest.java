@@ -34,60 +34,67 @@ class LiteratureSchemaMapperTest {
             .languages(List.of("deu", "eng"))
             .shortReport("Kurzreferat")
             .outline("Gliederung")
+            .founder(List.of("founder"))
+            .editors(List.of("editor"))
+            .edition("edition")
+            .publisherOrganizations(List.of("publisher organization"))
+            .publisherPersons(List.of("publisher person"))
+            .internationalIdentifiers(List.of("ISBN XXXX"))
+            .universityNotes(List.of("university note"))
+            .build();
+
+    LiteratureSchema expected =
+        LiteratureSchema.builder()
+            .id("/v1/literature/XXLU000000001")
+            .languages(List.of("de"))
+            .documentNumber("XXLU000000001")
+            .inLanguage("de")
+            .yearsOfPublication(List.of("1979", "2004-09"))
+            .documentTypes(List.of("Auf"))
+            .dependentReferences(List.of("BUV, 1982, 123-123"))
+            .independentReferences(List.of("50 Jahre Betriebs-Berater, 1987, 123-456"))
+            .normReferences(List.of("GG, Art 6 Abs 2 S 1, 1949-05-23"))
+            .headline("Hauptüberschrift")
+            .alternativeHeadline("Dokumentarischer Titel")
+            .headlineAdditions("Zusatz zur Hauptüberschrift")
+            .authors(List.of("Musterfrau, Sabine"))
+            .collaborators(List.of("Mustermann, Max"))
+            .originators(List.of("FOO"))
+            .conferenceNotes(List.of("Internationaler Kongress 2025, Berlin, GER"))
+            .languages(List.of("deu", "eng"))
+            .shortReport("Kurzreferat")
+            .outline("Gliederung")
+            .founder(List.of("founder"))
+            .editors(List.of("editor"))
+            .edition("edition")
+            .publishingHouses(List.of("publisher organization"))
+            .publishers(List.of("publisher person"))
+            .internationalIdentifiers(List.of("ISBN XXXX"))
+            .universityNotes(List.of("university note"))
+            .literatureType("uli")
+            .encoding(
+                List.of(
+                    LiteratureEncodingSchema.builder()
+                        .id("/v1/literature/XXLU000000001/html")
+                        .contentUrl("/v1/literature/XXLU000000001.html")
+                        .encodingFormat("text/html")
+                        .inLanguage("de")
+                        .build(),
+                    LiteratureEncodingSchema.builder()
+                        .id("/v1/literature/XXLU000000001/xml")
+                        .contentUrl("/v1/literature/XXLU000000001.xml")
+                        .encodingFormat("application/xml")
+                        .inLanguage("de")
+                        .build(),
+                    LiteratureEncodingSchema.builder()
+                        .id("/v1/literature/XXLU000000001/zip")
+                        .contentUrl("/v1/literature/XXLU000000001.zip")
+                        .encodingFormat("application/zip")
+                        .inLanguage("de")
+                        .build()))
             .build();
 
     LiteratureSchema literatureSchema = LiteratureSchemaMapper.fromDomain(literature);
-
-    assertThat(literatureSchema.id()).isEqualTo("/v1/literature/XXLU000000001");
-    assertThat(literatureSchema.inLanguage()).isEqualTo("de");
-    assertThat(literatureSchema.documentNumber()).isEqualTo("XXLU000000001");
-    assertThat(literatureSchema.yearsOfPublication()).containsExactly("1979", "2004-09");
-    assertThat(literatureSchema.documentTypes()).containsExactly("Auf");
-    assertThat(literatureSchema.dependentReferences()).containsExactly("BUV, 1982, 123-123");
-    assertThat(literatureSchema.independentReferences())
-        .containsExactly("50 Jahre Betriebs-Berater, 1987, 123-456");
-    assertThat(literatureSchema.normReferences())
-        .containsExactly("GG, Art 6 Abs 2 S 1, 1949-05-23");
-    assertThat(literatureSchema.headline()).isEqualTo("Hauptüberschrift");
-    assertThat(literatureSchema.alternativeHeadline()).isEqualTo("Dokumentarischer Titel");
-    assertThat(literatureSchema.headlineAdditions()).isEqualTo("Zusatz zur Hauptüberschrift");
-    assertThat(literatureSchema.authors()).containsExactly("Musterfrau, Sabine");
-    assertThat(literatureSchema.collaborators()).containsExactly("Mustermann, Max");
-    assertThat(literatureSchema.originators()).containsExactly("FOO");
-    assertThat(literatureSchema.conferenceNotes())
-        .containsExactly("Internationaler Kongress 2025, Berlin, GER");
-    assertThat(literatureSchema.languages()).containsExactly("deu", "eng");
-    assertThat(literatureSchema.shortReport()).isEqualTo("Kurzreferat");
-    assertThat(literatureSchema.outline()).isEqualTo("Gliederung");
-  }
-
-  @Test
-  @DisplayName("Creates encodings for html, xml and zip")
-  void createsEncodings() {
-    var literature =
-        Literature.builder().id("XXLU000000001").documentNumber("XXLU000000001").build();
-
-    LiteratureSchema literatureSchema = LiteratureSchemaMapper.fromDomain(literature);
-
-    assertThat(literatureSchema.encoding())
-        .containsExactly(
-            LiteratureEncodingSchema.builder()
-                .id("/v1/literature/XXLU000000001/html")
-                .contentUrl("/v1/literature/XXLU000000001.html")
-                .encodingFormat("text/html")
-                .inLanguage("de")
-                .build(),
-            LiteratureEncodingSchema.builder()
-                .id("/v1/literature/XXLU000000001/xml")
-                .contentUrl("/v1/literature/XXLU000000001.xml")
-                .encodingFormat("application/xml")
-                .inLanguage("de")
-                .build(),
-            LiteratureEncodingSchema.builder()
-                .id("/v1/literature/XXLU000000001/zip")
-                .contentUrl("/v1/literature/XXLU000000001.zip")
-                .encodingFormat("application/zip")
-                .inLanguage("de")
-                .build());
+    assertThat(literatureSchema).isEqualTo(expected);
   }
 }
