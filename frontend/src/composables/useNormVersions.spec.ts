@@ -39,6 +39,7 @@ describe("useNormVersions", () => {
       params: {
         eli: "dummy-eli",
         sort: "-temporalCoverageFrom",
+        size: "300",
       },
     });
     expect(sortedVersions.value.length).toBe(2);

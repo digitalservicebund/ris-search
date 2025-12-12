@@ -286,18 +286,18 @@ class AllDocumentsSearchControllerAPITest extends ContainersIntegrationBase {
   }
 
   @Test
-  @DisplayName("should throw an error when pagesize exceeds 100")
+  @DisplayName("should throw an error when pagesize exceeds 300")
   void testForExceededPageSize() throws Exception {
     mockMvc
         .perform(
             get(ApiConfig.Paths.DOCUMENT
-                    + "?searchTerm=Leitsatz mit ein paar Wörtern und Ergänzungen&size=101&pageIndex=0")
+                    + "?searchTerm=Leitsatz mit ein paar Wörtern und Ergänzungen&size=301&pageIndex=0")
                 .contentType(MediaType.APPLICATION_JSON))
         .andExpectAll(
             status().is(422),
             jsonPath("$.errors[0].code", Matchers.is("invalid_parameter_value")),
             jsonPath("$.errors[0].parameter", Matchers.is("size")),
-            jsonPath("$.errors[0].message", Matchers.is("size must not exceed 100")));
+            jsonPath("$.errors[0].message", Matchers.is("size must not exceed 300")));
   }
 
   @Test

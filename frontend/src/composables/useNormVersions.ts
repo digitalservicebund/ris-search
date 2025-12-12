@@ -27,7 +27,7 @@ function getNorms(params: {
   const { status, data, error } = useRisBackend<
     JSONLDList<SearchResult<LegislationWork>>
   >(`/v1/legislation`, {
-    params: params,
+    params: { ...params, size: "300" },
     immediate: immediate,
   });
 

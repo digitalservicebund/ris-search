@@ -28,7 +28,7 @@ public class PaginationParams {
       name = "size",
       description = "The number of entities per page",
       example = DEFAULT_API_PAGE_SIZE)
-  @Max(value = 100, message = "size must not exceed 100")
+  @Max(value = 300, message = "size must not exceed 300")
   @Min(value = 1, message = "size must be at least 1")
   int size = Integer.parseInt(DEFAULT_API_PAGE_SIZE);
 
