@@ -2,6 +2,7 @@ package de.bund.digitalservice.ris.search.service;
 
 import de.bund.digitalservice.ris.search.exception.OpenSearchMapperException;
 import de.bund.digitalservice.ris.search.mapper.AdministrativeDirectiveLdmlToOpenSearchMapper;
+import de.bund.digitalservice.ris.search.models.DocumentKind;
 import de.bund.digitalservice.ris.search.models.opensearch.AdministrativeDirective;
 import de.bund.digitalservice.ris.search.repository.objectstorage.AdministrativeDirectiveBucket;
 import de.bund.digitalservice.ris.search.repository.opensearch.AdministrativeDirectiveRepository;
@@ -16,6 +17,11 @@ public class IndexAdministrativeDirectiveService extends BaseIndexService<Admini
   public IndexAdministrativeDirectiveService(
       AdministrativeDirectiveBucket bucket, AdministrativeDirectiveRepository repository) {
     super(bucket, repository);
+  }
+
+  @Override
+  protected Optional<String> getIdFromFilename(String filename) {
+    return DocumentKind.extractIdFromFileName(filename, DocumentKind.ADMINISTRATIVE_DIRECTIVE);
   }
 
   @Override

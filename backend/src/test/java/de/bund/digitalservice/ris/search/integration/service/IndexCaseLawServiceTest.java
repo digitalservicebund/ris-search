@@ -98,10 +98,11 @@ class IndexCaseLawServiceTest extends ContainersIntegrationBase {
   @Test
   void itCanDeleteFromOneSpecificChangelog() throws ObjectStoreServiceException {
     Changelog changelog = new Changelog();
-    changelog.setDeleted(new HashSet<>(Set.of("TEST080020093.xml")));
+    changelog.setDeleted(
+        new HashSet<>(Set.of("TEST080020093.xml", "TEST080020094/TEST080020094.xml")));
     service.indexChangelog(changelog);
 
-    verify(repo, times(1)).deleteAllById(Set.of("TEST080020093"));
+    verify(repo, times(1)).deleteAllById(Set.of("TEST080020093", "TEST080020094"));
   }
 
   @Test

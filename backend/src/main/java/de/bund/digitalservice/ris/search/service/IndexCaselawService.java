@@ -2,6 +2,7 @@ package de.bund.digitalservice.ris.search.service;
 
 import de.bund.digitalservice.ris.search.exception.OpenSearchMapperException;
 import de.bund.digitalservice.ris.search.mapper.CaseLawLdmlToOpenSearchMapper;
+import de.bund.digitalservice.ris.search.models.DocumentKind;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import de.bund.digitalservice.ris.search.repository.objectstorage.CaseLawBucket;
 import de.bund.digitalservice.ris.search.repository.opensearch.CaseLawRepository;
@@ -23,6 +24,11 @@ public class IndexCaselawService extends BaseIndexService<CaseLawDocumentationUn
       CaseLawLdmlToOpenSearchMapper marshaller) {
     super(bucket, repository);
     this.marshaller = marshaller;
+  }
+
+  @Override
+  protected Optional<String> getIdFromFilename(String filename) {
+    return DocumentKind.extractIdFromFileName(filename, DocumentKind.CASE_LAW);
   }
 
   @Override
