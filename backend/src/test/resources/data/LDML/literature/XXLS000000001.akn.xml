@@ -117,15 +117,15 @@
                         <ris:gliederungEntry>II. Birnen.</ris:gliederungEntry>
                         <ris:gliederungEntry>III. Orangen.</ris:gliederungEntry>
                     </ris:gliederung>
+                    <ris:gesamttitelAngaben>
+                        <ris:gesamttitel titel="gesamttitel" bandbezeichnung="bandbezeichnung"/>
+                    </ris:gesamttitelAngaben>
                     <ris:titelkurzformen>
                         <ris:titelkurzform>titel kurzform</ris:titelkurzform>
                     </ris:titelkurzformen>
                     <ris:sonstigerSachtitelListe>
                         <ris:sonstigerSachtitel>sonstiger titel</ris:sonstigerSachtitel>
                     </ris:sonstigerSachtitelListe>
-                    <ris:gesamttitelangaben>
-                        <ris:gesamttitel titel="gesamttitel" bandbezeichnung="bandbezeichnung"/>
-                    </ris:gesamttitelangaben>
                     <ris:teilbaende>
                         <ris:teilband>Teilband</ris:teilband>
                     </ris:teilbaende>

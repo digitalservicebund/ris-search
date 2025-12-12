@@ -11,7 +11,10 @@
 
 	<xsl:variable name="titles" as="node()*" select="(//akn:FRBRWork/akn:FRBRalias[@name='haupttitel']/@value
 									| //akn:FRBRWork/akn:FRBRalias[@name='dokumentarischerTitel']/@value
-									| //akn:FRBRWork/akn:FRBRalias[@name='haupttitelZusatz']/@value)"/>
+									| //akn:FRBRWork/akn:FRBRalias[@name='haupttitelZusatz']/@value
+									| //ris:titelkurzformen
+									| //ris:gesamttitelAngaben/ris:gesamttitel
+									| //ris:sonstigerSachtitelListe)"/>
 
 	<xsl:template match="akn:doc">
 		<html>
@@ -30,25 +33,44 @@
 		</html>
 	</xsl:template>
 
-
 	<!-- render titles -->
 	<xsl:template match="akn:FRBRWork">
 		<xsl:for-each select="$titles">
 			<xsl:choose>
 				<xsl:when test="position() = 1">
-					<h1><xsl:value-of select="."/></h1>
+					<h1><xsl:call-template name="render-title">
+						<xsl:with-param name="node" select="."/>
+					</xsl:call-template>
+					</h1>
 				</xsl:when>
 				<xsl:when test="position() = 2">
 					<h2>Zusätzliche Titel</h2>
-					<p><xsl:value-of select="."/></p>
+					<p><xsl:call-template name="render-title">
+						<xsl:with-param name="node" select="."/>
+					</xsl:call-template>
+					</p>
 				</xsl:when>
-				<xsl:when test="position() = 3">
-					<p><xsl:value-of select="."/></p>
+				<xsl:when test="position() > 2">
+					<p><xsl:call-template name="render-title">
+						<xsl:with-param name="node" select="."/>
+					</xsl:call-template>
+					</p>
 				</xsl:when>
 			</xsl:choose>
 		</xsl:for-each>
 	</xsl:template>
 
+	<xsl:template name="render-title">
+		<xsl:param name="node"/>
+				<xsl:choose>
+					<xsl:when test="self::ris:gesamttitel">
+						<xsl:value-of select="concat($node/@titel, ' ', $node/@bandbezeichnung)"/>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:value-of select="$node"/>
+					</xsl:otherwise>
+				</xsl:choose>
+	</xsl:template>
 	<!-- Outline -->
 	<xsl:template match="*[local-name()='gliederung']">
 		<h2>Gliederung</h2>
