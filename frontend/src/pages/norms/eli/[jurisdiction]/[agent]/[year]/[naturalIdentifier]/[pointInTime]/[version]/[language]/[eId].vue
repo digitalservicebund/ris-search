@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import type { TreeNode } from "primevue/treenode";
 import { computed } from "vue";
-import ContentWrapper from "~/components/CustomLayouts/ContentWrapper.vue";
 import TableOfContentsLayout from "~/components/CustomLayouts/SidebarLayout.vue";
 import IncompleteDataMessage from "~/components/IncompleteDataMessage.vue";
 import ArticleVersionWarning from "~/components/Norm/ArticleVersionWarning.vue";
@@ -30,7 +29,7 @@ definePageMeta({
   // note: this is an expression ELI plus the article eId
   alias:
     "/eli/:jurisdiction/:agent/:year/:naturalIdentifier/:pointInTime/:version/:language/:eId",
-  layout: "base", // use "base" layout to allow for full-width text background
+  layout: "document",
 });
 
 const route = useRoute();
@@ -208,96 +207,94 @@ useDynamicSeo({ title, description });
 </script>
 
 <template>
-  <ContentWrapper border>
-    <div v-if="status == 'pending'" class="container">Lade ...</div>
-    <template v-if="!!norm">
-      <div class="container">
-        <RisBreadcrumb :items="breadcrumbItems" />
-        <div>
-          <h1
-            class="ris-heading3-bold link-hover mt-24 line-clamp-2 items-center text-blue-800"
-          >
-            <NuxtLink :to="normPath">
-              <MdiArrowTopLeft class="inline-block" />
-              {{ topNormLinkText }}
-            </NuxtLink>
-          </h1>
-          <h2
-            class="ris-heading2-bold my-24 mb-24 inline-block"
-            v-html="htmlTitle"
-          />
-        </div>
-
-        <ArticleVersionWarning
-          v-if="inForceNormLink && article"
-          :in-force-version-link="inForceNormLink"
-          :current-article="article"
+  <div v-if="status == 'pending'" class="container">Lade ...</div>
+  <template v-if="!!norm">
+    <div class="container">
+      <RisBreadcrumb :items="breadcrumbItems" />
+      <div>
+        <h1
+          class="ris-heading3-bold link-hover mt-24 line-clamp-2 items-center text-blue-800"
+        >
+          <NuxtLink :to="normPath">
+            <MdiArrowTopLeft class="inline-block" />
+            {{ topNormLinkText }}
+          </NuxtLink>
+        </h1>
+        <h2
+          class="ris-heading2-bold my-24 mb-24 inline-block"
+          v-html="htmlTitle"
         />
       </div>
 
-      <div
-        v-if="privateFeaturesEnabled"
-        class="container mb-24 flex flex-col space-y-16 space-x-0 md:space-y-0 lg:flex-row lg:space-x-24"
-        data-testid="metadata"
-      >
-        <Metadata :items="metadataItems" />
-      </div>
-      <div class="bg-white">
-        <TableOfContentsLayout class="container py-24">
-          <template v-if="!!articleHtml" #content>
-            <IncompleteDataMessage />
-            <article
-              class="legislation single-article akn-act"
-              v-html="articleHtml"
-            />
-            <div class="flex flex-row justify-between">
-              <div class="flex flex-col">
-                <NuxtLink
-                  v-if="previousArticleUrl"
-                  :to="previousArticleUrl"
-                  class="text-blue-800 hover:underline"
-                >
-                  <div class="flex items-center space-x-8">
-                    <IcBaselineArrowBack class="mt-1 shrink-0" />
-                    <span>Vorheriger Paragraf</span>
-                  </div>
-                </NuxtLink>
-              </div>
-              <div class="flex flex-col">
-                <NuxtLink
-                  v-if="nextArticleUrl"
-                  :to="nextArticleUrl"
-                  class="text-blue-800 hover:underline"
-                >
-                  <div class="flex items-center space-x-8">
-                    <span>Nächster Paragraf</span>
-                    <IcBaselineArrowForward class="mt-1 shrink-0" />
-                  </div>
-                </NuxtLink>
-              </div>
+      <ArticleVersionWarning
+        v-if="inForceNormLink && article"
+        :in-force-version-link="inForceNormLink"
+        :current-article="article"
+      />
+    </div>
+
+    <div
+      v-if="privateFeaturesEnabled"
+      class="container mb-24 flex flex-col space-y-16 space-x-0 md:space-y-0 lg:flex-row lg:space-x-24"
+      data-testid="metadata"
+    >
+      <Metadata :items="metadataItems" />
+    </div>
+    <div class="bg-white">
+      <TableOfContentsLayout class="container py-24">
+        <template v-if="!!articleHtml" #content>
+          <IncompleteDataMessage />
+          <article
+            class="legislation single-article akn-act"
+            v-html="articleHtml"
+          />
+          <div class="flex flex-row justify-between">
+            <div class="flex flex-col">
+              <NuxtLink
+                v-if="previousArticleUrl"
+                :to="previousArticleUrl"
+                class="text-blue-800 hover:underline"
+              >
+                <div class="flex items-center space-x-8">
+                  <IcBaselineArrowBack class="mt-1 shrink-0" />
+                  <span>Vorheriger Paragraf</span>
+                </div>
+              </NuxtLink>
             </div>
-          </template>
-          <template #sidebar>
-            <NormTableOfContents
-              v-if="norm.workExample.tableOfContents.length > 0"
-              :table-of-contents="tableOfContents"
-              :selected-key="eId"
-            >
-              <template #header>
-                <NuxtLink
-                  v-if="normTitle"
-                  :to="normPath"
-                  class="link-hover font-bold text-blue-800"
-                >
-                  {{ normTitle }}
-                </NuxtLink>
-              </template>
-            </NormTableOfContents>
-          </template>
-        </TableOfContentsLayout>
-      </div>
-    </template>
-  </ContentWrapper>
+            <div class="flex flex-col">
+              <NuxtLink
+                v-if="nextArticleUrl"
+                :to="nextArticleUrl"
+                class="text-blue-800 hover:underline"
+              >
+                <div class="flex items-center space-x-8">
+                  <span>Nächster Paragraf</span>
+                  <IcBaselineArrowForward class="mt-1 shrink-0" />
+                </div>
+              </NuxtLink>
+            </div>
+          </div>
+        </template>
+        <template #sidebar>
+          <NormTableOfContents
+            v-if="norm.workExample.tableOfContents.length > 0"
+            :table-of-contents="tableOfContents"
+            :selected-key="eId"
+          >
+            <template #header>
+              <NuxtLink
+                v-if="normTitle"
+                :to="normPath"
+                class="link-hover font-bold text-blue-800"
+              >
+                {{ normTitle }}
+              </NuxtLink>
+            </template>
+          </NormTableOfContents>
+        </template>
+      </TableOfContentsLayout>
+    </div>
+  </template>
 </template>
 
 <style>

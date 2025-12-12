@@ -18,9 +18,10 @@ const ecli = computed(() => {
       <DetailsListEntry label="ECLI" :value="ecli" />
     </DetailsList>
   </PageHeader>
+
   <div>
-    <main class="border border-yellow-300 bg-yellow-100 px-16 py-12">
+    <div class="border border-yellow-300 bg-yellow-100 px-16 py-12">
       <p class="leading-6">Platzhalter für die Anzeige einer Rechtsprechung.</p>
-    </main>
+    </div>
   </div>
 </template>

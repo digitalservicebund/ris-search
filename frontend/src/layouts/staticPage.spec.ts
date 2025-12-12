@@ -3,7 +3,7 @@ import { screen, within } from "@testing-library/vue";
 import { describe, it, expect } from "vitest";
 import StaticPage from "./staticPage.vue";
 
-describe("StaticPageWrapper", () => {
+describe("staticPage", () => {
   it("renders breadcrumb slot and content with correct semantics", async () => {
     await renderSuspended(StaticPage, {
       slots: {

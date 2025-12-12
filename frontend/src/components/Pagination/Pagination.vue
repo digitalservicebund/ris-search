@@ -102,7 +102,11 @@ const itemsOnPage = computed(() => buildItemsOnPageString(props.page));
   <nav
     v-if="page?.member && page?.member.length && !isLoading"
     aria-label="Paginierung"
-    class="my-32 mt-20 mb-10 flex flex-col items-center"
+    class="flex flex-col items-center"
+    :class="{
+      'mt-20': props.navigationPosition === 'bottom',
+      'mb-20': props.navigationPosition === 'top',
+    }"
   >
     <div class="flex w-full items-center">
       <div

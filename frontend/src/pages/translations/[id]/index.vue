@@ -2,7 +2,6 @@
 import Message from "primevue/message";
 import { computed } from "vue";
 import ActionsMenu from "~/components/ActionMenu/ActionsMenu.vue";
-import ContentWrapper from "~/components/CustomLayouts/ContentWrapper.vue";
 import DetailsList from "~/components/DetailsList.vue";
 import DetailsListEntry from "~/components/DetailsListEntry.vue";
 import type { BreadcrumbItem } from "~/components/Ris/RisBreadcrumb.vue";
@@ -20,7 +19,7 @@ import IcBaselineSubject from "~icons/ic/baseline-subject";
 import IcOutlineInfo from "~icons/ic/outline-info";
 import IcOutlineWarning from "~icons/material-symbols/warning-outline";
 
-definePageMeta({ layout: "base" });
+definePageMeta({ layout: "document" });
 
 useHead({
   htmlAttrs: { lang: "en" },
@@ -123,89 +122,87 @@ const tabs = computed(() => [
 </script>
 
 <template>
-  <ContentWrapper border>
-    <div v-if="currentTranslation" class="container">
-      <div class="flex items-center gap-8 print:hidden">
-        <RisBreadcrumb :items="breadcrumbItems" class="grow" />
-        <client-only>
-          <ActionsMenu :permalink />
-        </client-only>
-      </div>
-
-      <div class="dokumentenkopf mt-24 mb-48 max-w-prose">
-        <hgroup>
-          <p
-            v-if="currentTranslation?.translationOfWork"
-            class="word-wrap ris-heading3-regular mb-12 hyphens-auto"
-          >
-            {{ currentTranslation.translationOfWork }}
-          </p>
-
-          <h1
-            v-if="currentTranslation?.name"
-            class="ris-heading2-bold max-w-title mb-48 text-balance wrap-break-word hyphens-auto"
-          >
-            {{ currentTranslation.name }}
-          </h1>
-        </hgroup>
-      </div>
-      <Message
-        v-if="germanOriginal"
-        :closable="false"
-        class="mb-48 max-w-prose space-y-24"
-      >
-        <template #icon>
-          <IcOutlineWarning />
-        </template>
-        <p class="ris-body2-bold mt-2">Version Information</p>
-        <p class="mt-2">
-          Translations may not be updated at the same time as the German legal
-          provision.
-          <NuxtLink
-            class="ris-link1-regular"
-            :to="`/norms/${germanOriginalWorkEli}`"
-            >Go to the German version</NuxtLink
-          >.
-        </p>
-      </Message>
+  <div v-if="currentTranslation" class="container">
+    <div class="flex items-center gap-8 print:hidden">
+      <RisBreadcrumb :items="breadcrumbItems" class="grow" />
+      <client-only>
+        <ActionsMenu :permalink />
+      </client-only>
     </div>
 
-    <RisTabs :tabs="tabs">
-      <template #default="{ activeTab, isClient }">
-        <section
-          id="text"
-          :class="tabPanelClass"
-          :hidden="isClient && activeTab !== 'text'"
+    <div class="dokumentenkopf mt-24 mb-48 max-w-prose">
+      <hgroup>
+        <p
+          v-if="currentTranslation?.translationOfWork"
+          class="word-wrap ris-heading3-regular mb-12 hyphens-auto"
         >
-          <div class="container">
-            <h2 class="sr-only">Text</h2>
-            <section class="max-w-prose" v-html="html" />
-          </div>
-        </section>
+          {{ currentTranslation.translationOfWork }}
+        </p>
 
-        <section
-          id="details"
-          :class="tabPanelClass"
-          :hidden="isClient && activeTab !== 'details'"
-          aria-labelledby="detailsTabPanelTitle"
+        <h1
+          v-if="currentTranslation?.name"
+          class="ris-heading2-bold max-w-title mb-48 text-balance wrap-break-word hyphens-auto"
         >
-          <div class="container">
-            <h2 id="detailsTabPanelTitle" class="ris-heading3-bold my-24">
-              Details
-            </h2>
-            <DetailsList>
-              <DetailsListEntry
-                label="Translation provided by:"
-                :value="translatedBy"
-              />
-              <DetailsListEntry
-                label="Version information:"
-                :value="versionInformation"
-              />
-            </DetailsList>
-          </div>
-        </section>
+          {{ currentTranslation.name }}
+        </h1>
+      </hgroup>
+    </div>
+    <Message
+      v-if="germanOriginal"
+      :closable="false"
+      class="mb-48 max-w-prose space-y-24"
+    >
+      <template #icon>
+        <IcOutlineWarning />
       </template>
-    </RisTabs>
-  </ContentWrapper>
+      <p class="ris-body2-bold mt-2">Version Information</p>
+      <p class="mt-2">
+        Translations may not be updated at the same time as the German legal
+        provision.
+        <NuxtLink
+          class="ris-link1-regular"
+          :to="`/norms/${germanOriginalWorkEli}`"
+          >Go to the German version</NuxtLink
+        >.
+      </p>
+    </Message>
+  </div>
+
+  <RisTabs :tabs="tabs">
+    <template #default="{ activeTab, isClient }">
+      <section
+        id="text"
+        :class="tabPanelClass"
+        :hidden="isClient && activeTab !== 'text'"
+      >
+        <div class="container">
+          <h2 class="sr-only">Text</h2>
+          <section class="max-w-prose" v-html="html" />
+        </div>
+      </section>
+
+      <section
+        id="details"
+        :class="tabPanelClass"
+        :hidden="isClient && activeTab !== 'details'"
+        aria-labelledby="detailsTabPanelTitle"
+      >
+        <div class="container">
+          <h2 id="detailsTabPanelTitle" class="ris-heading3-bold my-24">
+            Details
+          </h2>
+          <DetailsList>
+            <DetailsListEntry
+              label="Translation provided by:"
+              :value="translatedBy"
+            />
+            <DetailsListEntry
+              label="Version information:"
+              :value="versionInformation"
+            />
+          </DetailsList>
+        </div>
+      </section>
+    </template>
+  </RisTabs>
 </template>

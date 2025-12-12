@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { Message, PanelMenu, Select } from "primevue";
 import type { MenuItem } from "primevue/menuitem";
-import ContentWrapper from "~/components/CustomLayouts/ContentWrapper.vue";
 import Pagination from "~/components/Pagination/Pagination.vue";
 import DataFieldPicker from "~/components/Search/DataFieldPicker.vue";
 import DateFilter from "~/components/Search/DateFilter.vue";
@@ -137,91 +136,88 @@ async function submit() {
 </script>
 
 <template>
-  <ContentWrapper class="pb-32 lg:pb-64">
-    <RisBreadcrumb :items="[{ label: 'Erweiterte Suche' }]" />
-    <div
-      class="mt-24 grid grid-cols-1 gap-40 lg:grid-cols-[20rem_1fr] lg:gap-64"
-    >
-      <div class="lg:col-span-2">
-        <h1 class="ris-heading2-bold mb-16">Erweiterte Suche</h1>
-        <p class="text-balance">
-          Nutzen Sie die erweiterte Suche, um genau das zu finden, was Sie
-          brauchen – ob im Leitsatz, Titel oder direkt im Volltext. Mit
-          Suchoperatoren wie AND, OR und NOT bekommen Sie noch präzisere
-          Ergebnisse.
-        </p>
-      </div>
+  <RisBreadcrumb :items="[{ label: 'Erweiterte Suche' }]" />
 
-      <aside
-        class="row-start-3 lg:row-span-2 lg:row-start-auto"
-        aria-label="Filter"
-      >
-        <fieldset class="mb-40">
-          <legend class="ris-label1-regular mb-8">Dokumentart</legend>
-          <PanelMenu
-            :model="documentKindMenuItems"
-            :expanded-keys="{ [documentKind]: true }"
-          />
-        </fieldset>
-
-        <DateFilter v-model="dateFilter" :document-kind />
-      </aside>
-
-      <div class="row-start-2 lg:row-start-auto">
-        <DataFieldPicker
-          v-model="query"
-          :data-fields="queryableDataFields"
-          :document-kind
-          :loading="searchStatus === 'pending'"
-          :form-id="searchFormId"
-          :count
-          @submit="submit"
-        />
-      </div>
-
-      <div>
-        <Pagination
-          v-if="searchStatus !== 'idle'"
-          :is-loading="searchStatus === 'pending'"
-          :page="searchResults"
-          navigation-position="bottom"
-          @update-page="pageIndex = $event"
-        >
-          <div
-            class="mb-32 flex flex-col gap-16 md:flex-row md:items-center md:gap-48"
-          >
-            <span class="ris-subhead-regular mr-auto text-nowrap">
-              {{ formattedResultCount }} Suchergebnisse
-            </span>
-            <SortSelect v-model="sort" :document-kind />
-
-            <label
-              :for="itemsPerPageDropdownId"
-              class="ris-label2-regular flex items-center gap-8"
-            >
-              Einträge pro Seite
-              <Select
-                :id="itemsPerPageDropdownId"
-                v-model="itemsPerPage"
-                :options="itemsPerPageOptions"
-              />
-            </label>
-          </div>
-
-          <Message v-if="!!searchError" severity="error" class="max-w-prose">
-            {{ searchError.message }}
-          </Message>
-
-          <ul v-if="searchResults" aria-label="Suchergebnisse">
-            <li
-              v-for="searchResult in searchResults.member"
-              :key="getIdentifier(searchResult.item)"
-            >
-              <SearchResult :search-result :order="1" />
-            </li>
-          </ul>
-        </Pagination>
-      </div>
+  <div class="mt-24 grid grid-cols-1 gap-40 lg:grid-cols-[20rem_1fr] lg:gap-64">
+    <div class="lg:col-span-2">
+      <h1 class="ris-heading2-bold mb-16">Erweiterte Suche</h1>
+      <p class="text-balance">
+        Nutzen Sie die erweiterte Suche, um genau das zu finden, was Sie
+        brauchen – ob im Leitsatz, Titel oder direkt im Volltext. Mit
+        Suchoperatoren wie AND, OR und NOT bekommen Sie noch präzisere
+        Ergebnisse.
+      </p>
     </div>
-  </ContentWrapper>
+
+    <aside
+      class="row-start-3 lg:row-span-2 lg:row-start-auto"
+      aria-label="Filter"
+    >
+      <fieldset class="mb-40">
+        <legend class="ris-label1-regular mb-8">Dokumentart</legend>
+        <PanelMenu
+          :model="documentKindMenuItems"
+          :expanded-keys="{ [documentKind]: true }"
+        />
+      </fieldset>
+
+      <DateFilter v-model="dateFilter" :document-kind />
+    </aside>
+
+    <div class="row-start-2 lg:row-start-auto">
+      <DataFieldPicker
+        v-model="query"
+        :data-fields="queryableDataFields"
+        :document-kind
+        :loading="searchStatus === 'pending'"
+        :form-id="searchFormId"
+        :count
+        @submit="submit"
+      />
+    </div>
+
+    <div>
+      <Pagination
+        v-if="searchStatus !== 'idle'"
+        :is-loading="searchStatus === 'pending'"
+        :page="searchResults"
+        navigation-position="bottom"
+        @update-page="pageIndex = $event"
+      >
+        <div
+          class="mb-32 flex flex-col gap-16 md:flex-row md:items-center md:gap-48"
+        >
+          <span class="ris-subhead-regular mr-auto text-nowrap">
+            {{ formattedResultCount }} Suchergebnisse
+          </span>
+          <SortSelect v-model="sort" :document-kind />
+
+          <label
+            :for="itemsPerPageDropdownId"
+            class="ris-label2-regular flex items-center gap-8"
+          >
+            Einträge pro Seite
+            <Select
+              :id="itemsPerPageDropdownId"
+              v-model="itemsPerPage"
+              :options="itemsPerPageOptions"
+            />
+          </label>
+        </div>
+
+        <Message v-if="!!searchError" severity="error" class="max-w-prose">
+          {{ searchError.message }}
+        </Message>
+
+        <ul v-if="searchResults" aria-label="Suchergebnisse">
+          <li
+            v-for="searchResult in searchResults.member"
+            :key="getIdentifier(searchResult.item)"
+          >
+            <SearchResult :search-result :order="1" />
+          </li>
+        </ul>
+      </Pagination>
+    </div>
+  </div>
 </template>

@@ -97,7 +97,7 @@ useHead({
   meta,
 });
 
-definePageMeta({ layout: "base" }); // use "base" layout to allow for full-width tab backgrounds
+definePageMeta({ layout: "document" });
 
 const tocEntries: ComputedRef<TableOfContentsEntry[] | null> = computed(() => {
   return html.value ? getAllSectionsFromHtml(html.value, "section") : null;

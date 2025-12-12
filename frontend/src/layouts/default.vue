@@ -8,7 +8,7 @@ import BaseLayout from "./base.vue";
 
 <template>
   <BaseLayout>
-    <div class="container">
+    <div class="container py-32 lg:py-64">
       <slot />
     </div>
   </BaseLayout>
