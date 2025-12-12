@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import type { TreeNode } from "primevue/treenode";
 import { computed } from "vue";
-import SidebarLayout from "~/components/CustomLayouts/SidebarLayout.vue";
 import IncompleteDataMessage from "~/components/IncompleteDataMessage.vue";
 import ArticleVersionWarning from "~/components/Norm/ArticleVersionWarning.vue";
-import NormTableOfContents from "~/components/Ris/NormTableOfContents.vue";
+import NormTableOfContents from "~/components/Norm/NormTableOfContents.vue";
 import type { BreadcrumbItem } from "~/components/Ris/RisBreadcrumb.vue";
 import RisBreadcrumb from "~/components/Ris/RisBreadcrumb.vue";
+import SidebarLayout from "~/components/SidebarLayout.vue";
 import { useDynamicSeo } from "~/composables/useDynamicSeo";
 import { useFetchNormArticleContent } from "~/composables/useNormData";
 import { useValidNormVersions } from "~/composables/useNormVersions";

@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import SidebarLayout from "~/components/CustomLayouts/SidebarLayout.vue";
 import type { MetadataItem } from "~/components/Metadata.vue";
 import RisBreadcrumb, {
   type BreadcrumbItem,
 } from "~/components/Ris/RisBreadcrumb.vue";
 import RisDocumentTitle from "~/components/Ris/RisDocumentTitle.vue";
+import SidebarLayout from "~/components/SidebarLayout.vue";
 import IcBaselineSubject from "~icons/ic/baseline-subject";
 import IcOutlineInfo from "~icons/ic/outline-info";
 
