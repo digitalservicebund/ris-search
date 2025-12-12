@@ -82,7 +82,7 @@ useStaticPageSeo("translations-list");
   </div>
 
   <section class="mt-24 max-w-prose space-y-24">
-    <h1 class="ris-heading2-bold max-w-title overflow-x-auto">
+    <h1 class="ris-heading2-bold overflow-x-auto">
       English Translations of German Federal Laws and Regulations
     </h1>
     <p>
@@ -126,7 +126,7 @@ useStaticPageSeo("translations-list");
 
           <NuxtLink
             :to="{ name: 'translations-id', params: { id: t['@id'] } }"
-            class="ris-heading3-bold! ris-link1-regular max-w-title link-hover block"
+            class="ris-heading3-bold! ris-link1-regular link-hover block"
           >
             <h2>{{ t.name }}</h2>
           </NuxtLink>

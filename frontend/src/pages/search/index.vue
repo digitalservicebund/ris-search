@@ -187,7 +187,7 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
         <ul
           v-if="currentPage && currentPage?.member?.length > 0"
           aria-label="Suchergebnisse"
-          class="w-full"
+          class="w-full max-w-prose"
         >
           <li v-for="(element, index) in currentPage.member" :key="index">
             <SearchResult :search-result="element" :order="index" />

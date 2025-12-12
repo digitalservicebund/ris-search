@@ -19,7 +19,7 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
 
 <template>
   <div class="flex gap-16 bg-blue-800 pt-64 pb-96 text-white">
-    <div class="container md:max-w-prose">
+    <div class="container max-w-prose">
       <div
         class="ris-label3-bold mb-8 inline-block rounded-sm border border-white/10 bg-blue-700 px-8 py-4 uppercase"
       >
@@ -36,7 +36,7 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
     </div>
   </div>
 
-  <div class="mx-auto flex max-w-prose flex-col gap-24 py-56">
+  <div class="container flex max-w-prose flex-col gap-24 py-56">
     <FeatureCard>
       <div>
         <h2 class="ris-heading3-bold wrap-break-word hyphens-auto">

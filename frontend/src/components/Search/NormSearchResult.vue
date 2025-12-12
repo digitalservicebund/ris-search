@@ -96,16 +96,13 @@ const headerItems = computed<SearchResultHeaderItem[]>(() => {
       v-if="!!link"
       :to="link"
       :aria-describedby="resultTypeId"
-      class="ris-heading3-bold! ris-link1-regular max-w-title link-hover block"
+      class="ris-heading3-bold! ris-link1-regular link-hover block"
       @click="openResult(link)"
     >
       <h2 v-html="headline" />
     </NuxtLink>
 
-    <div
-      class="flex w-full max-w-prose flex-col gap-6"
-      data-testid="highlights"
-    >
+    <div class="flex w-full flex-col gap-6" data-testid="highlights">
       <div
         v-for="(highlight, index) in relevantHighlights"
         :key="highlight.name + index"

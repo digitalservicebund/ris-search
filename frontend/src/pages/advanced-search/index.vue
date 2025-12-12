@@ -205,18 +205,20 @@ async function submit() {
           </label>
         </div>
 
-        <Message v-if="!!searchError" severity="error" class="max-w-prose">
-          {{ searchError.message }}
-        </Message>
+        <div class="max-w-prose">
+          <Message v-if="!!searchError" severity="error">
+            {{ searchError.message }}
+          </Message>
 
-        <ul v-if="searchResults" aria-label="Suchergebnisse">
-          <li
-            v-for="searchResult in searchResults.member"
-            :key="getIdentifier(searchResult.item)"
-          >
-            <SearchResult :search-result :order="1" />
-          </li>
-        </ul>
+          <ul v-if="searchResults" aria-label="Suchergebnisse">
+            <li
+              v-for="searchResult in searchResults.member"
+              :key="getIdentifier(searchResult.item)"
+            >
+              <SearchResult :search-result :order="1" />
+            </li>
+          </ul>
+        </div>
       </Pagination>
     </div>
   </div>

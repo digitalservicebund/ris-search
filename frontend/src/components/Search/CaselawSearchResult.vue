@@ -175,7 +175,7 @@ function trackResultClick(url: string) {
     <NuxtLink
       :to="metadata.route"
       :aria-describedby="resultTypeId"
-      class="ris-heading3-bold! ris-link1-regular max-w-title link-hover block"
+      class="ris-heading3-bold! ris-link1-regular link-hover block"
       @click="trackResultClick(metadata.url)"
     >
       <h2>
@@ -186,7 +186,7 @@ function trackResultClick(url: string) {
       </h2>
     </NuxtLink>
 
-    <div class="flex w-full max-w-prose flex-col gap-6">
+    <div class="flex w-full flex-col gap-6">
       <div v-for="section in previewSections" :key="section?.id">
         <NuxtLink
           :to="{ path: `${metadata.url}`, hash: `#${section?.id}` }"

@@ -130,23 +130,22 @@ const tabs = computed(() => [
       </client-only>
     </div>
 
-    <div class="dokumentenkopf mt-24 mb-48 max-w-prose">
-      <hgroup>
-        <p
-          v-if="currentTranslation?.translationOfWork"
-          class="word-wrap ris-heading3-regular mb-12 hyphens-auto"
-        >
-          {{ currentTranslation.translationOfWork }}
-        </p>
+    <hgroup class="dokumentenkopf mt-24 mb-48">
+      <p
+        v-if="currentTranslation?.translationOfWork"
+        class="word-wrap ris-heading3-regular mb-12 hyphens-auto"
+      >
+        {{ currentTranslation.translationOfWork }}
+      </p>
 
-        <h1
-          v-if="currentTranslation?.name"
-          class="ris-heading2-bold max-w-title mb-48 text-balance wrap-break-word hyphens-auto"
-        >
-          {{ currentTranslation.name }}
-        </h1>
-      </hgroup>
-    </div>
+      <h1
+        v-if="currentTranslation?.name"
+        class="ris-heading2-bold mb-48 wrap-break-word hyphens-auto"
+      >
+        {{ currentTranslation.name }}
+      </h1>
+    </hgroup>
+
     <Message
       v-if="germanOriginal"
       :closable="false"

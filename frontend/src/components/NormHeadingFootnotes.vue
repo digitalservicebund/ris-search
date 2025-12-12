@@ -11,7 +11,7 @@ const wrapFootnote = computed(
 </script>
 
 <template>
-  <div class="dokumentenkopf-fussnoten max-w-prose">
+  <div class="dokumentenkopf-fussnoten">
     <RisSingleAccordion
       v-if="wrapFootnote"
       class="print:hidden"
