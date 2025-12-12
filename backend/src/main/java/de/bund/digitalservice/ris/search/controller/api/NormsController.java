@@ -129,7 +129,7 @@ public class NormsController {
 
                       ## Example 3
 
-                      Get all legislation that belong to the work eli `eli/bund/bgbl-1/1979/s1325`
+                      Get all of the legislation that belong to the work eli `eli/bund/bgbl-1/1979/s1325`
                       ```http request
                       GET /v1/legislation?eli=eli/bund/bgbl-1/1979/s1325
                       ```
