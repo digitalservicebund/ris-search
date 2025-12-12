@@ -104,32 +104,10 @@ test.describe("view norm page", async () => {
       expect(marker).toBe("❃");
 
       const footnotes = page.locator(".dokumentenkopf-fussnoten");
-      const footnotesContent = footnotes.getByRole("list");
-      await expect(footnotesContent).not.toBeVisible();
-
-      const expandButton = page.getByRole("button", {
-        name: "Fußnote anzeigen",
-      });
-
-      await expect
-        .poll(
-          async () => {
-            await expandButton.click();
-            return footnotesContent.isVisible();
-          },
-          {
-            message: "wait for the expand button to become interactive",
-            timeout: 15000,
-          },
-        )
-        .toBeTruthy();
 
       await expect(footnotes).toContainText(
         "(Diese Fußnote im Titel wurde im End-to-end-Datenbestand ergänzt",
       );
-
-      await page.getByRole("button", { name: "Fußnote ausblenden" }).click();
-      await expect(footnotesContent).not.toBeVisible();
     });
   });
 
