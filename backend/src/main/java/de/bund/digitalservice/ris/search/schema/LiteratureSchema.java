@@ -56,9 +56,15 @@ public record LiteratureSchema(
     @Schema(description = "Haupttitel") String headline,
     @Schema(description = "Zusätze zum Haupttitel") String headlineAdditions,
     @Schema(description = "Dokumentarischer Titel") String alternativeHeadline,
+    @Nullable @Schema(description = "Ausgabe") String edition,
+    @Schema(description = "Bestellnummer") List<String> internationalIdentifiers,
     @Schema(description = "Authoren", example = "['Musterfrau, Sabine']") List<String> authors,
     @Schema(description = "Mitarbeiter", example = "['Mustermann, Max']")
         List<String> collaborators,
+    @Schema(description = "Bearbeiter") List<String> editors,
+    @Schema(description = "Begründer") List<String> founder,
+    @Schema(description = "Herausgeber") List<String> publishers,
+    @Schema(description = "Verlag") List<String> publishingHouses,
     @Schema(description = "Sprachen", example = "['deu', 'eng']") List<String> languages,
     @Schema(description = "Urheber", example = "['DGB']") List<String> originators,
     @Schema(
@@ -67,5 +73,6 @@ public record LiteratureSchema(
         List<String> conferenceNotes,
     @Schema(description = "Kurzreferat") String shortReport,
     @Schema(description = "Gliederung") String outline,
+    @Schema(description = "Hochschulvermerk") List<String> universityNotes,
     @Schema(description = "Literaturtyp", example = "['sli', 'uli']") String literatureType,
     @Nullable List<LiteratureEncodingSchema> encoding) {}
