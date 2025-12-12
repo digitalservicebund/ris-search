@@ -42,7 +42,7 @@ const availableFeatures: Feature[] = privateFeaturesEnabled
 </script>
 
 <template>
-  <div v-if="privateFeaturesEnabled" class="container mx-auto py-16">
+  <div v-if="privateFeaturesEnabled" class="container py-16">
     <div class="flex flex-col gap-48">
       <div>
         <h1 class="ris-heading2-regular mt-24 mb-8">Hilfe zur Suche</h1>

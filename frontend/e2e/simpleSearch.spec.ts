@@ -200,6 +200,17 @@ test.describe("general search page features", () => {
 
     await expect(searchResults).toHaveCount(18);
   });
+
+  test("falls back to last valid page when visiting an out-of-range pageNumber directly", async ({
+    page,
+  }) => {
+    const nonExistingUrl = "/search?itemsPerPage=100&category=N&pageNumber=10";
+    await navigate(page, nonExistingUrl);
+    await expect(page).not.toHaveURL(/pageNumber=10/);
+    const searchResults = await getSearchResults(page).all();
+    expect(searchResults.length).toBeGreaterThan(0);
+    await expect(getResultCounter(page)).toHaveText(nonZeroResultCount);
+  });
 });
 
 test.describe("searching all documents", () => {
@@ -649,7 +660,7 @@ test.describe("searching literature", () => {
 
     await expect(page).toHaveURL(/dateAfter=2024-01-01/);
 
-    await expect(getSearchResults(page)).toHaveCount(2);
+    await expect(getSearchResults(page)).toHaveCount(3);
   });
 
   test("searches by publication year with dateBefore and dateAfter", async ({
@@ -682,7 +693,7 @@ test.describe("searching literature", () => {
 
     await expect(page).toHaveURL(/dateAfter=2015-01-01&dateBefore=2024-12-31/);
 
-    await expect(getSearchResults(page)).toHaveCount(5);
+    await expect(getSearchResults(page)).toHaveCount(6);
   });
 });
 

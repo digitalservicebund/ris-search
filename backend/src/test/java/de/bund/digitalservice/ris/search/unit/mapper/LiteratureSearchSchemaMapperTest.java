@@ -78,7 +78,8 @@ class LiteratureSearchSchemaMapperTest {
                 null,
                 null,
                 null,
-                (AbstractSearchEntity) Literature.builder().documentNumber("doc-" + index).build());
+                (AbstractSearchEntity)
+                    Literature.builder().documentNumber("XXLU-" + index).build());
 
     var firstPageContents = IntStream.range(0, pageSize).mapToObj(buildItem).toList();
     var middlePageContents = IntStream.range(pageSize, pageSize * 2).mapToObj(buildItem).toList();
@@ -99,7 +100,7 @@ class LiteratureSearchSchemaMapperTest {
     CollectionSchema<SearchMemberSchema<LiteratureSearchSchema>> lastPage =
         LiteratureSearchSchemaMapper.fromSearchPage(lastPageImpl);
 
-    String prefix = ApiConfig.Paths.LITERATURE + "/doc-";
+    String prefix = ApiConfig.Paths.LITERATURE + "/XXLU-";
 
     assertEquals(prefix + "0", getItemId(firstPage, 0));
     assertEquals(prefix + "4", getItemId(firstPage, firstPage.member().size() - 1));

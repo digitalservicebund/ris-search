@@ -9,18 +9,14 @@ describe("AppHeader", () => {
     const user = userEvent.setup();
     await renderSuspended(AppHeader);
 
-    const openBtn = screen.getByRole("button", { name: /Menu/ });
-    await user.click(openBtn);
-    expect(screen.getByRole("button", { name: /Menu/ })).toHaveAttribute(
-      "id",
-      "mobile-menu-close",
-    );
+    const menuBtn = screen.getByRole("button", { name: "Menü" });
 
-    const closeBtn = screen.getByRole("button", { name: /Menu/ });
-    await user.click(closeBtn);
-    expect(screen.getByRole("button", { name: /Menu/ })).toHaveAttribute(
-      "id",
-      "mobile-menu",
-    );
+    await user.click(menuBtn);
+    expect(menuBtn).toHaveAttribute("aria-expanded", "true");
+    expect(screen.getByTestId("mobile-nav")).toBeVisible();
+
+    await user.click(menuBtn);
+    expect(menuBtn).toHaveAttribute("aria-expanded", "false");
+    expect(screen.getByTestId("mobile-nav")).not.toBeVisible();
   });
 });

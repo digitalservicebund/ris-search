@@ -1,20 +1,21 @@
 <script setup lang="ts">
-import StaticPageWrapper from "~/components/CustomLayouts/StaticPageWrapper.vue";
 import { useStaticPageSeo } from "~/composables/useStaticPageSeo";
 
-definePageMeta({ alias: ["/impressum"] });
+definePageMeta({ alias: ["/impressum"], layout: false });
 
 useStaticPageSeo("impressum");
 </script>
 
 <template>
-  <StaticPageWrapper>
-    <template #breadcrumb>
-      <RisBreadcrumb :items="[{ label: 'Impressum' }]" />
-    </template>
-    <PageHeader title="Impressum" />
-    <div class="flex flex-col gap-32">
-      <div class="max-w-prose space-y-48">
+  <div>
+    <NuxtLayout name="static-page">
+      <template #breadcrumb>
+        <RisBreadcrumb :items="[{ label: 'Impressum' }]" />
+      </template>
+
+      <template #pageTitle>Impressum</template>
+
+      <div class="space-y-48">
         <section>
           <h2 class="ris-heading3-regular mb-8">Anbieter</h2>
           <p>
@@ -86,6 +87,6 @@ useStaticPageSeo("impressum");
           </p>
         </section>
       </div>
-    </div></StaticPageWrapper
-  >
+    </NuxtLayout>
+  </div>
 </template>

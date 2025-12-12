@@ -114,6 +114,7 @@ public class LiteratureSearchSchemaMapper {
         .collaborators(doc.collaborators())
         .shortReport(doc.shortReport())
         .outline(doc.outline())
+        .literatureType(LiteratureTypeMapper.mapLiteratureType(doc.documentNumber()))
         .build();
   }
 

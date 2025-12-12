@@ -6,6 +6,7 @@ const handleClick = () => {
   }
 };
 </script>
+
 <template>
   <NuxtLink
     :to="{ hash: '#top' }"

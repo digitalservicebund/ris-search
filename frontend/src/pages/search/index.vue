@@ -13,7 +13,6 @@ import YearRangeFilter from "~/components/Search/YearRangeFilter.vue";
 import { useSimpleSearchParams } from "~/composables/useSimpleSearchParams/useSimpleSearchParams";
 import { useStaticPageSeo } from "~/composables/useStaticPageSeo";
 import { DocumentKind } from "~/types";
-import { buildResultCountString } from "~/utils/pagination";
 import {
   categoryToDocumentKind,
   convertParams,
@@ -41,6 +40,27 @@ watch(
   () => {
     if (loadError.value) {
       showError(loadError.value);
+    }
+  },
+  { immediate: true },
+);
+
+watch(
+  () => data.value,
+  async (page) => {
+    if (!page) return;
+
+    const totalItems = page.totalItems ?? 0;
+    const itemsPerPage = searchParams.itemsPerPage.value;
+    const requestedPage = searchParams.pageNumber.value;
+
+    if (page.member.length === 0 && totalItems > 0) {
+      const lastPage = Math.floor((totalItems - 1) / itemsPerPage);
+
+      if (requestedPage !== lastPage) {
+        searchParams.setPageNumber(lastPage);
+        await execute();
+      }
     }
   },
   { immediate: true },

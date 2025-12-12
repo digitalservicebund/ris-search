@@ -1,5 +1,31 @@
 import { expect, test, noJsTest, navigate } from "./utils/fixtures";
 
+test("displays all sli titles", async ({ page }) => {
+  await navigate(page, "/literature/XXLS000000001");
+
+  await expect(
+    page
+      .getByRole("main")
+      .getByRole("heading", { level: 1, name: "Test-Dokument SLI" })
+      .first(),
+  ).toBeVisible();
+
+  const textSection = page.getByRole("region", { name: "Text" });
+  await expect(
+    textSection.getByRole("heading", {
+      level: 2,
+      name: "Zusätzliche Titel",
+    }),
+  ).toBeVisible();
+
+  await expect(textSection).toContainText("Dokumentarischer Titel");
+  await expect(textSection).toContainText("Zusatz zum Haupttitel");
+  await expect(textSection).toContainText("Gesamttitel Bandbezeichnung");
+  await expect(textSection).toContainText("Gesamttitel 2 Bandbezeichnung 2");
+  await expect(textSection).toContainText("Titel Kurzform");
+  await expect(textSection).toContainText("sonstiger Titel");
+});
+
 test("displays literature page with metadata and text tab by default", async ({
   page,
 }) => {

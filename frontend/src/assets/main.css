@@ -4,17 +4,10 @@
 @source "../../node_modules/@digitalservicebund/ris-ui/dist/**/*.{js,vue,ts}";
 
 @theme {
-  --spacing-prose: 45rem;
+  --max-width-prose: 45rem;
   --max-width-title: 60ch;
   --shadow-active-tab:
     -1px -1px 0 0 var(--color-gray-600), 1px -1px 0 0 var(--color-gray-600);
-}
-
-.max-w-prose {
-  max-width: var(--spacing-prose);
-}
-.max-w-title {
-  max-width: var(--max-width-title);
 }
 
 @layer base {

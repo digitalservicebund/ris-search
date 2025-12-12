@@ -3,45 +3,49 @@ import IcBaselineClose from "~icons/ic/baseline-close";
 import IcBaselineMenu from "~icons/ic/baseline-menu";
 
 const open = ref(false);
-const toggleMenu = () => {
+
+function toggleMenu() {
   open.value = !open.value;
-};
+}
+
+const mobileMenuId = useId();
 </script>
+
 <template>
   <AppBanner />
+
   <header id="top" class="bg-white print:hidden">
-    <div class="container mx-auto">
-      <div class="flex flex-col gap-24 py-20">
-        <div class="flex flex-row items-center justify-between gap-16">
-          <Logo />
-          <div class="float-end lg:hidden">
-            <button
-              v-if="!open"
-              id="mobile-menu"
-              class="flex cursor-pointer items-center gap-4 hover:underline active:underline"
-              @click="toggleMenu"
-            >
-              <IcBaselineMenu size="1.25em" />Menu
-            </button>
-            <button
-              v-else
-              id="mobile-menu-close"
-              class="flex cursor-pointer items-center gap-4 hover:underline active:underline"
-              :onclick="toggleMenu"
-            >
-              <IcBaselineClose size="1.25em" />
-              Menu
-            </button>
-          </div>
-          <AppHeaderNav class="hidden lg:inline-block" list-class="items-end" />
+    <div class="container flex flex-col gap-24 py-20">
+      <div class="flex items-center justify-between gap-16">
+        <Logo />
+
+        <!-- Mobile menu toggle -->
+        <div class="float-end lg:hidden">
+          <button
+            class="ris-label1-regular flex cursor-pointer items-center gap-8 decoration-3 outline-offset-4 outline-blue-800 hover:underline focus-visible:outline-4"
+            :aria-expanded="open"
+            :aria-controls="mobileMenuId"
+            @click="toggleMenu()"
+          >
+            <IcBaselineMenu v-if="!open" size="1.25em" />
+            <IcBaselineClose v-else size="1.25em" />
+            Menü
+          </button>
         </div>
-        <AppHeaderNav
-          v-if="open"
-          class="inline-block items-center lg:hidden"
-          list-class="items-center gap-y-8"
-          @select-item="toggleMenu"
-        />
+
+        <!-- Desktop nav -->
+        <AppHeaderNav class="hidden lg:inline-block" list-class="items-end" />
       </div>
+
+      <!-- Mobile nav -->
+      <AppHeaderNav
+        :id="mobileMenuId"
+        :hidden="!open"
+        data-testid="mobile-nav"
+        class="inline-block items-center lg:hidden"
+        list-class="items-center gap-y-8"
+        @select-item="toggleMenu()"
+      />
     </div>
   </header>
 </template>

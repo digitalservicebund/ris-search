@@ -45,6 +45,7 @@ public class LiteratureSchemaMapper {
         .shortReport(entity.shortReport())
         .outline(entity.outline())
         .encoding(encodings)
+        .literatureType(LiteratureTypeMapper.mapLiteratureType(entity.documentNumber()))
         .build();
   }
 }
