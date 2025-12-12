@@ -1,19 +1,22 @@
 <script setup lang="ts">
 import { ExternalLink } from "#components";
-import StaticPageWrapper from "~/components/CustomLayouts/StaticPageWrapper.vue";
 import { useStaticPageSeo } from "~/composables/useStaticPageSeo";
+
+definePageMeta({ layout: false });
 
 useStaticPageSeo("open-source");
 </script>
 
 <template>
-  <StaticPageWrapper>
-    <template #breadcrumb>
-      <RisBreadcrumb :items="[{ label: 'Open Source' }]" />
-    </template>
-    <PageHeader title="Open Source" />
-    <div class="flex flex-col gap-32">
-      <div class="max-w-prose space-y-24">
+  <div>
+    <NuxtLayout name="static-page">
+      <template #breadcrumb>
+        <RisBreadcrumb :items="[{ label: 'Open Source' }]" />
+      </template>
+
+      <template #pageTitle>Open Source</template>
+
+      <div class="space-y-24">
         <p>
           Bei der Entwicklung setzen wir vollständig auf Open Source. Open
           Source bedeutet für uns Transparenz, Vertrauen, Sicherheit, Qualität
@@ -28,6 +31,6 @@ useStaticPageSeo("open-source");
           Zum Github Repository
         </Button>
       </div>
-    </div>
-  </StaticPageWrapper>
+    </NuxtLayout>
+  </div>
 </template>

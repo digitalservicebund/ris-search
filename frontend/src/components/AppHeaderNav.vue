@@ -3,35 +3,38 @@ import IconSearch from "~icons/ic/search";
 
 defineProps<{ listClass: string }>();
 
-defineEmits(["selectItem"]);
+defineEmits<{ selectItem: [] }>();
 </script>
 
 <template>
-  <nav class="flex flex-col items-end gap-y-8" aria-label="Hauptnavigation">
+  <nav aria-label="Hauptnavigation">
     <ul
       class="flex flex-col justify-end gap-x-28 md:flex-row md:items-center"
       :class="listClass"
     >
-      <li @click="$emit('selectItem')">
+      <li>
         <NuxtLink
-          class="ris-link1-regular link-hover flex items-center gap-4 decoration-3 aria-[current=page]:underline"
+          class="nav-link"
           :to="{ name: 'search' }"
+          @click="$emit('selectItem')"
         >
           <IconSearch />Suche
         </NuxtLink>
       </li>
-      <li @click="$emit('selectItem')">
+      <li>
         <NuxtLink
-          class="ris-link1-regular link-hover flex items-center gap-4 decoration-3 aria-[current=page]:underline"
+          class="nav-link"
           :to="{ name: 'feedback' }"
+          @click="$emit('selectItem')"
         >
           Feedback geben
         </NuxtLink>
       </li>
-      <li @click="$emit('selectItem')">
+      <li>
         <NuxtLink
-          class="ris-link1-regular link-hover flex items-center gap-4 decoration-3 aria-[current=page]:underline"
+          class="nav-link"
           :to="{ name: 'about' }"
+          @click="$emit('selectItem')"
         >
           Über den Service
         </NuxtLink>
@@ -39,3 +42,11 @@ defineEmits(["selectItem"]);
     </ul>
   </nav>
 </template>
+
+<style lang="css" scoped>
+@reference "~/assets/main.css";
+
+.nav-link {
+  @apply ris-link1-regular link-hover flex items-center gap-4 decoration-3 aria-[current=page]:underline;
+}
+</style>

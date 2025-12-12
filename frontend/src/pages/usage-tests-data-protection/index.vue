@@ -1,21 +1,34 @@
 <script setup lang="ts">
-import StaticPageWrapper from "~/components/CustomLayouts/StaticPageWrapper.vue";
 import { useStaticPageSeo } from "~/composables/useStaticPageSeo";
 
-definePageMeta({ alias: ["/nutzungstests-datenschutz"] });
+definePageMeta({
+  alias: ["/nutzungstests-datenschutz"],
+  layout: false,
+});
 
 useStaticPageSeo("nutzungstests-datenschutz");
-const title =
-  "Datenschutzerklärung für die Registrierung für Nutzungsstudien für das Projekt „Testphase Rechtsinformationsportal“";
 </script>
 
 <template>
-  <StaticPageWrapper>
-    <RisBreadcrumb :items="[{ label: title }]" />
+  <div>
+    <NuxtLayout name="static-page">
+      <template #breadcrumb>
+        <RisBreadcrumb
+          :items="[
+            {
+              label:
+                'Datenschutzerklärung für die Registrierung für Nutzungsstudien für das Projekt „Testphase Rechtsinformationsportal“',
+            },
+          ]"
+        />
+      </template>
 
-    <PageHeader class="max-w-prose" :title="title" />
-    <div class="mb-48">
-      <main class="max-w-prose space-y-64">
+      <template #pageTitle>
+        Datenschutzerklärung für die Registrierung für Nutzungsstudien für das
+        Projekt „Testphase Rechtsinformationsportal“
+      </template>
+
+      <div class="space-y-64">
         <section class="space-y-24">
           <p>
             In dieser Datenschutzerklärung informieren wir Sie darüber, welche
@@ -328,7 +341,7 @@ const title =
             >
           </p>
         </section>
-      </main>
-    </div></StaticPageWrapper
-  >
+      </div>
+    </NuxtLayout>
+  </div>
 </template>
