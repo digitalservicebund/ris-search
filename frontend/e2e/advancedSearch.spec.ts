@@ -185,6 +185,18 @@ test.describe("general advanced search page features", () => {
     await expect(searchResults).toHaveCount(13);
   });
 
+  test("falls back to last valid page when visiting an out-of-range pageIndex directly", async ({
+    page,
+  }) => {
+    const nonExistingUrl =
+      "/advanced-search?documentKind=R&dateFilterType=period&dateFilterFrom=2023-01-01&dateFilterTo=2025-12-31&itemsPerPage=100&pageIndex=10";
+    await navigate(page, nonExistingUrl);
+    await expect(page).not.toHaveURL(/pageIndex=10/);
+    const searchResults = await getSearchResults(page).all();
+    expect(searchResults.length).toBeGreaterThan(0);
+    await expect(getResultCounter(page)).toHaveText(nonZeroResultCount);
+  });
+
   test("clears query when switching document kind", async ({ page }) => {
     await navigate(page, "/advanced-search");
 
