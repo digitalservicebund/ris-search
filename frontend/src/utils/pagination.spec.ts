@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import type { Page } from "~/components/Pagination/Pagination.vue";
+import type { Page } from "~/components/Pagination.vue";
 import type { AnyDocument, SearchResult } from "~/types";
 import {
   buildItemsOnPageString,

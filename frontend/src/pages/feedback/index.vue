@@ -11,7 +11,7 @@ useStaticPageSeo("feedback");
   <div>
     <NuxtLayout name="static-page">
       <template #breadcrumb>
-        <RisBreadcrumb :items="[{ label: 'Feedback' }]" />
+        <Breadcrumbs :items="[{ label: 'Feedback' }]" />
       </template>
 
       <template #pageTitle>Geben Sie uns Feedback</template>

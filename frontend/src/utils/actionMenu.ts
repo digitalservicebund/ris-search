@@ -1,7 +1,7 @@
 import type {
   ActionMenuItem,
   ActionsMenuProps,
-} from "~/components/ActionMenu/ActionsMenu.vue";
+} from "~/components/documents/actionMenu/ActionsMenu.vue";
 import EngIcon from "~icons/custom/eng";
 import PdfIcon from "~icons/custom/pdf";
 import UpdatingLinkIcon from "~icons/custom/updatingLink";

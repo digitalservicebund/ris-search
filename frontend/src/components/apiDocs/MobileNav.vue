@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import PopoverNavigation from "./PopoverNavigation.vue";
-import Banner from "~/components/Docs/Banner.vue";
+import Banner from "~/components/apiDocs/Banner.vue";
 </script>
 
 <template>

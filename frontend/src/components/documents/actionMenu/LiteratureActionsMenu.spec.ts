@@ -1,7 +1,7 @@
 import { shallowMount } from "@vue/test-utils";
 import { describe, expect, it, vi } from "vitest";
-import ActionsMenu from "~/components/ActionMenu/ActionsMenu.vue";
-import LiteratureActionsMenu from "~/components/ActionMenu/LiteratureActionsMenu.vue";
+import ActionsMenu from "~/components/documents/actionMenu/ActionsMenu.vue";
+import LiteratureActionsMenu from "~/components/documents/actionMenu/LiteratureActionsMenu.vue";
 import type { Literature } from "~/types";
 
 describe("LiteratureActionsMenu", () => {

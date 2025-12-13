@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/vue";
 import { describe, it, expect, vi } from "vitest";
-import AppFooter from "~/components/AppFooter.vue";
+import AppFooter from "~/components/app/AppFooter.vue";
 import { usePrivateFeaturesFlag } from "~/composables/usePrivateFeaturesFlag";
 
 vi.mock("~/composables/usePrivateFeaturesFlag", () => ({

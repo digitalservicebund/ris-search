@@ -1,10 +1,9 @@
 <script setup lang="ts">
 import { computed } from "vue";
+import DocumentTitle from "./DocumentTitle.vue";
+import type { BreadcrumbItem } from "~/components/Breadcrumbs.vue";
+import IncompleteDataMessage from "~/components/documents/IncompleteDataMessage.vue";
 import type { MetadataItem } from "~/components/Metadata.vue";
-import RisBreadcrumb, {
-  type BreadcrumbItem,
-} from "~/components/Ris/RisBreadcrumb.vue";
-import RisDocumentTitle from "~/components/Ris/RisDocumentTitle.vue";
 import SidebarLayout from "~/components/SidebarLayout.vue";
 import IcBaselineSubject from "~icons/ic/baseline-subject";
 import IcOutlineInfo from "~icons/ic/outline-info";
@@ -52,10 +51,10 @@ const detailsTabPanelId = useId();
 <template>
   <div class="container text-left">
     <div class="flex items-center gap-8 print:hidden">
-      <RisBreadcrumb :items="breadcrumbItems" class="grow" />
+      <Breadcrumbs :items="breadcrumbItems" class="grow" />
       <slot name="actionsMenu" />
     </div>
-    <RisDocumentTitle :title="title" :placeholder="titlePlaceholder" />
+    <DocumentTitle :title="title" :placeholder="titlePlaceholder" />
     <Metadata :items="metadataItems" class="mb-48" />
   </div>
   <div

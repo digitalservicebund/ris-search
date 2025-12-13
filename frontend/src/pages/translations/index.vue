@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import MiniSearch from "minisearch";
-import type { BreadcrumbItem } from "~/components/Ris/RisBreadcrumb.vue";
+import type { BreadcrumbItem } from "~/components/Breadcrumbs.vue";
 import SimpleSearchInput from "~/components/Search/SimpleSearchInput.vue";
 import { useStaticPageSeo } from "~/composables/useStaticPageSeo";
 import { fetchTranslationList } from "~/composables/useTranslationData";
@@ -78,7 +78,7 @@ useStaticPageSeo("translations-list");
 
 <template>
   <div class="flex items-center gap-8 print:hidden">
-    <RisBreadcrumb :items="breadcrumbItems" />
+    <Breadcrumbs :items="breadcrumbItems" />
   </div>
 
   <section class="mt-24 max-w-prose space-y-24">

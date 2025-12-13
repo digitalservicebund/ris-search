@@ -1,13 +1,11 @@
 <script setup lang="ts">
-import ActionsMenu from "~/components/ActionMenu/ActionsMenu.vue";
-import type { AdministrativeDirective } from "~/types";
+import ActionsMenu from "~/components/documents/actionMenu/ActionsMenu.vue";
+import type { Literature } from "~/types";
 
-const { administrativeDirective } = defineProps<{
-  administrativeDirective: AdministrativeDirective | undefined;
-}>();
+const { literature } = defineProps<{ literature: Literature | undefined }>();
 
 const xmlUrl = computed(() => {
-  const encoding = administrativeDirective?.encoding?.find(
+  const encoding = literature?.encoding?.find(
     (e) => e.encodingFormat === "application/xml",
   );
   return encoding?.contentUrl ?? undefined;

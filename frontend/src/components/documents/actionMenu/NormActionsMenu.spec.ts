@@ -1,7 +1,7 @@
 import { shallowMount } from "@vue/test-utils";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import ActionsMenu from "~/components/ActionMenu/ActionsMenu.vue";
-import NormActionsMenu from "~/components/ActionMenu/NormActionsMenu.vue";
+import ActionsMenu from "~/components/documents/actionMenu/ActionsMenu.vue";
+import NormActionsMenu from "~/components/documents/actionMenu/NormActionsMenu.vue";
 import type { LegislationWork } from "~/types";
 import { getManifestationUrl } from "~/utils/norm";
 

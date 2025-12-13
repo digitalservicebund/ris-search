@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import Message from "primevue/message";
 import { computed } from "vue";
-import ActionsMenu from "~/components/ActionMenu/ActionsMenu.vue";
+import type { BreadcrumbItem } from "~/components/Breadcrumbs.vue";
 import DetailsList from "~/components/DetailsList.vue";
 import DetailsListEntry from "~/components/DetailsListEntry.vue";
-import type { BreadcrumbItem } from "~/components/Ris/RisBreadcrumb.vue";
-import RisTabs from "~/components/Ris/RisTabs.vue";
+import ActionsMenu from "~/components/documents/actionMenu/ActionsMenu.vue";
+import RisTabs from "~/components/RisTabs.vue";
 import { useDynamicSeo } from "~/composables/useDynamicSeo";
 import {
   fetchTranslationAndHTML,
@@ -124,7 +124,7 @@ const tabs = computed(() => [
 <template>
   <div v-if="currentTranslation" class="container">
     <div class="flex items-center gap-8 print:hidden">
-      <RisBreadcrumb :items="breadcrumbItems" class="grow" />
+      <Breadcrumbs :items="breadcrumbItems" class="grow" />
       <client-only>
         <ActionsMenu :permalink />
       </client-only>

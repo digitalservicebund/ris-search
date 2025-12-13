@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/vue";
-import RisBreadcrumb from "./RisBreadcrumb.vue";
+import RisBreadcrumb from "./Breadcrumbs.vue";
 
 describe("RisBreadcrumb", () => {
   it("renders home as text when no items given", () => {

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import Message from "primevue/message";
-import type { Page } from "~/components/Pagination/Pagination.vue";
+import type { Page } from "~/components/Pagination.vue";
 import CategoryFilter from "~/components/Search/CategoryFilter.vue";
 import CourtFilter from "~/components/Search/CourtFilter.vue";
 import DateRangeFilter from "~/components/Search/DateRangeFilter.vue";

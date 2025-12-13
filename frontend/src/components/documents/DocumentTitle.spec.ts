@@ -1,9 +1,9 @@
 import { render, screen } from "@testing-library/vue";
-import RisDocumentTitle from "./RisDocumentTitle.vue";
+import DocumentTitle from "./DocumentTitle.vue";
 
-describe("RisDocumentTitle", () => {
+describe("DocumentTitle", () => {
   it("renders title", () => {
-    render(RisDocumentTitle, {
+    render(DocumentTitle, {
       props: {
         title: "The Title",
         placeholder: "Placeholder value",
@@ -16,7 +16,7 @@ describe("RisDocumentTitle", () => {
   });
 
   it("renders placeholder if title is undefined", () => {
-    render(RisDocumentTitle, {
+    render(DocumentTitle, {
       props: {
         placeholder: "Placeholder value",
       },

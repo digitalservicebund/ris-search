@@ -2,7 +2,7 @@ import { mockNuxtImport } from "@nuxt/test-utils/runtime";
 import { mount } from "@vue/test-utils";
 import { vi } from "vitest";
 import MenuItem from "./MenuItem.vue";
-import type { MenuItemProps } from "~/components/Docs/MenuItem.vue";
+import type { MenuItemProps } from "~/components/apiDocs/MenuItem.vue";
 
 const mockUseRoute = vi.fn();
 const mockUseRouter = vi.fn();

@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { NuxtLoadingIndicator } from "#components";
 import ConsentBanner from "~/components/Analytics/ConsentBanner.vue";
-import AppFooter from "~/components/AppFooter.vue";
-import AppHeader from "~/components/AppHeader.vue";
+import AppFooter from "~/components/app/AppFooter.vue";
+import AppHeader from "~/components/app/AppHeader.vue";
 </script>
 
 <template>

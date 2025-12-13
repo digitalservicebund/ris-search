@@ -11,7 +11,7 @@ useStaticPageSeo("ueber");
   <div>
     <NuxtLayout name="static-page">
       <template #breadcrumb>
-        <RisBreadcrumb :items="[{ label: 'Über den Service' }]" />
+        <Breadcrumbs :items="[{ label: 'Über den Service' }]" />
       </template>
 
       <template #pageTitle>Rechtsinformationen zentral an einem Ort</template>

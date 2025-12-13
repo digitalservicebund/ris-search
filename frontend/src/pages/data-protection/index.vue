@@ -10,7 +10,7 @@ useStaticPageSeo("datenschutz");
   <div>
     <NuxtLayout name="static-page">
       <template #breadcrumb>
-        <RisBreadcrumb :items="[{ label: 'Datenschutzerklärung' }]" />
+        <Breadcrumbs :items="[{ label: 'Datenschutzerklärung' }]" />
       </template>
 
       <template #pageTitle>Datenschutzerklärung</template>

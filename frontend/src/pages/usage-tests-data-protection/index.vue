@@ -13,7 +13,7 @@ useStaticPageSeo("nutzungstests-datenschutz");
   <div>
     <NuxtLayout name="static-page">
       <template #breadcrumb>
-        <RisBreadcrumb
+        <Breadcrumbs
           :items="[
             {
               label:

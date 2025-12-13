@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import dayjs from "dayjs";
-import VersionWarningMessage from "~/components/Norm/VersionWarningMessage.vue";
+import VersionWarningMessage from "~/components/documents/norms/VersionWarningMessage.vue";
 import type { LegislationWork, SearchResult } from "~/types";
 import {
   getValidityStatus,

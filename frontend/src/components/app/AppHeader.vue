@@ -17,7 +17,7 @@ const mobileMenuId = useId();
   <header id="top" class="bg-white print:hidden">
     <div class="container flex flex-col gap-24 py-20">
       <div class="flex items-center justify-between gap-16">
-        <Logo />
+        <AppLogo />
 
         <!-- Mobile menu toggle -->
         <div class="float-end lg:hidden">

@@ -1,5 +1,5 @@
 import { toValue } from "vue";
-import type { Page } from "~/components/Pagination/Pagination.vue";
+import type { Page } from "~/components/Pagination.vue";
 import { DocumentKind } from "~/types";
 import {
   dateFilterToQuery,

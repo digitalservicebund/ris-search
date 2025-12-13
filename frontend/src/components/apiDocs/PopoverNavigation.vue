@@ -11,7 +11,7 @@ import IcBaselineMenu from "~icons/ic/baseline-menu";
     <PopoverButton
       class="text-neutral-secondary float-end flex w-full flex-row items-center justify-between gap-4 px-16 py-8 no-underline"
     >
-      <Logo />
+      <AppLogo />
       <div
         v-if="!open"
         class="flex items-center gap-4 hover:underline active:underline"

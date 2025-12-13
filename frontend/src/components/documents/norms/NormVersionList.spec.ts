@@ -5,7 +5,7 @@ import {
 } from "@nuxt/test-utils/runtime";
 import { vi } from "vitest";
 import NormVersionList from "./NormVersionList.vue";
-import { data } from "~/components/Norm/NormVersions.spec.data";
+import { data } from "~/components/documents/norms/NormVersions.spec.data";
 
 registerEndpoint(`/v1/legislation`, () => {
   return data;

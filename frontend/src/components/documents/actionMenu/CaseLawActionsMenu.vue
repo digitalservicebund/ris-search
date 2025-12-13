@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import ActionsMenu from "~/components/ActionMenu/ActionsMenu.vue";
+import ActionsMenu from "~/components/documents/actionMenu/ActionsMenu.vue";
 import type { CaseLaw } from "~/types";
 import { getEncodingURL } from "~/utils/caseLaw";
 

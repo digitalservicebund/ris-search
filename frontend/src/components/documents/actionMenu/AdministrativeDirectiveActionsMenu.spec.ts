@@ -1,7 +1,7 @@
 import { shallowMount } from "@vue/test-utils";
 import { describe, expect, it, vi } from "vitest";
-import ActionsMenu from "~/components/ActionMenu/ActionsMenu.vue";
-import AdministrativeDirectiveActionsMenu from "~/components/ActionMenu/AdministrativeDirectiveActionsMenu.vue";
+import ActionsMenu from "~/components/documents/actionMenu/ActionsMenu.vue";
+import AdministrativeDirectiveActionsMenu from "~/components/documents/actionMenu/AdministrativeDirectiveActionsMenu.vue";
 import type { AdministrativeDirective } from "~/types";
 
 describe("AdministrativeDirectiveActionsMenu", () => {

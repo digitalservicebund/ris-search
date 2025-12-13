@@ -1,7 +1,7 @@
 import { shallowMount } from "@vue/test-utils";
 import { describe, expect, it, vi } from "vitest";
-import ActionsMenu from "~/components/ActionMenu/ActionsMenu.vue";
-import CaseLawActionsMenu from "~/components/ActionMenu/CaseLawActionsMenu.vue";
+import ActionsMenu from "~/components/documents/actionMenu/ActionsMenu.vue";
+import CaseLawActionsMenu from "~/components/documents/actionMenu/CaseLawActionsMenu.vue";
 import type { CaseLaw } from "~/types";
 import { getEncodingURL } from "~/utils/caseLaw";
 
