@@ -1,21 +1,21 @@
 <script setup lang="ts">
 import PrimevueSelect from "primevue/select";
 import { computed } from "vue";
-import { type DropdownItem, sortMode } from "~/components/types";
+import { sortMode } from "~/composables/useSimpleSearchParams/useSimpleSearchParams";
 import { DocumentKind } from "~/types";
 
 const props = defineProps<{ documentKind: DocumentKind }>();
-const model = defineModel<DropdownItem["value"]>();
+const model = defineModel<string>();
 
 const reversedSortMode = (name: string) => "-" + name;
 
-const sharedSortOptions: DropdownItem[] = [
+const sharedSortOptions = [
   { label: "Relevanz", value: "default" },
   { label: "Datum: Älteste zuerst", value: sortMode.date },
   { label: "Datum: Neueste zuerst", value: reversedSortMode(sortMode.date) },
 ];
 
-const caselawSortOptions: DropdownItem[] = [
+const caselawSortOptions = [
   { label: "Relevanz", value: "default" },
   { label: "Gericht: Von A nach Z", value: sortMode.courtName },
   {
@@ -29,7 +29,7 @@ const caselawSortOptions: DropdownItem[] = [
   },
 ];
 
-const legislationSortOptions: DropdownItem[] = [
+const legislationSortOptions = [
   { label: "Relevanz", value: "default" },
   { label: "Ausfertigungsdatum: Älteste zuerst", value: sortMode.date },
   {

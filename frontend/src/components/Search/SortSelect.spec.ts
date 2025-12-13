@@ -2,7 +2,7 @@ import userEvent from "@testing-library/user-event";
 import { render, screen } from "@testing-library/vue";
 import { describe, it, expect } from "vitest";
 import SortOptionsComponent from "./SortSelect.vue";
-import { sortMode } from "~/components/types";
+import { sortMode } from "~/composables/useSimpleSearchParams/useSimpleSearchParams";
 import { DocumentKind } from "~/types";
 
 describe("SortSelect", () => {

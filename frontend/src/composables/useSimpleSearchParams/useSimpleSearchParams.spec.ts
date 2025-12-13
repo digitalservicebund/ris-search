@@ -4,10 +4,10 @@ import { nextTick } from "vue";
 import { defaultParams } from "./getInitialState";
 import {
   type QueryParams,
+  sortMode,
   useSimpleSearchParams,
 } from "./useSimpleSearchParams";
 import type { RouteLocationNormalized } from "#vue-router";
-import { sortMode } from "~/components/types";
 import { DocumentKind } from "~/types";
 
 type MockRoute = Pick<RouteLocationNormalized, "path" | "query">;

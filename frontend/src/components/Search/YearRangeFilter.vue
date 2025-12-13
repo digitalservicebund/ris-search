@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import PrimevueSelect from "primevue/select";
-import type { DropdownItem } from "~/components/types";
 import YearInput from "~/components/YearInput.vue";
 import { DateSearchMode } from "~/composables/useSimpleSearchParams/useSimpleSearchParams";
 
@@ -14,7 +13,7 @@ const yearEqualId = useId();
 const yearAfterId = useId();
 const yearBeforeId = useId();
 
-const items: DropdownItem[] = [
+const items = [
   { label: "Keine zeitliche Begrenzung", value: DateSearchMode.None },
   { label: "Bis zu einem Jahr", value: DateSearchMode.Before },
   { label: "In einem Jahr", value: DateSearchMode.Equal },

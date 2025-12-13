@@ -3,7 +3,6 @@
 // be reworked at some point.
 
 import Select from "primevue/select";
-import type { DropdownItem } from "~/components/types";
 import { usePrivateFeaturesFlag } from "~/composables/usePrivateFeaturesFlag";
 import {
   type FieldType,
@@ -19,7 +18,7 @@ definePageMeta({ alias: "/erweiterte-suche/hilfe" });
 
 const privateFeaturesEnabled = usePrivateFeaturesFlag();
 const filter = ref<FieldType>("all");
-const filters: DropdownItem[] = [
+const filters = [
   { label: "Alle", value: "all" },
   { label: "Rechtsprechung", value: "case_law" },
   { label: "Normen", value: "norms" },

@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import PrimevueSelect from "primevue/select";
 import type { ValidationError } from "~/components/DateInput.vue";
-import type { DropdownItem } from "~/components/types";
 import { DateSearchMode } from "~/composables/useSimpleSearchParams/useSimpleSearchParams";
 
 const date = defineModel<string | undefined>("date");
@@ -19,7 +18,7 @@ const dateValidationError = ref<ValidationError | undefined>();
 const dateAfterValidationError = ref<ValidationError | undefined>();
 const dateBeforeValidationError = ref<ValidationError | undefined>();
 
-const items: DropdownItem[] = [
+const items = [
   { label: "Keine zeitliche Begrenzung", value: DateSearchMode.None },
   { label: "Bis zu einem Datum", value: DateSearchMode.Before },
   { label: "An einem Datum", value: DateSearchMode.Equal },
