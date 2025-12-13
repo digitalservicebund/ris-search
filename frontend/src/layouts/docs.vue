@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { NuxtLoadingIndicator } from "#components";
-import ConsentBanner from "~/components/Analytics/ConsentBanner.vue";
+import ConsentBanner from "~/components/analytics1/ConsentBanner.vue";
 import Banner from "~/components/apiDocs/Banner.vue";
 import MobileNav from "~/components/apiDocs/MobileNav.vue";
 import Sidebar from "~/components/apiDocs/Sidebar.vue";
