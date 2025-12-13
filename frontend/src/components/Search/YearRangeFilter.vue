@@ -4,11 +4,15 @@ import type { DropdownItem } from "~/components/types";
 import YearInput from "~/components/YearInput.vue";
 import { DateSearchMode } from "~/composables/useSimpleSearchParams/useSimpleSearchParams";
 
-const dateAfter = defineModel<string | undefined>("dateAfter");
-const dateBefore = defineModel<string | undefined>("dateBefore");
+const dateAfter = defineModel<string>("dateAfter");
+const dateBefore = defineModel<string>("dateBefore");
 const dateSearchMode = defineModel<DateSearchMode>("dateSearchMode", {
   required: true,
 });
+
+const yearEqualId = useId();
+const yearAfterId = useId();
+const yearBeforeId = useId();
 
 const items: DropdownItem[] = [
   { label: "Keine zeitliche Begrenzung", value: DateSearchMode.None },
@@ -22,9 +26,11 @@ const items: DropdownItem[] = [
 function parseYearFromDate(date?: string): string | undefined {
   return date?.split("-")[0];
 }
+
 function formatYearStart(year: string) {
   return `${year}-01-01`;
 }
+
 function formatYearEnd(year: string) {
   return `${year}-12-31`;
 }
@@ -101,6 +107,7 @@ const show = computed(() => ({
     dateSearchMode.value,
   ),
 }));
+
 const hasMultipleInputs = computed(() => show.value.after && show.value.before);
 
 // Reset on mode change
@@ -122,40 +129,34 @@ watch(
         id="year-mode-select"
         v-model="dateSearchMode"
         :options="items"
+        :placeholder="items[0]?.label"
+        :pt="{ overlay: { class: 'bg-white w-full' } }"
+        append-to="self"
         option-label="label"
         option-value="value"
-        :placeholder="items[0]?.label"
         scroll-height="20rem"
-        append-to="self"
-        :pt="{ overlay: { class: 'bg-white w-full' } }"
       />
     </span>
 
-    <InputField
-      v-if="show.equal"
-      id="yearEqual"
-      v-slot="slotProps"
-      label="Jahr"
-    >
-      <YearInput :id="slotProps.id" v-model="yearEqual" />
-    </InputField>
+    <div v-if="show.equal" class="flex flex-col gap-8">
+      <label class="ris-label2-regular" :for="yearEqualId">Jahr</label>
+      <YearInput :id="yearEqualId" v-model="yearEqual" />
+    </div>
 
-    <InputField
-      v-if="show.after"
-      id="yearAfter"
-      v-slot="slotProps"
-      :label="hasMultipleInputs ? 'Ab dem Jahr' : 'Jahr'"
-    >
-      <YearInput :id="slotProps.id" v-model="yearAfter" />
-    </InputField>
+    <div v-if="show.after" class="flex flex-col gap-8">
+      <label class="ris-label2-regular" :for="yearAfterId">
+        <template v-if="hasMultipleInputs">Ab dem Jahr</template>
+        <template v-else>Jahr</template>
+      </label>
+      <YearInput :id="yearAfterId" v-model="yearAfter" />
+    </div>
 
-    <InputField
-      v-if="show.before"
-      id="yearBefore"
-      v-slot="slotProps"
-      :label="hasMultipleInputs ? 'Bis zum Jahr' : 'Jahr'"
-    >
-      <YearInput :id="slotProps.id" v-model="yearBefore" />
-    </InputField>
+    <div v-if="show.before" class="flex flex-col gap-8">
+      <label class="ris-label2-regular" :for="yearBeforeId">
+        <template v-if="hasMultipleInputs">Bis zum Jahr</template>
+        <template v-else>Jahr</template>
+      </label>
+      <YearInput :id="yearBeforeId" v-model="yearBefore" />
+    </div>
   </div>
 </template>

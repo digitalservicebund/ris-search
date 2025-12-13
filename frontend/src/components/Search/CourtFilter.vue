@@ -80,10 +80,13 @@ const suggestions = computed<AutoCompleteSuggestion[]>(() =>
     secondaryLabel: i.id,
   })),
 );
+
+const id = useId();
 </script>
 
 <template>
-  <InputField id="courtFilter" v-slot="{ id }" label="Bundesgericht">
+  <div class="flex flex-col gap-8">
+    <label :for="id" class="ris-label2-regular">Bundesgericht</label>
     <RisAutoComplete
       v-model="model"
       :input-id="id"
@@ -97,5 +100,5 @@ const suggestions = computed<AutoCompleteSuggestion[]>(() =>
       @dropdown-click="onDropdownClick"
       @item-select="onItemSelect"
     />
-  </InputField>
+  </div>
 </template>

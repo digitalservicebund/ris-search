@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import PrimevueSelect from "primevue/select";
+import type { ValidationError } from "~/components/DateInput.vue";
 import type { DropdownItem } from "~/components/types";
 import { DateSearchMode } from "~/composables/useSimpleSearchParams/useSimpleSearchParams";
 
@@ -9,6 +10,14 @@ const dateBefore = defineModel<string | undefined>("dateBefore");
 const dateSearchMode = defineModel<DateSearchMode>("dateSearchMode", {
   required: true,
 });
+
+const dateId = useId();
+const dateAfterId = useId();
+const dateBeforeId = useId();
+
+const dateValidationError = ref<ValidationError | undefined>();
+const dateAfterValidationError = ref<ValidationError | undefined>();
+const dateBeforeValidationError = ref<ValidationError | undefined>();
 
 const items: DropdownItem[] = [
   { label: "Keine zeitliche Begrenzung", value: DateSearchMode.None },
@@ -21,16 +30,19 @@ const items: DropdownItem[] = [
 const showDateField = computed(
   () => dateSearchMode.value === DateSearchMode.Equal,
 );
+
 const showDateAfterField = computed(
   () =>
     dateSearchMode.value === DateSearchMode.After ||
     dateSearchMode.value === DateSearchMode.Range,
 );
+
 const showDateBeforeField = computed(
   () =>
     dateSearchMode.value === DateSearchMode.Before ||
     dateSearchMode.value === DateSearchMode.Range,
 );
+
 const hasMultipleInputs = computed(
   () => showDateAfterField.value && showDateBeforeField.value,
 );
@@ -52,45 +64,38 @@ const hasMultipleInputs = computed(
         :pt="{ overlay: { class: 'bg-white w-full' } }"
       />
     </span>
-    <InputField v-if="showDateField" id="date" v-slot="slotProps" label="Datum">
+
+    <div v-if="showDateField" class="flex flex-col gap-8">
+      <label :for="dateId" class="ris-label2-regular">Datum</label>
       <DateInput
-        :id="slotProps.id"
-        :key="slotProps.id"
+        :id="dateId"
         v-model="date"
-        aria-label="Datum"
-        :has-error="slotProps.hasError"
-        @update:validation-error="slotProps.updateValidationError"
-      ></DateInput>
-    </InputField>
-    <InputField
-      v-if="showDateAfterField"
-      id="dateAfter"
-      v-slot="slotProps"
-      :label="hasMultipleInputs ? 'Ab dem Datum' : 'Datum'"
-    >
+        v-model:validation-error="dateValidationError"
+      />
+    </div>
+
+    <div v-if="showDateAfterField" class="flex flex-col gap-8">
+      <label :for="dateAfterId" class="ris-label2-regular">
+        <template v-if="hasMultipleInputs">Ab dem Datum</template>
+        <template v-else>Datum</template>
+      </label>
       <DateInput
-        :id="slotProps.id"
-        :key="slotProps.id"
+        :id="dateAfterId"
         v-model="dateAfter"
-        aria-label="Ab dem Datum"
-        :has-error="slotProps.hasError"
-        @update:validation-error="slotProps.updateValidationError"
-      ></DateInput>
-    </InputField>
-    <InputField
-      v-if="showDateBeforeField"
-      id="dateBefore"
-      v-slot="slotProps"
-      :label="hasMultipleInputs ? 'Bis zum Datum' : 'Datum'"
-    >
+        v-model:validation-error="dateAfterValidationError"
+      />
+    </div>
+
+    <div v-if="showDateBeforeField" class="flex flex-col gap-8">
+      <label :for="dateBeforeId" class="ris-label2-regular">
+        <template v-if="hasMultipleInputs">Bis zum Datum</template>
+        <template v-else>Datum</template>
+      </label>
       <DateInput
-        :id="slotProps.id"
-        :key="slotProps.id"
+        :id="dateBeforeId"
         v-model="dateBefore"
-        aria-label="Bis zum Datum"
-        :has-error="slotProps.hasError"
-        @update:validation-error="slotProps.updateValidationError"
-      ></DateInput>
-    </InputField>
+        v-model:validation-error="dateBeforeValidationError"
+      />
+    </div>
   </div>
 </template>

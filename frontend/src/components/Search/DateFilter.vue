@@ -154,9 +154,9 @@ function setPeriodTo(value: string | undefined) {
         <template v-if="filter.type === 'period'">
           <div
             v-if="documentKind === DocumentKind.Literature"
-            class="flex flex-col pt-8 pl-40"
+            class="flex flex-col gap-8 pt-8 pl-40"
           >
-            <label :for="periodFromYearInputId" class="ris-body2-regular">
+            <label :for="periodFromYearInputId" class="ris-label2-regular">
               von
             </label>
             <YearInput
@@ -165,7 +165,7 @@ function setPeriodTo(value: string | undefined) {
               @update:model-value="setPeriodFrom($event)"
             />
 
-            <label :for="periodToYearInputId" class="ris-body2-regular mt-8">
+            <label :for="periodToYearInputId" class="ris-label2-regular mt-8">
               bis
             </label>
             <YearInput
@@ -175,8 +175,8 @@ function setPeriodTo(value: string | undefined) {
             />
           </div>
 
-          <div v-else class="flex flex-col pt-8 pl-40">
-            <label :for="periodFromDateInputId" class="ris-body2-regular">
+          <div v-else class="flex flex-col gap-8 pt-8 pl-40">
+            <label :for="periodFromDateInputId" class="ris-label2-regular">
               von
             </label>
             <DateInput
@@ -185,7 +185,7 @@ function setPeriodTo(value: string | undefined) {
               @update:model-value="setPeriodFrom($event)"
             />
 
-            <label :for="periodToDateInputId" class="ris-body2-regular mt-8">
+            <label :for="periodToDateInputId" class="ris-label2-regular mt-8">
               bis
             </label>
             <DateInput

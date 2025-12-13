@@ -1,6 +1,6 @@
 import { renderSuspended } from "@nuxt/test-utils/runtime";
 import userEvent from "@testing-library/user-event";
-import { screen } from "@testing-library/vue";
+import { screen, waitFor } from "@testing-library/vue";
 import { InputText } from "primevue";
 import { describe, expect, it } from "vitest";
 import DateRangeFilter from "./DateRangeFilter.vue";
@@ -126,5 +126,154 @@ describe("DateRangeFilter", () => {
     await user.type(inputs[1]!, "03.10.1990");
 
     expect(emitted("update:dateBefore")).toContainEqual(["1990-10-03"]);
+  });
+
+  it("shows validation error for invalid date in equal mode", async () => {
+    const user = userEvent.setup();
+
+    await renderSuspended(DateRangeFilter, {
+      props: {
+        dateSearchMode: DateSearchMode.Equal,
+        date: undefined,
+        dateAfter: undefined,
+        dateBefore: undefined,
+      },
+      global: { stubs: { InputMask: InputText } },
+    });
+
+    const input = screen.getByRole("textbox");
+    await user.type(input, "29.02.2001");
+    await user.tab();
+
+    await waitFor(() => {
+      expect(screen.getByText("Kein valides Datum")).toBeInTheDocument();
+    });
+  });
+
+  it("shows validation error for invalid date in after mode", async () => {
+    const user = userEvent.setup();
+
+    await renderSuspended(DateRangeFilter, {
+      props: {
+        dateSearchMode: DateSearchMode.After,
+        date: undefined,
+        dateAfter: undefined,
+        dateBefore: undefined,
+      },
+      global: { stubs: { InputMask: InputText } },
+    });
+
+    const input = screen.getByRole("textbox");
+    await user.type(input, "32.12.2000");
+    await user.tab();
+
+    await waitFor(() => {
+      expect(screen.getByText("Kein valides Datum")).toBeInTheDocument();
+    });
+  });
+
+  it("shows validation error for invalid date in before mode", async () => {
+    const user = userEvent.setup();
+
+    await renderSuspended(DateRangeFilter, {
+      props: {
+        dateSearchMode: DateSearchMode.Before,
+        date: undefined,
+        dateAfter: undefined,
+        dateBefore: undefined,
+      },
+      global: { stubs: { InputMask: InputText } },
+    });
+
+    const input = screen.getByRole("textbox");
+    await user.type(input, "00.01.2000");
+    await user.tab();
+
+    await waitFor(() => {
+      expect(screen.getByText("Kein valides Datum")).toBeInTheDocument();
+    });
+  });
+
+  it("shows validation errors for both dates in range mode", async () => {
+    const user = userEvent.setup();
+
+    await renderSuspended(DateRangeFilter, {
+      props: {
+        dateSearchMode: DateSearchMode.Range,
+        date: undefined,
+        dateAfter: undefined,
+        dateBefore: undefined,
+      },
+      global: { stubs: { InputMask: InputText } },
+    });
+
+    const inputs = screen.getAllByRole("textbox");
+    expect(inputs).toHaveLength(2);
+
+    await user.type(inputs[0]!, "31.02.2000");
+    await user.tab();
+
+    await waitFor(() => {
+      expect(screen.getByText("Kein valides Datum")).toBeInTheDocument();
+    });
+
+    await user.type(inputs[1]!, "29.02.2001");
+    await user.tab();
+
+    await waitFor(() => {
+      expect(screen.getAllByText("Kein valides Datum")).toHaveLength(2);
+    });
+  });
+
+  it("clears validation error when valid date is entered", async () => {
+    const user = userEvent.setup();
+
+    await renderSuspended(DateRangeFilter, {
+      props: {
+        dateSearchMode: DateSearchMode.Equal,
+        date: undefined,
+        dateAfter: undefined,
+        dateBefore: undefined,
+      },
+      global: { stubs: { InputMask: InputText } },
+    });
+
+    const input = screen.getByRole("textbox");
+
+    await user.type(input, "29.02.2001");
+    await user.tab();
+
+    await waitFor(() => {
+      expect(screen.getByText("Kein valides Datum")).toBeInTheDocument();
+    });
+
+    await user.clear(input);
+    await user.type(input, "28.02.2001");
+
+    await waitFor(() => {
+      expect(screen.queryByText("Kein valides Datum")).not.toBeInTheDocument();
+    });
+  });
+
+  it("shows validation error for incomplete date", async () => {
+    const user = userEvent.setup();
+
+    await renderSuspended(DateRangeFilter, {
+      props: {
+        dateSearchMode: DateSearchMode.Equal,
+        date: undefined,
+        dateAfter: undefined,
+        dateBefore: undefined,
+      },
+      global: { stubs: { InputMask: InputText } },
+    });
+
+    const input = screen.getByRole("textbox");
+    await user.type(input, "01.01");
+    await user.tab();
+
+    await waitFor(() => {
+      expect(screen.getByText("Unvollständiges Datum")).toBeInTheDocument();
+    });
   });
 });
