@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import Message from "primevue/message";
 import type { Page } from "~/components/Pagination.vue";
-import CategoryFilter from "~/components/Search/CategoryFilter.vue";
-import CourtFilter from "~/components/Search/CourtFilter.vue";
-import DateRangeFilter from "~/components/Search/DateRangeFilter.vue";
-import ItemsPerPageDropdown from "~/components/Search/ItemsPerPageDropdown.vue";
-import SearchResult from "~/components/Search/SearchResult.vue";
-import SimpleSearchInput from "~/components/Search/SimpleSearchInput.vue";
-import SortSelect from "~/components/Search/SortSelect.vue";
-import YearRangeFilter from "~/components/Search/YearRangeFilter.vue";
+import CategoryFilter from "~/components/search/CategoryFilter.vue";
+import CourtFilter from "~/components/search/CourtFilter.vue";
+import DateRangeFilter from "~/components/search/DateRangeFilter.vue";
+import ItemsPerPageDropdown from "~/components/search/ItemsPerPageDropdown.vue";
+import SearchResult from "~/components/search/SearchResult.vue";
+import SimpleSearchInput from "~/components/search/SimpleSearchInput.vue";
+import SortSelect from "~/components/search/SortSelect.vue";
+import YearRangeFilter from "~/components/search/YearRangeFilter.vue";
 import { useSimpleSearchParams } from "~/composables/useSimpleSearchParams/useSimpleSearchParams";
 import { useStaticPageSeo } from "~/composables/useStaticPageSeo";
 import { DocumentKind } from "~/types";

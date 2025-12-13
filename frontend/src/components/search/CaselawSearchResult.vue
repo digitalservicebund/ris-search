@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import _ from "lodash";
 import type { RouteLocationRaw } from "#vue-router";
-import type { SearchResultHeaderItem } from "~/components/Search/SearchResultHeader.vue";
+import type { SearchResultHeaderItem } from "~/components/search/SearchResultHeader.vue";
 import { usePostHogStore } from "~/stores/usePostHogStore";
 import type { CaseLaw, SearchResult, TextMatch } from "~/types";
 import { dateFormattedDDMMYYYY } from "~/utils/dateFormatting";

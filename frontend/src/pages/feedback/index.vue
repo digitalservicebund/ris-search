@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import FeedbackForm from "~/components/analytics1/FeedbackForm.vue";
+import FeedbackForm from "~/components/analytics/FeedbackForm.vue";
 import { useStaticPageSeo } from "~/composables/useStaticPageSeo";
 
 definePageMeta({ layout: false });

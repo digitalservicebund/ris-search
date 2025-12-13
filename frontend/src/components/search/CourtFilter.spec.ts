@@ -2,7 +2,7 @@ import { renderSuspended } from "@nuxt/test-utils/runtime";
 import userEvent from "@testing-library/user-event";
 import { screen, waitFor } from "@testing-library/vue";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import CourtFilter from "~/components/Search/CourtFilter.vue";
+import CourtFilter from "~/components/search/CourtFilter.vue";
 import { DocumentKind } from "~/types";
 import { courtFilterDefaultSuggestions } from "~/utils/search/courtFilter";
 

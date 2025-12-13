@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { HttpStatusCode } from "axios";
 import type { NuxtError } from "#app";
-import SimpleSearchInput from "~/components/Search/SimpleSearchInput.vue";
+import SimpleSearchInput from "~/components/search/SimpleSearchInput.vue";
 
 function redirectToSearch(searchStr?: string) {
   navigateTo({ name: "search", query: searchStr ? { query: searchStr } : {} });

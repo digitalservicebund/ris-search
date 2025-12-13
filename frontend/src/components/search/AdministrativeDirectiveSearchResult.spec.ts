@@ -1,7 +1,7 @@
 import { renderSuspended } from "@nuxt/test-utils/runtime";
 import { screen } from "@testing-library/vue";
 import { describe } from "vitest";
-import AdministrativeDirectiveSearchResult from "~/components/Search/AdministrativeDirectiveSearchResult.vue";
+import AdministrativeDirectiveSearchResult from "~/components/search/AdministrativeDirectiveSearchResult.vue";
 import type { AdministrativeDirective, SearchResult } from "~/types";
 
 const searchResult: SearchResult<AdministrativeDirective> = {

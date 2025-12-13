@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { SearchResultHeaderItem } from "~/components/Search/SearchResultHeader.vue";
+import type { SearchResultHeaderItem } from "~/components/search/SearchResultHeader.vue";
 import { usePostHogStore } from "~/stores/usePostHogStore";
 import type { AdministrativeDirective, SearchResult } from "~/types";
 import { ADMINISTRATIVE_DIRECTIVE_TITLE_PLACEHOLDER } from "~/utils/administrativeDirective";

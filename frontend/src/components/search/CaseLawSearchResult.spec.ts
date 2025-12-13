@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/vue";
 import { describe, expect, it } from "vitest";
-import CaselawRecord from "~/components/Search/CaselawSearchResult.vue";
+import CaselawRecord from "~/components/search/CaselawSearchResult.vue";
 import type { CaseLaw, SearchResult, TextMatch } from "~/types";
 
 const searchResult: SearchResult<CaseLaw> = {

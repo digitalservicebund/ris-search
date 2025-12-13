@@ -2,7 +2,7 @@ import { render, screen } from "@testing-library/vue";
 import { describe, it, expect } from "vitest";
 import SearchResultHeader, {
   type SearchResultHeaderItem,
-} from "~/components/Search/SearchResultHeader.vue";
+} from "~/components/search/SearchResultHeader.vue";
 
 function renderComponent(items: SearchResultHeaderItem[] = []) {
   return render(SearchResultHeader, {

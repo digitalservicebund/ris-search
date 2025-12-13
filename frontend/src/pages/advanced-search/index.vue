@@ -2,9 +2,9 @@
 import { Message, PanelMenu, Select } from "primevue";
 import type { MenuItem } from "primevue/menuitem";
 import Pagination from "~/components/Pagination.vue";
-import DataFieldPicker from "~/components/Search/DataFieldPicker.vue";
-import DateFilter from "~/components/Search/DateFilter.vue";
-import SortSelect from "~/components/Search/SortSelect.vue";
+import DataFieldPicker from "~/components/search/DataFieldPicker.vue";
+import DateFilter from "~/components/search/DateFilter.vue";
+import SortSelect from "~/components/search/SortSelect.vue";
 import { useAdvancedSearch } from "~/composables/useAdvancedSearch";
 import { useAdvancedSearchRouteParams } from "~/composables/useAdvancedSearchRouteParams";
 import type { Statistics } from "~/types";

@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import AdministrativeDirectiveSearchResult from "~/components/Search/AdministrativeDirectiveSearchResult.vue";
-import CaselawSearchResult from "~/components/Search/CaselawSearchResult.vue";
-import LiteratureSearchResult from "~/components/Search/LiteratureSearchResult.vue";
-import NormSearchResult from "~/components/Search/NormSearchResult.vue";
+import AdministrativeDirectiveSearchResult from "~/components/search/AdministrativeDirectiveSearchResult.vue";
+import CaselawSearchResult from "~/components/search/CaselawSearchResult.vue";
+import LiteratureSearchResult from "~/components/search/LiteratureSearchResult.vue";
+import NormSearchResult from "~/components/search/NormSearchResult.vue";
 import type {
   AdministrativeDirective,
   AnyDocument,

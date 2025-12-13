@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import Badge from "~/components/Badge.vue";
-import type { SearchResultHeaderItem } from "~/components/Search/SearchResultHeader.vue";
+import type { SearchResultHeaderItem } from "~/components/search/SearchResultHeader.vue";
 import { usePrivateFeaturesFlag } from "~/composables/usePrivateFeaturesFlag";
 import { usePostHogStore } from "~/stores/usePostHogStore";
 import type { LegislationWork, SearchResult, TextMatch } from "~/types";

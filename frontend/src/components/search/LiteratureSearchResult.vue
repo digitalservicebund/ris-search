@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { SearchResultHeaderItem } from "~/components/Search/SearchResultHeader.vue";
+import type { SearchResultHeaderItem } from "~/components/search/SearchResultHeader.vue";
 import { usePostHogStore } from "~/stores/usePostHogStore";
 import type { Literature, SearchResult, TextMatch } from "~/types";
 import { LITERATURE_TITLE_PLACEHOLDER } from "~/utils/literature";

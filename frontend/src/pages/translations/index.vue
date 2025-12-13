@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import MiniSearch from "minisearch";
 import type { BreadcrumbItem } from "~/components/Breadcrumbs.vue";
-import SimpleSearchInput from "~/components/Search/SimpleSearchInput.vue";
+import SimpleSearchInput from "~/components/search/SimpleSearchInput.vue";
 import { useStaticPageSeo } from "~/composables/useStaticPageSeo";
 import { fetchTranslationList } from "~/composables/useTranslationData";
 import type { TranslationContent } from "~/composables/useTranslationData";

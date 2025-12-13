@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import bmjvLogo from "~/assets/img/BMJV_de_v1__Web_farbig.svg";
-import FeedbackForm from "~/components/analytics1/FeedbackForm.vue";
+import FeedbackForm from "~/components/analytics/FeedbackForm.vue";
 import BackToTopLink from "~/components/app/BackToTopLink.vue";
 import { usePrivateFeaturesFlag } from "~/composables/usePrivateFeaturesFlag";
 
