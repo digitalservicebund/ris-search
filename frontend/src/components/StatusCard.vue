@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import Badge, { BadgeColor } from "~/components/Badge.vue";
-import { StatusCardType } from "~/components/types";
 
 interface Props {
   header: string;
@@ -31,6 +30,14 @@ const badge = computed(() => {
       return undefined;
   }
 });
+</script>
+
+<script lang="ts">
+export enum StatusCardType {
+  IMPLEMENTED,
+  IN_PROGRESS,
+  PLANNED,
+}
 </script>
 
 <template>

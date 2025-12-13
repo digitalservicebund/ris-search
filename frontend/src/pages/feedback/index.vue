@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import FeedbackForm from "~/components/Analytics/FeedbackForm.vue";
+import FeedbackForm from "~/components/analytics/FeedbackForm.vue";
 import { useStaticPageSeo } from "~/composables/useStaticPageSeo";
 
 definePageMeta({ layout: false });
@@ -11,7 +11,7 @@ useStaticPageSeo("feedback");
   <div>
     <NuxtLayout name="static-page">
       <template #breadcrumb>
-        <RisBreadcrumb :items="[{ label: 'Feedback' }]" />
+        <Breadcrumbs :items="[{ label: 'Feedback' }]" />
       </template>
 
       <template #pageTitle>Geben Sie uns Feedback</template>

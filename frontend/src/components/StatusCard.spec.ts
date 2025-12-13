@@ -1,6 +1,5 @@
 import { mount } from "@vue/test-utils";
-import StatusCard from "./StatusCard.vue";
-import { StatusCardType } from "~/components/types";
+import StatusCard, { StatusCardType } from "./StatusCard.vue";
 
 const factory = (
   status: StatusCardType,

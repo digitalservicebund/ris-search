@@ -11,7 +11,7 @@ useStaticPageSeo("open-source");
   <div>
     <NuxtLayout name="static-page">
       <template #breadcrumb>
-        <RisBreadcrumb :items="[{ label: 'Open Source' }]" />
+        <Breadcrumbs :items="[{ label: 'Open Source' }]" />
       </template>
 
       <template #pageTitle>Open Source</template>

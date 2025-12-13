@@ -6,7 +6,7 @@ definePageMeta({ alias: ["/einfuehrung"], layout: false });
   <div>
     <NuxtLayout name="static-page">
       <template #breadcrumb>
-        <RisBreadcrumb :items="[{ label: 'Einführende Informationen' }]" />
+        <Breadcrumbs :items="[{ label: 'Einführende Informationen' }]" />
       </template>
 
       <template #pageTitle>Einführende Informationen</template>

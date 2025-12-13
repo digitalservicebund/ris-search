@@ -11,7 +11,7 @@ useStaticPageSeo("barrierefreiheit");
   <div>
     <NuxtLayout name="static-page">
       <template #breadcrumb>
-        <RisBreadcrumb :items="[{ label: 'Barrierefreiheit' }]" />
+        <Breadcrumbs :items="[{ label: 'Barrierefreiheit' }]" />
       </template>
 
       <template #pageTitle>Erklärung zur Barrierefreiheit</template>

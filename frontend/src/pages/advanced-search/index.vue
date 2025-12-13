@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { Message, PanelMenu, Select } from "primevue";
 import type { MenuItem } from "primevue/menuitem";
-import Pagination from "~/components/Pagination/Pagination.vue";
-import DataFieldPicker from "~/components/Search/DataFieldPicker.vue";
-import DateFilter from "~/components/Search/DateFilter.vue";
-import SortSelect from "~/components/Search/SortSelect.vue";
+import Pagination from "~/components/Pagination.vue";
+import DataFieldPicker from "~/components/search/DataFieldPicker.vue";
+import DateFilter from "~/components/search/DateFilter.vue";
+import SortSelect from "~/components/search/SortSelect.vue";
 import { useAdvancedSearch } from "~/composables/useAdvancedSearch";
 import { useAdvancedSearchRouteParams } from "~/composables/useAdvancedSearchRouteParams";
 import type { Statistics } from "~/types";
@@ -161,7 +161,7 @@ async function submit() {
 </script>
 
 <template>
-  <RisBreadcrumb :items="[{ label: 'Erweiterte Suche' }]" />
+  <Breadcrumbs :items="[{ label: 'Erweiterte Suche' }]" />
 
   <div class="mt-24 grid grid-cols-1 gap-40 lg:grid-cols-[20rem_1fr] lg:gap-64">
     <div class="lg:col-span-2">

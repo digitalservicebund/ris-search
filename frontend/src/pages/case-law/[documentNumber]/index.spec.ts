@@ -9,7 +9,7 @@ import { mount } from "@vue/test-utils";
 import dayjs from "dayjs";
 import { expect, it, vi } from "vitest";
 import { unref } from "vue";
-import CaseLawActionsMenu from "~/components/ActionMenu/CaseLawActionsMenu.vue";
+import CaseLawActionsMenu from "~/components/documents/actionMenu/CaseLawActionsMenu.vue";
 import CaseLawPage from "~/pages/case-law/[documentNumber]/index.vue";
 import type { CaseLaw } from "~/types";
 

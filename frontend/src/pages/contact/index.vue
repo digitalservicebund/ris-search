@@ -11,7 +11,7 @@ useStaticPageSeo("kontakt");
   <div>
     <NuxtLayout name="static-page">
       <template #breadcrumb>
-        <RisBreadcrumb :items="[{ label: 'Kontakt' }]" />
+        <Breadcrumbs :items="[{ label: 'Kontakt' }]" />
       </template>
 
       <template #pageTitle>Kontakt</template>

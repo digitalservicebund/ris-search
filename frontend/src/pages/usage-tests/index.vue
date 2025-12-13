@@ -10,7 +10,7 @@ useStaticPageSeo("nutzungstests");
   <div>
     <NuxtLayout name="static-page">
       <template #breadcrumb>
-        <RisBreadcrumb :items="[{ label: 'Für Nutzungstests registrieren' }]" />
+        <Breadcrumbs :items="[{ label: 'Für Nutzungstests registrieren' }]" />
       </template>
 
       <template #pageTitle>

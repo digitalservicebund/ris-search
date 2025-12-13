@@ -39,7 +39,7 @@ useStaticPageSeo("cookies");
   <div>
     <NuxtLayout name="static-page">
       <template #breadcrumb>
-        <RisBreadcrumb :items="[{ label: 'Cookie-Einstellungen' }]" />
+        <Breadcrumbs :items="[{ label: 'Cookie-Einstellungen' }]" />
       </template>
 
       <template #pageTitle>Cookie-Einstellungen</template>

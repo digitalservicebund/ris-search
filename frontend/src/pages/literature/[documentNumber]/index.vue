@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import LiteratureActionsMenu from "~/components/ActionMenu/LiteratureActionsMenu.vue";
-import DocumentDetailPage from "~/components/DocumentDetailPage.vue";
+import LiteratureActionsMenu from "~/components/documents/actionMenu/LiteratureActionsMenu.vue";
+import DocumentDetailPage from "~/components/documents/DocumentDetailPage.vue";
+import IncompleteDataMessage from "~/components/documents/IncompleteDataMessage.vue";
 import { DocumentKind, type Literature } from "~/types";
 import { formatDocumentKind } from "~/utils/displayValues";
 import {

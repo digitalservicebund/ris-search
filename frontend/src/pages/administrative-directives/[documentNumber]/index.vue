@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import AdministrativeDirectiveActionsMenu from "~/components/ActionMenu/AdministrativeDirectiveActionsMenu.vue";
-import DocumentDetailPage from "~/components/DocumentDetailPage.vue";
+import AdministrativeDirectiveActionsMenu from "~/components/documents/actionMenu/AdministrativeDirectiveActionsMenu.vue";
+import DocumentDetailPage from "~/components/documents/DocumentDetailPage.vue";
+import IncompleteDataMessage from "~/components/documents/IncompleteDataMessage.vue";
 import { type AdministrativeDirective, DocumentKind } from "~/types";
 import {
   ADMINISTRATIVE_DIRECTIVE_TITLE_PLACEHOLDER,
@@ -67,9 +68,9 @@ if (contentError?.value) {
     :html="html"
   >
     <template #actionsMenu>
-      <client-only
-        ><AdministrativeDirectiveActionsMenu :administrative-directive="data"
-      /></client-only>
+      <client-only>
+        <AdministrativeDirectiveActionsMenu :administrative-directive="data" />
+      </client-only>
     </template>
     <template #details="{ detailsTabPanelId }">
       <h2 :id="detailsTabPanelId" class="ris-heading3-bold my-24">Details</h2>

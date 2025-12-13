@@ -2,7 +2,8 @@ import { mockNuxtImport, mountSuspended } from "@nuxt/test-utils/runtime";
 import type { VueWrapper } from "@vue/test-utils";
 import { describe, it, expect, vi } from "vitest";
 import Index from "./index.vue";
-import NormActionsMenu from "~/components/ActionMenu/NormActionsMenu.vue";
+import Breadcrumbs from "~/components/Breadcrumbs.vue";
+import NormActionsMenu from "~/components/documents/actionMenu/NormActionsMenu.vue";
 import Metadata from "~/components/Metadata.vue";
 import type { NormContent } from "~/composables/useNormData";
 import type { LegislationWork } from "~/types";
@@ -104,7 +105,7 @@ function mountComponent() {
   return mountSuspended(Index, {
     global: {
       stubs: {
-        RisBreadcrumb: true,
+        Breadcrumbs: true,
         NormTableOfContents: true,
         Accordion: true,
         IncompleteDataMessage: true,
@@ -123,9 +124,7 @@ type StubbedComponent = {
 };
 
 function getBreadcrumbStub(wrapper: VueWrapper) {
-  return wrapper.findComponent(
-    "ris-breadcrumb-stub",
-  ) as unknown as StubbedComponent;
+  return wrapper.findComponent(Breadcrumbs) as unknown as StubbedComponent;
 }
 
 function getDDElement(wrapper: VueWrapper, label: string): HTMLElement | null {

@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import type { ComputedRef } from "vue";
 import { computed } from "vue";
-import CaseLawActionsMenu from "~/components/ActionMenu/CaseLawActionsMenu.vue";
-import TableOfContents, {
-  type TableOfContentsEntry,
-} from "~/components/Caselaw/TableOfContents.vue";
 import DetailsList from "~/components/DetailsList.vue";
 import DetailsListEntry from "~/components/DetailsListEntry.vue";
-import DocumentDetailPage from "~/components/DocumentDetailPage.vue";
-import IncompleteDataMessage from "~/components/IncompleteDataMessage.vue";
+import CaseLawActionsMenu from "~/components/documents/actionMenu/CaseLawActionsMenu.vue";
+import TableOfContents, {
+  type TableOfContentsEntry,
+} from "~/components/documents/caseLaw/TableOfContents.vue";
+import DocumentDetailPage from "~/components/documents/DocumentDetailPage.vue";
+import IncompleteDataMessage from "~/components/documents/IncompleteDataMessage.vue";
 import { type CaseLaw, DocumentKind } from "~/types";
 import { getEncodingURL } from "~/utils/caseLaw";
 import { dateFormattedDDMMYYYY } from "~/utils/dateFormatting";

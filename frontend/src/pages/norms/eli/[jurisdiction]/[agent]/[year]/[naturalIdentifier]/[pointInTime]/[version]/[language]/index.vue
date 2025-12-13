@@ -5,18 +5,17 @@ import type { TreeNode } from "primevue/treenode";
 import type { ComputedRef } from "vue";
 import { computed } from "vue";
 import { useRoute } from "#app";
-import NormActionsMenu from "~/components/ActionMenu/NormActionsMenu.vue";
+import type { BreadcrumbItem } from "~/components/Breadcrumbs.vue";
 import DetailsList from "~/components/DetailsList.vue";
 import DetailsListEntry from "~/components/DetailsListEntry.vue";
-import IncompleteDataMessage from "~/components/IncompleteDataMessage.vue";
-import NormHeadingGroup from "~/components/Norm/NormHeadingGroup.vue";
-import NormTableOfContents from "~/components/Norm/NormTableOfContents.vue";
-import NormVersionList from "~/components/Norm/NormVersionList.vue";
-import NormVersionWarning from "~/components/Norm/NormVersionWarning.vue";
-import VersionsTeaser from "~/components/Norm/VersionsTeaser.vue";
-import type { BreadcrumbItem } from "~/components/Ris/RisBreadcrumb.vue";
-import RisBreadcrumb from "~/components/Ris/RisBreadcrumb.vue";
-import RisTabs from "~/components/Ris/RisTabs.vue";
+import NormActionsMenu from "~/components/documents/actionMenu/NormActionsMenu.vue";
+import IncompleteDataMessage from "~/components/documents/IncompleteDataMessage.vue";
+import NormHeadingGroup from "~/components/documents/norms/NormHeadingGroup.vue";
+import NormTableOfContents from "~/components/documents/norms/NormTableOfContents.vue";
+import NormVersionList from "~/components/documents/norms/NormVersionList.vue";
+import NormVersionWarning from "~/components/documents/norms/NormVersionWarning.vue";
+import VersionsTeaser from "~/components/documents/norms/VersionsTeaser.vue";
+import RisTabs from "~/components/RisTabs.vue";
 import SidebarLayout from "~/components/SidebarLayout.vue";
 import { useDynamicSeo } from "~/composables/useDynamicSeo";
 import { useIntersectionObserver } from "~/composables/useIntersectionObserver";
@@ -236,7 +235,7 @@ useDynamicSeo({ title, description });
   <div v-if="!!metadata">
     <div class="container">
       <div class="flex items-center gap-8 print:hidden">
-        <RisBreadcrumb :items="breadcrumbItems" class="grow" />
+        <Breadcrumbs :items="breadcrumbItems" class="grow" />
         <client-only>
           <NormActionsMenu
             :metadata="metadata"

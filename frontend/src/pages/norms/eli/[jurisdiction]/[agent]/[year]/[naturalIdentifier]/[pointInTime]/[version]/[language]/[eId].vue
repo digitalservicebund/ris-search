@@ -1,11 +1,10 @@
 <script setup lang="ts">
 import type { TreeNode } from "primevue/treenode";
 import { computed } from "vue";
-import IncompleteDataMessage from "~/components/IncompleteDataMessage.vue";
-import ArticleVersionWarning from "~/components/Norm/ArticleVersionWarning.vue";
-import NormTableOfContents from "~/components/Norm/NormTableOfContents.vue";
-import type { BreadcrumbItem } from "~/components/Ris/RisBreadcrumb.vue";
-import RisBreadcrumb from "~/components/Ris/RisBreadcrumb.vue";
+import type { BreadcrumbItem } from "~/components/Breadcrumbs.vue";
+import IncompleteDataMessage from "~/components/documents/IncompleteDataMessage.vue";
+import ArticleVersionWarning from "~/components/documents/norms/ArticleVersionWarning.vue";
+import NormTableOfContents from "~/components/documents/norms/NormTableOfContents.vue";
 import SidebarLayout from "~/components/SidebarLayout.vue";
 import { useDynamicSeo } from "~/composables/useDynamicSeo";
 import { useFetchNormArticleContent } from "~/composables/useNormData";
@@ -210,7 +209,7 @@ useDynamicSeo({ title, description });
   <div v-if="status == 'pending'" class="container">Lade ...</div>
   <template v-if="!!norm">
     <div class="container">
-      <RisBreadcrumb :items="breadcrumbItems" />
+      <Breadcrumbs :items="breadcrumbItems" />
       <div>
         <h1
           class="ris-heading3-bold link-hover mt-24 line-clamp-2 items-center text-blue-800"
