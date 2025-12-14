@@ -192,7 +192,7 @@ jobs:
           # This email identifies the commit as GitHub Actions - see https://github.com/orgs/community/discussions/26560
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
       - name: E2E test reports - Download
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           path: tmp/playwright-report/
           pattern: playwright-e2e-tests-report-*
