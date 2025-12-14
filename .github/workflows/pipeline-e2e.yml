@@ -123,14 +123,14 @@ jobs:
           NUXT_PUBLIC_PRIVATE_FEATURES_ENABLED: ${{ matrix.private_features_enabled }}
           TZ: Europe/Berlin
       - name: Upload test reports
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         if: ${{ !failure() }}
         with:
           name: playwright-e2e-tests-report-${{ matrix.configuration_label }}-${{ matrix.browser }}
           path: frontend/playwright-report/**
           retention-days: 5
       - name: Upload traces of failed tests
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         if: ${{ failure() }}
         with:
           name: failed-e2e-tests-${{ matrix.configuration_label }}-${{ matrix.browser }}
@@ -140,19 +140,19 @@ jobs:
         if: ${{ failure() }}
         run: docker compose -f docker-compose.yml logs > docker-compose-logs-${{ matrix.configuration_label }}-${{ matrix.browser }}.log
       - name: Upload backend log
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         if: ${{ failure() }}
         with:
           name: backend-log-${{ matrix.configuration_label }}-${{ matrix.browser }}
           path: backend/backend.log
       - name: Upload frontend log
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         if: ${{ failure() }}
         with:
           name: frontend-log-${{ matrix.configuration_label }}-${{ matrix.browser }}
           path: frontend/frontend.log
       - name: Upload Docker logs
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         if: ${{ failure() }}
         with:
           name: docker-compose-logs-${{ matrix.configuration_label }}-${{ matrix.browser }}
