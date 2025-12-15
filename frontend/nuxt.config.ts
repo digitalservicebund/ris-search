@@ -237,9 +237,6 @@ export default defineNuxtConfig({
     },
   },
   vite: {
-    optimizeDeps: {
-      include: ["cookie"],
-    },
     build: {
       sourcemap: "inline",
     },
