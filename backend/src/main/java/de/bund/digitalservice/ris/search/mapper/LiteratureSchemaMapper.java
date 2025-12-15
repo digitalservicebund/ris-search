@@ -44,7 +44,6 @@ public class LiteratureSchemaMapper {
         .languages(entity.languages())
         .shortReport(entity.shortReport())
         .outline(entity.outline())
-        .edition(entity.edition())
         .founder(entity.founder())
         .editors(entity.editors())
         .edition(entity.edition())
