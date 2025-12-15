@@ -3494,7 +3494,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@primeuix/styled@npm:^0.7.3, @primeuix/styled@npm:^0.7.4":
+"@primeuix/styled@npm:^0.7.4":
   version: 0.7.4
   resolution: "@primeuix/styled@npm:0.7.4"
   dependencies:
@@ -3503,12 +3503,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@primeuix/styles@npm:^1.2.5":
-  version: 1.2.5
-  resolution: "@primeuix/styles@npm:1.2.5"
+"@primeuix/styles@npm:^2.0.2":
+  version: 2.0.2
+  resolution: "@primeuix/styles@npm:2.0.2"
   dependencies:
-    "@primeuix/styled": "npm:^0.7.3"
-  checksum: 10c0/49d8f5fca435e095c13bc7004187ee1d741004cf2696ed615e6a72d6732d928c55670f0f98700c3e040058746669d11abc7906f16c9b2f5631635d1260d01212
+    "@primeuix/styled": "npm:^0.7.4"
+  checksum: 10c0/e26ac8a23eb3f1248ef620f2275f7a304de42c9b07a2578ed51adc754dbe452a3bf8bb0723bb8973d28d3f94d2eb346f143b19dff137d0c0701702fb9f890d1e
   languageName: node
   linkType: hard
 
@@ -3519,25 +3519,32 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@primevue/core@npm:4.4.1":
-  version: 4.4.1
-  resolution: "@primevue/core@npm:4.4.1"
-  dependencies:
-    "@primeuix/styled": "npm:^0.7.4"
-    "@primeuix/utils": "npm:^0.6.1"
-  peerDependencies:
-    vue: ^3.5.0
-  checksum: 10c0/eb4252fd7dfc9428f1ced4db4e4ff404407391ea03a004dc4a9ce61418d8c0d06f13248196580ac33ed2104378d3c3590046823e42fe18271c54d2a1eb4d0fbe
+"@primeuix/utils@npm:^0.6.2":
+  version: 0.6.3
+  resolution: "@primeuix/utils@npm:0.6.3"
+  checksum: 10c0/d08638b0bea6a0124f1461c9eee54e9ad275cde5a061d85861a5b31970bc3714401dccc44abecec74ae37c971a6d795c36c3818637b54c0d7b46acb7b2c46ed9
   languageName: node
   linkType: hard
 
-"@primevue/icons@npm:4.4.1":
-  version: 4.4.1
-  resolution: "@primevue/icons@npm:4.4.1"
+"@primevue/core@npm:4.5.3":
+  version: 4.5.3
+  resolution: "@primevue/core@npm:4.5.3"
   dependencies:
-    "@primeuix/utils": "npm:^0.6.1"
-    "@primevue/core": "npm:4.4.1"
-  checksum: 10c0/6a14eeb15c4ee41cec6a9874ae88c1b48dafc745cd32f6796ed8dceaf5264908fa5b8ed462b0fb2df5147e030f917ebe28e66fa9eb71d5430414014647d6b7ae
+    "@primeuix/styled": "npm:^0.7.4"
+    "@primeuix/utils": "npm:^0.6.2"
+  peerDependencies:
+    vue: ^3.5.0
+  checksum: 10c0/7e3d71d304d2767b67419d589e9b38147dc5a37f05e794438bc0ad242beb0b702df086c23a93e68ce2704ebdc8171758e3910a31b675260b9ef6709e7f3de481
+  languageName: node
+  linkType: hard
+
+"@primevue/icons@npm:4.5.3":
+  version: 4.5.3
+  resolution: "@primevue/icons@npm:4.5.3"
+  dependencies:
+    "@primeuix/utils": "npm:^0.6.2"
+    "@primevue/core": "npm:4.5.3"
+  checksum: 10c0/0d8fca009aefe9cbe107201b21cab47ea244715f7202a5d08370156ec702aa069345df3be6cfa2b96ba00d9685b5072f0f64b4dc363fb01dbfb21714cb036adc
   languageName: node
   linkType: hard
 
@@ -13915,16 +13922,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"primevue@npm:^4.3.5":
-  version: 4.4.1
-  resolution: "primevue@npm:4.4.1"
+"primevue@npm:^4.5.3":
+  version: 4.5.3
+  resolution: "primevue@npm:4.5.3"
   dependencies:
     "@primeuix/styled": "npm:^0.7.4"
-    "@primeuix/styles": "npm:^1.2.5"
-    "@primeuix/utils": "npm:^0.6.1"
-    "@primevue/core": "npm:4.4.1"
-    "@primevue/icons": "npm:4.4.1"
-  checksum: 10c0/a1d5541dee8943840fa5c04bb15704726a4395a8adab9668f9ee69f0782aaab4c6bb4da0e2a3e869def2f3e43094a11f9da9f6e7b990f7ffd0fdf947bf450863
+    "@primeuix/styles": "npm:^2.0.2"
+    "@primeuix/utils": "npm:^0.6.2"
+    "@primevue/core": "npm:4.5.3"
+    "@primevue/icons": "npm:4.5.3"
+  checksum: 10c0/07e051651720b827c18151f49b92da78ab9d5d88e3baa1f4753c3799ab2d3dde6d6e86dae9aa83f699e9b18755fd6e44a73e11740f67006c3473f9c9a5dba5fd
   languageName: node
   linkType: hard
 
@@ -14597,7 +14604,7 @@ __metadata:
     posthog-js: "npm:^1.290.0"
     prettier: "npm:^3.5.3"
     prettier-plugin-tailwindcss: "npm:^0.7.1"
-    primevue: "npm:^4.3.5"
+    primevue: "npm:^4.5.3"
     sanitize-html: "npm:^2.17.0"
     tailwindcss: "npm:^4.1.16"
     typescript: "npm:~5.9.3"

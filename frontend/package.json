@@ -41,7 +41,7 @@
     "minisearch": "^7.1.2",
     "pinia": "^3.0.3",
     "posthog-js": "^1.290.0",
-    "primevue": "^4.3.5",
+    "primevue": "^4.5.3",
     "sanitize-html": "^2.17.0"
   },
   "devDependencies": {
