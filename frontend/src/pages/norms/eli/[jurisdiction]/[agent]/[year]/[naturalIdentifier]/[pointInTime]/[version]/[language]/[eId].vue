@@ -211,14 +211,17 @@ useDynamicSeo({ title, description });
     <div class="container">
       <Breadcrumbs :items="breadcrumbItems" />
       <div>
-        <h1
-          class="ris-heading3-bold link-hover mt-24 line-clamp-2 items-center text-blue-800"
+        <NuxtLink
+          :to="normPath"
+          class="ris-heading3-bold! ris-link1-regular link-hover mt-24 line-clamp-2"
         >
-          <NuxtLink :to="normPath">
-            <MdiArrowTopLeft class="inline-block" />
-            {{ topNormLinkText }}
-          </NuxtLink>
-        </h1>
+          <h1 class="flex items-center gap-4">
+            <MdiArrowTopLeft class="mt-4 flex-none self-start" />
+            <span class="line-clamp-2">
+              {{ topNormLinkText }}
+            </span>
+          </h1>
+        </NuxtLink>
         <h2
           class="ris-heading2-bold my-24 mb-24 inline-block"
           v-html="htmlTitle"
@@ -252,7 +255,7 @@ useDynamicSeo({ title, description });
               <NuxtLink
                 v-if="previousArticleUrl"
                 :to="previousArticleUrl"
-                class="text-blue-800 hover:underline"
+                class="ris-link1-regular link-hover"
               >
                 <div class="flex items-center space-x-8">
                   <IcBaselineArrowBack class="mt-1 shrink-0" />
@@ -264,7 +267,7 @@ useDynamicSeo({ title, description });
               <NuxtLink
                 v-if="nextArticleUrl"
                 :to="nextArticleUrl"
-                class="text-blue-800 hover:underline"
+                class="ris-link1-regular link-hover"
               >
                 <div class="flex items-center space-x-8">
                   <span>Nächster Paragraf</span>

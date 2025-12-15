@@ -103,17 +103,14 @@ onMounted(() => {
     <div>
       <div v-for="entry in tableOfContentEntries" :key="entry.id">
         <NuxtLink
-          class="flex flex-row items-center space-x-12 py-8 text-blue-800 underline hover:text-black hover:underline aria-[current=location]:bg-blue-300 aria-[current=location]:text-black aria-[current=location]:hover:bg-blue-300 lg:px-24 lg:py-20 lg:no-underline lg:hover:bg-blue-200 lg:aria-[current=location]:border-l-4 lg:aria-[current=location]:border-blue-900 lg:aria-[current=location]:bg-blue-200 lg:aria-[current=location]:pl-20"
+          class="ris-label1-regular aria-[current=location]:ris-label1-bold flex flex-row items-center space-x-12 border-l-4 border-l-transparent px-24 py-8 text-blue-800 -outline-offset-4 outline-blue-800 hover:border-l-blue-600 hover:bg-blue-200 hover:text-blue-900 focus-visible:outline-4 aria-[current=location]:border-l-blue-800 aria-[current=location]:bg-blue-200 aria-[current=location]:hover:bg-blue-300 lg:py-20"
           :aria-current="selectedEntry === entry.id ? 'location' : undefined"
           :to="{ hash: `#${entry.id}` }"
           replace
           @click="selectEntry(entry.id)"
         >
           <component :is="getIcon(entry.title)"></component>
-          <span
-            :data-selected="selectedEntry === entry.id"
-            class="ris-subhead-regular lg:data-[selected=true]:ris-subhead-bold"
-          >
+          <span :data-selected="selectedEntry === entry.id">
             {{ entry.title }}
           </span>
         </NuxtLink>

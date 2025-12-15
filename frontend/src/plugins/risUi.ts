@@ -8,11 +8,7 @@ import Tooltip from "primevue/tooltip";
 const theme = usePassThrough(
   RisUiTheme,
   {
-    panelmenu: {
-      headercontent: { class: "group" },
-      headerlink: { class: "no-underline group-hover:underline" },
-      itemlink: { class: "no-underline group-hover:underline" },
-    },
+    // Currently we don't use any customizations
   },
   { mergeProps: false, mergeSections: true },
 );
