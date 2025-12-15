@@ -9,7 +9,7 @@ import { mount } from "@vue/test-utils";
 import dayjs from "dayjs";
 import { expect, it, vi } from "vitest";
 import { unref } from "vue";
-import CaseLawActionsMenu from "~/components/documents/actionMenu/CaseLawActionsMenu.vue";
+import CaseLawActionMenu from "~/components/documents/actionMenu/CaseLawActionMenu.vue";
 import CaseLawPage from "~/pages/case-law/[documentNumber]/index.vue";
 import type { CaseLaw } from "~/types";
 
@@ -418,9 +418,9 @@ describe("case law single view page", async () => {
     expect(zipLink.attributes("href")).toBe("/v1/case-law/12345.zip");
   });
 
-  it("passes caseLaw to the CaseLawActionsMenu", async () => {
+  it("passes caseLaw to the CaseLawActionMenu", async () => {
     const wrapper = await mountSuspended(CaseLawPage);
-    const caseLawActionsMenu = wrapper.getComponent(CaseLawActionsMenu);
-    expect(caseLawActionsMenu.props("caseLaw")).toEqual(caseLawTestData);
+    const caseLawActionMenu = wrapper.getComponent(CaseLawActionMenu);
+    expect(caseLawActionMenu.props("caseLaw")).toEqual(caseLawTestData);
   });
 });

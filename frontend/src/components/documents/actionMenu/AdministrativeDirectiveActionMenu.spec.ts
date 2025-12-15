@@ -1,10 +1,10 @@
 import { shallowMount } from "@vue/test-utils";
 import { describe, expect, it, vi } from "vitest";
-import ActionsMenu from "~/components/documents/actionMenu/ActionsMenu.vue";
-import AdministrativeDirectiveActionsMenu from "~/components/documents/actionMenu/AdministrativeDirectiveActionsMenu.vue";
+import ActionMenu from "~/components/documents/actionMenu/ActionMenu.vue";
+import AdministrativeDirectiveActionMenu from "~/components/documents/actionMenu/AdministrativeDirectiveActionMenu.vue";
 import type { AdministrativeDirective } from "~/types";
 
-describe("AdministrativeDirectiveActionsMenu", () => {
+describe("AdministrativeDirectiveActionMenu", () => {
   it("passes correct props to ActionMenu", () => {
     vi.stubGlobal("location", {
       href: "https://test.com",
@@ -19,14 +19,14 @@ describe("AdministrativeDirectiveActionsMenu", () => {
       ],
     } as AdministrativeDirective;
 
-    const wrapper = shallowMount(AdministrativeDirectiveActionsMenu, {
+    const wrapper = shallowMount(AdministrativeDirectiveActionMenu, {
       props: {
         administrativeDirective: mockedAdministrativeDirective,
       },
     });
 
-    const actionsMenu = wrapper.findComponent(ActionsMenu);
-    expect(actionsMenu.props()).toMatchObject({
+    const actionMenu = wrapper.findComponent(ActionMenu);
+    expect(actionMenu.props()).toMatchObject({
       permalink: {
         label: "Link kopieren",
         url: "https://test.com",

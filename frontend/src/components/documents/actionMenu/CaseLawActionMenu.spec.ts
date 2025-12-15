@@ -1,7 +1,7 @@
 import { shallowMount } from "@vue/test-utils";
 import { describe, expect, it, vi } from "vitest";
-import ActionsMenu from "~/components/documents/actionMenu/ActionsMenu.vue";
-import CaseLawActionsMenu from "~/components/documents/actionMenu/CaseLawActionsMenu.vue";
+import ActionMenu from "~/components/documents/actionMenu/ActionMenu.vue";
+import CaseLawActionMenu from "~/components/documents/actionMenu/CaseLawActionMenu.vue";
 import type { CaseLaw } from "~/types";
 import { getEncodingURL } from "~/utils/caseLaw";
 
@@ -9,25 +9,25 @@ vi.mock("~/utils/caseLaw", () => ({
   getEncodingURL: vi.fn(),
 }));
 
-describe("CaseLawActionsMenu", () => {
+describe("CaseLawActionMenu", () => {
   it("passes correct props to ActionMenu", () => {
     const expectedXmlUrl = "/foo/foo.xml";
     vi.mocked(getEncodingURL).mockReturnValue(expectedXmlUrl);
 
     const mockedCaseLaw = {} as CaseLaw;
 
-    const wrapper = shallowMount(CaseLawActionsMenu, {
+    const wrapper = shallowMount(CaseLawActionMenu, {
       props: {
         caseLaw: mockedCaseLaw,
       },
     });
 
-    const actionsMenu = wrapper.findComponent(ActionsMenu);
+    const actionMenu = wrapper.findComponent(ActionMenu);
     expect(getEncodingURL).toHaveBeenCalledExactlyOnceWith(
       mockedCaseLaw,
       "application/xml",
     );
-    expect(actionsMenu.props()).toMatchObject({
+    expect(actionMenu.props()).toMatchObject({
       permalink: {
         label: "Link kopieren",
         disabled: true,

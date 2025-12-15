@@ -2,7 +2,7 @@ import { mockNuxtImport } from "@nuxt/test-utils/runtime";
 import { type DOMWrapper, mount, type VueWrapper } from "@vue/test-utils";
 import Menu from "primevue/menu";
 import { beforeEach, vi } from "vitest";
-import ActionsMenu from "./ActionsMenu.vue";
+import ActionMenu from "./ActionMenu.vue";
 import * as actionMenuUtils from "~/utils/actionMenu";
 import MaterialSymbolsLink from "~icons/material-symbols/link";
 
@@ -58,7 +58,7 @@ async function toggleMenu(wrapper: VueWrapper) {
   await nextTick();
 }
 
-describe("ActionsMenu", () => {
+describe("ActionMenu", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     vi.stubGlobal("navigator", {
@@ -79,7 +79,7 @@ describe("ActionsMenu", () => {
       },
     };
 
-    mount(ActionsMenu, {
+    mount(ActionMenu, {
       props: props,
       global: {
         directives: {
@@ -98,7 +98,7 @@ describe("ActionsMenu", () => {
   it("can copy link to clipboard and shows a toast", async () => {
     const spy = vi.spyOn(actionMenuUtils, "createActionMenuItems");
 
-    mount(ActionsMenu, {
+    mount(ActionMenu, {
       global: {
         directives: {
           tooltip: () => {},
@@ -129,7 +129,7 @@ describe("ActionsMenu", () => {
   it("can navigate to an url", async () => {
     const spy = vi.spyOn(actionMenuUtils, "createActionMenuItems");
 
-    mount(ActionsMenu, {
+    mount(ActionMenu, {
       global: {
         directives: {
           tooltip: () => {},
@@ -152,7 +152,7 @@ describe("ActionsMenu", () => {
   });
 
   it("shows small or large ActionMenu depending on screen size", () => {
-    const wrapper = mount(ActionsMenu, {
+    const wrapper = mount(ActionMenu, {
       global: {
         directives: {
           tooltip: () => {},
@@ -167,7 +167,7 @@ describe("ActionsMenu", () => {
   });
 
   it("correctly render action items on large screen", async () => {
-    const wrapper = mount(ActionsMenu, {
+    const wrapper = mount(ActionMenu, {
       global: {
         directives: {
           tooltip: () => {},
@@ -199,7 +199,7 @@ describe("ActionsMenu", () => {
   });
 
   it("shows menu after toggle button is clicked", async () => {
-    const wrapper = mount(ActionsMenu, {
+    const wrapper = mount(ActionMenu, {
       global: {
         stubs: {
           teleport: true,
@@ -216,7 +216,7 @@ describe("ActionsMenu", () => {
   });
 
   it("correctly renders action items on small screen", async () => {
-    const wrapper = mount(ActionsMenu, {
+    const wrapper = mount(ActionMenu, {
       global: {
         stubs: {
           teleport: true,

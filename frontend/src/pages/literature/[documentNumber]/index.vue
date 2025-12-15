@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import LiteratureActionsMenu from "~/components/documents/actionMenu/LiteratureActionsMenu.vue";
+import LiteratureActionMenu from "~/components/documents/actionMenu/LiteratureActionMenu.vue";
 import DocumentDetailPage from "~/components/documents/DocumentDetailPage.vue";
 import IncompleteDataMessage from "~/components/documents/IncompleteDataMessage.vue";
 import { DocumentKind, type Literature } from "~/types";
@@ -64,9 +64,9 @@ if (contentError?.value) {
     document-html-class="literature"
     :html="html"
   >
-    <template #actionsMenu>
+    <template #actionMenu>
       <client-only
-        ><LiteratureActionsMenu :literature="literature"
+        ><LiteratureActionMenu :literature="literature"
       /></client-only>
     </template>
     <template #details="{ detailsTabPanelId }">

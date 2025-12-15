@@ -1,7 +1,7 @@
 import type {
   ActionMenuItem,
-  ActionsMenuProps,
-} from "~/components/documents/actionMenu/ActionsMenu.vue";
+  ActionMenuProps,
+} from "~/components/documents/actionMenu/ActionMenu.vue";
 import EngIcon from "~icons/custom/eng";
 import PdfIcon from "~icons/custom/pdf";
 import UpdatingLinkIcon from "~icons/custom/updatingLink";
@@ -10,7 +10,7 @@ import MaterialSymbolsLink from "~icons/material-symbols/link";
 import MaterialSymbolsPrint from "~icons/material-symbols/print";
 
 export function createActionMenuItems(
-  records: ActionsMenuProps,
+  records: ActionMenuProps,
   copyUrlCommand: (url: string) => Promise<void>,
   navigationCommand: (url: string) => Promise<void>,
 ): ActionMenuItem[] {

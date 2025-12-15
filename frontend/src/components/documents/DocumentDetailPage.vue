@@ -52,7 +52,7 @@ const detailsTabPanelId = useId();
   <div class="container text-left">
     <div class="flex items-center gap-8 print:hidden">
       <Breadcrumbs :items="breadcrumbItems" class="grow" />
-      <slot name="actionsMenu" />
+      <slot name="actionMenu" />
     </div>
     <DocumentTitle :title="title" :placeholder="titlePlaceholder" />
     <Metadata :items="metadataItems" class="mb-48" />

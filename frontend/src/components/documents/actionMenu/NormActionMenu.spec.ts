@@ -1,7 +1,7 @@
 import { shallowMount } from "@vue/test-utils";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import ActionsMenu from "~/components/documents/actionMenu/ActionsMenu.vue";
-import NormActionsMenu from "~/components/documents/actionMenu/NormActionsMenu.vue";
+import ActionMenu from "~/components/documents/actionMenu/ActionMenu.vue";
+import NormActionMenu from "~/components/documents/actionMenu/NormActionMenu.vue";
 import type { LegislationWork } from "~/types";
 import { getManifestationUrl } from "~/utils/norm";
 
@@ -9,7 +9,7 @@ vi.mock("~/utils/norm", () => ({
   getManifestationUrl: vi.fn(),
 }));
 
-describe("NormActionsMenu", () => {
+describe("NormActionMenu", () => {
   const mockLegislationWork = {
     legislationIdentifier: "eli/bgbl-test/etc",
   } as LegislationWork;
@@ -28,19 +28,19 @@ describe("NormActionsMenu", () => {
     const expectedTranslationUrl = "/translations/abc";
     vi.mocked(getManifestationUrl).mockReturnValue(expectedXmlUrl);
 
-    const wrapper = shallowMount(NormActionsMenu, {
+    const wrapper = shallowMount(NormActionMenu, {
       props: {
         metadata: mockLegislationWork,
         translationUrl: expectedTranslationUrl,
       },
     });
 
-    const actionsMenu = wrapper.findComponent(ActionsMenu);
+    const actionMenu = wrapper.findComponent(ActionMenu);
     expect(getManifestationUrl).toHaveBeenCalledExactlyOnceWith(
       mockLegislationWork,
       "application/xml",
     );
-    expect(actionsMenu.props()).toMatchObject({
+    expect(actionMenu.props()).toMatchObject({
       link: {
         url: "eli/bgbl-test/etc",
         label: "Link zur jeweils gültigen Fassung",

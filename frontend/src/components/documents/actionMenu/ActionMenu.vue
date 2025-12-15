@@ -7,7 +7,7 @@ import { NuxtLink } from "#components";
 import { createActionMenuItems } from "~/utils/actionMenu";
 import MdiDotsVertical from "~icons/mdi/dots-vertical";
 
-export type ActionsMenuProps = {
+export type ActionMenuProps = {
   link?: {
     url: string;
     label: string;
@@ -25,7 +25,7 @@ export type ActionMenuItem = Omit<MenuItem, "icon"> & {
   iconComponent: Component;
 };
 
-const props = defineProps<ActionsMenuProps>();
+const props = defineProps<ActionMenuProps>();
 const toastService = useToast();
 
 async function copyUrlCommand(url: string) {

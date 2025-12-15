@@ -3,7 +3,7 @@ import type { ComputedRef } from "vue";
 import { computed } from "vue";
 import DetailsList from "~/components/DetailsList.vue";
 import DetailsListEntry from "~/components/DetailsListEntry.vue";
-import CaseLawActionsMenu from "~/components/documents/actionMenu/CaseLawActionsMenu.vue";
+import CaseLawActionMenu from "~/components/documents/actionMenu/CaseLawActionMenu.vue";
 import TableOfContents, {
   type TableOfContentsEntry,
 } from "~/components/documents/caseLaw/TableOfContents.vue";
@@ -169,8 +169,8 @@ const metadataItems = computed(() => [
     document-html-class="case-law"
     :html="html"
   >
-    <template #actionsMenu>
-      <CaseLawActionsMenu :case-law="caseLaw" />
+    <template #actionMenu>
+      <CaseLawActionMenu :case-law="caseLaw" />
     </template>
     <template #sidebar>
       <client-only>

@@ -3,7 +3,7 @@ import type { VueWrapper } from "@vue/test-utils";
 import { describe, it, expect, vi } from "vitest";
 import Index from "./index.vue";
 import Breadcrumbs from "~/components/Breadcrumbs.vue";
-import NormActionsMenu from "~/components/documents/actionMenu/NormActionsMenu.vue";
+import NormActionMenu from "~/components/documents/actionMenu/NormActionMenu.vue";
 import Metadata from "~/components/Metadata.vue";
 import type { NormContent } from "~/composables/useNormData";
 import type { LegislationWork } from "~/types";
@@ -112,7 +112,6 @@ function mountComponent() {
         RisExpandableText: {
           template: '<div class="mock-expandable-text"><slot /></div>',
         },
-        NormActionMenu: true,
         VersionWarningMessage: true,
       },
     },
@@ -223,11 +222,11 @@ describe("index", () => {
     );
   });
 
-  it("passes metadata to the NormActionsMenu", async () => {
+  it("passes metadata to the NormActionMenu", async () => {
     mockMetadata();
     const wrapper = await mountComponent();
-    const normActionsMenu = wrapper.getComponent(NormActionsMenu);
-    expect(normActionsMenu.props("metadata")).toEqual(legislationWork);
+    const normActionMenu = wrapper.getComponent(NormActionMenu);
+    expect(normActionMenu.props("metadata")).toEqual(legislationWork);
   });
 
   it("shows metadata", async () => {

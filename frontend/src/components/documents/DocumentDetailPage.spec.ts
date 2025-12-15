@@ -123,13 +123,13 @@ describe("DocumentDetailPage", () => {
         html: "",
       },
       slots: {
-        actionsMenu: "ActionsMenu",
+        actionMenu: "ActionMenu",
         sidebar: "Sidebar",
         details: "Detailed Information",
       },
     });
 
-    expect(screen.getByText("ActionsMenu")).toBeVisible();
+    expect(screen.getByText("ActionMenu")).toBeVisible();
     expect(screen.getByText("Sidebar")).toBeVisible();
 
     expect(await screen.findByText("Detailed Information")).not.toBeVisible();

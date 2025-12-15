@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import AdministrativeDirectiveActionsMenu from "~/components/documents/actionMenu/AdministrativeDirectiveActionsMenu.vue";
+import AdministrativeDirectiveActionMenu from "~/components/documents/actionMenu/AdministrativeDirectiveActionMenu.vue";
 import DocumentDetailPage from "~/components/documents/DocumentDetailPage.vue";
 import IncompleteDataMessage from "~/components/documents/IncompleteDataMessage.vue";
 import { type AdministrativeDirective, DocumentKind } from "~/types";
@@ -67,9 +67,9 @@ if (contentError?.value) {
     document-html-class="administrative-directive"
     :html="html"
   >
-    <template #actionsMenu>
+    <template #actionMenu>
       <client-only>
-        <AdministrativeDirectiveActionsMenu :administrative-directive="data" />
+        <AdministrativeDirectiveActionMenu :administrative-directive="data" />
       </client-only>
     </template>
     <template #details="{ detailsTabPanelId }">

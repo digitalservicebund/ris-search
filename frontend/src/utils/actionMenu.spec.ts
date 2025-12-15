@@ -1,5 +1,5 @@
 import { vi } from "vitest";
-import type { ActionMenuItem } from "~/components/documents/actionMenu/ActionsMenu.vue";
+import type { ActionMenuItem } from "~/components/documents/actionMenu/ActionMenu.vue";
 import { createActionMenuItems } from "~/utils/actionMenu";
 import PdfIcon from "~icons/custom/pdf";
 import UpdatingLinkIcon from "~icons/custom/updatingLink";

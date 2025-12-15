@@ -4,7 +4,7 @@ import { computed } from "vue";
 import type { BreadcrumbItem } from "~/components/Breadcrumbs.vue";
 import DetailsList from "~/components/DetailsList.vue";
 import DetailsListEntry from "~/components/DetailsListEntry.vue";
-import ActionsMenu from "~/components/documents/actionMenu/ActionsMenu.vue";
+import ActionMenu from "~/components/documents/actionMenu/ActionMenu.vue";
 import RisTabs from "~/components/RisTabs.vue";
 import { useDynamicSeo } from "~/composables/useDynamicSeo";
 import {
@@ -126,7 +126,7 @@ const tabs = computed(() => [
     <div class="flex items-center gap-8 print:hidden">
       <Breadcrumbs :items="breadcrumbItems" class="grow" />
       <client-only>
-        <ActionsMenu :permalink />
+        <ActionMenu :permalink />
       </client-only>
     </div>
 

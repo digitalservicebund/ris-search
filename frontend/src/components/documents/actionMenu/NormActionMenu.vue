@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import ActionsMenu from "~/components/documents/actionMenu/ActionsMenu.vue";
+import ActionMenu from "~/components/documents/actionMenu/ActionMenu.vue";
 import type { LegislationWork } from "~/types";
 import { getManifestationUrl } from "~/utils/norm";
 
@@ -34,12 +34,12 @@ const permalink = {
 </script>
 
 <template>
-  <ActionsMenu
+  <ActionMenu
     v-if="translationUrl !== ''"
     :link="link"
     :permalink="permalink"
     :xml-url="xmlUrl"
     :translation-url="translationUrl"
   />
-  <ActionsMenu v-else :link="link" :permalink="permalink" :xml-url="xmlUrl" />
+  <ActionMenu v-else :link="link" :permalink="permalink" :xml-url="xmlUrl" />
 </template>

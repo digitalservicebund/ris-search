@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import ActionsMenu from "~/components/documents/actionMenu/ActionsMenu.vue";
+import ActionMenu from "~/components/documents/actionMenu/ActionMenu.vue";
 import type { CaseLaw } from "~/types";
 import { getEncodingURL } from "~/utils/caseLaw";
 
@@ -15,5 +15,5 @@ const permalink = {
 </script>
 
 <template>
-  <ActionsMenu :permalink="permalink" :xml-url="xmlUrl" />
+  <ActionMenu :permalink="permalink" :xml-url="xmlUrl" />
 </template>

@@ -8,7 +8,7 @@ import { useRoute } from "#app";
 import type { BreadcrumbItem } from "~/components/Breadcrumbs.vue";
 import DetailsList from "~/components/DetailsList.vue";
 import DetailsListEntry from "~/components/DetailsListEntry.vue";
-import NormActionsMenu from "~/components/documents/actionMenu/NormActionsMenu.vue";
+import NormActionMenu from "~/components/documents/actionMenu/NormActionMenu.vue";
 import IncompleteDataMessage from "~/components/documents/IncompleteDataMessage.vue";
 import NormHeadingGroup from "~/components/documents/norms/NormHeadingGroup.vue";
 import NormTableOfContents from "~/components/documents/norms/NormTableOfContents.vue";
@@ -237,7 +237,7 @@ useDynamicSeo({ title, description });
       <div class="flex items-center gap-8 print:hidden">
         <Breadcrumbs :items="breadcrumbItems" class="grow" />
         <client-only>
-          <NormActionsMenu
+          <NormActionMenu
             :metadata="metadata"
             :translation-url="translationUrl"
         /></client-only>
