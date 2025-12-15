@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { Button } from "primevue";
 import { ExternalLink } from "#components";
 import { useStaticPageSeo } from "~/composables/useStaticPageSeo";
 

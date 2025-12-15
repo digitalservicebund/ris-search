@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { ProgressSpinner } from "primevue";
+import { ProgressSpinner } from "primevue";
 </script>
 
 <template>

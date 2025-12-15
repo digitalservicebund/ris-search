@@ -8,8 +8,6 @@ import SidebarLayout from "~/components/SidebarLayout.vue";
 import IcBaselineSubject from "~icons/ic/baseline-subject";
 import IcOutlineInfo from "~icons/ic/outline-info";
 
-definePageMeta({ layout: "document" });
-
 export interface DocumentDetailPageProps {
   title?: string;
   titlePlaceholder: string;

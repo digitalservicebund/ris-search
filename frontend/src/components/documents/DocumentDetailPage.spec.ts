@@ -1,10 +1,11 @@
+import { renderSuspended } from "@nuxt/test-utils/runtime";
 import userEvent from "@testing-library/user-event";
-import { render, screen } from "@testing-library/vue";
+import { screen } from "@testing-library/vue";
 import DocumentDetailPage from "./DocumentDetailPage.vue";
 
 describe("DocumentDetailPage", () => {
   it("renders title", async () => {
-    render(DocumentDetailPage, {
+    await renderSuspended(DocumentDetailPage, {
       props: {
         title: "Title",
         titlePlaceholder: "Title Placeholder",
@@ -21,7 +22,7 @@ describe("DocumentDetailPage", () => {
   });
 
   it("renders title placeholder if no title provided", async () => {
-    render(DocumentDetailPage, {
+    await renderSuspended(DocumentDetailPage, {
       props: {
         titlePlaceholder: "Title Placeholder",
         breadcrumbItems: [],
@@ -37,7 +38,7 @@ describe("DocumentDetailPage", () => {
   });
 
   it("renders breadcrumbs", async () => {
-    render(DocumentDetailPage, {
+    await renderSuspended(DocumentDetailPage, {
       props: {
         titlePlaceholder: "Title Placeholder",
         breadcrumbItems: [
@@ -68,7 +69,7 @@ describe("DocumentDetailPage", () => {
   });
 
   it("renders metadata items", async () => {
-    render(DocumentDetailPage, {
+    await renderSuspended(DocumentDetailPage, {
       props: {
         titlePlaceholder: "Title Placeholder",
         breadcrumbItems: [],
@@ -95,7 +96,7 @@ describe("DocumentDetailPage", () => {
   });
 
   it("renders html content", async () => {
-    render(DocumentDetailPage, {
+    await renderSuspended(DocumentDetailPage, {
       props: {
         titlePlaceholder: "Title Placeholder",
         breadcrumbItems: [],
@@ -113,7 +114,7 @@ describe("DocumentDetailPage", () => {
   it("renders slots", async () => {
     const user = userEvent.setup();
 
-    render(DocumentDetailPage, {
+    await renderSuspended(DocumentDetailPage, {
       props: {
         title: "Title",
         titlePlaceholder: "Title Placeholder",
@@ -123,9 +124,9 @@ describe("DocumentDetailPage", () => {
         html: "",
       },
       slots: {
-        actionMenu: "ActionMenu",
-        sidebar: "Sidebar",
-        details: "Detailed Information",
+        actionMenu: () => "ActionMenu",
+        sidebar: () => "Sidebar",
+        details: () => "Detailed Information",
       },
     });
 

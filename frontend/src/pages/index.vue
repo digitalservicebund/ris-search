@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { Button } from "primevue";
 import Message from "primevue/message";
 import { ExternalLink, NuxtLink } from "#components";
 import bmjvLogo from "~/assets/img/BMJV_de_v1__Web_farbig.svg";

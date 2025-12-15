@@ -2,8 +2,6 @@ import tailwindcss from "@tailwindcss/vite";
 import { defineNuxtConfig } from "nuxt/config";
 import { FileSystemIconLoader } from "unplugin-icons/loaders";
 import Icons from "unplugin-icons/vite";
-import { PrimeVueResolver } from "unplugin-vue-components/resolvers";
-import Components from "unplugin-vue-components/vite";
 import { getStringOrDefault, isStringEmpty } from "./src/utils/textFormatting";
 
 const config = {
@@ -237,17 +235,11 @@ export default defineNuxtConfig({
     },
   },
   vite: {
-    optimizeDeps: {
-      include: ["cookie"],
-    },
     build: {
       sourcemap: "inline",
     },
     plugins: [
       tailwindcss(),
-      Components({
-        resolvers: [PrimeVueResolver()],
-      }),
       Icons({
         scale: 1.3333, // ~24px at the current default font size of 18px
         customCollections: {

@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import Button from "primevue/button";
-import InputText from "primevue/inputtext";
+import { Button, InputText, InputGroup, InputGroupAddon } from "primevue";
 import { addDefaults } from "~/composables/useSimpleSearchParams/getInitialState";
 import { usePostHogStore } from "~/stores/usePostHogStore";
 import IconSearch from "~icons/ic/search";
