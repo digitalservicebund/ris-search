@@ -44,6 +44,13 @@ public class LiteratureSchemaMapper {
         .languages(entity.languages())
         .shortReport(entity.shortReport())
         .outline(entity.outline())
+        .founder(entity.founder())
+        .editors(entity.editors())
+        .edition(entity.edition())
+        .publishingHouses(entity.publisherOrganizations())
+        .publishers(entity.publisherPersons())
+        .internationalIdentifiers(entity.internationalIdentifiers())
+        .universityNotes(entity.universityNotes())
         .encoding(encodings)
         .literatureType(LiteratureTypeMapper.mapLiteratureType(entity.documentNumber()))
         .build();
