@@ -1,6 +1,8 @@
 <script setup lang="ts">
+import { Button } from "primevue";
 import { NuxtLink } from "#components";
 </script>
+
 <template>
   <div class="container">
     <div class="max-w-prose">

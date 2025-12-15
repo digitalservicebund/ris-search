@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { Button } from "primevue";
 import PrimevueTextarea from "primevue/textarea";
 import { NuxtLink } from "#components";
 import { usePostHogStore } from "~/stores/usePostHogStore";

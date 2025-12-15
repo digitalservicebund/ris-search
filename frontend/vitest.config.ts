@@ -3,10 +3,7 @@
 
 import { defineVitestConfig } from "@nuxt/test-utils/config";
 import { FileSystemIconLoader } from "unplugin-icons/loaders";
-import IconsResolver from "unplugin-icons/resolver";
 import Icons from "unplugin-icons/vite";
-import { PrimeVueResolver } from "unplugin-vue-components/resolvers";
-import Components from "unplugin-vue-components/vite";
 import { configDefaults } from "vitest/config";
 
 export default defineVitestConfig({
@@ -16,9 +13,6 @@ export default defineVitestConfig({
       customCollections: {
         custom: FileSystemIconLoader("./src/assets/icons"),
       },
-    }),
-    Components({
-      resolvers: [IconsResolver(), PrimeVueResolver()],
     }),
   ],
   test: {
