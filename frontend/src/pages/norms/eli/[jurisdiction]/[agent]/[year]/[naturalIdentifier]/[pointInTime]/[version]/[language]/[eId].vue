@@ -255,7 +255,7 @@ useDynamicSeo({ title, description });
               <NuxtLink
                 v-if="previousArticleUrl"
                 :to="previousArticleUrl"
-                class="text-blue-800 hover:underline"
+                class="ris-link1-regular link-hover"
               >
                 <div class="flex items-center space-x-8">
                   <IcBaselineArrowBack class="mt-1 shrink-0" />
@@ -267,7 +267,7 @@ useDynamicSeo({ title, description });
               <NuxtLink
                 v-if="nextArticleUrl"
                 :to="nextArticleUrl"
-                class="text-blue-800 hover:underline"
+                class="ris-link1-regular link-hover"
               >
                 <div class="flex items-center space-x-8">
                   <span>Nächster Paragraf</span>

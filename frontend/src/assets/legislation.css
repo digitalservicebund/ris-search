@@ -40,11 +40,11 @@
 }
 
 .akn-act a {
-  @apply text-blue-800;
-}
-/* Tailwind says the group utility class should not be used with @apply */
-.akn-act a:hover * {
-  @apply underline;
+  @apply text-blue-800 outline-offset-4 outline-blue-800 focus-visible:outline-4;
+
+  &:hover * {
+    @apply underline decoration-[3px];
+  }
 }
 
 .akn-act table > thead > tr > th {
