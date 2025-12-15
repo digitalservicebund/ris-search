@@ -77,9 +77,7 @@ function setPeriodTo(value: string | undefined) {
 
 <template>
   <form :aria-labelledby="formId" class="flex flex-col gap-24">
-    <label :id="formId" class="ris-label1-bold">
-      Filter nach {{ filterLabel }}
-    </label>
+    <p :id="formId" class="ris-label1-bold">Filter nach {{ filterLabel }}</p>
 
     <div v-if="visibleFilters.currentlyInForce" class="flex items-center">
       <RadioButton
