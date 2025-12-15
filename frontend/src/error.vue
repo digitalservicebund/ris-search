@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { HttpStatusCode } from "axios";
 import type { NuxtError } from "#app";
 import SimpleSearchInput from "~/components/search/SimpleSearchInput.vue";
 
@@ -14,13 +13,10 @@ const props = defineProps({
   },
 });
 
-const isNotFoundError = computed(
-  () => props.error?.statusCode === HttpStatusCode.NotFound,
-);
+const isNotFoundError = computed(() => props.error?.statusCode === 404);
 
-const isInternalServerError = computed(
-  () => props.error?.statusCode === HttpStatusCode.InternalServerError,
-);
+const isInternalServerError = computed(() => props.error?.statusCode === 500);
+
 const locationClientOnly = computed(() => window.location.href);
 
 const pageTitle = computed(() => {

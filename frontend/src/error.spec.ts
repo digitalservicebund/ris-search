@@ -1,5 +1,4 @@
 import { config, mount } from "@vue/test-utils";
-import { HttpStatusCode } from "axios";
 import { describe } from "vitest";
 import ErrorPage from "./error.vue";
 
@@ -46,7 +45,7 @@ describe("Error", () => {
   });
 
   it("shows a more generic message for other errors", async () => {
-    const component = mountComponent(HttpStatusCode.ImATeapot);
+    const component = mountComponent(418);
     expect(component.text()).toMatchSnapshot();
   });
 });
