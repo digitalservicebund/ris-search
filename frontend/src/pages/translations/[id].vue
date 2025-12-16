@@ -28,7 +28,9 @@ useHead({
 const route = useRoute();
 const id = route.params.id as string;
 
-const { data } = await fetchTranslationAndHTML(id);
+const { data, error } = await fetchTranslationAndHTML(id);
+if (error.value) showError(error.value);
+
 const { data: germanOriginal } = await getGermanOriginal(id);
 
 const currentTranslation = data.value?.content;

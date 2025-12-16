@@ -3,7 +3,7 @@ import type { DOMWrapper } from "@vue/test-utils";
 import { expect, it, describe, beforeEach, vi } from "vitest";
 import { ref } from "vue";
 import type { TranslationData } from "~/composables/useTranslationData";
-import TranslationDetailPage from "~/pages/translations/[id]/index.vue";
+import TranslationDetailPage from "~/pages/translations/[id].vue";
 
 const mockTranslationData: TranslationData = {
   content: {
