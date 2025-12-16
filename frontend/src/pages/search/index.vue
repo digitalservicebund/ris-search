@@ -127,9 +127,7 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
   </p>
 
   <div class="mt-24 flex flex-col gap-48 lg:flex-row">
-    <fieldset
-      class="top-8 flex w-full flex-col gap-24 pb-10 lg:sticky lg:max-h-screen lg:w-3/12 lg:overflow-y-auto"
-    >
+    <fieldset class="top-8 flex w-full flex-col gap-24 pb-10 lg:w-3/12">
       <legend class="ris-label1-regular flex h-48 items-center">Filter</legend>
       <CategoryFilter v-model="searchParams.category.value" />
       <CourtFilter
