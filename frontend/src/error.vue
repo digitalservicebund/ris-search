@@ -26,7 +26,7 @@ useHead({ title: pageTitle.value });
 </script>
 
 <template>
-  <NuxtLayout>
+  <NuxtLayout name="default">
     <div class="container pt-48 pb-24">
       <template v-if="isNotFoundError">
         <h1 class="ris-heading2-bold inline-block">

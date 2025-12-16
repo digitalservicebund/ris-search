@@ -103,7 +103,6 @@ describe("actionMenuUtils.ts", () => {
         label: "XML anzeigen",
         iconComponent: XmlIcon,
         url: "https://xml.xml",
-        dataAttribute: "xml-view",
       },
     ];
 

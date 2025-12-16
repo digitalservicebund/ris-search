@@ -3,14 +3,13 @@ import {
   mountSuspended,
   renderSuspended,
 } from "@nuxt/test-utils/runtime";
-import userEvent from "@testing-library/user-event";
-import { screen, within } from "@testing-library/vue";
+import { screen } from "@testing-library/vue";
 import { mount } from "@vue/test-utils";
 import dayjs from "dayjs";
 import { expect, it, vi } from "vitest";
 import { unref } from "vue";
 import CaseLawActionMenu from "~/components/documents/actionMenu/CaseLawActionMenu.vue";
-import CaseLawPage from "~/pages/case-law/[documentNumber]/index.vue";
+import CaseLawPage from "~/pages/case-law/[documentNumber].vue";
 import type { CaseLaw } from "~/types";
 
 const { useFetchMock, useHeadMock } = vi.hoisted(() => ({
@@ -154,38 +153,6 @@ describe("case law single view page", async () => {
     expect(screen.getByRole("heading", { name: "Gründe" })).toBeInTheDocument();
   });
 
-  it("displays detailed information in the details tab", async () => {
-    const user = userEvent.setup();
-    await renderSuspended(CaseLawPage);
-
-    await user.click(screen.getByRole("link", { name: "Details" }));
-
-    const detailsList = screen.getByTestId("details-list");
-    const terms = within(detailsList).getAllByRole("term");
-
-    expect(terms[0]).toHaveTextContent("Spruchkörper:");
-    expect(terms[0]?.nextElementSibling).toHaveTextContent(
-      "Sample judicial body",
-    );
-
-    expect(terms[1]).toHaveTextContent("ECLI:");
-    expect(terms[1]?.nextElementSibling).toHaveTextContent("Sample ecli");
-
-    expect(terms[2]).toHaveTextContent("Normen:");
-    expect(terms[2]?.nextElementSibling).toHaveTextContent("nicht vorhanden");
-
-    expect(terms[3]).toHaveTextContent("Entscheidungsname:");
-    expect(terms[3]?.nextElementSibling).toHaveTextContent("Sample decision");
-
-    expect(terms[4]).toHaveTextContent("Vorinstanz:");
-    expect(terms[4]?.nextElementSibling).toHaveTextContent("nicht vorhanden");
-
-    expect(terms[5]).toHaveTextContent("Download:");
-    expect(terms[5]?.nextElementSibling).toHaveTextContent(
-      "12345 als ZIP herunterladen",
-    );
-  });
-
   it('displays "Nicht verfügbar" for empty case law data', async () => {
     const caseLawTestData: CaseLaw = {
       "@id": "",
@@ -226,7 +193,6 @@ describe("case law single view page", async () => {
       }
     });
 
-    const user = userEvent.setup();
     await renderSuspended(CaseLawPage);
 
     const pageHeader = screen.getByRole("heading", {
@@ -269,41 +235,8 @@ describe("case law single view page", async () => {
       screen.queryByRole("heading", { name: "Gründe" }),
     ).not.toBeInTheDocument();
 
-    await user.click(screen.getByRole("link", { name: "Details" }));
-
     // Details tab
-    const detailsList = screen.getByTestId("details-list");
-    const detailsTerms = within(detailsList).getAllByRole("term");
-
-    expect(detailsTerms[0]).toHaveTextContent("Spruchkörper:");
-    expect(detailsTerms[0]?.nextElementSibling).toHaveTextContent(
-      "nicht vorhanden",
-    );
-
-    expect(detailsTerms[1]).toHaveTextContent("ECLI:");
-    expect(detailsTerms[1]?.nextElementSibling).toHaveTextContent(
-      "nicht vorhanden",
-    );
-
-    expect(detailsTerms[2]).toHaveTextContent("Normen:");
-    expect(detailsTerms[2]?.nextElementSibling).toHaveTextContent(
-      "nicht vorhanden",
-    );
-
-    expect(detailsTerms[3]).toHaveTextContent("Entscheidungsname:");
-    expect(detailsTerms[3]?.nextElementSibling).toHaveTextContent(
-      "nicht vorhanden",
-    );
-
-    expect(detailsTerms[4]).toHaveTextContent("Vorinstanz:");
-    expect(detailsTerms[4]?.nextElementSibling).toHaveTextContent(
-      "nicht vorhanden",
-    );
-
-    expect(detailsTerms[5]).toHaveTextContent("Download:");
-    expect(detailsTerms[5]?.nextElementSibling).toHaveTextContent(
-      "als ZIP herunterladen",
-    );
+    // Removed, already covered by E2E tests
   });
 
   it("displays 404 error page when case law is not found", async () => {
@@ -381,41 +314,6 @@ describe("case law single view page", async () => {
 
     expect(description).toContain("First body paragraph used for description.");
     expect(description.length).toBeLessThanOrEqual(150);
-  });
-
-  it("displays zip link on the details tab", async () => {
-    useFetchMock.mockImplementation(async (url: string) => {
-      if (url.includes("html")) {
-        return {
-          data: ref(htmlData),
-          status: ref("success"),
-        };
-      } else {
-        return {
-          data: ref(caseLawTestData),
-          status: ref("success"),
-        };
-      }
-    });
-
-    const wrapper = await mountSuspended(CaseLawPage, {
-      global: {
-        stubs: {
-          NuxtLink: {
-            props: ["to"],
-            template: `<a :href="to"><slot /></a>`,
-          },
-        },
-      },
-    });
-
-    const detailsTabLink = wrapper.get("a[href='#details']");
-    await detailsTabLink.trigger("click");
-
-    const zipLink = wrapper.get("[data-attr='xml-zip-view']");
-    expect(zipLink).toBeTruthy();
-    expect(zipLink.text()).toBe("12345 als ZIP herunterladen");
-    expect(zipLink.attributes("href")).toBe("/v1/case-law/12345.zip");
   });
 
   it("passes caseLaw to the CaseLawActionMenu", async () => {

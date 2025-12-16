@@ -2,7 +2,6 @@
 import type { SearchResultHeaderItem } from "~/components/search/SearchResultHeader.vue";
 import { usePostHogStore } from "~/stores/usePostHogStore";
 import type { AdministrativeDirective, SearchResult } from "~/types";
-import { ADMINISTRATIVE_DIRECTIVE_TITLE_PLACEHOLDER } from "~/utils/administrativeDirective";
 import { sanitizeSearchResult } from "~/utils/sanitize";
 import RuleIcon from "~icons/ic/outline-rule";
 
@@ -34,9 +33,7 @@ const headerItems = computed<SearchResultHeaderItem[]>(() => {
 });
 
 const headline = computed(() =>
-  sanitizeSearchResult(
-    getMatch("headline") || ADMINISTRATIVE_DIRECTIVE_TITLE_PLACEHOLDER,
-  ),
+  sanitizeSearchResult(getMatch("headline") || "Titelzeile nicht vorhanden"),
 );
 
 const text = computed(() => {

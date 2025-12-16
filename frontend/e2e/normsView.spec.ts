@@ -114,25 +114,64 @@ test.describe("view norm page", async () => {
   noJsTest("tabs work without JavaScript", async ({ page }) => {
     await navigate(page, "/norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu");
 
+    await test.step("text", async () => {
+      await expect(
+        page.getByRole("heading", { name: "Text", exact: false }),
+      ).toBeVisible();
+
+      await expect(
+        page.getByRole("tab", { name: "Text", selected: true }),
+      ).toBeVisible();
+    });
+
+    await test.step("details", async () => {
+      await page.getByRole("tab", { name: "Details" }).click();
+
+      await expect(
+        page.getByRole("heading", { name: "Details" }),
+      ).toBeVisible();
+
+      await expect(
+        page.getByRole("tab", { name: "Details", selected: true }),
+      ).toBeVisible();
+    });
+
+    await test.step("versions", async () => {
+      await page.getByRole("tab", { name: "Fassungen" }).click();
+
+      await expect(
+        page.getByRole("tab", { name: "Fassungen", selected: true }),
+      ).toBeVisible();
+    });
+  });
+
+  test("shows detailed information in the Details tab", async ({ page }) => {
+    await navigate(page, "/norms/eli/bund/bgbl-1/2000/s1016/2023-04-26/10/deu");
+
+    await page.getByRole("tab", { name: "Details" }).click();
+
     await expect(page.getByRole("heading", { name: "Details" })).toBeVisible();
-    await expect(
-      page.getByRole("heading", { name: "Fassungen" }),
-    ).toBeVisible();
 
-    await test.step("Navigate to Details tab", async () => {
-      await page.getByRole("link", { name: "Details" }).click();
-      await expect(page).toHaveURL(/#details$/);
-    });
+    const detailsList = page
+      .getByTestId("details-list")
+      .getByRole("term")
+      .or(page.getByTestId("details-list").getByRole("definition"));
 
-    await test.step("Navigate to Fassungen tab", async () => {
-      await page.getByRole("link", { name: "Fassungen" }).click();
-      await expect(page).toHaveURL(/#versions$/);
-    });
-
-    await test.step("Navigate back to Text tab", async () => {
-      await page.getByRole("link", { name: "Text" }).click();
-      await expect(page).toHaveURL(/#text$/);
-    });
+    expect(detailsList).toHaveText([
+      "Ausfertigungsdatum:",
+      "nicht vorhanden",
+      "Vollzitat:",
+      "Fiktive Fruchtsaft- und Erfrischungsgetränkeverordnung vom 27. Mai 2000 (BGBl. I S. 1016), zuletzt modifiziert im Testverfahren",
+      "Stand:",
+      "Zuletzt geändert durch Testanpassungen",
+      "Neugefasst durch Testdaten",
+      "Hinweis zum Stand:",
+      "nicht vorhanden",
+      "Fußnoten:",
+      "nicht vorhanden",
+      "Download:",
+      "FrSaftErfrischV als ZIP herunterladen",
+    ]);
   });
 
   test("can navigate to and view an attachment", async ({ page }) => {

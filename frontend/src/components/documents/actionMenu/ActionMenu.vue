@@ -69,7 +69,6 @@ const toggle = (event: Event) => {
             class="flex cursor-pointer items-center gap-8 no-underline"
             :to="item.url"
             data-pc-section="itemlink"
-            :data-attr="item.dataAttribute"
           >
             <component :is="(item as ActionMenuItem).iconComponent" />
             <span>{{ item.label }}</span>

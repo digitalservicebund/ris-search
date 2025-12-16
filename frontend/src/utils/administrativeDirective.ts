@@ -1,9 +1,6 @@
 import type { MetadataItem } from "~/components/Metadata.vue";
 import type { AdministrativeDirective } from "~/types";
 
-export const ADMINISTRATIVE_DIRECTIVE_TITLE_PLACEHOLDER =
-  "Titelzeile nicht vorhanden";
-
 export function getAdministrativeDirectiveMetadataItems(
   administrativeDirective?: Partial<AdministrativeDirective>,
 ): MetadataItem[] {

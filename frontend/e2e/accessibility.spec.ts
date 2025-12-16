@@ -78,7 +78,7 @@ const testPages = [
   },
   {
     name: "Translations List View",
-    url: "/literature/translations",
+    url: "/translations",
   },
   {
     name: "Translation View Page",
@@ -106,7 +106,7 @@ test.describe("General Pages Accessibility Tests", () => {
         .analyze();
       if (tabs) {
         for (const tab of tabs) {
-          await page.getByRole("link", { name: tab }).click();
+          await page.getByRole("tab", { name: tab }).click();
           await page
             .getByRole("heading", { name: tab, exact: true })
             .isVisible();
