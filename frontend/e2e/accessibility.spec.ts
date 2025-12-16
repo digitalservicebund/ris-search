@@ -78,7 +78,7 @@ const testPages = [
   },
   {
     name: "Translations List View",
-    url: "/literature/translations",
+    url: "/translations",
   },
   {
     name: "Translation View Page",
