@@ -46,7 +46,7 @@ definePageMeta({
   // note: this is an expression ELI
   alias:
     "/eli/:jurisdiction/:agent/:year/:naturalIdentifier/:pointInTime/:version/:language",
-  layout: "document",
+  layout: "norm",
 });
 
 const route = useRoute();

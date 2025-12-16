@@ -19,7 +19,7 @@ import IcBaselineSubject from "~icons/ic/baseline-subject";
 import IcOutlineInfo from "~icons/ic/outline-info";
 import IcOutlineWarning from "~icons/material-symbols/warning-outline";
 
-definePageMeta({ layout: "document" });
+definePageMeta({ layout: "norm" });
 
 useHead({
   htmlAttrs: { lang: "en" },
