@@ -174,7 +174,6 @@ const detailsMetadata = computed(() => {
 
         <DetailsListEntry v-if="detailsMetadata.zipUrl" label="Download:">
           <NuxtLink
-            data-attr="xml-zip-view"
             class="ris-link1-regular"
             external
             :to="detailsMetadata.zipUrl"

@@ -325,12 +325,7 @@ useDynamicSeo({ title, description });
               </template>
             </DetailsListEntry>
             <DetailsListEntry label="Download:">
-              <NuxtLink
-                data-attr="xml-zip-view"
-                class="ris-link1-regular"
-                external
-                :to="zipUrl"
-              >
+              <NuxtLink class="ris-link1-regular" external :to="zipUrl">
                 <MaterialSymbolsDownload class="mr-2 inline" />
                 {{ metadata.abbreviation ?? "Inhalte" }} als ZIP herunterladen
               </NuxtLink>
