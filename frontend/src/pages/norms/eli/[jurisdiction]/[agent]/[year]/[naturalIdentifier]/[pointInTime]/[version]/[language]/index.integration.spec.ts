@@ -126,23 +126,6 @@ function getBreadcrumbStub(wrapper: VueWrapper) {
   return wrapper.findComponent(Breadcrumbs) as unknown as StubbedComponent;
 }
 
-function getDDElement(wrapper: VueWrapper, label: string): HTMLElement | null {
-  const labelElement = wrapper
-    .findAll("dt")
-    .filter((element) => element.text() === label)[0];
-  if (!labelElement) {
-    return null;
-  }
-  let next = labelElement.element.nextSibling as HTMLElement | null;
-  if (next?.localName !== "dd") {
-    next = next?.nextSibling as HTMLElement | null; // skip in-between text node
-  }
-  if (next?.localName === "dd") {
-    return next;
-  }
-  return null;
-}
-
 describe("index", () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -229,43 +212,7 @@ describe("index", () => {
     expect(normActionMenu.props("metadata")).toEqual(legislationWork);
   });
 
-  it("shows metadata", async () => {
-    mockMetadata();
-    const wrapper = await mountComponent();
-
-    const tabButton = wrapper.findAll("a").find((a) => a.text() === "Details");
-    await tabButton?.trigger("click");
-
-    const ausfertigungsDatum = getDDElement(wrapper, "Ausfertigungsdatum:");
-    expect(ausfertigungsDatum?.textContent).toBe("05.10.2024");
-
-    const vollzitat = getDDElement(wrapper, "Vollzitat:");
-    expect(vollzitat?.textContent).toBe("Sample Norm of 05. October 2024");
-
-    const standElement = getDDElement(wrapper, "Stand:");
-    expect(standElement?.textContent).toBe("Zuletzt geändert durch X");
-
-    const standHinweisElement = getDDElement(wrapper, "Hinweis zum Stand:");
-    expect(standHinweisElement?.textContent).toBe(
-      "Änderung durch Y textlich nachgewiesen",
-    );
-
-    const besondererHinweisElement = getDDElement(
-      wrapper,
-      "Besonderer Hinweis:",
-    );
-    expect(besondererHinweisElement?.textContent).toBe(
-      "Mit dieser Verordnung wird…",
-    );
-
-    const notes = getDDElement(wrapper, "Fußnoten:");
-    expect(notes?.textContent).toBe("Notes");
-
-    const zipDownload = getDDElement(wrapper, "Download:");
-    expect(zipDownload?.querySelector("a")?.href).toBe(
-      "http://localhost:3000/v1/legislation/eli/work-LEG12345/expression-LEG12345/manifestation-LEG12345.zip",
-    );
-  });
+  // "shows metadata" test removed as this behavior is now covered by E2E tests
 
   it("uses the abbreviation as meta title and sets up comprehensive meta tags", async () => {
     mocks.usePrivateFeaturesFlag.mockReturnValue(true);

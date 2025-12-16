@@ -1,11 +1,12 @@
 <script setup lang="ts">
+import { Tab, TabList, Tabs } from "primevue";
 import Message from "primevue/message";
 import { computed } from "vue";
+import { NuxtLink } from "#components";
 import type { BreadcrumbItem } from "~/components/Breadcrumbs.vue";
 import DetailsList from "~/components/DetailsList.vue";
 import DetailsListEntry from "~/components/DetailsListEntry.vue";
 import ActionMenu from "~/components/documents/actionMenu/ActionMenu.vue";
-import RisTabs from "~/components/RisTabs.vue";
 import { useDynamicSeo } from "~/composables/useDynamicSeo";
 import {
   fetchTranslationAndHTML,
@@ -13,7 +14,6 @@ import {
 } from "~/composables/useTranslationData";
 import { DocumentKind } from "~/types";
 import { formatDocumentKind } from "~/utils/displayValues";
-import { tabPanelClass } from "~/utils/tabsStyles";
 import { removePrefix, truncateAtWord } from "~/utils/textFormatting";
 import IcBaselineSubject from "~icons/ic/baseline-subject";
 import IcOutlineInfo from "~icons/ic/outline-info";
@@ -105,20 +105,14 @@ const title = computed(() => translationSeo.value.title);
 const description = computed(() => translationSeo.value.description);
 useDynamicSeo({ title, description });
 
-const tabs = computed(() => [
-  {
-    id: "text",
-    href: "#text",
-    label: "Text",
-    icon: IcBaselineSubject,
-  },
-  {
-    id: "details",
-    href: "#details",
-    label: "Details",
-    icon: IcOutlineInfo,
-  },
-]);
+const views = [
+  { path: "text", label: "Text", icon: IcBaselineSubject },
+  { path: "details", label: "Details", icon: IcOutlineInfo },
+] as const;
+
+const currentView = computed(
+  () => route.query.view?.toString() ?? views[0].path,
+);
 </script>
 
 <template>
@@ -167,41 +161,52 @@ const tabs = computed(() => [
     </Message>
   </div>
 
-  <RisTabs :tabs="tabs">
-    <template #default="{ activeTab, isClient }">
-      <section
-        id="text"
-        :class="tabPanelClass"
-        :hidden="isClient && activeTab !== 'text'"
-      >
-        <div class="container">
-          <h2 class="sr-only">Text</h2>
-          <section class="max-w-prose" v-html="html" />
-        </div>
+  <div class="border-b border-gray-600">
+    <nav class="container -mb-1">
+      <Tabs :value="currentView" :show-navigators="false">
+        <TabList>
+          <Tab
+            v-for="view in views"
+            :key="view.path"
+            :value="view.path"
+            :as="NuxtLink"
+            :to="{ query: { view: view.path } }"
+            :aria-controls="undefined"
+            class="flex items-center gap-8"
+          >
+            <component :is="view.icon" />
+            {{ view.label }}
+          </Tab>
+        </TabList>
+      </Tabs>
+    </nav>
+  </div>
+
+  <div class="min-h-96 bg-white py-24 print:py-0">
+    <div class="container">
+      <section v-if="currentView === 'text'">
+        <h2 class="sr-only">Text</h2>
+        <section class="max-w-prose" v-html="html" />
       </section>
 
       <section
-        id="details"
-        :class="tabPanelClass"
-        :hidden="isClient && activeTab !== 'details'"
+        v-else-if="currentView === 'details'"
         aria-labelledby="detailsTabPanelTitle"
       >
-        <div class="container">
-          <h2 id="detailsTabPanelTitle" class="ris-heading3-bold my-24">
-            Details
-          </h2>
-          <DetailsList>
-            <DetailsListEntry
-              label="Translation provided by:"
-              :value="translatedBy"
-            />
-            <DetailsListEntry
-              label="Version information:"
-              :value="versionInformation"
-            />
-          </DetailsList>
-        </div>
+        <h2 id="detailsTabPanelTitle" class="ris-heading3-bold my-24">
+          Details
+        </h2>
+        <DetailsList>
+          <DetailsListEntry
+            label="Translation provided by:"
+            :value="translatedBy"
+          />
+          <DetailsListEntry
+            label="Version information:"
+            :value="versionInformation"
+          />
+        </DetailsList>
       </section>
-    </template>
-  </RisTabs>
+    </div>
+  </div>
 </template>

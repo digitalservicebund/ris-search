@@ -40,8 +40,8 @@ test("opens the page via URL", { tag: ["@RISDEV-8950"] }, async ({ page }) => {
 test("has text and detail tab", { tag: ["@RISDEV-8950"] }, async ({ page }) => {
   await navigate(page, "/translations/TestV");
 
-  const textTab = page.getByRole("link", { name: "Text" });
-  const detailsTab = page.getByRole("link", {
+  const textTab = page.getByRole("tab", { name: "Text" });
+  const detailsTab = page.getByRole("tab", {
     name: "Details",
   });
 
@@ -64,7 +64,7 @@ test(
     await expect(translator).not.toBeVisible();
     await expect(version).not.toBeVisible();
 
-    await page.getByRole("link", { name: "Details" }).click();
+    await page.getByRole("tab", { name: "Details" }).click();
 
     await expect(heading).toBeVisible();
     await expect(translator).toBeVisible();
@@ -82,7 +82,7 @@ test(
 
     await expect(section).toBeVisible();
 
-    await page.getByRole("link", { name: "Details" }).click();
+    await page.getByRole("tab", { name: "Details" }).click();
     await expect(section).not.toBeVisible();
   },
 );
@@ -159,10 +159,22 @@ noJsTest(
   async ({ page }) => {
     await navigate(page, "/translations/TestV");
 
-    await page.getByRole("link", { name: "Details" }).click();
-    await expect(page).toHaveURL(/#details$/);
+    await test.step("text", async () => {
+      await expect(
+        page.getByRole("tab", { name: "Text", selected: true }),
+      ).toBeVisible();
+    });
 
-    await page.getByRole("link", { name: "Text" }).click();
-    await expect(page).toHaveURL(/#text$/);
+    await test.step("details", async () => {
+      await page.getByRole("tab", { name: "Details" }).click();
+
+      await expect(
+        page.getByRole("heading", { name: "Details" }),
+      ).toBeVisible();
+
+      await expect(
+        page.getByRole("tab", { name: "Details", selected: true }),
+      ).toBeVisible();
+    });
   },
 );

@@ -71,16 +71,5 @@ describe("TranslationDetailPage", () => {
     });
   });
 
-  describe("Details tab", () => {
-    it("shows translator and version info after opening Details tab", async () => {
-      const detailsTabLink = pageWrapper.get("a[href='#details']");
-      await detailsTabLink.trigger("click");
-
-      const detailsListItems = pageWrapper.findAll("dd");
-      expect(detailsListItems).toHaveLength(2);
-
-      expect(detailsListItems[0].text()).toBe("someone.");
-      expect(detailsListItems[1].text()).toBe("The translation includes text");
-    });
-  });
+  // "Details tab" test removed as this behavior is covered by E2E tests
 });
