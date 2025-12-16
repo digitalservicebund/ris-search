@@ -105,16 +105,26 @@ test("can navigate to search via breadcrumb", async ({ page }) => {
 
 noJsTest("tabs work without JavaScript", async ({ page }) => {
   await navigate(page, "/administrative-directives/KSNR000000001");
-  await expect(page.getByRole("link", { name: "Details" })).toBeVisible();
 
-  await page.getByRole("link", { name: "Details" }).first().click();
+  await test.step("text", async () => {
+    await expect(
+      page.getByRole("heading", { name: "Kurzreferat" }),
+    ).toBeVisible();
 
-  await expect(page).toHaveURL(/#details$/);
+    await expect(
+      page.getByRole("tab", { name: "Text", selected: true }),
+    ).toBeVisible();
+  });
 
-  const detailsRegion = page.getByRole("region", { name: "Details" });
-  await expect(
-    detailsRegion.getByRole("heading", { name: "Details" }),
-  ).toBeVisible();
+  await test.step("details", async () => {
+    await page.getByRole("link", { name: "Details" }).click();
+
+    await expect(page.getByRole("heading", { name: "Details" })).toBeVisible();
+
+    await expect(
+      page.getByRole("tab", { name: "Details", selected: true }),
+    ).toBeVisible();
+  });
 });
 
 test("shows detailed information in the 'Details' tab", async ({ page }) => {
@@ -125,12 +135,8 @@ test("shows detailed information in the 'Details' tab", async ({ page }) => {
   });
   await detailsLink.click();
 
-  const detailsRegion = page.getByRole("region", { name: "Details" });
-
-  await expect(
-    detailsRegion.getByRole("heading", { name: "Details" }),
-  ).toBeVisible();
-  await expect(detailsRegion.getByRole("alert")).toContainText(
+  await expect(page.getByRole("heading", { name: "Details" })).toBeVisible();
+  await expect(page.getByRole("main").getByRole("alert")).toContainText(
     "Dieser Service befindet sich in der Testphase",
   );
 
