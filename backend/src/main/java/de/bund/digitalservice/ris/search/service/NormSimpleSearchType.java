@@ -1,6 +1,6 @@
 package de.bund.digitalservice.ris.search.service;
 
-import static org.opensearch.index.query.QueryBuilders.matchQuery;
+import static org.opensearch.index.query.QueryBuilders.termQuery;
 
 import de.bund.digitalservice.ris.search.models.api.parameters.NormsSearchParams;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
@@ -66,8 +66,10 @@ public class NormSimpleSearchType implements SimpleSearchType {
       return;
     }
     if (normsSearchParams.getEli() != null) {
-      query.must(
-          matchQuery(Norm.Fields.WORK_ELI, normsSearchParams.getEli()).operator(Operator.AND));
+      // for eli we do an exact match on work eli
+      // *termQuery is used for exact matching the whole field
+      // *filter is used because exact matching the whole field makes ranking redundant
+      query.filter(termQuery(Norm.Fields.WORK_ELI_KEYWORD, normsSearchParams.getEli()));
     }
     if (normsSearchParams.getMostRelevantOn() != null) {
       BoolQueryBuilder isNotNorm =

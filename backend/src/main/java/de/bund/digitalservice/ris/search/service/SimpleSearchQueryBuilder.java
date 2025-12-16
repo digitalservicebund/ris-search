@@ -7,10 +7,8 @@ import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.utils.DateUtils;
 import de.bund.digitalservice.ris.search.utils.RisHighlightBuilder;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.opensearch.action.search.SearchType;
@@ -64,14 +62,7 @@ public class SimpleSearchQueryBuilder {
     DateUtils.buildQuery("DATUM", params.getDateFrom(), params.getDateTo())
         .ifPresent(boolQuery::filter);
 
-    HighlightBuilder highlightBuilder = RisHighlightBuilder.baseHighlighter();
     List<String> excludedFields = new ArrayList<>();
-
-    // convert highlighted fields to Set, to avoid name collisions
-    Set<HighlightBuilder.Field> highlightedFields =
-        new HashSet<>(
-            searchTypes.stream().flatMap(st -> st.getHighlightedFields().stream()).toList());
-    highlightedFields.forEach(highlightBuilder::field);
 
     for (SimpleSearchType searchType : searchTypes) {
       excludedFields.addAll(searchType.getExcludedFields());
@@ -79,13 +70,23 @@ public class SimpleSearchQueryBuilder {
     }
 
     // add pagination and other parameters
-    NativeSearchQuery result =
+    NativeSearchQueryBuilder queryBuilder =
         new NativeSearchQueryBuilder()
             .withSearchType(SearchType.DFS_QUERY_THEN_FETCH)
             .withPageable(pageable)
-            .withQuery(boolQuery)
-            .withHighlightBuilder(highlightBuilder)
-            .build();
+            .withQuery(boolQuery);
+
+    if (StringUtils.isNotBlank(params.getSearchTerm())) {
+      HighlightBuilder highlightBuilder = RisHighlightBuilder.baseHighlighter();
+      // use distinct, to avoid name collisions
+      searchTypes.stream()
+          .flatMap(st -> st.getHighlightedFields().stream())
+          .distinct()
+          .forEach(highlightBuilder::field);
+      queryBuilder.withHighlightBuilder(highlightBuilder);
+    }
+
+    NativeSearchQuery result = queryBuilder.build();
 
     // exclude fields with long text from search results
     result.addSourceFilter(
