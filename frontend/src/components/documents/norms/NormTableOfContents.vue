@@ -90,7 +90,7 @@ watch(
   },
   { immediate: true },
 );
-const responsiveStyles = `max-lg:fixed max-lg:left-0 max-lg:top-0 max-lg:h-full max-lg:w-full max-lg:bg-gray-100 max-lg:px-32 max-lg:py-16`;
+const responsiveStyles = `z-10 max-lg:fixed max-lg:left-0 max-lg:top-0 max-lg:h-full max-lg:w-full max-lg:bg-gray-100 max-lg:px-32 max-lg:py-16`;
 </script>
 
 <template>
