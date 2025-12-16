@@ -43,15 +43,15 @@ test("can view a single case law documentation unit", async ({
 
   if (isMobileTest)
     for (const sectionName of ["Tenor", "Orientierungssatz", "Tatbestand"]) {
-      await test.step(`Jump straight to a specific section, ${sectionName}`, async () => {
+      await test.step(`jumps straight to a specific section, ${sectionName}`, async () => {
         await navigate(page, "/search?category=R&query=fiktiv");
         const link = page.getByRole("link", { name: sectionName }).first();
         await link.click();
 
         // Verify sidebar is visible and there but skip aria-current check
         // (its flaky due to Intersection Observer timing during hydration)
-        // Fix Intersection Observer logic (broken since Nuxt upgrade) - see ticket RISDEV-
-        // Once fixed, enable aria-current check here (was flaky due to Intersection Observer timing during hydration)
+        // Once fixed, enable aria-current check here (was flaky due to
+        // Intersection Observer timing during hydration)
         await getSidebar(page);
 
         const heading = page
@@ -212,9 +212,60 @@ test("can view metadata", async ({ page }) => {
   ]);
 });
 
+test("can view details", async ({ page }) => {
+  await navigate(page, "/case-law/KORE600500000");
+  await page.getByRole("link", { name: "Details" }).click();
+  const detailsList = page.getByTestId("details-list");
+
+  await expect(
+    detailsList.getByRole("term").or(detailsList.getByRole("definition")),
+  ).toHaveText([
+    "Spruchkörper:",
+    "8. Kammer",
+    "ECLI:",
+    "nicht vorhanden",
+    "Normen:",
+    "nicht vorhanden",
+    "Entscheidungsname:",
+    "nicht vorhanden",
+    "Vorinstanz:",
+    "nicht vorhanden",
+    "Download:",
+    "KORE600500000 als ZIP herunterladen",
+  ]);
+});
+
+test("renders the download link", async ({ page }) => {
+  await navigate(page, "/case-law/KORE600500000");
+  await page.getByRole("link", { name: "Details" }).click();
+
+  const zipLink = page.getByRole("link", {
+    name: "KORE600500000 als ZIP herunterladen",
+  });
+  expect(zipLink).toBeVisible();
+  expect(zipLink).toHaveAttribute("href", "/v1/case-law/KORE600500000.zip");
+});
+
 noJsTest("tabs work without JavaScript", async ({ page }) => {
   await navigate(page, "/case-law/JURE200030030");
-  await expect(page.getByRole("heading", { name: "Details" })).toBeVisible();
-  await page.getByRole("link", { name: "Details" }).click();
-  await expect(page).toHaveURL(/#details$/);
+
+  await test.step("text", async () => {
+    await expect(
+      page.getByRole("heading", { name: "Orientierungssatz" }),
+    ).toBeVisible();
+
+    await expect(
+      page.getByRole("tab", { name: "Text", selected: true }),
+    ).toBeVisible();
+  });
+
+  await test.step("details", async () => {
+    await page.getByRole("link", { name: "Details" }).click();
+
+    await expect(page.getByRole("heading", { name: "Details" })).toBeVisible();
+
+    await expect(
+      page.getByRole("tab", { name: "Details", selected: true }),
+    ).toBeVisible();
+  });
 });
