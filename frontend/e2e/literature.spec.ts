@@ -197,7 +197,7 @@ noJsTest("tabs work without JavaScript", async ({ page }) => {
   });
 
   await test.step("details", async () => {
-    await page.getByRole("link", { name: "Details" }).click();
+    await page.getByRole("tab", { name: "Details" }).click();
 
     await expect(page.getByRole("heading", { name: "Details" })).toBeVisible();
 
@@ -210,7 +210,7 @@ noJsTest("tabs work without JavaScript", async ({ page }) => {
 test("shows detailed information in the 'Details' tab", async ({ page }) => {
   await navigate(page, "/literature/XXLU000000001");
 
-  const detailsLink = page.getByRole("link", {
+  const detailsLink = page.getByRole("tab", {
     name: "Details",
   });
   await detailsLink.click();

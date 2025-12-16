@@ -3,7 +3,6 @@ import {
   mountSuspended,
   renderSuspended,
 } from "@nuxt/test-utils/runtime";
-import userEvent from "@testing-library/user-event";
 import { screen } from "@testing-library/vue";
 import { mount } from "@vue/test-utils";
 import dayjs from "dayjs";
@@ -194,7 +193,6 @@ describe("case law single view page", async () => {
       }
     });
 
-    const user = userEvent.setup();
     await renderSuspended(CaseLawPage);
 
     const pageHeader = screen.getByRole("heading", {
@@ -236,8 +234,6 @@ describe("case law single view page", async () => {
     expect(
       screen.queryByRole("heading", { name: "Gründe" }),
     ).not.toBeInTheDocument();
-
-    await user.click(screen.getByRole("link", { name: "Details" }));
 
     // Details tab
     // Removed, already covered by E2E tests

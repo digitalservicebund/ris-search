@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Tab, TabList, Tabs } from "primevue";
 import BaseLayout from "./base.vue";
+import { NuxtLink } from "#components";
 import type { BreadcrumbItem } from "~/components/Breadcrumbs.vue";
 import type { MetadataItem } from "~/components/Metadata.vue";
 
@@ -58,16 +59,22 @@ const currentView = computed(
         <!-- Tabs -->
         <div class="border-b border-gray-600">
           <nav class="container -mb-1">
-            <Tabs :value="currentView">
+            <Tabs :value="currentView" :show-navigators="false">
               <TabList>
-                <Tab v-for="view in views" :key="view.path" :value="view.path">
-                  <NuxtLink
-                    :to="{ query: { view: view.path } }"
-                    class="flex gap-8"
-                  >
-                    <component :is="view.icon" />
-                    {{ view.label }}
-                  </NuxtLink>
+                <!-- Note that we need to override aria-controls manually,
+                otherwise PrimeVue will insert the ID of a tab panel that
+                doesn't exist -->
+                <Tab
+                  v-for="view in views"
+                  :key="view.path"
+                  :value="view.path"
+                  :as="NuxtLink"
+                  :to="{ query: { view: view.path } }"
+                  :aria-controls="undefined"
+                  class="flex items-center gap-8"
+                >
+                  <component :is="view.icon" />
+                  {{ view.label }}
                 </Tab>
               </TabList>
             </Tabs>

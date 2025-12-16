@@ -214,7 +214,7 @@ test("can view metadata", async ({ page }) => {
 
 test("can view details", async ({ page }) => {
   await navigate(page, "/case-law/KORE600500000");
-  await page.getByRole("link", { name: "Details" }).click();
+  await page.getByRole("tab", { name: "Details" }).click();
   const detailsList = page.getByTestId("details-list");
 
   await expect(
@@ -237,7 +237,7 @@ test("can view details", async ({ page }) => {
 
 test("renders the download link", async ({ page }) => {
   await navigate(page, "/case-law/KORE600500000");
-  await page.getByRole("link", { name: "Details" }).click();
+  await page.getByRole("tab", { name: "Details" }).click();
 
   const zipLink = page.getByRole("link", {
     name: "KORE600500000 als ZIP herunterladen",
@@ -260,7 +260,7 @@ noJsTest("tabs work without JavaScript", async ({ page }) => {
   });
 
   await test.step("details", async () => {
-    await page.getByRole("link", { name: "Details" }).click();
+    await page.getByRole("tab", { name: "Details" }).click();
 
     await expect(page.getByRole("heading", { name: "Details" })).toBeVisible();
 
