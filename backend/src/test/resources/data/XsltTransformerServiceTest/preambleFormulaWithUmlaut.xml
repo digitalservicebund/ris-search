@@ -1,0 +1,12 @@
+<akn:akomaNtoso xmlns:akn="http://Inhaltsdaten.LegalDocML.de/1.8.2/">
+    <akn:act name="regelungstext">
+        <akn:preamble GUID="b6550511-ea00-4d8f-804f-1ed575fcc6df" eId="präambel-1">
+            <akn:formula eId="präambel-1_formel-1"
+                         name="attributsemantik-noch-undefiniert" refersTo="eingangsformel">
+                <akn:p eId="präambel-1_formel-1_text-1">PreambleTest</akn:p>
+            </akn:formula>
+        </akn:preamble>
+        <akn:body>
+        </akn:body>
+    </akn:act>
+</akn:akomaNtoso>

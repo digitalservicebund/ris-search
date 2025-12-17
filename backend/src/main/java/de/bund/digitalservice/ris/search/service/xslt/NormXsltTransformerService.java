@@ -2,7 +2,10 @@ package de.bund.digitalservice.ris.search.service.xslt;
 
 import de.bund.digitalservice.ris.search.exception.NoSuchKeyException;
 import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
+import de.bund.digitalservice.ris.search.service.exception.XMLElementNotFoundException;
 import de.bund.digitalservice.ris.search.utils.eli.EliFile;
+import java.nio.charset.StandardCharsets;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -11,10 +14,14 @@ import javax.xml.transform.URIResolver;
 import javax.xml.transform.stream.StreamSource;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
+import org.springframework.web.util.UriUtils;
 
 /** Service for transforming LegalDocML norm and article documents to HTML using XSLT. */
 @Service
 public class NormXsltTransformerService extends XsltTransformer {
+
+  static final String DEBUGGING_FLAG = "debugging";
+  static final String DEBUGGING_VALUE = "false";
 
   private final NormsBucket normsBucket;
 
@@ -87,12 +94,18 @@ public class NormXsltTransformerService extends XsltTransformer {
   public String transformNorm(byte[] source, String basePath, String resourcesBasePath) {
     Map<String, String> parameters =
         Map.of(
-            "dokumentpfad", basePath, "debugging", "false", RESOURCE_PATH_KEY, resourcesBasePath);
+            "dokumentpfad",
+            basePath,
+            DEBUGGING_FLAG,
+            DEBUGGING_VALUE,
+            RESOURCE_PATH_KEY,
+            resourcesBasePath);
     return transformLegalDocMlFromBytes(source, parameters);
   }
 
   /**
-   * Transforms a LegalDocML article document.
+   * Transforms a LegalDocML article document. It is not guaranteed that an eId is encoded or not.
+   * In case an identifier is not found a retry with a UTF-8 encoded identifier will be performed
    *
    * @param source
    * @param eId
@@ -100,8 +113,27 @@ public class NormXsltTransformerService extends XsltTransformer {
    * @return the transformed article as HTML string
    */
   public String transformArticle(byte[] source, String eId, String resourcesBasePath) {
-    Map<String, String> parameters =
-        Map.of("article-eid", eId, "debugging", "false", RESOURCE_PATH_KEY, resourcesBasePath);
-    return transformLegalDocMlFromBytes(source, parameters);
+    try {
+      return transformLegalDocMlFromBytes(
+          source,
+          Map.of(
+              "article-eid",
+              eId,
+              DEBUGGING_FLAG,
+              DEBUGGING_VALUE,
+              RESOURCE_PATH_KEY,
+              resourcesBasePath));
+    } catch (XMLElementNotFoundException ex) {
+      String encodedId = UriUtils.encode(eId, StandardCharsets.UTF_8).toLowerCase(Locale.ROOT);
+      return transformLegalDocMlFromBytes(
+          source,
+          Map.of(
+              "article-eid",
+              encodedId,
+              DEBUGGING_FLAG,
+              DEBUGGING_VALUE,
+              RESOURCE_PATH_KEY,
+              resourcesBasePath));
+    }
   }
 }
