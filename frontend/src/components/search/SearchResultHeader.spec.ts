@@ -18,45 +18,30 @@ function renderComponent(items: SearchResultHeaderItem[] = []) {
 describe("SearchResultHeader", () => {
   it("renders icon", async () => {
     renderComponent();
+
     expect(screen.getByText("icon-stub")).toBeVisible();
   });
 
   it("renders plain text items", async () => {
-    renderComponent([
-      {
-        value: "Item 1",
-      },
-      {
-        value: "<mark>Item 2</mark>",
-      },
-    ]);
+    renderComponent([{ value: "Item 1" }, { value: "<mark>Item 2</mark>" }]);
+
     expect(screen.getByText("icon-stub")).toBeVisible();
-    expect(screen.getByText("icon-stub").nextElementSibling).toHaveTextContent(
-      "Item 1",
-    );
-    // Is not rendered as markup
-    expect(screen.getByText("Item 1").nextElementSibling).toHaveTextContent(
-      "<mark>Item 2</mark>",
-    );
+    expect(screen.getByText("Item 1")).toBeVisible();
+    expect(screen.getByText("<mark>Item 2</mark>")).toBeVisible();
   });
 
   it("renders items as markup", async () => {
-    renderComponent([
-      {
-        value: "Item 1",
-      },
-      {
-        isMarkup: true,
-        value: "<mark>Item 2</mark>",
-      },
+    const { container } = renderComponent([
+      { value: "Item 1" },
+      { isMarkup: true, value: "<mark>Item 2</mark>" },
     ]);
+
     expect(screen.getByText("icon-stub")).toBeVisible();
-    expect(screen.getByText("icon-stub").nextElementSibling).toHaveTextContent(
-      "Item 1",
-    );
-    expect(screen.getByText("Item 1").nextElementSibling?.innerHTML).toContain(
-      "<mark>Item 2</mark>",
-    );
+    expect(screen.getByText("Item 1")).toBeVisible();
+    expect(screen.getByText("Item 2")).toBeVisible();
+
+    const markupSpan = container.querySelector("span:has(mark)");
+    expect(markupSpan?.innerHTML).toContain("<mark>Item 2</mark>");
   });
 
   it("renders trailing component", async () => {
@@ -71,10 +56,9 @@ describe("SearchResultHeader", () => {
         trailing: "<span>trailing-component</span>",
       },
     });
+
     expect(screen.getByText("icon-stub")).toBeVisible();
-    expect(screen.getByText("icon-stub").nextElementSibling).toHaveTextContent(
-      "trailing-component",
-    );
+    expect(screen.getByText("trailing-component")).toBeVisible();
   });
 
   it("renders IDs", async () => {
@@ -86,5 +70,19 @@ describe("SearchResultHeader", () => {
     ]);
 
     expect(screen.getByText("Item 1")).toHaveAttribute("id", "foo");
+  });
+
+  it("does not render empty items", async () => {
+    const { container } = renderComponent([
+      { value: "Item 1" },
+      { value: "" },
+      { value: "Item 2" },
+    ]);
+
+    expect(screen.getByText("Item 1")).toBeVisible();
+    expect(screen.getByText("Item 2")).toBeVisible();
+
+    const itemSpans = container.querySelectorAll("p > span");
+    expect(itemSpans).toHaveLength(3); // Icon + 2 text elements
   });
 });

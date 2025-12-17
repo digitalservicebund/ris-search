@@ -9,17 +9,27 @@ const { icon, items } = defineProps<{
   icon?: Component;
   items: SearchResultHeaderItem[];
 }>();
+
+const itemsWithContent = computed(() => items.filter((i) => !!i.value));
 </script>
 
 <template>
-  <p class="ris-label2-regular flex flex-row flex-wrap items-center gap-8">
-    <component :is="icon" v-if="icon" class="h-16 w-16 text-gray-900" />
+  <div class="flex gap-8">
+    <p class="ris-label2-regular content-center space-x-8">
+      <span class="inline-flex h-lh items-center align-text-bottom">
+        <component
+          :is="icon"
+          v-if="icon"
+          class="inline-block h-16 w-16 text-gray-900"
+        />
+      </span>
 
-    <template v-for="item in items" :key="item.value">
-      <span v-if="item.isMarkup" :id="item.id" v-html="item.value" />
-      <span v-else :id="item.id">{{ item.value }}</span>
-    </template>
+      <template v-for="item in itemsWithContent" :key="item.value">
+        <span v-if="item.isMarkup" :id="item.id" v-html="item.value" />
+        <span v-else :id="item.id">{{ item.value }}</span>
+      </template>
+    </p>
 
     <slot name="trailing" />
-  </p>
+  </div>
 </template>
