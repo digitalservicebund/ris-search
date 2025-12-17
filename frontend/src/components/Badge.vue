@@ -16,7 +16,7 @@ export enum BadgeColor {
 
 <template>
   <span
-    class="ris-label3-bold inline-block px-8 py-4"
+    class="ris-label3-bold inline-block flex-none px-8 py-4"
     :class="{
       'border border-green-200 bg-green-100 text-green-800':
         color === BadgeColor.GREEN,
