@@ -14,7 +14,7 @@ defineEmits<{ selectItem: [] }>();
     >
       <li>
         <NuxtLink
-          class="ris-link1-regular nav-link"
+          class="nav-link"
           :to="{ name: 'search' }"
           @click="$emit('selectItem')"
         >
@@ -23,7 +23,7 @@ defineEmits<{ selectItem: [] }>();
       </li>
       <li>
         <NuxtLink
-          class="ris-link1-regular nav-link"
+          class="nav-link"
           :to="{ name: 'feedback' }"
           @click="$emit('selectItem')"
         >
@@ -32,7 +32,7 @@ defineEmits<{ selectItem: [] }>();
       </li>
       <li>
         <NuxtLink
-          class="ris-link1-regular nav-link"
+          class="nav-link"
           :to="{ name: 'about' }"
           @click="$emit('selectItem')"
         >
@@ -47,6 +47,6 @@ defineEmits<{ selectItem: [] }>();
 @reference "~/assets/main.css";
 
 .nav-link {
-  @apply link-hover flex items-center gap-4 decoration-3 aria-[current=page]:underline;
+  @apply ris-link1-regular link-hover flex items-center gap-4 aria-[current=page]:underline aria-[current=page]:decoration-[0.1875rem];
 }
 </style>
