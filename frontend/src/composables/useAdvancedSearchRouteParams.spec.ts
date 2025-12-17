@@ -14,9 +14,8 @@ describe("useAdvancedSearchRouteParams", () => {
         }),
       }));
 
-      const { useAdvancedSearchRouteParams } = await import(
-        "./useAdvancedSearchRouteParams"
-      );
+      const { useAdvancedSearchRouteParams } =
+        await import("./useAdvancedSearchRouteParams");
 
       const { documentKind } = useAdvancedSearchRouteParams();
 
@@ -30,9 +29,8 @@ describe("useAdvancedSearchRouteParams", () => {
         }),
       }));
 
-      const { useAdvancedSearchRouteParams } = await import(
-        "./useAdvancedSearchRouteParams"
-      );
+      const { useAdvancedSearchRouteParams } =
+        await import("./useAdvancedSearchRouteParams");
 
       const { documentKind } = useAdvancedSearchRouteParams();
 
@@ -46,9 +44,8 @@ describe("useAdvancedSearchRouteParams", () => {
         }),
       }));
 
-      const { useAdvancedSearchRouteParams } = await import(
-        "./useAdvancedSearchRouteParams"
-      );
+      const { useAdvancedSearchRouteParams } =
+        await import("./useAdvancedSearchRouteParams");
 
       const { documentKind } = useAdvancedSearchRouteParams();
 
@@ -64,9 +61,8 @@ describe("useAdvancedSearchRouteParams", () => {
         }),
       }));
 
-      const { useAdvancedSearchRouteParams } = await import(
-        "./useAdvancedSearchRouteParams"
-      );
+      const { useAdvancedSearchRouteParams } =
+        await import("./useAdvancedSearchRouteParams");
 
       const { query } = useAdvancedSearchRouteParams();
 
@@ -80,9 +76,8 @@ describe("useAdvancedSearchRouteParams", () => {
         }),
       }));
 
-      const { useAdvancedSearchRouteParams } = await import(
-        "./useAdvancedSearchRouteParams"
-      );
+      const { useAdvancedSearchRouteParams } =
+        await import("./useAdvancedSearchRouteParams");
 
       const { query } = useAdvancedSearchRouteParams();
 
@@ -96,9 +91,8 @@ describe("useAdvancedSearchRouteParams", () => {
         }),
       }));
 
-      const { useAdvancedSearchRouteParams } = await import(
-        "./useAdvancedSearchRouteParams"
-      );
+      const { useAdvancedSearchRouteParams } =
+        await import("./useAdvancedSearchRouteParams");
 
       const { query } = useAdvancedSearchRouteParams();
 
@@ -114,9 +108,8 @@ describe("useAdvancedSearchRouteParams", () => {
         }),
       }));
 
-      const { useAdvancedSearchRouteParams } = await import(
-        "./useAdvancedSearchRouteParams"
-      );
+      const { useAdvancedSearchRouteParams } =
+        await import("./useAdvancedSearchRouteParams");
 
       const { dateFilter } = useAdvancedSearchRouteParams();
 
@@ -130,9 +123,8 @@ describe("useAdvancedSearchRouteParams", () => {
         }),
       }));
 
-      const { useAdvancedSearchRouteParams } = await import(
-        "./useAdvancedSearchRouteParams"
-      );
+      const { useAdvancedSearchRouteParams } =
+        await import("./useAdvancedSearchRouteParams");
 
       const { dateFilter } = useAdvancedSearchRouteParams();
 
@@ -146,9 +138,8 @@ describe("useAdvancedSearchRouteParams", () => {
         }),
       }));
 
-      const { useAdvancedSearchRouteParams } = await import(
-        "./useAdvancedSearchRouteParams"
-      );
+      const { useAdvancedSearchRouteParams } =
+        await import("./useAdvancedSearchRouteParams");
 
       const { dateFilter } = useAdvancedSearchRouteParams();
 
@@ -162,9 +153,8 @@ describe("useAdvancedSearchRouteParams", () => {
         }),
       }));
 
-      const { useAdvancedSearchRouteParams } = await import(
-        "./useAdvancedSearchRouteParams"
-      );
+      const { useAdvancedSearchRouteParams } =
+        await import("./useAdvancedSearchRouteParams");
 
       const { dateFilter } = useAdvancedSearchRouteParams();
 
@@ -178,9 +168,8 @@ describe("useAdvancedSearchRouteParams", () => {
         }),
       }));
 
-      const { useAdvancedSearchRouteParams } = await import(
-        "./useAdvancedSearchRouteParams"
-      );
+      const { useAdvancedSearchRouteParams } =
+        await import("./useAdvancedSearchRouteParams");
 
       const { dateFilter } = useAdvancedSearchRouteParams();
 
@@ -194,9 +183,8 @@ describe("useAdvancedSearchRouteParams", () => {
         }),
       }));
 
-      const { useAdvancedSearchRouteParams } = await import(
-        "./useAdvancedSearchRouteParams"
-      );
+      const { useAdvancedSearchRouteParams } =
+        await import("./useAdvancedSearchRouteParams");
 
       const { dateFilter } = useAdvancedSearchRouteParams();
 
@@ -210,9 +198,8 @@ describe("useAdvancedSearchRouteParams", () => {
         }),
       }));
 
-      const { useAdvancedSearchRouteParams } = await import(
-        "./useAdvancedSearchRouteParams"
-      );
+      const { useAdvancedSearchRouteParams } =
+        await import("./useAdvancedSearchRouteParams");
 
       const { dateFilter } = useAdvancedSearchRouteParams();
 
@@ -226,9 +213,8 @@ describe("useAdvancedSearchRouteParams", () => {
         }),
       }));
 
-      const { useAdvancedSearchRouteParams } = await import(
-        "./useAdvancedSearchRouteParams"
-      );
+      const { useAdvancedSearchRouteParams } =
+        await import("./useAdvancedSearchRouteParams");
 
       const { dateFilter } = useAdvancedSearchRouteParams();
 
@@ -244,9 +230,8 @@ describe("useAdvancedSearchRouteParams", () => {
         }),
       }));
 
-      const { useAdvancedSearchRouteParams } = await import(
-        "./useAdvancedSearchRouteParams"
-      );
+      const { useAdvancedSearchRouteParams } =
+        await import("./useAdvancedSearchRouteParams");
 
       const { sort } = useAdvancedSearchRouteParams();
 
@@ -260,9 +245,8 @@ describe("useAdvancedSearchRouteParams", () => {
         }),
       }));
 
-      const { useAdvancedSearchRouteParams } = await import(
-        "./useAdvancedSearchRouteParams"
-      );
+      const { useAdvancedSearchRouteParams } =
+        await import("./useAdvancedSearchRouteParams");
 
       const { sort } = useAdvancedSearchRouteParams();
 
@@ -278,9 +262,8 @@ describe("useAdvancedSearchRouteParams", () => {
         }),
       }));
 
-      const { useAdvancedSearchRouteParams } = await import(
-        "./useAdvancedSearchRouteParams"
-      );
+      const { useAdvancedSearchRouteParams } =
+        await import("./useAdvancedSearchRouteParams");
 
       const { itemsPerPage } = useAdvancedSearchRouteParams();
 
@@ -294,9 +277,8 @@ describe("useAdvancedSearchRouteParams", () => {
         }),
       }));
 
-      const { useAdvancedSearchRouteParams } = await import(
-        "./useAdvancedSearchRouteParams"
-      );
+      const { useAdvancedSearchRouteParams } =
+        await import("./useAdvancedSearchRouteParams");
 
       const { itemsPerPage } = useAdvancedSearchRouteParams();
 
@@ -312,9 +294,8 @@ describe("useAdvancedSearchRouteParams", () => {
         }),
       }));
 
-      const { useAdvancedSearchRouteParams } = await import(
-        "./useAdvancedSearchRouteParams"
-      );
+      const { useAdvancedSearchRouteParams } =
+        await import("./useAdvancedSearchRouteParams");
 
       const { pageIndex } = useAdvancedSearchRouteParams();
 
@@ -328,9 +309,8 @@ describe("useAdvancedSearchRouteParams", () => {
         }),
       }));
 
-      const { useAdvancedSearchRouteParams } = await import(
-        "./useAdvancedSearchRouteParams"
-      );
+      const { useAdvancedSearchRouteParams } =
+        await import("./useAdvancedSearchRouteParams");
 
       const { pageIndex } = useAdvancedSearchRouteParams();
 
@@ -344,9 +324,8 @@ describe("useAdvancedSearchRouteParams", () => {
         }),
       }));
 
-      const { useAdvancedSearchRouteParams } = await import(
-        "./useAdvancedSearchRouteParams"
-      );
+      const { useAdvancedSearchRouteParams } =
+        await import("./useAdvancedSearchRouteParams");
 
       const { pageIndex } = useAdvancedSearchRouteParams();
 
@@ -366,9 +345,8 @@ describe("useAdvancedSearchRouteParams", () => {
         navigateTo: navigateToMock,
       }));
 
-      const { useAdvancedSearchRouteParams } = await import(
-        "./useAdvancedSearchRouteParams"
-      );
+      const { useAdvancedSearchRouteParams } =
+        await import("./useAdvancedSearchRouteParams");
 
       const {
         query,
@@ -418,9 +396,8 @@ describe("useAdvancedSearchRouteParams", () => {
         navigateTo: navigateToMock,
       }));
 
-      const { useAdvancedSearchRouteParams } = await import(
-        "./useAdvancedSearchRouteParams"
-      );
+      const { useAdvancedSearchRouteParams } =
+        await import("./useAdvancedSearchRouteParams");
 
       const { query, saveFilterStateToRoute } = useAdvancedSearchRouteParams();
 
@@ -444,9 +421,8 @@ describe("useAdvancedSearchRouteParams", () => {
         navigateTo: navigateToMock,
       }));
 
-      const { useAdvancedSearchRouteParams } = await import(
-        "./useAdvancedSearchRouteParams"
-      );
+      const { useAdvancedSearchRouteParams } =
+        await import("./useAdvancedSearchRouteParams");
 
       const { dateFilter, saveFilterStateToRoute } =
         useAdvancedSearchRouteParams();
@@ -475,9 +451,8 @@ describe("useAdvancedSearchRouteParams", () => {
       useRoute: vi.fn().mockReturnValue(routeQuery),
     }));
 
-    const { useAdvancedSearchRouteParams } = await import(
-      "./useAdvancedSearchRouteParams"
-    );
+    const { useAdvancedSearchRouteParams } =
+      await import("./useAdvancedSearchRouteParams");
 
     const { query } = useAdvancedSearchRouteParams();
 
