@@ -90,6 +90,11 @@ const documentKindMenuItems: MenuItem[] = [
     label: formatDocumentKind(DocumentKind.Literature),
     command: setDocumentKind,
   },
+  {
+    key: DocumentKind.AdministrativeDirective,
+    label: formatDocumentKind(DocumentKind.AdministrativeDirective),
+    command: setDocumentKind,
+  },
 ];
 
 // Search results -----------------------------------------
