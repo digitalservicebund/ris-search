@@ -149,6 +149,40 @@ class NormXsltTransformerServiceTest {
   }
 
   @Test
+  @DisplayName("In can parse special characters in ids")
+  void testSpecialCharacterInArticleEId() throws IOException {
+    byte[] bytes =
+        Files.readAllBytes(Path.of(resourcesPath, "articleWithSpecialCharactersInId.xml"));
+    var result = service.transformArticle(bytes, "art-z§§ 1 bis 3", RESOURCES_BASE_PATH);
+
+    var actualHtml = Jsoup.parse(result).body().html();
+
+    var expectedHtml =
+        Jsoup.parse(
+                Files.readString(Path.of(resourcesPath, "articleWithSpecialCharactersInId.html")))
+            .body()
+            .html();
+
+    assertThat(actualHtml).isEqualTo(expectedHtml);
+  }
+
+  @Test
+  @DisplayName("In can parse umlaute in article ids")
+  void testUmlautInArticleEId() throws IOException {
+    byte[] bytes = Files.readAllBytes(Path.of(resourcesPath, "preambleFormulaWithUmlaut.xml"));
+    var result = service.transformArticle(bytes, "präambel-1_formel-1", RESOURCES_BASE_PATH);
+
+    var actualHtml = Jsoup.parse(result).body().html();
+
+    var expectedHtml =
+        Jsoup.parse(Files.readString(Path.of(resourcesPath, "preambleFormulaWithUmlaut.html")))
+            .body()
+            .html();
+
+    assertThat(actualHtml).isEqualTo(expectedHtml);
+  }
+
+  @Test
   void testTransformsNormTocCorrectly() throws IOException {
     var xml =
         Files.readAllBytes(
