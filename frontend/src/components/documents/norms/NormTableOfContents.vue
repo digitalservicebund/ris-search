@@ -16,7 +16,7 @@ interface Props {
 }
 
 const props = defineProps<Props>();
-
+const router = useRouter();
 const expandedKeys = ref<Record<string, boolean>>({});
 const isExpanded = ref<boolean>(false);
 const isTocVisible = ref<boolean>(false);
@@ -91,6 +91,28 @@ watch(
   { immediate: true },
 );
 const responsiveStyles = `z-10 max-lg:fixed max-lg:left-0 max-lg:top-0 max-lg:h-full max-lg:w-full max-lg:bg-gray-100 max-lg:px-32 max-lg:py-16`;
+
+/**
+ * This Fixes the issue of auto decoding of the browser for links that contains
+ * URI encoded characters. This is a temporary solution related to this ticket
+ * RISDEV-10337 and should be complemented later with a more permanent fix for
+ * encoding in eID elements.
+ **/
+const handleAnchorClick = (event: MouseEvent, route: string) => {
+  const hashIndex = route.indexOf("#");
+  if (hashIndex === -1) return;
+  event.preventDefault();
+  const hash = route.substring(hashIndex + 1); // e.g., "art-z%c2%a7%c2%a7%2018%20bis%2021"
+
+  const element = document.getElementById(hash);
+
+  if (element) {
+    event.preventDefault();
+
+    element.scrollIntoView({ behavior: "smooth" });
+    router.push({ hash: `#${hash}` });
+  }
+};
 </script>
 
 <template>
@@ -159,8 +181,11 @@ const responsiveStyles = `z-10 max-lg:fixed max-lg:left-0 max-lg:top-0 max-lg:h-
           class="no-underline"
           tabindex="-1"
           @click="
-            toggleNode(node);
-            hideTableOfContents();
+            (e) => {
+              handleAnchorClick(e, node.route);
+              toggleNode(node);
+              hideTableOfContents();
+            }
           "
         >
           {{ node.label }}

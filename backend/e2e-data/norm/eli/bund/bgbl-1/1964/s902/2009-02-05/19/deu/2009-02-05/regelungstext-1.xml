@@ -118,6 +118,16 @@
                     </akn:content>
                 </akn:paragraph>
             </akn:article>
+            <akn:article GUID="64114f96-552f-4cee-9ba9-65e6d6185021" eId="art-z%c2%a7%c2%a7%2018%20bis%2021" period="#meta-n1_geltzeiten-n1_geltungszeitgr-n33">
+                <akn:num GUID="95e46eb1-a944-4f60-bf36-52f541254047" eId="art-z%c2%a7%c2%a7%2018%20bis%2021_bezeichnung-n1">§§ 18 bis 21</akn:num>
+                <akn:heading GUID="e3cfb3a1-55dd-4eb0-9504-f3fbc34de5b9" eId="art-z%c2%a7%c2%a7%2018%20bis%2021_überschrift-n1">(weggefallen)</akn:heading>
+                <akn:paragraph GUID="671d6a69-668d-4344-a641-0ddb358bc6d1" eId="art-z%c2%a7%c2%a7%2018%20bis%2021_abs-z">
+                    <akn:num GUID="05274ccb-9cf3-4165-acea-02d3bea54581" eId="art-z%c2%a7%c2%a7%2018%20bis%2021_abs-z_bezeichnung-n1"/>
+                    <akn:content GUID="c1594632-b5ee-4697-a591-f099f1d2c80c" eId="art-z%c2%a7%c2%a7%2018%20bis%2021_abs-z_inhalt-n1">
+                        <akn:p GUID="76b9d7a7-0671-41be-9214-3a690703fa88" eId="art-z%c2%a7%c2%a7%2018%20bis%2021_abs-z_inhalt-n1_text-n1"/>
+                    </akn:content>
+                </akn:paragraph>
+            </akn:article>
         </akn:body>
     </akn:act>
 </akn:akomaNtoso>
