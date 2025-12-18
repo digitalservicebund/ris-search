@@ -205,6 +205,24 @@ describe("index", () => {
     );
   });
 
+  it("has a different breadcrumb with PrivateFeatures", async () => {
+    mocks.usePrivateFeaturesFlag.mockReturnValue(true);
+    mockMetadata();
+    const wrapper = await mountComponent();
+    expect(getBreadcrumbStub(wrapper).props("items")).toStrictEqual(
+      Array.of(
+        {
+          label: "Gesetze & Verordnungen",
+          route: "/search?category=N",
+        },
+        {
+          route: "/norms/eli/work-LEG12345",
+          label: "abbreviation vom 01.01.2024",
+        },
+      ),
+    );
+  });
+
   it("passes metadata to the NormActionMenu", async () => {
     mockMetadata();
     const wrapper = await mountComponent();

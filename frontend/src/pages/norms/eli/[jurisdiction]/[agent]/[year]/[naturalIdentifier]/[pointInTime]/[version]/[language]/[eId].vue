@@ -66,6 +66,14 @@ const tableOfContents: Ref<TreeNode[]> = computed(() => {
   );
 });
 
+const expressionValidityInterval = computed(() =>
+  privateFeaturesEnabled
+    ? temporalCoverageToValidityInterval(
+        norm?.value?.workExample.temporalCoverage,
+      )
+    : undefined,
+);
+
 const article: Ref<Article | undefined> = computed(() =>
   norm.value?.workExample.hasPart.find((part) => part.eId == eId.value),
 );
@@ -99,25 +107,22 @@ const currentNodePath = findNodePath(tableOfContents.value, eId.value ?? "");
 const normTitle = computed(() => getNormTitle(norm.value));
 const normBreadcrumbTitle = computed(() => getNormBreadcrumbTitle(norm.value));
 const breadcrumbItems: Ref<BreadcrumbItem[]> = computed(() => {
+  const validFrom = dateFormattedDDMMYYYY(
+    expressionValidityInterval.value?.from,
+  );
+  const validFromDisplay = validFrom ? ` vom ${validFrom}` : "";
+
   const list: BreadcrumbItem[] = [
     {
       label: formatDocumentKind(DocumentKind.Norm),
       route: `/search?category=${DocumentKind.Norm}`,
     },
     {
-      label: normBreadcrumbTitle.value,
+      label: normBreadcrumbTitle.value + validFromDisplay,
       route: normPath,
     },
   ];
 
-  if (article.value && !article.value?.isActive) {
-    list.push({
-      label: [article.value.entryIntoForceDate, article.value.expiryDate].join(
-        "–",
-      ),
-      route: route.fullPath,
-    } as BreadcrumbItem);
-  }
   currentNodePath?.forEach((node) =>
     list.push({
       label: node.label,
