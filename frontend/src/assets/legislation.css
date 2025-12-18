@@ -43,7 +43,7 @@
   @apply text-blue-800 outline-offset-4 outline-blue-800 focus-visible:outline-4;
 
   &:hover * {
-    @apply underline decoration-[3px];
+    @apply underline decoration-3;
   }
 }
 

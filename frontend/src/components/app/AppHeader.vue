@@ -22,7 +22,7 @@ const mobileMenuId = useId();
         <!-- Mobile menu toggle -->
         <div class="float-end lg:hidden">
           <button
-            class="ris-label1-regular flex cursor-pointer items-center gap-8 decoration-3 outline-offset-4 outline-blue-800 hover:underline focus-visible:outline-4"
+            class="ris-label1-regular hover:ris-link1-regular flex cursor-pointer items-center gap-8 outline-offset-4 outline-blue-800 focus-visible:outline-4"
             :aria-expanded="open"
             :aria-controls="mobileMenuId"
             @click="toggleMenu()"
