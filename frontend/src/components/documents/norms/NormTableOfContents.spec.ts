@@ -1,9 +1,19 @@
+import { mockNuxtImport } from "@nuxt/test-utils/runtime";
 import { mount, RouterLinkStub } from "@vue/test-utils";
 import type { TreeNode } from "primevue/treenode";
-import { describe, it, expect, beforeEach } from "vitest";
+import { beforeEach, describe, expect, it } from "vitest";
 import NormTableOfContents from "./NormTableOfContents.vue";
 import type { TableOfContentsItem } from "~/types";
 import { tocItemsToTreeNodes } from "~/utils/tableOfContents";
+
+const routerPushMock = vi.fn();
+mockNuxtImport("useRouter", () => {
+  return () => ({
+    push: routerPushMock,
+    // Add other router methods you use, e.g., replace, currentRoute, etc.
+  });
+});
+const scrollIntoViewMock = vi.fn();
 
 describe("NormTableOfContents", () => {
   /* eslint-disable-next-line @typescript-eslint/no-explicit-any -- No proper way of typing this */
@@ -61,6 +71,8 @@ describe("NormTableOfContents", () => {
   const leafBasePath = "/leaf/";
 
   beforeEach(() => {
+    vi.clearAllMocks();
+    vi.resetAllMocks();
     const treeNodes = tocItemsToTreeNodes(
       mockTocItems,
       headingBasePath,
@@ -91,6 +103,52 @@ describe("NormTableOfContents", () => {
           },
         },
       },
+    });
+
+    vi.spyOn(document, "getElementById").mockReturnValue({
+      scrollIntoView: scrollIntoViewMock,
+    } as unknown as HTMLElement);
+  });
+
+  describe("handleAnchorClick()", () => {
+    it("prevents default, scrolls to the anchor, and pushes hash to router", async () => {
+      const event = {
+        preventDefault: vi.fn(),
+      } as unknown as MouseEvent;
+
+      const encodedRoute = "/some/path#art-z%c2%a7%c2%a7%2018%20bis%2021";
+
+      // call the method directly on the component instance
+      wrapper.vm.handleAnchorClick(event, encodedRoute);
+
+      // preventDefault should be called
+      expect(event.preventDefault).toHaveBeenCalled();
+
+      // element lookup should be done using the raw encoded hash
+      expect(document.getElementById).toHaveBeenCalledWith(
+        "art-z%c2%a7%c2%a7%2018%20bis%2021",
+      );
+
+      // scrolling should be triggered
+      expect(scrollIntoViewMock).toHaveBeenCalledWith({
+        behavior: "smooth",
+      });
+
+      // router should receive the hash
+      expect(routerPushMock).toHaveBeenCalledWith({
+        hash: "#art-z%c2%a7%c2%a7%2018%20bis%2021",
+      });
+    });
+
+    it("does nothing if route does not contain a hash", () => {
+      const event = {
+        preventDefault: vi.fn(),
+      } as unknown as MouseEvent;
+
+      wrapper.vm.handleAnchorClick(event, "/some/path");
+
+      expect(event.preventDefault).not.toHaveBeenCalled();
+      expect(routerPushMock).not.toHaveBeenCalled();
     });
   });
 

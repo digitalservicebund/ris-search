@@ -227,7 +227,11 @@ test.describe("view norm page", async () => {
     });
   });
 
-  test("scrolls to an article with encoded hash in URL", async ({ page }) => {
+  test("scrolls to an article with encoded hash in URL", async ({
+    page,
+    isMobileTest,
+  }) => {
+    test.skip(isMobileTest);
     const normUrl = "/norms/eli/bund/bgbl-1/1964/s902/2009-02-05/19/deu";
 
     await navigate(page, normUrl);
