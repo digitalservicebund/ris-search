@@ -74,5 +74,6 @@ public record LiteratureSchema(
     @Schema(description = "Kurzreferat") String shortReport,
     @Schema(description = "Gliederung") String outline,
     @Schema(description = "Hochschulvermerk") List<String> universityNotes,
+    @Schema(description = "Teilbaende") List<String> volumes,
     @Schema(description = "Literaturtyp", example = "['sli', 'uli']") String literatureType,
     @Nullable List<LiteratureEncodingSchema> encoding) {}

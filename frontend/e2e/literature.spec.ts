@@ -237,6 +237,55 @@ test("shows detailed information in the 'Details' tab", async ({ page }) => {
   ]);
 });
 
+test("shows detailed information in the 'Details' tab of sli documents", async ({
+  page,
+}) => {
+  await navigate(page, "/literature/XXLS000000001");
+
+  const detailsLink = page.getByRole("tab", {
+    name: "Details",
+  });
+  await detailsLink.click();
+
+  await expect(page.getByRole("heading", { name: "Details" })).toBeVisible();
+  await expect(page.getByRole("main").getByRole("alert")).toContainText(
+    "Dieser Service befindet sich in der Testphase",
+  );
+
+  const detailsList = page.getByTestId("details-list");
+  await expect(
+    detailsList.getByRole("term").or(detailsList.getByRole("definition")),
+  ).toHaveText([
+    "Normen:",
+    "BMV-Ä, GG, Art 6 Abs 2 S 1, 1949-05-23",
+    "Bearbeiter:",
+    "Foo Bearbeiter",
+    "Mitarbeiter:",
+    "Peter Foo",
+    "Urheber:",
+    "DGB",
+    "Begründer:",
+    "Foo Begruender",
+    "Herausgeber:",
+    "Mitarbeiter Eins",
+    "Verlag:",
+    "herausgeber institution",
+    "Ausgabe:",
+    "1. Auflage",
+    "Bestellnummer:",
+    "ISBN 3-XXXXX-XX-X",
+    "Teilband:",
+    "Teilband 1",
+    "Teilband 2",
+    "Sprache:",
+    "deu",
+    "Kongress:",
+    "Internationaler Kongreß für das Recht, 1991, Athen, GRC",
+    "Hochschule:",
+    "Universität Foo",
+  ]);
+});
+
 test.describe("actions menu", () => {
   test("can use 'copy link' button to copy url to clipboard", async ({
     page,

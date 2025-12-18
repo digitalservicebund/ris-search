@@ -284,4 +284,167 @@ describe("getLiteratureDetailsItems", () => {
       expect(result[4]).toEqual({ label: expectedLabel, value: expectedValue });
     },
   );
+
+  it("returns sli details for sli documents with singular properties", () => {
+    const result = getLiteratureDetailItems({
+      inLanguage: "de",
+      documentNumber: "LIT-123",
+      normReferences: ["GG, Art 6 Abs 2 S 1, 1949-05-23"],
+      collaborators: ["Doe, John", "Doe, Jane"],
+      founder: ["Doe, Founder"],
+      editors: ["Doe, Editor"],
+      originators: ["FOO"],
+      publishers: ["Doe, Publisher"],
+      publishingHouses: ["publishing house"],
+      edition: "first edition",
+      volumes: ["Teilband 1"],
+      conferenceNotes: ["Internationaler Kongress 2025, Berlin, GER"],
+      languages: ["deu"],
+      universityNotes: ["University"],
+      literatureType: "sli",
+      internationalIdentifiers: ["ISBN-XXXX"],
+    });
+
+    expect(new Set(result)).toEqual(
+      new Set([
+        {
+          label: "Norm:",
+          value: "GG, Art 6 Abs 2 S 1, 1949-05-23",
+        },
+        {
+          label: "Bearbeiter:",
+          value: "Editor Doe",
+        },
+        {
+          label: "Mitarbeiter:",
+          value: "John Doe, Jane Doe",
+        },
+        {
+          label: "Urheber:",
+          value: "FOO",
+        },
+        {
+          label: "Begründer:",
+          value: "Founder Doe",
+        },
+        {
+          label: "Herausgeber:",
+          value: "Publisher Doe",
+        },
+        {
+          label: "Verlag:",
+          value: "publishing house",
+        },
+        {
+          label: "Ausgabe:",
+          value: "first edition",
+        },
+        {
+          label: "Bestellnummer:",
+          value: "ISBN-XXXX",
+        },
+        {
+          label: "Teilband:",
+          valueList: ["Teilband 1"],
+        },
+        {
+          label: "Sprache:",
+          value: "deu",
+        },
+        {
+          label: "Kongress:",
+          value: "Internationaler Kongress 2025, Berlin, GER",
+        },
+        {
+          label: "Hochschule:",
+          value: "University",
+        },
+      ]),
+    );
+  });
+
+  it("returns sli details for sli documents and transforms plural properties", () => {
+    const result = getLiteratureDetailItems({
+      inLanguage: "de",
+      documentNumber: "LIT-123",
+      normReferences: [
+        "GG, Art 6 Abs 2 S 1, 1949-05-23",
+        "GG, Art 4 Abs 3 S 1, 1949-05-23",
+      ],
+      collaborators: ["Doe, John", "Doe, Jane"],
+      founder: ["Doe, Founder"],
+      editors: ["Doe, Editor"],
+      originators: ["FOO"],
+      publishers: ["Doe, Publisher"],
+      publishingHouses: ["publishing house"],
+      edition: "first edition",
+      volumes: ["Teilband 1", "Teilband 2"],
+      conferenceNotes: [
+        "Internationaler Kongress 2025, Berlin, GER",
+        "Kongress 2",
+      ],
+      languages: ["deu", "eng"],
+      universityNotes: ["University 1", "University 2"],
+      literatureType: "sli",
+      internationalIdentifiers: ["ISBN-XXXX"],
+    });
+
+    expect(new Set(result)).toEqual(
+      new Set([
+        {
+          label: "Normen:",
+          value:
+            "GG, Art 6 Abs 2 S 1, 1949-05-23, GG, Art 4 Abs 3 S 1, 1949-05-23",
+        },
+        {
+          label: "Bearbeiter:",
+          value: "Editor Doe",
+        },
+        {
+          label: "Mitarbeiter:",
+          value: "John Doe, Jane Doe",
+        },
+        {
+          label: "Urheber:",
+          value: "FOO",
+        },
+        {
+          label: "Begründer:",
+          value: "Founder Doe",
+        },
+        {
+          label: "Herausgeber:",
+          value: "Publisher Doe",
+        },
+        {
+          label: "Verlag:",
+          value: "publishing house",
+        },
+        {
+          label: "Ausgabe:",
+          value: "first edition",
+        },
+        {
+          label: "Bestellnummer:",
+          value: "ISBN-XXXX",
+        },
+        {
+          label: "Teilband:",
+          valueList: ["Teilband 1", "Teilband 2"],
+        },
+        {
+          label: "Sprachen:",
+          value: "deu, eng",
+        },
+        {
+          label: "Kongresse:",
+          value: "Internationaler Kongress 2025, Berlin, GER, Kongress 2",
+        },
+        {
+          label: "Hochschulen:",
+          value: "University 1, University 2",
+        },
+      ]),
+    );
+  });
 });
