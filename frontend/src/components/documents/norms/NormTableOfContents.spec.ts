@@ -6,19 +6,18 @@ import NormTableOfContents from "./NormTableOfContents.vue";
 import type { TableOfContentsItem } from "~/types";
 import { tocItemsToTreeNodes } from "~/utils/tableOfContents";
 
-const routerPushMock = vi.fn();
-mockNuxtImport("useRouter", () => {
-  return () => ({
-    push: routerPushMock,
-    // Add other router methods you use, e.g., replace, currentRoute, etc.
-  });
+const { navigateToMock, scrollIntoViewMock } = vi.hoisted(() => {
+  return {
+    navigateToMock: vi.fn(),
+    scrollIntoViewMock: vi.fn(),
+  };
 });
-const scrollIntoViewMock = vi.fn();
+
+mockNuxtImport("navigateTo", () => navigateToMock);
 
 describe("NormTableOfContents", () => {
   /* eslint-disable-next-line @typescript-eslint/no-explicit-any -- No proper way of typing this */
   let wrapper: any;
-
   const mockTocItems: TableOfContentsItem[] = [
     {
       "@type": "TocEntry",
@@ -73,6 +72,7 @@ describe("NormTableOfContents", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     vi.resetAllMocks();
+
     const treeNodes = tocItemsToTreeNodes(
       mockTocItems,
       headingBasePath,
@@ -110,7 +110,7 @@ describe("NormTableOfContents", () => {
     } as unknown as HTMLElement);
   });
 
-  describe("handleAnchorClick()", () => {
+  describe("handleClick()", () => {
     it("prevents default, scrolls to the anchor, and pushes hash to router", async () => {
       const event = {
         preventDefault: vi.fn(),
@@ -118,24 +118,19 @@ describe("NormTableOfContents", () => {
 
       const encodedRoute = "/some/path#art-z%c2%a7%c2%a7%2018%20bis%2021";
 
-      // call the method directly on the component instance
-      wrapper.vm.handleAnchorClick(event, encodedRoute);
+      wrapper.vm.scrollToNode(event, encodedRoute);
 
-      // preventDefault should be called
       expect(event.preventDefault).toHaveBeenCalled();
 
-      // element lookup should be done using the raw encoded hash
       expect(document.getElementById).toHaveBeenCalledWith(
         "art-z%c2%a7%c2%a7%2018%20bis%2021",
       );
 
-      // scrolling should be triggered
       expect(scrollIntoViewMock).toHaveBeenCalledWith({
         behavior: "smooth",
       });
 
-      // router should receive the hash
-      expect(routerPushMock).toHaveBeenCalledWith({
+      expect(navigateToMock).toHaveBeenCalledWith({
         hash: "#art-z%c2%a7%c2%a7%2018%20bis%2021",
       });
     });
@@ -145,10 +140,10 @@ describe("NormTableOfContents", () => {
         preventDefault: vi.fn(),
       } as unknown as MouseEvent;
 
-      wrapper.vm.handleAnchorClick(event, "/some/path");
+      wrapper.vm.scrollToNode(event, "/some/path");
 
       expect(event.preventDefault).not.toHaveBeenCalled();
-      expect(routerPushMock).not.toHaveBeenCalled();
+      expect(navigateToMock).not.toHaveBeenCalled();
     });
   });
 

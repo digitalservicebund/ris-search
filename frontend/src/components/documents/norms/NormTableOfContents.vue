@@ -16,7 +16,6 @@ interface Props {
 }
 
 const props = defineProps<Props>();
-const router = useRouter();
 const expandedKeys = ref<Record<string, boolean>>({});
 const isExpanded = ref<boolean>(false);
 const isTocVisible = ref<boolean>(false);
@@ -98,7 +97,7 @@ const responsiveStyles = `z-10 max-lg:fixed max-lg:left-0 max-lg:top-0 max-lg:h-
  * RISDEV-10337 and should be complemented later with a more permanent fix for
  * encoding in eID elements.
  **/
-const handleAnchorClick = (event: MouseEvent, route: string) => {
+const scrollToNode = (event: MouseEvent, route: string) => {
   const hashIndex = route.indexOf("#");
   if (hashIndex === -1) return;
   event.preventDefault();
@@ -107,11 +106,14 @@ const handleAnchorClick = (event: MouseEvent, route: string) => {
   const element = document.getElementById(hash);
 
   if (element) {
-    event.preventDefault();
-
     element.scrollIntoView({ behavior: "smooth" });
-    router.push({ hash: `#${hash}` });
+    navigateTo({ hash: `#${hash}` });
   }
+};
+const handleClick = (event: MouseEvent, node: TreeNode) => {
+  scrollToNode(event, node.route);
+  toggleNode(node);
+  hideTableOfContents();
 };
 </script>
 
@@ -180,13 +182,7 @@ const handleAnchorClick = (event: MouseEvent, route: string) => {
           :to="node.route"
           class="no-underline"
           tabindex="-1"
-          @click="
-            (e) => {
-              handleAnchorClick(e, node.route);
-              toggleNode(node);
-              hideTableOfContents();
-            }
-          "
+          @click="(event) => handleClick(event, node)"
         >
           {{ node.label }}
         </NuxtLink>
