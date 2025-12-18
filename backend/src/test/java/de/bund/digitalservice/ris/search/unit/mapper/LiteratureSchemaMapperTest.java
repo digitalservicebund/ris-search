@@ -41,6 +41,7 @@ class LiteratureSchemaMapperTest {
             .publisherPersons(List.of("publisher person"))
             .internationalIdentifiers(List.of("ISBN XXXX"))
             .universityNotes(List.of("university note"))
+            .volumes(List.of("volume 1", "volume 2"))
             .build();
 
     LiteratureSchema expected =
@@ -71,6 +72,7 @@ class LiteratureSchemaMapperTest {
             .publishers(List.of("publisher person"))
             .internationalIdentifiers(List.of("ISBN XXXX"))
             .universityNotes(List.of("university note"))
+            .volumes(List.of("volume 1", "volume 2"))
             .literatureType("uli")
             .encoding(
                 List.of(

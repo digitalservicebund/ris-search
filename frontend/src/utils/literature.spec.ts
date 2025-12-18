@@ -447,4 +447,67 @@ describe("getLiteratureDetailsItems", () => {
       ]),
     );
   });
+
+  it("handles empty values in sli details", () => {
+    const result = getLiteratureDetailItems({
+      literatureType: "sli",
+    });
+
+    expect(new Set(result)).toEqual(
+      new Set([
+        {
+          label: "Norm:",
+          value: undefined,
+        },
+        {
+          label: "Bearbeiter:",
+          value: undefined,
+        },
+        {
+          label: "Mitarbeiter:",
+          value: undefined,
+        },
+        {
+          label: "Urheber:",
+          value: undefined,
+        },
+        {
+          label: "Begründer:",
+          value: undefined,
+        },
+        {
+          label: "Herausgeber:",
+          value: undefined,
+        },
+        {
+          label: "Verlag:",
+          value: undefined,
+        },
+        {
+          label: "Ausgabe:",
+          value: undefined,
+        },
+        {
+          label: "Bestellnummer:",
+          value: undefined,
+        },
+        {
+          label: "Teilband:",
+          valueList: undefined,
+        },
+        {
+          label: "Sprache:",
+          value: undefined,
+        },
+        {
+          label: "Kongress:",
+          value: undefined,
+        },
+        {
+          label: "Hochschule:",
+          value: undefined,
+        },
+      ]),
+    );
+  });
 });
