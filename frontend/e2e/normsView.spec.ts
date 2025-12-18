@@ -226,6 +226,35 @@ test.describe("view norm page", async () => {
       await page.getByRole("img", { name: "Beispielbild" }).isVisible();
     });
   });
+
+  test("scrolls to an article with encoded hash in URL", async ({
+    page,
+    isMobileTest,
+  }) => {
+    test.skip(isMobileTest);
+    const normUrl = "/norms/eli/bund/bgbl-1/1964/s902/2009-02-05/19/deu";
+
+    await navigate(page, normUrl);
+
+    const articleLink = page.getByRole("treeitem").getByRole("link", {
+      name: /§\s*18\s*bis\s*21/i,
+    });
+
+    await expect(articleLink).toBeVisible();
+    await articleLink.click();
+
+    await expect(page).toHaveURL(/#art-z.*18.*21/i);
+
+    const targetHeading = page
+      .getByRole("main")
+      .getByRole("heading", {
+        name: /§\s*18\s*bis\s*21/i,
+      })
+      .first();
+
+    await expect(targetHeading).toBeVisible();
+    await expect(targetHeading).toBeInViewport();
+  });
 });
 
 test.describe("shows link to translation if exists", () => {

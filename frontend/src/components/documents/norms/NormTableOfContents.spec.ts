@@ -1,14 +1,23 @@
+import { mockNuxtImport } from "@nuxt/test-utils/runtime";
 import { mount, RouterLinkStub } from "@vue/test-utils";
 import type { TreeNode } from "primevue/treenode";
-import { describe, it, expect, beforeEach } from "vitest";
+import { beforeEach, describe, expect, it } from "vitest";
 import NormTableOfContents from "./NormTableOfContents.vue";
 import type { TableOfContentsItem } from "~/types";
 import { tocItemsToTreeNodes } from "~/utils/tableOfContents";
 
+const { navigateToMock, scrollIntoViewMock } = vi.hoisted(() => {
+  return {
+    navigateToMock: vi.fn(),
+    scrollIntoViewMock: vi.fn(),
+  };
+});
+
+mockNuxtImport("navigateTo", () => navigateToMock);
+
 describe("NormTableOfContents", () => {
   /* eslint-disable-next-line @typescript-eslint/no-explicit-any -- No proper way of typing this */
   let wrapper: any;
-
   const mockTocItems: TableOfContentsItem[] = [
     {
       "@type": "TocEntry",
@@ -61,6 +70,9 @@ describe("NormTableOfContents", () => {
   const leafBasePath = "/leaf/";
 
   beforeEach(() => {
+    vi.clearAllMocks();
+    vi.resetAllMocks();
+
     const treeNodes = tocItemsToTreeNodes(
       mockTocItems,
       headingBasePath,
@@ -91,6 +103,47 @@ describe("NormTableOfContents", () => {
           },
         },
       },
+    });
+
+    vi.spyOn(document, "getElementById").mockReturnValue({
+      scrollIntoView: scrollIntoViewMock,
+    } as unknown as HTMLElement);
+  });
+
+  describe("handleClick()", () => {
+    it("prevents default, scrolls to the anchor, and pushes hash to router", async () => {
+      const event = {
+        preventDefault: vi.fn(),
+      } as unknown as MouseEvent;
+
+      const encodedRoute = "/some/path#art-z%c2%a7%c2%a7%2018%20bis%2021";
+
+      wrapper.vm.scrollToNode(event, encodedRoute);
+
+      expect(event.preventDefault).toHaveBeenCalled();
+
+      expect(document.getElementById).toHaveBeenCalledWith(
+        "art-z%c2%a7%c2%a7%2018%20bis%2021",
+      );
+
+      expect(scrollIntoViewMock).toHaveBeenCalledWith({
+        behavior: "smooth",
+      });
+
+      expect(navigateToMock).toHaveBeenCalledWith({
+        hash: "#art-z%c2%a7%c2%a7%2018%20bis%2021",
+      });
+    });
+
+    it("does nothing if route does not contain a hash", () => {
+      const event = {
+        preventDefault: vi.fn(),
+      } as unknown as MouseEvent;
+
+      wrapper.vm.scrollToNode(event, "/some/path");
+
+      expect(event.preventDefault).not.toHaveBeenCalled();
+      expect(navigateToMock).not.toHaveBeenCalled();
     });
   });
 
