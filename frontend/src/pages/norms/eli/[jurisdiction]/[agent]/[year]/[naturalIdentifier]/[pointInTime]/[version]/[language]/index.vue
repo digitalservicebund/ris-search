@@ -117,25 +117,19 @@ const { status: normVersionsStatus, sortedVersions: normVersions } =
   useNormVersions(metadata.value?.legislationIdentifier);
 
 const breadcrumbItems: ComputedRef<BreadcrumbItem[]> = computed(() => {
-  const list = [
+  const validFrom = dateFormattedDDMMYYYY(validityInterval.value?.from);
+  const validFromDisplay = validFrom ? ` vom ${validFrom}` : "";
+
+  return [
     {
       label: formatDocumentKind(DocumentKind.Norm),
       route: `/search?category=${DocumentKind.Norm}`,
     },
     {
       route: `/norms/${metadata.value?.legislationIdentifier}`,
-      label: normBreadcrumbTitle.value,
+      label: normBreadcrumbTitle.value + validFromDisplay,
     },
   ];
-
-  const isInForce =
-    metadata.value?.workExample.legislationLegalForce === "InForce";
-  if (!isInForce) {
-    const validityIntervalLabel = `${dateFormattedDDMMYYYY(validityInterval.value?.from) ?? ""}-${dateFormattedDDMMYYYY(validityInterval.value?.to) ?? ""}`;
-    list.push({ route: route.fullPath, label: validityIntervalLabel });
-  }
-
-  return list;
 });
 
 const buildOgTitle = (
