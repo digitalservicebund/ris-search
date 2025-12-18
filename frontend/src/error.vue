@@ -13,9 +13,13 @@ const props = defineProps({
   },
 });
 
-const isNotFoundError = computed(() => props.error?.statusCode === 404);
+const isNotFoundError = computed(
+  () => props.error?.statusCode === HttpStatusCodes.NotFound,
+);
 
-const isInternalServerError = computed(() => props.error?.statusCode === 500);
+const isInternalServerError = computed(
+  () => props.error?.statusCode === HttpStatusCodes.InternalServerError,
+);
 
 const locationClientOnly = computed(() => window.location.href);
 
