@@ -180,7 +180,9 @@ test.describe("view norm page", async () => {
     await navigate(page, mainExpressionEliUrl);
 
     const table = page.getByRole("table");
-    const cell = table.getByRole("cell", { name: "Produktionsanforderungen" });
+    const cell = table.getByRole("columnheader", {
+      name: "Produktionsanforderungen",
+    });
     await expect(cell).toBeVisible();
 
     await test.step("Navigate from main norm view to a single article", async () => {
