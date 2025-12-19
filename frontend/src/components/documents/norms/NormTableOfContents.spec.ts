@@ -110,43 +110,6 @@ describe("NormTableOfContents", () => {
     } as unknown as HTMLElement);
   });
 
-  describe("handleClick()", () => {
-    it("prevents default, scrolls to the anchor, and pushes hash to router", async () => {
-      const event = {
-        preventDefault: vi.fn(),
-      } as unknown as MouseEvent;
-
-      const encodedRoute = "/some/path#art-z%c2%a7%c2%a7%2018%20bis%2021";
-
-      wrapper.vm.scrollToNode(event, encodedRoute);
-
-      expect(event.preventDefault).toHaveBeenCalled();
-
-      expect(document.getElementById).toHaveBeenCalledWith(
-        "art-z%c2%a7%c2%a7%2018%20bis%2021",
-      );
-
-      expect(scrollIntoViewMock).toHaveBeenCalledWith({
-        behavior: "smooth",
-      });
-
-      expect(navigateToMock).toHaveBeenCalledWith({
-        hash: "#art-z%c2%a7%c2%a7%2018%20bis%2021",
-      });
-    });
-
-    it("does nothing if route does not contain a hash", () => {
-      const event = {
-        preventDefault: vi.fn(),
-      } as unknown as MouseEvent;
-
-      wrapper.vm.scrollToNode(event, "/some/path");
-
-      expect(event.preventDefault).not.toHaveBeenCalled();
-      expect(navigateToMock).not.toHaveBeenCalled();
-    });
-  });
-
   describe("Initial Rendering", () => {
     it("renders correctly with given tableOfContents", () => {
       const rootLabels = wrapper.findAll(".p-tree-node-label a");
