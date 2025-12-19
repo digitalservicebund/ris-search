@@ -40,6 +40,7 @@ jaxb-moxy = "4.0.8"
 posthog = "1.2.0"
 pebble = "4.0.0"
 rest-assured = "5.5.5"
+jose4j = "0.9.6"
 
 [libraries]
 spring-actuator = { module="org.springframework.boot:spring-boot-starter-actuator", version.ref="spring-boot-starter" }
@@ -55,6 +56,7 @@ jsoup = { module = "org.jsoup:jsoup", version.ref = "jsoup" }
 jts-core = { group = "org.locationtech.jts", name = "jts-core", version.ref = "jts" }
 amazon-aws-sdk-s3 = { module = "software.amazon.awssdk:s3", version.ref = "amazon-aws-sdk-s3" }
 snakeyaml = { module = "org.yaml:snakeyaml", version.ref = "snakeyalm" }
+jose4j = { module = "org.bitbucket.b_c:jose4j", version.ref = "jose4j"}
 micrometer-registry-prometheus = { module = "io.micrometer:micrometer-registry-prometheus", version.ref = "prometheus" }
 sentry-spring-boot-starter-jakarta = { module = "io.sentry:sentry-spring-boot-starter-jakarta", version.ref = "sentry" }
 sentry-logback = { module = "io.sentry:sentry-logback", version.ref = "sentry" }

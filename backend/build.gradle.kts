@@ -69,6 +69,9 @@ dependencies {
     // CVE-2022-1471
     implementation(libs.snakeyaml)
 
+    // CVE-2024-29371 upgrade kubernetes-client to 5.0.0 after boot 4.0.0 upgrade
+    implementation(libs.jose4j)
+
     implementation(libs.micrometer.registry.prometheus)
     implementation(libs.sentry.spring.boot.starter.jakarta)
     implementation(libs.sentry.logback)
