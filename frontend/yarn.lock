@@ -5174,7 +5174,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*, @types/node@npm:^24.10.0":
+"@types/node@npm:*":
   version: 24.10.0
   resolution: "@types/node@npm:24.10.0"
   dependencies:
@@ -5189,6 +5189,15 @@ __metadata:
   dependencies:
     undici-types: "npm:~6.21.0"
   checksum: 10c0/66b98fcd38efb4ae58c628d61fed2b8f17c830eb665d8bceabc4174cae1dd81b8e4caac4c70d7dc929f9f76a3dc46cb21f480e904d0b898297bd12c0a2d1571a
+  languageName: node
+  linkType: hard
+
+"@types/node@npm:^25.0.3":
+  version: 25.0.3
+  resolution: "@types/node@npm:25.0.3"
+  dependencies:
+    undici-types: "npm:~7.16.0"
+  checksum: 10c0/b7568f0d765d9469621615e2bb257c7fd1953d95e9acbdb58dffb6627a2c4150d405a4600aa1ad8a40182a94fe5f903cafd3c0a2f5132814debd0e3bfd61f835
   languageName: node
   linkType: hard
 
@@ -14588,7 +14597,7 @@ __metadata:
     "@types/js-cookie": "npm:^3.0.6"
     "@types/jsdom": "npm:^21.1.7"
     "@types/lodash": "npm:^4.17.20"
-    "@types/node": "npm:^24.10.0"
+    "@types/node": "npm:^25.0.3"
     "@types/sanitize-html": "npm:^2.16.0"
     "@unhead/vue": "npm:^2.0.19"
     "@vitest/coverage-v8": "npm:^4.0.14"
