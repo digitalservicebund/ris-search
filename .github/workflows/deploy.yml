@@ -23,7 +23,7 @@ jobs:
     steps:
       - uses: chainguard-dev/actions/setup-gitsign@b479012116eacde7f895586c17b598f7ba0ee700
       - name: Deploy new images
-        uses: digitalservicebund/argocd-deploy@faa88406a1d6afa918aad127b19735c6e54d7fb1
+        uses: digitalservicebund/argocd-deploy@4e758f584953506c571951ffcba33d6a6246e856
         with:
           environment: staging
           version: ${{ inputs.container-image-version }}
@@ -48,7 +48,7 @@ jobs:
     steps:
       - uses: chainguard-dev/actions/setup-gitsign@b479012116eacde7f895586c17b598f7ba0ee700
       - name: Deploy new images
-        uses: digitalservicebund/argocd-deploy@faa88406a1d6afa918aad127b19735c6e54d7fb1
+        uses: digitalservicebund/argocd-deploy@4e758f584953506c571951ffcba33d6a6246e856
         with:
           environment: uat
           version: ${{ inputs.container-image-version }}
