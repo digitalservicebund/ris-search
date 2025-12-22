@@ -45,6 +45,15 @@ export function getLiteratureMetadataItems(
 
 export function getLiteratureDetailItems(
   literature?: Partial<Literature>,
+): { label: string; value?: string; valueList?: string[] }[] {
+  if (literature?.literatureType == "sli") {
+    return getSliLiteratureDetailItems(literature);
+  }
+  return getUliLiteratureDetailItems(literature);
+}
+
+export function getUliLiteratureDetailItems(
+  literature?: Partial<Literature>,
 ): { label: string; value?: string }[] {
   const normReferences = literature?.normReferences ?? [];
   const languages = literature?.languages ?? [];
@@ -73,6 +82,77 @@ export function getLiteratureDetailItems(
         conferenceNotes.length,
       ),
       value: formatArray(conferenceNotes),
+    },
+  ];
+}
+
+export function getSliLiteratureDetailItems(
+  literature?: Partial<Literature>,
+): { label: string; value?: string; valueList?: string[] }[] {
+  const normReferences = literature?.normReferences ?? [];
+  const languages = literature?.languages ?? [];
+  const conferenceNotes = literature?.conferenceNotes ?? [];
+  const universityNotes = literature?.universityNotes ?? [];
+  return [
+    {
+      label: getSingularOrPlural("Norm:", "Normen:", normReferences.length),
+      value: formatArray(normReferences),
+    },
+    {
+      label: "Bearbeiter:",
+      value: formatArray(formatNames(literature?.editors ?? [])),
+    },
+    {
+      label: "Mitarbeiter:",
+      value: formatArray(formatNames(literature?.collaborators ?? [])),
+    },
+    {
+      label: "Urheber:",
+      value: formatArray(formatNames(literature?.originators ?? [])),
+    },
+    {
+      label: "Begründer:",
+      value: formatArray(formatNames(literature?.founder ?? [])),
+    },
+    {
+      label: "Herausgeber:",
+      value: formatArray(formatNames(literature?.publishers ?? [])),
+    },
+    {
+      label: "Verlag:",
+      value: formatArray(formatNames(literature?.publishingHouses ?? [])),
+    },
+    {
+      label: "Ausgabe:",
+      value: literature?.edition ?? undefined,
+    },
+    {
+      label: "Bestellnummer:",
+      value: formatArray(literature?.internationalIdentifiers ?? []),
+    },
+    {
+      label: "Teilband:",
+      valueList: literature?.volumes,
+    },
+    {
+      label: getSingularOrPlural("Sprache:", "Sprachen:", languages.length),
+      value: formatArray(languages),
+    },
+    {
+      label: getSingularOrPlural(
+        "Kongress:",
+        "Kongresse:",
+        conferenceNotes.length,
+      ),
+      value: formatArray(conferenceNotes),
+    },
+    {
+      label: getSingularOrPlural(
+        "Hochschule:",
+        "Hochschulen:",
+        universityNotes.length,
+      ),
+      value: formatArray(universityNotes),
     },
   ];
 }

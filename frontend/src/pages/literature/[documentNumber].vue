@@ -68,7 +68,11 @@ const detailItems = computed(() => getLiteratureDetailItems(literature.value));
         <DocumentsIncompleteDataMessage class="my-24" />
         <DetailsList>
           <template v-for="item in detailItems" :key="item.label">
-            <DetailsListEntry :label="item.label" :value="item.value" />
+            <DetailsListEntry
+              :label="item.label"
+              :value="item.value"
+              :value-list="item.valueList"
+            />
           </template>
         </DetailsList>
       </section>

@@ -127,6 +127,15 @@ describe("anyDocument", () => {
         languages: [],
         normReferences: [],
         originators: [],
+        universityNotes: [],
+        literatureType: "uli",
+        editors: [],
+        founder: [],
+        publishers: [],
+        publishingHouses: [],
+        edition: null,
+        volumes: [],
+        internationalIdentifiers: [],
       };
 
       expect(isLiterature(doc)).toBe(true);
@@ -242,6 +251,15 @@ describe("anyDocument", () => {
         languages: [],
         normReferences: [],
         originators: [],
+        universityNotes: [],
+        literatureType: "uli",
+        editors: [],
+        founder: [],
+        publishers: [],
+        publishingHouses: [],
+        edition: null,
+        volumes: [],
+        internationalIdentifiers: [],
       };
 
       expect(getIdentifier(doc)).toBe("4711");
@@ -269,6 +287,15 @@ describe("anyDocument", () => {
         languages: [],
         normReferences: [],
         originators: [],
+        universityNotes: [],
+        literatureType: "uli",
+        editors: [],
+        founder: [],
+        publishers: [],
+        publishingHouses: [],
+        edition: null,
+        volumes: [],
+        internationalIdentifiers: [],
       };
 
       expect(() => getIdentifier(doc)).toThrow();
