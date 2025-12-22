@@ -16,19 +16,32 @@ import org.springframework.web.filter.GenericFilterBean;
 public class RequestLogger extends GenericFilterBean {
   private final ObjectMapper mapper = new ObjectMapper();
 
+  private final String[] ignoredPaths = {"/actuator"};
+
   @Override
   public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
       throws IOException, ServletException {
 
     chain.doFilter(request, response);
-
     log((HttpServletRequest) request, (HttpServletResponse) response);
   }
 
   private void log(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    RequestLog log =
-        new RequestLog(request.getRequestURI(), request.getQueryString(), response.getStatus());
+    String uri = request.getRequestURI();
+    if (isIgnoredPath(uri)) {
+      return;
+    }
+    RequestLog log = new RequestLog(uri, request.getQueryString(), response.getStatus());
     String msg = mapper.writeValueAsString(log);
     logger.trace(msg);
+  }
+
+  private boolean isIgnoredPath(String path) {
+    for (String ignored : ignoredPaths) {
+      if (path.startsWith(ignored)) {
+        return true;
+      }
+    }
+    return false;
   }
 }

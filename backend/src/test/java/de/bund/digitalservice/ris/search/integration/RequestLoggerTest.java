@@ -58,4 +58,11 @@ class RequestLoggerTest extends ContainersIntegrationBase {
     assertThat(capturedOutput.getOut())
         .contains("{\"path\":\"/v1/document\",\"queryParams\":\"searchTerm=Test\",\"status\":200}");
   }
+
+  @Test
+  void itIgnoresActuator(CapturedOutput capturedOutput) throws Exception {
+    mockMvc.perform(get("/actuator/health/readiness"));
+
+    assertThat(capturedOutput.getOut()).doesNotContain("{\"path\":\"/actuator/health/readiness\"");
+  }
 }
