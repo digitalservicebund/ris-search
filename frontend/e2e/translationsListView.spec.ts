@@ -36,7 +36,7 @@ test(
     test.skip(!privateFeaturesEnabled);
     await navigate(page, "/");
 
-    const footer = page.locator("footer");
+    const footer = page.getByRole("contentinfo");
     const translationsLink = footer.getByRole("link", {
       name: "English translations",
     });
