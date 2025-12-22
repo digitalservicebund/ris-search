@@ -28,9 +28,13 @@ sentry:
 
 logging:
   level:
-    org:
-      zalando:
-        logbook: TRACE
+    de:
+      bund:
+        digitalservice:
+          ris:
+            search:
+              config:
+                httplogs: TRACE
 
 management:
   endpoints:

@@ -28,7 +28,6 @@ spring-data-opensearch-starter = "2.0.3"
 opensearch-test-autoconfigure = "2.0.3"
 opensearch-test-containers = "4.0.0"
 jsoup = "1.21.2"
-logbook = "3.12.3"
 org-json = "20250517"
 commons-csv = "1.14.1"
 amazon-aws-sdk-s3 = "2.29.45"
@@ -62,7 +61,6 @@ sentry-spring-boot-starter-jakarta = { module = "io.sentry:sentry-spring-boot-st
 sentry-logback = { module = "io.sentry:sentry-logback", version.ref = "sentry" }
 posthog = { module = "com.posthog.java:posthog", version.ref = "posthog" }
 commons-text = { module = "org.apache.commons:commons-text", version.ref = "commons-text" }
-logbook-spring-boot-starter = { module = "org.zalando:logbook-spring-boot-starter", version.ref = "logbook" }
 json = { module = "org.json:json", version.ref = "org-json" }
 commons-csv = { module = "org.apache.commons:commons-csv", version.ref = "commons-csv" }
 jackson-jsonld = { module = "com.io-informatics.oss:jackson-jsonld", version.ref = "jackson-json-ld" }
