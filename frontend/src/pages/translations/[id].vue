@@ -31,7 +31,7 @@ const id = route.params.id as string;
 const { data, error } = await fetchTranslationAndHTML(id);
 if (error.value) showError(error.value);
 
-const { data: germanOriginal } = await getGermanOriginal(id);
+const { legislation } = await getGermanOriginal(id);
 
 const currentTranslation = data.value?.content;
 const html = data.value?.html;
@@ -53,7 +53,7 @@ const translatedBy = computed(() => {
 });
 
 const germanOriginalWorkEli = computed(() => {
-  return germanOriginal.value?.item?.legislationIdentifier;
+  return legislation.value?.item?.legislationIdentifier;
 });
 
 const breadcrumbItems = computed(() => {
@@ -143,7 +143,7 @@ const currentView = computed(
     </hgroup>
 
     <Message
-      v-if="germanOriginal"
+      v-if="legislation"
       :closable="false"
       class="mb-48 max-w-prose space-y-24"
     >

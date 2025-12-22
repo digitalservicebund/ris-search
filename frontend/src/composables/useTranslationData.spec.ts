@@ -14,6 +14,33 @@ const { mockFetch } = vi.hoisted(() => {
   };
 });
 
+const { useRisBackendMock, _executeMock, dataRef } = vi.hoisted(() => {
+  const vue = require("vue") as typeof import("vue");
+  const ref = vue.ref;
+  const dataRef = ref(null) as Ref<unknown>;
+  const _executeMock = vi.fn();
+
+  return {
+    useRisBackendMock: vi.fn(
+      (_url: Ref<string>, _opts: Record<string, Ref<string>>) => ({
+        status: ref("success"),
+        data: dataRef,
+        error: ref(null),
+        pending: ref(false),
+        execute: _executeMock,
+        refresh: vi.fn(),
+        clear: vi.fn(),
+      }),
+    ),
+    _executeMock,
+    dataRef: dataRef,
+  };
+});
+
+mockNuxtImport("useRisBackend", () => {
+  return useRisBackendMock;
+});
+
 mockNuxtImport("useNuxtApp", () => {
   const nuxtApp = (globalThis as unknown as Window)?.useNuxtApp?.() ?? {};
   return () => {
@@ -30,58 +57,32 @@ beforeEach(() => {
 
 describe("fetchTranslationList", () => {
   it("returns a list when there is no error", async () => {
-    const mockTranslationListData: TranslationContent[] = [
-      {
-        "@id": "Cde",
-        name: "Act B",
-        inLanguage: "en",
-        translator: "…",
-        translationOfWork: "Gesetz B",
-        about: "…",
-        "ris:filename": "englisch_cde.html",
-      },
-      {
-        "@id": "AbC",
-        name: "Act A",
-        inLanguage: "en",
-        translator: "…",
-        translationOfWork: "Gesetz A",
-        about: "…",
-        "ris:filename": "englisch_abc.html",
-      },
-    ];
+    const mockTranslationResponse = [{ "@id": "Cde" }, { "@id": "AbC" }];
 
-    mockFetch.mockResolvedValueOnce(mockTranslationListData);
-    const { data, error } = await fetchTranslationList();
+    dataRef.value = mockTranslationResponse;
 
-    expect(mockFetch).toHaveBeenCalledWith("/v1/translatedLegislation");
-    expect(error.value).toBeUndefined();
-    expect(data.value).toHaveLength(2);
+    const { translations, translationsError, translationsStatus } =
+      await fetchTranslationList();
+
+    expect(useRisBackendMock).toHaveBeenCalledWith("/v1/translatedLegislation");
+
+    expect(translations.value).toEqual(mockTranslationResponse);
+
+    expect(translationsError.value).toBeNull();
+    expect(translationsStatus.value).toBe("success");
   });
 });
 
-describe.skip("fetchTranslationListWithIdFilter", () => {
+describe("fetchTranslationListWithIdFilter", () => {
   it("fetches a filtered list of translation", async () => {
-    const mockTranslationResponse = [
-      {
-        "@id": "AbC",
-        name: "Act A",
-        inLanguage: "en",
-        translator: "…",
-        translationOfWork: "Gesetz A",
-        about: "…",
-        "ris:filename": "englisch_abc.html",
-      },
-    ];
+    const mockTranslationResponse = [{ "@id": "Cde" }];
+    dataRef.value = mockTranslationResponse;
+    const { translations } = await fetchTranslationListWithIdFilter("Cde");
+    expect(translations.value).toEqual(mockTranslationResponse);
 
-    mockFetch.mockResolvedValueOnce(mockTranslationResponse);
-
-    const { data, error } = await fetchTranslationListWithIdFilter("AbC");
-
-    expect(mockFetch).toHaveBeenCalledWith("/v1/translatedLegislation?id=AbC");
-
-    expect(error.value).toBeUndefined();
-    expect(data.value).toHaveLength(1);
+    expect(useRisBackendMock).toHaveBeenCalledWith(
+      "/v1/translatedLegislation?id=Cde",
+    );
   });
 });
 
@@ -182,47 +183,52 @@ describe("getGermanOriginal", () => {
 
   it("returns first legislation work when API returns results", async () => {
     const mockResult = { item: { abbreviation: "test-id" } };
-    mockFetch.mockResolvedValueOnce({ member: [mockResult] });
+    dataRef.value = { member: [mockResult] };
 
-    const { data, error } = await getGermanOriginal("test-id");
+    const { legislation, legislationSearchError } =
+      await getGermanOriginal("test-id");
 
-    expect(data.value).toEqual(mockResult);
-    expect(error.value).toBeUndefined();
-    expect(mockFetch).toHaveBeenCalledWith(
+    expect(legislation.value).toEqual(mockResult);
+    expect(legislationSearchError.value).toBeNull();
+    expect(useRisBackendMock).toHaveBeenCalledWith(
       "/v1/legislation?searchTerm=test-id&temporalCoverageFrom=2025-10-13&temporalCoverageTo=2025-10-13&size=100&pageIndex=0",
     );
   });
 
   it("returns 404 error when API returns empty member list", async () => {
-    mockFetch.mockResolvedValueOnce({ member: [] });
+    dataRef.value = { member: [] };
 
-    const { data, error } = await getGermanOriginal("test-id");
+    const { legislation, legislationSearchError, legislationSearchStatus } =
+      await getGermanOriginal("test-id");
 
-    expect(data.value).toBeUndefined();
-    expect(error.value).not.toBeNull();
-    expect(error.value?.statusCode).toBe(404);
-    expect(error.value?.statusMessage).toBe("Not Found");
+    expect(legislation.value).toBeNull();
+    expect(legislationSearchError.value).not.toBeNull();
+    expect(legislationSearchStatus.value).toBe("404");
+    expect(legislationSearchError.value?.message).toBe(
+      "The fetched legislation does not match the requested ID: test-id",
+    );
   });
 
   it("returns 404 error when API returns null", async () => {
-    mockFetch.mockResolvedValueOnce(null);
+    dataRef.value = null;
 
-    const { data, error } = await getGermanOriginal("test-id");
+    const { legislation, legislationSearchError, legislationSearchStatus } =
+      await getGermanOriginal("test-id");
 
-    expect(data.value).toBeUndefined();
-    expect(error.value).not.toBeNull();
-    expect(error.value?.statusCode).toBe(404);
-    expect(error.value?.statusMessage).toBe("Not Found");
+    expect(legislation.value).toBeNull();
+    expect(legislationSearchError.value).not.toBeNull();
+    expect(legislationSearchStatus.value).toBe("404");
+    expect(legislationSearchError.value?.message).toBe(
+      "No results found for test-id",
+    );
   });
   it("throws an error when the ids don't macht", async () => {
-    const mockTranslationResponse = {
+    dataRef.value = {
       member: [{ item: { abbreviation: "test-id" } }],
     };
-
-    mockFetch.mockResolvedValueOnce(mockTranslationResponse);
-    const { error } = await getGermanOriginal("cde");
-    expect(error.value?.message).toBe(
-      "Not Found: Abbreviation mismatch for ID: cde",
+    const { legislationSearchError } = await getGermanOriginal("cde");
+    expect(legislationSearchError.value?.message).toBe(
+      "The fetched legislation does not match the requested ID: cde",
     );
   });
 });
