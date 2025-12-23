@@ -81,7 +81,6 @@ dependencies {
     implementation(libs.json)
     implementation(libs.commons.csv)
 
-    implementation(libs.jackson.jsonld)
     implementation(libs.saxon.he)
     implementation(libs.jaxb.moxy)
     implementation(libs.pebble)

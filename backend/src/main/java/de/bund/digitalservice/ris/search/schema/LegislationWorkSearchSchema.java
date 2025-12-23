@@ -1,10 +1,8 @@
 package de.bund.digitalservice.ris.search.schema;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import de.bund.digitalservice.ris.search.config.ApiConfig;
 import io.swagger.v3.oas.annotations.media.Schema;
-import ioinformarics.oss.jackson.module.jsonld.annotation.JsonldId;
-import ioinformarics.oss.jackson.module.jsonld.annotation.JsonldResource;
-import ioinformarics.oss.jackson.module.jsonld.annotation.JsonldType;
 import java.time.LocalDate;
 import lombok.Builder;
 import org.jetbrains.annotations.Nullable;
@@ -35,13 +33,14 @@ import org.jetbrains.annotations.Nullable;
  * adheres to JSON-LD representation under the type `Legislation`.
  */
 @Builder
-@JsonldResource
-@JsonldType("Legislation")
 @Schema(
     description =
         "A legislation item, across different expressions and manifestations. May be used to provide context to a `LegislationExpression` (under key `workExample`).")
+@JsonldType("Legislation")
 public record LegislationWorkSearchSchema(
-    @JsonldId @Schema(example = ApiConfig.Paths.LEGISLATION + "/eli/bund/bgbl-1/1975/s1760")
+    @JsonProperty("@type") String type,
+    @JsonProperty("@id")
+        @Schema(example = ApiConfig.Paths.LEGISLATION + "/eli/bund/bgbl-1/1975/s1760")
         String id,
     @Schema(example = "Verordnung über Kakao und Kakaoerzeugnisse") String name,
     @Schema(example = "eli/bund/bgbl-1/1975/s1760") String legislationIdentifier,
@@ -63,4 +62,12 @@ public record LegislationWorkSearchSchema(
         LocalDate datePublished,
     @Nullable PublicationIssueSchema isPartOf,
     @Nullable LegislationExpressionSearchSchema workExample)
-    implements AbstractDocumentSchema {}
+    implements AbstractDocumentSchema {
+
+  /** add default type to lombok builder pattern */
+  public static class LegislationWorkSearchSchemaBuilder {
+    LegislationWorkSearchSchemaBuilder() {
+      type = "Legislation";
+    }
+  }
+}

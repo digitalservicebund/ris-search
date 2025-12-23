@@ -1,11 +1,11 @@
 package de.bund.digitalservice.ris.search.config;
 
+import de.bund.digitalservice.ris.search.schema.JsonldType;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.media.StringSchema;
 import io.swagger.v3.oas.models.servers.Server;
-import ioinformarics.oss.jackson.module.jsonld.annotation.JsonldType;
 import java.util.HashMap;
 import java.util.List;
 import org.springdoc.core.customizers.OpenApiCustomizer;

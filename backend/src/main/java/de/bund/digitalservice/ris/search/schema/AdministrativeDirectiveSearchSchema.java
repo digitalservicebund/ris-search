@@ -1,9 +1,7 @@
 package de.bund.digitalservice.ris.search.schema;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
-import ioinformarics.oss.jackson.module.jsonld.annotation.JsonldId;
-import ioinformarics.oss.jackson.module.jsonld.annotation.JsonldResource;
-import ioinformarics.oss.jackson.module.jsonld.annotation.JsonldType;
 import java.time.LocalDate;
 import java.util.List;
 import lombok.Builder;
@@ -29,10 +27,10 @@ import org.jetbrains.annotations.Nullable;
  * directive became effective.
  */
 @Builder
-@JsonldResource
-@JsonldType("AdministrativeDirective")
+@JsonldType("@type")
 public record AdministrativeDirectiveSearchSchema(
-    @Schema(example = "KALU000000000") @JsonldId String id,
+    @JsonProperty("@type") String type,
+    @Schema(example = "KALU000000000") @JsonProperty("@id") String id,
     @Schema(description = "Dokumentnummer", example = "KALU000000000") String documentNumber,
     @Nullable @Schema(description = "Haupttitel") String headline,
     @Nullable @Schema(description = "Kurzreferat") String shortReport,
@@ -41,4 +39,12 @@ public record AdministrativeDirectiveSearchSchema(
     @Nullable @Schema(description = "Normgeber") String legislationAuthority,
     @Nullable @Schema(description = "Gültig ab Datum", example = "2003-12-15")
         LocalDate entryIntoForceDate)
-    implements AbstractDocumentSchema {}
+    implements AbstractDocumentSchema {
+
+  /** add default type to lombok builder pattern */
+  public static class AdministrativeDirectiveSearchSchemaBuilder {
+    AdministrativeDirectiveSearchSchemaBuilder() {
+      type = "AdministrativeDirective";
+    }
+  }
+}

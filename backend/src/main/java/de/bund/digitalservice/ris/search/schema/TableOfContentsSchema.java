@@ -1,7 +1,7 @@
 package de.bund.digitalservice.ris.search.schema;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
-import ioinformarics.oss.jackson.module.jsonld.annotation.JsonldType;
 import java.util.List;
 
 /**
@@ -21,4 +21,11 @@ public record TableOfContentsSchema(
     @Schema(example = "hauptteil-1_para-1") String id,
     @Schema(example = "1") String marker,
     @Schema(example = "Art 1") String heading,
-    List<TableOfContentsSchema> children) {}
+    List<TableOfContentsSchema> children,
+    @JsonProperty("@type") String type) {
+
+  public TableOfContentsSchema(
+      String id, String marker, String heading, List<TableOfContentsSchema> children) {
+    this(id, marker, heading, children, "TocEntry");
+  }
+}
