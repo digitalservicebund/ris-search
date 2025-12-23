@@ -37,48 +37,30 @@ function legislationSearchURL(id: string, currentDate: string) {
   return `/v1/legislation?searchTerm=${id}&temporalCoverageFrom=${currentDate}&temporalCoverageTo=${currentDate}&size=100&pageIndex=0`;
 }
 
-export function fetchTranslationList(): AsyncData<
-  TranslationContent[],
-  NuxtError<TranslationContent> | NuxtError<null> | undefined
-> {
-  const { $risBackend } = useNuxtApp();
-
-  return useAsyncData(
-    "translations-list",
-    async () => {
-      const response = await $risBackend<TranslationContent[]>(
-        translationsListURL(),
-      );
-
-      if (!response || response.length === 0) throw notFoundError("Not Found");
-
-      return response;
-    },
-    { server: true, lazy: false },
-  );
+export async function fetchTranslationList() {
+  const { data, error, status, pending, execute } = await useRisBackend<
+    TranslationContent[]
+  >(translationsListURL());
+  return {
+    translations: data,
+    translationsError: error,
+    translationsIsPending: pending,
+    translationsStatus: status,
+    executeTranslations: execute,
+  };
 }
 
-export function fetchTranslationListWithIdFilter(
-  id: string,
-): AsyncData<
-  TranslationContent[],
-  NuxtError<TranslationContent> | NuxtError<null> | undefined
-> {
-  const { $risBackend } = useNuxtApp();
-
-  return useAsyncData(
-    `translations-list-with_id-${id}`,
-    async () => {
-      const response = await $risBackend<TranslationContent[]>(
-        translationDetailURL(id),
-      );
-
-      if (!response || response.length === 0) throw notFoundError("Not Found");
-
-      return response;
-    },
-    { server: true, lazy: false },
-  );
+export async function fetchTranslationListWithIdFilter(id: string) {
+  const { data, error, status, pending, execute } = await useRisBackend<
+    TranslationContent[]
+  >(translationDetailURL(id));
+  return {
+    translations: data,
+    translationsError: error,
+    translationsIsPending: pending,
+    translationsStatus: status,
+    executeTranslations: execute,
+  };
 }
 
 export function fetchTranslationAndHTML(
@@ -118,30 +100,47 @@ export function fetchTranslationAndHTML(
   );
 }
 
-export function getGermanOriginal(
-  id: string,
-): AsyncData<SearchResult<LegislationWork> | null, NuxtError | undefined> {
-  const { $risBackend } = useNuxtApp();
-
-  return useAsyncData(
-    `german-original-${id}`,
-    async () => {
-      const currentDateInGermanyFormatted = getCurrentDateInGermanyFormatted();
-      const response = await $risBackend<
-        JSONLDList<SearchResult<LegislationWork>>
-      >(legislationSearchURL(id, currentDateInGermanyFormatted));
-
-      if (!response || response.member.length === 0) {
-        throw notFoundError("Not Found");
-      }
-
-      const [firstResult] = response.member;
-
-      if (firstResult?.item?.abbreviation === id) {
-        return firstResult;
-      }
-      throw notFoundError(`Not Found: Abbreviation mismatch for ID: ${id}`);
-    },
-    { server: true, lazy: false },
+export async function getGermanOriginal(id: string) {
+  const currentDateInGermanyFormatted = getCurrentDateInGermanyFormatted();
+  const searchEndpoint = legislationSearchURL(
+    id,
+    currentDateInGermanyFormatted,
   );
+
+  const legislation = ref<SearchResult<LegislationWork> | null>(null);
+  const legislationSearchError = ref<Error | null>(null);
+  const legislationSearchStatus = ref<string | null>(null);
+
+  const { data, error, status, pending, execute } =
+    await useRisBackend<JSONLDList<SearchResult<LegislationWork>>>(
+      searchEndpoint,
+    );
+
+  legislationSearchStatus.value = status.value;
+
+  if (data.value?.totalItems === 0 || data.value == null) {
+    legislation.value = null;
+    legislationSearchError.value = new Error(`No results found for ${id}`);
+    legislationSearchStatus.value = "404";
+  } else if (error.value) {
+    legislationSearchError.value = error.value;
+  } else {
+    const firstResult = data.value?.member?.[0] ?? null;
+    if (firstResult?.item?.abbreviation === id) {
+      legislation.value = firstResult;
+    } else {
+      legislationSearchError.value = new Error(
+        `The fetched legislation does not match the requested ID: ${id}`,
+      );
+      legislationSearchStatus.value = "404";
+    }
+  }
+
+  return {
+    legislation,
+    legislationSearchError,
+    legislationSearchIsPending: pending,
+    legislationSearchStatus,
+    executeLegislationSearch: execute,
+  };
 }

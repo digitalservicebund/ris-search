@@ -1,5 +1,5 @@
+import { mockNuxtImport } from "@nuxt/test-utils/runtime";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import useBackendUrl from "~/composables/useBackendUrl";
 import type { TranslationContent } from "~/composables/useTranslationData";
 import {
   fetchTranslationAndHTML,
@@ -8,86 +8,76 @@ import {
   getGermanOriginal,
 } from "~/composables/useTranslationData";
 
-const requestFetchMock = vi.fn();
+const { mockFetch } = vi.hoisted(() => {
+  return {
+    mockFetch: vi.fn(),
+  };
+});
 
-vi.stubGlobal("$fetch", requestFetchMock);
+const { useRisBackendMock, dataRef } = vi.hoisted(() => {
+  const { ref } = require("vue") as typeof import("vue");
+  const dataRef = ref(null) as Ref<unknown>;
+
+  return {
+    useRisBackendMock: vi.fn(
+      (_url: Ref<string>, _opts?: Record<string, Ref<string>>) => ({
+        status: ref("success"),
+        data: dataRef,
+        error: ref(null),
+        pending: ref(false),
+        execute: vi.fn(),
+        refresh: vi.fn(),
+        clear: vi.fn(),
+      }),
+    ),
+    dataRef,
+  };
+});
+
+mockNuxtImport("useRisBackend", () => {
+  return useRisBackendMock;
+});
+
+mockNuxtImport("useNuxtApp", () => {
+  const nuxtApp = (globalThis as unknown as Window)?.useNuxtApp?.() ?? {};
+  return () => {
+    return {
+      ...nuxtApp,
+      $risBackend: mockFetch,
+    };
+  };
+});
 
 beforeEach(() => {
-  requestFetchMock.mockReset();
+  vi.clearAllMocks();
 });
 
-describe.skip("fetchTranslationList", () => {
+describe("fetchTranslationList", () => {
   it("returns a list when there is no error", async () => {
-    const mockTranslationListData: TranslationContent[] = [
-      {
-        "@id": "Cde",
-        name: "Act B",
-        inLanguage: "en",
-        translator: "…",
-        translationOfWork: "Gesetz B",
-        about: "…",
-        "ris:filename": "englisch_cde.html",
-      },
-      {
-        "@id": "AbC",
-        name: "Act A",
-        inLanguage: "en",
-        translator: "…",
-        translationOfWork: "Gesetz A",
-        about: "…",
-        "ris:filename": "englisch_abc.html",
-      },
-    ];
+    const mockTranslationResponse = [{ "@id": "Cde" }, { "@id": "AbC" }];
+    dataRef.value = mockTranslationResponse;
+    const { translations, translationsError } = await fetchTranslationList();
 
-    requestFetchMock.mockResolvedValueOnce(mockTranslationListData);
-    const { data, error } = await fetchTranslationList();
-
-    expect(requestFetchMock).toHaveBeenCalledWith(
-      useBackendUrl("/v1/translatedLegislation"),
-      {
-        headers: {
-          Authorization: "Basic ",
-        },
-      },
-    );
-    expect(error.value).toBeUndefined();
-    expect(data.value).toHaveLength(2);
+    expect(useRisBackendMock).toHaveBeenCalledWith("/v1/translatedLegislation");
+    expect(translations.value).toEqual(mockTranslationResponse);
+    expect(translationsError.value).toBeNull();
   });
 });
 
-describe.skip("fetchTranslationListWithIdFilter", () => {
+describe("fetchTranslationListWithIdFilter", () => {
   it("fetches a filtered list of translation", async () => {
-    const mockTranslationResponse = [
-      {
-        "@id": "AbC",
-        name: "Act A",
-        inLanguage: "en",
-        translator: "…",
-        translationOfWork: "Gesetz A",
-        about: "…",
-        "ris:filename": "englisch_abc.html",
-      },
-    ];
+    const mockTranslationResponse = [{ "@id": "Cde" }];
+    dataRef.value = mockTranslationResponse;
+    const { translations } = await fetchTranslationListWithIdFilter("Cde");
+    expect(translations.value).toEqual(mockTranslationResponse);
 
-    requestFetchMock.mockResolvedValueOnce(mockTranslationResponse);
-
-    const { data, error } = await fetchTranslationListWithIdFilter("AbC");
-
-    expect(requestFetchMock).toHaveBeenCalledWith(
-      useBackendUrl("/v1/translatedLegislation?id=AbC"),
-      {
-        headers: {
-          Authorization: "Basic ",
-        },
-      },
+    expect(useRisBackendMock).toHaveBeenCalledWith(
+      "/v1/translatedLegislation?id=Cde",
     );
-
-    expect(error.value).toBeUndefined();
-    expect(data.value).toHaveLength(1);
   });
 });
 
-describe.skip("fetchTranslationAndHTML", () => {
+describe("fetchTranslationAndHTML", () => {
   it("fetches translation data and HTML content", async () => {
     const mockTranslationResponse = [
       {
@@ -103,26 +93,18 @@ describe.skip("fetchTranslationAndHTML", () => {
 
     const mockHtmlResponse = "<h1>Mock HTML Content</h1>";
 
-    requestFetchMock.mockResolvedValueOnce(mockTranslationResponse);
-    requestFetchMock.mockResolvedValueOnce(mockHtmlResponse);
+    mockFetch.mockResolvedValueOnce(mockTranslationResponse);
+    mockFetch.mockResolvedValueOnce(mockHtmlResponse);
 
     const { data, error } = await fetchTranslationAndHTML("AbC");
 
-    expect(requestFetchMock).toHaveBeenCalledWith(
-      useBackendUrl("/v1/translatedLegislation?id=AbC"),
-      {
-        headers: {
-          Authorization: "Basic ",
-        },
-      },
-    );
+    expect(mockFetch).toHaveBeenCalledWith("/v1/translatedLegislation?id=AbC");
 
-    expect(requestFetchMock).toHaveBeenCalledWith(
-      useBackendUrl("/v1/translatedLegislation/englisch_abc.html"),
+    expect(mockFetch).toHaveBeenCalledWith(
+      "/v1/translatedLegislation/englisch_abc.html",
       {
         headers: {
           Accept: "text/html",
-          Authorization: "Basic ",
         },
       },
     );
@@ -135,20 +117,13 @@ describe.skip("fetchTranslationAndHTML", () => {
 
   it("returns 404 when list is empty", async () => {
     const mockTranslationResponse: TranslationContent[] = [];
-    requestFetchMock.mockResolvedValueOnce(mockTranslationResponse);
+    mockFetch.mockResolvedValueOnce(mockTranslationResponse);
 
     const { data, error } = await fetchTranslationAndHTML("FgH");
 
-    expect(requestFetchMock).toHaveBeenCalledWith(
-      useBackendUrl("/v1/translatedLegislation?id=FgH"),
-      {
-        headers: {
-          Authorization: "Basic ",
-        },
-      },
-    );
+    expect(mockFetch).toHaveBeenCalledWith("/v1/translatedLegislation?id=FgH");
 
-    expect(requestFetchMock).toHaveBeenCalledTimes(1);
+    expect(mockFetch).toHaveBeenCalledTimes(1);
 
     expect(error.value).not.toBeNull();
     expect(error.value?.statusCode).toBe(404);
@@ -168,20 +143,13 @@ describe.skip("fetchTranslationAndHTML", () => {
         about: "…",
       },
     ];
-    requestFetchMock.mockResolvedValueOnce(mockTranslationResponse);
+    mockFetch.mockResolvedValueOnce(mockTranslationResponse);
 
     const { data, error } = await fetchTranslationAndHTML("FgH");
 
-    expect(requestFetchMock).toHaveBeenCalledWith(
-      useBackendUrl("/v1/translatedLegislation?id=FgH"),
-      {
-        headers: {
-          Authorization: "Basic ",
-        },
-      },
-    );
+    expect(mockFetch).toHaveBeenCalledWith("/v1/translatedLegislation?id=FgH");
 
-    expect(requestFetchMock).toHaveBeenCalledTimes(1);
+    expect(mockFetch).toHaveBeenCalledTimes(1);
 
     expect(error.value).not.toBeNull();
     expect(error.value?.statusCode).toBe(404);
@@ -191,7 +159,7 @@ describe.skip("fetchTranslationAndHTML", () => {
   });
 });
 
-describe.skip("getGermanOriginal", () => {
+describe("getGermanOriginal", () => {
   beforeAll(() => {
     vi.setSystemTime(new Date("2025-10-13T00:00:00.000Z"));
   });
@@ -206,54 +174,52 @@ describe.skip("getGermanOriginal", () => {
 
   it("returns first legislation work when API returns results", async () => {
     const mockResult = { item: { abbreviation: "test-id" } };
-    requestFetchMock.mockResolvedValueOnce({ member: [mockResult] });
+    dataRef.value = { member: [mockResult] };
 
-    const { data, error } = await getGermanOriginal("test-id");
+    const { legislation, legislationSearchError } =
+      await getGermanOriginal("test-id");
 
-    expect(data.value).toEqual(mockResult);
-    expect(error.value).toBeUndefined();
-    expect(requestFetchMock).toHaveBeenCalledWith(
-      useBackendUrl(
-        "/v1/legislation?searchTerm=test-id&temporalCoverageFrom=2025-10-13&temporalCoverageTo=2025-10-13&size=100&pageIndex=0",
-      ),
-      {
-        headers: {
-          Authorization: "Basic ",
-        },
-      },
+    expect(legislation.value).toEqual(mockResult);
+    expect(legislationSearchError.value).toBeNull();
+    expect(useRisBackendMock).toHaveBeenCalledWith(
+      "/v1/legislation?searchTerm=test-id&temporalCoverageFrom=2025-10-13&temporalCoverageTo=2025-10-13&size=100&pageIndex=0",
     );
   });
 
   it("returns 404 error when API returns empty member list", async () => {
-    requestFetchMock.mockResolvedValueOnce({ member: [] });
+    dataRef.value = { member: [] };
 
-    const { data, error } = await getGermanOriginal("test-id");
+    const { legislation, legislationSearchError, legislationSearchStatus } =
+      await getGermanOriginal("test-id");
 
-    expect(data.value).toBeUndefined();
-    expect(error.value).not.toBeNull();
-    expect(error.value?.statusCode).toBe(404);
-    expect(error.value?.statusMessage).toBe("Not Found");
+    expect(legislation.value).toBeNull();
+    expect(legislationSearchError.value).not.toBeNull();
+    expect(legislationSearchStatus.value).toBe("404");
+    expect(legislationSearchError.value?.message).toBe(
+      "The fetched legislation does not match the requested ID: test-id",
+    );
   });
 
   it("returns 404 error when API returns null", async () => {
-    requestFetchMock.mockResolvedValueOnce(null);
+    dataRef.value = null;
 
-    const { data, error } = await getGermanOriginal("test-id");
+    const { legislation, legislationSearchError, legislationSearchStatus } =
+      await getGermanOriginal("test-id");
 
-    expect(data.value).toBeUndefined();
-    expect(error.value).not.toBeNull();
-    expect(error.value?.statusCode).toBe(404);
-    expect(error.value?.statusMessage).toBe("Not Found");
+    expect(legislation.value).toBeNull();
+    expect(legislationSearchError.value).not.toBeNull();
+    expect(legislationSearchStatus.value).toBe("404");
+    expect(legislationSearchError.value?.message).toBe(
+      "No results found for test-id",
+    );
   });
   it("throws an error when the ids don't macht", async () => {
-    const mockTranslationResponse = {
+    dataRef.value = {
       member: [{ item: { abbreviation: "test-id" } }],
     };
-
-    requestFetchMock.mockResolvedValueOnce(mockTranslationResponse);
-    const { error } = await getGermanOriginal("cde");
-    expect(error.value?.message).toBe(
-      "Not Found: Abbreviation mismatch for ID: cde",
+    const { legislationSearchError } = await getGermanOriginal("cde");
+    expect(legislationSearchError.value?.message).toBe(
+      "The fetched legislation does not match the requested ID: cde",
     );
   });
 });

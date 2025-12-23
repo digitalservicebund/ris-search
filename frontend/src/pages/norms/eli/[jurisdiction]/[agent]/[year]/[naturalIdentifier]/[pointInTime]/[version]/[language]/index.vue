@@ -61,12 +61,12 @@ const metadata: Ref<LegislationWork | undefined> = computed(() => {
 
 const abbreviation = data.value?.legislationWork.abbreviation;
 
-const { data: translation } = abbreviation
-  ? fetchTranslationListWithIdFilter(abbreviation)
-  : { data: { value: [] } };
+const { translations } = abbreviation
+  ? await fetchTranslationListWithIdFilter(abbreviation)
+  : { translations: { value: [] } };
 
 const translationUrl = computed(() => {
-  if (translation.value && translation.value.length > 0) {
+  if (translations.value && translations.value.length > 0) {
     return `/translations/${abbreviation}`;
   }
   return "";
