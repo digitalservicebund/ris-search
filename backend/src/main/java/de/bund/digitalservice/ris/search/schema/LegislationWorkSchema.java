@@ -1,10 +1,8 @@
 package de.bund.digitalservice.ris.search.schema;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import de.bund.digitalservice.ris.search.config.ApiConfig;
 import io.swagger.v3.oas.annotations.media.Schema;
-import ioinformarics.oss.jackson.module.jsonld.annotation.JsonldId;
-import ioinformarics.oss.jackson.module.jsonld.annotation.JsonldResource;
-import ioinformarics.oss.jackson.module.jsonld.annotation.JsonldType;
 import java.time.LocalDate;
 import lombok.Builder;
 import org.jetbrains.annotations.Nullable;
@@ -15,13 +13,12 @@ import org.jetbrains.annotations.Nullable;
  * `workExample` property.
  */
 @Builder
-@JsonldResource
-@JsonldType("Legislation")
 @Schema(
     description =
         "A legislation item, across different expressions and manifestations. May be used to provide context to a `LegislationExpression` (under key `workExample`).")
 public record LegislationWorkSchema(
-    @JsonldId
+    @JsonProperty("@type") String type,
+    @JsonProperty("@id")
         @Schema(
             example = ApiConfig.Paths.LEGISLATION + "/eli/bund/bgbl-1/1975/s1760",
             description = "Based on the European Legislation Identifier (ELI)")
@@ -42,19 +39,26 @@ public record LegislationWorkSchema(
             example = "2003-12-15",
             description =
                 """
-            Ausfertigungsdatum (The date of adoption or signature of the legislation. This is the date at which the text is officially acknowledged to be a legislation, even though it might not even be published or in force.)
-            """)
+                        Ausfertigungsdatum (The date of adoption or signature of the legislation. This is the date at which the text is officially acknowledged to be a legislation, even though it might not even be published or in force.)
+                        """)
         LocalDate legislationDate,
     @Schema(
             example = "2003-12-16",
             description =
                 """
-                Verkündungsdatum (The date of first publication of the legislation, when it was published in the official gazette. This may be later than the `legislationDate`.)
-                """)
+                        Verkündungsdatum (The date of first publication of the legislation, when it was published in the official gazette. This may be later than the `legislationDate`.)
+                        """)
         LocalDate datePublished,
     @Nullable PublicationIssueSchema isPartOf,
     @Schema(
             description =
                 "Expression-level details (<i>an \"exemplary\" expression of this work</i>)")
         @Nullable
-        LegislationExpressionSchema workExample) {}
+        LegislationExpressionSchema workExample) {
+
+  public static class LegislationWorkSchemaBuilder {
+    LegislationWorkSchemaBuilder() {
+      type = "Legislation";
+    }
+  }
+}

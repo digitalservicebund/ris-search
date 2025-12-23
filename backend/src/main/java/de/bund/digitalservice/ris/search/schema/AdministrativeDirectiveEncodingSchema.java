@@ -1,9 +1,7 @@
 package de.bund.digitalservice.ris.search.schema;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
-import ioinformarics.oss.jackson.module.jsonld.annotation.JsonldId;
-import ioinformarics.oss.jackson.module.jsonld.annotation.JsonldResource;
-import ioinformarics.oss.jackson.module.jsonld.annotation.JsonldType;
 import lombok.Builder;
 
 /**
@@ -11,10 +9,21 @@ import lombok.Builder;
  * guidelines.
  */
 @Builder
-@JsonldResource
-@JsonldType("MediaObject")
 public record AdministrativeDirectiveEncodingSchema(
-    @JsonldId String id,
+    @JsonProperty("@id") String id,
     String contentUrl,
     @Schema(example = "text/html") String encodingFormat,
-    @Schema(example = "de") String inLanguage) {}
+    @Schema(example = "de") String inLanguage,
+    @JsonProperty("@type") String type) {
+
+  public AdministrativeDirectiveEncodingSchema(
+      String id, String contentUrl, String encodingFormat, String inLanguage) {
+    this(id, contentUrl, encodingFormat, inLanguage, "MediaObject");
+  }
+
+  public static class AdministrativeDirectiveEncodingSchemaBuilder {
+    AdministrativeDirectiveEncodingSchemaBuilder() {
+      type = "MediaObject";
+    }
+  }
+}

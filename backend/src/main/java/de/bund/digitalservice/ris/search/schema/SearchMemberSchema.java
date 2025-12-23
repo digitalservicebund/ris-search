@@ -1,7 +1,6 @@
 package de.bund.digitalservice.ris.search.schema;
 
-import ioinformarics.oss.jackson.module.jsonld.annotation.JsonldResource;
-import ioinformarics.oss.jackson.module.jsonld.annotation.JsonldType;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 import lombok.Builder;
 
@@ -23,7 +22,12 @@ import lombok.Builder;
  *     matched text snippets.
  */
 @Builder
-@JsonldResource
-@JsonldType("SearchResult")
 public record SearchMemberSchema<T extends AbstractDocumentSchema>(
-    T item, List<TextMatchSchema> textMatches) {}
+    @JsonProperty("@type") String type, T item, List<TextMatchSchema> textMatches) {
+
+  public static class SearchMemberSchemaBuilder<T extends AbstractDocumentSchema> {
+    SearchMemberSchemaBuilder() {
+      type = "SearchResult";
+    }
+  }
+}

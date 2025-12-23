@@ -108,8 +108,11 @@ public class NormSearchResponseMapper {
         searchHit.getHighlightFields().entrySet().stream()
             .map(
                 entrySet ->
-                    new TextMatchSchema(
-                        getTextMatchName(entrySet.getKey()), entrySet.getValue().getFirst(), null))
+                    TextMatchSchema.builder()
+                        .name(entrySet.getKey())
+                        .text(entrySet.getValue().getFirst())
+                        .location(null)
+                        .build())
             .toList();
     return ListUtils.union(articleHits, normHits);
   }
