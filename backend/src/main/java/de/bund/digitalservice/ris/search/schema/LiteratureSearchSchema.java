@@ -23,6 +23,7 @@ import org.jetbrains.annotations.Nullable;
  * literature. - Encoding information for representations of the document in various formats.
  */
 @Builder
+@JsonldType("Literature")
 public record LiteratureSearchSchema(
     @JsonProperty("@type") String type,
     @Schema(example = "KALU000000000") @JsonProperty("@id") String id,

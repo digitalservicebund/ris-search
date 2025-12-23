@@ -16,6 +16,7 @@ import java.util.List;
  * with this entry. - children: A list of child entries forming a hierarchical structure under this
  * entry.
  */
+@JsonldType("TocEntry")
 public record TableOfContentsSchema(
     @Schema(example = "hauptteil-1_para-1") String id,
     @Schema(example = "1") String marker,

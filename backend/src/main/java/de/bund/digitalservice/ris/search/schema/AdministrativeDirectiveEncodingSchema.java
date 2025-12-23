@@ -9,6 +9,7 @@ import lombok.Builder;
  * guidelines.
  */
 @Builder
+@JsonldType("MediaObject")
 public record AdministrativeDirectiveEncodingSchema(
     @JsonProperty("@id") String id,
     String contentUrl,

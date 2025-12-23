@@ -9,6 +9,7 @@ import lombok.Builder;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Builder
 @Schema(description = "A translation of a legislation item")
+@JsonldType("Legislation")
 public record LegislationTranslationSchema(
     @JsonProperty("@type") String type,
     @JsonProperty("@id") String id,

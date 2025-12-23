@@ -16,6 +16,7 @@ import lombok.Builder;
 @Schema(
     description =
         "A legislation item, across different expressions and manifestations. May be used to provide context to a `LegislationExpression` (under key `workExample`).")
+@JsonldType("Legislation")
 public record LegislationExpressionSearchSchema(
     @JsonProperty("@type") String type,
     @JsonProperty("@id")

@@ -7,6 +7,7 @@ import lombok.Builder;
 
 /** A DTO for legislation in a specific encoding, following schema.org naming guidelines. */
 @Builder
+@JsonldType("LegislationObject")
 public record LegislationObjectSchema(
     @JsonProperty("@type") String type,
     @JsonProperty("@id")

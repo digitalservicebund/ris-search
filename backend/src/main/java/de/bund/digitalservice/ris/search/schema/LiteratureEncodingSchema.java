@@ -6,6 +6,7 @@ import lombok.Builder;
 
 /** A DTO for literature in a specific encoding, following schema.org naming guidelines. */
 @Builder
+@JsonldType("MediaObject")
 public record LiteratureEncodingSchema(
     @JsonProperty("@type") String type,
     @JsonProperty("@id") String id,

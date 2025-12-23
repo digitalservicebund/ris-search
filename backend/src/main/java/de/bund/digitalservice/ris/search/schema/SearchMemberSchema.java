@@ -22,6 +22,7 @@ import lombok.Builder;
  *     matched text snippets.
  */
 @Builder
+@JsonldType("SearchResult")
 public record SearchMemberSchema<T extends AbstractDocumentSchema>(
     @JsonProperty("@type") String type, T item, List<TextMatchSchema> textMatches) {
 

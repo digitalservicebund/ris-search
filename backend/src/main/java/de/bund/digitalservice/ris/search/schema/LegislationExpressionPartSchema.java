@@ -18,6 +18,7 @@ import org.jetbrains.annotations.Nullable;
  * elements within a broader legislative context.
  */
 @Builder
+@JsonldType("Legislation")
 public record LegislationExpressionPartSchema(
     @JsonProperty("@type") String type,
     @JsonProperty("@id")

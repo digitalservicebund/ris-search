@@ -17,8 +17,13 @@ import lombok.Builder;
  * text, if available.
  */
 @Builder
+@JsonldType("SearchResultMatch")
 public record TextMatchSchema(
     String name, String text, @Nullable String location, @JsonProperty("@type") String type) {
+
+  public TextMatchSchema(String name, String text, @Nullable String location) {
+    this(name, text, location, "SearchResultMatch");
+  }
 
   public static class TextMatchSchemaBuilder {
     TextMatchSchemaBuilder() {

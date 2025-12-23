@@ -34,6 +34,7 @@ import org.jetbrains.annotations.Nullable;
  * literature.
  */
 @Builder
+@JsonldType("Literature")
 public record LiteratureSchema(
     @JsonProperty("@type") String type,
     @Schema(example = "KALU000000000") @JsonProperty("@id") String id,

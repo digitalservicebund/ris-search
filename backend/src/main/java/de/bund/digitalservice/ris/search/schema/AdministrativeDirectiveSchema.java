@@ -19,6 +19,7 @@ import org.jetbrains.annotations.Nullable;
  * <p>The use of JSON-LD annotations ensures compatibility with linked data structures.
  */
 @Builder
+@JsonldType("AdministrativeDirective")
 public record AdministrativeDirectiveSchema(
     @JsonProperty("@type") String type,
     @Schema(example = "KALU000000000") @JsonProperty("@id") String id,

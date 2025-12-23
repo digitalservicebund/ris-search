@@ -8,6 +8,7 @@ import lombok.Builder;
 
 /** A DTO for collections of resources, following schema.org naming guidelines. */
 @Builder
+@JsonldType("hydra:Collection")
 public record CollectionSchema<T>(
     @JsonProperty("@type") String type,
     @JsonProperty("@id") @Schema(example = ApiConfig.Paths.DOCUMENT + "?pageIndex=0&size=5")

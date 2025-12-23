@@ -9,6 +9,7 @@ import lombok.Builder;
 
 /** A DTO for court decisions in a specific encoding, following schema.org naming guidelines. */
 @Builder
+@JsonldType("Decision")
 public record CaseLawSearchSchema(
     @JsonProperty("@type") String type,
     @Schema(example = "KARE000000000") String documentNumber,
