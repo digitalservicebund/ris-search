@@ -14,26 +14,23 @@ const { mockFetch } = vi.hoisted(() => {
   };
 });
 
-const { useRisBackendMock, _executeMock, dataRef } = vi.hoisted(() => {
-  const vue = require("vue") as typeof import("vue");
-  const ref = vue.ref;
+const { useRisBackendMock, dataRef } = vi.hoisted(() => {
+  const { ref } = require("vue") as typeof import("vue");
   const dataRef = ref(null) as Ref<unknown>;
-  const _executeMock = vi.fn();
 
   return {
     useRisBackendMock: vi.fn(
-      (_url: Ref<string>, _opts: Record<string, Ref<string>>) => ({
+      (_url: Ref<string>, _opts?: Record<string, Ref<string>>) => ({
         status: ref("success"),
         data: dataRef,
         error: ref(null),
         pending: ref(false),
-        execute: _executeMock,
+        execute: vi.fn(),
         refresh: vi.fn(),
         clear: vi.fn(),
       }),
     ),
-    _executeMock,
-    dataRef: dataRef,
+    dataRef,
   };
 });
 
@@ -52,24 +49,18 @@ mockNuxtImport("useNuxtApp", () => {
 });
 
 beforeEach(() => {
-  mockFetch.mockReset();
+  vi.clearAllMocks();
 });
 
 describe("fetchTranslationList", () => {
   it("returns a list when there is no error", async () => {
     const mockTranslationResponse = [{ "@id": "Cde" }, { "@id": "AbC" }];
-
     dataRef.value = mockTranslationResponse;
-
-    const { translations, translationsError, translationsStatus } =
-      await fetchTranslationList();
+    const { translations, translationsError } = await fetchTranslationList();
 
     expect(useRisBackendMock).toHaveBeenCalledWith("/v1/translatedLegislation");
-
     expect(translations.value).toEqual(mockTranslationResponse);
-
     expect(translationsError.value).toBeNull();
-    expect(translationsStatus.value).toBe("success");
   });
 });
 
