@@ -23,9 +23,8 @@ public class JsonldObjectMapperConfig {
    * Provides a configured {@link ObjectMapper} bean for JSON serialization and deserialization.
    *
    * <p>This method customizes the {@link ObjectMapper} by registering additional modules: - {@link
-   * JsonldModule} to enable support for JSON-LD annotations (@id, @type). - {@link JavaTimeModule}
-   * for better handling of Java 8 date/time types, with a custom serializer for {@link LocalDate}
-   * to format dates using the pattern "yyyy-MM-dd".
+   * JavaTimeModule} for better handling of Java 8 date/time types, with a custom serializer for
+   * {@link LocalDate} to format dates using the pattern "yyyy-MM-dd".
    *
    * @return A configured instance of {@link ObjectMapper}, suitable for handling JSON-LD data and
    *     Java 8 date/time types with custom date formatting.

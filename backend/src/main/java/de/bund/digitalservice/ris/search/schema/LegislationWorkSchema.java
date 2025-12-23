@@ -57,6 +57,7 @@ public record LegislationWorkSchema(
         @Nullable
         LegislationExpressionSchema workExample) {
 
+  /** add default type to lombok builder pattern */
   public static class LegislationWorkSchemaBuilder {
     LegislationWorkSchemaBuilder() {
       type = "Legislation";

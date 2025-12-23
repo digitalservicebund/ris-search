@@ -50,6 +50,7 @@ public record CaseLawSchema(
     @Nullable List<CaseLawEncodingSchema> encoding,
     Map<String, List<String>> highlightedFields) {
 
+  /** add default type to lombok builder pattern */
   public static class CaseLawSchemaBuilder {
     CaseLawSchemaBuilder() {
       type = "Decision";

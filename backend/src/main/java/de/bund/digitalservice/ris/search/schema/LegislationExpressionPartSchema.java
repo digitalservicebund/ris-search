@@ -40,6 +40,7 @@ public record LegislationExpressionPartSchema(
     @Nullable @Schema(description = "The source data for this part, if available on its own")
         List<LegislationObjectSchema> encoding) {
 
+  /** add default type to lombok builder pattern */
   public static class LegislationExpressionPartSchemaBuilder {
     LegislationExpressionPartSchemaBuilder() {
       type = "Legislation";

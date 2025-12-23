@@ -60,6 +60,7 @@ public record LiteratureSearchSchema(
     @Nullable List<LiteratureEncodingSchema> encoding)
     implements AbstractDocumentSchema {
 
+  /** add default type to lombok builder pattern */
   public static class LiteratureSearchSchemaBuilder {
     LiteratureSearchSchemaBuilder() {
       type = "Literature";

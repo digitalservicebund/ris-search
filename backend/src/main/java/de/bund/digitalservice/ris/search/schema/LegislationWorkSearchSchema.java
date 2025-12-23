@@ -64,6 +64,7 @@ public record LegislationWorkSearchSchema(
     @Nullable LegislationExpressionSearchSchema workExample)
     implements AbstractDocumentSchema {
 
+  /** add default type to lombok builder pattern */
   public static class LegislationWorkSearchSchemaBuilder {
     LegislationWorkSearchSchemaBuilder() {
       type = "Legislation";

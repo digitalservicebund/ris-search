@@ -33,6 +33,7 @@ public record CaseLawSearchSchema(
     Map<String, List<String>> highlightedFields)
     implements AbstractDocumentSchema {
 
+  /** add default type to lombok builder pattern */
   public static class CaseLawSearchSchemaBuilder {
     CaseLawSearchSchemaBuilder() {
       type = "Decision";

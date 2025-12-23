@@ -25,6 +25,7 @@ public record TextMatchSchema(
     this(name, text, location, "SearchResultMatch");
   }
 
+  /** add default type to lombok builder pattern */
   public static class TextMatchSchemaBuilder {
     TextMatchSchemaBuilder() {
       type = "SearchResultMatch";

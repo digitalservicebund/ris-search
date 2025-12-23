@@ -34,6 +34,7 @@ public record LegislationExpressionSearchSchema(
     @Schema(description = "Whether the legislation expression is currently in force.")
         LegalForceStatus legislationLegalForce) {
 
+  /** add default type to lombok builder pattern */
   public static class LegislationExpressionSearchSchemaBuilder {
     LegislationExpressionSearchSchemaBuilder() {
       type = "Legislation";

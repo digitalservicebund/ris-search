@@ -14,6 +14,7 @@ public record LiteratureEncodingSchema(
     @Schema(example = "text/html") String encodingFormat,
     @Schema(example = "de") String inLanguage) {
 
+  /** add default type to lombok builder pattern */
   public static class LiteratureEncodingSchemaBuilder {
     LiteratureEncodingSchemaBuilder() {
       type = "MediaObject";
