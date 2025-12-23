@@ -1231,12 +1231,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@iconify-json/material-symbols@npm:^1.2.33":
-  version: 1.2.44
-  resolution: "@iconify-json/material-symbols@npm:1.2.44"
+"@iconify-json/material-symbols@npm:^1.2.50":
+  version: 1.2.50
+  resolution: "@iconify-json/material-symbols@npm:1.2.50"
   dependencies:
     "@iconify/types": "npm:*"
-  checksum: 10c0/16edf3fd75cf888880a0f0ba35cfda3a4cc296ec9062d4a3017e0a9960fd7ba3ab813da24f5a580a7f482c45bd500511f17ac1962cfd6abcfc614909d60025de
+  checksum: 10c0/d468eb36257486da5b8d279900d32bdaf588c3154edc8eeed2a0893ec2f8d1c8eac33f4207a5aa6db75bf625172046a5861b146fb5e713bfb2e0a2b4a8628445
   languageName: node
   linkType: hard
 
@@ -14577,7 +14577,7 @@ __metadata:
     "@axe-core/playwright": "npm:^4.10.2"
     "@digitalservicebund/ris-ui": "npm:^3.20.0"
     "@iconify-json/ic": "npm:^1.2.2"
-    "@iconify-json/material-symbols": "npm:^1.2.33"
+    "@iconify-json/material-symbols": "npm:^1.2.50"
     "@iconify/json": "npm:^2.2.407"
     "@nuxt/eslint": "npm:^1.4.1"
     "@nuxt/image": "npm:^1.10.0"
