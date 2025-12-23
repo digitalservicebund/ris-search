@@ -17,6 +17,7 @@ public record CollectionSchema<T>(
     List<T> member,
     PartialCollectionViewSchema view) {
 
+  @SuppressWarnings("squid:S2326")
   public static class CollectionSchemaBuilder<T> {
     CollectionSchemaBuilder() {
       type = "hydra:Collection";
