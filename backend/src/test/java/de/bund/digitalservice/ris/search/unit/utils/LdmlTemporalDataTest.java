@@ -2,10 +2,11 @@ package de.bund.digitalservice.ris.search.unit.utils;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.hibernate.validator.internal.util.Contracts.assertNotNull;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertThrows;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.spy;
@@ -76,7 +77,7 @@ class LdmlTemporalDataTest {
     InvocationTargetException thrown =
         assertThrows(InvocationTargetException.class, constructor::newInstance);
 
-    assertTrue(thrown.getCause() instanceof IllegalStateException);
+    assertInstanceOf(IllegalStateException.class, thrown.getCause());
     assertEquals("Utility class", thrown.getCause().getMessage());
   }
 
