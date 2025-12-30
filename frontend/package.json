@@ -40,7 +40,7 @@
     "lodash": "^4.17.21",
     "minisearch": "^7.1.2",
     "pinia": "^3.0.3",
-    "posthog-js": "^1.290.0",
+    "posthog-js": "^1.310.1",
     "primevue": "^4.5.3",
     "sanitize-html": "^2.17.0"
   },
