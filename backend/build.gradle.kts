@@ -78,7 +78,6 @@ dependencies {
     implementation(libs.posthog)
     implementation(libs.commons.text)
 
-    implementation(libs.logbook.spring.boot.starter)
     implementation(libs.json)
     implementation(libs.commons.csv)
 

@@ -27,12 +27,12 @@ const breadcrumbItems: ComputedRef<BreadcrumbItem[]> = computed(() => {
   ];
 });
 
-const { data: translationsList } = fetchTranslationList();
+const { translations } = await fetchTranslationList();
 
 const translationsMap = computed(() => {
   const map = new Map<string, TranslationContent>();
-  if (translationsList.value) {
-    for (const t of translationsList.value) {
+  if (translations.value) {
+    for (const t of translations.value) {
       map.set(t["@id"], t);
     }
   }
@@ -40,11 +40,11 @@ const translationsMap = computed(() => {
 });
 
 const sortedTranslations = computed<TranslationContent[] | null>(() => {
-  if (!translationsList.value) return null;
+  if (!translations.value) return null;
   let results: TranslationContent[] = [];
 
   if (activeSearchTerm.value == "") {
-    results = [...translationsList.value];
+    results = [...translations.value];
   } else {
     results = minisearch.value
       .search(activeSearchTerm.value, { prefix: true, fuzzy: 0.2 })
@@ -69,7 +69,7 @@ const minisearch = computed(() => {
     ],
     idField: "@id",
   });
-  miniSearch.addAll(translationsList.value ?? []);
+  miniSearch.addAll(translations.value ?? []);
   return miniSearch;
 });
 
