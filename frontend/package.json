@@ -78,7 +78,7 @@
     "playwright-lighthouse": "^4.0.0",
     "prettier": "^3.7.4",
     "prettier-plugin-tailwindcss": "^0.7.1",
-    "tailwindcss": "^4.1.16",
+    "tailwindcss": "^4.1.18",
     "typescript": "~5.9.3",
     "unplugin-icons": "^22.1.0",
     "vitest": "^4.0.8",
