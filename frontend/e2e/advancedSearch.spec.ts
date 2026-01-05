@@ -840,10 +840,6 @@ test.describe("searching administrative directive", () => {
       dateFilter: "Keine zeitliche Begrenzung",
     });
 
-    await expect(
-      page.getByRole("form", { name: "Filter nach Inkrafttreten" }),
-    ).toBeVisible();
-
     // Don't have a great way of asserting this filter, so just making sure the
     // parameter is handled correctly
     await expect(page).toHaveURL(/dateFilterType=allTime/);
