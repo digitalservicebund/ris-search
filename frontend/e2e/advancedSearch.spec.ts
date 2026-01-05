@@ -24,7 +24,7 @@ const nonZeroResultCount = /[1-9][\d.]* Suchergebnis(se)?/;
 
 function getTotalDocumentCounter(page: Page) {
   return page.getByText(
-    /In [\d.]+ (Gesetze & Verordnungen|Gerichtsentscheidungen|Literaturnachweise) suchen/,
+    /In [\d.]+ (Gesetze & Verordnungen|Gerichtsentscheidungen|Literaturnachweise|Verwaltungsvorschriften) suchen/,
     { exact: true },
   );
 }
