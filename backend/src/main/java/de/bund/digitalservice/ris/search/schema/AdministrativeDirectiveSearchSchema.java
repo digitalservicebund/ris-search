@@ -27,7 +27,7 @@ import org.jetbrains.annotations.Nullable;
  * directive became effective.
  */
 @Builder
-@JsonldType("@type")
+@JsonldType("AdministrativeDirective")
 public record AdministrativeDirectiveSearchSchema(
     @JsonProperty("@type") String type,
     @Schema(example = "KALU000000000") @JsonProperty("@id") String id,
