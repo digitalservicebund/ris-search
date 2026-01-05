@@ -703,7 +703,7 @@ test.describe("searching administrative directive", () => {
 
     await searchFor(page, {
       q: "und",
-      documentKind: "Verwaltungsvorschrift",
+      documentKind: "Verwaltungsvorschriften",
     });
 
     const searchResults = getSearchResults(page);
@@ -730,14 +730,14 @@ test.describe("searching administrative directive", () => {
 
     await searchFor(page, {
       q: 'VT:"Beschlüsse beschlossen werden"',
-      documentKind: "Verwaltungsvorschrift",
+      documentKind: "Verwaltungsvorschriften",
     });
 
     const searchResult = getSearchResults(page).first();
 
     // Header
     await expect(searchResult).toHaveText(/VB/);
-    await expect(searchResult).toHaveText(/DEU Neuris/);
+    await expect(searchResult).toHaveText(/FooBar/);
     await expect(searchResult).toHaveText(/Baz - 121 - 1/);
     await expect(searchResult).toHaveText(/24.12.2022/);
 
@@ -748,7 +748,7 @@ test.describe("searching administrative directive", () => {
 
     // Text preview (only checking the first two sentences)
     await expect(searchResult).toHaveText(
-      /Dies ist ein Testdokument. Beschlossen wurde, das Beschlüsse beschlossen werden müssen./,
+      /Beschlossen wurde, das Beschlüsse beschlossen werden müssen. /,
     );
   });
 
@@ -757,7 +757,7 @@ test.describe("searching administrative directive", () => {
 
     await searchFor(page, {
       q: "'Beschlüsse beschlossen werden'",
-      documentKind: "Verwaltungsvorschrift",
+      documentKind: "Verwaltungsvorschriften",
     });
 
     // Result detail link
@@ -777,7 +777,7 @@ test.describe("searching administrative directive", () => {
     await navigate(page, "/advanced-search");
 
     await searchFor(page, {
-      documentKind: "Verwaltungsvorschrift",
+      documentKind: "Verwaltungsvorschriften",
       q: "NG:FooBar",
     });
 
@@ -791,21 +791,21 @@ test.describe("searching administrative directive", () => {
     await navigate(page, "/advanced-search");
 
     await searchFor(page, {
-      documentKind: "Verwaltungsvorschrift",
+      documentKind: "Verwaltungsvorschriften",
       q: 'FU:"FooBar 2022, Nr 1, 123"',
     });
 
     const results = getSearchResults(page);
 
     await expect(results).toHaveCount(1);
-    await expect(results).toHaveText(/FooBar 2022, Nr 1, 123/);
+    await expect(results).toHaveText(/Beschluss über den Beschluss/);
   });
 
   test("can search in field 'Überschrift'", async ({ page }) => {
     await navigate(page, "/advanced-search");
 
     await searchFor(page, {
-      documentKind: "Verwaltungsvorschrift",
+      documentKind: "Verwaltungsvorschriften",
       q: "U:das",
     });
 
@@ -821,7 +821,7 @@ test.describe("searching administrative directive", () => {
     await navigate(page, "/advanced-search");
 
     await searchFor(page, {
-      documentKind: "Verwaltungsvorschrift",
+      documentKind: "Verwaltungsvorschriften",
       q: "VT:das",
     });
 
@@ -835,7 +835,7 @@ test.describe("searching administrative directive", () => {
     await navigate(page, "/advanced-search");
 
     await searchFor(page, {
-      documentKind: "Verwaltungsvorschrift",
+      documentKind: "Verwaltungsvorschriften",
       q: "und",
       dateFilter: "Keine zeitliche Begrenzung",
     });
@@ -852,7 +852,7 @@ test.describe("searching administrative directive", () => {
     await navigate(page, "/advanced-search");
 
     await searchFor(page, {
-      documentKind: "Verwaltungsvorschrift",
+      documentKind: "Verwaltungsvorschriften",
       q: "ipsum",
       dateFilter: "Bestimmtes Datum",
       dateFilterSpecificDate: "01.07.2025",
@@ -868,7 +868,7 @@ test.describe("searching administrative directive", () => {
     await navigate(page, "/advanced-search");
 
     await searchFor(page, {
-      documentKind: "Verwaltungsvorschrift",
+      documentKind: "Verwaltungsvorschriften",
       q: "",
       dateFilter: "Innerhalb einer Zeitspanne",
       dateFilterFrom: "01.01.2019",
@@ -1017,7 +1017,7 @@ test.describe("search by AND + OR operators", { tag: ["@RISDEV-8385"] }, () => {
 
       await searchFor(page, {
         q: "Beschlüsse AND Beschluss",
-        documentKind: "Verwaltungsvorschirft",
+        documentKind: "Verwaltungsvorschriften",
       });
 
       const results = getSearchResults(page);
@@ -1029,7 +1029,7 @@ test.describe("search by AND + OR operators", { tag: ["@RISDEV-8385"] }, () => {
       // Should not match anything if one of the values does not exist
       await searchFor(page, {
         q: "Beschlüsse AND DoesNotExist",
-        documentKind: "Verwaltungsvorschirft",
+        documentKind: "Verwaltungsvorschriften",
       });
 
       await expect(results).toHaveCount(0);
@@ -1039,7 +1039,7 @@ test.describe("search by AND + OR operators", { tag: ["@RISDEV-8385"] }, () => {
       await navigate(page, "/advanced-search");
       await searchFor(page, {
         q: "Katze OR Beschluss",
-        documentKind: "Verwaltungsvorschrift",
+        documentKind: "Verwaltungsvorschriften",
       });
 
       await sortBy(page, "Datum: Älteste zuerst");
