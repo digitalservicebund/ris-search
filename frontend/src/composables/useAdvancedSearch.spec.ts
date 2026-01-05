@@ -71,6 +71,21 @@ describe("useAdvancedSearch", () => {
     expect(url.value).toBe("/v1/document/lucene-search/literature");
   });
 
+  it("calls the endpoint for administrative directive with correct URL", async () => {
+    await useAdvancedSearch(
+      "example",
+      DocumentKind.AdministrativeDirective,
+      { type: "allTime", from: undefined, to: undefined },
+      {},
+    );
+
+    expect(useRisBackendMock).toHaveBeenCalled();
+    const url = useRisBackendMock.mock.calls[0]![0];
+    expect(url.value).toBe(
+      "/v1/document/lucene-search/administrative-directive",
+    );
+  });
+
   it("defaults to document search for other document kinds", async () => {
     await useAdvancedSearch(
       "example",
