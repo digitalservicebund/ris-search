@@ -55,7 +55,7 @@
             </akn:analysis>
             <akn:proprietary source="attributsemantik-noch-undefiniert">
                 <ris:meta>
-                    <ris:normgeber staat="DEU" organ="Neuris" />
+                    <ris:normgeber staat="FooBar" />
                     <ris:entryIntoEffectDate>2022-12-24</ris:entryIntoEffectDate>
                     <ris:documentType category="VB" longTitle="Verbandsbeschluss">VB Verbandsbeschluss</ris:documentType>
                     <ris:dateToQuoteList>
