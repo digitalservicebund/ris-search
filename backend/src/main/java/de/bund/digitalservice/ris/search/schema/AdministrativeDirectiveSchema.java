@@ -41,10 +41,7 @@ public record AdministrativeDirectiveSchema(
     @Schema(description = "Gliederung") List<String> outline,
     @Nullable List<AdministrativeDirectiveEncodingSchema> encoding) {
 
-  /** add default type to lombok builder pattern */
-  public static class AdministrativeDirectiveSchemaBuilder {
-    public AdministrativeDirectiveSchemaBuilder() {
-      type = "AdministrativeDirective";
-    }
+  public AdministrativeDirectiveSchema {
+    type = "AdministrativeDirective";
   }
 }

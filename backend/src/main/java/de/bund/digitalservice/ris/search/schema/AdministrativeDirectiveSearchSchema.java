@@ -41,10 +41,7 @@ public record AdministrativeDirectiveSearchSchema(
         LocalDate entryIntoForceDate)
     implements AbstractDocumentSchema {
 
-  /** add default type to lombok builder pattern */
-  public static class AdministrativeDirectiveSearchSchemaBuilder {
-    AdministrativeDirectiveSearchSchemaBuilder() {
-      type = "AdministrativeDirective";
-    }
+  public AdministrativeDirectiveSearchSchema {
+    type = "AdministrativeDirective";
   }
 }

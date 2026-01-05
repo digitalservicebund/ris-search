@@ -22,10 +22,7 @@ public record AdministrativeDirectiveEncodingSchema(
     this(id, contentUrl, encodingFormat, inLanguage, "MediaObject");
   }
 
-  /** add default type to lombok builder pattern */
-  public static class AdministrativeDirectiveEncodingSchemaBuilder {
-    AdministrativeDirectiveEncodingSchemaBuilder() {
-      type = "MediaObject";
-    }
+  public AdministrativeDirectiveEncodingSchema {
+    type = "MediaObject";
   }
 }

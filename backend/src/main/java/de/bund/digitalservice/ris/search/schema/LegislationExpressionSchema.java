@@ -61,10 +61,7 @@ public record LegislationExpressionSchema(
         List<LegislationExpressionPartSchema> hasPart,
     @Nullable List<LegislationObjectSchema> encoding) {
 
-  /** add default type to lombok builder pattern */
-  public static class LegislationExpressionSchemaBuilder {
-    LegislationExpressionSchemaBuilder() {
-      type = "Legislation";
-    }
+  public LegislationExpressionSchema {
+    type = "Legislation";
   }
 }

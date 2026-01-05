@@ -26,11 +26,7 @@ import lombok.Builder;
 public record SearchMemberSchema<T extends AbstractDocumentSchema>(
     @JsonProperty("@type") String type, T item, List<TextMatchSchema> textMatches) {
 
-  /** add default type to lombok builder pattern */
-  @SuppressWarnings("squid:S2326")
-  public static class SearchMemberSchemaBuilder<T extends AbstractDocumentSchema> {
-    SearchMemberSchemaBuilder() {
-      type = "SearchResult";
-    }
+  public SearchMemberSchema {
+    type = "SearchResult";
   }
 }

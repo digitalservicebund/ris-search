@@ -20,10 +20,7 @@ public record LegislationTranslationSchema(
     String about,
     @JsonProperty("ris:filename") String filename) {
 
-  /** add default type to lombok builder pattern */
-  public static class LegislationTranslationSchemaBuilder {
-    LegislationTranslationSchemaBuilder() {
-      type = "Legislation";
-    }
+  public LegislationTranslationSchema {
+    type = "Legislation";
   }
 }

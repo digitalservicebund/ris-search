@@ -75,10 +75,7 @@ public record LiteratureSchema(
     @Schema(description = "Literaturtyp", example = "['sli', 'uli']") String literatureType,
     @Nullable List<LiteratureEncodingSchema> encoding) {
 
-  /** add default type to lombok builder pattern */
-  public static class LiteratureSchemaBuilder {
-    LiteratureSchemaBuilder() {
-      type = "Literature";
-    }
+  public LiteratureSchema {
+    type = "Literature";
   }
 }

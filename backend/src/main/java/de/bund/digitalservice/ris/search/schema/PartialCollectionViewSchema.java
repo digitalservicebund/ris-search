@@ -14,10 +14,7 @@ public record PartialCollectionViewSchema(
     @Nullable String next,
     @Nullable String last) {
 
-  /** add default type to lombok builder pattern */
-  public static class PartialCollectionViewSchemaBuilder {
-    PartialCollectionViewSchemaBuilder() {
-      type = "hydra:PartialCollectionView";
-    }
+  public PartialCollectionViewSchema {
+    type = "hydra:PartialCollectionView";
   }
 }

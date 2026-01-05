@@ -14,10 +14,7 @@ public record CaseLawEncodingSchema(
     @Schema(example = "text/html") String encodingFormat,
     @Schema(example = "de") String inLanguage) {
 
-  /** add default type to lombok builder pattern */
-  public static class CaseLawEncodingSchemaBuilder {
-    CaseLawEncodingSchemaBuilder() {
-      type = "DecisionObject";
-    }
+  public CaseLawEncodingSchema {
+    type = "DecisionObject";
   }
 }
