@@ -1,6 +1,6 @@
 package de.bund.digitalservice.ris.search.schema;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import javax.annotation.Nullable;
 import lombok.Builder;
 
@@ -17,15 +17,12 @@ import lombok.Builder;
  * text, if available.
  */
 @Builder
-@JsonldType("SearchResultMatch")
-public record TextMatchSchema(
-    String name, String text, @Nullable String location, @JsonProperty("@type") String type) {
+public record TextMatchSchema(String name, String text, @Nullable String location)
+    implements JsonldResource {
 
-  public TextMatchSchema(String name, String text, @Nullable String location) {
-    this(name, text, location, "SearchResultMatch");
-  }
-
-  public TextMatchSchema {
-    type = "SearchResultMatch";
+  @Override
+  @Schema(example = "SearchResultMatch")
+  public String getType() {
+    return "SearchResultMatch";
   }
 }

@@ -7,9 +7,7 @@ import lombok.Builder;
 
 /** A DTO for legislation in a specific encoding, following schema.org naming guidelines. */
 @Builder
-@JsonldType("LegislationObject")
 public record LegislationObjectSchema(
-    @JsonProperty("@type") String type,
     @JsonProperty("@id")
         @Schema(
             example =
@@ -22,9 +20,12 @@ public record LegislationObjectSchema(
                     + "/eli/bund/bgbl-1/1975/s1760/1998-01-29/10/deu/1998-01-29/regelungstext-1.html")
         String contentUrl,
     @Schema(example = "text/html") String encodingFormat,
-    @Schema(example = "de") String inLanguage) {
+    @Schema(example = "de") String inLanguage)
+    implements JsonldResource {
 
-  public LegislationObjectSchema {
-    type = "LegislationObject";
+  @Override
+  @Schema(example = "LegislationObject")
+  public String getType() {
+    return "LegislationObject";
   }
 }

@@ -9,9 +9,7 @@ import lombok.Builder;
 
 /** A DTO for court decisions in a specific encoding, following schema.org naming guidelines. */
 @Builder
-@JsonldType("Decision")
 public record CaseLawSearchSchema(
-    @JsonProperty("@type") String type,
     @Schema(example = "KARE000000000") String documentNumber,
     @Schema(example = "ECLI:DE:FGRLP:1969:0905.IV85.68.0A") String ecli,
     @Schema(example = "Überschrift") String headline,
@@ -31,9 +29,11 @@ public record CaseLawSearchSchema(
         String id,
     @Schema(example = "de") String inLanguage,
     Map<String, List<String>> highlightedFields)
-    implements AbstractDocumentSchema {
+    implements AbstractDocumentSchema, JsonldResource {
 
-  public CaseLawSearchSchema {
-    type = "Decision";
+  @Override
+  @Schema(example = "Decision")
+  public String getType() {
+    return "Decision";
   }
 }

@@ -16,9 +16,7 @@ import org.jetbrains.annotations.Nullable;
 @Schema(
     description =
         "A legislation item, across different expressions and manifestations. May be used to provide context to a `LegislationExpression` (under key `workExample`).")
-@JsonldType("Legislation")
 public record LegislationWorkSchema(
-    @JsonProperty("@type") String type,
     @JsonProperty("@id")
         @Schema(
             example = ApiConfig.Paths.LEGISLATION + "/eli/bund/bgbl-1/1975/s1760",
@@ -55,9 +53,12 @@ public record LegislationWorkSchema(
             description =
                 "Expression-level details (<i>an \"exemplary\" expression of this work</i>)")
         @Nullable
-        LegislationExpressionSchema workExample) {
+        LegislationExpressionSchema workExample)
+    implements JsonldResource {
 
-  public LegislationWorkSchema {
-    type = "Legislation";
+  @Override
+  @Schema(example = "Legislation")
+  public String getType() {
+    return "Legislation";
   }
 }

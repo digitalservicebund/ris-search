@@ -19,9 +19,7 @@ import org.jetbrains.annotations.Nullable;
  * <p>The use of JSON-LD annotations ensures compatibility with linked data structures.
  */
 @Builder
-@JsonldType("AdministrativeDirective")
 public record AdministrativeDirectiveSchema(
-    @JsonProperty("@type") String type,
     @Schema(example = "KALU000000000") @JsonProperty("@id") String id,
     @Schema(description = "Dokumentnummer", example = "KALU000000000") String documentNumber,
     @Nullable @Schema(description = "Haupttitel") String headline,
@@ -39,9 +37,12 @@ public record AdministrativeDirectiveSchema(
     @Schema(description = "Zitierdaten", example = "") List<LocalDate> citationDates,
     @Schema(description = "Normkette", example = "['§ 1 Abs1 SGB']") List<String> normReferences,
     @Schema(description = "Gliederung") List<String> outline,
-    @Nullable List<AdministrativeDirectiveEncodingSchema> encoding) {
+    @Nullable List<AdministrativeDirectiveEncodingSchema> encoding)
+    implements JsonldResource {
 
-  public AdministrativeDirectiveSchema {
-    type = "AdministrativeDirective";
+  @Override
+  @Schema(example = "AdministrativeDirective")
+  public String getType() {
+    return "AdministrativeDirective";
   }
 }

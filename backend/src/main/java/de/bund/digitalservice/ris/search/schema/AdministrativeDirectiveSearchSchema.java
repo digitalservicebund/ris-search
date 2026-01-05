@@ -27,9 +27,7 @@ import org.jetbrains.annotations.Nullable;
  * directive became effective.
  */
 @Builder
-@JsonldType("AdministrativeDirective")
 public record AdministrativeDirectiveSearchSchema(
-    @JsonProperty("@type") String type,
     @Schema(example = "KALU000000000") @JsonProperty("@id") String id,
     @Schema(description = "Dokumentnummer", example = "KALU000000000") String documentNumber,
     @Nullable @Schema(description = "Haupttitel") String headline,
@@ -39,9 +37,11 @@ public record AdministrativeDirectiveSearchSchema(
     @Nullable @Schema(description = "Normgeber") String legislationAuthority,
     @Nullable @Schema(description = "Gültig ab Datum", example = "2003-12-15")
         LocalDate entryIntoForceDate)
-    implements AbstractDocumentSchema {
+    implements AbstractDocumentSchema, JsonldResource {
 
-  public AdministrativeDirectiveSearchSchema {
-    type = "AdministrativeDirective";
+  @Override
+  @Schema(example = "AdministrativeDirective")
+  public String getType() {
+    return "AdministrativeDirective";
   }
 }

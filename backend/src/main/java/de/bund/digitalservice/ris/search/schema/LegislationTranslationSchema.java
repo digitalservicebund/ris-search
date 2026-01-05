@@ -9,18 +9,19 @@ import lombok.Builder;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Builder
 @Schema(description = "A translation of a legislation item")
-@JsonldType("Legislation")
 public record LegislationTranslationSchema(
-    @JsonProperty("@type") String type,
     @JsonProperty("@id") String id,
     String name,
     String inLanguage,
     String translator,
     String translationOfWork,
     String about,
-    @JsonProperty("ris:filename") String filename) {
+    @JsonProperty("ris:filename") String filename)
+    implements JsonldResource {
 
-  public LegislationTranslationSchema {
-    type = "Legislation";
+  @Override
+  @Schema(example = "Legislation")
+  public String getType() {
+    return "Legislation";
   }
 }

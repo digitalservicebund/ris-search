@@ -6,15 +6,16 @@ import lombok.Builder;
 
 /** A DTO for court decisions in a specific encoding, following schema.org naming guidelines. */
 @Builder
-@JsonldType("DecisionObject")
 public record CaseLawEncodingSchema(
-    @JsonProperty("@type") String type,
     @JsonProperty("@id") String id,
     String contentUrl,
     @Schema(example = "text/html") String encodingFormat,
-    @Schema(example = "de") String inLanguage) {
+    @Schema(example = "de") String inLanguage)
+    implements JsonldResource {
 
-  public CaseLawEncodingSchema {
-    type = "DecisionObject";
+  @Override
+  @Schema(example = "DecisionObject")
+  public String getType() {
+    return "DecisionObject";
   }
 }

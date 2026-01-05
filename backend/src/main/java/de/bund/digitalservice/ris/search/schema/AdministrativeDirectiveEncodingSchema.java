@@ -9,20 +9,16 @@ import lombok.Builder;
  * guidelines.
  */
 @Builder
-@JsonldType("MediaObject")
 public record AdministrativeDirectiveEncodingSchema(
     @JsonProperty("@id") String id,
     String contentUrl,
     @Schema(example = "text/html") String encodingFormat,
-    @Schema(example = "de") String inLanguage,
-    @JsonProperty("@type") String type) {
+    @Schema(example = "de") String inLanguage)
+    implements JsonldResource {
 
-  public AdministrativeDirectiveEncodingSchema(
-      String id, String contentUrl, String encodingFormat, String inLanguage) {
-    this(id, contentUrl, encodingFormat, inLanguage, "MediaObject");
-  }
-
-  public AdministrativeDirectiveEncodingSchema {
-    type = "MediaObject";
+  @Override
+  @Schema(example = "MediaObject")
+  public String getType() {
+    return "MediaObject";
   }
 }

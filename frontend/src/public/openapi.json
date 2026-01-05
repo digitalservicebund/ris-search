@@ -42,9 +42,7 @@
             "description": "OK",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/StatisticsApiSchema"
-                }
+                "schema": { "$ref": "#/components/schemas/StatisticsApiSchema" }
               }
             }
           }
@@ -62,53 +60,31 @@
             "name": "documentNumber",
             "in": "query",
             "required": false,
-            "schema": {
-              "type": "string"
-            }
+            "schema": { "type": "string" }
           },
           {
             "name": "yearOfPublication",
             "in": "query",
             "required": false,
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            }
+            "schema": { "type": "array", "items": { "type": "string" } }
           },
           {
             "name": "documentType",
             "in": "query",
             "required": false,
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            }
+            "schema": { "type": "array", "items": { "type": "string" } }
           },
           {
             "name": "author",
             "in": "query",
             "required": false,
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            }
+            "schema": { "type": "array", "items": { "type": "string" } }
           },
           {
             "name": "collaborator",
             "in": "query",
             "required": false,
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            }
+            "schema": { "type": "array", "items": { "type": "string" } }
           },
           {
             "name": "searchTerm",
@@ -160,11 +136,7 @@
             "in": "query",
             "description": "The number of the page to request. The page starts with the value 0",
             "required": false,
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "minimum": 0
-            },
+            "schema": { "type": "integer", "format": "int32", "minimum": 0 },
             "example": 0
           },
           {
@@ -190,9 +162,7 @@
               }
             }
           },
-          "500": {
-            "description": "Internal Server Error"
-          }
+          "500": { "description": "Internal Server Error" }
         }
       }
     },
@@ -207,9 +177,7 @@
             "name": "documentNumber",
             "in": "path",
             "required": true,
-            "schema": {
-              "type": "string"
-            },
+            "schema": { "type": "string" },
             "example": "STRE201770751"
           }
         ],
@@ -218,15 +186,11 @@
             "description": "OK",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/LiteratureSchema"
-                }
+                "schema": { "$ref": "#/components/schemas/LiteratureSchema" }
               }
             }
           },
-          "404": {
-            "description": "Not Found"
-          }
+          "404": { "description": "Not Found" }
         }
       }
     },
@@ -241,9 +205,7 @@
             "name": "documentNumber",
             "in": "path",
             "required": true,
-            "schema": {
-              "type": "string"
-            },
+            "schema": { "type": "string" },
             "example": "BJLU075748788"
           }
         ],
@@ -252,16 +214,11 @@
             "description": "OK",
             "content": {
               "application/xml": {
-                "schema": {
-                  "type": "string",
-                  "format": "byte"
-                }
+                "schema": { "type": "string", "format": "byte" }
               }
             }
           },
-          "404": {
-            "description": "Not Found"
-          }
+          "404": { "description": "Not Found" }
         }
       }
     },
@@ -276,26 +233,16 @@
             "name": "documentNumber",
             "in": "path",
             "required": true,
-            "schema": {
-              "type": "string"
-            },
+            "schema": { "type": "string" },
             "example": "BJLU075748788"
           }
         ],
         "responses": {
           "200": {
             "description": "OK",
-            "content": {
-              "text/html": {
-                "schema": {
-                  "type": "string"
-                }
-              }
-            }
+            "content": { "text/html": { "schema": { "type": "string" } } }
           },
-          "404": {
-            "description": "Not Found"
-          }
+          "404": { "description": "Not Found" }
         }
       }
     },
@@ -303,7 +250,7 @@
       "get": {
         "tags": ["Legislation"],
         "summary": "List and search legislation",
-        "description": "List all legislation in our database with support for filtering and pagination.\n\n## Example 1\n\nGet all legislation containing the tokens :` Gesetz`, `über`,`das`, `Verfahren`, `bei`, `sonstigen` and `Änderungen`.\n```http request\nGET /v1/legislation?searchTerm=Gesetz%20über%20das%20Verfahren%20bei%20sonstigen%20Änderungen\n```\nThe API will return only the legislation that contains all these terms. Please note that in practice very common tokens such as `das` are ignored\n(please see <a href=\"https://en.wikipedia.org/wiki/Stop_word\">https://en.wikipedia.org/wiki/Stop_word</a> for more details).\n\n## Example 2\n\nGet all legislation containing the tokens :` Gesetz` and `über` and were valid on 2020-01-01\n```http request\nGET /v1/legislation?temporalCoverageFrom=2020-01-01&temporalCoverageTo=2020-01-01&searchTerm=Gesetz%20über\n```\nThis example can be used to only return currently valid legislation by replacing 2020-01-01 with today's date.\n\n## Example 3\n\nGet all legislation that belong to the work eli `eli/bund/bgbl-1/1979/s1325`\n```http request\nGET /v1/legislation?eli=eli/bund/bgbl-1/1979/s1325\n```\n",
+        "description": "List all legislation in our database with support for filtering and pagination.\n\n## Example 1\n\nGet all legislation containing the tokens :` Gesetz`, `über`,`das`, `Verfahren`, `bei`, `sonstigen` and `Änderungen`.\n```http request\nGET /v1/legislation?searchTerm=Gesetz%20über%20das%20Verfahren%20bei%20sonstigen%20Änderungen\n```\nThe API will return only the legislation that contains all these terms. Please note that in practice very common tokens such as `das` are ignored\n(please see <a href=\"https://en.wikipedia.org/wiki/Stop_word\">https://en.wikipedia.org/wiki/Stop_word</a> for more details).\n\n## Example 2\n\nGet all legislation containing the tokens :` Gesetz` and `über` and were valid on 2020-01-01\n```http request\nGET /v1/legislation?temporalCoverageFrom=2020-01-01&temporalCoverageTo=2020-01-01&searchTerm=Gesetz%20über\n```\nThis example can be used to only return currently valid legislation by replacing 2020-01-01 with today's date.\n\n## Example 3\n\nGet all of the legislation that belong to the work eli `eli/bund/bgbl-1/1979/s1325`\n```http request\nGET /v1/legislation?eli=eli/bund/bgbl-1/1979/s1325\n```\n",
         "operationId": "searchAndFilter_1",
         "parameters": [
           {
@@ -399,11 +346,7 @@
             "in": "query",
             "description": "The number of the page to request. The page starts with the value 0",
             "required": false,
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "minimum": 0
-            },
+            "schema": { "type": "integer", "format": "int32", "minimum": 0 },
             "example": 0
           },
           {
@@ -454,19 +397,14 @@
             "in": "path",
             "description": "Country or regional code for the jurisdiction",
             "required": true,
-            "schema": {
-              "type": "string",
-              "enum": ["bund"]
-            }
+            "schema": { "type": "string", "enum": ["bund"] }
           },
           {
             "name": "agent",
             "in": "path",
             "description": "Agent or authority issuing the legislation, e.g., 'bgbl-1' for Bundesgesetzblatt Teil I (Federal Law Gazette part I)",
             "required": true,
-            "schema": {
-              "type": "string"
-            },
+            "schema": { "type": "string" },
             "example": "bgbl-1"
           },
           {
@@ -474,9 +412,7 @@
             "in": "path",
             "description": "Year the legislation was enacted or published",
             "required": true,
-            "schema": {
-              "type": "string"
-            },
+            "schema": { "type": "string" },
             "example": 1979
           },
           {
@@ -484,38 +420,28 @@
             "in": "path",
             "description": "Unique natural identifier for the legislation, specific to the jurisdiction and agent",
             "required": true,
-            "schema": {
-              "type": "string"
-            },
+            "schema": { "type": "string" },
             "example": "s1325"
           },
           {
             "name": "pointInTime",
             "in": "path",
             "required": true,
-            "schema": {
-              "type": "string",
-              "format": "date"
-            },
+            "schema": { "type": "string", "format": "date" },
             "example": "2020-06-19"
           },
           {
             "name": "version",
             "in": "path",
             "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            },
+            "schema": { "type": "integer", "format": "int32" },
             "example": 2
           },
           {
             "name": "language",
             "in": "path",
             "required": true,
-            "schema": {
-              "type": "string"
-            },
+            "schema": { "type": "string" },
             "example": "deu"
           }
         ],
@@ -530,9 +456,7 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found"
-          }
+          "404": { "description": "Not Found" }
         }
       }
     },
@@ -548,10 +472,7 @@
             "in": "path",
             "description": "Country or regional code for the jurisdiction",
             "required": true,
-            "schema": {
-              "type": "string",
-              "enum": ["bund"]
-            },
+            "schema": { "type": "string", "enum": ["bund"] },
             "example": "bund"
           },
           {
@@ -559,9 +480,7 @@
             "in": "path",
             "description": "Agent or authority issuing the legislation, e.g., 'bgbl-1' for Bundesgesetzblatt Teil I (Federal Law Gazette part I)",
             "required": true,
-            "schema": {
-              "type": "string"
-            },
+            "schema": { "type": "string" },
             "example": "bgbl-1"
           },
           {
@@ -569,9 +488,7 @@
             "in": "path",
             "description": "Year the legislation was enacted or published",
             "required": true,
-            "schema": {
-              "type": "string"
-            },
+            "schema": { "type": "string" },
             "example": 1979
           },
           {
@@ -579,57 +496,42 @@
             "in": "path",
             "description": "Unique natural identifier for the legislation, specific to the jurisdiction and agent",
             "required": true,
-            "schema": {
-              "type": "string"
-            },
+            "schema": { "type": "string" },
             "example": "s1325"
           },
           {
             "name": "pointInTime",
             "in": "path",
             "required": true,
-            "schema": {
-              "type": "string",
-              "format": "date"
-            },
+            "schema": { "type": "string", "format": "date" },
             "example": "2020-06-19"
           },
           {
             "name": "version",
             "in": "path",
             "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            },
+            "schema": { "type": "integer", "format": "int32" },
             "example": 2
           },
           {
             "name": "language",
             "in": "path",
             "required": true,
-            "schema": {
-              "type": "string"
-            },
+            "schema": { "type": "string" },
             "example": "deu"
           },
           {
             "name": "pointInTimeManifestation",
             "in": "path",
             "required": true,
-            "schema": {
-              "type": "string",
-              "format": "date"
-            },
+            "schema": { "type": "string", "format": "date" },
             "example": "2020-06-19"
           },
           {
             "name": "subtype",
             "in": "path",
             "required": true,
-            "schema": {
-              "type": "string"
-            },
+            "schema": { "type": "string" },
             "example": "regelungstext-1"
           },
           {
@@ -637,26 +539,16 @@
             "in": "path",
             "description": "The expression identifier, denoting elements inside an expression",
             "required": true,
-            "schema": {
-              "type": "string"
-            },
+            "schema": { "type": "string" },
             "example": "art-z1"
           }
         ],
         "responses": {
           "200": {
             "description": "OK",
-            "content": {
-              "text/html": {
-                "schema": {
-                  "type": "string"
-                }
-              }
-            }
+            "content": { "text/html": { "schema": { "type": "string" } } }
           },
-          "404": {
-            "description": "Not Found"
-          }
+          "404": { "description": "Not Found" }
         }
       }
     },
@@ -672,10 +564,7 @@
             "in": "path",
             "description": "Country or regional code for the jurisdiction",
             "required": true,
-            "schema": {
-              "type": "string",
-              "enum": ["bund"]
-            },
+            "schema": { "type": "string", "enum": ["bund"] },
             "example": "bund"
           },
           {
@@ -683,9 +572,7 @@
             "in": "path",
             "description": "Agent or authority issuing the legislation, e.g., 'bgbl-1' for Bundesgesetzblatt Teil I (Federal Law Gazette part I)",
             "required": true,
-            "schema": {
-              "type": "string"
-            },
+            "schema": { "type": "string" },
             "example": "bgbl-1"
           },
           {
@@ -693,9 +580,7 @@
             "in": "path",
             "description": "Year the legislation was enacted or published",
             "required": true,
-            "schema": {
-              "type": "string"
-            },
+            "schema": { "type": "string" },
             "example": 1979
           },
           {
@@ -703,57 +588,42 @@
             "in": "path",
             "description": "Unique natural identifier for the legislation, specific to the jurisdiction and agent",
             "required": true,
-            "schema": {
-              "type": "string"
-            },
+            "schema": { "type": "string" },
             "example": "s1325"
           },
           {
             "name": "pointInTime",
             "in": "path",
             "required": true,
-            "schema": {
-              "type": "string",
-              "format": "date"
-            },
+            "schema": { "type": "string", "format": "date" },
             "example": "2020-06-19"
           },
           {
             "name": "version",
             "in": "path",
             "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            },
+            "schema": { "type": "integer", "format": "int32" },
             "example": 2
           },
           {
             "name": "language",
             "in": "path",
             "required": true,
-            "schema": {
-              "type": "string"
-            },
+            "schema": { "type": "string" },
             "example": "deu"
           },
           {
             "name": "pointInTimeManifestation",
             "in": "path",
             "required": true,
-            "schema": {
-              "type": "string",
-              "format": "date"
-            },
+            "schema": { "type": "string", "format": "date" },
             "example": "2020-06-19"
           },
           {
             "name": "subtype",
             "in": "path",
             "required": true,
-            "schema": {
-              "type": "string"
-            },
+            "schema": { "type": "string" },
             "example": "regelungstext-1"
           }
         ],
@@ -762,16 +632,11 @@
             "description": "OK",
             "content": {
               "application/xml": {
-                "schema": {
-                  "type": "string",
-                  "format": "byte"
-                }
+                "schema": { "type": "string", "format": "byte" }
               }
             }
           },
-          "404": {
-            "description": "Not Found"
-          }
+          "404": { "description": "Not Found" }
         }
       }
     },
@@ -787,10 +652,7 @@
             "in": "path",
             "description": "Country or regional code for the jurisdiction",
             "required": true,
-            "schema": {
-              "type": "string",
-              "enum": ["bund"]
-            },
+            "schema": { "type": "string", "enum": ["bund"] },
             "example": "bund"
           },
           {
@@ -798,9 +660,7 @@
             "in": "path",
             "description": "Agent or authority issuing the legislation, e.g., 'bgbl-1' for Bundesgesetzblatt Teil I (Federal Law Gazette part I)",
             "required": true,
-            "schema": {
-              "type": "string"
-            },
+            "schema": { "type": "string" },
             "example": "bgbl-1"
           },
           {
@@ -808,9 +668,7 @@
             "in": "path",
             "description": "Year the legislation was enacted or published",
             "required": true,
-            "schema": {
-              "type": "string"
-            },
+            "schema": { "type": "string" },
             "example": 1979
           },
           {
@@ -818,70 +676,49 @@
             "in": "path",
             "description": "Unique natural identifier for the legislation, specific to the jurisdiction and agent",
             "required": true,
-            "schema": {
-              "type": "string"
-            },
+            "schema": { "type": "string" },
             "example": "s1325"
           },
           {
             "name": "pointInTime",
             "in": "path",
             "required": true,
-            "schema": {
-              "type": "string",
-              "format": "date"
-            },
+            "schema": { "type": "string", "format": "date" },
             "example": "2020-06-19"
           },
           {
             "name": "version",
             "in": "path",
             "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            },
+            "schema": { "type": "integer", "format": "int32" },
             "example": 2
           },
           {
             "name": "language",
             "in": "path",
             "required": true,
-            "schema": {
-              "type": "string"
-            },
+            "schema": { "type": "string" },
             "example": "deu"
           },
           {
             "name": "pointInTimeManifestation",
             "in": "path",
             "required": true,
-            "schema": {
-              "type": "string",
-              "format": "date"
-            },
+            "schema": { "type": "string", "format": "date" },
             "example": "2020-06-19"
           },
           {
             "name": "subtype",
             "in": "path",
             "required": true,
-            "schema": {
-              "type": "string"
-            },
+            "schema": { "type": "string" },
             "example": "regelungstext-1"
           }
         ],
         "responses": {
           "200": {
             "description": "OK",
-            "content": {
-              "text/html": {
-                "schema": {
-                  "type": "string"
-                }
-              }
-            }
+            "content": { "text/html": { "schema": { "type": "string" } } }
           },
           "404": {
             "description": "Not Found",
@@ -909,10 +746,7 @@
             "in": "path",
             "description": "Country or regional code for the jurisdiction",
             "required": true,
-            "schema": {
-              "type": "string",
-              "enum": ["bund"]
-            },
+            "schema": { "type": "string", "enum": ["bund"] },
             "example": "bund"
           },
           {
@@ -920,9 +754,7 @@
             "in": "path",
             "description": "Agent or authority issuing the legislation, e.g., 'bgbl-1' for Bundesgesetzblatt Teil I (Federal Law Gazette part I)",
             "required": true,
-            "schema": {
-              "type": "string"
-            },
+            "schema": { "type": "string" },
             "example": "bgbl-1"
           },
           {
@@ -930,9 +762,7 @@
             "in": "path",
             "description": "Year the legislation was enacted or published",
             "required": true,
-            "schema": {
-              "type": "string"
-            },
+            "schema": { "type": "string" },
             "example": 1979
           },
           {
@@ -940,57 +770,42 @@
             "in": "path",
             "description": "Unique natural identifier for the legislation, specific to the jurisdiction and agent",
             "required": true,
-            "schema": {
-              "type": "string"
-            },
+            "schema": { "type": "string" },
             "example": "s1325"
           },
           {
             "name": "pointInTime",
             "in": "path",
             "required": true,
-            "schema": {
-              "type": "string",
-              "format": "date"
-            },
+            "schema": { "type": "string", "format": "date" },
             "example": "2020-06-19"
           },
           {
             "name": "version",
             "in": "path",
             "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            },
+            "schema": { "type": "integer", "format": "int32" },
             "example": 2
           },
           {
             "name": "language",
             "in": "path",
             "required": true,
-            "schema": {
-              "type": "string"
-            },
+            "schema": { "type": "string" },
             "example": "deu"
           },
           {
             "name": "pointInTimeManifestation",
             "in": "path",
             "required": true,
-            "schema": {
-              "type": "string",
-              "format": "date"
-            },
+            "schema": { "type": "string", "format": "date" },
             "example": "2020-06-19"
           },
           {
             "name": "name",
             "in": "path",
             "required": true,
-            "schema": {
-              "type": "string"
-            },
+            "schema": { "type": "string" },
             "example": "image"
           },
           {
@@ -1008,17 +823,10 @@
           "200": {
             "description": "OK",
             "content": {
-              "*/*": {
-                "schema": {
-                  "type": "string",
-                  "format": "byte"
-                }
-              }
+              "*/*": { "schema": { "type": "string", "format": "byte" } }
             }
           },
-          "404": {
-            "description": "Not Found"
-          }
+          "404": { "description": "Not Found" }
         }
       }
     },
@@ -1034,10 +842,7 @@
             "in": "path",
             "description": "Country or regional code for the jurisdiction",
             "required": true,
-            "schema": {
-              "type": "string",
-              "enum": ["bund"]
-            },
+            "schema": { "type": "string", "enum": ["bund"] },
             "example": "bund"
           },
           {
@@ -1045,9 +850,7 @@
             "in": "path",
             "description": "Agent or authority issuing the legislation, e.g., 'bgbl-1' for Bundesgesetzblatt Teil I (Federal Law Gazette part I)",
             "required": true,
-            "schema": {
-              "type": "string"
-            },
+            "schema": { "type": "string" },
             "example": "bgbl-1"
           },
           {
@@ -1055,9 +858,7 @@
             "in": "path",
             "description": "Year the legislation was enacted or published",
             "required": true,
-            "schema": {
-              "type": "string"
-            },
+            "schema": { "type": "string" },
             "example": 1979
           },
           {
@@ -1065,48 +866,35 @@
             "in": "path",
             "description": "Unique natural identifier for the legislation, specific to the jurisdiction and agent",
             "required": true,
-            "schema": {
-              "type": "string"
-            },
+            "schema": { "type": "string" },
             "example": "s1325"
           },
           {
             "name": "pointInTime",
             "in": "path",
             "required": true,
-            "schema": {
-              "type": "string",
-              "format": "date"
-            },
+            "schema": { "type": "string", "format": "date" },
             "example": "2020-06-19"
           },
           {
             "name": "version",
             "in": "path",
             "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            },
+            "schema": { "type": "integer", "format": "int32" },
             "example": 2
           },
           {
             "name": "language",
             "in": "path",
             "required": true,
-            "schema": {
-              "type": "string"
-            },
+            "schema": { "type": "string" },
             "example": "deu"
           },
           {
             "name": "pointInTimeManifestation",
             "in": "path",
             "required": true,
-            "schema": {
-              "type": "string",
-              "format": "date"
-            },
+            "schema": { "type": "string", "format": "date" },
             "example": "2020-06-19"
           }
         ],
@@ -1121,9 +909,7 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found"
-          }
+          "404": { "description": "Not Found" }
         }
       }
     },
@@ -1213,17 +999,13 @@
             "name": "fileNumber",
             "in": "query",
             "required": false,
-            "schema": {
-              "type": "string"
-            }
+            "schema": { "type": "string" }
           },
           {
             "name": "ecli",
             "in": "query",
             "required": false,
-            "schema": {
-              "type": "string"
-            }
+            "schema": { "type": "string" }
           },
           {
             "name": "court",
@@ -1289,53 +1071,31 @@
             "name": "documentNumber",
             "in": "query",
             "required": false,
-            "schema": {
-              "type": "string"
-            }
+            "schema": { "type": "string" }
           },
           {
             "name": "yearOfPublication",
             "in": "query",
             "required": false,
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            }
+            "schema": { "type": "array", "items": { "type": "string" } }
           },
           {
             "name": "documentType",
             "in": "query",
             "required": false,
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            }
+            "schema": { "type": "array", "items": { "type": "string" } }
           },
           {
             "name": "author",
             "in": "query",
             "required": false,
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            }
+            "schema": { "type": "array", "items": { "type": "string" } }
           },
           {
             "name": "collaborator",
             "in": "query",
             "required": false,
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            }
+            "schema": { "type": "array", "items": { "type": "string" } }
           },
           {
             "name": "sort",
@@ -1377,11 +1137,7 @@
             "in": "query",
             "description": "The number of the page to request. The page starts with the value 0",
             "required": false,
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "minimum": 0
-            },
+            "schema": { "type": "integer", "format": "int32", "minimum": 0 },
             "example": 0
           }
         ],
@@ -1396,9 +1152,7 @@
               }
             }
           },
-          "500": {
-            "description": "Internal Server Error"
-          }
+          "500": { "description": "Internal Server Error" }
         }
       }
     },
@@ -1413,9 +1167,7 @@
             "in": "query",
             "description": "The query filter based on Lucene query",
             "required": false,
-            "schema": {
-              "type": "string"
-            }
+            "schema": { "type": "string" }
           },
           {
             "name": "size",
@@ -1435,11 +1187,7 @@
             "in": "query",
             "description": "The number of the page to request. The page starts with the value 0",
             "required": false,
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "minimum": 0
-            },
+            "schema": { "type": "integer", "format": "int32", "minimum": 0 },
             "example": 0
           },
           {
@@ -1465,9 +1213,7 @@
               }
             }
           },
-          "500": {
-            "description": "Internal Server Error"
-          }
+          "500": { "description": "Internal Server Error" }
         }
       }
     },
@@ -1482,9 +1228,7 @@
             "in": "query",
             "description": "The query filter based on Lucene query syntax",
             "required": false,
-            "schema": {
-              "type": "string"
-            }
+            "schema": { "type": "string" }
           },
           {
             "name": "size",
@@ -1504,11 +1248,7 @@
             "in": "query",
             "description": "The number of the page to request. The page starts with the value 0",
             "required": false,
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "minimum": 0
-            },
+            "schema": { "type": "integer", "format": "int32", "minimum": 0 },
             "example": 0
           },
           {
@@ -1534,9 +1274,7 @@
               }
             }
           },
-          "500": {
-            "description": "Internal Server Error"
-          }
+          "500": { "description": "Internal Server Error" }
         }
       }
     },
@@ -1551,9 +1289,7 @@
             "in": "query",
             "description": "The query filter based on Lucene query",
             "required": false,
-            "schema": {
-              "type": "string"
-            }
+            "schema": { "type": "string" }
           },
           {
             "name": "size",
@@ -1573,11 +1309,7 @@
             "in": "query",
             "description": "The number of the page to request. The page starts with the value 0",
             "required": false,
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "minimum": 0
-            },
+            "schema": { "type": "integer", "format": "int32", "minimum": 0 },
             "example": 0
           },
           {
@@ -1603,9 +1335,7 @@
               }
             }
           },
-          "500": {
-            "description": "Internal Server Error"
-          }
+          "500": { "description": "Internal Server Error" }
         }
       }
     },
@@ -1620,9 +1350,7 @@
             "in": "query",
             "description": "The query filter based on Lucene query syntax",
             "required": false,
-            "schema": {
-              "type": "string"
-            }
+            "schema": { "type": "string" }
           },
           {
             "name": "size",
@@ -1642,11 +1370,7 @@
             "in": "query",
             "description": "The number of the page to request. The page starts with the value 0",
             "required": false,
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "minimum": 0
-            },
+            "schema": { "type": "integer", "format": "int32", "minimum": 0 },
             "example": 0
           },
           {
@@ -1672,9 +1396,7 @@
               }
             }
           },
-          "500": {
-            "description": "Internal Server Error"
-          }
+          "500": { "description": "Internal Server Error" }
         }
       }
     },
@@ -1689,9 +1411,7 @@
             "in": "query",
             "description": "The query filter based on Lucene query syntax",
             "required": false,
-            "schema": {
-              "type": "string"
-            }
+            "schema": { "type": "string" }
           },
           {
             "name": "size",
@@ -1711,11 +1431,7 @@
             "in": "query",
             "description": "The number of the page to request. The page starts with the value 0",
             "required": false,
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "minimum": 0
-            },
+            "schema": { "type": "integer", "format": "int32", "minimum": 0 },
             "example": 0
           },
           {
@@ -1741,9 +1457,7 @@
               }
             }
           },
-          "500": {
-            "description": "Internal Server Error"
-          }
+          "500": { "description": "Internal Server Error" }
         }
       }
     },
@@ -1758,17 +1472,13 @@
             "name": "fileNumber",
             "in": "query",
             "required": false,
-            "schema": {
-              "type": "string"
-            }
+            "schema": { "type": "string" }
           },
           {
             "name": "ecli",
             "in": "query",
             "required": false,
-            "schema": {
-              "type": "string"
-            }
+            "schema": { "type": "string" }
           },
           {
             "name": "court",
@@ -1880,11 +1590,7 @@
             "in": "query",
             "description": "The number of the page to request. The page starts with the value 0",
             "required": false,
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "minimum": 0
-            },
+            "schema": { "type": "integer", "format": "int32", "minimum": 0 },
             "example": 0
           },
           {
@@ -1910,9 +1616,7 @@
               }
             }
           },
-          "500": {
-            "description": "Internal Server Error"
-          }
+          "500": { "description": "Internal Server Error" }
         }
       }
     },
@@ -1927,9 +1631,7 @@
             "name": "documentNumber",
             "in": "path",
             "required": true,
-            "schema": {
-              "type": "string"
-            },
+            "schema": { "type": "string" },
             "example": "STRE201770751"
           }
         ],
@@ -1938,15 +1640,11 @@
             "description": "OK",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/CaseLawSchema"
-                }
+                "schema": { "$ref": "#/components/schemas/CaseLawSchema" }
               }
             }
           },
-          "404": {
-            "description": "Not Found"
-          }
+          "404": { "description": "Not Found" }
         }
       }
     },
@@ -1961,18 +1659,14 @@
             "name": "documentNumber",
             "in": "path",
             "required": true,
-            "schema": {
-              "type": "string"
-            },
+            "schema": { "type": "string" },
             "example": "BDRE000800001"
           },
           {
             "name": "name",
             "in": "path",
             "required": true,
-            "schema": {
-              "type": "string"
-            },
+            "schema": { "type": "string" },
             "example": "image"
           },
           {
@@ -1990,17 +1684,10 @@
           "200": {
             "description": "OK",
             "content": {
-              "*/*": {
-                "schema": {
-                  "type": "string",
-                  "format": "byte"
-                }
-              }
+              "*/*": { "schema": { "type": "string", "format": "byte" } }
             }
           },
-          "404": {
-            "description": "Not Found"
-          }
+          "404": { "description": "Not Found" }
         }
       }
     },
@@ -2015,9 +1702,7 @@
             "name": "documentNumber",
             "in": "path",
             "required": true,
-            "schema": {
-              "type": "string"
-            },
+            "schema": { "type": "string" },
             "example": "STRE201770751"
           }
         ],
@@ -2032,9 +1717,7 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found"
-          }
+          "404": { "description": "Not Found" }
         }
       }
     },
@@ -2049,9 +1732,7 @@
             "name": "documentNumber",
             "in": "path",
             "required": true,
-            "schema": {
-              "type": "string"
-            },
+            "schema": { "type": "string" },
             "example": "STRE201770751"
           }
         ],
@@ -2060,16 +1741,11 @@
             "description": "OK",
             "content": {
               "application/xml": {
-                "schema": {
-                  "type": "string",
-                  "format": "byte"
-                }
+                "schema": { "type": "string", "format": "byte" }
               }
             }
           },
-          "404": {
-            "description": "Not Found"
-          }
+          "404": { "description": "Not Found" }
         }
       }
     },
@@ -2084,26 +1760,16 @@
             "name": "documentNumber",
             "in": "path",
             "required": true,
-            "schema": {
-              "type": "string"
-            },
+            "schema": { "type": "string" },
             "example": "STRE201770751"
           }
         ],
         "responses": {
           "200": {
             "description": "OK",
-            "content": {
-              "text/html": {
-                "schema": {
-                  "type": "string"
-                }
-              }
-            }
+            "content": { "text/html": { "schema": { "type": "string" } } }
           },
-          "404": {
-            "description": "Not Found"
-          }
+          "404": { "description": "Not Found" }
         }
       }
     },
@@ -2118,9 +1784,7 @@
             "name": "prefix",
             "in": "query",
             "required": false,
-            "schema": {
-              "type": "string"
-            }
+            "schema": { "type": "string" }
           }
         ],
         "responses": {
@@ -2130,9 +1794,7 @@
               "application/json": {
                 "schema": {
                   "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/CourtSearchResult"
-                  }
+                  "items": { "$ref": "#/components/schemas/CourtSearchResult" }
                 }
               }
             }
@@ -2151,9 +1813,7 @@
             "name": "documentNumber",
             "in": "query",
             "required": false,
-            "schema": {
-              "type": "string"
-            }
+            "schema": { "type": "string" }
           },
           {
             "name": "searchTerm",
@@ -2205,11 +1865,7 @@
             "in": "query",
             "description": "The number of the page to request. The page starts with the value 0",
             "required": false,
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "minimum": 0
-            },
+            "schema": { "type": "integer", "format": "int32", "minimum": 0 },
             "example": 0
           },
           {
@@ -2235,9 +1891,7 @@
               }
             }
           },
-          "500": {
-            "description": "Internal Server Error"
-          }
+          "500": { "description": "Internal Server Error" }
         }
       }
     },
@@ -2252,9 +1906,7 @@
             "name": "documentNumber",
             "in": "path",
             "required": true,
-            "schema": {
-              "type": "string"
-            },
+            "schema": { "type": "string" },
             "example": "KSNR00000"
           }
         ],
@@ -2269,9 +1921,7 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found"
-          }
+          "404": { "description": "Not Found" }
         }
       }
     },
@@ -2286,9 +1936,7 @@
             "name": "documentNumber",
             "in": "path",
             "required": true,
-            "schema": {
-              "type": "string"
-            },
+            "schema": { "type": "string" },
             "example": "KSNR00000"
           }
         ],
@@ -2297,16 +1945,11 @@
             "description": "OK",
             "content": {
               "application/xml": {
-                "schema": {
-                  "type": "string",
-                  "format": "byte"
-                }
+                "schema": { "type": "string", "format": "byte" }
               }
             }
           },
-          "404": {
-            "description": "Not Found"
-          }
+          "404": { "description": "Not Found" }
         }
       }
     },
@@ -2321,26 +1964,16 @@
             "name": "documentNumber",
             "in": "path",
             "required": true,
-            "schema": {
-              "type": "string"
-            },
+            "schema": { "type": "string" },
             "example": "KSNR00000"
           }
         ],
         "responses": {
           "200": {
             "description": "OK",
-            "content": {
-              "text/html": {
-                "schema": {
-                  "type": "string"
-                }
-              }
-            }
+            "content": { "text/html": { "schema": { "type": "string" } } }
           },
-          "404": {
-            "description": "Not Found"
-          }
+          "404": { "description": "Not Found" }
         }
       }
     }
@@ -2353,9 +1986,7 @@
           "legislation": {
             "$ref": "#/components/schemas/StatisticsCountSchema"
           },
-          "case-law": {
-            "$ref": "#/components/schemas/StatisticsCountSchema"
-          },
+          "case-law": { "$ref": "#/components/schemas/StatisticsCountSchema" },
           "literature": {
             "$ref": "#/components/schemas/StatisticsCountSchema"
           },
@@ -2366,79 +1997,45 @@
       },
       "StatisticsCountSchema": {
         "type": "object",
-        "properties": {
-          "count": {
-            "type": "integer",
-            "format": "int64"
-          }
-        }
+        "properties": { "count": { "type": "integer", "format": "int64" } }
       },
       "CollectionSchemaSearchMemberSchemaLiteratureSearchSchema": {
         "type": "object",
         "properties": {
+          "@type": { "type": "string", "example": "hydra:Collection" },
           "@id": {
             "type": "string",
             "example": "/v1/document?pageIndex=0&size=5"
           },
-          "totalItems": {
-            "type": "integer",
-            "format": "int64",
-            "example": 1
-          },
+          "totalItems": { "type": "integer", "format": "int64", "example": 1 },
           "member": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/SearchMemberSchemaLiteratureSearchSchema"
             }
           },
-          "view": {
-            "$ref": "#/components/schemas/PartialCollectionViewSchema"
-          },
-          "@type": {
-            "type": "string",
-            "example": "hydra:Collection"
-          }
+          "view": { "$ref": "#/components/schemas/PartialCollectionViewSchema" }
         }
       },
       "LiteratureEncodingSchema": {
         "type": "object",
         "properties": {
-          "@id": {
-            "type": "string"
-          },
-          "contentUrl": {
-            "type": "string"
-          },
-          "encodingFormat": {
-            "type": "string",
-            "example": "text/html"
-          },
-          "inLanguage": {
-            "type": "string",
-            "example": "de"
-          },
-          "@type": {
-            "type": "string",
-            "example": "MediaObject"
-          }
+          "@type": { "type": "string", "example": "MediaObject" },
+          "@id": { "type": "string" },
+          "contentUrl": { "type": "string" },
+          "encodingFormat": { "type": "string", "example": "text/html" },
+          "inLanguage": { "type": "string", "example": "de" }
         }
       },
       "LiteratureSearchSchema": {
         "allOf": [
-          {
-            "$ref": "#/components/schemas/AbstractDocumentSchema"
-          },
+          { "$ref": "#/components/schemas/AbstractDocumentSchema" },
           {
             "type": "object",
             "properties": {
-              "@id": {
-                "type": "string",
-                "example": "KALU000000000"
-              },
-              "inLanguage": {
-                "type": "string",
-                "example": "de"
-              },
+              "@type": { "type": "string", "example": "Literature" },
+              "@id": { "type": "string", "example": "KALU000000000" },
+              "inLanguage": { "type": "string", "example": "de" },
               "documentNumber": {
                 "type": "string",
                 "description": "Dokumentnummer",
@@ -2448,9 +2045,7 @@
                 "type": "array",
                 "description": "Veröffentlichungsjahre",
                 "example": "[2014, 2024-09]",
-                "items": {
-                  "type": "string"
-                }
+                "items": { "type": "string" }
               },
               "firstPublicationDate": {
                 "type": "string",
@@ -2462,38 +2057,27 @@
                 "type": "array",
                 "description": "Dokumenttypen",
                 "example": "['Auf']",
-                "items": {
-                  "type": "string"
-                }
+                "items": { "type": "string" }
               },
               "dependentReferences": {
                 "type": "array",
                 "description": "Unselbstständige Fundstellen",
                 "example": "['BUV, 1982, 123-123']",
-                "items": {
-                  "type": "string"
-                }
+                "items": { "type": "string" }
               },
               "independentReferences": {
                 "type": "array",
                 "description": "Selbstständige Fundstellen",
                 "example": "['50 Jahre Betriebs-Berater, 1987, 123-456']",
-                "items": {
-                  "type": "string"
-                }
+                "items": { "type": "string" }
               },
               "normReferences": {
                 "type": "array",
                 "description": "Norm Verweise",
                 "example": "['GG, Art 6 Abs 2 S 1, 1949-05-23']",
-                "items": {
-                  "type": "string"
-                }
+                "items": { "type": "string" }
               },
-              "headline": {
-                "type": "string",
-                "description": "Haupttitel"
-              },
+              "headline": { "type": "string", "description": "Haupttitel" },
               "headlineAdditions": {
                 "type": "string",
                 "description": "Zusätze zum Haupttitel"
@@ -2506,50 +2090,34 @@
                 "type": "array",
                 "description": "Authoren",
                 "example": "['Musterfrau, Sabine']",
-                "items": {
-                  "type": "string"
-                }
+                "items": { "type": "string" }
               },
               "collaborators": {
                 "type": "array",
                 "description": "Mitarbeiter",
                 "example": "['Mustermann, Max']",
-                "items": {
-                  "type": "string"
-                }
+                "items": { "type": "string" }
               },
               "languages": {
                 "type": "array",
                 "description": "Sprachen",
                 "example": "['deu', 'eng']",
-                "items": {
-                  "type": "string"
-                }
+                "items": { "type": "string" }
               },
               "originators": {
                 "type": "array",
                 "description": "Urheber",
                 "example": "['DGB']",
-                "items": {
-                  "type": "string"
-                }
+                "items": { "type": "string" }
               },
               "conferenceNotes": {
                 "type": "array",
                 "description": "Kongressvermerke",
                 "example": "['Nationaler Beispiel Kongress, 2024, Berlin, GER']",
-                "items": {
-                  "type": "string"
-                }
+                "items": { "type": "string" }
               },
-              "shortReport": {
-                "type": "string",
-                "description": "Kurzreferat"
-              },
-              "outline": {
-                "type": "string",
-                "description": "Gliederung"
-              },
+              "shortReport": { "type": "string", "description": "Kurzreferat" },
+              "outline": { "type": "string", "description": "Gliederung" },
               "literatureType": {
                 "type": "string",
                 "description": "Literaturtyp",
@@ -2563,82 +2131,47 @@
               }
             }
           }
-        ],
-        "properties": {
-          "@type": {
-            "type": "string",
-            "example": "Literature"
-          }
-        }
+        ]
       },
       "PartialCollectionViewSchema": {
         "type": "object",
         "properties": {
-          "first": {
-            "type": "string"
-          },
-          "previous": {
-            "type": "string"
-          },
-          "next": {
-            "type": "string"
-          },
-          "last": {
-            "type": "string"
-          },
           "@type": {
             "type": "string",
             "example": "hydra:PartialCollectionView"
-          }
+          },
+          "first": { "type": "string" },
+          "previous": { "type": "string" },
+          "next": { "type": "string" },
+          "last": { "type": "string" }
         }
       },
       "SearchMemberSchemaLiteratureSearchSchema": {
         "type": "object",
         "properties": {
-          "item": {
-            "$ref": "#/components/schemas/LiteratureSearchSchema"
-          },
+          "@type": { "type": "string", "example": "SearchResult" },
+          "item": { "$ref": "#/components/schemas/LiteratureSearchSchema" },
           "textMatches": {
             "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/TextMatchSchema"
-            }
-          },
-          "@type": {
-            "type": "string",
-            "example": "SearchResult"
+            "items": { "$ref": "#/components/schemas/TextMatchSchema" }
           }
         }
       },
       "TextMatchSchema": {
         "type": "object",
         "properties": {
-          "name": {
-            "type": "string"
-          },
-          "text": {
-            "type": "string"
-          },
-          "location": {
-            "type": "string"
-          },
-          "@type": {
-            "type": "string",
-            "example": "SearchResultMatch"
-          }
+          "@type": { "type": "string", "example": "SearchResultMatch" },
+          "name": { "type": "string" },
+          "text": { "type": "string" },
+          "location": { "type": "string" }
         }
       },
       "LiteratureSchema": {
         "type": "object",
         "properties": {
-          "@id": {
-            "type": "string",
-            "example": "KALU000000000"
-          },
-          "inLanguage": {
-            "type": "string",
-            "example": "de"
-          },
+          "@type": { "type": "string", "example": "Literature" },
+          "@id": { "type": "string", "example": "KALU000000000" },
+          "inLanguage": { "type": "string", "example": "de" },
           "documentNumber": {
             "type": "string",
             "description": "Dokumentnummer",
@@ -2648,46 +2181,33 @@
             "type": "array",
             "description": "Veröffentlichungsjahre",
             "example": "[2014, 2024-09]",
-            "items": {
-              "type": "string"
-            }
+            "items": { "type": "string" }
           },
           "documentTypes": {
             "type": "array",
             "description": "Dokumenttypen",
             "example": "['Auf']",
-            "items": {
-              "type": "string"
-            }
+            "items": { "type": "string" }
           },
           "dependentReferences": {
             "type": "array",
             "description": "Unselbstständige Fundstellen",
             "example": "['BUV, 1982, 123-123']",
-            "items": {
-              "type": "string"
-            }
+            "items": { "type": "string" }
           },
           "independentReferences": {
             "type": "array",
             "description": "Selbstständige Fundstellen",
             "example": "['50 Jahre Betriebs-Berater, 1987, 123-456']",
-            "items": {
-              "type": "string"
-            }
+            "items": { "type": "string" }
           },
           "normReferences": {
             "type": "array",
             "description": "Norm Verweise",
             "example": "['GG, Art 6 Abs 2 S 1, 1949-05-23']",
-            "items": {
-              "type": "string"
-            }
+            "items": { "type": "string" }
           },
-          "headline": {
-            "type": "string",
-            "description": "Haupttitel"
-          },
+          "headline": { "type": "string", "description": "Haupttitel" },
           "headlineAdditions": {
             "type": "string",
             "description": "Zusätze zum Haupttitel"
@@ -2696,53 +2216,68 @@
             "type": "string",
             "description": "Dokumentarischer Titel"
           },
+          "edition": { "type": "string", "description": "Ausgabe" },
+          "internationalIdentifiers": {
+            "type": "array",
+            "description": "Bestellnummer",
+            "items": { "type": "string" }
+          },
           "authors": {
             "type": "array",
             "description": "Authoren",
             "example": "['Musterfrau, Sabine']",
-            "items": {
-              "type": "string"
-            }
+            "items": { "type": "string" }
           },
           "collaborators": {
             "type": "array",
             "description": "Mitarbeiter",
             "example": "['Mustermann, Max']",
-            "items": {
-              "type": "string"
-            }
+            "items": { "type": "string" }
+          },
+          "editors": {
+            "type": "array",
+            "description": "Bearbeiter",
+            "items": { "type": "string" }
+          },
+          "founder": {
+            "type": "array",
+            "description": "Begründer",
+            "items": { "type": "string" }
+          },
+          "publishers": {
+            "type": "array",
+            "description": "Herausgeber",
+            "items": { "type": "string" }
+          },
+          "publishingHouses": {
+            "type": "array",
+            "description": "Verlag",
+            "items": { "type": "string" }
           },
           "languages": {
             "type": "array",
             "description": "Sprachen",
             "example": "['deu', 'eng']",
-            "items": {
-              "type": "string"
-            }
+            "items": { "type": "string" }
           },
           "originators": {
             "type": "array",
             "description": "Urheber",
             "example": "['DGB']",
-            "items": {
-              "type": "string"
-            }
+            "items": { "type": "string" }
           },
           "conferenceNotes": {
             "type": "array",
             "description": "Kongressvermerke",
             "example": "['Nationaler Beispiel Kongress, 2024, Berlin, GER']",
-            "items": {
-              "type": "string"
-            }
+            "items": { "type": "string" }
           },
-          "shortReport": {
-            "type": "string",
-            "description": "Kurzreferat"
-          },
-          "outline": {
-            "type": "string",
-            "description": "Gliederung"
+          "shortReport": { "type": "string", "description": "Kurzreferat" },
+          "outline": { "type": "string", "description": "Gliederung" },
+          "universityNotes": {
+            "type": "array",
+            "description": "Hochschulvermerk",
+            "items": { "type": "string" }
           },
           "literatureType": {
             "type": "string",
@@ -2751,47 +2286,33 @@
           },
           "encoding": {
             "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/LiteratureEncodingSchema"
-            }
-          },
-          "@type": {
-            "type": "string",
-            "example": "Literature"
+            "items": { "$ref": "#/components/schemas/LiteratureEncodingSchema" }
           }
         }
       },
       "CollectionSchemaSearchMemberSchemaLegislationWorkSearchSchema": {
         "type": "object",
         "properties": {
+          "@type": { "type": "string", "example": "hydra:Collection" },
           "@id": {
             "type": "string",
             "example": "/v1/document?pageIndex=0&size=5"
           },
-          "totalItems": {
-            "type": "integer",
-            "format": "int64",
-            "example": 1
-          },
+          "totalItems": { "type": "integer", "format": "int64", "example": 1 },
           "member": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/SearchMemberSchemaLegislationWorkSearchSchema"
             }
           },
-          "view": {
-            "$ref": "#/components/schemas/PartialCollectionViewSchema"
-          },
-          "@type": {
-            "type": "string",
-            "example": "hydra:Collection"
-          }
+          "view": { "$ref": "#/components/schemas/PartialCollectionViewSchema" }
         }
       },
       "LegislationExpressionSearchSchema": {
         "type": "object",
         "description": "A legislation item, across different expressions and manifestations. May be used to provide context to a `LegislationExpression` (under key `workExample`).",
         "properties": {
+          "@type": { "type": "string", "example": "Legislation" },
           "@id": {
             "type": "string",
             "example": "/v1/legislation/eli/bund/bgbl-1/1975/s1760/1998-01-29/10/deu"
@@ -2809,21 +2330,16 @@
             "type": "string",
             "description": "Whether the legislation expression is currently in force.",
             "enum": ["InForce", "NotInForce", "PartiallyInForce"]
-          },
-          "@type": {
-            "type": "string",
-            "example": "Legislation"
           }
         }
       },
       "LegislationWorkSearchSchema": {
         "allOf": [
-          {
-            "$ref": "#/components/schemas/AbstractDocumentSchema"
-          },
+          { "$ref": "#/components/schemas/AbstractDocumentSchema" },
           {
             "type": "object",
             "properties": {
+              "@type": { "type": "string", "example": "Legislation" },
               "@id": {
                 "type": "string",
                 "example": "/v1/legislation/eli/bund/bgbl-1/1975/s1760"
@@ -2840,10 +2356,7 @@
                 "type": "string",
                 "example": "Kakaoverordnung"
               },
-              "abbreviation": {
-                "type": "string",
-                "example": "KakaoV 2003"
-              },
+              "abbreviation": { "type": "string", "example": "KakaoV 2003" },
               "legislationDate": {
                 "type": "string",
                 "format": "date",
@@ -2865,48 +2378,32 @@
             }
           }
         ],
-        "description": "A legislation item, across different expressions and manifestations. May be used to provide context to a `LegislationExpression` (under key `workExample`).",
-        "properties": {
-          "@type": {
-            "type": "string",
-            "example": "Legislation"
-          }
-        }
+        "description": "A legislation item, across different expressions and manifestations. May be used to provide context to a `LegislationExpression` (under key `workExample`)."
       },
       "PublicationIssueSchema": {
         "type": "object",
         "properties": {
-          "name": {
-            "type": "string",
-            "example": "BGBL I 2003, 1760"
-          },
-          "@type": {
-            "type": "string",
-            "example": "PublicationIssue"
-          }
+          "@type": { "type": "string", "example": "PublicationIssue" },
+          "name": { "type": "string", "example": "BGBL I 2003, 1760" }
         }
       },
       "SearchMemberSchemaLegislationWorkSearchSchema": {
         "type": "object",
         "properties": {
+          "@type": { "type": "string", "example": "SearchResult" },
           "item": {
             "$ref": "#/components/schemas/LegislationWorkSearchSchema"
           },
           "textMatches": {
             "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/TextMatchSchema"
-            }
-          },
-          "@type": {
-            "type": "string",
-            "example": "SearchResult"
+            "items": { "$ref": "#/components/schemas/TextMatchSchema" }
           }
         }
       },
       "LegislationExpressionPartSchema": {
         "type": "object",
         "properties": {
+          "@type": { "type": "string", "example": "Legislation" },
           "@id": {
             "type": "string",
             "example": "/v1/legislation/eli/bund/bgbl-1/1975/s1760/regelungstext-1.xml#hauptteitel-para-1"
@@ -2920,14 +2417,8 @@
             "type": "string",
             "example": "550e8400-e29b-41d4-a716-446655440000"
           },
-          "name": {
-            "type": "string",
-            "example": "§ 1"
-          },
-          "isActive": {
-            "type": "boolean",
-            "example": true
-          },
+          "name": { "type": "string", "example": "§ 1" },
+          "isActive": { "type": "boolean", "example": true },
           "entryIntoForceDate": {
             "type": "string",
             "format": "date",
@@ -2941,13 +2432,7 @@
           "encoding": {
             "type": "array",
             "description": "The source data for this part, if available on its own",
-            "items": {
-              "$ref": "#/components/schemas/LegislationObjectSchema"
-            }
-          },
-          "@type": {
-            "type": "string",
-            "example": "Legislation"
+            "items": { "$ref": "#/components/schemas/LegislationObjectSchema" }
           }
         }
       },
@@ -2955,6 +2440,7 @@
         "type": "object",
         "description": "A legislation item, across different expressions and manifestations. May be used to provide context to a `LegislationExpression` (under key `workExample`).",
         "properties": {
+          "@type": { "type": "string", "example": "Legislation" },
           "@id": {
             "type": "string",
             "example": "/v1/legislation/eli/bund/bgbl-1/1975/s1760/1998-01-29/10/deu"
@@ -2975,9 +2461,7 @@
           },
           "tableOfContents": {
             "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/TableOfContentsSchema"
-            }
+            "items": { "$ref": "#/components/schemas/TableOfContentsSchema" }
           },
           "hasPart": {
             "type": "array",
@@ -2988,19 +2472,14 @@
           },
           "encoding": {
             "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/LegislationObjectSchema"
-            }
-          },
-          "@type": {
-            "type": "string",
-            "example": "Legislation"
+            "items": { "$ref": "#/components/schemas/LegislationObjectSchema" }
           }
         }
       },
       "LegislationObjectSchema": {
         "type": "object",
         "properties": {
+          "@type": { "type": "string", "example": "LegislationObject" },
           "@id": {
             "type": "string",
             "example": "/v1/legislation/eli/bund/bgbl-1/1975/s1760/1998-01-29/10/deu/1998-01-29/regelungstext-1/html"
@@ -3009,24 +2488,15 @@
             "type": "string",
             "example": "/v1/legislation/eli/bund/bgbl-1/1975/s1760/1998-01-29/10/deu/1998-01-29/regelungstext-1.html"
           },
-          "encodingFormat": {
-            "type": "string",
-            "example": "text/html"
-          },
-          "inLanguage": {
-            "type": "string",
-            "example": "de"
-          },
-          "@type": {
-            "type": "string",
-            "example": "LegislationObject"
-          }
+          "encodingFormat": { "type": "string", "example": "text/html" },
+          "inLanguage": { "type": "string", "example": "de" }
         }
       },
       "LegislationWorkSchema": {
         "type": "object",
         "description": "A legislation item, across different expressions and manifestations. May be used to provide context to a `LegislationExpression` (under key `workExample`).",
         "properties": {
+          "@type": { "type": "string", "example": "Legislation" },
           "@id": {
             "type": "string",
             "description": "Based on the European Legislation Identifier (ELI)",
@@ -3064,77 +2534,46 @@
             "description": "Verkündungsdatum (The date of first publication of the legislation, when it was published in the official gazette. This may be later than the `legislationDate`.)\n",
             "example": "2003-12-16"
           },
-          "isPartOf": {
-            "$ref": "#/components/schemas/PublicationIssueSchema"
-          },
+          "isPartOf": { "$ref": "#/components/schemas/PublicationIssueSchema" },
           "workExample": {
             "$ref": "#/components/schemas/LegislationExpressionSchema",
             "description": "Expression-level details (<i>an \"exemplary\" expression of this work</i>)"
-          },
-          "@type": {
-            "type": "string",
-            "example": "Legislation"
           }
         }
       },
       "TableOfContentsSchema": {
         "type": "object",
         "properties": {
-          "id": {
-            "type": "string",
-            "example": "hauptteil-1_para-1"
-          },
-          "marker": {
-            "type": "string",
-            "example": 1
-          },
-          "heading": {
-            "type": "string",
-            "example": "Art 1"
-          },
-          "@type": {
-            "type": "string",
-            "example": "TocEntry"
-          }
+          "@type": { "type": "string", "example": "TocEntry" },
+          "id": { "type": "string", "example": "hauptteil-1_para-1" },
+          "marker": { "type": "string", "example": 1 },
+          "heading": { "type": "string", "example": "Art 1" }
         }
       },
       "StreamingResponseBody": {},
       "AbstractDocumentSchema": {
-        "discriminator": {
-          "propertyName": "@type"
-        },
-        "properties": {
-          "@type": {
-            "type": "string"
-          }
-        },
+        "discriminator": { "propertyName": "@type" },
+        "properties": { "@type": { "type": "string" } },
         "required": ["@type"]
       },
       "AdministrativeDirectiveSearchSchema": {
         "allOf": [
-          {
-            "$ref": "#/components/schemas/AbstractDocumentSchema"
-          },
+          { "$ref": "#/components/schemas/AbstractDocumentSchema" },
           {
             "type": "object",
             "properties": {
-              "@id": {
+              "@type": {
                 "type": "string",
-                "example": "KALU000000000"
+                "example": "AdministrativeDirective"
               },
+              "@id": { "type": "string", "example": "KALU000000000" },
               "documentNumber": {
                 "type": "string",
                 "description": "Dokumentnummer",
                 "example": "KALU000000000"
               },
-              "headline": {
-                "type": "string",
-                "description": "Haupttitel"
-              },
-              "shortReport": {
-                "type": "string",
-                "description": "Kurzreferat"
-              },
+              "headline": { "type": "string", "description": "Haupttitel" },
+              "shortReport": { "type": "string", "description": "Kurzreferat" },
               "documentType": {
                 "type": "string",
                 "description": "Dokumenttyp",
@@ -3144,9 +2583,7 @@
                 "type": "array",
                 "description": "Aktenzeichen",
                 "example": "['ZZ', 'YY']",
-                "items": {
-                  "type": "string"
-                }
+                "items": { "type": "string" }
               },
               "legislationAuthority": {
                 "type": "string",
@@ -3160,22 +2597,15 @@
               }
             }
           }
-        ],
-        "properties": {
-          "@type": {
-            "type": "string",
-            "example": "AdministrativeDirective"
-          }
-        }
+        ]
       },
       "CaseLawSearchSchema": {
         "allOf": [
-          {
-            "$ref": "#/components/schemas/AbstractDocumentSchema"
-          },
+          { "$ref": "#/components/schemas/AbstractDocumentSchema" },
           {
             "type": "object",
             "properties": {
+              "@type": { "type": "string", "example": "Decision" },
               "documentNumber": {
                 "type": "string",
                 "example": "KARE000000000"
@@ -3184,276 +2614,167 @@
                 "type": "string",
                 "example": "ECLI:DE:FGRLP:1969:0905.IV85.68.0A"
               },
-              "headline": {
-                "type": "string",
-                "example": "Überschrift"
-              },
+              "headline": { "type": "string", "example": "Überschrift" },
               "otherLongText": {
                 "type": "string",
                 "example": "Sonstiger Langtext"
               },
-              "decisionDate": {
-                "type": "string",
-                "format": "date"
-              },
+              "decisionDate": { "type": "string", "format": "date" },
               "fileNumbers": {
                 "type": "array",
                 "example": "BGH 123/23",
-                "items": {
-                  "type": "string"
-                }
+                "items": { "type": "string" }
               },
-              "courtType": {
-                "type": "string",
-                "example": "FG"
-              },
-              "location": {
-                "type": "string",
-                "example": "Berlin"
-              },
-              "documentType": {
-                "type": "string",
-                "example": "Urteil"
-              },
-              "outline": {
-                "type": "string",
-                "example": "Leitsatz"
-              },
-              "judicialBody": {
-                "type": "string",
-                "example": "Gericht"
-              },
-              "courtName": {
-                "type": "string",
-                "example": "LArbG Hamm"
-              },
+              "courtType": { "type": "string", "example": "FG" },
+              "location": { "type": "string", "example": "Berlin" },
+              "documentType": { "type": "string", "example": "Urteil" },
+              "outline": { "type": "string", "example": "Leitsatz" },
+              "judicialBody": { "type": "string", "example": "Gericht" },
+              "courtName": { "type": "string", "example": "LArbG Hamm" },
               "decisionName": {
                 "type": "array",
-                "items": {
-                  "type": "string"
-                }
+                "items": { "type": "string" }
               },
               "deviatingDocumentNumber": {
                 "type": "array",
                 "example": "DEV-123",
-                "items": {
-                  "type": "string"
-                }
+                "items": { "type": "string" }
               },
               "@id": {
                 "type": "string",
                 "example": "/v1/case-law/ECLI:DE:FGRLP:1969:0905.IV85.68.0A"
               },
-              "inLanguage": {
-                "type": "string",
-                "example": "de"
-              },
+              "inLanguage": { "type": "string", "example": "de" },
               "highlightedFields": {
                 "type": "object",
                 "additionalProperties": {
                   "type": "array",
-                  "items": {
-                    "type": "string"
-                  }
+                  "items": { "type": "string" }
                 }
               }
             }
           }
-        ],
-        "properties": {
-          "@type": {
-            "type": "string",
-            "example": "Decision"
-          }
-        }
+        ]
       },
       "CollectionSchemaSearchMemberSchemaAbstractDocumentSchema": {
         "type": "object",
         "properties": {
+          "@type": { "type": "string", "example": "hydra:Collection" },
           "@id": {
             "type": "string",
             "example": "/v1/document?pageIndex=0&size=5"
           },
-          "totalItems": {
-            "type": "integer",
-            "format": "int64",
-            "example": 1
-          },
+          "totalItems": { "type": "integer", "format": "int64", "example": 1 },
           "member": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/SearchMemberSchemaAbstractDocumentSchema"
             }
           },
-          "view": {
-            "$ref": "#/components/schemas/PartialCollectionViewSchema"
-          },
-          "@type": {
-            "type": "string",
-            "example": "hydra:Collection"
-          }
+          "view": { "$ref": "#/components/schemas/PartialCollectionViewSchema" }
         }
       },
       "SearchMemberSchemaAbstractDocumentSchema": {
         "type": "object",
         "properties": {
+          "@type": { "type": "string", "example": "SearchResult" },
           "item": {
             "oneOf": [
               {
                 "$ref": "#/components/schemas/AdministrativeDirectiveSearchSchema"
               },
-              {
-                "$ref": "#/components/schemas/CaseLawSearchSchema"
-              },
-              {
-                "$ref": "#/components/schemas/LegislationWorkSearchSchema"
-              },
-              {
-                "$ref": "#/components/schemas/LiteratureSearchSchema"
-              }
+              { "$ref": "#/components/schemas/CaseLawSearchSchema" },
+              { "$ref": "#/components/schemas/LegislationWorkSearchSchema" },
+              { "$ref": "#/components/schemas/LiteratureSearchSchema" }
             ]
           },
           "textMatches": {
             "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/TextMatchSchema"
-            }
-          },
-          "@type": {
-            "type": "string",
-            "example": "SearchResult"
+            "items": { "$ref": "#/components/schemas/TextMatchSchema" }
           }
         }
       },
       "CollectionSchemaSearchMemberSchemaCaseLawSearchSchema": {
         "type": "object",
         "properties": {
+          "@type": { "type": "string", "example": "hydra:Collection" },
           "@id": {
             "type": "string",
             "example": "/v1/document?pageIndex=0&size=5"
           },
-          "totalItems": {
-            "type": "integer",
-            "format": "int64",
-            "example": 1
-          },
+          "totalItems": { "type": "integer", "format": "int64", "example": 1 },
           "member": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/SearchMemberSchemaCaseLawSearchSchema"
             }
           },
-          "view": {
-            "$ref": "#/components/schemas/PartialCollectionViewSchema"
-          },
-          "@type": {
-            "type": "string",
-            "example": "hydra:Collection"
-          }
+          "view": { "$ref": "#/components/schemas/PartialCollectionViewSchema" }
         }
       },
       "SearchMemberSchemaCaseLawSearchSchema": {
         "type": "object",
         "properties": {
-          "item": {
-            "$ref": "#/components/schemas/CaseLawSearchSchema"
-          },
+          "@type": { "type": "string", "example": "SearchResult" },
+          "item": { "$ref": "#/components/schemas/CaseLawSearchSchema" },
           "textMatches": {
             "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/TextMatchSchema"
-            }
-          },
-          "@type": {
-            "type": "string",
-            "example": "SearchResult"
+            "items": { "$ref": "#/components/schemas/TextMatchSchema" }
           }
         }
       },
       "CollectionSchemaSearchMemberSchemaAdministrativeDirectiveSearchSchema": {
         "type": "object",
         "properties": {
+          "@type": { "type": "string", "example": "hydra:Collection" },
           "@id": {
             "type": "string",
             "example": "/v1/document?pageIndex=0&size=5"
           },
-          "totalItems": {
-            "type": "integer",
-            "format": "int64",
-            "example": 1
-          },
+          "totalItems": { "type": "integer", "format": "int64", "example": 1 },
           "member": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/SearchMemberSchemaAdministrativeDirectiveSearchSchema"
             }
           },
-          "view": {
-            "$ref": "#/components/schemas/PartialCollectionViewSchema"
-          },
-          "@type": {
-            "type": "string",
-            "example": "hydra:Collection"
-          }
+          "view": { "$ref": "#/components/schemas/PartialCollectionViewSchema" }
         }
       },
       "SearchMemberSchemaAdministrativeDirectiveSearchSchema": {
         "type": "object",
         "properties": {
+          "@type": { "type": "string", "example": "SearchResult" },
           "item": {
             "$ref": "#/components/schemas/AdministrativeDirectiveSearchSchema"
           },
           "textMatches": {
             "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/TextMatchSchema"
-            }
-          },
-          "@type": {
-            "type": "string",
-            "example": "SearchResult"
+            "items": { "$ref": "#/components/schemas/TextMatchSchema" }
           }
         }
       },
       "CaseLawEncodingSchema": {
         "type": "object",
         "properties": {
-          "@id": {
-            "type": "string"
-          },
-          "contentUrl": {
-            "type": "string"
-          },
-          "encodingFormat": {
-            "type": "string",
-            "example": "text/html"
-          },
-          "inLanguage": {
-            "type": "string",
-            "example": "de"
-          },
-          "@type": {
-            "type": "string",
-            "example": "DecisionObject"
-          }
+          "@type": { "type": "string", "example": "DecisionObject" },
+          "@id": { "type": "string" },
+          "contentUrl": { "type": "string" },
+          "encodingFormat": { "type": "string", "example": "text/html" },
+          "inLanguage": { "type": "string", "example": "de" }
         }
       },
       "CaseLawSchema": {
         "type": "object",
         "properties": {
-          "documentNumber": {
-            "type": "string",
-            "example": "KARE000000000"
-          },
+          "@type": { "type": "string", "example": "Decision" },
+          "documentNumber": { "type": "string", "example": "KARE000000000" },
           "ecli": {
             "type": "string",
             "description": "European Case Law Identifier",
             "example": "ECLI:DE:FGRLP:1969:0905.IV85.68.0A"
           },
-          "caseFacts": {
-            "type": "string",
-            "description": "Tatbestand"
-          },
+          "caseFacts": { "type": "string", "description": "Tatbestand" },
           "decisionGrounds": {
             "type": "string",
             "description": "Entscheidungsgründe"
@@ -3462,22 +2783,10 @@
             "type": "string",
             "description": "Abweichende Meinung"
           },
-          "grounds": {
-            "type": "string",
-            "description": "Gründe"
-          },
-          "guidingPrinciple": {
-            "type": "string",
-            "description": "Leitsatz"
-          },
-          "headline": {
-            "type": "string",
-            "description": "Überschrift"
-          },
-          "headnote": {
-            "type": "string",
-            "description": "Orientierungssatz"
-          },
+          "grounds": { "type": "string", "description": "Gründe" },
+          "guidingPrinciple": { "type": "string", "description": "Leitsatz" },
+          "headline": { "type": "string", "description": "Überschrift" },
+          "headnote": { "type": "string", "description": "Orientierungssatz" },
           "otherHeadnote": {
             "type": "string",
             "description": "Sonstiger Orientierungssatz"
@@ -3486,10 +2795,7 @@
             "type": "string",
             "description": "Sonstiger Langtext"
           },
-          "tenor": {
-            "type": "string",
-            "description": "Tenor"
-          },
+          "tenor": { "type": "string", "description": "Tenor" },
           "decisionDate": {
             "type": "string",
             "format": "date",
@@ -3499,9 +2805,7 @@
             "type": "array",
             "description": "Aktenzeichen",
             "example": "BGH 123/23",
-            "items": {
-              "type": "string"
-            }
+            "items": { "type": "string" }
           },
           "courtType": {
             "type": "string",
@@ -3513,14 +2817,8 @@
             "description": "Gerichtssitz",
             "example": "Berlin"
           },
-          "documentType": {
-            "type": "string",
-            "example": "Urteil"
-          },
-          "outline": {
-            "type": "string",
-            "description": "Leitsatz"
-          },
+          "documentType": { "type": "string", "example": "Urteil" },
+          "outline": { "type": "string", "description": "Leitsatz" },
           "judicialBody": {
             "type": "string",
             "description": "Spruchkörper",
@@ -3530,71 +2828,44 @@
             "type": "array",
             "description": "Schlagworte",
             "example": "3. Kammer",
-            "items": {
-              "type": "string"
-            }
+            "items": { "type": "string" }
           },
-          "courtName": {
-            "type": "string",
-            "example": "LArbG Hamm"
-          },
+          "courtName": { "type": "string", "example": "LArbG Hamm" },
           "decisionName": {
             "type": "array",
             "description": "Entscheidungsname",
             "examples": ["Beispielentscheidung"],
-            "items": {
-              "type": "string"
-            }
+            "items": { "type": "string" }
           },
           "deviatingDocumentNumber": {
             "type": "array",
             "description": "Abweichende Dokumentnummer",
             "example": "DEV-123",
-            "items": {
-              "type": "string"
-            }
+            "items": { "type": "string" }
           },
           "@id": {
             "type": "string",
             "example": "/v1/case-law/ECLI:DE:FGRLP:1969:0905.IV85.68.0A"
           },
-          "inLanguage": {
-            "type": "string",
-            "example": "de"
-          },
+          "inLanguage": { "type": "string", "example": "de" },
           "encoding": {
             "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/CaseLawEncodingSchema"
-            }
+            "items": { "$ref": "#/components/schemas/CaseLawEncodingSchema" }
           },
           "highlightedFields": {
             "type": "object",
             "additionalProperties": {
               "type": "array",
-              "items": {
-                "type": "string"
-              }
+              "items": { "type": "string" }
             }
-          },
-          "@type": {
-            "type": "string",
-            "example": "Decision"
           }
         }
       },
       "CourtSearchResult": {
         "type": "object",
         "properties": {
-          "id": {
-            "type": "string",
-            "example": "BGH Karlsruhe"
-          },
-          "count": {
-            "type": "integer",
-            "format": "int64",
-            "example": 10000
-          },
+          "id": { "type": "string", "example": "BGH Karlsruhe" },
+          "count": { "type": "integer", "format": "int64", "example": 10000 },
           "label": {
             "type": "string",
             "example": "Bundesgerichtshof Karlsruhe"
@@ -3604,46 +2875,25 @@
       "AdministrativeDirectiveEncodingSchema": {
         "type": "object",
         "properties": {
-          "@id": {
-            "type": "string"
-          },
-          "contentUrl": {
-            "type": "string"
-          },
-          "encodingFormat": {
-            "type": "string",
-            "example": "text/html"
-          },
-          "inLanguage": {
-            "type": "string",
-            "example": "de"
-          },
-          "@type": {
-            "type": "string",
-            "example": "MediaObject"
-          }
+          "@type": { "type": "string", "example": "MediaObject" },
+          "@id": { "type": "string" },
+          "contentUrl": { "type": "string" },
+          "encodingFormat": { "type": "string", "example": "text/html" },
+          "inLanguage": { "type": "string", "example": "de" }
         }
       },
       "AdministrativeDirectiveSchema": {
         "type": "object",
         "properties": {
-          "@id": {
-            "type": "string",
-            "example": "KALU000000000"
-          },
+          "@type": { "type": "string", "example": "AdministrativeDirective" },
+          "@id": { "type": "string", "example": "KALU000000000" },
           "documentNumber": {
             "type": "string",
             "description": "Dokumentnummer",
             "example": "KALU000000000"
           },
-          "headline": {
-            "type": "string",
-            "description": "Haupttitel"
-          },
-          "shortReport": {
-            "type": "string",
-            "description": "Kurzreferat"
-          },
+          "headline": { "type": "string", "description": "Haupttitel" },
+          "shortReport": { "type": "string", "description": "Kurzreferat" },
           "documentType": {
             "type": "string",
             "description": "Dokumenttyp",
@@ -3658,9 +2908,7 @@
             "type": "array",
             "description": "Aktenzeichen",
             "example": "['ZZ', 'YY']",
-            "items": {
-              "type": "string"
-            }
+            "items": { "type": "string" }
           },
           "entryIntoForceDate": {
             "type": "string",
@@ -3681,42 +2929,29 @@
           "references": {
             "type": "array",
             "description": "Fundstelle",
-            "items": {
-              "type": "string"
-            }
+            "items": { "type": "string" }
           },
           "citationDates": {
             "type": "array",
             "description": "Zitierdaten",
-            "items": {
-              "type": "string",
-              "format": "date"
-            }
+            "items": { "type": "string", "format": "date" }
           },
           "normReferences": {
             "type": "array",
             "description": "Normkette",
             "example": "['§ 1 Abs1 SGB']",
-            "items": {
-              "type": "string"
-            }
+            "items": { "type": "string" }
           },
           "outline": {
             "type": "array",
             "description": "Gliederung",
-            "items": {
-              "type": "string"
-            }
+            "items": { "type": "string" }
           },
           "encoding": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/AdministrativeDirectiveEncodingSchema"
             }
-          },
-          "@type": {
-            "type": "string",
-            "example": "AdministrativeDirective"
           }
         }
       }

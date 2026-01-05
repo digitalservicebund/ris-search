@@ -34,9 +34,7 @@ import org.jetbrains.annotations.Nullable;
  * literature.
  */
 @Builder
-@JsonldType("Literature")
 public record LiteratureSchema(
-    @JsonProperty("@type") String type,
     @Schema(example = "KALU000000000") @JsonProperty("@id") String id,
     @Schema(example = "de") String inLanguage,
     @Schema(description = "Dokumentnummer", example = "KALU000000000") String documentNumber,
@@ -73,9 +71,12 @@ public record LiteratureSchema(
     @Schema(description = "Gliederung") String outline,
     @Schema(description = "Hochschulvermerk") List<String> universityNotes,
     @Schema(description = "Literaturtyp", example = "['sli', 'uli']") String literatureType,
-    @Nullable List<LiteratureEncodingSchema> encoding) {
+    @Nullable List<LiteratureEncodingSchema> encoding)
+    implements JsonldResource {
 
-  public LiteratureSchema {
-    type = "Literature";
+  @Override
+  @Schema(example = "Literature")
+  public String getType() {
+    return "Literature";
   }
 }

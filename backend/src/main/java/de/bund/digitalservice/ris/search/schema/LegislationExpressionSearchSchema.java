@@ -16,9 +16,7 @@ import lombok.Builder;
 @Schema(
     description =
         "A legislation item, across different expressions and manifestations. May be used to provide context to a `LegislationExpression` (under key `workExample`).")
-@JsonldType("Legislation")
 public record LegislationExpressionSearchSchema(
-    @JsonProperty("@type") String type,
     @JsonProperty("@id")
         @Schema(
             example = ApiConfig.Paths.LEGISLATION + "/eli/bund/bgbl-1/1975/s1760/1998-01-29/10/deu")
@@ -32,9 +30,12 @@ public record LegislationExpressionSearchSchema(
             example = "1998-02-06/..")
         String temporalCoverage,
     @Schema(description = "Whether the legislation expression is currently in force.")
-        LegalForceStatus legislationLegalForce) {
+        LegalForceStatus legislationLegalForce)
+    implements JsonldResource {
 
-  public LegislationExpressionSearchSchema {
-    type = "Legislation";
+  @Override
+  @Schema(example = "Legislation")
+  public String getType() {
+    return "Legislation";
   }
 }

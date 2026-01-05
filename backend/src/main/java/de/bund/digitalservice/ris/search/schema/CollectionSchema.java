@@ -8,16 +8,17 @@ import lombok.Builder;
 
 /** A DTO for collections of resources, following schema.org naming guidelines. */
 @Builder
-@JsonldType("hydra:Collection")
 public record CollectionSchema<T>(
-    @JsonProperty("@type") String type,
     @JsonProperty("@id") @Schema(example = ApiConfig.Paths.DOCUMENT + "?pageIndex=0&size=5")
         String id,
     @Schema(example = "1") long totalItems,
     List<T> member,
-    PartialCollectionViewSchema view) {
+    PartialCollectionViewSchema view)
+    implements JsonldResource {
 
-  public CollectionSchema {
-    type = "hydra:Collection";
+  @Override
+  @Schema(example = "hydra:Collection")
+  public String getType() {
+    return "hydra:Collection";
   }
 }

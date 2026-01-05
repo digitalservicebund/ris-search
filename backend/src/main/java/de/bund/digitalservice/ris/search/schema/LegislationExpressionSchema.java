@@ -36,9 +36,7 @@ import org.jetbrains.annotations.Nullable;
 @Schema(
     description =
         "A legislation item, across different expressions and manifestations. May be used to provide context to a `LegislationExpression` (under key `workExample`).")
-@JsonldType("Legislation")
 public record LegislationExpressionSchema(
-    @JsonProperty("@type") String type,
     @JsonProperty("@id")
         @Schema(
             example = ApiConfig.Paths.LEGISLATION + "/eli/bund/bgbl-1/1975/s1760/1998-01-29/10/deu")
@@ -59,9 +57,12 @@ public record LegislationExpressionSchema(
                 "List of components (articles, preambles, conclusions, attachments, …) that form this legislation item.")
         @Nullable
         List<LegislationExpressionPartSchema> hasPart,
-    @Nullable List<LegislationObjectSchema> encoding) {
+    @Nullable List<LegislationObjectSchema> encoding)
+    implements JsonldResource {
 
-  public LegislationExpressionSchema {
-    type = "Legislation";
+  @Override
+  @Schema(example = "Legislation")
+  public String getType() {
+    return "Legislation";
   }
 }

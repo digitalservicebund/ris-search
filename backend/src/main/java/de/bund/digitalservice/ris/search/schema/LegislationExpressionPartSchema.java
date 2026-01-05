@@ -18,9 +18,7 @@ import org.jetbrains.annotations.Nullable;
  * elements within a broader legislative context.
  */
 @Builder
-@JsonldType("Legislation")
 public record LegislationExpressionPartSchema(
-    @JsonProperty("@type") String type,
     @JsonProperty("@id")
         @Schema(
             example =
@@ -38,9 +36,12 @@ public record LegislationExpressionPartSchema(
     @Nullable @Schema(example = "2003-12-15") LocalDate entryIntoForceDate,
     @Nullable @Schema(example = "2003-12-15") LocalDate expiryDate,
     @Nullable @Schema(description = "The source data for this part, if available on its own")
-        List<LegislationObjectSchema> encoding) {
+        List<LegislationObjectSchema> encoding)
+    implements JsonldResource {
 
-  public LegislationExpressionPartSchema {
-    type = "Legislation";
+  @Override
+  @Schema(example = "Legislation")
+  public String getType() {
+    return "Legislation";
   }
 }

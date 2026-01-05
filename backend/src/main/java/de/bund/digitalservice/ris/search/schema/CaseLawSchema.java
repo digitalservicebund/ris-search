@@ -10,9 +10,7 @@ import org.jetbrains.annotations.Nullable;
 
 /** A DTO for court decisions in a specific encoding, following schema.org naming guidelines. */
 @Builder
-@JsonldType("Decision")
 public record CaseLawSchema(
-    @JsonProperty("@type") String type,
     @Schema(example = "KARE000000000") String documentNumber,
     @Schema(
             example = "ECLI:DE:FGRLP:1969:0905.IV85.68.0A",
@@ -48,9 +46,12 @@ public record CaseLawSchema(
         String id,
     @Schema(example = "de") String inLanguage,
     @Nullable List<CaseLawEncodingSchema> encoding,
-    Map<String, List<String>> highlightedFields) {
+    Map<String, List<String>> highlightedFields)
+    implements JsonldResource {
 
-  public CaseLawSchema {
-    type = "Decision";
+  @Override
+  @Schema(example = "Decision")
+  public String getType() {
+    return "Decision";
   }
 }
