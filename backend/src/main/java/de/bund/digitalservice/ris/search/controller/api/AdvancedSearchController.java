@@ -33,6 +33,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
+import org.jspecify.annotations.Nullable;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -40,7 +41,6 @@ import org.springframework.data.elasticsearch.UncategorizedElasticsearchExceptio
 import org.springframework.data.elasticsearch.core.SearchPage;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -82,8 +82,7 @@ public class AdvancedSearchController {
   public ResponseEntity<CollectionSchema<SearchMemberSchema<AbstractDocumentSchema>>> search(
       @Parameter(name = "query", description = "The query filter based on Lucene query")
           @RequestParam
-          @Nullable
-          String query,
+          @Nullable String query,
       @ParameterObject @Valid PaginationParams pagination,
       @ParameterObject @Valid UniversalSortParam sortParams)
       throws CustomValidationException {
@@ -125,8 +124,7 @@ public class AdvancedSearchController {
       searchLegislation(
           @Parameter(name = "query", description = "The query filter based on Lucene query")
               @RequestParam
-              @Nullable
-              String query,
+              @Nullable String query,
           @ParameterObject @Valid PaginationParams pagination,
           @ParameterObject @Valid NormsSortParam sortParams)
           throws CustomValidationException {
@@ -167,8 +165,7 @@ public class AdvancedSearchController {
   public ResponseEntity<CollectionSchema<SearchMemberSchema<CaseLawSearchSchema>>> caseLawSearch(
       @Parameter(name = "query", description = "The query filter based on Lucene query syntax")
           @RequestParam
-          @Nullable
-          String query,
+          @Nullable String query,
       @ParameterObject @Valid PaginationParams pagination,
       @ParameterObject @Valid CaseLawSortParam sortParams)
       throws CustomValidationException {
@@ -209,8 +206,7 @@ public class AdvancedSearchController {
       literatureSearch(
           @Parameter(name = "query", description = "The query filter based on Lucene query syntax")
               @RequestParam
-              @Nullable
-              String query,
+              @Nullable String query,
           @ParameterObject @Valid PaginationParams pagination,
           @ParameterObject @Valid LiteratureSortParam sortParams)
           throws CustomValidationException {
@@ -252,8 +248,7 @@ public class AdvancedSearchController {
       literatureSearch(
           @Parameter(name = "query", description = "The query filter based on Lucene query syntax")
               @RequestParam
-              @Nullable
-              String query,
+              @Nullable String query,
           @ParameterObject @Valid PaginationParams pagination,
           @ParameterObject @Valid AdministrativeDirectiveSortParam sortParams)
           throws CustomValidationException {

@@ -5,7 +5,9 @@ server:
 
 spring:
   config:
-    import: "kubernetes:"
+    import:
+      - "kubernetes:"
+      - "optional:configtree:/etc/secrets/*/"
   cloud:
     kubernetes:
       config:
@@ -13,8 +15,6 @@ spring:
         sources:
           - name: ris-search-opensearch-config
           - name: ris-search-postgres-config
-      secrets:
-        paths: /etc/secrets
 
 swagger:
   server:

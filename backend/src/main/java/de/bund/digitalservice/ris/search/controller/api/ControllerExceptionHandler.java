@@ -52,7 +52,7 @@ public class ControllerExceptionHandler {
     List<CustomError> errors =
         ex.getBindingResult().getAllErrors().stream().map(this::sanitizeError).toList();
     CustomErrorResponse errorResponse = CustomErrorResponse.builder().errors(errors).build();
-    return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(errorResponse);
+    return ResponseEntity.status(HttpStatus.UNPROCESSABLE_CONTENT).body(errorResponse);
   }
 
   /**
@@ -111,7 +111,7 @@ public class ControllerExceptionHandler {
   public ResponseEntity<CustomErrorResponse> handleCustomValidationException(
       CustomValidationException exception) {
     var errorResponse = CustomErrorResponse.builder().errors(exception.getErrors()).build();
-    return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(errorResponse);
+    return ResponseEntity.status(HttpStatus.UNPROCESSABLE_CONTENT).body(errorResponse);
   }
 
   /**
@@ -134,7 +134,7 @@ public class ControllerExceptionHandler {
             .build();
     CustomErrorResponse errorResponse =
         CustomErrorResponse.builder().errors(List.of(errorDetail)).build();
-    return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(errorResponse);
+    return ResponseEntity.status(HttpStatus.UNPROCESSABLE_CONTENT).body(errorResponse);
   }
 
   /**

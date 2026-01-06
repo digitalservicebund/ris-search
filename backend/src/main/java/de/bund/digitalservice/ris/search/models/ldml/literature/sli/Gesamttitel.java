@@ -2,7 +2,7 @@ package de.bund.digitalservice.ris.search.models.ldml.literature.sli;
 
 import jakarta.xml.bind.annotation.XmlAttribute;
 import lombok.Getter;
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Represents a full title if additonaly given to the main title.

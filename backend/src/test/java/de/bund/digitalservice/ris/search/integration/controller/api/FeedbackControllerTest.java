@@ -11,8 +11,8 @@ import de.bund.digitalservice.ris.search.integration.config.ContainersIntegratio
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.util.LinkedMultiValueMap;
@@ -62,7 +62,7 @@ class FeedbackControllerTest extends ContainersIntegrationBase {
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
                 .params(invalidParams))
-        .andExpect(status().isUnprocessableEntity())
+        .andExpect(status().isUnprocessableContent())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
         .andExpect(jsonPath("$.errors.*.code").value("information_missing"))
         .andExpect(jsonPath("$.errors.*.parameter").value("user_id"))
