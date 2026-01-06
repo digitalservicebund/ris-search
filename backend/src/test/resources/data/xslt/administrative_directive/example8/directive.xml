@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<akn:akomaNtoso
+        xmlns:akn="http://docs.oasis-open.org/legaldocml/ns/akn/3.0"
+        xmlns:ris="http://ldml.neuris.de/meta/">
+    <akn:doc name="offene-struktur">
+        <akn:meta>
+            <akn:proprietary source="attributsemantik-noch-undefiniert">
+                <ris:meta>
+                    <ris:tableOfContentsEntries>
+                        <ris:tableOfContentsEntry>1. Foo</ris:tableOfContentsEntry>
+                        <ris:tableOfContentsEntry>2. Bar</ris:tableOfContentsEntry>
+                        <ris:tableOfContentsEntry>3. Baz</ris:tableOfContentsEntry>
+                    </ris:tableOfContentsEntries>
+                </ris:meta>
+            </akn:proprietary>
+            <akn:notes source="gesamtfussnoten">
+                <akn:note>
+                    <akn:block name="gesamtfussnote">1. Footnote Foo</akn:block>
+                </akn:note>
+                <akn:note>
+                    <akn:block name="gesamtfussnote">2. Footnote Bar</akn:block>
+                </akn:note>
+            </akn:notes>
+        </akn:meta>
+        <akn:preface>
+            <akn:longTitle>
+                <akn:block name="longTitle">Langer Titel einer Verwaltungsvorschrift</akn:block>
+            </akn:longTitle>
+        </akn:preface>
+        <akn:mainBody>
+            <akn:div>
+                <akn:p>
+                    A <akn:a href="http://www.foo.de" shape="rect">foo</akn:a> is <akn:span>bar</akn:span>.
+                    <akn:br/>
+                    Bar <akn:sub>baz</akn:sub> or <akn:sup>bas</akn:sup>.
+                </akn:p>
+                Bar.
+                <akn:p>
+                    1. <akn:inline name="em">EM</akn:inline>
+                    2. <akn:inline name="hlj">hlj</akn:inline>
+                    3. <akn:inline name="noindex">noindex</akn:inline>
+                    4. <akn:inline name="strong">strong</akn:inline>
+                </akn:p>
+            </akn:div>
+        </akn:mainBody>
+    </akn:doc>
+</akn:akomaNtoso>
