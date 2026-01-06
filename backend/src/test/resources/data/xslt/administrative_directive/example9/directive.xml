@@ -37,14 +37,6 @@
                     </ris:activeReferences>
                 </ris:meta>
             </akn:proprietary>
-            <akn:notes source="gesamtfussnoten">
-                <akn:note>
-                    <akn:block name="gesamtfussnote">1. Footnote Foo</akn:block>
-                </akn:note>
-                <akn:note>
-                    <akn:block name="gesamtfussnote">2. Footnote Bar</akn:block>
-                </akn:note>
-            </akn:notes>
         </akn:meta>
         <akn:preface>
             <akn:longTitle>

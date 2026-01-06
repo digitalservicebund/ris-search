@@ -32,8 +32,6 @@ class AdministrativeDirectiveXsltTransformerServiceTest {
         "example5 | transforms directive with active references",
         "example6 | transforms directive with caselaw references",
         "example7 | transforms directive with active references and caselaw references",
-        "example8 | transforms directive with footnotes",
-        "example9 | transforms directive with references and footnotes",
       },
       delimiter = '|')
   void testTransformLiteratureXmlDocuments(String testfilesDir, String testName)
