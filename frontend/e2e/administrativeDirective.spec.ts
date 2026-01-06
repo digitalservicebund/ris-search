@@ -321,3 +321,32 @@ test.describe("actions menu", () => {
     });
   });
 });
+
+test("displays references", async ({ page }) => {
+  await navigate(page, "/literature/KSNR000000005");
+
+  await expect(
+    page
+      .getByRole("main")
+      .getByRole("heading", { level: 1, name: "Erstes Test-Dokument ULI" })
+      .first(),
+  ).toBeVisible();
+
+  // Text section
+  // Make sure the text section with references is displayed even when
+  // references are te only "text" content
+  const textSection = page.getByRole("region", { name: "Text" });
+
+  await expect(
+    textSection.getByRole("heading", {
+      level: 2,
+      name: "Dieser Beitrag zitiert",
+    }),
+  ).toBeVisible();
+  await expect(
+    textSection.getByRole("heading", { level: 3, name: "Rechtsprechung" }),
+  ).toBeVisible();
+  await expect(
+    textSection.getByText("FOO BAR RefNr 123 2025-07-01"),
+  ).toBeVisible();
+});

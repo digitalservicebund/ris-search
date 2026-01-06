@@ -95,7 +95,7 @@ test("displays literature page with metadata and text tab by default", async ({
   await expect(
     textSection.getByRole("heading", {
       level: 2,
-      name: "Dieser Beitrag zitiert",
+      name: "Dieser Beitrag wird zitiert",
     }),
   ).toBeVisible();
   await expect(
@@ -472,4 +472,54 @@ test("hides tabs and shows details if document is empty", async ({ page }) => {
     "Kongress:",
     "nicht vorhanden",
   ]);
+});
+
+test("displays references", async ({ page }) => {
+  await navigate(page, "/literature/XXLU000000009");
+
+  await expect(
+    page
+      .getByRole("main")
+      .getByRole("heading", { level: 1, name: "Erstes Test-Dokument ULI" })
+      .first(),
+  ).toBeVisible();
+
+  // Text section
+  // Make sure the text section with references is displayed even when
+  // references are the only "text" content
+  const textSection = page.getByRole("region", { name: "Text" });
+
+  await expect(
+    textSection.getByRole("heading", {
+      level: 2,
+      name: "Dieser Beitrag zitiert",
+    }),
+  ).toBeVisible();
+  await expect(
+    textSection.getByRole("heading", {
+      level: 3,
+      name: "Rechtsprechung",
+    }),
+  ).toBeVisible();
+  await expect(
+    textSection.getByText(
+      "Vergleiche aktiv EuGH 2. Kammer, 3. April 2008, Az: C-346/06",
+    ),
+  ).toBeVisible();
+
+  await expect(
+    textSection.getByRole("heading", {
+      level: 2,
+      name: "Dieser Beitrag wird zitiert",
+    }),
+  ).toBeVisible();
+  await expect(
+    textSection.getByRole("heading", {
+      level: 3,
+      name: "Verwaltungsvorschriften",
+    }),
+  ).toBeVisible();
+  await expect(
+    textSection.getByText("Vergleiche passiv NaNu 1. Kammer, 2009, Az: XY"),
+  ).toBeVisible();
 });
