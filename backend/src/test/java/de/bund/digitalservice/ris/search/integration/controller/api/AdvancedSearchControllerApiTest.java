@@ -31,9 +31,9 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultMatcher;
@@ -433,7 +433,7 @@ class AdvancedSearchControllerApiTest extends ContainersIntegrationBase {
     mockMvc
         .perform(get(url).contentType(MediaType.APPLICATION_JSON))
         .andDo(print())
-        .andExpect(status().isUnprocessableEntity())
+        .andExpect(status().isUnprocessableContent())
         .andExpect(
             content()
                 .json(
@@ -471,7 +471,7 @@ class AdvancedSearchControllerApiTest extends ContainersIntegrationBase {
         .perform(
             get(baseUrl + "?query=anything&sort=invalidsortparameter")
                 .contentType(MediaType.APPLICATION_JSON))
-        .andExpect(status().isUnprocessableEntity())
+        .andExpect(status().isUnprocessableContent())
         .andExpect(
             content()
                 .json(

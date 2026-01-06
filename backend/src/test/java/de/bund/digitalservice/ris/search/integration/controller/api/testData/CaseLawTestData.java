@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import org.testcontainers.shaded.org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 
 /** Test data for Case Law Documentation Units. */
 public class CaseLawTestData {
@@ -156,7 +156,7 @@ public class CaseLawTestData {
     WITH_LEITSATZ_COUNT =
         (int)
             allDocuments.stream()
-                .filter(d -> StringUtils.startsWith(d.guidingPrinciple(), "Leitsatz"))
+                .filter(d -> Strings.CS.startsWith(d.guidingPrinciple(), "Leitsatz"))
                 .count();
 
     PUBLISHED_COUNT =
