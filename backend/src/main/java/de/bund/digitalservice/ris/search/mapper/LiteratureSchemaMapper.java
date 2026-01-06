@@ -53,6 +53,7 @@ public class LiteratureSchemaMapper {
         .universityNotes(entity.universityNotes())
         .encoding(encodings)
         .literatureType(LiteratureTypeMapper.mapLiteratureType(entity.documentNumber()))
+        .volumes(entity.volumes())
         .build();
   }
 }

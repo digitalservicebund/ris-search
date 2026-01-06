@@ -134,9 +134,18 @@ export interface Literature {
   collaborators: string[];
   originators: string[];
   conferenceNotes: string[];
+  universityNotes: string[];
   languages: string[];
   shortReport: string | null;
   outline: string | null;
+  editors: string[];
+  founder: string[];
+  publishers: string[];
+  publishingHouses: string[];
+  edition: string | null;
+  internationalIdentifiers: string[];
+  volumes: string[];
+  literatureType: "sli" | "uli";
   encoding: LiteratureEncoding[] | null;
 }
 

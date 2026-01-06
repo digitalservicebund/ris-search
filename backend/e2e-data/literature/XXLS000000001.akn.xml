@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<akn:akomaNtoso xmlns:akn="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" xmlns:ris="http://ldml.neuris.de/literature/selbstaendig/meta/">
+<akn:akomaNtoso xmlns:akn="http://docs.oasis-open.org/legaldocml/ns/akn/3.0"
+                xmlns:ris="http://ldml.neuris.de/literature/selbstaendig/meta/">
     <akn:doc name="offene-struktur">
         <akn:meta>
             <akn:identification source="attributsemantik-noch-undefiniert">
@@ -16,9 +17,15 @@
                     <akn:FRBRauthor as="#mitarbeiter" href="#foo-peter-mitarbeiter-1"/>
                     <akn:FRBRauthor as="#urheber" href="#dgb-urheber-1"/>
                     <akn:FRBRauthor as="#kongress" href="#foo-kongress-1"/>
+                    <akn:FRBRauthor as="#hochschule" href="#universitaet-1"/>
+                    <akn:FRBRauthor as="#bearbeiter" href="#foo-bearbeiter-1"/>
+                    <akn:FRBRauthor as="#begruender" href="#foo-begruender-1"/>
+                    <akn:FRBRauthor as="#herausgeber-person" href="#herausgeber-person-1"/>
+                    <akn:FRBRauthor as="#herausgeber-institution" href="#foo-herausgeber-1"/>
+                    <akn:FRBRauthor as="#verlag" href="#verlag-1"/>
                     <akn:FRBRcountry value="de"/>
                     <akn:FRBRsubtype value="LU"/>
-                    <akn:FRBRnumber value="TODO"/>
+                    <akn:FRBRnumber value="ISBN 3-XXXXX-XX-X"/>
                     <akn:FRBRname value="TODO"/>
                 </akn:FRBRWork>
                 <akn:FRBRExpression>
@@ -41,19 +48,47 @@
             </akn:classification>
             <akn:classification source="schlagwort">
                 <akn:keyword dictionary="attributsemantik-noch-undefiniert" showAs="Anerkennung" value="Anerkennung"/>
-                <akn:keyword dictionary="attributsemantik-noch-undefiniert" showAs="Anerkennungsbescheid" value="Anerkennungsbescheid"/>
+                <akn:keyword dictionary="attributsemantik-noch-undefiniert" showAs="Anerkennungsbescheid"
+                             value="Anerkennungsbescheid"/>
             </akn:classification>
             <akn:analysis source="attributsemantik-noch-undefiniert">
                 <akn:otherReferences source="attributsemantik-noch-undefiniert">
                     <akn:implicitReference showAs="Baz, 1900, 124-125">
                         <ris:fundstelleUnselbstaendig periodikum="Baz" zitatstelle="1900, 124-125"/>
                     </akn:implicitReference>
+                    <akn:implicitReference showAs="FooBar, 1982, 123-123">
+                        <ris:fundstelleUnselbstaendig periodikum="FooBar" zitatstelle="1982, 123-123"/>
+                    </akn:implicitReference>
+                    <akn:implicitReference showAs="SelbstFund, 1982, 123-123">
+                        <ris:fundstelleSelbstaendig titel="SelbstFund" zitatstelle="2024, 456-456"/>
+                    </akn:implicitReference>
+                    <akn:implicitReference showAs="BMV-Ä">
+                        <ris:normReference abbreviation="BMV-Ä"/>
+                    </akn:implicitReference>
+                    <akn:implicitReference showAs="GG, Art 6 Abs 2 S 1, 1949-05-23">
+                        <ris:normReference abbreviation="GG" dateOfVersion="1949-05-23" singleNorm="Art 6 Abs 2 S 1"/>
+                    </akn:implicitReference>
                 </akn:otherReferences>
             </akn:analysis>
             <akn:references source="attributsemantik-noch-undefiniert">
-                <akn:TLCPerson eId="musterfrau-sabine-verfasser-1" href="akn/ontology/persons/de/musterfrau-sabine" ris:name="Musterfrau, Sabine" ris:titel="Prof" showAs="Musterfrau, Sabine, Prof"/>
-                <akn:TLCPerson eId="foo-peter-mitarbeiter-1" href="" ris:titel="Dr" ris:name="Foo, Peter" showAs="Foo, Peter, Dr"/>
-                <akn:TLCOrganization eId="dgb-urheber-1" href="akn/ontology/organizations/de/dgb" ris:name="DGB" ris:zusatz="Bundesausschuß" showAs="DGB, Bundesauschuß"/>
+                <akn:TLCPerson eId="musterfrau-sabine-verfasser-1" href="akn/ontology/persons/de/musterfrau-sabine"
+                               ris:name="Musterfrau, Sabine" ris:titel="Prof" showAs="Musterfrau, Sabine, Prof"/>
+                <akn:TLCPerson eId="foo-peter-mitarbeiter-1" href="" ris:titel="Dr" ris:name="Foo, Peter"
+                               showAs="Foo, Peter, Dr"/>
+                <akn:TLCPerson eId="foo-bearbeiter-1" href="akn/ontology/persons/de/foo" ris:name="Bearbeiter, Foo"
+                               showAs="Titel,  Bearbeiter, Foo"/>
+                <akn:TLCPerson eId="foo-begruender-1" href="akn/ontology/persons/de/foo" ris:name="Begruender, Foo"
+                               showAs="Titel,  Begruender, Foo"/>
+                <akn:TLCPerson eId="herausgeber-person-1" href="akn/ontology/persons/de/herausgeber-person"
+                               ris:titel="Mitarbeiter Herausgeber" showAs="Mitarbeiter Eins"/>
+                <akn:TLCOrganization eId="dgb-urheber-1" href="akn/ontology/organizations/de/dgb" ris:name="DGB"
+                                     ris:zusatz="Bundesausschuß" showAs="DGB, Bundesauschuß"/>
+                <akn:TLCOrganization eId="verlag-1" href="akn/ontology/organizations/de/verlag" ris:name="verlag"
+                                     ris:ort="Berlin" showAs="verlag, Berlin"/>
+                <akn:TLCOrganization eId="universitaet-1" href="akn/ontology/organizations/de/universitaet"
+                                     ris:name="Universität Foo" ris:jahr="1984" showAs="Universität Foo"/>
+                <akn:TLCOrganization eId="foo-herausgeber-1" href="akn/ontology/organizations/de/foo-herausgeber-1"
+                                     ris:name="herausgeber institution" showAs="herausgeber institution showAs"/>
                 <akn:TLCEvent eId="foo-kongress-1" href="akn/ontology/organizations/de/kongress"
                               ris:name="Internationaler Kongreß für das Recht"
                               ris:jahr="1991"
@@ -80,6 +115,11 @@
                         <ris:gesamttitel titel="Gesamttitel" bandbezeichnung="Bandbezeichnung"/>
                         <ris:gesamttitel titel="Gesamttitel 2" bandbezeichnung="Bandbezeichnung 2"/>
                     </ris:gesamttitelAngaben>
+                    <ris:teilbaende>
+                        <ris:teilband>Teilband 1</ris:teilband>
+                        <ris:teilband>Teilband 2</ris:teilband>
+                    </ris:teilbaende>
+                    <ris:ausgabe>1. Auflage</ris:ausgabe>
                     <ris:titelkurzformen>
                         <ris:titelkurzform>Titel Kurzform</ris:titelkurzform>
                     </ris:titelkurzformen>
@@ -92,7 +132,12 @@
         <akn:mainBody>
             <akn:div>
                 <akn:p>Dieses Dokument hat alle Titel.</akn:p>
-                <akn:p>In sem neque, sagittis sed nunc eget, rutrum tempor dolor. Nulla arcu dui, tempor sed lorem sed, facilisis ornare sem. Duis ut rutrum orci. Sed pretium, nisl ut feugiat volutpat, mauris justo tempor eros, sit amet dapibus libero ligula non urna. Phasellus vitae rhoncus mauris, ac bibendum sapien. Suspendisse sagittis libero nec congue volutpat. Integer a ante quis augue ornare pharetra sit amet non orci.</akn:p>
+                <akn:p>In sem neque, sagittis sed nunc eget, rutrum tempor dolor. Nulla arcu dui, tempor sed lorem sed,
+                    facilisis ornare sem. Duis ut rutrum orci. Sed pretium, nisl ut feugiat volutpat, mauris justo
+                    tempor eros, sit amet dapibus libero ligula non urna. Phasellus vitae rhoncus mauris, ac bibendum
+                    sapien. Suspendisse sagittis libero nec congue volutpat. Integer a ante quis augue ornare pharetra
+                    sit amet non orci.
+                </akn:p>
             </akn:div>
         </akn:mainBody>
     </akn:doc>

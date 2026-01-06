@@ -29,6 +29,15 @@ Abschließend gibt das Werk Empfehlungen für die praktische Anwendung juristisc
     outline:
       "1. Einführung\n2. Historischer Überblick\n3. Aktuelle Entwicklungen\n4. Schlussfolgerungen",
     encoding: [],
+    universityNotes: [],
+    literatureType: "uli",
+    editors: [],
+    founder: [],
+    publishers: [],
+    publishingHouses: [],
+    edition: null,
+    volumes: [],
+    internationalIdentifiers: [],
   },
   textMatches: [],
 };
