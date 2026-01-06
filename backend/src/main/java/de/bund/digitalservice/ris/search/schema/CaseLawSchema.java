@@ -1,9 +1,7 @@
 package de.bund.digitalservice.ris.search.schema;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
-import ioinformarics.oss.jackson.module.jsonld.annotation.JsonldId;
-import ioinformarics.oss.jackson.module.jsonld.annotation.JsonldResource;
-import ioinformarics.oss.jackson.module.jsonld.annotation.JsonldType;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
@@ -12,8 +10,6 @@ import org.jetbrains.annotations.Nullable;
 
 /** A DTO for court decisions in a specific encoding, following schema.org naming guidelines. */
 @Builder
-@JsonldResource
-@JsonldType("Decision")
 public record CaseLawSchema(
     @Schema(example = "KARE000000000") String documentNumber,
     @Schema(
@@ -46,7 +42,16 @@ public record CaseLawSchema(
     @Schema(example = "DEV-123", description = "Abweichende Dokumentnummer")
         List<String> deviatingDocumentNumber,
     // fields that aren't shared with CaseLawDocumentationUnit
-    @Schema(example = "/v1/case-law/ECLI:DE:FGRLP:1969:0905.IV85.68.0A") @JsonldId String id,
+    @Schema(example = "/v1/case-law/ECLI:DE:FGRLP:1969:0905.IV85.68.0A") @JsonProperty("@id")
+        String id,
     @Schema(example = "de") String inLanguage,
     @Nullable List<CaseLawEncodingSchema> encoding,
-    Map<String, List<String>> highlightedFields) {}
+    Map<String, List<String>> highlightedFields)
+    implements JsonldResource {
+
+  @Override
+  @Schema(example = "Decision")
+  public String getType() {
+    return "Decision";
+  }
+}

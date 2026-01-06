@@ -1,9 +1,7 @@
 package de.bund.digitalservice.ris.search.schema;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
-import ioinformarics.oss.jackson.module.jsonld.annotation.JsonldId;
-import ioinformarics.oss.jackson.module.jsonld.annotation.JsonldResource;
-import ioinformarics.oss.jackson.module.jsonld.annotation.JsonldType;
 import java.time.LocalDate;
 import java.util.List;
 import lombok.Builder;
@@ -25,10 +23,8 @@ import org.jetbrains.annotations.Nullable;
  * literature. - Encoding information for representations of the document in various formats.
  */
 @Builder
-@JsonldResource
-@JsonldType("Literature")
 public record LiteratureSearchSchema(
-    @Schema(example = "KALU000000000") @JsonldId String id,
+    @Schema(example = "KALU000000000") @JsonProperty("@id") String id,
     @Schema(example = "de") String inLanguage,
     @Schema(description = "Dokumentnummer", example = "KALU000000000") String documentNumber,
     @Schema(description = "Veröffentlichungsjahre", example = "[2014, 2024-09]")
@@ -60,4 +56,11 @@ public record LiteratureSearchSchema(
     @Schema(description = "Gliederung") String outline,
     @Schema(description = "Literaturtyp", example = "['sli', 'uli']") String literatureType,
     @Nullable List<LiteratureEncodingSchema> encoding)
-    implements AbstractDocumentSchema {}
+    implements AbstractDocumentSchema, JsonldResource {
+
+  @Override
+  @Schema(example = "Literature")
+  public String getType() {
+    return "Literature";
+  }
+}

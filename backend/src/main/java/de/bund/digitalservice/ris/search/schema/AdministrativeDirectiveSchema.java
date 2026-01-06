@@ -1,9 +1,7 @@
 package de.bund.digitalservice.ris.search.schema;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
-import ioinformarics.oss.jackson.module.jsonld.annotation.JsonldId;
-import ioinformarics.oss.jackson.module.jsonld.annotation.JsonldResource;
-import ioinformarics.oss.jackson.module.jsonld.annotation.JsonldType;
 import java.time.LocalDate;
 import java.util.List;
 import lombok.Builder;
@@ -21,10 +19,8 @@ import org.jetbrains.annotations.Nullable;
  * <p>The use of JSON-LD annotations ensures compatibility with linked data structures.
  */
 @Builder
-@JsonldResource
-@JsonldType("AdministrativeDirective")
 public record AdministrativeDirectiveSchema(
-    @Schema(example = "KALU000000000") @JsonldId String id,
+    @Schema(example = "KALU000000000") @JsonProperty("@id") String id,
     @Schema(description = "Dokumentnummer", example = "KALU000000000") String documentNumber,
     @Nullable @Schema(description = "Haupttitel") String headline,
     @Nullable @Schema(description = "Kurzreferat") String shortReport,
@@ -41,4 +37,12 @@ public record AdministrativeDirectiveSchema(
     @Schema(description = "Zitierdaten", example = "") List<LocalDate> citationDates,
     @Schema(description = "Normkette", example = "['§ 1 Abs1 SGB']") List<String> normReferences,
     @Schema(description = "Gliederung") List<String> outline,
-    @Nullable List<AdministrativeDirectiveEncodingSchema> encoding) {}
+    @Nullable List<AdministrativeDirectiveEncodingSchema> encoding)
+    implements JsonldResource {
+
+  @Override
+  @Schema(example = "AdministrativeDirective")
+  public String getType() {
+    return "AdministrativeDirective";
+  }
+}

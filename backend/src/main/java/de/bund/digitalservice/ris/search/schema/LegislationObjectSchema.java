@@ -1,18 +1,14 @@
 package de.bund.digitalservice.ris.search.schema;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import de.bund.digitalservice.ris.search.config.ApiConfig;
 import io.swagger.v3.oas.annotations.media.Schema;
-import ioinformarics.oss.jackson.module.jsonld.annotation.JsonldId;
-import ioinformarics.oss.jackson.module.jsonld.annotation.JsonldResource;
-import ioinformarics.oss.jackson.module.jsonld.annotation.JsonldType;
 import lombok.Builder;
 
 /** A DTO for legislation in a specific encoding, following schema.org naming guidelines. */
 @Builder
-@JsonldResource
-@JsonldType("LegislationObject")
 public record LegislationObjectSchema(
-    @JsonldId
+    @JsonProperty("@id")
         @Schema(
             example =
                 ApiConfig.Paths.LEGISLATION
@@ -24,4 +20,12 @@ public record LegislationObjectSchema(
                     + "/eli/bund/bgbl-1/1975/s1760/1998-01-29/10/deu/1998-01-29/regelungstext-1.html")
         String contentUrl,
     @Schema(example = "text/html") String encodingFormat,
-    @Schema(example = "de") String inLanguage) {}
+    @Schema(example = "de") String inLanguage)
+    implements JsonldResource {
+
+  @Override
+  @Schema(example = "LegislationObject")
+  public String getType() {
+    return "LegislationObject";
+  }
+}

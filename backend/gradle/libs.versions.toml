@@ -33,7 +33,6 @@ commons-csv = "1.14.1"
 amazon-aws-sdk-s3 = "2.29.45"
 saxon-he = "12.5"
 streamex = "0.8.4"
-jackson-json-ld = "0.1.1"
 jackson-datatype-jsr310 = "2.20.0"
 jaxb-moxy = "4.0.8"
 posthog = "1.2.0"
@@ -63,7 +62,6 @@ posthog = { module = "com.posthog.java:posthog", version.ref = "posthog" }
 commons-text = { module = "org.apache.commons:commons-text", version.ref = "commons-text" }
 json = { module = "org.json:json", version.ref = "org-json" }
 commons-csv = { module = "org.apache.commons:commons-csv", version.ref = "commons-csv" }
-jackson-jsonld = { module = "com.io-informatics.oss:jackson-jsonld", version.ref = "jackson-json-ld" }
 jackson-datatype-jsr310 = { module = "com.fasterxml.jackson.datatype:jackson-datatype-jsr310", version.ref = "jackson-datatype-jsr310"}
 saxon-he = { module = "net.sf.saxon:Saxon-HE", version.ref = "saxon-he" }
 lombok = { module = "org.projectlombok:lombok" }

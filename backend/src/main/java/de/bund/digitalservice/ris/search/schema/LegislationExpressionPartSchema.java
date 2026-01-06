@@ -1,10 +1,8 @@
 package de.bund.digitalservice.ris.search.schema;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import de.bund.digitalservice.ris.search.config.ApiConfig;
 import io.swagger.v3.oas.annotations.media.Schema;
-import ioinformarics.oss.jackson.module.jsonld.annotation.JsonldId;
-import ioinformarics.oss.jackson.module.jsonld.annotation.JsonldResource;
-import ioinformarics.oss.jackson.module.jsonld.annotation.JsonldType;
 import java.time.LocalDate;
 import java.util.List;
 import lombok.Builder;
@@ -20,10 +18,8 @@ import org.jetbrains.annotations.Nullable;
  * elements within a broader legislative context.
  */
 @Builder
-@JsonldResource
-@JsonldType("Legislation")
 public record LegislationExpressionPartSchema(
-    @JsonldId
+    @JsonProperty("@id")
         @Schema(
             example =
                 ApiConfig.Paths.LEGISLATION
@@ -40,4 +36,12 @@ public record LegislationExpressionPartSchema(
     @Nullable @Schema(example = "2003-12-15") LocalDate entryIntoForceDate,
     @Nullable @Schema(example = "2003-12-15") LocalDate expiryDate,
     @Nullable @Schema(description = "The source data for this part, if available on its own")
-        List<LegislationObjectSchema> encoding) {}
+        List<LegislationObjectSchema> encoding)
+    implements JsonldResource {
+
+  @Override
+  @Schema(example = "Legislation")
+  public String getType() {
+    return "Legislation";
+  }
+}

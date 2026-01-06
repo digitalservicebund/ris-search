@@ -5,7 +5,6 @@ import static de.bund.digitalservice.ris.search.utils.DateUtils.DATE_FORMATTER;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
-import ioinformarics.oss.jackson.module.jsonld.JsonldModule;
 import java.time.LocalDate;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,9 +23,8 @@ public class JsonldObjectMapperConfig {
    * Provides a configured {@link ObjectMapper} bean for JSON serialization and deserialization.
    *
    * <p>This method customizes the {@link ObjectMapper} by registering additional modules: - {@link
-   * JsonldModule} to enable support for JSON-LD annotations (@id, @type). - {@link JavaTimeModule}
-   * for better handling of Java 8 date/time types, with a custom serializer for {@link LocalDate}
-   * to format dates using the pattern "yyyy-MM-dd".
+   * JavaTimeModule} for better handling of Java 8 date/time types, with a custom serializer for
+   * {@link LocalDate} to format dates using the pattern "yyyy-MM-dd".
    *
    * @return A configured instance of {@link ObjectMapper}, suitable for handling JSON-LD data and
    *     Java 8 date/time types with custom date formatting.
@@ -35,8 +33,6 @@ public class JsonldObjectMapperConfig {
   @Primary
   public ObjectMapper objectMapper() {
     var objectMapper = new ObjectMapper();
-    objectMapper.registerModule(new JsonldModule());
-
     JavaTimeModule javaTimeModule = new JavaTimeModule();
     // use format yyyy-MM-dd to serialize LocalDates
     javaTimeModule.addSerializer(LocalDate.class, new LocalDateSerializer(DATE_FORMATTER));

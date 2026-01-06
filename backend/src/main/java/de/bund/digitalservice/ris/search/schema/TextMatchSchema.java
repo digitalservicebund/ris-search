@@ -1,7 +1,6 @@
 package de.bund.digitalservice.ris.search.schema;
 
-import ioinformarics.oss.jackson.module.jsonld.annotation.JsonldResource;
-import ioinformarics.oss.jackson.module.jsonld.annotation.JsonldType;
+import io.swagger.v3.oas.annotations.media.Schema;
 import javax.annotation.Nullable;
 import lombok.Builder;
 
@@ -18,6 +17,12 @@ import lombok.Builder;
  * text, if available.
  */
 @Builder
-@JsonldResource
-@JsonldType("SearchResultMatch")
-public record TextMatchSchema(String name, String text, @Nullable String location) {}
+public record TextMatchSchema(String name, String text, @Nullable String location)
+    implements JsonldResource {
+
+  @Override
+  @Schema(example = "SearchResultMatch")
+  public String getType() {
+    return "SearchResultMatch";
+  }
+}
