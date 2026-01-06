@@ -1,7 +1,7 @@
 package de.bund.digitalservice.ris.search.models;
 
 import lombok.Builder;
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Represents an attachment entity with various attributes.

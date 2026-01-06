@@ -5,12 +5,12 @@ import jakarta.persistence.ElementCollection;
 import java.time.LocalDate;
 import java.util.List;
 import lombok.Builder;
+import org.jspecify.annotations.Nullable;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.DateFormat;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
-import org.springframework.lang.Nullable;
 
 /**
  * Represents an administrative directive within the system. This record is modeled to handle
