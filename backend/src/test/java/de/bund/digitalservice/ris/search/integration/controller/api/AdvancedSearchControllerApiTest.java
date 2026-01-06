@@ -433,7 +433,7 @@ class AdvancedSearchControllerApiTest extends ContainersIntegrationBase {
     mockMvc
         .perform(get(url).contentType(MediaType.APPLICATION_JSON))
         .andDo(print())
-        .andExpect(status().isUnprocessableEntity())
+        .andExpect(status().isUnprocessableContent())
         .andExpect(
             content()
                 .json(
@@ -471,7 +471,7 @@ class AdvancedSearchControllerApiTest extends ContainersIntegrationBase {
         .perform(
             get(baseUrl + "?query=anything&sort=invalidsortparameter")
                 .contentType(MediaType.APPLICATION_JSON))
-        .andExpect(status().isUnprocessableEntity())
+        .andExpect(status().isUnprocessableContent())
         .andExpect(
             content()
                 .json(

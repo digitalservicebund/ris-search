@@ -62,7 +62,7 @@ class FeedbackControllerTest extends ContainersIntegrationBase {
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
                 .params(invalidParams))
-        .andExpect(status().isUnprocessableEntity())
+        .andExpect(status().isUnprocessableContent())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
         .andExpect(jsonPath("$.errors.*.code").value("information_missing"))
         .andExpect(jsonPath("$.errors.*.parameter").value("user_id"))

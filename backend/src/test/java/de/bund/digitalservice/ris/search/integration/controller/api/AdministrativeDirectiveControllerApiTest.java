@@ -128,7 +128,7 @@ class AdministrativeDirectiveControllerApiTest extends ContainersIntegrationBase
         .perform(
             get(ApiConfig.Paths.ADMINISTRATIVE_DIRECTIVE + "?sort=foo")
                 .contentType(MediaType.APPLICATION_XML))
-        .andExpect(status().isUnprocessableEntity());
+        .andExpect(status().isUnprocessableContent());
   }
 
   @Test
