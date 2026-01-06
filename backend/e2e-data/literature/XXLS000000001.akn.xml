@@ -128,6 +128,14 @@
                     </ris:sonstigerSachtitelListe>
                 </ris:meta>
             </akn:proprietary>
+            <akn:notes source="gesamtfussnoten">
+                <akn:note>
+                    <akn:block name="gesamtfussnote">Eine Fußnote.</akn:block>
+                </akn:note>
+                <akn:note>
+                    <akn:block name="gesamtfussnote">Dies ist eine andere längere Fußnote.</akn:block>
+                </akn:note>
+            </akn:notes>
         </akn:meta>
         <akn:mainBody>
             <akn:div>
