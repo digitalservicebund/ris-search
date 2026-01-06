@@ -323,12 +323,12 @@ test.describe("actions menu", () => {
 });
 
 test("displays references", async ({ page }) => {
-  await navigate(page, "/literature/KSNR000000005");
+  await navigate(page, "/administrative-directives/KSNR000000005");
 
   await expect(
     page
       .getByRole("main")
-      .getByRole("heading", { level: 1, name: "Erstes Test-Dokument ULI" })
+      .getByRole("heading", { level: 1, name: "VV Ausschließlich Verweise" })
       .first(),
   ).toBeVisible();
 

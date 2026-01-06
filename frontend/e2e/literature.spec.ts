@@ -480,7 +480,7 @@ test("displays references", async ({ page }) => {
   await expect(
     page
       .getByRole("main")
-      .getByRole("heading", { level: 1, name: "Erstes Test-Dokument ULI" })
+      .getByRole("heading", { level: 1, name: "Lit Ausschließlich Verweise" })
       .first(),
   ).toBeVisible();
 
@@ -502,9 +502,7 @@ test("displays references", async ({ page }) => {
     }),
   ).toBeVisible();
   await expect(
-    textSection.getByText(
-      "Vergleiche aktiv EuGH 2. Kammer, 3. April 2008, Az: C-346/06",
-    ),
+    textSection.getByText("Vergleiche aktiv FooBar 1. Kammer, 3. April 2008"),
   ).toBeVisible();
 
   await expect(
