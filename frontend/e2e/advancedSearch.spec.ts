@@ -24,7 +24,7 @@ const nonZeroResultCount = /[1-9][\d.]* Suchergebnis(se)?/;
 
 function getTotalDocumentCounter(page: Page) {
   return page.getByText(
-    /In [\d.]+ (Gesetze & Verordnungen|Gerichtsentscheidungen|Literaturnachweise) suchen/,
+    /In [\d.]+ (Gesetze & Verordnungen|Gerichtsentscheidungen|Literaturnachweise|Verwaltungsvorschriften) suchen/,
     { exact: true },
   );
 }
@@ -697,6 +697,193 @@ test.describe("searching literature", () => {
   });
 });
 
+test.describe("searching administrative directive", () => {
+  test("only shows administrative directive results", async ({ page }) => {
+    await navigate(page, "/advanced-search");
+
+    await searchFor(page, {
+      q: "und",
+      documentKind: "Verwaltungsvorschriften",
+    });
+
+    const searchResults = getSearchResults(page);
+    const resultCounter = getResultCounter(page);
+
+    await expect(resultCounter).toHaveText(nonZeroResultCount);
+
+    // Ensure all visible entries are of type administrative directive
+    await expect(searchResults).toHaveText([/^(VB|VR|VV)/]);
+  });
+
+  test("shows total document count", async ({ page }) => {
+    await navigate(page, "/advanced-search?documentKind=V");
+
+    const count = getTotalDocumentCounter(page);
+
+    await expect(count).toHaveText(
+      nonZeroTotalDocumentCount("Verwaltungsvorschriften"),
+    );
+  });
+
+  test("shows the search result contents", async ({ page }) => {
+    await navigate(page, "/advanced-search");
+
+    await searchFor(page, {
+      q: 'VT:"Beschlüsse beschlossen werden"',
+      documentKind: "Verwaltungsvorschriften",
+    });
+
+    const searchResult = getSearchResults(page).first();
+
+    // Header
+    await expect(searchResult).toHaveText(/VB/);
+    await expect(searchResult).toHaveText(/FooBar/);
+    await expect(searchResult).toHaveText(/Baz - 121 - 1/);
+    await expect(searchResult).toHaveText(/24.12.2022/);
+
+    // Title and detail link
+    await expect(
+      searchResult.getByRole("link").getByRole("heading", { level: 2 }),
+    ).toHaveText(/Beschluss über den Beschluss/);
+
+    // Text preview (only checking the first two sentences)
+    await expect(searchResult).toHaveText(
+      /Beschlossen wurde, das Beschlüsse beschlossen werden müssen. /,
+    );
+  });
+
+  test("navigates to the document detail page", async ({ page }) => {
+    await navigate(page, "/advanced-search");
+
+    await searchFor(page, {
+      q: "'Beschlüsse beschlossen werden'",
+      documentKind: "Verwaltungsvorschriften",
+    });
+
+    // Result detail link
+    await page
+      .getByRole("link", { name: "Beschluss über den Beschluss" })
+      .click();
+
+    await expect(
+      page.getByRole("heading", {
+        level: 1,
+        name: "Beschluss über den Beschluss",
+      }),
+    ).toBeVisible();
+  });
+
+  test("can search in field 'Normgeber'", async ({ page }) => {
+    await navigate(page, "/advanced-search");
+
+    await searchFor(page, {
+      documentKind: "Verwaltungsvorschriften",
+      q: "NG:FooBar",
+    });
+
+    const results = getSearchResults(page);
+
+    await expect(results).toHaveCount(1);
+    await expect(results).toHaveText(/FooBar/);
+  });
+
+  test("can search in field 'Fundstelle'", async ({ page }) => {
+    await navigate(page, "/advanced-search");
+
+    await searchFor(page, {
+      documentKind: "Verwaltungsvorschriften",
+      q: 'FU:"FooBar 2022, Nr 1, 123"',
+    });
+
+    const results = getSearchResults(page);
+
+    await expect(results).toHaveCount(1);
+    await expect(results).toHaveText(/Beschluss über den Beschluss/);
+  });
+
+  test("can search in field 'Überschrift'", async ({ page }) => {
+    await navigate(page, "/advanced-search");
+
+    await searchFor(page, {
+      documentKind: "Verwaltungsvorschriften",
+      q: "U:das",
+    });
+
+    const results = getSearchResults(page);
+
+    await expect(results).toHaveCount(1);
+    await expect(results).toHaveText(
+      /Verwaltungsvorschrift für das Testen des Portals zur Darstellung von Verwaltungsvorschriften/,
+    );
+  });
+
+  test("can search in field 'Volltext'", async ({ page }) => {
+    await navigate(page, "/advanced-search");
+
+    await searchFor(page, {
+      documentKind: "Verwaltungsvorschriften",
+      q: "VT:das",
+    });
+
+    const results = getSearchResults(page);
+
+    await expect(results).toHaveCount(1);
+    await expect(results).toHaveText(/Beschluss über den Beschluss/);
+  });
+
+  test("searches without date restrictions", async ({ page }) => {
+    await navigate(page, "/advanced-search");
+
+    await searchFor(page, {
+      documentKind: "Verwaltungsvorschriften",
+      q: "und",
+      dateFilter: "Keine zeitliche Begrenzung",
+    });
+
+    // Don't have a great way of asserting this filter, so just making sure the
+    // parameter is handled correctly
+    await expect(page).toHaveURL(/dateFilterType=allTime/);
+
+    const resultCounter = getResultCounter(page);
+    await expect(resultCounter).toHaveText(nonZeroResultCount);
+  });
+
+  test("filter to show specific date", async ({ page }) => {
+    await navigate(page, "/advanced-search");
+
+    await searchFor(page, {
+      documentKind: "Verwaltungsvorschriften",
+      q: "ipsum",
+      dateFilter: "Bestimmtes Datum",
+      dateFilterSpecificDate: "01.07.2025",
+    });
+
+    const results = getSearchResults(page);
+
+    await expect(results).toHaveCount(1);
+    await expect(results).toHaveText(/01.07.2025/);
+  });
+
+  test("filter to show date range", async ({ page }) => {
+    await navigate(page, "/advanced-search");
+
+    await searchFor(page, {
+      documentKind: "Verwaltungsvorschriften",
+      q: "",
+      dateFilter: "Innerhalb einer Zeitspanne",
+      dateFilterFrom: "01.01.2019",
+      dateFilterTo: "31.12.2022",
+    });
+
+    await sortBy(page, "Datum: Älteste zuerst");
+
+    const results = getSearchResults(page);
+
+    await expect(results).toHaveCount(2);
+    await expect(results).toHaveText([/2019/, /2022/]);
+  });
+});
+
 test.describe("responsive", () => {
   test.beforeEach(({ isMobileTest }) => {
     test.skip(!isMobileTest);
@@ -821,6 +1008,46 @@ test.describe("search by AND + OR operators", { tag: ["@RISDEV-8385"] }, () => {
 
       await expect(results).toHaveCount(2);
       await expect(results).toHaveText([/Zweites/, /Erstes/]);
+    });
+  });
+
+  test.describe("administrative directive", () => {
+    test("searches with AND operator", async ({ page }) => {
+      await navigate(page, "/advanced-search");
+
+      await searchFor(page, {
+        q: "Beschlüsse AND Beschluss",
+        documentKind: "Verwaltungsvorschriften",
+      });
+
+      const results = getSearchResults(page);
+
+      await expect(results).toHaveCount(1);
+      await expect(results).toHaveText(/Beschlüsse/);
+      await expect(results).toHaveText(/Beschluss/);
+
+      // Should not match anything if one of the values does not exist
+      await searchFor(page, {
+        q: "Beschlüsse AND DoesNotExist",
+        documentKind: "Verwaltungsvorschriften",
+      });
+
+      await expect(results).toHaveCount(0);
+    });
+
+    test("searches with OR operator", async ({ page }) => {
+      await navigate(page, "/advanced-search");
+      await searchFor(page, {
+        q: "Katze OR Beschluss",
+        documentKind: "Verwaltungsvorschriften",
+      });
+
+      await sortBy(page, "Datum: Älteste zuerst");
+
+      const results = getSearchResults(page);
+
+      await expect(results).toHaveCount(2);
+      await expect(results).toHaveText([/Beschluss/, /Katze/]);
     });
   });
 });

@@ -47,5 +47,10 @@ export const queryableDataFields: Record<DocumentKind, DataField[]> = {
     { label: "Fundstelle", pattern: "FU:" },
     { label: "Norm", pattern: "N:" },
   ],
-  [DocumentKind.AdministrativeDirective]: [],
+  [DocumentKind.AdministrativeDirective]: [
+    { label: "Normgeber", pattern: "NG:" },
+    { label: "Fundstelle", pattern: "FU:" },
+    { label: "Überschrift", pattern: "U:" },
+    { label: "Volltext", pattern: "VT:" },
+  ],
 } as const;

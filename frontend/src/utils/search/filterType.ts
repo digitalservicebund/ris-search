@@ -131,8 +131,12 @@ export function dateFilterToQuery(
     }
   }
 
-  // Case law
-  else if (documentKind === DocumentKind.CaseLaw) {
+  // Case law or Administrative directive
+  else if (
+    [DocumentKind.CaseLaw, DocumentKind.AdministrativeDirective].includes(
+      documentKind,
+    )
+  ) {
     if (strictFilter.type === "period") {
       filterStr = `DATUM:[${strictFilter.from} TO ${strictFilter.to}]`;
     } else if (strictFilter.type === "specificDate") {

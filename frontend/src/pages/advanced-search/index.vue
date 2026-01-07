@@ -53,6 +53,8 @@ const count = computed(() =>
         [DocumentKind.CaseLaw]: stats.value["case-law"]?.count,
         [DocumentKind.Literature]: stats.value.literature?.count,
         [DocumentKind.Norm]: stats.value.legislation?.count,
+        [DocumentKind.AdministrativeDirective]:
+          stats.value["administrative-directive"]?.count,
       }
     : undefined,
 );
@@ -88,6 +90,11 @@ const documentKindMenuItems: MenuItem[] = [
   {
     key: DocumentKind.Literature,
     label: formatDocumentKind(DocumentKind.Literature),
+    command: setDocumentKind,
+  },
+  {
+    key: DocumentKind.AdministrativeDirective,
+    label: formatDocumentKind(DocumentKind.AdministrativeDirective),
     command: setDocumentKind,
   },
 ];

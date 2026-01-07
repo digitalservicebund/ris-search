@@ -32,6 +32,8 @@ const filterLabel = computed(() => {
       return "Gültigkeit";
     case DocumentKind.Literature:
       return "Veröffentlichungsjahr";
+    case DocumentKind.AdministrativeDirective:
+      return "Inkrafttreten";
     default:
       return "Datum";
   }
@@ -41,9 +43,11 @@ const visibleFilters = computed(() => {
   return {
     currentlyInForce: documentKind === DocumentKind.Norm,
     allTime: true,
-    specificDate: [DocumentKind.Norm, DocumentKind.CaseLaw].includes(
-      documentKind,
-    ),
+    specificDate: [
+      DocumentKind.Norm,
+      DocumentKind.CaseLaw,
+      DocumentKind.AdministrativeDirective,
+    ].includes(documentKind),
     period: true,
   };
 });

@@ -17,7 +17,7 @@
                     <akn:FRBRcountry value="de" />
                     <akn:FRBRsubtype value="VB" />
                     <akn:FRBRnumber value="Baz - 121 - 1" />
-                    <akn:FRBRname value="DEU Neuris" />
+                    <akn:FRBRname value="FooBar" />
                 </akn:FRBRWork>
                 <akn:FRBRExpression>
                     <akn:FRBRthis
@@ -55,7 +55,7 @@
             </akn:analysis>
             <akn:proprietary source="attributsemantik-noch-undefiniert">
                 <ris:meta>
-                    <ris:normgeber staat="DEU" organ="Neuris" />
+                    <ris:normgeber staat="FooBar" />
                     <ris:entryIntoEffectDate>2022-12-24</ris:entryIntoEffectDate>
                     <ris:documentType category="VB" longTitle="Verbandsbeschluss">VB Verbandsbeschluss</ris:documentType>
                     <ris:dateToQuoteList>
@@ -67,7 +67,7 @@
                     <ris:regionen domainTerm="Regionen">
                         <ris:region domainTerm="Region">DEU</ris:region>
                     </ris:regionen>
-                    <ris:historicAbbreviation>VB DEU Neuris 2022-04-11 Baz - 121 - 1</ris:historicAbbreviation>
+                    <ris:historicAbbreviation>VB FooBar 2022-04-11 Baz - 121 - 1</ris:historicAbbreviation>
                     <ris:activeReferences>
                         <ris:activeReference typeNumber="82" reference="CDE" paragraph="§ 4"
                             position="Abs 1" dateOfVersion="2014-02-17" />
