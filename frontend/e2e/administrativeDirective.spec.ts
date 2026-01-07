@@ -334,7 +334,7 @@ test("displays references", async ({ page }) => {
 
   // Text section
   // Make sure the text section with references is displayed even when
-  // references are te only "text" content
+  // references are the only "text" content
   const textSection = page.getByRole("region", { name: "Text" });
 
   await expect(

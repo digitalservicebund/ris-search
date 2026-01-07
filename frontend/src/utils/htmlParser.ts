@@ -74,7 +74,7 @@ export function isDocumentEmpty(htmlDocument?: string): boolean {
 
   const isEmptyBody =
     bodyElements.length === 0 && doc.body.childNodes.length == 0;
-  const hasSingleH2 =
+  const hasSingleH1 =
     bodyElements.length === 1 && bodyElements[0]?.tagName === "H1";
-  return isEmptyBody || hasSingleH2;
+  return isEmptyBody || hasSingleH1;
 }
