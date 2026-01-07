@@ -1,4 +1,4 @@
-import { mount } from "@vue/test-utils";
+import { render, screen } from "@testing-library/vue";
 import StatusCard, { StatusCardType } from "./StatusCard.vue";
 
 const factory = (
@@ -6,7 +6,7 @@ const factory = (
   header: string = "Test Header",
   content: string = "Test Content",
 ) =>
-  mount(StatusCard, {
+  render(StatusCard, {
     props: {
       header: header,
       content: content,
@@ -15,23 +15,23 @@ const factory = (
   });
 describe("StatusCard", () => {
   it("renders correctly with given props", () => {
-    const wrapper = factory(StatusCardType.IMPLEMENTED);
-    expect(wrapper.text()).contains("Test Header");
-    expect(wrapper.text()).contains("Test Content");
+    factory(StatusCardType.IMPLEMENTED);
+    expect(screen.getByText("Test Header")).toBeInTheDocument();
+    expect(screen.getByText("Test Content")).toBeInTheDocument();
   });
 
   it("displays the correct label for IMPLEMENTED status", () => {
-    const wrapper = factory(StatusCardType.IMPLEMENTED);
-    expect(wrapper.text()).contains("Erste Version verfügbar");
+    factory(StatusCardType.IMPLEMENTED);
+    expect(screen.getByText("Erste Version verfügbar")).toBeInTheDocument();
   });
 
   it("displays the correct label for IN_PROGRESS status", () => {
-    const wrapper = factory(StatusCardType.IN_PROGRESS);
-    expect(wrapper.text()).contains("In Arbeit");
+    factory(StatusCardType.IN_PROGRESS);
+    expect(screen.getByText("In Arbeit")).toBeInTheDocument();
   });
 
   it("displays the correct label for PLANNED status", () => {
-    const wrapper = factory(StatusCardType.PLANNED);
-    expect(wrapper.text()).contains("Geplant");
+    factory(StatusCardType.PLANNED);
+    expect(screen.getByText("Geplant")).toBeInTheDocument();
   });
 });

@@ -1,21 +1,14 @@
-import { mockNuxtImport } from "@nuxt/test-utils/runtime";
-import { mount } from "@vue/test-utils";
+import { mockNuxtImport, renderSuspended } from "@nuxt/test-utils/runtime";
+import userEvent from "@testing-library/user-event";
+import { screen } from "@testing-library/vue";
 import { vi } from "vitest";
 import MenuItem from "./MenuItem.vue";
 import type { MenuItemProps } from "~/components/apiDocs/MenuItem.vue";
 
-const mockUseRoute = vi.fn();
-const mockUseRouter = vi.fn();
-vi.mock("#imports", () => ({
-  useRoute: () => mockUseRoute(),
-  useRouter: () => mockUseRouter(),
-}));
-
 const NuxtLinkStub = {
   name: "NuxtLink",
   props: ["to"],
-  emits: ["click"],
-  template: `<a :href="to" v-bind="$attrs" @click="$emit('click', $event)"><slot /></a>`,
+  template: `<a :href="to" v-bind="$attrs"><slot /></a>`,
 };
 
 const MdiChevronUpStub = {
@@ -45,7 +38,7 @@ mockNuxtImport("useRoute", () => {
   return useRouteMock;
 });
 
-function mountWithRoute({
+async function mountWithRoute({
   path = "/guide",
   hash = "",
   props,
@@ -58,7 +51,7 @@ function mountWithRoute({
     return { path, hash };
   });
 
-  return mount(MenuItem, {
+  return await renderSuspended(MenuItem, {
     props,
     global: {
       stubs: {
@@ -86,23 +79,21 @@ describe("MenuItem", () => {
       ],
     };
 
-    const wrapper = mountWithRoute({
+    await mountWithRoute({
       path: "/guide",
       hash: "#getting-started",
       props: { item, root: true },
     });
 
-    const link = wrapper.get("a");
-    expect(link.attributes("href")).toBe("#");
-    expect(link.classes()).toContain("border-l-4");
-    expect(link.classes()).toContain("text-blue-800");
+    const link = screen.getByRole("link", { name: "Getting started" });
+    expect(link).toHaveAttribute("href", "#");
+    expect(link).toHaveClass("border-l-4");
+    expect(link).toHaveClass("text-blue-800");
 
-    expect(wrapper.find('[data-testid="chev-up"]').exists()).toBe(true);
-    expect(wrapper.find('[data-testid="chev-right"]').exists()).toBe(false);
+    expect(screen.getByTestId("chev-up")).toBeInTheDocument();
+    expect(screen.queryByTestId("chev-right")).not.toBeInTheDocument();
 
-    const childrenWrap = wrapper.find("div.ml-12.border-l-2.border-gray-300");
-    expect(childrenWrap.exists()).toBe(true);
-    expect(wrapper.findAll('[data-testid="child"]').length).toBe(2);
+    expect(screen.getAllByTestId("child")).toHaveLength(2);
   });
 
   it("is inactive when path matches but hash does not match parent or any child", async () => {
@@ -115,19 +106,17 @@ describe("MenuItem", () => {
       ],
     };
 
-    const wrapper = mountWithRoute({
+    await mountWithRoute({
       path: "/guide/anything",
       hash: "#other-hash",
       props: { item, root: false },
     });
 
-    const link = wrapper.get("a");
-    expect(link.classes()).not.toContain("border-l-4");
-    expect(wrapper.find('[data-testid="chev-right"]').exists()).toBe(true);
-    expect(wrapper.find('[data-testid="chev-up"]').exists()).toBe(false);
-    expect(wrapper.find("div.ml-12.border-l-2.border-gray-300").exists()).toBe(
-      false,
-    );
+    const link = screen.getByRole("link", { name: "Getting started" });
+    expect(link).not.toHaveClass("border-l-4");
+    expect(screen.getByTestId("chev-right")).toBeInTheDocument();
+    expect(screen.queryByTestId("chev-up")).not.toBeInTheDocument();
+    expect(screen.queryAllByTestId("child")).toHaveLength(0);
   });
 
   it("becomes active via child hash match (matchingHashes includes children)", async () => {
@@ -140,18 +129,16 @@ describe("MenuItem", () => {
       ],
     };
 
-    const wrapper = mountWithRoute({
+    await mountWithRoute({
       path: "/guide/advanced",
       hash: "#deep-dive",
       props: { item },
     });
 
-    const link = wrapper.get("a");
-    expect(link.classes()).toContain("border-l-4");
-    expect(wrapper.find('[data-testid="chev-up"]').exists()).toBe(true);
-    expect(wrapper.find("div.ml-12.border-l-2.border-gray-300").exists()).toBe(
-      true,
-    );
+    const link = screen.getByRole("link", { name: "Parent" });
+    expect(link).toHaveClass("border-l-4");
+    expect(screen.getByTestId("chev-up")).toBeInTheDocument();
+    expect(screen.getAllByTestId("child")).toHaveLength(2);
   });
 
   it("is active when item has no hash and path matches", async () => {
@@ -161,18 +148,16 @@ describe("MenuItem", () => {
       items: [{ text: "Child", link: "/guide#child" }],
     };
 
-    const wrapper = mountWithRoute({
+    await mountWithRoute({
       path: "/guide/anything",
       hash: "#whatever",
       props: { item, root: true },
     });
 
-    const link = wrapper.get("a");
-    expect(link.classes()).toContain("border-l-4");
-    expect(wrapper.find('[data-testid="chev-up"]').exists()).toBe(true);
-    expect(wrapper.find("div.ml-12.border-l-2.border-gray-300").exists()).toBe(
-      true,
-    );
+    const link = screen.getByRole("link", { name: "Guide root" });
+    expect(link).toHaveClass("border-l-4");
+    expect(screen.getByTestId("chev-up")).toBeInTheDocument();
+    expect(screen.getAllByTestId("child")).toHaveLength(1);
   });
 
   it("is inactive when route path does not start with item path", async () => {
@@ -182,18 +167,16 @@ describe("MenuItem", () => {
       items: [{ text: "Child", link: "/docs#child" }],
     };
 
-    const wrapper = mountWithRoute({
+    await mountWithRoute({
       path: "/guide/intro",
       hash: "#getting-started",
       props: { item },
     });
 
-    const link = wrapper.get("a");
-    expect(link.classes()).not.toContain("border-l-4");
-    expect(wrapper.find('[data-testid="chev-right"]').exists()).toBe(true);
-    expect(wrapper.find("div.ml-12.border-l-2.border-gray-300").exists()).toBe(
-      false,
-    );
+    const link = screen.getByRole("link", { name: "Other section" });
+    expect(link).not.toHaveClass("border-l-4");
+    expect(screen.getByTestId("chev-right")).toBeInTheDocument();
+    expect(screen.queryAllByTestId("child")).toHaveLength(0);
   });
 
   it("does not emit click while menu is disabled (current implementation)", async () => {
@@ -203,16 +186,17 @@ describe("MenuItem", () => {
       items: [],
     };
 
-    const wrapper = mountWithRoute({
+    const user = userEvent.setup();
+    const { emitted } = await mountWithRoute({
       path: "/guide",
       hash: "#hash",
       props: { item },
     });
 
-    const link = wrapper.get("a");
-    await link.trigger("click");
+    const link = screen.getByRole("link", { name: "Disabled link" });
+    await user.click(link);
 
-    expect(wrapper.emitted("click")).toBeUndefined();
-    expect(link.attributes("href")).toBe("#");
+    expect(emitted("click")).toBeUndefined();
+    expect(link).toHaveAttribute("href", "#");
   });
 });

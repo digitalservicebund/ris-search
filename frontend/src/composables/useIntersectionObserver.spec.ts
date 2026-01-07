@@ -131,10 +131,12 @@ describe("useIntersectionObserver", () => {
         target: { id: "section1" },
       },
     ] as IntersectionObserverEntry[];
+
     it("ignores the initial intersection if a section was provided by hash", () => {
       handleIntersection(mockEntries);
       expect(wrapper.vm.selectedEntry).toBe("section1");
     });
+
     it("considers the values on subsequent events", () => {
       handleIntersection(mockEntries);
       expect(wrapper.vm.selectedEntry).toBe("section2");

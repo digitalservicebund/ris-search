@@ -1,4 +1,5 @@
-import { mount } from "@vue/test-utils";
+import userEvent from "@testing-library/user-event";
+import { render, screen } from "@testing-library/vue";
 import { describe, expect, it } from "vitest";
 import { data } from "./navigation.data";
 import SidebarMenu from "./SidebarMenu.vue";
@@ -10,44 +11,46 @@ const MenuItemStub = {
     root: { type: Boolean, default: false },
   },
   emits: ["click"],
-  template: `<div data-testid="menu-item" @click="$emit('click')"></div>`,
+  template: `<div data-testid="menu-item" :data-root="root" :data-item="JSON.stringify(item)" @click="$emit('click')"></div>`,
 };
 
 describe("NavigationMenu", () => {
   it("renders one MenuItem per data entry and passes correct props", async () => {
-    const wrapper = mount(SidebarMenu, {
+    render(SidebarMenu, {
       props: { model: data },
       global: {
         stubs: { MenuItem: MenuItemStub },
       },
     });
 
-    const items = wrapper.findAll('[data-testid="menu-item"]');
+    const items = screen.getAllByTestId("menu-item");
     expect(items.length).toBe(data.length);
 
-    const stubs = wrapper.findAllComponents(MenuItemStub);
-    for (const [idx, stub] of stubs.entries()) {
-      expect(stub.props("root")).toBe(true);
-      expect(stub.props("item")).toEqual(data[idx]);
+    for (const [idx, item] of items.entries()) {
+      expect(item.getAttribute("data-root")).toBe("true");
+      expect(JSON.parse(item.getAttribute("data-item") || "{}")).toEqual(
+        data[idx],
+      );
     }
   });
 
   it('emits "selectLeaf" for leaf items and not for parents', async () => {
-    const wrapper = mount(SidebarMenu, {
+    const user = userEvent.setup();
+    const { emitted } = render(SidebarMenu, {
       props: { model: data },
       global: { stubs: { MenuItem: MenuItemStub } },
     });
-    const stubs = wrapper.findAllComponents(MenuItemStub);
+    const items = screen.getAllByTestId("menu-item");
 
-    await stubs[0]?.trigger("click"); // Get Started
-    await stubs[1]?.trigger("click"); // Standards
-    await stubs[3]?.trigger("click"); // Changelog
-    await stubs[4]?.trigger("click"); // Endpoints (items: [])
-    await stubs[5]?.trigger("click"); // Feedback
-    await stubs[2]?.trigger("click"); // Guides - Non-Leaf
+    await user.click(items[0]!); // Get Started
+    await user.click(items[1]!); // Standards
+    await user.click(items[3]!); // Changelog
+    await user.click(items[4]!); // Endpoints (items: [])
+    await user.click(items[5]!); // Feedback
+    await user.click(items[2]!); // Guides - Non-Leaf
 
-    const emitted = wrapper.emitted("selectLeaf") ?? [];
-    expect(emitted.length).toBe(5);
+    const selectLeafEmitted = emitted("selectLeaf") ?? [];
+    expect(selectLeafEmitted.length).toBe(5);
   });
 
   it("does not emit when only non-leaf items are clicked", async () => {
@@ -59,13 +62,14 @@ describe("NavigationMenu", () => {
       },
     ];
 
-    const wrapper = mount(SidebarMenu, {
+    const user = userEvent.setup();
+    const { emitted } = render(SidebarMenu, {
       props: { model },
       global: { stubs: { MenuItem: MenuItemStub } },
     });
 
-    await wrapper.findComponent(MenuItemStub).trigger("click");
+    await user.click(screen.getByTestId("menu-item"));
 
-    expect(wrapper.emitted("selectLeaf")).toBeUndefined();
+    expect(emitted("selectLeaf")).toBeUndefined();
   });
 });

@@ -1,9 +1,19 @@
-import { config, mount } from "@vue/test-utils";
+import { renderSuspended } from "@nuxt/test-utils/runtime";
 import { describe } from "vitest";
 import ErrorPage from "./error.vue";
 
-const mountComponent = (statusCode: number) =>
-  mount(ErrorPage, {
+const NuxtLayoutStub = {
+  name: "NuxtLayout",
+  template: "<div><slot /></div>",
+};
+
+const SimpleSearchInputStub = {
+  name: "SimpleSearchInput",
+  template: "<div></div>",
+};
+
+const mountComponent = async (statusCode: number) =>
+  await renderSuspended(ErrorPage, {
     props: {
       error: {
         statusCode,
@@ -19,33 +29,25 @@ const mountComponent = (statusCode: number) =>
     },
     global: {
       stubs: {
-        NuxtLayout: true,
-        SimpleSearchInput: true,
+        NuxtLayout: NuxtLayoutStub,
+        SimpleSearchInput: SimpleSearchInputStub,
       },
     },
   });
 
 describe("Error", () => {
-  beforeAll(() => {
-    config.global.renderStubDefaultSlot = true;
-  });
-
-  afterAll(() => {
-    config.global.renderStubDefaultSlot = false;
-  });
-
   it("shows a specific message for Not Found errors (404)", async () => {
-    const component = mountComponent(404);
-    expect(component.text()).toMatchSnapshot();
+    const { container } = await mountComponent(404);
+    expect(container.textContent).toMatchSnapshot();
   });
 
   it("shows a generic message for internal server errors (500)", async () => {
-    const component = mountComponent(500);
-    expect(component.text()).toMatchSnapshot();
+    const { container } = await mountComponent(500);
+    expect(container.textContent).toMatchSnapshot();
   });
 
   it("shows a more generic message for other errors", async () => {
-    const component = mountComponent(418);
-    expect(component.text()).toMatchSnapshot();
+    const { container } = await mountComponent(418);
+    expect(container.textContent).toMatchSnapshot();
   });
 });
