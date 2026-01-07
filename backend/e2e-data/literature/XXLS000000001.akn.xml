@@ -101,6 +101,14 @@
                 <akn:TLCRole eId="mitarbeiter" href="akn/ontology/roles/de/mitarbeiter" showAs="Mitarbeiter"/>
                 <akn:TLCRole eId="verfasser" href="akn/ontology/roles/de/verfasser" showAs="Verfasser"/>
             </akn:references>
+            <akn:notes source="gesamtfussnoten">
+                <akn:note>
+                    <akn:block name="gesamtfussnote">Eine Fußnote.</akn:block>
+                </akn:note>
+                <akn:note>
+                    <akn:block name="gesamtfussnote">Dies ist eine andere längere Fußnote.</akn:block>
+                </akn:note>
+            </akn:notes>
             <akn:proprietary source="attributsemantik-noch-undefiniert">
                 <ris:meta>
                     <ris:veroeffentlichungsJahre>

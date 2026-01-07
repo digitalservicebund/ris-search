@@ -35,6 +35,8 @@ class SliLiteratureXsltTransformerServiceTest {
         "sli/example9  | transforms passive citations",
         "sli/example10 | transforms active and passive citations",
         "sli/example11 | transforms mainTitle and all additionals",
+        "sli/example12 | transforms footnotes",
+        "sli/example13 | transforms footnotes and citations",
       },
       delimiter = '|')
   void testTransformLiteratureXmlDocuments(String testfileDir, String testName) throws IOException {

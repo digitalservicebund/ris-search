@@ -1,31 +1,5 @@
 import { expect, test, noJsTest, navigate } from "./utils/fixtures";
 
-test("displays all sli titles", async ({ page }) => {
-  await navigate(page, "/literature/XXLS000000001");
-
-  await expect(
-    page
-      .getByRole("main")
-      .getByRole("heading", { level: 1, name: "Test-Dokument SLI" })
-      .first(),
-  ).toBeVisible();
-
-  const textSection = page.getByRole("region", { name: "Text" });
-  await expect(
-    textSection.getByRole("heading", {
-      level: 2,
-      name: "Zusätzliche Titel",
-    }),
-  ).toBeVisible();
-
-  await expect(textSection).toContainText("Dokumentarischer Titel");
-  await expect(textSection).toContainText("Zusatz zum Haupttitel");
-  await expect(textSection).toContainText("Gesamttitel Bandbezeichnung");
-  await expect(textSection).toContainText("Gesamttitel 2 Bandbezeichnung 2");
-  await expect(textSection).toContainText("Titel Kurzform");
-  await expect(textSection).toContainText("sonstiger Titel");
-});
-
 test("displays literature page with metadata and text tab by default", async ({
   page,
 }) => {
@@ -150,6 +124,29 @@ test("displays literature page with metadata and text tab by default", async ({
   ).toBeVisible();
 });
 
+test("displays sli footnotes in text section", async ({ page }) => {
+  await navigate(page, "/literature/XXLS000000001");
+
+  await expect(
+    page
+      .getByRole("main")
+      .getByRole("heading", { level: 1, name: "Test-Dokument SLI" })
+      .first(),
+  ).toBeVisible();
+
+  const textSection = page.getByRole("region", { name: "Text" });
+  await expect(
+    textSection.getByRole("heading", {
+      level: 2,
+      name: "Fußnoten",
+    }),
+  ).toBeVisible();
+  await expect(textSection.getByText("Eine Fußnote.")).toBeVisible();
+  await expect(
+    textSection.getByText("Dies ist eine andere längere Fußnote."),
+  ).toBeVisible();
+});
+
 test("displays all titles", async ({ page }) => {
   await navigate(page, "/literature/XXLU000000002");
 
@@ -170,6 +167,32 @@ test("displays all titles", async ({ page }) => {
 
   await expect(textSection).toContainText("Dokumentarischer Titel");
   await expect(textSection).toContainText("Zusatz zum Haupttitel");
+});
+
+test("displays all sli titles", async ({ page }) => {
+  await navigate(page, "/literature/XXLS000000001");
+
+  await expect(
+    page
+      .getByRole("main")
+      .getByRole("heading", { level: 1, name: "Test-Dokument SLI" })
+      .first(),
+  ).toBeVisible();
+
+  const textSection = page.getByRole("region", { name: "Text" });
+  await expect(
+    textSection.getByRole("heading", {
+      level: 2,
+      name: "Zusätzliche Titel",
+    }),
+  ).toBeVisible();
+
+  await expect(textSection).toContainText("Dokumentarischer Titel");
+  await expect(textSection).toContainText("Zusatz zum Haupttitel");
+  await expect(textSection).toContainText("Gesamttitel Bandbezeichnung");
+  await expect(textSection).toContainText("Gesamttitel 2 Bandbezeichnung 2");
+  await expect(textSection).toContainText("Titel Kurzform");
+  await expect(textSection).toContainText("sonstiger Titel");
 });
 
 test("can navigate to search via breadcrumb", async ({ page }) => {

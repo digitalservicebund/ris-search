@@ -29,6 +29,7 @@
 				<xsl:apply-templates select="//akn:mainBody"/>
 				<xsl:apply-templates select="//akn:otherReferences[@source='active']"/>
 				<xsl:apply-templates select="//akn:otherReferences[@source='passive']"/>
+				<xsl:apply-templates select="//akn:notes[@source='gesamtfussnoten']"/>
 			</body>
 		</html>
 	</xsl:template>
@@ -138,6 +139,15 @@
 
 	</xsl:template>
 
+	<xsl:template match="akn:notes[@source='gesamtfussnoten']">
+		<h2>Fußnoten</h2>
+		<ul>
+			<xsl:for-each select="akn:note[akn:block[@name='gesamtfussnote']]">
+				<li><xsl:value-of select="."/></li>
+			</xsl:for-each>
+		</ul>
+	</xsl:template>
+	
 	<!--***************************************************************************************-->
 	<!--Html transformation-->
 	<!--***************************************************************************************-->
