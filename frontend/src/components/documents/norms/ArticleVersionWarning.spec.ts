@@ -1,4 +1,4 @@
-import { mount } from "@vue/test-utils";
+import { render, screen } from "@testing-library/vue";
 import ArticleVersionWarning from "./ArticleVersionWarning.vue";
 import type { Article } from "~/types";
 import { parseDateGermanLocalTime } from "~/utils/dateFormatting";
@@ -22,6 +22,11 @@ vi.mock("~/utils/norm", async (importOriginal) => {
   };
 });
 
+const VersionWarningMessageStub = {
+  name: "VersionWarningMessage",
+  template: '<div data-testid="version-warning-message"></div>',
+};
+
 const articleTestData = [
   {
     entryIntoForceDate: "1990-01-01",
@@ -42,13 +47,11 @@ describe("ArticleVersionWarning", () => {
     "/norms/eli/bund/bgbl-1/2000/s100/2000-01-01/1/deu";
   for (const currentArticle of articleTestData) {
     it(`shows warning for article with entry date ${currentArticle.entryIntoForceDate} and expiry date ${currentArticle.expiryDate}`, () => {
-      const wrapper = mount(ArticleVersionWarning, {
+      render(ArticleVersionWarning, {
         props: { inForceVersionLink, currentArticle },
-        global: { stubs: ["VersionWarningMessage"] },
+        global: { stubs: { VersionWarningMessage: VersionWarningMessageStub } },
       });
-      expect(
-        wrapper.findComponent({ name: "VersionWarningMessage" }).exists(),
-      ).toBe(true);
+      expect(screen.getByTestId("version-warning-message")).toBeInTheDocument();
     });
   }
 });

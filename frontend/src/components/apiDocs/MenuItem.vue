@@ -52,6 +52,7 @@ const linkTo = computed(() => (isMenuDisabled ? "#" : props.item.link));
 function handleClick(e: MouseEvent) {
   if (isMenuDisabled) {
     e.preventDefault();
+    e.stopPropagation();
     return;
   }
   if (props.item.items?.length) {

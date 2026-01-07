@@ -1,25 +1,34 @@
-import { mount, RouterLinkStub } from "@vue/test-utils";
+import { renderSuspended } from "@nuxt/test-utils/runtime";
+import userEvent from "@testing-library/user-event";
+import { screen } from "@testing-library/vue";
 import { describe, it, expect } from "vitest";
 import AppHeaderNav from "./AppHeaderNav.vue";
 
+const NuxtLinkStub = {
+  name: "NuxtLink",
+  props: ["to"],
+  template: `<a :href="typeof to === 'string' ? to : '/'" v-bind="$attrs"><slot /></a>`,
+};
+
 describe("AppHeaderNav", () => {
   it('emits "selectItem" for each NuxtLink that has been clicked', async () => {
-    const wrapper = mount(AppHeaderNav, {
+    const user = userEvent.setup();
+    const { emitted } = await renderSuspended(AppHeaderNav, {
       props: {
         listClass: "test-class",
       },
       global: {
         stubs: {
-          NuxtLink: RouterLinkStub,
+          NuxtLink: NuxtLinkStub,
         },
       },
     });
 
-    const searchLinks = wrapper.findAll("a");
+    const searchLinks = screen.getAllByRole("link");
     for (const link of searchLinks) {
-      await link.trigger("click");
+      await user.click(link);
     }
-    expect(wrapper.emitted("selectItem")).toBeTruthy();
-    expect(wrapper.emitted("selectItem")?.length).toBe(searchLinks.length);
+    expect(emitted("selectItem")).toBeTruthy();
+    expect(emitted("selectItem")?.length).toBe(searchLinks.length);
   });
 });
