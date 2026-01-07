@@ -14,12 +14,8 @@ spring:
           - name: ris-search-opensearch-config
           - name: ris-search-postgres-config
       secrets:
-        sources:
-          - name: s3-case-law-ldml-bucket-secrets
-          - name: s3-literature-ldml-bucket-secrets
-          - name: s3-norms-ldml-bucket-secrets
-          - name: s3-team-bucket-secrets
-          - name: s3-administrative-directive-ldml-bucket-secrets
+        paths: /etc/secrets
+
 swagger:
   server:
     url: https://ris-portal.dev.ds4g.net/

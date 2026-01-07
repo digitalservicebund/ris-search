@@ -7,7 +7,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.mapper.LiteratureSearchSchemaMapper;
 import de.bund.digitalservice.ris.search.models.opensearch.AbstractSearchEntity;
-import de.bund.digitalservice.ris.search.models.opensearch.AdministrativeDirective;
 import de.bund.digitalservice.ris.search.models.opensearch.Literature;
 import de.bund.digitalservice.ris.search.schema.CollectionSchema;
 import de.bund.digitalservice.ris.search.schema.LiteratureSearchSchema;
@@ -131,7 +130,7 @@ class LiteratureSearchSchemaMapperTest {
   @Test
   void convertTextmatchKeys() {
     var searchHit =
-        new SearchHit<AdministrativeDirective>(
+        new SearchHit<>(
             "my-index",
             "1",
             null,
@@ -142,7 +141,7 @@ class LiteratureSearchSchemaMapperTest {
             null,
             null,
             null,
-            null);
+            Literature.builder().documentNumber("docNr").build());
 
     var list = LiteratureSearchSchemaMapper.getTextMatches(searchHit);
     assertThat(list.getFirst().name()).isEqualTo("snakeCase");

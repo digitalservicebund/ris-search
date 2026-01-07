@@ -1,8 +1,7 @@
 [versions]
 # plugins
 jacoco = "0.8.11"
-spring-boot = "4.0.0"
-spring-boot-starter = "4.0.0"
+spring-boot = "3.5.8"
 spring-dependency-management = "1.1.7"
 spotless = "8.0.0"
 sonarqube = "7.1.0.6387"
@@ -11,8 +10,10 @@ test-logger = "4.0.0"
 node-gradle = "7.1.0"
 # libraries
 jts = "1.20.0"
-test-containers = "1.21.4"
-spring-cloud-k8s = "5.0.0"
+spring-boot-starter = "3.5.8"
+test-containers = "1.21.3"
+spring-cloud-k8s = "3.3.0"
+spring-data-elasticsearch = "5.3.6"
 springdoc-openapi = "2.8.14"
 prometheus = "1.16.1"
 protobuf = "4.33.1"
@@ -23,7 +24,7 @@ mockito = "5.20.0"
 spring-security = "6.5.2"
 spring-security-test = "7.0.0"
 snakeyalm = "2.5"
-spring-data-opensearch = "3.0.0"
+spring-data-opensearch-starter = "2.0.3"
 opensearch-test-autoconfigure = "2.0.3"
 opensearch-test-containers = "4.1.0"
 jsoup = "1.21.2"
@@ -46,8 +47,8 @@ spring-web = { module = "org.springframework.boot:spring-boot-starter-web", vers
 spring-security = { module = "org.springframework.boot:spring-boot-starter-security", version.ref = "spring-boot-starter" }
 spring-data-jpa = { module = "org.springframework.boot:spring-boot-starter-data-jpa", version.ref = "spring-boot-starter" }
 spring-kubernetes-client = { module = "org.springframework.cloud:spring-cloud-starter-kubernetes-client-config", version.ref = "spring-cloud-k8s" }
-spring-data-opensearch = { module = "org.opensearch.client:spring-data-opensearch", version.ref = "spring-data-opensearch" }
-spring-boot-starter-webmvc-test = { module = "org.springframework.boot:spring-boot-starter-webmvc-test", version.ref = "spring-boot-starter"}
+spring-data-opensearch = { module = "org.opensearch.client:spring-data-opensearch-starter", version.ref = "spring-data-opensearch-starter" }
+opensearch-test-autoconfigure = { module = "org.opensearch.client:spring-data-opensearch-test-autoconfigure", version.ref = "opensearch-test-autoconfigure"}
 springdoc-openapi-starter-webmvc-ui = { module = "org.springdoc:springdoc-openapi-starter-webmvc-ui", version.ref = "springdoc-openapi" }
 jsoup = { module = "org.jsoup:jsoup", version.ref = "jsoup" }
 jts-core = { group = "org.locationtech.jts", name = "jts-core", version.ref = "jts" }
@@ -55,12 +56,13 @@ amazon-aws-sdk-s3 = { module = "software.amazon.awssdk:s3", version.ref = "amazo
 snakeyaml = { module = "org.yaml:snakeyaml", version.ref = "snakeyalm" }
 jose4j = { module = "org.bitbucket.b_c:jose4j", version.ref = "jose4j"}
 micrometer-registry-prometheus = { module = "io.micrometer:micrometer-registry-prometheus", version.ref = "prometheus" }
-sentry-spring-boot-starter-jakarta = { module = "io.sentry:sentry-spring-boot-4", version.ref = "sentry" }
+sentry-spring-boot-starter-jakarta = { module = "io.sentry:sentry-spring-boot-starter-jakarta", version.ref = "sentry" }
 sentry-logback = { module = "io.sentry:sentry-logback", version.ref = "sentry" }
 posthog = { module = "com.posthog.java:posthog", version.ref = "posthog" }
 commons-text = { module = "org.apache.commons:commons-text", version.ref = "commons-text" }
 json = { module = "org.json:json", version.ref = "org-json" }
 commons-csv = { module = "org.apache.commons:commons-csv", version.ref = "commons-csv" }
+jackson-datatype-jsr310 = { module = "com.fasterxml.jackson.datatype:jackson-datatype-jsr310", version.ref = "jackson-datatype-jsr310"}
 saxon-he = { module = "net.sf.saxon:Saxon-HE", version.ref = "saxon-he" }
 lombok = { module = "org.projectlombok:lombok" }
 spring-boot-devtools = { module = "org.springframework.boot:spring-boot-devtools" }

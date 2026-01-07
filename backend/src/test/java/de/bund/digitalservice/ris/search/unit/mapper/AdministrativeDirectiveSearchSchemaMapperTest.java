@@ -46,7 +46,7 @@ class AdministrativeDirectiveSearchSchemaMapperTest {
   @Test
   void convertTextmatchKeys() {
     var searchHit =
-        new SearchHit<AdministrativeDirective>(
+        new SearchHit<>(
             "my-index",
             "1",
             null,
@@ -57,7 +57,7 @@ class AdministrativeDirectiveSearchSchemaMapperTest {
             null,
             null,
             null,
-            null);
+            AdministrativeDirective.builder().id("id").build());
 
     var list = AdministrativeDirectiveSearchSchemaMapper.getTextMatches(searchHit);
     assertThat(list.getFirst().name()).isEqualTo("snakeCase");

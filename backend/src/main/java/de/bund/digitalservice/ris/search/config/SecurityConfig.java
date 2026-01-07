@@ -32,7 +32,7 @@ public class SecurityConfig {
     this.authProperties = authProperties;
   }
 
-  private void applyCommonConfiguration(HttpSecurity http) {
+  private void applyCommonConfiguration(HttpSecurity http) throws Exception {
     http.csrf(customizer -> customizer.ignoringRequestMatchers(internalPaths));
     http.headers(headers -> headers.contentSecurityPolicy(csp -> csp.policyDirectives(cspHeader)));
   }
@@ -43,10 +43,11 @@ public class SecurityConfig {
    *
    * @param http the {@link HttpSecurity} object used to define security configurations
    * @return a {@link SecurityFilterChain} instance representing the configured HTTP security filter
+   * @throws Exception if any error occurs during the configuration of the security filter chain
    */
   @Bean
   @Profile({"default", "test"})
-  public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) {
+  public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
     http.authorizeHttpRequests(requests -> requests.anyRequest().permitAll());
     applyCommonConfiguration(http);
     return http.build();
@@ -60,10 +61,11 @@ public class SecurityConfig {
    *
    * @param http the {@link HttpSecurity} object used to define security configurations
    * @return a {@link SecurityFilterChain} instance representing the configured HTTP security filter
+   * @throws Exception if any error occurs during the configuration of the security filter chain
    */
   @Bean
   @Profile({"prototype", "staging", "uat"})
-  public SecurityFilterChain prototypeSecurityFilterChain(HttpSecurity http) {
+  public SecurityFilterChain prototypeSecurityFilterChain(HttpSecurity http) throws Exception {
     http.authorizeHttpRequests(
         requests ->
             requests
@@ -84,11 +86,12 @@ public class SecurityConfig {
    * @param http The http security object
    * @param apiKeyRequestMatcher The request matcher for API key authentication
    * @return The security filter chain
+   * @throws Exception If an error occurs
    */
   @Bean
   @Profile({"production"})
   public SecurityFilterChain productionSecurityFilterChain(
-      HttpSecurity http, ApiKeyRequestMatcher apiKeyRequestMatcher) {
+      HttpSecurity http, ApiKeyRequestMatcher apiKeyRequestMatcher) throws Exception {
     http.authorizeHttpRequests(
         requests ->
             requests
