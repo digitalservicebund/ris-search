@@ -49,19 +49,18 @@ function renderComponent({
 describe("CaselawSearchResult", () => {
   it("renders the expected title", () => {
     renderComponent({});
-    expect(
-      screen.getByRole("link", { name: "Decision Name — Test Headline" }),
-    ).toBeInTheDocument();
+    expect(screen.getByRole("link")).toHaveTextContent(
+      "Decision Name — Test Headline",
+    );
   });
 
   it("has accessible description linking to result type", () => {
     renderComponent({});
     expect(
       screen.getByRole("link", {
-        name: "Decision Name — Test Headline",
         description: "Document Type",
       }),
-    ).toBeInTheDocument();
+    ).toHaveTextContent("Decision Name — Test Headline");
   });
 
   it("displays highlighted headline", () => {
