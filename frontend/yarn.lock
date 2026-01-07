@@ -5926,12 +5926,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vitest/coverage-v8@npm:^4.0.14":
-  version: 4.0.14
-  resolution: "@vitest/coverage-v8@npm:4.0.14"
+"@vitest/coverage-v8@npm:^4.0.16":
+  version: 4.0.16
+  resolution: "@vitest/coverage-v8@npm:4.0.16"
   dependencies:
     "@bcoe/v8-coverage": "npm:^1.0.2"
-    "@vitest/utils": "npm:4.0.14"
+    "@vitest/utils": "npm:4.0.16"
     ast-v8-to-istanbul: "npm:^0.3.8"
     istanbul-lib-coverage: "npm:^3.2.2"
     istanbul-lib-report: "npm:^3.0.1"
@@ -5942,12 +5942,12 @@ __metadata:
     std-env: "npm:^3.10.0"
     tinyrainbow: "npm:^3.0.3"
   peerDependencies:
-    "@vitest/browser": 4.0.14
-    vitest: 4.0.14
+    "@vitest/browser": 4.0.16
+    vitest: 4.0.16
   peerDependenciesMeta:
     "@vitest/browser":
       optional: true
-  checksum: 10c0/ae4f7c0b187167bb679c6eee9b6dc6d036e15b629506cb2a462675de7ebd7bcf43ed07c2ade9d9737c351cf9f8fcd614f42b028a26cd4e44fce56ec05a79d6ca
+  checksum: 10c0/3edd18dc994949d5180a3fbd9c1af4ca4756735e82cffb73b3c0918ad23a4c71521287a205cc61a39b63453448e9bfd207f82b2d472fd757dfbb47987dbe99a8
   languageName: node
   linkType: hard
 
@@ -5981,15 +5981,6 @@ __metadata:
     vite:
       optional: true
   checksum: 10c0/cf4469a4745e3cdd46e8ee4e20aa04369e7f985d40175d974d3a6f6d331bf9d8610f9638c5a18f7ff59a30ff04b19f4b823457b4c79142186fe463fa4cee80c5
-  languageName: node
-  linkType: hard
-
-"@vitest/pretty-format@npm:4.0.14":
-  version: 4.0.14
-  resolution: "@vitest/pretty-format@npm:4.0.14"
-  dependencies:
-    tinyrainbow: "npm:^3.0.3"
-  checksum: 10c0/ca03cbad86053a05eb3164b1794ada25767215e94f76fe069c0a0431629500a53b221610b186917bfbdebf6a28ac7d3945f78e1e18875230ea6dda685c6a18f3
   languageName: node
   linkType: hard
 
@@ -6027,16 +6018,6 @@ __metadata:
   version: 4.0.16
   resolution: "@vitest/spy@npm:4.0.16"
   checksum: 10c0/2502918e703d60ef64854d0fa83ebf94da64b80e81b80c319568feee3d86069fd46e24880a768edba06c8caba13801e44005e17a0f16d9b389486f24d539f0bf
-  languageName: node
-  linkType: hard
-
-"@vitest/utils@npm:4.0.14":
-  version: 4.0.14
-  resolution: "@vitest/utils@npm:4.0.14"
-  dependencies:
-    "@vitest/pretty-format": "npm:4.0.14"
-    tinyrainbow: "npm:^3.0.3"
-  checksum: 10c0/be5432b4445bdb1b41d1ad1bffe9e2a297b7d1d9addef3cbf3782d66da4e80ec8a14e2396638172572e5a6e3527f34bae7f1b98cee00cbe1175b099a28073ecd
   languageName: node
   linkType: hard
 
@@ -15010,7 +14991,7 @@ __metadata:
     "@types/node": "npm:^25.0.3"
     "@types/sanitize-html": "npm:^2.16.0"
     "@unhead/vue": "npm:^2.0.19"
-    "@vitest/coverage-v8": "npm:^4.0.14"
+    "@vitest/coverage-v8": "npm:^4.0.16"
     "@vue/test-utils": "npm:^2.4.6"
     axe-html-reporter: "npm:^2.2.11"
     dayjs: "npm:^1.11.13"
