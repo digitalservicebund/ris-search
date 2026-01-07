@@ -34,7 +34,7 @@ export default defineVitestConfig({
         ["json", { file: "coverage.json" }],
         "lcov",
       ],
-      reportsDirectory: "./coverage",
+      reportsDirectory: "src/coverage",
       include: ["*/**/*.ts", "*/**/*.vue"],
 
       // This needs to be kept in sync with exclusions in sonar-project.properties
