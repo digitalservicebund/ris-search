@@ -1,11 +1,13 @@
 package de.bund.digitalservice.ris.search.unit.mapper;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.mapper.CaseLawSearchSchemaMapper;
 import de.bund.digitalservice.ris.search.models.opensearch.AbstractSearchEntity;
+import de.bund.digitalservice.ris.search.models.opensearch.AdministrativeDirective;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import de.bund.digitalservice.ris.search.schema.CaseLawSearchSchema;
 import de.bund.digitalservice.ris.search.schema.CollectionSchema;
@@ -13,6 +15,7 @@ import de.bund.digitalservice.ris.search.schema.SearchMemberSchema;
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Map;
 import java.util.function.IntFunction;
 import java.util.stream.IntStream;
 import org.junit.jupiter.api.DisplayName;
@@ -126,6 +129,26 @@ class CaseLawSearchSchemaMapperTest {
     assertTrue(firstPage.id().startsWith(ApiConfig.Paths.CASELAW));
     assertTrue(middlePage.id().startsWith(ApiConfig.Paths.CASELAW));
     assertTrue(lastPage.id().startsWith(ApiConfig.Paths.CASELAW));
+  }
+
+  @Test
+  void convertTextmatchKeys() {
+    var searchHit =
+        new SearchHit<AdministrativeDirective>(
+            "my-index",
+            "1",
+            null,
+            1.0f,
+            null,
+            Map.of("snake_case.text", List.of("match")),
+            Map.of(),
+            null,
+            null,
+            null,
+            null);
+
+    var list = CaseLawSearchSchemaMapper.getTextMatches(searchHit);
+    assertThat(list.getFirst().name()).isEqualTo("snakeCase");
   }
 
   private SearchPage<AbstractSearchEntity> createSearchPage(

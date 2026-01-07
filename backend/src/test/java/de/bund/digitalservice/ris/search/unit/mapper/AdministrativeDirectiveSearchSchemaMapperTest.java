@@ -7,7 +7,9 @@ import de.bund.digitalservice.ris.search.models.opensearch.AdministrativeDirecti
 import de.bund.digitalservice.ris.search.schema.AdministrativeDirectiveSearchSchema;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import org.junit.jupiter.api.Test;
+import org.springframework.data.elasticsearch.core.SearchHit;
 
 class AdministrativeDirectiveSearchSchemaMapperTest {
 
@@ -39,5 +41,25 @@ class AdministrativeDirectiveSearchSchemaMapperTest {
             .build();
 
     assertThat(expected).isEqualTo(AdministrativeDirectiveSearchSchemaMapper.fromDomain(entity));
+  }
+
+  @Test
+  void convertTextmatchKeys() {
+    var searchHit =
+        new SearchHit<AdministrativeDirective>(
+            "my-index",
+            "1",
+            null,
+            1.0f,
+            null,
+            Map.of("snake_case.text", List.of("match")),
+            Map.of(),
+            null,
+            null,
+            null,
+            null);
+
+    var list = AdministrativeDirectiveSearchSchemaMapper.getTextMatches(searchHit);
+    assertThat(list.getFirst().name()).isEqualTo("snakeCase");
   }
 }
