@@ -58,3 +58,23 @@ export function getTextFromElements(elements?: NodeListOf<Element>): string[] {
   );
   return textElements.filter(Boolean) as string[];
 }
+
+/**
+ * Determines if the given html document is empty. A document is considered empty
+ * if the html `<body>` is empty or contains only a single headline (`<h1>`).
+ * @param htmlDocument
+ */
+export function isDocumentEmpty(htmlDocument?: string): boolean {
+  if (!htmlDocument) {
+    return true;
+  }
+
+  const doc = parseDocument(htmlDocument);
+  const bodyElements = Array.from(doc.body.children);
+
+  const isEmptyBody =
+    bodyElements.length === 0 && doc.body.childNodes.length == 0;
+  const hasSingleH1 =
+    bodyElements.length === 1 && bodyElements[0]?.tagName === "H1";
+  return isEmptyBody || hasSingleH1;
+}

@@ -25,15 +25,6 @@ export function getAdministrativeDirectiveMetadataItems(
   ];
 }
 
-export function isAdministrativeDirectiveEmpty(
-  administrativeDirective?: Partial<AdministrativeDirective>,
-) {
-  return (
-    !administrativeDirective?.shortReport?.length &&
-    !administrativeDirective?.outline?.length
-  );
-}
-
 export function getAdministrativeDirectiveDetailItems(
   administrativeDirective?: Partial<AdministrativeDirective>,
 ): { label: string; value?: string }[] {

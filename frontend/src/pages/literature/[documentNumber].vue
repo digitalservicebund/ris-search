@@ -34,7 +34,7 @@ const textSectionId = useId();
 const detailsSectionId = useId();
 
 const title = computed(() => getTitle(literature.value));
-const isEmptyDocument = computed(() => isLiteratureEmpty(literature.value));
+const isEmptyDocument = computed(() => isDocumentEmpty(html.value));
 
 const breadcrumbs = computed(() => [
   {

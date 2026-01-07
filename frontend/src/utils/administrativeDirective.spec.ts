@@ -2,7 +2,6 @@ import { describe, expect } from "vitest";
 import {
   getAdministrativeDirectiveDetailItems,
   getAdministrativeDirectiveMetadataItems,
-  isAdministrativeDirectiveEmpty,
 } from "./administrativeDirective";
 
 describe("getAdministrativeDirectiveMetadataItems", () => {
@@ -76,30 +75,6 @@ describe("getAdministrativeDirectiveMetadataItems", () => {
 
     expect(result[3]?.value).toBeUndefined();
   });
-});
-
-describe("isAdministrativeDirectiveEmpty", () => {
-  it.each([
-    [undefined, undefined, true],
-    [undefined, [], true],
-    ["", [], true],
-    ["", [], true],
-    ["foo", undefined, false],
-    ["foo", [], false],
-    [undefined, ["bar"], false],
-    ["", ["bar"], false],
-    ["foo", ["bar"], false],
-  ])(
-    "given shortReport: '%s' and outline: '%o' returns '%s'",
-    (shortReport, outline, expected) => {
-      expect(
-        isAdministrativeDirectiveEmpty({
-          shortReport: shortReport,
-          outline: outline,
-        }),
-      ).toBe(expected);
-    },
-  );
 });
 
 describe("getAdministrativeDirectiveDetailItems", () => {

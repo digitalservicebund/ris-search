@@ -34,7 +34,7 @@ const textSectionId = useId();
 const detailsSectionId = useId();
 
 const title = computed(() => data.value?.headline);
-const isEmptyDocument = isAdministrativeDirectiveEmpty(data.value);
+const isEmptyDocument = isDocumentEmpty(html.value);
 
 const breadcrumbs = computed(() => [
   {
