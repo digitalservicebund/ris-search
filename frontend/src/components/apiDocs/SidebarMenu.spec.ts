@@ -27,10 +27,8 @@ describe("NavigationMenu", () => {
     expect(items.length).toBe(data.length);
 
     for (const [idx, item] of items.entries()) {
-      expect(item.getAttribute("data-root")).toBe("true");
-      expect(JSON.parse(item.getAttribute("data-item") || "{}")).toEqual(
-        data[idx],
-      );
+      expect(item.dataset.root).toBe("true");
+      expect(JSON.parse(item.dataset.item || "{}")).toEqual(data[idx]);
     }
   });
 

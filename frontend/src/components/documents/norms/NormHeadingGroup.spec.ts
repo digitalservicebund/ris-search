@@ -54,8 +54,8 @@ describe("HeadingGroup", () => {
     expect(screen.getAllByTestId("ris-expandable-text")).toHaveLength(1);
 
     const notesStub = screen.getByTestId("norm-heading-footnotes");
-    expect(notesStub.getAttribute("data-html")).toBe("<p>Test Notes</p>");
-    expect(notesStub.getAttribute("data-text-length")).toBe("180");
+    expect(notesStub.dataset.html).toBe("<p>Test Notes</p>");
+    expect(notesStub.dataset.textLength).toBe("180");
   });
 
   it("adds data-longtitle attribute for long titles", async () => {
