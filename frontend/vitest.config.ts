@@ -19,7 +19,7 @@ export default defineVitestConfig({
     environment: "nuxt",
     globals: true,
     exclude: [...configDefaults.exclude, "e2e/**"],
-    setupFiles: ["src/tests/setup.ts"],
+    setupFiles: ["tests/setup.ts"],
     environmentOptions: {
       nuxt: {
         domEnvironment: "jsdom",
