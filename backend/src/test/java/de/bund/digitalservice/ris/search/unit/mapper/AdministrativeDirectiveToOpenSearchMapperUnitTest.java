@@ -1,7 +1,7 @@
 package de.bund.digitalservice.ris.search.unit.mapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.Assert.assertThrows;
 
 import de.bund.digitalservice.ris.search.exception.OpenSearchMapperException;
 import de.bund.digitalservice.ris.search.mapper.AdministrativeDirectiveLdmlToOpenSearchMapper;

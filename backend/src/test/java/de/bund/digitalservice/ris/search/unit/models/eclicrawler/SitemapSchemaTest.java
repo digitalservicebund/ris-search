@@ -1,6 +1,6 @@
 package de.bund.digitalservice.ris.search.unit.models.eclicrawler;
 
-import static org.apache.commons.io.FileUtils.getFile;
+import static org.testcontainers.shaded.org.apache.commons.io.FileUtils.getFile;
 
 import de.bund.digitalservice.ris.search.mapper.EcliCrawlerDocumentMapper;
 import de.bund.digitalservice.ris.search.models.eclicrawler.sitemap.Sitemap;

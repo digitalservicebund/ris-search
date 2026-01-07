@@ -10,7 +10,7 @@ import de.bund.digitalservice.ris.search.schema.TextMatchSchema;
 import de.bund.digitalservice.ris.search.utils.PageUtils;
 import java.util.List;
 import java.util.Map;
-import org.apache.commons.lang3.Strings;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.elasticsearch.core.SearchHit;
 import org.springframework.data.elasticsearch.core.SearchPage;
 
@@ -85,7 +85,7 @@ public class CaseLawSearchSchemaMapper {
   private static String getTextMatchKey(Map.Entry<String, List<String>> textMatch) {
     final String key = textMatch.getKey();
     if (key.endsWith(".text")) {
-      return PageUtils.snakeCaseToCamelCase(Strings.CS.removeEnd(key, ".text"));
+      return PageUtils.snakeCaseToCamelCase(StringUtils.removeEnd(key, ".text"));
     }
     return PageUtils.snakeCaseToCamelCase(key);
   }

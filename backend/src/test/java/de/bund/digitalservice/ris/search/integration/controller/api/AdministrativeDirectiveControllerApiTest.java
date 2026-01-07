@@ -17,8 +17,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -128,7 +128,7 @@ class AdministrativeDirectiveControllerApiTest extends ContainersIntegrationBase
         .perform(
             get(ApiConfig.Paths.ADMINISTRATIVE_DIRECTIVE + "?sort=foo")
                 .contentType(MediaType.APPLICATION_XML))
-        .andExpect(status().isUnprocessableContent());
+        .andExpect(status().isUnprocessableEntity());
   }
 
   @Test

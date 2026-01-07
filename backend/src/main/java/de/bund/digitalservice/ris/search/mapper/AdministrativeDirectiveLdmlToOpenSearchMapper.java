@@ -33,7 +33,7 @@ import java.util.Objects;
 import java.util.Optional;
 import javax.xml.transform.stream.StreamSource;
 import org.eclipse.persistence.exceptions.DescriptorException;
-import org.jspecify.annotations.Nullable;
+import org.springframework.lang.Nullable;
 
 /**
  * The AdministrativeDirectiveLdmlToOpenSearchMapper class is responsible for mapping an {@code
