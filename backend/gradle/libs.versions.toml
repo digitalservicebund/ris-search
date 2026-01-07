@@ -55,7 +55,7 @@ amazon-aws-sdk-s3 = { module = "software.amazon.awssdk:s3", version.ref = "amazo
 snakeyaml = { module = "org.yaml:snakeyaml", version.ref = "snakeyalm" }
 jose4j = { module = "org.bitbucket.b_c:jose4j", version.ref = "jose4j"}
 micrometer-registry-prometheus = { module = "io.micrometer:micrometer-registry-prometheus", version.ref = "prometheus" }
-sentry-spring-boot-starter-jakarta = { module = "io.sentry:sentry-spring-boot-starter-jakarta", version.ref = "sentry" }
+sentry-spring-boot-starter-jakarta = { module = "io.sentry:sentry-spring-boot-4", version.ref = "sentry" }
 sentry-logback = { module = "io.sentry:sentry-logback", version.ref = "sentry" }
 posthog = { module = "com.posthog.java:posthog", version.ref = "posthog" }
 commons-text = { module = "org.apache.commons:commons-text", version.ref = "commons-text" }
