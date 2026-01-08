@@ -7,7 +7,7 @@ describe("ExternalLink", () => {
   it("renders external link", async () => {
     await renderSuspended(ExternalLink, {
       props: { url: "https://example.com" },
-      slots: { default: () => "Example" },
+      slots: { default: () => "Example " },
     });
 
     const link = screen.getByRole("link", {
