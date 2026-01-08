@@ -3,15 +3,15 @@ server:
 
 spring:
   config:
-    import: "kubernetes:"
+    import:
+      - "kubernetes:"
+      - "optional:configtree:/etc/secrets/*/"
   cloud:
     kubernetes:
       config:
         fail-fast: true
         sources:
           - name: ris-search-opensearch-config
-      secrets:
-        paths: /etc/secrets
 
 swagger:
   server:
