@@ -10,7 +10,7 @@ import { NuxtLink } from "#components";
 import type { BreadcrumbItem } from "~/components/Breadcrumbs.vue";
 import DetailsList from "~/components/DetailsList.vue";
 import DetailsListEntry from "~/components/DetailsListEntry.vue";
-import NormActionMenu from "~/components/documents/actionMenu/NormActionMenu.vue";
+import ActionMenu1 from "~/components/documents/actionMenu/ActionMenu1.vue";
 import IncompleteDataMessage from "~/components/documents/IncompleteDataMessage.vue";
 import LegislationContent from "~/components/documents/norms/LegislationContent.vue";
 import NormHeadingGroup from "~/components/documents/norms/NormHeadingGroup.vue";
@@ -19,6 +19,9 @@ import NormVersionList from "~/components/documents/norms/NormVersionList.vue";
 import NormVersionWarning from "~/components/documents/norms/NormVersionWarning.vue";
 import VersionsTeaser from "~/components/documents/norms/VersionsTeaser.vue";
 import SidebarLayout from "~/components/SidebarLayout.vue";
+import { useCommandAction } from "~/composables/useAction/useCommandAction";
+import { useCopyUrlAction } from "~/composables/useAction/useCopyUrlAction";
+import { useNavigateAction } from "~/composables/useAction/useNavigateAction";
 import { useDynamicSeo } from "~/composables/useDynamicSeo";
 import { useIntersectionObserver } from "~/composables/useIntersectionObserver";
 import { useFetchNormContent } from "~/composables/useNormData";
@@ -38,10 +41,15 @@ import {
 } from "~/utils/norm";
 import { tocItemsToTreeNodes } from "~/utils/tableOfContents";
 import { truncateAtWord } from "~/utils/textFormatting";
+import EngIcon from "~icons/custom/eng";
+import PdfIcon from "~icons/custom/pdf";
+import UpdatingLinkIcon from "~icons/custom/updatingLink";
+import XmlIcon from "~icons/custom/xml";
 import IcBaselineSubject from "~icons/ic/baseline-subject";
 import IcOutlineInfo from "~icons/ic/outline-info";
 import IcOutlineRestore from "~icons/ic/outline-settings-backup-restore";
 import MaterialSymbolsDownload from "~icons/material-symbols/download";
+import MaterialSymbolsPrint from "~icons/material-symbols/print";
 
 definePageMeta({
   // note: this is an expression ELI
@@ -222,6 +230,41 @@ const currentView = computed(
 useDynamicSeo({ title, description });
 
 const detailsTabPanelTitleId = useId();
+
+const actions = computed(() => {
+  const href = useRequestURL().href;
+  const workEli = metadata.value?.legislationIdentifier;
+  const workEliLink = workEli ? href.replace(/eli.+$/, workEli) : undefined;
+  const xmlUrl = useBackendUrl(
+    getManifestationUrl(metadata.value, "application/xml"),
+  );
+
+  const actions = [
+    useCopyUrlAction(
+      workEliLink,
+      "Link zur jeweils gültigen Fassung",
+      UpdatingLinkIcon,
+    ),
+    useCopyUrlAction(href, "Permalink zu dieser Fassung"),
+    useCommandAction("Drucken", MaterialSymbolsPrint, async () =>
+      globalThis?.print(),
+    ),
+    useCommandAction("Als PDF speichern", PdfIcon, undefined, true),
+    useNavigateAction("XML anzeigen", XmlIcon, xmlUrl),
+  ];
+
+  if (translationUrl.value) {
+    actions.push(
+      useNavigateAction(
+        "Zur englischen Übersetzung",
+        EngIcon,
+        translationUrl.value,
+      ),
+    );
+  }
+
+  return actions;
+});
 </script>
 
 <template>
@@ -230,11 +273,12 @@ const detailsTabPanelTitleId = useId();
     <div class="container">
       <div class="flex items-center gap-8 print:hidden">
         <Breadcrumbs :items="breadcrumbItems" class="grow" />
-        <client-only>
-          <NormActionMenu
-            :metadata="metadata"
-            :translation-url="translationUrl"
-        /></client-only>
+        <!--        <client-only>-->
+        <!--          <NormActionMenu-->
+        <!--            :metadata="metadata"-->
+        <!--            :translation-url="translationUrl"-->
+        <!--        /></client-only>-->
+        <ActionMenu1 :actions />
       </div>
       <NormHeadingGroup :metadata="metadata" :html-parts="htmlParts" />
       <NormVersionWarning
