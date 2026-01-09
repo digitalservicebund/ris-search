@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import type { SearchResultHeaderItem } from "~/components/search/SearchResultHeader.vue";
-import { usePostHogStore } from "~/stores/usePostHogStore";
+import { usePostHog } from "~/composables/usePostHog";
 import type { Literature, SearchResult, TextMatch } from "~/types";
 import { LITERATURE_TITLE_PLACEHOLDER } from "~/utils/literature";
 import { sanitizeSearchResult } from "~/utils/sanitize";
 import { addEllipsis } from "~/utils/textFormatting";
 import OutlineBookIcon from "~icons/ic/outline-book";
 
-const postHogStore = usePostHogStore();
+const { searchResultClicked } = usePostHog();
 const router = useRouter();
 
 const props = defineProps<{
@@ -96,7 +96,7 @@ const sanitizedShortReport = computed(() =>
 
 function trackResultClick() {
   const url = router.resolve(detailPageRoute.value).href;
-  postHogStore.searchResultClicked(url, props.order);
+  searchResultClicked(url, props.order);
 }
 </script>
 

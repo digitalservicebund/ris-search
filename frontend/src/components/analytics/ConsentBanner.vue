@@ -1,9 +1,8 @@
 <script setup lang="ts">
-import { storeToRefs } from "pinia";
 import PrimeVueButton from "primevue/button";
-import { usePostHogStore } from "~/stores/usePostHogStore";
+import { usePostHog } from "~/composables/usePostHog";
 
-const store = usePostHogStore();
+const { userConsent, isBannerVisible, setTracking } = usePostHog();
 
 if (import.meta.server) {
   const cookieHeader = useRequestHeaders(["cookie"]);
@@ -11,13 +10,12 @@ if (import.meta.server) {
   const consentMatch = cookies.match(/consent_given=([^;]+)/);
   if (consentMatch) {
     const consentValue = consentMatch[1];
-    store.userConsent = consentValue === "true";
+    userConsent.value = consentValue === "true";
   }
 }
 
-const { isBannerVisible } = storeToRefs(store);
 const handleSetTracking = (value: boolean) => {
-  store.setTracking(value);
+  setTracking(value);
 };
 
 const consentAction = "/api/cookie-consent";

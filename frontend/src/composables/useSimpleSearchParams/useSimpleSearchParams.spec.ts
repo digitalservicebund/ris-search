@@ -27,11 +27,11 @@ const mockPostHog = {
 };
 
 // refer to https://nuxt.com/docs/getting-started/testing#unit-testing
-const { useRouteMock, useRouterMock, usePostHogStoreMock } = vi.hoisted(() => {
+const { useRouteMock, useRouterMock, usePostHogMock } = vi.hoisted(() => {
   return {
     useRouteMock: vi.fn().mockImplementation(() => mockRoute.value),
     useRouterMock: vi.fn().mockImplementation(() => routerEmptyState),
-    usePostHogStoreMock: () => mockPostHog,
+    usePostHogMock: () => mockPostHog,
   };
 });
 
@@ -42,9 +42,9 @@ mockNuxtImport("useRouter", () => {
   return useRouterMock;
 });
 
-vi.mock("~/stores/usePostHogStore", () => {
+vi.mock("~/composables/usePostHog", () => {
   return {
-    usePostHogStore: usePostHogStoreMock,
+    usePostHog: usePostHogMock,
   };
 });
 

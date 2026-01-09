@@ -1,7 +1,6 @@
-import { createTestingPinia } from "@pinia/testing";
 import type { VueWrapper } from "@vue/test-utils";
 import { flushPromises, mount } from "@vue/test-utils";
-import { describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
 async function clickSubmit(wrapper: VueWrapper) {
   await wrapper.find("form").trigger("submit");
@@ -21,8 +20,8 @@ function getErrorMessage(wrapper: VueWrapper) {
 }
 
 function mockSendFeedbackToPostHog(mockedSend: () => Promise<void>) {
-  vi.doMock("~/stores/usePostHogStore", () => ({
-    usePostHogStore: () => ({
+  vi.doMock("~/composables/usePostHog", () => ({
+    usePostHog: () => ({
       sendFeedbackToPostHog: mockedSend,
     }),
   }));
@@ -34,16 +33,6 @@ const factory = async () => {
   const { default: FeedbackForm } = await import("./FeedbackForm.vue");
   return mount(FeedbackForm, {
     global: {
-      plugins: [
-        createTestingPinia({
-          stubActions: false,
-          initialState: {
-            postHog: {
-              userConsent: undefined,
-            },
-          },
-        }),
-      ],
       stubs: {
         Textarea: {
           name: "Textarea",
@@ -129,7 +118,6 @@ describe("FeedbackForm", () => {
     const wrapper = mount(FeedbackForm, {
       props: { hideIntro: true },
       global: {
-        plugins: [createTestingPinia({ stubActions: false })],
         stubs: {
           Textarea: {
             name: "Textarea",

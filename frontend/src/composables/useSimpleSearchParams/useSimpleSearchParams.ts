@@ -10,7 +10,7 @@ import {
   omitDefaults,
 } from "./getInitialState";
 import type { LocationQuery } from "#vue-router";
-import { usePostHogStore } from "~/stores/usePostHogStore";
+import { usePostHog } from "~/composables/usePostHog";
 import { DocumentKind } from "~/types";
 
 export { DateSearchMode } from "./dateParams";
@@ -142,15 +142,11 @@ export function useSimpleSearchParams() {
   */
   const storeQuery = ref(normalizeQuery(omitDefaults(params.value)));
 
-  const postHogStore = usePostHogStore();
+  const { searchPerformed } = usePostHog();
   const updateRouterQuery = (router: Router, params: LocationQueryRaw) => {
     const query = omitDefaults(params);
     const previousQuery = storeQuery.value;
-    postHogStore.searchPerformed(
-      "simple",
-      addDefaults(query),
-      addDefaults(previousQuery),
-    );
+    searchPerformed("simple", addDefaults(query), addDefaults(previousQuery));
     const normalized = normalizeQuery(query);
     storeQuery.value = normalized;
     return router.push({

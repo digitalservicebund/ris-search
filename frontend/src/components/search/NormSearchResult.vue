@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import Badge from "~/components/Badge.vue";
 import type { SearchResultHeaderItem } from "~/components/search/SearchResultHeader.vue";
+import { usePostHog } from "~/composables/usePostHog";
 import { usePrivateFeaturesFlag } from "~/composables/usePrivateFeaturesFlag";
-import { usePostHogStore } from "~/stores/usePostHogStore";
 import type { LegislationWork, SearchResult, TextMatch } from "~/types";
 import { dateFormattedDDMMYYYY } from "~/utils/dateFormatting";
 import { formatNormValidity } from "~/utils/displayValues";
@@ -16,7 +16,7 @@ const props = defineProps<{
   order: number;
 }>();
 
-const postHogStore = usePostHogStore();
+const { searchResultClicked } = usePostHog();
 
 const item = computed(() => props.searchResult.item);
 
@@ -63,7 +63,7 @@ const relevantHighlights = computed(() => {
 });
 
 function openResult(url: string) {
-  postHogStore.searchResultClicked(url, props.order);
+  searchResultClicked(url, props.order);
 }
 
 const validityStatus = computed(() => {
