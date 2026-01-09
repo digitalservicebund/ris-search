@@ -204,3 +204,74 @@ const detailsMetadata = computed(() => {
     </template>
   </NuxtLayout>
 </template>
+
+<style scoped>
+@reference "~/assets/main.css";
+
+.case-law {
+  --border-number-min-width: 3rem;
+
+  @apply max-w-prose print:max-w-none;
+
+  :deep(& table[border="1"] :is(th, td)) {
+    @apply border border-solid border-black px-4;
+  }
+
+  :deep(& table) {
+    @apply inline-block max-w-full overflow-x-auto;
+  }
+
+  :deep(& h2) {
+    @apply ris-heading3-bold my-24 inline-block;
+  }
+
+  :deep(& .border-number) {
+    display: flex;
+    align-items: flex-start;
+  }
+
+  :deep(& .border-number .number) {
+    margin-right: 0.5rem;
+    min-width: calc(var(--border-number-min-width) - 0.5rem);
+    @apply text-gray-900;
+  }
+
+  :deep(& .border-number .content) {
+    flex: 1;
+    min-width: 0;
+  }
+
+  :deep(& .border-number-link) {
+    @apply ris-link1-regular pl-[0.25ch];
+  }
+
+  :deep(& section > p) {
+    margin-left: var(--border-number-min-width);
+  }
+
+  :deep(& #gliederung blockquote) {
+    @apply ml-32;
+  }
+
+  :deep(& #gruende blockquote) {
+    @apply ml-(--border-number-min-width) border-l-2 border-gray-700 pl-16 sm:ml-[calc(var(--border-number-min-width)+2rem)];
+
+    & + * {
+      @apply mt-16;
+    }
+
+    & + blockquote {
+      @apply mt-0;
+    }
+  }
+
+  :deep(& #title) {
+    display: none;
+  }
+
+  :deep(& p) {
+    @apply mb-16 wrap-break-word;
+    unicode-bidi: isolate;
+  }
+}
+</style>

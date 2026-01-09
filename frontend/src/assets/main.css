@@ -36,8 +36,6 @@
   @apply ml-24 list-outside list-disc space-y-16;
 }
 
-/* Workaround for https://github.com/tailwindlabs/tailwindcss/discussions/16429 */
-@import "./caselaw.css";
 
 @import "./print.css";
 
