@@ -48,15 +48,15 @@ defineProps<{
 
 /* These values will be displayed separately */
 :deep(.akn-docTitle) {
-  display: none;
+  @apply hidden;
 }
 
 :deep(.akn-shortTitle) {
-  display: none;
+  @apply hidden;
 }
 
 :deep(.akn-proprietary) {
-  display: none;
+  @apply hidden;
 }
 
 :deep(.akn-act a) {
@@ -68,14 +68,12 @@ defineProps<{
 }
 
 :deep(.akn-act table > thead > tr > th) {
-  @apply align-bottom;
-  @apply border-b-2 border-solid border-gray-800;
+  @apply border-b-2 border-solid border-gray-800 align-bottom;
 }
 
 :deep(.akn-act td),
 :deep(.akn-act th) {
-  @apply align-top;
-  @apply p-4; /* Used to be 1mm at gesetze-im-internet.de */
+  @apply p-4 align-top; /* Used to be 1mm at gesetze-im-internet.de */
 }
 
 :deep(.akn-act table) {
@@ -112,8 +110,7 @@ defineProps<{
 }
 
 :deep(.akn-act pre) {
-  @apply ris-body3-regular overflow-x-auto;
-  font-family: monospace;
+  @apply ris-body3-regular overflow-x-auto font-[monospace];
 }
 
 :deep(.akn-act .akn-paragraph),
@@ -148,7 +145,7 @@ Attributes from the Juris CALS format without a corresponding HTML attribute mig
 /* Single article inline heading overrides */
 .single-article :deep(.akn-num.inline),
 .single-article :deep(.akn-heading.inline) {
-  display: none;
+  @apply hidden;
 }
 
 /* highlight unimplemented structures */
@@ -174,8 +171,7 @@ Attributes from the Juris CALS format without a corresponding HTML attribute mig
 
 /* Einzelvorschrift :: Überschrift  */
 :deep(h2.einzelvorschrift) {
-  @apply ris-heading3-bold my-24 inline-block;
-  @apply break-after-avoid; /* Avoid page breaks between an Einzelvorschrift title and its body */
+  @apply ris-heading3-bold my-24 inline-block break-after-avoid;
 }
 
 :deep(.akn-heading a) {
@@ -227,13 +223,11 @@ Attributes from the Juris CALS format without a corresponding HTML attribute mig
 }
 
 :deep(hr.trennlinie) {
-  @apply border-t border-black;
-  @apply mx-[30%] my-28;
+  @apply mx-[30%] my-28 border-t border-black;
 }
 
 :deep(.signatur) {
-  @apply text-center;
-  @apply my-32;
+  @apply my-32 text-center;
 }
 
 /*
@@ -306,12 +300,12 @@ Attributes from the Juris CALS format without a corresponding HTML attribute mig
 
 /* Do not show separator line if the non-authorial notes are preceded by authorial notes */
 :deep(.fussnoten + .nichtamtliche-fussnoten:before) {
-  content: initial;
+  @apply content-[initial];
 }
 
 /* Zeige Aufzählungszeichen und dazugehörigen Text nebeneinander an */
 :deep(.fussnote) {
-  display: flex;
+  @apply flex;
 }
 
 /* Mindestbreite für Aufzählungszeichen */
@@ -321,7 +315,7 @@ Attributes from the Juris CALS format without a corresponding HTML attribute mig
 
 /* Stelle sicher, dass Aufzählungszeichen und p auf der gleichen Zeile stehen */
 :deep(.fussnote .marker + p) {
-  margin-top: 0;
+  @apply mt-0;
 }
 
 /* Hebe Fußnoten hervor, wenn direkt zu ihnen navigiert wurde */
@@ -330,10 +324,8 @@ Attributes from the Juris CALS format without a corresponding HTML attribute mig
 }
 
 /* Blende Rückverweis-Links in Print-Version aus */
-@media print {
-  :deep(.fussnoten .rueckverweis) {
-    display: none;
-  }
+:deep(.fussnoten .rueckverweis) {
+  @apply print:hidden;
 }
 
 /* Display blockLists with indent */
@@ -358,11 +350,8 @@ Attributes from the Juris CALS format without a corresponding HTML attribute mig
 }
 
 :deep(.norm-pdf-link::before) {
-  content: "";
-  @apply mr-8 inline-block h-24 w-24;
+  @apply mr-8 inline-block h-24 w-24 bg-current mask-contain content-['_'];
   mask: url("~/assets/img/file.svg") no-repeat center;
-  mask-size: contain;
-  background-color: currentColor;
 }
 
 /* Print styles for legislation content */
@@ -377,6 +366,6 @@ Attributes from the Juris CALS format without a corresponding HTML attribute mig
 }
 
 :deep(.extra_letter_spacing) {
-  letter-spacing: 0.2em; /* following styling in gesetze-im-internet.de */
+  @apply tracking-[0.2em]; /* following styling in gesetze-im-internet.de */
 }
 </style>

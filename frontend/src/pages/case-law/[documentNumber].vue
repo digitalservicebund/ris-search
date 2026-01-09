@@ -226,19 +226,16 @@ const detailsMetadata = computed(() => {
   }
 
   :deep(& .border-number) {
-    display: flex;
-    align-items: flex-start;
+    @apply flex items-start;
   }
 
   :deep(& .border-number .number) {
-    margin-right: 0.5rem;
+    @apply mr-8 text-gray-900;
     min-width: calc(var(--border-number-min-width) - 0.5rem);
-    @apply text-gray-900;
   }
 
   :deep(& .border-number .content) {
-    flex: 1;
-    min-width: 0;
+    @apply min-w-0 flex-1;
   }
 
   :deep(& .border-number-link) {
@@ -246,7 +243,7 @@ const detailsMetadata = computed(() => {
   }
 
   :deep(& section > p) {
-    margin-left: var(--border-number-min-width);
+    @apply ml-(--border-number-min-width);
   }
 
   :deep(& #gliederung blockquote) {
@@ -266,7 +263,7 @@ const detailsMetadata = computed(() => {
   }
 
   :deep(& #title) {
-    display: none;
+    @apply hidden;
   }
 
   :deep(& p) {
