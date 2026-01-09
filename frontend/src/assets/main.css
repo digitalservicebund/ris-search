@@ -3,6 +3,8 @@
 
 @source "../../node_modules/@digitalservicebund/ris-ui/dist/**/*.{js,vue,ts}";
 
+@import "./print.css";
+
 @theme {
   --max-width-prose: 45rem;
 }
@@ -36,8 +38,9 @@
   @apply ml-24 list-outside list-disc space-y-16;
 }
 
-
-@import "./print.css";
+mark {
+  @apply bg-yellow-200;
+}
 
 input[type="search"] {
   &[data-size="large"] {
@@ -51,6 +54,7 @@ input[type="search"] {
     background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='-16 -16 52 52'><path fill='currentColor' d='M19 6.41L17.59 5L12 10.59L6.41 5L5 6.41L10.59 12L5 17.59L6.41 19L12 13.41L17.59 19L19 17.59L13.41 12z'></path></svg>");
   }
 }
+
 input[type="search"]::-webkit-search-cancel-button:hover {
   @apply bg-blue-100;
 }
