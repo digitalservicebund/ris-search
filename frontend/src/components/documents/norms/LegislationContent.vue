@@ -1,13 +1,33 @@
+<script setup lang="ts">
+/**
+ * Wrapper component for legislation content that provides scoped styling
+ * for server-rendered AKN (Akoma Ntoso) HTML content.
+ */
+defineProps<{
+  /** When true, applies single-article view styling (hides section headings) */
+  singleArticle?: boolean;
+}>();
+</script>
+
+<template>
+  <div :class="['legislation', { 'single-article': singleArticle }]">
+    <slot />
+  </div>
+</template>
+
+<style scoped>
+@reference "~/assets/main.css";
+
 .legislation {
   @apply max-w-prose print:max-w-none;
 }
 
 /* AKN */
-.akn-act {
+:deep(.akn-act) {
   @apply flex flex-col gap-32 pt-24;
 }
 
-.akn-content {
+:deep(.akn-content) {
   @apply block;
 }
 
@@ -17,29 +37,29 @@
     | .akn-content
        | .akn-p
  */
-.akn-num + .akn-content,
-.akn-content > .akn-p:first-child {
+:deep(.akn-num + .akn-content),
+:deep(.akn-content > .akn-p:first-child) {
   @apply inline;
 }
 
-.akn-paragraph {
+:deep(.akn-paragraph) {
   @apply mb-16;
 }
 
 /* These values will be displayed separately */
-.akn-docTitle {
+:deep(.akn-docTitle) {
   display: none;
 }
 
-.akn-shortTitle {
+:deep(.akn-shortTitle) {
   display: none;
 }
 
-.akn-proprietary {
+:deep(.akn-proprietary) {
   display: none;
 }
 
-.akn-act a {
+:deep(.akn-act a) {
   @apply text-blue-800 outline-offset-4 outline-blue-800 focus-visible:outline-4;
 
   &:hover * {
@@ -47,18 +67,18 @@
   }
 }
 
-.akn-act table > thead > tr > th {
+:deep(.akn-act table > thead > tr > th) {
   @apply align-bottom;
   @apply border-b-2 border-solid border-gray-800;
 }
 
-.akn-act td,
-.akn-act th {
+:deep(.akn-act td),
+:deep(.akn-act th) {
   @apply align-top;
   @apply p-4; /* Used to be 1mm at gesetze-im-internet.de */
 }
 
-.akn-act table {
+:deep(.akn-act table) {
   @apply mb-8 max-w-full border-collapse overflow-x-auto border-gray-800;
 
   .rowsep {
@@ -70,49 +90,50 @@
 }
 
 /* see https://stackoverflow.com/questions/13352080/match-all-elements-having-class-name-starting-with-a-specific-string */
-.akn-act *[class^="frame-"],
-.akn-act *[class*=" frame-"] {
+:deep(.akn-act *[class^="frame-"]),
+:deep(.akn-act *[class*=" frame-"]) {
   @apply border-solid border-gray-800;
 }
 
-.akn-act .frame-all {
+:deep(.akn-act .frame-all) {
   @apply border;
 }
-.akn-act .frame-top {
+:deep(.akn-act .frame-top) {
   @apply border-t;
 }
-.akn-act .frame-right {
+:deep(.akn-act .frame-right) {
   @apply border-r;
 }
-.akn-act .frame-bottom {
+:deep(.akn-act .frame-bottom) {
   @apply border-b;
 }
-.akn-act .frame-left {
+:deep(.akn-act .frame-left) {
   @apply border-l;
 }
 
-.akn-act pre {
+:deep(.akn-act pre) {
   @apply ris-body3-regular overflow-x-auto;
   font-family: monospace;
 }
-.akn-act .akn-paragraph,
-.akn-mainBody {
+
+:deep(.akn-act .akn-paragraph),
+:deep(.akn-mainBody) {
   @apply overflow-x-auto;
 }
 
 /*
 Attributes from the Juris CALS format without a corresponding HTML attribute migrated as classes
 */
-.akn-act .valign-top {
+:deep(.akn-act .valign-top) {
   @apply align-top;
 }
-.akn-act .valign-middle {
+:deep(.akn-act .valign-middle) {
   @apply align-middle;
 }
-.akn-act .valign-bottom {
+:deep(.akn-act .valign-bottom) {
   @apply align-bottom;
 }
-.akn-act .align-center {
+:deep(.akn-act .align-center) {
   @apply text-center;
   img {
     @apply inline-block;
@@ -120,69 +141,53 @@ Attributes from the Juris CALS format without a corresponding HTML attribute mig
 }
 
 /* Hide headings for single article view */
-.single-article h2.einzelvorschrift {
+.single-article :deep(h2.einzelvorschrift) {
   @apply hidden;
+}
+
+/* Single article inline heading overrides */
+.single-article :deep(.akn-num.inline),
+.single-article :deep(.akn-heading.inline) {
+  display: none;
 }
 
 /* highlight unimplemented structures */
-.unimplementiert {
+:deep(.unimplementiert) {
   @apply bg-yellow-100;
 }
 
-.akn-act > .dokumentenkopf {
+:deep(.akn-act > .dokumentenkopf) {
   @apply hidden;
 }
 
-.dokumentenkopf {
-  .titel {
-    @apply ris-heading2-bold hyphens-auto max-md:text-2xl;
-  }
-
-  *[data-longTitle] .titel {
-    @apply ris-heading3-bold;
-  }
-}
-
-.dokumentenkopf-fussnoten {
-  .fussnoten {
-    @apply my-0 space-y-12;
-  }
-  .fussnoten:before {
-    @apply hidden;
-  }
-  .rueckverweis {
-    @apply hidden;
-  }
-}
-
 /* hide default table of contents, since it will be displayed behind an accordion section */
-.eingangsformel .inhaltsuebersicht {
+:deep(.eingangsformel .inhaltsuebersicht) {
   @apply hidden;
 }
 
 /*   Regelungstext-Hauptteil
      ======================= */
 
-.einzelvorschrift {
+:deep(.einzelvorschrift) {
   @apply mb-16;
 }
 
 /* Einzelvorschrift :: Überschrift  */
-h2.einzelvorschrift {
+:deep(h2.einzelvorschrift) {
   @apply ris-heading3-bold my-24 inline-block;
   @apply break-after-avoid; /* Avoid page breaks between an Einzelvorschrift title and its body */
 }
 
-.akn-heading a {
+:deep(.akn-heading a) {
   @apply text-blue-800;
 }
 
-.akn-p {
+:deep(.akn-p) {
   @apply mb-8;
 }
 
-.akn-act,
-.akn-doc {
+:deep(.akn-act),
+:deep(.akn-doc) {
   .akn-book,
   .akn-part,
   .akn-chapter,
@@ -210,23 +215,23 @@ h2.einzelvorschrift {
   Disable default list style. Instead, use the <li> attribute `data-aufzählungsliteral`
   as the :before element's content.
 */
-.juristischer-absatz-untergliederung {
+:deep(.juristischer-absatz-untergliederung) {
   @apply list-none;
 }
-.juristischer-absatz-untergliederung li::before {
+:deep(.juristischer-absatz-untergliederung li::before) {
   content: attr(data-aufzählungsliteral) /* Leerzeichen einfügen */ " ";
   @apply mr-4;
 }
-.juristischer-absatz-untergliederung li div {
+:deep(.juristischer-absatz-untergliederung li div) {
   @apply inline;
 }
 
-hr.trennlinie {
+:deep(hr.trennlinie) {
   @apply border-t border-black;
   @apply mx-[30%] my-28;
 }
 
-.signatur {
+:deep(.signatur) {
   @apply text-center;
   @apply my-32;
 }
@@ -237,100 +242,102 @@ hr.trennlinie {
  The following is the LegalDocML.de nesting hierarchy.
  Apply different border widths depending on level.
  */
-.akn-book > .akn-num,
-.akn-part > .akn-num,
-.akn-chapter > .akn-num,
-.akn-subchapter > .akn-num,
-.akn-section > .akn-num,
-.akn-subsection > .akn-num,
-.akn-title > .akn-num,
-.akn-subtitle > .akn-num {
+:deep(.akn-book > .akn-num),
+:deep(.akn-part > .akn-num),
+:deep(.akn-chapter > .akn-num),
+:deep(.akn-subchapter > .akn-num),
+:deep(.akn-section > .akn-num),
+:deep(.akn-subsection > .akn-num),
+:deep(.akn-title > .akn-num),
+:deep(.akn-subtitle > .akn-num) {
   @apply ris-heading3-bold float-none mb-4 block text-center;
 }
 
-.akn-book > .akn-heading,
-.akn-part > .akn-heading,
-.akn-chapter > .akn-heading,
-.akn-subchapter > .akn-heading,
-.akn-section > .akn-heading,
-.akn-subsection > .akn-heading,
-.akn-title > .akn-heading,
-.akn-subtitle > .akn-heading {
+:deep(.akn-book > .akn-heading),
+:deep(.akn-part > .akn-heading),
+:deep(.akn-chapter > .akn-heading),
+:deep(.akn-subchapter > .akn-heading),
+:deep(.akn-section > .akn-heading),
+:deep(.akn-subsection > .akn-heading),
+:deep(.akn-title > .akn-heading),
+:deep(.akn-subtitle > .akn-heading) {
   @apply ris-heading3-regular float-none mb-24 block border-b-4 border-gray-600 pb-16 text-center text-gray-900;
 }
-.akn-book > .akn-heading,
-.akn-part > .akn-heading {
+:deep(.akn-book > .akn-heading),
+:deep(.akn-part > .akn-heading) {
   @apply border-b-10;
 }
-.akn-chapter > .akn-heading {
+:deep(.akn-chapter > .akn-heading) {
   @apply border-b-8;
 }
-.akn-subchapter > .akn-heading,
-.akn-section > .akn-heading {
+:deep(.akn-subchapter > .akn-heading),
+:deep(.akn-section > .akn-heading) {
   @apply border-b-[6px];
 }
 
-.akn-book + .akn-book,
-.akn-part + .akn-part,
-.akn-chapter + .akn-chapter,
-.akn-subchapter + .akn-subchapter,
-.akn-section + .akn-section,
-.akn-subsection + .akn-subsection,
-.akn-title + .akn-title,
-.akn-subtitle + .akn-subtitle {
+:deep(.akn-book + .akn-book),
+:deep(.akn-part + .akn-part),
+:deep(.akn-chapter + .akn-chapter),
+:deep(.akn-subchapter + .akn-subchapter),
+:deep(.akn-section + .akn-section),
+:deep(.akn-subsection + .akn-subsection),
+:deep(.akn-title + .akn-title),
+:deep(.akn-subtitle + .akn-subtitle) {
   @apply mt-80 block;
 }
+
 /*   Darstellung von Fußnoten
      ====== */
 
-.fussnoten,
-.nichtamtliche-fussnoten {
+:deep(.fussnoten),
+:deep(.nichtamtliche-fussnoten) {
   @apply ris-body2-regular my-16 list-none pl-0 text-gray-900;
 }
 
 /* Show a 10 character wide separator above the collected notes  */
-.fussnoten:before,
-.nichtamtliche-fussnoten:before {
+:deep(.fussnoten:before),
+:deep(.nichtamtliche-fussnoten:before) {
   content: "";
   display: block;
   width: 10ch;
   height: 1px;
   @apply mb-10 bg-gray-900;
 }
+
 /* Do not show separator line if the non-authorial notes are preceded by authorial notes */
-.fussnoten + .nichtamtliche-fussnoten:before {
+:deep(.fussnoten + .nichtamtliche-fussnoten:before) {
   content: initial;
 }
 
 /* Zeige Aufzählungszeichen und dazugehörigen Text nebeneinander an */
-.fussnote {
+:deep(.fussnote) {
   display: flex;
 }
 
 /* Mindestbreite für Aufzählungszeichen */
-.fussnote .marker {
+:deep(.fussnote .marker) {
   @apply min-w-32 align-super text-sm;
 }
 
 /* Stelle sicher, dass Aufzählungszeichen und p auf der gleichen Zeile stehen */
-.fussnote .marker + p {
+:deep(.fussnote .marker + p) {
   margin-top: 0;
 }
 
 /* Hebe Fußnoten hervor, wenn direkt zu ihnen navigiert wurde */
-.fussnote:target {
+:deep(.fussnote:target) {
   @apply bg-yellow-200;
 }
 
 /* Blende Rückverweis-Links in Print-Version aus */
 @media print {
-  .fussnoten .rueckverweis {
+  :deep(.fussnoten .rueckverweis) {
     display: none;
   }
 }
 
 /* Display blockLists with indent */
-.akn-blockList {
+:deep(.akn-blockList) {
   @apply mb-8;
 
   .akn-item {
@@ -346,30 +353,38 @@ hr.trennlinie {
   }
 }
 
-.official-toc div {
-  @apply lg:pl-32;
-  @apply ml-16;
-  @apply mb-16;
-  &.level-1 {
-    @apply ml-0;
-    @apply ris-label1-bold;
-  }
-  &.level-5 {
-    @apply ml-8;
-  }
-  &.level-10 {
-    @apply ml-16;
-  }
-}
-
-.norm-pdf-link {
+:deep(.norm-pdf-link) {
   @apply inline-flex items-center;
 }
 
-.norm-pdf-link::before {
+:deep(.norm-pdf-link::before) {
   content: "";
   @apply mr-8 inline-block h-24 w-24;
-  mask: url("img/file.svg") no-repeat center;
+  mask: url("~/assets/img/file.svg") no-repeat center;
   mask-size: contain;
   background-color: currentColor;
 }
+
+/* Print styles for legislation content */
+:deep(.akn-section),
+:deep(.akn-subsection) {
+  @apply break-inside-avoid;
+
+  .akn-num,
+  .akn-heading {
+    @apply break-after-avoid-page;
+  }
+}
+
+:deep(article) {
+  @apply break-inside-avoid-page;
+
+  h2 {
+    @apply break-after-avoid-page;
+  }
+}
+
+:deep(.extra_letter_spacing) {
+  letter-spacing: 0.2em; /* following styling in gesetze-im-internet.de */
+}
+</style>

@@ -4,6 +4,7 @@ import { computed } from "vue";
 import type { BreadcrumbItem } from "~/components/Breadcrumbs.vue";
 import IncompleteDataMessage from "~/components/documents/IncompleteDataMessage.vue";
 import ArticleVersionWarning from "~/components/documents/norms/ArticleVersionWarning.vue";
+import LegislationContent from "~/components/documents/norms/LegislationContent.vue";
 import NormTableOfContents from "~/components/documents/norms/NormTableOfContents.vue";
 import SidebarLayout from "~/components/SidebarLayout.vue";
 import { useDynamicSeo } from "~/composables/useDynamicSeo";
@@ -251,10 +252,9 @@ useDynamicSeo({ title, description });
       <SidebarLayout class="container py-24">
         <template v-if="!!articleHtml" #content>
           <IncompleteDataMessage />
-          <article
-            class="legislation single-article akn-act"
-            v-html="articleHtml"
-          />
+          <LegislationContent single-article>
+            <article class="akn-act" v-html="articleHtml" />
+          </LegislationContent>
           <div class="flex flex-row justify-between">
             <div class="flex flex-col">
               <NuxtLink
@@ -303,12 +303,3 @@ useDynamicSeo({ title, description });
     </div>
   </template>
 </template>
-
-<style>
-@import url("~/assets/legislation.css");
-
-.single-article .akn-num.inline,
-.single-article .akn-heading.inline {
-  display: none;
-}
-</style>

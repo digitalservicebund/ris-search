@@ -22,14 +22,6 @@
   @apply no-underline hover:underline;
 }
 
-.extra_letter_spacing {
-  letter-spacing: 0.2em; /* following styling in gesetze-im-internet.de */
-}
-
-mark {
-  @apply bg-yellow-200;
-}
-
 @utility list-custom {
   li {
     @apply relative ml-56;
@@ -45,7 +37,6 @@ mark {
 }
 
 /* Workaround for https://github.com/tailwindlabs/tailwindcss/discussions/16429 */
-@import "./legislation.css";
 @import "./caselaw.css";
 @import "./literature.css";
 @import "./administrative-directive.css";
