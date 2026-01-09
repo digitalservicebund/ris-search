@@ -28,3 +28,29 @@ const wrapFootnote = computed(
     ></div>
   </div>
 </template>
+
+<style scoped>
+@reference "~/assets/main.css";
+
+.dokumentenkopf-fussnoten {
+  :deep(.fussnoten) {
+    @apply ris-body2-regular my-0 list-none space-y-12 pl-0 text-gray-900;
+  }
+
+  :deep(.fussnoten:before) {
+    @apply hidden;
+  }
+
+  :deep(.rueckverweis) {
+    @apply hidden;
+  }
+
+  :deep(.fussnote) {
+    display: flex;
+  }
+
+  :deep(.fussnote .marker) {
+    @apply min-w-32 align-super text-sm;
+  }
+}
+</style>

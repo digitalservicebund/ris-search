@@ -64,3 +64,17 @@ const normTitle = computed(() => getNormTitle(props.metadata));
     />
   </div>
 </template>
+
+<style scoped>
+@reference "~/assets/main.css";
+
+.dokumentenkopf {
+  :deep(.titel) {
+    @apply ris-heading2-bold hyphens-auto max-md:text-2xl;
+  }
+
+  :deep(*[data-longTitle] .titel) {
+    @apply ris-heading3-bold;
+  }
+}
+</style>

@@ -12,6 +12,7 @@ import DetailsList from "~/components/DetailsList.vue";
 import DetailsListEntry from "~/components/DetailsListEntry.vue";
 import NormActionMenu from "~/components/documents/actionMenu/NormActionMenu.vue";
 import IncompleteDataMessage from "~/components/documents/IncompleteDataMessage.vue";
+import LegislationContent from "~/components/documents/norms/LegislationContent.vue";
 import NormHeadingGroup from "~/components/documents/norms/NormHeadingGroup.vue";
 import NormTableOfContents from "~/components/documents/norms/NormTableOfContents.vue";
 import NormVersionList from "~/components/documents/norms/NormVersionList.vue";
@@ -270,7 +271,9 @@ useDynamicSeo({ title, description });
             >
               <div v-html="htmlParts.officialToc" />
             </RisSingleAccordion>
-            <div v-observe-elements class="legislation" v-html="html" />
+            <LegislationContent v-observe-elements>
+              <div v-html="html" />
+            </LegislationContent>
           </template>
           <template #sidebar>
             <client-only>
@@ -344,3 +347,23 @@ useDynamicSeo({ title, description });
     </div>
   </div>
 </template>
+
+<style lang="css" scoped>
+@reference "~/assets/main.css";
+
+:deep(.official-toc div) {
+  @apply lg:pl-32;
+  @apply ml-16;
+  @apply mb-16;
+  &.level-1 {
+    @apply ml-0;
+    @apply ris-label1-bold;
+  }
+  &.level-5 {
+    @apply ml-8;
+  }
+  &.level-10 {
+    @apply ml-16;
+  }
+}
+</style>
