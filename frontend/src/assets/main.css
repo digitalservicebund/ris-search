@@ -38,7 +38,6 @@
 
 /* Workaround for https://github.com/tailwindlabs/tailwindcss/discussions/16429 */
 @import "./caselaw.css";
-@import "./literature.css";
 
 @import "./print.css";
 
