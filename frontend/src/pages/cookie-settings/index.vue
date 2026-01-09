@@ -1,15 +1,14 @@
 <script setup lang="ts">
-import { storeToRefs } from "pinia";
 import PrimeVueButton from "primevue/button";
 import Message from "primevue/message";
+import { usePostHog } from "~/composables/usePostHog";
 import { useStaticPageSeo } from "~/composables/useStaticPageSeo";
-import { usePostHogStore } from "~/stores/usePostHogStore";
 import IconCheck from "~icons/ic/check";
 import IconClose from "~icons/ic/close";
 
 definePageMeta({ alias: ["/cookie-einstellungen"], layout: false });
 
-const store = usePostHogStore();
+const { userConsent, initialize, setTracking } = usePostHog();
 
 if (import.meta.server) {
   const cookieHeader = useRequestHeaders(["cookie"]);
@@ -17,19 +16,18 @@ if (import.meta.server) {
   const consentMatch = cookies.match(/consent_given=([^;]+)/);
   if (consentMatch) {
     const consentValue = consentMatch[1];
-    store.userConsent = consentValue === "true";
+    userConsent.value = consentValue === "true";
   }
 }
 
 const isClient = ref(false);
 onMounted(() => {
-  store.initialize();
+  initialize();
   isClient.value = true;
 });
 
-const { userConsent } = storeToRefs(store);
 function handleSetTracking(value: boolean) {
-  store.setTracking(value);
+  setTracking(value);
 }
 
 useStaticPageSeo("cookies");

@@ -1,7 +1,6 @@
 import { mockNuxtImport } from "@nuxt/test-utils/runtime";
-import { createTestingPinia } from "@pinia/testing";
 import { mount, RouterLinkStub } from "@vue/test-utils";
-import { vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import ConsentBanner from "./ConsentBanner.vue";
 import { getPostHogConfig } from "~/tests/postHogUtils";
 
@@ -17,28 +16,36 @@ mockNuxtImport("useRuntimeConfig", () => {
   return useRuntimeConfigMock;
 });
 
-const factory = (userConsent: boolean | undefined) =>
-  mount(ConsentBanner, {
+const mockUserConsent = ref<boolean | undefined>(undefined);
+const mockSetTracking = vi.fn();
+
+vi.mock("~/composables/usePostHog", () => ({
+  usePostHog: () => ({
+    userConsent: mockUserConsent,
+    isBannerVisible: computed(() => mockUserConsent.value === undefined),
+    setTracking: mockSetTracking,
+  }),
+}));
+
+const factory = (userConsent: boolean | undefined) => {
+  mockUserConsent.value = userConsent;
+  return mount(ConsentBanner, {
     global: {
-      plugins: [
-        createTestingPinia({
-          stubActions: true,
-          initialState: {
-            postHog: {
-              userConsent: userConsent,
-            },
-          },
-        }),
-      ],
       stubs: {
         NuxtLink: RouterLinkStub,
       },
     },
   });
+};
 
 describe("ConsentBanner", () => {
   const cookieBanner = '[data-testid="cookie-banner"]';
   const declineButton = '[data-testid="decline-cookie"]';
+
+  beforeEach(() => {
+    mockUserConsent.value = undefined;
+    vi.clearAllMocks();
+  });
 
   it("shows the banner when user has not given consent yet", async () => {
     const wrapper = factory(undefined);
@@ -52,12 +59,11 @@ describe("ConsentBanner", () => {
 
   it("sets tracking when clicking the Decline button", async () => {
     const wrapper = factory(undefined);
-    const store = usePostHogStore();
 
     const forms = wrapper.findAll("form");
     const declineForm = forms.find((form) => form.find(declineButton).exists());
     await declineForm?.trigger("submit");
 
-    expect(store.setTracking).toHaveBeenCalledWith(false);
+    expect(mockSetTracking).toHaveBeenCalledWith(false);
   });
 });

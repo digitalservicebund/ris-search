@@ -1,8 +1,7 @@
 import { mockNuxtImport, mountSuspended } from "@nuxt/test-utils/runtime";
-import { createTestingPinia } from "@pinia/testing";
 import { RouterLinkStub } from "@vue/test-utils";
 import type { VueWrapper } from "@vue/test-utils";
-import { describe, it, expect, vi } from "vitest";
+import { beforeEach, describe, it, expect, vi } from "vitest";
 import CookieSettings from "~/pages/cookie-settings/index.vue";
 import { getPostHogConfig } from "~/tests/postHogUtils";
 
@@ -30,25 +29,32 @@ vi.mock("js-cookie", () => ({
   default: cookiesMock,
 }));
 
-const factory = async (userConsent: boolean | undefined) =>
-  await mountSuspended(CookieSettings, {
+const mockUserConsent = ref<boolean | undefined>(undefined);
+const mockSetTracking = vi.fn((value: boolean) => {
+  mockUserConsent.value = value;
+});
+const mockInitialize = vi.fn();
+
+vi.mock("~/composables/usePostHog", () => ({
+  usePostHog: () => ({
+    userConsent: mockUserConsent,
+    isBannerVisible: computed(() => mockUserConsent.value === undefined),
+    setTracking: mockSetTracking,
+    initialize: mockInitialize,
+  }),
+}));
+
+const factory = async (userConsent: boolean | undefined) => {
+  mockUserConsent.value = userConsent;
+  return await mountSuspended(CookieSettings, {
     global: {
-      plugins: [
-        createTestingPinia({
-          stubActions: false,
-          initialState: {
-            postHog: {
-              userConsent: userConsent,
-            },
-          },
-        }),
-      ],
       stubs: {
         RouterLink: RouterLinkStub,
         Breadcrumb: true,
       },
     },
   });
+};
 
 describe("CookieSettings Page", () => {
   const acceptButtonSelector = '[data-testid="settings-accept-cookie"]';
@@ -76,6 +82,7 @@ describe("CookieSettings Page", () => {
   }
 
   beforeEach(() => {
+    mockUserConsent.value = undefined;
     vi.clearAllMocks();
   });
 

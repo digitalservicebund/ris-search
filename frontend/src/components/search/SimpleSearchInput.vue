@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Button, InputText, InputGroup, InputGroupAddon } from "primevue";
+import { usePostHog } from "~/composables/usePostHog";
 import { addDefaults } from "~/composables/useSimpleSearchParams/getInitialState";
-import { usePostHogStore } from "~/stores/usePostHogStore";
 import IconSearch from "~icons/ic/search";
 
 const {
@@ -17,7 +17,7 @@ const {
 
 const model = defineModel<string>();
 
-const postHogStore = usePostHogStore();
+const { searchPerformed } = usePostHog();
 
 const router = useRouter();
 
@@ -35,10 +35,7 @@ const emit = defineEmits(["emptySearch"]);
 const performSearch = () => {
   // If the user is coming from another page, we want to track the search
   if (router.currentRoute.value.name !== "search") {
-    postHogStore.searchPerformed(
-      "simple",
-      addDefaults({ query: currentText.value ?? "" }),
-    );
+    searchPerformed("simple", addDefaults({ query: currentText.value ?? "" }));
   }
 
   if (!currentText.value) {

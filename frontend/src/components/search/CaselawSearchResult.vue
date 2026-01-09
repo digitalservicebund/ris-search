@@ -2,14 +2,14 @@
 import _ from "lodash";
 import type { RouteLocationRaw } from "#vue-router";
 import type { SearchResultHeaderItem } from "~/components/search/SearchResultHeader.vue";
-import { usePostHogStore } from "~/stores/usePostHogStore";
+import { usePostHog } from "~/composables/usePostHog";
 import type { CaseLaw, SearchResult, TextMatch } from "~/types";
 import { dateFormattedDDMMYYYY } from "~/utils/dateFormatting";
 import { sanitizeSearchResult } from "~/utils/sanitize";
 import { addEllipsis, removeOuterParentheses } from "~/utils/textFormatting";
 import GavelIcon from "~icons/material-symbols/gavel";
 
-const postHogStore = usePostHogStore();
+const { searchResultClicked } = usePostHog();
 
 const props = defineProps<{
   searchResult: SearchResult<CaseLaw>;
@@ -165,7 +165,7 @@ const headline = computed(() =>
 );
 
 function trackResultClick(url: string) {
-  postHogStore.searchResultClicked(url, props.order);
+  searchResultClicked(url, props.order);
 }
 </script>
 

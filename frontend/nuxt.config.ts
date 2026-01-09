@@ -95,7 +95,6 @@ export default defineNuxtConfig({
     "@nuxt/image",
     "@nuxt/eslint",
     "unplugin-icons/nuxt",
-    "@pinia/nuxt",
     "@nuxt/test-utils/module",
     "@sentry/nuxt/module",
     "nuxt-security",
