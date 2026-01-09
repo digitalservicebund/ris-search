@@ -376,14 +376,6 @@ Attributes from the Juris CALS format without a corresponding HTML attribute mig
   }
 }
 
-:deep(article) {
-  @apply break-inside-avoid-page;
-
-  h2 {
-    @apply break-after-avoid-page;
-  }
-}
-
 :deep(.extra_letter_spacing) {
   letter-spacing: 0.2em; /* following styling in gesetze-im-internet.de */
 }
