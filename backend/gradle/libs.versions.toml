@@ -35,7 +35,7 @@ streamex = "0.8.4"
 jackson-datatype-jsr310 = "2.20.0"
 jaxb-moxy = "4.0.8"
 posthog = "1.2.0"
-pebble = "4.0.0"
+pebble = "4.1.0"
 rest-assured = "5.5.5"
 jose4j = "0.9.6"
 
