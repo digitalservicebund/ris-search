@@ -210,65 +210,64 @@ const detailsMetadata = computed(() => {
 
 .case-law {
   --border-number-min-width: 3rem;
-
   @apply max-w-prose print:max-w-none;
+}
 
-  :deep(& table[border="1"] :is(th, td)) {
-    @apply border border-solid border-black px-4;
+:deep(.case-law table[border="1"] :is(th, td)) {
+  @apply border border-solid border-black px-4;
+}
+
+:deep(.case-law table) {
+  @apply inline-block max-w-full overflow-x-auto;
+}
+
+:deep(.case-law h2) {
+  @apply ris-heading3-bold my-24 inline-block;
+}
+
+:deep(.case-law .border-number) {
+  @apply flex items-start;
+}
+
+:deep(.case-law .border-number .number) {
+  @apply mr-8 text-gray-900;
+  min-width: calc(var(--border-number-min-width) - 0.5rem);
+}
+
+:deep(.case-law .border-number .content) {
+  @apply min-w-0 flex-1;
+}
+
+:deep(.case-law .border-number-link) {
+  @apply ris-link1-regular pl-[0.25ch];
+}
+
+:deep(.case-law section > p) {
+  @apply ml-(--border-number-min-width);
+}
+
+:deep(.case-law #gliederung blockquote) {
+  @apply ml-32;
+}
+
+:deep(.case-law #gruende blockquote) {
+  @apply ml-(--border-number-min-width) border-l-2 border-gray-700 pl-16 sm:ml-[calc(var(--border-number-min-width)+2rem)];
+
+  & + * {
+    @apply mt-16;
   }
 
-  :deep(& table) {
-    @apply inline-block max-w-full overflow-x-auto;
+  & + blockquote {
+    @apply mt-0;
   }
+}
 
-  :deep(& h2) {
-    @apply ris-heading3-bold my-24 inline-block;
-  }
+:deep(.case-law #title) {
+  @apply hidden;
+}
 
-  :deep(& .border-number) {
-    @apply flex items-start;
-  }
-
-  :deep(& .border-number .number) {
-    @apply mr-8 text-gray-900;
-    min-width: calc(var(--border-number-min-width) - 0.5rem);
-  }
-
-  :deep(& .border-number .content) {
-    @apply min-w-0 flex-1;
-  }
-
-  :deep(& .border-number-link) {
-    @apply ris-link1-regular pl-[0.25ch];
-  }
-
-  :deep(& section > p) {
-    @apply ml-(--border-number-min-width);
-  }
-
-  :deep(& #gliederung blockquote) {
-    @apply ml-32;
-  }
-
-  :deep(& #gruende blockquote) {
-    @apply ml-(--border-number-min-width) border-l-2 border-gray-700 pl-16 sm:ml-[calc(var(--border-number-min-width)+2rem)];
-
-    & + * {
-      @apply mt-16;
-    }
-
-    & + blockquote {
-      @apply mt-0;
-    }
-  }
-
-  :deep(& #title) {
-    @apply hidden;
-  }
-
-  :deep(& p) {
-    @apply mb-16 wrap-break-word;
-    unicode-bidi: isolate;
-  }
+:deep(.case-law p) {
+  @apply mb-16 wrap-break-word;
+  unicode-bidi: isolate;
 }
 </style>

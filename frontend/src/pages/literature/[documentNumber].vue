@@ -97,25 +97,25 @@ const detailItems = computed(() => getLiteratureDetailItems(literature.value));
 
 .literature {
   @apply max-w-prose print:max-w-none;
+}
 
-  :deep(& h1) {
-    @apply hidden;
-  }
+:deep(.literature h1) {
+  @apply hidden;
+}
 
-  :deep(& h2) {
-    @apply ris-heading3-bold my-24 inline-block;
-  }
+:deep(.literature h2) {
+  @apply ris-heading3-bold my-24 inline-block;
+}
 
-  :deep(& h3) {
-    @apply ris-body1-bold my-8;
-  }
+:deep(.literature h3) {
+  @apply ris-body1-bold my-8;
+}
 
-  :deep(& p) {
-    @apply mb-16 overflow-x-auto;
-  }
+:deep(.literature p) {
+  @apply mb-16 overflow-x-auto;
+}
 
-  :deep(& ul) {
-    @apply mb-16;
-  }
+:deep(.literature ul) {
+  @apply mb-16;
 }
 </style>
