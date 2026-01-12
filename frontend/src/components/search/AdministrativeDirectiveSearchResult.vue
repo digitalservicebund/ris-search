@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import type { SearchResultHeaderItem } from "~/components/search/SearchResultHeader.vue";
-import { usePostHogStore } from "~/stores/usePostHogStore";
+import { usePostHog } from "~/composables/usePostHog";
 import type { AdministrativeDirective, SearchResult } from "~/types";
 import { sanitizeSearchResult } from "~/utils/sanitize";
 import RuleIcon from "~icons/ic/outline-rule";
 
-const postHogStore = usePostHogStore();
+const { searchResultClicked } = usePostHog();
 const router = useRouter();
 
 const { searchResult, order } = defineProps<{
@@ -58,7 +58,7 @@ function getMatch(name: string) {
 
 function trackResultClick() {
   const url = router.resolve(detailPageRoute.value).href;
-  postHogStore.searchResultClicked(url, order);
+  searchResultClicked(url, order);
 }
 </script>
 

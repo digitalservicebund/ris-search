@@ -2,11 +2,11 @@
 import { Button } from "primevue";
 import PrimevueTextarea from "primevue/textarea";
 import { NuxtLink } from "#components";
-import { usePostHogStore } from "~/stores/usePostHogStore";
+import { usePostHog } from "~/composables/usePostHog";
 import { isStringEmpty } from "~/utils/textFormatting";
 import ErrorOutline from "~icons/material-symbols/error-outline";
 
-const store = usePostHogStore();
+const { sendFeedbackToPostHog } = usePostHog();
 const feedback = ref("");
 const errorMessage: Ref<string | undefined> = ref();
 const isSent = ref(false);
@@ -21,7 +21,7 @@ const submitFeedback = async () => {
     return;
   }
   try {
-    await store.sendFeedbackToPostHog(feedback.value);
+    await sendFeedbackToPostHog(feedback.value);
     isSent.value = true;
   } catch {
     errorMessage.value = sendingError;

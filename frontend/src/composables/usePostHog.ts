@@ -1,5 +1,4 @@
 import Cookies from "js-cookie";
-import { defineStore } from "pinia";
 import type { PostHog } from "posthog-js";
 import posthog from "posthog-js";
 import type { QueryParams } from "~/composables/useSimpleSearchParams/useSimpleSearchParams";
@@ -11,20 +10,39 @@ import {
 
 const CONSENT_COOKIE_NAME = "consent_given";
 
-export const usePostHogStore = defineStore("postHog", () => {
+// Declared on module level rather than inside of `usePostHog` to ensure state
+// is shared across all usage of the composable, rather than declaring them again
+// every time the composable is used.
+const postHog = ref<PostHog | undefined>(undefined);
+const userConsent = ref<boolean | undefined>(undefined);
+
+/** Resets the module-level state. Only exported for testing purposes. */
+export function resetPostHogState() {
+  postHog.value = undefined;
+  userConsent.value = undefined;
+}
+
+/** Composable for managing PostHog analytics and user consent. */
+export function usePostHog() {
   const config = useRuntimeConfig();
   const router = useRouter();
   const key = getStringOrUndefined(config.public.analytics.posthogKey);
   const host = getStringOrUndefined(config.public.analytics.posthogHost);
 
-  const postHog: Ref<PostHog | undefined> = ref(undefined);
-  const userConsent: Ref<boolean | undefined> = ref(undefined);
+  /**
+   * Whether the consent banner should be shown to the user. True once PostHog is
+   * enabled, and no consent decision has been made yet.
+   */
   const isBannerVisible = computed(() => {
     const isPostHogEnabled = !isStringEmpty(key) && !isStringEmpty(host);
     const isUserConsentGiven = userConsent.value !== undefined;
     return isPostHogEnabled && !isUserConsentGiven;
   });
 
+  /**
+   * Initializes the PostHog state. This should only be called once when the
+   * application starts.
+   */
   function initialize() {
     userConsent.value = stringToBoolean(Cookies.get(CONSENT_COOKIE_NAME));
     if (userConsent.value === true) {
@@ -35,15 +53,20 @@ export const usePostHogStore = defineStore("postHog", () => {
     }
   }
 
+  /** Initializes the PostHog SDK if configured. */
   function initializePostHog() {
     if (key && host) {
       postHog.value = posthog.init(key, { api_host: host });
     }
   }
+
+  /** Activates PostHog tracking. */
   function activatePostHog() {
     initializePostHog();
     postHog.value?.opt_in_capturing();
   }
+
+  /** Deactivates PostHog tracking and clears all PostHog cookies. */
   function deactivatePostHog() {
     postHog.value?.opt_out_capturing();
     postHog.value?.clear_opt_in_out_capturing();
@@ -58,6 +81,7 @@ export const usePostHogStore = defineStore("postHog", () => {
     }
   }
 
+  /** Retrieves the user's PostHog distinct ID from cookies. */
   function getUserPostHogId() {
     const cookies = Cookies.get();
     const phCookieString = cookies?.[`ph_${key}_posthog`] ?? "{}";
@@ -65,6 +89,12 @@ export const usePostHogStore = defineStore("postHog", () => {
     return phCookieObject.distinct_id ?? "anonymous_feedback_user";
   }
 
+  /**
+   * Sends user feedback to the backend.
+   *
+   * @param text - The feedback text from the user
+   * @throws Error if the backend request fails
+   */
   async function sendFeedbackToPostHog(text: string) {
     const params = new URLSearchParams({
       text: text,
@@ -78,6 +108,11 @@ export const usePostHogStore = defineStore("postHog", () => {
     }
   }
 
+  /**
+   * Sets the user's tracking consent and persists it in a cookie.
+   *
+   * @param userHasAccepted - Whether the user accepted tracking
+   */
   function setTracking(userHasAccepted: boolean) {
     const isDevMode = process.env.NODE_ENV === "development";
     Cookies.set(CONSENT_COOKIE_NAME, userHasAccepted.toString(), {
@@ -93,6 +128,14 @@ export const usePostHogStore = defineStore("postHog", () => {
       deactivatePostHog();
     }
   }
+
+  /**
+   * Tracks a search event in PostHog.
+   *
+   * @param type - Simple or advanced search
+   * @param newParams - The current search parameters
+   * @param previousParams - The previous search parameters for comparison
+   */
   function searchPerformed(
     type: "simple" | "advanced",
     newParams?: Partial<QueryParams>,
@@ -106,6 +149,13 @@ export const usePostHogStore = defineStore("postHog", () => {
       });
     }
   }
+
+  /**
+   * Tracks when a user clicks on a search result.
+   *
+   * @param url - The URL of the clicked result
+   * @param order - The position of the result in the list
+   */
   function searchResultClicked(url: string, order: number) {
     if (postHog.value && userConsent.value === true) {
       postHog.value.capture("search_result_clicked", {
@@ -115,6 +165,8 @@ export const usePostHogStore = defineStore("postHog", () => {
       });
     }
   }
+
+  /** Tracks when a search returns no results. */
   function noSearchResults() {
     if (postHog.value && userConsent.value === true) {
       postHog.value.capture("no_search_results", {
@@ -122,6 +174,7 @@ export const usePostHogStore = defineStore("postHog", () => {
       });
     }
   }
+
   return {
     userConsent,
     isBannerVisible,
@@ -133,4 +186,4 @@ export const usePostHogStore = defineStore("postHog", () => {
     setTracking,
     sendFeedbackToPostHog,
   };
-});
+}
