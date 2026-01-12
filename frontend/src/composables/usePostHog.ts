@@ -7,7 +7,7 @@ import {
   stringToBoolean,
 } from "~/utils/textFormatting";
 
-const CONSENT_COOKIE_NAME = "consent_given";
+export const CONSENT_COOKIE_NAME = "consent_given";
 
 // Declared on module level rather than inside of `usePostHog` to ensure state
 // is shared across all usage of the composable, rather than declaring them again

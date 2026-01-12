@@ -5,20 +5,13 @@ import { usePostHog } from "~/composables/usePostHog";
 const { userConsent, isBannerVisible, setTracking } = usePostHog();
 
 if (import.meta.server) {
-  const cookieHeader = useRequestHeaders(["cookie"]);
-  const cookies = cookieHeader.cookie || "";
-  const consentMatch = cookies.match(/consent_given=([^;]+)/);
-  if (consentMatch) {
-    const consentValue = consentMatch[1];
-    userConsent.value = consentValue === "true";
-  }
+  const cookie = useCookie<boolean>(CONSENT_COOKIE_NAME);
+  userConsent.value = cookie.value ?? undefined;
 }
 
 const handleSetTracking = async (value: boolean) => {
   await setTracking(value);
 };
-
-const consentAction = "/api/cookie-consent";
 </script>
 
 <template>
@@ -45,7 +38,7 @@ const consentAction = "/api/cookie-consent";
 
       <div class="flex flex-wrap items-center gap-x-24 gap-y-12 pt-16 lg:pt-24">
         <form
-          :action="consentAction"
+          action="/api/cookie-consent"
           method="POST"
           class="inline"
           @submit.prevent="handleSetTracking(true)"
@@ -59,7 +52,7 @@ const consentAction = "/api/cookie-consent";
           />
         </form>
         <form
-          :action="consentAction"
+          action="/api/cookie-consent"
           method="POST"
           class="inline"
           @submit.prevent="handleSetTracking(false)"
