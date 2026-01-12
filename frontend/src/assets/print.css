@@ -1,29 +1,22 @@
-.akn-section,
-.akn-subsection {
-  @apply break-inside-avoid;
-
-  .akn-num,
-  .akn-heading {
-    @apply break-after-avoid-page;
-  }
-}
-
-article {
-  @apply break-inside-avoid-page;
-  h2 {
-    @apply break-after-avoid-page;
-  }
-}
-
 @media print {
-  .ris-heading2-bold {
-    @apply text-2xl;
+  :root {
+    --max-width-prose: 100%;
   }
+
   body {
     @apply text-sm;
   }
-  :root {
-    --max-width-prose: 100%;
+
+  .ris-heading2-bold {
+    @apply text-2xl;
+  }
+
+  article {
+    @apply break-inside-avoid-page;
+
+    h2 {
+      @apply break-after-avoid-page;
+    }
   }
 }
 
