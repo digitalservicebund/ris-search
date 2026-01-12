@@ -26,9 +26,6 @@ public class NormSimpleSearchType implements SimpleSearchType {
 
   private static final int ARTICLE_INNER_HITS_SIZE = 3;
 
-  private static final List<String> NORMS_HIGHLIGHT_CONTENT_FIELDS =
-      List.of(Norm.Fields.OFFICIAL_TITLE);
-
   public static final List<String> NORMS_FETCH_EXCLUDED_FIELDS =
       List.of(
           Norm.Fields.ARTICLE_NAMES,
@@ -53,7 +50,7 @@ public class NormSimpleSearchType implements SimpleSearchType {
   }
 
   public static List<HighlightBuilder.Field> getHighlightedFieldsStatic() {
-    return NORMS_HIGHLIGHT_CONTENT_FIELDS.stream().map(HighlightBuilder.Field::new).toList();
+    return List.of(new HighlightBuilder.Field(Norm.Fields.OFFICIAL_TITLE).numOfFragments(0));
   }
 
   @Override
