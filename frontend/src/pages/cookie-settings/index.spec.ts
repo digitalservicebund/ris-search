@@ -25,10 +25,6 @@ const cookiesMock = vi.hoisted(() => {
   };
 });
 
-vi.mock("js-cookie", () => ({
-  default: cookiesMock,
-}));
-
 const mockUserConsent = ref<boolean | undefined>(undefined);
 const mockSetTracking = vi.fn((value: boolean) => {
   mockUserConsent.value = value;
