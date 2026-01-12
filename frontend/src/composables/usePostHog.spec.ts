@@ -5,6 +5,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { resetPostHogState, usePostHog } from "~/composables/usePostHog";
 import { addDefaults } from "~/composables/useSimpleSearchParams/getInitialState";
 import type { QueryParams } from "~/composables/useSimpleSearchParams/useSimpleSearchParams";
+import { cookieStoreBackend, cookieStoreMock } from "~/tests/cookieStoreMock";
 import { getPostHogConfig } from "~/tests/postHogUtils";
 
 const { useRuntimeConfigMock } = vi.hoisted(() => {
@@ -34,18 +35,6 @@ vi.mock("posthog-js", () => ({
   },
 }));
 
-const cookiesMock = vi.hoisted(() => {
-  return {
-    get: vi.fn(),
-    set: vi.fn(),
-    remove: vi.fn(),
-  };
-});
-
-vi.mock("js-cookie", () => ({
-  default: cookiesMock,
-}));
-
 const { useRisBackendMock } = vi.hoisted(() => {
   return {
     useRisBackendMock: vi.fn(() => {
@@ -63,13 +52,17 @@ const feedbackURL = `/v1/feedback`;
 describe("usePostHog", () => {
   beforeEach(() => {
     resetPostHogState();
+    cookieStoreBackend.clear();
     vi.clearAllMocks();
   });
 
-  it("initializes postHog when userConsent is true", () => {
-    cookiesMock.get.mockReturnValue("true");
+  it("initializes postHog when userConsent is true", async () => {
+    cookieStoreBackend.set("consent_given", {
+      name: "consent_given",
+      value: "true",
+    });
     const { initialize, postHog } = usePostHog();
-    initialize();
+    await initialize();
     expect(posthog.init).toHaveBeenCalledWith("key", {
       api_host: "host",
     });
@@ -77,84 +70,97 @@ describe("usePostHog", () => {
   });
 
   it("isBannerVisible returns true when PostHog is enabled and no consent cookie exists", () => {
-    cookiesMock.get.mockReturnValue(undefined);
     const { isBannerVisible } = usePostHog();
     expect(isBannerVisible.value).toBe(true);
   });
 
-  it("isBannerVisible returns false when a consent cookie is present", () => {
-    cookiesMock.get.mockReturnValue("true");
+  it("isBannerVisible returns false when a consent cookie is present", async () => {
+    cookieStoreBackend.set("consent_given", {
+      name: "consent_given",
+      value: "true",
+    });
     const { isBannerVisible, initialize } = usePostHog();
-    initialize();
+    await initialize();
     expect(isBannerVisible.value).toBe(false);
   });
 
-  it("userConsent returns the boolean value from the consent cookie", () => {
-    cookiesMock.get.mockReturnValue("false");
+  it("userConsent returns the boolean value from the consent cookie", async () => {
+    cookieStoreBackend.set("consent_given", {
+      name: "consent_given",
+      value: "false",
+    });
     const { userConsent, initialize } = usePostHog();
-    initialize();
+    await initialize();
     expect(userConsent.value).toBe(false);
   });
 
-  it("setTracking to false deactivates postHog state, removes cookie and opt out of capturing", () => {
+  it("setTracking to false deactivates postHog state, sets cookie and opt out of capturing", async () => {
+    cookieStoreBackend.set("ph_key_posthog", {
+      name: "ph_key_posthog",
+      value: "some cookie value",
+    });
     const { setTracking, postHog, userConsent } = usePostHog();
-    cookiesMock.get.mockReturnValue({ ph_key_posthog: "some cookie value" });
-    setTracking(false);
+    await setTracking(false);
     expect(postHog.value).toBeUndefined();
-    expect(cookiesMock.set).toHaveBeenCalledWith("consent_given", "false", {
-      expires: 365,
-      path: "/",
-      sameSite: "lax",
-      secure: expect.anything(),
-    });
+    expect(cookieStoreMock.set).toHaveBeenCalledWith(
+      expect.objectContaining({
+        name: "consent_given",
+        value: "false",
+        path: "/",
+        sameSite: "lax",
+      }),
+    );
     expect(userConsent.value).toBe(false);
-    expect(cookiesMock.remove).toHaveBeenCalledWith("ph_key_posthog", {
+    expect(cookieStoreMock.delete).toHaveBeenCalledWith({
+      name: "ph_key_posthog",
       path: "/",
     });
   });
 
-  it("setTracking to true activates postHog state, sets cookie and opt in capturing", () => {
+  it("setTracking to true activates postHog state, sets cookie and opt in capturing", async () => {
     const { setTracking, postHog, userConsent } = usePostHog();
-    setTracking(true);
+    await setTracking(true);
     expect(posthog.init).toHaveBeenCalledWith("key", {
       api_host: "host",
     });
     expect(postHog.value).toBeDefined();
-    expect(cookiesMock.set).toHaveBeenCalledWith("consent_given", "true", {
-      expires: 365,
-      path: "/",
-      sameSite: "lax",
-      secure: expect.anything(),
-    });
+    expect(cookieStoreMock.set).toHaveBeenCalledWith(
+      expect.objectContaining({
+        name: "consent_given",
+        value: "true",
+        path: "/",
+        sameSite: "lax",
+      }),
+    );
     expect(userConsent.value).toBe(true);
     expect(postHog.value?.opt_in_capturing).toHaveBeenCalled();
   });
 
-  it("sendFeedbackToPostHog sends the user feedback and tracking information to backend when user enables tracking", () => {
+  it("sendFeedbackToPostHog sends the user feedback and tracking information to backend when user enables tracking", async () => {
     const { setTracking, sendFeedbackToPostHog } = usePostHog();
-    cookiesMock.get.mockReturnValue({
-      ph_key_posthog: '{"distinct_id":"12345"}',
+    cookieStoreBackend.set("ph_key_posthog", {
+      name: "ph_key_posthog",
+      value: '{"distinct_id":"12345"}',
     });
-    setTracking(true);
-    sendFeedbackToPostHog("good");
+    await setTracking(true);
+    await sendFeedbackToPostHog("good");
     expect(useRisBackendMock).toHaveBeenCalledWith(
       feedbackURL + "?text=good&url=%2F&user_id=12345",
     );
-    cookiesMock.get.mockRestore();
   });
 
-  it("sendFeedbackToPostHog sends the data to backend as anonymous user when the user disables tracking", () => {
+  it("sendFeedbackToPostHog sends the data to backend as anonymous user when the user disables tracking", async () => {
     const { setTracking, sendFeedbackToPostHog } = usePostHog();
-    setTracking(false);
-    sendFeedbackToPostHog("test");
+    await setTracking(false);
+    await sendFeedbackToPostHog("test");
     expect(useRisBackendMock).toHaveBeenCalledWith(
       feedbackURL + "?text=test&url=%2F&user_id=anonymous_feedback_user",
     );
   });
 
-  it("captures search event when postHog is initialized and user consent is given", () => {
+  it("captures search event when postHog is initialized and user consent is given", async () => {
     const { setTracking, searchPerformed, postHog } = usePostHog();
-    setTracking(true);
+    await setTracking(true);
     searchPerformed("simple", addDefaults({ query: "test query" }), {
       query: "old query",
     } as QueryParams);
@@ -173,19 +179,19 @@ describe("usePostHog", () => {
     });
   });
 
-  it("does not capture search event when user consent is not given", () => {
+  it("does not capture search event when user consent is not given", async () => {
     const { setTracking, searchPerformed, postHog, userConsent } = usePostHog();
-    setTracking(true);
+    await setTracking(true);
     userConsent.value = false;
     searchPerformed("simple", addDefaults({ query: "test query" }));
     expect(postHog.value?.capture).not.toHaveBeenCalled();
   });
 
-  it("captures search_result_clicked event when postHog exists and user consent is given", () => {
+  it("captures search_result_clicked event when postHog exists and user consent is given", async () => {
     const { setTracking, searchResultClicked, postHog } = usePostHog();
     const router = useRouter();
     router.currentRoute.value.query = { query: "test query" };
-    setTracking(true);
+    await setTracking(true);
     const captureSpy = vi.spyOn(postHog.value as PostHog, "capture");
     searchResultClicked("testUrl", 1);
     expect(captureSpy).toHaveBeenCalledWith("search_result_clicked", {
@@ -195,9 +201,9 @@ describe("usePostHog", () => {
     });
   });
 
-  it("captures no_search_results event when postHog exists and user consent is given", () => {
+  it("captures no_search_results event when postHog exists and user consent is given", async () => {
     const { setTracking, noSearchResults, postHog } = usePostHog();
-    setTracking(true);
+    await setTracking(true);
     const router = useRouter();
     router.currentRoute.value.query = { query: "test query" };
     const captureSpy = vi.spyOn(postHog.value as PostHog, "capture");

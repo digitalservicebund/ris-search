@@ -5257,13 +5257,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/js-cookie@npm:^3.0.6":
-  version: 3.0.6
-  resolution: "@types/js-cookie@npm:3.0.6"
-  checksum: 10c0/173afaf5ea9d86c22395b9d2a00b6adb0006dcfef165d6dcb0395cdc32f5a5dcf9c3c60f97194119963a15849b8f85121e1ae730b03e40bc0c29b84396ba22f9
-  languageName: node
-  linkType: hard
-
 "@types/jsdom@npm:^27.0.0":
   version: 27.0.0
   resolution: "@types/jsdom@npm:27.0.0"
@@ -14694,7 +14687,6 @@ __metadata:
     "@testing-library/jest-dom": "npm:^6.8.0"
     "@testing-library/user-event": "npm:^14.6.1"
     "@testing-library/vue": "npm:^8.1.0"
-    "@types/js-cookie": "npm:^3.0.6"
     "@types/jsdom": "npm:^27.0.0"
     "@types/lodash": "npm:^4.17.21"
     "@types/node": "npm:^25.0.3"
@@ -14707,7 +14699,6 @@ __metadata:
     eslint: "npm:^9.30.1"
     eslint-config-prettier: "npm:^10.1.5"
     eslint-plugin-unused-imports: "npm:^4.1.4"
-    js-cookie: "npm:^3.0.5"
     jsdom: "npm:^27.4.0"
     license-checker-rseidelsohn: "npm:^4.4.2"
     lighthouse: "npm:^12.8.2"

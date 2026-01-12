@@ -11,23 +11,16 @@ definePageMeta({ alias: ["/cookie-einstellungen"], layout: false });
 const { userConsent, initialize, setTracking } = usePostHog();
 
 if (import.meta.server) {
-  const cookieHeader = useRequestHeaders(["cookie"]);
-  const cookies = cookieHeader.cookie || "";
-  const consentMatch = cookies.match(/consent_given=([^;]+)/);
-  if (consentMatch) {
-    const consentValue = consentMatch[1];
-    userConsent.value = consentValue === "true";
-  }
+  const cookie = useCookie<boolean>(CONSENT_COOKIE_NAME);
+  userConsent.value = cookie.value ?? undefined;
 }
 
-const isClient = ref(false);
-onMounted(() => {
-  initialize();
-  isClient.value = true;
+onMounted(async () => {
+  await initialize();
 });
 
-function handleSetTracking(value: boolean) {
-  setTracking(value);
+async function handleSetTracking(value: boolean) {
+  await setTracking(value);
 }
 
 useStaticPageSeo("cookies");
@@ -53,7 +46,7 @@ useStaticPageSeo("cookies");
                 <IconCheck v-if="userConsent" class="text-blue-800" />
                 <IconClose v-else class="text-blue-800" />
               </template>
-              <template v-if="isClient">
+              <client-only>
                 <div v-if="userConsent">
                   <p class="ris-body2-bold">
                     Ich bin mit der Nutzung von Analyse-Cookies einverstanden.
@@ -70,28 +63,28 @@ useStaticPageSeo("cookies");
                     erfasst.
                   </p>
                 </div>
-              </template>
-              <template v-else>
-                <div v-if="userConsent">
-                  <p class="ris-body2-bold">
-                    Ich bin mit der Nutzung von System-Cookies einverstanden.
-                  </p>
-                  <p>
-                    Wir verwenden aktuell keine Analyse-Cookies, weil JavaScript
-                    ausgeschaltet ist.
-                  </p>
-                </div>
-                <div v-else>
-                  <p class="ris-body2-bold">
-                    Ich bin mit der Nutzung von Analyse-Cookies nicht
-                    einverstanden.
-                  </p>
-                  <p>
-                    Ihre Nutzung des Portals wird nicht zu Analysezwecken
-                    erfasst.
-                  </p>
-                </div>
-              </template>
+                <template #fallback>
+                  <div v-if="userConsent">
+                    <p class="ris-body2-bold">
+                      Ich bin mit der Nutzung von System-Cookies einverstanden.
+                    </p>
+                    <p>
+                      Wir verwenden aktuell keine Analyse-Cookies, weil
+                      JavaScript ausgeschaltet ist.
+                    </p>
+                  </div>
+                  <div v-else>
+                    <p class="ris-body2-bold">
+                      Ich bin mit der Nutzung von Analyse-Cookies nicht
+                      einverstanden.
+                    </p>
+                    <p>
+                      Ihre Nutzung des Portals wird nicht zu Analysezwecken
+                      erfasst.
+                    </p>
+                  </div>
+                </template>
+              </client-only>
             </Message>
             <form
               v-if="userConsent"
