@@ -504,3 +504,114 @@ test.describe("can view metadata of norms and articles", () => {
     await expect(page.getByTestId("metadata-list")).not.toBeVisible();
   });
 });
+
+test("sets up meta tags for article page", async ({ page }) => {
+  await navigate(
+    page,
+    "/norms/eli/bund/bgbl-1/2000/s1016/2023-04-26/10/deu/art-z1",
+  );
+
+  const title = await page.title();
+  expect(title).toContain("§ 1 Anwendungsbereich");
+
+  const canonicalLink = await page
+    .locator('link[rel="canonical"]')
+    .getAttribute("href");
+  expect(canonicalLink).toBeTruthy();
+
+  const metaDescription = await page
+    .locator('meta[name="description"]')
+    .getAttribute("content");
+  expect(metaDescription).toBe(
+    "Die in Anlage 1 aufgeführten Erzeugnisse unterliegen dieser Verordnung, soweit sie zum gewerbsmäßigen Vertrieb bestimmt sind.",
+  );
+
+  const ogType = await page
+    .locator('meta[property="og:type"]')
+    .getAttribute("content");
+  expect(ogType).toBe("article");
+
+  const ogTitle = await page
+    .locator('meta[property="og:title"]')
+    .getAttribute("content");
+  expect(ogTitle).toContain("§ 1 Anwendungsbereich");
+
+  const ogDescription = await page
+    .locator('meta[property="og:description"]')
+    .getAttribute("content");
+  expect(ogDescription).toBe(
+    "Die in Anlage 1 aufgeführten Erzeugnisse unterliegen dieser Verordnung, soweit sie zum gewerbsmäßigen Vertrieb bestimmt sind.",
+  );
+
+  const ogUrl = await page
+    .locator('meta[property="og:url"]')
+    .getAttribute("content");
+  expect(ogUrl).toBeTruthy();
+
+  const twitterTitle = await page
+    .locator('meta[name="twitter:title"]')
+    .getAttribute("content");
+  expect(twitterTitle).toContain("§ 1 Anwendungsbereich");
+
+  const twitterDescription = await page
+    .locator('meta[name="twitter:description"]')
+    .getAttribute("content");
+  expect(twitterDescription).toBe(
+    "Die in Anlage 1 aufgeführten Erzeugnisse unterliegen dieser Verordnung, soweit sie zum gewerbsmäßigen Vertrieb bestimmt sind.",
+  );
+});
+
+test("sets up meta tags for norm page", async ({ page }) => {
+  await navigate(page, "/norms/eli/bund/bgbl-1/2000/s1016/2023-04-26/10/deu");
+
+  const title = await page.title();
+  expect(title).toContain("FrSaftErfrischV");
+
+  const canonicalLink = await page
+    .locator('link[rel="canonical"]')
+    .getAttribute("href");
+  expect(canonicalLink).toBeTruthy();
+
+  const metaDescription = await page
+    .locator('meta[name="description"]')
+    .getAttribute("content");
+  expect(metaDescription).toBe(
+    "Fruchtsaft- und Erfrischungsgetränkeverordnung",
+  );
+
+  const ogType = await page
+    .locator('meta[property="og:type"]')
+    .getAttribute("content");
+  expect(ogType).toBe("article");
+
+  const ogTitle = await page
+    .locator('meta[property="og:title"]')
+    .getAttribute("content");
+  expect(ogTitle).toBe(
+    "FrSaftErfrischV: Fassung vom 29.04.2023, Aktuell gültig",
+  );
+
+  const ogDescription = await page
+    .locator('meta[property="og:description"]')
+    .getAttribute("content");
+  expect(ogDescription).toBe("Fruchtsaft- und Erfrischungsgetränkeverordnung");
+
+  const ogUrl = await page
+    .locator('meta[property="og:url"]')
+    .getAttribute("content");
+  expect(ogUrl).toBeTruthy();
+
+  const twitterTitle = await page
+    .locator('meta[name="twitter:title"]')
+    .getAttribute("content");
+  expect(twitterTitle).toBe(
+    "FrSaftErfrischV: Fassung vom 29.04.2023, Aktuell gültig",
+  );
+
+  const twitterDescription = await page
+    .locator('meta[name="twitter:description"]')
+    .getAttribute("content");
+  expect(twitterDescription).toBe(
+    "Fruchtsaft- und Erfrischungsgetränkeverordnung",
+  );
+});

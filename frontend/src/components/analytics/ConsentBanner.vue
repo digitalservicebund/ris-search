@@ -45,7 +45,6 @@ const handleSetTracking = async (value: boolean) => {
         >
           <input type="hidden" name="consent" value="true" />
           <PrimeVueButton
-            aria-label="Cookie-Akzeptieren-Button"
             label="Akzeptieren"
             data-testid="accept-cookie"
             type="submit"
@@ -59,7 +58,6 @@ const handleSetTracking = async (value: boolean) => {
         >
           <input type="hidden" name="consent" value="false" />
           <PrimeVueButton
-            aria-label="Cookie-Ablehnen-Button"
             label="Ablehnen"
             data-testid="decline-cookie"
             type="submit"

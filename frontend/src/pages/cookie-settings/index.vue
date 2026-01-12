@@ -94,7 +94,6 @@ useStaticPageSeo("cookies");
             >
               <input type="hidden" name="consent" value="false" />
               <PrimeVueButton
-                aria-label="Cookie-Ablehnen-Button"
                 label="Cookies ablehnen"
                 data-testid="settings-decline-cookie"
                 type="submit"
@@ -108,7 +107,6 @@ useStaticPageSeo("cookies");
             >
               <input type="hidden" name="consent" value="true" />
               <PrimeVueButton
-                aria-label="Cookie-Akzeptieren-Button"
                 label="Cookies akzeptieren"
                 data-testid="settings-accept-cookie"
                 type="submit"
