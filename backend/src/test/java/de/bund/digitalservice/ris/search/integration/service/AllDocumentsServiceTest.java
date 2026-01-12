@@ -98,14 +98,13 @@ class AllDocumentsServiceTest extends ContainersIntegrationBase {
   }
 
   @Test
-  @DisplayName("titles are not fragmented in the Highlighter")
+  @DisplayName("titles are not fragmented in textMatches")
   void titlesAreNotFragmentedInTheHighlighter() {
-    String expectedHeadline = "this headline. Should not - be fragmented.";
     CaseLawDocumentationUnit unit =
         CaseLawDocumentationUnit.builder()
             .id("IDXXX")
             .caseFacts("Test")
-            .headline(expectedHeadline)
+            .headline("this headline. Should not - be fragmented.")
             .build();
     caseLawRepository.save(unit);
 
@@ -117,9 +116,9 @@ class AllDocumentsServiceTest extends ContainersIntegrationBase {
             searchParams, null, null, null, null, null, Pageable.ofSize(10));
     var collection = DocumentResponseMapper.fromDomain(searchResult, ApiConfig.Paths.DOCUMENT);
 
-    String expectedheadline =
+    String expectedTextMatch =
         "this headline. Should not - <mark>be</mark> <mark>fragmented</mark>.";
     assertThat(collection.member().getFirst().textMatches())
-        .anyMatch(m -> expectedheadline.equals(m.text()));
+        .anyMatch(m -> expectedTextMatch.equals(m.text()));
   }
 }
