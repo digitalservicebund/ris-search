@@ -2,12 +2,16 @@ package de.bund.digitalservice.ris.search.integration.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.integration.config.ContainersIntegrationBase;
 import de.bund.digitalservice.ris.search.integration.controller.api.testData.CaseLawTestData;
 import de.bund.digitalservice.ris.search.integration.controller.api.testData.LiteratureTestData;
 import de.bund.digitalservice.ris.search.integration.controller.api.testData.NormsTestData;
 import de.bund.digitalservice.ris.search.integration.controller.api.testData.TestDataGenerator;
+import de.bund.digitalservice.ris.search.mapper.DocumentResponseMapper;
+import de.bund.digitalservice.ris.search.models.api.parameters.UniversalSearchParams;
 import de.bund.digitalservice.ris.search.models.opensearch.AbstractSearchEntity;
+import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import de.bund.digitalservice.ris.search.service.AllDocumentsService;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,6 +21,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.elasticsearch.core.SearchPage;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
@@ -89,5 +95,31 @@ class AllDocumentsServiceTest extends ContainersIntegrationBase {
     assertThat(literatureIds).containsExactlyInAnyOrder("literature1");
     List<String> normIds = TestDataGenerator.getNormIds(searchResults);
     assertThat(normIds).containsExactlyInAnyOrder("norm1");
+  }
+
+  @Test
+  @DisplayName("titles are not fragmented in the Highlighter")
+  void titlesAreNotFragmentedInTheHighlighter() {
+    String expectedHeadline = "this headline. Should not - be fragmented.";
+    CaseLawDocumentationUnit unit =
+        CaseLawDocumentationUnit.builder()
+            .id("IDXXX")
+            .caseFacts("Test")
+            .headline(expectedHeadline)
+            .build();
+    caseLawRepository.save(unit);
+
+    UniversalSearchParams searchParams = new UniversalSearchParams();
+    searchParams.setSearchTerm("be fragmented");
+
+    SearchPage<AbstractSearchEntity> searchResult =
+        allDocumentsService.simpleSearchAllDocuments(
+            searchParams, null, null, null, null, null, Pageable.ofSize(10));
+    var collection = DocumentResponseMapper.fromDomain(searchResult, ApiConfig.Paths.DOCUMENT);
+
+    String expectedheadline =
+        "this headline. Should not - <mark>be</mark> <mark>fragmented</mark>.";
+    assertThat(collection.member().getFirst().textMatches())
+        .anyMatch(m -> expectedheadline.equals(m.text()));
   }
 }
