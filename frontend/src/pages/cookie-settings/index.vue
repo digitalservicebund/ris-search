@@ -21,13 +21,13 @@ if (import.meta.server) {
 }
 
 const isClient = ref(false);
-onMounted(() => {
-  initialize();
+onMounted(async () => {
+  await initialize();
   isClient.value = true;
 });
 
-function handleSetTracking(value: boolean) {
-  setTracking(value);
+async function handleSetTracking(value: boolean) {
+  await setTracking(value);
 }
 
 useStaticPageSeo("cookies");

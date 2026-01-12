@@ -1,9 +1,9 @@
 import { usePostHog } from "~/composables/usePostHog";
 import { getAccessibilityRelatedMetrics } from "~/utils/postHog";
 
-export default defineNuxtPlugin(() => {
+export default defineNuxtPlugin(async () => {
   const { initialize, postHog } = usePostHog();
-  initialize();
+  await initialize();
   if (postHog.value) {
     useRouter().afterEach((to) => {
       nextTick(() => {

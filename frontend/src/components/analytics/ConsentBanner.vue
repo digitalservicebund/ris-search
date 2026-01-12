@@ -14,8 +14,8 @@ if (import.meta.server) {
   }
 }
 
-const handleSetTracking = (value: boolean) => {
-  setTracking(value);
+const handleSetTracking = async (value: boolean) => {
+  await setTracking(value);
 };
 
 const consentAction = "/api/cookie-consent";

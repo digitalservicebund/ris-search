@@ -1,4 +1,3 @@
-import Cookies from "js-cookie";
 import type { PostHog } from "posthog-js";
 import posthog from "posthog-js";
 import type { QueryParams } from "~/composables/useSimpleSearchParams/useSimpleSearchParams";
@@ -43,14 +42,11 @@ export function usePostHog() {
    * Initializes the PostHog state. This should only be called once when the
    * application starts.
    */
-  function initialize() {
-    userConsent.value = stringToBoolean(Cookies.get(CONSENT_COOKIE_NAME));
-    if (userConsent.value === true) {
-      activatePostHog();
-    }
-    if (userConsent.value === false && postHog.value) {
-      deactivatePostHog();
-    }
+  async function initialize() {
+    const cookie = await cookieStore.get(CONSENT_COOKIE_NAME);
+    userConsent.value = cookie ? stringToBoolean(cookie.value) : undefined;
+    if (userConsent.value) activatePostHog();
+    else await deactivatePostHog();
   }
 
   /** Initializes the PostHog SDK if configured. */
@@ -67,24 +63,20 @@ export function usePostHog() {
   }
 
   /** Deactivates PostHog tracking and clears all PostHog cookies. */
-  function deactivatePostHog() {
+  async function deactivatePostHog() {
     postHog.value?.opt_out_capturing();
     postHog.value?.clear_opt_in_out_capturing();
     postHog.value = undefined;
-    const cookies = Cookies.get();
-    if (cookies) {
-      for (const key of Object.keys(cookies)) {
-        if (key.startsWith("ph_")) {
-          Cookies.remove(key, { path: "/" });
-        }
-      }
-    }
+
+    (await cookieStore.getAll()).forEach(({ name }) => {
+      if (name?.startsWith("ph_")) cookieStore.delete({ name, path: "/" });
+    });
   }
 
   /** Retrieves the user's PostHog distinct ID from cookies. */
-  function getUserPostHogId() {
-    const cookies = Cookies.get();
-    const phCookieString = cookies?.[`ph_${key}_posthog`] ?? "{}";
+  async function getUserPostHogId() {
+    const cookie = await cookieStore.get(`ph_${key}_posthog`);
+    const phCookieString = cookie?.value ?? "{}";
     const phCookieObject = JSON.parse(phCookieString) as Record<string, string>;
     return phCookieObject.distinct_id ?? "anonymous_feedback_user";
   }
@@ -96,10 +88,12 @@ export function usePostHog() {
    * @throws Error if the backend request fails
    */
   async function sendFeedbackToPostHog(text: string) {
+    const userId = await getUserPostHogId();
+
     const params = new URLSearchParams({
       text: text,
       url: router.currentRoute.value.fullPath,
-      user_id: getUserPostHogId(),
+      user_id: userId,
     });
     const { error } = await useRisBackend(`/v1/feedback?${params.toString()}`);
 
@@ -113,20 +107,21 @@ export function usePostHog() {
    *
    * @param userHasAccepted - Whether the user accepted tracking
    */
-  function setTracking(userHasAccepted: boolean) {
-    const isDevMode = process.env.NODE_ENV === "development";
-    Cookies.set(CONSENT_COOKIE_NAME, userHasAccepted.toString(), {
-      expires: 365,
+  async function setTracking(userHasAccepted: boolean) {
+    const expiresAt = new Date();
+    expiresAt.setFullYear(expiresAt.getFullYear() + 1);
+
+    await cookieStore.set({
+      name: CONSENT_COOKIE_NAME,
+      value: userHasAccepted.toString(),
+      expires: expiresAt.getTime(),
       path: "/",
       sameSite: "lax",
-      secure: !isDevMode,
     });
+
     userConsent.value = userHasAccepted;
-    if (userHasAccepted) {
-      activatePostHog();
-    } else {
-      deactivatePostHog();
-    }
+    if (userHasAccepted) activatePostHog();
+    else await deactivatePostHog();
   }
 
   /**
