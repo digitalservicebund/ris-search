@@ -13,6 +13,14 @@ test.skip(
   "Removed redundant testing since there are no specific functionality marked as private",
 );
 
+test("shows 404 page when case law is not found", async ({ page }) => {
+  await page.goto("/case-law/NONEXISTENT123");
+
+  await expect(
+    page.getByRole("heading", { name: "Diese Seite existiert nicht" }),
+  ).toBeVisible();
+});
+
 test("can view a single case law documentation unit", async ({
   page,
   isMobileTest,

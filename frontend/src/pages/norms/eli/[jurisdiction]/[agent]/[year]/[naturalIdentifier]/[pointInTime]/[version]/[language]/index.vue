@@ -147,27 +147,20 @@ const buildOgTitle = (
 
   if (privateFeaturesEnabled) {
     const formattedValidFrom = dateFormattedDDMMYYYY(validFrom);
-    if (formattedValidFrom) {
-      parts.push(`Fassung vom ${formattedValidFrom}`);
-    }
+    if (formattedValidFrom) parts.push(`Fassung vom ${formattedValidFrom}`);
 
     const statusLabel = getValidityStatusLabel(status);
-    if (statusLabel) {
-      parts.push(statusLabel);
-    }
+    if (statusLabel) parts.push(statusLabel);
 
     return truncateAtWord(`${baseTitle}: ${parts.join(", ")}`, 55) || undefined;
+  } else {
+    if (validFrom) parts.push(`Fassung vom [Inkrafttreten]`);
+    if (status) parts.push("[Status]");
   }
 
-  if (validFrom) {
-    parts.push(`Fassung vom [Inkrafttreten]`);
-  }
-
-  if (status) {
-    parts.push("[Status]");
-  }
-  const placeholder = parts.join(", ");
-  return truncateAtWord(`${baseTitle}: ${placeholder}`, 55) || undefined;
+  let result = baseTitle;
+  if (parts.length) result += `: ${parts.join(", ")}`;
+  return truncateAtWord(result, 55) || undefined;
 };
 
 const title = computed<string | undefined>(() =>

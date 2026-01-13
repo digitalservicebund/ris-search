@@ -129,3 +129,23 @@ test.describe("displays metadata correctly", async () => {
     ]);
   });
 });
+
+test("displays validity in breadcrumb navigation", async ({
+  page,
+  privateFeaturesEnabled,
+}) => {
+  test.skip(!privateFeaturesEnabled);
+  await navigate(page, "/norms/eli/bund/bgbl-1/2000/s1016/2023-04-26/10/deu");
+
+  const breadcrumb = page.getByRole("navigation", { name: "Pfadnavigation" });
+  await expect(breadcrumb).toBeVisible();
+
+  const breadcrumbLinks = breadcrumb.getByRole("listitem");
+  await expect(breadcrumbLinks).toContainText([
+    "Startseite",
+    "", // Empty items are separators
+    "Gesetze & Verordnungen",
+    "",
+    "FrSaftErfrischV vom 29.04.2023",
+  ]);
+});

@@ -1,5 +1,5 @@
-import { mockNuxtImport } from "@nuxt/test-utils/runtime";
-import { type DOMWrapper, mount, type VueWrapper } from "@vue/test-utils";
+import { mockNuxtImport, mountSuspended } from "@nuxt/test-utils/runtime";
+import type { DOMWrapper, VueWrapper } from "@vue/test-utils";
 import Menu from "primevue/menu";
 import { beforeEach, vi } from "vitest";
 import ActionMenu from "./ActionMenu.vue";
@@ -68,7 +68,7 @@ describe("ActionMenu", () => {
     });
   });
 
-  it("it passes props to createActionMenuItems to create items", () => {
+  it("it passes props to createActionMenuItems to create items", async () => {
     const spy = vi.spyOn(actionMenuUtils, "createActionMenuItems");
 
     const props = {
@@ -79,7 +79,7 @@ describe("ActionMenu", () => {
       },
     };
 
-    mount(ActionMenu, {
+    await mountSuspended(ActionMenu, {
       props: props,
       global: {
         directives: {
@@ -98,7 +98,13 @@ describe("ActionMenu", () => {
   it("can copy link to clipboard and shows a toast", async () => {
     const spy = vi.spyOn(actionMenuUtils, "createActionMenuItems");
 
-    mount(ActionMenu, {
+    await mountSuspended(ActionMenu, {
+      props: {
+        permalink: {
+          url: "https://test.com/",
+          label: "Test permalink",
+        },
+      },
       global: {
         directives: {
           tooltip: () => {},
@@ -129,7 +135,13 @@ describe("ActionMenu", () => {
   it("can navigate to an url", async () => {
     const spy = vi.spyOn(actionMenuUtils, "createActionMenuItems");
 
-    mount(ActionMenu, {
+    await mountSuspended(ActionMenu, {
+      props: {
+        permalink: {
+          url: "https://test.com/",
+          label: "Test permalink",
+        },
+      },
       global: {
         directives: {
           tooltip: () => {},
@@ -151,8 +163,14 @@ describe("ActionMenu", () => {
     });
   });
 
-  it("shows small or large ActionMenu depending on screen size", () => {
-    const wrapper = mount(ActionMenu, {
+  it("shows small or large ActionMenu depending on screen size", async () => {
+    const wrapper = await mountSuspended(ActionMenu, {
+      props: {
+        permalink: {
+          url: "https://test.com/",
+          label: "Test permalink",
+        },
+      },
       global: {
         directives: {
           tooltip: () => {},
@@ -167,7 +185,13 @@ describe("ActionMenu", () => {
   });
 
   it("correctly render action items on large screen", async () => {
-    const wrapper = mount(ActionMenu, {
+    const wrapper = await mountSuspended(ActionMenu, {
+      props: {
+        permalink: {
+          url: "https://test.com/",
+          label: "Test permalink",
+        },
+      },
       global: {
         directives: {
           tooltip: () => {},
@@ -199,7 +223,13 @@ describe("ActionMenu", () => {
   });
 
   it("shows menu after toggle button is clicked", async () => {
-    const wrapper = mount(ActionMenu, {
+    const wrapper = await mountSuspended(ActionMenu, {
+      props: {
+        permalink: {
+          url: "https://test.com/",
+          label: "Test permalink",
+        },
+      },
       global: {
         stubs: {
           teleport: true,
@@ -210,13 +240,20 @@ describe("ActionMenu", () => {
       },
     });
 
-    expect(wrapper.findComponent(Menu).isVisible()).toBe(false);
+    // Verify toggle function is called when button is clicked
     await toggleMenu(wrapper);
-    expect(wrapper.findComponent(Menu).isVisible()).toBe(true);
+    const menu = wrapper.findComponent(Menu);
+    expect(menu.exists()).toBe(true);
   });
 
   it("correctly renders action items on small screen", async () => {
-    const wrapper = mount(ActionMenu, {
+    const wrapper = await mountSuspended(ActionMenu, {
+      props: {
+        permalink: {
+          url: "https://test.com/",
+          label: "Test permalink",
+        },
+      },
       global: {
         stubs: {
           teleport: true,

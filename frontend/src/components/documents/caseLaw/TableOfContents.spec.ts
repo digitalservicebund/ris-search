@@ -73,6 +73,11 @@ describe("TableOfContents", async () => {
   });
 
   it("updates selected item based on the route hash", async () => {
+    // Create the target element that the router will try to scroll to
+    const targetElement = document.createElement("div");
+    targetElement.id = "leitsatz";
+    document.body.appendChild(targetElement);
+
     await renderSuspended(TableOfContents, {
       props: { tableOfContentEntries },
       route: { path: "/", hash: "#leitsatz" },
@@ -82,6 +87,9 @@ describe("TableOfContents", async () => {
       "aria-current",
       "location",
     );
+
+    // Clean up
+    targetElement.remove();
   });
 
   it("navigates on click", async () => {
