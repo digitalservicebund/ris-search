@@ -205,6 +205,8 @@ const currentView = computed(
 );
 
 useDynamicSeo({ title, description });
+
+const detailsTabPanelTitleId = useId();
 </script>
 
 <template>
@@ -282,10 +284,10 @@ useDynamicSeo({ title, description });
 
       <section
         v-else-if="currentView === 'details'"
-        aria-labelledby="detailsTabPanelTitle"
+        :aria-labelledby="detailsTabPanelTitleId"
       >
         <div class="container">
-          <h2 id="detailsTabPanelTitle" class="ris-heading3-bold my-24">
+          <h2 :id="detailsTabPanelTitleId" class="ris-heading3-bold my-24">
             Details
           </h2>
           <IncompleteDataMessage class="my-24" />

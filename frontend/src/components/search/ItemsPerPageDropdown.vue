@@ -18,15 +18,17 @@ const itemsPerPage = computed({
     model.value = Number.parseInt(value);
   },
 });
+
+const itemsPerPageSelectId = useId();
 </script>
 
 <template>
   <span class="flex w-auto items-center gap-8">
-    <label for="items-per-page-select" class="ris-label2-regular"
+    <label :for="itemsPerPageSelectId" class="ris-label2-regular"
       >Einträge pro Seite</label
     >
     <PrimevueSelect
-      id="items-per-page-select"
+      :id="itemsPerPageSelectId"
       v-model="itemsPerPage"
       option-label="label"
       option-value="value"

@@ -242,7 +242,7 @@ describe("NormTableOfContents", () => {
 
   describe("Interactions with UI", () => {
     it("calls toggleExpandCollapse when the button is clicked", async () => {
-      const button = wrapper.find("#toc-expand-collapse-button");
+      const button = wrapper.find("[data-testid='toc-expand-collapse-button']");
       await button.trigger("click");
       expect(wrapper.vm.isExpanded).toBe(true);
       await button.trigger("click");
@@ -282,7 +282,7 @@ describe("NormTableOfContents", () => {
       const mobileTocButton = wrapper.find("[data-testid='mobile-toc-button']");
       expect(mobileTocButton.isVisible()).toBe(true);
       await mobileTocButton.trigger("click");
-      const closeButton = wrapper.find("#toc-close-button");
+      const closeButton = wrapper.find("[data-testid='toc-close-button']");
       expect(wrapper.vm.isTocVisible).toBe(true);
       await closeButton.trigger("click");
       expect(wrapper.vm.isTocVisible).toBe(false);
@@ -325,17 +325,23 @@ describe("NormTableOfContents", () => {
           },
         },
       });
-      const expandCollapseButton = wrapper.find("#toc-expand-collapse-button");
+      const expandCollapseButton = wrapper.find(
+        "[data-testid='toc-expand-collapse-button']",
+      );
       expect(expandCollapseButton.exists()).toBe(false);
     });
 
     it("shows the expand/collapse button if the tableOfContents is multi-level", async () => {
-      const expandCollapseButton = wrapper.find("#toc-expand-collapse-button");
+      const expandCollapseButton = wrapper.find(
+        "[data-testid='toc-expand-collapse-button']",
+      );
       expect(expandCollapseButton.exists()).toBe(true);
     });
 
     it("shows the correct icon when the tableOfContents is collapsed", async () => {
-      const expandCollapseButton = wrapper.find("#toc-expand-collapse-button");
+      const expandCollapseButton = wrapper.find(
+        "[data-testid='toc-expand-collapse-button']",
+      );
       expect(
         expandCollapseButton
           .findComponent({ name: "IcBaselineUnfoldMore" })
@@ -349,7 +355,9 @@ describe("NormTableOfContents", () => {
     });
 
     it("shows the correct icon when the tableOfContents is expanded", async () => {
-      const expandCollapseButton = wrapper.find("#toc-expand-collapse-button");
+      const expandCollapseButton = wrapper.find(
+        "[data-testid='toc-expand-collapse-button']",
+      );
       await expandCollapseButton.trigger("click");
       expect(
         expandCollapseButton

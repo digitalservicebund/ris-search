@@ -90,6 +90,10 @@ watch(
   { immediate: true },
 );
 const responsiveStyles = `z-10 max-lg:fixed max-lg:left-0 max-lg:top-0 max-lg:h-full max-lg:w-full max-lg:bg-gray-100 max-lg:px-32 max-lg:py-16`;
+
+const expandCollapseButtonId = useId();
+const closeButtonId = useId();
+
 /**
  * Replacing the NuxtLink with an <a> to stop the NuxtLink to decode the href. This is a temporary solution related to this ticket
  * RISDEV-10337 and should be complemented later with a more permanent fix for
@@ -121,7 +125,8 @@ const responsiveStyles = `z-10 max-lg:fixed max-lg:left-0 max-lg:top-0 max-lg:h-
       <div class="ml-12">
         <Button
           v-if="isNestedToC"
-          id="toc-expand-collapse-button"
+          :id="expandCollapseButtonId"
+          data-testid="toc-expand-collapse-button"
           class="bg-transparent hover:bg-transparent"
           :aria-label="
             isExpanded ? 'Alle Einträge einklappen' : 'Alle Einträge ausklappen'
@@ -135,7 +140,8 @@ const responsiveStyles = `z-10 max-lg:fixed max-lg:left-0 max-lg:top-0 max-lg:h-
           <IcBaselineUnfoldLess v-else class="text-gray-900 hover:text-black" />
         </Button>
         <Button
-          id="toc-close-button"
+          :id="closeButtonId"
+          data-testid="toc-close-button"
           class="visible bg-transparent hover:bg-transparent lg:hidden"
           aria-label="Inhaltsverzeichnis schließen"
           @click="toggleTableOfContents"

@@ -60,13 +60,15 @@ watch(validSortOptions, (newVal) => {
     model.value = newVal[0]?.value;
   }
 });
+
+const sortSelectId = useId();
 </script>
 
 <template>
   <span class="flex w-auto items-center gap-8">
-    <label for="sort-select" class="ris-label2-regular">Sortieren nach</label>
+    <label :for="sortSelectId" class="ris-label2-regular">Sortieren nach</label>
     <PrimevueSelect
-      id="sort-select"
+      :id="sortSelectId"
       v-model="model"
       scroll-height="20rem"
       option-label="label"

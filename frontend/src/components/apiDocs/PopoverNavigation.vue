@@ -16,9 +16,9 @@ import IcBaselineMenu from "~icons/ic/baseline-menu";
         v-if="!open"
         class="flex items-center gap-4 hover:underline active:underline"
       >
-        <IcBaselineMenu id="menu" size="1.25em" />Menu
+        <IcBaselineMenu size="1.25em" />Menu
       </div>
-      <IcBaselineClose v-else id="close" size="1.25em" class="my-4" />
+      <IcBaselineClose v-else size="1.25em" class="my-4" />
     </PopoverButton>
     <PopoverPanel
       v-slot="{ close }"

@@ -74,6 +74,8 @@ const minisearch = computed(() => {
 });
 
 useStaticPageSeo("translations-list");
+
+const translationsListId = useId();
 </script>
 
 <template>
@@ -107,8 +109,8 @@ useStaticPageSeo("translations-list");
     />
   </section>
 
-  <section aria-labelledby="translations-list" class="mt-48">
-    <h2 id="translations-list" class="sr-only">Translations List</h2>
+  <section :aria-labelledby="translationsListId" class="mt-48">
+    <h2 :id="translationsListId" class="sr-only">Translations List</h2>
 
     <ul
       v-if="sortedTranslations !== null && sortedTranslations.length > 0"
