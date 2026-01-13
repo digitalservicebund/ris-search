@@ -561,7 +561,10 @@ test("sets up meta tags for article page", async ({ page }) => {
   );
 });
 
-test("sets up meta tags for norm page", async ({ page }) => {
+test("sets up meta tags for norm page", async ({
+  page,
+  privateFeaturesEnabled,
+}) => {
   await navigate(page, "/norms/eli/bund/bgbl-1/2000/s1016/2023-04-26/10/deu");
 
   const title = await page.title();
@@ -584,13 +587,6 @@ test("sets up meta tags for norm page", async ({ page }) => {
     .getAttribute("content");
   expect(ogType).toBe("article");
 
-  const ogTitle = await page
-    .locator('meta[property="og:title"]')
-    .getAttribute("content");
-  expect(ogTitle).toBe(
-    "FrSaftErfrischV: Fassung vom 29.04.2023, Aktuell gültig",
-  );
-
   const ogDescription = await page
     .locator('meta[property="og:description"]')
     .getAttribute("content");
@@ -601,17 +597,28 @@ test("sets up meta tags for norm page", async ({ page }) => {
     .getAttribute("content");
   expect(ogUrl).toBeTruthy();
 
-  const twitterTitle = await page
-    .locator('meta[name="twitter:title"]')
-    .getAttribute("content");
-  expect(twitterTitle).toBe(
-    "FrSaftErfrischV: Fassung vom 29.04.2023, Aktuell gültig",
-  );
-
   const twitterDescription = await page
     .locator('meta[name="twitter:description"]')
     .getAttribute("content");
   expect(twitterDescription).toBe(
     "Fruchtsaft- und Erfrischungsgetränkeverordnung",
+  );
+
+  const ogTitle = await page
+    .locator('meta[property="og:title"]')
+    .getAttribute("content");
+  expect(ogTitle).toBe(
+    privateFeaturesEnabled
+      ? "FrSaftErfrischV: Fassung vom 29.04.2023, Aktuell gültig"
+      : "FrSaftErfrischV",
+  );
+
+  const twitterTitle = await page
+    .locator('meta[name="twitter:title"]')
+    .getAttribute("content");
+  expect(twitterTitle).toBe(
+    privateFeaturesEnabled
+      ? "FrSaftErfrischV: Fassung vom 29.04.2023, Aktuell gültig"
+      : "FrSaftErfrischV",
   );
 });
