@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/vue";
+import { render } from "@testing-library/vue";
 import { describe, it, expect } from "vitest";
 import SearchResultComponent from "./SearchResult.vue";
 import type {
@@ -12,7 +12,7 @@ import type {
 
 describe("SearchResult", () => {
   it("shows the correct result for caselaw", () => {
-    render(SearchResultComponent, {
+    const { container } = render(SearchResultComponent, {
       props: {
         searchResult: {
           item: { "@type": "Decision" },
@@ -21,18 +21,18 @@ describe("SearchResult", () => {
       },
       global: {
         stubs: {
-          CaselawSearchResult: {
-            template: "caselaw-search-result-stub",
-          },
+          CaselawSearchResult: true,
         },
       },
     });
 
-    expect(screen.getByText("caselaw-search-result-stub")).toBeInTheDocument();
+    expect(
+      container.querySelector("caselaw-search-result-stub"),
+    ).toBeInTheDocument();
   });
 
   it("shows the correct result for norm", () => {
-    render(SearchResultComponent, {
+    const { container } = render(SearchResultComponent, {
       props: {
         searchResult: {
           item: { "@type": "Legislation" },
@@ -41,18 +41,18 @@ describe("SearchResult", () => {
       },
       global: {
         stubs: {
-          NormSearchResult: {
-            template: "norm-search-result-stub",
-          },
+          NormSearchResult: true,
         },
       },
     });
 
-    expect(screen.getByText("norm-search-result-stub")).toBeInTheDocument();
+    expect(
+      container.querySelector("norm-search-result-stub"),
+    ).toBeInTheDocument();
   });
 
   it("shows the correct result for literature", () => {
-    render(SearchResultComponent, {
+    const { container } = render(SearchResultComponent, {
       props: {
         searchResult: {
           item: { "@type": "Literature" },
@@ -61,20 +61,18 @@ describe("SearchResult", () => {
       },
       global: {
         stubs: {
-          LiteratureSearchResult: {
-            template: "literature-search-result-stub",
-          },
+          LiteratureSearchResult: true,
         },
       },
     });
 
     expect(
-      screen.getByText("literature-search-result-stub"),
+      container.querySelector("literature-search-result-stub"),
     ).toBeInTheDocument();
   });
 
   it("shows the correct result for administrative directive", () => {
-    render(SearchResultComponent, {
+    const { container } = render(SearchResultComponent, {
       props: {
         searchResult: {
           item: { "@type": "AdministrativeDirective" },
@@ -83,15 +81,13 @@ describe("SearchResult", () => {
       },
       global: {
         stubs: {
-          AdministrativeDirectiveSearchResult: {
-            template: "administrative-directive-search-result-stub",
-          },
+          AdministrativeDirectiveSearchResult: true,
         },
       },
     });
 
     expect(
-      screen.getByText("administrative-directive-search-result-stub"),
+      container.querySelector("administrative-directive-search-result-stub"),
     ).toBeInTheDocument();
   });
 

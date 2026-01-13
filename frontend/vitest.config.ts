@@ -26,6 +26,16 @@ export default defineVitestConfig({
       },
     },
     slowTestThreshold: 100,
+    onConsoleLog(log) {
+      const suppressedWarnings = [
+        "already provides property with key",
+        "<Suspense> is an experimental feature",
+      ];
+
+      for (const warning of suppressedWarnings) {
+        if (log.includes(warning)) return false;
+      }
+    },
     coverage: {
       provider: "v8",
       reporter: [

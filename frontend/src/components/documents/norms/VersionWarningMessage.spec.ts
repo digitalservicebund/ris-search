@@ -27,6 +27,14 @@ describe("VersionWarningMessage", () => {
         currentVersionValidityStatus: "InForce",
         futureVersion: futureVersion.item,
       },
+      global: {
+        stubs: {
+          NuxtLink: {
+            template: '<a :href="to"><slot /></a>',
+            props: ["to"],
+          },
+        },
+      },
     });
 
     expect(
