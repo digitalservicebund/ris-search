@@ -84,11 +84,13 @@ async function handleSelectionUpdate(newSelection: TableRowData) {
     selectedVersion.value = undefined;
   }
 }
+
+const fassungenTabPanelTitleId = useId();
 </script>
 
 <template>
-  <section aria-labelledby="fassungenTabPanelTitle">
-    <h2 id="fassungenTabPanelTitle" class="ris-heading3-bold my-24">
+  <section :aria-labelledby="fassungenTabPanelTitleId">
+    <h2 :id="fassungenTabPanelTitleId" class="ris-heading3-bold my-24">
       Fassungen
     </h2>
     <IncompleteDataMessage class="my-24" />

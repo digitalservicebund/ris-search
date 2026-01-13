@@ -44,6 +44,8 @@ watch(
   },
   { immediate: true },
 );
+
+const feedbackMessageId = useId();
 </script>
 
 <template>
@@ -101,11 +103,11 @@ watch(
         </p>
       </div>
       <div class="flex flex-col space-y-2">
-        <label for="feedback-message" class="ris-label2-regular"
+        <label :for="feedbackMessageId" class="ris-label2-regular"
           >Feedback</label
         >
         <PrimevueTextarea
-          id="feedback-message"
+          :id="feedbackMessageId"
           v-model="feedback"
           :invalid="!isStringEmpty(errorMessage)"
           class="min-h-160 w-full"

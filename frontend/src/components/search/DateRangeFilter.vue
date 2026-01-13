@@ -10,6 +10,7 @@ const dateSearchMode = defineModel<DateSearchMode>("dateSearchMode", {
   required: true,
 });
 
+const dateModeSelectId = useId();
 const dateId = useId();
 const dateAfterId = useId();
 const dateBeforeId = useId();
@@ -50,9 +51,9 @@ const hasMultipleInputs = computed(
 <template>
   <div class="flex flex-col gap-16">
     <span class="flex flex-col gap-8">
-      <label for="date-mode-select" class="ris-label2-regular">Zeitraum</label>
+      <label :for="dateModeSelectId" class="ris-label2-regular">Zeitraum</label>
       <PrimevueSelect
-        id="date-mode-select"
+        :id="dateModeSelectId"
         v-model="dateSearchMode"
         :options="items"
         option-label="label"

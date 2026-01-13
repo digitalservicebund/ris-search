@@ -90,12 +90,14 @@ onMounted(() => {
   const { hash } = route;
   if (hash) selectedEntry.value = hash.substring(1); // drop leading #
 });
+
+const tocHeaderId = useId();
 </script>
 
 <template>
-  <nav class="w-full" aria-labelledby="toc-header">
+  <nav class="w-full" :aria-labelledby="tocHeaderId">
     <div
-      id="toc-header"
+      :id="tocHeaderId"
       class="ris-heading3-bold lg:ris-subhead-regular my-16 inline-block"
     >
       Seiteninhalte

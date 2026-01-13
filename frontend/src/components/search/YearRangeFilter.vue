@@ -9,6 +9,7 @@ const dateSearchMode = defineModel<DateSearchMode>("dateSearchMode", {
   required: true,
 });
 
+const yearModeSelectId = useId();
 const yearEqualId = useId();
 const yearAfterId = useId();
 const yearBeforeId = useId();
@@ -123,9 +124,9 @@ watch(
 <template>
   <div class="flex flex-col gap-16">
     <span class="flex flex-col gap-8">
-      <label for="year-mode-select" class="ris-label2-regular">Zeitraum</label>
+      <label :for="yearModeSelectId" class="ris-label2-regular">Zeitraum</label>
       <PrimevueSelect
-        id="year-mode-select"
+        :id="yearModeSelectId"
         v-model="dateSearchMode"
         :options="items"
         :placeholder="items[0]?.label"

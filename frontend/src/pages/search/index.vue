@@ -104,6 +104,9 @@ const title = computed(() => {
 useHead({ title });
 
 const privateFeaturesEnabled = usePrivateFeaturesFlag();
+
+const mainSectionId = useId();
+const resultCountId = useId();
 </script>
 
 <template>
@@ -115,7 +118,10 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
     :model-value="searchParams.query.value"
     @update:model-value="handleSearchSubmit"
   />
-  <NuxtLink :to="{ hash: '#main' }" class="ris-link2-bold not-focus:sr-only">
+  <NuxtLink
+    :to="{ hash: `#${mainSectionId}` }"
+    class="ris-link2-bold not-focus:sr-only"
+  >
     Zu den Hauptinhalten springen
   </NuxtLink>
 
@@ -153,7 +159,10 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
       />
     </fieldset>
 
-    <div id="main" class="w-full flex-col justify-end gap-8 lg:w-9/12">
+    <div
+      :id="mainSectionId"
+      class="w-full flex-col justify-end gap-8 lg:w-9/12"
+    >
       <Pagination
         :is-loading="isLoading"
         navigation-position="bottom"
@@ -164,7 +173,7 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
           class="mb-12 flex w-full flex-wrap items-center justify-between gap-x-32 gap-y-16"
         >
           <output
-            id="result-count"
+            :id="resultCountId"
             aria-live="polite"
             aria-atomic="true"
             class="ris-label2-regular"

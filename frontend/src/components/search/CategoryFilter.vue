@@ -29,12 +29,14 @@ const addUpdate = (items: MenuItem[]) => {
 const selectedItems = addUpdate(categoryFilterItems);
 
 const expandedKeys = computed(() => computeExpandedKeys(model.value));
+
+const panelMenuId = useId();
 </script>
 <template>
   <fieldset>
     <legend class="sr-only">Dokumentarten</legend>
     <PanelMenu
-      id="panelMenu"
+      :id="panelMenuId"
       :model="selectedItems"
       :expanded-keys="expandedKeys"
       class="w-full md:w-200"

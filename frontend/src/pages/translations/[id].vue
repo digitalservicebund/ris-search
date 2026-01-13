@@ -115,6 +115,8 @@ const views = [
 const currentView = computed(
   () => route.query.view?.toString() ?? views[0].path,
 );
+
+const detailsTabPanelTitleId = useId();
 </script>
 
 <template>
@@ -193,9 +195,9 @@ const currentView = computed(
 
       <section
         v-else-if="currentView === 'details'"
-        aria-labelledby="detailsTabPanelTitle"
+        :aria-labelledby="detailsTabPanelTitleId"
       >
-        <h2 id="detailsTabPanelTitle" class="ris-heading3-bold my-24">
+        <h2 :id="detailsTabPanelTitleId" class="ris-heading3-bold my-24">
           Details
         </h2>
         <DetailsList>

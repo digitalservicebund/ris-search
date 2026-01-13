@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import DefaultLayout from "./default.vue";
+
+const breadcrumbHeadingId = useId();
 </script>
 
 <template>
   <DefaultLayout>
-    <nav aria-labelledby="breadcrumb-heading">
-      <h2 id="breadcrumb-heading" class="sr-only">Brotkrumen</h2>
+    <nav :aria-labelledby="breadcrumbHeadingId">
+      <h2 :id="breadcrumbHeadingId" class="sr-only">Brotkrumen</h2>
       <slot name="breadcrumb" />
     </nav>
 
