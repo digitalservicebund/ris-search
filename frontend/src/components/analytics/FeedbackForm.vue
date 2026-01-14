@@ -7,6 +7,8 @@ import { isStringEmpty } from "~/utils/textFormatting";
 import ErrorOutline from "~icons/material-symbols/error-outline";
 
 const { sendFeedbackToPostHog } = usePostHog();
+const honeypotId = useId();
+const feedbackMessageId = useId();
 const feedback = ref("");
 const errorMessage: Ref<string | undefined> = ref();
 const isSent = ref(false);
@@ -44,8 +46,6 @@ watch(
   },
   { immediate: true },
 );
-
-const feedbackMessageId = useId();
 </script>
 
 <template>
@@ -103,22 +103,34 @@ const feedbackMessageId = useId();
         </p>
       </div>
       <div class="flex flex-col space-y-2">
-        <label :for="feedbackMessageId" class="ris-label2-regular"
-          >Feedback</label
-        >
-        <PrimevueTextarea
-          :id="feedbackMessageId"
-          v-model="feedback"
-          :invalid="!isStringEmpty(errorMessage)"
-          class="min-h-160 w-full"
-          placeholder="Feedback eingeben"
-          name="text"
-          @update:model-value="
-            () => {
-              errorMessage = undefined;
-            }
-          "
-        />
+        <div class="name-field" aria-hidden="true">
+          <label :for="honeypotId">Name</label>
+          <input
+            :id="honeypotId"
+            type="text"
+            name="name"
+            tabindex="-1"
+            autocomplete="off"
+          />
+        </div>
+
+        <div class="text-field">
+          <label :for="feedbackMessageId" class="ris-label2-regular">Feedback</label>
+          <PrimevueTextarea
+            :id="feedbackMessageId"
+            v-model="feedback"
+            :invalid="!isStringEmpty(errorMessage)"
+            class="min-h-160 w-full"
+            placeholder="Feedback eingeben"
+            name="text"
+            @update:model-value="
+              () => {
+                errorMessage = undefined;
+              }
+            "
+          />
+        </div>
+
         <small v-if="errorMessage" data-test-id="feedback-error-message">
           <ErrorOutline />
           {{ errorMessage }}
@@ -135,3 +147,14 @@ const feedbackMessageId = useId();
     </form>
   </div>
 </template>
+
+<style scoped>
+.name-field {
+  position: absolute;
+  left: -5000px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+</style>

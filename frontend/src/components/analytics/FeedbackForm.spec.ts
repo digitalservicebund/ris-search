@@ -152,4 +152,15 @@ describe("FeedbackForm", () => {
       wrapper.find('[data-test-id="feedback-error-message"]').exists(),
     ).toBe(false);
   });
+
+  it("renders the honeypot field hidden from users", async () => {
+    const wrapper = await factory();
+    const honeypotContainer = wrapper.find(".name-field");
+    const honeypotInput = wrapper.find('input[name="name"]');
+
+    expect(honeypotContainer.attributes("aria-hidden")).toBe("true");
+    expect(honeypotInput.attributes("tabindex")).toBe("-1");
+    expect(honeypotInput.attributes("autocomplete")).toBe("off");
+    expect(honeypotContainer.classes()).toContain("name-field");
+  });
 });

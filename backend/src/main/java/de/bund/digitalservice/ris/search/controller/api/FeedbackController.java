@@ -45,7 +45,9 @@ public class FeedbackController {
    * @param url The URL to be sent
    * @param userId The user identifier for PostHog. If the user is not opted for tracking then this
    *     field should be "anonymous_feedback"
-   * @return ResponseEntity with message indicating success or failure
+   * @param honeypot Used to identify bots and prevent submissions to posthog in that case
+   * @return ResponseEntity with message indicating success or failure even if a bot is used so that
+   *     smart bots would not keep on trying or improving their tactics
    */
   @Hidden
   @GetMapping
@@ -63,9 +65,12 @@ public class FeedbackController {
           String url,
       @Parameter(name = "user_id", description = "The user identifier to be sent")
           @RequestParam(value = "user_id")
-          String userId) {
+          String userId,
+      @RequestParam(value = "name", required = false) String honeypot) {
+    if (honeypot == null || honeypot.isEmpty()) {
+      postHogService.sendFeedback(userId, url, text);
+    }
 
-    postHogService.sendFeedback(userId, url, text);
     return ResponseEntity.ok()
         .contentType(MediaType.APPLICATION_JSON)
         .body(Map.of("message", "Feedback sent successfully"));
