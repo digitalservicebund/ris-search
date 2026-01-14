@@ -100,6 +100,7 @@ export default defineNuxtConfig({
     "nuxt-security",
     "@nuxt/scripts",
     "@nuxtjs/sitemap",
+    "@nuxtjs/mdc",
   ],
   devtools: {
     enabled: process.env.CI !== "true",
@@ -269,6 +270,11 @@ export default defineNuxtConfig({
       // use this element while waiting for https://github.com/vuejs/core/pull/9249
       // to be released.
       isCustomElement: (tag) => ["search"].includes(tag),
+    },
+  },
+  mdc: {
+    headings: {
+      anchorLinks: false,
     },
   },
   ignore: [
