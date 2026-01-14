@@ -154,7 +154,7 @@ describe("usePostHog", () => {
     await setTracking(false);
     await sendFeedbackToPostHog("test", "");
     expect(useRisBackendMock).toHaveBeenCalledWith(
-      feedbackURL + "?text=test&url=%2F&user_id=anonymous_feedback_user",
+      feedbackURL + "?text=test&url=%2F&user_id=anonymous_feedback_user&name=",
     );
   });
 
