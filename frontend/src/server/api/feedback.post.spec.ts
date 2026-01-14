@@ -61,7 +61,7 @@ describe("feedback.post", () => {
       text: "Feedback text",
       url: "/custom-page",
       user_id: "user123",
-      name: "honeypot-valu",
+      name: "honeypot-value",
     });
     mockGetHeader.mockReturnValue(undefined);
     mockFetch.mockResolvedValue({});
