@@ -10,7 +10,7 @@ Der Service wird gemeinsam vom Bundesministerium der Justiz und für Verbraucher
 
 Der Service enthält bereits eine erste Auswahl an Gesetzen, Verordnungen und Gerichtsentscheidungen. Während der Testphase kann es noch zu fehlenden Inhalten oder Darstellungsfehlern kommen. Ihr Feedback hilft uns, den Service weiter zu verbessern.
 
-::static-content-status-card-grid{class="my-24"}
+::static-content-status-card-grid{class="no-prose my-24"}
 ::static-content-status-card{status="implemented"}
 #header
 Gesetze und Verordnungen
@@ -51,7 +51,7 @@ mit der unsere Daten direkt abgerufen werden können
 
 Wir entwickeln den Service stetig weiter und arbeiten an folgenden Inhalten und Funktionen:
 
-::static-content-status-card-grid{class="my-24"}
+::static-content-status-card-grid{class="no-prose my-24"}
 ::static-content-status-card{status="in_progress"}
 #header
 Verwaltungsvorschriften

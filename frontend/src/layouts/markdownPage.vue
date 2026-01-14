@@ -21,30 +21,42 @@ const breadcrumbHeadingId = useId();
   </DefaultLayout>
 </template>
 
-<style scoped>
+<style>
 @reference "~/assets/main.css";
 
-.prose {
+/* This uses native CSS scoping rather than Vue's own scoping solution to:
+
+- Avoid having to write :deep all the time
+- Having the ability to limit where typography styles are applied in order to make
+  it possible for custom components used in Markdown to be unaffected by the typography
+  styles defined here.
+
+see: https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/At-rules/@scope */
+@scope (.prose) to (.no-prose) {
   @apply max-w-prose;
-}
 
-.prose :deep(h1) {
-  @apply ris-heading1-regular mt-24 mb-48 hyphens-auto max-sm:leading-48;
-}
+  h1 {
+    @apply ris-heading1-regular mt-24 mb-48 hyphens-auto max-sm:leading-48;
+  }
 
-.prose :deep(h2) {
-  @apply ris-heading2-regular mt-64 mb-16;
-}
+  h2 {
+    @apply ris-heading2-regular mt-64 mb-16;
+  }
 
-.prose :deep(a) {
-  @apply ris-link1-regular;
-}
+  h3 {
+    @apply ris-heading3-regular my-24;
+  }
 
-.prose :deep(:is(p, ul, ol, li)) {
-  @apply my-16;
-}
+  a {
+    @apply ris-link1-regular;
+  }
 
-.prose :deep(:is(ul, ol)) {
-  @apply list-outside list-disc pl-24;
+  :is(p, ul, ol, li) {
+    @apply my-16;
+  }
+
+  :is(ul, ol) {
+    @apply list-outside list-disc pl-24;
+  }
 }
 </style>
