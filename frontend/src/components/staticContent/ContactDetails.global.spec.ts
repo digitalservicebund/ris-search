@@ -1,7 +1,7 @@
 import { renderSuspended } from "@nuxt/test-utils/runtime";
 import { screen } from "@testing-library/vue";
 import { describe, it, expect } from "vitest";
-import ContactDetails from "./ContactDetails.vue";
+import ContactDetails from "./ContactDetails.global.vue";
 
 describe("ContactDetails", () => {
   it("shows contact information", async () => {

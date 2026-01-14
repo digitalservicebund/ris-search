@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import ContactDetails from "~/components/ContactDetails.vue";
 import { useStaticPageSeo } from "~/composables/useStaticPageSeo";
 
 definePageMeta({ alias: ["/kontakt"], layout: false });
@@ -16,7 +15,7 @@ useStaticPageSeo("kontakt");
 
       <template #pageTitle>Kontakt</template>
 
-      <ContactDetails />
+      <StaticContentContactDetails />
     </NuxtLayout>
   </div>
 </template>

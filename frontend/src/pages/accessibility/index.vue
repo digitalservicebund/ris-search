@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import ContactDetails from "~/components/ContactDetails.vue";
 import { useStaticPageSeo } from "~/composables/useStaticPageSeo";
 
 definePageMeta({ alias: ["/barrierefreiheit"], layout: false });
@@ -90,7 +89,7 @@ useStaticPageSeo("barrierefreiheit");
             Umsetzung der Barrierefreiheit erfragen? Schreiben Sie uns gern eine
             Nachricht.
           </p>
-          <ContactDetails />
+          <StaticContentContactDetails />
         </section>
         <section class="space-y-16">
           <h2 class="ris-heading2-regular">Schlichtungsverfahren</h2>
