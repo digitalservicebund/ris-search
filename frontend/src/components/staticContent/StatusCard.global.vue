@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import Badge, { BadgeColor } from "~/components/Badge.vue";
 
+export type StatusCardType = "implemented" | "in_progress" | "planned";
+
 interface Props {
-  header: string;
-  content: string;
   status: StatusCardType;
 }
 
@@ -11,17 +11,17 @@ const props = defineProps<Props>();
 
 const badge = computed(() => {
   switch (props.status) {
-    case StatusCardType.IMPLEMENTED:
+    case "implemented":
       return {
         label: "Erste Version verfügbar",
         color: BadgeColor.GREEN,
       };
-    case StatusCardType.IN_PROGRESS:
+    case "in_progress":
       return {
         label: "In Arbeit",
         color: BadgeColor.YELLOW,
       };
-    case StatusCardType.PLANNED:
+    case "planned":
       return {
         label: "Geplant",
         color: BadgeColor.BLUE,
@@ -32,21 +32,13 @@ const badge = computed(() => {
 });
 </script>
 
-<script lang="ts">
-export enum StatusCardType {
-  IMPLEMENTED,
-  IN_PROGRESS,
-  PLANNED,
-}
-</script>
-
 <template>
   <div class="flex h-full flex-col bg-white p-16">
     <div class="ris-body2-bold">
-      {{ props.header }}
+      <MDCSlot unwrap="p" name="header" />
     </div>
     <div class="ris-body2-regular pt-8 pb-16">
-      {{ props.content }}
+      <MDCSlot unwrap="p" />
     </div>
     <div v-if="badge" class="mt-auto self-start">
       <Badge :label="badge.label" :color="badge.color" />

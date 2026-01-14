@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { StatusCardType } from "~/components/StatusCard.vue";
 import { useStaticPageSeo } from "~/composables/useStaticPageSeo";
 
 definePageMeta({ alias: ["/ueber"], layout: false });
@@ -49,31 +48,28 @@ useStaticPageSeo("ueber");
           <div
             class="grid auto-rows-fr grid-cols-1 gap-24 md:grid-cols-3 lg:-mr-288"
           >
-            <StatusCard
-              header="Gesetze und Verordnungen"
-              content="in der jeweils aktuell gültigen Fassung inklusive Tabellen und Anhängen sowie den wichtigsten Metadaten"
-              :status="StatusCardType.IMPLEMENTED"
-            />
-            <StatusCard
-              header="Gerichtsentscheidungen"
-              content="mit den wichtigsten Metadaten und verlinkten Randnummern"
-              :status="StatusCardType.IMPLEMENTED"
-            />
-            <StatusCard
-              header="Eine umfangreiche Suche"
-              content="die sowohl für gezielte Anfragen als auch für die Volltextsuche geeignet ist"
-              :status="StatusCardType.IMPLEMENTED"
-            />
-            <StatusCard
-              header="XML-Ansichten"
-              content="für Gesetze, Verordnungen und Gerichtsentscheidungen"
-              :status="StatusCardType.IMPLEMENTED"
-            />
-            <StatusCard
-              header="Programmierschnittstelle [API]"
-              content="mit der unsere Daten direkt abgerufen werden können"
-              :status="StatusCardType.IMPLEMENTED"
-            />
+            <StaticContentStatusCard status="implemented">
+              <template #header>Gesetze und Verordnungen</template>
+              in der jeweils aktuell gültigen Fassung inklusive Tabellen und
+              Anhängen sowie den wichtigsten Metadaten
+            </StaticContentStatusCard>
+            <StaticContentStatusCard status="implemented">
+              <template #header>Gerichtsentscheidungen</template>
+              mit den wichtigsten Metadaten und verlinkten Randnummern
+            </StaticContentStatusCard>
+            <StaticContentStatusCard status="implemented">
+              <template #header>Eine umfangreiche Suche</template>
+              die sowohl für gezielte Anfragen als auch für die Volltextsuche
+              geeignet ist
+            </StaticContentStatusCard>
+            <StaticContentStatusCard status="implemented">
+              <template #header>XML-Ansichten</template>
+              für Gesetze, Verordnungen und Gerichtsentscheidungen
+            </StaticContentStatusCard>
+            <StaticContentStatusCard status="implemented">
+              <template #header>Programmierschnittstelle [API]</template>
+              mit der unsere Daten direkt abgerufen werden können
+            </StaticContentStatusCard>
           </div>
         </section>
         <section class="space-y-24">
@@ -85,41 +81,37 @@ useStaticPageSeo("ueber");
           <div
             class="grid max-w-5xl auto-rows-fr grid-cols-1 gap-24 md:grid-cols-3 lg:-mr-288"
           >
-            <StatusCard
-              header="Verwaltungsvorschriften"
-              content="um den Zugang zu allen relevanten Rechtsinformationen zu vervollständigen"
-              :status="StatusCardType.IN_PROGRESS"
-            />
-            <StatusCard
-              header="Optimierung der Suche"
-              content="auf Basis von Nutzerfeedback, um weitere Anwendungsfälle abzudecken"
-              :status="StatusCardType.IN_PROGRESS"
-            />
-            <StatusCard
-              header="Fassungen von Gesetzen"
-              content="einschließlich historischer und noch nicht in Kraft getretener Fassungen"
-              :status="StatusCardType.PLANNED"
-            />
-            <StatusCard
-              header="PDF-Downloads"
-              content="um Dokumente einfacher speichern und teilen zu können"
-              :status="StatusCardType.PLANNED"
-            />
-            <StatusCard
-              header="Nutzungstests zur Barrierefreiheit"
-              content="mit Menschen, die assistive Technologien verwenden"
-              :status="StatusCardType.PLANNED"
-            />
-            <StatusCard
-              header="Optimierung der API-Dokumentation"
-              content="um die API und den Datenstandard genauer zu erklären"
-              :status="StatusCardType.IN_PROGRESS"
-            />
-            <StatusCard
-              header="Englische Übersetzungen"
-              content="einiger ausgewählter Gesetze"
-              :status="StatusCardType.IN_PROGRESS"
-            />
+            <StaticContentStatusCard status="in_progress">
+              <template #header>Verwaltungsvorschriften</template>
+              um den Zugang zu allen relevanten Rechtsinformationen zu
+              vervollständigen
+            </StaticContentStatusCard>
+            <StaticContentStatusCard status="in_progress">
+              <template #header>Optimierung der Suche</template>
+              auf Basis von Nutzerfeedback, um weitere Anwendungsfälle
+              abzudecken
+            </StaticContentStatusCard>
+            <StaticContentStatusCard status="planned">
+              <template #header>Fassungen von Gesetzen</template>
+              einschließlich historischer und noch nicht in Kraft getretener
+              Fassungen
+            </StaticContentStatusCard>
+            <StaticContentStatusCard status="planned">
+              <template #header>PDF-Downloads</template>
+              um Dokumente einfacher speichern und teilen zu können
+            </StaticContentStatusCard>
+            <StaticContentStatusCard status="planned">
+              <template #header>Nutzungstests zur Barrierefreiheit</template>
+              mit Menschen, die assistive Technologien verwenden
+            </StaticContentStatusCard>
+            <StaticContentStatusCard status="in_progress">
+              <template #header>Optimierung der API-Dokumentation</template>
+              um die API und den Datenstandard genauer zu erklären
+            </StaticContentStatusCard>
+            <StaticContentStatusCard status="in_progress">
+              <template #header>Englische Übersetzungen</template>
+              einiger ausgewählter Gesetze
+            </StaticContentStatusCard>
           </div>
           <div>
             Ihnen fehlen noch Funktionen?
