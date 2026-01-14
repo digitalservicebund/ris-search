@@ -211,4 +211,3 @@ useStaticPageSeo("cookies");
     </NuxtLayout>
   </div>
 </template>
-
