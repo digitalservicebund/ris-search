@@ -1,15 +1,13 @@
 <script setup lang="ts">
+import text from "./content.md?raw";
+
 definePageMeta({ alias: ["/einfuehrung"], layout: false });
 </script>
 
 <template>
-  <div>
-    <NuxtLayout name="static-page">
-      <template #breadcrumb>
-        <Breadcrumbs :items="[{ label: 'Einführende Informationen' }]" />
-      </template>
-
-      <template #pageTitle>Einführende Informationen</template>
-    </NuxtLayout>
-  </div>
+  <NuxtLayout name="markdown-page" :static-content="text">
+    <template #breadcrumb>
+      <Breadcrumbs :items="[{ label: 'Einführende Informationen' }]" />
+    </template>
+  </NuxtLayout>
 </template>

@@ -5,7 +5,6 @@ import { ExternalLink, NuxtLink } from "#components";
 import bmjvLogo from "~/assets/img/BMJV_de_v1__Web_farbig.svg";
 import SimpleSearchInput from "~/components/search/SimpleSearchInput.vue";
 import { usePrivateFeaturesFlag } from "~/composables/usePrivateFeaturesFlag";
-import { useStaticPageSeo } from "~/composables/useStaticPageSeo";
 
 function redirectToSearch(searchStr?: string) {
   navigateTo({ name: "search", query: searchStr ? { query: searchStr } : {} });

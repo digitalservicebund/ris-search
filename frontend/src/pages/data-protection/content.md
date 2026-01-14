@@ -1,6 +1,6 @@
 # Datenschutzerklärung
 
-Zuletzt aktualisiert: [23. April 2025]
+Zuletzt aktualisiert: 23. April 2025
 
 Für das Bundesministerium der Justiz und für Verbraucherschutz (BMJV) hat der Schutz personenbezogener Daten einen hohen Stellenwert. Auf dieser Seite informieren wir Sie über die Verarbeitung Ihrer personenbezogenen Daten, wenn Sie
 
