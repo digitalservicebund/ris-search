@@ -1,11 +1,4 @@
 <script setup lang="ts">
-/**
- * Displays the cookie consent status and provides controls to change it.
- *
- * This component shows whether the user has accepted or declined analytics cookies
- * and provides buttons to toggle the consent setting. It integrates with PostHog
- * for analytics tracking.
- */
 import PrimeVueButton from "primevue/button";
 import Message from "primevue/message";
 import { CONSENT_COOKIE_NAME, usePostHog } from "~/composables/usePostHog";

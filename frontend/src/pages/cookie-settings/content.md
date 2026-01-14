@@ -2,7 +2,7 @@
 
 ## Sind Sie mit der Nutzung von Analyse-Cookies einverstanden?
 
-> TODO: Custom component
+:static-content-consent-status{class="no-prose my-24"}
 
 Nachfolgend informieren wir Sie darüber, welche Cookies auf der Webseite **testphase.rechtsinformationen.bund.de** eingesetzt werden. Cookies sind kleine Textdateien, die auf dem Datenträger des Nutzenden gespeichert werden und über den Browser bestimmte Einstellungen und Daten mit dem System des BMJ austauschen.
 
