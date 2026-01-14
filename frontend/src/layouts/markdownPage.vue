@@ -47,6 +47,10 @@ see: https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/At-rules/@scope 
     @apply ris-heading3-regular my-24;
   }
 
+  h4 {
+    @apply ris-subhead-bold mt-32 mb-8;
+  }
+
   a {
     @apply ris-link1-regular;
   }
