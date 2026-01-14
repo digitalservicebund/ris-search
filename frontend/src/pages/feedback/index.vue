@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import FeedbackForm from "~/components/analytics/FeedbackForm.vue";
 import { useStaticPageSeo } from "~/composables/useStaticPageSeo";
 
 definePageMeta({ layout: false });
@@ -33,7 +32,7 @@ useStaticPageSeo("feedback");
         <li>Bitte geben Sie keine persönlichen Daten an.</li>
       </ul>
 
-      <FeedbackForm hide-intro class="mt-24" />
+      <AnalyticsFeedbackForm hide-intro class="mt-24" />
     </NuxtLayout>
   </div>
 </template>

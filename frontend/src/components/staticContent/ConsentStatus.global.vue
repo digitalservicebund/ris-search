@@ -39,9 +39,7 @@ async function handleSetTracking(value: boolean) {
           <p class="ris-body2-bold">
             Ich bin mit der Nutzung von Analyse-Cookies nicht einverstanden.
           </p>
-          <p>
-            Ihre Nutzung des Portals wird nicht zu Analysezwecken erfasst.
-          </p>
+          <p>Ihre Nutzung des Portals wird nicht zu Analysezwecken erfasst.</p>
         </div>
         <template #fallback>
           <div v-if="userConsent">
