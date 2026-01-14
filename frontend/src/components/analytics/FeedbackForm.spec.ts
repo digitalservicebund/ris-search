@@ -19,7 +19,9 @@ function getErrorMessage(wrapper: VueWrapper) {
   return wrapper.find('[data-test-id="feedback-error-message"]').text();
 }
 
-function mockSendFeedbackToPostHog(mockedSend: () => Promise<void>) {
+function mockSendFeedbackToPostHog(
+  mockedSend: (text: string, honeypot: string) => Promise<void>,
+) {
   vi.doMock("~/composables/usePostHog", () => ({
     usePostHog: () => ({
       sendFeedbackToPostHog: mockedSend,
@@ -162,5 +164,20 @@ describe("FeedbackForm", () => {
     expect(honeypotInput.attributes("tabindex")).toBe("-1");
     expect(honeypotInput.attributes("autocomplete")).toBe("off");
     expect(honeypotContainer.classes()).toContain("name-field");
+  });
+
+  it("passes the honeypot value to the sendFeedbackToPostHog function", async () => {
+    const mockedSend = vi.fn().mockResolvedValue(undefined);
+    mockSendFeedbackToPostHog(mockedSend);
+
+    const wrapper = await factory();
+
+    await fillFeedbackForm(wrapper, "Real feedback");
+
+    const honeypotInput = wrapper.find('input[name="name"]');
+    await honeypotInput.setValue("I am a bot");
+
+    await clickSubmit(wrapper);
+    expect(mockedSend).toHaveBeenCalledWith("Real feedback", "I am a bot");
   });
 });

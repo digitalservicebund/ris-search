@@ -143,16 +143,16 @@ describe("usePostHog", () => {
       value: '{"distinct_id":"12345"}',
     });
     await setTracking(true);
-    await sendFeedbackToPostHog("good");
+    await sendFeedbackToPostHog("good", "bot-trap-value");
     expect(useRisBackendMock).toHaveBeenCalledWith(
-      feedbackURL + "?text=good&url=%2F&user_id=12345",
+      feedbackURL + "?text=good&url=%2F&user_id=12345&name=bot-trap-value",
     );
   });
 
   it("sendFeedbackToPostHog sends the data to backend as anonymous user when the user disables tracking", async () => {
     const { setTracking, sendFeedbackToPostHog } = usePostHog();
     await setTracking(false);
-    await sendFeedbackToPostHog("test");
+    await sendFeedbackToPostHog("test", "");
     expect(useRisBackendMock).toHaveBeenCalledWith(
       feedbackURL + "?text=test&url=%2F&user_id=anonymous_feedback_user",
     );

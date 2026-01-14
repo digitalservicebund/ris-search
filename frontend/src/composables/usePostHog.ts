@@ -85,15 +85,17 @@ export function usePostHog() {
    * Sends user feedback to the backend.
    *
    * @param text - The feedback text from the user
+   * @param honeypot - A field used for reducing spam sent to posthog
    * @throws Error if the backend request fails
    */
-  async function sendFeedbackToPostHog(text: string) {
+  async function sendFeedbackToPostHog(text: string, honeypot: string) {
     const userId = await getUserPostHogId();
 
     const params = new URLSearchParams({
       text: text,
       url: router.currentRoute.value.fullPath,
       user_id: userId,
+      name: honeypot,
     });
     const { error } = await useRisBackend(`/v1/feedback?${params.toString()}`);
 

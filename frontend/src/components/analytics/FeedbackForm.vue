@@ -10,6 +10,7 @@ const { sendFeedbackToPostHog } = usePostHog();
 const honeypotId = useId();
 const feedbackMessageId = useId();
 const feedback = ref("");
+const honeypot = ref("");
 const errorMessage: Ref<string | undefined> = ref();
 const isSent = ref(false);
 const emptyMessageError = "Geben Sie Ihr Feedback in das obere Textfeld ein.";
@@ -23,7 +24,7 @@ const submitFeedback = async () => {
     return;
   }
   try {
-    await sendFeedbackToPostHog(feedback.value);
+    await sendFeedbackToPostHog(feedback.value, honeypot.value);
     isSent.value = true;
   } catch {
     errorMessage.value = sendingError;
@@ -107,6 +108,7 @@ watch(
           <label :for="honeypotId">Name</label>
           <input
             :id="honeypotId"
+            v-model="honeypot"
             type="text"
             name="name"
             tabindex="-1"
