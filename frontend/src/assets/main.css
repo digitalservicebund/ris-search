@@ -23,20 +23,6 @@
   @apply no-underline hover:underline;
 }
 
-@utility list-custom {
-  li {
-    @apply relative ml-56;
-  }
-  li:before {
-    @apply absolute -left-56 flex size-40 items-center justify-center rounded-full border-2 border-gray-400;
-    content: counter(list-item);
-  }
-}
-
-@utility list-bullet {
-  @apply ml-24 list-outside list-disc space-y-16;
-}
-
 mark {
   @apply bg-yellow-200;
 }
