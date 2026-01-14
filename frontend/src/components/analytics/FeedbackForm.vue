@@ -115,7 +115,9 @@ watch(
         </div>
 
         <div class="text-field">
-          <label :for="feedbackMessageId" class="ris-label2-regular">Feedback</label>
+          <label :for="feedbackMessageId" class="ris-label2-regular"
+            >Feedback</label
+          >
           <PrimevueTextarea
             :id="feedbackMessageId"
             v-model="feedback"
