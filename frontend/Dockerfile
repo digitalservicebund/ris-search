@@ -1,19 +1,17 @@
-FROM node:22.17.0-alpine3.22 AS build
-
+FROM node:24.13.0-alpine3.22 AS build
 RUN apk update && apk upgrade
-
 WORKDIR /app
 COPY .yarn/releases/yarn-4.9.2.cjs .yarn/releases/yarn-4.9.2.cjs
 COPY package.json yarn.lock .yarnrc.yml ./
 RUN yarn install --immutable
 COPY playwright.config.ts nuxt.config.ts nuxt.config.d.ts tsconfig.json \
-    eslint.config.mjs sentry.server.config.ts ./
+  eslint.config.mjs sentry.server.config.ts ./
 COPY src ./src
 RUN yarn run prepare && NODE_OPTIONS="--max-old-space-size=4096" yarn build
 
-FROM node:22.17.0-alpine3.22
+FROM node:24.13.0-alpine3.22
 RUN apk update && apk upgrade && apk add dumb-init && apk cache clean && \
-    rm -r /usr/local/lib/node_modules/npm/node_modules/cross-spawn
+  rm -r /usr/local/lib/node_modules/npm/node_modules/cross-spawn
 USER node
 WORKDIR /app
 COPY --chown=node:node --from=build /app/.output/server ./server
