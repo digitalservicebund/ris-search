@@ -36,19 +36,23 @@ see: https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/At-rules/@scope 
   @apply max-w-prose;
 
   h1 {
-    @apply ris-heading1-regular mt-24 mb-48 hyphens-auto max-sm:leading-48;
+    @apply ris-heading1-regular pt-32 pb-24 hyphens-auto max-sm:leading-48;
   }
 
   h2 {
-    @apply ris-heading2-regular mt-64 mb-16;
+    @apply ris-heading2-regular py-24;
   }
 
   h3 {
-    @apply ris-heading3-regular my-24;
+    @apply ris-heading3-regular py-16;
   }
 
   h4 {
-    @apply ris-subhead-bold mt-32 mb-8;
+    @apply ris-subhead-bold py-8;
+  }
+
+  h5 {
+    @apply ris-body1-bold pb-8;
   }
 
   a {
@@ -56,7 +60,7 @@ see: https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/At-rules/@scope 
   }
 
   :is(p, ul, ol, li) {
-    @apply my-16;
+    @apply pb-16;
   }
 
   :is(ul, ol) {
