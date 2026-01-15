@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import bmjvLogo from "~/assets/img/BMJV_de_v1__Web_farbig.svg";
-import FeedbackForm from "~/components/analytics/FeedbackForm.vue";
 import BackToTopLink from "~/components/app/BackToTopLink.vue";
 import { usePrivateFeaturesFlag } from "~/composables/usePrivateFeaturesFlag";
 
@@ -11,7 +10,7 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
 
 <template>
   <footer class="relative container flex flex-col gap-80 py-80 print:hidden">
-    <FeedbackForm v-if="!hideFeedbackForm" />
+    <AnalyticsFeedbackForm v-if="!hideFeedbackForm" />
 
     <div class="grid grid-cols-1 gap-48 md:grid-cols-2">
       <div class="space-y-16">

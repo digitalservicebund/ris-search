@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/vue";
-import StatusCard, { StatusCardType } from "./StatusCard.vue";
+import StatusCard, { type StatusCardType } from "./StatusCard.global.vue";
 
 const factory = (
   status: StatusCardType,
@@ -7,31 +7,32 @@ const factory = (
   content: string = "Test Content",
 ) =>
   render(StatusCard, {
-    props: {
+    props: { status },
+    slots: {
       header: header,
-      content: content,
-      status: status,
+      default: content,
     },
   });
+
 describe("StatusCard", () => {
-  it("renders correctly with given props", () => {
-    factory(StatusCardType.IMPLEMENTED);
+  it("renders header and default slots", () => {
+    factory("implemented");
     expect(screen.getByText("Test Header")).toBeInTheDocument();
     expect(screen.getByText("Test Content")).toBeInTheDocument();
   });
 
   it("displays the correct label for IMPLEMENTED status", () => {
-    factory(StatusCardType.IMPLEMENTED);
+    factory("implemented");
     expect(screen.getByText("Erste Version verfügbar")).toBeInTheDocument();
   });
 
   it("displays the correct label for IN_PROGRESS status", () => {
-    factory(StatusCardType.IN_PROGRESS);
+    factory("in_progress");
     expect(screen.getByText("In Arbeit")).toBeInTheDocument();
   });
 
   it("displays the correct label for PLANNED status", () => {
-    factory(StatusCardType.PLANNED);
+    factory("planned");
     expect(screen.getByText("Geplant")).toBeInTheDocument();
   });
 });

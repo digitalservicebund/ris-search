@@ -32,7 +32,7 @@ function mockSendFeedbackToPostHog(
 const factory = async () => {
   // Dynamically import the component to be able to mock other imports the component depends on
   // a per-test basis
-  const { default: FeedbackForm } = await import("./FeedbackForm.vue");
+  const { default: FeedbackForm } = await import("./FeedbackForm.global.vue");
   return mount(FeedbackForm, {
     global: {
       stubs: {
@@ -116,7 +116,7 @@ describe("FeedbackForm", () => {
   });
 
   it("hides intro when hideIntro prop is true", async () => {
-    const { default: FeedbackForm } = await import("./FeedbackForm.vue");
+    const { default: FeedbackForm } = await import("./FeedbackForm.global.vue");
     const wrapper = mount(FeedbackForm, {
       props: { hideIntro: true },
       global: {

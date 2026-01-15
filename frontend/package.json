@@ -30,6 +30,7 @@
   "dependencies": {
     "@digitalservicebund/ris-ui": "^3.20.0",
     "@nuxt/image": "^1.10.0",
+    "@nuxtjs/mdc": "0.19.2",
     "@nuxtjs/sitemap": "^7.4.3",
     "@scalar/api-reference": "^1.40.9",
     "@sentry/nuxt": "^10.29.0",
@@ -37,6 +38,8 @@
     "dayjs": "^1.11.13",
     "lodash": "^4.17.21",
     "minisearch": "^7.1.2",
+    "nuxt": "^4.1.3",
+    "nuxt-security": "2.2.0",
     "posthog-js": "^1.315.1",
     "primevue": "^4.5.3",
     "sanitize-html": "^2.17.0"
@@ -68,8 +71,6 @@
     "jsdom": "^27.4.0",
     "license-checker-rseidelsohn": "^4.4.2",
     "lighthouse": "^12.8.2",
-    "nuxt": "^4.1.3",
-    "nuxt-security": "2.2.0",
     "playwright-lighthouse": "^4.0.0",
     "prettier": "^3.7.4",
     "prettier-plugin-tailwindcss": "^0.7.2",
