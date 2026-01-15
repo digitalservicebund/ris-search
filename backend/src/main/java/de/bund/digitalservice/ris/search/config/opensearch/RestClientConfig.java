@@ -1,5 +1,6 @@
 package de.bund.digitalservice.ris.search.config.opensearch;
 
+import lombok.Generated;
 import org.apache.hc.core5.reactor.IOReactorConfig;
 import org.opensearch.client.RestHighLevelClient;
 import org.opensearch.data.client.orhlc.AbstractOpenSearchConfiguration;
@@ -15,7 +16,7 @@ import org.springframework.data.elasticsearch.core.convert.ElasticsearchConverte
 import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories;
 
 /** Class to configure the REST client which connects to opensearch in production without ssl. */
-@SuppressWarnings("java:S*")
+@Generated
 @Configuration
 @Profile({"staging", "uat", "prototype"})
 @EnableElasticsearchRepositories(
