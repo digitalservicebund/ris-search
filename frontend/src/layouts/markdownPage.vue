@@ -33,7 +33,9 @@ const breadcrumbHeadingId = useId();
 
 see: https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/At-rules/@scope */
 @scope (.prose) to (.no-prose) {
-  @apply max-w-prose;
+  :scope {
+    @apply max-w-prose;
+  }
 
   h1 {
     @apply ris-heading1-regular pt-32 pb-24 hyphens-auto max-sm:leading-48;
