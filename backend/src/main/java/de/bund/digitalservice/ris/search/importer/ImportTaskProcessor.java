@@ -14,6 +14,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 /**
@@ -21,6 +22,7 @@ import org.springframework.stereotype.Component;
  *
  * <p>Parses task targets from args and executes corresponding sync or update jobs.
  */
+@Profile({"default", "staging", "uat", "test", "prototype"})
 @Component
 public class ImportTaskProcessor {
 
