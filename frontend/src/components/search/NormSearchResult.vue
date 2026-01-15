@@ -59,7 +59,7 @@ const formattedDate = computed(() => {
 const relevantHighlights = computed(() => {
   return highlights.value
     .filter((highlight) => highlight.name != "name")
-    .map((hl) => ({ ...hl, text: addEllipsis(hl.text) }));
+    .map((hl) => ({ ...hl, text: addEllipsis(hl.text) }) as TextMatch);
 });
 
 function openResult(url: string) {
@@ -79,6 +79,9 @@ const headerItems = computed<SearchResultHeaderItem[]>(() => {
     { value: formattedDate.value },
   ].filter((item): item is SearchResultHeaderItem => item.value !== undefined);
 });
+
+const getArticleUrl = (highlight: TextMatch) =>
+  `${link.value}/${highlight.location ? encodeForUri(highlight.location) : ""}`;
 </script>
 
 <template>
@@ -111,13 +114,8 @@ const headerItems = computed<SearchResultHeaderItem[]>(() => {
         <div class="ris-label1-bold">
           <NuxtLink
             class="link-hover text-blue-800"
-            :to="{
-              path: `${link}`,
-              hash: highlight.location
-                ? `#${encodeForUri(highlight.location)}`
-                : undefined,
-            }"
-            @click="openResult(`${link}#${highlight.location || ''}`)"
+            :to="getArticleUrl(highlight)"
+            @click="openResult(getArticleUrl(highlight))"
           >
             <h3 v-html="sanitizeSearchResult(highlight.name)" />
           </NuxtLink>

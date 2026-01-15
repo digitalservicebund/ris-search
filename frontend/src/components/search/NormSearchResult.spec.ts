@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/vue";
-import { describe, expect, it, vi } from "vitest";
+import { describe, expect, it, vi, beforeEach, afterEach } from "vitest";
 import NormSearchResult from "./NormSearchResult.vue";
 import type { LegislationWork, SearchResult, TextMatch } from "~/types";
 
@@ -71,8 +71,7 @@ function renderComponent(
     global: {
       stubs: {
         NuxtLink: {
-          template:
-            '<a :href="to?.path ? (to?.path + to?.hash) : to"><slot /></a>',
+          template: '<a :href="to"><slot /></a>',
           props: ["to"],
         },
       },
@@ -235,7 +234,7 @@ describe("NormSearchResult", () => {
     const articleHeading = screen.getByText("Article 1");
     expect(articleHeading).toBeInTheDocument();
     const link = articleHeading.closest("a");
-    expect(link?.getAttribute("href")).contains("#PraeoeueAeOeUeambel");
+    expect(link?.getAttribute("href")).contains("/PraeoeueAeOeUeambel");
   });
 
   describe("validity status badge", () => {
