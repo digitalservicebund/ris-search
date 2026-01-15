@@ -6,16 +6,13 @@ import { appHead } from "./config/appHead";
 import { routeRules } from "./config/routeRules";
 import { runtimeConfig } from "./config/runtimeConfig";
 import { security } from "./config/security";
-import { sentry, sentryEnabled } from "./config/sentry";
+import { sentry } from "./config/sentry";
 import { sitemap } from "./config/sitemap";
 import { getStringOrDefault } from "./src/utils/textFormatting";
-
-const devMode = process.env.NODE_ENV === "development";
 
 export default defineNuxtConfig({
   // Nuxt core settings
   compatibilityDate: "2024-11-01",
-  extends: [],
   modules: [
     "@nuxt/image",
     "@nuxt/eslint",
@@ -52,9 +49,6 @@ export default defineNuxtConfig({
 
   // Build
   vite: {
-    build: {
-      sourcemap: "inline",
-    },
     plugins: [
       tailwindcss(),
       Icons({
@@ -64,13 +58,6 @@ export default defineNuxtConfig({
         },
       }),
     ],
-  },
-  nitro: {
-    rollupConfig: {
-      output: {
-        sourcemap: "hidden",
-      },
-    },
   },
   typescript: {
     typeCheck: process.env.CI !== "true",
@@ -84,8 +71,8 @@ export default defineNuxtConfig({
     },
   },
   sourcemap: {
-    server: true,
-    client: sentryEnabled ? "hidden" : devMode,
+    server: "hidden",
+    client: "hidden",
   },
   vue: {
     compilerOptions: {
