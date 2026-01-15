@@ -1,7 +1,7 @@
 import type { NuxtConfig } from "nuxt/schema";
+import { isDevelopment } from "./shared";
 
-const devMode = process.env.NODE_ENV === "development";
-const secureCookie = !devMode;
+const secureCookie = !isDevelopment;
 
 /** Configuration for the runtimeConfig section of Nuxt config. */
 export const runtimeConfig: NuxtConfig["runtimeConfig"] = {
