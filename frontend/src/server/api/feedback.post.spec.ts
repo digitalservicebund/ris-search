@@ -39,7 +39,7 @@ describe("feedback.post", () => {
     } as unknown as H3Event<EventHandlerRequest>;
   });
 
-  it("forwards feedback and empty honeypot to the backend by defauly", async () => {
+  it("forwards feedback and empty honeypot to the backend by default", async () => {
     mockReadBody.mockResolvedValue({ text: "Great app!" });
     mockGetHeader.mockReturnValue("https://example.com/search?query=test");
     mockGetRequestURL.mockReturnValue(

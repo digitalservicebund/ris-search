@@ -154,11 +154,6 @@ watch(
 
 <style scoped>
 .name-field {
-  position: absolute;
-  left: -5000px;
-  top: auto;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
+  @apply sr-only;
 }
 </style>
