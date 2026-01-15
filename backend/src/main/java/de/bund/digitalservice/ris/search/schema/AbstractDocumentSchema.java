@@ -26,12 +26,17 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
  * <p>The use of @JsonTypeInfo and @JsonSubTypes annotations allows the application to handle
  * instances of this interface seamlessly during JSON serialization and deserialization processes.
  */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "@type")
+@JsonTypeInfo(
+    use = JsonTypeInfo.Id.NAME,
+    include = JsonTypeInfo.As.EXISTING_PROPERTY,
+    property = "@type")
 @JsonSubTypes({
-  @JsonSubTypes.Type(value = CaseLawSearchSchema.class),
-  @JsonSubTypes.Type(value = LiteratureSearchSchema.class),
-  @JsonSubTypes.Type(value = LegislationWorkSearchSchema.class),
-  @JsonSubTypes.Type(value = AdministrativeDirectiveSearchSchema.class)
+  @JsonSubTypes.Type(value = CaseLawSearchSchema.class, name = "Decision"),
+  @JsonSubTypes.Type(value = LiteratureSearchSchema.class, name = "Literature"),
+  @JsonSubTypes.Type(value = LegislationWorkSearchSchema.class, name = "Legislation"),
+  @JsonSubTypes.Type(
+      value = AdministrativeDirectiveSearchSchema.class,
+      name = "AdministrativeDirective")
 })
 public sealed interface AbstractDocumentSchema
     permits CaseLawSearchSchema,
