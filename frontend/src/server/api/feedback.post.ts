@@ -59,6 +59,7 @@ export default defineEventHandler(async (event) => {
       text: body.text,
       url: body.url || currentUrl,
       user_id: body.user_id || "anonymous_feedback_user",
+      name: body.name || "",
     });
 
     await $fetch(useBackendUrl(`/v1/feedback?${params.toString()}`));
@@ -72,7 +73,12 @@ export default defineEventHandler(async (event) => {
     // This catches network errors, HTTP errors etc
     // We redirect the user with error status so they see feedback was not sent
     console.error("Failed to submit feedback:", error, {
-      body: { text: body.text, url: body.url, user_id: body.user_id },
+      body: {
+        text: body.text,
+        url: body.url,
+        user_id: body.user_id,
+        name: body.name,
+      },
     });
     return sendRedirect(
       event,

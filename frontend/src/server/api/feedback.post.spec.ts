@@ -39,7 +39,7 @@ describe("feedback.post", () => {
     } as unknown as H3Event<EventHandlerRequest>;
   });
 
-  it("forwards feedback to backend", async () => {
+  it("forwards feedback and empty honeypot to the backend by default", async () => {
     mockReadBody.mockResolvedValue({ text: "Great app!" });
     mockGetHeader.mockReturnValue("https://example.com/search?query=test");
     mockGetRequestURL.mockReturnValue(
@@ -51,16 +51,17 @@ describe("feedback.post", () => {
 
     expect(mockFetch).toHaveBeenCalledWith(
       useBackendUrl(
-        "/v1/feedback?text=Great+app%21&url=%2Fsearch%3Fquery%3Dtest&user_id=anonymous_feedback_user",
+        "/v1/feedback?text=Great+app%21&url=%2Fsearch%3Fquery%3Dtest&user_id=anonymous_feedback_user&name=",
       ),
     );
   });
 
-  it("uses provided url and user_id from form body", async () => {
+  it("uses provided url, user_id and honeypot value from form body", async () => {
     mockReadBody.mockResolvedValue({
       text: "Feedback text",
       url: "/custom-page",
       user_id: "user123",
+      name: "honeypot-value",
     });
     mockGetHeader.mockReturnValue(undefined);
     mockFetch.mockResolvedValue({});
@@ -69,7 +70,7 @@ describe("feedback.post", () => {
 
     expect(mockFetch).toHaveBeenCalledWith(
       useBackendUrl(
-        "/v1/feedback?text=Feedback+text&url=%2Fcustom-page&user_id=user123",
+        "/v1/feedback?text=Feedback+text&url=%2Fcustom-page&user_id=user123&name=honeypot-value",
       ),
     );
   });
@@ -112,7 +113,7 @@ describe("feedback.post", () => {
 
     expect(mockFetch).toHaveBeenCalledWith(
       useBackendUrl(
-        "/v1/feedback?text=Feedback&url=%2Fpage%3Fparam%3Dvalue&user_id=anonymous_feedback_user",
+        "/v1/feedback?text=Feedback&url=%2Fpage%3Fparam%3Dvalue&user_id=anonymous_feedback_user&name=",
       ),
     );
   });
