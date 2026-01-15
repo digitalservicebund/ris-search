@@ -15,8 +15,9 @@ import org.springframework.data.elasticsearch.core.convert.ElasticsearchConverte
 import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories;
 
 /** Class to configure the REST client which connects to opensearch in production without ssl. */
+@SuppressWarnings("java:S*")
 @Configuration
-@Profile({"stackit"})
+@Profile({"production"})
 @EnableElasticsearchRepositories(
     basePackages = "de.bund.digitalservice.ris.search.repository.opensearch")
 public class RestClientConfigStackit extends AbstractOpenSearchConfiguration {
