@@ -16,10 +16,10 @@ import org.springframework.data.elasticsearch.repository.config.EnableElasticsea
 
 /** Class to configure the REST client which connects to opensearch in production without ssl. */
 @Configuration
-@Profile({"staging", "uat", "prototype"})
+@Profile({"production"})
 @EnableElasticsearchRepositories(
     basePackages = "de.bund.digitalservice.ris.search.repository.opensearch")
-public class RestClientConfig extends AbstractOpenSearchConfiguration {
+public class RestClientConfigStackit extends AbstractOpenSearchConfiguration {
 
   private final Configurations configurationsOpensearch;
   private final OpensearchSchemaSetup schemaSetup;
@@ -32,7 +32,7 @@ public class RestClientConfig extends AbstractOpenSearchConfiguration {
    * @param schemaSetup the object responsible for setting up and updating the OpenSearch schema.
    */
   @Autowired
-  public RestClientConfig(
+  public RestClientConfigStackit(
       Configurations configurationsOpensearch, OpensearchSchemaSetup schemaSetup) {
     this.configurationsOpensearch = configurationsOpensearch;
     this.schemaSetup = schemaSetup;
@@ -52,7 +52,11 @@ public class RestClientConfig extends AbstractOpenSearchConfiguration {
                 this.configurationsOpensearch.getHost()
                     + ":"
                     + this.configurationsOpensearch.getPort())
+            .usingSsl()
             .withClientConfigurer(keepAliveCallback)
+            .withBasicAuth(
+                this.configurationsOpensearch.getUsername(),
+                this.configurationsOpensearch.getPassword())
             .build();
 
     RestHighLevelClient restHighLevelClient =

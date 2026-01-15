@@ -44,7 +44,8 @@ sonar {
         property("sonar.projectKey", "digitalservicebund_ris-search-backend")
         property("sonar.organization", "digitalservicebund")
         property("sonar.host.url", "https://sonarcloud.io")
-        property("sonar.coverage.exclusions", "**/config/**, ,**/e2e/**, **/CustomErrorController.java")
+        property("sonar.coverage.exclusions", "**/config/**, **/e2e/**, **/CustomErrorController.java, **/RestClientConfigStackit.java")
+        property("sonar.cpd.exclusions", "**/RestClientConfigStackit.java")
     }
 }
 
