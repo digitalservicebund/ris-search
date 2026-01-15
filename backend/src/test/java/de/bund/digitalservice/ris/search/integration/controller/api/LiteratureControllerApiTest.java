@@ -192,7 +192,8 @@ class LiteratureControllerApiTest extends ContainersIntegrationBase {
         .andExpect(
             jsonPath(
                 "$.member[0]['textMatches'][*]['text']",
-                Matchers.hasItem("Einführung in das <mark>%s</mark>".formatted(searchTerm))));
+                Matchers.hasItem(
+                    "Literatur. Einführung in das <mark>%s</mark>".formatted(searchTerm))));
   }
 
   @Test

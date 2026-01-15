@@ -12,9 +12,6 @@ import org.opensearch.search.fetch.subphase.highlight.HighlightBuilder;
 /** Simple search type for administrative directives. */
 public class AdministrativeDirectiveSimpleSearchType implements SimpleSearchType {
 
-  private static final List<String> HIGHLIGHT_CONTENT_FIELDS =
-      List.of(AdministrativeDirective.Fields.SHORT_REPORT, AdministrativeDirective.Fields.HEADLINE);
-
   private final AdministrativeDirectiveSearchParams searchParams;
 
   public AdministrativeDirectiveSimpleSearchType(AdministrativeDirectiveSearchParams searchParams) {
@@ -32,7 +29,9 @@ public class AdministrativeDirectiveSimpleSearchType implements SimpleSearchType
   }
 
   public static List<HighlightBuilder.Field> getHighlightedFieldsStatic() {
-    return HIGHLIGHT_CONTENT_FIELDS.stream().map(HighlightBuilder.Field::new).toList();
+    return List.of(
+        new HighlightBuilder.Field(AdministrativeDirective.Fields.HEADLINE).numOfFragments(0),
+        new HighlightBuilder.Field(AdministrativeDirective.Fields.SHORT_REPORT));
   }
 
   /**

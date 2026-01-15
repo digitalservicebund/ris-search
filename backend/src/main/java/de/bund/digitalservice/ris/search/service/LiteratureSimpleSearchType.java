@@ -14,12 +14,6 @@ import org.opensearch.search.fetch.subphase.highlight.HighlightBuilder;
 /** Service class for interacting with the database and return the search results. */
 public class LiteratureSimpleSearchType implements SimpleSearchType {
 
-  private static final List<String> LITERATURE_HIGHLIGHT_CONTENT_FIELDS =
-      List.of(
-          Literature.Fields.MAIN_TITLE,
-          Literature.Fields.DOCUMENTARY_TITLE,
-          Literature.Fields.SHORT_REPORT);
-
   private static final List<String> LITERATURE_FETCH_EXCLUDED_FIELDS =
       List.of(Literature.Fields.OUTLINE);
 
@@ -30,7 +24,10 @@ public class LiteratureSimpleSearchType implements SimpleSearchType {
   }
 
   public static List<HighlightBuilder.Field> getHighlightedFieldsStatic() {
-    return LITERATURE_HIGHLIGHT_CONTENT_FIELDS.stream().map(HighlightBuilder.Field::new).toList();
+    return List.of(
+        new HighlightBuilder.Field(Literature.Fields.MAIN_TITLE).numOfFragments(0),
+        new HighlightBuilder.Field(Literature.Fields.DOCUMENTARY_TITLE).numOfFragments(0),
+        new HighlightBuilder.Field(Literature.Fields.SHORT_REPORT));
   }
 
   @Override

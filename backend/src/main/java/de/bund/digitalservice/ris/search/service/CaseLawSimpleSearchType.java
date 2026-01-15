@@ -18,20 +18,6 @@ import org.opensearch.search.fetch.subphase.highlight.HighlightBuilder;
 /** Simple search type for case law. */
 public class CaseLawSimpleSearchType implements SimpleSearchType {
 
-  private static final List<String> CASE_LAW_HIGHLIGHT_CONTENT_FIELDS =
-      List.of(
-          CaseLawDocumentationUnit.Fields.HEADLINE,
-          CaseLawDocumentationUnit.Fields.GUIDING_PRINCIPLE,
-          CaseLawDocumentationUnit.Fields.HEADNOTE,
-          CaseLawDocumentationUnit.Fields.OTHER_HEADNOTE,
-          CaseLawDocumentationUnit.Fields.OUTLINE,
-          CaseLawDocumentationUnit.Fields.TENOR,
-          CaseLawDocumentationUnit.Fields.CASE_FACTS,
-          CaseLawDocumentationUnit.Fields.DECISION_GROUNDS,
-          CaseLawDocumentationUnit.Fields.GROUNDS,
-          CaseLawDocumentationUnit.Fields.OTHER_LONG_TEXT,
-          CaseLawDocumentationUnit.Fields.DISSENTING_OPINION);
-
   private static final List<String> CASE_LAW_FETCH_EXCLUDED_FIELDS =
       List.of(
           CaseLawDocumentationUnit.Fields.CASE_FACTS,
@@ -62,7 +48,18 @@ public class CaseLawSimpleSearchType implements SimpleSearchType {
    */
   public static List<HighlightBuilder.Field> getHighlightedFieldsStatic() {
     Stream<HighlightBuilder.Field> contentFields =
-        CASE_LAW_HIGHLIGHT_CONTENT_FIELDS.stream().map(HighlightBuilder.Field::new);
+        Stream.of(
+            new HighlightBuilder.Field(CaseLawDocumentationUnit.Fields.HEADLINE).numOfFragments(0),
+            new HighlightBuilder.Field(CaseLawDocumentationUnit.Fields.GUIDING_PRINCIPLE),
+            new HighlightBuilder.Field(CaseLawDocumentationUnit.Fields.HEADNOTE),
+            new HighlightBuilder.Field(CaseLawDocumentationUnit.Fields.OTHER_HEADNOTE),
+            new HighlightBuilder.Field(CaseLawDocumentationUnit.Fields.OUTLINE),
+            new HighlightBuilder.Field(CaseLawDocumentationUnit.Fields.TENOR),
+            new HighlightBuilder.Field(CaseLawDocumentationUnit.Fields.CASE_FACTS),
+            new HighlightBuilder.Field(CaseLawDocumentationUnit.Fields.DECISION_GROUNDS),
+            new HighlightBuilder.Field(CaseLawDocumentationUnit.Fields.GROUNDS),
+            new HighlightBuilder.Field(CaseLawDocumentationUnit.Fields.OTHER_LONG_TEXT),
+            new HighlightBuilder.Field(CaseLawDocumentationUnit.Fields.DISSENTING_OPINION));
 
     Stream<HighlightBuilder.Field> noMatchFields =
         Stream.of(
