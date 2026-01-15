@@ -2,30 +2,22 @@
 /// <reference types="vite" />
 
 import { defineVitestConfig } from "@nuxt/test-utils/config";
-import { FileSystemIconLoader } from "unplugin-icons/loaders";
-import Icons from "unplugin-icons/vite";
 import { configDefaults } from "vitest/config";
 
 export default defineVitestConfig({
-  plugins: [
-    Icons({
-      scale: 1.3333, // ~24px at the current default font size of 18px
-      customCollections: {
-        custom: FileSystemIconLoader("./src/assets/icons"),
-      },
-    }),
-  ],
   test: {
+    // General test environment
     environment: "nuxt",
-    globals: true,
-    exclude: [...configDefaults.exclude, "e2e/**"],
-    setupFiles: ["src/tests/setup.ts"],
     environmentOptions: {
       nuxt: {
         domEnvironment: "jsdom",
       },
     },
-    slowTestThreshold: 100,
+    globals: true,
+    setupFiles: ["src/tests/setup.ts"],
+    exclude: [...configDefaults.exclude, "e2e/**"],
+
+    // Filtering test output
     onConsoleLog(log) {
       const suppressedWarnings = [
         "already provides property with key",
@@ -36,16 +28,18 @@ export default defineVitestConfig({
         if (log.includes(warning)) return false;
       }
     },
+
+    // Coverage reporting
     coverage: {
       provider: "v8",
+      reportsDirectory: "src/coverage",
+      include: ["*/**/*.ts", "*/**/*.vue"],
       reporter: [
         "text",
         ["json-summary", { file: "coverage-summary.json" }],
         ["json", { file: "coverage.json" }],
         "lcov",
       ],
-      reportsDirectory: "src/coverage",
-      include: ["*/**/*.ts", "*/**/*.vue"],
 
       // This needs to be kept in sync with exclusions in sonar-project.properties
       // to ensure coverage is reported accurately in SonarCloud
@@ -58,5 +52,8 @@ export default defineVitestConfig({
         "src/tests/**/*",
       ],
     },
+
+    // Misc configuration
+    slowTestThreshold: 100,
   },
 });
