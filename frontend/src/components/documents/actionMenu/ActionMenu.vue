@@ -23,6 +23,7 @@ export type ActionMenuProps = {
 
 export type ActionMenuItem = Omit<MenuItem, "icon"> & {
   iconComponent: Component;
+  analyticsId?: string;
 };
 
 const props = defineProps<ActionMenuProps>();
@@ -69,6 +70,7 @@ const toggle = (event: Event) => {
             class="flex cursor-pointer items-center gap-8 no-underline"
             :to="item.url"
             data-pc-section="itemlink"
+            :data-attr="(item as ActionMenuItem).analyticsId"
           >
             <component :is="(item as ActionMenuItem).iconComponent" />
             <span>{{ item.label }}</span>
@@ -95,6 +97,7 @@ const toggle = (event: Event) => {
         :aria-label="item.label"
         :to="item.url"
         :as="item.url ? NuxtLink : undefined"
+        :data-attr="(item as ActionMenuItem).analyticsId"
         @click.prevent="item.command && item.command()"
       >
         <template #icon
