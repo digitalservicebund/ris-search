@@ -29,7 +29,6 @@ import org.opensearch.search.aggregations.bucket.terms.ParsedStringTerms;
 import org.opensearch.search.aggregations.bucket.terms.Terms;
 import org.opensearch.search.aggregations.bucket.terms.TermsAggregationBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Profile;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.SearchHits;
@@ -42,7 +41,6 @@ import org.springframework.stereotype.Service;
  * annotated with {@link Service} to indicate that it's a service component in the Spring context.
  */
 @Service
-@Profile({"default", "staging", "uat", "test", "prototype"})
 public class CaseLawService {
   private final CaseLawRepository caseLawRepository;
   private final CaseLawBucket caseLawBucket;
