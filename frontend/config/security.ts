@@ -7,10 +7,16 @@ export const security: Partial<ModuleOptions> = {
   headers: {
     referrerPolicy: "same-origin",
     contentSecurityPolicy: {
+      "default-src": "'self'",
       "style-src": ["'self'", "https:", "'unsafe-inline'"],
       "img-src": ["'self'", "data:", "'unsafe-inline'"],
-      "script-src": ["'strict-dynamic'", "'nonce-{{nonce}}'"],
-      "connect-src": isDevelopment ? ["'self'", "http:"] : ["'self'"],
+      "script-src": isDevelopment
+        ? ["'strict-dynamic'", "'nonce-{{nonce}}'"]
+        : ["'strict-dynamic'", "'nonce-{{nonce}}'", "https://*.posthog.com"],
+      "connect-src": isDevelopment
+        ? ["'self'", "http:"]
+        : ["'self'", "https://*.posthog.com"],
+      "worker-src": ["'self'", "blob:", "data:"],
     },
   },
   rateLimiter: {
