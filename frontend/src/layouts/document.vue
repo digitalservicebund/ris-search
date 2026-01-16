@@ -9,6 +9,7 @@ export type DocumentView = {
   label: string;
   path: string;
   icon: Component;
+  analyticsId?: string;
 };
 
 const { titlePlaceholder = "Titelzeile nicht vorhanden", views } = defineProps<{
@@ -71,6 +72,7 @@ const currentView = computed(
                   :as="NuxtLink"
                   :to="{ query: { view: view.path } }"
                   :aria-controls="undefined"
+                  :data-attr="view.analyticsId"
                   class="flex items-center gap-8"
                 >
                   <component :is="view.icon" />
