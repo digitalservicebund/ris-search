@@ -2,20 +2,26 @@ import type { ModuleOptions } from "nuxt-security";
 import { isDevelopment, isProduction } from "./shared";
 
 /** Configuration for the security section of Nuxt config. */
+const hasPosthog = !!process.env.NUXT_PUBLIC_ANALYTICS_POSTHOG_KEY;
+
 export const security: Partial<ModuleOptions> = {
   strict: isProduction,
   headers: {
     referrerPolicy: "same-origin",
     contentSecurityPolicy: {
-      "default-src": "'self'",
       "style-src": ["'self'", "https:", "'unsafe-inline'"],
-      "img-src": ["'self'", "data:", "'unsafe-inline'"],
-      "script-src": isDevelopment
-        ? ["'strict-dynamic'", "'nonce-{{nonce}}'"]
-        : ["'strict-dynamic'", "'nonce-{{nonce}}'", "https://*.posthog.com"],
-      "connect-src": isDevelopment
-        ? ["'self'", "http:"]
-        : ["'self'", "https://*.posthog.com"],
+      "img-src": ["'self'", "data:"],
+      "script-src": [
+        "'strict-dynamic'",
+        "'nonce-{{nonce}}'",
+        ...(hasPosthog ? ["https://eu.posthog.com"] : []),
+        ...(isDevelopment ? [] : []),
+      ],
+      "connect-src": [
+        "'self'",
+        ...(hasPosthog ? ["https://eu.posthog.com"] : []),
+        ...(isDevelopment ? ["http:"] : []),
+      ],
       "worker-src": ["'self'", "blob:", "data:"],
     },
   },
