@@ -1,11 +1,9 @@
 package de.bund.digitalservice.ris.search.service;
 
 import de.bund.digitalservice.ris.search.repository.objectstorage.CaseLawBucket;
-import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 /** Job for synchronizing the index of case law. */
-@Profile({"default", "staging", "uat", "test", "prototype"})
 @Component
 public class CaseLawIndexSyncJob extends IndexSyncJob {
 
