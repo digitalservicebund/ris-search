@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
  * operations to the provided ObjectStorageClient.
  */
 @Component
-@Profile({"default", "staging", "uat", "test", "prototype"})
+@Profile({"default", "staging", "uat", "test", "prototype", "production"})
 public class CaseLawBucket extends ObjectStorage {
 
   public CaseLawBucket(@Qualifier("caseLawS3Client") ObjectStorageClient s3Client) {
