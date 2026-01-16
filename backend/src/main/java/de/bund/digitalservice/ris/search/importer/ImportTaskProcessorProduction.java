@@ -1,12 +1,7 @@
 package de.bund.digitalservice.ris.search.importer;
 
-import de.bund.digitalservice.ris.search.service.AdministrativeDirectiveIndexSyncJob;
-import de.bund.digitalservice.ris.search.service.CaseLawIndexSyncJob;
 import de.bund.digitalservice.ris.search.service.Job;
-import de.bund.digitalservice.ris.search.service.LiteratureIndexSyncJob;
 import de.bund.digitalservice.ris.search.service.NormIndexSyncJob;
-import de.bund.digitalservice.ris.search.service.SitemapsUpdateJob;
-import de.bund.digitalservice.ris.search.service.eclicrawler.EcliSitemapJob;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -22,21 +17,16 @@ import org.springframework.stereotype.Component;
  *
  * <p>Parses task targets from args and executes corresponding sync or update jobs.
  */
-@Profile({"default", "staging", "uat", "test", "prototype"})
+@Profile({"production"})
 @Component
-public class ImportTaskProcessor {
+public class ImportTaskProcessorProduction {
 
   public static final int OK_RETURN_CODE = 0;
   public static final int ERROR_RETURN_CODE = 1;
 
   private final NormIndexSyncJob normIndexSyncJob;
-  private final CaseLawIndexSyncJob caseLawIndexSyncJob;
-  private final LiteratureIndexSyncJob literatureIndexSyncJob;
-  private final SitemapsUpdateJob sitemapsUpdateJob;
-  private final EcliSitemapJob ecliSitemapJob;
-  private final AdministrativeDirectiveIndexSyncJob administrativeDirectiveUpdateJob;
 
-  private static final Logger logger = LogManager.getLogger(ImportTaskProcessor.class);
+  private static final Logger logger = LogManager.getLogger(ImportTaskProcessorProduction.class);
 
   private static final String TASK_ARGUMENT = "--task";
 
@@ -44,26 +34,10 @@ public class ImportTaskProcessor {
    * Create an ImportTaskProcessor wired with the available job implementations.
    *
    * @param normIndexSyncJob job that syncs norms index
-   * @param caseLawIndexSyncJob job that syncs case law index
-   * @param sitemapsUpdateJob job that updates sitemaps
-   * @param literatureIndexSyncJob job that syncs literature index
-   * @param ecliSitemapJob job that generates ECLI sitemaps
-   * @param administrativeDirectiveUpdateJob job that syncs administrative directives
    */
   @Autowired
-  public ImportTaskProcessor(
-      NormIndexSyncJob normIndexSyncJob,
-      CaseLawIndexSyncJob caseLawIndexSyncJob,
-      SitemapsUpdateJob sitemapsUpdateJob,
-      LiteratureIndexSyncJob literatureIndexSyncJob,
-      EcliSitemapJob ecliSitemapJob,
-      AdministrativeDirectiveIndexSyncJob administrativeDirectiveUpdateJob) {
+  public ImportTaskProcessorProduction(NormIndexSyncJob normIndexSyncJob) {
     this.normIndexSyncJob = normIndexSyncJob;
-    this.caseLawIndexSyncJob = caseLawIndexSyncJob;
-    this.literatureIndexSyncJob = literatureIndexSyncJob;
-    this.sitemapsUpdateJob = sitemapsUpdateJob;
-    this.ecliSitemapJob = ecliSitemapJob;
-    this.administrativeDirectiveUpdateJob = administrativeDirectiveUpdateJob;
   }
 
   public boolean shouldRun(String[] args) {
@@ -141,11 +115,6 @@ public class ImportTaskProcessor {
   public int runTask(String target) {
     return switch (target) {
       case "import_norms" -> runTask(normIndexSyncJob);
-      case "import_caselaw" -> runTask(caseLawIndexSyncJob);
-      case "import_literature" -> runTask(literatureIndexSyncJob);
-      case "import_administrative_directive" -> runTask(administrativeDirectiveUpdateJob);
-      case "update_sitemaps" -> runTask(sitemapsUpdateJob);
-      case "generate_ecli_sitemaps" -> runTask(ecliSitemapJob);
       default -> throw new IllegalArgumentException("Unexpected target '%s'".formatted(target));
     };
   }
