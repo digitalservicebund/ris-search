@@ -4,14 +4,11 @@ import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.models.opensearch.Article;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.schema.CollectionSchema;
-import de.bund.digitalservice.ris.search.schema.LegalForceStatus;
-import de.bund.digitalservice.ris.search.schema.LegislationExpressionSearchSchema;
 import de.bund.digitalservice.ris.search.schema.LegislationWorkSearchSchema;
 import de.bund.digitalservice.ris.search.schema.PartialCollectionViewSchema;
 import de.bund.digitalservice.ris.search.schema.PublicationIssueSchema;
 import de.bund.digitalservice.ris.search.schema.SearchMemberSchema;
 import de.bund.digitalservice.ris.search.schema.TextMatchSchema;
-import de.bund.digitalservice.ris.search.utils.DateUtils;
 import de.bund.digitalservice.ris.search.utils.PageUtils;
 import java.util.List;
 import java.util.Map;
@@ -133,16 +130,6 @@ public class NormSearchResponseMapper {
    */
   public static LegislationWorkSearchSchema fromDomain(Norm norm) {
     String contentBaseUrl = ApiConfig.Paths.LEGISLATION + "/";
-    String expressionEli = norm.getExpressionEli();
-    LegalForceStatus legislationLegalForce =
-        DateUtils.isActive(norm.getEntryIntoForceDate(), norm.getExpiryDate())
-            ? LegalForceStatus.IN_FORCE
-            : LegalForceStatus.NOT_IN_FORCE;
-
-    String temporalCoverage =
-        DateUtils.toDateIntervalString(norm.getEntryIntoForceDate(), norm.getExpiryDate());
-
-    String expressionId = contentBaseUrl + expressionEli;
 
     PublicationIssueSchema publicationIssue =
         norm.getPublishedIn() != null ? new PublicationIssueSchema(norm.getPublishedIn()) : null;
@@ -156,13 +143,7 @@ public class NormSearchResponseMapper {
         .datePublished(norm.getDatePublished())
         .name(norm.getOfficialTitle())
         .isPartOf(publicationIssue)
-        .workExample(
-            LegislationExpressionSearchSchema.builder()
-                .legislationLegalForce(legislationLegalForce)
-                .legislationIdentifier(expressionEli)
-                .id(expressionId)
-                .temporalCoverage(temporalCoverage)
-                .build())
+        .workExample(LegislationExpressionSearchSchemaMapper.fromNorm(norm))
         .build();
   }
 
