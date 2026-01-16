@@ -118,6 +118,12 @@ public class ObsConfig {
         bucket);
   }
 
+  @Bean(name = "caseLawS3Client")
+  @Profile({"production"})
+  public ObjectStorageClient caseLawS3DummyClient() {
+    return new ObjectStorageClientDummy();
+  }
+
   /**
    * Creates an {@code ObjectStorageClient} for the "literature" context, which interacts with an
    * S3-compatible object storage service. This client is configured using specific credentials,
