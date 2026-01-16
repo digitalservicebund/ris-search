@@ -46,9 +46,9 @@ sonar {
         property("sonar.host.url", "https://sonarcloud.io")
         property(
             "sonar.coverage.exclusions",
-            "**/config/**, **/e2e/**, **/CustomErrorController.java, **/RestClientConfigStackit.java, **/ImportTaskProcessorProduction.java",
+            "**/config/**, **/e2e/**, **/CustomErrorController.java, **/RestClientConfigStackit.java",
         )
-        property("sonar.cpd.exclusions", "**/RestClientConfigStackit.java, **/ImportTaskProcessorProduction.java")
+        property("sonar.cpd.exclusions", "**/RestClientConfigStackit.java")
     }
 }
 

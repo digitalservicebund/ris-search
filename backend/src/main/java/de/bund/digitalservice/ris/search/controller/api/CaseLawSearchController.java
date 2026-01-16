@@ -24,7 +24,6 @@ import java.util.List;
 import org.jspecify.annotations.Nullable;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Profile;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.elasticsearch.UncategorizedElasticsearchException;
 import org.springframework.data.elasticsearch.core.SearchPage;
@@ -43,7 +42,6 @@ import org.springframework.web.bind.annotation.RestController;
     description =
         "This group of endpoints provides judgments and decisions of the Federal Constitutional Court, the supreme courts of the Federal Republic of Germany, the Federal Patent Court, and others that were documented by the documentation units of these courts. The documents are anonymized and published in full, and the database is updated daily.")
 @RestController
-@Profile({"default", "staging", "uat", "test", "prototype"})
 public class CaseLawSearchController {
   private final CaseLawService caseLawService;
 
