@@ -27,7 +27,12 @@ if (contentError?.value) showError(contentError.value);
 
 const views: DocumentView[] = [
   { path: "text", label: "Text", icon: IcBaselineSubject },
-  { path: "details", label: "Details", icon: IcOutlineInfo },
+  {
+    path: "details",
+    label: "Details",
+    icon: IcOutlineInfo,
+    analyticsId: "literature-metadata-tab",
+  },
 ];
 
 const textSectionId = useId();

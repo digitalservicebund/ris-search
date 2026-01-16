@@ -108,8 +108,18 @@ const description = computed(() => translationSeo.value.description);
 useDynamicSeo({ title, description });
 
 const views = [
-  { path: "text", label: "Text", icon: IcBaselineSubject },
-  { path: "details", label: "Details", icon: IcOutlineInfo },
+  {
+    path: "text",
+    label: "Text",
+    icon: IcBaselineSubject,
+    analyticsId: undefined,
+  },
+  {
+    path: "details",
+    label: "Details",
+    icon: IcOutlineInfo,
+    analyticsId: "translation-metadata-tab",
+  },
 ] as const;
 
 const currentView = computed(
@@ -176,6 +186,7 @@ const detailsTabPanelTitleId = useId();
             :as="NuxtLink"
             :to="{ query: { view: view.path } }"
             :aria-controls="undefined"
+            :data-attr="view.analyticsId"
             class="flex items-center gap-8"
           >
             <component :is="view.icon" />

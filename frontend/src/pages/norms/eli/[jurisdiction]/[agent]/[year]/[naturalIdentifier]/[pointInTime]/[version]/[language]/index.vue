@@ -195,9 +195,24 @@ const description = computed<string | undefined>(() => {
 });
 
 const views = [
-  { path: "text", label: "Text", icon: IcBaselineSubject },
-  { path: "details", label: "Details", icon: IcOutlineInfo },
-  { path: "versions", label: "Fassungen", icon: IcOutlineRestore },
+  {
+    path: "text",
+    label: "Text",
+    icon: IcBaselineSubject,
+    analyticsId: undefined,
+  },
+  {
+    path: "details",
+    label: "Details",
+    icon: IcOutlineInfo,
+    analyticsId: "norm-metadata-tab",
+  },
+  {
+    path: "versions",
+    label: "Fassungen",
+    icon: IcOutlineRestore,
+    analyticsId: "norm-versions-tab",
+  },
 ] as const;
 
 const currentView = computed(
@@ -241,6 +256,7 @@ const detailsTabPanelTitleId = useId();
               :as="NuxtLink"
               :to="{ query: { view: view.path } }"
               :aria-controls="undefined"
+              :data-attr="view.analyticsId"
               class="flex items-center gap-8"
             >
               <component :is="view.icon" />
@@ -317,7 +333,12 @@ const detailsTabPanelTitleId = useId();
               </template>
             </DetailsListEntry>
             <DetailsListEntry label="Download:">
-              <NuxtLink class="ris-link1-regular" external :to="zipUrl">
+              <NuxtLink
+                data-attr="xml-zip-view"
+                class="ris-link1-regular"
+                external
+                :to="zipUrl"
+              >
                 <MaterialSymbolsDownload class="mr-2 inline" />
                 {{ metadata.abbreviation ?? "Inhalte" }} als ZIP herunterladen
               </NuxtLink>
