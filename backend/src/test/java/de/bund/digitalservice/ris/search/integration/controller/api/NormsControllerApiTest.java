@@ -704,7 +704,8 @@ class NormsControllerApiTest extends ContainersIntegrationBase {
                 .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.@type", equalTo("hydra:Collection")))
-        .andExpect(jsonPath("$.@id", equalTo("/v1/legislation/work-example?pageIndex=0&size=100")))
+        .andExpect(
+            jsonPath("$.@id", equalTo("/v1/legislation/work-example/eli?pageIndex=0&size=100")))
         .andExpect(jsonPath("$.member[0].@type", equalTo("Legislation")))
         .andExpect(
             jsonPath(

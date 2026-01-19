@@ -31,7 +31,7 @@ public class ApiConfig {
     public static final String FEEDBACK = BASE + "/feedback";
 
     public static final String LEGISLATION = BASE + "/legislation";
-    public static final String LEGISLATION_WORK_EXAMPLE = LEGISLATION + "/work-example";
+    public static final String LEGISLATION_WORK_EXAMPLE = LEGISLATION + "/work-example/eli";
     public static final String LEGISLATION_SINGLE = LEGISLATION + "/eli";
 
     public static final String LEGISLATION_TRANSLATION = BASE + "/translatedLegislation";
