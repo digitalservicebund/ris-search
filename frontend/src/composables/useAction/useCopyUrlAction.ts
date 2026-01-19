@@ -1,5 +1,5 @@
 import { useToast } from "primevue/usetoast";
-import type { ActionMenuItem1 } from "~/components/documents/actionMenu/ActionMenu1.vue";
+import type { ActionMenuItem } from "~/components/documents/actionMenu/ActionMenu.vue";
 import { useCommandAction } from "~/composables/useAction/useCommandAction";
 import MaterialSymbolsLink from "~icons/material-symbols/link";
 
@@ -7,7 +7,7 @@ export function useCopyUrlAction(
   url?: string,
   label?: string,
   icon?: Component,
-): ActionMenuItem1 {
+): ActionMenuItem {
   const toastService = useToast();
 
   const command = async () => {

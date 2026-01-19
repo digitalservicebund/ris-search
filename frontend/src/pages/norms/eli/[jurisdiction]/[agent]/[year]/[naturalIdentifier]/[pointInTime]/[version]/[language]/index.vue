@@ -10,7 +10,7 @@ import { NuxtLink } from "#components";
 import type { BreadcrumbItem } from "~/components/Breadcrumbs.vue";
 import DetailsList from "~/components/DetailsList.vue";
 import DetailsListEntry from "~/components/DetailsListEntry.vue";
-import ActionMenu1 from "~/components/documents/actionMenu/ActionMenu1.vue";
+import ActionMenu from "~/components/documents/actionMenu/ActionMenu.vue";
 import IncompleteDataMessage from "~/components/documents/IncompleteDataMessage.vue";
 import LegislationContent from "~/components/documents/norms/LegislationContent.vue";
 import NormHeadingGroup from "~/components/documents/norms/NormHeadingGroup.vue";
@@ -278,7 +278,7 @@ const actions = computed(() => {
         <!--            :metadata="metadata"-->
         <!--            :translation-url="translationUrl"-->
         <!--        /></client-only>-->
-        <ActionMenu1 :actions />
+        <ActionMenu :actions />
       </div>
       <NormHeadingGroup :metadata="metadata" :html-parts="htmlParts" />
       <NormVersionWarning

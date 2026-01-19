@@ -1,6 +1,6 @@
 import { shallowMount } from "@vue/test-utils";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import ActionMenu from "~/components/documents/actionMenu/ActionMenu.vue";
+import ActionMenuWrapper from "~/components/documents/actionMenu/ActionMenuWrapper.vue";
 import NormActionMenu from "~/components/documents/actionMenu/NormActionMenu.vue";
 import type { LegislationWork } from "~/types";
 import { getManifestationUrl } from "~/utils/norm";
@@ -35,7 +35,7 @@ describe("NormActionMenu", () => {
       },
     });
 
-    const actionMenu = wrapper.findComponent(ActionMenu);
+    const actionMenu = wrapper.findComponent(ActionMenuWrapper);
     expect(getManifestationUrl).toHaveBeenCalledExactlyOnceWith(
       mockLegislationWork,
       "application/xml",

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import ActionMenu from "~/components/documents/actionMenu/ActionMenu.vue";
+import ActionMenuWrapper from "~/components/documents/actionMenu/ActionMenuWrapper.vue";
 import type { AdministrativeDirective } from "~/types";
 
 const { administrativeDirective } = defineProps<{
@@ -20,5 +20,5 @@ const permalink = {
 </script>
 
 <template>
-  <ActionMenu :permalink="permalink" :xml-url="xmlUrl" />
+  <ActionMenuWrapper :permalink="permalink" :xml-url="xmlUrl" />
 </template>

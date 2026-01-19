@@ -1,6 +1,6 @@
 import { shallowMount } from "@vue/test-utils";
 import { describe, expect, it, vi } from "vitest";
-import ActionMenu from "~/components/documents/actionMenu/ActionMenu.vue";
+import ActionMenuWrapper from "~/components/documents/actionMenu/ActionMenuWrapper.vue";
 import CaseLawActionMenu from "~/components/documents/actionMenu/CaseLawActionMenu.vue";
 import type { CaseLaw } from "~/types";
 import { getEncodingURL } from "~/utils/caseLaw";
@@ -22,7 +22,7 @@ describe("CaseLawActionMenu", () => {
       },
     });
 
-    const actionMenu = wrapper.findComponent(ActionMenu);
+    const actionMenu = wrapper.findComponent(ActionMenuWrapper);
     expect(getEncodingURL).toHaveBeenCalledExactlyOnceWith(
       mockedCaseLaw,
       "application/xml",

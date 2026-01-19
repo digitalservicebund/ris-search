@@ -1,6 +1,6 @@
 import { shallowMount } from "@vue/test-utils";
 import { describe, expect, it, vi } from "vitest";
-import ActionMenu from "~/components/documents/actionMenu/ActionMenu.vue";
+import ActionMenuWrapper from "~/components/documents/actionMenu/ActionMenuWrapper.vue";
 import LiteratureActionMenu from "~/components/documents/actionMenu/LiteratureActionMenu.vue";
 import type { Literature } from "~/types";
 
@@ -25,7 +25,7 @@ describe("LiteratureActionMenu", () => {
       },
     });
 
-    const actionMenu = wrapper.findComponent(ActionMenu);
+    const actionMenu = wrapper.findComponent(ActionMenuWrapper);
     expect(actionMenu.props()).toMatchObject({
       permalink: {
         label: "Link kopieren",
