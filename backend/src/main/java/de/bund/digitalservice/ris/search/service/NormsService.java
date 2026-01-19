@@ -117,7 +117,10 @@ public class NormsService {
   }
 
   /**
-   * Retrieves all work_example expression metadata for a given work Eli paginated
+   * Retrieves all work_example expression metadata for a given work Eli paginated. The method uses
+   * the {@link org.opensearch.client.RestHighLevelClient} to retrieve the docValue fields. An
+   * {@link ElasticsearchOperations} search Query will still query the _source of a document,
+   * potentially leading to performance issues for big documents
    *
    * @param workEli workEli to retrieve all expression metadata from
    * @param pageable pagination

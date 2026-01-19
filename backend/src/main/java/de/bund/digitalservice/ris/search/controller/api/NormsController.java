@@ -209,6 +209,17 @@ public class NormsController {
         .orElse(ResponseEntity.notFound().build());
   }
 
+  /**
+   * Retrieves all expression level metadata for a given workEli
+   *
+   * @param jurisdiction the jurisdiction to which the legal document belongs
+   * @param agent the agent responsible for the legal document
+   * @param year the year of issuance for the legal document
+   * @param naturalIdentifier an identifier for the legal document
+   * @param pagination the pagination parameters defining page size and index
+   * @return a paginated collection {@link CollectionSchema} of expression level metadata {@link
+   *     LegislationExpressionSearchSchema}
+   */
   @GetMapping(
       path =
           ApiConfig.Paths.LEGISLATION_WORK_EXAMPLE
