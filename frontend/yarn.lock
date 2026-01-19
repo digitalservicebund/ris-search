@@ -2032,7 +2032,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nuxt/kit@npm:^3.11.2, @nuxt/kit@npm:^3.13.2, @nuxt/kit@npm:^3.15.4, @nuxt/kit@npm:^3.18.0, @nuxt/kit@npm:^3.20.2":
+"@nuxt/kit@npm:^3.13.2, @nuxt/kit@npm:^3.15.4, @nuxt/kit@npm:^3.18.0, @nuxt/kit@npm:^3.20.2":
   version: 3.20.2
   resolution: "@nuxt/kit@npm:3.20.2"
   dependencies:
@@ -8135,7 +8135,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"defu@npm:^6.1.1, defu@npm:^6.1.4":
+"defu@npm:^6.1.4":
   version: 6.1.4
   resolution: "defu@npm:6.1.4"
   checksum: 10c0/2d6cc366262dc0cb8096e429368e44052fdf43ed48e53ad84cc7c9407f890301aa5fcb80d0995abaaf842b3949f154d060be4160f7a46cb2bc2f7726c81526f5
@@ -12953,18 +12953,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nuxt-security@npm:2.2.0":
-  version: 2.2.0
-  resolution: "nuxt-security@npm:2.2.0"
+"nuxt-security@npm:2.5.0":
+  version: 2.5.0
+  resolution: "nuxt-security@npm:2.5.0"
   dependencies:
-    "@nuxt/kit": "npm:^3.11.2"
+    "@nuxt/kit": "npm:^4.2.1"
     basic-auth: "npm:^2.0.1"
-    defu: "npm:^6.1.1"
+    defu: "npm:^6.1.4"
     nuxt-csurf: "npm:^1.6.5"
-    pathe: "npm:^1.0.0"
+    pathe: "npm:^2.0.3"
     unplugin-remove: "npm:^1.0.3"
-    xss: "npm:^1.0.14"
-  checksum: 10c0/feb7e44a35ccf75e4661bfca992f35496a038bfd0b4e4080d513d8a30fc14c24aaca10ecc43aba139298c2be89057c8b199625ab8f1913da4949b813693b4780
+    xss: "npm:^1.0.15"
+  checksum: 10c0/73158add8727d1dc8a288eb43d089ebb5dbd8062810d519f2f48800020eec92aa21f848b2594291ca58d4a86c4412504ab39ef5059b5c0901c4ad06e9b1f5897
   languageName: node
   linkType: hard
 
@@ -13668,7 +13668,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pathe@npm:^1.0.0, pathe@npm:^1.1.1, pathe@npm:^1.1.2":
+"pathe@npm:^1.1.1, pathe@npm:^1.1.2":
   version: 1.1.2
   resolution: "pathe@npm:1.1.2"
   checksum: 10c0/64ee0a4e587fb0f208d9777a6c56e4f9050039268faaaaecd50e959ef01bf847b7872785c36483fa5cdcdbdfdb31fef2ff222684d4fc21c330ab60395c681897
@@ -15130,7 +15130,7 @@ __metadata:
     lodash: "npm:^4.17.21"
     minisearch: "npm:^7.1.2"
     nuxt: "npm:^4.1.3"
-    nuxt-security: "npm:2.2.0"
+    nuxt-security: "npm:2.5.0"
     playwright-lighthouse: "npm:^4.0.0"
     posthog-js: "npm:^1.315.1"
     prettier: "npm:^3.7.4"
@@ -17896,7 +17896,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"xss@npm:^1.0.14":
+"xss@npm:^1.0.14, xss@npm:^1.0.15":
   version: 1.0.15
   resolution: "xss@npm:1.0.15"
   dependencies:
