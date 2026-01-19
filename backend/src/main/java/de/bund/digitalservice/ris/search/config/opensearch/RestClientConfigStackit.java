@@ -1,6 +1,8 @@
 package de.bund.digitalservice.ris.search.config.opensearch;
 
 import org.apache.hc.core5.reactor.IOReactorConfig;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.opensearch.client.RestHighLevelClient;
 import org.opensearch.data.client.orhlc.AbstractOpenSearchConfiguration;
 import org.opensearch.data.client.orhlc.ClientConfiguration;
@@ -23,6 +25,8 @@ public class RestClientConfigStackit extends AbstractOpenSearchConfiguration {
 
   private final Configurations configurationsOpensearch;
   private final OpensearchSchemaSetup schemaSetup;
+
+  private static final Logger logger = LogManager.getLogger(RestClientConfigStackit.class);
 
   /**
    * Constructs a RestClientConfig instance to configure and initialize the OpenSearch REST client.
@@ -70,12 +74,20 @@ public class RestClientConfigStackit extends AbstractOpenSearchConfiguration {
   @Override
   public ElasticsearchOperations elasticsearchOperations(
       ElasticsearchConverter elasticsearchConverter, RestHighLevelClient elasticsearchClient) {
+
     return new OpenSearchRestTemplate(opensearchClient(), elasticsearchConverter) {
+      int retryCount = 0;
+
       @Override
       public <T> T execute(OpenSearchRestTemplate.ClientCallback<T> callback) {
         try {
           return super.execute(callback);
         } catch (DataAccessResourceFailureException e) {
+          retryCount++;
+          if (retryCount < 10) {
+            logger.error("retry opensearch execute nr.{}", retryCount);
+            execute(callback);
+          }
           return super.execute(callback);
         }
       }
