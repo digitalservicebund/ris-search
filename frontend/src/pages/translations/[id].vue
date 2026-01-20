@@ -112,7 +112,7 @@ const views = [
     path: "text",
     label: "Text",
     icon: IcBaselineSubject,
-    analyticsId: undefined,
+    analyticsId: "translation-text-tab",
   },
   {
     path: "details",

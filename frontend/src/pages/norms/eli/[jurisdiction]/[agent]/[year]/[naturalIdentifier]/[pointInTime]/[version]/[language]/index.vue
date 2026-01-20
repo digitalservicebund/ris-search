@@ -199,7 +199,7 @@ const views = [
     path: "text",
     label: "Text",
     icon: IcBaselineSubject,
-    analyticsId: undefined,
+    analyticsId: "norm-text-tab",
   },
   {
     path: "details",
