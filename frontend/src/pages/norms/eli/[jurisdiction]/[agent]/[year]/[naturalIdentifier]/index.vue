@@ -1,23 +1,14 @@
 <script setup lang="ts">
-import type { JSONLDList, LegislationWork, SearchResult } from "~/types";
+import type { JSONLDList, LegislationExpression } from "~/types";
 import { getMostRelevantExpression } from "~/utils/norm";
 
 const route = useRoute();
-const workEli = [
-  "eli",
-  route.params.jurisdiction,
-  route.params.agent,
-  route.params.year,
-  route.params.naturalIdentifier,
-].join("/");
 
 const { data, error: loadError } = await useRisBackend<
-  JSONLDList<SearchResult<LegislationWork>>
->(`/v1/legislation`, {
-  params: {
-    eli: workEli,
-  },
-});
+  JSONLDList<LegislationExpression>
+>(
+  `/v1/legislation/work-example/eli/${route.params.jurisdiction}/${route.params.agent}/${route.params.year}/${route.params.naturalIdentifier}`,
+);
 
 const matchedExpressionEli = computed(() => {
   if (!data.value) return null;
