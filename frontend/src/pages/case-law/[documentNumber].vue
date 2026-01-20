@@ -96,7 +96,12 @@ useHead({ title: ogTitle, link, meta });
 
 const views: DocumentView[] = [
   { path: "text", label: "Text", icon: IcBaselineSubject },
-  { path: "details", label: "Details", icon: IcOutlineInfo },
+  {
+    path: "details",
+    label: "Details",
+    icon: IcOutlineInfo,
+    analyticsId: "caselaw-metadata-tab",
+  },
 ];
 
 const title = computed(() => {
@@ -174,6 +179,7 @@ const detailsMetadata = computed(() => {
 
         <DetailsListEntry v-if="detailsMetadata.zipUrl" label="Download:">
           <NuxtLink
+            data-attr="xml-zip-view"
             class="ris-link1-regular"
             external
             :to="detailsMetadata.zipUrl"

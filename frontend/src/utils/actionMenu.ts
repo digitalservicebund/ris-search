@@ -61,6 +61,7 @@ export function createActionMenuItems(
       iconComponent: XmlIcon,
       command: async () => await navigationCommand(xmlUrl),
       url: records.xmlUrl,
+      analyticsId: "xml-view",
     });
   }
 

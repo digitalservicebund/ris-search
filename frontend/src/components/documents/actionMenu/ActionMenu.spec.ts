@@ -23,6 +23,7 @@ vi.mock("~/utils/actionMenu", () => {
           iconComponent: MaterialSymbolsLink,
           label: "Link",
           url: "https://example.com/",
+          analyticsId: "test-link",
         },
         {
           key: "action",
@@ -206,6 +207,7 @@ describe("ActionMenu", () => {
     expect(links).toHaveLength(1);
     expect(links?.[0]?.attributes("aria-label")).toBe("Link");
     expect(links?.[0]?.element.href).toBe("https://example.com/");
+    expect(links?.[0]?.attributes("data-attr")).toBe("test-link");
 
     const actionButtons = largeScreenDiv?.findAll("button");
     expect(actionButtons).toHaveLength(2);
@@ -278,6 +280,7 @@ describe("ActionMenu", () => {
     expect(actions?.[0]?.get("a").attributes("href")).toBe(
       "https://example.com/",
     );
+    expect(actions?.[0]?.get("a").attributes("data-attr")).toBe("test-link");
 
     expect(actions?.[1]?.text()).toBe("Action");
     actions?.[1]?.get("a").element.click();
