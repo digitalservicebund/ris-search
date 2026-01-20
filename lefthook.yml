@@ -14,8 +14,8 @@ pre-commit:
       root: frontend
       stage_fixed: true
       run: >-
-        yarn prettier:fix {staged_files} &&
-        yarn eslint:fix --no-warn-ignored {staged_files}
+        pnpm prettier:fix {staged_files} &&
+        pnpm eslint:fix --no-warn-ignored {staged_files}
     check-javadocs:
       skip: true
       tags: check javadocs
@@ -31,4 +31,4 @@ pre-push:
     licenses-audit-frontend:
       tags: licenses audit
       root: frontend
-      run: yarn audit:licences
+      run: pnpm audit:licences

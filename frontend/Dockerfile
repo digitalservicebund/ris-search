@@ -1,14 +1,14 @@
 FROM node:24.13.0-alpine3.22 AS build
 RUN apk update && apk upgrade
+RUN npm install -g pnpm@10.28.1
 WORKDIR /app
-COPY .yarn/releases/yarn-4.9.2.cjs .yarn/releases/yarn-4.9.2.cjs
-COPY package.json yarn.lock .yarnrc.yml ./
-RUN yarn install --immutable
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+RUN pnpm install --frozen-lockfile
 COPY playwright.config.ts nuxt.config.ts nuxt.config.d.ts tsconfig.json \
   eslint.config.mjs sentry.server.config.ts ./
 COPY config ./config
 COPY src ./src
-RUN yarn run prepare && NODE_OPTIONS="--max-old-space-size=4096" yarn build
+RUN pnpm run prepare && NODE_OPTIONS="--max-old-space-size=4096" pnpm build
 
 FROM node:24.13.0-alpine3.22
 RUN apk update && apk upgrade && apk add dumb-init && apk cache clean && \

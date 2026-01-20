@@ -17,8 +17,8 @@
     "eslint:fix": "eslint --fix",
     "prettier:check": "prettier --check .",
     "prettier:fix": "prettier . --write --ignore-unknown",
-    "style:check": "yarn prettier:check && yarn eslint:check",
-    "style:fix": "yarn prettier:fix && yarn eslint:fix",
+    "style:check": "pnpm prettier:check && pnpm eslint:check",
+    "style:fix": "pnpm prettier:fix && pnpm eslint:fix",
     "typecheck": "nuxt typecheck",
     "audit:licences": "bash -c 'license-checker-rseidelsohn --production --excludePrivatePackages --onlyAllow \"$(./parseAllowedLicences.sh)\" --csv --out ./frontend-licence-report.csv'"
   },
@@ -26,7 +26,7 @@
     "node": "24.13.0",
     "npm": "11.6.0"
   },
-  "packageManager": "yarn@4.9.2",
+  "packageManager": "pnpm@10.28.1",
   "dependencies": {
     "@digitalservicebund/ris-ui": "^3.20.0",
     "@nuxt/image": "^1.10.0",

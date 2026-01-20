@@ -5,9 +5,9 @@
 To run the portal frontend, run
 
 ```bash
-yarn install
+pnpm install
 cp .env.example .env
-yarn dev
+pnpm dev
 ```
 
 For authentication, you will also need to have a local Keycloak server running. The easiest way would be to start
@@ -33,7 +33,7 @@ to see the feature flag variant (the NUXT_PUBLIC prefix only means that the valu
 To use the public profile (e.g. for prototype), you may use the public env file by running
 
 ```shell
-yarn dev --dotenv .env.public
+pnpm dev --dotenv .env.public
 ```
 
 ## Logging in
