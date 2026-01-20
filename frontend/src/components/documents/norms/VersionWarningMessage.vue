@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import Message from "primevue/message";
 import type { RouteLocationRaw } from "#vue-router";
-import type { LegislationWork } from "~/types";
+import type { LegislationExpression } from "~/types";
 import { dateFormattedDDMMYYYY } from "~/utils/dateFormatting";
 import type { ValidityStatus } from "~/utils/norm";
 import { temporalCoverageToValidityInterval } from "~/utils/norm";
@@ -16,7 +16,7 @@ const {
   inForceVersionLink,
 } = defineProps<{
   currentVersionValidityStatus?: ValidityStatus;
-  futureVersion?: LegislationWork;
+  futureVersion?: LegislationExpression;
   futureWarningMessage: string;
   historicalWarningMessage: string;
   inForceVersionLink?: string;
@@ -38,9 +38,7 @@ const versionTextId = useId();
 const versionText = computed(() => {
   if (currentVersionValidityStatus === "InForce" && futureVersion) {
     const formattedFutureDate = dateFormattedDDMMYYYY(
-      temporalCoverageToValidityInterval(
-        futureVersion.workExample.temporalCoverage,
-      )?.from,
+      temporalCoverageToValidityInterval(futureVersion.temporalCoverage)?.from,
     );
     return `Ab ${formattedFutureDate} gilt eine neue Fassung.`;
   } else {
@@ -55,7 +53,7 @@ const versionLink = computed<
 >(() => {
   if (currentVersionValidityStatus === "InForce" && futureVersion) {
     return {
-      to: `/norms/${futureVersion.workExample.legislationIdentifier}`,
+      to: `/norms/${futureVersion.legislationIdentifier}`,
       label: "Zur zukünftigen Fassung",
     };
   } else if (inForceVersionLink) {

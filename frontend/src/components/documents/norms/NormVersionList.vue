@@ -4,7 +4,7 @@ import Column from "primevue/column";
 import DataTable from "primevue/datatable";
 import Badge from "~/components/Badge.vue";
 import IncompleteDataMessage from "~/components/documents/IncompleteDataMessage.vue";
-import type { LegislationWork, SearchResult } from "~/types";
+import type { LegislationExpression } from "~/types";
 import { dateFormattedDDMMYYYY } from "~/utils/dateFormatting";
 import { formatNormValidity } from "~/utils/displayValues";
 import { temporalCoverageToValidityInterval } from "~/utils/norm";
@@ -13,7 +13,7 @@ import IcBaselineLaunch from "~icons/ic/baseline-launch";
 const props = defineProps<{
   status: string;
   currentLegislationIdentifier: string;
-  versions: SearchResult<LegislationWork>[];
+  versions: LegislationExpression[];
 }>();
 
 interface TableRowData {
@@ -30,26 +30,23 @@ const selectedVersion = ref<TableRowData>();
 const tableRowData = computed<TableRowData[]>(() => {
   const versionsSorted = _.orderBy(
     props.versions,
-    [(version) => version.item.workExample.temporalCoverage],
+    [(version) => version.temporalCoverage],
     ["desc"],
   );
 
   return versionsSorted.map((version, index) => {
     const validityInterval = temporalCoverageToValidityInterval(
-      version.item.workExample.temporalCoverage,
+      version.temporalCoverage,
     );
 
-    const status = formatNormValidity(
-      version.item.workExample.temporalCoverage,
-    );
+    const status = formatNormValidity(version.temporalCoverage);
 
     const id = index;
 
-    const link = `/norms/${version.item.workExample.legislationIdentifier}`;
+    const link = `/norms/${version.legislationIdentifier}`;
 
     const selectable =
-      version.item.workExample.legislationIdentifier !==
-      props.currentLegislationIdentifier;
+      version.legislationIdentifier !== props.currentLegislationIdentifier;
 
     const rowData: TableRowData = {
       id: id,

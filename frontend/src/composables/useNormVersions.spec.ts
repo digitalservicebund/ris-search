@@ -6,8 +6,8 @@ import type { LegislationWork, SearchResult } from "~/types";
 
 const dummyData = {
   member: [
-    { item: { workExample: { temporalCoverage: "2023-12-01/2300-10-01" } } },
-    { item: { workExample: { temporalCoverage: "2021-12-01/2023-11-30" } } },
+    { temporalCoverage: "2023-12-01/2300-10-01" },
+    { temporalCoverage: "2021-12-01/2023-11-30" },
   ],
 } as unknown as SearchResult<LegislationWork>[];
 
@@ -34,19 +34,17 @@ beforeEach(() => {
 describe("useNormVersions", () => {
   it("returns a sorted list when there is no error", () => {
     const { sortedVersions } = useNormVersions("dummy-eli");
-    expect(useRisBackendMock).toBeCalledWith("/v1/legislation", {
-      immediate: true,
-      params: {
-        eli: "dummy-eli",
-        sort: "-temporalCoverageFrom",
-        size: "300",
+    expect(useRisBackendMock).toBeCalledWith(
+      "/v1/legislation/work-example/dummy-eli",
+      {
+        immediate: true,
       },
-    });
+    );
     expect(sortedVersions.value.length).toBe(2);
-    expect(sortedVersions.value[0]?.item.workExample.temporalCoverage).toBe(
+    expect(sortedVersions.value[0]?.temporalCoverage).toBe(
       "2023-12-01/2300-10-01",
     );
-    expect(sortedVersions.value[1]?.item.workExample.temporalCoverage).toBe(
+    expect(sortedVersions.value[1]?.temporalCoverage).toBe(
       "2021-12-01/2023-11-30",
     );
   });
