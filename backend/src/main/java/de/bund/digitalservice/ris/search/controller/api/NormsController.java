@@ -25,6 +25,7 @@ import de.bund.digitalservice.ris.search.utils.LuceneQueryTools;
 import de.bund.digitalservice.ris.search.utils.eli.ExpressionEli;
 import de.bund.digitalservice.ris.search.utils.eli.ManifestationEli;
 import de.bund.digitalservice.ris.search.utils.eli.WorkEli;
+import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -231,6 +232,7 @@ public class NormsController {
           "Returns the expression-level (\"workExample\") metadata of a legislation item.")
   @ApiResponse(responseCode = "200")
   @ApiResponse(responseCode = "404", content = @Content)
+  @Hidden
   public CollectionSchema<LegislationExpressionSearchSchema> getWorkExamples(
       @Parameter(description = BUND_DESCRIPTION, schema = @Schema(allowableValues = {BUND_EXAMPLE}))
           @PathVariable
