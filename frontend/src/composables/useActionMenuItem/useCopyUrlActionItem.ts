@@ -1,9 +1,9 @@
 import { useToast } from "primevue/usetoast";
 import type { ActionMenuItem } from "~/components/documents/actionMenu/ActionMenu.vue";
-import { useCommandAction } from "~/composables/useAction/useCommandAction";
+import { useCommandActionItem } from "~/composables/useActionMenuItem/useCommandActionItem";
 import MaterialSymbolsLink from "~icons/material-symbols/link";
 
-export function useCopyUrlAction(
+export function useCopyUrlActionItem(
   url?: string,
   label?: string,
   icon?: Component,
@@ -23,7 +23,7 @@ export function useCopyUrlAction(
     });
   };
 
-  return useCommandAction(
+  return useCommandActionItem(
     label ?? "Link kopieren",
     icon ?? MaterialSymbolsLink,
     command,

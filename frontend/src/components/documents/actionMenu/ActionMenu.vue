@@ -57,14 +57,14 @@ const toggle = (event: Event) => {
     <div class="flex items-center *:-mx-4">
       <Button
         v-for="item in actions"
-        :key="item.key"
+        :key="item.label"
         v-tooltip.bottom="item.label"
         text
         :disabled="item.disabled"
         :aria-label="item.label"
         :to="item.url"
         :as="item.url ? NuxtLink : undefined"
-		:data-attr="(item as ActionMenuItem).analytic
+        :data-attr="(item as ActionMenuItem).analyticsId"
         external
         @click="item.command && item.command()"
       >
