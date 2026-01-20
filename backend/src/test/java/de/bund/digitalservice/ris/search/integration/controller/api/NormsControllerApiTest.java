@@ -693,4 +693,29 @@ class NormsControllerApiTest extends ContainersIntegrationBase {
     URI uri = URI.create(MANIFESTATION_URL_HTML.replace(".html", "/" + encodedMissing + ".html"));
     mockMvc.perform(get(uri).contentType(MediaType.TEXT_HTML)).andExpect(status().isNotFound());
   }
+
+  @Test
+  @DisplayName("It returns all workExamples of a given workEli")
+  void itReturnsTheWorkExmapleOfAGivenWorkEli() throws Exception {
+
+    mockMvc
+        .perform(
+            get(ApiConfig.Paths.LEGISLATION_WORK_EXAMPLE + "/bund/bgbl-1/1000/test")
+                .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.@type", equalTo("hydra:Collection")))
+        .andExpect(
+            jsonPath("$.@id", equalTo("/v1/legislation/work-example/eli?pageIndex=0&size=100")))
+        .andExpect(jsonPath("$.member[0].@type", equalTo("Legislation")))
+        .andExpect(
+            jsonPath(
+                "$.member[0].@id",
+                equalTo("/v1/legislation/eli/bund/bgbl-1/1000/test/2000-10-06/2/deu")))
+        .andExpect(
+            jsonPath(
+                "$.member[0].legislationIdentifier",
+                equalTo("eli/bund/bgbl-1/1000/test/2000-10-06/2/deu")))
+        .andExpect(jsonPath("$.member[0].temporalCoverage", equalTo("2025-11-01/..")))
+        .andExpect(jsonPath("$.member[0].legislationLegalForce", equalTo("InForce")));
+  }
 }

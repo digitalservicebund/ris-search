@@ -5,6 +5,7 @@ import static org.springframework.http.HttpHeaders.CONTENT_DISPOSITION;
 import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.exception.CustomValidationException;
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
+import de.bund.digitalservice.ris.search.mapper.LegislationExpressionSearchSchemaMapper;
 import de.bund.digitalservice.ris.search.mapper.NormSchemaMapper;
 import de.bund.digitalservice.ris.search.mapper.NormSearchResponseMapper;
 import de.bund.digitalservice.ris.search.mapper.SortParamsConverter;
@@ -14,6 +15,7 @@ import de.bund.digitalservice.ris.search.models.api.parameters.PaginationParams;
 import de.bund.digitalservice.ris.search.models.api.parameters.UniversalSearchParams;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.schema.CollectionSchema;
+import de.bund.digitalservice.ris.search.schema.LegislationExpressionSearchSchema;
 import de.bund.digitalservice.ris.search.schema.LegislationWorkSchema;
 import de.bund.digitalservice.ris.search.schema.LegislationWorkSearchSchema;
 import de.bund.digitalservice.ris.search.schema.SearchMemberSchema;
@@ -22,6 +24,8 @@ import de.bund.digitalservice.ris.search.service.xslt.NormXsltTransformerService
 import de.bund.digitalservice.ris.search.utils.LuceneQueryTools;
 import de.bund.digitalservice.ris.search.utils.eli.ExpressionEli;
 import de.bund.digitalservice.ris.search.utils.eli.ManifestationEli;
+import de.bund.digitalservice.ris.search.utils.eli.WorkEli;
+import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -35,6 +39,7 @@ import java.util.List;
 import java.util.Optional;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.elasticsearch.UncategorizedElasticsearchException;
 import org.springframework.data.elasticsearch.core.SearchPage;
@@ -203,6 +208,49 @@ public class NormsController {
     return result
         .map(r -> ResponseEntity.ok(NormSchemaMapper.fromDomain(r)))
         .orElse(ResponseEntity.notFound().build());
+  }
+
+  /**
+   * Retrieves all expression level metadata for a given workEli
+   *
+   * @param jurisdiction the jurisdiction to which the legal document belongs
+   * @param agent the agent responsible for the legal document
+   * @param year the year of issuance for the legal document
+   * @param naturalIdentifier an identifier for the legal document
+   * @param pagination the pagination parameters defining page size and index
+   * @return a paginated collection {@link CollectionSchema} of expression level metadata {@link
+   *     LegislationExpressionSearchSchema}
+   */
+  @GetMapping(
+      path =
+          ApiConfig.Paths.LEGISLATION_WORK_EXAMPLE
+              + "/{jurisdiction}/{agent}/{year}/{naturalIdentifier}",
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @Operation(
+      summary = "Retrieves expression level metadata for a given work eli",
+      description =
+          "Returns the expression-level (\"workExample\") metadata of a legislation item.")
+  @ApiResponse(responseCode = "200")
+  @ApiResponse(responseCode = "404", content = @Content)
+  @Hidden
+  public CollectionSchema<LegislationExpressionSearchSchema> getWorkExamples(
+      @Parameter(description = BUND_DESCRIPTION, schema = @Schema(allowableValues = {BUND_EXAMPLE}))
+          @PathVariable
+          String jurisdiction,
+      @Parameter(description = AGENT_DESCRIPTION, example = AGENT_EXAMPLE) @PathVariable
+          String agent,
+      @Parameter(description = YEAR_DESCRIPTION, example = YEAR_EXAMPLE) @PathVariable String year,
+      @Parameter(description = NATURAL_IDENTIFIER_DESCRIPTION, example = NATURAL_IDENTIFIER_EXAMPLE)
+          @PathVariable
+          String naturalIdentifier,
+      @ParameterObject @Valid PaginationParams pagination) {
+    WorkEli eli = new WorkEli(jurisdiction, agent, year, naturalIdentifier);
+    Page<Norm> expressions =
+        normsService.getWorkExpressions(
+            eli, PageRequest.of(pagination.getPageIndex(), pagination.getSize()));
+
+    return LegislationExpressionSearchSchemaMapper.fromNormsPage(
+        expressions, ApiConfig.Paths.LEGISLATION_WORK_EXAMPLE);
   }
 
   /**
