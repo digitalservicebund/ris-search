@@ -71,13 +71,17 @@ jobs:
         run: |
           nohup ./gradlew bootRun --no-daemon > backend.log 2>&1 &
           sleep 8
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          package_json_file: ./frontend/package.json
       - uses: actions/setup-node@v6
         with:
           node-version: 24
-          cache: 'yarn'
-          cache-dependency-path: ./frontend/yarn.lock
+          cache: 'pnpm'
+          cache-dependency-path: ./frontend/pnpm-lock.yaml
       - name: Install Node modules
-        run: yarn install --immutable
+        run: pnpm install --frozen-lockfile
         working-directory: ./frontend
       - name: Start frontend locally (background)
         working-directory: ./frontend
@@ -87,9 +91,9 @@ jobs:
           SENTRY_TELEMETRY: false
           CI: true
         run: |
-          nohup yarn dev --no-devtools --port 3000 > frontend.log 2>&1 &
+          nohup pnpm dev --no-devtools --port 3000 > frontend.log 2>&1 &
       - name: Get Playwright version
-        run: echo "PLAYWRIGHT_VERSION=$(yarn list --pattern @playwright/test | awk -F "@" 'NR==2 {print $NF}')" >> $GITHUB_ENV
+        run: echo "PLAYWRIGHT_VERSION=$(pnpm list @playwright/test --depth=0 | grep @playwright/test | awk '{print $2}')" >> $GITHUB_ENV
         working-directory: ./frontend
       - name: Cache browser binaries
         id: playwright-cache
@@ -98,7 +102,7 @@ jobs:
           path: /home/runner/.cache/ms-playwright
           key: ${{ runner.os }}-playwright-${{ env.PLAYWRIGHT_VERSION }}
       - name: Install Playwright browsers
-        run: yarn exec playwright install --with-deps chromium firefox webkit
+        run: pnpm exec playwright install --with-deps chromium firefox webkit
         working-directory: ./frontend
       - name: Wait for backend to respond
         run: |
@@ -117,7 +121,7 @@ jobs:
           done
           echo "Nuxt is ready!"
       - name: Run Playwright tests
-        run: yarn exec playwright test --project ${{ matrix.browser }}
+        run: pnpm exec playwright test --project ${{ matrix.browser }}
         working-directory: ./frontend
         env:
           NUXT_PUBLIC_PRIVATE_FEATURES_ENABLED: ${{ matrix.private_features_enabled }}
@@ -163,7 +167,7 @@ jobs:
         run: docker compose -f docker-compose.yml down -v
       - name: Kill frontend dev process
         if: ${{ always() }}
-        run: pkill -f "yarn dev" || true
+        run: pkill -f "pnpm dev" || true
       - name: Kill backend process
         if: ${{ always() }}
         run: pkill -f "bootRun" || true
