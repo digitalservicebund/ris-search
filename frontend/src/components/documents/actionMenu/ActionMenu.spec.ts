@@ -20,6 +20,9 @@ const actions: ActionMenuItem[] = [
   },
 ];
 
+// NOTE: only testing the "desktop" variant here as testing the different
+// variants which are based on the screen size is not reliably doable
+// without a real browser
 describe("ActionMenu", () => {
   beforeEach(() => {
     vi.clearAllMocks();
