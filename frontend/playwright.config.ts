@@ -10,6 +10,7 @@ const projects: Project[] = [
     name: "chromium",
     use: {
       ...devices["Desktop Chrome"],
+      permissions: ["clipboard-read", "clipboard-write"],
     },
   },
   {

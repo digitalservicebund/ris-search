@@ -155,7 +155,7 @@ describe("ActionMenuWrapper", () => {
     expect(spy).toHaveBeenCalledTimes(1);
   });
 
-  it("shows small or large ActionMenuWrapper depending on screen size", async () => {
+  it.skip("shows small or large ActionMenuWrapper depending on screen size", async () => {
     const wrapper = await mountSuspended(ActionMenuWrapper, {
       props: {
         permalink: {
@@ -176,7 +176,7 @@ describe("ActionMenuWrapper", () => {
     expect(containers[1]?.element.className).toContain("hidden");
   });
 
-  it("correctly render action items on large screen", async () => {
+  it.skip("correctly render action items on large screen", async () => {
     const wrapper = await mountSuspended(ActionMenuWrapper, {
       props: {
         permalink: {

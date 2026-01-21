@@ -28,37 +28,30 @@ const toggle = (event: Event) => {
     </Button>
     <Menu ref="menu" :popup="true" :model="actions" class="print:hidden">
       <template #item="{ item }">
-        <div
-          class="flex h-full items-center py-4"
-          data-pc-section="itemcontent"
-          bis_skin_checked="1"
+        <NuxtLink
+          v-if="!item.disabled"
+          class="flex cursor-pointer items-center gap-8 no-underline"
+          :to="item.url"
+          data-pc-section="itemlink"
+          :data-attr="(item as ActionMenuItem).analyticsId"
         >
-          <NuxtLink
-            v-if="!item.disabled"
-            class="flex cursor-pointer items-center gap-8 no-underline"
-            :to="item.url"
-            data-pc-section="itemlink"
-            :data-attr="(item as ActionMenuItem).analyticsId"
-          >
-            <component :is="(item as ActionMenuItem).iconComponent" />
-            <span>{{ item.label }}</span>
-          </NuxtLink>
-          <span
-            v-else
-            class="flex cursor-not-allowed items-center gap-8 text-gray-800"
-          >
-            <component :is="(item as ActionMenuItem).iconComponent" />
-            <span>{{ item.label }}</span>
-          </span>
-        </div>
+          <component :is="(item as ActionMenuItem).iconComponent" />
+          <span>{{ item.label }}</span>
+        </NuxtLink>
+        <span
+          v-else
+          class="flex cursor-not-allowed items-center gap-8 text-gray-800"
+        >
+          <component :is="(item as ActionMenuItem).iconComponent" />
+          <span>{{ item.label }}</span>
+        </span>
       </template>
     </Menu>
   </div>
-  <div class="hidden sm:flex">
-    <div class="flex items-center *:-mx-4">
+
+  <ul role="menu" class="hidden items-center *:-mx-4 sm:flex">
+    <li v-for="item in actions" :key="item.label" role="menuitem">
       <Button
-        v-for="item in actions"
-        :key="item.label"
         v-tooltip.bottom="item.label"
         text
         :disabled="item.disabled"
@@ -73,6 +66,6 @@ const toggle = (event: Event) => {
           <component :is="(item as ActionMenuItem).iconComponent" />
         </template>
       </Button>
-    </div>
-  </div>
+    </li>
+  </ul>
 </template>
