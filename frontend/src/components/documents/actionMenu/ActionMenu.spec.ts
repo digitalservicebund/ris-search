@@ -49,7 +49,7 @@ describe("ActionMenu", () => {
     });
 
     expect(commandActionButton).toBeVisible();
-    expect(commandActionButton).not.toBeDisabled();
+    expect(commandActionButton).toBeEnabled();
 
     // Displays the provided icon component
     expect(screen.getByText("CommandIcon")).toBeVisible();
@@ -71,7 +71,7 @@ describe("ActionMenu", () => {
     });
 
     expect(navigateActionLink).toBeVisible();
-    expect(navigateActionLink).not.toBeDisabled();
+    expect(navigateActionLink).toBeEnabled();
     expect(navigateActionLink).toHaveAttribute("href", "https://example.com");
 
     // Displays the provided icon component
