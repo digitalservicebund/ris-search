@@ -18,7 +18,7 @@ describe("useCommandActionItem", () => {
     expect(item.iconComponent).toEqual(PdfIcon);
 
     expect(someAction).not.toHaveBeenCalled();
-    item.command();
+    item.command?.();
     expect(someAction).toHaveBeenCalledOnce();
 
     expect(item.disabled).toBeTruthy();

@@ -8,6 +8,7 @@ import MdiDotsVertical from "~icons/mdi/dots-vertical";
 export type ActionMenuItem = Omit<MenuItem, "icon"> & {
   iconComponent: Component;
   analyticsId?: string;
+  command?: () => void | Promise<void>;
 };
 
 const { actions } = defineProps<{ actions: ActionMenuItem[] }>();

@@ -63,6 +63,9 @@ function renderNormActionMenu(
   });
 }
 
+// NOTE: only testing the "desktop" variant here as testing the different
+// variants which are based on the screen size is not reliably doable
+// without a real browser - desktop and mobile will be tested in the e2e tests
 describe("NormActionMenu", () => {
   beforeEach(() => {
     vi.resetAllMocks();

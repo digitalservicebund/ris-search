@@ -329,7 +329,7 @@ test.describe("actions menu", () => {
           await page.getByLabel("Aktionen anzeigen").click();
         }
 
-        const button = page.getByRole("link", { name: testCase.linkText });
+        const button = page.getByRole("button", { name: testCase.linkText });
         await button.isVisible();
 
         if (!isMobileTest) {
@@ -430,7 +430,7 @@ test.describe("actions menu", () => {
 
     await button.click();
     await page.waitForURL(
-      `v1/legislation/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu/2024-12-19/regelungstext-1.xml`,
+      "http://localhost:8090/v1/legislation/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu/2024-12-19/regelungstext-1.xml",
       { waitUntil: "commit" },
     );
   });

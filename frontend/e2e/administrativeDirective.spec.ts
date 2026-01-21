@@ -208,7 +208,7 @@ test.describe("actions menu", () => {
       await page.getByLabel("Aktionen anzeigen").click();
     }
 
-    const button = page.getByRole("link", {
+    const button = page.getByRole("button", {
       name: "Link kopieren",
     });
 

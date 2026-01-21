@@ -7,8 +7,7 @@ import XmlIcon from "~icons/custom/xml";
 import MaterialSymbolsLink from "~icons/material-symbols/link";
 import MaterialSymbolsPrint from "~icons/material-symbols/print";
 
-const { mockNavigationCommand, mockCopyUrlCommand } = vi.hoisted(() => ({
-  mockNavigationCommand: vi.fn(),
+const { mockCopyUrlCommand } = vi.hoisted(() => ({
   mockCopyUrlCommand: vi.fn(),
 }));
 
@@ -17,7 +16,6 @@ const minimalExpectedActions = [
     key: "permalink",
     label: "Link kopieren",
     iconComponent: MaterialSymbolsLink,
-    url: "https://permalink.com/",
   },
   {
     key: "print",
@@ -46,7 +44,6 @@ describe("actionMenuUtils.ts", () => {
         },
       },
       mockCopyUrlCommand,
-      mockNavigationCommand,
     );
 
     expect(result).toMatchObject(minimalExpectedActions);
@@ -66,7 +63,6 @@ describe("actionMenuUtils.ts", () => {
         },
       },
       mockCopyUrlCommand,
-      mockNavigationCommand,
     );
 
     const expectedActions = [
@@ -74,7 +70,6 @@ describe("actionMenuUtils.ts", () => {
         key: "link",
         label: "Copy link",
         iconComponent: UpdatingLinkIcon,
-        url: "https://link.com/",
       },
       ...minimalExpectedActions,
     ];
@@ -93,7 +88,6 @@ describe("actionMenuUtils.ts", () => {
         xmlUrl: "https://xml.xml",
       },
       mockCopyUrlCommand,
-      mockNavigationCommand,
     );
 
     const expectedActions = [
@@ -123,7 +117,6 @@ describe("actionMenuUtils.ts", () => {
         },
       },
       mockCopyUrlCommand,
-      mockNavigationCommand,
     );
 
     const copyLinkCommand = findCommandForActionWithKey(result, "link");
@@ -149,7 +142,6 @@ describe("actionMenuUtils.ts", () => {
         },
       },
       mockCopyUrlCommand,
-      mockNavigationCommand,
     );
 
     const printCommand = findCommandForActionWithKey(result, "print");
@@ -170,13 +162,9 @@ describe("actionMenuUtils.ts", () => {
         xmlUrl: "https://xml.xml",
       },
       mockCopyUrlCommand,
-      mockNavigationCommand,
     );
 
-    const xmlCommand = findCommandForActionWithKey(result, "xml");
-    xmlCommand?.();
-
-    expect(mockNavigationCommand).toHaveBeenCalledExactlyOnceWith(
+    expect(result.find((action) => action.key === "xml")?.url).toEqual(
       "https://xml.xml",
     );
   });

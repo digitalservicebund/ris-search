@@ -34,7 +34,7 @@ describe("useCopyUrlActionItem", () => {
     expect(mockToastAdd).not.toHaveBeenCalled();
 
     // command should do nothing when no url is given
-    await item.command();
+    await item.command?.();
 
     expect(navigator.clipboard.writeText).not.toHaveBeenCalled();
     expect(mockToastAdd).not.toHaveBeenCalled();
@@ -50,7 +50,7 @@ describe("useCopyUrlActionItem", () => {
     expect(navigator.clipboard.writeText).not.toHaveBeenCalled();
     expect(mockToastAdd).not.toHaveBeenCalled();
 
-    await item.command();
+    await item.command?.();
 
     expect(navigator.clipboard.writeText).toHaveBeenCalledExactlyOnceWith(
       "https://example.com",
