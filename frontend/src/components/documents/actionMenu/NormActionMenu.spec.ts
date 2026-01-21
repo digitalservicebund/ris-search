@@ -14,6 +14,10 @@ const { mockToastAdd } = vi.hoisted(() => ({
   mockToastAdd: vi.fn(),
 }));
 
+vi.mock("~/composables/useBackendUrl", () => ({
+  default: vi.fn((url?: string) => url),
+}));
+
 vi.mock("primevue/usetoast", () => ({
   useToast: () => ({
     add: mockToastAdd,
@@ -61,7 +65,7 @@ function renderNormActionMenu(
 
 describe("NormActionMenu", () => {
   beforeEach(() => {
-    vi.clearAllMocks();
+    vi.resetAllMocks();
   });
 
   it("can copy link to currently valid expression", async () => {

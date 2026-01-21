@@ -66,7 +66,7 @@ const toggle = (event: Event) => {
         :as="item.url ? NuxtLink : undefined"
         :data-attr="(item as ActionMenuItem).analyticsId"
         external
-        @click="item.command && item.command()"
+        @click="item.command"
       >
         <template #icon>
           <component :is="(item as ActionMenuItem).iconComponent" />

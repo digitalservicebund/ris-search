@@ -15,7 +15,7 @@ vi.mock("primevue/usetoast", () => ({
 
 describe("useCopyUrlActionItem", () => {
   beforeEach(() => {
-    // vi.clearAllMocks();
+    vi.resetAllMocks();
     vi.stubGlobal("navigator", {
       clipboard: {
         writeText: vi.fn(),
@@ -33,7 +33,8 @@ describe("useCopyUrlActionItem", () => {
     expect(navigator.clipboard.writeText).not.toHaveBeenCalled();
     expect(mockToastAdd).not.toHaveBeenCalled();
 
-    item.command();
+    // command should do nothing when no url is given
+    await item.command();
 
     expect(navigator.clipboard.writeText).not.toHaveBeenCalled();
     expect(mockToastAdd).not.toHaveBeenCalled();
@@ -49,7 +50,7 @@ describe("useCopyUrlActionItem", () => {
     expect(navigator.clipboard.writeText).not.toHaveBeenCalled();
     expect(mockToastAdd).not.toHaveBeenCalled();
 
-    item.command();
+    await item.command();
 
     expect(navigator.clipboard.writeText).toHaveBeenCalledExactlyOnceWith(
       "https://example.com",
