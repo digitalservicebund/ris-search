@@ -1,5 +1,5 @@
 import { renderSuspended } from "@nuxt/test-utils/runtime";
-import userEvent from "@testing-library/user-event";
+import { userEvent } from "@testing-library/user-event";
 import { screen } from "@testing-library/vue";
 import { InputText } from "primevue";
 import { describe, expect, it } from "vitest";
@@ -10,7 +10,7 @@ describe("YearRangeFilter", () => {
   const setup: [
     mode: DateSearchMode,
     fields: string[],
-    expectations: Record<string, string>,
+    expectations: { dateAfter?: string; dateBefore?: string },
   ][] = [
     [DateSearchMode.None, [], {}],
     [
@@ -52,17 +52,22 @@ describe("YearRangeFilter", () => {
       }
 
       // verify emitted values
-      if ("dateAfter" in expectations) {
-        expect(emitted("update:dateAfter")).toContainEqual([
-          expectations.dateAfter,
-        ]);
-      }
+      const dateAfterEmitted = emitted("update:dateAfter");
+      const dateBeforeEmitted = emitted("update:dateBefore");
 
-      if ("dateBefore" in expectations) {
-        expect(emitted("update:dateBefore")).toContainEqual([
-          expectations.dateBefore,
-        ]);
-      }
+      expect(dateAfterEmitted).toSatisfy((events: unknown) =>
+        expectations.dateAfter
+          ? Array.isArray(events) &&
+            events.some((e) => Array.isArray(e) && e[0] === expectations.dateAfter)
+          : !events || (Array.isArray(events) && events.length === 0),
+      );
+
+      expect(dateBeforeEmitted).toSatisfy((events: unknown) =>
+        expectations.dateBefore
+          ? Array.isArray(events) &&
+            events.some((e) => Array.isArray(e) && e[0] === expectations.dateBefore)
+          : !events || (Array.isArray(events) && events.length === 0),
+      );
     },
   );
 

@@ -26,7 +26,7 @@ export const useIntersectionObserver = () => {
           visibleIds.value?.filter((id) => id !== entry.target.id) ?? [];
       }
     });
-    const sorted = visibleIds.value.sort();
+    const sorted = visibleIds.value.toSorted();
 
     // prevent overriding the entry selected based on the hash, only set it if none is selected
     if (initialLoad.value && selectedEntry.value?.length) {

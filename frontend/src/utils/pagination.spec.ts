@@ -16,7 +16,7 @@ function getPage(params: {
   return {
     "@id": `list?pageIndex=${params.page}&size=${params.size}`,
     totalItems: params.totalItems,
-    member: new Array(params.itemsOnPage) as SearchResult<AnyDocument>[],
+    member: Array.from({ length: params.itemsOnPage }) as SearchResult<AnyDocument>[],
     view: {},
   };
 }
@@ -122,7 +122,7 @@ describe("buildResultCountString", () => {
 
   it("returns special message for 10000 results", () => {
     const page = {
-      member: new Array(10),
+      member: Array.from({ length: 10 }),
       totalItems: 10000,
       "@id": "",
       view: {},

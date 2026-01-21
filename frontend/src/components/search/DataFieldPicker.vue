@@ -80,6 +80,7 @@ function insertInQuery({ pattern }: DataField) {
 
     focusableInput.focus();
     focusableInput.setSelectionRange(nextCursorPosition, nextCursorPosition);
+    return;
   });
 }
 

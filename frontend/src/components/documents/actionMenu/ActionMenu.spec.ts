@@ -69,7 +69,7 @@ describe("ActionMenu", () => {
     });
   });
 
-  it("it passes props to createActionMenuItems to create items", async () => {
+  it("passes props to createActionMenuItems to create items", async () => {
     const spy = vi.spyOn(actionMenuUtils, "createActionMenuItems");
 
     const props = {

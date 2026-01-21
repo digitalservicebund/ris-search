@@ -1,5 +1,5 @@
 import type { PostHog } from "posthog-js";
-import posthog from "posthog-js";
+import { posthog } from "posthog-js";
 import type { QueryParams } from "~/composables/useSimpleSearchParams/useSimpleSearchParams";
 import {
   getStringOrUndefined,

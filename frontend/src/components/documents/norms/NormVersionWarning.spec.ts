@@ -74,7 +74,7 @@ describe("NormVersionWarning", () => {
     },
   ];
 
-  test.for(testCases)("$label", async (testData) => {
+  it.each(testCases)("$label", async (testData) => {
     render(NormVersionWarning, {
       props: {
         versions: testVersions,
