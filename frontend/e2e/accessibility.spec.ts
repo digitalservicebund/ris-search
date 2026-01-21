@@ -39,7 +39,7 @@ const testPages = [
   },
   {
     name: "Open Source Page",
-    url: "/opensource",
+    url: "/open-source",
   },
   // {
   //   name: "User Tests Page",
