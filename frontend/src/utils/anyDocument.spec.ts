@@ -303,7 +303,9 @@ describe("anyDocument", () => {
 
     it("throws if the document type is not supported", () => {
       // @ts-expect-error Deliberately providing an invalid type
-      expect(() => getIdentifier({ "@type": "fake type" })).toThrow("Failed to identify document");
+      expect(() => getIdentifier({ "@type": "fake type" })).toThrow(
+        "Failed to identify document",
+      );
     });
   });
 });

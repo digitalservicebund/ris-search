@@ -16,7 +16,9 @@ function getPage(params: {
   return {
     "@id": `list?pageIndex=${params.page}&size=${params.size}`,
     totalItems: params.totalItems,
-    member: Array.from({ length: params.itemsOnPage }) as SearchResult<AnyDocument>[],
+    member: Array.from({
+      length: params.itemsOnPage,
+    }) as SearchResult<AnyDocument>[],
     view: {},
   };
 }

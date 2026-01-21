@@ -58,14 +58,18 @@ describe("YearRangeFilter", () => {
       expect(dateAfterEmitted).toSatisfy((events: unknown) =>
         expectations.dateAfter
           ? Array.isArray(events) &&
-            events.some((e) => Array.isArray(e) && e[0] === expectations.dateAfter)
+            events.some(
+              (e) => Array.isArray(e) && e[0] === expectations.dateAfter,
+            )
           : !events || (Array.isArray(events) && events.length === 0),
       );
 
       expect(dateBeforeEmitted).toSatisfy((events: unknown) =>
         expectations.dateBefore
           ? Array.isArray(events) &&
-            events.some((e) => Array.isArray(e) && e[0] === expectations.dateBefore)
+            events.some(
+              (e) => Array.isArray(e) && e[0] === expectations.dateBefore,
+            )
           : !events || (Array.isArray(events) && events.length === 0),
       );
     },
