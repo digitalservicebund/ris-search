@@ -4,11 +4,7 @@ import utc from "dayjs/plugin/utc";
 import _ from "lodash";
 import { describe, expect, vi } from "vitest";
 import { parseDateGermanLocalTime } from "./dateFormatting";
-import type {
-  LegislationExpression,
-  LegislationWork,
-  SearchResult,
-} from "~/types";
+import type { LegislationExpression } from "~/types";
 import {
   getMostRelevantExpression,
   getValidityStatus,
@@ -150,14 +146,9 @@ describe("getMostRelevantExpression", () => {
 
   function transform(
     partialExpressions: PartialExpression[],
-  ): SearchResult<LegislationWork>[] {
+  ): LegislationExpression[] {
     return partialExpressions.map(
-      (partialExpression) =>
-        ({
-          item: {
-            workExample: partialExpression as LegislationExpression,
-          },
-        }) as SearchResult<LegislationWork>,
+      (partialExpression) => partialExpression as LegislationExpression,
     );
   }
 

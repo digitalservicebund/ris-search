@@ -1,75 +1,72 @@
 import { render, screen } from "@testing-library/vue";
 import NormVersionWarning from "./NormVersionWarning.vue";
-import type { LegislationWork, SearchResult } from "~/types";
+import type { LegislationExpression, LegislationWork } from "~/types";
 
 describe("NormVersionWarning", () => {
   const testVersions = [
     {
-      item: {
-        legislationIdentifier: "eli/bund/bgbl-1/2020/s1126/regelungstext-1",
-        workExample: {
-          temporalCoverage: "2020-01-01/2022-12-31",
-          legislationIdentifier:
-            "eli/bund/bgbl-1/2020/s1126/2020-08-04/1/deu/regelungstext-1",
-          legislationLegalForce: "NotInForce",
-        },
-      },
+      temporalCoverage: "2020-01-01/2022-12-31",
+      legislationIdentifier: "eli/bund/bgbl-1/2020/s1126/2020-08-04/1/deu",
+      legislationLegalForce: "NotInForce",
     },
     {
-      item: {
-        legislationIdentifier: "eli/bund/bgbl-1/2020/s1126/regelungstext-1",
-        workExample: {
-          temporalCoverage: "2023-01-01/2823-12-31",
-          legislationIdentifier:
-            "eli/bund/bgbl-1/2020/s1126/2023-01-01/1/deu/regelungstext-1",
-          legislationLegalForce: "InForce",
-        },
-      },
+      temporalCoverage: "2023-01-01/2823-12-31",
+      legislationIdentifier: "eli/bund/bgbl-1/2020/s1126/2023-01-01/1/deu",
+      legislationLegalForce: "InForce",
     },
     {
-      item: {
-        legislationIdentifier: "eli/bund/bgbl-1/2020/s1126/regelungstext-1",
-        workExample: {
-          temporalCoverage: "2824-01-01/2923-12-31",
-          legislationIdentifier:
-            "eli/bund/bgbl-1/2020/s1126/2024-01-01/1/deu/regelungstext-1",
-          legislationLegalForce: "NotInForce",
-        },
-      },
+      temporalCoverage: "2824-01-01/2923-12-31",
+      legislationIdentifier: "eli/bund/bgbl-1/2020/s1126/2024-01-01/1/deu",
+      legislationLegalForce: "NotInForce",
     },
     {
-      item: {
-        legislationIdentifier: "eli/bund/bgbl-1/2020/s1126/regelungstext-1",
-        workExample: {
-          temporalCoverage: "2924-01-01/..",
-          legislationIdentifier:
-            "eli/bund/bgbl-1/2020/s1126/2924-01-01/1/deu/regelungstext-1",
-          legislationLegalForce: "NotInForce",
-        },
-      },
+      temporalCoverage: "2924-01-01/..",
+      legislationIdentifier: "eli/bund/bgbl-1/2020/s1126/2924-01-01/1/deu",
+      legislationLegalForce: "NotInForce",
     },
-  ] as SearchResult<LegislationWork>[];
+  ] as LegislationExpression[];
 
   const testCases = [
     {
       label: "inForce points to next neue Fassung",
-      currentlyRendered: testVersions[1]!.item,
+      currentlyRendered: {
+        legislationIdentifier: "eli/bund/bgbl-1/2020/s1126",
+        workExample: {
+          temporalCoverage: testVersions[1]!.temporalCoverage,
+          legislationIdentifier: testVersions[1]!.legislationIdentifier,
+          legislationLegalForce: testVersions[1]!.legislationLegalForce,
+        },
+      },
       messageText: "Ab 01.01.2824 gilt eine neue Fassung.",
-      link: `/norms/${testVersions[2]!.item.workExample.legislationIdentifier}`,
+      link: `/norms/${testVersions[2]!.legislationIdentifier}`,
       linkText: "Zur zukünftigen Fassung",
     },
     {
       label: "historic version points to inForce Fassung",
-      currentlyRendered: testVersions[0]!.item,
+      currentlyRendered: {
+        legislationIdentifier: "eli/bund/bgbl-1/2020/s1126",
+        workExample: {
+          temporalCoverage: testVersions[0]!.temporalCoverage,
+          legislationIdentifier: testVersions[0]!.legislationIdentifier,
+          legislationLegalForce: testVersions[0]!.legislationLegalForce,
+        },
+      },
       messageText: "Sie lesen eine historische Fassung.",
-      link: `/norms/${testVersions[1]!.item.workExample.legislationIdentifier}`,
+      link: `/norms/${testVersions[1]!.legislationIdentifier}`,
       linkText: "Zur aktuell gültigen Fassung",
     },
     {
       label: "futureInForce points to inForce Fassung",
-      currentlyRendered: testVersions[2]!.item,
+      currentlyRendered: {
+        legislationIdentifier: "eli/bund/bgbl-1/2020/s1126",
+        workExample: {
+          temporalCoverage: testVersions[2]!.temporalCoverage,
+          legislationIdentifier: testVersions[2]!.legislationIdentifier,
+          legislationLegalForce: testVersions[2]!.legislationLegalForce,
+        },
+      },
       messageText: "Sie lesen eine zukünftige Fassung.",
-      link: `/norms/${testVersions[1]!.item.workExample.legislationIdentifier}`,
+      link: `/norms/${testVersions[1]!.legislationIdentifier}`,
       linkText: "Zur aktuell gültigen Fassung",
     },
   ];
@@ -78,7 +75,7 @@ describe("NormVersionWarning", () => {
     render(NormVersionWarning, {
       props: {
         versions: testVersions,
-        currentVersion: testData.currentlyRendered,
+        currentVersion: testData.currentlyRendered as LegislationWork,
       },
       global: {
         stubs: {
@@ -109,7 +106,14 @@ describe("NormVersionWarning", () => {
     const { container } = render(NormVersionWarning, {
       props: {
         versions: [testVersions[0]!, testVersions[1]!],
-        currentVersion: testVersions[1]!.item,
+        currentVersion: {
+          legislationIdentifier: "eli/bund/bgbl-1/2020/s1126",
+          workExample: {
+            temporalCoverage: testVersions[1]!.temporalCoverage,
+            legislationIdentifier: testVersions[1]!.legislationIdentifier,
+            legislationLegalForce: testVersions[1]!.legislationLegalForce,
+          },
+        } as LegislationWork,
       },
       global: {
         stubs: ["RouterLink"],
@@ -129,7 +133,14 @@ describe("NormVersionWarning", () => {
     const { container } = render(NormVersionWarning, {
       props: {
         versions: versionsWithoutInForce,
-        currentVersion: testVersions[0]!.item,
+        currentVersion: {
+          legislationIdentifier: "eli/bund/bgbl-1/2020/s1126",
+          workExample: {
+            temporalCoverage: testVersions[0]!.temporalCoverage,
+            legislationIdentifier: testVersions[0]!.legislationIdentifier,
+            legislationLegalForce: testVersions[0]!.legislationLegalForce,
+          },
+        } as LegislationWork,
       },
       global: {
         stubs: {

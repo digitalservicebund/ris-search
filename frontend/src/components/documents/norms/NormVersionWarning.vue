@@ -1,26 +1,24 @@
 <script setup lang="ts">
 import dayjs from "dayjs";
 import VersionWarningMessage from "~/components/documents/norms/VersionWarningMessage.vue";
-import type { LegislationWork, SearchResult } from "~/types";
+import type { LegislationExpression, LegislationWork } from "~/types";
 import {
   getValidityStatus,
   temporalCoverageToValidityInterval,
 } from "~/utils/norm";
 
 const props = defineProps<{
-  versions: SearchResult<LegislationWork>[];
+  versions: LegislationExpression[];
   currentVersion: LegislationWork;
 }>();
 
 const inForceVersion = computed(() =>
-  props.versions.find(
-    (version) => version.item.workExample.legislationLegalForce === "InForce",
-  ),
+  props.versions.find((version) => version.legislationLegalForce === "InForce"),
 );
 
 const inForceVersionLink = computed(() =>
   inForceVersion.value
-    ? `/norms/${inForceVersion.value?.item.workExample.legislationIdentifier}`
+    ? `/norms/${inForceVersion.value?.legislationIdentifier}`
     : undefined,
 );
 
@@ -35,24 +33,20 @@ const firstFutureVersion = computed(() => {
   if (currentVersionValidityStatus.value !== "InForce") return undefined;
 
   const sorted = props.versions.toSorted((v1, v2) => {
-    const from1 = temporalCoverageToValidityInterval(
-      v1.item.workExample.temporalCoverage,
-    )?.from;
-    const from2 = temporalCoverageToValidityInterval(
-      v2.item.workExample.temporalCoverage,
-    )?.from;
+    const from1 = temporalCoverageToValidityInterval(v1.temporalCoverage)?.from;
+    const from2 = temporalCoverageToValidityInterval(v2.temporalCoverage)?.from;
     return dayjs(from1).diff(from2, "day");
   });
 
   const firstFutureInForce = sorted.find((v) => {
     return (
       getValidityStatus(
-        temporalCoverageToValidityInterval(v.item.workExample.temporalCoverage),
+        temporalCoverageToValidityInterval(v.temporalCoverage),
       ) === "FutureInForce"
     );
   });
 
-  return firstFutureInForce?.item;
+  return firstFutureInForce;
 });
 </script>
 

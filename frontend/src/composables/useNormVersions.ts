@@ -1,20 +1,37 @@
-import { computed } from "vue";
+import { computed, type ComputedRef } from "vue";
 import type { AsyncDataRequestStatus } from "#app";
-import type { JSONLDList, LegislationWork, SearchResult } from "~/types";
+import type {
+  JSONLDList,
+  LegislationExpression,
+  LegislationWork,
+  SearchResult,
+} from "~/types";
 import { getCurrentDateInGermanyFormatted } from "~/utils/dateFormatting";
 
 interface UseNormVersions {
   status: Ref<AsyncDataRequestStatus>;
-  sortedVersions: ComputedRef<SearchResult<LegislationWork>[]>;
+  sortedVersions: ComputedRef<LegislationExpression[]>;
 }
 
 export function useNormVersions(workEli?: string): UseNormVersions {
-  const { data, status } = getNorms({
-    eli: workEli,
-    sort: "-temporalCoverageFrom",
-  });
+  const { data, status } = getNormVersions(workEli);
   const sortedVersions = computed(() => data.value?.member ?? []);
   return { status, sortedVersions };
+}
+
+function getNormVersions(workEli?: string) {
+  const immediate = true;
+  const { status, data, error } = useRisBackend<
+    JSONLDList<LegislationExpression>
+  >(`/v1/legislation/work-example/${workEli}`, {
+    immediate: immediate,
+  });
+
+  if (error?.value) {
+    showError(error.value);
+  }
+
+  return { status, data };
 }
 
 function getNorms(params: {

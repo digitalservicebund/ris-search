@@ -1,7 +1,7 @@
 import { renderSuspended } from "@nuxt/test-utils/runtime";
 import { screen } from "@testing-library/vue";
 import VersionWarningMessage from "./VersionWarningMessage.vue";
-import type { LegislationWork, SearchResult } from "~/types";
+import type { LegislationExpression } from "~/types";
 
 const baseProps = {
   inForceVersionLink: "/norms/eli/bund/bgbl-1/2000/s100/2000-01-01/1/deu",
@@ -10,14 +10,10 @@ const baseProps = {
 };
 
 const futureVersion = {
-  item: {
-    workExample: {
-      legislationIdentifier: "future-id",
-      temporalCoverage: "2100-01-01/..",
-    },
-  },
+  legislationIdentifier: "future-id",
+  temporalCoverage: "2100-01-01/..",
   versionDates: ["2100-01-01"],
-} as unknown as SearchResult<LegislationWork>;
+} as unknown as LegislationExpression;
 
 describe("VersionWarningMessage", () => {
   it("shows info message for inForce with futureVersion", async () => {
@@ -25,7 +21,7 @@ describe("VersionWarningMessage", () => {
       props: {
         ...baseProps,
         currentVersionValidityStatus: "InForce",
-        futureVersion: futureVersion.item,
+        futureVersion: futureVersion,
       },
       global: {
         stubs: {

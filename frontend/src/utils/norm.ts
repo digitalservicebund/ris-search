@@ -1,7 +1,7 @@
 import dayjs, { type Dayjs } from "dayjs";
 import _ from "lodash";
 import type { MetadataItem } from "~/components/Metadata.vue";
-import type { LegislationWork, SearchResult } from "~/types";
+import type { LegislationExpression, LegislationWork } from "~/types";
 import {
   dateFormattedDDMMYYYY,
   getCurrentDateInGermany,
@@ -88,12 +88,11 @@ export function getNormTitle(norm: LegislationWork): string {
 }
 
 export function getMostRelevantExpression(
-  list: SearchResult<LegislationWork>[],
+  expressions: LegislationExpression[],
 ): string | null | undefined {
-  if (list.length === 0) {
+  if (expressions.length === 0) {
     return null;
   }
-  const expressions = list.map((member) => member.item.workExample);
   const activeExpressions = expressions.filter(
     (expression) => expression.legislationLegalForce === "InForce",
   );
