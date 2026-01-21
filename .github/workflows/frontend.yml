@@ -29,21 +29,27 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v6
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          package_json_file: ./frontend/package.json
       - name: Setup Node
         uses: actions/setup-node@v6
         with:
           node-version: 24
+          cache: 'pnpm'
+          cache-dependency-path: ./frontend/pnpm-lock.yaml
       - name: Install Node modules
-        run: yarn install --immutable
+        run: pnpm install --frozen-lockfile
         working-directory: ./frontend
       - name: Prepare Nuxt
-        run: yarn run prepare
+        run: pnpm run prepare
         working-directory: ./frontend
       - name: Check style
-        run: yarn run style:check
+        run: pnpm run style:check
         working-directory: ./frontend
       - name: Run tests with coverage
-        run: yarn run coverage
+        run: pnpm run coverage
         working-directory: ./frontend
       - name: Set up SonarCloud
         if: ${{  github.actor != 'dependabot[bot]' }}
@@ -77,15 +83,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          package_json_file: ./frontend/package.json
       - name: Setup Node
         uses: actions/setup-node@v6
         with:
           node-version: 24
+          cache: 'pnpm'
+          cache-dependency-path: ./frontend/pnpm-lock.yaml
       - name: Install Node modules
-        run: yarn install --immutable
+        run: pnpm install --frozen-lockfile
         working-directory: ./frontend
       - name: Run licence scanner
-        run: yarn audit:licences
+        run: pnpm audit:licences
         working-directory: ./frontend
       - name: Upload licence report
         uses: actions/upload-artifact@v6

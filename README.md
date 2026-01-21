@@ -10,7 +10,7 @@ These instructions are written assuming development takes place on macOS.
 ## Prerequisites
 
 ### Java
-This project uses Java 21 for the backend. Check your java version with 
+This project uses Java 21 for the backend. Check your java version with
 ```bash
 java --version
 ```
@@ -153,7 +153,7 @@ The end-to-end tests use Playwright and the test cases are located in the `./fro
 1. Install the required browser dependencies:
 
    ```bash
-   npx playwright install --with-deps chromium firefox webkit
+   pnpm exec playwright install --with-deps chromium firefox webkit
    ```
 2. Run the OpenSearch container (required for indexed data):
 
@@ -174,7 +174,7 @@ The end-to-end tests use Playwright and the test cases are located in the `./fro
 4. Run the frontend from the `frontend` folder:
 
    ```bash
-   yarn dev
+   pnpm dev
    ```
 
    **Note:** Copy the variables from `.env.example` into a `.env` file and configure them correctly.
@@ -184,19 +184,19 @@ The end-to-end tests use Playwright and the test cases are located in the `./fro
 Once setup is complete, you may run the end-to-end tests:
 
 ```bash
-yarn run e2e
+pnpm run e2e
 ```
 
 or to open the UI:
 
 ```bash
-yarn run e2e -- --ui
+pnpm run e2e -- --ui
 ```
 
 Alternatively, you can run directly with Playwright:
 
 ```bash
-npx playwright test
+pnpm exec playwright test
 ```
 
 If using the VS Code Playwright extension, select the “setup” project. Otherwise, the authentication flow may not be executed before the tests run.

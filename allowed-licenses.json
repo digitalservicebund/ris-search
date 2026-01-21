@@ -85,6 +85,9 @@
       "moduleLicense": "0BSD"
     },
     {
+      "moduleLicense": "LGPL-3.0-or-later"
+    },
+    {
       "moduleLicense": "Custom: LICENSE",
       "moduleName": "posthog-js"
     }

@@ -35,7 +35,6 @@ frontend-licence-report.csv
 /blob-report/
 /playwright/.cache/
 /playwright/.auth/user.json
-/.yarn/install-state.gz
 
 # Nuxt files
 components.d.ts
