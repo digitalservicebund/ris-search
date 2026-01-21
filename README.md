@@ -153,7 +153,7 @@ The end-to-end tests use Playwright and the test cases are located in the `./fro
 1. Install the required browser dependencies:
 
    ```bash
-   npx playwright install --with-deps chromium firefox webkit
+   pnpm exec playwright install --with-deps chromium firefox webkit
    ```
 2. Run the OpenSearch container (required for indexed data):
 
@@ -196,7 +196,7 @@ pnpm run e2e -- --ui
 Alternatively, you can run directly with Playwright:
 
 ```bash
-npx playwright test
+pnpm exec playwright test
 ```
 
 If using the VS Code Playwright extension, select the “setup” project. Otherwise, the authentication flow may not be executed before the tests run.
@@ -225,17 +225,17 @@ See https://github.com/npryce/adr-tools regarding usage.
 
 ## About the Repository
 
-**Program Name:** NeuRIS (Neues Rechtsinformationsportal)
+**Program Name:** NeuRIS (Neues Rechtsinformationsportal)  
 **Description:** An intuitive legal information system aimed at simplifying access to laws, regulations, and court decisions in Germany.
 
 **Copyright (C) 2025 DigitalService GmbH des Bundes**
 
 **Author's Contact Information**
 
-DigitalService GmbH des Bundes
-Prinzessinnenstraße 8-14,
-10969 Berlin, Germany
-Email: hallo@digitalservice.bund.de
+DigitalService GmbH des Bundes  
+Prinzessinnenstraße 8-14,  
+10969 Berlin, Germany  
+Email: hallo@digitalservice.bund.de  
 Website: [https://digitalservice.bund.de](https://digitalservice.bund.de)
 
 ## Contributing
