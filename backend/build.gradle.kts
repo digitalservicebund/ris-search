@@ -48,7 +48,6 @@ sonar {
             "sonar.coverage.exclusions",
             "**/config/**, **/e2e/**, **/CustomErrorController.java, **/RestClientConfigStackit.java",
         )
-        property("sonar.cpd.exclusions", "**/RestClientConfigStackit.java")
     }
 }
 
@@ -155,13 +154,14 @@ project.tasks.sonar {
 
 tasks {
     register("generate-nlex-wsdl", JavaExec::class) {
+        val outputDir = layout.buildDirectory.dir("generated/nlex")
         doFirst {
-            mkdir("$buildDir/generated/nlex")
+            mkdir(outputDir)
         }
         enabled = true
         classpath(configurations["xjc"])
         mainClass = "org.eclipse.persistence.jaxb.xjc.MOXyXJC"
-        args = listOf("src/main/resources/WEB_INF/nlex/simple_template.wsdl", "-wsdl", "-d", "$buildDir/generated/nlex", "-p", "nlex")
+        args = listOf("src/main/resources/WEB_INF/nlex/simple_template.wsdl", "-wsdl", "-d", outputDir.get().asFile.path, "-p", "nlex")
     }
 
     compileJava {

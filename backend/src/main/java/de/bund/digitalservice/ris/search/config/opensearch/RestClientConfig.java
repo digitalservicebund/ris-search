@@ -7,6 +7,7 @@ import org.opensearch.data.client.orhlc.ClientConfiguration;
 import org.opensearch.data.client.orhlc.OpenSearchRestTemplate;
 import org.opensearch.data.client.orhlc.RestClients;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.dao.DataAccessResourceFailureException;
@@ -16,13 +17,14 @@ import org.springframework.data.elasticsearch.repository.config.EnableElasticsea
 
 /** Class to configure the REST client which connects to opensearch in production without ssl. */
 @Configuration
-@Profile({"staging", "uat", "prototype"})
+@Profile({"staging", "production", "uat", "prototype"})
 @EnableElasticsearchRepositories(
     basePackages = "de.bund.digitalservice.ris.search.repository.opensearch")
 public class RestClientConfig extends AbstractOpenSearchConfiguration {
 
   private final Configurations configurationsOpensearch;
   private final OpensearchSchemaSetup schemaSetup;
+  private final String datacenter;
 
   /**
    * Constructs a RestClientConfig instance to configure and initialize the OpenSearch REST client.
@@ -33,27 +35,24 @@ public class RestClientConfig extends AbstractOpenSearchConfiguration {
    */
   @Autowired
   public RestClientConfig(
-      Configurations configurationsOpensearch, OpensearchSchemaSetup schemaSetup) {
+      Configurations configurationsOpensearch,
+      OpensearchSchemaSetup schemaSetup,
+      @Value("${datacenter}") String datacenter) {
     this.configurationsOpensearch = configurationsOpensearch;
     this.schemaSetup = schemaSetup;
+    this.datacenter = datacenter;
   }
 
   @Override
   public RestHighLevelClient opensearchClient() {
-    final var keepAliveCallback =
-        RestClients.RestClientConfigurationCallback.from(
-            clientConfigurer ->
-                clientConfigurer.setIOReactorConfig(
-                    IOReactorConfig.custom().setSoKeepAlive(true).build()));
 
     final ClientConfiguration clientConfiguration =
-        ClientConfiguration.builder()
-            .connectedTo(
-                this.configurationsOpensearch.getHost()
-                    + ":"
-                    + this.configurationsOpensearch.getPort())
-            .withClientConfigurer(keepAliveCallback)
-            .build();
+        buildClientConfiguration(
+            ClientConfiguration.builder()
+                .connectedTo(
+                    this.configurationsOpensearch.getHost()
+                        + ":"
+                        + this.configurationsOpensearch.getPort()));
 
     RestHighLevelClient restHighLevelClient =
         RestClients.create( // NOSONAR java:S2095 closed by spring @Bean(destroyMethod = "close")
@@ -61,6 +60,27 @@ public class RestClientConfig extends AbstractOpenSearchConfiguration {
             .rest();
     schemaSetup.updateOpensearchSchema(restHighLevelClient);
     return restHighLevelClient;
+  }
+
+  private ClientConfiguration buildClientConfiguration(
+      ClientConfiguration.MaybeSecureClientConfigurationBuilder builder) {
+    final var keepAliveCallback =
+        RestClients.RestClientConfigurationCallback.from(
+            clientConfigurer ->
+                clientConfigurer.setIOReactorConfig(
+                    IOReactorConfig.custom().setSoKeepAlive(true).build()));
+
+    if ("otc".equalsIgnoreCase(datacenter)) {
+      return builder.withClientConfigurer(keepAliveCallback).build();
+    } else {
+      return builder
+          .usingSsl()
+          .withClientConfigurer(keepAliveCallback)
+          .withBasicAuth(
+              this.configurationsOpensearch.getUsername(),
+              this.configurationsOpensearch.getPassword())
+          .build();
+    }
   }
 
   @Override
