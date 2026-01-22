@@ -1,3 +1,8 @@
+import {
+  testCopyLinkButton,
+  testPdfButton,
+  testPrintButton,
+} from "./utils/actionMenuHelper";
 import { expect, test, noJsTest, navigate } from "./utils/fixtures";
 
 test(
@@ -122,38 +127,23 @@ test(
   },
 );
 
-test(
-  "links in action menu are correct",
-  { tag: ["@RISDEV-8950"] },
-  async ({ page, isMobileTest }) => {
-    const url = "/translations/TestV";
-    await navigate(page, url);
+test.describe("actions menu", { tag: ["@RISDEV-8950"] }, () => {
+  test.describe("can copy link to translation", () => {
+    testCopyLinkButton(
+      "/translations/TestV",
+      "Link to translation",
+      RegExp(".*/translations/TestV"),
+    );
+  });
 
-    if (isMobileTest) {
-      await page.getByLabel("Aktionen anzeigen").click();
-    }
+  test.describe("can use print action button to open print menu", () => {
+    testPrintButton("/translations/TestV");
+  });
 
-    await expect(
-      page.getByRole("menuitem", { name: "Link to translation" }),
-    ).toBeVisible();
-
-    if (isMobileTest) {
-      await expect(page.getByText("Als PDF speichern")).toBeVisible();
-      await expect(page.getByText("Drucken")).toBeVisible();
-    } else {
-      const printButton = page.getByRole("menuitem", { name: "Drucken" });
-      const pdfButton = page.getByRole("menuitem", {
-        name: "Als PDF speichern",
-      });
-      await printButton.waitFor({ state: "visible" });
-      await expect(printButton).toBeVisible();
-
-      await pdfButton.waitFor({ state: "visible" });
-      await expect(pdfButton).toBeVisible();
-      await expect(pdfButton).toBeDisabled();
-    }
-  },
-);
+  test.describe("can't use PDF action as it is disabled", () => {
+    testPdfButton("/translations/TestV");
+  });
+});
 
 noJsTest(
   "tabs work without JavaScript",

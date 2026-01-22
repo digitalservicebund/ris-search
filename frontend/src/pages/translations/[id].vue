@@ -6,7 +6,7 @@ import { NuxtLink } from "#components";
 import type { BreadcrumbItem } from "~/components/Breadcrumbs.vue";
 import DetailsList from "~/components/DetailsList.vue";
 import DetailsListEntry from "~/components/DetailsListEntry.vue";
-import ActionMenuWrapper from "~/components/documents/actionMenu/ActionMenuWrapper.vue";
+import NormTranslationActionMenu from "~/components/documents/actionMenu/NormTranslationActionMenu.vue";
 import { useDynamicSeo } from "~/composables/useDynamicSeo";
 import {
   fetchTranslationAndHTML,
@@ -35,11 +35,6 @@ const { legislation } = await getGermanOriginal(id);
 
 const currentTranslation = data.value?.content;
 const html = data.value?.html;
-
-const permalink = {
-  url: globalThis?.location?.href,
-  label: "Link to translation",
-};
 
 const versionInformation = computed(() => {
   return removePrefix(currentTranslation?.about, "Version information:");
@@ -133,9 +128,7 @@ const detailsTabPanelTitleId = useId();
   <div v-if="currentTranslation" class="container">
     <div class="flex items-center gap-8 print:hidden">
       <Breadcrumbs :items="breadcrumbItems" class="grow" />
-      <client-only>
-        <ActionMenuWrapper :permalink />
-      </client-only>
+      <NormTranslationActionMenu />
     </div>
 
     <hgroup class="dokumentenkopf mt-24 mb-48">
