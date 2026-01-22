@@ -24,7 +24,7 @@ public class RestClientConfig extends AbstractOpenSearchConfiguration {
 
   private final Configurations configurationsOpensearch;
   private final OpensearchSchemaSetup schemaSetup;
-  private final String datacenter;
+  private final boolean needsAuthentication;
 
   /**
    * Constructs a RestClientConfig instance to configure and initialize the OpenSearch REST client.
@@ -37,10 +37,10 @@ public class RestClientConfig extends AbstractOpenSearchConfiguration {
   public RestClientConfig(
       Configurations configurationsOpensearch,
       OpensearchSchemaSetup schemaSetup,
-      @Value("${datacenter}") String datacenter) {
+      @Value("${opensearch.needs-authentication}") boolean needsAuthentication) {
     this.configurationsOpensearch = configurationsOpensearch;
     this.schemaSetup = schemaSetup;
-    this.datacenter = datacenter;
+    this.needsAuthentication = needsAuthentication;
   }
 
   @Override
@@ -70,9 +70,7 @@ public class RestClientConfig extends AbstractOpenSearchConfiguration {
                 clientConfigurer.setIOReactorConfig(
                     IOReactorConfig.custom().setSoKeepAlive(true).build()));
 
-    if ("otc".equalsIgnoreCase(datacenter)) {
-      return builder.withClientConfigurer(keepAliveCallback).build();
-    } else {
+    if (needsAuthentication) {
       return builder
           .usingSsl()
           .withClientConfigurer(keepAliveCallback)
@@ -80,6 +78,8 @@ public class RestClientConfig extends AbstractOpenSearchConfiguration {
               this.configurationsOpensearch.getUsername(),
               this.configurationsOpensearch.getPassword())
           .build();
+    } else {
+      return builder.withClientConfigurer(keepAliveCallback).build();
     }
   }
 
