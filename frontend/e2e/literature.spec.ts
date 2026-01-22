@@ -1,3 +1,9 @@
+import {
+  testCopyLinkButton,
+  testPdfButton,
+  testPrintButton,
+  testXmlButton,
+} from "./utils/actionMenuHelper";
 import { expect, test, noJsTest, navigate } from "./utils/fixtures";
 
 test("displays literature page with metadata and text tab by default", async ({
@@ -310,127 +316,27 @@ test("shows detailed information in the 'Details' tab of sli documents", async (
 });
 
 test.describe("actions menu", () => {
-  test("can use 'copy link' button to copy url to clipboard", async ({
-    page,
-    browserName,
-    context,
-    isMobileTest,
-  }) => {
-    await navigate(page, "/literature/XXLU000000001");
-
-    if (browserName === "chromium") {
-      await context.grantPermissions(["clipboard-read", "clipboard-write"]);
-    }
-
-    if (isMobileTest) {
-      await page.getByLabel("Aktionen anzeigen").click();
-    }
-
-    const button = page.getByRole("menuitem", {
-      name: "Link kopieren",
-    });
-
-    await button.isVisible();
-
-    if (!isMobileTest) {
-      await button.hover();
-
-      await expect(
-        page.getByRole("tooltip", {
-          name: "Link kopieren",
-        }),
-      ).toBeVisible({
-        timeout: 15000,
-      });
-    }
-
-    await button.click();
-    if (!isMobileTest) await expect(page.getByText("Kopiert!")).toBeVisible();
-    if (browserName === "chromium") {
-      const clipboardContents = await page.evaluate(() => {
-        return navigator.clipboard.readText();
-      });
-      expect(clipboardContents.endsWith("/literature/XXLU000000001")).toBe(
-        true,
-      );
-    }
+  test.describe("can copy link to currently viewed page", () => {
+    testCopyLinkButton(
+      "/literature/XXLU000000001",
+      "Link kopieren",
+      RegExp(".*/literature/XXLU000000001"),
+    );
   });
 
-  test("can use 'print button' to open print menu", async ({
-    page,
-    isMobileTest,
-  }) => {
-    await navigate(page, "/literature/XXLU000000001");
-    if (isMobileTest) await page.getByLabel("Aktionen anzeigen").click();
-
-    const button = page.getByRole("menuitem", { name: "Drucken" });
-
-    if (!isMobileTest) {
-      await button.hover();
-
-      await expect(page.getByRole("tooltip", { name: "Drucken" })).toBeVisible({
-        timeout: 15000,
-      });
-    }
-
-    await test.step("can open print menu", async () => {
-      await page.evaluate(
-        "(() => {window.waitForPrintDialog = new Promise(f => window.print = f);})()",
-      );
-      await button.click();
-
-      await page.waitForFunction("window.waitForPrintDialog");
-    });
+  test.describe("can use print action button to open print menu", () => {
+    testPrintButton("/literature/XXLU000000001");
   });
 
-  test("can't use PDF action as it is disabled", async ({
-    page,
-    isMobileTest,
-  }) => {
-    await navigate(page, "/literature/XXLU000000001");
-    if (isMobileTest) await page.getByLabel("Aktionen anzeigen").click();
-    const button = page.getByRole("menuitem", {
-      name: "Als PDF speichern",
-    });
-
-    if (!isMobileTest) {
-      await button.hover();
-
-      await expect(
-        page.getByRole("tooltip", { name: "Als PDF speichern" }),
-      ).toBeVisible({
-        timeout: 15000,
-      });
-    }
-
-    if (!isMobileTest) await expect(button).toBeDisabled();
+  test.describe("can't use PDF action as it is disabled", () => {
+    testPdfButton("/literature/XXLU000000001");
   });
 
-  test("can use XML action to view literature xml file", async ({
-    page,
-    isMobileTest,
-  }) => {
-    await navigate(page, "/literature/XXLU000000001");
-
-    if (isMobileTest) await page.getByLabel("Aktionen anzeigen").click();
-    const button = page.getByRole("menuitem", {
-      name: "XML anzeigen",
-    });
-
-    if (!isMobileTest) {
-      await button.hover();
-
-      await expect(
-        page.getByRole("tooltip", { name: "XML anzeigen" }),
-      ).toBeVisible({
-        timeout: 15000,
-      });
-    }
-
-    await button.click();
-    await page.waitForURL(`v1/literature/XXLU000000001.xml`, {
-      waitUntil: "commit",
-    });
+  test.describe("can use XML action to view literature xml file", () => {
+    testXmlButton(
+      "/literature/XXLU000000001",
+      "http://localhost:8090/v1/literature/XXLU000000001.xml",
+    );
   });
 });
 

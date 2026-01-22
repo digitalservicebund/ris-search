@@ -1,15 +1,14 @@
 <script setup lang="ts">
 import ActionMenu from "~/components/documents/actionMenu/ActionMenu.vue";
-import { useCommandActionItem } from "~/composables/useActionMenuItem/useCommandActionItem";
 import { useCopyUrlActionItem } from "~/composables/useActionMenuItem/useCopyUrlActionItem";
 import { useNavigateActionItem } from "~/composables/useActionMenuItem/useNavigateActionItem";
+import { usePdfActionItem } from "~/composables/useActionMenuItem/usePdfActionItem";
+import { usePrintActionItem } from "~/composables/useActionMenuItem/usePrintActionItem";
 import type { LegislationWork } from "~/types";
 import { getManifestationUrl } from "~/utils/norm";
 import EngIcon from "~icons/custom/eng";
-import PdfIcon from "~icons/custom/pdf";
 import UpdatingLinkIcon from "~icons/custom/updatingLink";
 import XmlIcon from "~icons/custom/xml";
-import MaterialSymbolsPrint from "~icons/material-symbols/print";
 
 const { metadata, translationUrl } = defineProps<{
   metadata: LegislationWork | undefined;
@@ -31,10 +30,8 @@ const actions = computed(() => {
       UpdatingLinkIcon,
     ),
     useCopyUrlActionItem(href, "Permalink zu dieser Fassung"),
-    useCommandActionItem("Drucken", MaterialSymbolsPrint, async () =>
-      globalThis?.print(),
-    ),
-    useCommandActionItem("Als PDF speichern", PdfIcon, undefined, true),
+    usePrintActionItem(),
+    usePdfActionItem(),
     useNavigateActionItem("XML anzeigen", XmlIcon, xmlUrl),
   ];
 
