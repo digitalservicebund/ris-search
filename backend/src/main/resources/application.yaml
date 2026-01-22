@@ -50,7 +50,7 @@ opensearch:
   literature-index-name: literature
   documents-alias-name: documents
   administrative-directive-index-name: administrative_directive
-  needs-authentication: false
+  authentication: disabled
 
 # The user and password to access postgres was created in the neuris-infra following the variable convention in that repo
 search:
