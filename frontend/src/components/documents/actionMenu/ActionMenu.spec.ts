@@ -1,4 +1,4 @@
-import userEvent from "@testing-library/user-event/dist/cjs/index.js";
+import { userEvent } from "@testing-library/user-event";
 import { render, screen } from "@testing-library/vue";
 import Tooltip from "primevue/tooltip";
 import { vi } from "vitest";
@@ -46,8 +46,7 @@ describe("ActionMenu", () => {
       },
     });
 
-    // Command actions are rendered as buttons
-    const commandActionButton = screen.getByRole("button", {
+    const commandActionButton = screen.getByRole("menuitem", {
       name: "Command Action",
     });
 
@@ -68,8 +67,7 @@ describe("ActionMenu", () => {
     await user.click(commandActionButton);
     expect(mockCommand).toHaveBeenCalledOnce();
 
-    // navigate actions are rendered as links
-    const navigateActionLink = screen.getByRole("link", {
+    const navigateActionLink = screen.getByRole("menuitem", {
       name: "Navigate Action",
     });
 
@@ -106,7 +104,7 @@ describe("ActionMenu", () => {
       },
     });
 
-    const disabledButton = screen.getByRole("button", {
+    const disabledButton = screen.getByRole("menuitem", {
       name: "Disabled Action",
     });
 
