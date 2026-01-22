@@ -3,6 +3,12 @@ import type { ActionMenuItem } from "~/components/documents/actionMenu/ActionMen
 import { useCommandActionItem } from "~/composables/useActionMenuItem/useCommandActionItem";
 import MaterialSymbolsLink from "~icons/material-symbols/link";
 
+/**
+ * Use this function to create an action item where the action is to copy the given url to the clipboard.
+ * @param url
+ * @param label
+ * @param icon
+ */
 export function useCopyUrlActionItem(
   url?: string,
   label?: string,
