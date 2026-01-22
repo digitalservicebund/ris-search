@@ -2,6 +2,7 @@
 CVE-2024-35870
 CVE-2024-53179
 CVE-2025-38118
+CVE-2026-0861
 
 # Ignore HIGH CVEs from cnb/lifecycle/launcher and other gobinaries
 CVE-2025-47912
