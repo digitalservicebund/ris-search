@@ -230,11 +230,7 @@ const detailsTabPanelTitleId = useId();
     <div class="container">
       <div class="flex items-center gap-8 print:hidden">
         <Breadcrumbs :items="breadcrumbItems" class="grow" />
-        <client-only>
-          <NormActionMenu
-            :metadata="metadata"
-            :translation-url="translationUrl"
-        /></client-only>
+        <NormActionMenu :metadata :translation-url />
       </div>
       <NormHeadingGroup :metadata="metadata" :html-parts="htmlParts" />
       <NormVersionWarning

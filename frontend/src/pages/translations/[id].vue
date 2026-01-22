@@ -6,7 +6,7 @@ import { NuxtLink } from "#components";
 import type { BreadcrumbItem } from "~/components/Breadcrumbs.vue";
 import DetailsList from "~/components/DetailsList.vue";
 import DetailsListEntry from "~/components/DetailsListEntry.vue";
-import ActionMenu from "~/components/documents/actionMenu/ActionMenu.vue";
+import ActionMenuWrapper from "~/components/documents/actionMenu/ActionMenuWrapper.vue";
 import { useDynamicSeo } from "~/composables/useDynamicSeo";
 import {
   fetchTranslationAndHTML,
@@ -134,7 +134,7 @@ const detailsTabPanelTitleId = useId();
     <div class="flex items-center gap-8 print:hidden">
       <Breadcrumbs :items="breadcrumbItems" class="grow" />
       <client-only>
-        <ActionMenu :permalink />
+        <ActionMenuWrapper :permalink />
       </client-only>
     </div>
 

@@ -1,296 +1,119 @@
-import { mockNuxtImport, mountSuspended } from "@nuxt/test-utils/runtime";
-import type { DOMWrapper, VueWrapper } from "@vue/test-utils";
-import Menu from "primevue/menu";
-import { beforeEach, vi } from "vitest";
-import ActionMenu from "./ActionMenu.vue";
-import * as actionMenuUtils from "~/utils/actionMenu";
-import MaterialSymbolsLink from "~icons/material-symbols/link";
+import { userEvent } from "@testing-library/user-event";
+import { render, screen } from "@testing-library/vue";
+import Tooltip from "primevue/tooltip";
+import { vi } from "vitest";
+import ActionMenu, {
+  type ActionMenuItem,
+} from "~/components/documents/actionMenu/ActionMenu.vue";
 
-const { mockToastAdd, mockNavigateTo } = vi.hoisted(() => ({
-  mockNavigateTo: vi.fn(),
-  mockToastAdd: vi.fn(),
-}));
+const mockCommand = vi.fn();
+const actions: ActionMenuItem[] = [
+  {
+    label: "Command Action",
+    iconComponent: h("span", "CommandIcon"),
+    command: mockCommand,
+  },
+  {
+    label: "Navigate Action",
+    url: "https://example.com",
+    iconComponent: h("span", "NavigateIcon"),
+  },
+];
 
-const commandEnabled = vi.fn();
-const commandDisabled = vi.fn();
-
-vi.mock("~/utils/actionMenu", () => {
-  return {
-    createActionMenuItems: vi.fn((_, _1, _2) => {
-      return [
-        {
-          key: "link",
-          iconComponent: MaterialSymbolsLink,
-          label: "Link",
-          url: "https://example.com/",
-          analyticsId: "test-link",
-        },
-        {
-          key: "action",
-          command: commandEnabled,
-          iconComponent: MaterialSymbolsLink,
-          label: "Action",
-        },
-        {
-          key: "action",
-          command: commandDisabled,
-          iconComponent: MaterialSymbolsLink,
-          label: "Disabled Action",
-          disabled: true,
-        },
-      ];
-    }),
-  };
-});
-
-vi.mock("primevue/usetoast", () => ({
-  useToast: () => ({
-    add: mockToastAdd,
-  }),
-}));
-
-mockNuxtImport("navigateTo", () => mockNavigateTo);
-
-async function toggleMenu(wrapper: VueWrapper) {
-  const toggleButton = wrapper.get(
-    'button[aria-label="Aktionen anzeigen"]',
-  ) as DOMWrapper<HTMLButtonElement>;
-  toggleButton.element.click();
-  await nextTick();
-}
-
+// NOTE: only testing the "desktop" variant here as testing the different
+// variants which are based on the screen size is not reliably doable
+// without a real browser
 describe("ActionMenu", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    vi.stubGlobal("navigator", {
-      clipboard: {
-        writeText: vi.fn(),
-      },
-    });
   });
 
-  it("passes props to createActionMenuItems to create items", async () => {
-    const spy = vi.spyOn(actionMenuUtils, "createActionMenuItems");
+  it("renders provided action items", async () => {
+    const user = userEvent.setup();
 
-    const props = {
-      permalink: {
-        url: "https://permalink.com/",
-        label: "Link kopieren",
-        disabled: true,
-      },
-    };
-
-    await mountSuspended(ActionMenu, {
-      props: props,
-      global: {
-        directives: {
-          tooltip: () => {},
-        },
-      },
-    });
-
-    expect(spy).toHaveBeenCalledTimes(1);
-
-    const receivedProps = spy.mock.calls[0]?.[0];
-
-    expect(receivedProps).toEqual(props);
-  });
-
-  it("can copy link to clipboard and shows a toast", async () => {
-    const spy = vi.spyOn(actionMenuUtils, "createActionMenuItems");
-
-    await mountSuspended(ActionMenu, {
+    render(ActionMenu, {
       props: {
-        permalink: {
-          url: "https://test.com/",
-          label: "Test permalink",
-        },
+        actions: actions,
       },
       global: {
-        directives: {
-          tooltip: () => {},
-        },
-      },
-    });
-
-    expect(spy).toHaveBeenCalledTimes(1);
-
-    const copyUrlCommand = spy.mock.calls[0]?.[1] as (
-      url: string,
-    ) => Promise<void>;
-
-    const urlToCopy = "https://copy.com";
-    await copyUrlCommand(urlToCopy);
-
-    expect(navigator.clipboard.writeText).toHaveBeenCalledExactlyOnceWith(
-      urlToCopy,
-    );
-
-    expect(mockToastAdd).toHaveBeenCalledExactlyOnceWith(
-      expect.objectContaining({
-        summary: "Kopiert!",
-      }),
-    );
-  });
-
-  it("can navigate to an url", async () => {
-    const spy = vi.spyOn(actionMenuUtils, "createActionMenuItems");
-
-    await mountSuspended(ActionMenu, {
-      props: {
-        permalink: {
-          url: "https://test.com/",
-          label: "Test permalink",
-        },
-      },
-      global: {
-        directives: {
-          tooltip: () => {},
-        },
-      },
-    });
-
-    expect(spy).toHaveBeenCalledTimes(1);
-
-    const navigationCommand = spy.mock.calls[0]?.[2] as (
-      url: string,
-    ) => Promise<void>;
-
-    const navigationUrl = "https://navigation.com";
-    await navigationCommand(navigationUrl);
-
-    expect(mockNavigateTo).toHaveBeenCalledExactlyOnceWith(navigationUrl, {
-      external: true,
-    });
-  });
-
-  it("shows small or large ActionMenu depending on screen size", async () => {
-    const wrapper = await mountSuspended(ActionMenu, {
-      props: {
-        permalink: {
-          url: "https://test.com/",
-          label: "Test permalink",
-        },
-      },
-      global: {
-        directives: {
-          tooltip: () => {},
-        },
-      },
-    });
-
-    const containers = wrapper.findAll("div");
-    expect(containers[0]?.element.className).toContain("sm:hidden");
-    expect(containers[1]?.element.className).toContain("sm:flex");
-    expect(containers[1]?.element.className).toContain("hidden");
-  });
-
-  it("correctly render action items on large screen", async () => {
-    const wrapper = await mountSuspended(ActionMenu, {
-      props: {
-        permalink: {
-          url: "https://test.com/",
-          label: "Test permalink",
-        },
-      },
-      global: {
-        directives: {
-          tooltip: () => {},
-        },
-      },
-    });
-
-    const containers = wrapper.findAll("div");
-    const largeScreenDiv = containers[1];
-
-    const links = largeScreenDiv?.findAll("a");
-    expect(links).toHaveLength(1);
-    expect(links?.[0]?.attributes("aria-label")).toBe("Link");
-    expect(links?.[0]?.element.href).toBe("https://example.com/");
-    expect(links?.[0]?.attributes("data-attr")).toBe("test-link");
-
-    const actionButtons = largeScreenDiv?.findAll("button");
-    expect(actionButtons).toHaveLength(2);
-    expect(actionButtons?.[0]?.attributes("aria-label")).toBe("Action");
-    actionButtons?.[0]?.element.click();
-    await nextTick();
-    expect(commandEnabled).toHaveBeenCalledOnce();
-
-    expect(actionButtons?.[1]?.attributes("aria-label")).toBe(
-      "Disabled Action",
-    );
-    actionButtons?.[1]?.element.click();
-    await nextTick();
-    expect(commandDisabled).not.toHaveBeenCalled();
-  });
-
-  it("shows menu after toggle button is clicked", async () => {
-    const wrapper = await mountSuspended(ActionMenu, {
-      props: {
-        permalink: {
-          url: "https://test.com/",
-          label: "Test permalink",
-        },
-      },
-      global: {
+        directives: { tooltip: Tooltip },
         stubs: {
-          teleport: true,
-        },
-        directives: {
-          tooltip: () => {},
+          NuxtLink: {
+            template: '<a :href="to"><slot /></a>',
+            props: ["to"],
+          },
         },
       },
     });
 
-    // Verify toggle function is called when button is clicked
-    await toggleMenu(wrapper);
-    const menu = wrapper.findComponent(Menu);
-    expect(menu.exists()).toBe(true);
+    const commandActionButton = screen.getByRole("menuitem", {
+      name: "Command Action",
+    });
+
+    expect(commandActionButton).toBeVisible();
+    expect(commandActionButton).toBeEnabled();
+
+    // Displays the provided icon component
+    expect(screen.getByText("CommandIcon")).toBeVisible();
+
+    // Shows tooltip when hovered
+    await user.hover(commandActionButton);
+    expect(await screen.findByRole("tooltip")).toHaveTextContent(
+      "Command Action",
+    );
+
+    // Executes provided command when clicked
+    expect(mockCommand).not.toHaveBeenCalled();
+    await user.click(commandActionButton);
+    expect(mockCommand).toHaveBeenCalledOnce();
+
+    const navigateActionLink = screen.getByRole("menuitem", {
+      name: "Navigate Action",
+    });
+
+    expect(navigateActionLink).toBeVisible();
+    expect(navigateActionLink).toBeEnabled();
+    expect(navigateActionLink).toHaveAttribute("href", "https://example.com");
+
+    // Displays the provided icon component
+    expect(screen.getByText("NavigateIcon")).toBeVisible();
+
+    // Shows tooltip when hovered
+    await user.hover(navigateActionLink);
+    expect(await screen.findByRole("tooltip")).toHaveTextContent(
+      "Navigate Action",
+    );
   });
 
-  it("correctly renders action items on small screen", async () => {
-    const wrapper = await mountSuspended(ActionMenu, {
+  it("renders disabled action items", async () => {
+    const user = userEvent.setup();
+
+    render(ActionMenu, {
       props: {
-        permalink: {
-          url: "https://test.com/",
-          label: "Test permalink",
-        },
+        actions: [
+          {
+            label: "Disabled Action",
+            iconComponent: h("span", "DisabledIcon"),
+            command: mockCommand,
+            disabled: true,
+          },
+        ],
       },
       global: {
-        stubs: {
-          teleport: true,
-        },
-        directives: {
-          tooltip: () => {},
-        },
+        directives: { tooltip: Tooltip },
       },
     });
 
-    await toggleMenu(wrapper);
+    const disabledButton = screen.getByRole("menuitem", {
+      name: "Disabled Action",
+    });
 
-    const containers = wrapper.findAll("div");
-    const smallScreenDiv = containers[0];
+    expect(disabledButton).toBeVisible();
+    expect(disabledButton).toBeDisabled();
 
-    const actions = smallScreenDiv
-      ?.get('[data-pc-section="list"]')
-      .findAll("li");
-    expect(actions).toHaveLength(3);
-
-    expect(actions?.[0]?.text()).toBe("Link");
-    expect(actions?.[0]?.get("a").attributes("href")).toBe(
-      "https://example.com/",
-    );
-    expect(actions?.[0]?.get("a").attributes("data-attr")).toBe("test-link");
-
-    expect(actions?.[1]?.text()).toBe("Action");
-    actions?.[1]?.get("a").element.click();
-    await nextTick();
-    expect(commandEnabled).toHaveBeenCalledOnce();
-
-    expect(actions?.[2]?.text()).toBe("Disabled Action");
-    expect(actions?.[2]?.attributes("aria-disabled")).toBe("true");
-    actions?.[2]?.get("span").element.click();
-    await nextTick();
-    expect(commandDisabled).not.toHaveBeenCalledOnce();
+    // Executes provided command when clicked
+    expect(mockCommand).not.toHaveBeenCalled();
+    await user.click(disabledButton);
+    expect(mockCommand).not.toHaveBeenCalled();
   });
 });

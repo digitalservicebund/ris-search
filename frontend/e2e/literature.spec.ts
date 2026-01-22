@@ -326,7 +326,7 @@ test.describe("actions menu", () => {
       await page.getByLabel("Aktionen anzeigen").click();
     }
 
-    const button = page.getByRole("link", {
+    const button = page.getByRole("menuitem", {
       name: "Link kopieren",
     });
 
@@ -363,11 +363,7 @@ test.describe("actions menu", () => {
     await navigate(page, "/literature/XXLU000000001");
     if (isMobileTest) await page.getByLabel("Aktionen anzeigen").click();
 
-    const button = isMobileTest
-      ? page.getByRole("menuitem", { name: "Drucken" })
-      : page.getByRole("button", {
-          name: "Drucken",
-        });
+    const button = page.getByRole("menuitem", { name: "Drucken" });
 
     if (!isMobileTest) {
       await button.hover();
@@ -393,11 +389,9 @@ test.describe("actions menu", () => {
   }) => {
     await navigate(page, "/literature/XXLU000000001");
     if (isMobileTest) await page.getByLabel("Aktionen anzeigen").click();
-    const button = isMobileTest
-      ? page.getByText("Als PDF speichern")
-      : page.getByRole("button", {
-          name: "Als PDF speichern",
-        });
+    const button = page.getByRole("menuitem", {
+      name: "Als PDF speichern",
+    });
 
     if (!isMobileTest) {
       await button.hover();
@@ -419,7 +413,7 @@ test.describe("actions menu", () => {
     await navigate(page, "/literature/XXLU000000001");
 
     if (isMobileTest) await page.getByLabel("Aktionen anzeigen").click();
-    const button = page.getByRole("link", {
+    const button = page.getByRole("menuitem", {
       name: "XML anzeigen",
     });
 

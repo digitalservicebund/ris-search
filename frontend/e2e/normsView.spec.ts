@@ -1,3 +1,9 @@
+import {
+  testCopyLinkButton,
+  testPdfButton,
+  testPrintButton,
+  testXmlButton,
+} from "./utils/actionMenuHelper";
 import { expect, navigate, noJsTest, test } from "./utils/fixtures";
 
 const expectedNorms = [
@@ -257,182 +263,107 @@ test.describe("view norm page", async () => {
   });
 });
 
-test.describe("shows link to translation if exists", () => {
-  test("has link to translation", async ({ page, isMobileTest }) => {
-    await navigate(page, "norms/eli/bund/bgbl-1/1964/s902/2009-02-05/19/deu");
-
-    if (isMobileTest) {
-      await page.getByLabel("Aktionen anzeigen").click();
-    }
-    const translationButton = page.getByRole("link", {
-      name: "Zur englischen Übersetzung",
-    });
-    await translationButton.click();
-    await expect(
-      page.getByRole("heading", {
-        name: "Test Regulation for the Model Framework of the Public Service",
-      }),
-    ).toBeVisible();
-  });
-
-  test("if there is no translation, there is not link", async ({
-    page,
-    isMobileTest,
-  }) => {
-    await navigate(page, "/norms/eli/bund/bgbl-1/2000/s1016/2023-04-26/10/deu");
-
-    if (isMobileTest) {
-      await page.getByLabel("Aktionen anzeigen").click();
-    }
-    await expect(
-      page.getByRole("link", { name: "Zur englischen Übersetzung" }),
-    ).toHaveCount(0);
-  });
-});
-
 test.describe("actions menu", () => {
-  const testCases = [
-    {
-      name: "can use link action button to copy link to currently valid expression",
-      linkText: "Link zur jeweils gültigen Fassung",
-      clipboardText: "/norms/eli/bund/bgbl-1/2024/383",
-    },
-    {
-      name: "can use permalink action button to copy permalink to viewed expression",
-      linkText: "Permalink zu dieser Fassung",
-      clipboardText: "/norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu",
-    },
-  ];
-
-  for (const testCase of testCases) {
-    test(
-      testCase.name,
-      async ({ page, browserName, baseURL, context, isMobileTest }) => {
-        await navigate(
-          page,
-          "/norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu",
-        );
-
-        if (browserName === "chromium") {
-          const origin = baseURL
-            ? new URL(baseURL).origin
-            : new URL(page.url()).origin;
-          await context.grantPermissions(
-            ["clipboard-read", "clipboard-write"],
-            {
-              origin,
-            },
-          );
-        }
-
-        if (isMobileTest) {
-          await page.getByLabel("Aktionen anzeigen").click();
-        }
-
-        const button = page.getByRole("link", { name: testCase.linkText });
-        await button.isVisible();
-
-        if (!isMobileTest) {
-          await button.hover();
-          await expect(
-            page.getByRole("tooltip", { name: testCase.linkText }),
-          ).toBeVisible({
-            timeout: 15000,
-          });
-        }
-
-        await test.step("can copy the link", async () => {
-          await button.click();
-          if (!isMobileTest) {
-            await expect(page.getByText("Kopiert!")).toBeVisible();
-          }
-          if (browserName === "chromium") {
-            const clipboardContents = await page.evaluate(() =>
-              navigator.clipboard.readText(),
-            );
-            expect(clipboardContents.endsWith(testCase.clipboardText)).toBe(
-              true,
-            );
-          }
-        });
-      },
+  test.describe("can copy currently valid expression link", () => {
+    testCopyLinkButton(
+      "/norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu",
+      "Link zur jeweils gültigen Fassung",
+      RegExp(".*/norms/eli/bund/bgbl-1/2024/383"),
     );
-  }
+  });
 
-  test("can use print action button to open print menu", async ({
-    page,
-    isMobileTest,
-  }) => {
-    await navigate(page, "/norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu");
-    if (isMobileTest) await page.getByLabel("Aktionen anzeigen").click();
+  test.describe("can copy permalink to currenlty viewd expression", () => {
+    testCopyLinkButton(
+      "/norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu",
+      "Permalink zu dieser Fassung",
+      RegExp(".*/norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu"),
+    );
+  });
 
-    const button = isMobileTest
-      ? page.getByRole("menuitem", { name: "Drucken" })
-      : page.getByRole("button", { name: "Drucken" });
+  test.describe("can use print action button to open print menu", () => {
+    testPrintButton("/norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu");
+  });
 
-    if (!isMobileTest) {
+  test.describe("can't use PDF action as it is disabled", () => {
+    testPdfButton("/norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu");
+  });
+
+  test.describe("can use XML action to view norms xml file", () => {
+    testXmlButton(
+      "/norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu",
+      "http://localhost:8090/v1/legislation/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu/2024-12-19/regelungstext-1.xml",
+    );
+  });
+
+  test.describe("can navigate to english translation if available", () => {
+    test("desktop", async ({ page, isMobileTest }) => {
+      test.skip(isMobileTest);
+      await navigate(
+        page,
+        "/norms/eli/bund/bgbl-1/1964/s902/2009-02-05/19/deu",
+      );
+
+      const button = page.getByRole("menuitem", {
+        name: "Zur englischen Übersetzung",
+      });
+
       await button.hover();
-      await expect(page.getByRole("tooltip", { name: "Drucken" })).toBeVisible({
+      await expect(
+        page.getByRole("tooltip", { name: "Zur englischen Übersetzung" }),
+      ).toBeVisible({
         timeout: 15000,
       });
-    }
 
-    await test.step("can open print menu", async () => {
-      await page.evaluate(
-        "(() => {window.waitForPrintDialog = new Promise(f => window.print = f);})()",
-      );
       await button.click();
-      await page.waitForFunction("window.waitForPrintDialog");
+      await expect(page.getByRole("heading", { level: 1 })).toHaveText(
+        "Test Regulation for the Model Framework of the Public Service",
+      );
+    });
+
+    test("mobile", async ({ page, isMobileTest }) => {
+      test.skip(!isMobileTest);
+      await navigate(
+        page,
+        "/norms/eli/bund/bgbl-1/1964/s902/2009-02-05/19/deu",
+      );
+
+      await page.getByLabel("Aktionen anzeigen").click();
+
+      const button = page.getByRole("menuitem", {
+        name: "Zur englischen Übersetzung",
+      });
+
+      await button.click();
+      await expect(page.getByRole("heading", { level: 1 })).toHaveText(
+        "Test Regulation for the Model Framework of the Public Service",
+      );
     });
   });
 
-  test("can't use PDF action as it is disabled", async ({
-    page,
-    isMobileTest,
-  }) => {
-    await navigate(page, "/norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu");
-    if (isMobileTest) await page.getByLabel("Aktionen anzeigen").click();
+  test.describe("does not show english translation link if no translation exists", () => {
+    test("desktop", async ({ page, isMobileTest }) => {
+      test.skip(isMobileTest);
+      await navigate(page, "/norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu");
 
-    const button = isMobileTest
-      ? page.getByText("Als PDF speichern")
-      : page.getByRole("button", { name: "Als PDF speichern" });
-
-    if (!isMobileTest) {
-      await button.hover();
       await expect(
-        page.getByRole("tooltip", { name: "Als PDF speichern" }),
-      ).toBeVisible({
-        timeout: 15000,
-      });
-    }
+        page.getByRole("menuitem", {
+          name: "Zur englischen Übersetzung",
+        }),
+      ).toHaveCount(0);
+    });
 
-    if (!isMobileTest) {
-      await expect(button).toBeDisabled();
-    }
-  });
+    test("mobile", async ({ page, isMobileTest }) => {
+      test.skip(!isMobileTest);
+      await navigate(page, "/norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu");
 
-  test("can use XML action to view norms xml file", async ({
-    page,
-    isMobileTest,
-  }) => {
-    await navigate(page, "/norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu");
-    if (isMobileTest) await page.getByLabel("Aktionen anzeigen").click();
-    const button = page.getByRole("link", { name: "XML anzeigen" });
+      await page.getByLabel("Aktionen anzeigen").click();
 
-    if (!isMobileTest) {
-      await button.hover();
       await expect(
-        page.getByRole("tooltip", { name: "XML anzeigen" }),
-      ).toBeVisible({
-        timeout: 15000,
-      });
-    }
-
-    await button.click();
-    await page.waitForURL(
-      `v1/legislation/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu/2024-12-19/regelungstext-1.xml`,
-      { waitUntil: "commit" },
-    );
+        page.getByRole("menuitem", {
+          name: "Zur englischen Übersetzung",
+        }),
+      ).toHaveCount(0);
+    });
   });
 });
 

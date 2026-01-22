@@ -1,7 +1,5 @@
-import type {
-  ActionMenuItem,
-  ActionMenuProps,
-} from "~/components/documents/actionMenu/ActionMenu.vue";
+import type { ActionMenuItem } from "~/components/documents/actionMenu/ActionMenu.vue";
+import type { ActionMenuProps } from "~/components/documents/actionMenu/ActionMenuWrapper.vue";
 import EngIcon from "~icons/custom/eng";
 import PdfIcon from "~icons/custom/pdf";
 import UpdatingLinkIcon from "~icons/custom/updatingLink";
@@ -12,7 +10,6 @@ import MaterialSymbolsPrint from "~icons/material-symbols/print";
 export function createActionMenuItems(
   records: ActionMenuProps,
   copyUrlCommand: (url: string) => Promise<void>,
-  navigationCommand: (url: string) => Promise<void>,
 ): ActionMenuItem[] {
   const items: ActionMenuItem[] = [];
   const link = records.link;
@@ -25,7 +22,6 @@ export function createActionMenuItems(
       label: link.label ?? "Link kopieren",
       iconComponent: UpdatingLinkIcon,
       command: async () => await copyUrlCommand(link.url),
-      url: link.url,
     });
   }
 
@@ -35,7 +31,6 @@ export function createActionMenuItems(
       label: records.permalink.label,
       iconComponent: MaterialSymbolsLink,
       command: async () => await copyUrlCommand(records.permalink.url),
-      url: records.permalink.url,
       disabled: records.permalink.disabled,
     },
     {
@@ -59,7 +54,6 @@ export function createActionMenuItems(
       key: "xml",
       label: "XML anzeigen",
       iconComponent: XmlIcon,
-      command: async () => await navigationCommand(xmlUrl),
       url: records.xmlUrl,
       analyticsId: "xml-view",
     });
@@ -70,7 +64,6 @@ export function createActionMenuItems(
       key: "translation",
       label: "Zur englischen Übersetzung",
       iconComponent: EngIcon,
-      command: async () => await navigationCommand(translationUrl),
       url: translationUrl,
     });
   }
