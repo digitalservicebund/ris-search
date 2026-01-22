@@ -1,5 +1,5 @@
 import { mockNuxtImport } from "@nuxt/test-utils/runtime";
-import userEvent from "@testing-library/user-event/dist/cjs/index.js";
+import { userEvent } from "@testing-library/user-event/dist/cjs/index.js";
 import { render, screen } from "@testing-library/vue";
 import Tooltip from "primevue/tooltip";
 import { describe, expect, it, vi } from "vitest";
@@ -60,11 +60,22 @@ describe("LiteratureActionMenu", () => {
     vi.resetAllMocks();
   });
 
+  it("renders all actions in correct order", async () => {
+    renderLiteratureActionMenu();
+    const menuitems = await screen.findAllByRole("menuitem");
+
+    expect(menuitems).toHaveLength(4);
+    expect(menuitems[0]).toHaveAccessibleName("Link kopieren");
+    expect(menuitems[1]).toHaveAccessibleName("Drucken");
+    expect(menuitems[2]).toHaveAccessibleName("Als PDF speichern");
+    expect(menuitems[3]).toHaveAccessibleName("XML anzeigen");
+  });
+
   it("can copy link to currently viewed document", async () => {
     const user = userEvent.setup();
     renderLiteratureActionMenu();
 
-    const copyButton = screen.getByRole("button", {
+    const copyButton = screen.getByRole("menuitem", {
       name: "Link kopieren",
     });
     expect(copyButton).toBeVisible();
@@ -88,7 +99,7 @@ describe("LiteratureActionMenu", () => {
     const user = userEvent.setup();
     renderLiteratureActionMenu();
 
-    const printButton = screen.getByRole("button", {
+    const printButton = screen.getByRole("menuitem", {
       name: "Drucken",
     });
     expect(printButton).toBeVisible();
@@ -102,7 +113,7 @@ describe("LiteratureActionMenu", () => {
   it("renders disabled PDF button", async () => {
     renderLiteratureActionMenu();
 
-    const pdfButton = screen.getByRole("button", {
+    const pdfButton = screen.getByRole("menuitem", {
       name: "Als PDF speichern",
     });
     expect(pdfButton).toBeVisible();
@@ -112,7 +123,7 @@ describe("LiteratureActionMenu", () => {
   it("can open link to xml view", async () => {
     renderLiteratureActionMenu();
 
-    const xmlLink = screen.getByRole("link", {
+    const xmlLink = screen.getByRole("menuitem", {
       name: "XML anzeigen",
     });
     expect(xmlLink).toBeVisible();
