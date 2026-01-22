@@ -1,5 +1,5 @@
 import { mockNuxtImport } from "@nuxt/test-utils/runtime";
-import userEvent from "@testing-library/user-event/dist/cjs/index.js";
+import { userEvent } from "@testing-library/user-event/dist/cjs/index.js";
 import { render, screen } from "@testing-library/vue";
 import Tooltip from "primevue/tooltip";
 import { describe, expect, it, vi } from "vitest";
@@ -71,11 +71,25 @@ describe("NormActionMenu", () => {
     vi.resetAllMocks();
   });
 
+  it("renders all actions in correct order", async () => {
+    renderNormActionMenu();
+    const menuitems = await screen.findAllByRole("menuitem");
+
+    expect(menuitems).toHaveLength(5);
+    expect(menuitems[0]).toHaveAccessibleName(
+      "Link zur jeweils gültigen Fassung",
+    );
+    expect(menuitems[1]).toHaveAccessibleName("Permalink zu dieser Fassung");
+    expect(menuitems[2]).toHaveAccessibleName("Drucken");
+    expect(menuitems[3]).toHaveAccessibleName("Als PDF speichern");
+    expect(menuitems[4]).toHaveAccessibleName("XML anzeigen");
+  });
+
   it("can copy link to currently valid expression", async () => {
     const user = userEvent.setup();
     renderNormActionMenu();
 
-    const copyButton = screen.getByRole("button", {
+    const copyButton = screen.getByRole("menuitem", {
       name: "Link zur jeweils gültigen Fassung",
     });
     expect(copyButton).toBeVisible();
@@ -98,7 +112,7 @@ describe("NormActionMenu", () => {
     const user = userEvent.setup();
     renderNormActionMenu();
 
-    const copyButton = screen.getByRole("button", {
+    const copyButton = screen.getByRole("menuitem", {
       name: "Permalink zu dieser Fassung",
     });
     expect(copyButton).toBeVisible();
@@ -122,7 +136,7 @@ describe("NormActionMenu", () => {
     const user = userEvent.setup();
     renderNormActionMenu();
 
-    const printButton = screen.getByRole("button", {
+    const printButton = screen.getByRole("menuitem", {
       name: "Drucken",
     });
     expect(printButton).toBeVisible();
@@ -136,7 +150,7 @@ describe("NormActionMenu", () => {
   it("renders disabled PDF button", async () => {
     renderNormActionMenu();
 
-    const pdfButton = screen.getByRole("button", {
+    const pdfButton = screen.getByRole("menuitem", {
       name: "Als PDF speichern",
     });
     expect(pdfButton).toBeVisible();
@@ -146,7 +160,7 @@ describe("NormActionMenu", () => {
   it("can open link to xml view", async () => {
     renderNormActionMenu();
 
-    const xmlLink = screen.getByRole("link", {
+    const xmlLink = screen.getByRole("menuitem", {
       name: "XML anzeigen",
     });
     expect(xmlLink).toBeVisible();
@@ -160,7 +174,10 @@ describe("NormActionMenu", () => {
   it("does not show translation link button if no translation url given", async () => {
     renderNormActionMenu();
 
-    const translationLink = screen.queryByRole("link", {
+    const menuitems = await screen.findAllByRole("menuitem");
+    expect(menuitems).toHaveLength(5);
+
+    const translationLink = screen.queryByRole("menuitem", {
       name: "Zur englischen Übersetzung",
     });
 
@@ -170,9 +187,13 @@ describe("NormActionMenu", () => {
   it("renders translation link button if translation url given", async () => {
     renderNormActionMenu(mockLegislationWork, "/translations/test");
 
-    const translationLink = screen.getByRole("link", {
+    const menuitems = await screen.findAllByRole("menuitem");
+    expect(menuitems).toHaveLength(6);
+
+    const translationLink = screen.getByRole("menuitem", {
       name: "Zur englischen Übersetzung",
     });
+    expect(menuitems[5]).toEqual(translationLink);
     expect(translationLink).toBeVisible();
     expect(translationLink).toBeEnabled();
     expect(translationLink).toHaveAttribute("href", "/translations/test");

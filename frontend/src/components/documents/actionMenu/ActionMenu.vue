@@ -32,7 +32,6 @@ const toggle = (event: Event) => {
           v-if="!item.disabled"
           class="flex cursor-pointer items-center gap-8 no-underline"
           :to="item.url"
-          data-pc-section="itemlink"
           :data-attr="(item as ActionMenuItem).analyticsId"
         >
           <component :is="(item as ActionMenuItem).iconComponent" />
@@ -49,9 +48,10 @@ const toggle = (event: Event) => {
     </Menu>
   </div>
   <ul role="menubar" class="hidden items-center *:-mx-4 sm:flex">
-    <li v-for="item in actions" :key="item.label" role="menuitem">
+    <li v-for="item in actions" :key="item.label" role="presentation">
       <Button
         v-tooltip.bottom="item.label"
+        role="menuitem"
         text
         :disabled="item.disabled"
         :aria-label="item.label"
