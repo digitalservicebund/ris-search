@@ -1,10 +1,10 @@
 import { renderSuspended } from "@nuxt/test-utils/runtime";
-import userEvent from "@testing-library/user-event";
+import { userEvent } from "@testing-library/user-event";
 import { screen } from "@testing-library/vue";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import TableOfContents from "./TableOfContents.vue";
 
-describe("TableOfContents", async () => {
+describe("TableOfContents", () => {
   const tableOfContentEntries = [
     {
       id: "leitsatz",

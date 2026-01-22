@@ -1,6 +1,6 @@
 import { mockNuxtImport } from "@nuxt/test-utils/runtime";
 import type { PostHog } from "posthog-js";
-import posthog from "posthog-js";
+import { posthog } from "posthog-js";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { resetPostHogState, usePostHog } from "~/composables/usePostHog";
 import { addDefaults } from "~/composables/useSimpleSearchParams/getInitialState";
@@ -30,7 +30,7 @@ const postHogMock = vi.hoisted(() => {
 });
 
 vi.mock("posthog-js", () => ({
-  default: {
+  posthog: {
     init: vi.fn().mockReturnValue(postHogMock),
   },
 }));

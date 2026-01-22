@@ -1,5 +1,5 @@
 import { renderSuspended } from "@nuxt/test-utils/runtime";
-import userEvent from "@testing-library/user-event";
+import { userEvent } from "@testing-library/user-event";
 import { screen } from "@testing-library/vue";
 import { describe, it, expect } from "vitest";
 import PopoverNavigation from "./PopoverNavigation.vue";

@@ -1,5 +1,5 @@
 import path from "node:path";
-import AxeBuilder from "@axe-core/playwright";
+import { AxeBuilder } from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
 import { createHtmlReport } from "axe-html-reporter";
 import { navigate } from "./utils/fixtures";
@@ -39,7 +39,7 @@ const testPages = [
   },
   {
     name: "Open Source Page",
-    url: "/opensource",
+    url: "/open-source",
   },
   // {
   //   name: "User Tests Page",

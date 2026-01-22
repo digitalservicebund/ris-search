@@ -477,7 +477,7 @@ test.describe("searching caselaw", () => {
       await expect(page).toHaveURL(/category=R\.urteil/);
 
       await expect(getSearchResults(page)).toHaveText(
-        new Array(10).fill(/^Urteil/),
+        Array.from<RegExp>({ length: 10 }).fill(/^Urteil/),
       );
     });
 
@@ -490,7 +490,7 @@ test.describe("searching caselaw", () => {
       await expect(page).toHaveURL(/category=R\.beschluss/);
 
       await expect(getSearchResults(page)).toHaveText(
-        new Array(2).fill(/^Beschluss/),
+        Array.from<RegExp>({ length: 2 }).fill(/^Beschluss/),
       );
     });
 

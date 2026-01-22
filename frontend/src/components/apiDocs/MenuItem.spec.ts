@@ -1,5 +1,5 @@
 import { mockNuxtImport, renderSuspended } from "@nuxt/test-utils/runtime";
-import userEvent from "@testing-library/user-event";
+import { userEvent } from "@testing-library/user-event";
 import { screen } from "@testing-library/vue";
 import { vi } from "vitest";
 import MenuItem from "./MenuItem.vue";

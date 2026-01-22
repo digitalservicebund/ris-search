@@ -4,10 +4,11 @@ type Section = {
   id: string;
   title: string;
 };
-let _JSDOM: typeof JSDOM;
+
+let jsdom: typeof JSDOM;
 if (import.meta.server) {
   import("jsdom").then((module) => {
-    _JSDOM = module.JSDOM;
+    jsdom = module.JSDOM;
   });
 }
 
@@ -21,7 +22,7 @@ export function parseDocument(html: string): Document {
     return parser.parseFromString(source, "text/html");
   } else {
     /* v8 ignore next 2 */
-    const dom = new _JSDOM(source);
+    const dom = new jsdom(source);
     return dom.window.document;
   }
 }
