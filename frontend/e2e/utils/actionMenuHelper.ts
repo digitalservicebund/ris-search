@@ -91,9 +91,7 @@ export function testPdfButton(pageUrl: string) {
 
     await navigate(page, pageUrl);
 
-    const button = page
-      .getByRole("menuitem", { name: "Als PDF speichern" })
-      .getByRole("button");
+    const button = page.getByRole("menuitem", { name: "Als PDF speichern" });
 
     await button.hover();
     await expect(

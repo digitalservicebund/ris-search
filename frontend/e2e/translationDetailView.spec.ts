@@ -108,7 +108,7 @@ test(
     if (isMobileTest) {
       await page.getByLabel("Aktionen anzeigen").click();
     }
-    const translationButton = page.getByRole("link", {
+    const translationButton = page.getByRole("menuitem", {
       name: "Zur englischen Übersetzung",
     });
 
@@ -141,8 +141,10 @@ test(
       await expect(page.getByText("Als PDF speichern")).toBeVisible();
       await expect(page.getByText("Drucken")).toBeVisible();
     } else {
-      const printButton = page.getByRole("button", { name: "Drucken" });
-      const pdfButton = page.getByRole("button", { name: "Als PDF speichern" });
+      const printButton = page.getByRole("menuitem", { name: "Drucken" });
+      const pdfButton = page.getByRole("menuitem", {
+        name: "Als PDF speichern",
+      });
       await printButton.waitFor({ state: "visible" });
       await expect(printButton).toBeVisible();
 
