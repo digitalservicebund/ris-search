@@ -48,6 +48,10 @@ jobs:
       - name: Check style
         run: pnpm run style:check
         working-directory: ./frontend
+      - name: Run oxlint (experimental; this will not fail the pipeline)
+        run: pnpm run oxlint:check
+        working-directory: ./frontend
+        continue-on-error: true
       - name: Run tests with coverage
         run: pnpm run coverage
         working-directory: ./frontend
