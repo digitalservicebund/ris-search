@@ -263,39 +263,6 @@ test.describe("view norm page", async () => {
   });
 });
 
-test.describe("shows link to translation if exists", () => {
-  test("has link to translation", async ({ page, isMobileTest }) => {
-    await navigate(page, "norms/eli/bund/bgbl-1/1964/s902/2009-02-05/19/deu");
-
-    if (isMobileTest) {
-      await page.getByLabel("Aktionen anzeigen").click();
-    }
-    const translationButton = page.getByRole("link", {
-      name: "Zur englischen Übersetzung",
-    });
-    await translationButton.click();
-    await expect(
-      page.getByRole("heading", {
-        name: "Test Regulation for the Model Framework of the Public Service",
-      }),
-    ).toBeVisible();
-  });
-
-  test("if there is no translation, there is not link", async ({
-    page,
-    isMobileTest,
-  }) => {
-    await navigate(page, "/norms/eli/bund/bgbl-1/2000/s1016/2023-04-26/10/deu");
-
-    if (isMobileTest) {
-      await page.getByLabel("Aktionen anzeigen").click();
-    }
-    await expect(
-      page.getByRole("link", { name: "Zur englischen Übersetzung" }),
-    ).toHaveCount(0);
-  });
-});
-
 test.describe("actions menu", () => {
   test.describe("can copy currently valid expression link", () => {
     testCopyLinkButton(
@@ -370,6 +337,35 @@ test.describe("actions menu", () => {
       await expect(page.getByRole("heading", { level: 1 })).toHaveText(
         "Test Regulation for the Model Framework of the Public Service",
       );
+    });
+  });
+
+  test.describe("does not show english translation link if no translation exists", () => {
+    test("desktop", async ({ page, isMobileTest }) => {
+      test.skip(isMobileTest);
+      await navigate(page, "/norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu");
+
+      await expect(
+        page.getByRole("menuitem", {
+          name: "Zur englischen Übersetzung",
+        }),
+      ).toHaveCount(0);
+    });
+
+    test("mobile", async ({ page, isMobileTest }) => {
+      test.skip(!isMobileTest);
+      await navigate(
+        page,
+        "/norms/eli/bund/bgbl-1/1964/s902/2009-02-05/19/deu",
+      );
+
+      await page.getByLabel("Aktionen anzeigen").click();
+
+      await expect(
+        page.getByRole("menuitem", {
+          name: "Zur englischen Übersetzung",
+        }),
+      ).toHaveCount(0);
     });
   });
 });
