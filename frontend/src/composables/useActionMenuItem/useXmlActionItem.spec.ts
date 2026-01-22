@@ -6,7 +6,7 @@ describe("useXmlActionItem", () => {
   it("creates an ActionMenuItem with with xml url", async () => {
     const xmlItem = useXmlActionItem("https://example.com/foo.xml");
 
-    expect(xmlItem.label).toEqual("Xml Anzeigen");
+    expect(xmlItem.label).toEqual("XML anzeigen");
     expect(xmlItem.iconComponent).toEqual(XmlIcon);
     expect(xmlItem.disabled).toBeFalsy();
     expect(xmlItem.url).toEqual("https://example.com/foo.xml");
@@ -16,7 +16,7 @@ describe("useXmlActionItem", () => {
   it("sets disabled to true if the url is undefined", async () => {
     const xmlItem = useXmlActionItem();
 
-    expect(xmlItem.label).toEqual("Xml Anzeigen");
+    expect(xmlItem.label).toEqual("XML anzeigen");
     expect(xmlItem.iconComponent).toEqual(XmlIcon);
     expect(xmlItem.disabled).toBeTruthy();
     expect(xmlItem.url).toBeUndefined();

@@ -4,11 +4,11 @@ import { useCopyUrlActionItem } from "~/composables/useActionMenuItem/useCopyUrl
 import { useNavigateActionItem } from "~/composables/useActionMenuItem/useNavigateActionItem";
 import { usePdfActionItem } from "~/composables/useActionMenuItem/usePdfActionItem";
 import { usePrintActionItem } from "~/composables/useActionMenuItem/usePrintActionItem";
+import { useXmlActionItem } from "~/composables/useActionMenuItem/useXmlActionItem";
 import type { LegislationWork } from "~/types";
 import { getManifestationUrl } from "~/utils/norm";
 import EngIcon from "~icons/custom/eng";
 import UpdatingLinkIcon from "~icons/custom/updatingLink";
-import XmlIcon from "~icons/custom/xml";
 
 const { metadata, translationUrl } = defineProps<{
   metadata: LegislationWork | undefined;
@@ -32,7 +32,7 @@ const actions = computed(() => {
     useCopyUrlActionItem(href, "Permalink zu dieser Fassung"),
     usePrintActionItem(),
     usePdfActionItem(),
-    useNavigateActionItem("XML anzeigen", XmlIcon, xmlUrl),
+    useXmlActionItem(xmlUrl),
   ];
 
   if (translationUrl) {
