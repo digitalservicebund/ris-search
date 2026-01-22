@@ -354,10 +354,7 @@ test.describe("actions menu", () => {
 
     test("mobile", async ({ page, isMobileTest }) => {
       test.skip(!isMobileTest);
-      await navigate(
-        page,
-        "/norms/eli/bund/bgbl-1/1964/s902/2009-02-05/19/deu",
-      );
+      await navigate(page, "/norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu");
 
       await page.getByLabel("Aktionen anzeigen").click();
 
