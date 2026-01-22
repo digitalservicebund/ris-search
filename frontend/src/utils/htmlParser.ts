@@ -9,7 +9,6 @@ let jsdom: typeof JSDOM;
 if (import.meta.server) {
   import("jsdom").then((module) => {
     jsdom = module.JSDOM;
-    return;
   });
 }
 

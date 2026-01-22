@@ -26,6 +26,9 @@
     // (e.g. jest-dom for environment setup during testing.)
     "import/no-unassigned-import": "off",
 
+    // Conflicts with SonarCloud
+    "promise/always-return": "off",
+
     "no-restricted-imports": [
       "error",
       {
