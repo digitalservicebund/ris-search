@@ -134,7 +134,7 @@ test(
     }
 
     await expect(
-      page.getByRole("button", { name: "Link to translation" }),
+      page.getByRole("menuitem", { name: "Link to translation" }),
     ).toBeVisible();
 
     if (isMobileTest) {

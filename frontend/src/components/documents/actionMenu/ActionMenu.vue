@@ -48,8 +48,7 @@ const toggle = (event: Event) => {
       </template>
     </Menu>
   </div>
-
-  <ul role="menu" class="hidden items-center *:-mx-4 sm:flex">
+  <ul role="menubar" class="hidden items-center *:-mx-4 sm:flex">
     <li v-for="item in actions" :key="item.label" role="menuitem">
       <Button
         v-tooltip.bottom="item.label"
