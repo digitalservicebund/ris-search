@@ -50,6 +50,7 @@ opensearch:
   literature-index-name: literature
   documents-alias-name: documents
   administrative-directive-index-name: administrative_directive
+  authentication: disabled
 
 # The user and password to access postgres was created in the neuris-infra following the variable convention in that repo
 search:
@@ -97,3 +98,4 @@ sentry:
 app:
   security:
     csp-header: "default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src data: 'self'; connect-src 'self'; font-src 'self'; frame-src 'none'; object-src 'none'; media-src 'none';"
+
