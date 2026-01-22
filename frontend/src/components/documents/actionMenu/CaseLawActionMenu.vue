@@ -1,19 +1,28 @@
 <script setup lang="ts">
-import ActionMenuWrapper from "~/components/documents/actionMenu/ActionMenuWrapper.vue";
+import ActionMenu from "~/components/documents/actionMenu/ActionMenu.vue";
+import { useCopyUrlActionItem } from "~/composables/useActionMenuItem/useCopyUrlActionItem";
+import { usePdfActionItem } from "~/composables/useActionMenuItem/usePdfActionItem";
+import { usePrintActionItem } from "~/composables/useActionMenuItem/usePrintActionItem";
+import { useXmlActionItem } from "~/composables/useActionMenuItem/useXmlActionItem";
 import type { CaseLaw } from "~/types";
 import { getEncodingURL } from "~/utils/caseLaw";
 
 const { caseLaw } = defineProps<{ caseLaw: CaseLaw | undefined }>();
 
-const xmlUrl = computed(() => getEncodingURL(caseLaw, "application/xml"));
+const actions = computed(() => {
+  const permalink = useRequestURL().href;
 
-const permalink = {
-  label: "Link kopieren",
-  url: "",
-  disabled: true,
-};
+  const xmlUrl = useBackendUrl(getEncodingURL(caseLaw, "application/xml"));
+
+  return [
+    useCopyUrlActionItem(permalink),
+    usePrintActionItem(),
+    usePdfActionItem(),
+    useXmlActionItem(xmlUrl),
+  ];
+});
 </script>
 
 <template>
-  <ActionMenuWrapper :permalink="permalink" :xml-url="xmlUrl" />
+  <ActionMenu :actions />
 </template>

@@ -1,4 +1,10 @@
 import type { Page } from "@playwright/test";
+import {
+  testCopyLinkButton,
+  testPdfButton,
+  testPrintButton,
+  testXmlButton,
+} from "./utils/actionMenuHelper";
 import { expect, navigate, noJsTest, test } from "./utils/fixtures";
 
 async function getSidebar(page: Page) {
@@ -94,103 +100,27 @@ test("jumps to Randnummern", async ({ page }) => {
 });
 
 test.describe("actions menu", () => {
-  test("can't use link action button as its disabled", async ({
-    page,
-    isMobileTest,
-  }) => {
-    await navigate(page, "/case-law/JURE200030030");
-
-    if (isMobileTest) {
-      await page.getByLabel("Aktionen anzeigen").click();
-    }
-    const button = page.getByRole("menuitem", {
-      name: "Link kopieren",
-    });
-
-    if (!isMobileTest) {
-      await button.hover();
-
-      await expect(
-        page.getByRole("tooltip", { name: "Link kopieren" }),
-      ).toBeVisible({ timeout: 30000 });
-    }
-
-    if (!isMobileTest) await expect(button).toBeDisabled();
+  test.describe("can copy link to currently viewed page", () => {
+    testCopyLinkButton(
+      "/case-law/JURE200030030",
+      "Link kopieren",
+      RegExp(".*/case-law/JURE200030030"),
+    );
   });
 
-  test("can use print action button to open print menu", async ({
-    page,
-    isMobileTest,
-  }) => {
-    await navigate(page, "/case-law/JURE200030030");
-    if (isMobileTest) {
-      await page.getByLabel("Aktionen anzeigen").click();
-    }
-    const button = page.getByRole("menuitem", { name: "Drucken" });
-
-    if (!isMobileTest) {
-      await button.hover();
-
-      await expect(page.getByRole("tooltip", { name: "Drucken" })).toBeVisible({
-        timeout: 30000,
-      });
-    }
-
-    await test.step("can open print menu", async () => {
-      await page.evaluate(
-        "(() => {window.waitForPrintDialog = new Promise(f => window.print = f);})()",
-      );
-      await button.click();
-
-      await page.waitForFunction("window.waitForPrintDialog");
-    });
+  test.describe("can use print action button to open print menu", () => {
+    testPrintButton("/case-law/JURE200030030");
   });
 
-  test("can't use PDF action as it is disabled", async ({
-    page,
-    isMobileTest,
-  }) => {
-    await navigate(page, "/case-law/JURE200030030");
-    if (isMobileTest) await page.getByLabel("Aktionen anzeigen").click();
-    const button = page.getByRole("menuitem", {
-      name: "Als PDF speichern",
-    });
-
-    if (!isMobileTest) {
-      await button.hover();
-
-      await expect(
-        page.getByRole("tooltip", { name: "Als PDF speichern" }),
-      ).toBeVisible({
-        timeout: 15000,
-      });
-    }
-
-    if (!isMobileTest) await expect(button).toBeDisabled();
+  test.describe("can't use PDF action as it is disabled", () => {
+    testPdfButton("/case-law/JURE200030030");
   });
 
-  test("can use XML action to view norms xml file", async ({
-    page,
-    isMobileTest,
-  }) => {
-    await navigate(page, "/case-law/JURE200030030");
-    if (isMobileTest) await page.getByLabel("Aktionen anzeigen").click();
-    const button = page.getByRole("menuitem", {
-      name: "XML anzeigen",
-    });
-
-    if (!isMobileTest) {
-      await button.hover();
-
-      await expect(
-        page.getByRole("tooltip", { name: "XML anzeigen" }),
-      ).toBeVisible({ timeout: 15000 });
-    }
-
-    await button.click();
-    await page.waitForURL(`v1/case-law/JURE200030030.xml`, {
-      waitUntil: "commit",
-    });
+  test.describe("can use XML action to view caselaw xml file", () => {
+    testXmlButton(
+      "/case-law/JURE200030030",
+      "http://localhost:8090/v1/case-law/JURE200030030.xml",
+    );
   });
 });
 
