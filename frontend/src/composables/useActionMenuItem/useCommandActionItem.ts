@@ -11,7 +11,7 @@ import type { ActionMenuItem } from "~/components/documents/actionMenu/ActionMen
 export function useCommandActionItem(
   label: string,
   icon: Component,
-  command?: () => Promise<void>,
+  command?: () => Promise<void> | void,
   disabled: boolean = false,
 ): ActionMenuItem {
   return {
