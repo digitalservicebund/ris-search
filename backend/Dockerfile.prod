@@ -4,7 +4,7 @@ COPY . /app
 RUN ./gradlew build -x integrationTest -x test -x spotlessCheck
 
 
-FROM cgr.dev/chainguard/jre@sha256:f452e791bdf8a70267d8ad08b506ab57c7471ab6e47c4940431d1bac0f917637
+FROM docker.io/library/eclipse-temurin:21.0.9_10-jre-ubi10-minimal
 COPY --from=backend-builder /app/build/libs/ris-search-*.jar /app/app.jar
 EXPOSE 8090
 ENTRYPOINT ["java", "-jar", "/app/app.jar"]
