@@ -1,9 +1,9 @@
 import type { ModuleOptions } from "nuxt-security";
-import { usePostHog } from "../src/composables/usePostHog";
+import { usePrivateFeaturesFlag } from "../src/composables/usePrivateFeaturesFlag";
 import { isDevelopment, isProduction } from "./shared";
 
 /** Configuration for the security section of Nuxt config. */
-const hasPosthog = !!usePostHog().postHog;
+const hasPosthog = !usePrivateFeaturesFlag();
 
 export const security: Partial<ModuleOptions> = {
   strict: isProduction,
