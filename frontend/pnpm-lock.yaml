@@ -54,8 +54,8 @@ importers:
         specifier: 2.5.1
         version: 2.5.1(magicast@0.5.1)(rollup@4.55.1)
       posthog-js:
-        specifier: 1.327.0
-        version: 1.327.0
+        specifier: 1.334.1
+        version: 1.334.1
       primevue:
         specifier: 4.5.4
         version: 4.5.4(vue@3.5.26(typescript@5.9.3))
@@ -2038,11 +2038,11 @@ packages:
   '@poppinss/exception@1.2.3':
     resolution: {integrity: sha512-dCED+QRChTVatE9ibtoaxc+WkdzOSjYTKi/+uacHWIsfodVfpsueo3+DKpgU5Px8qXjgmXkSvhXvSCz3fnP9lw==}
 
-  '@posthog/core@1.10.0':
-    resolution: {integrity: sha512-Xk3JQ+cdychsvftrV3G9ZrN9W329lbyFW0pGJXFGKFQf8qr4upw2SgNg9BVorjSrfhoXZRnJGt/uNF4nGFBL5A==}
+  '@posthog/core@1.13.0':
+    resolution: {integrity: sha512-knjncrk7qRmssFRbGzBl1Tunt21GRpe0Wv+uVelyL0Rh7PdQUsgguulzXFTps8hA6wPwTU4kq85qnbAJ3eH6Wg==}
 
-  '@posthog/types@1.327.0':
-    resolution: {integrity: sha512-nVXKK5c/pzJfYOAHQzmsk0SOSzugGmJvXNC2GIQMAD2V076p8C4nVBy5gnPG5iA2wHEyKXyZ8qeIKvb8TQZS1g==}
+  '@posthog/types@1.334.1':
+    resolution: {integrity: sha512-ypFnwTO7qbV7icylLbujbamPdQXbJq0a61GUUBnJAeTbBw/qYPIss5IRYICcbCj0uunQrwD7/CGxVb5TOYKWgA==}
 
   '@primeuix/styled@0.7.4':
     resolution: {integrity: sha512-QSO/NpOQg8e9BONWRBx9y8VGMCMYz0J/uKfNJEya/RGEu7ARx0oYW0ugI1N3/KB1AAvyGxzKBzGImbwg0KUiOQ==}
@@ -6213,8 +6213,8 @@ packages:
     resolution: {integrity: sha512-9ZhXKM/rw350N1ovuWHbGxnGh/SNJ4cnxHiM0rxE4VN41wsg8P8zWn9hv/buK00RP4WvlOyr/RBDiptyxVbkZQ==}
     engines: {node: '>=0.10.0'}
 
-  posthog-js@1.327.0:
-    resolution: {integrity: sha512-vu6lp9UMelxSxqEdHvzQho1aA/57vWX4rM79Df4/HzkfDRV3w7NG+rVbKQUQq/8fVmvtSMpOpUMh+aeVo+jkXw==}
+  posthog-js@1.334.1:
+    resolution: {integrity: sha512-5cDzLICr2afnwX/cR9fwoLC0vN0Nb5gP5HiCigzHkgHdO+E3WsYefla3EFMQz7U4r01CBPZ+nZ9/srkzeACxtQ==}
 
   preact@10.28.2:
     resolution: {integrity: sha512-lbteaWGzGHdlIuiJ0l2Jq454m6kcpI1zNje6d8MlGAFlYvP2GO4ibnat7P74Esfz4sPTdM6UxtTwh/d3pwM9JA==}
@@ -7539,8 +7539,8 @@ packages:
   web-namespaces@2.0.1:
     resolution: {integrity: sha512-bKr1DkiNa2krS7qxNtdrtHAmzuYGFQLiQ13TsorsdT6ULTkPLKuu5+GsFpDlg6JFjUTwX2DyhMPG2be8uPrqsQ==}
 
-  web-vitals@4.2.4:
-    resolution: {integrity: sha512-r4DIlprAGwJ7YM11VZp4R884m0Vmgr6EAKe3P+kO0PPj3Unqyvv59rczf6UiGcb9Z8QxZVcqKNwv/g0WNdWwsw==}
+  web-vitals@5.1.0:
+    resolution: {integrity: sha512-ArI3kx5jI0atlTtmV0fWU3fjpLmq/nD3Zr1iFFlJLaqa5wLBkUSzINwBPySCX/8jRyjlmy1Volw1kz1g9XE4Jg==}
 
   webdriver-bidi-protocol@0.3.10:
     resolution: {integrity: sha512-5LAE43jAVLOhB/QqX4bwSiv0Hg1HBfMmOuwBSXHdvg4GMGu9Y0lIq7p4R/yySu6w74WmaR4GM4H9t2IwLW7hgw==}
@@ -9965,11 +9965,11 @@ snapshots:
 
   '@poppinss/exception@1.2.3': {}
 
-  '@posthog/core@1.10.0':
+  '@posthog/core@1.13.0':
     dependencies:
       cross-spawn: 7.0.6
 
-  '@posthog/types@1.327.0': {}
+  '@posthog/types@1.334.1': {}
 
   '@primeuix/styled@0.7.4':
     dependencies:
@@ -15055,21 +15055,21 @@ snapshots:
     dependencies:
       xtend: 4.0.2
 
-  posthog-js@1.327.0:
+  posthog-js@1.334.1:
     dependencies:
       '@opentelemetry/api': 1.9.0
       '@opentelemetry/api-logs': 0.208.0
       '@opentelemetry/exporter-logs-otlp-http': 0.208.0(@opentelemetry/api@1.9.0)
       '@opentelemetry/resources': 2.4.0(@opentelemetry/api@1.9.0)
       '@opentelemetry/sdk-logs': 0.208.0(@opentelemetry/api@1.9.0)
-      '@posthog/core': 1.10.0
-      '@posthog/types': 1.327.0
+      '@posthog/core': 1.13.0
+      '@posthog/types': 1.334.1
       core-js: 3.47.0
       dompurify: 3.3.1
       fflate: 0.4.8
       preact: 10.28.2
       query-selector-shadow-dom: 1.0.1
-      web-vitals: 4.2.4
+      web-vitals: 5.1.0
 
   preact@10.28.2: {}
 
@@ -16600,7 +16600,7 @@ snapshots:
 
   web-namespaces@2.0.1: {}
 
-  web-vitals@4.2.4: {}
+  web-vitals@5.1.0: {}
 
   webdriver-bidi-protocol@0.3.10: {}
 

@@ -3,6 +3,9 @@ packages: []
 minimumReleaseAge: 4320
 minimumReleaseAgeExclude:
   - tar # patch vulnerable version immediately
+  - "@posthog/types"
+  - "@posthog/core"
+  - posthog-js # update minimum sdk requirements for posthog, see RISDEV-10836
 
 nodeLinker: hoisted
 
