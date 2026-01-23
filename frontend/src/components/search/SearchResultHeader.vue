@@ -16,12 +16,8 @@ const itemsWithContent = computed(() => items.filter((i) => !!i.value));
 <template>
   <div class="flex gap-8">
     <p class="ris-label2-regular content-center space-x-8">
-      <span class="inline-flex h-lh items-center align-text-bottom">
-        <component
-          :is="icon"
-          v-if="icon"
-          class="inline-block h-16 w-16 text-gray-900"
-        />
+      <span v-if="icon" class="inline-flex h-lh items-center align-text-bottom">
+        <component :is="icon" class="inline-block h-16 w-16 text-gray-900" />
       </span>
 
       <template v-for="item in itemsWithContent" :key="item.value">
