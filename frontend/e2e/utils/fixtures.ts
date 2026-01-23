@@ -131,7 +131,7 @@ export const expect = baseExpect.extend({
 
 type NoJsFixtures = {
   noJsContext: BrowserContext;
-  page: import("@playwright/test").Page;
+  page: Page;
 };
 
 export const noJsTest = base.extend<NoJsFixtures>({

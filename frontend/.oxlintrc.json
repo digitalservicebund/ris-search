@@ -26,6 +26,9 @@
     // (e.g. jest-dom for environment setup during testing.)
     "import/no-unassigned-import": "off",
 
+    // Clearly separate type imports from regular JavaScript
+    "typescript/consistent-type-imports": "error",
+
     // Conflicts with SonarCloud
     "promise/always-return": "off",
 
