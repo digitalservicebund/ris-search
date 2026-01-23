@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { useCopyUrlActionItem } from "~/composables/useActionMenuItem/useCopyUrlActionItem";
 import PdfIcon from "~icons/custom/pdf";
-import MaterialSymbolsLink from "~icons/ic/outline-link";
+import IconLink from "~icons/ic/outline-link";
 
 const { mockToastAdd } = vi.hoisted(() => ({
   mockToastAdd: vi.fn(),
@@ -27,7 +27,7 @@ describe("useCopyUrlActionItem", () => {
     const item = useCopyUrlActionItem();
 
     expect(item.label).toEqual("Link kopieren");
-    expect(item.iconComponent).toEqual(MaterialSymbolsLink);
+    expect(item.iconComponent).toEqual(IconLink);
     expect(item.disabled).toBeTruthy();
 
     expect(navigator.clipboard.writeText).not.toHaveBeenCalled();

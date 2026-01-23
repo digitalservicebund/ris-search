@@ -39,7 +39,7 @@ import {
 import { tocItemsToTreeNodes } from "~/utils/tableOfContents";
 import { truncateAtWord } from "~/utils/textFormatting";
 import IcBaselineSubject from "~icons/ic/baseline-subject";
-import MaterialSymbolsDownload from "~icons/ic/outline-file-download";
+import IconFileDownload from "~icons/ic/outline-file-download";
 import IcOutlineInfo from "~icons/ic/outline-info";
 import IcOutlineRestore from "~icons/ic/outline-settings-backup-restore";
 
@@ -335,7 +335,7 @@ const detailsTabPanelTitleId = useId();
                 external
                 :to="zipUrl"
               >
-                <MaterialSymbolsDownload class="mr-2 inline" />
+                <IconFileDownload class="mr-2 inline" />
                 {{ metadata.abbreviation ?? "Inhalte" }} als ZIP herunterladen
               </NuxtLink>
             </DetailsListEntry>

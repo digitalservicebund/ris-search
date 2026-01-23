@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import MaterialSymbolsWarningOutline from "~icons/ic/outline-warning-amber";
+import IconWarningAmber from "~icons/ic/outline-warning-amber";
 </script>
 <template>
   <div
     class="ris-body2-regular flex border-b border-yellow-700 bg-yellow-200 px-8 py-12 text-black sm:px-8 lg:px-16 dark:border-transparent dark:bg-orange-900 dark:text-white"
   >
     <div class="mx-auto flex gap-16">
-      <MaterialSymbolsWarningOutline class="shrink-0" />
+      <IconWarningAmber class="shrink-0" />
       <div>
         <p>
           <span class="ris-body2-bold">This is a trial service.</span>
