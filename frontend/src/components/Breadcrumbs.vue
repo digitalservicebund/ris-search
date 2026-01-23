@@ -42,7 +42,7 @@ const items = computed(() => {
         <a
           :href="href"
           v-bind="breadcrumbProps.action"
-          class="link-hover"
+          class="ris-link2-regular link-hover"
           @click="navigate"
         >
           <template v-if="item.type === 'home'">Startseite</template>
