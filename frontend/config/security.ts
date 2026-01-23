@@ -1,9 +1,8 @@
 import type { ModuleOptions } from "nuxt-security";
-import { usePostHog } from "../src/composables/usePostHog";
 import { isDevelopment, isProduction } from "./shared";
 
 /** Configuration for the security section of Nuxt config. */
-const hasPosthog = !!usePostHog().postHog;
+const hasPosthog = !!process.env.NUXT_PUBLIC_ANALYTICS_POSTHOG_KEY;
 
 export const security: Partial<ModuleOptions> = {
   strict: isProduction,
@@ -15,11 +14,12 @@ export const security: Partial<ModuleOptions> = {
       "script-src": [
         "'strict-dynamic'",
         "'nonce-{{nonce}}'",
-        ...(hasPosthog ? ["https://*.posthog.com"] : []),
+        ...(hasPosthog ? ["https://eu.posthog.com"] : []),
+        ...(isDevelopment ? [] : []),
       ],
       "connect-src": [
         "'self'",
-        ...(hasPosthog ? ["https://*.posthog.com"] : []),
+        ...(hasPosthog ? ["https://eu.posthog.com"] : []),
         ...(isDevelopment ? ["http:"] : []),
       ],
       "worker-src": ["'self'", "blob:", "data:"],
