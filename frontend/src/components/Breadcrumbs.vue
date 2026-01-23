@@ -2,8 +2,6 @@
 import { Breadcrumb } from "primevue";
 import { NuxtLink } from "#components";
 import type { RouteLocationRaw } from "#vue-router";
-import HomeFilledIcon from "~icons/material-symbols/home";
-import HomeOutlineIcon from "~icons/material-symbols/home-outline";
 import ChevronRightIcon from "~icons/ic/outline-chevron-right";
 
 export interface BreadcrumbItem {
@@ -30,8 +28,6 @@ const items = computed(() => {
 
   return items;
 });
-
-const isHomeHovered = ref(false);
 </script>
 
 <template>
@@ -49,21 +45,7 @@ const isHomeHovered = ref(false);
           class="link-hover"
           @click="navigate"
         >
-          <template v-if="item.type === 'home'">
-            <span
-              aria-hidden="true"
-              @mouseenter="isHomeHovered = true"
-              @mouseleave="isHomeHovered = false"
-            >
-              <template v-if="isHomeHovered">
-                <HomeFilledIcon class="-ml-2" />
-              </template>
-              <template v-else>
-                <HomeOutlineIcon class="-ml-2" />
-              </template>
-            </span>
-            <span class="sr-only">Startseite</span>
-          </template>
+          <template v-if="item.type === 'home'">Startseite</template>
           <span v-else class="ris-body2-regular line-clamp-1">
             {{ item.label }}
           </span>
