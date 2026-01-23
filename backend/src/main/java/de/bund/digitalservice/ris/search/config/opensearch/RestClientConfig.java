@@ -1,18 +1,16 @@
 package de.bund.digitalservice.ris.search.config.opensearch;
 
+import org.apache.hc.client5.http.impl.DefaultHttpRequestRetryStrategy;
 import org.apache.hc.core5.reactor.IOReactorConfig;
+import org.apache.hc.core5.util.TimeValue;
 import org.opensearch.client.RestHighLevelClient;
 import org.opensearch.data.client.orhlc.AbstractOpenSearchConfiguration;
 import org.opensearch.data.client.orhlc.ClientConfiguration;
-import org.opensearch.data.client.orhlc.OpenSearchRestTemplate;
 import org.opensearch.data.client.orhlc.RestClients;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
-import org.springframework.dao.DataAccessResourceFailureException;
-import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
-import org.springframework.data.elasticsearch.core.convert.ElasticsearchConverter;
 import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories;
 
 /** Class to configure the REST client which connects to opensearch in production without ssl. */
@@ -67,8 +65,10 @@ public class RestClientConfig extends AbstractOpenSearchConfiguration {
     final var keepAliveCallback =
         RestClients.RestClientConfigurationCallback.from(
             clientConfigurer ->
-                clientConfigurer.setIOReactorConfig(
-                    IOReactorConfig.custom().setSoKeepAlive(true).build()));
+                clientConfigurer
+                    .setRetryStrategy(
+                        new DefaultHttpRequestRetryStrategy(3, TimeValue.ofSeconds(1L)))
+                    .setIOReactorConfig(IOReactorConfig.custom().setSoKeepAlive(true).build()));
 
     if ("enabled".equals(authentication)) {
       return builder
@@ -81,20 +81,5 @@ public class RestClientConfig extends AbstractOpenSearchConfiguration {
     } else {
       return builder.withClientConfigurer(keepAliveCallback).build();
     }
-  }
-
-  @Override
-  public ElasticsearchOperations elasticsearchOperations(
-      ElasticsearchConverter elasticsearchConverter, RestHighLevelClient elasticsearchClient) {
-    return new OpenSearchRestTemplate(opensearchClient(), elasticsearchConverter) {
-      @Override
-      public <T> T execute(OpenSearchRestTemplate.ClientCallback<T> callback) {
-        try {
-          return super.execute(callback);
-        } catch (DataAccessResourceFailureException e) {
-          return super.execute(callback);
-        }
-      }
-    };
   }
 }
