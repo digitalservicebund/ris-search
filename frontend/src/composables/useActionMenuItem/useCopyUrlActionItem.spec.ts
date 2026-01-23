@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { useCopyUrlActionItem } from "~/composables/useActionMenuItem/useCopyUrlActionItem";
 import PdfIcon from "~icons/custom/pdf";
-import MaterialSymbolsLink from "~icons/material-symbols/link";
+import MaterialSymbolsLink from "~icons/ic/outline-link";
 
 const { mockToastAdd } = vi.hoisted(() => ({
   mockToastAdd: vi.fn(),

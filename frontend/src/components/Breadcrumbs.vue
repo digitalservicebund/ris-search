@@ -2,9 +2,9 @@
 import { Breadcrumb } from "primevue";
 import { NuxtLink } from "#components";
 import type { RouteLocationRaw } from "#vue-router";
-import ChevronRightIcon from "~icons/material-symbols/chevron-right";
 import HomeFilledIcon from "~icons/material-symbols/home";
 import HomeOutlineIcon from "~icons/material-symbols/home-outline";
+import ChevronRightIcon from "~icons/ic/outline-chevron-right";
 
 export interface BreadcrumbItem {
   label: string;

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import MaterialSymbolsWarningOutline from "~icons/material-symbols/warning-outline";
+import MaterialSymbolsWarningOutline from "~icons/ic/outline-warning-amber";
 </script>
 <template>
   <div

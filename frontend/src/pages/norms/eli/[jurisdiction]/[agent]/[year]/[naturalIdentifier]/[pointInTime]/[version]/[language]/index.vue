@@ -39,9 +39,9 @@ import {
 import { tocItemsToTreeNodes } from "~/utils/tableOfContents";
 import { truncateAtWord } from "~/utils/textFormatting";
 import IcBaselineSubject from "~icons/ic/baseline-subject";
+import MaterialSymbolsDownload from "~icons/ic/outline-file-download";
 import IcOutlineInfo from "~icons/ic/outline-info";
 import IcOutlineRestore from "~icons/ic/outline-settings-backup-restore";
-import MaterialSymbolsDownload from "~icons/material-symbols/download";
 
 definePageMeta({
   // note: this is an expression ELI

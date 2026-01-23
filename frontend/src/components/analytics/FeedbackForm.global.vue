@@ -4,7 +4,7 @@ import PrimevueTextarea from "primevue/textarea";
 import { NuxtLink } from "#components";
 import { usePostHog } from "~/composables/usePostHog";
 import { isStringEmpty } from "~/utils/textFormatting";
-import ErrorOutline from "~icons/material-symbols/error-outline";
+import ErrorOutline from "~icons/ic/outline-error-outline";
 
 const { sendFeedbackToPostHog } = usePostHog();
 const honeypotId = useId();
