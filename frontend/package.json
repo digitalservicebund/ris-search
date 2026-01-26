@@ -34,7 +34,7 @@
     "@nuxtjs/mdc": "0.20.0",
     "@nuxtjs/sitemap": "7.5.2",
     "@scalar/api-reference": "1.43.8",
-    "@sentry/nuxt": "10.34.0",
+    "@sentry/nuxt": "10.36.0",
     "dayjs": "1.11.19",
     "lodash": "4.17.21",
     "minisearch": "7.2.0",
