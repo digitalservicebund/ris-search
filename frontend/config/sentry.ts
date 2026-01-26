@@ -3,6 +3,9 @@ import { isStringEmpty } from "../src/utils/textFormatting";
 
 /** Configuration for the sentry section of Nuxt config. */
 export const sentry: NuxtConfig["sentry"] = {
+  enabled: !isStringEmpty(process.env.NUXT_PUBLIC_SENTRY_DSN),
+  telemetry: false,
+
   sourceMapsUploadOptions: {
     org: "digitalservice",
     project: "ris-search",
@@ -11,5 +14,4 @@ export const sentry: NuxtConfig["sentry"] = {
       filesToDeleteAfterUpload: [".*/**/public/**/*.map"],
     },
   },
-  enabled: !isStringEmpty(process.env.NUXT_PUBLIC_SENTRY_DSN),
 };
