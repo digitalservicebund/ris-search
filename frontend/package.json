@@ -58,7 +58,7 @@
     "@testing-library/vue": "8.1.0",
     "@types/jsdom": "27.0.0",
     "@types/lodash": "4.17.23",
-    "@types/node": "25.0.9",
+    "@types/node": "25.0.10",
     "@types/sanitize-html": "2.16.0",
     "@vitest/coverage-v8": "4.0.17",
     "@vue/test-utils": "2.4.6",
