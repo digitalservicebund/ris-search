@@ -1,7 +1,7 @@
 import { useToast } from "primevue/usetoast";
 import type { ActionMenuItem } from "~/components/documents/actionMenu/ActionMenu.vue";
 import { useCommandActionItem } from "~/composables/useActionMenuItem/useCommandActionItem";
-import MaterialSymbolsLink from "~icons/material-symbols/link";
+import IconLink from "~icons/ic/outline-link";
 
 /**
  * Use this function to create an action item where the action is to copy the given url to the clipboard.
@@ -31,7 +31,7 @@ export function useCopyUrlActionItem(
 
   return useCommandActionItem(
     label ?? "Link kopieren",
-    icon ?? MaterialSymbolsLink,
+    icon ?? IconLink,
     command,
     !url,
   );

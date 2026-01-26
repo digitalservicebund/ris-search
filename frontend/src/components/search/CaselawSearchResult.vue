@@ -7,7 +7,7 @@ import type { CaseLaw, SearchResult, TextMatch } from "~/types";
 import { dateFormattedDDMMYYYY } from "~/utils/dateFormatting";
 import { sanitizeSearchResult } from "~/utils/sanitize";
 import { addEllipsis, removeOuterParentheses } from "~/utils/textFormatting";
-import GavelIcon from "~icons/material-symbols/gavel";
+import GavelIcon from "~icons/ic/outline-gavel";
 
 const { searchResultClicked } = usePostHog();
 

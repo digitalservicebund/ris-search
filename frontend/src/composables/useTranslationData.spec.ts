@@ -14,8 +14,8 @@ const { mockFetch } = vi.hoisted(() => {
   };
 });
 
-const { useRisBackendMock, dataRef } = vi.hoisted(() => {
-  const { ref } = require("vue") as typeof import("vue");
+const { useRisBackendMock, dataRef } = await vi.hoisted(async () => {
+  const { ref } = await import("vue");
   const dataRef = ref(null) as Ref<unknown>;
 
   return {

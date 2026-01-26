@@ -4,7 +4,7 @@ import PrimevueTextarea from "primevue/textarea";
 import { NuxtLink } from "#components";
 import { usePostHog } from "~/composables/usePostHog";
 import { isStringEmpty } from "~/utils/textFormatting";
-import ErrorOutline from "~icons/material-symbols/error-outline";
+import ErrorOutline from "~icons/ic/outline-error-outline";
 
 const { sendFeedbackToPostHog } = usePostHog();
 const honeypotId = useId();
@@ -117,9 +117,9 @@ watch(
         </div>
 
         <div class="text-field">
-          <label :for="feedbackMessageId" class="ris-label2-regular"
-            >Feedback</label
-          >
+          <label :for="feedbackMessageId" class="ris-label2-regular">
+            Feedback
+          </label>
           <PrimevueTextarea
             :id="feedbackMessageId"
             v-model="feedback"
@@ -133,13 +133,13 @@ watch(
               }
             "
           />
+          <small v-if="errorMessage" data-test-id="feedback-error-message">
+            <ErrorOutline />
+            {{ errorMessage }}
+          </small>
         </div>
-
-        <small v-if="errorMessage" data-test-id="feedback-error-message">
-          <ErrorOutline />
-          {{ errorMessage }}
-        </small>
       </div>
+
       <div class="flex flex-row">
         <Button
           data-test-id="submit-feedback-button"

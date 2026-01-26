@@ -17,7 +17,7 @@ import { formatDocumentKind } from "~/utils/displayValues";
 import { removePrefix, truncateAtWord } from "~/utils/textFormatting";
 import IcBaselineSubject from "~icons/ic/baseline-subject";
 import IcOutlineInfo from "~icons/ic/outline-info";
-import IcOutlineWarning from "~icons/material-symbols/warning-outline";
+import IcOutlineWarning from "~icons/ic/outline-warning-amber";
 
 definePageMeta({ layout: "norm" });
 
