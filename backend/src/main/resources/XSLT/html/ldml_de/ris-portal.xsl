@@ -10,7 +10,7 @@
                 xmlns="http://www.w3.org/1999/xhtml"
                 exclude-result-prefixes="xs xsi akn xhtml" version="3.0"
 >
-    <xsl:output method="html" indent="yes" omit-xml-declaration="yes"/>
+    <xsl:output method="html" indent="no" omit-xml-declaration="yes"/>
     <xsl:strip-space elements="*"/>
 
     <!-- Include utilities -->
