@@ -241,9 +241,9 @@ jobs:
           if-no-files-found: error
       - name: Install Cosign
         if: ${{ github.actor != 'dependabot[bot]' && github.ref == 'refs/heads/main' }}
-        # Third-party action, pin to commit SHA!
-        # See https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions
-        uses: sigstore/cosign-installer@faadad0cce49287aee09b3a48701e75088a2c6ad
+        uses: sigstore/cosign-installer@4d14d7f17e7112af04ea6108fbb4bfc714c00390
+        with:
+          cosign-release: "v2.6.0" # We need to use v2.X.X because of major version GHA v4.X.X and broken image verification of Kyverno
       - name: Sign the published Docker image
         if: ${{ github.actor != 'dependabot[bot]' && github.ref == 'refs/heads/main' }}
         run: cosign sign --yes ${{ inputs.container-image-tag }}
