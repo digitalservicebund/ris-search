@@ -1,6 +1,10 @@
 import type { ModuleOptions } from "nuxt-security";
 import { isDevelopment, isProduction } from "./shared";
 
+const allowedExternalSrc = isDevelopment
+  ? []
+  : ["https://*.posthog.com", "https://*.ingest.us.sentry.io"];
+
 /** Configuration for the security section of Nuxt config. */
 export const security: Partial<ModuleOptions> = {
   strict: isProduction,
@@ -10,12 +14,14 @@ export const security: Partial<ModuleOptions> = {
       "default-src": "'self'",
       "style-src": ["'self'", "https:", "'unsafe-inline'"],
       "img-src": ["'self'", "data:", "'unsafe-inline'"],
-      "script-src": isDevelopment
-        ? ["'strict-dynamic'", "'nonce-{{nonce}}'"]
-        : ["'strict-dynamic'", "'nonce-{{nonce}}'", "https://*.posthog.com"],
+      "script-src": [
+        "'strict-dynamic'",
+        "'nonce-{{nonce}}'",
+        ...allowedExternalSrc,
+      ],
       "connect-src": isDevelopment
         ? ["'self'", "http:"]
-        : ["'self'", "https://*.posthog.com"],
+        : ["'self'", ...allowedExternalSrc],
       "worker-src": ["'self'", "blob:", "data:"],
     },
   },
