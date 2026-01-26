@@ -69,7 +69,6 @@ const searchInputId = useId();
         :id="searchInputId"
         v-model="currentText"
         :placeholder="inputPlaceholder"
-        autofocus
         fluid
         name="query"
         type="search"
