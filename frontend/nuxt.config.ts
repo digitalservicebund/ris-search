@@ -19,7 +19,6 @@ export default defineNuxtConfig({
     "@nuxt/test-utils/module",
     "@sentry/nuxt/module",
     "nuxt-security",
-    "@nuxt/scripts",
     "@nuxtjs/sitemap",
     "@nuxtjs/mdc",
   ],
