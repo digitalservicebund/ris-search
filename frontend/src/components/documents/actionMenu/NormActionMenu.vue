@@ -26,10 +26,10 @@ const actions = computed(() => {
   const actions = [
     useCopyUrlActionItem(
       workEliLink,
-      "Link zur jeweils gültigen Fassung",
+      "Link zur jeweils gültigen Fassung kopieren",
       UpdatingLinkIcon,
     ),
-    useCopyUrlActionItem(href, "Permalink zu dieser Fassung"),
+    useCopyUrlActionItem(href, "Permalink zu dieser Fassung kopieren"),
     usePrintActionItem(),
     usePdfActionItem(),
     useXmlActionItem(xmlUrl),

@@ -275,7 +275,7 @@ test.describe("actions menu", () => {
   test.describe("can copy permalink to currenlty viewd expression", () => {
     testCopyLinkButton(
       "/norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu",
-      "Permalink zu dieser Fassung",
+      "Permalink zu dieser Fassung kopieren",
       RegExp(".*/norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu"),
     );
   });

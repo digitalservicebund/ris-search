@@ -77,9 +77,11 @@ describe("NormActionMenu", () => {
 
     expect(menuitems).toHaveLength(5);
     expect(menuitems[0]).toHaveAccessibleName(
-      "Link zur jeweils gültigen Fassung",
+      "Link zur jeweils gültigen Fassung kopieren",
     );
-    expect(menuitems[1]).toHaveAccessibleName("Permalink zu dieser Fassung");
+    expect(menuitems[1]).toHaveAccessibleName(
+      "Permalink zu dieser Fassung kopieren",
+    );
     expect(menuitems[2]).toHaveAccessibleName("Drucken");
     expect(menuitems[3]).toHaveAccessibleName("Als PDF speichern");
     expect(menuitems[4]).toHaveAccessibleName("XML anzeigen");
@@ -90,7 +92,7 @@ describe("NormActionMenu", () => {
     renderNormActionMenu();
 
     const copyButton = screen.getByRole("menuitem", {
-      name: "Link zur jeweils gültigen Fassung",
+      name: "Link zur jeweils gültigen Fassung kopieren",
     });
     expect(copyButton).toBeVisible();
     expect(copyButton).toBeEnabled();
@@ -113,7 +115,7 @@ describe("NormActionMenu", () => {
     renderNormActionMenu();
 
     const copyButton = screen.getByRole("menuitem", {
-      name: "Permalink zu dieser Fassung",
+      name: "Permalink zu dieser Fassung kopieren",
     });
     expect(copyButton).toBeVisible();
     expect(copyButton).toBeEnabled();
