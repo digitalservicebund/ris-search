@@ -255,18 +255,7 @@ Attributes from the Juris CALS format without a corresponding HTML attribute mig
 :deep(.akn-subsection > .akn-heading),
 :deep(.akn-title > .akn-heading),
 :deep(.akn-subtitle > .akn-heading) {
-  @apply ris-heading3-regular float-none mb-24 block border-b-4 border-gray-600 pb-16 text-center text-gray-900;
-}
-:deep(.akn-book > .akn-heading),
-:deep(.akn-part > .akn-heading) {
-  @apply border-b-10;
-}
-:deep(.akn-chapter > .akn-heading) {
-  @apply border-b-8;
-}
-:deep(.akn-subchapter > .akn-heading),
-:deep(.akn-section > .akn-heading) {
-  @apply border-b-[6px];
+  @apply ris-heading3-regular float-none mb-24 block border-b border-gray-400 pb-16 text-center text-gray-900;
 }
 
 :deep(.akn-book + .akn-book),
