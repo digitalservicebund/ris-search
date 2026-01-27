@@ -3,7 +3,7 @@ import { isDevelopment, isProduction } from "./shared";
 
 const allowedExternalSrc = isDevelopment
   ? []
-  : ["https://*.posthog.com", "https://*.ingest.us.sentry.io"];
+  : ["https://*.posthog.com", "https://*.sentry.io/"];
 
 /** Configuration for the security section of Nuxt config. */
 export const security: Partial<ModuleOptions> = {

@@ -4,24 +4,18 @@ on:
   workflow_call:
     inputs:
       container-image-tag:
-        description: 'The full tag for the frontend container image'
+        description: "The full tag for the frontend container image"
         required: true
         type: string
       container-image-version:
-        description: 'The sha of the commit that triggered the pipeline'
+        description: "The sha of the commit that triggered the pipeline"
         required: true
         type: string
       container-registry:
-        description: 'Name of the container registry'
+        description: "Name of the container registry"
         required: false
         type: string
         default: ghcr.io
-
-env:
-  RUN_ID: ${{ github.run_id }}
-  SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
-  SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-  SENTRY_RELEASE: ${{ github.sha }}
 
 jobs:
   check-frontend:
@@ -37,7 +31,7 @@ jobs:
         uses: actions/setup-node@v6
         with:
           node-version: 24
-          cache: 'pnpm'
+          cache: "pnpm"
           cache-dependency-path: ./frontend/pnpm-lock.yaml
       - name: Install Node modules
         run: pnpm install --frozen-lockfile
@@ -95,7 +89,7 @@ jobs:
         uses: actions/setup-node@v6
         with:
           node-version: 24
-          cache: 'pnpm'
+          cache: "pnpm"
           cache-dependency-path: ./frontend/pnpm-lock.yaml
       - name: Install Node modules
         run: pnpm install --frozen-lockfile
@@ -184,10 +178,15 @@ jobs:
         with:
           file: frontend/Dockerfile
           context: frontend
-          tags: ${{ inputs.container-image-tag}}
+          tags: ${{ inputs.container-image-tag }}
           push: true
           cache-from: type=gha
           cache-to: type=gha,mode=max
+          build-args: |
+            NUXT_PUBLIC_SENTRY_DSN=${{ secrets.SENTRY_DSN }}
+            SENTRY_RELEASE=${{ github.sha }}
+          secrets: |
+            SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }}
       - name: Run Trivy vulnerability image scanner
         # Third-party action, pin to commit SHA!
         # See https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions
