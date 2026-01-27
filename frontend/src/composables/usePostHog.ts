@@ -81,7 +81,7 @@ export function usePostHog() {
 
     try {
       const cookie = await cookieStore.get(`ph_${key}_posthog`);
-      if (cookie?.value && cookie.value.startsWith("{")) {
+      if (cookie?.value) {
         const phCookieObject = JSON.parse(cookie.value);
         return phCookieObject.distinct_id ?? "anonymous_feedback_user";
       }
