@@ -10,6 +10,11 @@
 }
 
 @layer base {
+  :root {
+    --p-tabs-tab-border-color: var(--color-gray-400);
+    --p-tabs-tablist-border-color: var(--color-gray-400);
+  }
+
   body {
     @apply ris-body1-regular antialiased;
   }

@@ -241,7 +241,7 @@ const detailsTabPanelTitleId = useId();
       <Metadata :items="metadataItems" class="mb-48" />
     </div>
 
-    <div class="border-b border-gray-600">
+    <div class="border-b border-gray-400">
       <nav class="container -mb-1">
         <Tabs :value="currentView" :show-navigators="false">
           <TabList>

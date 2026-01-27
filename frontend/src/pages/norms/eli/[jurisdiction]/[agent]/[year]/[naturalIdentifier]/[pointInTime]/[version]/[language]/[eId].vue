@@ -248,7 +248,8 @@ useDynamicSeo({ title, description });
     >
       <Metadata :items="metadataItems" />
     </div>
-    <div class="bg-white">
+
+    <div class="border-t border-t-gray-400 bg-white">
       <SidebarLayout class="container py-24">
         <template v-if="!!articleHtml" #content>
           <IncompleteDataMessage />
