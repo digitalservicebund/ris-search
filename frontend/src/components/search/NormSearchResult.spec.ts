@@ -253,7 +253,7 @@ describe("NormSearchResult", () => {
       );
 
       expect(screen.getByText("Aktuell gültig")).toBeInTheDocument();
-      const badge = container.querySelector(".border-green-200");
+      const badge = container.querySelector(".border-green-400");
       expect(badge).toBeInTheDocument();
     });
 
@@ -263,7 +263,7 @@ describe("NormSearchResult", () => {
       );
 
       expect(screen.getByText("Zukünftig in Kraft")).toBeInTheDocument();
-      const badge = container.querySelector(".border-yellow-400");
+      const badge = container.querySelector(".border-yellow-600");
       expect(badge).toBeInTheDocument();
     });
 
