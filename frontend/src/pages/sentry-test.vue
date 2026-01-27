@@ -1,8 +1,9 @@
 <script setup lang="ts">
+import { captureException } from "@sentry/nuxt";
 import { Button } from "primevue";
 
 function throwError() {
-  throw new Error("testing Sentry integration");
+  captureException(new Error("testing Sentry integration 2"));
 }
 </script>
 
