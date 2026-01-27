@@ -23,7 +23,6 @@ import { findNodePath, tocItemsToTreeNodes } from "~/utils/tableOfContents";
 import { truncateAtWord } from "~/utils/textFormatting";
 import IcBaselineArrowBack from "~icons/ic/baseline-arrow-back";
 import IcBaselineArrowForward from "~icons/ic/baseline-arrow-Forward";
-import MdiArrowTopLeft from "~icons/mdi/arrow-top-left?width=24&height=24";
 
 definePageMeta({
   // note: this is an expression ELI plus the article eId
@@ -134,10 +133,6 @@ const breadcrumbItems: Ref<BreadcrumbItem[]> = computed(() => {
 });
 
 const htmlTitle = computed(() => data.value?.articleHeading);
-const topNormLinkText = computed(() => {
-  if (norm.value) return norm.value.name || norm.value.alternateName;
-  else return "";
-});
 
 const validVersions =
   norm.value?.workExample.legislationLegalForce !== "InForce"
@@ -217,18 +212,7 @@ useDynamicSeo({ title, description });
     <div class="container">
       <Breadcrumbs :items="breadcrumbItems" />
       <div>
-        <NuxtLink
-          :to="normPath"
-          class="ris-heading3-bold! ris-link1-regular link-hover mt-24 line-clamp-2"
-        >
-          <h1 class="flex items-center gap-4">
-            <MdiArrowTopLeft class="mt-4 flex-none self-start" />
-            <span class="line-clamp-2">
-              {{ topNormLinkText }}
-            </span>
-          </h1>
-        </NuxtLink>
-        <h2
+        <h1
           class="ris-heading2-bold my-24 mb-24 inline-block"
           v-html="htmlTitle"
         />

@@ -6,10 +6,6 @@ import {
 } from "./utils/actionMenuHelper";
 import { expect, navigate, noJsTest, test } from "./utils/fixtures";
 
-const expectedNorms = [
-  "Fiktive Fruchtsaft- und Erfrischungsgetränkeverordnung zu Testzwecken",
-];
-
 test.describe("view norm page", async () => {
   test.setTimeout(60000);
   test("can navigate to a single norm article and between articles", async ({
@@ -25,11 +21,8 @@ test.describe("view norm page", async () => {
         waitUntil: "commit",
       });
       const heading = page.getByRole("heading", {
+        level: 1,
         name: "§ 1 Anwendungsbereich",
-      });
-      await page.waitForSelector("h1, h2", {
-        state: "visible",
-        timeout: 10000,
       });
       await expect.soft(heading).toBeVisible();
     });
@@ -62,6 +55,7 @@ test.describe("view norm page", async () => {
       await expect(h2Art3).toBeVisible();
       await expect(
         page.getByRole("heading", {
+          level: 1,
           name: "§ 3 Kennzeichnung",
         }),
       ).toBeVisible();
@@ -81,6 +75,7 @@ test.describe("view norm page", async () => {
       await expect(h2Art3Back).toBeVisible();
       await expect(
         page.getByRole("heading", {
+          level: 1,
           name: "§ 3 Kennzeichnung",
         }),
       ).toBeVisible();
@@ -101,7 +96,7 @@ test.describe("view norm page", async () => {
     });
 
     await test.step("Navigate back to main norm view", async () => {
-      await page.getByRole("link", { name: expectedNorms[0] }).first().click();
+      await page.getByRole("link", { name: "FrSaftErfrischV" }).first().click();
       await page.waitForURL(mainExpressionEliUrl, { waitUntil: "commit" });
     });
 
@@ -212,7 +207,7 @@ test.describe("view norm page", async () => {
     });
 
     await test.step("Navigate back to main norm view", async () => {
-      await page.getByRole("link", { name: expectedNorms[0] }).first().click();
+      await page.getByRole("link", { name: "FrSaftErfrischV" }).first().click();
       await page.waitForURL(mainExpressionEliUrl, { waitUntil: "commit" });
     });
   });
