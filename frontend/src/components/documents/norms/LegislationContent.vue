@@ -334,15 +334,6 @@ Attributes from the Juris CALS format without a corresponding HTML attribute mig
   }
 }
 
-:deep(.norm-pdf-link) {
-  @apply inline-flex items-center;
-}
-
-:deep(.norm-pdf-link::before) {
-  @apply mr-8 inline-block h-24 w-24 bg-current mask-contain content-['_'];
-  mask: url("~/assets/img/file.svg") no-repeat center;
-}
-
 /* Print styles for legislation content */
 :deep(.akn-section),
 :deep(.akn-subsection) {
