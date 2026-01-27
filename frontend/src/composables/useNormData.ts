@@ -19,7 +19,7 @@ export interface NormContent {
 }
 
 /**
- * Fetches the metadata and actual content for a whole norm as an async operation.
+ * Fetches the metadata of a norm exluding its articles content as an async operation.
  * This has the advantage of only needing to be processed once, either during
  * client-side or server-side rendering.
  * It will also extract the title and table of contents HTML parts, to be
@@ -52,7 +52,8 @@ export function useFetchNormContent(
       });
       const document = parseDocument(html);
       const htmlParts = extractHtmlParts(document);
-
+      //set hasPart empty to reduce payload size
+      metadata.workExample.hasPart = [];
       return {
         legislationWork: metadata,
         html,
