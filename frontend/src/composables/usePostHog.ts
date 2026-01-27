@@ -75,10 +75,21 @@ export function usePostHog() {
 
   /** Retrieves the user's PostHog distinct ID from cookies. */
   async function getUserPostHogId() {
-    const cookie = await cookieStore.get(`ph_${key}_posthog`);
-    const phCookieString = cookie?.value ?? "{}";
-    const phCookieObject = JSON.parse(phCookieString) as Record<string, string>;
-    return phCookieObject.distinct_id ?? "anonymous_feedback_user";
+    if (import.meta.server || typeof cookieStore === "undefined" || !key) {
+      return "anonymous_feedback_user";
+    }
+
+    try {
+      const cookie = await cookieStore.get(`ph_${key}_posthog`);
+      if (cookie?.value && cookie.value.startsWith("{")) {
+        const phCookieObject = JSON.parse(cookie.value);
+        return phCookieObject.distinct_id ?? "anonymous_feedback_user";
+      }
+    } catch (exception) {
+      console.warn("PostHog cookie parsing failed:", exception);
+    }
+
+    return "anonymous_feedback_user";
   }
 
   /**
