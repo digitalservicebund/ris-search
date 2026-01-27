@@ -1,11 +1,9 @@
 # Swapping indices in OpenSearch
 
 Sometimes, the indexes in Opensearch need to be recreated.
-This is usually the result of the *mappings.json and/or the german_analyzer.json files changing.
+This is usually the result of the \*mappings.json and/or the german_analyzer.json files changing.
 To prevent downtime, it is advisable to build a new index in the background and swap the indices once ready.
 The following commands in this file should be run in the opensearch dev console for the appropriate environment being updated.
-
-
 
 ## Initial state
 
@@ -13,15 +11,19 @@ The following commands in this file should be run in the opensearch dev console 
 Using an alias helps with a zero downtime index recreation.
 
 ## Make sure everything is the way you expect
+
 There should already be indexes in the form `<DOC_KIND>_OLD_DATE`.
+
 ```shell
 GET _cat/indices
 GET _cat/aliases
 ```
 
 ## Create the new indexes
+
 NEW_DATE should be today's date in the format YYYY-MM-DD.
 Please note that these index creation commands will automatically use the template files by name prefix.
+
 ```shell
 PUT /caselaws_NEW_DATE
 PUT /literature_NEW_DATE
@@ -29,6 +31,7 @@ PUT /norms_NEW_DATE
 ```
 
 ## Do the data copy
+
 ```shell
 POST /_reindex?wait_for_completion=false
 {
@@ -63,12 +66,15 @@ POST /_reindex?wait_for_completion=false
 ```
 
 ## Wait for the copy to finish
+
 ```shell
 GET _cat/tasks?actions=*reindex
 ```
 
 ## Double checks
+
 The count of the old and new indexes should match your expectations
+
 ```shell
 GET caselaws_OLD_DATE/_count
 GET caselaws_NEW_DATE/_count
@@ -79,6 +85,7 @@ GET norms_NEW_DATE/_count
 ```
 
 ## Switch aliases to new indexes
+
 ```shell
 POST /_aliases
 {
@@ -118,9 +125,11 @@ POST /_aliases
 ```
 
 ## More double checks
+
 Check the portal ui by searching and making sure everything is as expected.
 
 ## Delete the old indexes
+
 ```shell
 DELETE caselaws_OLD_DATE
 DELETE literature_OLD_DATE
