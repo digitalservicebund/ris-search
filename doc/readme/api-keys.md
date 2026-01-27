@@ -1,6 +1,7 @@
 # Portal API keys
 
 The portal API can be operated
+
 - without authentication
 - with authentication, either using individual OAuth accounts, or API keys
 
@@ -19,33 +20,34 @@ Spring configuration mechanisms, under `server.api-keys`. They are read by `Conf
 2. Create a new secure random string to be used as secret.
 
 3. Encode the value by running this Java code:
-    ```java
+
+   ```java
    import org.springframework.security.crypto.password.Pbkdf2PasswordEncoder;
-    
+
    // ...
-   
-    Pbkdf2PasswordEncoder pbkdf2PasswordEncoder = Pbkdf2PasswordEncoder.defaultsForSpringSecurity_v5_8();
-    String encoded = pbkdf2PasswordEncoder.encode(secret);
-    ```
+
+   Pbkdf2PasswordEncoder pbkdf2PasswordEncoder = Pbkdf2PasswordEncoder.defaultsForSpringSecurity_v5_8();
+   String encoded = pbkdf2PasswordEncoder.encode(secret);
+   ```
 
 4. Add both values to the configuration's `server.api-keys` list, e.g., in `application.yaml`.
 
-    ```yaml
-    server:
-      api-keys:
-        - prefix: ris_  # from step 1, note the trailing underscore
-          hash: ...     # from step 3
+   ```yaml
+   server:
+     api-keys:
+       - prefix: ris_ # from step 1, note the trailing underscore
+         hash: ... # from step 3
    ```
 
    Note that the alternate syntax may be used if brackets are not supported as keys:
 
-    ```yaml
-    server.api-keys.0.prefix: ris_ # from step 1, note the trailing underscore
-    server.api-keys.0.hash: ... # from step 3
-    ```
+   ```yaml
+   server.api-keys.0.prefix: ris_ # from step 1, note the trailing underscore
+   server.api-keys.0.hash: ... # from step 3
+   ```
 
 5. Concatenate the prefix (step 1) and secret (step 2) to obtain the API key.
    You may test it using e.g. `curl`:
-    ```shell
-    curl -H "X-Api-Key: ris_..." "http://localhost:8090/v1/legislation?size=1" -v
-    ```
+   ```shell
+   curl -H "X-Api-Key: ris_..." "http://localhost:8090/v1/legislation?size=1" -v
+   ```
