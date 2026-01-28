@@ -16,8 +16,6 @@ Swagger API documentation is available at [localhost:8090/swagger-ui](http://loc
 
 ## Testing
 
-### Test
-
 The project has distinct unit and integration test sets.
 
 **To run just the unit tests:**
