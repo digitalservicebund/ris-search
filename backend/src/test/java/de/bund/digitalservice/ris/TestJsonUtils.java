@@ -9,7 +9,7 @@ import de.bund.digitalservice.ris.search.schema.AbstractDocumentSchema;
 import de.bund.digitalservice.ris.search.schema.AdministrativeDirectiveSearchSchema;
 import de.bund.digitalservice.ris.search.schema.CaseLawSearchSchema;
 import de.bund.digitalservice.ris.search.schema.CollectionSchema;
-import de.bund.digitalservice.ris.search.schema.LegislationWorkSearchSchema;
+import de.bund.digitalservice.ris.search.schema.LegislationExpressionSearchSchema;
 import de.bund.digitalservice.ris.search.schema.LiteratureSearchSchema;
 import de.bund.digitalservice.ris.search.schema.SearchMemberSchema;
 import java.util.List;
@@ -54,8 +54,8 @@ public class TestJsonUtils {
     return switch (entity) {
       case CaseLawSearchSchema c -> c.decisionDate().toString();
       case LiteratureSearchSchema l -> l.firstPublicationDate().toString();
-      case LegislationWorkSearchSchema n ->
-          Objects.requireNonNull(n.workExample()).temporalCoverage().substring(0, 10);
+      case LegislationExpressionSearchSchema n ->
+          Objects.requireNonNull(n.temporalCoverage().substring(0, 10));
       case AdministrativeDirectiveSearchSchema n ->
           Objects.requireNonNull(n.entryIntoForceDate()).toString();
     };

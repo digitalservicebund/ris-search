@@ -23,7 +23,7 @@ import de.bund.digitalservice.ris.search.schema.AbstractDocumentSchema;
 import de.bund.digitalservice.ris.search.schema.AdministrativeDirectiveSearchSchema;
 import de.bund.digitalservice.ris.search.schema.CaseLawSearchSchema;
 import de.bund.digitalservice.ris.search.schema.CollectionSchema;
-import de.bund.digitalservice.ris.search.schema.LegislationWorkSearchSchema;
+import de.bund.digitalservice.ris.search.schema.LegislationExpressionSearchSchema;
 import de.bund.digitalservice.ris.search.schema.LiteratureSearchSchema;
 import de.bund.digitalservice.ris.search.schema.SearchMemberSchema;
 import de.bund.digitalservice.ris.search.service.AdvancedSearchService;
@@ -120,7 +120,7 @@ public class AdvancedSearchController {
   @Operation(summary = "Advanced search using Lucene query syntax", tags = "Legislation")
   @ApiResponse(responseCode = "200", description = "Success")
   @ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content)
-  public ResponseEntity<CollectionSchema<SearchMemberSchema<LegislationWorkSearchSchema>>>
+  public ResponseEntity<CollectionSchema<SearchMemberSchema<LegislationExpressionSearchSchema>>>
       searchLegislation(
           @Parameter(name = "query", description = "The query filter based on Lucene query")
               @RequestParam

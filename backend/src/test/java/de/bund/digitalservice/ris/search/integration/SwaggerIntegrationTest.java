@@ -62,7 +62,7 @@ class SwaggerIntegrationTest extends ContainersIntegrationBase {
             })
         .andExpect(
             jsonPath(
-                "$.components.schemas.LegislationWorkSchema.properties['@type'].example",
+                "$.components.schemas.LegislationExpressionSchema.properties['@type'].example",
                 Matchers.is("Legislation")))
         .andExpect(
             jsonPath(
