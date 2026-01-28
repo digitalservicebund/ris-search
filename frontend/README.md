@@ -39,6 +39,23 @@ The frontend has a feature flag that enables or disables private features:
 
 The default is that private features are disabled. Set `NUXT_PUBLIC_PRIVATE_FEATURES_ENABLED=true` to enable them.
 
+### Configuration
+
+The frontend can be configured through environment variables at different points in its lifecycle. Variables marked with ⭐️ are required for the application to function.
+
+- **Runtime:** when the application is run, either through Docker or standalone. All of this configuration is read in `nuxt.config.ts` or one of its related modules. With the exception of the `PORT`, this configuration is made available to the application through the `useRuntimeConfig` composable.
+  - ⭐️ `NUXT_PUBLIC_RIS_BACKEND_URL`: URL under which the Portal API can be reached
+  - ⭐️ `NUXT_BASIC_AUTH`: When basic auth is enabled on the infrastructure level, this needs to be set to the basic auth credentials so the Nuxt server can talk to the Portal API.
+  - `NUXT_PUBLIC_PRIVATE_FEATURES_ENABLED`: If set to `true`, private features are enabled. Make sure to also set this when running E2E tests, so the test suite is in sync with the running application. By default, private features are disabled.
+  - `NUXT_PUBLIC_SENTRY_DSN`: Sentry Data Source. Setting this will enable Sentry.
+  - `NUXT_PUBLIC_ANALYTICS_POSTHOG_KEY` and `NUXT_PUBLIC_ANALYTICS_POSTHOG_HOST`: Key and host for PostHog. Both need to be used together. Setting this will enable PostHog.
+  - `PORT`: Port to run the application on
+
+- **Buildtime:** when the application is built, either in the Docker container or manually. This configuration will be baked into the application, shared in all environments, and the variables don't need to exist at runtime.
+  - `SENTRY_AUTH_TOKEN`: Used for uploading source maps to Sentry during build. Recommended when Sentry is enabled.
+  - `SENTRY_RELEASE`: Name of the current release to show up in Sentry.
+  - `NODE_ENV`: Automatically set by Node based on the task to either `development` or `production`. This will enable/disable some features in the configuration, see `nuxt.config.ts`.
+
 ## Testing
 
 We cover all code outside of `pages/` with unit tests (pages are too complex for unit testing and are covered in E2E tests instead). We use [Vitest](https://vitest.dev/) and [Vue Testing Library](https://testing-library.com/docs/vue-testing-library/intro/).
