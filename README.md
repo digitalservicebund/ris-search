@@ -155,3 +155,18 @@ When installing dependencies, make sure they are licensed under one of the [allo
 ## Contributing
 
 If you would like to contribute, check out [`CONTRIBUTING.md`](./CONTRIBUTING.md). Please also consider our [Code of Conduct](./CODE_OF_CONDUCT.md).
+
+## About the Repository
+
+**Program name:** NeuRIS (Neues Rechtsinformationsportal)\
+**Description:** An intuitive legal information system aimed at simplifying access to laws, regulations, and court decisions in Germany.
+
+**Copyright (C) 2025 DigitalService GmbH des Bundes**
+
+**Author's Contact Information**
+
+DigitalService GmbH des Bundes\
+Prinzessinnenstraße 8-14,\
+10969 Berlin, Germany\
+Email: hallo@digitalservice.bund.de\
+Website: <https://digitalservice.bund.de>\
