@@ -1,4 +1,4 @@
-# Dump caselaw data to Opensearch
+# Dump case law data to OpenSearch
 
 This service is responsible for transferring Caselaw data from PostgreSQL to OpenSearch. This operation, known as a "dump," is resource-intensive in terms of CPU and memory usage. It is crucial to perform this dump selectively, only when modifications are made to the Caselaw data model in the OpenSearch index.
 
