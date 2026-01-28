@@ -102,6 +102,8 @@ const documentKindMenuItems: MenuItem[] = [
 // Search results -----------------------------------------
 
 const itemsPerPageDropdownId = useId();
+const resultsContainerRef = ref<HTMLElement | null>(null);
+const scrollToResultsOnLoad = ref(false);
 
 const itemsPerPageOptions = ["10", "50", "100"];
 
@@ -165,6 +167,22 @@ async function submit() {
   await saveFilterStateToRoute();
   submitSearch();
 }
+
+function handlePageUpdate(page: number) {
+  scrollToResultsOnLoad.value = true;
+  pageIndex.value = page;
+}
+
+watch(searchStatus, (newStatus, oldStatus) => {
+  if (oldStatus === "pending" && newStatus === "success") {
+    if (scrollToResultsOnLoad.value) {
+      scrollToResultsOnLoad.value = false;
+      nextTick(() => {
+        resultsContainerRef.value?.scrollIntoView({ behavior: "smooth" });
+      });
+    }
+  }
+});
 </script>
 
 <template>
@@ -208,13 +226,13 @@ async function submit() {
       />
     </div>
 
-    <div>
+    <div ref="resultsContainerRef" class="scroll-mt-16">
       <Pagination
         v-if="searchStatus !== 'idle'"
         :is-loading="searchStatus === 'pending'"
         :page="searchResults"
         navigation-position="bottom"
-        @update-page="pageIndex = $event"
+        @update-page="handlePageUpdate"
       >
         <div
           class="mb-32 flex flex-col gap-16 md:flex-row md:items-center md:gap-48"

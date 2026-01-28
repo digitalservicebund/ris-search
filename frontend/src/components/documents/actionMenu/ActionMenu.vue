@@ -30,7 +30,7 @@ const toggle = (event: Event) => {
       <template #item="{ item }">
         <NuxtLink
           v-if="!item.disabled"
-          class="flex cursor-pointer items-center gap-8 no-underline"
+          class="flex h-full w-full cursor-pointer items-center gap-8 no-underline"
           :to="item.url"
           :data-attr="(item as ActionMenuItem).analyticsId"
         >

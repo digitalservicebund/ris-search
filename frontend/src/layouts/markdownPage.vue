@@ -38,7 +38,7 @@ see: https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/At-rules/@scope 
   }
 
   h1 {
-    @apply ris-heading1-regular pt-32 pb-24 hyphens-auto max-sm:leading-48;
+    @apply ris-heading1-regular pt-32 pb-24 hyphens-auto max-sm:leading-48 md:hyphens-none;
   }
 
   h2 {

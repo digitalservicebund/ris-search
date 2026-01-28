@@ -74,6 +74,7 @@ async function handleSearchSubmit(value?: string) {
 }
 
 async function updatePage(page: number) {
+  scrollToResultsOnLoad.value = true;
   searchParams.setPageNumber(page);
 }
 
@@ -106,6 +107,19 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
 
 const mainSectionId = useId();
 const resultCountId = useId();
+const resultsContainerRef = ref<HTMLElement | null>(null);
+const scrollToResultsOnLoad = ref(false);
+
+watch(status, (newStatus, oldStatus) => {
+  if (oldStatus === "pending" && newStatus === "success") {
+    if (scrollToResultsOnLoad.value) {
+      scrollToResultsOnLoad.value = false;
+      nextTick(() => {
+        resultsContainerRef.value?.scrollIntoView({ behavior: "smooth" });
+      });
+    }
+  }
+});
 </script>
 
 <template>
@@ -160,7 +174,8 @@ const resultCountId = useId();
 
     <div
       :id="mainSectionId"
-      class="w-full flex-col justify-end gap-8 lg:w-9/12"
+      ref="resultsContainerRef"
+      class="w-full scroll-mt-16 flex-col justify-end gap-8 lg:w-9/12"
     >
       <Pagination
         :is-loading="isLoading"

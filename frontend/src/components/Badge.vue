@@ -18,13 +18,13 @@ export enum BadgeColor {
   <span
     class="ris-label3-bold inline-block flex-none px-8 py-4"
     :class="{
-      'border border-green-200 bg-green-100 text-green-800':
+      'border border-green-400 bg-green-100 text-green-800':
         color === BadgeColor.GREEN,
-      'border border-yellow-400 bg-yellow-200 text-orange-800':
+      'border border-yellow-600 bg-yellow-200 text-orange-800':
         color === BadgeColor.YELLOW,
       'border border-blue-500 bg-blue-200 text-blue-800':
         color === BadgeColor.BLUE,
-      'border border-red-400 bg-red-200 text-red-900': color === BadgeColor.RED,
+      'border border-red-400 bg-red-200 text-red-800': color === BadgeColor.RED,
     }"
   >
     {{ label }}

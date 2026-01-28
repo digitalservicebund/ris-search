@@ -30,7 +30,7 @@ const currentView = computed(
 
 <template>
   <BaseLayout>
-    <div class="border-b border-b-gray-400 pt-32 lg:pt-64">
+    <div class="pt-32 lg:pt-64">
       <!-- Header -->
       <div class="container text-left">
         <div class="flex items-center gap-8 print:hidden">
@@ -58,7 +58,7 @@ const currentView = computed(
 
       <div v-else>
         <!-- Tabs -->
-        <div class="border-b border-gray-600">
+        <div class="border-b border-gray-400">
           <nav class="container -mb-1">
             <Tabs :value="currentView" :show-navigators="false">
               <TabList>

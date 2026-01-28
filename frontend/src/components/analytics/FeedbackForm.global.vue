@@ -90,7 +90,7 @@ watch(
     </div>
     <form
       v-else
-      class="space-y-24"
+      class="space-y-16"
       :action="feedbackAction"
       method="POST"
       @submit.prevent="submitFeedback"
@@ -124,7 +124,7 @@ watch(
             :id="feedbackMessageId"
             v-model="feedback"
             :invalid="!isStringEmpty(errorMessage)"
-            class="min-h-160 w-full"
+            class="block min-h-160 w-full"
             placeholder="Feedback eingeben"
             name="text"
             @update:model-value="

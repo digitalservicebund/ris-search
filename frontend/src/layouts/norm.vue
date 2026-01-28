@@ -4,7 +4,7 @@ import BaseLayout from "./base.vue";
 
 <template>
   <BaseLayout>
-    <div class="border-b border-b-gray-400 pt-32 lg:pt-64">
+    <div class="pt-32 lg:pt-64">
       <slot />
     </div>
   </BaseLayout>

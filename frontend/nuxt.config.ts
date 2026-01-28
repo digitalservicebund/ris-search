@@ -50,7 +50,7 @@ export default defineNuxtConfig({
     plugins: [
       tailwindcss(),
       Icons({
-        scale: 1.3333, // ~24px at the current default font size of 18px
+        scale: 1.5,
         customCollections: {
           custom: FileSystemIconLoader("./src/assets/icons"),
         },

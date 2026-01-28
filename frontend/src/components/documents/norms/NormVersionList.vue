@@ -8,7 +8,6 @@ import type { LegislationExpression } from "~/types";
 import { dateFormattedDDMMYYYY } from "~/utils/dateFormatting";
 import { formatNormValidity } from "~/utils/displayValues";
 import { temporalCoverageToValidityInterval } from "~/utils/norm";
-import IcBaselineLaunch from "~icons/ic/baseline-launch";
 
 const props = defineProps<{
   status: string;
@@ -119,9 +118,6 @@ const fassungenTabPanelTitleId = useId();
               :label="slotProps.data.status.label"
               :color="slotProps.data.status.color"
             ></Badge>
-            <IcBaselineLaunch
-              class="invisible text-gray-900 group-hover:visible"
-            />
           </div>
         </template>
       </Column>

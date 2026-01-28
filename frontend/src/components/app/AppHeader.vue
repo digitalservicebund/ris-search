@@ -14,7 +14,7 @@ const mobileMenuId = useId();
 <template>
   <AppBanner />
 
-  <header id="top" class="bg-white print:hidden">
+  <header id="top" class="border-b border-b-gray-400 bg-white print:hidden">
     <div class="container flex flex-col gap-24 py-20">
       <div class="flex items-center justify-between gap-16">
         <AppLogo />
