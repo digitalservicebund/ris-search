@@ -15,9 +15,8 @@ import de.bund.digitalservice.ris.search.models.api.parameters.PaginationParams;
 import de.bund.digitalservice.ris.search.models.api.parameters.UniversalSearchParams;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.schema.CollectionSchema;
+import de.bund.digitalservice.ris.search.schema.LegislationExpressionSchema;
 import de.bund.digitalservice.ris.search.schema.LegislationExpressionSearchSchema;
-import de.bund.digitalservice.ris.search.schema.LegislationWorkSchema;
-import de.bund.digitalservice.ris.search.schema.LegislationWorkSearchSchema;
 import de.bund.digitalservice.ris.search.schema.SearchMemberSchema;
 import de.bund.digitalservice.ris.search.service.NormsService;
 import de.bund.digitalservice.ris.search.service.xslt.NormXsltTransformerService;
@@ -138,7 +137,7 @@ public class NormsController {
                       """)
   @ApiResponse(responseCode = "200")
   @ApiResponse(responseCode = "422")
-  public CollectionSchema<SearchMemberSchema<LegislationWorkSearchSchema>> searchAndFilter(
+  public CollectionSchema<SearchMemberSchema<LegislationExpressionSearchSchema>> searchAndFilter(
       @ParameterObject NormsSearchParams normsSearchParams,
       @ParameterObject UniversalSearchParams universalSearchParams,
       @ParameterObject @Valid PaginationParams pagination,
@@ -186,7 +185,7 @@ public class NormsController {
           "Returns the work and expression-level (\"workExample\") metadata of a legislation item.")
   @ApiResponse(responseCode = "200")
   @ApiResponse(responseCode = "404", content = @Content)
-  public ResponseEntity<LegislationWorkSchema> getLegislation(
+  public ResponseEntity<LegislationExpressionSchema> getLegislation(
       @Parameter(description = BUND_DESCRIPTION, schema = @Schema(allowableValues = {BUND_EXAMPLE}))
           @PathVariable
           String jurisdiction,

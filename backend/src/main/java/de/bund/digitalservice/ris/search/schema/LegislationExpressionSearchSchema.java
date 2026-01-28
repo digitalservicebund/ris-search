@@ -3,8 +3,10 @@ package de.bund.digitalservice.ris.search.schema;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import de.bund.digitalservice.ris.search.config.ApiConfig;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.time.LocalDate;
 import java.util.List;
 import lombok.Builder;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Represents the schema for a legislation expression search result, providing details about a
@@ -24,6 +26,10 @@ public record LegislationExpressionSearchSchema(
             requiredMode = Schema.RequiredMode.REQUIRED)
         String id,
     @Schema(
+            example = "Verordnung über Kakao und Kakaoerzeugnisse",
+            description = "Amtliche Langüberschrift")
+    String name,
+    @Schema(
             example = "eli/bund/bgbl-1/1975/s1760/1998-01-29/10/deu",
             requiredMode = Schema.RequiredMode.REQUIRED)
         String legislationIdentifier,
@@ -35,8 +41,26 @@ public record LegislationExpressionSearchSchema(
             example = "1998-02-06/..",
             requiredMode = Schema.RequiredMode.REQUIRED)
         String temporalCoverage,
+    @Nullable @Schema(example = "KakaoV 2003", description = "Amtliche Buchstabenabkürzung")
+    String abbreviation,
+    @Schema(example = "Kakaoverordnung", description = "Amtliche Kurzüberschrift")
+    String alternateName,
     @Schema(
-            description = "Whether the legislation expression is currently in force.",
+            example = "2003-12-15",
+            description =
+                    """
+                                    Ausfertigungsdatum (The date of adoption or signature of the legislation. This is the date at which the text is officially acknowledged to be a legislation, even though it might not even be published or in force.)
+                                    """)
+    LocalDate legislationDate,
+    @Schema(
+            example = "2003-12-16",
+            description =
+                    """
+                                    Verkündungsdatum (The date of first publication of the legislation, when it was published in the official gazette. This may be later than the `legislationDate`.)
+                                    """)
+    LocalDate datePublished,
+    @Nullable PublicationIssueSchema isPartOf,
+    @Schema(description = "Whether the legislation expression is currently in force.",
             requiredMode = Schema.RequiredMode.REQUIRED)
         LegalForceStatus legislationLegalForce,
     @Schema(requiredMode = Schema.RequiredMode.REQUIRED) List<LegislationObjectSchema> encoding)
