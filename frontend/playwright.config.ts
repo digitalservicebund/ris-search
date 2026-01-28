@@ -1,7 +1,7 @@
 import { defineConfig, devices, type Project } from "@playwright/test";
 
 export const environment = {
-  baseUrl: process.env.RIS_BASE_URL || "http://localhost:3000/",
+  baseUrl: "http://localhost:3000/",
   remoteDebuggingPort: 9222,
 };
 
@@ -67,11 +67,4 @@ export default defineConfig({
 
   /* Configure projects for major browsers */
   projects,
-
-  /* Run your local dev server before starting the tests */
-  // webServer: {
-  //   command: 'npm run start',
-  //   url: 'http://127.0.0.1:3000',
-  //   reuseExistingServer: !process.env.CI,
-  // },
 });
