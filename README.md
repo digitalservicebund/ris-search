@@ -134,7 +134,7 @@ Once you installed the prerequisites, make sure to initialize Git hooks. This wi
 lefthook install
 ```
 
-Finally, there are some environment variables that need to be set locally. As a starting point, copy the `frontend/.env.example file, and rename it to `.env`.
+Finally, there are some environment variables that need to be set locally. As a starting point, copy the `frontend/.env.example` file and rename it to `.env`.
 
 ## Learn more
 

@@ -45,7 +45,7 @@ The frontend can be configured through environment variables at different points
 
 - **Runtime:** when the application is run, either through Docker or standalone. All of this configuration is read in `nuxt.config.ts` or one of its related modules. With the exception of the `PORT`, this configuration is made available to the application through the `useRuntimeConfig` composable.
   - ⭐️ `NUXT_PUBLIC_RIS_BACKEND_URL`: URL under which the Portal API can be reached
-  - ⭐️ `NUXT_BASIC_AUTH`: When basic auth is enabled on the infrastructure level, this needs to be set to the basic auth credentials so the Nuxt server can talk to the Portal API.
+  - `NUXT_BASIC_AUTH`: When basic auth is enabled on the infrastructure level, this needs to be set to the basic auth credentials so the Nuxt server can talk to the Portal API.
   - `NUXT_PUBLIC_PRIVATE_FEATURES_ENABLED`: If set to `true`, private features are enabled. Make sure to also set this when running E2E tests, so the test suite is in sync with the running application. By default, private features are disabled.
   - `NUXT_PUBLIC_SENTRY_DSN`: Sentry Data Source. Setting this will enable Sentry.
   - `NUXT_PUBLIC_ANALYTICS_POSTHOG_KEY` and `NUXT_PUBLIC_ANALYTICS_POSTHOG_HOST`: Key and host for PostHog. Both need to be used together. Setting this will enable PostHog.
@@ -101,14 +101,14 @@ pnpm exec playwright test --ui
 We use TypeScript, ESLint, and Prettier to support code quality and consistent formatting. To run ESLint and Prettier:
 
 ```sh
-node --run style:check  # Check if code follows conventions and is formatted
-node --run style:fix    # Check + try to fix violations automatically
+pnpm style:check  # Check if code follows conventions and is formatted
+pnpm style:fix    # Check + try to fix violations automatically
 ```
 
 To run type checking:
 
 ```sh
-node --run typecheck
+pnpm typecheck
 ```
 
 ## Icons
