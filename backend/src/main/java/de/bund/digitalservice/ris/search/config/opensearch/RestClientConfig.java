@@ -1,8 +1,6 @@
 package de.bund.digitalservice.ris.search.config.opensearch;
 
-import org.apache.hc.client5.http.impl.DefaultHttpRequestRetryStrategy;
 import org.apache.hc.core5.reactor.IOReactorConfig;
-import org.apache.hc.core5.util.TimeValue;
 import org.opensearch.client.RestHighLevelClient;
 import org.opensearch.data.client.orhlc.AbstractOpenSearchConfiguration;
 import org.opensearch.data.client.orhlc.ClientConfiguration;
@@ -62,24 +60,23 @@ public class RestClientConfig extends AbstractOpenSearchConfiguration {
 
   private ClientConfiguration buildClientConfiguration(
       ClientConfiguration.MaybeSecureClientConfigurationBuilder builder) {
-    final var keepAliveCallback =
+    final var customConfigurationCallback =
         RestClients.RestClientConfigurationCallback.from(
             clientConfigurer ->
                 clientConfigurer
-                    .setRetryStrategy(
-                        new DefaultHttpRequestRetryStrategy(3, TimeValue.ofSeconds(1L)))
+                    .setRetryStrategy(new OpenSearchRetryStrategy())
                     .setIOReactorConfig(IOReactorConfig.custom().setSoKeepAlive(true).build()));
 
     if ("enabled".equals(authentication)) {
       return builder
           .usingSsl()
-          .withClientConfigurer(keepAliveCallback)
+          .withClientConfigurer(customConfigurationCallback)
           .withBasicAuth(
               this.configurationsOpensearch.getUsername(),
               this.configurationsOpensearch.getPassword())
           .build();
     } else {
-      return builder.withClientConfigurer(keepAliveCallback).build();
+      return builder.withClientConfigurer(customConfigurationCallback).build();
     }
   }
 }
