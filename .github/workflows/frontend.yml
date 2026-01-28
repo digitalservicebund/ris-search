@@ -239,12 +239,12 @@ jobs:
           path: "vuln-frontend.json"
           if-no-files-found: error
       - name: Install Cosign
-        if: ${{ github.actor != 'dependabot[bot]' && github.ref == 'refs/heads/main' }}
+        if: ${{ github.actor != 'dependabot[bot]' }}
         uses: sigstore/cosign-installer@4d14d7f17e7112af04ea6108fbb4bfc714c00390
         with:
           cosign-release: "v2.6.0" # We need to use v2.X.X because of major version GHA v4.X.X and broken image verification of Kyverno
       - name: Sign the published Docker image
-        if: ${{ github.actor != 'dependabot[bot]' && github.ref == 'refs/heads/main' }}
+        if: ${{ github.actor != 'dependabot[bot]' }}
         run: cosign sign --yes ${{ inputs.container-image-tag }}
       - name: Attest vulnerability scan
         if: ${{ github.actor != 'dependabot[bot]' && github.ref == 'refs/heads/main' }}
