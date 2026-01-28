@@ -9,6 +9,7 @@ import org.apache.hc.core5.util.TimeValue;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+/** Class to configure the OpenSearch retry strategy. */
 public class OpenSearchRetryStrategy implements HttpRequestRetryStrategy {
 
   private static final Logger logger = LogManager.getLogger(OpenSearchRetryStrategy.class);
