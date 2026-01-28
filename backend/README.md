@@ -2,11 +2,9 @@
 
 Java 21 + Spring Boot REST API.
 
-See the [main README](../README.md) for prerequisites.
-
 ## Running
 
-(working dir: `backend/`)
+Make sure your system meets the prerequisites. Then, run the backend by running:
 
 ```bash
 ./gradlew bootRun
@@ -18,33 +16,36 @@ Swagger API documentation is available at [localhost:8090/swagger-ui](http://loc
 
 ## Testing
 
-### Unit Tests
+### Test
+
+The project has distinct unit and integration test sets.
+
+**To run just the unit tests:**
 
 ```bash
 ./gradlew test
 ```
 
-Includes [ArchUnit](https://www.archunit.org/getting-started) tests for ensuring architectural characteristics (e.g. no cyclic dependencies).
-
-### Integration Tests
+**To run the integration tests:**
 
 ```bash
 ./gradlew integrationTest
 ```
 
-**Note:** Running integration tests requires passing unit tests first (in Gradle terms: integration tests depend on unit tests).
+**Note:** Running integration tests requires passing unit tests (in Gradle terms: integration tests
+depend on unit tests), so unit tests are going to be run first. In case there are failing unit tests we won't attempt to continue running any integration tests.
 
-To run integration tests exclusively, without the unit test dependency:
+**To run integration tests exclusively, without the unit test dependency:**
 
 ```bash
 ./gradlew integrationTest --exclude-task test
 ```
 
-Integration tests are denoted using a JUnit 5 tag annotation: `@Tag("integration")`.
+Denoting an integration test is accomplished by using a JUnit 5 tag annotation: `@Tag("integration")`.
+
+Furthermore, there is another type of test worth mentioning. We're using [ArchUnit](https://www.archunit.org/getting-started) for ensuring certain architectural characteristics, for instance making sure that there are no cyclic dependencies.
 
 ## Code Quality
-
-### Formatting
 
 Check formatting:
 
@@ -56,12 +57,6 @@ Auto-format:
 
 ```bash
 ./gradlew spotlessApply
-```
-
-### License Check
-
-```bash
-./gradlew checkLicense
 ```
 
 ## Data Import
