@@ -56,11 +56,3 @@ Auto-format:
 ```bash
 ./gradlew spotlessApply
 ```
-
-## Data Import
-
-Re-import local norms data:
-
-```bash
-curl http://localhost:8090/internal/import/norms/changelog --json '{"change_all": true}'
-```
