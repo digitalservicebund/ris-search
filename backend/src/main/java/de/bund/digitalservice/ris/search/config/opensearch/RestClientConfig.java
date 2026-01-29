@@ -63,9 +63,8 @@ public class RestClientConfig extends AbstractOpenSearchConfiguration {
     final var customConfigurationCallback =
         RestClients.RestClientConfigurationCallback.from(
             clientConfigurer ->
-                clientConfigurer
-                    .setRetryStrategy(new OpenSearchRetryStrategy())
-                    .setIOReactorConfig(IOReactorConfig.custom().setSoKeepAlive(true).build()));
+                clientConfigurer.setIOReactorConfig(
+                    IOReactorConfig.custom().setSoKeepAlive(true).build()));
 
     if ("enabled".equals(authentication)) {
       return builder

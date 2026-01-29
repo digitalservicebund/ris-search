@@ -1,0 +1,66 @@
+package de.bund.digitalservice.ris.search.config.opensearch;
+
+import java.lang.reflect.Proxy;
+import java.time.Duration;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.config.BeanPostProcessor;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.core.retry.RetryPolicy;
+import org.springframework.core.retry.RetryTemplate;
+import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
+
+@Configuration
+public class OpensearchRetryConfiguration {
+
+  private static final Logger logger = LogManager.getLogger(OpensearchRetryConfiguration.class);
+
+  @Bean
+  public RetryTemplate openSearchRetryTemplate() {
+    RetryPolicy retryPolicy =
+        RetryPolicy.builder()
+            .maxRetries(2) // Total 3 attempts
+            .delay(Duration.ofSeconds(1)) // Wait 1 second on the first retry
+            .multiplier(2.0) // Wait twice as long with each retry
+            .predicate(
+                throwable -> {
+                  logger.warn(
+                      "OpenSearch failure. Error: {}. Will attempt retry...",
+                      throwable.getMessage());
+                  return true;
+                })
+            .build();
+
+    return new RetryTemplate(retryPolicy);
+  }
+
+  @Bean
+  public BeanPostProcessor elasticsearchRetryWrapper(RetryTemplate retryTemplate) {
+    return new BeanPostProcessor() {
+      @Override
+      public Object postProcessAfterInitialization(Object bean, String beanName) {
+        if (bean instanceof ElasticsearchOperations operations) {
+          return createRetryProxy(operations, retryTemplate);
+        }
+        return bean;
+      }
+    };
+  }
+
+  private Object createRetryProxy(ElasticsearchOperations target, RetryTemplate template) {
+    return Proxy.newProxyInstance(
+        target.getClass().getClassLoader(),
+        new Class<?>[] {ElasticsearchOperations.class},
+        (proxy, method, args) ->
+            template.execute(
+                () -> {
+                  try {
+                    return method.invoke(target, args);
+                  } catch (Exception e) {
+                    // Unwrap the Reflection exception to help the predicate
+                    throw (e.getCause() != null) ? e.getCause() : e;
+                  }
+                }));
+  }
+}
