@@ -8,11 +8,17 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.retry.RetryPolicy;
 import org.springframework.core.retry.RetryTemplate;
 
+/** RetryConfiguration fo configure behaviour of opensearch query retries */
 @Configuration
 public class OpensearchRetryConfiguration {
 
   private static final Logger logger = LogManager.getLogger(OpensearchRetryConfiguration.class);
 
+  /**
+   * RetryTemplate Bean to control opensearch execution retry behaviour
+   *
+   * @return RetryTemplate
+   */
   @Bean
   public RetryTemplate openSearchRetryTemplate() {
     RetryPolicy retryPolicy =
