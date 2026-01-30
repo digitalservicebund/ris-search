@@ -10,9 +10,9 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
 
 <template>
   <footer class="relative print:hidden">
-    <div class="border-t border-t-gray-400 py-64">
+    <div v-if="!hideFeedbackForm" class="border-t border-t-gray-400 py-64">
       <div class="container">
-        <AnalyticsFeedbackForm v-if="!hideFeedbackForm" />
+        <AnalyticsFeedbackForm />
       </div>
     </div>
 
