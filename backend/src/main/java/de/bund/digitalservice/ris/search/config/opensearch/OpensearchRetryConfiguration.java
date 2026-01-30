@@ -1,15 +1,12 @@
 package de.bund.digitalservice.ris.search.config.opensearch;
 
-import java.lang.reflect.Proxy;
 import java.time.Duration;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.retry.RetryPolicy;
 import org.springframework.core.retry.RetryTemplate;
-import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 
 @Configuration
 public class OpensearchRetryConfiguration {
@@ -33,34 +30,5 @@ public class OpensearchRetryConfiguration {
             .build();
 
     return new RetryTemplate(retryPolicy);
-  }
-
-  @Bean
-  public BeanPostProcessor elasticsearchRetryWrapper(RetryTemplate retryTemplate) {
-    return new BeanPostProcessor() {
-      @Override
-      public Object postProcessAfterInitialization(Object bean, String beanName) {
-        if (bean instanceof ElasticsearchOperations operations) {
-          return createRetryProxy(operations, retryTemplate);
-        }
-        return bean;
-      }
-    };
-  }
-
-  private Object createRetryProxy(ElasticsearchOperations target, RetryTemplate template) {
-    return Proxy.newProxyInstance(
-        target.getClass().getClassLoader(),
-        new Class<?>[] {ElasticsearchOperations.class},
-        (proxy, method, args) ->
-            template.execute(
-                () -> {
-                  try {
-                    return method.invoke(target, args);
-                  } catch (Exception e) {
-                    // Unwrap the Reflection exception to help the predicate
-                    throw (e.getCause() != null) ? e.getCause() : e;
-                  }
-                }));
   }
 }
