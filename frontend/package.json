@@ -36,7 +36,7 @@
     "@scalar/api-reference": "1.43.8",
     "@sentry/nuxt": "10.36.0",
     "dayjs": "1.11.19",
-    "lodash": "4.17.21",
+    "lodash": "4.17.23",
     "minisearch": "7.2.0",
     "nuxt": "4.2.2",
     "nuxt-security": "2.5.1",
