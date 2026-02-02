@@ -1,12 +1,17 @@
 package de.bund.digitalservice.ris.search.config.opensearch;
 
+import lombok.SneakyThrows;
 import org.opensearch.client.RestHighLevelClient;
 import org.opensearch.data.client.orhlc.AbstractOpenSearchConfiguration;
 import org.opensearch.data.client.orhlc.ClientConfiguration;
+import org.opensearch.data.client.orhlc.OpenSearchRestTemplate;
 import org.opensearch.data.client.orhlc.RestClients;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import org.springframework.core.retry.RetryTemplate;
+import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
+import org.springframework.data.elasticsearch.core.convert.ElasticsearchConverter;
 import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories;
 
 /** Class to configure the REST client which connects to opensearch in local environment */
@@ -18,6 +23,7 @@ public class RestClientConfigDev extends AbstractOpenSearchConfiguration {
 
   private final Configurations configurations;
   private final OpensearchSchemaSetup schemaSetup;
+  private final RetryTemplate retryTemplate;
 
   /**
    * Initializes the RestClientConfigDev configuration to set up the REST client connection with
@@ -29,9 +35,12 @@ public class RestClientConfigDev extends AbstractOpenSearchConfiguration {
    */
   @Autowired
   public RestClientConfigDev(
-      Configurations configurationsOpensearch, OpensearchSchemaSetup schemaSetup) {
+      Configurations configurationsOpensearch,
+      OpensearchSchemaSetup schemaSetup,
+      RetryTemplate retryTemplate) {
     this.configurations = configurationsOpensearch;
     this.schemaSetup = schemaSetup;
+    this.retryTemplate = retryTemplate;
   }
 
   @Override
@@ -46,5 +55,19 @@ public class RestClientConfigDev extends AbstractOpenSearchConfiguration {
             .rest();
     schemaSetup.updateOpensearchSchema(restHighLevelClient);
     return restHighLevelClient;
+  }
+
+  @Override
+  public ElasticsearchOperations elasticsearchOperations(
+      ElasticsearchConverter elasticsearchConverter, RestHighLevelClient elasticsearchClient) {
+
+    return new OpenSearchRestTemplate(opensearchClient(), elasticsearchConverter) {
+
+      @SneakyThrows
+      @Override
+      public <T> T execute(OpenSearchRestTemplate.ClientCallback<T> callback) {
+        return retryTemplate.execute(() -> super.execute(callback));
+      }
+    };
   }
 }

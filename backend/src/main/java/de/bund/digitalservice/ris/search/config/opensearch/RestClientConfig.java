@@ -1,14 +1,19 @@
 package de.bund.digitalservice.ris.search.config.opensearch;
 
+import lombok.SneakyThrows;
 import org.apache.hc.core5.reactor.IOReactorConfig;
 import org.opensearch.client.RestHighLevelClient;
 import org.opensearch.data.client.orhlc.AbstractOpenSearchConfiguration;
 import org.opensearch.data.client.orhlc.ClientConfiguration;
+import org.opensearch.data.client.orhlc.OpenSearchRestTemplate;
 import org.opensearch.data.client.orhlc.RestClients;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import org.springframework.core.retry.RetryTemplate;
+import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
+import org.springframework.data.elasticsearch.core.convert.ElasticsearchConverter;
 import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories;
 
 /** Class to configure the REST client which connects to opensearch in production without ssl. */
@@ -21,6 +26,7 @@ public class RestClientConfig extends AbstractOpenSearchConfiguration {
   private final Configurations configurationsOpensearch;
   private final OpensearchSchemaSetup schemaSetup;
   private final String authentication;
+  private final RetryTemplate retryTemplate;
 
   /**
    * Constructs a RestClientConfig instance to configure and initialize the OpenSearch REST client.
@@ -33,10 +39,12 @@ public class RestClientConfig extends AbstractOpenSearchConfiguration {
   public RestClientConfig(
       Configurations configurationsOpensearch,
       OpensearchSchemaSetup schemaSetup,
+      RetryTemplate retryTemplate,
       @Value("${opensearch.authentication}") String authentication) {
     this.configurationsOpensearch = configurationsOpensearch;
     this.schemaSetup = schemaSetup;
     this.authentication = authentication;
+    this.retryTemplate = retryTemplate;
   }
 
   @Override
@@ -63,9 +71,8 @@ public class RestClientConfig extends AbstractOpenSearchConfiguration {
     final var customConfigurationCallback =
         RestClients.RestClientConfigurationCallback.from(
             clientConfigurer ->
-                clientConfigurer
-                    .setRetryStrategy(new OpenSearchRetryStrategy())
-                    .setIOReactorConfig(IOReactorConfig.custom().setSoKeepAlive(true).build()));
+                clientConfigurer.setIOReactorConfig(
+                    IOReactorConfig.custom().setSoKeepAlive(true).build()));
 
     if ("enabled".equals(authentication)) {
       return builder
@@ -78,5 +85,19 @@ public class RestClientConfig extends AbstractOpenSearchConfiguration {
     } else {
       return builder.withClientConfigurer(customConfigurationCallback).build();
     }
+  }
+
+  @Override
+  public ElasticsearchOperations elasticsearchOperations(
+      ElasticsearchConverter elasticsearchConverter, RestHighLevelClient elasticsearchClient) {
+
+    return new OpenSearchRestTemplate(opensearchClient(), elasticsearchConverter) {
+
+      @SneakyThrows
+      @Override
+      public <T> T execute(OpenSearchRestTemplate.ClientCallback<T> callback) {
+        return retryTemplate.execute(() -> super.execute(callback));
+      }
+    };
   }
 }
