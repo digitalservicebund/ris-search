@@ -103,32 +103,20 @@ describe("parsePageNumber", () => {
 
 describe("buildResultCountString", () => {
   it("returns no results message", () => {
-    const page = { member: [], totalItems: 0, "@id": "", view: {} } as Page;
-    expect(buildResultCountString(page)).toBe("Keine Suchergebnisse gefunden");
+    expect(buildResultCountString(0)).toBe("Keine Suchergebnisse gefunden");
   });
 
   it("returns singular for one result", () => {
-    const page = { member: [{}], totalItems: 1, "@id": "", view: {} } as Page;
-    expect(buildResultCountString(page)).toBe("1 Suchergebnis");
+    expect(buildResultCountString(1)).toBe("1 Suchergebnis");
   });
 
   it("returns formatted count for multiple results", () => {
-    const page = {
-      member: [{}, {}],
-      totalItems: 1234,
-      "@id": "",
-      view: {},
-    } as Page;
-    expect(buildResultCountString(page)).toBe("1.234 Suchergebnisse");
+    expect(buildResultCountString(1234)).toBe("1.234 Suchergebnisse");
   });
 
   it("returns special message for 10000 results", () => {
-    const page = {
-      member: Array.from({ length: 10 }),
-      totalItems: 10000,
-      "@id": "",
-      view: {},
-    } as Page;
-    expect(buildResultCountString(page)).toBe("Mehr als 10.000 Suchergebnisse");
+    expect(buildResultCountString(10000)).toBe(
+      "Mehr als 10.000 Suchergebnisse",
+    );
   });
 });

@@ -13,22 +13,17 @@ export const parsePageNumber = (id?: string) => {
   };
 };
 
-export function buildResultCountString(currentPage: Page) {
-  if (!currentPage || currentPage.totalItems === 0) {
+export function buildResultCountString(count: number) {
+  if (count === 0) {
     usePostHog().noSearchResults();
     return "Keine Suchergebnisse gefunden";
-  }
-
-  if (!currentPage.totalItems) {
-    return "";
-  }
-  if (currentPage.totalItems === 1) {
+  } else if (count === 1) {
     return "1 Suchergebnis";
-  }
-  if (currentPage.totalItems === 10000) {
+  } else if (count === 10_000) {
     return "Mehr als 10.000 Suchergebnisse";
   }
-  return `${currentPage.totalItems.toLocaleString("de-DE")} Suchergebnisse`;
+
+  return `${count.toLocaleString("de-DE")} Suchergebnisse`;
 }
 
 export function buildItemsOnPageString(page?: Page | null) {
