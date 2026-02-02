@@ -1,8 +1,8 @@
 import { describe, expect } from "vitest";
-import type { LocationQueryRaw } from "vue-router";
 import { dateSearchFromQuery } from "./dateParams";
 import { addDefaults, defaultParams, getInitialState } from "./getInitialState";
 import { DateSearchMode } from "./useSimpleSearchParams";
+import type { LocationQueryRaw } from "#vue-router";
 
 vi.mock("./dateParams.ts");
 

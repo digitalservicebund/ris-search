@@ -1,6 +1,5 @@
 import _ from "lodash";
 import { computed, ref, watch } from "vue";
-import type { LocationQueryRaw, Router } from "vue-router";
 import type { DateSearchMode } from "./dateParams";
 import { useDateParams } from "./dateParams";
 import {
@@ -9,7 +8,7 @@ import {
   getInitialState,
   omitDefaults,
 } from "./getInitialState";
-import type { LocationQuery } from "#vue-router";
+import type { LocationQuery, LocationQueryRaw, Router } from "#vue-router";
 import { usePostHog } from "~/composables/usePostHog";
 import { DocumentKind } from "~/types";
 import { sortMode } from "~/utils/search/sortMode";
