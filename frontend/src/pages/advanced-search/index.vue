@@ -99,7 +99,7 @@ const documentKindMenuItems: MenuItem[] = [
   },
 ];
 
-// Search results -----------------------------------------
+// Search results ------------------------------------------
 
 const itemsPerPageDropdownId = useId();
 const resultsContainerRef = ref<HTMLElement | null>(null);
@@ -137,9 +137,7 @@ watch(
 
       if (requestedPage !== lastPage) {
         pageIndex.value = lastPage;
-
         await saveFilterStateToRoute();
-
         await submitSearch();
       }
     }
@@ -173,14 +171,12 @@ function handlePageUpdate(page: number) {
   pageIndex.value = page;
 }
 
-watch(searchStatus, (newStatus, oldStatus) => {
-  if (oldStatus === "pending" && newStatus === "success") {
-    if (scrollToResultsOnLoad.value) {
-      scrollToResultsOnLoad.value = false;
-      nextTick(() => {
-        resultsContainerRef.value?.scrollIntoView({ behavior: "smooth" });
-      });
-    }
+watch(searchStatus, async (newStatus, oldStatus) => {
+  const loadingSuccess = oldStatus === "pending" && newStatus === "success";
+  if (loadingSuccess && scrollToResultsOnLoad.value) {
+    scrollToResultsOnLoad.value = false;
+    await nextTick();
+    resultsContainerRef.value?.scrollIntoView({ behavior: "smooth" });
   }
 });
 </script>
