@@ -47,12 +47,6 @@ const performSearch = () => {
   model.value = currentText.value;
 };
 
-const onKeyup = (event: KeyboardEvent) => {
-  if (event.key === "Enter") {
-    performSearch();
-  }
-};
-
 const searchInputId = useId();
 </script>
 
@@ -72,7 +66,6 @@ const searchInputId = useId();
         fluid
         name="query"
         type="search"
-        @keyup="onKeyup"
       />
       <InputGroupAddon>
         <Button :aria-label="submitLabel" type="submit">
