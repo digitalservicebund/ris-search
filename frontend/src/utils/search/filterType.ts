@@ -6,6 +6,8 @@ const filterTypes = [
   "specificDate",
   "period",
   "currentlyInForce",
+  "before",
+  "after",
 ] as const;
 
 /** Different ways of filtering by date */
@@ -39,7 +41,9 @@ export function isFilterType(maybe: string): maybe is FilterType {
 export type StrictDateFilterValue =
   | { type: "allTime" | "currentlyInForce"; to: undefined; from: undefined }
   | { type: "specificDate"; to: undefined; from: string }
-  | { type: "period"; to: string; from: string };
+  | { type: "period"; to: string; from: string }
+  | { type: "before"; to: string; from: undefined }
+  | { type: "after"; from: string; to: undefined };
 
 /**
  * Takes a date filter from the UI and makes sure that its internal state is
@@ -62,12 +66,13 @@ function validateDateFilterValue(
   if (filterType === "allTime" || filterType === "currentlyInForce") {
     from = undefined;
     to = undefined;
-  } else if (filterType === "specificDate") {
+  } else if (filterType === "specificDate" || filterType === "after") {
     if (!from) {
       throw new Error(`Missing 'from' date in filter type ${filterType}`, {
         cause: filter,
       });
     }
+    to = undefined;
   } else if (filterType === "period") {
     if (!(from && to)) {
       throw new Error(
@@ -75,6 +80,13 @@ function validateDateFilterValue(
         { cause: filter },
       );
     }
+  } else if (filterType === "before") {
+    if (!to) {
+      throw new Error(`Missing 'to' date in filter type ${filterType}`, {
+        cause: filter,
+      });
+    }
+    from = undefined;
   }
 
   return { type: filterType, from, to } as StrictDateFilterValue;
@@ -105,15 +117,25 @@ function validAtPointInTime(pointInTime: string): string {
 /**
  * Converts a date filter to a Lucene query string.
  *
+ * The "before" and "after" filter types are not currently supported. Attempting
+ * to use them will throw an error.
+ *
  * @param filter Date filter to convert
  * @returns Lucene query string or undefined if the filter is "allTime"
  * @throws if the provided filter is in an inconsistent state (e.g. required
- *  parameters for the current type are missing)
+ *  parameters for the current type are missing) or unsupported in Lucene queries
  */
 export function dateFilterToQuery(
   filter: DateFilterValue,
   documentKind: DocumentKind,
 ): string | undefined {
+  if (filter.type === "before" || filter.type === "after") {
+    throw new Error(
+      `Attempted to convert unsupported filter type ${filter.type} to query`,
+      { cause: filter },
+    );
+  }
+
   if (filter.type === "allTime") return undefined;
 
   let filterStr: string | undefined = undefined;
