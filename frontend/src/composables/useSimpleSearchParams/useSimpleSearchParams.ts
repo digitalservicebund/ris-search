@@ -12,16 +12,11 @@ import {
 import type { LocationQuery } from "#vue-router";
 import { usePostHog } from "~/composables/usePostHog";
 import { DocumentKind } from "~/types";
+import { sortMode } from "~/utils/search/sortMode";
 
 export { DateSearchMode } from "./dateParams";
 
 export type DocumentKindSelectable = Omit<DocumentKind, DocumentKind.All>;
-
-export const sortMode = {
-  default: "default",
-  date: "date",
-  courtName: "courtName",
-};
 
 export interface QueryParams {
   query: string;
