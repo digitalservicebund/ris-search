@@ -77,6 +77,6 @@
     "typescript": "5.9.3",
     "unplugin-icons": "23.0.1",
     "vitest": "4.0.17",
-    "vue-tsc": "3.2.2"
+    "vue-tsc": "3.2.4"
   }
 }
