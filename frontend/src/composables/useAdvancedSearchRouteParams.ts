@@ -3,19 +3,7 @@ import { navigateTo, useRoute } from "#app";
 import { DocumentKind } from "~/types";
 import { isDocumentKind } from "~/utils/documentKind";
 import { type DateFilterValue, isFilterType } from "~/utils/search/filterType";
-
-function tryGetPageIndexFromQuery(
-  query: LocationQueryValue | LocationQueryValue[] | undefined,
-) {
-  let result = 0;
-
-  if (query) {
-    const parsedNumber = Number.parseInt(query.toString());
-    if (Number.isFinite(parsedNumber)) result = parsedNumber;
-  }
-
-  return result;
-}
+import { searchParamToNumber, searchParamToString } from "~/utils/searchParams";
 
 export function useAdvancedSearchRouteParams() {
   const route = useRoute();
@@ -62,25 +50,25 @@ export function useAdvancedSearchRouteParams() {
   // Saving and restoring -----------------------------------
 
   function loadFilterStateFromRoute(routeQuery = route.query) {
+    const documentKindParam = searchParamToString(routeQuery.documentKind);
     documentKind.value =
-      typeof routeQuery.documentKind === "string" &&
-      isDocumentKind(routeQuery.documentKind)
-        ? routeQuery.documentKind
+      documentKindParam && isDocumentKind(documentKindParam)
+        ? documentKindParam
         : DocumentKind.Norm;
 
-    query.value = decodeURIComponent(routeQuery.q?.toString() ?? "");
+    query.value = decodeURIComponent(searchParamToString(routeQuery.q) ?? "");
 
     dateFilter.value = {
       type: getInitialFilterTypeFromQuery(routeQuery.dateFilterType),
-      from: routeQuery.dateFilterFrom?.toString(),
-      to: routeQuery.dateFilterTo?.toString(),
+      from: searchParamToString(routeQuery.dateFilterFrom),
+      to: searchParamToString(routeQuery.dateFilterTo),
     };
 
-    sort.value = routeQuery.sort?.toString() ?? "default";
+    sort.value = searchParamToString(routeQuery.sort) ?? "default";
 
-    itemsPerPage.value = routeQuery.itemsPerPage?.toString() ?? "50";
+    itemsPerPage.value = searchParamToString(routeQuery.itemsPerPage) ?? "50";
 
-    pageIndex.value = tryGetPageIndexFromQuery(routeQuery.pageIndex);
+    pageIndex.value = searchParamToNumber(routeQuery.pageIndex, 0);
   }
 
   function saveFilterStateToRoute() {
