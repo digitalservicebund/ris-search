@@ -44,14 +44,13 @@ const sortedTranslations = computed<TranslationContent[] | null>(() => {
 
   if (activeSearchTerm.value == "") {
     results = [...translations.value];
+    return results.toSorted((a, b) => a.name.localeCompare(b.name));
   } else {
-    results = minisearch.value
+    return minisearch.value
       .search(activeSearchTerm.value, { prefix: true, fuzzy: 0.2 })
       .map((r) => translationsMap.value.get(r.id))
       .filter((doc): doc is TranslationContent => !!doc);
   }
-
-  return results.toSorted((a, b) => a.name.localeCompare(b.name));
 });
 
 const minisearch = computed(() => {
