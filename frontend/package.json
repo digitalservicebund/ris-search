@@ -71,7 +71,7 @@
     "lighthouse": "13.0.1",
     "oxlint": "1.42.0",
     "playwright-lighthouse": "4.0.0",
-    "prettier": "3.8.0",
+    "prettier": "3.8.1",
     "prettier-plugin-tailwindcss": "0.7.2",
     "tailwindcss": "4.1.18",
     "typescript": "5.9.3",
