@@ -254,6 +254,40 @@ describe("useSimpleSearchRouteParams", () => {
     });
   });
 
+  describe("type group", () => {
+    it("restores the type group from the query", async () => {
+      vi.doMock("#app", () => ({
+        useRoute: vi.fn().mockReturnValue({
+          query: { typeGroup: "example-type-group" },
+        }),
+      }));
+
+      const { useSimpleSearchRouteParams } = await import(
+        "./useSimpleSearchRouteParams"
+      );
+
+      const { typeGroup } = useSimpleSearchRouteParams();
+
+      expect(typeGroup.value).toBe("example-type-group");
+    });
+
+    it("returns undefined when the type group is not in the query", async () => {
+      vi.doMock("#app", () => ({
+        useRoute: vi.fn().mockReturnValue({
+          query: {},
+        }),
+      }));
+
+      const { useSimpleSearchRouteParams } = await import(
+        "./useSimpleSearchRouteParams"
+      );
+
+      const { typeGroup } = useSimpleSearchRouteParams();
+
+      expect(typeGroup.value).toBeUndefined();
+    });
+  });
+
   describe("sort", () => {
     it("returns the sort param from the query", async () => {
       vi.doMock("#app", () => ({
@@ -392,6 +426,7 @@ describe("useSimpleSearchRouteParams", () => {
         query,
         documentKind,
         court,
+        typeGroup,
         dateFilter,
         pageIndex,
         sort,
@@ -402,6 +437,7 @@ describe("useSimpleSearchRouteParams", () => {
       query.value = "test search";
       documentKind.value = DocumentKind.CaseLaw;
       court.value = "BGH";
+      typeGroup.value = "example-type-group";
       dateFilter.value = {
         type: "allTime",
         from: "2023-01-01",
@@ -419,6 +455,7 @@ describe("useSimpleSearchRouteParams", () => {
           q: "test%20search",
           court: "BGH",
           documentKind: "R",
+          typeGroup: "example-type-group",
           dateFilterType: "allTime",
           dateFilterFrom: "2023-01-01",
           dateFilterTo: "2023-12-31",

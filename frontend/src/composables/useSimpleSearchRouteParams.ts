@@ -11,8 +11,9 @@ export function useSimpleSearchRouteParams() {
   // General parameters -------------------------------------
 
   // TODO: Reset document-type specific options
-  // TODO: Subtypes (e.g. `R.decision`)
   const documentKind = ref<DocumentKind>(DocumentKind.All);
+
+  const typeGroup = ref<string>();
 
   const query = ref<string>("");
 
@@ -55,6 +56,8 @@ export function useSimpleSearchRouteParams() {
 
     court.value = searchParamToString(routeQuery.court);
 
+    typeGroup.value = searchParamToString(routeQuery.typeGroup);
+
     dateFilter.value = {
       type: getInitialFilterTypeFromQuery(routeQuery.dateFilterType),
       from: searchParamToString(routeQuery.dateFilterFrom),
@@ -77,6 +80,7 @@ export function useSimpleSearchRouteParams() {
         q: encodeURIComponent(query.value),
         court: court.value,
         documentKind: documentKind.value,
+        typeGroup: typeGroup.value ?? "",
         dateFilterType: dateFilter.value.type,
         dateFilterFrom: dateFilter.value.from ?? "",
         dateFilterTo: dateFilter.value.to ?? "",
@@ -102,5 +106,6 @@ export function useSimpleSearchRouteParams() {
     query,
     saveFilterStateToRoute,
     sort,
+    typeGroup,
   };
 }
