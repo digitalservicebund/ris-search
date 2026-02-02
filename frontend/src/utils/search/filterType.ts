@@ -175,3 +175,33 @@ export function dateFilterToQuery(
 
   return filterStr;
 }
+
+/**
+ * Converts a date filter to a query that can be submitted to the simple search
+ * endpoint.
+ *
+ * The "currentlyInForce" filter type is not currently supported. Attempting
+ * to use it will throw an error.
+ *
+ * @param filter Date filter to convert
+ * @returns Filter object or undefined if the filter is "allTime"
+ * @throws if the provided filter is in an inconsistent state (e.g. required
+ *  parameters for the current type are missing) or unsupported in the simple
+ *  search
+ */
+export function dateFilterToSimpleSearchParams(
+  filter: DateFilterValue,
+): { dateFrom?: string; dateTo?: string } | undefined {
+  if (filter.type === "currentlyInForce") {
+    throw new Error(
+      `Attempted to convert unsupported filter type ${filter.type} to query`,
+      { cause: filter },
+    );
+  }
+
+  const strictFilter = validateDateFilterValue(filter);
+
+  if (strictFilter.type === "allTime") return undefined;
+
+  return { dateFrom: strictFilter.from, dateTo: strictFilter.to };
+}
