@@ -278,17 +278,13 @@ Attributes from the Juris CALS format without a corresponding HTML attribute mig
 }
 
 /* Show a 10 character wide separator above the collected notes  */
-:deep(.fussnoten:before),
-:deep(.nichtamtliche-fussnoten:before) {
-  content: "";
-  display: block;
-  width: 10ch;
-  height: 1px;
-  @apply mb-10 bg-gray-900;
+:deep(.fussnoten)::before,
+:deep(.nichtamtliche-fussnoten)::before {
+  @apply mb-10 block h-px w-[10ch] bg-gray-400 content-["_"];
 }
 
 /* Do not show separator line if the non-authorial notes are preceded by authorial notes */
-:deep(.fussnoten + .nichtamtliche-fussnoten:before) {
+:deep(.fussnoten + .nichtamtliche-fussnoten)::before {
   @apply content-[initial];
 }
 
