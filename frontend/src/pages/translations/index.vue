@@ -49,7 +49,7 @@ const sortedTranslations = computed<TranslationContent[] | null>(() => {
   }
 
   return minisearch.value
-    .search(searchTerm, { prefix: true, fuzzy: 0.2 })
+    .search(searchTerm, { prefix: true, fuzzy: 0.2, boost: { "@id": 2 } })
     .map((result) => translationsMap.value.get(result.id))
     .filter((doc): doc is TranslationContent => Boolean(doc));
 });
