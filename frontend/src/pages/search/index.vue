@@ -1,125 +1,189 @@
 <script setup lang="ts">
-import Message from "primevue/message";
-import type { Page } from "~/components/Pagination.vue";
+import { Select, Message } from "primevue";
 import CategoryFilter from "~/components/search/CategoryFilter.vue";
 import CourtFilter from "~/components/search/CourtFilter.vue";
 import DateRangeFilter from "~/components/search/DateRangeFilter.vue";
-import ItemsPerPageDropdown from "~/components/search/ItemsPerPageDropdown.vue";
 import SearchResult from "~/components/search/SearchResult.vue";
 import SimpleSearchInput from "~/components/search/SimpleSearchInput.vue";
 import SortSelect from "~/components/search/SortSelect.vue";
 import YearRangeFilter from "~/components/search/YearRangeFilter.vue";
-import { useSimpleSearchParams } from "~/composables/useSimpleSearchParams/useSimpleSearchParams";
 import { DocumentKind } from "~/types";
-import {
-  categoryToDocumentKind,
-  convertParams,
-  getUrl,
-} from "~/utils/search/simpleSearch";
+import { isStrictDateFilterValue } from "~/utils/search/filterType";
 
 useStaticPageSeo("suche");
 
-const searchParams = useSimpleSearchParams();
-
-const params = computed(() => convertParams(searchParams.params.value));
-
 const {
-  data,
-  error: loadError, // must not be named error, refer to https://github.com/nuxt/test-utils/issues/684#issuecomment-1946138626
-  status,
-  execute,
-} = await useRisBackend<Page>(() => getUrl(searchParams.category.value), {
-  query: params,
-  watch: [params],
+  court,
+  dateFilter,
+  documentKind,
+  itemsPerPage,
+  pageIndex,
+  query,
+  saveFilterStateToRoute,
+  sort,
+  typeGroup,
+} = useSimpleSearchRouteParams();
+
+const privateFeaturesEnabled = usePrivateFeaturesFlag();
+
+// Date filter ---------------------------------------------
+
+const strictDateFilter = ref(
+  isStrictDateFilterValue(dateFilter.value) ? dateFilter.value : undefined,
+);
+
+watch(dateFilter, (newVal) => {
+  console.log(newVal);
+  console.log(isStrictDateFilterValue(newVal));
+  if (isStrictDateFilterValue(newVal)) strictDateFilter.value = newVal;
 });
 
+// Document kind -------------------------------------------
+
+const categoryFilterValue = computed({
+  get() {
+    let val = documentKind.value.toString();
+    if (typeGroup.value) val += `.${typeGroup.value}`;
+    return val;
+  },
+  set(value) {
+    const [maybeKind, group] = value.split(".");
+
+    let kind = DocumentKind.All;
+    if (maybeKind && isDocumentKind(maybeKind)) kind = maybeKind;
+    documentKind.value = kind;
+
+    typeGroup.value = group;
+  },
+});
+
+const documentKindAndGroup = computed(() => ({
+  documentKind: documentKind.value,
+  typeGroup: typeGroup.value,
+}));
+
+// Search results ------------------------------------------
+
+const mainSectionId = useId();
+const itemsPerPageDropdownId = useId();
+const resultsContainerRef = ref<HTMLElement | null>(null);
+const scrollToResultsOnLoad = ref(false);
+
+const itemsPerPageOptions = ["10", "50", "100"];
+
+const {
+  searchError,
+  searchResults,
+  searchStatus,
+  submitSearch,
+  totalItemCount,
+} = await useSimpleSearch(
+  query,
+  documentKindAndGroup,
+  strictDateFilter,
+  court,
+  {
+    itemsPerPage,
+    sort,
+    pageIndex,
+  },
+);
+
+// Perform initial search with any existing filter + query params
+await submitSearch();
+
 watch(
-  loadError,
-  () => {
-    if (loadError.value) {
-      showError(loadError.value);
-    }
+  searchError,
+  (val) => {
+    if (val) showError(val);
   },
   { immediate: true },
 );
 
+// Watch for changes in page size, so that the page number is adjusted accordingly
 watch(
-  () => data.value,
+  () => searchResults.value,
   async (page) => {
     if (!page) return;
 
     const totalItems = page.totalItems ?? 0;
-    const itemsPerPage = searchParams.itemsPerPage.value;
-    const requestedPage = searchParams.pageNumber.value;
+    const requestedPage = pageIndex.value;
+    const perPage = Number(itemsPerPage.value);
 
     if (page.member.length === 0 && totalItems > 0) {
-      const lastPage = Math.floor((totalItems - 1) / itemsPerPage);
+      const lastPage = Math.floor((totalItems - 1) / perPage);
 
       if (requestedPage !== lastPage) {
-        searchParams.setPageNumber(lastPage);
-        await execute();
+        pageIndex.value = lastPage;
+        await saveFilterStateToRoute();
+        await submitSearch();
       }
     }
   },
   { immediate: true },
 );
 
-const isLoading = computed(() => status.value === "pending");
-const currentPage = computed(() => data.value);
+const formattedResultCount = computed(() => {
+  if (isLoading.value) return "";
+  return buildResultCountString(totalItemCount.value);
+});
 
-async function handleSearchSubmit(value?: string) {
-  searchParams.setQuery(value ?? "");
-  searchParams.setPageNumber(0);
-  await execute();
+const isLoading = computed(() => searchStatus.value === "pending");
+
+// Auto reload for "discrete" actions
+watch(
+  () => [
+    court.value,
+    documentKind.value,
+    itemsPerPage.value,
+    pageIndex.value,
+    sort.value,
+    strictDateFilter.value,
+    typeGroup.value,
+    query.value,
+  ],
+  () => submit(),
+);
+
+async function submit() {
+  await saveFilterStateToRoute();
+  submitSearch();
 }
 
 async function updatePage(page: number) {
   scrollToResultsOnLoad.value = true;
-  searchParams.setPageNumber(page);
+  pageIndex.value = page;
 }
 
-const documentKind = computed(() =>
-  categoryToDocumentKind(searchParams.category.value),
-);
+watch(searchStatus, async (newStatus, oldStatus) => {
+  const loadingSuccess = oldStatus === "pending" && newStatus === "success";
+  if (loadingSuccess && scrollToResultsOnLoad.value) {
+    scrollToResultsOnLoad.value = false;
+    await nextTick();
+    resultsContainerRef.value?.scrollIntoView({ behavior: "smooth" });
+  }
+});
+
+// Page title ---------------------------------------------
 
 const title = computed(() => {
-  if (searchParams.query.value) {
-    return `${searchParams.query.value} — Suche`;
-  } else {
-    switch (documentKind.value) {
-      case DocumentKind.Norm:
-        return "Gesetze & Verordnungen — Suche";
-      case DocumentKind.CaseLaw:
-        return "Rechtsprechung — Suche";
-      case DocumentKind.Literature:
-        return "Literaturnachweise — Suche";
-      case DocumentKind.AdministrativeDirective:
-        return "Verwaltungsvorschriften — Suche";
-      default:
-        return "Suche";
-    }
+  if (query.value) return `${query.value} — Suche`;
+
+  switch (documentKind.value) {
+    case DocumentKind.Norm:
+      return "Gesetze & Verordnungen — Suche";
+    case DocumentKind.CaseLaw:
+      return "Rechtsprechung — Suche";
+    case DocumentKind.Literature:
+      return "Literaturnachweise — Suche";
+    case DocumentKind.AdministrativeDirective:
+      return "Verwaltungsvorschriften — Suche";
+    default:
+      return "Suche";
   }
 });
 
 useHead({ title });
-
-const privateFeaturesEnabled = usePrivateFeaturesFlag();
-
-const mainSectionId = useId();
-const resultCountId = useId();
-const resultsContainerRef = ref<HTMLElement | null>(null);
-const scrollToResultsOnLoad = ref(false);
-
-watch(status, (newStatus, oldStatus) => {
-  if (oldStatus === "pending" && newStatus === "success") {
-    if (scrollToResultsOnLoad.value) {
-      scrollToResultsOnLoad.value = false;
-      nextTick(() => {
-        resultsContainerRef.value?.scrollIntoView({ behavior: "smooth" });
-      });
-    }
-  }
-});
 </script>
 
 <template>
@@ -127,10 +191,8 @@ watch(status, (newStatus, oldStatus) => {
     <h1 class="ris-heading2-bold inline-block">Suche</h1>
   </div>
 
-  <SimpleSearchInput
-    :model-value="searchParams.query.value"
-    @update:model-value="handleSearchSubmit"
-  />
+  <SimpleSearchInput v-model="query" />
+
   <NuxtLink
     :to="{ hash: `#${mainSectionId}` }"
     class="ris-link2-bold not-focus:sr-only"
@@ -148,27 +210,25 @@ watch(status, (newStatus, oldStatus) => {
   <div class="mt-24 flex flex-col gap-48 lg:flex-row">
     <fieldset class="top-8 flex w-full flex-col gap-24 pb-10 lg:w-3/12">
       <legend class="ris-label1-regular flex h-48 items-center">Filter</legend>
-      <CategoryFilter v-model="searchParams.category.value" />
+
+      <CategoryFilter v-model="categoryFilterValue" />
+
       <CourtFilter
-        v-if="searchParams.category.value.startsWith(DocumentKind.CaseLaw)"
-        v-model="searchParams.court.value"
-        :category="searchParams.category.value"
+        v-if="documentKind === DocumentKind.CaseLaw"
+        v-model="court"
       />
+
       <DateRangeFilter
         v-if="
           documentKind === DocumentKind.CaseLaw ||
           documentKind === DocumentKind.AdministrativeDirective
         "
-        v-model:date="searchParams.date.value"
-        v-model:date-after="searchParams.dateAfter.value"
-        v-model:date-before="searchParams.dateBefore.value"
-        v-model:date-search-mode="searchParams.dateSearchMode.value"
+        v-model="dateFilter"
       />
+
       <YearRangeFilter
         v-else-if="documentKind === DocumentKind.Literature"
-        v-model:date-after="searchParams.dateAfter.value"
-        v-model:date-before="searchParams.dateBefore.value"
-        v-model:date-search-mode="searchParams.dateSearchMode.value"
+        v-model="dateFilter"
       />
     </fieldset>
 
@@ -179,66 +239,70 @@ watch(status, (newStatus, oldStatus) => {
     >
       <Pagination
         :is-loading="isLoading"
+        :page="searchResults"
         navigation-position="bottom"
-        :page="currentPage"
         @update-page="updatePage"
       >
         <div
           class="mb-12 flex w-full flex-wrap items-center justify-between gap-x-32 gap-y-16"
         >
           <output
-            :id="resultCountId"
-            aria-live="polite"
             aria-atomic="true"
+            aria-live="polite"
             class="ris-label2-regular"
           >
-            {{ isLoading ? "Lade ..." : null }}
-            {{
-              currentPage && !isLoading
-                ? buildResultCountString(currentPage)
-                : ""
-            }}
+            {{ isLoading ? "Lade ..." : formattedResultCount }}
           </output>
+
           <div class="flex flex-wrap gap-x-32 gap-y-16">
-            <ItemsPerPageDropdown v-model="searchParams.itemsPerPage.value" />
-            <SortSelect
-              v-model="searchParams.sort.value"
-              :document-kind="documentKind"
-            />
+            <label
+              :for="itemsPerPageDropdownId"
+              class="ris-label2-regular flex items-center gap-8"
+            >
+              Einträge pro Seite
+              <Select
+                :id="itemsPerPageDropdownId"
+                v-model="itemsPerPage"
+                :options="itemsPerPageOptions"
+              />
+            </label>
+
+            <SortSelect v-model="sort" :document-kind />
           </div>
         </div>
-        <p
-          v-if="!!loadError"
-          class="my-8 text-red-700"
-          role="alert"
-          aria-relevant="all"
-        >
-          {{ loadError.message }}
-        </p>
-        <Message severity="warn" class="ris-body2-regular mt-16 max-w-prose">
-          <p class="ris-body2-bold mt-2">
-            Dieser Service befindet sich in der Testphase.
-          </p>
-          <p>
-            Der Datenbestand ist noch nicht vollständig und die
-            Suchpriorisierung noch nicht final. Der Service ist in Entwicklung.
-            Wir arbeiten an der Ergänzung und Darstellung aller Inhalte.
-          </p>
-        </Message>
-        <ul
-          v-if="currentPage && currentPage?.member?.length > 0"
-          aria-label="Suchergebnisse"
-          class="w-full max-w-prose"
-        >
-          <li v-for="(element, index) in currentPage.member" :key="index">
-            <SearchResult :search-result="element" :order="index" />
-          </li>
-        </ul>
-        <div
-          v-if="isLoading"
-          class="flex h-full min-h-48 w-full items-center justify-center"
-        >
-          <DelayedLoadingMessage />
+
+        <div class="max-w-prose">
+          <Message v-if="!!searchError" severity="error">
+            {{ searchError.message }}
+          </Message>
+
+          <Message severity="warn" class="ris-body2-regular mt-16 max-w-prose">
+            <p class="ris-body2-bold mt-2">
+              Dieser Service befindet sich in der Testphase.
+            </p>
+            <p>
+              Der Datenbestand ist noch nicht vollständig und die
+              Suchpriorisierung noch nicht final. Der Service ist in
+              Entwicklung. Wir arbeiten an der Ergänzung und Darstellung aller
+              Inhalte.
+            </p>
+          </Message>
+
+          <ul v-if="searchResults" aria-label="Suchergebnisse">
+            <li
+              v-for="(searchResult, index) in searchResults.member"
+              :key="getIdentifier(searchResult.item)"
+            >
+              <SearchResult :search-result :order="index" />
+            </li>
+          </ul>
+
+          <div
+            v-if="isLoading"
+            class="flex h-full min-h-48 w-full items-center justify-center"
+          >
+            <DelayedLoadingMessage />
+          </div>
         </div>
       </Pagination>
     </div>
