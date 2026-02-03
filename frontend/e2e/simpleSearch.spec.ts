@@ -124,7 +124,7 @@ test.describe("general search page features", () => {
   });
 
   test("does not show date search filter", async ({ page }) => {
-    await navigate(page, "/search?category=N");
+    await navigate(page, "/search?documentKind=N");
 
     await expect(
       page.getByRole("combobox", { name: "Keine zeitliche Begrenzung" }),
@@ -144,9 +144,7 @@ test.describe("general search page features", () => {
     await expect(pagination).toHaveText(/Seite 1: Treffer 1–10 von \d+/);
 
     await page.getByLabel("nächste Ergebnisse").click();
-    await page.waitForURL("/search?query=und&pageNumber=1", {
-      waitUntil: "commit",
-    });
+    await page.waitForURL(/pageIndex=1/);
 
     expect(resultCounter).toHaveText(nonZeroResultCount);
     // Warning: this is potentially flaky and only works because the previous
@@ -157,7 +155,7 @@ test.describe("general search page features", () => {
     await expect(pagination).toHaveText(/Seite 2: Treffer 11–\d+ von \d+/);
 
     await page.getByLabel("vorherige Ergebnisse").click();
-    await page.waitForURL("/search?query=und", { waitUntil: "commit" });
+    await page.waitForURL(/pageIndex=0/);
     await expect(searchResults).toHaveCount(10);
   });
 
@@ -185,7 +183,7 @@ test.describe("general search page features", () => {
     await page.getByRole("combobox", { name: "Datum: Älteste zuerst" }).click();
     await page.getByRole("option", { name: "Relevanz" }).click();
 
-    await expect(page).not.toHaveURL(/sort=/);
+    await expect(page).toHaveURL(/sort=default/);
   });
 
   test("change number of results per page", async ({ page }) => {
@@ -201,12 +199,13 @@ test.describe("general search page features", () => {
     await expect(searchResults).toHaveCount(18);
   });
 
-  test("falls back to last valid page when visiting an out-of-range pageNumber directly", async ({
+  test("falls back to last valid page when visiting an out-of-range pageIndex directly", async ({
     page,
   }) => {
-    const nonExistingUrl = "/search?itemsPerPage=100&category=N&pageNumber=10";
+    const nonExistingUrl =
+      "/search?itemsPerPage=100&documentKind=N&pageIndex=10";
     await navigate(page, nonExistingUrl);
-    await expect(page).not.toHaveURL(/pageNumber=10/);
+    await expect(page).not.toHaveURL(/pageIndex=10/);
     const searchResults = await getSearchResults(page).all();
     expect(searchResults.length).toBeGreaterThan(0);
     await expect(getResultCounter(page)).toHaveText(nonZeroResultCount);
@@ -263,7 +262,7 @@ test.describe("searching legislation", () => {
       .getByRole("button", { name: "Gesetze & Verordnungen" })
       .click();
 
-    await expect(page).toHaveURL(/category=N/);
+    await expect(page).toHaveURL(/documentKind=N/);
 
     await expect(resultCounter).toHaveText(nonZeroResultCount);
 
@@ -275,7 +274,7 @@ test.describe("searching legislation", () => {
     page,
     privateFeaturesEnabled,
   }) => {
-    await navigate(page, "/search?query=FrSaftErfrischV&category=N");
+    await navigate(page, "/search?query=FrSaftErfrischV&documentKind=N");
 
     const searchResult = getSearchResults(page).first();
 
@@ -329,7 +328,7 @@ test.describe("searching legislation", () => {
   });
 
   test("navigates to the document detail page", async ({ page }) => {
-    await navigate(page, "/search?query=FrSaftErfrischV&category=N");
+    await navigate(page, "/search?query=FrSaftErfrischV&documentKind=N");
 
     // Result detail link
     await page
@@ -347,15 +346,18 @@ test.describe("searching legislation", () => {
   });
 
   test("displays validity status batches", async ({ page }) => {
-    await navigate(page, "/search?query=Zukunftsgesetz&category=N");
+    await navigate(page, "/search?query=Zukunftsgesetz&documentKind=N");
     await expect(getSearchResults(page).first()).toHaveText(
       /Zukünftig in Kraft/,
     );
 
-    await navigate(page, "/search?query=Fruchtsaftkonzentrat&category=N");
+    await navigate(page, "/search?query=Fruchtsaftkonzentrat&documentKind=N");
     await expect(getSearchResults(page).first()).toHaveText(/Aktuell gültig/);
 
-    await navigate(page, "/search?query=Heimaturlaubsberechtigung&category=N");
+    await navigate(
+      page,
+      "/search?query=Heimaturlaubsberechtigung&documentKind=N",
+    );
     await expect(getSearchResults(page).first()).toHaveText(/Außer Kraft/);
   });
 
@@ -363,7 +365,10 @@ test.describe("searching legislation", () => {
     page,
     privateFeaturesEnabled,
   }) => {
-    await navigate(page, '/search?query="Zum+Testen+von+Fassungen"&category=N');
+    await navigate(
+      page,
+      '/search?query="Zum+Testen+von+Fassungen"&documentKind=N',
+    );
 
     const searchResults = getSearchResults(page);
     await expect(searchResults).toHaveCount(1);
@@ -388,7 +393,7 @@ test.describe("searching legislation", () => {
   });
 
   test("does not show date search filter", async ({ page }) => {
-    await navigate(page, "/search?category=N");
+    await navigate(page, "/search?documentKind=N");
 
     await expect(
       page.getByRole("combobox", { name: "Keine zeitliche Begrenzung" }),
@@ -410,7 +415,7 @@ test.describe("searching caselaw", () => {
       .getByRole("button", { name: "Gerichtsentscheidungen" })
       .click();
 
-    await expect(page).toHaveURL(/category=R/);
+    await expect(page).toHaveURL(/documentKind=R/);
 
     await expect(resultCounter).toHaveText(nonZeroResultCount);
 
@@ -421,7 +426,7 @@ test.describe("searching caselaw", () => {
   });
 
   test("shows the search result contents", async ({ page }) => {
-    await navigate(page, "/search?query=34+X+(xyz)+456/78&category=R");
+    await navigate(page, "/search?query=34+X+(xyz)+456/78&documentKind=R");
 
     const searchResult = getSearchResults(page).first();
 
@@ -448,7 +453,7 @@ test.describe("searching caselaw", () => {
   });
 
   test("navigates to the document detail page", async ({ page }) => {
-    await navigate(page, "/search?query=34+X+(xyz)+456/78&category=R");
+    await navigate(page, "/search?query=34+X+(xyz)+456/78&documentKind=R");
 
     // Result detail link
     await page
@@ -466,7 +471,7 @@ test.describe("searching caselaw", () => {
   });
 
   test("narrows by subtypes", async ({ page }) => {
-    await navigate(page, "/search?category=R");
+    await navigate(page, "/search?documentKind=R");
 
     await test.step("Urteil", async () => {
       await page
@@ -474,7 +479,8 @@ test.describe("searching caselaw", () => {
         .getByRole("treeitem", { name: "Urteil" })
         .click();
 
-      await expect(page).toHaveURL(/category=R\.urteil/);
+      await expect(page).toHaveURL(/documentKind=R/);
+      await expect(page).toHaveURL(/typeGroup=urteil/);
 
       await expect(getSearchResults(page)).toHaveText(
         Array.from<RegExp>({ length: 10 }).fill(/^Urteil/),
@@ -487,7 +493,8 @@ test.describe("searching caselaw", () => {
         .getByRole("treeitem", { name: "Beschluss" })
         .click();
 
-      await expect(page).toHaveURL(/category=R\.beschluss/);
+      await expect(page).toHaveURL(/documentKind=R/);
+      await expect(page).toHaveURL(/typeGroup=beschluss/);
 
       await expect(getSearchResults(page)).toHaveText(
         Array.from<RegExp>({ length: 2 }).fill(/^Beschluss/),
@@ -500,7 +507,8 @@ test.describe("searching caselaw", () => {
         .getByRole("treeitem", { name: "Sonstige Entscheidungen" })
         .click();
 
-      await expect(page).toHaveURL(/category=R\.other/);
+      await expect(page).toHaveURL(/documentKind=R/);
+      await expect(page).toHaveURL(/typeGroup=other/);
 
       await expect(getSearchResults(page)).toHaveCount(0);
     });
@@ -511,7 +519,8 @@ test.describe("searching caselaw", () => {
         .getByRole("treeitem", { name: "Alle Gerichtsentscheidungen" })
         .click();
 
-      await expect(page).toHaveURL(/category=R/);
+      await expect(page).toHaveURL(/documentKind=R/);
+      await expect(page).toHaveURL(/typeGroup=($|&)/);
 
       await expect(getSearchResults(page)).toHaveText(
         Array(10).fill(/^(Beschluss|Urteil)/),
@@ -520,7 +529,7 @@ test.describe("searching caselaw", () => {
   });
 
   test("searches by suggested court", async ({ page }) => {
-    await navigate(page, "/search?category=R");
+    await navigate(page, "/search?documentKind=R");
 
     await page.getByRole("button", { name: "Vorschläge anzeigen" }).click();
     await page
@@ -533,7 +542,7 @@ test.describe("searching caselaw", () => {
   });
 
   test("searches by custom court", async ({ page }) => {
-    await navigate(page, "/search?category=R");
+    await navigate(page, "/search?documentKind=R");
 
     await page.getByRole("combobox", { name: "Gericht" }).fill("LG");
     await page.getByRole("option", { name: "LG Hamburg" }).click();
@@ -565,7 +574,7 @@ test.describe("searching literature", () => {
       .getByRole("button", { name: "Literaturnachweise" })
       .click();
 
-    await expect(page).toHaveURL(/category=L/);
+    await expect(page).toHaveURL(/documentKind=L/);
 
     await expect(resultCounter).toHaveText("1 Suchergebnis");
 
@@ -574,7 +583,7 @@ test.describe("searching literature", () => {
   });
 
   test("shows the search result contents", async ({ page }) => {
-    await navigate(page, "/search?query=FooBar,+1982,+123-123&category=L");
+    await navigate(page, "/search?query=FooBar,+1982,+123-123&documentKind=L");
 
     const searchResult = getSearchResults(page).first();
 
@@ -601,7 +610,7 @@ test.describe("searching literature", () => {
   }) => {
     await navigate(
       page,
-      "/search?query=Dieses+Dokument+hat+keinen+Titel&category=L",
+      "/search?query=Dieses+Dokument+hat+keinen+Titel&documentKind=L",
     );
 
     // Result detail link
@@ -620,7 +629,7 @@ test.describe("searching literature", () => {
   });
 
   test("navigates to the document detail page", async ({ page }) => {
-    await navigate(page, "/search?query=FooBar,+1982,+123-123&category=L");
+    await navigate(page, "/search?query=FooBar,+1982,+123-123&documentKind=L");
 
     // Result detail link
     await page.getByRole("link", { name: "Erstes Test-Dokument ULI" }).click();
@@ -633,8 +642,8 @@ test.describe("searching literature", () => {
     ).toBeVisible();
   });
 
-  test("searches by publication year with dateBefore", async ({ page }) => {
-    await navigate(page, "/search?category=L");
+  test("searches until publication year", async ({ page }) => {
+    await navigate(page, "/search?documentKind=L");
 
     await page
       .getByRole("combobox", { name: "Keine zeitliche Begrenzung" })
@@ -643,13 +652,13 @@ test.describe("searching literature", () => {
 
     await page.getByRole("textbox", { name: "Jahr" }).fill("2013");
 
-    await expect(page).toHaveURL(/dateBefore=2013-12-31/);
+    await expect(page).toHaveURL(/dateFilterFrom=&dateFilterTo=2013-12-31/);
 
     await expect(getSearchResults(page)).toHaveCount(4);
   });
 
-  test("searches by publication year with dateAfter", async ({ page }) => {
-    await navigate(page, "/search?category=L");
+  test("searches from publication year", async ({ page }) => {
+    await navigate(page, "/search?documentKind=L");
 
     await page
       .getByRole("combobox", { name: "Keine zeitliche Begrenzung" })
@@ -658,15 +667,15 @@ test.describe("searching literature", () => {
 
     await page.getByRole("textbox", { name: "Jahr" }).fill("2024");
 
-    await expect(page).toHaveURL(/dateAfter=2024-01-01/);
+    await expect(page).toHaveURL(
+      /dateFilterFrom=2024-01-01&dateFilterTo=($|&)/,
+    );
 
     await expect(getSearchResults(page)).toHaveCount(3);
   });
 
-  test("searches by publication year with dateBefore and dateAfter", async ({
-    page,
-  }) => {
-    await navigate(page, "/search?category=L");
+  test("searches for specific publication year", async ({ page }) => {
+    await navigate(page, "/search?documentKind=L");
 
     await page
       .getByRole("combobox", { name: "Keine zeitliche Begrenzung" })
@@ -675,13 +684,15 @@ test.describe("searching literature", () => {
 
     await page.getByRole("textbox", { name: "Jahr" }).fill("2015");
 
-    await expect(page).toHaveURL(/dateAfter=2015-01-01&dateBefore=2015-12-31/);
+    await expect(page).toHaveURL(
+      /dateFilterFrom=2015-01-01&dateFilterTo=2015-12-31/,
+    );
 
     await expect(getSearchResults(page)).toHaveCount(1);
   });
 
   test("searches by publication year with range", async ({ page }) => {
-    await navigate(page, "/search?category=L");
+    await navigate(page, "/search?documentKind=L");
 
     await page
       .getByRole("combobox", { name: "Keine zeitliche Begrenzung" })
@@ -691,7 +702,9 @@ test.describe("searching literature", () => {
     await page.getByRole("textbox", { name: "Ab dem Jahr" }).fill("2015");
     await page.getByRole("textbox", { name: "Bis zum Jahr" }).fill("2024");
 
-    await expect(page).toHaveURL(/dateAfter=2015-01-01&dateBefore=2024-12-31/);
+    await expect(page).toHaveURL(
+      /dateFilterFrom=2015-01-01&dateFilterTo=2024-12-31/,
+    );
 
     await expect(getSearchResults(page)).toHaveCount(6);
   });
@@ -711,7 +724,7 @@ test.describe("searching administrative directives", () => {
       .getByRole("button", { name: "Verwaltungsvorschriften" })
       .click();
 
-    await expect(page).toHaveURL(/category=V/);
+    await expect(page).toHaveURL(/documentKind=V/);
 
     await expect(resultCounter).toHaveText("1 Suchergebnis");
 
@@ -720,7 +733,7 @@ test.describe("searching administrative directives", () => {
   });
 
   test("shows the search result contents", async ({ page }) => {
-    await navigate(page, "/search?query=wurde&category=V");
+    await navigate(page, "/search?query=wurde&documentKind=V");
 
     const searchResult = getSearchResults(page).first();
 
@@ -748,7 +761,7 @@ test.describe("searching administrative directives", () => {
   test("shows placeholder title for search result items without title", async ({
     page,
   }) => {
-    await navigate(page, "/search?query=keinen+Titel&category=V");
+    await navigate(page, "/search?query=keinen+Titel&documentKind=V");
 
     // Result detail link
     await page
@@ -766,7 +779,7 @@ test.describe("searching administrative directives", () => {
   });
 
   test("navigates to the document detail page", async ({ page }) => {
-    await navigate(page, "/search?query=Beschluss&category=V");
+    await navigate(page, "/search?query=Beschluss&documentKind=V");
 
     // Result detail link
     await page
@@ -787,8 +800,8 @@ test.describe("searching administrative directives", () => {
     ).toBeVisible();
   });
 
-  test("searches by entryIntoForce date with dateBefore", async ({ page }) => {
-    await navigate(page, "/search?category=V");
+  test("searches entry into force before a date", async ({ page }) => {
+    await navigate(page, "/search?documentKind=V");
 
     await page
       .getByRole("combobox", { name: "Keine zeitliche Begrenzung" })
@@ -797,15 +810,15 @@ test.describe("searching administrative directives", () => {
 
     await page.getByRole("textbox", { name: "Datum" }).fill("15.03.2019");
 
-    await expect(page).toHaveURL(/dateBefore=2019-03-15/);
+    await expect(page).toHaveURL(/dateFilterFrom=&dateFilterTo=2019-03-15/);
 
     const searchResults = getSearchResults(page);
     await expect(searchResults).toHaveCount(3);
     await expect(searchResults.nth(0)).toHaveText(/14.03.2019/);
   });
 
-  test("searches by entryIntoForce date with dateAfter", async ({ page }) => {
-    await navigate(page, "/search?category=V");
+  test("searches entry into force after a date", async ({ page }) => {
+    await navigate(page, "/search?documentKind=V");
 
     await page
       .getByRole("combobox", { name: "Keine zeitliche Begrenzung" })
@@ -814,15 +827,17 @@ test.describe("searching administrative directives", () => {
 
     await page.getByRole("textbox", { name: "Datum" }).fill("01.07.2025");
 
-    await expect(page).toHaveURL(/dateAfter=2025-07-01/);
+    await expect(page).toHaveURL(
+      /dateFilterFrom=2025-07-01&dateFilterTo=($|&)/,
+    );
 
     const searchResults = getSearchResults(page);
     await expect(searchResults).toHaveCount(1);
     await expect(searchResults).toHaveText(/01.07.2025/);
   });
 
-  test("searches by specific date", async ({ page }) => {
-    await navigate(page, "/search?category=V");
+  test("searches entry into force on a specific date", async ({ page }) => {
+    await navigate(page, "/search?documentKind=V");
 
     await page
       .getByRole("combobox", { name: "Keine zeitliche Begrenzung" })
@@ -831,20 +846,20 @@ test.describe("searching administrative directives", () => {
 
     await page.getByRole("textbox", { name: "Datum" }).fill("23.12.2022");
 
-    await expect(page).toHaveURL(/date=2022-12-23/);
+    await expect(page).toHaveURL(/dateFilterFrom=2022-12-23&dateFilterTo=/);
 
     const searchResults = getSearchResults(page);
     await expect(searchResults).toHaveCount(0);
 
     await page.getByRole("textbox", { name: "Datum" }).fill("24.12.2022");
-    await expect(page).toHaveURL(/date=2022-12-24/);
+    await expect(page).toHaveURL(/dateFilterFrom=2022-12-24&dateFilterTo=/);
 
     await expect(searchResults).toHaveCount(1);
     await expect(searchResults).toHaveText(/24.12.2022/);
   });
 
-  test("searches by entryIntoForce date with range", async ({ page }) => {
-    await navigate(page, "/search?category=V");
+  test("searches entry into force in a range", async ({ page }) => {
+    await navigate(page, "/search?documentKind=V");
 
     await page
       .getByRole("combobox", { name: "Keine zeitliche Begrenzung" })
@@ -858,13 +873,15 @@ test.describe("searching administrative directives", () => {
       .getByRole("textbox", { name: "Bis zum Datum" })
       .fill("24.12.2022");
 
-    await expect(page).toHaveURL(/dateAfter=2019-03-14&dateBefore=2022-12-24/);
+    await expect(page).toHaveURL(
+      /dateFilterFrom=2019-03-14&dateFilterTo=2022-12-24/,
+    );
 
     await expect(getSearchResults(page)).toHaveCount(2);
   });
 
   test("sort by date", async ({ page }) => {
-    await navigate(page, "/search?category=V");
+    await navigate(page, "/search?documentKind=V");
 
     await page.getByRole("combobox", { name: "Relevanz" }).click();
     await page.getByRole("option", { name: "Datum: Älteste zuerst" }).click();
@@ -895,9 +912,7 @@ noJsTest("search works without JavaScript", async ({ page }) => {
     await page.getByPlaceholder("Suchbegriff eingeben").fill(searchTerm);
     await page.getByRole("button", { name: "Suchen" }).click();
 
-    await page.waitForURL(`/search?query=${searchTerm}`, {
-      waitUntil: "commit",
-    });
+    await page.waitForURL(`/search?query=${searchTerm}`);
     expect(await getSearchResults(page).count()).toBeGreaterThan(0);
     await expect(page.getByPlaceholder("Suchbegriff eingeben")).toHaveValue(
       searchTerm,
@@ -909,9 +924,7 @@ noJsTest("search works without JavaScript", async ({ page }) => {
     await page.getByPlaceholder("Suchbegriff eingeben").fill(newSearchTerm);
     await page.getByRole("button", { name: "Suchen" }).click();
 
-    await page.waitForURL(`/search?query=${newSearchTerm}`, {
-      waitUntil: "commit",
-    });
+    await page.waitForURL(`/search?query=${newSearchTerm}`);
     expect(await getSearchResults(page).count()).toBeGreaterThan(0);
     await expect(page.getByPlaceholder("Suchbegriff eingeben")).toHaveValue(
       newSearchTerm,
@@ -926,9 +939,7 @@ noJsTest("pagination works without JavaScript", async ({ page }) => {
   await expect(getSearchResults(page)).toHaveCount(10);
 
   await page.getByLabel("nächste Ergebnisse").click();
-  await page.waitForURL("/search?query=und&pageNumber=1", {
-    waitUntil: "commit",
-  });
+  await page.waitForURL(/pageIndex=1/);
 
   await expect(getResultCounter(page)).toHaveText(nonZeroResultCount);
   // Warning: this is potentially flaky and only works because the previous
@@ -938,7 +949,7 @@ noJsTest("pagination works without JavaScript", async ({ page }) => {
   expect(await getSearchResults(page).count()).toBeGreaterThan(1);
 
   await page.getByLabel("vorherige Ergebnisse").click();
-  await page.waitForURL("/search?query=und", { waitUntil: "commit" });
+  expect(page).not.toHaveURL(/pageIndex=\d+/);
 
   await expect(getResultCounter(page)).toHaveText(nonZeroResultCount);
   await expect(getSearchResults(page)).toHaveCount(10);
