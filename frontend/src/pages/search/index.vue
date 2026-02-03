@@ -123,7 +123,7 @@ watch(
 
 const formattedResultCount = computed(() => {
   if (isLoading.value) return "";
-  return buildResultCountString(totalItemCount.value);
+  return formatResultCount(totalItemCount.value);
 });
 
 const isLoading = computed(() => searchStatus.value === "pending");

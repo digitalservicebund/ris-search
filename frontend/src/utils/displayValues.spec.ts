@@ -114,4 +114,22 @@ describe("displayValues", () => {
       expect(result).toBeUndefined();
     });
   });
+
+  describe("formatResultCount", () => {
+    it("returns no results message", () => {
+      expect(formatResultCount(0)).toBe("Keine Suchergebnisse gefunden");
+    });
+
+    it("returns singular for one result", () => {
+      expect(formatResultCount(1)).toBe("1 Suchergebnis");
+    });
+
+    it("returns formatted count for multiple results", () => {
+      expect(formatResultCount(1234)).toBe("1.234 Suchergebnisse");
+    });
+
+    it("returns special message for 10000 results", () => {
+      expect(formatResultCount(10000)).toBe("Mehr als 10.000 Suchergebnisse");
+    });
+  });
 });

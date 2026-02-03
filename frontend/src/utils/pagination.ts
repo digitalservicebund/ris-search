@@ -12,18 +12,6 @@ export const parsePageNumber = (id?: string) => {
   };
 };
 
-export function buildResultCountString(count: number) {
-  if (count === 0) {
-    return "Keine Suchergebnisse gefunden";
-  } else if (count === 1) {
-    return "1 Suchergebnis";
-  } else if (count === 10_000) {
-    return "Mehr als 10.000 Suchergebnisse";
-  }
-
-  return `${count.toLocaleString("de-DE")} Suchergebnisse`;
-}
-
 export function buildItemsOnPageString(page?: Page | null) {
   if (!page?.member.length || !page?.totalItems) {
     return "";

@@ -11,7 +11,6 @@ import type { Statistics } from "~/types";
 import { DocumentKind } from "~/types";
 import { getIdentifier } from "~/utils/anyDocument";
 import { formatDocumentKind } from "~/utils/displayValues";
-import { formatNumberWithSeparators } from "~/utils/numberFormatting";
 import { queryableDataFields } from "~/utils/search/dataFields";
 import { isStrictDateFilterValue } from "~/utils/search/filterType";
 
@@ -146,7 +145,7 @@ watch(
 );
 
 const formattedResultCount = computed(() =>
-  formatNumberWithSeparators(totalItemCount.value),
+  formatResultCount(totalItemCount.value),
 );
 
 // Auto reload for "discrete" actions
@@ -234,7 +233,7 @@ watch(searchStatus, async (newStatus, oldStatus) => {
           class="mb-32 flex flex-col gap-16 md:flex-row md:items-center md:gap-48"
         >
           <span class="ris-subhead-regular mr-auto text-nowrap">
-            {{ formattedResultCount }} Suchergebnisse
+            {{ formattedResultCount }}
           </span>
           <SortSelect v-model="sort" :document-kind />
 

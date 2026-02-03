@@ -1,11 +1,7 @@
 import { describe, it, expect } from "vitest";
 import type { Page } from "~/components/Pagination.vue";
 import type { AnyDocument, SearchResult } from "~/types";
-import {
-  buildItemsOnPageString,
-  buildResultCountString,
-  parsePageNumber,
-} from "~/utils/pagination";
+import { buildItemsOnPageString, parsePageNumber } from "~/utils/pagination";
 
 function getPage(params: {
   page: number;
@@ -98,25 +94,5 @@ describe("parsePageNumber", () => {
     },
   ])("$description", ({ input, expected }) => {
     expect(parsePageNumber(input)).toEqual(expected);
-  });
-});
-
-describe("buildResultCountString", () => {
-  it("returns no results message", () => {
-    expect(buildResultCountString(0)).toBe("Keine Suchergebnisse gefunden");
-  });
-
-  it("returns singular for one result", () => {
-    expect(buildResultCountString(1)).toBe("1 Suchergebnis");
-  });
-
-  it("returns formatted count for multiple results", () => {
-    expect(buildResultCountString(1234)).toBe("1.234 Suchergebnisse");
-  });
-
-  it("returns special message for 10000 results", () => {
-    expect(buildResultCountString(10000)).toBe(
-      "Mehr als 10.000 Suchergebnisse",
-    );
   });
 });
