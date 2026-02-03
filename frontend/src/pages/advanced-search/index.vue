@@ -1,16 +1,8 @@
 <script setup lang="ts">
 import { Message, PanelMenu, Select } from "primevue";
 import type { MenuItem } from "primevue/menuitem";
-import Pagination from "~/components/Pagination.vue";
-import DataFieldPicker from "~/components/search/DataFieldPicker.vue";
-import DateFilter from "~/components/search/DateFilter.vue";
-import SortSelect from "~/components/search/SortSelect.vue";
-import { useAdvancedSearch } from "~/composables/useAdvancedSearch";
-import { useAdvancedSearchRouteParams } from "~/composables/useAdvancedSearchRouteParams";
 import type { Statistics } from "~/types";
 import { DocumentKind } from "~/types";
-import { getIdentifier } from "~/utils/anyDocument";
-import { formatDocumentKind } from "~/utils/displayValues";
 import { queryableDataFields } from "~/utils/search/dataFields";
 import { isStrictDateFilterValue } from "~/utils/search/filterType";
 
@@ -206,11 +198,11 @@ watch(searchStatus, async (newStatus, oldStatus) => {
         />
       </fieldset>
 
-      <DateFilter v-model="dateFilter" :document-kind />
+      <SearchDateFilter v-model="dateFilter" :document-kind />
     </aside>
 
     <div class="row-start-2 lg:row-start-auto">
-      <DataFieldPicker
+      <SearchDataFieldPicker
         v-model="query"
         :data-fields="queryableDataFields"
         :document-kind
@@ -235,7 +227,7 @@ watch(searchStatus, async (newStatus, oldStatus) => {
           <span class="ris-subhead-regular mr-auto text-nowrap">
             {{ formattedResultCount }}
           </span>
-          <SortSelect v-model="sort" :document-kind />
+          <SearchSortSelect v-model="sort" :document-kind />
 
           <label
             :for="itemsPerPageDropdownId"

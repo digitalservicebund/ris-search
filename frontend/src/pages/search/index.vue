@@ -1,12 +1,5 @@
 <script setup lang="ts">
-import { Select, Message } from "primevue";
-import CategoryFilter from "~/components/search/CategoryFilter.vue";
-import CourtFilter from "~/components/search/CourtFilter.vue";
-import DateRangeFilter from "~/components/search/DateRangeFilter.vue";
-import SearchResult from "~/components/search/SearchResult.vue";
-import SimpleSearchInput from "~/components/search/SimpleSearchInput.vue";
-import SortSelect from "~/components/search/SortSelect.vue";
-import YearRangeFilter from "~/components/search/YearRangeFilter.vue";
+import { Message, Select } from "primevue";
 import { DocumentKind } from "~/types";
 import { isStrictDateFilterValue } from "~/utils/search/filterType";
 
@@ -189,7 +182,7 @@ useHead({ title });
     <h1 class="ris-heading2-bold inline-block">Suche</h1>
   </div>
 
-  <SimpleSearchInput v-model="query" />
+  <SearchSimpleSearchInput v-model="query" />
 
   <NuxtLink
     :to="{ hash: `#${mainSectionId}` }"
@@ -209,14 +202,14 @@ useHead({ title });
     <fieldset class="top-8 flex w-full flex-col gap-24 pb-10 lg:w-3/12">
       <legend class="ris-label1-regular flex h-48 items-center">Filter</legend>
 
-      <CategoryFilter v-model="categoryFilterValue" />
+      <SearchCategoryFilter v-model="categoryFilterValue" />
 
-      <CourtFilter
+      <SearchCourtFilter
         v-if="documentKind === DocumentKind.CaseLaw"
         v-model="court"
       />
 
-      <DateRangeFilter
+      <SearchDateRangeFilter
         v-if="
           documentKind === DocumentKind.CaseLaw ||
           documentKind === DocumentKind.AdministrativeDirective
@@ -224,7 +217,7 @@ useHead({ title });
         v-model="dateFilter"
       />
 
-      <YearRangeFilter
+      <SearchYearRangeFilter
         v-else-if="documentKind === DocumentKind.Literature"
         v-model="dateFilter"
       />
@@ -265,7 +258,7 @@ useHead({ title });
               />
             </label>
 
-            <SortSelect v-model="sort" :document-kind />
+            <SearchSortSelect v-model="sort" :document-kind />
           </div>
         </div>
 
