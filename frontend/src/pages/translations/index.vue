@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import MiniSearch from "minisearch";
+import MiniSearch, { type Options } from "minisearch";
 import type { BreadcrumbItem } from "~/components/Breadcrumbs.vue";
 import SimpleSearchInput from "~/components/search/SimpleSearchInput.vue";
 import { fetchTranslationList } from "~/composables/useTranslationData";
@@ -55,11 +55,9 @@ const sortedTranslations = computed<TranslationContent[] | null>(() => {
 });
 
 const minisearch = computed(() => {
-  const miniSearch = new MiniSearch({
+  const options: Options & { boost?: Record<string, number> } = {
     fields: ["@id", "name", "translationOfWork"],
-    boost: {
-      "@id": 2,
-    },
+    boost: { "@id": 2 },
     storeFields: [
       "@id",
       "name",
@@ -70,7 +68,9 @@ const minisearch = computed(() => {
       "ris:filename",
     ],
     idField: "@id",
-  });
+  };
+
+  const miniSearch = new MiniSearch(options);
   miniSearch.addAll(translations.value ?? []);
   return miniSearch;
 });
