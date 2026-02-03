@@ -150,9 +150,7 @@ const show = computed(() => ({
 }));
 
 /** Whether multiple year inputs are visible (range mode). */
-const hasMultipleInputs = computed(
-  () => show.value.after && show.value.before,
-);
+const hasMultipleInputs = computed(() => show.value.after && show.value.before);
 </script>
 
 <template>

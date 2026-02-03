@@ -15,7 +15,7 @@ describe("DateRangeFilter", () => {
     ["period", 2],
   ];
 
-  test.each(renderModes)(
+  it.each(renderModes)(
     'type "%s" renders %d input fields',
     async (type, fieldCount) => {
       await renderSuspended(DateRangeFilter, {
@@ -27,7 +27,7 @@ describe("DateRangeFilter", () => {
     },
   );
 
-  test.each<[FilterType, Partial<DateFilterValue>]>([
+  it.each<[FilterType, Partial<DateFilterValue>]>([
     ["specificDate", { from: "2000-01-02" }],
     ["after", { from: "2000-01-02" }],
     ["before", { to: "2000-01-02" }],
@@ -50,9 +50,7 @@ describe("DateRangeFilter", () => {
       const updates = emitted("update:modelValue") as DateFilterValue[][];
       for (const [key, value] of Object.entries(expected)) {
         expect(
-          updates.some(
-            ([f]) => f?.[key as keyof DateFilterValue] === value,
-          ),
+          updates.some(([f]) => f?.[key as keyof DateFilterValue] === value),
         ).toBe(true);
       }
     },
@@ -72,11 +70,15 @@ describe("DateRangeFilter", () => {
     await user.clear(inputs[0]!);
     await user.type(inputs[0]!, "02.01.2000");
     await user.clear(inputs[1]!);
-    await user.type(inputs[1]!, "02.01.2000");
+    await user.type(inputs[1]!, "02.01.2001");
 
     const updates = emitted("update:modelValue") as DateFilterValue[][];
-    expect(updates.some(([f]) => f?.from === "2000-01-02")).toBe(true);
-    expect(updates.some(([f]) => f?.to === "2000-01-02")).toBe(true);
+    expect(updates).toContainEqual([
+      { from: "2000-01-02", to: undefined, type: "period" },
+    ]);
+    expect(updates).toContainEqual([
+      { from: "2000-01-02", to: "2001-01-02", type: "period" },
+    ]);
   });
 
   it("renders just the dropdown if type is allTime", async () => {
@@ -137,7 +139,9 @@ describe("DateRangeFilter", () => {
     await user.type(inputs[1]!, "03.10.1990");
 
     const updates = emitted("update:modelValue") as DateFilterValue[][];
-    expect(updates.some(([f]) => f?.to === "1990-10-03")).toBe(true);
+    expect(updates).toContainEqual([
+      { to: "1990-10-03", from: "1949-05-23", type: "period" },
+    ]);
   });
 
   it("shows validation error for invalid date in specificDate mode", async () => {

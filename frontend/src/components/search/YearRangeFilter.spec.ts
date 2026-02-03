@@ -7,7 +7,7 @@ import YearRangeFilter from "./YearRangeFilter.vue";
 import type { DateFilterValue } from "~/utils/search/filterType";
 
 describe("YearRangeFilter", () => {
-  test.each<[string, DateFilterValue, number]>([
+  it.each<[string, DateFilterValue, number]>([
     ["allTime", { type: "allTime" }, 0],
     ["equal", { type: "period", from: "2000-01-01", to: "2000-12-31" }, 1],
     ["after", { type: "after" }, 1],
