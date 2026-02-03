@@ -1,3 +1,4 @@
+import _ from "lodash";
 import type { Page } from "~/components/Pagination.vue";
 import { DocumentKind } from "~/types";
 import {
@@ -108,12 +109,34 @@ export async function useSimpleSearch(
     return result;
   });
 
+  const { searchPerformed, noSearchResults } = usePostHog();
+  let previousQuery: SimpleSearchEndpointParams | undefined = {
+    ...combinedQuery.value,
+  };
+
   const { data, error, status, execute } = await useRisBackend<Page>(
     searchEndpointUrl,
     {
       query: combinedQuery,
       watch: false,
       dedupe: "defer",
+
+      // PostHog integration
+      onRequest({ options }) {
+        const newQuery = { ...options.query };
+
+        // If the queries are identical, it's most likely an initial query or
+        // re-submission of the same query, so in that case we leave the
+        // previous query empty
+        if (_.isEqual(newQuery, previousQuery)) previousQuery = undefined;
+
+        searchPerformed("simple", newQuery, previousQuery);
+        previousQuery = newQuery as SimpleSearchEndpointParams;
+      },
+
+      onResponse({ response }) {
+        if (!response._data?.totalItems) noSearchResults();
+      },
     },
   );
 

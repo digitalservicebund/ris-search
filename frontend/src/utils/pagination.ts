@@ -1,5 +1,4 @@
 import type { Page } from "~/components/Pagination.vue";
-import { usePostHog } from "~/composables/usePostHog";
 
 export const parsePageNumber = (id?: string) => {
   if (!id) return { page: undefined, size: undefined };
@@ -15,7 +14,6 @@ export const parsePageNumber = (id?: string) => {
 
 export function buildResultCountString(count: number) {
   if (count === 0) {
-    usePostHog().noSearchResults();
     return "Keine Suchergebnisse gefunden";
   } else if (count === 1) {
     return "1 Suchergebnis";
