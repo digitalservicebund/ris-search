@@ -352,7 +352,7 @@ describe("filterType", () => {
     });
 
     describe("specificDate filter", () => {
-      it("returns only dateFrom for specificDate filter", () => {
+      it("returns dateFrom for both boundaries of specificDate filter", () => {
         const filter = {
           type: "specificDate",
           from: "2024-01-15",
@@ -362,7 +362,7 @@ describe("filterType", () => {
 
         expect(result).toEqual({
           dateFrom: "2024-01-15",
-          dateTo: undefined,
+          dateTo: "2024-01-15",
         });
       });
 
@@ -372,21 +372,6 @@ describe("filterType", () => {
         expect(() => dateFilterToSimpleSearchParams(filter)).toThrow(
           "Missing 'from' date in filter type specificDate",
         );
-      });
-
-      it("removes to date if present in specificDate filter", () => {
-        const filter = {
-          type: "specificDate",
-          from: "2024-01-15",
-          to: "2024-12-31",
-        } as const;
-
-        const result = dateFilterToSimpleSearchParams(filter);
-
-        expect(result).toEqual({
-          dateFrom: "2024-01-15",
-          dateTo: undefined,
-        });
       });
     });
 

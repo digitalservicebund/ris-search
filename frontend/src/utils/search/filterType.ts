@@ -199,9 +199,14 @@ export function dateFilterToSimpleSearchParams(
     );
   }
 
-  const strictFilter = validateDateFilterValue(filter);
+  /* eslint-disable-next-line prefer-const */
+  let { type, from, to } = validateDateFilterValue(filter);
 
-  if (strictFilter.type === "allTime") return undefined;
+  if (type === "allTime") return undefined;
 
-  return { dateFrom: strictFilter.from, dateTo: strictFilter.to };
+  // When searching for a specific date, the API expects the from and to
+  // properties of the filter to be set to the same date
+  if (type === "specificDate") to = from;
+
+  return { dateFrom: from, dateTo: to };
 }
