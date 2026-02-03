@@ -258,10 +258,10 @@ watch(searchStatus, async (newStatus, oldStatus) => {
 
           <ul v-if="searchResults" aria-label="Suchergebnisse">
             <li
-              v-for="searchResult in searchResults.member"
+              v-for="(searchResult, order) in searchResults.member"
               :key="getIdentifier(searchResult.item)"
             >
-              <SearchResult :search-result :order="1" />
+              <SearchResult :search-result :order />
             </li>
           </ul>
         </div>
