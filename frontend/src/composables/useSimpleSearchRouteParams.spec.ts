@@ -14,9 +14,8 @@ describe("useSimpleSearchRouteParams", () => {
         }),
       }));
 
-      const { useSimpleSearchRouteParams } = await import(
-        "./useSimpleSearchRouteParams"
-      );
+      const { useSimpleSearchRouteParams } =
+        await import("./useSimpleSearchRouteParams");
 
       const { documentKind } = useSimpleSearchRouteParams();
 
@@ -30,9 +29,8 @@ describe("useSimpleSearchRouteParams", () => {
         }),
       }));
 
-      const { useSimpleSearchRouteParams } = await import(
-        "./useSimpleSearchRouteParams"
-      );
+      const { useSimpleSearchRouteParams } =
+        await import("./useSimpleSearchRouteParams");
 
       const { documentKind } = useSimpleSearchRouteParams();
 
@@ -46,9 +44,8 @@ describe("useSimpleSearchRouteParams", () => {
         }),
       }));
 
-      const { useSimpleSearchRouteParams } = await import(
-        "./useSimpleSearchRouteParams"
-      );
+      const { useSimpleSearchRouteParams } =
+        await import("./useSimpleSearchRouteParams");
 
       const { documentKind } = useSimpleSearchRouteParams();
 
@@ -60,13 +57,12 @@ describe("useSimpleSearchRouteParams", () => {
     it("restores a search query from the query", async () => {
       vi.doMock("#app", () => ({
         useRoute: vi.fn().mockReturnValue({
-          query: { q: "example" },
+          query: { query: "example" },
         }),
       }));
 
-      const { useSimpleSearchRouteParams } = await import(
-        "./useSimpleSearchRouteParams"
-      );
+      const { useSimpleSearchRouteParams } =
+        await import("./useSimpleSearchRouteParams");
 
       const { query } = useSimpleSearchRouteParams();
 
@@ -80,9 +76,8 @@ describe("useSimpleSearchRouteParams", () => {
         }),
       }));
 
-      const { useSimpleSearchRouteParams } = await import(
-        "./useSimpleSearchRouteParams"
-      );
+      const { useSimpleSearchRouteParams } =
+        await import("./useSimpleSearchRouteParams");
 
       const { query } = useSimpleSearchRouteParams();
 
@@ -92,13 +87,12 @@ describe("useSimpleSearchRouteParams", () => {
     it("decodes a URI encoded query", async () => {
       vi.doMock("#app", () => ({
         useRoute: vi.fn().mockReturnValue({
-          query: { q: encodeURIComponent("DATUM:>2021-01-01") },
+          query: { query: encodeURIComponent("DATUM:>2021-01-01") },
         }),
       }));
 
-      const { useSimpleSearchRouteParams } = await import(
-        "./useSimpleSearchRouteParams"
-      );
+      const { useSimpleSearchRouteParams } =
+        await import("./useSimpleSearchRouteParams");
 
       const { query } = useSimpleSearchRouteParams();
 
@@ -114,9 +108,8 @@ describe("useSimpleSearchRouteParams", () => {
         }),
       }));
 
-      const { useSimpleSearchRouteParams } = await import(
-        "./useSimpleSearchRouteParams"
-      );
+      const { useSimpleSearchRouteParams } =
+        await import("./useSimpleSearchRouteParams");
 
       const { dateFilter } = useSimpleSearchRouteParams();
 
@@ -130,9 +123,8 @@ describe("useSimpleSearchRouteParams", () => {
         }),
       }));
 
-      const { useSimpleSearchRouteParams } = await import(
-        "./useSimpleSearchRouteParams"
-      );
+      const { useSimpleSearchRouteParams } =
+        await import("./useSimpleSearchRouteParams");
 
       const { dateFilter } = useSimpleSearchRouteParams();
 
@@ -146,9 +138,8 @@ describe("useSimpleSearchRouteParams", () => {
         }),
       }));
 
-      const { useSimpleSearchRouteParams } = await import(
-        "./useSimpleSearchRouteParams"
-      );
+      const { useSimpleSearchRouteParams } =
+        await import("./useSimpleSearchRouteParams");
 
       const { dateFilter } = useSimpleSearchRouteParams();
 
@@ -162,9 +153,8 @@ describe("useSimpleSearchRouteParams", () => {
         }),
       }));
 
-      const { useSimpleSearchRouteParams } = await import(
-        "./useSimpleSearchRouteParams"
-      );
+      const { useSimpleSearchRouteParams } =
+        await import("./useSimpleSearchRouteParams");
 
       const { dateFilter } = useSimpleSearchRouteParams();
 
@@ -178,9 +168,8 @@ describe("useSimpleSearchRouteParams", () => {
         }),
       }));
 
-      const { useSimpleSearchRouteParams } = await import(
-        "./useSimpleSearchRouteParams"
-      );
+      const { useSimpleSearchRouteParams } =
+        await import("./useSimpleSearchRouteParams");
 
       const { dateFilter } = useSimpleSearchRouteParams();
 
@@ -194,9 +183,8 @@ describe("useSimpleSearchRouteParams", () => {
         }),
       }));
 
-      const { useSimpleSearchRouteParams } = await import(
-        "./useSimpleSearchRouteParams"
-      );
+      const { useSimpleSearchRouteParams } =
+        await import("./useSimpleSearchRouteParams");
 
       const { dateFilter } = useSimpleSearchRouteParams();
 
@@ -210,9 +198,8 @@ describe("useSimpleSearchRouteParams", () => {
         }),
       }));
 
-      const { useSimpleSearchRouteParams } = await import(
-        "./useSimpleSearchRouteParams"
-      );
+      const { useSimpleSearchRouteParams } =
+        await import("./useSimpleSearchRouteParams");
 
       const { dateFilter } = useSimpleSearchRouteParams();
 
@@ -228,9 +215,8 @@ describe("useSimpleSearchRouteParams", () => {
         }),
       }));
 
-      const { useSimpleSearchRouteParams } = await import(
-        "./useSimpleSearchRouteParams"
-      );
+      const { useSimpleSearchRouteParams } =
+        await import("./useSimpleSearchRouteParams");
 
       const { court } = useSimpleSearchRouteParams();
 
@@ -244,9 +230,8 @@ describe("useSimpleSearchRouteParams", () => {
         }),
       }));
 
-      const { useSimpleSearchRouteParams } = await import(
-        "./useSimpleSearchRouteParams"
-      );
+      const { useSimpleSearchRouteParams } =
+        await import("./useSimpleSearchRouteParams");
 
       const { court } = useSimpleSearchRouteParams();
 
@@ -262,9 +247,8 @@ describe("useSimpleSearchRouteParams", () => {
         }),
       }));
 
-      const { useSimpleSearchRouteParams } = await import(
-        "./useSimpleSearchRouteParams"
-      );
+      const { useSimpleSearchRouteParams } =
+        await import("./useSimpleSearchRouteParams");
 
       const { typeGroup } = useSimpleSearchRouteParams();
 
@@ -278,9 +262,8 @@ describe("useSimpleSearchRouteParams", () => {
         }),
       }));
 
-      const { useSimpleSearchRouteParams } = await import(
-        "./useSimpleSearchRouteParams"
-      );
+      const { useSimpleSearchRouteParams } =
+        await import("./useSimpleSearchRouteParams");
 
       const { typeGroup } = useSimpleSearchRouteParams();
 
@@ -296,9 +279,8 @@ describe("useSimpleSearchRouteParams", () => {
         }),
       }));
 
-      const { useSimpleSearchRouteParams } = await import(
-        "./useSimpleSearchRouteParams"
-      );
+      const { useSimpleSearchRouteParams } =
+        await import("./useSimpleSearchRouteParams");
 
       const { sort } = useSimpleSearchRouteParams();
 
@@ -312,9 +294,8 @@ describe("useSimpleSearchRouteParams", () => {
         }),
       }));
 
-      const { useSimpleSearchRouteParams } = await import(
-        "./useSimpleSearchRouteParams"
-      );
+      const { useSimpleSearchRouteParams } =
+        await import("./useSimpleSearchRouteParams");
 
       const { sort } = useSimpleSearchRouteParams();
 
@@ -330,9 +311,8 @@ describe("useSimpleSearchRouteParams", () => {
         }),
       }));
 
-      const { useSimpleSearchRouteParams } = await import(
-        "./useSimpleSearchRouteParams"
-      );
+      const { useSimpleSearchRouteParams } =
+        await import("./useSimpleSearchRouteParams");
 
       const { itemsPerPage } = useSimpleSearchRouteParams();
 
@@ -346,9 +326,8 @@ describe("useSimpleSearchRouteParams", () => {
         }),
       }));
 
-      const { useSimpleSearchRouteParams } = await import(
-        "./useSimpleSearchRouteParams"
-      );
+      const { useSimpleSearchRouteParams } =
+        await import("./useSimpleSearchRouteParams");
 
       const { itemsPerPage } = useSimpleSearchRouteParams();
 
@@ -364,9 +343,8 @@ describe("useSimpleSearchRouteParams", () => {
         }),
       }));
 
-      const { useSimpleSearchRouteParams } = await import(
-        "./useSimpleSearchRouteParams"
-      );
+      const { useSimpleSearchRouteParams } =
+        await import("./useSimpleSearchRouteParams");
 
       const { pageIndex } = useSimpleSearchRouteParams();
 
@@ -380,9 +358,8 @@ describe("useSimpleSearchRouteParams", () => {
         }),
       }));
 
-      const { useSimpleSearchRouteParams } = await import(
-        "./useSimpleSearchRouteParams"
-      );
+      const { useSimpleSearchRouteParams } =
+        await import("./useSimpleSearchRouteParams");
 
       const { pageIndex } = useSimpleSearchRouteParams();
 
@@ -396,9 +373,8 @@ describe("useSimpleSearchRouteParams", () => {
         }),
       }));
 
-      const { useSimpleSearchRouteParams } = await import(
-        "./useSimpleSearchRouteParams"
-      );
+      const { useSimpleSearchRouteParams } =
+        await import("./useSimpleSearchRouteParams");
 
       const { pageIndex } = useSimpleSearchRouteParams();
 
@@ -418,9 +394,8 @@ describe("useSimpleSearchRouteParams", () => {
         navigateTo: navigateToMock,
       }));
 
-      const { useSimpleSearchRouteParams } = await import(
-        "./useSimpleSearchRouteParams"
-      );
+      const { useSimpleSearchRouteParams } =
+        await import("./useSimpleSearchRouteParams");
 
       const {
         query,
@@ -452,7 +427,7 @@ describe("useSimpleSearchRouteParams", () => {
       expect(navigateToMock).toHaveBeenCalledWith({
         query: {
           existingParam: "value",
-          q: "test%20search",
+          query: "test%20search",
           court: "BGH",
           documentKind: "R",
           typeGroup: "example-type-group",
@@ -476,9 +451,8 @@ describe("useSimpleSearchRouteParams", () => {
         navigateTo: navigateToMock,
       }));
 
-      const { useSimpleSearchRouteParams } = await import(
-        "./useSimpleSearchRouteParams"
-      );
+      const { useSimpleSearchRouteParams } =
+        await import("./useSimpleSearchRouteParams");
 
       const { query, saveFilterStateToRoute } = useSimpleSearchRouteParams();
 
@@ -487,7 +461,7 @@ describe("useSimpleSearchRouteParams", () => {
 
       expect(navigateToMock).toHaveBeenCalledWith({
         query: expect.objectContaining({
-          q: encodeURIComponent("DATUM:>2021-01-01"),
+          query: encodeURIComponent("DATUM:>2021-01-01"),
         }),
       });
     });
@@ -502,9 +476,8 @@ describe("useSimpleSearchRouteParams", () => {
         navigateTo: navigateToMock,
       }));
 
-      const { useSimpleSearchRouteParams } = await import(
-        "./useSimpleSearchRouteParams"
-      );
+      const { useSimpleSearchRouteParams } =
+        await import("./useSimpleSearchRouteParams");
 
       const { dateFilter, saveFilterStateToRoute } =
         useSimpleSearchRouteParams();
@@ -527,21 +500,20 @@ describe("useSimpleSearchRouteParams", () => {
   });
 
   it("reacts to route changes", async () => {
-    const routeQuery = reactive({ query: { q: "test before" } });
+    const routeQuery = reactive({ query: { query: "test before" } });
 
     vi.doMock("#app", () => ({
       useRoute: vi.fn().mockReturnValue(routeQuery),
     }));
 
-    const { useSimpleSearchRouteParams } = await import(
-      "./useSimpleSearchRouteParams"
-    );
+    const { useSimpleSearchRouteParams } =
+      await import("./useSimpleSearchRouteParams");
 
     const { query } = useSimpleSearchRouteParams();
 
     expect(query.value).toEqual("test before");
 
-    routeQuery.query = { q: "test after" };
+    routeQuery.query = { query: "test after" };
     await nextTick();
 
     expect(query.value).toEqual("test after");

@@ -52,7 +52,9 @@ export function useSimpleSearchRouteParams() {
         ? documentKindParam
         : DocumentKind.All;
 
-    query.value = decodeURIComponent(searchParamToString(routeQuery.q) ?? "");
+    query.value = decodeURIComponent(
+      searchParamToString(routeQuery.query) ?? "",
+    );
 
     court.value = searchParamToString(routeQuery.court);
 
@@ -77,7 +79,7 @@ export function useSimpleSearchRouteParams() {
     return navigateTo({
       query: {
         ...route.query,
-        q: encodeURIComponent(query.value),
+        query: encodeURIComponent(query.value),
         court: court.value,
         documentKind: documentKind.value,
         typeGroup: typeGroup.value ?? "",
