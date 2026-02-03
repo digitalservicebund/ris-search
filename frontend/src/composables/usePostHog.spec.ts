@@ -3,8 +3,6 @@ import type { PostHog } from "posthog-js";
 import { posthog } from "posthog-js";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { resetPostHogState, usePostHog } from "~/composables/usePostHog";
-import { addDefaults } from "~/composables/useSimpleSearchParams/getInitialState";
-import type { QueryParams } from "~/composables/useSimpleSearchParams/useSimpleSearchParams";
 import { cookieStoreBackend, cookieStoreMock } from "~/tests/cookieStoreMock";
 import { getPostHogConfig } from "~/tests/postHogUtils";
 
@@ -161,21 +159,16 @@ describe("usePostHog", () => {
   it("captures search event when postHog is initialized and user consent is given", async () => {
     const { setTracking, searchPerformed, postHog } = usePostHog();
     await setTracking(true);
-    searchPerformed("simple", addDefaults({ query: "test query" }), {
-      query: "old query",
-    } as QueryParams);
+    searchPerformed(
+      "simple",
+      { searchTerm: "test query" },
+      { searchTerm: "old query" },
+    );
     expect(posthog.init).toHaveBeenCalledWith("key", { api_host: "host" });
     expect(postHog.value?.capture).toHaveBeenCalledWith("search_performed", {
       type: "simple",
-      newParams: {
-        category: "A",
-        dateSearchMode: "",
-        itemsPerPage: 10,
-        pageIndex: 0,
-        query: "test query",
-        sort: "default",
-      },
-      previousParams: { query: "old query" },
+      newParams: { searchTerm: "test query" },
+      previousParams: { searchTerm: "old query" },
     });
   });
 
@@ -183,7 +176,7 @@ describe("usePostHog", () => {
     const { setTracking, searchPerformed, postHog, userConsent } = usePostHog();
     await setTracking(true);
     userConsent.value = false;
-    searchPerformed("simple", addDefaults({ query: "test query" }));
+    searchPerformed("simple", { searchTerm: "test query" });
     expect(postHog.value?.capture).not.toHaveBeenCalled();
   });
 

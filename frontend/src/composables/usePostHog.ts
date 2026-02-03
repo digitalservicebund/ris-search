@@ -1,6 +1,5 @@
 import type { PostHog } from "posthog-js";
 import { posthog } from "posthog-js";
-import type { QueryParams } from "~/composables/useSimpleSearchParams/useSimpleSearchParams";
 import {
   getStringOrUndefined,
   isStringEmpty,
@@ -146,8 +145,8 @@ export function usePostHog() {
    */
   function searchPerformed(
     type: "simple" | "advanced",
-    newParams?: Partial<QueryParams>,
-    previousParams?: Partial<QueryParams>,
+    newParams?: Partial<SimpleSearchEndpointParams>,
+    previousParams?: Partial<SimpleSearchEndpointParams>,
   ) {
     if (postHog.value && userConsent.value === true) {
       postHog.value.capture("search_performed", {
