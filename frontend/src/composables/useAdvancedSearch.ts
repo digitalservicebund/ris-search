@@ -21,9 +21,9 @@ type AdvancedSearchOptions = {
 /**
  * Provides access to the advanced search API.
  *
- * @param query Lucene search query to be submitted
- * @param documentKind Type of documents to search for
- * @param dateFilter Date filter to apply to the results
+ * @param query - Lucene search query to be submitted
+ * @param documentKind - Type of documents to search for
+ * @param dateFilter - Date filter to apply to the results
  * @returns State and context for interacting with advanced search
  */
 export async function useAdvancedSearch(
@@ -78,15 +78,11 @@ export async function useAdvancedSearch(
     {
       query: combinedQuery,
 
-      // immediate always executes even if the query is empty. Instead the
-      // component should execute manually using `executeWhenValid` to make
-      // sure only useful requests are submitted.
-      immediate: false,
-
-      // default watch is too eager to reload even when manually specifying
-      // watch sources, so disabling it and leaving it at the discretion of the
-      // component to decide when to reload.
+      // default watch + immediate is too eager to reload even when manually
+      // specifying watch sources, so disabling it and leaving it at the
+      // discretion of the component to decide when to reload.
       watch: false,
+      immediate: false,
 
       dedupe: "defer",
     },
