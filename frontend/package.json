@@ -32,7 +32,7 @@
   "dependencies": {
     "@digitalservicebund/ris-ui": "3.21.1",
     "@nuxtjs/mdc": "0.20.0",
-    "@nuxtjs/sitemap": "7.5.2",
+    "@nuxtjs/sitemap": "7.6.0",
     "@scalar/api-reference": "1.43.8",
     "@sentry/nuxt": "10.36.0",
     "dayjs": "1.11.19",
