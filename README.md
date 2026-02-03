@@ -1,273 +1,172 @@
 # RIS Search
 
-[![Frontend](https://github.com/digitalservicebund/ris-search/actions/workflows/frontend.yml/badge.svg)](https://github.com/digitalservicebund/ris-search/actions/workflows/frontend.yml)
-[![Backend](https://github.com/digitalservicebund/ris-search/actions/workflows/backend.yml/badge.svg)](https://github.com/digitalservicebund/ris-search/actions/workflows/backend.yml)
-[![End-to-end tests](https://github.com/digitalservicebund/ris-search/actions/workflows/pipeline-e2e.yml/badge.svg)](https://github.com/digitalservicebund/ris-search/actions/workflows/pipeline-e2e.yml)
-[![Deployment](https://github.com/digitalservicebund/ris-search/actions/workflows/deploy.yml/badge.svg)](https://github.com/digitalservicebund/ris-search/actions/workflows/deploy.yml)
+| Frontend                                                                                                                                                                                  | Backend                                                                                                                                                                                | Deployment                                                                                                                                                                              |
+| ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [![Frontend](https://github.com/digitalservicebund/ris-search/actions/workflows/frontend.yml/badge.svg)](https://github.com/digitalservicebund/ris-search/actions/workflows/frontend.yml) | [![Backend](https://github.com/digitalservicebund/ris-search/actions/workflows/backend.yml/badge.svg)](https://github.com/digitalservicebund/ris-search/actions/workflows/backend.yml) | [![Deployment](https://github.com/digitalservicebund/ris-search/actions/workflows/deploy.yml/badge.svg)](https://github.com/digitalservicebund/ris-search/actions/workflows/deploy.yml) |
 
-These instructions are written assuming development takes place on macOS.
+This is the repository for the public portal of NeuRIS. You can learn more about NeuRIS on our [website](https://digitalservice.bund.de/en/projects/new-legal-information-system).
+
+## Quickstart
+
+Clone this repo:
+
+```sh
+git clone git@github.com:digitalservicebund/ris-search.git
+```
+
+If you're already familiar with our stack and the project, here is a list of the most important commands for running frequent tasks. You will find [more detailed instructions below](#prerequisites).
+
+### Running backend + frontend separately
+
+```sh
+# Run Docker containers (working dir: project root)
+docker compose up -d
+
+# Run backend (working dir: ./backend)
+# Include `e2e` profile if you want test data for E2E tests
+./gradlew bootRun --args='--spring.profiles.active=default,e2e'
+
+# Install frontend dependencies and run frontend (working dir: ./frontend)
+pnpm install
+pnpm dev
+```
+
+You will find the following services at these addresses:
+
+- Frontend at <http://localhost:3000>
+- OpenSearch at <http://localhost:9200>
+- OpenSearch Dashboards at <http://localhost:5601>
+- Backend at <http://localhost:8090>
+- Swagger API documentation at <http://localhost:8090/swagger-ui/index.html>
+
+### Testing
+
+Backend:
+
+```sh
+./gradlew test              # Unit tests
+./gradlew integrationTest   # Integration tests
+```
+
+Frontend:
+
+```sh
+pnpm test         # Unit tests (once)
+pnpm test:watch   # Unit tests (watch mode)
+```
+
+E2E tests (backend and frontend must be [running separately](#running-backend--frontend-separately)):
+
+```sh
+pnpm exec playwright test                     # E2E tests
+pnpm exec playwright test --project chromium  # E2E tests for Chromium only
+pnpm exec playwright test --ui                # Opens the Playwright UI
+```
+
+### Code style & quality
+
+Backend:
+
+```sh
+./gradlew spotlessApply   # Format code
+```
+
+Frontend:
+
+```sh
+pnpm style:fix  # Check code conventions + formatting, attempt to fix
+pnpm typecheck  # Check TypeScript validity
+```
+
+### Building
+
+Backend:
+
+```sh
+./gradlew build
+```
+
+Frontend:
+
+```sh
+pnpm build
+
+# Optionally, preview the build output (requires a running backend):
+pnpm nuxt preview
+```
+
+## Navigating the repository
+
+This is a mono-repository containing:
+
+| Directory                 | Description                                                                     |
+| ------------------------- | ------------------------------------------------------------------------------- |
+| [`backend`](./backend/)   | The backend service (Java 21 + Spring Boot)                                     |
+| [`doc`](./doc/)           | Additional documentation, including [Architecture Decision Records](./doc/adr/) |
+| [`frontend`](./frontend/) | A browser-based interface for users (TypeScript + Vue + Nuxt + Tailwind)        |
+| [`scripts`](./scripts/)   | Utility scripts                                                                 |
 
 ## Prerequisites
 
-### Java
-This project uses Java 21 for the backend. Check your java version with
-```bash
-java --version
-```
-If java is not installed, install it
-```bash
-brew install openjdk@21
-```
-and check the version again. If the version returned is not 21, you may need to change your version
-```bash
-sudo ln -sfn /opt/homebrew/opt/openjdk@21/libexec/openjdk.jdk /Library/Java/JavaVirtualMachines/openjdk-21.jdk
-echo 'export PATH="/opt/homebrew/opt/openjdk@21/bin:$PATH"' >> ~/.zshrc
-```
-Close your shell, open a new one and check the version again.
+To build and run the application, you'll need:
 
-If you get an error message, try running
-```bash
-brew info java
-```
-and follow the steps provided.
+- Docker, for services like OpenSearch
+- A Java 21-compatible JDK
+- Node.js and pnpm (you'll find the exact versions [here](./frontend/package.json))
 
-### Docker
-This project uses Docker to run some containers locally. These include
-* OpenSearch
-* OpenSearch Dashboards
-* Keycloak
-* Application containers (backend and frontend)
+If you would like to make changes to the application, you'll also need:
 
-Check Docker is installed by running
-```bash
-docker --version
+- [`jq`](https://jqlang.org/), for parsing license data
+- [`lefthook`](https://lefthook.dev/), for running Git hooks
+- (optional) [`adr-tools`](https://github.com/npryce/adr-tools), for scaffolding new ADRs
+- (optional) [`nvm`](https://github.com/nvm-sh/nvm), for managing Node versions
+
+If you use [Homebrew](https://brew.sh/), you can install all of them like this:
+
+```sh
+brew install openjdk@21 lefthook nvm pnpm adr-tools
+brew install --cask docker # or `brew install docker` if you don't want the desktop app
 ```
 
-If docker is not installed, run this to install it.
+Once you installed the prerequisites, make sure to initialize Git hooks. This will ensure any code you commit follows our coding standards, is properly formatted, and has a commit message adhering to our conventions:
 
-```bash
-brew install --cask docker
+```sh
+lefthook install
 ```
 
-Make sure to open docker once to complete the installation and start the docker daemon.
+Finally, there are some environment variables that need to be set locally. As a starting point, copy the `frontend/.env.example` file and rename it to `.env`.
 
-### Node
+## Learn more
 
-For the provided Git hooks you will need:
+You will find more information about each module in the respective folders. If you're getting started, the READMEs of the [backend](./backend/README.md) and [frontend](./frontend/README.md) will be the most relevant resources.
 
-```bash
-brew install lefthook node
-```
+Additional guides:
 
-## Getting started
-
-**Clone Repository:**
-
-```bash
-git clone git@github.com:digitalservicebund/ris-search.git
-cd ris-search
-```
-
-**Run initialization script:**
-
-```bash
-./run.sh init
-```
-
-This will replace placeholders in the application template and install a couple of Git hooks.
-
-**Starting Docker**
-
-Run
-```bash
-docker-compose up
-```
-to start docker.
-
-You will find the following services served at the following addresses:
-- OpenSearch running at [localhost:9200](http://localhost:9200/)
-- OpenSearch Dashboards at [localhost:5601](http://localhost:5601/) by default.
-- Backend running at [localhost:8090](http://localhost:8090/)
-- Frontend running at [localhost:3001](http://localhost:3001/)
-- Swagger API documentation for Backend endpoints
-  at [localhost:8090/swagger-ui](http://localhost:8090/swagger-ui/index.html)
-  or [localhost:3000/api/docs/index.html](http://localhost:3000/api/docs/index.html).
-
-
-## Backend
-
-### Build and run
-
-If you don't want to use Docker for running the backend, you can build and run the application backend with:
-
-```bash
-cd backend
-./gradlew bootRun
-```
-
-The API application will be available at [localhost:8090](http://localhost:8090).
-
-### Test
-
-The project has distinct unit and integration test sets.
-
-**To run just the unit tests:**
-
-```bash
-./gradlew test
-```
-
-**To run the integration tests:**
-
-```bash
-./gradlew integrationTest
-```
-
-**Note:** Running integration tests requires passing unit tests (in Gradle terms: integration tests depend on unit
-tests), so unit tests are going to be run first. In case there are failing unit tests we won't attempt to continue
-running any integration tests.
-
-**To run integration tests exclusively, without the unit test dependency:**
-
-```bash
-./gradlew integrationTest --exclude-task test
-```
-
-Denoting an integration test is accomplished by using a JUnit 5 tag annotation: `@Tag("integration")`.
-
-Furthermore, there is another type of test worth mentioning. We're
-using [ArchUnit](https://www.archunit.org/getting-started)
-for ensuring certain architectural characteristics, for instance making sure that there are no cyclic dependencies.
-
-
-## Frontend
-
-See [./frontend/README.md](./frontend/README.md) for instructions to run the frontend.
-
-## End-to-end tests
-
-The end-to-end tests use Playwright and the test cases are located in the `./frontend/e2e` directory.
-
-### Setup
-
-1. Install the required browser dependencies:
-
-   ```bash
-   pnpm exec playwright install --with-deps chromium firefox webkit
-   ```
-2. Run the OpenSearch container (required for indexed data):
-
-   ```bash
-   docker compose -f docker-compose.yml up -d opensearch
-   ```
-3. Run the backend from the `backend` folder:
-
-   ```bash
-   ./gradlew bootRun
-   ```
-
-   **Note:** First export the following environment variables:
-
-  * `SPRING_PROFILES_ACTIVE=e2e,default`
-  * `OPENSEARCH_HOST=localhost`
-  * `THC_PORT=8090`
-4. Run the frontend from the `frontend` folder:
-
-   ```bash
-   pnpm dev
-   ```
-
-   **Note:** Copy the variables from `.env.example` into a `.env` file and configure them correctly.
-
-### Running Playwright Tests
-
-Once setup is complete, you may run the end-to-end tests:
-
-```bash
-pnpm run e2e
-```
-
-or to open the UI:
-
-```bash
-pnpm run e2e -- --ui
-```
-
-Alternatively, you can run directly with Playwright:
-
-```bash
-pnpm exec playwright test
-```
-
-If using the VS Code Playwright extension, select the “setup” project. Otherwise, the authentication flow may not be executed before the tests run.
-
----
-
-If you like, I can check the rest of the README.md file for consistency and format it all according to your project style.
-
-## Content
-
-- [Commands](./doc/readme/commands.md)
 - [Container image](./doc/readme/container-image.md)
-- [Vulnerability Scanning](./doc/readme/vulnerability-scan.md)
-- [Dump caselaw data to OpenSearch](./doc/readme/dump-caselaw-to-opensearch.md)
+- [Vulnerability scanning](./doc/readme/vulnerability-scan.md)
+- [Dump case law data to OpenSearch](./doc/readme/dump-caselaw-to-opensearch.md)
+- [OpenSearch index swap](./doc/readme/opensearch-index-swap.md)
+- [API keys](./doc/readme/api-keys.md)
 
-## Architecture Decision Records
+## License checking
 
-[Architecture decisions](https://cognitect.com/blog/2011/11/15/documenting-architecture-decisions)
-are kept in the `doc/adr` directory. For adding new records install the [adr-tools](https://github.com/npryce/adr-tools) package:
+When installing dependencies, make sure they are licensed under one of the [allowed licenses](./allowed-licenses.json). This will be checked in the pipeline for both frontend and backend dependencies. The pipeline will fail if licenses not included in the list are used by any dependency.
 
-```bash
-brew install adr-tools
-```
+## Contributing
 
-See https://github.com/npryce/adr-tools regarding usage.
+If you would like to contribute, check out [`CONTRIBUTING.md`](./CONTRIBUTING.md). Please also consider our [Code of Conduct](./CODE_OF_CONDUCT.md).
 
 ## About the Repository
 
-**Program Name:** NeuRIS (Neues Rechtsinformationsportal)  
+**Program name:** NeuRIS (Neues Rechtsinformationsportal)\
 **Description:** An intuitive legal information system aimed at simplifying access to laws, regulations, and court decisions in Germany.
 
 **Copyright (C) 2025 DigitalService GmbH des Bundes**
 
 **Author's Contact Information**
 
-DigitalService GmbH des Bundes  
-Prinzessinnenstraße 8-14,  
-10969 Berlin, Germany  
-Email: hallo@digitalservice.bund.de  
-Website: [https://digitalservice.bund.de](https://digitalservice.bund.de)
-
-## Contributing
-
-🇬🇧
-Currently the repository has data that can not be publicly released and is private. We plan to remove the
-repository history and make it public. Until then, everyone inside DigitalService is welcome to contribute to
-the development of the _ris-search_. You can contribute by opening pull request, providing documentation or
-answering questions or giving feedback. Please always follow the guidelines and our
-[Code of Conduct](CODE_OF_CONDUCT.md).
-
-🇩🇪
-Derzeit enthält das Repository Daten, die nicht öffentlich zugänglich gemacht werden können, und ist daher
-privat. Wir planen, die Repository-Historie zu entfernen und es öffentlich zugänglich zu machen. Bis dahin
-sind alle Mitarbeitenden von DigitalService herzlich eingeladen, zur Entwicklung der ris-search beizutragen.
-Du kannst beitragen, indem du Pull Requests erstellst, Dokumentation bereitstellst oder Fragen beantwortest
-bzw. Feedback gibst.
-Bitte befolge immer die Richtlinien und unseren [Verhaltenskodex](CODE_OF_CONDUCT_DE.md).
-
-### Contributing code
-
-🇬🇧
-Open a pull request with your changes and it will be reviewed by someone from the team. When you submit a pull request,
-you declare that you have the right to license your contribution to the DigitalService and the community.
-By submitting the patch, you agree that your contributions are licensed under the MIT license.
-
-Please make sure that your changes have been tested before submitting a pull request.
-
-🇩🇪
-Nach dem Erstellen eines Pull Requests wird dieser von einer Person aus dem Team überprüft. Wenn du einen Pull Request
-einreichst, erklärst du dich damit einverstanden, deinen Beitrag an den DigitalService und die Community zu
-lizenzieren. Durch das Einreichen des Patches erklärst du dich damit einverstanden, dass deine Beiträge unter der
-MIT-Lizenz lizenziert sind.
-
-Bitte stelle sicher, dass deine Änderungen getestet wurden, bevor du einen Pull Request sendest.
+DigitalService GmbH des Bundes\
+Prinzessinnenstraße 8-14,\
+10969 Berlin, Germany\
+Email: hallo@digitalservice.bund.de\
+Website: <https://digitalservice.bund.de>\
