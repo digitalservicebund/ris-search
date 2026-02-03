@@ -14,12 +14,12 @@ export function useSimpleSearchRouteParams() {
 
   watch(
     documentKind,
-    (val, oldVal) => {
+    (val) => {
       if (val === DocumentKind.All || val === DocumentKind.Norm) {
         dateFilter.value = { type: "allTime" };
       }
 
-      if (oldVal === DocumentKind.CaseLaw) {
+      if (val !== DocumentKind.CaseLaw) {
         typeGroup.value = undefined;
         court.value = undefined;
       }
