@@ -20,7 +20,7 @@ test(
 
     await page.getByRole("link", { name: title }).click();
 
-    await page.waitForURL("/translations/CDe", { waitUntil: "commit" });
+    await page.waitForURL("/translations/BGB", { waitUntil: "commit" });
 
     await expect(
       page.getByRole("heading", {
@@ -31,7 +31,7 @@ test(
 );
 
 test("opens the page via URL", { tag: ["@RISDEV-8950"] }, async ({ page }) => {
-  await navigate(page, "/translations/TestV");
+  await navigate(page, "/translations/ABG");
   await expect(
     page.getByRole("heading", {
       name: "Test Regulation for the Model Framework of the Public Service",
@@ -43,7 +43,7 @@ test("opens the page via URL", { tag: ["@RISDEV-8950"] }, async ({ page }) => {
 });
 
 test("has text and detail tab", { tag: ["@RISDEV-8950"] }, async ({ page }) => {
-  await navigate(page, "/translations/TestV");
+  await navigate(page, "/translations/ABG");
 
   const textTab = page.getByRole("tab", { name: "Text" });
   const detailsTab = page.getByRole("tab", {
@@ -58,7 +58,7 @@ test(
   "detail tab shows details",
   { tag: ["@RISDEV-8950"] },
   async ({ page }) => {
-    await navigate(page, "/translations/TestV");
+    await navigate(page, "/translations/ABG");
 
     const heading = page.getByRole("heading", { name: " Details " });
     const translator = page.getByText("someone and someone.");
@@ -81,7 +81,7 @@ test(
   "text tab shows text of translated norm",
   { tag: ["@RISDEV-8950"] },
   async ({ page }) => {
-    await navigate(page, "/translations/TestV");
+    await navigate(page, "/translations/ABG");
 
     const section = page.getByText("Section 1Dummy data");
 
@@ -96,7 +96,7 @@ test(
   "German original and English version link to each other",
   { tag: ["@RISDEV-8950"] },
   async ({ page, isMobileTest }) => {
-    await navigate(page, "/translations/TestV");
+    await navigate(page, "/translations/ABG");
     await expect(
       page.getByRole("heading", {
         name: "Test Regulation for the Model Framework of the Public Service",
@@ -130,18 +130,18 @@ test(
 test.describe("actions menu", { tag: ["@RISDEV-8950"] }, () => {
   test.describe("can copy link to translation", () => {
     testCopyLinkButton(
-      "/translations/TestV",
+      "/translations/ABG",
       "Link to translation",
-      RegExp(".*/translations/TestV"),
+      RegExp(".*/translations/ABG"),
     );
   });
 
   test.describe("can use print action button to open print menu", () => {
-    testPrintButton("/translations/TestV");
+    testPrintButton("/translations/ABG");
   });
 
   test.describe("can't use PDF action as it is disabled", () => {
-    testPdfButton("/translations/TestV");
+    testPdfButton("/translations/ABG");
   });
 });
 
@@ -149,7 +149,7 @@ noJsTest(
   "tabs work without JavaScript",
   { tag: ["@RISDEV-8979"] },
   async ({ page }) => {
-    await navigate(page, "/translations/TestV");
+    await navigate(page, "/translations/ABG");
 
     await test.step("text", async () => {
       await expect(

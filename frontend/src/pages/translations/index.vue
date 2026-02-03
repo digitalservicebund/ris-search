@@ -39,19 +39,19 @@ const translationsMap = computed(() => {
 });
 
 const sortedTranslations = computed<TranslationContent[] | null>(() => {
-  if (!translations.value) return null;
-  let results: TranslationContent[] = [];
+  const translationList = translations.value;
+  const searchTerm = activeSearchTerm.value.trim();
 
-  if (activeSearchTerm.value == "") {
-    results = [...translations.value];
-  } else {
-    results = minisearch.value
-      .search(activeSearchTerm.value, { prefix: true, fuzzy: 0.2 })
-      .map((r) => translationsMap.value.get(r.id))
-      .filter((doc): doc is TranslationContent => !!doc);
+  if (!translationList) return null;
+
+  if (!searchTerm) {
+    return [...translationList].sort((a, b) => a.name.localeCompare(b.name));
   }
 
-  return results.toSorted((a, b) => a.name.localeCompare(b.name));
+  return minisearch.value
+    .search(searchTerm, { prefix: true, fuzzy: 0.2 })
+    .map((result) => translationsMap.value.get(result.id))
+    .filter((doc): doc is TranslationContent => Boolean(doc));
 });
 
 const minisearch = computed(() => {

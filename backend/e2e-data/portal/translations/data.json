@@ -1,6 +1,6 @@
 [
   {
-    "abbreviation": "TestV",
+    "abbreviation": "ABG",
     "name": "Test Regulation for the Model Framework of the Public Service",
     "filename": "englisch_TestV.html",
     "german_name": "Testverordnung zur Musterregelung des öffentlichen Dienstes",
@@ -8,7 +8,7 @@
     "version": "Version information: The translation includes the amendment(s) to the Act by Article 1 of the Act of 8 October 2021"
   },
   {
-    "abbreviation": "CDe",
+    "abbreviation": "BGB",
     "name": "Act on Chemistry and Dentists",
     "filename": "englisch_Cde.html",
     "german_name": "Zahnarzt-Chemie Gesetz",
@@ -16,7 +16,7 @@
     "version": "Version information: Act on Chemistry and Dentists as published on 15 July 1985 (Federal Law Gazette I, p. 2010)"
   },
   {
-    "abbreviation": "FG",
+    "abbreviation": "CBG",
     "name": "Act on Friends and Goldfishs",
     "filename": "englisch_fg.html",
     "german_name": "Freunde und Goldfische Gesetz",

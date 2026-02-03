@@ -82,7 +82,7 @@ const testPages = [
   },
   {
     name: "Translation View Page",
-    url: "/translations/FG",
+    url: "/translations/CBG",
     tabs: ["Details"],
   },
   {

@@ -86,6 +86,25 @@ test(
 );
 
 test(
+  "displays list sorted by title ascending by default",
+  { tag: ["@RISDEV-8949"] },
+  async ({ page }) => {
+    await navigate(page, "/translations");
+
+    const resultsRegion = page.getByRole("region", {
+      name: "Translations List",
+    });
+
+    const titlesLocator = resultsRegion
+      .getByRole("listitem")
+      .getByRole("heading");
+    const listItemTitles = await titlesLocator.allTextContents();
+    const sortedTitles = [...listItemTitles].sort((a, b) => a.localeCompare(b));
+    expect(listItemTitles).toEqual(sortedTitles);
+  },
+);
+
+test(
   "filters translations correctly",
   { tag: ["@RISDEV-8949"] },
   async ({ page }) => {
@@ -112,3 +131,28 @@ test(
     await expect(page.getByText("We didn’t find anything.")).toBeVisible();
   },
 );
+
+test("sorts translations by relevance after search", async ({ page }) => {
+  await navigate(page, "/translations");
+  const searchTerm = "abg";
+  const input = page.getByRole("searchbox", { name: "search term" });
+  await input.fill(searchTerm);
+  await input.press("Enter");
+
+  const resultsRegion = page.getByRole("region", {
+    name: "Translations List",
+  });
+
+  const items = resultsRegion.getByRole("listitem");
+  const titlesLocator = resultsRegion
+    .getByRole("listitem")
+    .getByRole("heading");
+  const listItemTitles = await titlesLocator.allTextContents();
+
+  const sortedTitles = [...listItemTitles].sort((a, b) => a.localeCompare(b));
+  expect(listItemTitles).not.toEqual(sortedTitles);
+
+  const allTexts = await items.allTextContents();
+  expect(allTexts.length).toBeGreaterThan(0);
+  expect(allTexts[0]).toMatch(new RegExp(`^${searchTerm}`, "i"));
+});
