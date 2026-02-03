@@ -518,4 +518,152 @@ describe("useSimpleSearchRouteParams", () => {
 
     expect(query.value).toEqual("test after");
   });
+
+  describe("document kind change side effects", () => {
+    it("resets dateFilter when changing to All", async () => {
+      const routeQuery = reactive({
+        query: {
+          documentKind: DocumentKind.CaseLaw,
+          dateFilterType: "period",
+          dateFilterFrom: "2024-01-01",
+          dateFilterTo: "2024-12-31",
+        },
+      });
+
+      vi.doMock("#app", () => ({
+        useRoute: vi.fn().mockReturnValue(routeQuery),
+      }));
+
+      const { useSimpleSearchRouteParams } =
+        await import("./useSimpleSearchRouteParams");
+
+      const { documentKind, dateFilter } = useSimpleSearchRouteParams();
+
+      expect(documentKind.value).toEqual(DocumentKind.CaseLaw);
+      expect(dateFilter.value.type).toBe("period");
+
+      documentKind.value = DocumentKind.All;
+
+      expect(documentKind.value).toEqual(DocumentKind.All);
+      expect(dateFilter.value.type).toBe("allTime");
+    });
+
+    it("resets dateFilter when changing to Norm", async () => {
+      const routeQuery = reactive({
+        query: {
+          documentKind: DocumentKind.CaseLaw,
+          dateFilterType: "period",
+          dateFilterFrom: "2024-01-01",
+          dateFilterTo: "2024-12-31",
+        },
+      });
+
+      vi.doMock("#app", () => ({
+        useRoute: vi.fn().mockReturnValue(routeQuery),
+      }));
+
+      const { useSimpleSearchRouteParams } =
+        await import("./useSimpleSearchRouteParams");
+
+      const { documentKind, dateFilter } = useSimpleSearchRouteParams();
+
+      expect(documentKind.value).toEqual(DocumentKind.CaseLaw);
+      expect(dateFilter.value.type).toBe("period");
+
+      documentKind.value = DocumentKind.Norm;
+
+      expect(dateFilter.value.type).toBe("allTime");
+    });
+
+    it("preserves dateFilter when changing to Literature", async () => {
+      const routeQuery = reactive({
+        query: {
+          documentKind: DocumentKind.CaseLaw,
+          dateFilterType: "period",
+          dateFilterFrom: "2024-01-01",
+          dateFilterTo: "2024-12-31",
+        },
+      });
+
+      vi.doMock("#app", () => ({
+        useRoute: vi.fn().mockReturnValue(routeQuery),
+      }));
+
+      const { useSimpleSearchRouteParams } =
+        await import("./useSimpleSearchRouteParams");
+
+      const { documentKind, dateFilter } = useSimpleSearchRouteParams();
+
+      expect(documentKind.value).toEqual(DocumentKind.CaseLaw);
+      expect(dateFilter.value.type).toBe("period");
+
+      documentKind.value = DocumentKind.Literature;
+
+      expect(dateFilter.value.type).toBe("period");
+      expect(dateFilter.value.from).toBe("2024-01-01");
+      expect(dateFilter.value.to).toBe("2024-12-31");
+    });
+
+    it("resets typeGroup and court when changing from CaseLaw", async () => {
+      const routeQuery = reactive({
+        query: {
+          documentKind: DocumentKind.CaseLaw,
+          typeGroup: "urteil",
+          court: "BGH",
+        },
+      });
+
+      vi.doMock("#app", () => ({
+        useRoute: vi.fn().mockReturnValue(routeQuery),
+      }));
+
+      const { useSimpleSearchRouteParams } =
+        await import("./useSimpleSearchRouteParams");
+
+      const { documentKind, typeGroup, court } = useSimpleSearchRouteParams();
+
+      expect(documentKind.value).toEqual(DocumentKind.CaseLaw);
+      expect(typeGroup.value).toBe("urteil");
+      expect(court.value).toBe("BGH");
+
+      documentKind.value = DocumentKind.All;
+
+      expect(typeGroup.value).toBeUndefined();
+      expect(court.value).toBeUndefined();
+    });
+
+    it("resets all CaseLaw-specific filters when changing from CaseLaw to All", async () => {
+      const routeQuery = reactive({
+        query: {
+          documentKind: DocumentKind.CaseLaw,
+          typeGroup: "urteil",
+          court: "BGH",
+          dateFilterType: "period",
+          dateFilterFrom: "2024-01-01",
+          dateFilterTo: "2024-12-31",
+        },
+      });
+
+      vi.doMock("#app", () => ({
+        useRoute: vi.fn().mockReturnValue(routeQuery),
+      }));
+
+      const { useSimpleSearchRouteParams } =
+        await import("./useSimpleSearchRouteParams");
+
+      const { documentKind, typeGroup, court, dateFilter } =
+        useSimpleSearchRouteParams();
+
+      expect(documentKind.value).toEqual(DocumentKind.CaseLaw);
+      expect(typeGroup.value).toBe("urteil");
+      expect(court.value).toBe("BGH");
+      expect(dateFilter.value.type).toBe("period");
+
+      documentKind.value = DocumentKind.All;
+
+      expect(typeGroup.value).toBeUndefined();
+      expect(court.value).toBeUndefined();
+      expect(dateFilter.value.type).toBe("allTime");
+    });
+  });
 });

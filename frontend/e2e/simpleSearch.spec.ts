@@ -629,6 +629,33 @@ test.describe("searching caselaw", () => {
     const searchResults = getSearchResults(page);
     await expect(searchResults).toHaveCount(1);
   });
+
+  test("resets caselaw-specific filters when switching to all documents", async ({
+    page,
+  }) => {
+    // Start with caselaw search with typeGroup, date filter, and court
+    await navigate(
+      page,
+      "/search?documentKind=R&typeGroup=urteil&court=LG+Hamburg&dateFilterType=period&dateFilterFrom=2025-01-01&dateFilterTo=2025-12-31",
+    );
+
+    await expect(getResultCounter(page)).toHaveText("2 Suchergebnisse");
+
+    // Switch to All Documents
+    await page
+      .getByRole("group", { name: "Filter" })
+      .getByRole("button", { name: "Alle Dokumentarten" })
+      .click();
+
+    await expect(getResultCounter(page)).toHaveText("40 Suchergebnisse");
+
+    // Verify caselaw-specific filters are reset
+    await expect(page).not.toHaveURL(/documentKind=R/);
+    await expect(page).not.toHaveURL(/typeGroup=urteil/);
+    await expect(page).not.toHaveURL(/court=LG\+Hamburg/);
+    await expect(page).not.toHaveURL(/dateFilterFrom=2024-01-01/);
+    await expect(page).not.toHaveURL(/dateFilterTo=2024-12-31/);
+  });
 });
 
 test.describe("searching literature", () => {

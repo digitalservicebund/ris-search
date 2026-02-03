@@ -113,6 +113,84 @@ describe("useSimpleSearchParams", () => {
     expect(params.court.value).toBeUndefined();
   });
 
+  it("discards typeGroup when changing from CaseLaw subtype to All", async () => {
+    const mockPush = vi.fn();
+
+    useRouteMock.mockReturnValueOnce({
+      query: {
+        category: "R.urteil",
+        court: "BGH",
+      },
+    });
+    useRouterMock.mockReturnValue({
+      push: mockPush,
+    });
+
+    const params = useSimpleSearchParams();
+    expect(params.category.value).toEqual("R.urteil");
+    expect(params.court.value).toEqual("BGH");
+
+    params.category.value = DocumentKind.All;
+    await nextTick();
+
+    expect(params.category.value).toEqual(DocumentKind.All);
+    expect(params.court.value).toBeUndefined();
+  });
+
+  it("discards court and sort when changing from CaseLaw with typeGroup to Literature", async () => {
+    const mockPush = vi.fn();
+
+    useRouteMock.mockReturnValueOnce({
+      query: {
+        category: "R.beschluss",
+        sort: sortMode.courtName,
+        court: "LG Hamburg",
+      },
+    });
+    useRouterMock.mockReturnValue({
+      push: mockPush,
+    });
+
+    const params = useSimpleSearchParams();
+    expect(params.category.value).toEqual("R.beschluss");
+    expect(params.sort.value).toEqual(sortMode.courtName);
+    expect(params.court.value).toEqual("LG Hamburg");
+
+    params.category.value = DocumentKind.Literature;
+    await nextTick();
+
+    expect(params.category.value).toEqual(DocumentKind.Literature);
+    expect(params.sort.value).toEqual(sortMode.default);
+    expect(params.court.value).toBeUndefined();
+  });
+
+  it("preserves date filter when changing document kinds", async () => {
+    const mockPush = vi.fn();
+
+    useRouteMock.mockReturnValueOnce({
+      query: {
+        category: DocumentKind.CaseLaw,
+        dateAfter: "2024-01-01",
+        dateBefore: "2024-12-31",
+      },
+    });
+    useRouterMock.mockReturnValue({
+      push: mockPush,
+    });
+
+    const params = useSimpleSearchParams();
+    expect(params.category.value).toEqual(DocumentKind.CaseLaw);
+    expect(params.dateAfter.value).toEqual("2024-01-01");
+    expect(params.dateBefore.value).toEqual("2024-12-31");
+
+    params.category.value = DocumentKind.Literature;
+    await nextTick();
+
+    expect(params.category.value).toEqual(DocumentKind.Literature);
+    expect(params.dateAfter.value).toEqual("2024-01-01");
+    expect(params.dateBefore.value).toEqual("2024-12-31");
+  });
+
   it("resets the page index if the category is updated", async () => {
     const mockPush = vi.fn();
     useRouterMock.mockReturnValueOnce({

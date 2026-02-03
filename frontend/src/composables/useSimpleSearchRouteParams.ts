@@ -10,8 +10,27 @@ export function useSimpleSearchRouteParams() {
 
   // General parameters -------------------------------------
 
-  // TODO: Reset document-type specific options
   const documentKind = ref<DocumentKind>(DocumentKind.All);
+
+  watch(
+    documentKind,
+    (val, oldVal) => {
+      if (val === DocumentKind.All || val === DocumentKind.Norm) {
+        dateFilter.value = { type: "allTime" };
+      }
+
+      if (oldVal === DocumentKind.CaseLaw) {
+        typeGroup.value = undefined;
+        court.value = undefined;
+      }
+    },
+    {
+      // Run this watcher immediately when the documentKind changes, rather than
+      // scheduling it with the other watchers, since it has side effects on
+      // other watched properties that can cause race conditions.
+      flush: "sync",
+    },
+  );
 
   const typeGroup = ref<string>();
 
@@ -74,8 +93,6 @@ export function useSimpleSearchRouteParams() {
   }
 
   function saveFilterStateToRoute() {
-    // TODO: PostHog integration
-
     return navigateTo({
       query: {
         ...route.query,
