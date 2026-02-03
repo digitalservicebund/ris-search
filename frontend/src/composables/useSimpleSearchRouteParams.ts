@@ -68,7 +68,7 @@ export function useSimpleSearchRouteParams() {
 
     sort.value = searchParamToString(routeQuery.sort) ?? "default";
 
-    itemsPerPage.value = searchParamToString(routeQuery.itemsPerPage) ?? "50";
+    itemsPerPage.value = searchParamToString(routeQuery.itemsPerPage) ?? "10";
 
     pageIndex.value = searchParamToNumber(routeQuery.pageIndex, 0);
   }
