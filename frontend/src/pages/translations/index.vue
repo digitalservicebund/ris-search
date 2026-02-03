@@ -57,6 +57,9 @@ const sortedTranslations = computed<TranslationContent[] | null>(() => {
 const minisearch = computed(() => {
   const miniSearch = new MiniSearch({
     fields: ["@id", "name", "translationOfWork"],
+    boost: {
+      "@id": 2,
+    },
     storeFields: [
       "@id",
       "name",
