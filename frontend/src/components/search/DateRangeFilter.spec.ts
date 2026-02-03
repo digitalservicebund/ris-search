@@ -72,7 +72,7 @@ describe("DateRangeFilter", () => {
     await user.clear(inputs[1]!);
     await user.type(inputs[1]!, "02.01.2001");
 
-    const updates = emitted("update:modelValue") as DateFilterValue[][];
+    const updates = emitted("update:modelValue");
     expect(updates).toContainEqual([
       { from: "2000-01-02", to: undefined, type: "period" },
     ]);
@@ -138,7 +138,7 @@ describe("DateRangeFilter", () => {
 
     await user.type(inputs[1]!, "03.10.1990");
 
-    const updates = emitted("update:modelValue") as DateFilterValue[][];
+    const updates = emitted("update:modelValue");
     expect(updates).toContainEqual([
       { to: "1990-10-03", from: "1949-05-23", type: "period" },
     ]);

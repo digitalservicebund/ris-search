@@ -492,7 +492,7 @@ describe("useSimpleSearch", () => {
         {},
       );
 
-      simulateOnResponse(undefined);
+      simulateOnResponse();
 
       expect(mockPostHog.noSearchResults).toHaveBeenCalled();
     });

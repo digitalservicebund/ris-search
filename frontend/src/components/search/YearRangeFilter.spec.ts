@@ -47,7 +47,7 @@ describe("YearRangeFilter", () => {
     await user.type(inputs[0]!, "2000");
     await user.type(inputs[1]!, "2020");
 
-    const updates = emitted("update:modelValue") as DateFilterValue[][];
+    const updates = emitted("update:modelValue");
     expect(updates).toContainEqual([
       { from: "2000-01-01", to: "2020-12-31", type: "period" },
     ]);
@@ -67,7 +67,7 @@ describe("YearRangeFilter", () => {
     await user.clear(input);
     await user.type(input, "2022");
 
-    const updates = emitted("update:modelValue") as DateFilterValue[][];
+    const updates = emitted("update:modelValue");
     expect(updates).toContainEqual([
       { from: "2022-01-01", to: "2022-12-31", type: "period" },
     ]);
@@ -87,7 +87,7 @@ describe("YearRangeFilter", () => {
     await user.clear(input);
     await user.type(input, "abcd");
 
-    const updates = emitted("update:modelValue") as DateFilterValue[][];
+    const updates = emitted("update:modelValue");
     expect(updates).toContainEqual([
       { from: undefined, to: undefined, type: "after" },
     ]);
