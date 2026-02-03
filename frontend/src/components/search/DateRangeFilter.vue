@@ -21,21 +21,27 @@ const items: { label: string; value: FilterType }[] = [
   { label: "In einem Zeitraum", value: "period" },
 ];
 
+// The key will be set to a random value when the filter type changes to force
+// Vue to fully re-render the date input. This is a workaround to fix a
+// rendering bug where the date input of the "from" date is sometimes reused for
+// the "to" date after switching filter types, resulting in a broken in-between
+// state of the input mask.
+const key = ref<string>();
+
 const selectedType = computed({
   get: () => filter.value.type,
   set: (type: FilterType) => {
     filter.value = { type };
+    key.value = crypto.randomUUID();
   },
 });
 
 const showFromField = computed(() =>
-  (["specificDate", "after", "period"] as FilterType[]).includes(
-    filter.value.type,
-  ),
+  ["specificDate", "after", "period"].includes(filter.value.type),
 );
 
 const showToField = computed(() =>
-  (["before", "period"] as FilterType[]).includes(filter.value.type),
+  ["before", "period"].includes(filter.value.type),
 );
 
 const hasMultipleInputs = computed(
@@ -73,12 +79,12 @@ const toDate = computed({
         :id="dateModeSelectId"
         v-model="selectedType"
         :options="items"
+        :placeholder="items[0]?.label"
+        :pt="{ overlay: { class: 'bg-white w-full' } }"
+        append-to="self"
         option-label="label"
         option-value="value"
-        :placeholder="items[0]?.label"
         scroll-height="20rem"
-        append-to="self"
-        :pt="{ overlay: { class: 'bg-white w-full' } }"
       />
     </span>
 
@@ -89,6 +95,7 @@ const toDate = computed({
       </label>
       <DateInput
         :id="fromDateId"
+        :key
         v-model="fromDate"
         v-model:validation-error="fromValidationError"
       />
@@ -101,6 +108,7 @@ const toDate = computed({
       </label>
       <DateInput
         :id="toDateId"
+        :key
         v-model="toDate"
         v-model:validation-error="toValidationError"
       />

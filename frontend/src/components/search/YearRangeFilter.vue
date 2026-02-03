@@ -25,6 +25,13 @@ const items: { label: string; value: YearMode }[] = [
   { label: "In einem Zeitraum", value: "range" },
 ];
 
+// The key will be set to a random value when the filter type changes to force
+// Vue to fully re-render the date input. This is a workaround to fix a
+// rendering bug where the date input of the "from" date is sometimes reused for
+// the "to" date after switching filter types, resulting in a broken in-between
+// state of the input mask.
+const key = ref<string>();
+
 function parseYearFromDate(date?: string): string | undefined {
   return date?.split("-")[0];
 }
@@ -79,6 +86,7 @@ function modeToFilterType(m: YearMode): FilterType {
 function onModeChange(newMode: YearMode) {
   mode.value = newMode;
   filter.value = { type: modeToFilterType(newMode) };
+  key.value = crypto.randomUUID();
 }
 
 /** Writable computed for the year input in "after" and "range" modes. */
@@ -173,7 +181,7 @@ const hasMultipleInputs = computed(() => show.value.after && show.value.before);
 
     <div v-if="show.equal" class="flex flex-col gap-8">
       <label class="ris-label2-regular" :for="yearEqualId">Jahr</label>
-      <YearInput :id="yearEqualId" v-model="yearEqual" />
+      <YearInput :id="yearEqualId" :key v-model="yearEqual" />
     </div>
 
     <div v-if="show.after" class="flex flex-col gap-8">
@@ -181,7 +189,7 @@ const hasMultipleInputs = computed(() => show.value.after && show.value.before);
         <template v-if="hasMultipleInputs">Ab dem Jahr</template>
         <template v-else>Jahr</template>
       </label>
-      <YearInput :id="yearAfterId" v-model="yearAfter" />
+      <YearInput :id="yearAfterId" :key v-model="yearAfter" />
     </div>
 
     <div v-if="show.before" class="flex flex-col gap-8">
@@ -189,7 +197,7 @@ const hasMultipleInputs = computed(() => show.value.after && show.value.before);
         <template v-if="hasMultipleInputs">Bis zum Jahr</template>
         <template v-else>Jahr</template>
       </label>
-      <YearInput :id="yearBeforeId" v-model="yearBefore" />
+      <YearInput :id="yearBeforeId" :key v-model="yearBefore" />
     </div>
   </div>
 </template>

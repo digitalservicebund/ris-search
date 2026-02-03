@@ -630,6 +630,25 @@ test.describe("searching caselaw", () => {
     await expect(searchResults).toHaveCount(1);
   });
 
+  test("resets date input when switching filter types", async ({ page }) => {
+    await navigate(
+      page,
+      "/search?documentKind=R&dateFilterType=specificDate&dateFilterFrom=2020-01-01",
+    );
+
+    const dateInput = page.getByRole("textbox", { name: "Datum" });
+    await expect(dateInput).toHaveValue("01.01.2020");
+
+    await page.getByRole("combobox", { name: "An einem Datum" }).click();
+    await page.getByRole("option", { name: "Ab einem Datum" }).click();
+
+    // Type a partial date - if the input wasn't properly reset, this would
+    // result in a broken value due to the input mask carrying over state
+    await dateInput.press("2");
+
+    await expect(dateInput).toHaveValue("2_.__.____");
+  });
+
   test("resets caselaw-specific filters when switching to all documents", async ({
     page,
   }) => {
@@ -805,6 +824,25 @@ test.describe("searching literature", () => {
     );
 
     await expect(getSearchResults(page)).toHaveCount(6);
+  });
+
+  test("resets year input when switching filter types", async ({ page }) => {
+    await navigate(
+      page,
+      "/search?documentKind=L&dateFilterType=period&dateFilterFrom=2020-01-01&dateFilterTo=2020-12-31",
+    );
+
+    const yearInput = page.getByRole("textbox", { name: "Jahr" });
+    await expect(yearInput).toHaveValue("2020");
+
+    await page.getByRole("combobox", { name: "In einem Jahr" }).click();
+    await page.getByRole("option", { name: "Ab einem Jahr" }).click();
+
+    // Type a partial year - if the input wasn't properly reset, this would
+    // result in a broken value due to the input carrying over state
+    await yearInput.fill("1");
+
+    await expect(yearInput).toHaveValue("1___");
   });
 });
 
