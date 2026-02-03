@@ -554,9 +554,80 @@ test.describe("searching caselaw", () => {
     );
   });
 
-  test.skip("filters by date", async () => {
-    // Filters will be aligned with the advanced search, so test will be added
-    // later
+  test("searches decision date before a date", async ({ page }) => {
+    await navigate(page, "/search?documentKind=R");
+
+    await page
+      .getByRole("combobox", { name: "Keine zeitliche Begrenzung" })
+      .click();
+    await page.getByRole("option", { name: "Bis zu einem Datum" }).click();
+
+    await page.getByRole("textbox", { name: "Datum" }).fill("31.12.2024");
+
+    await expect(page).toHaveURL(/dateFilterFrom=&dateFilterTo=2024-12-31/);
+
+    const searchResults = getSearchResults(page);
+    await expect(searchResults).toHaveCount(2);
+    await expect(searchResults.nth(0)).toHaveText(/15.06.2024|22.11.2023/);
+  });
+
+  test("searches decision date after a date", async ({ page }) => {
+    await navigate(page, "/search?documentKind=R");
+
+    await page
+      .getByRole("combobox", { name: "Keine zeitliche Begrenzung" })
+      .click();
+    await page.getByRole("option", { name: "Ab einem Datum" }).click();
+
+    await page.getByRole("textbox", { name: "Datum" }).fill("10.04.2025");
+
+    await expect(page).toHaveURL(
+      /dateFilterFrom=2025-04-10&dateFilterTo=($|&)/,
+    );
+
+    const searchResults = getSearchResults(page);
+    await expect(searchResults).toHaveCount(1);
+    await expect(searchResults).toHaveText(/10.04.2025/);
+  });
+
+  test("searches decision date on a specific date", async ({ page }) => {
+    await navigate(page, "/search?documentKind=R");
+
+    await page
+      .getByRole("combobox", { name: "Keine zeitliche Begrenzung" })
+      .click();
+    await page.getByRole("option", { name: "An einem Datum" }).click();
+
+    await page.getByRole("textbox", { name: "Datum" }).fill("15.06.2024");
+
+    await expect(page).toHaveURL(/dateFilterFrom=2024-06-15&dateFilterTo=/);
+
+    const searchResults = getSearchResults(page);
+    await expect(searchResults).toHaveCount(1);
+    await expect(searchResults).toHaveText(/15.06.2024/);
+  });
+
+  test("searches decision date in a range", async ({ page }) => {
+    await navigate(page, "/search?documentKind=R");
+
+    await page
+      .getByRole("combobox", { name: "Keine zeitliche Begrenzung" })
+      .click();
+    await page.getByRole("option", { name: "In einem Zeitraum" }).click();
+
+    await page
+      .getByRole("textbox", { name: "Ab dem Datum" })
+      .fill("01.01.2024");
+    await page
+      .getByRole("textbox", { name: "Bis zum Datum" })
+      .fill("31.12.2024");
+
+    await expect(page).toHaveURL(
+      /dateFilterFrom=2024-01-01&dateFilterTo=2024-12-31/,
+    );
+
+    const searchResults = getSearchResults(page);
+    await expect(searchResults).toHaveCount(1);
   });
 });
 
