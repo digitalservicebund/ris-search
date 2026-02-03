@@ -33,8 +33,6 @@ const strictDateFilter = ref(
 );
 
 watch(dateFilter, (newVal) => {
-  console.log(newVal);
-  console.log(isStrictDateFilterValue(newVal));
   if (isStrictDateFilterValue(newVal)) strictDateFilter.value = newVal;
 });
 
