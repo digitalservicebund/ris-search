@@ -42,7 +42,7 @@ export function convertParams(
   const result: SearchEndpointParams = {
     searchTerm: params.query,
     size: params.itemsPerPage.toString(),
-    pageIndex: params.pageNumber.toString(),
+    pageIndex: params.pageIndex.toString(),
     sort: params.sort,
   };
 

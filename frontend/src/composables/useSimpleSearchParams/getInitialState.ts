@@ -12,7 +12,7 @@ export const defaultParams: QueryParams = {
   query: "",
   category: DocumentKind.All,
   itemsPerPage: 10,
-  pageNumber: 0,
+  pageIndex: 0,
   sort: "default",
   dateSearchMode: DateSearchMode.None,
 };
@@ -54,7 +54,7 @@ export const getInitialState = (routerQuery: LocationQuery): QueryParams => {
     category: getFirstValue(routerQuery.category) ?? defaultParams.category,
     itemsPerPage:
       getFirstInt(routerQuery.itemsPerPage) ?? defaultParams.itemsPerPage,
-    pageNumber: getFirstInt(routerQuery.pageNumber) ?? defaultParams.pageNumber,
+    pageIndex: getFirstInt(routerQuery.pageIndex) ?? defaultParams.pageIndex,
     sort: getFirstValue(routerQuery.sort) ?? defaultParams.sort,
     ...dateSearchFromQuery(routerQuery),
     court: getFirstValue(routerQuery.court),

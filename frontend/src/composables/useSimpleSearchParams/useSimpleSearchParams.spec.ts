@@ -58,7 +58,7 @@ describe("useSimpleSearchParams", () => {
     const params = useSimpleSearchParams();
 
     expect(params.query.value).toBeFalsy();
-    expect(params.pageNumber.value).toBe(0);
+    expect(params.pageIndex.value).toBe(0);
     expect(params.category.value).toBe(defaultParams.category);
     expect(params.sort.value).toBe(defaultParams.sort);
 
@@ -121,17 +121,17 @@ describe("useSimpleSearchParams", () => {
     useRouteMock.mockReturnValueOnce({
       query: {
         category: DocumentKind.CaseLaw,
-        pageNumber: 1,
+        pageIndex: 1,
       },
     });
 
     const params = useSimpleSearchParams();
-    expect(params.pageNumber.value).toEqual(1);
+    expect(params.pageIndex.value).toEqual(1);
 
     params.category.value = DocumentKind.Norm;
     await nextTick();
 
-    expect(params.pageNumber.value).toEqual(0);
+    expect(params.pageIndex.value).toEqual(0);
   });
 
   it("updates the URL", async () => {
@@ -146,18 +146,18 @@ describe("useSimpleSearchParams", () => {
     const params = useSimpleSearchParams();
 
     params.category.value = DocumentKind.CaseLaw;
-    params.pageNumber.value = 1;
+    params.pageIndex.value = 1;
     await nextTick();
     expect(mockPush).toHaveBeenLastCalledWith({
       path: "/search",
-      query: { category: DocumentKind.CaseLaw, pageNumber: "1" },
+      query: { category: DocumentKind.CaseLaw, pageIndex: "1" },
     });
 
     params.category.value = DocumentKind.All;
     await nextTick();
     expect(mockPush).toHaveBeenLastCalledWith({
       path: "/search",
-      query: {}, // pageNumber is reset through category change
+      query: {}, // pageIndex is reset through category change
     });
   });
 
@@ -180,7 +180,7 @@ describe("useSimpleSearchParams", () => {
         category: "A",
         dateSearchMode: "",
         itemsPerPage: 10,
-        pageNumber: 0,
+        pageIndex: 0,
         query: "second",
         sort: "default",
       },
@@ -188,7 +188,7 @@ describe("useSimpleSearchParams", () => {
         category: "A",
         dateSearchMode: "",
         itemsPerPage: 10,
-        pageNumber: 0,
+        pageIndex: 0,
         query: "first",
         sort: "default",
       },

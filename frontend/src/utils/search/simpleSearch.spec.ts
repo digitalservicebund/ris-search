@@ -40,7 +40,7 @@ const testParams = {
   query: "test",
   category: "A",
   itemsPerPage: 10,
-  pageNumber: 1,
+  pageIndex: 1,
   sort: "date",
   date: "2023-01-01",
 };

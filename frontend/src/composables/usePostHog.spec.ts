@@ -171,7 +171,7 @@ describe("usePostHog", () => {
         category: "A",
         dateSearchMode: "",
         itemsPerPage: 10,
-        pageNumber: 0,
+        pageIndex: 0,
         query: "test query",
         sort: "default",
       },

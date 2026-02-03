@@ -21,7 +21,7 @@ export interface QueryParams {
   query: string;
   category: string;
   itemsPerPage: number;
-  pageNumber: number;
+  pageIndex: number;
   sort: string;
   date?: string;
   dateAfter?: string; // inclusive (greater-than-equal)
@@ -60,7 +60,7 @@ export function useSimpleSearchParams() {
       #############
   */
   const query = ref(initialState.query);
-  const pageNumber = ref(initialState.pageNumber);
+  const pageIndex = ref(initialState.pageIndex);
   const _category = ref(initialState.category);
   const itemsPerPage = ref(initialState.itemsPerPage);
   const sort = ref(initialState.sort);
@@ -76,7 +76,7 @@ export function useSimpleSearchParams() {
   const params = computed(() => {
     return {
       query: query.value,
-      pageNumber: pageNumber.value,
+      pageIndex: pageIndex.value,
       itemsPerPage: itemsPerPage.value,
       category: _category.value,
       sort: sort.value,
@@ -98,7 +98,7 @@ export function useSimpleSearchParams() {
           sort.value = defaultParams.sort;
         }
       }
-      pageNumber.value = 0; // reset page number
+      pageIndex.value = 0; // reset page number
     },
   });
 
@@ -108,7 +108,7 @@ export function useSimpleSearchParams() {
       ##############
   */
   const setQuery = (value: string) => (query.value = value);
-  const setPageNumber = (value: number) => (pageNumber.value = value);
+  const setPageNumber = (value: number) => (pageIndex.value = value);
   const setItemsPerPage = (value: number) => (itemsPerPage.value = value);
   const setSort = (value: string) => (sort.value = value);
 
@@ -116,7 +116,7 @@ export function useSimpleSearchParams() {
     const initialState = getInitialState(routerQuery);
 
     query.value = initialState.query;
-    pageNumber.value = initialState.pageNumber;
+    pageIndex.value = initialState.pageIndex;
     category.value = initialState.category;
     itemsPerPage.value = initialState.itemsPerPage;
     sort.value = initialState.sort;
@@ -164,7 +164,7 @@ export function useSimpleSearchParams() {
 
   return {
     query,
-    pageNumber,
+    pageIndex,
     category,
     itemsPerPage,
     sort,

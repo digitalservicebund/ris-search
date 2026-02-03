@@ -31,8 +31,8 @@ describe("getInitialState", () => {
 
   it("parses int page params", () => {
     expect(
-      getInitialState({ itemsPerPage: "55", pageNumber: "7" }),
-    ).toMatchObject({ itemsPerPage: 55, pageNumber: 7 });
+      getInitialState({ itemsPerPage: "55", pageIndex: "7" }),
+    ).toMatchObject({ itemsPerPage: 55, pageIndex: 7 });
   });
 
   it("parses sort", () => {
