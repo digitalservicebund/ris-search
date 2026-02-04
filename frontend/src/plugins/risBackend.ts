@@ -1,12 +1,12 @@
 import type { FetchHook } from "ofetch";
 
-const addServerAuthentication: FetchHook = ({ options }) => {
-  if (import.meta.server) {
-    const config = useRuntimeConfig();
-    const basicAuth = config.basicAuth;
-    if (basicAuth) options.headers.set("Authorization", `Basic ${basicAuth}`);
-  }
-};
+function addServerAuthentication(basicAuth: string): FetchHook {
+  return ({ options }) => {
+    if (import.meta.server && basicAuth) {
+      options.headers.set("Authorization", `Basic ${basicAuth}`);
+    }
+  };
+}
 
 /**
  * Allows you to register onRequest handlers for fetch calls while preserving
@@ -30,7 +30,8 @@ const addServerAuthentication: FetchHook = ({ options }) => {
  * @returns Interceptor list to provide to
  */
 export function extendOnRequest(...cb: FetchHook[]) {
-  return [addServerAuthentication, ...cb];
+  const config = useRuntimeConfig();
+  return [addServerAuthentication(config.basicAuth), ...cb];
 }
 
 export default defineNuxtPlugin(() => {
