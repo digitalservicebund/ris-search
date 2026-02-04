@@ -1,5 +1,6 @@
 import type { PostHog } from "posthog-js";
 import { posthog } from "posthog-js";
+import type { DocumentKind } from "~/types";
 import {
   getStringOrUndefined,
   isStringEmpty,
@@ -7,6 +8,48 @@ import {
 } from "~/utils/textFormatting";
 
 export const CONSENT_COOKIE_NAME = "consent_given";
+
+/** Format of the payload that will be sent to PostHog when tracking searches. */
+export type PostHogSearchParams = SimpleSearchEndpointParams & {
+  documentKind: DocumentKind;
+};
+
+/**
+ * @deprecated - This is here for backwards compatibility until we rebuild our
+ *  PostHog tracking. The format corresponds to the shape of the data that was
+ *  sent to PostHog before the search was refactored.
+ */
+interface LegacyPostHogSearchReporting {
+  category: string;
+  court?: string;
+  date?: string;
+  dateAfter?: string;
+  dateBefore?: string;
+  dateSearchMode: string;
+  itemsPerPage: number;
+  pageNumber: number;
+  query: string;
+  sort: string;
+}
+
+function mapTrackingParamsToLegacyFormat(
+  q?: PostHogSearchParams,
+): LegacyPostHogSearchReporting | undefined {
+  if (!q) return undefined;
+
+  return {
+    category: q.typeGroup ? `${q.typeGroup}.${q.documentKind}` : q.documentKind,
+    court: q.court,
+    date: q.dateFrom === q.dateTo ? q.dateFrom : undefined,
+    dateAfter: q.dateFrom,
+    dateBefore: q.dateTo,
+    dateSearchMode: "", // This has never been tracked properly and only exist for compatibility
+    itemsPerPage: searchParamToNumber(q.size, 10),
+    pageNumber: q.pageIndex,
+    query: q.searchTerm,
+    sort: q.sort,
+  };
+}
 
 // Declared on module level rather than inside of `usePostHog` to ensure state
 // is shared across all usage of the composable, rather than declaring them again
@@ -140,21 +183,30 @@ export function usePostHog() {
    * Tracks a search event in PostHog.
    *
    * @param type - Simple or advanced search
-   * @param newParams - The current search parameters
+   * @param params - The current search parameters
    * @param previousParams - The previous search parameters for comparison
    */
   function searchPerformed(
     type: "simple" | "advanced",
-    newParams?: Partial<SimpleSearchEndpointParams>,
-    previousParams?: Partial<SimpleSearchEndpointParams>,
+    params: PostHogSearchParams,
+    previousParams?: PostHogSearchParams,
   ) {
-    if (postHog.value && userConsent.value === true) {
-      postHog.value.capture("search_performed", {
-        type: type,
-        newParams: newParams,
-        previousParams: previousParams,
-      });
-    }
+    if (!(postHog.value && userConsent.value === true)) return;
+
+    postHog.value.capture("search_performed", {
+      type,
+      newParams: mapTrackingParamsToLegacyFormat(params),
+      previousParams: mapTrackingParamsToLegacyFormat(previousParams),
+    });
+  }
+
+  /** Tracks when a search returns no results. */
+  function noSearchResults(params: PostHogSearchParams) {
+    if (!(postHog.value && userConsent.value === true)) return;
+
+    postHog.value.capture("no_search_results", {
+      searchParams: mapTrackingParamsToLegacyFormat(params),
+    });
   }
 
   /**
@@ -168,15 +220,6 @@ export function usePostHog() {
       postHog.value.capture("search_result_clicked", {
         url: url,
         order: order,
-        searchParams: router.currentRoute.value.query,
-      });
-    }
-  }
-
-  /** Tracks when a search returns no results. */
-  function noSearchResults() {
-    if (postHog.value && userConsent.value === true) {
-      postHog.value.capture("no_search_results", {
         searchParams: router.currentRoute.value.query,
       });
     }

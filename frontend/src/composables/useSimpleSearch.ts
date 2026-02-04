@@ -1,5 +1,6 @@
 import _ from "lodash";
 import type { Page } from "~/components/Pagination.vue";
+import { extendOnRequest } from "~/plugins/risBackend";
 import { DocumentKind } from "~/types";
 import {
   dateFilterToSimpleSearchParams,
@@ -110,9 +111,12 @@ export async function useSimpleSearch(
   });
 
   const { searchPerformed, noSearchResults } = usePostHog();
-  let previousQuery: SimpleSearchEndpointParams | undefined = {
-    ...combinedQuery.value,
-  };
+
+  function toPostHogParams(q: SimpleSearchEndpointParams): PostHogSearchParams {
+    return { ...q, documentKind: toValue(documentKindAndGroup).documentKind };
+  }
+
+  let previousQuery: PostHogSearchParams | undefined = undefined;
 
   const { data, error, status, execute } = await useRisBackend<Page>(
     searchEndpointUrl,
@@ -122,20 +126,22 @@ export async function useSimpleSearch(
       dedupe: "defer",
 
       // PostHog integration
-      onRequest({ options }) {
-        const newQuery = { ...options.query };
+      onRequest: extendOnRequest(({ options }) => {
+        const newQuery = toPostHogParams(
+          options.query as SimpleSearchEndpointParams,
+        );
 
-        // If the queries are identical, it's most likely an initial query or
-        // re-submission of the same query, so in that case we leave the
-        // previous query empty
-        if (_.isEqual(newQuery, previousQuery)) previousQuery = undefined;
+        // De-duplicate reporting of identical queries
+        if (previousQuery && _.isEqual(newQuery, previousQuery)) return;
 
         searchPerformed("simple", newQuery, previousQuery);
-        previousQuery = newQuery as SimpleSearchEndpointParams;
-      },
+        previousQuery = newQuery;
+      }),
 
       onResponse({ response }) {
-        if (!response._data?.totalItems) noSearchResults();
+        if (!response._data?.totalItems) {
+          noSearchResults(toPostHogParams(combinedQuery.value));
+        }
       },
     },
   );

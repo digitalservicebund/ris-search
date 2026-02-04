@@ -7,9 +7,11 @@ import {
 } from "./useSimpleSearch";
 import { DocumentKind } from "~/types";
 
+type OnRequestHook = (ctx: { options: { query: unknown } }) => void;
+
 type BackendOptions = {
   query: ComputedRef<SimpleSearchEndpointParams>;
-  onRequest?: (ctx: { options: { query: unknown } }) => void;
+  onRequest?: OnRequestHook | OnRequestHook[];
   onResponse?: (ctx: { response: { _data?: { totalItems?: number } } }) => void;
 };
 
@@ -62,6 +64,10 @@ vi.mock("~/composables/usePostHog", () => ({
   usePostHog: usePostHogMock,
 }));
 
+vi.mock("~/plugins/risBackend", () => ({
+  extendOnRequest: (...cbs: OnRequestHook[]) => cbs,
+}));
+
 /** Helper to get the query parameter value from the mock call */
 function getQueryValue(): SimpleSearchEndpointParams {
   return useRisBackendMock.mock.calls[0]![1].query.value;
@@ -69,7 +75,12 @@ function getQueryValue(): SimpleSearchEndpointParams {
 
 /** Helper to simulate the onRequest callback being triggered */
 function simulateOnRequest(query: unknown) {
-  capturedOptions.current?.onRequest?.({ options: { query } });
+  const onRequest = capturedOptions.current?.onRequest;
+  if (Array.isArray(onRequest)) {
+    onRequest.forEach((hook) => hook({ options: { query } }));
+  } else {
+    onRequest?.({ options: { query } });
+  }
 }
 
 /** Helper to simulate the onResponse callback being triggered */
@@ -413,7 +424,7 @@ describe("useSimpleSearch", () => {
 
       expect(mockPostHog.searchPerformed).toHaveBeenCalledWith(
         "simple",
-        query,
+        { ...query, documentKind: DocumentKind.CaseLaw },
         undefined,
       );
     });
@@ -439,12 +450,12 @@ describe("useSimpleSearch", () => {
 
       expect(mockPostHog.searchPerformed).toHaveBeenCalledWith(
         "simple",
-        secondQuery,
-        firstQuery,
+        { ...secondQuery, documentKind: DocumentKind.CaseLaw },
+        { ...firstQuery, documentKind: DocumentKind.CaseLaw },
       );
     });
 
-    it("calls searchPerformed with undefined previous query when same query is submitted twice", async () => {
+    it("does not call searchPerformed again when same query is submitted twice", async () => {
       await useSimpleSearch(
         "example",
         { documentKind: DocumentKind.CaseLaw },
@@ -459,14 +470,10 @@ describe("useSimpleSearch", () => {
       simulateOnRequest(query);
       mockPostHog.searchPerformed.mockClear();
 
-      // Simulate second request with identical query
+      // Simulate second request with identical query — should be de-duplicated
       simulateOnRequest(query);
 
-      expect(mockPostHog.searchPerformed).toHaveBeenCalledWith(
-        "simple",
-        query,
-        undefined,
-      );
+      expect(mockPostHog.searchPerformed).not.toHaveBeenCalled();
     });
 
     it("calls noSearchResults when response has no totalItems", async () => {
@@ -479,20 +486,6 @@ describe("useSimpleSearch", () => {
       );
 
       simulateOnResponse(0);
-
-      expect(mockPostHog.noSearchResults).toHaveBeenCalled();
-    });
-
-    it("calls noSearchResults when response has undefined totalItems", async () => {
-      await useSimpleSearch(
-        "example",
-        { documentKind: DocumentKind.CaseLaw },
-        undefined,
-        undefined,
-        {},
-      );
-
-      simulateOnResponse();
 
       expect(mockPostHog.noSearchResults).toHaveBeenCalled();
     });

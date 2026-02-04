@@ -2,9 +2,14 @@ import { mockNuxtImport } from "@nuxt/test-utils/runtime";
 import type { PostHog } from "posthog-js";
 import { posthog } from "posthog-js";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { resetPostHogState, usePostHog } from "~/composables/usePostHog";
+import {
+  resetPostHogState,
+  usePostHog,
+  type PostHogSearchParams,
+} from "~/composables/usePostHog";
 import { cookieStoreBackend, cookieStoreMock } from "~/tests/cookieStoreMock";
 import { getPostHogConfig } from "~/tests/postHogUtils";
+import { DocumentKind } from "~/types";
 
 const { useRuntimeConfigMock } = vi.hoisted(() => {
   return {
@@ -159,16 +164,51 @@ describe("usePostHog", () => {
   it("captures search event when postHog is initialized and user consent is given", async () => {
     const { setTracking, searchPerformed, postHog } = usePostHog();
     await setTracking(true);
-    searchPerformed(
-      "simple",
-      { searchTerm: "test query" },
-      { searchTerm: "old query" },
-    );
+
+    const params: PostHogSearchParams = {
+      searchTerm: "test query",
+      size: "10",
+      pageIndex: 0,
+      sort: "default",
+      documentKind: DocumentKind.CaseLaw,
+    };
+
+    const previousParams: PostHogSearchParams = {
+      searchTerm: "old query",
+      size: "10",
+      pageIndex: 0,
+      sort: "default",
+      documentKind: DocumentKind.CaseLaw,
+    };
+
+    searchPerformed("simple", params, previousParams);
     expect(posthog.init).toHaveBeenCalledWith("key", { api_host: "host" });
     expect(postHog.value?.capture).toHaveBeenCalledWith("search_performed", {
       type: "simple",
-      newParams: { searchTerm: "test query" },
-      previousParams: { searchTerm: "old query" },
+      newParams: {
+        category: DocumentKind.CaseLaw,
+        court: undefined,
+        date: undefined,
+        dateAfter: undefined,
+        dateBefore: undefined,
+        dateSearchMode: "",
+        itemsPerPage: 10,
+        pageNumber: 0,
+        query: "test query",
+        sort: "default",
+      },
+      previousParams: {
+        category: DocumentKind.CaseLaw,
+        court: undefined,
+        date: undefined,
+        dateAfter: undefined,
+        dateBefore: undefined,
+        dateSearchMode: "",
+        itemsPerPage: 10,
+        pageNumber: 0,
+        query: "old query",
+        sort: "default",
+      },
     });
   });
 
@@ -176,7 +216,13 @@ describe("usePostHog", () => {
     const { setTracking, searchPerformed, postHog, userConsent } = usePostHog();
     await setTracking(true);
     userConsent.value = false;
-    searchPerformed("simple", { searchTerm: "test query" });
+    searchPerformed("simple", {
+      searchTerm: "test query",
+      size: "10",
+      pageIndex: 0,
+      sort: "default",
+      documentKind: DocumentKind.CaseLaw,
+    });
     expect(postHog.value?.capture).not.toHaveBeenCalled();
   });
 
@@ -197,12 +243,30 @@ describe("usePostHog", () => {
   it("captures no_search_results event when postHog exists and user consent is given", async () => {
     const { setTracking, noSearchResults, postHog } = usePostHog();
     await setTracking(true);
-    const router = useRouter();
-    router.currentRoute.value.query = { query: "test query" };
+
+    const params: PostHogSearchParams = {
+      searchTerm: "test query",
+      size: "10",
+      pageIndex: 0,
+      sort: "default",
+      documentKind: DocumentKind.CaseLaw,
+    };
+
     const captureSpy = vi.spyOn(postHog.value as PostHog, "capture");
-    noSearchResults();
+    noSearchResults(params);
     expect(captureSpy).toHaveBeenCalledWith("no_search_results", {
-      searchParams: { query: "test query" },
+      searchParams: {
+        category: DocumentKind.CaseLaw,
+        court: undefined,
+        date: undefined,
+        dateAfter: undefined,
+        dateBefore: undefined,
+        dateSearchMode: "",
+        itemsPerPage: 10,
+        pageNumber: 0,
+        query: "test query",
+        sort: "default",
+      },
     });
   });
 });

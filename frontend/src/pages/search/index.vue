@@ -133,12 +133,14 @@ watch(
     typeGroup.value,
     query.value,
   ],
-  () => submit(),
+  async () => {
+    await submit();
+  },
 );
 
 async function submit() {
   await saveFilterStateToRoute();
-  submitSearch();
+  await submitSearch();
 }
 
 async function updatePage(page: number) {
