@@ -1,7 +1,5 @@
 <script setup lang="ts">
-import { Button, InputText, InputGroup, InputGroupAddon } from "primevue";
-import { usePostHog } from "~/composables/usePostHog";
-import { addDefaults } from "~/composables/useSimpleSearchParams/getInitialState";
+import { Button, InputGroup, InputGroupAddon, InputText } from "primevue";
 import IconSearch from "~icons/ic/search";
 
 const {
@@ -17,10 +15,6 @@ const {
 
 const model = defineModel<string>();
 
-const { searchPerformed } = usePostHog();
-
-const router = useRouter();
-
 // currentText is decoupled from the model, we want to update
 // the model only when the user performs a search
 const currentText = ref<string | undefined>(model.value);
@@ -33,24 +27,11 @@ watch(model, (newValue) => {
 const emit = defineEmits(["emptySearch"]);
 
 const performSearch = () => {
-  // If the user is coming from another page, we want to track the search
-  if (router.currentRoute.value.name !== "search") {
-    searchPerformed("simple", addDefaults({ query: currentText.value ?? "" }));
-  }
-
-  if (!currentText.value) {
-    // if the user hasn't entered any text, updating the model will have no effect
-    // since they might still want to trigger an empty search, use "emit"
-    emit("emptySearch");
-  }
+  // if the user hasn't entered any text, updating the model will have no effect
+  // since they might still want to trigger an empty search, use "emit"
+  if (!currentText.value) emit("emptySearch");
 
   model.value = currentText.value;
-};
-
-const onKeyup = (event: KeyboardEvent) => {
-  if (event.key === "Enter") {
-    performSearch();
-  }
 };
 
 const searchInputId = useId();
@@ -72,7 +53,6 @@ const searchInputId = useId();
         fluid
         name="query"
         type="search"
-        @keyup="onKeyup"
       />
       <InputGroupAddon>
         <Button :aria-label="submitLabel" type="submit">

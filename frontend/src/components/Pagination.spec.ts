@@ -146,7 +146,7 @@ describe("Pagination", () => {
     });
 
     const nextLink = screen.getByRole("link", { name: "nächste Ergebnisse" });
-    expect(nextLink).toHaveAttribute("href", "/?pageNumber=1");
+    expect(nextLink).toHaveAttribute("href", "/?pageIndex=1");
   });
 
   it("previous button links to correct page", async () => {
@@ -166,10 +166,10 @@ describe("Pagination", () => {
     const previousLink = screen.getByRole("link", {
       name: "vorherige Ergebnisse",
     });
-    expect(previousLink).toHaveAttribute("href", "/?pageNumber=1");
+    expect(previousLink).toHaveAttribute("href", "/?pageIndex=1");
   });
 
-  it("previous button removes pageNumber param when going to first page", async () => {
+  it("previous button removes pageIndex param when going to first page", async () => {
     const page = createMockPage({
       "@id": "/api/search?pageIndex=1&size=10",
       view: {

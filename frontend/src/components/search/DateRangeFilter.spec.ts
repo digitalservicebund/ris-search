@@ -4,82 +4,100 @@ import { screen, waitFor } from "@testing-library/vue";
 import { InputText } from "primevue";
 import { describe, expect, it } from "vitest";
 import DateRangeFilter from "./DateRangeFilter.vue";
-import { DateSearchMode } from "~/composables/useSimpleSearchParams/useSimpleSearchParams";
+import type {
+  DateFilterValue,
+  FilterType,
+} from "~/utils/search/dateFilterType";
 
 describe("DateRangeFilter", () => {
-  const testDates = {
-    date: "1999-12-31",
-    dateAfter: "2000-01-01",
-    dateBefore: "2025-12-31",
-  };
-
-  const setup: [DateSearchMode, string[]][] = [
-    [DateSearchMode.None, []],
-    [DateSearchMode.Equal, ["date"]],
-    [DateSearchMode.After, ["dateAfter"]],
-    [DateSearchMode.Before, ["dateBefore"]],
-    [DateSearchMode.Range, ["dateAfter", "dateBefore"]],
+  const renderModes: [FilterType, number][] = [
+    ["allTime", 0],
+    ["specificDate", 1],
+    ["after", 1],
+    ["before", 1],
+    ["period", 2],
   ];
 
-  test.each(setup)('mode "%s" renders "%s" fields', async (mode, fields) => {
-    await renderSuspended(DateRangeFilter, {
-      props: {
-        dateSearchMode: mode,
-        date: undefined,
-        dateAfter: undefined,
-        dateBefore: undefined,
-      },
-      global: { stubs: { InputMask: InputText } },
-    });
+  it.each(renderModes)(
+    'type "%s" renders %d input fields',
+    async (type, fieldCount) => {
+      await renderSuspended(DateRangeFilter, {
+        props: { modelValue: { type } },
+        global: { stubs: { InputMask: InputText } },
+      });
 
-    expect(screen.queryAllByRole("textbox")).toHaveLength(fields.length);
-  });
+      expect(screen.queryAllByRole("textbox")).toHaveLength(fieldCount);
+    },
+  );
 
-  test.each(setup)(
-    'correctly updates the input date(s) for mode "%s"',
-    async (mode, fields) => {
+  it.each<[FilterType, Partial<DateFilterValue>]>([
+    ["specificDate", { from: "2000-01-02" }],
+    ["after", { from: "2000-01-02" }],
+    ["before", { to: "2000-01-02" }],
+  ])(
+    'correctly emits date filter value for type "%s"',
+    async (type, expected) => {
       const user = userEvent.setup();
 
       const { emitted } = await renderSuspended(DateRangeFilter, {
-        props: {
-          dateSearchMode: mode,
-          date: undefined,
-          dateAfter: undefined,
-          dateBefore: undefined,
-        },
+        props: { modelValue: { type } },
         global: { stubs: { InputMask: InputText } },
       });
 
       const inputs = screen.queryAllByRole("textbox");
-
       for (const input of inputs) {
         await user.clear(input);
         await user.type(input, "02.01.2000");
       }
 
-      for (const field of fields) {
-        expect(emitted(`update:${field}`)).toContainEqual(["2000-01-02"]);
+      const updates = emitted("update:modelValue") as DateFilterValue[][];
+      for (const [key, value] of Object.entries(expected)) {
+        expect(
+          updates.some(([f]) => f?.[key as keyof DateFilterValue] === value),
+        ).toBe(true);
       }
     },
   );
 
-  it("renders just the dropdown if no mode is set", async () => {
+  it("correctly emits both dates in period mode", async () => {
+    const user = userEvent.setup();
+
+    const { emitted } = await renderSuspended(DateRangeFilter, {
+      props: { modelValue: { type: "period" } },
+      global: { stubs: { InputMask: InputText } },
+    });
+
+    const inputs = screen.queryAllByRole("textbox");
+    expect(inputs).toHaveLength(2);
+
+    await user.clear(inputs[0]!);
+    await user.type(inputs[0]!, "02.01.2000");
+    await user.clear(inputs[1]!);
+    await user.type(inputs[1]!, "02.01.2001");
+
+    const updates = emitted("update:modelValue");
+    expect(updates).toContainEqual([
+      { from: "2000-01-02", to: undefined, type: "period" },
+    ]);
+    expect(updates).toContainEqual([
+      { from: "2000-01-02", to: "2001-01-02", type: "period" },
+    ]);
+  });
+
+  it("renders just the dropdown if type is allTime", async () => {
     await renderSuspended(DateRangeFilter, {
-      props: {
-        dateSearchMode: DateSearchMode.None,
-        date: undefined,
-        dateAfter: undefined,
-        dateBefore: undefined,
-      },
+      props: { modelValue: { type: "allTime" } },
       global: { stubs: { InputMask: InputText } },
     });
 
     expect(screen.queryAllByRole("textbox")).toHaveLength(0);
   });
 
-  it("ignores other parameters when showing single date input", async () => {
+  it("shows existing date for specificDate type", async () => {
     await renderSuspended(DateRangeFilter, {
-      props: { dateSearchMode: DateSearchMode.Equal, ...testDates },
+      props: {
+        modelValue: { type: "specificDate", from: "1999-12-31" },
+      },
       global: { stubs: { InputMask: InputText } },
     });
 
@@ -91,10 +109,11 @@ describe("DateRangeFilter", () => {
   it("renders a correct date range", async () => {
     await renderSuspended(DateRangeFilter, {
       props: {
-        dateSearchMode: DateSearchMode.Range,
-        date: undefined,
-        dateAfter: testDates.dateAfter,
-        dateBefore: testDates.dateBefore,
+        modelValue: {
+          type: "period",
+          from: "2000-01-01",
+          to: "2025-12-31",
+        },
       },
       global: { stubs: { InputMask: InputText } },
     });
@@ -105,15 +124,12 @@ describe("DateRangeFilter", () => {
     expect(inputs[1]).toHaveValue("31.12.2025");
   });
 
-  it("emits dateBefore when entering value in range mode", async () => {
+  it("emits updated filter when entering 'to' date in period mode", async () => {
     const user = userEvent.setup();
 
     const { emitted } = await renderSuspended(DateRangeFilter, {
       props: {
-        dateSearchMode: DateSearchMode.Range,
-        date: undefined,
-        dateAfter: "1949-05-23",
-        dateBefore: undefined,
+        modelValue: { type: "period", from: "1949-05-23" },
       },
       global: { stubs: { InputMask: InputText } },
     });
@@ -125,19 +141,17 @@ describe("DateRangeFilter", () => {
 
     await user.type(inputs[1]!, "03.10.1990");
 
-    expect(emitted("update:dateBefore")).toContainEqual(["1990-10-03"]);
+    const updates = emitted("update:modelValue");
+    expect(updates).toContainEqual([
+      { to: "1990-10-03", from: "1949-05-23", type: "period" },
+    ]);
   });
 
-  it("shows validation error for invalid date in equal mode", async () => {
+  it("shows validation error for invalid date in specificDate mode", async () => {
     const user = userEvent.setup();
 
     await renderSuspended(DateRangeFilter, {
-      props: {
-        dateSearchMode: DateSearchMode.Equal,
-        date: undefined,
-        dateAfter: undefined,
-        dateBefore: undefined,
-      },
+      props: { modelValue: { type: "specificDate" } },
       global: { stubs: { InputMask: InputText } },
     });
 
@@ -154,12 +168,7 @@ describe("DateRangeFilter", () => {
     const user = userEvent.setup();
 
     await renderSuspended(DateRangeFilter, {
-      props: {
-        dateSearchMode: DateSearchMode.After,
-        date: undefined,
-        dateAfter: undefined,
-        dateBefore: undefined,
-      },
+      props: { modelValue: { type: "after" } },
       global: { stubs: { InputMask: InputText } },
     });
 
@@ -176,12 +185,7 @@ describe("DateRangeFilter", () => {
     const user = userEvent.setup();
 
     await renderSuspended(DateRangeFilter, {
-      props: {
-        dateSearchMode: DateSearchMode.Before,
-        date: undefined,
-        dateAfter: undefined,
-        dateBefore: undefined,
-      },
+      props: { modelValue: { type: "before" } },
       global: { stubs: { InputMask: InputText } },
     });
 
@@ -194,16 +198,11 @@ describe("DateRangeFilter", () => {
     });
   });
 
-  it("shows validation errors for both dates in range mode", async () => {
+  it("shows validation errors for both dates in period mode", async () => {
     const user = userEvent.setup();
 
     await renderSuspended(DateRangeFilter, {
-      props: {
-        dateSearchMode: DateSearchMode.Range,
-        date: undefined,
-        dateAfter: undefined,
-        dateBefore: undefined,
-      },
+      props: { modelValue: { type: "period" } },
       global: { stubs: { InputMask: InputText } },
     });
 
@@ -229,12 +228,7 @@ describe("DateRangeFilter", () => {
     const user = userEvent.setup();
 
     await renderSuspended(DateRangeFilter, {
-      props: {
-        dateSearchMode: DateSearchMode.Equal,
-        date: undefined,
-        dateAfter: undefined,
-        dateBefore: undefined,
-      },
+      props: { modelValue: { type: "specificDate" } },
       global: { stubs: { InputMask: InputText } },
     });
 
@@ -259,12 +253,7 @@ describe("DateRangeFilter", () => {
     const user = userEvent.setup();
 
     await renderSuspended(DateRangeFilter, {
-      props: {
-        dateSearchMode: DateSearchMode.Equal,
-        date: undefined,
-        dateAfter: undefined,
-        dateBefore: undefined,
-      },
+      props: { modelValue: { type: "specificDate" } },
       global: { stubs: { InputMask: InputText } },
     });
 

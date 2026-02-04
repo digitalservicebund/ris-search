@@ -1,8 +1,9 @@
 import {
   dateFilterToQuery,
+  dateFilterToSimpleSearchParams,
   isFilterType,
   isStrictDateFilterValue,
-} from "./filterType";
+} from "./dateFilterType";
 import { DocumentKind } from "~/types";
 
 describe("filterType", () => {
@@ -13,6 +14,8 @@ describe("filterType", () => {
         "period",
         "specificDate",
         "currentlyInForce",
+        "before",
+        "after",
       ]) {
         expect(isFilterType(i)).toBe(true);
       }
@@ -66,6 +69,26 @@ describe("filterType", () => {
       ).toBe(true);
     });
 
+    it("returns true for valid 'before' filter", () => {
+      expect(
+        isStrictDateFilterValue({
+          type: "before",
+          from: undefined,
+          to: "2024-12-31",
+        }),
+      ).toBe(true);
+    });
+
+    it("returns true for valid 'after' filter", () => {
+      expect(
+        isStrictDateFilterValue({
+          type: "after",
+          from: "2024-01-01",
+          to: undefined,
+        }),
+      ).toBe(true);
+    });
+
     it("returns false for 'specificDate' without from date", () => {
       expect(
         isStrictDateFilterValue({
@@ -92,6 +115,26 @@ describe("filterType", () => {
           type: "period",
           from: "2024-01-01",
           to: undefined,
+        }),
+      ).toBe(false);
+    });
+
+    it("returns false for 'before' without to date", () => {
+      expect(
+        isStrictDateFilterValue({
+          type: "before",
+          from: "2024-01-01",
+          to: undefined,
+        }),
+      ).toBe(false);
+    });
+
+    it("returns false for 'after' without from date", () => {
+      expect(
+        isStrictDateFilterValue({
+          type: "after",
+          from: undefined,
+          to: "2024-01-01",
         }),
       ).toBe(false);
     });
@@ -269,6 +312,189 @@ describe("filterType", () => {
             DocumentKind.Literature,
           ),
         ).toThrow("Missing 'from' or 'to' date in filter type period");
+      });
+    });
+
+    describe("unsupported filter types", () => {
+      it("throws error for 'before' filters", () => {
+        expect(() => {
+          dateFilterToQuery(
+            { type: "before", from: undefined, to: "2026-02-01" },
+            DocumentKind.Norm,
+          );
+        }).toThrow(
+          "Attempted to convert unsupported filter type before to query",
+        );
+      });
+
+      it("throws error for 'after' filters", () => {
+        expect(() => {
+          dateFilterToQuery(
+            { type: "after", from: "2026-02-01", to: undefined },
+            DocumentKind.Norm,
+          );
+        }).toThrow(
+          "Attempted to convert unsupported filter type after to query",
+        );
+      });
+    });
+  });
+
+  describe("dateFilterToSimpleSearchParams", () => {
+    describe("allTime filter", () => {
+      it("returns undefined for allTime filter", () => {
+        const filter = { type: "allTime" } as const;
+
+        const result = dateFilterToSimpleSearchParams(filter);
+
+        expect(result).toBeUndefined();
+      });
+    });
+
+    describe("specificDate filter", () => {
+      it("returns dateFrom for both boundaries of specificDate filter", () => {
+        const filter = {
+          type: "specificDate",
+          from: "2024-01-15",
+        } as const;
+
+        const result = dateFilterToSimpleSearchParams(filter);
+
+        expect(result).toEqual({
+          dateFrom: "2024-01-15",
+          dateTo: "2024-01-15",
+        });
+      });
+
+      it("throws error when specificDate filter is missing from date", () => {
+        const filter = { type: "specificDate" } as const;
+
+        expect(() => dateFilterToSimpleSearchParams(filter)).toThrow(
+          "Missing 'from' date in filter type specificDate",
+        );
+      });
+    });
+
+    describe("period filter", () => {
+      it("returns both dateFrom and dateTo for period filter", () => {
+        const filter = {
+          type: "period",
+          from: "2024-01-01",
+          to: "2024-12-31",
+        } as const;
+
+        const result = dateFilterToSimpleSearchParams(filter);
+
+        expect(result).toEqual({
+          dateFrom: "2024-01-01",
+          dateTo: "2024-12-31",
+        });
+      });
+
+      it("throws error when period filter is missing from date", () => {
+        const filter = { type: "period", to: "2024-12-31" } as const;
+
+        expect(() => dateFilterToSimpleSearchParams(filter)).toThrow(
+          "Missing 'from' or 'to' date in filter type period",
+        );
+      });
+
+      it("throws error when period filter is missing to date", () => {
+        const filter = { type: "period", from: "2024-01-01" } as const;
+
+        expect(() => dateFilterToSimpleSearchParams(filter)).toThrow(
+          "Missing 'from' or 'to' date in filter type period",
+        );
+      });
+
+      it("throws error when period filter is missing both dates", () => {
+        const filter = { type: "period" } as const;
+
+        expect(() => dateFilterToSimpleSearchParams(filter)).toThrow(
+          "Missing 'from' or 'to' date in filter type period",
+        );
+      });
+    });
+
+    describe("before filter", () => {
+      it("returns only dateTo for before filter", () => {
+        const filter = { type: "before", to: "2024-12-31" } as const;
+
+        const result = dateFilterToSimpleSearchParams(filter);
+
+        expect(result).toEqual({
+          dateFrom: undefined,
+          dateTo: "2024-12-31",
+        });
+      });
+
+      it("throws error when before filter is missing to date", () => {
+        const filter = { type: "before" } as const;
+
+        expect(() => dateFilterToSimpleSearchParams(filter)).toThrow(
+          "Missing 'to' date in filter type before",
+        );
+      });
+
+      it("removes from date if present in before filter", () => {
+        const filter = {
+          type: "before",
+          from: "2024-01-01",
+          to: "2024-12-31",
+        } as const;
+
+        const result = dateFilterToSimpleSearchParams(filter);
+
+        expect(result).toEqual({
+          dateFrom: undefined,
+          dateTo: "2024-12-31",
+        });
+      });
+    });
+
+    describe("after filter", () => {
+      it("returns only dateFrom for after filter", () => {
+        const filter = { type: "after", from: "2024-01-01" } as const;
+
+        const result = dateFilterToSimpleSearchParams(filter);
+
+        expect(result).toEqual({
+          dateFrom: "2024-01-01",
+          dateTo: undefined,
+        });
+      });
+
+      it("throws error when after filter is missing from date", () => {
+        const filter = { type: "after" } as const;
+
+        expect(() => dateFilterToSimpleSearchParams(filter)).toThrow(
+          "Missing 'from' date in filter type after",
+        );
+      });
+
+      it("removes to date if present in after filter", () => {
+        const filter = {
+          type: "after",
+          from: "2024-01-01",
+          to: "2024-12-31",
+        } as const;
+
+        const result = dateFilterToSimpleSearchParams(filter);
+
+        expect(result).toEqual({
+          dateFrom: "2024-01-01",
+          dateTo: undefined,
+        });
+      });
+    });
+
+    describe("currentlyInForce filter", () => {
+      it("throws error for currentlyInForce filter", () => {
+        const filter = { type: "currentlyInForce" } as const;
+
+        expect(() => dateFilterToSimpleSearchParams(filter)).toThrow(
+          "Attempted to convert unsupported filter type currentlyInForce to query",
+        );
       });
     });
   });

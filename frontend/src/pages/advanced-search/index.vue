@@ -1,19 +1,10 @@
 <script setup lang="ts">
 import { Message, PanelMenu, Select } from "primevue";
 import type { MenuItem } from "primevue/menuitem";
-import Pagination from "~/components/Pagination.vue";
-import DataFieldPicker from "~/components/search/DataFieldPicker.vue";
-import DateFilter from "~/components/search/DateFilter.vue";
-import SortSelect from "~/components/search/SortSelect.vue";
-import { useAdvancedSearch } from "~/composables/useAdvancedSearch";
-import { useAdvancedSearchRouteParams } from "~/composables/useAdvancedSearchRouteParams";
 import type { Statistics } from "~/types";
 import { DocumentKind } from "~/types";
-import { getIdentifier } from "~/utils/anyDocument";
-import { formatDocumentKind } from "~/utils/displayValues";
-import { formatNumberWithSeparators } from "~/utils/numberFormatting";
 import { queryableDataFields } from "~/utils/search/dataFields";
-import { isStrictDateFilterValue } from "~/utils/search/filterType";
+import { isStrictDateFilterValue } from "~/utils/search/dateFilterType";
 
 useHead({ title: "Erweiterte Suche" });
 
@@ -99,7 +90,7 @@ const documentKindMenuItems: MenuItem[] = [
   },
 ];
 
-// Search results -----------------------------------------
+// Search results ------------------------------------------
 
 const itemsPerPageDropdownId = useId();
 const resultsContainerRef = ref<HTMLElement | null>(null);
@@ -137,9 +128,7 @@ watch(
 
       if (requestedPage !== lastPage) {
         pageIndex.value = lastPage;
-
         await saveFilterStateToRoute();
-
         await submitSearch();
       }
     }
@@ -148,7 +137,7 @@ watch(
 );
 
 const formattedResultCount = computed(() =>
-  formatNumberWithSeparators(totalItemCount.value),
+  formatResultCount(totalItemCount.value),
 );
 
 // Auto reload for "discrete" actions
@@ -173,14 +162,12 @@ function handlePageUpdate(page: number) {
   pageIndex.value = page;
 }
 
-watch(searchStatus, (newStatus, oldStatus) => {
-  if (oldStatus === "pending" && newStatus === "success") {
-    if (scrollToResultsOnLoad.value) {
-      scrollToResultsOnLoad.value = false;
-      nextTick(() => {
-        resultsContainerRef.value?.scrollIntoView({ behavior: "smooth" });
-      });
-    }
+watch(searchStatus, async (newStatus, oldStatus) => {
+  const loadingSuccess = oldStatus === "pending" && newStatus === "success";
+  if (loadingSuccess && scrollToResultsOnLoad.value) {
+    scrollToResultsOnLoad.value = false;
+    await nextTick();
+    resultsContainerRef.value?.scrollIntoView({ behavior: "smooth" });
   }
 });
 </script>
@@ -211,11 +198,11 @@ watch(searchStatus, (newStatus, oldStatus) => {
         />
       </fieldset>
 
-      <DateFilter v-model="dateFilter" :document-kind />
+      <SearchDateFilter v-model="dateFilter" :document-kind />
     </aside>
 
     <div class="row-start-2 lg:row-start-auto">
-      <DataFieldPicker
+      <SearchDataFieldPicker
         v-model="query"
         :data-fields="queryableDataFields"
         :document-kind
@@ -238,9 +225,9 @@ watch(searchStatus, (newStatus, oldStatus) => {
           class="mb-32 flex flex-col gap-16 md:flex-row md:items-center md:gap-48"
         >
           <span class="ris-subhead-regular mr-auto text-nowrap">
-            {{ formattedResultCount }} Suchergebnisse
+            {{ formattedResultCount }}
           </span>
-          <SortSelect v-model="sort" :document-kind />
+          <SearchSortSelect v-model="sort" :document-kind />
 
           <label
             :for="itemsPerPageDropdownId"
@@ -262,10 +249,10 @@ watch(searchStatus, (newStatus, oldStatus) => {
 
           <ul v-if="searchResults" aria-label="Suchergebnisse">
             <li
-              v-for="searchResult in searchResults.member"
+              v-for="(searchResult, order) in searchResults.member"
               :key="getIdentifier(searchResult.item)"
             >
-              <SearchResult :search-result :order="1" />
+              <SearchResult :search-result :order />
             </li>
           </ul>
         </div>

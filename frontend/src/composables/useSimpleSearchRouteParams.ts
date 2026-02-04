@@ -1,18 +1,41 @@
 import { navigateTo, useRoute } from "#app";
 import type { LocationQueryValue } from "#vue-router";
 import { DocumentKind } from "~/types";
+import { isDocumentKind } from "~/utils/documentKind";
 import {
-  type DateFilterValue,
   isFilterType,
+  type DateFilterValue,
 } from "~/utils/search/dateFilterType";
 import { searchParamToNumber, searchParamToString } from "~/utils/searchParams";
 
-export function useAdvancedSearchRouteParams() {
+export function useSimpleSearchRouteParams() {
   const route = useRoute();
 
   // General parameters -------------------------------------
 
-  const documentKind = ref<DocumentKind>(DocumentKind.Norm);
+  const documentKind = ref<DocumentKind>(DocumentKind.All);
+
+  watch(
+    documentKind,
+    (val) => {
+      if (val === DocumentKind.All || val === DocumentKind.Norm) {
+        dateFilter.value = { type: "allTime" };
+      }
+
+      if (val !== DocumentKind.CaseLaw) {
+        typeGroup.value = undefined;
+        court.value = undefined;
+      }
+    },
+    {
+      // Run this watcher immediately when the documentKind changes, rather than
+      // scheduling it with the other watchers, since it has side effects on
+      // other watched properties that can cause race conditions.
+      flush: "sync",
+    },
+  );
+
+  const typeGroup = ref<string>();
 
   const query = ref<string>("");
 
@@ -22,30 +45,23 @@ export function useAdvancedSearchRouteParams() {
     init: LocationQueryValue | LocationQueryValue[] | undefined,
   ): DateFilterValue["type"] {
     if (typeof init !== "string" || !isFilterType(init)) {
-      // If the initial value is no valid filter, return the default filter
-      // based on the selected document kind
-      return documentKind.value === DocumentKind.Norm
-        ? "currentlyInForce"
-        : "allTime";
-    } else if (
-      init === "currentlyInForce" &&
-      documentKind.value !== DocumentKind.Norm
-    ) {
-      // If the current filter is not valid for the current selection, return
-      // a different filter
       return "allTime";
     }
-    // Return parsed filter
-    else return init;
+
+    return init;
   }
 
   const dateFilter = ref<DateFilterValue>({ type: "allTime" });
+
+  // Court filter -------------------------------------------
+
+  const court = ref<string>();
 
   // Sort & pagination --------------------------------------
 
   const sort = ref<string>("default");
 
-  const itemsPerPage = ref<string>("50");
+  const itemsPerPage = ref<string>("10");
 
   const pageIndex = ref<number>(0);
 
@@ -56,9 +72,15 @@ export function useAdvancedSearchRouteParams() {
     documentKind.value =
       documentKindParam && isDocumentKind(documentKindParam)
         ? documentKindParam
-        : DocumentKind.Norm;
+        : DocumentKind.All;
 
-    query.value = decodeURIComponent(searchParamToString(routeQuery.q) ?? "");
+    query.value = decodeURIComponent(
+      searchParamToString(routeQuery.query) ?? "",
+    );
+
+    court.value = searchParamToString(routeQuery.court);
+
+    typeGroup.value = searchParamToString(routeQuery.typeGroup);
 
     dateFilter.value = {
       type: getInitialFilterTypeFromQuery(routeQuery.dateFilterType),
@@ -68,7 +90,7 @@ export function useAdvancedSearchRouteParams() {
 
     sort.value = searchParamToString(routeQuery.sort) ?? "default";
 
-    itemsPerPage.value = searchParamToString(routeQuery.itemsPerPage) ?? "50";
+    itemsPerPage.value = searchParamToString(routeQuery.itemsPerPage) ?? "10";
 
     pageIndex.value = searchParamToNumber(routeQuery.pageIndex, 0);
   }
@@ -77,8 +99,10 @@ export function useAdvancedSearchRouteParams() {
     return navigateTo({
       query: {
         ...route.query,
-        q: encodeURIComponent(query.value),
+        query: encodeURIComponent(query.value),
+        court: court.value,
         documentKind: documentKind.value,
+        typeGroup: typeGroup.value ?? "",
         dateFilterType: dateFilter.value.type,
         dateFilterFrom: dateFilter.value.from ?? "",
         dateFilterTo: dateFilter.value.to ?? "",
@@ -96,6 +120,7 @@ export function useAdvancedSearchRouteParams() {
   );
 
   return {
+    court,
     dateFilter,
     documentKind,
     itemsPerPage,
@@ -103,5 +128,6 @@ export function useAdvancedSearchRouteParams() {
     query,
     saveFilterStateToRoute,
     sort,
+    typeGroup,
   };
 }

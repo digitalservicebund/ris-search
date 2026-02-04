@@ -65,3 +65,21 @@ export function formatNormValidity(
 
   return label ? { label, color } : undefined;
 }
+
+/**
+ * Formats the count of search results.
+ *
+ * @param count - Result count
+ * @returns Formatted count
+ */
+export function formatResultCount(count: number) {
+  if (count === 0) {
+    return "Keine Suchergebnisse gefunden";
+  } else if (count === 1) {
+    return "1 Suchergebnis";
+  } else if (count === 10_000) {
+    return "Mehr als 10.000 Suchergebnisse";
+  }
+
+  return `${formatNumberWithSeparators(count)} Suchergebnisse`;
+}

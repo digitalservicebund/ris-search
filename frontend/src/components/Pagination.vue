@@ -48,9 +48,9 @@ const previousPageRoute = computed<RouteLocationRaw | undefined>(() => {
   if (previousPageNumber.value === undefined) return undefined;
   const query = { ...route.query };
   if (previousPageNumber.value === 0) {
-    delete query.pageNumber;
+    delete query.pageIndex;
   } else {
-    query.pageNumber = previousPageNumber.value.toString();
+    query.pageIndex = previousPageNumber.value.toString();
   }
   return {
     path: route.path,
@@ -62,9 +62,9 @@ const nextPageRoute = computed<RouteLocationRaw | undefined>(() => {
   if (nextPageNumber.value === undefined) return undefined;
   const query = { ...route.query };
   if (nextPageNumber.value === 0) {
-    delete query.pageNumber;
+    delete query.pageIndex;
   } else {
-    query.pageNumber = nextPageNumber.value.toString();
+    query.pageIndex = nextPageNumber.value.toString();
   }
   return {
     path: route.path,

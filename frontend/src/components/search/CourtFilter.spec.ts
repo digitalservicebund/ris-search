@@ -3,7 +3,6 @@ import { userEvent } from "@testing-library/user-event";
 import { screen, waitFor } from "@testing-library/vue";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import CourtFilter from "~/components/search/CourtFilter.vue";
-import { DocumentKind } from "~/types";
 import { courtFilterDefaultSuggestions } from "~/utils/search/courtFilter";
 
 const mockData = [{ id: "TG Berlin", label: "Tagesgericht Berlin", count: 1 }];
@@ -16,26 +15,20 @@ describe("court autocomplete", () => {
   afterEach(() => mockFetch.mockClear());
 
   it("is not visible by default", async () => {
-    await renderSuspended(CourtFilter, {
-      props: { category: undefined },
-    });
+    await renderSuspended(CourtFilter);
 
     expect(screen.queryByLabelText("Gericht")).not.toBeInTheDocument();
   });
 
   it("is not visible for non-CaseLaw categories", async () => {
-    await renderSuspended(CourtFilter, {
-      props: { category: DocumentKind.Norm },
-    });
+    await renderSuspended(CourtFilter);
 
     expect(screen.queryByLabelText("Gericht")).not.toBeInTheDocument();
   });
 
   describe("when category is set to CaseLaw", () => {
     it("renders an empty input field", async () => {
-      await renderSuspended(CourtFilter, {
-        props: { category: DocumentKind.CaseLaw },
-      });
+      await renderSuspended(CourtFilter);
 
       const input = screen.getByRole("combobox");
       expect(input).toBeInTheDocument();
@@ -46,7 +39,6 @@ describe("court autocomplete", () => {
       const courtId = mockData[0]?.id;
       await renderSuspended(CourtFilter, {
         props: {
-          category: DocumentKind.CaseLaw,
           modelValue: courtId,
         },
       });
@@ -58,9 +50,7 @@ describe("court autocomplete", () => {
     it("calls the API when typing and shows suggestions", async () => {
       const user = userEvent.setup();
 
-      await renderSuspended(CourtFilter, {
-        props: { category: DocumentKind.CaseLaw },
-      });
+      await renderSuspended(CourtFilter);
 
       const input = screen.getByRole("combobox");
       await user.type(input, "Ber");
@@ -78,9 +68,7 @@ describe("court autocomplete", () => {
     it("shows default suggestions when dropdown is opened without input", async () => {
       const user = userEvent.setup();
 
-      await renderSuspended(CourtFilter, {
-        props: { category: DocumentKind.CaseLaw },
-      });
+      await renderSuspended(CourtFilter);
 
       await user.click(
         screen.getByRole("button", {
@@ -102,9 +90,7 @@ describe("court autocomplete", () => {
     it("emits update when selecting a suggestion", async () => {
       const user = userEvent.setup();
 
-      const { emitted } = await renderSuspended(CourtFilter, {
-        props: { category: DocumentKind.CaseLaw },
-      });
+      const { emitted } = await renderSuspended(CourtFilter);
 
       const dropdownButton = screen.getByRole("button");
       await user.click(dropdownButton);
@@ -120,7 +106,6 @@ describe("court autocomplete", () => {
 
       await renderSuspended(CourtFilter, {
         props: {
-          category: DocumentKind.CaseLaw,
           modelValue: "existing court",
         },
       });

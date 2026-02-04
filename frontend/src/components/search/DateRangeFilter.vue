@@ -1,51 +1,77 @@
 <script setup lang="ts">
 import PrimevueSelect from "primevue/select";
 import type { ValidationError } from "~/components/DateInput.vue";
-import { DateSearchMode } from "~/composables/useSimpleSearchParams/useSimpleSearchParams";
+import type {
+  DateFilterValue,
+  FilterType,
+} from "~/utils/search/dateFilterType";
 
-const date = defineModel<string | undefined>("date");
-const dateAfter = defineModel<string | undefined>("dateAfter");
-const dateBefore = defineModel<string | undefined>("dateBefore");
-const dateSearchMode = defineModel<DateSearchMode>("dateSearchMode", {
-  required: true,
-});
+/** Active date filter value */
+const filter = defineModel<DateFilterValue>({ required: true });
 
 const dateModeSelectId = useId();
-const dateId = useId();
-const dateAfterId = useId();
-const dateBeforeId = useId();
+const fromDateId = useId();
+const toDateId = useId();
 
-const dateValidationError = ref<ValidationError | undefined>();
-const dateAfterValidationError = ref<ValidationError | undefined>();
-const dateBeforeValidationError = ref<ValidationError | undefined>();
+const fromValidationError = ref<ValidationError | undefined>();
+const toValidationError = ref<ValidationError | undefined>();
 
-const items = [
-  { label: "Keine zeitliche Begrenzung", value: DateSearchMode.None },
-  { label: "Bis zu einem Datum", value: DateSearchMode.Before },
-  { label: "An einem Datum", value: DateSearchMode.Equal },
-  { label: "Ab einem Datum", value: DateSearchMode.After },
-  { label: "In einem Zeitraum", value: DateSearchMode.Range },
+const items: { label: string; value: FilterType }[] = [
+  { label: "Keine zeitliche Begrenzung", value: "allTime" },
+  { label: "Bis zu einem Datum", value: "before" },
+  { label: "An einem Datum", value: "specificDate" },
+  { label: "Ab einem Datum", value: "after" },
+  { label: "In einem Zeitraum", value: "period" },
 ];
 
-const showDateField = computed(
-  () => dateSearchMode.value === DateSearchMode.Equal,
+// The key will be set to a random value when the filter type changes to force
+// Vue to fully re-render the date input. This is a workaround to fix a
+// rendering bug where the date input of the "from" date is sometimes reused for
+// the "to" date after switching filter types, resulting in a broken in-between
+// state of the input mask.
+const key = ref<string>();
+
+const selectedType = computed({
+  get: () => filter.value.type,
+  set: (type: FilterType) => {
+    filter.value = { type };
+    key.value = crypto.randomUUID();
+  },
+});
+
+const showFromField = computed(() =>
+  ["specificDate", "after", "period"].includes(filter.value.type),
 );
 
-const showDateAfterField = computed(
-  () =>
-    dateSearchMode.value === DateSearchMode.After ||
-    dateSearchMode.value === DateSearchMode.Range,
-);
-
-const showDateBeforeField = computed(
-  () =>
-    dateSearchMode.value === DateSearchMode.Before ||
-    dateSearchMode.value === DateSearchMode.Range,
+const showToField = computed(() =>
+  ["before", "period"].includes(filter.value.type),
 );
 
 const hasMultipleInputs = computed(
-  () => showDateAfterField.value && showDateBeforeField.value,
+  () => showFromField.value && showToField.value,
 );
+
+const fromDate = computed({
+  get: () => filter.value.from,
+  set: (value) => {
+    filter.value = {
+      type: filter.value.type,
+      from: value,
+      to: filter.value.to,
+    };
+  },
+});
+
+const toDate = computed({
+  get: () => filter.value.to,
+  set: (value) => {
+    filter.value = {
+      type: filter.value.type,
+      from: filter.value.from,
+      to: value,
+    };
+  },
+});
 </script>
 
 <template>
@@ -54,47 +80,40 @@ const hasMultipleInputs = computed(
       <label :for="dateModeSelectId" class="ris-label2-regular">Zeitraum</label>
       <PrimevueSelect
         :id="dateModeSelectId"
-        v-model="dateSearchMode"
+        v-model="selectedType"
         :options="items"
+        :placeholder="items[0]?.label"
+        :pt="{ overlay: { class: 'bg-white w-full' } }"
+        append-to="self"
         option-label="label"
         option-value="value"
-        :placeholder="items[0]?.label"
         scroll-height="20rem"
-        append-to="self"
-        :pt="{ overlay: { class: 'bg-white w-full' } }"
       />
     </span>
 
-    <div v-if="showDateField" class="flex flex-col gap-8">
-      <label :for="dateId" class="ris-label2-regular">Datum</label>
-      <DateInput
-        :id="dateId"
-        v-model="date"
-        v-model:validation-error="dateValidationError"
-      />
-    </div>
-
-    <div v-if="showDateAfterField" class="flex flex-col gap-8">
-      <label :for="dateAfterId" class="ris-label2-regular">
+    <div v-if="showFromField" class="flex flex-col gap-8">
+      <label :for="fromDateId" class="ris-label2-regular">
         <template v-if="hasMultipleInputs">Ab dem Datum</template>
         <template v-else>Datum</template>
       </label>
       <DateInput
-        :id="dateAfterId"
-        v-model="dateAfter"
-        v-model:validation-error="dateAfterValidationError"
+        :id="fromDateId"
+        :key
+        v-model="fromDate"
+        v-model:validation-error="fromValidationError"
       />
     </div>
 
-    <div v-if="showDateBeforeField" class="flex flex-col gap-8">
-      <label :for="dateBeforeId" class="ris-label2-regular">
+    <div v-if="showToField" class="flex flex-col gap-8">
+      <label :for="toDateId" class="ris-label2-regular">
         <template v-if="hasMultipleInputs">Bis zum Datum</template>
         <template v-else>Datum</template>
       </label>
       <DateInput
-        :id="dateBeforeId"
-        v-model="dateBefore"
-        v-model:validation-error="dateBeforeValidationError"
+        :id="toDateId"
+        :key
+        v-model="toDate"
+        v-model:validation-error="toValidationError"
       />
     </div>
   </div>

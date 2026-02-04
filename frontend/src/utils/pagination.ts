@@ -1,5 +1,4 @@
 import type { Page } from "~/components/Pagination.vue";
-import { usePostHog } from "~/composables/usePostHog";
 
 export const parsePageNumber = (id?: string) => {
   if (!id) return { page: undefined, size: undefined };
@@ -12,24 +11,6 @@ export const parsePageNumber = (id?: string) => {
     size: size ? Number.parseInt(size) : undefined,
   };
 };
-
-export function buildResultCountString(currentPage: Page) {
-  if (!currentPage || currentPage.totalItems === 0) {
-    usePostHog().noSearchResults();
-    return "Keine Suchergebnisse gefunden";
-  }
-
-  if (!currentPage.totalItems) {
-    return "";
-  }
-  if (currentPage.totalItems === 1) {
-    return "1 Suchergebnis";
-  }
-  if (currentPage.totalItems === 10000) {
-    return "Mehr als 10.000 Suchergebnisse";
-  }
-  return `${currentPage.totalItems.toLocaleString("de-DE")} Suchergebnisse`;
-}
 
 export function buildItemsOnPageString(page?: Page | null) {
   if (!page?.member.length || !page?.totalItems) {

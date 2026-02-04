@@ -4,98 +4,40 @@ import { screen } from "@testing-library/vue";
 import { InputText } from "primevue";
 import { describe, expect, it } from "vitest";
 import YearRangeFilter from "./YearRangeFilter.vue";
-import { DateSearchMode } from "~/composables/useSimpleSearchParams/useSimpleSearchParams";
+import type { DateFilterValue } from "~/utils/search/dateFilterType";
 
 describe("YearRangeFilter", () => {
-  const setup: [
-    mode: DateSearchMode,
-    fields: string[],
-    expectations: { dateAfter?: string; dateBefore?: string },
-  ][] = [
-    [DateSearchMode.None, [], {}],
-    [
-      DateSearchMode.Equal,
-      ["yearEqual"],
-      { dateAfter: "2000-01-01", dateBefore: "2000-12-31" },
-    ],
-    [DateSearchMode.After, ["yearAfter"], { dateAfter: "2000-01-01" }],
-    [DateSearchMode.Before, ["yearBefore"], { dateBefore: "2000-12-31" }],
-    [
-      DateSearchMode.Range,
-      ["yearAfter", "yearBefore"],
-      { dateAfter: "2000-01-01", dateBefore: "2000-12-31" },
-    ],
-  ];
-
-  test.each(setup)(
-    'mode "%s" renders "%s" and emits correct values',
-    async (mode, fields, expectations) => {
-      const user = userEvent.setup();
-
-      const { emitted } = await renderSuspended(YearRangeFilter, {
-        props: {
-          dateSearchMode: mode,
-          dateAfter: undefined,
-          dateBefore: undefined,
-        },
+  it.each<[string, DateFilterValue, number]>([
+    ["allTime", { type: "allTime" }, 0],
+    ["equal", { type: "period", from: "2000-01-01", to: "2000-12-31" }, 1],
+    ["after", { type: "after" }, 1],
+    ["before", { type: "before" }, 1],
+    ["range", { type: "period" }, 2],
+  ])(
+    'mode "%s" renders $2 input fields',
+    async (_mode, modelValue, fieldCount) => {
+      await renderSuspended(YearRangeFilter, {
+        props: { modelValue },
         global: { stubs: { InputMask: InputText } },
       });
 
-      // check rendered inputs match expected count
-      const inputs = screen.queryAllByRole("textbox");
-      expect(inputs).toHaveLength(fields.length);
-
-      // set values if any
-      for (const input of inputs) {
-        await user.clear(input);
-        await user.type(input, "2000");
-      }
-
-      // verify emitted values
-      const dateAfterEmitted = emitted("update:dateAfter");
-      const dateBeforeEmitted = emitted("update:dateBefore");
-
-      expect(dateAfterEmitted).toSatisfy((events: unknown) =>
-        expectations.dateAfter
-          ? Array.isArray(events) &&
-            events.some(
-              (e) => Array.isArray(e) && e[0] === expectations.dateAfter,
-            )
-          : !events || (Array.isArray(events) && events.length === 0),
-      );
-
-      expect(dateBeforeEmitted).toSatisfy((events: unknown) =>
-        expectations.dateBefore
-          ? Array.isArray(events) &&
-            events.some(
-              (e) => Array.isArray(e) && e[0] === expectations.dateBefore,
-            )
-          : !events || (Array.isArray(events) && events.length === 0),
-      );
+      expect(screen.queryAllByRole("textbox")).toHaveLength(fieldCount);
     },
   );
 
-  it("renders no input fields if no date search mode selected", async () => {
+  it("renders no input fields for allTime filter", async () => {
     await renderSuspended(YearRangeFilter, {
-      props: {
-        dateSearchMode: DateSearchMode.None,
-        dateAfter: undefined,
-        dateBefore: undefined,
-      },
+      props: { modelValue: { type: "allTime" } },
     });
 
     expect(screen.queryByRole("textbox")).toBeNull();
   });
 
-  it("emits values when entering years in Range mode", async () => {
+  it("emits correct values when entering years in range mode", async () => {
     const user = userEvent.setup();
 
     const { emitted } = await renderSuspended(YearRangeFilter, {
-      props: {
-        dateSearchMode: DateSearchMode.Range,
-        dateAfter: undefined,
-        dateBefore: undefined,
-      },
+      props: { modelValue: { type: "period" } },
       global: { stubs: { InputMask: InputText } },
     });
 
@@ -105,18 +47,18 @@ describe("YearRangeFilter", () => {
     await user.type(inputs[0]!, "2000");
     await user.type(inputs[1]!, "2020");
 
-    expect(emitted("update:dateAfter")).toContainEqual(["2000-01-01"]);
-    expect(emitted("update:dateBefore")).toContainEqual(["2020-12-31"]);
+    const updates = emitted("update:modelValue");
+    expect(updates).toContainEqual([
+      { from: "2000-01-01", to: "2020-12-31", type: "period" },
+    ]);
   });
 
-  it('keeps "Equal" mode start and end synchronized', async () => {
+  it("synchronizes start and end in equal year mode", async () => {
     const user = userEvent.setup();
 
     const { emitted } = await renderSuspended(YearRangeFilter, {
       props: {
-        dateSearchMode: DateSearchMode.Equal,
-        dateAfter: undefined,
-        dateBefore: undefined,
+        modelValue: { type: "period", from: "2000-01-01", to: "2000-12-31" },
       },
       global: { stubs: { InputMask: InputText } },
     });
@@ -125,18 +67,18 @@ describe("YearRangeFilter", () => {
     await user.clear(input);
     await user.type(input, "2022");
 
-    expect(emitted("update:dateAfter")).toContainEqual(["2022-01-01"]);
-    expect(emitted("update:dateBefore")).toContainEqual(["2022-12-31"]);
+    const updates = emitted("update:modelValue");
+    expect(updates).toContainEqual([
+      { from: "2022-01-01", to: "2022-12-31", type: "period" },
+    ]);
   });
 
-  it("emits undefined for invalid year input", async () => {
+  it("emits filter with undefined date for invalid year input", async () => {
     const user = userEvent.setup();
 
     const { emitted } = await renderSuspended(YearRangeFilter, {
       props: {
-        dateSearchMode: DateSearchMode.After,
-        dateAfter: "2000-01-01",
-        dateBefore: undefined,
+        modelValue: { type: "after", from: "2000-01-01" },
       },
       global: { stubs: { InputMask: InputText } },
     });
@@ -145,6 +87,9 @@ describe("YearRangeFilter", () => {
     await user.clear(input);
     await user.type(input, "abcd");
 
-    expect(emitted("update:dateAfter")).toContainEqual([undefined]);
+    const updates = emitted("update:modelValue");
+    expect(updates).toContainEqual([
+      { from: undefined, to: undefined, type: "after" },
+    ]);
   });
 });

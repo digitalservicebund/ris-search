@@ -9,11 +9,6 @@ import useBackendUrl from "~/composables/useBackendUrl";
 import type { CourtSearchResult } from "~/types";
 import { courtFilterDefaultSuggestions } from "~/utils/search/courtFilter";
 
-defineProps<{
-  /** Current category filter value */
-  category?: string;
-}>();
-
 const model = defineModel<string | undefined>();
 
 const searchResults = ref<CourtSearchResult[]>([]);
