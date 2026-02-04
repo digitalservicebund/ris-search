@@ -4,7 +4,10 @@ import { screen, waitFor } from "@testing-library/vue";
 import { InputText } from "primevue";
 import { describe, expect, it } from "vitest";
 import DateRangeFilter from "./DateRangeFilter.vue";
-import type { DateFilterValue, FilterType } from "~/utils/search/filterType";
+import type {
+  DateFilterValue,
+  FilterType,
+} from "~/utils/search/dateFilterType";
 
 describe("DateRangeFilter", () => {
   const renderModes: [FilterType, number][] = [

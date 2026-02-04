@@ -1,7 +1,10 @@
 <script setup lang="ts">
 import PrimevueSelect from "primevue/select";
 import type { ValidationError } from "~/components/DateInput.vue";
-import type { DateFilterValue, FilterType } from "~/utils/search/filterType";
+import type {
+  DateFilterValue,
+  FilterType,
+} from "~/utils/search/dateFilterType";
 
 /** Active date filter value */
 const filter = defineModel<DateFilterValue>({ required: true });

@@ -3,7 +3,10 @@ import { RadioButton } from "primevue";
 import DateInput from "~/components/DateInput.vue";
 import YearInput from "~/components/YearInput.vue";
 import { DocumentKind } from "~/types";
-import type { DateFilterValue, FilterType } from "~/utils/search/filterType";
+import type {
+  DateFilterValue,
+  FilterType,
+} from "~/utils/search/dateFilterType";
 
 const { documentKind } = defineProps<{
   /* Document kind for which the filter should be used */

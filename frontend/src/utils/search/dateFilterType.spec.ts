@@ -3,7 +3,7 @@ import {
   dateFilterToSimpleSearchParams,
   isFilterType,
   isStrictDateFilterValue,
-} from "./filterType";
+} from "./dateFilterType";
 import { DocumentKind } from "~/types";
 
 describe("filterType", () => {

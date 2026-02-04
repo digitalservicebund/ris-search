@@ -1,7 +1,10 @@
 import { navigateTo, useRoute } from "#app";
 import type { LocationQueryValue } from "#vue-router";
 import { DocumentKind } from "~/types";
-import { type DateFilterValue, isFilterType } from "~/utils/search/filterType";
+import {
+  type DateFilterValue,
+  isFilterType,
+} from "~/utils/search/dateFilterType";
 import { searchParamToNumber, searchParamToString } from "~/utils/searchParams";
 
 export function useAdvancedSearchRouteParams() {

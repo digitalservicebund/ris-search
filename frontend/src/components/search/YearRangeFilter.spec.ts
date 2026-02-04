@@ -4,7 +4,7 @@ import { screen } from "@testing-library/vue";
 import { InputText } from "primevue";
 import { describe, expect, it } from "vitest";
 import YearRangeFilter from "./YearRangeFilter.vue";
-import type { DateFilterValue } from "~/utils/search/filterType";
+import type { DateFilterValue } from "~/utils/search/dateFilterType";
 
 describe("YearRangeFilter", () => {
   it.each<[string, DateFilterValue, number]>([

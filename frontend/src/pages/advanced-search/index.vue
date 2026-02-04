@@ -4,7 +4,7 @@ import type { MenuItem } from "primevue/menuitem";
 import type { Statistics } from "~/types";
 import { DocumentKind } from "~/types";
 import { queryableDataFields } from "~/utils/search/dataFields";
-import { isStrictDateFilterValue } from "~/utils/search/filterType";
+import { isStrictDateFilterValue } from "~/utils/search/dateFilterType";
 
 useHead({ title: "Erweiterte Suche" });
 

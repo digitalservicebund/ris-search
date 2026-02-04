@@ -5,7 +5,7 @@ import { DocumentKind } from "~/types";
 import {
   dateFilterToSimpleSearchParams,
   type StrictDateFilterValue,
-} from "~/utils/search/filterType";
+} from "~/utils/search/dateFilterType";
 
 /** Additional configuration for search API calls */
 type SimpleSearchOptions = {
