@@ -3,6 +3,7 @@ packages: []
 minimumReleaseAge: 4320
 minimumReleaseAgeExclude:
   - tar # patch vulnerable version immediately
+  - "@isaacs/brace-expansion"
 
 nodeLinker: hoisted
 
@@ -10,5 +11,6 @@ overrides:
   tar: 7.5.7
   fast-xml-parser: 5.3.4
   lodash-es: 4.17.23
+  "@isaacs/brace-expansion": 5.0.1
 
 saveExact: true
