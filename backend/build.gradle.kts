@@ -208,6 +208,8 @@ tasks {
         useJUnitPlatform {
             includeTags("data")
         }
+        testClassesDirs = sourceSets["test"].output.classesDirs
+        classpath = sourceSets["test"].runtimeClasspath
         mustRunAfter(check)
     }
 
@@ -217,6 +219,8 @@ tasks {
         useJUnitPlatform {
             includeTags("integration")
         }
+        testClassesDirs = sourceSets["test"].output.classesDirs
+        classpath = sourceSets["test"].runtimeClasspath
         mustRunAfter(check)
         finalizedBy("jacocoTestReport")
     }
