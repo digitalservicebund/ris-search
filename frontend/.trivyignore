@@ -1,11 +1,25 @@
 # Ignore CVE in the glob package. This has already been fixed by pinning the
+
 # version in our package.json. The remaining finding causing the errors
+
 # is caused by an unrelated but unused package in the image.
+
 CVE-2025-64756
 
 # Ignore CVEs in the (npm) tar package. This has already been fixed by pinning the
+
 # version in our package.json. The remaining finding causing the errors
+
 # is caused by an unrelated but unused package in the image (node:24.13.0-alpine3.22).
+
 CVE-2026-23745
 CVE-2026-23950
 CVE-2026-24842
+
+# CVE in @isaacs/brace-expansion is resolved in our packages, but is present in the docker image
+
+CVE-2026-25547
+
+# is caused by npm version of the docker image. An attacker must first obtain the ability to execute low-privileged code on the target system in order to exploit this vulnerability
+
+CVE-2026-0775
