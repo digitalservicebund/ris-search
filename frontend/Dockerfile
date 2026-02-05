@@ -2,7 +2,7 @@ FROM node:24.13.0-alpine3.22 AS build
 ARG NUXT_PUBLIC_SENTRY_DSN
 ARG SENTRY_RELEASE
 RUN apk update && apk upgrade
-RUN npm install -g pnpm@10.28.1
+RUN npm install -g pnpm@10.28.2
 WORKDIR /app
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 RUN pnpm install --frozen-lockfile
