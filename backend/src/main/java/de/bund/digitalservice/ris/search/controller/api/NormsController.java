@@ -181,8 +181,7 @@ public class NormsController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @Operation(
       summary = "Work and expression-level metadata",
-      description =
-          "Returns the work and expression-level (\"workExample\") metadata of a legislation item.")
+      description = "Returns metadata of a legislation item.")
   @ApiResponse(responseCode = "200")
   @ApiResponse(responseCode = "404", content = @Content)
   public ResponseEntity<LegislationExpressionSchema> getLegislation(
@@ -227,8 +226,7 @@ public class NormsController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @Operation(
       summary = "Retrieves expression level metadata for a given work eli",
-      description =
-          "Returns the expression-level (\"workExample\") metadata of a legislation item.")
+      description = "Returns all legislation items based on its work eli")
   @ApiResponse(responseCode = "200")
   @ApiResponse(responseCode = "404", content = @Content)
   @Hidden
