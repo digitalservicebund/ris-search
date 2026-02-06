@@ -224,7 +224,12 @@ const detailsMetadata = computed(() => {
 }
 
 :deep(.case-law table) {
-  @apply inline-block max-w-full overflow-x-auto;
+  @apply inline-block max-w-full overflow-x-auto text-sm;
+
+  td,
+  th {
+    @apply p-4 align-top;
+  }
 }
 
 :deep(.case-law h2) {
