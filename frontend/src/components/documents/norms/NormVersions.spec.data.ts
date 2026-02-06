@@ -11,6 +11,13 @@ function createWorkExample(
     legislationIdentifier: expressionEli,
     temporalCoverage: temporalCoverage,
     legislationLegalForce: legalForce,
+    name: "",
+    alternateName: "",
+    legislationDate: "2025-01-01",
+    datePublished: "2025-01-01",
+    isPartOf: {
+      name: "",
+    },
     encoding: [],
     tableOfContents: [],
     hasPart: [],

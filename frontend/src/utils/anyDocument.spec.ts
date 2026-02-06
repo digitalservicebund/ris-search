@@ -10,7 +10,7 @@ import type {
   AdministrativeDirective,
   AnyDocument,
   CaseLaw,
-  LegislationWork,
+  LegislationExpression,
   Literature,
 } from "~/types/api";
 
@@ -36,7 +36,7 @@ describe("anyDocument", () => {
     });
 
     it("returns false if the document is not a caselaw document", () => {
-      const doc: LegislationWork = {
+      const doc: LegislationExpression = {
         "@type": "Legislation",
         "@id": "4711",
         name: "",
@@ -45,16 +45,11 @@ describe("anyDocument", () => {
         legislationDate: "",
         datePublished: "",
         isPartOf: { name: "" },
-        workExample: {
-          "@type": "Legislation",
-          "@id": "4712",
-          legislationIdentifier: "",
-          legislationLegalForce: "InForce",
-          temporalCoverage: "",
-          encoding: [],
-          tableOfContents: [],
-          hasPart: [],
-        },
+        legislationLegalForce: "InForce",
+        temporalCoverage: "",
+        encoding: [],
+        tableOfContents: [],
+        hasPart: [],
       };
 
       expect(isCaselaw(doc)).toBe(false);
@@ -63,7 +58,7 @@ describe("anyDocument", () => {
 
   describe("isLegislation", () => {
     it("returns true if the document is a legislation work document", () => {
-      const doc: LegislationWork = {
+      const doc: LegislationExpression = {
         "@type": "Legislation",
         "@id": "4711",
         name: "",
@@ -72,16 +67,11 @@ describe("anyDocument", () => {
         legislationDate: "",
         datePublished: "",
         isPartOf: { name: "" },
-        workExample: {
-          "@type": "Legislation",
-          "@id": "4712",
-          legislationIdentifier: "",
-          legislationLegalForce: "InForce",
-          temporalCoverage: "",
-          encoding: [],
-          tableOfContents: [],
-          hasPart: [],
-        },
+        legislationLegalForce: "InForce",
+        temporalCoverage: "",
+        encoding: [],
+        tableOfContents: [],
+        hasPart: [],
       };
 
       expect(isLegislationWork(doc)).toBe(true);
@@ -146,7 +136,7 @@ describe("anyDocument", () => {
     });
 
     it("returns false if the document is not a literature document", () => {
-      const doc: LegislationWork = {
+      const doc: LegislationExpression = {
         "@type": "Legislation",
         "@id": "4711",
         name: "",
@@ -155,16 +145,11 @@ describe("anyDocument", () => {
         legislationDate: "",
         datePublished: "",
         isPartOf: { name: "" },
-        workExample: {
-          "@type": "Legislation",
-          "@id": "4712",
-          legislationIdentifier: "",
-          legislationLegalForce: "InForce",
-          temporalCoverage: "",
-          encoding: [],
-          tableOfContents: [],
-          hasPart: [],
-        },
+        legislationLegalForce: "InForce",
+        temporalCoverage: "",
+        encoding: [],
+        tableOfContents: [],
+        hasPart: [],
       };
 
       expect(isLiterature(doc)).toBe(false);
@@ -183,7 +168,7 @@ describe("anyDocument", () => {
     it("returns false if the document is not an administrativeDirective document", () => {
       const doc = {
         "@type": "Legislation",
-      } as LegislationWork;
+      } as LegislationExpression;
 
       expect(isAdministrativeDirective(doc)).toBe(false);
     });
@@ -210,25 +195,20 @@ describe("anyDocument", () => {
     });
 
     it("identifies a legislation work document", () => {
-      const doc: LegislationWork = {
+      const doc: LegislationExpression = {
         "@type": "Legislation",
-        "@id": "",
+        "@id": "4712",
         name: "",
-        legislationIdentifier: "",
+        legislationIdentifier: "4712",
         alternateName: "",
         legislationDate: "",
         datePublished: "",
         isPartOf: { name: "" },
-        workExample: {
-          "@type": "Legislation",
-          "@id": "4712",
-          legislationIdentifier: "4712",
-          legislationLegalForce: "InForce",
-          temporalCoverage: "",
-          encoding: [],
-          tableOfContents: [],
-          hasPart: [],
-        },
+        legislationLegalForce: "InForce",
+        temporalCoverage: "",
+        encoding: [],
+        tableOfContents: [],
+        hasPart: [],
       };
 
       expect(getIdentifier(doc)).toBe("4712");
