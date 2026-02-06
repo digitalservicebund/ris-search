@@ -121,7 +121,7 @@ public class SliLiteratureLdmlToOpenSearchMapper {
         .additionalTitles(extractSonstigeSachtitel(literatureLdml))
         .fullTitleAdditions(extractFullTitleAdditions(literatureLdml))
         .footnotes(extractFootnotes(literatureLdml))
-        .publicherInformation(extractPublisherinformation(literatureLdml))
+        .publisherInformation(extractPublisherinformation(literatureLdml))
         .edition(extractEdition(literatureLdml))
         .internationalIdentifiers(extractInternationalIdentifiers(literatureLdml))
         .volumes(extractVolumes(literatureLdml))

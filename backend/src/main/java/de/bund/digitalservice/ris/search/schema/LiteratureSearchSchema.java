@@ -43,7 +43,7 @@ public record LiteratureSearchSchema(
     @Schema(description = "Haupttitel") String headline,
     @Schema(description = "Zusätze zum Haupttitel") String headlineAdditions,
     @Schema(description = "Dokumentarischer Titel") String alternativeHeadline,
-    @Schema(description = "Authoren", example = "['Musterfrau, Sabine']") List<String> authors,
+    @Schema(description = "Autoren", example = "['Musterfrau, Sabine']") List<String> authors,
     @Schema(description = "Mitarbeiter", example = "['Mustermann, Max']")
         List<String> collaborators,
     @Schema(description = "Sprachen", example = "['deu', 'eng']") List<String> languages,

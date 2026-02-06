@@ -40,7 +40,7 @@ class SliLiteratureLdmlToOpenSearchMapperTest {
             .languages(List.of("deu"))
             .normReferences(List.of("GG, Art 6 Abs 2 S 1, 1949-05-23"))
             .universityNotes(List.of("Universität Foo"))
-            .publicherInformation(List.of("verlag"))
+            .publisherInformation(List.of("verlag"))
             .publisherOrganizations(List.of("herausgeber institution"))
             .publisherPersons(List.of("Titel, foo herausgeber person"))
             .conferenceNotes(List.of("Internationaler Kongreß für das Recht, 1991, Athen, GRC"))

@@ -2088,7 +2088,7 @@
               },
               "authors": {
                 "type": "array",
-                "description": "Authoren",
+                "description": "Autoren",
                 "example": "['Musterfrau, Sabine']",
                 "items": { "type": "string" }
               },
@@ -2224,7 +2224,7 @@
           },
           "authors": {
             "type": "array",
-            "description": "Authoren",
+            "description": "Autoren",
             "example": "['Musterfrau, Sabine']",
             "items": { "type": "string" }
           },

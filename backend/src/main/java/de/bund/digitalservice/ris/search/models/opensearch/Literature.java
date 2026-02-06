@@ -46,7 +46,7 @@ public record Literature(
     @ElementCollection @Field(name = Fields.FULL_TITLE_ADDITIONS) List<String> fullTitleAdditions,
     @ElementCollection @Field(name = Fields.FOOTNOTES) List<String> footnotes,
     @ElementCollection @Field(name = Fields.PUBLISHER_INFORMATION)
-        List<String> publicherInformation,
+        List<String> publisherInformation,
     @ElementCollection @Field(name = Fields.INTERNATIONAL_IDENTIFIERS)
         List<String> internationalIdentifiers,
     @ElementCollection @Field(name = Fields.VOLUMES) List<String> volumes,

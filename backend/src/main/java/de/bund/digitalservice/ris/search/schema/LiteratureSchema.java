@@ -54,7 +54,7 @@ public record LiteratureSchema(
     @Schema(description = "Dokumentarischer Titel") String alternativeHeadline,
     @Nullable @Schema(description = "Ausgabe") String edition,
     @Schema(description = "Bestellnummer") List<String> internationalIdentifiers,
-    @Schema(description = "Authoren", example = "['Musterfrau, Sabine']") List<String> authors,
+    @Schema(description = "Autoren", example = "['Musterfrau, Sabine']") List<String> authors,
     @Schema(description = "Mitarbeiter", example = "['Mustermann, Max']")
         List<String> collaborators,
     @Schema(description = "Bearbeiter") List<String> editors,
