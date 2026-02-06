@@ -4,12 +4,6 @@ import { isDevelopment } from "./shared";
 
 const secureCookie = !isDevelopment;
 
-/**
- * Configuration for the runtimeConfig section of Nuxt config. These should be
- * set in the environment variables. Please refer to the README for more
- * information on configuration.
- */
-
 const getBasicAuth = () => {
   const path = "/etc/secrets/basic-auth/secret";
   if (fs.existsSync(path)) {
@@ -18,6 +12,11 @@ const getBasicAuth = () => {
   return process.env.NUXT_BASIC_AUTH || "";
 };
 
+/**
+ * Configuration for the runtimeConfig section of Nuxt config. These should be
+ * set in the environment variables. Please refer to the README for more
+ * information on configuration.
+ */
 export const runtimeConfig: NuxtConfig["runtimeConfig"] = {
   basicAuth: getBasicAuth(),
   auth: {
