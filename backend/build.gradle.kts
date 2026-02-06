@@ -89,14 +89,10 @@ dependencies {
     implementation(libs.pebble)
     implementation(libs.streamex)
 
-    // CVE-2024-7254
-    implementation(libs.protobuf)
-
     compileOnly(libs.lombok)
     annotationProcessor(libs.lombok)
 
     developmentOnly(libs.spring.boot.devtools)
-
     testImplementation(libs.spring.boot.starter.test)
     testImplementation(libs.spring.security.test)
     testImplementation(libs.archunit.junit5)
