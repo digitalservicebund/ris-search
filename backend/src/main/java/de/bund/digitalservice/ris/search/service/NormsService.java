@@ -54,6 +54,7 @@ public class NormsService {
   private final RestHighLevelClient openSearchRestClient;
   private final NormsBucket normsBucket;
   private final String normsIndexName;
+  private static final String DATE_FORMAT = "yyyy-MM-dd";
 
   /**
    * Constructs a new instance of {@code NormsService}.
@@ -134,12 +135,12 @@ public class NormsService {
             .query(QueryBuilders.termQuery(Norm.Fields.WORK_ELI_KEYWORD, workEli.toString()))
             .sort(Norm.Fields.ENTRY_INTO_FORCE_DATE, SortOrder.DESC)
             .docValueField(Norm.Fields.EXPRESSION_ELI_KEYWORD)
-            .docValueField(Norm.Fields.ENTRY_INTO_FORCE_DATE, "yyyy-MM-dd")
-            .docValueField(Norm.Fields.EXPIRY_DATE, "yyyy-MM-dd")
+            .docValueField(Norm.Fields.ENTRY_INTO_FORCE_DATE, DATE_FORMAT)
+            .docValueField(Norm.Fields.EXPIRY_DATE, DATE_FORMAT)
             .docValueField(Norm.Fields.OFFICIAL_TITLE_KEYWORD)
-            .docValueField(Norm.Fields.DATE_PUBLISHED, "yyyy-MM-dd")
+            .docValueField(Norm.Fields.DATE_PUBLISHED, DATE_FORMAT)
             .docValueField(Norm.Fields.OFFICIAL_SHORT_TITLE_KEYWORD)
-            .docValueField(Norm.Fields.NORMS_DATE, "yyyy-MM-dd")
+            .docValueField(Norm.Fields.NORMS_DATE, DATE_FORMAT)
             .docValueField(Norm.Fields.OFFICIAL_ABBREVIATION_KEYWORD)
             .fetchSource(false)
             .from(pageable.getPageNumber() * pageable.getPageSize())

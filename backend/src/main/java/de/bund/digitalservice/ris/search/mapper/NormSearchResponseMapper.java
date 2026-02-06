@@ -7,7 +7,6 @@ import de.bund.digitalservice.ris.search.schema.CollectionSchema;
 import de.bund.digitalservice.ris.search.schema.LegalForceStatus;
 import de.bund.digitalservice.ris.search.schema.LegislationExpressionSearchSchema;
 import de.bund.digitalservice.ris.search.schema.PartialCollectionViewSchema;
-import de.bund.digitalservice.ris.search.schema.PublicationIssueSchema;
 import de.bund.digitalservice.ris.search.schema.SearchMemberSchema;
 import de.bund.digitalservice.ris.search.schema.TextMatchSchema;
 import de.bund.digitalservice.ris.search.utils.DateUtils;
@@ -132,9 +131,6 @@ public class NormSearchResponseMapper {
    */
   public static LegislationExpressionSearchSchema fromDomain(Norm norm) {
     String contentBaseUrl = ApiConfig.Paths.LEGISLATION + "/";
-
-    PublicationIssueSchema publicationIssue =
-        norm.getPublishedIn() != null ? new PublicationIssueSchema(norm.getPublishedIn()) : null;
 
     LegalForceStatus legislationLegalForce =
         DateUtils.isActive(norm.getEntryIntoForceDate(), norm.getExpiryDate())
