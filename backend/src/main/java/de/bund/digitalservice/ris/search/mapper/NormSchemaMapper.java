@@ -56,10 +56,10 @@ public class NormSchemaMapper {
         norm.getPublishedIn() != null ? new PublicationIssueSchema(norm.getPublishedIn()) : null;
 
     return LegislationExpressionSchema.builder()
-        .id(CONTENT_BASE_URL + norm.getWorkEli())
+        .id(CONTENT_BASE_URL + norm.getExpressionEli())
         .abbreviation(norm.getOfficialAbbreviation())
         .alternateName(norm.getOfficialShortTitle())
-        .legislationIdentifier(norm.getWorkEli())
+        .legislationIdentifier(norm.getExpressionEli())
         .legislationDate(norm.getNormsDate())
         .datePublished(norm.getDatePublished())
         .name(norm.getOfficialTitle())

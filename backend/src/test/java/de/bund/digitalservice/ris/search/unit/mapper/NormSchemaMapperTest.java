@@ -76,8 +76,8 @@ class NormSchemaMapperTest {
 
     LegislationExpressionSchema expectedResponse =
         LegislationExpressionSchema.builder()
-            .id("/v1/legislation/workEli")
-            .legislationIdentifier("workEli")
+            .id("/v1/legislation/expressionEli")
+            .legislationIdentifier("expressionEli")
             .legislationLegalForce(LegalForceStatus.IN_FORCE)
             .tableOfContents(List.of())
             .encoding(
