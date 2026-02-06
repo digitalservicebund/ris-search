@@ -389,7 +389,7 @@
       "get": {
         "tags": ["Legislation"],
         "summary": "Work and expression-level metadata",
-        "description": "Returns the work and expression-level (\"workExample\") metadata of a legislation item.",
+        "description": "Returns metadata of a legislation item.",
         "operationId": "getLegislation",
         "parameters": [
           {
