@@ -77,7 +77,7 @@ defineProps<{
 }
 
 :deep(.akn-act table) {
-  @apply mb-8 max-w-full border-collapse overflow-x-auto border-gray-800;
+  @apply mb-8 max-w-full border-collapse overflow-x-auto border-gray-800 text-sm;
 
   .rowsep {
     @apply border-b;
