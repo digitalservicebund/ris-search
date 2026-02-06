@@ -90,7 +90,7 @@ class NormsControllerApiTest extends ContainersIntegrationBase {
             status().isOk(),
             jsonPath("$.@type", is("Legislation")),
             jsonPath("$.name", is("Test Gesetz")),
-            jsonPath("$.legislationIdentifier", is("eli/bund/bgbl-1/1000/test")),
+            jsonPath("$.legislationIdentifier", is("eli/bund/bgbl-1/1000/test/2000-10-06/2/deu")),
             jsonPath("$.alternateName", is("TestG1")),
             jsonPath("$.abbreviation", is("TeG")),
             jsonPath("$.legislationDate", is("2024-01-02")),
