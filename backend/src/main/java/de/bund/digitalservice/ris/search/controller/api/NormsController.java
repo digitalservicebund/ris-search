@@ -222,7 +222,7 @@ public class NormsController {
   @GetMapping(
       path =
           ApiConfig.Paths.LEGISLATION_VERSIONS
-              + "/{jurisdiction}/{agent}/{year}/{naturalIdentifier}/{pointInTime}/{version}/{language}",
+              + "/{jurisdiction}/{agent}/{year}/{naturalIdentifier}",
       produces = MediaType.APPLICATION_JSON_VALUE)
   @Operation(
       summary = "Retrieves expression level metadata for a given work eli",

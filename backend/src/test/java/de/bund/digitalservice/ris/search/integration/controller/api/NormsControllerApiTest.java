@@ -699,7 +699,7 @@ class NormsControllerApiTest extends ContainersIntegrationBase {
 
     mockMvc
         .perform(
-            get(ApiConfig.Paths.LEGISLATION_VERSIONS + "/bund/bgbl-1/1000/test/2000-10-06/2/deu")
+            get(ApiConfig.Paths.LEGISLATION_VERSIONS + "/bund/bgbl-1/1000/test")
                 .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.@type", equalTo("hydra:Collection")))
