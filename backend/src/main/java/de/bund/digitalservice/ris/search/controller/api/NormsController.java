@@ -221,8 +221,8 @@ public class NormsController {
    */
   @GetMapping(
       path =
-          ApiConfig.Paths.LEGISLATION_WORK_EXAMPLE
-              + "/{jurisdiction}/{agent}/{year}/{naturalIdentifier}",
+          ApiConfig.Paths.LEGISLATION_VERSIONS
+              + "/{jurisdiction}/{agent}/{year}/{naturalIdentifier}/{pointInTime}/{version}/{language}",
       produces = MediaType.APPLICATION_JSON_VALUE)
   @Operation(
       summary = "Retrieves expression level metadata for a given work eli",
@@ -247,7 +247,7 @@ public class NormsController {
             eli, PageRequest.of(pagination.getPageIndex(), pagination.getSize()));
 
     return LegislationExpressionSearchSchemaMapper.fromNormsPage(
-        expressions, ApiConfig.Paths.LEGISLATION_WORK_EXAMPLE);
+        expressions, ApiConfig.Paths.LEGISLATION_VERSIONS);
   }
 
   /**
