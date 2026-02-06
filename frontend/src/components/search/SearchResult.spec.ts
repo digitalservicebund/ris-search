@@ -5,7 +5,7 @@ import type {
   AdministrativeDirective,
   AnyDocument,
   CaseLaw,
-  LegislationWork,
+  LegislationExpression,
   Literature,
   SearchResult,
 } from "~/types";
@@ -36,7 +36,7 @@ describe("SearchResult", () => {
       props: {
         searchResult: {
           item: { "@type": "Legislation" },
-        } as SearchResult<LegislationWork>,
+        } as SearchResult<LegislationExpression>,
         order: 0,
       },
       global: {

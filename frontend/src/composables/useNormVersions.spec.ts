@@ -2,14 +2,14 @@ import { mockNuxtImport } from "@nuxt/test-utils/runtime";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { ref } from "vue";
 import { useNormVersions } from "./useNormVersions";
-import type { LegislationWork, SearchResult } from "~/types";
+import type { LegislationExpression, SearchResult } from "~/types";
 
 const dummyData = {
   member: [
     { temporalCoverage: "2023-12-01/2300-10-01" },
     { temporalCoverage: "2021-12-01/2023-11-30" },
   ],
-} as unknown as SearchResult<LegislationWork>[];
+} as unknown as SearchResult<LegislationExpression>[];
 
 const { useRisBackendMock } = vi.hoisted(() => {
   return {

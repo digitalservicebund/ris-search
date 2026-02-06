@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/vue";
 import NormVersionWarning from "./NormVersionWarning.vue";
-import type { LegislationExpression, LegislationWork } from "~/types";
+import type { LegislationExpression } from "~/types";
 
 describe("NormVersionWarning", () => {
   const testVersions = [
@@ -30,12 +30,9 @@ describe("NormVersionWarning", () => {
     {
       label: "inForce points to next neue Fassung",
       currentlyRendered: {
-        legislationIdentifier: "eli/bund/bgbl-1/2020/s1126",
-        workExample: {
-          temporalCoverage: testVersions[1]!.temporalCoverage,
-          legislationIdentifier: testVersions[1]!.legislationIdentifier,
-          legislationLegalForce: testVersions[1]!.legislationLegalForce,
-        },
+        temporalCoverage: testVersions[1]!.temporalCoverage,
+        legislationIdentifier: testVersions[1]!.legislationIdentifier,
+        legislationLegalForce: testVersions[1]!.legislationLegalForce,
       },
       messageText: "Ab 01.01.2824 gilt eine neue Fassung.",
       link: `/norms/${testVersions[2]!.legislationIdentifier}`,
@@ -44,12 +41,9 @@ describe("NormVersionWarning", () => {
     {
       label: "historic version points to inForce Fassung",
       currentlyRendered: {
-        legislationIdentifier: "eli/bund/bgbl-1/2020/s1126",
-        workExample: {
-          temporalCoverage: testVersions[0]!.temporalCoverage,
-          legislationIdentifier: testVersions[0]!.legislationIdentifier,
-          legislationLegalForce: testVersions[0]!.legislationLegalForce,
-        },
+        temporalCoverage: testVersions[0]!.temporalCoverage,
+        legislationIdentifier: testVersions[0]!.legislationIdentifier,
+        legislationLegalForce: testVersions[0]!.legislationLegalForce,
       },
       messageText: "Sie lesen eine historische Fassung.",
       link: `/norms/${testVersions[1]!.legislationIdentifier}`,
@@ -58,12 +52,9 @@ describe("NormVersionWarning", () => {
     {
       label: "futureInForce points to inForce Fassung",
       currentlyRendered: {
-        legislationIdentifier: "eli/bund/bgbl-1/2020/s1126",
-        workExample: {
-          temporalCoverage: testVersions[2]!.temporalCoverage,
-          legislationIdentifier: testVersions[2]!.legislationIdentifier,
-          legislationLegalForce: testVersions[2]!.legislationLegalForce,
-        },
+        temporalCoverage: testVersions[2]!.temporalCoverage,
+        legislationIdentifier: testVersions[2]!.legislationIdentifier,
+        legislationLegalForce: testVersions[2]!.legislationLegalForce,
       },
       messageText: "Sie lesen eine zukünftige Fassung.",
       link: `/norms/${testVersions[1]!.legislationIdentifier}`,
@@ -75,7 +66,7 @@ describe("NormVersionWarning", () => {
     render(NormVersionWarning, {
       props: {
         versions: testVersions,
-        currentVersion: testData.currentlyRendered as LegislationWork,
+        currentVersion: testData.currentlyRendered as LegislationExpression,
       },
       global: {
         stubs: {
@@ -107,13 +98,10 @@ describe("NormVersionWarning", () => {
       props: {
         versions: [testVersions[0]!, testVersions[1]!],
         currentVersion: {
-          legislationIdentifier: "eli/bund/bgbl-1/2020/s1126",
-          workExample: {
-            temporalCoverage: testVersions[1]!.temporalCoverage,
-            legislationIdentifier: testVersions[1]!.legislationIdentifier,
-            legislationLegalForce: testVersions[1]!.legislationLegalForce,
-          },
-        } as LegislationWork,
+          temporalCoverage: testVersions[1]!.temporalCoverage,
+          legislationIdentifier: testVersions[1]!.legislationIdentifier,
+          legislationLegalForce: testVersions[1]!.legislationLegalForce,
+        } as LegislationExpression,
       },
       global: {
         stubs: ["RouterLink"],
@@ -134,13 +122,10 @@ describe("NormVersionWarning", () => {
       props: {
         versions: versionsWithoutInForce,
         currentVersion: {
-          legislationIdentifier: "eli/bund/bgbl-1/2020/s1126",
-          workExample: {
-            temporalCoverage: testVersions[0]!.temporalCoverage,
-            legislationIdentifier: testVersions[0]!.legislationIdentifier,
-            legislationLegalForce: testVersions[0]!.legislationLegalForce,
-          },
-        } as LegislationWork,
+          temporalCoverage: testVersions[0]!.temporalCoverage,
+          legislationIdentifier: testVersions[0]!.legislationIdentifier,
+          legislationLegalForce: testVersions[0]!.legislationLegalForce,
+        } as LegislationExpression,
       },
       global: {
         stubs: {
