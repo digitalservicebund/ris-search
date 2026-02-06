@@ -155,7 +155,6 @@ public class NormSearchResponseMapper {
         .legislationDate(norm.getNormsDate())
         .datePublished(norm.getDatePublished())
         .name(norm.getOfficialTitle())
-        .isPartOf(publicationIssue)
         .legislationLegalForce(legislationLegalForce)
         .legislationIdentifier(expressionEli)
         .temporalCoverage(temporalCoverage)

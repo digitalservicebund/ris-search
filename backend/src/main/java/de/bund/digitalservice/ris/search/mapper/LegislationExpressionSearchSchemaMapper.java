@@ -39,6 +39,11 @@ public class LegislationExpressionSearchSchemaMapper {
     return LegislationExpressionSearchSchema.builder()
         .legislationLegalForce(legislationLegalForce)
         .legislationIdentifier(expressionEli)
+        .datePublished(norm.getDatePublished())
+        .abbreviation(norm.getOfficialAbbreviation())
+        .legislationDate(norm.getNormsDate())
+        .name(norm.getOfficialTitle())
+        .alternateName(norm.getOfficialShortTitle())
         .id(expressionId)
         .temporalCoverage(temporalCoverage)
         .build();

@@ -2360,9 +2360,6 @@
                 "description": "Verkündungsdatum (The date of first publication of the legislation, when it was published in the official gazette. This may be later than the `legislationDate`.)\n",
                 "example": "2003-12-16"
               },
-              "isPartOf": {
-                "$ref": "#/components/schemas/PublicationIssueSchema"
-              },
               "legislationLegalForce": {
                 "type": "string",
                 "description": "Whether the legislation expression is currently in force.",
@@ -2372,13 +2369,6 @@
           }
         ],
         "description": "A legislation item, across different expressions and manifestations. May be used to provide context to a `LegislationExpression` (under key `workExample`)."
-      },
-      "PublicationIssueSchema": {
-        "type": "object",
-        "properties": {
-          "@type": { "type": "string", "example": "PublicationIssue" },
-          "name": { "type": "string", "example": "BGBL I 2003, 1760" }
-        }
       },
       "SearchMemberSchemaLegislationExpressionSearchSchema": {
         "type": "object",
@@ -2511,6 +2501,13 @@
           },
           "encodingFormat": { "type": "string", "example": "text/html" },
           "inLanguage": { "type": "string", "example": "de" }
+        }
+      },
+      "PublicationIssueSchema": {
+        "type": "object",
+        "properties": {
+          "@type": { "type": "string", "example": "PublicationIssue" },
+          "name": { "type": "string", "example": "BGBL I 2003, 1760" }
         }
       },
       "TableOfContentsSchema": {

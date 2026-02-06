@@ -53,7 +53,6 @@ public record LegislationExpressionSearchSchema(
                                 Verkündungsdatum (The date of first publication of the legislation, when it was published in the official gazette. This may be later than the `legislationDate`.)
                                 """)
         LocalDate datePublished,
-    @Nullable PublicationIssueSchema isPartOf,
     @Schema(description = "Whether the legislation expression is currently in force.")
         LegalForceStatus legislationLegalForce)
     implements AbstractDocumentSchema, JsonldResource {
