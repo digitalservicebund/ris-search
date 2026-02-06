@@ -1,11 +1,6 @@
 import { computed, type ComputedRef } from "vue";
 import type { AsyncDataRequestStatus } from "#app";
-import type {
-  JSONLDList,
-  LegislationExpression,
-  LegislationWork,
-  SearchResult,
-} from "~/types";
+import type { JSONLDList, LegislationExpression, SearchResult } from "~/types";
 import { getCurrentDateInGermanyFormatted } from "~/utils/dateFormatting";
 
 interface UseNormVersions {
@@ -42,7 +37,7 @@ function getNorms(params: {
 }) {
   const immediate = params.eli !== undefined;
   const { status, data, error } = useRisBackend<
-    JSONLDList<SearchResult<LegislationWork>>
+    JSONLDList<SearchResult<LegislationExpression>>
   >(`/v1/legislation`, {
     params: { ...params, size: "300" },
     immediate: immediate,

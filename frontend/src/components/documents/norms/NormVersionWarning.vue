@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import dayjs from "dayjs";
 import VersionWarningMessage from "~/components/documents/norms/VersionWarningMessage.vue";
-import type { LegislationExpression, LegislationWork } from "~/types";
+import type { LegislationExpression } from "~/types";
 import {
   getValidityStatus,
   temporalCoverageToValidityInterval,
@@ -9,7 +9,7 @@ import {
 
 const props = defineProps<{
   versions: LegislationExpression[];
-  currentVersion: LegislationWork;
+  currentVersion: LegislationExpression;
 }>();
 
 const inForceVersion = computed(() =>
@@ -24,7 +24,7 @@ const inForceVersionLink = computed(() =>
 
 const currentVersionValidityStatus = computed(() => {
   const validityInterval = temporalCoverageToValidityInterval(
-    props.currentVersion.workExample.temporalCoverage,
+    props.currentVersion.temporalCoverage,
   );
   return getValidityStatus(validityInterval);
 });

@@ -1,13 +1,12 @@
 import { render, screen } from "@testing-library/vue";
 import { describe, expect, it, vi, beforeEach, afterEach } from "vitest";
 import NormSearchResult from "./NormSearchResult.vue";
-import type { LegislationWork, SearchResult, TextMatch } from "~/types";
+import type { LegislationExpression, SearchResult, TextMatch } from "~/types";
 
-const mockSearchResult: SearchResult<LegislationWork> = {
+const mockSearchResult: SearchResult<LegislationExpression> = {
   item: {
     name: "Test Norm",
     abbreviation: "TN",
-    legislationIdentifier: "eli/bund/bgbl-0/1999/ab/regelungstext-1",
     "@type": "Legislation",
     "@id": "eli/bund/bgbl-0/1999/ab/regelungstext-1",
     alternateName: "NoRM",
@@ -16,17 +15,13 @@ const mockSearchResult: SearchResult<LegislationWork> = {
     isPartOf: {
       name: "The Official Gazette",
     },
-    workExample: {
-      "@id": "eli/bund/bgbl-0/1999/abc/1999-12-31/1/deu/regelungstext-1",
-      "@type": "Legislation",
-      hasPart: [],
-      legislationIdentifier:
-        "eli/bund/bgbl-0/1999/abc/1999-12-31/1/deu/regelungstext-1",
-      encoding: [],
-      tableOfContents: [],
-      legislationLegalForce: "InForce",
-      temporalCoverage: "2000-01-01/..",
-    },
+    hasPart: [],
+    legislationIdentifier:
+      "eli/bund/bgbl-0/1999/abc/1999-12-31/1/deu/regelungstext-1",
+    encoding: [],
+    tableOfContents: [],
+    legislationLegalForce: "InForce",
+    temporalCoverage: "2000-01-01/..",
   },
   textMatches: [
     {
@@ -63,7 +58,7 @@ const mockSearchResult: SearchResult<LegislationWork> = {
 };
 
 function renderComponent(
-  searchResult: SearchResult<LegislationWork> = mockSearchResult,
+  searchResult: SearchResult<LegislationExpression> = mockSearchResult,
   order: number = 0,
 ) {
   return render(NormSearchResult, {
@@ -84,12 +79,9 @@ function withTemporalCoverage(temporalCoverage: string | undefined) {
     ...mockSearchResult,
     item: {
       ...mockSearchResult.item,
-      workExample: {
-        ...mockSearchResult.item.workExample,
-        temporalCoverage,
-      },
+      temporalCoverage,
     },
-  } as SearchResult<LegislationWork>;
+  } as SearchResult<LegislationExpression>;
 }
 
 const mocks = vi.hoisted(() => {
@@ -166,7 +158,7 @@ describe("NormSearchResult", () => {
     const link = screen.getByRole("link", { name: /Test Title/i });
     expect(link).toHaveAttribute(
       "href",
-      `/norms/${mockSearchResult.item.workExample.legislationIdentifier}`,
+      `/norms/${mockSearchResult.item.legislationIdentifier}`,
     );
   });
 
@@ -187,7 +179,7 @@ describe("NormSearchResult", () => {
       text: "testing <mark>highlighted Text</mark> is here",
       location: null,
     };
-    const modifiedSearchResult: SearchResult<LegislationWork> = {
+    const modifiedSearchResult: SearchResult<LegislationExpression> = {
       ...mockSearchResult,
       textMatches: [textMatch],
     };
@@ -202,7 +194,7 @@ describe("NormSearchResult", () => {
       '<mark>mark</mark> <i>i</i> <b>b</b> <img src="" alt="do not show"> <div>div</div> plain_text.';
     const expectedSanitized =
       "<mark>mark</mark> <i>i</i> <b>b</b>  div plain_text.";
-    const modifiedSearchResult: SearchResult<LegislationWork> = {
+    const modifiedSearchResult: SearchResult<LegislationExpression> = {
       ...mockSearchResult,
       textMatches: [
         {
