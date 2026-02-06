@@ -694,17 +694,16 @@ class NormsControllerApiTest extends ContainersIntegrationBase {
   }
 
   @Test
-  @DisplayName("It returns all workExamples of a given workEli")
+  @DisplayName("It returns all workExamples of a given expressionEli")
   void itReturnsTheWorkExmapleOfAGivenWorkEli() throws Exception {
 
     mockMvc
         .perform(
-            get(ApiConfig.Paths.LEGISLATION_WORK_EXAMPLE + "/bund/bgbl-1/1000/test")
+            get(ApiConfig.Paths.LEGISLATION_VERSIONS + "/bund/bgbl-1/1000/test/2000-10-06/2/deu")
                 .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.@type", equalTo("hydra:Collection")))
-        .andExpect(
-            jsonPath("$.@id", equalTo("/v1/legislation/work-example/eli?pageIndex=0&size=100")))
+        .andExpect(jsonPath("$.@id", equalTo("/v1/legislation/versions/eli?pageIndex=0&size=100")))
         .andExpect(jsonPath("$.member[0].@type", equalTo("Legislation")))
         .andExpect(
             jsonPath(
