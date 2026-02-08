@@ -15,8 +15,8 @@ importers:
   .:
     dependencies:
       '@digitalservicebund/ris-ui':
-        specifier: 3.21.1
-        version: 3.21.1(primevue@4.5.4(vue@3.5.26(typescript@5.9.3)))(tailwindcss@4.1.18)(vue@3.5.26(typescript@5.9.3))
+        specifier: 3.21.3
+        version: 3.21.3(primevue@4.5.4(vue@3.5.26(typescript@5.9.3)))(tailwindcss@4.1.18)(vue@3.5.26(typescript@5.9.3))
       '@nuxtjs/mdc':
         specifier: 0.20.0
         version: 0.20.0(magicast@0.5.1)
@@ -415,8 +415,8 @@ packages:
     resolution: {integrity: sha512-Vd/9EVDiu6PPJt9yAh6roZP6El1xHrdvIVGjyBsHR0RYwNHgL7FJPyIIW4fANJNG6FtyZfvlRPpFI4ZM/lubvw==}
     engines: {node: '>=18'}
 
-  '@digitalservicebund/ris-ui@3.21.1':
-    resolution: {integrity: sha512-1zao6znyCADMajYlRKMFliXH1fUfREisL4Jzwtcq1PwK69C0UK6byjoOY4t/l0ZA3T0OABzVuQQP1K+gspA4LQ==}
+  '@digitalservicebund/ris-ui@3.21.3':
+    resolution: {integrity: sha512-U7NYLNUoPWr+PuDDuLapiTaVePF4oqmY51dZv+C6ZJbiQ1TKPmgiNbPO9/xkaa0VmIeK5GE/1c5DVWW6aUiRJg==}
     peerDependencies:
       primevue: ^4.0.0
       tailwindcss: ^4.0.0
@@ -4459,6 +4459,7 @@ packages:
 
   glob@10.5.0:
     resolution: {integrity: sha512-DfXN8DfhJ7NH3Oe7cFmu3NCu1wKbkReJ8TorzSAFbSKrlNaQSKfIzqYqVY8zlbs2NLBbWpRiU52GX2PbaBVNkg==}
+    deprecated: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
     hasBin: true
 
   glob@13.0.0:
@@ -7930,7 +7931,7 @@ snapshots:
 
   '@csstools/css-tokenizer@3.0.4': {}
 
-  '@digitalservicebund/ris-ui@3.21.1(primevue@4.5.4(vue@3.5.26(typescript@5.9.3)))(tailwindcss@4.1.18)(vue@3.5.26(typescript@5.9.3))':
+  '@digitalservicebund/ris-ui@3.21.3(primevue@4.5.4(vue@3.5.26(typescript@5.9.3)))(tailwindcss@4.1.18)(vue@3.5.26(typescript@5.9.3))':
     dependencies:
       primevue: 4.5.4(vue@3.5.26(typescript@5.9.3))
       tailwindcss: 4.1.18
