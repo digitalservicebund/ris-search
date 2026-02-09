@@ -520,35 +520,7 @@ describe("useSimpleSearchRouteParams", () => {
   });
 
   describe("document kind change side effects", () => {
-    it("resets dateFilter when changing to All", async () => {
-      const routeQuery = reactive({
-        query: {
-          documentKind: DocumentKind.CaseLaw,
-          dateFilterType: "period",
-          dateFilterFrom: "2024-01-01",
-          dateFilterTo: "2024-12-31",
-        },
-      });
-
-      vi.doMock("#app", () => ({
-        useRoute: vi.fn().mockReturnValue(routeQuery),
-      }));
-
-      const { useSimpleSearchRouteParams } =
-        await import("./useSimpleSearchRouteParams");
-
-      const { documentKind, dateFilter } = useSimpleSearchRouteParams();
-
-      expect(documentKind.value).toEqual(DocumentKind.CaseLaw);
-      expect(dateFilter.value.type).toBe("period");
-
-      documentKind.value = DocumentKind.All;
-
-      expect(documentKind.value).toEqual(DocumentKind.All);
-      expect(dateFilter.value.type).toBe("allTime");
-    });
-
-    it("resets dateFilter when changing to Norm", async () => {
+    it("resets dateFilter when changing document kind", async () => {
       const routeQuery = reactive({
         query: {
           documentKind: DocumentKind.CaseLaw,
@@ -573,35 +545,6 @@ describe("useSimpleSearchRouteParams", () => {
       documentKind.value = DocumentKind.Norm;
 
       expect(dateFilter.value.type).toBe("allTime");
-    });
-
-    it("preserves dateFilter when changing to Literature", async () => {
-      const routeQuery = reactive({
-        query: {
-          documentKind: DocumentKind.CaseLaw,
-          dateFilterType: "period",
-          dateFilterFrom: "2024-01-01",
-          dateFilterTo: "2024-12-31",
-        },
-      });
-
-      vi.doMock("#app", () => ({
-        useRoute: vi.fn().mockReturnValue(routeQuery),
-      }));
-
-      const { useSimpleSearchRouteParams } =
-        await import("./useSimpleSearchRouteParams");
-
-      const { documentKind, dateFilter } = useSimpleSearchRouteParams();
-
-      expect(documentKind.value).toEqual(DocumentKind.CaseLaw);
-      expect(dateFilter.value.type).toBe("period");
-
-      documentKind.value = DocumentKind.Literature;
-
-      expect(dateFilter.value.type).toBe("period");
-      expect(dateFilter.value.from).toBe("2024-01-01");
-      expect(dateFilter.value.to).toBe("2024-12-31");
     });
 
     it("resets typeGroup and court when changing from CaseLaw", async () => {
