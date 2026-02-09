@@ -336,7 +336,7 @@ public class SliLiteratureLdmlToOpenSearchMapper {
         .orElse(Collections.emptyList())
         .stream()
         .filter(event -> eIds.contains(event.getEId()))
-        .map(TlcOrganization::getName)
+        .map(TlcOrganization::getShowAs)
         .toList();
   }
 
@@ -477,7 +477,7 @@ public class SliLiteratureLdmlToOpenSearchMapper {
         .orElse(Collections.emptyList())
         .stream()
         .filter(event -> eIds.contains(event.getEId()))
-        .map(TlcOrganization::getName)
+        .map(TlcOrganization::getShowAs)
         .toList();
   }
 

@@ -12,6 +12,7 @@ import de.bund.digitalservice.ris.search.schema.LiteratureSchema;
  * {@link LiteratureSchema} objects. It cannot be instantiated.
  */
 public class LiteratureSchemaMapper {
+
   private LiteratureSchemaMapper() {}
 
   /**
@@ -47,7 +48,8 @@ public class LiteratureSchemaMapper {
         .founder(entity.founder())
         .editors(entity.editors())
         .edition(entity.edition())
-        .publishingHouses(entity.publisherOrganizations())
+        .publishingHouses(entity.publisherInformation())
+        .publisherOrganizations(entity.publisherOrganizations())
         .publishers(entity.publisherPersons())
         .internationalIdentifiers(entity.internationalIdentifiers())
         .universityNotes(entity.universityNotes())

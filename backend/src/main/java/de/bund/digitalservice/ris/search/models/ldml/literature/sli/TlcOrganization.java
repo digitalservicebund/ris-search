@@ -13,7 +13,8 @@ import lombok.Getter;
  * namespaces.
  *
  * <p>Attributes: - eId: A unique identifier assigned to the organization. - name: The name of the
- * organization, serialized within a specific namespace.
+ * organization, serialized within a specific namespace. - showAs: The display representation of the
+ * organization.
  */
 @Getter
 public class TlcOrganization {
@@ -23,4 +24,7 @@ public class TlcOrganization {
 
   @XmlAttribute(name = "name", namespace = LiteratureNamespaces.RIS_SELBSTSTAENDIG_NS)
   private String name;
+
+  @XmlAttribute(name = "showAs")
+  private String showAs;
 }

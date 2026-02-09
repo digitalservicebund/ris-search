@@ -34,6 +34,7 @@ Abschließend gibt das Werk Empfehlungen für die praktische Anwendung juristisc
     editors: [],
     founder: [],
     publishers: [],
+    publisherOrganizations: [],
     publishingHouses: [],
     edition: null,
     volumes: [],

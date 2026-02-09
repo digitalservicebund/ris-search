@@ -214,7 +214,8 @@ describe("getLiteratureDetailsItems", () => {
       editors: ["Doe, Editor"],
       originators: ["FOO"],
       publishers: ["Doe, Publisher"],
-      publishingHouses: ["publishing house"],
+      publisherOrganizations: ["Institution"],
+      publishingHouses: ["Nomos, Baden-Baden"],
       edition: "first edition",
       volumes: ["Teilband 1"],
       conferenceNotes: ["Internationaler Kongress 2025, Berlin, GER"],
@@ -251,8 +252,12 @@ describe("getLiteratureDetailsItems", () => {
           value: "Publisher Doe",
         },
         {
+          label: "Herausgeber (Institution):",
+          value: "Institution",
+        },
+        {
           label: "Verlag:",
-          value: "publishing house",
+          value: "Nomos, Baden-Baden",
         },
         {
           label: "Ausgabe:",
@@ -295,7 +300,8 @@ describe("getLiteratureDetailsItems", () => {
       editors: ["Doe, Editor"],
       originators: ["FOO"],
       publishers: ["Doe, Publisher"],
-      publishingHouses: ["publishing house"],
+      publisherOrganizations: ["Institution"],
+      publishingHouses: ["Nomos, Baden-Baden"],
       edition: "first edition",
       volumes: ["Teilband 1", "Teilband 2"],
       conferenceNotes: [
@@ -336,8 +342,12 @@ describe("getLiteratureDetailsItems", () => {
           value: "Publisher Doe",
         },
         {
+          label: "Herausgeber (Institution):",
+          value: "Institution",
+        },
+        {
           label: "Verlag:",
-          value: "publishing house",
+          value: "Nomos, Baden-Baden",
         },
         {
           label: "Ausgabe:",
@@ -396,6 +406,10 @@ describe("getLiteratureDetailsItems", () => {
         },
         {
           label: "Herausgeber:",
+          value: undefined,
+        },
+        {
+          label: "Herausgeber (Institution):",
           value: undefined,
         },
         {
