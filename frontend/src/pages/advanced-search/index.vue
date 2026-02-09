@@ -79,13 +79,13 @@ const documentKindMenuItems: MenuItem[] = [
     command: setDocumentKind,
   },
   {
-    key: DocumentKind.Literature,
-    label: formatDocumentKind(DocumentKind.Literature),
+    key: DocumentKind.AdministrativeDirective,
+    label: formatDocumentKind(DocumentKind.AdministrativeDirective),
     command: setDocumentKind,
   },
   {
-    key: DocumentKind.AdministrativeDirective,
-    label: formatDocumentKind(DocumentKind.AdministrativeDirective),
+    key: DocumentKind.Literature,
+    label: formatDocumentKind(DocumentKind.Literature),
     command: setDocumentKind,
   },
 ];
