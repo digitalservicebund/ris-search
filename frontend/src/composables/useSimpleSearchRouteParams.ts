@@ -17,8 +17,8 @@ export function useSimpleSearchRouteParams() {
 
   watch(
     documentKind,
-    (val) => {
-      if (val === DocumentKind.All || val === DocumentKind.Norm) {
+    (val, oldVal) => {
+      if (val !== oldVal) {
         dateFilter.value = { type: "allTime" };
       }
 
