@@ -373,7 +373,7 @@
             }
           },
           "422": {
-            "description": "Unprocessable Entity",
+            "description": "Unprocessable Content",
             "content": {
               "application/json": {
                 "schema": {
@@ -2246,7 +2246,12 @@
           },
           "publishers": {
             "type": "array",
-            "description": "Herausgeber",
+            "description": "Herausgeber (Person)",
+            "items": { "type": "string" }
+          },
+          "publisherOrganizations": {
+            "type": "array",
+            "description": "Herausgeber (Institution)",
             "items": { "type": "string" }
           },
           "publishingHouses": {
@@ -2277,6 +2282,11 @@
           "universityNotes": {
             "type": "array",
             "description": "Hochschulvermerk",
+            "items": { "type": "string" }
+          },
+          "volumes": {
+            "type": "array",
+            "description": "Teilbaende",
             "items": { "type": "string" }
           },
           "literatureType": {
