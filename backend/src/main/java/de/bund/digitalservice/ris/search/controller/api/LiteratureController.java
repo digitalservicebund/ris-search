@@ -109,7 +109,9 @@ public class LiteratureController {
   @Operation(
       summary = "Literature HTML",
       description = "Renders and returns a literature item as HTML.")
-  @ApiResponse(responseCode = "200")
+  @ApiResponse(
+      responseCode = "200",
+      content = @Content(mediaType = MediaType.TEXT_HTML_VALUE, schema = @Schema(type = "string")))
   @ApiResponse(responseCode = "404", content = @Content)
   public ResponseEntity<String> getLiteratureAsHtml(
       @Parameter(example = "BJLU075748788") @PathVariable String documentNumber)

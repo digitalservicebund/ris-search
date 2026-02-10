@@ -548,7 +548,17 @@
             "description": "OK",
             "content": { "text/html": { "schema": { "type": "string" } } }
           },
-          "404": { "description": "Not Found" }
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string",
+                  "example": "<div>LegalDocML file not found</div>"
+                }
+              }
+            }
+          }
         }
       }
     },

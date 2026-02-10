@@ -284,7 +284,9 @@ public class NormsController {
           """
               Returns a particular manifestation of a piece of legislation, converted to HTML.
               """)
-  @ApiResponse(responseCode = "200")
+  @ApiResponse(
+      responseCode = "200",
+      content = @Content(mediaType = MediaType.TEXT_HTML_VALUE, schema = @Schema(type = "string")))
   @ApiResponse(
       responseCode = "404",
       content =
@@ -511,8 +513,15 @@ public class NormsController {
           """
               Returns a specific article (§) of particular manifestation of a piece of legislation, converted to HTML.
               """)
-  @ApiResponse(responseCode = "200")
-  @ApiResponse(responseCode = "404", content = @Content())
+  @ApiResponse(
+      responseCode = "200",
+      content = @Content(mediaType = MediaType.TEXT_HTML_VALUE, schema = @Schema(type = "string")))
+  @ApiResponse(
+      responseCode = "404",
+      content =
+          @Content(
+              mediaType = MediaType.TEXT_HTML_VALUE,
+              schema = @Schema(example = HTML_FILE_NOT_FOUND)))
   public ResponseEntity<String> getLegislationArticleAsHtml(
       @Parameter(
               description = BUND_DESCRIPTION,

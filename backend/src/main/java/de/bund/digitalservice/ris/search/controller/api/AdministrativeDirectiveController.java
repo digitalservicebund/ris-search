@@ -180,7 +180,9 @@ public class AdministrativeDirectiveController {
   @Operation(
       summary = "Administrative directive HTML",
       description = "Renders and returns an administrative directive as HTML.")
-  @ApiResponse(responseCode = "200")
+  @ApiResponse(
+      responseCode = "200",
+      content = @Content(mediaType = MediaType.TEXT_HTML_VALUE, schema = @Schema(type = "string")))
   @ApiResponse(responseCode = "404", content = @Content)
   public ResponseEntity<String> getAdministrativeDirectiveAsHtml(
       @Parameter(example = "KSNR00000") @PathVariable String documentNumber) {
