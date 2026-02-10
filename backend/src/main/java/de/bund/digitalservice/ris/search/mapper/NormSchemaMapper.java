@@ -8,6 +8,7 @@ import de.bund.digitalservice.ris.search.schema.LegalForceStatus;
 import de.bund.digitalservice.ris.search.schema.LegislationExpressionPartSchema;
 import de.bund.digitalservice.ris.search.schema.LegislationExpressionSchema;
 import de.bund.digitalservice.ris.search.schema.LegislationObjectSchema;
+import de.bund.digitalservice.ris.search.schema.LegislationWorkSchema;
 import de.bund.digitalservice.ris.search.schema.PublicationIssueSchema;
 import de.bund.digitalservice.ris.search.schema.TableOfContentsSchema;
 import de.bund.digitalservice.ris.search.utils.DateUtils;
@@ -59,6 +60,7 @@ public class NormSchemaMapper {
         .id(CONTENT_BASE_URL + norm.getExpressionEli())
         .abbreviation(norm.getOfficialAbbreviation())
         .alternateName(norm.getOfficialShortTitle())
+        .exampleOfWork(new LegislationWorkSchema(norm.getWorkEli()))
         .legislationIdentifier(norm.getExpressionEli())
         .legislationDate(norm.getNormsDate())
         .datePublished(norm.getDatePublished())

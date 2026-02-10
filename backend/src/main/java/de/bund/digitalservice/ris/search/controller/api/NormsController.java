@@ -5,7 +5,6 @@ import static org.springframework.http.HttpHeaders.CONTENT_DISPOSITION;
 import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.exception.CustomValidationException;
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
-import de.bund.digitalservice.ris.search.mapper.LegislationExpressionSearchSchemaMapper;
 import de.bund.digitalservice.ris.search.mapper.NormSchemaMapper;
 import de.bund.digitalservice.ris.search.mapper.NormSearchResponseMapper;
 import de.bund.digitalservice.ris.search.mapper.SortParamsConverter;
@@ -221,7 +220,7 @@ public class NormsController {
    */
   @GetMapping(
       path =
-          ApiConfig.Paths.LEGISLATION_VERSIONS
+          ApiConfig.Paths.LEGISLATION_WORK_EXAMPLE
               + "/{jurisdiction}/{agent}/{year}/{naturalIdentifier}",
       produces = MediaType.APPLICATION_JSON_VALUE)
   @Operation(
@@ -246,8 +245,8 @@ public class NormsController {
         normsService.getWorkExpressions(
             eli, PageRequest.of(pagination.getPageIndex(), pagination.getSize()));
 
-    return LegislationExpressionSearchSchemaMapper.fromNormsPage(
-        expressions, ApiConfig.Paths.LEGISLATION_VERSIONS);
+    return NormSearchResponseMapper.fromNormsPage(
+        expressions, ApiConfig.Paths.LEGISLATION_WORK_EXAMPLE);
   }
 
   /**
