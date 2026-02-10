@@ -39,6 +39,10 @@ describe("anyDocument", () => {
         "@id": "4711",
         name: "",
         legislationIdentifier: "",
+        exampleOfWork: {
+          "@type": "Legislation",
+          legislationIdentifier: "",
+        },
         alternateName: "",
         legislationDate: "",
         datePublished: "",
@@ -61,6 +65,10 @@ describe("anyDocument", () => {
         "@id": "4711",
         name: "",
         legislationIdentifier: "",
+        exampleOfWork: {
+          "@type": "Legislation",
+          legislationIdentifier: "",
+        },
         alternateName: "",
         legislationDate: "",
         datePublished: "",
@@ -138,6 +146,10 @@ describe("anyDocument", () => {
         "@id": "4711",
         name: "",
         legislationIdentifier: "",
+        exampleOfWork: {
+          "@type": "Legislation",
+          legislationIdentifier: "",
+        },
         alternateName: "",
         legislationDate: "",
         datePublished: "",
@@ -196,6 +208,10 @@ describe("anyDocument", () => {
         "@id": "4712",
         name: "",
         legislationIdentifier: "4712",
+        exampleOfWork: {
+          "@type": "Legislation",
+          legislationIdentifier: "",
+        },
         alternateName: "",
         legislationDate: "",
         datePublished: "",

@@ -136,7 +136,7 @@ const htmlTitle = computed(() => data.value?.articleHeading);
 
 const validVersions =
   norm.value?.legislationLegalForce !== "InForce"
-    ? useValidNormVersions(norm.value?.legislationIdentifier)
+    ? useValidNormVersions(norm.value?.exampleOfWork.legislationIdentifier)
     : undefined;
 
 const inForceNormLink = computed(() => {

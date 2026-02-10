@@ -2344,6 +2344,10 @@
                 "description": "Amtliche Langüberschrift",
                 "example": "Verordnung über Kakao und Kakaoerzeugnisse"
               },
+              "exampleOfWork": {
+                "$ref": "#/components/schemas/LegislationWorkSchema",
+                "description": "the work the expression is based on"
+              },
               "legislationIdentifier": {
                 "type": "string",
                 "example": "eli/bund/bgbl-1/1975/s1760/1998-01-29/10/deu"
@@ -2384,6 +2388,16 @@
           }
         ],
         "description": "A legislation item, across different expressions and manifestations. May be used to provide context to a `LegislationExpression` (under key `workExample`)."
+      },
+      "LegislationWorkSchema": {
+        "type": "object",
+        "properties": {
+          "@type": { "type": "string", "example": "Legislation" },
+          "legislationIdentifier": {
+            "type": "string",
+            "example": "eli/bund/bgbl-1/1975/s1760"
+          }
+        }
       },
       "SearchMemberSchemaLegislationExpressionSearchSchema": {
         "type": "object",
@@ -2457,6 +2471,10 @@
             "type": "string",
             "description": "Amtliche Kurzüberschrift",
             "example": "Kakaoverordnung"
+          },
+          "exampleOfWork": {
+            "$ref": "#/components/schemas/LegislationWorkSchema",
+            "description": "the work the expression is based on"
           },
           "isPartOf": { "$ref": "#/components/schemas/PublicationIssueSchema" },
           "legislationDate": {

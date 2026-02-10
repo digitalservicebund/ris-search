@@ -18,6 +18,10 @@ const mockSearchResult: SearchResult<LegislationExpression> = {
     hasPart: [],
     legislationIdentifier:
       "eli/bund/bgbl-0/1999/abc/1999-12-31/1/deu/regelungstext-1",
+    exampleOfWork: {
+      "@type": "Legislation",
+      legislationIdentifier: "eli/bund/bgbl-0/1999/abc",
+    },
     encoding: [],
     tableOfContents: [],
     legislationLegalForce: "InForce",
