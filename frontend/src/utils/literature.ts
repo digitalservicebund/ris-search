@@ -116,8 +116,12 @@ export function getSliLiteratureDetailItems(
       value: formatArray(formatNames(literature?.publishers ?? [])),
     },
     {
+      label: "Herausgeber (Institution):",
+      value: formatArray(literature?.publisherOrganizations ?? []),
+    },
+    {
       label: "Verlag:",
-      value: formatArray(formatNames(literature?.publishingHouses ?? [])),
+      value: formatArray(literature?.publishingHouses ?? []),
     },
     {
       label: "Ausgabe:",

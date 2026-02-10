@@ -141,6 +141,7 @@ export interface Literature {
   editors: string[];
   founder: string[];
   publishers: string[];
+  publisherOrganizations: string[];
   publishingHouses: string[];
   edition: string | null;
   internationalIdentifiers: string[];
