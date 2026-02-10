@@ -37,6 +37,12 @@ export interface LegislationExpression {
   encoding: LegislationManifestation[];
   tableOfContents: TableOfContentsItem[];
   hasPart: Article[];
+  exampleOfWork: LegislationWork;
+}
+
+export interface LegislationWork {
+  "@type": "Legislation";
+  legislationIdentifier: string;
 }
 
 export type LegalForceStatus = "InForce" | "NotInForce" | "PartiallyInForce";

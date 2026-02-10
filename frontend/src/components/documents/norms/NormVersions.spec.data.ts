@@ -11,6 +11,10 @@ function createWorkExample(
     legislationIdentifier: expressionEli,
     temporalCoverage: temporalCoverage,
     legislationLegalForce: legalForce,
+    exampleOfWork: {
+      "@type": "Legislation",
+      legislationIdentifier: expressionEli.split("/").slice(0, 5).join("/"),
+    },
     name: "",
     alternateName: "",
     legislationDate: "2025-01-01",

@@ -9,6 +9,7 @@ import de.bund.digitalservice.ris.search.schema.LegalForceStatus;
 import de.bund.digitalservice.ris.search.schema.LegislationExpressionPartSchema;
 import de.bund.digitalservice.ris.search.schema.LegislationExpressionSchema;
 import de.bund.digitalservice.ris.search.schema.LegislationObjectSchema;
+import de.bund.digitalservice.ris.search.schema.LegislationWorkSchema;
 import de.bund.digitalservice.ris.search.schema.TableOfContentsSchema;
 import java.util.List;
 import java.util.Objects;
@@ -80,6 +81,7 @@ class NormSchemaMapperTest {
             .legislationIdentifier("expressionEli")
             .legislationLegalForce(LegalForceStatus.IN_FORCE)
             .tableOfContents(List.of())
+            .exampleOfWork(new LegislationWorkSchema("workEli"))
             .encoding(
                 List.of(
                     LegislationObjectSchema.builder()

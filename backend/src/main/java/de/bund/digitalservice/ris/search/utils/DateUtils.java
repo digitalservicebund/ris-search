@@ -11,7 +11,7 @@ import java.util.Optional;
 import java.util.TimeZone;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.opensearch.index.query.BoolQueryBuilder;
 import org.opensearch.index.query.ExistsQueryBuilder;
 import org.opensearch.index.query.QueryBuilder;
@@ -137,7 +137,7 @@ public class DateUtils {
    * @return a {@link LocalDate} object corresponding to the parsed date string or null if the input
    *     date string is null.
    */
-  public static LocalDate nullSafeParseyyyyMMdd(String date) {
+  public static @Nullable LocalDate nullSafeParseyyyyMMdd(@Nullable String date) {
     if (date == null) {
       return null;
     }

@@ -113,7 +113,7 @@ const normBreadcrumbTitle = computed(() =>
 );
 
 const { status: normVersionsStatus, sortedVersions: normVersions } =
-  useNormVersions(metadata.value?.legislationIdentifier ?? "");
+  useNormVersions(metadata.value?.exampleOfWork.legislationIdentifier ?? "");
 
 const breadcrumbItems: ComputedRef<BreadcrumbItem[]> = computed(() => {
   const validFrom = dateFormattedDDMMYYYY(validityInterval.value?.from);

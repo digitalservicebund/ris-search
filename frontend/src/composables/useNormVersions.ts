@@ -18,7 +18,7 @@ function getNormVersions(eli: string) {
   const immediate = true;
   const { status, data, error } = useRisBackend<
     JSONLDList<LegislationExpression>
-  >(`/v1/legislation/versions/${getWorkEli(eli)}`, {
+  >(`/v1/legislation/work-example/${eli}`, {
     immediate: immediate,
   });
 
@@ -53,7 +53,7 @@ function getNorms(params: {
 export function useValidNormVersions(eli: string) {
   const today = getCurrentDateInGermanyFormatted();
   return getNorms({
-    eli: getWorkEli(eli),
+    eli: eli,
     temporalCoverageFrom: today,
     temporalCoverageTo: today,
   });
