@@ -249,11 +249,7 @@ describe("getLiteratureDetailsItems", () => {
         },
         {
           label: "Herausgeber:",
-          value: "Publisher Doe",
-        },
-        {
-          label: "Herausgeber (Institution):",
-          value: "Institution",
+          value: "Institution, Publisher Doe",
         },
         {
           label: "Verlag:",
@@ -339,11 +335,7 @@ describe("getLiteratureDetailsItems", () => {
         },
         {
           label: "Herausgeber:",
-          value: "Publisher Doe",
-        },
-        {
-          label: "Herausgeber (Institution):",
-          value: "Institution",
+          value: "Institution, Publisher Doe",
         },
         {
           label: "Verlag:",
@@ -409,10 +401,6 @@ describe("getLiteratureDetailsItems", () => {
           value: undefined,
         },
         {
-          label: "Herausgeber (Institution):",
-          value: undefined,
-        },
-        {
           label: "Verlag:",
           value: undefined,
         },
@@ -442,5 +430,46 @@ describe("getLiteratureDetailsItems", () => {
         },
       ]),
     );
+  });
+
+  it("merges publishers and publisherOrganizations", () => {
+    const result = getLiteratureDetailItems({
+      literatureType: "sli",
+      publishers: ["Doe, Publisher1", "Doe, Publisher2"],
+      publisherOrganizations: ["Institution1", "Institution2"],
+    });
+
+    const herausgeberItem = result.find(
+      (item) => item.label === "Herausgeber:",
+    );
+    expect(herausgeberItem?.value).toBe(
+      "Institution1, Institution2, Publisher1 Doe, Publisher2 Doe",
+    );
+  });
+
+  it("handles only publishers when publisherOrganizations is empty", () => {
+    const result = getLiteratureDetailItems({
+      literatureType: "sli",
+      publishers: ["Doe, Publisher"],
+      publisherOrganizations: [],
+    });
+
+    const herausgeberItem = result.find(
+      (item) => item.label === "Herausgeber:",
+    );
+    expect(herausgeberItem?.value).toBe("Publisher Doe");
+  });
+
+  it("handles only publisherOrganizations when publishers is empty", () => {
+    const result = getLiteratureDetailItems({
+      literatureType: "sli",
+      publishers: [],
+      publisherOrganizations: ["Institution"],
+    });
+
+    const herausgeberItem = result.find(
+      (item) => item.label === "Herausgeber:",
+    );
+    expect(herausgeberItem?.value).toBe("Institution");
   });
 });
