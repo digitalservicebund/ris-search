@@ -1,6 +1,5 @@
 import type { MetadataItem } from "~/components/Metadata.vue";
 import type { Literature } from "~/types";
-import { formatArray, formatNames } from "~/utils/textFormatting";
 
 export const LITERATURE_TITLE_PLACEHOLDER = "Titelzeile nicht vorhanden";
 
@@ -90,6 +89,11 @@ export function getSliLiteratureDetailItems(
   const languages = literature?.languages ?? [];
   const conferenceNotes = literature?.conferenceNotes ?? [];
   const universityNotes = literature?.universityNotes ?? [];
+
+  const publisherOrganizations = literature?.publisherOrganizations ?? [];
+  const formattedPublishers = formatNames(literature?.publishers ?? []);
+  const mergedPublishers = [...publisherOrganizations, ...formattedPublishers];
+
   return [
     {
       label: getSingularOrPlural("Norm:", "Normen:", normReferences.length),
@@ -113,11 +117,7 @@ export function getSliLiteratureDetailItems(
     },
     {
       label: "Herausgeber:",
-      value: formatArray(formatNames(literature?.publishers ?? [])),
-    },
-    {
-      label: "Herausgeber (Institution):",
-      value: formatArray(literature?.publisherOrganizations ?? []),
+      value: formatArray(mergedPublishers),
     },
     {
       label: "Verlag:",
