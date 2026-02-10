@@ -28,11 +28,13 @@ public record LegislationExpressionSearchSchema(
     @Schema(
             example = "Verordnung über Kakao und Kakaoerzeugnisse",
             description = "Amtliche Langüberschrift")
-    String name,
+        String name,
     @Schema(
             example = "eli/bund/bgbl-1/1975/s1760/1998-01-29/10/deu",
             requiredMode = Schema.RequiredMode.REQUIRED)
-        String legislationIdentifier,
+    String legislationIdentifier,
+    @Schema(description = "the work the expression is based on")
+    LegislationWorkSchema exampleOfWork,
     @Schema(
             description =
                 """

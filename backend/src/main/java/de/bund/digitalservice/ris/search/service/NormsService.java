@@ -7,6 +7,7 @@ import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
 import de.bund.digitalservice.ris.search.repository.opensearch.NormsRepository;
 import de.bund.digitalservice.ris.search.service.helper.ZipManager;
+import de.bund.digitalservice.ris.search.utils.DateUtils;
 import de.bund.digitalservice.ris.search.utils.PageUtils;
 import de.bund.digitalservice.ris.search.utils.eli.ExpressionEli;
 import de.bund.digitalservice.ris.search.utils.eli.ManifestationEli;
@@ -19,8 +20,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import org.opensearch.OpenSearchException;
 import org.opensearch.action.search.SearchRequest;
 import org.opensearch.action.search.SearchResponse;
@@ -91,7 +92,7 @@ public class NormsService {
    * @return A new {@link SearchPage} of the containing {@link Norm}.
    */
   public SearchPage<Norm> simpleSearchNorms(
-      @NotNull UniversalSearchParams params,
+      @NonNull UniversalSearchParams params,
       @Nullable NormsSearchParams normsSearchParams,
       Pageable pageable) {
 
@@ -135,6 +136,7 @@ public class NormsService {
             .query(QueryBuilders.termQuery(Norm.Fields.WORK_ELI_KEYWORD, workEli.toString()))
             .sort(Norm.Fields.ENTRY_INTO_FORCE_DATE, SortOrder.DESC)
             .docValueField(Norm.Fields.EXPRESSION_ELI_KEYWORD)
+            .docValueField(Norm.Fields.WORK_ELI_KEYWORD)
             .docValueField(Norm.Fields.ENTRY_INTO_FORCE_DATE, DATE_FORMAT)
             .docValueField(Norm.Fields.EXPIRY_DATE, DATE_FORMAT)
             .docValueField(Norm.Fields.OFFICIAL_TITLE_KEYWORD)
@@ -151,39 +153,32 @@ public class NormsService {
     try {
       SearchResponse response = openSearchRestClient.search(searchRequest, RequestOptions.DEFAULT);
       var hits = response.getHits();
-
       var norms =
-          Arrays.stream(response.getHits().getHits())
+          Arrays.stream(hits.getHits())
               .map(
                   hit -> {
                     var fields = hit.getFields();
 
-                    String expressionEli =
-                        getField(fields, Norm.Fields.EXPRESSION_ELI_KEYWORD).orElse(null);
-                    hit.getFields().get(Norm.Fields.EXPRESSION_ELI_KEYWORD).getValue();
+                    String returnedWorkEli = getField(fields, Norm.Fields.WORK_ELI_KEYWORD);
+                    String expressionEli = getField(fields, Norm.Fields.EXPRESSION_ELI_KEYWORD);
                     LocalDate entryIntoForceDate =
-                        getField(fields, Norm.Fields.ENTRY_INTO_FORCE_DATE)
-                            .map(LocalDate::parse)
-                            .orElse(null);
+                        DateUtils.nullSafeParseyyyyMMdd(
+                            getField(fields, Norm.Fields.ENTRY_INTO_FORCE_DATE));
                     LocalDate expiryDate =
-                        getField(fields, Norm.Fields.EXPIRY_DATE)
-                            .map(LocalDate::parse)
-                            .orElse(null);
+                        DateUtils.nullSafeParseyyyyMMdd(getField(fields, Norm.Fields.EXPIRY_DATE));
                     LocalDate datePublished =
-                        getField(fields, Norm.Fields.DATE_PUBLISHED)
-                            .map(LocalDate::parse)
-                            .orElse(null);
+                        DateUtils.nullSafeParseyyyyMMdd(
+                            getField(fields, Norm.Fields.DATE_PUBLISHED));
                     LocalDate normsDate =
-                        getField(fields, Norm.Fields.NORMS_DATE).map(LocalDate::parse).orElse(null);
+                        DateUtils.nullSafeParseyyyyMMdd(getField(fields, Norm.Fields.NORMS_DATE));
 
-                    String officialTitle =
-                        getField(fields, Norm.Fields.OFFICIAL_TITLE_KEYWORD).orElse(null);
-                    String shortTitle =
-                        getField(fields, Norm.Fields.OFFICIAL_SHORT_TITLE_KEYWORD).orElse(null);
+                    String officialTitle = getField(fields, Norm.Fields.OFFICIAL_TITLE_KEYWORD);
+                    String shortTitle = getField(fields, Norm.Fields.OFFICIAL_SHORT_TITLE_KEYWORD);
                     String abbreviation =
-                        getField(fields, Norm.Fields.OFFICIAL_ABBREVIATION_KEYWORD).orElse(null);
+                        getField(fields, Norm.Fields.OFFICIAL_ABBREVIATION_KEYWORD);
                     return Norm.builder()
                         .id(hit.getId())
+                        .workEli(returnedWorkEli)
                         .officialAbbreviation(abbreviation)
                         .officialShortTitle(shortTitle)
                         .officialTitle(officialTitle)
@@ -203,11 +198,15 @@ public class NormsService {
     }
   }
 
-  private Optional<String> getField(Map<String, DocumentField> fields, String field) {
-    if (fields.get(field) != null) {
-      return Optional.of(fields.get(field).getValue());
-    }
-    return Optional.empty();
+  /**
+   * Returns the Optional of the string value of a DocumentField if it is part of the fields Map
+   *
+   * @param fields Map of Fieldname and DocumentField of a Searchhit
+   * @param field the field to retrieve from the Map
+   * @return Optional of a the string value of DocumentField
+   */
+  private @Nullable String getField(Map<String, DocumentField> fields, String field) {
+    return fields.get(field) != null ? fields.get(field).getValue() : null;
   }
 
   public void writeZipArchive(List<String> keys, OutputStream outputStream) throws IOException {

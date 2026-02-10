@@ -51,6 +51,8 @@ public record LegislationExpressionSchema(
         String abbreviation,
     @Schema(example = "Kakaoverordnung", description = "Amtliche Kurzüberschrift")
         String alternateName,
+    @Schema(description = "the work the expression is based on")
+        LegislationWorkSchema exampleOfWork,
     @Nullable PublicationIssueSchema isPartOf,
     @Schema(
             example = "2003-12-15",

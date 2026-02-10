@@ -87,10 +87,6 @@ export function getNormTitle(norm: LegislationWork): string {
   return norm.name || norm.alternateName || norm.abbreviation || "";
 }
 
-export function getWorkEli(eli: string): string {
-  return eli.split("/").slice(0, 5).join("/");
-}
-
 export function getMostRelevantExpression(
   expressions: LegislationExpression[],
 ): string | null | undefined {

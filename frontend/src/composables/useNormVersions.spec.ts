@@ -35,7 +35,7 @@ describe("useNormVersions", () => {
   it("returns a sorted list when there is no error", () => {
     const { sortedVersions } = useNormVersions("dummy-eli");
     expect(useRisBackendMock).toBeCalledWith(
-      "/v1/legislation/versions/dummy-eli",
+      "/v1/legislation/work-example/dummy-eli",
       {
         immediate: true,
       },
