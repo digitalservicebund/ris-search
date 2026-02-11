@@ -111,7 +111,9 @@ public class CaseLawController {
   @Operation(
       summary = "Decision HTML",
       description = "Renders and returns a case law decision as HTML.")
-  @ApiResponse(responseCode = "200")
+  @ApiResponse(
+      responseCode = "200",
+      content = @Content(mediaType = MediaType.TEXT_HTML_VALUE, schema = @Schema(type = "string")))
   @ApiResponse(responseCode = "404", content = @Content)
   public ResponseEntity<String> getCaseLawDocumentationUnitAsHtml(
       @Parameter(example = "STRE201770751") @PathVariable String documentNumber)
