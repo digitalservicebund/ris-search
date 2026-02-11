@@ -2,11 +2,11 @@
 import { RisExpandableText } from "@digitalservicebund/ris-ui/components";
 import NormHeadingFootnotes from "./NormHeadingFootnotes.vue";
 import type { NormContent } from "~/composables/useNormData";
-import type { LegislationWork } from "~/types";
+import type { LegislationExpression } from "~/types";
 import { getNormTitle } from "~/utils/norm";
 const props = defineProps<{
   htmlParts?: NormContent["htmlParts"];
-  metadata: LegislationWork;
+  metadata: LegislationExpression;
 }>();
 
 // show very long titles in smaller font

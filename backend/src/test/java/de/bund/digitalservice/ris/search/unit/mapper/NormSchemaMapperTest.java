@@ -54,7 +54,7 @@ class NormSchemaMapperTest {
             new TableOfContentsSchema("id2", "marker2", "heading2", List.of()));
 
     List<TableOfContentsSchema> actual =
-        Objects.requireNonNull(NormSchemaMapper.fromDomain(norm).workExample()).tableOfContents();
+        Objects.requireNonNull(NormSchemaMapper.fromDomain(norm)).tableOfContents();
     Assertions.assertEquals(expected, actual);
   }
 
@@ -75,50 +75,46 @@ class NormSchemaMapperTest {
             .workEli("workEli")
             .build();
 
-    LegislationWorkSchema expectedResponse =
-        LegislationWorkSchema.builder()
-            .id("/v1/legislation/workEli")
-            .legislationIdentifier("workEli")
-            .workExample(
-                LegislationExpressionSchema.builder()
-                    .id("/v1/legislation/expressionEli")
-                    .legislationIdentifier("expressionEli")
-                    .legislationLegalForce(LegalForceStatus.IN_FORCE)
-                    .tableOfContents(List.of())
-                    .encoding(
-                        List.of(
-                            LegislationObjectSchema.builder()
-                                .id("/v1/legislation/manifestationEli/regelungstext-1/html")
-                                .contentUrl("/v1/legislation/manifestationEli/regelungstext-1.html")
-                                .encodingFormat("text/html")
-                                .inLanguage("de")
-                                .build(),
-                            LegislationObjectSchema.builder()
-                                .id("/v1/legislation/manifestationEli/regelungstext-1/xml")
-                                .contentUrl("/v1/legislation/manifestationEli/regelungstext-1.xml")
-                                .encodingFormat("application/xml")
-                                .inLanguage("de")
-                                .build(),
-                            LegislationObjectSchema.builder()
-                                .id("/v1/legislation/manifestationEli/zip")
-                                .contentUrl("/v1/legislation/manifestationEli.zip")
-                                .encodingFormat("application/zip")
-                                .inLanguage("de")
-                                .build()))
-                    .hasPart(
-                        List.of(
-                            LegislationExpressionPartSchema.builder()
-                                .id("/v1/legislation/expressionEli#eId")
-                                .eId("eId")
-                                .isActive(true)
-                                .encoding(
-                                    List.of(
-                                        LegislationObjectSchema.builder()
-                                            .contentUrl(ApiConfig.Paths.LEGISLATION + "/eli")
-                                            .encodingFormat("application/xml")
-                                            .build()))
-                                .build()))
-                    .build())
+    LegislationExpressionSchema expectedResponse =
+        LegislationExpressionSchema.builder()
+            .id("/v1/legislation/expressionEli")
+            .legislationIdentifier("expressionEli")
+            .legislationLegalForce(LegalForceStatus.IN_FORCE)
+            .tableOfContents(List.of())
+            .exampleOfWork(new LegislationWorkSchema("workEli"))
+            .encoding(
+                List.of(
+                    LegislationObjectSchema.builder()
+                        .id("/v1/legislation/manifestationEli/regelungstext-1/html")
+                        .contentUrl("/v1/legislation/manifestationEli/regelungstext-1.html")
+                        .encodingFormat("text/html")
+                        .inLanguage("de")
+                        .build(),
+                    LegislationObjectSchema.builder()
+                        .id("/v1/legislation/manifestationEli/regelungstext-1/xml")
+                        .contentUrl("/v1/legislation/manifestationEli/regelungstext-1.xml")
+                        .encodingFormat("application/xml")
+                        .inLanguage("de")
+                        .build(),
+                    LegislationObjectSchema.builder()
+                        .id("/v1/legislation/manifestationEli/zip")
+                        .contentUrl("/v1/legislation/manifestationEli.zip")
+                        .encodingFormat("application/zip")
+                        .inLanguage("de")
+                        .build()))
+            .hasPart(
+                List.of(
+                    LegislationExpressionPartSchema.builder()
+                        .id("/v1/legislation/expressionEli#eId")
+                        .eId("eId")
+                        .isActive(true)
+                        .encoding(
+                            List.of(
+                                LegislationObjectSchema.builder()
+                                    .contentUrl(ApiConfig.Paths.LEGISLATION + "/eli")
+                                    .encodingFormat("application/xml")
+                                    .build()))
+                        .build()))
             .build();
 
     Assertions.assertEquals(expectedResponse, NormSchemaMapper.fromDomain(norm));

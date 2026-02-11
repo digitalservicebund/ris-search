@@ -2,6 +2,7 @@ package de.bund.digitalservice.ris.search.integration.controller.api;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.either;
 import static org.hamcrest.Matchers.everyItem;
 import static org.hamcrest.Matchers.hasSize;
@@ -120,9 +121,10 @@ class AllDocumentsSearchControllerAPITest extends ContainersIntegrationBase {
     mockMvc
         .perform(get(url).contentType(MediaType.APPLICATION_JSON))
         .andExpect(jsonPath("$.member", hasSize(3)))
-        .andExpect(jsonPath("$.member[0]['item'].documentNumber", Matchers.is("KSNR0000")))
-        .andExpect(jsonPath("$.member[1]['item'].documentNumber", Matchers.is("BFRE000087655")))
-        .andExpect(jsonPath("$.member[2]['item'].abbreviation", Matchers.is("TeG")));
+        .andExpect(
+            jsonPath(
+                "$.member[*].item.documentNumber", containsInAnyOrder("KSNR0000", "BFRE000087655")))
+        .andExpect(jsonPath("$.member[*].item.abbreviation", containsInAnyOrder("TeG")));
   }
 
   static Stream<Arguments> testArgsSameResultsAsOtherControllers() {

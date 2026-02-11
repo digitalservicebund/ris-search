@@ -3,7 +3,7 @@ import Badge from "~/components/Badge.vue";
 import type { SearchResultHeaderItem } from "~/components/search/SearchResultHeader.vue";
 import { usePostHog } from "~/composables/usePostHog";
 import { usePrivateFeaturesFlag } from "~/composables/usePrivateFeaturesFlag";
-import type { LegislationWork, SearchResult, TextMatch } from "~/types";
+import type { LegislationExpression, SearchResult, TextMatch } from "~/types";
 import { dateFormattedDDMMYYYY } from "~/utils/dateFormatting";
 import { formatNormValidity } from "~/utils/displayValues";
 import { temporalCoverageToValidityInterval } from "~/utils/norm";
@@ -12,7 +12,7 @@ import { addEllipsis } from "~/utils/textFormatting";
 import LegalIcon from "~icons/mdi/legal";
 
 const props = defineProps<{
-  searchResult: SearchResult<LegislationWork>;
+  searchResult: SearchResult<LegislationExpression>;
   order: number;
 }>();
 
@@ -39,7 +39,7 @@ function getMatch(match: string, highlights: TextMatch[]) {
 
 const link = computed(() => {
   const prefix = "/norms/";
-  const expressionEli = item.value.workExample.legislationIdentifier;
+  const expressionEli = item.value.legislationIdentifier;
   if (!expressionEli) return null;
   return prefix + expressionEli;
 });
@@ -48,9 +48,7 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
 
 const formattedDate = computed(() => {
   const date = privateFeaturesEnabled
-    ? temporalCoverageToValidityInterval(
-        item.value?.workExample?.temporalCoverage,
-      )?.from
+    ? temporalCoverageToValidityInterval(item.value?.temporalCoverage)?.from
     : item.value?.legislationDate;
 
   return dateFormattedDDMMYYYY(date);
@@ -67,7 +65,7 @@ function openResult(url: string) {
 }
 
 const validityStatus = computed(() => {
-  return formatNormValidity(item.value.workExample.temporalCoverage);
+  return formatNormValidity(item.value.temporalCoverage);
 });
 
 const resultTypeId = useId();

@@ -90,22 +90,22 @@ class NormsControllerApiTest extends ContainersIntegrationBase {
             status().isOk(),
             jsonPath("$.@type", is("Legislation")),
             jsonPath("$.name", is("Test Gesetz")),
-            jsonPath("$.legislationIdentifier", is("eli/bund/bgbl-1/1000/test")),
+            jsonPath("$.legislationIdentifier", is("eli/bund/bgbl-1/1000/test/2000-10-06/2/deu")),
             jsonPath("$.alternateName", is("TestG1")),
             jsonPath("$.abbreviation", is("TeG")),
             jsonPath("$.legislationDate", is("2024-01-02")),
             jsonPath("$.datePublished", is("2024-01-03")),
-            jsonPath("$.workExample.hasPart", hasSize(2)),
-            jsonPath("$.workExample.hasPart[0].@type", is("Legislation")),
-            jsonPath("$.workExample.hasPart[0].eId", is("eid1")),
-            jsonPath("$.workExample.hasPart[0].guid", is("guid1")),
+            jsonPath("$.hasPart", hasSize(2)),
+            jsonPath("$.hasPart[0].@type", is("Legislation")),
+            jsonPath("$.hasPart[0].eId", is("eid1")),
+            jsonPath("$.hasPart[0].guid", is("guid1")),
             jsonPath(
-                "$.workExample.hasPart[0].@id",
+                "$.hasPart[0].@id",
                 is("/v1/legislation/eli/bund/bgbl-1/1000/test/2000-10-06/2/deu#eid1")),
-            jsonPath("$.workExample.hasPart[0].name", is("§ 1 Example article")),
-            jsonPath("$.workExample.hasPart[0].isActive", is(true)),
-            jsonPath("$.workExample.hasPart[0].entryIntoForceDate", is("2023-12-31")),
-            jsonPath("$.workExample.hasPart[0].expiryDate", is("3000-01-02")));
+            jsonPath("$.hasPart[0].name", is("§ 1 Example article")),
+            jsonPath("$.hasPart[0].isActive", is(true)),
+            jsonPath("$.hasPart[0].entryIntoForceDate", is("2023-12-31")),
+            jsonPath("$.hasPart[0].expiryDate", is("3000-01-02")));
   }
 
   @Test
@@ -354,9 +354,9 @@ class NormsControllerApiTest extends ContainersIntegrationBase {
                 .getContentAsString());
     assertThat(json.read("$.member.length()", Integer.class)).isEqualTo(1);
     assertThat(json.read("$.member[0].item.abbreviation", String.class)).isEqualTo("TeG");
-    assertThat(json.read("$.member[0].item.workExample.temporalCoverage", String.class))
+    assertThat(json.read("$.member[0].item.temporalCoverage", String.class))
         .isEqualTo("2025-11-01/..");
-    assertThat(json.read("$.member[0].item.workExample.legislationLegalForce", String.class))
+    assertThat(json.read("$.member[0].item.legislationLegalForce", String.class))
         .isEqualTo("InForce");
 
     json =
@@ -371,9 +371,9 @@ class NormsControllerApiTest extends ContainersIntegrationBase {
                 .getContentAsString());
     assertThat(json.read("$.member.length()", Integer.class)).isEqualTo(1);
     assertThat(json.read("$.member[0].item.abbreviation", String.class)).isEqualTo("TeG3");
-    assertThat(json.read("$.member[0].item.workExample.temporalCoverage", String.class))
+    assertThat(json.read("$.member[0].item.temporalCoverage", String.class))
         .isEqualTo("2025-11-03/2025-11-03");
-    assertThat(json.read("$.member[0].item.workExample.legislationLegalForce", String.class))
+    assertThat(json.read("$.member[0].item.legislationLegalForce", String.class))
         .isEqualTo("NotInForce");
   }
 
@@ -388,7 +388,7 @@ class NormsControllerApiTest extends ContainersIntegrationBase {
         .andExpect(jsonPath("$.member", hasSize(1)))
         .andExpect(
             jsonPath(
-                "$.member[0].item.workExample.legislationIdentifier",
+                "$.member[0].item.legislationIdentifier",
                 is("eli/bund/bgbl-1/1000/test/2000-10-06/2/deu")))
         .andExpect(status().isOk());
   }
@@ -403,7 +403,7 @@ class NormsControllerApiTest extends ContainersIntegrationBase {
         .andExpectAll(
             status().isOk(),
             jsonPath("$.member", hasSize(1)),
-            jsonPath("$.member[0]['item'].workExample.legislationIdentifier", is(eli)));
+            jsonPath("$.member[0]['item'].legislationIdentifier", is(eli)));
   }
 
   @Test
@@ -493,9 +493,9 @@ class NormsControllerApiTest extends ContainersIntegrationBase {
   @CsvSource(
       value = {
         // sorting by legislationIdentifier sorts by the expression eli
-        "legislationIdentifier, 3, eli/2024/teg/2;eli/2024/teg/3;eli/bund/bgbl-1/1000/test",
+        "legislationIdentifier, 3, eli/2024/teg/2/exp;eli/2024/teg/3/exp;eli/bund/bgbl-1/1000/test/2000-10-06/2/deu",
         // reverse sort reverses the sort
-        "-legislationIdentifier, 3, eli/bund/bgbl-1/1000/test;eli/2024/teg/3;eli/2024/teg/2"
+        "-legislationIdentifier, 3, eli/bund/bgbl-1/1000/test/2000-10-06/2/deu;eli/2024/teg/3/exp;eli/2024/teg/2/exp"
       })
   @DisplayName("norms sort by id correctly")
   void normsSortByIdCorrectly(String sortParam, Integer expectedSize, String expectedIds)
@@ -543,8 +543,7 @@ class NormsControllerApiTest extends ContainersIntegrationBase {
                 .getContentAsString());
 
     assertThat(json.read("$.member.length()", Integer.class)).isEqualTo(expectedSize);
-    List<String> actualDates =
-        json.read("$.member[*].item.workExample.temporalCoverage", List.class);
+    List<String> actualDates = json.read("$.member[*].item.temporalCoverage", List.class);
     assertThat(String.join(";", actualDates)).isEqualTo(expectedDates);
   }
 
@@ -602,7 +601,7 @@ class NormsControllerApiTest extends ContainersIntegrationBase {
                 .getResponse()
                 .getContentAsString());
     assertThat(json.read("$.member.length()", Integer.class)).isEqualTo(1);
-    assertThat(json.read("$.member[0].item.workExample.legislationIdentifier", String.class))
+    assertThat(json.read("$.member[0].item.legislationIdentifier", String.class))
         .isEqualTo("eli/bund/bgbl-1/1991/s102/1991-01-01/1/deu");
 
     // A date where 1 expression was in force return that expression
@@ -619,7 +618,7 @@ class NormsControllerApiTest extends ContainersIntegrationBase {
                 .getResponse()
                 .getContentAsString());
     assertThat(json.read("$.member.length()", Integer.class)).isEqualTo(1);
-    assertThat(json.read("$.member[0].item.workExample.legislationIdentifier", String.class))
+    assertThat(json.read("$.member[0].item.legislationIdentifier", String.class))
         .isEqualTo("eli/bund/bgbl-1/1991/s102/1991-01-01/1/deu");
 
     // A date where no expressions were in force should return the next to be in force
@@ -636,7 +635,7 @@ class NormsControllerApiTest extends ContainersIntegrationBase {
                 .getResponse()
                 .getContentAsString());
     assertThat(json.read("$.member.length()", Integer.class)).isEqualTo(1);
-    assertThat(json.read("$.member[0].item.workExample.legislationIdentifier", String.class))
+    assertThat(json.read("$.member[0].item.legislationIdentifier", String.class))
         .isEqualTo("eli/bund/bgbl-1/1991/s102/2020-01-01/1/deu");
 
     // A date far in the future will return the last expression (ausserkraft undefined)
@@ -653,7 +652,7 @@ class NormsControllerApiTest extends ContainersIntegrationBase {
                 .getResponse()
                 .getContentAsString());
     assertThat(json.read("$.member.length()", Integer.class)).isEqualTo(1);
-    assertThat(json.read("$.member[0].item.workExample.legislationIdentifier", String.class))
+    assertThat(json.read("$.member[0].item.legislationIdentifier", String.class))
         .isEqualTo("eli/bund/bgbl-1/1991/s102/2050-01-01/1/deu");
   }
 
@@ -695,7 +694,7 @@ class NormsControllerApiTest extends ContainersIntegrationBase {
   }
 
   @Test
-  @DisplayName("It returns all workExamples of a given workEli")
+  @DisplayName("It returns all workExamples of a given expressionEli")
   void itReturnsTheWorkExmapleOfAGivenWorkEli() throws Exception {
 
     mockMvc

@@ -4,17 +4,20 @@ import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.models.opensearch.Article;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.schema.CollectionSchema;
-import de.bund.digitalservice.ris.search.schema.LegislationWorkSearchSchema;
+import de.bund.digitalservice.ris.search.schema.LegalForceStatus;
+import de.bund.digitalservice.ris.search.schema.LegislationExpressionSearchSchema;
+import de.bund.digitalservice.ris.search.schema.LegislationWorkSchema;
 import de.bund.digitalservice.ris.search.schema.PartialCollectionViewSchema;
-import de.bund.digitalservice.ris.search.schema.PublicationIssueSchema;
 import de.bund.digitalservice.ris.search.schema.SearchMemberSchema;
 import de.bund.digitalservice.ris.search.schema.TextMatchSchema;
+import de.bund.digitalservice.ris.search.utils.DateUtils;
 import de.bund.digitalservice.ris.search.utils.PageUtils;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import org.apache.commons.collections4.ListUtils;
+import org.springframework.data.domain.Page;
 import org.springframework.data.elasticsearch.core.SearchHit;
 import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.data.elasticsearch.core.SearchPage;
@@ -41,11 +44,11 @@ public class NormSearchResponseMapper {
    * @param searchHit The input {@link SearchHit} of {@code Norm} entity to be converted.
    * @return A new {@link SearchMemberSchema} instance mapped from the input {@link Norm}.
    */
-  public static <T> SearchMemberSchema<LegislationWorkSearchSchema> fromSearchHit(
+  public static <T> SearchMemberSchema<LegislationExpressionSearchSchema> fromSearchHit(
       SearchHit<T> searchHit) {
     Norm norm = (Norm) searchHit.getContent();
     List<TextMatchSchema> textMatches = getTextMatches(searchHit);
-    return SearchMemberSchema.<LegislationWorkSearchSchema>builder()
+    return SearchMemberSchema.<LegislationExpressionSearchSchema>builder()
         .item(fromDomain(norm))
         .textMatches(textMatches)
         .build();
@@ -122,49 +125,80 @@ public class NormSearchResponseMapper {
   }
 
   /**
-   * Maps the given {@link Norm} entity to a {@link LegislationWorkSearchSchema} instance.
+   * Maps the given {@link Norm} entity to a {@link LegislationExpressionSearchSchema} instance.
    *
    * @param norm The {@link Norm} entity containing legislative data to be converted.
-   * @return A {@link LegislationWorkSearchSchema} instance constructed from the provided {@link
-   *     Norm}.
+   * @return A {@link LegislationExpressionSearchSchema} instance constructed from the provided
+   *     {@link Norm}.
    */
-  public static LegislationWorkSearchSchema fromDomain(Norm norm) {
+  public static LegislationExpressionSearchSchema fromDomain(Norm norm) {
     String contentBaseUrl = ApiConfig.Paths.LEGISLATION + "/";
 
-    PublicationIssueSchema publicationIssue =
-        norm.getPublishedIn() != null ? new PublicationIssueSchema(norm.getPublishedIn()) : null;
+    LegalForceStatus legislationLegalForce =
+        DateUtils.isActive(norm.getEntryIntoForceDate(), norm.getExpiryDate())
+            ? LegalForceStatus.IN_FORCE
+            : LegalForceStatus.NOT_IN_FORCE;
 
-    return LegislationWorkSearchSchema.builder()
-        .id(contentBaseUrl + norm.getWorkEli())
+    String expressionEli = norm.getExpressionEli();
+    String expressionId = contentBaseUrl + expressionEli;
+
+    String temporalCoverage =
+        DateUtils.toDateIntervalString(norm.getEntryIntoForceDate(), norm.getExpiryDate());
+
+    return LegislationExpressionSearchSchema.builder()
+        .id(expressionId)
         .abbreviation(norm.getOfficialAbbreviation())
         .alternateName(norm.getOfficialShortTitle())
-        .legislationIdentifier(norm.getWorkEli())
+        .legislationIdentifier(expressionEli)
         .legislationDate(norm.getNormsDate())
+        .exampleOfWork(new LegislationWorkSchema(norm.getWorkEli()))
         .datePublished(norm.getDatePublished())
         .name(norm.getOfficialTitle())
-        .isPartOf(publicationIssue)
-        .workExample(LegislationExpressionSearchSchemaMapper.fromNorm(norm))
+        .legislationLegalForce(legislationLegalForce)
+        .legislationIdentifier(expressionEli)
+        .temporalCoverage(temporalCoverage)
         .build();
   }
 
   /**
    * Converts the given {@link SearchPage} of {@code Norm} into a {@link CollectionSchema} of {@link
-   * SearchMemberSchema} containing {@link LegislationWorkSearchSchema}.
+   * SearchMemberSchema} containing {@link LegislationExpressionSearchSchema}.
    *
    * @param page The {@link SearchPage} containing {@link Norm} elements to be transformed.
    * @param path The base path used for constructing the collection's ID and view metadata.
    * @return A {@link CollectionSchema} initialized with members mapped from the input page, the
    *     total number of items, and the corresponding view metadata.
    */
-  public static CollectionSchema<SearchMemberSchema<LegislationWorkSearchSchema>> fromDomain(
+  public static CollectionSchema<SearchMemberSchema<LegislationExpressionSearchSchema>> fromDomain(
       final SearchPage<Norm> page, String path) {
     String id = String.format("%s?pageIndex=%d&size=%d", path, page.getNumber(), page.getSize());
     PartialCollectionViewSchema view = PartialCollectionViewMapper.fromPage(path, page);
 
-    return CollectionSchema.<SearchMemberSchema<LegislationWorkSearchSchema>>builder()
+    return CollectionSchema.<SearchMemberSchema<LegislationExpressionSearchSchema>>builder()
         .id(id)
         .totalItems(page.getTotalElements())
         .member(page.stream().map(NormSearchResponseMapper::fromSearchHit).toList())
+        .view(view)
+        .build();
+  }
+
+  /**
+   * Maps an opensearch Page of a Norm to a collection of LegislationExpressionSearchSchema
+   *
+   * @param page the {@link org.springframework.data.domain.Page} of {@link Norm} instances returned
+   *     by OpenSearch
+   * @param path api path that was used to retrieve norms
+   * @return a {@link CollectionSchema} containing {@link LegislationExpressionSearchSchema} items
+   */
+  public static CollectionSchema<LegislationExpressionSearchSchema> fromNormsPage(
+      Page<Norm> page, String path) {
+    String id = String.format("%s?pageIndex=%d&size=%d", path, page.getNumber(), page.getSize());
+    PartialCollectionViewSchema view = PartialCollectionViewMapper.fromPage(path, page);
+
+    return CollectionSchema.<LegislationExpressionSearchSchema>builder()
+        .id(id)
+        .totalItems(page.getTotalElements())
+        .member(page.stream().map(NormSearchResponseMapper::fromDomain).toList())
         .view(view)
         .build();
   }
