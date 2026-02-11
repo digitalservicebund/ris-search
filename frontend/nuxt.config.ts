@@ -14,7 +14,6 @@ export default defineNuxtConfig({
   // Nuxt core settings
   compatibilityDate: "2024-11-01",
   modules: [
-    "@nuxt/eslint",
     "unplugin-icons/nuxt",
     "@nuxt/test-utils/module",
     "@sentry/nuxt/module",
