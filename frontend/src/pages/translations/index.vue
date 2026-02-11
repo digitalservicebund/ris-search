@@ -45,7 +45,9 @@ const sortedTranslations = computed<TranslationContent[] | null>(() => {
   if (!translationList) return null;
 
   if (!searchTerm) {
-    return [...translationList].sort((a, b) => a.name.localeCompare(b.name));
+    return [...translationList].toSorted((a, b) =>
+      a.name.localeCompare(b.name),
+    );
   }
 
   return minisearch.value

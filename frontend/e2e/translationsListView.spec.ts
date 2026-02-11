@@ -99,7 +99,9 @@ test(
       .getByRole("listitem")
       .getByRole("heading");
     const listItemTitles = await titlesLocator.allTextContents();
-    const sortedTitles = [...listItemTitles].sort((a, b) => a.localeCompare(b));
+    const sortedTitles = [...listItemTitles].toSorted((a, b) =>
+      a.localeCompare(b),
+    );
     expect(listItemTitles).toEqual(sortedTitles);
   },
 );
@@ -149,7 +151,9 @@ test("sorts translations by relevance after search", async ({ page }) => {
     .getByRole("heading");
   const listItemTitles = await titlesLocator.allTextContents();
 
-  const sortedTitles = [...listItemTitles].sort((a, b) => a.localeCompare(b));
+  const sortedTitles = [...listItemTitles].toSorted((a, b) =>
+    a.localeCompare(b),
+  );
   expect(listItemTitles).not.toEqual(sortedTitles);
 
   const allTexts = await items.allTextContents();
