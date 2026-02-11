@@ -16,7 +16,6 @@ const { navigateToMock, scrollIntoViewMock } = vi.hoisted(() => {
 mockNuxtImport("navigateTo", () => navigateToMock);
 
 describe("NormTableOfContents", () => {
-  /* eslint-disable-next-line @typescript-eslint/no-explicit-any -- No proper way of typing this */
   let wrapper: any;
   const mockTocItems: TableOfContentsItem[] = [
     {
