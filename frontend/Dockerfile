@@ -7,7 +7,7 @@ WORKDIR /app
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 RUN pnpm install --frozen-lockfile
 COPY playwright.config.ts nuxt.config.ts nuxt.config.d.ts tsconfig.json \
-  eslint.config.mjs sentry.server.config.ts sentry.client.config.ts ./
+  .oxlintrc.json sentry.server.config.ts sentry.client.config.ts ./
 COPY config ./config
 COPY src ./src
 RUN --mount=type=secret,id=SENTRY_AUTH_TOKEN,required=false \
