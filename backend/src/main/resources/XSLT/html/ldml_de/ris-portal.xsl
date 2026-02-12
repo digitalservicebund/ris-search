@@ -101,6 +101,10 @@
         </xsl:result-document>
     </xsl:template>
 
+    <xsl:template match="akn:content/akn:p/text()">
+        <xsl:value-of select="normalize-space(.)"/>
+    </xsl:template>
+
     <xsl:template match="akn:preamble/akn:formula">
         <xsl:sequence select="akn:gliederungskommentar('Eingangsformel (akn:formula)')"/>
         <section class="{$eingangsformel}">
