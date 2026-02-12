@@ -1,10 +1,15 @@
 <script setup lang="ts">
-import * as Sentry from "@sentry/nuxt";
+import {
+  captureException,
+  diagnoseSdkConnectivity,
+  isEnabled,
+  isInitialized,
+} from "@sentry/nuxt";
 import { Button } from "primevue";
 
 const status = computed(() => ({
-  isEnabled: Sentry.isEnabled,
-  isInitialized: Sentry.isInitialized,
+  isEnabled,
+  isInitialized,
   dsn: useRuntimeConfig().public.sentryDSN,
   diagnose: connect.value,
 }));
@@ -12,15 +17,14 @@ const status = computed(() => ({
 const connect = ref("open");
 onMounted(async () => {
   try {
-    connect.value =
-      (await Sentry.diagnoseSdkConnectivity()) ?? "no issue detected";
+    connect.value = (await diagnoseSdkConnectivity()) ?? "no issue detected";
   } catch (err) {
     connect.value = "failed to connect " + err;
   }
 });
 
 function throwError() {
-  Sentry.captureException(new Error("testing Sentry integration"));
+  captureException(new Error("testing Sentry integration"));
 }
 </script>
 

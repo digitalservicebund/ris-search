@@ -9,10 +9,9 @@ type WorkerFixtures = {
   privateFeaturesEnabled: boolean;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export const test = base.extend<{}, WorkerFixtures>({
   isMobileTest: [
-    // eslint-disable-next-line no-empty-pattern
+    // oxlint-disable-next-line no-empty-pattern -- Playwright fixture syntax requires this
     async ({}, use, workerInfo) => {
       const isMobileTest = workerInfo.project.name.toLowerCase() === "mobile";
       await use(isMobileTest);
@@ -20,7 +19,7 @@ export const test = base.extend<{}, WorkerFixtures>({
     { scope: "worker" },
   ],
   privateFeaturesEnabled: [
-    // eslint-disable-next-line no-empty-pattern
+    // oxlint-disable-next-line no-empty-pattern -- Playwright fixture syntax requires this
     async ({}, use) => {
       const privateFeaturesEnabled =
         process.env.NUXT_PUBLIC_PRIVATE_FEATURES_ENABLED === "true";
@@ -35,10 +34,9 @@ type SeoWorkerFixtures = {
   privateFeaturesEnabled: boolean;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export const seoTest = base.extend<{}, SeoWorkerFixtures>({
   persistentContext: [
-    // eslint-disable-next-line no-empty-pattern
+    // oxlint-disable-next-line no-empty-pattern -- Playwright fixture syntax requires this
     async ({}, use) => {
       const port = environment.remoteDebuggingPort;
       const userDataDir = path.join(os.tmpdir(), `playwright-seo-${port}`);
@@ -58,7 +56,7 @@ export const seoTest = base.extend<{}, SeoWorkerFixtures>({
     { scope: "worker" },
   ],
   privateFeaturesEnabled: [
-    // eslint-disable-next-line no-empty-pattern
+    // oxlint-disable-next-line no-empty-pattern -- Playwright fixture syntax requires this
     async ({}, use) => {
       const privateFeaturesEnabled =
         process.env.NUXT_PUBLIC_PRIVATE_FEATURES_ENABLED === "true";

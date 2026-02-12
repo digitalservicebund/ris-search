@@ -55,7 +55,6 @@ describe("removeOuterParentheses", () => {
   it("returns an empty string for falsy inputs", () => {
     const inputs = [null, false, undefined, ""];
     for (const input of inputs) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       expect(removeOuterParentheses(input as any)).toBe("");
     }
   });

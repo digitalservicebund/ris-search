@@ -199,7 +199,6 @@ export function dateFilterToSimpleSearchParams(
     );
   }
 
-  /* eslint-disable-next-line prefer-const */
   let { type, from, to } = validateDateFilterValue(filter);
 
   if (type === "allTime") return undefined;

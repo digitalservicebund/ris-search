@@ -98,7 +98,7 @@ pnpm exec playwright test --ui
 
 ## Code Quality
 
-We use TypeScript, ESLint, and Prettier to support code quality and consistent formatting. To run ESLint and Prettier:
+We use TypeScript, Oxlint, and Prettier to support code quality and consistent formatting. To run Oxlint and Prettier:
 
 ```sh
 pnpm style:check  # Check if code follows conventions and is formatted
