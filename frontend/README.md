@@ -32,7 +32,7 @@ The frontend will be available at [localhost:3000](http://localhost:3000).
 
 > [!NOTE]
 >
-> Instead of running a local backend, you can also connect the frontend dev server to our staging backend. This is slower, but will give you access to realistic data. Learn more 🔒 [here](https://digitalservicebund.atlassian.net/wiki/spaces/VER/pages/1215889433/Portal+Infrastructure+and+Deployment+Guide#Local-Development-(Port-Forwarding)).
+> Instead of running a local backend, you can also connect the frontend dev server to our staging backend. This is slower, but will give you access to realistic data. Learn more 🔒 [here](<https://digitalservicebund.atlassian.net/wiki/spaces/VER/pages/1215889433/Portal+Infrastructure+and+Deployment+Guide#Local-Development-(Port-Forwarding)>).
 
 ### Feature Flags
 
