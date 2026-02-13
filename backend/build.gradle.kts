@@ -81,7 +81,6 @@ dependencies {
     implementation(libs.posthog)
     implementation(libs.commons.text)
 
-    implementation(libs.json)
     implementation(libs.commons.csv)
 
     implementation(libs.saxon.he)
