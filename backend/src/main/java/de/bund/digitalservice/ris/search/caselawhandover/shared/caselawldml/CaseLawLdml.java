@@ -22,8 +22,8 @@ public class CaseLawLdml {
   @Builder.Default
   @XmlAttribute(name = "xsi:schemaLocation")
   private String schemaLocation =
-      "http://docs.oasis-open.org/legaldocml/ns/akn/3.0/WD17 "
-          + "https://docs.oasis-open.org/legaldocml/akn-core/v1.0/csprd02/part2-specs/schemas/akomantoso30.xsd";
+      "http://docs.oasis-open.org/legaldocml/ns/akn/3.0 "
+          + "https://docs.oasis-open.org/legaldocml/akn-core/v1.0/os/part2-specs/schemas/akomantoso30.xsd";
 
   @XmlElement(name = "judgment", namespace = CaseLawLdmlNamespaces.AKN_NS)
   private Judgment judgment;
