@@ -12,7 +12,7 @@ node-gradle = "7.1.0"
 # libraries
 jts = "1.20.0"
 test-containers = "1.21.4"
-spring-cloud-k8s = "5.0.0"
+spring-cloud-k8s = "5.0.1"
 springdoc-openapi = "3.0.1"
 prometheus = "1.16.2"
 sentry = "8.31.0"
