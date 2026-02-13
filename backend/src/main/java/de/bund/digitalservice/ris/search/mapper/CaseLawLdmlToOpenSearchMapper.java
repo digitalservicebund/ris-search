@@ -8,6 +8,7 @@ import de.bund.digitalservice.ris.search.caselawhandover.shared.caselawldml.AknB
 import de.bund.digitalservice.ris.search.caselawhandover.shared.caselawldml.AknKeyword;
 import de.bund.digitalservice.ris.search.caselawhandover.shared.caselawldml.AknMultipleBlock;
 import de.bund.digitalservice.ris.search.caselawhandover.shared.caselawldml.CaseLawLdml;
+import de.bund.digitalservice.ris.search.caselawhandover.shared.caselawldml.Court;
 import de.bund.digitalservice.ris.search.caselawhandover.shared.caselawldml.FrbrDate;
 import de.bund.digitalservice.ris.search.caselawhandover.shared.caselawldml.FrbrElement;
 import de.bund.digitalservice.ris.search.caselawhandover.shared.caselawldml.JaxbHtml;
@@ -60,7 +61,8 @@ public class CaseLawLdmlToOpenSearchMapper {
     validateNotNull(meta.getProprietary(), "Proprietary missing");
     validateNotNull(meta.getProprietary().getMeta(), "RisMeta missing");
     RisMeta risMeta = meta.getProprietary().getMeta();
-    validateNotNull(risMeta.getCourtType(), "CourtType missing");
+    Court court = risMeta.getCourt();
+    validateNotNull(court.getGerichtstyp(), "CourtType missing");
     validateNotNull(risMeta.getDocumentType(), "DocumentType missing");
     validate(!risMeta.getFileNumbers().isEmpty(), "FileNumber missing");
     validateNotNull(meta.getIdentification(), "Identification missing");
@@ -78,7 +80,8 @@ public class CaseLawLdmlToOpenSearchMapper {
 
     // visible elements
     validateNotNull(judgment.getHeader(), "Header missing");
-    JaxbHtml header = judgment.getHeader();
+    JaxbHtml header =
+        meta.getAnalysis().getOtherAnalysis().getDocumentaryShortTexts().getTitleLine();
     validateNotNull(judgment.getJudgmentBody(), "JudgmentBody missing");
 
     JudgmentBody judgmentBody = judgment.getJudgmentBody();
@@ -124,7 +127,7 @@ public class CaseLawLdmlToOpenSearchMapper {
         .ecli(ecli)
         .decisionDate(DateUtils.nullSafeParseyyyyMMdd(frbrDate.getDate()))
         .fileNumbers(risMeta.getFileNumbers())
-        .courtType(risMeta.getCourtType())
+        .courtType(court.getGerichtstyp())
         .location(risMeta.getCourtLocation())
         .documentType(risMeta.getDocumentType())
         .judicialBody(risMeta.getJudicialBody())
