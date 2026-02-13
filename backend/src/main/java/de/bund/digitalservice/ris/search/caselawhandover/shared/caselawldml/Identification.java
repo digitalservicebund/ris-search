@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 public class Identification {
   @Builder.Default
   @XmlAttribute(name = "source")
-  private String name = "attributsemantik-noch-undefiniert";
+  private String name = "#ris";
 
   @XmlElement(name = "FRBRWork", namespace = CaseLawLdmlNamespaces.AKN_NS)
   private FrbrElement frbrWork;
