@@ -15,7 +15,7 @@ pre-commit:
       stage_fixed: true
       run: >-
         pnpm prettier:fix {staged_files} &&
-        pnpm oxlint:fix --no-warn-ignored {staged_files}
+        pnpm oxlint:fix {staged_files}
     check-javadocs:
       skip: true
       tags: check javadocs
