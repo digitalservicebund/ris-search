@@ -288,4 +288,23 @@ class NormLdmlToOpenSearchMapperTest {
     assertThat(firstArticle.guid()).isEqualTo("87cd6b3a-d198-49c3-a02f-6adfd12940cb");
     assertThat(firstArticle.expiryDate()).isNull();
   }
+
+  private static Stream<Arguments> provideShortTitlePermutations() {
+    return Stream.of(
+        Arguments.of("(", ""),
+        Arguments.of(" ( Kurztitel -", "Kurztitel"),
+        Arguments.of("( Kurztitel -\n", "Kurztitel"),
+        Arguments.of("( Kurztitel - ", "Kurztitel"),
+        Arguments.of(
+            "Fruchtsaft- und Erfrischungsgetränkeverordnung",
+            "Fruchtsaft- und Erfrischungsgetränkeverordnung"),
+        Arguments.of("Kurz-\ntitel\n", "Kurz-\ntitel"));
+  }
+
+  @ParameterizedTest
+  @MethodSource("provideShortTitlePermutations")
+  @DisplayName("It removes parenthesis and trailing dashes from short titles")
+  void itParsesTheShortTitle(String input, String expected) {
+    assertThat(NormLdmlToOpenSearchMapper.parseShortTitle(input)).isEqualTo(expected);
+  }
 }
