@@ -125,6 +125,20 @@
                     <ris:standangabe type="neuf">Neugefasst durch Testdaten</ris:standangabe>
                 </ris:legalDocML.de_metadaten>
             </akn:proprietary>
+            <akn:notes>
+                <akn:note GUID="e1111111-1111-1111-1111-111111111111" eId="meta-n1_editfnote-n1" marker="#"
+                          placementBase="#einleitung-n1" refersTo="kommentierende-fussnote">
+                    <akn:p GUID="e2222222-2222-2222-2222-222222222222" eId="meta-n1_editfnote-n1_text-n1">*T (+++ Textnachweis ab: 27.5.2000 +++) (+++ Zur Anwendung vgl. §§ 5, 12, 15 +++)</akn:p>
+                </akn:note>
+                <akn:note GUID="e3333333-3333-3333-3333-333333333333" eId="meta-n1_editfnote-n2" marker="#"
+                          placementBase="#einleitung-n1" refersTo="aenderungsfussnote">
+                    <akn:p GUID="e4444444-4444-4444-4444-444444444444" eId="meta-n1_editfnote-n2_text-n1">*/ Die V ist gem. § 22 Abs. 1 am 1.6.2000 in Kraft getreten; abweichend hiervon ist § 8 Abs. 2 am 1.1.2001 in Kraft getreten gem. § 22 Abs. 3 V v. 27.5.2000 I 1016. *&amp;</akn:p>
+                </akn:note>
+                <akn:note GUID="e5555555-5555-5555-5555-555555555555" eId="meta-n1_editfnote-n3" marker="#"
+                          placementBase="#einleitung-n1" refersTo="aenderungsfussnote">
+                    <akn:p GUID="e6666666-6666-6666-6666-666666666666" eId="meta-n1_editfnote-n3_text-n1">Die V wurde von der Bundesregierung erlassen*.</akn:p>
+                </akn:note>
+            </akn:notes>
         </akn:meta>
         <akn:preface GUID="d1111111-1111-1111-1111-111111111111" eId="einleitung-n1">
             <akn:longTitle GUID="d2222222-2222-2222-2222-222222222222" eId="einleitung-n1_doktitel-n1">

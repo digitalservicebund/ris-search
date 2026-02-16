@@ -74,7 +74,9 @@ function extractHtmlParts(document: Document): NormContent["htmlParts"] {
     .trim()
     .replaceAll(/\s+/g, " ").length;
 
-  const headingNotes = document.querySelector(".dokumentenkopf .akn-notes");
+  const headingNotes = document.querySelector(
+    ".dokumentenkopf .nichtamtliche-fussnoten",
+  );
   const prefaceContainer = document.querySelector(
     ".dokumentenkopf .akn-container",
   );
@@ -96,13 +98,27 @@ function extractHtmlParts(document: Document): NormContent["htmlParts"] {
     officialToc,
     heading: heading?.outerHTML,
     headingAuthorialNotes: headingAuthorialNotes?.outerHTML,
-    headingNotes: headingNotes?.outerHTML,
+    headingNotes: insertLineBreaksBetweenBracketedBlocks(
+      headingNotes?.outerHTML,
+    ),
     headingAuthorialNotesLength,
     prefaceContainer: prefaceContainer?.outerHTML,
     standangaben,
     standangabenHinweis,
     vollzitat,
   };
+}
+
+/**
+ * Inserts <br> between consecutive "(+++ ... +++)" blocks within footnote HTML
+ * so each block appears on its own line.
+ */
+function insertLineBreaksBetweenBracketedBlocks(
+  html: string | undefined,
+): string | undefined {
+  if (!html) return undefined;
+  // Regex means (+++ footnote text +++) followed by (+++
+  return html.replaceAll(/(\(\+{3}[^)]*\+{3}\))\s+(?=\(\+{3})/g, "$1<br>");
 }
 
 export interface NormArticleContent {

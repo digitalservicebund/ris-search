@@ -324,8 +324,8 @@ const detailsTabPanelTitleId = useId();
               <div v-html="htmlParts.prefaceContainer" />
             </DetailsListEntry>
             <DetailsListEntry label="Fußnoten:">
-              <template v-if="htmlParts.headingNotes" #default>
-                <div v-html="htmlParts.headingNotes" />
+              <template v-if="htmlParts.headingNotes">
+                <div class="footnotes" v-html="htmlParts.headingNotes" />
               </template>
             </DetailsListEntry>
             <DetailsListEntry label="Download:">
@@ -377,5 +377,13 @@ const detailsTabPanelTitleId = useId();
   &.level-10 {
     @apply ml-16;
   }
+}
+
+.footnotes :deep(.nichtamtliche-fussnoten) {
+  @apply list-none p-0;
+}
+
+.footnotes :deep(.nichtamtliche-fussnoten .fussnote) {
+  @apply mt-16 first:mt-0;
 }
 </style>
