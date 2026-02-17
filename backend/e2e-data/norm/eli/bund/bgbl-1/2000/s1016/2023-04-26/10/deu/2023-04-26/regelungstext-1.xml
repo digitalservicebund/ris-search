@@ -117,6 +117,20 @@
                     <akn:timeInterval GUID="bb666666-6666-6666-6666-666666666666" eId="meta-n1_geltzeiten-n1_geltungszeitgr-n16_gelzeitintervall-n1" refersTo="geltungszeit" start="#meta-n1_lebzykl-n1_ereignis-n19"/>
                 </akn:temporalGroup>
             </akn:temporalData>
+            <akn:notes source="attributsemantik-noch-undefiniert">
+                <akn:note GUID="e1111111-1111-1111-1111-111111111111" eId="meta-n1_editfnote-n1" marker="#"
+                          placementBase="#einleitung-n1" refersTo="kommentierende-fussnote">
+                    <akn:p GUID="e2222222-2222-2222-2222-222222222222" eId="meta-n1_editfnote-n1_text-n1">*T (+++ Textnachweis ab: 27.5.2000 +++) (+++ Zur Anwendung vgl. §§ 5, 12, 15 +++)</akn:p>
+                </akn:note>
+                <akn:note GUID="e3333333-3333-3333-3333-333333333333" eId="meta-n1_editfnote-n2" marker="#"
+                          placementBase="#einleitung-n1" refersTo="aenderungsfussnote">
+                    <akn:p GUID="e4444444-4444-4444-4444-444444444444" eId="meta-n1_editfnote-n2_text-n1">*/ Die V ist gem. § 22 Abs. 1 am 1.6.2000 in Kraft getreten; abweichend hiervon ist § 8 Abs. 2 am 1.1.2001 in Kraft getreten gem. § 22 Abs. 3 V v. 27.5.2000 I 1016. *&amp;</akn:p>
+                </akn:note>
+                <akn:note GUID="e5555555-5555-5555-5555-555555555555" eId="meta-n1_editfnote-n3" marker="#"
+                          placementBase="#einleitung-n1" refersTo="aenderungsfussnote">
+                    <akn:p GUID="e6666666-6666-6666-6666-666666666666" eId="meta-n1_editfnote-n3_text-n1">Die V wurde von der Bundesregierung erlassen*.</akn:p>
+                </akn:note>
+            </akn:notes>
             <akn:proprietary GUID="bb777777-7777-7777-7777-777777777777" eId="meta-n1_proprietary-n1" source="attributsemantik-noch-undefiniert">
                 <ris:legalDocML.de_metadaten xmlns:ris="http://MetadatenRIS.LegalDocML.de/1.8.2/" xsi:schemaLocation="http://MetadatenRIS.LegalDocML.de/1.8.2/ Grammatiken/legalDocML.de-metadaten-ris.xsd">
                     <ris:inkraft date="2023-04-29"/>

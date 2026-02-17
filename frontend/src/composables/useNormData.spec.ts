@@ -62,7 +62,7 @@ describe("useNormData", () => {
       <span />
       <div class="titel">Title</div>
       <div class="akn-container"><p>Besonderer Hinweis</p></div>
-      <div class="akn-notes">Notes</div>
+      <ul class="nichtamtliche-fussnoten"><li>Notes</li></ul>
     </section>
     <section class="akn-proprietary">
       <dl>
@@ -89,7 +89,7 @@ describe("useNormData", () => {
         heading: `<div class="titel">Title</div>`,
         headingAuthorialNotes: `<div class="fussnoten">Footnote content</div>`,
         headingAuthorialNotesLength: 16,
-        headingNotes: `<div class="akn-notes">Notes</div>`,
+        headingNotes: `<ul class="nichtamtliche-fussnoten"><li>Notes</li></ul>`,
         prefaceContainer: `<div class="akn-container"><p>Besonderer Hinweis</p></div>`,
         standangaben: ["Stand-Stand"],
         standangabenHinweis: ["Stand-Hinweis 1;", "Stand-Hinweis 2"],
@@ -172,4 +172,16 @@ describe("useNormData", () => {
       );
     },
   );
+
+  it("inserts line breaks between consecutive bracketed blocks in footnotes", async () => {
+    mockFetch.mockReturnValueOnce(mockMetadata);
+    mockFetch.mockReturnValueOnce(
+      `<section class="dokumentenkopf"><ul class="nichtamtliche-fussnoten"><li class="fussnote"><p>(+++ Textnachweis ab: 1.1.2000 +++) (+++ Zur Anwendung vgl. § 5 +++)</p></li></ul></section>`,
+    );
+
+    const { data } = await useFetchNormContent(expressionEli);
+    expect(data.value.htmlParts.headingNotes).toContain(
+      "(+++ Textnachweis ab: 1.1.2000 +++)<br />(+++ Zur Anwendung vgl. § 5 +++)",
+    );
+  });
 });

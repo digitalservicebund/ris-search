@@ -1,7 +1,7 @@
 commit-msg:
   commands:
     lint-commit-msg:
-      run: pnpx commitlint --edit
+      run: pnpm dlx commitlint --edit
 pre-commit:
   parallel: true
   commands:

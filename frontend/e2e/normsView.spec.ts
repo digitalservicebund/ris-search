@@ -169,9 +169,9 @@ test.describe("view norm page", async () => {
       "Hinweis zum Stand:",
       "nicht vorhanden",
       "Fußnoten:",
-      "nicht vorhanden",
+      /\*T \(\+{3} Textnachweis ab: 27\.5\.2000 \+{3}\).*\(\+{3} Zur Anwendung vgl\. §§ 5, 12, 15 \+{3}\)/,
       "Download:",
-      "FrSaftErfrischV als ZIP herunterladen",
+      /FrSaftErfrischV als ZIP herunterladen/,
     ]);
   });
 
