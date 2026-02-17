@@ -35,7 +35,6 @@ management:
 sentry:
   environment: prototype
   traces-sample-rate: 0.01
-  dsn: "https://9fb90db5a19e625b82c4d9b52dd80fa8@o1248831.ingest.us.sentry.io/4506614661840896"
 
 logging:
   level:
