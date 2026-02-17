@@ -181,7 +181,7 @@ describe("useNormData", () => {
 
     const { data } = await useFetchNormContent(expressionEli);
     expect(data.value.htmlParts.headingNotes).toContain(
-      "(+++ Textnachweis ab: 1.1.2000 +++)<br>(+++ Zur Anwendung vgl. § 5 +++)",
+      "(+++ Textnachweis ab: 1.1.2000 +++)<br />(+++ Zur Anwendung vgl. § 5 +++)",
     );
   });
 });

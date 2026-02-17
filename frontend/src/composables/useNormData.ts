@@ -117,8 +117,7 @@ function insertLineBreaksBetweenBracketedBlocks(
   html: string | undefined,
 ): string | undefined {
   if (!html) return undefined;
-  // Regex means (+++ footnote text +++) followed by (+++
-  return html.replaceAll(/(\(\+{3}[^)]*\+{3}\))\s+(?=\(\+{3})/g, "$1<br>");
+  return html.replaceAll(/\+\+\+\)\s+\(\+\+\+/g, "+++)<br />(+++");
 }
 
 export interface NormArticleContent {
