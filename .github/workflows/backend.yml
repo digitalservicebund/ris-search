@@ -274,7 +274,7 @@ jobs:
         if: ${{ env.SENTRY_AUTH_TOKEN != '' }}
         run: |
           sentry-cli releases new ${{ inputs.container-image-version }}
-          sentry-cli releases set-commits --auto --ignore-missing ${{ inputs.container-image-version }}
+          sentry-cli releases set-commits --auto ${{ inputs.container-image-version }}
           sentry-cli releases finalize ${{ inputs.container-image-version }}
         env:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
