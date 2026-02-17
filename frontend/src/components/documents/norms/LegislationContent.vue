@@ -40,7 +40,10 @@ defineProps<{
 :deep(.akn-num + .akn-content),
 :deep(.akn-content > .akn-p:first-child) {
   @apply inline;
-  margin: 4px;
+}
+/* apply a margin for content following a randnummer */
+:deep(.akn-num:not(:empty) + .akn-content > .akn-p:first-child) {
+  @apply ml-4;
 }
 
 :deep(.akn-paragraph) {
