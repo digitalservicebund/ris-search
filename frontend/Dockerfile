@@ -1,4 +1,4 @@
-FROM node:24.13.0-alpine3.22 AS build
+FROM node:24.13.1-alpine3.22 AS build
 ARG NUXT_PUBLIC_SENTRY_DSN
 ARG SENTRY_RELEASE
 RUN apk update && apk upgrade
@@ -16,11 +16,10 @@ RUN --mount=type=secret,id=SENTRY_AUTH_TOKEN,required=false \
   fi && \
   pnpm run prepare && NODE_OPTIONS="--max-old-space-size=4096" pnpm build
 
-FROM node:24.13.0-alpine3.22
+FROM node:24.13.1-alpine3.22
 ARG NUXT_PUBLIC_SENTRY_DSN
 ARG SENTRY_RELEASE
-RUN apk update && apk upgrade && apk add dumb-init && apk cache clean && \
-  rm -r /usr/local/lib/node_modules/npm/node_modules/cross-spawn
+RUN apk update && apk upgrade && apk add dumb-init && apk cache clean
 USER node
 WORKDIR /app
 COPY --chown=node:node --from=build /app/.output/server ./server
