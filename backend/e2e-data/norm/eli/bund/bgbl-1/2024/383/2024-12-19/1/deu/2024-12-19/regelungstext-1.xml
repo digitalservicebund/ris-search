@@ -78,8 +78,7 @@
                 <akn:paragraph GUID="a8b9cad0-e1f2-4789-abcd-1234abcdef45" eId="art-z1_abs-z2">
                     <akn:num GUID="b9cad0e1-f2a3-4789-abcd-2345abcdef56" eId="art-z1_abs-z2_bezeichnung-n1">(2)</akn:num>
                     <akn:content GUID="cad0e1f2-a3b4-4789-abcd-3456abcdef67" eId="art-z1_abs-z2_inhalt-n1">
-                        <akn:p GUID="dae1f2a3-b4c5-4789-abcd-4567abcdef78" eId="art-z1_abs-z2_inhalt-n1_text-n1">
-                            Beispielhafte Illustration
+                        <akn:p GUID="dae1f2a3-b4c5-4789-abcd-4567abcdef78" eId="art-z1_abs-z2_inhalt-n1_text-n1">Beispielhafte Illustration
                             <akn:img GUID="7f4172f8-2184-4b13-98b3-d387b6b25a72"
                                      eId="art-z1_abs-z2_inhalt-n1_bild-n1"
                                      src="eli/bund/bgbl-1/2024/383/2024-12-19/1/deu/2024-12-19/illustration.jpg" alt="Beispielbild"/></akn:p>
