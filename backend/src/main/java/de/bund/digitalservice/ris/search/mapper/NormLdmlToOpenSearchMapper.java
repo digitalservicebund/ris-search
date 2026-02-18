@@ -250,10 +250,26 @@ public class NormLdmlToOpenSearchMapper {
     String xmlDocumentAlternateName =
         xmlDocument.getElementByXpath(X_PATH_SHORT_TITLE_ALTERNATE_NAME);
 
-    if (StringUtils.isEmpty(xmlDocumentAlternateName)) return null;
+    return StringUtils.trimToNull(parseShortTitle(xmlDocumentAlternateName));
+  }
 
-    String cleaned = xmlDocumentAlternateName.replace("(", "").replace("–", "").replace(" -", "");
-    return StringUtils.trimToNull(cleaned);
+  /**
+   * Removes Trailing dash punctuation and Parenthesis from a given String
+   *
+   * @param original String to be processed
+   * @return cleared String
+   */
+  public static String parseShortTitle(String original) {
+    if (original == null || original.isEmpty()) {
+      return original;
+    }
+
+    return original
+        .strip()
+        .replaceAll("\\p{Pd}\\Z", "") // remove trailing dash punctuation
+        .replaceAll("[()]", " ")
+        .replaceAll("\\s{2,}", " ") // collapse multiple whitespaces
+        .trim();
   }
 
   private static String getOfficialAbbreviationByXmlDocument(XmlDocument xmlDocument) {
