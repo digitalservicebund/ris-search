@@ -5,13 +5,13 @@ import { useNavigateActionItem } from "~/composables/useActionMenuItem/useNaviga
 import { usePdfActionItem } from "~/composables/useActionMenuItem/usePdfActionItem";
 import { usePrintActionItem } from "~/composables/useActionMenuItem/usePrintActionItem";
 import { useXmlActionItem } from "~/composables/useActionMenuItem/useXmlActionItem";
-import type { LegislationWork } from "~/types";
+import type { LegislationExpression } from "~/types";
 import { getManifestationUrl } from "~/utils/norm";
 import EngIcon from "~icons/custom/eng";
 import UpdatingLinkIcon from "~icons/custom/updatingLink";
 
 const { metadata, translationUrl } = defineProps<{
-  metadata: LegislationWork | undefined;
+  metadata: LegislationExpression | undefined;
   translationUrl: string | undefined;
 }>();
 

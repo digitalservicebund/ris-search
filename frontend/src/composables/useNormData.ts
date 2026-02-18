@@ -1,9 +1,9 @@
 import type { AsyncData, NuxtError } from "#app";
-import type { LegislationWork } from "~/types";
+import type { LegislationExpression } from "~/types";
 import { getTextFromElements, parseDocument } from "~/utils/htmlParser";
 
 export interface NormContent {
-  legislationWork: LegislationWork;
+  legislation: LegislationExpression;
   html: string;
   htmlParts: {
     heading?: string;
@@ -40,7 +40,7 @@ export function useFetchNormContent(
   return useAsyncData(
     `json+html for ${expressionEli}`,
     async () => {
-      const metadata = await $risBackend<LegislationWork>(
+      const metadata = await $risBackend<LegislationExpression>(
         `/v1/legislation/eli/${expressionEli}`,
       );
       const contentUrl = getContentUrl(metadata);
@@ -53,9 +53,9 @@ export function useFetchNormContent(
       const document = parseDocument(html);
       const htmlParts = extractHtmlParts(document);
       //set hasPart empty to reduce payload size
-      metadata.workExample.hasPart = [];
+      metadata.hasPart = [];
       return {
-        legislationWork: metadata,
+        legislation: metadata,
         html,
         htmlParts,
       };
@@ -121,7 +121,7 @@ function insertLineBreaksBetweenBracketedBlocks(
 }
 
 export interface NormArticleContent {
-  legislationWork: LegislationWork;
+  legislationWork: LegislationExpression;
   html: string;
   articleHeading?: string;
 }
@@ -153,7 +153,7 @@ export function useFetchNormArticleContent(
   return useAsyncData(
     `json+html for ${expressionEli}/${articleEId}`,
     async () => {
-      const metadata = await $risBackend<LegislationWork>(
+      const metadata = await $risBackend<LegislationExpression>(
         `/v1/legislation/eli/${expressionEli}`,
       );
       // build the article URL by appending the eId in front of the .html suffix
@@ -185,15 +185,15 @@ export function useFetchNormArticleContent(
  * Extracts the HTML URL from a LegislationWork metadata structure.
  * @throws Error If the metadata doesn't include an HTML version.
  */
-function getContentUrl(metadata: LegislationWork) {
-  const encoding = metadata?.workExample.encoding?.find(
+function getContentUrl(metadata: LegislationExpression) {
+  const encoding = metadata?.encoding?.find(
     (e) => e.encodingFormat === "text/html",
   );
   const contentUrl = encoding?.contentUrl;
   if (contentUrl) {
     console.info("using manifestation", encoding?.["@id"]);
   } else {
-    console.error("contentUrl is missing", metadata?.workExample?.encoding);
+    console.error("contentUrl is missing", metadata?.encoding);
     throw new Error("contentUrl is missing");
   }
 

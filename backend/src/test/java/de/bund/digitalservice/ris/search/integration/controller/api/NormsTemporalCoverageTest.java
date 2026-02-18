@@ -137,6 +137,6 @@ class NormsTemporalCoverageTest extends ContainersIntegrationBase {
   }
 
   private static @NotNull ResultMatcher resultHasItems(String... elis) {
-    return jsonPath("$.member[*].item.workExample.legislationIdentifier", containsInAnyOrder(elis));
+    return jsonPath("$.member[*].item.legislationIdentifier", containsInAnyOrder(elis));
   }
 }

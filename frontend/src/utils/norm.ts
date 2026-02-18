@@ -1,7 +1,7 @@
 import dayjs, { type Dayjs } from "dayjs";
 import _ from "lodash";
 import type { MetadataItem } from "~/components/Metadata.vue";
-import type { LegislationExpression, LegislationWork } from "~/types";
+import type { LegislationExpression } from "~/types";
 import {
   dateFormattedDDMMYYYY,
   getCurrentDateInGermany,
@@ -70,20 +70,18 @@ export function getValidityStatus(
 }
 
 export function getManifestationUrl(
-  metadata: LegislationWork | undefined,
+  metadata: LegislationExpression | undefined,
   format: string,
 ) {
-  const encoding = metadata?.workExample?.encoding.find(
-    (e) => e.encodingFormat === format,
-  );
+  const encoding = metadata?.encoding.find((e) => e.encodingFormat === format);
   return encoding?.contentUrl;
 }
 
-export function getNormBreadcrumbTitle(norm: LegislationWork): string {
+export function getNormBreadcrumbTitle(norm: LegislationExpression): string {
   return norm.abbreviation || norm.alternateName || norm.name || "";
 }
 
-export function getNormTitle(norm: LegislationWork): string {
+export function getNormTitle(norm: LegislationExpression): string {
   return norm.name || norm.alternateName || norm.abbreviation || "";
 }
 
@@ -123,10 +121,10 @@ export function getMostRelevantExpression(
 }
 
 export function getNormMetadataItems(
-  norm?: Partial<LegislationWork>,
+  norm?: Partial<LegislationExpression>,
 ): MetadataItem[] {
   const validityInterval = temporalCoverageToValidityInterval(
-    norm?.workExample?.temporalCoverage,
+    norm?.temporalCoverage,
   );
   const formattedStatus = getValidityStatusLabel(
     getValidityStatus(validityInterval),

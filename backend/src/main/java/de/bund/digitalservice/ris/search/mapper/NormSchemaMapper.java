@@ -18,9 +18,9 @@ import javax.annotation.Nullable;
 import org.springframework.http.MediaType;
 
 /**
- * Utility class for mapping {@link Norm} domain objects to a {@link LegislationWorkSchema}. This
- * class provides methods to transform legislative data into the corresponding schema structure used
- * for legal work representations.
+ * Utility class for mapping {@link Norm} domain objects to a {@link LegislationExpressionSchema}.
+ * This class provides methods to transform legislative data into the corresponding schema structure
+ * used for legal work representations.
  *
  * <p>This class is non-instantiable, as it contains only static utility methods.
  */
@@ -30,14 +30,14 @@ public class NormSchemaMapper {
   private static final String CONTENT_BASE_URL = ApiConfig.Paths.LEGISLATION + "/";
 
   /**
-   * Maps a {@link Norm} object to a {@link LegislationWorkSchema} object.
+   * Maps a {@link Norm} object to a {@link LegislationExpressionSchema} object.
    *
    * @param norm the {@link Norm} instance to be converted; it contains all necessary fields such as
    *     ELI references, metadata, and publication information.
-   * @return a {@link LegislationWorkSchema} object representing the input {@link Norm} with its
-   *     associated legal force, temporal coverage, and publication details.
+   * @return a {@link LegislationExpressionSchema} object representing the input {@link Norm} with
+   *     its associated legal force, temporal coverage, and publication details.
    */
-  public static LegislationWorkSchema fromDomain(Norm norm) {
+  public static LegislationExpressionSchema fromDomain(Norm norm) {
     String expressionEli = norm.getExpressionEli();
     String manifestationEliXml = norm.getManifestationEliExample();
 
@@ -52,30 +52,25 @@ public class NormSchemaMapper {
         DateUtils.toDateIntervalString(norm.getEntryIntoForceDate(), norm.getExpiryDate());
 
     String expressionId = CONTENT_BASE_URL + expressionEli;
-    LegislationExpressionSchema expression =
-        LegislationExpressionSchema.builder()
-            .id(expressionId)
-            .legislationIdentifier(expressionEli)
-            .legislationLegalForce(legislationLegalForce)
-            .temporalCoverage(temporalCoverage)
-            .encoding(encodings)
-            .tableOfContents(buildTableOfContents(norm.getTableOfContents()))
-            .hasPart(buildPartList(norm, expressionId))
-            .build();
 
     PublicationIssueSchema publicationIssue =
         norm.getPublishedIn() != null ? new PublicationIssueSchema(norm.getPublishedIn()) : null;
 
-    return LegislationWorkSchema.builder()
-        .id(CONTENT_BASE_URL + norm.getWorkEli())
+    return LegislationExpressionSchema.builder()
+        .id(CONTENT_BASE_URL + norm.getExpressionEli())
         .abbreviation(norm.getOfficialAbbreviation())
         .alternateName(norm.getOfficialShortTitle())
-        .legislationIdentifier(norm.getWorkEli())
+        .exampleOfWork(new LegislationWorkSchema(norm.getWorkEli()))
+        .legislationIdentifier(norm.getExpressionEli())
         .legislationDate(norm.getNormsDate())
         .datePublished(norm.getDatePublished())
         .name(norm.getOfficialTitle())
-        .workExample(expression)
         .isPartOf(publicationIssue)
+        .legislationLegalForce(legislationLegalForce)
+        .temporalCoverage(temporalCoverage)
+        .encoding(encodings)
+        .tableOfContents(buildTableOfContents(norm.getTableOfContents()))
+        .hasPart(buildPartList(norm, expressionId))
         .build();
   }
 

@@ -25,7 +25,7 @@ import { useFetchNormContent } from "~/composables/useNormData";
 import { useNormVersions } from "~/composables/useNormVersions";
 import { usePrivateFeaturesFlag } from "~/composables/usePrivateFeaturesFlag";
 import { fetchTranslationListWithIdFilter } from "~/composables/useTranslationData";
-import { DocumentKind, type LegislationWork } from "~/types";
+import { DocumentKind, type LegislationExpression } from "~/types";
 import { dateFormattedDDMMYYYY } from "~/utils/dateFormatting";
 import { formatDocumentKind } from "~/utils/displayValues";
 import type { ValidityStatus } from "~/utils/norm";
@@ -56,11 +56,11 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
 
 const { data, error, status } = await useFetchNormContent(expressionEli);
 
-const metadata: Ref<LegislationWork | undefined> = computed(() => {
-  return data.value?.legislationWork;
+const metadata: Ref<LegislationExpression | undefined> = computed(() => {
+  return data.value?.legislation;
 });
 
-const abbreviation = data.value?.legislationWork.abbreviation;
+const abbreviation = data.value?.legislation.abbreviation;
 
 const { translations } = abbreviation
   ? await fetchTranslationListWithIdFilter(abbreviation)
@@ -85,10 +85,10 @@ if (error.value) {
 }
 
 const tableOfContents: Ref<TreeNode[]> = computed(() => {
-  if (!metadata.value?.workExample.tableOfContents) return [];
+  if (!metadata.value?.tableOfContents) return [];
   const normPath = route.path;
   return tocItemsToTreeNodes(
-    metadata.value.workExample.tableOfContents,
+    metadata.value.tableOfContents,
     normPath.concat("#"),
     normPath.concat("#"),
   );
@@ -96,14 +96,12 @@ const tableOfContents: Ref<TreeNode[]> = computed(() => {
 
 const validityInterval = computed(() =>
   privateFeaturesEnabled
-    ? temporalCoverageToValidityInterval(
-        metadata.value?.workExample.temporalCoverage,
-      )
+    ? temporalCoverageToValidityInterval(metadata.value?.temporalCoverage)
     : undefined,
 );
 
 const validityStatus = computed(() => {
-  if (metadata.value?.workExample && validityInterval)
+  if (metadata.value && validityInterval)
     return getValidityStatus(validityInterval.value);
   return undefined;
 });
@@ -115,7 +113,7 @@ const normBreadcrumbTitle = computed(() =>
 );
 
 const { status: normVersionsStatus, sortedVersions: normVersions } =
-  useNormVersions(metadata.value?.legislationIdentifier);
+  useNormVersions(metadata.value?.exampleOfWork.legislationIdentifier ?? "");
 
 const breadcrumbItems: ComputedRef<BreadcrumbItem[]> = computed(() => {
   const validFrom = dateFormattedDDMMYYYY(validityInterval.value?.from);
@@ -134,7 +132,7 @@ const breadcrumbItems: ComputedRef<BreadcrumbItem[]> = computed(() => {
 });
 
 const buildOgTitle = (
-  norm: LegislationWork,
+  norm: LegislationExpression,
   validFrom?: Dayjs,
   status?: ValidityStatus,
 ) => {
@@ -285,7 +283,7 @@ const detailsTabPanelTitleId = useId();
           <template #sidebar>
             <client-only>
               <NormTableOfContents
-                v-if="metadata.workExample.tableOfContents.length > 0"
+                v-if="metadata.tableOfContents.length > 0"
                 :table-of-contents="tableOfContents"
                 :selected-key="selectedEntry"
               />
@@ -348,9 +346,7 @@ const detailsTabPanelTitleId = useId();
           <NormVersionList
             v-if="privateFeaturesEnabled"
             :status="normVersionsStatus"
-            :current-legislation-identifier="
-              metadata.workExample.legislationIdentifier
-            "
+            :current-legislation-identifier="metadata.legislationIdentifier"
             :versions="normVersions"
           />
           <VersionsTeaser v-else />

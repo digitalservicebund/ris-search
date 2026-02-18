@@ -62,16 +62,19 @@ class AllDocumentsSearchControllerMultiMatchAPITest extends ContainersIntegratio
         List.of(
             Norm.builder()
                 .workEli("N1 {m,t} in one field")
+                .expressionEli("N1 {m,t} in one field")
                 .officialTitle("Mord Totschlag")
                 .tableOfContents(Collections.emptyList())
                 .build(),
             Norm.builder()
                 .workEli("N2 {r} in one field")
+                .expressionEli("N2 {r} in one field")
                 .officialTitle("Raub")
                 .tableOfContents(Collections.emptyList())
                 .build(),
             Norm.builder()
                 .workEli("N3 {r} in one field")
+                .expressionEli("N3 {r} in one field")
                 .officialTitle("Raub")
                 .tableOfContents(Collections.emptyList())
                 .build());

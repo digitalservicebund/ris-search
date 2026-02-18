@@ -5,7 +5,6 @@ import static org.springframework.http.HttpHeaders.CONTENT_DISPOSITION;
 import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.exception.CustomValidationException;
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
-import de.bund.digitalservice.ris.search.mapper.LegislationExpressionSearchSchemaMapper;
 import de.bund.digitalservice.ris.search.mapper.NormSchemaMapper;
 import de.bund.digitalservice.ris.search.mapper.NormSearchResponseMapper;
 import de.bund.digitalservice.ris.search.mapper.SortParamsConverter;
@@ -15,9 +14,8 @@ import de.bund.digitalservice.ris.search.models.api.parameters.PaginationParams;
 import de.bund.digitalservice.ris.search.models.api.parameters.UniversalSearchParams;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.schema.CollectionSchema;
+import de.bund.digitalservice.ris.search.schema.LegislationExpressionSchema;
 import de.bund.digitalservice.ris.search.schema.LegislationExpressionSearchSchema;
-import de.bund.digitalservice.ris.search.schema.LegislationWorkSchema;
-import de.bund.digitalservice.ris.search.schema.LegislationWorkSearchSchema;
 import de.bund.digitalservice.ris.search.schema.SearchMemberSchema;
 import de.bund.digitalservice.ris.search.service.NormsService;
 import de.bund.digitalservice.ris.search.service.xslt.NormXsltTransformerService;
@@ -138,7 +136,7 @@ public class NormsController {
                       """)
   @ApiResponse(responseCode = "200")
   @ApiResponse(responseCode = "422")
-  public CollectionSchema<SearchMemberSchema<LegislationWorkSearchSchema>> searchAndFilter(
+  public CollectionSchema<SearchMemberSchema<LegislationExpressionSearchSchema>> searchAndFilter(
       @ParameterObject NormsSearchParams normsSearchParams,
       @ParameterObject UniversalSearchParams universalSearchParams,
       @ParameterObject @Valid PaginationParams pagination,
@@ -182,11 +180,10 @@ public class NormsController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @Operation(
       summary = "Work and expression-level metadata",
-      description =
-          "Returns the work and expression-level (\"workExample\") metadata of a legislation item.")
+      description = "Returns metadata of a legislation item.")
   @ApiResponse(responseCode = "200")
   @ApiResponse(responseCode = "404", content = @Content)
-  public ResponseEntity<LegislationWorkSchema> getLegislation(
+  public ResponseEntity<LegislationExpressionSchema> getLegislation(
       @Parameter(description = BUND_DESCRIPTION, schema = @Schema(allowableValues = {BUND_EXAMPLE}))
           @PathVariable
           String jurisdiction,
@@ -228,8 +225,7 @@ public class NormsController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   @Operation(
       summary = "Retrieves expression level metadata for a given work eli",
-      description =
-          "Returns the expression-level (\"workExample\") metadata of a legislation item.")
+      description = "Returns all legislation items based on its work eli")
   @ApiResponse(responseCode = "200")
   @ApiResponse(responseCode = "404", content = @Content)
   @Hidden
@@ -249,7 +245,7 @@ public class NormsController {
         normsService.getWorkExpressions(
             eli, PageRequest.of(pagination.getPageIndex(), pagination.getSize()));
 
-    return LegislationExpressionSearchSchemaMapper.fromNormsPage(
+    return NormSearchResponseMapper.fromNormsPage(
         expressions, ApiConfig.Paths.LEGISLATION_WORK_EXAMPLE);
   }
 
