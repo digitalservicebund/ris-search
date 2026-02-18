@@ -13,6 +13,7 @@ CVE-2025-64756
 # is caused by an unrelated but unused package in the image (node:24.13.0-alpine3.22).
 
 CVE-2026-23745
+CVE-2026-26960
 CVE-2026-23950
 CVE-2026-24842
 
