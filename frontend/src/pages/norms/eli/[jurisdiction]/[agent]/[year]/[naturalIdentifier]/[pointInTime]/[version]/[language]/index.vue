@@ -250,7 +250,9 @@ const detailsTabPanelTitleId = useId();
               :key="view.path"
               :value="view.path"
               :as="NuxtLink"
-              :to="{ query: { view: view.path } }"
+              :to="{
+                query: view.path !== 'text' ? { view: view.path } : undefined,
+              }"
               :aria-controls="undefined"
               :data-attr="view.analyticsId"
               class="flex items-center gap-8"
