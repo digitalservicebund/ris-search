@@ -58,7 +58,7 @@ test("can view a single case law documentation unit", async ({
   if (isMobileTest)
     for (const sectionName of ["Tenor", "Orientierungssatz", "Tatbestand"]) {
       await test.step(`jumps straight to a specific section, ${sectionName}`, async () => {
-        await navigate(page, "/search?category=R&query=fiktiv");
+        await navigate(page, "/search?documentKind=R&query=fiktiv");
         const link = page.getByRole("link", { name: sectionName }).first();
         await link.click();
 

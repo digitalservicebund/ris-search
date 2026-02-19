@@ -47,11 +47,11 @@ const testPages = [
   // },
   {
     name: "Norms Search Page",
-    url: "/search?category=N",
+    url: "/search?documentKind=N",
   },
   {
     name: "Caselaw Search Page",
-    url: "/search?category=R",
+    url: "/search?documentKind=R",
   },
   {
     name: "Advanced Search Page",

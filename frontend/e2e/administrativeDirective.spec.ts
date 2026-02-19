@@ -102,7 +102,7 @@ test("can navigate to search via breadcrumb", async ({ page }) => {
   await navigate(page, "/administrative-directives/KSNR000000001");
 
   await page.getByRole("link", { name: "Verwaltungsvorschriften" }).click();
-  await page.waitForURL("**/search?category=V");
+  await page.waitForURL("**/search?documentKind=V");
 
   await expect(
     page.getByRole("heading", { level: 1, name: "Suche" }),

@@ -44,7 +44,7 @@ const isEmptyDocument = computed(() => isDocumentEmpty(html.value));
 const breadcrumbs = computed(() => [
   {
     label: formatDocumentKind(DocumentKind.Literature),
-    route: `/search?category=${DocumentKind.Literature}`,
+    route: `/search?documentKind=${DocumentKind.Literature}`,
   },
   { label: title.value ?? "Titelzeile nicht vorhanden" },
 ]);
