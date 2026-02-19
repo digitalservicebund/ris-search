@@ -78,10 +78,10 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
         </p>
       </div>
       <div class="flex flex-wrap gap-16">
-        <Button :as="NuxtLink" to="/search?category=N">
+        <Button :as="NuxtLink" to="/search?documentKind=N">
           Zu den Gesetzen und Verordnungen
         </Button>
-        <Button :as="NuxtLink" to="/search?category=R">
+        <Button :as="NuxtLink" to="/search?documentKind=R">
           Zu den Gerichtsentscheidungen
         </Button>
       </div>

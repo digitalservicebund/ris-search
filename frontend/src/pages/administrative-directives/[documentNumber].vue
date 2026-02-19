@@ -41,7 +41,7 @@ const breadcrumbs = computed(() => [
     label: formatDocumentKind(DocumentKind.AdministrativeDirective),
     route: {
       name: "search",
-      query: { category: DocumentKind.AdministrativeDirective },
+      query: { documentKind: DocumentKind.AdministrativeDirective },
     },
   },
   { label: title.value ?? "Titelzeile nicht vorhanden" },

@@ -124,7 +124,7 @@ const breadcrumbItems: ComputedRef<BreadcrumbItem[]> = computed(() => {
   return [
     {
       label: formatDocumentKind(DocumentKind.Norm),
-      route: `/search?category=${DocumentKind.Norm}`,
+      route: `/search?documentKind=${DocumentKind.Norm}`,
     },
     {
       route: `/norms/${metadata.value?.legislationIdentifier}`,

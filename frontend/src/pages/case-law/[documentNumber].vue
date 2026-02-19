@@ -113,7 +113,7 @@ const title = computed(() => {
 const breadcrumbs = computed(() => [
   {
     label: formatDocumentKind(DocumentKind.CaseLaw),
-    route: `/search?category=${DocumentKind.CaseLaw}`,
+    route: `/search?documentKind=${DocumentKind.CaseLaw}`,
   },
   { label: title.value ?? "Titelzeile nicht vorhanden" },
 ]);

@@ -1,10 +1,9 @@
-# Ignore CVEs in the (npm) tar package. This has already been fixed by pinning the
-# version in our package.json. The remaining finding causing the errors
-# is caused by an unrelated but unused package in the image (node:24.13.1-alpine3.22).
+# CVEs ignored here are usually fixed by pinning them in pnpm-workspace.yaml.
+# Ignoring them here is to solve trivy complaints from vulnerable dependencies
+# in the Node Docker image that are not actually used in the production
+# application.
 
-CVE-2026-26960
 CVE-2026-24842
-
-# CVE in @isaacs/brace-expansion is resolved in our packages, but is present in the docker image
-
 CVE-2026-25547
+CVE-2026-26960
+CVE-2026-26996
