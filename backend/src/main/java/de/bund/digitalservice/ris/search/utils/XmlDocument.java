@@ -3,6 +3,7 @@ package de.bund.digitalservice.ris.search.utils;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.AbstractList;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import javax.xml.XMLConstants;
@@ -215,6 +216,26 @@ public class XmlDocument {
     final List<String> textItems =
         XmlDocument.asList(nodes).stream().map(Node::getTextContent).toList();
     return String.join(" ", textItems).replaceAll("\\s+", " ").trim();
+  }
+
+  /**
+   * Extracts and cleans the text content of all XML nodes that match the given XPath expression.
+   * The resulting text is space-normalized, replacing multiple consecutive whitespace characters
+   * with a single space, and trims leading or trailing spaces.
+   *
+   * @param xPath the XPath expression used to select the nodes from which text content is extracted
+   * @return a List of strings containing the normalized text content of the matching nodes
+   * @throws XPathExpressionException if the given XPath expression cannot be evaluated
+   */
+  public List<String> extractCleanedTextAsList(String xPath) throws XPathExpressionException {
+    NodeList nodes = (NodeList) xpathInstance.evaluate(xPath, document, XPathConstants.NODESET);
+
+    List<String> textContent = new ArrayList<>();
+    for (int i = 0; i < nodes.getLength(); i++) {
+      Node note = nodes.item(i);
+      textContent.add(note.getTextContent().replaceAll("\\s+", " ").trim());
+    }
+    return textContent;
   }
 
   /**

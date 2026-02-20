@@ -6,6 +6,7 @@ import de.bund.digitalservice.ris.search.models.Attachment;
 import de.bund.digitalservice.ris.search.models.ldml.TimeInterval;
 import de.bund.digitalservice.ris.search.models.opensearch.Article;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
+import de.bund.digitalservice.ris.search.models.opensearch.Preface;
 import de.bund.digitalservice.ris.search.models.opensearch.TableOfContentsItem;
 import de.bund.digitalservice.ris.search.utils.LdmlTemporalData;
 import de.bund.digitalservice.ris.search.utils.XmlDocument;
@@ -74,6 +75,9 @@ public class NormLdmlToOpenSearchMapper {
       "//*[local-name()='FRBRWork']/*[local-name()='FRBRdate']/@date";
   private static final String X_PATH_DATE_AUSFERTIGUNG =
       "//*[local-name()='preface']/*[local-name()='block']/*[local-name()='date' and @refersTo='ausfertigung-datum']/@date";
+  private static final String X_PATH_PREFACE_EID = "//*[local-name()='preface']/@eId";
+  private static final String X_PATH_PREFACE_CONTENT =
+      "//*[local-name()='preface']//*[local-name()='container']//text()[normalize-space()]";
   private static final String X_PATH_WORK_NUMBER =
       "//*[local-name()='FRBRWork']/*[local-name()='FRBRnumber']/@value";
   private static final String X_PATH_WORK_NAME =
@@ -99,6 +103,11 @@ public class NormLdmlToOpenSearchMapper {
   private static final String X_PATH_PREAMBLE_FORMULA =
       "//*[local-name()='preamble']/*[local-name()='formula']";
   public static final String X_PATH_OFFICIAL_FOOTNOTES = "//*[local-name()='authorialNote']";
+  private static final String X_PATH_FOOTNOTES = "//*[local-name()='note']";
+  private static final String X_PATH_PREFACE_AUTHORIAL_NOTES =
+      "//akn:preface//akn:authorialNote//*[text()]";
+  private static final String X_PATH_STANDANGABE = "//ris:standangabe[@type!='hinweis']";
+  private static final String X_PATH_STANDANGBAE_HINWEIS = "//ris:standangabe[@type='hinweis']";
 
   private static final String EINGANGSFORMEL = "Eingangsformel";
   private static final String SCHLUSSFORMEL = "Schlussformel";
@@ -133,6 +142,8 @@ public class NormLdmlToOpenSearchMapper {
       boolean isGegenstandslos = xmlDocument.getElementExistByXpath(X_PATH_GEGENSTANDSLOS);
       boolean isBedingtesInkrafttreten =
           xmlDocument.getElementExistByXpath(X_PATH_BEDINGTES_INKRAFTTRETEN);
+
+      var footNotes = xmlDocument.getNodesByXpath(X_PATH_FOOTNOTES);
 
       if (isGegenstandslos) {
         logger.warn("Ignoring Gegenstandslos until logic is defined");
@@ -193,11 +204,34 @@ public class NormLdmlToOpenSearchMapper {
               .articleTexts(articleTexts)
               .officialFootNotes(getOfficialFootNotes(xmlDocument, attachments))
               .indexedAt(Instant.now().toString())
+              .preface(getPreface(xmlDocument, footNotes))
+              .consolidationStatus(xmlDocument.extractCleanedTextAsList(X_PATH_STANDANGABE))
+              .consolidationStatusNotes(
+                  xmlDocument.extractCleanedTextAsList(X_PATH_STANDANGBAE_HINWEIS))
               .build());
     } catch (Exception e) {
       logger.warn("Error to create Norms from XML content.", e);
       return Optional.empty();
     }
+  }
+
+  private static Preface getPreface(XmlDocument document, NodeList footNotes)
+      throws XPathExpressionException {
+    var prefaceEId = document.getElementByXpath(X_PATH_PREFACE_EID);
+
+    List<String> prefaceFootnotes = new ArrayList<>();
+    for (int i = 0; i < footNotes.getLength(); i++) {
+      Node note = footNotes.item(i);
+      String placementBase =
+          note.getAttributes().getNamedItem("placementBase").getNodeValue().substring(1);
+      if (placementBase.equals(prefaceEId)) {
+        prefaceFootnotes.add(note.getTextContent().replaceAll("\\s+", " ").trim());
+      }
+    }
+
+    List<String> authorialNotes = document.extractCleanedTextAsList(X_PATH_PREFACE_AUTHORIAL_NOTES);
+    List<String> content = document.extractCleanedTextAsList(X_PATH_PREFACE_CONTENT);
+    return new Preface(prefaceEId, content, prefaceFootnotes, authorialNotes);
   }
 
   private static String getOfficialFootNotes(XmlDocument xmlDocument, List<Attachment> attachments)

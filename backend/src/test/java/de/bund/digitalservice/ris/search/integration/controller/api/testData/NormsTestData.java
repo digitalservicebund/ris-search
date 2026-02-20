@@ -6,6 +6,7 @@ import static de.bund.digitalservice.ris.search.integration.controller.api.testD
 
 import de.bund.digitalservice.ris.search.models.opensearch.Article;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
+import de.bund.digitalservice.ris.search.models.opensearch.Preface;
 import de.bund.digitalservice.ris.search.models.opensearch.TableOfContentsItem;
 import de.bund.digitalservice.ris.search.utils.eli.EliFile;
 import java.io.IOException;
@@ -165,6 +166,14 @@ public class NormsTestData {
             .articleTexts(List.of("example text 1", "example text 2"))
             .articleNames(List.of("§ 1 Example article", "§ 2 Example article"))
             .entryIntoForceDate(LocalDate.of(2025, 11, 1))
+            .consolidationStatus(List.of("Standangabe"))
+            .consolidationStatusNotes(List.of("Standangabe Hinweis"))
+            .preface(
+                new Preface(
+                    "preface_eId",
+                    List.of("preface content"),
+                    List.of("footnote"),
+                    List.of("authorial note")))
             .articles(
                 List.of(
                     new Article(

@@ -57,6 +57,13 @@ public record LegislationExpressionSchema(
                 "List of components (articles, preambles, conclusions, attachments, …) that form this legislation item.")
         @Nullable
         List<LegislationExpressionPartSchema> hasPart,
+    @Nullable @Schema(description = "consolidation status of a legal expression")
+        List<String> consolidationStatus,
+    @Nullable
+        @Schema(
+            description =
+                "additional notes regarding the consolidation status of a legal expression")
+        List<String> consolidationStatusNotes,
     @Nullable List<LegislationObjectSchema> encoding)
     implements JsonldResource {
 

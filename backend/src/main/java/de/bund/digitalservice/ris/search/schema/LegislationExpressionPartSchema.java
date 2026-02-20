@@ -36,7 +36,11 @@ public record LegislationExpressionPartSchema(
     @Nullable @Schema(example = "2003-12-15") LocalDate entryIntoForceDate,
     @Nullable @Schema(example = "2003-12-15") LocalDate expiryDate,
     @Nullable @Schema(description = "The source data for this part, if available on its own")
-        List<LegislationObjectSchema> encoding)
+        List<LegislationObjectSchema> encoding,
+    @Nullable @Schema(description = "the text content of this part") List<String> text,
+    @Nullable @Schema(description = "footnotes belonging to this part") List<String> footNotes,
+    @Nullable @Schema(description = "authorial notes belonging to this part")
+        List<String> authorialNotes)
     implements JsonldResource {
 
   @Override

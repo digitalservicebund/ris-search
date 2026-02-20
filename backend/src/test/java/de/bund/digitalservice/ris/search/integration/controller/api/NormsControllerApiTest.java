@@ -95,17 +95,27 @@ class NormsControllerApiTest extends ContainersIntegrationBase {
             jsonPath("$.abbreviation", is("TeG")),
             jsonPath("$.legislationDate", is("2024-01-02")),
             jsonPath("$.datePublished", is("2024-01-03")),
-            jsonPath("$.workExample.hasPart", hasSize(2)),
-            jsonPath("$.workExample.hasPart[0].@type", is("Legislation")),
-            jsonPath("$.workExample.hasPart[0].eId", is("eid1")),
-            jsonPath("$.workExample.hasPart[0].guid", is("guid1")),
+            jsonPath("$.workExample.consolidationStatus", containsInAnyOrder("Standangabe")),
             jsonPath(
-                "$.workExample.hasPart[0].@id",
+                "$.workExample.consolidationStatusNotes",
+                containsInAnyOrder("Standangabe Hinweis")),
+            jsonPath("$.workExample.hasPart", hasSize(3)),
+            jsonPath("$.workExample.hasPart[0].name", is("Preface")),
+            jsonPath("$.workExample.hasPart[0].name", is("Preface")),
+            jsonPath("$.workExample.hasPart[0].text", containsInAnyOrder("preface content")),
+            jsonPath("$.workExample.hasPart[0].footNotes", containsInAnyOrder("footnote")),
+            jsonPath(
+                "$.workExample.hasPart[0].authorialNotes", containsInAnyOrder("authorial note")),
+            jsonPath("$.workExample.hasPart[1].@type", is("Legislation")),
+            jsonPath("$.workExample.hasPart[1].eId", is("eid1")),
+            jsonPath("$.workExample.hasPart[1].guid", is("guid1")),
+            jsonPath(
+                "$.workExample.hasPart[1].@id",
                 is("/v1/legislation/eli/bund/bgbl-1/1000/test/2000-10-06/2/deu#eid1")),
-            jsonPath("$.workExample.hasPart[0].name", is("§ 1 Example article")),
-            jsonPath("$.workExample.hasPart[0].isActive", is(true)),
-            jsonPath("$.workExample.hasPart[0].entryIntoForceDate", is("2023-12-31")),
-            jsonPath("$.workExample.hasPart[0].expiryDate", is("3000-01-02")));
+            jsonPath("$.workExample.hasPart[1].name", is("§ 1 Example article")),
+            jsonPath("$.workExample.hasPart[1].isActive", is(true)),
+            jsonPath("$.workExample.hasPart[1].entryIntoForceDate", is("2023-12-31")),
+            jsonPath("$.workExample.hasPart[1].expiryDate", is("3000-01-02")));
   }
 
   @Test

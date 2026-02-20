@@ -2453,6 +2453,21 @@
             "type": "array",
             "description": "The source data for this part, if available on its own",
             "items": { "$ref": "#/components/schemas/LegislationObjectSchema" }
+          },
+          "text": {
+            "type": "array",
+            "description": "the text content of this part",
+            "items": { "type": "string" }
+          },
+          "footNotes": {
+            "type": "array",
+            "description": "footnotes belonging to this part",
+            "items": { "type": "string" }
+          },
+          "authorialNotes": {
+            "type": "array",
+            "description": "authorial notes belonging to this part",
+            "items": { "type": "string" }
           }
         }
       },
@@ -2489,6 +2504,16 @@
             "items": {
               "$ref": "#/components/schemas/LegislationExpressionPartSchema"
             }
+          },
+          "consolidationStatus": {
+            "type": "array",
+            "description": "consolidation status of a legal expression",
+            "items": { "type": "string" }
+          },
+          "consolidationStatusNotes": {
+            "type": "array",
+            "description": "additional notes regarding the consolidation status of a legal expression",
+            "items": { "type": "string" }
           },
           "encoding": {
             "type": "array",
@@ -2567,7 +2592,11 @@
           "@type": { "type": "string", "example": "TocEntry" },
           "id": { "type": "string", "example": "hauptteil-1_para-1" },
           "marker": { "type": "string", "example": 1 },
-          "heading": { "type": "string", "example": "Art 1" }
+          "heading": { "type": "string", "example": "Art 1" },
+          "children": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/TableOfContentsSchema" }
+          }
         }
       },
       "StreamingResponseBody": {},
