@@ -5,6 +5,7 @@ import static de.bund.digitalservice.ris.search.utils.MappingUtils.cleanText;
 import de.bund.digitalservice.ris.search.models.Attachment;
 import de.bund.digitalservice.ris.search.models.ldml.TimeInterval;
 import de.bund.digitalservice.ris.search.models.opensearch.Article;
+import de.bund.digitalservice.ris.search.models.opensearch.FootNote;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.models.opensearch.TableOfContentsItem;
 import de.bund.digitalservice.ris.search.utils.LdmlTemporalData;
@@ -74,6 +75,7 @@ public class NormLdmlToOpenSearchMapper {
       "//*[local-name()='FRBRWork']/*[local-name()='FRBRdate']/@date";
   private static final String X_PATH_DATE_AUSFERTIGUNG =
       "//*[local-name()='preface']/*[local-name()='block']/*[local-name()='date' and @refersTo='ausfertigung-datum']/@date";
+  private static final String X_PATH_PREFACE_EID = "//*[local-name()='preface']/@eId";
   private static final String X_PATH_WORK_NUMBER =
       "//*[local-name()='FRBRWork']/*[local-name()='FRBRnumber']/@value";
   private static final String X_PATH_WORK_NAME =
@@ -99,6 +101,7 @@ public class NormLdmlToOpenSearchMapper {
   private static final String X_PATH_PREAMBLE_FORMULA =
       "//*[local-name()='preamble']/*[local-name()='formula']";
   public static final String X_PATH_OFFICIAL_FOOTNOTES = "//*[local-name()='authorialNote']";
+  private static final String X_PATH_FOOTNOTES = "//*[local-name()='note']";
 
   private static final String EINGANGSFORMEL = "Eingangsformel";
   private static final String SCHLUSSFORMEL = "Schlussformel";
@@ -133,6 +136,9 @@ public class NormLdmlToOpenSearchMapper {
       boolean isGegenstandslos = xmlDocument.getElementExistByXpath(X_PATH_GEGENSTANDSLOS);
       boolean isBedingtesInkrafttreten =
           xmlDocument.getElementExistByXpath(X_PATH_BEDINGTES_INKRAFTTRETEN);
+
+      var prefaceEId = xmlDocument.getElementByXpath(X_PATH_PREFACE_EID);
+      var nodes = xmlDocument.getNodesByXpath(X_PATH_FOOTNOTES);
 
       if (isGegenstandslos) {
         logger.warn("Ignoring Gegenstandslos until logic is defined");
@@ -193,11 +199,28 @@ public class NormLdmlToOpenSearchMapper {
               .articleTexts(articleTexts)
               .officialFootNotes(getOfficialFootNotes(xmlDocument, attachments))
               .indexedAt(Instant.now().toString())
+              .prefaceFootNotes(getPrefaceFootNotes(nodes, prefaceEId))
               .build());
     } catch (Exception e) {
       logger.warn("Error to create Norms from XML content.", e);
       return Optional.empty();
     }
+  }
+
+  private static List<FootNote> getPrefaceFootNotes(NodeList footnotes, String eId) {
+    List<FootNote> prefaceFootnotes = new ArrayList<>();
+    for (int i = 0; i < footnotes.getLength(); i++) {
+      Node note = footnotes.item(i);
+      String placementBase =
+          note.getAttributes().getNamedItem("placementBase").getNodeValue().substring(1);
+      if (placementBase.equals(eId)) {
+        prefaceFootnotes.add(
+            new FootNote(
+                note.getAttributes().getNamedItem("eId").getNodeValue(), note.getTextContent()));
+      }
+    }
+
+    return prefaceFootnotes;
   }
 
   private static String getOfficialFootNotes(XmlDocument xmlDocument, List<Attachment> attachments)
