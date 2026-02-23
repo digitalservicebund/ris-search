@@ -35,7 +35,10 @@
     <xsl:variable name="rueckverweis" as="xs:string" select="'rueckverweis'"/>
     <xsl:param name="erlaube-links-in-heading" as="xs:boolean" select="false()"/>
     <xsl:param name="ressourcenpfad" as="xs:string" select="''"/>
-
+    <xsl:key
+            name="notes-by-placement"
+            match="akn:note"
+            use="substring(@placementBase, 2)"/>
     <!-- ******************************************************************************************************* -->
 
     <!--
@@ -271,6 +274,7 @@
         <xsl:sequence select="akn:gliederungskommentar('Eingangsformel (akn:preamble)')"/>
         <section class="{$eingangsformel}">
             <xsl:apply-templates select="node() | @*"/>
+            <xsl:call-template name="notes-collection" />
         </section>
     </xsl:template>
 
@@ -513,17 +517,25 @@
     Die Zuordnung erfolgt über @placementBase.
     -->
     <xsl:template name="notes-collection">
-        <xsl:variable name="thisId" select="@eId" />
-        <xsl:variable name="nichtamtliche-fussnoten-elemente" select="//akn:akomaNtoso/akn:act/akn:meta/akn:notes/akn:note[@placementBase=concat('#', $thisId)]" />
+
+        <!-- Collect current and descendant eIds -->
+        <xsl:variable name="all-eIds"
+                      select="(@eId, descendant::*[@eId]/@eId)"/>
+
+        <!-- Lookup notes via key -->
+        <xsl:variable name="nichtamtliche-fussnoten-elemente"
+                      select="key('notes-by-placement', $all-eIds)"/>
+
         <xsl:if test="$nichtamtliche-fussnoten-elemente">
             <ul class="{$nichtamtliche-fussnoten}">
                 <xsl:for-each select="$nichtamtliche-fussnoten-elemente">
                     <li id="{akn:encode-for-uri(@eId)}" class="{$fussnote}">
-                        <xsl:apply-templates />
+                        <xsl:apply-templates/>
                     </li>
                 </xsl:for-each>
             </ul>
         </xsl:if>
+
     </xsl:template>
 
     <!--
