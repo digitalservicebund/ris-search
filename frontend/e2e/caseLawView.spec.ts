@@ -86,13 +86,13 @@ test("jumps to Randnummern", async ({ page }) => {
 
   const link = page.getByRole("link", { name: "Springe zu Randnummer: 1" });
 
-  expect(link).toBeVisible();
+  await expect(link).toBeVisible();
 
   await link.click();
 
-  expect(page).toHaveURL(/#border-number-link-1$/);
+  await expect(page).toHaveURL(/#border-number-link-1$/);
 
-  expect(
+  await expect(
     page.getByText(
       "Fiktiver Hintergrundtext für den Testfall zur Randnummernverlinkung.",
     ),
@@ -172,8 +172,11 @@ test("renders the download link", async ({ page }) => {
   const zipLink = page.getByRole("link", {
     name: "KORE600500000 als ZIP herunterladen",
   });
-  expect(zipLink).toBeVisible();
-  expect(zipLink).toHaveAttribute("href", "/v1/case-law/KORE600500000.zip");
+  await expect(zipLink).toBeVisible();
+  await expect(zipLink).toHaveAttribute(
+    "href",
+    "/v1/case-law/KORE600500000.zip",
+  );
 });
 
 noJsTest("tabs work without JavaScript", async ({ page }) => {

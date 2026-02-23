@@ -158,7 +158,7 @@ test.describe("view norm page", async () => {
       .getByRole("term")
       .or(page.getByTestId("details-list").getByRole("definition"));
 
-    expect(detailsList).toHaveText([
+    await expect(detailsList).toHaveText([
       "Ausfertigungsdatum:",
       "nicht vorhanden",
       "Vollzitat:",

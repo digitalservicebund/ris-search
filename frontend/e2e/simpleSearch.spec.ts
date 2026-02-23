@@ -146,7 +146,7 @@ test.describe("general search page features", () => {
     await page.getByLabel("nächste Ergebnisse").click();
     await page.waitForURL(/pageIndex=1/);
 
-    expect(resultCounter).toHaveText(nonZeroResultCount);
+    await expect(resultCounter).toHaveText(nonZeroResultCount);
     // Warning: this is potentially flaky and only works because the previous
     // assertion about the result counter has already "stabilized" the page.
     // Unfortunately there is no other way of asserting a number that isn't
