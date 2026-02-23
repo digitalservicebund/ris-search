@@ -215,7 +215,7 @@ test.describe("view norm page", async () => {
   test("can view images", async ({ page }) => {
     await navigate(page, "/norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu");
 
-    await page.getByRole("img", { name: "Beispielbild" }).isVisible();
+    await expect(page.getByRole("img", { name: "Beispielbild" })).toBeVisible();
 
     await test.step("in a single article", async () => {
       await page
@@ -224,7 +224,9 @@ test.describe("view norm page", async () => {
         .first()
         .click();
       await page.waitForURL(/\/art-z1$/g, { waitUntil: "commit" });
-      await page.getByRole("img", { name: "Beispielbild" }).isVisible();
+      await expect(
+        page.getByRole("img", { name: "Beispielbild" }),
+      ).toBeVisible();
     });
   });
 
