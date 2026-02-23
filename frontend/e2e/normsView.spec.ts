@@ -445,7 +445,7 @@ test("sets up meta tags for article page", async ({ page }) => {
   const canonicalLink = await page
     .locator('link[rel="canonical"]')
     .getAttribute("href");
-  expect(canonicalLink).toBeTruthy();
+  expect(canonicalLink).toMatch(/\/norms\/eli\/bund\//);
 
   const metaDescription = await page
     .locator('meta[name="description"]')
@@ -474,7 +474,7 @@ test("sets up meta tags for article page", async ({ page }) => {
   const ogUrl = await page
     .locator('meta[property="og:url"]')
     .getAttribute("content");
-  expect(ogUrl).toBeTruthy();
+  expect(ogUrl).toMatch(/\/norms\/eli\/bund\//);
 
   const twitterTitle = await page
     .locator('meta[name="twitter:title"]')
@@ -501,7 +501,7 @@ test("sets up meta tags for norm page", async ({
   const canonicalLink = await page
     .locator('link[rel="canonical"]')
     .getAttribute("href");
-  expect(canonicalLink).toBeTruthy();
+  expect(canonicalLink).toMatch(/\/norms\/eli\/bund\//);
 
   const metaDescription = await page
     .locator('meta[name="description"]')
@@ -523,7 +523,7 @@ test("sets up meta tags for norm page", async ({
   const ogUrl = await page
     .locator('meta[property="og:url"]')
     .getAttribute("content");
-  expect(ogUrl).toBeTruthy();
+  expect(ogUrl).toMatch(/\/norms\/eli\/bund\//);
 
   const twitterDescription = await page
     .locator('meta[name="twitter:description"]')

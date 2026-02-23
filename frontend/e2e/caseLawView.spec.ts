@@ -62,6 +62,12 @@ test("can view a single case law documentation unit", async ({
         const link = page.getByRole("link", { name: sectionName }).first();
         await link.click();
 
+        const expectedHash: Record<string, string> = {
+          Tenor: "tenor",
+          Orientierungssatz: "orientierungssatz",
+          Tatbestand: "tatbestand",
+        };
+
         // Verify sidebar is visible and there but skip aria-current check
         // (its flaky due to Intersection Observer timing during hydration)
         // Once fixed, enable aria-current check here (was flaky due to
@@ -73,7 +79,9 @@ test("can view a single case law documentation unit", async ({
           .getByRole("heading", { name: sectionName })
           .first();
 
-        await expect(page).toHaveURL(new RegExp(`#`, "i"));
+        await expect(page).toHaveURL(
+          new RegExp(`#${expectedHash[sectionName]}$`, "i"),
+        );
         await heading.scrollIntoViewIfNeeded();
         await expect(heading).toBeVisible();
         await expect(heading).toBeInViewport();
