@@ -60,7 +60,10 @@ const testPages = [
   {
     name: "Norm View Page",
     url: "/norms/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu",
-    tabs: ["Details", "Fassungen"],
+    tabs: [
+      { name: "Details" },
+      { name: "Fassungen", heading: /Fassungen( sind noch nicht verfügbar)?/ },
+    ],
   },
   {
     name: "Article View Page",
@@ -69,12 +72,12 @@ const testPages = [
   {
     name: "Caselaw View Page",
     url: "/case-law/STRE300770800",
-    tabs: ["Details"],
+    tabs: [{ name: "Details" }],
   },
   {
     name: "Literature View Page",
     url: "/literature/XXLU000000001",
-    tabs: ["Details"],
+    tabs: [{ name: "Details" }],
   },
   {
     name: "Translations List View",
@@ -83,7 +86,7 @@ const testPages = [
   {
     name: "Translation View Page",
     url: "/translations/CBG",
-    tabs: ["Details"],
+    tabs: [{ name: "Details" }],
   },
   {
     name: "Introduction Page",
@@ -100,20 +103,20 @@ test.describe("General Pages Accessibility Tests", () => {
     test(`${name} should not have accessibility issues`, async ({ page }) => {
       await navigate(page, url);
       const tabsAnalysisResults = [];
-      let currentTab = 0;
-      tabsAnalysisResults[currentTab] = await new AxeBuilder({ page })
-        .exclude("nuxt-devtools-frame")
-        .analyze();
+      tabsAnalysisResults.push(
+        await new AxeBuilder({ page }).exclude("nuxt-devtools-frame").analyze(),
+      );
       if (tabs) {
         for (const tab of tabs) {
-          await page.getByRole("tab", { name: tab }).click();
-          await page
-            .getByRole("heading", { name: tab, exact: true })
-            .isVisible();
-          tabsAnalysisResults[currentTab] = await new AxeBuilder({ page })
-            .exclude("nuxt-devtools-frame")
-            .analyze();
-          currentTab++;
+          await page.getByRole("tab", { name: tab.name }).click();
+          await expect(
+            page.getByRole("heading", { name: tab.heading ?? tab.name }),
+          ).toBeVisible();
+          tabsAnalysisResults.push(
+            await new AxeBuilder({ page })
+              .exclude("nuxt-devtools-frame")
+              .analyze(),
+          );
         }
       }
       tabsAnalysisResults.forEach((result, index) => {
