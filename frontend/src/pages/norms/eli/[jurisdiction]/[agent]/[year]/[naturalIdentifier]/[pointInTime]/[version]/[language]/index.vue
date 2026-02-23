@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { RisSingleAccordion } from "@digitalservicebund/ris-ui/components";
 import type { Dayjs } from "dayjs";
 import { Tab, TabList, Tabs } from "primevue";
 import type { TreeNode } from "primevue/treenode";
@@ -269,16 +268,10 @@ const detailsTabPanelTitleId = useId();
           <template #content>
             <h2 class="sr-only">Text</h2>
             <IncompleteDataMessage />
-
-            <RisSingleAccordion
-              v-if="htmlParts.officialToc"
-              class="mt-24"
-              header-expanded="Amtliches Inhaltsverzeichnis ausblenden"
-              header-collapsed="Amtliches Inhaltsverzeichnis einblenden"
+            <LegislationContent
+              v-observe-elements
+              :official-toc="htmlParts.officialToc"
             >
-              <div v-html="htmlParts.officialToc" />
-            </RisSingleAccordion>
-            <LegislationContent v-observe-elements>
               <div v-html="html" />
             </LegislationContent>
           </template>
