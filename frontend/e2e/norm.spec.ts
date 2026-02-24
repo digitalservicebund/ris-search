@@ -158,7 +158,7 @@ test.describe("view norm page", async () => {
       .getByRole("term")
       .or(page.getByTestId("details-list").getByRole("definition"));
 
-    expect(detailsList).toHaveText([
+    await expect(detailsList).toHaveText([
       "Ausfertigungsdatum:",
       "nicht vorhanden",
       "Vollzitat:",
@@ -215,7 +215,7 @@ test.describe("view norm page", async () => {
   test("can view images", async ({ page }) => {
     await navigate(page, "/norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu");
 
-    await page.getByRole("img", { name: "Beispielbild" }).isVisible();
+    await expect(page.getByRole("img", { name: "Beispielbild" })).toBeVisible();
 
     await test.step("in a single article", async () => {
       await page
@@ -224,7 +224,9 @@ test.describe("view norm page", async () => {
         .first()
         .click();
       await page.waitForURL(/\/art-z1$/g, { waitUntil: "commit" });
-      await page.getByRole("img", { name: "Beispielbild" }).isVisible();
+      await expect(
+        page.getByRole("img", { name: "Beispielbild" }),
+      ).toBeVisible();
     });
   });
 
@@ -267,7 +269,7 @@ test.describe("actions menu", () => {
     );
   });
 
-  test.describe("can copy permalink to currenlty viewd expression", () => {
+  test.describe("can copy permalink to currently viewed expression", () => {
     testCopyLinkButton(
       "/norms/eli/bund/bgbl-1/2024/383/2024-12-19/1/deu",
       "Permalink zu dieser Fassung kopieren",
@@ -443,7 +445,7 @@ test("sets up meta tags for article page", async ({ page }) => {
   const canonicalLink = await page
     .locator('link[rel="canonical"]')
     .getAttribute("href");
-  expect(canonicalLink).toBeTruthy();
+  expect(canonicalLink).toMatch(/\/norms\/eli\/bund\//);
 
   const metaDescription = await page
     .locator('meta[name="description"]')
@@ -472,7 +474,7 @@ test("sets up meta tags for article page", async ({ page }) => {
   const ogUrl = await page
     .locator('meta[property="og:url"]')
     .getAttribute("content");
-  expect(ogUrl).toBeTruthy();
+  expect(ogUrl).toMatch(/\/norms\/eli\/bund\//);
 
   const twitterTitle = await page
     .locator('meta[name="twitter:title"]')
@@ -499,7 +501,7 @@ test("sets up meta tags for norm page", async ({
   const canonicalLink = await page
     .locator('link[rel="canonical"]')
     .getAttribute("href");
-  expect(canonicalLink).toBeTruthy();
+  expect(canonicalLink).toMatch(/\/norms\/eli\/bund\//);
 
   const metaDescription = await page
     .locator('meta[name="description"]')
@@ -521,7 +523,7 @@ test("sets up meta tags for norm page", async ({
   const ogUrl = await page
     .locator('meta[property="og:url"]')
     .getAttribute("content");
-  expect(ogUrl).toBeTruthy();
+  expect(ogUrl).toMatch(/\/norms\/eli\/bund\//);
 
   const twitterDescription = await page
     .locator('meta[name="twitter:description"]')

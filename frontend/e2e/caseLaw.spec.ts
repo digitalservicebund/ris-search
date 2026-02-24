@@ -62,6 +62,12 @@ test("can view a single case law documentation unit", async ({
         const link = page.getByRole("link", { name: sectionName }).first();
         await link.click();
 
+        const expectedHash: Record<string, string> = {
+          Tenor: "tenor",
+          Orientierungssatz: "orientierungssatz",
+          Tatbestand: "tatbestand",
+        };
+
         // Verify sidebar is visible and there but skip aria-current check
         // (its flaky due to Intersection Observer timing during hydration)
         // Once fixed, enable aria-current check here (was flaky due to
@@ -73,7 +79,9 @@ test("can view a single case law documentation unit", async ({
           .getByRole("heading", { name: sectionName })
           .first();
 
-        await expect(page).toHaveURL(new RegExp(`#`, "i"));
+        await expect(page).toHaveURL(
+          new RegExp(`#${expectedHash[sectionName]}$`, "i"),
+        );
         await heading.scrollIntoViewIfNeeded();
         await expect(heading).toBeVisible();
         await expect(heading).toBeInViewport();
@@ -86,13 +94,13 @@ test("jumps to Randnummern", async ({ page }) => {
 
   const link = page.getByRole("link", { name: "Springe zu Randnummer: 1" });
 
-  expect(link).toBeVisible();
+  await expect(link).toBeVisible();
 
   await link.click();
 
-  expect(page).toHaveURL(/#border-number-link-1$/);
+  await expect(page).toHaveURL(/#border-number-link-1$/);
 
-  expect(
+  await expect(
     page.getByText(
       "Fiktiver Hintergrundtext für den Testfall zur Randnummernverlinkung.",
     ),
@@ -172,8 +180,11 @@ test("renders the download link", async ({ page }) => {
   const zipLink = page.getByRole("link", {
     name: "KORE600500000 als ZIP herunterladen",
   });
-  expect(zipLink).toBeVisible();
-  expect(zipLink).toHaveAttribute("href", "/v1/case-law/KORE600500000.zip");
+  await expect(zipLink).toBeVisible();
+  await expect(zipLink).toHaveAttribute(
+    "href",
+    "/v1/case-law/KORE600500000.zip",
+  );
 });
 
 noJsTest("tabs work without JavaScript", async ({ page }) => {

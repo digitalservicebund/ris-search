@@ -1,8 +1,10 @@
 import { expect, navigate, test } from "./utils/fixtures";
 
 test("opens the page via URL", async ({ page }) => {
-  await navigate(page, "/einfuehrung");
+  await navigate(page, "/ueber");
   await expect(
-    page.getByRole("heading", { name: "Einführende Informationen" }),
+    page.getByRole("heading", {
+      name: "Rechtsinformationen zentral an einem Ort",
+    }),
   ).toBeVisible();
 });
