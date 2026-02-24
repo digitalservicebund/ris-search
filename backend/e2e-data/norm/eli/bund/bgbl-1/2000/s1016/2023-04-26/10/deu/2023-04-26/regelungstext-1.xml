@@ -165,23 +165,6 @@
             </akn:longTitle>
         </akn:preface>
         <akn:preamble GUID="d8888888-8888-8888-8888-888888888888" eId="präambel-n1">
-            <akn:blockContainer GUID="91cfd9c4-a40b-4faf-84ac-df5894d750d5" eId="präambel-n1_blockcontainer-n1"
-                                refersTo="inhaltsuebersicht">
-                <akn:heading GUID="0056676a-a751-42c1-a3ac-62605d761db9" eId="präambel-n1_blockcontainer-n1_überschrift-n1">
-                    Inhaltsübersicht
-                </akn:heading>
-                <akn:toc GUID="15463867-68fc-4ece-8518-ef4099c04a91" eId="präambel-n1_blockcontainer-n1_inhuebs-n1">
-                    <akn:tocItem GUID="e58bbb95-b7a5-4058-be1c-7cbad708f883"
-                                 eId="präambel-n1_blockcontainer-n1_inhuebs-n1_eintrag-n1" href="" level="1">
-                        <akn:span GUID="c8f0014c-9e28-4907-aade-f148d7602b21"
-                                  eId="präambel-n1_blockcontainer-n1_inhuebs-n1_eintrag-n1_span-n1">
-                            <akn:b GUID="cd778cb3-0141-4fec-b236-989fec2ec4a4"
-                                   eId="präambel-n1_blockcontainer-n1_inhuebs-n1_eintrag-n1_span-n1_fettschrift-n1">1. Abschnitt
-                            </akn:b>
-                        </akn:span>
-                    </akn:tocItem>
-                </akn:toc>
-            </akn:blockContainer>
             <akn:formula GUID="d9999999-9999-9999-9999-999999999999" eId="präambel-n1_formel-n1" name="attributsemantik-noch-undefiniert" refersTo="eingangsformel">
                 <akn:p GUID="da111111-1111-1111-1111-111111111111" eId="präambel-n1_formel-n1_text-n1">
                     Auf Grundlage des fiktiven Lebensmittel- und Bedarfsgegenständegesetzes in der Fassung vom 27. Mai 2000 und unter Einbeziehung aktueller Testdaten wird diese Verordnung erlassen:
@@ -204,6 +187,23 @@
                     (Letzte Änderung durch fiktive Testanpassungen)
                 </akn:p>
             </akn:formula>
+            <akn:blockContainer GUID="91cfd9c4-a40b-4faf-84ac-df5894d750d5" eId="präambel-n1_blockcontainer-n1"
+                                refersTo="inhaltsuebersicht">
+                <akn:heading GUID="0056676a-a751-42c1-a3ac-62605d761db9" eId="präambel-n1_blockcontainer-n1_überschrift-n1">
+                    Inhaltsübersicht
+                </akn:heading>
+                <akn:toc GUID="15463867-68fc-4ece-8518-ef4099c04a91" eId="präambel-n1_blockcontainer-n1_inhuebs-n1">
+                    <akn:tocItem GUID="e58bbb95-b7a5-4058-be1c-7cbad708f883"
+                                 eId="präambel-n1_blockcontainer-n1_inhuebs-n1_eintrag-n1" href="" level="1">
+                        <akn:span GUID="c8f0014c-9e28-4907-aade-f148d7602b21"
+                                  eId="präambel-n1_blockcontainer-n1_inhuebs-n1_eintrag-n1_span-n1">
+                            <akn:b GUID="cd778cb3-0141-4fec-b236-989fec2ec4a4"
+                                   eId="präambel-n1_blockcontainer-n1_inhuebs-n1_eintrag-n1_span-n1_fettschrift-n1">1. Abschnitt
+                            </akn:b>
+                        </akn:span>
+                    </akn:tocItem>
+                </akn:toc>
+            </akn:blockContainer>
         </akn:preamble>
         <akn:body GUID="db111111-1111-1111-1111-111111111111" eId="hauptteil-n1">
             <akn:section GUID="db222222-2222-2222-2222-222222222222" eId="hauptteil-n1_abschnitt-n1">
