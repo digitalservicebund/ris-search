@@ -4,71 +4,71 @@ import { navigate, seoTest as test } from "./utils/fixtures";
 
 export const testPages = [
   {
-    name: "Home Page",
+    name: "home",
     url: "/",
   },
   {
-    name: "All Search Results Page",
-    url: "/search",
-  },
-  {
-    name: "Contact Page",
+    name: "contact",
     url: "/kontakt",
   },
   {
-    name: "Imprint Page",
+    name: "imprint",
     url: "/impressum",
   },
   {
-    name: "Data Protection Page",
+    name: "data protection",
     url: "/datenschutz",
   },
   {
-    name: "Accessibility Page",
+    name: "accessibility",
     url: "/barrierefreiheit",
   },
   {
-    name: "Cookie Settings Page",
+    name: "cookie settings",
     url: "/cookie-einstellungen",
   },
   {
-    name: "Open Source Page",
+    name: "open source",
     url: "/open-source",
   },
   // {
-  //   name: "User Tests Page",
+  //   name: "user tests",
   //   url: "/nutzungstests",
   // },
   {
-    name: "Norms Search Page",
+    name: "simple search - all documents",
+    url: "/search",
+  },
+  {
+    name: "simple search - legislation",
     url: "/search?documentKind=N",
   },
   {
-    name: "Caselaw Search Page",
+    name: "simple search - caselaw",
     url: "/search?documentKind=R",
   },
   {
-    name: "Advanced Search Page",
+    name: "advanced search",
     url: "/advanced-search",
   },
   {
-    name: "Norm View Page",
+    name: "norm view",
     url: "/norms/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu",
   },
   {
-    name: "Article View Page",
+    name: "norm view - single article",
     url: "/norms/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu/art-z1",
   },
   {
-    name: "Caselaw View Page",
+    name: "caselaw view",
     url: "/case-law/STRE300770800",
   },
   {
-    name: "Literature View Page",
+    name: "literature view",
     url: "/literature/XXLU000000001",
   },
   {
-    name: "Administrative Directive View Page",
+    name: "administrative directive view",
     url: "/administrative-directives/KSNR000000001",
   },
 ];
@@ -79,22 +79,20 @@ test.beforeAll(async ({ privateFeaturesEnabled, browserName }) => {
 
 test.setTimeout(120000);
 
-test.describe("SEO testing for desktop and mobile using lighthouse", () => {
-  for (const testPage of testPages) {
-    test(`SEO checks for page ${testPage.name}`, async ({ page }) => {
-      await navigate(page, testPage.url);
-      await playAudit({
-        page,
-        port: environment.remoteDebuggingPort,
-        thresholds: { seo: 90 },
-        config: {
-          extends: "lighthouse:default",
-          settings: {
-            onlyCategories: ["seo"],
-            disableStorageReset: true,
-          },
+for (const testPage of testPages) {
+  test(`SEO checks for "${testPage.name}" page`, async ({ page }) => {
+    await navigate(page, testPage.url);
+    await playAudit({
+      page,
+      port: environment.remoteDebuggingPort,
+      thresholds: { seo: 90 },
+      config: {
+        extends: "lighthouse:default",
+        settings: {
+          onlyCategories: ["seo"],
+          disableStorageReset: true,
         },
-      });
+      },
     });
-  }
-});
+  });
+}
