@@ -29,6 +29,9 @@
     // Clearly separate type imports from regular JavaScript
     "typescript/consistent-type-imports": "error",
 
+    // Consistently use const if possible
+    "prefer-const": ["error", { "destructuring": "all" }],
+
     // Conflicts with SonarCloud
     "promise/always-return": "off",
 
