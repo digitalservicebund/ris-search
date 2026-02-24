@@ -130,7 +130,7 @@
                           placementBase="#einleitung-n1" refersTo="aenderungsfussnote">
                     <akn:p GUID="e6666666-6666-6666-6666-666666666666" eId="meta-n1_editfnote-n3_text-n1">Die V wurde von der Bundesregierung erlassen*.</akn:p>
                 </akn:note>
-                <akn:note GUID="e139d37b-0714-4996-9269-6117aca521e2" eId="meta-n1_editfnote-n3" marker="#" placementBase="#präambel-n1_blockcontainer-n1" refersTo="aenderungsfussnote"><akn:p GUID="d3c6dd33-4847-4529-950f-f8e248c89715" eId="meta-n1_editfnote-n3_text-n1">Inhaltsübersicht: präambel Fußnote</akn:p></akn:note>
+                <akn:note GUID="e139d37b-0714-4996-9269-6117aca521e2" eId="meta-n1_editfnote-n4" marker="#" placementBase="#präambel-n1_blockcontainer-n1" refersTo="aenderungsfussnote"><akn:p GUID="d3c6dd33-4847-4529-950f-f8e248c89715" eId="meta-n1_editfnote-n4_text-n1">Inhaltsübersicht: präambel Fußnote</akn:p></akn:note>
             </akn:notes>
             <akn:proprietary GUID="bb777777-7777-7777-7777-777777777777" eId="meta-n1_proprietary-n1" source="attributsemantik-noch-undefiniert">
                 <ris:legalDocML.de_metadaten xmlns:ris="http://MetadatenRIS.LegalDocML.de/1.8.2/" xsi:schemaLocation="http://MetadatenRIS.LegalDocML.de/1.8.2/ Grammatiken/legalDocML.de-metadaten-ris.xsd">
