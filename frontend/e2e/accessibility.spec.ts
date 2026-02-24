@@ -66,7 +66,10 @@ const testPages = [
     url: "/norms/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu",
     tabs: [
       { name: "Details" },
-      { name: "Fassungen", heading: /Fassungen( sind noch nicht verfügbar)?/ },
+      {
+        name: "Fassungen",
+        heading: /^Fassungen( sind noch nicht verfügbar)?$/,
+      },
     ],
   },
   {
@@ -111,7 +114,10 @@ testPages.forEach(({ name, url, tabs }) => {
       for (const tab of tabs) {
         await page.getByRole("tab", { name: tab.name }).click();
         await expect(
-          page.getByRole("heading", { name: tab.heading ?? tab.name }),
+          page.getByRole("heading", {
+            name: tab.heading ?? tab.name,
+            exact: true,
+          }),
         ).toBeVisible();
         tabsAnalysisResults.push(
           await new AxeBuilder({ page })
