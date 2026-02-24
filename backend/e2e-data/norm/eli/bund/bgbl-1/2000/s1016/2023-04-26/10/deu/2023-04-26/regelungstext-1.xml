@@ -130,6 +130,7 @@
                           placementBase="#einleitung-n1" refersTo="aenderungsfussnote">
                     <akn:p GUID="e6666666-6666-6666-6666-666666666666" eId="meta-n1_editfnote-n3_text-n1">Die V wurde von der Bundesregierung erlassen*.</akn:p>
                 </akn:note>
+                <akn:note GUID="e139d37b-0714-4996-9269-6117aca521e2" eId="meta-n1_editfnote-n3" marker="#" placementBase="#präambel-n1_blockcontainer-n1" refersTo="aenderungsfussnote"><akn:p GUID="d3c6dd33-4847-4529-950f-f8e248c89715" eId="meta-n1_editfnote-n3_text-n1">Inhaltsübersicht: präambel Fußnote</akn:p></akn:note>
             </akn:notes>
             <akn:proprietary GUID="bb777777-7777-7777-7777-777777777777" eId="meta-n1_proprietary-n1" source="attributsemantik-noch-undefiniert">
                 <ris:legalDocML.de_metadaten xmlns:ris="http://MetadatenRIS.LegalDocML.de/1.8.2/" xsi:schemaLocation="http://MetadatenRIS.LegalDocML.de/1.8.2/ Grammatiken/legalDocML.de-metadaten-ris.xsd">
@@ -164,6 +165,23 @@
             </akn:longTitle>
         </akn:preface>
         <akn:preamble GUID="d8888888-8888-8888-8888-888888888888" eId="präambel-n1">
+            <akn:blockContainer GUID="91cfd9c4-a40b-4faf-84ac-df5894d750d5" eId="präambel-n1_blockcontainer-n1"
+                                refersTo="inhaltsuebersicht">
+                <akn:heading GUID="0056676a-a751-42c1-a3ac-62605d761db9" eId="präambel-n1_blockcontainer-n1_überschrift-n1">
+                    Inhaltsübersicht
+                </akn:heading>
+                <akn:toc GUID="15463867-68fc-4ece-8518-ef4099c04a91" eId="präambel-n1_blockcontainer-n1_inhuebs-n1">
+                    <akn:tocItem GUID="e58bbb95-b7a5-4058-be1c-7cbad708f883"
+                                 eId="präambel-n1_blockcontainer-n1_inhuebs-n1_eintrag-n1" href="" level="1">
+                        <akn:span GUID="c8f0014c-9e28-4907-aade-f148d7602b21"
+                                  eId="präambel-n1_blockcontainer-n1_inhuebs-n1_eintrag-n1_span-n1">
+                            <akn:b GUID="cd778cb3-0141-4fec-b236-989fec2ec4a4"
+                                   eId="präambel-n1_blockcontainer-n1_inhuebs-n1_eintrag-n1_span-n1_fettschrift-n1">1. Abschnitt
+                            </akn:b>
+                        </akn:span>
+                    </akn:tocItem>
+                </akn:toc>
+            </akn:blockContainer>
             <akn:formula GUID="d9999999-9999-9999-9999-999999999999" eId="präambel-n1_formel-n1" name="attributsemantik-noch-undefiniert" refersTo="eingangsformel">
                 <akn:p GUID="da111111-1111-1111-1111-111111111111" eId="präambel-n1_formel-n1_text-n1">
                     Auf Grundlage des fiktiven Lebensmittel- und Bedarfsgegenständegesetzes in der Fassung vom 27. Mai 2000 und unter Einbeziehung aktueller Testdaten wird diese Verordnung erlassen:

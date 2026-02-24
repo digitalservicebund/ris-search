@@ -15,6 +15,20 @@ test.describe("view norm page", async () => {
       "/norms/eli/bund/bgbl-1/2000/s1016/2023-04-26/10/deu";
     await navigate(page, mainExpressionEliUrl);
 
+    await test.step("Official toc is visible", async () => {
+      const button = page.getByRole("button", {
+        name: "Amtliches Inhaltsverzeichnis einblenden",
+      });
+
+      await button.click();
+      const accordion = page.locator('[data-pc-name="accordioncontent"]');
+      const toc = accordion.locator(".official-toc").first();
+      const footNotes = accordion.locator(".nichtamtliche-fussnoten").first();
+      await toc.scrollIntoViewIfNeeded();
+      await expect(toc).toBeVisible();
+      await expect(footNotes).toBeVisible();
+    });
+
     await test.step("Navigate from main norm view to a single article", async () => {
       await page.getByRole("link", { name: "§ 1 Anwendungsbereich" }).click();
       await page.waitForURL(`${mainExpressionEliUrl}/art-z1`, {
