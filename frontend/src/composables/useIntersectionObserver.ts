@@ -36,15 +36,12 @@ export const useIntersectionObserver = () => {
 
     if (sorted.length > 0) {
       selectedEntry.value = sorted[0] ?? undefined;
-    } else {
-      // handle the case when no headers are currently visible
-      if (!scrollingDown) {
-        const currentIndex = allIds.value.findIndex(
-          (id) => id === selectedEntry.value,
-        );
-        if (currentIndex > 0) {
-          selectedEntry.value = allIds.value[currentIndex - 1];
-        }
+    }
+    // handle the case when no headers are currently visible
+    else if (!scrollingDown && selectedEntry.value) {
+      const currentIndex = allIds.value.indexOf(selectedEntry.value);
+      if (currentIndex > 0) {
+        selectedEntry.value = allIds.value[currentIndex - 1];
       }
     }
   }

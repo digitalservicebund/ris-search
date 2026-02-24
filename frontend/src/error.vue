@@ -21,7 +21,7 @@ const isInternalServerError = computed(
   () => props.error?.statusCode === HttpStatusCodes.InternalServerError,
 );
 
-const locationClientOnly = computed(() => window.location.href);
+const locationClientOnly = computed(() => location.href);
 
 const pageTitle = computed(() => {
   return `${isNotFoundError.value ? "Diese Seite existiert nicht" : "Es gab leider einen Fehler"}`;
