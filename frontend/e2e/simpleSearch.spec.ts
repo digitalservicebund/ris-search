@@ -270,10 +270,11 @@ test.describe("searching legislation", () => {
     await expect(searchResults).toHaveText(Array(5).fill(/^Norm/));
   });
 
-  test("shows the search result contents", async ({
+  test("shows the search result contents when private features are enabled", async ({
     page,
     privateFeaturesEnabled,
   }) => {
+    test.skip(!privateFeaturesEnabled);
     await navigate(page, "/search?query=FrSaftErfrischV&documentKind=N");
 
     const searchResult = getSearchResults(page).first();
@@ -281,11 +282,7 @@ test.describe("searching legislation", () => {
     // Header
     await expect(searchResult).toHaveText(/Norm/);
     await expect(searchResult).toHaveText(/FrSaftErfrischV/);
-    if (privateFeaturesEnabled) {
-      await expect(searchResult).toHaveText(/29.04.2023/);
-    } else {
-      await expect(searchResult).not.toHaveText(/29.04.2023/);
-    }
+    await expect(searchResult).toHaveText(/29.04.2023/);
 
     await expect(searchResult).toHaveText(/Aktuell gültig/);
 
@@ -327,6 +324,18 @@ test.describe("searching legislation", () => {
     ).toBeVisible();
   });
 
+  test("shows the search result contents when private features are disabled", async ({
+    page,
+    privateFeaturesEnabled,
+  }) => {
+    test.skip(privateFeaturesEnabled);
+    await navigate(page, "/search?query=FrSaftErfrischV&documentKind=N");
+
+    const searchResult = getSearchResults(page).first();
+
+    await expect(searchResult).not.toHaveText(/29.04.2023/);
+  });
+
   test("navigates to the document detail page", async ({ page }) => {
     await navigate(page, "/search?query=FrSaftErfrischV&documentKind=N");
 
@@ -361,10 +370,11 @@ test.describe("searching legislation", () => {
     await expect(getSearchResults(page).first()).toHaveText(/Außer Kraft/);
   });
 
-  test("shows only most relevant Fassung", async ({
+  test("shows only most relevant Fassung when private features are enabled", async ({
     page,
     privateFeaturesEnabled,
   }) => {
+    test.skip(!privateFeaturesEnabled);
     await navigate(
       page,
       '/search?query="Zum+Testen+von+Fassungen"&documentKind=N',
@@ -376,11 +386,7 @@ test.describe("searching legislation", () => {
     const searchResult = searchResults.first();
 
     await expect(searchResult).toHaveText(/Norm/);
-    if (privateFeaturesEnabled) {
-      await expect(searchResult).toHaveText(/04.08.2022/);
-    } else {
-      await expect(searchResult).not.toHaveText(/04.08.2022/);
-    }
+    await expect(searchResult).toHaveText(/04.08.2022/);
 
     await expect(searchResult).toHaveText(/Aktuell gültig/);
 
@@ -390,6 +396,21 @@ test.describe("searching legislation", () => {
         name: "Zum Testen von Fassungen - Aktuelle Fassung",
       }),
     ).toBeVisible();
+  });
+
+  test("shows only most relevant Fassung when private features are disabled", async ({
+    page,
+    privateFeaturesEnabled,
+  }) => {
+    test.skip(privateFeaturesEnabled);
+    await navigate(
+      page,
+      '/search?query="Zum+Testen+von+Fassungen"&documentKind=N',
+    );
+
+    const searchResult = getSearchResults(page).first();
+
+    await expect(searchResult).not.toHaveText(/04.08.2022/);
   });
 
   test("does not show date search filter", async ({ page }) => {

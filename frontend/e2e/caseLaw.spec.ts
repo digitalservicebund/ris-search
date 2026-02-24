@@ -14,11 +14,6 @@ async function getSidebar(page: Page) {
   return navigation;
 }
 
-test.skip(
-  process.env.NUXT_PUBLIC_PRIVATE_FEATURES_ENABLED !== "true",
-  "Removed redundant testing since there are no specific functionality marked as private",
-);
-
 test("shows 404 page when case law is not found", async ({ page }) => {
   await page.goto("/case-law/NONEXISTENT123");
 
@@ -27,10 +22,7 @@ test("shows 404 page when case law is not found", async ({ page }) => {
   ).toBeVisible();
 });
 
-test("can view a single case law documentation unit", async ({
-  page,
-  isMobileTest,
-}) => {
+test("can view a single case law documentation unit", async ({ page }) => {
   await navigate(page, "/case-law/KORE600500000");
 
   await expect(
@@ -50,12 +42,16 @@ test("can view a single case law documentation unit", async ({
   // Only check aria-current on desktop as it's flaky on mobile due to Intersection Observer timing
   // Fix Intersection Observer logic (broken since Nuxt upgrade) - see ticket RISDEV-
   // Once fixed, remove the isMobileTest check and enable aria-current verification for mobile too
-  if (!isMobileTest) {
-    const currentSection = sidebar.locator('a[aria-current="location"]');
-    await expect(currentSection).toHaveCount(1);
-  }
+  const currentSection = sidebar.locator('a[aria-current="location"]');
+  await expect(currentSection).toHaveCount(1);
+});
 
-  if (isMobileTest)
+test.describe("responsive", () => {
+  test.beforeEach(({ isMobileTest }) => {
+    test.skip(!isMobileTest);
+  });
+
+  test("can view a single case law documentation unit", async ({ page }) => {
     for (const sectionName of ["Tenor", "Orientierungssatz", "Tatbestand"]) {
       await test.step(`jumps straight to a specific section, ${sectionName}`, async () => {
         await navigate(page, "/search?documentKind=R&query=fiktiv");
@@ -87,6 +83,7 @@ test("can view a single case law documentation unit", async ({
         await expect(heading).toBeInViewport();
       });
     }
+  });
 });
 
 test("jumps to Randnummern", async ({ page }) => {
