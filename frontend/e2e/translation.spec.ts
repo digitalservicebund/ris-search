@@ -96,6 +96,7 @@ test(
   "German original and English version link to each other",
   { tag: ["@RISDEV-8950"] },
   async ({ page, isMobileTest }) => {
+    test.skip(isMobileTest);
     await navigate(page, "/translations/ABG");
     await expect(
       page.getByRole("heading", {
@@ -110,9 +111,6 @@ test(
       }),
     ).toBeVisible();
 
-    if (isMobileTest) {
-      await page.getByLabel("Aktionen anzeigen").click();
-    }
     const translationButton = page.getByRole("menuitem", {
       name: "Zur englischen Übersetzung",
     });
@@ -126,6 +124,47 @@ test(
     ).toBeVisible();
   },
 );
+
+test.describe("responsive", () => {
+  test.beforeEach(({ isMobileTest }) => {
+    test.skip(!isMobileTest);
+  });
+
+  test(
+    "German original and English version link to each other",
+    { tag: ["@RISDEV-8950"] },
+    async ({ page }) => {
+      await navigate(page, "/translations/ABG");
+      await expect(
+        page.getByRole("heading", {
+          name: "Test Regulation for the Model Framework of the Public Service",
+        }),
+      ).toBeVisible();
+      await page
+        .getByRole("link", { name: "Go to the German version" })
+        .click();
+      await page.waitForLoadState("networkidle");
+      await expect(
+        page.getByRole("heading", {
+          name: "Testverordnung zur Musterregelung des öffentlichen Dienstes",
+        }),
+      ).toBeVisible();
+
+      await page.getByLabel("Aktionen anzeigen").click();
+      const translationButton = page.getByRole("menuitem", {
+        name: "Zur englischen Übersetzung",
+      });
+
+      await expect(translationButton).toBeVisible();
+      await translationButton.click();
+      await expect(
+        page.getByRole("heading", {
+          name: "Test Regulation for the Model Framework of the Public Service",
+        }),
+      ).toBeVisible();
+    },
+  );
+});
 
 test.describe("actions menu", { tag: ["@RISDEV-8950"] }, () => {
   test.describe("can copy link to translation", () => {

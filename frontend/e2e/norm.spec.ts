@@ -489,10 +489,11 @@ test("sets up meta tags for article page", async ({ page }) => {
   );
 });
 
-test("sets up meta tags for norm page", async ({
+test("sets up meta tags for norm page when private features are enabled", async ({
   page,
   privateFeaturesEnabled,
 }) => {
+  test.skip(!privateFeaturesEnabled);
   await navigate(page, "/norms/eli/bund/bgbl-1/2000/s1016/2023-04-26/10/deu");
 
   const title = await page.title();
@@ -536,17 +537,31 @@ test("sets up meta tags for norm page", async ({
     .locator('meta[property="og:title"]')
     .getAttribute("content");
   expect(ogTitle).toBe(
-    privateFeaturesEnabled
-      ? "FrSaftErfrischV: Fassung vom 29.04.2023, Aktuell gültig"
-      : "FrSaftErfrischV",
+    "FrSaftErfrischV: Fassung vom 29.04.2023, Aktuell gültig",
   );
 
   const twitterTitle = await page
     .locator('meta[name="twitter:title"]')
     .getAttribute("content");
   expect(twitterTitle).toBe(
-    privateFeaturesEnabled
-      ? "FrSaftErfrischV: Fassung vom 29.04.2023, Aktuell gültig"
-      : "FrSaftErfrischV",
+    "FrSaftErfrischV: Fassung vom 29.04.2023, Aktuell gültig",
   );
+});
+
+test("sets up meta tags for norm page when private features are disabled", async ({
+  page,
+  privateFeaturesEnabled,
+}) => {
+  test.skip(privateFeaturesEnabled);
+  await navigate(page, "/norms/eli/bund/bgbl-1/2000/s1016/2023-04-26/10/deu");
+
+  const ogTitle = await page
+    .locator('meta[property="og:title"]')
+    .getAttribute("content");
+  expect(ogTitle).toBe("FrSaftErfrischV");
+
+  const twitterTitle = await page
+    .locator('meta[name="twitter:title"]')
+    .getAttribute("content");
+  expect(twitterTitle).toBe("FrSaftErfrischV");
 });
