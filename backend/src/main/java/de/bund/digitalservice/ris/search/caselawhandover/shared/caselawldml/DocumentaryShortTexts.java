@@ -1,13 +1,60 @@
 package de.bund.digitalservice.ris.search.caselawhandover.shared.caselawldml;
 
 import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlElementWrapper;
+import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
+import org.eclipse.persistence.oxm.annotations.XmlPath;
 
+/** Container for short documentary and editorial texts associated with a legal decision. */
 @Getter
 @Setter
 public class DocumentaryShortTexts {
 
   @XmlElement(name = "titelzeile", namespace = CaseLawLdmlNamespaces.RIS_NS)
-  private JaxbHtml titleLine;
+  private TitleLine titleLine;
+
+  @XmlElement(name = "orientierungssatz", namespace = CaseLawLdmlNamespaces.RIS_NS)
+  private Orientierungssatz headNotes;
+
+  @XmlElement(name = "sonstigerOrientierungssatz", namespace = CaseLawLdmlNamespaces.RIS_NS)
+  private SonstigerOrientierungssatz otherHeadNotes;
+
+  /** List of decision names (Entscheidungsnamen). */
+  @XmlElementWrapper(name = "entscheidungsnamen", namespace = CaseLawLdmlNamespaces.RIS_NS)
+  @XmlElement(name = "entscheidungsname", namespace = CaseLawLdmlNamespaces.RIS_NS)
+  private List<DecisionName> decisionNames;
+
+  /** Represents the title line (Titelzeile) of the documentary short texts. */
+  @Getter
+  @Setter
+  public static class TitleLine {
+    @XmlPath(".")
+    private JaxbHtml content;
+  }
+
+  /** Represents a primary headnote (Orientierungssatz) of the decision. */
+  @Getter
+  @Setter
+  public static class Orientierungssatz {
+    @XmlPath(".")
+    private JaxbHtml content;
+  }
+
+  /** Represents an additional or other headnote (Sonstiger Orientierungssatz). */
+  @Getter
+  @Setter
+  public static class SonstigerOrientierungssatz {
+    @XmlPath(".")
+    private JaxbHtml content;
+  }
+
+  /** Represents a single decision name entry. */
+  @Getter
+  @Setter
+  public static class DecisionName {
+    @XmlPath("text()")
+    private String name;
+  }
 }

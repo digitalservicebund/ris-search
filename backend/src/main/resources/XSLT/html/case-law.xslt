@@ -11,13 +11,17 @@
 	<xsl:param name="ressourcenpfad" as="xs:string" select="''"/>
 
 	<!-- akn wrapper elements (can be removed but content is kept) -->
-	<xsl:template match="akn:judgmentBody|akn:subFlow|akn:docTitle|akn:akomaNtoso
-	|akn:embeddedStructure|akn:foreign">
+	<xsl:template match="akn:judgmentBody|akn:subFlow|akn:meta|akn:docTitle|akn:akomaNtoso
+	|akn:embeddedStructure|akn:foreign|akn:otherAnalysis|akn:otherAnalysis|ris:dokumentarischeKurztexte">
 		<xsl:apply-templates />
 	</xsl:template>
 
 	<!-- Ignored elements (content is ignored as well) -->
-	<xsl:template match="akn:meta" />
+    <xsl:template match="akn:identification" />
+    <xsl:template match="akn:references" />
+    <xsl:template match="akn:proprietary" />
+    <xsl:template match="akn:otherReferences" />
+    <xsl:template match="akn:header" />
 
 	<!-- Top level container element -->
 	<xsl:template match="akn:judgment">
@@ -36,11 +40,11 @@
 	<!--***************************************************************************************-->
 
 	<!-- Titel -->
-	<xsl:template match="akn:header">
-		<h1 id="title">
-			<xsl:apply-templates/>
-		</h1>
-	</xsl:template>
+    <xsl:template match="ris:titelzeile">
+        <h1 id="title">
+            <xsl:apply-templates/>
+        </h1>
+    </xsl:template>
 
 	<!-- H2 Headings -->
     <xsl:template match="akn:introduction[@ris:domainTerm = 'Leitsatz']">
@@ -52,12 +56,14 @@
 
 	<xsl:template match="akn:block[@name='Orientierungssatz']">
 		<section id="orientierungssatz">
-			<h2>Orientierungssatz</h2>
-			<xsl:apply-templates />
-		</section>
-	</xsl:template>
+    <xsl:template match="ris:orientierungssatz">
+        <section id="orientierungssatz">
+            <h2>Orientierungssatz</h2>
+            <xsl:apply-templates />
+        </section>
+    </xsl:template>
 
-	<xsl:template match="akn:block[@name='Sonstiger Orientierungssatz']">
+	<xsl:template match="ris:sonstigerOrientierungssatz">
 		<section id="sonstigerOrientierungssatz">
 			<h2>Sonstiger Orientierungssatz</h2>
 				<xsl:apply-templates />
