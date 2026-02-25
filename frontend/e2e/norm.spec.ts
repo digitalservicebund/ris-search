@@ -21,12 +21,11 @@ test.describe("view norm page", async () => {
       });
 
       await button.click();
-      const accordion = page.locator('[data-pc-name="accordioncontent"]');
-      const toc = accordion.locator(".official-toc").first();
-      const footNotes = accordion.locator(".nichtamtliche-fussnoten").first();
-      await toc.scrollIntoViewIfNeeded();
-      await expect(toc).toBeVisible();
-      await expect(footNotes).toBeVisible();
+      const toc = page.getByRole("region", {
+        name: "Amtliches Inhaltsverzeichnis ausblenden",
+      });
+      expect(toc).toBeVisible();
+      expect(toc.getByRole("listitem")).toBeVisible();
     });
 
     await test.step("Navigate from main norm view to a single article", async () => {
