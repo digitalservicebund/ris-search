@@ -81,7 +81,16 @@ function extractHtmlParts(document: Document): NormContent["htmlParts"] {
     ".dokumentenkopf .akn-container",
   );
 
-  const officialToc = document.querySelector(".official-toc")?.outerHTML;
+  const officialTocElements = Array.from(
+    document.querySelectorAll(
+      ".official-toc, section.eingangsformel .nichtamtliche-fussnoten",
+    ),
+  );
+
+  const officialToc = officialTocElements.length
+    ? officialTocElements.map((el) => el.outerHTML).join("")
+    : undefined;
+
   const proprietary = document.querySelector(".akn-proprietary");
   const standangaben = getTextFromElements(
     proprietary?.querySelectorAll(

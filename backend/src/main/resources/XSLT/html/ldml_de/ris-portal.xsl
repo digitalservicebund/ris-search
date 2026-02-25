@@ -127,7 +127,9 @@
             <xsl:apply-templates select="node()[not(self::akn:num | self::akn:heading)]"/>
             <!-- output authorialNote and note contents at the end of an article -->
             <xsl:call-template name="authorial-notes-collection"/>
-            <xsl:call-template name="notes-collection" />
+            <xsl:call-template name="notes-collection" >
+                <xsl:with-param name="thisId" select="@eId"/>
+            </xsl:call-template>
         </article>
     </xsl:template>
 
@@ -141,7 +143,9 @@
 
             <!-- output authorialNote and note contents at the end of an article -->
             <xsl:call-template name="authorial-notes-collection"/>
-            <xsl:call-template name="notes-collection" />
+            <xsl:call-template name="notes-collection" >
+                <xsl:with-param name="thisId" select="@eId"/>
+            </xsl:call-template>
         </article>
     </xsl:template>
 

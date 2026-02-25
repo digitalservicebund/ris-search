@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { RisSingleAccordion } from "@digitalservicebund/ris-ui/components";
+
 /**
  * Wrapper component for legislation content that provides scoped styling
  * for server-rendered AKN (Akoma Ntoso) HTML content.
@@ -6,10 +8,19 @@
 defineProps<{
   /** When true, applies single-article view styling (hides section headings) */
   singleArticle?: boolean;
+  officialToc?: string;
 }>();
 </script>
 
 <template>
+  <RisSingleAccordion
+    v-if="officialToc"
+    class="mt-24"
+    header-expanded="Amtliches Inhaltsverzeichnis ausblenden"
+    header-collapsed="Amtliches Inhaltsverzeichnis einblenden"
+  >
+    <div v-html="officialToc" />
+  </RisSingleAccordion>
   <div :class="['legislation', { 'single-article': singleArticle }]">
     <slot />
   </div>
@@ -163,6 +174,9 @@ Attributes from the Juris CALS format without a corresponding HTML attribute mig
 
 /* hide default table of contents, since it will be displayed behind an accordion section */
 :deep(.eingangsformel .inhaltsuebersicht) {
+  @apply hidden;
+}
+:deep(section.eingangsformel .nichtamtliche-fussnoten) {
   @apply hidden;
 }
 

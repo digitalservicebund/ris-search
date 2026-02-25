@@ -35,7 +35,10 @@
     <xsl:variable name="rueckverweis" as="xs:string" select="'rueckverweis'"/>
     <xsl:param name="erlaube-links-in-heading" as="xs:boolean" select="false()"/>
     <xsl:param name="ressourcenpfad" as="xs:string" select="''"/>
-
+    <xsl:key
+            name="notes-by-placement"
+            match="akn:note"
+            use="substring-after(@placementBase, '#')"/>
     <!-- ******************************************************************************************************* -->
 
     <!--
@@ -112,7 +115,9 @@
         </div>
         <!-- Der Inhalt von Fußnoten (authorialNote) wird am Ende der Einzelvorschrift ausgegeben -->
         <xsl:call-template name="authorial-notes-collection"/>
-        <xsl:call-template name="notes-collection" />
+        <xsl:call-template name="notes-collection" >
+            <xsl:with-param name="thisId" select="@eId"/>
+        </xsl:call-template>
     </xsl:template>
 
     <xsl:template match="akn:blockList">
@@ -199,7 +204,9 @@
         <section class="{$dokumentenkopf}">
             <xsl:apply-templates select="node() | @*"/>
             <xsl:call-template name="authorial-notes-collection"/>
-            <xsl:call-template name="notes-collection" />
+            <xsl:call-template name="notes-collection" >
+                <xsl:with-param name="thisId" select="@eId"/>
+            </xsl:call-template>
         </section>
 
             <xsl:apply-templates select="/akn:akomaNtoso/akn:act/akn:meta/akn:proprietary" />
@@ -271,6 +278,9 @@
         <xsl:sequence select="akn:gliederungskommentar('Eingangsformel (akn:preamble)')"/>
         <section class="{$eingangsformel}">
             <xsl:apply-templates select="node() | @*"/>
+            <xsl:call-template name="notes-collection">
+                <xsl:with-param name="thisId" select="akn:blockContainer/@eId" />
+            </xsl:call-template>
         </section>
     </xsl:template>
 
@@ -302,7 +312,9 @@
             <xsl:apply-templates/>
             <!-- Der Inhalt von Fußnoten (authorialNote) wird am Ende der Einzelvorschrift ausgegeben -->
             <xsl:call-template name="authorial-notes-collection"/>
-            <xsl:call-template name="notes-collection" />
+            <xsl:call-template name="notes-collection">
+                <xsl:with-param name="thisId" select="@eId"/>
+            </xsl:call-template>
         </article>
     </xsl:template>
 
@@ -513,17 +525,23 @@
     Die Zuordnung erfolgt über @placementBase.
     -->
     <xsl:template name="notes-collection">
-        <xsl:variable name="thisId" select="@eId" />
-        <xsl:variable name="nichtamtliche-fussnoten-elemente" select="//akn:akomaNtoso/akn:act/akn:meta/akn:notes/akn:note[@placementBase=concat('#', $thisId)]" />
+        <!-- Collect current and descendant eIds -->
+        <xsl:param name="thisId" />
+
+        <!-- Lookup notes via key -->
+        <xsl:variable name="nichtamtliche-fussnoten-elemente"
+                      select="key('notes-by-placement', $thisId)"/>
+
         <xsl:if test="$nichtamtliche-fussnoten-elemente">
             <ul class="{$nichtamtliche-fussnoten}">
                 <xsl:for-each select="$nichtamtliche-fussnoten-elemente">
                     <li id="{akn:encode-for-uri(@eId)}" class="{$fussnote}">
-                        <xsl:apply-templates />
+                        <xsl:apply-templates/>
                     </li>
                 </xsl:for-each>
             </ul>
         </xsl:if>
+
     </xsl:template>
 
     <!--

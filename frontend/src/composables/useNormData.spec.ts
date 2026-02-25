@@ -184,4 +184,31 @@ describe("useNormData", () => {
       "(+++ Textnachweis ab: 1.1.2000 +++)<br />(+++ Zur Anwendung vgl. § 5 +++)",
     );
   });
+
+  it("adds preamble footnotes to the official toc", async () => {
+    mockFetch.mockReturnValueOnce(mockMetadata);
+    mockFetch.mockReturnValueOnce(
+      `<div class="official-toc">
+        <ul class="nichtamtliche-fussnoten">
+          <li class="fussnote">
+           <p id="meta-n1_editfnote-n3_text-n1">Inhaltsübersicht: präambel Fußnote</p>
+          </li>
+        </ul>
+      </div>`,
+    );
+
+    const { data } = await useFetchNormContent(expressionEli);
+
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(
+      data.value.htmlParts.officialToc!,
+      "text/html",
+    );
+
+    expect(doc.querySelector(".official-toc")).not.toBeNull();
+    expect(doc.querySelector(".fussnote")).not.toBeNull();
+    expect(
+      doc.querySelector("#meta-n1_editfnote-n3_text-n1")?.textContent,
+    ).toBe("Inhaltsübersicht: präambel Fußnote");
+  });
 });

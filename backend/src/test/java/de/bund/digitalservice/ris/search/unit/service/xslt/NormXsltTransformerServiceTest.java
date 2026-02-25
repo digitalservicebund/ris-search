@@ -85,7 +85,6 @@ class NormXsltTransformerServiceTest {
             .ignoreWhitespace()
             .checkForIdentical()
             .build();
-
     assertThat(diff.hasDifferences()).describedAs(diff::toString).isFalse();
   }
 
