@@ -4,18 +4,19 @@ import static de.bund.digitalservice.ris.search.utils.MappingUtils.nullSafeGet;
 import static de.bund.digitalservice.ris.search.utils.MappingUtils.validate;
 import static de.bund.digitalservice.ris.search.utils.MappingUtils.validateNotNull;
 
-import de.bund.digitalservice.ris.search.caselawhandover.shared.caselawldml.AknBlock;
 import de.bund.digitalservice.ris.search.caselawhandover.shared.caselawldml.AknKeyword;
-import de.bund.digitalservice.ris.search.caselawhandover.shared.caselawldml.AknMultipleBlock;
+import de.bund.digitalservice.ris.search.caselawhandover.shared.caselawldml.Analysis;
 import de.bund.digitalservice.ris.search.caselawhandover.shared.caselawldml.CaseLawLdml;
 import de.bund.digitalservice.ris.search.caselawhandover.shared.caselawldml.Court;
+import de.bund.digitalservice.ris.search.caselawhandover.shared.caselawldml.DocumentaryShortTexts;
 import de.bund.digitalservice.ris.search.caselawhandover.shared.caselawldml.FrbrDate;
 import de.bund.digitalservice.ris.search.caselawhandover.shared.caselawldml.FrbrElement;
+import de.bund.digitalservice.ris.search.caselawhandover.shared.caselawldml.ImplicitReference;
 import de.bund.digitalservice.ris.search.caselawhandover.shared.caselawldml.JaxbHtml;
 import de.bund.digitalservice.ris.search.caselawhandover.shared.caselawldml.Judgment;
 import de.bund.digitalservice.ris.search.caselawhandover.shared.caselawldml.JudgmentBody;
 import de.bund.digitalservice.ris.search.caselawhandover.shared.caselawldml.Meta;
-import de.bund.digitalservice.ris.search.caselawhandover.shared.caselawldml.RelatedDecision;
+import de.bund.digitalservice.ris.search.caselawhandover.shared.caselawldml.OtherAnalysis;
 import de.bund.digitalservice.ris.search.caselawhandover.shared.caselawldml.RisMeta;
 import de.bund.digitalservice.ris.search.exception.OpenSearchMapperException;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
@@ -26,10 +27,10 @@ import jakarta.xml.bind.JAXB;
 import jakarta.xml.bind.ValidationException;
 import java.io.StringReader;
 import java.time.Instant;
+import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import javax.xml.transform.stream.StreamSource;
 import org.eclipse.persistence.exceptions.DescriptorException;
 import org.springframework.stereotype.Service;
@@ -80,44 +81,72 @@ public class CaseLawLdmlToOpenSearchMapper {
 
     // visible elements
     validateNotNull(judgment.getHeader(), "Header missing");
-    JaxbHtml header =
-        meta.getAnalysis().getOtherAnalysis().getDocumentaryShortTexts().getTitleLine();
+
+    JaxbHtml header = judgment.getHeader().findShortTitle();
+
     validateNotNull(judgment.getJudgmentBody(), "JudgmentBody missing");
 
     JudgmentBody judgmentBody = judgment.getJudgmentBody();
-    JaxbHtml motivation = judgmentBody.getMotivation();
 
-    AknMultipleBlock introduction = judgmentBody.getIntroduction();
-    AknBlock headnoteBlock = nullSafeGet(introduction, e -> e.getBlock("Orientierungssatz"));
-    JaxbHtml headnote = nullSafeGet(headnoteBlock, AknBlock::getContent);
-    AknBlock otherHeadnoteBlock =
-        nullSafeGet(introduction, e -> e.getBlock("Sonstiger Orientierungssatz"));
-    JaxbHtml otherHeadnote = nullSafeGet(otherHeadnoteBlock, AknBlock::getContent);
-    AknBlock outlineBlock = nullSafeGet(introduction, e -> e.getBlock("Gliederung"));
-    JaxbHtml outline = nullSafeGet(outlineBlock, AknBlock::getContent);
-    AknBlock tenorBlock = nullSafeGet(introduction, e -> e.getBlock("Tenor"));
-    JaxbHtml tenor = nullSafeGet(tenorBlock, AknBlock::getContent);
+    // Get data from introductions
+    JaxbHtml leitsatz = judgmentBody.getIntroductionEntryContentByName("Leitsatz").orElse(null);
+    JaxbHtml gliederung = judgmentBody.getIntroductionEntryContentByName("Gliederung").orElse(null);
+
+    Optional<DocumentaryShortTexts> docShortTexts =
+        Optional.ofNullable(meta.getAnalysis())
+            .map(Analysis::getOtherAnalysis)
+            .map(OtherAnalysis::getDocumentaryShortTexts);
+
+    JaxbHtml headNote =
+        docShortTexts
+            .map(DocumentaryShortTexts::getHeadNotes)
+            .map(note -> note.getContent())
+            .orElse(null);
+
+    JaxbHtml otherHeadNote =
+        docShortTexts
+            .map(DocumentaryShortTexts::getOtherHeadNotes)
+            .map(note -> note.getContent())
+            .orElse(null);
+
+    List<String> decisionNames =
+        docShortTexts
+            .map(DocumentaryShortTexts::getDecisionNames)
+            .orElse(Collections.emptyList())
+            .stream()
+            .map(DocumentaryShortTexts.DecisionName::getName)
+            .toList();
 
     JaxbHtml background = judgmentBody.getBackground();
 
-    AknMultipleBlock decision = judgmentBody.getDecision();
-    AknBlock dissentingOpinionBlock = nullSafeGet(decision, e -> e.getBlock("Abweichende Meinung"));
-    JaxbHtml dissentingOpinion = nullSafeGet(dissentingOpinionBlock, AknBlock::getContent);
+    JaxbHtml decision = judgmentBody.getDecision();
 
-    AknBlock decisionGroundsBlock = nullSafeGet(decision, e -> e.getBlock("Entscheidungsgründe"));
-    JaxbHtml decisionGrounds = nullSafeGet(decisionGroundsBlock, AknBlock::getContent);
-    AknBlock groundsBlock = nullSafeGet(decision, e -> e.getBlock("Gründe"));
-    JaxbHtml grounds = nullSafeGet(groundsBlock, AknBlock::getContent);
-    AknBlock otherLongTextBlock = nullSafeGet(decision, e -> e.getBlock("Sonstiger Langtext"));
-    JaxbHtml otherLongText = nullSafeGet(otherLongTextBlock, AknBlock::getContent);
+    // TODO
+    JaxbHtml dissentingOpinion = null;
+
+    JaxbHtml decisionGrounds =
+        judgmentBody.getMotivationEntryContentByName("Entscheidungsgründe").orElse(null);
+    JaxbHtml grounds = judgmentBody.getMotivationEntryContentByName("Gründe").orElse(null);
+    JaxbHtml otherLongText =
+        judgmentBody.getMotivationEntryContentByName("Sonstiger Langtext").orElse(null);
+
     List<String> previousDecisions =
-        nullSafeGet(
-            risMeta.getPreviousDecision(),
-            e -> e.stream().map(this::relatedDecisionToString).toList());
+        Optional.ofNullable(meta.getAnalysis())
+            .map(Analysis::getOtherReferences)
+            .map(refs -> refs.getReferencesByType(ImplicitReference::getPrecedingJudgement))
+            .map(
+                legalProceedings ->
+                    legalProceedings.stream().map(lp -> lp.asString()).collect(Collectors.toList()))
+            .orElse(Collections.emptyList());
+
     List<String> ensuingDecisions =
-        nullSafeGet(
-            risMeta.getEnsuingDecision(),
-            e -> e.stream().map(this::relatedDecisionToString).toList());
+        Optional.ofNullable(meta.getAnalysis())
+            .map(Analysis::getOtherReferences)
+            .map(refs -> refs.getReferencesByType(ImplicitReference::getEnsuingJudgement))
+            .map(
+                legalProceedings ->
+                    legalProceedings.stream().map(lp -> lp.asString()).collect(Collectors.toList()))
+            .orElse(Collections.emptyList());
 
     // some fields not in ldml are commented for now
     return CaseLawDocumentationUnit.builder()
@@ -128,7 +157,7 @@ public class CaseLawLdmlToOpenSearchMapper {
         .decisionDate(DateUtils.nullSafeParseyyyyMMdd(frbrDate.getDate()))
         .fileNumbers(risMeta.getFileNumbers())
         .courtType(court.getGerichtstyp())
-        .location(risMeta.getCourtLocation())
+        .location(court.getGerichtsort())
         .documentType(risMeta.getDocumentType())
         .judicialBody(court.getSpruchkoerper().getValue())
         .courtKeyword(risMeta.getCourtKeyword())
@@ -138,7 +167,7 @@ public class CaseLawLdmlToOpenSearchMapper {
                 e ->
                     nullSafeGet(
                         e.getKeyword(), f -> f.stream().map(AknKeyword::getValue).toList())))
-        .decisionName(risMeta.getDecisionName())
+        .decisionName(decisionNames)
         .deviatingDocumentNumber(risMeta.getDeviatingDocumentNumber())
         .publicationStatus(risMeta.getPublicationStatus())
         .error(risMeta.getError() == null || risMeta.getError())
@@ -148,11 +177,11 @@ public class CaseLawLdmlToOpenSearchMapper {
 
         // Visible elements (in display order)
         .headline(jaxbToSanitizedHtml(header))
-        .guidingPrinciple(jaxbToSanitizedHtml(motivation))
-        .headnote(jaxbToSanitizedHtml(headnote))
-        .otherHeadnote(jaxbToSanitizedHtml(otherHeadnote))
-        .outline(jaxbToSanitizedHtml(outline))
-        .tenor(jaxbToSanitizedHtml(tenor))
+        .guidingPrinciple(jaxbToSanitizedHtml(leitsatz))
+        .headnote(jaxbToSanitizedHtml(headNote))
+        .otherHeadnote(jaxbToSanitizedHtml(otherHeadNote))
+        .outline(jaxbToSanitizedHtml(gliederung))
+        .tenor(jaxbToSanitizedHtml(decision))
         .caseFacts(jaxbToSanitizedHtml(background))
         .decisionGrounds(jaxbToSanitizedHtml(decisionGrounds))
         .grounds(jaxbToSanitizedHtml(grounds))
@@ -191,14 +220,5 @@ public class CaseLawLdmlToOpenSearchMapper {
     } catch (DescriptorException | DataBindingException | ValidationException e) {
       throw new OpenSearchMapperException("unable to parse file to DocumentationUnit", e);
     }
-  }
-
-  private String relatedDecisionToString(RelatedDecision relatedDecision) {
-    return Stream.of(
-            relatedDecision.getDocumentNumber(),
-            relatedDecision.getFileNumber(),
-            relatedDecision.getCourtType())
-        .filter(Objects::nonNull)
-        .collect(Collectors.joining(" "));
   }
 }

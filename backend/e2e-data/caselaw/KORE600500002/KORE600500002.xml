@@ -1,91 +1,108 @@
 <?xml version="1.0" encoding="utf-8"?>
-<akn:akomaNtoso xmlns:akn="http://docs.oasis-open.org/legaldocml/ns/akn/3.0/WD17"
+<akn:akomaNtoso xmlns:akn="http://docs.oasis-open.org/legaldocml/ns/akn/3.0"
                 xmlns:ris="http://example.com/0.1/"
                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                xsi:schemaLocation="http://docs.oasis-open.org/legaldocml/ns/akn/3.0/WD17
-                     https://docs.oasis-open.org/legaldocml/akn-core/v1.0/csprd02/part2-specs/schemas/akomantoso30.xsd">
-   <akn:judgment name="Beispielurteil8">
-      <akn:meta>
-         <akn:identification source="Testquelle8">
-            <akn:FRBRWork>
-               <akn:FRBRthis value="KORE600500002"/>
-               <akn:FRBRuri value="KORE600500002"/>
-               <akn:FRBRalias name="uebergreifende-id" value="fake-uuid-00012"/>
-               <akn:FRBRdate date="2023-11-22" name="entscheidungsdatum"/>
-               <akn:FRBRauthor href="Testautor12"/>
-               <akn:FRBRcountry value="de"/>
-            </akn:FRBRWork>
-            <akn:FRBRExpression>
-               <akn:FRBRthis value="KORE600500002/dokument"/>
-               <akn:FRBRuri value="KORE600500002/dokument"/>
-               <akn:FRBRdate date="2023-11-22" name="entscheidungsdatum"/>
-               <akn:FRBRauthor href="Testautor12"/>
-               <akn:FRBRlanguage language="deu"/>
-            </akn:FRBRExpression>
-            <akn:FRBRManifestation>
-               <akn:FRBRthis value="KORE600500002/dokument.xml"/>
-               <akn:FRBRuri value="KORE600500002/dokument.xml"/>
-               <akn:FRBRdate date="2023-11-22" name="entscheidungsdatum"/>
-               <akn:FRBRauthor href="Testautor12"/>
-            </akn:FRBRManifestation>
-         </akn:identification>
-         <akn:classification source="Testquelle12">
-            <akn:keyword dictionary="TestDict12" showAs="Beispiel" value="ZuteilungTest"/>
-            <akn:keyword dictionary="TestDict12" showAs="Beispiel" value="BeschlusssTest"/>
-            <akn:keyword dictionary="TestDict12" showAs="Beispiel" value="Verschiebung"/>
-            <akn:keyword dictionary="TestDict12" showAs="Beispiel" value="BerechnungZ"/>
-         </akn:classification>
-         <akn:proprietary source="Testquelle12">
-            <ris:meta>
-               <ris:fileNumbers>
-                  <ris:fileNumber>TS 345678</ris:fileNumber>
-               </ris:fileNumbers>
-               <ris:documentType>Urteil</ris:documentType>
-               <ris:courtLocation>Testort12</ris:courtLocation>
-               <ris:courtType>LG</ris:courtType>
-               <ris:legalEffect>KEINE_ANGABE</ris:legalEffect>
-               <ris:fieldOfLaws>
-                  <ris:fieldOfLaw>Testzuteilung</ris:fieldOfLaw>
-                  <ris:fieldOfLaw>Testbeschluss</ris:fieldOfLaw>
-                  <ris:fieldOfLaw>Testverschiebung</ris:fieldOfLaw>
-                  <ris:fieldOfLaw>BerechnungZ</ris:fieldOfLaw>
-               </ris:fieldOfLaws>
-               <ris:judicialBody>3. Kammer</ris:judicialBody>
-               <ris:publicationStatus>PUBLISHED</ris:publicationStatus>
-               <ris:error>false</ris:error>
-               <ris:documentationOffice>LG Test12</ris:documentationOffice>
-               <ris:procedures>
-                  <ris:procedure>TS876543</ris:procedure>
-               </ris:procedures>
-            </ris:meta>
-         </akn:proprietary>
-      </akn:meta>
-      <akn:header>
-         <akn:p>Testheader für Urteil 12.</akn:p>
-      </akn:header>
-      <akn:judgmentBody>
-         <akn:introduction>
-            <akn:block name="Orientierungssatz">
-               <akn:embeddedStructure>
-                  <akn:p>1. Fiktiver Satz für den Fall der Zuteilung und entsprechenden Berechnung.</akn:p>
-                  <akn:p>2. Zusätzliche Testangaben werden in diesem Kontext beispielhaft präsentiert.</akn:p>
-               </akn:embeddedStructure>
-            </akn:block>
-            <akn:block name="Tenor">
-               <akn:embeddedStructure>
-                  <akn:p>Der Beklagte wird zur Zahlung eines Betrages verurteilt.</akn:p>
-                  <akn:p>Die Kosten des Verfahrens werden vom Beklagten getragen.</akn:p>
-               </akn:embeddedStructure>
-            </akn:block>
-         </akn:introduction>
-         <akn:background>
-            <akn:hcontainer name="randnummer">
-               <akn:num>1</akn:num>
-               <akn:content>
-                  <akn:p>Testbeschreibung des fiktiven Sachverhalts mit abweichenden Einzelheiten.</akn:p>
-               </akn:content>
-            </akn:hcontainer>
-         </akn:background>
-      </akn:judgmentBody>
-   </akn:judgment>
+                xsi:schemaLocation="http://docs.oasis-open.org/legaldocml/ns/akn/3.0 https://docs.oasis-open.org/legaldocml/akn-core/v1.0/os/part2-specs/schemas/akomantoso30.xsd">
+
+    <akn:judgment name="Urteil">
+        <akn:meta>
+            <akn:identification source="#ris">
+                <akn:FRBRWork>
+                    <akn:FRBRthis value="KORE600500002"/>
+                    <akn:FRBRuri value="KORE600500002"/>
+                    <akn:FRBRalias name="Übergreifende ID" value="fake-uuid-00012"/>
+                    <akn:FRBRalias name="Dokumentnummer" value="KORE600500002" />
+                    <akn:FRBRdate eId="Entscheidungsdatum" date="2023-11-22" name="Entscheidungsdatum"/>
+                    <akn:FRBRauthor href="#gericht"/>
+                    <akn:FRBRcountry value="de"/>
+                </akn:FRBRWork>
+                <akn:FRBRExpression>
+                    <akn:FRBRthis value="KORE600500002/dokument"/>
+                    <akn:FRBRuri value="KORE600500002/dokument"/>
+                    <akn:FRBRdate date="2023-11-22" name="Entscheidungsdatum"/>
+                    <akn:FRBRauthor href="#gericht"/>
+                    <akn:FRBRlanguage language="deu"/>
+                </akn:FRBRExpression>
+                <akn:FRBRManifestation>
+                    <akn:FRBRthis value="KORE600500002/dokument.xml"/>
+                    <akn:FRBRuri value="KORE600500002/dokument.xml"/>
+                    <akn:FRBRdate date="2023-11-22" name="XML Transformation"/>
+                    <akn:FRBRauthor href="#lg-test12-dokumentationsstelle"/>
+                </akn:FRBRManifestation>
+            </akn:identification>
+            <akn:classification source="#ris">
+                <akn:keyword ris:domainTerm="Schlagwort" dictionary="" showAs="ZuteilungTest" value="ZuteilungTest"/>
+                <akn:keyword ris:domainTerm="Schlagwort" dictionary="" showAs="BeschlusssTest" value="BeschlusssTest"/>
+                <akn:keyword ris:domainTerm="Schlagwort" dictionary="" showAs="Verschiebung" value="Verschiebung"/>
+                <akn:keyword ris:domainTerm="Schlagwort" dictionary="" showAs="BerechnungZ" value="BerechnungZ"/>
+            </akn:classification>
+            <akn:analysis source="#ris">
+                <akn:otherAnalysis source="#ris">
+                    <ris:dokumentarischeKurztexte domainTerm="Dokumentarische Kurztexte">
+                        <ris:titelzeile akn:eId="titelzeile" ris:domainTerm="Titelzeile">
+                            <akn:p>Urteil 12.</akn:p>
+                        </ris:titelzeile>
+                        <ris:orientierungssatz ris:domainTerm="Orientierungssatz">
+                            <akn:p>1. Fiktiver Satz für den Fall der Zuteilung und entsprechenden Berechnung.</akn:p>
+                            <akn:p>2. Zusätzliche Testangaben werden in diesem Kontext beispielhaft präsentiert.</akn:p>
+                        </ris:orientierungssatz>
+                    </ris:dokumentarischeKurztexte>
+                </akn:otherAnalysis>
+            </akn:analysis>
+            <akn:references source="#ris">
+                <akn:TLCOrganization eId="ris" href="" showAs="Rechtsinformationssystem des Bundes"/>
+                <akn:TLCOrganization eId="lg-test12-dokumentationsstelle" href="" showAs="LG Test12"/>
+                <akn:TLCOrganization eId="gericht" href="" showAs="LG"/>
+                <akn:TLCOrganization eId="spruchkoerper" href="" showAs="3. Kammer"/>
+            </akn:references>
+            <akn:proprietary source="ris">
+                <ris:meta>
+                    <ris:aktenzeichenListe domainTerm="Liste der Aktenzeichen">
+                        <ris:aktenzeichen domainTerm="Aktenzeichen" akn:refersTo="#aktenzeichen">TS 345678</ris:aktenzeichen>
+                    </ris:aktenzeichenListe>
+                    <ris:dokumenttyp akn:eId="dokumenttyp" domainTerm="Dokumenttyp">Urteil</ris:dokumenttyp>
+                    <ris:gericht domainTerm="Gericht" akn:refersTo="#gericht">
+                        <ris:gerichtstyp domainTerm="Gerichtstyp">LG</ris:gerichtstyp>
+                        <ris:gerichtsort domainTerm="Gerichtsort">Testort12</ris:gerichtsort>
+                        <ris:spruchkoerper domainTerm="Spruchkörper" akn:refersTo="#spruchkoerper">3. Kammer</ris:spruchkoerper>
+                    </ris:gericht>
+                    <ris:rechtskraft domainTerm="Rechtskraft">Keine Angabe</ris:rechtskraft>
+                    <ris:sachgebiete domainTerm="Sachgebiete">
+                        <ris:sachgebiet domainTerm="Sachgebiet" notation="neu">Testzuteilung</ris:sachgebiet>
+                        <ris:sachgebiet domainTerm="Sachgebiet" notation="neu">Testbeschluss</ris:sachgebiet>
+                        <ris:sachgebiet domainTerm="Sachgebiet" notation="neu">Testverschiebung</ris:sachgebiet>
+                        <ris:sachgebiet domainTerm="Sachgebiet" notation="neu">BerechnungZ</ris:sachgebiet>
+                    </ris:sachgebiete>
+                    <ris:dokumentationsstelle domainTerm="Dokumentationsstelle" akn:refersTo="#lg-test12-dokumentationsstelle">LG Test12</ris:dokumentationsstelle>
+                </ris:meta>
+            </akn:proprietary>
+        </akn:meta>
+        <akn:header>
+            <akn:p>Testheader für Urteil 12.</akn:p>
+            <akn:p>Aktenzeichen: <akn:docNumber refersTo="#aktenzeichen">TS 345678</akn:docNumber></akn:p>
+            <akn:p>Entscheidungsdatum: <akn:docDate date="2023-11-22" refersTo="#entscheidungsdatum">22.11.2023</akn:docDate></akn:p>
+            <akn:p>Gericht: <akn:courtType refersTo="#gericht">LG</akn:courtType></akn:p>
+            <akn:p>Dokumenttyp: <akn:docType refersTo="#dokumenttyp">Urteil</akn:docType></akn:p>
+            <akn:p>Kurztitel: <akn:shortTitle>
+                <akn:embeddedStructure>
+                    <akn:p>Testheader für Urteil 12.</akn:p>
+                </akn:embeddedStructure>
+            </akn:shortTitle>
+            </akn:p>
+        </akn:header>
+        <akn:judgmentBody>
+            <akn:decision ris:domainTerm="Tenor">
+                <akn:p>Der Beklagte wird zur Zahlung eines Betrages verurteilt.</akn:p>
+                <akn:p>Die Kosten des Verfahrens werden vom Beklagten getragen.</akn:p>
+            </akn:decision>
+            <akn:background ris:domainTerm="Tatbestand">
+                <akn:hcontainer name="randnummer">
+                    <akn:num>1</akn:num>
+                    <akn:content>
+                        <akn:p>Testbeschreibung des fiktiven Sachverhalts mit abweichenden Einzelheiten.</akn:p>
+                    </akn:content>
+                </akn:hcontainer>
+            </akn:background>
+        </akn:judgmentBody>
+    </akn:judgment>
 </akn:akomaNtoso>

@@ -1,94 +1,114 @@
 <?xml version="1.0" encoding="utf-8"?>
-<akn:akomaNtoso xmlns:akn="http://docs.oasis-open.org/legaldocml/ns/akn/3.0/WD17"
+<akn:akomaNtoso xmlns:akn="http://docs.oasis-open.org/legaldocml/ns/akn/3.0"
                 xmlns:ris="http://example.com/0.1/"
                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                xsi:schemaLocation="http://docs.oasis-open.org/legaldocml/ns/akn/3.0/WD17
-                     https://docs.oasis-open.org/legaldocml/akn-core/v1.0/csprd02/part2-specs/schemas/akomantoso30.xsd">
-   <akn:judgment name="Beispielbeschluss">
-      <akn:meta>
-         <akn:identification source="Testquelle">
-            <akn:FRBRWork>
-               <akn:FRBRthis value="MWRE000500300"/>
-               <akn:FRBRuri value="MWRE000500300"/>
-               <akn:FRBRalias name="uebergreifende-id" value="fake-uuid-0002"/>
-               <akn:FRBRdate date="2025-04-09" name="entscheidungsdatum"/>
-               <akn:FRBRauthor href="Testautor"/>
-               <akn:FRBRcountry value="de"/>
-            </akn:FRBRWork>
-            <akn:FRBRExpression>
-               <akn:FRBRthis value="MWRE000500300/dokument"/>
-               <akn:FRBRuri value="MWRE000500300/dokument"/>
-               <akn:FRBRdate date="2025-04-09" name="entscheidungsdatum"/>
-               <akn:FRBRauthor href="Testautor"/>
-               <akn:FRBRlanguage language="deu"/>
-            </akn:FRBRExpression>
-            <akn:FRBRManifestation>
-               <akn:FRBRthis value="MWRE000500300/dokument.xml"/>
-               <akn:FRBRuri value="MWRE000500300/dokument.xml"/>
-               <akn:FRBRdate date="2025-04-09" name="entscheidungsdatum"/>
-               <akn:FRBRauthor href="Testautor"/>
-            </akn:FRBRManifestation>
-         </akn:identification>
-         <akn:classification source="Testquelle">
-            <akn:keyword dictionary="TestDict" showAs="Schlüsselwort" value="Ortsname"/>
-            <akn:keyword dictionary="TestDict" showAs="Schlüsselwort" value="Dienstbezug"/>
-            <akn:keyword dictionary="TestDict" showAs="Schlüsselwort" value="Abgang"/>
-            <akn:keyword dictionary="TestDict" showAs="Schlüsselwort" value="Testprozessrecht!!"/>
-         </akn:classification>
-         <akn:proprietary source="Testquelle">
-            <ris:meta>
-               <ris:decisionNames>
-                  <ris:decisionName>Beispielentscheid</ris:decisionName>
-               </ris:decisionNames>
-               <ris:fileNumbers>
-                  <ris:fileNumber>34 X (xyz) 456/78</ris:fileNumber>
-               </ris:fileNumbers>
-               <ris:documentType>Beschluss</ris:documentType>
-               <ris:courtLocation>Teststadt</ris:courtLocation>
-               <ris:courtType>BPatG</ris:courtType>
-               <ris:legalEffect>KEINE_ANGABE</ris:legalEffect>
-               <ris:fieldOfLaws>
-                  <ris:fieldOfLaw>Testprozessrecht!!</ris:fieldOfLaw>
-                  <ris:fieldOfLaw>Testmarkenrecht (Beispiel)</ris:fieldOfLaw>
-                  <ris:fieldOfLaw>Beispielverfahren (inkl. Musterdaten)</ris:fieldOfLaw>
-                  <ris:fieldOfLaw>Beiswertung</ris:fieldOfLaw>
-               </ris:fieldOfLaws>
-               <ris:judicialBody>27. Senat</ris:judicialBody>
-               <ris:publicationStatus>PUBLISHED</ris:publicationStatus>
-               <ris:error>false</ris:error>
-               <ris:documentationOffice>BPatG</ris:documentationOffice>
-               <ris:procedures>
-                  <ris:procedure>TSTP12345</ris:procedure>
-               </ris:procedures>
-            </ris:meta>
-         </akn:proprietary>
-      </akn:meta>
-      <akn:header>
-         <akn:p>Beispielheader für den Beschlusstext.</akn:p>
-      </akn:header>
-      <akn:judgmentBody>
-         <akn:introduction>
-            <akn:block name="Orientierungssatz">
-               <akn:embeddedStructure>
-                  <akn:p>1. Fiktiver Satz für Testzwecke im Beschluss.</akn:p>
-                  <akn:p>2. Weitere fiktive Informationen zur Verfahrensbeschreibung.</akn:p>
-               </akn:embeddedStructure>
-            </akn:block>
-            <akn:block name="Tenor">
-               <akn:embeddedStructure>
-                  <akn:p>Der Beschluss wird mit Testwerten versehen.</akn:p>
-                  <akn:p>Die Kosten trägt der Beklagte vollständig.</akn:p>
-               </akn:embeddedStructure>
-            </akn:block>
-         </akn:introduction>
-         <akn:background>
-            <akn:hcontainer name="randnummer">
-               <akn:num>1</akn:num>
-               <akn:content>
-                  <akn:p>Hier erfolgt eine fiktive Darstellung des Sachverhalts.</akn:p>
-               </akn:content>
-            </akn:hcontainer>
-         </akn:background>
-      </akn:judgmentBody>
-   </akn:judgment>
+                xsi:schemaLocation="http://docs.oasis-open.org/legaldocml/ns/akn/3.0 https://docs.oasis-open.org/legaldocml/akn-core/v1.0/os/part2-specs/schemas/akomantoso30.xsd">
+
+    <akn:judgment name="Beispielbeschluss">
+        <akn:meta>
+            <akn:identification source="#ris">
+                <akn:FRBRWork>
+                    <akn:FRBRthis value="MWRE000500300"/>
+                    <akn:FRBRuri value="MWRE000500300"/>
+                    <akn:FRBRalias name="Übergreifende ID" value="fake-uuid-0002"/>
+                    <akn:FRBRalias name="Dokumentnummer" value="MWRE000500300" />
+                    <akn:FRBRdate eId="Entscheidungsdatum" date="2025-04-09" name="Entscheidungsdatum"/>
+                    <akn:FRBRauthor href="#gericht"/>
+                    <akn:FRBRcountry value="de"/>
+                </akn:FRBRWork>
+                <akn:FRBRExpression>
+                    <akn:FRBRthis value="MWRE000500300/dokument"/>
+                    <akn:FRBRuri value="MWRE000500300/dokument"/>
+                    <akn:FRBRdate date="2025-04-09" name="Entscheidungsdatum"/>
+                    <akn:FRBRauthor href="#gericht"/>
+                    <akn:FRBRlanguage language="deu"/>
+                </akn:FRBRExpression>
+                <akn:FRBRManifestation>
+                    <akn:FRBRthis value="MWRE000500300/dokument.xml"/>
+                    <akn:FRBRuri value="MWRE000500300/dokument.xml"/>
+                    <akn:FRBRdate date="2025-04-09" name="XML Transformation"/>
+                    <akn:FRBRauthor href="#bpatg-dokumentationsstelle"/>
+                </akn:FRBRManifestation>
+            </akn:identification>
+            <akn:classification source="#ris">
+                <akn:keyword ris:domainTerm="Schlagwort" dictionary="" showAs="Ortsname" value="Ortsname"/>
+                <akn:keyword ris:domainTerm="Schlagwort" dictionary="" showAs="Dienstbezug" value="Dienstbezug"/>
+                <akn:keyword ris:domainTerm="Schlagwort" dictionary="" showAs="Abgang" value="Abgang"/>
+                <akn:keyword ris:domainTerm="Schlagwort" dictionary="" showAs="Testprozessrecht!!" value="Testprozessrecht!!"/>
+            </akn:classification>
+            <akn:analysis source="#ris">
+                <akn:otherAnalysis source="#ris">
+                    <ris:dokumentarischeKurztexte domainTerm="Dokumentarische Kurztexte">
+                        <ris:titelzeile akn:eId="titelzeile" ris:domainTerm="Titelzeile">
+                            <akn:p>Beispielbeschluss.</akn:p>
+                        </ris:titelzeile>
+                        <ris:orientierungssatz ris:domainTerm="Orientierungssatz">
+                            <akn:p>1. Fiktiver Satz für Testzwecke im Beschluss.</akn:p>
+                            <akn:p>2. Weitere fiktive Informationen zur Verfahrensbeschreibung.</akn:p>
+                        </ris:orientierungssatz>
+                        <ris:entscheidungsnamen domainTerm="Entscheidungsnamen">
+                            <ris:entscheidungsname domainTerm="Entscheidungsname">Beispielentscheid</ris:entscheidungsname>
+                        </ris:entscheidungsnamen>
+                    </ris:dokumentarischeKurztexte>
+                </akn:otherAnalysis>
+            </akn:analysis>
+            <akn:references source="#ris">
+                <akn:TLCOrganization eId="ris" href="" showAs="Rechtsinformationssystem des Bundes"/>
+                <akn:TLCOrganization eId="bpatg-dokumentationsstelle" href="" showAs="BPatG"/>
+                <akn:TLCOrganization eId="gericht" href="" showAs="BPatG"/>
+                <akn:TLCOrganization eId="spruchkoerper" href="" showAs="27. Senat"/>
+            </akn:references>
+            <akn:proprietary source="ris">
+                <ris:meta>
+                    <ris:entscheidungstextListe domainTerm="Liste der Entscheidungstexte">
+                        <ris:entscheidungstext domainTerm="Entscheidungstext">Beispielentscheid</ris:entscheidungstext>
+                    </ris:entscheidungstextListe>
+                    <ris:aktenzeichenListe domainTerm="Liste der Aktenzeichen">
+                        <ris:aktenzeichen domainTerm="Aktenzeichen" akn:refersTo="#aktenzeichen">34 X (xyz) 456/78</ris:aktenzeichen>
+                    </ris:aktenzeichenListe>
+                    <ris:dokumenttyp akn:eId="dokumenttyp" domainTerm="Dokumenttyp">Beschluss</ris:dokumenttyp>
+                    <ris:gericht domainTerm="Gericht" akn:refersTo="#gericht">
+                        <ris:gerichtstyp domainTerm="Gerichtstyp">BPatG</ris:gerichtstyp>
+                        <ris:gerichtsort domainTerm="Gerichtsort">Teststadt</ris:gerichtsort>
+                        <ris:spruchkoerper domainTerm="Spruchkörper" akn:refersTo="#spruchkoerper">27. Senat</ris:spruchkoerper>
+                    </ris:gericht>
+                    <ris:rechtskraft domainTerm="Rechtskraft">Keine Angabe</ris:rechtskraft>
+                    <ris:sachgebiete domainTerm="Sachgebiete">
+                        <ris:sachgebiet domainTerm="Sachgebiet" notation="neu">Testprozessrecht!!</ris:sachgebiet>
+                        <ris:sachgebiet domainTerm="Sachgebiet" notation="neu">Testmarkenrecht (Beispiel)</ris:sachgebiet>
+                        <ris:sachgebiet domainTerm="Sachgebiet" notation="neu">Beispielverfahren (inkl. Musterdaten)</ris:sachgebiet>
+                        <ris:sachgebiet domainTerm="Sachgebiet" notation="neu">Beiswertung</ris:sachgebiet>
+                    </ris:sachgebiete>
+                    <ris:dokumentationsstelle domainTerm="Dokumentationsstelle" akn:refersTo="#bpatg-dokumentationsstelle">BPatG</ris:dokumentationsstelle>
+                </ris:meta>
+            </akn:proprietary>
+        </akn:meta>
+        <akn:header>
+            <akn:p>Beispielheader für den Beschlusstext.</akn:p>
+            <akn:p>Aktenzeichen: <akn:docNumber refersTo="#aktenzeichen">34 X (xyz) 456/78</akn:docNumber></akn:p>
+            <akn:p>Entscheidungsdatum: <akn:docDate date="2025-04-09" refersTo="#entscheidungsdatum">09.04.2025</akn:docDate></akn:p>
+            <akn:p>Gericht: <akn:courtType refersTo="#gericht">BPatG</akn:courtType></akn:p>
+            <akn:p>Dokumenttyp: <akn:docType refersTo="#dokumenttyp">Beschluss</akn:docType></akn:p>
+            <akn:p>Kurztitel: <akn:shortTitle>
+                <akn:embeddedStructure>
+                    <akn:p>Beispielheader für den Beschlusstext.</akn:p>
+                </akn:embeddedStructure>
+            </akn:shortTitle>
+            </akn:p>
+        </akn:header>
+        <akn:judgmentBody>
+            <akn:decision ris:domainTerm="Tenor">
+                <akn:p>Der Beschluss wird mit Testwerten versehen.</akn:p>
+                <akn:p>Die Kosten trägt der Beklagte vollständig.</akn:p>
+            </akn:decision>
+            <akn:background ris:domainTerm="Tatbestand">
+                <akn:hcontainer name="randnummer">
+                    <akn:num>1</akn:num>
+                    <akn:content>
+                        <akn:p>Hier erfolgt eine fiktive Darstellung des Sachverhalts.</akn:p>
+                    </akn:content>
+                </akn:hcontainer>
+            </akn:background>
+        </akn:judgmentBody>
+    </akn:judgment>
 </akn:akomaNtoso>

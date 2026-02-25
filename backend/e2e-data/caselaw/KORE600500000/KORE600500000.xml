@@ -1,91 +1,108 @@
 <?xml version="1.0" encoding="utf-8"?>
-<akn:akomaNtoso xmlns:akn="http://docs.oasis-open.org/legaldocml/ns/akn/3.0/WD17"
+<akn:akomaNtoso xmlns:akn="http://docs.oasis-open.org/legaldocml/ns/akn/3.0"
                 xmlns:ris="http://example.com/0.1/"
                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                xsi:schemaLocation="http://docs.oasis-open.org/legaldocml/ns/akn/3.0/WD17
-                     https://docs.oasis-open.org/legaldocml/akn-core/v1.0/csprd02/part2-specs/schemas/akomantoso30.xsd">
-   <akn:judgment name="Beispielurteil6">
-      <akn:meta>
-         <akn:identification source="Testquelle6">
-            <akn:FRBRWork>
-               <akn:FRBRthis value="KORE600500000"/>
-               <akn:FRBRuri value="KORE600500000"/>
-               <akn:FRBRalias name="uebergreifende-id" value="fake-uuid-0006"/>
-               <akn:FRBRdate date="2025-04-09" name="entscheidungsdatum"/>
-               <akn:FRBRauthor href="Testautor6"/>
-               <akn:FRBRcountry value="de"/>
-            </akn:FRBRWork>
-            <akn:FRBRExpression>
-               <akn:FRBRthis value="KORE600500000/dokument"/>
-               <akn:FRBRuri value="KORE600500000/dokument"/>
-               <akn:FRBRdate date="2025-04-09" name="entscheidungsdatum"/>
-               <akn:FRBRauthor href="Testautor6"/>
-               <akn:FRBRlanguage language="deu"/>
-            </akn:FRBRExpression>
-            <akn:FRBRManifestation>
-               <akn:FRBRthis value="KORE600500000/dokument.xml"/>
-               <akn:FRBRuri value="KORE600500000/dokument.xml"/>
-               <akn:FRBRdate date="2025-04-09" name="entscheidungsdatum"/>
-               <akn:FRBRauthor href="Testautor6"/>
-            </akn:FRBRManifestation>
-         </akn:identification>
-         <akn:classification source="Testquelle6">
-            <akn:keyword dictionary="TestDict6" showAs="Beispiel" value="AufteilungTest"/>
-            <akn:keyword dictionary="TestDict6" showAs="Beispiel" value="EndeTest"/>
-            <akn:keyword dictionary="TestDict6" showAs="Beispiel" value="Unterbrechung"/>
-            <akn:keyword dictionary="TestDict6" showAs="Beispiel" value="BerechnungX"/>
-         </akn:classification>
-         <akn:proprietary source="Testquelle6">
-            <ris:meta>
-               <ris:fileNumbers>
-                  <ris:fileNumber>TS 123456</ris:fileNumber>
-               </ris:fileNumbers>
-               <ris:documentType>Urteil</ris:documentType>
-               <ris:courtLocation>Testort6</ris:courtLocation>
-               <ris:courtType>LG</ris:courtType>
-               <ris:legalEffect>KEINE_ANGABE</ris:legalEffect>
-               <ris:fieldOfLaws>
-                  <ris:fieldOfLaw>Testaufteilung</ris:fieldOfLaw>
-                  <ris:fieldOfLaw>Testende</ris:fieldOfLaw>
-                  <ris:fieldOfLaw>Testunterbrechung</ris:fieldOfLaw>
-                  <ris:fieldOfLaw>BerechnungX</ris:fieldOfLaw>
-               </ris:fieldOfLaws>
-               <ris:judicialBody>8. Kammer</ris:judicialBody>
-               <ris:publicationStatus>PUBLISHED</ris:publicationStatus>
-               <ris:error>false</ris:error>
-               <ris:documentationOffice>LG Test6</ris:documentationOffice>
-               <ris:procedures>
-                  <ris:procedure>TS654321</ris:procedure>
-               </ris:procedures>
-            </ris:meta>
-         </akn:proprietary>
-      </akn:meta>
-      <akn:header>
-         <akn:p>Testheader für Urteil 6.</akn:p>
-      </akn:header>
-      <akn:judgmentBody>
-         <akn:introduction>
-            <akn:block name="Orientierungssatz">
-               <akn:embeddedStructure>
-                  <akn:p>1. Fiktiver Satz für den Fall der Aufteilung und Berechnung.</akn:p>
-                  <akn:p>2. Weitere Testangaben werden hier exemplarisch dargestellt.</akn:p>
-               </akn:embeddedStructure>
-            </akn:block>
-            <akn:block name="Tenor">
-               <akn:embeddedStructure>
-                  <akn:p>Der Beklagte wird zur Zahlung verurteilt.</akn:p>
-                  <akn:p>Die Kostenlast wird vollumfänglich übernommen.</akn:p>
-               </akn:embeddedStructure>
-            </akn:block>
-         </akn:introduction>
-         <akn:background>
-            <akn:hcontainer name="randnummer">
-               <akn:num>1</akn:num>
-               <akn:content>
-                  <akn:p>Testbeschreibung des fiktiven Sachverhalts.</akn:p>
-               </akn:content>
-            </akn:hcontainer>
-         </akn:background>
-      </akn:judgmentBody>
-   </akn:judgment>
+                xsi:schemaLocation="http://docs.oasis-open.org/legaldocml/ns/akn/3.0 https://docs.oasis-open.org/legaldocml/akn-core/v1.0/os/part2-specs/schemas/akomantoso30.xsd">
+
+    <akn:judgment name="Urteil">
+        <akn:meta>
+            <akn:identification source="#ris">
+                <akn:FRBRWork>
+                    <akn:FRBRthis value="KORE600500000"/>
+                    <akn:FRBRuri value="KORE600500000"/>
+                    <akn:FRBRalias name="Übergreifende ID" value="fake-uuid-0006"/>
+                    <akn:FRBRalias name="Dokumentnummer" value="KORE600500000" />
+                    <akn:FRBRdate eId="Entscheidungsdatum" date="2025-04-09" name="Entscheidungsdatum"/>
+                    <akn:FRBRauthor href="#gericht"/>
+                    <akn:FRBRcountry value="de"/>
+                </akn:FRBRWork>
+                <akn:FRBRExpression>
+                    <akn:FRBRthis value="KORE600500000/dokument"/>
+                    <akn:FRBRuri value="KORE600500000/dokument"/>
+                    <akn:FRBRdate date="2025-04-09" name="Entscheidungsdatum"/>
+                    <akn:FRBRauthor href="#gericht"/>
+                    <akn:FRBRlanguage language="deu"/>
+                </akn:FRBRExpression>
+                <akn:FRBRManifestation>
+                    <akn:FRBRthis value="KORE600500000/dokument.xml"/>
+                    <akn:FRBRuri value="KORE600500000/dokument.xml"/>
+                    <akn:FRBRdate date="2025-04-09" name="XML Transformation"/>
+                    <akn:FRBRauthor href="#lg-test6-dokumentationsstelle"/>
+                </akn:FRBRManifestation>
+            </akn:identification>
+            <akn:classification source="#ris">
+                <akn:keyword ris:domainTerm="Schlagwort" dictionary="" showAs="AufteilungTest" value="AufteilungTest"/>
+                <akn:keyword ris:domainTerm="Schlagwort" dictionary="" showAs="EndeTest" value="EndeTest"/>
+                <akn:keyword ris:domainTerm="Schlagwort" dictionary="" showAs="Unterbrechung" value="Unterbrechung"/>
+                <akn:keyword ris:domainTerm="Schlagwort" dictionary="" showAs="BerechnungX" value="BerechnungX"/>
+            </akn:classification>
+            <akn:analysis source="#ris">
+                <akn:otherAnalysis source="#ris">
+                    <ris:dokumentarischeKurztexte domainTerm="Dokumentarische Kurztexte">
+                        <ris:titelzeile akn:eId="titelzeile" ris:domainTerm="Titelzeile">
+                            <akn:p>Urteil 6.</akn:p>
+                        </ris:titelzeile>
+                        <ris:orientierungssatz ris:domainTerm="Orientierungssatz">
+                            <akn:p>1. Fiktiver Satz für den Fall der Aufteilung und Berechnung.</akn:p>
+                            <akn:p>2. Weitere Testangaben werden hier exemplarisch dargestellt.</akn:p>
+                        </ris:orientierungssatz>
+                    </ris:dokumentarischeKurztexte>
+                </akn:otherAnalysis>
+            </akn:analysis>
+            <akn:references source="#ris">
+                <akn:TLCOrganization eId="ris" href="" showAs="Rechtsinformationssystem des Bundes"/>
+                <akn:TLCOrganization eId="lg-test6-dokumentationsstelle" href="" showAs="LG Test6"/>
+                <akn:TLCOrganization eId="gericht" href="" showAs="LG"/>
+                <akn:TLCOrganization eId="spruchkoerper" href="" showAs="8. Kammer"/>
+            </akn:references>
+            <akn:proprietary source="ris">
+                <ris:meta>
+                    <ris:aktenzeichenListe domainTerm="Liste der Aktenzeichen">
+                        <ris:aktenzeichen domainTerm="Aktenzeichen" akn:refersTo="#aktenzeichen">TS 123456</ris:aktenzeichen>
+                    </ris:aktenzeichenListe>
+                    <ris:dokumenttyp akn:eId="dokumenttyp" domainTerm="Dokumenttyp">Urteil</ris:dokumenttyp>
+                    <ris:gericht domainTerm="Gericht" akn:refersTo="#gericht">
+                        <ris:gerichtstyp domainTerm="Gerichtstyp">LG</ris:gerichtstyp>
+                        <ris:gerichtsort domainTerm="Gerichtsort">Testort6</ris:gerichtsort>
+                        <ris:spruchkoerper domainTerm="Spruchkörper" akn:refersTo="#spruchkoerper">8. Kammer</ris:spruchkoerper>
+                    </ris:gericht>
+                    <ris:rechtskraft domainTerm="Rechtskraft">Keine Angabe</ris:rechtskraft>
+                    <ris:sachgebiete domainTerm="Sachgebiete">
+                        <ris:sachgebiet domainTerm="Sachgebiet" notation="neu">Testaufteilung</ris:sachgebiet>
+                        <ris:sachgebiet domainTerm="Sachgebiet" notation="neu">Testende</ris:sachgebiet>
+                        <ris:sachgebiet domainTerm="Sachgebiet" notation="neu">Testunterbrechung</ris:sachgebiet>
+                        <ris:sachgebiet domainTerm="Sachgebiet" notation="neu">BerechnungX</ris:sachgebiet>
+                    </ris:sachgebiete>
+                    <ris:dokumentationsstelle domainTerm="Dokumentationsstelle" akn:refersTo="#lg-test6-dokumentationsstelle">LG Test6</ris:dokumentationsstelle>
+                </ris:meta>
+            </akn:proprietary>
+        </akn:meta>
+        <akn:header>
+            <akn:p>Testheader für Urteil 6.</akn:p>
+            <akn:p>Aktenzeichen: <akn:docNumber refersTo="#aktenzeichen">TS 123456</akn:docNumber></akn:p>
+            <akn:p>Entscheidungsdatum: <akn:docDate date="2025-04-09" refersTo="#entscheidungsdatum">09.04.2025</akn:docDate></akn:p>
+            <akn:p>Gericht: <akn:courtType refersTo="#gericht">LG</akn:courtType></akn:p>
+            <akn:p>Dokumenttyp: <akn:docType refersTo="#dokumenttyp">Urteil</akn:docType></akn:p>
+            <akn:p>Kurztitel: <akn:shortTitle>
+                <akn:embeddedStructure>
+                    <akn:p>Testheader für Urteil 6.</akn:p>
+                </akn:embeddedStructure>
+            </akn:shortTitle>
+            </akn:p>
+        </akn:header>
+        <akn:judgmentBody>
+            <akn:decision ris:domainTerm="Tenor">
+                <akn:p>Der Beklagte wird zur Zahlung verurteilt.</akn:p>
+                <akn:p>Die Kostenlast wird vollumfänglich übernommen.</akn:p>
+            </akn:decision>
+            <akn:background ris:domainTerm="Tatbestand">
+                <akn:hcontainer name="randnummer">
+                    <akn:num>1</akn:num>
+                    <akn:content>
+                        <akn:p>Testbeschreibung des fiktiven Sachverhalts.</akn:p>
+                    </akn:content>
+                </akn:hcontainer>
+            </akn:background>
+        </akn:judgmentBody>
+    </akn:judgment>
 </akn:akomaNtoso>
