@@ -1,6 +1,5 @@
 package de.bund.digitalservice.ris.search.caselawhandover.shared.caselawldml;
 
-import de.bund.digitalservice.ris.search.models.ldml.directive.OtherReferences;
 import jakarta.xml.bind.annotation.XmlElement;
 import lombok.Getter;
 import lombok.Setter;
