@@ -1,9 +1,5 @@
 package de.bund.digitalservice.ris.search.caselawhandover.shared.caselawldml;
 
-import de.bund.digitalservice.ris.search.models.ldml.literature.LiteratureNamespaces;
-import de.bund.digitalservice.ris.search.models.ldml.literature.sli.TlcEvent;
-import de.bund.digitalservice.ris.search.models.ldml.literature.sli.TlcOrganization;
-import de.bund.digitalservice.ris.search.models.ldml.literature.sli.TlcPerson;
 import jakarta.xml.bind.annotation.XmlElement;
 import java.util.List;
 import lombok.Getter;
@@ -26,12 +22,12 @@ import lombok.Getter;
 @Getter
 public class References {
 
-  @XmlElement(name = "TLCPerson", namespace = LiteratureNamespaces.AKN_NS)
+  @XmlElement(name = "TLCPerson", namespace = CaseLawLdmlNamespaces.AKN_NS)
   private List<TlcPerson> tlcPersons;
 
-  @XmlElement(name = "TLCOrganization", namespace = LiteratureNamespaces.AKN_NS)
+  @XmlElement(name = "TLCOrganization", namespace = CaseLawLdmlNamespaces.AKN_NS)
   private List<TlcOrganization> tlcOrganizations;
 
-  @XmlElement(name = "TLCEvent", namespace = LiteratureNamespaces.AKN_NS)
+  @XmlElement(name = "TLCEvent", namespace = CaseLawLdmlNamespaces.AKN_NS)
   private List<TlcEvent> tlcEvents;
 }
