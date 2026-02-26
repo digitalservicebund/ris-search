@@ -28,7 +28,7 @@
   },
   "packageManager": "pnpm@10.28.1",
   "dependencies": {
-    "@digitalservicebund/ris-ui": "3.21.1",
+    "@digitalservicebund/ris-ui": "3.21.3",
     "@nuxtjs/mdc": "0.20.0",
     "@nuxtjs/sitemap": "7.6.0",
     "@scalar/api-reference": "1.43.8",
