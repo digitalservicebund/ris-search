@@ -21,7 +21,7 @@ jobs:
     permissions:
       id-token: write
     steps:
-      - uses: chainguard-dev/actions/setup-gitsign@6f74cdeee55d70b03fa220746d6739dbbb3e9421
+      - uses: chainguard-dev/actions/setup-gitsign@0cf1221da92242205c2d9f8a63add344ebd6b304
       - name: Deploy new images
         uses: digitalservicebund/argocd-deploy@4e758f584953506c571951ffcba33d6a6246e856
         with:
@@ -46,7 +46,7 @@ jobs:
     permissions:
       id-token: write
     steps:
-      - uses: chainguard-dev/actions/setup-gitsign@6f74cdeee55d70b03fa220746d6739dbbb3e9421
+      - uses: chainguard-dev/actions/setup-gitsign@0cf1221da92242205c2d9f8a63add344ebd6b304
       - name: Deploy new images
         uses: digitalservicebund/argocd-deploy@4e758f584953506c571951ffcba33d6a6246e856
         with:
