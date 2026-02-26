@@ -5,7 +5,6 @@ import static de.bund.digitalservice.ris.search.utils.MappingUtils.cleanText;
 import de.bund.digitalservice.ris.search.models.Attachment;
 import de.bund.digitalservice.ris.search.models.ldml.TimeInterval;
 import de.bund.digitalservice.ris.search.models.opensearch.Article;
-import de.bund.digitalservice.ris.search.models.opensearch.FootNote;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.models.opensearch.TableOfContentsItem;
 import de.bund.digitalservice.ris.search.utils.LdmlTemporalData;
@@ -102,6 +101,7 @@ public class NormLdmlToOpenSearchMapper {
       "//*[local-name()='preamble']/*[local-name()='formula']";
   public static final String X_PATH_OFFICIAL_FOOTNOTES = "//*[local-name()='authorialNote']";
   private static final String X_PATH_FOOTNOTES = "//*[local-name()='note']";
+  private static final String X_PATH_PREFACE_AUTHORIAL_NOTES = "//akn:preface//akn:authorialNote";
 
   private static final String EINGANGSFORMEL = "Eingangsformel";
   private static final String SCHLUSSFORMEL = "Schlussformel";
@@ -138,7 +138,8 @@ public class NormLdmlToOpenSearchMapper {
           xmlDocument.getElementExistByXpath(X_PATH_BEDINGTES_INKRAFTTRETEN);
 
       var prefaceEId = xmlDocument.getElementByXpath(X_PATH_PREFACE_EID);
-      var nodes = xmlDocument.getNodesByXpath(X_PATH_FOOTNOTES);
+      var footNotes = xmlDocument.getNodesByXpath(X_PATH_FOOTNOTES);
+      var prefaceAuthorialNotes = xmlDocument.getNodesByXpath(X_PATH_PREFACE_AUTHORIAL_NOTES);
 
       if (isGegenstandslos) {
         logger.warn("Ignoring Gegenstandslos until logic is defined");
@@ -199,7 +200,8 @@ public class NormLdmlToOpenSearchMapper {
               .articleTexts(articleTexts)
               .officialFootNotes(getOfficialFootNotes(xmlDocument, attachments))
               .indexedAt(Instant.now().toString())
-              .prefaceFootNotes(getPrefaceFootNotes(nodes, prefaceEId))
+              .prefaceFootNotes(getPrefaceFootNotes(footNotes, prefaceEId))
+              .prefaceAuthorialNotes(getPrefaceAuthorialNotes(prefaceAuthorialNotes))
               .build());
     } catch (Exception e) {
       logger.warn("Error to create Norms from XML content.", e);
@@ -207,20 +209,28 @@ public class NormLdmlToOpenSearchMapper {
     }
   }
 
-  private static List<FootNote> getPrefaceFootNotes(NodeList footnotes, String eId) {
-    List<FootNote> prefaceFootnotes = new ArrayList<>();
+  private static List<String> getPrefaceFootNotes(NodeList footnotes, String eId) {
+    List<String> prefaceFootnotes = new ArrayList<>();
     for (int i = 0; i < footnotes.getLength(); i++) {
       Node note = footnotes.item(i);
       String placementBase =
           note.getAttributes().getNamedItem("placementBase").getNodeValue().substring(1);
       if (placementBase.equals(eId)) {
-        prefaceFootnotes.add(
-            new FootNote(
-                note.getAttributes().getNamedItem("eId").getNodeValue(), note.getTextContent()));
+        prefaceFootnotes.add(note.getTextContent());
       }
     }
 
     return prefaceFootnotes;
+  }
+
+  private static List<String> getPrefaceAuthorialNotes(NodeList footnotes) {
+    List<String> authorialNotes = new ArrayList<>();
+    for (int i = 0; i < footnotes.getLength(); i++) {
+      Node note = footnotes.item(i);
+      authorialNotes.add(note.getTextContent());
+    }
+
+    return authorialNotes;
   }
 
   private static String getOfficialFootNotes(XmlDocument xmlDocument, List<Attachment> attachments)

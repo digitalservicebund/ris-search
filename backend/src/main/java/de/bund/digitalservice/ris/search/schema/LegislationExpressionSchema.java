@@ -57,6 +57,8 @@ public record LegislationExpressionSchema(
                 "List of components (articles, preambles, conclusions, attachments, …) that form this legislation item.")
         @Nullable
         List<LegislationExpressionPartSchema> hasPart,
+    List<String> footNotes,
+    List<String> authorialNotes,
     @Nullable List<LegislationObjectSchema> encoding)
     implements JsonldResource {
 

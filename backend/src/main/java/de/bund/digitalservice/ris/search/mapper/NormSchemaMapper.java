@@ -61,6 +61,7 @@ public class NormSchemaMapper {
             .encoding(encodings)
             .tableOfContents(buildTableOfContents(norm.getTableOfContents()))
             .hasPart(buildPartList(norm, expressionId))
+            .footNotes(norm.getPrefaceFootNotes())
             .build();
 
     PublicationIssueSchema publicationIssue =
