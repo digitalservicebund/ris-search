@@ -102,6 +102,8 @@ public class NormLdmlToOpenSearchMapper {
   public static final String X_PATH_OFFICIAL_FOOTNOTES = "//*[local-name()='authorialNote']";
   private static final String X_PATH_FOOTNOTES = "//*[local-name()='note']";
   private static final String X_PATH_PREFACE_AUTHORIAL_NOTES = "//akn:preface//akn:authorialNote";
+  private static final String X_PATH_STANDANGABE = "//ris:standangabe[@type!='hinweis']";
+  private static final String X_PATH_STANDANGBAE_HINWEIS = "//ris:standangabe[@type='hinweis']";
 
   private static final String EINGANGSFORMEL = "Eingangsformel";
   private static final String SCHLUSSFORMEL = "Schlussformel";
@@ -139,7 +141,6 @@ public class NormLdmlToOpenSearchMapper {
 
       var prefaceEId = xmlDocument.getElementByXpath(X_PATH_PREFACE_EID);
       var footNotes = xmlDocument.getNodesByXpath(X_PATH_FOOTNOTES);
-      var prefaceAuthorialNotes = xmlDocument.getNodesByXpath(X_PATH_PREFACE_AUTHORIAL_NOTES);
 
       if (isGegenstandslos) {
         logger.warn("Ignoring Gegenstandslos until logic is defined");
@@ -201,7 +202,13 @@ public class NormLdmlToOpenSearchMapper {
               .officialFootNotes(getOfficialFootNotes(xmlDocument, attachments))
               .indexedAt(Instant.now().toString())
               .prefaceFootNotes(getPrefaceFootNotes(footNotes, prefaceEId))
-              .prefaceAuthorialNotes(getPrefaceAuthorialNotes(prefaceAuthorialNotes))
+              .prefaceAuthorialNotes(
+                  getTextContentOfNodeList(
+                      xmlDocument.getNodesByXpath(X_PATH_PREFACE_AUTHORIAL_NOTES)))
+              .provisionStatuses(
+                  getTextContentOfNodeList(xmlDocument.getNodesByXpath(X_PATH_STANDANGABE)))
+              .privisionStatusNotes(
+                  getTextContentOfNodeList(xmlDocument.getNodesByXpath(X_PATH_STANDANGBAE_HINWEIS)))
               .build());
     } catch (Exception e) {
       logger.warn("Error to create Norms from XML content.", e);
@@ -223,7 +230,7 @@ public class NormLdmlToOpenSearchMapper {
     return prefaceFootnotes;
   }
 
-  private static List<String> getPrefaceAuthorialNotes(NodeList footnotes) {
+  private static List<String> getTextContentOfNodeList(NodeList footnotes) {
     List<String> authorialNotes = new ArrayList<>();
     for (int i = 0; i < footnotes.getLength(); i++) {
       Node note = footnotes.item(i);

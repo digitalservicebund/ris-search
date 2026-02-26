@@ -115,6 +115,12 @@ public final class Norm implements AbstractSearchEntity {
   @Field(name = Fields.PREFACE_AUTHORIAL_NOTES, index = false)
   private List<String> prefaceAuthorialNotes;
 
+  @Field(name = Fields.PROVISION_STATUSES, index = false)
+  private List<String> provisionStatuses;
+
+  @Field(name = Fields.PROVISION_STATUS_NOTES, index = false)
+  private List<String> privisionStatusNotes;
+
   /**
    * The Fields class provides a centralized collection of constant field names that are used as
    * keys, primarily within the context of the Norm entity in OpenSearch models. These constants
@@ -157,5 +163,7 @@ public final class Norm implements AbstractSearchEntity {
     public static final String OFFICIAL_FOOT_NOTES = "official_foot_notes";
     public static final String PREFACE_FOOT_NOTES = "preface_foot_notes";
     public static final String PREFACE_AUTHORIAL_NOTES = "preface_authorial_notes";
+    public static final String PROVISION_STATUSES = "provision_statuses";
+    public static final String PROVISION_STATUS_NOTES = "privision_status_notes";
   }
 }
