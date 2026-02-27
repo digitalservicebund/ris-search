@@ -12,6 +12,7 @@ vi.mock("~/composables/usePostHog", () => ({
     userConsent: mockUserConsent,
     setTracking: mockSetTracking,
     initialize: mockInitialize,
+    postHog: ref(undefined),
   }),
 }));
 

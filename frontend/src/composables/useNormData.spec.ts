@@ -1,4 +1,3 @@
-import { mockNuxtImport } from "@nuxt/test-utils/runtime";
 import { describe, expect, it, vi } from "vitest";
 import { useFetchNormArticleContent, useFetchNormContent } from "./useNormData";
 import type {
@@ -6,6 +5,7 @@ import type {
   LegislationManifestation,
   LegislationWork,
 } from "~/types";
+import type { FetchHook } from "ofetch";
 
 const { mockFetch } = vi.hoisted(() => {
   return {
@@ -13,15 +13,10 @@ const { mockFetch } = vi.hoisted(() => {
   };
 });
 
-mockNuxtImport("useNuxtApp", () => {
-  const nuxtApp = (globalThis as unknown as Window)?.useNuxtApp?.() ?? {};
-  return () => {
-    return {
-      ...nuxtApp,
-      $risBackend: mockFetch,
-    };
-  };
-});
+vi.mock("~/plugins/risBackend", () => ({
+  default: defineNuxtPlugin(() => ({ provide: { risBackend: mockFetch } })),
+  extendOnRequest: (...cbs: FetchHook[]) => cbs,
+}));
 
 describe("useNormData", () => {
   const consoleInfoMock = vi

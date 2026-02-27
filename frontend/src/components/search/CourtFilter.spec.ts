@@ -7,12 +7,15 @@ import { courtFilterDefaultSuggestions } from "~/utils/search/courtFilter";
 
 const mockData = [{ id: "TG Berlin", label: "Tagesgericht Berlin", count: 1 }];
 
-const mockFetch = vi.fn().mockResolvedValue(mockData);
-
-vi.stubGlobal("$fetch", mockFetch);
+vi.mock("~/plugins/risBackend", () => ({
+  default: vi.fn(),
+  extendOnRequest: (...cbs: unknown[]) => cbs,
+}));
 
 describe("court autocomplete", () => {
-  afterEach(() => mockFetch.mockClear());
+  afterEach(() => {
+    vi.resetAllMocks();
+  });
 
   it("is not visible by default", async () => {
     await renderSuspended(CourtFilter);
@@ -48,6 +51,9 @@ describe("court autocomplete", () => {
     });
 
     it("calls the API when typing and shows suggestions", async () => {
+      const fetchSpy = vi
+        .spyOn(globalThis as any, "$fetch")
+        .mockResolvedValue(mockData);
       const user = userEvent.setup();
 
       await renderSuspended(CourtFilter);
@@ -56,7 +62,7 @@ describe("court autocomplete", () => {
       await user.type(input, "Ber");
 
       await waitFor(() => {
-        expect(mockFetch).toHaveBeenCalledWith(
+        expect(fetchSpy).toHaveBeenCalledWith(
           expect.anything(),
           expect.objectContaining({ params: { prefix: "Ber" } }),
         );
@@ -66,6 +72,9 @@ describe("court autocomplete", () => {
     });
 
     it("shows default suggestions when dropdown is opened without input", async () => {
+      const fetchSpy = vi
+        .spyOn(globalThis as any, "$fetch")
+        .mockResolvedValue(mockData);
       const user = userEvent.setup();
 
       await renderSuspended(CourtFilter);
@@ -78,7 +87,7 @@ describe("court autocomplete", () => {
 
       // Default suggestions should appear without API call
       await waitFor(() => {
-        expect(mockFetch).not.toHaveBeenCalled();
+        expect(fetchSpy).not.toHaveBeenCalled();
       });
 
       // Check that default suggestions are shown
@@ -102,6 +111,9 @@ describe("court autocomplete", () => {
     });
 
     it("uses current value as search prefix when dropdown is opened", async () => {
+      const fetchSpy = vi
+        .spyOn(globalThis as any, "$fetch")
+        .mockResolvedValue(mockData);
       const user = userEvent.setup();
 
       await renderSuspended(CourtFilter, {
@@ -117,7 +129,7 @@ describe("court autocomplete", () => {
       );
 
       await waitFor(() => {
-        expect(mockFetch).toHaveBeenCalledWith(
+        expect(fetchSpy).toHaveBeenCalledWith(
           expect.anything(),
           expect.objectContaining({ params: { prefix: "existing court" } }),
         );

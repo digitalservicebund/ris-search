@@ -18,6 +18,8 @@ type BackendOptions = {
 const mockPostHog = {
   searchPerformed: vi.fn(),
   noSearchResults: vi.fn(),
+  initialize: vi.fn(),
+  postHog: ref(undefined),
 };
 
 const {
@@ -65,6 +67,7 @@ vi.mock("~/composables/usePostHog", () => ({
 }));
 
 vi.mock("~/plugins/risBackend", () => ({
+  default: vi.fn(),
   extendOnRequest: (...cbs: OnRequestHook[]) => cbs,
 }));
 
