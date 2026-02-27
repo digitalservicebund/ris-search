@@ -59,6 +59,8 @@ public record LegislationExpressionSchema(
         List<LegislationExpressionPartSchema> hasPart,
     List<String> footNotes,
     List<String> authorialNotes,
+    List<String> consolidationStatus,
+    List<String> consolidationStatusNotes,
     @Nullable List<LegislationObjectSchema> encoding)
     implements JsonldResource {
 

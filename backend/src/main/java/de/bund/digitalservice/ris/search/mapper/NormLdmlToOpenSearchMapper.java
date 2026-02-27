@@ -205,9 +205,9 @@ public class NormLdmlToOpenSearchMapper {
               .prefaceAuthorialNotes(
                   getTextContentOfNodeList(
                       xmlDocument.getNodesByXpath(X_PATH_PREFACE_AUTHORIAL_NOTES)))
-              .provisionStatuses(
+              .consolidationStatuses(
                   getTextContentOfNodeList(xmlDocument.getNodesByXpath(X_PATH_STANDANGABE)))
-              .privisionStatusNotes(
+              .consolidationStatusNotes(
                   getTextContentOfNodeList(xmlDocument.getNodesByXpath(X_PATH_STANDANGBAE_HINWEIS)))
               .build());
     } catch (Exception e) {
