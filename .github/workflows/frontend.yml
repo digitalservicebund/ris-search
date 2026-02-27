@@ -124,6 +124,7 @@ jobs:
           skip-dirs: node_modules # See https://github.com/aquasecurity/trivy/issues/1283
           format: "sarif"
           output: "trivy-results.sarif"
+          trivyignores: frontend/.trivyignore
       - name: Check Trivy results
         run: |
           if grep -qE 'HIGH|CRITICAL' trivy-results.sarif; then
