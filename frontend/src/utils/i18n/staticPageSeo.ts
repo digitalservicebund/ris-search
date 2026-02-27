@@ -10,7 +10,6 @@ export type StaticPage =
   | "cookies"
   | "open-source"
   | "nutzungstests"
-  | "api"
   | "nutzungstests-datenschutz"
   | "translations-list";
 
@@ -74,11 +73,6 @@ export const staticPageSeo: Record<StaticPage, StaticPageSeo> = {
     title: "Nutzungstests zum Rechtsinformationsportal des Bundes",
     description:
       "Erfahren Sie, wie das Portal getestet wird, welche Ergebnisse vorliegen und wie Sie teilnehmen können.",
-  },
-  api: {
-    title: "API-Dokumentation des Rechtsinformationsportals des Bundes",
-    description:
-      "Technische Dokumentation und API-Referenz für den Zugriff auf Rechtsinformationen des Bundes.",
   },
   "nutzungstests-datenschutz": {
     title:
