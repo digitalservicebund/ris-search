@@ -6,6 +6,7 @@ import de.bund.digitalservice.ris.search.models.Attachment;
 import de.bund.digitalservice.ris.search.models.ldml.TimeInterval;
 import de.bund.digitalservice.ris.search.models.opensearch.Article;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
+import de.bund.digitalservice.ris.search.models.opensearch.Preface;
 import de.bund.digitalservice.ris.search.models.opensearch.TableOfContentsItem;
 import de.bund.digitalservice.ris.search.utils.LdmlTemporalData;
 import de.bund.digitalservice.ris.search.utils.XmlDocument;
@@ -75,6 +76,8 @@ public class NormLdmlToOpenSearchMapper {
   private static final String X_PATH_DATE_AUSFERTIGUNG =
       "//*[local-name()='preface']/*[local-name()='block']/*[local-name()='date' and @refersTo='ausfertigung-datum']/@date";
   private static final String X_PATH_PREFACE_EID = "//*[local-name()='preface']/@eId";
+  private static final String X_PATH_PREFACE_CONTENT =
+      "//*[local-name()='preface']//*[local-name()='container']//text()[normalize-space()]";
   private static final String X_PATH_WORK_NUMBER =
       "//*[local-name()='FRBRWork']/*[local-name()='FRBRnumber']/@value";
   private static final String X_PATH_WORK_NAME =
@@ -101,7 +104,8 @@ public class NormLdmlToOpenSearchMapper {
       "//*[local-name()='preamble']/*[local-name()='formula']";
   public static final String X_PATH_OFFICIAL_FOOTNOTES = "//*[local-name()='authorialNote']";
   private static final String X_PATH_FOOTNOTES = "//*[local-name()='note']";
-  private static final String X_PATH_PREFACE_AUTHORIAL_NOTES = "//akn:preface//akn:authorialNote";
+  private static final String X_PATH_PREFACE_AUTHORIAL_NOTES =
+      "//akn:preface//akn:authorialNote//*[text()]";
   private static final String X_PATH_STANDANGABE = "//ris:standangabe[@type!='hinweis']";
   private static final String X_PATH_STANDANGBAE_HINWEIS = "//ris:standangabe[@type='hinweis']";
 
@@ -139,7 +143,6 @@ public class NormLdmlToOpenSearchMapper {
       boolean isBedingtesInkrafttreten =
           xmlDocument.getElementExistByXpath(X_PATH_BEDINGTES_INKRAFTTRETEN);
 
-      var prefaceEId = xmlDocument.getElementByXpath(X_PATH_PREFACE_EID);
       var footNotes = xmlDocument.getNodesByXpath(X_PATH_FOOTNOTES);
 
       if (isGegenstandslos) {
@@ -201,11 +204,8 @@ public class NormLdmlToOpenSearchMapper {
               .articleTexts(articleTexts)
               .officialFootNotes(getOfficialFootNotes(xmlDocument, attachments))
               .indexedAt(Instant.now().toString())
-              .prefaceFootNotes(getPrefaceFootNotes(footNotes, prefaceEId))
-              .prefaceAuthorialNotes(
-                  getTextContentOfNodeList(
-                      xmlDocument.getNodesByXpath(X_PATH_PREFACE_AUTHORIAL_NOTES)))
-              .consolidationStatuses(
+              .preface(getPreface(xmlDocument, footNotes))
+              .consolidationStatus(
                   getTextContentOfNodeList(xmlDocument.getNodesByXpath(X_PATH_STANDANGABE)))
               .consolidationStatusNotes(
                   getTextContentOfNodeList(xmlDocument.getNodesByXpath(X_PATH_STANDANGBAE_HINWEIS)))
@@ -216,25 +216,32 @@ public class NormLdmlToOpenSearchMapper {
     }
   }
 
-  private static List<String> getPrefaceFootNotes(NodeList footnotes, String eId) {
+  private static Preface getPreface(XmlDocument document, NodeList footNotes)
+      throws XPathExpressionException {
+    var prefaceEId = document.getElementByXpath(X_PATH_PREFACE_EID);
+
     List<String> prefaceFootnotes = new ArrayList<>();
-    for (int i = 0; i < footnotes.getLength(); i++) {
-      Node note = footnotes.item(i);
+    for (int i = 0; i < footNotes.getLength(); i++) {
+      Node note = footNotes.item(i);
       String placementBase =
           note.getAttributes().getNamedItem("placementBase").getNodeValue().substring(1);
-      if (placementBase.equals(eId)) {
-        prefaceFootnotes.add(note.getTextContent());
+      if (placementBase.equals(prefaceEId)) {
+        prefaceFootnotes.add(note.getTextContent().replaceAll("\\s+", " ").trim());
       }
     }
 
-    return prefaceFootnotes;
+    List<String> authorialNotes =
+        getTextContentOfNodeList(document.getNodesByXpath(X_PATH_PREFACE_AUTHORIAL_NOTES));
+    List<String> content =
+        getTextContentOfNodeList(document.getNodesByXpath(X_PATH_PREFACE_CONTENT));
+    return new Preface(prefaceEId, content, prefaceFootnotes, authorialNotes);
   }
 
   private static List<String> getTextContentOfNodeList(NodeList footnotes) {
     List<String> authorialNotes = new ArrayList<>();
     for (int i = 0; i < footnotes.getLength(); i++) {
       Node note = footnotes.item(i);
-      authorialNotes.add(note.getTextContent());
+      authorialNotes.add(note.getTextContent().replaceAll("\\s+", " ").trim());
     }
 
     return authorialNotes;

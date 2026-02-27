@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-model href="Grammatiken/Norms/legalDocML.de.sch" schematypens="http://purl.oclc.org/dsdl/schematron"?>
 <akn:akomaNtoso xmlns:akn="http://Inhaltsdaten.LegalDocML.de/1.8.2/"
-                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://MetadatenRIS.LegalDocML.de/1.8.2/ Grammatiken/Norms/legalDocML.de-metadaten-ris.xsd http://MetadatenRegelungstext.LegalDocML.de/1.8.2/ Grammatiken/Norms/legalDocML.de-metadaten-regelungstext.xsd http://MetadatenRechtsetzungsdokument.LegalDocML.de/1.8.2/ Grammatiken/Norms/legalDocML.de-metadaten-rechtsetzungsdokument.xsd http://Inhaltsdaten.LegalDocML.de/1.8.2/ Grammatiken/Norms/legalDocML.de-regelungstextverkuendungsfassung.xsd">
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://MetadatenRIS.LegalDocML.de/1.8.2/ ../../../../../../../../../../../src/test/resources/Grammatiken/Norms/legalDocML.de-metadaten-ris.xsd http://MetadatenRegelungstext.LegalDocML.de/1.8.2/ ../../../../../../../../../../../src/test/resources/Grammatiken/Norms/legalDocML.de-metadaten-regelungstext.xsd http://MetadatenRechtsetzungsdokument.LegalDocML.de/1.8.2/ ../../../../../../../../../../../src/test/resources/Grammatiken/Norms/legalDocML.de-metadaten-rechtsetzungsdokument.xsd http://Inhaltsdaten.LegalDocML.de/1.8.2/ ../../../../../../../../../../../src/test/resources/Grammatiken/Norms/legalDocML.de-regelungstextverkuendungsfassung.xsd">
     <akn:act name="/akn/ontology/de/concept/documenttype/bund/regelungstext-verkuendung">
         <akn:meta GUID="a1111111-1111-1111-1111-111111111111" eId="meta-n1">
             <akn:identification GUID="a2222222-2222-2222-2222-222222222222" eId="meta-n1_ident-n1" source="attributsemantik-noch-undefiniert">
@@ -150,8 +150,7 @@
                         <akn:authorialNote GUID="d5555555-5555-5555-5555-5555555555ef" eId="einleitung-n1_doktitel-n1_text-n1_doctitel-n1_amtlfnote-n1"
                                            marker="❃">
                             <akn:p GUID="d5555555-5555-5555-5555-555555555523" eId="einleitung-n1_doktitel-n1_text-n1_doctitel-n1_amtlfnote-n1_text-n1">
-                                (Diese Fußnote im Titel wurde im End-to-end-Datenbestand ergänzt und ist keine echte
-                                amtliche Fußnote.)
+                                (Diese Fußnote im Titel wurde im End-to-end-Datenbestand ergänzt und ist keine echte amtliche Fußnote.)
                                 <akn:marker GUID="d5555555-5555-5555-5555-555555555589"
                                             eId="einleitung-n1_doktitel-n1_text-n1_doctitel-n1_amtlfnote-n1_text-n1_marker-n1"
                                             refersTo="satzende"/>
@@ -163,6 +162,15 @@
                     </akn:shortTitle>
                 </akn:p>
             </akn:longTitle>
+            <akn:container GUID="a513335c-a609-4a37-a929-fe9d350d0ac8" eId="einleitung-n1_dokcontainer-n1">
+                <akn:p GUID="6d69a6bf-a1dc-4b7e-8d16-2a5131589707" eId="einleitung-n1_dokcontainer-n1_text-n1">Dieses Gesetz dient der Umsetzung folgender Richtlinien:</akn:p>
+                <akn:blockList GUID="3afb9069-cb32-4973-8c86-bd2aa01d5eea" eId="einleitung-n1_dokcontainer-n1_liste-n1">
+                    <akn:item GUID="96ecfd7d-1b72-4dcc-9429-9917de3ceda3" eId="einleitung-n1_dokcontainer-n1_liste-n1_listenelem-n1">
+                        <akn:num GUID="0678bd81-8ac5-47ce-84de-bdf4f723e5fe" eId="einleitung-n1_dokcontainer-n1_liste-n1_listenelem-n1_bezeichnung-n1">1.</akn:num>
+                        <akn:p GUID="36c59a04-2cd5-42d0-a55c-5a2496e2de8e" eId="einleitung-n1_dokcontainer-n1_liste-n1_listenelem-n1_text-n1">Richtlinie 1</akn:p>
+                    </akn:item>
+                </akn:blockList>
+            </akn:container>
         </akn:preface>
         <akn:preamble GUID="d8888888-8888-8888-8888-888888888888" eId="präambel-n1">
             <akn:formula GUID="d9999999-9999-9999-9999-999999999999" eId="präambel-n1_formel-n1" name="attributsemantik-noch-undefiniert" refersTo="eingangsformel">

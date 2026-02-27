@@ -3,6 +3,7 @@ package de.bund.digitalservice.ris.search.mapper;
 import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.models.opensearch.Article;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
+import de.bund.digitalservice.ris.search.models.opensearch.Preface;
 import de.bund.digitalservice.ris.search.models.opensearch.TableOfContentsItem;
 import de.bund.digitalservice.ris.search.schema.LegalForceStatus;
 import de.bund.digitalservice.ris.search.schema.LegislationExpressionPartSchema;
@@ -12,8 +13,10 @@ import de.bund.digitalservice.ris.search.schema.LegislationWorkSchema;
 import de.bund.digitalservice.ris.search.schema.PublicationIssueSchema;
 import de.bund.digitalservice.ris.search.schema.TableOfContentsSchema;
 import de.bund.digitalservice.ris.search.utils.DateUtils;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import javax.annotation.Nullable;
 import org.springframework.http.MediaType;
 
@@ -61,9 +64,7 @@ public class NormSchemaMapper {
             .encoding(encodings)
             .tableOfContents(buildTableOfContents(norm.getTableOfContents()))
             .hasPart(buildPartList(norm, expressionId))
-            .footNotes(norm.getPrefaceFootNotes())
-            .authorialNotes(norm.getPrefaceAuthorialNotes())
-            .consolidationStatus(norm.getConsolidationStatuses())
+            .consolidationStatus(norm.getConsolidationStatus())
             .consolidationStatusNotes(norm.getConsolidationStatusNotes())
             .build();
 
@@ -113,8 +114,27 @@ public class NormSchemaMapper {
   }
 
   private static List<LegislationExpressionPartSchema> buildPartList(Norm norm, String idPrefix) {
-    if (norm.getArticles() == null) return Collections.emptyList();
-    return norm.getArticles().stream().map(article -> buildPart(article, idPrefix)).toList();
+    List<LegislationExpressionPartSchema> parts = new ArrayList<>();
+    if (!Objects.isNull(norm.getPreface())) {
+      parts.add(buildPrefacePart(norm.getPreface(), idPrefix));
+    }
+    if (!Objects.isNull(norm.getArticles())) {
+      parts.addAll(
+          norm.getArticles().stream().map(article -> buildPart(article, idPrefix)).toList());
+    }
+
+    return parts;
+  }
+
+  private static LegislationExpressionPartSchema buildPrefacePart(
+      Preface preface, String idPrefix) {
+    return LegislationExpressionPartSchema.builder()
+        .eId(idPrefix + "#" + preface.eid())
+        .name("Preface")
+        .text(preface.content())
+        .footNotes(preface.footNotes())
+        .authorialNotes(preface.authorialNotes())
+        .build();
   }
 
   /**
