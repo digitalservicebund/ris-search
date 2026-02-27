@@ -11,17 +11,19 @@ import { cookieStoreBackend, cookieStoreMock } from "~/tests/cookieStoreMock";
 import { getPostHogConfig } from "~/tests/postHogUtils";
 import { DocumentKind } from "~/types";
 
-const { useRuntimeConfigMock } = vi.hoisted(() => {
-  return {
-    useRuntimeConfigMock: vi.fn(() => {
-      return getPostHogConfig("key", "host");
-    }),
-  };
-});
-
-mockNuxtImport("useRuntimeConfig", () => {
-  return useRuntimeConfigMock;
-});
+mockNuxtImport<() => ReturnType<typeof useRuntimeConfig>>(
+  "useRuntimeConfig",
+  (original) => {
+    return () =>
+      ({
+        ...original(),
+        public: {
+          ...original().public,
+          ...getPostHogConfig("key", "host").public,
+        },
+      }) as ReturnType<typeof useRuntimeConfig>;
+  },
+);
 
 const postHogMock = vi.hoisted(() => {
   return {

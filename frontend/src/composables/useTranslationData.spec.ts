@@ -7,6 +7,7 @@ import {
   fetchTranslationListWithIdFilter,
   getGermanOriginal,
 } from "~/composables/useTranslationData";
+import type { FetchHook } from "ofetch";
 
 const { mockFetch } = vi.hoisted(() => {
   return {
@@ -38,15 +39,10 @@ mockNuxtImport("useRisBackend", () => {
   return useRisBackendMock;
 });
 
-mockNuxtImport("useNuxtApp", () => {
-  const nuxtApp = (globalThis as unknown as Window)?.useNuxtApp?.() ?? {};
-  return () => {
-    return {
-      ...nuxtApp,
-      $risBackend: mockFetch,
-    };
-  };
-});
+vi.mock("~/plugins/risBackend", () => ({
+  default: defineNuxtPlugin(() => ({ provide: { risBackend: mockFetch } })),
+  extendOnRequest: (...cbs: FetchHook[]) => cbs,
+}));
 
 beforeEach(() => {
   vi.clearAllMocks();

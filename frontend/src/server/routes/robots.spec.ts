@@ -1,31 +1,41 @@
 import { mockNuxtImport } from "@nuxt/test-utils/runtime";
 import type { EventHandlerRequest, H3Event } from "h3";
-import { beforeEach, describe, expect, it, test, vi } from "vitest";
+import { afterEach, describe, expect, it, test, vi } from "vitest";
 import middleware from "./robots.txt.get";
 import useBackendUrl from "~/composables/useBackendUrl";
 
-const mockFetch = vi.fn();
-vi.stubGlobal("$fetch", mockFetch);
+vi.mock("~/plugins/risBackend", () => ({
+  default: vi.fn(),
+  extendOnRequest: (...cbs: unknown[]) => cbs,
+}));
 
-const { mockUseRuntimeConfig } = vi.hoisted(() => {
-  return { getRequestURL: vi.fn(), mockUseRuntimeConfig: vi.fn() };
-});
+const mockPrivateFeaturesEnabled = vi.fn(() => false);
+vi.mock("~/composables/usePrivateFeaturesFlag", () => ({
+  usePrivateFeaturesFlag: () => mockPrivateFeaturesEnabled(),
+}));
 
-mockNuxtImport("useRuntimeConfig", () => {
-  return mockUseRuntimeConfig;
-});
+const mockBasicAuth = vi.hoisted(() => vi.fn(() => ""));
+
+mockNuxtImport<() => ReturnType<typeof useRuntimeConfig>>(
+  "useRuntimeConfig",
+  (original) => {
+    return () => ({
+      ...original(),
+      basicAuth: mockBasicAuth(),
+    });
+  },
+);
 
 describe("robots txt route", () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
+  afterEach(() => {
+    vi.resetAllMocks();
   });
 
   it("should serve robots txt from backend api on justice crawler", async () => {
-    mockUseRuntimeConfig.mockImplementation(() => ({
-      public: {
-        privateFeaturesEnabled: false,
-      },
-    }));
+    const fetchSpy = vi
+      .spyOn(globalThis as any, "$fetch")
+      .mockResolvedValue("");
+    mockPrivateFeaturesEnabled.mockReturnValue(false);
 
     const mockEvent: H3Event<EventHandlerRequest> = {
       node: {
@@ -43,7 +53,7 @@ describe("robots txt route", () => {
     } as unknown as H3Event<EventHandlerRequest>;
 
     await middleware(mockEvent);
-    expect(mockFetch).toHaveBeenCalledWith(
+    expect(fetchSpy).toHaveBeenCalledWith(
       useBackendUrl("/v1/eclicrawler/robots.txt"),
       {
         method: "GET",
@@ -51,7 +61,7 @@ describe("robots txt route", () => {
     );
   });
 
-  const testCases = [
+  const testCases: [boolean, string][] = [
     [false, "robots.public.txt"],
     [true, "robots.staging.txt"],
   ];
@@ -59,12 +69,11 @@ describe("robots txt route", () => {
   test.for(testCases)(
     "privateFeaturesEnabled flag = %s serves %s",
     async ([privateFeaturesEnabled, file]) => {
-      mockUseRuntimeConfig.mockImplementation(() => ({
-        public: {
-          privateFeaturesEnabled,
-        },
-        basicAuth: "auth",
-      }));
+      const fetchSpy = vi
+        .spyOn(globalThis as any, "$fetch")
+        .mockResolvedValue("");
+      mockPrivateFeaturesEnabled.mockReturnValue(privateFeaturesEnabled);
+      mockBasicAuth.mockReturnValue("auth");
 
       const mockEvent: H3Event<EventHandlerRequest> = {
         node: {
@@ -83,7 +92,7 @@ describe("robots txt route", () => {
       } as unknown as H3Event<EventHandlerRequest>;
 
       await middleware(mockEvent);
-      expect(mockFetch).toHaveBeenCalledWith(`http://origin/${file}`, {
+      expect(fetchSpy).toHaveBeenCalledWith(`http://origin/${file}`, {
         method: "GET",
         headers: {
           Authorization: "Basic auth",

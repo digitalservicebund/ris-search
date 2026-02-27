@@ -1,20 +1,6 @@
-import { mockNuxtImport } from "@nuxt/test-utils/runtime";
 import { mount, RouterLinkStub } from "@vue/test-utils";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import ConsentBanner from "./ConsentBanner.vue";
-import { getPostHogConfig } from "~/tests/postHogUtils";
-
-const { useRuntimeConfigMock } = vi.hoisted(() => {
-  return {
-    useRuntimeConfigMock: vi.fn(() => {
-      return getPostHogConfig("key", "host");
-    }),
-  };
-});
-
-mockNuxtImport("useRuntimeConfig", () => {
-  return useRuntimeConfigMock;
-});
 
 const mockUserConsent = ref<boolean | undefined>(undefined);
 const mockSetTracking = vi.fn();
@@ -24,6 +10,8 @@ vi.mock("~/composables/usePostHog", () => ({
     userConsent: mockUserConsent,
     isBannerVisible: computed(() => mockUserConsent.value === undefined),
     setTracking: mockSetTracking,
+    initialize: vi.fn(),
+    postHog: ref(undefined),
   }),
 }));
 
