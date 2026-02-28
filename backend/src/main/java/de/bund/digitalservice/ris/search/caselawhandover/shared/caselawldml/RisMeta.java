@@ -30,18 +30,15 @@ public class RisMeta {
   @XmlElement(name = "ensuingDecision", namespace = CaseLawLdmlNamespaces.RIS_NS)
   private List<RelatedDecision> ensuingDecision;
 
-  @XmlElementWrapper(name = "fileNumbers", namespace = CaseLawLdmlNamespaces.RIS_NS)
-  @XmlElement(name = "fileNumber", namespace = CaseLawLdmlNamespaces.RIS_NS)
+  @XmlElementWrapper(name = "aktenzeichenListe", namespace = CaseLawLdmlNamespaces.RIS_NS)
+  @XmlElement(name = "aktenzeichen", namespace = CaseLawLdmlNamespaces.RIS_NS)
   private List<String> fileNumbers;
 
-  @XmlElement(name = "documentType", namespace = CaseLawLdmlNamespaces.RIS_NS)
+  @XmlElement(name = "dokumenttyp", namespace = CaseLawLdmlNamespaces.RIS_NS)
   private String documentType;
 
-  @XmlElement(name = "courtLocation", namespace = CaseLawLdmlNamespaces.RIS_NS)
-  private String courtLocation;
-
-  @XmlElement(name = "courtType", namespace = CaseLawLdmlNamespaces.RIS_NS)
-  private String courtType;
+  @XmlElement(name = "gericht", namespace = CaseLawLdmlNamespaces.RIS_NS)
+  private Court court;
 
   @XmlElementWrapper(name = "legalForces", namespace = CaseLawLdmlNamespaces.RIS_NS)
   @XmlElement(name = "legalForce", namespace = CaseLawLdmlNamespaces.RIS_NS)
@@ -100,9 +97,10 @@ public class RisMeta {
    * @return the combined court keyword
    */
   public String getCourtKeyword() {
-    if (courtLocation == null) {
-      return courtType;
+    if (court == null) return null;
+    if (court.getGerichtsort() == null) {
+      return court.getGerichtstyp();
     }
-    return String.format("%s %s", courtType, courtLocation);
+    return String.format("%s %s", court.getGerichtstyp(), court.getGerichtsort());
   }
 }

@@ -26,17 +26,17 @@ class CaseLawLdmlToOpenSearchMapperTest {
     CaseLawDocumentationUnit caseLaw = mapper.fromString(testCaseLawLdml);
 
     assertThat(caseLaw.id()).isEqualTo("testDocNumber");
-    assertThat(caseLaw.documentationOffice()).isEqualTo("documentationOffice");
     assertThat(caseLaw.caseFacts())
         .isEqualTo("Example Tatbestand/CaseFacts. More background even more background");
     assertThat(caseLaw.decisionGrounds()).isEqualTo("Example Entscheidungsgründe/DecisionGrounds");
     assertThat(caseLaw.documentNumber()).isEqualTo("testDocNumber");
     assertThat(caseLaw.ecli()).isEqualTo("testEcli");
     assertThat(caseLaw.guidingPrinciple()).isEqualTo("Example Leitsatz/GuidingPrinciple");
-    assertThat(caseLaw.headline()).isEqualTo("Title");
+    assertThat(caseLaw.headline())
+        .isEqualTo(
+            "Aktenzeichen: fileNumber test Entscheidungsdatum: 01.01.2020 Gericht: courtLabel test Dokumenttyp: documentType test");
     assertThat(caseLaw.decisionDate()).isEqualTo(LocalDate.of(2020, 1, 1));
     assertThat(caseLaw.tenor()).isEqualTo("Example Tenor/Tenor");
-    assertThat(caseLaw.publicationStatus()).isEqualTo("PUBLISHED");
     assertThat(caseLaw.fileNumbers()).hasToString("[Test file number 1, Test file number 2]");
     assertThat(caseLaw.courtType()).isEqualTo("Test court type");
     assertThat(caseLaw.location()).isEqualTo("Test court location");

@@ -2,72 +2,180 @@
         <akn:FRBRWork>
             <akn:FRBRthis value="{% if documentNumber %}{{documentNumber}}{% else %}testDocNumber{% endif %}"/>
             <akn:FRBRuri value="{% if documentNumber %}{{documentNumber}}{% else %}testDocNumber{% endif %}"/>
-            <akn:FRBRalias name="uebergreifende-id" value="testUUID"/>
-            <akn:FRBRalias name="ecli" value="{% if ecli %}{{ ecli }}{% else %}testEcli{% endif %}"/>
-            <akn:FRBRdate date="{% if decisionDate %}{{ decisionDate }}{% else %}2020-01-01{% endif %}" name="entscheidungsdatum"/>
-            <akn:FRBRauthor href="attributsemantik-noch-undefiniert"/>
+            <akn:FRBRalias name="Übergreifende ID" value="testUUID"/>
+            <akn:FRBRalias name="Dokumentnummer" value="{% if documentNumber %}{{documentNumber}}{% else %}testDocNumber{% endif %}"/>
+            <akn:FRBRalias name="ECLI" value="{% if ecli %}{{ ecli }}{% else %}testEcli{% endif %}"/>
+            <akn:FRBRalias eId="aktenzeichen" name="Aktenzeichen" value="fileNumber test"/>
+            <akn:FRBRdate eId="entscheidungsdatum" date="{% if decisionDate %}{{ decisionDate }}{% else %}2020-01-01{% endif %}" name="Entscheidungsdatum"/>
+            <akn:FRBRauthor href="#gericht"/>
             <akn:FRBRcountry value="de"/>
         </akn:FRBRWork>
         <akn:FRBRExpression>
             <akn:FRBRthis value="{% if documentNumber %}{{documentNumber}}{% else %}testDocNumber{% endif %}"/>
             <akn:FRBRuri value="{% if documentNumber %}{{documentNumber}}{% else %}testDocNumber{% endif %}"/>
-            <akn:FRBRdate date="2020-01-01" name="entscheidungsdatum"/>
-            <akn:FRBRauthor href="attributsemantik-noch-undefiniert"/>
+            <akn:FRBRdate date="2020-01-01" name="Entscheidungsdatum"/>
+            <akn:FRBRauthor href="#gericht"/>
             <akn:FRBRlanguage language="deu"/>
         </akn:FRBRExpression>
         <akn:FRBRManifestation>
             <akn:FRBRthis value="{% if documentNumber %}{{documentNumber}}{% else %}testDocNumber{% endif %}.xml"/>
             <akn:FRBRuri value="{% if documentNumber %}{{documentNumber}}{% else %}testDocNumber{% endif %}.xml"/>
-            <akn:FRBRdate date="2020-01-01" name="entscheidungsdatum"/>
-            <akn:FRBRauthor href="attributsemantik-noch-undefiniert"/>
+            <akn:FRBRdate date="2020-01-01" name="XML Transformation"/>
+            <akn:FRBRauthor href="#documentationoffice-dokumentationsstelle"/>
         </akn:FRBRManifestation>
-    </akn:identification>
-    <akn:proprietary source="attributsemantik-noch-undefiniert">
-        <ris:meta>
-            <ris:decisionNames>
-                <ris:decisionName>Test decision name</ris:decisionName>
-            </ris:decisionNames>
-            <ris:fileNumbers>
-                <ris:fileNumber>Test file number 1</ris:fileNumber>
-                <ris:fileNumber>Test file number 2</ris:fileNumber>
-            </ris:fileNumbers>
-            <ris:documentType>{% if documentType %}{{ documentType }}{% else %}Test document type{% endif %}</ris:documentType>
-            <ris:courtLocation>{% if location %}{{ location }}{% else %}Test court location{% endif%}</ris:courtLocation>
-            <ris:courtType>{% if courtType %}{{ courtType }}{% else %}Test court type{% endif %}</ris:courtType>
-            <ris:legalForces>
-                <ris:legalForce>Test legal force</ris:legalForce>
-            </ris:legalForces>
-            <ris:legalEffect>JA</ris:legalEffect>
-            <ris:fieldOfLaws>
-                <ris:fieldOfLaw>Test field of law</ris:fieldOfLaw>
-            </ris:fieldOfLaws>
-            <ris:judicialBody>Test judicial body</ris:judicialBody>
-            <ris:deviatingDocumentNumbers>
-                <ris:deviatingDocumentNumber>Test deviatingDocumentNumber</ris:deviatingDocumentNumber>
-            </ris:deviatingDocumentNumbers>
-            <ris:publicationStatus>{% if publicationStatus %}{{ publicationStatus }}{% else %}PUBLISHED{% endif %}</ris:publicationStatus>
-            <ris:error>{% if error %}{{ error }}{% else %}false{% endif %}</ris:error>
-            <ris:documentationOffice>{% if documentationOffice %}{{ documentationOffice }}{% else %}documentationOffice{% endif %}</ris:documentationOffice>
-            <ris:previousDecisions>
-                <ris:previousDecision date="2009-06-25">
-                    <ris:fileNumber>previous decision - file number</ris:fileNumber>
-                    <ris:courtType>LG</ris:courtType>
-                </ris:previousDecision>
-            </ris:previousDecisions>
-            <ris:ensuingDecisions>
-                <ris:ensuingDecision date="2012-12-17">
-                    <ris:documentNumber>ENSUING12345678</ris:documentNumber>
-                    <ris:fileNumber>ensuing decision - file number</ris:fileNumber>
-                    <ris:courtType>BVerfG</ris:courtType>
-                </ris:ensuingDecision>
-            </ris:ensuingDecisions>
-        </ris:meta>
-    </akn:proprietary>
-    <akn:classification source="attributsemantik-noch-undefiniert">
-        <akn:keyword dictionary="attributsemantik-noch-undefiniert"
-                     showAs="attributsemantik-noch-undefiniert"
-                     value ="keyword1"/>
-        <akn:keyword dictionary="attributsemantik-noch-undefiniert"
-                     showAs="attributsemantik-noch-undefiniert"
-                     value ="keyword2"/>
-    </akn:classification>
+</akn:identification>
+<akn:analysis source="#ris">
+    <akn:otherReferences source="#ris">
+        <akn:implicitReference ris:domainTerm="Norm">
+            <ris:norm domainTerm="Norm">
+                <ris:abkuerzung domainTerm="Abkürzung">normReference test</ris:abkuerzung>
+                <ris:einzelnorm domainTerm="Einzelnorm">
+                    <ris:bezeichnung domainTerm="Bezeichnung">singleNorm test</ris:bezeichnung>
+                    <ris:fassungsdatum domainTerm="Fassungsdatum">2021-02-05</ris:fassungsdatum>
+                    <ris:jahr domainTerm="Jahr">2020</ris:jahr>
+                </ris:einzelnorm>
+                <ris:einzelnorm domainTerm="Einzelnorm">
+                    <ris:bezeichnung domainTerm="Bezeichnung">singleNorm 2 test</ris:bezeichnung>
+                    <ris:fassungsdatum domainTerm="Fassungsdatum">2022-03-06</ris:fassungsdatum>
+                    <ris:jahr domainTerm="Jahr">2022</ris:jahr>
+                </ris:einzelnorm>
+            </ris:norm>
+        </akn:implicitReference>
+        <akn:implicitReference ris:domainTerm="Norm">
+            <ris:norm domainTerm="Norm">
+                <ris:abkuerzung domainTerm="Abkürzung">normReference without SingleNorms</ris:abkuerzung>
+                <ris:titel domainTerm="Amtliche Langüberschrift">officialLongTitle</ris:titel>
+            </ris:norm>
+        </akn:implicitReference>
+        <akn:implicitReference ris:domainTerm="Rechtszug">
+            <ris:vorgehend domainTerm="Vorgehende Entscheidung">
+                <ris:dokumenttyp domainTerm="Dokumenttyp">previous decision document type</ris:dokumenttyp>
+                <ris:entscheidungsdatum domainTerm="Entscheidungsdatum">2020-01-01</ris:entscheidungsdatum>
+                <ris:dokumentnummer domainTerm="Dokumentnummer">previous decision document number 1</ris:dokumentnummer>
+                <ris:aktenzeichen domainTerm="Aktenzeichen">previous decision file number</ris:aktenzeichen>
+                <ris:gericht domainTerm="Gericht">
+                    <ris:gerichtstyp domainTerm="Gerichtstyp">previous decision court type</ris:gerichtstyp>
+                    <ris:gerichtsort domainTerm="Gerichtsort">previous decision court location</ris:gerichtsort>
+                </ris:gericht>
+            </ris:vorgehend>
+        </akn:implicitReference>
+        <akn:implicitReference ris:domainTerm="Rechtszug">
+            <ris:vorgehend domainTerm="Vorgehende Entscheidung">
+                <ris:dokumenttyp domainTerm="Dokumenttyp">previous decision document type</ris:dokumenttyp>
+                <ris:entscheidungsdatum domainTerm="Entscheidungsdatum">2020-01-01</ris:entscheidungsdatum>
+                <ris:dokumentnummer domainTerm="Dokumentnummer">previous decision document number 2</ris:dokumentnummer>
+                <ris:aktenzeichen domainTerm="Aktenzeichen">previous decision file number</ris:aktenzeichen>
+                <ris:gericht domainTerm="Gericht">
+                    <ris:gerichtstyp domainTerm="Gerichtstyp">previous decision court type</ris:gerichtstyp>
+                    <ris:gerichtsort domainTerm="Gerichtsort">previous decision court location</ris:gerichtsort>
+                </ris:gericht>
+            </ris:vorgehend>
+        </akn:implicitReference>
+        <akn:implicitReference ris:domainTerm="Rechtszug">
+            <ris:nachgehend art="anhängig" domainTerm="Nachgehende Entscheidung">
+                <ris:dokumenttyp domainTerm="Dokumenttyp">ensuing decision document type</ris:dokumenttyp>
+                <ris:entscheidungsdatum domainTerm="Entscheidungsdatum">2022-10-01</ris:entscheidungsdatum>
+                <ris:dokumentnummer domainTerm="Dokumentnummer">ensuing decision document number 1</ris:dokumentnummer>
+                <ris:aktenzeichen domainTerm="Aktenzeichen">ensuing decision file number</ris:aktenzeichen>
+                <ris:gericht domainTerm="Gericht">
+                    <ris:gerichtstyp domainTerm="Gerichtstyp">ensuing decision court type</ris:gerichtstyp>
+                </ris:gericht>
+            </ris:nachgehend>
+        </akn:implicitReference>
+        <akn:implicitReference ris:domainTerm="Rechtszug">
+            <ris:nachgehend art="anhängig" domainTerm="Nachgehende Entscheidung">
+                <ris:dokumenttyp domainTerm="Dokumenttyp">ensuing decision document type</ris:dokumenttyp>
+                <ris:entscheidungsdatum domainTerm="Entscheidungsdatum">2022-10-01</ris:entscheidungsdatum>
+                <ris:dokumentnummer domainTerm="Dokumentnummer">ensuing decision document number 2</ris:dokumentnummer>
+                <ris:aktenzeichen domainTerm="Aktenzeichen">ensuing decision file number</ris:aktenzeichen>
+                <ris:gericht domainTerm="Gericht">
+                    <ris:gerichtstyp domainTerm="Gerichtstyp">ensuing decision court type</ris:gerichtstyp>
+                </ris:gericht>
+                <ris:vermerk domainTerm="Vermerk">ensuing decision note</ris:vermerk>
+            </ris:nachgehend>
+        </akn:implicitReference>
+    </akn:otherReferences>
+<akn:otherAnalysis source="#ris">
+    <ris:dokumentarischeKurztexte domainTerm="Dokumentarische Kurztexte">
+        {% if not hideTitle %}
+        <ris:titelzeile akn:eId="titelzeile" ris:domainTerm="Titelzeile">
+            {% if title %}
+            {{ title | raw }}
+            {% else %}
+            <akn:p>Title</akn:p>
+            {% endif %}
+        </ris:titelzeile>
+        {% endif %}
+        {% if not hideHeadnote %}
+        <ris:orientierungssatz ris:domainTerm="Orientierungssatz">
+            {% if headnote %}
+            {{ headnote | raw }}
+            {% else %}
+            <akn:p>Example Orientierungssatz/Headnote</akn:p>
+            {% endif %}
+        </ris:orientierungssatz>
+        {% endif %}
+        {% if not hideOtherHeadnote %}
+        <ris:sonstigerOrientierungssatz ris:domainTerm="Sonstiger Orientierungssatz">
+            {% if otherHeadnote %}
+            {{ otherHeadnote | raw }}
+            {% else %}
+            <akn:p>Example SonstigerOrientierungssatz/OtherHeadnote</akn:p>
+            {% endif %}
+        </ris:sonstigerOrientierungssatz>
+        {% endif %}
+    </ris:dokumentarischeKurztexte>
+</akn:otherAnalysis>
+</akn:analysis>
+<akn:proprietary source="attributsemantik-noch-undefiniert">
+    <ris:meta>
+        <ris:decisionNames>
+            <ris:decisionName>Test decision name</ris:decisionName>
+        </ris:decisionNames>
+        <ris:aktenzeichenListe domainTerm="Gericht" akn:refersTo="#gericht">
+            <ris:aktenzeichen domainTerm="Aktenzeichen" akn:refersTo="#aktenzeichen">Test file number 1</ris:aktenzeichen>
+            <ris:aktenzeichen domainTerm="Aktenzeichen" akn:refersTo="#aktenzeichen">Test file number 2</ris:aktenzeichen>
+        </ris:aktenzeichenListe>
+        <ris:dokumenttyp akn:eId="dokumenttyp" domainTerm="Dokumenttyp">{% if documentType %}{{ documentType }}{% else %}Test document type{% endif %}</ris:dokumenttyp>
+        <ris:gericht domainTerm="Gericht" akn:refersTo="#gericht">
+            <ris:gerichtstyp domainTerm="Gerichtstyp">{% if courtType %}{{ courtType }}{% else %}Test court type{% endif %}</ris:gerichtstyp>
+            <ris:gerichtsort domainTerm="Gerichtsort">{% if location %}{{ location }}{% else %}Test court location{% endif%}</ris:gerichtsort>
+            <ris:spruchkoerper domainTerm="Spruchkörper" akn:refersTo="#spruchkoerper">Test judicial body</ris:spruchkoerper>
+        </ris:gericht>
+        <ris:legalForces>
+            <ris:legalForce>Test legal force</ris:legalForce>
+        </ris:legalForces>
+        <ris:legalEffect>JA</ris:legalEffect>
+        <ris:fieldOfLaws>
+            <ris:fieldOfLaw>Test field of law</ris:fieldOfLaw>
+        </ris:fieldOfLaws>
+        <ris:deviatingDocumentNumbers>
+            <ris:deviatingDocumentNumber>Test deviatingDocumentNumber</ris:deviatingDocumentNumber>
+        </ris:deviatingDocumentNumbers>
+        <ris:previousDecisions>
+            <ris:previousDecision date="2009-06-25">
+                <ris:fileNumber>previous decision - file number</ris:fileNumber>
+                <ris:courtType>LG</ris:courtType>
+            </ris:previousDecision>
+        </ris:previousDecisions>
+        <ris:ensuingDecisions>
+            <ris:ensuingDecision date="2012-12-17">
+                <ris:documentNumber>ENSUING12345678</ris:documentNumber>
+                <ris:fileNumber>ensuing decision - file number</ris:fileNumber>
+                <ris:courtType>BVerfG</ris:courtType>
+            </ris:ensuingDecision>
+        </ris:ensuingDecisions>
+        <ris:regionen domainTerm="Regionen">
+            <ris:region domainTerm="Region">NW</ris:region>
+        </ris:regionen>
+        <ris:dokumentationsstelle domainTerm="Dokumentationsstelle" akn:refersTo="#documentationoffice-dokumentationsstelle">documentationOffice</ris:dokumentationsstelle>
+    </ris:meta>
+</akn:proprietary>
+<akn:classification source="attributsemantik-noch-undefiniert">
+    <akn:keyword dictionary="attributsemantik-noch-undefiniert"
+                 showAs="attributsemantik-noch-undefiniert"
+                 value ="keyword1"/>
+    <akn:keyword dictionary="attributsemantik-noch-undefiniert"
+                 showAs="attributsemantik-noch-undefiniert"
+                 value ="keyword2"/>
+</akn:classification>

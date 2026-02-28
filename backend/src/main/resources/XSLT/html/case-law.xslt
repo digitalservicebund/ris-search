@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema"
-				xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:akn="http://docs.oasis-open.org/legaldocml/ns/akn/3.0/WD17"
+				xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:akn="http://docs.oasis-open.org/legaldocml/ns/akn/3.0"
 				xmlns:ris="http://example.com/0.1/"
 				xmlns:local="http://example.com/ns/1.0" exclude-result-prefixes="ris xs math akn local xsi"
 				xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-				xsi:schemaLocation="http://docs.oasis-open.org/legaldocml/ns/akn/3.0/WD17 https://docs.oasis-open.org/legaldocml/akn-core/v1.0/csprd02/part2-specs/schemas/akomantoso30.xsd">
+				xsi:schemaLocation="http://docs.oasis-open.org/legaldocml/ns/akn/3.0 https://docs.oasis-open.org/legaldocml/akn-core/v1.0/os/part2-specs/schemas/akomantoso30.xsd">
 
 	<xsl:output method="html" encoding="UTF-8" />
 
@@ -19,13 +19,17 @@
 	<xsl:param name="ressourcenpfad" as="xs:string" select="''"/>
 
 	<!-- akn wrapper elements (can be removed but content is kept) -->
-	<xsl:template match="akn:judgmentBody|akn:subFlow|akn:docTitle|akn:akomaNtoso
-	|akn:embeddedStructure|akn:decision|akn:foreign|akn:opinion|akn:introduction">
+	<xsl:template match="akn:judgmentBody|akn:subFlow|akn:meta|akn:docTitle|akn:akomaNtoso
+	|akn:embeddedStructure|akn:foreign|akn:otherAnalysis|akn:otherAnalysis|ris:dokumentarischeKurztexte">
 		<xsl:apply-templates />
 	</xsl:template>
 
 	<!-- Ignored elements (content is ignored as well) -->
-	<xsl:template match="akn:meta" />
+    <xsl:template match="akn:identification" />
+    <xsl:template match="akn:references" />
+    <xsl:template match="akn:proprietary" />
+    <xsl:template match="akn:otherReferences" />
+    <xsl:template match="akn:header" />
 
 	<!-- Top level container element -->
 	<xsl:template match="akn:judgment">
@@ -44,18 +48,19 @@
 	<!--***************************************************************************************-->
 
 	<!-- Titel -->
-	<xsl:template match="akn:header">
-		<h1 id="title">
-			<xsl:apply-templates/>
-		</h1>
-	</xsl:template>
+    <xsl:template match="ris:titelzeile">
+        <h1 id="title">
+            <xsl:apply-templates/>
+        </h1>
+    </xsl:template>
 
 	<!-- H2 Headings -->
-	<xsl:template match="akn:motivation">
-		<section id="leitsatz"><h2>Leitsatz</h2>
-			<xsl:apply-templates />
-		</section>
-	</xsl:template>
+    <xsl:template match="akn:introduction[@ris:domainTerm = 'Leitsatz']">
+        <section id="leitsatz">
+            <h2>Leitsatz</h2>
+            <xsl:apply-templates />
+        </section>
+    </xsl:template>
 
 	<xsl:template match="akn:block[@name='Orientierungssatz']">
 		<section id="orientierungssatz">
@@ -71,7 +76,7 @@
 		</section>
 	</xsl:template>
 
-	<xsl:template match="akn:block[@name='Gliederung']">
+    <xsl:template match="akn:introduction[@ris:domainTerm = 'Gliederung']">
 		<section id="gliederung">
 			<h2>Gliederung</h2>
 			<xsl:apply-templates />
@@ -79,7 +84,7 @@
 	</xsl:template>
 
 
-	<xsl:template match="akn:block[@name='Tenor']">
+	<xsl:template match="akn:decision[@ris:domainTerm = 'Tenor']">
 		<section id="tenor">
 			<h2>Tenor</h2>
 			<xsl:apply-templates />
@@ -93,33 +98,51 @@
 		</section>
 	</xsl:template>
 
-	<xsl:template match="akn:block[@name='Entscheidungsgründe']">
+    <xsl:template match="akn:motivation[@ris:domainTerm = 'Entscheidungsgründe']">
 		<section id="entscheidungsgruende">
 			<h2>Entscheidungsgründe</h2>
 			<xsl:apply-templates />
 		</section>
 	</xsl:template>
 
-	<xsl:template match="akn:block[@name='Gründe']">
+	<xsl:template match="akn:motivation[@ris:domainTerm = 'Gründe']">
 		<section id="gruende">
 			<h2>Gründe</h2>
 			<xsl:apply-templates/>
 		</section>
 	</xsl:template>
 
-	<xsl:template match="akn:block[@name='Sonstiger Langtext']">
+	<xsl:template match="akn:motivation[@ris:domainTerm = 'Sonstiger Langtext']">
 		<section id="sonstigerLangtext">
 			<h2>Sonstiger Langtext</h2>
 			<xsl:apply-templates/>
 		</section>
 	</xsl:template>
 
-	<xsl:template match="akn:block[@name='Abweichende Meinung']/akn:opinion">
+	<xsl:template match="akn:motivation[@ris:domainTerm = 'Abweichende Meinung']">
 		<section id="abweichendeMeinung">
 			<h2>Abweichende Meinung</h2>
 			<xsl:apply-templates/>
 		</section>
 	</xsl:template>
+
+    <xsl:template match="akn:block[@name='Mitwirkende Richter']">
+        <xsl:apply-templates />
+    </xsl:template>
+
+    <xsl:template match="akn:opinion">
+        <p class="opinion-entry">
+            <xsl:variable name="personId" select="substring-after(@by, '#')"/>
+            <xsl:variable name="personName" select="//akn:references/akn:TLCPerson[@eId = $personId]/@showAs"/>
+
+            <strong>
+                <xsl:value-of select="$personName"/>
+            </strong>:
+
+            <xsl:apply-templates/>
+
+        </p>
+    </xsl:template>
 
 
 

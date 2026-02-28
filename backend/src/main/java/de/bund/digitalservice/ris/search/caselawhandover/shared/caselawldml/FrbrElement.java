@@ -56,10 +56,10 @@ public class FrbrElement {
   }
 
   public String getEcliAliasValue() {
-    return getAliasValueByName("ecli");
+    return getAliasValueByName("ECLI");
   }
 
   public String getUuidAliasValue() {
-    return getAliasValueByName("uebergreifende-id");
+    return getAliasValueByName("Übergreifende ID");
   }
 }

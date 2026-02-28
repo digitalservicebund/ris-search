@@ -64,12 +64,10 @@ class CaseLawControllerApiTest extends ContainersIntegrationBase {
     context.put("location", "Berlin");
     context.put("documentType", "Urteil");
     context.put("decisionDate", decisionDate.toString());
-    context.put("motivation", "Das ist der Leitsatz");
+    context.put("leitsatz", "Das ist der Leitsatz");
     context.put("otherLongText", "Sonstiger Langtext");
     context.put("otherHeadnote", "Sonstiger Orientierungssatz");
     context.put("publicationStatus", PublicationStatus.UNPUBLISHED.toString());
-    context.put("documentationOffice", "DS");
-    context.put("error", false);
     context.put(
         "background",
         """

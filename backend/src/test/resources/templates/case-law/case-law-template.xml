@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<akn:akomaNtoso xmlns:akn="http://docs.oasis-open.org/legaldocml/ns/akn/3.0/WD17"
+<akn:akomaNtoso xmlns:akn="http://docs.oasis-open.org/legaldocml/ns/akn/3.0"
                 xmlns:ris="http://example.com/0.1/"
                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                xsi:schemaLocation="http://docs.oasis-open.org/legaldocml/ns/akn/3.0/WD17 https://docs.oasis-open.org/legaldocml/akn-core/v1.0/csprd02/part2-specs/schemas/akomantoso30.xsd">
+                xsi:schemaLocation="http://docs.oasis-open.org/legaldocml/ns/akn/3.0 https://docs.oasis-open.org/legaldocml/akn-core/v1.0/os/part2-specs/schemas/akomantoso30.xsd">
     <akn:judgment name="attributsemantik-noch-undefiniert">
 
         {% if not hideMeta %}
@@ -11,75 +11,49 @@
         </akn:meta>
         {% endif %}
 
-        {% if not hideTitle %}
         <akn:header>
-            {% if title %}
-            {{ title | raw }}
-            {% else %}
-            <akn:p>Title</akn:p>
-            {% endif %}
+            <akn:p>Aktenzeichen:
+                <akn:docNumber refersTo="#aktenzeichen">fileNumber test</akn:docNumber>
+            </akn:p>
+            <akn:p>Entscheidungsdatum:
+                <akn:docDate date="2020-01-01" refersTo="#entscheidungsdatum">01.01.2020</akn:docDate>
+            </akn:p>
+            <akn:p>Gericht:
+                <akn:courtType refersTo="#gericht">courtLabel test</akn:courtType>
+            </akn:p>
+            <akn:p>Dokumenttyp:
+                <akn:docType refersTo="#dokumenttyp">documentType test</akn:docType>
+            </akn:p>
         </akn:header>
-        {% endif %}
 
         <akn:judgmentBody>
 
-            {% if not hideMotivation %}
-            <akn:motivation>
-                <akn:p>{% if motivation %}{{ motivation }}{% else %}Example Leitsatz/GuidingPrinciple{% endif %}</akn:p>
-            </akn:motivation>
-            {% endif %}
+            <akn:introduction ris:domainTerm="Leitsatz">
+                <akn:p>{% if leitsatz %}{{ leitsatz }}{% else %}Example Leitsatz/GuidingPrinciple{% endif %}</akn:p>
+            </akn:introduction>
 
-            {% if not hideIntroduction %}
-            <akn:introduction>
-                {% if not hideHeadnote %}
-                <akn:block name="Orientierungssatz">
-                    <akn:embeddedStructure>
-                        {% if headnote %}
-                        {{ headnote | raw }}
-                        {% else %}
-                        <akn:p>Example Orientierungssatz/Headnote</akn:p>
-                        {% endif %}
-                    </akn:embeddedStructure>
-                </akn:block>
-                {% endif %}
-                {% if not hideOtherHeadnote %}
-                <akn:block name="Sonstiger Orientierungssatz">
-                    <akn:embeddedStructure>
-                        {% if otherHeadnote %}
-                        {{ otherHeadnote | raw }}
-                        {% else %}
-                        <akn:p>Example SonstigerOrientierungssatz/OtherHeadnote</akn:p>
-                        {% endif %}
-                    </akn:embeddedStructure>
-                </akn:block>
-                {% endif %}
-                {% if not hideOutline %}
-                <akn:block name="Gliederung">
-                    <akn:embeddedStructure>
-                        {% if outline %}
-                        {{ outline | raw }}
-                        {% else %}
-                        <akn:p>Example Gliederung/Outline</akn:p>
-                        {% endif %}
-                    </akn:embeddedStructure>
-                </akn:block>
-                {% endif %}
-                {% if not hideTenor %}
-                <akn:block name="Tenor">
-                    <akn:embeddedStructure>
-                        {% if tenor %}
-                        {{ tenor | raw }}
-                        {% else %}
-                        <akn:p>Example Tenor/Tenor</akn:p>
-                        {% endif %}
-                    </akn:embeddedStructure>
-                </akn:block>
+            {% if not hideOutline %}
+            <akn:introduction ris:domainTerm="Gliederung">
+                {% if outline %}
+                {{ outline | raw }}
+                {% else %}
+                <akn:p>Example Gliederung/Outline</akn:p>
                 {% endif %}
             </akn:introduction>
             {% endif %}
 
+            {% if not hideTenor %}
+            <akn:decision ris:domainTerm="Tenor">
+                {% if tenor %}
+                {{ tenor | raw }}
+                {% else %}
+                <akn:p>Example Tenor/Tenor</akn:p>
+                {% endif %}
+            </akn:decision>
+            {% endif %}
+
             {% if not hideBackground %}
-            <akn:background>
+            <akn:background ris:domainTerm="Tatbestand">
                 {% if background %}
                 {{ background | raw }}
                 {% else %}
@@ -99,77 +73,74 @@
             </akn:background>
             {% endif %}
 
-            {% if not hideDecision %}
-            <akn:decision>
-                {% if not hideDecisionGrounds %}
-                <akn:block name="Entscheidungsgründe">
-                    <akn:embeddedStructure>
-                        <akn:p>Example Entscheidungsgründe/DecisionGrounds</akn:p>
-                    </akn:embeddedStructure>
-                </akn:block>
+            {% if not hideDecisionGrounds %}
+            <akn:motivation ris:domainTerm="Entscheidungsgründe">
+                <akn:p>Example Entscheidungsgründe/DecisionGrounds</akn:p>
+            </akn:motivation>
+            {% endif %}
+
+            {% if not hideGrounds %}
+            <akn:motivation ris:domainTerm="Gründe">
+                {% if grounds %}
+                {{ grounds | raw }}
+                {% else %}
+                <akn:foreign>
+                    <ris:table akn:unknownUseCaseDiscoveredForborder=""
+                               ris:cellpadding="2"
+                               ris:cellspacing="0">
+                        <ris:tbody>
+                            <ris:tr>
+                                <ris:td colspan="2" rowspan="1">
+                                    <akn:p style="text-align:center">
+                                        <akn:b>Spalte 1</akn:b>
+                                    </akn:p>
+                                </ris:td>
+                                <ris:td colspan="1" rowspan="1">
+                                    <akn:p style="text-align:center">
+                                        <akn:b>Spalte 2</akn:b>
+                                    </akn:p>
+                                </ris:td>
+                                <ris:td colspan="1" rowspan="1">
+                                    <akn:p style="text-align:center">
+                                        <akn:b>Spalte 3</akn:b>
+                                    </akn:p>
+                                </ris:td>
+                                <ris:td colspan="1" rowspan="1">
+                                    <akn:p style="text-align:center">
+                                        <akn:b>Spalte 4</akn:b>
+                                    </akn:p>
+                                </ris:td>
+                                <ris:td colspan="1" rowspan="1">
+                                    <akn:p style="text-align:center">
+                                        <akn:b>Spalte <akn:br/>5- <akn:br/>text</akn:b>
+                                    </akn:p>
+                                </ris:td>
+                            </ris:tr>
+                        </ris:tbody>
+                    </ris:table>
+                </akn:foreign>
                 {% endif %}
-                {% if not hideGrounds %}
-                <akn:block name="Gründe">
-                    <akn:embeddedStructure>
-                        {% if grounds %}
-                        {{ grounds | raw }}
-                        {% else %}
-                        <akn:foreign>
-                            <ris:table akn:unknownUseCaseDiscoveredForborder=""
-                                       ris:cellpadding="2"
-                                       ris:cellspacing="0">
-                                <ris:tbody>
-                                    <ris:tr>
-                                        <ris:td colspan="2" rowspan="1">
-                                            <akn:p style="text-align:center">
-                                                <akn:b>Spalte 1</akn:b>
-                                            </akn:p>
-                                        </ris:td>
-                                        <ris:td colspan="1" rowspan="1">
-                                            <akn:p style="text-align:center">
-                                                <akn:b>Spalte 2</akn:b>
-                                            </akn:p>
-                                        </ris:td>
-                                        <ris:td colspan="1" rowspan="1">
-                                            <akn:p style="text-align:center">
-                                                <akn:b>Spalte 3</akn:b>
-                                            </akn:p>
-                                        </ris:td>
-                                        <ris:td colspan="1" rowspan="1">
-                                            <akn:p style="text-align:center">
-                                                <akn:b>Spalte 4</akn:b>
-                                            </akn:p>
-                                        </ris:td>
-                                        <ris:td colspan="1" rowspan="1">
-                                            <akn:p style="text-align:center">
-                                                <akn:b>Spalte <akn:br/>5- <akn:br/>text</akn:b>
-                                            </akn:p>
-                                        </ris:td>
-                                    </ris:tr>
-                                </ris:tbody>
-                            </ris:table>
-                        </akn:foreign>
-                        {% endif %}
-                    </akn:embeddedStructure>
+            </akn:motivation>
+            {% endif %}
+
+            {% if not hideOpinions %}
+            <akn:motivation ris:domainTerm="Abweichende Meinung">
+                <akn:p>dissenting test</akn:p>
+                <akn:block name="Mitwirkende Richter">
+                    <akn:opinion ris:domainTerm="Art der Mitwirkung"
+                                 type="dissenting"
+                                 by="#dr-phil-max-mustermann">referenced opinions test 1</akn:opinion>
+                    <akn:opinion ris:domainTerm="Art der Mitwirkung"
+                                 type="dissenting"
+                                 by="#richterin-maxima-mustermann">referenced opinions test 2</akn:opinion>
                 </akn:block>
-                {% endif %}
-                {% if not hideOtherLongText %}
-                <akn:block name="Sonstiger Langtext">
-                    <akn:embeddedStructure>
-                        <akn:p>{% if otherLongText %}{{ otherLongText }}{% else %}Example SonstigerLangtext/OtherLongText{% endif %}</akn:p>
-                    </akn:embeddedStructure>
-                </akn:block>
-                {% endif %}
-                {% if not hideOpinions %}
-                <akn:block name="Abweichende Meinung">
-                    <akn:opinion>
-                        <akn:embeddedStructure>
-                            <akn:p>Example AbweichendeMeinung/DissentingOpinion</akn:p>
-                        </akn:embeddedStructure>
-                    </akn:opinion>
-                </akn:block>
-                {% endif %}
-            </akn:decision>
+            </akn:motivation>
+            {% endif %}
+
+            {% if not hideOtherLongText %}
+            <akn:motivation ris:domainTerm="Sonstiger Langtext">
+                <akn:p>{% if otherLongText %}{{ otherLongText }}{% else %}Example SonstigerLangtext/OtherLongText{% endif %}</akn:p>
+            </akn:motivation>
             {% endif %}
 
 
