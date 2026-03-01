@@ -117,7 +117,7 @@ jobs:
       - name: Run Trivy vulnerability file scanner
         # Third-party action, pin to commit SHA!
         # See https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions
-        uses: aquasecurity/trivy-action@c1824fd6edce30d7ab345a9989de00bbd46ef284
+        uses: aquasecurity/trivy-action@e368e328979b113139d6f9068e03accaed98a518
         with:
           scan-type: "fs"
           scan-ref: "./frontend"
@@ -187,7 +187,7 @@ jobs:
       - name: Run Trivy vulnerability image scanner
         # Third-party action, pin to commit SHA!
         # See https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions
-        uses: aquasecurity/trivy-action@c1824fd6edce30d7ab345a9989de00bbd46ef284
+        uses: aquasecurity/trivy-action@e368e328979b113139d6f9068e03accaed98a518
         with:
           image-ref: ${{ inputs.container-image-tag}}
           format: "sarif"
@@ -222,7 +222,7 @@ jobs:
       - name: Generate Cosign vulnerability scan record
         # Third-party action, pin to commit SHA!
         # See https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions
-        uses: aquasecurity/trivy-action@c1824fd6edce30d7ab345a9989de00bbd46ef284
+        uses: aquasecurity/trivy-action@e368e328979b113139d6f9068e03accaed98a518
         if: ${{ github.actor != 'dependabot[bot]' }}
         with:
           image-ref: ${{ inputs.container-image-tag }}
