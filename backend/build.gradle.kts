@@ -69,12 +69,6 @@ dependencies {
     implementation(libs.jsoup)
     implementation(libs.amazon.aws.sdk.s3)
 
-    // CVE-2022-1471
-    implementation(libs.snakeyaml)
-
-    // CVE-2024-29371 upgrade kubernetes-client to 5.0.0 after boot 4.0.0 upgrade
-    implementation(libs.jose4j)
-
     implementation(libs.micrometer.registry.prometheus)
     implementation(libs.sentry.spring.boot.starter.jakarta)
     implementation(libs.sentry.logback)
@@ -87,6 +81,10 @@ dependencies {
     implementation(libs.jaxb.moxy)
     implementation(libs.pebble)
     implementation(libs.streamex)
+
+    // pin jackson core version to avoid Vulnerability GHSA-72hv-8253-57qq
+    implementation(libs.tools.jackson.core)
+    implementation(libs.fasterxml.jackson.core)
 
     compileOnly(libs.lombok)
     annotationProcessor(libs.lombok)

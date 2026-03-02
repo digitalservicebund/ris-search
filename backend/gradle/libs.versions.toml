@@ -21,7 +21,6 @@ junit5 = "1.4.1"
 mockito = "5.21.0"
 spring-security = "6.5.2"
 spring-security-test = "7.0.3"
-snakeyalm = "2.5"
 spring-data-opensearch = "3.0.2"
 opensearch-test-autoconfigure = "2.0.3"
 opensearch-test-containers = "4.1.0"
@@ -30,12 +29,12 @@ commons-csv = "1.14.1"
 amazon-aws-sdk-s3 = "2.29.45"
 saxon-he = "12.9"
 streamex = "0.8.4"
-jackson-datatype-jsr310 = "2.20.0"
+fasterxml-jackson-core = "2.21.1"
+tools-jackson-core = "3.1.0"
 jaxb-moxy = "4.0.9"
 posthog = "1.2.0"
 pebble = "4.1.1"
 rest-assured = "6.0.0"
-jose4j = "0.9.6"
 
 [libraries]
 spring-actuator = { module="org.springframework.boot:spring-boot-starter-actuator", version.ref="spring-boot-starter" }
@@ -50,8 +49,6 @@ springdoc-openapi-starter-webmvc-ui = { module = "org.springdoc:springdoc-openap
 jsoup = { module = "org.jsoup:jsoup", version.ref = "jsoup" }
 jts-core = { group = "org.locationtech.jts", name = "jts-core", version.ref = "jts" }
 amazon-aws-sdk-s3 = { module = "software.amazon.awssdk:s3", version.ref = "amazon-aws-sdk-s3" }
-snakeyaml = { module = "org.yaml:snakeyaml", version.ref = "snakeyalm" }
-jose4j = { module = "org.bitbucket.b_c:jose4j", version.ref = "jose4j"}
 micrometer-registry-prometheus = { module = "io.micrometer:micrometer-registry-prometheus", version.ref = "prometheus" }
 sentry-spring-boot-starter-jakarta = { module = "io.sentry:sentry-spring-boot-4", version.ref = "sentry" }
 sentry-logback = { module = "io.sentry:sentry-logback", version.ref = "sentry" }
@@ -74,6 +71,8 @@ jaxb-moxy-xjc = {module = "org.eclipse.persistence:org.eclipse.persistence.moxy.
 pebble = { module = "io.pebbletemplates:pebble-spring-boot-starter", version.ref = "pebble" }
 streamex = { module = 'one.util:streamex', version.ref = "streamex" }
 restassured = { module = 'io.rest-assured:rest-assured', version.ref = "rest-assured" }
+fasterxml-jackson-core = { module = "com.fasterxml.jackson.core:jackson-core", version.ref = "fasterxml-jackson-core" }
+tools-jackson-core = { module = "tools.jackson.core:jackson-core", version.ref = "tools-jackson-core" }
 
 [plugins]
 spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
