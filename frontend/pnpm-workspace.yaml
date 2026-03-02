@@ -4,6 +4,7 @@ minimumReleaseAge: 4320
 minimumReleaseAgeExclude:
   - tar
   - minimatch
+  - serialize-javascript
 
 nodeLinker: hoisted
 
@@ -13,5 +14,6 @@ overrides:
   fast-xml-parser: 5.3.6
   minimatch: 10.2.3
   storybook: 10.2.10
+  serialize-javascript: 7.0.3
 
 saveExact: true
