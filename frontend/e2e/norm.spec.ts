@@ -181,6 +181,8 @@ test.describe("view norm page", async () => {
       "Neugefasst durch Testdaten",
       "Hinweis zum Stand:",
       "nicht vorhanden",
+      "Besonderer Hinweis:",
+      "Dieses Gesetz dient der Umsetzung folgender Richtlinien:1.Richtlinie 1",
       "Fußnoten:",
       /\*T \(\+{3} Textnachweis ab: 27\.5\.2000 \+{3}\).*\(\+{3} Zur Anwendung vgl\. §§ 5, 12, 15 \+{3}\)/,
       "Download:",
