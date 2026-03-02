@@ -255,6 +255,7 @@ jobs:
       - name: Create and finalize Sentry release for frontend
         if: ${{ github.actor != 'dependabot[bot]' && github.ref == 'refs/heads/main' }}
         run: |
+          export SENTRY_LOG_LEVEL=debug
           sentry-cli releases new ${{ inputs.container-image-version }}
           sentry-cli releases set-commits --auto ${{ inputs.container-image-version }}
           sentry-cli releases finalize ${{ inputs.container-image-version }}
