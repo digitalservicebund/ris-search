@@ -1,0 +1,59 @@
+name: Smoke tests
+
+on:
+  workflow_call:
+  workflow_dispatch:
+
+env:
+  RUN_ID: ${{ github.run_id }}
+
+jobs:
+  smoke-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 40
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          package_json_file: ./frontend/package.json
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: 'pnpm'
+          cache-dependency-path: ./frontend/pnpm-lock.yaml
+      - name: Install Node modules
+        run: pnpm install --frozen-lockfile
+        working-directory: ./frontend
+      - name: Get Playwright version
+        run: echo "PLAYWRIGHT_VERSION=$(pnpm list @playwright/test --depth=0 | grep @playwright/test | awk '{print $2}')" >> $GITHUB_ENV
+        working-directory: ./frontend
+      - name: Cache browser binaries
+        id: playwright-cache
+        uses: actions/cache@v5
+        with:
+          path: /home/runner/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ env.PLAYWRIGHT_VERSION }}
+      - name: Install Playwright browsers
+        run: pnpm exec playwright install --with-deps chromium
+        working-directory: ./frontend
+      - name: Run Playwright tests
+        run: pnpm exec playwright test --project=smoke-tests
+        working-directory: ./frontend
+        env:
+          STAGING_BASIC_AUTH_USERNAME: ${{ secrets.STAGING_BASIC_AUTH_USERNAME }}
+          STAGING_BASIC_AUTH_PASSWORD: ${{ secrets.STAGING_BASIC_AUTH_PASSWORD }}
+          TZ: Europe/Berlin
+      - name: Upload traces of failed smoke tests
+        uses: actions/upload-artifact@v6
+        if: ${{ failure() }}
+        with:
+          name: failed-smoke-tests
+          path: frontend/playwright-report/**/*.zip
+          retention-days: 5
+      - name: Send status to Slack
+        uses: digitalservicebund/notify-on-failure-gha@66c485757701f8d5dbee32f24df38d904ca693ba
+        if: ${{ failure() && github.ref == 'refs/heads/main' }}
+        with:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
