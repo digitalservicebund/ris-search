@@ -1,62 +1,35 @@
-name: Deploy Staging and UAT
+name: Deploy
 
 on:
   workflow_call:
     inputs:
-      deploying-repo:
-        description: 'Name of the repo that is deploying, either "ris-search" or "ris-search/frontend"'
-        required: true
-        type: string
       container-image-version:
         description: 'The sha which identifies the image'
         required: true
         type: string
+      deployment-environment:
+        description: 'Environment to deploy to, either "staging" or "uat"'
+        required: true
+        type: string
 
 jobs:
-  deploy-staging:
+  deploy:
     runs-on: ubuntu-latest
     if: ${{ github.ref == 'refs/heads/main' }}
-    concurrency: deploy
-    environment: staging
     permissions:
       id-token: write
     steps:
       - uses: chainguard-dev/actions/setup-gitsign@71714a76c3df10b544595a2294c16649dc3472e5
-      - name: Deploy new images
+      - name: Deploy backend and frontend images to ${{ inputs.deployment-environment}}
         uses: digitalservicebund/argocd-deploy@4e758f584953506c571951ffcba33d6a6246e856
         with:
-          environment: staging
+          environment: ${{ inputs.deployment-environment}}
           version: ${{ inputs.container-image-version }}
-          deploying_repo: ${{ inputs.deploying-repo }}
+          deploying_repo: ris-search,ris-search/frontend
           infra_repo: neuris-portal-infra
           github_app_id: ${{ secrets.GITOPS_NEURIS_APP_ID }}
           github_app_private_key: ${{ secrets.GITOPS_NEURIS_APP_PRIVATE_KEY }}
-          app: ris-portal-staging
-          argocd_pipeline_password: ${{ secrets.ARGOCD_PIPELINE_PASSWORD }}
-          argocd_server: ${{ secrets.ARGOCD_SERVER }}
-          argocd_sync_timeout: 420
-
-  deploy-uat:
-    runs-on: ubuntu-latest
-    if: ${{ github.ref == 'refs/heads/main' }}
-    concurrency: deploy
-    environment: staging
-    needs:
-      - deploy-staging
-    permissions:
-      id-token: write
-    steps:
-      - uses: chainguard-dev/actions/setup-gitsign@71714a76c3df10b544595a2294c16649dc3472e5
-      - name: Deploy new images
-        uses: digitalservicebund/argocd-deploy@4e758f584953506c571951ffcba33d6a6246e856
-        with:
-          environment: uat
-          version: ${{ inputs.container-image-version }}
-          deploying_repo: ${{ inputs.deploying-repo }}
-          infra_repo: neuris-portal-infra
-          github_app_id: ${{ secrets.GITOPS_NEURIS_APP_ID }}
-          github_app_private_key: ${{ secrets.GITOPS_NEURIS_APP_PRIVATE_KEY }}
-          app: ris-portal-uat
+          app: ris-portal-${{ inputs.deployment-environment}}
           argocd_pipeline_password: ${{ secrets.ARGOCD_PIPELINE_PASSWORD }}
           argocd_server: ${{ secrets.ARGOCD_SERVER }}
           argocd_sync_timeout: 420

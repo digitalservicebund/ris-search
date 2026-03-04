@@ -32,22 +32,22 @@ jobs:
       container-image-tag: ghcr.io/${{ github.repository }}/frontend:${{ github.sha }}
       container-image-version: ${{ github.sha }}
 
-  deploy-backend-staging-and-uat:
+  deploy-staging:
     needs:
       - backend-jobs
-      - e2e-tests
-    uses: ./.github/workflows/deploy.yml
-    secrets: inherit
-    with:
-      deploying-repo: ris-search
-      container-image-version: ${{ github.sha }}
-
-  deploy-frontend-staging-and-uat:
-    needs:
       - frontend-jobs
       - e2e-tests
     uses: ./.github/workflows/deploy.yml
     secrets: inherit
     with:
-      deploying-repo: ris-search/frontend
       container-image-version: ${{ github.sha }}
+      deployment-environment: staging
+
+  deploy-uat:
+    needs:
+      - deploy-staging
+    uses: ./.github/workflows/deploy.yml
+    secrets: inherit
+    with:
+      container-image-version: ${{ github.sha }}
+      deployment-environment: uat
