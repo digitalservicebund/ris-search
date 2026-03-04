@@ -44,9 +44,8 @@ jobs:
       deployment-environment: staging
 
   smoke-tests:
-    # Enable after testing that it works
-#    needs:
-#      - deploy-staging
+    needs:
+      - deploy-staging
     uses: ./.github/workflows/smoke-tests.yml
     secrets: inherit
 
