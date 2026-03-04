@@ -36,6 +36,18 @@ const projects: Project[] = [
     },
     testIgnore: "seo.spec.ts",
   },
+  {
+    name: "smoke-tests",
+    use: {
+      ...devices["Desktop Chrome"],
+      baseURL: "https://ris-portal.dev.ds4g.net",
+      httpCredentials: {
+        username: process.env.STAGING_BASIC_AUTH_USERNAME,
+        password: process.env.STAGING_BASIC_AUTH_PASSWORD,
+      },
+    },
+    testDir: "./smoke-tests",
+  },
 ];
 
 /**

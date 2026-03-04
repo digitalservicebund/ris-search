@@ -43,9 +43,15 @@ jobs:
       container-image-version: ${{ github.sha }}
       deployment-environment: staging
 
-  deploy-uat:
+  smoke-tests:
     needs:
       - deploy-staging
+    uses: ./.github/workflows/smoke-tests.yml
+    secrets: inherit
+
+  deploy-uat:
+    needs:
+      - smoke-tests
     uses: ./.github/workflows/deploy.yml
     secrets: inherit
     with:

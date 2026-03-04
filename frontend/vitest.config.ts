@@ -15,7 +15,7 @@ export default defineVitestConfig({
     },
     globals: true,
     setupFiles: ["src/tests/setup.ts"],
-    exclude: [...configDefaults.exclude, "e2e/**"],
+    exclude: [...configDefaults.exclude, "e2e/**", "smoke-tests/**"],
 
     // Filtering test output
     onConsoleLog(log) {
