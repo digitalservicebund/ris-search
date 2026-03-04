@@ -131,9 +131,9 @@ const breadcrumbItems: Ref<BreadcrumbItem[]> = computed(() => {
 const htmlTitle = computed(() => data.value?.articleHeading);
 
 const validVersions =
-  norm.value?.workExample?.legislationLegalForce !== "InForce"
-    ? useValidNormVersions(norm.value?.legislationIdentifier)
-    : undefined;
+  norm.value?.workExample?.legislationLegalForce === "InForce"
+    ? undefined
+    : useValidNormVersions(norm.value?.legislationIdentifier);
 
 const inForceNormLink = computed(() => {
   if (
