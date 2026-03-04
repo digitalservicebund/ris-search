@@ -1,3 +1,4 @@
+import { mockNuxtImport } from "@nuxt/test-utils/runtime";
 import { describe, expect, it, vi } from "vitest";
 import { useFetchNormArticleContent, useFetchNormContent } from "./useNormData";
 import type {
@@ -5,7 +6,6 @@ import type {
   LegislationManifestation,
   LegislationWork,
 } from "~/types";
-import type { FetchHook } from "ofetch";
 
 const { mockFetch } = vi.hoisted(() => {
   return {
@@ -13,10 +13,15 @@ const { mockFetch } = vi.hoisted(() => {
   };
 });
 
-vi.mock("~/plugins/risBackend", () => ({
-  default: defineNuxtPlugin(() => ({ provide: { risBackend: mockFetch } })),
-  extendOnRequest: (...cbs: FetchHook[]) => cbs,
-}));
+mockNuxtImport("useNuxtApp", () => {
+  const nuxtApp = (globalThis as unknown as Window)?.useNuxtApp?.() ?? {};
+  return () => {
+    return {
+      ...nuxtApp,
+      $risBackend: mockFetch,
+    };
+  };
+});
 
 describe("useNormData", () => {
   const consoleInfoMock = vi
@@ -38,19 +43,17 @@ describe("useNormData", () => {
 
   const expressionEli = "test-eli";
   const mockMetadata = {
-    workExample: {
-      encoding: [
-        {
-          "@id": "test-encoding-id",
-          encodingFormat: "text/html",
-          contentUrl: "/v1/test-content-url.html",
-          "@type": "LegislationObject",
-          inLanguage: "deu",
-        },
-      ],
-      hasPart: [],
-    } as Partial<LegislationExpression>,
-  } as LegislationWork;
+    encoding: [
+      {
+        "@id": "test-encoding-id",
+        encodingFormat: "text/html",
+        contentUrl: "/v1/test-content-url.html",
+        "@type": "LegislationObject",
+        inLanguage: "deu",
+      },
+    ],
+    hasPart: [],
+  } as Partial<LegislationExpression>;
   const mockHtml = `
     <section class="dokumentenkopf">
       <div class="fussnoten">Footnote content</div>
@@ -77,7 +80,7 @@ describe("useNormData", () => {
 
     const { data } = await useFetchNormContent(expressionEli);
     expect(data.value).toEqual({
-      legislationWork: mockMetadata,
+      legislation: mockMetadata,
       html: mockHtml,
       htmlParts: {
         officialToc: undefined,

@@ -33,13 +33,13 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 @JsonSubTypes({
   @JsonSubTypes.Type(value = CaseLawSearchSchema.class, name = "Decision"),
   @JsonSubTypes.Type(value = LiteratureSearchSchema.class, name = "Literature"),
-  @JsonSubTypes.Type(value = LegislationWorkSearchSchema.class, name = "Legislation"),
+  @JsonSubTypes.Type(value = LegislationExpressionSearchSchema.class, name = "Legislation"),
   @JsonSubTypes.Type(
       value = AdministrativeDirectiveSearchSchema.class,
       name = "AdministrativeDirective")
 })
 public sealed interface AbstractDocumentSchema
-    permits CaseLawSearchSchema,
-        LegislationWorkSearchSchema,
-        LiteratureSearchSchema,
-        AdministrativeDirectiveSearchSchema {}
+    permits AdministrativeDirectiveSearchSchema,
+        CaseLawSearchSchema,
+        LegislationExpressionSearchSchema,
+        LiteratureSearchSchema {}

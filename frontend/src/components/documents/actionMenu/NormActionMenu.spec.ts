@@ -4,11 +4,7 @@ import { render, screen } from "@testing-library/vue";
 import Tooltip from "primevue/tooltip";
 import { describe, expect, it, vi } from "vitest";
 import NormActionMenu from "~/components/documents/actionMenu/NormActionMenu.vue";
-import type {
-  LegislationExpression,
-  LegislationManifestation,
-  LegislationWork,
-} from "~/types";
+import type { LegislationManifestation, LegislationExpression } from "~/types";
 
 const { mockToastAdd } = vi.hoisted(() => ({
   mockToastAdd: vi.fn(),
@@ -32,18 +28,16 @@ mockNuxtImport("useRequestURL", () => {
 
 const mockLegislationWork = {
   legislationIdentifier: "eli/bgbl-test",
-  workExample: {
-    encoding: [
-      {
-        encodingFormat: "application/xml",
-        contentUrl: "https://example.com/v1/xml-content",
-      } as LegislationManifestation,
-    ],
-  } as LegislationExpression,
-} as LegislationWork;
+  encoding: [
+    {
+      encodingFormat: "application/xml",
+      contentUrl: "https://example.com/v1/xml-content",
+    } as LegislationManifestation,
+  ],
+} as LegislationExpression;
 
 function renderNormActionMenu(
-  metadata: LegislationWork = mockLegislationWork,
+  metadata: LegislationExpression = mockLegislationWork,
   translationUrl?: string,
 ) {
   render(NormActionMenu, {

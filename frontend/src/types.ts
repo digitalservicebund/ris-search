@@ -22,7 +22,7 @@ export interface SearchResult<T> {
   textMatches: TextMatch[];
 }
 
-export interface LegislationWork {
+export interface LegislationExpression {
   "@type": "Legislation";
   "@id": string;
   name: string;
@@ -32,20 +32,20 @@ export interface LegislationWork {
   legislationDate: string;
   datePublished: string;
   isPartOf: PublicationSchema;
-  workExample: LegislationExpression;
-}
-
-export type LegalForceStatus = "InForce" | "NotInForce" | "PartiallyInForce";
-export interface LegislationExpression {
-  "@type": "Legislation";
-  "@id": string;
-  legislationIdentifier: string;
   legislationLegalForce: LegalForceStatus;
   temporalCoverage: string;
   encoding: LegislationManifestation[];
   tableOfContents: TableOfContentsItem[];
   hasPart: Article[];
+  exampleOfWork: LegislationWork;
 }
+
+export interface LegislationWork {
+  "@type": "Legislation";
+  legislationIdentifier: string;
+}
+
+export type LegalForceStatus = "InForce" | "NotInForce" | "PartiallyInForce";
 
 export interface PublicationSchema {
   name: string;
@@ -187,7 +187,7 @@ export interface AdministrativeDirectiveEncoding {
 
 export type AnyDocument =
   | CaseLaw
-  | LegislationWork
+  | LegislationExpression
   | Literature
   | AdministrativeDirective;
 
