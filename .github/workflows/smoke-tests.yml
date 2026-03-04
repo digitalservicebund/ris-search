@@ -46,7 +46,7 @@ jobs:
           STAGING_BASIC_AUTH_PASSWORD: ${{ secrets.STAGING_BASIC_AUTH_PASSWORD }}
           TZ: Europe/Berlin
       - name: Upload traces of failed smoke tests
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         if: ${{ failure() }}
         with:
           name: failed-smoke-tests
