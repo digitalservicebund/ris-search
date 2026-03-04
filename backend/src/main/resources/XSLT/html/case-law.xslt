@@ -64,12 +64,14 @@
 
 	<xsl:template match="akn:block[@name='Orientierungssatz']">
 		<section id="orientierungssatz">
-			<h2>Orientierungssatz</h2>
-			<xsl:apply-templates />
-		</section>
-	</xsl:template>
+    <xsl:template match="ris:orientierungssatz">
+        <section id="orientierungssatz">
+            <h2>Orientierungssatz</h2>
+            <xsl:apply-templates />
+        </section>
+    </xsl:template>
 
-	<xsl:template match="akn:block[@name='Sonstiger Orientierungssatz']">
+	<xsl:template match="ris:sonstigerOrientierungssatz">
 		<section id="sonstigerOrientierungssatz">
 			<h2>Sonstiger Orientierungssatz</h2>
 				<xsl:apply-templates />
