@@ -17,6 +17,7 @@ const createMockSearchResult = (): SearchResult<CaseLaw> => ({
     deviatingDocumentNumber: [],
     inLanguage: "de",
     encoding: [],
+    highlightedFields: {},
   },
   textMatches: [],
 });

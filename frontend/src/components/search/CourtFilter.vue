@@ -69,11 +69,15 @@ const onItemSelect = () => {
 };
 
 const suggestions = computed<AutoCompleteSuggestion[]>(() =>
-  searchResults.value.map((i) => ({
-    id: i.id,
-    label: i.label,
-    secondaryLabel: i.id,
-  })),
+  searchResults.value
+    .filter(
+      (i): i is typeof i & { id: string; label: string } => !!i.id && !!i.label,
+    )
+    .map((i) => ({
+      id: i.id,
+      label: i.label,
+      secondaryLabel: i.id,
+    })),
 );
 
 const id = useId();

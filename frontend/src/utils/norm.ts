@@ -73,7 +73,7 @@ export function getManifestationUrl(
   metadata: LegislationWork | undefined,
   format: string,
 ) {
-  const encoding = metadata?.workExample?.encoding.find(
+  const encoding = metadata?.workExample?.encoding?.find(
     (e) => e.encodingFormat === format,
   );
   return encoding?.contentUrl;

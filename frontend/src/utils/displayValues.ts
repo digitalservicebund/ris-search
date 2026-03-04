@@ -34,7 +34,7 @@ export function formatDocumentKind(documentKind: DocumentKind): string {
  *  on the temporal coverage
  */
 export function formatNormValidity(
-  temporalCoverage: string,
+  temporalCoverage: string | undefined,
 ): { label: string; color: BadgeColor } | undefined {
   let interval;
   try {

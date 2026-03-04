@@ -24,7 +24,7 @@ const inForceVersionLink = computed(() =>
 
 const currentVersionValidityStatus = computed(() => {
   const validityInterval = temporalCoverageToValidityInterval(
-    props.currentVersion.workExample.temporalCoverage,
+    props.currentVersion.workExample?.temporalCoverage,
   );
   return getValidityStatus(validityInterval);
 });

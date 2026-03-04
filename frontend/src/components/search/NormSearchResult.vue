@@ -39,7 +39,7 @@ function getMatch(match: string, highlights: TextMatch[]) {
 
 const link = computed(() => {
   const prefix = "/norms/";
-  const expressionEli = item.value.workExample.legislationIdentifier;
+  const expressionEli = item.value.workExample?.legislationIdentifier;
   if (!expressionEli) return null;
   return prefix + expressionEli;
 });
@@ -67,7 +67,7 @@ function openResult(url: string) {
 }
 
 const validityStatus = computed(() => {
-  return formatNormValidity(item.value.workExample.temporalCoverage);
+  return formatNormValidity(item.value.workExample?.temporalCoverage);
 });
 
 const resultTypeId = useId();

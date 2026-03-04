@@ -31,8 +31,8 @@ describe("NormVersionList", () => {
       props: {
         status: "success",
         currentLegislationIdentifier:
-          data.member[1]?.legislationIdentifier ?? "",
-        versions: data.member,
+          data.member![1]?.legislationIdentifier ?? "",
+        versions: data.member!,
       },
       global: {
         stubs: {
@@ -78,8 +78,8 @@ describe("NormVersionList", () => {
       props: {
         status: "success",
         currentLegislationIdentifier:
-          data.member[1]?.legislationIdentifier ?? "",
-        versions: data.member,
+          data.member![1]?.legislationIdentifier ?? "",
+        versions: data.member!,
       },
       global: {
         stubs: {
@@ -102,8 +102,8 @@ describe("NormVersionList", () => {
       props: {
         status: "success",
         currentLegislationIdentifier:
-          data.member[1]?.legislationIdentifier ?? "",
-        versions: data.member,
+          data.member![1]?.legislationIdentifier ?? "",
+        versions: data.member!,
       },
       global: {
         stubs: {

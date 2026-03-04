@@ -33,7 +33,7 @@ const mockSearchResult: SearchResult<LegislationWork> = {
       name: "name",
       text: "Highlighted <mark>Test Title</mark>",
       "@type": "SearchResultMatch",
-      location: null,
+      location: undefined,
     },
     {
       name: "Article 1",
@@ -45,19 +45,19 @@ const mockSearchResult: SearchResult<LegislationWork> = {
       name: "Article 2",
       text: "Example Text 2",
       "@type": "SearchResultMatch",
-      location: null,
+      location: undefined,
     },
     {
       name: "Article 3",
       text: "Example Text 3",
       "@type": "SearchResultMatch",
-      location: null,
+      location: undefined,
     },
     {
       name: "Article 4",
       text: "Example Text 4",
       "@type": "SearchResultMatch",
-      location: null,
+      location: undefined,
     },
   ],
 };
@@ -166,7 +166,7 @@ describe("NormSearchResult", () => {
     const link = screen.getByRole("link", { name: /Test Title/i });
     expect(link).toHaveAttribute(
       "href",
-      `/norms/${mockSearchResult.item.workExample.legislationIdentifier}`,
+      `/norms/${mockSearchResult.item.workExample?.legislationIdentifier}`,
     );
   });
 
@@ -185,7 +185,7 @@ describe("NormSearchResult", () => {
       "@type": "SearchResultMatch",
       name: "articles.text",
       text: "testing <mark>highlighted Text</mark> is here",
-      location: null,
+      location: undefined,
     };
     const modifiedSearchResult: SearchResult<LegislationWork> = {
       ...mockSearchResult,
@@ -209,7 +209,7 @@ describe("NormSearchResult", () => {
           "@type": "SearchResultMatch",
           name: "name",
           text,
-          location: null,
+          location: undefined,
         },
         {
           "@type": "SearchResultMatch",

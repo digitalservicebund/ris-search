@@ -38,8 +38,8 @@ export const data: JSONLDList<LegislationExpression> = {
   ],
   view: {
     first: "",
-    previous: null,
-    next: null,
+    previous: undefined,
+    next: undefined,
     last: "",
   },
 };

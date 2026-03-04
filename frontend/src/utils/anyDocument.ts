@@ -68,7 +68,7 @@ export function getIdentifier(document: AnyDocument): string {
   ) {
     id = document.documentNumber;
   } else if (isLegislationWork(document)) {
-    id = document.workExample.legislationIdentifier;
+    id = document.workExample?.legislationIdentifier;
   }
 
   if (!id)

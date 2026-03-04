@@ -8,6 +8,7 @@ import {
 } from "./anyDocument";
 import type {
   AdministrativeDirective,
+  AnyDocument,
   CaseLaw,
   LegislationWork,
   Literature,
@@ -28,6 +29,7 @@ describe("anyDocument", () => {
         deviatingDocumentNumber: [],
         inLanguage: "",
         encoding: [],
+        highlightedFields: {},
       };
 
       expect(isCaselaw(doc)).toBe(true);
@@ -98,6 +100,7 @@ describe("anyDocument", () => {
         deviatingDocumentNumber: [],
         inLanguage: "",
         encoding: [],
+        highlightedFields: {},
       };
 
       expect(isLegislationWork(doc)).toBe(false);
@@ -109,17 +112,17 @@ describe("anyDocument", () => {
       const doc: Literature = {
         "@id": "4711",
         "@type": "Literature",
-        inLanguage: null,
-        documentNumber: null,
+        inLanguage: "",
+        documentNumber: "",
         yearsOfPublication: [],
         documentTypes: [],
         dependentReferences: [],
         independentReferences: [],
-        headline: null,
+        headline: undefined,
         authors: [],
         collaborators: [],
-        shortReport: null,
-        outline: null,
+        shortReport: undefined,
+        outline: undefined,
         encoding: [],
         alternativeHeadline: "",
         conferenceNotes: [],
@@ -134,7 +137,7 @@ describe("anyDocument", () => {
         publishers: [],
         publisherOrganizations: [],
         publishingHouses: [],
-        edition: null,
+        edition: undefined,
         volumes: [],
         internationalIdentifiers: [],
       };
@@ -200,6 +203,7 @@ describe("anyDocument", () => {
         deviatingDocumentNumber: [],
         inLanguage: "",
         encoding: [],
+        highlightedFields: {},
       };
 
       expect(getIdentifier(doc)).toBe("4711");
@@ -234,17 +238,17 @@ describe("anyDocument", () => {
       const doc: Literature = {
         "@id": "",
         "@type": "Literature",
-        inLanguage: null,
+        inLanguage: "",
         documentNumber: "4711",
         yearsOfPublication: [],
         documentTypes: [],
         dependentReferences: [],
         independentReferences: [],
-        headline: null,
+        headline: undefined,
         authors: [],
         collaborators: [],
-        shortReport: null,
-        outline: null,
+        shortReport: undefined,
+        outline: undefined,
         encoding: [],
         alternativeHeadline: "",
         conferenceNotes: [],
@@ -259,7 +263,7 @@ describe("anyDocument", () => {
         publishers: [],
         publisherOrganizations: [],
         publishingHouses: [],
-        edition: null,
+        edition: undefined,
         volumes: [],
         internationalIdentifiers: [],
       };
@@ -271,17 +275,17 @@ describe("anyDocument", () => {
       const doc: Literature = {
         "@id": "",
         "@type": "Literature",
-        inLanguage: null,
-        documentNumber: null,
+        inLanguage: "",
+        documentNumber: "",
         yearsOfPublication: [],
         documentTypes: [],
         dependentReferences: [],
         independentReferences: [],
-        headline: null,
+        headline: undefined,
         authors: [],
         collaborators: [],
-        shortReport: null,
-        outline: null,
+        shortReport: undefined,
+        outline: undefined,
         encoding: [],
         alternativeHeadline: "",
         conferenceNotes: [],
@@ -296,7 +300,7 @@ describe("anyDocument", () => {
         publishers: [],
         publisherOrganizations: [],
         publishingHouses: [],
-        edition: null,
+        edition: undefined,
         volumes: [],
         internationalIdentifiers: [],
       };
@@ -305,10 +309,9 @@ describe("anyDocument", () => {
     });
 
     it("throws if the document type is not supported", () => {
-      // @ts-expect-error Deliberately providing an invalid type
-      expect(() => getIdentifier({ "@type": "fake type" })).toThrow(
-        "Failed to identify document",
-      );
+      expect(() =>
+        getIdentifier({ "@type": "fake type" } as AnyDocument),
+      ).toThrow("Failed to identify document");
     });
   });
 });

@@ -21,13 +21,13 @@ const searchResult: SearchResult<AdministrativeDirective> = {
       "@type": "SearchResultMatch",
       name: "shortReport",
       text: "Inhalt eines Kurzreferats.",
-      location: null,
+      location: undefined,
     },
     {
       "@type": "SearchResultMatch",
       name: "headline",
       text: "Verwaltungsvorschrift Überschrift",
-      location: null,
+      location: undefined,
     },
   ],
 };
@@ -99,7 +99,7 @@ describe("AdministrativeDirectiveSearchResult", () => {
             "@type": "SearchResultMatch",
             name: "headline",
             text: "Verwaltungsvorschrift <mark>Überschrift</mark>",
-            location: null,
+            location: undefined,
           },
         ],
       });
@@ -173,7 +173,7 @@ describe("AdministrativeDirectiveSearchResult", () => {
             "@type": "SearchResultMatch",
             name: "shortReport",
             text: "<b>Inhalt</b> <i>eines</i> <mark>Kurzreferats.</mark> <a>Weiterer Inhalt.</a>",
-            location: null,
+            location: undefined,
           },
         ],
       });
@@ -195,7 +195,7 @@ describe("AdministrativeDirectiveSearchResult", () => {
             "@type": "SearchResultMatch",
             name: "shortReport",
             text: "<mark>Inhalt</mark> eines Kurzreferats.",
-            location: null,
+            location: undefined,
           },
         ],
       });

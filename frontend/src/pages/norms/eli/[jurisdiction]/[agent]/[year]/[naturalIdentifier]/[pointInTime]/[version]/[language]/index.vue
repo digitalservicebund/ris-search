@@ -84,7 +84,7 @@ if (error.value) {
 }
 
 const tableOfContents: Ref<TreeNode[]> = computed(() => {
-  if (!metadata.value?.workExample.tableOfContents) return [];
+  if (!metadata.value?.workExample?.tableOfContents) return [];
   const normPath = route.path;
   return tocItemsToTreeNodes(
     metadata.value.workExample.tableOfContents,
@@ -96,7 +96,7 @@ const tableOfContents: Ref<TreeNode[]> = computed(() => {
 const validityInterval = computed(() =>
   privateFeaturesEnabled
     ? temporalCoverageToValidityInterval(
-        metadata.value?.workExample.temporalCoverage,
+        metadata.value?.workExample?.temporalCoverage,
       )
     : undefined,
 );
@@ -278,7 +278,7 @@ const detailsTabPanelTitleId = useId();
           <template #sidebar>
             <client-only>
               <NormTableOfContents
-                v-if="metadata.workExample.tableOfContents.length > 0"
+                v-if="metadata.workExample?.tableOfContents?.length"
                 :table-of-contents="tableOfContents"
                 :selected-key="selectedEntry"
               />
@@ -342,7 +342,7 @@ const detailsTabPanelTitleId = useId();
             v-if="privateFeaturesEnabled"
             :status="normVersionsStatus"
             :current-legislation-identifier="
-              metadata.workExample.legislationIdentifier
+              metadata.workExample?.legislationIdentifier ?? ''
             "
             :versions="normVersions"
           />
