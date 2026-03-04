@@ -51,7 +51,7 @@ jobs:
 
   deploy-uat:
     needs:
-      - deploy-staging
+      - smoke-tests
     uses: ./.github/workflows/deploy.yml
     secrets: inherit
     with:
