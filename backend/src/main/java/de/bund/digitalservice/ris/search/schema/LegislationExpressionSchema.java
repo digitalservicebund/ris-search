@@ -39,17 +39,24 @@ import org.jetbrains.annotations.Nullable;
 public record LegislationExpressionSchema(
     @JsonProperty("@id")
         @Schema(
-            example = ApiConfig.Paths.LEGISLATION + "/eli/bund/bgbl-1/1975/s1760/1998-01-29/10/deu")
+            example = ApiConfig.Paths.LEGISLATION + "/eli/bund/bgbl-1/1975/s1760/1998-01-29/10/deu",
+            requiredMode = Schema.RequiredMode.REQUIRED)
         String id,
-    @Schema(example = "eli/bund/bgbl-1/1975/s1760/1998-01-29/10/deu") String legislationIdentifier,
+    @Schema(
+            example = "eli/bund/bgbl-1/1975/s1760/1998-01-29/10/deu",
+            requiredMode = Schema.RequiredMode.REQUIRED)
+        String legislationIdentifier,
     @Schema(
             description =
                 """
                          Textual string indicating a time period in [ISO 8601 time interval format](https://en.wikipedia.org/wiki/ISO_8601#Time_intervals)
                          """,
-            example = "1998-02-06/..")
+            example = "1998-02-06/..",
+            requiredMode = Schema.RequiredMode.REQUIRED)
         String temporalCoverage,
-    @Schema(description = "Whether the legislation expression is currently in force.")
+    @Schema(
+            description = "Whether the legislation expression is currently in force.",
+            requiredMode = Schema.RequiredMode.REQUIRED)
         LegalForceStatus legislationLegalForce,
     @Nullable List<TableOfContentsSchema> tableOfContents,
     @Schema(

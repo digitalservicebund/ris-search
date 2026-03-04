@@ -20,17 +20,23 @@ public record LegislationWorkSchema(
     @JsonProperty("@id")
         @Schema(
             example = ApiConfig.Paths.LEGISLATION + "/eli/bund/bgbl-1/1975/s1760",
-            description = "Based on the European Legislation Identifier (ELI)")
+            description = "Based on the European Legislation Identifier (ELI)",
+            requiredMode = Schema.RequiredMode.REQUIRED)
         String id,
     @Schema(
             example = "Verordnung über Kakao und Kakaoerzeugnisse",
-            description = "Amtliche Langüberschrift")
+            description = "Amtliche Langüberschrift",
+            requiredMode = Schema.RequiredMode.REQUIRED)
         String name,
     @Schema(
             example = "eli/bund/bgbl-1/1975/s1760/regelungstext-1",
-            description = "European Legislation Identifier (ELI)")
+            description = "European Legislation Identifier (ELI)",
+            requiredMode = Schema.RequiredMode.REQUIRED)
         String legislationIdentifier,
-    @Schema(example = "Kakaoverordnung", description = "Amtliche Kurzüberschrift")
+    @Schema(
+            example = "Kakaoverordnung",
+            description = "Amtliche Kurzüberschrift",
+            requiredMode = Schema.RequiredMode.REQUIRED)
         String alternateName,
     @Nullable @Schema(example = "KakaoV 2003", description = "Amtliche Buchstabenabkürzung")
         String abbreviation,
@@ -39,14 +45,16 @@ public record LegislationWorkSchema(
             description =
                 """
                         Ausfertigungsdatum (The date of adoption or signature of the legislation. This is the date at which the text is officially acknowledged to be a legislation, even though it might not even be published or in force.)
-                        """)
+                        """,
+            requiredMode = Schema.RequiredMode.REQUIRED)
         LocalDate legislationDate,
     @Schema(
             example = "2003-12-16",
             description =
                 """
                         Verkündungsdatum (The date of first publication of the legislation, when it was published in the official gazette. This may be later than the `legislationDate`.)
-                        """)
+                        """,
+            requiredMode = Schema.RequiredMode.REQUIRED)
         LocalDate datePublished,
     @Nullable PublicationIssueSchema isPartOf,
     @Schema(

@@ -23,15 +23,20 @@ public record LegislationExpressionPartSchema(
         @Schema(
             example =
                 ApiConfig.Paths.LEGISLATION
-                    + "/eli/bund/bgbl-1/1975/s1760/regelungstext-1.xml#hauptteitel-para-1")
+                    + "/eli/bund/bgbl-1/1975/s1760/regelungstext-1.xml#hauptteitel-para-1",
+            requiredMode = Schema.RequiredMode.REQUIRED)
         String id,
     @Schema(
             description =
                 "Expression-level identifier, uniquely identifying this element in an FRBR expression",
-            example = "hauptteitel-para-1")
+            example = "hauptteitel-para-1",
+            requiredMode = Schema.RequiredMode.REQUIRED)
         String eId,
-    @Schema(example = "550e8400-e29b-41d4-a716-446655440000") String guid,
-    @Schema(example = "§ 1") String name,
+    @Schema(
+            example = "550e8400-e29b-41d4-a716-446655440000",
+            requiredMode = Schema.RequiredMode.REQUIRED)
+        String guid,
+    @Schema(example = "§ 1", requiredMode = Schema.RequiredMode.REQUIRED) String name,
     @Nullable @Schema(example = "true") Boolean isActive,
     @Nullable @Schema(example = "2003-12-15") LocalDate entryIntoForceDate,
     @Nullable @Schema(example = "2003-12-15") LocalDate expiryDate,

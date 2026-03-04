@@ -10,10 +10,11 @@ import lombok.Builder;
  */
 @Builder
 public record AdministrativeDirectiveEncodingSchema(
-    @JsonProperty("@id") String id,
-    String contentUrl,
-    @Schema(example = "text/html") String encodingFormat,
-    @Schema(example = "de") String inLanguage)
+    @Schema(requiredMode = Schema.RequiredMode.REQUIRED) @JsonProperty("@id") String id,
+    @Schema(requiredMode = Schema.RequiredMode.REQUIRED) String contentUrl,
+    @Schema(example = "text/html", requiredMode = Schema.RequiredMode.REQUIRED)
+        String encodingFormat,
+    @Schema(example = "de", requiredMode = Schema.RequiredMode.REQUIRED) String inLanguage)
     implements JsonldResource {
 
   @Override
