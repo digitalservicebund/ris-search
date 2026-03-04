@@ -6,7 +6,7 @@ import {
 import _ from "lodash";
 import type { AutoCompleteDropdownClickEvent } from "primevue/autocomplete";
 import useBackendUrl from "~/composables/useBackendUrl";
-import type { CourtSearchResult } from "~/types/api";
+import type { CourtSearchResult, CourtsSearchParams } from "~/types/api";
 import { courtFilterDefaultSuggestions } from "~/utils/search/courtFilter";
 
 const model = defineModel<string | undefined>();
@@ -14,7 +14,7 @@ const model = defineModel<string | undefined>();
 const searchResults = ref<CourtSearchResult[]>([]);
 
 const search = async (prefix?: string) => {
-  const params = prefix ? { prefix } : {};
+  const params: CourtsSearchParams = prefix ? { prefix } : {};
   searchResults.value = await $fetch<CourtSearchResult[]>(
     useBackendUrl("/v1/case-law/courts"),
     {

@@ -10,7 +10,10 @@ import {
 export const CONSENT_COOKIE_NAME = "consent_given";
 
 /** Format of the payload that will be sent to PostHog when tracking searches. */
-export type PostHogSearchParams = SimpleSearchEndpointParams & {
+export type PostHogSearchParams = Omit<
+  SimpleSearchEndpointParams,
+  "documentKind"
+> & {
   documentKind: DocumentKind;
 };
 

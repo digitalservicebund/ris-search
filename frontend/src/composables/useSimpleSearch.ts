@@ -1,7 +1,7 @@
 import _ from "lodash";
 import type { Page } from "~/components/Pagination.vue";
 import { extendOnRequest } from "~/plugins/risBackend";
-import { DocumentKind } from "~/types/api";
+import { DocumentKind, type DocumentSearchParams } from "~/types/api";
 import {
   dateFilterToSimpleSearchParams,
   type StrictDateFilterValue,
@@ -19,16 +19,15 @@ type SimpleSearchOptions = {
   sort: MaybeRefOrGetter<string>;
 };
 
-export type SimpleSearchEndpointParams = {
+export type SimpleSearchEndpointParams = Omit<
+  DocumentSearchParams,
+  "size" | "typeGroup"
+> & {
   searchTerm: string;
   size: string;
   pageIndex: number;
   sort: string;
-  court?: string;
-  dateFrom?: string;
-  dateTo?: string;
   typeGroup?: string;
-  mostRelevantOn?: string;
 };
 
 /**

@@ -1,5 +1,5 @@
-import type { components } from "./api-generated.d.ts";
-export type { components } from "./api-generated.d.ts";
+import type { components, operations } from "./api-generated.d.ts";
+export type { components, operations } from "./api-generated.d.ts";
 
 // Shared
 export type LegalForceStatus = NonNullable<
@@ -56,6 +56,16 @@ export type AdministrativeDirectiveEncoding =
 
 // Search / court
 export type CourtSearchResult = components["schemas"]["CourtSearchResult"];
+
+// Query parameter types for API endpoints
+type QueryParams<T extends keyof operations> = NonNullable<
+  operations[T]["parameters"]["query"]
+>;
+
+export type DocumentSearchParams = QueryParams<"searchAndFilter_2">;
+export type LuceneSearchParams = QueryParams<"search">;
+export type LegislationSearchParams = QueryParams<"searchAndFilter_1">;
+export type CourtsSearchParams = QueryParams<"getCourts">;
 
 // Frontend-only types
 export type AnyDocument =
