@@ -2003,11 +2003,18 @@
           "administrative-directive": {
             "$ref": "#/components/schemas/StatisticsCountSchema"
           }
-        }
+        },
+        "required": [
+          "administrative-directive",
+          "case-law",
+          "legislation",
+          "literature"
+        ]
       },
       "StatisticsCountSchema": {
         "type": "object",
-        "properties": { "count": { "type": "integer", "format": "int64" } }
+        "properties": { "count": { "type": "integer", "format": "int64" } },
+        "required": ["count"]
       },
       "CollectionSchemaSearchMemberSchemaLiteratureSearchSchema": {
         "type": "object",
@@ -2025,7 +2032,8 @@
             }
           },
           "view": { "$ref": "#/components/schemas/PartialCollectionViewSchema" }
-        }
+        },
+        "required": ["@id", "member", "totalItems", "view"]
       },
       "LiteratureEncodingSchema": {
         "type": "object",
@@ -2035,7 +2043,8 @@
           "contentUrl": { "type": "string" },
           "encodingFormat": { "type": "string", "example": "text/html" },
           "inLanguage": { "type": "string", "example": "de" }
-        }
+        },
+        "required": ["@id", "contentUrl", "encodingFormat", "inLanguage"]
       },
       "LiteratureSearchSchema": {
         "allOf": [
@@ -2141,6 +2150,23 @@
               }
             }
           }
+        ],
+        "required": [
+          "@id",
+          "authors",
+          "collaborators",
+          "conferenceNotes",
+          "dependentReferences",
+          "documentNumber",
+          "documentTypes",
+          "firstPublicationDate",
+          "inLanguage",
+          "independentReferences",
+          "languages",
+          "literatureType",
+          "normReferences",
+          "originators",
+          "yearsOfPublication"
         ]
       },
       "PartialCollectionViewSchema": {
@@ -2165,7 +2191,8 @@
             "type": "array",
             "items": { "$ref": "#/components/schemas/TextMatchSchema" }
           }
-        }
+        },
+        "required": ["item", "textMatches"]
       },
       "TextMatchSchema": {
         "type": "object",
@@ -2174,7 +2201,8 @@
           "name": { "type": "string" },
           "text": { "type": "string" },
           "location": { "type": "string" }
-        }
+        },
+        "required": ["name", "text"]
       },
       "LiteratureSchema": {
         "type": "object",
@@ -2308,7 +2336,31 @@
             "type": "array",
             "items": { "$ref": "#/components/schemas/LiteratureEncodingSchema" }
           }
-        }
+        },
+        "required": [
+          "@id",
+          "authors",
+          "collaborators",
+          "conferenceNotes",
+          "dependentReferences",
+          "documentNumber",
+          "documentTypes",
+          "editors",
+          "founder",
+          "inLanguage",
+          "independentReferences",
+          "internationalIdentifiers",
+          "languages",
+          "literatureType",
+          "normReferences",
+          "originators",
+          "publisherOrganizations",
+          "publishers",
+          "publishingHouses",
+          "universityNotes",
+          "volumes",
+          "yearsOfPublication"
+        ]
       },
       "CollectionSchemaSearchMemberSchemaLegislationWorkSearchSchema": {
         "type": "object",
@@ -2326,7 +2378,8 @@
             }
           },
           "view": { "$ref": "#/components/schemas/PartialCollectionViewSchema" }
-        }
+        },
+        "required": ["@id", "member", "totalItems", "view"]
       },
       "LegislationExpressionSearchSchema": {
         "type": "object",
@@ -2351,7 +2404,13 @@
             "description": "Whether the legislation expression is currently in force.",
             "enum": ["InForce", "NotInForce", "PartiallyInForce"]
           }
-        }
+        },
+        "required": [
+          "@id",
+          "legislationIdentifier",
+          "legislationLegalForce",
+          "temporalCoverage"
+        ]
       },
       "LegislationWorkSearchSchema": {
         "allOf": [
@@ -2386,7 +2445,7 @@
               "datePublished": {
                 "type": "string",
                 "format": "date",
-                "description": "The date of first publication of the legislation, when it was published in the official gazette. This may be later than the `legislationDate`.\"\"\n",
+                "description": "The date of first publication of the legislation, when it was published in the official gazette. This may be later than the `legislationDate`.\"\n",
                 "example": "2003-12-16"
               },
               "isPartOf": {
@@ -2398,14 +2457,23 @@
             }
           }
         ],
-        "description": "A legislation item, across different expressions and manifestations. May be used to provide context to a `LegislationExpression` (under key `workExample`)."
+        "description": "A legislation item, across different expressions and manifestations. May be used to provide context to a `LegislationExpression` (under key `workExample`).",
+        "required": [
+          "@id",
+          "alternateName",
+          "datePublished",
+          "legislationDate",
+          "legislationIdentifier",
+          "name"
+        ]
       },
       "PublicationIssueSchema": {
         "type": "object",
         "properties": {
           "@type": { "type": "string", "example": "PublicationIssue" },
           "name": { "type": "string", "example": "BGBL I 2003, 1760" }
-        }
+        },
+        "required": ["name"]
       },
       "SearchMemberSchemaLegislationWorkSearchSchema": {
         "type": "object",
@@ -2418,7 +2486,8 @@
             "type": "array",
             "items": { "$ref": "#/components/schemas/TextMatchSchema" }
           }
-        }
+        },
+        "required": ["item", "textMatches"]
       },
       "LegislationExpressionPartSchema": {
         "type": "object",
@@ -2454,7 +2523,8 @@
             "description": "The source data for this part, if available on its own",
             "items": { "$ref": "#/components/schemas/LegislationObjectSchema" }
           }
-        }
+        },
+        "required": ["@id", "eId", "guid", "name"]
       },
       "LegislationExpressionSchema": {
         "type": "object",
@@ -2494,7 +2564,13 @@
             "type": "array",
             "items": { "$ref": "#/components/schemas/LegislationObjectSchema" }
           }
-        }
+        },
+        "required": [
+          "@id",
+          "legislationIdentifier",
+          "legislationLegalForce",
+          "temporalCoverage"
+        ]
       },
       "LegislationObjectSchema": {
         "type": "object",
@@ -2510,7 +2586,8 @@
           },
           "encodingFormat": { "type": "string", "example": "text/html" },
           "inLanguage": { "type": "string", "example": "de" }
-        }
+        },
+        "required": ["@id", "contentUrl", "encodingFormat", "inLanguage"]
       },
       "LegislationWorkSchema": {
         "type": "object",
@@ -2559,7 +2636,15 @@
             "$ref": "#/components/schemas/LegislationExpressionSchema",
             "description": "Expression-level details (<i>an \"exemplary\" expression of this work</i>)"
           }
-        }
+        },
+        "required": [
+          "@id",
+          "alternateName",
+          "datePublished",
+          "legislationDate",
+          "legislationIdentifier",
+          "name"
+        ]
       },
       "TableOfContentsSchema": {
         "type": "object",
@@ -2567,8 +2652,13 @@
           "@type": { "type": "string", "example": "TocEntry" },
           "id": { "type": "string", "example": "hauptteil-1_para-1" },
           "marker": { "type": "string", "example": 1 },
-          "heading": { "type": "string", "example": "Art 1" }
-        }
+          "heading": { "type": "string", "example": "Art 1" },
+          "children": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/TableOfContentsSchema" }
+          }
+        },
+        "required": ["children", "heading", "id", "marker"]
       },
       "StreamingResponseBody": {},
       "AbstractDocumentSchema": {
@@ -2617,6 +2707,12 @@
               }
             }
           }
+        ],
+        "required": [
+          "@id",
+          "documentNumber",
+          "documentType",
+          "referenceNumbers"
         ]
       },
       "CaseLawSearchSchema": {
@@ -2653,6 +2749,7 @@
               "courtName": { "type": "string", "example": "LArbG Hamm" },
               "decisionName": {
                 "type": "array",
+                "examples": ["Beispielentscheidung"],
                 "items": { "type": "string" }
               },
               "deviatingDocumentNumber": {
@@ -2674,6 +2771,17 @@
               }
             }
           }
+        ],
+        "required": [
+          "@id",
+          "decisionDate",
+          "decisionName",
+          "deviatingDocumentNumber",
+          "documentNumber",
+          "ecli",
+          "fileNumbers",
+          "highlightedFields",
+          "inLanguage"
         ]
       },
       "CollectionSchemaSearchMemberSchemaAbstractDocumentSchema": {
@@ -2692,7 +2800,8 @@
             }
           },
           "view": { "$ref": "#/components/schemas/PartialCollectionViewSchema" }
-        }
+        },
+        "required": ["@id", "member", "totalItems", "view"]
       },
       "SearchMemberSchemaAbstractDocumentSchema": {
         "type": "object",
@@ -2712,7 +2821,8 @@
             "type": "array",
             "items": { "$ref": "#/components/schemas/TextMatchSchema" }
           }
-        }
+        },
+        "required": ["item", "textMatches"]
       },
       "CollectionSchemaSearchMemberSchemaCaseLawSearchSchema": {
         "type": "object",
@@ -2730,7 +2840,8 @@
             }
           },
           "view": { "$ref": "#/components/schemas/PartialCollectionViewSchema" }
-        }
+        },
+        "required": ["@id", "member", "totalItems", "view"]
       },
       "SearchMemberSchemaCaseLawSearchSchema": {
         "type": "object",
@@ -2741,7 +2852,8 @@
             "type": "array",
             "items": { "$ref": "#/components/schemas/TextMatchSchema" }
           }
-        }
+        },
+        "required": ["item", "textMatches"]
       },
       "CollectionSchemaSearchMemberSchemaAdministrativeDirectiveSearchSchema": {
         "type": "object",
@@ -2759,7 +2871,8 @@
             }
           },
           "view": { "$ref": "#/components/schemas/PartialCollectionViewSchema" }
-        }
+        },
+        "required": ["@id", "member", "totalItems", "view"]
       },
       "SearchMemberSchemaAdministrativeDirectiveSearchSchema": {
         "type": "object",
@@ -2772,7 +2885,8 @@
             "type": "array",
             "items": { "$ref": "#/components/schemas/TextMatchSchema" }
           }
-        }
+        },
+        "required": ["item", "textMatches"]
       },
       "CaseLawEncodingSchema": {
         "type": "object",
@@ -2782,7 +2896,8 @@
           "contentUrl": { "type": "string" },
           "encodingFormat": { "type": "string", "example": "text/html" },
           "inLanguage": { "type": "string", "example": "de" }
-        }
+        },
+        "required": ["@id", "contentUrl", "encodingFormat", "inLanguage"]
       },
       "CaseLawSchema": {
         "type": "object",
@@ -2879,7 +2994,19 @@
               "items": { "type": "string" }
             }
           }
-        }
+        },
+        "required": [
+          "@id",
+          "decisionDate",
+          "decisionName",
+          "deviatingDocumentNumber",
+          "documentNumber",
+          "ecli",
+          "fileNumbers",
+          "highlightedFields",
+          "inLanguage",
+          "keywords"
+        ]
       },
       "CourtSearchResult": {
         "type": "object",
@@ -2900,7 +3027,8 @@
           "contentUrl": { "type": "string" },
           "encodingFormat": { "type": "string", "example": "text/html" },
           "inLanguage": { "type": "string", "example": "de" }
-        }
+        },
+        "required": ["@id", "contentUrl", "encodingFormat", "inLanguage"]
       },
       "AdministrativeDirectiveSchema": {
         "type": "object",
@@ -2973,7 +3101,17 @@
               "$ref": "#/components/schemas/AdministrativeDirectiveEncodingSchema"
             }
           }
-        }
+        },
+        "required": [
+          "@id",
+          "citationDates",
+          "documentNumber",
+          "documentType",
+          "normReferences",
+          "outline",
+          "referenceNumbers",
+          "references"
+        ]
       }
     }
   }
