@@ -18,17 +18,6 @@ import lombok.NoArgsConstructor;
 @Getter
 @Builder
 public class RisMeta {
-  @XmlElementWrapper(name = "decisionNames", namespace = CaseLawLdmlNamespaces.RIS_NS)
-  @XmlElement(name = "decisionName", namespace = CaseLawLdmlNamespaces.RIS_NS)
-  private List<String> decisionName;
-
-  @XmlElementWrapper(name = "previousDecisions", namespace = CaseLawLdmlNamespaces.RIS_NS)
-  @XmlElement(name = "previousDecision", namespace = CaseLawLdmlNamespaces.RIS_NS)
-  private List<RelatedDecision> previousDecision;
-
-  @XmlElementWrapper(name = "ensuingDecisions", namespace = CaseLawLdmlNamespaces.RIS_NS)
-  @XmlElement(name = "ensuingDecision", namespace = CaseLawLdmlNamespaces.RIS_NS)
-  private List<RelatedDecision> ensuingDecision;
 
   @XmlElementWrapper(name = "aktenzeichenListe", namespace = CaseLawLdmlNamespaces.RIS_NS)
   @XmlElement(name = "aktenzeichen", namespace = CaseLawLdmlNamespaces.RIS_NS)

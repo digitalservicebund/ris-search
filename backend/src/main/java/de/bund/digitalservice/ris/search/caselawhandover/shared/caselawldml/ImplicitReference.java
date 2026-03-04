@@ -12,14 +12,18 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ImplicitReference {
+  @XmlAttribute(name = "domainTerm")
+  private String domainTerm;
 
-  @XmlAttribute private String showAs;
+  @XmlElement(name = "norm", namespace = CaseLawLdmlNamespaces.RIS_NS)
+  private Norm norm;
 
-  @XmlAttribute private String shortForm;
+  @XmlElement(name = "vorgehend", namespace = CaseLawLdmlNamespaces.RIS_NS)
+  private LinkedJudgement precedingJudgement;
 
-  @XmlElement(namespace = CaseLawLdmlNamespaces.RIS_NS)
-  private NormReference normReference;
+  @XmlElement(name = "nachgehend", namespace = CaseLawLdmlNamespaces.RIS_NS)
+  private LinkedJudgement ensuingJudgement;
 
-  @XmlElement(namespace = CaseLawLdmlNamespaces.RIS_NS)
-  private CaselawReference caselawReference;
+  @XmlElement(name = "fundstelle", namespace = CaseLawLdmlNamespaces.RIS_NS)
+  private Citation citation;
 }
