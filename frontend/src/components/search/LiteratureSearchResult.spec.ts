@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/vue";
 import { describe } from "vitest";
 import LiteratureSearchResult from "~/components/search/LiteratureSearchResult.vue";
-import type { Literature, SearchResult, TextMatch } from "~/types";
+import type { Literature, SearchResult, TextMatch } from "~/types/api";
 
 const searchResult: SearchResult<Literature> = {
   item: {

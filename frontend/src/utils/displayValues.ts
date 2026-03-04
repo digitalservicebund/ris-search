@@ -1,5 +1,5 @@
 import { BadgeColor } from "~/components/Badge.vue";
-import { DocumentKind } from "~/types";
+import { DocumentKind } from "~/types/api";
 import {
   getValidityStatus,
   getValidityStatusLabel,

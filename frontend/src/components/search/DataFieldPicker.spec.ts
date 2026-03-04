@@ -1,7 +1,7 @@
 import { userEvent } from "@testing-library/user-event";
 import { render, screen } from "@testing-library/vue";
 import DataFieldPicker from "./DataFieldPicker.vue";
-import { DocumentKind } from "~/types";
+import { DocumentKind } from "~/types/api";
 
 describe("DataFieldPicker", () => {
   it("displays the document kind name without count", () => {

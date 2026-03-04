@@ -4,7 +4,7 @@ import {
   isFilterType,
   isStrictDateFilterValue,
 } from "./dateFilterType";
-import { DocumentKind } from "~/types";
+import { DocumentKind } from "~/types/api";
 
 describe("filterType", () => {
   describe("isFilterType", () => {

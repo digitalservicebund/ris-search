@@ -3,7 +3,7 @@ import Badge from "~/components/Badge.vue";
 import type { SearchResultHeaderItem } from "~/components/search/SearchResultHeader.vue";
 import { usePostHog } from "~/composables/usePostHog";
 import { usePrivateFeaturesFlag } from "~/composables/usePrivateFeaturesFlag";
-import type { LegislationWork, SearchResult, TextMatch } from "~/types";
+import type { LegislationWork, SearchResult, TextMatch } from "~/types/api";
 import { dateFormattedDDMMYYYY } from "~/utils/dateFormatting";
 import { formatNormValidity } from "~/utils/displayValues";
 import { temporalCoverageToValidityInterval } from "~/utils/norm";

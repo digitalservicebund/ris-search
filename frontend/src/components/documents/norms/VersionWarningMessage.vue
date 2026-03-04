@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import Message from "primevue/message";
 import type { RouteLocationRaw } from "#vue-router";
-import type { LegislationExpression } from "~/types";
+import type { LegislationExpression } from "~/types/api";
 import { dateFormattedDDMMYYYY } from "~/utils/dateFormatting";
 import type { ValidityStatus } from "~/utils/norm";
 import { temporalCoverageToValidityInterval } from "~/utils/norm";

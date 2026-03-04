@@ -1,4 +1,4 @@
-import type { CaseLaw } from "~/types";
+import type { CaseLaw } from "~/types/api";
 
 export function getEncodingURL(
   caseLaw: CaseLaw | null | undefined,

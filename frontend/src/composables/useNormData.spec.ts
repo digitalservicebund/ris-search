@@ -4,7 +4,7 @@ import type {
   LegislationExpression,
   LegislationManifestation,
   LegislationWork,
-} from "~/types";
+} from "~/types/api";
 import type { FetchHook } from "ofetch";
 
 const { mockFetch } = vi.hoisted(() => {

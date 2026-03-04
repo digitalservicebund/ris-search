@@ -1,4 +1,4 @@
-import { DocumentKind } from "~/types";
+import { DocumentKind } from "~/types/api";
 
 /**
  * Returns true if a string corresponds to a document kind.

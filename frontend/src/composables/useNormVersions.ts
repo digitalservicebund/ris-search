@@ -5,7 +5,7 @@ import type {
   LegislationExpression,
   LegislationWork,
   SearchResult,
-} from "~/types";
+} from "~/types/api";
 import { getCurrentDateInGermanyFormatted } from "~/utils/dateFormatting";
 
 interface UseNormVersions {

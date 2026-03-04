@@ -1,7 +1,7 @@
 import dayjs, { type Dayjs } from "dayjs";
 import _ from "lodash";
 import type { MetadataItem } from "~/components/Metadata.vue";
-import type { LegislationExpression, LegislationWork } from "~/types";
+import type { LegislationExpression, LegislationWork } from "~/types/api";
 import {
   dateFormattedDDMMYYYY,
   getCurrentDateInGermany,

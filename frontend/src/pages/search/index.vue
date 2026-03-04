@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Message, Select } from "primevue";
-import { DocumentKind } from "~/types";
+import { DocumentKind } from "~/types/api";
 import { isStrictDateFilterValue } from "~/utils/search/dateFilterType";
 
 useStaticPageSeo("suche");

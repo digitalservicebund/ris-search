@@ -1,6 +1,6 @@
 import type { PostHog } from "posthog-js";
 import { posthog } from "posthog-js";
-import type { DocumentKind } from "~/types";
+import type { DocumentKind } from "~/types/api";
 import {
   getStringOrUndefined,
   isStringEmpty,

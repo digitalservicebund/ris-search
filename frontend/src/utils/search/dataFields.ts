@@ -1,4 +1,4 @@
-import { DocumentKind } from "~/types";
+import { DocumentKind } from "~/types/api";
 
 /**
  * Queryable fields that can be added to the search query for advanced searches.

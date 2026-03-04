@@ -24,7 +24,7 @@ import { useFetchNormContent } from "~/composables/useNormData";
 import { useNormVersions } from "~/composables/useNormVersions";
 import { usePrivateFeaturesFlag } from "~/composables/usePrivateFeaturesFlag";
 import { fetchTranslationListWithIdFilter } from "~/composables/useTranslationData";
-import { DocumentKind, type LegislationWork } from "~/types";
+import { DocumentKind, type LegislationWork } from "~/types/api";
 import { dateFormattedDDMMYYYY } from "~/utils/dateFormatting";
 import { formatDocumentKind } from "~/utils/displayValues";
 import type { ValidityStatus } from "~/utils/norm";

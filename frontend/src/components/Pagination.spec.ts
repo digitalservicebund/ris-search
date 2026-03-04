@@ -2,7 +2,7 @@ import { renderSuspended } from "@nuxt/test-utils/runtime";
 import { screen } from "@testing-library/vue";
 import { describe, expect, it } from "vitest";
 import Pagination, { type Page } from "./Pagination.vue";
-import type { SearchResult, CaseLaw } from "~/types";
+import type { SearchResult, CaseLaw } from "~/types/api";
 
 const createMockSearchResult = (): SearchResult<CaseLaw> => ({
   item: {

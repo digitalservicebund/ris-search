@@ -1,5 +1,5 @@
 import type { AsyncData, NuxtError } from "#app";
-import type { LegislationWork } from "~/types";
+import type { LegislationWork } from "~/types/api";
 import { getTextFromElements, parseDocument } from "~/utils/htmlParser";
 
 export interface NormContent {

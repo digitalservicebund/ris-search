@@ -8,7 +8,7 @@ import type {
   LegislationWork,
   Literature,
   SearchResult,
-} from "~/types";
+} from "~/types/api";
 
 describe("SearchResult", () => {
   it("shows the correct result for caselaw", () => {

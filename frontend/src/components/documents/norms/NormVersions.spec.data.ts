@@ -1,4 +1,4 @@
-import type { JSONLDList, LegislationExpression } from "~/types";
+import type { JSONLDList, LegislationExpression } from "~/types/api";
 
 function createWorkExample(
   expressionEli: string,

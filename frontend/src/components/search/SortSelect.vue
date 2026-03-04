@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import PrimevueSelect from "primevue/select";
 import { computed } from "vue";
-import { DocumentKind } from "~/types";
+import { DocumentKind } from "~/types/api";
 import { sortMode } from "~/utils/search/sortMode";
 
 const props = defineProps<{ documentKind: DocumentKind }>();

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { SearchResultHeaderItem } from "~/components/search/SearchResultHeader.vue";
 import { usePostHog } from "~/composables/usePostHog";
-import type { AdministrativeDirective, SearchResult } from "~/types";
+import type { AdministrativeDirective, SearchResult } from "~/types/api";
 import { sanitizeSearchResult } from "~/utils/sanitize";
 import RuleIcon from "~icons/ic/outline-rule";
 

@@ -1,5 +1,5 @@
 import { reactive, nextTick } from "vue";
-import { DocumentKind } from "~/types";
+import { DocumentKind } from "~/types/api";
 
 describe("useSimpleSearchRouteParams", () => {
   beforeEach(() => {

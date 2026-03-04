@@ -1,6 +1,6 @@
 import { toValue } from "vue";
 import type { Page } from "~/components/Pagination.vue";
-import { DocumentKind } from "~/types";
+import { DocumentKind } from "~/types/api";
 import {
   dateFilterToQuery,
   type StrictDateFilterValue,

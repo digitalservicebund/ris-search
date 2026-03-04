@@ -1,5 +1,5 @@
 import type { MetadataItem } from "~/components/Metadata.vue";
-import type { Literature } from "~/types";
+import type { Literature } from "~/types/api";
 
 export const LITERATURE_TITLE_PLACEHOLDER = "Titelzeile nicht vorhanden";
 

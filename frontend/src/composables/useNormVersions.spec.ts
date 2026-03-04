@@ -2,7 +2,7 @@ import { mockNuxtImport } from "@nuxt/test-utils/runtime";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { ref } from "vue";
 import { useNormVersions } from "./useNormVersions";
-import type { LegislationWork, SearchResult } from "~/types";
+import type { LegislationWork, SearchResult } from "~/types/api";
 
 const dummyData = {
   member: [

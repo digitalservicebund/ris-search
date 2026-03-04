@@ -6,7 +6,7 @@ import {
 import _ from "lodash";
 import type { AutoCompleteDropdownClickEvent } from "primevue/autocomplete";
 import useBackendUrl from "~/composables/useBackendUrl";
-import type { CourtSearchResult } from "~/types";
+import type { CourtSearchResult } from "~/types/api";
 import { courtFilterDefaultSuggestions } from "~/utils/search/courtFilter";
 
 const model = defineModel<string | undefined>();

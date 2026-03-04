@@ -1,7 +1,7 @@
 import _ from "lodash";
 import type { Page } from "~/components/Pagination.vue";
 import { extendOnRequest } from "~/plugins/risBackend";
-import { DocumentKind } from "~/types";
+import { DocumentKind } from "~/types/api";
 import {
   dateFilterToSimpleSearchParams,
   type StrictDateFilterValue,

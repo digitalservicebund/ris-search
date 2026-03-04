@@ -8,7 +8,7 @@ import type {
   LegislationExpression,
   LegislationManifestation,
   LegislationWork,
-} from "~/types";
+} from "~/types/api";
 
 const { mockToastAdd } = vi.hoisted(() => ({
   mockToastAdd: vi.fn(),

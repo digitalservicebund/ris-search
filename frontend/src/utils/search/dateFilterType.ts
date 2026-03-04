@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import { DocumentKind } from "~/types";
+import { DocumentKind } from "~/types/api";
 
 const filterTypes = [
   "allTime",

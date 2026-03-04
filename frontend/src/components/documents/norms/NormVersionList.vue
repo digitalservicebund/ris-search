@@ -4,7 +4,7 @@ import Column from "primevue/column";
 import DataTable from "primevue/datatable";
 import Badge from "~/components/Badge.vue";
 import IncompleteDataMessage from "~/components/documents/IncompleteDataMessage.vue";
-import type { LegislationExpression } from "~/types";
+import type { LegislationExpression } from "~/types/api";
 import { dateFormattedDDMMYYYY } from "~/utils/dateFormatting";
 import { formatNormValidity } from "~/utils/displayValues";
 import { temporalCoverageToValidityInterval } from "~/utils/norm";

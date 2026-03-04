@@ -1,5 +1,5 @@
 import type { AsyncData, NuxtError } from "#app";
-import type { JSONLDList, LegislationWork, SearchResult } from "~/types";
+import type { JSONLDList, LegislationWork, SearchResult } from "~/types/api";
 import { getCurrentDateInGermanyFormatted } from "~/utils/dateFormatting";
 
 export interface TranslationContent {

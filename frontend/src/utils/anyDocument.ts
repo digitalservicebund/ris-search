@@ -4,7 +4,7 @@ import type {
   CaseLaw,
   LegislationWork,
   Literature,
-} from "~/types";
+} from "~/types/api";
 
 /**
  * Type guard asserting that the candidate is a caselaw document.

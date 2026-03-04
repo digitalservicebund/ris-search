@@ -4,7 +4,7 @@ import { render, screen } from "@testing-library/vue";
 import Tooltip from "primevue/tooltip";
 import { describe, expect, it, vi } from "vitest";
 import LiteratureActionMenu from "~/components/documents/actionMenu/LiteratureActionMenu.vue";
-import type { Literature } from "~/types";
+import type { Literature } from "~/types/api";
 
 const { mockToastAdd } = vi.hoisted(() => ({
   mockToastAdd: vi.fn(),

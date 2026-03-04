@@ -5,7 +5,7 @@ import {
   useSimpleSearch,
   type SimpleSearchEndpointParams,
 } from "./useSimpleSearch";
-import { DocumentKind } from "~/types";
+import { DocumentKind } from "~/types/api";
 
 type OnRequestHook = (ctx: { options: { query: unknown } }) => void;
 

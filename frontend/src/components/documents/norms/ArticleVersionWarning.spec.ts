@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/vue";
 import ArticleVersionWarning from "./ArticleVersionWarning.vue";
-import type { Article } from "~/types";
+import type { Article } from "~/types/api";
 import { parseDateGermanLocalTime } from "~/utils/dateFormatting";
 import type { ValidityInterval } from "~/utils/norm";
 

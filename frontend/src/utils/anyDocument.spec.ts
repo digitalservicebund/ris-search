@@ -11,7 +11,7 @@ import type {
   CaseLaw,
   LegislationWork,
   Literature,
-} from "~/types";
+} from "~/types/api";
 
 describe("anyDocument", () => {
   describe("isCaselaw", () => {

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { DocumentView } from "~/layouts/document.vue";
-import { DocumentKind, type Literature } from "~/types";
+import { DocumentKind, type Literature } from "~/types/api";
 import IcBaselineSubject from "~icons/ic/baseline-subject";
 import IcOutlineInfo from "~icons/ic/outline-info";
 
