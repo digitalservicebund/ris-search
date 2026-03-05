@@ -900,7 +900,7 @@ export interface components {
       legislationDate: string;
       /**
        * Format: date
-       * @description The date of first publication of the legislation, when it was published in the official gazette. This may be later than the `legislationDate`."
+       * @description The date of first publication of the legislation, when it was published in the official gazette. This may be later than the `legislationDate`.
        * @example 2003-12-16
        */
       datePublished: string;

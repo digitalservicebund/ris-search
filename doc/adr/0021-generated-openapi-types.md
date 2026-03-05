@@ -14,7 +14,7 @@ The frontend communicates with the backend via a REST API documented by an OpenA
 - Adding or renaming backend fields required manual updates in two places
 - There was no automated way to detect when the API changed in a breaking way
 
-The backend already generates an OpenAPI spec at via SpringDoc. This means a machine-readable, up-to-date spec is always available.
+The backend already generates an OpenAPI spec via SpringDoc. This means a machine-readable, up-to-date spec is always available.
 
 ## Decision
 

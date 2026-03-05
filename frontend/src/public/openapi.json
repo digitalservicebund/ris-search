@@ -2445,7 +2445,7 @@
               "datePublished": {
                 "type": "string",
                 "format": "date",
-                "description": "The date of first publication of the legislation, when it was published in the official gazette. This may be later than the `legislationDate`.\"\n",
+                "description": "The date of first publication of the legislation, when it was published in the official gazette. This may be later than the `legislationDate`.\n",
                 "example": "2003-12-16"
               },
               "isPartOf": {

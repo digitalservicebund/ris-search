@@ -63,7 +63,7 @@ public record LegislationWorkSearchSchema(
             example = "2003-12-16",
             description =
                 """
-                The date of first publication of the legislation, when it was published in the official gazette. This may be later than the `legislationDate`."
+                The date of first publication of the legislation, when it was published in the official gazette. This may be later than the `legislationDate`.
                 """,
             requiredMode = Schema.RequiredMode.REQUIRED)
         LocalDate datePublished,
