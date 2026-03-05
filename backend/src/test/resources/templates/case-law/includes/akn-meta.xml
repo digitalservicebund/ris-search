@@ -124,6 +124,9 @@
             {% endif %}
         </ris:sonstigerOrientierungssatz>
         {% endif %}
+        <ris:entscheidungsnamen domainTerm="Entscheidungsnamen">
+            <ris:entscheidungsname domainTerm="Entscheidungsname">Test decision name</ris:entscheidungsname>
+        </ris:entscheidungsnamen>
     </ris:dokumentarischeKurztexte>
 </akn:otherAnalysis>
 </akn:analysis>

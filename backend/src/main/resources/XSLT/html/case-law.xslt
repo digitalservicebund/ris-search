@@ -62,8 +62,6 @@
         </section>
     </xsl:template>
 
-	<xsl:template match="akn:block[@name='Orientierungssatz']">
-		<section id="orientierungssatz">
     <xsl:template match="ris:orientierungssatz">
         <section id="orientierungssatz">
             <h2>Orientierungssatz</h2>
@@ -215,7 +213,7 @@
 	<!--***************************************************************************************-->
 
 	<!-- Border Number -->
-	<xsl:template match="akn:hcontainer[@name='randnummer']">
+	<xsl:template match="akn:hcontainer[@name='Randnummer']">
 		<dl class="border-number">
 			<dt class="number">
 				<xsl:attribute name="id">

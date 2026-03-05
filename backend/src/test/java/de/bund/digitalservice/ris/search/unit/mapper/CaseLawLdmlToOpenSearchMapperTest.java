@@ -32,9 +32,7 @@ class CaseLawLdmlToOpenSearchMapperTest {
     assertThat(caseLaw.documentNumber()).isEqualTo("testDocNumber");
     assertThat(caseLaw.ecli()).isEqualTo("testEcli");
     assertThat(caseLaw.guidingPrinciple()).isEqualTo("Example Leitsatz/GuidingPrinciple");
-    assertThat(caseLaw.headline())
-        .isEqualTo(
-            "Aktenzeichen: fileNumber test Entscheidungsdatum: 01.01.2020 Gericht: courtLabel test Dokumenttyp: documentType test");
+    assertThat(caseLaw.headline()).isEqualTo("the title");
     assertThat(caseLaw.decisionDate()).isEqualTo(LocalDate.of(2020, 1, 1));
     assertThat(caseLaw.tenor()).isEqualTo("Example Tenor/Tenor");
     assertThat(caseLaw.fileNumbers()).hasToString("[Test file number 1, Test file number 2]");
@@ -48,8 +46,12 @@ class CaseLawLdmlToOpenSearchMapperTest {
     assertThat(caseLaw.decisionName()).hasToString("[Test decision name]");
     assertThat(caseLaw.deviatingDocumentNumber()).hasToString("[Test deviatingDocumentNumber]");
     assertThat(caseLaw.previousDecisions())
-        .containsExactlyInAnyOrder("previous decision - file number LG");
+        .containsExactlyInAnyOrder(
+            "previous decision file number, previous decision court type",
+            "previous decision file number, previous decision court type");
     assertThat(caseLaw.ensuingDecisions())
-        .containsExactlyInAnyOrder("ENSUING12345678 ensuing decision - file number BVerfG");
+        .containsExactlyInAnyOrder(
+            "ensuing decision file number, ensuing decision court type",
+            "ensuing decision file number, ensuing decision court type");
   }
 }

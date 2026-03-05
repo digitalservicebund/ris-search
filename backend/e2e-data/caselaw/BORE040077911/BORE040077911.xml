@@ -97,7 +97,7 @@
                 <akn:p>Die Kosten des Verfahrens werden vom Beklagten getragen.</akn:p>
             </akn:decision>
             <akn:background ris:domainTerm="Tatbestand">
-                <akn:hcontainer name="randnummer">
+                <akn:hcontainer ris:domainTerm="Randnummer" eId="randnummer-1" name="Randnummer">
                     <akn:num>1</akn:num>
                     <akn:content>
                         <akn:p>Fiktiver Hintergrundtext für den Testfall zur Randnummernverlinkung.</akn:p>
