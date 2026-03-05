@@ -35,9 +35,7 @@ function getNormVersions(workEli?: string) {
   return { status, data };
 }
 
-function getNorms(
-  params: Omit<LegislationSearchParams, "size"> & { size: string },
-) {
+function getNorms(params: LegislationSearchParams) {
   const immediate = params.eli !== undefined;
   const { status, data, error } = useRisBackend<
     JSONLDList<SearchResult<LegislationWork>>
@@ -59,6 +57,6 @@ export function useValidNormVersions(workEli?: string) {
     eli: workEli,
     temporalCoverageFrom: today,
     temporalCoverageTo: today,
-    size: "300",
+    size: 300,
   });
 }
