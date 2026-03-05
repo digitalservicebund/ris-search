@@ -4,6 +4,7 @@ import jakarta.xml.bind.annotation.XmlElement;
 import lombok.Getter;
 import lombok.Setter;
 
+/** Represents a legal citation, consisting of a periodical and a specific position within it. */
 @Getter
 @Setter
 public class Citation {
@@ -11,5 +12,5 @@ public class Citation {
   private Periodical periodical;
 
   @XmlElement(name = "zitatstelle", namespace = CaseLawLdmlNamespaces.RIS_NS)
-  private String citationPosition; // e.g., "138, 287-300"
+  private String citationPosition;
 }

@@ -5,6 +5,7 @@ import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 
+/** Represents a linked court decision (judgement) and its associated metadata. */
 @Getter
 @Setter
 public class LinkedJudgement {
@@ -20,6 +21,11 @@ public class LinkedJudgement {
   @XmlElement(name = "gericht", namespace = CaseLawLdmlNamespaces.RIS_NS)
   private Court court;
 
+  /**
+   * Returns a simplified string representation containing the file number and court type.
+   *
+   * @return a comma-separated string of the judgement details
+   */
   public String asString() {
     return String.join(", ", List.of(this.fileNumber, this.court.getGerichtstyp()));
   }

@@ -26,6 +26,7 @@ public class DocumentaryShortTexts {
   @XmlElement(name = "entscheidungsname", namespace = CaseLawLdmlNamespaces.RIS_NS)
   private List<DecisionName> decisionNames;
 
+  /** Represents the title line (Titelzeile) of the documentary short texts. */
   @Getter
   @Setter
   public static class TitleLine {
@@ -33,6 +34,7 @@ public class DocumentaryShortTexts {
     private JaxbHtml content;
   }
 
+  /** Represents a primary headnote (Orientierungssatz) of the decision. */
   @Getter
   @Setter
   public static class Orientierungssatz {
@@ -40,6 +42,7 @@ public class DocumentaryShortTexts {
     private JaxbHtml content;
   }
 
+  /** Represents an additional or other headnote (Sonstiger Orientierungssatz). */
   @Getter
   @Setter
   public static class SonstigerOrientierungssatz {

@@ -4,6 +4,7 @@ import jakarta.xml.bind.annotation.XmlElement;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+/** Represents a header paragraph within the case law LDML structure. */
 @Getter
 @NoArgsConstructor
 public class HeaderParagraph {
