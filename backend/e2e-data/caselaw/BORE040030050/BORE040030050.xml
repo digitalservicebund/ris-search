@@ -96,7 +96,7 @@
                 <akn:p>Die Verfahrenskosten werden vollständig übernommen.</akn:p>
             </akn:decision>
             <akn:background ris:domainTerm="Tatbestand">
-                <akn:hcontainer name="randnummer">
+                <akn:hcontainer ris:domainTerm="Randnummer" eId="randnummer-1" name="Randnummer">
                     <akn:num>1</akn:num>
                     <akn:content>
                         <akn:p>Fiktiver Hintergrundtext für den Testfall im Verkehrsbereich.</akn:p>
