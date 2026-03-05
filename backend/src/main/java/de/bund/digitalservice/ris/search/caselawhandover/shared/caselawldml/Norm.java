@@ -5,6 +5,9 @@ import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * Represents a legal norm, including its abbreviation, title, and a list of specific provisions.
+ */
 @Getter
 @Setter
 public class Norm {
