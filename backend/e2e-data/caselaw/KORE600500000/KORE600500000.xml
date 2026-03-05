@@ -96,7 +96,7 @@
                 <akn:p>Die Kostenlast wird vollumfänglich übernommen.</akn:p>
             </akn:decision>
             <akn:background ris:domainTerm="Tatbestand">
-                <akn:hcontainer name="randnummer">
+                <akn:hcontainer ris:domainTerm="Randnummer" eId="randnummer-1" name="Randnummer">
                     <akn:num>1</akn:num>
                     <akn:content>
                         <akn:p>Testbeschreibung des fiktiven Sachverhalts.</akn:p>
