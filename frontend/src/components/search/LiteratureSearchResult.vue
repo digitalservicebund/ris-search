@@ -26,7 +26,7 @@ function getMatch(match: string, highlights: TextMatch[]) {
 }
 
 function getShortReportSnippet(
-  shortReport: string | null | undefined,
+  shortReport: string | undefined,
   textMatches: TextMatch[],
 ): string | undefined {
   if (!shortReport) return undefined;
