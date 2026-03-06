@@ -40,14 +40,6 @@ public abstract class AknMainContentMotivation extends AknMainContent {
   public static class DecisionGrounds extends AknMainContentMotivation {
     public static final String NAME = "Entscheidungsgründe";
 
-    public DecisionGrounds(JaxbHtml content) {
-      this.content = content;
-    }
-
-    public static DecisionGrounds build(JaxbHtml content) {
-      return content == null ? null : new DecisionGrounds(content);
-    }
-
     @Override
     public String getName() {
       return NAME;
@@ -63,14 +55,6 @@ public abstract class AknMainContentMotivation extends AknMainContent {
   @XmlDiscriminatorValue(AknMainContentMotivation.Grounds.NAME)
   public static class Grounds extends AknMainContentMotivation {
     public static final String NAME = "Gründe";
-
-    public Grounds(JaxbHtml content) {
-      this.content = content;
-    }
-
-    public static Grounds build(JaxbHtml content) {
-      return content == null ? null : new Grounds(content);
-    }
 
     @Override
     public String getName() {
@@ -89,14 +73,6 @@ public abstract class AknMainContentMotivation extends AknMainContent {
   public static class OtherLongText extends AknMainContentMotivation {
     public static final String NAME = "Sonstiger Langtext";
 
-    public OtherLongText(JaxbHtml content) {
-      this.content = content;
-    }
-
-    public static OtherLongText build(JaxbHtml content) {
-      return content == null ? null : new OtherLongText(content);
-    }
-
     @Override
     public String getName() {
       return NAME;
@@ -112,14 +88,6 @@ public abstract class AknMainContentMotivation extends AknMainContent {
   @XmlDiscriminatorValue(AknMainContentMotivation.DissentingOpinion.NAME)
   public static class DissentingOpinion extends AknMainContentMotivation {
     public static final String NAME = "Abweichende Meinung";
-
-    public DissentingOpinion(JaxbHtml content) {
-      this.content = content;
-    }
-
-    public static DissentingOpinion build(JaxbHtml content) {
-      return content == null ? null : new DissentingOpinion(content);
-    }
 
     @Override
     public String getName() {

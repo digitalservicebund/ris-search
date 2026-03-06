@@ -40,20 +40,6 @@ public abstract class AknMainContentIntroduction extends AknMainContent {
   public static class GuidingPrinciple extends AknMainContentIntroduction {
     public static final String NAME = "Leitsatz";
 
-    public GuidingPrinciple(JaxbHtml content) {
-      this.content = content;
-    }
-
-    /**
-     * Factory method to create a GuidingPrinciple if content is present.
-     *
-     * @param content the HTML content to wrap
-     * @return a new instance, or {@code null} if content is null
-     */
-    public static GuidingPrinciple build(JaxbHtml content) {
-      return content == null ? null : new GuidingPrinciple(content);
-    }
-
     @Override
     public String getName() {
       return NAME;
@@ -69,20 +55,6 @@ public abstract class AknMainContentIntroduction extends AknMainContent {
   @XmlDiscriminatorValue(AknMainContentIntroduction.Outline.NAME)
   public static class Outline extends AknMainContentIntroduction {
     public static final String NAME = "Gliederung";
-
-    public Outline(JaxbHtml content) {
-      this.content = content;
-    }
-
-    /**
-     * Factory method to create an Outline if content is present.
-     *
-     * @param content the HTML content to wrap
-     * @return a new instance, or {@code null} if content is null
-     */
-    public static Outline build(JaxbHtml content) {
-      return content == null ? null : new Outline(content);
-    }
 
     @Override
     public String getName() {

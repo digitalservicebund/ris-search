@@ -152,9 +152,9 @@
         <ris:fieldOfLaws>
             <ris:fieldOfLaw>Test field of law</ris:fieldOfLaw>
         </ris:fieldOfLaws>
-        <ris:deviatingDocumentNumbers>
-            <ris:deviatingDocumentNumber>Test deviatingDocumentNumber</ris:deviatingDocumentNumber>
-        </ris:deviatingDocumentNumbers>
+        <ris:abweichendeDokumentnummern domainTerm="Abweichende Dokumentnummern">
+            <ris:abweichendeDokumentnummer domainTerm="Abweichende Dokumentnummer">Test deviatingDocumentNumber</ris:abweichendeDokumentnummer>
+        </ris:abweichendeDokumentnummern>
         <ris:previousDecisions>
             <ris:previousDecision date="2009-06-25">
                 <ris:fileNumber>previous decision - file number</ris:fileNumber>

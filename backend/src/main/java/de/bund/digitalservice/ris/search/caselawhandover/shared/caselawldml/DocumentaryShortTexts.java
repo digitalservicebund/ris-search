@@ -13,23 +13,23 @@ import org.eclipse.persistence.oxm.annotations.XmlPath;
 public class DocumentaryShortTexts {
 
   @XmlElement(name = "titelzeile", namespace = CaseLawLdmlNamespaces.RIS_NS)
-  private TitleLine titleLine;
+  private RisTitelzeile risTitelzeile;
 
   @XmlElement(name = "orientierungssatz", namespace = CaseLawLdmlNamespaces.RIS_NS)
-  private Orientierungssatz headNotes;
+  private RisOrientierungssatz risOrientierungssatz;
 
   @XmlElement(name = "sonstigerOrientierungssatz", namespace = CaseLawLdmlNamespaces.RIS_NS)
-  private SonstigerOrientierungssatz otherHeadNotes;
+  private RisSonstigerOrientierungssatz risSonstigerOrientierungssatz;
 
   /** List of decision names (Entscheidungsnamen). */
   @XmlElementWrapper(name = "entscheidungsnamen", namespace = CaseLawLdmlNamespaces.RIS_NS)
   @XmlElement(name = "entscheidungsname", namespace = CaseLawLdmlNamespaces.RIS_NS)
-  private List<DecisionName> decisionNames;
+  private List<RisEntscheidungsName> risEntscheidungsNames;
 
   /** Represents the title line (Titelzeile) of the documentary short texts. */
   @Getter
   @Setter
-  public static class TitleLine {
+  public static class RisTitelzeile {
     @XmlPath(".")
     private JaxbHtml content;
   }
@@ -37,7 +37,7 @@ public class DocumentaryShortTexts {
   /** Represents a primary headnote (Orientierungssatz) of the decision. */
   @Getter
   @Setter
-  public static class Orientierungssatz {
+  public static class RisOrientierungssatz {
     @XmlPath(".")
     private JaxbHtml content;
   }
@@ -45,7 +45,7 @@ public class DocumentaryShortTexts {
   /** Represents an additional or other headnote (Sonstiger Orientierungssatz). */
   @Getter
   @Setter
-  public static class SonstigerOrientierungssatz {
+  public static class RisSonstigerOrientierungssatz {
     @XmlPath(".")
     private JaxbHtml content;
   }
@@ -53,7 +53,7 @@ public class DocumentaryShortTexts {
   /** Represents a single decision name entry. */
   @Getter
   @Setter
-  public static class DecisionName {
+  public static class RisEntscheidungsName {
     @XmlPath("text()")
     private String name;
   }

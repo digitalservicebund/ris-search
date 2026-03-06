@@ -18,9 +18,6 @@ public class Meta {
   @XmlElement(name = "analysis", namespace = CaseLawLdmlNamespaces.AKN_NS)
   private Analysis analysis;
 
-  @XmlElement(name = "references", namespace = CaseLawLdmlNamespaces.AKN_NS)
-  private References references;
-
   @XmlElement(name = "classification", namespace = CaseLawLdmlNamespaces.AKN_NS)
   private Classification classification;
 

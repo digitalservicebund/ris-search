@@ -20,7 +20,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Builder
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Court {
+public class RisGericht {
 
   /** The domain-specific term identifying the court. */
   @XmlAttribute private String domainTerm;

@@ -1,22 +1,24 @@
 package de.bund.digitalservice.ris.search.mapper;
 
-import static de.bund.digitalservice.ris.search.utils.MappingUtils.nullSafeGet;
-import static de.bund.digitalservice.ris.search.utils.MappingUtils.validate;
-import static de.bund.digitalservice.ris.search.utils.MappingUtils.validateNotNull;
-
 import de.bund.digitalservice.ris.search.caselawhandover.shared.caselawldml.AknKeyword;
+import de.bund.digitalservice.ris.search.caselawhandover.shared.caselawldml.AknMainContentIntroduction;
+import de.bund.digitalservice.ris.search.caselawhandover.shared.caselawldml.AknMainContentMotivation;
 import de.bund.digitalservice.ris.search.caselawhandover.shared.caselawldml.Analysis;
 import de.bund.digitalservice.ris.search.caselawhandover.shared.caselawldml.CaseLawLdml;
-import de.bund.digitalservice.ris.search.caselawhandover.shared.caselawldml.Court;
+import de.bund.digitalservice.ris.search.caselawhandover.shared.caselawldml.CaseLawLdmlValidator;
 import de.bund.digitalservice.ris.search.caselawhandover.shared.caselawldml.DocumentaryShortTexts;
-import de.bund.digitalservice.ris.search.caselawhandover.shared.caselawldml.FrbrDate;
 import de.bund.digitalservice.ris.search.caselawhandover.shared.caselawldml.FrbrElement;
+import de.bund.digitalservice.ris.search.caselawhandover.shared.caselawldml.FrbrThis;
 import de.bund.digitalservice.ris.search.caselawhandover.shared.caselawldml.ImplicitReference;
 import de.bund.digitalservice.ris.search.caselawhandover.shared.caselawldml.JaxbHtml;
 import de.bund.digitalservice.ris.search.caselawhandover.shared.caselawldml.Judgment;
 import de.bund.digitalservice.ris.search.caselawhandover.shared.caselawldml.JudgmentBody;
+import de.bund.digitalservice.ris.search.caselawhandover.shared.caselawldml.LinkedJudgement;
 import de.bund.digitalservice.ris.search.caselawhandover.shared.caselawldml.Meta;
 import de.bund.digitalservice.ris.search.caselawhandover.shared.caselawldml.OtherAnalysis;
+import de.bund.digitalservice.ris.search.caselawhandover.shared.caselawldml.OtherReferences;
+import de.bund.digitalservice.ris.search.caselawhandover.shared.caselawldml.Proprietary;
+import de.bund.digitalservice.ris.search.caselawhandover.shared.caselawldml.RisGericht;
 import de.bund.digitalservice.ris.search.caselawhandover.shared.caselawldml.RisMeta;
 import de.bund.digitalservice.ris.search.exception.OpenSearchMapperException;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
@@ -27,12 +29,16 @@ import jakarta.xml.bind.JAXB;
 import jakarta.xml.bind.ValidationException;
 import java.io.StringReader;
 import java.time.Instant;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import javax.xml.transform.stream.StreamSource;
 import org.eclipse.persistence.exceptions.DescriptorException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -46,6 +52,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class CaseLawLdmlToOpenSearchMapper {
 
+  private final CaseLawLdmlValidator validator;
+
+  @Autowired
+  public CaseLawLdmlToOpenSearchMapper(CaseLawLdmlValidator validator) {
+    this.validator = validator;
+  }
+
   /**
    * Maps a {@link CaseLawLdml} object to a {@link CaseLawDocumentationUnit} entity. The method
    * performs validation checks on mandatory fields and ensures all necessary data is present.
@@ -55,152 +68,57 @@ public class CaseLawLdmlToOpenSearchMapper {
    * @throws ValidationException if any required fields in the input object are missing or invalid
    */
   public CaseLawDocumentationUnit mapToEntity(CaseLawLdml caseLawLdml) throws ValidationException {
-    validateNotNull(caseLawLdml.getJudgment(), "Judgment missing");
+
+    validator.validate(caseLawLdml);
+
     Judgment judgment = caseLawLdml.getJudgment();
-    validateNotNull(judgment.getMeta(), "Meta missing");
     Meta meta = judgment.getMeta();
-    validateNotNull(meta.getProprietary(), "Proprietary missing");
-    validateNotNull(meta.getProprietary().getMeta(), "RisMeta missing");
-    RisMeta risMeta = meta.getProprietary().getMeta();
-    Court court = risMeta.getCourt();
-    validateNotNull(court.getGerichtstyp(), "CourtType missing");
-    validateNotNull(risMeta.getDocumentType(), "DocumentType missing");
-    validate(!risMeta.getFileNumbers().isEmpty(), "FileNumber missing");
-    validateNotNull(meta.getIdentification(), "Identification missing");
-    validateNotNull(meta.getIdentification().getFrbrWork(), "FrbrWork missing");
-    FrbrElement frbrWork = meta.getIdentification().getFrbrWork();
-    validateNotNull(frbrWork.getFrbrThis(), "FrbrThis missing");
-    validateNotNull(frbrWork.getFrbrThis().getValue(), "Unique identifier missing");
-    String uniqueIdentifier = frbrWork.getFrbrThis().getValue();
-    validateNotNull(frbrWork.getFrbrAlias(), "FrbrAlias missing");
-    validateNotNull(frbrWork.getUuidAliasValue(), "FrbrAlias UUID missing");
-    String ecli = frbrWork.getEcliAliasValue();
-    validateNotNull(frbrWork.getFrbrDate(), "FrbrDate missing");
-    FrbrDate frbrDate = frbrWork.getFrbrDate();
-    validateNotNull(frbrDate.getDate(), "DecisionDate missing");
-
-    // visible elements
-    validateNotNull(judgment.getHeader(), "Header missing");
-
-    JaxbHtml header = judgment.getHeader().findShortTitle();
-
-    validateNotNull(judgment.getJudgmentBody(), "JudgmentBody missing");
-
+    RisMeta risMeta = meta.getProprietary().getRisMeta();
+    FrbrElement work = meta.getIdentification().getFrbrWork();
+    String uniqueId = extractUniqueIdentifier(work);
+    RisGericht risGericht = risMeta.getRisGericht();
     JudgmentBody judgmentBody = judgment.getJudgmentBody();
 
-    // Get data from introductions
-    JaxbHtml leitsatz = judgmentBody.getIntroductionEntryContentByName("Leitsatz").orElse(null);
-    JaxbHtml gliederung = judgmentBody.getIntroductionEntryContentByName("Gliederung").orElse(null);
-
-    Optional<DocumentaryShortTexts> docShortTexts =
-        Optional.ofNullable(meta.getAnalysis())
-            .map(Analysis::getOtherAnalysis)
-            .map(OtherAnalysis::getDocumentaryShortTexts);
-
-    JaxbHtml headNote =
-        docShortTexts
-            .map(DocumentaryShortTexts::getHeadNotes)
-            .map(note -> note.getContent())
-            .orElse(null);
-
-    JaxbHtml otherHeadNote =
-        docShortTexts
-            .map(DocumentaryShortTexts::getOtherHeadNotes)
-            .map(note -> note.getContent())
-            .orElse(null);
-
-    List<String> decisionNames =
-        docShortTexts
-            .map(DocumentaryShortTexts::getDecisionNames)
-            .orElse(Collections.emptyList())
-            .stream()
-            .map(DocumentaryShortTexts.DecisionName::getName)
-            .toList();
-
-    JaxbHtml background = judgmentBody.getBackground();
-
-    JaxbHtml decision = judgmentBody.getDecision();
-
-    // TODO
-    JaxbHtml dissentingOpinion = null;
-
-    JaxbHtml decisionGrounds =
-        judgmentBody.getMotivationEntryContentByName("Entscheidungsgründe").orElse(null);
-    JaxbHtml grounds = judgmentBody.getMotivationEntryContentByName("Gründe").orElse(null);
-    JaxbHtml otherLongText =
-        judgmentBody.getMotivationEntryContentByName("Sonstiger Langtext").orElse(null);
-
-    List<String> previousDecisions =
-        Optional.ofNullable(meta.getAnalysis())
-            .map(Analysis::getOtherReferences)
-            .map(refs -> refs.getReferencesByType(ImplicitReference::getPrecedingJudgement))
-            .map(
-                legalProceedings ->
-                    legalProceedings.stream().map(lp -> lp.asString()).collect(Collectors.toList()))
-            .orElse(Collections.emptyList());
-
-    List<String> ensuingDecisions =
-        Optional.ofNullable(meta.getAnalysis())
-            .map(Analysis::getOtherReferences)
-            .map(refs -> refs.getReferencesByType(ImplicitReference::getEnsuingJudgement))
-            .map(
-                legalProceedings ->
-                    legalProceedings.stream().map(lp -> lp.asString()).collect(Collectors.toList()))
-            .orElse(Collections.emptyList());
-
-    // some fields not in ldml are commented for now
     return CaseLawDocumentationUnit.builder()
-        // Meta elements
-        .id(uniqueIdentifier)
-        .documentNumber(uniqueIdentifier)
-        .ecli(ecli)
-        .decisionDate(DateUtils.nullSafeParseyyyyMMdd(frbrDate.getDate()))
-        .fileNumbers(risMeta.getFileNumbers())
-        .courtType(court.getGerichtstyp())
-        .location(court.getGerichtsort())
-        .documentType(risMeta.getDocumentType())
-        .judicialBody(court.getSpruchkoerper().getValue())
+        .id(uniqueId)
+        .documentNumber(uniqueId)
+        .ecli(work.getEcliAliasValue())
+        .decisionDate(DateUtils.nullSafeParseyyyyMMdd(work.getFrbrDate().getDate()))
+        .fileNumbers(risMeta.getAktenzeichen())
+        .courtType(risGericht.getGerichtstyp())
+        .location(risGericht.getGerichtsort())
+        .documentType(risMeta.getRisDokumentTyp())
+        .judicialBody(risGericht.getSpruchkoerper().getValue())
         .courtKeyword(risMeta.getCourtKeyword())
-        .keywords(
-            nullSafeGet(
-                meta.getClassification(),
-                e ->
-                    nullSafeGet(
-                        e.getKeyword(), f -> f.stream().map(AknKeyword::getValue).toList())))
-        .decisionName(decisionNames)
-        .deviatingDocumentNumber(risMeta.getDeviatingDocumentNumber())
-        .publicationStatus(risMeta.getPublicationStatus())
-        .error(risMeta.getError() == null || risMeta.getError())
-        .documentationOffice(risMeta.getDocumentationOffice())
-        .procedures(risMeta.getProcedure())
-        .legalEffect(risMeta.getLegalEffect())
-
-        // Visible elements (in display order)
-        .headline(jaxbToSanitizedHtml(header))
-        .guidingPrinciple(jaxbToSanitizedHtml(leitsatz))
-        .headnote(jaxbToSanitizedHtml(headNote))
-        .otherHeadnote(jaxbToSanitizedHtml(otherHeadNote))
-        .outline(jaxbToSanitizedHtml(gliederung))
-        .tenor(jaxbToSanitizedHtml(decision))
-        .caseFacts(jaxbToSanitizedHtml(background))
-        .decisionGrounds(jaxbToSanitizedHtml(decisionGrounds))
-        .grounds(jaxbToSanitizedHtml(grounds))
-        .otherLongText(jaxbToSanitizedHtml(otherLongText))
-        .dissentingOpinion(jaxbToSanitizedHtml(dissentingOpinion))
-        .previousDecisions(previousDecisions)
-        .ensuingDecisions(ensuingDecisions)
-
+        .keywords(extractKeywords(meta))
+        .decisionName(extractDecisionNames(meta))
+        .deviatingDocumentNumber(risMeta.getRisAbweichendeDokumentnummern())
+        .documentationOffice(risMeta.getRisDokumentationsstelle())
+        .legalEffect(risMeta.getRisRechtskraft())
+        .headline(sanitize(judgment.getHeader().findShortTitle()))
+        .guidingPrinciple(
+            extractContent(judgmentBody, AknMainContentIntroduction.GuidingPrinciple.NAME))
+        .headnote(sanitize(extractHeadnote(meta).orElse(null)))
+        .otherHeadnote(sanitize(extractOtherHeadnote(meta).orElse(null)))
+        .outline(extractContent(judgmentBody, AknMainContentIntroduction.Outline.NAME))
+        .tenor(sanitize(judgmentBody.getDecision()))
+        .caseFacts(sanitize(judgmentBody.getBackground()))
+        .decisionGrounds(
+            extractContent(judgmentBody, AknMainContentMotivation.DecisionGrounds.NAME))
+        .grounds(extractContent(judgmentBody, AknMainContentMotivation.Grounds.NAME))
+        .otherLongText(extractContent(judgmentBody, AknMainContentMotivation.OtherLongText.NAME))
+        .dissentingOpinion(
+            extractContent(judgmentBody, AknMainContentMotivation.DissentingOpinion.NAME))
+        .previousDecisions(
+            getLinkedJudgements(
+                meta, refs -> refs.getReferencesByType(ImplicitReference::getPrecedingJudgement)))
+        .ensuingDecisions(
+            getLinkedJudgements(
+                meta, refs -> refs.getReferencesByType(ImplicitReference::getEnsuingJudgement)))
         // Internal (portal team) fields
         .indexedAt(Instant.now().toString())
         .articles(null)
         .build();
-  }
-
-  private static String jaxbToSanitizedHtml(JaxbHtml html) {
-    if (html == null) {
-      return null;
-    }
-    return MappingUtils.sanitizeHtmlFromString(html.toHtmlString());
   }
 
   /**
@@ -220,5 +138,91 @@ public class CaseLawLdmlToOpenSearchMapper {
     } catch (DescriptorException | DataBindingException | ValidationException e) {
       throw new OpenSearchMapperException("unable to parse file to DocumentationUnit", e);
     }
+  }
+
+  private static String extractUniqueIdentifier(FrbrElement frbrWork) throws ValidationException {
+    return Optional.ofNullable(frbrWork)
+        .map(FrbrElement::getFrbrThis)
+        .map(FrbrThis::getValue)
+        .filter(s -> !s.isBlank())
+        .orElseThrow(() -> new ValidationException("Case Law LDML has no documentNumber"));
+  }
+
+  private static Optional<DocumentaryShortTexts> extractDocumentaryShortTexts(Meta meta) {
+    return Optional.ofNullable(meta.getAnalysis())
+        .map(Analysis::getOtherAnalysis)
+        .map(OtherAnalysis::getDocumentaryShortTexts);
+  }
+
+  private static Optional<JaxbHtml> extractHeadnote(Meta meta) {
+    Optional<DocumentaryShortTexts> docShortTexts = extractDocumentaryShortTexts(meta);
+    return Optional.ofNullable(
+        docShortTexts
+            .map(DocumentaryShortTexts::getRisOrientierungssatz)
+            .map(note -> note.getContent())
+            .orElse(null));
+  }
+
+  private static Optional<JaxbHtml> extractOtherHeadnote(Meta meta) {
+    Optional<DocumentaryShortTexts> docShortTexts = extractDocumentaryShortTexts(meta);
+    return Optional.ofNullable(
+        docShortTexts
+            .map(DocumentaryShortTexts::getRisSonstigerOrientierungssatz)
+            .map(note -> note.getContent())
+            .orElse(null));
+  }
+
+  private static List<String> extractDecisionNames(Meta meta) {
+    Optional<DocumentaryShortTexts> docShortTexts = extractDocumentaryShortTexts(meta);
+    return docShortTexts
+        .map(DocumentaryShortTexts::getRisEntscheidungsNames)
+        .orElse(Collections.emptyList())
+        .stream()
+        .map(DocumentaryShortTexts.RisEntscheidungsName::getName)
+        .toList();
+  }
+
+  private static List<String> getLinkedJudgements(
+      Meta meta, Function<OtherReferences, List<LinkedJudgement>> extractor) {
+    return Optional.ofNullable(meta.getAnalysis())
+        .map(Analysis::getOtherReferences)
+        .map(extractor)
+        .stream()
+        .flatMap(Collection::stream)
+        .filter(Objects::nonNull)
+        .map(LinkedJudgement::asString)
+        .collect(Collectors.toList());
+  }
+
+  private static RisMeta getRisMeta(CaseLawLdml ldml) throws ValidationException {
+    return Optional.ofNullable(ldml)
+        .map(CaseLawLdml::getJudgment)
+        .map(Judgment::getMeta)
+        .map(Meta::getProprietary)
+        .map(Proprietary::getRisMeta)
+        .orElseThrow(
+            () -> new ValidationException("Metadata structure (Proprietary/RisMeta) is missing"));
+  }
+
+  private List<String> extractKeywords(Meta meta) {
+    return Optional.ofNullable(meta.getClassification())
+        .map(c -> c.getKeyword().stream().map(AknKeyword::getValue).toList())
+        .orElse(Collections.emptyList());
+  }
+
+  private String extractContent(JudgmentBody judgmentBody, String name) {
+    return judgmentBody
+        .getIntroductionEntryContentByName(name)
+        .or(() -> judgmentBody.getMotivationEntryContentByName(name))
+        .map(this::sanitize)
+        .orElse(null);
+  }
+
+  private String sanitize(JaxbHtml html) {
+    if (html == null) {
+      return null;
+    }
+
+    return MappingUtils.sanitizeHtmlFromString(html.toHtmlString());
   }
 }
