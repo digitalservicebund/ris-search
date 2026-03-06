@@ -1,92 +1,109 @@
 <?xml version="1.0" encoding="utf-8"?>
-<akn:akomaNtoso xmlns:akn="http://docs.oasis-open.org/legaldocml/ns/akn/3.0/WD17"
+<akn:akomaNtoso xmlns:akn="http://docs.oasis-open.org/legaldocml/ns/akn/3.0"
                 xmlns:ris="http://example.com/0.1/"
                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                xsi:schemaLocation="http://docs.oasis-open.org/legaldocml/ns/akn/3.0/WD17
-                     https://docs.oasis-open.org/legaldocml/akn-core/v1.0/csprd02/part2-specs/schemas/akomantoso30.xsd">
-   <akn:judgment name="Beispielurteil10">
-      <akn:meta>
-         <akn:identification source="Testquelle10">
-            <akn:FRBRWork>
-               <akn:FRBRthis value="BORE040077911"/>
-               <akn:FRBRuri value="BORE040077911"/>
-               <akn:FRBRalias name="uebergreifende-id" value="fake-uuid-0010"/>
-               <akn:FRBRdate date="2025-04-10" name="entscheidungsdatum"/>
-               <akn:FRBRauthor href="Testautor10"/>
-               <akn:FRBRcountry value="de"/>
-            </akn:FRBRWork>
-            <akn:FRBRExpression>
-               <akn:FRBRthis value="BORE040077911/dokument"/>
-               <akn:FRBRuri value="BORE040077911/dokument"/>
-               <akn:FRBRdate date="2025-04-10" name="entscheidungsdatum"/>
-               <akn:FRBRauthor href="Testautor10"/>
-               <akn:FRBRlanguage language="deu"/>
-            </akn:FRBRExpression>
-            <akn:FRBRManifestation>
-               <akn:FRBRthis value="BORE040077911/dokument.xml"/>
-               <akn:FRBRuri value="BORE040077911/dokument.xml"/>
-               <akn:FRBRdate date="2025-04-10" name="entscheidungsdatum"/>
-               <akn:FRBRauthor href="Testautor10"/>
-            </akn:FRBRManifestation>
-         </akn:identification>
-         <akn:classification source="Testquelle10">
-            <akn:keyword dictionary="TestDict10" showAs="Beispiel" value="RandnummerTest"/>
-            <akn:keyword dictionary="TestDict10" showAs="Beispiel" value="VerlinkungTest"/>
-            <akn:keyword dictionary="TestDict10" showAs="Beispiel" value="NavigationTest"/>
-            <akn:keyword dictionary="TestDict10" showAs="Beispiel" value="Testdokument"/>
-         </akn:classification>
-         <akn:proprietary source="Testquelle10">
-            <ris:meta>
-               <ris:fileNumbers>
-                  <ris:fileNumber>RT 567891</ris:fileNumber>
-               </ris:fileNumbers>
-               <ris:documentType>Urteil</ris:documentType>
-               <ris:courtLocation>Berlin</ris:courtLocation>
-               <ris:courtType>LG</ris:courtType>
-               <ris:legalEffect>KEINE_ANGABE</ris:legalEffect>
-               <ris:fieldOfLaws>
-                  <ris:fieldOfLaw>Testrandnummern</ris:fieldOfLaw>
-                  <ris:fieldOfLaw>Testverlinkung</ris:fieldOfLaw>
-                  <ris:fieldOfLaw>Testnavigation</ris:fieldOfLaw>
-                  <ris:fieldOfLaw>Testdokumentation</ris:fieldOfLaw>
-               </ris:fieldOfLaws>
-               <ris:judicialBody>13. Senat</ris:judicialBody>
-               <ris:publicationStatus>PUBLISHED</ris:publicationStatus>
-               <ris:error>false</ris:error>
-               <ris:documentationOffice>LG Berlin</ris:documentationOffice>
-               <ris:procedures>
-                  <ris:procedure>RT123457</ris:procedure>
-               </ris:procedures>
-            </ris:meta>
-         </akn:proprietary>
-      </akn:meta>
-      <akn:header>
-         <akn:p>Testheader für Urteil 10 mit Randnummernverlinkung.</akn:p>
-      </akn:header>
-      <akn:judgmentBody>
-         <akn:introduction>
-            <akn:block name="Orientierungssatz">
-               <akn:embeddedStructure>
-                  <akn:p>1. Fiktiver Satz für die Testdarstellung im Bereich Randnummernverlinkung.<akn:a class="border-number-link" href="#border-number-link-1">1</akn:a>
-                  </akn:p>
-                  <akn:p>2. Weitere Testangaben zur Dokumentennavigation werden hier exemplarisch aufgeführt.</akn:p>
-               </akn:embeddedStructure>
-            </akn:block>
-            <akn:block name="Tenor">
-               <akn:embeddedStructure>
-                  <akn:p>Der Beklagte wird zur Testzahlung in Höhe von 500 Euro verpflichtet.</akn:p>
-                  <akn:p>Die Kosten des Verfahrens werden vom Beklagten getragen.</akn:p>
-               </akn:embeddedStructure>
-            </akn:block>
-         </akn:introduction>
-         <akn:background>
-            <akn:hcontainer name="randnummer">
-               <akn:num>1</akn:num>
-               <akn:content>
-                  <akn:p>Fiktiver Hintergrundtext für den Testfall zur Randnummernverlinkung.</akn:p>
-               </akn:content>
-            </akn:hcontainer>
-         </akn:background>
-      </akn:judgmentBody>
-   </akn:judgment>
+                xsi:schemaLocation="http://docs.oasis-open.org/legaldocml/ns/akn/3.0 https://docs.oasis-open.org/legaldocml/akn-core/v1.0/os/part2-specs/schemas/akomantoso30.xsd">
+
+    <akn:judgment name="Urteil">
+        <akn:meta>
+            <akn:identification source="#ris">
+                <akn:FRBRWork>
+                    <akn:FRBRthis value="BORE040077911"/>
+                    <akn:FRBRuri value="BORE040077911"/>
+                    <akn:FRBRalias name="Übergreifende ID" value="fake-uuid-0010"/>
+                    <akn:FRBRalias name="Dokumentnummer" value="BORE040077911" />
+                    <akn:FRBRdate eId="Entscheidungsdatum" date="2025-04-10" name="Entscheidungsdatum"/>
+                    <akn:FRBRauthor href="#gericht"/>
+                    <akn:FRBRcountry value="de"/>
+                </akn:FRBRWork>
+                <akn:FRBRExpression>
+                    <akn:FRBRthis value="BORE040077911/dokument"/>
+                    <akn:FRBRuri value="BORE040077911/dokument"/>
+                    <akn:FRBRdate date="2025-04-10" name="Entscheidungsdatum"/>
+                    <akn:FRBRauthor href="#gericht"/>
+                    <akn:FRBRlanguage language="deu"/>
+                </akn:FRBRExpression>
+                <akn:FRBRManifestation>
+                    <akn:FRBRthis value="BORE040077911/dokument.xml"/>
+                    <akn:FRBRuri value="BORE040077911/dokument.xml"/>
+                    <akn:FRBRdate date="2025-04-10" name="XML Transformation"/>
+                    <akn:FRBRauthor href="#lg-berlin-dokumentationsstelle"/>
+                </akn:FRBRManifestation>
+            </akn:identification>
+            <akn:classification source="#ris">
+                <akn:keyword ris:domainTerm="Schlagwort" dictionary="" showAs="RandnummerTest" value="RandnummerTest"/>
+                <akn:keyword ris:domainTerm="Schlagwort" dictionary="" showAs="VerlinkungTest" value="VerlinkungTest"/>
+                <akn:keyword ris:domainTerm="Schlagwort" dictionary="" showAs="NavigationTest" value="NavigationTest"/>
+                <akn:keyword ris:domainTerm="Schlagwort" dictionary="" showAs="Testdokument" value="Testdokument"/>
+            </akn:classification>
+            <akn:analysis source="#ris">
+                <akn:otherAnalysis source="#ris">
+                    <ris:dokumentarischeKurztexte domainTerm="Dokumentarische Kurztexte">
+                        <ris:titelzeile akn:eId="titelzeile" ris:domainTerm="Titelzeile">
+                            <akn:p>Urteil 10 mit Randnummernverlinkung.</akn:p>
+                        </ris:titelzeile>
+                        <ris:orientierungssatz ris:domainTerm="Orientierungssatz">
+                            <akn:p>1. Fiktiver Satz für die Testdarstellung im Bereich Randnummernverlinkung.<akn:a class="border-number-link" href="#border-number-link-1">1</akn:a>
+                            </akn:p>
+                            <akn:p>2. Weitere Testangaben zur Dokumentennavigation werden hier exemplarisch aufgeführt.</akn:p>
+                        </ris:orientierungssatz>
+                    </ris:dokumentarischeKurztexte>
+                </akn:otherAnalysis>
+            </akn:analysis>
+            <akn:references source="#ris">
+                <akn:TLCOrganization eId="ris" href="" showAs="Rechtsinformationssystem des Bundes"/>
+                <akn:TLCOrganization eId="lg-berlin-dokumentationsstelle" href="" showAs="LG Berlin"/>
+                <akn:TLCOrganization eId="gericht" href="" showAs="LG"/>
+                <akn:TLCOrganization eId="spruchkoerper" href="" showAs="13. Senat"/>
+            </akn:references>
+            <akn:proprietary source="ris">
+                <ris:meta>
+                    <ris:aktenzeichenListe domainTerm="Liste der Aktenzeichen">
+                        <ris:aktenzeichen domainTerm="Aktenzeichen" akn:refersTo="#aktenzeichen">RT 567891</ris:aktenzeichen>
+                    </ris:aktenzeichenListe>
+                    <ris:dokumenttyp akn:eId="dokumenttyp" domainTerm="Dokumenttyp">Urteil</ris:dokumenttyp>
+                    <ris:gericht domainTerm="Gericht" akn:refersTo="#gericht">
+                        <ris:gerichtstyp domainTerm="Gerichtstyp">LG</ris:gerichtstyp>
+                        <ris:gerichtsort domainTerm="Gerichtsort">Berlin</ris:gerichtsort>
+                        <ris:spruchkoerper domainTerm="Spruchkörper" akn:refersTo="#spruchkoerper">13. Senat</ris:spruchkoerper>
+                    </ris:gericht>
+                    <ris:rechtskraft domainTerm="Rechtskraft">Keine Angabe</ris:rechtskraft>
+                    <ris:sachgebiete domainTerm="Sachgebiete">
+                        <ris:sachgebiet domainTerm="Sachgebiet" notation="neu">Testrandnummern</ris:sachgebiet>
+                        <ris:sachgebiet domainTerm="Sachgebiet" notation="neu">Testverlinkung</ris:sachgebiet>
+                        <ris:sachgebiet domainTerm="Sachgebiet" notation="neu">Testnavigation</ris:sachgebiet>
+                        <ris:sachgebiet domainTerm="Sachgebiet" notation="neu">Testdokumentation</ris:sachgebiet>
+                    </ris:sachgebiete>
+                    <ris:dokumentationsstelle domainTerm="Dokumentationsstelle" akn:refersTo="#lg-berlin-dokumentationsstelle">LG Berlin</ris:dokumentationsstelle>
+                </ris:meta>
+            </akn:proprietary>
+        </akn:meta>
+        <akn:header>
+            <akn:p>Testheader für Urteil 10 mit Randnummernverlinkung.</akn:p>
+            <akn:p>Aktenzeichen: <akn:docNumber refersTo="#aktenzeichen">RT 567891</akn:docNumber></akn:p>
+            <akn:p>Entscheidungsdatum: <akn:docDate date="2025-04-10" refersTo="#entscheidungsdatum">10.04.2025</akn:docDate></akn:p>
+            <akn:p>Gericht: <akn:courtType refersTo="#gericht">LG</akn:courtType></akn:p>
+            <akn:p>Dokumenttyp: <akn:docType refersTo="#dokumenttyp">Urteil</akn:docType></akn:p>
+            <akn:p>Kurztitel: <akn:shortTitle>
+                <akn:embeddedStructure>
+                    <akn:p>Testheader für Urteil 10 mit Randnummernverlinkung.</akn:p>
+                </akn:embeddedStructure>
+            </akn:shortTitle>
+            </akn:p>
+        </akn:header>
+        <akn:judgmentBody>
+            <akn:decision ris:domainTerm="Tenor">
+                <akn:p>Der Beklagte wird zur Testzahlung in Höhe von 500 Euro verpflichtet.</akn:p>
+                <akn:p>Die Kosten des Verfahrens werden vom Beklagten getragen.</akn:p>
+            </akn:decision>
+            <akn:background ris:domainTerm="Tatbestand">
+                <akn:hcontainer ris:domainTerm="Randnummer" eId="randnummer-1" name="Randnummer">
+                    <akn:num>1</akn:num>
+                    <akn:content>
+                        <akn:p>Fiktiver Hintergrundtext für den Testfall zur Randnummernverlinkung.</akn:p>
+                    </akn:content>
+                </akn:hcontainer>
+            </akn:background>
+        </akn:judgmentBody>
+    </akn:judgment>
 </akn:akomaNtoso>
