@@ -1,7 +1,7 @@
 import { vi } from "vitest";
 import { formatDocumentKind, formatNormValidity } from "./displayValues";
 import { BadgeColor } from "~/components/Badge.vue";
-import { DocumentKind } from "~/types";
+import { DocumentKind } from "~/types/api";
 
 describe("displayValues", () => {
   describe("formatDocumentKind", () => {

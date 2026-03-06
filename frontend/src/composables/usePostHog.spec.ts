@@ -9,7 +9,7 @@ import {
 } from "~/composables/usePostHog";
 import { cookieStoreBackend, cookieStoreMock } from "~/tests/cookieStoreMock";
 import { getPostHogConfig } from "~/tests/postHogUtils";
-import { DocumentKind } from "~/types";
+import { DocumentKind } from "~/types/api";
 
 mockNuxtImport<() => ReturnType<typeof useRuntimeConfig>>(
   "useRuntimeConfig",

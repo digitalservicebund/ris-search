@@ -1,6 +1,7 @@
 package de.bund.digitalservice.ris.search.schema;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 /**
  * Represents the statistical data available in the API for different types of documents. This
@@ -16,7 +17,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * law items. - literature: Statistical count for literature items.
  */
 public record StatisticsApiSchema(
-    @JsonProperty("legislation") StatisticsCountSchema legislation,
-    @JsonProperty("case-law") StatisticsCountSchema caseLaw,
-    @JsonProperty("literature") StatisticsCountSchema literature,
-    @JsonProperty("administrative-directive") StatisticsCountSchema administrativeDirective) {}
+    @Schema(requiredMode = Schema.RequiredMode.REQUIRED) @JsonProperty("legislation")
+        StatisticsCountSchema legislation,
+    @Schema(requiredMode = Schema.RequiredMode.REQUIRED) @JsonProperty("case-law")
+        StatisticsCountSchema caseLaw,
+    @Schema(requiredMode = Schema.RequiredMode.REQUIRED) @JsonProperty("literature")
+        StatisticsCountSchema literature,
+    @Schema(requiredMode = Schema.RequiredMode.REQUIRED) @JsonProperty("administrative-directive")
+        StatisticsCountSchema administrativeDirective) {}

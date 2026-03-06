@@ -1,5 +1,5 @@
 import type { MetadataItem } from "~/components/Metadata.vue";
-import type { AdministrativeDirective } from "~/types";
+import type { AdministrativeDirective } from "~/types/api";
 
 export function getAdministrativeDirectiveMetadataItems(
   administrativeDirective?: Partial<AdministrativeDirective>,

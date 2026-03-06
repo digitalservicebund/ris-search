@@ -3,7 +3,7 @@ import type { ComputedRef } from "vue";
 import type { TableOfContentsEntry } from "~/components/documents/caseLaw/TableOfContents.vue";
 import type { MetadataItem } from "~/components/Metadata.vue";
 import type { DocumentView } from "~/layouts/document.vue";
-import { type CaseLaw, DocumentKind } from "~/types";
+import { type CaseLaw, DocumentKind } from "~/types/api";
 import IcBaselineSubject from "~icons/ic/baseline-subject";
 import IcOutlineFileDownload from "~icons/ic/outline-file-download";
 import IcOutlineInfo from "~icons/ic/outline-info";

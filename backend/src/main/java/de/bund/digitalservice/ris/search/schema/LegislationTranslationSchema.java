@@ -10,13 +10,14 @@ import lombok.Builder;
 @Builder
 @Schema(description = "A translation of a legislation item")
 public record LegislationTranslationSchema(
-    @JsonProperty("@id") String id,
-    String name,
-    String inLanguage,
-    String translator,
-    String translationOfWork,
-    String about,
-    @JsonProperty("ris:filename") String filename)
+    @Schema(requiredMode = Schema.RequiredMode.REQUIRED) @JsonProperty("@id") String id,
+    @Schema(requiredMode = Schema.RequiredMode.REQUIRED) String name,
+    @Schema(requiredMode = Schema.RequiredMode.REQUIRED) String inLanguage,
+    @Schema(requiredMode = Schema.RequiredMode.REQUIRED) String translator,
+    @Schema(requiredMode = Schema.RequiredMode.REQUIRED) String translationOfWork,
+    @Schema(requiredMode = Schema.RequiredMode.REQUIRED) String about,
+    @Schema(requiredMode = Schema.RequiredMode.REQUIRED) @JsonProperty("ris:filename")
+        String filename)
     implements JsonldResource {
 
   @Override

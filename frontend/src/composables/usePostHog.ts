@@ -1,6 +1,6 @@
 import type { PostHog } from "posthog-js";
 import { posthog } from "posthog-js";
-import type { DocumentKind } from "~/types";
+import type { DocumentKind } from "~/types/api";
 import {
   getStringOrUndefined,
   isStringEmpty,
@@ -10,7 +10,10 @@ import {
 export const CONSENT_COOKIE_NAME = "consent_given";
 
 /** Format of the payload that will be sent to PostHog when tracking searches. */
-export type PostHogSearchParams = SimpleSearchEndpointParams & {
+export type PostHogSearchParams = Omit<
+  SimpleSearchEndpointParams,
+  "documentKind"
+> & {
   documentKind: DocumentKind;
 };
 

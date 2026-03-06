@@ -9,11 +9,14 @@ import lombok.Builder;
 /** A DTO for collections of resources, following schema.org naming guidelines. */
 @Builder
 public record CollectionSchema<T>(
-    @JsonProperty("@id") @Schema(example = ApiConfig.Paths.DOCUMENT + "?pageIndex=0&size=5")
+    @JsonProperty("@id")
+        @Schema(
+            example = ApiConfig.Paths.DOCUMENT + "?pageIndex=0&size=5",
+            requiredMode = Schema.RequiredMode.REQUIRED)
         String id,
-    @Schema(example = "1") long totalItems,
-    List<T> member,
-    PartialCollectionViewSchema view)
+    @Schema(example = "1", requiredMode = Schema.RequiredMode.REQUIRED) long totalItems,
+    @Schema(requiredMode = Schema.RequiredMode.REQUIRED) List<T> member,
+    @Schema(requiredMode = Schema.RequiredMode.REQUIRED) PartialCollectionViewSchema view)
     implements JsonldResource {
 
   @Override

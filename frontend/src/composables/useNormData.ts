@@ -1,5 +1,5 @@
 import type { AsyncData, NuxtError } from "#app";
-import type { LegislationWork } from "~/types";
+import type { LegislationWork } from "~/types/api";
 import { getTextFromElements, parseDocument } from "~/utils/htmlParser";
 
 export interface NormContent {
@@ -53,7 +53,7 @@ export function useFetchNormContent(
       const document = parseDocument(html);
       const htmlParts = extractHtmlParts(document);
       //set hasPart empty to reduce payload size
-      metadata.workExample.hasPart = [];
+      if (metadata.workExample) metadata.workExample.hasPart = [];
       return {
         legislationWork: metadata,
         html,
@@ -195,7 +195,7 @@ export function useFetchNormArticleContent(
  * @throws Error If the metadata doesn't include an HTML version.
  */
 function getContentUrl(metadata: LegislationWork) {
-  const encoding = metadata?.workExample.encoding?.find(
+  const encoding = metadata?.workExample?.encoding?.find(
     (e) => e.encodingFormat === "text/html",
   );
   const contentUrl = encoding?.contentUrl;

@@ -1,5 +1,5 @@
 import type { MenuItem } from "primevue/menuitem";
-import { DocumentKind } from "~/types";
+import { DocumentKind } from "~/types/api";
 
 export const categoryFilterItems: MenuItem[] = [
   {

@@ -1,7 +1,7 @@
 import type { TreeNode } from "primevue/treenode";
 import { describe, it, expect } from "vitest";
 import { tocItemsToTreeNodes, findNodePath } from "./tableOfContents";
-import type { TableOfContentsItem } from "~/types";
+import type { TableOfContentsItem } from "~/types/api";
 
 describe("tableOfContents", () => {
   describe("tocItemsToTreeNodes", () => {

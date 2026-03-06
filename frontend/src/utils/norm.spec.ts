@@ -4,7 +4,7 @@ import utc from "dayjs/plugin/utc";
 import _ from "lodash";
 import { describe, expect, vi } from "vitest";
 import { parseDateGermanLocalTime } from "./dateFormatting";
-import type { LegislationExpression } from "~/types";
+import type { LegislationExpression } from "~/types/api";
 import {
   getMostRelevantExpression,
   getValidityStatus,

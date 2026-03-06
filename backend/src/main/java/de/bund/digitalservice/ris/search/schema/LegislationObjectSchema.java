@@ -12,15 +12,18 @@ public record LegislationObjectSchema(
         @Schema(
             example =
                 ApiConfig.Paths.LEGISLATION
-                    + "/eli/bund/bgbl-1/1975/s1760/1998-01-29/10/deu/1998-01-29/regelungstext-1/html")
+                    + "/eli/bund/bgbl-1/1975/s1760/1998-01-29/10/deu/1998-01-29/regelungstext-1/html",
+            requiredMode = Schema.RequiredMode.REQUIRED)
         String id,
     @Schema(
             example =
                 ApiConfig.Paths.LEGISLATION
-                    + "/eli/bund/bgbl-1/1975/s1760/1998-01-29/10/deu/1998-01-29/regelungstext-1.html")
+                    + "/eli/bund/bgbl-1/1975/s1760/1998-01-29/10/deu/1998-01-29/regelungstext-1.html",
+            requiredMode = Schema.RequiredMode.REQUIRED)
         String contentUrl,
-    @Schema(example = "text/html") String encodingFormat,
-    @Schema(example = "de") String inLanguage)
+    @Schema(example = "text/html", requiredMode = Schema.RequiredMode.REQUIRED)
+        String encodingFormat,
+    @Schema(example = "de", requiredMode = Schema.RequiredMode.REQUIRED) String inLanguage)
     implements JsonldResource {
 
   @Override

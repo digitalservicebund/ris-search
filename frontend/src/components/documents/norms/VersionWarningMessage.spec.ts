@@ -1,7 +1,7 @@
 import { renderSuspended } from "@nuxt/test-utils/runtime";
 import { screen } from "@testing-library/vue";
 import VersionWarningMessage from "./VersionWarningMessage.vue";
-import type { LegislationExpression } from "~/types";
+import type { LegislationExpression } from "~/types/api";
 
 const baseProps = {
   inForceVersionLink: "/norms/eli/bund/bgbl-1/2000/s100/2000-01-01/1/deu",

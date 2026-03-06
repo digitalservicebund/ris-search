@@ -17,7 +17,10 @@ import lombok.Builder;
  * text, if available.
  */
 @Builder
-public record TextMatchSchema(String name, String text, @Nullable String location)
+public record TextMatchSchema(
+    @Schema(requiredMode = Schema.RequiredMode.REQUIRED) String name,
+    @Schema(requiredMode = Schema.RequiredMode.REQUIRED) String text,
+    @Nullable String location)
     implements JsonldResource {
 
   @Override

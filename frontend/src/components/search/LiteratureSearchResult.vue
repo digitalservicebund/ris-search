@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { SearchResultHeaderItem } from "~/components/search/SearchResultHeader.vue";
 import { usePostHog } from "~/composables/usePostHog";
-import type { Literature, SearchResult, TextMatch } from "~/types";
+import type { Literature, SearchResult, TextMatch } from "~/types/api";
 import { LITERATURE_TITLE_PLACEHOLDER } from "~/utils/literature";
 import { sanitizeSearchResult } from "~/utils/sanitize";
 import { addEllipsis } from "~/utils/textFormatting";
@@ -26,7 +26,7 @@ function getMatch(match: string, highlights: TextMatch[]) {
 }
 
 function getShortReportSnippet(
-  shortReport: string | null,
+  shortReport: string | undefined,
   textMatches: TextMatch[],
 ): string | undefined {
   if (!shortReport) return undefined;

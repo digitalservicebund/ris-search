@@ -1,11 +1,12 @@
-import { computed, type ComputedRef } from "vue";
 import type { AsyncDataRequestStatus } from "#app";
+import { computed, type ComputedRef } from "vue";
 import type {
   JSONLDList,
   LegislationExpression,
+  LegislationSearchParams,
   LegislationWork,
   SearchResult,
-} from "~/types";
+} from "~/types/api";
 import { getCurrentDateInGermanyFormatted } from "~/utils/dateFormatting";
 
 interface UseNormVersions {
@@ -34,17 +35,12 @@ function getNormVersions(workEli?: string) {
   return { status, data };
 }
 
-function getNorms(params: {
-  eli?: string;
-  temporalCoverageFrom?: string;
-  temporalCoverageTo?: string;
-  sort?: string;
-}) {
+function getNorms(params: LegislationSearchParams) {
   const immediate = params.eli !== undefined;
   const { status, data, error } = useRisBackend<
     JSONLDList<SearchResult<LegislationWork>>
   >(`/v1/legislation`, {
-    params: { ...params, size: "300" },
+    params,
     immediate: immediate,
   });
 
@@ -61,5 +57,6 @@ export function useValidNormVersions(workEli?: string) {
     eli: workEli,
     temporalCoverageFrom: today,
     temporalCoverageTo: today,
+    size: 300,
   });
 }

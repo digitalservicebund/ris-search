@@ -4,7 +4,7 @@ import { useCopyUrlActionItem } from "~/composables/useActionMenuItem/useCopyUrl
 import { usePdfActionItem } from "~/composables/useActionMenuItem/usePdfActionItem";
 import { usePrintActionItem } from "~/composables/useActionMenuItem/usePrintActionItem";
 import { useXmlActionItem } from "~/composables/useActionMenuItem/useXmlActionItem";
-import type { CaseLaw } from "~/types";
+import type { CaseLaw } from "~/types/api";
 import { getEncodingURL } from "~/utils/caseLaw";
 
 const { caseLaw } = defineProps<{ caseLaw: CaseLaw | undefined }>();

@@ -1,6 +1,6 @@
 import { toValue } from "vue";
 import type { Page } from "~/components/Pagination.vue";
-import { DocumentKind } from "~/types";
+import { DocumentKind, type LuceneSearchParams } from "~/types/api";
 import {
   dateFilterToQuery,
   type StrictDateFilterValue,
@@ -16,6 +16,10 @@ type AdvancedSearchOptions = {
 
   /** Sorting order */
   sort: MaybeRefOrGetter<string>;
+};
+
+type AdvancedSearchEndpointParams = Omit<LuceneSearchParams, "size"> & {
+  size: string;
 };
 
 /**
@@ -51,7 +55,7 @@ export async function useAdvancedSearch(
     } else return baseUrl;
   });
 
-  const combinedQuery = computed(() => {
+  const combinedQuery = computed<AdvancedSearchEndpointParams>(() => {
     const result = [toValue(query)];
 
     const filterVal = toValue(dateFilter);

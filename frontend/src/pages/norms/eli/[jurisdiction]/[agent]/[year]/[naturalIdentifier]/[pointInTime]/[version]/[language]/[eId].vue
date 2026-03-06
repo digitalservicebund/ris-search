@@ -11,7 +11,7 @@ import { useDynamicSeo } from "~/composables/useDynamicSeo";
 import { useFetchNormArticleContent } from "~/composables/useNormData";
 import { useValidNormVersions } from "~/composables/useNormVersions";
 import { usePrivateFeaturesFlag } from "~/composables/usePrivateFeaturesFlag";
-import { type Article, DocumentKind, type LegislationWork } from "~/types";
+import { type Article, DocumentKind, type LegislationWork } from "~/types/api";
 import {
   dateFormattedDDMMYYYY,
   parseDateGermanLocalTime,
@@ -58,7 +58,7 @@ if (error.value) {
 const normPath: string = route.fullPath.replace(/\/[^/]*$/, "");
 
 const tableOfContents: Ref<TreeNode[]> = computed(() => {
-  if (!norm.value?.workExample.tableOfContents) return [];
+  if (!norm.value?.workExample?.tableOfContents) return [];
   return tocItemsToTreeNodes(
     norm.value.workExample.tableOfContents,
     normPath.concat("#"),
@@ -69,13 +69,13 @@ const tableOfContents: Ref<TreeNode[]> = computed(() => {
 const expressionValidityInterval = computed(() =>
   privateFeaturesEnabled
     ? temporalCoverageToValidityInterval(
-        norm?.value?.workExample.temporalCoverage,
+        norm?.value?.workExample?.temporalCoverage,
       )
     : undefined,
 );
 
 const article: Ref<Article | undefined> = computed(() =>
-  norm.value?.workExample.hasPart.find((part) => part.eId == eId.value),
+  norm.value?.workExample?.hasPart?.find((part) => part.eId == eId.value),
 );
 
 const previousArticleUrl: Ref<string | undefined> = computed(() =>
@@ -90,17 +90,13 @@ function getRouteForSiblingArticle(
   article: Article | undefined,
   indexDifference: number,
 ): string | undefined {
-  if (!norm.value || !article) return undefined;
-  const newIndex =
-    norm.value.workExample.hasPart.findIndex(
-      (item) => item.eId == article?.eId,
-    ) + indexDifference;
-  if (newIndex < 0 || newIndex >= norm.value.workExample.hasPart.length)
+  if (!norm.value || !article || !norm.value.workExample?.hasPart)
     return undefined;
-  return route.fullPath.replace(
-    /\/[^/]*$/,
-    `/${norm.value.workExample.hasPart[newIndex]?.eId}`,
-  );
+  const hasPart = norm.value.workExample.hasPart;
+  const newIndex =
+    hasPart.findIndex((item) => item.eId == article?.eId) + indexDifference;
+  if (newIndex < 0 || newIndex >= hasPart.length) return undefined;
+  return route.fullPath.replace(/\/[^/]*$/, `/${hasPart[newIndex]?.eId}`);
 }
 
 const currentNodePath = findNodePath(tableOfContents.value, eId.value ?? "");
@@ -135,9 +131,9 @@ const breadcrumbItems: Ref<BreadcrumbItem[]> = computed(() => {
 const htmlTitle = computed(() => data.value?.articleHeading);
 
 const validVersions =
-  norm.value?.workExample.legislationLegalForce !== "InForce"
-    ? useValidNormVersions(norm.value?.legislationIdentifier)
-    : undefined;
+  norm.value?.workExample?.legislationLegalForce === "InForce"
+    ? undefined
+    : useValidNormVersions(norm.value?.legislationIdentifier);
 
 const inForceNormLink = computed(() => {
   if (
@@ -150,7 +146,7 @@ const inForceNormLink = computed(() => {
   }
 
   const validVersion = validVersions.data.value.member[0];
-  return `/norms/${validVersion?.item.workExample.legislationIdentifier}`;
+  return `/norms/${validVersion?.item.workExample?.legislationIdentifier}`;
 });
 
 const buildOgTitleForArticle = (
@@ -269,7 +265,7 @@ useDynamicSeo({ title, description });
         </template>
         <template #sidebar>
           <NormTableOfContents
-            v-if="norm.workExample.tableOfContents.length > 0"
+            v-if="norm.workExample?.tableOfContents?.length"
             :table-of-contents="tableOfContents"
             :selected-key="eId"
           >

@@ -4,7 +4,7 @@ import { render, screen } from "@testing-library/vue";
 import Tooltip from "primevue/tooltip";
 import { describe, expect, it, vi } from "vitest";
 import CaseLawActionMenu from "~/components/documents/actionMenu/CaseLawActionMenu.vue";
-import type { CaseLaw } from "~/types";
+import type { CaseLaw } from "~/types/api";
 
 const { mockToastAdd } = vi.hoisted(() => ({
   mockToastAdd: vi.fn(),

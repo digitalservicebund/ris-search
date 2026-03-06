@@ -16,10 +16,10 @@ import java.util.List;
  * entry.
  */
 public record TableOfContentsSchema(
-    @Schema(example = "hauptteil-1_para-1") String id,
-    @Schema(example = "1") String marker,
-    @Schema(example = "Art 1") String heading,
-    List<TableOfContentsSchema> children)
+    @Schema(example = "hauptteil-1_para-1", requiredMode = Schema.RequiredMode.REQUIRED) String id,
+    @Schema(example = "1", requiredMode = Schema.RequiredMode.REQUIRED) String marker,
+    @Schema(example = "Art 1", requiredMode = Schema.RequiredMode.REQUIRED) String heading,
+    @Schema(requiredMode = Schema.RequiredMode.REQUIRED) List<TableOfContentsSchema> children)
     implements JsonldResource {
 
   @Override

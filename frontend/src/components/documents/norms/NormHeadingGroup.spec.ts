@@ -2,7 +2,7 @@ import { render, screen } from "@testing-library/vue";
 import { describe, it, expect, vi } from "vitest";
 import { nextTick } from "vue";
 import NormHeadingGroup from "./NormHeadingGroup.vue";
-import type { LegislationWork } from "~/types";
+import type { LegislationWork } from "~/types/api";
 
 const createDefaultProps = () => ({
   htmlParts: {

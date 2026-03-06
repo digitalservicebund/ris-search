@@ -23,7 +23,9 @@ import lombok.Builder;
  */
 @Builder
 public record SearchMemberSchema<T extends AbstractDocumentSchema>(
-    T item, List<TextMatchSchema> textMatches) implements JsonldResource {
+    @Schema(requiredMode = Schema.RequiredMode.REQUIRED) T item,
+    @Schema(requiredMode = Schema.RequiredMode.REQUIRED) List<TextMatchSchema> textMatches)
+    implements JsonldResource {
 
   @Override
   @Schema(example = "SearchResult")

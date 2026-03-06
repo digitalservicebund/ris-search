@@ -1,6 +1,6 @@
 import { navigateTo, useRoute } from "#app";
 import type { LocationQueryValue } from "#vue-router";
-import { DocumentKind } from "~/types";
+import { DocumentKind } from "~/types/api";
 import {
   type DateFilterValue,
   isFilterType,

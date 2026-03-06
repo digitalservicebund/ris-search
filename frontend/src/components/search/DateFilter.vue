@@ -2,7 +2,7 @@
 import { RadioButton } from "primevue";
 import DateInput from "~/components/DateInput.vue";
 import YearInput from "~/components/YearInput.vue";
-import { DocumentKind } from "~/types";
+import { DocumentKind } from "~/types/api";
 import type {
   DateFilterValue,
   FilterType,

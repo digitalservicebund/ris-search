@@ -2,7 +2,7 @@ import { mockNuxtImport } from "@nuxt/test-utils/runtime";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { ref } from "vue";
 import { useAdvancedSearch } from "./useAdvancedSearch";
-import { DocumentKind } from "~/types";
+import { DocumentKind } from "~/types/api";
 
 const { useRisBackendMock, executeMock } = vi.hoisted(() => {
   const executeMock = vi.fn();

@@ -38,25 +38,34 @@ import org.jetbrains.annotations.Nullable;
         "A legislation item, across different expressions and manifestations. May be used to provide context to a `LegislationExpression` (under key `workExample`).")
 public record LegislationWorkSearchSchema(
     @JsonProperty("@id")
-        @Schema(example = ApiConfig.Paths.LEGISLATION + "/eli/bund/bgbl-1/1975/s1760")
+        @Schema(
+            example = ApiConfig.Paths.LEGISLATION + "/eli/bund/bgbl-1/1975/s1760",
+            requiredMode = Schema.RequiredMode.REQUIRED)
         String id,
-    @Schema(example = "Verordnung über Kakao und Kakaoerzeugnisse") String name,
-    @Schema(example = "eli/bund/bgbl-1/1975/s1760") String legislationIdentifier,
-    @Schema(example = "Kakaoverordnung") String alternateName,
+    @Schema(
+            example = "Verordnung über Kakao und Kakaoerzeugnisse",
+            requiredMode = Schema.RequiredMode.REQUIRED)
+        String name,
+    @Schema(example = "eli/bund/bgbl-1/1975/s1760", requiredMode = Schema.RequiredMode.REQUIRED)
+        String legislationIdentifier,
+    @Schema(example = "Kakaoverordnung", requiredMode = Schema.RequiredMode.REQUIRED)
+        String alternateName,
     @Nullable @Schema(example = "KakaoV 2003") String abbreviation,
     @Schema(
             example = "2003-12-15",
             description =
                 """
             The date of adoption or signature of the legislation. This is the date at which the text is officially acknowledged to be a legislation, even though it might not even be published or in force.
-            """)
+            """,
+            requiredMode = Schema.RequiredMode.REQUIRED)
         LocalDate legislationDate,
     @Schema(
             example = "2003-12-16",
             description =
                 """
-                The date of first publication of the legislation, when it was published in the official gazette. This may be later than the `legislationDate`.""
-                """)
+                The date of first publication of the legislation, when it was published in the official gazette. This may be later than the `legislationDate`.
+                """,
+            requiredMode = Schema.RequiredMode.REQUIRED)
         LocalDate datePublished,
     @Nullable PublicationIssueSchema isPartOf,
     @Nullable LegislationExpressionSearchSchema workExample)

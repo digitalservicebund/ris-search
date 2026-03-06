@@ -3,7 +3,7 @@ import { mount, RouterLinkStub } from "@vue/test-utils";
 import type { TreeNode } from "primevue/treenode";
 import { beforeEach, describe, expect, it } from "vitest";
 import NormTableOfContents from "./NormTableOfContents.vue";
-import type { TableOfContentsItem } from "~/types";
+import type { TableOfContentsItem } from "~/types/api";
 import { tocItemsToTreeNodes } from "~/utils/tableOfContents";
 
 const { navigateToMock, scrollIntoViewMock } = vi.hoisted(() => {

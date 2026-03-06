@@ -100,6 +100,14 @@ Or with the UI:
 pnpm exec playwright test --ui
 ```
 
+## API Types
+
+To re-generate the API types from the OpenAPI specification, run:
+
+```bash
+pnpm generate-api-types
+```
+
 ## Code Quality
 
 We use TypeScript, Oxlint, and Prettier to support code quality and consistent formatting. To run Oxlint and Prettier:

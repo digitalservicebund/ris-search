@@ -3,7 +3,7 @@ import { RisSingleAccordion } from "@digitalservicebund/ris-ui/components";
 import { Button, InputGroup, InputGroupAddon, InputText } from "primevue";
 import OperatorsHelp from "./OperatorsHelp.vue";
 import DataFieldList from "~/components/search/DataFieldList.vue";
-import type { DocumentKind } from "~/types";
+import type { DocumentKind } from "~/types/api";
 import { formatDocumentKind } from "~/utils/displayValues";
 import { formatNumberWithSeparators } from "~/utils/numberFormatting";
 import type { DataField } from "~/utils/search/dataFields";

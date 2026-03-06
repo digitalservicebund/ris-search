@@ -4,7 +4,7 @@ import type {
   CaseLaw,
   LegislationWork,
   Literature,
-} from "~/types";
+} from "~/types/api";
 
 /**
  * Type guard asserting that the candidate is a caselaw document.
@@ -68,7 +68,7 @@ export function getIdentifier(document: AnyDocument): string {
   ) {
     id = document.documentNumber;
   } else if (isLegislationWork(document)) {
-    id = document.workExample.legislationIdentifier;
+    id = document.workExample?.legislationIdentifier;
   }
 
   if (!id)

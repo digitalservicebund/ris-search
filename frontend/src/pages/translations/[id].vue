@@ -12,7 +12,7 @@ import {
   fetchTranslationAndHTML,
   getGermanOriginal,
 } from "~/composables/useTranslationData";
-import { DocumentKind } from "~/types";
+import { DocumentKind } from "~/types/api";
 import { formatDocumentKind } from "~/utils/displayValues";
 import { removePrefix, truncateAtWord } from "~/utils/textFormatting";
 import IcBaselineSubject from "~icons/ic/baseline-subject";

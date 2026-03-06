@@ -24,37 +24,80 @@ import org.jetbrains.annotations.Nullable;
  */
 @Builder
 public record LiteratureSearchSchema(
-    @Schema(example = "KALU000000000") @JsonProperty("@id") String id,
-    @Schema(example = "de") String inLanguage,
-    @Schema(description = "Dokumentnummer", example = "KALU000000000") String documentNumber,
-    @Schema(description = "Veröffentlichungsjahre", example = "[2014, 2024-09]")
+    @Schema(example = "KALU000000000", requiredMode = Schema.RequiredMode.REQUIRED)
+        @JsonProperty("@id")
+        String id,
+    @Schema(example = "de", requiredMode = Schema.RequiredMode.REQUIRED) String inLanguage,
+    @Schema(
+            description = "Dokumentnummer",
+            example = "KALU000000000",
+            requiredMode = Schema.RequiredMode.REQUIRED)
+        String documentNumber,
+    @Schema(
+            description = "Veröffentlichungsjahre",
+            example = "[2014, 2024-09]",
+            requiredMode = Schema.RequiredMode.REQUIRED)
         List<String> yearsOfPublication,
-    @Schema(description = "Erstes Veröffentlichungsdatum", example = "2014-01-01")
+    @Schema(
+            description = "Erstes Veröffentlichungsdatum",
+            example = "2014-01-01",
+            requiredMode = Schema.RequiredMode.REQUIRED)
         LocalDate firstPublicationDate,
-    @Schema(description = "Dokumenttypen", example = "['Auf']") List<String> documentTypes,
-    @Schema(description = "Unselbstständige Fundstellen", example = "['BUV, 1982, 123-123']")
+    @Schema(
+            description = "Dokumenttypen",
+            example = "['Auf']",
+            requiredMode = Schema.RequiredMode.REQUIRED)
+        List<String> documentTypes,
+    @Schema(
+            description = "Unselbstständige Fundstellen",
+            example = "['BUV, 1982, 123-123']",
+            requiredMode = Schema.RequiredMode.REQUIRED)
         List<String> dependentReferences,
     @Schema(
             description = "Selbstständige Fundstellen",
-            example = "['50 Jahre Betriebs-Berater, 1987, 123-456']")
+            example = "['50 Jahre Betriebs-Berater, 1987, 123-456']",
+            requiredMode = Schema.RequiredMode.REQUIRED)
         List<String> independentReferences,
-    @Schema(description = "Norm Verweise", example = "['GG, Art 6 Abs 2 S 1, 1949-05-23']")
+    @Schema(
+            description = "Norm Verweise",
+            example = "['GG, Art 6 Abs 2 S 1, 1949-05-23']",
+            requiredMode = Schema.RequiredMode.REQUIRED)
         List<String> normReferences,
     @Schema(description = "Haupttitel") String headline,
     @Schema(description = "Zusätze zum Haupttitel") String headlineAdditions,
     @Schema(description = "Dokumentarischer Titel") String alternativeHeadline,
-    @Schema(description = "Autoren", example = "['Musterfrau, Sabine']") List<String> authors,
-    @Schema(description = "Mitarbeiter", example = "['Mustermann, Max']")
+    @Schema(
+            description = "Autoren",
+            example = "['Musterfrau, Sabine']",
+            requiredMode = Schema.RequiredMode.REQUIRED)
+        List<String> authors,
+    @Schema(
+            description = "Mitarbeiter",
+            example = "['Mustermann, Max']",
+            requiredMode = Schema.RequiredMode.REQUIRED)
         List<String> collaborators,
-    @Schema(description = "Sprachen", example = "['deu', 'eng']") List<String> languages,
-    @Schema(description = "Urheber", example = "['DGB']") List<String> originators,
+    @Schema(
+            description = "Sprachen",
+            example = "['deu', 'eng']",
+            requiredMode = Schema.RequiredMode.REQUIRED)
+        List<String> languages,
+    @Schema(
+            description = "Urheber",
+            example = "['DGB']",
+            requiredMode = Schema.RequiredMode.REQUIRED)
+        List<String> originators,
     @Schema(
             description = "Kongressvermerke",
-            example = "['Nationaler Beispiel Kongress, 2024, Berlin, GER']")
+            example = "['Nationaler Beispiel Kongress, 2024, Berlin, GER']",
+            requiredMode = Schema.RequiredMode.REQUIRED)
         List<String> conferenceNotes,
     @Schema(description = "Kurzreferat") String shortReport,
     @Schema(description = "Gliederung") String outline,
-    @Schema(description = "Literaturtyp", example = "['sli', 'uli']") String literatureType,
+    @Schema(
+            description = "Literaturtyp",
+            example = "['sli', 'uli']",
+            requiredMode = Schema.RequiredMode.REQUIRED)
+        String literatureType,
     @Nullable List<LiteratureEncodingSchema> encoding)
     implements AbstractDocumentSchema, JsonldResource {
 

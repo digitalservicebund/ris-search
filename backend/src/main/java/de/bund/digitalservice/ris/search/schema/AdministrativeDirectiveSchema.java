@@ -20,23 +20,44 @@ import org.jspecify.annotations.Nullable;
  */
 @Builder
 public record AdministrativeDirectiveSchema(
-    @Schema(example = "KALU000000000") @JsonProperty("@id") String id,
-    @Schema(description = "Dokumentnummer", example = "KALU000000000") String documentNumber,
+    @Schema(example = "KALU000000000", requiredMode = Schema.RequiredMode.REQUIRED)
+        @JsonProperty("@id")
+        String id,
+    @Schema(
+            description = "Dokumentnummer",
+            example = "KALU000000000",
+            requiredMode = Schema.RequiredMode.REQUIRED)
+        String documentNumber,
     @Nullable @Schema(description = "Haupttitel") String headline,
     @Nullable @Schema(description = "Kurzreferat") String shortReport,
-    @Schema(description = "Dokumenttyp", example = "VV") String documentType,
+    @Schema(
+            description = "Dokumenttyp",
+            example = "VV",
+            requiredMode = Schema.RequiredMode.REQUIRED)
+        String documentType,
     @Nullable @Schema(description = "Art der Verwaltungsvorschrift", example = "Bekanntmachung")
         String documentTypeDetail,
-    @Schema(description = "Aktenzeichen", example = "['ZZ', 'YY']") List<String> referenceNumbers,
+    @Schema(
+            description = "Aktenzeichen",
+            example = "['ZZ', 'YY']",
+            requiredMode = Schema.RequiredMode.REQUIRED)
+        List<String> referenceNumbers,
     @Nullable @Schema(description = "Gültig ab Datum", example = "2003-12-15")
         LocalDate entryIntoForceDate,
     @Nullable @Schema(description = "Gültig bis Datum", example = "2005-12-01")
         LocalDate expiryDate,
     @Nullable @Schema(description = "Normgeber") String legislationAuthority,
-    @Schema(description = "Fundstelle") List<String> references,
-    @Schema(description = "Zitierdaten", example = "") List<LocalDate> citationDates,
-    @Schema(description = "Normkette", example = "['§ 1 Abs1 SGB']") List<String> normReferences,
-    @Schema(description = "Gliederung") List<String> outline,
+    @Schema(description = "Fundstelle", requiredMode = Schema.RequiredMode.REQUIRED)
+        List<String> references,
+    @Schema(description = "Zitierdaten", example = "", requiredMode = Schema.RequiredMode.REQUIRED)
+        List<LocalDate> citationDates,
+    @Schema(
+            description = "Normkette",
+            example = "['§ 1 Abs1 SGB']",
+            requiredMode = Schema.RequiredMode.REQUIRED)
+        List<String> normReferences,
+    @Schema(description = "Gliederung", requiredMode = Schema.RequiredMode.REQUIRED)
+        List<String> outline,
     @Nullable List<AdministrativeDirectiveEncodingSchema> encoding)
     implements JsonldResource {
 

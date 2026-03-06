@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import VersionWarningMessage from "~/components/documents/norms/VersionWarningMessage.vue";
-import type { Article } from "~/types";
+import type { Article } from "~/types/api";
 import { parseDateGermanLocalTime } from "~/utils/dateFormatting";
 import { getValidityStatus } from "~/utils/norm";
 

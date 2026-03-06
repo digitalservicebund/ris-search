@@ -4,7 +4,7 @@ import type { BreadcrumbItem } from "~/components/Breadcrumbs.vue";
 import SimpleSearchInput from "~/components/search/SimpleSearchInput.vue";
 import { fetchTranslationList } from "~/composables/useTranslationData";
 import type { TranslationContent } from "~/composables/useTranslationData";
-import { DocumentKind } from "~/types";
+import { DocumentKind } from "~/types/api";
 import { formatDocumentKind } from "~/utils/displayValues";
 
 useHead({

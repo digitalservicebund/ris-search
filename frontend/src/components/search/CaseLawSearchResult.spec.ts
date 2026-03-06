@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/vue";
 import { describe, expect, it } from "vitest";
 import CaselawRecord from "~/components/search/CaselawSearchResult.vue";
-import type { CaseLaw, SearchResult, TextMatch } from "~/types";
+import type { CaseLaw, SearchResult, TextMatch } from "~/types/api";
 
 const searchResult: SearchResult<CaseLaw> = {
   item: {
@@ -26,6 +26,7 @@ const searchResult: SearchResult<CaseLaw> = {
     fileNumbers: ["123", "testing highlighted file number is here"],
     decisionName: ["Decision Name"],
     documentType: "Document Type",
+    highlightedFields: {},
   },
   textMatches: [],
 };
@@ -68,7 +69,7 @@ describe("CaselawSearchResult", () => {
       "@type": "SearchResultMatch",
       name: "headline",
       text: `testing <mark>highlighted headline</mark> is here`,
-      location: null,
+      location: undefined,
     };
 
     const { container } = renderComponent({ textMatches: [textMatch] });
@@ -83,7 +84,7 @@ describe("CaselawSearchResult", () => {
       "@type": "SearchResultMatch",
       name: "fileNumbers",
       text: `testing <mark>highlighted file number</mark> is here`,
-      location: null,
+      location: undefined,
     };
 
     const { container } = renderComponent({ textMatches: [textMatch] });
@@ -106,7 +107,7 @@ describe("CaselawSearchResult", () => {
       "@type": "SearchResultMatch",
       name: "guidingPrinciple",
       text: "testing <mark>highlighted Text</mark> is here",
-      location: null,
+      location: undefined,
     };
 
     const { container } = renderComponent({ textMatches: [textMatch] });
@@ -127,13 +128,13 @@ describe("CaselawSearchResult", () => {
         "@type": "SearchResultMatch",
         name: "guidingPrinciple",
         text,
-        location: null,
+        location: undefined,
       },
       {
         "@type": "SearchResultMatch",
         name: "headline",
         text,
-        location: null,
+        location: undefined,
       },
     ];
 
@@ -177,7 +178,7 @@ describe("CaselawSearchResult", () => {
             name: field,
             text: value,
             "@type": "SearchResultMatch",
-            location: null,
+            location: undefined,
           },
         ];
 
@@ -196,13 +197,13 @@ describe("CaselawSearchResult", () => {
         "@type": "SearchResultMatch",
         name: "guidingPrinciple",
         text: "Leitsatz.",
-        location: null,
+        location: undefined,
       },
       {
         "@type": "SearchResultMatch",
         name: "caseFacts",
         text: "Tatbestand.",
-        location: null,
+        location: undefined,
       },
     ];
 
@@ -218,33 +219,33 @@ describe("CaselawSearchResult", () => {
       "@type": "SearchResultMatch",
       name: "guidingPrinciple",
       text: "Guiding <mark>Principle</mark>.",
-      location: null,
+      location: undefined,
     };
     const textMatches: TextMatch[] = [
       {
         "@type": "SearchResultMatch",
         name: "headnote",
         text: "<mark>Headnote</mark>.",
-        location: null,
+        location: undefined,
       },
       guidingPrinciple,
       {
         "@type": "SearchResultMatch",
         name: "otherHeadnote",
         text: "<mark>Other Headnote</mark>.",
-        location: null,
+        location: undefined,
       },
       {
         "@type": "SearchResultMatch",
         name: "tenor",
         text: "<mark>Tenor</mark>.",
-        location: null,
+        location: undefined,
       },
       {
         "@type": "SearchResultMatch",
         name: "grounds",
         text: "<mark>Grounds</mark>.",
-        location: null,
+        location: undefined,
       },
     ];
 
@@ -288,13 +289,13 @@ describe("CaselawSearchResult", () => {
           "@type": "SearchResultMatch",
           name: "guidingPrinciple",
           text: "Guiding Principle.",
-          location: null,
+          location: undefined,
         },
         {
           "@type": "SearchResultMatch",
           name: "headnote",
           text: "This should not even be shown.",
-          location: null,
+          location: undefined,
         },
       ] as TextMatch[],
     };
@@ -312,25 +313,25 @@ describe("CaselawSearchResult", () => {
         "@type": "SearchResultMatch",
         name: "guidingPrinciple",
         text: "Guiding Principle.",
-        location: null,
+        location: undefined,
       },
       {
         "@type": "SearchResultMatch",
         name: "otherHeadnote",
         text: "<mark>Other Headnote</mark>.",
-        location: null,
+        location: undefined,
       },
       {
         "@type": "SearchResultMatch",
         name: "tenor",
         text: "<mark>Tenor</mark>.",
-        location: null,
+        location: undefined,
       },
       {
         "@type": "SearchResultMatch",
         name: "grounds",
         text: "<mark>Grounds</mark>.",
-        location: null,
+        location: undefined,
       },
     ];
 

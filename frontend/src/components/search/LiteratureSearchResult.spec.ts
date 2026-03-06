@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/vue";
 import { describe } from "vitest";
 import LiteratureSearchResult from "~/components/search/LiteratureSearchResult.vue";
-import type { Literature, SearchResult, TextMatch } from "~/types";
+import type { Literature, SearchResult, TextMatch } from "~/types/api";
 
 const searchResult: SearchResult<Literature> = {
   item: {
@@ -36,7 +36,7 @@ Abschließend gibt das Werk Empfehlungen für die praktische Anwendung juristisc
     publishers: [],
     publisherOrganizations: [],
     publishingHouses: [],
-    edition: null,
+    edition: undefined,
     volumes: [],
     internationalIdentifiers: [],
   },
@@ -90,8 +90,8 @@ describe("LiteratureSearchResult", () => {
     const searchResultWithoutTitle = {
       item: {
         ...searchResult.item,
-        headline: null,
-        alternativeHeadline: null,
+        headline: undefined,
+        alternativeHeadline: undefined,
       },
       textMatches: [],
     };
@@ -104,7 +104,7 @@ describe("LiteratureSearchResult", () => {
       "@type": "SearchResultMatch",
       name: "mainTitle",
       text: `testing <mark>highlighted main title</mark> is here`,
-      location: null,
+      location: undefined,
     };
 
     renderComponent({ textMatches: [textMatch] });
@@ -118,11 +118,11 @@ describe("LiteratureSearchResult", () => {
       "@type": "SearchResultMatch",
       name: "documentaryTitle",
       text: `testing <mark>highlighted documentary title</mark> is here`,
-      location: null,
+      location: undefined,
     };
 
-    // Clone the item but set headline to null
-    const itemWithoutHeadline = { ...searchResult.item, headline: null };
+    // Clone the item but set headline to undefined
+    const itemWithoutHeadline = { ...searchResult.item, headline: undefined };
 
     renderComponent({ item: itemWithoutHeadline, textMatches: [textMatch] });
 
@@ -143,7 +143,7 @@ describe("LiteratureSearchResult", () => {
       "@type": "SearchResultMatch",
       name: "shortReport",
       text: "testing <mark>highlighted Text</mark> is here",
-      location: null,
+      location: undefined,
     };
 
     renderComponent({ textMatches: [textMatch] });
@@ -170,7 +170,7 @@ describe("LiteratureSearchResult", () => {
       "@type": "SearchResultMatch",
       name: "shortReport",
       text: `<mark>Dieses</mark> Werk analysiert`,
-      location: null,
+      location: undefined,
     };
     await rerender({
       searchResult: { item: searchResult.item, textMatches: [match] },
@@ -185,7 +185,7 @@ describe("LiteratureSearchResult", () => {
       "@type": "SearchResultMatch",
       name: "shortReport",
       text: `… Rolle von <mark>Präzedenzfällen</mark> in modernen Gerichtsbarkeiten …`,
-      location: null,
+      location: undefined,
     };
 
     renderComponent({ textMatches: [match] });
@@ -200,7 +200,7 @@ describe("LiteratureSearchResult", () => {
       "@type": "SearchResultMatch",
       name: "shortReport",
       text: `… automatisierter <mark>Entscheidungsfindung</mark>`,
-      location: null,
+      location: undefined,
     };
 
     renderComponent({ textMatches: [match] });
@@ -215,7 +215,7 @@ describe("LiteratureSearchResult", () => {
       "@type": "SearchResultMatch",
       name: "shortReport",
       text: `… Rolle von <mark>Präzedenzfällen</mark> in modernen Gerichtsbarkeiten …`,
-      location: null,
+      location: undefined,
     };
 
     renderComponent({ textMatches: [match] });
@@ -236,7 +236,7 @@ describe("LiteratureSearchResult", () => {
       "@type": "SearchResultMatch",
       name: "shortReport",
       text: `<mark>Dieses</mark> Werk analysiert`,
-      location: null,
+      location: undefined,
     };
     await rerender({
       searchResult: { item: searchResult.item, textMatches: [match] },

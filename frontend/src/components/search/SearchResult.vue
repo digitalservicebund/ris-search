@@ -10,7 +10,7 @@ import type {
   LegislationWork,
   Literature,
   SearchResult,
-} from "~/types";
+} from "~/types/api";
 import {
   isCaselaw,
   isLegislationWork,

@@ -4,7 +4,7 @@ import { useCopyUrlActionItem } from "~/composables/useActionMenuItem/useCopyUrl
 import { usePdfActionItem } from "~/composables/useActionMenuItem/usePdfActionItem";
 import { usePrintActionItem } from "~/composables/useActionMenuItem/usePrintActionItem";
 import { useXmlActionItem } from "~/composables/useActionMenuItem/useXmlActionItem";
-import type { AdministrativeDirective } from "~/types";
+import type { AdministrativeDirective } from "~/types/api";
 
 const { administrativeDirective } = defineProps<{
   administrativeDirective: AdministrativeDirective | undefined;

@@ -1,7 +1,7 @@
 import dayjs, { type Dayjs } from "dayjs";
 import _ from "lodash";
 import type { MetadataItem } from "~/components/Metadata.vue";
-import type { LegislationExpression, LegislationWork } from "~/types";
+import type { LegislationExpression, LegislationWork } from "~/types/api";
 import {
   dateFormattedDDMMYYYY,
   getCurrentDateInGermany,
@@ -73,7 +73,7 @@ export function getManifestationUrl(
   metadata: LegislationWork | undefined,
   format: string,
 ) {
-  const encoding = metadata?.workExample?.encoding.find(
+  const encoding = metadata?.workExample?.encoding?.find(
     (e) => e.encodingFormat === format,
   );
   return encoding?.contentUrl;
