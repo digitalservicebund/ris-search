@@ -39,7 +39,6 @@ class CaseLawSchemaMapperTest {
             .keywords(List.of("one", "two"))
             .decisionName(List.of("decisionName"))
             .deviatingDocumentNumber(List.of("deviatingDocumentNumber"))
-            .error(false)
             .grounds("grounds")
             .guidingPrinciple("guidingPrinciple")
             .tenor("tenor")

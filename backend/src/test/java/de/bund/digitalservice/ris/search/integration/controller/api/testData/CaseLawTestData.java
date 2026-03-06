@@ -1,6 +1,5 @@
 package de.bund.digitalservice.ris.search.integration.controller.api.testData;
 
-import de.bund.digitalservice.ris.search.models.PublicationStatus;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import java.io.IOException;
 import java.time.LocalDate;
@@ -8,7 +7,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import org.apache.commons.lang3.Strings;
 
 /** Test data for Case Law Documentation Units. */
@@ -24,7 +22,6 @@ public class CaseLawTestData {
   public static final int OTHER_COUNT = 2;
 
   public static final int WITH_LEITSATZ_COUNT;
-  public static final int PUBLISHED_COUNT;
 
   public static final String CASE_LAW_LDML_TEMPLATE = "templates/case-law/case-law-template.xml";
 
@@ -52,9 +49,7 @@ public class CaseLawTestData {
             .keywords(keywords)
             .decisionName(List.of("decisionNames"))
             .deviatingDocumentNumber(List.of("deviatingDocumentNumbers"))
-            .publicationStatus(PublicationStatus.PUBLISHED.toString())
             .documentationOffice("DS")
-            .error(false)
             .legalEffect("JA")
             .build());
     allDocuments.add(
@@ -72,8 +67,6 @@ public class CaseLawTestData {
             .otherLongText("Sonstiger Langtext " + matchAllTerm)
             .otherHeadnote("Sonstiger Orientierungssatz")
             .caseFacts("Tatbestand nach § 4 TBestG")
-            .publicationStatus(PublicationStatus.UNPUBLISHED.toString())
-            .error(false)
             .legalEffect("JA")
             .build());
 
@@ -93,9 +86,6 @@ public class CaseLawTestData {
             .otherLongText(matchAllTerm)
             .tenor("Tenor")
             .headline("Titelzeile")
-            .publicationStatus(PublicationStatus.PUBLISHING.toString())
-            .error(true)
-            .procedures(List.of("proceduresTest"))
             .build());
 
     allDocuments.add(
@@ -113,8 +103,6 @@ public class CaseLawTestData {
             .otherLongText(matchAllTerm)
             .tenor("Tenor")
             .headline("Headline Beschluss")
-            .publicationStatus(PublicationStatus.PUBLISHED.toString())
-            .error(false)
             .build());
 
     allDocuments.add(
@@ -132,7 +120,6 @@ public class CaseLawTestData {
             .otherLongText(matchAllTerm)
             .tenor("Tenor")
             .headline("Headline decision one")
-            .publicationStatus(PublicationStatus.PUBLISHED.toString())
             .build());
 
     allDocuments.add(
@@ -150,19 +137,12 @@ public class CaseLawTestData {
             .otherLongText(matchAllTerm)
             .tenor("Tenor")
             .headline("Headline EuGH-Vorlage")
-            .publicationStatus(PublicationStatus.PUBLISHED.toString())
             .build());
 
     WITH_LEITSATZ_COUNT =
         (int)
             allDocuments.stream()
                 .filter(d -> Strings.CS.startsWith(d.guidingPrinciple(), "Leitsatz"))
-                .count();
-
-    PUBLISHED_COUNT =
-        (int)
-            allDocuments.stream()
-                .filter(d -> Objects.equals(d.publicationStatus(), "PUBLISHED"))
                 .count();
   }
 

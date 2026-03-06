@@ -18,5 +18,5 @@ public class Proprietary {
   private String name = "attributsemantik-noch-undefiniert";
 
   @XmlElement(name = "meta", namespace = CaseLawLdmlNamespaces.RIS_NS)
-  private RisMeta meta;
+  private RisMeta risMeta;
 }

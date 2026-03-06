@@ -1,7 +1,9 @@
 package de.bund.digitalservice.ris.search.caselawhandover.shared.caselawldml;
 
 import jakarta.xml.bind.annotation.XmlElement;
-import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -19,7 +21,7 @@ public class LinkedJudgement {
   private String fileNumber;
 
   @XmlElement(name = "gericht", namespace = CaseLawLdmlNamespaces.RIS_NS)
-  private Court court;
+  private RisGericht risGericht;
 
   /**
    * Returns a simplified string representation containing the file number and court type.
@@ -27,6 +29,10 @@ public class LinkedJudgement {
    * @return a comma-separated string of the judgement details
    */
   public String asString() {
-    return String.join(", ", List.of(this.fileNumber, this.court.getGerichtstyp()));
+    String courtType = (risGericht != null) ? risGericht.getGerichtstyp() : null;
+
+    return Stream.of(fileNumber, courtType)
+        .filter(Objects::nonNull)
+        .collect(Collectors.joining(", "));
   }
 }

@@ -15,15 +15,9 @@ public class ImplicitReference {
   @XmlAttribute(name = "domainTerm")
   private String domainTerm;
 
-  @XmlElement(name = "norm", namespace = CaseLawLdmlNamespaces.RIS_NS)
-  private Norm norm;
-
   @XmlElement(name = "vorgehend", namespace = CaseLawLdmlNamespaces.RIS_NS)
   private LinkedJudgement precedingJudgement;
 
   @XmlElement(name = "nachgehend", namespace = CaseLawLdmlNamespaces.RIS_NS)
   private LinkedJudgement ensuingJudgement;
-
-  @XmlElement(name = "fundstelle", namespace = CaseLawLdmlNamespaces.RIS_NS)
-  private Citation citation;
 }
