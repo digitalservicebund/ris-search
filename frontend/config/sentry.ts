@@ -7,6 +7,9 @@ export const sentry: NuxtConfig["sentry"] = {
   org: "digitalservice",
   project: "ris-search",
   authToken: process.env.SENTRY_AUTH_TOKEN,
-  sourcemaps: { filesToDeleteAfterUpload: [".*/**/public/**/*.map"] },
+  sourceMapsUploadOptions: {
+    // Only upload the source maps when build on main
+    enabled: process.env.GITHUB_REF_NAME === "main",
+  },
   telemetry: false,
 };
