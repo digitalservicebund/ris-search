@@ -61,8 +61,8 @@ importers:
         specifier: 1.2.4
         version: 1.2.4
       '@iconify/json':
-        specifier: 2.2.432
-        version: 2.2.432
+        specifier: 2.2.446
+        version: 2.2.446
       '@nuxt/test-utils':
         specifier: 4.0.0
         version: 4.0.0(@playwright/test@1.58.2)(@testing-library/vue@8.1.0(@vue/compiler-sfc@3.5.29)(vue@3.5.29(typescript@5.9.3)))(@vue/test-utils@2.4.6)(jsdom@28.0.0)(magicast@0.5.2)(playwright-core@1.58.2)(typescript@5.9.3)(vite@7.3.1(@types/node@25.3.2)(jiti@2.6.1)(lightningcss@1.30.2)(terser@5.46.0)(yaml@2.8.2))(vitest@4.0.17(@opentelemetry/api@1.9.0)(@types/node@25.3.2)(jiti@2.6.1)(jsdom@28.0.0)(lightningcss@1.30.2)(terser@5.46.0)(yaml@2.8.2))
@@ -568,8 +568,8 @@ packages:
   '@iconify-json/ic@1.2.4':
     resolution: {integrity: sha512-pzPMmrZrBQuwT7nmtrYdkttun8KalRGgZPIL1Ny9KpF2zjRGIUPN+npTfuD3lrgO/OnSwAoJWuekQwBpt/Cqrw==}
 
-  '@iconify/json@2.2.432':
-    resolution: {integrity: sha512-W0Qa5ByXfJUEtami6b4Mm4DRfcAWWsKsUhJ2uiaEOE2QabREEcDSa1op9qP12yrhuArEPiCyuO04rHNxArZ4Xw==}
+  '@iconify/json@2.2.446':
+    resolution: {integrity: sha512-FrZToC6ONvIVmOkFhcNMGJYvIKJ4UPzdKE5hgAUkQijYz+ZWx74OZBHExp8osCLMEmyxrUPTFg2oynlpGWLsTw==}
 
   '@iconify/types@2.0.0':
     resolution: {integrity: sha512-+wluvCrRhXrhyOmRDJ3q8mux9JkKy5SJ/v8ol2tu4FVjyYvtEzkc/3pK15ET6RKg4b4w4BmTk1+gsCUhf21Ykg==}
@@ -6707,7 +6707,7 @@ snapshots:
     dependencies:
       '@iconify/types': 2.0.0
 
-  '@iconify/json@2.2.432':
+  '@iconify/json@2.2.446':
     dependencies:
       '@iconify/types': 2.0.0
       pathe: 2.0.3

@@ -42,7 +42,7 @@
   "devDependencies": {
     "@axe-core/playwright": "4.11.0",
     "@iconify-json/ic": "1.2.4",
-    "@iconify/json": "2.2.432",
+    "@iconify/json": "2.2.446",
     "@nuxt/test-utils": "4.0.0",
     "@playwright/test": "1.58.2",
     "@tailwindcss/vite": "4.1.18",
