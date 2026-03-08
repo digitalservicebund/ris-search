@@ -40,7 +40,7 @@
     "sanitize-html": "2.17.1"
   },
   "devDependencies": {
-    "@axe-core/playwright": "4.11.0",
+    "@axe-core/playwright": "4.11.1",
     "@iconify-json/ic": "1.2.4",
     "@iconify/json": "2.2.432",
     "@nuxt/test-utils": "4.0.0",
