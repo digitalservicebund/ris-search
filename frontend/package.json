@@ -29,7 +29,7 @@
     "@digitalservicebund/ris-ui": "3.21.3",
     "@nuxtjs/mdc": "0.20.1",
     "@nuxtjs/sitemap": "7.6.0",
-    "@sentry/nuxt": "10.38.0",
+    "@sentry/nuxt": "10.42.0",
     "dayjs": "1.11.19",
     "lodash": "4.17.23",
     "minisearch": "7.2.0",
