@@ -11,7 +11,7 @@ import { useDynamicSeo } from "~/composables/useDynamicSeo";
 import { useFetchNormArticleContent } from "~/composables/useNormData";
 import { useValidNormVersions } from "~/composables/useNormVersions";
 import { usePrivateFeaturesFlag } from "~/composables/usePrivateFeaturesFlag";
-import { type Article, DocumentKind, type LegislationWork } from "~/types/api";
+import { type Article, DocumentKind } from "~/types/api";
 import {
   dateFormattedDDMMYYYY,
   parseDateGermanLocalTime,
