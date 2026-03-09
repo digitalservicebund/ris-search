@@ -65,6 +65,13 @@ const { translations } = abbreviation
   ? await fetchTranslationListWithIdFilter(abbreviation)
   : { translations: { value: [] } };
 
+const translationUrl = computed(() => {
+  if (translations.value && translations.value.length > 0) {
+    return `/translations/${abbreviation}`;
+  }
+  return "";
+});
+
 const html = computed(() => data.value?.html);
 const htmlParts = computed(() => data.value?.htmlParts);
 
