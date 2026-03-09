@@ -94,7 +94,7 @@ jobs:
         run: pnpm audit:licences
         working-directory: ./frontend
       - name: Upload licence report
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: licence-reports-frontend
           retention-days: 3
@@ -140,7 +140,7 @@ jobs:
             exit 0
           fi
       - name: Upload Trivy vulnerability file scanner results
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         if: ${{ failure() }}
         with:
           name: "trivy-frontend-file-results.sarif"
@@ -196,7 +196,7 @@ jobs:
           output: "trivy-results.sarif"
           trivyignores: frontend/.trivyignore
       - name: Upload Trivy vulnerability image scanner results (as artifact)
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: "trivy-image-results-frontend.sarif"
           path: "trivy-results.sarif"
@@ -231,7 +231,7 @@ jobs:
           format: "cosign-vuln"
           output: "vuln-frontend.json"
       - name: Upload Cosign vulnerability scan record
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         if: ${{ github.actor != 'dependabot[bot]' }}
         with:
           name: "vuln-frontend.json"
