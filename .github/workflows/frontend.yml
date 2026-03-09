@@ -248,6 +248,19 @@ jobs:
       - name: Attest vulnerability scan
         if: ${{ github.actor != 'dependabot[bot]' && github.ref == 'refs/heads/main' }}
         run: cosign attest --yes --replace --predicate vuln-frontend.json --type vuln ${{ inputs.container-image-tag }}
+      - name: Install Sentry CLI using official script
+        if: ${{ github.actor != 'dependabot[bot]' && github.ref == 'refs/heads/main' }}
+        run: |
+          curl -sL https://sentry.io/get-cli/ | bash
+      - name: Create and finalize Sentry release for frontend
+        # The sourcemap uploading during the frontend build process already creates a release
+        # this is finalized here and associated with commits
+        if: ${{ github.actor != 'dependabot[bot]' && github.ref == 'refs/heads/main' }}
+        run: |
+          sentry-cli releases set-commits --auto ${{ inputs.container-image-version }}
+          sentry-cli releases finalize ${{ inputs.container-image-version }}
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
       - name: Send status to Slack
         if: ${{ failure() && github.ref == 'refs/heads/main' }}
         uses: digitalservicebund/notify-on-failure-gha@868884a79c05c62cab52b4f79832cc3589c91a12
