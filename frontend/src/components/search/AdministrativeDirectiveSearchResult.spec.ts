@@ -36,13 +36,13 @@ async function renderComponent({
   item = searchResult.item,
   textMatches = searchResult.textMatches,
 }: Partial<SearchResult<AdministrativeDirective>> = {}) {
-  const searchResult: SearchResult<AdministrativeDirective> = {
+  const result: SearchResult<AdministrativeDirective> = {
     item,
     textMatches,
   };
 
   return await renderSuspended(AdministrativeDirectiveSearchResult, {
-    props: { searchResult, order: 0 },
+    props: { searchResult: result, order: 0 },
   });
 }
 

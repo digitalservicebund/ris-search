@@ -87,14 +87,14 @@ const nextArticleUrl: Ref<string | undefined> = computed(() =>
 );
 
 function getRouteForSiblingArticle(
-  article: Article | undefined,
+  baseArticle: Article | undefined,
   indexDifference: number,
 ): string | undefined {
-  if (!norm.value || !article || !norm.value.workExample?.hasPart)
+  if (!norm.value || !baseArticle || !norm.value.workExample?.hasPart)
     return undefined;
   const hasPart = norm.value.workExample.hasPart;
   const newIndex =
-    hasPart.findIndex((item) => item.eId == article?.eId) + indexDifference;
+    hasPart.findIndex((item) => item.eId == baseArticle?.eId) + indexDifference;
   if (newIndex < 0 || newIndex >= hasPart.length) return undefined;
   return route.fullPath.replace(/\/[^/]*$/, `/${hasPart[newIndex]?.eId}`);
 }
@@ -150,10 +150,9 @@ const inForceNormLink = computed(() => {
 });
 
 const buildOgTitleForArticle = (
-  norm: LegislationWork,
+  normAbbreviation?: string,
   articleHeadlineHtml?: string,
 ): string | undefined => {
-  const abbreviation = norm.abbreviation?.trim();
   const headlineText = (() => {
     if (!articleHeadlineHtml) return "";
     const doc = parseDocument(articleHeadlineHtml);
@@ -161,17 +160,21 @@ const buildOgTitleForArticle = (
     return text.replaceAll(/\s+/g, " ").trim();
   })();
 
-  const base = abbreviation || headlineText;
+  const base = normAbbreviation || headlineText;
   if (!base) return undefined;
 
   const full =
-    abbreviation && headlineText ? `${abbreviation}: ${headlineText}` : base;
+    normAbbreviation && headlineText
+      ? `${normAbbreviation}: ${headlineText}`
+      : base;
 
   return truncateAtWord(full, 55) || undefined;
 };
 
 const title = computed(() =>
-  norm.value ? buildOgTitleForArticle(norm.value, htmlTitle.value) : "",
+  norm.value
+    ? buildOgTitleForArticle(norm.value.abbreviation?.trim(), htmlTitle.value)
+    : "",
 );
 
 const metadataItems = computed(() => {

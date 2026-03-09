@@ -61,7 +61,7 @@
     "license-checker-rseidelsohn": "4.4.2",
     "lighthouse": "13.0.3",
     "openapi-typescript": "7.13.0",
-    "oxlint": "1.43.0",
+    "oxlint": "1.51.0",
     "playwright-lighthouse": "4.0.0",
     "prettier": "3.8.1",
     "prettier-plugin-tailwindcss": "0.7.2",

@@ -79,9 +79,9 @@ export const expect = baseExpect.extend({
   ) {
     const assertionName = "toHaveSelectedOptionText";
     let pass: boolean;
-    let matcherResult: string | null = null;
+    let matcherResult: string | undefined;
     try {
-      const matcherResult = await locator.evaluate(
+      matcherResult = await locator.evaluate(
         (select: HTMLSelectElement) =>
           select.options[select.options.selectedIndex]?.textContent,
         options,

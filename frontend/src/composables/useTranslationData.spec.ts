@@ -17,7 +17,7 @@ const { mockFetch } = vi.hoisted(() => {
 
 const { useRisBackendMock, dataRef } = await vi.hoisted(async () => {
   const { ref } = await import("vue");
-  const dataRef = ref(null) as Ref<unknown>;
+  const dataRefMock = ref(null) as Ref<unknown>;
 
   return {
     useRisBackendMock: vi.fn(
@@ -31,7 +31,7 @@ const { useRisBackendMock, dataRef } = await vi.hoisted(async () => {
         clear: vi.fn(),
       }),
     ),
-    dataRef,
+    dataRef: dataRefMock,
   };
 });
 

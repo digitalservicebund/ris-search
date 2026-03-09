@@ -27,13 +27,13 @@ if (contentError?.value) showError(contentError.value);
 
 // Page head ----------------------------------------------
 
-function buildOgTitle(caseLaw: CaseLaw) {
-  const court = caseLaw.courtName?.trim() || "";
-  const dtype = caseLaw.documentType || "Gerichtsentscheidung";
-  const date = caseLaw.decisionDate
-    ? dateFormattedDDMMYYYY(caseLaw.decisionDate)
+function buildOgTitle(caselawData: CaseLaw) {
+  const court = caselawData.courtName?.trim() || "";
+  const dtype = caselawData.documentType || "Gerichtsentscheidung";
+  const date = caselawData.decisionDate
+    ? dateFormattedDDMMYYYY(caselawData.decisionDate)
     : "";
-  const file = caseLaw.fileNumbers?.[0] || "";
+  const file = caselawData.fileNumbers?.[0] || "";
 
   const parts = [
     court && `${court}:`,

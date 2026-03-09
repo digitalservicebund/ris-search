@@ -103,10 +103,10 @@ describe("useNormData", () => {
 
   it("should fetch JSON and HTML data for articles", async () => {
     const articleEId = "eid-1";
-    const mockHtml = `<h2 class="einzelvorschrift">§ 1 Some article</h2><div>Test HTML content</div>`;
+    const html = `<h2 class="einzelvorschrift">§ 1 Some article</h2><div>Test HTML content</div>`;
 
     mockFetch.mockReturnValueOnce(mockMetadata);
-    mockFetch.mockReturnValueOnce(mockHtml);
+    mockFetch.mockReturnValueOnce(html);
 
     const { data } = await useFetchNormArticleContent(
       expressionEli,
@@ -114,7 +114,7 @@ describe("useNormData", () => {
     );
     expect(data.value).toEqual({
       legislationWork: mockMetadata,
-      html: mockHtml,
+      html: html,
       articleHeading: "§ 1 Some article",
     });
 
@@ -129,8 +129,7 @@ describe("useNormData", () => {
   });
 
   it("should throw an error if contentUrl is missing", async () => {
-    const expressionEli = "test-eli";
-    const mockMetadata = {
+    const mockMetadataWithouContentUrl = {
       workExample: {
         encoding: [
           {
@@ -141,7 +140,7 @@ describe("useNormData", () => {
       },
     };
 
-    mockFetch.mockReturnValueOnce(mockMetadata);
+    mockFetch.mockReturnValueOnce(mockMetadataWithouContentUrl);
 
     const { error } = await useFetchNormContent(expressionEli);
     expect(error.value?.message).toEqual("contentUrl is missing");

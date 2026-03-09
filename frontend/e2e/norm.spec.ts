@@ -75,9 +75,9 @@ test.describe("view norm page", async () => {
     });
 
     await test.step("Navigate back between single articles", async () => {
-      const mainExpressionEliUrl =
+      const expressionEliUrl =
         "/norms/eli/bund/bgbl-1/2000/s1016/2023-04-26/10/deu";
-      await page.goto(`${mainExpressionEliUrl}/art-z3`, {
+      await page.goto(`${expressionEliUrl}/art-z3`, {
         waitUntil: "commit",
       });
       const h2Art3Back = page

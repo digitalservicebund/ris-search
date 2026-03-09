@@ -47,13 +47,13 @@ function renderComponent({
   item = searchResult.item,
   textMatches = [],
 }: Partial<SearchResult<Literature>> = {}) {
-  const searchResult: SearchResult<Literature> = {
+  const result: SearchResult<Literature> = {
     item,
     textMatches,
   };
 
   return render(LiteratureSearchResult, {
-    props: { searchResult, order: 0 },
+    props: { searchResult: result, order: 0 },
     global: {
       stubs: {
         NuxtLink: {

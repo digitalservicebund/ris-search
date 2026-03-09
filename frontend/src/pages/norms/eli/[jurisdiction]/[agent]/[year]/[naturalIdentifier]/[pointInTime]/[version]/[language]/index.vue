@@ -65,13 +65,6 @@ const { translations } = abbreviation
   ? await fetchTranslationListWithIdFilter(abbreviation)
   : { translations: { value: [] } };
 
-const translationUrl = computed(() => {
-  if (translations.value && translations.value.length > 0) {
-    return `/translations/${abbreviation}`;
-  }
-  return "";
-});
-
 const html = computed(() => data.value?.html);
 const htmlParts = computed(() => data.value?.htmlParts);
 
@@ -135,11 +128,10 @@ const breadcrumbItems: ComputedRef<BreadcrumbItem[]> = computed(() => {
 const buildOgTitle = (
   norm: LegislationWork,
   validFrom?: Dayjs,
-  status?: ValidityStatus,
+  normValidityStatus?: ValidityStatus,
 ) => {
-  const abbreviation = norm.abbreviation?.trim();
   const shortTitle = norm.alternateName?.trim();
-  const baseTitle = abbreviation || shortTitle || "";
+  const baseTitle = norm.abbreviation?.trim() || shortTitle || "";
 
   if (!baseTitle) return undefined;
   const parts: string[] = [];
@@ -148,13 +140,13 @@ const buildOgTitle = (
     const formattedValidFrom = dateFormattedDDMMYYYY(validFrom);
     if (formattedValidFrom) parts.push(`Fassung vom ${formattedValidFrom}`);
 
-    const statusLabel = getValidityStatusLabel(status);
+    const statusLabel = getValidityStatusLabel(normValidityStatus);
     if (statusLabel) parts.push(statusLabel);
 
     return truncateAtWord(`${baseTitle}: ${parts.join(", ")}`, 55) || undefined;
   } else {
     if (validFrom) parts.push(`Fassung vom [Inkrafttreten]`);
-    if (status) parts.push("[Status]");
+    if (validityStatus) parts.push("[Status]");
   }
 
   let result = baseTitle;

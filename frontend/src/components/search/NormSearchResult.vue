@@ -20,13 +20,13 @@ const { searchResultClicked } = usePostHog();
 
 const item = computed(() => props.searchResult.item);
 
-const highlights: ComputedRef<TextMatch[]> = computed(
+const textMatches: ComputedRef<TextMatch[]> = computed(
   () => props.searchResult.textMatches,
 );
 
 const headline = computed(() => {
   const match =
-    getMatch("name", highlights.value) ||
+    getMatch("name", textMatches.value) ||
     item.value.name ||
     "Titelzeile nicht vorhanden";
 
@@ -57,7 +57,7 @@ const formattedDate = computed(() => {
 });
 
 const relevantHighlights = computed(() => {
-  return highlights.value
+  return textMatches.value
     .filter((highlight) => highlight.name != "name")
     .map((hl) => ({ ...hl, text: addEllipsis(hl.text) }) as TextMatch);
 });
@@ -77,7 +77,7 @@ const headerItems = computed<SearchResultHeaderItem[]>(() => {
     { value: "Norm", id: resultTypeId },
     { value: item.value.abbreviation },
     { value: formattedDate.value },
-  ].filter((item): item is SearchResultHeaderItem => item.value !== undefined);
+  ].filter((i): i is SearchResultHeaderItem => i.value !== undefined);
 });
 
 const getArticleUrl = (highlight: TextMatch) =>
