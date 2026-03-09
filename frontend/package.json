@@ -14,7 +14,7 @@
     "prepare": "nuxt prepare",
     "fmt": "prettier . --write --ignore-unknown",
     "lint": "oxlint --fix",
-    "style:check": "prettier --check && oxlint --max-warnings=0",
+    "style:check": "prettier --check . && oxlint --max-warnings=0",
     "style:fix": "pnpm fmt && pnpm lint",
     "generate-api-types": "openapi-typescript src/public/openapi.json -o src/types/api-generated.d.ts",
     "typecheck": "nuxt typecheck",
