@@ -153,7 +153,7 @@ const buildOgTitle = (
     return truncateAtWord(`${baseTitle}: ${parts.join(", ")}`, 55) || undefined;
   } else {
     if (validFrom) parts.push(`Fassung vom [Inkrafttreten]`);
-    if (validityStatus) parts.push("[Status]");
+    if (normValidityStatus) parts.push("[Status]");
   }
 
   let result = baseTitle;
