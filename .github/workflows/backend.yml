@@ -25,8 +25,6 @@ env:
 
   TRIVY_DB_REPOSITORY: ghcr.io/aquasecurity/trivy-db,public.ecr.aws/aquasecurity/trivy-db
   TRIVY_JAVA_DB_REPOSITORY: ghcr.io/aquasecurity/trivy-java-db,public.ecr.aws/aquasecurity/trivy-java-db
-  SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-  SENTRY_RELEASE: ${{ github.sha }}
 
 jobs:
   validate-gradle-wrapper:
@@ -254,6 +252,8 @@ jobs:
           context: backend
           tags: ${{ inputs.container-image-tag}}
           push: true
+          build-args: |
+            SENTRY_RELEASE=${{ github.sha }}
       - name: Install cosign
         uses: sigstore/cosign-installer@430b6a704fe0c92f1b1261d84376a900f38d90ff
         with:
@@ -266,20 +266,6 @@ jobs:
           name: "vuln.json"
       - name: Attest vulnerability scan
         run: cosign attest --yes --replace --predicate vuln.json --type vuln ${{ inputs.container-image-tag}}
-      - name: Install sentry-cli using official script
-        if: ${{ env.SENTRY_AUTH_TOKEN != '' }}
-        run: |
-          curl -sL https://sentry.io/get-cli/ | bash
-        env:
-          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-      - name: Create and finalize Sentry release for Backend
-        if: ${{ env.SENTRY_AUTH_TOKEN != '' }}
-        run: |
-          sentry-cli releases new ${{ inputs.container-image-version }}
-          sentry-cli releases set-commits --auto --ignore-missing ${{ inputs.container-image-version }}
-          sentry-cli releases finalize ${{ inputs.container-image-version }}
-        env:
-          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
 
 
   generate-backend-code-documentation:
