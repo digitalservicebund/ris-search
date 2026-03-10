@@ -23,7 +23,7 @@ const actions = computed(() => {
     getManifestationUrl(metadata, "application/xml"),
   );
 
-  const actions = [
+  const actionsList = [
     useCopyUrlActionItem(
       workEliLink,
       "Link zur jeweils gültigen Fassung kopieren",
@@ -36,7 +36,7 @@ const actions = computed(() => {
   ];
 
   if (translationUrl) {
-    actions.push(
+    actionsList.push(
       useNavigateActionItem(
         "Zur englischen Übersetzung",
         EngIcon,
@@ -45,7 +45,7 @@ const actions = computed(() => {
     );
   }
 
-  return actions;
+  return actionsList;
 });
 </script>
 

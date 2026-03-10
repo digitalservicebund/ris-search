@@ -135,11 +135,10 @@ const breadcrumbItems: ComputedRef<BreadcrumbItem[]> = computed(() => {
 const buildOgTitle = (
   norm: LegislationWork,
   validFrom?: Dayjs,
-  status?: ValidityStatus,
+  normValidityStatus?: ValidityStatus,
 ) => {
-  const abbreviation = norm.abbreviation?.trim();
   const shortTitle = norm.alternateName?.trim();
-  const baseTitle = abbreviation || shortTitle || "";
+  const baseTitle = norm.abbreviation?.trim() || shortTitle || "";
 
   if (!baseTitle) return undefined;
   const parts: string[] = [];
@@ -148,13 +147,13 @@ const buildOgTitle = (
     const formattedValidFrom = dateFormattedDDMMYYYY(validFrom);
     if (formattedValidFrom) parts.push(`Fassung vom ${formattedValidFrom}`);
 
-    const statusLabel = getValidityStatusLabel(status);
+    const statusLabel = getValidityStatusLabel(normValidityStatus);
     if (statusLabel) parts.push(statusLabel);
 
     return truncateAtWord(`${baseTitle}: ${parts.join(", ")}`, 55) || undefined;
   } else {
     if (validFrom) parts.push(`Fassung vom [Inkrafttreten]`);
-    if (status) parts.push("[Status]");
+    if (normValidityStatus) parts.push("[Status]");
   }
 
   let result = baseTitle;

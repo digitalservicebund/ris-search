@@ -35,10 +35,10 @@ function renderComponent({
   item = searchResult.item,
   textMatches = [],
 }: Partial<SearchResult<CaseLaw>>) {
-  const searchResult: SearchResult<CaseLaw> = { item, textMatches };
+  const result: SearchResult<CaseLaw> = { item, textMatches };
 
   return render(CaselawRecord, {
-    props: { searchResult, order: 0 },
+    props: { searchResult: result, order: 0 },
     global: {
       stubs: {
         NuxtLink: { template: '<a :href="to"><slot /></a>', props: ["to"] },

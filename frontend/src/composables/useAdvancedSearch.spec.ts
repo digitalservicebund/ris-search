@@ -5,7 +5,7 @@ import { useAdvancedSearch } from "./useAdvancedSearch";
 import { DocumentKind } from "~/types/api";
 
 const { useRisBackendMock, executeMock } = vi.hoisted(() => {
-  const executeMock = vi.fn();
+  const executeMockFn = vi.fn();
 
   return {
     useRisBackendMock: vi.fn(
@@ -19,7 +19,7 @@ const { useRisBackendMock, executeMock } = vi.hoisted(() => {
         clear: vi.fn(),
       }),
     ),
-    executeMock,
+    executeMock: executeMockFn,
   };
 });
 

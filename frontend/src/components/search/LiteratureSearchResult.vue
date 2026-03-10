@@ -75,7 +75,7 @@ const headerItems = computed<SearchResultHeaderItem[]>(() => {
     { value: item.documentTypes?.[0], id: resultTypeId },
     { value: reference },
     { value: item.yearsOfPublication?.[0] },
-  ].filter((item): item is SearchResultHeaderItem => item.value !== undefined);
+  ].filter((i): i is SearchResultHeaderItem => i.value !== undefined);
 });
 
 const sanitizedHeadline = computed(() =>

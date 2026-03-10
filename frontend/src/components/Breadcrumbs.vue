@@ -17,7 +17,7 @@ interface Props {
 const props = defineProps<Props>();
 
 const items = computed(() => {
-  const items: BreadcrumbItem[] = [
+  const breadcrumbItems: BreadcrumbItem[] = [
     {
       label: "Startseite",
       type: "home",
@@ -26,7 +26,7 @@ const items = computed(() => {
     ...(props.items ?? []),
   ];
 
-  return items;
+  return breadcrumbItems;
 });
 </script>
 

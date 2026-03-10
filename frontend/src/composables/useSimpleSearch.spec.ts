@@ -29,28 +29,28 @@ const {
   usePostHogMock,
   capturedOptions,
 } = vi.hoisted(() => {
-  const executeMock = vi.fn();
-  const capturedOptions: { current?: BackendOptions } = {};
+  const executeMockFn = vi.fn();
+  const options: { current?: BackendOptions } = {};
 
   return {
     useRisBackendMock: vi.fn<
       (url: Ref<string>, opts: BackendOptions) => unknown
     >((_, opts) => {
-      capturedOptions.current = opts;
+      options.current = opts;
       return {
         status: ref("success"),
         data: computed(() => ref({ content: [], totalItems: 0 })),
         error: ref(null),
         pending: ref(false),
-        execute: executeMock,
+        execute: executeMockFn,
         refresh: vi.fn(),
         clear: vi.fn(),
       };
     }),
-    executeMock,
+    executeMock: executeMockFn,
     getCurrentDateMock: vi.fn(() => "2024-01-15"),
     usePostHogMock: () => mockPostHog,
-    capturedOptions: capturedOptions,
+    capturedOptions: options,
   };
 });
 

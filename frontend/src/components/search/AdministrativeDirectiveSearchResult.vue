@@ -29,7 +29,7 @@ const headerItems = computed<SearchResultHeaderItem[]>(() => {
     { value: item.legislationAuthority },
     { value: item.referenceNumbers?.[0] },
     { value: dateFormattedDDMMYYYY(item.entryIntoForceDate) },
-  ].filter((item): item is SearchResultHeaderItem => item.value !== undefined);
+  ].filter((i): i is SearchResultHeaderItem => i.value !== undefined);
 });
 
 const headline = computed(() =>
