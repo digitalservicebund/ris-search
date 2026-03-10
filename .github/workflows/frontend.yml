@@ -158,10 +158,26 @@ jobs:
       packages: write
       id-token: write
       contents: read
+    env:
+      SENTRY_RELEASE: ${{ github.sha }}
     steps:
       - uses: actions/checkout@v6
         with:
           fetch-depth: 0
+      - name: Install Sentry CLI using official script
+        if: ${{ github.actor != 'dependabot[bot]' && github.ref == 'refs/heads/main' }}
+        run: |
+          curl -sL https://sentry.io/get-cli/ | bash
+      - name: Create Sentry release
+        # Create the sentry release before the build step so the sourcemap uploading during the
+        # frontend build process can associate the sourcemaps with this release
+        # NOTE: only create releases on main!
+        if: ${{ github.actor != 'dependabot[bot]' && github.ref == 'refs/heads/main' }}
+        run: |
+          sentry-cli releases new $SENTRY_RELEASE
+          sentry-cli releases set-commits --auto $SENTRY_RELEASE
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@4d04d5d9486b7bd6fa91e7baf45bbb4f8b9deedd
       - name: Log into container registry
@@ -183,7 +199,7 @@ jobs:
           cache-to: type=gha,mode=max
           build-args: |
             NUXT_PUBLIC_SENTRY_DSN=${{ secrets.SENTRY_DSN }}
-            SENTRY_RELEASE=${{ github.sha }}
+            SENTRY_RELEASE=${{ env.SENTRY_RELEASE }}
           secrets: |
             SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }}
       - name: Run Trivy vulnerability image scanner
@@ -248,17 +264,10 @@ jobs:
       - name: Attest vulnerability scan
         if: ${{ github.actor != 'dependabot[bot]' && github.ref == 'refs/heads/main' }}
         run: cosign attest --yes --replace --predicate vuln-frontend.json --type vuln ${{ inputs.container-image-tag }}
-      - name: Install Sentry CLI using official script
+      - name: Finalize Sentry release
+        # NOTE: only on main!
         if: ${{ github.actor != 'dependabot[bot]' && github.ref == 'refs/heads/main' }}
-        run: |
-          curl -sL https://sentry.io/get-cli/ | bash
-      - name: Create and finalize Sentry release for frontend
-        # The sourcemap uploading during the frontend build process already creates a release
-        # this is finalized here and associated with commits
-        if: ${{ github.actor != 'dependabot[bot]' && github.ref == 'refs/heads/main' }}
-        run: |
-          sentry-cli releases set-commits --auto ${{ inputs.container-image-version }}
-          sentry-cli releases finalize ${{ inputs.container-image-version }}
+        run: sentry-cli releases finalize $SENTRY_RELEASE
         env:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
       - name: Send status to Slack
