@@ -15,6 +15,11 @@ updates:
       day: "sunday"
     cooldown:
       default-days: 3
+    groups:
+      all-backend-non-major-dependencies:
+        update-types:
+          - minor
+          - patch
   - package-ecosystem: "npm"
     directory: "/frontend"
     schedule:
@@ -22,3 +27,8 @@ updates:
       day: "sunday"
     cooldown:
       default-days: 3
+    groups:
+      all-frontend-non-major-dependencies:
+        update-types:
+          - minor
+          - patch
