@@ -165,14 +165,14 @@ jobs:
         with:
           fetch-depth: 0
       - name: Install Sentry CLI using official script
-        if: ${{ github.actor != 'dependabot[bot]' && github.ref == 'refs/heads/main' }}
+        if: ${{ github.ref == 'refs/heads/main' }}
         run: |
           curl -sL https://sentry.io/get-cli/ | bash
       - name: Create Sentry release
         # Create the sentry release before the build step so the sourcemap uploading during the
         # frontend build process can associate the sourcemaps with this release
         # NOTE: only create releases on main!
-        if: ${{ github.actor != 'dependabot[bot]' && github.ref == 'refs/heads/main' }}
+        if: ${{ github.ref == 'refs/heads/main' }}
         run: |
           sentry-cli releases new $SENTRY_RELEASE
           sentry-cli releases set-commits --auto $SENTRY_RELEASE
@@ -266,7 +266,7 @@ jobs:
         run: cosign attest --yes --replace --predicate vuln-frontend.json --type vuln ${{ inputs.container-image-tag }}
       - name: Finalize Sentry release
         # NOTE: only on main!
-        if: ${{ github.actor != 'dependabot[bot]' && github.ref == 'refs/heads/main' }}
+        if: ${{ github.ref == 'refs/heads/main' }}
         run: sentry-cli releases finalize $SENTRY_RELEASE
         env:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
