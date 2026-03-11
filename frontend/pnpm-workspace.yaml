@@ -10,7 +10,7 @@ minimumReleaseAgeExclude:
 nodeLinker: hoisted
 
 overrides:
-  tar: 7.5.10
+  tar: 7.5.11
   lodash-es: 4.17.23
   fast-xml-parser: 5.3.6
   minimatch: 10.2.3
