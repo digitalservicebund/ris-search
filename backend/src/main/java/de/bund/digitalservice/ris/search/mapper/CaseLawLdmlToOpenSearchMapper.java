@@ -4,6 +4,8 @@ import static de.bund.digitalservice.ris.search.utils.MappingUtils.nullSafeGet;
 import static de.bund.digitalservice.ris.search.utils.MappingUtils.validateNotNull;
 
 import de.bund.digitalservice.ris.search.caselawhandover.shared.caselawldml.AknKeyword;
+import de.bund.digitalservice.ris.search.caselawhandover.shared.caselawldml.AknMainContentIntroduction;
+import de.bund.digitalservice.ris.search.caselawhandover.shared.caselawldml.AknMainContentMotivation;
 import de.bund.digitalservice.ris.search.caselawhandover.shared.caselawldml.Analysis;
 import de.bund.digitalservice.ris.search.caselawhandover.shared.caselawldml.CaseLawLdml;
 import de.bund.digitalservice.ris.search.caselawhandover.shared.caselawldml.DocumentaryShortTexts;
@@ -101,24 +103,40 @@ public class CaseLawLdmlToOpenSearchMapper {
         .headline(jaxbToSanitizedHtml(getShortTitle(caseLawLdml)))
         .guidingPrinciple(
             jaxbToSanitizedHtml(
-                judgmentBody.getIntroductionEntryContentByName("Leitsatz").orElse(null)))
+                judgmentBody
+                    .getIntroductionEntryContentByName(
+                        AknMainContentIntroduction.GuidingPrinciple.NAME)
+                    .orElse(null)))
         .headnote(jaxbToSanitizedHtml(extractHeadnote(caseLawLdml).orElse(null)))
         .otherHeadnote(jaxbToSanitizedHtml(extractOtherHeadnote(caseLawLdml).orElse(null)))
         .outline(
             jaxbToSanitizedHtml(
-                judgmentBody.getIntroductionEntryContentByName("Gliederung").orElse(null)))
+                judgmentBody
+                    .getIntroductionEntryContentByName(AknMainContentIntroduction.Outline.NAME)
+                    .orElse(null)))
         .tenor(jaxbToSanitizedHtml(judgmentBody.getDecision()))
         .caseFacts(jaxbToSanitizedHtml(judgmentBody.getBackground()))
         .decisionGrounds(
             jaxbToSanitizedHtml(
-                judgmentBody.getMotivationEntryContentByName("Entscheidungsgründe").orElse(null)))
+                judgmentBody
+                    .getMotivationEntryContentByName(AknMainContentMotivation.DecisionGrounds.NAME)
+                    .orElse(null)))
         .grounds(
             jaxbToSanitizedHtml(
-                judgmentBody.getMotivationEntryContentByName("Gründe").orElse(null)))
+                judgmentBody
+                    .getMotivationEntryContentByName(AknMainContentMotivation.Grounds.NAME)
+                    .orElse(null)))
         .otherLongText(
             jaxbToSanitizedHtml(
-                judgmentBody.getMotivationEntryContentByName("Sonstiger Langtext").orElse(null)))
-        .dissentingOpinion(jaxbToSanitizedHtml(null))
+                judgmentBody
+                    .getMotivationEntryContentByName(AknMainContentMotivation.OtherLongText.NAME)
+                    .orElse(null)))
+        .dissentingOpinion(
+            jaxbToSanitizedHtml(
+                judgmentBody
+                    .getMotivationEntryContentByName(
+                        AknMainContentMotivation.DissentingOpinion.NAME)
+                    .orElse(null)))
         .previousDecisions(
             getLinkedJudgements(
                 caseLawLdml,
@@ -254,6 +272,13 @@ public class CaseLawLdmlToOpenSearchMapper {
         .map(Proprietary::getMeta)
         .orElseThrow(
             () -> new ValidationException("Metadata structure (Proprietary/RisMeta) is missing"));
+  }
+
+  private static JudgmentBody getJudgmentBody(CaseLawLdml ldml) throws ValidationException {
+    return Optional.ofNullable(ldml)
+        .map(CaseLawLdml::getJudgment)
+        .map(Judgment::getJudgmentBody)
+        .orElseThrow(() -> new ValidationException("JudgmentBody missing"));
   }
 
   private static String getDocumentType(CaseLawLdml ldml) throws ValidationException {
