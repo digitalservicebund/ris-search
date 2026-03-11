@@ -21,63 +21,46 @@ public class RisMeta {
 
   @XmlElementWrapper(name = "aktenzeichenListe", namespace = CaseLawLdmlNamespaces.RIS_NS)
   @XmlElement(name = "aktenzeichen", namespace = CaseLawLdmlNamespaces.RIS_NS)
-  private List<String> fileNumbers;
+  private List<RisAktenzeichen> risAktenzeichen;
 
   @XmlElement(name = "dokumenttyp", namespace = CaseLawLdmlNamespaces.RIS_NS)
-  private String documentType;
+  private String risDokumentTyp;
 
   @XmlElement(name = "gericht", namespace = CaseLawLdmlNamespaces.RIS_NS)
-  private Court court;
+  private RisGericht risGericht;
 
-  @XmlElementWrapper(name = "legalForces", namespace = CaseLawLdmlNamespaces.RIS_NS)
-  @XmlElement(name = "legalForce", namespace = CaseLawLdmlNamespaces.RIS_NS)
-  private List<String> legalForce;
+  @XmlElement(name = "rechtskraft", namespace = CaseLawLdmlNamespaces.RIS_NS)
+  private String risRechtskraft;
 
-  @XmlElement(name = "legalEffect", namespace = CaseLawLdmlNamespaces.RIS_NS)
-  private String legalEffect;
+  @XmlElementWrapper(name = "sachgebiete", namespace = CaseLawLdmlNamespaces.RIS_NS)
+  @XmlElement(name = "sachgebiet", namespace = CaseLawLdmlNamespaces.RIS_NS)
+  private List<String> risSachgebiete;
 
-  @XmlElementWrapper(name = "fieldOfLaws", namespace = CaseLawLdmlNamespaces.RIS_NS)
-  @XmlElement(name = "fieldOfLaw", namespace = CaseLawLdmlNamespaces.RIS_NS)
-  private List<String> fieldOfLaw;
+  @XmlElementWrapper(name = "streitjahre", namespace = CaseLawLdmlNamespaces.RIS_NS)
+  @XmlElement(name = "streitjahr", namespace = CaseLawLdmlNamespaces.RIS_NS)
+  private List<String> risStreitjahre;
 
-  @XmlElement(name = "yearOfDispute", namespace = CaseLawLdmlNamespaces.RIS_NS)
-  private String yearOfDispute;
-
-  @XmlElement(name = "judicialBody", namespace = CaseLawLdmlNamespaces.RIS_NS)
-  private String judicialBody;
+  @XmlElement(name = "spruchkoerper", namespace = CaseLawLdmlNamespaces.RIS_NS)
+  private String risSpruchkoerper;
 
   @XmlElementWrapper(name = "deviatingCourts", namespace = CaseLawLdmlNamespaces.RIS_NS)
   @XmlElement(name = "deviatingCourt", namespace = CaseLawLdmlNamespaces.RIS_NS)
   private List<String> deviatingCourt;
 
-  @XmlElementWrapper(name = "deviatingDates", namespace = CaseLawLdmlNamespaces.RIS_NS)
-  @XmlElement(name = "deviatingDate", namespace = CaseLawLdmlNamespaces.RIS_NS)
-  private List<String> deviatingDate;
+  @XmlElementWrapper(name = "abweichendeDaten", namespace = CaseLawLdmlNamespaces.RIS_NS)
+  @XmlElement(name = "abweichendesDatum", namespace = CaseLawLdmlNamespaces.RIS_NS)
+  private List<String> risAbweichendeDaten;
 
-  @XmlElementWrapper(name = "deviatingDocumentNumbers", namespace = CaseLawLdmlNamespaces.RIS_NS)
-  @XmlElement(name = "deviatingDocumentNumber", namespace = CaseLawLdmlNamespaces.RIS_NS)
-  private List<String> deviatingDocumentNumber;
+  @XmlElementWrapper(name = "abweichendeDokumentnummern", namespace = CaseLawLdmlNamespaces.RIS_NS)
+  @XmlElement(name = "abweichendeDokumentnummer", namespace = CaseLawLdmlNamespaces.RIS_NS)
+  private List<String> risAbweichendeDokumentnummern;
 
-  @XmlElementWrapper(name = "deviatingEclis", namespace = CaseLawLdmlNamespaces.RIS_NS)
-  @XmlElement(name = "deviatingEcli", namespace = CaseLawLdmlNamespaces.RIS_NS)
-  private List<String> deviatingEcli;
+  @XmlElementWrapper(name = "abweichendeEclis", namespace = CaseLawLdmlNamespaces.RIS_NS)
+  @XmlElement(name = "abweichenderEcli", namespace = CaseLawLdmlNamespaces.RIS_NS)
+  private List<String> risAbweichendeEclis;
 
-  @XmlElementWrapper(name = "deviatingFileNumbers", namespace = CaseLawLdmlNamespaces.RIS_NS)
-  @XmlElement(name = "deviatingFileNumber", namespace = CaseLawLdmlNamespaces.RIS_NS)
-  private List<String> deviatingFileNumber;
-
-  @XmlElement(name = "publicationStatus", namespace = CaseLawLdmlNamespaces.RIS_NS)
-  private String publicationStatus;
-
-  @XmlElement(name = "error", namespace = CaseLawLdmlNamespaces.RIS_NS)
-  private Boolean error;
-
-  @XmlElement(name = "documentationOffice", namespace = CaseLawLdmlNamespaces.RIS_NS)
-  private String documentationOffice;
-
-  @XmlElementWrapper(name = "procedures", namespace = CaseLawLdmlNamespaces.RIS_NS)
-  @XmlElement(name = "procedure", namespace = CaseLawLdmlNamespaces.RIS_NS)
-  private List<String> procedure;
+  @XmlElement(name = "dokumentationsstelle", namespace = CaseLawLdmlNamespaces.RIS_NS)
+  private String risDokumentationsstelle;
 
   /**
    * Returns a combined court keyword consisting of court type and court location. If court location
@@ -86,10 +69,17 @@ public class RisMeta {
    * @return the combined court keyword
    */
   public String getCourtKeyword() {
-    if (court == null) return null;
-    if (court.getGerichtsort() == null) {
-      return court.getGerichtstyp();
+    if (risGericht == null) return null;
+    if (risGericht.getGerichtsort() == null) {
+      return risGericht.getGerichtstyp();
     }
-    return String.format("%s %s", court.getGerichtstyp(), court.getGerichtsort());
+    return String.format("%s %s", risGericht.getGerichtstyp(), risGericht.getGerichtsort());
+  }
+
+  public List<String> getAktenzeichen() {
+    return risAktenzeichen.stream()
+        .filter(a -> "Aktenzeichen".equals(a.getDomainTerm()))
+        .map(RisAktenzeichen::getValue)
+        .toList();
   }
 }
