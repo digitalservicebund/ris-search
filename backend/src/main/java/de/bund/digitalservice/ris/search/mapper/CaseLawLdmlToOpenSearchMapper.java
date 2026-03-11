@@ -152,10 +152,6 @@ public class CaseLawLdmlToOpenSearchMapper {
     }
   }
 
-  /**
-   * Extracts the unique identifier from the CaseLaw LDML structure. * @throws IllegalStateException
-   * if any part of the path is missing.
-   */
   private static String extractUniqueIdentifier(CaseLawLdml caseLawLdml)
       throws ValidationException {
     return Optional.ofNullable(caseLawLdml)
@@ -169,7 +165,6 @@ public class CaseLawLdmlToOpenSearchMapper {
         .orElseThrow(() -> new ValidationException("Case Law LDML has no documentNumber"));
   }
 
-  /** Extracts the ECLI from the CaseLaw LDML structure if present. */
   private static Optional<String> extractEcli(CaseLawLdml caseLawLdml) {
     return Optional.ofNullable(caseLawLdml)
         .map(CaseLawLdml::getJudgment)
@@ -179,10 +174,6 @@ public class CaseLawLdmlToOpenSearchMapper {
         .map(FrbrElement::getEcliAliasValue);
   }
 
-  /**
-   * Extracts the Date from the CaseLaw LDML structure. * @throws IllegalStateException if any part
-   * of the path is missing.
-   */
   private static FrbrDate extractFrbrDate(CaseLawLdml caseLawLdml) throws ValidationException {
     return Optional.ofNullable(caseLawLdml)
         .map(CaseLawLdml::getJudgment)
@@ -194,7 +185,6 @@ public class CaseLawLdmlToOpenSearchMapper {
         .orElseThrow(() -> new ValidationException("Case Law LDML has no date"));
   }
 
-  /** Extracts the DocumentaryShortTexts from the CaseLaw LDML structure if present. */
   private static Optional<DocumentaryShortTexts> extractDocumentaryShortTexts(
       CaseLawLdml caseLawLdml) {
     return Optional.ofNullable(caseLawLdml)
