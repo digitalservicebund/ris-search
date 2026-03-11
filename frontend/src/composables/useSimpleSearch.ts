@@ -28,6 +28,7 @@ export type SimpleSearchEndpointParams = Omit<
   pageIndex: number;
   sort: string;
   typeGroup?: string;
+  court?: string;
 };
 
 /**

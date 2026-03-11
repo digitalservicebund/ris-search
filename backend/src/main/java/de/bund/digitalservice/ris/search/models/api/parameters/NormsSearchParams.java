@@ -43,6 +43,9 @@ import lombok.Setter;
 @Setter
 @Getter
 public class NormsSearchParams {
+  public static final String MOST_RELEVANT_ON_DESCRIPTION =
+      "Filters the result set so every work returns exactly one expression. Most relevant is defined as : The expression in force on that date if it exists, then the expression that would next be in force if that exists, then the most recent expression that was in force. If other filters are used the work may return 0 expressions due to the most relevant expression being filtered out.";
+
   @Schema(
       description =
           "Search by European Legislation Identifier (ELI). Right now only searching by work ELI is supported, but a general eli prefix match might be supported in the future.")
@@ -58,9 +61,7 @@ public class NormsSearchParams {
           "Filters the result set to only return expressions that are in force *on or before* the provided date. The parameter should be provided in `YYYY-MM-DD` format. Differs from `dateTo`, which refers to the date of adoption or signature of the legislation.")
   LocalDate temporalCoverageTo;
 
-  @Schema(
-      description =
-          "Filters the result set so every work returns exactly one expression. Most relevant is defined as : The expression in force on that date if it exists, then the expression that would next be in force if that exists, then the most recent expression that was in force. If other filters are used the work may return 0 expressions due to the most relevant expression being filtered out.")
+  @Schema(description = MOST_RELEVANT_ON_DESCRIPTION)
   LocalDate mostRelevantOn;
 
   /**

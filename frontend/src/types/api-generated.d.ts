@@ -1937,33 +1937,8 @@ export interface operations {
         dateFrom?: string;
         /** @description The to (less than or equal) parameter returns all entities where date is earlier than, or equal to, the given date. */
         dateTo?: string;
-        /** @description Search by European Legislation Identifier (ELI). Right now only searching by work ELI is supported, but a general eli prefix match might be supported in the future. */
-        eli?: string;
-        /** @description Filters the result set to only return expressions that are in force *on or after* the provided date. The parameter should be provided in `YYYY-MM-DD` format. Differs from `dateFrom`, which refers to the date of adoption or signature of the legislation. If both `temporalCoverageFrom` and `temporalCoverageTo` are given, this will output all expressions that were in force during at least one day between the two dates. To get all expressions for one specific day, set both parameters to the same day. */
-        temporalCoverageFrom?: string;
-        /** @description Filters the result set to only return expressions that are in force *on or before* the provided date. The parameter should be provided in `YYYY-MM-DD` format. Differs from `dateTo`, which refers to the date of adoption or signature of the legislation. */
-        temporalCoverageTo?: string;
-        /** @description Filters the result set so every work returns exactly one expression. Most relevant is defined as : The expression in force on that date if it exists, then the expression that would next be in force if that exists, then the most recent expression that was in force. If other filters are used the work may return 0 expressions due to the most relevant expression being filtered out. */
-        mostRelevantOn?: string;
-        fileNumber?: string;
-        ecli?: string;
-        /** @description Filter by court name (Finanzgericht Münster, FG Münster, ArbG Köln) or court type (Finanzgericht, FG, ArbG). Supports both long and short names. */
-        court?: string;
-        /** @description Corresponds to “Rechtskraft”, meaning that the decision referred to is legally binding. */
-        legalEffect?: "JA" | "NEIN" | "KEINE_ANGABE" | "FALSCHE_ANGABE";
-        /** @description Filter by document type (Urteil, Versäumnisurteil, Entscheidung etc.). Multiple values may be specified as a comma-separated list or by repeating the parameter. */
-        type?: string[];
-        /** @description Extended filter by type group. Multiple values may be specified as a comma-separated list or by repeating the parameter. */
-        typeGroup?: "Urteil" | "Beschluss" | "other";
-        documentNumber?: string;
-        yearOfPublication?: string[];
-        documentType?: string[];
-        author?: string[];
-        collaborator?: string[];
         /** @description The field to sort the results by. Default is the relevance score calculated by OpenSearch. Valid usage of the sort field are : date, temporalCoverageFrom, legislationIdentifier, courtName, documentNumber and not setting the sort field (sort by relevance descending).Add a leading - to set the order to descending (-date) */
         sort?: string;
-        /** @description Filter by document kind. Specify R for case law (<u>R</u>echtsprechung), N for legislation (<u>N</u>ormen) or L for literature (<u>L</u>iteratur). */
-        documentKind?: "R" | "N" | "L" | "V";
         /**
          * @description The number of entities per page
          * @example 100
@@ -1974,6 +1949,11 @@ export interface operations {
          * @example 0
          */
         pageIndex?: number;
+        /**
+         * @description Filters the result set so every work returns exactly one expression. Most relevant is defined as : The expression in force on that date if it exists, then the expression that would next be in force if that exists, then the most recent expression that was in force. If other filters are used the work may return 0 expressions due to the most relevant expression being filtered out.
+         * @example 2026-03-11
+         */
+        mostRelevantOn?: string;
       };
       header?: never;
       path?: never;

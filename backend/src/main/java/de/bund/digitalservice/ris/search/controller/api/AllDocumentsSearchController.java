@@ -4,10 +4,6 @@ import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.exception.CustomValidationException;
 import de.bund.digitalservice.ris.search.mapper.DocumentResponseMapper;
 import de.bund.digitalservice.ris.search.mapper.SortParamsConverter;
-import de.bund.digitalservice.ris.search.models.DocumentKind;
-import de.bund.digitalservice.ris.search.models.api.parameters.AdministrativeDirectiveSearchParams;
-import de.bund.digitalservice.ris.search.models.api.parameters.CaseLawSearchParams;
-import de.bund.digitalservice.ris.search.models.api.parameters.LiteratureSearchParams;
 import de.bund.digitalservice.ris.search.models.api.parameters.NormsSearchParams;
 import de.bund.digitalservice.ris.search.models.api.parameters.PaginationParams;
 import de.bund.digitalservice.ris.search.models.api.parameters.UniversalSearchParams;
@@ -19,12 +15,12 @@ import de.bund.digitalservice.ris.search.schema.SearchMemberSchema;
 import de.bund.digitalservice.ris.search.service.AllDocumentsService;
 import de.bund.digitalservice.ris.search.utils.LuceneQueryTools;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import java.util.Optional;
+import java.time.LocalDate;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.elasticsearch.UncategorizedElasticsearchException;
@@ -53,22 +49,15 @@ public class AllDocumentsSearchController {
   /**
    * Performs a global search and filtering operation on documents of various kinds (case law,
    * legislation, and literature). This endpoint supports paginated, filtered, and sorted search
-   * results, allowing clients to query specific document types and apply sorting and pagination
-   * parameters.
+   * results.
    *
-   * <p>Default sorting is by relevance, but it can be customized to sort by date. The endpoint
-   * supports multiple search parameters depending on the document kind.
+   * <p>Default sorting is by relevance, but it can be customized to sort by date.
    *
    * @param request Universal search parameters that apply to all document kinds.
-   * @param normsSearchParams Specific search parameters related to legislation documents.
-   * @param caseLawSearchParams Specific search parameters related to case law documents.
-   * @param literatureSearchParams Specific search parameters related to literature documents.
-   * @param administrativeDirectiveSearchParams Specific search parameters related to administrative
-   *     documents.
    * @param sortParams Sorting parameters for ordering the search results.
-   * @param documentKind Optional filter indicating the kind of document to search for. Supported
-   *     values: R (case law), N (legislation), L (literature).
    * @param paginationParams Pagination parameters such as page index and size.
+   * @param mostRelevantOn Specifies for what date the norms most relevant expression should be
+   *     returned.
    * @return A ResponseEntity containing a paginated collection of search results.
    * @throws CustomValidationException if there are validation errors with the provided input
    *     parameters.
@@ -89,19 +78,14 @@ public class AllDocumentsSearchController {
   public ResponseEntity<CollectionSchema<SearchMemberSchema<AbstractDocumentSchema>>>
       searchAndFilter(
           @ParameterObject UniversalSearchParams request,
-          @ParameterObject NormsSearchParams normsSearchParams,
-          @ParameterObject CaseLawSearchParams caseLawSearchParams,
-          @ParameterObject LiteratureSearchParams literatureSearchParams,
-          @ParameterObject AdministrativeDirectiveSearchParams administrativeDirectiveSearchParams,
           @ParameterObject @Valid UniversalSortParam sortParams,
-          @RequestParam("documentKind")
-              @Schema(
-                  description =
-                      "Filter by document kind. Specify R for case law (<u>R</u>echtsprechung), N for legislation (<u>N</u>ormen) or L for literature (<u>L</u>iteratur).")
-              Optional<DocumentKind> documentKind,
-          @ParameterObject @Valid PaginationParams paginationParams)
+          @ParameterObject @Valid PaginationParams paginationParams,
+          @Parameter(
+                  description = NormsSearchParams.MOST_RELEVANT_ON_DESCRIPTION,
+                  example = "2026-03-11")
+              @RequestParam(name = "mostRelevantOn", required = false)
+              LocalDate mostRelevantOn)
           throws CustomValidationException {
-    normsSearchParams.validate();
 
     var pageRequest = PageRequest.of(paginationParams.getPageIndex(), paginationParams.getSize());
 
@@ -110,14 +94,7 @@ public class AllDocumentsSearchController {
 
     try {
       SearchPage<AbstractSearchEntity> searchResult =
-          allDocumentsService.simpleSearchAllDocuments(
-              request,
-              normsSearchParams,
-              caseLawSearchParams,
-              literatureSearchParams,
-              administrativeDirectiveSearchParams,
-              documentKind.orElse(null),
-              sortedPageRequest);
+          allDocumentsService.simpleSearchAllDocuments(request, sortedPageRequest, mostRelevantOn);
 
       return ResponseEntity.ok()
           .contentType(MediaType.APPLICATION_JSON)
