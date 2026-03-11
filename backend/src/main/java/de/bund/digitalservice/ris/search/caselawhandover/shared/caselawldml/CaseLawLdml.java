@@ -27,8 +27,4 @@ public class CaseLawLdml {
 
   @XmlElement(name = "judgment", namespace = CaseLawLdmlNamespaces.AKN_NS)
   private Judgment judgment;
-
-  public String getUniqueId() {
-    return judgment.getMeta().getIdentification().getFrbrWork().getFrbrThis().getValue();
-  }
 }

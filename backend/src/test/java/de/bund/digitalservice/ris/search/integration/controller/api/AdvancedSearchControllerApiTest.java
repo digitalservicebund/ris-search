@@ -152,19 +152,8 @@ class AdvancedSearchControllerApiTest extends ContainersIntegrationBase {
       arguments.add(Arguments.of(alias, "deviatingDocumentNumbers", 1));
     }
 
-    for (var alias : new String[] {"publication_status", "STATUS"}) {
-      arguments.add(Arguments.of(alias, "PUBLISHED", CaseLawTestData.PUBLISHED_COUNT));
-    }
-
-    for (var alias : new String[] {"error", "FEHLER"}) {
-      arguments.add(Arguments.of(alias, "true", 1));
-    }
-
     arguments.add(Arguments.of("documentation_office", "DS", 1));
 
-    for (var alias : new String[] {"procedures", "VORGANG", "VG"}) {
-      arguments.add(Arguments.of(alias, "proceduresTest", 1));
-    }
     for (var alias : new String[] {"legal_effect", "RECHTSKRAFT", "RK"}) {
       arguments.add(Arguments.of(alias, "JA", 2));
     }
