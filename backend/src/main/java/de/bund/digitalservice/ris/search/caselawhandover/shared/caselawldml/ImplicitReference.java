@@ -23,7 +23,4 @@ public class ImplicitReference {
 
   @XmlElement(name = "nachgehend", namespace = CaseLawLdmlNamespaces.RIS_NS)
   private LinkedJudgement ensuingJudgement;
-
-  @XmlElement(name = "fundstelle", namespace = CaseLawLdmlNamespaces.RIS_NS)
-  private Citation citation;
 }
