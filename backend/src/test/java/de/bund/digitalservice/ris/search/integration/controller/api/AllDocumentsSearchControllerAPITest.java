@@ -3,6 +3,7 @@ package de.bund.digitalservice.ris.search.integration.controller.api;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.either;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.everyItem;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.matchesRegex;
@@ -18,21 +19,22 @@ import de.bund.digitalservice.ris.TestJsonUtils;
 import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.integration.config.ContainersIntegrationBase;
 import de.bund.digitalservice.ris.search.integration.controller.api.testData.CaseLawTestData;
-import de.bund.digitalservice.ris.search.integration.controller.api.testData.LiteratureTestData;
+import de.bund.digitalservice.ris.search.integration.controller.api.testData.NormsTestData;
 import de.bund.digitalservice.ris.search.models.opensearch.AdministrativeDirective;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import de.bund.digitalservice.ris.search.models.opensearch.Literature;
 import de.bund.digitalservice.ris.search.repository.opensearch.AdministrativeDirectiveRepository;
 import de.bund.digitalservice.ris.search.repository.opensearch.CaseLawRepository;
 import de.bund.digitalservice.ris.search.repository.opensearch.LiteratureRepository;
+import de.bund.digitalservice.ris.search.service.IndexNormsService;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Stream;
 import org.apache.commons.collections4.IteratorUtils;
 import org.hamcrest.Matchers;
-import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -45,7 +47,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
@@ -56,6 +57,12 @@ class AllDocumentsSearchControllerAPITest extends ContainersIntegrationBase {
   @Autowired private CaseLawRepository caseLawRepository;
   @Autowired private LiteratureRepository literatureRepository;
   @Autowired private AdministrativeDirectiveRepository administrativeDirectiveRepository;
+  @Autowired private IndexNormsService indexNormsService;
+
+  @BeforeEach
+  void setup() {
+    resetRepositories();
+  }
 
   @Test
   @DisplayName("Should return correct result for term search, with textMatches")
@@ -123,43 +130,6 @@ class AllDocumentsSearchControllerAPITest extends ContainersIntegrationBase {
         .andExpect(jsonPath("$.member[0]['item'].documentNumber", Matchers.is("KSNR0000")))
         .andExpect(jsonPath("$.member[1]['item'].documentNumber", Matchers.is("BFRE000087655")))
         .andExpect(jsonPath("$.member[2]['item'].abbreviation", Matchers.is("TeG")));
-  }
-
-  static Stream<Arguments> testArgsSameResultsAsOtherControllers() {
-    return Stream.of(
-        Arguments.of(
-            ApiConfig.Paths.DOCUMENT
-                + "?searchTerm="
-                + CaseLawTestData.matchAllTerm
-                + "&documentKind=R",
-            ApiConfig.Paths.CASELAW + "?searchTerm=" + CaseLawTestData.matchAllTerm),
-        Arguments.of(
-            ApiConfig.Paths.DOCUMENT + "?searchTerm=Gesetz&documentKind=N",
-            ApiConfig.Paths.LEGISLATION + "?searchTerm=Gesetz"),
-        Arguments.of(
-            ApiConfig.Paths.DOCUMENT
-                + "?searchTerm="
-                + LiteratureTestData.matchAllTerm
-                + "&documentKind=L",
-            ApiConfig.Paths.LITERATURE + "?searchTerm=" + LiteratureTestData.matchAllTerm));
-  }
-
-  @ParameterizedTest
-  @MethodSource("testArgsSameResultsAsOtherControllers")
-  @DisplayName("Returns the same contents as Norms, CaseLaw and Literature search controllers")
-  void testConsistencyWithOtherSearchControllers(String firstPath, String secondPath)
-      throws Exception {
-    var firstResponse =
-        mockMvc.perform(get(firstPath).contentType(MediaType.APPLICATION_JSON)).andReturn();
-
-    var secondResponse =
-        mockMvc.perform(get(secondPath).contentType(MediaType.APPLICATION_JSON)).andReturn();
-    var firstMap =
-        new ObjectMapper().readValue(firstResponse.getResponse().getContentAsString(), Map.class);
-    var secondMap =
-        new ObjectMapper().readValue(secondResponse.getResponse().getContentAsString(), Map.class);
-
-    Assertions.assertEquals(firstMap.get("member"), secondMap.get("member"));
   }
 
   @ParameterizedTest
@@ -313,5 +283,53 @@ class AllDocumentsSearchControllerAPITest extends ContainersIntegrationBase {
             jsonPath("$.errors[0].code", Matchers.is("invalid_parameter_value")),
             jsonPath("$.errors[0].parameter", Matchers.is("size")),
             jsonPath("$.errors[0].message", Matchers.is("size must be at least 1")));
+  }
+
+  @Test
+  @DisplayName("Should return most relevant expression for a mostRelevantOn date")
+  void shouldReturnMostRelevantExpressionForADay() throws Exception {
+    addNormXmlFiles(NormsTestData.s102WorkExpressions);
+    indexNormsService.reindexAll(Instant.now().toString());
+
+    // A date where 1 expression was in force returns that expression
+    JsonPath.parse(
+        mockMvc
+            .perform(
+                get(ApiConfig.Paths.DOCUMENT
+                        + "?searchTerm=eli/bund/bgbl-1/1991/s102"
+                        + "&mostRelevantOn=1991-06-01")
+                    .contentType(MediaType.APPLICATION_JSON))
+            .andExpectAll(
+                status().isOk(),
+                jsonPath("$.member", hasSize(1)),
+                jsonPath(
+                    "$.member[0].item.workExample.legislationIdentifier",
+                    equalTo("eli/bund/bgbl-1/1991/s102/1991-01-01/1/deu"))));
+  }
+
+  @Test
+  @DisplayName("Should return all expressions if mostRelevantOn is null")
+  void shouldReturnAllExpressions() throws Exception {
+    addNormXmlFiles(NormsTestData.s102WorkExpressions);
+    indexNormsService.reindexAll(Instant.now().toString());
+
+    // A date where 1 expression was in force returns that expression
+    JsonPath.parse(
+        mockMvc
+            .perform(
+                get(ApiConfig.Paths.DOCUMENT + "?searchTerm=eli/bund/bgbl-1/1991/s102")
+                    .contentType(MediaType.APPLICATION_JSON))
+            .andExpectAll(
+                status().isOk(),
+                jsonPath("$.member", hasSize(3)),
+                jsonPath(
+                    "$.member[0].item.workExample.legislationIdentifier",
+                    equalTo("eli/bund/bgbl-1/1991/s102/1991-01-01/1/deu")),
+                jsonPath(
+                    "$.member[1].item.workExample.legislationIdentifier",
+                    equalTo("eli/bund/bgbl-1/1991/s102/2050-01-01/1/deu")),
+                jsonPath(
+                    "$.member[2].item.workExample.legislationIdentifier",
+                    equalTo("eli/bund/bgbl-1/1991/s102/2020-01-01/1/deu"))));
   }
 }

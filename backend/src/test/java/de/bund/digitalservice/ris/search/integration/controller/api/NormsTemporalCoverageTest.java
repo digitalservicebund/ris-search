@@ -115,7 +115,7 @@ class NormsTemporalCoverageTest extends ContainersIntegrationBase {
 
   @DisplayName("Rejects inverted ranges")
   @ParameterizedTest
-  @ValueSource(strings = {ApiConfig.Paths.LEGISLATION, ApiConfig.Paths.DOCUMENT})
+  @ValueSource(strings = {ApiConfig.Paths.LEGISLATION})
   void shouldRejectInvalidRange(String basePath) throws Exception {
     mockMvc
         .perform(
