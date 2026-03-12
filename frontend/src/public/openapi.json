@@ -963,151 +963,6 @@
             }
           },
           {
-            "name": "eli",
-            "in": "query",
-            "description": "Search by European Legislation Identifier (ELI). Right now only searching by work ELI is supported, but a general eli prefix match might be supported in the future.",
-            "required": false,
-            "schema": {
-              "type": "string",
-              "description": "Search by European Legislation Identifier (ELI). Right now only searching by work ELI is supported, but a general eli prefix match might be supported in the future."
-            }
-          },
-          {
-            "name": "temporalCoverageFrom",
-            "in": "query",
-            "description": "Filters the result set to only return expressions that are in force *on or after* the provided date. The parameter should be provided in `YYYY-MM-DD` format. Differs from `dateFrom`, which refers to the date of adoption or signature of the legislation. If both `temporalCoverageFrom` and `temporalCoverageTo` are given, this will output all expressions that were in force during at least one day between the two dates. To get all expressions for one specific day, set both parameters to the same day.",
-            "required": false,
-            "schema": {
-              "type": "string",
-              "format": "date",
-              "description": "Filters the result set to only return expressions that are in force *on or after* the provided date. The parameter should be provided in `YYYY-MM-DD` format. Differs from `dateFrom`, which refers to the date of adoption or signature of the legislation. If both `temporalCoverageFrom` and `temporalCoverageTo` are given, this will output all expressions that were in force during at least one day between the two dates. To get all expressions for one specific day, set both parameters to the same day."
-            }
-          },
-          {
-            "name": "temporalCoverageTo",
-            "in": "query",
-            "description": "Filters the result set to only return expressions that are in force *on or before* the provided date. The parameter should be provided in `YYYY-MM-DD` format. Differs from `dateTo`, which refers to the date of adoption or signature of the legislation.",
-            "required": false,
-            "schema": {
-              "type": "string",
-              "format": "date",
-              "description": "Filters the result set to only return expressions that are in force *on or before* the provided date. The parameter should be provided in `YYYY-MM-DD` format. Differs from `dateTo`, which refers to the date of adoption or signature of the legislation."
-            }
-          },
-          {
-            "name": "mostRelevantOn",
-            "in": "query",
-            "description": "Filters the result set so every work returns exactly one expression. Most relevant is defined as : The expression in force on that date if it exists, then the expression that would next be in force if that exists, then the most recent expression that was in force. If other filters are used the work may return 0 expressions due to the most relevant expression being filtered out.",
-            "required": false,
-            "schema": {
-              "type": "string",
-              "format": "date",
-              "description": "Filters the result set so every work returns exactly one expression. Most relevant is defined as : The expression in force on that date if it exists, then the expression that would next be in force if that exists, then the most recent expression that was in force. If other filters are used the work may return 0 expressions due to the most relevant expression being filtered out."
-            }
-          },
-          {
-            "name": "fileNumber",
-            "in": "query",
-            "required": false,
-            "schema": { "type": "string" }
-          },
-          {
-            "name": "ecli",
-            "in": "query",
-            "required": false,
-            "schema": { "type": "string" }
-          },
-          {
-            "name": "court",
-            "in": "query",
-            "description": "Filter by court name (Finanzgericht Münster, FG Münster, ArbG Köln) or court type (Finanzgericht, FG, ArbG). Supports both long and short names.",
-            "required": false,
-            "schema": {
-              "type": "string",
-              "description": "Filter by court name (Finanzgericht Münster, FG Münster, ArbG Köln) or court type (Finanzgericht, FG, ArbG). Supports both long and short names."
-            }
-          },
-          {
-            "name": "legalEffect",
-            "in": "query",
-            "description": "Corresponds to “Rechtskraft”, meaning that the decision referred to is legally binding.",
-            "required": false,
-            "schema": {
-              "type": "string",
-              "description": "Corresponds to “Rechtskraft”, meaning that the decision referred to is legally binding.",
-              "enum": ["JA", "NEIN", "KEINE_ANGABE", "FALSCHE_ANGABE"]
-            }
-          },
-          {
-            "name": "type",
-            "in": "query",
-            "description": "Filter by document type (Urteil, Versäumnisurteil, Entscheidung etc.). Multiple values may be specified as a comma-separated list or by repeating the parameter.",
-            "required": false,
-            "schema": {
-              "type": "array",
-              "description": "Filter by document type (Urteil, Versäumnisurteil, Entscheidung etc.). Multiple values may be specified as a comma-separated list or by repeating the parameter.",
-              "examples": ["Versäumnisurteil", "Entscheidung"],
-              "items": {
-                "type": "string",
-                "description": "Filter by document type (Urteil, Versäumnisurteil, Entscheidung etc.). Multiple values may be specified as a comma-separated list or by repeating the parameter.",
-                "examples": ["Versäumnisurteil", "Entscheidung"]
-              }
-            }
-          },
-          {
-            "name": "typeGroup",
-            "in": "query",
-            "description": "Extended filter by type group. Multiple values may be specified as a comma-separated list or by repeating the parameter.",
-            "required": false,
-            "schema": {
-              "type": "array",
-              "description": "Extended filter by type group. Multiple values may be specified as a comma-separated list or by repeating the parameter.",
-              "enum": ["Urteil", "Beschluss", "other"],
-              "items": {
-                "type": "string",
-                "description": "Extended filter by type group. Multiple values may be specified as a comma-separated list or by repeating the parameter.",
-                "enum": [
-                  "URTEIL",
-                  "BESCHLUSS",
-                  "OTHER",
-                  "Urteil",
-                  "Beschluss",
-                  "other"
-                ]
-              }
-            }
-          },
-          {
-            "name": "documentNumber",
-            "in": "query",
-            "required": false,
-            "schema": { "type": "string" }
-          },
-          {
-            "name": "yearOfPublication",
-            "in": "query",
-            "required": false,
-            "schema": { "type": "array", "items": { "type": "string" } }
-          },
-          {
-            "name": "documentType",
-            "in": "query",
-            "required": false,
-            "schema": { "type": "array", "items": { "type": "string" } }
-          },
-          {
-            "name": "author",
-            "in": "query",
-            "required": false,
-            "schema": { "type": "array", "items": { "type": "string" } }
-          },
-          {
-            "name": "collaborator",
-            "in": "query",
-            "required": false,
-            "schema": { "type": "array", "items": { "type": "string" } }
-          },
-          {
             "name": "sort",
             "in": "query",
             "description": "The field to sort the results by. Default is the relevance score calculated by OpenSearch. Valid usage of the sort field are : date, temporalCoverageFrom, legislationIdentifier, courtName, documentNumber and not setting the sort field (sort by relevance descending).Add a leading - to set the order to descending (-date)",
@@ -1116,17 +971,6 @@
               "type": "string",
               "description": "The field to sort the results by. Default is the relevance score calculated by OpenSearch. Valid usage of the sort field are : date, temporalCoverageFrom, legislationIdentifier, courtName, documentNumber and not setting the sort field (sort by relevance descending).Add a leading - to set the order to descending (-date)",
               "pattern": "^-?(|default|date|DATUM|courtName|documentNumber|temporalCoverageFrom|legislationIdentifier)$"
-            }
-          },
-          {
-            "name": "documentKind",
-            "in": "query",
-            "description": "Filter by document kind. Specify R for case law (<u>R</u>echtsprechung), N for legislation (<u>N</u>ormen) or L for literature (<u>L</u>iteratur).",
-            "required": false,
-            "schema": {
-              "type": "string",
-              "description": "Filter by document kind. Specify R for case law (<u>R</u>echtsprechung), N for legislation (<u>N</u>ormen) or L for literature (<u>L</u>iteratur).",
-              "enum": ["R", "N", "L", "V"]
             }
           },
           {
@@ -1149,6 +993,14 @@
             "required": false,
             "schema": { "type": "integer", "format": "int32", "minimum": 0 },
             "example": 0
+          },
+          {
+            "name": "mostRelevantOn",
+            "in": "query",
+            "description": "Filters the result set so every work returns exactly one expression. Most relevant is defined as : The expression in force on that date if it exists, then the expression that would next be in force if that exists, then the most recent expression that was in force. If other filters are used the work may return 0 expressions due to the most relevant expression being filtered out.",
+            "required": false,
+            "schema": { "type": "string", "format": "date" },
+            "example": "2026-03-11"
           }
         ],
         "responses": {
@@ -2651,7 +2503,7 @@
         "properties": {
           "@type": { "type": "string", "example": "TocEntry" },
           "id": { "type": "string", "example": "hauptteil-1_para-1" },
-          "marker": { "type": "string", "example": 1 },
+          "marker": { "type": "string", "example": "1" },
           "heading": { "type": "string", "example": "Art 1" },
           "children": {
             "type": "array",
