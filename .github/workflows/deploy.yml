@@ -19,7 +19,7 @@ jobs:
     permissions:
       id-token: write
     steps:
-      - uses: chainguard-dev/actions/setup-gitsign@71714a76c3df10b544595a2294c16649dc3472e5
+      - uses: chainguard-dev/actions/setup-gitsign@7440e20e3e0bb180a2f6e330bcd53504e2ac8980
       - name: Deploy backend and frontend images to ${{ inputs.deployment-environment}}
         uses: digitalservicebund/argocd-deploy@4e758f584953506c571951ffcba33d6a6246e856
         with:
