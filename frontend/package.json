@@ -33,7 +33,7 @@
     "dayjs": "1.11.19",
     "lodash": "4.17.23",
     "minisearch": "7.2.0",
-    "nuxt": "4.3.1",
+    "nuxt": "4.3.0",
     "nuxt-security": "2.5.1",
     "posthog-js": "1.360.1",
     "primevue": "4.5.4",
