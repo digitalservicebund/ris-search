@@ -1,7 +1,13 @@
 <script setup lang="ts">
 import type { TreeItem } from "~/components/TreeView.vue";
 
-definePageMeta({ layout: "norm" });
+definePageMeta({
+  layout: "norm",
+  middleware: () => {
+    const config = useRuntimeConfig();
+    if (!config.public.privateFeaturesEnabled) return abortNavigation();
+  },
+});
 
 const sampleTree: TreeItem[] = [
   {
@@ -60,7 +66,6 @@ const lastClicked = ref<TreeItem>();
 
 <template>
   <div class="container flex gap-64 py-32 lg:py-64">
-    <!-- Tree -->
     <div class="flex-1">
       <TreeView
         :items="sampleTree"
