@@ -217,7 +217,7 @@ function toggleDeep() {
   /* leaf node */
   &:not([aria-expanded]) {
     .header {
-      @apply ml-8 py-16 pr-16 pl-[1.125rem];
+      @apply py-16 pr-16 pl-[1.625rem];
     }
 
     .content {
