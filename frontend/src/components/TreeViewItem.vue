@@ -98,6 +98,7 @@ function toggleDeep() {
         <button
           :aria-label="isExpanded ? 'Ebene schließen' : 'Ebene öffnen'"
           class="h-24 w-24"
+          type="button"
           @click="toggleSelf"
         >
           <IcBaselineExpandMore v-if="!isExpanded" />
@@ -107,6 +108,7 @@ function toggleDeep() {
 
       <component
         :is="item.to ? NuxtLink : 'button'"
+        :type="item.to ? undefined : 'button'"
         :to="item.to"
         class="content"
         @click="onSelect(item)"
@@ -118,6 +120,7 @@ function toggleDeep() {
       <div v-if="isParent" class="tree-control">
         <button
           class="h-40 w-40"
+          type="button"
           :aria-label="
             isDeepExpanded ? 'Alle Ebenen zuklappen' : 'Alle Ebenen ausklappen'
           "
