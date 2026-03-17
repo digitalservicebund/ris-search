@@ -157,6 +157,24 @@ describe("TreeViewItem", () => {
     expect(emitted("update:selected")).toContainEqual(["a"]);
   });
 
+  describe("link", () => {
+    const linkedLeaf: TreeItem = {
+      key: "a",
+      title: "Item A",
+      to: "/some/path",
+    };
+
+    it("renders a link when `to` is set", async () => {
+      await render(linkedLeaf);
+      expect(screen.getByRole("link", { name: "Item A" })).toBeInTheDocument();
+    });
+
+    it("renders a button for the content when `to` is not set", async () => {
+      await render(leaf);
+      expect(screen.getByRole("button")).toBeInTheDocument();
+    });
+  });
+
   describe("subtitle", () => {
     it("renders the subtitle on a leaf item", async () => {
       await render({ key: "a", title: "Item A", subtitle: "A description" });

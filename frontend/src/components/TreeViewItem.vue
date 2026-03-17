@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { NuxtLink } from "#components";
 import IcBaselineExpandLess from "~icons/ic/baseline-expand-less";
 import IcBaselineExpandMore from "~icons/ic/baseline-expand-more";
 import IcBaselineUnfoldLess from "~icons/ic/baseline-unfold-less";
@@ -88,15 +89,15 @@ function toggleDeep() {
 <template>
   <li
     role="treeitem"
-    :aria-label="accessibleLabel"
     :aria-expanded="isParent ? isExpanded : undefined"
+    :aria-label="accessibleLabel"
     :aria-selected="isSelected"
   >
     <div class="header">
       <div v-if="isParent" class="tree-control">
         <button
-          class="h-24 w-24"
           :aria-label="isExpanded ? 'Ebene schließen' : 'Ebene öffnen'"
+          class="h-24 w-24"
           @click="toggleSelf"
         >
           <IcBaselineExpandMore v-if="!isExpanded" />
@@ -104,10 +105,15 @@ function toggleDeep() {
         </button>
       </div>
 
-      <button @click="onSelect(item)" class="content">
+      <component
+        :is="item.to ? NuxtLink : 'button'"
+        :to="item.to"
+        class="content"
+        @click="onSelect(item)"
+      >
         <span class="title">{{ item.title }}</span>
         <span v-if="item.subtitle" class="subtitle">{{ item.subtitle }}</span>
-      </button>
+      </component>
 
       <div v-if="isParent" class="tree-control">
         <button

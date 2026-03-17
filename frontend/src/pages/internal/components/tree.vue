@@ -13,8 +13,14 @@ const sampleTree: TreeItem[] = [
         key: "abschnitt-1",
         title: "Erster Abschnitt",
         subtitle: "Grundlagen",
+        to: { hash: "#example" },
         children: [
-          { key: "para-1", title: "§ 1", subtitle: "Grundsatz" },
+          {
+            key: "para-1",
+            title: "§ 1",
+            subtitle: "Grundsatz",
+            to: { hash: "#example2" },
+          },
           { key: "para-2", title: "§ 2", subtitle: "Begriffsbestimmungen" },
           { key: "para-3", title: "§ 3", subtitle: "Anwendungsbereich" },
         ],
@@ -64,23 +70,6 @@ const lastClicked = ref<TreeItem>();
         v-model:selected="selectedKey"
         @click="lastClicked = $event"
       />
-    </div>
-
-    <!-- Debug panel -->
-    <div class="max-w-256 flex-none overflow-auto">
-      <h2 class="ris-heading3-bold mb-16">State</h2>
-      <p class="ris-label2-regular mb-4 font-bold">expandedKeys (shared):</p>
-      <pre class="ris-label2-regular mb-24 rounded bg-gray-100 p-8 text-xs">{{
-        expandedKeys
-      }}</pre>
-      <p class="ris-label2-regular mb-4 font-bold">selectedKey (shared):</p>
-      <pre class="ris-label2-regular mb-24 rounded bg-gray-100 p-8 text-xs">{{
-        selectedKey ?? "—"
-      }}</pre>
-      <p class="ris-label2-regular mb-4 font-bold">Last clicked:</p>
-      <pre class="ris-label2-regular rounded bg-gray-100 p-8 text-xs">{{
-        lastClicked ?? "—"
-      }}</pre>
     </div>
   </div>
 </template>
