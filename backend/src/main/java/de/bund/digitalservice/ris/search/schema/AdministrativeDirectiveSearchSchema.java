@@ -50,7 +50,9 @@ public record AdministrativeDirectiveSearchSchema(
         List<String> referenceNumbers,
     @Nullable @Schema(description = "Normgeber") String legislationAuthority,
     @Nullable @Schema(description = "Gültig ab Datum", example = "2003-12-15")
-        LocalDate entryIntoForceDate)
+        LocalDate entryIntoForceDate,
+    @Schema(requiredMode = Schema.RequiredMode.REQUIRED)
+        List<AdministrativeDirectiveEncodingSchema> encoding)
     implements AbstractDocumentSchema, JsonldResource {
 
   @Override

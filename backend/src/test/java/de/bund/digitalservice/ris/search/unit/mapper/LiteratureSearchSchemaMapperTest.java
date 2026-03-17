@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import de.bund.digitalservice.ris.search.config.ApiConfig;
+import de.bund.digitalservice.ris.search.mapper.EncodingSchemaFactory;
 import de.bund.digitalservice.ris.search.mapper.LiteratureSearchSchemaMapper;
 import de.bund.digitalservice.ris.search.models.opensearch.AbstractSearchEntity;
 import de.bund.digitalservice.ris.search.models.opensearch.Literature;
@@ -17,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.IntFunction;
 import java.util.stream.IntStream;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.domain.PageRequest;
@@ -167,5 +169,61 @@ class LiteratureSearchSchemaMapperTest {
   private String getItemId(
       CollectionSchema<SearchMemberSchema<LiteratureSearchSchema>> page, int index) {
     return (page.member().get(index).item()).id();
+  }
+
+  @Test
+  @DisplayName("Correctly maps attributes")
+  void fromDomainSingle() {
+    var literature =
+        Literature.builder()
+            .id("XXLU000000001")
+            .documentNumber("XXLU000000001")
+            .yearsOfPublication(List.of("1979", "2004-09"))
+            .documentTypes(List.of("Auf"))
+            .dependentReferences(List.of("BUV, 1982, 123-123"))
+            .independentReferences(List.of("50 Jahre Betriebs-Berater, 1987, 123-456"))
+            .normReferences(List.of("GG, Art 6 Abs 2 S 1, 1949-05-23"))
+            .mainTitle("Hauptüberschrift")
+            .mainTitleAdditions("Zusatz zur Hauptüberschrift")
+            .documentaryTitle("Dokumentarischer Titel")
+            .authors(List.of("Musterfrau, Sabine"))
+            .collaborators(List.of("Mustermann, Max"))
+            .originators(List.of("FOO"))
+            .conferenceNotes(List.of("Internationaler Kongress 2025, Berlin, GER"))
+            .languages(List.of("deu", "eng"))
+            .shortReport("Kurzreferat")
+            .outline("Gliederung")
+            .founder(List.of("founder"))
+            .editors(List.of("editor"))
+            .edition("edition")
+            .publisherInformation(List.of("publishing house"))
+            .publisherOrganizations(List.of("publisher organization"))
+            .publisherPersons(List.of("publisher person"))
+            .internationalIdentifiers(List.of("ISBN XXXX"))
+            .universityNotes(List.of("university note"))
+            .volumes(List.of("volume 1", "volume 2"))
+            .build();
+
+    LiteratureSearchSchema expected =
+        LiteratureSearchSchema.builder()
+            .id("/v1/literature/XXLU000000001")
+            .documentNumber("XXLU000000001")
+            .inLanguage("de")
+            .yearsOfPublication(List.of("1979", "2004-09"))
+            .documentTypes(List.of("Auf"))
+            .dependentReferences(List.of("BUV, 1982, 123-123"))
+            .independentReferences(List.of("50 Jahre Betriebs-Berater, 1987, 123-456"))
+            .alternativeHeadline("Dokumentarischer Titel")
+            .authors(List.of("Musterfrau, Sabine"))
+            .collaborators(List.of("Mustermann, Max"))
+            .shortReport("Kurzreferat")
+            .outline("Gliederung")
+            .headline("Hauptüberschrift")
+            .literatureType("uli")
+            .encoding(
+                EncodingSchemaFactory.literatureEncodingSchemas("/v1/literature/XXLU000000001"))
+            .build();
+
+    Assertions.assertThat(LiteratureSearchSchemaMapper.fromDomain(literature)).isEqualTo(expected);
   }
 }

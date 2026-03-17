@@ -33,6 +33,7 @@ public record CaseLawSearchSchema(
         List<String> decisionName,
     @Schema(example = "DEV-123", requiredMode = Schema.RequiredMode.REQUIRED)
         List<String> deviatingDocumentNumber,
+    @Schema(requiredMode = Schema.RequiredMode.REQUIRED) List<CaseLawEncodingSchema> encoding,
     // fields that aren't shared with CaseLawDocumentationUnit
     @Schema(
             example = "/v1/case-law/ECLI:DE:FGRLP:1969:0905.IV85.68.0A",

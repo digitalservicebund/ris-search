@@ -6,12 +6,14 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.mapper.CaseLawSearchSchemaMapper;
+import de.bund.digitalservice.ris.search.mapper.EncodingSchemaFactory;
 import de.bund.digitalservice.ris.search.models.opensearch.AbstractSearchEntity;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import de.bund.digitalservice.ris.search.schema.CaseLawSearchSchema;
 import de.bund.digitalservice.ris.search.schema.CollectionSchema;
 import de.bund.digitalservice.ris.search.schema.SearchMemberSchema;
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Map;
@@ -128,6 +130,53 @@ class CaseLawSearchSchemaMapperTest {
     assertTrue(firstPage.id().startsWith(ApiConfig.Paths.CASELAW));
     assertTrue(middlePage.id().startsWith(ApiConfig.Paths.CASELAW));
     assertTrue(lastPage.id().startsWith(ApiConfig.Paths.CASELAW));
+  }
+
+  @Test
+  void fromDomain() {
+
+    CaseLawDocumentationUnit docUnit =
+        CaseLawDocumentationUnit.builder()
+            .id("id")
+            .documentNumber("docNumber")
+            .ecli("ecli")
+            .headline("headline")
+            .otherLongText("other longtext")
+            .decisionDate(LocalDate.of(2026, 1, 1))
+            .fileNumbers(List.of("n1", "n2"))
+            .courtType("courtType")
+            .location("location")
+            .documentType("documentType")
+            .outline("outline")
+            .judicialBody("judicialBody")
+            .decisionName(List.of("decisionName"))
+            .deviatingDocumentNumber(List.of("deviatingDocumentNumber"))
+            .courtKeyword("courtKeyword")
+            .build();
+
+    String expectedPath = ApiConfig.Paths.CASELAW + "/" + "docNumber";
+    CaseLawSearchSchema expected =
+        CaseLawSearchSchema.builder()
+            .id(expectedPath)
+            .inLanguage("de")
+            .documentNumber("docNumber")
+            .ecli("ecli")
+            .headline("headline")
+            .otherLongText("other longtext")
+            .decisionDate(LocalDate.of(2026, 1, 1))
+            .fileNumbers(List.of("n1", "n2"))
+            .courtType("courtType")
+            .location("location")
+            .documentType("documentType")
+            .outline("outline")
+            .judicialBody("judicialBody")
+            .decisionName(List.of("decisionName"))
+            .deviatingDocumentNumber(List.of("deviatingDocumentNumber"))
+            .courtName("courtKeyword")
+            .encoding(EncodingSchemaFactory.caselawEncodingSchemas(expectedPath))
+            .build();
+
+    assertEquals(expected, CaseLawSearchSchemaMapper.fromDomain(docUnit));
   }
 
   @Test

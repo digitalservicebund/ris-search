@@ -3,6 +3,7 @@ package de.bund.digitalservice.ris.search.schema;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import de.bund.digitalservice.ris.search.config.ApiConfig;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.List;
 import lombok.Builder;
 
 /**
@@ -37,7 +38,8 @@ public record LegislationExpressionSearchSchema(
     @Schema(
             description = "Whether the legislation expression is currently in force.",
             requiredMode = Schema.RequiredMode.REQUIRED)
-        LegalForceStatus legislationLegalForce)
+        LegalForceStatus legislationLegalForce,
+    @Schema(requiredMode = Schema.RequiredMode.REQUIRED) List<LegislationObjectSchema> encoding)
     implements JsonldResource {
 
   @Override

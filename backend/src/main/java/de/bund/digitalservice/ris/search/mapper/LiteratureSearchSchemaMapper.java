@@ -115,6 +115,7 @@ public class LiteratureSearchSchemaMapper {
         .shortReport(doc.shortReport())
         .outline(doc.outline())
         .literatureType(LiteratureTypeMapper.mapLiteratureType(doc.documentNumber()))
+        .encoding(EncodingSchemaFactory.literatureEncodingSchemas(entityURI))
         .build();
   }
 

@@ -24,7 +24,11 @@ class EncodingSchemaFactoryTest {
             "caselaw", (Function<String, List<?>>) EncodingSchemaFactory::caselawEncodingSchemas),
         Arguments.of(
             "literature",
-            (Function<String, List<?>>) EncodingSchemaFactory::literatureEncodingSchemas));
+            (Function<String, List<?>>) EncodingSchemaFactory::literatureEncodingSchemas),
+        Arguments.of(
+            "administrativeDirective",
+            (Function<String, List<?>>)
+                EncodingSchemaFactory::administrativeDirectiveEncodingSchemas));
   }
 
   @ParameterizedTest(name = "generates {0} encoding schemas")

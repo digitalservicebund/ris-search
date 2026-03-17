@@ -5,7 +5,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDate;
 import java.util.List;
 import lombok.Builder;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * A record representing the schema for literature documents, used in document search contexts. The
@@ -58,13 +57,7 @@ public record LiteratureSearchSchema(
             example = "['50 Jahre Betriebs-Berater, 1987, 123-456']",
             requiredMode = Schema.RequiredMode.REQUIRED)
         List<String> independentReferences,
-    @Schema(
-            description = "Norm Verweise",
-            example = "['GG, Art 6 Abs 2 S 1, 1949-05-23']",
-            requiredMode = Schema.RequiredMode.REQUIRED)
-        List<String> normReferences,
     @Schema(description = "Haupttitel") String headline,
-    @Schema(description = "Zusätze zum Haupttitel") String headlineAdditions,
     @Schema(description = "Dokumentarischer Titel") String alternativeHeadline,
     @Schema(
             description = "Autoren",
@@ -76,21 +69,6 @@ public record LiteratureSearchSchema(
             example = "['Mustermann, Max']",
             requiredMode = Schema.RequiredMode.REQUIRED)
         List<String> collaborators,
-    @Schema(
-            description = "Sprachen",
-            example = "['deu', 'eng']",
-            requiredMode = Schema.RequiredMode.REQUIRED)
-        List<String> languages,
-    @Schema(
-            description = "Urheber",
-            example = "['DGB']",
-            requiredMode = Schema.RequiredMode.REQUIRED)
-        List<String> originators,
-    @Schema(
-            description = "Kongressvermerke",
-            example = "['Nationaler Beispiel Kongress, 2024, Berlin, GER']",
-            requiredMode = Schema.RequiredMode.REQUIRED)
-        List<String> conferenceNotes,
     @Schema(description = "Kurzreferat") String shortReport,
     @Schema(description = "Gliederung") String outline,
     @Schema(
@@ -98,7 +76,7 @@ public record LiteratureSearchSchema(
             example = "['sli', 'uli']",
             requiredMode = Schema.RequiredMode.REQUIRED)
         String literatureType,
-    @Nullable List<LiteratureEncodingSchema> encoding)
+    @Schema(requiredMode = Schema.RequiredMode.REQUIRED) List<LiteratureEncodingSchema> encoding)
     implements AbstractDocumentSchema, JsonldResource {
 
   @Override
