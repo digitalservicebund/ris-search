@@ -18,7 +18,7 @@ const expandedKeys = defineModel<string[]>("expandedKeys", { required: true });
 
 // This is the key of the selected item instead of a simple flag because it
 // tracks the `selected` state of the entire tree view, including this item and
-// all it's children.
+// all its children.
 const selected = defineModel<string>("selected");
 
 const isParent = computed(() => !!props.item.children?.length);

@@ -111,7 +111,7 @@ describe("TreeViewItem", () => {
       expect(emitted("update:expandedKeys")).toContainEqual([["p"]]);
     });
 
-    it("updated the model when collapsing a node", async () => {
+    it("updates the model when collapsing a node", async () => {
       const user = userEvent.setup();
       const { emitted } = await render(parent, ["p"]);
       await user.click(screen.getByRole("button", { name: "Ebene schließen" }));
