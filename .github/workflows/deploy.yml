@@ -8,7 +8,7 @@ on:
         required: true
         type: string
       deployment-environment:
-        description: 'Environment to deploy to, either "staging" or "uat"'
+        description: 'Environment to deploy to, either "staging", "uat" or "prototype"'
         required: true
         type: string
 
