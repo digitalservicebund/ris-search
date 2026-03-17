@@ -47,18 +47,16 @@ describe("TreeViewItem", () => {
   describe("expansion", () => {
     it("sets expanded state on an expanded parent", async () => {
       await render(parent, ["p"]);
-      expect(screen.getByRole("treeitem", { name: /parent/i })).toHaveAttribute(
-        "aria-expanded",
-        "true",
-      );
+      expect(
+        screen.getByRole("treeitem", { name: "Parent (geöffnet)" }),
+      ).toHaveAttribute("aria-expanded", "true");
     });
 
     it("sets expanded state on a collapsed parent", async () => {
       await render(parent, []);
-      expect(screen.getByRole("treeitem", { name: /parent/i })).toHaveAttribute(
-        "aria-expanded",
-        "false",
-      );
+      expect(
+        screen.getByRole("treeitem", { name: "Parent (geschlossen)" }),
+      ).toHaveAttribute("aria-expanded", "false");
     });
 
     it("omits expanded state on a node that can't be expanded", async () => {
@@ -110,18 +108,14 @@ describe("TreeViewItem", () => {
       const user = userEvent.setup();
       const { emitted } = await render(parent, []);
       await user.click(screen.getByRole("button", { name: "Ebene öffnen" }));
-      expect((emitted("update:expandedKeys")![0] as [string[]])[0]).toContain(
-        "p",
-      );
+      expect(emitted("update:expandedKeys")).toContainEqual([["p"]]);
     });
 
     it("updated the model when collapsing a node", async () => {
       const user = userEvent.setup();
       const { emitted } = await render(parent, ["p"]);
       await user.click(screen.getByRole("button", { name: "Ebene schließen" }));
-      expect(
-        (emitted("update:expandedKeys")![0] as [string[]])[0],
-      ).not.toContain("p");
+      expect(emitted("update:expandedKeys")).not.toContainEqual([["p"]]);
     });
   });
 
@@ -132,9 +126,9 @@ describe("TreeViewItem", () => {
       await user.click(
         screen.getByRole("button", { name: "Alle Ebenen ausklappen" }),
       );
-      const keys = (emitted("update:expandedKeys")![0] as [string[]])[0];
-      expect(keys).toContain("p");
-      expect(keys).toContain("c");
+      expect(emitted("update:expandedKeys")).toContainEqual([
+        expect.arrayContaining(["p", "c"]),
+      ]);
     });
 
     it("updates the model when collapsing all children", async () => {
@@ -143,9 +137,9 @@ describe("TreeViewItem", () => {
       await user.click(
         screen.getAllByRole("button", { name: "Alle Ebenen zuklappen" })[0]!,
       );
-      const keys = (emitted("update:expandedKeys")![0] as [string[]])[0];
-      expect(keys).not.toContain("p");
-      expect(keys).not.toContain("c");
+      expect(emitted("update:expandedKeys")).toContainEqual([
+        expect.not.arrayContaining(["p", "c"]),
+      ]);
     });
   });
 
@@ -153,35 +147,74 @@ describe("TreeViewItem", () => {
     const user = userEvent.setup();
     const { emitted } = await render(leaf);
     await user.click(screen.getByText("Item A"));
-    expect(emitted("click")).toBeTruthy();
-    expect((emitted("click")![0] as [TreeItem])[0]).toMatchObject(leaf);
+    expect(emitted("click")).toContainEqual([leaf]);
   });
 
   it("emits model update with the item key when the title is clicked", async () => {
     const user = userEvent.setup();
     const { emitted } = await render(leaf);
     await user.click(screen.getByText("Item A"));
-    expect((emitted("update:selected")![0] as [string])[0]).toBe("a");
+    expect(emitted("update:selected")).toContainEqual(["a"]);
   });
 
-  it("renders the subtitle when provided", async () => {
-    const itemWithSubtitle: TreeItem = {
-      key: "a",
-      title: "Item A",
-      subtitle: "A description",
-    };
-    await renderSuspended(TreeViewItem, {
-      props: { item: itemWithSubtitle, expandedKeys: [] },
+  describe("subtitle", () => {
+    it("renders the subtitle on a leaf item", async () => {
+      await render({ key: "a", title: "Item A", subtitle: "A description" });
+      expect(screen.getByText("A description")).toBeInTheDocument();
     });
-    expect(screen.getByText("A description")).toBeInTheDocument();
-  });
 
-  it("does not render a subtitle element when subtitle is absent", async () => {
-    await renderSuspended(TreeViewItem, {
-      props: { item: leaf, expandedKeys: [] },
+    it("renders the subtitle on a parent item", async () => {
+      await render({
+        key: "p",
+        title: "Parent",
+        subtitle: "Parent description",
+        children: [{ key: "c1", title: "Child 1" }],
+      });
+      expect(screen.getByText("Parent description")).toBeInTheDocument();
     });
-    // Only the title span should be present in the default slot
-    expect(screen.getByText("Item A")).toBeInTheDocument();
-    expect(screen.queryByText(/description/i)).not.toBeInTheDocument();
+
+    it("renders the subtitle on a child item", async () => {
+      await render(
+        {
+          key: "p",
+          title: "Parent",
+          children: [
+            { key: "c1", title: "Child 1", subtitle: "Child description" },
+          ],
+        },
+        ["p"],
+      );
+      expect(screen.getByText("Child description")).toBeInTheDocument();
+    });
+
+    it("does not render a subtitle when absent", async () => {
+      await render(leaf);
+      expect(screen.queryByRole("term")).not.toBeInTheDocument();
+      expect(screen.queryByText(/description/i)).not.toBeInTheDocument();
+    });
+
+    it("includes the subtitle in the accessible label of a leaf item", async () => {
+      await render({ key: "a", title: "Item A", subtitle: "A description" });
+      expect(
+        screen.getByRole("treeitem", { name: "Item A, A description" }),
+      ).toBeInTheDocument();
+    });
+
+    it("includes the subtitle in the accessible label of a parent item", async () => {
+      await render(
+        {
+          key: "p",
+          title: "Parent",
+          subtitle: "Parent description",
+          children: [{ key: "c1", title: "Child 1" }],
+        },
+        ["p"],
+      );
+      expect(
+        screen.getByRole("treeitem", {
+          name: "Parent, Parent description (geöffnet)",
+        }),
+      ).toBeInTheDocument();
+    });
   });
 });

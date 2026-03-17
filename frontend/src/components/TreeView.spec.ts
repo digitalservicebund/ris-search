@@ -2,7 +2,7 @@ import { renderSuspended } from "@nuxt/test-utils/runtime";
 import { userEvent } from "@testing-library/user-event";
 import { screen } from "@testing-library/vue";
 import { describe, expect, it } from "vitest";
-import TreeView, { type TreeItem } from "./TreeView.vue";
+import TreeView from "./TreeView.vue";
 
 describe("TreeView", () => {
   const flatItems = [
@@ -126,9 +126,7 @@ describe("TreeView", () => {
       props: { items: flatItems },
     });
     await user.click(screen.getByText("Item B"));
-    expect(emitted("click")).toBeTruthy();
-    const clickedItem = (emitted("click")![0] as [TreeItem])[0];
-    expect(clickedItem).toMatchObject({ key: "b", title: "Item B" });
+    expect(emitted("click")).toContainEqual([{ key: "b", title: "Item B" }]);
   });
 
   describe("selection", () => {

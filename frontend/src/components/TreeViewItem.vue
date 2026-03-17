@@ -24,6 +24,12 @@ const isParent = computed(() => !!props.item.children?.length);
 
 const isExpanded = computed(() => expandedKeys.value.includes(props.item.key));
 
+const accessibleLabel = computed(() => {
+  const subtitle = props.item.subtitle ? `, ${props.item.subtitle}` : "";
+  if (!isParent.value) return `${props.item.title}${subtitle}`;
+  return `${props.item.title}${subtitle} ${isExpanded.value ? "(geöffnet)" : "(geschlossen)"}`;
+});
+
 const isSelected = computed(() => props.item.key === selected.value);
 
 function onSelect(item: TreeItem) {
@@ -82,6 +88,7 @@ function toggleDeep() {
 <template>
   <li
     role="treeitem"
+    :aria-label="accessibleLabel"
     :aria-expanded="isParent ? isExpanded : undefined"
     :aria-selected="isSelected"
   >
