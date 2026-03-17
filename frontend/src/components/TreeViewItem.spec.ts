@@ -109,7 +109,7 @@ describe("TreeViewItem", () => {
     it("updates the model when expanding a node", async () => {
       const user = userEvent.setup();
       const { emitted } = await render(parent, []);
-      await user.click(screen.getByRole("button", { name: "Expand" }));
+      await user.click(screen.getByRole("button", { name: "Ebene öffnen" }));
       expect((emitted("update:expandedKeys")![0] as [string[]])[0]).toContain(
         "p",
       );
@@ -118,7 +118,7 @@ describe("TreeViewItem", () => {
     it("updated the model when collapsing a node", async () => {
       const user = userEvent.setup();
       const { emitted } = await render(parent, ["p"]);
-      await user.click(screen.getByRole("button", { name: "Collapse" }));
+      await user.click(screen.getByRole("button", { name: "Ebene schließen" }));
       expect(
         (emitted("update:expandedKeys")![0] as [string[]])[0],
       ).not.toContain("p");
@@ -129,7 +129,9 @@ describe("TreeViewItem", () => {
     it("updates the model when expanding all children", async () => {
       const user = userEvent.setup();
       const { emitted } = await render(deepParent, []);
-      await user.click(screen.getByRole("button", { name: "Expand all" }));
+      await user.click(
+        screen.getByRole("button", { name: "Alle Ebenen ausklappen" }),
+      );
       const keys = (emitted("update:expandedKeys")![0] as [string[]])[0];
       expect(keys).toContain("p");
       expect(keys).toContain("c");
@@ -139,7 +141,7 @@ describe("TreeViewItem", () => {
       const user = userEvent.setup();
       const { emitted } = await render(deepParent, ["p", "c"]);
       await user.click(
-        screen.getAllByRole("button", { name: "Collapse all" })[0]!,
+        screen.getAllByRole("button", { name: "Alle Ebenen zuklappen" })[0]!,
       );
       const keys = (emitted("update:expandedKeys")![0] as [string[]])[0];
       expect(keys).not.toContain("p");

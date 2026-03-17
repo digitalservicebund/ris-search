@@ -86,30 +86,34 @@ function toggleDeep() {
     :aria-selected="isSelected"
   >
     <div class="header">
-      <button
-        class="tree-control-button h-24 w-24"
-        v-if="isParent"
-        :aria-label="isExpanded ? 'Collapse' : 'Expand'"
-        @click="toggleSelf"
-      >
-        <IcBaselineExpandMore v-if="!isExpanded" />
-        <IcBaselineExpandLess v-else />
-      </button>
+      <div v-if="isParent" class="tree-control">
+        <button
+          class="h-24 w-24"
+          :aria-label="isExpanded ? 'Ebene schließen' : 'Ebene öffnen'"
+          @click="toggleSelf"
+        >
+          <IcBaselineExpandMore v-if="!isExpanded" />
+          <IcBaselineExpandLess v-else />
+        </button>
+      </div>
 
       <button @click="onSelect(item)" class="content">
         <span class="title">{{ item.title }}</span>
         <span v-if="item.subtitle" class="subtitle">{{ item.subtitle }}</span>
       </button>
 
-      <button
-        v-if="isParent"
-        class="tree-control-button h-40 w-40"
-        :aria-label="isDeepExpanded ? 'Collapse all' : 'Expand all'"
-        @click="toggleDeep"
-      >
-        <IcBaselineUnfoldMore v-if="isDeepExpanded" />
-        <IcBaselineUnfoldLess v-else />
-      </button>
+      <div v-if="isParent" class="tree-control">
+        <button
+          class="h-40 w-40"
+          :aria-label="
+            isDeepExpanded ? 'Alle Ebenen zuklappen' : 'Alle Ebenen ausklappen'
+          "
+          @click="toggleDeep"
+        >
+          <IcBaselineUnfoldMore v-if="isDeepExpanded" />
+          <IcBaselineUnfoldLess v-else />
+        </button>
+      </div>
     </div>
 
     <ul v-if="isParent && isExpanded" role="group">
@@ -128,13 +132,31 @@ function toggleDeep() {
 <style scoped>
 @reference "~/assets/main.css";
 
+/*
+ * The styles for the different item states are extracted here instead of
+ * applying the classes to the elements directly because of the many different
+ * permutations (parent/child/expanded/collapsed/selected/hover/active/...).
+ * This is really hard to specify in Tailwind due to limited support for
+ * inheritance and ARIA-selectors.
+ *
+ * The styles below start from an unselected tree item with children as the
+ * default variants. The other variants are built by selectively overriding
+ * styles of the default variant.
+ *
+ * The @scope from treeitem to treeitem ensures that the expanded and selected
+ * states of the parent don't bleed into children of the current element. For
+ * some reason Vue's own scoping doesn't seem sufficient for that.
+ *
+ * The :after pseudo element is used throughout to increase the clickable area
+ * of the controls.
+ */
 @scope ([role=treeitem]) to ([role=treeitem]) {
   .header {
     @apply text-gray-1000 ris-label1-regular mb-2 flex gap-8 border-l-4 border-l-transparent py-8 pr-8 pl-12 hover:border-blue-500 hover:bg-blue-200 active:border-blue-800 active:bg-blue-300;
   }
 
   .content {
-    @apply flex flex-1 cursor-pointer flex-col gap-4 text-left wrap-break-word hyphens-auto;
+    @apply relative flex flex-1 cursor-pointer flex-col gap-4 text-left wrap-break-word hyphens-auto after:absolute after:-inset-x-8 after:-inset-y-8 after:content-["_"];
 
     &:hover .title {
       @apply underline underline-offset-2;
@@ -145,8 +167,20 @@ function toggleDeep() {
     @apply ris-label2-regular flex-1 text-gray-900;
   }
 
-  .tree-control-button {
-    @apply flex flex-none cursor-pointer items-center justify-center hover:bg-blue-800/30;
+  .tree-control {
+    @apply relative;
+
+    &:first-child button {
+      @apply after:right-0 after:-left-16;
+    }
+
+    &:last-child button {
+      @apply after:-right-8 after:left-0;
+    }
+
+    button {
+      @apply flex flex-none cursor-pointer items-center justify-center after:absolute after:-inset-y-8 after:content-["_"] hover:bg-blue-800/30;
+    }
   }
 
   /* expanded parent node */
@@ -167,7 +201,7 @@ function toggleDeep() {
     }
 
     .content {
-      @apply flex-row gap-8;
+      @apply flex-row gap-8 after:-inset-x-16 after:-inset-y-16;
 
       &:hover {
         .title:not(:only-child) {
