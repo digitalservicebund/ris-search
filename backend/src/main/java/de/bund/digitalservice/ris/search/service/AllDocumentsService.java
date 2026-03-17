@@ -1,18 +1,11 @@
 package de.bund.digitalservice.ris.search.service;
 
 import de.bund.digitalservice.ris.search.config.opensearch.Configurations;
-import de.bund.digitalservice.ris.search.models.DocumentKind;
-import de.bund.digitalservice.ris.search.models.api.parameters.AdministrativeDirectiveSearchParams;
-import de.bund.digitalservice.ris.search.models.api.parameters.CaseLawSearchParams;
-import de.bund.digitalservice.ris.search.models.api.parameters.LiteratureSearchParams;
 import de.bund.digitalservice.ris.search.models.api.parameters.NormsSearchParams;
 import de.bund.digitalservice.ris.search.models.api.parameters.UniversalSearchParams;
 import de.bund.digitalservice.ris.search.models.opensearch.AbstractSearchEntity;
-import de.bund.digitalservice.ris.search.models.opensearch.AdministrativeDirective;
-import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
-import de.bund.digitalservice.ris.search.models.opensearch.Literature;
-import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.utils.PageUtils;
+import java.time.LocalDate;
 import java.util.List;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -52,58 +45,29 @@ public class AllDocumentsService {
    * docs</a>.
    *
    * @param params Search parameters
-   * @param normsParams Norms search parameters
-   * @param caseLawParams Case law search parameters
-   * @param literatureSearchParams Literature search parameters
-   * @param administrativeDirectiveSearchParams Administrative directive search parameters
-   * @param documentKind The kind of document to search for.
    * @param pageable Page (offset) and size parameters.
+   * @param mostRelevantOn Only applies to norms and determines which of multiple matching
+   *     expressions is returned.
    * @return A new {@link SearchPage} of the containing {@link AbstractSearchEntity}.
    */
   public SearchPage<AbstractSearchEntity> simpleSearchAllDocuments(
       @NotNull UniversalSearchParams params,
-      @Nullable NormsSearchParams normsParams,
-      @Nullable CaseLawSearchParams caseLawParams,
-      @Nullable LiteratureSearchParams literatureSearchParams,
-      @Nullable AdministrativeDirectiveSearchParams administrativeDirectiveSearchParams,
-      @Nullable DocumentKind documentKind,
-      Pageable pageable) {
+      Pageable pageable,
+      @Nullable LocalDate mostRelevantOn) {
+
+    NormsSearchParams normsParams = new NormsSearchParams();
+    normsParams.setMostRelevantOn(mostRelevantOn);
 
     List<SimpleSearchType> searchTypes =
-        switch (documentKind) {
-          case LEGISLATION -> List.of(new NormSimpleSearchType(normsParams));
-          case CASE_LAW -> List.of(new CaseLawSimpleSearchType(caseLawParams));
-          case LITERATURE -> List.of(new LiteratureSimpleSearchType(literatureSearchParams));
-          case ADMINISTRATIVE_DIRECTIVE ->
-              List.of(
-                  new AdministrativeDirectiveSimpleSearchType(administrativeDirectiveSearchParams));
-          case null ->
-              List.of(
-                  new NormSimpleSearchType(normsParams),
-                  new CaseLawSimpleSearchType(caseLawParams),
-                  new LiteratureSimpleSearchType(literatureSearchParams),
-                  new AdministrativeDirectiveSimpleSearchType(administrativeDirectiveSearchParams));
-        };
+        List.of(
+            new NormSimpleSearchType(normsParams),
+            new CaseLawSimpleSearchType(null),
+            new LiteratureSimpleSearchType(null),
+            new AdministrativeDirectiveSimpleSearchType(null));
 
     NativeSearchQuery query = simpleSearchQueryBuilder.buildQuery(searchTypes, params, pageable);
 
-    if (documentKind == null) {
-      SearchHits<Document> search = operations.search(query, Document.class, allDocumentsIndex);
-      return pageUtils.unwrapMixedSearchHits(search, pageable);
-    } else {
-
-      var searchHits =
-          switch (documentKind) {
-            case LEGISLATION -> operations.search(query, Norm.class);
-            case CASE_LAW -> operations.search(query, CaseLawDocumentationUnit.class);
-            case LITERATURE -> operations.search(query, Literature.class);
-            case ADMINISTRATIVE_DIRECTIVE ->
-                operations.search(query, AdministrativeDirective.class);
-          };
-      @SuppressWarnings("unchecked")
-      SearchHits<AbstractSearchEntity> castSearchHits =
-          (SearchHits<AbstractSearchEntity>) searchHits;
-      return PageUtils.unwrapSearchHits(castSearchHits, pageable);
-    }
+    SearchHits<Document> search = operations.search(query, Document.class, allDocumentsIndex);
+    return pageUtils.unwrapMixedSearchHits(search, pageable);
   }
 }

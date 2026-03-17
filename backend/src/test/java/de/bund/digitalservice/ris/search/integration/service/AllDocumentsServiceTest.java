@@ -112,8 +112,7 @@ class AllDocumentsServiceTest extends ContainersIntegrationBase {
     searchParams.setSearchTerm("be fragmented");
 
     SearchPage<AbstractSearchEntity> searchResult =
-        allDocumentsService.simpleSearchAllDocuments(
-            searchParams, null, null, null, null, null, Pageable.ofSize(10));
+        allDocumentsService.simpleSearchAllDocuments(searchParams, Pageable.ofSize(10), null);
     var collection = DocumentResponseMapper.fromDomain(searchResult, ApiConfig.Paths.DOCUMENT);
 
     String expectedTextMatch =
