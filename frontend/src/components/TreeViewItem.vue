@@ -123,8 +123,8 @@ function toggleDeep() {
           "
           @click="toggleDeep"
         >
-          <IcBaselineUnfoldMore v-if="isDeepExpanded" />
-          <IcBaselineUnfoldLess v-else />
+          <IcBaselineUnfoldLess v-if="isDeepExpanded" />
+          <IcBaselineUnfoldMore v-else />
         </button>
       </div>
     </div>
