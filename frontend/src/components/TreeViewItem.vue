@@ -190,8 +190,12 @@ function toggleDeep() {
       @apply after:right-0 after:-left-16;
     }
 
-    &:last-child button {
-      @apply after:-right-8 after:left-0;
+    &:last-child {
+      @apply flex items-center;
+
+      button {
+        @apply after:-right-8 after:left-0;
+      }
     }
 
     button {
