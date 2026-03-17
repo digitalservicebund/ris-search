@@ -10,7 +10,7 @@ const props = defineProps<{
 }>();
 
 const emit = defineEmits<{
-  (e: "click", item: TreeItem): void;
+  click: [item: TreeItem];
 }>();
 
 const expandedKeys = defineModel<string[]>("expandedKeys", { required: true });

@@ -20,7 +20,7 @@ const expandedKeys = defineModel<string[]>("expandedKeys", {
 const selected = defineModel<string>("selected");
 
 defineEmits<{
-  (e: "click", item: T): void;
+  click: [item: T];
 }>();
 
 const headingId = useId();
