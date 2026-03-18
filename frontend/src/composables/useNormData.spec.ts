@@ -3,7 +3,6 @@ import { useFetchNormArticleContent, useFetchNormContent } from "./useNormData";
 import type {
   LegislationExpression,
   LegislationManifestation,
-  LegislationWork,
 } from "~/types/api";
 import type { FetchHook } from "ofetch";
 
@@ -38,7 +37,6 @@ describe("useNormData", () => {
 
   const expressionEli = "test-eli";
   const mockMetadata = {
-    workExample: {
       encoding: [
         {
           "@id": "test-encoding-id",
@@ -49,7 +47,6 @@ describe("useNormData", () => {
         },
       ],
       hasPart: [],
-    } as Partial<LegislationExpression>,
   } as LegislationWork;
 
   it("should fetch JSON and HTML data", async () => {
@@ -131,14 +128,12 @@ describe("useNormData", () => {
 
   it("should throw an error if contentUrl is missing", async () => {
     const mockMetadataWithouContentUrl = {
-      workExample: {
-        encoding: [
-          {
-            "@id": "test-encoding-id",
-            encodingFormat: "application/json",
-          } as Partial<LegislationManifestation>,
-        ],
-      },
+      encoding: [
+        {
+          "@id": "test-encoding-id",
+          encodingFormat: "application/json",
+        } as Partial<LegislationManifestation>,
+      ],
     };
 
     mockFetch.mockReturnValueOnce(mockMetadataWithouContentUrl);

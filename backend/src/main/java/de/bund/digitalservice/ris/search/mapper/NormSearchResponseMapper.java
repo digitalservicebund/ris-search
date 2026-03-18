@@ -157,6 +157,7 @@ public class NormSearchResponseMapper {
         .legislationLegalForce(legislationLegalForce)
         .legislationIdentifier(expressionEli)
         .temporalCoverage(temporalCoverage)
+        .encoding(NormSchemaMapper.getEncodings(norm.getManifestationEliExample()))
         .build();
   }
 

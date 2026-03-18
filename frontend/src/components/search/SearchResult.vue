@@ -13,7 +13,7 @@ import type {
 } from "~/types/api";
 import {
   isCaselaw,
-  isLegislationWork,
+  isLegislation,
   isLiterature,
   isAdministrativeDirective,
 } from "~/utils/anyDocument";
@@ -32,7 +32,7 @@ const props = defineProps<{
   />
 
   <NormSearchResult
-    v-else-if="isLegislationWork(props.searchResult.item)"
+    v-else-if="isLegislation(props.searchResult.item)"
     :search-result="props.searchResult as SearchResult<LegislationExpression>"
     :order="props.order"
   />

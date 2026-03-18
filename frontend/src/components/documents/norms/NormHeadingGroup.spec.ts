@@ -2,7 +2,7 @@ import { render, screen } from "@testing-library/vue";
 import { describe, it, expect, vi } from "vitest";
 import { nextTick } from "vue";
 import NormHeadingGroup from "./NormHeadingGroup.vue";
-import type { LegislationWork } from "~/types/api";
+import type { LegislationExpression } from "~/types/api";
 
 const createDefaultProps = () => ({
   htmlParts: {
@@ -14,7 +14,7 @@ const createDefaultProps = () => ({
   metadata: {
     name: "Test Law Name",
     alternateName: "Test Alternate Name",
-  } as LegislationWork,
+  } as LegislationExpression,
 });
 
 vi.mock("@digitalservicebund/ris-ui/components", () => ({

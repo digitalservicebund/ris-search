@@ -24,7 +24,7 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
 
 const { data, error, status } = await useFetchNormContent(expressionEli);
 
-const metadata: Ref<LegislationWork | undefined> = computed(() => {
+const metadata: Ref<LegislationExpression | undefined> = computed(() => {
   return data.value?.legislationWork;
 });
 
@@ -63,14 +63,12 @@ const tableOfContents = computed(() => {
 
 const validityInterval = computed(() =>
   privateFeaturesEnabled
-    ? temporalCoverageToValidityInterval(
-        metadata.value?.workExample?.temporalCoverage,
-      )
+    ? temporalCoverageToValidityInterval(metadata.value?.temporalCoverage)
     : undefined,
 );
 
 const validityStatus = computed(() => {
-  if (metadata.value?.workExample && validityInterval)
+  if (metadata.value && validityInterval)
     return getValidityStatus(validityInterval.value);
   return undefined;
 });
@@ -80,7 +78,7 @@ const normBreadcrumbTitle = computed(() =>
 );
 
 const { status: normVersionsStatus, sortedVersions: normVersions } =
-  useNormVersions(metadata.value?.exampleOfWork.legislationIdentifier ?? "");
+  useNormVersions(metadata.value?.exampleOfWork?.legislationIdentifier ?? "");
 
 const breadcrumbItems: ComputedRef<BreadcrumbItem[]> = computed(() => {
   const validFrom = dateFormattedDDMMYYYY(validityInterval.value?.from);
@@ -99,7 +97,7 @@ const breadcrumbItems: ComputedRef<BreadcrumbItem[]> = computed(() => {
 });
 
 const buildOgTitle = (
-  norm: LegislationWork,
+  norm: LegislationExpression,
   validFrom?: Dayjs,
   normValidityStatus?: ValidityStatus,
 ) => {

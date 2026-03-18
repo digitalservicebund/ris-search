@@ -1,6 +1,6 @@
 import type { JSONLDList, LegislationExpression } from "~/types/api";
 
-function createWorkExample(
+function createLegislationExpression(
   expressionEli: string,
   temporalCoverage: string,
   legalForce: "InForce" | "NotInForce",
@@ -31,17 +31,17 @@ export const data: JSONLDList<LegislationExpression> = {
   "@type": "hydra:Collection",
   totalItems: 3,
   member: [
-    createWorkExample(
+    createLegislationExpression(
       "eli/bund/bgbl-1/2000/s001/2000-01-01/1/deu/regelungstext-1",
       "2000-01-05/2019-12-31",
       "NotInForce",
     ),
-    createWorkExample(
+    createLegislationExpression(
       "eli/bund/bgbl-1/2000/s001/2020-01-01/1/deu/regelungstext-1",
       "2020-01-01/..",
       "InForce",
     ),
-    createWorkExample(
+    createLegislationExpression(
       "eli/bund/bgbl-1/2000/s001/2030-01-01/1/deu/regelungstext-1",
       "2031-01-01/..",
       "NotInForce",
