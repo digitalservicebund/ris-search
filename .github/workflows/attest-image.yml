@@ -97,7 +97,7 @@ jobs:
 
       - name: Attest vulnerability scan
         if: ${{ github.actor != 'dependabot[bot]' }}
-        run: cosign attest --yes --replace --predicate vuln-${{ inputs.app }}.json" --type vuln ${{ inputs.image-reference }}
+        run: cosign attest --yes --replace --predicate "vuln-${{ inputs.app }}.json" --type vuln ${{ inputs.image-reference }}
 
       - name: Send status to Slack
         if: ${{ failure() && github.ref == 'refs/heads/main' }}
