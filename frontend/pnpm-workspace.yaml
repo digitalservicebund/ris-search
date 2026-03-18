@@ -2,10 +2,8 @@ packages: []
 
 minimumReleaseAge: 4320
 minimumReleaseAgeExclude:
-  - svgo
-  - tar
-  - minimatch
-  - serialize-javascript
+  - fast-xml-parser
+  - fast-xml-builder
 
 nodeLinker: hoisted
 
