@@ -1,0 +1,46 @@
+name: Sign-Image
+
+on:
+  workflow_call:
+    inputs:
+      image-reference:
+        description: 'The full image reference (registry/repo:tag) of the image to scan and attest'
+        required: true
+        type: string
+      container-registry:
+        description: "Name of the container registry"
+        required: false
+        type: string
+        default: ghcr.io
+
+jobs:
+  sign-image:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
+    steps:
+      - name: Log into container registry
+        # Third-party action, pin to commit SHA!
+        uses: docker/login-action@9fe7774c8f8ebfade96f0a62aa10f3882309d517
+        with:
+          registry: ${{ inputs.container-registry }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install Cosign
+        if: ${{ github.actor != 'dependabot[bot]' }}
+        uses: sigstore/cosign-installer@ba7bc0a3fef59531c69a25acd34668d6d3fe6f22
+        with:
+          cosign-release: "v2.6.0" # We need to use v2.X.X because of major version GHA v4.X.X and broken image verification of Kyverno
+
+      - name: Sign the published Docker image
+        if: ${{ github.actor != 'dependabot[bot]' }}
+        run: cosign sign --yes ${{ inputs.image-reference }}
+
+      - name: Send status to Slack
+        if: ${{ failure() && github.ref == 'refs/heads/main' }}
+        uses: digitalservicebund/notify-on-failure-gha@868884a79c05c62cab52b4f79832cc3589c91a12
+        with:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
