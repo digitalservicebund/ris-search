@@ -53,7 +53,7 @@ jobs:
     uses: ./.github/workflows/deploy.yml
     secrets: inherit
     with:
-      container-image-version: ${{ github.sha }}
+      image-tag: ${{ github.sha }}
       deployment-environment: uat
 
   deploy-prototype:
@@ -62,6 +62,6 @@ jobs:
     uses: ./.github/workflows/deploy.yml
     secrets: inherit
     with:
-      container-image-version: ${{ github.sha }}
+      image-tag: ${{ github.sha }}
       deployment-environment: prototype
       argocd-app-name: ris-portal-prototype-production
