@@ -6,12 +6,8 @@ name: Backend
 on:
   workflow_call:
     inputs:
-      container-image-tag:
-        description: 'The full tag for the backend container image'
-        required: true
-        type: string
-      container-image-version:
-        description: 'The sha of the commit that triggered the pipeline'
+      image-reference:
+        description: 'The full image reference (registry/repo:tag) for the backend image'
         required: true
         type: string
       container-registry:
@@ -90,7 +86,7 @@ jobs:
         with:
           file: backend/Dockerfile.prod
           context: backend
-          tags: ${{ inputs.container-image-tag}}
+          tags: ${{ inputs.image-reference}}
           push: false
       - name: Run Trivy vulnerability scanner
         # Third-party action, pin to commit SHA!
@@ -99,7 +95,7 @@ jobs:
         env:
           TRIVY_OFFLINE_SCAN: true
         with:
-          image-ref: ${{ inputs.container-image-tag }}
+          image-ref: ${{ inputs.image-reference }}
           format: "sarif"
           output: "trivy-results.sarif"
           cache-dir: .trivy
@@ -137,7 +133,7 @@ jobs:
         env:
           TRIVY_OFFLINE_SCAN: true
         with:
-          image-ref: ${{ inputs.container-image-tag }}
+          image-ref: ${{ inputs.image-reference }}
           format: "cosign-vuln"
           output: "vuln.json"
       - name: Upload cosign vulnerability scan record
@@ -254,7 +250,7 @@ jobs:
         with:
           file: backend/Dockerfile.prod
           context: backend
-          tags: ${{ inputs.container-image-tag}}
+          tags: ${{ inputs.image-reference}}
           push: true
           build-args: |
             SENTRY_RELEASE=${{ github.sha }}
@@ -263,13 +259,13 @@ jobs:
         with:
           cosign-release: "v2.6.0" # We need to use v2.X.X because of major version GHA v4.X.X and broken image verification of Kyverno
       - name: Sign the published Docker image
-        run: cosign sign --yes ${{ inputs.container-image-tag}}
+        run: cosign sign --yes ${{ inputs.image-reference}}
       - name: Download cosign vulnerability scan record
         uses: actions/download-artifact@v8
         with:
           name: "vuln.json"
       - name: Attest vulnerability scan
-        run: cosign attest --yes --replace --predicate vuln.json --type vuln ${{ inputs.container-image-tag}}
+        run: cosign attest --yes --replace --predicate vuln.json --type vuln ${{ inputs.image-reference}}
 
 
   generate-backend-code-documentation:

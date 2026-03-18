@@ -3,8 +3,8 @@ name: Deploy
 on:
   workflow_call:
     inputs:
-      container-image-version:
-        description: 'The sha which identifies the image'
+      image-tag:
+        description: 'The tag of the image to deploy'
         required: true
         type: string
       deployment-environment:
@@ -28,7 +28,7 @@ jobs:
         uses: digitalservicebund/argocd-deploy@4e758f584953506c571951ffcba33d6a6246e856
         with:
           environment: ${{ inputs.deployment-environment}}
-          version: ${{ inputs.container-image-version }}
+          version: ${{ inputs.image-tag }}
           deploying_repo: ris-search,ris-search/frontend
           infra_repo: neuris-portal-infra
           github_app_id: ${{ secrets.GITOPS_NEURIS_APP_ID }}

@@ -3,12 +3,8 @@ name: Frontend
 on:
   workflow_call:
     inputs:
-      container-image-tag:
-        description: "The full tag for the frontend container image"
-        required: true
-        type: string
-      container-image-version:
-        description: "The sha of the commit that triggered the pipeline"
+      image-reference:
+        description: "The full image reference (registry/repo:tag) for the frontend image"
         required: true
         type: string
       container-registry:
@@ -193,7 +189,7 @@ jobs:
         with:
           file: frontend/Dockerfile
           context: frontend
-          tags: ${{ inputs.container-image-tag }}
+          tags: ${{ inputs.image-reference }}
           push: true
           cache-from: type=gha
           cache-to: type=gha,mode=max
@@ -207,7 +203,7 @@ jobs:
         # See https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions
         uses: aquasecurity/trivy-action@57a97c7e7821a5776cebc9bb87c984fa69cba8f1
         with:
-          image-ref: ${{ inputs.container-image-tag}}
+          image-ref: ${{ inputs.image-reference}}
           format: "sarif"
           output: "trivy-results.sarif"
           trivyignores: frontend/.trivyignore
@@ -243,7 +239,7 @@ jobs:
         uses: aquasecurity/trivy-action@57a97c7e7821a5776cebc9bb87c984fa69cba8f1
         if: ${{ github.actor != 'dependabot[bot]' }}
         with:
-          image-ref: ${{ inputs.container-image-tag }}
+          image-ref: ${{ inputs.image-reference }}
           format: "cosign-vuln"
           output: "vuln-frontend.json"
       - name: Upload Cosign vulnerability scan record
@@ -260,10 +256,10 @@ jobs:
           cosign-release: "v2.6.0" # We need to use v2.X.X because of major version GHA v4.X.X and broken image verification of Kyverno
       - name: Sign the published Docker image
         if: ${{ github.actor != 'dependabot[bot]' }}
-        run: cosign sign --yes ${{ inputs.container-image-tag }}
+        run: cosign sign --yes ${{ inputs.image-reference }}
       - name: Attest vulnerability scan
         if: ${{ github.actor != 'dependabot[bot]' && github.ref == 'refs/heads/main' }}
-        run: cosign attest --yes --replace --predicate vuln-frontend.json --type vuln ${{ inputs.container-image-tag }}
+        run: cosign attest --yes --replace --predicate vuln-frontend.json --type vuln ${{ inputs.image-reference }}
       - name: Finalize Sentry release
         # NOTE: only on main!
         if: ${{ github.ref == 'refs/heads/main' }}
