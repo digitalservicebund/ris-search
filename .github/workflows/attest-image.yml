@@ -1,0 +1,106 @@
+name: Scan-And-Attest-Image
+
+on:
+  workflow_call:
+    inputs:
+      image-reference:
+        description: 'The full image reference (registry/repo:tag) of the image to scan and attest'
+        required: true
+        type: string
+      app:
+        description: 'App for which the scan and attestation is run, Either "frontend" or "backend"'
+        required: true
+        type: string
+      container-registry:
+        description: "Name of the container registry"
+        required: false
+        type: string
+        default: ghcr.io
+
+jobs:
+  scan-and-attest-image:
+    runs-on: ubuntu-latest
+    permissions:
+      security-events: write
+      packages: write
+      id-token: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v6
+      - name: Log into container registry
+        # Third-party action, pin to commit SHA!
+        uses: docker/login-action@9fe7774c8f8ebfade96f0a62aa10f3882309d517
+        with:
+          registry: ${{ inputs.container-registry }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Run Trivy vulnerability image scanner
+       # Third-party action, pin to commit SHA!
+        uses: aquasecurity/trivy-action@57a97c7e7821a5776cebc9bb87c984fa69cba8f1
+        with:
+         image-ref: ${{ inputs.image-reference }}
+         format: "sarif"
+         output: "trivy-results.sarif"
+         trivyignores: ${{ inputs.app}}/.trivyignore
+
+      - name: Upload Trivy vulnerability image scanner results as artifact
+        uses: actions/upload-artifact@v7
+        with:
+         name: "trivy-scan-results-${{ inputs.app }}.sarif"
+         path: "trivy-results.sarif"
+         if-no-files-found: error
+
+      - name: Upload Trivy image scan results to GitHub Security tab (on 'main' only)
+        uses: github/codeql-action/upload-sarif@v4
+        if: ${{ always() &&  github.ref == 'refs/heads/main' }} # Bypass non-zero exit code..
+        with:
+         sarif_file: "trivy-results.sarif"
+         category: trivy-${{ inputs.app }}-image-scan
+
+      - name: Check Trivy results
+        run: |
+         if grep -qE 'HIGH|CRITICAL' trivy-results.sarif; then
+           echo "Vulnerabilities found"
+           echo "### Found vulnerabilities in trivy results" >> $GITHUB_STEP_SUMMARY
+           echo "" >> $GITHUB_STEP_SUMMARY
+           RESULT=$(cat trivy-results.sarif | jq -r '[.runs[].results[].message.text] | join("\\n\\n")')
+           echo -e $RESULT >> $GITHUB_STEP_SUMMARY
+           echo -e $RESULT
+           exit 1
+         else
+           echo "No significant vulnerabilities found"
+           exit 0
+         fi
+
+      - name: Generate Cosign vulnerability scan record
+        # Third-party action, pin to commit SHA!
+        uses: aquasecurity/trivy-action@57a97c7e7821a5776cebc9bb87c984fa69cba8f1
+        if: ${{ github.actor != 'dependabot[bot]' }}
+        with:
+         image-ref: ${{ inputs.image-reference }}
+         format: "cosign-vuln"
+         output: "vuln-${{ inputs.app }}.json"
+
+      - name: Upload Cosign vulnerability scan record as artifact
+        uses: actions/upload-artifact@v7
+        if: ${{ github.actor != 'dependabot[bot]' }}
+        with:
+         name: "vuln-${{ inputs.app }}.json"
+         path: "vuln-${{ inputs.app }}.json"
+         if-no-files-found: error
+
+      - name: Install Cosign
+        if: ${{ github.actor != 'dependabot[bot]' }}
+        uses: sigstore/cosign-installer@ba7bc0a3fef59531c69a25acd34668d6d3fe6f22
+        with:
+         cosign-release: "v2.6.0" # We need to use v2.X.X because of major version GHA v4.X.X and broken image verification of Kyverno
+
+      - name: Attest vulnerability scan
+        if: ${{ github.actor != 'dependabot[bot]' }}
+        run: cosign attest --yes --replace --predicate "vuln-${{ inputs.app }}.json" --type vuln ${{ inputs.image-reference }}
+
+      - name: Send status to Slack
+        if: ${{ failure() && github.ref == 'refs/heads/main' }}
+        uses: digitalservicebund/notify-on-failure-gha@868884a79c05c62cab52b4f79832cc3589c91a12
+        with:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
