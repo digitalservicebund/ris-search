@@ -305,7 +305,7 @@ class AllDocumentsSearchControllerAPITest extends ContainersIntegrationBase {
                 status().isOk(),
                 jsonPath("$.member", hasSize(1)),
                 jsonPath(
-                    "$.member[0].item.workExample.legislationIdentifier",
+                    "$.member[0].item.legislationIdentifier",
                     equalTo("eli/bund/bgbl-1/1991/s102/1991-01-01/1/deu"))));
   }
 
@@ -325,13 +325,13 @@ class AllDocumentsSearchControllerAPITest extends ContainersIntegrationBase {
                 status().isOk(),
                 jsonPath("$.member", hasSize(3)),
                 jsonPath(
-                    "$.member[0].item.workExample.legislationIdentifier",
+                    "$.member[0].item.legislationIdentifier",
                     equalTo("eli/bund/bgbl-1/1991/s102/1991-01-01/1/deu")),
                 jsonPath(
-                    "$.member[1].item.workExample.legislationIdentifier",
+                    "$.member[1].item.legislationIdentifier",
                     equalTo("eli/bund/bgbl-1/1991/s102/2050-01-01/1/deu")),
                 jsonPath(
-                    "$.member[2].item.workExample.legislationIdentifier",
+                    "$.member[2].item.legislationIdentifier",
                     equalTo("eli/bund/bgbl-1/1991/s102/2020-01-01/1/deu"))));
   }
 }
