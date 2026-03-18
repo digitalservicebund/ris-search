@@ -143,16 +143,14 @@ jobs:
           path: "trivy-results.sarif"
           if-no-files-found: error
 
-  frontend-image-build-scan-and-push:
+  build-and-upload-image:
     runs-on: ubuntu-latest
     needs:
       - check-frontend
       - audit-licences-frontend
       - frontend-file-scan
     permissions:
-      security-events: write
       packages: write
-      id-token: write
       contents: read
     env:
       SENTRY_RELEASE: ${{ github.sha }}
@@ -160,10 +158,12 @@ jobs:
       - uses: actions/checkout@v6
         with:
           fetch-depth: 0
+
       - name: Install Sentry CLI using official script
         if: ${{ github.ref == 'refs/heads/main' }}
         run: |
           curl -sL https://sentry.io/get-cli/ | bash
+
       - name: Create Sentry release
         # Create the sentry release before the build step so the sourcemap uploading during the
         # frontend build process can associate the sourcemaps with this release
@@ -174,16 +174,18 @@ jobs:
           sentry-cli releases set-commits --auto $SENTRY_RELEASE
         env:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@4d04d5d9486b7bd6fa91e7baf45bbb4f8b9deedd
+
       - name: Log into container registry
         # Third-party action, pin to commit SHA!
-        # See https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions
         uses: docker/login-action@9fe7774c8f8ebfade96f0a62aa10f3882309d517
         with:
           registry: ${{ inputs.container-registry }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Build frontend image
         uses: docker/build-push-action@d08e5c354a6adb9ed34480a06d141179aa583294 # v7.0.0
         with:
@@ -198,76 +200,48 @@ jobs:
             SENTRY_RELEASE=${{ env.SENTRY_RELEASE }}
           secrets: |
             SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }}
-      - name: Run Trivy vulnerability image scanner
-        # Third-party action, pin to commit SHA!
-        # See https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions
-        uses: aquasecurity/trivy-action@57a97c7e7821a5776cebc9bb87c984fa69cba8f1
-        with:
-          image-ref: ${{ inputs.image-reference}}
-          format: "sarif"
-          output: "trivy-results.sarif"
-          trivyignores: frontend/.trivyignore
-      - name: Upload Trivy vulnerability image scanner results (as artifact)
-        uses: actions/upload-artifact@v7
-        with:
-          name: "trivy-image-results-frontend.sarif"
-          path: "trivy-results.sarif"
-          if-no-files-found: error
-      - name: Upload Trivy image scan results to GitHub Security tab (on 'main' only)
-        uses: github/codeql-action/upload-sarif@v4
-        if: ${{ always() &&  github.ref == 'refs/heads/main' }} # Bypass non-zero exit code..
-        with:
-          sarif_file: "trivy-results.sarif"
-          category: trivy-frontend-image-scan
-      - name: Check Trivy results
-        run: |
-          if grep -qE 'HIGH|CRITICAL' trivy-results.sarif; then
-            echo "Vulnerabilities found"
-            echo "### Found vulnerabilities in trivy results" >> $GITHUB_STEP_SUMMARY
-            echo "" >> $GITHUB_STEP_SUMMARY
-            RESULT=$(cat trivy-results.sarif | jq -r '[.runs[].results[].message.text] | join("\\n\\n")')
-            echo -e $RESULT >> $GITHUB_STEP_SUMMARY
-            echo -e $RESULT
-            exit 1
-          else
-            echo "No significant vulnerabilities found"
-            exit 0
-          fi
-      - name: Generate Cosign vulnerability scan record
-        # Third-party action, pin to commit SHA!
-        # See https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions
-        uses: aquasecurity/trivy-action@57a97c7e7821a5776cebc9bb87c984fa69cba8f1
-        if: ${{ github.actor != 'dependabot[bot]' }}
-        with:
-          image-ref: ${{ inputs.image-reference }}
-          format: "cosign-vuln"
-          output: "vuln-frontend.json"
-      - name: Upload Cosign vulnerability scan record
-        uses: actions/upload-artifact@v7
-        if: ${{ github.actor != 'dependabot[bot]' }}
-        with:
-          name: "vuln-frontend.json"
-          path: "vuln-frontend.json"
-          if-no-files-found: error
-      - name: Install Cosign
-        if: ${{ github.actor != 'dependabot[bot]' }}
-        uses: sigstore/cosign-installer@ba7bc0a3fef59531c69a25acd34668d6d3fe6f22
-        with:
-          cosign-release: "v2.6.0" # We need to use v2.X.X because of major version GHA v4.X.X and broken image verification of Kyverno
-      - name: Sign the published Docker image
-        if: ${{ github.actor != 'dependabot[bot]' }}
-        run: cosign sign --yes ${{ inputs.image-reference }}
-      - name: Attest vulnerability scan
-        if: ${{ github.actor != 'dependabot[bot]' && github.ref == 'refs/heads/main' }}
-        run: cosign attest --yes --replace --predicate vuln-frontend.json --type vuln ${{ inputs.image-reference }}
+
       - name: Finalize Sentry release
         # NOTE: only on main!
         if: ${{ github.ref == 'refs/heads/main' }}
         run: sentry-cli releases finalize $SENTRY_RELEASE
         env:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+
       - name: Send status to Slack
         if: ${{ failure() && github.ref == 'refs/heads/main' }}
         uses: digitalservicebund/notify-on-failure-gha@868884a79c05c62cab52b4f79832cc3589c91a12
         with:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+  scan-and-attest-image:
+    uses: ./.github/workflows/attest-image.yml
+    secrets: inherit
+    with:
+      image-reference: ${{ inputs.image-reference }}
+      app: frontend
+
+  sign-image:
+    runs-on: ubuntu-latest
+    needs:
+      - build-and-upload-image
+    permissions:
+      packages: write
+      id-token: write
+    steps:
+      - name: Install Cosign
+        if: ${{ github.actor != 'dependabot[bot]' }}
+        uses: sigstore/cosign-installer@ba7bc0a3fef59531c69a25acd34668d6d3fe6f22
+        with:
+          cosign-release: "v2.6.0" # We need to use v2.X.X because of major version GHA v4.X.X and broken image verification of Kyverno
+
+      - name: Sign the published Docker image
+        if: ${{ github.actor != 'dependabot[bot]' }}
+        run: cosign sign --yes ${{ inputs.image-reference }}
+
+      - name: Send status to Slack
+        if: ${{ failure() && github.ref == 'refs/heads/main' }}
+        uses: digitalservicebund/notify-on-failure-gha@868884a79c05c62cab52b4f79832cc3589c91a12
+        with:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
