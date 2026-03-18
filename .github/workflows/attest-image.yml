@@ -16,6 +16,15 @@ on:
         required: false
         type: string
         default: ghcr.io
+      trivy-db-repository:
+        required: false
+        type: string
+      trivy-java-db-repository:
+        required: false
+        type: string
+      trivy-offile-scan:
+        required: false
+        type: boolean
 
 jobs:
   scan-and-attest-image:
@@ -25,6 +34,10 @@ jobs:
       packages: write
       id-token: write
       contents: read
+    env:
+      TRIVY_DB_REPOSITORY: ${{ inputs.trivy-db-repository }}
+      TRIVY_JAVA_DB_REPOSITORY: ${{ inputs.trivy-java-db-repository }}
+      TRIVY_OFFLINE_SCAN: ${{ inputs.trivy-offile-scan }}
     steps:
       - uses: actions/checkout@v6
       - name: Log into container registry
