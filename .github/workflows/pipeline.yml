@@ -57,3 +57,12 @@ jobs:
     with:
       container-image-version: ${{ github.sha }}
       deployment-environment: uat
+
+  deploy-prototype:
+    needs:
+      - deploy-uat
+    uses: ./.github/workflows/deploy.yml
+    secrets: inherit
+    with:
+      container-image-version: ${{ github.sha }}
+      deployment-environment: prototype
