@@ -11,6 +11,10 @@ on:
         description: 'Environment to deploy to, either "staging", "uat" or "prototype"'
         required: true
         type: string
+      argocd-app-name:
+        description: 'Name of the argoCD app. If not provided will be "ris-portal-<deployment-environment>"'
+        required: false
+        type: string
 
 jobs:
   deploy:
@@ -29,7 +33,7 @@ jobs:
           infra_repo: neuris-portal-infra
           github_app_id: ${{ secrets.GITOPS_NEURIS_APP_ID }}
           github_app_private_key: ${{ secrets.GITOPS_NEURIS_APP_PRIVATE_KEY }}
-          app: ris-portal-${{ inputs.deployment-environment}}
+          app: ${{ inputs.argocd-app-name || format('ris-portal-{0}', inputs.deployment-environment) }}
           argocd_pipeline_password: ${{ secrets.ARGOCD_PIPELINE_PASSWORD }}
           argocd_server: ${{ secrets.ARGOCD_SERVER }}
           argocd_sync_timeout: 420

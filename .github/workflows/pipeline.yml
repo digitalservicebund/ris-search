@@ -66,3 +66,4 @@ jobs:
     with:
       container-image-version: ${{ github.sha }}
       deployment-environment: prototype
+      argocd-app-name: ris-portal-prototype-production
