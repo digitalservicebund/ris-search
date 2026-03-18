@@ -11,6 +11,11 @@ on:
         description: 'App for which the scan and attestation is run, Either "frontend" or "backend"'
         required: true
         type: string
+      container-registry:
+        description: "Name of the container registry"
+        required: false
+        type: string
+        default: ghcr.io
 
 jobs:
   scan-and-attest-image:
@@ -22,6 +27,13 @@ jobs:
       contents: read
     steps:
       - uses: actions/checkout@v6
+      - name: Log into container registry
+        # Third-party action, pin to commit SHA!
+        uses: docker/login-action@9fe7774c8f8ebfade96f0a62aa10f3882309d517
+        with:
+          registry: ${{ inputs.container-registry }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
       - name: Run Trivy vulnerability image scanner
        # Third-party action, pin to commit SHA!
         uses: aquasecurity/trivy-action@57a97c7e7821a5776cebc9bb87c984fa69cba8f1
@@ -84,7 +96,7 @@ jobs:
          cosign-release: "v2.6.0" # We need to use v2.X.X because of major version GHA v4.X.X and broken image verification of Kyverno
 
       - name: Attest vulnerability scan
-        if: ${{ github.actor != 'dependabot[bot]' && github.ref == 'refs/heads/main' }}
+        if: ${{ github.actor != 'dependabot[bot]' }}
         run: cosign attest --yes --replace --predicate vuln-${{ inputs.app }}.json" --type vuln ${{ inputs.image-reference }}
 
       - name: Send status to Slack
