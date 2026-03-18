@@ -215,6 +215,7 @@ jobs:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 
   scan-and-attest-image:
+    needs: build-and-upload-image
     uses: ./.github/workflows/attest-image.yml
     secrets: inherit
     with:
@@ -224,7 +225,7 @@ jobs:
   sign-image:
     runs-on: ubuntu-latest
     needs:
-      - build-and-upload-image
+      - scan-and-attest-image
     permissions:
       packages: write
       id-token: write
