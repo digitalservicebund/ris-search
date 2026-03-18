@@ -180,7 +180,7 @@ jobs:
     secrets: inherit
     with:
       # Use image digest instead of tag to uniquely identify the image
-      image-reference: ${{ inputs.container-registry}}/${{ github.repository }}/backend@${{ needs.build-and-push-image.outputs.image-digest }}
+      image-reference: ${{ inputs.container-registry}}/${{ github.repository }}@${{ needs.build-and-push-image.outputs.image-digest }}
       app: backend
       trivy-db-repository: ghcr.io/aquasecurity/trivy-db,public.ecr.aws/aquasecurity/trivy-db
       trivy-java-db-repository: ghcr.io/aquasecurity/trivy-java-db,public.ecr.aws/aquasecurity/trivy-java-db
@@ -195,7 +195,7 @@ jobs:
     secrets: inherit
     with:
       # Use image digest instead of tag to uniquely identify the image
-      image-reference: ${{ inputs.container-registry}}/${{ github.repository }}/backend@${{ needs.build-and-push-image.outputs.image-digest }}
+      image-reference: ${{ inputs.container-registry}}/${{ github.repository }}@${{ needs.build-and-push-image.outputs.image-digest }}
 
 
   generate-backend-code-documentation:
