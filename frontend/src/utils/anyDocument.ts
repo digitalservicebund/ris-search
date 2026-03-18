@@ -2,7 +2,7 @@ import type {
   AdministrativeDirective,
   AnyDocument,
   CaseLaw,
-  LegislationWork,
+  LegislationExpression,
   Literature,
 } from "~/types/api";
 
@@ -22,9 +22,9 @@ export function isCaselaw(candidate: AnyDocument): candidate is CaseLaw {
  * @param candidate Document to check
  * @returns true if the document is a legislation work document.
  */
-export function isLegislationWork(
+export function isLegislation(
   candidate: AnyDocument,
-): candidate is LegislationWork {
+): candidate is LegislationExpression {
   return candidate["@type"] === "Legislation";
 }
 
@@ -67,8 +67,8 @@ export function getIdentifier(document: AnyDocument): string {
     isAdministrativeDirective(document)
   ) {
     id = document.documentNumber;
-  } else if (isLegislationWork(document)) {
-    id = document.workExample?.legislationIdentifier;
+  } else if (isLegislation(document)) {
+    id = document.legislationIdentifier;
   }
 
   if (!id)

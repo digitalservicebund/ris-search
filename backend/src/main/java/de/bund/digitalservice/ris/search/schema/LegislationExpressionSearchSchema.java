@@ -11,14 +11,9 @@ import org.jetbrains.annotations.Nullable;
 /**
  * Represents the schema for a legislation expression search result, providing details about a
  * specific legislative expression within the broader context of a legislation item.
- *
- * <p>This schema is designed to link legislation expressions to their respective works
- * (`workExample` key) and provides information about the
  */
 @Builder
-@Schema(
-    description =
-        "A legislation item, across different expressions and manifestations. May be used to provide context to a `LegislationExpression` (under key `workExample`).")
+@Schema(description = "A legislation expression and references to its manifestations.")
 public record LegislationExpressionSearchSchema(
     @JsonProperty("@id")
         @Schema(
@@ -27,14 +22,17 @@ public record LegislationExpressionSearchSchema(
         String id,
     @Schema(
             example = "Verordnung über Kakao und Kakaoerzeugnisse",
-            description = "Amtliche Langüberschrift")
+            description = "Amtliche Langüberschrift",
+            requiredMode = Schema.RequiredMode.REQUIRED)
         String name,
     @Schema(
             example = "eli/bund/bgbl-1/1975/s1760/1998-01-29/10/deu",
             requiredMode = Schema.RequiredMode.REQUIRED)
-    String legislationIdentifier,
-    @Schema(description = "the work the expression is based on")
-    LegislationWorkSchema exampleOfWork,
+        String legislationIdentifier,
+    @Schema(
+            description = "the work the expression is based on",
+            requiredMode = Schema.RequiredMode.REQUIRED)
+        LegislationWorkSchema exampleOfWork,
     @Schema(
             description =
                 """
@@ -44,29 +42,35 @@ public record LegislationExpressionSearchSchema(
             requiredMode = Schema.RequiredMode.REQUIRED)
         String temporalCoverage,
     @Nullable @Schema(example = "KakaoV 2003", description = "Amtliche Buchstabenabkürzung")
-    String abbreviation,
-    @Schema(example = "Kakaoverordnung", description = "Amtliche Kurzüberschrift")
-    String alternateName,
+        String abbreviation,
+    @Schema(
+            example = "Kakaoverordnung",
+            description = "Amtliche Kurzüberschrift",
+            requiredMode = Schema.RequiredMode.REQUIRED)
+        String alternateName,
     @Schema(
             example = "2003-12-15",
             description =
-                    """
+                """
                                     Ausfertigungsdatum (The date of adoption or signature of the legislation. This is the date at which the text is officially acknowledged to be a legislation, even though it might not even be published or in force.)
-                                    """)
-    LocalDate legislationDate,
+                                    """,
+            requiredMode = Schema.RequiredMode.REQUIRED)
+        LocalDate legislationDate,
     @Schema(
             example = "2003-12-16",
             description =
-                    """
+                """
                                     Verkündungsdatum (The date of first publication of the legislation, when it was published in the official gazette. This may be later than the `legislationDate`.)
-                                    """)
-    LocalDate datePublished,
+                                    """,
+            requiredMode = Schema.RequiredMode.REQUIRED)
+        LocalDate datePublished,
     @Nullable PublicationIssueSchema isPartOf,
-    @Schema(description = "Whether the legislation expression is currently in force.",
+    @Schema(
+            description = "Whether the legislation expression is currently in force.",
             requiredMode = Schema.RequiredMode.REQUIRED)
         LegalForceStatus legislationLegalForce,
     @Schema(requiredMode = Schema.RequiredMode.REQUIRED) List<LegislationObjectSchema> encoding)
-    implements JsonldResource {
+    implements AbstractDocumentSchema, JsonldResource {
 
   @Override
   @Schema(example = "Legislation")

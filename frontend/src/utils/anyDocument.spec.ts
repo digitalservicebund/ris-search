@@ -3,7 +3,7 @@ import {
   getIdentifier,
   isAdministrativeDirective,
   isCaselaw,
-  isLegislationWork,
+  isLegislation,
   isLiterature,
 } from "./anyDocument";
 import type {
@@ -82,7 +82,7 @@ describe("anyDocument", () => {
         hasPart: [],
       };
 
-      expect(isLegislationWork(doc)).toBe(true);
+      expect(isLegislation(doc)).toBe(true);
     });
 
     it("returns false if the document is not a legislation work document", () => {
@@ -101,7 +101,7 @@ describe("anyDocument", () => {
         highlightedFields: {},
       };
 
-      expect(isLegislationWork(doc)).toBe(false);
+      expect(isLegislation(doc)).toBe(false);
     });
   });
 

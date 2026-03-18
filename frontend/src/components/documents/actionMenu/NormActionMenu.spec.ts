@@ -7,7 +7,6 @@ import NormActionMenu from "~/components/documents/actionMenu/NormActionMenu.vue
 import type {
   LegislationExpression,
   LegislationManifestation,
-  LegislationWork,
 } from "~/types/api";
 
 const { mockToastAdd } = vi.hoisted(() => ({
@@ -30,20 +29,21 @@ mockNuxtImport("useRequestURL", () => {
   });
 });
 
-const mockLegislationWork = {
-  legislationIdentifier: "eli/bgbl-test",
-  workExample: {
-    encoding: [
-      {
-        encodingFormat: "application/xml",
-        contentUrl: "https://example.com/v1/xml-content",
-      } as LegislationManifestation,
-    ],
-  } as LegislationExpression,
-} as LegislationWork;
+const mockLegislation = {
+  legislationIdentifier: "eli/bgbl-test-expression",
+  exampleOfWork: {
+    legislationIdentifier: "eli/bgbl-test",
+  },
+  encoding: [
+    {
+      encodingFormat: "application/xml",
+      contentUrl: "https://example.com/v1/xml-content",
+    } as LegislationManifestation,
+  ],
+} as LegislationExpression;
 
 function renderNormActionMenu(
-  metadata: LegislationWork = mockLegislationWork,
+  metadata: LegislationExpression = mockLegislation,
   translationUrl?: string,
 ) {
   render(NormActionMenu, {
@@ -187,7 +187,7 @@ describe("NormActionMenu", () => {
   });
 
   it("renders translation link button if translation url given", async () => {
-    renderNormActionMenu(mockLegislationWork, "/translations/test");
+    renderNormActionMenu(mockLegislation, "/translations/test");
 
     const menuitems = await screen.findAllByRole("menuitem");
     expect(menuitems).toHaveLength(6);

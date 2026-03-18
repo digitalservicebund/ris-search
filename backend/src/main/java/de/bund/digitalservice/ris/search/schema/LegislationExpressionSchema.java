@@ -34,9 +34,7 @@ import org.jetbrains.annotations.Nullable;
  * representations of this expression in multiple formats (e.g., HTML, XML).
  */
 @Builder
-@Schema(
-    description =
-        "A legislation item, across different expressions and manifestations. May be used to provide context to a `LegislationExpression` (under key `workExample`).")
+@Schema(description = "A legislation expression and references to its manifestations.")
 public record LegislationExpressionSchema(
     @JsonProperty("@id")
         @Schema(
@@ -45,13 +43,19 @@ public record LegislationExpressionSchema(
         String id,
     @Schema(
             example = "Verordnung über Kakao und Kakaoerzeugnisse",
-            description = "Amtliche Langüberschrift")
+            description = "Amtliche Langüberschrift",
+            requiredMode = Schema.RequiredMode.REQUIRED)
         String name,
     @Nullable @Schema(example = "KakaoV 2003", description = "Amtliche Buchstabenabkürzung")
         String abbreviation,
-    @Schema(example = "Kakaoverordnung", description = "Amtliche Kurzüberschrift")
+    @Schema(
+            example = "Kakaoverordnung",
+            description = "Amtliche Kurzüberschrift",
+            requiredMode = Schema.RequiredMode.REQUIRED)
         String alternateName,
-    @Schema(description = "the work the expression is based on")
+    @Schema(
+            description = "the work the expression is based on",
+            requiredMode = Schema.RequiredMode.REQUIRED)
         LegislationWorkSchema exampleOfWork,
     @Nullable PublicationIssueSchema isPartOf,
     @Schema(
@@ -59,17 +63,21 @@ public record LegislationExpressionSchema(
             description =
                 """
                             Ausfertigungsdatum (The date of adoption or signature of the legislation. This is the date at which the text is officially acknowledged to be a legislation, even though it might not even be published or in force.)
-                            """)
+                            """,
+            requiredMode = Schema.RequiredMode.REQUIRED)
         LocalDate legislationDate,
     @Schema(
             example = "2003-12-16",
             description =
                 """
                             Verkündungsdatum (The date of first publication of the legislation, when it was published in the official gazette. This may be later than the `legislationDate`.)
-                            """)
+                            """,
+            requiredMode = Schema.RequiredMode.REQUIRED)
         LocalDate datePublished,
-    @Schema(example = "eli/bund/bgbl-1/1975/s1760/1998-01-29/10/deu",
-            requiredMode = Schema.RequiredMode.REQUIRED) String legislationIdentifier,
+    @Schema(
+            example = "eli/bund/bgbl-1/1975/s1760/1998-01-29/10/deu",
+            requiredMode = Schema.RequiredMode.REQUIRED)
+        String legislationIdentifier,
     @Schema(
             description =
                 """
