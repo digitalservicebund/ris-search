@@ -21,16 +21,14 @@ jobs:
     secrets: inherit
     with:
       container-registry: ghcr.io
-      container-image-tag: ghcr.io/${{ github.repository }}:${{ github.sha }}
-      container-image-version: ${{ github.sha }}
+      image-reference: ghcr.io/${{ github.repository }}:${{ github.sha }}
 
   frontend-jobs:
     uses: ./.github/workflows/frontend.yml
     secrets: inherit
     with:
       container-registry: ghcr.io
-      container-image-tag: ghcr.io/${{ github.repository }}/frontend:${{ github.sha }}
-      container-image-version: ${{ github.sha }}
+      image-reference: ghcr.io/${{ github.repository }}/frontend:${{ github.sha }}
 
   deploy-staging:
     needs:
@@ -40,7 +38,7 @@ jobs:
     uses: ./.github/workflows/deploy.yml
     secrets: inherit
     with:
-      container-image-version: ${{ github.sha }}
+      image-tag: ${{ github.sha }}
       deployment-environment: staging
 
   smoke-tests:
@@ -55,7 +53,7 @@ jobs:
     uses: ./.github/workflows/deploy.yml
     secrets: inherit
     with:
-      container-image-version: ${{ github.sha }}
+      image-tag: ${{ github.sha }}
       deployment-environment: uat
 
   deploy-prototype:
@@ -64,6 +62,6 @@ jobs:
     uses: ./.github/workflows/deploy.yml
     secrets: inherit
     with:
-      container-image-version: ${{ github.sha }}
+      image-tag: ${{ github.sha }}
       deployment-environment: prototype
       argocd-app-name: ris-portal-prototype-production
