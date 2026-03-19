@@ -1,4 +1,4 @@
-name: Scan-And-Attest-Image
+name: Scan-Attest-and-Sign-Image
 
 on:
   workflow_call:
@@ -27,7 +27,7 @@ on:
         type: boolean
 
 jobs:
-  scan-and-attest-image:
+  scan-attest-sign-image:
     runs-on: ubuntu-latest
     permissions:
       security-events: write
@@ -111,6 +111,10 @@ jobs:
       - name: Attest vulnerability scan
         if: ${{ github.actor != 'dependabot[bot]' }}
         run: cosign attest --yes --replace --predicate "vuln-${{ inputs.app }}.json" --type vuln ${{ inputs.image-reference }}
+
+      - name: Sign the published image
+        if: ${{ github.actor != 'dependabot[bot]' }}
+        run: cosign sign --yes ${{ inputs.image-reference }}
 
       - name: Send status to Slack
         if: ${{ failure() && github.ref == 'refs/heads/main' }}

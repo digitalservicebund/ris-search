@@ -174,9 +174,9 @@ jobs:
           build-args: |
             SENTRY_RELEASE=${{ github.sha }}
 
-  scan-and-attest-image:
+  scan-attest-and-sign-image:
     needs: build-and-push-image
-    uses: ./.github/workflows/attest-image.yml
+    uses: ./.github/workflows/scan-attest-sign-image.yml
     secrets: inherit
     with:
       # Use image digest instead of tag to uniquely identify the image
@@ -185,17 +185,6 @@ jobs:
       trivy-db-repository: ghcr.io/aquasecurity/trivy-db,public.ecr.aws/aquasecurity/trivy-db
       trivy-java-db-repository: ghcr.io/aquasecurity/trivy-java-db,public.ecr.aws/aquasecurity/trivy-java-db
       trivy-offile-scan: true
-
-
-  sign-image:
-    needs:
-      - build-and-push-image
-      - scan-and-attest-image
-    uses: ./.github/workflows/sign-image.yml
-    secrets: inherit
-    with:
-      # Use image digest instead of tag to uniquely identify the image
-      image-reference: ${{ inputs.container-registry}}/${{ github.repository }}@${{ needs.build-and-push-image.outputs.image-digest }}
 
 
   generate-backend-code-documentation:
