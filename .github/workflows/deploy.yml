@@ -17,7 +17,10 @@ on:
         type: string
 
 jobs:
-  deploy:
+  # NOTE: After our final switch to STACKIT this step can be removed
+  # also the input argocd-app-name won't be needed anymore because in STACKIT
+  # the argocd projects follow a consistent naming scheme (ris-search-<environment>)
+  deploy-to-OTC:
     runs-on: ubuntu-latest
     if: ${{ github.ref == 'refs/heads/main' }}
     permissions:
@@ -37,3 +40,20 @@ jobs:
           argocd_pipeline_password: ${{ secrets.ARGOCD_PIPELINE_PASSWORD }}
           argocd_server: ${{ secrets.ARGOCD_SERVER }}
           argocd_sync_timeout: 420
+
+  deploy-to-STACKIT:
+    runs-on: ubuntu-latest
+    if: ${{ github.ref == 'refs/heads/main' }}
+    steps:
+      - name: Deploy backend and frontend images to ${{ inputs.deployment-environment}}
+        uses: digitalservicebund/argocd-deploy@auth-token # Use the auth-token branch for STACKIT
+        with:
+          environment: ${{ inputs.deployment-environment}}
+          version: ${{ inputs.image-tag }}
+          deploying_repo: ris-search,ris-search/frontend
+          infra_repo: ris-search-infra
+          github_app_id: ${{ secrets.GITOPS_NEURIS_APP_ID }}
+          github_app_private_key: ${{ secrets.GITOPS_NEURIS_APP_PRIVATE_KEY }}
+          app: ris-search-${{ inputs.deployment-environment }}
+          argocd_auth_token: ${{ secrets.ARGOCD_AUTH_TOKEN }}
+          argocd_server: ${{ secrets.ARGOCD_SERVER_STACKIT }}
