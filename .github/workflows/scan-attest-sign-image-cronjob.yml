@@ -20,7 +20,7 @@ jobs:
       backend-image-digest: ${{ steps.resolve-tags.outputs.backend-image-digest }}
     steps:
       # Attestation and signing should be done on the actual image digest and
-      # not a tag (because the image "behind" a can change). Therefore we need to
+      # not a tag (because the image "behind" a tag can change). Therefore, we need to
       # resolve the current image by tag to get a digest.
       - name: Resolve Digests
         id: resolve-tags
