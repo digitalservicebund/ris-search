@@ -18,12 +18,15 @@ jobs:
     env:
       FRONTEND_IMAGE_REFERENCE_BY_TAG: ghcr.io/${{ github.repository }}/frontend:${{ inputs.image-tag || github.sha }}
       BACKEND_IMAGE_REFERENCE_BY_TAG: ghcr.io/${{ github.repository }}:${{ inputs.image-tag || github.sha }}
+    outputs:
+      frontend-image-digest: ${{ steps.resolve-tags.outputs.frontend-image-digest }}
+      backend-image-digest: ${{ steps.resolve-tags.outputs.backend-image-digest }}
     steps:
       # Attestation and signing should be done on the actual image digest and
       # not a tag (because the image "behind" a can change). Therefore we need to
       # resolve the current image by tag to get a digest.
       - name: Resolve Digests
-        id: resolve-digests
+        id: resolve-tags
         run: |
           # Force the step to fail if any command fails
           set -eo pipefail
