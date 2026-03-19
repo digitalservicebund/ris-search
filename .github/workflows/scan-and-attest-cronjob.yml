@@ -45,7 +45,7 @@ jobs:
     uses: ./.github/workflows/attest-image.yml
     secrets: inherit
     with:
-      image-reference: ${{ inputs.container-registry}}/${{ github.repository }}/frontend@${{ needs.resolve-image-tags.outputs.frontend-image-digest }}
+      image-reference: ghcr.io/${{ github.repository }}/frontend@${{ needs.resolve-image-tags.outputs.frontend-image-digest }}
       app: frontend
 
   scan-and-attest-backend-image:
@@ -53,7 +53,7 @@ jobs:
     uses: ./.github/workflows/attest-image.yml
     secrets: inherit
     with:
-      image-reference: ${{ inputs.container-registry}}/${{ github.repository }}@${{ needs.resolve-image-tags.outputs.backend-image-digest }}
+      image-reference: ghcr.io/${{ github.repository }}@${{ needs.resolve-image-tags.outputs.backend-image-digest }}
       app: backend
       trivy-db-repository: ghcr.io/aquasecurity/trivy-db,public.ecr.aws/aquasecurity/trivy-db
       trivy-java-db-repository: ghcr.io/aquasecurity/trivy-java-db,public.ecr.aws/aquasecurity/trivy-java-db
