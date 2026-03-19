@@ -30,9 +30,12 @@ jobs:
           
           BACKEND_IMAGE_DIGEST=$(docker buildx imagetools inspect ${{ env.BACKEND_IMAGE_REFERENCE_BY_TAG }} --format "{{json .Manifest.Digest}}" | tr -d '"')
           echo "backend-image-digest=$BACKEND_IMAGE_DIGEST" >> $GITHUB_OUTPUT
+          
+          echo "Frontend digest: $FRONTEND_IMAGE_DIGEST"
+          echo "Backend digest: $BACKEND_IMAGE_DIGEST"
 
-      - name: Send status to Slack
-        if: ${{ failure() && github.ref == 'refs/heads/main' }}
-        uses: digitalservicebund/notify-on-failure-gha@868884a79c05c62cab52b4f79832cc3589c91a12
-        with:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+#      - name: Send status to Slack
+#        if: ${{ failure() && github.ref == 'refs/heads/main' }}
+#        uses: digitalservicebund/notify-on-failure-gha@868884a79c05c62cab52b4f79832cc3589c91a12
+#        with:
+#          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
