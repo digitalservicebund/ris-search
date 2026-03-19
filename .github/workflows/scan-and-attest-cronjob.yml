@@ -1,0 +1,38 @@
+name: Scan-And-Attest-Cronjob
+on:
+  # TODO: Remove workflow dispatch and inputs for final implementation
+  workflow_dispatch: # Make it manually runnable for testing
+    inputs:
+      image-tag:
+        description: 'Tag of the image to resolve the digest for - just for testing'
+  schedule:
+    - cron: '0 5 * * 1,3' # Runs at 5:00am on Mondays and Wednesdays
+
+jobs:
+  sign-image:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: read
+      id-token: write
+    env:
+      FRONTEND_IMAGE_REFERENCE_BY_TAG: ghcr.io/${{ github.repository }}/frontend:${{ inputs.image-tag || github.sha }}
+      BACKEND_IMAGE_REFERENCE_BY_TAG: ghcr.io/${{ github.repository }}:${{ inputs.image-tag || github.sha }}
+    steps:
+      # Attestation and signing should be done on the actual image digest and
+      # not a tag (because the image "behind" a can change). Therefore we need to
+      # resolve the current image by tag to get a digest.
+      - name: Resolve Digests
+        id: resolve-digests
+        run: |
+          FRONTEND_IMAGE_DIGEST=$(docker buildx imagetools inspect ${{ env.FRONTEND_IMAGE_REFERENCE_BY_TAG }} --format "{{json .Manifest.Digest}}" | tr -d '"')
+          echo "frontend-image-digest=$FRONTEND_IMAGE_DIGEST" >> $GITHUB_OUTPUT
+          
+          BACKEND_IMAGE_DIGEST=$(docker buildx imagetools inspect ${{ env.BACKEND_IMAGE_REFERENCE_BY_TAG }} --format "{{json .Manifest.Digest}}" | tr -d '"')
+          echo "backend-image-digest=$BACKEND_IMAGE_DIGEST" >> $GITHUB_OUTPUT
+
+      - name: Send status to Slack
+        if: ${{ failure() && github.ref == 'refs/heads/main' }}
+        uses: digitalservicebund/notify-on-failure-gha@868884a79c05c62cab52b4f79832cc3589c91a12
+        with:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
