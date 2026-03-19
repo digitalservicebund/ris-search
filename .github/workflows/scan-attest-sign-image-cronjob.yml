@@ -1,12 +1,8 @@
 name: Scan-Attest-and-Sing-Images-Cronjob
 on:
-  # TODO: Remove workflow dispatch and inputs for final implementation
-  workflow_dispatch: # Make it manually runnable for testing
-    inputs:
-      image-tag:
-        description: 'Tag of the image to resolve the digest for - just for testing'
   schedule:
     - cron: '0 5 * * 1,3' # Runs at 5:00am on Mondays and Wednesdays
+    - cron: '17 10 * * 4' # TODO: remove after final test run
 
 jobs:
   resolve-image-tags:
