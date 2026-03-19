@@ -1,8 +1,10 @@
 name: Scan-Attest-and-Sign-Images-Cronjob
 on:
   schedule:
-    - cron: '0 3 * * 1,3' # Runs at 3:00am UTC (4 winter time/5 summertime in Germany) on Mondays and Wednesdays
+    - cron: '0 3 * * 1,3' # Runs at 3:00am UTC (4 winter time/5 summer time in Germany) on Mondays and Wednesdays
     - cron: '*/10 * * * *' # TODO: remove after final test run
+  # Allow manual workflow trigger
+  workflow_dispatch:
 
 jobs:
   resolve-image-tags:
