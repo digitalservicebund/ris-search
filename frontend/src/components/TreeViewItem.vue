@@ -29,9 +29,8 @@ const isExpanded = computed(() => expandedKeys.value.includes(item.key));
 const isFocused = computed(() => item.key === focusedKey);
 
 const accessibleLabel = computed(() => {
-  const subtitle = props.item.subtitle ? `, ${props.item.subtitle}` : "";
-  if (!isParent.value) return `${props.item.title}${subtitle}`;
-  return `${props.item.title}${subtitle} ${isExpanded.value ? "(geöffnet)" : "(geschlossen)"}`;
+  const subtitle = item.subtitle ? `, ${item.subtitle}` : "";
+  return `${item.title}${subtitle}`;
 });
 
 const isSelected = computed(() => item.key === selected.value);
