@@ -32,9 +32,10 @@ describe("TreeViewItem", () => {
     expandedKeys: string[] = [],
     selected?: string,
     focusedKey?: string,
+    level?: number,
   ) {
     return renderSuspended(TreeViewItem, {
-      props: { item, expandedKeys, selected, focusedKey },
+      props: { item, expandedKeys, selected, focusedKey, level },
     });
   }
 
@@ -236,6 +237,26 @@ describe("TreeViewItem", () => {
           name: "Parent, Parent description",
         }),
       ).toBeInTheDocument();
+    });
+  });
+
+  describe("aria-level", () => {
+    it("defaults to level 1", async () => {
+      await render(leaf);
+      expect(screen.getByRole("treeitem")).toHaveAttribute("aria-level", "1");
+    });
+
+    it("uses the provided level", async () => {
+      await render(leaf, [], undefined, undefined, 3);
+      expect(screen.getByRole("treeitem")).toHaveAttribute("aria-level", "3");
+    });
+
+    it("increments the level for children", async () => {
+      await render(parent, ["p"], undefined, undefined, 1);
+      const items = screen.getAllByRole("treeitem");
+      expect(items[0]).toHaveAttribute("aria-level", "1");
+      expect(items[1]).toHaveAttribute("aria-level", "2");
+      expect(items[2]).toHaveAttribute("aria-level", "2");
     });
   });
 

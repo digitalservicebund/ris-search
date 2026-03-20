@@ -6,9 +6,14 @@ import IcBaselineUnfoldLess from "~icons/ic/baseline-unfold-less";
 import IcBaselineUnfoldMore from "~icons/ic/baseline-unfold-more";
 import type { TreeItem } from "./TreeView.vue";
 
-const { item, focusedKey } = defineProps<{
+const {
+  item,
+  focusedKey,
+  level = 1,
+} = defineProps<{
   item: TreeItem;
   focusedKey?: string;
+  level?: number;
 }>();
 
 const emit = defineEmits<{
@@ -62,6 +67,7 @@ function onToggleDeep() {
     role="treeitem"
     :aria-expanded="isParent ? isExpanded : undefined"
     :aria-label="accessibleLabel"
+    :aria-level="level"
     :aria-selected="isSelected"
     :tabindex="isFocused ? 0 : -1"
   >
@@ -115,6 +121,7 @@ function onToggleDeep() {
         :key="child.key"
         :focused-key="focusedKey"
         :item="child"
+        :level="level + 1"
         v-model:expanded-keys="expandedKeys"
         v-model:selected="selected"
         @click="emit('click', $event)"
