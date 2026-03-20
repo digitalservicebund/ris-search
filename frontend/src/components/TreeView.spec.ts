@@ -23,6 +23,20 @@ describe("TreeView", () => {
     { key: "leaf", title: "Leaf" },
   ];
 
+  const deepItems = [
+    {
+      key: "root",
+      title: "Root",
+      children: [
+        {
+          key: "mid",
+          title: "Mid",
+          children: [{ key: "leaf", title: "Leaf" }],
+        },
+      ],
+    },
+  ];
+
   it("renders a flat list of items", async () => {
     await renderSuspended(TreeView, { props: { items: flatItems } });
 
@@ -334,6 +348,56 @@ describe("TreeView", () => {
       await user.keyboard("{ArrowDown}");
       const leafItem = screen.getByRole("treeitem", { name: "Leaf" });
       expect(leafItem).toHaveFocus();
+    });
+
+    it("deeply expands a collapsed parent with * key", async () => {
+      const user = userEvent.setup();
+      const { emitted } = await renderSuspended(TreeView, {
+        props: { items: deepItems, expandedKeys: [] },
+      });
+      const rootItem = screen.getByRole("treeitem", { name: "Root" });
+      rootItem.focus();
+      await user.keyboard("*");
+      expect(emitted("update:expandedKeys")).toContainEqual([
+        expect.arrayContaining(["root", "mid"]),
+      ]);
+    });
+
+    it("deeply collapses a fully expanded parent with * key", async () => {
+      const user = userEvent.setup();
+      const { emitted } = await renderSuspended(TreeView, {
+        props: { items: deepItems, expandedKeys: ["root", "mid"] },
+      });
+      const rootItem = screen.getByRole("treeitem", { name: "Root" });
+      rootItem.focus();
+      await user.keyboard("*");
+      expect(emitted("update:expandedKeys")).toContainEqual([
+        expect.not.arrayContaining(["root", "mid"]),
+      ]);
+    });
+
+    it("expands all when * is pressed on a partially expanded parent", async () => {
+      const user = userEvent.setup();
+      const { emitted } = await renderSuspended(TreeView, {
+        props: { items: deepItems, expandedKeys: ["root"] },
+      });
+      const rootItem = screen.getByRole("treeitem", { name: "Root" });
+      rootItem.focus();
+      await user.keyboard("*");
+      expect(emitted("update:expandedKeys")).toContainEqual([
+        expect.arrayContaining(["root", "mid"]),
+      ]);
+    });
+
+    it("does nothing when * is pressed on a leaf node", async () => {
+      const user = userEvent.setup();
+      const { emitted } = await renderSuspended(TreeView, {
+        props: { items: flatItems },
+      });
+      const items = screen.getAllByRole("treeitem");
+      items[0]!.focus();
+      await user.keyboard("*");
+      expect(emitted("update:expandedKeys")).toBeUndefined();
     });
   });
 });

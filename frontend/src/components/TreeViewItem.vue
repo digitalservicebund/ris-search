@@ -48,43 +48,12 @@ function toggleSelf() {
   }
 }
 
-/** Collect keys of all descendant nodes that have children. */
-function getChildKeys(item: TreeItem): string[] {
-  if (!item.children?.length) return [];
-  return item.children.flatMap((child) =>
-    child.children?.length ? [child.key, ...getChildKeys(child)] : [],
-  );
-}
-
-const childKeys = computed(() => getChildKeys(item));
-
-/**
- * Shorthand for the node itself and all children. Needed for "deep" toggling
- * of the node and all its children.
- */
-const subtreeKeys = computed(() => [item.key, ...childKeys.value]);
-
-/** True if the node and all its children are expanded. */
-const isDeepExpanded = computed(() =>
-  subtreeKeys.value.every((k) => expandedKeys.value.includes(k)),
+const itemIsDeepExpanded = computed(() =>
+  isDeepExpanded(item, expandedKeys.value),
 );
 
-/**
- * Toggles the expanded state of the node and all its children:
- *
- * - if all are expanded, close all
- * - if all are closed, expand all
- * - if the state is mixed, expand all
- */
-function toggleDeep() {
-  if (isDeepExpanded.value) {
-    const toRemove = new Set(subtreeKeys.value);
-    expandedKeys.value = expandedKeys.value.filter((k) => !toRemove.has(k));
-  } else {
-    const existing = new Set(expandedKeys.value);
-    const toAdd = subtreeKeys.value.filter((k) => !existing.has(k));
-    expandedKeys.value = [...expandedKeys.value, ...toAdd];
-  }
+function onToggleDeep() {
+  expandedKeys.value = toggleDeep(item, expandedKeys.value);
 }
 </script>
 
@@ -128,11 +97,13 @@ function toggleDeep() {
           tabindex="-1"
           type="button"
           :aria-label="
-            isDeepExpanded ? 'Alle Ebenen zuklappen' : 'Alle Ebenen ausklappen'
+            itemIsDeepExpanded
+              ? 'Alle Ebenen zuklappen'
+              : 'Alle Ebenen ausklappen'
           "
-          @click="toggleDeep"
+          @click="onToggleDeep"
         >
-          <IcBaselineUnfoldLess v-if="isDeepExpanded" />
+          <IcBaselineUnfoldLess v-if="itemIsDeepExpanded" />
           <IcBaselineUnfoldMore v-else />
         </button>
       </div>

@@ -176,6 +176,13 @@ function onKeydown(event: KeyboardEvent) {
       break;
     }
 
+    // On a parent node with nested children: toggle deep expand/collapse
+    case "*": {
+      if (!isParent) break;
+      expandedKeys.value = toggleDeep(item, expandedKeys.value);
+      break;
+    }
+
     // No match = cancel custom keyboard handling
     default:
       return;
