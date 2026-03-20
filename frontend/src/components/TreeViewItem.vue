@@ -6,8 +6,9 @@ import IcBaselineUnfoldLess from "~icons/ic/baseline-unfold-less";
 import IcBaselineUnfoldMore from "~icons/ic/baseline-unfold-more";
 import type { TreeItem } from "./TreeView.vue";
 
-const props = defineProps<{
+const { item, focusedKey } = defineProps<{
   item: TreeItem;
+  focusedKey?: string;
 }>();
 
 const emit = defineEmits<{
@@ -21,9 +22,11 @@ const expandedKeys = defineModel<string[]>("expandedKeys", { required: true });
 // all its children.
 const selected = defineModel<string>("selected");
 
-const isParent = computed(() => !!props.item.children?.length);
+const isParent = computed(() => !!item.children?.length);
 
-const isExpanded = computed(() => expandedKeys.value.includes(props.item.key));
+const isExpanded = computed(() => expandedKeys.value.includes(item.key));
+
+const isFocused = computed(() => item.key === focusedKey);
 
 const accessibleLabel = computed(() => {
   const subtitle = props.item.subtitle ? `, ${props.item.subtitle}` : "";
@@ -31,7 +34,7 @@ const accessibleLabel = computed(() => {
   return `${props.item.title}${subtitle} ${isExpanded.value ? "(geöffnet)" : "(geschlossen)"}`;
 });
 
-const isSelected = computed(() => props.item.key === selected.value);
+const isSelected = computed(() => item.key === selected.value);
 
 function onSelect(item: TreeItem) {
   emit("click", item);
@@ -40,9 +43,9 @@ function onSelect(item: TreeItem) {
 
 function toggleSelf() {
   if (isExpanded.value) {
-    expandedKeys.value = expandedKeys.value.filter((k) => k !== props.item.key);
+    expandedKeys.value = expandedKeys.value.filter((k) => k !== item.key);
   } else {
-    expandedKeys.value = [...expandedKeys.value, props.item.key];
+    expandedKeys.value = [...expandedKeys.value, item.key];
   }
 }
 
@@ -54,13 +57,13 @@ function getChildKeys(item: TreeItem): string[] {
   );
 }
 
-const childKeys = computed(() => getChildKeys(props.item));
+const childKeys = computed(() => getChildKeys(item));
 
 /**
  * Shorthand for the node itself and all children. Needed for "deep" toggling
  * of the node and all its children.
  */
-const subtreeKeys = computed(() => [props.item.key, ...childKeys.value]);
+const subtreeKeys = computed(() => [item.key, ...childKeys.value]);
 
 /** True if the node and all its children are expanded. */
 const isDeepExpanded = computed(() =>
@@ -92,12 +95,14 @@ function toggleDeep() {
     :aria-expanded="isParent ? isExpanded : undefined"
     :aria-label="accessibleLabel"
     :aria-selected="isSelected"
+    :tabindex="isFocused ? 0 : -1"
   >
     <div class="header">
       <div v-if="isParent" class="tree-control">
         <button
           :aria-label="isExpanded ? 'Ebene schließen' : 'Ebene öffnen'"
           class="h-24 w-24"
+          tabindex="-1"
           type="button"
           @click="toggleSelf"
         >
@@ -108,9 +113,10 @@ function toggleDeep() {
 
       <component
         :is="item.to ? NuxtLink : 'button'"
-        :type="item.to ? undefined : 'button'"
         :to="item.to"
+        :type="item.to ? undefined : 'button'"
         class="content"
+        tabindex="-1"
         @click="onSelect(item)"
       >
         <span class="title">{{ item.title }}</span>
@@ -120,6 +126,7 @@ function toggleDeep() {
       <div v-if="isParent" class="tree-control">
         <button
           class="h-40 w-40"
+          tabindex="-1"
           type="button"
           :aria-label="
             isDeepExpanded ? 'Alle Ebenen zuklappen' : 'Alle Ebenen ausklappen'
@@ -136,6 +143,7 @@ function toggleDeep() {
       <TreeViewItem
         v-for="child in item.children"
         :key="child.key"
+        :focused-key="focusedKey"
         :item="child"
         v-model:expanded-keys="expandedKeys"
         v-model:selected="selected"
@@ -167,6 +175,15 @@ function toggleDeep() {
  * of the controls.
  */
 @scope ([role=treeitem]) to ([role=treeitem]) {
+  /* Focus indicator for keyboard navigation (roving tabindex) */
+  :scope:focus-visible {
+    @apply outline-4 outline-offset-4 outline-blue-800;
+  }
+
+  * {
+    outline: none;
+  }
+
   .header {
     @apply text-gray-1000 ris-label1-regular mb-2 flex gap-8 border-l-4 border-l-transparent py-8 pr-8 pl-12 hover:border-blue-500 hover:bg-blue-200 active:border-blue-800 active:bg-blue-300;
   }

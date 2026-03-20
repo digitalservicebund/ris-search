@@ -31,9 +31,10 @@ describe("TreeViewItem", () => {
     item: TreeItem,
     expandedKeys: string[] = [],
     selected?: string,
+    focusedKey?: string,
   ) {
     return renderSuspended(TreeViewItem, {
-      props: { item, expandedKeys, selected },
+      props: { item, expandedKeys, selected, focusedKey },
     });
   }
 
@@ -47,16 +48,18 @@ describe("TreeViewItem", () => {
   describe("expansion", () => {
     it("sets expanded state on an expanded parent", async () => {
       await render(parent, ["p"]);
-      expect(
-        screen.getByRole("treeitem", { name: "Parent (geöffnet)" }),
-      ).toHaveAttribute("aria-expanded", "true");
+      expect(screen.getByRole("treeitem", { name: "Parent" })).toHaveAttribute(
+        "aria-expanded",
+        "true",
+      );
     });
 
     it("sets expanded state on a collapsed parent", async () => {
       await render(parent, []);
-      expect(
-        screen.getByRole("treeitem", { name: "Parent (geschlossen)" }),
-      ).toHaveAttribute("aria-expanded", "false");
+      expect(screen.getByRole("treeitem", { name: "Parent" })).toHaveAttribute(
+        "aria-expanded",
+        "false",
+      );
     });
 
     it("omits expanded state on a node that can't be expanded", async () => {
@@ -230,9 +233,50 @@ describe("TreeViewItem", () => {
       );
       expect(
         screen.getByRole("treeitem", {
-          name: "Parent, Parent description (geöffnet)",
+          name: "Parent, Parent description",
         }),
       ).toBeInTheDocument();
+    });
+  });
+
+  describe("roving tabindex", () => {
+    it("makes item focusable when its key matches the focused key", async () => {
+      await render(leaf, [], undefined, "a");
+      expect(screen.getByRole("treeitem")).toHaveAttribute("tabindex", "0");
+    });
+
+    it("prevents focus when focused key doesn't match", async () => {
+      await render(leaf, [], undefined, "other");
+      expect(screen.getByRole("treeitem")).toHaveAttribute("tabindex", "-1");
+    });
+
+    it("prevents focus by default", async () => {
+      await render(leaf);
+      expect(screen.getByRole("treeitem")).toHaveAttribute("tabindex", "-1");
+    });
+
+    it("prevents focus on inner elements of a parent node", async () => {
+      await render(parent, [], undefined, "p");
+      const buttons = screen.getAllByRole("button");
+      for (const button of buttons) {
+        expect(button).toHaveAttribute("tabindex", "-1");
+      }
+    });
+
+    it("prevents focus on inner elements of a leaf node", async () => {
+      await render(leaf, [], undefined, "a");
+      const button = screen.getByRole("button");
+      expect(button).toHaveAttribute("tabindex", "-1");
+    });
+
+    it("prevents focus on inner elements of a parent node with a link", async () => {
+      const linkedLeaf: TreeItem = {
+        key: "a",
+        title: "Item A",
+        to: "/some/path",
+      };
+      await render(linkedLeaf, [], undefined, "a");
+      expect(screen.getByRole("link")).toHaveAttribute("tabindex", "-1");
     });
   });
 });
