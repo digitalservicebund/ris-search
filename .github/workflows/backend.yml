@@ -152,7 +152,7 @@ jobs:
         run: chmod +x gradlew
       - name: Log into container registry
         # Third-party action, pin to commit SHA!
-        uses: docker/login-action@9fe7774c8f8ebfade96f0a62aa10f3882309d517
+        uses: docker/login-action@da5b89b92c1be57a07eeed1334a0728b94145654
         with:
           registry: ${{ inputs.container-registry }}
           username: ${{ github.actor }}
