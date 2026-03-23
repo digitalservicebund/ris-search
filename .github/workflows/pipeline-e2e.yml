@@ -172,7 +172,7 @@ jobs:
         if: ${{ always() }}
         run: pkill -f "bootRun" || true
       - name: Send status to Slack
-        uses: digitalservicebund/notify-on-failure-gha@868884a79c05c62cab52b4f79832cc3589c91a12
+        uses: digitalservicebund/notify-on-failure-gha@671832f192aee0a068fd92b2f6deb975df794a84
         if: ${{ failure() && github.ref == 'refs/heads/main' }}
         with:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
@@ -217,7 +217,7 @@ jobs:
             git push origin main &&
             echo "Pushed reports to ${{ github.server_url }}/${{ env.reports-repo }}" >> $GITHUB_STEP_SUMMARY
       - name: Send status to Slack
-        uses: digitalservicebund/notify-on-failure-gha@868884a79c05c62cab52b4f79832cc3589c91a12
+        uses: digitalservicebund/notify-on-failure-gha@671832f192aee0a068fd92b2f6deb975df794a84
         if: ${{ failure() && github.ref == 'refs/heads/main' }}
         with:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
