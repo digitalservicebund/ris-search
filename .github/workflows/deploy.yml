@@ -15,14 +15,18 @@ on:
         description: 'Name of the argoCD app. If not provided will be "ris-portal-<deployment-environment>"'
         required: false
         type: string
-
+      skip-OTC-deployment:
+        description: 'Temporary flag to be able to only deploy to STACKIT for the given envrionment'
+        required: false
+        default: false
+        type: boolean
 jobs:
   # NOTE: After our final switch to STACKIT this step can be removed
   # also the input argocd-app-name won't be needed anymore because in STACKIT
   # the argocd projects follow a consistent naming scheme (ris-search-<environment>)
   deploy-to-OTC:
     runs-on: ubuntu-latest
-    if: ${{ github.ref == 'refs/heads/main' }}
+    if: ${{ github.ref == 'refs/heads/main' && !inputs.skip-OTC-deployment }}
     permissions:
       id-token: write
     steps:

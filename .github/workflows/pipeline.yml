@@ -74,3 +74,4 @@ jobs:
     with:
       image-tag: ${{ github.sha }}
       deployment-environment: production
+      skip-OTC-deployment: true
