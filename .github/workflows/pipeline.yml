@@ -58,7 +58,7 @@ jobs:
 
   deploy-prototype:
     needs:
-      - smoke-tests
+      - deploy-uat
     uses: ./.github/workflows/deploy.yml
     secrets: inherit
     with:
@@ -66,12 +66,30 @@ jobs:
       deployment-environment: prototype
       argocd-app-name: ris-portal-prototype-production
 
-  deploy-production:
-    needs:
-      - smoke-tests
-    uses: ./.github/workflows/deploy.yml
-    secrets: inherit
-    with:
-      image-tag: ${{ github.sha }}
-      deployment-environment: production
-      skip-OTC-deployment: true
+  # Note: This is not using the reusable deploy.yml workflow
+  # because the environment ("prod") string and the app postfix
+  # "production" are not the same and this would require yet another
+  # workaround with inputs. As we plan to remove the otc deployments
+  # in the near future, this can be refactored at that point.
+  deploy-production-to-STACKIT:
+    runs-on: ubuntu-latest
+    if: ${{ github.ref == 'refs/heads/main' }}
+    steps:
+      - name: Deploy backend and frontend images to production on STACKIT
+        uses: digitalservicebund/argocd-deploy@auth-token # Use the auth-token branch for STACKIT
+        with:
+          environment: prod
+          version: ${{ github.sha }}
+          deploying_repo: ris-search,ris-search/frontend
+          infra_repo: ris-search-infra
+          github_app_id: ${{ secrets.GITOPS_NEURIS_APP_ID }}
+          github_app_private_key: ${{ secrets.GITOPS_NEURIS_APP_PRIVATE_KEY }}
+          app: ris-search-production
+          argocd_auth_token: ${{ secrets.ARGOCD_AUTH_TOKEN }}
+          argocd_server: ${{ secrets.ARGOCD_SERVER_STACKIT }}
+
+      - name: Send status to Slack
+        if: ${{ failure() }}
+        uses: digitalservicebund/notify-on-failure-gha@868884a79c05c62cab52b4f79832cc3589c91a12
+        with:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
