@@ -72,6 +72,7 @@ jobs:
   # workaround with inputs. As we plan to remove the otc deployments
   # in the near future, this can be refactored at that point.
   deploy-production-to-STACKIT:
+    needs: deploy-prototype
     runs-on: ubuntu-latest
     if: ${{ github.ref == 'refs/heads/main' }}
     steps:
