@@ -58,10 +58,19 @@ jobs:
 
   deploy-prototype:
     needs:
-      - deploy-uat
+      - smoke-tests
     uses: ./.github/workflows/deploy.yml
     secrets: inherit
     with:
       image-tag: ${{ github.sha }}
       deployment-environment: prototype
       argocd-app-name: ris-portal-prototype-production
+
+  deploy-production:
+    needs:
+      - smoke-tests
+    uses: ./.github/workflows/deploy.yml
+    secrets: inherit
+    with:
+      image-tag: ${{ github.sha }}
+      deployment-environment: production
