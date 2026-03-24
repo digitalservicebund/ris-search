@@ -679,15 +679,8 @@ export interface components {
        * @example ['50 Jahre Betriebs-Berater, 1987, 123-456']
        */
       independentReferences: string[];
-      /**
-       * @description Norm Verweise
-       * @example ['GG, Art 6 Abs 2 S 1, 1949-05-23']
-       */
-      normReferences: string[];
       /** @description Haupttitel */
       headline?: string;
-      /** @description Zusätze zum Haupttitel */
-      headlineAdditions?: string;
       /** @description Dokumentarischer Titel */
       alternativeHeadline?: string;
       /**
@@ -700,21 +693,6 @@ export interface components {
        * @example ['Mustermann, Max']
        */
       collaborators: string[];
-      /**
-       * @description Sprachen
-       * @example ['deu', 'eng']
-       */
-      languages: string[];
-      /**
-       * @description Urheber
-       * @example ['DGB']
-       */
-      originators: string[];
-      /**
-       * @description Kongressvermerke
-       * @example ['Nationaler Beispiel Kongress, 2024, Berlin, GER']
-       */
-      conferenceNotes: string[];
       /** @description Kurzreferat */
       shortReport?: string;
       /** @description Gliederung */
@@ -724,7 +702,7 @@ export interface components {
        * @example ['sli', 'uli']
        */
       literatureType: string;
-      encoding?: components["schemas"]["LiteratureEncodingSchema"][];
+      encoding: components["schemas"]["LiteratureEncodingSchema"][];
     });
     PartialCollectionViewSchema: {
       /** @example hydra:PartialCollectionView */
@@ -842,7 +820,7 @@ export interface components {
        * @example ['sli', 'uli']
        */
       literatureType: string;
-      encoding?: components["schemas"]["LiteratureEncodingSchema"][];
+      encoding: components["schemas"]["LiteratureEncodingSchema"][];
     };
     CollectionSchemaSearchMemberSchemaLegislationWorkSearchSchema: {
       /** @example hydra:Collection */
@@ -875,6 +853,19 @@ export interface components {
        * @enum {string}
        */
       legislationLegalForce: "InForce" | "NotInForce" | "PartiallyInForce";
+      encoding: components["schemas"]["LegislationObjectSchema"][];
+    };
+    LegislationObjectSchema: {
+      /** @example LegislationObject */
+      "@type"?: string;
+      /** @example /v1/legislation/eli/bund/bgbl-1/1975/s1760/1998-01-29/10/deu/1998-01-29/regelungstext-1/html */
+      "@id": string;
+      /** @example /v1/legislation/eli/bund/bgbl-1/1975/s1760/1998-01-29/10/deu/1998-01-29/regelungstext-1.html */
+      contentUrl: string;
+      /** @example text/html */
+      encodingFormat: string;
+      /** @example de */
+      inLanguage: string;
     };
     /** @description A legislation item, across different expressions and manifestations. May be used to provide context to a `LegislationExpression` (under key `workExample`). */
     LegislationWorkSearchSchema: {
@@ -969,19 +960,7 @@ export interface components {
       tableOfContents?: components["schemas"]["TableOfContentsSchema"][];
       /** @description List of components (articles, preambles, conclusions, attachments, …) that form this legislation item. */
       hasPart?: components["schemas"]["LegislationExpressionPartSchema"][];
-      encoding?: components["schemas"]["LegislationObjectSchema"][];
-    };
-    LegislationObjectSchema: {
-      /** @example LegislationObject */
-      "@type"?: string;
-      /** @example /v1/legislation/eli/bund/bgbl-1/1975/s1760/1998-01-29/10/deu/1998-01-29/regelungstext-1/html */
-      "@id": string;
-      /** @example /v1/legislation/eli/bund/bgbl-1/1975/s1760/1998-01-29/10/deu/1998-01-29/regelungstext-1.html */
-      contentUrl: string;
-      /** @example text/html */
-      encodingFormat: string;
-      /** @example de */
-      inLanguage: string;
+      encoding: components["schemas"]["LegislationObjectSchema"][];
     };
     /** @description A legislation item, across different expressions and manifestations. May be used to provide context to a `LegislationExpression` (under key `workExample`). */
     LegislationWorkSchema: {
@@ -1043,6 +1022,16 @@ export interface components {
     AbstractDocumentSchema: {
       "@type": string;
     };
+    AdministrativeDirectiveEncodingSchema: {
+      /** @example MediaObject */
+      "@type"?: string;
+      "@id": string;
+      contentUrl: string;
+      /** @example text/html */
+      encodingFormat: string;
+      /** @example de */
+      inLanguage: string;
+    };
     AdministrativeDirectiveSearchSchema: {
       "@type": "AdministrativeDirectiveSearchSchema";
     } & (Omit<components["schemas"]["AbstractDocumentSchema"], "@type"> & {
@@ -1077,7 +1066,18 @@ export interface components {
        * @example 2003-12-15
        */
       entryIntoForceDate?: string;
+      encoding: components["schemas"]["AdministrativeDirectiveEncodingSchema"][];
     });
+    CaseLawEncodingSchema: {
+      /** @example DecisionObject */
+      "@type"?: string;
+      "@id": string;
+      contentUrl: string;
+      /** @example text/html */
+      encodingFormat: string;
+      /** @example de */
+      inLanguage: string;
+    };
     CaseLawSearchSchema: {
       "@type": "CaseLawSearchSchema";
     } & (Omit<components["schemas"]["AbstractDocumentSchema"], "@type"> & {
@@ -1111,6 +1111,7 @@ export interface components {
       decisionName: string[];
       /** @example DEV-123 */
       deviatingDocumentNumber: string[];
+      encoding: components["schemas"]["CaseLawEncodingSchema"][];
       /** @example /v1/case-law/ECLI:DE:FGRLP:1969:0905.IV85.68.0A */
       "@id": string;
       /** @example de */
@@ -1179,16 +1180,6 @@ export interface components {
       "@type"?: string;
       item: components["schemas"]["AdministrativeDirectiveSearchSchema"];
       textMatches: components["schemas"]["TextMatchSchema"][];
-    };
-    CaseLawEncodingSchema: {
-      /** @example DecisionObject */
-      "@type"?: string;
-      "@id": string;
-      contentUrl: string;
-      /** @example text/html */
-      encodingFormat: string;
-      /** @example de */
-      inLanguage: string;
     };
     CaseLawSchema: {
       /** @example Decision */
@@ -1270,7 +1261,7 @@ export interface components {
       "@id": string;
       /** @example de */
       inLanguage: string;
-      encoding?: components["schemas"]["CaseLawEncodingSchema"][];
+      encoding: components["schemas"]["CaseLawEncodingSchema"][];
       highlightedFields: {
         [key: string]: string[];
       };
@@ -1285,16 +1276,6 @@ export interface components {
       count?: number;
       /** @example Bundesgerichtshof Karlsruhe */
       label?: string;
-    };
-    AdministrativeDirectiveEncodingSchema: {
-      /** @example MediaObject */
-      "@type"?: string;
-      "@id": string;
-      contentUrl: string;
-      /** @example text/html */
-      encodingFormat: string;
-      /** @example de */
-      inLanguage: string;
     };
     AdministrativeDirectiveSchema: {
       /** @example AdministrativeDirective */
@@ -1350,7 +1331,7 @@ export interface components {
       normReferences: string[];
       /** @description Gliederung */
       outline: string[];
-      encoding?: components["schemas"]["AdministrativeDirectiveEncodingSchema"][];
+      encoding: components["schemas"]["AdministrativeDirectiveEncodingSchema"][];
     };
   };
   responses: never;
