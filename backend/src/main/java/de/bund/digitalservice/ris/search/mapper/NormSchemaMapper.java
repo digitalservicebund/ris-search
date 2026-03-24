@@ -60,12 +60,11 @@ public class NormSchemaMapper {
         .id(CONTENT_BASE_URL + norm.getExpressionEli())
         .abbreviation(norm.getOfficialAbbreviation())
         .alternateName(norm.getOfficialShortTitle())
-        .exampleOfWork(new LegislationWorkSchema(norm.getWorkEli()))
+        .exampleOfWork(
+            new LegislationWorkSchema(
+                norm.getWorkEli(), norm.getNormsDate(), norm.getDatePublished(), publicationIssue))
         .legislationIdentifier(norm.getExpressionEli())
-        .legislationDate(norm.getNormsDate())
-        .datePublished(norm.getDatePublished())
         .name(norm.getOfficialTitle())
-        .isPartOf(publicationIssue)
         .legislationLegalForce(legislationLegalForce)
         .temporalCoverage(temporalCoverage)
         .encoding(encodings)

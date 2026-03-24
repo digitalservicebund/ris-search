@@ -29,7 +29,7 @@ const { data, error, status } = await useFetchNormArticleContent(
   eId.value,
 );
 
-const norm = computed(() => data.value?.legislationWork);
+const norm = computed(() => data.value?.legislation);
 const articleHtml = computed(() => data.value?.htmlBody);
 
 if (error.value) {
@@ -39,9 +39,9 @@ if (error.value) {
 const normPath: string = route.fullPath.replace(/\/[^/]*$/, "");
 
 const tableOfContents = computed(() => {
-  if (!norm.value?.workExample?.tableOfContents) return [];
+  if (!norm.value?.tableOfContents) return [];
   return tocItemsToTreeViewItems(
-    norm.value.workExample.tableOfContents,
+    norm.value.tableOfContents,
     (id) => ({ path: normPath, hash: `#${id}` }),
     (id) => ({ path: `${normPath}/${id}` }),
   );
@@ -248,7 +248,7 @@ useDynamicSeo({ title, description });
         </template>
         <template #sidebar>
           <DocumentsNormsNormTableOfContents
-            v-if="norm.workExample?.tableOfContents?.length"
+            v-if="norm.tableOfContents?.length"
             :subheading="normBreadcrumbTitle"
             :subheading-to="normPath"
             :table-of-contents="tableOfContents"

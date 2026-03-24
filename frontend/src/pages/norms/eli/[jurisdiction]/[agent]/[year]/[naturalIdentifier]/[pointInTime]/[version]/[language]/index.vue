@@ -4,7 +4,7 @@ import type { Dayjs } from "dayjs";
 import { Tab, TabList, Tabs } from "primevue";
 import type { ComputedRef } from "vue";
 import type { BreadcrumbItem } from "~/components/Breadcrumbs.vue";
-import { DocumentKind, type LegislationWork } from "~/types/api";
+import { DocumentKind, type LegislationExpression } from "~/types/api";
 import type { ValidityStatus } from "~/utils/norm";
 import IcBaselineSubject from "~icons/ic/baseline-subject";
 import IconFileDownload from "~icons/ic/outline-file-download";
@@ -25,10 +25,10 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
 const { data, error, status } = await useFetchNormContent(expressionEli);
 
 const metadata: Ref<LegislationExpression | undefined> = computed(() => {
-  return data.value?.legislationWork;
+  return data.value?.legislation;
 });
 
-const abbreviation = data.value?.legislationWork.abbreviation;
+const abbreviation = data.value?.legislation.abbreviation;
 
 const { translations } = abbreviation
   ? await fetchTranslationListWithIdFilter(abbreviation)
@@ -52,10 +52,10 @@ if (error.value) {
 }
 
 const tableOfContents = computed(() => {
-  if (!metadata.value?.workExample?.tableOfContents) return [];
+  if (!metadata.value?.tableOfContents) return [];
   const normPath = route.path;
   return tocItemsToTreeViewItems(
-    metadata.value.workExample.tableOfContents,
+    metadata.value.tableOfContents,
     (id) => ({ path: normPath, hash: `#${encodeForUri(id)}` }),
     (id) => ({ path: normPath, hash: `#${encodeForUri(id)}` }),
   );
@@ -243,10 +243,7 @@ const fassungenTabPanelTitleId = useId();
             </DocumentsNormsLegislationContent>
           </template>
 
-          <template
-            #sidebar
-            v-if="metadata.workExample?.tableOfContents?.length"
-          >
+          <template #sidebar v-if="metadata.tableOfContents?.length">
             <client-only>
               <DocumentsNormsNormTableOfContents
                 :subheading="normBreadcrumbTitle"
@@ -269,7 +266,9 @@ const fassungenTabPanelTitleId = useId();
           <DetailsList>
             <DetailsListEntry
               label="Ausfertigungsdatum:"
-              :value="dateFormattedDDMMYYYY(metadata.legislationDate)"
+              :value="
+                dateFormattedDDMMYYYY(metadata.exampleOfWork.legislationDate)
+              "
             />
             <DetailsListEntry label="Vollzitat:" :value="htmlParts.vollzitat" />
             <DetailsListEntry
@@ -321,7 +320,7 @@ const fassungenTabPanelTitleId = useId();
             <DocumentsNormsNormVersionList
               :status="normVersionsStatus"
               :current-legislation-identifier="
-                metadata.workExample?.legislationIdentifier ?? ''
+                metadata.legislationIdentifier ?? ''
               "
               :versions="normVersions"
             />

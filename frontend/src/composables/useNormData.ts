@@ -3,7 +3,7 @@ import type { LegislationExpression } from "~/types/api";
 import { getTextFromElements, parseDocument } from "~/utils/htmlParser";
 
 export interface NormContent {
-  legislationWork: LegislationWork;
+  legislation: LegislationExpression;
   htmlParts: {
     heading?: string;
     headingAuthorialNotes?: string; // amtliche Fußnoten
@@ -55,7 +55,7 @@ export function useFetchNormContent(
       //set hasPart empty to reduce payload size
       if (metadata) metadata.hasPart = [];
       return {
-        legislationWork: metadata,
+        legislation: metadata,
         htmlParts,
       };
     },
@@ -130,7 +130,7 @@ function insertLineBreaksBetweenBracketedBlocks(
 }
 
 export interface NormArticleContent {
-  legislationWork: LegislationWork;
+  legislation: LegislationExpression;
   htmlBody: string;
   articleHeading?: string;
 }
@@ -182,7 +182,7 @@ export function useFetchNormArticleContent(
       )?.innerHTML;
 
       return {
-        legislationWork: metadata,
+        legislation: metadata,
         htmlBody: body,
         articleHeading,
       };
@@ -192,7 +192,7 @@ export function useFetchNormArticleContent(
 }
 
 /**
- * Extracts the HTML URL from a LegislationWork metadata structure.
+ * Extracts the HTML URL from a Legislation metadata structure.
  * @throws Error If the metadata doesn't include an HTML version.
  */
 function getContentUrl(metadata: LegislationExpression) {

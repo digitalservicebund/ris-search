@@ -53,7 +53,7 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
 const formattedDate = computed(() => {
   const date = privateFeaturesEnabled
     ? temporalCoverageToValidityInterval(item.value?.temporalCoverage)?.from
-    : item.value?.legislationDate;
+    : item.value?.exampleOfWork.legislationDate;
 
   return dateFormattedDDMMYYYY(date);
 });

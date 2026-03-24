@@ -37,17 +37,17 @@ describe("useNormData", () => {
 
   const expressionEli = "test-eli";
   const mockMetadata = {
-      encoding: [
-        {
-          "@id": "test-encoding-id",
-          encodingFormat: "text/html",
-          contentUrl: "/v1/test-content-url.html",
-          "@type": "LegislationObject",
-          inLanguage: "deu",
-        },
-      ],
-      hasPart: [],
-  } as LegislationWork;
+    encoding: [
+      {
+        "@id": "test-encoding-id",
+        encodingFormat: "text/html",
+        contentUrl: "/v1/test-content-url.html",
+        "@type": "LegislationObject",
+        inLanguage: "deu",
+      },
+    ],
+    hasPart: [],
+  } as Partial<LegislationExpression>;
 
   it("should fetch JSON and HTML data", async () => {
     const expectedHtml = `
@@ -76,7 +76,7 @@ describe("useNormData", () => {
 
     const { data } = await useFetchNormContent(expressionEli);
     expect(data.value).toEqual({
-      legislationWork: mockMetadata,
+      legislation: mockMetadata,
       htmlParts: {
         officialToc: undefined,
         heading: `<div class="titel">Title</div>`,
@@ -111,7 +111,7 @@ describe("useNormData", () => {
       articleEId,
     );
     expect(data.value).toEqual({
-      legislationWork: mockMetadata,
+      legislation: mockMetadata,
       htmlBody: html,
       articleHeading: "§ 1 Some article",
     });

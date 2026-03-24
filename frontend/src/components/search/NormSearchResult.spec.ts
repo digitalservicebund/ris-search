@@ -14,17 +14,17 @@ const mockSearchResult: SearchResult<LegislationExpression> = {
     "@type": "Legislation",
     "@id": "eli/bund/bgbl-0/1999/ab/regelungstext-1",
     alternateName: "NoRM",
-    legislationDate: "1999-12-14",
-    datePublished: "1999-12-21",
-    isPartOf: {
-      name: "The Official Gazette",
-    },
     hasPart: [],
     legislationIdentifier:
       "eli/bund/bgbl-0/1999/abc/1999-12-31/1/deu/regelungstext-1",
     exampleOfWork: {
       "@type": "Legislation",
       legislationIdentifier: "eli/bund/bgbl-0/1999/abc",
+      legislationDate: "1999-12-14",
+      datePublished: "1999-12-21",
+      isPartOf: {
+        name: "The Official Gazette",
+      },
     },
     encoding: [],
     tableOfContents: [],

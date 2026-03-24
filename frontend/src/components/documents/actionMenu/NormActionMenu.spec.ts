@@ -187,7 +187,7 @@ describe("NormActionMenu", () => {
   });
 
   it("renders translation link button if translation url given", async () => {
-    await renderNormActionMenu(mockLegislationWork, "/translations/test");
+    await renderNormActionMenu(mockLegislation, "/translations/test");
 
     const menuitems = await screen.findAllByRole("menuitem");
     expect(menuitems).toHaveLength(6);
