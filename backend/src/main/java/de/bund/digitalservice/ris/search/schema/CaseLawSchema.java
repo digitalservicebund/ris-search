@@ -6,7 +6,6 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import lombok.Builder;
-import org.jetbrains.annotations.Nullable;
 
 /** A DTO for court decisions in a specific encoding, following schema.org naming guidelines. */
 @Builder
@@ -63,7 +62,7 @@ public record CaseLawSchema(
         @JsonProperty("@id")
         String id,
     @Schema(example = "de", requiredMode = Schema.RequiredMode.REQUIRED) String inLanguage,
-    @Nullable List<CaseLawEncodingSchema> encoding,
+    @Schema(requiredMode = Schema.RequiredMode.REQUIRED) List<CaseLawEncodingSchema> encoding,
     @Schema(requiredMode = Schema.RequiredMode.REQUIRED)
         Map<String, List<String>> highlightedFields)
     implements JsonldResource {

@@ -41,6 +41,7 @@ public class LegislationExpressionSearchSchemaMapper {
         .legislationIdentifier(expressionEli)
         .id(expressionId)
         .temporalCoverage(temporalCoverage)
+        .encoding(NormSchemaMapper.getEncodings(norm.getManifestationEliExample()))
         .build();
   }
 

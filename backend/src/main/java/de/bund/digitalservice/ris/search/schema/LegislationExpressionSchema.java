@@ -64,7 +64,7 @@ public record LegislationExpressionSchema(
                 "List of components (articles, preambles, conclusions, attachments, …) that form this legislation item.")
         @Nullable
         List<LegislationExpressionPartSchema> hasPart,
-    @Nullable List<LegislationObjectSchema> encoding)
+    @Schema(requiredMode = Schema.RequiredMode.REQUIRED) List<LegislationObjectSchema> encoding)
     implements JsonldResource {
 
   @Override

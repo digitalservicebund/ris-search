@@ -6,11 +6,18 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 import de.bund.digitalservice.ris.search.mapper.NormSearchResponseMapper;
 import de.bund.digitalservice.ris.search.models.opensearch.Article;
+import de.bund.digitalservice.ris.search.models.opensearch.Norm;
+import de.bund.digitalservice.ris.search.schema.LegalForceStatus;
+import de.bund.digitalservice.ris.search.schema.LegislationExpressionSearchSchema;
+import de.bund.digitalservice.ris.search.schema.LegislationObjectSchema;
+import de.bund.digitalservice.ris.search.schema.LegislationWorkSearchSchema;
 import de.bund.digitalservice.ris.search.schema.TextMatchSchema;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -115,5 +122,57 @@ class NormSearchResponseMapperTest {
             null,
             null,
             true));
+  }
+
+  @Test
+  void itMapsFromADomainObject() {
+    Norm norm =
+        Norm.builder()
+            .id("id")
+            .expressionEli("expressionEli")
+            .articles(
+                List.of(
+                    Article.builder()
+                        .eId("eId")
+                        .text("attachmentText")
+                        .manifestationEli("eli")
+                        .build()))
+            .manifestationEliExample("manifestationEli/regelungstext-1.xml")
+            .workEli("workEli")
+            .build();
+
+    LegislationWorkSearchSchema expectedResponse =
+        LegislationWorkSearchSchema.builder()
+            .id("/v1/legislation/workEli")
+            .legislationIdentifier("workEli")
+            .workExample(
+                LegislationExpressionSearchSchema.builder()
+                    .id("/v1/legislation/expressionEli")
+                    .legislationIdentifier("expressionEli")
+                    .legislationLegalForce(LegalForceStatus.IN_FORCE)
+                    .encoding(
+                        List.of(
+                            LegislationObjectSchema.builder()
+                                .id("/v1/legislation/manifestationEli/regelungstext-1/html")
+                                .contentUrl("/v1/legislation/manifestationEli/regelungstext-1.html")
+                                .encodingFormat("text/html")
+                                .inLanguage("de")
+                                .build(),
+                            LegislationObjectSchema.builder()
+                                .id("/v1/legislation/manifestationEli/regelungstext-1/xml")
+                                .contentUrl("/v1/legislation/manifestationEli/regelungstext-1.xml")
+                                .encodingFormat("application/xml")
+                                .inLanguage("de")
+                                .build(),
+                            LegislationObjectSchema.builder()
+                                .id("/v1/legislation/manifestationEli/zip")
+                                .contentUrl("/v1/legislation/manifestationEli.zip")
+                                .encodingFormat("application/zip")
+                                .inLanguage("de")
+                                .build()))
+                    .build())
+            .build();
+
+    Assertions.assertEquals(expectedResponse, NormSearchResponseMapper.fromDomain(norm));
   }
 }

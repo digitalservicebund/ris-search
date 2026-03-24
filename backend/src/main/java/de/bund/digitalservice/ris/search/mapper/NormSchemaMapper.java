@@ -41,7 +41,7 @@ public class NormSchemaMapper {
     String expressionEli = norm.getExpressionEli();
     String manifestationEliXml = norm.getManifestationEliExample();
 
-    var encodings = getEncodings(CONTENT_BASE_URL, manifestationEliXml);
+    var encodings = getEncodings(manifestationEliXml);
 
     LegalForceStatus legislationLegalForce =
         DateUtils.isActive(norm.getEntryIntoForceDate(), norm.getExpiryDate())
@@ -79,15 +79,20 @@ public class NormSchemaMapper {
         .build();
   }
 
-  private static List<LegislationObjectSchema> getEncodings(
-      String contentBaseUrl, @Nullable String manifestationEli) {
+  /**
+   * create manifestation references from the manifestationEli
+   *
+   * @param manifestationEli manifestationEli of a Norm
+   * @return List of Legislation manifestation reference objects
+   */
+  public static List<LegislationObjectSchema> getEncodings(@Nullable String manifestationEli) {
     if (manifestationEli == null) {
       return Collections.emptyList();
     }
 
-    var encodingBaseUrl = contentBaseUrl + manifestationEli.replace(".xml", "");
+    var encodingBaseUrl = CONTENT_BASE_URL + manifestationEli.replace(".xml", "");
     var encodingZipBaseUrl =
-        contentBaseUrl + manifestationEli.substring(0, manifestationEli.lastIndexOf('/'));
+        CONTENT_BASE_URL + manifestationEli.substring(0, manifestationEli.lastIndexOf('/'));
 
     return EncodingSchemaFactory.legislationEncodingSchemas(encodingBaseUrl, encodingZipBaseUrl);
   }

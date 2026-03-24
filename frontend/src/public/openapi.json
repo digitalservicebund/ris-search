@@ -1942,17 +1942,7 @@
                 "example": "['50 Jahre Betriebs-Berater, 1987, 123-456']",
                 "items": { "type": "string" }
               },
-              "normReferences": {
-                "type": "array",
-                "description": "Norm Verweise",
-                "example": "['GG, Art 6 Abs 2 S 1, 1949-05-23']",
-                "items": { "type": "string" }
-              },
               "headline": { "type": "string", "description": "Haupttitel" },
-              "headlineAdditions": {
-                "type": "string",
-                "description": "Zusätze zum Haupttitel"
-              },
               "alternativeHeadline": {
                 "type": "string",
                 "description": "Dokumentarischer Titel"
@@ -1967,24 +1957,6 @@
                 "type": "array",
                 "description": "Mitarbeiter",
                 "example": "['Mustermann, Max']",
-                "items": { "type": "string" }
-              },
-              "languages": {
-                "type": "array",
-                "description": "Sprachen",
-                "example": "['deu', 'eng']",
-                "items": { "type": "string" }
-              },
-              "originators": {
-                "type": "array",
-                "description": "Urheber",
-                "example": "['DGB']",
-                "items": { "type": "string" }
-              },
-              "conferenceNotes": {
-                "type": "array",
-                "description": "Kongressvermerke",
-                "example": "['Nationaler Beispiel Kongress, 2024, Berlin, GER']",
                 "items": { "type": "string" }
               },
               "shortReport": { "type": "string", "description": "Kurzreferat" },
@@ -2007,17 +1979,14 @@
           "@id",
           "authors",
           "collaborators",
-          "conferenceNotes",
           "dependentReferences",
           "documentNumber",
           "documentTypes",
+          "encoding",
           "firstPublicationDate",
           "inLanguage",
           "independentReferences",
-          "languages",
           "literatureType",
-          "normReferences",
-          "originators",
           "yearsOfPublication"
         ]
       },
@@ -2198,6 +2167,7 @@
           "documentNumber",
           "documentTypes",
           "editors",
+          "encoding",
           "founder",
           "inLanguage",
           "independentReferences",
@@ -2255,14 +2225,36 @@
             "type": "string",
             "description": "Whether the legislation expression is currently in force.",
             "enum": ["InForce", "NotInForce", "PartiallyInForce"]
+          },
+          "encoding": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/LegislationObjectSchema" }
           }
         },
         "required": [
           "@id",
+          "encoding",
           "legislationIdentifier",
           "legislationLegalForce",
           "temporalCoverage"
         ]
+      },
+      "LegislationObjectSchema": {
+        "type": "object",
+        "properties": {
+          "@type": { "type": "string", "example": "LegislationObject" },
+          "@id": {
+            "type": "string",
+            "example": "/v1/legislation/eli/bund/bgbl-1/1975/s1760/1998-01-29/10/deu/1998-01-29/regelungstext-1/html"
+          },
+          "contentUrl": {
+            "type": "string",
+            "example": "/v1/legislation/eli/bund/bgbl-1/1975/s1760/1998-01-29/10/deu/1998-01-29/regelungstext-1.html"
+          },
+          "encodingFormat": { "type": "string", "example": "text/html" },
+          "inLanguage": { "type": "string", "example": "de" }
+        },
+        "required": ["@id", "contentUrl", "encodingFormat", "inLanguage"]
       },
       "LegislationWorkSearchSchema": {
         "allOf": [
@@ -2419,27 +2411,11 @@
         },
         "required": [
           "@id",
+          "encoding",
           "legislationIdentifier",
           "legislationLegalForce",
           "temporalCoverage"
         ]
-      },
-      "LegislationObjectSchema": {
-        "type": "object",
-        "properties": {
-          "@type": { "type": "string", "example": "LegislationObject" },
-          "@id": {
-            "type": "string",
-            "example": "/v1/legislation/eli/bund/bgbl-1/1975/s1760/1998-01-29/10/deu/1998-01-29/regelungstext-1/html"
-          },
-          "contentUrl": {
-            "type": "string",
-            "example": "/v1/legislation/eli/bund/bgbl-1/1975/s1760/1998-01-29/10/deu/1998-01-29/regelungstext-1.html"
-          },
-          "encodingFormat": { "type": "string", "example": "text/html" },
-          "inLanguage": { "type": "string", "example": "de" }
-        },
-        "required": ["@id", "contentUrl", "encodingFormat", "inLanguage"]
       },
       "LegislationWorkSchema": {
         "type": "object",
@@ -2518,6 +2494,17 @@
         "properties": { "@type": { "type": "string" } },
         "required": ["@type"]
       },
+      "AdministrativeDirectiveEncodingSchema": {
+        "type": "object",
+        "properties": {
+          "@type": { "type": "string", "example": "MediaObject" },
+          "@id": { "type": "string" },
+          "contentUrl": { "type": "string" },
+          "encodingFormat": { "type": "string", "example": "text/html" },
+          "inLanguage": { "type": "string", "example": "de" }
+        },
+        "required": ["@id", "contentUrl", "encodingFormat", "inLanguage"]
+      },
       "AdministrativeDirectiveSearchSchema": {
         "allOf": [
           { "$ref": "#/components/schemas/AbstractDocumentSchema" },
@@ -2556,6 +2543,12 @@
                 "format": "date",
                 "description": "Gültig ab Datum",
                 "example": "2003-12-15"
+              },
+              "encoding": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/AdministrativeDirectiveEncodingSchema"
+                }
               }
             }
           }
@@ -2564,8 +2557,20 @@
           "@id",
           "documentNumber",
           "documentType",
+          "encoding",
           "referenceNumbers"
         ]
+      },
+      "CaseLawEncodingSchema": {
+        "type": "object",
+        "properties": {
+          "@type": { "type": "string", "example": "DecisionObject" },
+          "@id": { "type": "string" },
+          "contentUrl": { "type": "string" },
+          "encodingFormat": { "type": "string", "example": "text/html" },
+          "inLanguage": { "type": "string", "example": "de" }
+        },
+        "required": ["@id", "contentUrl", "encodingFormat", "inLanguage"]
       },
       "CaseLawSearchSchema": {
         "allOf": [
@@ -2609,6 +2614,12 @@
                 "example": "DEV-123",
                 "items": { "type": "string" }
               },
+              "encoding": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/CaseLawEncodingSchema"
+                }
+              },
               "@id": {
                 "type": "string",
                 "example": "/v1/case-law/ECLI:DE:FGRLP:1969:0905.IV85.68.0A"
@@ -2631,6 +2642,7 @@
           "deviatingDocumentNumber",
           "documentNumber",
           "ecli",
+          "encoding",
           "fileNumbers",
           "highlightedFields",
           "inLanguage"
@@ -2740,17 +2752,6 @@
         },
         "required": ["item", "textMatches"]
       },
-      "CaseLawEncodingSchema": {
-        "type": "object",
-        "properties": {
-          "@type": { "type": "string", "example": "DecisionObject" },
-          "@id": { "type": "string" },
-          "contentUrl": { "type": "string" },
-          "encodingFormat": { "type": "string", "example": "text/html" },
-          "inLanguage": { "type": "string", "example": "de" }
-        },
-        "required": ["@id", "contentUrl", "encodingFormat", "inLanguage"]
-      },
       "CaseLawSchema": {
         "type": "object",
         "properties": {
@@ -2854,6 +2855,7 @@
           "deviatingDocumentNumber",
           "documentNumber",
           "ecli",
+          "encoding",
           "fileNumbers",
           "highlightedFields",
           "inLanguage",
@@ -2870,17 +2872,6 @@
             "example": "Bundesgerichtshof Karlsruhe"
           }
         }
-      },
-      "AdministrativeDirectiveEncodingSchema": {
-        "type": "object",
-        "properties": {
-          "@type": { "type": "string", "example": "MediaObject" },
-          "@id": { "type": "string" },
-          "contentUrl": { "type": "string" },
-          "encodingFormat": { "type": "string", "example": "text/html" },
-          "inLanguage": { "type": "string", "example": "de" }
-        },
-        "required": ["@id", "contentUrl", "encodingFormat", "inLanguage"]
       },
       "AdministrativeDirectiveSchema": {
         "type": "object",
@@ -2959,6 +2950,7 @@
           "citationDates",
           "documentNumber",
           "documentType",
+          "encoding",
           "normReferences",
           "outline",
           "referenceNumbers",

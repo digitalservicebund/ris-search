@@ -121,7 +121,7 @@ public record LiteratureSchema(
             example = "['sli', 'uli']",
             requiredMode = Schema.RequiredMode.REQUIRED)
         String literatureType,
-    @Nullable List<LiteratureEncodingSchema> encoding)
+    @Schema(requiredMode = Schema.RequiredMode.REQUIRED) List<LiteratureEncodingSchema> encoding)
     implements JsonldResource {
 
   @Override

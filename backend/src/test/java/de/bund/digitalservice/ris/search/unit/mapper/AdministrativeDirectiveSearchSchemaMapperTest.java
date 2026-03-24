@@ -3,6 +3,7 @@ package de.bund.digitalservice.ris.search.unit.mapper;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 import de.bund.digitalservice.ris.search.mapper.AdministrativeDirectiveSearchSchemaMapper;
+import de.bund.digitalservice.ris.search.mapper.EncodingSchemaFactory;
 import de.bund.digitalservice.ris.search.models.opensearch.AdministrativeDirective;
 import de.bund.digitalservice.ris.search.schema.AdministrativeDirectiveSearchSchema;
 import java.time.LocalDate;
@@ -38,6 +39,9 @@ class AdministrativeDirectiveSearchSchemaMapperTest {
             .referenceNumbers(List.of("RNR"))
             .legislationAuthority("legislationAuthority")
             .entryIntoForceDate(LocalDate.of(2024, 1, 1))
+            .encoding(
+                EncodingSchemaFactory.administrativeDirectiveEncodingSchemas(
+                    "/v1/administrative-directive/KN0000"))
             .build();
 
     assertThat(expected).isEqualTo(AdministrativeDirectiveSearchSchemaMapper.fromDomain(entity));

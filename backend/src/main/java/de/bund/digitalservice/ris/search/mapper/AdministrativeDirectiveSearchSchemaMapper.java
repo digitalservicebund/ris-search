@@ -104,6 +104,7 @@ public class AdministrativeDirectiveSearchSchemaMapper {
         .referenceNumbers(doc.referenceNumbers())
         .legislationAuthority(doc.legislationAuthority())
         .documentType(doc.documentType())
+        .encoding(EncodingSchemaFactory.administrativeDirectiveEncodingSchemas(entityURI))
         .build();
   }
 

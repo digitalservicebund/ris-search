@@ -3,8 +3,8 @@ package de.bund.digitalservice.ris.search.unit.mapper;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 import de.bund.digitalservice.ris.search.mapper.AdministrativeDirectiveSchemaMapper;
+import de.bund.digitalservice.ris.search.mapper.EncodingSchemaFactory;
 import de.bund.digitalservice.ris.search.models.opensearch.AdministrativeDirective;
-import de.bund.digitalservice.ris.search.schema.AdministrativeDirectiveEncodingSchema;
 import de.bund.digitalservice.ris.search.schema.AdministrativeDirectiveSchema;
 import java.time.LocalDate;
 import java.util.List;
@@ -48,22 +48,8 @@ class AdministrativeDirectiveSchemaMapperTest {
             .normReferences(List.of("norm"))
             .outline(List.of("item 1", "item 2"))
             .encoding(
-                List.of(
-                    new AdministrativeDirectiveEncodingSchema(
-                        "/v1/administrative-directive/KN0000/html",
-                        "/v1/administrative-directive/KN0000.html",
-                        "text/html",
-                        "de"),
-                    new AdministrativeDirectiveEncodingSchema(
-                        "/v1/administrative-directive/KN0000/xml",
-                        "/v1/administrative-directive/KN0000.xml",
-                        "application/xml",
-                        "de"),
-                    new AdministrativeDirectiveEncodingSchema(
-                        "/v1/administrative-directive/KN0000/zip",
-                        "/v1/administrative-directive/KN0000.zip",
-                        "application/zip",
-                        "de")))
+                EncodingSchemaFactory.administrativeDirectiveEncodingSchemas(
+                    "/v1/administrative-directive/KN0000"))
             .build();
 
     assertThat(expected).isEqualTo(AdministrativeDirectiveSchemaMapper.fromDomain(entity));

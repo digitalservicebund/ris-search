@@ -2,9 +2,9 @@ package de.bund.digitalservice.ris.search.unit.mapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import de.bund.digitalservice.ris.search.mapper.EncodingSchemaFactory;
 import de.bund.digitalservice.ris.search.mapper.LiteratureSchemaMapper;
 import de.bund.digitalservice.ris.search.models.opensearch.Literature;
-import de.bund.digitalservice.ris.search.schema.LiteratureEncodingSchema;
 import de.bund.digitalservice.ris.search.schema.LiteratureSchema;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
@@ -77,25 +77,7 @@ class LiteratureSchemaMapperTest {
             .volumes(List.of("volume 1", "volume 2"))
             .literatureType("uli")
             .encoding(
-                List.of(
-                    LiteratureEncodingSchema.builder()
-                        .id("/v1/literature/XXLU000000001/html")
-                        .contentUrl("/v1/literature/XXLU000000001.html")
-                        .encodingFormat("text/html")
-                        .inLanguage("de")
-                        .build(),
-                    LiteratureEncodingSchema.builder()
-                        .id("/v1/literature/XXLU000000001/xml")
-                        .contentUrl("/v1/literature/XXLU000000001.xml")
-                        .encodingFormat("application/xml")
-                        .inLanguage("de")
-                        .build(),
-                    LiteratureEncodingSchema.builder()
-                        .id("/v1/literature/XXLU000000001/zip")
-                        .contentUrl("/v1/literature/XXLU000000001.zip")
-                        .encodingFormat("application/zip")
-                        .inLanguage("de")
-                        .build()))
+                EncodingSchemaFactory.literatureEncodingSchemas("/v1/literature/XXLU000000001"))
             .build();
 
     LiteratureSchema literatureSchema = LiteratureSchemaMapper.fromDomain(literature);
