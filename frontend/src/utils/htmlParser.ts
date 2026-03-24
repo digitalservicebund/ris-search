@@ -65,16 +65,15 @@ export function getTextFromElements(elements?: NodeListOf<Element>): string[] {
  * if the html `<body>` is empty or contains only a single headline (`<h1>`).
  * @param htmlDocument
  */
-export function isDocumentEmpty(htmlDocument?: string): boolean {
-  if (!htmlDocument) {
+export function isDocumentEmpty(document?: Document): boolean {
+  if (!document) {
     return true;
   }
 
-  const doc = parseDocument(htmlDocument);
-  const bodyElements = Array.from(doc.body.children);
+  const bodyElements = Array.from(document.body.children);
 
   const isEmptyBody =
-    bodyElements.length === 0 && doc.body.childNodes.length == 0;
+    bodyElements.length === 0 && document.body.childNodes.length == 0;
   const hasSingleH1 =
     bodyElements.length === 1 && bodyElements[0]?.tagName === "H1";
   return isEmptyBody || hasSingleH1;

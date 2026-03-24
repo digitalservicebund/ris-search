@@ -51,10 +51,11 @@ describe("useNormData", () => {
       hasPart: [],
     } as Partial<LegislationExpression>,
   } as LegislationWork;
-  const mockHtml = `
+
+  it("should fetch JSON and HTML data", async () => {
+    const expectedHtml = `
     <section class="dokumentenkopf">
       <div class="fussnoten">Footnote content</div>
-      <span />
       <div class="titel">Title</div>
       <div class="akn-container"><p>Besonderer Hinweis</p></div>
       <ul class="nichtamtliche-fussnoten"><li>Notes</li></ul>
@@ -71,14 +72,14 @@ describe("useNormData", () => {
    </section>
    <div>Test HTML content</div>`;
 
-  it("should fetch JSON and HTML data", async () => {
     mockFetch.mockReturnValueOnce(mockMetadata);
-    mockFetch.mockReturnValueOnce(mockHtml);
+    mockFetch.mockReturnValueOnce(
+      "<html><body>" + expectedHtml + "</body></html>",
+    );
 
     const { data } = await useFetchNormContent(expressionEli);
     expect(data.value).toEqual({
       legislationWork: mockMetadata,
-      html: mockHtml,
       htmlParts: {
         officialToc: undefined,
         heading: `<div class="titel">Title</div>`,
@@ -89,6 +90,7 @@ describe("useNormData", () => {
         standangaben: ["Stand-Stand"],
         standangabenHinweis: ["Stand-Hinweis 1;", "Stand-Hinweis 2"],
         vollzitat: "Vollzitat",
+        body: expectedHtml,
       },
     });
 
@@ -104,9 +106,8 @@ describe("useNormData", () => {
   it("should fetch JSON and HTML data for articles", async () => {
     const articleEId = "eid-1";
     const html = `<h2 class="einzelvorschrift">§ 1 Some article</h2><div>Test HTML content</div>`;
-
     mockFetch.mockReturnValueOnce(mockMetadata);
-    mockFetch.mockReturnValueOnce(html);
+    mockFetch.mockReturnValueOnce("<html><body>" + html + "</body></html>");
 
     const { data } = await useFetchNormArticleContent(
       expressionEli,

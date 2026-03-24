@@ -63,13 +63,18 @@ describe("isDocumentEmpty", () => {
   });
 
   it("returns true if html body is empty", () => {
-    const doc = "<!DOCTYPE HTML><html><body></body></html>";
+    const docString = "<!DOCTYPE HTML><html><body></body></html>";
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(docString, "text/html");
 
     expect(isDocumentEmpty(doc)).toBeTruthy();
   });
 
   it("returns true if html body contains only single h1", () => {
-    const doc = "<!DOCTYPE HTML><html><body><h1>Still Empty</h1></body></html>";
+    const docString =
+      "<!DOCTYPE HTML><html><body><h1>Still Empty</h1></body></html>";
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(docString, "text/html");
 
     expect(isDocumentEmpty(doc)).toBeTruthy();
   });
@@ -77,8 +82,9 @@ describe("isDocumentEmpty", () => {
   it.each(["Foo", "<p>Foo Bar</p>", "<h1>Not Empty</h1><p>Foo Bar</p>"])(
     "returns false if html body contains '%s'",
     (bodyContent) => {
-      const doc = `<!DOCTYPE HTML><html><body>${bodyContent}</body></html>`;
-
+      const docString = `<!DOCTYPE HTML><html><body>${bodyContent}</body></html>`;
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(docString, "text/html");
       expect(isDocumentEmpty(doc)).toBeFalsy();
     },
   );
