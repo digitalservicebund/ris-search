@@ -11,6 +11,7 @@ import de.bund.digitalservice.ris.search.schema.LegislationExpressionSchema;
 import de.bund.digitalservice.ris.search.schema.LegislationObjectSchema;
 import de.bund.digitalservice.ris.search.schema.LegislationWorkSchema;
 import de.bund.digitalservice.ris.search.schema.TableOfContentsSchema;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 import org.junit.jupiter.api.Assertions;
@@ -64,6 +65,8 @@ class NormSchemaMapperTest {
         Norm.builder()
             .id("id")
             .expressionEli("expressionEli")
+            .normsDate(LocalDate.of(2025, 1, 1))
+            .datePublished(LocalDate.of(2026, 1, 1))
             .articles(
                 List.of(
                     Article.builder()
@@ -81,7 +84,9 @@ class NormSchemaMapperTest {
             .legislationIdentifier("expressionEli")
             .legislationLegalForce(LegalForceStatus.IN_FORCE)
             .tableOfContents(List.of())
-            .exampleOfWork(new LegislationWorkSchema("workEli"))
+            .exampleOfWork(
+                new LegislationWorkSchema(
+                    "workEli", LocalDate.of(2025, 1, 1), LocalDate.of(2026, 1, 1), null))
             .encoding(
                 List.of(
                     LegislationObjectSchema.builder()

@@ -296,7 +296,9 @@ const detailsTabPanelTitleId = useId();
           <DetailsList>
             <DetailsListEntry
               label="Ausfertigungsdatum:"
-              :value="dateFormattedDDMMYYYY(metadata.legislationDate)"
+              :value="
+                dateFormattedDDMMYYYY(metadata.exampleOfWork.legislationDate)
+              "
             />
             <DetailsListEntry label="Vollzitat:" :value="htmlParts.vollzitat" />
             <DetailsListEntry

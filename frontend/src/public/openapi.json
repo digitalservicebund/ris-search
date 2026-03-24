@@ -2242,21 +2242,6 @@
                 "description": "Amtliche Kurzüberschrift",
                 "example": "Kakaoverordnung"
               },
-              "legislationDate": {
-                "type": "string",
-                "format": "date",
-                "description": "Ausfertigungsdatum (The date of adoption or signature of the legislation. This is the date at which the text is officially acknowledged to be a legislation, even though it might not even be published or in force.)\n",
-                "example": "2003-12-15"
-              },
-              "datePublished": {
-                "type": "string",
-                "format": "date",
-                "description": "Verkündungsdatum (The date of first publication of the legislation, when it was published in the official gazette. This may be later than the `legislationDate`.)\n",
-                "example": "2003-12-16"
-              },
-              "isPartOf": {
-                "$ref": "#/components/schemas/PublicationIssueSchema"
-              },
               "legislationLegalForce": {
                 "type": "string",
                 "description": "Whether the legislation expression is currently in force.",
@@ -2275,10 +2260,8 @@
         "required": [
           "@id",
           "alternateName",
-          "datePublished",
           "encoding",
           "exampleOfWork",
-          "legislationDate",
           "legislationIdentifier",
           "legislationLegalForce",
           "name",
@@ -2309,8 +2292,22 @@
           "legislationIdentifier": {
             "type": "string",
             "example": "eli/bund/bgbl-1/1975/s1760"
-          }
-        }
+          },
+          "legislationDate": {
+            "type": "string",
+            "format": "date",
+            "description": "Ausfertigungsdatum (The date of adoption or signature of the legislation. This is the date at which the text is officially acknowledged to be a legislation, even though it might not even be published or in force.)\n",
+            "example": "2003-12-15"
+          },
+          "datePublished": {
+            "type": "string",
+            "format": "date",
+            "description": "Verkündungsdatum (The date of first publication of the legislation, when it was published in the official gazette. This may be later than the `legislationDate`.)\n",
+            "example": "2003-12-16"
+          },
+          "isPartOf": { "$ref": "#/components/schemas/PublicationIssueSchema" }
+        },
+        "required": ["datePublished", "legislationDate"]
       },
       "PublicationIssueSchema": {
         "type": "object",
@@ -2399,19 +2396,6 @@
             "$ref": "#/components/schemas/LegislationWorkSchema",
             "description": "the work the expression is based on"
           },
-          "isPartOf": { "$ref": "#/components/schemas/PublicationIssueSchema" },
-          "legislationDate": {
-            "type": "string",
-            "format": "date",
-            "description": "Ausfertigungsdatum (The date of adoption or signature of the legislation. This is the date at which the text is officially acknowledged to be a legislation, even though it might not even be published or in force.)\n",
-            "example": "2003-12-15"
-          },
-          "datePublished": {
-            "type": "string",
-            "format": "date",
-            "description": "Verkündungsdatum (The date of first publication of the legislation, when it was published in the official gazette. This may be later than the `legislationDate`.)\n",
-            "example": "2003-12-16"
-          },
           "legislationIdentifier": {
             "type": "string",
             "example": "eli/bund/bgbl-1/1975/s1760/1998-01-29/10/deu"
@@ -2445,10 +2429,8 @@
         "required": [
           "@id",
           "alternateName",
-          "datePublished",
           "encoding",
           "exampleOfWork",
-          "legislationDate",
           "legislationIdentifier",
           "legislationLegalForce",
           "name",

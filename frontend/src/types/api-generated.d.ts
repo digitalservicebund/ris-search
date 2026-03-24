@@ -868,19 +868,6 @@ export interface components {
        */
       alternateName: string;
       /**
-       * Format: date
-       * @description Ausfertigungsdatum (The date of adoption or signature of the legislation. This is the date at which the text is officially acknowledged to be a legislation, even though it might not even be published or in force.)
-       * @example 2003-12-15
-       */
-      legislationDate: string;
-      /**
-       * Format: date
-       * @description Verkündungsdatum (The date of first publication of the legislation, when it was published in the official gazette. This may be later than the `legislationDate`.)
-       * @example 2003-12-16
-       */
-      datePublished: string;
-      isPartOf?: components["schemas"]["PublicationIssueSchema"];
-      /**
        * @description Whether the legislation expression is currently in force.
        * @enum {string}
        */
@@ -904,6 +891,19 @@ export interface components {
       "@type"?: string;
       /** @example eli/bund/bgbl-1/1975/s1760 */
       legislationIdentifier?: string;
+      /**
+       * Format: date
+       * @description Ausfertigungsdatum (The date of adoption or signature of the legislation. This is the date at which the text is officially acknowledged to be a legislation, even though it might not even be published or in force.)
+       * @example 2003-12-15
+       */
+      legislationDate: string;
+      /**
+       * Format: date
+       * @description Verkündungsdatum (The date of first publication of the legislation, when it was published in the official gazette. This may be later than the `legislationDate`.)
+       * @example 2003-12-16
+       */
+      datePublished: string;
+      isPartOf?: components["schemas"]["PublicationIssueSchema"];
     };
     PublicationIssueSchema: {
       /** @example PublicationIssue */
@@ -969,19 +969,6 @@ export interface components {
       alternateName: string;
       /** @description the work the expression is based on */
       exampleOfWork: components["schemas"]["LegislationWorkSchema"];
-      isPartOf?: components["schemas"]["PublicationIssueSchema"];
-      /**
-       * Format: date
-       * @description Ausfertigungsdatum (The date of adoption or signature of the legislation. This is the date at which the text is officially acknowledged to be a legislation, even though it might not even be published or in force.)
-       * @example 2003-12-15
-       */
-      legislationDate: string;
-      /**
-       * Format: date
-       * @description Verkündungsdatum (The date of first publication of the legislation, when it was published in the official gazette. This may be later than the `legislationDate`.)
-       * @example 2003-12-16
-       */
-      datePublished: string;
       /** @example eli/bund/bgbl-1/1975/s1760/1998-01-29/10/deu */
       legislationIdentifier: string;
       /**

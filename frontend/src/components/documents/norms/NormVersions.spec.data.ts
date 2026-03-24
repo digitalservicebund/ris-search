@@ -14,14 +14,14 @@ function createLegislationExpression(
     exampleOfWork: {
       "@type": "Legislation",
       legislationIdentifier: expressionEli.split("/").slice(0, 5).join("/"),
+      legislationDate: "2025-01-01",
+      datePublished: "2025-01-01",
+      isPartOf: {
+        name: "",
+      },
     },
     name: "",
     alternateName: "",
-    legislationDate: "2025-01-01",
-    datePublished: "2025-01-01",
-    isPartOf: {
-      name: "",
-    },
     encoding: [],
     tableOfContents: [],
     hasPart: [],

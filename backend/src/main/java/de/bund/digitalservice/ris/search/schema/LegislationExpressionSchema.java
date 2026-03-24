@@ -3,7 +3,6 @@ package de.bund.digitalservice.ris.search.schema;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import de.bund.digitalservice.ris.search.config.ApiConfig;
 import io.swagger.v3.oas.annotations.media.Schema;
-import java.time.LocalDate;
 import java.util.List;
 import lombok.Builder;
 import org.jetbrains.annotations.Nullable;
@@ -57,23 +56,6 @@ public record LegislationExpressionSchema(
             description = "the work the expression is based on",
             requiredMode = Schema.RequiredMode.REQUIRED)
         LegislationWorkSchema exampleOfWork,
-    @Nullable PublicationIssueSchema isPartOf,
-    @Schema(
-            example = "2003-12-15",
-            description =
-                """
-                            Ausfertigungsdatum (The date of adoption or signature of the legislation. This is the date at which the text is officially acknowledged to be a legislation, even though it might not even be published or in force.)
-                            """,
-            requiredMode = Schema.RequiredMode.REQUIRED)
-        LocalDate legislationDate,
-    @Schema(
-            example = "2003-12-16",
-            description =
-                """
-                            Verkündungsdatum (The date of first publication of the legislation, when it was published in the official gazette. This may be later than the `legislationDate`.)
-                            """,
-            requiredMode = Schema.RequiredMode.REQUIRED)
-        LocalDate datePublished,
     @Schema(
             example = "eli/bund/bgbl-1/1975/s1760/1998-01-29/10/deu",
             requiredMode = Schema.RequiredMode.REQUIRED)

@@ -8,6 +8,7 @@ import de.bund.digitalservice.ris.search.schema.LegalForceStatus;
 import de.bund.digitalservice.ris.search.schema.LegislationExpressionSearchSchema;
 import de.bund.digitalservice.ris.search.schema.LegislationWorkSchema;
 import de.bund.digitalservice.ris.search.schema.PartialCollectionViewSchema;
+import de.bund.digitalservice.ris.search.schema.PublicationIssueSchema;
 import de.bund.digitalservice.ris.search.schema.SearchMemberSchema;
 import de.bund.digitalservice.ris.search.schema.TextMatchSchema;
 import de.bund.digitalservice.ris.search.utils.DateUtils;
@@ -145,14 +146,17 @@ public class NormSearchResponseMapper {
     String temporalCoverage =
         DateUtils.toDateIntervalString(norm.getEntryIntoForceDate(), norm.getExpiryDate());
 
+    PublicationIssueSchema publicationIssue =
+        norm.getPublishedIn() != null ? new PublicationIssueSchema(norm.getPublishedIn()) : null;
+
     return LegislationExpressionSearchSchema.builder()
         .id(expressionId)
         .abbreviation(norm.getOfficialAbbreviation())
         .alternateName(norm.getOfficialShortTitle())
         .legislationIdentifier(expressionEli)
-        .legislationDate(norm.getNormsDate())
-        .exampleOfWork(new LegislationWorkSchema(norm.getWorkEli()))
-        .datePublished(norm.getDatePublished())
+        .exampleOfWork(
+            new LegislationWorkSchema(
+                norm.getWorkEli(), norm.getNormsDate(), norm.getDatePublished(), publicationIssue))
         .name(norm.getOfficialTitle())
         .legislationLegalForce(legislationLegalForce)
         .legislationIdentifier(expressionEli)
