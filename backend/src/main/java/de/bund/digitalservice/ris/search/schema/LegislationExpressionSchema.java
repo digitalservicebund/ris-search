@@ -33,15 +33,29 @@ import org.jetbrains.annotations.Nullable;
  * representations of this expression in multiple formats (e.g., HTML, XML).
  */
 @Builder
-@Schema(
-    description =
-        "A legislation item, across different expressions and manifestations. May be used to provide context to a `LegislationExpression` (under key `workExample`).")
+@Schema(description = "A legislation expression and references to its manifestations.")
 public record LegislationExpressionSchema(
     @JsonProperty("@id")
         @Schema(
             example = ApiConfig.Paths.LEGISLATION + "/eli/bund/bgbl-1/1975/s1760/1998-01-29/10/deu",
             requiredMode = Schema.RequiredMode.REQUIRED)
         String id,
+    @Schema(
+            example = "Verordnung über Kakao und Kakaoerzeugnisse",
+            description = "Amtliche Langüberschrift",
+            requiredMode = Schema.RequiredMode.REQUIRED)
+        String name,
+    @Nullable @Schema(example = "KakaoV 2003", description = "Amtliche Buchstabenabkürzung")
+        String abbreviation,
+    @Schema(
+            example = "Kakaoverordnung",
+            description = "Amtliche Kurzüberschrift",
+            requiredMode = Schema.RequiredMode.REQUIRED)
+        String alternateName,
+    @Schema(
+            description = "the work the expression is based on",
+            requiredMode = Schema.RequiredMode.REQUIRED)
+        LegislationWorkSchema exampleOfWork,
     @Schema(
             example = "eli/bund/bgbl-1/1975/s1760/1998-01-29/10/deu",
             requiredMode = Schema.RequiredMode.REQUIRED)

@@ -24,7 +24,7 @@ import { useFetchNormContent } from "~/composables/useNormData";
 import { useNormVersions } from "~/composables/useNormVersions";
 import { usePrivateFeaturesFlag } from "~/composables/usePrivateFeaturesFlag";
 import { fetchTranslationListWithIdFilter } from "~/composables/useTranslationData";
-import { DocumentKind, type LegislationWork } from "~/types/api";
+import { DocumentKind, type LegislationExpression } from "~/types/api";
 import { dateFormattedDDMMYYYY } from "~/utils/dateFormatting";
 import { formatDocumentKind } from "~/utils/displayValues";
 import type { ValidityStatus } from "~/utils/norm";
@@ -55,7 +55,7 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
 
 const { data, error, status } = await useFetchNormContent(expressionEli);
 
-const metadata: Ref<LegislationWork | undefined> = computed(() => {
+const metadata: Ref<LegislationExpression | undefined> = computed(() => {
   return data.value?.legislationWork;
 });
 
@@ -84,10 +84,10 @@ if (error.value) {
 }
 
 const tableOfContents: Ref<TreeNode[]> = computed(() => {
-  if (!metadata.value?.workExample?.tableOfContents) return [];
+  if (!metadata.value?.tableOfContents) return [];
   const normPath = route.path;
   return tocItemsToTreeNodes(
-    metadata.value.workExample.tableOfContents,
+    metadata.value.tableOfContents,
     normPath.concat("#"),
     normPath.concat("#"),
   );
@@ -95,14 +95,12 @@ const tableOfContents: Ref<TreeNode[]> = computed(() => {
 
 const validityInterval = computed(() =>
   privateFeaturesEnabled
-    ? temporalCoverageToValidityInterval(
-        metadata.value?.workExample?.temporalCoverage,
-      )
+    ? temporalCoverageToValidityInterval(metadata.value?.temporalCoverage)
     : undefined,
 );
 
 const validityStatus = computed(() => {
-  if (metadata.value?.workExample && validityInterval)
+  if (metadata.value && validityInterval)
     return getValidityStatus(validityInterval.value);
   return undefined;
 });
@@ -114,7 +112,7 @@ const normBreadcrumbTitle = computed(() =>
 );
 
 const { status: normVersionsStatus, sortedVersions: normVersions } =
-  useNormVersions(metadata.value?.legislationIdentifier);
+  useNormVersions(metadata.value?.exampleOfWork?.legislationIdentifier ?? "");
 
 const breadcrumbItems: ComputedRef<BreadcrumbItem[]> = computed(() => {
   const validFrom = dateFormattedDDMMYYYY(validityInterval.value?.from);
@@ -133,7 +131,7 @@ const breadcrumbItems: ComputedRef<BreadcrumbItem[]> = computed(() => {
 });
 
 const buildOgTitle = (
-  norm: LegislationWork,
+  norm: LegislationExpression,
   validFrom?: Dayjs,
   normValidityStatus?: ValidityStatus,
 ) => {
@@ -277,7 +275,7 @@ const detailsTabPanelTitleId = useId();
           <template #sidebar>
             <client-only>
               <NormTableOfContents
-                v-if="metadata.workExample?.tableOfContents?.length"
+                v-if="metadata.tableOfContents?.length"
                 :table-of-contents="tableOfContents"
                 :selected-key="selectedEntry"
               />
@@ -298,7 +296,9 @@ const detailsTabPanelTitleId = useId();
           <DetailsList>
             <DetailsListEntry
               label="Ausfertigungsdatum:"
-              :value="dateFormattedDDMMYYYY(metadata.legislationDate)"
+              :value="
+                dateFormattedDDMMYYYY(metadata.exampleOfWork.legislationDate)
+              "
             />
             <DetailsListEntry label="Vollzitat:" :value="htmlParts.vollzitat" />
             <DetailsListEntry
@@ -341,7 +341,7 @@ const detailsTabPanelTitleId = useId();
             v-if="privateFeaturesEnabled"
             :status="normVersionsStatus"
             :current-legislation-identifier="
-              metadata.workExample?.legislationIdentifier ?? ''
+              metadata.legislationIdentifier ?? ''
             "
             :versions="normVersions"
           />

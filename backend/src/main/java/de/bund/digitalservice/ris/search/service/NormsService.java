@@ -7,6 +7,7 @@ import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.repository.objectstorage.NormsBucket;
 import de.bund.digitalservice.ris.search.repository.opensearch.NormsRepository;
 import de.bund.digitalservice.ris.search.service.helper.ZipManager;
+import de.bund.digitalservice.ris.search.utils.DateUtils;
 import de.bund.digitalservice.ris.search.utils.PageUtils;
 import de.bund.digitalservice.ris.search.utils.eli.ExpressionEli;
 import de.bund.digitalservice.ris.search.utils.eli.ManifestationEli;
@@ -16,15 +17,17 @@ import java.io.OutputStream;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import org.opensearch.OpenSearchException;
 import org.opensearch.action.search.SearchRequest;
 import org.opensearch.action.search.SearchResponse;
 import org.opensearch.client.RequestOptions;
 import org.opensearch.client.RestHighLevelClient;
+import org.opensearch.common.document.DocumentField;
 import org.opensearch.data.client.orhlc.NativeSearchQuery;
 import org.opensearch.index.query.QueryBuilders;
 import org.opensearch.search.builder.SearchSourceBuilder;
@@ -52,6 +55,7 @@ public class NormsService {
   private final RestHighLevelClient openSearchRestClient;
   private final NormsBucket normsBucket;
   private final String normsIndexName;
+  private static final String DATE_FORMAT = "yyyy-MM-dd";
 
   /**
    * Constructs a new instance of {@code NormsService}.
@@ -88,7 +92,7 @@ public class NormsService {
    * @return A new {@link SearchPage} of the containing {@link Norm}.
    */
   public SearchPage<Norm> simpleSearchNorms(
-      @NotNull UniversalSearchParams params,
+      @NonNull UniversalSearchParams params,
       @Nullable NormsSearchParams normsSearchParams,
       Pageable pageable) {
 
@@ -132,8 +136,14 @@ public class NormsService {
             .query(QueryBuilders.termQuery(Norm.Fields.WORK_ELI_KEYWORD, workEli.toString()))
             .sort(Norm.Fields.ENTRY_INTO_FORCE_DATE, SortOrder.DESC)
             .docValueField(Norm.Fields.EXPRESSION_ELI_KEYWORD)
-            .docValueField(Norm.Fields.ENTRY_INTO_FORCE_DATE, "yyyy-MM-dd")
-            .docValueField(Norm.Fields.EXPIRY_DATE, "yyyy-MM-dd")
+            .docValueField(Norm.Fields.WORK_ELI_KEYWORD)
+            .docValueField(Norm.Fields.ENTRY_INTO_FORCE_DATE, DATE_FORMAT)
+            .docValueField(Norm.Fields.EXPIRY_DATE, DATE_FORMAT)
+            .docValueField(Norm.Fields.OFFICIAL_TITLE_KEYWORD)
+            .docValueField(Norm.Fields.DATE_PUBLISHED, DATE_FORMAT)
+            .docValueField(Norm.Fields.OFFICIAL_SHORT_TITLE_KEYWORD)
+            .docValueField(Norm.Fields.NORMS_DATE, DATE_FORMAT)
+            .docValueField(Norm.Fields.OFFICIAL_ABBREVIATION_KEYWORD)
             .fetchSource(false)
             .from(pageable.getPageNumber() * pageable.getPageSize())
             .size(pageable.getPageSize());
@@ -143,27 +153,38 @@ public class NormsService {
     try {
       SearchResponse response = openSearchRestClient.search(searchRequest, RequestOptions.DEFAULT);
       var hits = response.getHits();
-
       var norms =
-          Arrays.stream(response.getHits().getHits())
+          Arrays.stream(hits.getHits())
               .map(
                   hit -> {
-                    String expressionEli =
-                        hit.getFields().get(Norm.Fields.EXPRESSION_ELI_KEYWORD).getValue();
-                    LocalDate entryIntoForceDate =
-                        hit.getFields().get(Norm.Fields.ENTRY_INTO_FORCE_DATE) != null
-                            ? LocalDate.parse(
-                                hit.getFields().get(Norm.Fields.ENTRY_INTO_FORCE_DATE).getValue())
-                            : null;
-                    LocalDate expiryDate =
-                        hit.getFields().get(Norm.Fields.EXPIRY_DATE) != null
-                            ? LocalDate.parse(
-                                hit.getFields().get(Norm.Fields.EXPIRY_DATE).getValue())
-                            : null;
+                    var fields = hit.getFields();
 
+                    String returnedWorkEli = getField(fields, Norm.Fields.WORK_ELI_KEYWORD);
+                    String expressionEli = getField(fields, Norm.Fields.EXPRESSION_ELI_KEYWORD);
+                    LocalDate entryIntoForceDate =
+                        DateUtils.nullSafeParseyyyyMMdd(
+                            getField(fields, Norm.Fields.ENTRY_INTO_FORCE_DATE));
+                    LocalDate expiryDate =
+                        DateUtils.nullSafeParseyyyyMMdd(getField(fields, Norm.Fields.EXPIRY_DATE));
+                    LocalDate datePublished =
+                        DateUtils.nullSafeParseyyyyMMdd(
+                            getField(fields, Norm.Fields.DATE_PUBLISHED));
+                    LocalDate normsDate =
+                        DateUtils.nullSafeParseyyyyMMdd(getField(fields, Norm.Fields.NORMS_DATE));
+
+                    String officialTitle = getField(fields, Norm.Fields.OFFICIAL_TITLE_KEYWORD);
+                    String shortTitle = getField(fields, Norm.Fields.OFFICIAL_SHORT_TITLE_KEYWORD);
+                    String abbreviation =
+                        getField(fields, Norm.Fields.OFFICIAL_ABBREVIATION_KEYWORD);
                     return Norm.builder()
                         .id(hit.getId())
+                        .workEli(returnedWorkEli)
+                        .officialAbbreviation(abbreviation)
+                        .officialShortTitle(shortTitle)
+                        .officialTitle(officialTitle)
+                        .datePublished(datePublished)
                         .expressionEli(expressionEli)
+                        .normsDate(normsDate)
                         .entryIntoForceDate(entryIntoForceDate)
                         .expiryDate(expiryDate)
                         .build();
@@ -175,6 +196,17 @@ public class NormsService {
     } catch (IOException e) {
       throw new OpenSearchException(e);
     }
+  }
+
+  /**
+   * Returns the Optional of the string value of a DocumentField if it is part of the fields Map
+   *
+   * @param fields Map of Fieldname and DocumentField of a Searchhit
+   * @param field the field to retrieve from the Map
+   * @return Optional of a the string value of DocumentField
+   */
+  private @Nullable String getField(Map<String, DocumentField> fields, String field) {
+    return fields.get(field) != null ? fields.get(field).getValue() : null;
   }
 
   public void writeZipArchive(List<String> keys, OutputStream outputStream) throws IOException {

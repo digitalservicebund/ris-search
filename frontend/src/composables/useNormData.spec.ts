@@ -3,7 +3,6 @@ import { useFetchNormArticleContent, useFetchNormContent } from "./useNormData";
 import type {
   LegislationExpression,
   LegislationManifestation,
-  LegislationWork,
 } from "~/types/api";
 import type { FetchHook } from "ofetch";
 
@@ -38,19 +37,17 @@ describe("useNormData", () => {
 
   const expressionEli = "test-eli";
   const mockMetadata = {
-    workExample: {
-      encoding: [
-        {
-          "@id": "test-encoding-id",
-          encodingFormat: "text/html",
-          contentUrl: "/v1/test-content-url.html",
-          "@type": "LegislationObject",
-          inLanguage: "deu",
-        },
-      ],
-      hasPart: [],
-    } as Partial<LegislationExpression>,
-  } as LegislationWork;
+    encoding: [
+      {
+        "@id": "test-encoding-id",
+        encodingFormat: "text/html",
+        contentUrl: "/v1/test-content-url.html",
+        "@type": "LegislationObject",
+        inLanguage: "deu",
+      },
+    ],
+    hasPart: [],
+  } as Partial<LegislationExpression>;
   const mockHtml = `
     <section class="dokumentenkopf">
       <div class="fussnoten">Footnote content</div>
@@ -130,14 +127,12 @@ describe("useNormData", () => {
 
   it("should throw an error if contentUrl is missing", async () => {
     const mockMetadataWithouContentUrl = {
-      workExample: {
-        encoding: [
-          {
-            "@id": "test-encoding-id",
-            encodingFormat: "application/json",
-          } as Partial<LegislationManifestation>,
-        ],
-      },
+      encoding: [
+        {
+          "@id": "test-encoding-id",
+          encodingFormat: "application/json",
+        } as Partial<LegislationManifestation>,
+      ],
     };
 
     mockFetch.mockReturnValueOnce(mockMetadataWithouContentUrl);

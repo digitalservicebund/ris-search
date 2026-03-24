@@ -2,6 +2,7 @@ package de.bund.digitalservice.ris.search.integration.controller.api;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.either;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.everyItem;
@@ -127,9 +128,10 @@ class AllDocumentsSearchControllerAPITest extends ContainersIntegrationBase {
     mockMvc
         .perform(get(url).contentType(MediaType.APPLICATION_JSON))
         .andExpect(jsonPath("$.member", hasSize(3)))
-        .andExpect(jsonPath("$.member[0]['item'].documentNumber", Matchers.is("KSNR0000")))
-        .andExpect(jsonPath("$.member[1]['item'].documentNumber", Matchers.is("BFRE000087655")))
-        .andExpect(jsonPath("$.member[2]['item'].abbreviation", Matchers.is("TeG")));
+        .andExpect(
+            jsonPath(
+                "$.member[*].item.documentNumber", containsInAnyOrder("KSNR0000", "BFRE000087655")))
+        .andExpect(jsonPath("$.member[*].item.abbreviation", containsInAnyOrder("TeG")));
   }
 
   @ParameterizedTest
@@ -303,7 +305,7 @@ class AllDocumentsSearchControllerAPITest extends ContainersIntegrationBase {
                 status().isOk(),
                 jsonPath("$.member", hasSize(1)),
                 jsonPath(
-                    "$.member[0].item.workExample.legislationIdentifier",
+                    "$.member[0].item.legislationIdentifier",
                     equalTo("eli/bund/bgbl-1/1991/s102/1991-01-01/1/deu"))));
   }
 
@@ -323,13 +325,13 @@ class AllDocumentsSearchControllerAPITest extends ContainersIntegrationBase {
                 status().isOk(),
                 jsonPath("$.member", hasSize(3)),
                 jsonPath(
-                    "$.member[0].item.workExample.legislationIdentifier",
+                    "$.member[0].item.legislationIdentifier",
                     equalTo("eli/bund/bgbl-1/1991/s102/1991-01-01/1/deu")),
                 jsonPath(
-                    "$.member[1].item.workExample.legislationIdentifier",
+                    "$.member[1].item.legislationIdentifier",
                     equalTo("eli/bund/bgbl-1/1991/s102/2050-01-01/1/deu")),
                 jsonPath(
-                    "$.member[2].item.workExample.legislationIdentifier",
+                    "$.member[2].item.legislationIdentifier",
                     equalTo("eli/bund/bgbl-1/1991/s102/2020-01-01/1/deu"))));
   }
 }

@@ -153,7 +153,7 @@ export interface paths {
     };
     /**
      * Work and expression-level metadata
-     * @description Returns the work and expression-level ("workExample") metadata of a legislation item.
+     * @description Returns metadata of a legislation item.
      */
     get: operations["getLegislation"];
     put?: never;
@@ -822,7 +822,7 @@ export interface components {
       literatureType: string;
       encoding: components["schemas"]["LiteratureEncodingSchema"][];
     };
-    CollectionSchemaSearchMemberSchemaLegislationWorkSearchSchema: {
+    CollectionSchemaSearchMemberSchemaLegislationExpressionSearchSchema: {
       /** @example hydra:Collection */
       "@type"?: string;
       /** @example /v1/document?pageIndex=0&size=5 */
@@ -832,29 +832,48 @@ export interface components {
        * @example 1
        */
       totalItems: number;
-      member: components["schemas"]["SearchMemberSchemaLegislationWorkSearchSchema"][];
+      member: components["schemas"]["SearchMemberSchemaLegislationExpressionSearchSchema"][];
       view: components["schemas"]["PartialCollectionViewSchema"];
     };
-    /** @description A legislation item, across different expressions and manifestations. May be used to provide context to a `LegislationExpression` (under key `workExample`). */
+    /** @description A legislation expression and references to its manifestations. */
     LegislationExpressionSearchSchema: {
+      "@type": "LegislationExpressionSearchSchema";
+    } & (Omit<components["schemas"]["AbstractDocumentSchema"], "@type"> & {
       /** @example Legislation */
       "@type"?: string;
       /** @example /v1/legislation/eli/bund/bgbl-1/1975/s1760/1998-01-29/10/deu */
       "@id": string;
+      /**
+       * @description Amtliche Langüberschrift
+       * @example Verordnung über Kakao und Kakaoerzeugnisse
+       */
+      name: string;
       /** @example eli/bund/bgbl-1/1975/s1760/1998-01-29/10/deu */
       legislationIdentifier: string;
+      /** @description the work the expression is based on */
+      exampleOfWork: components["schemas"]["LegislationWorkSchema"];
       /**
        * @description Textual string indicating a time period in [ISO 8601 time interval format](https://en.wikipedia.org/wiki/ISO_8601#Time_intervals)
        * @example 1998-02-06/..
        */
       temporalCoverage: string;
       /**
+       * @description Amtliche Buchstabenabkürzung
+       * @example KakaoV 2003
+       */
+      abbreviation?: string;
+      /**
+       * @description Amtliche Kurzüberschrift
+       * @example Kakaoverordnung
+       */
+      alternateName: string;
+      /**
        * @description Whether the legislation expression is currently in force.
        * @enum {string}
        */
       legislationLegalForce: "InForce" | "NotInForce" | "PartiallyInForce";
       encoding: components["schemas"]["LegislationObjectSchema"][];
-    };
+    });
     LegislationObjectSchema: {
       /** @example LegislationObject */
       "@type"?: string;
@@ -867,47 +886,35 @@ export interface components {
       /** @example de */
       inLanguage: string;
     };
-    /** @description A legislation item, across different expressions and manifestations. May be used to provide context to a `LegislationExpression` (under key `workExample`). */
-    LegislationWorkSearchSchema: {
-      "@type": "LegislationWorkSearchSchema";
-    } & (Omit<components["schemas"]["AbstractDocumentSchema"], "@type"> & {
+    LegislationWorkSchema: {
       /** @example Legislation */
       "@type"?: string;
-      /** @example /v1/legislation/eli/bund/bgbl-1/1975/s1760 */
-      "@id": string;
-      /** @example Verordnung über Kakao und Kakaoerzeugnisse */
-      name: string;
       /** @example eli/bund/bgbl-1/1975/s1760 */
-      legislationIdentifier: string;
-      /** @example Kakaoverordnung */
-      alternateName: string;
-      /** @example KakaoV 2003 */
-      abbreviation?: string;
+      legislationIdentifier?: string;
       /**
        * Format: date
-       * @description The date of adoption or signature of the legislation. This is the date at which the text is officially acknowledged to be a legislation, even though it might not even be published or in force.
+       * @description Ausfertigungsdatum (The date of adoption or signature of the legislation. This is the date at which the text is officially acknowledged to be a legislation, even though it might not even be published or in force.)
        * @example 2003-12-15
        */
       legislationDate: string;
       /**
        * Format: date
-       * @description The date of first publication of the legislation, when it was published in the official gazette. This may be later than the `legislationDate`.
+       * @description Verkündungsdatum (The date of first publication of the legislation, when it was published in the official gazette. This may be later than the `legislationDate`.)
        * @example 2003-12-16
        */
       datePublished: string;
       isPartOf?: components["schemas"]["PublicationIssueSchema"];
-      workExample?: components["schemas"]["LegislationExpressionSearchSchema"];
-    });
+    };
     PublicationIssueSchema: {
       /** @example PublicationIssue */
       "@type"?: string;
       /** @example BGBL I 2003, 1760 */
       name: string;
     };
-    SearchMemberSchemaLegislationWorkSearchSchema: {
+    SearchMemberSchemaLegislationExpressionSearchSchema: {
       /** @example SearchResult */
       "@type"?: string;
-      item: components["schemas"]["LegislationWorkSearchSchema"];
+      item: components["schemas"]["LegislationExpressionSearchSchema"];
       textMatches: components["schemas"]["TextMatchSchema"][];
     };
     LegislationExpressionPartSchema: {
@@ -939,12 +946,29 @@ export interface components {
       /** @description The source data for this part, if available on its own */
       encoding?: components["schemas"]["LegislationObjectSchema"][];
     };
-    /** @description A legislation item, across different expressions and manifestations. May be used to provide context to a `LegislationExpression` (under key `workExample`). */
+    /** @description A legislation expression and references to its manifestations. */
     LegislationExpressionSchema: {
       /** @example Legislation */
       "@type"?: string;
       /** @example /v1/legislation/eli/bund/bgbl-1/1975/s1760/1998-01-29/10/deu */
       "@id": string;
+      /**
+       * @description Amtliche Langüberschrift
+       * @example Verordnung über Kakao und Kakaoerzeugnisse
+       */
+      name: string;
+      /**
+       * @description Amtliche Buchstabenabkürzung
+       * @example KakaoV 2003
+       */
+      abbreviation?: string;
+      /**
+       * @description Amtliche Kurzüberschrift
+       * @example Kakaoverordnung
+       */
+      alternateName: string;
+      /** @description the work the expression is based on */
+      exampleOfWork: components["schemas"]["LegislationWorkSchema"];
       /** @example eli/bund/bgbl-1/1975/s1760/1998-01-29/10/deu */
       legislationIdentifier: string;
       /**
@@ -961,51 +985,6 @@ export interface components {
       /** @description List of components (articles, preambles, conclusions, attachments, …) that form this legislation item. */
       hasPart?: components["schemas"]["LegislationExpressionPartSchema"][];
       encoding: components["schemas"]["LegislationObjectSchema"][];
-    };
-    /** @description A legislation item, across different expressions and manifestations. May be used to provide context to a `LegislationExpression` (under key `workExample`). */
-    LegislationWorkSchema: {
-      /** @example Legislation */
-      "@type"?: string;
-      /**
-       * @description Based on the European Legislation Identifier (ELI)
-       * @example /v1/legislation/eli/bund/bgbl-1/1975/s1760
-       */
-      "@id": string;
-      /**
-       * @description Amtliche Langüberschrift
-       * @example Verordnung über Kakao und Kakaoerzeugnisse
-       */
-      name: string;
-      /**
-       * @description European Legislation Identifier (ELI)
-       * @example eli/bund/bgbl-1/1975/s1760/regelungstext-1
-       */
-      legislationIdentifier: string;
-      /**
-       * @description Amtliche Kurzüberschrift
-       * @example Kakaoverordnung
-       */
-      alternateName: string;
-      /**
-       * @description Amtliche Buchstabenabkürzung
-       * @example KakaoV 2003
-       */
-      abbreviation?: string;
-      /**
-       * Format: date
-       * @description Ausfertigungsdatum (The date of adoption or signature of the legislation. This is the date at which the text is officially acknowledged to be a legislation, even though it might not even be published or in force.)
-       * @example 2003-12-15
-       */
-      legislationDate: string;
-      /**
-       * Format: date
-       * @description Verkündungsdatum (The date of first publication of the legislation, when it was published in the official gazette. This may be later than the `legislationDate`.)
-       * @example 2003-12-16
-       */
-      datePublished: string;
-      isPartOf?: components["schemas"]["PublicationIssueSchema"];
-      /** @description Expression-level details (<i>an "exemplary" expression of this work</i>) */
-      workExample?: components["schemas"]["LegislationExpressionSchema"];
     };
     TableOfContentsSchema: {
       /** @example TocEntry */
@@ -1139,7 +1118,7 @@ export interface components {
       item:
         | components["schemas"]["AdministrativeDirectiveSearchSchema"]
         | components["schemas"]["CaseLawSearchSchema"]
-        | components["schemas"]["LegislationWorkSearchSchema"]
+        | components["schemas"]["LegislationExpressionSearchSchema"]
         | components["schemas"]["LiteratureSearchSchema"];
       textMatches: components["schemas"]["TextMatchSchema"][];
     };
@@ -1545,7 +1524,7 @@ export interface operations {
           [name: string]: unknown;
         };
         content: {
-          "application/json": components["schemas"]["CollectionSchemaSearchMemberSchemaLegislationWorkSearchSchema"];
+          "application/json": components["schemas"]["CollectionSchemaSearchMemberSchemaLegislationExpressionSearchSchema"];
         };
       };
       /** @description Unprocessable Content */
@@ -1554,7 +1533,7 @@ export interface operations {
           [name: string]: unknown;
         };
         content: {
-          "application/json": components["schemas"]["CollectionSchemaSearchMemberSchemaLegislationWorkSearchSchema"];
+          "application/json": components["schemas"]["CollectionSchemaSearchMemberSchemaLegislationExpressionSearchSchema"];
         };
       };
     };
@@ -1598,7 +1577,7 @@ export interface operations {
           [name: string]: unknown;
         };
         content: {
-          "application/json": components["schemas"]["LegislationWorkSchema"];
+          "application/json": components["schemas"]["LegislationExpressionSchema"];
         };
       };
       /** @description Not Found */
@@ -2074,7 +2053,7 @@ export interface operations {
           [name: string]: unknown;
         };
         content: {
-          "*/*": components["schemas"]["CollectionSchemaSearchMemberSchemaLegislationWorkSearchSchema"];
+          "*/*": components["schemas"]["CollectionSchemaSearchMemberSchemaLegislationExpressionSearchSchema"];
         };
       };
       /** @description Internal Server Error */

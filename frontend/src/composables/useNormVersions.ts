@@ -14,17 +14,17 @@ interface UseNormVersions {
   sortedVersions: ComputedRef<LegislationExpression[]>;
 }
 
-export function useNormVersions(workEli?: string): UseNormVersions {
-  const { data, status } = getNormVersions(workEli);
+export function useNormVersions(eli: string): UseNormVersions {
+  const { data, status } = getNormVersions(eli);
   const sortedVersions = computed(() => data.value?.member ?? []);
   return { status, sortedVersions };
 }
 
-function getNormVersions(workEli?: string) {
+function getNormVersions(eli: string) {
   const immediate = true;
   const { status, data, error } = useRisBackend<
     JSONLDList<LegislationExpression>
-  >(`/v1/legislation/work-example/${workEli}`, {
+  >(`/v1/legislation/work-example/${eli}`, {
     immediate: immediate,
   });
 
@@ -51,10 +51,10 @@ function getNorms(params: LegislationSearchParams) {
   return { status, data };
 }
 
-export function useValidNormVersions(workEli?: string) {
+export function useValidNormVersions(eli: string) {
   const today = getCurrentDateInGermanyFormatted();
   return getNorms({
-    eli: workEli,
+    eli: eli,
     temporalCoverageFrom: today,
     temporalCoverageTo: today,
     size: 300,

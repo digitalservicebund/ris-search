@@ -70,7 +70,7 @@ export type CourtsSearchParams = QueryParams<"getCourts">;
 // Frontend-only types
 export type AnyDocument =
   | CaseLaw
-  | LegislationWork
+  | LegislationExpression
   | Literature
   | AdministrativeDirective;
 
