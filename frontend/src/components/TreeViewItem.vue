@@ -33,6 +33,8 @@ const isExpanded = computed(() => expandedKeys.value.includes(item.key));
 
 const isFocused = computed(() => item.key === focusedKey);
 
+const contentTag = computed(() => (item.to ? NuxtLink : "button"));
+
 const accessibleLabel = computed(() => {
   const subtitle = item.subtitle ? `, ${item.subtitle}` : "";
   return `${item.title}${subtitle}`;
@@ -40,9 +42,18 @@ const accessibleLabel = computed(() => {
 
 const isSelected = computed(() => item.key === selected.value);
 
-function onSelect(item: TreeItem) {
+function onSelect() {
   emit("click", item);
   selected.value = item.key;
+}
+
+function onHeaderClick() {
+  if (isParent.value) {
+    toggleSelf();
+    return;
+  }
+
+  onSelect();
 }
 
 function toggleSelf() {
@@ -71,31 +82,69 @@ function onToggleDeep() {
     :aria-selected="isSelected"
     :tabindex="isFocused ? 0 : -1"
   >
-    <div class="header">
+    <!-- Allowing clicking on a non-interactive element in this case to increase
+    the clickable area without invalid nesting of interactive elements. Should
+    be fine because the same functionality is also exposed via actual
+    interactive elements. -->
+    <div class="header" @click="onHeaderClick">
       <div v-if="isParent" class="tree-control">
         <button
           :aria-label="isExpanded ? 'Ebene schließen' : 'Ebene öffnen'"
           class="h-24 w-24"
           tabindex="-1"
           type="button"
-          @click="toggleSelf"
+          @click.stop="toggleSelf"
         >
           <IcBaselineExpandMore v-if="!isExpanded" />
           <IcBaselineExpandLess v-else />
         </button>
       </div>
 
-      <component
-        :is="item.to ? NuxtLink : 'button'"
-        :to="item.to"
-        :type="item.to ? undefined : 'button'"
-        class="content"
-        tabindex="-1"
-        @click="onSelect(item)"
-      >
-        <span class="title">{{ item.title }}</span>
-        <span v-if="item.subtitle" class="subtitle">{{ item.subtitle }}</span>
-      </component>
+      <div class="content">
+        <div v-if="item.to" class="content-action">
+          <component
+            :is="contentTag"
+            :to="item.to"
+            class="title-action"
+            tabindex="-1"
+            @click.stop="onSelect()"
+          >
+            {{ item.title }}
+          </component>
+        </div>
+        <component
+          v-else
+          :is="contentTag"
+          :type="'button'"
+          class="title"
+          tabindex="-1"
+          @click.stop="onSelect()"
+        >
+          {{ item.title }}
+        </component>
+
+        <div v-if="item.subtitle && item.to" class="content-action">
+          <component
+            :is="contentTag"
+            :to="item.to"
+            class="subtitle-action"
+            tabindex="-1"
+            @click.stop="onSelect()"
+          >
+            {{ item.subtitle }}
+          </component>
+        </div>
+        <component
+          v-else-if="item.subtitle"
+          :is="contentTag"
+          :type="'button'"
+          class="subtitle"
+          tabindex="-1"
+          @click.stop="onSelect()"
+        >
+          {{ item.subtitle }}
+        </component>
+      </div>
 
       <div v-if="isParent" class="tree-control">
         <button
@@ -107,7 +156,7 @@ function onToggleDeep() {
               ? 'Alle Ebenen zuklappen'
               : 'Alle Ebenen ausklappen'
           "
-          @click="onToggleDeep"
+          @click.stop="onToggleDeep"
         >
           <IcBaselineUnfoldLess v-if="itemIsDeepExpanded" />
           <IcBaselineUnfoldMore v-else />
@@ -152,13 +201,12 @@ function onToggleDeep() {
  * of the controls.
  */
 @scope ([role=treeitem]) to ([role=treeitem]) {
-  /* Focus indicator for keyboard navigation (roving tabindex) */
   :scope:focus-visible {
     @apply outline-4 outline-offset-4 outline-blue-800;
   }
 
   * {
-    outline: none;
+    @apply cursor-pointer outline-none;
   }
 
   .header {
@@ -166,15 +214,21 @@ function onToggleDeep() {
   }
 
   .content {
-    @apply relative flex flex-1 cursor-pointer flex-col gap-4 text-left wrap-break-word hyphens-auto after:absolute after:-inset-x-8 after:-inset-y-8 after:content-["_"];
+    @apply flex flex-1 flex-col gap-4;
 
-    &:hover .title {
+    .title:hover,
+    &:has(.subtitle:hover) .title {
       @apply underline underline-offset-2;
     }
   }
 
+  .title,
   .subtitle {
-    @apply ris-label2-regular flex-1 text-gray-900;
+    @apply self-start text-left wrap-break-word hyphens-auto;
+  }
+
+  .subtitle {
+    @apply ris-label2-regular text-gray-900;
   }
 
   .tree-control {
@@ -215,11 +269,15 @@ function onToggleDeep() {
     }
 
     .content {
-      @apply flex-row gap-8 after:-inset-x-16 after:-inset-y-16;
+      @apply relative flex-row gap-8 after:absolute after:-inset-y-16 after:-right-16 after:-left-[1.625rem] after:content-["_"];
 
       &:hover {
-        .title:not(:only-child) {
-          @apply no-underline;
+        .title {
+          @apply underline;
+
+          &:not(:only-child) {
+            @apply no-underline;
+          }
         }
 
         .subtitle {
@@ -228,8 +286,12 @@ function onToggleDeep() {
       }
     }
 
-    .title:not(:only-child) {
-      @apply ris-label1-bold;
+    .title {
+      @apply flex-none;
+
+      &:not(:only-child) {
+        @apply ris-label1-bold;
+      }
     }
 
     .subtitle {

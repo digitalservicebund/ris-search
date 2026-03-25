@@ -161,6 +161,18 @@ describe("TreeViewItem", () => {
     expect(emitted("update:selected")).toContainEqual(["a"]);
   });
 
+  it("toggles a parent when clicking the non-link header area", async () => {
+    const user = userEvent.setup();
+    const { container, emitted } = await render(parent, []);
+
+    const content = container.querySelector(".content");
+    expect(content).toBeTruthy();
+    await user.click(content!);
+
+    expect(emitted("update:expandedKeys")).toContainEqual([["p"]]);
+    expect(emitted("click")).not.toContainEqual([parent]);
+  });
+
   describe("link", () => {
     const linkedLeaf: TreeItem = {
       key: "a",
@@ -171,6 +183,30 @@ describe("TreeViewItem", () => {
     it("renders a link when `to` is set", async () => {
       await render(linkedLeaf);
       expect(screen.getByRole("link", { name: "Item A" })).toBeInTheDocument();
+    });
+
+    it("only exposes the text content as a link", async () => {
+      const { container } = await render({
+        key: "p",
+        title: "Parent",
+        subtitle: "Description",
+        to: "/some/path",
+        children: [{ key: "c1", title: "Child 1" }],
+      });
+
+      const links = screen.getAllByRole("link");
+
+      expect(links).toHaveLength(2);
+      expect(links[0]).toHaveTextContent("Parent");
+      expect(links[0]).toHaveClass("title-action");
+      expect(links[1]).toHaveTextContent("Description");
+      expect(links[1]).toHaveClass("subtitle-action");
+
+      const titleWidth = (links[0] as HTMLElement).style.width;
+      const subtitleWidth = (links[1] as HTMLElement).style.width;
+      expect(titleWidth).toBe("");
+      expect(subtitleWidth).toBe("");
+      expect(container.querySelectorAll(".content-action")).toHaveLength(2);
     });
 
     it("renders a button for the content when `to` is not set", async () => {
