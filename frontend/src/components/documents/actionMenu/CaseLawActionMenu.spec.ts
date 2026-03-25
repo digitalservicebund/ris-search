@@ -1,6 +1,6 @@
-import { mockNuxtImport } from "@nuxt/test-utils/runtime";
+import { mockNuxtImport, renderSuspended } from "@nuxt/test-utils/runtime";
 import { userEvent } from "@testing-library/user-event/dist/cjs/index.js";
-import { render, screen } from "@testing-library/vue";
+import { screen } from "@testing-library/vue";
 import Tooltip from "primevue/tooltip";
 import { describe, expect, it, vi } from "vitest";
 import CaseLawActionMenu from "~/components/documents/actionMenu/CaseLawActionMenu.vue";
@@ -36,7 +36,7 @@ const mockedCaselaw = {
 } as CaseLaw;
 
 function renderCaseLawActionMenu() {
-  render(CaseLawActionMenu, {
+  return renderSuspended(CaseLawActionMenu, {
     props: {
       caseLaw: mockedCaselaw,
     },
@@ -61,7 +61,7 @@ describe("CaseLawActionMenu", () => {
   });
 
   it("renders all actions in correct order", async () => {
-    renderCaseLawActionMenu();
+    await renderCaseLawActionMenu();
     const menuitems = await screen.findAllByRole("menuitem");
 
     expect(menuitems).toHaveLength(4);
@@ -73,7 +73,7 @@ describe("CaseLawActionMenu", () => {
 
   it("can copy link to currently viewed document", async () => {
     const user = userEvent.setup();
-    renderCaseLawActionMenu();
+    await renderCaseLawActionMenu();
 
     const copyButton = screen.getByRole("menuitem", {
       name: "Link kopieren",
@@ -97,7 +97,7 @@ describe("CaseLawActionMenu", () => {
   it("can open the print dialog", async () => {
     globalThis.print = vi.fn();
     const user = userEvent.setup();
-    renderCaseLawActionMenu();
+    await renderCaseLawActionMenu();
 
     const printButton = screen.getByRole("menuitem", {
       name: "Drucken",
@@ -111,7 +111,7 @@ describe("CaseLawActionMenu", () => {
   });
 
   it("renders disabled PDF button", async () => {
-    renderCaseLawActionMenu();
+    await renderCaseLawActionMenu();
 
     const pdfButton = screen.getByRole("menuitem", {
       name: "Als PDF speichern",
@@ -121,7 +121,7 @@ describe("CaseLawActionMenu", () => {
   });
 
   it("can open link to xml view", async () => {
-    renderCaseLawActionMenu();
+    await renderCaseLawActionMenu();
 
     const xmlLink = screen.getByRole("menuitem", {
       name: "XML anzeigen",

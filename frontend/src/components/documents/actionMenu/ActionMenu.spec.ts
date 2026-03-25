@@ -1,5 +1,6 @@
+import { renderSuspended } from "@nuxt/test-utils/runtime";
 import { userEvent } from "@testing-library/user-event";
-import { render, screen } from "@testing-library/vue";
+import { screen } from "@testing-library/vue";
 import Tooltip from "primevue/tooltip";
 import { vi } from "vitest";
 import ActionMenu, {
@@ -31,7 +32,7 @@ describe("ActionMenu", () => {
   it("renders provided action items", async () => {
     const user = userEvent.setup();
 
-    render(ActionMenu, {
+    await renderSuspended(ActionMenu, {
       props: {
         actions: actions,
       },
@@ -88,7 +89,7 @@ describe("ActionMenu", () => {
   it("renders disabled action items", async () => {
     const user = userEvent.setup();
 
-    render(ActionMenu, {
+    await renderSuspended(ActionMenu, {
       props: {
         actions: [
           {

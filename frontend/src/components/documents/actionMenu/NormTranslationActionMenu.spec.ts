@@ -1,6 +1,6 @@
-import { mockNuxtImport } from "@nuxt/test-utils/runtime";
+import { mockNuxtImport, renderSuspended } from "@nuxt/test-utils/runtime";
 import { userEvent } from "@testing-library/user-event/dist/cjs/index.js";
-import { render, screen } from "@testing-library/vue";
+import { screen } from "@testing-library/vue";
 import Tooltip from "primevue/tooltip";
 import { describe, expect, it, vi } from "vitest";
 import NormTranslationActionMenu from "~/components/documents/actionMenu/NormTranslationActionMenu.vue";
@@ -22,7 +22,7 @@ mockNuxtImport("useRequestURL", () => {
 });
 
 function renderLiteratureActionMenu() {
-  render(NormTranslationActionMenu, {
+  return renderSuspended(NormTranslationActionMenu, {
     global: {
       directives: { tooltip: Tooltip },
       stubs: {
@@ -44,7 +44,7 @@ describe("NormTranslationActionMenu", () => {
   });
 
   it("renders all actions in correct order", async () => {
-    renderLiteratureActionMenu();
+    await renderLiteratureActionMenu();
     const menuitems = await screen.findAllByRole("menuitem");
 
     expect(menuitems).toHaveLength(3);
@@ -55,7 +55,7 @@ describe("NormTranslationActionMenu", () => {
 
   it("can copy link to currently viewed document", async () => {
     const user = userEvent.setup();
-    renderLiteratureActionMenu();
+    await renderLiteratureActionMenu();
 
     const copyButton = screen.getByRole("menuitem", {
       name: "Link to translation",
@@ -79,7 +79,7 @@ describe("NormTranslationActionMenu", () => {
   it("can open the print dialog", async () => {
     globalThis.print = vi.fn();
     const user = userEvent.setup();
-    renderLiteratureActionMenu();
+    await renderLiteratureActionMenu();
 
     const printButton = screen.getByRole("menuitem", {
       name: "Drucken",
@@ -93,7 +93,7 @@ describe("NormTranslationActionMenu", () => {
   });
 
   it("renders disabled PDF button", async () => {
-    renderLiteratureActionMenu();
+    await renderLiteratureActionMenu();
 
     const pdfButton = screen.getByRole("menuitem", {
       name: "Als PDF speichern",

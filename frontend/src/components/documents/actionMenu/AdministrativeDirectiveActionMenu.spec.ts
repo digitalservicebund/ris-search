@@ -1,6 +1,6 @@
-import { mockNuxtImport } from "@nuxt/test-utils/runtime";
+import { mockNuxtImport, renderSuspended } from "@nuxt/test-utils/runtime";
 import { userEvent } from "@testing-library/user-event/dist/cjs/index.js";
-import { render, screen } from "@testing-library/vue";
+import { screen } from "@testing-library/vue";
 import Tooltip from "primevue/tooltip";
 import { describe, expect, it, vi } from "vitest";
 import AdministrativeDirectiveActionMenu from "~/components/documents/actionMenu/AdministrativeDirectiveActionMenu.vue";
@@ -37,7 +37,7 @@ const mockedAdministrativeDirective = {
 } as AdministrativeDirective;
 
 function renderAdministrativeDirectiveActionMenu() {
-  render(AdministrativeDirectiveActionMenu, {
+  return renderSuspended(AdministrativeDirectiveActionMenu, {
     props: {
       administrativeDirective: mockedAdministrativeDirective,
     },
@@ -62,7 +62,7 @@ describe("AdministrativeDirectiveActionMenu", () => {
   });
 
   it("renders all actions in correct order", async () => {
-    renderAdministrativeDirectiveActionMenu();
+    await renderAdministrativeDirectiveActionMenu();
     const menuitems = await screen.findAllByRole("menuitem");
 
     expect(menuitems).toHaveLength(4);
@@ -74,7 +74,7 @@ describe("AdministrativeDirectiveActionMenu", () => {
 
   it("can copy link to currently viewed document", async () => {
     const user = userEvent.setup();
-    renderAdministrativeDirectiveActionMenu();
+    await renderAdministrativeDirectiveActionMenu();
 
     const copyButton = screen.getByRole("menuitem", {
       name: "Link kopieren",
@@ -98,7 +98,7 @@ describe("AdministrativeDirectiveActionMenu", () => {
   it("can open the print dialog", async () => {
     globalThis.print = vi.fn();
     const user = userEvent.setup();
-    renderAdministrativeDirectiveActionMenu();
+    await renderAdministrativeDirectiveActionMenu();
 
     const printButton = screen.getByRole("menuitem", {
       name: "Drucken",
@@ -112,7 +112,7 @@ describe("AdministrativeDirectiveActionMenu", () => {
   });
 
   it("renders disabled PDF button", async () => {
-    renderAdministrativeDirectiveActionMenu();
+    await renderAdministrativeDirectiveActionMenu();
 
     const pdfButton = screen.getByRole("menuitem", {
       name: "Als PDF speichern",
@@ -122,7 +122,7 @@ describe("AdministrativeDirectiveActionMenu", () => {
   });
 
   it("can open link to xml view", async () => {
-    renderAdministrativeDirectiveActionMenu();
+    await renderAdministrativeDirectiveActionMenu();
 
     const xmlLink = screen.getByRole("menuitem", {
       name: "XML anzeigen",
