@@ -6,8 +6,14 @@ import IcBaselineUnfoldLess from "~icons/ic/baseline-unfold-less";
 import IcBaselineUnfoldMore from "~icons/ic/baseline-unfold-more";
 import type { TreeItem } from "./TreeView.vue";
 
-const props = defineProps<{
+const {
+  item,
+  focusedKey,
+  level = 1,
+} = defineProps<{
   item: TreeItem;
+  focusedKey?: string;
+  level?: number;
 }>();
 
 const emit = defineEmits<{
@@ -21,68 +27,49 @@ const expandedKeys = defineModel<string[]>("expandedKeys", { required: true });
 // all its children.
 const selected = defineModel<string>("selected");
 
-const isParent = computed(() => !!props.item.children?.length);
+const isParent = computed(() => !!item.children?.length);
 
-const isExpanded = computed(() => expandedKeys.value.includes(props.item.key));
+const isExpanded = computed(() => expandedKeys.value.includes(item.key));
+
+const isFocused = computed(() => item.key === focusedKey);
+
+const contentTag = computed(() => (item.to ? NuxtLink : "button"));
 
 const accessibleLabel = computed(() => {
-  const subtitle = props.item.subtitle ? `, ${props.item.subtitle}` : "";
-  if (!isParent.value) return `${props.item.title}${subtitle}`;
-  return `${props.item.title}${subtitle} ${isExpanded.value ? "(geöffnet)" : "(geschlossen)"}`;
+  const subtitle = item.subtitle ? `, ${item.subtitle}` : "";
+  return `${item.title}${subtitle}`;
 });
 
-const isSelected = computed(() => props.item.key === selected.value);
+const isSelected = computed(() => item.key === selected.value);
 
-function onSelect(item: TreeItem) {
+function onSelect() {
   emit("click", item);
   selected.value = item.key;
 }
 
+function onHeaderClick() {
+  if (isParent.value) {
+    toggleSelf();
+    return;
+  }
+
+  onSelect();
+}
+
 function toggleSelf() {
   if (isExpanded.value) {
-    expandedKeys.value = expandedKeys.value.filter((k) => k !== props.item.key);
+    expandedKeys.value = expandedKeys.value.filter((k) => k !== item.key);
   } else {
-    expandedKeys.value = [...expandedKeys.value, props.item.key];
+    expandedKeys.value = [...expandedKeys.value, item.key];
   }
 }
 
-/** Collect keys of all descendant nodes that have children. */
-function getChildKeys(item: TreeItem): string[] {
-  if (!item.children?.length) return [];
-  return item.children.flatMap((child) =>
-    child.children?.length ? [child.key, ...getChildKeys(child)] : [],
-  );
-}
-
-const childKeys = computed(() => getChildKeys(props.item));
-
-/**
- * Shorthand for the node itself and all children. Needed for "deep" toggling
- * of the node and all its children.
- */
-const subtreeKeys = computed(() => [props.item.key, ...childKeys.value]);
-
-/** True if the node and all its children are expanded. */
-const isDeepExpanded = computed(() =>
-  subtreeKeys.value.every((k) => expandedKeys.value.includes(k)),
+const itemIsDeepExpanded = computed(() =>
+  isDeepExpanded(item, expandedKeys.value),
 );
 
-/**
- * Toggles the expanded state of the node and all its children:
- *
- * - if all are expanded, close all
- * - if all are closed, expand all
- * - if the state is mixed, expand all
- */
-function toggleDeep() {
-  if (isDeepExpanded.value) {
-    const toRemove = new Set(subtreeKeys.value);
-    expandedKeys.value = expandedKeys.value.filter((k) => !toRemove.has(k));
-  } else {
-    const existing = new Set(expandedKeys.value);
-    const toAdd = subtreeKeys.value.filter((k) => !existing.has(k));
-    expandedKeys.value = [...expandedKeys.value, ...toAdd];
-  }
+function onToggleDeep() {
+  expandedKeys.value = toggleDeep(item, expandedKeys.value);
 }
 </script>
 
@@ -91,42 +78,66 @@ function toggleDeep() {
     role="treeitem"
     :aria-expanded="isParent ? isExpanded : undefined"
     :aria-label="accessibleLabel"
+    :aria-level="level"
     :aria-selected="isSelected"
+    :tabindex="isFocused ? 0 : -1"
   >
-    <div class="header">
+    <!-- Allowing clicking on a non-interactive element in this case to increase
+    the clickable area without invalid nesting of interactive elements. Should
+    be fine because the same functionality is also exposed via actual
+    interactive elements. -->
+    <div class="header" @click="onHeaderClick">
       <div v-if="isParent" class="tree-control">
         <button
           :aria-label="isExpanded ? 'Ebene schließen' : 'Ebene öffnen'"
           class="h-24 w-24"
+          tabindex="-1"
           type="button"
-          @click="toggleSelf"
+          @click.stop="toggleSelf"
         >
           <IcBaselineExpandMore v-if="!isExpanded" />
           <IcBaselineExpandLess v-else />
         </button>
       </div>
 
-      <component
-        :is="item.to ? NuxtLink : 'button'"
-        :type="item.to ? undefined : 'button'"
-        :to="item.to"
-        class="content"
-        @click="onSelect(item)"
-      >
-        <span class="title">{{ item.title }}</span>
-        <span v-if="item.subtitle" class="subtitle">{{ item.subtitle }}</span>
-      </component>
+      <div class="content">
+        <component
+          :is="contentTag"
+          :to="item.to"
+          :type="item.to ? undefined : 'button'"
+          class="title"
+          tabindex="-1"
+          @click.stop="onSelect()"
+        >
+          {{ item.title }}
+        </component>
+
+        <component
+          v-if="item.subtitle"
+          :is="contentTag"
+          :to="item.to"
+          :type="item.to ? undefined : 'button'"
+          class="subtitle"
+          tabindex="-1"
+          @click.stop="onSelect()"
+        >
+          {{ item.subtitle }}
+        </component>
+      </div>
 
       <div v-if="isParent" class="tree-control">
         <button
           class="h-40 w-40"
+          tabindex="-1"
           type="button"
           :aria-label="
-            isDeepExpanded ? 'Alle Ebenen zuklappen' : 'Alle Ebenen ausklappen'
+            itemIsDeepExpanded
+              ? 'Alle Ebenen zuklappen'
+              : 'Alle Ebenen ausklappen'
           "
-          @click="toggleDeep"
+          @click.stop="onToggleDeep"
         >
-          <IcBaselineUnfoldLess v-if="isDeepExpanded" />
+          <IcBaselineUnfoldLess v-if="itemIsDeepExpanded" />
           <IcBaselineUnfoldMore v-else />
         </button>
       </div>
@@ -136,7 +147,9 @@ function toggleDeep() {
       <TreeViewItem
         v-for="child in item.children"
         :key="child.key"
+        :focused-key="focusedKey"
         :item="child"
+        :level="level + 1"
         v-model:expanded-keys="expandedKeys"
         v-model:selected="selected"
         @click="emit('click', $event)"
@@ -167,20 +180,33 @@ function toggleDeep() {
  * of the controls.
  */
 @scope ([role=treeitem]) to ([role=treeitem]) {
+  :scope:focus-visible {
+    @apply outline-4 outline-offset-4 outline-blue-800;
+  }
+
+  * {
+    @apply cursor-pointer outline-none;
+  }
+
   .header {
     @apply text-gray-1000 ris-label1-regular mb-2 flex gap-8 border-l-4 border-l-transparent py-8 pr-8 pl-12 hover:border-blue-500 hover:bg-blue-200 active:border-blue-800 active:bg-blue-300;
   }
 
   .content {
-    @apply relative flex flex-1 cursor-pointer flex-col gap-4 text-left wrap-break-word hyphens-auto after:absolute after:-inset-x-8 after:-inset-y-8 after:content-["_"];
+    @apply flex flex-1 flex-col gap-4;
 
-    &:hover .title {
+    :is(.title, .subtitle) {
+      @apply self-start text-left wrap-break-word hyphens-auto;
+    }
+
+    .subtitle {
+      @apply ris-label2-regular text-gray-900;
+    }
+
+    .title:hover,
+    &:has(.subtitle:hover) .title {
       @apply underline underline-offset-2;
     }
-  }
-
-  .subtitle {
-    @apply ris-label2-regular flex-1 text-gray-900;
   }
 
   .tree-control {
@@ -190,8 +216,12 @@ function toggleDeep() {
       @apply after:right-0 after:-left-16;
     }
 
-    &:last-child button {
-      @apply after:-right-8 after:left-0;
+    &:last-child {
+      @apply flex items-center;
+
+      button {
+        @apply after:-right-8 after:left-0;
+      }
     }
 
     button {
@@ -205,7 +235,7 @@ function toggleDeep() {
       @apply border-l-blue-500 bg-blue-200 hover:bg-blue-300 active:border-blue-800 active:bg-blue-300;
     }
 
-    .title {
+    .content .title {
       @apply ris-label1-bold;
     }
   }
@@ -213,29 +243,37 @@ function toggleDeep() {
   /* leaf node */
   &:not([aria-expanded]) {
     .header {
-      @apply ml-8 py-16 pr-16 pl-[1.125rem];
+      @apply py-16 pr-16 pl-[1.625rem];
     }
 
     .content {
-      @apply flex-row gap-8 after:-inset-x-16 after:-inset-y-16;
+      @apply relative flex-row gap-8 after:absolute after:-inset-y-16 after:-right-16 after:-left-[1.625rem] after:content-["_"];
+
+      .title {
+        @apply flex-none;
+
+        &:not(:only-child) {
+          @apply ris-label1-bold;
+        }
+      }
+
+      .subtitle {
+        @apply ris-label1-regular text-gray-1000;
+      }
 
       &:hover {
-        .title:not(:only-child) {
-          @apply no-underline;
+        .title {
+          @apply underline;
+
+          &:not(:only-child) {
+            @apply no-underline;
+          }
         }
 
         .subtitle {
           @apply underline underline-offset-2;
         }
       }
-    }
-
-    .title:not(:only-child) {
-      @apply ris-label1-bold;
-    }
-
-    .subtitle {
-      @apply ris-label1-regular text-gray-1000;
     }
   }
 
@@ -244,12 +282,14 @@ function toggleDeep() {
       @apply border-blue-800 bg-blue-300 hover:border-blue-900 hover:bg-blue-500;
     }
 
-    .title {
-      @apply ris-label1-bold flex-none;
-    }
+    .content {
+      .title {
+        @apply ris-label1-bold flex-none;
+      }
 
-    .subtitle {
-      @apply text-gray-1000;
+      .subtitle {
+        @apply text-gray-1000;
+      }
     }
 
     &:not([aria-expanded]) :is(.title, .subtitle) {
