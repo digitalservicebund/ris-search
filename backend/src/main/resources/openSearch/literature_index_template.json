@@ -29,6 +29,9 @@
           "type": "alias",
           "path": "norm_references"
         },
+        "id": {
+          "type": "keyword"
+        },
         "document_number": {
           "type": "text",
           "analyzer": "custom_german_analyzer",
