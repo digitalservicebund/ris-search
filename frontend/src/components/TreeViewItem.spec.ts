@@ -185,30 +185,6 @@ describe("TreeViewItem", () => {
       expect(screen.getByRole("link", { name: "Item A" })).toBeInTheDocument();
     });
 
-    it("only exposes the text content as a link", async () => {
-      const { container } = await render({
-        key: "p",
-        title: "Parent",
-        subtitle: "Description",
-        to: "/",
-        children: [{ key: "c1", title: "Child 1" }],
-      });
-
-      const links = screen.getAllByRole("link");
-
-      expect(links).toHaveLength(2);
-      expect(links[0]).toHaveTextContent("Parent");
-      expect(links[0]).toHaveClass("title-action");
-      expect(links[1]).toHaveTextContent("Description");
-      expect(links[1]).toHaveClass("subtitle-action");
-
-      const titleWidth = (links[0] as HTMLElement).style.width;
-      const subtitleWidth = (links[1] as HTMLElement).style.width;
-      expect(titleWidth).toBe("");
-      expect(subtitleWidth).toBe("");
-      expect(container.querySelectorAll(".content-action")).toHaveLength(2);
-    });
-
     it("renders a button for the content when `to` is not set", async () => {
       await render(leaf);
       expect(screen.getByRole("button")).toBeInTheDocument();
@@ -296,7 +272,7 @@ describe("TreeViewItem", () => {
     });
   });
 
-  describe("roving tabindex", () => {
+  describe("tabindex", () => {
     it("makes item focusable when its key matches the focused key", async () => {
       await render(leaf, [], undefined, "a");
       expect(screen.getByRole("treeitem")).toHaveAttribute("tabindex", "0");

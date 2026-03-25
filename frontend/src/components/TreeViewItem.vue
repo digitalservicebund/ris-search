@@ -101,21 +101,10 @@ function onToggleDeep() {
       </div>
 
       <div class="content">
-        <div v-if="item.to" class="content-action">
-          <component
-            :is="contentTag"
-            :to="item.to"
-            class="title-action"
-            tabindex="-1"
-            @click.stop="onSelect()"
-          >
-            {{ item.title }}
-          </component>
-        </div>
         <component
-          v-else
           :is="contentTag"
-          :type="'button'"
+          :to="item.to"
+          :type="item.to ? undefined : 'button'"
           class="title"
           tabindex="-1"
           @click.stop="onSelect()"
@@ -123,21 +112,11 @@ function onToggleDeep() {
           {{ item.title }}
         </component>
 
-        <div v-if="item.subtitle && item.to" class="content-action">
-          <component
-            :is="contentTag"
-            :to="item.to"
-            class="subtitle-action"
-            tabindex="-1"
-            @click.stop="onSelect()"
-          >
-            {{ item.subtitle }}
-          </component>
-        </div>
         <component
-          v-else-if="item.subtitle"
+          v-if="item.subtitle"
           :is="contentTag"
-          :type="'button'"
+          :to="item.to"
+          :type="item.to ? undefined : 'button'"
           class="subtitle"
           tabindex="-1"
           @click.stop="onSelect()"
@@ -216,19 +195,18 @@ function onToggleDeep() {
   .content {
     @apply flex flex-1 flex-col gap-4;
 
+    :is(.title, .subtitle) {
+      @apply self-start text-left wrap-break-word hyphens-auto;
+    }
+
+    .subtitle {
+      @apply ris-label2-regular text-gray-900;
+    }
+
     .title:hover,
     &:has(.subtitle:hover) .title {
       @apply underline underline-offset-2;
     }
-  }
-
-  .title,
-  .subtitle {
-    @apply self-start text-left wrap-break-word hyphens-auto;
-  }
-
-  .subtitle {
-    @apply ris-label2-regular text-gray-900;
   }
 
   .tree-control {
@@ -257,7 +235,7 @@ function onToggleDeep() {
       @apply border-l-blue-500 bg-blue-200 hover:bg-blue-300 active:border-blue-800 active:bg-blue-300;
     }
 
-    .title {
+    .content .title {
       @apply ris-label1-bold;
     }
   }
@@ -270,6 +248,18 @@ function onToggleDeep() {
 
     .content {
       @apply relative flex-row gap-8 after:absolute after:-inset-y-16 after:-right-16 after:-left-[1.625rem] after:content-["_"];
+
+      .title {
+        @apply flex-none;
+
+        &:not(:only-child) {
+          @apply ris-label1-bold;
+        }
+      }
+
+      .subtitle {
+        @apply ris-label1-regular text-gray-1000;
+      }
 
       &:hover {
         .title {
@@ -285,18 +275,6 @@ function onToggleDeep() {
         }
       }
     }
-
-    .title {
-      @apply flex-none;
-
-      &:not(:only-child) {
-        @apply ris-label1-bold;
-      }
-    }
-
-    .subtitle {
-      @apply ris-label1-regular text-gray-1000;
-    }
   }
 
   &[aria-selected="true"] {
@@ -304,12 +282,14 @@ function onToggleDeep() {
       @apply border-blue-800 bg-blue-300 hover:border-blue-900 hover:bg-blue-500;
     }
 
-    .title {
-      @apply ris-label1-bold flex-none;
-    }
+    .content {
+      .title {
+        @apply ris-label1-bold flex-none;
+      }
 
-    .subtitle {
-      @apply text-gray-1000;
+      .subtitle {
+        @apply text-gray-1000;
+      }
     }
 
     &:not([aria-expanded]) :is(.title, .subtitle) {
