@@ -46,13 +46,6 @@ const treeRef = ref<HTMLElement>();
 
 const focusedKey = ref<string>(selected.value ?? props.items[0]?.key ?? "");
 
-watch(
-  () => selected.value,
-  (val) => {
-    if (val) focusedKey.value = val;
-  },
-);
-
 async function focusCurrent() {
   await nextTick();
   treeRef.value?.querySelector<HTMLElement>('[tabindex="0"]')?.focus();
@@ -92,6 +85,43 @@ function collectParentsByKey(
 }
 
 const parentByKey = computed(() => collectParentsByKey(props.items));
+
+function getNearestVisibleKey(key?: string) {
+  const visibleKeys = new Set(visibleItems.value.map((item) => item.key));
+  let currentKey = key;
+
+  while (currentKey) {
+    if (visibleKeys.has(currentKey)) return currentKey;
+    currentKey = parentByKey.value.get(currentKey)?.key;
+  }
+}
+
+// The focused item must always stay in the set of visible tree items so the
+// roving tabindex keeps exactly one `treeitem` tabbable and keyboard handling
+// can still find the current index.
+//
+// When selection or collapsing hides the current focus target, walk up to the
+// nearest visible ancestor; if neither the current focus target nor the
+// selected item is visible anymore, fall back to the first visible item.
+function getNextFocusableKey() {
+  const visible = visibleItems.value;
+  if (!visible.length) return "";
+
+  return (
+    getNearestVisibleKey(focusedKey.value) ??
+    getNearestVisibleKey(selected.value) ??
+    visible[0]?.key ??
+    ""
+  );
+}
+
+watch(
+  [visibleItems, () => selected.value, parentByKey],
+  () => {
+    focusedKey.value = getNextFocusableKey();
+  },
+  { immediate: true },
+);
 
 function moveFocusTo(item?: TreeItem) {
   if (!item) return;

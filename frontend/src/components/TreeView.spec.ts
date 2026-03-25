@@ -175,6 +175,18 @@ describe("TreeView", () => {
       expect(items[1]).toHaveAttribute("tabindex", "0");
       expect(items[2]).toHaveAttribute("tabindex", "-1");
     });
+
+    it("keeps a visible item focusable when the selected item is collapsed", async () => {
+      await renderSuspended(TreeView, {
+        props: { items: nestedItems, expandedKeys: [], selected: "child-1" },
+      });
+
+      const parentItem = screen.getByRole("treeitem", { name: /Parent/ });
+      const leafItem = screen.getByRole("treeitem", { name: "Leaf" });
+
+      expect(parentItem).toHaveAttribute("tabindex", "0");
+      expect(leafItem).toHaveAttribute("tabindex", "-1");
+    });
   });
 
   describe("keyboard navigation", () => {
@@ -293,6 +305,33 @@ describe("TreeView", () => {
       expect(emitted("update:expandedKeys")).toContainEqual([
         expect.not.arrayContaining(["parent"]),
       ]);
+    });
+
+    it("keeps keyboard navigation working after collapsing a selected child", async () => {
+      const user = userEvent.setup();
+      const view = await renderSuspended(TreeView, {
+        props: {
+          items: nestedItems,
+          expandedKeys: ["parent"],
+          selected: "child-1",
+        },
+      });
+
+      await view.rerender({
+        items: nestedItems,
+        expandedKeys: [],
+        selected: "child-1",
+      });
+
+      const parentItem = screen.getByRole("treeitem", { name: /Parent/ });
+      const leafItem = screen.getByRole("treeitem", { name: "Leaf" });
+
+      expect(parentItem).toHaveAttribute("tabindex", "0");
+
+      parentItem.focus();
+      await user.keyboard("{ArrowDown}");
+
+      expect(leafItem).toHaveFocus();
     });
 
     it("moves focus to parent from a child", async () => {
