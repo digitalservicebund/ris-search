@@ -177,7 +177,7 @@ describe("TreeViewItem", () => {
     const linkedLeaf: TreeItem = {
       key: "a",
       title: "Item A",
-      to: "/some/path",
+      to: "/",
     };
 
     it("renders a link when `to` is set", async () => {
@@ -190,7 +190,7 @@ describe("TreeViewItem", () => {
         key: "p",
         title: "Parent",
         subtitle: "Description",
-        to: "/some/path",
+        to: "/",
         children: [{ key: "c1", title: "Child 1" }],
       });
 
@@ -330,7 +330,7 @@ describe("TreeViewItem", () => {
       const linkedLeaf: TreeItem = {
         key: "a",
         title: "Item A",
-        to: "/some/path",
+        to: "/",
       };
       await render(linkedLeaf, [], undefined, "a");
       expect(screen.getByRole("link")).toHaveAttribute("tabindex", "-1");
