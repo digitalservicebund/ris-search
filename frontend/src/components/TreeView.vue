@@ -75,23 +75,64 @@ const visibleItems = computed(() =>
   getVisibleItems(props.items, expandedKeys.value),
 );
 
-/**
- * Recursively walks the tree from top to bottom to find the parent that
- * contains the child with the specified key as a direct descendant, then
- * returns the parent.
- */
-function findParent(
+function collectParentsByKey(
   items: TreeItem[],
-  childKey: string,
   currentParent?: TreeItem,
-): TreeItem | undefined {
+  parents = new Map<string, TreeItem | undefined>(),
+): Map<string, TreeItem | undefined> {
   for (const item of items) {
-    if (item.key === childKey) return currentParent;
+    parents.set(item.key, currentParent);
+
     if (item.children?.length) {
-      const found = findParent(item.children, childKey, item);
-      if (found) return found;
+      collectParentsByKey(item.children, item, parents);
     }
   }
+
+  return parents;
+}
+
+const parentByKey = computed(() => collectParentsByKey(props.items));
+
+function moveFocusTo(item?: TreeItem) {
+  if (!item) return;
+
+  focusedKey.value = item.key;
+  focusCurrent();
+}
+
+function expandItem(item: TreeItem) {
+  expandedKeys.value = [...expandedKeys.value, item.key];
+}
+
+function collapseItem(item: TreeItem) {
+  expandedKeys.value = expandedKeys.value.filter((key) => key !== item.key);
+}
+
+function expandIfParent(item: TreeItem) {
+  if (!item.children?.length) return;
+
+  if (!expandedKeys.value.includes(item.key)) {
+    expandItem(item);
+    return;
+  }
+
+  moveFocusTo(item.children[0]);
+}
+
+function collapseIfParent(item: TreeItem) {
+  if (item.children?.length && expandedKeys.value.includes(item.key)) {
+    collapseItem(item);
+    return;
+  }
+
+  moveFocusTo(parentByKey.value.get(item.key));
+}
+
+function activateItem(item: TreeItem) {
+  selected.value = item.key;
+  emit("click", item as T);
+
+  if (item.to) navigateTo(item.to);
 }
 
 function onKeydown(event: KeyboardEvent) {
@@ -100,90 +141,41 @@ function onKeydown(event: KeyboardEvent) {
   const item = visible[index];
   if (!item) return;
 
-  const isParent = !!item.children?.length;
-  const isExpanded = expandedKeys.value.includes(item.key);
-
   switch (event.key) {
-    // Focus next item
-    case "ArrowDown": {
-      const next = visible[index + 1];
-      if (next) {
-        focusedKey.value = next.key;
-        focusCurrent();
-      }
+    case "ArrowDown":
+      moveFocusTo(visible[index + 1]);
       break;
-    }
 
-    // Focus previous item
-    case "ArrowUp": {
-      const prev = visible[index - 1];
-      if (prev) {
-        focusedKey.value = prev.key;
-        focusCurrent();
-      }
+    case "ArrowUp":
+      moveFocusTo(visible[index - 1]);
       break;
-    }
 
-    // On a parent node: expand if collapsed, move focus to first child if
-    // expanded
-    case "ArrowRight": {
-      if (isParent && !isExpanded) {
-        expandedKeys.value = [...expandedKeys.value, item.key];
-      } else if (isParent && isExpanded && item.children?.[0]) {
-        focusedKey.value = item.children[0].key;
-        focusCurrent();
-      }
+    case "ArrowRight":
+      expandIfParent(item);
       break;
-    }
 
-    // On a parent node: collapse if expanded. Move focus to parent if collapsed
-    // or on a child node
-    case "ArrowLeft": {
-      if (isParent && isExpanded) {
-        expandedKeys.value = expandedKeys.value.filter((k) => k !== item.key);
-      } else {
-        const parent = findParent(props.items, item.key);
-        if (parent) {
-          focusedKey.value = parent.key;
-          focusCurrent();
-        }
-      }
+    case "ArrowLeft":
+      collapseIfParent(item);
       break;
-    }
 
-    // Move focus to first node
     case "Home":
-      if (visible[0]) {
-        focusedKey.value = visible[0].key;
-        focusCurrent();
-      }
+      moveFocusTo(visible[0]);
       break;
 
-    // Move focus to last node
     case "End":
-      const last = visible.at(-1);
-      if (last) {
-        focusedKey.value = last.key;
-        focusCurrent();
+      moveFocusTo(visible.at(-1));
+      break;
+
+    case "Enter":
+      activateItem(item);
+      break;
+
+    case "*":
+      if (item.children?.length) {
+        expandedKeys.value = toggleDeep(item, expandedKeys.value);
       }
       break;
 
-    // Activate node = select, emit click + trigger navigation if applicable
-    case "Enter": {
-      selected.value = item.key;
-      emit("click", item as T);
-      if (item.to) navigateTo(item.to);
-      break;
-    }
-
-    // On a parent node with nested children: toggle deep expand/collapse
-    case "*": {
-      if (!isParent) break;
-      expandedKeys.value = toggleDeep(item, expandedKeys.value);
-      break;
-    }
-
-    // No match = cancel custom keyboard handling
     default:
       return;
   }
