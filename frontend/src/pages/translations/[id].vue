@@ -34,7 +34,7 @@ if (error.value) showError(error.value);
 const { legislation } = await getGermanOriginal(id);
 
 const currentTranslation = data.value?.content;
-const html = data.value?.html;
+const html = data.value?.htmlBody;
 
 const versionInformation = computed(() => {
   return removePrefix(currentTranslation?.about, "Version information:");
