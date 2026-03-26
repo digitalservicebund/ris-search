@@ -92,8 +92,9 @@ const detailItems = computed(() =>
             <h2 :id="textSectionId" class="sr-only">Text</h2>
             <DocumentsIncompleteDataMessage class="mb-16" />
             <div
+              v-if="document"
               class="administrative-directive"
-              v-html="document?.body.innerHTML"
+              v-html="document.body.innerHTML"
             ></div>
           </section>
         </template>

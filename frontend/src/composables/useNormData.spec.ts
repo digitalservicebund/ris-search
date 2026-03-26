@@ -115,7 +115,7 @@ describe("useNormData", () => {
     );
     expect(data.value).toEqual({
       legislationWork: mockMetadata,
-      html: html,
+      htmlBody: html,
       articleHeading: "§ 1 Some article",
     });
 

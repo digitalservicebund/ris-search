@@ -28,18 +28,17 @@ export function parseDocument(html: string): Document {
 }
 
 /**
- * Extracts all headings (or specified elements) from HTML content.
+ * Extracts all headings (or specified elements) from HTML Document.
  *
- * @param html - The raw HTML string.
+ * @param document - The raw HTML string.
  * @param elementName - The element tag name to search for (e.g., "h2", "h3").
  * @returns An array of headings with `id` and `title`.
  */
-export function getAllSectionsFromHtml(
-  html: string,
+export function getAllSectionsFromDocument(
+  document: Document,
   elementName: string,
 ): Section[] {
-  const elements: NodeListOf<Element> =
-    parseDocument(html).querySelectorAll(elementName);
+  const elements: NodeListOf<Element> = document.querySelectorAll(elementName);
 
   return (Array.from(elements) as HTMLElement[]).map((element) => {
     const heading = element.querySelector("h2");

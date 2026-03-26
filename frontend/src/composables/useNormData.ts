@@ -131,7 +131,7 @@ function insertLineBreaksBetweenBracketedBlocks(
 
 export interface NormArticleContent {
   legislationWork: LegislationWork;
-  html: string;
+  htmlBody: string;
   articleHeading?: string;
 }
 
@@ -183,7 +183,7 @@ export function useFetchNormArticleContent(
 
       return {
         legislationWork: metadata,
-        html: body,
+        htmlBody: body,
         articleHeading,
       };
     },

@@ -25,6 +25,12 @@ const { data: html, error: contentError } = await useRisBackend<string>(
 );
 if (contentError?.value) showError(contentError.value);
 
+const document = computed(() => {
+  if (html.value) {
+    return parseDocument(html.value);
+  }
+});
+
 // Page head ----------------------------------------------
 
 function buildOgTitle(caselawData: CaseLaw) {
@@ -60,9 +66,8 @@ const description = computed<string>(() => {
     return truncateAtWord(sentences.slice(0, 2).join(" "), 150);
   }
 
-  if (html.value) {
-    const doc = parseDocument(html.value);
-    const firstParagraph = doc.querySelector("section p");
+  if (document.value) {
+    const firstParagraph = document.value.querySelector("section p");
     const firstParagraphText = firstParagraph?.textContent?.trim();
     if (firstParagraphText) {
       return truncateAtWord(firstParagraphText, 150);
@@ -119,7 +124,9 @@ const breadcrumbs = computed(() => [
 ]);
 
 const tocEntries: ComputedRef<TableOfContentsEntry[] | null> = computed(() => {
-  return html.value ? getAllSectionsFromHtml(html.value, "section") : null;
+  return document.value
+    ? getAllSectionsFromDocument(document.value, "section")
+    : null;
 });
 
 const headerMetadata = computed<MetadataItem[]>(() => [
@@ -195,7 +202,11 @@ const detailsMetadata = computed(() => {
       <SidebarLayout>
         <template #content>
           <DocumentsIncompleteDataMessage class="mb-16" />
-          <div class="case-law" v-html="html"></div>
+          <div
+            v-if="document"
+            class="case-law"
+            v-html="document.body.innerHTML"
+          ></div>
         </template>
 
         <template #sidebar>

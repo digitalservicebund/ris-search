@@ -90,7 +90,11 @@ const detailItems = computed(() => getLiteratureDetailItems(literature.value));
           <section :aria-labelledby="textSectionId">
             <h2 :id="textSectionId" class="sr-only">Text</h2>
             <DocumentsIncompleteDataMessage class="mb-16" />
-            <div class="literature" v-html="document?.body.innerHTML"></div>
+            <div
+              v-if="document"
+              class="literature"
+              v-html="document.body.innerHTML"
+            ></div>
           </section>
         </template>
       </SidebarLayout>
