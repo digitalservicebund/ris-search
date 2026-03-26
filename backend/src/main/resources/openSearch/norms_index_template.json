@@ -55,6 +55,9 @@
           "type": "alias",
           "path": "article_names"
         },
+        "id": {
+          "type": "keyword"
+        },
         "official_title": {
           "type": "text",
           "analyzer": "custom_german_analyzer",
@@ -111,8 +114,24 @@
             }
           }
         },
-        "manifestation_eli": {
-          "type": "keyword"
+        "latest_manifestation_eli": {
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "normalizer": "normalized_keyword"
+            }
+          }
+        },
+        "time_relevance_end_date": {
+          "type": "date"
+        },
+        "time_relevance_start_date": {
+          "type": "date"
+        },
+        "table_of_contents": {
+          "type": "object",
+          "enabled": false
         },
         "articles": {
           "type": "nested",
