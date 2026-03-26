@@ -9,6 +9,7 @@ const createDefaultProps = () => ({
     heading: "<h1>Test Heading</h1>",
     headingAuthorialNotes: "<p>Test Notes</p>",
     headingAuthorialNotesLength: 180,
+    body: "",
   },
   metadata: {
     name: "Test Law Name",

@@ -14,7 +14,7 @@ export interface TranslationContent {
 
 export interface TranslationData {
   content: TranslationContent;
-  html: string;
+  htmlBody: string;
 }
 
 function notFoundError(message: string) {
@@ -94,7 +94,11 @@ export function fetchTranslationAndHTML(
         },
       );
 
-      return { content: firstTranslationsListElement, html: htmlData };
+      const document = parseDocument(htmlData);
+      return {
+        content: firstTranslationsListElement,
+        htmlBody: document.body.innerHTML,
+      };
     },
     { server: true, lazy: false },
   );

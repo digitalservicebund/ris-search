@@ -87,7 +87,9 @@ describe("fetchTranslationAndHTML", () => {
       },
     ];
 
-    const mockHtmlResponse = "<h1>Mock HTML Content</h1>";
+    const mockHtmlResponse =
+      "<html><body><h1>Mock HTML Content</h1></body></html>";
+    const expectedBody = "<h1>Mock HTML Content</h1>";
 
     mockFetch.mockResolvedValueOnce(mockTranslationResponse);
     mockFetch.mockResolvedValueOnce(mockHtmlResponse);
@@ -108,7 +110,7 @@ describe("fetchTranslationAndHTML", () => {
     expect(error.value).toBeUndefined();
 
     expect(data.value?.content).toEqual(mockTranslationResponse[0]);
-    expect(data.value?.html).toEqual(mockHtmlResponse);
+    expect(data.value?.htmlBody).toEqual(expectedBody);
   });
 
   it("returns 404 when list is empty", async () => {

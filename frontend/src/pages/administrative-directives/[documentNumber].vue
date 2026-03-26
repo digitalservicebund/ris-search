@@ -34,7 +34,9 @@ const textSectionId = useId();
 const detailsSectionId = useId();
 
 const title = computed(() => data.value?.headline);
-const isEmptyDocument = isDocumentEmpty(html.value);
+
+const document = html.value ? parseDocument(html.value) : undefined;
+const isEmptyDocument = isDocumentEmpty(document);
 
 const breadcrumbs = computed(() => [
   {
@@ -89,7 +91,11 @@ const detailItems = computed(() =>
           <section :aria-labelledby="textSectionId">
             <h2 :id="textSectionId" class="sr-only">Text</h2>
             <DocumentsIncompleteDataMessage class="mb-16" />
-            <div class="administrative-directive" v-html="html"></div>
+            <div
+              v-if="document"
+              class="administrative-directive"
+              v-html="document.body.innerHTML"
+            ></div>
           </section>
         </template>
       </SidebarLayout>

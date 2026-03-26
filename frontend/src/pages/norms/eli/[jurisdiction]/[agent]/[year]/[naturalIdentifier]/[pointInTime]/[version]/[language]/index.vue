@@ -72,7 +72,6 @@ const translationUrl = computed(() => {
   return "";
 });
 
-const html = computed(() => data.value?.html);
 const htmlParts = computed(() => data.value?.htmlParts);
 
 const zipUrl = computed(() =>
@@ -271,7 +270,7 @@ const detailsTabPanelTitleId = useId();
               v-observe-elements
               :official-toc="htmlParts.officialToc"
             >
-              <div v-html="html" />
+              <div v-html="htmlParts.body" />
             </LegislationContent>
           </template>
           <template #sidebar>

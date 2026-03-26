@@ -4,7 +4,6 @@ import { getTextFromElements, parseDocument } from "~/utils/htmlParser";
 
 export interface NormContent {
   legislationWork: LegislationWork;
-  html: string;
   htmlParts: {
     heading?: string;
     headingAuthorialNotes?: string; // amtliche Fußnoten
@@ -15,6 +14,7 @@ export interface NormContent {
     vollzitat?: string;
     standangaben?: string[];
     standangabenHinweis?: string[];
+    body: string;
   };
 }
 
@@ -56,7 +56,6 @@ export function useFetchNormContent(
       if (metadata.workExample) metadata.workExample.hasPart = [];
       return {
         legislationWork: metadata,
-        html,
         htmlParts,
       };
     },
@@ -115,6 +114,7 @@ function extractHtmlParts(document: Document): NormContent["htmlParts"] {
     standangaben,
     standangabenHinweis,
     vollzitat,
+    body: document.body.innerHTML,
   };
 }
 
@@ -131,7 +131,7 @@ function insertLineBreaksBetweenBracketedBlocks(
 
 export interface NormArticleContent {
   legislationWork: LegislationWork;
-  html: string;
+  htmlBody: string;
   articleHeading?: string;
 }
 
@@ -176,13 +176,14 @@ export function useFetchNormArticleContent(
         },
       });
       const document = parseDocument(html);
+      const body = document.body.innerHTML;
       const articleHeading = document.querySelector(
         "h2.einzelvorschrift",
       )?.innerHTML;
 
       return {
         legislationWork: metadata,
-        html,
+        htmlBody: body,
         articleHeading,
       };
     },

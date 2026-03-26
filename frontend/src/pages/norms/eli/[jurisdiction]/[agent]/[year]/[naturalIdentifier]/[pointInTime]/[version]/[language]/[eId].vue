@@ -49,7 +49,7 @@ const { data, error, status } = await useFetchNormArticleContent(
 );
 
 const norm = computed(() => data.value?.legislationWork);
-const articleHtml = computed(() => data.value?.html);
+const articleHtml = computed(() => data.value?.htmlBody);
 
 if (error.value) {
   showError(error.value);

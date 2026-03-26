@@ -28,18 +28,17 @@ export function parseDocument(html: string): Document {
 }
 
 /**
- * Extracts all headings (or specified elements) from HTML content.
+ * Extracts all headings (or specified elements) from HTML Document.
  *
- * @param html - The raw HTML string.
+ * @param document - The raw HTML string.
  * @param elementName - The element tag name to search for (e.g., "h2", "h3").
  * @returns An array of headings with `id` and `title`.
  */
-export function getAllSectionsFromHtml(
-  html: string,
+export function getAllSectionsFromDocument(
+  document: Document,
   elementName: string,
 ): Section[] {
-  const elements: NodeListOf<Element> =
-    parseDocument(html).querySelectorAll(elementName);
+  const elements: NodeListOf<Element> = document.querySelectorAll(elementName);
 
   return (Array.from(elements) as HTMLElement[]).map((element) => {
     const heading = element.querySelector("h2");
@@ -65,16 +64,15 @@ export function getTextFromElements(elements?: NodeListOf<Element>): string[] {
  * if the html `<body>` is empty or contains only a single headline (`<h1>`).
  * @param htmlDocument
  */
-export function isDocumentEmpty(htmlDocument?: string): boolean {
-  if (!htmlDocument) {
+export function isDocumentEmpty(document?: Document): boolean {
+  if (!document) {
     return true;
   }
 
-  const doc = parseDocument(htmlDocument);
-  const bodyElements = Array.from(doc.body.children);
+  const bodyElements = Array.from(document.body.children);
 
   const isEmptyBody =
-    bodyElements.length === 0 && doc.body.childNodes.length == 0;
+    bodyElements.length === 0 && document.body.childNodes.length == 0;
   const hasSingleH1 =
     bodyElements.length === 1 && bodyElements[0]?.tagName === "H1";
   return isEmptyBody || hasSingleH1;
