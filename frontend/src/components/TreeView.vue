@@ -10,10 +10,22 @@ export type TreeItem = {
 };
 
 const props = defineProps<{
+  /** All items in the tree */
   items: T[];
+  /** Heading of the tree */
   heading?: string;
+  /** Additional heading */
   subheading?: string;
+  /**
+   * Accessible lable of the tree. If undefined, the tree will be labelled by
+   * the heading. Make sure that at least one of them is set.
+   */
   label?: string;
+  /**
+   * When set, recursively expand the tree to make sure the item with that key
+   * is visible. Any pre-existing expansions are not affected.
+   */
+  expandToKey?: string;
 }>();
 
 const expandedKeys = defineModel<string[]>("expandedKeys", {
@@ -51,6 +63,10 @@ async function focusCurrent() {
   treeRef.value?.querySelector<HTMLElement>('[tabindex="0"]')?.focus();
 }
 
+/**
+ * Lists all visible items, i.e. all root items, as well as all items that are a
+ * child of an expanded item.
+ */
 function getVisibleItems(items: TreeItem[], expanded: string[]): TreeItem[] {
   const result: TreeItem[] = [];
 
@@ -68,23 +84,50 @@ const visibleItems = computed(() =>
   getVisibleItems(props.items, expandedKeys.value),
 );
 
+/** Creates a map that maps each item key to its parent item. */
 function collectParentsByKey(
   items: TreeItem[],
   currentParent?: TreeItem,
   parents = new Map<string, TreeItem | undefined>(),
 ): Map<string, TreeItem | undefined> {
-  for (const item of items) {
+  items.forEach((item) => {
     parents.set(item.key, currentParent);
 
     if (item.children?.length) {
       collectParentsByKey(item.children, item, parents);
     }
-  }
+  });
 
   return parents;
 }
 
 const parentByKey = computed(() => collectParentsByKey(props.items));
+
+/**
+ * Gets the keys of all ancestors of an item, i.e. the item's parent, the
+ * parent's parent etc.
+ */
+function getAncestorKeys(key: string): string[] {
+  const ancestors: string[] = [];
+  let current = parentByKey.value.get(key);
+  while (current) {
+    ancestors.push(current.key);
+    current = parentByKey.value.get(current.key);
+  }
+  return ancestors;
+}
+
+watch(
+  [() => props.expandToKey, parentByKey],
+  ([key]) => {
+    if (!key) return;
+    const ancestors = getAncestorKeys(key);
+    if (ancestors.length) {
+      expandedKeys.value = [...new Set([...expandedKeys.value, ...ancestors])];
+    }
+  },
+  { immediate: true },
+);
 
 function getNearestVisibleKey(key?: string) {
   const visibleKeys = new Set(visibleItems.value.map((item) => item.key));
@@ -96,14 +139,15 @@ function getNearestVisibleKey(key?: string) {
   }
 }
 
-// The focused item must always stay in the set of visible tree items so the
-// roving tabindex keeps exactly one `treeitem` tabbable and keyboard handling
-// can still find the current index.
-//
-// When selection or collapsing hides the current focus target, walk up to the
-// nearest visible ancestor; if neither the current focus target nor the
-// selected item is visible anymore, fall back to the first visible item.
 function getNextFocusableKey() {
+  // The focused item must always stay in the set of visible tree items so the
+  // roving tabindex keeps exactly one `treeitem` tabbable and keyboard handling
+  // can still find the current index.
+  //
+  // When selection or collapsing hides the current focus target, walk up to the
+  // nearest visible ancestor; if neither the current focus target nor the
+  // selected item is visible anymore, fall back to the first visible item.
+
   const visible = visibleItems.value;
   if (!visible.length) return "";
 

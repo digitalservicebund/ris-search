@@ -117,6 +117,82 @@ describe("TreeView", () => {
     });
   });
 
+  describe("expandToKey", () => {
+    it("expands ancestor nodes to reveal the target item", async () => {
+      await renderSuspended(TreeView, {
+        props: { items: deepItems, expandToKey: "leaf" },
+      });
+
+      expect(
+        screen.getByRole("treeitem", { name: "Leaf" }),
+      ).toBeInTheDocument();
+    });
+
+    it("does nothing when expandToKey is not set", async () => {
+      await renderSuspended(TreeView, {
+        props: { items: deepItems },
+      });
+      expect(
+        screen.queryByRole("treeitem", { name: "Leaf" }),
+      ).not.toBeInTheDocument();
+    });
+
+    it("does not collapse already-expanded keys when expanding ancestors", async () => {
+      const items = [
+        {
+          key: "root",
+          title: "Root",
+          children: [
+            {
+              key: "mid",
+              title: "Mid",
+              children: [{ key: "leaf", title: "Leaf" }],
+            },
+            { key: "sibling", title: "Sibling" },
+          ],
+        },
+      ];
+      await renderSuspended(TreeView, {
+        props: { items, expandedKeys: ["root"], expandToKey: "leaf" },
+      });
+      expect(
+        screen.getByRole("treeitem", { name: "Leaf" }),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByRole("treeitem", { name: "Sibling" }),
+      ).toBeInTheDocument();
+    });
+
+    it("updates when expandToKey changes", async () => {
+      const items = [
+        {
+          key: "a",
+          title: "A",
+          children: [{ key: "a-child", title: "A Child" }],
+        },
+        {
+          key: "b",
+          title: "B",
+          children: [{ key: "b-child", title: "B Child" }],
+        },
+      ];
+      const view = await renderSuspended(TreeView, {
+        props: { items, expandToKey: "a-child" },
+      });
+      expect(
+        screen.getByRole("treeitem", { name: "A Child" }),
+      ).toBeInTheDocument();
+      expect(
+        screen.queryByRole("treeitem", { name: "B Child" }),
+      ).not.toBeInTheDocument();
+
+      await view.rerender({ items, expandToKey: "b-child" });
+      expect(
+        screen.getByRole("treeitem", { name: "B Child" }),
+      ).toBeInTheDocument();
+    });
+  });
+
   describe("toggle single item", () => {
     it("hides children when parent is collapsed", async () => {
       await renderSuspended(TreeView, {
