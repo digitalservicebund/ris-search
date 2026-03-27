@@ -246,6 +246,10 @@ function onToggleDeep() {
       @apply py-16 pr-16 pl-[1.625rem];
     }
 
+    &[aria-level="1"] .header {
+      @apply pl-[1.125rem];
+    }
+
     .content {
       @apply relative flex-row gap-8 after:absolute after:-inset-y-16 after:-right-16 after:-left-[1.625rem] after:content-["_"];
 
