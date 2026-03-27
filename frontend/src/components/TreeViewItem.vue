@@ -36,8 +36,8 @@ const isFocused = computed(() => item.key === focusedKey);
 const contentTag = computed(() => (item.to ? NuxtLink : "button"));
 
 const accessibleLabel = computed(() => {
-  const subtitle = item.subtitle ? `, ${item.subtitle}` : "";
-  return `${item.title}${subtitle}`;
+  const label = [item.title, item.subtitle].filter(Boolean).join(", ");
+  return label || undefined;
 });
 
 const isSelected = computed(() => item.key === selected.value);
@@ -102,6 +102,7 @@ function onToggleDeep() {
 
       <div class="content">
         <component
+          v-if="item.title"
           :is="contentTag"
           :to="item.to"
           :type="item.to ? undefined : 'button'"

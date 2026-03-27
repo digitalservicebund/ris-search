@@ -3,7 +3,7 @@ import type { RouteLocationRaw } from "#vue-router";
 
 export type TreeItem = {
   key: string;
-  title: string;
+  title?: string;
   subtitle?: string;
   to?: RouteLocationRaw;
   children?: TreeItem[];
