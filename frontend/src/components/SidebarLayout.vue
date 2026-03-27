@@ -13,7 +13,7 @@ defineSlots<{
 
     <div
       v-if="$slots.sidebar"
-      class="col-span-1 row-start-1 border-l border-gray-400 lg:sticky lg:top-0 lg:row-start-auto lg:h-[calc(min(100%,100dvh))] print:hidden"
+      class="col-span-1 row-start-1 lg:sticky lg:top-0 lg:row-start-auto lg:h-[calc(min(100%,100dvh))] lg:border-l lg:border-gray-400 print:hidden"
     >
       <slot name="sidebar" />
     </div>
