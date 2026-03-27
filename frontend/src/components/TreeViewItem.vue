@@ -252,10 +252,10 @@ function onToggleDeep() {
     }
 
     .content {
-      @apply relative flex-row gap-8 after:absolute after:-inset-y-16 after:-right-16 after:-left-[1.625rem] after:content-["_"];
+      @apply relative flex-row gap-8;
 
       .title {
-        @apply flex-none;
+        @apply flex-none after:absolute after:-inset-y-16 after:-right-16 after:-left-[1.625rem] after:content-["_"];
 
         &:not(:only-child) {
           @apply ris-label1-bold;
