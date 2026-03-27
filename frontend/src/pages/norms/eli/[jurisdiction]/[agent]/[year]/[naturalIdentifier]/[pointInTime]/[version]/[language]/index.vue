@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import type { Dayjs } from "dayjs";
 import { Tab, TabList, Tabs } from "primevue";
-import type { TreeNode } from "primevue/treenode";
 import type { ComputedRef } from "vue";
 import { computed } from "vue";
 import { useRoute } from "#app";
@@ -34,7 +33,7 @@ import {
   getValidityStatusLabel,
   temporalCoverageToValidityInterval,
 } from "~/utils/norm";
-import { tocItemsToTreeNodes } from "~/utils/tableOfContents";
+import { tocItemsToTreeViewItems } from "~/utils/tableOfContents";
 import { truncateAtWord } from "~/utils/textFormatting";
 import IcBaselineSubject from "~icons/ic/baseline-subject";
 import IconFileDownload from "~icons/ic/outline-file-download";
@@ -81,10 +80,10 @@ if (error.value) {
   showError(error.value);
 }
 
-const tableOfContents: Ref<TreeNode[]> = computed(() => {
+const tableOfContents = computed(() => {
   if (!metadata.value?.workExample?.tableOfContents) return [];
   const normPath = route.path;
-  return tocItemsToTreeNodes(
+  return tocItemsToTreeViewItems(
     metadata.value.workExample.tableOfContents,
     normPath.concat("#"),
     normPath.concat("#"),

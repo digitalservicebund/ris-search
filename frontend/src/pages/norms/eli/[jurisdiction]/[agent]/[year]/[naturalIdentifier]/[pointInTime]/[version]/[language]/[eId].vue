@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import type { TreeNode } from "primevue/treenode";
 import { computed } from "vue";
 import type { BreadcrumbItem } from "~/components/Breadcrumbs.vue";
 import ArticleVersionWarning from "~/components/documents/norms/ArticleVersionWarning.vue";
@@ -17,8 +16,8 @@ import {
 } from "~/utils/dateFormatting";
 import { formatDocumentKind } from "~/utils/displayValues";
 import { parseDocument } from "~/utils/htmlParser";
-import { getNormBreadcrumbTitle, getNormTitle } from "~/utils/norm";
-import { findNodePath, tocItemsToTreeNodes } from "~/utils/tableOfContents";
+import { getNormBreadcrumbTitle } from "~/utils/norm";
+import { findNodePath, tocItemsToTreeViewItems } from "~/utils/tableOfContents";
 import { truncateAtWord } from "~/utils/textFormatting";
 import IcBaselineArrowBack from "~icons/ic/baseline-arrow-back";
 import IcBaselineArrowForward from "~icons/ic/baseline-arrow-Forward";
@@ -56,9 +55,9 @@ if (error.value) {
 
 const normPath: string = route.fullPath.replace(/\/[^/]*$/, "");
 
-const tableOfContents: Ref<TreeNode[]> = computed(() => {
+const tableOfContents = computed(() => {
   if (!norm.value?.workExample?.tableOfContents) return [];
-  return tocItemsToTreeNodes(
+  return tocItemsToTreeViewItems(
     norm.value.workExample.tableOfContents,
     normPath.concat("#"),
     normPath.concat("/"),
@@ -99,7 +98,6 @@ function getRouteForSiblingArticle(
 }
 
 const currentNodePath = findNodePath(tableOfContents.value, eId.value ?? "");
-const normTitle = computed(() => getNormTitle(norm.value));
 const normBreadcrumbTitle = computed(() => getNormBreadcrumbTitle(norm.value));
 const breadcrumbItems: Ref<BreadcrumbItem[]> = computed(() => {
   const validFrom = dateFormattedDDMMYYYY(
@@ -120,8 +118,8 @@ const breadcrumbItems: Ref<BreadcrumbItem[]> = computed(() => {
 
   currentNodePath?.forEach((node) =>
     list.push({
-      label: node.label,
-      route: node.route,
+      label: [node.title, node.subtitle].filter(Boolean).join(" "),
+      route: typeof node.to === "string" ? node.to : undefined,
     } as BreadcrumbItem),
   );
   return list;
@@ -206,6 +204,7 @@ useDynamicSeo({ title, description });
 
 <template>
   <div v-if="status == 'pending'" class="container">Lade ...</div>
+
   <template v-if="!!norm">
     <div class="container">
       <Breadcrumbs :items="breadcrumbItems" />
@@ -270,17 +269,7 @@ useDynamicSeo({ title, description });
             v-if="norm.workExample?.tableOfContents?.length"
             :table-of-contents="tableOfContents"
             :selected-key="eId"
-          >
-            <template #header>
-              <NuxtLink
-                v-if="normTitle"
-                :to="normPath"
-                class="link-hover font-bold text-blue-800"
-              >
-                {{ normTitle }}
-              </NuxtLink>
-            </template>
-          </NormTableOfContents>
+          />
         </template>
       </SidebarLayout>
     </div>
