@@ -154,6 +154,8 @@ const detailsMetadata = computed(() => {
     zipUrl,
   };
 });
+
+const detailsSectionId = useId();
 </script>
 
 <template>
@@ -169,39 +171,41 @@ const detailsMetadata = computed(() => {
     </template>
 
     <template #details>
-      <h2 class="ris-heading3-bold my-24">Details</h2>
-      <DocumentsIncompleteDataMessage class="my-24" />
-      <DetailsList>
-        <DetailsListEntry
-          label="Spruchkörper:"
-          :value="detailsMetadata.judicialBody"
-        />
-        <DetailsListEntry label="ECLI:" :value="detailsMetadata.ecli" />
-        <DetailsListEntry label="Normen:" value="" />
-        <DetailsListEntry
-          label="Entscheidungsname:"
-          :value="detailsMetadata.decisionNames"
-        />
-        <DetailsListEntry label="Vorinstanz:" value="" />
+      <section :aria-labelledby="detailsSectionId" class="pt-32 pb-32 lg:pb-56">
+        <h2 :id="detailsSectionId" class="ris-heading3-bold">Details</h2>
+        <DocumentsIncompleteDataMessage class="my-24" />
+        <DetailsList>
+          <DetailsListEntry
+            label="Spruchkörper:"
+            :value="detailsMetadata.judicialBody"
+          />
+          <DetailsListEntry label="ECLI:" :value="detailsMetadata.ecli" />
+          <DetailsListEntry label="Normen:" value="" />
+          <DetailsListEntry
+            label="Entscheidungsname:"
+            :value="detailsMetadata.decisionNames"
+          />
+          <DetailsListEntry label="Vorinstanz:" value="" />
 
-        <DetailsListEntry v-if="detailsMetadata.zipUrl" label="Download:">
-          <NuxtLink
-            data-attr="xml-zip-view"
-            class="ris-link1-regular"
-            external
-            :to="detailsMetadata.zipUrl"
-          >
-            <IcOutlineFileDownload class="mr-2 inline" />
-            {{ detailsMetadata.documentNumber }} als ZIP herunterladen
-          </NuxtLink>
-        </DetailsListEntry>
-      </DetailsList>
+          <DetailsListEntry v-if="detailsMetadata.zipUrl" label="Download:">
+            <NuxtLink
+              data-attr="xml-zip-view"
+              class="ris-link1-regular"
+              external
+              :to="detailsMetadata.zipUrl"
+            >
+              <IcOutlineFileDownload class="mr-2 inline" />
+              {{ detailsMetadata.documentNumber }} als ZIP herunterladen
+            </NuxtLink>
+          </DetailsListEntry>
+        </DetailsList>
+      </section>
     </template>
 
     <template #text>
       <SidebarLayout>
         <template #content>
-          <DocumentsIncompleteDataMessage class="mb-16" />
+          <DocumentsIncompleteDataMessage />
           <div
             v-if="document"
             class="case-law"

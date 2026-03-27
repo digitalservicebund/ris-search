@@ -2,7 +2,6 @@
 import type { TreeNode } from "primevue/treenode";
 import { computed } from "vue";
 import type { BreadcrumbItem } from "~/components/Breadcrumbs.vue";
-import IncompleteDataMessage from "~/components/documents/IncompleteDataMessage.vue";
 import ArticleVersionWarning from "~/components/documents/norms/ArticleVersionWarning.vue";
 import LegislationContent from "~/components/documents/norms/LegislationContent.vue";
 import NormTableOfContents from "~/components/documents/norms/NormTableOfContents.vue";
@@ -233,9 +232,9 @@ useDynamicSeo({ title, description });
     </div>
 
     <div class="border-t border-t-gray-400 bg-white">
-      <SidebarLayout class="container py-24">
+      <SidebarLayout class="container">
         <template v-if="!!articleHtml" #content>
-          <IncompleteDataMessage />
+          <DocumentsIncompleteDataMessage />
           <LegislationContent single-article>
             <article class="akn-act" v-html="articleHtml" />
           </LegislationContent>

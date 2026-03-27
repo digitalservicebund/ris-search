@@ -10,7 +10,6 @@ import type { BreadcrumbItem } from "~/components/Breadcrumbs.vue";
 import DetailsList from "~/components/DetailsList.vue";
 import DetailsListEntry from "~/components/DetailsListEntry.vue";
 import NormActionMenu from "~/components/documents/actionMenu/NormActionMenu.vue";
-import IncompleteDataMessage from "~/components/documents/IncompleteDataMessage.vue";
 import LegislationContent from "~/components/documents/norms/LegislationContent.vue";
 import NormHeadingGroup from "~/components/documents/norms/NormHeadingGroup.vue";
 import NormTableOfContents from "~/components/documents/norms/NormTableOfContents.vue";
@@ -219,10 +218,12 @@ const currentView = computed(
 useDynamicSeo({ title, description });
 
 const detailsTabPanelTitleId = useId();
+const fassungenTabPanelTitleId = useId();
 </script>
 
 <template>
   <div v-if="status == 'pending'">Lade ...</div>
+
   <div v-if="!!metadata">
     <div class="container">
       <div class="flex items-center gap-8 print:hidden">
@@ -260,12 +261,12 @@ const detailsTabPanelTitleId = useId();
       </nav>
     </div>
 
-    <div class="min-h-96 bg-white py-24 print:py-0">
+    <div class="min-h-96 bg-white print:py-0">
       <section v-if="currentView === 'text'">
         <SidebarLayout class="container">
           <template #content>
             <h2 class="sr-only">Text</h2>
-            <IncompleteDataMessage />
+            <DocumentsIncompleteDataMessage />
             <LegislationContent
               v-observe-elements
               :official-toc="htmlParts.officialToc"
@@ -273,6 +274,7 @@ const detailsTabPanelTitleId = useId();
               <div v-html="htmlParts.body" />
             </LegislationContent>
           </template>
+
           <template #sidebar>
             <client-only>
               <NormTableOfContents
@@ -289,11 +291,11 @@ const detailsTabPanelTitleId = useId();
         v-else-if="currentView === 'details'"
         :aria-labelledby="detailsTabPanelTitleId"
       >
-        <div class="container">
-          <h2 :id="detailsTabPanelTitleId" class="ris-heading3-bold my-24">
+        <div class="container pt-32 pb-32 lg:pb-56">
+          <h2 :id="detailsTabPanelTitleId" class="ris-heading3-bold">
             Details
           </h2>
-          <IncompleteDataMessage class="my-24" />
+          <DocumentsIncompleteDataMessage class="my-24" />
           <DetailsList>
             <DetailsListEntry
               label="Ausfertigungsdatum:"
@@ -334,8 +336,15 @@ const detailsTabPanelTitleId = useId();
         </div>
       </section>
 
-      <section v-else-if="currentView === 'versions'">
-        <div class="container">
+      <section
+        v-else-if="currentView === 'versions'"
+        :aria-labelledby="detailsTabPanelTitleId"
+      >
+        <div class="container pt-32 pb-32 lg:pb-56">
+          <h2 :id="fassungenTabPanelTitleId" class="ris-heading3-bold">
+            Fassungen
+          </h2>
+          <DocumentsIncompleteDataMessage class="my-24" />
           <NormVersionList
             v-if="privateFeaturesEnabled"
             :status="normVersionsStatus"
@@ -355,16 +364,16 @@ const detailsTabPanelTitleId = useId();
 @reference "~/assets/main.css";
 
 :deep(.official-toc div) {
-  @apply lg:pl-32;
-  @apply ml-16;
-  @apply mb-16;
+  @apply mb-16 ml-16 lg:pl-32;
+
   &.level-1 {
-    @apply ml-0;
-    @apply ris-label1-bold;
+    @apply ris-label1-bold ml-0;
   }
+
   &.level-5 {
     @apply ml-8;
   }
+
   &.level-10 {
     @apply ml-16;
   }
