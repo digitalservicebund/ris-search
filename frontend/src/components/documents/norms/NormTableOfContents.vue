@@ -56,6 +56,7 @@ function hideTableOfContents() {
       :items="tableOfContents"
       :selected="selectedKey"
       :expand-to-key="selectedKey"
+      :selection-enabled="!!selectedKey"
       heading="Inhalte"
       class="overflow-y-auto lg:pt-16"
       label="Inhaltsverzeichnis des aktuellen Gesetzes"

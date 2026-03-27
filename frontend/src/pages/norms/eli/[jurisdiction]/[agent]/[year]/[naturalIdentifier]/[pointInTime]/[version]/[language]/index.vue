@@ -104,8 +104,6 @@ const validityStatus = computed(() => {
   return undefined;
 });
 
-const { selectedEntry, vObserveElements } = useIntersectionObserver();
-
 const normBreadcrumbTitle = computed(() =>
   metadata.value ? getNormBreadcrumbTitle(metadata.value) : "",
 );
@@ -266,10 +264,7 @@ const fassungenTabPanelTitleId = useId();
           <template #content>
             <h2 class="sr-only">Text</h2>
             <DocumentsIncompleteDataMessage />
-            <LegislationContent
-              v-observe-elements
-              :official-toc="htmlParts.officialToc"
-            >
+            <LegislationContent :official-toc="htmlParts.officialToc">
               <div v-html="htmlParts.body" />
             </LegislationContent>
           </template>
@@ -279,7 +274,6 @@ const fassungenTabPanelTitleId = useId();
               <NormTableOfContents
                 v-if="metadata.workExample?.tableOfContents?.length"
                 :table-of-contents="tableOfContents"
-                :selected-key="selectedEntry"
               />
             </client-only>
           </template>

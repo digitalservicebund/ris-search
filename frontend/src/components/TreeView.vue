@@ -9,7 +9,14 @@ export type TreeItem = {
   children?: TreeItem[];
 };
 
-const props = defineProps<{
+const {
+  items,
+  heading,
+  subheading,
+  label,
+  expandToKey,
+  selectionEnabled = true,
+} = defineProps<{
   /** All items in the tree */
   items: T[];
   /** Heading of the tree */
@@ -26,6 +33,8 @@ const props = defineProps<{
    * is visible. Any pre-existing expansions are not affected.
    */
   expandToKey?: string;
+  /** Enables selected state and selection updates for tree items. */
+  selectionEnabled?: boolean;
 }>();
 
 const expandedKeys = defineModel<string[]>("expandedKeys", {
@@ -56,7 +65,7 @@ const treeRef = ref<HTMLElement>();
 // [1]: https://www.w3.org/WAI/ARIA/apg/patterns/treeview/
 // [2]: https://www.w3.org/WAI/ARIA/apg/practices/keyboard-interface/#kbd_roving_tabindex
 
-const focusedKey = ref<string>(selected.value ?? props.items[0]?.key ?? "");
+const focusedKey = ref<string>(selected.value ?? items[0]?.key ?? "");
 
 async function focusCurrent() {
   await nextTick();
@@ -67,10 +76,10 @@ async function focusCurrent() {
  * Lists all visible items, i.e. all root items, as well as all items that are a
  * child of an expanded item.
  */
-function getVisibleItems(items: TreeItem[], expanded: string[]): TreeItem[] {
+function getVisibleItems(allItems: TreeItem[], expanded: string[]): TreeItem[] {
   const result: TreeItem[] = [];
 
-  items.forEach((i) => {
+  allItems.forEach((i) => {
     result.push(i);
     if (i.children?.length && expanded.includes(i.key)) {
       result.push(...getVisibleItems(i.children, expanded));
@@ -80,17 +89,15 @@ function getVisibleItems(items: TreeItem[], expanded: string[]): TreeItem[] {
   return result;
 }
 
-const visibleItems = computed(() =>
-  getVisibleItems(props.items, expandedKeys.value),
-);
+const visibleItems = computed(() => getVisibleItems(items, expandedKeys.value));
 
 /** Creates a map that maps each item key to its parent item. */
 function collectParentsByKey(
-  items: TreeItem[],
+  allItems: TreeItem[],
   currentParent?: TreeItem,
   parents = new Map<string, TreeItem | undefined>(),
 ): Map<string, TreeItem | undefined> {
-  items.forEach((item) => {
+  allItems.forEach((item) => {
     parents.set(item.key, currentParent);
 
     if (item.children?.length) {
@@ -101,7 +108,7 @@ function collectParentsByKey(
   return parents;
 }
 
-const parentByKey = computed(() => collectParentsByKey(props.items));
+const parentByKey = computed(() => collectParentsByKey(items));
 
 /**
  * Gets the keys of all ancestors of an item, i.e. the item's parent, the
@@ -118,7 +125,7 @@ function getAncestorKeys(key: string): string[] {
 }
 
 watch(
-  [() => props.expandToKey, parentByKey],
+  [() => expandToKey, parentByKey],
   ([key]) => {
     if (!key) return;
     const ancestors = getAncestorKeys(key);
@@ -203,7 +210,8 @@ function collapseIfParent(item: TreeItem) {
 }
 
 function activateItem(item: TreeItem) {
-  selected.value = item.key;
+  if (selectionEnabled) selected.value = item.key;
+
   emit("click", item as T);
 
   if (item.to) navigateTo(item.to);
@@ -280,6 +288,7 @@ function onKeydown(event: KeyboardEvent) {
         :key="item.key"
         :item="item"
         :focused-key="focusedKey"
+        :selection-enabled="selectionEnabled"
         v-model:expanded-keys="expandedKeys"
         v-model:selected="selected"
         @click="$emit('click', $event as T)"

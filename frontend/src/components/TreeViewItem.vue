@@ -10,10 +10,12 @@ const {
   item,
   focusedKey,
   level = 1,
+  selectionEnabled = true,
 } = defineProps<{
   item: TreeItem;
   focusedKey?: string;
   level?: number;
+  selectionEnabled?: boolean;
 }>();
 
 const emit = defineEmits<{
@@ -40,11 +42,13 @@ const accessibleLabel = computed(() => {
   return label || undefined;
 });
 
-const isSelected = computed(() => item.key === selected.value);
+const isSelected = computed(
+  () => selectionEnabled && item.key === selected.value,
+);
 
 function onSelect() {
   emit("click", item);
-  selected.value = item.key;
+  if (selectionEnabled) selected.value = item.key;
 }
 
 function onHeaderClick() {
@@ -79,7 +83,7 @@ function onToggleDeep() {
     :aria-expanded="isParent ? isExpanded : undefined"
     :aria-label="accessibleLabel"
     :aria-level="level"
-    :aria-selected="isSelected"
+    :aria-selected="selectionEnabled ? isSelected : undefined"
     :tabindex="isFocused ? 0 : -1"
   >
     <!-- Allowing clicking on a non-interactive element in this case to increase
@@ -151,6 +155,7 @@ function onToggleDeep() {
         :focused-key="focusedKey"
         :item="child"
         :level="level + 1"
+        :selection-enabled="selectionEnabled"
         v-model:expanded-keys="expandedKeys"
         v-model:selected="selected"
         @click="emit('click', $event)"

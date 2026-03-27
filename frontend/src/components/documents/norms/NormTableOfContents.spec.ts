@@ -68,6 +68,7 @@ describe("NormTableOfContents", () => {
   async function renderComponent(props?: {
     selectedKey?: string;
     items?: ReturnType<typeof createItems>;
+    selectionEnabled?: boolean;
   }) {
     return renderSuspended(NormTableOfContents, {
       props: {

@@ -229,6 +229,17 @@ describe("TreeView", () => {
         expect(item).toHaveAttribute("aria-selected", "false");
       }
     });
+
+    it("omits selected state when selection is disabled", async () => {
+      await renderSuspended(TreeView, {
+        props: { items: flatItems, selectionEnabled: false, selected: "b" },
+      });
+
+      const items = screen.getAllByRole("treeitem");
+      for (const item of items) {
+        expect(item).not.toHaveAttribute("aria-selected");
+      }
+    });
   });
 
   describe("tabindex manipulation", () => {
@@ -448,6 +459,18 @@ describe("TreeView", () => {
       items[0]!.focus();
       await user.keyboard("{Enter}");
       expect(emitted("update:selected")).toContainEqual(["a"]);
+      expect(emitted("click")).toContainEqual([{ key: "a", title: "Item A" }]);
+    });
+
+    it("does not select the focused item when selection is disabled", async () => {
+      const user = userEvent.setup();
+      const { emitted } = await renderSuspended(TreeView, {
+        props: { items: flatItems, selectionEnabled: false },
+      });
+      const items = screen.getAllByRole("treeitem");
+      items[0]!.focus();
+      await user.keyboard("{Enter}");
+      expect(emitted("update:selected")).toBeUndefined();
       expect(emitted("click")).toContainEqual([{ key: "a", title: "Item A" }]);
     });
 
