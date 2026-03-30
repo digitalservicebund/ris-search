@@ -1,24 +1,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import type { BreadcrumbItem } from "~/components/Breadcrumbs.vue";
-import ArticleVersionWarning from "~/components/documents/norms/ArticleVersionWarning.vue";
-import LegislationContent from "~/components/documents/norms/LegislationContent.vue";
-import NormTableOfContents from "~/components/documents/norms/NormTableOfContents.vue";
-import SidebarLayout from "~/components/SidebarLayout.vue";
-import { useDynamicSeo } from "~/composables/useDynamicSeo";
-import { useFetchNormArticleContent } from "~/composables/useNormData";
-import { useValidNormVersions } from "~/composables/useNormVersions";
-import { usePrivateFeaturesFlag } from "~/composables/usePrivateFeaturesFlag";
 import { type Article, DocumentKind } from "~/types/api";
-import {
-  dateFormattedDDMMYYYY,
-  parseDateGermanLocalTime,
-} from "~/utils/dateFormatting";
-import { formatDocumentKind } from "~/utils/displayValues";
-import { parseDocument } from "~/utils/htmlParser";
-import { getNormBreadcrumbTitle } from "~/utils/norm";
-import { findNodePath, tocItemsToTreeViewItems } from "~/utils/tableOfContents";
-import { truncateAtWord } from "~/utils/textFormatting";
 import IcBaselineArrowBack from "~icons/ic/baseline-arrow-back";
 import IcBaselineArrowForward from "~icons/ic/baseline-arrow-Forward";
 
@@ -215,7 +198,7 @@ useDynamicSeo({ title, description });
         />
       </div>
 
-      <ArticleVersionWarning
+      <DocumentsNormsArticleVersionWarning
         v-if="inForceNormLink && article"
         :in-force-version-link="inForceNormLink"
         :current-article="article"
@@ -234,9 +217,9 @@ useDynamicSeo({ title, description });
       <SidebarLayout class="container">
         <template v-if="!!articleHtml" #content>
           <DocumentsIncompleteDataMessage />
-          <LegislationContent single-article>
+          <DocumentsNormsLegislationContent single-article>
             <article class="akn-act" v-html="articleHtml" />
-          </LegislationContent>
+          </DocumentsNormsLegislationContent>
           <div class="flex flex-row justify-between">
             <div class="flex flex-col">
               <NuxtLink
@@ -265,7 +248,7 @@ useDynamicSeo({ title, description });
           </div>
         </template>
         <template #sidebar>
-          <NormTableOfContents
+          <DocumentsNormsNormTableOfContents
             v-if="norm.workExample?.tableOfContents?.length"
             :subheading="normBreadcrumbTitle"
             :table-of-contents="tableOfContents"

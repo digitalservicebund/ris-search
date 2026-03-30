@@ -1,40 +1,11 @@
 <script setup lang="ts">
+import { NuxtLink } from "#components";
 import type { Dayjs } from "dayjs";
 import { Tab, TabList, Tabs } from "primevue";
 import type { ComputedRef } from "vue";
-import { computed } from "vue";
-import { useRoute } from "#app";
-import { NuxtLink } from "#components";
 import type { BreadcrumbItem } from "~/components/Breadcrumbs.vue";
-import DetailsList from "~/components/DetailsList.vue";
-import DetailsListEntry from "~/components/DetailsListEntry.vue";
-import NormActionMenu from "~/components/documents/actionMenu/NormActionMenu.vue";
-import LegislationContent from "~/components/documents/norms/LegislationContent.vue";
-import NormHeadingGroup from "~/components/documents/norms/NormHeadingGroup.vue";
-import NormTableOfContents from "~/components/documents/norms/NormTableOfContents.vue";
-import NormVersionList from "~/components/documents/norms/NormVersionList.vue";
-import NormVersionWarning from "~/components/documents/norms/NormVersionWarning.vue";
-import VersionsTeaser from "~/components/documents/norms/VersionsTeaser.vue";
-import SidebarLayout from "~/components/SidebarLayout.vue";
-import { useDynamicSeo } from "~/composables/useDynamicSeo";
-import { useIntersectionObserver } from "~/composables/useIntersectionObserver";
-import { useFetchNormContent } from "~/composables/useNormData";
-import { useNormVersions } from "~/composables/useNormVersions";
-import { usePrivateFeaturesFlag } from "~/composables/usePrivateFeaturesFlag";
-import { fetchTranslationListWithIdFilter } from "~/composables/useTranslationData";
 import { DocumentKind, type LegislationWork } from "~/types/api";
-import { dateFormattedDDMMYYYY } from "~/utils/dateFormatting";
-import { formatDocumentKind } from "~/utils/displayValues";
 import type { ValidityStatus } from "~/utils/norm";
-import {
-  getManifestationUrl,
-  getNormBreadcrumbTitle,
-  getValidityStatus,
-  getValidityStatusLabel,
-  temporalCoverageToValidityInterval,
-} from "~/utils/norm";
-import { tocItemsToTreeViewItems } from "~/utils/tableOfContents";
-import { truncateAtWord } from "~/utils/textFormatting";
 import IcBaselineSubject from "~icons/ic/baseline-subject";
 import IconFileDownload from "~icons/ic/outline-file-download";
 import IcOutlineInfo from "~icons/ic/outline-info";
@@ -225,10 +196,13 @@ const fassungenTabPanelTitleId = useId();
     <div class="container">
       <div class="flex items-center gap-8 print:hidden">
         <Breadcrumbs :items="breadcrumbItems" class="grow" />
-        <NormActionMenu :metadata :translation-url />
+        <DocumentsActionMenuNormActionMenu :metadata :translation-url />
       </div>
-      <NormHeadingGroup :metadata="metadata" :html-parts="htmlParts" />
-      <NormVersionWarning
+      <DocumentsNormsNormHeadingGroup
+        :metadata="metadata"
+        :html-parts="htmlParts"
+      />
+      <DocumentsNormsNormVersionWarning
         v-if="normVersionsStatus === 'success'"
         :versions="normVersions"
         :current-version="metadata"
@@ -264,14 +238,16 @@ const fassungenTabPanelTitleId = useId();
           <template #content>
             <h2 class="sr-only">Text</h2>
             <DocumentsIncompleteDataMessage />
-            <LegislationContent :official-toc="htmlParts.officialToc">
+            <DocumentsNormsLegislationContent
+              :official-toc="htmlParts.officialToc"
+            >
               <div v-html="htmlParts.body" />
-            </LegislationContent>
+            </DocumentsNormsLegislationContent>
           </template>
 
           <template #sidebar>
             <client-only>
-              <NormTableOfContents
+              <DocumentsNormsNormTableOfContents
                 v-if="metadata.workExample?.tableOfContents?.length"
                 :subheading="normBreadcrumbTitle"
                 :table-of-contents="tableOfContents"
@@ -339,7 +315,7 @@ const fassungenTabPanelTitleId = useId();
             Fassungen
           </h2>
           <DocumentsIncompleteDataMessage class="my-24" />
-          <NormVersionList
+          <DocumentsNormsNormVersionList
             v-if="privateFeaturesEnabled"
             :status="normVersionsStatus"
             :current-legislation-identifier="
@@ -347,7 +323,7 @@ const fassungenTabPanelTitleId = useId();
             "
             :versions="normVersions"
           />
-          <VersionsTeaser v-else />
+          <DocumentsNormsVersionsTeaser v-else />
         </div>
       </section>
     </div>

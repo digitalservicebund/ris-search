@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import type { ComputedRef } from "vue";
 import type { MetadataItem } from "~/components/Metadata.vue";
 import type { TreeItem } from "~/components/TreeView.vue";
 import type { DocumentView } from "~/layouts/document.vue";
