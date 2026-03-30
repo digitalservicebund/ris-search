@@ -39,17 +39,17 @@ jobs:
       TRIVY_JAVA_DB_REPOSITORY: ${{ inputs.trivy-java-db-repository }}
       TRIVY_OFFLINE_SCAN: ${{ inputs.trivy-offile-scan }}
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
       - name: Log into container registry
         # Third-party action, pin to commit SHA!
-        uses: docker/login-action@9fe7774c8f8ebfade96f0a62aa10f3882309d517
+        uses: docker/login-action@b45d80f862d83dbcd57f89517bcf500b2ab88fb2 # v4
         with:
           registry: ${{ inputs.container-registry }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Run Trivy vulnerability image scanner
        # Third-party action, pin to commit SHA!
-        uses: aquasecurity/trivy-action@57a97c7e7821a5776cebc9bb87c984fa69cba8f1
+        uses: aquasecurity/trivy-action@57a97c7e7821a5776cebc9bb87c984fa69cba8f1 # v0.35.0
         with:
          image-ref: ${{ inputs.image-reference }}
          format: "sarif"
@@ -57,7 +57,7 @@ jobs:
          trivyignores: ${{ inputs.app}}/.trivyignore
 
       - name: Upload Trivy vulnerability image scanner results as artifact
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7
         with:
          name: "trivy-scan-results-${{ inputs.app }}.sarif"
          path: "trivy-results.sarif"
@@ -87,7 +87,7 @@ jobs:
 
       - name: Generate Cosign vulnerability scan record
         # Third-party action, pin to commit SHA!
-        uses: aquasecurity/trivy-action@57a97c7e7821a5776cebc9bb87c984fa69cba8f1
+        uses: aquasecurity/trivy-action@57a97c7e7821a5776cebc9bb87c984fa69cba8f1 # v0.35.0
         if: ${{ github.actor != 'dependabot[bot]' }}
         with:
          image-ref: ${{ inputs.image-reference }}
@@ -95,7 +95,7 @@ jobs:
          output: "vuln-${{ inputs.app }}.json"
 
       - name: Upload Cosign vulnerability scan record as artifact
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7
         if: ${{ github.actor != 'dependabot[bot]' }}
         with:
          name: "vuln-${{ inputs.app }}.json"
@@ -104,7 +104,7 @@ jobs:
 
       - name: Install Cosign
         if: ${{ github.actor != 'dependabot[bot]' }}
-        uses: sigstore/cosign-installer@ba7bc0a3fef59531c69a25acd34668d6d3fe6f22
+        uses: sigstore/cosign-installer@cad07c2e89fa2edd6e2d7bab4c1aa38e53f76003  # v4.1.1
         with:
          cosign-release: "v2.6.0" # We need to use v2.X.X because of major version GHA v4.X.X and broken image verification of Kyverno
 

@@ -21,14 +21,14 @@ jobs:
           - configuration_label: private
             private_features_enabled: true
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
         with:
           fetch-depth: 40
       - name: Adjust permissions to Docker
         run: sudo chmod 666 /var/run/docker.sock
       - name: Cache OpenSearch image
         id: opensearch-cache
-        uses: actions/cache@v5
+        uses: actions/cache@668228422ae6a00e4ad889ee87cd7109ec5666a7 # v5
         with:
           path: /home/runner/.docker-image-cache/opensearch.tar
           key: opensearch-image-cache-2.11.0
@@ -44,9 +44,9 @@ jobs:
           docker save opensearchproject/opensearch:2.11.0 -o /home/runner/.docker-image-cache/opensearch.tar
       - name: Start opensearch container
         run: docker compose -f docker-compose.yml up -d opensearch
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
       - name: Set up JDK
-        uses: actions/setup-java@v5
+        uses: actions/setup-java@be666c2fcd27ec809703dec50e508c2fdc7f6654 # v5
         with:
           java-version: "21.0"
           distribution: "temurin"
@@ -72,10 +72,10 @@ jobs:
           nohup ./gradlew bootRun --no-daemon > backend.log 2>&1 &
           sleep 8
       - name: Setup pnpm
-        uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 #v5.0.0
+        uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 #v5
         with:
           package_json_file: ./frontend/package.json
-      - uses: actions/setup-node@v6
+      - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6
         with:
           node-version: 24
           cache: 'pnpm'
@@ -97,7 +97,7 @@ jobs:
         working-directory: ./frontend
       - name: Cache browser binaries
         id: playwright-cache
-        uses: actions/cache@v5
+        uses: actions/cache@668228422ae6a00e4ad889ee87cd7109ec5666a7 # v5
         with:
           path: /home/runner/.cache/ms-playwright
           key: ${{ runner.os }}-playwright-${{ env.PLAYWRIGHT_VERSION }}
@@ -127,14 +127,14 @@ jobs:
           NUXT_PUBLIC_PRIVATE_FEATURES_ENABLED: ${{ matrix.private_features_enabled }}
           TZ: Europe/Berlin
       - name: Upload test reports
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7
         if: ${{ !failure() }}
         with:
           name: playwright-e2e-tests-report-${{ matrix.configuration_label }}-${{ matrix.browser }}
           path: frontend/playwright-report/**
           retention-days: 5
       - name: Upload traces of failed tests
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7
         if: ${{ failure() }}
         with:
           name: failed-e2e-tests-${{ matrix.configuration_label }}-${{ matrix.browser }}
@@ -144,19 +144,19 @@ jobs:
         if: ${{ failure() }}
         run: docker compose -f docker-compose.yml logs > docker-compose-logs-${{ matrix.configuration_label }}-${{ matrix.browser }}.log
       - name: Upload backend log
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7
         if: ${{ failure() }}
         with:
           name: backend-log-${{ matrix.configuration_label }}-${{ matrix.browser }}
           path: backend/backend.log
       - name: Upload frontend log
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7
         if: ${{ failure() }}
         with:
           name: frontend-log-${{ matrix.configuration_label }}-${{ matrix.browser }}
           path: frontend/frontend.log
       - name: Upload Docker logs
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7
         if: ${{ failure() }}
         with:
           name: docker-compose-logs-${{ matrix.configuration_label }}-${{ matrix.browser }}
@@ -185,7 +185,7 @@ jobs:
       - e2e-tests
     if: ${{ github.ref == 'refs/heads/main' }}
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
         with:
           repository: ${{ env.reports-repo }}
           ssh-key: ${{ secrets.REPORTS_DEPLOY_KEY }}
@@ -196,7 +196,7 @@ jobs:
           # This email identifies the commit as GitHub Actions - see https://github.com/orgs/community/discussions/26560
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
       - name: E2E test reports - Download
-        uses: actions/download-artifact@v8
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
         with:
           path: tmp/playwright-report/
           pattern: playwright-e2e-tests-report-*
