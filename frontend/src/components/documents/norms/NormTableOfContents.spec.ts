@@ -55,11 +55,12 @@ describe("NormTableOfContents", () => {
     },
   ];
 
-  const headingBasePath = "/headings/";
-  const leafBasePath = "/leaf/";
-
   const createItems = (items = mockTocItems) =>
-    tocItemsToTreeViewItems(items, headingBasePath, leafBasePath);
+    tocItemsToTreeViewItems(
+      items,
+      (id) => ({ path: "/", hash: `#${id}` }),
+      (id) => ({ path: "/about", hash: `#${id}` }),
+    );
 
   beforeEach(() => {
     vi.clearAllMocks();

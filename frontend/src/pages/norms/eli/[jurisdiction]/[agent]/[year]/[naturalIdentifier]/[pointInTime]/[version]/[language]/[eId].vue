@@ -42,8 +42,8 @@ const tableOfContents = computed(() => {
   if (!norm.value?.workExample?.tableOfContents) return [];
   return tocItemsToTreeViewItems(
     norm.value.workExample.tableOfContents,
-    normPath.concat("#"),
-    normPath.concat("/"),
+    (id) => ({ path: normPath, hash: `#${id}` }),
+    (id) => ({ path: `${normPath}/${encodeForUri(id)}` }),
   );
 });
 

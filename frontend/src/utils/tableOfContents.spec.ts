@@ -1,6 +1,16 @@
 import { describe, expect, it } from "vitest";
 import { findNodePath, tocItemsToTreeViewItems } from "./tableOfContents";
 import type { TableOfContentsItem } from "~/types/api";
+import { encodeForUri } from "./textFormatting";
+
+const getHeadingTarget = (id: string, headingPath = "/heading") => ({
+  path: headingPath,
+  hash: `#${id}`,
+});
+
+const getLeafTarget = (id: string, leafPath = "/leaf") => ({
+  path: `${leafPath}/${encodeForUri(id)}`,
+});
 
 describe("tableOfContents", () => {
   describe("tocItemsToTreeViewItems", () => {
@@ -15,13 +25,17 @@ describe("tableOfContents", () => {
         },
       ];
 
-      const result = tocItemsToTreeViewItems(items, "/heading/", "/leaf/");
+      const result = tocItemsToTreeViewItems(
+        items,
+        getHeadingTarget,
+        getLeafTarget,
+      );
 
       expect(result).toHaveLength(1);
       expect(result[0]?.key).toBe("art-1");
       expect(result[0]?.title).toBe("§ 1");
       expect(result[0]?.subtitle).toBe("Title");
-      expect(result[0]?.to).toBe("/leaf/art-1");
+      expect(result[0]?.to).toEqual({ path: "/leaf/art-1" });
       expect(result[0]?.children).toBeUndefined();
     });
 
@@ -44,13 +58,17 @@ describe("tableOfContents", () => {
         },
       ];
 
-      const result = tocItemsToTreeViewItems(items, "/heading/", "/leaf/");
+      const result = tocItemsToTreeViewItems(
+        items,
+        getHeadingTarget,
+        getLeafTarget,
+      );
 
       expect(result).toHaveLength(1);
       expect(result[0]?.key).toBe("chapter-1");
       expect(result[0]?.title).toBe("Chapter 1");
       expect(result[0]?.subtitle).toBe("Introduction");
-      expect(result[0]?.to).toBe("/heading/chapter-1");
+      expect(result[0]?.to).toEqual({ path: "/heading", hash: "#chapter-1" });
       expect(result[0]?.children).toHaveLength(1);
       expect(result[0]?.children?.[0]?.key).toBe("art-1");
     });
@@ -66,10 +84,38 @@ describe("tableOfContents", () => {
         },
       ];
 
-      const result = tocItemsToTreeViewItems(items, "/heading/", "/leaf/");
+      const result = tocItemsToTreeViewItems(
+        items,
+        getHeadingTarget,
+        getLeafTarget,
+      );
 
       expect(result).toHaveLength(1);
-      expect(result[0]?.to).toBe("/leaf/Praeoeue AeOeUe §1");
+      expect(result[0]?.to).toEqual({ path: "/leaf/Praeoeue AeOeUe §1" });
+    });
+
+    it("keeps raw IDs for selection and encodes hash links for router navigation", () => {
+      const items: TableOfContentsItem[] = [
+        {
+          "@type": "TocEntry",
+          id: "art-z§§ 18 bis 21",
+          marker: "§§ 18 bis 21",
+          heading: "Encoded hash target",
+          children: [],
+        },
+      ];
+
+      const result = tocItemsToTreeViewItems(
+        items,
+        (id: string) => ({ path: "/heading", hash: `#${id}` }),
+        (id: string) => ({ path: "/leaf", hash: `#${id}` }),
+      );
+
+      expect(result[0]?.key).toBe("art-z§§ 18 bis 21");
+      expect(result[0]?.to).toEqual({
+        path: "/leaf",
+        hash: "#art-z§§ 18 bis 21",
+      });
     });
   });
 

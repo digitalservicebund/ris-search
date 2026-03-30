@@ -1,29 +1,30 @@
 import type { TreeItem } from "~/components/TreeView.vue";
 import type { TableOfContentsItem } from "~/types/api";
 
+type TocTargetBuilder = (id: string) => TreeItem["to"];
+
 export function tocItemsToTreeViewItems(
   items: TableOfContentsItem[],
-  headingBasePath: string,
-  leafBasePath: string,
+  getHeadingTarget: TocTargetBuilder,
+  getLeafTarget: TocTargetBuilder,
 ): TreeItem[] {
   return items.map((child) => {
-    const encodedChildId = encodeForUri(child.id);
     const childTreeItem: TreeItem = {
-      key: encodedChildId,
+      key: child.id,
       title: child.marker,
       subtitle: child.heading,
-      to: leafBasePath + encodedChildId,
+      to: getLeafTarget(child.id),
     };
 
     return !child.children || child.children.length === 0
       ? childTreeItem
       : {
           ...childTreeItem,
-          to: headingBasePath + encodedChildId,
+          to: getHeadingTarget(child.id),
           children: tocItemsToTreeViewItems(
             child.children,
-            headingBasePath,
-            leafBasePath,
+            getHeadingTarget,
+            getLeafTarget,
           ),
         };
   });

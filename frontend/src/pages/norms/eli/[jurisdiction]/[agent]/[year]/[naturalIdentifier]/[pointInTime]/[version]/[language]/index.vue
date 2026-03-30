@@ -56,8 +56,8 @@ const tableOfContents = computed(() => {
   const normPath = route.path;
   return tocItemsToTreeViewItems(
     metadata.value.workExample.tableOfContents,
-    normPath.concat("#"),
-    normPath.concat("#"),
+    (id) => ({ path: normPath, hash: `#${id}` }),
+    (id) => ({ path: normPath, hash: `#${id}` }),
   );
 });
 
