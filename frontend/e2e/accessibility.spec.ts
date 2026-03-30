@@ -41,10 +41,14 @@ const testPages = [
     name: "introduction",
     url: "/einfuehrung",
   },
-  // {
-  //   name: "user tests",
-  //   url: "/nutzungstests",
-  // },
+  {
+    name: "user tests",
+    url: "/nutzungstests",
+  },
+  {
+    name: "user tests data protection",
+    url: "/nutzungstests-datenschutz",
+  },
   {
     name: "simple search - all documents",
     url: "/search",

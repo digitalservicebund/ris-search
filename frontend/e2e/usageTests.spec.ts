@@ -1,15 +1,15 @@
 import { expect, navigate, test } from "./utils/fixtures";
 
 test("opens the page via URL", async ({ page }) => {
-  await navigate(page, "/nutzungstests-datenschutz");
+  await navigate(page, "/nutzungstests");
   await expect(
     page.getByRole("heading", {
-      name: `Datenschutzerklärung für die Registrierung für Nutzungsstudien für das Projekt „Testphase Rechtsinformationsportal"`,
+      name: `Helfen Sie uns, Rechtsinformationen leichter zugänglich zu machen`,
     }),
   ).toBeVisible();
 
   const formbricksLink = page.getByRole("link", {
-    name: /^https:\/\/surveys.digitalservice.dev.*/,
+    name: "Jetzt registrieren",
   });
 
   await expect(formbricksLink).toBeVisible();

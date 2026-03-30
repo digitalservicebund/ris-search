@@ -103,8 +103,7 @@ const privateFeaturesEnabled = usePrivateFeaturesFlag();
                   >API-Dokumentation</ExternalLink
                 >
               </li>
-              <!-- Temporarily disabled due to data issue with Form bricks -->
-              <li v-if="false">
+              <li>
                 <NuxtLink
                   class="ris-link2-regular link-hover"
                   :to="{ name: 'usage-tests' }"

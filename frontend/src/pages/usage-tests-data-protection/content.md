@@ -1,6 +1,6 @@
 # Datenschutzerklärung für die Registrierung für Nutzungsstudien für das Projekt „Testphase Rechtsinformationsportal"
 
-In dieser Datenschutzerklärung informieren wir Sie darüber, welche personenbezogenen Daten bei Nutzung des Registrierungsformulars für Nutzungsstudien zu dem Projekt _„Testphase Rechtsinformationsportal“_ auf [https://app.formbricks.com/s/cm1gatpbv0001zm7bryylwzyw](https://app.formbricks.com/s/cm1gatpbv0001zm7bryylwzyw) verarbeitet werden. Außerdem erhalten Sie Informationen zur Weitergabe Ihrer personenbezogenen Daten an Dritte, zur Dauer der Speicherung Ihrer personenbezogenen Daten, über Ihre Rechte in Bezug auf die Verarbeitung Ihrer personenbezogenen Daten und darüber, an wen Sie sich diesbezüglich wenden können.
+In dieser Datenschutzerklärung informieren wir Sie darüber, welche personenbezogenen Daten bei Nutzung des Registrierungsformulars für Nutzungsstudien zu dem Projekt _„Testphase Rechtsinformationsportal“_ auf [https://surveys.digitalservice.dev/s/so79ojxtsz0lhy2f1u7qm2yp](https://surveys.digitalservice.dev/s/so79ojxtsz0lhy2f1u7qm2yp) verarbeitet werden. Außerdem erhalten Sie Informationen zur Weitergabe Ihrer personenbezogenen Daten an Dritte, zur Dauer der Speicherung Ihrer personenbezogenen Daten, über Ihre Rechte in Bezug auf die Verarbeitung Ihrer personenbezogenen Daten und darüber, an wen Sie sich diesbezüglich wenden können.
 
 Das Bundesministerium der Justiz und für Verbraucherschutz (BMJV) verarbeitet Ihre personenbezogenen Daten gemäß den datenschutzrechtlichen Vorschriften der Verordnung (EU) 2016/679 (Datenschutz-Grundverordnung – „DS-GVO"), des Bundesdatenschutzgesetzes („BDSG") in der ab dem 25. Mai 2018 geltenden Fassung, sowie des Telekommunikation-Digitale-Dienste-Datenschutz-Gesetzes („TDDDG").
 
@@ -41,18 +41,16 @@ Folgende personenbezogene Daten werden verarbeitet:
 
 - Name/Vorname
 - Kontaktdaten (E-Mail-Adresse, Telefon (optional))
-- Altersgruppe
-- Geschlecht (optional)
-- Berufsbranche (optional)
 - Höchster Bildungsabschluss (optional)
 - Rechtskenntnisse (optional)
 - Häufigkeit von Recherchen bei Rechtsfragen (optional)
 - Vertrautheit mit bestehenden Services wie Gesetze-im-Internet, Juris etc. (optional)
-- Technisches Wissen zu APIs (optional)
+- Nutzung der Daten des Portals (optional)
 - Deutschkenntnisse (optional)
-- Besitz digitaler Endgeräte (optional)
-- Textgröße auf Handy und anderen digitalen Endgeräten (optional)
 - Hilfsmittel, die Sie für Computer, Tablet oder Smartphone nutzen (optional)
+- Nutzung der Suchfunktionen (optional)
+- Interesse an Arten von Rechtsinformationen (optional)
+- Angaben im Freitextfeld (optional)
 
 ## 5. Was ist der Zweck der Datenverarbeitung?
 
