@@ -38,6 +38,29 @@ test("can view a single case law documentation unit", async ({ page }) => {
   await firstSectionHeader.scrollIntoViewIfNeeded();
 });
 
+test("sidebar TOC renders on desktop and clicking a link scrolls to the section", async ({
+  page,
+  isMobileTest,
+}) => {
+  test.skip(isMobileTest);
+
+  await navigate(page, "/case-law/KORE705352026");
+
+  const sidebar = await getSidebar(page);
+
+  await expect(sidebar.getByRole("link", { name: "Tenor" })).toBeVisible();
+
+  const tatbestandLink = sidebar.getByRole("link", { name: "Tatbestand" });
+  await expect(tatbestandLink).toBeVisible();
+  await tatbestandLink.click();
+
+  await expect(page).toHaveURL(/#tatbestand$/i);
+
+  await expect(
+    page.getByRole("heading", { name: "Tatbestand" }),
+  ).toBeInViewport();
+});
+
 test.describe("responsive", () => {
   test.beforeEach(({ isMobileTest }) => {
     test.skip(!isMobileTest);

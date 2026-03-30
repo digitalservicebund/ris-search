@@ -243,6 +243,51 @@ test.describe("view norm page", async () => {
     });
   });
 
+  test("table of contents renders and clicking a link scrolls to the article", async ({
+    page,
+    isMobileTest,
+  }) => {
+    test.skip(isMobileTest);
+    const normUrl = "/norms/eli/bund/bgbl-1/1964/s902/2009-02-05/19/deu";
+
+    await navigate(page, normUrl);
+
+    const tocNav = page.getByRole("navigation", { name: "Inhalte" });
+    await expect(tocNav).toBeVisible();
+
+    const articleLink = tocNav.getByRole("link", { name: "§ 1" }).first();
+    await expect(articleLink).toBeVisible();
+    await articleLink.click();
+
+    await expect(page).toHaveURL(/#art-z1$/);
+
+    const targetHeading = page
+      .getByRole("main")
+      .getByRole("heading", { name: /§\s*1\s+Erlaubnis/i });
+
+    await expect(targetHeading).toBeInViewport();
+  });
+
+  test("table of contents renders on article page", async ({
+    page,
+    isMobileTest,
+  }) => {
+    test.skip(isMobileTest);
+
+    await navigate(
+      page,
+      "/norms/eli/bund/bgbl-1/1964/s902/2009-02-05/19/deu/art-z1",
+    );
+
+    const tocNav = page.getByRole("navigation", { name: "Inhalte" });
+    await expect(tocNav).toBeVisible();
+
+    const selectedItem = tocNav.getByRole("treeitem", {
+      name: /§\s*1,/i,
+    });
+    await expect(selectedItem).toHaveAttribute("aria-selected", "true");
+  });
+
   test("scrolls to an article with encoded hash in URL", async ({
     page,
     isMobileTest,
