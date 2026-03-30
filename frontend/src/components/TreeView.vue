@@ -267,7 +267,7 @@ function onKeydown(event: KeyboardEvent) {
 </script>
 
 <template>
-  <div>
+  <nav :aria-labelledby="heading ? headingId : undefined" :aria-label="label">
     <div
       v-if="heading"
       class="space-y-4 border-b border-b-gray-400 px-[1.375rem] py-16"
@@ -294,5 +294,5 @@ function onKeydown(event: KeyboardEvent) {
         @click="$emit('click', $event as T)"
       />
     </ul>
-  </div>
+  </nav>
 </template>

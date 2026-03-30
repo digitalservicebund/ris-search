@@ -98,13 +98,16 @@ describe("TreeView", () => {
       expect(screen.queryByText("A description")).not.toBeInTheDocument();
     });
 
-    it("labels the tree when heading is provided", async () => {
+    it("labels the component when heading is provided", async () => {
       await renderSuspended(TreeView, {
         props: { items: flatItems, heading: "Auto label" },
       });
-      const tree = screen.getByRole("tree");
-      const heading = screen.getByRole("heading", { name: "Auto label" });
-      expect(tree).toHaveAttribute("aria-labelledby", heading.id);
+      expect(
+        screen.getByRole("tree", { name: "Auto label" }),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByRole("navigation", { name: "Auto label" }),
+      ).toBeInTheDocument();
     });
 
     it("applies aria-label to the root element", async () => {
@@ -113,6 +116,9 @@ describe("TreeView", () => {
       });
       expect(
         screen.getByRole("tree", { name: "Table of contents" }),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByRole("navigation", { name: "Table of contents" }),
       ).toBeInTheDocument();
     });
   });
