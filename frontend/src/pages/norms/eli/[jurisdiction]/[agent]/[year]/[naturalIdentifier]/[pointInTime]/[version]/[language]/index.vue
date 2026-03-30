@@ -311,18 +311,21 @@ const fassungenTabPanelTitleId = useId();
         :aria-labelledby="detailsTabPanelTitleId"
       >
         <div class="container pt-32 pb-32 lg:pb-56">
-          <h2 :id="fassungenTabPanelTitleId" class="ris-heading3-bold">
-            Fassungen
-          </h2>
-          <DocumentsIncompleteDataMessage class="my-24" />
-          <DocumentsNormsNormVersionList
-            v-if="privateFeaturesEnabled"
-            :status="normVersionsStatus"
-            :current-legislation-identifier="
-              metadata.workExample?.legislationIdentifier ?? ''
-            "
-            :versions="normVersions"
-          />
+          <template v-if="privateFeaturesEnabled">
+            <h2 :id="fassungenTabPanelTitleId" class="ris-heading3-bold">
+              Fassungen
+            </h2>
+            <DocumentsIncompleteDataMessage class="my-24" />
+            <DocumentsNormsNormVersionList
+              v-if="privateFeaturesEnabled"
+              :status="normVersionsStatus"
+              :current-legislation-identifier="
+                metadata.workExample?.legislationIdentifier ?? ''
+              "
+              :versions="normVersions"
+            />
+          </template>
+
           <DocumentsNormsVersionsTeaser v-else />
         </div>
       </section>
