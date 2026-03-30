@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { ComputedRef } from "vue";
-import type { TableOfContentsEntry } from "~/components/documents/caseLaw/TableOfContents.vue";
 import type { MetadataItem } from "~/components/Metadata.vue";
+import type { TreeItem } from "~/components/TreeView.vue";
 import type { DocumentView } from "~/layouts/document.vue";
 import { type CaseLaw, DocumentKind } from "~/types/api";
 import IcBaselineSubject from "~icons/ic/baseline-subject";
@@ -123,9 +123,13 @@ const breadcrumbs = computed(() => [
   { label: title.value ?? "Titelzeile nicht vorhanden" },
 ]);
 
-const tocEntries: ComputedRef<TableOfContentsEntry[] | null> = computed(() => {
+const tocEntries = computed<TreeItem[] | null>(() => {
   return document.value
-    ? getAllSectionsFromDocument(document.value, "section")
+    ? getAllSectionsFromDocument(document.value, "section").map((entry) => ({
+        key: entry.id,
+        title: entry.title,
+        to: { hash: `#${entry.id}` },
+      }))
     : null;
 });
 
@@ -215,9 +219,11 @@ const detailsSectionId = useId();
 
         <template #sidebar>
           <client-only>
-            <DocumentsCaseLawTableOfContents
+            <TreeView
               v-if="tocEntries?.length"
-              :table-of-content-entries="tocEntries"
+              :items="tocEntries"
+              :selection-enabled="false"
+              heading="Inhalte"
             />
           </client-only>
         </template>
