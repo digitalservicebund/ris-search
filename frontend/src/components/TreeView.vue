@@ -273,7 +273,9 @@ function onKeydown(event: KeyboardEvent) {
       class="space-y-4 border-b border-b-gray-400 px-[1.375rem] py-16"
     >
       <h2 :id="headingId" class="ris-heading3-bold">{{ heading }}</h2>
-      <p v-if="subheading" class="ris-label1-regular">{{ subheading }}</p>
+      <p v-if="subheading" class="ris-label1-regular line-clamp-3">
+        {{ subheading }}
+      </p>
     </div>
 
     <ul

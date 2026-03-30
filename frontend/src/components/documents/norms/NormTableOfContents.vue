@@ -7,6 +7,7 @@ import IcBaselineFormatListBulleted from "~icons/ic/baseline-format-list-bullete
 interface Props {
   tableOfContents: TreeItem[];
   selectedKey?: string;
+  subheading?: string;
 }
 
 const props = defineProps<Props>();
@@ -57,6 +58,7 @@ function hideTableOfContents() {
       :selected="selectedKey"
       :expand-to-key="selectedKey"
       :selection-enabled="!!selectedKey"
+      :subheading="subheading"
       heading="Inhalte"
       class="overflow-y-auto lg:pt-16"
       @click="hideTableOfContents"

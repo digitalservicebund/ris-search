@@ -273,6 +273,7 @@ const fassungenTabPanelTitleId = useId();
             <client-only>
               <NormTableOfContents
                 v-if="metadata.workExample?.tableOfContents?.length"
+                :subheading="normBreadcrumbTitle"
                 :table-of-contents="tableOfContents"
               />
             </client-only>

@@ -69,11 +69,13 @@ describe("NormTableOfContents", () => {
     selectedKey?: string;
     items?: ReturnType<typeof createItems>;
     selectionEnabled?: boolean;
+    subheading?: string;
   }) {
     return renderSuspended(NormTableOfContents, {
       props: {
         tableOfContents: props?.items ?? createItems(),
         selectedKey: props?.selectedKey,
+        subheading: props?.subheading,
       },
     });
   }
@@ -92,6 +94,12 @@ describe("NormTableOfContents", () => {
     expect(
       screen.getByRole("treeitem", { name: "2, Chapter 2" }),
     ).toBeVisible();
+  });
+
+  it("renders the navigation subtitle", async () => {
+    await renderComponent({ subheading: "Norm abbreviation" });
+
+    expect(screen.getByText("Norm abbreviation")).toBeInTheDocument();
   });
 
   it("does not expand any nodes by default", async () => {

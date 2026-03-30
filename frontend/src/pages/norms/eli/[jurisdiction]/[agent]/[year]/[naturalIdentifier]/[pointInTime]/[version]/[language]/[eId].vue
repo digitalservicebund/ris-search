@@ -267,6 +267,7 @@ useDynamicSeo({ title, description });
         <template #sidebar>
           <NormTableOfContents
             v-if="norm.workExample?.tableOfContents?.length"
+            :subheading="normBreadcrumbTitle"
             :table-of-contents="tableOfContents"
             :selected-key="eId"
           />
