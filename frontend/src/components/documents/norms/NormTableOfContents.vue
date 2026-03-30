@@ -38,9 +38,9 @@ function hideTableOfContents() {
   </Button>
   <div
     :data-selected="isTocVisible"
+    :class="responsiveStyles"
     class="flex h-full flex-col max-lg:data-[selected=false]:hidden max-lg:data-[selected=true]:flex"
     data-testid="table-of-contents"
-    :class="responsiveStyles"
   >
     <div class="flex flex-row items-center justify-between">
       <Button
@@ -59,7 +59,6 @@ function hideTableOfContents() {
       :selection-enabled="!!selectedKey"
       heading="Inhalte"
       class="overflow-y-auto lg:pt-16"
-      label="Inhaltsverzeichnis des aktuellen Gesetzes"
       @click="hideTableOfContents"
     />
   </div>
