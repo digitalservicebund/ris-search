@@ -64,7 +64,7 @@ jobs:
          if-no-files-found: error
 
       - name: Upload Trivy image scan results to GitHub Security tab (on 'main' only)
-        uses: github/codeql-action/upload-sarif@7434149006143a4d75b82a2f411ef15b03ccc2d7 # v4
+        uses: github/codeql-action/upload-sarif@a899987af240c0578ed84ce13c02319a693e168f # v4
         if: ${{ always() &&  github.ref == 'refs/heads/main' }} # Bypass non-zero exit code..
         with:
          sarif_file: "trivy-results.sarif"
