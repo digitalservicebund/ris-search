@@ -245,10 +245,12 @@ const fassungenTabPanelTitleId = useId();
             </DocumentsNormsLegislationContent>
           </template>
 
-          <template #sidebar>
+          <template
+            #sidebar
+            v-if="metadata.workExample?.tableOfContents?.length"
+          >
             <client-only>
               <DocumentsNormsNormTableOfContents
-                v-if="metadata.workExample?.tableOfContents?.length"
                 :subheading="normBreadcrumbTitle"
                 :table-of-contents="tableOfContents"
               />
