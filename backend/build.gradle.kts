@@ -100,6 +100,18 @@ dependencies {
     testImplementation(libs.opensearch.testcontainers)
     testImplementation(libs.testcontainers.postgresql)
     testImplementation(libs.restassured)
+
+    constraints {
+        implementation("io.netty:netty-codec-http2") {
+            version { require("4.2.11.Final") }
+            because("Version 4.2.10 contains CVE-2026-33871")
+        }
+
+        implementation("org.springframework.security:spring-security-web") {
+            version { require("7.0.4") }
+            because("Version 7.0.3 contains CVE-2026-22732")
+        }
+    }
 }
 
 val generatedPath = "build/generated/**"
