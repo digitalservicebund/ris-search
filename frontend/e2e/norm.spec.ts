@@ -316,6 +316,95 @@ test.describe("view norm page", async () => {
     await expect(targetHeading).toBeVisible();
     await expect(targetHeading).toBeInViewport();
   });
+
+  test("clicking Eingangsformel in TOC scrolls to Eingangsformel section", async ({
+    page,
+    isMobileTest,
+  }) => {
+    test.skip(isMobileTest);
+    const normUrl = "/norms/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu";
+    await navigate(page, normUrl);
+
+    const tocNav = page.getByRole("navigation", { name: "Inhalte" });
+    await tocNav.getByRole("link", { name: "Eingangsformel" }).click();
+
+    await expect(page).toHaveURL(
+      "/norms/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu#praeambel-n1_formel-n1",
+    );
+
+    const heading = page
+      .getByRole("main")
+      .getByRole("heading", { name: "Eingangsformel" });
+    await expect(heading).toBeInViewport();
+  });
+
+  test("clicking Eingangsformel heading link navigates to Eingangsformel article", async ({
+    page,
+  }) => {
+    const normUrl = "/norms/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu";
+    await navigate(page, normUrl);
+
+    // The Eingangsformel heading in the main content is wrapped in a link to the article page
+    await page
+      .getByRole("main")
+      .getByRole("link", { name: "Eingangsformel" })
+      .first()
+      .click();
+
+    await page.waitForURL(
+      "/norms/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu/pr%C3%A4ambel-n1_formel-n1",
+      { waitUntil: "commit" },
+    );
+
+    await expect(
+      page.getByRole("heading", { level: 1, name: "Eingangsformel" }),
+    ).toBeVisible();
+  });
+
+  test("clicking Nächster Paragraf on Eingangsformel article navigates to next article", async ({
+    page,
+  }) => {
+    await navigate(
+      page,
+      "/norms/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu/pr%C3%A4ambel-n1_formel-n1",
+    );
+
+    await page.getByRole("link", { name: "Nächster Paragraf" }).click();
+    await page.waitForURL(
+      "/norms/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu/art-z1",
+      { waitUntil: "commit" },
+    );
+
+    await expect(
+      page.getByRole("heading", {
+        level: 1,
+        name: "Art 1 Fiktive Bestimmungen zur Einführung",
+      }),
+    ).toBeVisible();
+  });
+
+  test("clicking Eingangsformel in TOC on art-z1 page navigates to Eingangsformel article", async ({
+    page,
+    isMobileTest,
+  }) => {
+    test.skip(isMobileTest);
+    await navigate(
+      page,
+      "/norms/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu/art-z1",
+    );
+
+    const tocNav = page.getByRole("navigation", { name: "Inhalte" });
+    await tocNav.getByRole("link", { name: "Eingangsformel" }).click();
+
+    await page.waitForURL(
+      "/norms/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu/pr%C3%A4ambel-n1_formel-n1",
+      { waitUntil: "commit" },
+    );
+
+    await expect(
+      page.getByRole("heading", { level: 1, name: "Eingangsformel" }),
+    ).toBeVisible();
+  });
 });
 
 test.describe("actions menu", () => {
