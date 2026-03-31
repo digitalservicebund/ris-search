@@ -222,6 +222,7 @@ const detailsSectionId = useId();
               v-if="tocEntries?.length"
               :items="tocEntries"
               :selection-enabled="false"
+              class="h-full lg:pt-16"
               heading="Inhalte"
             />
           </client-only>

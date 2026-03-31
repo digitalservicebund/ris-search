@@ -267,10 +267,14 @@ function onKeydown(event: KeyboardEvent) {
 </script>
 
 <template>
-  <nav :aria-labelledby="heading ? headingId : undefined" :aria-label="label">
+  <nav
+    :aria-labelledby="heading ? headingId : undefined"
+    :aria-label="label"
+    class="flex flex-col"
+  >
     <div
       v-if="heading"
-      class="space-y-4 border-b border-b-gray-400 px-[1.375rem] py-16"
+      class="flex-none space-y-4 border-b border-b-gray-400 px-[1.375rem] py-16"
     >
       <h2 :id="headingId" class="ris-heading3-bold">{{ heading }}</h2>
       <p v-if="subheading" class="ris-label1-regular line-clamp-3">
@@ -283,6 +287,7 @@ function onKeydown(event: KeyboardEvent) {
       role="tree"
       :aria-label="label"
       :aria-labelledby="heading ? headingId : undefined"
+      class="overflow-y-auto"
       @keydown="onKeydown"
     >
       <TreeViewItem

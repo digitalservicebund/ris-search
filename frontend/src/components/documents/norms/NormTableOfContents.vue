@@ -60,7 +60,7 @@ function hideTableOfContents() {
       :selection-enabled="!!selectedKey"
       :subheading="subheading"
       heading="Inhalte"
-      class="overflow-y-auto lg:pt-16"
+      class="h-full lg:pt-16"
       @click="hideTableOfContents"
     />
   </div>
