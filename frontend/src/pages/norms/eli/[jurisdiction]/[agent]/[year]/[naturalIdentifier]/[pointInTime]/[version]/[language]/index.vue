@@ -56,8 +56,8 @@ const tableOfContents = computed(() => {
   const normPath = route.path;
   return tocItemsToTreeViewItems(
     metadata.value.workExample.tableOfContents,
-    (id) => ({ path: normPath, hash: `#${id}` }),
-    (id) => ({ path: normPath, hash: `#${id}` }),
+    (id) => ({ path: normPath, hash: `#${encodeForUri(id)}` }),
+    (id) => ({ path: normPath, hash: `#${encodeForUri(id)}` }),
   );
 });
 
@@ -245,10 +245,12 @@ const fassungenTabPanelTitleId = useId();
             </DocumentsNormsLegislationContent>
           </template>
 
-          <template #sidebar>
+          <template
+            #sidebar
+            v-if="metadata.workExample?.tableOfContents?.length"
+          >
             <client-only>
               <DocumentsNormsNormTableOfContents
-                v-if="metadata.workExample?.tableOfContents?.length"
                 :subheading="normBreadcrumbTitle"
                 :table-of-contents="tableOfContents"
               />

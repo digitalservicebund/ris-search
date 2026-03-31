@@ -216,10 +216,9 @@ const detailsSectionId = useId();
           ></div>
         </template>
 
-        <template #sidebar>
+        <template #sidebar v-if="tocEntries?.length">
           <client-only>
             <TreeView
-              v-if="tocEntries?.length"
               :items="tocEntries"
               :selection-enabled="false"
               class="h-full lg:pt-16"

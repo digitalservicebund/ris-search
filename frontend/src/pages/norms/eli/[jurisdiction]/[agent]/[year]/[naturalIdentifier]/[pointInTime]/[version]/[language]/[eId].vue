@@ -43,7 +43,7 @@ const tableOfContents = computed(() => {
   return tocItemsToTreeViewItems(
     norm.value.workExample.tableOfContents,
     (id) => ({ path: normPath, hash: `#${id}` }),
-    (id) => ({ path: `${normPath}/${encodeForUri(id)}` }),
+    (id) => ({ path: `${normPath}/${id}` }),
   );
 });
 

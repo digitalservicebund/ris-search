@@ -259,8 +259,12 @@ function onToggleDeep() {
     .content {
       @apply relative flex-row gap-8;
 
+      :is(.title, .subtitle):first-of-type {
+        @apply after:absolute after:-inset-y-16 after:-right-16 after:-left-[1.625rem] after:content-["_"];
+      }
+
       .title {
-        @apply flex-none after:absolute after:-inset-y-16 after:-right-16 after:-left-[1.625rem] after:content-["_"];
+        @apply flex-none;
 
         &:not(:only-child) {
           @apply ris-label1-bold;
