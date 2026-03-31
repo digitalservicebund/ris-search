@@ -102,16 +102,6 @@ dependencies {
     testImplementation(libs.restassured)
 }
 
-dependencyManagement {
-    // Pin transitive dependencies to none vulnerable versions
-    dependencies {
-        // Version 4.2.10 contains CVE-2026-33871
-        dependency("io.netty:netty-codec-http2:4.2.11.Final")
-        // Version 7.0.3 contains CVE-2026-22732
-        dependency("org.springframework.security:spring-security-web:7.0.4")
-    }
-}
-
 val generatedPath = "build/generated/**"
 spotless {
     java {
