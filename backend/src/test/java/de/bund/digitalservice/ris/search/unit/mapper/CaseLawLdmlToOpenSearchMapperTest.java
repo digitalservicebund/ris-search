@@ -2,6 +2,7 @@ package de.bund.digitalservice.ris.search.unit.mapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import de.bund.digitalservice.ris.search.caselawhandover.shared.caselawldml.CaseLawLdmlValidator;
 import de.bund.digitalservice.ris.search.mapper.CaseLawLdmlToOpenSearchMapper;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import de.bund.digitalservice.ris.search.utils.CaseLawLdmlTemplateUtils;
@@ -14,7 +15,9 @@ class CaseLawLdmlToOpenSearchMapperTest {
 
   private String testCaseLawLdml;
   private final CaseLawLdmlTemplateUtils caseLawLdmlTemplateUtils = new CaseLawLdmlTemplateUtils();
-  private final CaseLawLdmlToOpenSearchMapper mapper = new CaseLawLdmlToOpenSearchMapper();
+  private final CaseLawLdmlValidator caseLawLdmlValidator = new CaseLawLdmlValidator();
+  private final CaseLawLdmlToOpenSearchMapper mapper =
+      new CaseLawLdmlToOpenSearchMapper(caseLawLdmlValidator);
 
   @BeforeEach
   void beforeEach() throws IOException {
