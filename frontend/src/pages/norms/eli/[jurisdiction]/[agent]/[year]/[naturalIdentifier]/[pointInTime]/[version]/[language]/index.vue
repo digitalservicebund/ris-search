@@ -308,7 +308,9 @@ const fassungenTabPanelTitleId = useId();
 
       <section
         v-else-if="currentView === 'versions'"
-        :aria-labelledby="detailsTabPanelTitleId"
+        :aria-labelledby="
+          privateFeaturesEnabled ? fassungenTabPanelTitleId : undefined
+        "
       >
         <div class="container pt-32 pb-32 lg:pb-56">
           <template v-if="privateFeaturesEnabled">
@@ -317,7 +319,6 @@ const fassungenTabPanelTitleId = useId();
             </h2>
             <DocumentsIncompleteDataMessage class="my-24" />
             <DocumentsNormsNormVersionList
-              v-if="privateFeaturesEnabled"
               :status="normVersionsStatus"
               :current-legislation-identifier="
                 metadata.workExample?.legislationIdentifier ?? ''
