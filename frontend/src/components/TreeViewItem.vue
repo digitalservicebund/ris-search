@@ -187,7 +187,7 @@ function onToggleDeep() {
  */
 @scope ([role=treeitem]) to ([role=treeitem]) {
   :scope:focus-visible {
-    @apply outline-4 outline-offset-4 outline-blue-800;
+    @apply outline-4 -outline-offset-4 outline-blue-800;
   }
 
   * {
