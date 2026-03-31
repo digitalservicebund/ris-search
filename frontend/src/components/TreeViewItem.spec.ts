@@ -250,6 +250,26 @@ describe("TreeViewItem", () => {
         }),
       ).toBeInTheDocument();
     });
+
+    it("renders the subtitle when title is empty", async () => {
+      await render({ key: "a", title: "", subtitle: "A description" });
+      expect(screen.getByText("A description")).toBeInTheDocument();
+    });
+
+    it("uses the subtitle as the accessible label when title is empty", async () => {
+      await render({ key: "a", title: "", subtitle: "A description" });
+      expect(
+        screen.getByRole("treeitem", { name: "A description" }),
+      ).toBeInTheDocument();
+    });
+
+    it("renders when only subtitle is provided", async () => {
+      await render({ key: "a", subtitle: "A description" });
+      expect(screen.getByText("A description")).toBeInTheDocument();
+      expect(
+        screen.getByRole("treeitem", { name: "A description" }),
+      ).toBeInTheDocument();
+    });
   });
 
   describe("aria-level", () => {

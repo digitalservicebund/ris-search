@@ -15,4 +15,15 @@ describe("SidebarLayout", () => {
     expect(screen.getByText("Main content")).toBeInTheDocument();
     expect(screen.getByText("Sidebar content")).toBeInTheDocument();
   });
+
+  it("does not render the sidebar container when the sidebar slot is empty", async () => {
+    const { container } = await renderSuspended(SidebarLayout, {
+      slots: {
+        content: "Main content",
+      },
+    });
+
+    expect(screen.getByText("Main content")).toBeInTheDocument();
+    expect(container.querySelector(".border-l.border-gray-400")).toBeNull();
+  });
 });

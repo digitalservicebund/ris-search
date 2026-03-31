@@ -51,7 +51,7 @@ const currentView = computed(
         v-if="isEmptyDocument"
         class="min-h-96 border-t border-t-gray-400 bg-white print:py-0"
       >
-        <div class="container pt-24 pb-80">
+        <div class="container">
           <slot name="details" />
         </div>
       </div>
@@ -83,7 +83,7 @@ const currentView = computed(
           </nav>
         </div>
 
-        <div class="min-h-96 bg-white py-24 print:py-0">
+        <div class="min-h-96 bg-white">
           <div class="container">
             <slot :name="currentView" />
           </div>

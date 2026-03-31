@@ -3,17 +3,38 @@ import type { RouteLocationRaw } from "#vue-router";
 
 export type TreeItem = {
   key: string;
-  title: string;
+  title?: string;
   subtitle?: string;
   to?: RouteLocationRaw;
   children?: TreeItem[];
 };
 
-const props = defineProps<{
+const {
+  items,
+  heading,
+  subheading,
+  label,
+  expandToKey,
+  selectionEnabled = true,
+} = defineProps<{
+  /** All items in the tree */
   items: T[];
+  /** Heading of the tree */
   heading?: string;
+  /** Additional heading */
   subheading?: string;
+  /**
+   * Accessible lable of the tree. If undefined, the tree will be labelled by
+   * the heading. Make sure that at least one of them is set.
+   */
   label?: string;
+  /**
+   * When set, recursively expand the tree to make sure the item with that key
+   * is visible. Any pre-existing expansions are not affected.
+   */
+  expandToKey?: string;
+  /** Enables selected state and selection updates for tree items. */
+  selectionEnabled?: boolean;
 }>();
 
 const expandedKeys = defineModel<string[]>("expandedKeys", {
@@ -44,17 +65,21 @@ const treeRef = ref<HTMLElement>();
 // [1]: https://www.w3.org/WAI/ARIA/apg/patterns/treeview/
 // [2]: https://www.w3.org/WAI/ARIA/apg/practices/keyboard-interface/#kbd_roving_tabindex
 
-const focusedKey = ref<string>(selected.value ?? props.items[0]?.key ?? "");
+const focusedKey = ref<string>(selected.value ?? items[0]?.key ?? "");
 
 async function focusCurrent() {
   await nextTick();
   treeRef.value?.querySelector<HTMLElement>('[tabindex="0"]')?.focus();
 }
 
-function getVisibleItems(items: TreeItem[], expanded: string[]): TreeItem[] {
+/**
+ * Lists all visible items, i.e. all root items, as well as all items that are a
+ * child of an expanded item.
+ */
+function getVisibleItems(allItems: TreeItem[], expanded: string[]): TreeItem[] {
   const result: TreeItem[] = [];
 
-  items.forEach((i) => {
+  allItems.forEach((i) => {
     result.push(i);
     if (i.children?.length && expanded.includes(i.key)) {
       result.push(...getVisibleItems(i.children, expanded));
@@ -64,27 +89,52 @@ function getVisibleItems(items: TreeItem[], expanded: string[]): TreeItem[] {
   return result;
 }
 
-const visibleItems = computed(() =>
-  getVisibleItems(props.items, expandedKeys.value),
-);
+const visibleItems = computed(() => getVisibleItems(items, expandedKeys.value));
 
+/** Creates a map that maps each item key to its parent item. */
 function collectParentsByKey(
-  items: TreeItem[],
+  allItems: TreeItem[],
   currentParent?: TreeItem,
   parents = new Map<string, TreeItem | undefined>(),
 ): Map<string, TreeItem | undefined> {
-  for (const item of items) {
+  allItems.forEach((item) => {
     parents.set(item.key, currentParent);
 
     if (item.children?.length) {
       collectParentsByKey(item.children, item, parents);
     }
-  }
+  });
 
   return parents;
 }
 
-const parentByKey = computed(() => collectParentsByKey(props.items));
+const parentByKey = computed(() => collectParentsByKey(items));
+
+/**
+ * Gets the keys of all ancestors of an item, i.e. the item's parent, the
+ * parent's parent etc.
+ */
+function getAncestorKeys(key: string): string[] {
+  const ancestors: string[] = [];
+  let current = parentByKey.value.get(key);
+  while (current) {
+    ancestors.push(current.key);
+    current = parentByKey.value.get(current.key);
+  }
+  return ancestors;
+}
+
+watch(
+  [() => expandToKey, parentByKey],
+  ([key]) => {
+    if (!key) return;
+    const ancestors = getAncestorKeys(key);
+    if (ancestors.length) {
+      expandedKeys.value = [...new Set([...expandedKeys.value, ...ancestors])];
+    }
+  },
+  { immediate: true },
+);
 
 function getNearestVisibleKey(key?: string) {
   const visibleKeys = new Set(visibleItems.value.map((item) => item.key));
@@ -96,14 +146,15 @@ function getNearestVisibleKey(key?: string) {
   }
 }
 
-// The focused item must always stay in the set of visible tree items so the
-// roving tabindex keeps exactly one `treeitem` tabbable and keyboard handling
-// can still find the current index.
-//
-// When selection or collapsing hides the current focus target, walk up to the
-// nearest visible ancestor; if neither the current focus target nor the
-// selected item is visible anymore, fall back to the first visible item.
 function getNextFocusableKey() {
+  // The focused item must always stay in the set of visible tree items so the
+  // roving tabindex keeps exactly one `treeitem` tabbable and keyboard handling
+  // can still find the current index.
+  //
+  // When selection or collapsing hides the current focus target, walk up to the
+  // nearest visible ancestor; if neither the current focus target nor the
+  // selected item is visible anymore, fall back to the first visible item.
+
   const visible = visibleItems.value;
   if (!visible.length) return "";
 
@@ -159,7 +210,8 @@ function collapseIfParent(item: TreeItem) {
 }
 
 function activateItem(item: TreeItem) {
-  selected.value = item.key;
+  if (selectionEnabled) selected.value = item.key;
+
   emit("click", item as T);
 
   if (item.to) navigateTo(item.to);
@@ -215,13 +267,19 @@ function onKeydown(event: KeyboardEvent) {
 </script>
 
 <template>
-  <div>
+  <nav
+    :aria-labelledby="heading ? headingId : undefined"
+    :aria-label="label"
+    class="flex flex-col"
+  >
     <div
       v-if="heading"
-      class="space-y-4 border-b border-b-gray-400 px-[1.375rem] py-16"
+      class="flex-none space-y-4 border-b border-b-gray-400 px-[1.375rem] py-16"
     >
       <h2 :id="headingId" class="ris-heading3-bold">{{ heading }}</h2>
-      <p v-if="subheading" class="ris-label1-regular">{{ subheading }}</p>
+      <p v-if="subheading" class="ris-label1-regular line-clamp-3">
+        {{ subheading }}
+      </p>
     </div>
 
     <ul
@@ -229,6 +287,7 @@ function onKeydown(event: KeyboardEvent) {
       role="tree"
       :aria-label="label"
       :aria-labelledby="heading ? headingId : undefined"
+      class="overflow-y-auto"
       @keydown="onKeydown"
     >
       <TreeViewItem
@@ -236,10 +295,11 @@ function onKeydown(event: KeyboardEvent) {
         :key="item.key"
         :item="item"
         :focused-key="focusedKey"
+        :selection-enabled="selectionEnabled"
         v-model:expanded-keys="expandedKeys"
         v-model:selected="selected"
         @click="$emit('click', $event as T)"
       />
     </ul>
-  </div>
+  </nav>
 </template>

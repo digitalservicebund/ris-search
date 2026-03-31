@@ -10,10 +10,12 @@ const {
   item,
   focusedKey,
   level = 1,
+  selectionEnabled = true,
 } = defineProps<{
   item: TreeItem;
   focusedKey?: string;
   level?: number;
+  selectionEnabled?: boolean;
 }>();
 
 const emit = defineEmits<{
@@ -36,15 +38,17 @@ const isFocused = computed(() => item.key === focusedKey);
 const contentTag = computed(() => (item.to ? NuxtLink : "button"));
 
 const accessibleLabel = computed(() => {
-  const subtitle = item.subtitle ? `, ${item.subtitle}` : "";
-  return `${item.title}${subtitle}`;
+  const label = [item.title, item.subtitle].filter(Boolean).join(", ");
+  return label || undefined;
 });
 
-const isSelected = computed(() => item.key === selected.value);
+const isSelected = computed(
+  () => selectionEnabled && item.key === selected.value,
+);
 
 function onSelect() {
   emit("click", item);
-  selected.value = item.key;
+  if (selectionEnabled) selected.value = item.key;
 }
 
 function onHeaderClick() {
@@ -79,7 +83,7 @@ function onToggleDeep() {
     :aria-expanded="isParent ? isExpanded : undefined"
     :aria-label="accessibleLabel"
     :aria-level="level"
-    :aria-selected="isSelected"
+    :aria-selected="selectionEnabled ? isSelected : undefined"
     :tabindex="isFocused ? 0 : -1"
   >
     <!-- Allowing clicking on a non-interactive element in this case to increase
@@ -102,6 +106,7 @@ function onToggleDeep() {
 
       <div class="content">
         <component
+          v-if="item.title"
           :is="contentTag"
           :to="item.to"
           :type="item.to ? undefined : 'button'"
@@ -150,6 +155,7 @@ function onToggleDeep() {
         :focused-key="focusedKey"
         :item="child"
         :level="level + 1"
+        :selection-enabled="selectionEnabled"
         v-model:expanded-keys="expandedKeys"
         v-model:selected="selected"
         @click="emit('click', $event)"
@@ -181,7 +187,7 @@ function onToggleDeep() {
  */
 @scope ([role=treeitem]) to ([role=treeitem]) {
   :scope:focus-visible {
-    @apply outline-4 outline-offset-4 outline-blue-800;
+    @apply outline-4 -outline-offset-4 outline-blue-800;
   }
 
   * {
@@ -246,11 +252,15 @@ function onToggleDeep() {
       @apply py-16 pr-16 pl-[1.625rem];
     }
 
+    &[aria-level="1"] .header {
+      @apply pl-[1.125rem];
+    }
+
     .content {
-      @apply relative flex-row gap-8 after:absolute after:-inset-y-16 after:-right-16 after:-left-[1.625rem] after:content-["_"];
+      @apply relative flex-row gap-8;
 
       .title {
-        @apply flex-none;
+        @apply flex-none after:absolute after:-inset-y-16 after:-right-16 after:-left-[1.625rem] after:content-["_"];
 
         &:not(:only-child) {
           @apply ris-label1-bold;

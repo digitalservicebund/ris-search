@@ -3,7 +3,6 @@ import _ from "lodash";
 import Column from "primevue/column";
 import DataTable from "primevue/datatable";
 import Badge from "~/components/Badge.vue";
-import IncompleteDataMessage from "~/components/documents/IncompleteDataMessage.vue";
 import type { LegislationExpression } from "~/types/api";
 import { dateFormattedDDMMYYYY } from "~/utils/dateFormatting";
 import { formatNormValidity } from "~/utils/displayValues";
@@ -80,47 +79,39 @@ async function handleSelectionUpdate(newSelection: TableRowData) {
     selectedVersion.value = undefined;
   }
 }
-
-const fassungenTabPanelTitleId = useId();
 </script>
 
 <template>
-  <section :aria-labelledby="fassungenTabPanelTitleId">
-    <h2 :id="fassungenTabPanelTitleId" class="ris-heading3-bold my-24">
-      Fassungen
-    </h2>
-    <IncompleteDataMessage class="my-24" />
-    <DataTable
-      v-model:selection="selectedVersion"
-      selection-mode="single"
-      data-key="id"
-      :value="tableRowData"
-      :loading="status === 'pending'"
-      :row-class="rowClass"
-      @row-select="onRowSelect"
-      @update:selection="handleSelectionUpdate"
-    >
-      <Column
-        field="fromDate"
-        header="Gültig ab"
-        header-class="whitespace-nowrap w-1"
-      ></Column>
-      <Column
-        field="toDate"
-        header="Gültig bis"
-        header-class="whitespace-nowrap w-1"
-      ></Column>
-      <Column header="Status">
-        <template #body="slotProps">
-          <div class="flex justify-between">
-            <Badge
-              v-if="slotProps.data.status"
-              :label="slotProps.data.status.label"
-              :color="slotProps.data.status.color"
-            ></Badge>
-          </div>
-        </template>
-      </Column>
-    </DataTable>
-  </section>
+  <DataTable
+    v-model:selection="selectedVersion"
+    selection-mode="single"
+    data-key="id"
+    :value="tableRowData"
+    :loading="status === 'pending'"
+    :row-class="rowClass"
+    @row-select="onRowSelect"
+    @update:selection="handleSelectionUpdate"
+  >
+    <Column
+      field="fromDate"
+      header="Gültig ab"
+      header-class="whitespace-nowrap w-1"
+    ></Column>
+    <Column
+      field="toDate"
+      header="Gültig bis"
+      header-class="whitespace-nowrap w-1"
+    ></Column>
+    <Column header="Status">
+      <template #body="slotProps">
+        <div class="flex justify-between">
+          <Badge
+            v-if="slotProps.data.status"
+            :label="slotProps.data.status.label"
+            :color="slotProps.data.status.color"
+          ></Badge>
+        </div>
+      </template>
+    </Column>
+  </DataTable>
 </template>

@@ -74,8 +74,8 @@ const detailItems = computed(() =>
     </template>
 
     <template #details>
-      <section :aria-labelledby="detailsSectionId">
-        <h2 :id="detailsSectionId" class="ris-heading3-bold my-24">Details</h2>
+      <section :aria-labelledby="detailsSectionId" class="pt-32 pb-32 lg:pb-56">
+        <h2 :id="detailsSectionId" class="ris-heading3-bold">Details</h2>
         <DocumentsIncompleteDataMessage class="my-24" />
         <DetailsList>
           <template v-for="item in detailItems" :key="item.label">
@@ -90,7 +90,7 @@ const detailItems = computed(() =>
         <template #content>
           <section :aria-labelledby="textSectionId">
             <h2 :id="textSectionId" class="sr-only">Text</h2>
-            <DocumentsIncompleteDataMessage class="mb-16" />
+            <DocumentsIncompleteDataMessage />
             <div
               v-if="document"
               class="administrative-directive"

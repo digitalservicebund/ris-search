@@ -1,42 +1,11 @@
 <script setup lang="ts">
+import { NuxtLink } from "#components";
 import type { Dayjs } from "dayjs";
 import { Tab, TabList, Tabs } from "primevue";
-import type { TreeNode } from "primevue/treenode";
 import type { ComputedRef } from "vue";
-import { computed } from "vue";
-import { useRoute } from "#app";
-import { NuxtLink } from "#components";
 import type { BreadcrumbItem } from "~/components/Breadcrumbs.vue";
-import DetailsList from "~/components/DetailsList.vue";
-import DetailsListEntry from "~/components/DetailsListEntry.vue";
-import NormActionMenu from "~/components/documents/actionMenu/NormActionMenu.vue";
-import IncompleteDataMessage from "~/components/documents/IncompleteDataMessage.vue";
-import LegislationContent from "~/components/documents/norms/LegislationContent.vue";
-import NormHeadingGroup from "~/components/documents/norms/NormHeadingGroup.vue";
-import NormTableOfContents from "~/components/documents/norms/NormTableOfContents.vue";
-import NormVersionList from "~/components/documents/norms/NormVersionList.vue";
-import NormVersionWarning from "~/components/documents/norms/NormVersionWarning.vue";
-import VersionsTeaser from "~/components/documents/norms/VersionsTeaser.vue";
-import SidebarLayout from "~/components/SidebarLayout.vue";
-import { useDynamicSeo } from "~/composables/useDynamicSeo";
-import { useIntersectionObserver } from "~/composables/useIntersectionObserver";
-import { useFetchNormContent } from "~/composables/useNormData";
-import { useNormVersions } from "~/composables/useNormVersions";
-import { usePrivateFeaturesFlag } from "~/composables/usePrivateFeaturesFlag";
-import { fetchTranslationListWithIdFilter } from "~/composables/useTranslationData";
 import { DocumentKind, type LegislationWork } from "~/types/api";
-import { dateFormattedDDMMYYYY } from "~/utils/dateFormatting";
-import { formatDocumentKind } from "~/utils/displayValues";
 import type { ValidityStatus } from "~/utils/norm";
-import {
-  getManifestationUrl,
-  getNormBreadcrumbTitle,
-  getValidityStatus,
-  getValidityStatusLabel,
-  temporalCoverageToValidityInterval,
-} from "~/utils/norm";
-import { tocItemsToTreeNodes } from "~/utils/tableOfContents";
-import { truncateAtWord } from "~/utils/textFormatting";
 import IcBaselineSubject from "~icons/ic/baseline-subject";
 import IconFileDownload from "~icons/ic/outline-file-download";
 import IcOutlineInfo from "~icons/ic/outline-info";
@@ -82,13 +51,13 @@ if (error.value) {
   showError(error.value);
 }
 
-const tableOfContents: Ref<TreeNode[]> = computed(() => {
+const tableOfContents = computed(() => {
   if (!metadata.value?.workExample?.tableOfContents) return [];
   const normPath = route.path;
-  return tocItemsToTreeNodes(
+  return tocItemsToTreeViewItems(
     metadata.value.workExample.tableOfContents,
-    normPath.concat("#"),
-    normPath.concat("#"),
+    (id) => ({ path: normPath, hash: `#${id}` }),
+    (id) => ({ path: normPath, hash: `#${id}` }),
   );
 });
 
@@ -105,8 +74,6 @@ const validityStatus = computed(() => {
     return getValidityStatus(validityInterval.value);
   return undefined;
 });
-
-const { selectedEntry, vObserveElements } = useIntersectionObserver();
 
 const normBreadcrumbTitle = computed(() =>
   metadata.value ? getNormBreadcrumbTitle(metadata.value) : "",
@@ -219,18 +186,23 @@ const currentView = computed(
 useDynamicSeo({ title, description });
 
 const detailsTabPanelTitleId = useId();
+const fassungenTabPanelTitleId = useId();
 </script>
 
 <template>
   <div v-if="status == 'pending'">Lade ...</div>
+
   <div v-if="!!metadata">
     <div class="container">
       <div class="flex items-center gap-8 print:hidden">
         <Breadcrumbs :items="breadcrumbItems" class="grow" />
-        <NormActionMenu :metadata :translation-url />
+        <DocumentsActionMenuNormActionMenu :metadata :translation-url />
       </div>
-      <NormHeadingGroup :metadata="metadata" :html-parts="htmlParts" />
-      <NormVersionWarning
+      <DocumentsNormsNormHeadingGroup
+        :metadata="metadata"
+        :html-parts="htmlParts"
+      />
+      <DocumentsNormsNormVersionWarning
         v-if="normVersionsStatus === 'success'"
         :versions="normVersions"
         :current-version="metadata"
@@ -260,25 +232,25 @@ const detailsTabPanelTitleId = useId();
       </nav>
     </div>
 
-    <div class="min-h-96 bg-white py-24 print:py-0">
+    <div class="min-h-96 bg-white print:py-0">
       <section v-if="currentView === 'text'">
         <SidebarLayout class="container">
           <template #content>
             <h2 class="sr-only">Text</h2>
-            <IncompleteDataMessage />
-            <LegislationContent
-              v-observe-elements
+            <DocumentsIncompleteDataMessage />
+            <DocumentsNormsLegislationContent
               :official-toc="htmlParts.officialToc"
             >
               <div v-html="htmlParts.body" />
-            </LegislationContent>
+            </DocumentsNormsLegislationContent>
           </template>
+
           <template #sidebar>
             <client-only>
-              <NormTableOfContents
+              <DocumentsNormsNormTableOfContents
                 v-if="metadata.workExample?.tableOfContents?.length"
+                :subheading="normBreadcrumbTitle"
                 :table-of-contents="tableOfContents"
-                :selected-key="selectedEntry"
               />
             </client-only>
           </template>
@@ -289,11 +261,11 @@ const detailsTabPanelTitleId = useId();
         v-else-if="currentView === 'details'"
         :aria-labelledby="detailsTabPanelTitleId"
       >
-        <div class="container">
-          <h2 :id="detailsTabPanelTitleId" class="ris-heading3-bold my-24">
+        <div class="container pt-32 pb-32 lg:pb-56">
+          <h2 :id="detailsTabPanelTitleId" class="ris-heading3-bold">
             Details
           </h2>
-          <IncompleteDataMessage class="my-24" />
+          <DocumentsIncompleteDataMessage class="my-24" />
           <DetailsList>
             <DetailsListEntry
               label="Ausfertigungsdatum:"
@@ -334,17 +306,28 @@ const detailsTabPanelTitleId = useId();
         </div>
       </section>
 
-      <section v-else-if="currentView === 'versions'">
-        <div class="container">
-          <NormVersionList
-            v-if="privateFeaturesEnabled"
-            :status="normVersionsStatus"
-            :current-legislation-identifier="
-              metadata.workExample?.legislationIdentifier ?? ''
-            "
-            :versions="normVersions"
-          />
-          <VersionsTeaser v-else />
+      <section
+        v-else-if="currentView === 'versions'"
+        :aria-labelledby="
+          privateFeaturesEnabled ? fassungenTabPanelTitleId : undefined
+        "
+      >
+        <div class="container pt-32 pb-32 lg:pb-56">
+          <template v-if="privateFeaturesEnabled">
+            <h2 :id="fassungenTabPanelTitleId" class="ris-heading3-bold">
+              Fassungen
+            </h2>
+            <DocumentsIncompleteDataMessage class="my-24" />
+            <DocumentsNormsNormVersionList
+              :status="normVersionsStatus"
+              :current-legislation-identifier="
+                metadata.workExample?.legislationIdentifier ?? ''
+              "
+              :versions="normVersions"
+            />
+          </template>
+
+          <DocumentsNormsVersionsTeaser v-else />
         </div>
       </section>
     </div>
@@ -355,16 +338,16 @@ const detailsTabPanelTitleId = useId();
 @reference "~/assets/main.css";
 
 :deep(.official-toc div) {
-  @apply lg:pl-32;
-  @apply ml-16;
-  @apply mb-16;
+  @apply mb-16 ml-16 lg:pl-32;
+
   &.level-1 {
-    @apply ml-0;
-    @apply ris-label1-bold;
+    @apply ris-label1-bold ml-0;
   }
+
   &.level-5 {
     @apply ml-8;
   }
+
   &.level-10 {
     @apply ml-16;
   }

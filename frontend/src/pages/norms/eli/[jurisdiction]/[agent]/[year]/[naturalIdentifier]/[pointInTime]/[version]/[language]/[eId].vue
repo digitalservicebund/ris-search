@@ -1,26 +1,7 @@
 <script setup lang="ts">
-import type { TreeNode } from "primevue/treenode";
 import { computed } from "vue";
 import type { BreadcrumbItem } from "~/components/Breadcrumbs.vue";
-import IncompleteDataMessage from "~/components/documents/IncompleteDataMessage.vue";
-import ArticleVersionWarning from "~/components/documents/norms/ArticleVersionWarning.vue";
-import LegislationContent from "~/components/documents/norms/LegislationContent.vue";
-import NormTableOfContents from "~/components/documents/norms/NormTableOfContents.vue";
-import SidebarLayout from "~/components/SidebarLayout.vue";
-import { useDynamicSeo } from "~/composables/useDynamicSeo";
-import { useFetchNormArticleContent } from "~/composables/useNormData";
-import { useValidNormVersions } from "~/composables/useNormVersions";
-import { usePrivateFeaturesFlag } from "~/composables/usePrivateFeaturesFlag";
 import { type Article, DocumentKind } from "~/types/api";
-import {
-  dateFormattedDDMMYYYY,
-  parseDateGermanLocalTime,
-} from "~/utils/dateFormatting";
-import { formatDocumentKind } from "~/utils/displayValues";
-import { parseDocument } from "~/utils/htmlParser";
-import { getNormBreadcrumbTitle, getNormTitle } from "~/utils/norm";
-import { findNodePath, tocItemsToTreeNodes } from "~/utils/tableOfContents";
-import { truncateAtWord } from "~/utils/textFormatting";
 import IcBaselineArrowBack from "~icons/ic/baseline-arrow-back";
 import IcBaselineArrowForward from "~icons/ic/baseline-arrow-Forward";
 
@@ -57,12 +38,12 @@ if (error.value) {
 
 const normPath: string = route.fullPath.replace(/\/[^/]*$/, "");
 
-const tableOfContents: Ref<TreeNode[]> = computed(() => {
+const tableOfContents = computed(() => {
   if (!norm.value?.workExample?.tableOfContents) return [];
-  return tocItemsToTreeNodes(
+  return tocItemsToTreeViewItems(
     norm.value.workExample.tableOfContents,
-    normPath.concat("#"),
-    normPath.concat("/"),
+    (id) => ({ path: normPath, hash: `#${id}` }),
+    (id) => ({ path: `${normPath}/${encodeForUri(id)}` }),
   );
 });
 
@@ -99,8 +80,9 @@ function getRouteForSiblingArticle(
   return route.fullPath.replace(/\/[^/]*$/, `/${hasPart[newIndex]?.eId}`);
 }
 
-const currentNodePath = findNodePath(tableOfContents.value, eId.value ?? "");
-const normTitle = computed(() => getNormTitle(norm.value));
+const currentNodePath = computed(() =>
+  findNodePath(tableOfContents.value, eId.value ?? ""),
+);
 const normBreadcrumbTitle = computed(() => getNormBreadcrumbTitle(norm.value));
 const breadcrumbItems: Ref<BreadcrumbItem[]> = computed(() => {
   const validFrom = dateFormattedDDMMYYYY(
@@ -119,10 +101,10 @@ const breadcrumbItems: Ref<BreadcrumbItem[]> = computed(() => {
     },
   ];
 
-  currentNodePath?.forEach((node) =>
+  currentNodePath.value?.forEach((node) =>
     list.push({
-      label: node.label,
-      route: node.route,
+      label: [node.title, node.subtitle].filter(Boolean).join(" "),
+      route: typeof node.to === "string" ? node.to : undefined,
     } as BreadcrumbItem),
   );
   return list;
@@ -207,6 +189,7 @@ useDynamicSeo({ title, description });
 
 <template>
   <div v-if="status == 'pending'" class="container">Lade ...</div>
+
   <template v-if="!!norm">
     <div class="container">
       <Breadcrumbs :items="breadcrumbItems" />
@@ -217,7 +200,7 @@ useDynamicSeo({ title, description });
         />
       </div>
 
-      <ArticleVersionWarning
+      <DocumentsNormsArticleVersionWarning
         v-if="inForceNormLink && article"
         :in-force-version-link="inForceNormLink"
         :current-article="article"
@@ -233,12 +216,12 @@ useDynamicSeo({ title, description });
     </div>
 
     <div class="border-t border-t-gray-400 bg-white">
-      <SidebarLayout class="container py-24">
+      <SidebarLayout class="container">
         <template v-if="!!articleHtml" #content>
-          <IncompleteDataMessage />
-          <LegislationContent single-article>
+          <DocumentsIncompleteDataMessage />
+          <DocumentsNormsLegislationContent single-article>
             <article class="akn-act" v-html="articleHtml" />
-          </LegislationContent>
+          </DocumentsNormsLegislationContent>
           <div class="flex flex-row justify-between">
             <div class="flex flex-col">
               <NuxtLink
@@ -267,21 +250,12 @@ useDynamicSeo({ title, description });
           </div>
         </template>
         <template #sidebar>
-          <NormTableOfContents
+          <DocumentsNormsNormTableOfContents
             v-if="norm.workExample?.tableOfContents?.length"
+            :subheading="normBreadcrumbTitle"
             :table-of-contents="tableOfContents"
             :selected-key="eId"
-          >
-            <template #header>
-              <NuxtLink
-                v-if="normTitle"
-                :to="normPath"
-                class="link-hover font-bold text-blue-800"
-              >
-                {{ normTitle }}
-              </NuxtLink>
-            </template>
-          </NormTableOfContents>
+          />
         </template>
       </SidebarLayout>
     </div>

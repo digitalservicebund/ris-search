@@ -8,7 +8,7 @@ import {
 import { expect, navigate, noJsTest, test } from "./utils/fixtures";
 
 async function getSidebar(page: Page) {
-  const navigation = page.getByRole("navigation", { name: "Seiteninhalte" });
+  const navigation = page.getByRole("navigation", { name: "Inhalte" });
   await navigation.scrollIntoViewIfNeeded();
   await expect(navigation).toBeVisible();
   return navigation;
@@ -29,8 +29,6 @@ test("can view a single case law documentation unit", async ({ page }) => {
     page.getByRole("heading", { name: "Testheader für Urteil 6." }).first(),
   ).toBeVisible();
 
-  const sidebar = await getSidebar(page);
-
   const firstSectionHeader = page
     .getByRole("main")
     .getByRole("heading", { level: 2 })
@@ -38,12 +36,29 @@ test("can view a single case law documentation unit", async ({ page }) => {
   await expect(firstSectionHeader).toBeVisible();
 
   await firstSectionHeader.scrollIntoViewIfNeeded();
+});
 
-  // Only check aria-current on desktop as it's flaky on mobile due to Intersection Observer timing
-  // Fix Intersection Observer logic (broken since Nuxt upgrade) - see ticket RISDEV-
-  // Once fixed, remove the isMobileTest check and enable aria-current verification for mobile too
-  const currentSection = sidebar.locator('a[aria-current="location"]');
-  await expect(currentSection).toHaveCount(1);
+test("sidebar TOC renders on desktop and clicking a link scrolls to the section", async ({
+  page,
+  isMobileTest,
+}) => {
+  test.skip(isMobileTest);
+
+  await navigate(page, "/case-law/JURE200030030");
+
+  const sidebar = await getSidebar(page);
+
+  await expect(sidebar.getByRole("link", { name: "Tenor" })).toBeVisible();
+
+  const tatbestandLink = sidebar.getByRole("link", { name: "Tatbestand" });
+  await expect(tatbestandLink).toBeVisible();
+  await tatbestandLink.click();
+
+  await expect(page).toHaveURL(/#tatbestand$/i);
+
+  await expect(
+    page.getByRole("heading", { name: "Tatbestand" }),
+  ).toBeInViewport();
 });
 
 test.describe("responsive", () => {

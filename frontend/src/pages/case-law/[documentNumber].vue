@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import type { ComputedRef } from "vue";
-import type { TableOfContentsEntry } from "~/components/documents/caseLaw/TableOfContents.vue";
 import type { MetadataItem } from "~/components/Metadata.vue";
+import type { TreeItem } from "~/components/TreeView.vue";
 import type { DocumentView } from "~/layouts/document.vue";
 import { type CaseLaw, DocumentKind } from "~/types/api";
 import IcBaselineSubject from "~icons/ic/baseline-subject";
@@ -123,9 +122,13 @@ const breadcrumbs = computed(() => [
   { label: title.value ?? "Titelzeile nicht vorhanden" },
 ]);
 
-const tocEntries: ComputedRef<TableOfContentsEntry[] | null> = computed(() => {
+const tocEntries = computed<TreeItem[] | null>(() => {
   return document.value
-    ? getAllSectionsFromDocument(document.value, "section")
+    ? getAllSectionsFromDocument(document.value, "section").map((entry) => ({
+        key: entry.id,
+        title: entry.title,
+        to: { hash: `#${entry.id}` },
+      }))
     : null;
 });
 
@@ -154,6 +157,8 @@ const detailsMetadata = computed(() => {
     zipUrl,
   };
 });
+
+const detailsSectionId = useId();
 </script>
 
 <template>
@@ -169,39 +174,41 @@ const detailsMetadata = computed(() => {
     </template>
 
     <template #details>
-      <h2 class="ris-heading3-bold my-24">Details</h2>
-      <DocumentsIncompleteDataMessage class="my-24" />
-      <DetailsList>
-        <DetailsListEntry
-          label="Spruchkörper:"
-          :value="detailsMetadata.judicialBody"
-        />
-        <DetailsListEntry label="ECLI:" :value="detailsMetadata.ecli" />
-        <DetailsListEntry label="Normen:" value="" />
-        <DetailsListEntry
-          label="Entscheidungsname:"
-          :value="detailsMetadata.decisionNames"
-        />
-        <DetailsListEntry label="Vorinstanz:" value="" />
+      <section :aria-labelledby="detailsSectionId" class="pt-32 pb-32 lg:pb-56">
+        <h2 :id="detailsSectionId" class="ris-heading3-bold">Details</h2>
+        <DocumentsIncompleteDataMessage class="my-24" />
+        <DetailsList>
+          <DetailsListEntry
+            label="Spruchkörper:"
+            :value="detailsMetadata.judicialBody"
+          />
+          <DetailsListEntry label="ECLI:" :value="detailsMetadata.ecli" />
+          <DetailsListEntry label="Normen:" value="" />
+          <DetailsListEntry
+            label="Entscheidungsname:"
+            :value="detailsMetadata.decisionNames"
+          />
+          <DetailsListEntry label="Vorinstanz:" value="" />
 
-        <DetailsListEntry v-if="detailsMetadata.zipUrl" label="Download:">
-          <NuxtLink
-            data-attr="xml-zip-view"
-            class="ris-link1-regular"
-            external
-            :to="detailsMetadata.zipUrl"
-          >
-            <IcOutlineFileDownload class="mr-2 inline" />
-            {{ detailsMetadata.documentNumber }} als ZIP herunterladen
-          </NuxtLink>
-        </DetailsListEntry>
-      </DetailsList>
+          <DetailsListEntry v-if="detailsMetadata.zipUrl" label="Download:">
+            <NuxtLink
+              data-attr="xml-zip-view"
+              class="ris-link1-regular"
+              external
+              :to="detailsMetadata.zipUrl"
+            >
+              <IcOutlineFileDownload class="mr-2 inline" />
+              {{ detailsMetadata.documentNumber }} als ZIP herunterladen
+            </NuxtLink>
+          </DetailsListEntry>
+        </DetailsList>
+      </section>
     </template>
 
     <template #text>
       <SidebarLayout>
         <template #content>
-          <DocumentsIncompleteDataMessage class="mb-16" />
+          <DocumentsIncompleteDataMessage />
           <div
             v-if="document"
             class="case-law"
@@ -211,9 +218,12 @@ const detailsMetadata = computed(() => {
 
         <template #sidebar>
           <client-only>
-            <DocumentsCaseLawTableOfContents
+            <TreeView
               v-if="tocEntries?.length"
-              :table-of-content-entries="tocEntries"
+              :items="tocEntries"
+              :selection-enabled="false"
+              class="h-full lg:pt-16"
+              heading="Inhalte"
             />
           </client-only>
         </template>
