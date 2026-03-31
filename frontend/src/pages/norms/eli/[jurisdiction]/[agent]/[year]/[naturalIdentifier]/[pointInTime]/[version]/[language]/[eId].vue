@@ -80,7 +80,9 @@ function getRouteForSiblingArticle(
   return route.fullPath.replace(/\/[^/]*$/, `/${hasPart[newIndex]?.eId}`);
 }
 
-const currentNodePath = findNodePath(tableOfContents.value, eId.value ?? "");
+const currentNodePath = computed(() =>
+  findNodePath(tableOfContents.value, eId.value ?? ""),
+);
 const normBreadcrumbTitle = computed(() => getNormBreadcrumbTitle(norm.value));
 const breadcrumbItems: Ref<BreadcrumbItem[]> = computed(() => {
   const validFrom = dateFormattedDDMMYYYY(
@@ -99,7 +101,7 @@ const breadcrumbItems: Ref<BreadcrumbItem[]> = computed(() => {
     },
   ];
 
-  currentNodePath?.forEach((node) =>
+  currentNodePath.value?.forEach((node) =>
     list.push({
       label: [node.title, node.subtitle].filter(Boolean).join(" "),
       route: typeof node.to === "string" ? node.to : undefined,
