@@ -44,7 +44,7 @@ test("sidebar TOC renders on desktop and clicking a link scrolls to the section"
 }) => {
   test.skip(isMobileTest);
 
-  await navigate(page, "/case-law/KORE705352026");
+  await navigate(page, "/case-law/JURE200030030");
 
   const sidebar = await getSidebar(page);
 
