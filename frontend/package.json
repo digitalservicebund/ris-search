@@ -57,7 +57,7 @@
     "@vitest/coverage-v8": "4.1.2",
     "@vue/test-utils": "2.4.6",
     "axe-html-reporter": "2.2.11",
-    "jsdom": "28.1.0",
+    "jsdom": "29.0.1",
     "license-checker-rseidelsohn": "4.4.2",
     "lighthouse": "13.0.3",
     "openapi-typescript": "7.13.0",
