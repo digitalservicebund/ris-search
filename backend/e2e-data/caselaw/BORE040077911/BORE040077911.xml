@@ -43,7 +43,8 @@
                             <akn:p>Urteil 10 mit Randnummernverlinkung.</akn:p>
                         </ris:titelzeile>
                         <ris:orientierungssatz ris:domainTerm="Orientierungssatz">
-                            <akn:p>1. Fiktiver Satz für die Testdarstellung im Bereich Randnummernverlinkung.<akn:a class="border-number-link" href="#border-number-link-1">1</akn:a>
+                            <akn:p>1. Fiktiver Satz für die Testdarstellung im Bereich Randnummernverlinkung.<akn:ref ris:domainTerm="Randnummernverlinkung" class="border-number-link"
+                                                                                                                      href="#randnummer-1">1</akn:ref>
                             </akn:p>
                             <akn:p>2. Weitere Testangaben zur Dokumentennavigation werden hier exemplarisch aufgeführt.</akn:p>
                         </ris:orientierungssatz>

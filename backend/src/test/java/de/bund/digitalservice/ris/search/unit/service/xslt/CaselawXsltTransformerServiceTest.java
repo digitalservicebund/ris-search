@@ -27,7 +27,7 @@ class CaselawXsltTransformerServiceTest {
     var expectedHeader =
         """
         <h1 id="title">
-          <p>Title</p>
+          <p alternativeTo="textWrapper">the title</p>
         </h1>
         """;
     assertTrue(deleteWhitespace(actualHtml).contains(deleteWhitespace(expectedHeader)));
@@ -41,7 +41,7 @@ class CaselawXsltTransformerServiceTest {
     var expectedBorderNumber =
         """
             <dl class="border-number">
-              <dt class="number" id="border-number-link-1">1</dt>
+              <dt class="number" id="randnummer-1">1</dt>
               <dd class="content"><p>Example Tatbestand/CaseFacts. More background</p></dd>
             </dl>
             """;
@@ -51,7 +51,7 @@ class CaselawXsltTransformerServiceTest {
     var otherBorderNumber =
         """
             <dl class="border-number">
-               <dt class="number" id="border-number-link-2">2</dt>
+               <dt class="number" id="randnummer-2">2</dt>
                <dd class="content">
                   <p>even more background</p>
                </dd>
