@@ -34,7 +34,9 @@ updates:
           - patch
   - package-ecosystem: "docker"
     directories:
-      - "/**"
+      - "/"
+      - "/backend"
+      - "/frontend"
     schedule:
       interval: "weekly"
       day: "sunday"
