@@ -1,3 +1,4 @@
+import type { Page } from "@playwright/test";
 import {
   testCopyLinkButton,
   testPdfButton,
@@ -5,6 +6,13 @@ import {
   testXmlButton,
 } from "./utils/actionMenuHelper";
 import { expect, test, noJsTest, navigate } from "./utils/fixtures";
+
+async function getSidebar(page: Page) {
+  const navigation = page.getByRole("navigation", { name: "Inhalte" });
+  await navigation.scrollIntoViewIfNeeded();
+  await expect(navigation).toBeVisible();
+  return navigation;
+}
 
 test("displays literature page with metadata and text tab by default", async ({
   page,
@@ -199,6 +207,41 @@ test("displays all sli titles", async ({ page }) => {
   await expect(textSection).toContainText("Gesamttitel 2 Bandbezeichnung 2");
   await expect(textSection).toContainText("Titel Kurzform");
   await expect(textSection).toContainText("sonstiger Titel");
+});
+
+test("sidebar TOC renders on desktop and clicking a link scrolls to the section", async ({
+  page,
+  isMobileTest,
+}) => {
+  test.skip(isMobileTest);
+
+  await navigate(page, "/literature/XXLU000000001");
+
+  const sidebar = await getSidebar(page);
+
+  await expect(sidebar.getByRole("link", { name: "Gliederung" })).toBeVisible();
+
+  const kurzreferatLink = sidebar.getByRole("link", { name: "Kurzreferat" });
+  await kurzreferatLink.click();
+
+  await expect(page).toHaveURL(/#kurzreferat$/i);
+
+  await expect(
+    page.getByRole("heading", { name: "Kurzreferat" }),
+  ).toBeInViewport();
+});
+
+test("sidebar TOC is not shown when document has no text sections", async ({
+  page,
+  isMobileTest,
+}) => {
+  test.skip(isMobileTest);
+
+  await navigate(page, "/literature/XXLU000000005");
+
+  await expect(
+    page.getByRole("navigation", { name: "Inhalte" }),
+  ).not.toBeVisible();
 });
 
 test("can navigate to search via breadcrumb", async ({ page }) => {
