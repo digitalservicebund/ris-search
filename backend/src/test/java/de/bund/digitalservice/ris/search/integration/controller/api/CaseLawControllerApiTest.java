@@ -71,7 +71,7 @@ class CaseLawControllerApiTest extends ContainersIntegrationBase {
     context.put(
         "background",
         """
-                <akn:hcontainer name="randnummer">
+                <akn:hcontainer ris:domainTerm="Randnummer" eId="randnummer-1" name="Randnummer">
                     <akn:num>1</akn:num>
                     <akn:content>
                         <akn:p>Example Tatbestand/CaseFacts. More background</akn:p>
