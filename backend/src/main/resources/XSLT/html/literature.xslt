@@ -33,28 +33,27 @@
 
 	<!-- render titles -->
 	<xsl:template match="akn:FRBRWork">
-		<xsl:for-each select="$titles">
-			<xsl:choose>
-				<xsl:when test="position() = 1">
-					<h1><xsl:value-of select="."/></h1>
-				</xsl:when>
-				<xsl:when test="position() = 2">
-					<h2>Zusätzliche Titel</h2>
+		<xsl:if test="$titles[1]">
+			<h1><xsl:value-of select="$titles[1]"/></h1>
+		</xsl:if>
+		<xsl:if test="$titles[2]">
+			<section id="zusaetzliche-titel">
+				<h2>Zusätzliche Titel</h2>
+				<xsl:for-each select="$titles[position() > 1]">
 					<p><xsl:value-of select="."/></p>
-				</xsl:when>
-				<xsl:when test="position() = 3">
-					<p><xsl:value-of select="."/></p>
-				</xsl:when>
-			</xsl:choose>
-		</xsl:for-each>
+				</xsl:for-each>
+			</section>
+		</xsl:if>
 	</xsl:template>
 
 	<!-- Outline -->
 	<xsl:template match="*[local-name()='gliederung']">
-		<h2>Gliederung</h2>
-		<ul>
-			<xsl:apply-templates/>
-		</ul>
+		<section id="gliederung">
+			<h2>Gliederung</h2>
+			<ul>
+				<xsl:apply-templates/>
+			</ul>
+		</section>
 	</xsl:template>
 
 	<xsl:template match="*[local-name()='gliederungEntry']">
@@ -65,21 +64,27 @@
 	<!-- if there is no short report the main body only contains an empty hcontainer -->
 	<xsl:template match="akn:mainBody">
 		<xsl:if test="not(akn:hcontainer)">
-			<h2>Kurzreferat</h2>
-			<xsl:apply-templates />
+			<section id="kurzreferat">
+				<h2>Kurzreferat</h2>
+				<xsl:apply-templates />
+			</section>
 		</xsl:if>
 	</xsl:template>
 
 	<!-- Active references -->
 	<xsl:template match="akn:otherReferences[@source='active']">
-		<h2>Dieser Beitrag zitiert</h2>
-		<xsl:call-template name="references"/>
+		<section id="dieser-beitrag-zitiert">
+			<h2>Dieser Beitrag zitiert</h2>
+			<xsl:call-template name="references"/>
+		</section>
 	</xsl:template>
 
 	<!-- Passive references -->
 	<xsl:template match="akn:otherReferences[@source='passive']">
-		<h2>Dieser Beitrag wird zitiert</h2>
-		<xsl:call-template name="references"/>
+		<section id="dieser-beitrag-wird-zitiert">
+			<h2>Dieser Beitrag wird zitiert</h2>
+			<xsl:call-template name="references"/>
+		</section>
 	</xsl:template>
 
 	<!-- active and passive contents references -->
