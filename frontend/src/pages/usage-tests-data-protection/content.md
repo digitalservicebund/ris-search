@@ -70,7 +70,7 @@ Personenbezogene Daten werden ausschließlich auf Servern innerhalb der Europäi
 
 ## 8. Wie lange und wo speichern wir Ihre Daten?
 
-Personenbezogene Daten werden ausschließlich auf Servern innerhalb der Europäischen Union/des Europäischen Wirtschaftsraums verarbeitet. Die Daten werden gelöscht, wenn Sie nicht mehr zum Zwecke der Kontaktaufnahme benötigt werden, spätestens jedoch nach 12 Monaten.
+Personenbezogene Daten werden ausschließlich auf Servern innerhalb der Europäischen Union/des Europäischen Wirtschaftsraums verarbeitet. Die Daten werden gelöscht, wenn sie nicht mehr zum Zwecke der Kontaktaufnahme benötigt werden, spätestens jedoch nach 12 Monaten.
 
 ## 9. Welche Rechte haben Sie?
 
