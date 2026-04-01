@@ -31,10 +31,10 @@ export const testPages = [
     name: "open source",
     url: "/open-source",
   },
-  // {
-  //   name: "user tests",
-  //   url: "/nutzungstests",
-  // },
+  {
+    name: "user tests",
+    url: "/nutzungstests",
+  },
   {
     name: "simple search - all documents",
     url: "/search",

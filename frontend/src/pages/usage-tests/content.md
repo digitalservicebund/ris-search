@@ -10,7 +10,7 @@ Unser Ziel ist es, Rechtsinformationen für Bürgerinnen und Bürger leichter zu
 
    Registrieren Sie sich in wenigen Minuten, um über neue Interviews und Nutzungstests informiert zu werden.
 
-   [Jetzt registrieren](https://app.formbricks.com/s/cm1gatpbv0001zm7bryylwzyw)
+   [Jetzt registrieren](https://surveys.digitalservice.dev/s/so79ojxtsz0lhy2f1u7qm2yp)
 
 2. **Einladungen erhalten**
 
