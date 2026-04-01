@@ -66,13 +66,11 @@ Die Verarbeitung Ihrer Daten erfolgt nur mit Ihrer Einwilligung. Rechtsgrundlage
 
 ## 7. Werden personenbezogene Daten an Dritte weitergegeben?
 
-Personenbezogene Daten werden ausschließlich auf Servern innerhalb der Europäischen Union/des Europäischen Wirtschaftsraums verarbeitet und nicht an unberechtigte Dritte weitergeleitet. Die DigitalService GmbH des Bundes bedient sich insofern im Rahmen der Kontaktaufnahme für eine Terminvereinbarung zum Zwecke videotelefonischer Interviews, Telefoninterviews und/oder eines Termins vor Ort zum Projekt „Testphase Rechtsinformationsportal" der Unterstützung eines externen Dienstleisters, der Formbricks GmbH (Kuhnkestraße 6, 24118 Kiel), der zur Erbringung dieser Dienstleistungen Zugriff auf Ihre personenbezogenen Daten erhält. Dieser Dienstleister ist sorgfältig ausgewählt und erfüllt hohe Datenschutz- und Datensicherheitsstandards. Er ist zu strikter Verschwiegenheit verpflichtet und verarbeitet Ihre personenbezogenen Daten nur im Auftrag und nach den Weisungen der DigitalService GmbH des Bundes.
+Personenbezogene Daten werden ausschließlich auf Servern innerhalb der Europäischen Union/des Europäischen Wirtschaftsraums verarbeitet und nicht an unberechtigte Dritte weitergeleitet.
 
 ## 8. Wie lange und wo speichern wir Ihre Daten?
 
-Informationen, die Sie im Rahmen des Registrierungsformulars eingeben, werden von dem externen Dienstleister Formbricks ausschließlich auf Servern innerhalb der Europäischen Union/des Europäischen Wirtschaftsraums gespeichert. Unsere Auftragsverarbeiterin greift dann auf diese personenbezogenen Daten zu und nutzt sie, um Sie zu kontaktieren. Weitere Informationen hierzu finden Sie in der Datenschutzerklärung von Formbricks unter [https://formbricks.com/privacy-policy](https://formbricks.com/privacy-policy).
-
-Die Daten werden gelöscht, wenn Sie nicht mehr zum Zwecke der Kontaktaufnahme benötigt werden, spätestens jedoch nach 12 Monaten.
+Personenbezogene Daten werden ausschließlich auf Servern innerhalb der Europäischen Union/des Europäischen Wirtschaftsraums verarbeitet. Die Daten werden gelöscht, wenn Sie nicht mehr zum Zwecke der Kontaktaufnahme benötigt werden, spätestens jedoch nach 12 Monaten.
 
 ## 9. Welche Rechte haben Sie?
 
