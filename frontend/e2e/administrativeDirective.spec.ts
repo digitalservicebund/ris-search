@@ -1,3 +1,4 @@
+import type { Page } from "@playwright/test";
 import {
   testCopyLinkButton,
   testPdfButton,
@@ -5,6 +6,13 @@ import {
   testXmlButton,
 } from "./utils/actionMenuHelper";
 import { expect, test, navigate, noJsTest } from "./utils/fixtures";
+
+async function getSidebar(page: Page) {
+  const navigation = page.getByRole("navigation", { name: "Inhalte" });
+  await navigation.scrollIntoViewIfNeeded();
+  await expect(navigation).toBeVisible();
+  return navigation;
+}
 
 test("displays administrative directive page with metadata and text tab by default", async ({
   page,
@@ -96,6 +104,44 @@ test("displays administrative directive page with metadata and text tab by defau
   await expect(
     textSection.getByText("ABC BAZ RefNr 456 2023-01-01"),
   ).toBeVisible();
+});
+
+test("sidebar TOC renders on desktop and clicking a link scrolls to the section", async ({
+  page,
+  isMobileTest,
+}) => {
+  test.skip(isMobileTest);
+
+  await navigate(page, "/administrative-directives/KSNR000000001");
+
+  const sidebar = await getSidebar(page);
+
+  await expect(
+    sidebar.getByRole("link", { name: "Kurzreferat" }),
+  ).toBeVisible();
+
+  const verweiseLink = sidebar.getByRole("link", { name: "Verweise" });
+  await expect(verweiseLink).toBeVisible();
+  await verweiseLink.click();
+
+  await expect(page).toHaveURL(/#verweise$/i);
+
+  await expect(
+    page.getByRole("heading", { name: "Verweise" }),
+  ).toBeInViewport();
+});
+
+test("sidebar TOC is not shown when document has no text sections", async ({
+  page,
+  isMobileTest,
+}) => {
+  test.skip(isMobileTest);
+
+  await navigate(page, "/administrative-directives/KSNR000000004");
+
+  await expect(
+    page.getByRole("navigation", { name: "Inhalte" }),
+  ).not.toBeVisible();
 });
 
 test("can navigate to search via breadcrumb", async ({ page }) => {
