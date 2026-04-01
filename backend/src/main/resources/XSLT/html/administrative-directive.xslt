@@ -41,17 +41,21 @@
 	<!-- if there is no short report the main body only contains an empty hcontainer -->
 	<xsl:template match="akn:mainBody">
 		<xsl:if test="not(akn:hcontainer)">
-			<h2>Kurzreferat</h2>
-			<xsl:apply-templates />
+			<section id="kurzreferat">
+				<h2>Kurzreferat</h2>
+				<xsl:apply-templates />
+			</section>
 		</xsl:if>
 	</xsl:template>
 
 	<!-- Content -->
 	<xsl:template match="ris:tableOfContentsEntries">
-		<h2>Inhalt</h2>
-		<ul>
-			<xsl:apply-templates/>
-		</ul>
+		<section id="inhalt">
+			<h2>Inhalt</h2>
+			<ul>
+				<xsl:apply-templates/>
+			</ul>
+		</section>
 	</xsl:template>
 
 	<xsl:template match="ris:tableOfContentsEntry">
@@ -59,41 +63,45 @@
 	</xsl:template>
 
 	<xsl:template match="ris:activeReferences">
-		<h2>Verweise</h2>
-		<ul>
-			<xsl:for-each select="ris:activeReference">
-				<li>
-					<xsl:value-of select="@reference" />
-					<xsl:if test="@section">
-						<xsl:text> </xsl:text>
-						<xsl:value-of select="@section" />
-					</xsl:if>
-					<xsl:if test="@paragraph">
-						<xsl:text> </xsl:text>
-						<xsl:value-of select="@paragraph" />
-					</xsl:if>
-					<xsl:if test="@subParagraph">
-						<xsl:text> </xsl:text>
-						<xsl:value-of select="@subParagraph" />
-					</xsl:if>
-					<xsl:if test="@position">
-						<xsl:text> </xsl:text>
-						<xsl:value-of select="@position" />
-					</xsl:if>
-				</li>
-			</xsl:for-each>
-		</ul>
+		<section id="verweise">
+			<h2>Verweise</h2>
+			<ul>
+				<xsl:for-each select="ris:activeReference">
+					<li>
+						<xsl:value-of select="@reference" />
+						<xsl:if test="@section">
+							<xsl:text> </xsl:text>
+							<xsl:value-of select="@section" />
+						</xsl:if>
+						<xsl:if test="@paragraph">
+							<xsl:text> </xsl:text>
+							<xsl:value-of select="@paragraph" />
+						</xsl:if>
+						<xsl:if test="@subParagraph">
+							<xsl:text> </xsl:text>
+							<xsl:value-of select="@subParagraph" />
+						</xsl:if>
+						<xsl:if test="@position">
+							<xsl:text> </xsl:text>
+							<xsl:value-of select="@position" />
+						</xsl:if>
+					</li>
+				</xsl:for-each>
+			</ul>
+		</section>
 	</xsl:template>
 
 	<xsl:template match="akn:otherReferences[@source='attributsemantik-noch-undefiniert']">
 		<xsl:if test="akn:implicitReference/ris:caselawReference">
-			<h2>Dieser Beitrag zitiert</h2>
-			<h3>Rechtsprechung</h3>
-			<ul>
-				<xsl:for-each select="akn:implicitReference[ris:caselawReference]">
-					<li><xsl:value-of select="@showAs" /></li>
-				</xsl:for-each>
-			</ul>
+			<section id="dieser-beitrag-zitiert">
+				<h2>Dieser Beitrag zitiert</h2>
+				<h3>Rechtsprechung</h3>
+				<ul>
+					<xsl:for-each select="akn:implicitReference[ris:caselawReference]">
+						<li><xsl:value-of select="@showAs" /></li>
+					</xsl:for-each>
+				</ul>
+			</section>
 		</xsl:if>
 	</xsl:template>
 

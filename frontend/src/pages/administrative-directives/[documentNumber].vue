@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { DocumentView } from "~/layouts/document.vue";
+import type { TreeItem } from "~/components/TreeView.vue";
 import { type AdministrativeDirective, DocumentKind } from "~/types/api";
 import IcBaselineSubject from "~icons/ic/baseline-subject";
 import IcOutlineInfo from "~icons/ic/outline-info";
@@ -37,6 +38,16 @@ const title = computed(() => data.value?.headline);
 
 const document = html.value ? parseDocument(html.value) : undefined;
 const isEmptyDocument = isDocumentEmpty(document);
+
+const tocEntries = computed<TreeItem[] | null>(() => {
+  return document
+    ? getAllSectionsFromDocument(document, "section").map((entry) => ({
+        key: entry.id,
+        title: entry.title,
+        to: { hash: `#${entry.id}` },
+      }))
+    : null;
+});
 
 const breadcrumbs = computed(() => [
   {
@@ -97,6 +108,18 @@ const detailItems = computed(() =>
               v-html="document.body.innerHTML"
             ></div>
           </section>
+        </template>
+
+        <template #sidebar>
+          <client-only>
+            <TreeView
+              v-if="tocEntries?.length"
+              :items="tocEntries"
+              :selection-enabled="false"
+              class="h-full lg:pt-16"
+              heading="Inhalte"
+            />
+          </client-only>
         </template>
       </SidebarLayout>
     </template>
