@@ -4,9 +4,19 @@ import jakarta.xml.bind.ValidationException;
 import java.util.List;
 import org.springframework.stereotype.Component;
 
+/**
+ * Validator for CaseLawLdml objects to ensure compliance with mandatory business rules and
+ * structural requirements for legal document metadata.
+ */
 @Component
 public class CaseLawLdmlValidator {
 
+  /**
+   * Validates the provided LDML object.
+   *
+   * @param ldml the legal document metadata to validate
+   * @throws ValidationException if any mandatory fields are missing or empty
+   */
   public void validate(CaseLawLdml ldml) throws ValidationException {
     if (ldml == null) throw new ValidationException("LDML root is null");
 
