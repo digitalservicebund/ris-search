@@ -126,7 +126,7 @@ const tocEntries = computed<TreeItem[] | null>(() => {
   return document.value
     ? getAllSectionsFromDocument(document.value, "section").map((entry) => ({
         key: entry.id,
-        title: entry.title,
+        subtitle: entry.title, // Subtitle for more subtle appearance
         to: { hash: `#${entry.id}` },
       }))
     : null;
