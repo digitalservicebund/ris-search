@@ -158,20 +158,16 @@ test.describe("view norm page", async () => {
     isMobileTest,
   }) => {
     test.skip(isMobileTest);
-    const normUrl = "/norms/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu";
-    await navigate(page, normUrl);
+    await navigate(page, "/norms/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu");
 
-    const tocNav = page.getByRole("navigation", { name: "Inhalte" });
-    await tocNav.getByRole("link", { name: "Eingangsformel" }).click();
+    const sidebar = page.getByRole("navigation", { name: "Inhalte" });
+    await sidebar.getByRole("link", { name: "Eingangsformel" }).click();
 
     await expect(page).toHaveURL(
       "/norms/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu#praeambel-n1_formel-n1",
     );
 
-    const heading = page
-      .getByRole("main")
-      .getByRole("heading", { name: "Eingangsformel" });
-    await expect(heading).toBeInViewport();
+    await expect(page).toHaveScreenshot();
   });
 });
 

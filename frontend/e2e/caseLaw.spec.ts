@@ -9,7 +9,6 @@ import { expect, navigate, noJsTest, test } from "./utils/fixtures";
 
 async function getSidebar(page: Page) {
   const navigation = page.getByRole("navigation", { name: "Inhalte" });
-  await navigation.scrollIntoViewIfNeeded();
   await expect(navigation).toBeVisible();
   return navigation;
 }
@@ -43,22 +42,14 @@ test("sidebar TOC renders on desktop and clicking a link scrolls to the section"
   isMobileTest,
 }) => {
   test.skip(isMobileTest);
-
   await navigate(page, "/case-law/JURE200030030");
 
   const sidebar = await getSidebar(page);
+  await sidebar.getByRole("link", { name: "Tatbestand" }).click();
 
-  await expect(sidebar.getByRole("link", { name: "Tenor" })).toBeVisible();
+  await expect(page).toHaveURL("/case-law/JURE200030030#tatbestand");
 
-  const tatbestandLink = sidebar.getByRole("link", { name: "Tatbestand" });
-  await expect(tatbestandLink).toBeVisible();
-  await tatbestandLink.click();
-
-  await expect(page).toHaveURL(/#tatbestand$/i);
-
-  await expect(
-    page.getByRole("heading", { name: "Tatbestand" }),
-  ).toBeInViewport();
+  await expect(page).toHaveScreenshot();
 });
 
 test.describe("responsive", () => {
