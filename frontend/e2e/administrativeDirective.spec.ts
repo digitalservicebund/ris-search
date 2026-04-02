@@ -120,7 +120,10 @@ test("sidebar TOC renders on desktop and clicking a link scrolls to the section"
     "/administrative-directives/KSNR000000001#verweise",
   );
 
-  await expect(page).toHaveScreenshot();
+  const heading = page.getByRole("heading", { name: "Verweise" });
+  await expect(heading).toBeInViewport();
+  const box = await heading.boundingBox();
+  expect(box!.y).toBeLessThan(100);
 });
 
 test("sidebar TOC is not shown when document has no text sections", async ({

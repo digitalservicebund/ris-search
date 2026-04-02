@@ -49,7 +49,10 @@ test("sidebar TOC renders on desktop and clicking a link scrolls to the section"
 
   await expect(page).toHaveURL("/case-law/JURE200030030#tatbestand");
 
-  await expect(page).toHaveScreenshot();
+  const heading = page.getByRole("heading", { name: "Tatbestand" });
+  await expect(heading).toBeInViewport();
+  const box = await heading.boundingBox();
+  expect(box!.y).toBeLessThan(100);
 });
 
 test.describe("responsive", () => {

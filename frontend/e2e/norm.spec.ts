@@ -167,7 +167,10 @@ test.describe("view norm page", async () => {
       "/norms/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu#praeambel-n1_formel-n1",
     );
 
-    await expect(page).toHaveScreenshot();
+    const heading = page.getByRole("heading", { name: "Eingangsformel" });
+    await expect(heading).toBeInViewport();
+    const box = await heading.boundingBox();
+    expect(box!.y).toBeLessThan(100);
   });
 });
 
