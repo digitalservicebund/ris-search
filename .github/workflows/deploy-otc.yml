@@ -1,4 +1,5 @@
-name: Deploy
+# NOTE: After our final switch to STACKIT this workflow can be removed
+name: Deploy-OTC
 
 on:
   workflow_call:
@@ -8,30 +9,33 @@ on:
         required: true
         type: string
       deployment-environment:
-        description: 'Environment to deploy to, either "staging", "uat", "prod" or "prototype"'
+        description: 'Environment to deploy to, either "staging", "uat" or "prototype"'
         required: true
         type: string
       argocd-app-name:
-        description: 'Name of the argoCD app. If not provided will be "ris-search-<deployment-environment>"'
+        description: 'Name of the argoCD app. If not provided will be "ris-portal-<deployment-environment>"'
         required: false
         type: string
 jobs:
-  deploy-to-STACKIT:
+  deploy-to-OTC:
     runs-on: ubuntu-latest
-    if: ${{ github.ref == 'refs/heads/main' }}
+    if: ${{ github.ref == 'refs/heads/main' && !inputs.skip-OTC-deployment }}
+    permissions:
+      id-token: write
     steps:
       - name: Deploy backend and frontend images to ${{ inputs.deployment-environment}}
-        uses: digitalservicebund/argocd-deploy@auth-token # Use the auth-token branch for STACKIT
+        uses: digitalservicebund/argocd-deploy@f641e07b623c4544d048a302cc16fcb18e7bf190
         with:
           environment: ${{ inputs.deployment-environment}}
           version: ${{ inputs.image-tag }}
           deploying_repo: ris-search,ris-search/frontend
-          infra_repo: ris-search-infra
+          infra_repo: neuris-portal-infra
           github_app_id: ${{ secrets.GITOPS_NEURIS_APP_ID }}
           github_app_private_key: ${{ secrets.GITOPS_NEURIS_APP_PRIVATE_KEY }}
-          app: ${{ inputs.argocd-app-name || format('ris-search-{0}', inputs.deployment-environment) }}
-          argocd_auth_token: ${{ secrets.ARGOCD_AUTH_TOKEN }}
-          argocd_server: ${{ secrets.ARGOCD_SERVER_STACKIT }}
+          app: ${{ inputs.argocd-app-name || format('ris-portal-{0}', inputs.deployment-environment) }}
+          argocd_pipeline_password: ${{ secrets.ARGOCD_PIPELINE_PASSWORD }}
+          argocd_server: ${{ secrets.ARGOCD_SERVER }}
+          argocd_sync_timeout: 420
 
       - name: Send status to Slack
         if: ${{ failure() }}

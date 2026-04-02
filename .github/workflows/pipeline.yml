@@ -30,6 +30,7 @@ jobs:
       container-registry: ghcr.io
       image-reference: ghcr.io/${{ github.repository }}/frontend:${{ github.sha }}
 
+  ### Deploy Staging ###
   deploy-staging:
     needs:
       - backend-jobs
@@ -41,11 +42,22 @@ jobs:
       image-tag: ${{ github.sha }}
       deployment-environment: staging
 
+  ### Smoke tests ###
   smoke-tests:
     needs:
       - deploy-staging
     uses: ./.github/workflows/smoke-tests.yml
     secrets: inherit
+
+  ### Deploy UAT ###
+  deploy-uat-otc:
+    needs:
+      - smoke-tests
+    uses: ./.github/workflows/deploy-otc.yml
+    secrets: inherit
+    with:
+      image-tag: ${{ github.sha }}
+      deployment-environment: uat
 
   deploy-uat:
     needs:
@@ -56,6 +68,17 @@ jobs:
       image-tag: ${{ github.sha }}
       deployment-environment: uat
 
+  ### Deploy Prototype ###
+  deploy-prototype-otc:
+    needs:
+      - deploy-uat-otc
+    uses: ./.github/workflows/deploy-otc.yml
+    secrets: inherit
+    with:
+      image-tag: ${{ github.sha }}
+      deployment-environment: prototype
+      argocd-app-name: ris-portal-prototype-production
+
   deploy-prototype:
     needs:
       - deploy-uat
@@ -64,34 +87,14 @@ jobs:
     with:
       image-tag: ${{ github.sha }}
       deployment-environment: prototype
-      argocd-app-name: ris-portal-prototype-production
 
-  # Note: This is not using the reusable deploy.yml workflow
-  # because the environment ("prod") string and the app postfix
-  # "production" are not the same and this would require yet another
-  # workaround with inputs. As we plan to remove the otc deployments
-  # in the near future, this can be refactored at that point.
-  deploy-production-to-STACKIT:
-    needs: deploy-prototype
-    runs-on: ubuntu-latest
-    if: ${{ github.ref == 'refs/heads/main' }}
-    steps:
-      - name: Deploy backend and frontend images to production on STACKIT
-        uses: digitalservicebund/argocd-deploy@auth-token # Use the auth-token branch for STACKIT
-        with:
-          environment: prod
-          version: ${{ github.sha }}
-          deploying_repo: ris-search,ris-search/frontend
-          infra_repo: ris-search-infra
-          github_app_id: ${{ secrets.GITOPS_NEURIS_APP_ID }}
-          github_app_private_key: ${{ secrets.GITOPS_NEURIS_APP_PRIVATE_KEY }}
-          app: ris-search-production
-          argocd_auth_token: ${{ secrets.ARGOCD_AUTH_TOKEN }}
-          argocd_server: ${{ secrets.ARGOCD_SERVER_STACKIT }}
-
-      - name: Send status to Slack
-        if: ${{ failure() }}
-        uses: digitalservicebund/notify-on-failure-gha@671832f192aee0a068fd92b2f6deb975df794a84 # v1.6.1
-        with:
-          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
-          SLACK_CHANNEL_ID: ${{ vars.NEURIS_PORTAL_ALERTS_SLACK_CHANNEL_ID }}
+  ### Deploy Production ###
+  deploy-production:
+    needs:
+      - deploy-prototype
+    uses: ./.github/workflows/deploy.yml
+    secrets: inherit
+    with:
+      image-tag: ${{ github.sha }}
+      deployment-environment: prod
+      argocd-app-name: ris-search-production
