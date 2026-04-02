@@ -1,4 +1,5 @@
 <script setup lang="ts" generic="T extends TreeItem">
+import { NuxtLink } from "#components";
 import type { RouteLocationRaw } from "#vue-router";
 
 export type TreeItem = {
@@ -13,6 +14,7 @@ const {
   items,
   heading,
   subheading,
+  subheadingTo,
   label,
   expandToKey,
   selectionEnabled = true,
@@ -23,6 +25,8 @@ const {
   heading?: string;
   /** Additional heading */
   subheading?: string;
+  /** When set, the subheading becomes a link to this route */
+  subheadingTo?: RouteLocationRaw;
   /**
    * Accessible lable of the tree. If undefined, the tree will be labelled by
    * the heading. Make sure that at least one of them is set.
@@ -277,7 +281,14 @@ function onKeydown(event: KeyboardEvent) {
       class="flex-none space-y-4 border-b border-b-gray-400 px-[1.375rem] py-16"
     >
       <h2 :id="headingId" class="ris-heading3-bold">{{ heading }}</h2>
-      <p v-if="subheading" class="ris-label1-regular line-clamp-3">
+      <NuxtLink
+        v-if="subheading && subheadingTo"
+        :to="subheadingTo"
+        class="ris-link1-regular link-hover line-clamp-3"
+      >
+        {{ subheading }}
+      </NuxtLink>
+      <p v-else-if="subheading" class="ris-label1-regular line-clamp-3">
         {{ subheading }}
       </p>
     </div>
