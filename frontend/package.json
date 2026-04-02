@@ -28,7 +28,7 @@
   "dependencies": {
     "@digitalservicebund/ris-ui": "3.21.3",
     "@nuxtjs/mdc": "0.21.0",
-    "@nuxtjs/sitemap": "7.6.0",
+    "@nuxtjs/sitemap": "8.0.11",
     "@sentry/nuxt": "10.46.0",
     "dayjs": "1.11.20",
     "lodash": "4.18.1",
