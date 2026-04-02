@@ -55,7 +55,6 @@ const projects: Project[] = [
  */
 export default defineConfig({
   testDir: "./e2e",
-  snapshotDir: "./e2e/snapshots",
   /* Run tests in files in parallel */
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
@@ -82,6 +81,8 @@ export default defineConfig({
   expect: {
     toHaveScreenshot: {
       maxDiffPixels: 100,
+      pathTemplate:
+        "{testDir}/__snapshots__/{testFileName}/{testName}-{projectName}{ext}",
     },
   },
 
