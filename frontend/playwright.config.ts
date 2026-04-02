@@ -69,17 +69,5 @@ export default defineConfig({
     trace: "retain-on-first-failure",
   },
 
-  expect: {
-    toHaveScreenshot: {
-      maxDiffPixels: 100,
-
-      // Deliberately excludes the operating system (included in the default
-      // template) so the snapshots can be used both locally as well as in the
-      // pipeline.
-      pathTemplate:
-        "{testDir}/__snapshots__/{testFileName}/{testName}-{projectName}{ext}",
-    },
-  },
-
   projects,
 });
