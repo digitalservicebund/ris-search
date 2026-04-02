@@ -9,7 +9,6 @@ import { expect, test, navigate, noJsTest } from "./utils/fixtures";
 
 async function getSidebar(page: Page) {
   const navigation = page.getByRole("navigation", { name: "Inhalte" });
-  await navigation.scrollIntoViewIfNeeded();
   await expect(navigation).toBeVisible();
   return navigation;
 }
@@ -115,20 +114,16 @@ test("sidebar TOC renders on desktop and clicking a link scrolls to the section"
   await navigate(page, "/administrative-directives/KSNR000000001");
 
   const sidebar = await getSidebar(page);
+  await sidebar.getByRole("link", { name: "Verweise" }).click();
 
-  await expect(
-    sidebar.getByRole("link", { name: "Kurzreferat" }),
-  ).toBeVisible();
+  await expect(page).toHaveURL(
+    "/administrative-directives/KSNR000000001#verweise",
+  );
 
-  const verweiseLink = sidebar.getByRole("link", { name: "Verweise" });
-  await expect(verweiseLink).toBeVisible();
-  await verweiseLink.click();
-
-  await expect(page).toHaveURL(/#verweise$/i);
-
-  await expect(
-    page.getByRole("heading", { name: "Verweise" }),
-  ).toBeInViewport();
+  const heading = page.getByRole("heading", { name: "Verweise" });
+  await expect(heading).toBeInViewport();
+  const box = await heading.boundingBox();
+  expect(box!.y).toBeLessThan(100);
 });
 
 test("sidebar TOC is not shown when document has no text sections", async ({

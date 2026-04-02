@@ -11,23 +11,18 @@ import { NuxtLink } from "#components";
       Kraft getretene und zukünftig in Kraft tretende Fassungen der Gesetze und
       Verordnungen zur Verfügung gestellt.
     </p>
-    <!-- Temporarily disabled due to data issue with Form bricks -->
-    <h3 v-if="false" class="ris-heading3-bold mt-48 mb-24">
+
+    <h3 class="ris-heading3-bold mt-48 mb-24">
       Unterstützen Sie uns bei der Entwicklung dieser Funktion
     </h3>
-    <!-- Temporarily disabled due to data issue with Form bricks -->
-    <p v-if="false">
+
+    <p>
       Unser Ziel ist es, Rechtsinformationen für Bürgerinnen und Bürger leichter
       zugänglich zu machen. Deshalb suchen wir Menschen, die ihre Erfahrungen
       mit uns teilen und unseren Service testen.
     </p>
-    <!-- Temporarily disabled due to data issue with Form bricks -->
-    <Button
-      v-if="false"
-      :as="NuxtLink"
-      class="mt-16"
-      :to="{ name: 'usage-tests' }"
-    >
+
+    <Button :as="NuxtLink" class="mt-16" :to="{ name: 'usage-tests' }">
       Mehr über Nutzungstest erfahren
     </Button>
   </div>
