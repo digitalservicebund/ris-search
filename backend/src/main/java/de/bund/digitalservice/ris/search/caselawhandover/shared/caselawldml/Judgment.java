@@ -15,13 +15,13 @@ import lombok.NoArgsConstructor;
 public class Judgment {
   @Builder.Default
   @XmlAttribute(name = "name")
-  private String name = "attributsemantik-noch-undefiniert";
+  private String name = "documentType test";
 
   @XmlElement(name = "meta", namespace = CaseLawLdmlNamespaces.AKN_NS)
   private Meta meta;
 
   @XmlElement(name = "header", namespace = CaseLawLdmlNamespaces.AKN_NS)
-  private JaxbHtml header;
+  private Header header;
 
   @XmlElement(name = "judgmentBody", namespace = CaseLawLdmlNamespaces.AKN_NS)
   private JudgmentBody judgmentBody;

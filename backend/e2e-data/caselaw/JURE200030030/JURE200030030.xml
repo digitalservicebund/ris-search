@@ -1,93 +1,110 @@
 <?xml version="1.0" encoding="utf-8"?>
-<akn:akomaNtoso xmlns:akn="http://docs.oasis-open.org/legaldocml/ns/akn/3.0/WD17"
+<akn:akomaNtoso xmlns:akn="http://docs.oasis-open.org/legaldocml/ns/akn/3.0"
                 xmlns:ris="http://example.com/0.1/"
                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                xsi:schemaLocation="http://docs.oasis-open.org/legaldocml/ns/akn/3.0/WD17
-                     https://docs.oasis-open.org/legaldocml/akn-core/v1.0/csprd02/part2-specs/schemas/akomantoso30.xsd">
-    <akn:judgment name="Beispielurteil7">
+                xsi:schemaLocation="http://docs.oasis-open.org/legaldocml/ns/akn/3.0 https://docs.oasis-open.org/legaldocml/akn-core/v1.0/os/part2-specs/schemas/akomantoso30.xsd">
+
+    <akn:judgment name="Urteil">
         <akn:meta>
-            <akn:identification source="Testquelle7">
+            <akn:identification source="#ris">
                 <akn:FRBRWork>
                     <akn:FRBRthis value="JURE200030030"/>
                     <akn:FRBRuri value="JURE200030030"/>
-                    <akn:FRBRalias name="uebergreifende-id" value="fake-uuid-0007"/>
-                    <akn:FRBRdate date="2025-04-09" name="entscheidungsdatum"/>
-                    <akn:FRBRauthor href="Testautor7"/>
+                    <akn:FRBRalias name="Übergreifende ID" value="fake-uuid-0007"/>
+                    <akn:FRBRalias name="Dokumentnummer" value="JURE200030030" />
+                    <akn:FRBRdate eId="Entscheidungsdatum" date="2025-04-09" name="Entscheidungsdatum"/>
+                    <akn:FRBRauthor href="#gericht"/>
                     <akn:FRBRcountry value="de"/>
                 </akn:FRBRWork>
                 <akn:FRBRExpression>
                     <akn:FRBRthis value="JURE200030030/dokument"/>
                     <akn:FRBRuri value="JURE200030030/dokument"/>
-                    <akn:FRBRdate date="2025-04-09" name="entscheidungsdatum"/>
-                    <akn:FRBRauthor href="Testautor7"/>
+                    <akn:FRBRdate date="2025-04-09" name="Entscheidungsdatum"/>
+                    <akn:FRBRauthor href="#gericht"/>
                     <akn:FRBRlanguage language="deu"/>
                 </akn:FRBRExpression>
                 <akn:FRBRManifestation>
                     <akn:FRBRthis value="JURE200030030/dokument.xml"/>
                     <akn:FRBRuri value="JURE200030030/dokument.xml"/>
-                    <akn:FRBRdate date="2025-04-09" name="entscheidungsdatum"/>
-                    <akn:FRBRauthor href="Testautor7"/>
+                    <akn:FRBRdate date="2025-04-09" name="XML Transformation"/>
+                    <akn:FRBRauthor href="#bag-dokumentationsstelle"/>
                 </akn:FRBRManifestation>
             </akn:identification>
-            <akn:classification source="Testquelle7">
-                <akn:keyword dictionary="TestDict7" showAs="Beispiel" value="Prozessförderung"/>
-                <akn:keyword dictionary="TestDict7" showAs="Beispiel" value="AnzahlTest"/>
-                <akn:keyword dictionary="TestDict7" showAs="Beispiel" value="UrlaubstageTest"/>
-                <akn:keyword dictionary="TestDict7" showAs="Beispiel" value="Testbeschleunigung"/>
+            <akn:classification source="#ris">
+                <akn:keyword ris:domainTerm="Schlagwort" dictionary="" showAs="Prozessförderung" value="Prozessförderung"/>
+                <akn:keyword ris:domainTerm="Schlagwort" dictionary="" showAs="AnzahlTest" value="AnzahlTest"/>
+                <akn:keyword ris:domainTerm="Schlagwort" dictionary="" showAs="UrlaubstageTest" value="UrlaubstageTest"/>
+                <akn:keyword ris:domainTerm="Schlagwort" dictionary="" showAs="Testbeschleunigung" value="Testbeschleunigung"/>
             </akn:classification>
-            <akn:proprietary source="Testquelle7">
+            <akn:analysis source="#ris">
+                <akn:otherAnalysis source="#ris">
+                    <ris:dokumentarischeKurztexte domainTerm="Dokumentarische Kurztexte">
+                        <ris:titelzeile akn:eId="titelzeile" ris:domainTerm="Titelzeile">
+                            <akn:p>Urteil 7.</akn:p>
+                        </ris:titelzeile>
+                        <ris:orientierungssatz ris:domainTerm="Orientierungssatz">
+                            <akn:p>1. Fiktive Darstellung des Sachverhalts im Bereich Urlaubsanspruch.</akn:p>
+                            <akn:p>2. Weitere Testangaben zur Prozessförderung werden exemplarisch aufgeführt.</akn:p>
+                            <akn:p>3. Berufung und weitere Schritte sind eingeleitet.</akn:p>
+                        </ris:orientierungssatz>
+                    </ris:dokumentarischeKurztexte>
+                </akn:otherAnalysis>
+            </akn:analysis>
+            <akn:references source="#ris">
+                <akn:TLCOrganization eId="ris" href="" showAs="Rechtsinformationssystem des Bundes"/>
+                <akn:TLCOrganization eId="bag-dokumentationsstelle" href="" showAs="BAG"/>
+                <akn:TLCOrganization eId="gericht" href="" showAs="ArbG"/>
+                <akn:TLCOrganization eId="spruchkoerper" href="" showAs="5. Kammer"/>
+            </akn:references>
+            <akn:proprietary source="ris">
                 <ris:meta>
-                    <ris:ensuingDecisions>
-                        <ris:ensuingDecision>
-                            <ris:fileNumber>XY Z 12/34</ris:fileNumber>
-                            <ris:courtType>LArbG</ris:courtType>
-                        </ris:ensuingDecision>
-                    </ris:ensuingDecisions>
-                    <ris:fileNumbers>
-                        <ris:fileNumber>AB 5678/90</ris:fileNumber>
-                    </ris:fileNumbers>
-                    <ris:documentType>Urteil</ris:documentType>
-                    <ris:courtLocation>Köln</ris:courtLocation>
-                    <ris:courtType>ArbG</ris:courtType>
-                    <ris:legalEffect>KEINE_ANGABE</ris:legalEffect>
-                    <ris:fieldOfLaws>
-                        <ris:fieldOfLaw>Testarbeitsrecht</ris:fieldOfLaw>
-                        <ris:fieldOfLaw>Testberufung</ris:fieldOfLaw>
-                        <ris:fieldOfLaw>Testprozess (Testfall)</ris:fieldOfLaw>
-                        <ris:fieldOfLaw>Testurlaub</ris:fieldOfLaw>
-                    </ris:fieldOfLaws>
-                    <ris:judicialBody>5. Kammer</ris:judicialBody>
-                    <ris:publicationStatus>PUBLISHED</ris:publicationStatus>
-                    <ris:error>false</ris:error>
-                    <ris:documentationOffice>BAG</ris:documentationOffice>
-                    <ris:procedures>
-                        <ris:procedure>TESTPROC7</ris:procedure>
-                    </ris:procedures>
+                    <ris:aktenzeichenListe domainTerm="Liste der Aktenzeichen">
+                        <ris:aktenzeichen domainTerm="Aktenzeichen" akn:refersTo="#aktenzeichen">AB 5678/90</ris:aktenzeichen>
+                    </ris:aktenzeichenListe>
+                    <ris:dokumenttyp akn:eId="dokumenttyp" domainTerm="Dokumenttyp">Urteil</ris:dokumenttyp>
+                    <ris:gericht domainTerm="Gericht" akn:refersTo="#gericht">
+                        <ris:gerichtstyp domainTerm="Gerichtstyp">ArbG</ris:gerichtstyp>
+                        <ris:gerichtsort domainTerm="Gerichtsort">Köln</ris:gerichtsort>
+                        <ris:spruchkoerper domainTerm="Spruchkörper" akn:refersTo="#spruchkoerper">5. Kammer</ris:spruchkoerper>
+                    </ris:gericht>
+                    <ris:rechtskraft domainTerm="Rechtskraft">Keine Angabe</ris:rechtskraft>
+                    <ris:sachgebiete domainTerm="Sachgebiete">
+                        <ris:sachgebiet domainTerm="Sachgebiet" notation="neu">Testarbeitsrecht</ris:sachgebiet>
+                        <ris:sachgebiet domainTerm="Sachgebiet" notation="neu">Testberufung</ris:sachgebiet>
+                        <ris:sachgebiet domainTerm="Sachgebiet" notation="neu">Testprozess (Testfall)</ris:sachgebiet>
+                        <ris:sachgebiet domainTerm="Sachgebiet" notation="neu">Testurlaub</ris:sachgebiet>
+                    </ris:sachgebiete>
+                    <ris:dokumentationsstelle domainTerm="Dokumentationsstelle" akn:refersTo="#bag-dokumentationsstelle">BAG</ris:dokumentationsstelle>
+                    <ris:vorgehendeEntscheidungen domainTerm="Vorgehende Entscheidungen">
+                        <ris:vorgehendeEntscheidung>
+                            <ris:aktenzeichen domainTerm="Aktenzeichen">XY Z 12/34</ris:aktenzeichen>
+                            <ris:gerichtstyp domainTerm="Gerichtstyp">LArbG</ris:gerichtstyp>
+                        </ris:vorgehendeEntscheidung>
+                    </ris:vorgehendeEntscheidungen>
                 </ris:meta>
             </akn:proprietary>
         </akn:meta>
         <akn:header>
             <akn:p>Testheader für Urteil 7.</akn:p>
+            <akn:p>Aktenzeichen: <akn:docNumber refersTo="#aktenzeichen">AB 5678/90</akn:docNumber></akn:p>
+            <akn:p>Entscheidungsdatum: <akn:docDate date="2025-04-09" refersTo="#entscheidungsdatum">09.04.2025</akn:docDate></akn:p>
+            <akn:p>Gericht: <akn:courtType refersTo="#gericht">ArbG</akn:courtType></akn:p>
+            <akn:p>Dokumenttyp: <akn:docType refersTo="#dokumenttyp">Urteil</akn:docType></akn:p>
+            <akn:p>Kurztitel: <akn:shortTitle>
+                <akn:embeddedStructure>
+                    <akn:p>Testheader für Urteil 7.</akn:p>
+                </akn:embeddedStructure>
+            </akn:shortTitle>
+            </akn:p>
         </akn:header>
         <akn:judgmentBody>
-            <akn:introduction>
-                <akn:block name="Orientierungssatz">
-                    <akn:embeddedStructure>
-                        <akn:p>1. Fiktive Darstellung des Sachverhalts im Bereich Urlaubsanspruch.</akn:p>
-                        <akn:p>2. Weitere Testangaben zur Prozessförderung werden exemplarisch aufgeführt.</akn:p>
-                        <akn:p>3. Berufung und weitere Schritte sind eingeleitet.</akn:p>
-                    </akn:embeddedStructure>
-                </akn:block>
-                <akn:block name="Tenor">
-                    <akn:embeddedStructure>
-                        <akn:p>Der Beklagte wird zur Zahlung von Ersatzurlaub verurteilt.</akn:p>
-                        <akn:p>Die Verfahrenskosten werden dem Beklagten angelastet.</akn:p>
-                        <akn:p>Ein weiterer Verfahrensteil wird zugelassen.</akn:p>
-                    </akn:embeddedStructure>
-                </akn:block>
-            </akn:introduction>
-            <akn:background>
-                <akn:hcontainer name="randnummer">
+            <akn:decision ris:domainTerm="Tenor">
+                <akn:p>Der Beklagte wird zur Zahlung von Ersatzurlaub verurteilt.</akn:p>
+                <akn:p>Die Verfahrenskosten werden dem Beklagten angelastet.</akn:p>
+                <akn:p>Ein weiterer Verfahrensteil wird zugelassen.</akn:p>
+            </akn:decision>
+            <akn:background ris:domainTerm="Tatbestand">
+                <akn:hcontainer ris:domainTerm="Randnummer" eId="randnummer-1" name="Randnummer">
                     <akn:num>1</akn:num>
                     <akn:content>
                         <akn:p>Fiktiver Hintergrundtext zur Darstellung des Testfalls im Prozess.</akn:p>
