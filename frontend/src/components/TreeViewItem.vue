@@ -264,11 +264,7 @@ function onToggleDeep() {
       }
 
       .title {
-        @apply flex-none;
-
-        &:not(:only-child) {
-          @apply ris-label1-bold;
-        }
+        @apply ris-label1-bold flex-none;
       }
 
       .subtitle {
@@ -277,11 +273,7 @@ function onToggleDeep() {
 
       &:hover {
         .title {
-          @apply underline;
-
-          &:not(:only-child) {
-            @apply no-underline;
-          }
+          @apply no-underline;
         }
 
         .subtitle {
@@ -306,7 +298,7 @@ function onToggleDeep() {
       }
     }
 
-    &:not([aria-expanded]) :is(.title, .subtitle) {
+    &:not([aria-expanded]) .title {
       @apply ris-label1-bold;
     }
   }

@@ -253,6 +253,7 @@ useDynamicSeo({ title, description });
           <DocumentsNormsNormTableOfContents
             v-if="norm.workExample?.tableOfContents?.length"
             :subheading="normBreadcrumbTitle"
+            :subheading-to="normPath"
             :table-of-contents="tableOfContents"
             :selected-key="eId"
           />

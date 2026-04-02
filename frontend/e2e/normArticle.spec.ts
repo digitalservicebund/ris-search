@@ -238,6 +238,27 @@ test.describe("view norm article page", () => {
       page.getByRole("heading", { level: 1, name: "Eingangsformel" }),
     ).toBeVisible();
   });
+
+  test("clicking the TOC subheading navigates back to the parent norm expression", async ({
+    page,
+    isMobileTest,
+  }) => {
+    test.skip(isMobileTest);
+    const expressionEliUrl =
+      "/norms/eli/bund/bgbl-1/2000/s1016/2023-04-26/10/deu";
+    await navigate(page, `${expressionEliUrl}/art-z1`);
+
+    const tocNav = page.getByRole("navigation", { name: "Inhalte" });
+    await expect(tocNav).toBeVisible();
+
+    const subheadingLink = tocNav.getByRole("link", {
+      name: /FrSaftErfrischV/i,
+    });
+    await expect(subheadingLink).toBeVisible();
+
+    await subheadingLink.click();
+    await expect(page).toHaveURL(expressionEliUrl);
+  });
 });
 
 test.describe("can view metadata of norm articles", () => {

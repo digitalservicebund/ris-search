@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import Button from "primevue/button";
+import type { RouteLocationRaw } from "#vue-router";
 import type { TreeItem } from "~/components/TreeView.vue";
 import IcBaselineClose from "~icons/ic/baseline-close";
 import IcBaselineFormatListBulleted from "~icons/ic/baseline-format-list-bulleted";
@@ -8,6 +9,7 @@ interface Props {
   tableOfContents: TreeItem[];
   selectedKey?: string;
   subheading?: string;
+  subheadingTo?: RouteLocationRaw;
 }
 
 const props = defineProps<Props>();
@@ -15,7 +17,7 @@ const props = defineProps<Props>();
 const isTocVisible = ref(false);
 
 const responsiveStyles =
-  "z-10 max-lg:fixed max-lg:left-0 max-lg:top-0 max-lg:h-full max-lg:w-full max-lg:bg-gray-100 max-lg:px-32 max-lg:py-16";
+  "z-10 max-lg:fixed max-lg:left-0 max-lg:top-0 max-lg:h-full max-lg:w-full max-lg:bg-gray-100 max-lg:py-16";
 
 function toggleTableOfContents() {
   isTocVisible.value = !isTocVisible.value;
@@ -59,6 +61,7 @@ function hideTableOfContents() {
       :expand-to-key="selectedKey"
       :selection-enabled="!!selectedKey"
       :subheading="subheading"
+      :subheading-to="subheadingTo"
       heading="Inhalte"
       class="h-full lg:pt-16"
       @click="hideTableOfContents"

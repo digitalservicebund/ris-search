@@ -98,6 +98,20 @@ describe("TreeView", () => {
       expect(screen.queryByText("A description")).not.toBeInTheDocument();
     });
 
+    it("renders the subheading as a link", async () => {
+      await renderSuspended(TreeView, {
+        props: {
+          items: flatItems,
+          heading: "Heading",
+          subheading: "A description",
+          subheadingTo: "/some/path",
+        },
+      });
+      const link = screen.getByRole("link", { name: "A description" });
+      expect(link).toBeInTheDocument();
+      expect(link).toHaveAttribute("href", "/some/path");
+    });
+
     it("labels the component when heading is provided", async () => {
       await renderSuspended(TreeView, {
         props: { items: flatItems, heading: "Auto label" },
