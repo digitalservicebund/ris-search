@@ -40,7 +40,7 @@ const projects: Project[] = [
     name: "smoke-tests",
     use: {
       ...devices["Desktop Chrome"],
-      baseURL: "https://ris-portal.dev.ds4g.net",
+      baseURL: "https://ris-portal-staging.dev.tech.digitalservice.dev",
       httpCredentials: {
         username: process.env.STAGING_BASIC_AUTH_USERNAME,
         password: process.env.STAGING_BASIC_AUTH_PASSWORD,
