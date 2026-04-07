@@ -41,7 +41,7 @@ public class MappingDefinitions {
 
   protected static final Map<String, String> schemaToOpenSearchMap;
 
-  private static final String DATUM_FIELD = "DATUM";
+  public static final String DATUM_FIELD = "DATUM";
 
   static {
     literatureOpenSearchToSchemaMap =

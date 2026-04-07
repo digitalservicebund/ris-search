@@ -23,14 +23,13 @@ public class SortParamsConverter {
    * empty String.
    *
    * @param sort SortString to sort by combined with relevance
-   * @param nullHandling how to handle null values during sorting
    * @return returns the sort together with document relevance
    */
-  public static @NonNull Sort buildSort(String sort, Sort.NullHandling nullHandling) {
+  public static @NonNull Sort buildSort(String sort) {
 
-    Sort relevance = Sort.by(Sort.Order.desc("_score").with(nullHandling));
+    Sort relevance = Sort.by(Sort.Order.desc("_score").nullsLast());
     if (Strings.isEmpty(sort) || sort.equalsIgnoreCase("default")) {
-      Sort defaultSort = Sort.by(Sort.Order.desc(DATE_ALIAS_FIELD).with(nullHandling));
+      Sort defaultSort = Sort.by(Sort.Order.desc(DATE_ALIAS_FIELD).nullsLast());
       return relevance.and(defaultSort);
     }
 
@@ -50,37 +49,8 @@ public class SortParamsConverter {
       mappedFieldName = fieldName;
     }
 
-    Sort.Order order = new Sort.Order(direction, mappedFieldName).with(nullHandling);
+    Sort.Order order = new Sort.Order(direction, mappedFieldName).nullsLast();
 
     return Sort.by(order).and(relevance);
-  }
-
-  /**
-   * Translate a sort String to a Sort object adding the handling of null values as native
-   * (default).
-   *
-   * @param sort SortString to sort by combined with relevance
-   * @return Sort object
-   */
-  public static @NonNull Sort buildSort(String sort) {
-    return buildSort(
-        sort,
-        Sort.NullHandling
-            .NATIVE); // Default null handling, Spring data does not add any special handling for
-    // nulls
-  }
-
-  /**
-   * Translate a sort String to a Sort object adding the handling of null values as last.
-   *
-   * @param sort SortString to sort by combined with relevance
-   * @return Sort object
-   */
-  public static @NonNull Sort buildSortWithNullHandlingLast(String sort) {
-    return buildSort(
-        sort,
-        Sort.NullHandling
-            .NULLS_LAST); // Those null values in the sorting date will always appear last, both in
-    // ASC and DESC
   }
 }
