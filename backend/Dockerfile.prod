@@ -1,4 +1,5 @@
-FROM gradle:8.5.0-jdk21 AS backend-builder
+# gradle:9.4.1-jdk21
+FROM gradle@sha256:4a19481c230d8b5d41f17ea0c3cb9633f566be9ce498dccdb75aaa1282275f9f AS backend-builder
 WORKDIR /app
 COPY . /app
 RUN ./gradlew build -x integrationTest -x test -x spotlessCheck
