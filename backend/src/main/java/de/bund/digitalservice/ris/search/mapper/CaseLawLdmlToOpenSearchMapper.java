@@ -1,11 +1,13 @@
 package de.bund.digitalservice.ris.search.mapper;
 
+import static de.bund.digitalservice.ris.search.utils.MappingUtils.validate;
+import static de.bund.digitalservice.ris.search.utils.MappingUtils.validateNotNull;
+
 import de.bund.digitalservice.ris.search.caselawhandover.shared.caselawldml.AknKeyword;
 import de.bund.digitalservice.ris.search.caselawhandover.shared.caselawldml.AknMainContentIntroduction;
 import de.bund.digitalservice.ris.search.caselawhandover.shared.caselawldml.AknMainContentMotivation;
 import de.bund.digitalservice.ris.search.caselawhandover.shared.caselawldml.Analysis;
 import de.bund.digitalservice.ris.search.caselawhandover.shared.caselawldml.CaseLawLdml;
-import de.bund.digitalservice.ris.search.caselawhandover.shared.caselawldml.CaseLawLdmlValidator;
 import de.bund.digitalservice.ris.search.caselawhandover.shared.caselawldml.DocumentaryShortTexts;
 import de.bund.digitalservice.ris.search.caselawhandover.shared.caselawldml.FrbrElement;
 import de.bund.digitalservice.ris.search.caselawhandover.shared.caselawldml.FrbrThis;
@@ -38,7 +40,6 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import javax.xml.transform.stream.StreamSource;
 import org.eclipse.persistence.exceptions.DescriptorException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -52,13 +53,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class CaseLawLdmlToOpenSearchMapper {
 
-  private final CaseLawLdmlValidator validator;
-
-  @Autowired
-  public CaseLawLdmlToOpenSearchMapper(CaseLawLdmlValidator validator) {
-    this.validator = validator;
-  }
-
   /**
    * Maps a {@link CaseLawLdml} object to a {@link CaseLawDocumentationUnit} entity. The method
    * performs validation checks on mandatory fields and ensures all necessary data is present.
@@ -69,7 +63,7 @@ public class CaseLawLdmlToOpenSearchMapper {
    */
   public CaseLawDocumentationUnit mapToEntity(CaseLawLdml caseLawLdml) throws ValidationException {
 
-    validator.validate(caseLawLdml);
+    validateCaseLawLdml(caseLawLdml);
 
     Judgment judgment = caseLawLdml.getJudgment();
     Meta meta = judgment.getMeta();
@@ -137,6 +131,36 @@ public class CaseLawLdmlToOpenSearchMapper {
       return mapToEntity(ldml);
     } catch (DescriptorException | DataBindingException | ValidationException e) {
       throw new OpenSearchMapperException("unable to parse file to DocumentationUnit", e);
+    }
+  }
+
+  private static void validateCaseLawLdml(CaseLawLdml ldml) throws ValidationException {
+    if (ldml == null) throw new ValidationException("LDML root is null");
+    validateNotNull(ldml.getJudgment(), "Judgment missing");
+    Judgment judgment = ldml.getJudgment();
+
+    validateNotNull(judgment.getMeta(), "Meta missing");
+    validateNotNull(judgment.getJudgmentBody(), "JudgmentBody missing");
+
+    Meta meta = judgment.getMeta();
+    validateNotNull(meta.getIdentification(), "Identification missing");
+    validateNotNull(meta.getIdentification().getFrbrWork(), "FrbrWork missing");
+    FrbrElement work = meta.getIdentification().getFrbrWork();
+    validateNotNull(work.getFrbrThis(), "FrbrThis missing");
+
+    if (work.getFrbrDate() == null || work.getFrbrDate().getDate().isBlank()) {
+      throw new ValidationException("Decision date is missing");
+    }
+    validateNotNull(meta.getProprietary(), "Proprietary missing");
+    validateNotNull(meta.getProprietary().getRisMeta(), "RisMeta missing");
+    validate(!meta.getProprietary().getRisMeta().getAktenzeichen().isEmpty(), "FileNumber missing");
+    validateNotNull(meta.getProprietary().getRisMeta().getRisDokumentTyp(), "DocumentType missing");
+    validateNotNull(meta.getProprietary().getRisMeta().getRisGericht(), "RisGericht missing");
+    validateNotNull(
+        meta.getProprietary().getRisMeta().getRisGericht().getGerichtstyp(), "CourtType missing");
+
+    if (judgment.getHeader() == null || judgment.getHeader().findShortTitle() == null) {
+      throw new ValidationException("Header or Short Title is missing");
     }
   }
 
