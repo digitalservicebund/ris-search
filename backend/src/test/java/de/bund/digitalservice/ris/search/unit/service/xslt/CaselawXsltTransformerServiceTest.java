@@ -27,7 +27,7 @@ class CaselawXsltTransformerServiceTest {
     var expectedHeader =
         """
         <h1 id="title">
-          <p alternativeTo="textWrapper">the title</p>
+          the title
         </h1>
         """;
     assertTrue(deleteWhitespace(actualHtml).contains(deleteWhitespace(expectedHeader)));

@@ -22,8 +22,13 @@
     <xsl:param name="ressourcenpfad" as="xs:string" select="''"/>
 
     <xsl:template match="akn:judgment">
-        <html>
-            <head><meta charset="utf-8" /></head>
+        <html lang="de">
+            <head>
+                <meta charset="utf-8" />
+                <title>
+                    <xsl:value-of select=".//akn:shortTitle"/>
+                </title>
+            </head>
             <body>
                 <xsl:apply-templates select=".//akn:shortTitle" />
 
@@ -59,7 +64,7 @@
 
     <xsl:template match="akn:shortTitle">
         <h1 id="title">
-            <xsl:apply-templates/>
+            <xsl:value-of select="."/>
         </h1>
     </xsl:template>
 
