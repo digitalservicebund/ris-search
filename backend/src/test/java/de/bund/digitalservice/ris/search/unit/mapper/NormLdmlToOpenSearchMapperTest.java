@@ -36,7 +36,8 @@ class NormLdmlToOpenSearchMapperTest {
   @DisplayName("Should create the ELI, ID, title, abbreviation, and dates correctly")
   void shouldCreateAttributesCorrect() throws IOException {
     String normFile = "xmlContent.xml";
-    Norm norm = NormLdmlToOpenSearchMapper.parseNorm(readXmlTestFile(normFile), Map.of()).get();
+    Norm norm =
+        NormLdmlToOpenSearchMapper.parseNorm(readXmlTestFile(normFile), Map.of(), true).get();
 
     assertEquals("eli/bund/bgbl-1/1962/s514", norm.getWorkEli());
     assertEquals("eli/bund/bgbl-1/1962/s514/2010-04-27/1/deu", norm.getExpressionEli());
@@ -50,6 +51,7 @@ class NormLdmlToOpenSearchMapperTest {
     assertEquals("Kurztitel", norm.getOfficialShortTitle());
     assertEquals("ABK", norm.getOfficialAbbreviation());
     assertEquals(LocalDate.parse("1962-07-15"), norm.getNormsDate());
+    assertEquals(LocalDate.parse("1962-07-15"), norm.getNormsSortDate());
     assertEquals(LocalDate.parse("1962-07-20"), norm.getDatePublished());
   }
 
@@ -57,7 +59,8 @@ class NormLdmlToOpenSearchMapperTest {
   @DisplayName("Should create the official abbreviation title correct from the doctitle")
   void shouldOfficialAbbreviationTitleFromDocTitleCorrect() throws IOException {
     String normFile = "xmlDocumentTestAbbreviationWithDocTitle.xml";
-    Norm norm = NormLdmlToOpenSearchMapper.parseNorm(readXmlTestFile(normFile), Map.of()).get();
+    Norm norm =
+        NormLdmlToOpenSearchMapper.parseNorm(readXmlTestFile(normFile), Map.of(), true).get();
     assertEquals("AdKG", norm.getOfficialAbbreviation());
   }
 
@@ -65,7 +68,8 @@ class NormLdmlToOpenSearchMapperTest {
   @DisplayName("Should create the official abbreviation title correct from the short title")
   void shouldOfficialAbbreviationTitleFromShortTitleCorrect() throws IOException {
     String normFile = "xmlDocumentTestAbbreviationWithShortTitle.xml";
-    Norm norm = NormLdmlToOpenSearchMapper.parseNorm(readXmlTestFile(normFile), Map.of()).get();
+    Norm norm =
+        NormLdmlToOpenSearchMapper.parseNorm(readXmlTestFile(normFile), Map.of(), true).get();
     assertEquals("AdWirkG", norm.getOfficialAbbreviation());
     assertNull(norm.getNormsDate());
   }
@@ -74,21 +78,24 @@ class NormLdmlToOpenSearchMapperTest {
   @DisplayName("Should not create norms when it does not exist the eli")
   void shouldNotCreateNormsWithoutEli() throws IOException {
     String normFile = "xmlDocumentTestWithoutEli.xml";
-    assertTrue(NormLdmlToOpenSearchMapper.parseNorm(readXmlTestFile(normFile), Map.of()).isEmpty());
+    assertTrue(
+        NormLdmlToOpenSearchMapper.parseNorm(readXmlTestFile(normFile), Map.of(), true).isEmpty());
   }
 
   @Test
   @DisplayName("Should not create norms when the xml has a wrong format")
   void shouldNotCreateNormsWithWrongXmlDocument() throws IOException {
     String normFile = "xmlDocumentWrongFormat.xml";
-    assertTrue(NormLdmlToOpenSearchMapper.parseNorm(readXmlTestFile(normFile), Map.of()).isEmpty());
+    assertTrue(
+        NormLdmlToOpenSearchMapper.parseNorm(readXmlTestFile(normFile), Map.of(), true).isEmpty());
   }
 
   @Test
   @DisplayName("Should create norms date even when has an empty space in the xml file")
   void shouldCreateNormsDateEmptySpace() throws IOException {
     String normFile = "xmlDocumentTestDateWithEmptySpace.xml";
-    Norm norm = NormLdmlToOpenSearchMapper.parseNorm(readXmlTestFile(normFile), Map.of()).get();
+    Norm norm =
+        NormLdmlToOpenSearchMapper.parseNorm(readXmlTestFile(normFile), Map.of(), true).get();
     assertEquals(LocalDate.parse("1962-07-15"), norm.getNormsDate());
     assertEquals(LocalDate.parse("1962-07-20"), norm.getDatePublished());
   }
@@ -99,7 +106,7 @@ class NormLdmlToOpenSearchMapperTest {
       String entryIntoForceDate, String expiryDate, boolean isActive) throws IOException {
     String normFile = "xmlDocumentTestEntryIntoForceAndExpiryDates.xml";
     String fileContent = String.format(readXmlTestFile(normFile), entryIntoForceDate, expiryDate);
-    Norm norm = NormLdmlToOpenSearchMapper.parseNorm(fileContent, Map.of()).get();
+    Norm norm = NormLdmlToOpenSearchMapper.parseNorm(fileContent, Map.of(), false).get();
 
     LocalDate expectedEntryIntoForceDate = null;
     if (entryIntoForceDate != null) {
@@ -110,7 +117,12 @@ class NormLdmlToOpenSearchMapperTest {
       expectedExpiryDate = LocalDate.parse(expiryDate);
     }
     assertEquals(expectedEntryIntoForceDate, norm.getEntryIntoForceDate());
+    assertEquals(expectedEntryIntoForceDate, norm.getNormsSortDate());
     assertEquals(expectedExpiryDate, norm.getExpiryDate());
+
+    norm = NormLdmlToOpenSearchMapper.parseNorm(fileContent, Map.of(), true).get();
+    assertEquals(LocalDate.parse("1964-08-01"), norm.getNormsDate());
+    assertEquals(LocalDate.parse("1964-08-01"), norm.getNormsSortDate());
   }
 
   private static Stream<Arguments> getTestDates() {
@@ -135,7 +147,7 @@ class NormLdmlToOpenSearchMapperTest {
             Objects.requireNonNullElse(normsDate, ""),
             Objects.requireNonNullElse(number, ""),
             Objects.requireNonNullElse(name, ""));
-    Norm norm = NormLdmlToOpenSearchMapper.parseNorm(fileContent, Map.of()).get();
+    Norm norm = NormLdmlToOpenSearchMapper.parseNorm(fileContent, Map.of(), true).get();
 
     assertEquals(expectedResult, norm.getPublishedIn());
   }
@@ -159,7 +171,8 @@ class NormLdmlToOpenSearchMapperTest {
         Map.of(
             "eli/bund/bgbl-1/1962/s514/2010-04-27/1/deu/2010-04-27/offenestruktur-1.xml",
             readXmlTestFile("offenestruktur-1.xml"));
-    Norm norm = NormLdmlToOpenSearchMapper.parseNorm(readXmlTestFile(normFile), attachments).get();
+    Norm norm =
+        NormLdmlToOpenSearchMapper.parseNorm(readXmlTestFile(normFile), attachments, true).get();
     assertEquals(5, norm.getArticles().size());
 
     Article preamble = norm.getArticles().get(0);
@@ -203,7 +216,8 @@ class NormLdmlToOpenSearchMapperTest {
         Map.of(
             "eli/bund/bgbl-1/1962/s514/2010-04-27/1/deu/2010-04-27/offenestruktur-1.xml",
             readXmlTestFile("offenestruktur-1.xml"));
-    Norm norm = NormLdmlToOpenSearchMapper.parseNorm(readXmlTestFile(normFile), attachments).get();
+    Norm norm =
+        NormLdmlToOpenSearchMapper.parseNorm(readXmlTestFile(normFile), attachments, true).get();
 
     List<TableOfContentsItem> toc = norm.getTableOfContents();
 
@@ -245,7 +259,7 @@ class NormLdmlToOpenSearchMapperTest {
     var sourceFile =
         Files.readString(
             Path.of("src/test/resources/data/xmlTests/xmlDocumentTestTableOfContent.xml"));
-    var norm = NormLdmlToOpenSearchMapper.parseNorm(sourceFile, Map.of()).orElseThrow();
+    var norm = NormLdmlToOpenSearchMapper.parseNorm(sourceFile, Map.of(), true).orElseThrow();
     var tableOfContents = norm.getTableOfContents();
     assertEquals(tableOfContents, expectedToC);
   }
@@ -259,7 +273,7 @@ class NormLdmlToOpenSearchMapperTest {
     // Removes one empty heading node from the last article
     sourceFile =
         sourceFile.replaceAll("<[^<]*hauptteil-1_teil-2_titel-1_art-1_überschrift-1[^>]*>", "");
-    var norm = NormLdmlToOpenSearchMapper.parseNorm(sourceFile, Map.of()).orElseThrow();
+    var norm = NormLdmlToOpenSearchMapper.parseNorm(sourceFile, Map.of(), true).orElseThrow();
     // Table of content should be rendered the same
     var tableOfContents = norm.getTableOfContents();
     assertEquals(expectedToC, tableOfContents);
@@ -272,7 +286,7 @@ class NormLdmlToOpenSearchMapperTest {
         Files.readString(
             Path.of(
                 "src/test/resources/data/LDML/norm/eli/bund/bgbl-1/1991/s101/1991-01-01/1/deu/1991-01-01/regelungstext-1.xml"));
-    var norm = NormLdmlToOpenSearchMapper.parseNorm(sourceFile, Map.of()).orElseThrow();
+    var norm = NormLdmlToOpenSearchMapper.parseNorm(sourceFile, Map.of(), true).orElseThrow();
     var eIds =
         List.of(
             "art-z1",

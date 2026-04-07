@@ -120,7 +120,7 @@ public class NormLdmlToOpenSearchMapper {
    *     conditions.
    */
   public static Optional<Norm> parseNorm(
-      String xmlFile, Map<String, String> attachmentFileContents) {
+      String xmlFile, Map<String, String> attachmentFileContents, Boolean isPrototype) {
     try {
       var xmlDocument = new XmlDocument(xmlFile.getBytes(StandardCharsets.UTF_8));
       @Nullable String workEli = xmlDocument.getElementByXpath(X_PATH_WORK_URI);
@@ -171,11 +171,7 @@ public class NormLdmlToOpenSearchMapper {
       LocalDate expiryDate = getDateByXpath(xmlDocument, X_PATH_EXPIRY_DATE);
       LocalDate legislationDate = getDateByXpath(xmlDocument, X_PATH_DATE_AUSFERTIGUNG);
       LocalDate datePublished = getDateByXpath(xmlDocument, X_PATH_WORK_DATE);
-      LocalDate normsSortDate =
-          entryIntoForceDate != null
-                  && NORMS_IN_FORCE_UNDEFINED_SENTINEL_VALUE.equals(inFornceDateString)
-              ? entryIntoForceDate
-              : legislationDate;
+      LocalDate normsSortDate = isPrototype ? legislationDate : entryIntoForceDate;
 
       return Optional.of(
           Norm.builder()

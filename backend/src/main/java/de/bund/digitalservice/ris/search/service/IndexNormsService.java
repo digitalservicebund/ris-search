@@ -29,6 +29,8 @@ import org.apache.commons.collections4.ListUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
+import org.springframework.core.env.Profiles;
 import org.springframework.stereotype.Service;
 
 /** Service for indexing norms from an object storage bucket into an OpenSearch repository. */
@@ -37,6 +39,7 @@ public class IndexNormsService implements IndexService {
 
   private static final Logger logger = LogManager.getLogger(IndexNormsService.class);
 
+  private final Environment environment;
   private final NormsRepository normsRepository;
   private final NormsBucket normsBucket;
 
@@ -51,7 +54,9 @@ public class IndexNormsService implements IndexService {
    * @param normsRepository The NormsRepository instance for storing norms.
    */
   @Autowired
-  public IndexNormsService(NormsBucket normsBucket, NormsRepository normsRepository) {
+  public IndexNormsService(
+      Environment environment, NormsBucket normsBucket, NormsRepository normsRepository) {
+    this.environment = environment;
     this.normsBucket = normsBucket;
     this.normsRepository = normsRepository;
   }
@@ -243,7 +248,9 @@ public class IndexNormsService implements IndexService {
         attachment.ifPresent(a -> attachments.put(key, a));
       }
     }
-    Optional<Norm> norm = NormLdmlToOpenSearchMapper.parseNorm(fileContent.get(), attachments);
+    Optional<Norm> norm =
+        NormLdmlToOpenSearchMapper.parseNorm(
+            fileContent.get(), attachments, environment.acceptsProfiles(Profiles.of("prototype")));
     if (norm.isEmpty()) {
       logger.error("Unknown error while processing file {} during Norm import.", fileName);
       return Optional.empty();
