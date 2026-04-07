@@ -126,8 +126,7 @@ public class AdministrativeDirectiveController {
     var pageRequest = PageRequest.of(paginationParams.getPageIndex(), paginationParams.getSize());
 
     var sortedPageRequest =
-        pageRequest.withSort(
-            SortParamsConverter.buildSort(sortParams.getSort()));
+        pageRequest.withSort(SortParamsConverter.buildSort(sortParams.getSort()));
 
     try {
       SearchPage<AdministrativeDirective> page =

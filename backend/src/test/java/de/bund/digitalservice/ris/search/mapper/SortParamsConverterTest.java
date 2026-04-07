@@ -9,7 +9,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Sort;
 
 @ExtendWith(MockitoExtension.class)
-//For all sort requests we expect all parameters to have nulls last
+// For all sort requests we expect all parameters to have nulls last
 class SortParamsConverterTest {
 
   @ParameterizedTest
