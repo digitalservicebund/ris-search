@@ -166,8 +166,7 @@ public class NormLdmlToOpenSearchMapper {
 
       // For differentiation of legislationDate and datePublished, see comments on Norm::normsDate
       // and Norm::datePublished
-      String inFornceDateString = xmlDocument.getElementByXpath(X_PATH_ENTRY_INTO_FORCE_DATE);
-      LocalDate entryIntoForceDate = toLocalDate(inFornceDateString);
+      LocalDate entryIntoForceDate = getDateByXpath(xmlDocument, X_PATH_ENTRY_INTO_FORCE_DATE);
       LocalDate expiryDate = getDateByXpath(xmlDocument, X_PATH_EXPIRY_DATE);
       LocalDate legislationDate = getDateByXpath(xmlDocument, X_PATH_DATE_AUSFERTIGUNG);
       LocalDate datePublished = getDateByXpath(xmlDocument, X_PATH_WORK_DATE);

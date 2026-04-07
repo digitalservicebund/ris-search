@@ -30,7 +30,7 @@ class SortParamsConverterTest {
   }
 
   @Test
-  void dateSortUsesDatumFieldWThenScore() {
+  void dateSortUsesDatumFieldThenScore() {
     // Act
     Sort result = SortParamsConverter.buildSort("date");
 
@@ -42,7 +42,7 @@ class SortParamsConverterTest {
   }
 
   @Test
-  void reverseDateSortUsesDatumFieldWThenScore() {
+  void reverseDateSortUsesDatumFieldThenScore() {
     // Act
     Sort result = SortParamsConverter.buildSort("-date");
 
