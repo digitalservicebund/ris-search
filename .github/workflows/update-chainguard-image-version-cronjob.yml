@@ -17,3 +17,4 @@ jobs:
             image_name: jre
             file_path: backend/Dockerfile.prod
             github_token: ${{ github.token }}
+            branch: bump-chaingurad-jre-image-version
