@@ -22,6 +22,9 @@ jobs:
     if: ${{ github.ref == 'refs/heads/main' && !inputs.skip-OTC-deployment }}
     permissions:
       id-token: write
+    concurrency:
+      # Make sure that the deploy-step is always executed in series (this applies across multiple workflows)
+      group: "${{ inputs.deployment-environment }}-otc"
     steps:
       - name: Deploy backend and frontend images to ${{ inputs.deployment-environment}}
         uses: digitalservicebund/argocd-deploy@f641e07b623c4544d048a302cc16fcb18e7bf190
