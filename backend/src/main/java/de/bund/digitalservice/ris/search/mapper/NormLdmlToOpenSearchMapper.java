@@ -103,8 +103,6 @@ public class NormLdmlToOpenSearchMapper {
   private static final String EINGANGSFORMEL = "Eingangsformel";
   private static final String SCHLUSSFORMEL = "Schlussformel";
 
-  private static final String NORMS_IN_FORCE_UNDEFINED_SENTINEL_VALUE = "1001-01-01";
-
   private NormLdmlToOpenSearchMapper() {}
 
   /**
@@ -120,7 +118,7 @@ public class NormLdmlToOpenSearchMapper {
    *     conditions.
    */
   public static Optional<Norm> parseNorm(
-      String xmlFile, Map<String, String> attachmentFileContents, Boolean isPrototype) {
+      String xmlFile, Map<String, String> attachmentFileContents, boolean isPrototype) {
     try {
       var xmlDocument = new XmlDocument(xmlFile.getBytes(StandardCharsets.UTF_8));
       @Nullable String workEli = xmlDocument.getElementByXpath(X_PATH_WORK_URI);
