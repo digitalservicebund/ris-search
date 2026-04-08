@@ -165,6 +165,7 @@ public class NormsTestData {
             .articleTexts(List.of("example text 1", "example text 2"))
             .articleNames(List.of("§ 1 Example article", "§ 2 Example article"))
             .entryIntoForceDate(LocalDate.of(2025, 11, 1))
+            .normsSortDate(LocalDate.of(2025, 11, 1))
             .articles(
                 List.of(
                     new Article(
@@ -201,6 +202,7 @@ public class NormsTestData {
             .normsDate(DATE_1_1)
             .datePublished(DATE_1_1)
             .entryIntoForceDate(LocalDate.of(2025, 11, 2))
+            .normsSortDate(LocalDate.of(2025, 11, 2))
             .expiryDate(LocalDate.of(2025, 11, 3))
             .build();
 
@@ -216,6 +218,7 @@ public class NormsTestData {
             .normsDate(DATE_2_1)
             .datePublished(DATE_2_1)
             .entryIntoForceDate(LocalDate.of(2025, 11, 3))
+            .normsSortDate(LocalDate.of(2025, 11, 3))
             .expiryDate(LocalDate.of(2025, 11, 3))
             .build();
 

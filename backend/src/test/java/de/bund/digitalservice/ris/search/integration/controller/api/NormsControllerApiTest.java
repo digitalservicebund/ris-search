@@ -520,7 +520,8 @@ class NormsControllerApiTest extends ContainersIntegrationBase {
   @ParameterizedTest
   @CsvSource(
       value = {
-        // default sort is by relevance and therefore dates returned are not sorted
+        // default sort is by relevance then date. Since the searchTerm is "test", results are not
+        // sorted by date
         "'', 3, 2025-11-01/..;2025-11-03/2025-11-03;2025-11-02/2025-11-03",
         // sorting by date sorts by in force (api uses temporalCoverage for in force date)
         "DATUM, 3, 2025-11-01/..;2025-11-02/2025-11-03;2025-11-03/2025-11-03",
