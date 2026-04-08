@@ -14,6 +14,6 @@ jobs:
         - name: Bump chainguard/jre image
           uses: digitalservicebund/bump-chainguard-digest@937cc7a12750bfd06419f32cabcaa79a37f32705 # v1.1.3
           with:
-            image_name: cgr.dev/chainguard/jre
+            image_name: jre
             file_path: backend/Dockerfile.prod
             github_token: ${{ github.token }}
