@@ -113,6 +113,7 @@ public class NormLdmlToOpenSearchMapper {
    * @param xmlFile A string representation of the XML file content.
    * @param attachmentFileContents A map where the keys represent the attachment names and the
    *     values contain their respective content.
+   * @param isPrototype A flag to indicate if the parsing is happening in the prototype environment.
    * @return An {@link Optional} containing the constructed {@link Norm} instance if parsing
    *     succeeds, or {@link Optional#empty()} in case of parsing failure or unprocessable
    *     conditions.
