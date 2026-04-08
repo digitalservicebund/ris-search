@@ -50,15 +50,6 @@ jobs:
     secrets: inherit
 
   ### Deploy UAT ###
-  deploy-uat-otc:
-    needs:
-      - smoke-tests
-    uses: ./.github/workflows/deploy-otc.yml
-    secrets: inherit
-    with:
-      image-tag: ${{ github.sha }}
-      deployment-environment: uat
-
   deploy-uat:
     needs:
       - smoke-tests
@@ -71,7 +62,7 @@ jobs:
   ### Deploy Prototype ###
   deploy-prototype-otc:
     needs:
-      - deploy-uat-otc
+      - deploy-uat
     uses: ./.github/workflows/deploy-otc.yml
     secrets: inherit
     with:
