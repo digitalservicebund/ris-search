@@ -19,6 +19,9 @@ jobs:
   deploy-to-STACKIT:
     runs-on: ubuntu-latest
     if: ${{ github.ref == 'refs/heads/main' }}
+    concurrency:
+      # Make sure that the deploy-step is always executed in series (this applies across multiple workflows)
+      group: ${{ inputs.deployment-environment }}
     steps:
       - name: Deploy backend and frontend images to ${{ inputs.deployment-environment}}
         uses: digitalservicebund/argocd-deploy@6033da861398e0d7fcffe1b195f8d58f10b62c4e # Use the auth-token branch for STACKIT
