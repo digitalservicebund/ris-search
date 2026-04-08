@@ -21,6 +21,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.core.env.Environment;
 
 @ExtendWith(MockitoExtension.class)
 class IndexNormsServiceTest {
@@ -28,11 +29,12 @@ class IndexNormsServiceTest {
   IndexNormsService service;
 
   @Mock NormsBucket bucket;
+  @Mock Environment environment;
   @Mock NormsRepository repo;
 
   @BeforeEach()
   void setup() {
-    this.service = new IndexNormsService(bucket, repo);
+    this.service = new IndexNormsService(environment, bucket, repo);
   }
 
   private final String testContent =

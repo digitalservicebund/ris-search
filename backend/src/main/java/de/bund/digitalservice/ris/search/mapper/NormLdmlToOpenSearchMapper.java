@@ -113,12 +113,13 @@ public class NormLdmlToOpenSearchMapper {
    * @param xmlFile A string representation of the XML file content.
    * @param attachmentFileContents A map where the keys represent the attachment names and the
    *     values contain their respective content.
+   * @param isPrototype A flag to indicate if the parsing is happening in the prototype environment.
    * @return An {@link Optional} containing the constructed {@link Norm} instance if parsing
    *     succeeds, or {@link Optional#empty()} in case of parsing failure or unprocessable
    *     conditions.
    */
   public static Optional<Norm> parseNorm(
-      String xmlFile, Map<String, String> attachmentFileContents) {
+      String xmlFile, Map<String, String> attachmentFileContents, boolean isPrototype) {
     try {
       var xmlDocument = new XmlDocument(xmlFile.getBytes(StandardCharsets.UTF_8));
       @Nullable String workEli = xmlDocument.getElementByXpath(X_PATH_WORK_URI);
@@ -153,23 +154,22 @@ public class NormLdmlToOpenSearchMapper {
           getArticlesByXmlDocument(xmlDocument, attachments, officialAbbreviation);
       List<String> articleNames = articles.stream().map(Article::name).toList();
       List<String> articleTexts = articles.stream().map(Article::text).toList();
-      LocalDate entryIntoForceDate = getDateByXpath(xmlDocument, X_PATH_ENTRY_INTO_FORCE_DATE);
-      LocalDate expiryDate = getDateByXpath(xmlDocument, X_PATH_EXPIRY_DATE);
       String fullCitation = xmlDocument.getElementByXpath(X_PATH_FULL_CITATION);
       String officialToc =
           Optional.ofNullable(xmlDocument.getElementByXpath(X_PATH_OFFICIAL_TOC))
               .map(String::strip)
               .map(e -> e.replaceAll("\\s+", " "))
               .orElse(null);
-
-      /*
-      For differentiation of legislationDate and datePublished, see comments on Norm::normsDate and Norm::datePublished
-      */
-      LocalDate legislationDate = getDateByXpath(xmlDocument, X_PATH_DATE_AUSFERTIGUNG);
-      LocalDate datePublished = getDateByXpath(xmlDocument, X_PATH_WORK_DATE);
-
       final List<TableOfContentsItem> tableOfContents =
           getTableOfContents(expressionEli, xmlDocument, attachments);
+
+      // For differentiation of legislationDate and datePublished, see comments on Norm::normsDate
+      // and Norm::datePublished
+      LocalDate entryIntoForceDate = getDateByXpath(xmlDocument, X_PATH_ENTRY_INTO_FORCE_DATE);
+      LocalDate expiryDate = getDateByXpath(xmlDocument, X_PATH_EXPIRY_DATE);
+      LocalDate legislationDate = getDateByXpath(xmlDocument, X_PATH_DATE_AUSFERTIGUNG);
+      LocalDate datePublished = getDateByXpath(xmlDocument, X_PATH_WORK_DATE);
+      LocalDate normsSortDate = isPrototype ? legislationDate : entryIntoForceDate;
 
       return Optional.of(
           Norm.builder()
@@ -182,6 +182,7 @@ public class NormLdmlToOpenSearchMapper {
               .officialShortTitle(getOfficialShortTitleByXmlDocument(xmlDocument))
               .officialAbbreviation(officialAbbreviation)
               .normsDate(legislationDate)
+              .normsSortDate(normsSortDate)
               .datePublished(datePublished)
               .publishedIn(getPublishedInByXmlDocument(xmlDocument, datePublished))
               .entryIntoForceDate(entryIntoForceDate)

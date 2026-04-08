@@ -63,6 +63,10 @@ public final class Norm implements AbstractSearchEntity {
   @Field(name = Fields.NORMS_DATE, type = FieldType.Date, format = DateFormat.date)
   private LocalDate normsDate;
 
+  /** The date we use to sort. This enables us to use conditional logic at insertion time. */
+  @Field(name = Fields.NORMS_SORT_DATE, type = FieldType.Date, format = DateFormat.date)
+  private LocalDate normsSortDate;
+
   /** "Verkündungsdatum", the date when the law was published in the official gazette. */
   @Field(name = Fields.DATE_PUBLISHED, type = FieldType.Date, format = DateFormat.date)
   private LocalDate datePublished;
@@ -132,6 +136,7 @@ public final class Norm implements AbstractSearchEntity {
     public static final String ID = "id";
     public static final String INDEXED_AT = "indexed_at";
     public static final String NORMS_DATE = "norms_date";
+    public static final String NORMS_SORT_DATE = "norms_sort_date";
     public static final String DATE_PUBLISHED = "date_published";
     public static final String OFFICIAL_ABBREVIATION = "official_abbreviation";
     public static final String OFFICIAL_ABBREVIATION_KEYWORD = "official_abbreviation.keyword";

@@ -29,11 +29,11 @@
         },
         "DATUM": {
           "type": "alias",
-          "path": "entry_into_force_date"
+          "path": "norms_sort_date"
         },
         "DAT": {
           "type": "alias",
-          "path": "entry_into_force_date"
+          "path": "norms_sort_date"
         },
         "TE": {
           "type": "alias",
@@ -69,6 +69,9 @@
           }
         },
         "norms_date": {
+          "type": "date"
+        },
+        "norms_sort_date": {
           "type": "date"
         },
         "date_published": {
