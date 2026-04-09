@@ -19,7 +19,7 @@ services:
       - node.name=opensearch-node1
       - discovery.type=single-node
       - "DISABLE_SECURITY_PLUGIN=true"
-      - "OPENSEARCH_JAVA_OPTS=-Xms4096m -Xmx4096m"
+      - "OPENSEARCH_JAVA_OPTS=-Xms1024m -Xmx1024m"
     networks:
       - ris-portal
     volumes:
