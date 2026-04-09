@@ -29,7 +29,7 @@ export function formatDocumentKind(documentKind: DocumentKind): string {
  * a norm.
  *
  * @param temporalCoverage Temporal coverage, must conform to the format of
- *  LegislationExpression.workExample
+ *  LegislationExpression.temporalCoverage
  * @returns Formatted status or undefined if no status can be determined based
  *  on the temporal coverage
  */

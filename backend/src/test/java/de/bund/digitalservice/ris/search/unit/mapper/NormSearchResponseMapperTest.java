@@ -10,9 +10,10 @@ import de.bund.digitalservice.ris.search.models.opensearch.Norm;
 import de.bund.digitalservice.ris.search.schema.LegalForceStatus;
 import de.bund.digitalservice.ris.search.schema.LegislationExpressionSearchSchema;
 import de.bund.digitalservice.ris.search.schema.LegislationObjectSchema;
-import de.bund.digitalservice.ris.search.schema.LegislationWorkSearchSchema;
+import de.bund.digitalservice.ris.search.schema.LegislationWorkSchema;
 import de.bund.digitalservice.ris.search.schema.TextMatchSchema;
 import java.lang.reflect.Method;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
@@ -130,6 +131,8 @@ class NormSearchResponseMapperTest {
         Norm.builder()
             .id("id")
             .expressionEli("expressionEli")
+            .datePublished(LocalDate.of(2026, 1, 1))
+            .normsDate(LocalDate.of(2025, 1, 1))
             .articles(
                 List.of(
                     Article.builder()
@@ -141,36 +144,38 @@ class NormSearchResponseMapperTest {
             .workEli("workEli")
             .build();
 
-    LegislationWorkSearchSchema expectedResponse =
-        LegislationWorkSearchSchema.builder()
-            .id("/v1/legislation/workEli")
-            .legislationIdentifier("workEli")
-            .workExample(
-                LegislationExpressionSearchSchema.builder()
-                    .id("/v1/legislation/expressionEli")
-                    .legislationIdentifier("expressionEli")
-                    .legislationLegalForce(LegalForceStatus.IN_FORCE)
-                    .encoding(
-                        List.of(
-                            LegislationObjectSchema.builder()
-                                .id("/v1/legislation/manifestationEli/regelungstext-1/html")
-                                .contentUrl("/v1/legislation/manifestationEli/regelungstext-1.html")
-                                .encodingFormat("text/html")
-                                .inLanguage("de")
-                                .build(),
-                            LegislationObjectSchema.builder()
-                                .id("/v1/legislation/manifestationEli/regelungstext-1/xml")
-                                .contentUrl("/v1/legislation/manifestationEli/regelungstext-1.xml")
-                                .encodingFormat("application/xml")
-                                .inLanguage("de")
-                                .build(),
-                            LegislationObjectSchema.builder()
-                                .id("/v1/legislation/manifestationEli/zip")
-                                .contentUrl("/v1/legislation/manifestationEli.zip")
-                                .encodingFormat("application/zip")
-                                .inLanguage("de")
-                                .build()))
-                    .build())
+    LegislationExpressionSearchSchema expectedResponse =
+        LegislationExpressionSearchSchema.builder()
+            .id("/v1/legislation/expressionEli")
+            .legislationIdentifier("expressionEli")
+            .exampleOfWork(
+                new LegislationWorkSchema(
+                    "/v1/legislation/workEli",
+                    "workEli",
+                    LocalDate.of(2025, 1, 1),
+                    LocalDate.of(2026, 1, 1),
+                    null))
+            .legislationLegalForce(LegalForceStatus.IN_FORCE)
+            .encoding(
+                List.of(
+                    LegislationObjectSchema.builder()
+                        .id("/v1/legislation/manifestationEli/regelungstext-1/html")
+                        .contentUrl("/v1/legislation/manifestationEli/regelungstext-1.html")
+                        .encodingFormat("text/html")
+                        .inLanguage("de")
+                        .build(),
+                    LegislationObjectSchema.builder()
+                        .id("/v1/legislation/manifestationEli/regelungstext-1/xml")
+                        .contentUrl("/v1/legislation/manifestationEli/regelungstext-1.xml")
+                        .encodingFormat("application/xml")
+                        .inLanguage("de")
+                        .build(),
+                    LegislationObjectSchema.builder()
+                        .id("/v1/legislation/manifestationEli/zip")
+                        .contentUrl("/v1/legislation/manifestationEli.zip")
+                        .encodingFormat("application/zip")
+                        .inLanguage("de")
+                        .build()))
             .build();
 
     Assertions.assertEquals(expectedResponse, NormSearchResponseMapper.fromDomain(norm));

@@ -1,5 +1,9 @@
 import type { AsyncData, NuxtError } from "#app";
-import type { JSONLDList, LegislationWork, SearchResult } from "~/types/api";
+import type {
+  JSONLDList,
+  LegislationExpression,
+  SearchResult,
+} from "~/types/api";
 import { getCurrentDateInGermanyFormatted } from "~/utils/dateFormatting";
 
 export interface TranslationContent {
@@ -111,12 +115,12 @@ export async function getGermanOriginal(id: string) {
     currentDateInGermanyFormatted,
   );
 
-  const legislation = ref<SearchResult<LegislationWork> | null>(null);
+  const legislation = ref<SearchResult<LegislationExpression> | null>(null);
   const legislationSearchError = ref<Error | null>(null);
   const legislationSearchStatus = ref<string | null>(null);
 
   const { data, error, status, pending, execute } =
-    await useRisBackend<JSONLDList<SearchResult<LegislationWork>>>(
+    await useRisBackend<JSONLDList<SearchResult<LegislationExpression>>>(
       searchEndpoint,
     );
 

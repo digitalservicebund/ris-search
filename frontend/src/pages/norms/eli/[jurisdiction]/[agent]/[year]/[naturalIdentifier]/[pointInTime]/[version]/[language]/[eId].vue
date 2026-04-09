@@ -29,7 +29,7 @@ const { data, error, status } = await useFetchNormArticleContent(
   eId.value,
 );
 
-const norm = computed(() => data.value?.legislationWork);
+const norm = computed(() => data.value?.legislation);
 const articleHtml = computed(() => data.value?.htmlBody);
 
 if (error.value) {
@@ -39,9 +39,9 @@ if (error.value) {
 const normPath: string = route.fullPath.replace(/\/[^/]*$/, "");
 
 const tableOfContents = computed(() => {
-  if (!norm.value?.workExample?.tableOfContents) return [];
+  if (!norm.value?.tableOfContents) return [];
   return tocItemsToTreeViewItems(
-    norm.value.workExample.tableOfContents,
+    norm.value.tableOfContents,
     (id) => ({ path: normPath, hash: `#${id}` }),
     (id) => ({ path: `${normPath}/${id}` }),
   );
@@ -49,14 +49,12 @@ const tableOfContents = computed(() => {
 
 const expressionValidityInterval = computed(() =>
   privateFeaturesEnabled
-    ? temporalCoverageToValidityInterval(
-        norm?.value?.workExample?.temporalCoverage,
-      )
+    ? temporalCoverageToValidityInterval(norm?.value?.temporalCoverage)
     : undefined,
 );
 
 const article: Ref<Article | undefined> = computed(() =>
-  norm.value?.workExample?.hasPart?.find((part) => part.eId == eId.value),
+  norm.value?.hasPart?.find((part) => part.eId == eId.value),
 );
 
 const previousArticleUrl: Ref<string | undefined> = computed(() =>
@@ -71,9 +69,8 @@ function getRouteForSiblingArticle(
   baseArticle: Article | undefined,
   indexDifference: number,
 ): string | undefined {
-  if (!norm.value || !baseArticle || !norm.value.workExample?.hasPart)
-    return undefined;
-  const hasPart = norm.value.workExample.hasPart;
+  if (!norm.value || !baseArticle || !norm.value.hasPart) return undefined;
+  const hasPart = norm.value.hasPart;
   const newIndex =
     hasPart.findIndex((item) => item.eId == baseArticle?.eId) + indexDifference;
   if (newIndex < 0 || newIndex >= hasPart.length) return undefined;
@@ -113,7 +110,7 @@ const breadcrumbItems: Ref<BreadcrumbItem[]> = computed(() => {
 const htmlTitle = computed(() => data.value?.articleHeading);
 
 const validVersions =
-  norm.value?.workExample?.legislationLegalForce === "InForce"
+  norm.value?.legislationLegalForce === "InForce"
     ? undefined
     : useValidNormVersions(norm.value?.legislationIdentifier);
 
@@ -128,7 +125,7 @@ const inForceNormLink = computed(() => {
   }
 
   const validVersion = validVersions.data.value.member[0];
-  return `/norms/${validVersion?.item.workExample?.legislationIdentifier}`;
+  return `/norms/${validVersion?.item.legislationIdentifier}`;
 });
 
 const buildOgTitleForArticle = (
@@ -251,7 +248,7 @@ useDynamicSeo({ title, description });
         </template>
         <template #sidebar>
           <DocumentsNormsNormTableOfContents
-            v-if="norm.workExample?.tableOfContents?.length"
+            v-if="norm.tableOfContents?.length"
             :subheading="normBreadcrumbTitle"
             :subheading-to="normPath"
             :table-of-contents="tableOfContents"
