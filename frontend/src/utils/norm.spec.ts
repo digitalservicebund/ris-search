@@ -199,24 +199,21 @@ describe("getNormMetadataItems", () => {
     const result = getNormMetadataItems({
       abbreviation: "",
       legislationIdentifier: "",
-      workExample: {
-        "@type": "Legislation",
-        legislationIdentifier: "",
-        "@id": "",
-        temporalCoverage: "",
-        legislationLegalForce: "NotInForce",
-        encoding: [
-          {
-            "@type": "LegislationObject",
-            "@id": "",
-            contentUrl: "",
-            encodingFormat: "",
-            inLanguage: "",
-          },
-        ],
-        tableOfContents: [],
-        hasPart: [],
-      },
+      "@type": "Legislation",
+      "@id": "",
+      temporalCoverage: "",
+      legislationLegalForce: "NotInForce",
+      encoding: [
+        {
+          "@type": "LegislationObject",
+          "@id": "",
+          contentUrl: "",
+          encodingFormat: "",
+          inLanguage: "",
+        },
+      ],
+      tableOfContents: [],
+      hasPart: [],
     });
 
     expect(result.map((item) => item.value)).toEqual([
@@ -231,24 +228,21 @@ describe("getNormMetadataItems", () => {
     const result = getNormMetadataItems({
       abbreviation: "ABC",
       legislationIdentifier: "",
-      workExample: {
-        "@type": "Legislation",
-        legislationIdentifier: "",
-        "@id": "",
-        temporalCoverage: "2025-05-06/2037-03-31",
-        legislationLegalForce: "NotInForce",
-        encoding: [
-          {
-            "@type": "LegislationObject",
-            "@id": "",
-            contentUrl: "",
-            encodingFormat: "",
-            inLanguage: "",
-          },
-        ],
-        tableOfContents: [],
-        hasPart: [],
-      },
+      "@type": "Legislation",
+      "@id": "",
+      temporalCoverage: "2025-05-06/2037-03-31",
+      legislationLegalForce: "NotInForce",
+      encoding: [
+        {
+          "@type": "LegislationObject",
+          "@id": "",
+          contentUrl: "",
+          encodingFormat: "",
+          inLanguage: "",
+        },
+      ],
+      tableOfContents: [],
+      hasPart: [],
     });
 
     expect(result.map((item) => item.value)).toEqual([
