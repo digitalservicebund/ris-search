@@ -5,6 +5,7 @@ function createLegislationExpression(
   temporalCoverage: string,
   legalForce: "InForce" | "NotInForce",
 ): LegislationExpression {
+  const workIdentifier = expressionEli.split("/").slice(0, 5).join("/");
   return {
     "@type": "Legislation",
     "@id": `/v1/legislation/${expressionEli}`,
@@ -12,8 +13,9 @@ function createLegislationExpression(
     temporalCoverage: temporalCoverage,
     legislationLegalForce: legalForce,
     exampleOfWork: {
+      "@id": `/v1/legislation/${workIdentifier}`,
       "@type": "Legislation",
-      legislationIdentifier: expressionEli.split("/").slice(0, 5).join("/"),
+      legislationIdentifier: workIdentifier,
       legislationDate: "2025-01-01",
       datePublished: "2025-01-01",
       isPartOf: {

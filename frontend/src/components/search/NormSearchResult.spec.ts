@@ -18,6 +18,7 @@ const mockSearchResult: SearchResult<LegislationExpression> = {
     legislationIdentifier:
       "eli/bund/bgbl-0/1999/abc/1999-12-31/1/deu/regelungstext-1",
     exampleOfWork: {
+      "@id": "/v1/legislation/eli/bund/bgbl-0/1999/abc",
       "@type": "Legislation",
       legislationIdentifier: "eli/bund/bgbl-0/1999/abc",
       legislationDate: "1999-12-14",

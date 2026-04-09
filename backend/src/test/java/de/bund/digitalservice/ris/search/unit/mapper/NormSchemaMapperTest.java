@@ -86,7 +86,11 @@ class NormSchemaMapperTest {
             .tableOfContents(List.of())
             .exampleOfWork(
                 new LegislationWorkSchema(
-                    "workEli", LocalDate.of(2025, 1, 1), LocalDate.of(2026, 1, 1), null))
+                    "/v1/legislation/workEli",
+                    "workEli",
+                    LocalDate.of(2025, 1, 1),
+                    LocalDate.of(2026, 1, 1),
+                    null))
             .encoding(
                 List.of(
                     LegislationObjectSchema.builder()

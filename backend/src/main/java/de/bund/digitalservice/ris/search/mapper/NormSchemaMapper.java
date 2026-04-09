@@ -62,7 +62,11 @@ public class NormSchemaMapper {
         .alternateName(norm.getOfficialShortTitle())
         .exampleOfWork(
             new LegislationWorkSchema(
-                norm.getWorkEli(), norm.getNormsDate(), norm.getDatePublished(), publicationIssue))
+                CONTENT_BASE_URL + norm.getWorkEli(),
+                norm.getWorkEli(),
+                norm.getNormsDate(),
+                norm.getDatePublished(),
+                publicationIssue))
         .legislationIdentifier(norm.getExpressionEli())
         .name(norm.getOfficialTitle())
         .legislationLegalForce(legislationLegalForce)

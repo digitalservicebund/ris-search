@@ -889,6 +889,8 @@ export interface components {
     LegislationWorkSchema: {
       /** @example Legislation */
       "@type"?: string;
+      /** @example /v1/legislation/eli/bund/bgbl-1/1975 */
+      "@id": string;
       /** @example eli/bund/bgbl-1/1975/s1760 */
       legislationIdentifier?: string;
       /**

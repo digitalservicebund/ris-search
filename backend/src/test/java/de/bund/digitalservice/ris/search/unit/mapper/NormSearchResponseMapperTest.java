@@ -150,7 +150,11 @@ class NormSearchResponseMapperTest {
             .legislationIdentifier("expressionEli")
             .exampleOfWork(
                 new LegislationWorkSchema(
-                    "workEli", LocalDate.of(2025, 1, 1), LocalDate.of(2026, 1, 1), null))
+                    "/v1/legislation/workEli",
+                    "workEli",
+                    LocalDate.of(2025, 1, 1),
+                    LocalDate.of(2026, 1, 1),
+                    null))
             .legislationLegalForce(LegalForceStatus.IN_FORCE)
             .encoding(
                 List.of(

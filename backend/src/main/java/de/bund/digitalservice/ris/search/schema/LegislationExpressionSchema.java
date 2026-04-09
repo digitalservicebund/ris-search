@@ -53,7 +53,7 @@ public record LegislationExpressionSchema(
             requiredMode = Schema.RequiredMode.REQUIRED)
         String alternateName,
     @Schema(
-            description = "the work the expression is based on",
+            description = "The work the expression is based on",
             requiredMode = Schema.RequiredMode.REQUIRED)
         LegislationWorkSchema exampleOfWork,
     @Schema(

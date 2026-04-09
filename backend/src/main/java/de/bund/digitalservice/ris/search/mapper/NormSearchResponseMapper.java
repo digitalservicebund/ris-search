@@ -142,6 +142,7 @@ public class NormSearchResponseMapper {
 
     String expressionEli = norm.getExpressionEli();
     String expressionId = contentBaseUrl + expressionEli;
+    String workId = contentBaseUrl + norm.getWorkEli();
 
     String temporalCoverage =
         DateUtils.toDateIntervalString(norm.getEntryIntoForceDate(), norm.getExpiryDate());
@@ -156,7 +157,11 @@ public class NormSearchResponseMapper {
         .legislationIdentifier(expressionEli)
         .exampleOfWork(
             new LegislationWorkSchema(
-                norm.getWorkEli(), norm.getNormsDate(), norm.getDatePublished(), publicationIssue))
+                workId,
+                norm.getWorkEli(),
+                norm.getNormsDate(),
+                norm.getDatePublished(),
+                publicationIssue))
         .name(norm.getOfficialTitle())
         .legislationLegalForce(legislationLegalForce)
         .legislationIdentifier(expressionEli)

@@ -42,6 +42,7 @@ describe("anyDocument", () => {
         name: "",
         legislationIdentifier: "",
         exampleOfWork: {
+          "@id": "",
           "@type": "Legislation",
           legislationIdentifier: "",
           legislationDate: "",
@@ -68,6 +69,7 @@ describe("anyDocument", () => {
         name: "",
         legislationIdentifier: "",
         exampleOfWork: {
+          "@id": "",
           "@type": "Legislation",
           legislationIdentifier: "",
           legislationDate: "",
@@ -150,6 +152,7 @@ describe("anyDocument", () => {
         name: "",
         legislationIdentifier: "",
         exampleOfWork: {
+          "@id": "",
           "@type": "Legislation",
           legislationIdentifier: "",
           legislationDate: "",
@@ -213,6 +216,7 @@ describe("anyDocument", () => {
         name: "",
         legislationIdentifier: "4712",
         exampleOfWork: {
+          "@id": "",
           "@type": "Legislation",
           legislationIdentifier: "",
           legislationDate: "",

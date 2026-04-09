@@ -1,5 +1,7 @@
 package de.bund.digitalservice.ris.search.schema;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import de.bund.digitalservice.ris.search.config.ApiConfig;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDate;
 import org.jetbrains.annotations.Nullable;
@@ -10,6 +12,11 @@ import org.jetbrains.annotations.Nullable;
  * @param legislationIdentifier
  */
 public record LegislationWorkSchema(
+    @JsonProperty("@id")
+        @Schema(
+            example = ApiConfig.Paths.LEGISLATION + "/eli/bund/bgbl-1/1975",
+            requiredMode = Schema.RequiredMode.REQUIRED)
+        String id,
     @Schema(example = "eli/bund/bgbl-1/1975/s1760") String legislationIdentifier,
     @Schema(
             example = "2003-12-15",

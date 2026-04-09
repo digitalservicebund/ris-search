@@ -29,7 +29,7 @@ public record LegislationExpressionSearchSchema(
             requiredMode = Schema.RequiredMode.REQUIRED)
         String legislationIdentifier,
     @Schema(
-            description = "the work the expression is based on",
+            description = "The work the expression is based on",
             requiredMode = Schema.RequiredMode.REQUIRED)
         LegislationWorkSchema exampleOfWork,
     @Schema(
