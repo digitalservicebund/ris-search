@@ -134,4 +134,28 @@ class CaselawXsltTransformerServiceTest {
             """;
     assertTrue(deleteWhitespace(actualHtml).contains(deleteWhitespace(expectedImage)));
   }
+
+  @Test
+  void testReturnsDissentingDecisionCorrectly() throws IOException {
+    var actualXml = caseLawLdmlTemplateUtils.getXmlFromTemplate(null);
+    var actualHtml =
+        service.transformCaseLaw(actualXml.getBytes(StandardCharsets.UTF_8), "api/v1/");
+    var expectedDissentingOpinionSection =
+        """
+                    <section id="abweichendeMeinung">
+                                  <h2>Abweichende Meinung</h2>
+
+                                  <p>dissenting test</p>
+
+                                  <p><strong>Mitwirkende Richter:</strong></p>
+
+                                  <p class="opinion-entry"><strong>Dr. Phil. Max Mustermann</strong>: referenced opinions test 1</p>
+
+                                  <p class="opinion-entry"><strong>Richterin Maxima Mustermann</strong>: referenced opinions test 2</p>
+
+                                  </section>
+            """;
+    assertTrue(
+        deleteWhitespace(actualHtml).contains(deleteWhitespace(expectedDissentingOpinionSection)));
+  }
 }

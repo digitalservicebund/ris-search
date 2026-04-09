@@ -55,6 +55,12 @@
                 <akn:TLCOrganization eId="bag-dokumentationsstelle" href="" showAs="BAG"/>
                 <akn:TLCOrganization eId="gericht" href="" showAs="ArbG"/>
                 <akn:TLCOrganization eId="spruchkoerper" href="" showAs="5. Kammer"/>
+                <akn:TLCPerson eId="dr-phil-max-mustermann"
+                               href=""
+                               showAs="Dr. Phil. Max Mustermann"/>
+                <akn:TLCPerson eId="richterin-maxima-mustermann"
+                               href=""
+                               showAs="Richterin Maxima Mustermann"/>
             </akn:references>
             <akn:proprietary source="ris">
                 <ris:meta>
@@ -111,6 +117,15 @@
                     </akn:content>
                 </akn:hcontainer>
             </akn:background>
+            <akn:motivation ris:domainTerm="Abweichende Meinung">
+                <akn:p>dissenting test</akn:p>
+                <akn:block name="Mitwirkende Richter">
+                    <akn:opinion ris:domainTerm="Art der Mitwirkung"
+                                 by="#dr-phil-max-mustermann">referenced opinions test 1</akn:opinion>
+                    <akn:opinion ris:domainTerm="Art der Mitwirkung"
+                                 by="#richterin-maxima-mustermann">referenced opinions test 2</akn:opinion>
+                </akn:block>
+            </akn:motivation>
         </akn:judgmentBody>
     </akn:judgment>
 </akn:akomaNtoso>
