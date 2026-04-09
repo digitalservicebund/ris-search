@@ -130,6 +130,18 @@
     </ris:dokumentarischeKurztexte>
 </akn:otherAnalysis>
 </akn:analysis>
+<akn:references source="#ris">
+<akn:TLCOrganization eId="ris" href="" showAs="Rechtsinformationssystem des Bundes"/>
+<akn:TLCOrganization eId="bag-dokumentationsstelle" href="" showAs="BAG"/>
+<akn:TLCOrganization eId="gericht" href="" showAs="ArbG"/>
+<akn:TLCOrganization eId="spruchkoerper" href="" showAs="5. Kammer"/>
+<akn:TLCPerson eId="dr-phil-max-mustermann"
+               href=""
+               showAs="Dr. Phil. Max Mustermann"/>
+<akn:TLCPerson eId="richterin-maxima-mustermann"
+               href=""
+               showAs="Richterin Maxima Mustermann"/>
+</akn:references>
 <akn:proprietary source="attributsemantik-noch-undefiniert">
     <ris:meta>
         <ris:decisionNames>

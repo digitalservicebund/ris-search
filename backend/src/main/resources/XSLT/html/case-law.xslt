@@ -54,6 +54,24 @@
         <xsl:apply-templates />
     </xsl:template>
 
+    <xsl:template match="akn:block[@name='Mitwirkende Richter']">
+        <p><strong>Mitwirkende Richter:</strong></p>
+        <xsl:apply-templates />
+    </xsl:template>
+
+    <xsl:template match="akn:opinion">
+        <p class="opinion-entry">
+            <xsl:variable name="personId" select="substring-after(@by, '#')"/>
+            <xsl:variable name="personName" select="//akn:references/akn:TLCPerson[@eId = $personId]/@showAs"/>
+
+            <strong>
+                <xsl:value-of select="normalize-space($personName)"/>
+            </strong>
+            <xsl:text>: </xsl:text>
+            <xsl:apply-templates/>
+        </p>
+    </xsl:template>
+
     <xsl:template match="akn:shortTitle">
         <h1 id="title">
             <xsl:value-of select="."/>
