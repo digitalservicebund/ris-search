@@ -102,8 +102,7 @@ class NormsControllerApiTest extends ContainersIntegrationBase {
                 "$.hasPart[0].@id",
                 is("/v1/legislation/eli/bund/bgbl-1/1000/test/2000-10-06/2/deu#eid1")),
             jsonPath("$.hasPart[0].name", is("§ 1 Example article")),
-            jsonPath("$.hasPart[0].entryIntoForceDate", is("2023-12-31")),
-            jsonPath("$.hasPart[0].expiryDate", is("3000-01-02")));
+            jsonPath("$.hasPart[0].temporalCoverage", is("2023-12-31/3000-01-02")));
   }
 
   @Test

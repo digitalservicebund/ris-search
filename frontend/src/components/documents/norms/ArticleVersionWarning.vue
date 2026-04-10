@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import VersionWarningMessage from "~/components/documents/norms/VersionWarningMessage.vue";
 import type { Article } from "~/types/api";
-import { parseDateGermanLocalTime } from "~/utils/dateFormatting";
 import { getValidityStatus } from "~/utils/norm";
 
 const props = defineProps<{
@@ -9,12 +8,15 @@ const props = defineProps<{
   currentArticle: Article;
 }>();
 
-const currentArticleStatus = computed(() =>
-  getValidityStatus({
-    from: parseDateGermanLocalTime(props.currentArticle.entryIntoForceDate),
-    to: parseDateGermanLocalTime(props.currentArticle.expiryDate),
-  }),
-);
+const currentArticleStatus = computed(() => {
+  const interval = temporalCoverageToValidityInterval(
+    props.currentArticle.temporalCoverage,
+  );
+  return getValidityStatus({
+    from: interval?.from,
+    to: interval?.to,
+  });
+});
 </script>
 
 <template>
