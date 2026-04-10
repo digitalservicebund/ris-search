@@ -29,16 +29,13 @@ const VersionWarningMessageStub = {
 
 const articleTestData = [
   {
-    entryIntoForceDate: "1990-01-01",
-    expiryDate: "2000-01-01",
+    temporalCoverage: "1990-01-01/2000-01-01",
   },
   {
-    entryIntoForceDate: "2100-01-01",
-    expiryDate: null,
+    temporalCoverage: "2100-01-01/..",
   },
   {
-    entryIntoForceDate: "2000-01-02",
-    expiryDate: null,
+    temporalCoverage: "2000-01-02/..",
   },
 ] as unknown as Article[];
 
@@ -46,7 +43,7 @@ describe("ArticleVersionWarning", () => {
   const inForceVersionLink =
     "/norms/eli/bund/bgbl-1/2000/s100/2000-01-01/1/deu";
   for (const currentArticle of articleTestData) {
-    it(`shows warning for article with entry date ${currentArticle.entryIntoForceDate} and expiry date ${currentArticle.expiryDate}`, () => {
+    it(`shows warning for article with temporalCoverage ${currentArticle.temporalCoverage}`, () => {
       render(ArticleVersionWarning, {
         props: { inForceVersionLink, currentArticle },
         global: { stubs: { VersionWarningMessage: VersionWarningMessageStub } },
