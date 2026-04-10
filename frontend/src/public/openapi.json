@@ -2225,7 +2225,7 @@
               },
               "exampleOfWork": {
                 "$ref": "#/components/schemas/LegislationWorkSchema",
-                "description": "the work the expression is based on"
+                "description": "The work the expression is based on"
               },
               "temporalCoverage": {
                 "type": "string",
@@ -2348,21 +2348,11 @@
             "description": "Expression-level identifier, uniquely identifying this element in an FRBR expression",
             "example": "hauptteitel-para-1"
           },
-          "guid": {
-            "type": "string",
-            "example": "550e8400-e29b-41d4-a716-446655440000"
-          },
           "name": { "type": "string", "example": "§ 1" },
-          "isActive": { "type": "boolean", "example": true },
-          "entryIntoForceDate": {
+          "temporalCoverage": {
             "type": "string",
-            "format": "date",
-            "example": "2003-12-15"
-          },
-          "expiryDate": {
-            "type": "string",
-            "format": "date",
-            "example": "2003-12-15"
+            "description": "Textual string indicating a time period in [ISO 8601 time interval format](https://en.wikipedia.org/wiki/ISO_8601#Time_intervals)\n",
+            "example": "1998-02-06/.."
           },
           "encoding": {
             "type": "array",
@@ -2370,7 +2360,7 @@
             "items": { "$ref": "#/components/schemas/LegislationObjectSchema" }
           }
         },
-        "required": ["@id", "eId", "guid", "name"]
+        "required": ["@id", "eId", "name", "temporalCoverage"]
       },
       "LegislationExpressionSchema": {
         "type": "object",
@@ -2398,7 +2388,7 @@
           },
           "exampleOfWork": {
             "$ref": "#/components/schemas/LegislationWorkSchema",
-            "description": "the work the expression is based on"
+            "description": "The work the expression is based on"
           },
           "legislationIdentifier": {
             "type": "string",

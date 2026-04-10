@@ -157,18 +157,17 @@ const title = computed(() =>
 );
 
 const metadataItems = computed(() => {
+  const interval = temporalCoverageToValidityInterval(
+    article.value?.temporalCoverage,
+  );
   return [
     {
       label: "Gültig ab",
-      value: dateFormattedDDMMYYYY(
-        parseDateGermanLocalTime(article.value?.entryIntoForceDate),
-      ),
+      value: dateFormattedDDMMYYYY(interval?.from),
     },
     {
       label: "Gültig bis",
-      value: dateFormattedDDMMYYYY(
-        parseDateGermanLocalTime(article.value?.expiryDate),
-      ),
+      value: dateFormattedDDMMYYYY(interval?.to),
     },
   ];
 });
