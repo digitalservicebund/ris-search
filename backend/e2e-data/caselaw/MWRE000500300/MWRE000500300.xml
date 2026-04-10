@@ -4,7 +4,7 @@
                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                 xsi:schemaLocation="http://docs.oasis-open.org/legaldocml/ns/akn/3.0 https://docs.oasis-open.org/legaldocml/akn-core/v1.0/os/part2-specs/schemas/akomantoso30.xsd">
 
-    <akn:judgment name="Beispielbeschluss">
+    <akn:judgment name="Beschluss">
         <akn:meta>
             <akn:identification source="#ris">
                 <akn:FRBRWork>

@@ -1,7 +1,10 @@
 package de.bund.digitalservice.ris.search.caselawhandover.shared.caselawldml;
 
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlRootElement;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,10 +15,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Getter
 @Builder
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlRootElement(name = "judgment", namespace = CaseLawLdmlNamespaces.AKN_NS)
 public class Judgment {
-  @Builder.Default
+
   @XmlAttribute(name = "name")
-  private String name = "documentType test";
+  private String name;
 
   @XmlElement(name = "meta", namespace = CaseLawLdmlNamespaces.AKN_NS)
   private Meta meta;
