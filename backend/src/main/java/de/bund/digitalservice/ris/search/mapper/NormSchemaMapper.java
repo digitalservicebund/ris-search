@@ -140,10 +140,8 @@ public class NormSchemaMapper {
         .id(idPrefix + "#" + article.eId())
         .name(article.name())
         .eId(article.eId())
-        .guid(article.guid())
         .entryIntoForceDate(article.entryIntoForceDate())
         .expiryDate(article.expiryDate())
-        .isActive(DateUtils.isActive(article.entryIntoForceDate(), article.expiryDate()))
         .encoding(encoding)
         .build();
   }

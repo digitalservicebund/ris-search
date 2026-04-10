@@ -116,7 +116,6 @@ class NormSchemaMapperTest {
                     LegislationExpressionPartSchema.builder()
                         .id("/v1/legislation/expressionEli#eId")
                         .eId("eId")
-                        .isActive(true)
                         .encoding(
                             List.of(
                                 LegislationObjectSchema.builder()

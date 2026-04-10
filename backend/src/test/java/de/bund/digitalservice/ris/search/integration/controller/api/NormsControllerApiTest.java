@@ -98,12 +98,10 @@ class NormsControllerApiTest extends ContainersIntegrationBase {
             jsonPath("$.hasPart", hasSize(2)),
             jsonPath("$.hasPart[0].@type", is("Legislation")),
             jsonPath("$.hasPart[0].eId", is("eid1")),
-            jsonPath("$.hasPart[0].guid", is("guid1")),
             jsonPath(
                 "$.hasPart[0].@id",
                 is("/v1/legislation/eli/bund/bgbl-1/1000/test/2000-10-06/2/deu#eid1")),
             jsonPath("$.hasPart[0].name", is("§ 1 Example article")),
-            jsonPath("$.hasPart[0].isActive", is(true)),
             jsonPath("$.hasPart[0].entryIntoForceDate", is("2023-12-31")),
             jsonPath("$.hasPart[0].expiryDate", is("3000-01-02")));
   }
