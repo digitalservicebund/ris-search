@@ -3,7 +3,7 @@
                 xmlns:ris="http://example.com/0.1/"
                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                 xsi:schemaLocation="http://docs.oasis-open.org/legaldocml/ns/akn/3.0 https://docs.oasis-open.org/legaldocml/akn-core/v1.0/os/part2-specs/schemas/akomantoso30.xsd">
-    <akn:judgment name="attributsemantik-noch-undefiniert">
+    <akn:judgment name="Urteil">
 
         {% if not hideMeta %}
         <akn:meta>
