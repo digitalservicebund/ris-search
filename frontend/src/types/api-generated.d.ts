@@ -850,7 +850,7 @@ export interface components {
       name: string;
       /** @example eli/bund/bgbl-1/1975/s1760/1998-01-29/10/deu */
       legislationIdentifier: string;
-      /** @description the work the expression is based on */
+      /** @description The work the expression is based on */
       exampleOfWork: components["schemas"]["LegislationWorkSchema"];
       /**
        * @description Textual string indicating a time period in [ISO 8601 time interval format](https://en.wikipedia.org/wiki/ISO_8601#Time_intervals)
@@ -929,12 +929,8 @@ export interface components {
        * @example hauptteitel-para-1
        */
       eId: string;
-      /** @example 550e8400-e29b-41d4-a716-446655440000 */
-      guid: string;
       /** @example § 1 */
       name: string;
-      /** @example true */
-      isActive?: boolean;
       /**
        * Format: date
        * @example 2003-12-15
@@ -969,7 +965,7 @@ export interface components {
        * @example Kakaoverordnung
        */
       alternateName: string;
-      /** @description the work the expression is based on */
+      /** @description The work the expression is based on */
       exampleOfWork: components["schemas"]["LegislationWorkSchema"];
       /** @example eli/bund/bgbl-1/1975/s1760/1998-01-29/10/deu */
       legislationIdentifier: string;

@@ -2225,7 +2225,7 @@
               },
               "exampleOfWork": {
                 "$ref": "#/components/schemas/LegislationWorkSchema",
-                "description": "the work the expression is based on"
+                "description": "The work the expression is based on"
               },
               "temporalCoverage": {
                 "type": "string",
@@ -2348,12 +2348,7 @@
             "description": "Expression-level identifier, uniquely identifying this element in an FRBR expression",
             "example": "hauptteitel-para-1"
           },
-          "guid": {
-            "type": "string",
-            "example": "550e8400-e29b-41d4-a716-446655440000"
-          },
           "name": { "type": "string", "example": "§ 1" },
-          "isActive": { "type": "boolean", "example": true },
           "entryIntoForceDate": {
             "type": "string",
             "format": "date",
@@ -2370,7 +2365,7 @@
             "items": { "$ref": "#/components/schemas/LegislationObjectSchema" }
           }
         },
-        "required": ["@id", "eId", "guid", "name"]
+        "required": ["@id", "eId", "name"]
       },
       "LegislationExpressionSchema": {
         "type": "object",
@@ -2398,7 +2393,7 @@
           },
           "exampleOfWork": {
             "$ref": "#/components/schemas/LegislationWorkSchema",
-            "description": "the work the expression is based on"
+            "description": "The work the expression is based on"
           },
           "legislationIdentifier": {
             "type": "string",
