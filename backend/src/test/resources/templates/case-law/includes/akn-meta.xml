@@ -142,7 +142,7 @@
                href=""
                showAs="Richterin Maxima Mustermann"/>
 </akn:references>
-<akn:proprietary source="attributsemantik-noch-undefiniert">
+<akn:proprietary source="#ris">
     <ris:meta>
         <ris:decisionNames>
             <ris:decisionName>Test decision name</ris:decisionName>
@@ -186,11 +186,13 @@
         <ris:dokumentationsstelle domainTerm="Dokumentationsstelle" akn:refersTo="#documentationoffice-dokumentationsstelle">documentationOffice</ris:dokumentationsstelle>
     </ris:meta>
 </akn:proprietary>
-<akn:classification source="attributsemantik-noch-undefiniert">
-    <akn:keyword dictionary="attributsemantik-noch-undefiniert"
-                 showAs="attributsemantik-noch-undefiniert"
+<akn:classification source="#ris">
+    <akn:keyword ris:domainTerm="Schlagwort"
+                 dictionary=""
+                 showAs="keyword1"
                  value ="keyword1"/>
-    <akn:keyword dictionary="attributsemantik-noch-undefiniert"
-                 showAs="attributsemantik-noch-undefiniert"
+    <akn:keyword ris:domainTerm="Schlagwort"
+                 dictionary=""
+                 showAs="keyword2"
                  value ="keyword2"/>
 </akn:classification>
