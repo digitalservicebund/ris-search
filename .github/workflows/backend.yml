@@ -271,11 +271,13 @@ jobs:
           path: docs/data/
           name: openapi.json
       - name: Push reports
+        env:
+          COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
         run: |
           git add docs/data/openapi.json &&
           git diff-index --cached --quiet HEAD ||
             git commit \
-              -m ${{ toJSON(github.event.head_commit.message) }} \
+              -m "$COMMIT_MESSAGE" \
               -m "From commit: ${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }}" &&
             git push origin main &&
             echo "Pushed documentation to ${{ github.server_url }}/${{ env.documentation-repo }}" >> $GITHUB_STEP_SUMMARY
