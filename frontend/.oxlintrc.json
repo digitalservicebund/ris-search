@@ -35,6 +35,11 @@
     // Conflicts with SonarCloud
     "promise/always-return": "off",
 
+    // Introduced later than the existing test code; requiring type params on
+    // every vi.fn() call adds boilerplate noise with no clear benefit in test
+    // files.
+    "vitest/require-mock-type-parameters": "off",
+
     "no-restricted-imports": [
       "error",
       {
