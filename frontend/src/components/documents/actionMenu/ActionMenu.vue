@@ -3,7 +3,7 @@ import Button from "primevue/button";
 import Menu, { type MenuMethods } from "primevue/menu";
 import type { MenuItem } from "primevue/menuitem";
 import { NuxtLink } from "#components";
-import MdiDotsVertical from "~icons/mdi/dots-vertical";
+import IcBaselineMoreHoriz from "~icons/ic/baseline-more-horiz";
 
 export type ActionMenuItem = Omit<MenuItem, "icon"> & {
   iconComponent: Component;
@@ -23,7 +23,7 @@ const toggle = (event: Event) => {
   <div class="sm:hidden">
     <Button text aria-label="Aktionen anzeigen" @click="toggle">
       <template #icon>
-        <MdiDotsVertical />
+        <IcBaselineMoreHoriz />
       </template>
     </Button>
     <Menu ref="menu" :popup="true" :model="actions" class="print:hidden">
