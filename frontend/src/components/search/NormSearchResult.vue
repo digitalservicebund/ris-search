@@ -13,7 +13,7 @@ import { formatNormValidity } from "~/utils/displayValues";
 import { temporalCoverageToValidityInterval } from "~/utils/norm";
 import { sanitizeSearchResult } from "~/utils/sanitize";
 import { addEllipsis } from "~/utils/textFormatting";
-import LegalIcon from "~icons/mdi/legal";
+import IcBaselineBalance from "~icons/ic/baseline-balance";
 
 const props = defineProps<{
   searchResult: SearchResult<LegislationExpression>;
@@ -88,7 +88,7 @@ const getArticleUrl = (highlight: TextMatch) =>
 
 <template>
   <div class="my-36 flex flex-col gap-8 hyphens-auto">
-    <SearchResultHeader :icon="LegalIcon" :items="headerItems">
+    <SearchResultHeader :icon="IcBaselineBalance" :items="headerItems">
       <template #trailing>
         <Badge
           v-if="validityStatus"
