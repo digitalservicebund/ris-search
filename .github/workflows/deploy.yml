@@ -24,7 +24,7 @@ jobs:
       group: ${{ inputs.deployment-environment }}
     steps:
       - name: Deploy backend and frontend images to ${{ inputs.deployment-environment}}
-        uses: digitalservicebund/argocd-deploy@f641e07b623c4544d048a302cc16fcb18e7bf190 # Use the auth-token branch for STACKIT
+        uses: digitalservicebund/argocd-deploy@6033da861398e0d7fcffe1b195f8d58f10b62c4e # Use the auth-token branch for STACKIT
         with:
           environment: ${{ inputs.deployment-environment}}
           version: ${{ inputs.image-tag }}
