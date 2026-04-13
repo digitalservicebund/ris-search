@@ -30,7 +30,6 @@ jobs:
       container-registry: ghcr.io
       image-reference: ghcr.io/${{ github.repository }}/frontend:${{ github.sha }}
 
-  ### Deploy Staging ###
   deploy-staging:
     needs:
       - backend-jobs
@@ -42,14 +41,12 @@ jobs:
       image-tag: ${{ github.sha }}
       deployment-environment: staging
 
-  ### Smoke tests ###
   smoke-tests:
     needs:
       - deploy-staging
     uses: ./.github/workflows/smoke-tests.yml
     secrets: inherit
 
-  ### Deploy UAT ###
   deploy-uat:
     needs:
       - smoke-tests
@@ -58,17 +55,6 @@ jobs:
     with:
       image-tag: ${{ github.sha }}
       deployment-environment: uat
-
-  ### Deploy Prototype ###
-  deploy-prototype-otc:
-    needs:
-      - deploy-uat
-    uses: ./.github/workflows/deploy-otc.yml
-    secrets: inherit
-    with:
-      image-tag: ${{ github.sha }}
-      deployment-environment: prototype
-      argocd-app-name: ris-portal-prototype-production
 
   deploy-prototype:
     needs:
@@ -79,7 +65,6 @@ jobs:
       image-tag: ${{ github.sha }}
       deployment-environment: prototype
 
-  ### Deploy Production ###
   deploy-production:
     needs:
       - deploy-prototype
