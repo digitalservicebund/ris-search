@@ -4,7 +4,9 @@ minimumReleaseAge: 4320
 minimumReleaseAgeExclude:
   - vite
 
-nodeLinker: hoisted
+publicHoistPattern:
+  - "vue"
+  - "vite"
 
 overrides:
   fast-xml-parser: 5.5.7
