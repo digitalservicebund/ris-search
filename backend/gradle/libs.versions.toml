@@ -29,7 +29,6 @@ commons-csv = "1.14.1"
 amazon-aws-sdk-s3 = "2.29.45"
 saxon-he = "12.9"
 streamex = "0.8.4"
-fasterxml-jackson-core = "2.21.2"
 tools-jackson-core = "3.1.1"
 jaxb-moxy = "5.0.0"
 posthog = "1.2.0"
@@ -66,13 +65,12 @@ mockito-junit-jupiter = { module = "org.mockito:mockito-junit-jupiter", version.
 testcontainers-junit-jupiter = { module = "org.testcontainers:junit-jupiter", version.ref = "test-containers" }
 opensearch-testcontainers = { module = "org.opensearch:opensearch-testcontainers", version.ref = "opensearch-test-containers" }
 testcontainers-postgresql = { module = "org.testcontainers:postgresql", version.ref = "test-containers" }
+tools-jackson-core = { module = "tools.jackson.core:jackson-core", version.ref = "tools-jackson-core" }
 jaxb-moxy = { module = "org.eclipse.persistence:org.eclipse.persistence.moxy", version.ref = "jaxb-moxy" }
 jaxb-moxy-xjc = {module = "org.eclipse.persistence:org.eclipse.persistence.moxy.utils.xjc", version.ref = "jaxb-moxy"}
 pebble = { module = "io.pebbletemplates:pebble-spring-boot-starter", version.ref = "pebble" }
 streamex = { module = 'one.util:streamex', version.ref = "streamex" }
 restassured = { module = 'io.rest-assured:rest-assured', version.ref = "rest-assured" }
-fasterxml-jackson-core = { module = "com.fasterxml.jackson.core:jackson-core", version.ref = "fasterxml-jackson-core" }
-tools-jackson-core = { module = "tools.jackson.core:jackson-core", version.ref = "tools-jackson-core" }
 
 [plugins]
 spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
