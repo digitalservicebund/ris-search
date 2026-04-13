@@ -84,7 +84,6 @@ dependencies {
 
     // pin jackson core version to avoid Vulnerability GHSA-72hv-8253-57qq
     implementation(libs.tools.jackson.core)
-    implementation(libs.fasterxml.jackson.core)
 
     compileOnly(libs.lombok)
     annotationProcessor(libs.lombok)
