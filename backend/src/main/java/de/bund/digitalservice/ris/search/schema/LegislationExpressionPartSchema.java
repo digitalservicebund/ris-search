@@ -32,12 +32,7 @@ public record LegislationExpressionPartSchema(
             example = "hauptteitel-para-1",
             requiredMode = Schema.RequiredMode.REQUIRED)
         String eId,
-    @Schema(
-            example = "550e8400-e29b-41d4-a716-446655440000",
-            requiredMode = Schema.RequiredMode.REQUIRED)
-        String guid,
     @Schema(example = "§ 1", requiredMode = Schema.RequiredMode.REQUIRED) String name,
-    @Nullable @Schema(example = "true") Boolean isActive,
     @Nullable @Schema(example = "2003-12-15") LocalDate entryIntoForceDate,
     @Nullable @Schema(example = "2003-12-15") LocalDate expiryDate,
     @Nullable @Schema(description = "The source data for this part, if available on its own")
