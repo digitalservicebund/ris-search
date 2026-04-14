@@ -93,6 +93,31 @@ describe("tableOfContents", () => {
       expect(result[0]?.to).toEqual({ path: "/leaf/Präöü ÄÖÜ §1" });
     });
 
+    it("decodes percent-encoded IDs for use as selection key", () => {
+      const items: TableOfContentsItem[] = [
+        {
+          "@type": "TocEntry",
+          id: "art-z%c2%a7%c2%a7%2018%20bis%2021",
+          marker: "§§ 18 bis 21",
+          heading: "Pre-encoded eId",
+          children: [],
+        },
+      ];
+
+      const result = tocItemsToTreeViewItems(
+        items,
+        getHeadingTarget,
+        getLeafTarget,
+      );
+
+      // key must be decoded so it can be compared to route.params.eId (always decoded by Vue Router)
+      expect(result[0]?.key).toBe("art-z§§ 18 bis 21");
+      // to uses the raw id so the router can encode it correctly
+      expect(result[0]?.to).toEqual({
+        path: "/leaf/art-z%c2%a7%c2%a7%2018%20bis%2021",
+      });
+    });
+
     it("keeps raw IDs for selection and encodes hash links for router navigation", () => {
       const items: TableOfContentsItem[] = [
         {

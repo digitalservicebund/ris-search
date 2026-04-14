@@ -10,7 +10,11 @@ export function tocItemsToTreeViewItems(
 ): TreeItem[] {
   return items.map((child) => {
     const childTreeItem: TreeItem = {
-      key: child.id,
+      // Some eIDs (e.g. "art-z§§ 1 bis 3") are URL encoded in the XML. The
+      // frontend router automatically de-/encodes values that are used as
+      // parameters in routes. "Normalize" the value by decoding to prevent
+      // double encoding/decoding and make them comparable.
+      key: decodeURIComponent(child.id),
       title: child.marker,
       subtitle: child.heading,
       to: getLeafTarget(child.id),
