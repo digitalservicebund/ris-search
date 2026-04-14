@@ -3,7 +3,6 @@ package de.bund.digitalservice.ris.search.schema;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import de.bund.digitalservice.ris.search.config.ApiConfig;
 import io.swagger.v3.oas.annotations.media.Schema;
-import java.time.LocalDate;
 import java.util.List;
 import lombok.Builder;
 import org.jetbrains.annotations.Nullable;
@@ -33,8 +32,14 @@ public record LegislationExpressionPartSchema(
             requiredMode = Schema.RequiredMode.REQUIRED)
         String eId,
     @Schema(example = "§ 1", requiredMode = Schema.RequiredMode.REQUIRED) String name,
-    @Nullable @Schema(example = "2003-12-15") LocalDate entryIntoForceDate,
-    @Nullable @Schema(example = "2003-12-15") LocalDate expiryDate,
+    @Schema(
+            description =
+                """
+                             Textual string indicating a time period in [ISO 8601 time interval format](https://en.wikipedia.org/wiki/ISO_8601#Time_intervals)
+                             """,
+            example = "1998-02-06/..",
+            requiredMode = Schema.RequiredMode.REQUIRED)
+        String temporalCoverage,
     @Nullable @Schema(description = "The source data for this part, if available on its own")
         List<LegislationObjectSchema> encoding)
     implements JsonldResource {

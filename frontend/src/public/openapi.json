@@ -2349,15 +2349,10 @@
             "example": "hauptteitel-para-1"
           },
           "name": { "type": "string", "example": "§ 1" },
-          "entryIntoForceDate": {
+          "temporalCoverage": {
             "type": "string",
-            "format": "date",
-            "example": "2003-12-15"
-          },
-          "expiryDate": {
-            "type": "string",
-            "format": "date",
-            "example": "2003-12-15"
+            "description": "Textual string indicating a time period in [ISO 8601 time interval format](https://en.wikipedia.org/wiki/ISO_8601#Time_intervals)\n",
+            "example": "1998-02-06/.."
           },
           "encoding": {
             "type": "array",
@@ -2365,7 +2360,7 @@
             "items": { "$ref": "#/components/schemas/LegislationObjectSchema" }
           }
         },
-        "required": ["@id", "eId", "name"]
+        "required": ["@id", "eId", "name", "temporalCoverage"]
       },
       "LegislationExpressionSchema": {
         "type": "object",

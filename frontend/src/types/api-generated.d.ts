@@ -932,15 +932,10 @@ export interface components {
       /** @example § 1 */
       name: string;
       /**
-       * Format: date
-       * @example 2003-12-15
+       * @description Textual string indicating a time period in [ISO 8601 time interval format](https://en.wikipedia.org/wiki/ISO_8601#Time_intervals)
+       * @example 1998-02-06/..
        */
-      entryIntoForceDate?: string;
-      /**
-       * Format: date
-       * @example 2003-12-15
-       */
-      expiryDate?: string;
+      temporalCoverage: string;
       /** @description The source data for this part, if available on its own */
       encoding?: components["schemas"]["LegislationObjectSchema"][];
     };
