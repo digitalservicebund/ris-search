@@ -45,23 +45,7 @@ public class FrbrElement {
         .orElse(null);
   }
 
-  /**
-   * Convenience method to set both FRBRthis and FRBRuri to the same value
-   *
-   * @param value the value to set for both FRBRthis and FRBRuri
-   * @return the updated FrbrElement instance
-   */
-  public FrbrElement withFrbrThisAndUri(String value) {
-    this.frbrThis = new FrbrThis(value);
-    this.frbrUri = new FrbrUri(value);
-    return this;
-  }
-
   public String getEcliAliasValue() {
     return getAliasValueByName("ECLI");
-  }
-
-  public String getUuidAliasValue() {
-    return getAliasValueByName("Übergreifende ID");
   }
 }
