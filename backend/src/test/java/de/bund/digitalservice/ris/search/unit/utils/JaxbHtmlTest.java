@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-public class JaxbHtmlTest {
+class JaxbHtmlTest {
 
   @Test
   @DisplayName("build() should return null for empty or null inputs")
