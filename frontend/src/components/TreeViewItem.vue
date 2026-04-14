@@ -272,12 +272,8 @@ function onToggleDeep() {
       }
 
       &:hover {
-        .title {
+        :is(.title, .subtitle) {
           @apply no-underline;
-        }
-
-        .subtitle {
-          @apply underline underline-offset-2;
         }
       }
     }
