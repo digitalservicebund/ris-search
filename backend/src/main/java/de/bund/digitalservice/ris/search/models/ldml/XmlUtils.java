@@ -7,8 +7,6 @@ import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
-import javax.xml.XMLConstants;
-import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Templates;
@@ -28,8 +26,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
 
 /** Utility class for XML processing, including XSLT transformations and NodeList manipulations. */
 public class XmlUtils {
@@ -38,7 +34,6 @@ public class XmlUtils {
   private static final Logger logger = LogManager.getLogger(XmlUtils.class);
   private static final TransformerFactory transformerFactory =
       new net.sf.saxon.TransformerFactoryImpl();
-  private static final DocumentBuilderFactory documentBuilderFactory = getDocumentBuilderFactory();
   private static final String HTML_TRANSFORMATION_ERROR = "Xml transformation error.";
 
   /**
@@ -111,25 +106,6 @@ public class XmlUtils {
   }
 
   /**
-   * Converts an HTML string to a NodeList.
-   *
-   * @param html The HTML string to convert.
-   * @return A NodeList representing the HTML content.
-   * @throws MappingException if an error occurs during parsing.
-   */
-  public static NodeList htmlStringToNodeList(String html) {
-    try {
-      String wrapped = "<wrapper>" + html + "</wrapper>";
-      DocumentBuilder builder = documentBuilderFactory.newDocumentBuilder();
-      Document doc = builder.parse(new InputSource(new StringReader(wrapped)));
-      return doc.getDocumentElement().getChildNodes();
-    } catch (ParserConfigurationException | IOException | SAXException e) {
-      logger.error(HTML_TRANSFORMATION_ERROR, e);
-      throw new MappingException(e.getMessage());
-    }
-  }
-
-  /**
    * Converts a NodeList to a List of Nodes.
    *
    * @param nodeList The NodeList to convert.
@@ -142,34 +118,5 @@ public class XmlUtils {
       nodes.add(nodeList.item(i));
     }
     return nodes;
-  }
-
-  /**
-   * Applies the given XSLT templates to the provided XML content string.
-   *
-   * @param templates The XSLT templates to apply.
-   * @param content The XML content as a string.
-   * @return The transformed XML content as a string.
-   * @throws MappingException if an error occurs during transformation.
-   */
-  public static String xsltTransform(Templates templates, String content) {
-    try {
-      StringWriter xsltOutput = new StringWriter();
-      Transformer transformer = templates.newTransformer();
-      transformer.transform(
-          new StreamSource(new StringReader(content.strip())), new StreamResult(xsltOutput));
-      return xsltOutput.toString();
-    } catch (TransformerException e) {
-      logger.error("Xslt transformation error.", e);
-      throw new MappingException(e.getMessage());
-    }
-  }
-
-  private static DocumentBuilderFactory getDocumentBuilderFactory() {
-    DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-    factory.setAttribute(XMLConstants.FEATURE_SECURE_PROCESSING, true);
-    factory.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
-    factory.setAttribute(XMLConstants.ACCESS_EXTERNAL_SCHEMA, "");
-    return factory;
   }
 }
