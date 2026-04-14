@@ -158,7 +158,7 @@
     <!-- @eIds zu @id in HTML -->
     <xsl:template match="@eId" priority="2">
         <xsl:attribute name="id">
-            <xsl:value-of select="akn:encode-for-uri(.)" />
+            <xsl:value-of select="." />
         </xsl:attribute>
     </xsl:template>
 
@@ -480,7 +480,7 @@
     <!-- An der Stelle ihres Vorkommens wird zu einer authorialNote nur der @marker selbst ausgegeben, der Inhalt
     hingegen kann an passender Stelle mit authorial-notes-collection ausgegeben werden -->
     <xsl:template match="akn:authorialNote">
-        <a href="{concat('#', akn:encode-for-uri(@eId))}">
+        <a href="{concat('#', @eId)}">
             <sup>
                 <xsl:value-of select="@marker"/>
             </sup>
@@ -511,7 +511,7 @@
         <xsl:if test=".//akn:authorialNote[not(@placementBase)]">
             <ol class="{$fussnoten}">
                 <xsl:for-each select=".//akn:authorialNote[not(@placementBase)]">
-                    <li id="{akn:encode-for-uri(@eId)}" class="{$fussnote}">
+                    <li id="{@eId}" class="{$fussnote}">
                         <xsl:call-template name="authorial-note-content"/>
                     </li>
                 </xsl:for-each>
@@ -535,7 +535,7 @@
         <xsl:if test="$nichtamtliche-fussnoten-elemente">
             <ul class="{$nichtamtliche-fussnoten}">
                 <xsl:for-each select="$nichtamtliche-fussnoten-elemente">
-                    <li id="{akn:encode-for-uri(@eId)}" class="{$fussnote}">
+                    <li id="{@eId}" class="{$fussnote}">
                         <xsl:apply-templates/>
                     </li>
                 </xsl:for-each>
@@ -554,7 +554,7 @@
         </span>
         <p>
             <xsl:value-of select="."/><xsl:text> </xsl:text>
-            <a class="{$rueckverweis}" aria-label="Zurück zum Inhalt" href="{concat('#', akn:encode-for-uri($parent-id))}">↑</a>
+            <a class="{$rueckverweis}" aria-label="Zurück zum Inhalt" href="{concat('#', $parent-id)}">↑</a>
         </p>
     </xsl:template>
 
@@ -571,7 +571,7 @@
         <xsl:variable name="marker-eId" select="concat('#', @eId)"/>
 
         <xsl:for-each select="//akn:authorialNote[@placementBase=$marker-eId]">
-            <div id="{akn:encode-for-uri(@eId)}" class="{$fussnote}">
+            <div id="{@eId}" class="{$fussnote}">
                 <xsl:call-template name="authorial-note-content"/>
             </div>
         </xsl:for-each>

@@ -164,7 +164,7 @@ test.describe("view norm page", async () => {
     await sidebar.getByRole("link", { name: "Eingangsformel" }).click();
 
     await expect(page).toHaveURL(
-      "/norms/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu#praeambel-n1_formel-n1",
+      "/norms/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu#präambel-n1_formel-n1",
     );
 
     const heading = page.getByRole("heading", { name: "Eingangsformel" });

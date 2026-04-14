@@ -235,7 +235,7 @@ describe("NormSearchResult", () => {
     const articleHeading = screen.getByText("Article 1");
     expect(articleHeading).toBeInTheDocument();
     const link = articleHeading.closest("a");
-    expect(link?.getAttribute("href")).contains("/PraeoeueAeOeUeambel");
+    expect(link?.getAttribute("href")).contains("/PräöüÄÖÜambel");
   });
 
   describe("validity status badge", () => {

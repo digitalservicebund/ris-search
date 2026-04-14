@@ -8,14 +8,6 @@
 
 	<xsl:output method="html" encoding="UTF-8" />
 
-	<xsl:function name="local:encode-for-uri" as="xs:string">
-		<xsl:param name="uri" as="xs:string" />
-		<xsl:variable name="uri" select="replace($uri, 'ä', 'ae')" />
-		<xsl:variable name="uri" select="replace($uri, 'ö', 'oe')" />
-		<xsl:variable name="uri" select="replace($uri, 'ü', 'ue')" />
-		<xsl:value-of select="$uri" />
-	</xsl:function>
-
 	<xsl:param name="ressourcenpfad" as="xs:string" select="''"/>
 
 	<!-- akn wrapper elements (can be removed but content is kept) -->
@@ -210,7 +202,7 @@
 	<xsl:template match="akn:a[@class='border-number-link']">
 		<a>
 			<xsl:attribute name="href">
-				<xsl:value-of select="concat('#', local:encode-for-uri(.))" />
+				<xsl:value-of select="concat('#', .)" />
 			</xsl:attribute>
 			<xsl:attribute name="aria-label">
 				<xsl:value-of select="concat('Springe zu Randnummer: ', .)" />

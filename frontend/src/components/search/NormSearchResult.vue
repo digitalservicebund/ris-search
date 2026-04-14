@@ -83,7 +83,7 @@ const headerItems = computed<SearchResultHeaderItem[]>(() => {
 });
 
 const getArticleUrl = (highlight: TextMatch) =>
-  `${link.value}/${highlight.location ? encodeForUri(highlight.location) : ""}`;
+  `${link.value}/${highlight.location ?? ""}`;
 </script>
 
 <template>

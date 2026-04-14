@@ -1,7 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { findNodePath, tocItemsToTreeViewItems } from "./tableOfContents";
 import type { TableOfContentsItem } from "~/types/api";
-import { encodeForUri } from "./textFormatting";
 
 const getHeadingTarget = (id: string, headingPath = "/heading") => ({
   path: headingPath,
@@ -9,7 +8,7 @@ const getHeadingTarget = (id: string, headingPath = "/heading") => ({
 });
 
 const getLeafTarget = (id: string, leafPath = "/leaf") => ({
-  path: `${leafPath}/${encodeForUri(id)}`,
+  path: `${leafPath}/${id}`,
 });
 
 describe("tableOfContents", () => {
@@ -73,7 +72,7 @@ describe("tableOfContents", () => {
       expect(result[0]?.children?.[0]?.key).toBe("art-1");
     });
 
-    it("encodes IDs correctly in generated URLs", () => {
+    it("uses raw IDs in generated URLs", () => {
       const items: TableOfContentsItem[] = [
         {
           "@type": "TocEntry",
@@ -91,7 +90,7 @@ describe("tableOfContents", () => {
       );
 
       expect(result).toHaveLength(1);
-      expect(result[0]?.to).toEqual({ path: "/leaf/Praeoeue AeOeUe §1" });
+      expect(result[0]?.to).toEqual({ path: "/leaf/Präöü ÄÖÜ §1" });
     });
 
     it("keeps raw IDs for selection and encodes hash links for router navigation", () => {

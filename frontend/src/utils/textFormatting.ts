@@ -119,26 +119,6 @@ export function formatNames(names: string[]): string[] {
 }
 
 /**
- * Encodes German umlauts into ASCII-friendly equivalents for URI usage.
- * Mirrors the logic used in XSLT:
- *  ä → ae, ö → oe, ü → ue (and uppercase versions)
- */
-export function encodeForUri(text?: string): string {
-  if (!text) return "";
-
-  const map: Record<string, string> = {
-    ä: "ae",
-    ö: "oe",
-    ü: "ue",
-    Ä: "Ae",
-    Ö: "Oe",
-    Ü: "Ue",
-  };
-
-  return text.replaceAll(/[äöüÄÖÜ]/g, (char: string) => map[char] ?? char);
-}
-
-/**
  * Given a noun in singular and plural form, choses the correct one based on the provided count.
  * @param singular
  * @param plural

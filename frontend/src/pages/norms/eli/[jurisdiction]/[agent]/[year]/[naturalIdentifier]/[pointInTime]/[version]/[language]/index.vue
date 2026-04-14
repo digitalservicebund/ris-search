@@ -56,8 +56,8 @@ const tableOfContents = computed(() => {
   const normPath = route.path;
   return tocItemsToTreeViewItems(
     metadata.value.tableOfContents,
-    (id) => ({ path: normPath, hash: `#${encodeForUri(id)}` }),
-    (id) => ({ path: normPath, hash: `#${encodeForUri(id)}` }),
+    (id) => ({ path: normPath, hash: `#${id}` }),
+    (id) => ({ path: normPath, hash: `#${id}` }),
   );
 });
 

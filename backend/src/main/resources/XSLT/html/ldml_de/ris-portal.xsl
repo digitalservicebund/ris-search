@@ -120,7 +120,7 @@
         <article>
             <xsl:apply-templates select="@*" />
             <!-- wrap h2 in link that points to $dokumentpfad/@eId -->
-            <a href="{concat($dokumentpfad, '/', akn:encode-for-uri(@eId))}">
+            <a href="{concat($dokumentpfad, '/', @eId)}">
                 <xsl:call-template name="num-and-heading-h2"/>
             </a>
             <!-- process remaining elements -->
@@ -269,7 +269,7 @@
         <xsl:param name="attachment-eId" tunnel="yes"/>
         <xsl:choose>
             <xsl:when test="not($is-single-article)">
-                <a href="{concat($dokumentpfad, '/', akn:encode-for-uri($attachment-eId))}">
+                <a href="{concat($dokumentpfad, '/', $attachment-eId)}">
                     <h2 class="{$einzelvorschrift}">
                         <xsl:apply-templates/>
                     </h2>
@@ -296,7 +296,7 @@
         <div class="akn-doc" data-name="offene-struktur">
         <xsl:choose>
             <xsl:when test="not($is-single-article)">
-                <a href="{concat($dokumentpfad, '/', akn:encode-for-uri($attachment-eId))}">
+                <a href="{concat($dokumentpfad, '/', $attachment-eId)}">
                     <h2 class="{$einzelvorschrift}">
                         Anlage
                     </h2>

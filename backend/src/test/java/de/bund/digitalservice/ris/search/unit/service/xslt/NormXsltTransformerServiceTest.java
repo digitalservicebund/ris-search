@@ -191,16 +191,16 @@ class NormXsltTransformerServiceTest {
     var expectedToc =
         """
         <div class="level-1">
-         <span class="akn-span" id="praeambel-n1_blockcontainer-n1_inhuebs-n1_eintrag-n1_span-n1">Abschnitt 1</span>
+         <span class="akn-span" id="präambel-n1_blockcontainer-n1_inhuebs-n1_eintrag-n1_span-n1">Abschnitt 1</span>
         </div>
         <div class="level-2">
-         <span class="akn-span" id="praeambel-n1_blockcontainer-n1_inhuebs-n1_eintrag-n2_span-n1">Allgemeine Bestimmungen</span>
+         <span class="akn-span" id="präambel-n1_blockcontainer-n1_inhuebs-n1_eintrag-n2_span-n1">Allgemeine Bestimmungen</span>
         </div>
         <div class="level-5">
-         <span class="akn-span" id="praeambel-n1_blockcontainer-n1_inhuebs-n1_eintrag-n3_span-n1">Art 1</span> <span class="akn-span" id="praeambel-n1_blockcontainer-n1_inhuebs-n1_eintrag-n3_span-n2">Test Title</span>
+         <span class="akn-span" id="präambel-n1_blockcontainer-n1_inhuebs-n1_eintrag-n3_span-n1">Art 1</span> <span class="akn-span" id="präambel-n1_blockcontainer-n1_inhuebs-n1_eintrag-n3_span-n2">Test Title</span>
         </div>
         <div class="level-1">
-         <span class="akn-span" id="praeambel-n1_blockcontainer-n1_inhuebs-n1_eintrag-n4_span-n1">Art 2</span> <span class="akn-span" id="praeambel-n1_blockcontainer-n1_inhuebs-n1_eintrag-n4_span-n2">Another Test Title</span>
+         <span class="akn-span" id="präambel-n1_blockcontainer-n1_inhuebs-n1_eintrag-n4_span-n1">Art 2</span> <span class="akn-span" id="präambel-n1_blockcontainer-n1_inhuebs-n1_eintrag-n4_span-n2">Another Test Title</span>
         </div>""";
     final Document parsed = Jsoup.parse(html);
 
@@ -222,7 +222,7 @@ class NormXsltTransformerServiceTest {
          <article id="art-z1" data-period="#meta-n1_geltzeiten-n1_geltungszeitgr-n1">
             <h2 class="einzelvorschrift">
               <span class="akn-num" id="art-z1_bezeichnung-n1">§ 1</span>
-              <span class="akn-heading" id="art-z1_ueberschrift-n1">
+              <span class="akn-heading" id="art-z1_überschrift-n1">
                 Basic HTML Elements
               </span>
             </h2>
