@@ -284,11 +284,11 @@ function onKeydown(event: KeyboardEvent) {
       <NuxtLink
         v-if="subheading && subheadingTo"
         :to="subheadingTo"
-        class="ris-link1-regular link-hover line-clamp-3"
+        class="ris-link1-regular link-hover line-clamp-1"
       >
         {{ subheading }}
       </NuxtLink>
-      <p v-else-if="subheading" class="ris-label1-regular line-clamp-3">
+      <p v-else-if="subheading" class="ris-label1-regular line-clamp-1">
         {{ subheading }}
       </p>
     </div>
@@ -298,7 +298,7 @@ function onKeydown(event: KeyboardEvent) {
       role="tree"
       :aria-label="label"
       :aria-labelledby="heading ? headingId : undefined"
-      class="overflow-y-auto"
+      class="overflow-y-auto pb-16"
       @keydown="onKeydown"
     >
       <TreeViewItem
