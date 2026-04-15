@@ -154,8 +154,7 @@ test.describe("view norm article page", () => {
   test("clicking Eingangsformel heading link navigates to Eingangsformel article", async ({
     page,
   }) => {
-    const normUrl = "/norms/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu";
-    await navigate(page, normUrl);
+    await navigate(page, "/norms/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu");
 
     // The Eingangsformel heading in the main content is wrapped in a link to the article page
     await page
@@ -167,6 +166,18 @@ test.describe("view norm article page", () => {
     await expect(
       page.getByRole("heading", { level: 1, name: "Eingangsformel" }),
     ).toBeVisible();
+  });
+
+  test("highlights Eingangsformel as selected in TOC", async ({
+    page,
+    isMobileTest,
+  }) => {
+    test.skip(isMobileTest);
+
+    await navigate(
+      page,
+      "/norms/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu/präambel-n1_formel-n1",
+    );
 
     await expect(
       page.getByRole("treeitem", { name: "Eingangsformel" }),
@@ -226,6 +237,18 @@ test.describe("view norm article page", () => {
         name: "§§ 18 bis 21 (weggefallen)",
       }),
     ).toBeVisible();
+  });
+
+  test("highlights repealed article as selected in TOC", async ({
+    page,
+    isMobileTest,
+  }) => {
+    test.skip(isMobileTest);
+
+    await navigate(
+      page,
+      "/norms/eli/bund/bgbl-1/1964/s902/2009-02-05/19/deu/art-z%c2%a7%c2%a7%2018%20bis%2021",
+    );
 
     await expect(
       page.getByRole("treeitem", { name: "§§ 18 bis 21, (weggefallen)" }),
