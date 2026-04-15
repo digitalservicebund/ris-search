@@ -151,31 +151,10 @@ test.describe("view norm article page", () => {
     });
   });
 
-  test("table of contents renders on article page", async ({
-    page,
-    isMobileTest,
-  }) => {
-    test.skip(isMobileTest);
-
-    await navigate(
-      page,
-      "/norms/eli/bund/bgbl-1/1964/s902/2009-02-05/19/deu/art-z1",
-    );
-
-    const tocNav = page.getByRole("navigation", { name: "Inhalte" });
-    await expect(tocNav).toBeVisible();
-
-    const selectedItem = tocNav.getByRole("treeitem", {
-      name: /§\s*1,/i,
-    });
-    await expect(selectedItem).toHaveAttribute("aria-selected", "true");
-  });
-
   test("clicking Eingangsformel heading link navigates to Eingangsformel article", async ({
     page,
   }) => {
-    const normUrl = "/norms/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu";
-    await navigate(page, normUrl);
+    await navigate(page, "/norms/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu");
 
     // The Eingangsformel heading in the main content is wrapped in a link to the article page
     await page
@@ -184,14 +163,25 @@ test.describe("view norm article page", () => {
       .first()
       .click();
 
-    await page.waitForURL(
-      "/norms/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu/pr%C3%A4ambel-n1_formel-n1",
-      { waitUntil: "commit" },
-    );
-
     await expect(
       page.getByRole("heading", { level: 1, name: "Eingangsformel" }),
     ).toBeVisible();
+  });
+
+  test("highlights Eingangsformel as selected in TOC", async ({
+    page,
+    isMobileTest,
+  }) => {
+    test.skip(isMobileTest);
+
+    await navigate(
+      page,
+      "/norms/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu/präambel-n1_formel-n1",
+    );
+
+    await expect(
+      page.getByRole("treeitem", { name: "Eingangsformel" }),
+    ).toHaveAttribute("aria-selected", "true");
   });
 
   test("clicking Nächster Paragraf on Eingangsformel article navigates to next article", async ({
@@ -203,10 +193,6 @@ test.describe("view norm article page", () => {
     );
 
     await page.getByRole("link", { name: "Nächster Paragraf" }).click();
-    await page.waitForURL(
-      "/norms/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu/art-z1",
-      { waitUntil: "commit" },
-    );
 
     await expect(
       page.getByRole("heading", {
@@ -216,7 +202,7 @@ test.describe("view norm article page", () => {
     ).toBeVisible();
   });
 
-  test("clicking Eingangsformel in TOC on art-z1 page navigates to Eingangsformel article", async ({
+  test("clicking Eingangsformel in TOC on article page navigates to Eingangsformel article", async ({
     page,
     isMobileTest,
   }) => {
@@ -229,13 +215,108 @@ test.describe("view norm article page", () => {
     const tocNav = page.getByRole("navigation", { name: "Inhalte" });
     await tocNav.getByRole("link", { name: "Eingangsformel" }).click();
 
-    await page.waitForURL(
-      "/norms/eli/bund/bgbl-1/2020/s1126/2022-08-04/1/deu/pr%C3%A4ambel-n1_formel-n1",
-      { waitUntil: "commit" },
+    await expect(
+      page.getByRole("heading", { level: 1, name: "Eingangsformel" }),
+    ).toBeVisible();
+  });
+
+  test("navigates to a repealed article by clicking on a heading link", async ({
+    page,
+  }) => {
+    await navigate(page, "/norms/eli/bund/bgbl-1/1964/s902/2009-02-05/19/deu");
+
+    await page
+      .getByRole("main")
+      .getByRole("link", { name: "§§ 18 bis 21 (weggefallen)" })
+      .first()
+      .click();
+
+    await expect(
+      page.getByRole("heading", {
+        level: 1,
+        name: "§§ 18 bis 21 (weggefallen)",
+      }),
+    ).toBeVisible();
+  });
+
+  test("highlights repealed article as selected in TOC", async ({
+    page,
+    isMobileTest,
+  }) => {
+    test.skip(isMobileTest);
+
+    await navigate(
+      page,
+      "/norms/eli/bund/bgbl-1/1964/s902/2009-02-05/19/deu/art-z%c2%a7%c2%a7%2018%20bis%2021",
     );
 
     await expect(
-      page.getByRole("heading", { level: 1, name: "Eingangsformel" }),
+      page.getByRole("treeitem", { name: "§§ 18 bis 21, (weggefallen)" }),
+    ).toHaveAttribute("aria-selected", "true");
+  });
+
+  test("navigates to a repealed article by clicking Nächster Paragraf", async ({
+    page,
+  }) => {
+    await navigate(
+      page,
+      "/norms/eli/bund/bgbl-1/1964/s902/2009-02-05/19/deu/art-z3",
+    );
+
+    await page.getByRole("link", { name: "Nächster Paragraf" }).click();
+
+    await expect(
+      page.getByRole("heading", {
+        level: 1,
+        name: "§§ 18 bis 21 (weggefallen)",
+      }),
+    ).toBeVisible();
+  });
+
+  test("navigates to previous article from a repealed article", async ({
+    page,
+  }) => {
+    await navigate(
+      page,
+      "/norms/eli/bund/bgbl-1/1964/s902/2009-02-05/19/deu/art-z%C2%A7%C2%A7%2018%20bis%2021",
+    );
+
+    await expect(
+      page.getByRole("heading", {
+        level: 1,
+        name: "§§ 18 bis 21 (weggefallen)",
+      }),
+    ).toBeVisible();
+
+    await page.getByRole("link", { name: "Vorheriger Paragraf" }).click();
+
+    await expect(
+      page.getByRole("heading", {
+        level: 1,
+        name: "§ 3 Testregelung für freiwillige Dienste im öffentlichen Sektor",
+      }),
+    ).toBeVisible();
+  });
+
+  test("navigates to a repealed article by clicking on the TOC item", async ({
+    page,
+    isMobileTest,
+  }) => {
+    test.skip(isMobileTest);
+
+    await navigate(
+      page,
+      "/norms/eli/bund/bgbl-1/1964/s902/2009-02-05/19/deu/art-z3",
+    );
+
+    const tocNav = page.getByRole("navigation", { name: "Inhalte" });
+    await tocNav.getByRole("link", { name: "§§ 18 bis 21" }).click();
+
+    await expect(
+      page.getByRole("heading", {
+        level: 1,
+        name: "§§ 18 bis 21 (weggefallen)",
+      }),
     ).toBeVisible();
   });
 

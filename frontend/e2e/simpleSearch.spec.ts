@@ -420,6 +420,17 @@ test.describe("searching legislation", () => {
       page.getByRole("combobox", { name: "Keine zeitliche Begrenzung" }),
     ).not.toBeVisible();
   });
+
+  test("navigates to article view for search results", async ({ page }) => {
+    await navigate(page, "/search?query=Eingangsformel&documentKind=N");
+
+    const searchResult = getSearchResults(page).first();
+    await searchResult.getByRole("link", { name: "Eingangsformel" }).click();
+
+    await expect(
+      page.getByRole("heading", { level: 1, name: "Eingangsformel" }),
+    ).toBeVisible();
+  });
 });
 
 test.describe("searching caselaw", () => {

@@ -37,15 +37,6 @@
         </xsl:if>
     </xsl:function>
 
-    <!-- Ersetzt Umlaute -->
-    <xsl:function name="akn:encode-for-uri" as="xs:string">
-        <xsl:param name="uri" as="xs:string" />
-        <xsl:variable name="uri" select="replace($uri, 'ä', 'ae')" />
-        <xsl:variable name="uri" select="replace($uri, 'ö', 'oe')" />
-        <xsl:variable name="uri" select="replace($uri, 'ü', 'ue')" />
-        <xsl:value-of select="$uri" />
-    </xsl:function>
-
 
     <!--
         ################
