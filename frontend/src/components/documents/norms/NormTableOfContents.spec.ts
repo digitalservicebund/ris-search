@@ -11,16 +11,16 @@ describe("NormTableOfContents", () => {
     {
       "@id": "chapter1",
       eId: "chapter1",
-      alternativeName: "1",
-      name: "Chapter 1",
+      name: "1",
+      alternativeName: "Chapter 1",
       encoding: [],
       temporalCoverage: "../..",
       hasPart: [
         {
           "@id": "section1-1",
           eId: "section1-1",
-          alternativeName: "1.1",
-          name: "Section 1.1",
+          name: "1.1",
+          alternativeName: "Section 1.1",
           encoding: [],
           temporalCoverage: "../..",
           hasPart: [],
@@ -28,16 +28,16 @@ describe("NormTableOfContents", () => {
         {
           "@id": "section1-2",
           eId: "section1-2",
-          alternativeName: "1.2",
-          name: "Section 1.2",
+          name: "1.2",
+          alternativeName: "Section 1.2",
           encoding: [],
           temporalCoverage: "../..",
           hasPart: [
             {
               "@id": "subsection1-2-1",
               eId: "subsection1-2-1",
-              alternativeName: "1.2.1",
-              name: "Subsection 1.2.1",
+              name: "1.2.1",
+              alternativeName: "Subsection 1.2.1",
               encoding: [],
               temporalCoverage: "../..",
               hasPart: [],
@@ -49,16 +49,16 @@ describe("NormTableOfContents", () => {
     {
       "@id": "chapter2",
       eId: "chapter2",
-      alternativeName: "2",
-      name: "Chapter 2",
+      name: "2",
+      alternativeName: "Chapter 2",
       encoding: [],
       temporalCoverage: "../..",
       hasPart: [
         {
           "@id": "section2-1",
           eId: "section2-1",
-          alternativeName: "2.1",
-          name: "Section 2.1",
+          name: "2.1",
+          alternativeName: "Section 2.1",
           encoding: [],
           temporalCoverage: "../..",
           hasPart: [],

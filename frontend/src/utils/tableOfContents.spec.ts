@@ -19,8 +19,8 @@ describe("tableOfContents", () => {
           "@type": "TocEntry",
           "@id": "art-1",
           eId: "art-1",
-          alternativeName: "§ 1",
-          name: "Title",
+          name: "§ 1",
+          alternativeName: "Title",
           encoding: [],
           temporalCoverage: "../..",
           hasPart: [],
@@ -46,8 +46,8 @@ describe("tableOfContents", () => {
         {
           "@id": "chapter-1",
           eId: "chapter-1",
-          alternativeName: "Chapter 1",
-          name: "Introduction",
+          name: "Chapter 1",
+          alternativeName: "Introduction",
           encoding: [],
           temporalCoverage: "../..",
           hasPart: [
