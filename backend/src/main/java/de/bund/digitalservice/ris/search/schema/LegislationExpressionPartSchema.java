@@ -35,7 +35,7 @@ public record LegislationExpressionPartSchema(
         String eId,
     @Schema(example = "§ 1", requiredMode = Schema.RequiredMode.REQUIRED) String name,
     @Schema(example = "Zulassungsvorraussetzung", requiredMode = Schema.RequiredMode.REQUIRED)
-        String alternativeName,
+        String headline,
     @Schema(
             description =
                 """

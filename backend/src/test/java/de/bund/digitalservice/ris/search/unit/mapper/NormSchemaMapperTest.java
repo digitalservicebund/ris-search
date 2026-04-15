@@ -84,7 +84,7 @@ class NormSchemaMapperTest {
                         .id("/v1/legislation/expressionEli#eId")
                         .eId("eId")
                         .name("marker")
-                        .alternativeName("heading")
+                        .headline("heading")
                         .temporalCoverage("2024-01-01/2025-01-01")
                         .hasPart(List.of())
                         .encoding(

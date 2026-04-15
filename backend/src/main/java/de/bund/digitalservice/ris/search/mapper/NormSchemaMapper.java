@@ -148,7 +148,7 @@ public class NormSchemaMapper {
         .id(idPrefix + "#" + article.eId())
         .name(marker)
         .eId(article.eId())
-        .alternativeName(heading)
+        .headline(heading)
         .temporalCoverage(
             DateUtils.toDateIntervalString(article.entryIntoForceDate(), article.expiryDate()))
         .encoding(encoding)

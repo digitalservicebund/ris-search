@@ -16,7 +16,7 @@ export function tocItemsToTreeViewItems(
       // double encoding/decoding and make them comparable.
       key: decodeURIComponent(child.eId),
       title: child.name,
-      subtitle: child.alternativeName,
+      subtitle: child.headline,
       to: getLeafTarget(child.eId),
     };
 

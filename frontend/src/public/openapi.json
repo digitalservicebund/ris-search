@@ -2355,7 +2355,7 @@
             "example": "hauptteitel-para-1"
           },
           "name": { "type": "string", "example": "§ 1" },
-          "alternativeName": {
+          "headline": {
             "type": "string",
             "example": "Zulassungsvorraussetzung"
           },
@@ -2376,13 +2376,7 @@
             }
           }
         },
-        "required": [
-          "@id",
-          "alternativeName",
-          "eId",
-          "name",
-          "temporalCoverage"
-        ]
+        "required": ["@id", "eId", "headline", "name", "temporalCoverage"]
       },
       "LegislationExpressionSchema": {
         "type": "object",
