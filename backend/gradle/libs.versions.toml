@@ -66,6 +66,10 @@ testcontainers-junit-jupiter = { module = "org.testcontainers:junit-jupiter", ve
 opensearch-testcontainers = { module = "org.opensearch:opensearch-testcontainers", version.ref = "opensearch-test-containers" }
 testcontainers-postgresql = { module = "org.testcontainers:postgresql", version.ref = "test-containers" }
 tools-jackson-core = { module = "tools.jackson.core:jackson-core", version.ref = "tools-jackson-core" }
+# CVE-2026-34483, CVE-2026-34486, CVE-2026-34487, CVE-2026-34500
+tomcat-embed-core = "org.apache.tomcat.embed:tomcat-embed-core:11.0.21"
+# CVE-2026-34477, CVE-2026-34478, CVE-2026-34480
+log4j-core = "org.apache.logging.log4j:log4j-core:2.25.4"
 jaxb-moxy = { module = "org.eclipse.persistence:org.eclipse.persistence.moxy", version.ref = "jaxb-moxy" }
 jaxb-moxy-xjc = {module = "org.eclipse.persistence:org.eclipse.persistence.moxy.utils.xjc", version.ref = "jaxb-moxy"}
 pebble = { module = "io.pebbletemplates:pebble-spring-boot-starter", version.ref = "pebble" }
