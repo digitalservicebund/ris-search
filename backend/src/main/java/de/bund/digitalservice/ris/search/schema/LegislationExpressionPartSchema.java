@@ -33,8 +33,15 @@ public record LegislationExpressionPartSchema(
             example = "hauptteitel-para-1",
             requiredMode = Schema.RequiredMode.REQUIRED)
         String eId,
-    @Schema(example = "§ 1", requiredMode = Schema.RequiredMode.REQUIRED) String name,
-    @Schema(example = "Zulassungsvorraussetzung", requiredMode = Schema.RequiredMode.REQUIRED)
+    @Schema(
+            description = "Numerical identifier of a specific legislation part",
+            example = "§ 1",
+            requiredMode = Schema.RequiredMode.REQUIRED)
+        String name,
+    @Schema(
+            description = "Headline of a specific legislation part",
+            example = "Beginn der Rechtsfähigkeit",
+            requiredMode = Schema.RequiredMode.REQUIRED)
         String headline,
     @Schema(
             description =

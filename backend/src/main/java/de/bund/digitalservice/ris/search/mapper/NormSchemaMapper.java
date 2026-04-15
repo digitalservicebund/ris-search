@@ -93,6 +93,19 @@ public class NormSchemaMapper {
     return EncodingSchemaFactory.legislationEncodingSchemas(encodingBaseUrl, encodingZipBaseUrl);
   }
 
+  /**
+   * Builds the hasPart structure for a legislation expression.
+   *
+   * <p>The resulting list represents the hierarchical structure of the norm, where each entry
+   * corresponds to a structural element derived from the structure of the table of contents. Each
+   * part includes its identifiers and may contain nested subparts.
+   *
+   * @param tableOfContentsItems the table of contents entries describing the structure of the norm;
+   *     may be {@code null}
+   * @param idPrefix the prefix used to generate unique identifiers for each part in the hierarchy
+   * @param articles the list of articles used to enrich or resolve the corresponding parts
+   * @return a list of {@link LegislationExpressionPartSchema}
+   */
   private static List<LegislationExpressionPartSchema> buildNestedHasPart(
       @Nullable List<TableOfContentsItem> tableOfContentsItems,
       String idPrefix,
@@ -105,6 +118,16 @@ public class NormSchemaMapper {
         .toList();
   }
 
+  /**
+   * Builds a single legislation expression part. It uses a combination of the tableOfCOntents and
+   * articles array to construct the object, depending if it is a leaf node that is part of the
+   * articles array, or if it is a parent node
+   *
+   * @param articles articles array
+   * @param tocItem tableOfContentsItem that is supposed to be mapped to a part
+   * @param idPrefix the prefix used to generate unique identifiers for each part in the hierarchy
+   * @return {@link LegislationExpressionPartSchema}
+   */
   private static LegislationExpressionPartSchema buildLegislationExpressionPart(
       List<Article> articles, TableOfContentsItem tocItem, String idPrefix) {
     var article = articles.stream().filter(a -> tocItem.id().equals(a.eId())).findFirst();
@@ -124,7 +147,8 @@ public class NormSchemaMapper {
   }
 
   /**
-   * This maps articles and attachments of a norm. Both are currently part of the articles array.
+   * This maps articles, preamble formula, conclusions formula and attachments of a norm. All are
+   * currently part of the articles array.
    *
    * @param article Article or Attachment of a norm
    * @param idPrefix idPrefix referencing the corresponding norm
