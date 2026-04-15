@@ -83,8 +83,8 @@ class NormSchemaMapperTest {
                     LegislationExpressionPartSchema.builder()
                         .id("/v1/legislation/expressionEli#eId")
                         .eId("eId")
-                        .name("name")
-                        .alternativeName("marker")
+                        .name("marker")
+                        .alternativeName("heading")
                         .temporalCoverage("2024-01-01/2025-01-01")
                         .hasPart(List.of())
                         .encoding(
