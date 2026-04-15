@@ -53,7 +53,6 @@ export function useFetchNormContent(
       const document = parseDocument(html);
       const htmlParts = extractHtmlParts(document);
       //set hasPart empty to reduce payload size
-      if (metadata) metadata.hasPart = [];
       return {
         legislation: metadata,
         htmlParts,

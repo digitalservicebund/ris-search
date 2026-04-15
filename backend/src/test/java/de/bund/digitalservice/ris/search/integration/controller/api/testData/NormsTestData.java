@@ -173,7 +173,7 @@ public class NormsTestData {
                         "example text 1",
                         LocalDate.of(2023, 12, 31),
                         LocalDate.of(3000, 1, 2),
-                        "eid1",
+                        "art-z1",
                         "guid1",
                         null,
                         "§ 1 TeG"),
@@ -182,7 +182,7 @@ public class NormsTestData {
                         "example text 2",
                         null,
                         LocalDate.of(2024, 1, 2),
-                        "eid2",
+                        "art-z2",
                         "guid2",
                         null,
                         "§ 2 TeG")))

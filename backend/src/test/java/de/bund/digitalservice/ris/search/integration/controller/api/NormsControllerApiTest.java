@@ -1,7 +1,6 @@
 package de.bund.digitalservice.ris.search.integration.controller.api;
 
 import static de.bund.digitalservice.ris.ZipTestUtils.readZipStream;
-import static de.bund.digitalservice.ris.search.utils.JsonLdUtils.writeJsonLdString;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.containsString;
@@ -22,8 +21,6 @@ import de.bund.digitalservice.ris.search.config.ApiConfig;
 import de.bund.digitalservice.ris.search.integration.config.ContainersIntegrationBase;
 import de.bund.digitalservice.ris.search.integration.controller.api.testData.NormsTestData;
 import de.bund.digitalservice.ris.search.models.opensearch.Norm;
-import de.bund.digitalservice.ris.search.models.opensearch.TableOfContentsItem;
-import de.bund.digitalservice.ris.search.schema.TableOfContentsSchema;
 import de.bund.digitalservice.ris.search.service.IndexNormsService;
 import java.io.ByteArrayInputStream;
 import java.net.URI;
@@ -95,40 +92,14 @@ class NormsControllerApiTest extends ContainersIntegrationBase {
             jsonPath("$.abbreviation", is("TeG")),
             jsonPath("$.exampleOfWork.legislationDate", is("2024-01-02")),
             jsonPath("$.exampleOfWork.datePublished", is("2024-01-03")),
-            jsonPath("$.hasPart", hasSize(2)),
+            jsonPath("$.hasPart", hasSize(3)),
             jsonPath("$.hasPart[0].@type", is("Legislation")),
-            jsonPath("$.hasPart[0].eId", is("eid1")),
+            jsonPath("$.hasPart[0].eId", is("art-z1")),
             jsonPath(
                 "$.hasPart[0].@id",
-                is("/v1/legislation/eli/bund/bgbl-1/1000/test/2000-10-06/2/deu#eid1")),
+                is("/v1/legislation/eli/bund/bgbl-1/1000/test/2000-10-06/2/deu#art-z1")),
             jsonPath("$.hasPart[0].name", is("§ 1 Example article")),
             jsonPath("$.hasPart[0].temporalCoverage", is("2023-12-31/3000-01-02")));
-  }
-
-  @Test
-  @DisplayName("Json Endpoint Should return table of contents")
-  void jsonEndpointShouldReturnTableOfContents() throws Exception {
-    String expectedToc =
-        writeJsonLdString(
-            NormsTestData.nestedToC.stream().map(this::mapToTableOfContentsSchema).toList());
-    var result =
-        mockMvc
-            .perform(
-                get(ApiConfig.Paths.LEGISLATION_SINGLE + "/bund/bgbl-1/1000/test/2000-10-06/2/deu")
-                    .contentType(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk())
-            .andReturn()
-            .getResponse()
-            .getContentAsString();
-    assertThat(result).contains(expectedToc);
-  }
-
-  private TableOfContentsSchema mapToTableOfContentsSchema(TableOfContentsItem item) {
-    return new TableOfContentsSchema(
-        item.id(),
-        item.marker(),
-        item.heading(),
-        item.children().stream().map(this::mapToTableOfContentsSchema).toList());
   }
 
   @Test
@@ -453,7 +424,7 @@ class NormsControllerApiTest extends ContainersIntegrationBase {
                 .value(containsInAnyOrder("name", "§ 1 Example article", "§ 2 Example article")))
         .andExpect(
             jsonPath("$.member[0].textMatches[*].location")
-                .value(containsInAnyOrder(null, "eid1", "eid2")))
+                .value(containsInAnyOrder(null, "art-z1", "art-z2")))
         .andExpect(
             jsonPath("$.member[0].textMatches[*].text")
                 .value(containsInAnyOrder(highlightedMatch, "example text 1", "example text 2")));
@@ -477,7 +448,8 @@ class NormsControllerApiTest extends ContainersIntegrationBase {
                     "§ 1 <mark>Example</mark> <mark>article</mark>",
                     "§ 2 <mark>Example</mark> <mark>article</mark>")),
             jsonPath(
-                "$.member[0].textMatches[*].location", containsInAnyOrder(null, "eid1", "eid2")),
+                "$.member[0].textMatches[*].location",
+                containsInAnyOrder(null, "art-z1", "art-z2")),
             jsonPath(
                 "$.member[0].textMatches[*].text",
                 containsInAnyOrder(

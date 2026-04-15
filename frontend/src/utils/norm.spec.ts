@@ -212,7 +212,6 @@ describe("getNormMetadataItems", () => {
           inLanguage: "",
         },
       ],
-      tableOfContents: [],
       hasPart: [],
     });
 
@@ -241,7 +240,6 @@ describe("getNormMetadataItems", () => {
           inLanguage: "",
         },
       ],
-      tableOfContents: [],
       hasPart: [],
     });
 

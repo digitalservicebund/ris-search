@@ -2,6 +2,7 @@ package de.bund.digitalservice.ris.search.schema;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.List;
+import lombok.Builder;
 
 /**
  * Represents the structure of a table of contents entry, following the "TocEntry" JSON-LD type.
@@ -15,6 +16,7 @@ import java.util.List;
  * with this entry. - children: A list of child entries forming a hierarchical structure under this
  * entry.
  */
+@Builder
 public record TableOfContentsSchema(
     @Schema(example = "hauptteil-1_para-1", requiredMode = Schema.RequiredMode.REQUIRED) String id,
     @Schema(example = "1", requiredMode = Schema.RequiredMode.REQUIRED) String marker,

@@ -2,6 +2,7 @@ package de.bund.digitalservice.ris.search.schema;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import de.bund.digitalservice.ris.search.config.ApiConfig;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.List;
 import lombok.Builder;
@@ -17,6 +18,7 @@ import org.jetbrains.annotations.Nullable;
  * elements within a broader legislative context.
  */
 @Builder
+@Schema(description = "A specific part of a legislation expression")
 public record LegislationExpressionPartSchema(
     @JsonProperty("@id")
         @Schema(
@@ -32,6 +34,8 @@ public record LegislationExpressionPartSchema(
             requiredMode = Schema.RequiredMode.REQUIRED)
         String eId,
     @Schema(example = "§ 1", requiredMode = Schema.RequiredMode.REQUIRED) String name,
+    @Schema(example = "Zulassungsvorraussetzung", requiredMode = Schema.RequiredMode.REQUIRED)
+        String alternativeName,
     @Schema(
             description =
                 """
@@ -41,7 +45,9 @@ public record LegislationExpressionPartSchema(
             requiredMode = Schema.RequiredMode.REQUIRED)
         String temporalCoverage,
     @Nullable @Schema(description = "The source data for this part, if available on its own")
-        List<LegislationObjectSchema> encoding)
+        List<LegislationObjectSchema> encoding,
+    @ArraySchema(schema = @Schema(implementation = LegislationExpressionPartSchema.class))
+        List<LegislationExpressionPartSchema> hasPart)
     implements JsonldResource {
 
   @Override

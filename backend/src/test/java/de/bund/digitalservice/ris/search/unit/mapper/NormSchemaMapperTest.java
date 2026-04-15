@@ -10,54 +10,12 @@ import de.bund.digitalservice.ris.search.schema.LegislationExpressionPartSchema;
 import de.bund.digitalservice.ris.search.schema.LegislationExpressionSchema;
 import de.bund.digitalservice.ris.search.schema.LegislationObjectSchema;
 import de.bund.digitalservice.ris.search.schema.LegislationWorkSchema;
-import de.bund.digitalservice.ris.search.schema.TableOfContentsSchema;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Objects;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 class NormSchemaMapperTest {
-
-  @Test
-  void itMapsATableOfContents() {
-    Norm norm =
-        Norm.builder()
-            .tableOfContents(
-                List.of(
-                    TableOfContentsItem.builder()
-                        .id("id1")
-                        .marker("marker1")
-                        .heading("heading1")
-                        .children(
-                            List.of(
-                                TableOfContentsItem.builder()
-                                    .id("subId1")
-                                    .marker("subMarker1")
-                                    .heading("subHeading1")
-                                    .build()))
-                        .build(),
-                    TableOfContentsItem.builder()
-                        .id("id2")
-                        .marker("marker2")
-                        .heading("heading2")
-                        .build()))
-            .build();
-
-    List<TableOfContentsSchema> expected =
-        List.of(
-            new TableOfContentsSchema(
-                "id1",
-                "marker1",
-                "heading1",
-                List.of(
-                    new TableOfContentsSchema("subId1", "subMarker1", "subHeading1", List.of()))),
-            new TableOfContentsSchema("id2", "marker2", "heading2", List.of()));
-
-    List<TableOfContentsSchema> actual =
-        Objects.requireNonNull(NormSchemaMapper.fromDomain(norm)).tableOfContents();
-    Assertions.assertEquals(expected, actual);
-  }
 
   @Test
   void itMapsLegislationExpressionsAndManifestations() {
@@ -67,12 +25,22 @@ class NormSchemaMapperTest {
             .expressionEli("expressionEli")
             .normsDate(LocalDate.of(2025, 1, 1))
             .datePublished(LocalDate.of(2026, 1, 1))
+            .tableOfContents(
+                List.of(
+                    TableOfContentsItem.builder()
+                        .id("eId")
+                        .heading("heading")
+                        .marker("marker")
+                        .build()))
             .articles(
                 List.of(
                     Article.builder()
                         .eId("eId")
+                        .name("name")
                         .text("attachmentText")
                         .manifestationEli("eli")
+                        .entryIntoForceDate(LocalDate.of(2024, 1, 1))
+                        .expiryDate(LocalDate.of(2025, 1, 1))
                         .build()))
             .manifestationEliExample("manifestationEli/regelungstext-1.xml")
             .workEli("workEli")
@@ -83,7 +51,6 @@ class NormSchemaMapperTest {
             .id("/v1/legislation/expressionEli")
             .legislationIdentifier("expressionEli")
             .legislationLegalForce(LegalForceStatus.IN_FORCE)
-            .tableOfContents(List.of())
             .exampleOfWork(
                 new LegislationWorkSchema(
                     "/v1/legislation/workEli",
@@ -116,6 +83,10 @@ class NormSchemaMapperTest {
                     LegislationExpressionPartSchema.builder()
                         .id("/v1/legislation/expressionEli#eId")
                         .eId("eId")
+                        .name("name")
+                        .alternativeName("marker")
+                        .temporalCoverage("2024-01-01/2025-01-01")
+                        .hasPart(List.of())
                         .encoding(
                             List.of(
                                 LegislationObjectSchema.builder()

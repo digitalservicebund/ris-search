@@ -10,7 +10,6 @@ import de.bund.digitalservice.ris.search.schema.LegislationExpressionSchema;
 import de.bund.digitalservice.ris.search.schema.LegislationObjectSchema;
 import de.bund.digitalservice.ris.search.schema.LegislationWorkSchema;
 import de.bund.digitalservice.ris.search.schema.PublicationIssueSchema;
-import de.bund.digitalservice.ris.search.schema.TableOfContentsSchema;
 import de.bund.digitalservice.ris.search.utils.DateUtils;
 import java.util.Collections;
 import java.util.List;
@@ -72,8 +71,7 @@ public class NormSchemaMapper {
         .legislationLegalForce(legislationLegalForce)
         .temporalCoverage(temporalCoverage)
         .encoding(encodings)
-        .tableOfContents(buildTableOfContents(norm.getTableOfContents()))
-        .hasPart(buildPartList(norm, expressionId))
+        .hasPart(buildNestedHasPart(norm.getTableOfContents(), expressionId, norm.getArticles()))
         .build();
   }
 
@@ -95,25 +93,34 @@ public class NormSchemaMapper {
     return EncodingSchemaFactory.legislationEncodingSchemas(encodingBaseUrl, encodingZipBaseUrl);
   }
 
-  private static List<TableOfContentsSchema> buildTableOfContents(
-      @Nullable List<TableOfContentsItem> tableOfContentsItems) {
+  private static List<LegislationExpressionPartSchema> buildNestedHasPart(
+      @Nullable List<TableOfContentsItem> tableOfContentsItems,
+      String idPrefix,
+      List<Article> articles) {
     if (tableOfContentsItems == null) {
       return List.of();
     }
     return tableOfContentsItems.stream()
-        .map(
-            item ->
-                new TableOfContentsSchema(
-                    item.id(),
-                    item.marker(),
-                    item.heading(),
-                    buildTableOfContents(item.children())))
+        .map(item -> buildLegislationExpressionPart(articles, item, idPrefix))
         .toList();
   }
 
-  private static List<LegislationExpressionPartSchema> buildPartList(Norm norm, String idPrefix) {
-    if (norm.getArticles() == null) return Collections.emptyList();
-    return norm.getArticles().stream().map(article -> buildPart(article, idPrefix)).toList();
+  private static LegislationExpressionPartSchema buildLegislationExpressionPart(
+      List<Article> articles, TableOfContentsItem tocItem, String idPrefix) {
+    var article = articles.stream().filter(a -> tocItem.id().equals(a.eId())).findFirst();
+
+    if (article.isPresent()) {
+      return buildPart(article.get(), idPrefix, tocItem.marker(), tocItem.heading());
+    } else {
+      return new LegislationExpressionPartSchema(
+          idPrefix + "#" + tocItem.id(),
+          tocItem.id(),
+          tocItem.marker(),
+          tocItem.heading(),
+          "",
+          List.of(),
+          buildNestedHasPart(tocItem.children(), idPrefix, articles));
+    }
   }
 
   /**
@@ -123,7 +130,8 @@ public class NormSchemaMapper {
    * @param idPrefix idPrefix referencing the corresponding norm
    * @return LegislationExpressionPartSchema object
    */
-  private static LegislationExpressionPartSchema buildPart(Article article, String idPrefix) {
+  private static LegislationExpressionPartSchema buildPart(
+      Article article, String idPrefix, String marker, String heading) {
     List<LegislationObjectSchema> encoding;
     // Only attachments have their own manifestationELi and receive an encoding object.
     if (article.manifestationEli() != null) {
@@ -134,15 +142,17 @@ public class NormSchemaMapper {
               .build();
       encoding = List.of(encodingItem);
     } else {
-      encoding = null;
+      encoding = List.of();
     }
     return LegislationExpressionPartSchema.builder()
         .id(idPrefix + "#" + article.eId())
-        .name(article.name())
+        .name(marker)
         .eId(article.eId())
+        .alternativeName(heading)
         .temporalCoverage(
             DateUtils.toDateIntervalString(article.entryIntoForceDate(), article.expiryDate()))
         .encoding(encoding)
+        .hasPart(List.of())
         .build();
   }
 }

@@ -53,7 +53,6 @@ describe("anyDocument", () => {
         legislationLegalForce: "InForce",
         temporalCoverage: "",
         encoding: [],
-        tableOfContents: [],
         hasPart: [],
       };
 
@@ -80,7 +79,6 @@ describe("anyDocument", () => {
         legislationLegalForce: "InForce",
         temporalCoverage: "",
         encoding: [],
-        tableOfContents: [],
         hasPart: [],
       };
 
@@ -163,7 +161,6 @@ describe("anyDocument", () => {
         legislationLegalForce: "InForce",
         temporalCoverage: "",
         encoding: [],
-        tableOfContents: [],
         hasPart: [],
       };
 
@@ -227,7 +224,6 @@ describe("anyDocument", () => {
         legislationLegalForce: "InForce",
         temporalCoverage: "",
         encoding: [],
-        tableOfContents: [],
         hasPart: [],
       };
 

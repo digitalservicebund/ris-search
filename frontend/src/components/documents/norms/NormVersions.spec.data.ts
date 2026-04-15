@@ -25,7 +25,6 @@ function createLegislationExpression(
     name: "",
     alternateName: "",
     encoding: [],
-    tableOfContents: [],
     hasPart: [],
   };
 }
