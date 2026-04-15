@@ -1,4 +1,4 @@
-FROM node:24.13.1-alpine3.22@sha256:d28696cabe6a72c5addbb608b344818e5a158d849174abd4b1ae85ab48536280 AS build
+FROM node:24.14.1-alpine3.22@sha256:4f33c7804fa7775b87875f512e25e515692210bfdeafd715eb8bc441c364e2f6 AS build
 ARG NUXT_PUBLIC_SENTRY_DSN
 ARG SENTRY_RELEASE
 RUN apk update && apk upgrade
@@ -16,7 +16,7 @@ RUN --mount=type=secret,id=SENTRY_AUTH_TOKEN,required=false \
   fi && \
   pnpm run prepare && NODE_OPTIONS="--max-old-space-size=4096" pnpm build
 
-FROM node:24.13.1-alpine3.22@sha256:d28696cabe6a72c5addbb608b344818e5a158d849174abd4b1ae85ab48536280
+FROM node:24.14.1-alpine3.22@sha256:4f33c7804fa7775b87875f512e25e515692210bfdeafd715eb8bc441c364e2f6
 ARG NUXT_PUBLIC_SENTRY_DSN
 ARG SENTRY_RELEASE
 RUN apk update && apk upgrade && apk add dumb-init && apk cache clean
