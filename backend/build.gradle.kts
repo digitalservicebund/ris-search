@@ -84,6 +84,10 @@ dependencies {
 
     // pin jackson core version to avoid Vulnerability GHSA-72hv-8253-57qq
     implementation(libs.tools.jackson.core)
+    // CVE-2026-34483, CVE-2026-34486, CVE-2026-34487, CVE-2026-34500
+    implementation(libs.tomcat.embed.core)
+    // CVE-2026-34477, CVE-2026-34478, CVE-2026-34480
+    implementation(libs.log4j.core)
 
     compileOnly(libs.lombok)
     annotationProcessor(libs.lombok)
